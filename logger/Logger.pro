@@ -17,6 +17,7 @@ pluginmeta.path = $$ENVISION_PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
+debug:DEFINES += DEBUG
 HEADERS += src/DefaultLog.h \
     headers/Log.h \
     src/logger.h \

@@ -17,7 +17,7 @@ namespace Logger {
 class LOGGER_API Log
 {
 	public:
-		enum Level {DEBUG, ERROR, WARNING, INFO};
+		enum Level {LOGDEBUG, LOGERROR, LOGWARNING, LOGINFO};
 
 		struct LogEntry
 		{

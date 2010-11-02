@@ -7,6 +7,7 @@
 
 #include "DefaultLog.h"
 #include <QMutexLocker>
+#include <iostream>
 
 namespace Logger {
 
@@ -23,12 +24,17 @@ DefaultLog::~DefaultLog()
 
 void DefaultLog::add(QString message)
 {
-	add(INFO, message);
+	add(LOGINFO, message);
 }
 
 void DefaultLog::add(Level l, QString message)
 {
 	QMutexLocker locker(&logAccess);
+
+	if (l == LOGERROR) std::cerr<<	"ERROR   " << qPrintable(pluginId) << ": " << qPrintable(message) << std::endl;
+	if (l == LOGDEBUG) std::cout<<	"DEBUG   " << qPrintable(pluginId) << ": " << qPrintable(message) << std::endl;
+	if (l == LOGINFO) std::cout<<		"INFO    " << qPrintable(pluginId) << ": " << qPrintable(message) << std::endl;
+	if (l == LOGWARNING) std::cout<<	"WARNING " << qPrintable(pluginId) << ": " << qPrintable(message) << std::endl;
 
 	loggedEvents.append(LogEntry());
 	loggedEvents.last().level = l;
