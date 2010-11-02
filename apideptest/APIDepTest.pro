@@ -17,5 +17,6 @@ pluginmeta.path = $$ENVISION_PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
+debug:DEFINES += DEBUG
 HEADERS += src/apideptest.h
 SOURCES += src/apideptest.cpp

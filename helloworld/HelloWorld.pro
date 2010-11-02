@@ -14,6 +14,7 @@ target.path = $$ENVISION_PLUGINS_DIR
 pluginmeta.path = $$ENVISION_PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target pluginmeta
+debug:DEFINES += DEBUG
 HEADERS += headers/HelloWorldPrinter.h \
     headers/helloworld_api.h \
     src/helloworld.h

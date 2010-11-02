@@ -13,6 +13,7 @@ QT += core \
     xml
 INCLUDEPATH += ./headers
 QMAKE_CXXFLAGS += -Werror
+debug:DEFINES += DEBUG
 HEADERS += src/TestEvent.h \
     src/TestRunner.h \
     src/DefaultEnvisionManager.h \
