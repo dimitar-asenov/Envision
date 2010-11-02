@@ -1,0 +1,5 @@
+<!DOCTYPE EnvisionPlugin>
+<plugin id="logger" name="Loger" version="0.1">
+	<dependencies>
+	</dependencies>
+</plugin>
