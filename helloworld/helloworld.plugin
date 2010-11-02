@@ -1,0 +1,5 @@
+<!DOCTYPE EnvisionPlugin>
+<plugin id="helloworld" name="Hello World Test Plugin" version="1.0.0">
+	<dependencies>
+	</dependencies>
+</plugin>
