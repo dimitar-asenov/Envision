@@ -1,0 +1,6 @@
+<!DOCTYPE EnvisionPlugin>
+<plugin id="apideptest" name="API and Dependency Test Plugin" version="1.0.0">
+	<dependencies>
+		<dependency pluginid="helloworld" version="1" />
+	</dependencies>
+</plugin>
