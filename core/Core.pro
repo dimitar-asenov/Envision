@@ -12,6 +12,8 @@ QT += core \
     gui \
     xml
 INCLUDEPATH += ./headers
+	./src \
+	./test \
 QMAKE_CXXFLAGS += -Werror
 debug:DEFINES += DEBUG
 HEADERS += src/TestEvent.h \

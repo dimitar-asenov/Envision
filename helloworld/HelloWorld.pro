@@ -2,6 +2,8 @@ ENVISION_SRC_DIR = $$PWD/..
 ENVISION_DIR = $${ENVISION_SRC_DIR}/envision_build
 ENVISION_PLUGINS_DIR = $${ENVISION_DIR}/plugins
 INCLUDEPATH += ./headers \
+	./src \
+	./test \
     $${ENVISION_SRC_DIR}/core/headers \
     $${ENVISION_SRC_DIR}
 TARGET = helloworld
