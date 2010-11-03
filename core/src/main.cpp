@@ -8,6 +8,7 @@
 
 #include <QtGui>
 #include <QApplication>
+#include <QTextStream>
 #include "PluginManager.h"
 #include "EnvisionException.h"
 #include "DefaultEnvisionManager.h"
@@ -41,6 +42,11 @@ int main(int argc, char *argv[])
    	 pm.loadAllPlugins(manager);
 
    	 testr.enqueueSelfTests(pm);
+
+   	 QTextStream out(stdout);
+   	 out << "------------------------------" << endl;
+   	 out << "All plug-ins loaded." << endl;
+   	 out << "------------------------------" << endl;
 
    	 retCode = a.exec();
     }
