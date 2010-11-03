@@ -1,0 +1,6 @@
+<!DOCTYPE EnvisionPlugin>
+<plugin id="modelbase" name="Model base" version="0.1">
+	<dependencies>
+		<dependency pluginid="logger" version="0" />
+	</dependencies>
+</plugin>
