@@ -9,13 +9,16 @@
 #define LOG_H_
 
 #include "logger_api.h"
+#include <QObject>
 #include <QString>
 #include <QList>
 
 namespace Logger {
 
-class LOGGER_API Log
+class LOGGER_API Log : public QObject
 {
+	Q_OBJECT
+
 	public:
 		enum Level {LOGDEBUG, LOGERROR, LOGWARNING, LOGINFO};
 
@@ -36,6 +39,9 @@ class LOGGER_API Log
 		static Log* getLogger(QString requestingPluginId);
 
 		virtual ~Log() = 0;
+
+	signals:
+		void newLogEntry();
 };
 
 

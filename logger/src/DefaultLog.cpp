@@ -40,6 +40,8 @@ void DefaultLog::add(Level l, QString message)
 	loggedEvents.last().level = l;
 	loggedEvents.last().message = message;
 	loggedEvents.last().pluginId = pluginId;
+
+	emit newLogEntry();
 }
 
 bool DefaultLog::hasUnreadEntries()

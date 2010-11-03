@@ -8,6 +8,8 @@
 #include "logger.h"
 #include <iostream>
 #include "Log.h"
+#include "LogTester.h"
+#include <QCoreApplication>
 
 Q_EXPORT_PLUGIN2( logger, Logger::LoggerPlugin )
 
@@ -21,13 +23,13 @@ bool LoggerPlugin::initialize(Envision::EnvisionManager&)
 
 void LoggerPlugin::selfTest(QString)
 {
-	Log* l = Log::getLogger("logger");
-
-	l->add("A default message");
-	l->add(Log::LOGDEBUG, "A debug log");
-	l->add(Log::LOGERROR, "An error log");
-	l->add(Log::LOGINFO, "An info log");
-	l->add(Log::LOGWARNING, "A warning log");
+	LogTester lt;
+	lt.runTests();
+	qApp->processEvents();
+	if (lt.allTestsOK())
+		std::cout << "LOGGER: All tests passed" << std::endl;
+	else
+		std::cout << "LOGGER: Tests failed!" << std::endl;
 }
 
 }
