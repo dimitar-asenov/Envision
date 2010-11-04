@@ -9,10 +9,17 @@
 #define PERSISTENTSTORE_H_
 
 #include "modelbase_api.h"
+#include <QString>
 
 namespace Model {
 
-class Persistent;
+class Node;
+
+struct LoadedNode
+{
+	QString name;
+	Node* node;
+};
 
 class MODELBASE_API PersistentStore
 {
@@ -22,7 +29,12 @@ class MODELBASE_API PersistentStore
 		virtual void saveStringValue(QString &value) = 0;
 		virtual void saveIntValue(int &value) = 0;
 		virtual void saveFloatValue(double &value) = 0;
-		virtual void saveSubNode(Persistent *subnode, QString &name) = 0;
+		virtual void saveSubNode(Node *subnode, QString &name) = 0;
+
+		virtual bool hasMoreSubNodes() = 0;
+		virtual LoadedNode getNextSubNode() = 0;
+
+		virtual Node* getRootNode() = 0;
 };
 
 }

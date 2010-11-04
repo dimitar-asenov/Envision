@@ -27,6 +27,5 @@ HEADERS += headers/PersistentStore.h \
     headers/Node.h \
     headers/modelbase_api.h \
     src/modelbase.h
-SOURCES += src/ExtendableNode.cpp \
-    src/Node.cpp \
+SOURCES += src/Node.cpp \
     src/modelbase.cpp

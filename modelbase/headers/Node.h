@@ -12,6 +12,7 @@
 #include "PersistentStore.h"
 #include <QString>
 #include <QMutex>
+#include <QMap>
 
 namespace Model {
 
@@ -19,7 +20,9 @@ class MODELBASE_API Node
 {
 
 	public:
-		typedef unsigned long IdType;
+		typedef long IdType;
+		typedef Node* (*NodeConstructor)(Node* parent);
+		//typedef Node* (*NodeConstructorWithId)(Node* parent, IdType id);
 
 	private:
 		Node* parent;
@@ -29,15 +32,22 @@ class MODELBASE_API Node
 		static IdType nextId;
 		static QMutex nextIdAccess;
 
+		static QMap<QString, NodeConstructor> nodeTypeRegister;
+
+	protected:
+		bool fullyLoaded;
+
 	public:
 		Node(Node* parent);
 		Node(Node* parent, IdType id);
 		virtual ~Node();
 
+		Node* getParent();
 		IdType getId();
 		int getRevision();
 		void incrementRevision();
 		void addToRevision(int valueToAdd);
+		bool isFullyLoaded();
 
 		/**
 		 * Saves the current node to a persistent store.
@@ -45,13 +55,11 @@ class MODELBASE_API Node
 		 *
 		 * @param store
 		 * 				The persistent store to use
-		 * @param name
-		 * 				The name under which to save this node. This can be QString::null to indicate that the node has no
-		 * 				name. If the node has no name it is assumed that is a part of an ordered list.
 		 *
 		 */
-		virtual void save(PersistentStore &store, QString &name) = 0;
-		virtual void load(PersistentStore &store) = 0;
+		virtual void save(PersistentStore &store) = 0;
+		virtual void loadFully(PersistentStore &store) = 0;
+		virtual void loadPartially(PersistentStore &store);
 
 		/**
 		 * Returns true if this node should be persisted in a new persistence unit. This is typically a per class value.
@@ -70,6 +78,11 @@ class MODELBASE_API Node
 		 * not be new persistence units, as this will greatly increase the memory required by the persistence engine.
 		 */
 		virtual bool isNewPersistenceUnit();
+
+		virtual const QString& getTypeName() = 0;
+
+		static bool registerNodeType(const QString &type, const NodeConstructor constructor);
+		static Node* createNewNode(const QString &type, Node* parent);
 };
 
 }
