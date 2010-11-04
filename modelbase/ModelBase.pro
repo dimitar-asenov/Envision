@@ -8,6 +8,8 @@ INCLUDEPATH += ./headers \
     $${ENVISION_SRC_DIR}
 TARGET = modelbase
 DEFINES += MODELBASE_LIBRARY
+win32:LIBS += -L$${ENVISION_PLUGINS_DIR} \
+    -llogger
 QT = core
 QMAKE_CXXFLAGS += -Werror
 TEMPLATE = lib
@@ -20,6 +22,11 @@ pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
 debug:DEFINES += DEBUG
-HEADERS += headers/modelbase_api.h \
+HEADERS += headers/PersistentStore.h \
+    headers/ExtendableNode.h \
+    headers/Node.h \
+    headers/modelbase_api.h \
     src/modelbase.h
-SOURCES += src/modelbase.cpp
+SOURCES += src/ExtendableNode.cpp \
+    src/Node.cpp \
+    src/modelbase.cpp

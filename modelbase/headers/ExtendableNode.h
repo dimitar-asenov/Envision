@@ -15,7 +15,7 @@ namespace Model {
 class MODELBASE_API ExtendableNode: public Model::Node
 {
 	public:
-		ExtendableNode();
+		ExtendableNode(Node *parent);
 		virtual ~ExtendableNode();
 };
 

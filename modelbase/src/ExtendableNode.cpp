@@ -9,7 +9,7 @@
 
 namespace Model {
 
-ExtendableNode::ExtendableNode()
+ExtendableNode::ExtendableNode(Node *parent) : Node(parent)
 {
 	// TODO Auto-generated constructor stub
 
