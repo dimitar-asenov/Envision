@@ -21,29 +21,58 @@ class MODELBASE_API ExtendableNode: public Model::Node
 		QVector<Node*> attributes;
 		static QVector<QString> attributeNames;
 		static QVector<QString> attributeTypes;
+		static QVector<bool> attributeOptional;
 
 	protected:
-		Node* get(int attributeIndex);
+		Node* get(int attributeIndex)
+		{
+			return attributes[attributeIndex];
+		}
+
+		Node* createOptional(int attributeIndex)
+		{
+			if ( attributeOptional(attributeIndex) )
+			{
+				attributes[attributeIndex] = Node::createNewNode(attributeTypes[attributeIndex], this);
+				return attributes[attributeIndex];
+			}
+
+			// TODO throw exception instead of returning null
+			// TODO record event in undo history
+			return NULL;
+		}
+
+		void removeOptional(int attributeIndex)
+		{
+			if ( attributeOptional(attributeIndex) )
+			{
+				attributes[attributeIndex].remove();
+				attributes[attributeIndex] = NULL;
+			}
+
+			// TODO throw exception instead of returning null
+			// TODO record event in undo history
+		}
 
 	public:
 		ExtendableNode(Node *parent) :
 			Node(parent), attributes(attributeNames.size(), NULL)
 		{
 			for (int i = 0; i < attributeNames; i++)
-				attributes[i] = Node::createNewNode(attributeTypes[i], this);
+				if ( !attributeOptional[i] ) attributes[i] = Node::createNewNode(attributeTypes[i], this);
 		}
 
-		ExtendableNode(Node *parent, IdType id, PersistentStore &store) :
+		ExtendableNode(Node *parent, IdType id, PersistentStore &store, bool) :
 			Node(parent, id), attributes(attributeNames.size(), NULL)
 		{
-			while ( store.hasMoreSubNodes() )
+			QList<LoadedNode> children = p.loadAllSubNodes(this);
+
+			for (QList<LoadedNode>::iterator ln = children.begin(); attr != children.end(); attr++)
 			{
-				LoadedNode ln = getNextSubNode();
+				int index = attributeNames.indexOf(ln->name);
+				if ( index < 0 ) continue; //TODO throw an exception
 
-				int index = attributeNames.indexOf(ln.name);
-				if (index < 0) continue; //TODO throw an exception
-
-				attributes[index] = ln.node;
+				attributes[index] = ln->node;
 			}
 		}
 
@@ -56,7 +85,17 @@ class MODELBASE_API ExtendableNode: public Model::Node
 		void save(PersistentStore &store, QString &name)
 		{
 			for (int i = 0; i < attributes.size(); i++)
-				store.saveSubNode(attributes[i], attributeNames[i]);
+				store.saveNode(attributes[i], attributeNames[i]);
+		}
+
+		Node* getChild(IdType id)
+		{
+			Node* res = NULL;
+
+			for (int i = 0; i < attributes.size(); i++)
+				if ( attributes[i]->getId() == id ) res = attributes[i];
+
+			return res;
 		}
 
 		Node* get(const QString &attributeName)
@@ -76,13 +115,14 @@ class MODELBASE_API ExtendableNode: public Model::Node
 			return "ExtendableNode";
 		}
 
-		static int registerNewAttribute(const QString &attributeName, const QString &attributeType)
+		static int registerNewAttribute(const QString &attributeName, const QString &attributeType, bool isOptional = false)
 		{
 			if ( attributeNames.contains(attributeName) ) return attributeNames.indexOf(attributeName);
 			//TODO include proper exception handling
 
 			attributeNames.append(attributeName);
 			attributeTypes.append(attributeType);
+			attributeOptional.append(isOptional);
 
 			return attributeNames.size() - 1;
 		}
@@ -90,6 +130,7 @@ class MODELBASE_API ExtendableNode: public Model::Node
 
 template<class T> QVector<QString> ExtendableNode<T>::attributeNames;
 template<class T> QVector<QString> ExtendableNode<T>::attributeTypes;
+template<class T> QVector<bool> ExtendableNode<T>::attributeOptional;
 
 }
 

@@ -10,7 +10,8 @@ TARGET = modelbase
 DEFINES += MODELBASE_LIBRARY
 win32:LIBS += -L$${ENVISION_PLUGINS_DIR} \
     -llogger
-QT = core
+QT = core \
+    gui
 QMAKE_CXXFLAGS += -Werror
 TEMPLATE = lib
 CONFIG += plugin \
@@ -22,10 +23,16 @@ pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
 debug:DEFINES += DEBUG
-HEADERS += headers/PersistentStore.h \
+HEADERS += headers/commands/ExtendedNodeOptional.h \
+    headers/UndoCommand.h \
+    headers/Model.h \
+    headers/PersistentStore.h \
     headers/ExtendableNode.h \
     headers/Node.h \
     headers/modelbase_api.h \
     src/modelbase.h
-SOURCES += src/Node.cpp \
+SOURCES += headers/commands/ExtendedNodeOptional.cpp \
+    src/UndoCommand.cpp \
+    src/Model.cpp \
+    src/Node.cpp \
     src/modelbase.cpp

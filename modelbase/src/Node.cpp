@@ -8,6 +8,7 @@
 #include "Node.h"
 #include <QMutexLocker>
 #include "modelbase.h"
+#include "Model.h"
 
 using namespace Logger;
 
@@ -16,9 +17,10 @@ namespace Model {
 /***********************************************************************************************************************
  * STATIC MEMBERS
  **********************************************************************************************************************/
-Node::IdType Node::nextId = 0;
+NodeIdType Node::nextId = 0;
 QMutex Node::nextIdAccess;
-QMap<QString, Node::NodeConstructor> Node::nodeTypeRegister;
+QMap<QString, Node::NodeConstructor> Node::nodeConstructorRegister;
+QMap<QString, Node::NodePersistenceConstructor> Node::nodePersistenceConstructorRegister;
 
 /***********************************************************************************************************************
  * CONSTRUCTORS AND DESTRUCTORS
@@ -32,7 +34,7 @@ Node::Node(Node* parent_) :
 	nextId++;
 }
 
-Node::Node(Node* parent_, IdType id_) :
+Node::Node(Node* parent_, NodeIdType id_) :
 	parent(parent_), id(id_), revision(0), fullyLoaded(true)
 {
 }
@@ -50,15 +52,27 @@ void Node::loadPartially(PersistentStore &store)
 	loadFully(store);
 }
 
+void Node::execute(UndoCommand *command)
+{
+	Model::getModel( getRoot() )->pushCommandOnUndoStack(command);
+}
+
 /***********************************************************************************************************************
  * GETTERS AND SETTERS
  **********************************************************************************************************************/
+Node* Node::getRoot()
+{
+	if (parent == NULL) return this;
+
+	return parent->getRoot();
+}
+
 Node* Node::getParent()
 {
 	return parent;
 }
 
-Node::IdType Node::getId()
+NodeIdType Node::getId()
 {
 	return id;
 }
@@ -91,11 +105,12 @@ bool Node::isFullyLoaded()
 /***********************************************************************************************************************
  * STATIC METHODS
  **********************************************************************************************************************/
-bool Node::registerNodeType(const QString &type, const NodeConstructor constructor)
+bool Node::registerNodeType(const QString &type, const NodeConstructor constructor, const NodePersistenceConstructor persistenceconstructor)
 {
-	if ( nodeTypeRegister.contains(type) ) return false;
+	if ( nodeConstructorRegister.contains(type) || nodePersistenceConstructorRegister.contains(type) ) return false;
 
-	nodeTypeRegister.insert(type, constructor);
+	nodeConstructorRegister.insert(type, constructor);
+	nodePersistenceConstructorRegister.insert(type, persistenceconstructor);
 
 	ModelBase::log()->add(Log::LOGINFO, "Registered new node type " + type);
 
@@ -104,13 +119,26 @@ bool Node::registerNodeType(const QString &type, const NodeConstructor construct
 
 Node* Node::createNewNode(const QString &type, Node* parent)
 {
-	if ( nodeTypeRegister.contains(type) )
+	if ( nodeConstructorRegister.contains(type) )
 	{
-		return nodeTypeRegister.value(type)(parent);
+		return nodeConstructorRegister.value(type)(parent);
 	}
 	else
 	{
 		ModelBase::log()->add(Log::LOGERROR, "Could not create new node. Requested node type has not been registered.");
+		return NULL;
+	}
+}
+
+Node* Node::createNewNode(const QString &type, Node* parent, NodeIdType id, PersistentStore &store, bool partialLoadHint)
+{
+	if ( nodePersistenceConstructorRegister.contains(type) )
+	{
+		return nodePersistenceConstructorRegister.value(type)(parent, id, store, partialLoadHint);
+	}
+	else
+	{
+		ModelBase::log()->add(Log::LOGERROR, "Could not create new node from persistence. Requested node type has not been registered.");
 		return NULL;
 	}
 }

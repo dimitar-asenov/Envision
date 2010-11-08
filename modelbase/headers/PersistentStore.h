@@ -10,12 +10,15 @@
 
 #include "modelbase_api.h"
 #include <QString>
+#include <QList>
 
 namespace Model {
 
+typedef long long NodeIdType;
+
 class Node;
 
-struct LoadedNode
+struct MODELBASE_API LoadedNode
 {
 	QString name;
 	Node* node;
@@ -29,12 +32,14 @@ class MODELBASE_API PersistentStore
 		virtual void saveStringValue(QString &value) = 0;
 		virtual void saveIntValue(int &value) = 0;
 		virtual void saveFloatValue(double &value) = 0;
-		virtual void saveSubNode(Node *subnode, QString &name) = 0;
+		virtual void saveNode(Node *node, QString &name, bool partialLoadHint) = 0;
 
-		virtual bool hasMoreSubNodes() = 0;
-		virtual LoadedNode getNextSubNode() = 0;
 
-		virtual Node* getRootNode() = 0;
+		virtual Node* loadRootNode(QString &name) = 0;
+		virtual QList<LoadedNode> loadAllSubNodes(Node* parent) = 0;
+		virtual int loadIntValue() = 0;
+		virtual QString loadStringValue() = 0;
+		virtual double loadFloatValue() = 0;
 };
 
 }

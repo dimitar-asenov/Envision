@@ -10,6 +10,7 @@
 
 #include "modelbase_api.h"
 #include "PersistentStore.h"
+#include "UndoCommand.h"
 #include <QString>
 #include <QMutex>
 #include <QMap>
@@ -20,34 +21,50 @@ class MODELBASE_API Node
 {
 
 	public:
-		typedef long IdType;
 		typedef Node* (*NodeConstructor)(Node* parent);
-		//typedef Node* (*NodeConstructorWithId)(Node* parent, IdType id);
+		typedef Node* (*NodePersistenceConstructor)(Node *parent, NodeIdType id, PersistentStore &store, bool partialLoadHint);
 
 	private:
 		Node* parent;
-		IdType id;
+		NodeIdType id;
 		int revision;
 
-		static IdType nextId;
+		static NodeIdType nextId;
 		static QMutex nextIdAccess;
 
-		static QMap<QString, NodeConstructor> nodeTypeRegister;
+		static QMap<QString, NodeConstructor> nodeConstructorRegister;
+		static QMap<QString, NodePersistenceConstructor> nodePersistenceConstructorRegister;
 
 	protected:
 		bool fullyLoaded;
 
 	public:
 		Node(Node* parent);
-		Node(Node* parent, IdType id);
+		Node(Node* parent, NodeIdType id);
 		virtual ~Node();
 
+		Node* getRoot();
 		Node* getParent();
-		IdType getId();
+
+		virtual Node* getChild(NodeIdType id) = 0;
+		NodeIdType getId();
 		int getRevision();
 		void incrementRevision();
 		void addToRevision(int valueToAdd);
 		bool isFullyLoaded();
+
+		/**
+		 * Executes the specified command and pushes it on the undo stack.
+		 */
+		void execute(UndoCommand *command);
+
+		/**
+		 * Returns the name by which this node can be referenced.
+		 *
+		 * This name should be unique between all siblings. If the returned value is QString::null this means that this
+		 * node can not be referenced.
+		 */
+		virtual QString getReferenceName() = 0;
 
 		/**
 		 * Saves the current node to a persistent store.
@@ -81,8 +98,9 @@ class MODELBASE_API Node
 
 		virtual const QString& getTypeName() = 0;
 
-		static bool registerNodeType(const QString &type, const NodeConstructor constructor);
+		static bool registerNodeType(const QString &type, const NodeConstructor constructor, const NodePersistenceConstructor persistenceconstructor);
 		static Node* createNewNode(const QString &type, Node* parent);
+		static Node* createNewNode(const QString &type, Node* parent, NodeIdType id, PersistentStore &store, bool partialLoadHint);
 };
 
 }
