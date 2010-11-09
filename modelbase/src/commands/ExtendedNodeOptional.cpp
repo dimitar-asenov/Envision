@@ -5,7 +5,7 @@
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "ExtendedNodeOptional.h"
+#include "commands/ExtendedNodeOptional.h"
 
 namespace Model {
 

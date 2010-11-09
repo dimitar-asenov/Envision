@@ -31,7 +31,7 @@ HEADERS += headers/commands/ExtendedNodeOptional.h \
     headers/Node.h \
     headers/modelbase_api.h \
     src/modelbase.h
-SOURCES += headers/commands/ExtendedNodeOptional.cpp \
+SOURCES += src/commands/ExtendedNodeOptional.cpp \
     src/UndoCommand.cpp \
     src/Model.cpp \
     src/Node.cpp \

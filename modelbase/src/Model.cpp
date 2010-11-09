@@ -13,6 +13,7 @@ QList<Model*> Model::loadedModels;
 
 Model::Model()
 {
+	commands.setUndoLimit(100);
 	loadedModels.append(this);
 }
 
@@ -22,7 +23,7 @@ Model::~Model()
 	// TODO Make sure to persist and destroy the tree in a nice way.
 }
 
-void Model::beginModification(const QString &text )
+void Model::beginModification(const QString &text)
 {
 	modification.lock();
 	commands.beginMacro(text);
@@ -44,11 +45,21 @@ void Model::pushCommandOnUndoStack(UndoCommand* command)
 	commands.push(command);
 }
 
+void Model::undo()
+{
+	commands.undo();
+}
+
+void Model::redo()
+{
+	commands.redo();
+}
+
 Model* Model::getModel(Node* root)
 {
-	for(QList<Model*>::iterator model = loadedModels.begin(); model != loadedModels.end(); model++)
+	for (QList<Model*>::iterator model = loadedModels.begin(); model != loadedModels.end(); model++)
 	{
-		if ( (*model)->getRoot() == root) return *model;
+		if ( (*model)->getRoot() == root ) return *model;
 	}
 
 	return NULL;

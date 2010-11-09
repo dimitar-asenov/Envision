@@ -32,12 +32,14 @@ class MODELBASE_API Model
 		Model();
 		virtual ~Model();
 
-		void beginModification();
+		void beginModification(const QString &text);
 		void endModification();
 
 		Node* getRoot();
 
 		void pushCommandOnUndoStack(UndoCommand* command);
+		void undo();
+		void redo();
 
 		/**
 		 * Returns the model object that has as its root node the node indicated.

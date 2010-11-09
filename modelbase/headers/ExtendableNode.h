@@ -11,6 +11,7 @@
 #include "Node.h"
 #include <QVector>
 #include <QString>
+#include "commands/ExtendedNodeOptional.h"
 
 namespace Model {
 
@@ -33,12 +34,12 @@ class MODELBASE_API ExtendableNode: public Model::Node
 		{
 			if ( attributeOptional(attributeIndex) )
 			{
-				attributes[attributeIndex] = Node::createNewNode(attributeTypes[attributeIndex], this);
+				Node* newnode = Node::createNewNode(attributeTypes[attributeIndex], this);
+				execute(new ExtendedNodeOptional(this, newnode, attributeIndex, &attributes, true));
 				return attributes[attributeIndex];
 			}
 
 			// TODO throw exception instead of returning null
-			// TODO record event in undo history
 			return NULL;
 		}
 
@@ -46,12 +47,8 @@ class MODELBASE_API ExtendableNode: public Model::Node
 		{
 			if ( attributeOptional(attributeIndex) )
 			{
-				attributes[attributeIndex].remove();
-				attributes[attributeIndex] = NULL;
+				execute(new ExtendedNodeOptional(this, attributes[attributeIndex], attributeIndex, &attributes, false));
 			}
-
-			// TODO throw exception instead of returning null
-			// TODO record event in undo history
 		}
 
 	public:
