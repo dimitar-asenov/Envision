@@ -21,7 +21,10 @@ class Text: public Model::Node
 		QString text;
 
 	public:
-		QString get();
+
+		const  QString&  get() const;
+		operator const QString&() const;
+
 		void set(const QString &newText);
 
 		void save(PersistentStore &store);
