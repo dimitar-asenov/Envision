@@ -46,7 +46,7 @@ class MODELBASE_API Node
 		Node* getRoot();
 		Node* getParent();
 
-		virtual Node* getChild(NodeIdType id) = 0;
+		virtual Node* getChild(NodeIdType id);
 		NodeIdType getId();
 		int getRevision();
 		void incrementRevision();
@@ -61,10 +61,10 @@ class MODELBASE_API Node
 		/**
 		 * Returns the name by which this node can be referenced.
 		 *
-		 * This name should be unique between all siblings. If the returned value is QString::null this means that this
-		 * node can not be referenced.
+		 * This name should be unique between all siblings. If the returned value is a null string ( QString.isNull()
+		 * returns true ) this means that this node can not be referenced.
 		 */
-		virtual QString getReferenceName() = 0;
+		virtual QString getReferenceName();
 
 		/**
 		 * Saves the current node to a persistent store.
@@ -75,8 +75,7 @@ class MODELBASE_API Node
 		 *
 		 */
 		virtual void save(PersistentStore &store) = 0;
-		virtual void loadFully(PersistentStore &store) = 0;
-		virtual void loadPartially(PersistentStore &store);
+		virtual void loadFully(PersistentStore &store);
 
 		/**
 		 * Returns true if this node should be persisted in a new persistence unit. This is typically a per class value.
@@ -96,7 +95,7 @@ class MODELBASE_API Node
 		 */
 		virtual bool isNewPersistenceUnit();
 
-		virtual const QString& getTypeName() = 0;
+		virtual QString getTypeName() = 0;
 
 		static bool registerNodeType(const QString &type, const NodeConstructor constructor, const NodePersistenceConstructor persistenceconstructor);
 		static Node* createNewNode(const QString &type, Node* parent);

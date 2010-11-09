@@ -23,15 +23,22 @@ pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
 debug:DEFINES += DEBUG
-HEADERS += headers/commands/ExtendedNodeOptional.h \
+HEADERS += headers/commands/TextSet.h \
+    headers/nodes/Text.h \
+    headers/nodes/ExtendableNode.h \
+    headers/nodeMacros.h \
+    test/BinaryNode.h \
+    headers/commands/ExtendedNodeOptional.h \
     headers/UndoCommand.h \
     headers/Model.h \
     headers/PersistentStore.h \
-    headers/ExtendableNode.h \
     headers/Node.h \
     headers/modelbase_api.h \
     src/modelbase.h
-SOURCES += src/commands/ExtendedNodeOptional.cpp \
+SOURCES += src/commands/TextSet.cpp \
+    src/nodes/Text.cpp \
+    test/BinaryNode.cpp \
+    src/commands/ExtendedNodeOptional.cpp \
     src/UndoCommand.cpp \
     src/Model.cpp \
     src/Node.cpp \

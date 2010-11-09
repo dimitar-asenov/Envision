@@ -11,7 +11,8 @@ namespace Model {
 
 QList<Model*> Model::loadedModels;
 
-Model::Model()
+Model::Model() :
+	root(NULL)
 {
 	commands.setUndoLimit(100);
 	loadedModels.append(this);
@@ -63,6 +64,17 @@ Model* Model::getModel(Node* root)
 	}
 
 	return NULL;
+}
+
+Node* Model::createRoot(const QString &typeName)
+{
+	if (root == NULL )
+	{
+		commands.clear();
+		root = Node::createNewNode(typeName, NULL);
+	}
+
+	return root;
 }
 
 }

@@ -47,9 +47,8 @@ Node::~Node()
 /***********************************************************************************************************************
  * MAIN METHODS
  **********************************************************************************************************************/
-void Node::loadPartially(PersistentStore &store)
+void Node::loadFully(PersistentStore&)
 {
-	loadFully(store);
 }
 
 void Node::execute(UndoCommand *command)
@@ -70,6 +69,11 @@ Node* Node::getRoot()
 Node* Node::getParent()
 {
 	return parent;
+}
+
+Node* Node::getChild(NodeIdType)
+{
+	return NULL;
 }
 
 NodeIdType Node::getId()
@@ -102,6 +106,10 @@ bool Node::isFullyLoaded()
 	return fullyLoaded;
 }
 
+QString Node::getReferenceName()
+{
+	return QString();
+}
 /***********************************************************************************************************************
  * STATIC METHODS
  **********************************************************************************************************************/

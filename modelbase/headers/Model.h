@@ -37,6 +37,8 @@ class MODELBASE_API Model
 
 		Node* getRoot();
 
+		Node* createRoot(const QString &typeName);
+
 		void pushCommandOnUndoStack(UndoCommand* command);
 		void undo();
 		void redo();
