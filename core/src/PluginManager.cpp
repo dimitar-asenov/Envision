@@ -8,6 +8,7 @@
 #include <QStringList>
 #include <QDomDocument>
 #include <QDomElement>
+#include <QTextStream>
 
 #include "EnvisionPlugin.h"
 #include "PluginManager.h"
@@ -57,6 +58,9 @@ void PluginManager::loadAllPlugins(EnvisionManager& envisionManager)
 
 			if ( allDependenciesLoaded )
 			{
+				QTextStream out(stdout);
+				out << "Loading plug-in " << plugins.at(i) << "... ";
+
 				QPluginLoader* plugin = new QPluginLoader(pluginsDir.absoluteFilePath(getLibraryFileName(plugins.at(i))));
 				plugin->setLoadHints(QLibrary::ExportExternalSymbolsHint);
 
@@ -70,6 +74,8 @@ void PluginManager::loadAllPlugins(EnvisionManager& envisionManager)
 				loadedPlugins.append(plugin);
 				idToPluginLoaderMap.insert(plugins.at(i), plugin);
 				plugins.removeAt(i);
+
+				out << "OK" << endl;
 			}
 		}
 	}
