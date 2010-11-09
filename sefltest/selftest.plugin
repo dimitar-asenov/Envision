@@ -1,5 +1,0 @@
-<!DOCTYPE EnvisionPlugin>
-<plugin id="selftest" name="Self-Test auxiliary plug-in" version="0.1">
-	<dependencies>
-	</dependencies>
-</plugin>
