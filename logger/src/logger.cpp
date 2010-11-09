@@ -17,7 +17,6 @@ namespace Logger {
 
 bool LoggerPlugin::initialize(Envision::EnvisionManager&)
 {
-	std::cout << "here" << std::endl;
 	return true;
 }
 
