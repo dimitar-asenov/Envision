@@ -10,27 +10,26 @@
 
 #include "modelbase_api.h"
 #include "PersistentStore.h"
-#include "UndoCommand.h"
 #include <QString>
 #include <QMutex>
 #include <QMap>
 
 namespace Model {
 
+class Model;
+class UndoCommand;
+
 class MODELBASE_API Node
 {
 
 	public:
-		typedef Node* (*NodeConstructor)(Node* parent);
+		typedef Node* (*NodeConstructor)(Node* parent, Model* model);
 		typedef Node* (*NodePersistenceConstructor)(Node *parent, NodeIdType id, PersistentStore &store, bool partialLoadHint);
 
 	private:
 		Node* parent;
 		NodeIdType id;
 		int revision;
-
-		static NodeIdType nextId;
-		static QMutex nextIdAccess;
 
 		static QMap<QString, NodeConstructor> nodeConstructorRegister;
 		static QMap<QString, NodePersistenceConstructor> nodePersistenceConstructorRegister;
@@ -39,10 +38,11 @@ class MODELBASE_API Node
 		bool fullyLoaded;
 
 	public:
-		Node(Node* parent);
+		Node(Node* parent, Model* model);
 		Node(Node* parent, NodeIdType id);
 		virtual ~Node();
 
+		Model* getModel();
 		Node* getRoot();
 		Node* getParent();
 
@@ -98,7 +98,23 @@ class MODELBASE_API Node
 		virtual QString getTypeName() = 0;
 
 		static bool registerNodeType(const QString &type, const NodeConstructor constructor, const NodePersistenceConstructor persistenceconstructor);
-		static Node* createNewNode(const QString &type, Node* parent);
+
+		/**
+		 * Creates a new node of the specified type.
+		 *
+		 * @param type
+		 * 			The type of the node to create. This must be a type that has been registered before by calling
+		 * 			registerNodeType.
+		 *
+		 * @param parent
+		 * 			The parent of the node. This can be NULL if this is the root node.
+		 *
+		 * @param model
+		 * 			The model that this node belongs to. If this value is NULL the model of the parent will be used. The
+		 * 			default value is NULL. Note that this should only be set to a value different than NULL in case the
+		 * 			parent node does not yet belong to a model. This arises only when the root node is constructed.
+		 */
+		static Node* createNewNode(const QString &type, Node* parent, Model* model = NULL);
 		static Node* createNewNode(const QString &type, Node* parent, NodeIdType id, PersistentStore &store, bool partialLoadHint);
 };
 

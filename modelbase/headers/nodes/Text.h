@@ -13,7 +13,7 @@
 
 namespace Model {
 
-class Text: public Model::Node
+class Text: public Node
 {
 	NODE_DECLARE_STANDARD_CONSTRUCTORS(Text)
 

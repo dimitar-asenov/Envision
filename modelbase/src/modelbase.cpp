@@ -6,6 +6,10 @@
  **********************************************************************************************************************/
 
 #include "modelbase.h"
+#include "selftest/headers/SelfTestSuite.h"
+
+#include "nodes/Text.h"
+#include "BinaryNode.h"
 
 using namespace Logger;
 
@@ -18,11 +22,14 @@ Log* ModelBase::logger = NULL;
 bool ModelBase::initialize(Envision::EnvisionManager&)
 {
 	logger = Logger::Log::getLogger("modelbase");
+	Text::registerNodeConstructors();
 	return true;
 }
 
 void ModelBase::selfTest(QString)
 {
+	BinaryNode::init();
+	SelfTest::TestManager<ModelBase>::runAllTests().printResultStatistics();
 }
 
 Log* ModelBase::log()

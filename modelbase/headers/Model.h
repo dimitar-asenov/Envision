@@ -24,7 +24,11 @@ class MODELBASE_API Model
 	private:
 		Node* root;
 		QUndoStack commands;
+
+		bool modificationInProgress;
 		QMutex modification;
+
+		NodeIdType nextId;
 
 		static QList<Model*> loadedModels;
 
@@ -36,6 +40,8 @@ class MODELBASE_API Model
 		void endModification();
 
 		Node* getRoot();
+
+		NodeIdType generateNextId();
 
 		Node* createRoot(const QString &typeName);
 

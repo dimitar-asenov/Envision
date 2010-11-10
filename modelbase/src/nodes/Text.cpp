@@ -12,8 +12,8 @@ namespace Model {
 
 NODE_DEFINE_TYPE_REGISTRATION_METHODS(Text)
 
-Text::Text(Node *parent) :
-	Node(parent)
+Text::Text(Node *parent, Model* model) :
+	Node(parent, model)
 {
 }
 

@@ -9,6 +9,7 @@
 #include <QMutexLocker>
 #include "modelbase.h"
 #include "Model.h"
+#include "UndoCommand.h"
 
 using namespace Logger;
 
@@ -17,21 +18,20 @@ namespace Model {
 /***********************************************************************************************************************
  * STATIC MEMBERS
  **********************************************************************************************************************/
-NodeIdType Node::nextId = 0;
-QMutex Node::nextIdAccess;
 QMap<QString, Node::NodeConstructor> Node::nodeConstructorRegister;
 QMap<QString, Node::NodePersistenceConstructor> Node::nodePersistenceConstructorRegister;
 
 /***********************************************************************************************************************
  * CONSTRUCTORS AND DESTRUCTORS
  **********************************************************************************************************************/
-Node::Node(Node* parent_) :
-	parent(parent_), revision(0), fullyLoaded(true)
+Node::Node(Node* parent_, Model* model_) :
+	parent(parent_), id(0), revision(0), fullyLoaded(true)
 {
-	QMutexLocker locker(&nextIdAccess);
+	Model *model = model_;
+	if (model == NULL) model = getModel();
+	else if (getModel() != NULL){}; // TODO here throw an exception. This should never be the case.
 
-	id = nextId;
-	nextId++;
+	id = model->generateNextId();
 }
 
 Node::Node(Node* parent_, NodeIdType id_) :
@@ -41,7 +41,7 @@ Node::Node(Node* parent_, NodeIdType id_) :
 
 Node::~Node()
 {
-	// TODO Auto-generated destructor stub
+	// TODO Node destructor: Does something need to go here?
 }
 
 /***********************************************************************************************************************
@@ -53,15 +53,20 @@ void Node::loadFully(PersistentStore&)
 
 void Node::execute(UndoCommand *command)
 {
-	Model::getModel( getRoot() )->pushCommandOnUndoStack(command);
+	getModel()->pushCommandOnUndoStack(command);
 }
 
 /***********************************************************************************************************************
  * GETTERS AND SETTERS
  **********************************************************************************************************************/
+Model* Node::getModel()
+{
+	return Model::getModel(getRoot());
+}
+
 Node* Node::getRoot()
 {
-	if (parent == NULL) return this;
+	if ( parent == NULL ) return this;
 
 	return parent->getRoot();
 }
@@ -125,11 +130,11 @@ bool Node::registerNodeType(const QString &type, const NodeConstructor construct
 	return true;
 }
 
-Node* Node::createNewNode(const QString &type, Node* parent)
+Node* Node::createNewNode(const QString &type, Node* parent, Model* model)
 {
 	if ( nodeConstructorRegister.contains(type) )
 	{
-		return nodeConstructorRegister.value(type)(parent);
+		return nodeConstructorRegister.value(type)(parent, model);
 	}
 	else
 	{

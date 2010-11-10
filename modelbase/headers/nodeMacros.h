@@ -29,12 +29,12 @@
  */
 #define NODE_DECLARE_STANDARD_CONSTRUCTORS(className)																						\
 	public:																																				\
-		className(Node* parent);																													\
+		className(Node* parent, Model* model);																									\
 		className(Node *parent, NodeIdType id, PersistentStore &store, bool partialLoadHint);									\
 																																							\
 		QString getTypeName();																														\
 																																							\
-		static Node* createNew(Node* parent);																									\
+		static Node* createNew(Node* parent, Model* model);																				\
 		static Node* createFromPersistence(Node *parent, NodeIdType id, PersistentStore &store, bool partialLoadHint);	\
 																																							\
 		static void registerNodeConstructors();																								\
@@ -56,7 +56,7 @@
  * Use this macro in the .cpp file that defines the new Node type.
  */
 #define NODE_DEFINE_EMPTY_CONSTRUCTORS(className, parentName)																			\
-	className::className(Node* parent) : parentName (parent) {}																			\
+	className::className(Node* parent, Model* model) : parentName (parent, model) {}												\
 																																							\
 	className::className(Node *parent, NodeIdType id, PersistentStore &store, bool partialLoadHint)							\
 		: parentName (parent, id, store, partialLoadHint) {}
@@ -84,9 +84,9 @@ void className::registerNodeConstructors()																									\
 	Node::registerNodeType(#className, createNew, createFromPersistence);															\
 }																																							\
 																																							\
-Node* className::createNew(Node* parent)																										\
+Node* className::createNew(Node* parent, Model* model)																					\
 {																																							\
-	return new className(parent);																													\
+	return new className(parent, model);																										\
 }																																							\
 																																							\
 Node* className::createFromPersistence(Node *parent, NodeIdType id, PersistentStore &store, bool partialLoadHint)		\

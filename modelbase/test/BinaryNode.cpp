@@ -6,6 +6,7 @@
  **********************************************************************************************************************/
 
 #include "BinaryNode.h"
+#include "nodes/Text.h"
 
 namespace Model {
 
@@ -18,25 +19,45 @@ int BinaryNode::rightIndex = 0;
 
 void BinaryNode::init()
 {
-	registerNodeConstructors();
-	textIndex = registerNewAttribute("text", "Text", false, false);
-	leftIndex = registerNewAttribute("left", "BinaryNode", false, true);
-	rightIndex = registerNewAttribute("right", "BinaryNode", false, true);
+registerNodeConstructors();
+textIndex = registerNewAttribute("text", "Text", false, false);
+leftIndex = registerNewAttribute("left", "BinaryNode", false, true);
+rightIndex = registerNewAttribute("right", "BinaryNode", false, true);
 }
 
 Text* BinaryNode::text()
 {
-	return static_cast<Text*> (get(textIndex));
+return static_cast<Text*> (get(textIndex));
 }
 
 BinaryNode* BinaryNode::left()
 {
-	return static_cast<BinaryNode*> (get(leftIndex));
+return static_cast<BinaryNode*> (get(leftIndex));
 }
 
 BinaryNode* BinaryNode::right()
 {
-	return static_cast<BinaryNode*> (get(rightIndex));
+return static_cast<BinaryNode*> (get(rightIndex));
+}
+
+BinaryNode* BinaryNode::makeLeftNode()
+{
+return static_cast<BinaryNode*> (createOptional(leftIndex));
+}
+
+BinaryNode* BinaryNode::makeRightNode()
+{
+	return static_cast<BinaryNode*> (createOptional(rightIndex));
+}
+
+void BinaryNode::removeLeftNode()
+{
+	removeOptional(leftIndex);
+}
+
+void BinaryNode::removeRightNode()
+{
+	removeOptional(rightIndex);
 }
 
 }

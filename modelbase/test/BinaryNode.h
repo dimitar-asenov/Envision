@@ -9,10 +9,11 @@
 #define BINARYNODE_H_
 
 #include "nodes/ExtendableNode.h"
-#include "nodes/Text.h"
 #include "nodeMacros.h"
 
 namespace Model {
+
+class Text;
 
 class BinaryNode: public ExtendableNode<BinaryNode>
 {
@@ -29,6 +30,12 @@ class BinaryNode: public ExtendableNode<BinaryNode>
 		Text* text();
 		BinaryNode* left();
 		BinaryNode* right();
+
+		BinaryNode* makeLeftNode();
+		BinaryNode* makeRightNode();
+
+		void removeLeftNode();
+		void removeRightNode();
 
 };
 

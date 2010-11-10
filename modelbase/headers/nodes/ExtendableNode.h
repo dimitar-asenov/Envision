@@ -16,7 +16,7 @@
 namespace Model {
 
 template<class T>
-class MODELBASE_API ExtendableNode: public Model::Node
+class MODELBASE_API ExtendableNode: public Node
 {
 	private:
 		QVector<Node*> attributes;
@@ -53,11 +53,11 @@ class MODELBASE_API ExtendableNode: public Model::Node
 		}
 
 	public:
-		ExtendableNode(Node *parent) :
-			Node(parent), attributes(attributeNames.size(), NULL)
+		ExtendableNode(Node *parent, Model* model) :
+			Node(parent, model), attributes(attributeNames.size(), NULL)
 		{
 			for (int i = 0; i < attributeNames.size(); i++)
-				if ( !attributeOptional[i] ) attributes[i] = Node::createNewNode(attributeTypes[i], this);
+				if ( !attributeOptional[i] ) attributes[i] = Node::createNewNode(attributeTypes[i], this, model);
 		}
 
 		ExtendableNode(Node *parent, NodeIdType id, PersistentStore &store, bool) :

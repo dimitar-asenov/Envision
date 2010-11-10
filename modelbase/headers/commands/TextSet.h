@@ -13,7 +13,7 @@
 
 namespace Model {
 
-class TextSet: public Model::UndoCommand
+class TextSet: public UndoCommand
 {
 	private:
 		QString* field;

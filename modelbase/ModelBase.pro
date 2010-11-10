@@ -9,7 +9,8 @@ INCLUDEPATH += ./headers \
 TARGET = modelbase
 DEFINES += MODELBASE_LIBRARY
 win32:LIBS += -L$${ENVISION_PLUGINS_DIR} \
-    -llogger
+    -llogger \
+    -lselftest
 QT = core \
     gui
 QMAKE_CXXFLAGS += -Werror
@@ -35,7 +36,9 @@ HEADERS += headers/commands/TextSet.h \
     headers/Node.h \
     headers/modelbase_api.h \
     src/modelbase.h
-SOURCES += src/commands/TextSet.cpp \
+SOURCES += test/UndoRedoTests.cpp \
+    test/SimpleTests.cpp \
+    src/commands/TextSet.cpp \
     src/nodes/Text.cpp \
     test/BinaryNode.cpp \
     src/commands/ExtendedNodeOptional.cpp \

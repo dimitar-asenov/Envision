@@ -6,13 +6,14 @@
  **********************************************************************************************************************/
 
 #include "Model.h"
+#include "UndoCommand.h"
 
 namespace Model {
 
 QList<Model*> Model::loadedModels;
 
 Model::Model() :
-	root(NULL)
+	root(NULL), modificationInProgress(false), nextId(0)
 {
 	commands.setUndoLimit(100);
 	loadedModels.append(this);
@@ -27,18 +28,26 @@ Model::~Model()
 void Model::beginModification(const QString &text)
 {
 	modification.lock();
+	modificationInProgress = true;
 	commands.beginMacro(text);
 }
 
 void Model::endModification()
 {
 	commands.endMacro();
+	modificationInProgress = false;
 	modification.unlock();
 }
 
 Node* Model::getRoot()
 {
 	return root;
+}
+
+NodeIdType Model::generateNextId()
+{
+	// TODO throw exception if the model is not under modification
+	return nextId++;
 }
 
 void Model::pushCommandOnUndoStack(UndoCommand* command)
@@ -71,7 +80,7 @@ Node* Model::createRoot(const QString &typeName)
 	if (root == NULL )
 	{
 		commands.clear();
-		root = Node::createNewNode(typeName, NULL);
+		root = Node::createNewNode(typeName, NULL, this);
 	}
 
 	return root;

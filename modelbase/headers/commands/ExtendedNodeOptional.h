@@ -9,12 +9,13 @@
 #define EXTENDEDNODEOPTIONAL_H_
 
 #include "UndoCommand.h"
-#include "Node.h"
 #include <QVector>
 
 namespace Model {
 
-class ExtendedNodeOptional: public Model::UndoCommand
+class Node;
+
+class ExtendedNodeOptional: public UndoCommand
 {
 	private:
 		Node* attribute;
