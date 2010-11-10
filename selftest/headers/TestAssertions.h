@@ -35,7 +35,7 @@
 			QString message = getName() + "   " + __FILE__ + ":" + QString::number(__LINE__) + "\n";							\
 			message += "Actual value is different from expected\n";																		\
 			message += "Actual    " + QString::number(actual) + "\n";																	\
-			message += "Expected  " + QString::number(exptected);																			\
+			message += "Expected  " + QString::number(expected);																			\
 			testResults.addFailed(message);																										\
 		}																																					\
 	} catch (...)																																		\
