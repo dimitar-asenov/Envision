@@ -20,8 +20,15 @@ pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
 debug:DEFINES += DEBUG
-HEADERS += headers/TestManager.h \
+HEADERS += headers/SelfTestSuite.h \
+    headers/TestAssertions.h \
+    headers/TestResult.h \
+    headers/TestResults.h \
+    headers/Test.h \
+    headers/TestManager.h \
     headers/selftest_api.h \
     src/selftest.h
-SOURCES += src/TestManager.cpp \
+SOURCES += src/TestResult.cpp \
+    src/TestResults.cpp \
+    src/Test.cpp \
     src/selftest.cpp

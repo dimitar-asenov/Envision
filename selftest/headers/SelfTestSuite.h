@@ -1,23 +1,16 @@
 /***********************************************************************************************************************
- * TestManager.cpp
+ * SelfTestSuite.h
  *
- *  Created on: Nov 9, 2010
+ *  Created on: Nov 10, 2010
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
+#ifndef SELFTESTSUITE_H_
+#define SELFTESTSUITE_H_
+
+#include "Test.h"
 #include "TestManager.h"
+#include "TestResults.h"
+#include "TestAssertions.h"
 
-namespace SelfTest {
-
-TestManager::TestManager()
-{
-	// TODO Auto-generated constructor stub
-
-}
-
-TestManager::~TestManager()
-{
-	// TODO Auto-generated destructor stub
-}
-
-}
+#endif /* SELFTESTSUITE_H_ */
