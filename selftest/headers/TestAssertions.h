@@ -15,13 +15,13 @@
 		if ( (expected) == (actual) ) testResults.addPassed();																			\
 		else																																				\
 		{																																					\
-			QString message = getName() + "   " + __FILE__ + ":" + __LINE__ + "\n";													\
+			QString message = getName() + "   " + __FILE__ + ":" + QString::number(__LINE__) + "\n";							\
 			message += "Actual value is different from expected";																			\
-			testResults.addFailed(message)																										\
+			testResults.addFailed(message);																										\
 		}																																					\
 	} catch (...)																																		\
 	{																																						\
-		restResults.addFailed(getName() + "   " + __FILE__ + ":" + __LINE__ + "\nUncaught exception");						\
+		testResults.addFailed(getName() + "   " + __FILE__ + ":" + QString::number(__LINE__) + "\nUncaught exception");\
 	}
 /**********************************************************************************************************************/
 
@@ -32,15 +32,15 @@
 		if ( (expected) == (actual) ) testResults.addPassed();																			\
 		else																																				\
 		{																																					\
-			QString message = getName() + "   " + __FILE__ + ":" + __LINE__ + "\n";													\
+			QString message = getName() + "   " + __FILE__ + ":" + QString::number(__LINE__) + "\n";							\
 			message += "Actual value is different from expected\n";																		\
 			message += "Actual    " + QString::number(actual) + "\n";																	\
 			message += "Expected  " + QString::number(exptected);																			\
-			testResults.addFailed(message)																										\
+			testResults.addFailed(message);																										\
 		}																																					\
 	} catch (...)																																		\
 	{																																						\
-		restResults.addFailed(getName() + "   " + __FILE__ + ":" + __LINE__ + "\nUncaught exception");						\
+		testResults.addFailed(getName() + "   " + __FILE__ + ":" + QString::number(__LINE__) + "\nUncaught exception");\
 	}
 /**********************************************************************************************************************/
 
@@ -51,13 +51,13 @@
 		if ( (condition) ) testResults.addPassed();																							\
 		else																																				\
 		{																																					\
-			QString message = getName() + "   " + __FILE__ + ":" + __LINE__ + "\n";													\
-			message += "Condition is false: " + #condition;																					\
-			testResults.addFailed(message)																										\
+			QString message = getName() + "   " + __FILE__ + ":" + QString::number(__LINE__) + "\n";							\
+			message += "Condition is false: " #condition;																					\
+			testResults.addFailed(message);																										\
 		}																																					\
 	} catch (...)																																		\
 	{																																						\
-		restResults.addFailed(getName() + "   " + __FILE__ + ":" + __LINE__ + "\nUncaught exception");						\
+		testResults.addFailed(getName() + "   " + __FILE__ + ":" + QString::number(__LINE__) + "\nUncaught exception");\
 	}
 /**********************************************************************************************************************/
 

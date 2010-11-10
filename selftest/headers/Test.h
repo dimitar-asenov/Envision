@@ -35,28 +35,28 @@ class SELFTEST_API Test
 }
 
 /**********************************************************************************************************************/
-#define TEST(pluginClass, testId, testName)																									\
-class ##pluginClass##Test##testName## : public SelfTest::Test																			\
+#define TEST(pluginClass, testName)																												\
+class pluginClass##Test##testName : public SelfTest::Test																				\
 {																																							\
-		static void* initTrigger;																													\
-		##pluginClass##Test##testName## (const QString &name) : Test (name) {}														\
+		static int initTrigger;																														\
+		pluginClass##Test##testName (const QString &name) : Test (name) {}															\
 																																							\
 	public:																																				\
-		static Test* create##pluginClass##Test##testName## ()																				\
+		static Test* create##pluginClass##Test##testName ()																				\
 		{																																					\
-			return new ##pluginClass##Test##testName## (testId);																			\
+			return new pluginClass##Test##testName (#testName);																			\
 		}																																					\
 																																							\
-		static void* init ()																															\
+		static int init ()																															\
 		{																																					\
-			TestManager<pluginClass>::add(create##pluginClass##Test##testName##, testId)											\
-			return NULL;																																\
+			SelfTest::TestManager<pluginClass>::add(create##pluginClass##Test##testName, #testName);							\
+			return 0;																																	\
 		}																																					\
 																																							\
 		void runCustom(SelfTest::TestResults& testResults);																				\
-}																																							\
-##pluginClass##Test##testName##::initTrigger = ##pluginClass##Test##testName##::init();										\
-void ##pluginClass##Test##testName##::runCustom(SelfTest::TestResults& testResults)
+};																																							\
+int pluginClass##Test##testName::initTrigger = pluginClass##Test##testName::init();												\
+void pluginClass##Test##testName::runCustom(SelfTest::TestResults& testResults)
 /**********************************************************************************************************************/
 
 #endif /* TEST_H_ */

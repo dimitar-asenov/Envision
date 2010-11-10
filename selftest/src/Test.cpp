@@ -32,7 +32,7 @@ void Test::run(TestResults& testResults)
 	}
 	catch (...)
 	{
-
+		testResults.addFailed(getName() +": Uncaught exception outside of check.");
 	}
 }
 
