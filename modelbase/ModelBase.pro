@@ -39,7 +39,8 @@ HEADERS += headers/commands/IntegerSet.h \
     headers/Node.h \
     headers/modelbase_api.h \
     src/modelbase.h
-SOURCES += src/commands/IntegerSet.cpp \
+SOURCES += test/PositionTests.cpp \
+    src/commands/IntegerSet.cpp \
     src/nodes/Integer.cpp \
     test/BinaryWithPosition.cpp \
     test/UndoRedoTests.cpp \

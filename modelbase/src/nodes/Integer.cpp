@@ -13,7 +13,7 @@ namespace Model {
 NODE_DEFINE_TYPE_REGISTRATION_METHODS(Integer)
 
 Integer::Integer(Node *parent, Model* model) :
-	Node(parent, model)
+	Node(parent, model), integer(0)
 {
 }
 

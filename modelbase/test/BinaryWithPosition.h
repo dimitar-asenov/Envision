@@ -15,7 +15,7 @@ class BinaryNode;
 class BinaryWithPosition
 {
 	private:
-		BinaryNode* binary;
+		BinaryNode* binaryNode;
 		static int xIndex;
 		static int yIndex;
 
@@ -23,6 +23,7 @@ class BinaryWithPosition
 		BinaryWithPosition(BinaryNode* binary);
 		virtual ~BinaryWithPosition();
 
+		BinaryNode* binary();
 		int x();
 		int y();
 

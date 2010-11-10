@@ -14,8 +14,8 @@ namespace Model {
 int BinaryWithPosition::xIndex;
 int BinaryWithPosition::yIndex;
 
-BinaryWithPosition::BinaryWithPosition(BinaryNode* binary_) :
-	binary(binary_)
+BinaryWithPosition::BinaryWithPosition(BinaryNode* binary) :
+	binaryNode(binary)
 {
 }
 
@@ -23,20 +23,25 @@ BinaryWithPosition::~BinaryWithPosition()
 {
 }
 
+BinaryNode* BinaryWithPosition::binary()
+{
+	return binaryNode;
+}
+
 int BinaryWithPosition::x()
 {
-	return static_cast<Integer*> (binary->get(xIndex))->get();
+	return static_cast<Integer*> (binaryNode->get(xIndex))->get();
 }
 
 int BinaryWithPosition::y()
 {
-	return static_cast<Integer*> (binary->get(yIndex))->get();
+	return static_cast<Integer*> (binaryNode->get(yIndex))->get();
 }
 
 void BinaryWithPosition::set(int x, int y)
 {
-	static_cast<Integer*> (binary->get(xIndex))->set(x);
-	static_cast<Integer*> (binary->get(yIndex))->set(y);
+	static_cast<Integer*> (binaryNode->get(xIndex))->set(x);
+	static_cast<Integer*> (binaryNode->get(yIndex))->set(y);
 }
 
 void BinaryWithPosition::init()
