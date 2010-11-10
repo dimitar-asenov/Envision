@@ -53,12 +53,12 @@ TEST(ModelBase, ChildNodeRetrieval)
 	BinaryNode* right = root->makeRightNode();
 
 	CHECK_INT_EQUAL(0, root->getId());
-	CHECK_INT_EQUAL(2, left->getId());
-	CHECK_INT_EQUAL(4, right->getId());
+	CHECK_INT_EQUAL(4, left->getId());
+	CHECK_INT_EQUAL(8, right->getId());
 
 	CHECK_CONDITION(root->getChild(1) == root->text());
-	CHECK_CONDITION(root->getChild(2) == left);
-	CHECK_CONDITION(root->getChild(4) == right);
+	CHECK_CONDITION(root->getChild(4) == left);
+	CHECK_CONDITION(root->getChild(8) == right);
 
 	CHECK_CONDITION(root->hasAttribute("text"));
 	CHECK_CONDITION(root->hasAttribute("left"));

@@ -9,7 +9,9 @@
 #include "selftest/headers/SelfTestSuite.h"
 
 #include "nodes/Text.h"
+#include "nodes/Integer.h"
 #include "BinaryNode.h"
+#include "BinaryWithPosition.h"
 
 using namespace Logger;
 
@@ -23,12 +25,14 @@ bool ModelBase::initialize(Envision::EnvisionManager&)
 {
 	logger = Logger::Log::getLogger("modelbase");
 	Text::registerNodeConstructors();
+	Integer::registerNodeConstructors();
 	return true;
 }
 
 void ModelBase::selfTest(QString)
 {
 	BinaryNode::init();
+	BinaryWithPosition::init();
 	SelfTest::TestManager<ModelBase>::runAllTests().printResultStatistics();
 }
 

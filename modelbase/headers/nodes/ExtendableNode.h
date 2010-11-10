@@ -25,33 +25,6 @@ class MODELBASE_API ExtendableNode: public Node
 		static QVector<bool> attributeOptional;
 		static QVector<bool> attributePartialHint;
 
-	protected:
-		Node* get(int attributeIndex)
-		{
-			return attributes[attributeIndex];
-		}
-
-		Node* createOptional(int attributeIndex)
-		{
-			if ( attributeOptional[attributeIndex] )
-			{
-				Node* newnode = Node::createNewNode(attributeTypes[attributeIndex], this);
-				execute(new ExtendedNodeOptional(this, newnode, attributeIndex, &attributes, true));
-				return attributes[attributeIndex];
-			}
-
-			// TODO throw exception instead of returning null
-			return NULL;
-		}
-
-		void removeOptional(int attributeIndex)
-		{
-			if ( attributeOptional[attributeIndex] )
-			{
-				execute(new ExtendedNodeOptional(this, attributes[attributeIndex], attributeIndex, &attributes, false));
-			}
-		}
-
 	public:
 		ExtendableNode(Node *parent, Model* model) :
 			Node(parent, model), attributes(attributeNames.size(), NULL)
@@ -78,6 +51,32 @@ class MODELBASE_API ExtendableNode: public Node
 		{
 			for (int i = 0; i < attributes.size(); i++)
 				delete attributes[i];
+		}
+
+		Node* get(int attributeIndex)
+		{
+			return attributes[attributeIndex];
+		}
+
+		Node* createOptional(int attributeIndex)
+		{
+			if ( attributeOptional[attributeIndex] )
+			{
+				Node* newnode = Node::createNewNode(attributeTypes[attributeIndex], this);
+				execute(new ExtendedNodeOptional(this, newnode, attributeIndex, &attributes, true));
+				return attributes[attributeIndex];
+			}
+
+			// TODO throw exception instead of returning null
+			return NULL;
+		}
+
+		void removeOptional(int attributeIndex)
+		{
+			if ( attributeOptional[attributeIndex] )
+			{
+				execute(new ExtendedNodeOptional(this, attributes[attributeIndex], attributeIndex, &attributes, false));
+			}
 		}
 
 		void save(PersistentStore &store)

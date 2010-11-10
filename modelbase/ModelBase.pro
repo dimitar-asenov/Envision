@@ -24,7 +24,10 @@ pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
 debug:DEFINES += DEBUG
-HEADERS += headers/commands/TextSet.h \
+HEADERS += headers/commands/IntegerSet.h \
+    headers/nodes/Integer.h \
+    test/BinaryWithPosition.h \
+    headers/commands/TextSet.h \
     headers/nodes/Text.h \
     headers/nodes/ExtendableNode.h \
     headers/nodeMacros.h \
@@ -36,7 +39,10 @@ HEADERS += headers/commands/TextSet.h \
     headers/Node.h \
     headers/modelbase_api.h \
     src/modelbase.h
-SOURCES += test/UndoRedoTests.cpp \
+SOURCES += src/commands/IntegerSet.cpp \
+    src/nodes/Integer.cpp \
+    test/BinaryWithPosition.cpp \
+    test/UndoRedoTests.cpp \
     test/SimpleTests.cpp \
     src/commands/TextSet.cpp \
     src/nodes/Text.cpp \
