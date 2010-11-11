@@ -9,27 +9,45 @@
 #define ENVISIONEXCEPTION_H_
 
 #include <QString>
+#include <QTextStream>
 
 namespace Envision {
 
 class EnvisionException
 {
 	private:
-		QString reason;
-		EnvisionException* causedBy;
+		QString msg;
 
 	public:
-		EnvisionException();
-		EnvisionException(QString reason);
-		EnvisionException(QString reason, EnvisionException& causedBy);
+		EnvisionException()
+		{
+		}
 
-		virtual ~EnvisionException();
+		EnvisionException(const QString& message) :
+			msg(message)
+		{
+		}
 
-		virtual QString getExceptionName();
-		virtual QString getExceptionReason();
-		virtual EnvisionException* getCausingException();
+		virtual ~EnvisionException()
+		{
+		}
 
-		void printError();
+		virtual const QString& name() const
+		{
+			static QString ename("EnvisionException");
+			return ename;
+		}
+
+		virtual const QString& message() const
+		{
+			return msg;
+		}
+
+		virtual void printError() const
+		{
+			QTextStream err(stderr);
+			err << "Exception " << qPrintable( name() ) << ": " << qPrintable( message() ) << endl;
+		}
 };
 
 }

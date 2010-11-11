@@ -12,14 +12,12 @@ QT += core \
     gui \
     xml
 INCLUDEPATH += ./headers
-	./src \
-	./test \
-QMAKE_CXXFLAGS += -Werror
+./src ./test QMAKE_CXXFLAGS += -Werror
 debug:DEFINES += DEBUG
-HEADERS += src/TestEvent.h \
+HEADERS += headers/EnvisionException.h \
+    src/TestEvent.h \
     src/TestRunner.h \
     src/DefaultEnvisionManager.h \
-    src/EnvisionException.h \
     headers/EnvisionManager.h \
     headers/PluginInfo.h \
     src/PluginManager.h \
@@ -28,7 +26,6 @@ HEADERS += src/TestEvent.h \
 SOURCES += src/TestEvent.cpp \
     src/TestRunner.cpp \
     src/DefaultEnvisionManager.cpp \
-    src/EnvisionException.cpp \
     src/PluginManager.cpp \
     src/main.cpp \
     src/EnvisionWindow.cpp
