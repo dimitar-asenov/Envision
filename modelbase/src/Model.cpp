@@ -7,13 +7,14 @@
 
 #include "Model.h"
 #include "UndoCommand.h"
+#include "ModelException.h"
 
 namespace Model {
 
 QList<Model*> Model::loadedModels;
 
 Model::Model() :
-	root(NULL), modificationInProgress(false), nextId(0)
+	root(NULL), pushedNewCommandsOnTheStack(false), modificationInProgress(false), nextId(0)
 {
 	commands.setUndoLimit(100);
 	loadedModels.append(this);
@@ -29,12 +30,18 @@ void Model::beginModification(const QString &text)
 {
 	modification.lock();
 	modificationInProgress = true;
-	commands.beginMacro(text);
+	modificationText = text;
+
 }
 
 void Model::endModification()
 {
-	commands.endMacro();
+	if (pushedNewCommandsOnTheStack)
+	{
+		pushedNewCommandsOnTheStack = false;
+		commands.endMacro();
+	}
+
 	modificationInProgress = false;
 	modification.unlock();
 }
@@ -46,23 +53,43 @@ Node* Model::getRoot()
 
 NodeIdType Model::generateNextId()
 {
-	// TODO throw exception if the model is not under modification
+	if ( root != NULL && !modificationInProgress ) throw ModelException("Creating a new node without calling Model.beginModification() first");
+
 	return nextId++;
 }
 
 void Model::pushCommandOnUndoStack(UndoCommand* command)
 {
+	if ( !modificationInProgress ) throw ModelException("Changing the application tree without calling Model.beginModification() first");
+
+	if ( pushedNewCommandsOnTheStack == false )
+	{
+		pushedNewCommandsOnTheStack = true;
+		commands.beginMacro(modificationText);
+	}
+
 	commands.push(command);
 }
 
 void Model::undo()
 {
+	if ( !modificationInProgress ) throw ModelException("Requesting an Undo without calling Model.beginModification() first");
+	if ( pushedNewCommandsOnTheStack ) throw ModelException("Requesting an undo in the middle of a modification after inserting new commands.");
+
 	commands.undo();
 }
 
 void Model::redo()
 {
+	if ( !modificationInProgress ) throw ModelException("Requesting a Redo without calling Model.beginModification() first");
+	if ( pushedNewCommandsOnTheStack ) throw ModelException("Requesting a Redo in the middle of a modification after inserting new commands.");
+
 	commands.redo();
+}
+
+void Model::save(PersistentStore& store)
+{
+	if (root) store.saveNode(root,"root",false);
 }
 
 Model* Model::getModel(Node* root)
@@ -77,7 +104,7 @@ Model* Model::getModel(Node* root)
 
 Node* Model::createRoot(const QString &typeName)
 {
-	if (root == NULL )
+	if ( root == NULL )
 	{
 		commands.clear();
 		root = Node::createNewNode(typeName, NULL, this);

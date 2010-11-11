@@ -28,7 +28,9 @@ TEST(ModelBase, PositionExtension)
 	CHECK_INT_EQUAL( 0, pos.x() );
 	CHECK_INT_EQUAL( 0, pos.y() );
 
+	model.beginModification("Setting values");
 	pos.set(42, -18);
+	model.endModification();
 
 	CHECK_INT_EQUAL( 42, pos.x() );
 	CHECK_INT_EQUAL( -18, pos.y() );

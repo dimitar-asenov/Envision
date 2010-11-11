@@ -25,7 +25,7 @@ class Integer: public Node
 		int  get() const;
 		void set(int newval);
 
-		void save(PersistentStore &store);
+		void save(PersistentStore &store) const;
 };
 
 }

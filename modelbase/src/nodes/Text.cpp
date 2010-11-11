@@ -38,7 +38,7 @@ void Text::set(const QString &newText)
 	execute(new TextSet(this, &text, newText));
 }
 
-void Text::save(PersistentStore &store)
+void Text::save(PersistentStore &store) const
 {
 	store.saveStringValue(text);
 }

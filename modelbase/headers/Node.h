@@ -42,16 +42,16 @@ class MODELBASE_API Node
 		Node(Node* parent, NodeIdType id);
 		virtual ~Node();
 
-		Model* getModel();
-		Node* getRoot();
-		Node* getParent();
+		Model* getModel() const;
+		Node* getRoot() const;
+		Node* getParent() const;
 
-		virtual Node* getChild(NodeIdType id);
-		NodeIdType getId();
-		int getRevision();
+		virtual Node* getChild(NodeIdType id) const;
+		NodeIdType getId() const;
+		int getRevision() const;
 		void incrementRevision();
 		void addToRevision(int valueToAdd);
-		bool isFullyLoaded();
+		bool isFullyLoaded() const;
 
 		/**
 		 * Executes the specified command and pushes it on the undo stack.
@@ -64,7 +64,7 @@ class MODELBASE_API Node
 		 * This name should be unique between all siblings. If the returned value is a null string ( QString.isNull()
 		 * returns true ) this means that this node can not be referenced.
 		 */
-		virtual QString getReferenceName();
+		virtual QString getReferenceName() const;
 
 		/**
 		 * Saves the current node to a persistent store.
@@ -74,7 +74,7 @@ class MODELBASE_API Node
 		 * 				The persistent store to use
 		 *
 		 */
-		virtual void save(PersistentStore &store) = 0;
+		virtual void save(PersistentStore &store) const = 0;
 		virtual void loadFully(PersistentStore &store);
 
 		/**
@@ -93,9 +93,9 @@ class MODELBASE_API Node
 		 * suitable for being new persistence units. Nodes closer to the leafs, such as expressions and text values should
 		 * not be new persistence units, as this will greatly increase the memory required by the persistence engine.
 		 */
-		virtual bool isNewPersistenceUnit();
+		virtual bool isNewPersistenceUnit() const;
 
-		virtual QString getTypeName() = 0;
+		virtual QString getTypeName() const = 0;
 
 		static bool registerNodeType(const QString &type, const NodeConstructor constructor, const NodePersistenceConstructor persistenceconstructor);
 

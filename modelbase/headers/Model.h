@@ -11,6 +11,7 @@
 #include "modelbase_api.h"
 #include "Node.h"
 
+#include <QString>
 #include <QUndoStack>
 #include <QMutex>
 #include <QVector>
@@ -25,6 +26,8 @@ class MODELBASE_API Model
 		Node* root;
 		QUndoStack commands;
 
+		QString modificationText;
+		bool pushedNewCommandsOnTheStack;
 		bool modificationInProgress;
 		QMutex modification;
 
@@ -36,7 +39,7 @@ class MODELBASE_API Model
 		Model();
 		virtual ~Model();
 
-		void beginModification(const QString &text);
+		void beginModification(const QString &text = QString());
 		void endModification();
 
 		Node* getRoot();
@@ -48,6 +51,8 @@ class MODELBASE_API Model
 		void pushCommandOnUndoStack(UndoCommand* command);
 		void undo();
 		void redo();
+
+		void save(PersistentStore& store);
 
 		/**
 		 * Returns the model object that has as its root node the node indicated.

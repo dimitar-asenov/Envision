@@ -12,6 +12,7 @@
 #include <QVector>
 #include <QString>
 #include "commands/ExtendedNodeOptional.h"
+#include "ModelException.h"
 
 namespace Model {
 
@@ -41,7 +42,7 @@ class MODELBASE_API ExtendableNode: public Node
 			for (QList<LoadedNode>::iterator ln = children.begin(); ln != children.end(); ln++)
 			{
 				int index = attributeNames.indexOf(ln->name);
-				if ( index < 0 ) continue; //TODO throw an exception
+				if ( index < 0 ) throw ModelException("Node has attribute " + ln->name + " in persistent store, but this attribute is not registered");
 
 				attributes[index] = ln->node;
 			}
@@ -60,15 +61,17 @@ class MODELBASE_API ExtendableNode: public Node
 
 		Node* createOptional(int attributeIndex)
 		{
+			if ( attributeIndex < 0 || attributeIndex >= attributeOptional.size() ) throw ModelException("Trying to create an optional attribute with an index out of bounds " + QString::number(attributeIndex));
+
 			if ( attributeOptional[attributeIndex] )
 			{
 				Node* newnode = Node::createNewNode(attributeTypes[attributeIndex], this);
 				execute(new ExtendedNodeOptional(this, newnode, attributeIndex, &attributes, true));
 				return attributes[attributeIndex];
 			}
+			else
+				throw ModelException("Trying to create an optional attribute for an index which is mandatory " + QString::number(attributeIndex));
 
-			// TODO throw exception instead of returning null
-			return NULL;
 		}
 
 		void removeOptional(int attributeIndex)
@@ -79,10 +82,10 @@ class MODELBASE_API ExtendableNode: public Node
 			}
 		}
 
-		void save(PersistentStore &store)
+		void save(PersistentStore &store) const
 		{
 			for (int i = 0; i < attributes.size(); i++)
-				store.saveNode(attributes[i], attributeNames[i], attributePartialHint[i]);
+				if ( attributes[i] != NULL ) store.saveNode(attributes[i], attributeNames[i], attributePartialHint[i]);
 		}
 
 		Node* getChild(NodeIdType id)
@@ -109,8 +112,7 @@ class MODELBASE_API ExtendableNode: public Node
 
 		static int registerNewAttribute(const QString &attributeName, const QString &attributeType, bool canBePartiallyLoaded = false, bool isOptional = false)
 		{
-			if ( attributeNames.contains(attributeName) ) return attributeNames.indexOf(attributeName);
-			//TODO include proper exception handling
+			if ( attributeNames.contains(attributeName) ) throw ModelException("Trying to register new attribute " + attributeName + " but this name already exists");
 
 			attributeNames.append(attributeName);
 			attributeTypes.append(attributeType);

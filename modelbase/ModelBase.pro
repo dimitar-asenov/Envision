@@ -24,7 +24,9 @@ pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
 debug:DEFINES += DEBUG
-HEADERS += headers/commands/IntegerSet.h \
+HEADERS += test/PersistentStoreMock.h \
+    headers/ModelException.h \
+    headers/commands/IntegerSet.h \
     headers/nodes/Integer.h \
     test/BinaryWithPosition.h \
     headers/commands/TextSet.h \
@@ -39,7 +41,10 @@ HEADERS += headers/commands/IntegerSet.h \
     headers/Node.h \
     headers/modelbase_api.h \
     src/modelbase.h
-SOURCES += test/PositionTests.cpp \
+SOURCES += test/PersistenceTests.cpp \
+    test/PersistentStoreMock.cpp \
+    src/ModelException.cpp \
+    test/PositionTests.cpp \
     src/commands/IntegerSet.cpp \
     src/nodes/Integer.cpp \
     test/BinaryWithPosition.cpp \

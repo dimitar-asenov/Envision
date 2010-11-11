@@ -10,6 +10,7 @@
 #include "modelbase.h"
 #include "Model.h"
 #include "UndoCommand.h"
+#include "ModelException.h"
 
 using namespace Logger;
 
@@ -29,7 +30,10 @@ Node::Node(Node* parent_, Model* model_) :
 {
 	Model *model = model_;
 	if (model == NULL) model = getModel();
-	else if (getModel() != NULL){}; // TODO here throw an exception. This should never be the case.
+	else if (getModel() != NULL)
+		throw ModelException("Constructing a new Node with an explicitly specified model and existing parent model");
+
+	if (model == NULL) throw ModelException("Constructing a node without a valid model");
 
 	id = model->generateNextId();
 }
@@ -59,39 +63,39 @@ void Node::execute(UndoCommand *command)
 /***********************************************************************************************************************
  * GETTERS AND SETTERS
  **********************************************************************************************************************/
-Model* Node::getModel()
+Model* Node::getModel() const
 {
 	return Model::getModel(getRoot());
 }
 
-Node* Node::getRoot()
+Node* Node::getRoot() const
 {
-	if ( parent == NULL ) return this;
+	if ( parent == NULL ) return const_cast<Node*> (this);
 
 	return parent->getRoot();
 }
 
-Node* Node::getParent()
+Node* Node::getParent() const
 {
 	return parent;
 }
 
-Node* Node::getChild(NodeIdType)
+Node* Node::getChild(NodeIdType) const
 {
 	return NULL;
 }
 
-NodeIdType Node::getId()
+NodeIdType Node::getId() const
 {
 	return id;
 }
 
-bool Node::isNewPersistenceUnit()
+bool Node::isNewPersistenceUnit() const
 {
 	return false;
 }
 
-int Node::getRevision()
+int Node::getRevision() const
 {
 	return revision;
 }
@@ -106,12 +110,12 @@ void Node::addToRevision(int valueToAdd)
 	revision += valueToAdd;
 }
 
-bool Node::isFullyLoaded()
+bool Node::isFullyLoaded() const
 {
 	return fullyLoaded;
 }
 
-QString Node::getReferenceName()
+QString Node::getReferenceName() const
 {
 	return QString();
 }

@@ -33,7 +33,7 @@ void Integer::set(int value)
 	execute(new IntegerSet(this, &integer, value));
 }
 
-void Integer::save(PersistentStore &store)
+void Integer::save(PersistentStore &store) const
 {
 	store.saveIntValue(integer);
 }

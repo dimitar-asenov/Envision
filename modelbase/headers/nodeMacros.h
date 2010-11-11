@@ -32,7 +32,7 @@
 		className(Node* parent, Model* model);																									\
 		className(Node *parent, NodeIdType id, PersistentStore &store, bool partialLoadHint);									\
 																																							\
-		QString getTypeName();																														\
+		QString getTypeName() const;																												\
 																																							\
 		static Node* createNew(Node* parent, Model* model);																				\
 		static Node* createFromPersistence(Node *parent, NodeIdType id, PersistentStore &store, bool partialLoadHint);	\
@@ -74,7 +74,7 @@
  * Use this macro in the .cpp file that defines the new Node type.
  */
 #define NODE_DEFINE_TYPE_REGISTRATION_METHODS(className)																					\
-QString className::getTypeName()																													\
+QString className::getTypeName()	const																											\
 {																																							\
 	return #className;																																\
 }																																							\

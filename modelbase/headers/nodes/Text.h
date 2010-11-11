@@ -27,7 +27,7 @@ class Text: public Node
 
 		void set(const QString &newText);
 
-		void save(PersistentStore &store);
+		void save(PersistentStore &store) const;
 };
 
 }

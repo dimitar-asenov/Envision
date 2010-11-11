@@ -24,18 +24,16 @@ struct MODELBASE_API LoadedNode
 	Node* node;
 };
 
-class MODELBASE_API PersistentStore
+class PersistentStore
 {
 	public:
-		virtual ~PersistentStore() = 0;
-
-		virtual void saveStringValue(QString &value) = 0;
-		virtual void saveIntValue(int &value) = 0;
-		virtual void saveFloatValue(double &value) = 0;
-		virtual void saveNode(Node *node, QString &name, bool partialLoadHint) = 0;
+		virtual void saveStringValue(const QString &value) = 0;
+		virtual void saveIntValue(int value) = 0;
+		virtual void saveFloatValue(double value) = 0;
+		virtual void saveNode(const Node *node, const QString &name, bool partialLoadHint) = 0;
 
 
-		virtual Node* loadRootNode(QString &name) = 0;
+		virtual Node* loadRootNode(const QString &name) = 0;
 		virtual QList<LoadedNode> loadAllSubNodes(Node* parent) = 0;
 		virtual int loadIntValue() = 0;
 		virtual QString loadStringValue() = 0;
