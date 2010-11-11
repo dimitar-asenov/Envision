@@ -45,6 +45,25 @@
 /**********************************************************************************************************************/
 
 /**********************************************************************************************************************/
+#define CHECK_STR_EQUAL(expected, actual)																										\
+	try																																					\
+	{																																						\
+		if ( (expected) == (actual) ) testResults.addPassed();																			\
+		else																																				\
+		{																																					\
+			QString message = getName() + "   " + __FILE__ + ":" + QString::number(__LINE__) + "\n";							\
+			message += "Actual value is different from expected\n";																		\
+			message += "Actual    " + QString(actual) + "\n";																							\
+			message += "Expected  " + QString(expected);																									\
+			testResults.addFailed(message);																										\
+		}																																					\
+	} catch (...)																																		\
+	{																																						\
+		testResults.addFailed(getName() + "   " + __FILE__ + ":" + QString::number(__LINE__) + "\nUncaught exception");\
+	}
+/**********************************************************************************************************************/
+
+/**********************************************************************************************************************/
 #define CHECK_CONDITION( condition )																											\
 	try																																					\
 	{																																						\

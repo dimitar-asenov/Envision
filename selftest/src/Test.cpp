@@ -7,6 +7,7 @@
 
 #include "Test.h"
 #include "TestManager.h"
+#include "EnvisionException.h"
 
 namespace SelfTest {
 
@@ -30,9 +31,13 @@ void Test::run(TestResults& testResults)
 	{
 		runCustom(testResults);
 	}
+	catch (const Envision::EnvisionException& e)
+	{
+		testResults.addFailed(getName() +": " + e.name() + " " + e.message());
+	}
 	catch (...)
 	{
-		testResults.addFailed(getName() +": Uncaught exception outside of check.");
+		testResults.addFailed(getName() +": Uncaught exception of unknown type");
 	}
 }
 
