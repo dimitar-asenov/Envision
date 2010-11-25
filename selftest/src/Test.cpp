@@ -27,18 +27,25 @@ const QString& Test::getName() const
 
 void Test::run(TestResults& testResults)
 {
+	bool passed = true;
+
 	try
 	{
-		runCustom(testResults);
+		runCustom(testResults, passed);
 	}
 	catch (const Envision::EnvisionException& e)
 	{
-		testResults.addFailed(getName() +": " + e.name() + " " + e.message());
+		passed = false;
+		testResults.addFailedCheck(getName() +": " + e.name() + " " + e.message());
 	}
 	catch (...)
 	{
-		testResults.addFailed(getName() +": Uncaught exception of unknown type");
+		passed = false;
+		testResults.addFailedCheck(getName() +": Uncaught exception of unknown type");
 	}
+
+	if (passed) testResults.addPassedTest(getName());
+	else testResults.addFailedTest(getName());
 }
 
 }

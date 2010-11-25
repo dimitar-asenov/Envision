@@ -29,7 +29,7 @@ class SELFTEST_API Test
 
 		const QString& getName() const;
 		void run(TestResults& testResults);
-		virtual void runCustom(TestResults& testResults) = 0;
+		virtual void runCustom(TestResults& testResults, bool &passed) = 0;
 };
 
 }
@@ -53,10 +53,10 @@ class pluginClass##Test##testName : public SelfTest::Test																				\
 			return 0;																																	\
 		}																																					\
 																																							\
-		void runCustom(SelfTest::TestResults& testResults);																				\
+		void runCustom(SelfTest::TestResults& testResults, bool &passed);																\
 };																																							\
 int pluginClass##Test##testName::initTrigger = pluginClass##Test##testName::init();												\
-void pluginClass##Test##testName::runCustom(SelfTest::TestResults& testResults)
+void pluginClass##Test##testName::runCustom(SelfTest::TestResults& testResults, bool &allChecksPassedFlag)
 /**********************************************************************************************************************/
 
 #endif /* TEST_H_ */

@@ -16,7 +16,7 @@ namespace SelfTest {
 class SELFTEST_API TestResult
 {
 	public:
-		typedef enum{TestPassed, TestFailed, TestInconclusive} TestOutcome;
+		typedef enum{TestPassed, TestFailed} TestOutcome;
 
 	private:
 		TestOutcome outcome;
@@ -30,7 +30,6 @@ class SELFTEST_API TestResult
 
 		bool isPassed() const;
 		bool isFailed() const;
-		bool isInconclusive() const;
 
 		TestOutcome getOutcome() const;
 };

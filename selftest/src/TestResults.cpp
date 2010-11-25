@@ -11,7 +11,7 @@
 namespace SelfTest {
 
 TestResults::TestResults() :
-	numPassed(0), numFailed(0), numInconclusive(0)
+	numPassedTests(0), numFailedTests(0), numPassedChecks(0), numFailedChecks(0)
 {
 }
 
@@ -19,67 +19,87 @@ TestResults::~TestResults()
 {
 }
 
-void TestResults::addPassed(const QString& message)
+void TestResults::addPassedTest(const QString& testName)
 {
-	results.append( TestResult(TestResult::TestPassed, message) );
-	numPassed++;
+	testResults.append(TestResult(TestResult::TestPassed, testName));
+	numPassedTests++;
 }
 
-void TestResults::addFailed(const QString& message)
+void TestResults::addFailedTest(const QString& testName)
 {
-	results.append( TestResult(TestResult::TestFailed, message) );
-	numFailed++;
+	testResults.append(TestResult(TestResult::TestFailed, testName));
+	numFailedTests++;
 }
 
-void TestResults::addInconclusive(const QString& message)
+void TestResults::addPassedCheck(const QString& message)
 {
-	results.append( TestResult(TestResult::TestInconclusive, message) );
-	numInconclusive++;
+	checkResults.append(TestResult(TestResult::TestPassed, message));
+	numPassedChecks++;
 }
 
-int TestResults::getNumExecuted() const
+void TestResults::addFailedCheck(const QString& message)
 {
-	return numPassed + numFailed + numInconclusive;
+	checkResults.append(TestResult(TestResult::TestFailed, message));
+	numFailedChecks++;
 }
 
-int TestResults::getNumPassed() const
+int TestResults::getNumExecutedTests() const
 {
-	return numPassed;
+	return numPassedTests + numFailedTests;
 }
 
-int TestResults::getNumFailed() const
+int TestResults::getNumPassedTests() const
 {
-	return numFailed;
+	return numPassedTests;
 }
 
-int TestResults::getNumInconclusive() const
+int TestResults::getNumFailedTests() const
 {
-	return numInconclusive;
+	return numFailedTests;
 }
 
-const QList<TestResult>& TestResults::getResults() const
+int TestResults::getNumExecutedChecks() const
 {
-	return results;
+	return numPassedChecks + numFailedChecks;
+}
+
+int TestResults::getNumPassedChecks() const
+{
+	return numPassedChecks;
+}
+
+int TestResults::getNumFailedChecks() const
+{
+	return numFailedChecks;
+}
+
+const QList<TestResult>& TestResults::getTestResults() const
+{
+	return testResults;
+}
+
+const QList<TestResult>& TestResults::getCheckResults() const
+{
+	return checkResults;
 }
 
 void TestResults::printResultStatistics() const
 {
 	QTextStream out(stdout);
 	out << "--------------------------" << endl;
-	out << "Total executed tests : " << getNumExecuted() << endl;
-	out << "Passed               : " << numPassed << endl;
-	out << "Failed               : " << numFailed << endl;
-	out << "Inconclusive         : " << numInconclusive << endl;
+	out << "Total executed tests : " << getNumExecutedTests() << "\t(" << getNumExecutedChecks() << ")" << endl;
+	out << "Passed               : " << numPassedTests << "\t(" << getNumPassedChecks() << ")" << endl;
+	out << "Failed               : " << numFailedTests << "\t(" << getNumFailedChecks() << ")" << endl;
 	out << "--------------------------" << endl;
 
-	if (numFailed > 0 || numInconclusive > 0)
+	if ( numFailedChecks > 0 || numFailedTests > 0)
 	{
 		out << endl << "Error messages" << endl;
-		for (QList<TestResult>::const_iterator r = results.begin(); r != results.end(); r++)
-		{
-			if (r->isFailed()) out << "FAILED: " << r->getMessage() << endl;
-			if (r->isInconclusive())  out << "INCONCLUSIVE: " << r->getMessage() << endl;
-		}
+		for (QList<TestResult>::const_iterator r = testResults.begin(); r != testResults.end(); r++)
+			if ( r->isFailed() ) out << "Test FAILED: " << r->getMessage() << endl;
+
+		for (QList<TestResult>::const_iterator r = checkResults.begin(); r != checkResults.end(); r++)
+					if ( r->isFailed() ) out << "Failure:" << r->getMessage() << endl;
 	}
 }
 

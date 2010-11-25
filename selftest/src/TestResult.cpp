@@ -33,11 +33,6 @@ bool TestResult::isFailed() const
 	return outcome == TestFailed;
 }
 
-bool TestResult::isInconclusive() const
-{
-	return outcome == TestInconclusive;
-}
-
 TestResult::TestOutcome TestResult::getOutcome() const
 {
 	return outcome;

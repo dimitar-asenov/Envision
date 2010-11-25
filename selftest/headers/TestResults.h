@@ -17,26 +17,35 @@ namespace SelfTest {
 class SELFTEST_API TestResults
 {
 	private:
-		QList<TestResult> results;
+		QList<TestResult> testResults;
+		QList<TestResult> checkResults;
 
-		int numPassed;
-		int numFailed;
-		int numInconclusive;
+		int numPassedTests;
+		int numFailedTests;
+
+		int numPassedChecks;
+		int numFailedChecks;
 
 	public:
 		TestResults();
 		virtual ~TestResults();
 
-		void addPassed(const QString& message = "OK");
-		void addFailed(const QString& message);
-		void addInconclusive(const QString& message);
+		void addPassedTest(const QString& testName);
+		void addFailedTest(const QString& testName);
 
-		int getNumExecuted() const;
-		int getNumPassed() const;
-		int getNumFailed() const;
-		int getNumInconclusive() const;
+		void addPassedCheck(const QString& message = "OK");
+		void addFailedCheck(const QString& message);
 
-		const QList<TestResult>& getResults() const;
+		int getNumExecutedTests() const;
+		int getNumPassedTests() const;
+		int getNumFailedTests() const;
+
+		int getNumExecutedChecks() const;
+		int getNumPassedChecks() const;
+		int getNumFailedChecks() const;
+
+		const QList<TestResult>& getTestResults() const;
+		const QList<TestResult>& getCheckResults() const;
 
 		void printResultStatistics() const;
 };
