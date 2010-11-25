@@ -10,6 +10,7 @@
 
 #include "nodes/Text.h"
 #include "nodes/Integer.h"
+#include "nodes/Reference.h"
 #include "BinaryNode.h"
 #include "BinaryWithPosition.h"
 
@@ -26,6 +27,7 @@ bool ModelBase::initialize(Envision::EnvisionManager&)
 	logger = Logger::Log::getLogger("modelbase");
 	Text::registerNodeConstructors();
 	Integer::registerNodeConstructors();
+	Reference::registerNodeConstructors();
 	return true;
 }
 

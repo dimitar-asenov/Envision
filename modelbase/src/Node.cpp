@@ -11,6 +11,7 @@
 #include "Model.h"
 #include "UndoCommand.h"
 #include "ModelException.h"
+#include <QList>
 
 using namespace Logger;
 
@@ -29,11 +30,10 @@ Node::Node(Node* parent_, Model* model_) :
 	parent(parent_), id(0), revision(0), fullyLoaded(true)
 {
 	Model *model = model_;
-	if (model == NULL) model = getModel();
-	else if (getModel() != NULL)
-		throw ModelException("Constructing a new Node with an explicitly specified model and existing parent model");
+	if ( model == NULL ) model = getModel();
+	else if ( getModel() != NULL ) throw ModelException("Constructing a new Node with an explicitly specified model and existing parent model");
 
-	if (model == NULL) throw ModelException("Constructing a node without a valid model");
+	if ( model == NULL ) throw ModelException("Constructing a node without a valid model");
 
 	id = model->generateNextId();
 }
@@ -60,6 +60,39 @@ void Node::execute(UndoCommand *command)
 	getModel()->pushCommandOnUndoStack(command);
 }
 
+Node* Node::getLowestCommonAncestor(Node* other)
+{
+	QList<Node*> thisParents;
+	QList<Node*> otherParents;
+
+	// Get all parents of the current node
+	Node* n = this;
+	while (n)
+	{
+		thisParents.prepend(n);
+		n = n->getParent();
+	}
+
+	// Get all parents of the other node
+	n = other;
+	while (n)
+	{
+		otherParents.prepend(n);
+		n = n->getParent();
+	}
+
+	// Find the lowest common ancestor
+	n = NULL;
+	while (thisParents.size() > 0 && otherParents.size() > 0 && thisParents.first() == otherParents.first())
+	{
+		n = thisParents.first();
+
+		thisParents.removeFirst();
+		otherParents.removeFirst();
+	}
+
+	return n;
+}
 /***********************************************************************************************************************
  * GETTERS AND SETTERS
  **********************************************************************************************************************/
@@ -81,6 +114,11 @@ Node* Node::getParent() const
 }
 
 Node* Node::getChild(NodeIdType) const
+{
+	return NULL;
+}
+
+Node* Node::getChild(const QString&) const
 {
 	return NULL;
 }
@@ -116,6 +154,11 @@ bool Node::isFullyLoaded() const
 }
 
 QString Node::getReferenceName() const
+{
+	return QString();
+}
+
+QString Node::getChildReferenceName(const Node*) const
 {
 	return QString();
 }

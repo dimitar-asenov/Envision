@@ -24,12 +24,12 @@ pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
 debug:DEFINES += DEBUG
-HEADERS += test/PersistentStoreMock.h \
+HEADERS += headers/commands/FieldSet.h \
+    headers/nodes/Reference.h \
+    test/PersistentStoreMock.h \
     headers/ModelException.h \
-    headers/commands/IntegerSet.h \
     headers/nodes/Integer.h \
     test/BinaryWithPosition.h \
-    headers/commands/TextSet.h \
     headers/nodes/Text.h \
     headers/nodes/ExtendableNode.h \
     headers/nodeMacros.h \
@@ -41,16 +41,15 @@ HEADERS += test/PersistentStoreMock.h \
     headers/Node.h \
     headers/modelbase_api.h \
     src/modelbase.h
-SOURCES += test/PersistenceTests.cpp \
+SOURCES += src/nodes/Reference.cpp \
+    test/PersistenceTests.cpp \
     test/PersistentStoreMock.cpp \
     src/ModelException.cpp \
     test/PositionTests.cpp \
-    src/commands/IntegerSet.cpp \
     src/nodes/Integer.cpp \
     test/BinaryWithPosition.cpp \
     test/UndoRedoTests.cpp \
     test/SimpleTests.cpp \
-    src/commands/TextSet.cpp \
     src/nodes/Text.cpp \
     test/BinaryNode.cpp \
     src/commands/ExtendedNodeOptional.cpp \

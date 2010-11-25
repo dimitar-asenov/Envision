@@ -6,7 +6,7 @@
  **********************************************************************************************************************/
 
 #include "nodes/Integer.h"
-#include "commands/IntegerSet.h"
+#include "commands/FieldSet.h"
 
 namespace Model {
 
@@ -30,7 +30,7 @@ int Integer::get() const
 
 void Integer::set(int value)
 {
-	execute(new IntegerSet(this, &integer, value));
+	execute(new FieldSet<int> (this, integer, value));
 }
 
 void Integer::save(PersistentStore &store) const

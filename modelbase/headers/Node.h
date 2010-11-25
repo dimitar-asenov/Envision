@@ -47,11 +47,14 @@ class MODELBASE_API Node
 		Node* getParent() const;
 
 		virtual Node* getChild(NodeIdType id) const;
+		virtual Node* getChild(const QString& name) const;
 		NodeIdType getId() const;
 		int getRevision() const;
 		void incrementRevision();
 		void addToRevision(int valueToAdd);
 		bool isFullyLoaded() const;
+
+		Node* getLowestCommonAncestor(Node* other);
 
 		/**
 		 * Executes the specified command and pushes it on the undo stack.
@@ -65,6 +68,11 @@ class MODELBASE_API Node
 		 * returns true ) this means that this node can not be referenced.
 		 */
 		virtual QString getReferenceName() const;
+
+		/**
+		 * Returns a name under which this node know the specified child or NULL if the child is unknown.
+		 */
+		virtual QString getChildReferenceName(const Node* child) const;
 
 		/**
 		 * Saves the current node to a persistent store.

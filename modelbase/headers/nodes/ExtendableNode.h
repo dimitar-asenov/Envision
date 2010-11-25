@@ -88,7 +88,7 @@ class MODELBASE_API ExtendableNode: public Node
 				if ( attributes[i] != NULL ) store.saveNode(attributes[i], attributeNames[i], attributePartialHint[i]);
 		}
 
-		Node* getChild(NodeIdType id)
+		Node* getChild(NodeIdType id) const
 		{
 			Node* res = NULL;
 
@@ -98,10 +98,22 @@ class MODELBASE_API ExtendableNode: public Node
 			return res;
 		}
 
-		Node* get(const QString &attributeName)
+		Node* getChild(const QString& name) const
+		{
+			return get(name);
+		}
+
+		Node* get(const QString &attributeName) const
 		{
 			int index = attributeNames.indexOf(attributeName);
 			if ( index >= 0 ) return attributes[index];
+			return NULL;
+		}
+
+		QString getChildReferenceName(const Node* child) const
+		{
+			int index = attributes.indexOf(const_cast<Node*> (child)); // TODO find a way to do this cleanly
+			if ( index >= 0 ) return attributeNames[index];
 			return NULL;
 		}
 

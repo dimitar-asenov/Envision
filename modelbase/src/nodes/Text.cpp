@@ -6,7 +6,7 @@
  **********************************************************************************************************************/
 
 #include "nodes/Text.h"
-#include "commands/TextSet.h"
+#include "commands/FieldSet.h"
 
 namespace Model {
 
@@ -35,7 +35,7 @@ Text::operator const QString&() const
 
 void Text::set(const QString &newText)
 {
-	execute(new TextSet(this, &text, newText));
+	execute(new FieldSet<QString> (this, text, newText));
 }
 
 void Text::save(PersistentStore &store) const

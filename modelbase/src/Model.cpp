@@ -36,7 +36,7 @@ void Model::beginModification(const QString &text)
 
 void Model::endModification()
 {
-	if (pushedNewCommandsOnTheStack)
+	if ( pushedNewCommandsOnTheStack )
 	{
 		pushedNewCommandsOnTheStack = false;
 		commands.endMacro();
@@ -89,7 +89,7 @@ void Model::redo()
 
 void Model::save(PersistentStore& store)
 {
-	if (root) store.saveNode(root,"root",false);
+	if ( root ) store.saveNode(root, "root", false);
 }
 
 Model* Model::getModel(Node* root)

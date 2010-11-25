@@ -13,7 +13,7 @@
 
 namespace Model {
 
-class Text: public Node
+class MODELBASE_API Text: public Node
 {
 	NODE_DECLARE_STANDARD_CONSTRUCTORS(Text)
 

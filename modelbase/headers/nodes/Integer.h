@@ -13,7 +13,7 @@
 
 namespace Model {
 
-class Integer: public Node
+class MODELBASE_API Integer: public Node
 {
 	NODE_DECLARE_STANDARD_CONSTRUCTORS(Integer)
 
