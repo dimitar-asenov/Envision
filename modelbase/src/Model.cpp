@@ -8,13 +8,14 @@
 #include "Model.h"
 #include "UndoCommand.h"
 #include "ModelException.h"
+#include "commands/SetModificationTarget.h"
 
 namespace Model {
 
 QList<Model*> Model::loadedModels;
 
 Model::Model() :
-	root(NULL), pushedNewCommandsOnTheStack(false), modificationInProgress(false), nextId(0)
+	root(NULL), currentModificationTarget(NULL), currentModificationLock(NULL), pushedNewCommandsOnTheStack(false), modificationInProgress(false), nextId(0)
 {
 	commands.setUndoLimit(100);
 	loadedModels.append(this);
@@ -26,12 +27,20 @@ Model::~Model()
 	// TODO Make sure to persist and destroy the tree in a nice way.
 }
 
-void Model::beginModification(const QString &text)
+void Model::beginModification(Node* modificationTarget, const QString &text)
 {
-	modification.lock();
+	exclusiveAccess.lock();
 	modificationInProgress = true;
 	modificationText = text;
 
+	if (modificationTarget) changeModificationTarget(modificationTarget);
+}
+
+void Model::changeModificationTarget(Node* modificationTarget)
+{
+	if ( !modificationInProgress ) throw ModelException("Switching modification targets without calling Model.beginModification() first");
+
+	pushCommandOnUndoStack( new SetModificationTarget(currentModificationTarget, currentModificationLock, currentModificationTarget, modificationTarget));
 }
 
 void Model::endModification()
@@ -43,7 +52,27 @@ void Model::endModification()
 	}
 
 	modificationInProgress = false;
-	modification.unlock();
+	exclusiveAccess.unlock();
+}
+
+void Model::beginExclusiveRead()
+{
+	exclusiveAccess.lock();
+}
+
+void Model::endExclusiveRead()
+{
+	exclusiveAccess.unlock();
+}
+
+NodeReadWriteLock* Model::getRootLock()
+{
+	return &rootLock;
+}
+
+bool Model::isInCurrentAccessUnit(const Node* node) const
+{
+	return node->getAccessLock() == currentModificationLock;
 }
 
 Node* Model::getRoot()

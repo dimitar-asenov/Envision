@@ -57,7 +57,13 @@ void Node::loadFully(PersistentStore&)
 
 void Node::execute(UndoCommand *command)
 {
-	getModel()->pushCommandOnUndoStack(command);
+	if (this != command->getTarget()) throw ModelException("Command target differs from current node when executing commands");
+
+	Model* model = getModel();
+
+	if ( !model->isInCurrentAccessUnit(this) ) throw ModelException("Modifying a node in an unlocked access unit.");
+
+	model->pushCommandOnUndoStack(command);
 }
 
 Node* Node::getLowestCommonAncestor(Node* other)
@@ -67,7 +73,7 @@ Node* Node::getLowestCommonAncestor(Node* other)
 
 	// Get all parents of the current node
 	Node* n = this;
-	while (n)
+	while ( n )
 	{
 		thisParents.prepend(n);
 		n = n->getParent();
@@ -75,7 +81,7 @@ Node* Node::getLowestCommonAncestor(Node* other)
 
 	// Get all parents of the other node
 	n = other;
-	while (n)
+	while ( n )
 	{
 		otherParents.prepend(n);
 		n = n->getParent();
@@ -83,7 +89,7 @@ Node* Node::getLowestCommonAncestor(Node* other)
 
 	// Find the lowest common ancestor
 	n = NULL;
-	while (thisParents.size() > 0 && otherParents.size() > 0 && thisParents.first() == otherParents.first())
+	while ( thisParents.size() > 0 && otherParents.size() > 0 && thisParents.first() == otherParents.first() )
 	{
 		n = thisParents.first();
 
@@ -161,6 +167,12 @@ QString Node::getReferenceName() const
 QString Node::getChildReferenceName(const Node*) const
 {
 	return QString();
+}
+
+NodeReadWriteLock* Node::getAccessLock() const
+{
+	if (parent) return parent->getAccessLock();
+	else return getModel()->getRootLock();
 }
 /***********************************************************************************************************************
  * STATIC METHODS

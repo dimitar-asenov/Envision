@@ -31,20 +31,20 @@ TEST(ModelBase, RemoveOptional)
 	Model model;
 	BinaryNode* root = dynamic_cast<BinaryNode*> (model.createRoot("BinaryNode"));
 
-	model.beginModification("Making left node");
+	model.beginModification(root, "Making left node");
 	BinaryNode* left = root->makeLeftNode();
 	model.endModification();
 	CHECK_CONDITION( root->left() == left );
 	CHECK_CONDITION( root->left() != NULL );
 
 
-	model.beginModification("Removing left node");
+	model.beginModification(root, "Removing left node");
 	root->removeLeftNode();
 	model.endModification();
 	CHECK_CONDITION( root->left() == NULL);
 
 
-	model.beginModification("Making left node");
+	model.beginModification(root, "Making left node");
 	root->makeLeftNode();
 	model.endModification();
 	CHECK_CONDITION( root->left() != left );
@@ -56,7 +56,7 @@ TEST(ModelBase, ChildNodeRetrieval)
 	Model model;
 	BinaryNode* root = dynamic_cast<BinaryNode*> (model.createRoot("BinaryNode"));
 
-	model.beginModification("Making nodes");
+	model.beginModification(root, "Making nodes");
 	BinaryNode* left = root->makeLeftNode();
 	BinaryNode* right = root->makeRightNode();
 	model.endModification();

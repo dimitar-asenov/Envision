@@ -10,6 +10,7 @@
 
 #include "modelbase_api.h"
 #include "Node.h"
+#include "NodeReadWriteLock.h"
 
 #include <QString>
 #include <QUndoStack>
@@ -26,10 +27,15 @@ class MODELBASE_API Model
 		Node* root;
 		QUndoStack commands;
 
+		QMutex exclusiveAccess;
+		NodeReadWriteLock rootLock;
+
 		QString modificationText;
+		Node* currentModificationTarget;
+		NodeReadWriteLock* currentModificationLock;
+
 		bool pushedNewCommandsOnTheStack;
 		bool modificationInProgress;
-		QMutex modification;
 
 		NodeIdType nextId;
 
@@ -39,8 +45,16 @@ class MODELBASE_API Model
 		Model();
 		virtual ~Model();
 
-		void beginModification(const QString &text = QString());
+		void beginModification(Node* modificationTarget, const QString &text = QString());
 		void endModification();
+		void changeModificationTarget(Node* modificationTarget);
+
+		void beginExclusiveRead();
+		void endExclusiveRead();
+
+		NodeReadWriteLock* getRootLock();
+
+		bool isInCurrentAccessUnit(const Node* node) const;
 
 		Node* getRoot();
 

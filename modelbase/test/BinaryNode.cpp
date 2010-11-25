@@ -47,17 +47,17 @@ return static_cast<BinaryNode*> (createOptional(leftIndex));
 
 BinaryNode* BinaryNode::makeRightNode()
 {
-	return static_cast<BinaryNode*> (createOptional(rightIndex));
+return static_cast<BinaryNode*> (createOptional(rightIndex));
 }
 
 void BinaryNode::removeLeftNode()
 {
-	removeOptional(leftIndex);
+removeOptional(leftIndex);
 }
 
 void BinaryNode::removeRightNode()
 {
-	removeOptional(rightIndex);
+removeOptional(rightIndex);
 }
 
 }

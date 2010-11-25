@@ -18,6 +18,7 @@ namespace Model {
 
 class Model;
 class UndoCommand;
+class NodeReadWriteLock;
 
 class MODELBASE_API Node
 {
@@ -53,6 +54,17 @@ class MODELBASE_API Node
 		void incrementRevision();
 		void addToRevision(int valueToAdd);
 		bool isFullyLoaded() const;
+
+		/**
+		 * Returns the lock used to control access to this node.
+		 *
+		 * If a node should represent a new access unit, this method should be overriden to return a lock associated with
+		 * the node.
+		 *
+		 * The default implementation just asks for the lock of the parent, or if the parent is NULL for the root lock of
+		 * the model.
+		 */
+		virtual NodeReadWriteLock* getAccessLock() const;
 
 		Node* getLowestCommonAncestor(Node* other);
 

@@ -24,7 +24,11 @@ pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
 debug:DEFINES += DEBUG
-HEADERS += headers/commands/FieldSet.h \
+HEADERS += test/BinaryNodeUnit.h \
+    src/commands/SetModificationTarget.h \
+    headers/InterruptibleThread.h \
+    headers/NodeReadWriteLock.h \
+    headers/commands/FieldSet.h \
     headers/nodes/Reference.h \
     test/PersistentStoreMock.h \
     headers/ModelException.h \
@@ -41,7 +45,10 @@ HEADERS += headers/commands/FieldSet.h \
     headers/Node.h \
     headers/modelbase_api.h \
     src/modelbase.h
-SOURCES += src/nodes/Reference.cpp \
+SOURCES += test/BinaryNodeUnit.cpp \
+    src/commands/SetModificationTarget.cpp \
+    src/NodeReadWriteLock.cpp \
+    src/nodes/Reference.cpp \
     test/PersistenceTests.cpp \
     test/PersistentStoreMock.cpp \
     src/ModelException.cpp \

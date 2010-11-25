@@ -22,21 +22,21 @@ TEST(ModelBase, UndoRedoTextSet)
 	CHECK_INT_EQUAL(0, root->text()->getRevision());
 	CHECK_INT_EQUAL(0, root->getRevision());
 
-	model.beginModification("testing");
+	model.beginModification(root->text(), "testing");
 	root->text()->set("t1");
 	model.endModification();
 	CHECK_CONDITION(root->text()->get() == "t1");
 	CHECK_INT_EQUAL(1, root->text()->getRevision());
 	CHECK_INT_EQUAL(1, root->getRevision());
 
-	model.beginModification("testing");
+	model.beginModification(root->text(),"testing");
 	root->text()->set("t222");
 	model.endModification();
 	CHECK_CONDITION(root->text()->get() == "t222");
 	CHECK_INT_EQUAL(2, root->text()->getRevision());
 	CHECK_INT_EQUAL(2, root->getRevision());
 
-	model.beginModification();
+	model.beginModification(NULL);
 	model.undo();
 	CHECK_CONDITION(root->text()->get() == "t1");
 	CHECK_INT_EQUAL(1, root->text()->getRevision());
@@ -69,7 +69,7 @@ TEST(ModelBase, UndoRedoOptionalNodes)
 	CHECK_CONDITION(root->left() == NULL);
 	CHECK_CONDITION(root->right() == NULL);
 
-	model.beginModification("testing");
+	model.beginModification(root, "testing");
 	BinaryNode* left = root->makeLeftNode();
 	model.endModification();
 	CHECK_INT_EQUAL(0, root->text()->getRevision());
@@ -80,7 +80,7 @@ TEST(ModelBase, UndoRedoOptionalNodes)
 	CHECK_INT_EQUAL(0, left->text()->getRevision());
 	CHECK_INT_EQUAL(0, left->getRevision());
 
-	model.beginModification("testing");
+	model.beginModification(root, "testing");
 	BinaryNode* right = root->makeRightNode();
 	model.endModification();
 	CHECK_INT_EQUAL(0, root->text()->getRevision());
@@ -96,7 +96,7 @@ TEST(ModelBase, UndoRedoOptionalNodes)
 
 	CHECK_CONDITION(left != right);
 
-	model.beginModification();
+	model.beginModification(NULL);
 	model.undo();
 	CHECK_INT_EQUAL(0, root->text()->getRevision());
 	CHECK_INT_EQUAL(1, root->getRevision());
@@ -145,7 +145,7 @@ TEST(ModelBase, UndoRedoGroupTextSet)
 
 	CHECK_INT_EQUAL(0, root->getRevision());
 
-	model.beginModification("Modification group");
+	model.beginModification(root, "Modification group");
 	root->set("change1");
 	root->set("change2");
 	model.endModification();
@@ -153,7 +153,7 @@ TEST(ModelBase, UndoRedoGroupTextSet)
 	CHECK_INT_EQUAL(2, root->getRevision());
 	CHECK_CONDITION( root->get() == "change2");
 
-	model.beginModification();
+	model.beginModification(NULL);
 	model.undo();
 	CHECK_INT_EQUAL(0, root->getRevision());
 	CHECK_CONDITION( root->get().isNull());

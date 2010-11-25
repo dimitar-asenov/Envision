@@ -13,6 +13,7 @@
 #include "nodes/Reference.h"
 #include "BinaryNode.h"
 #include "BinaryWithPosition.h"
+#include "BinaryNodeUnit.h"
 
 using namespace Logger;
 
@@ -35,6 +36,7 @@ void ModelBase::selfTest(QString)
 {
 	BinaryNode::init();
 	BinaryWithPosition::init();
+	BinaryNodeUnit::init();
 	SelfTest::TestManager<ModelBase>::runAllTests().printResultStatistics();
 }
 

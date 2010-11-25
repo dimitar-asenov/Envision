@@ -42,6 +42,8 @@ class MODELBASE_API UndoCommand: public QUndoCommand
 		 * command is deleted and isUndone is true.
 		 */
 		bool isUndone();
+
+		Node* getTarget();
 };
 
 }
