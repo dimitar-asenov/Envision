@@ -138,6 +138,16 @@ class MODELBASE_API Node
 		static Node* createNewNode(const QString &type, Node* parent, NodeIdType id, PersistentStore &store, bool partialLoadHint);
 };
 
+template<class T> Node* createNewNode(Node* parent, Model* model)
+{
+	return new T(parent, model);
+}
+
+template<class T> Node* createNodeFromPersistence(Node *parent, NodeIdType id, PersistentStore &store, bool partialLoadHint)
+{
+	return new T(parent, id, store, partialLoadHint);
+}
+
 }
 
 #endif /* NODE_H_ */

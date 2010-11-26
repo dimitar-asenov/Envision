@@ -33,10 +33,6 @@
 		className(Node *parent, NodeIdType id, PersistentStore &store, bool partialLoadHint);									\
 																																							\
 		QString getTypeName() const;																												\
-																																							\
-		static Node* createNew(Node* parent, Model* model);																				\
-		static Node* createFromPersistence(Node *parent, NodeIdType id, PersistentStore &store, bool partialLoadHint);	\
-																																							\
 		static void registerNodeConstructors();																								\
 																																							\
 	private:
@@ -81,17 +77,7 @@ QString className::getTypeName()	const																											\
 																																							\
 void className::registerNodeConstructors()																									\
 {																																							\
-	Node::registerNodeType(#className, createNew, createFromPersistence);															\
-}																																							\
-																																							\
-Node* className::createNew(Node* parent, Model* model)																					\
-{																																							\
-	return new className(parent, model);																										\
-}																																							\
-																																							\
-Node* className::createFromPersistence(Node *parent, NodeIdType id, PersistentStore &store, bool partialLoadHint)		\
-{																																							\
-	return new className(parent, id, store, partialLoadHint);																			\
+	Node::registerNodeType(#className, ::Model::createNewNode< className >, ::Model::createNodeFromPersistence< className >);\
 }
 /*********************************************************************************************************************/
 

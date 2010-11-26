@@ -10,10 +10,9 @@
 
 #include "nodes/ExtendableNode.h"
 #include "nodeMacros.h"
+#include "nodes/Text.h"
 
 namespace Model {
-
-class Text;
 
 class BinaryNode: public ExtendableNode<BinaryNode>
 {

@@ -45,7 +45,8 @@ HEADERS += test/BinaryNodeUnit.h \
     headers/Node.h \
     headers/modelbase_api.h \
     src/modelbase.h
-SOURCES += test/BinaryNodeUnit.cpp \
+SOURCES += test/ConcurrencyTests.cpp \
+    test/BinaryNodeUnit.cpp \
     src/commands/SetModificationTarget.cpp \
     src/NodeReadWriteLock.cpp \
     src/nodes/Reference.cpp \

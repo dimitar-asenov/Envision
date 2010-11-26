@@ -19,7 +19,7 @@ void BinaryNodeUnit::init()
 
 NodeReadWriteLock* BinaryNodeUnit::getAccessLock() const
 {
-	return & (const_cast<BinaryNodeUnit*> (this) )->accessLock;
+	return & (const_cast<BinaryNodeUnit*> (this) )->accessLock; // TODO const cast madness. What is the best way to use these?
 }
 
 }
