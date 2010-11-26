@@ -24,7 +24,8 @@ pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
 debug:DEFINES += DEBUG
-HEADERS += test/BinaryNodeUnit.h \
+HEADERS += src/Attribute.h \
+    test/BinaryNodeUnit.h \
     src/commands/SetModificationTarget.h \
     headers/InterruptibleThread.h \
     headers/NodeReadWriteLock.h \
@@ -45,7 +46,8 @@ HEADERS += test/BinaryNodeUnit.h \
     headers/Node.h \
     headers/modelbase_api.h \
     src/modelbase.h
-SOURCES += test/ConcurrencyTests.cpp \
+SOURCES += src/Attribute.cpp \
+    test/ConcurrencyTests.cpp \
     test/BinaryNodeUnit.cpp \
     src/commands/SetModificationTarget.cpp \
     src/NodeReadWriteLock.cpp \

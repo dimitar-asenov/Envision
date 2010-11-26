@@ -12,36 +12,36 @@
 #include <QVector>
 #include <QString>
 #include "commands/ExtendedNodeOptional.h"
+#include "Attribute.h"
 #include "ModelException.h"
 
 namespace Model {
+
+
 
 template<class T>
 class MODELBASE_API ExtendableNode: public Node
 {
 	private:
 		QVector<Node*> attributes;
-		static QVector<QString> attributeNames;
-		static QVector<QString> attributeTypes;
-		static QVector<bool> attributeOptional;
-		static QVector<bool> attributePartialHint;
+		static QVector<Attribute> attributeDescriptions;
 
 	public:
 		ExtendableNode(Node *parent, Model* model) :
-			Node(parent, model), attributes(attributeNames.size(), NULL)
+			Node(parent, model), attributes(attributeDescriptions.size(), NULL)
 		{
-			for (int i = 0; i < attributeNames.size(); i++)
-				if ( !attributeOptional[i] ) attributes[i] = Node::createNewNode(attributeTypes[i], this, model);
+			for (int i = 0; i < attributeDescriptions.size(); i++)
+				if ( !attributeDescriptions[i].optional() ) attributes[i] = Node::createNewNode(attributeDescriptions[i].type(), this, model);
 		}
 
 		ExtendableNode(Node *parent, NodeIdType id, PersistentStore &store, bool) :
-			Node(parent, id), attributes(attributeNames.size(), NULL)
+			Node(parent, id), attributes(attributeDescriptions.size(), NULL)
 		{
 			QList<LoadedNode> children = store.loadAllSubNodes(this);
 
 			for (QList<LoadedNode>::iterator ln = children.begin(); ln != children.end(); ln++)
 			{
-				int index = attributeNames.indexOf(ln->name);
+				int index = attributeDescriptions.indexOf(ln->name);
 				if ( index < 0 ) throw ModelException("Node has attribute " + ln->name + " in persistent store, but this attribute is not registered");
 
 				attributes[index] = ln->node;
@@ -51,7 +51,7 @@ class MODELBASE_API ExtendableNode: public Node
 		virtual ~ExtendableNode()
 		{
 			for (int i = 0; i < attributes.size(); i++)
-				delete attributes[i];
+				if (attributes[i]) delete attributes[i];
 		}
 
 		Node* get(int attributeIndex)
@@ -61,11 +61,11 @@ class MODELBASE_API ExtendableNode: public Node
 
 		Node* createOptional(int attributeIndex)
 		{
-			if ( attributeIndex < 0 || attributeIndex >= attributeOptional.size() ) throw ModelException("Trying to create an optional attribute with an index out of bounds " + QString::number(attributeIndex));
+			if ( attributeIndex < 0 || attributeIndex >= attributeDescriptions.size() ) throw ModelException("Trying to create an optional attribute with an index out of bounds " + QString::number(attributeIndex));
 
-			if ( attributeOptional[attributeIndex] )
+			if ( attributeDescriptions[attributeIndex].optional() )
 			{
-				Node* newnode = Node::createNewNode(attributeTypes[attributeIndex], this);
+				Node* newnode = Node::createNewNode(attributeDescriptions[attributeIndex].type(), this);
 				execute(new ExtendedNodeOptional(this, newnode, attributeIndex, &attributes, true));
 				return attributes[attributeIndex];
 			}
@@ -76,7 +76,7 @@ class MODELBASE_API ExtendableNode: public Node
 
 		void removeOptional(int attributeIndex)
 		{
-			if ( attributeOptional[attributeIndex] )
+			if ( attributeDescriptions[attributeIndex].optional() )
 			{
 				execute(new ExtendedNodeOptional(this, attributes[attributeIndex], attributeIndex, &attributes, false));
 			}
@@ -85,7 +85,7 @@ class MODELBASE_API ExtendableNode: public Node
 		void save(PersistentStore &store) const
 		{
 			for (int i = 0; i < attributes.size(); i++)
-				if ( attributes[i] != NULL ) store.saveNode(attributes[i], attributeNames[i], attributePartialHint[i]);
+				if ( attributes[i] != NULL ) store.saveNode(attributes[i], attributeDescriptions[i].name(), attributeDescriptions[i].partialHint());
 		}
 
 		Node* getChild(NodeIdType id) const
@@ -105,7 +105,7 @@ class MODELBASE_API ExtendableNode: public Node
 
 		Node* get(const QString &attributeName) const
 		{
-			int index = attributeNames.indexOf(attributeName);
+			int index = attributeDescriptions.indexOf(attributeName);
 			if ( index >= 0 ) return attributes[index];
 			return NULL;
 		}
@@ -113,32 +113,26 @@ class MODELBASE_API ExtendableNode: public Node
 		QString getChildReferenceName(const Node* child) const
 		{
 			int index = attributes.indexOf(const_cast<Node*> (child)); // TODO find a way to do this cleanly
-			if ( index >= 0 ) return attributeNames[index];
+			if ( index >= 0 ) return attributeDescriptions[index].name();
 			return NULL;
 		}
 
 		bool hasAttribute(const QString& attributeName)
 		{
-			return attributeNames.contains(attributeName);
+			return attributeDescriptions.contains(attributeName);
 		}
 
 		static int registerNewAttribute(const QString &attributeName, const QString &attributeType, bool canBePartiallyLoaded = false, bool isOptional = false)
 		{
-			if ( attributeNames.contains(attributeName) ) throw ModelException("Trying to register new attribute " + attributeName + " but this name already exists");
+			if ( attributeDescriptions.contains(attributeName) ) throw ModelException("Trying to register new attribute " + attributeName + " but this name already exists");
 
-			attributeNames.append(attributeName);
-			attributeTypes.append(attributeType);
-			attributePartialHint.append(canBePartiallyLoaded);
-			attributeOptional.append(isOptional);
+			attributeDescriptions.append(Attribute(attributeName, attributeType, isOptional,canBePartiallyLoaded ));
 
-			return attributeNames.size() - 1;
+			return attributeDescriptions.size() - 1;
 		}
 };
 
-template<class T> QVector<QString> ExtendableNode<T>::attributeNames;
-template<class T> QVector<QString> ExtendableNode<T>::attributeTypes;
-template<class T> QVector<bool> ExtendableNode<T>::attributeOptional;
-template<class T> QVector<bool> ExtendableNode<T>::attributePartialHint;
+template<class T> QVector<Attribute> ExtendableNode<T>::attributeDescriptions;
 
 }
 
