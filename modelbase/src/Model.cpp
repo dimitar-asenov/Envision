@@ -37,28 +37,33 @@ void Model::beginModification(Node* modificationTarget, const QString &text)
 	modificationText = text;
 	modifiedTargets.clear();
 
-	if (modificationTarget) changeModificationTarget(modificationTarget);
+	if ( modificationTarget ) changeModificationTarget(modificationTarget);
 }
 
 void Model::changeModificationTarget(Node* modificationTarget)
 {
 	if ( !modificationInProgress ) throw ModelException("Switching modification targets without calling Model.beginModification() first");
 
-	pushCommandOnUndoStack( new SetModificationTarget(currentModificationTarget, currentModificationLock, modifiedTargets, modificationTarget));
+	pushCommandOnUndoStack(new SetModificationTarget(currentModificationTarget, currentModificationLock, modifiedTargets, modificationTarget));
 }
 
 void Model::endModification()
 {
 	if ( pushedNewCommandsOnTheStack )
 	{
+		pushCommandOnUndoStack(new SetModificationTarget(currentModificationTarget, currentModificationLock, modifiedTargets, NULL));
 		pushedNewCommandsOnTheStack = false;
 		commands.endMacro();
 	}
 
+
+	QList<Node*> mt = modifiedTargets;
+	modifiedTargets.clear();
+
 	modificationInProgress = false;
 	exclusiveAccess.unlock();
 
-	emit nodesModified(modifiedTargets);
+	emit nodesModified(mt);
 }
 
 void Model::beginExclusiveRead()
@@ -143,6 +148,7 @@ Node* Model::createRoot(const QString &typeName)
 	{
 		commands.clear();
 		root = Node::createNewNode(typeName, NULL, this);
+		emit rootCreated(root);
 	}
 
 	return root;

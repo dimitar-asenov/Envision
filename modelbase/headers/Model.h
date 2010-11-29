@@ -78,9 +78,10 @@ class MODELBASE_API Model: public QObject
 
 		void emitNameModified(Node* node, const QString &oldName);
 
-		signals:
-		     void nodesModified(QList<Node*> nodes);
-		     void nameModified(Node* node, const QString &oldName);
+	signals:
+		void rootCreated(Node* root);
+		void nodesModified(QList<Node*> nodes);
+		void nameModified(Node* node, const QString &oldName);
 
 };
 

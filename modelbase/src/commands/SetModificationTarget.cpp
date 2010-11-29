@@ -22,7 +22,7 @@ void SetModificationTarget::redo()
 	if (newTarget) newTarget->getAccessLock()->lockForWrite(newTarget);
 
 	field = newTarget;
-	if ( !modifiedTargets.contains(newTarget) ) modifiedTargets.append(newTarget);
+	if ( newTarget && !modifiedTargets.contains(newTarget) ) modifiedTargets.append(newTarget);
 
 	if (field) lock = field->getAccessLock();
 	else lock = NULL;
@@ -36,7 +36,7 @@ void SetModificationTarget::undo()
 	if (oldTarget) oldTarget->getAccessLock()->lockForWrite(oldTarget);
 
 	field = oldTarget;
-	if ( !modifiedTargets.contains(oldTarget) ) modifiedTargets.append(oldTarget);
+	if ( oldTarget && !modifiedTargets.contains(oldTarget) ) modifiedTargets.append(oldTarget);
 
 	if (field) lock = field->getAccessLock();
 	else lock = NULL;

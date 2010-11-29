@@ -24,7 +24,8 @@ pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
 debug:DEFINES += DEBUG
-HEADERS += headers/commands/UndoCommand.h \
+HEADERS += test/NotificationListener.h \
+    headers/commands/UndoCommand.h \
     headers/nodes/nodeMacros.h \
     headers/nodes/Node.h \
     headers/nodes/Extendable/Attribute.h \
@@ -48,7 +49,9 @@ HEADERS += headers/commands/UndoCommand.h \
     headers/PersistentStore.h \
     headers/modelbase_api.h \
     src/modelbase.h
-SOURCES += src/nodes/Extendable/Attribute.cpp \
+SOURCES += test/NotificationsTest.cpp \
+    test/NotificationListener.cpp \
+    src/nodes/Extendable/Attribute.cpp \
     src/nodes/Extendable/AttributeChain.cpp \
     src/nodes/Extendable/ExtendableIndex.cpp \
     src/nodes/Node.cpp \
