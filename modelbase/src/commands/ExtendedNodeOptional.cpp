@@ -6,7 +6,7 @@
  **********************************************************************************************************************/
 
 #include "commands/ExtendedNodeOptional.h"
-#include "Node.h"
+#include "nodes/Node.h"
 
 namespace Model {
 

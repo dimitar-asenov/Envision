@@ -5,7 +5,7 @@
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "nodes/ExtendableNode.h"
+#include "nodes/Extendable/ExtendableNode.h"
 
 namespace Model {
 

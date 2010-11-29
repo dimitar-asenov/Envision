@@ -5,11 +5,11 @@
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "Node.h"
+#include "nodes/Node.h"
 #include <QMutexLocker>
 #include "modelbase.h"
 #include "Model.h"
-#include "UndoCommand.h"
+#include "commands/UndoCommand.h"
 #include "ModelException.h"
 #include <QList>
 

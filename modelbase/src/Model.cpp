@@ -6,7 +6,7 @@
  **********************************************************************************************************************/
 
 #include "Model.h"
-#include "UndoCommand.h"
+#include "commands/UndoCommand.h"
 #include "ModelException.h"
 #include "commands/SetModificationTarget.h"
 

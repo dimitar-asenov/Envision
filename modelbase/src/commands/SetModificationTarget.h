@@ -8,7 +8,7 @@
 #ifndef SETMODIFICATIONTARGET_H_
 #define SETMODIFICATIONTARGET_H_
 
-#include "UndoCommand.h"
+#include "commands/UndoCommand.h"
 
 namespace Model {
 

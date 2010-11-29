@@ -8,8 +8,8 @@
 #ifndef EXTENDEDNODEOPTIONAL_H_
 #define EXTENDEDNODEOPTIONAL_H_
 
-#include "UndoCommand.h"
-#include "ExtendableIndex.h"
+#include "commands/UndoCommand.h"
+#include "nodes/Extendable/ExtendableIndex.h"
 #include <QVector>
 
 namespace Model {

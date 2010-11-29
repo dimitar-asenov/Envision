@@ -24,9 +24,13 @@ pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
 debug:DEFINES += DEBUG
-HEADERS += headers/ExtendableIndex.h \
-    headers/Attribute.h \
-    headers/AttributeChain.h \
+HEADERS += headers/commands/UndoCommand.h \
+    headers/nodes/nodeMacros.h \
+    headers/nodes/Node.h \
+    headers/nodes/Extendable/Attribute.h \
+    headers/nodes/Extendable/AttributeChain.h \
+    headers/nodes/Extendable/ExtendableIndex.h \
+    headers/nodes/Extendable/ExtendableNode.h \
     test/BinaryNodeUnit.h \
     src/commands/SetModificationTarget.h \
     headers/InterruptibleThread.h \
@@ -38,20 +42,18 @@ HEADERS += headers/ExtendableIndex.h \
     headers/nodes/Integer.h \
     test/BinaryWithPosition.h \
     headers/nodes/Text.h \
-    headers/nodes/ExtendableNode.h \
-    headers/nodeMacros.h \
     test/BinaryNode.h \
     headers/commands/ExtendedNodeOptional.h \
-    headers/UndoCommand.h \
     headers/Model.h \
     headers/PersistentStore.h \
-    headers/Node.h \
     headers/modelbase_api.h \
     src/modelbase.h
-SOURCES += src/nodes/ExtendableNode.cpp \
-    src/ExtendableIndex.cpp \
-    src/AttributeChain.cpp \
-    src/Attribute.cpp \
+SOURCES += src/nodes/Extendable/Attribute.cpp \
+    src/nodes/Extendable/AttributeChain.cpp \
+    src/nodes/Extendable/ExtendableIndex.cpp \
+    src/nodes/Node.cpp \
+    src/nodes/Extendable/ExtendableNode.cpp \
+    src/commands/UndoCommand.cpp \
     test/ConcurrencyTests.cpp \
     test/BinaryNodeUnit.cpp \
     src/commands/SetModificationTarget.cpp \
@@ -68,7 +70,5 @@ SOURCES += src/nodes/ExtendableNode.cpp \
     src/nodes/Text.cpp \
     test/BinaryNode.cpp \
     src/commands/ExtendedNodeOptional.cpp \
-    src/UndoCommand.cpp \
     src/Model.cpp \
-    src/Node.cpp \
     src/modelbase.cpp

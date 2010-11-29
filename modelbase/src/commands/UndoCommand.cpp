@@ -5,8 +5,8 @@
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "UndoCommand.h"
-#include "Node.h"
+#include "commands/UndoCommand.h"
+#include "nodes/Node.h"
 
 namespace Model {
 

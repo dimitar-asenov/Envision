@@ -5,7 +5,7 @@
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "Attribute.h"
+#include "nodes/Extendable/Attribute.h"
 
 namespace Model {
 

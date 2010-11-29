@@ -6,7 +6,7 @@
  **********************************************************************************************************************/
 
 #include "SetModificationTarget.h"
-#include "Node.h"
+#include "nodes/Node.h"
 #include "NodeReadWriteLock.h"
 
 namespace Model {

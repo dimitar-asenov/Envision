@@ -6,7 +6,7 @@
  **********************************************************************************************************************/
 
 #include "PersistentStoreMock.h"
-#include "Node.h"
+#include "nodes/Node.h"
 
 namespace Model {
 

@@ -8,8 +8,8 @@
 #ifndef BINARYNODE_H_
 #define BINARYNODE_H_
 
-#include "nodes/ExtendableNode.h"
-#include "nodeMacros.h"
+#include "nodes/Extendable/ExtendableNode.h"
+#include "nodes/nodeMacros.h"
 #include "nodes/Text.h"
 
 namespace Model {

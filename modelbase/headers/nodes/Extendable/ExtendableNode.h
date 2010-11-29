@@ -8,10 +8,10 @@
 #ifndef EXTENDABLENODE_H_
 #define EXTENDABLENODE_H_
 
-#include "Node.h"
+#include "nodes/Node.h"
 #include <QVector>
 #include <QString>
-#include "AttributeChain.h"
+#include "nodes/Extendable/AttributeChain.h"
 #include "ModelException.h"
 #include "commands/ExtendedNodeOptional.h"
 

@@ -5,7 +5,7 @@
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "ExtendableIndex.h"
+#include "nodes/Extendable/ExtendableIndex.h"
 
 namespace Model {
 

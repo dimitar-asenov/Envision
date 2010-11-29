@@ -5,7 +5,7 @@
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "AttributeChain.h"
+#include "nodes/Extendable/AttributeChain.h"
 
 namespace Model {
 

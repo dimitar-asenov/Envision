@@ -9,7 +9,7 @@
 #define MODEL_H_
 
 #include "modelbase_api.h"
-#include "Node.h"
+#include "nodes/Node.h"
 #include "NodeReadWriteLock.h"
 
 #include <QString>
