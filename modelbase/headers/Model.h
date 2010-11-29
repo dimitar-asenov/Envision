@@ -21,8 +21,10 @@ namespace Model {
 
 class UndoCommand;
 
-class MODELBASE_API Model
+class MODELBASE_API Model: public QObject
 {
+	Q_OBJECT
+
 	private:
 		Node* root;
 		QUndoStack commands;
@@ -33,6 +35,7 @@ class MODELBASE_API Model
 		QString modificationText;
 		Node* currentModificationTarget;
 		NodeReadWriteLock* currentModificationLock;
+		QList<Node*> modifiedTargets;
 
 		bool pushedNewCommandsOnTheStack;
 		bool modificationInProgress;
@@ -72,6 +75,13 @@ class MODELBASE_API Model
 		 * Returns the model object that has as its root node the node indicated.
 		 */
 		static Model* getModel(Node* root);
+
+		void emitNameModified(Node* node, const QString &oldName);
+
+		signals:
+		     void nodesModified(QList<Node*> nodes);
+		     void nameModified(Node* node, const QString &oldName);
+
 };
 
 }

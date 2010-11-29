@@ -19,12 +19,13 @@ class SetModificationTarget: public UndoCommand
 	private:
 		Node* &field;
 		NodeReadWriteLock* &lock;
+		QList<Node*>& modifiedTargets;
 
 		Node* oldTarget;
 		Node* newTarget;
 
 	public:
-		SetModificationTarget(Node* &field, NodeReadWriteLock* &lock, Node* oldTarget, Node* newTarget);
+		SetModificationTarget(Node* &field, NodeReadWriteLock* &lock, QList<Node*>& modifiedTargets, Node* newTarget);
 		void redo();
 		void undo();
 };

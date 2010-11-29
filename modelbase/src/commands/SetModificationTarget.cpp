@@ -11,8 +11,8 @@
 
 namespace Model {
 
-SetModificationTarget::SetModificationTarget(Node* &field_, NodeReadWriteLock* &lock_, Node* oldTarget_, Node* newTarget_) :
-	UndoCommand(NULL, "Change modification target"), field(field_), lock(lock_), oldTarget(oldTarget_), newTarget(newTarget_)
+SetModificationTarget::SetModificationTarget(Node* &field_, NodeReadWriteLock* &lock_, QList<Node*>& modifiedTargets_, Node* newTarget_) :
+	UndoCommand(NULL, "Change modification target"), field(field_), lock(lock_), modifiedTargets(modifiedTargets_), oldTarget(field_), newTarget(newTarget_)
 {
 }
 
@@ -22,6 +22,8 @@ void SetModificationTarget::redo()
 	if (newTarget) newTarget->getAccessLock()->lockForWrite(newTarget);
 
 	field = newTarget;
+	if ( !modifiedTargets.contains(newTarget) ) modifiedTargets.append(newTarget);
+
 	if (field) lock = field->getAccessLock();
 	else lock = NULL;
 
@@ -34,6 +36,8 @@ void SetModificationTarget::undo()
 	if (oldTarget) oldTarget->getAccessLock()->lockForWrite(oldTarget);
 
 	field = oldTarget;
+	if ( !modifiedTargets.contains(oldTarget) ) modifiedTargets.append(oldTarget);
+
 	if (field) lock = field->getAccessLock();
 	else lock = NULL;
 

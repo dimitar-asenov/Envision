@@ -24,7 +24,10 @@ Model::Model() :
 Model::~Model()
 {
 	loadedModels.removeAll(this);
+
 	// TODO Make sure to persist and destroy the tree in a nice way.
+	// TODO Emit a signal that this model is no longer valid.
+	delete root;
 }
 
 void Model::beginModification(Node* modificationTarget, const QString &text)
@@ -32,6 +35,7 @@ void Model::beginModification(Node* modificationTarget, const QString &text)
 	exclusiveAccess.lock();
 	modificationInProgress = true;
 	modificationText = text;
+	modifiedTargets.clear();
 
 	if (modificationTarget) changeModificationTarget(modificationTarget);
 }
@@ -40,7 +44,7 @@ void Model::changeModificationTarget(Node* modificationTarget)
 {
 	if ( !modificationInProgress ) throw ModelException("Switching modification targets without calling Model.beginModification() first");
 
-	pushCommandOnUndoStack( new SetModificationTarget(currentModificationTarget, currentModificationLock, currentModificationTarget, modificationTarget));
+	pushCommandOnUndoStack( new SetModificationTarget(currentModificationTarget, currentModificationLock, modifiedTargets, modificationTarget));
 }
 
 void Model::endModification()
@@ -53,6 +57,8 @@ void Model::endModification()
 
 	modificationInProgress = false;
 	exclusiveAccess.unlock();
+
+	emit nodesModified(modifiedTargets);
 }
 
 void Model::beginExclusiveRead()
@@ -140,6 +146,11 @@ Node* Model::createRoot(const QString &typeName)
 	}
 
 	return root;
+}
+
+void Model::emitNameModified(Node* node, const QString &oldName)
+{
+	emit nameModified(node, oldName);
 }
 
 }
