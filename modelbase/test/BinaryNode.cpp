@@ -9,54 +9,54 @@
 
 namespace Model {
 
-NODE_DEFINE_EMPTY_CONSTRUCTORS(BinaryNode, ExtendableNode<BinaryNode> )
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(BinaryNode)
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(BinaryNode, ExtendableNode)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(BinaryNode)
 
-int BinaryNode::textIndex = 0;
-int BinaryNode::leftIndex = 0;
-int BinaryNode::rightIndex = 0;
+ExtendableIndex BinaryNode::textIndex = ExtendableIndex();
+ExtendableIndex BinaryNode::leftIndex = ExtendableIndex();
+ExtendableIndex BinaryNode::rightIndex = ExtendableIndex();
 
 void BinaryNode::init()
 {
-registerNodeConstructors();
-textIndex = registerNewAttribute("text", "Text", false, false);
-leftIndex = registerNewAttribute("left", "BinaryNode", false, true);
-rightIndex = registerNewAttribute("right", "BinaryNode", false, true);
+	registerNodeConstructors();
+	textIndex = registerNewAttribute<BinaryNode> ("text", "Text", false, false);
+	leftIndex = registerNewAttribute<BinaryNode> ("left", "BinaryNode", false, true);
+	rightIndex = registerNewAttribute<BinaryNode> ("right", "BinaryNode", false, true);
 }
 
 Text* BinaryNode::text()
 {
-return static_cast<Text*> (get(textIndex));
+	return static_cast<Text*> (get(textIndex));
 }
 
 BinaryNode* BinaryNode::left()
 {
-return static_cast<BinaryNode*> (get(leftIndex));
+	return static_cast<BinaryNode*> (get(leftIndex));
 }
 
 BinaryNode* BinaryNode::right()
 {
-return static_cast<BinaryNode*> (get(rightIndex));
+	return static_cast<BinaryNode*> (get(rightIndex));
 }
 
 BinaryNode* BinaryNode::makeLeftNode()
 {
-return static_cast<BinaryNode*> (createOptional(leftIndex));
+	return static_cast<BinaryNode*> (createOptional(leftIndex));
 }
 
 BinaryNode* BinaryNode::makeRightNode()
 {
-return static_cast<BinaryNode*> (createOptional(rightIndex));
+	return static_cast<BinaryNode*> (createOptional(rightIndex));
 }
 
 void BinaryNode::removeLeftNode()
 {
-removeOptional(leftIndex);
+	removeOptional(leftIndex);
 }
 
 void BinaryNode::removeRightNode()
 {
-removeOptional(rightIndex);
+	removeOptional(rightIndex);
 }
 
 }

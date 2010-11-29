@@ -8,11 +8,12 @@
 #ifndef ATTRIBUTE_H_
 #define ATTRIBUTE_H_
 
+#include "modelbase_api.h"
 #include <QString>
 
 namespace Model {
 
-class Attribute
+class MODELBASE_API Attribute
 {
 	private:
 		QString name_;

@@ -9,6 +9,7 @@
 #define EXTENDEDNODEOPTIONAL_H_
 
 #include "UndoCommand.h"
+#include "ExtendableIndex.h"
 #include <QVector>
 
 namespace Model {
@@ -19,12 +20,12 @@ class ExtendedNodeOptional: public UndoCommand
 {
 	private:
 		Node* attribute;
-		int attributeIndex;
-		QVector<Node*>* nodeAttributes;
+		ExtendableIndex attributeIndex;
+		QVector< QVector<Node*> >* subnodes;
 		bool created;
 
 	public:
-		ExtendedNodeOptional(Node* target, Node* attribute, int attributeIndex, QVector<Node*>* nodeAttributes, bool created);
+		ExtendedNodeOptional(Node* target, Node* attribute, const ExtendableIndex &attributeIndex, QVector< QVector<Node*> >* subnodes, bool created);
 		virtual ~ExtendedNodeOptional();
 
 		void redo();

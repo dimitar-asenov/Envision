@@ -8,10 +8,48 @@
 #include "modelbase.h"
 #include "selftest/headers/SelfTestSuite.h"
 #include "BinaryNode.h"
+#include "BinaryNodeUnit.h"
 #include "Model.h"
 #include "nodes/Text.h"
 
 namespace Model {
+
+TEST(ModelBase, ExtendableMetaData)
+{
+	AttributeChain& metaExt = ExtendableNode::getMetaData<BinaryNode>();
+	AttributeChain& metaUnit = ExtendableNode::getMetaData<BinaryNodeUnit>();
+
+	CHECK_INT_EQUAL(1, metaExt.getNumLevels());
+	CHECK_INT_EQUAL(2, metaUnit.getNumLevels());
+
+	CHECK_INT_EQUAL(5, metaExt.size());
+	CHECK_INT_EQUAL(0, metaUnit.size());
+	CHECK_CONDITION( metaUnit.getLevel(0) == &metaExt);
+
+	CHECK_STR_EQUAL("text", metaExt[0].name());
+	CHECK_STR_EQUAL("left", metaExt[1].name());
+	CHECK_STR_EQUAL("right", metaExt[2].name());
+	CHECK_STR_EQUAL("x", metaExt[3].name());
+	CHECK_STR_EQUAL("y", metaExt[4].name());
+
+	CHECK_STR_EQUAL("Text", metaExt[0].type());
+	CHECK_STR_EQUAL("BinaryNode", metaExt[1].type());
+	CHECK_STR_EQUAL("BinaryNode", metaExt[2].type());
+	CHECK_STR_EQUAL("Integer", metaExt[3].type());
+	CHECK_STR_EQUAL("Integer", metaExt[4].type());
+
+	CHECK_CONDITION(metaExt[0].optional() == false);
+	CHECK_CONDITION(metaExt[1].optional() == true);
+	CHECK_CONDITION(metaExt[2].optional() == true);
+	CHECK_CONDITION(metaExt[3].optional() == false);
+	CHECK_CONDITION(metaExt[4].optional() == false);
+
+	CHECK_CONDITION(metaExt[0].partialHint() == false);
+	CHECK_CONDITION(metaExt[1].partialHint() == false);
+	CHECK_CONDITION(metaExt[2].partialHint() == false);
+	CHECK_CONDITION(metaExt[3].partialHint() == false);
+	CHECK_CONDITION(metaExt[4].partialHint() == false);
+}
 
 TEST(ModelBase, SimpleModelCreation)
 {
@@ -37,12 +75,10 @@ TEST(ModelBase, RemoveOptional)
 	CHECK_CONDITION( root->left() == left );
 	CHECK_CONDITION( root->left() != NULL );
 
-
 	model.beginModification(root, "Removing left node");
 	root->removeLeftNode();
 	model.endModification();
 	CHECK_CONDITION( root->left() == NULL);
-
 
 	model.beginModification(root, "Making left node");
 	root->makeLeftNode();

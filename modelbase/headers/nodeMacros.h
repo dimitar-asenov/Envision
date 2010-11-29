@@ -12,10 +12,12 @@
 #define NODEMACROS_H_
 
 /**
- * Declares standard constructors and standard static methods for registering the constructors.
+ * Declares standard constructors and standard static methods for registering the constructors of a class inheriting
+ * Node.
  *
  * @param className
- * 			The name of the class being defined. This class must inherit from Node, directly or indirectly.
+ * 			The name of the class being defined. This class must inherit from Node, directly or indirectly. For
+ * 			classes directly inheriting ExtendableNode use the macro EXTENDABLENODE_DECLARE_STANDARD_CONSTRUCTORS.
  *
  * This macro declares a static method "registerNodeConstructors" which should be called during the initialization of
  * the plug-in where this node is defined. This will assure that the new node type's constructors are properly
@@ -38,6 +40,33 @@
 	private:
 /*********************************************************************************************************************/
 
+/**
+ * Declares standard constructors and standard static methods for registering the constructors of a class inheriting
+ * ExtendableNode.
+ *
+ * @param className
+ * 			The name of the class being defined. This class must inherit from ExtendableNode, directly or indirectly.
+ *
+ * This macro declares a static method "registerNodeConstructors" which should be called during the initialization of
+ * the plug-in where this node is defined. This will assure that the new node type's constructors are properly
+ * registered.
+ *
+ * This macro should appear as the first line after the class declaration e.g. :
+ *
+ * class MyNewNode : public ExtendableNode
+ * {
+ * 	EXTENDABLENODE_DECLARE_STANDARD_CONSTRUCTORS( MyNewNode )
+ */
+#define EXTENDABLENODE_DECLARE_STANDARD_CONSTRUCTORS(className)																		\
+	public:																																				\
+		className(Node* parent, Model* model, AttributeChain& metaData);																\
+		className(Node *parent, NodeIdType id, PersistentStore &store, bool partialLoadHint, AttributeChain& metaData); \
+																																							\
+		QString getTypeName() const;																												\
+		static void registerNodeConstructors();																								\
+																																							\
+	private:
+/*********************************************************************************************************************/
 
 
 /**
@@ -58,6 +87,25 @@
 		: parentName (parent, id, store, partialLoadHint) {}
 /*********************************************************************************************************************/
 
+/**
+ * Defines standard empty constructors for a new Node type which just call their parent constructors.
+ *
+ * @param className
+ * 			The name of the class being defined. This class must inherit from parentName.
+ *
+ * @param parentName
+ * 			The name of the direct parent class. This class must be or inherit from from ExtendableNode, directly or
+ * 			indirectly.
+ *
+ * Use this macro in the .cpp file that defines the new Node type.
+ */
+#define EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(className, parentName)																\
+	className::className(Node* parent, Model* model, AttributeChain& metaData)														\
+		: parentName (parent, model, metaData) {}																								\
+																																							\
+	className::className(Node *parent, NodeIdType id, PersistentStore &store, bool partialLoadHint, AttributeChain& metaData)\
+		: parentName (parent, id, store, partialLoadHint, metaData) {}
+/*********************************************************************************************************************/
 
 
 /**
@@ -78,6 +126,28 @@ QString className::getTypeName()	const																											\
 void className::registerNodeConstructors()																									\
 {																																							\
 	Node::registerNodeType(#className, ::Model::createNewNode< className >, ::Model::createNodeFromPersistence< className >);\
+}
+/*********************************************************************************************************************/
+
+/**
+ * Defines standard static methods that register the new Node type's constructors and a virtual getTypeName method
+ * that returns the name of this class.
+ *
+ * @param className
+ * 			The name of the class being defined. This class must inherit from from ExtendableNode, directly or
+ * 			indirectly.
+ *
+ * Use this macro in the .cpp file that defines the new Node type.
+ */
+#define EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(className)																	\
+QString className::getTypeName()	const																											\
+{																																							\
+	return #className;																																\
+}																																							\
+																																							\
+void className::registerNodeConstructors()																									\
+{																																							\
+	Node::registerNodeType(#className, ::Model::createNewExtendableNode< className >, ::Model::createExtendableNodeFromPersistence< className >);\
 }
 /*********************************************************************************************************************/
 

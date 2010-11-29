@@ -8,16 +8,17 @@
 #ifndef BINARYWITHPOSITION_H_
 #define BINARYWITHPOSITION_H_
 
+#include "BinaryNode.h"
+
 namespace Model {
 
-class BinaryNode;
 
 class BinaryWithPosition
 {
 	private:
 		BinaryNode* binaryNode;
-		static int xIndex;
-		static int yIndex;
+		static ExtendableIndex xIndex;
+		static ExtendableIndex yIndex;
 
 	public:
 		BinaryWithPosition(BinaryNode* binary);

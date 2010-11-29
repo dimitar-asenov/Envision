@@ -10,8 +10,8 @@
 
 namespace Model {
 
-ExtendedNodeOptional::ExtendedNodeOptional(Node* target, Node* attribute_, int attributeIndex_, QVector<Node*>* nodeAttributes_, bool created_) :
-	UndoCommand(target, created_ ? "create optional node" : "remove optional node"), attribute(attribute_), attributeIndex(attributeIndex_), nodeAttributes(nodeAttributes_), created(created_)
+ExtendedNodeOptional::ExtendedNodeOptional(Node* target, Node* attribute_, const ExtendableIndex &attributeIndex_, QVector< QVector<Node*> >* subnodes_, bool created_) :
+	UndoCommand(target, created_ ? "create optional node" : "remove optional node"), attribute(attribute_), attributeIndex(attributeIndex_), subnodes(subnodes_), created(created_)
 {
 }
 
@@ -23,16 +23,16 @@ ExtendedNodeOptional::~ExtendedNodeOptional()
 
 void ExtendedNodeOptional::redo()
 {
-	if (created) (*nodeAttributes)[attributeIndex] = attribute;
-	else (*nodeAttributes)[attributeIndex] = NULL;
+	if (created) (*subnodes)[attributeIndex.level()][attributeIndex.index()] = attribute;
+	else (*subnodes)[attributeIndex.level()][attributeIndex.index()] = NULL;
 
 	UndoCommand::redo();
 }
 
 void ExtendedNodeOptional::undo()
 {
-	if (created) (*nodeAttributes)[attributeIndex] = NULL;
-	else (*nodeAttributes)[attributeIndex] = attribute;
+	if (created) (*subnodes)[attributeIndex.level()][attributeIndex.index()] = NULL;
+	else (*subnodes)[attributeIndex.level()][attributeIndex.index()] = attribute;
 
 	UndoCommand::undo();
 }

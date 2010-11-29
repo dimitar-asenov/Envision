@@ -6,13 +6,12 @@
  **********************************************************************************************************************/
 
 #include "BinaryWithPosition.h"
-#include "BinaryNode.h"
 #include "nodes/Integer.h"
 
 namespace Model {
 
-int BinaryWithPosition::xIndex;
-int BinaryWithPosition::yIndex;
+ExtendableIndex BinaryWithPosition::xIndex = ExtendableIndex();
+ExtendableIndex BinaryWithPosition::yIndex = ExtendableIndex();
 
 BinaryWithPosition::BinaryWithPosition(BinaryNode* binary) :
 	binaryNode(binary)
@@ -46,8 +45,8 @@ void BinaryWithPosition::set(int x, int y)
 
 void BinaryWithPosition::init()
 {
-	xIndex = BinaryNode::registerNewAttribute("x", "Integer");
-	yIndex = BinaryNode::registerNewAttribute("y", "Integer");
+	xIndex = BinaryNode::registerNewAttribute<BinaryNode>("x", "Integer");
+	yIndex = BinaryNode::registerNewAttribute<BinaryNode>("y", "Integer");
 }
 
 }

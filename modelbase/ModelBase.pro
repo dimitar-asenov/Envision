@@ -24,7 +24,9 @@ pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
 debug:DEFINES += DEBUG
-HEADERS += src/Attribute.h \
+HEADERS += headers/ExtendableIndex.h \
+    headers/Attribute.h \
+    headers/AttributeChain.h \
     test/BinaryNodeUnit.h \
     src/commands/SetModificationTarget.h \
     headers/InterruptibleThread.h \
@@ -46,7 +48,10 @@ HEADERS += src/Attribute.h \
     headers/Node.h \
     headers/modelbase_api.h \
     src/modelbase.h
-SOURCES += src/Attribute.cpp \
+SOURCES += src/nodes/ExtendableNode.cpp \
+    src/ExtendableIndex.cpp \
+    src/AttributeChain.cpp \
+    src/Attribute.cpp \
     test/ConcurrencyTests.cpp \
     test/BinaryNodeUnit.cpp \
     src/commands/SetModificationTarget.cpp \

@@ -15,7 +15,7 @@ namespace Model {
 
 class BinaryNodeUnit: public BinaryNode
 {
-	NODE_DECLARE_STANDARD_CONSTRUCTORS(BinaryNodeUnit)
+	EXTENDABLENODE_DECLARE_STANDARD_CONSTRUCTORS(BinaryNodeUnit)
 
 	private:
 		NodeReadWriteLock accessLock;

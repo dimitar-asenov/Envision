@@ -14,14 +14,14 @@
 
 namespace Model {
 
-class BinaryNode: public ExtendableNode<BinaryNode>
+class BinaryNode: public ExtendableNode
 {
-	NODE_DECLARE_STANDARD_CONSTRUCTORS(BinaryNode)
+	EXTENDABLENODE_DECLARE_STANDARD_CONSTRUCTORS(BinaryNode)
 
 	private:
-		static int textIndex;
-		static int leftIndex;
-		static int rightIndex;
+		static ExtendableIndex textIndex;
+		static ExtendableIndex leftIndex;
+		static ExtendableIndex rightIndex;
 
 	public:
 		static void init();

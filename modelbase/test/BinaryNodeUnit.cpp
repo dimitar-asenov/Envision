@@ -9,11 +9,12 @@
 
 namespace Model {
 
-NODE_DEFINE_EMPTY_CONSTRUCTORS(BinaryNodeUnit, BinaryNode )
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(BinaryNodeUnit)
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(BinaryNodeUnit, BinaryNode)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(BinaryNodeUnit)
 
 void BinaryNodeUnit::init()
 {
+	BinaryNodeUnit::setParentMeta<BinaryNodeUnit, BinaryNode>();
 	registerNodeConstructors();
 }
 
