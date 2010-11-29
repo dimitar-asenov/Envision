@@ -92,4 +92,24 @@
 	}
 /**********************************************************************************************************************/
 
+/**********************************************************************************************************************/
+#define CHECK_FOR_EXCEPTION( exception, statement )																						\
+	try																																					\
+	{																																						\
+		statement;																																		\
+		allChecksPassedFlag = false;																												\
+		QString message = getName() + "\t" + __FILE__ + ":" + QString::number(__LINE__) + "\n";								\
+		message += "Exception " #exception " was expected but did not occur";														\
+		testResults.addFailedCheck(message);																									\
+	} catch (exception &e)																															\
+	{																																						\
+		testResults.addPassedCheck();																												\
+	} catch (...)																																		\
+	{																																						\
+		allChecksPassedFlag = false;																												\
+		testResults.addFailedCheck(getName() + "\t" + __FILE__ + ":" + QString::number(__LINE__) + " Uncaught exception");	\
+		throw;																																			\
+	}
+/**********************************************************************************************************************/
+
 #endif /* TESTASSERTIONS_H_ */
