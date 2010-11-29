@@ -16,20 +16,21 @@
 
 namespace Model {
 
-//TEST(ModelBase, ConcurrentRead)
-//{
-//	Model model;
-//
-//	BinaryNode* root = dynamic_cast<BinaryNode*> (model.createRoot("BinaryNode"));
-//
-//	model.beginModification(root, "make tree");
-//	root->makeLeftNode();
-//	root->makeRightNode();
-//	root->text()->set("Troot");
-//	root->left()->text()->set("Tleft");
-//	root->right()->text()->set("Tright");
-//	model.endModification();
-//
-//}
+TEST(ModelBase, ConcurrentRead)
+{
+	Model model;
+
+	BinaryNode* root = dynamic_cast<BinaryNode*> (model.createRoot("BinaryNode"));
+
+	model.beginModification(root, "make tree");
+	root->makeLeftNode();
+	root->makeRightNode();
+	root->text()->set("Troot");
+	root->left()->text()->set("Tleft");
+	root->right()->text()->set("Tright");
+	model.endModification();
+	CHECK_INT_EQUAL(0,0)
+
+}
 
 }

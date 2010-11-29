@@ -13,6 +13,7 @@
 #include <QString>
 #include "AttributeChain.h"
 #include "ModelException.h"
+#include "commands/ExtendedNodeOptional.h"
 
 namespace Model {
 
@@ -44,7 +45,34 @@ class MODELBASE_API ExtendableNode: public Node
 
 		QString getChildReferenceName(const Node* child) const;
 
-		Node* createOptional(const ExtendableIndex &attributeIndex, const QString& type = QString());
+		template<class T>
+		T* createOptional(const ExtendableIndex &attributeIndex, const QString& type = QString())
+		{
+			if ( !attributeIndex.isValid() ) throw ModelException("Trying to create an optional attribute with an invalid Index");
+
+			if ( meta.getAttribute(attributeIndex).optional() )
+			{
+				QString creationType = meta.getAttribute(attributeIndex).type();
+				if ( !type.isEmpty() ) creationType = type;
+
+				Node* nodeGeneric = Node::createNewNode(creationType, this);
+				T* nodeSpecific = dynamic_cast<T*> (nodeGeneric);
+
+				if ( nodeSpecific == NULL )
+				{
+					if (nodeGeneric) delete nodeGeneric;
+					throw ModelException("Could not create optional node with the type " + creationType
+							+ ". This type is not compatible with the expected node type of this attribute.");
+				}
+
+				execute(new ExtendedNodeOptional(this, nodeSpecific, attributeIndex, &subnodes, true));
+
+				return nodeSpecific;
+			}
+			else
+				throw ModelException("Trying to create a non-optional attribute");
+		}
+
 		void removeOptional(const ExtendableIndex &attributeIndex);
 
 		void save(PersistentStore &store) const;

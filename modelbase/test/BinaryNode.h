@@ -30,8 +30,8 @@ class BinaryNode: public ExtendableNode
 		BinaryNode* left();
 		BinaryNode* right();
 
-		BinaryNode* makeLeftNode();
-		BinaryNode* makeRightNode();
+		BinaryNode* makeLeftNode(const QString &type = QString());
+		BinaryNode* makeRightNode(const QString &type = QString());
 
 		void removeLeftNode();
 		void removeRightNode();

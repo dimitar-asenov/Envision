@@ -6,7 +6,6 @@
  **********************************************************************************************************************/
 
 #include "nodes/ExtendableNode.h"
-#include "commands/ExtendedNodeOptional.h"
 
 namespace Model {
 
@@ -86,26 +85,6 @@ QString ExtendableNode::getChildReferenceName(const Node* child) const
 bool ExtendableNode::hasAttribute(const QString& attributeName)
 {
 	return meta.hasAttribute(attributeName);
-}
-
-Node* ExtendableNode::createOptional(const ExtendableIndex &attributeIndex, const QString& type)
-{
-	if ( !attributeIndex.isValid() ) throw ModelException("Trying to create an optional attribute with an invalid Index");
-
-	if ( meta.getAttribute(attributeIndex).optional() )
-	{
-		QString creationType = meta.getAttribute(attributeIndex).type();
-		if ( !type.isEmpty()) creationType = type;
-
-		Node* newnode = Node::createNewNode(creationType, this);
-		execute(new ExtendedNodeOptional(this, newnode, attributeIndex, &subnodes, true));
-
-		return subnodes[attributeIndex.level()][attributeIndex.index()];
-	}
-	else
-		throw ModelException("Trying to create a non-optional attribute");
-
-
 }
 
 void ExtendableNode::removeOptional(const ExtendableIndex &attributeIndex)

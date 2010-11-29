@@ -39,14 +39,14 @@ BinaryNode* BinaryNode::right()
 	return static_cast<BinaryNode*> (get(rightIndex));
 }
 
-BinaryNode* BinaryNode::makeLeftNode()
+BinaryNode* BinaryNode::makeLeftNode(const QString &type)
 {
-	return static_cast<BinaryNode*> (createOptional(leftIndex));
+	return createOptional<BinaryNode>(leftIndex, type);
 }
 
-BinaryNode* BinaryNode::makeRightNode()
+BinaryNode* BinaryNode::makeRightNode(const QString &type)
 {
-	return static_cast<BinaryNode*> (createOptional(rightIndex));
+	return createOptional<BinaryNode>(rightIndex, type);
 }
 
 void BinaryNode::removeLeftNode()
