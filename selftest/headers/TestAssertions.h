@@ -16,7 +16,7 @@
 		else																																				\
 		{																																					\
 			allChecksPassedFlag = false;																											\
-			QString message = getName() + "\t" + __FILE__ + ":" + QString::number(__LINE__) + "\n";							\
+			QString message = getName() + "\t" + __FILE__ + ":" + QString::number(__LINE__) + "\t";							\
 			message += "Actual value is different from expected";																			\
 			testResults.addFailedCheck(message);																								\
 		}																																					\
@@ -36,10 +36,9 @@
 		else																																				\
 		{																																					\
 			allChecksPassedFlag = false;																											\
-			QString message = getName() + "\t" + __FILE__ + ":" + QString::number(__LINE__) + "\n";							\
-			message += "Actual value is different from expected\n";																		\
-			message += "Actual    " + QString::number(actual) + "\n";																	\
-			message += "Expected  " + QString::number(expected);																			\
+			QString message = getName() + "\t" + __FILE__ + ":" + QString::number(__LINE__) + "\t";							\
+			message += "Actual value (" + QString::number(actual);																		\
+			message += ") is different from expected ("+QString::number(expected)+")";												\
 			testResults.addFailedCheck(message);																								\
 		}																																					\
 	} catch (...)																																		\
@@ -58,10 +57,8 @@
 		else																																				\
 		{																																					\
 			allChecksPassedFlag = false;																											\
-			QString message = getName() + "\t" + __FILE__ + ":" + QString::number(__LINE__) + "\n";							\
-			message += "Actual value is different from expected\n";																		\
-			message += "Actual    " + QString(actual) + "\n";																				\
-			message += "Expected  " + QString(expected);																						\
+			QString message = getName() + "\t" + __FILE__ + ":" + QString::number(__LINE__) + "\t";							\
+			message += "Actual value (" + QString(actual) +") is different from expected ("+QString(expected)+")";		\
 			testResults.addFailedCheck(message);																								\
 		}																																					\
 	} catch (...)																																		\
@@ -80,7 +77,7 @@
 		else																																				\
 		{																																					\
 			allChecksPassedFlag = false;																											\
-			QString message = getName() + "\t" + __FILE__ + ":" + QString::number(__LINE__) + "\n";							\
+			QString message = getName() + "\t" + __FILE__ + ":" + QString::number(__LINE__) + "\t";							\
 			message += "Condition is false: " #condition;																					\
 			testResults.addFailedCheck(message);																								\
 		}																																					\
@@ -98,7 +95,7 @@
 	{																																						\
 		statement;																																		\
 		allChecksPassedFlag = false;																												\
-		QString message = getName() + "\t" + __FILE__ + ":" + QString::number(__LINE__) + "\n";								\
+		QString message = getName() + "\t" + __FILE__ + ":" + QString::number(__LINE__) + "\t";								\
 		message += "Exception " #exception " was expected but did not occur";														\
 		testResults.addFailedCheck(message);																									\
 	} catch (exception &e)																															\
