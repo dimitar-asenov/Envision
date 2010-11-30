@@ -61,7 +61,7 @@ void Node::execute(UndoCommand *command)
 
 	Model* model = getModel();
 
-	if ( !model->isInCurrentAccessUnit(this) ) throw ModelException("Modifying a node in an unlocked access unit.");
+	if ( !model->canBeModified(this) ) throw ModelException("Can not modify the current node.");
 
 	model->pushCommandOnUndoStack(command);
 }

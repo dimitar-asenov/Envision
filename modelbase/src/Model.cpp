@@ -15,7 +15,7 @@ namespace Model {
 QList<Model*> Model::loadedModels;
 
 Model::Model() :
-	root(NULL), currentModificationTarget(NULL), currentModificationLock(NULL), pushedNewCommandsOnTheStack(false), modificationInProgress(false), nextId(0)
+	root(NULL), currentModificationTarget(NULL), currentModificationLock(NULL), pushedNewCommandsOnTheStack(false), performedUndoRedo(false), modificationInProgress(false), nextId(0)
 {
 	commands.setUndoLimit(100);
 	loadedModels.append(this);
@@ -32,7 +32,7 @@ Model::~Model()
 
 void Model::beginModification(Node* modificationTarget, const QString &text)
 {
-	exclusiveAccess.lock();
+	exclusiveAccess.lockForWrite();
 	modificationInProgress = true;
 	modificationText = text;
 	modifiedTargets.clear();
@@ -56,6 +56,7 @@ void Model::endModification()
 		commands.endMacro();
 	}
 
+	performedUndoRedo = false;
 
 	QList<Node*> mt = modifiedTargets;
 	modifiedTargets.clear();
@@ -68,7 +69,7 @@ void Model::endModification()
 
 void Model::beginExclusiveRead()
 {
-	exclusiveAccess.lock();
+	exclusiveAccess.lockForRead();
 }
 
 void Model::endExclusiveRead()
@@ -81,8 +82,17 @@ NodeReadWriteLock* Model::getRootLock()
 	return &rootLock;
 }
 
-bool Model::isInCurrentAccessUnit(const Node* node) const
+bool Model::canBeModified(const Node* node) const
 {
+	// Check that we are in a modification block
+	if ( !modificationInProgress ) return false;
+
+	// Check that this node has as a parent the current modification target.
+	const Node* n = node;
+	while (n != NULL && n != currentModificationTarget) n = n->getParent();
+	if (n == NULL) return false;
+
+	// Check that the access lock for this node is the current modification lock.
 	return node->getAccessLock() == currentModificationLock;
 }
 
@@ -101,6 +111,7 @@ NodeIdType Model::generateNextId()
 void Model::pushCommandOnUndoStack(UndoCommand* command)
 {
 	if ( !modificationInProgress ) throw ModelException("Changing the application tree without calling Model.beginModification() first");
+	if ( performedUndoRedo ) throw ModelException("Trying to execute new commands after performing an Undo or a Redo operation.");
 
 	if ( pushedNewCommandsOnTheStack == false )
 	{
@@ -114,7 +125,8 @@ void Model::pushCommandOnUndoStack(UndoCommand* command)
 void Model::undo()
 {
 	if ( !modificationInProgress ) throw ModelException("Requesting an Undo without calling Model.beginModification() first");
-	if ( pushedNewCommandsOnTheStack ) throw ModelException("Requesting an undo in the middle of a modification after inserting new commands.");
+	if ( pushedNewCommandsOnTheStack ) throw ModelException("Requesting an undo in the middle of a modification after executing new commands.");
+	performedUndoRedo = true;
 
 	commands.undo();
 }
@@ -122,7 +134,8 @@ void Model::undo()
 void Model::redo()
 {
 	if ( !modificationInProgress ) throw ModelException("Requesting a Redo without calling Model.beginModification() first");
-	if ( pushedNewCommandsOnTheStack ) throw ModelException("Requesting a Redo in the middle of a modification after inserting new commands.");
+	if ( pushedNewCommandsOnTheStack ) throw ModelException("Requesting a Redo in the middle of a modification after executing new commands.");
+	performedUndoRedo = true;
 
 	commands.redo();
 }
