@@ -15,4 +15,8 @@ Log* Log::getLogger(QString requestingPluginId)
 	return new DefaultLog(requestingPluginId);
 }
 
+Log::~Log()
+{
+}
+
 }

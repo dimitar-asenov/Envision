@@ -38,7 +38,7 @@ class LOGGER_API Log : public QObject
 
 		static Log* getLogger(QString requestingPluginId);
 
-		virtual ~Log() = 0;
+		virtual ~Log();
 
 	signals:
 		void newLogEntry();
