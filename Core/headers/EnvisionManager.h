@@ -19,6 +19,7 @@ class EnvisionManager
 	public:
 		virtual QList<PluginInfo> getAllLoadedPluginsInfo() = 0;
 		virtual QWidget* getMainWindow() = 0;
+		virtual ~EnvisionManager() {};
 };
 
 }

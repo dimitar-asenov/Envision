@@ -19,6 +19,7 @@ class EnvisionPlugin
 	public:
 		virtual bool initialize(EnvisionManager&) = 0;
 		virtual void selfTest(QString testid) = 0;
+		virtual ~EnvisionPlugin() {};
 };
 
 }

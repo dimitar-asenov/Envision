@@ -38,6 +38,8 @@ class PersistentStore
 		virtual int loadIntValue() = 0;
 		virtual QString loadStringValue() = 0;
 		virtual double loadFloatValue() = 0;
+
+		virtual ~PersistentStore() {};
 };
 
 }
