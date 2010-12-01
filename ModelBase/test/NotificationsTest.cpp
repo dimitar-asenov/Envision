@@ -6,7 +6,7 @@
  **********************************************************************************************************************/
 
 #include "modelbase.h"
-#include "selftest/headers/SelfTestSuite.h"
+#include "SelfTest/headers/SelfTestSuite.h"
 #include "BinaryNode.h"
 #include "Model.h"
 #include "NotificationListener.h"

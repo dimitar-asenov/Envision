@@ -26,11 +26,16 @@ void LogTester::runTests()
 
 void LogTester::newLogEntryAdded()
 {
-	if ( log->hasUnreadEntries() == false ) return;
+	// Search the log for an unread entry from the logger plug-in.
+	Log::LogEntry le;
+	bool loggerEntry = false;
+	while ( log->hasUnreadEntries() && !loggerEntry)
+	{
+		le = log->getNextEntry();
+		loggerEntry = le.pluginId == "logger";
+	}
 
-	Log::LogEntry le = log->getNextEntry();
-
-	if ( le.pluginId != "logger" ) return;
+	if ( !loggerEntry ) return;
 
 	if ( correctLogEntries == 0 && le.level == Log::LOGINFO && le.message == "A default message" ) correctLogEntries++;
 	if ( correctLogEntries == 1 && le.level == Log::LOGDEBUG && le.message == "A debug log" ) correctLogEntries++;

@@ -6,7 +6,7 @@
  **********************************************************************************************************************/
 
 #include "apideptest.h"
-#include "helloworld/headers/HelloWorldPrinter.h"
+#include "HelloWorld/headers/HelloWorldPrinter.h"
 #include <QString>
 
 Q_EXPORT_PLUGIN2( apideptest, APIDepTest::APIDep )

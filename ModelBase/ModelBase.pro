@@ -1,29 +1,31 @@
-ENVISION_SRC_DIR = $$PWD/..
-ENVISION_DIR = $${ENVISION_SRC_DIR}/envision_build
-ENVISION_PLUGINS_DIR = $${ENVISION_DIR}/plugins
+ENVISION_ROOT_DIR = $$PWD/..
+CONFIG(release, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/ReleaseBuild
+CONFIG(debug, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/DebugBuild
+PLUGINS_DIR = $${BUILD_DIR}/plugins
+CONFIG(debug, debug|release):DEFINES += DEBUG
+QMAKE_CXXFLAGS += -Werror
+
 INCLUDEPATH += ./headers \
     ./src \
     ./test \
-    $${ENVISION_SRC_DIR}/core/headers \
-    $${ENVISION_SRC_DIR}
+    $${ENVISION_ROOT_DIR}/Core/headers \
+    $${ENVISION_ROOT_DIR}
 TARGET = modelbase
 DEFINES += MODELBASE_LIBRARY
-win32:LIBS += -L$${ENVISION_PLUGINS_DIR} \
+win32:LIBS += -L$${PLUGINS_DIR} \
     -llogger \
     -lselftest
 QT = core \
     gui
-QMAKE_CXXFLAGS += -Werror
 TEMPLATE = lib
 CONFIG += plugin \
     warn_on \
     thread
-target.path = $$ENVISION_PLUGINS_DIR
-pluginmeta.path = $$ENVISION_PLUGINS_DIR
+target.path = $$PLUGINS_DIR
+pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
-debug:DEFINES += DEBUG
 HEADERS += test/NotificationListener.h \
     headers/commands/UndoCommand.h \
     headers/nodes/nodeMacros.h \

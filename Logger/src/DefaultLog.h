@@ -14,7 +14,7 @@
 
 namespace Logger {
 
-class DefaultLog: public Logger::Log
+class DefaultLog: public Log
 {
 	private:
 		QString pluginId;
