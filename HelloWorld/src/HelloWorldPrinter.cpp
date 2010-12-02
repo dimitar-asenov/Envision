@@ -6,13 +6,14 @@
  **********************************************************************************************************************/
 
 #include "HelloWorldPrinter.h"
-#include <iostream>
+#include <QtCore/QTextStream>
 
 namespace Hello {
 
 void HelloWorldPrinter::sayHello(QString fromWho)
 {
-	std::cout<< "Hello World from " << qPrintable(fromWho) << '.' << std::endl;
+	QTextStream out(stdout);
+	out<< "Hello World from " << fromWho << '.' << endl;
 }
 
 }

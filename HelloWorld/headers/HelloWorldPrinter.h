@@ -11,7 +11,7 @@
 #define HELLOWORLDPRINTER_H_
 
 #include "helloworld_api.h"
-#include <QString>
+#include <QtCore/QString>
 
 namespace Hello {
 
