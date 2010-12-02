@@ -25,8 +25,10 @@ pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
-HEADERS += headers/FileStore.h \
+HEADERS += headers/FilePersistenceException.h \
+    headers/FileStore.h \
     headers/filepersistence_api.h \
     src/filepersistence.h
-SOURCES += src/FileStore.cpp \
+SOURCES += headers/FilePersistenceException.cpp \
+    src/FileStore.cpp \
     src/filepersistence.cpp

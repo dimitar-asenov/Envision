@@ -21,6 +21,7 @@ class PersistentStoreMock: public PersistentStore
 		PersistentStoreMock();
 		~PersistentStoreMock();
 
+		void saveModel(Model& model, const QString &name);
 		void saveStringValue(const QString &value);
 		void saveIntValue(int value);
 		void saveFloatValue(double value);

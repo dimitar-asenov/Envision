@@ -7,6 +7,7 @@
 
 #include "PersistentStoreMock.h"
 #include "nodes/Node.h"
+#include "Model.h"
 
 namespace Model {
 
@@ -16,6 +17,11 @@ PersistentStoreMock::PersistentStoreMock()
 
 PersistentStoreMock::~PersistentStoreMock()
 {
+}
+
+void PersistentStoreMock::saveModel(Model& model, const QString &name)
+{
+	saveNode(model.getRoot(), name, false);
 }
 
 void PersistentStoreMock::saveStringValue(const QString &value)

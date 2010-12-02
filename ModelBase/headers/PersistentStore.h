@@ -18,6 +18,7 @@ namespace Model {
 typedef long long NodeIdType;
 
 class Node;
+class Model;
 
 struct MODELBASE_API LoadedNode
 {
@@ -28,6 +29,7 @@ struct MODELBASE_API LoadedNode
 class PersistentStore
 {
 	public:
+		virtual void saveModel(Model& model, const QString &name) = 0;
 		virtual void saveStringValue(const QString &value) = 0;
 		virtual void saveIntValue(int value) = 0;
 		virtual void saveFloatValue(double value) = 0;

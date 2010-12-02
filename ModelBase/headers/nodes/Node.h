@@ -8,8 +8,8 @@
 #ifndef NODE_H_
 #define NODE_H_
 
-#include "modelbase_api.h"
-#include "PersistentStore.h"
+#include "../modelbase_api.h"
+#include "../PersistentStore.h"
 
 #include <QtCore/QString>
 #include <QtCore/QMutex>

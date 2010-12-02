@@ -8,7 +8,7 @@
 #ifndef ATTRIBUTE_H_
 #define ATTRIBUTE_H_
 
-#include "modelbase_api.h"
+#include "../../modelbase_api.h"
 #include <QtCore/QString>
 
 namespace Model {

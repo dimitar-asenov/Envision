@@ -8,7 +8,7 @@
 #ifndef ATTRIBUTECHAIN_H_
 #define ATTRIBUTECHAIN_H_
 
-#include "modelbase_api.h"
+#include "../../modelbase_api.h"
 #include "Attribute.h"
 #include "ExtendableIndex.h"
 

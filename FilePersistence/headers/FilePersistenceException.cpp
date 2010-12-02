@@ -1,20 +1,20 @@
 /***********************************************************************************************************************
- * ModelException.cpp
+ * FilePersistenceException.cpp
  *
- *  Created on: Nov 11, 2010
+ *  Created on: Dec 2, 2010
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "ModelException.h"
+#include "FilePersistenceException.h"
 
-namespace Model {
+namespace FilePersistence {
 
-ModelException::ModelException(const QString& message) :
+FilePersistenceException::FilePersistenceException(const QString& message) :
 	Envision::EnvisionException(message)
 {
 }
 
-const QString& ModelException::name() const
+const QString& FilePersistenceException::name() const
 {
 	static QString ename("ModelException");
 	return ename;
