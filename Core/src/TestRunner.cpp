@@ -6,9 +6,9 @@
  **********************************************************************************************************************/
 
 #include "TestRunner.h"
-#include <QApplication>
-#include "EnvisionException.h"
 #include "TestEvent.h"
+#include "EnvisionException.h"
+#include <QtGui/QApplication>
 
 namespace Envision {
 

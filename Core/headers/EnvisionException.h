@@ -8,8 +8,8 @@
 #ifndef ENVISIONEXCEPTION_H_
 #define ENVISIONEXCEPTION_H_
 
-#include <QString>
-#include <QTextStream>
+#include <QtCore/QString>
+#include <QtCore/QTextStream>
 
 namespace Envision {
 

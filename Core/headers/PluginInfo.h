@@ -8,8 +8,8 @@
 #ifndef PLUGININFO_H_
 #define PLUGININFO_H_
 
-#include <QString>
-#include <QList>
+#include <QtCore/QString>
+#include <QtCore/QList>
 
 namespace Envision {
 

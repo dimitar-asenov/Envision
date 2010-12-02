@@ -5,14 +5,14 @@
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include <QStringList>
-#include <QDomDocument>
-#include <QDomElement>
-#include <QTextStream>
-
 #include "EnvisionPlugin.h"
 #include "PluginManager.h"
 #include "EnvisionException.h"
+
+#include <QtXml/QDomDocument>
+#include <QtXml/QDomElement>
+#include <QtCore/QTextStream>
+#include <QtCore/QStringList>
 
 namespace Envision {
 

@@ -5,14 +5,13 @@
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 #include "EnvisionWindow.h"
-
-#include <QtGui>
-#include <QApplication>
-#include <QTextStream>
 #include "PluginManager.h"
 #include "EnvisionException.h"
 #include "DefaultEnvisionManager.h"
 #include "TestRunner.h"
+
+#include <QtGui/QApplication>
+#include <QtCore/QTextStream>
 
 using namespace Envision;
 

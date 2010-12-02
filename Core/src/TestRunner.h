@@ -8,9 +8,9 @@
 #ifndef TESTRUNNER_H_
 #define TESTRUNNER_H_
 
-#include <QObject>
-#include <QEvent>
 #include "PluginManager.h"
+#include <QtCore/QEvent>
+#include <QtCore/QObject>
 
 namespace Envision {
 

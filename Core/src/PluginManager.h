@@ -8,14 +8,14 @@
 #ifndef PLUGINMANAGER_H_
 #define PLUGINMANAGER_H_
 
-#include <QString>
-#include <QList>
-#include <QPluginLoader>
-#include <QDir>
-#include <QMap>
-
 #include "PluginInfo.h"
 #include "EnvisionPlugin.h"
+
+#include <QtCore/QString>
+#include <QtCore/QList>
+#include <QtCore/QPluginLoader>
+#include <QtCore/QDir>
+#include <QtCore/QMap>
 
 namespace Envision
 {

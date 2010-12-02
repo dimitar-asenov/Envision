@@ -8,8 +8,8 @@
 #ifndef TESTEVENT_H_
 #define TESTEVENT_H_
 
-#include <QEvent>
-#include <QString>
+#include <QtCore/QEvent>
+#include <QtCore/QString>
 
 namespace Envision {
 

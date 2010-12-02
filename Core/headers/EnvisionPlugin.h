@@ -8,9 +8,10 @@
 #ifndef ENVISIONPLUGIN_H_
 #define ENVISIONPLUGIN_H_
 
-#include <QtPlugin>
-#include <QString>
 #include "EnvisionManager.h"
+
+#include <QtCore/QtPlugin>
+#include <QtCore/QString>
 
 namespace Envision {
 
