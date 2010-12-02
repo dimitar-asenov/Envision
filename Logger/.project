@@ -3,6 +3,8 @@
 	<name>Logger</name>
 	<comment></comment>
 	<projects>
+		<project>Core</project>
+		<project>SelfTest</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

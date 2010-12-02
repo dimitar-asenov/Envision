@@ -3,6 +3,8 @@
 	<name>APIDepTest</name>
 	<comment></comment>
 	<projects>
+		<project>Core</project>
+		<project>HelloWorld</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

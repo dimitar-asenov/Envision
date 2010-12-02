@@ -120,6 +120,7 @@
 				<pathentry kind="prj" path="/Core"/>
 				<pathentry kind="prj" path="/Logger"/>
 				<pathentry kind="prj" path="/ModelBase"/>
+				<pathentry kind="prj" path="/SelfTest"/>
 			</storageModule>
 		</cconfiguration>
 	</storageModule>
