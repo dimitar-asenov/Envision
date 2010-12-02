@@ -1,0 +1,5 @@
+<!DOCTYPE EnvisionPlugin>
+<plugin id="filepersistence" name="File Persistence" version="0">
+	<dependencies>
+	</dependencies>
+</plugin>
