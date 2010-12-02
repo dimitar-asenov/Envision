@@ -11,7 +11,7 @@
 #include "selftest_api.h"
 #include "Test.h"
 #include "TestResults.h"
-#include <QMap>
+#include <QtCore/QMap>
 
 namespace SelfTest {
 

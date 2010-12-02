@@ -9,7 +9,7 @@
 #define TESTRESULT_H_
 
 #include "selftest_api.h"
-#include <QString>
+#include <QtCore/QString>
 
 namespace SelfTest {
 

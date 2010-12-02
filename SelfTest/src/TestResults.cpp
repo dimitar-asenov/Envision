@@ -6,7 +6,7 @@
  **********************************************************************************************************************/
 
 #include "TestResults.h"
-#include <QTextStream>
+#include <QtCore/QTextStream>
 
 namespace SelfTest {
 

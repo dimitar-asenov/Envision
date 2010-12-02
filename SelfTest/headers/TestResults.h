@@ -10,7 +10,7 @@
 
 #include "selftest_api.h"
 #include "TestResult.h"
-#include <QList>
+#include <QtCore/QList>
 
 namespace SelfTest {
 
