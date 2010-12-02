@@ -7,7 +7,7 @@
 
 #include "filepersistence.h"
 
-Q_EXPORT_PLUGIN2( filepersistence, FilePersistence::FilePersistence );
+Q_EXPORT_PLUGIN2( filepersistence, FilePersistence::FilePersistence )
 
 namespace FilePersistence {
 
