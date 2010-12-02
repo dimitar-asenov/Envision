@@ -8,8 +8,9 @@
 #ifndef LOGTESTER_H_
 #define LOGTESTER_H_
 
-#include <QObject>
 #include "Log.h"
+
+#include <QtCore/QObject>
 
 namespace Logger {
 
