@@ -113,52 +113,10 @@
 					</target>
 				</buildTargets>
 			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 			<storageModule moduleId="org.eclipse.cdt.core.pathentry">
-				<pathentry base-path="/usr/include/qt4" include="" kind="inc" path="" system="true"/>
-				<pathentry base-path="/usr/include/qt4" include="QtDeclarative" kind="inc" path="" system="true"/>
-				<pathentry base-path="/usr/include/qt4" include="QtCore" kind="inc" path="" system="true"/>
-				<pathentry base-path="/usr/include/qt4" include="QtDesigner" kind="inc" path="" system="true"/>
-				<pathentry base-path="/usr/include/qt4" include="QtUiTools" kind="inc" path="" system="true"/>
-				<pathentry base-path="/usr/include/qt4" include="QtTest" kind="inc" path="" system="true"/>
-				<pathentry base-path="/usr/include/qt4" include="QtXmlPatterns" kind="inc" path="" system="true"/>
-				<pathentry base-path="/usr/include/qt4" include="QtNetwork" kind="inc" path="" system="true"/>
-				<pathentry base-path="/usr/include/qt4" include="QtScript" kind="inc" path="" system="true"/>
-				<pathentry base-path="/usr/include/qt4" include="QtHelp" kind="inc" path="" system="true"/>
-				<pathentry base-path="/usr/include/qt4" include="QtXml" kind="inc" path="" system="true"/>
-				<pathentry base-path="/usr/include/qt4" include="Qt" kind="inc" path="" system="true"/>
-				<pathentry base-path="/usr/include/qt4" include="QtDBus" kind="inc" path="" system="true"/>
-				<pathentry base-path="/usr/include/qt4" include="Qt3Support" kind="inc" path="" system="true"/>
-				<pathentry base-path="/usr/include/qt4" include="QtScriptTools" kind="inc" path="" system="true"/>
-				<pathentry base-path="/usr/include/qt4" include="QtSql" kind="inc" path="" system="true"/>
-				<pathentry base-path="/usr/include/qt4" include="QtGui" kind="inc" path="" system="true"/>
-				<pathentry base-path="/usr/include/qt4" include="QtOpenGL" kind="inc" path="" system="true"/>
-				<pathentry base-path="/usr/include/qt4" include="QtSvg" kind="inc" path="" system="true"/>
-				<pathentry base-path="/usr/include/qt4" include="QtWebKit" kind="inc" path="" system="true"/>
-				<pathentry base-path="/local/qtsdk/qt/include" include="" kind="inc" path="" system="true"/>
-				<pathentry base-path="/local/qtsdk/qt/include" include="QtScriptTools" kind="inc" path="" system="true"/>
-				<pathentry base-path="/local/qtsdk/qt/include" include="QtWebKit" kind="inc" path="" system="true"/>
-				<pathentry base-path="/local/qtsdk/qt/include" include="QtXml" kind="inc" path="" system="true"/>
-				<pathentry base-path="/local/qtsdk/qt/include" include="QtTest" kind="inc" path="" system="true"/>
-				<pathentry base-path="/local/qtsdk/qt/include" include="QtUiTools" kind="inc" path="" system="true"/>
-				<pathentry base-path="/local/qtsdk/qt/include" include="QtNetwork" kind="inc" path="" system="true"/>
-				<pathentry base-path="/local/qtsdk/qt/include" include="QtCore" kind="inc" path="" system="true"/>
-				<pathentry base-path="/local/qtsdk/qt/include" include="QtMultimedia" kind="inc" path="" system="true"/>
-				<pathentry base-path="/local/qtsdk/qt/include" include="Qt" kind="inc" path="" system="true"/>
-				<pathentry base-path="/local/qtsdk/qt/include" include="QtXmlPatterns" kind="inc" path="" system="true"/>
-				<pathentry base-path="/local/qtsdk/qt/include" include="phonon_compat" kind="inc" path="" system="true"/>
-				<pathentry base-path="/local/qtsdk/qt/include" include="Qt3Support" kind="inc" path="" system="true"/>
-				<pathentry base-path="/local/qtsdk/qt/include" include="QtSql" kind="inc" path="" system="true"/>
-				<pathentry base-path="/local/qtsdk/qt/include" include="QtOpenVG" kind="inc" path="" system="true"/>
-				<pathentry base-path="/local/qtsdk/qt/include" include="QtScript" kind="inc" path="" system="true"/>
-				<pathentry base-path="/local/qtsdk/qt/include" include="QtDBus" kind="inc" path="" system="true"/>
-				<pathentry base-path="/local/qtsdk/qt/include" include="QtDeclarative" kind="inc" path="" system="true"/>
-				<pathentry base-path="/local/qtsdk/qt/include" include="ActiveQt" kind="inc" path="" system="true"/>
-				<pathentry base-path="/local/qtsdk/qt/include" include="QtHelp" kind="inc" path="" system="true"/>
-				<pathentry base-path="/local/qtsdk/qt/include" include="QtOpenGL" kind="inc" path="" system="true"/>
-				<pathentry base-path="/local/qtsdk/qt/include" include="QtDesigner" kind="inc" path="" system="true"/>
-				<pathentry base-path="/local/qtsdk/qt/include" include="phonon" kind="inc" path="" system="true"/>
-				<pathentry base-path="/local/qtsdk/qt/include" include="QtSvg" kind="inc" path="" system="true"/>
-				<pathentry base-path="/local/qtsdk/qt/include" include="QtGui" kind="inc" path="" system="true"/>
+				<pathentry kind="src" path=""/>
+				<pathentry kind="out" path=""/>
 			</storageModule>
 		</cconfiguration>
 	</storageModule>
