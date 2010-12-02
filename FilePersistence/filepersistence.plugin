@@ -1,5 +1,8 @@
 <!DOCTYPE EnvisionPlugin>
-<plugin id="filepersistence" name="File Persistence" version="0">
+<plugin id="filepersistence" name="File Persistence" version="0.1">
 	<dependencies>
+		<dependency pluginid="logger" version="0" />
+		<dependency pluginid="selftest" version="0" />
+		<dependency pluginid="modelbase" version="0" />
 	</dependencies>
 </plugin>

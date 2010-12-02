@@ -11,6 +11,10 @@ INCLUDEPATH += ./headers \
     $${ENVISION_ROOT_DIR}
 TARGET = filepersistence
 DEFINES += FILEPERSISTENCE_LIBRARY
+win32:LIBS += -L$${PLUGINS_DIR} \
+    -llogger \
+    -lselftest \
+    -lmodelbase
 QT = core
 TEMPLATE = lib
 CONFIG += plugin \
@@ -21,6 +25,8 @@ pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
-HEADERS += headers/filepersistence_api.h \
+HEADERS += headers/FileStore.h \
+    headers/filepersistence_api.h \
     src/filepersistence.h
-SOURCES += src/filepersistence.cpp
+SOURCES += src/FileStore.cpp \
+    src/filepersistence.cpp
