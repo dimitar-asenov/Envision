@@ -10,7 +10,8 @@
 
 #include "Node.h"
 #include "nodeMacros.h"
-#include <QString>
+
+#include <QtCore/QString>
 
 namespace Model {
 

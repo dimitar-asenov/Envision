@@ -11,9 +11,9 @@
 #include "modelbase_api.h"
 #include "InterruptibleThread.h"
 
-#include <QReadWriteLock>
-#include <QMutex>
-#include <QList>
+#include <QtCore/QReadWriteLock>
+#include <QtCore/QMutex>
+#include <QtCore/QList>
 
 namespace Model {
 

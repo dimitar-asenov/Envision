@@ -9,11 +9,12 @@
 #define EXTENDABLENODE_H_
 
 #include "nodes/Node.h"
-#include <QVector>
-#include <QString>
 #include "nodes/Extendable/AttributeChain.h"
 #include "ModelException.h"
 #include "commands/ExtendedNodeOptional.h"
+
+#include <QtCore/QString>
+#include <QtCore/QVector>
 
 namespace Model {
 

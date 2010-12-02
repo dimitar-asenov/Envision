@@ -11,8 +11,9 @@
 #include "modelbase_api.h"
 #include "Attribute.h"
 #include "ExtendableIndex.h"
-#include <QVector>
-#include <QString>
+
+#include <QtCore/QString>
+#include <QtCore/QVector>
 
 namespace Model {
 

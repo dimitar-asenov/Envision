@@ -6,7 +6,8 @@
  **********************************************************************************************************************/
 
 #include "ModelException.h"
-#include <QTextStream>
+
+#include <QtCore/QTextStream>
 
 namespace Model {
 

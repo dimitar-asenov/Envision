@@ -10,8 +10,9 @@
 
 #include "Model.h"
 #include "nodes/Node.h"
-#include <QObject>
-#include <QList>
+
+#include <QtCore/QList>
+#include <QtCore/QObject>
 
 namespace Model {
 

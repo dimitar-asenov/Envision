@@ -12,10 +12,10 @@
 #include "nodes/Node.h"
 #include "NodeReadWriteLock.h"
 
-#include <QString>
-#include <QUndoStack>
-#include <QReadWriteLock>
-#include <QVector>
+#include <QtGui/QUndoStack>
+#include <QtCore/QString>
+#include <QtCore/QReadWriteLock>
+#include <QtCore/QVector>
 
 namespace Model {
 

@@ -6,12 +6,13 @@
  **********************************************************************************************************************/
 
 #include "nodes/Node.h"
-#include <QMutexLocker>
 #include "modelbase.h"
 #include "Model.h"
 #include "commands/UndoCommand.h"
 #include "ModelException.h"
-#include <QList>
+
+#include <QtCore/QMutexLocker>
+#include <QtCore/QList>
 
 using namespace Logger;
 

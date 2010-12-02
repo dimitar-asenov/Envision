@@ -9,7 +9,7 @@
 #define INTERRUPTIBLETHREAD_H_
 
 #include "modelbase_api.h"
-#include <QThread>
+#include <QtCore/QThread>
 
 namespace Model {
 

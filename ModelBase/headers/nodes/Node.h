@@ -10,9 +10,10 @@
 
 #include "modelbase_api.h"
 #include "PersistentStore.h"
-#include <QString>
-#include <QMutex>
-#include <QMap>
+
+#include <QtCore/QString>
+#include <QtCore/QMutex>
+#include <QtCore/QMap>
 
 namespace Model {
 

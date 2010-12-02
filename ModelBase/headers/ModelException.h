@@ -10,7 +10,8 @@
 
 #include "modelbase_api.h"
 #include "EnvisionException.h"
-#include <QString>
+
+#include <QtCore/QString>
 
 namespace Model {
 

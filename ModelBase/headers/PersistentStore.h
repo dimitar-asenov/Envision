@@ -9,8 +9,9 @@
 #define PERSISTENTSTORE_H_
 
 #include "modelbase_api.h"
-#include <QString>
-#include <QList>
+
+#include <QtCore/QString>
+#include <QtCore/QList>
 
 namespace Model {
 

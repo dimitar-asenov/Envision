@@ -7,7 +7,8 @@
 
 #include "NodeReadWriteLock.h"
 #include "ModelException.h"
-#include <QMutexLocker>
+
+#include <QtCore/QMutexLocker>
 
 namespace Model {
 

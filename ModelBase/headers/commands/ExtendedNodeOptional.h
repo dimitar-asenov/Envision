@@ -8,9 +8,9 @@
 #ifndef EXTENDEDNODEOPTIONAL_H_
 #define EXTENDEDNODEOPTIONAL_H_
 
-#include "commands/UndoCommand.h"
 #include "nodes/Extendable/ExtendableIndex.h"
-#include <QVector>
+#include "commands/UndoCommand.h"
+#include <QtCore/QVector>
 
 namespace Model {
 

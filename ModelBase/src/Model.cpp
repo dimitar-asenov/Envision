@@ -6,8 +6,8 @@
  **********************************************************************************************************************/
 
 #include "Model.h"
-#include "commands/UndoCommand.h"
 #include "ModelException.h"
+#include "commands/UndoCommand.h"
 #include "commands/SetModificationTarget.h"
 
 namespace Model {

@@ -8,7 +8,8 @@
 #include "nodes/Reference.h"
 #include "commands/FieldSet.h"
 #include "Model.h"
-#include <QStringList>
+
+#include <QtCore/QStringList>
 
 namespace Model {
 

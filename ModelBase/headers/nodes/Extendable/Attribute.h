@@ -9,7 +9,7 @@
 #define ATTRIBUTE_H_
 
 #include "modelbase_api.h"
-#include <QString>
+#include <QtCore/QString>
 
 namespace Model {
 

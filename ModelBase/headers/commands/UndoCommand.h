@@ -9,7 +9,7 @@
 #define UNDOCOMMAND_H_
 
 #include "modelbase_api.h"
-#include <QUndoCommand>
+#include <QtGui/QUndoCommand>
 
 namespace Model {
 
