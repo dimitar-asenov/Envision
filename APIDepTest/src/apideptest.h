@@ -5,7 +5,7 @@
  *      Author: Dimitar Asenov
  *
  * The APIDepTest plug-in tests if it can import the API provided by the Hello World plug-in and print a message. It is
- * also test the functioanlity of the core module to load all dependent plug-ins first.
+ * also test the functionality of the core module to load all dependent plug-ins first.
  **********************************************************************************************************************/
 
 #ifndef APIDEPTEST_H
