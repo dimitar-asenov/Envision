@@ -1,24 +1,24 @@
 /***********************************************************************************************************************
- * filepersistence.cpp
+ * FileStore.h
  *
  *  Created on: Dec 2, 2010
- *      Author: Dimitar Asenov
+ *      Author: dasenov
  **********************************************************************************************************************/
 
-#include "filepersistence.h"
+#ifndef FILESTORE_H_
+#define FILESTORE_H_
 
-Q_EXPORT_PLUGIN2( filepersistence, FilePersistence::FilePersistence );
+#include "ModelBase/headers/PersistentStore.h"
 
 namespace FilePersistence {
 
-bool FilePersistence::initialize(Envision::EnvisionManager&)
+class FileStore : public Model::PersistentStore
 {
-	return true;
-}
-
-void FilePersistence::selfTest(QString)
-{
-
-}
+	public:
+		FileStore();
+		virtual ~FileStore();
+};
 
 }
+
+#endif /* FILESTORE_H_ */
