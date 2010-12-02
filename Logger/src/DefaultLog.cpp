@@ -6,8 +6,8 @@
  **********************************************************************************************************************/
 
 #include "DefaultLog.h"
-#include <QMutexLocker>
-#include <iostream>
+#include <QtCore/QMutexLocker>
+#include <QtCore/QTextStream>
 
 namespace Logger {
 
@@ -31,10 +31,13 @@ void DefaultLog::add(Level l, QString message)
 {
 	QMutexLocker locker(&logAccess);
 
-	if (l == LOGERROR) std::cerr<<	"ERROR   " << qPrintable(pluginId) << ": " << qPrintable(message) << std::endl;
-	if (l == LOGDEBUG) std::cout<<	"DEBUG   " << qPrintable(pluginId) << ": " << qPrintable(message) << std::endl;
-	if (l == LOGINFO) std::cout<<		"INFO    " << qPrintable(pluginId) << ": " << qPrintable(message) << std::endl;
-	if (l == LOGWARNING) std::cout<<	"WARNING " << qPrintable(pluginId) << ": " << qPrintable(message) << std::endl;
+	QTextStream out(stdout);
+	QTextStream err(stderr);
+
+	if (l == LOGERROR) err<<	"ERROR   " << pluginId << ": " << message << endl;
+	if (l == LOGDEBUG) out<<	"DEBUG   " << pluginId << ": " << message << endl;
+	if (l == LOGINFO) out<<		"INFO    " << pluginId << ": " << message << endl;
+	if (l == LOGWARNING) out<<	"WARNING " << pluginId << ": " << message << endl;
 
 	loggedEvents.append(LogEntry());
 	loggedEvents.last().level = l;

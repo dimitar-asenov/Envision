@@ -6,10 +6,11 @@
  **********************************************************************************************************************/
 
 #include "logger.h"
-#include <iostream>
 #include "Log.h"
 #include "LogTester.h"
-#include <QCoreApplication>
+
+#include <QtCore/QTextStream>
+#include <QtCore/QCoreApplication>
 
 Q_EXPORT_PLUGIN2( logger, Logger::LoggerPlugin )
 
@@ -25,10 +26,13 @@ void LoggerPlugin::selfTest(QString)
 	LogTester lt;
 	lt.runTests();
 	qApp->processEvents();
+
+	QTextStream out(stdout);
+
 	if (lt.allTestsOK())
-		std::cout << "LOGGER: All tests passed" << std::endl;
+		out << "LOGGER: All tests passed" << endl;
 	else
-		std::cout << "LOGGER: Tests failed!" << std::endl;
+		out << "LOGGER: Tests failed!" << endl;
 }
 
 }

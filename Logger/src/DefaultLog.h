@@ -9,8 +9,8 @@
 #define DEFAULTLOG_H_
 
 #include "Log.h"
-#include <QMutex>
-#include <QVector>
+#include <QtCore/QMutex>
+#include <QtCore/QVector>
 
 namespace Logger {
 

@@ -9,9 +9,9 @@
 #define LOG_H_
 
 #include "logger_api.h"
-#include <QObject>
-#include <QString>
-#include <QList>
+#include <QtCore/QString>
+#include <QtCore/QList>
+#include <QtCore/QObject>
 
 namespace Logger {
 
