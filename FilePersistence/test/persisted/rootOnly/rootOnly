@@ -1,0 +1,4 @@
+<!DOCTYPE EnvisionFilePersistence>
+<BinaryNode id="0" name="rootOnly" partial="0">
+ <Text id="1" name="text" partial="0">Title</Text>
+</BinaryNode>

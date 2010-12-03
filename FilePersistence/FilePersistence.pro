@@ -37,3 +37,4 @@ SOURCES += test/SimpleTests.cpp \
     headers/FilePersistenceException.cpp \
     src/FileStore.cpp \
     src/filepersistence.cpp
+RESOURCES = FilePersistence.qrc

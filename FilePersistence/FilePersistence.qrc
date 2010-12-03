@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/FilePersistence">
+        <file>test/persisted/2Children/2Children</file>
+        <file>test/persisted/rootOnly/rootOnly</file>
+        <file>test/persisted/units/2</file>
+        <file>test/persisted/units/units</file>
+    </qresource>
+</RCC>

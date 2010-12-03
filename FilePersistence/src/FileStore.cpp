@@ -23,8 +23,8 @@ const int MAX_DOUBLE_PRECISION = 15;
 const int ATTRIBUTE_TRUE = 1;
 const int ATTRIBUTE_FALSE = 0;
 
-FileStore::FileStore() :
-	baseFolder(QDir::home().path() + QDir::toNativeSeparators("/Envsion/projects")), working(false), currentDoc(NULL), currentParent(NULL)
+FileStore::FileStore() : // TODO the Envision folder should be taken from the environment not hardcoded.
+	baseFolder(QDir::home().path() + QDir::toNativeSeparators("/Envision/projects")), working(false), currentDoc(NULL), currentParent(NULL)
 {
 }
 
