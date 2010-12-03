@@ -31,8 +31,8 @@
  */
 #define NODE_DECLARE_STANDARD_CONSTRUCTORS(className)																						\
 	public:																																				\
-		className(Node* parent, Model* model);																									\
-		className(Node *parent, NodeIdType id, PersistentStore &store, bool partialLoadHint);									\
+		className(::Model::Node* parent, ::Model::Model* model);																			\
+		className(::Model::Node *parent, ::Model::NodeIdType id, ::Model::PersistentStore &store, bool partialLoadHint);\
 																																							\
 		QString getTypeName() const;																												\
 		static void registerNodeConstructors();																								\
@@ -59,8 +59,8 @@
  */
 #define EXTENDABLENODE_DECLARE_STANDARD_CONSTRUCTORS(className)																		\
 	public:																																				\
-		className(Node* parent, Model* model, AttributeChain& metaData);																\
-		className(Node *parent, NodeIdType id, PersistentStore &store, bool partialLoadHint, AttributeChain& metaData); \
+		className(::Model::Node* parent, ::Model::Model* model, ::Model::AttributeChain& metaData);							\
+		className(::Model::Node *parent, ::Model::NodeIdType id, ::Model::PersistentStore &store, bool partialLoadHint, ::Model::AttributeChain& metaData); \
 																																							\
 		QString getTypeName() const;																												\
 		static void registerNodeConstructors();																								\
@@ -81,9 +81,9 @@
  * Use this macro in the .cpp file that defines the new Node type.
  */
 #define NODE_DEFINE_EMPTY_CONSTRUCTORS(className, parentName)																			\
-	className::className(Node* parent, Model* model) : parentName (parent, model) {}												\
+	className::className(::Model::Node* parent, ::Model::Model* model) : parentName (parent, model) {}						\
 																																							\
-	className::className(Node *parent, NodeIdType id, PersistentStore &store, bool partialLoadHint)							\
+	className::className(::Model::Node *parent, ::Model::NodeIdType id, ::Model::PersistentStore &store, bool partialLoadHint)\
 		: parentName (parent, id, store, partialLoadHint) {}
 /*********************************************************************************************************************/
 
@@ -100,10 +100,10 @@
  * Use this macro in the .cpp file that defines the new Node type.
  */
 #define EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(className, parentName)																\
-	className::className(Node* parent, Model* model, AttributeChain& metaData)														\
+	className::className(::Model::Node* parent, ::Model::Model* model, ::Model::AttributeChain& metaData)					\
 		: parentName (parent, model, metaData) {}																								\
 																																							\
-	className::className(Node *parent, NodeIdType id, PersistentStore &store, bool partialLoadHint, AttributeChain& metaData)\
+	className::className(::Model::Node *parent, ::Model::NodeIdType id, ::Model::PersistentStore &store, bool partialLoadHint, ::Model::AttributeChain& metaData)\
 		: parentName (parent, id, store, partialLoadHint, metaData) {}
 /*********************************************************************************************************************/
 
