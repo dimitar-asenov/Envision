@@ -6,6 +6,10 @@
  **********************************************************************************************************************/
 
 #include "filepersistence.h"
+#include "BinaryNode.h"
+#include "BinaryNodeUnit.h"
+
+#include "SelfTest/headers/SelfTestSuite.h"
 
 Q_EXPORT_PLUGIN2( filepersistence, FilePersistence::FilePersistence )
 
@@ -18,7 +22,9 @@ bool FilePersistence::initialize(Envision::EnvisionManager&)
 
 void FilePersistence::selfTest(QString)
 {
-
+	BinaryNode::init();
+	BinaryNodeUnit::init();
+	SelfTest::TestManager<FilePersistence>::runAllTests().printResultStatistics();
 }
 
 }
