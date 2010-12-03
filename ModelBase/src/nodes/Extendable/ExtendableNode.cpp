@@ -25,6 +25,9 @@ ExtendableNode::ExtendableNode(Node *parent, Model* model, AttributeChain& metaD
 ExtendableNode::ExtendableNode(Node *parent, NodeIdType id, PersistentStore &store, bool, AttributeChain& metaData) :
 	Node(parent, id), meta(metaData), subnodes(meta.getNumLevels())
 {
+	for (int level = 0; level < meta.getNumLevels(); ++level)
+		subnodes[level] = QVector<Node*> (meta.getLevel(level)->size(), NULL);
+
 	QList<LoadedNode> children = store.loadAllSubNodes(this);
 
 	for (QList<LoadedNode>::iterator ln = children.begin(); ln != children.end(); ln++)
@@ -94,7 +97,7 @@ void ExtendableNode::removeOptional(const ExtendableIndex &attributeIndex)
 		execute(new ExtendedNodeOptional(this, subnodes[attributeIndex.level()][attributeIndex.index()], attributeIndex, &subnodes, false));
 	}
 	else
-			throw ModelException("Trying to remove a non-optional attribute");
+		throw ModelException("Trying to remove a non-optional attribute");
 }
 
 void ExtendableNode::save(PersistentStore &store) const

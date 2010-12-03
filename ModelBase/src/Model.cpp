@@ -145,6 +145,16 @@ void Model::save(PersistentStore& store)
 	if ( root ) store.saveNode(root, "root", false);
 }
 
+void Model::load(PersistentStore& store, const QString& name)
+{
+	if ( root == NULL )
+	{
+		commands.clear();
+		root = store.loadRootNode(name);
+		emit rootCreated(root);
+	}
+}
+
 Model* Model::getModel(Node* root)
 {
 	for (QList<Model*>::iterator model = loadedModels.begin(); model != loadedModels.end(); model++)

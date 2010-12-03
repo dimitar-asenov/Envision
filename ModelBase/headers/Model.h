@@ -321,6 +321,19 @@ class MODELBASE_API Model: public QObject
 		void save(PersistentStore& store);
 
 		/**
+		 * Loads the current model tree from the specified persistent store.
+		 *
+		 * If this model already has a root node, this method does nothing.
+		 *
+		 * @param store
+		 * 				The persistent store where the model should be loaded from.
+		 *
+		 * @param name
+		 * 				The model name in the persistent store which contains the model tree.
+		 */
+		void load(PersistentStore& store, const QString& name);
+
+		/**
 		 * Returns the model object that has as its root node the node indicated.
 		 */
 		static Model* getModel(Node* root);
