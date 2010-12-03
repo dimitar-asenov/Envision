@@ -11,8 +11,6 @@
 #include "ModelBase/headers/nodes/Node.h"
 #include "ModelBase/headers/ModelException.h"
 
-#include <QtCore/QDebug>
-
 namespace FilePersistence {
 
 const char* XML_DOM_TYPE = "EnvisionFilePersistence";
@@ -251,7 +249,6 @@ Model::LoadedNode FileStore::loadNode(QDomElement& nodeElement, Model::Node* par
 	Model::LoadedNode node;
 	node.name = nodeElement.attribute("name");
 	node.node = Model::Node::createNewNode(nodeType, parent, id, *this, partial == ATTRIBUTE_TRUE);
-
 	currentParent = oldParent;
 
 	return node;

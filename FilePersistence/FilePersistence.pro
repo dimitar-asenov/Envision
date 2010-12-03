@@ -31,7 +31,8 @@ HEADERS += test/BinaryNode.h \
     headers/FileStore.h \
     headers/filepersistence_api.h \
     src/filepersistence.h
-SOURCES += test/SimpleTests.cpp \
+SOURCES += test/LoadTests.cpp \
+    test/SaveTests.cpp \
     test/BinaryNode.cpp \
     test/BinaryNodeUnit.cpp \
     headers/FilePersistenceException.cpp \
