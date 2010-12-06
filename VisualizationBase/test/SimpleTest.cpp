@@ -1,29 +1,29 @@
 /***********************************************************************************************************************
- * visualizationbase.cpp
+ * SimpleTest.cpp
  *
  *  Created on: Dec 6, 2010
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
 #include "visualizationbase.h"
-
 #include "VisualizationManager.h"
+#include "Scene.h"
+#include "View.h"
 #include "SelfTest/headers/SelfTestSuite.h"
 
-Q_EXPORT_PLUGIN2( visualizationbase, Visualization::VisualizationBase )
+#include <QtCore/QCoreApplication>
 
-namespace Visualization
+namespace Visualization {
+
+TEST(VisualizationBase, ShowView)
 {
 
-	bool VisualizationBase::initialize(Envision::EnvisionManager& manager)
-	{
-		VisualizationManager::init(&manager);
-		return true;
-	}
+	Scene* scene = new Scene();
+	View* v = new View(scene);
+	//v->setGeometry(50,50,100,100);
+	v->show();
 
-	void VisualizationBase::selfTest(QString)
-	{
-		SelfTest::TestManager<VisualizationBase>::runAllTests().printResultStatistics();
-	}
+	CHECK_INT_EQUAL(1, 1);
+}
 
 }
