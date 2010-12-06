@@ -33,6 +33,7 @@ class MODELBASE_API Node
 		NodeIdType id;
 		int revision;
 
+		static int numRegisteredTypes;
 		static QMap<QString, NodeConstructor> nodeConstructorRegister;
 		static QMap<QString, NodePersistenceConstructor> nodePersistenceConstructorRegister;
 
@@ -117,8 +118,9 @@ class MODELBASE_API Node
 		virtual bool isNewPersistenceUnit() const;
 
 		virtual QString getTypeName() const = 0;
+		virtual int getTypeId() const = 0;
 
-		static bool registerNodeType(const QString &type, const NodeConstructor constructor, const NodePersistenceConstructor persistenceconstructor);
+		static int registerNodeType(const QString &type, const NodeConstructor constructor, const NodePersistenceConstructor persistenceconstructor);
 
 		/**
 		 * Creates a new node of the specified type.

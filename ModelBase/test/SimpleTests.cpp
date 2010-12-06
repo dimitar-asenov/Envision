@@ -11,6 +11,8 @@
 #include "BinaryNodeUnit.h"
 #include "Model.h"
 #include "nodes/Text.h"
+#include "nodes/Integer.h"
+#include "nodes/Reference.h"
 
 namespace Model {
 
@@ -114,6 +116,31 @@ TEST(ModelBase, ChildNodeRetrieval)
 	CHECK_CONDITION(root->get("text") == root->text());
 	CHECK_CONDITION(root->get("left") == left);
 	CHECK_CONDITION(root->get("right") == right);
+}
+
+TEST(ModelBase, ProperRegistration)
+{
+	Model model;
+	BinaryNode* root = dynamic_cast<BinaryNode*> (model.createRoot("BinaryNode"));
+	CHECK_CONDITION(root->getTypeId() >= 0);
+
+	Model model2;
+	Text* t = dynamic_cast<Text*> (model2.createRoot("Text"));
+	CHECK_CONDITION(t->getTypeId() >= 0);
+	CHECK_CONDITION(t->getTypeId() != root->getTypeId());
+
+	Model model3;
+	Integer* i = dynamic_cast<Integer*> (model3.createRoot("Integer"));
+	CHECK_CONDITION(i->getTypeId() >= 0);
+	CHECK_CONDITION(i->getTypeId() != root->getTypeId());
+	CHECK_CONDITION(i->getTypeId() != t->getTypeId());
+
+	Model model4;
+	Reference* r = dynamic_cast<Reference*> (model4.createRoot("Reference"));
+	CHECK_CONDITION(r->getTypeId() >= 0);
+	CHECK_CONDITION(r->getTypeId() != root->getTypeId());
+	CHECK_CONDITION(r->getTypeId() != t->getTypeId());
+	CHECK_CONDITION(r->getTypeId() != i->getTypeId());
 }
 
 }

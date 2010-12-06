@@ -18,7 +18,7 @@ ExtendableIndex BinaryNode::rightIndex = ExtendableIndex();
 
 void BinaryNode::init()
 {
-	registerNodeConstructors();
+	registerNodeType();
 	textIndex = registerNewAttribute<BinaryNode> ("text", "Text", false, false);
 	leftIndex = registerNewAttribute<BinaryNode> ("left", "BinaryNode", false, true);
 	rightIndex = registerNewAttribute<BinaryNode> ("right", "BinaryNode", false, true);

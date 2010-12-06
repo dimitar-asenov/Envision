@@ -30,12 +30,16 @@
  * 	NODE_DECLARE_STANDARD_CONSTRUCTORS( MyNewNode )
  */
 #define NODE_DECLARE_STANDARD_CONSTRUCTORS(className)																						\
+	private:																																				\
+		static int typeId;																															\
+																																							\
 	public:																																				\
 		className(::Model::Node* parent, ::Model::Model* model);																			\
 		className(::Model::Node *parent, ::Model::NodeIdType id, ::Model::PersistentStore &store, bool partialLoadHint);\
 																																							\
 		QString getTypeName() const;																												\
-		static void registerNodeConstructors();																								\
+		int getTypeId() const;																														\
+		static void registerNodeType();																											\
 																																							\
 	private:
 /*********************************************************************************************************************/
@@ -58,12 +62,16 @@
  * 	EXTENDABLENODE_DECLARE_STANDARD_CONSTRUCTORS( MyNewNode )
  */
 #define EXTENDABLENODE_DECLARE_STANDARD_CONSTRUCTORS(className)																		\
+	private:																																				\
+		static int typeId;																															\
+																																							\
 	public:																																				\
 		className(::Model::Node* parent, ::Model::Model* model, ::Model::AttributeChain& metaData);							\
 		className(::Model::Node *parent, ::Model::NodeIdType id, ::Model::PersistentStore &store, bool partialLoadHint, ::Model::AttributeChain& metaData); \
 																																							\
 		QString getTypeName() const;																												\
-		static void registerNodeConstructors();																								\
+		int getTypeId() const;																														\
+		static void registerNodeType();																											\
 																																							\
 	private:
 /*********************************************************************************************************************/
@@ -123,9 +131,15 @@ QString className::getTypeName()	const																											\
 	return #className;																																\
 }																																							\
 																																							\
-void className::registerNodeConstructors()																									\
+int className::typeId = -1; /* This must be set to the result of Node::registerNodeType */									\
+int className::getTypeId()	const																													\
 {																																							\
-	Node::registerNodeType(#className, ::Model::createNewNode< className >, ::Model::createNodeFromPersistence< className >);\
+	return typeId;																																		\
+}																																							\
+																																							\
+void className::registerNodeType()																												\
+{																																							\
+	typeId = Node::registerNodeType(#className, ::Model::createNewNode< className >, ::Model::createNodeFromPersistence< className >);\
 }
 /*********************************************************************************************************************/
 
@@ -145,9 +159,15 @@ QString className::getTypeName()	const																											\
 	return #className;																																\
 }																																							\
 																																							\
-void className::registerNodeConstructors()																									\
+int className::typeId = -1; /* This must be set to the result of Node::registerNodeType */									\
+int className::getTypeId()	const																													\
 {																																							\
-	Node::registerNodeType(#className, ::Model::createNewExtendableNode< className >, ::Model::createExtendableNodeFromPersistence< className >);\
+	return typeId;																																		\
+}																																							\
+																																							\
+void className::registerNodeType()																												\
+{																																							\
+	typeId = Node::registerNodeType(#className, ::Model::createNewExtendableNode< className >, ::Model::createExtendableNodeFromPersistence< className >);\
 }
 /*********************************************************************************************************************/
 

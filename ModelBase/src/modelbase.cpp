@@ -26,9 +26,9 @@ Log* ModelBase::logger = NULL;
 bool ModelBase::initialize(Envision::EnvisionManager&)
 {
 	logger = Logger::Log::getLogger("modelbase");
-	Text::registerNodeConstructors();
-	Integer::registerNodeConstructors();
-	Reference::registerNodeConstructors();
+	Text::registerNodeType();
+	Integer::registerNodeType();
+	Reference::registerNodeType();
 	return true;
 }
 

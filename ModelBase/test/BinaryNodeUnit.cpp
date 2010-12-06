@@ -15,7 +15,7 @@ EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(BinaryNodeUnit)
 void BinaryNodeUnit::init()
 {
 	BinaryNodeUnit::setParentMeta<BinaryNodeUnit, BinaryNode>();
-	registerNodeConstructors();
+	registerNodeType();
 }
 
 NodeReadWriteLock* BinaryNodeUnit::getAccessLock() const

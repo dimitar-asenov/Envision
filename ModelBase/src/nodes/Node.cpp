@@ -21,6 +21,7 @@ namespace Model {
 /***********************************************************************************************************************
  * STATIC MEMBERS
  **********************************************************************************************************************/
+int Node::numRegisteredTypes = 0;
 QMap<QString, Node::NodeConstructor> Node::nodeConstructorRegister;
 QMap<QString, Node::NodePersistenceConstructor> Node::nodePersistenceConstructorRegister;
 
@@ -58,7 +59,7 @@ void Node::loadFully(PersistentStore&)
 
 void Node::execute(UndoCommand *command)
 {
-	if (this != command->getTarget()) throw ModelException("Command target differs from current node when executing commands");
+	if ( this != command->getTarget() ) throw ModelException("Command target differs from current node when executing commands");
 
 	Model* model = getModel();
 
@@ -172,22 +173,24 @@ QString Node::getChildReferenceName(const Node*) const
 
 NodeReadWriteLock* Node::getAccessLock() const
 {
-	if (parent) return parent->getAccessLock();
-	else return getModel()->getRootLock();
+	if ( parent ) return parent->getAccessLock();
+	else
+		return getModel()->getRootLock();
 }
 /***********************************************************************************************************************
  * STATIC METHODS
  **********************************************************************************************************************/
-bool Node::registerNodeType(const QString &type, const NodeConstructor constructor, const NodePersistenceConstructor persistenceconstructor)
+int Node::registerNodeType(const QString &type, const NodeConstructor constructor, const NodePersistenceConstructor persistenceconstructor)
 {
-	if ( nodeConstructorRegister.contains(type) || nodePersistenceConstructorRegister.contains(type) ) return false;
+	if ( nodeConstructorRegister.contains(type) || nodePersistenceConstructorRegister.contains(type) ) throw ModelException("Trying to register a node type that has already been registered: " + type);
 
 	nodeConstructorRegister.insert(type, constructor);
 	nodePersistenceConstructorRegister.insert(type, persistenceconstructor);
 
 	ModelBase::log()->add(Log::LOGINFO, "Registered new node type " + type);
 
-	return true;
+	++numRegisteredTypes;
+	return numRegisteredTypes - 1;
 }
 
 Node* Node::createNewNode(const QString &type, Node* parent, Model* model)
