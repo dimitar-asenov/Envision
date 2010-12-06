@@ -8,6 +8,7 @@
 #include "TestRunner.h"
 #include "TestEvent.h"
 #include "EnvisionException.h"
+#include <QtCore/QTextStream>
 #include <QtGui/QApplication>
 
 namespace Envision {
@@ -58,6 +59,11 @@ void TestRunner::customEvent( QEvent * event )
 	TestEvent* ev = dynamic_cast<TestEvent *>(event);
 	if (ev)
 	{
+		QTextStream out(stdout);
+		if ( ev->getId().isEmpty())
+			out << "Running all tests for plug-in " + ev->getTarget() << endl;
+		else
+			out << "Running test '" << ev->getId() << "' for plug-in " << ev->getTarget() << endl;
 		pm->getLoadedPluginInterface(ev->getTarget())->selfTest(ev->getId());
 	}
 }

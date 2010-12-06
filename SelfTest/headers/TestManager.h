@@ -36,11 +36,15 @@ class TestManager
 		static TestResults runAllTests()
 		{
 			TestResults testRes;
-			for (QMap<QString, Test::TestConstructor>::iterator testConstructor = testConstructors->begin(); testConstructor != testConstructors->end(); testConstructor++)
+
+			if (testConstructors)
 			{
-				Test* test = (*testConstructor)();
-				test->run(testRes);
-				delete test;
+				for (QMap<QString, Test::TestConstructor>::iterator testConstructor = testConstructors->begin(); testConstructor != testConstructors->end(); testConstructor++)
+				{
+					Test* test = (*testConstructor)();
+					test->run(testRes);
+					delete test;
+				}
 			}
 
 			return testRes;
