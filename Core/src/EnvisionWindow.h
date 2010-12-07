@@ -1,9 +1,9 @@
 #ifndef ENVISIONWINDOW_H
 #define ENVISIONWINDOW_H
 
-#include <QtGui/QWidget>
+#include <QtGui/QMainWindow>
 
-class EnvisionWindow: public QWidget
+class EnvisionWindow: public QMainWindow
 {
 	Q_OBJECT
 

@@ -17,7 +17,7 @@ class DefaultEnvisionManager: public EnvisionManager
 {
 	private:
 		PluginManager* pm;
-		QWidget* mainWindow;
+		QMainWindow* mainWindow;
 
 		bool exitSet;
 
@@ -26,10 +26,10 @@ class DefaultEnvisionManager: public EnvisionManager
 		~DefaultEnvisionManager();
 
 		QList<PluginInfo> getAllLoadedPluginsInfo();
-		QWidget* getMainWindow();
+		QMainWindow* getMainWindow();
 
 		void setPluginManager(PluginManager*);
-		void setMainWindow(QWidget*);
+		void setMainWindow(QMainWindow*);
 
 		void exit();
 };

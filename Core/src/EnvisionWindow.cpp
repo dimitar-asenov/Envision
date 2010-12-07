@@ -1,7 +1,7 @@
 #include "EnvisionWindow.h"
 
 EnvisionWindow::EnvisionWindow(QWidget *parent)
-    : QWidget(parent)
+    : QMainWindow(parent)
 {
 }
 

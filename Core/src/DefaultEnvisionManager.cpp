@@ -27,7 +27,7 @@ QList<PluginInfo> DefaultEnvisionManager::getAllLoadedPluginsInfo()
 	throw EnvisionException("The Envision Manager has no Plugin Manager set");
 }
 
-QWidget* DefaultEnvisionManager::getMainWindow()
+QMainWindow* DefaultEnvisionManager::getMainWindow()
 {
 	return mainWindow;
 }
@@ -39,7 +39,7 @@ void DefaultEnvisionManager::setPluginManager(PluginManager* pm_)
 	pm = pm_;
 }
 
-void DefaultEnvisionManager::setMainWindow(QWidget* mainWindow_)
+void DefaultEnvisionManager::setMainWindow(QMainWindow* mainWindow_)
 {
 	mainWindow = mainWindow_;
 }

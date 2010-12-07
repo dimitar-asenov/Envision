@@ -10,7 +10,7 @@
 
 #include "PluginInfo.h"
 
-#include <QtGui/QWidget>
+#include <QtGui/QMainWindow>
 #include <QtCore/QString>
 
 namespace Envision {
@@ -19,7 +19,7 @@ class EnvisionManager
 {
 	public:
 		virtual QList<PluginInfo> getAllLoadedPluginsInfo() = 0;
-		virtual QWidget* getMainWindow() = 0;
+		virtual QMainWindow* getMainWindow() = 0;
 		virtual ~EnvisionManager() {};
 };
 
