@@ -29,6 +29,8 @@ class PersistentStoreMock: public PersistentStore
 
 		Node* loadRootNode(const QString &name);
 		QList<LoadedNode> loadAllSubNodes(Node* parent);
+		Node* loadSubNode(Node* parent, const QString& name);
+		QList<LoadedNode> loadPartialNode(Node* partialNode);
 		int loadIntValue();
 		QString loadStringValue();
 		double loadFloatValue();

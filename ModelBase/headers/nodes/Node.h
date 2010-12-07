@@ -84,7 +84,7 @@ class MODELBASE_API Node
 		virtual QString getReferenceName() const;
 
 		/**
-		 * Returns a name under which this node know the specified child or NULL if the child is unknown.
+		 * Returns a name under which this node knows the specified child or QString::null if the child is unknown.
 		 */
 		virtual QString getChildReferenceName(const Node* child) const;
 

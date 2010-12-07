@@ -4,7 +4,6 @@ CONFIG(debug, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/DebugBuild
 PLUGINS_DIR = $${BUILD_DIR}/plugins
 CONFIG(debug, debug|release):DEFINES += DEBUG
 QMAKE_CXXFLAGS += -Werror
-
 INCLUDEPATH += ./headers \
     ./src \
     ./test \
@@ -26,7 +25,12 @@ pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
-HEADERS += test/NotificationListener.h \
+HEADERS += headers/commands/ListRemove.h \
+    headers/commands/ListInsert.h \
+    headers/commands/NameChange.h \
+    headers/commands/PointerFieldSet.h \
+    headers/nodes/List.h \
+    test/NotificationListener.h \
     headers/commands/UndoCommand.h \
     headers/nodes/nodeMacros.h \
     headers/nodes/Node.h \
@@ -51,7 +55,11 @@ HEADERS += test/NotificationListener.h \
     headers/PersistentStore.h \
     headers/modelbase_api.h \
     src/modelbase.h
-SOURCES += test/NotificationsTest.cpp \
+SOURCES += src/commands/ListRemove.cpp \
+    src/commands/ListInsert.cpp \
+    src/commands/NameChange.cpp \
+    src/nodes/List.cpp \
+    test/NotificationsTest.cpp \
     test/NotificationListener.cpp \
     src/nodes/Extendable/Attribute.cpp \
     src/nodes/Extendable/AttributeChain.cpp \

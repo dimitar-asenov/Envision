@@ -38,6 +38,8 @@ class PersistentStore
 
 		virtual Node* loadRootNode(const QString &name) = 0;
 		virtual QList<LoadedNode> loadAllSubNodes(Node* parent) = 0;
+		virtual Node* loadSubNode(Node* parent, const QString& name) = 0;
+		virtual QList<LoadedNode> loadPartialNode(Node* partialNode) = 0;
 		virtual int loadIntValue() = 0;
 		virtual QString loadStringValue() = 0;
 		virtual double loadFloatValue() = 0;
