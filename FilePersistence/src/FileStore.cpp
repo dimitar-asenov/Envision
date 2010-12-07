@@ -104,6 +104,7 @@ void FileStore::saveNewPersistenceUnit(const Model::Node *node, const QString &n
 	if ( currentDoc != NULL ) // If this is not the root node, then we should put a reference to this node
 	{
 		QDomElement container = currentDoc->createElement(XML_NEWUNIT_NODE_TAG);
+		container.setAttribute("name", name);
 		QDomText text = currentDoc->createTextNode(QString::number(node->getId()));
 		container.appendChild(text);
 		currentParent->appendChild(container);
@@ -252,6 +253,111 @@ Model::LoadedNode FileStore::loadNode(QDomElement& nodeElement, Model::Node* par
 	currentParent = oldParent;
 
 	return node;
+}
+
+Model::Node* FileStore::loadSubNode(Model::Node* parent, const QString& name)
+{
+	checkIsWorking();
+
+	QDomElement elem = currentParent->firstChildElement();
+	while ( !elem.isNull() )
+	{
+		if ( elem.attribute("name", QString()) == name )
+		{
+			Model::LoadedNode ln;
+			if ( elem.tagName() == XML_NEWUNIT_NODE_TAG ) ln = loadNewPersistenceUnit(elem.firstChild().nodeValue(), parent);
+			else
+				ln = loadNode(elem, parent);
+
+			return ln.node;
+		}
+
+		elem = elem.nextSiblingElement();
+	}
+
+	return NULL;
+}
+
+QList<Model::LoadedNode> FileStore::loadPartialNode(Model::Node* partialNode)
+{
+	storeAccess.lock();
+	working = true;
+	Model::LoadedNode ln;
+
+	QList < Model::LoadedNode > result;
+
+	try
+	{
+		modelDir = baseFolder.path() + QDir::toNativeSeparators("/" + partialNode->getModel()->getName());
+		if ( !modelDir.exists() ) throw FilePersistenceException("Can not find root node folder " + modelDir.path());
+
+		// Find the parent which is a persistent unit, if any
+		// Record the depth of the current node relative to the persistent unit root
+		// This speeds the later search a bit
+		int depth = 0;
+		Model::Node* persistentUnitNode = partialNode;
+		while ( persistentUnitNode && persistentUnitNode->isNewPersistenceUnit() == false )
+		{
+			persistentUnitNode = persistentUnitNode->getParent();
+			++depth;
+		}
+
+
+		// Open the corresponding file name and read all content
+		QString filename;
+		if ( persistentUnitNode ) filename = QString::number(persistentUnitNode->getId());
+		else
+			filename = partialNode->getModel()->getName();
+
+		QDomDocument doc(XML_DOM_TYPE);
+		QFile file(modelDir.absoluteFilePath(filename));
+		if ( !file.open(QIODevice::ReadOnly) ) throw FilePersistenceException("Could not open file " + file.fileName() + ".");
+
+		if ( !doc.setContent(&file) )
+		{
+			file.close();
+			throw FilePersistenceException("Reading of the XML structure of file " + file.fileName() + " failed.");
+		}
+		file.close();
+
+		// Search through the content in order to find the requested node it.
+		QDomElement rootElem = doc.firstChildElement();
+		currentParent = findElementById(&rootElem, QString::number(partialNode->getId()), depth);
+
+		// Load all subnodes and return them
+		result = loadAllSubNodes(partialNode);
+	}
+	catch (Model::ModelException& e)
+	{
+		working = false;
+		storeAccess.unlock();
+		throw;
+	}
+
+	working = false;
+	storeAccess.unlock();
+
+	return result;
+}
+
+QDomElement* FileStore::findElementById(QDomElement* root, const QString& id, int depthLimit)
+{
+	if ( depthLimit <= 0 && root->attribute("id", QString()) == id ) return root;
+
+	// If we are at the depth limit and the previous check was unsuccessful return NULL
+	// If the procedure was started with depthLimit == -1 we will continue searching
+	if ( depthLimit == 0 ) return NULL;
+
+	QDomElement elem = root->firstChildElement();
+	while ( !elem.isNull() )
+	{
+		QDomElement* r = findElementById(&elem, id, depthLimit - 1);
+		if ( r ) return r;
+
+		elem = elem.nextSiblingElement();
+	}
+
+	return NULL;
 }
 
 int FileStore::loadIntValue()
