@@ -17,11 +17,8 @@ namespace Visualization {
 
 TEST(VisualizationBase, ShowView)
 {
-
 	Scene* scene = new Scene();
-	View* v = new View(scene);
-	//v->setGeometry(50,50,100,100);
-	v->show();
+	new View(scene);
 
 	CHECK_INT_EQUAL(1, 1);
 }

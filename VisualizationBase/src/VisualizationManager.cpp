@@ -44,6 +44,12 @@ QWidget* VisualizationManager::getMainWindow()
 void VisualizationManager::addTopLevelView(View* view)
 {
 	views.append(view);
+
+	// If this is the only view maximize it
+	if (views.size() == 1)
+	{
+		envisionManager->getMainWindow()->setCentralWidget(view);
+	}
 }
 
 }
