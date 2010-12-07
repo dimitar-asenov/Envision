@@ -11,6 +11,7 @@
 #include "nodes/Text.h"
 #include "nodes/Integer.h"
 #include "nodes/Reference.h"
+#include "nodes/List.h"
 #include "BinaryNode.h"
 #include "BinaryWithPosition.h"
 #include "BinaryNodeUnit.h"
@@ -29,6 +30,7 @@ bool ModelBase::initialize(Envision::EnvisionManager&)
 	Text::registerNodeType();
 	Integer::registerNodeType();
 	Reference::registerNodeType();
+	List::registerNodeType();
 	return true;
 }
 

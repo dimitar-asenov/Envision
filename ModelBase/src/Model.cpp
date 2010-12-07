@@ -101,6 +101,16 @@ Node* Model::getRoot()
 	return root;
 }
 
+QString Model::getName()
+{
+	return name;
+}
+
+void Model::setName(const QString& name_)
+{
+	name = name_;
+}
+
 NodeIdType Model::generateNextId()
 {
 	if ( root != NULL && !modificationInProgress ) throw ModelException("Creating a new node without calling Model.beginModification() first");
@@ -145,8 +155,9 @@ void Model::save(PersistentStore& store)
 	if ( root ) store.saveNode(root, "root", false);
 }
 
-void Model::load(PersistentStore& store, const QString& name)
+void Model::load(PersistentStore& store, const QString& name_)
 {
+	name = name_;
 	if ( root == NULL )
 	{
 		commands.clear();
