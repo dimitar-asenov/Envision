@@ -88,11 +88,11 @@ class MODELBASE_API ExtendableNode: public Node
 		}
 
 		template<class T>
-		static ExtendableIndex registerNewAttribute(const QString &attributeName, const QString &attributeType, bool canBePartiallyLoaded = false, bool isOptional = false)
+		static ExtendableIndex registerNewAttribute(const QString &attributeName, const QString &attributeType, bool canBePartiallyLoaded, bool isOptional, bool isPersistent)
 		{
 			if ( getMetaData<T> ().hasAttribute(attributeName) ) throw ModelException("Trying to register new attribute " + attributeName + " but this name already exists");
 
-			getMetaData<T> ().append(Attribute(attributeName, attributeType, isOptional, canBePartiallyLoaded));
+			getMetaData<T> ().append(Attribute(attributeName, attributeType, isOptional, canBePartiallyLoaded, isPersistent));
 
 			return ExtendableIndex(getMetaData<T> ().getNumLevels() - 1, getMetaData<T> ().size() - 1);
 		}

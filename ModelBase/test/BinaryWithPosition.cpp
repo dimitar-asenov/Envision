@@ -45,8 +45,8 @@ void BinaryWithPosition::set(int x, int y)
 
 void BinaryWithPosition::init()
 {
-	xIndex = BinaryNode::registerNewAttribute<BinaryNode>("x", "Integer");
-	yIndex = BinaryNode::registerNewAttribute<BinaryNode>("y", "Integer");
+	xIndex = BinaryNode::registerNewAttribute<BinaryNode>("x", "Integer", false, false, true);
+	yIndex = BinaryNode::registerNewAttribute<BinaryNode>("y", "Integer", false, false, true);
 }
 
 }

@@ -20,11 +20,12 @@ class MODELBASE_API Attribute
 		QString type_;
 		bool optional_;
 		bool partialHint_;
+		bool persistent_;
 
 	public:
 		Attribute();
 
-		Attribute(QString name, QString type, bool optional, bool partialHint);
+		Attribute(QString name, QString type, bool optional, bool partialHint, bool persistent);
 
 		/**
 		 * Used for comparisons only.
@@ -35,6 +36,7 @@ class MODELBASE_API Attribute
 		const QString& type() const;
 		bool optional() const;
 		bool partialHint() const;
+		bool persistent() const;
 
 		bool operator==(const Attribute &other) const;
 };

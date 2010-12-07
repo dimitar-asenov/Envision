@@ -14,8 +14,8 @@ Attribute::Attribute()
 
 }
 
-Attribute::Attribute(QString name, QString type, bool optional, bool partialHint) :
-	name_(name), type_(type), optional_(optional), partialHint_(partialHint)
+Attribute::Attribute(QString name, QString type, bool optional, bool partialHint, bool persistent) :
+	name_(name), type_(type), optional_(optional), partialHint_(partialHint), persistent_(persistent)
 {
 }
 
@@ -42,6 +42,11 @@ bool Attribute::optional() const
 bool Attribute::partialHint() const
 {
 	return partialHint_;
+}
+
+bool Attribute::persistent() const
+{
+	return persistent_;
 }
 
 bool Attribute::operator==(const Attribute &other) const

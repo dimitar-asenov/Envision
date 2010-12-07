@@ -19,9 +19,9 @@ Model::ExtendableIndex BinaryNode::rightIndex = Model::ExtendableIndex();
 void BinaryNode::init()
 {
 	registerNodeType();
-	textIndex = registerNewAttribute<BinaryNode> ("text", "Text", false, false);
-	leftIndex = registerNewAttribute<BinaryNode> ("left", "BinaryNode", false, true);
-	rightIndex = registerNewAttribute<BinaryNode> ("right", "BinaryNode", false, true);
+	textIndex = registerNewAttribute<BinaryNode> ("text", "Text", false, false, true);
+	leftIndex = registerNewAttribute<BinaryNode> ("left", "BinaryNode", false, true, true);
+	rightIndex = registerNewAttribute<BinaryNode> ("right", "BinaryNode", false, true, true);
 }
 
 Model::Text* BinaryNode::text()

@@ -106,7 +106,7 @@ void ExtendableNode::save(PersistentStore &store) const
 	{
 		AttributeChain* currentLevel = meta.getLevel(level);
 		for (int i = 0; i < currentLevel->size(); ++i)
-			if ( subnodes[level][i] != NULL ) store.saveNode(subnodes[level][i], currentLevel->at(i).name(), currentLevel->at(i).partialHint());
+			if ( subnodes[level][i] != NULL && currentLevel->at(i).persistent() ) store.saveNode(subnodes[level][i], currentLevel->at(i).name(), currentLevel->at(i).partialHint());
 	}
 
 }
