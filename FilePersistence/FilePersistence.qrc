@@ -4,5 +4,6 @@
         <file>test/persisted/rootOnly/rootOnly</file>
         <file>test/persisted/units/2</file>
         <file>test/persisted/units/units</file>
+        <file>test/persisted/partial/partial</file>
     </qresource>
 </RCC>

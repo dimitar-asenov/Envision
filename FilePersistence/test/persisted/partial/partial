@@ -1,0 +1,7 @@
+<!DOCTYPE EnvisionFilePersistence>
+<List id="0" name="partial" partial="1">
+ <Text id="1" name="text" partial="0">one</Text>
+ <Text id="2" name="text" partial="0">two</Text>
+ <Text id="3" name="text" partial="0">three</Text>
+ <Text id="4" name="text" partial="0">four</Text>
+</List>
