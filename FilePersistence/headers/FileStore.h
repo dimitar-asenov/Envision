@@ -52,6 +52,7 @@ class FILEPERSISTENCE_API FileStore: public Model::PersistentStore
 		void saveNewPersistenceUnit(const Model::Node *node, const QString &name, bool partialLoadHint);
 		Model::LoadedNode loadNewPersistenceUnit(const QString& name, Model::Node* parent);
 		Model::LoadedNode loadNode(QDomElement& nodeElement, Model::Node* parent);
+		void saveNodeDirectly(const Model::Node *node, const QString &name, bool partialLoadHint);
 
 		/**
 		 * When started with -1 it searches through the entire tree. Otherwise expects to find before or at the specified

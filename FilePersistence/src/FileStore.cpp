@@ -110,19 +110,15 @@ void FileStore::saveNewPersistenceUnit(const Model::Node *node, const QString &n
 		currentParent->appendChild(container);
 	}
 
-	// TODO make sure that partially loaded nodes are correctly loaded before we rewrite the info.
-	// At this point we still have not overwritten the old file, so maybe we can expand the nodes as we meet them.
 	QDomDocument doc(XML_DOM_TYPE);
 	currentDoc = &doc;
 
-	QDomElement rootElem = currentDoc->createElement(node->getTypeName());
-	rootElem.setAttribute("name", name);
-	rootElem.setAttribute("id", QString::number(node->getId()));
-	rootElem.setAttribute("partial", partialLoadHint ? ATTRIBUTE_TRUE : ATTRIBUTE_FALSE);
+	// We need a fake element since currentParent is of type QDomElement and QDomDocument is not
+	QDomElement fakeElem = currentDoc->createElement(node->getTypeName());
+	currentParent = &fakeElem;
 
-	currentParent = &rootElem;
-	node->save(*this);
-	currentDoc->appendChild(rootElem);
+	saveNodeDirectly(node, name, partialLoadHint);
+	currentDoc->appendChild( fakeElem.firstChild() );
 
 	QString filename;
 	if ( oldDoc == NULL ) filename = name; // This is the root of the model, save the file name
@@ -144,12 +140,13 @@ void FileStore::saveNode(const Model::Node *node, const QString &name, bool part
 {
 	checkIsWorking();
 
-	if ( node->isNewPersistenceUnit() )
-	{
-		saveNewPersistenceUnit(node, name, partialLoadHint);
-		return;
-	}
+	if ( node->isNewPersistenceUnit() ) saveNewPersistenceUnit(node, name, partialLoadHint);
+	else
+		saveNodeDirectly(node, name, partialLoadHint);
+}
 
+void FileStore::saveNodeDirectly(const Model::Node *node, const QString &name, bool partialLoadHint)
+{
 	// TODO make sure that partially loaded nodes are correctly loaded before we rewrite the info.
 	// At this point we still have not overwritten the old file, so maybe we can expand the nodes as we meet them.
 
@@ -301,7 +298,6 @@ QList<Model::LoadedNode> FileStore::loadPartialNode(Model::Node* partialNode)
 			persistentUnitNode = persistentUnitNode->getParent();
 			++depth;
 		}
-
 
 		// Open the corresponding file name and read all content
 		QString filename;
