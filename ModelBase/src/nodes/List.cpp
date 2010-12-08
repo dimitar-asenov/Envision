@@ -190,7 +190,7 @@ Node* List::prepend(const QString& type)
 
 Node* List::insert(const QString& type, int position)
 {
-	Node* newNode = Node::createNewNode(type,this,getModel());
+	Node* newNode = Node::createNewNode(type, this);
 	execute( new ListInsert(this, nodes, newNode, position) );
 	return newNode;
 }

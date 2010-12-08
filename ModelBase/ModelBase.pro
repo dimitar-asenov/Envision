@@ -55,7 +55,8 @@ HEADERS += headers/commands/ListRemove.h \
     headers/PersistentStore.h \
     headers/modelbase_api.h \
     src/modelbase.h
-SOURCES += src/commands/ListRemove.cpp \
+SOURCES += test/ListTest.cpp \
+    src/commands/ListRemove.cpp \
     src/commands/ListInsert.cpp \
     src/commands/NameChange.cpp \
     src/nodes/List.cpp \
