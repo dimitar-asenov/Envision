@@ -13,6 +13,7 @@
 #include "ModelBase/headers/PersistentStore.h"
 
 #include <QtXml/QDomDocument>
+#include <QtCore/QStringList>
 #include <QtCore/QDir>
 #include <QtCore/QMutex>
 
@@ -55,10 +56,28 @@ class FILEPERSISTENCE_API FileStore: public Model::PersistentStore
 		void saveNodeDirectly(const Model::Node *node, const QString &name, bool partialLoadHint);
 
 		/**
+		 * Returns the name of the persistent unit that corresponds to the specified node.
+		 *
+		 * If the atDepth argument is not NULL, the depth at which the node is found relative to the persistent unit
+		 * will be saved there.
+		 */
+		QString getPersistenceUnitName(const Model::Node *node, int* atDepth = NULL);
+
+		/**
 		 * When started with -1 it searches through the entire tree. Otherwise expects to find before or at the specified
 		 * depth. Depth = 0 checks just the root element.
 		 */
 		QDomElement* findElementById(QDomElement* root, const QString& id, int depthLimit);
+
+		/**
+		 * Loads the document with the specified name.
+		 *
+		 * This document should represent a node in the current model.
+		 */
+		QDomDocument loadDoc(const QString& name ) const;
+
+		QStringList getChildrenNames(const QDomElement* elem) const;
+
 		void checkIsWorking();
 
 	public:
