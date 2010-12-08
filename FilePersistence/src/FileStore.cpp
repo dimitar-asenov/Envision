@@ -51,7 +51,10 @@ QString FileStore::getPersistenceUnitName(const Model::Node *node, int* atDepth)
 	QString name;
 	if ( persistentUnitNode ) name = QString::number(persistentUnitNode->getId());
 	else
+	{
+		--depth; // In this case we decrement depth one more time than actually needed.
 		name = node->getModel()->getName();
+	}
 
 	if ( atDepth ) *atDepth = depth;
 
@@ -207,6 +210,9 @@ void FileStore::saveNodeDirectly(const Model::Node *node, const QString &name, b
 		// Load the old persisted version of this node
 		int depth;
 		QString filename = getPersistenceUnitName(node, &depth);
+
+		// TODO this will fail if the rootDir of the FileStore has changed in the mean time. E.g when saving in a new
+		// location.
 		QDomElement rootElem = loadDoc(filename).firstChildElement();
 
 		// Search through the content in order to find the requested node.

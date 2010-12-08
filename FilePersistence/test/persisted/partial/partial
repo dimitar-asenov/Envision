@@ -1,7 +1,8 @@
 <!DOCTYPE EnvisionFilePersistence>
 <List id="0" name="partial" partial="1">
- <Text id="1" name="text" partial="0">one</Text>
- <Text id="2" name="text" partial="0">two</Text>
- <Text id="3" name="text" partial="0">three</Text>
- <Text id="4" name="text" partial="0">four</Text>
+ <Text id="1" name="ModelBaseListRefName" partial="0">TheRoot</Text>
+ <Text id="2" name="0" partial="0">one</Text>
+ <Text id="3" name="1" partial="0">two</Text>
+ <Text id="4" name="2" partial="0">three</Text>
+ <Text id="5" name="3" partial="0">four</Text>
 </List>
