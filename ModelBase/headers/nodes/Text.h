@@ -13,8 +13,12 @@
 
 namespace Model {
 
+class NameChange;
+
 class MODELBASE_API Text: public Node
 {
+	friend class NameChange;
+
 	NODE_DECLARE_STANDARD_CONSTRUCTORS(Text)
 
 	private:
