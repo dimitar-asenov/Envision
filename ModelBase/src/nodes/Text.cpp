@@ -35,12 +35,17 @@ Text::operator const QString&() const
 
 void Text::set(const QString &newText)
 {
-	execute(new FieldSet<QString> (this, text, newText));
+	execute(getSetCommand(newText));
 }
 
 void Text::save(PersistentStore &store) const
 {
 	store.saveStringValue(text);
+}
+
+FieldSet<QString>* Text::getSetCommand(const QString& newText)
+{
+	return new FieldSet<QString> (this, text, newText);
 }
 
 }

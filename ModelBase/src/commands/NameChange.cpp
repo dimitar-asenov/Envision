@@ -6,6 +6,7 @@
  **********************************************************************************************************************/
 
 #include "commands/NameChange.h"
+#include "commands/FieldSet.h"
 #include "nodes/Text.h"
 #include "nodes/Node.h"
 #include "Model.h"
@@ -13,31 +14,29 @@
 namespace Model {
 
 NameChange::NameChange(Node *target, const QString& oldName_, const QString& newName_, UndoCommand* command_) :
-	UndoCommand(target, "Change name"), oldName(oldName_), newName(newName_), command(command_), text(NULL)
+	UndoCommand(target, "Change name"), oldName(oldName_), newName(newName_), command(command_)
 {
 }
 
 NameChange::NameChange(Node *target, Text* text_, const QString& newName_) :
-		UndoCommand(target, "Change name"), oldName(text->get()), newName(newName_), command(NULL), text(text_)
+		UndoCommand(target, "Change name"), oldName(text_->get()), newName(newName_), command(text_->getSetCommand(newName_))
 {
 }
 
 NameChange::~NameChange()
 {
-	if (command) delete command;
+	delete command;
 }
 
 void NameChange::redo()
 {
-	if (command) command->redo();
-	if (text) text->text = newName;
+	command->redo();
 	UndoCommand::getTarget()->getModel()->emitNameModified(UndoCommand::getTarget(), oldName);
 }
 
 void NameChange::undo()
 {
-	if (command) command->undo();
-	if (text) text->text = oldName;
+	command->undo();
 	UndoCommand::getTarget()->getModel()->emitNameModified(UndoCommand::getTarget(), newName);
 }
 

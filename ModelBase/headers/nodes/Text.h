@@ -14,6 +14,7 @@
 namespace Model {
 
 class NameChange;
+template<class T> class FieldSet;
 
 class MODELBASE_API Text: public Node
 {
@@ -24,6 +25,7 @@ class MODELBASE_API Text: public Node
 	private:
 		QString text;
 
+		FieldSet<QString>* getSetCommand(const QString& newText);
 	public:
 
 		const  QString&  get() const;
