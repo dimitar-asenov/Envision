@@ -8,6 +8,7 @@
 #include "filepersistence.h"
 #include "BinaryNode.h"
 #include "BinaryNodeUnit.h"
+#include "PartialList.h"
 
 #include "SelfTest/headers/SelfTestSuite.h"
 
@@ -27,6 +28,7 @@ void FilePersistence::selfTest(QString)
 {
 	BinaryNode::init();
 	BinaryNodeUnit::init();
+	PartialList::init();
 	SelfTest::TestManager<FilePersistence>::runAllTests().printResultStatistics();
 }
 

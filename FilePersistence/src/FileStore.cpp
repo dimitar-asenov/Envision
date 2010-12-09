@@ -216,11 +216,11 @@ void FileStore::saveNodeDirectly(const Model::Node *node, const QString &name, b
 		QDomElement rootElem = loadDoc(filename).firstChildElement();
 
 		// Search through the content in order to find the requested node.
-		QDomElement* oldElem = findElementById(&rootElem, QString::number(node->getId()), depth);
+		QDomElement oldElem = findElementById(rootElem, QString::number(node->getId()), depth);
 
-		if (!oldElem) throw FilePersistenceException("Could not find the persistent unit for partial node with id " + QString::number(node->getId()));
+		if (oldElem.isNull()) throw FilePersistenceException("Could not find the persistent unit for partial node with id " + QString::number(node->getId()));
 
-		QDomElement child = oldElem->firstChildElement();
+		QDomElement child = oldElem.firstChildElement();
 		while ( !child.isNull() )
 		{
 			QString name = child.attribute("name", QString());
@@ -363,6 +363,7 @@ QList<Model::LoadedNode> FileStore::loadPartialNode(Model::Node* partialNode)
 
 	try
 	{
+
 		modelDir = baseFolder.path() + QDir::toNativeSeparators("/" + partialNode->getModel()->getName());
 		if ( !modelDir.exists() ) throw FilePersistenceException("Can not find root node folder " + modelDir.path());
 
@@ -371,7 +372,10 @@ QList<Model::LoadedNode> FileStore::loadPartialNode(Model::Node* partialNode)
 		QDomElement rootElem = loadDoc(filename).firstChildElement();
 
 		// Search through the content in order to find the requested node it.
-		currentParent = findElementById(&rootElem, QString::number(partialNode->getId()), depth);
+		QDomElement targetElem = findElementById(rootElem, QString::number(partialNode->getId()), depth);
+		if (targetElem.isNull()) throw FilePersistenceException("Could not find the persisted data for partial node with id " + QString::number(partialNode->getId()));
+
+		currentParent = &targetElem;
 
 		// Load all subnodes and return them
 		result = loadAllSubNodes(partialNode);
@@ -389,24 +393,24 @@ QList<Model::LoadedNode> FileStore::loadPartialNode(Model::Node* partialNode)
 	return result;
 }
 
-QDomElement* FileStore::findElementById(QDomElement* root, const QString& id, int depthLimit)
+QDomElement FileStore::findElementById(QDomElement root, const QString& id, int depthLimit)
 {
-	if ( depthLimit <= 0 && root->attribute("id", QString()) == id ) return root;
+	if ( depthLimit <= 0 && root.attribute("id", QString()) == id ) return root;
 
-	// If we are at the depth limit and the previous check was unsuccessful return NULL
+	// If we are at the depth limit and the previous check was unsuccessful return a null element
 	// If the procedure was started with depthLimit == -1 we will continue searching
-	if ( depthLimit == 0 ) return NULL;
+	if ( depthLimit == 0 ) return QDomElement();
 
-	QDomElement elem = root->firstChildElement();
+	QDomElement elem = root.firstChildElement();
 	while ( !elem.isNull() )
 	{
-		QDomElement* r = findElementById(&elem, id, depthLimit - 1);
-		if ( r ) return r;
+		QDomElement r = findElementById(elem, id, depthLimit - 1);
+		if ( !r.isNull() ) return r;
 
 		elem = elem.nextSiblingElement();
 	}
 
-	return NULL;
+	return QDomElement();
 }
 
 int FileStore::loadIntValue()
