@@ -9,6 +9,10 @@
 #define LIST_H_
 
 #include "Node.h"
+#include "../Model.h"
+#include "../commands/ListInsert.h"
+#include "../ModelException.h"
+
 #include <QtCore/QVector>
 
 namespace Model {
@@ -45,19 +49,70 @@ class List: public Node
 		void setReferenceName(const QString &name);
 
 		int size();
-		Node* first();
-		Node* last();
-		Node* operator[](int i);
+		template <class T> T* first();
+		template <class T> T* last();
+		template <class T> T* at(int i);
 
-		Node* append(const QString& type);
-		Node* prepend(const QString& type);
-		Node* insert(const QString& type, int position);
+		template <class T> T* append();
+		template <class T> T* prepend();
+		template <class T> T* insert(int position);
 
 		void remove(int index);
 		void remove(Node* instance);
 
 		static void registerNodeType();
 };
+
+template <class T> T* List::first()
+{
+	if (!fullyLoaded) loadFully(* (getModel()->getLastUsedStore()));
+
+	if ( nodes.isEmpty() ) throw ModelException("Trying to access the first element of an empty list.");
+	return static_cast<T*> (nodes.first());
+}
+
+template <class T> T* List::last()
+{
+	if (!fullyLoaded) loadFully(* (getModel()->getLastUsedStore()));
+
+	if ( nodes.isEmpty() ) throw ModelException("Trying to access the last element of an empty list.");
+	return static_cast<T*> (nodes.last());
+}
+
+template <class T> T* List::at(int i)
+{
+	if (!fullyLoaded) loadFully(* (getModel()->getLastUsedStore()));
+
+	return static_cast<T*> (nodes[i]);
+}
+
+template <class T>
+T* List::append()
+{
+	if (!fullyLoaded) loadFully(* (getModel()->getLastUsedStore()));
+
+	return insert<T>(nodes.size());
+}
+
+template <class T>
+T* List::prepend()
+{
+	if (!fullyLoaded) loadFully(* (getModel()->getLastUsedStore()));
+
+	return insert<T>(0);
+}
+
+template <class T>
+T* List::insert(int position)
+{
+	if (!fullyLoaded) loadFully(* (getModel()->getLastUsedStore()));
+
+	T* newNode = new T(this, NULL);
+	if (! Node::isTypeRegistered(newNode->getTypeName())) throw ModelException("Trying to create a list entry of an unregistered type.");
+
+	execute(new ListInsert(this, nodes, newNode, position));
+	return newNode;
+}
 
 }
 

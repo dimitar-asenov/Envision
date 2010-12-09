@@ -25,21 +25,18 @@ TEST(ModelBase, ListCreation)
 	CHECK_INT_EQUAL(0, root->size());
 
 	model.beginModification(root, "add elements to list");
-	Text* a = dynamic_cast<Text*> (root->append("Text"));
-	Text* b = dynamic_cast<Text*> (root->append("Text"));
-	Integer* c = dynamic_cast<Integer*> (root->append("Integer"));
+	Text* a = root->append<Text>();
+	Text* b = root->append<Text>();
+	Integer* c = root->append<Integer>();
 	a->set("first");
 	b->set("second");
 	c->set(3);
 	model.endModification();
 
 	CHECK_INT_EQUAL(3, root->size());
-	CHECK_CONDITION((*root)[0] == a);
-	CHECK_CONDITION((*root)[1] == b);
-	CHECK_CONDITION((*root)[2] == c);
-	CHECK_CONDITION(a != NULL);
-	CHECK_CONDITION(b != NULL);
-	CHECK_CONDITION(c != NULL);
+	CHECK_CONDITION(root->at<Node>(0) == a);
+	CHECK_CONDITION(root->at<Node>(1) == b);
+	CHECK_CONDITION(root->at<Node>(2) == c);
 }
 
 TEST(ModelBase, ListInsertion)
@@ -48,23 +45,23 @@ TEST(ModelBase, ListInsertion)
 	List* root = dynamic_cast<List*> (model.createRoot("List"));
 
 	model.beginModification(root, "add elements to list");
-	Text* a = dynamic_cast<Text*> (root->append("Text"));
-	Text* b = dynamic_cast<Text*> (root->prepend("Text"));
-	Text* c = dynamic_cast<Text*> (root->append("Text"));
-	Text* d = dynamic_cast<Text*> (root->prepend("Text"));
-	Text* e = dynamic_cast<Text*> (root->insert("Text",2));
-	Text* f = dynamic_cast<Text*> (root->insert("Text",3));
-	Text* g = dynamic_cast<Text*> (root->insert("Text",1));
+	Text* a = root->append<Text>();
+	Text* b = root->prepend<Text>();
+	Text* c = root->append<Text>();
+	Text* d = root->prepend<Text>();
+	Text* e = root->insert<Text>(2);
+	Text* f = root->insert<Text>(3);
+	Text* g = root->insert<Text>(1);
 	model.endModification();
 
 	CHECK_INT_EQUAL(7, root->size());
-	CHECK_CONDITION(root->first() == d);
-	CHECK_CONDITION((*root)[1] == g);
-	CHECK_CONDITION((*root)[2] == b);
-	CHECK_CONDITION((*root)[3] == e);
-	CHECK_CONDITION((*root)[4] == f);
-	CHECK_CONDITION((*root)[5] == a);
-	CHECK_CONDITION(root->last() == c);
+	CHECK_CONDITION(root->first<Node>() == d);
+	CHECK_CONDITION(root->at<Node>(1) == g);
+	CHECK_CONDITION(root->at<Node>(2) == b);
+	CHECK_CONDITION(root->at<Node>(3) == e);
+	CHECK_CONDITION(root->at<Node>(4) == f);
+	CHECK_CONDITION(root->at<Node>(5) == a);
+	CHECK_CONDITION(root->last<Node>() == c);
 }
 
 TEST(ModelBase, ListRemoval)
@@ -73,13 +70,13 @@ TEST(ModelBase, ListRemoval)
 	List* root = dynamic_cast<List*> (model.createRoot("List"));
 
 	model.beginModification(root, "add elements to list");
-	Text* a = dynamic_cast<Text*> (root->append("Text"));
-	Text* b = dynamic_cast<Text*> (root->append("Text"));
-	Text* c = dynamic_cast<Text*> (root->append("Text"));
-	Text* d = dynamic_cast<Text*> (root->append("Text"));
-	Text* e = dynamic_cast<Text*> (root->append("Text"));
-	Text* f = dynamic_cast<Text*> (root->append("Text"));
-	Text* g = dynamic_cast<Text*> (root->append("Text"));
+	Text* a = root->append<Text>();
+	Text* b = root->append<Text>();
+	Text* c = root->append<Text>();
+	Text* d = root->append<Text>();
+	Text* e = root->append<Text>();
+	Text* f = root->append<Text>();
+	Text* g = root->append<Text>();
 	model.endModification();
 
 	model.beginModification(root, "remove elements from list");
@@ -93,9 +90,9 @@ TEST(ModelBase, ListRemoval)
 	CHECK_CONDITION(g != NULL);
 
 	CHECK_INT_EQUAL(3, root->size());
-	CHECK_CONDITION(root->first() == c);
-	CHECK_CONDITION((*root)[1] == e);
-	CHECK_CONDITION(root->last() == f);
+	CHECK_CONDITION(root->first<Node>() == c);
+	CHECK_CONDITION(root->at<Node>(1) == e);
+	CHECK_CONDITION(root->last<Node>() == f);
 }
 
 TEST(ModelBase, ListUndo)
@@ -104,23 +101,23 @@ TEST(ModelBase, ListUndo)
 	List* root = dynamic_cast<List*> (model.createRoot("List"));
 
 	model.beginModification(root, "add elements to list");
-	Text* a = dynamic_cast<Text*> (root->append("Text"));
-	Text* b = dynamic_cast<Text*> (root->append("Text"));
-	Text* c = dynamic_cast<Text*> (root->append("Text"));
-	Text* d = dynamic_cast<Text*> (root->append("Text"));
-	Text* e = dynamic_cast<Text*> (root->append("Text"));
-	Text* f = dynamic_cast<Text*> (root->append("Text"));
-	Text* g = dynamic_cast<Text*> (root->append("Text"));
+	Text* a = root->append<Text>();
+	Text* b = root->append<Text>();
+	Text* c = root->append<Text>();
+	Text* d = root->append<Text>();
+	Text* e = root->append<Text>();
+	Text* f = root->append<Text>();
+	Text* g = root->append<Text>();
 	model.endModification();
 
 	CHECK_INT_EQUAL(7, root->size());
-	CHECK_CONDITION((*root)[0] == a);
-	CHECK_CONDITION((*root)[1] == b);
-	CHECK_CONDITION((*root)[2] == c);
-	CHECK_CONDITION((*root)[3] == d);
-	CHECK_CONDITION((*root)[4] == e);
-	CHECK_CONDITION((*root)[5] == f);
-	CHECK_CONDITION((*root)[6] == g);
+	CHECK_CONDITION(root->at<Node>(0) == a);
+	CHECK_CONDITION(root->at<Node>(1) == b);
+	CHECK_CONDITION(root->at<Node>(2) == c);
+	CHECK_CONDITION(root->at<Node>(3) == d);
+	CHECK_CONDITION(root->at<Node>(4) == e);
+	CHECK_CONDITION(root->at<Node>(5) == f);
+	CHECK_CONDITION(root->at<Node>(6) == g);
 
 	model.beginModification(NULL);
 	model.undo();
@@ -133,13 +130,13 @@ TEST(ModelBase, ListUndo)
 	model.endModification();
 
 	CHECK_INT_EQUAL(7, root->size());
-	CHECK_CONDITION((*root)[0] == a);
-	CHECK_CONDITION((*root)[1] == b);
-	CHECK_CONDITION((*root)[2] == c);
-	CHECK_CONDITION((*root)[3] == d);
-	CHECK_CONDITION((*root)[4] == e);
-	CHECK_CONDITION((*root)[5] == f);
-	CHECK_CONDITION((*root)[6] == g);
+	CHECK_CONDITION(root->at<Node>(0) == a);
+	CHECK_CONDITION(root->at<Node>(1) == b);
+	CHECK_CONDITION(root->at<Node>(2) == c);
+	CHECK_CONDITION(root->at<Node>(3) == d);
+	CHECK_CONDITION(root->at<Node>(4) == e);
+	CHECK_CONDITION(root->at<Node>(5) == f);
+	CHECK_CONDITION(root->at<Node>(6) == g);
 
 	model.beginModification(root, "add elements to list");
 	root->remove(a);
@@ -147,35 +144,35 @@ TEST(ModelBase, ListUndo)
 	model.endModification();
 
 	CHECK_INT_EQUAL(5, root->size());
-	CHECK_CONDITION((*root)[0] == b);
-	CHECK_CONDITION((*root)[1] == c);
-	CHECK_CONDITION((*root)[2] == d);
-	CHECK_CONDITION((*root)[3] == f);
-	CHECK_CONDITION((*root)[4] == g);
+	CHECK_CONDITION(root->at<Node>(0) == b);
+	CHECK_CONDITION(root->at<Node>(1) == c);
+	CHECK_CONDITION(root->at<Node>(2) == d);
+	CHECK_CONDITION(root->at<Node>(3) == f);
+	CHECK_CONDITION(root->at<Node>(4) == g);
 
 	model.beginModification(NULL);
 	model.undo();
 	model.endModification();
 
 	CHECK_INT_EQUAL(7, root->size());
-	CHECK_CONDITION((*root)[0] == a);
-	CHECK_CONDITION((*root)[1] == b);
-	CHECK_CONDITION((*root)[2] == c);
-	CHECK_CONDITION((*root)[3] == d);
-	CHECK_CONDITION((*root)[4] == e);
-	CHECK_CONDITION((*root)[5] == f);
-	CHECK_CONDITION((*root)[6] == g)
+	CHECK_CONDITION(root->at<Node>(0) == a);
+	CHECK_CONDITION(root->at<Node>(1) == b);
+	CHECK_CONDITION(root->at<Node>(2) == c);
+	CHECK_CONDITION(root->at<Node>(3) == d);
+	CHECK_CONDITION(root->at<Node>(4) == e);
+	CHECK_CONDITION(root->at<Node>(5) == f);
+	CHECK_CONDITION(root->at<Node>(6) == g);
 
 	model.beginModification(NULL);
 	model.redo();
 	model.endModification();
 
 	CHECK_INT_EQUAL(5, root->size());
-	CHECK_CONDITION((*root)[0] == b);
-	CHECK_CONDITION((*root)[1] == c);
-	CHECK_CONDITION((*root)[2] == d);
-	CHECK_CONDITION((*root)[3] == f);
-	CHECK_CONDITION((*root)[4] == g);
+	CHECK_CONDITION(root->at<Node>(0) == b);
+	CHECK_CONDITION(root->at<Node>(1) == c);
+	CHECK_CONDITION(root->at<Node>(2) == d);
+	CHECK_CONDITION(root->at<Node>(3) == f);
+	CHECK_CONDITION(root->at<Node>(4) == g);
 
 }
 

@@ -42,10 +42,10 @@ TEST(FilePersistence, LoadingList)
 	CHECK_CONDITION(list->isFullyLoaded());
 	CHECK_INT_EQUAL(4, list->size());
 
-	Model::Text* one = dynamic_cast<Model::Text*> ((*list)[0]);
-	Model::Text* two = dynamic_cast<Model::Text*> ((*list)[1]);
-	Model::Text* three = dynamic_cast<Model::Text*> ((*list)[2]);
-	Model::Text* four = dynamic_cast<Model::Text*> ((*list)[3]);
+	Model::Text* one = list->at<Model::Text>(0);
+	Model::Text* two = list->at<Model::Text>(1);
+	Model::Text* three = list->at<Model::Text>(2);
+	Model::Text* four = list->at<Model::Text>(3);
 
 	CHECK_CONDITION(one != NULL);
 	CHECK_STR_EQUAL("one", one->get());
@@ -76,15 +76,10 @@ TEST(FilePersistence, SaveList)
 
 	model.beginModification(root, "create ");
 	root->list()->setReferenceName("TheList");
-	Model::Text* t = NULL;
-	t = dynamic_cast<Model::Text*> (root->list()->append("Text"));
-	t->set("one");
-	t = dynamic_cast<Model::Text*> (root->list()->append("Text"));
-	t->set("two");
-	t = dynamic_cast<Model::Text*> (root->list()->append("Text"));
-	t->set("three");
-	t = dynamic_cast<Model::Text*> (root->list()->append("Text"));
-	t->set("four");
+	root->list()->append<Model::Text>()->set("one");
+	root->list()->append<Model::Text>()->set("two");
+	root->list()->append<Model::Text>()->set("three");
+	root->list()->append<Model::Text>()->set("four");
 	model.endModification();
 
 	store.saveModel(model, "partial");

@@ -10,9 +10,7 @@
 #include "nodes/Text.h"
 #include "commands/PointerFieldSet.h"
 #include "commands/NameChange.h"
-#include "commands/ListInsert.h"
 #include "commands/ListRemove.h"
-#include "nodes/Node.h"
 #include "nodes/nodeMacros.h"
 
 namespace Model {
@@ -148,52 +146,6 @@ int List::size()
 	if (!fullyLoaded) loadFully(* (getModel()->getLastUsedStore()));
 
 	return nodes.size();
-}
-
-Node* List::first()
-{
-	if (!fullyLoaded) loadFully(* (getModel()->getLastUsedStore()));
-
-	if ( nodes.isEmpty() ) throw ModelException("Trying to access the first element of an empty list.");
-	return nodes.first();
-}
-
-Node* List::last()
-{
-	if (!fullyLoaded) loadFully(* (getModel()->getLastUsedStore()));
-
-	if ( nodes.isEmpty() ) throw ModelException("Trying to access the last element of an empty list.");
-	return nodes.last();
-}
-
-Node* List::operator[](int i)
-{
-	if (!fullyLoaded) loadFully(* (getModel()->getLastUsedStore()));
-
-	return nodes[i];
-}
-
-Node* List::append(const QString& type)
-{
-	if (!fullyLoaded) loadFully(* (getModel()->getLastUsedStore()));
-
-	return insert(type, nodes.size());
-}
-
-Node* List::prepend(const QString& type)
-{
-	if (!fullyLoaded) loadFully(* (getModel()->getLastUsedStore()));
-
-	return insert(type, 0);
-}
-
-Node* List::insert(const QString& type, int position)
-{
-	if (!fullyLoaded) loadFully(* (getModel()->getLastUsedStore()));
-
-	Node* newNode = Node::createNewNode(type, this);
-	execute(new ListInsert(this, nodes, newNode, position));
-	return newNode;
 }
 
 void List::remove(int index)

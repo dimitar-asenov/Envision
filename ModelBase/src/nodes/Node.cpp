@@ -182,7 +182,7 @@ NodeReadWriteLock* Node::getAccessLock() const
  **********************************************************************************************************************/
 int Node::registerNodeType(const QString &type, const NodeConstructor constructor, const NodePersistenceConstructor persistenceconstructor)
 {
-	if ( nodeConstructorRegister.contains(type) || nodePersistenceConstructorRegister.contains(type) ) throw ModelException("Trying to register a node type that has already been registered: " + type);
+	if ( isTypeRegistered(type) ) throw ModelException("Trying to register a node type that has already been registered: " + type);
 
 	nodeConstructorRegister.insert(type, constructor);
 	nodePersistenceConstructorRegister.insert(type, persistenceconstructor);
@@ -195,7 +195,7 @@ int Node::registerNodeType(const QString &type, const NodeConstructor constructo
 
 Node* Node::createNewNode(const QString &type, Node* parent, Model* model)
 {
-	if ( nodeConstructorRegister.contains(type) )
+	if ( isTypeRegistered(type) )
 	{
 		return nodeConstructorRegister.value(type)(parent, model);
 	}
@@ -208,7 +208,7 @@ Node* Node::createNewNode(const QString &type, Node* parent, Model* model)
 
 Node* Node::createNewNode(const QString &type, Node* parent, NodeIdType id, PersistentStore &store, bool partialLoadHint)
 {
-	if ( nodePersistenceConstructorRegister.contains(type) )
+	if ( isTypeRegistered(type) )
 	{
 		return nodePersistenceConstructorRegister.value(type)(parent, id, store, partialLoadHint);
 	}
@@ -217,6 +217,11 @@ Node* Node::createNewNode(const QString &type, Node* parent, NodeIdType id, Pers
 		ModelBase::log()->add(Log::LOGERROR, "Could not create new node from persistence. Requested node type has not been registered.");
 		return NULL;
 	}
+}
+
+bool Node::isTypeRegistered(const QString &type)
+{
+	return nodeConstructorRegister.contains(type);
 }
 
 }
