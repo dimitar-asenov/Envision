@@ -8,11 +8,13 @@
 #ifndef SCENE_H_
 #define SCENE_H_
 
+#include "visualizationbase_api.h"
+
 #include <QtGui/QGraphicsScene>
 
 namespace Visualization {
 
-class Scene : public QGraphicsScene
+class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 {
 	public:
 		Scene();

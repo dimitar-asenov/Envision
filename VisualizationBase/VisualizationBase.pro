@@ -25,13 +25,21 @@ pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
-HEADERS += headers/VisualizationManager.h \
+HEADERS += headers/ModelItem.h \
+    headers/Item.h \
+    headers/ModelRenderer.h \
+    headers/ModelScene.h \
+    headers/VisualizationManager.h \
     headers/View.h \
     headers/Scene.h \
     src/visualizationbase.h \
     headers/VisualizationException.h \
     headers/visualizationbase_api.h
-SOURCES += test/SimpleTest.cpp \
+SOURCES += src/ModelItem.cpp \
+    src/Item.cpp \
+    src/ModelRenderer.cpp \
+    src/ModelScene.cpp \
+    test/SimpleTest.cpp \
     src/VisualizationManager.cpp \
     src/visualizationbase.cpp \
     src/VisualizationException.cpp \

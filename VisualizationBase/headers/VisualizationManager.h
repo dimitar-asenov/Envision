@@ -8,13 +8,15 @@
 #ifndef VISUALIZATIONMANAGER_H_
 #define VISUALIZATIONMANAGER_H_
 
+#include "visualizationbase_api.h"
+
 #include "EnvisionManager.h"
 
 namespace Visualization {
 
 class View;
 
-class VisualizationManager
+class VISUALIZATIONBASE_API VisualizationManager
 {
 	private:
 		static VisualizationManager theInstance;

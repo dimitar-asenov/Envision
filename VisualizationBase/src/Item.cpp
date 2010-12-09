@@ -1,28 +1,17 @@
 /***********************************************************************************************************************
- * View.h
+ * Item.cpp
  *
- *  Created on: Dec 6, 2010
+ *  Created on: Dec 9, 2010
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef VIEW_H_
-#define VIEW_H_
-
-#include "visualizationbase_api.h"
-
-#include <QtGui/QGraphicsView>
+#include "Item.h"
 
 namespace Visualization {
 
-class Scene;
-
-class VISUALIZATIONBASE_API View : public QGraphicsView
+Item::Item(Item* parent) : QGraphicsItem(parent)
 {
-	public:
-		View(Scene *scene, View *parent = NULL);
-		virtual ~View();
-};
 
 }
 
-#endif /* VIEW_H_ */
+}

@@ -1,28 +1,33 @@
 /***********************************************************************************************************************
- * View.h
+ * ModelScene.h
  *
- *  Created on: Dec 6, 2010
+ *  Created on: Dec 9, 2010
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef VIEW_H_
-#define VIEW_H_
+#ifndef MODELSCENE_H_
+#define MODELSCENE_H_
 
 #include "visualizationbase_api.h"
 
-#include <QtGui/QGraphicsView>
+#include "Scene.h"
 
 namespace Visualization {
 
-class Scene;
+class ModelRenderer;
 
-class VISUALIZATIONBASE_API View : public QGraphicsView
+class VISUALIZATIONBASE_API ModelScene: public Scene
 {
+	private:
+		ModelRenderer* renderer_;
+
 	public:
-		View(Scene *scene, View *parent = NULL);
-		virtual ~View();
+		ModelScene();
+		void setRenderer(ModelRenderer* renderer);
+
+		ModelRenderer* renderer();
 };
 
 }
 
-#endif /* VIEW_H_ */
+#endif /* MODELSCENE_H_ */
