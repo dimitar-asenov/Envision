@@ -58,7 +58,7 @@ Node* ExtendableNode::get(const QString &attributeName) const
 	return NULL;
 }
 
-Node* ExtendableNode::getChild(NodeIdType id) const
+Node* ExtendableNode::getChild(NodeIdType id)
 {
 	Node* res = NULL;
 
@@ -69,7 +69,7 @@ Node* ExtendableNode::getChild(NodeIdType id) const
 	return res;
 }
 
-Node* ExtendableNode::getChild(const QString& name) const
+Node* ExtendableNode::getChild(const QString& name)
 {
 	return get(name);
 }

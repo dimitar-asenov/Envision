@@ -36,23 +36,18 @@ class List: public Node
 		QString getTypeName() const;
 		int getTypeId() const;
 
-		Node* getChild(NodeIdType id) const;
-		Node* getChild(const QString& name) const;
+		Node* getChild(NodeIdType id);
+		Node* getChild(const QString& name);
 
 		QString getReferenceName() const;
 		QString getChildReferenceName(const Node* child) const;
 
 		void setReferenceName(const QString &name);
 
-		int size() const;
+		int size();
 		Node* first();
-		const Node* first() const;
-
 		Node* last();
-		const Node* last() const;
-
 		Node* operator[](int i);
-		const Node* operator[](int i) const;
 
 		Node* append(const QString& type);
 		Node* prepend(const QString& type);

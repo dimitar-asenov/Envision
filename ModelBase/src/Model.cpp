@@ -15,7 +15,7 @@ namespace Model {
 QList<Model*> Model::loadedModels;
 
 Model::Model() :
-	root(NULL), currentModificationTarget(NULL), currentModificationLock(NULL), pushedNewCommandsOnTheStack(false), performedUndoRedo(false), modificationInProgress(false), nextId(0)
+	root(NULL), currentModificationTarget(NULL), currentModificationLock(NULL), pushedNewCommandsOnTheStack(false), performedUndoRedo(false), modificationInProgress(false), nextId(0), lastUsedStore(NULL)
 {
 	commands.setUndoLimit(100);
 	loadedModels.append(this);
@@ -89,8 +89,9 @@ bool Model::canBeModified(const Node* node) const
 
 	// Check that this node has as a parent the current modification target.
 	const Node* n = node;
-	while (n != NULL && n != currentModificationTarget) n = n->getParent();
-	if (n == NULL) return false;
+	while ( n != NULL && n != currentModificationTarget )
+		n = n->getParent();
+	if ( n == NULL ) return false;
 
 	// Check that the access lock for this node is the current modification lock.
 	return node->getAccessLock() == currentModificationLock;
@@ -153,6 +154,7 @@ void Model::redo()
 void Model::save(PersistentStore& store)
 {
 	if ( root ) store.saveNode(root, "root", false);
+	lastUsedStore = &store;
 }
 
 void Model::load(PersistentStore& store, const QString& name_)
@@ -160,6 +162,7 @@ void Model::load(PersistentStore& store, const QString& name_)
 	name = name_;
 	if ( root == NULL )
 	{
+		lastUsedStore = &store;
 		commands.clear();
 		root = store.loadRootNode(name);
 		emit rootCreated(root);
@@ -188,9 +191,24 @@ Node* Model::createRoot(const QString &typeName)
 	return root;
 }
 
+PersistentStore* Model::getLastUsedStore()
+{
+	return lastUsedStore;
+}
+
 void Model::emitNameModified(Node* node, const QString &oldName)
 {
 	emit nameModified(node, oldName);
+}
+
+void Model::emitNodeFullyLoaded(Node* node)
+{
+	emit nodeFullyLoaded(node);
+}
+
+void Model::emitNodePartiallyLoaded(Node* node)
+{
+	emit nodePartiallyLoaded(node);
 }
 
 }

@@ -41,8 +41,8 @@ class MODELBASE_API ExtendableNode: public Node
 		Node* get(const ExtendableIndex &attributeIndex);
 		Node* get(const QString &attributeName) const;
 
-		Node* getChild(NodeIdType id) const;
-		Node* getChild(const QString& name) const;
+		Node* getChild(NodeIdType id);
+		Node* getChild(const QString& name);
 
 		QString getChildReferenceName(const Node* child) const;
 

@@ -97,11 +97,14 @@ void List::loadFully(PersistentStore &store)
 		QList<LoadedNode> subnodes = store.loadPartialNode(this);
 		loadSubNodes(subnodes);
 		fullyLoaded = true;
+		getModel()->emitNodeFullyLoaded(this);
 	}
 }
 
-Node* List::getChild(NodeIdType id) const
+Node* List::getChild(NodeIdType id)
 {
+	if (!fullyLoaded) loadFully(* (getModel()->getLastUsedStore()));
+
 	if ( referenceName->getId() == id ) return referenceName;
 
 	for (int i = 0; i < nodes.size(); ++i)
@@ -110,8 +113,10 @@ Node* List::getChild(NodeIdType id) const
 	return NULL;
 }
 
-Node* List::getChild(const QString& name) const
+Node* List::getChild(const QString& name)
 {
+	if (!fullyLoaded) loadFully(* (getModel()->getLastUsedStore()));
+
 	if ( name.isEmpty() ) return NULL;
 
 	for (int i = 0; i < nodes.size(); ++i)
@@ -138,57 +143,54 @@ void List::setReferenceName(const QString &name)
 	execute(new NameChange(this, referenceName, name));
 }
 
-int List::size() const
+int List::size()
 {
+	if (!fullyLoaded) loadFully(* (getModel()->getLastUsedStore()));
+
 	return nodes.size();
 }
 
 Node* List::first()
 {
-	if ( nodes.isEmpty() ) throw ModelException("Trying to access the first element of an empty list.");
-	return nodes.first();
-}
+	if (!fullyLoaded) loadFully(* (getModel()->getLastUsedStore()));
 
-const Node* List::first() const
-{
 	if ( nodes.isEmpty() ) throw ModelException("Trying to access the first element of an empty list.");
 	return nodes.first();
 }
 
 Node* List::last()
 {
-	if ( nodes.isEmpty() ) throw ModelException("Trying to access the last element of an empty list.");
-	return nodes.last();
-}
+	if (!fullyLoaded) loadFully(* (getModel()->getLastUsedStore()));
 
-const Node* List::last() const
-{
 	if ( nodes.isEmpty() ) throw ModelException("Trying to access the last element of an empty list.");
 	return nodes.last();
 }
 
 Node* List::operator[](int i)
 {
-	return nodes[i];
-}
+	if (!fullyLoaded) loadFully(* (getModel()->getLastUsedStore()));
 
-const Node* List::operator[](int i) const
-{
 	return nodes[i];
 }
 
 Node* List::append(const QString& type)
 {
+	if (!fullyLoaded) loadFully(* (getModel()->getLastUsedStore()));
+
 	return insert(type, nodes.size());
 }
 
 Node* List::prepend(const QString& type)
 {
+	if (!fullyLoaded) loadFully(* (getModel()->getLastUsedStore()));
+
 	return insert(type, 0);
 }
 
 Node* List::insert(const QString& type, int position)
 {
+	if (!fullyLoaded) loadFully(* (getModel()->getLastUsedStore()));
+
 	Node* newNode = Node::createNewNode(type, this);
 	execute(new ListInsert(this, nodes, newNode, position));
 	return newNode;
@@ -196,11 +198,15 @@ Node* List::insert(const QString& type, int position)
 
 void List::remove(int index)
 {
+	if (!fullyLoaded) loadFully(* (getModel()->getLastUsedStore()));
+
 	execute(new ListRemove(this, nodes, index));
 }
 
 void List::remove(Node* instance)
 {
+	if (!fullyLoaded) loadFully(* (getModel()->getLastUsedStore()));
+
 	int index = nodes.indexOf(instance);
 	if ( index >= 0 ) remove(index);
 }

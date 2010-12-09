@@ -121,12 +121,12 @@ Node* Node::getParent() const
 	return parent;
 }
 
-Node* Node::getChild(NodeIdType) const
+Node* Node::getChild(NodeIdType)
 {
 	return NULL;
 }
 
-Node* Node::getChild(const QString&) const
+Node* Node::getChild(const QString&)
 {
 	return NULL;
 }
