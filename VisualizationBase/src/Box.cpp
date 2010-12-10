@@ -12,7 +12,7 @@
 namespace Visualization {
 
 Box::Box(Item* parent, int sub) :
-	Item(parent), items(this, &style)
+		ShapeExperiment<Item>(parent), items(this, &style)
 {
 	style.setMargins(4);
 	style.setSpaceBetweenElements(2);
@@ -32,12 +32,10 @@ void Box::updateState()
 	size.setWidth(items.width());
 	size.setHeight(items.height());
 
-	bounding_rect.setRect(0,0, size.width(), size.height());
-}
+	setWidth(items.width());
+	setHeight(items.height());
 
-void Box::paint(QPainter * painter, const QStyleOptionGraphicsItem *, QWidget *)
-{
-	painter->drawRect(0, 0, size.width(), size.height());
+	bounding_rect.setRect(0,0, size.width(), size.height());
 }
 
 }

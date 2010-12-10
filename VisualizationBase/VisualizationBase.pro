@@ -25,7 +25,8 @@ pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
-HEADERS += headers/Box.h \
+HEADERS += headers/shapes/ShapeExperiment.h \
+    headers/Box.h \
     headers/layouts/Layout.h \
     headers/layouts/SequentialLayoutStyle.h \
     headers/layouts/SequentialLayout.h \
@@ -39,7 +40,8 @@ HEADERS += headers/Box.h \
     src/visualizationbase.h \
     headers/VisualizationException.h \
     headers/visualizationbase_api.h
-SOURCES += src/Box.cpp \
+SOURCES += headers/shapes/ShapeExperiment.cpp \
+    src/Box.cpp \
     src/layouts/Layout.cpp \
     src/layouts/SequentialLayoutStyle.cpp \
     src/layouts/SequentialLayout.cpp \

@@ -10,10 +10,11 @@
 
 #include "Item.h"
 #include "layouts/SequentialLayout.h"
+#include "shapes/ShapeExperiment.h"
 
 namespace Visualization {
 
-class Box: public Item
+class Box: public ShapeExperiment<Item>
 {
 	private:
 		SequentialLayoutStyle style;
@@ -24,7 +25,6 @@ class Box: public Item
 
 		void determineChildren();
 		void updateState();
-		void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0);
 };
 
 }
