@@ -12,10 +12,15 @@
 namespace Visualization {
 
 Box::Box(Item* parent, int sub) :
-	Item(parent), items(this)
+	Item(parent), items(this, &style)
 {
+	style.setMargins(4);
+	style.setSpaceBetweenElements(2);
+	style.setAlignment(SequentialLayoutStyle::CenterAlignment);
+	style.setDirection(SequentialLayoutStyle::BottomToTop);
+
 	for (int i = 0; i < sub; ++i)
-		items.append(new Box(this, sub - 1));
+		items.append(new Box(this, sub - 1 - i));
 }
 
 void Box::determineChildren()

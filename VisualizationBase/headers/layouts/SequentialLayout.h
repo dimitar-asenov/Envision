@@ -33,6 +33,8 @@ class VISUALIZATIONBASE_API SequentialLayout: public Layout
 		template <class T> T* at(int index);
 
 		void updateState();
+
+		void setStyle(SequentialLayoutStyle* style = SequentialLayoutStyle::getDefault());
 };
 
 template <class T> T* SequentialLayout::at(int index)

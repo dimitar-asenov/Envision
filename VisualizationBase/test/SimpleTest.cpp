@@ -19,10 +19,18 @@ namespace Visualization {
 TEST(VisualizationBase, ShowView)
 {
 	Scene* scene = new Scene();
-	scene->addItem(new Box(NULL, 10));
-	new View(scene);
+
+	Box* b = new Box(NULL, 3);
+	scene->addItem(b);
+	b->updateSubtreeState();
+
+	View* view = new View(scene);
 
 	CHECK_INT_EQUAL(1, 1);
+
+	CHECK_CONDITION(view != NULL);
+	//delete view;
+	//delete scene;
 }
 
 }

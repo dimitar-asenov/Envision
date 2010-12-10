@@ -16,6 +16,7 @@ namespace Visualization {
 class Box: public Item
 {
 	private:
+		SequentialLayoutStyle style;
 		SequentialLayout items;
 
 	public:

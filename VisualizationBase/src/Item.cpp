@@ -71,7 +71,8 @@ void Item::updateSubtreeState()
 
 void Item::updateChildren()
 {
-	for (QList<QGraphicsItem *>::iterator child = childItems().begin(); child != childItems().end(); ++child)
+	QList<QGraphicsItem *> children = childItems();
+	for (QList<QGraphicsItem *>::iterator child = children.begin(); child != children.end(); ++child)
 	{
 		Item* item = static_cast<Item*> (*child);
 		item->updateSubtreeState();

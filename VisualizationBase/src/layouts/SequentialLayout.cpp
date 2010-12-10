@@ -40,6 +40,12 @@ void SequentialLayout::insert(Item* item, int position)
 	setNeedsUpdate();
 }
 
+void SequentialLayout::setStyle(SequentialLayoutStyle* style_)
+{
+	style = style_;
+	setNeedsUpdate();
+}
+
 void SequentialLayout::updateState()
 {
 	int w = style->leftMargin();
@@ -71,7 +77,7 @@ void SequentialLayout::updateState()
 	}
 	else
 	{
-		begin = items.size()-1;
+		begin = items.size() - 1;
 		end = -1;
 		step = -1;
 	}
@@ -87,6 +93,7 @@ void SequentialLayout::updateState()
 
 			if ( i != begin ) w += style->spaceBetweenElements();
 			items[i]->setPos(w, y);
+			w += items[i]->width();
 		}
 		else
 		{
@@ -96,9 +103,12 @@ void SequentialLayout::updateState()
 
 			if ( i != begin ) h += style->spaceBetweenElements();
 			items[i]->setPos(x, h);
+			h += items[i]->height();
 		}
 	}
 
+	if ( horizontal ) h += maxChildHeight;
+	else w += maxChildWidth;
 	size.setWidth(w + style->rightMargin());
 	size.setHeight(h + style->bottomMargin());
 }

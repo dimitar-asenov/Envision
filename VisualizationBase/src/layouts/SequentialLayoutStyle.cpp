@@ -10,7 +10,7 @@
 namespace Visualization {
 
 SequentialLayoutStyle::SequentialLayoutStyle() :
-	direction_(LeftToRight), alignment_(CenterAlignment), spaceBetweenElements_(5), leftMargin_(0), rightMargin_(0), topMargin_(0), bottomMargin_(0)
+	direction_(LeftToRight), alignment_(CenterAlignment), spaceBetweenElements_(2), leftMargin_(2), rightMargin_(2), topMargin_(2), bottomMargin_(2)
 {
 
 }
