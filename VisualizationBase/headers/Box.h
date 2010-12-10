@@ -1,32 +1,31 @@
 /***********************************************************************************************************************
- * ModelItem.h
+ * Box.h
  *
- *  Created on: Dec 9, 2010
+ *  Created on: Dec 10, 2010
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef MODELITEM_H_
-#define MODELITEM_H_
+#ifndef BOX_H_
+#define BOX_H_
 
 #include "Item.h"
-#include "ModelBase/headers/nodes/Node.h"
+#include "layouts/SequentialLayout.h"
 
 namespace Visualization {
 
-class ModelItem: public Item
+class Box: public Item
 {
 	private:
-		Model::Node* node;
-		int revision;
-
+		SequentialLayout items;
 
 	public:
-		ModelItem(Item* parent, Model::Node* node);
+		Box(Item* parent, int sub);
 
-		bool needsUpdate();
-		void updateSubtreeState();
+		void determineChildren();
+		void updateState();
+		void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0);
 };
 
 }
 
-#endif /* MODELITEM_H_ */
+#endif /* BOX_H_ */

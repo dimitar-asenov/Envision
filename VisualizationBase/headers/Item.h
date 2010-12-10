@@ -16,22 +16,37 @@ namespace Visualization {
 
 class VISUALIZATIONBASE_API Item : public QGraphicsItem
 {
+	private:
+		QSize sizeLimit;
+		bool sizeLimitChanged_;
+
+		bool sizeLimitChanged();
+		void updateChildren();
+
 	protected:
 		QRectF bounding_rect;
-		QRectF logical_rect;
-		QSize sizeLimit;
+		QSize size;
+
 
 	public:
 		Item(Item* parent);
 
 		QRectF boundingRect() const;
-		QRectF logicalRect() const;
+		int width() const;
+		int height() const;
 
 		const QSize& getSizeLimit() const;
 
-		virtual void setSizeLimit(int limitWidth, int limitHeight);
-		virtual void setSizeWidthLimit(int limitWidth);
-		virtual void setSizeHeightLimit(int limitHeight);
+		void setSizeLimit(int limitWidth, int limitHeight);
+		void setSizeWidthLimit(int limitWidth);
+		void setSizeHeightLimit(int limitHeight);
+
+		virtual bool needsUpdate();
+		virtual void updateSubtreeState();
+		virtual void determineChildren() = 0;
+		virtual void updateState() = 0;
+
+
 };
 
 }

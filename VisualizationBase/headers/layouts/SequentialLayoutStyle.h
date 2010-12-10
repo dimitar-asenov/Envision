@@ -16,15 +16,35 @@ class VISUALIZATIONBASE_API SequentialLayoutStyle
 {
 	public:
 		enum SequntialLayoutDirection { LeftToRight, RightToLeft, TopToBottom, BottomToTop};
+		enum SequntialLayoutAlignment { CenterAlignment, LeftAlignment, RightAlignment, TopAlignment, BottomAlignment};
 
 	private:
-		SequntialLayoutDirection direction;
-		int spaceBetweenElements;
-
+		SequntialLayoutDirection direction_;
+		SequntialLayoutAlignment alignment_;
+		int spaceBetweenElements_;
+		int leftMargin_;
+		int rightMargin_;
+		int topMargin_;
+		int bottomMargin_;
 
 	public:
+		SequentialLayoutStyle();
 
-		static SequentialLayoutStyle& getDefault();
+		SequntialLayoutDirection direction() const;
+		SequntialLayoutAlignment alignment() const;
+		int spaceBetweenElements() const;
+		int leftMargin() const;
+		int rightMargin() const;
+		int topMargin() const;
+		int bottomMargin() const;
+
+		void setDirection(SequntialLayoutDirection direction);
+		void setAlignment(SequntialLayoutAlignment alignment);
+		void setSpaceBetweenElements(int space);
+		void setMargins(int marginSize);
+		void setMargins(int left, int right, int top, int bottom);
+
+		static SequentialLayoutStyle* getDefault();
 };
 
 }

@@ -9,9 +9,19 @@
 
 namespace Visualization {
 
-ModelItem::ModelItem(Item* parent, Model::Node* node_) : Item(parent), node(node_)
+ModelItem::ModelItem(Item* parent, Model::Node* node_) : Item(parent), node(node_), revision(-1)
 {
 }
 
+bool ModelItem::needsUpdate()
+{
+	return revision != node->getRevision();
+}
+
+void ModelItem::updateSubtreeState()
+{
+	Item::updateSubtreeState();
+	revision = node->getRevision();
+}
 
 }

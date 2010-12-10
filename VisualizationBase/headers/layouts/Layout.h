@@ -1,32 +1,36 @@
 /***********************************************************************************************************************
- * ModelItem.h
+ * Layout.h
  *
- *  Created on: Dec 9, 2010
+ *  Created on: Dec 10, 2010
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef MODELITEM_H_
-#define MODELITEM_H_
+#ifndef LAYOUT_H_
+#define LAYOUT_H_
+
+#include "visualizationbase_api.h"
 
 #include "Item.h"
-#include "ModelBase/headers/nodes/Node.h"
 
 namespace Visualization {
 
-class ModelItem: public Item
+class Layout: public Item
 {
 	private:
-		Model::Node* node;
-		int revision;
-
+		bool needsUpdate_;
 
 	public:
-		ModelItem(Item* parent, Model::Node* node);
+		Layout(Item* parent);
 
+		void setNeedsUpdate();
 		bool needsUpdate();
+		void determineChildren();
+
 		void updateSubtreeState();
+
+		void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget);
 };
 
 }
 
-#endif /* MODELITEM_H_ */
+#endif /* LAYOUT_H_ */

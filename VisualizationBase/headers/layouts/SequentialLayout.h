@@ -10,27 +10,29 @@
 
 #include "visualizationbase_api.h"
 
-#include "Item.h"
+#include "Layout.h"
 #include "SequentialLayoutStyle.h"
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API SequentialLayout: public Item
+class VISUALIZATIONBASE_API SequentialLayout: public Layout
 {
 	private:
-		SequentialLayoutStyle& style;
+		SequentialLayoutStyle* style;
 		QVector<Item*> items;
 
 	public:
-		SequentialLayout(Item* parent, SequentialLayoutStyle& style = SequentialLayoutStyle::getDefault());
+		SequentialLayout(Item* parent, SequentialLayoutStyle* style = SequentialLayoutStyle::getDefault());
 
-		int size() const;
+		int length() const;
 
 		void append(Item* item);
 		void prepend(Item* item);
 		void insert(Item* item, int position);
 
 		template <class T> T* at(int index);
+
+		void updateState();
 };
 
 template <class T> T* SequentialLayout::at(int index)

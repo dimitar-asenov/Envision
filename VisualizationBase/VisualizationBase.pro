@@ -25,7 +25,9 @@ pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
-HEADERS += headers/layouts/SequentialLayoutStyle.h \
+HEADERS += headers/Box.h \
+    headers/layouts/Layout.h \
+    headers/layouts/SequentialLayoutStyle.h \
     headers/layouts/SequentialLayout.h \
     headers/ModelItem.h \
     headers/Item.h \
@@ -37,7 +39,9 @@ HEADERS += headers/layouts/SequentialLayoutStyle.h \
     src/visualizationbase.h \
     headers/VisualizationException.h \
     headers/visualizationbase_api.h
-SOURCES += src/layouts/SequentialLayoutStyle.cpp \
+SOURCES += src/Box.cpp \
+    src/layouts/Layout.cpp \
+    src/layouts/SequentialLayoutStyle.cpp \
     src/layouts/SequentialLayout.cpp \
     src/ModelItem.cpp \
     src/Item.cpp \
