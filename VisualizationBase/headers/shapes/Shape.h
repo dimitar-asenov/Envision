@@ -11,6 +11,9 @@
 #include "visualizationbase_api.h"
 
 #include "../Item.h"
+#include "ShapeStyle.h"
+
+#include "VisualizationException.h"
 
 namespace Visualization {
 
@@ -21,6 +24,8 @@ class VISUALIZATIONBASE_API Shape
 
 	private:
 		Item* parent;
+		ShapeStyle* style_;
+
 		SizeType sizeToUse;
 		int width_;
 		int height_;
@@ -28,11 +33,20 @@ class VISUALIZATIONBASE_API Shape
 		int yOffset_;
 
 	protected:
-		int width();
-		int height();
-		int xOffset();
-		int yOffset();
-		SizeType sizeSpecified();
+		int width() const;
+		int height() const;
+		int xOffset() const;
+		int yOffset() const;
+		SizeType sizeSpecified() const;
+
+		template <class T> void setGenericStyle(ShapeStyle *style)
+		{
+			T* s = dynamic_cast<T*> (style);
+			if (!s) throw VisualizationException("Trying to set a style incompatible with the shape.");
+			style_ = s;
+		}
+
+		ShapeStyle* style() const;
 
 		void setItemSize(int width, int height);
 		void setItemBoundingRect(int x, int y, int width, int height);
@@ -40,7 +54,7 @@ class VISUALIZATIONBASE_API Shape
 		virtual void update() = 0;
 
 	public:
-		Shape(Item* parent);
+		Shape(Item* parent, ShapeStyle *style = NULL);
 		virtual ~Shape();
 
 		void setInnerWidth(int width);
@@ -52,8 +66,16 @@ class VISUALIZATIONBASE_API Shape
 		void setOutterSize(int width, int height);
 		void setOffset(int x, int y);
 
+		virtual void setStyle(ShapeStyle *style);
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) = 0;
 };
+
+inline int Shape::width() const { return width_; }
+inline int Shape::height() const { return height_; }
+inline int Shape::xOffset() const { return xOffset_; }
+inline int Shape::yOffset() const { return yOffset_; }
+inline Shape::SizeType Shape::sizeSpecified() const { return sizeToUse; }
+inline ShapeStyle* Shape::style() const {	return style_; }
 
 }
 

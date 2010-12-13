@@ -9,38 +9,13 @@
 
 namespace Visualization {
 
-Shape::Shape(Item* parent_) :
-	parent(parent_), width_(0), height_(0), xOffset_(0), yOffset_(0)
+Shape::Shape(Item* parent_, ShapeStyle *style) :
+	parent(parent_), style_(style), width_(0), height_(0), xOffset_(0), yOffset_(0)
 {
 }
 
 Shape::~Shape()
 {
-}
-
-int Shape::width()
-{
-	return width_;
-}
-
-int Shape::height()
-{
-	return height_;
-}
-
-int Shape::xOffset()
-{
-	return xOffset_;
-}
-
-int Shape::yOffset()
-{
-	return yOffset_;
-}
-
-Shape::SizeType Shape::sizeSpecified()
-{
-	return sizeToUse;
 }
 
 void Shape::setItemSize(int width, int height)
@@ -106,6 +81,11 @@ void Shape::setOffset(int x, int y)
 	xOffset_ = x;
 	yOffset_ = y;
 	update();
+}
+
+void Shape::setStyle(ShapeStyle *style)
+{
+	style_ = style;
 }
 
 }

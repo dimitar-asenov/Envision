@@ -11,13 +11,21 @@
 #include "visualizationbase_api.h"
 
 #include "Shape.h"
+#include "shapes/BoxStyle.h"
 
 namespace Visualization {
 
 class VISUALIZATIONBASE_API Box: public Shape
 {
+	protected:
+		QPainterPath getRectanglePath(int x, int y, int width, int height);
+
 	public:
-		Box(Item* parent);
+		Box(Item *parent, BoxStyle *style = BoxStyle::getDefault());
+
+		BoxStyle* style() const;
+		virtual void setStyle(ShapeStyle *style);
+
 		virtual void update();
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 };
