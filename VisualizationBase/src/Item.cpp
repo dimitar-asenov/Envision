@@ -6,12 +6,23 @@
  **********************************************************************************************************************/
 
 #include "Item.h"
+#include "shapes/Shape.h"
+#include "VisualizationException.h"
 
 namespace Visualization {
 
-Item::Item(Item* parent) :
-	QGraphicsItem(parent), sizeLimitChanged_(false)
+Item::Item(Item* parent, Shape *shape) :
+	QGraphicsItem(parent), sizeLimitChanged_(false), shape_(shape)
 {
+}
+
+Item::~Item()
+{
+	if ( shape_ )
+	{
+		delete shape_;
+		shape_ = NULL;
+	}
 }
 
 QRectF Item::boundingRect() const
@@ -77,6 +88,23 @@ void Item::updateChildren()
 		Item* item = static_cast<Item*> (*child);
 		item->updateSubtreeState();
 	}
+}
+
+void Item::setShape(Shape* shape)
+{
+	shape_ = shape;
+}
+
+Shape* Item::shape()
+{
+	return shape_;
+}
+
+void Item::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+	if ( shape_ ) shape_->paint(painter, option, widget);
+	else
+		throw VisualizationException("Calling Item::paint without specifying a shape.");
 }
 
 }

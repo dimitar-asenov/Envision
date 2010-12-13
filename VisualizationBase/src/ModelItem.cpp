@@ -9,7 +9,7 @@
 
 namespace Visualization {
 
-ModelItem::ModelItem(Item* parent, Model::Node* node_) : Item(parent), node(node_), revision(-1)
+ModelItem::ModelItem(Item* parent, Model::Node* node_, Shape *shape) : Item(parent, shape), node(node_), revision(-1)
 {
 }
 

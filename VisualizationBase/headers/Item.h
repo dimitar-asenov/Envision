@@ -14,11 +14,16 @@
 
 namespace Visualization {
 
+class Shape;
+
 class VISUALIZATIONBASE_API Item : public QGraphicsItem
 {
 	private:
+		friend class Shape;
 		QSize sizeLimit;
 		bool sizeLimitChanged_;
+
+		Shape* shape_;
 
 		bool sizeLimitChanged();
 		void updateChildren();
@@ -29,7 +34,8 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 
 
 	public:
-		Item(Item* parent);
+		Item(Item* parent, Shape *shape = NULL);
+		virtual ~Item();
 
 		QRectF boundingRect() const;
 		int width() const;
@@ -46,7 +52,10 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		virtual void determineChildren() = 0;
 		virtual void updateState() = 0;
 
+		void setShape(Shape* shape);
+		Shape* shape();
 
+		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 };
 
 }

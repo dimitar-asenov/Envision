@@ -1,18 +1,18 @@
 /***********************************************************************************************************************
- * Box.cpp
+ * BoxTest.cpp
  *
- *  Created on: Dec 10, 2010
+ *  Created on: Dec 13, 2010
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "Box.h"
+#include "BoxTest.h"
 
-#include <QtGui/QPainter>
+#include "shapes/Box.h"
 
 namespace Visualization {
 
-Box::Box(Item* parent, int sub) :
-		ShapeExperiment<Item>(parent), items(this, &style)
+BoxTest::BoxTest(Item* parent, int sub) :
+		Item(parent, new Box(this)), items(this, &style)
 {
 	style.setMargins(4);
 	style.setSpaceBetweenElements(2);
@@ -20,22 +20,16 @@ Box::Box(Item* parent, int sub) :
 	style.setDirection(SequentialLayoutStyle::BottomToTop);
 
 	for (int i = 0; i < sub; ++i)
-		items.append(new Box(this, sub - 1 - i));
+		items.append(new BoxTest(this, sub - 1 - i));
 }
 
-void Box::determineChildren()
+void BoxTest::determineChildren()
 {
 }
 
-void Box::updateState()
+void BoxTest::updateState()
 {
-	size.setWidth(items.width());
-	size.setHeight(items.height());
-
-	setWidth(items.width());
-	setHeight(items.height());
-
-	bounding_rect.setRect(0,0, size.width(), size.height());
+	shape()->setInnerSize(items.width(), items.height());
 }
 
 }

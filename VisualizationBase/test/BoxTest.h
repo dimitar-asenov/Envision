@@ -1,27 +1,27 @@
 /***********************************************************************************************************************
- * Box.h
+ * BoxTest.h
  *
- *  Created on: Dec 10, 2010
+ *  Created on: Dec 13, 2010
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef BOX_H_
-#define BOX_H_
+#ifndef BOXTEST_H_
+#define BOXTEST_H_
 
-#include "Item.h"
+#include "layouts/SequentialLayoutStyle.h"
 #include "layouts/SequentialLayout.h"
-#include "shapes/ShapeExperiment.h"
+#include "Item.h"
 
 namespace Visualization {
 
-class Box: public ShapeExperiment<Item>
+class BoxTest : public Item
 {
 	private:
 		SequentialLayoutStyle style;
 		SequentialLayout items;
 
 	public:
-		Box(Item* parent, int sub);
+		BoxTest(Item* parent, int sub);
 
 		void determineChildren();
 		void updateState();
@@ -29,4 +29,4 @@ class Box: public ShapeExperiment<Item>
 
 }
 
-#endif /* BOX_H_ */
+#endif /* BOXTEST_H_ */

@@ -10,7 +10,7 @@
 #include "Scene.h"
 #include "View.h"
 #include "SelfTest/headers/SelfTestSuite.h"
-#include "Box.h"
+#include "BoxTest.h"
 
 #include <QtCore/QCoreApplication>
 
@@ -20,7 +20,7 @@ TEST(VisualizationBase, ShowView)
 {
 	Scene* scene = new Scene();
 
-	Box* b = new Box(NULL, 3);
+	BoxTest* b = new BoxTest(NULL, 3);
 	scene->addItem(b);
 	b->updateSubtreeState();
 

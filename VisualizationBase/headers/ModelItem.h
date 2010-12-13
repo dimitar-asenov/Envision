@@ -21,7 +21,7 @@ class ModelItem: public Item
 
 
 	public:
-		ModelItem(Item* parent, Model::Node* node);
+		ModelItem(Item* parent, Model::Node* node, Shape *shape = NULL);
 
 		bool needsUpdate();
 		void updateSubtreeState();
