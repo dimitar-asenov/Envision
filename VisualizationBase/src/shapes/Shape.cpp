@@ -88,4 +88,9 @@ void Shape::setStyle(ShapeStyle *style)
 	style_ = style;
 }
 
+QPoint Shape::contentPosition()
+{
+	return QPoint(xOffset_, yOffset_);
+}
+
 }

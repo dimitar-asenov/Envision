@@ -18,7 +18,10 @@ namespace Visualization {
 class VISUALIZATIONBASE_API Box: public Shape
 {
 	protected:
-		QPainterPath getRectanglePath(int x, int y, int width, int height);
+		qreal contentBoxWidth;
+		qreal contentBoxHeight;
+
+		QPainterPath getRectanglePath(qreal x, qreal y, int width, int height);
 
 	public:
 		Box(Item *parent, BoxStyle *style = BoxStyle::getDefault());
@@ -27,6 +30,7 @@ class VISUALIZATIONBASE_API Box: public Shape
 		virtual void setStyle(ShapeStyle *style);
 
 		virtual void update();
+		virtual QPoint contentPosition();
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 };
 

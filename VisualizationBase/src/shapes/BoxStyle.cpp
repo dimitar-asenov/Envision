@@ -10,7 +10,7 @@
 namespace Visualization {
 
 BoxStyle::BoxStyle() :
-		background_(QColor(0xAA, 0xFF, 0xCC, 0xFF)), corner_(RightAngleCorner), cornerRadius_(5), shadow_(Qt::NoBrush), xShadowOffset_(3), yShadowOffset_(3)
+		background_(QColor(0xAA, 0xFF, 0xCC, 0xFF)), corner_(RightAngleCorner), cornerRadius_(5), shadow_(Qt::NoBrush), xShadowOffset_(3), yShadowOffset_(3), shadowIsPartOfSize_(false)
 {
 }
 
@@ -31,11 +31,12 @@ void BoxStyle::setCorner(BoxStyle::CornerType type, int radius)
 	cornerRadius_ = radius;
 }
 
-void BoxStyle::setShadow(const QBrush& brush, int xOffset, int yOffset)
+void BoxStyle::setShadow(const QBrush& brush, int xOffset, int yOffset, bool partOfSize)
 {
 	shadow_ = brush;
 	xShadowOffset_ = xOffset;
 	yShadowOffset_ = yOffset;
+	shadowIsPartOfSize_ = partOfSize;
 }
 
 }

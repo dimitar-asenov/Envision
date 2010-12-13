@@ -10,6 +10,7 @@
 
 #include "layouts/SequentialLayoutStyle.h"
 #include "layouts/SequentialLayout.h"
+#include "shapes/BoxStyle.h"
 #include "Item.h"
 
 namespace Visualization {
@@ -18,6 +19,7 @@ class BoxTest : public Item
 {
 	private:
 		SequentialLayoutStyle style;
+		BoxStyle boxStyle;
 		SequentialLayout items;
 
 	public:

@@ -25,6 +25,7 @@ TEST(VisualizationBase, ShowView)
 	b->updateSubtreeState();
 
 	View* view = new View(scene);
+	view->setRenderHint(QPainter::Antialiasing);
 
 	CHECK_INT_EQUAL(1, 1);
 

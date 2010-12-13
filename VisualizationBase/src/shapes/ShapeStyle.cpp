@@ -18,4 +18,9 @@ ShapeStyle::~ShapeStyle()
 {
 }
 
+void ShapeStyle::setOutline(const QPen& outline)
+{
+	outline_ = outline;
+}
+
 }

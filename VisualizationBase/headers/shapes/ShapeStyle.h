@@ -22,6 +22,7 @@ class VISUALIZATIONBASE_API ShapeStyle
 	public:
 		ShapeStyle();
 
+		void setOutline(const QPen& outline);
 		const QPen& outline();
 
 		virtual ~ShapeStyle();

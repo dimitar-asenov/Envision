@@ -67,6 +67,8 @@ class VISUALIZATIONBASE_API Shape
 		void setOffset(int x, int y);
 
 		virtual void setStyle(ShapeStyle *style);
+
+		virtual QPoint contentPosition();
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) = 0;
 };
 
