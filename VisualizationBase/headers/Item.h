@@ -47,6 +47,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		void setSizeLimit(int limitWidth, int limitHeight);
 		void setSizeWidthLimit(int limitWidth);
 		void setSizeHeightLimit(int limitHeight);
+		void setUpdateNeeded();
 
 		virtual bool needsUpdate();
 		virtual void updateSubtreeState();
@@ -64,6 +65,8 @@ inline int Item::width() const { return size.width(); }
 inline int Item::height() const { return size.height(); }
 inline const QSize& Item::getSizeLimit() const { return sizeLimit; }
 inline Shape* Item::getShape() const {	return shape_; };
+
+inline void Item::setUpdateNeeded() { needsUpdate_ = true; };
 
 }
 

@@ -1,33 +1,31 @@
 /***********************************************************************************************************************
- * Text.cpp
+ * VText.cpp
  *
  *  Created on: Dec 14, 2010
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "items/Text.h"
+#include "items/VText.h"
 
 #include <QtGui/QPainter>
 #include <QtGui/QFontMetrics>
 
 namespace Visualization {
 
-Text::Text(Item* parent, const QString& text_) :
-	Item(parent), text(text_), style(TextStyle::getDefault())
+VText::VText(Item* parent, Model::Text *text, TextStyle *style_) :
+	ModelItem(parent, text), style(style_)
 {
 }
 
-Text::Text(Item* parent, TextStyle *style_, const QString& text_) :
-	Item(parent), text(text_), style(style_)
+void VText::determineChildren()
 {
 }
 
-void Text::determineChildren()
+void VText::updateState()
 {
-}
+	Model::Text* textNode = static_cast<Model::Text*> (getNode());
 
-void Text::updateState()
-{
+	text.setText(textNode->get());
 	text.setTextOption(style->option());
 	QFontMetrics qfm(style->font());
 
@@ -39,7 +37,7 @@ void Text::updateState()
 	size.setHeight(bounding_rect.height());
 }
 
-void Text::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
+void VText::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
 	painter->setPen(style->pen());
 	painter->setFont(style->font());

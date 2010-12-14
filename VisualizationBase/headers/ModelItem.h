@@ -19,6 +19,8 @@ class ModelItem: public Item
 		Model::Node* node;
 		int revision;
 
+	protected:
+		Model::Node* getNode();
 
 	public:
 		ModelItem(Item* parent, Model::Node* node, Shape *shape = NULL);
@@ -26,6 +28,8 @@ class ModelItem: public Item
 		bool needsUpdate();
 		void updateSubtreeState();
 };
+
+inline Model::Node* ModelItem::getNode() { return node; };
 
 }
 

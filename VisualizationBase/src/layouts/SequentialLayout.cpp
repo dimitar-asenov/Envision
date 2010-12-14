@@ -24,27 +24,27 @@ void SequentialLayout::append(Item* item)
 {
 	item->setParentItem(this);
 	items.append(item);
-	setNeedsUpdate();
+	setUpdateNeeded();
 }
 
 void SequentialLayout::prepend(Item* item)
 {
 	item->setParentItem(this);
 	items.prepend(item);
-	setNeedsUpdate();
+	setUpdateNeeded();
 }
 
 void SequentialLayout::insert(Item* item, int position)
 {
 	item->setParentItem(this);
 	items.insert(position, item);
-	setNeedsUpdate();
+	setUpdateNeeded();
 }
 
 void SequentialLayout::setStyle(SequentialLayoutStyle* style_)
 {
 	style = style_;
-	setNeedsUpdate();
+	setUpdateNeeded();
 }
 
 void SequentialLayout::updateState()

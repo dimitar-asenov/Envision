@@ -10,28 +10,12 @@
 namespace Visualization {
 
 Layout::Layout(Item* parent) :
-	Item(parent), needsUpdate_(true)
+	Item(parent)
 {
-}
-
-void Layout::setNeedsUpdate()
-{
-	needsUpdate_ = true;
-}
-
-bool Layout::needsUpdate()
-{
-	return needsUpdate_;
 }
 
 void Layout::determineChildren()
 {
-}
-
-void Layout::updateSubtreeState()
-{
-	Item::updateSubtreeState();
-	needsUpdate_ = false;
 }
 
 void Layout::paint ( QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)

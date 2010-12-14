@@ -16,17 +16,10 @@ namespace Visualization {
 
 class Layout: public Item
 {
-	private:
-		bool needsUpdate_;
-
 	public:
 		Layout(Item* parent);
 
-		void setNeedsUpdate();
-		bool needsUpdate();
 		void determineChildren();
-
-		void updateSubtreeState();
 
 		void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget);
 };

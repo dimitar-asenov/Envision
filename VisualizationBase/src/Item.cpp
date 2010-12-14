@@ -52,7 +52,7 @@ void Item::setSizeHeightLimit(int limitHeight)
 
 bool Item::needsUpdate()
 {
-	return true;
+	return needsUpdate_;
 }
 
 void Item::updateSubtreeState()
