@@ -39,6 +39,7 @@ class List: public Node
 
 		QString getTypeName() const;
 		int getTypeId() const;
+		static int getTypeIdStatic();
 
 		Node* getChild(NodeIdType id);
 		Node* getChild(const QString& name);

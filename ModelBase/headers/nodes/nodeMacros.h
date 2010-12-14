@@ -39,6 +39,7 @@
 																																							\
 		QString getTypeName() const;																												\
 		int getTypeId() const;																														\
+		static int getTypeIdStatic();																												\
 		static void registerNodeType();																											\
 																																							\
 	private:
@@ -71,6 +72,7 @@
 																																							\
 		QString getTypeName() const;																												\
 		int getTypeId() const;																														\
+		static int getTypeIdStatic();																												\
 		static void registerNodeType();																											\
 																																							\
 	private:
@@ -136,6 +138,10 @@ int className::getTypeId()	const																													\
 {																																							\
 	return typeId;																																		\
 }																																							\
+int className::getTypeIdStatic()																													\
+{																																							\
+	return typeId;																																		\
+}																																							\
 																																							\
 void className::registerNodeType()																												\
 {																																							\
@@ -161,6 +167,10 @@ QString className::getTypeName()	const																											\
 																																							\
 int className::typeId = -1; /* This must be set to the result of Node::registerNodeType */									\
 int className::getTypeId()	const																													\
+{																																							\
+	return typeId;																																		\
+}																																							\
+int className::getTypeIdStatic()																													\
 {																																							\
 	return typeId;																																		\
 }																																							\
