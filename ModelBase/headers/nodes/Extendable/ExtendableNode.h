@@ -15,6 +15,8 @@
 
 #include <QtCore/QString>
 #include <QtCore/QVector>
+#include <QtCore/QPair>
+#include <QtCore/QList>
 
 namespace Model {
 
@@ -79,6 +81,8 @@ class MODELBASE_API ExtendableNode: public Node
 		void save(PersistentStore &store) const;
 
 		bool hasAttribute(const QString& attributeName);
+
+		QList< QPair<QString, Node*> > getAllAttributes(bool includeNullValues = false);
 
 		template<class T>
 		static AttributeChain& getMetaData()

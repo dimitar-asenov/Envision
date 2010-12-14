@@ -90,6 +90,21 @@ bool ExtendableNode::hasAttribute(const QString& attributeName)
 	return meta.hasAttribute(attributeName);
 }
 
+QList< QPair<QString, Node*> > ExtendableNode::getAllAttributes(bool includeNullValues)
+{
+	QList< QPair<QString, Node*> > result;
+
+	for (int level = 0; level < meta.getNumLevels(); ++level)
+	{
+		AttributeChain* currentLevel = meta.getLevel(level);
+
+		for (int i = 0; i < currentLevel->size(); ++i)
+			if ( subnodes[level][i] || includeNullValues ) result.append(QPair<QString,Node*>((*currentLevel)[i].name(),subnodes[level][i]));
+	}
+
+	return result;
+}
+
 void ExtendableNode::removeOptional(const ExtendableIndex &attributeIndex)
 {
 	if ( meta.getAttribute(attributeIndex).optional() )
