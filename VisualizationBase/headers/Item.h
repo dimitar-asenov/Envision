@@ -15,13 +15,14 @@
 namespace Visualization {
 
 class Shape;
+class ShapeStyle;
 
 class VISUALIZATIONBASE_API Item : public QGraphicsItem
 {
 	private:
 		friend class Shape;
 		QSize sizeLimit;
-		bool sizeLimitChanged_;
+		bool needsUpdate_;
 
 		Shape* shape_;
 
@@ -53,10 +54,16 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		virtual void updateState() = 0;
 
 		void setShape(Shape* shape);
-		Shape* shape();
+		void setShapeStyle(ShapeStyle* style);
+		Shape* getShape() const;
 
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 };
+
+inline int Item::width() const { return size.width(); }
+inline int Item::height() const { return size.height(); }
+inline const QSize& Item::getSizeLimit() const { return sizeLimit; }
+inline Shape* Item::getShape() const {	return shape_; };
 
 }
 

@@ -12,6 +12,8 @@
 #include "SelfTest/headers/SelfTestSuite.h"
 #include "BoxTest.h"
 
+#include <QtGui/QDesktopWidget>
+#include <QtGui/QApplication>
 #include <QtCore/QCoreApplication>
 
 namespace Visualization {
@@ -26,6 +28,13 @@ TEST(VisualizationBase, ShowView)
 
 	View* view = new View(scene);
 	view->setRenderHint(QPainter::Antialiasing);
+	view->setRenderHint(QPainter::TextAntialiasing);
+	view->parentWidget()->resize(600,500);
+
+	QRect descktop( QApplication::desktop()->screenGeometry() );
+	int left = descktop.width()/2-view->parentWidget()->width()/2;
+	int top = descktop.height()/2-view->parentWidget()->height()/2;
+	view->parentWidget()->move(left,top);
 
 	CHECK_INT_EQUAL(1, 1);
 

@@ -7,12 +7,13 @@
 
 #include "Item.h"
 #include "shapes/Shape.h"
+#include "shapes/ShapeStyle.h"
 #include "VisualizationException.h"
 
 namespace Visualization {
 
 Item::Item(Item* parent, Shape *shape) :
-	QGraphicsItem(parent), sizeLimitChanged_(false), shape_(shape)
+	QGraphicsItem(parent), needsUpdate_(true), shape_(shape)
 {
 }
 
@@ -30,38 +31,23 @@ QRectF Item::boundingRect() const
 	return bounding_rect;
 }
 
-int Item::width() const
-{
-	return size.width();
-}
-
-int Item::height() const
-{
-	return size.height();
-}
-
-const QSize& Item::getSizeLimit() const
-{
-	return sizeLimit;
-}
-
 void Item::setSizeLimit(int limitWidth, int limitHeight)
 {
 	sizeLimit.setWidth(limitWidth);
 	sizeLimit.setHeight(limitHeight);
-	sizeLimitChanged_ = true;
+	needsUpdate_ = true;
 }
 
 void Item::setSizeWidthLimit(int limitWidth)
 {
 	sizeLimit.setWidth(limitWidth);
-	sizeLimitChanged_ = true;
+	needsUpdate_ = true;
 }
 
 void Item::setSizeHeightLimit(int limitHeight)
 {
 	sizeLimit.setHeight(limitHeight);
-	sizeLimitChanged_ = true;
+	needsUpdate_ = true;
 }
 
 bool Item::needsUpdate()
@@ -71,12 +57,12 @@ bool Item::needsUpdate()
 
 void Item::updateSubtreeState()
 {
-	if ( needsUpdate() || sizeLimitChanged_ )
+	if ( needsUpdate() || needsUpdate_ )
 	{
 		determineChildren();
 		updateChildren();
 		updateState();
-		sizeLimitChanged_ = false;
+		needsUpdate_ = false;
 	}
 }
 
@@ -93,11 +79,14 @@ void Item::updateChildren()
 void Item::setShape(Shape* shape)
 {
 	shape_ = shape;
+	needsUpdate_ = true;
 }
 
-Shape* Item::shape()
+void Item::setShapeStyle(ShapeStyle* style)
 {
-	return shape_;
+	if (!shape_) throw VisualizationException("Trying to set the style of a shape for an item, but no shape was specified.");
+	shape_->setStyle(style);
+	needsUpdate_ = true;
 }
 
 void Item::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)

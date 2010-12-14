@@ -25,7 +25,9 @@ pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
-HEADERS += headers/shapes/BoxStyle.h \
+HEADERS += headers/items/TextStyle.h \
+    headers/items/Text.h \
+    headers/shapes/BoxStyle.h \
     headers/shapes/ShapeStyle.h \
     test/BoxTest.h \
     headers/shapes/Box.h \
@@ -43,7 +45,9 @@ HEADERS += headers/shapes/BoxStyle.h \
     src/visualizationbase.h \
     headers/VisualizationException.h \
     headers/visualizationbase_api.h
-SOURCES += src/shapes/BoxStyle.cpp \
+SOURCES += src/items/TextStyle.cpp \
+    src/items/Text.cpp \
+    src/shapes/BoxStyle.cpp \
     src/shapes/ShapeStyle.cpp \
     test/BoxTest.cpp \
     src/shapes/Box.cpp \

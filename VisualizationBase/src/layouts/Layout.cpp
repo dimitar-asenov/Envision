@@ -34,9 +34,9 @@ void Layout::updateSubtreeState()
 	needsUpdate_ = false;
 }
 
-void Layout::paint ( QPainter *, const QStyleOptionGraphicsItem *, QWidget *)
+void Layout::paint ( QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-
+	if (getShape()) Item::paint(painter, option, widget);
 }
 
 }

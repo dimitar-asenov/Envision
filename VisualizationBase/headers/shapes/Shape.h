@@ -50,6 +50,7 @@ class VISUALIZATIONBASE_API Shape
 
 		void setItemSize(int width, int height);
 		void setItemBoundingRect(int x, int y, int width, int height);
+		void setParentNeedsUpdate();
 
 		virtual void update() = 0;
 

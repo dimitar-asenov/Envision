@@ -6,6 +6,7 @@
  **********************************************************************************************************************/
 
 #include "layouts/SequentialLayout.h"
+#include "shapes/Shape.h"
 
 namespace Visualization {
 
@@ -54,16 +55,34 @@ void SequentialLayout::updateState()
 	// Get the maximum width and height of any element.
 	int maxChildWidth = 0;
 	int maxChildHeight = 0;
+	int sizeWidth = style->leftMargin() + style->rightMargin();
+	int sizeHeight = style->topMargin() + style->bottomMargin();
 
 	for (int i = 0; i != items.size(); ++i)
 	{
 		if ( maxChildWidth < items[i]->width() ) maxChildWidth = items[i]->width();
 		if ( maxChildHeight < items[i]->height() ) maxChildHeight = items[i]->height();
+
+		sizeWidth += items[i]->width() + (i > 0 ? style->spaceBetweenElements() : 0);
+		sizeHeight += items[i]->height() + (i > 0 ? style->spaceBetweenElements() : 0);
 	}
 
 	// Determine what sort of sequence we're building
 	bool horizontal = style->direction() == SequentialLayoutStyle::LeftToRight || style->direction() == SequentialLayoutStyle::RightToLeft;
 	bool forward = style->direction() == SequentialLayoutStyle::LeftToRight || style->direction() == SequentialLayoutStyle::TopToBottom;
+
+
+	// Set the size
+	if (horizontal) sizeHeight = style->topMargin() + maxChildHeight + style->bottomMargin();
+	else sizeWidth = style->leftMargin() + maxChildWidth + style->rightMargin();
+
+	if (getShape()) getShape()->setInnerSize(sizeWidth, sizeHeight);
+	else
+	{
+		size.setWidth(sizeWidth);
+		size.setHeight(sizeHeight);
+		bounding_rect = QRectF();
+	}
 
 	// Get the iteration parameters
 	int begin;
@@ -82,6 +101,9 @@ void SequentialLayout::updateState()
 		step = -1;
 	}
 
+	QPoint offset;
+	if (getShape()) offset = getShape()->contentPosition();
+
 	// Set the positions of all elements
 	for (int i = begin; i != end; i += step)
 	{
@@ -92,7 +114,7 @@ void SequentialLayout::updateState()
 			if ( style->alignment() == SequentialLayoutStyle::CenterAlignment ) y += (maxChildHeight - items[i]->height()) / 2;
 
 			if ( i != begin ) w += style->spaceBetweenElements();
-			items[i]->setPos(w, y);
+			items[i]->setPos(w + offset.x(), y + offset.y());
 			w += items[i]->width();
 		}
 		else
@@ -102,15 +124,10 @@ void SequentialLayout::updateState()
 			if ( style->alignment() == SequentialLayoutStyle::CenterAlignment ) x += (maxChildWidth - items[i]->width()) / 2;
 
 			if ( i != begin ) h += style->spaceBetweenElements();
-			items[i]->setPos(x, h);
+			items[i]->setPos(x + offset.x(), h + offset.y());
 			h += items[i]->height();
 		}
 	}
-
-	if ( horizontal ) h += maxChildHeight;
-	else w += maxChildWidth;
-	size.setWidth(w + style->rightMargin());
-	size.setHeight(h + style->bottomMargin());
 }
 
 }
