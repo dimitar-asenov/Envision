@@ -47,6 +47,14 @@ class VISUALIZATIONBASE_API SequentialLayoutStyle
 		static SequentialLayoutStyle* getDefault();
 };
 
+inline SequentialLayoutStyle::SequntialLayoutDirection SequentialLayoutStyle::direction() const { return direction_; }
+inline SequentialLayoutStyle::SequntialLayoutAlignment SequentialLayoutStyle::alignment() const {	return alignment_; }
+inline int SequentialLayoutStyle::spaceBetweenElements() const {	return spaceBetweenElements_; }
+inline int SequentialLayoutStyle::leftMargin() const { return leftMargin_; }
+inline int SequentialLayoutStyle::rightMargin() const {	return rightMargin_; }
+inline int SequentialLayoutStyle::topMargin() const { return topMargin_; }
+inline int SequentialLayoutStyle::bottomMargin() const {	return bottomMargin_; }
+
 }
 
 #endif /* SEQUENTIALLAYOUTSTYLE_H_ */

@@ -57,7 +57,7 @@ bool Item::needsUpdate()
 
 void Item::updateSubtreeState()
 {
-	if ( needsUpdate() || needsUpdate_ )
+	if ( needsUpdate_ || needsUpdate())
 	{
 		determineChildren();
 		updateChildren();

@@ -19,9 +19,10 @@ class Layout: public Item
 	public:
 		Layout(Item* parent);
 
-		void determineChildren();
+		virtual void determineChildren();
+		virtual bool needsUpdate();
 
-		void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget);
+		virtual void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget);
 };
 
 }

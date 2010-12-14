@@ -15,6 +15,12 @@ SequentialLayout::SequentialLayout(Item* parent, SequentialLayoutStyle* style_) 
 {
 }
 
+void SequentialLayout::setStyle(SequentialLayoutStyle* style_)
+{
+	style = style_;
+	setUpdateNeeded();
+}
+
 int SequentialLayout::length() const
 {
 	return items.size();
@@ -44,12 +50,6 @@ void SequentialLayout::insert(Item* item, int position)
 void SequentialLayout::remove(int index)
 {
 	items.remove(index);
-	setUpdateNeeded();
-}
-
-void SequentialLayout::setStyle(SequentialLayoutStyle* style_)
-{
-	style = style_;
 	setUpdateNeeded();
 }
 

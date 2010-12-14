@@ -25,7 +25,9 @@ pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
-HEADERS += test/BinaryNode.h \
+HEADERS += headers/layouts/PanelLayoutStyle.h \
+    headers/layouts/PanelLayout.h \
+    test/BinaryNode.h \
     headers/items/VExtendable.h \
     headers/items/VText.h \
     headers/items/TextStyle.h \
@@ -48,7 +50,9 @@ HEADERS += test/BinaryNode.h \
     src/visualizationbase.h \
     headers/VisualizationException.h \
     headers/visualizationbase_api.h
-SOURCES += test/BinaryNode.cpp \
+SOURCES += src/layouts/PanelLayoutStyle.cpp \
+    src/layouts/PanelLayout.cpp \
+    test/BinaryNode.cpp \
     src/items/VExtendable.cpp \
     src/items/VText.cpp \
     src/items/TextStyle.cpp \

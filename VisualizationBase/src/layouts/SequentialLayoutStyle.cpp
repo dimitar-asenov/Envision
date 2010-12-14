@@ -21,41 +21,6 @@ SequentialLayoutStyle* SequentialLayoutStyle::getDefault()
 	return &s;
 }
 
-SequentialLayoutStyle::SequntialLayoutDirection SequentialLayoutStyle::direction() const
-{
-	return direction_;
-}
-
-SequentialLayoutStyle::SequntialLayoutAlignment SequentialLayoutStyle::alignment() const
-{
-	return alignment_;
-}
-
-int SequentialLayoutStyle::spaceBetweenElements() const
-{
-	return spaceBetweenElements_;
-}
-
-int SequentialLayoutStyle::leftMargin() const
-{
-	return leftMargin_;
-}
-
-int SequentialLayoutStyle::rightMargin() const
-{
-	return rightMargin_;
-}
-
-int SequentialLayoutStyle::topMargin() const
-{
-	return topMargin_;
-}
-
-int SequentialLayoutStyle::bottomMargin() const
-{
-	return bottomMargin_;
-}
-
 void SequentialLayoutStyle::setDirection(SequntialLayoutDirection direction)
 {
 	direction_ = direction;

@@ -23,6 +23,7 @@ class VISUALIZATIONBASE_API SequentialLayout: public Layout
 
 	public:
 		SequentialLayout(Item* parent, SequentialLayoutStyle* style = SequentialLayoutStyle::getDefault());
+		void setStyle(SequentialLayoutStyle* style = SequentialLayoutStyle::getDefault());
 
 		int length() const;
 
@@ -33,9 +34,7 @@ class VISUALIZATIONBASE_API SequentialLayout: public Layout
 
 		template <class T> T* at(int index);
 
-		void updateState();
-
-		void setStyle(SequentialLayoutStyle* style = SequentialLayoutStyle::getDefault());
+		virtual void updateState();
 };
 
 template <class T> T* SequentialLayout::at(int index)
