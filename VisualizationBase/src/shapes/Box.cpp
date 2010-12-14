@@ -87,9 +87,9 @@ void Box::update()
 	}
 
 	if (style()->shadow() == Qt::NoBrush || !style()->isShadowPartOfSize())
-		setItemSize(contentBoxWidth, contentBoxHeight);
+		setItemSize(contentBoxWidth + xOffset(), contentBoxHeight + yOffset());
 	else
-		setItemSize(contentBoxWidth + style()->xShadowOffset(), contentBoxHeight + style()->yShadowOffset());
+		setItemSize(contentBoxWidth + style()->xShadowOffset() + xOffset(), contentBoxHeight + style()->yShadowOffset() + yOffset());
 
 	if (style()->shadow() == Qt::NoBrush)
 		setItemBoundingRect(xOffset(), yOffset(), contentBoxWidth, contentBoxHeight);

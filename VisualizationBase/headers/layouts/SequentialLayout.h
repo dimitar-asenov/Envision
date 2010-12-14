@@ -29,6 +29,7 @@ class VISUALIZATIONBASE_API SequentialLayout: public Layout
 		void append(Item* item);
 		void prepend(Item* item);
 		void insert(Item* item, int position);
+		void remove(int index);
 
 		template <class T> T* at(int index);
 

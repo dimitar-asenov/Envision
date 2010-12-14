@@ -8,6 +8,7 @@
 #include "visualizationbase.h"
 
 #include "VisualizationManager.h"
+#include "BinaryNode.h"
 #include "SelfTest/headers/SelfTestSuite.h"
 
 Q_EXPORT_PLUGIN2( visualizationbase, Visualization::VisualizationBase )
@@ -23,6 +24,7 @@ namespace Visualization
 
 	void VisualizationBase::selfTest(QString)
 	{
+		BinaryNode::init();
 		SelfTest::TestManager<VisualizationBase>::runAllTests().printResultStatistics();
 	}
 

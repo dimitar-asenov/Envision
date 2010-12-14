@@ -41,6 +41,12 @@ void SequentialLayout::insert(Item* item, int position)
 	setUpdateNeeded();
 }
 
+void SequentialLayout::remove(int index)
+{
+	items.remove(index);
+	setUpdateNeeded();
+}
+
 void SequentialLayout::setStyle(SequentialLayoutStyle* style_)
 {
 	style = style_;

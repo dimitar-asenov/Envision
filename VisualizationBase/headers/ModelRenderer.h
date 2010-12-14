@@ -9,13 +9,14 @@
 #define MODELRENDERER_H_
 
 #include "visualizationbase_api.h"
-
-#include "ModelItem.h"
 #include "ModelBase/headers/nodes/Node.h"
 
 #include <QtCore/QVector>
 
 namespace Visualization {
+
+class Item;
+class ModelItem;
 
 class VISUALIZATIONBASE_API ModelRenderer
 {
@@ -33,10 +34,10 @@ class VISUALIZATIONBASE_API ModelRenderer
 		void registerVisualization(int typeId, ItemConstructor visualization);
 };
 
-template<class T>
+template<class VIS, class NODE>
 ModelItem* createVisualization(Item* parent, Model::Node* node)
 {
-	return new T(parent, node);
+	return new VIS(parent, static_cast<NODE*> (node));
 }
 
 }

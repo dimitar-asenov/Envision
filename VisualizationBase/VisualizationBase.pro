@@ -25,7 +25,9 @@ pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
-HEADERS += headers/items/VText.h \
+HEADERS += test/BinaryNode.h \
+    headers/items/VExtendable.h \
+    headers/items/VText.h \
     headers/items/TextStyle.h \
     headers/items/Text.h \
     headers/shapes/BoxStyle.h \
@@ -46,7 +48,9 @@ HEADERS += headers/items/VText.h \
     src/visualizationbase.h \
     headers/VisualizationException.h \
     headers/visualizationbase_api.h
-SOURCES += src/items/VText.cpp \
+SOURCES += test/BinaryNode.cpp \
+    src/items/VExtendable.cpp \
+    src/items/VText.cpp \
     src/items/TextStyle.cpp \
     src/items/Text.cpp \
     src/shapes/BoxStyle.cpp \
