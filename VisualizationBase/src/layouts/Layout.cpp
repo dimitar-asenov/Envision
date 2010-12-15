@@ -14,6 +14,17 @@ Layout::Layout(Item* parent) :
 {
 }
 
+void Layout::setInnerSize(int width, int height)
+{
+	if (getShape()) getShape()->setInnerSize(width, height);
+	else
+	{
+		size.setWidth(width);
+		size.setHeight(height);
+		bounding_rect = QRectF();
+	}
+}
+
 void Layout::determineChildren()
 {
 }

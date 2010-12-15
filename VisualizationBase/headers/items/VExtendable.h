@@ -12,6 +12,7 @@
 
 #include "ModelItem.h"
 #include "layouts/SequentialLayout.h"
+#include "layouts/PanelLayout.h"
 #include "ModelBase/headers/nodes/Extendable/ExtendableNode.h"
 
 namespace Visualization {
@@ -19,6 +20,7 @@ namespace Visualization {
 class VISUALIZATIONBASE_API VExtendable : public ModelItem
 {
 	private:
+		PanelLayout topPanel;
 		SequentialLayout header;
 		SequentialLayout attributes;
 

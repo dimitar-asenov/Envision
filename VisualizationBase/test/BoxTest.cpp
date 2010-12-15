@@ -42,7 +42,7 @@ void BoxTest::determineChildren()
 void BoxTest::updateState()
 {
 	getShape()->setInnerSize(items.width(), items.height());
-	items.setPos(getShape()->contentPosition());
+	items.setPos(getShape()->contentLeft(), getShape()->contentTop());
 }
 
 }

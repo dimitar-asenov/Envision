@@ -69,7 +69,11 @@ class VISUALIZATIONBASE_API Shape
 
 		virtual void setStyle(ShapeStyle *style);
 
-		virtual QPoint contentPosition();
+		virtual int contentLeft();
+		virtual int contentTop();
+		virtual int getOutterWidth(int innerWidth) const;
+		virtual int getOutterHeight(int innerHeight) const;
+
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) = 0;
 };
 

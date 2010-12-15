@@ -7,6 +7,7 @@
 
 #include "shapes/Shape.h"
 
+#include <cmath>
 namespace Visualization {
 
 Shape::Shape(Item* parent_, ShapeStyle *style) :
@@ -103,9 +104,26 @@ void Shape::setStyle(ShapeStyle *style)
 	setParentNeedsUpdate();
 }
 
-QPoint Shape::contentPosition()
+int Shape::contentLeft()
 {
-	return QPoint(xOffset_, yOffset_);
+	return xOffset_;
+}
+
+int Shape::contentTop()
+{
+	return yOffset_;
+}
+
+int Shape::getOutterWidth(int innerWidth) const
+{
+	if (style_) return innerWidth + std::ceil(style_->outline().width());
+	return innerWidth;
+}
+
+int Shape::getOutterHeight(int innerHeight) const
+{
+	if (style_) return innerHeight + std::ceil(style_->outline().width());
+	return innerHeight;
 }
 
 }

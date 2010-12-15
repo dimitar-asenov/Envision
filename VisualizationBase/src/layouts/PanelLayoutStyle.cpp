@@ -5,23 +5,24 @@
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "PanelLayoutStyle.h"
+#include "layouts/PanelLayoutStyle.h"
 
 namespace Visualization {
 
-PanelLayoutStyle::PanelLayoutStyle()
+PanelLayoutStyle::PanelLayoutStyle() : orientation_(HorizontalOrientation), alignment_(CenterAlignment), spaceBetweenElements_(5),
+		leftMargin_(2), rightMargin_(2), topMargin_(2), bottomMargin_(2)
 {
 }
 
-static PanelLayoutStyle* PanelLayoutStyle::getDefault()
+PanelLayoutStyle* PanelLayoutStyle::getDefault()
 {
 	static PanelLayoutStyle defaultStyle;
 	return &defaultStyle;
 }
 
-void PanelLayoutStyle::setDirection(PanelLayoutDirection direction)
+void PanelLayoutStyle::setOrientation(PanelLayoutOrientation orientation)
 {
-	direction_ = direction;
+	orientation_ = orientation;
 }
 
 void PanelLayoutStyle::setAlignment(PanelLayoutAlignment alignment)

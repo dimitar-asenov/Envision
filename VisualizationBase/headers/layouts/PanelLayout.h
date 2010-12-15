@@ -21,24 +21,37 @@ class VISUALIZATIONBASE_API PanelLayout: public Layout
 	private:
 		PanelLayoutStyle* style;
 
-		SequentialLayout begin_;
-		SequentialLayout center_;
-		SequentialLayout end_;
+		Item* first_;
+		Item* middle_;
+		Item* last_;
+
+		int minimalLength;
 
 	public:
 		PanelLayout(Item* parent, PanelLayoutStyle* style = PanelLayoutStyle::getDefault());
 		void setStyle(PanelLayoutStyle* style = PanelLayoutStyle::getDefault());
 
-		SequentialLayout* begin();
-		SequentialLayout* center();
-		SequentialLayout* end();
+		void setFirst(Item* item);
+		void setMiddle(Item* item);
+		void setLast(Item* item);
 
+		template <class T> T* first();
+		template <class T> T* middle();
+		template <class T> T* last();
+
+		void setMinimalLength(int minimalLength);
 		virtual void updateState();
 };
 
-inline SequentialLayout* PanelLayout::begin() { return &begin_; };
-inline SequentialLayout* PanelLayout::center() { return &center_; };
-inline SequentialLayout* PanelLayout::end() { return &end_; };
+template <class T> inline T* PanelLayout::first() { return static_cast<T*> (first_); };
+template <class T> inline T* PanelLayout::middle() { return static_cast<T*> (middle_); };
+template <class T> inline T* PanelLayout::last() { return static_cast<T*> (last_); };
+
+inline void PanelLayout::setFirst(Item* item) {item->setParentItem(this); first_ = item; setUpdateNeeded();};
+inline void PanelLayout::setMiddle(Item* item) {item->setParentItem(this); middle_ = item; setUpdateNeeded();};
+inline void PanelLayout::setLast(Item* item) {item->setParentItem(this); last_ = item; setUpdateNeeded();};
+
+inline void PanelLayout::setMinimalLength(int length) { minimalLength = length; setUpdateNeeded(); };
 
 }
 

@@ -13,7 +13,7 @@
 namespace Visualization {
 
 Item::Item(Item* parent, Shape *shape) :
-	QGraphicsItem(parent), needsUpdate_(true), shape_(shape)
+	QGraphicsItem(parent), shape_(shape), needsUpdate_(true)
 {
 }
 
@@ -29,25 +29,6 @@ Item::~Item()
 QRectF Item::boundingRect() const
 {
 	return bounding_rect;
-}
-
-void Item::setSizeLimit(int limitWidth, int limitHeight)
-{
-	sizeLimit.setWidth(limitWidth);
-	sizeLimit.setHeight(limitHeight);
-	needsUpdate_ = true;
-}
-
-void Item::setSizeWidthLimit(int limitWidth)
-{
-	sizeLimit.setWidth(limitWidth);
-	needsUpdate_ = true;
-}
-
-void Item::setSizeHeightLimit(int limitHeight)
-{
-	sizeLimit.setHeight(limitHeight);
-	needsUpdate_ = true;
 }
 
 bool Item::needsUpdate()

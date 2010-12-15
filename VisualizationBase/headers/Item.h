@@ -21,12 +21,9 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 {
 	private:
 		friend class Shape;
-		QSize sizeLimit;
+		Shape* shape_;
 		bool needsUpdate_;
 
-		Shape* shape_;
-
-		bool sizeLimitChanged();
 		void updateChildren();
 
 	protected:
@@ -42,11 +39,6 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		int width() const;
 		int height() const;
 
-		const QSize& getSizeLimit() const;
-
-		void setSizeLimit(int limitWidth, int limitHeight);
-		void setSizeWidthLimit(int limitWidth);
-		void setSizeHeightLimit(int limitHeight);
 		void setUpdateNeeded();
 
 		virtual bool needsUpdate();
@@ -63,7 +55,6 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 
 inline int Item::width() const { return size.width(); }
 inline int Item::height() const { return size.height(); }
-inline const QSize& Item::getSizeLimit() const { return sizeLimit; }
 inline Shape* Item::getShape() const {	return shape_; };
 
 inline void Item::setUpdateNeeded() { needsUpdate_ = true; };

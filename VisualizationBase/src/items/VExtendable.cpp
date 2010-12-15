@@ -14,19 +14,20 @@
 #include <QtCore/QPair>
 #include <QtCore/QList>
 
+#include <QtCore/QDebug>
+
 namespace Visualization {
 
 VExtendable::VExtendable(Item* parent, Model::ExtendableNode* node) :
-	ModelItem(parent, node, new Box(this)), header(this), attributes(this)
+	ModelItem(parent, node, new Box(this)), topPanel(this), header(&topPanel), attributes(this)
 {
+	header.setShape(new Box(&header));
+	header.append(new Text(&header, node->getTypeName()));
 }
 
 void VExtendable::determineChildren()
 {
 	Model::ExtendableNode* node = static_cast<Model::ExtendableNode*> (getNode());
-
-	// Add once the name of the type
-	if ( header.length() == 0 ) header.append(new Text(&header, node->getTypeName()));
 
 	// Set the name if any
 	if ( node->hasAttribute("name") )
@@ -74,10 +75,14 @@ void VExtendable::determineChildren()
 void VExtendable::updateState()
 {
 	// TODO this should be a layout.
-	getShape()->setOffset(0, (2 * header.height()) / 3);
-	getShape()->setInnerSize(attributes.width(), attributes.height());
-	attributes.setPos(getShape()->contentPosition());
-	header.setPos((size.width() - header.width() ) / 2, 0);
+	topPanel.setMinimalLength(attributes.width());
+
+	int maxWidth = attributes.width();
+	if (topPanel.width() > maxWidth) maxWidth = topPanel.width();
+
+	getShape()->setOffset(0, (2 * topPanel.height()) / 3);
+	getShape()->setInnerSize(maxWidth, attributes.height());
+	attributes.setPos(getShape()->contentLeft(), getShape()->contentTop());
 }
 
 }

@@ -87,9 +87,9 @@ void Box::update()
 	}
 
 	if (style()->shadow() == Qt::NoBrush || !style()->isShadowPartOfSize())
-		setItemSize(contentBoxWidth + xOffset(), contentBoxHeight + yOffset());
+		setItemSize(contentBoxWidth, contentBoxHeight);
 	else
-		setItemSize(contentBoxWidth + style()->xShadowOffset() + xOffset(), contentBoxHeight + style()->yShadowOffset() + yOffset());
+		setItemSize(contentBoxWidth + style()->xShadowOffset(), contentBoxHeight + style()->yShadowOffset());
 
 	if (style()->shadow() == Qt::NoBrush)
 		setItemBoundingRect(xOffset(), yOffset(), contentBoxWidth, contentBoxHeight);
@@ -97,9 +97,28 @@ void Box::update()
 		setItemBoundingRect(xOffset(), yOffset(), contentBoxWidth + style()->xShadowOffset(), contentBoxHeight + style()->yShadowOffset());
 }
 
-QPoint Box::contentPosition()
+int Box::contentLeft()
 {
-	return QPoint(xOffset() + style()->cornerRadius() + (style()->outline().width()+1)/2, yOffset() + style()->cornerRadius() + (style()->outline().width()+1)/2);
+	return xOffset() + style()->cornerRadius() + (style()->outline().width()+1)/2;
+}
+
+int Box::contentTop()
+{
+	return yOffset() + style()->cornerRadius() + (style()->outline().width()+1)/2;
+}
+
+int Box::getOutterWidth(int innerWidth) const
+{
+	int outterWidth = innerWidth + 2*style()->cornerRadius() + std::ceil(style()->outline().width());
+	if (style()->shadow() != Qt::NoBrush && style()->isShadowPartOfSize()) outterWidth += style()->xShadowOffset();
+	return outterWidth;
+}
+
+int Box::getOutterHeight(int innerHeight) const
+{
+	int outterHeight = innerHeight + 2*style()->cornerRadius() + std::ceil(style()->outline().width());
+	if (style()->shadow() != Qt::NoBrush && style()->isShadowPartOfSize()) outterHeight += style()->yShadowOffset();
+	return outterHeight;
 }
 
 void Box::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)

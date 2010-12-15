@@ -82,13 +82,7 @@ void SequentialLayout::updateState()
 	if (horizontal) sizeHeight = style->topMargin() + maxChildHeight + style->bottomMargin();
 	else sizeWidth = style->leftMargin() + maxChildWidth + style->rightMargin();
 
-	if (getShape()) getShape()->setInnerSize(sizeWidth, sizeHeight);
-	else
-	{
-		size.setWidth(sizeWidth);
-		size.setHeight(sizeHeight);
-		bounding_rect = QRectF();
-	}
+	setInnerSize(sizeWidth, sizeHeight);
 
 	// Get the iteration parameters
 	int begin;
@@ -107,9 +101,6 @@ void SequentialLayout::updateState()
 		step = -1;
 	}
 
-	QPoint offset;
-	if (getShape()) offset = getShape()->contentPosition();
-
 	// Set the positions of all elements
 	for (int i = begin; i != end; i += step)
 	{
@@ -120,7 +111,7 @@ void SequentialLayout::updateState()
 			if ( style->alignment() == SequentialLayoutStyle::CenterAlignment ) y += (maxChildHeight - items[i]->height()) / 2;
 
 			if ( i != begin ) w += style->spaceBetweenElements();
-			items[i]->setPos(w + offset.x(), y + offset.y());
+			items[i]->setPos(w + xOffset(), y + yOffset());
 			w += items[i]->width();
 		}
 		else
@@ -130,7 +121,7 @@ void SequentialLayout::updateState()
 			if ( style->alignment() == SequentialLayoutStyle::CenterAlignment ) x += (maxChildWidth - items[i]->width()) / 2;
 
 			if ( i != begin ) h += style->spaceBetweenElements();
-			items[i]->setPos(x + offset.x(), h + offset.y());
+			items[i]->setPos(x + xOffset(), h + yOffset());
 			h += items[i]->height();
 		}
 	}

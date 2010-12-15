@@ -17,15 +17,12 @@ namespace Visualization {
 class VISUALIZATIONBASE_API PanelLayoutStyle
 {
 	public:
-		enum PanelLayoutDirection { LeftToRight, TopToBottom};
+		enum PanelLayoutOrientation { HorizontalOrientation, VerticalOrientation};
 		enum PanelLayoutAlignment { CenterAlignment, LeftAlignment, RightAlignment, TopAlignment, BottomAlignment};
 
 	private:
-		SequentialLayoutStyle beginStyle_;
-		SequentialLayoutStyle centerStyle_;
-		SequentialLayoutStyle endStyle_;
 
-		PanelLayoutDirection direction_;
+		PanelLayoutOrientation orientation_;
 		PanelLayoutAlignment alignment_;
 		int spaceBetweenElements_;
 		int leftMargin_;
@@ -36,11 +33,7 @@ class VISUALIZATIONBASE_API PanelLayoutStyle
 	public:
 		PanelLayoutStyle();
 
-		SequentialLayoutStyle& beginStyle();
-		SequentialLayoutStyle& centerStyle();
-		SequentialLayoutStyle& endStyle();
-
-		PanelLayoutDirection direction() const;
+		PanelLayoutOrientation orientation() const;
 		PanelLayoutAlignment alignment() const;
 		int spaceBetweenElements() const;
 		int leftMargin() const;
@@ -48,7 +41,7 @@ class VISUALIZATIONBASE_API PanelLayoutStyle
 		int topMargin() const;
 		int bottomMargin() const;
 
-		void setDirection(PanelLayoutDirection direction);
+		void setOrientation(PanelLayoutOrientation orientation);
 		void setAlignment(PanelLayoutAlignment alignment);
 		void setSpaceBetweenElements(int space);
 		void setMargins(int marginSize);
@@ -57,11 +50,7 @@ class VISUALIZATIONBASE_API PanelLayoutStyle
 		static PanelLayoutStyle* getDefault();
 };
 
-inline SequentialLayoutStyle& PanelLayoutStyle::beginStyle() { return beginStyle_; }
-inline SequentialLayoutStyle& PanelLayoutStyle::centerStyle() { return centerStyle_; }
-inline SequentialLayoutStyle& PanelLayoutStyle::endStyle() { return endStyle_; }
-
-inline PanelLayoutStyle::PanelLayoutDirection PanelLayoutStyle::direction() const { return direction_; }
+inline PanelLayoutStyle::PanelLayoutOrientation PanelLayoutStyle::orientation() const { return orientation_; }
 inline PanelLayoutStyle::PanelLayoutAlignment PanelLayoutStyle::alignment() const {	return alignment_; }
 inline int PanelLayoutStyle::spaceBetweenElements() const {	return spaceBetweenElements_; }
 inline int PanelLayoutStyle::leftMargin() const { return leftMargin_; }
