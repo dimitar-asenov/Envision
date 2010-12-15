@@ -111,7 +111,7 @@ TEST(VisualizationBase, ExtendableTest)
 	View* view = new View(scene);
 	view->setRenderHint(QPainter::Antialiasing);
 	view->setRenderHint(QPainter::TextAntialiasing);
-	view->parentWidget()->resize(600,500);
+	view->parentWidget()->resize(1200,700);
 
 	QRect descktop( QApplication::desktop()->screenGeometry() );
 	int leftPos = descktop.width()/2-view->parentWidget()->width()/2;

@@ -55,7 +55,7 @@ void PanelLayout::updateState()
 		if ( style->alignment() == PanelLayoutStyle::CenterAlignment ) last_->setPos(x, y + (maxChildHeight - last_->height()) / 2);
 
 		// Center
-		x += (width - middle_->width() )/ 2;
+		x = (width - middle_->width() )/ 2;
 		int minX = first_->pos().x() + first_->width() + style->spaceBetweenElements();
 		if (x < minX ) x = minX;
 		if ( style->alignment() == PanelLayoutStyle::BottomAlignment ) middle_->setPos(x, y + maxChildHeight - middle_->height());
@@ -93,7 +93,7 @@ void PanelLayout::updateState()
 		if ( style->alignment() == PanelLayoutStyle::CenterAlignment ) last_->setPos(x + (maxChildWidth - last_->width()) / 2, y);
 
 		// Center
-		y += (height - middle_->height() )/ 2;
+		y = (height - middle_->height() )/ 2;
 		int minY = first_->pos().y() + first_->height() + style->spaceBetweenElements();
 		if (y < minY ) y = minY;
 		if ( style->alignment() == PanelLayoutStyle::RightAlignment ) middle_->setPos(x + maxChildWidth - middle_->width(), y);
