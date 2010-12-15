@@ -10,50 +10,34 @@
 
 #include "visualizationbase_api.h"
 
+#include "LayoutStyle.h"
+
 namespace Visualization {
 
-class VISUALIZATIONBASE_API SequentialLayoutStyle
+class VISUALIZATIONBASE_API SequentialLayoutStyle : public LayoutStyle
 {
-	public:
-		enum SequntialLayoutDirection { LeftToRight, RightToLeft, TopToBottom, BottomToTop};
-		enum SequntialLayoutAlignment { CenterAlignment, LeftAlignment, RightAlignment, TopAlignment, BottomAlignment};
-
 	private:
-		SequntialLayoutDirection direction_;
-		SequntialLayoutAlignment alignment_;
+		Direction direction_;
+		Alignment alignment_;
 		int spaceBetweenElements_;
-		int leftMargin_;
-		int rightMargin_;
-		int topMargin_;
-		int bottomMargin_;
 
 	public:
 		SequentialLayoutStyle();
 
-		SequntialLayoutDirection direction() const;
-		SequntialLayoutAlignment alignment() const;
+		Direction direction() const;
+		Alignment alignment() const;
 		int spaceBetweenElements() const;
-		int leftMargin() const;
-		int rightMargin() const;
-		int topMargin() const;
-		int bottomMargin() const;
 
-		void setDirection(SequntialLayoutDirection direction);
-		void setAlignment(SequntialLayoutAlignment alignment);
+		void setDirection(Direction direction);
+		void setAlignment(Alignment alignment);
 		void setSpaceBetweenElements(int space);
-		void setMargins(int marginSize);
-		void setMargins(int left, int right, int top, int bottom);
 
 		static SequentialLayoutStyle* getDefault();
 };
 
-inline SequentialLayoutStyle::SequntialLayoutDirection SequentialLayoutStyle::direction() const { return direction_; }
-inline SequentialLayoutStyle::SequntialLayoutAlignment SequentialLayoutStyle::alignment() const {	return alignment_; }
+inline LayoutStyle::Direction SequentialLayoutStyle::direction() const { return direction_; }
+inline LayoutStyle::Alignment SequentialLayoutStyle::alignment() const {	return alignment_; }
 inline int SequentialLayoutStyle::spaceBetweenElements() const {	return spaceBetweenElements_; }
-inline int SequentialLayoutStyle::leftMargin() const { return leftMargin_; }
-inline int SequentialLayoutStyle::rightMargin() const {	return rightMargin_; }
-inline int SequentialLayoutStyle::topMargin() const { return topMargin_; }
-inline int SequentialLayoutStyle::bottomMargin() const {	return bottomMargin_; }
 
 }
 

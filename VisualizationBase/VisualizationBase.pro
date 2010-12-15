@@ -25,7 +25,10 @@ pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
-HEADERS += headers/items/NoItem.h \
+HEADERS += headers/layouts/LayoutStyle.h \
+    headers/layouts/PanelBorderLayoutStyle.h \
+    headers/layouts/PanelBorderLayout.h \
+    headers/items/NoItem.h \
     headers/layouts/PanelLayoutStyle.h \
     headers/layouts/PanelLayout.h \
     test/BinaryNode.h \
@@ -51,7 +54,10 @@ HEADERS += headers/items/NoItem.h \
     src/visualizationbase.h \
     headers/VisualizationException.h \
     headers/visualizationbase_api.h
-SOURCES += src/items/NoItem.cpp \
+SOURCES += src/layouts/LayoutStyle.cpp \
+    src/layouts/PanelBorderLayoutStyle.cpp \
+    src/layouts/PanelBorderLayout.cpp \
+    src/items/NoItem.cpp \
     src/layouts/PanelLayoutStyle.cpp \
     src/layouts/PanelLayout.cpp \
     test/BinaryNode.cpp \

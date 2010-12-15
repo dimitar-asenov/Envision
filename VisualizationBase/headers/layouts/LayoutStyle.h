@@ -1,0 +1,47 @@
+/***********************************************************************************************************************
+ * LayoutStyle.h
+ *
+ *  Created on: Dec 15, 2010
+ *      Author: Dimitar Asenov
+ **********************************************************************************************************************/
+
+#ifndef LAYOUTSTYLE_H_
+#define LAYOUTSTYLE_H_
+
+#include "visualizationbase_api.h"
+
+namespace Visualization {
+
+class VISUALIZATIONBASE_API LayoutStyle
+{
+	public:
+		enum Orientation { HorizontalOrientation, VerticalOrientation};
+		enum Alignment { CenterAlignment, LeftAlignment, RightAlignment, TopAlignment, BottomAlignment};
+		enum Direction { LeftToRight, RightToLeft, TopToBottom, BottomToTop};
+
+	private:
+		int leftMargin_;
+		int rightMargin_;
+		int topMargin_;
+		int bottomMargin_;
+
+	public:
+		LayoutStyle(int leftMargin = 2, int rightMargin = 2, int topMargin = 2, int bottomMargin = 2);
+
+		int leftMargin() const;
+		int rightMargin() const;
+		int topMargin() const;
+		int bottomMargin() const;
+
+		void setMargins(int marginSize);
+		void setMargins(int left, int right, int top, int bottom);
+};
+
+inline int LayoutStyle::leftMargin() const { return leftMargin_; }
+inline int LayoutStyle::rightMargin() const { return rightMargin_; }
+inline int LayoutStyle::topMargin() const { return topMargin_; }
+inline int LayoutStyle::bottomMargin() const {return bottomMargin_; }
+
+}
+
+#endif /* LAYOUTSTYLE_H_ */
