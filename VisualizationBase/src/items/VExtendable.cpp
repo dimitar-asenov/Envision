@@ -14,15 +14,17 @@
 #include <QtCore/QPair>
 #include <QtCore/QList>
 
+#include <QtCore/QDebug>
+
 namespace Visualization {
 
 VExtendable::VExtendable(Item* parent, Model::ExtendableNode* node) :
 	ModelItem(parent, node, new Box(this)), layout(this), header(NULL), attributes(NULL)
 {
+	setShape(new Box(this));
 	layout.setTop(true);
 	layout.top()->setMiddle(&header);
 	layout.setContent(&attributes);
-	layout.setShape(new Box(&layout));
 	header.setShape(new Box(&header));
 	header.append(new Text(&header, node->getTypeName()));
 }
@@ -76,13 +78,11 @@ void VExtendable::determineChildren()
 
 void VExtendable::updateState()
 {
+	getShape()->setOffset(layout.getExternalShapeX(), layout.getExternalShapeY());
+	getShape()->setOutterSize(layout.getExternalShapeOutterWidth(), layout.getExternalShapeOutterHeight());
+	qDebug() << layout.getExternalShapeX() << " " <<layout.getExternalShapeY();
 	size.setHeight(layout.height());
 	size.setWidth(layout.width());
-	bounding_rect.setRect(0,0,0,0);
-}
-
-void VExtendable::paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *)
-{
 }
 
 }

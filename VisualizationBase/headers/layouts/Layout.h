@@ -19,8 +19,8 @@ namespace Visualization {
 class Layout: public Item
 {
 	protected:
-		int xOffset();
-		int yOffset();
+		int xOffset() const;
+		int yOffset() const;
 
 		virtual const LayoutStyle* getStyle() const = 0;
 

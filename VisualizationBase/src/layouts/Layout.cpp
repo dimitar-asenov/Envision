@@ -48,13 +48,13 @@ bool Layout::needsUpdate()
 	return false;
 }
 
-int Layout::xOffset()
+int Layout::xOffset() const
 {
 	if ( getShape() ) return getShape()->contentLeft();
 	else return getStyle()->leftMargin();
 }
 
-int Layout::yOffset()
+int Layout::yOffset() const
 {
 	if ( getShape() ) return getShape()->contentTop();
 	else return getStyle()->leftMargin();

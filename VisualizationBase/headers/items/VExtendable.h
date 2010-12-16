@@ -30,8 +30,6 @@ class VISUALIZATIONBASE_API VExtendable : public ModelItem
 
 	public:
 		VExtendable(Item* parent, Model::ExtendableNode* node);
-
-		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 };
 
 }

@@ -7,8 +7,6 @@
 
 #include "layouts/PanelBorderLayout.h"
 
-#include <QtCore/QDebug>
-
 namespace Visualization {
 
 PanelBorderLayout::PanelBorderLayout(Item* parent, PanelBorderLayoutStyle* style_) :
@@ -96,47 +94,43 @@ void PanelBorderLayout::updateState()
 	if ( top_ ) outterHeight += top_->height();
 	if ( bottom_ ) outterHeight += bottom_->height();
 
-	// Set offsets and sizes
-	int x = style->leftMargin();
-	int y = style->topMargin();
-
-	if ( !getShape() || style->shapeBorder() == LayoutStyle::OutterBorder )
-	{
-		setInnerSize(outterWidth, outterHeight);
-		x = xOffset();
-		y = yOffset();
-	}
-	else if ( style->shapeBorder() == LayoutStyle::MiddleBorder )
-	{
-		getShape()->setOffset(x + (left_ ? left_->width() / 2 : 0), y + (top_ ? top_->height() / 2 : 0));
-
-		int shapeHeight = innerHeight + style->topInnerMargin() + style->bottomInnerMargin();
-		if ( top_ ) shapeHeight += top_->height() / 2;
-		if ( bottom_ ) shapeHeight += bottom_->height() / 2;
-		getShape()->setOutterSize(maxMiddleWidth, shapeHeight);
-
-		size.setWidth(outterWidth + style->leftMargin() + style->rightMargin());
-		size.setHeight(outterHeight + style->topMargin() + style->bottomMargin());
-
-		qDebug() << shapeHeight << " " << outterHeight << " " << height() << " " << style->topMargin() << " " << style->bottomMargin();
-	}
+	setInnerSize(outterWidth, outterHeight);
 
 	// Set positions
+	int x = xOffset();
+	int x2 = x + (left_ ? left_->width() / 2 : 0);
+	int x3 = x + style->leftInnerMargin() + (left_ ? left_->width() : 0);
+	int x4 = x3 + style->rightInnerMargin() + (content_ ? content_->width() : 0);
+
+	int y = yOffset();
 	int y2 = y + (top_ ? top_->height() : 0) + style->topInnerMargin();
 	int y3 = y2 + innerHeight + style->bottomInnerMargin();
 
-	int x2 = x + (left_ ? left_->width() / 2 : 0);
-	int x3 = x + style->leftInnerMargin() + (left_ ? left_->width() : 0);
-	int x4 = x3 + style->rightInnerMargin() + ( content_ ? content_->width() : 0);
+	if ( top_ ) top_->setPos(x2, y);
+	if ( left_ ) left_->setPos(x, y2);
+	if ( content_ ) content_->setPos(x3, y2);
+	if ( right_ ) right_->setPos(x4, y2);
+	if ( bottom_ ) bottom_->setPos(x2, y3);
+}
 
-	if (top_) top_->setPos(x2,y);
-	if (left_) left_->setPos(x,y2);
-	if (content_) content_->setPos(x3,y2);
-	if (right_) right_->setPos(x4,y2);
-	if (bottom_) bottom_->setPos(x2,y3);
+int PanelBorderLayout::getExternalShapeX() const
+{
+	return xOffset() + (left_ ? left_->width() / 2 : 0);
+}
 
-	qDebug() << content_->height();
-	qDebug() << content_->y() << " " << content_->y() + content_->height() << " " << height() - 2;
+int PanelBorderLayout::getExternalShapeY() const
+{
+	return yOffset() + (top_ ? top_->height() / 2 : 0);
+}
+
+int PanelBorderLayout::getExternalShapeOutterWidth() const
+{
+	return width() - style->leftMargin() - style->rightMargin() - (left_ ? left_->width() / 2 : 0);
+}
+
+int PanelBorderLayout::getExternalShapeOutterHeight() const
+{
+	return height() - style->topMargin() - style->bottomMargin() - (top_ ? top_->height() / 2 : 0);
 }
 
 }

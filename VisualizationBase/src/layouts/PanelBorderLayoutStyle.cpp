@@ -10,7 +10,7 @@
 namespace Visualization {
 
 PanelBorderLayoutStyle::PanelBorderLayoutStyle() :
-		shapeBorder_(MiddleBorder), leftInnerMargin_(5), rightInnerMargin_(5), topInnerMargin_(5), bottomInnerMargin_(5)
+		leftInnerMargin_(5), rightInnerMargin_(5), topInnerMargin_(5), bottomInnerMargin_(5)
 {
 }
 

@@ -19,8 +19,6 @@ class VISUALIZATIONBASE_API LayoutStyle
 		enum Alignment { CenterAlignment, LeftAlignment, RightAlignment, TopAlignment, BottomAlignment};
 		enum Direction { LeftToRight, RightToLeft, TopToBottom, BottomToTop};
 
-		enum ShapeBorderPosition { MiddleBorder, OutterBorder};
-
 	private:
 		int leftMargin_;
 		int rightMargin_;
