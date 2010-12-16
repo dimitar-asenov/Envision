@@ -26,15 +26,16 @@ class VISUALIZATIONBASE_API Text : public Item
 		qreal xOffset;
 		qreal yOffset;
 
+	protected:
+		virtual void determineChildren();
+		virtual void updateState();
+
 	public:
 		Text(Item* parent, const QString& text = QString());
 		Text(Item* parent, TextStyle *style, const QString& text = QString());
 
 		void setText(const QString& newText);
 		void setStyle(TextStyle *style);
-
-		virtual void determineChildren();
-		virtual void updateState();
 
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 };

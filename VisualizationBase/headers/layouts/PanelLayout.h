@@ -29,6 +29,9 @@ class VISUALIZATIONBASE_API PanelLayout: public Layout
 
 		void setItem(Item* item, Item*& position);
 
+	protected:
+		virtual const PanelLayoutStyle* getStyle() const;
+
 	public:
 		PanelLayout(Item* parent, PanelLayoutStyle* style = PanelLayoutStyle::getDefault());
 		void setStyle(PanelLayoutStyle* style = PanelLayoutStyle::getDefault());

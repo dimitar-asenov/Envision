@@ -71,13 +71,13 @@ void Box::update()
 {
 	if ( sizeSpecified() == InnerSize )
 	{
-		contentBoxWidth = width() + 2*style()->cornerRadius() + std::ceil(style()->outline().width());
-		contentBoxHeight = height() + 2*style()->cornerRadius() + std::ceil(style()->outline().width());
+		contentBoxWidth = width() + 2*style()->cornerRadius() + style()->outline().width();
+		contentBoxHeight = height() + 2*style()->cornerRadius() + style()->outline().width();
 	}
 	else
 	{
-		contentBoxWidth = width() - 2*style()->cornerRadius() + std::ceil(style()->outline().width());
-		contentBoxHeight = height() - 2*style()->cornerRadius() + std::ceil(style()->outline().width());
+		contentBoxWidth = width();
+		contentBoxHeight = height();
 
 		if (style()->shadow() != Qt::NoBrush && style()->isShadowPartOfSize())
 		{
@@ -87,14 +87,14 @@ void Box::update()
 	}
 
 	if (style()->shadow() == Qt::NoBrush || !style()->isShadowPartOfSize())
-		setItemSize(contentBoxWidth, contentBoxHeight);
+		setItemSize(std::ceil(contentBoxWidth), std::ceil(contentBoxHeight));
 	else
-		setItemSize(contentBoxWidth + style()->xShadowOffset(), contentBoxHeight + style()->yShadowOffset());
+		setItemSize(std::ceil(contentBoxWidth) + style()->xShadowOffset(), std::ceil(contentBoxHeight) + style()->yShadowOffset());
 
 	if (style()->shadow() == Qt::NoBrush)
-		setItemBoundingRect(xOffset(), yOffset(), contentBoxWidth, contentBoxHeight);
+		setItemBoundingRect(xOffset(), yOffset(), std::ceil(contentBoxWidth), std::ceil(contentBoxHeight));
 	else
-		setItemBoundingRect(xOffset(), yOffset(), contentBoxWidth + style()->xShadowOffset(), contentBoxHeight + style()->yShadowOffset());
+		setItemBoundingRect(xOffset(), yOffset(), std::ceil(contentBoxWidth) + style()->xShadowOffset(), std::ceil(contentBoxHeight) + style()->yShadowOffset());
 }
 
 int Box::contentLeft()
@@ -123,23 +123,11 @@ int Box::getOutterHeight(int innerHeight) const
 
 void Box::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-	qreal outlineWidth = style()->outline().width();
-
-	// Draw shadow
-	if ( style()->shadow() != Qt::NoBrush )
-	{
-		painter->setPen(Qt::NoPen);
-		painter->setBrush(style()->shadow());
-		painter->drawPath(getRectanglePath(xOffset() + style()->xShadowOffset(), yOffset() + style()->yShadowOffset(), contentBoxWidth, contentBoxHeight));
-	}
-
-	// Draw box.
-	painter->setPen(style()->outline());
-	painter->setBrush(style()->background());
 
 	qreal x = xOffset();
 	qreal y = yOffset();
 
+	qreal outlineWidth = style()->outline().width();
 	// Move the figure when using antialiasing. The outline will start at a pixel boundary. This makes it sharper.
 	if (painter->testRenderHint(QPainter::Antialiasing) ||  painter->testRenderHint(QPainter::HighQualityAntialiasing) )
 		if (style()->outline() != Qt::NoPen )
@@ -151,6 +139,17 @@ void Box::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 			y += fracPart;
 		}
 
+	// Draw shadow
+	if ( style()->shadow() != Qt::NoBrush )
+	{
+		painter->setPen(Qt::NoPen);
+		painter->setBrush(style()->shadow());
+		painter->drawPath(getRectanglePath(x + style()->xShadowOffset(), y + style()->yShadowOffset(), contentBoxWidth, contentBoxHeight));
+	}
+
+	// Draw box.
+	painter->setPen(style()->outline());
+	painter->setBrush(style()->background());
 	painter->drawPath(getRectanglePath(x, y, contentBoxWidth - outlineWidth , contentBoxHeight - outlineWidth));
 }
 

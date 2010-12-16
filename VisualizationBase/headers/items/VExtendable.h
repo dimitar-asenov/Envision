@@ -12,7 +12,7 @@
 
 #include "ModelItem.h"
 #include "layouts/SequentialLayout.h"
-#include "layouts/PanelLayout.h"
+#include "layouts/PanelBorderLayout.h"
 #include "ModelBase/headers/nodes/Extendable/ExtendableNode.h"
 
 namespace Visualization {
@@ -20,15 +20,18 @@ namespace Visualization {
 class VISUALIZATIONBASE_API VExtendable : public ModelItem
 {
 	private:
-		PanelLayout topPanel;
+		PanelBorderLayout layout;
 		SequentialLayout header;
 		SequentialLayout attributes;
+
+	protected:
+		void determineChildren();
+		void updateState();
 
 	public:
 		VExtendable(Item* parent, Model::ExtendableNode* node);
 
-		void determineChildren();
-		void updateState();
+		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 };
 
 }

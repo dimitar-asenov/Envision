@@ -14,15 +14,22 @@ Layout::Layout(Item* parent) :
 {
 }
 
-void Layout::setInnerSize(int width, int height)
+void Layout::setInnerSize(int width_, int height_)
 {
-	if (getShape()) getShape()->setInnerSize(width, height);
+	if ( getShape() )
+	{
+		getShape()->setOffset(getStyle()->leftMargin(), getStyle()->topMargin());
+		getShape()->setInnerSize(width_, height_);
+		size.setWidth(width() + getStyle()->leftMargin() + getStyle()->rightMargin());
+		size.setHeight(height() + getStyle()->topMargin() + getStyle()->bottomMargin());
+	}
 	else
 	{
-		size.setWidth(width);
-		size.setHeight(height);
 		bounding_rect = QRectF();
+		size.setWidth(width_ + getStyle()->leftMargin() + getStyle()->rightMargin());
+		size.setHeight(height_ + getStyle()->topMargin() + getStyle()->bottomMargin());
 	}
+
 }
 
 void Layout::determineChildren()
@@ -35,15 +42,27 @@ bool Layout::needsUpdate()
 	for (QList<QGraphicsItem *>::iterator child = children.begin(); child != children.end(); ++child)
 	{
 		Item* item = static_cast<Item*> (*child);
-		if (item->needsUpdate()) return true;
+		if ( item->needsUpdate() ) return true;
 	}
 
 	return false;
 }
 
-void Layout::paint ( QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+int Layout::xOffset()
 {
-	if (getShape()) Item::paint(painter, option, widget);
+	if ( getShape() ) return getShape()->contentLeft();
+	else return getStyle()->leftMargin();
+}
+
+int Layout::yOffset()
+{
+	if ( getShape() ) return getShape()->contentTop();
+	else return getStyle()->leftMargin();
+}
+
+void Layout::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+	if ( getShape() ) Item::paint(painter, option, widget);
 }
 
 }

@@ -29,6 +29,9 @@ class VISUALIZATIONBASE_API PanelBorderLayout: public Layout
 
 		void setPanel(bool enable, PanelLayout*& panel, PanelLayoutStyle& style);
 
+	protected:
+		virtual const PanelBorderLayoutStyle* getStyle() const;
+
 	public:
 		PanelBorderLayout(Item* parent, PanelBorderLayoutStyle* style = PanelBorderLayoutStyle::getDefault());
 		void setStyle(PanelBorderLayoutStyle* style = PanelBorderLayoutStyle::getDefault());

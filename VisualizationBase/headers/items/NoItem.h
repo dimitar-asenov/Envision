@@ -16,12 +16,14 @@ namespace Visualization {
 
 class VISUALIZATIONBASE_API NoItem: public Visualization::Item
 {
+	protected:
+		virtual void determineChildren();
+		virtual void updateState();
+
 	public:
 		NoItem(Item* parent);
 
 		virtual bool needsUpdate();
-		virtual void determineChildren();
-		virtual void updateState();
 		virtual void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *);
 };
 

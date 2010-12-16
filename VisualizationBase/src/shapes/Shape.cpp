@@ -32,11 +32,6 @@ void Shape::setItemBoundingRect(int x, int y, int width, int height)
 	setParentNeedsUpdate();
 }
 
-void Shape::setParentNeedsUpdate()
-{
-	parent->needsUpdate_ = true;
-}
-
 void Shape::setInnerWidth(int width)
 {
 	width_ = width;

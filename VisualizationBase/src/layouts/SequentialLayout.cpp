@@ -15,6 +15,11 @@ SequentialLayout::SequentialLayout(Item* parent, SequentialLayoutStyle* style_) 
 {
 }
 
+const SequentialLayoutStyle* SequentialLayout::getStyle() const
+{
+	return style;
+}
+
 void SequentialLayout::setStyle(SequentialLayoutStyle* style_)
 {
 	style = style_;
@@ -56,14 +61,11 @@ void SequentialLayout::remove(int index)
 
 void SequentialLayout::updateState()
 {
-	int w = style->leftMargin();
-	int h = style->topMargin();
-
 	// Get the maximum width and height of any element.
 	int maxChildWidth = 0;
 	int maxChildHeight = 0;
-	int sizeWidth = style->leftMargin() + style->rightMargin();
-	int sizeHeight = style->topMargin() + style->bottomMargin();
+	int sizeWidth = 0;
+	int sizeHeight = 0;
 
 	for (int i = 0; i != items.size(); ++i)
 	{
@@ -101,6 +103,9 @@ void SequentialLayout::updateState()
 		end = -1;
 		step = -1;
 	}
+
+	int w = style->leftMargin();
+	int h = style->topMargin();
 
 	// Set the positions of all elements
 	for (int i = begin; i != end; i += step)

@@ -84,6 +84,8 @@ inline int Shape::yOffset() const { return yOffset_; }
 inline Shape::SizeType Shape::sizeSpecified() const { return sizeToUse; }
 inline ShapeStyle* Shape::style() const {	return style_; }
 
+inline void Shape::setParentNeedsUpdate() { parent->setUpdateNeeded(); }
+
 }
 
 #endif /* SHAPE_H_ */

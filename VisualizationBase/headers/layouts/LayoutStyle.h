@@ -19,6 +19,8 @@ class VISUALIZATIONBASE_API LayoutStyle
 		enum Alignment { CenterAlignment, LeftAlignment, RightAlignment, TopAlignment, BottomAlignment};
 		enum Direction { LeftToRight, RightToLeft, TopToBottom, BottomToTop};
 
+		enum ShapeBorderPosition { MiddleBorder, OutterBorder};
+
 	private:
 		int leftMargin_;
 		int rightMargin_;
@@ -26,7 +28,7 @@ class VISUALIZATIONBASE_API LayoutStyle
 		int bottomMargin_;
 
 	public:
-		LayoutStyle(int leftMargin = 2, int rightMargin = 2, int topMargin = 2, int bottomMargin = 2);
+		LayoutStyle(int leftMargin = 0, int rightMargin = 0, int topMargin = 0, int bottomMargin = 0);
 
 		int leftMargin() const;
 		int rightMargin() const;

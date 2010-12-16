@@ -21,6 +21,9 @@ class VISUALIZATIONBASE_API SequentialLayout: public Layout
 		SequentialLayoutStyle* style;
 		QVector<Item*> items;
 
+	protected:
+		virtual const SequentialLayoutStyle* getStyle() const;
+
 	public:
 		SequentialLayout(Item* parent, SequentialLayoutStyle* style = SequentialLayoutStyle::getDefault());
 		void setStyle(SequentialLayoutStyle* style = SequentialLayoutStyle::getDefault());

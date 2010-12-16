@@ -30,6 +30,8 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		QRectF bounding_rect;
 		QSize size;
 
+		virtual void determineChildren() = 0;
+		virtual void updateState() = 0;
 
 	public:
 		Item(Item* parent, Shape *shape = NULL);
@@ -43,8 +45,6 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 
 		virtual bool needsUpdate();
 		virtual void updateSubtreeState();
-		virtual void determineChildren() = 0;
-		virtual void updateState() = 0;
 
 		void setShape(Shape* shape);
 		void setShapeStyle(ShapeStyle* style);

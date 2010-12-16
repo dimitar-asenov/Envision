@@ -14,14 +14,15 @@
 #include <QtCore/QPair>
 #include <QtCore/QList>
 
-#include <QtCore/QDebug>
-
 namespace Visualization {
 
 VExtendable::VExtendable(Item* parent, Model::ExtendableNode* node) :
-	ModelItem(parent, node, new Box(this)), topPanel(this), header(&topPanel), attributes(this)
+	ModelItem(parent, node, new Box(this)), layout(this), header(NULL), attributes(NULL)
 {
-	topPanel.setMiddle(&header);
+	layout.setTop(true);
+	layout.top()->setMiddle(&header);
+	layout.setContent(&attributes);
+	layout.setShape(new Box(&layout));
 	header.setShape(new Box(&header));
 	header.append(new Text(&header, node->getTypeName()));
 }
@@ -75,18 +76,13 @@ void VExtendable::determineChildren()
 
 void VExtendable::updateState()
 {
-	// TODO this should be a layout.
-	topPanel.setMinimalLength(attributes.width());
-	topPanel.updateSubtreeState();
+	size.setHeight(layout.height());
+	size.setWidth(layout.width());
+	bounding_rect.setRect(0,0,0,0);
+}
 
-	int maxWidth = attributes.width();
-	if (topPanel.width() > maxWidth) maxWidth = topPanel.width();
-
-	getShape()->setOffset(0, (2*topPanel.height())/3);
-	getShape()->setInnerSize(maxWidth, attributes.height());
-	topPanel.setPos(getShape()->contentLeft(),0);
-	attributes.setPos(getShape()->contentLeft(), getShape()->contentTop());
-	size.setHeight((2*topPanel.height())/3 + size.height() );
+void VExtendable::paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *)
+{
 }
 
 }
