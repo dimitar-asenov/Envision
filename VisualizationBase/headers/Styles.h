@@ -149,7 +149,7 @@ template<class T> typename T::StyleType* Styles::loadStyle(const QString& object
 	if (doc.isNull()) return NULL;
 
 	QList<Prototype> proto;
-	openNode(elem, "style", proto);
+	openNode(doc, "style", proto);
 
 	typename T::StyleType* style = new typename T::StyleType();
 	style->load();

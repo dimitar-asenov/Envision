@@ -65,7 +65,7 @@ void Styles::loadElementPrototypes()
 		}
 
 		// If prototype is not found, fail
-		if ( prototypes->last().doc.isNull() ) throw VisualizationException("Could not find the prototype " + prototypePath);
+		if ( prototypes->last().doc.isNull() ) throw VisualizationException("Could not find the prototype style " + prototypePath);
 
 		prototypes->last().elem = prototypes->last().doc.firstChildElement("style");
 		if ( prototypes->last().elem.isNull() ) throw VisualizationException("Invalid prototype file '" + prototypePath
@@ -81,7 +81,7 @@ QDomElement Styles::getProperty(QDomNode& root, const QString& name)
 	QDomElement elem = root.firstChildElement(name);
 
 	int index = 0;
-	while (elem.isNull() && index < prototypes->size())
+	while (elem.isNull() && prototypes && index < prototypes->size())
 	{
 		elem = prototypes->at(index).elem.firstChildElement(name);
 		++index;
