@@ -18,6 +18,9 @@ namespace Visualization {
 
 class VISUALIZATIONBASE_API PanelLayout: public Layout
 {
+	public:
+		typedef PanelLayoutStyle StyleType;
+
 	private:
 		PanelLayoutStyle* style;
 

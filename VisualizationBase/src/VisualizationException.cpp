@@ -16,7 +16,7 @@ VisualizationException::VisualizationException(const QString& message) :
 
 const QString& VisualizationException::name() const
 {
-	static QString ename("ModelException");
+	static QString ename("VisualizationException");
 	return ename;
 }
 

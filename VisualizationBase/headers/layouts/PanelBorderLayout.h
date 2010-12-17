@@ -18,6 +18,9 @@ namespace Visualization {
 
 class VISUALIZATIONBASE_API PanelBorderLayout: public Layout
 {
+	public:
+		typedef PanelBorderLayoutStyle StyleType;
+
 	private:
 		PanelBorderLayoutStyle* style;
 
@@ -48,10 +51,10 @@ class VISUALIZATIONBASE_API PanelBorderLayout: public Layout
 		PanelLayout* right();
 		template <class T> T* content();
 
-		int getExternalShapeX() const;
-		int getExternalShapeY() const;
-		int getExternalShapeOutterWidth() const;
-		int getExternalShapeOutterHeight() const;
+		int getXOffsetForExternalShape() const;
+		int getYOffsetForExternalShape() const;
+		int getOutterWidthForExternalShape() const;
+		int getOutterHeightForExternalShape() const;
 
 		virtual void updateState();
 };

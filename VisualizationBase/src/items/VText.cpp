@@ -26,7 +26,6 @@ void VText::updateState()
 	Model::Text* textNode = static_cast<Model::Text*> (getNode());
 
 	text.setText(textNode->get());
-	text.setTextOption(style->option());
 	QFontMetrics qfm(style->font());
 
 	bounding_rect = qfm.boundingRect(text.text());

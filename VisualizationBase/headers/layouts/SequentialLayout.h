@@ -17,6 +17,9 @@ namespace Visualization {
 
 class VISUALIZATIONBASE_API SequentialLayout: public Layout
 {
+	public:
+		typedef SequentialLayoutStyle StyleType;
+
 	private:
 		SequentialLayoutStyle* style;
 		QVector<Item*> items;

@@ -7,6 +7,8 @@
 
 #include "items/TextStyle.h"
 
+#include "Styles.h"
+
 namespace Visualization {
 
 TextStyle::TextStyle()
@@ -18,6 +20,12 @@ TextStyle* TextStyle::getDefault()
 {
 	static TextStyle defaultStyle;
 	return &defaultStyle;
+}
+
+void TextStyle::load()
+{
+	Styles::load("pen", pen_);
+	Styles::load("font", font_);
 }
 
 }

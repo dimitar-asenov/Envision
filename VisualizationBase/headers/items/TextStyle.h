@@ -12,7 +12,6 @@
 
 #include <QtGui/QPen>
 #include <QtGui/QFont>
-#include <QtGui/QTextOption>
 
 namespace Visualization {
 
@@ -21,21 +20,19 @@ class VISUALIZATIONBASE_API TextStyle
 	private:
 		QPen pen_;
 		QFont font_;
-		QTextOption option_;
 
 	public:
 		TextStyle();
+		void load();
 
 		QPen& pen();
 		QFont& font();
-		QTextOption& option();
 
 		static TextStyle* getDefault();
 };
 
 inline QPen& TextStyle::pen() { return pen_; };
 inline QFont& TextStyle::font() { return font_; };
-inline QTextOption& TextStyle::option() { return option_; };
 
 }
 

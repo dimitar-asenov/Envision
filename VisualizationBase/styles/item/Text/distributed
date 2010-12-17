@@ -1,0 +1,22 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style>
+	<pen>
+		<width>1.0</width>
+		<style>1</style>
+		<color>
+			<alpha>255</alpha>
+			<red>64</red>
+			<green>64</green>
+			<blue>128</blue>
+		</color>
+		<capStyle>0</capStyle>
+		<joinStyle>0</joinStyle>
+	</pen>
+	<font>
+		<family></family>
+		<size>15</size>
+		<sizeIsInPixels>true</sizeIsInPixels>
+		<weight>1</weight>
+		<style>0</style>
+	</font>
+</style>

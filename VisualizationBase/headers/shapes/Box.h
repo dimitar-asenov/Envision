@@ -17,6 +17,9 @@ namespace Visualization {
 
 class VISUALIZATIONBASE_API Box: public Shape
 {
+	public:
+		typedef BoxStyle StyleType;
+
 	protected:
 		qreal contentBoxWidth;
 		qreal contentBoxHeight;

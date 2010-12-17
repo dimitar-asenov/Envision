@@ -14,8 +14,6 @@
 #include <QtCore/QPair>
 #include <QtCore/QList>
 
-#include <QtCore/QDebug>
-
 namespace Visualization {
 
 VExtendable::VExtendable(Item* parent, Model::ExtendableNode* node) :
@@ -78,9 +76,8 @@ void VExtendable::determineChildren()
 
 void VExtendable::updateState()
 {
-	getShape()->setOffset(layout.getExternalShapeX(), layout.getExternalShapeY());
-	getShape()->setOutterSize(layout.getExternalShapeOutterWidth(), layout.getExternalShapeOutterHeight());
-	qDebug() << layout.getExternalShapeX() << " " <<layout.getExternalShapeY();
+	getShape()->setOffset(layout.getXOffsetForExternalShape(), layout.getYOffsetForExternalShape());
+	getShape()->setOutterSize(layout.getOutterWidthForExternalShape(), layout.getOutterHeightForExternalShape());
 	size.setHeight(layout.height());
 	size.setWidth(layout.width());
 }

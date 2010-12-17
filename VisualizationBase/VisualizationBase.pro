@@ -23,9 +23,13 @@ CONFIG += plugin \
 target.path = $$PLUGINS_DIR
 pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
+styles.path = $${BUILD_DIR}/styles
+styles.files = styles/*
 INSTALLS += target \
-    pluginmeta
-HEADERS += headers/layouts/LayoutStyle.h \
+    pluginmeta \
+    styles
+HEADERS += headers/Styles.h \
+    headers/layouts/LayoutStyle.h \
     headers/layouts/PanelBorderLayoutStyle.h \
     headers/layouts/PanelBorderLayout.h \
     headers/items/NoItem.h \
@@ -54,7 +58,8 @@ HEADERS += headers/layouts/LayoutStyle.h \
     src/visualizationbase.h \
     headers/VisualizationException.h \
     headers/visualizationbase_api.h
-SOURCES += src/layouts/LayoutStyle.cpp \
+SOURCES += src/Styles.cpp \
+    src/layouts/LayoutStyle.cpp \
     src/layouts/PanelBorderLayoutStyle.cpp \
     src/layouts/PanelBorderLayout.cpp \
     src/items/NoItem.cpp \

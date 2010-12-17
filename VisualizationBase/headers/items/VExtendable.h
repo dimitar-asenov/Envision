@@ -30,7 +30,10 @@ class VISUALIZATIONBASE_API VExtendable : public ModelItem
 
 	public:
 		VExtendable(Item* parent, Model::ExtendableNode* node);
+		static const QString& className();
 };
+
+inline const QString& VExtendable::className() {static QString name("VExtendable"); return name;}
 
 }
 

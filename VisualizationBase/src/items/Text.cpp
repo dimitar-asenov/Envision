@@ -7,13 +7,15 @@
 
 #include "items/Text.h"
 
+#include "Styles.h"
+
 #include <QtGui/QPainter>
 #include <QtGui/QFontMetrics>
 
 namespace Visualization {
 
 Text::Text(Item* parent, const QString& text_) :
-	Item(parent), text(text_), style(TextStyle::getDefault())
+	Item(parent), text(text_), style(Styles::item<Text>("normal"))
 {
 }
 
@@ -28,7 +30,6 @@ void Text::determineChildren()
 
 void Text::updateState()
 {
-	text.setTextOption(style->option());
 	QFontMetrics qfm(style->font());
 
 	bounding_rect = qfm.boundingRect(text.text());

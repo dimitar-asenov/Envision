@@ -113,22 +113,22 @@ void PanelBorderLayout::updateState()
 	if ( bottom_ ) bottom_->setPos(x2, y3);
 }
 
-int PanelBorderLayout::getExternalShapeX() const
+int PanelBorderLayout::getXOffsetForExternalShape() const
 {
 	return xOffset() + (left_ ? left_->width() / 2 : 0);
 }
 
-int PanelBorderLayout::getExternalShapeY() const
+int PanelBorderLayout::getYOffsetForExternalShape() const
 {
 	return yOffset() + (top_ ? top_->height() / 2 : 0);
 }
 
-int PanelBorderLayout::getExternalShapeOutterWidth() const
+int PanelBorderLayout::getOutterWidthForExternalShape() const
 {
 	return width() - style->leftMargin() - style->rightMargin() - (left_ ? left_->width() / 2 : 0);
 }
 
-int PanelBorderLayout::getExternalShapeOutterHeight() const
+int PanelBorderLayout::getOutterHeightForExternalShape() const
 {
 	return height() - style->topMargin() - style->bottomMargin() - (top_ ? top_->height() / 2 : 0);
 }
