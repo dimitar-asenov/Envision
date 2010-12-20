@@ -28,6 +28,7 @@ class VISUALIZATIONBASE_API Box: public Shape
 
 	public:
 		Box(Item *parent, BoxStyle *style = BoxStyle::getDefault());
+		static const QString& className();
 
 		BoxStyle* style() const;
 		virtual void setStyle(ShapeStyle *style);
@@ -40,6 +41,8 @@ class VISUALIZATIONBASE_API Box: public Shape
 
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 };
+
+inline const QString& Box::className() {static QString name("Box"); return name;}
 
 }
 

@@ -31,7 +31,7 @@ class VISUALIZATIONBASE_API VText : public ModelItem
 		qreal yOffset;
 
 	public:
-		VText(Item* parent, Model::Text *text, TextStyle *style = TextStyle::getDefault());
+		VText(Item* parent, Model::Text *text, TextStyle *style = NULL);
 		static const QString& className();
 
 		void setStyle(TextStyle *style);

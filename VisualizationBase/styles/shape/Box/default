@@ -1,0 +1,26 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="../Shape/default">
+	<backgroundBrush>
+		<style>1</style>
+		<color>
+			<alpha>255</alpha>
+			<red>170</red>
+			<green>255</green>
+			<blue>204</blue>
+		</color>
+	</backgroundBrush>
+	<cornerType>2</cornerType>
+	<cornerRadius>5</cornerRadius>
+	<shadowBrush>
+		<style>0</style>
+		<color>
+			<alpha>255</alpha>
+			<red>128</red>
+			<green>128</green>
+			<blue>128</blue>
+		</color>
+	</shadowBrush>
+	<shadowXOffset>5</shadowXOffset>
+	<shadowYOffset>5</shadowYOffset>
+	<shadowIsPartOfSize>true</shadowIsPartOfSize>
+</style>

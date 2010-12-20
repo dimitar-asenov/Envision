@@ -57,6 +57,7 @@ class VISUALIZATIONBASE_API Shape
 	public:
 		Shape(Item* parent, ShapeStyle *style = NULL);
 		virtual ~Shape();
+		static const QString& className();
 
 		void setInnerWidth(int width);
 		void setInnerHeight(int height);
@@ -76,6 +77,8 @@ class VISUALIZATIONBASE_API Shape
 
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) = 0;
 };
+
+inline const QString& Shape::className() {static QString name("Shape"); return name;}
 
 inline int Shape::width() const { return width_; }
 inline int Shape::height() const { return height_; }

@@ -11,9 +11,11 @@
 #include "visualizationbase_api.h"
 #include "VisualizationException.h"
 
-#include <QtXml/QDomDocument>
+#include "StyleNode.h"
+
 #include <QtCore/QMutex>
 #include <QtCore/QMutexLocker>
+#include <QtXml/QDomDocument>
 #include <QtCore/QMap>
 #include <QtCore/QDir>
 #include <QtCore/QList>
@@ -21,31 +23,20 @@
 class QColor;
 class QPen;
 class QFont;
+class QBrush;
 
 namespace Visualization {
-
-class VISUALIZATIONBASE_API Prototype
-{
-	public:
-		QDomDocument doc;
-		QDomElement elem;
-};
 
 class VISUALIZATIONBASE_API Styles
 {
 	private:
 		static const QString STYLES_DIRECTORY_NAME;
-		static const QString XML_DOM_TYPE;
 
 		static QMutex accessMutex;
-		static QDomElement elem;
-		static QString currentPath;
-		static QList<Prototype>* prototypes;
+		static QList< QString > nodePath;
+		static StyleNode* root;
 
-		static QDomDocument openStyleDoc(const QString& path);
-		static void openNode(QDomNode node, const QString& property, QList<Prototype>& prototypes);
-		static void loadElementPrototypes();
-		static QDomElement getProperty(QDomNode& root, const QString& name);
+		static QString getProperty(const QString& name);
 
 		template <class T> static QMap<QString, typename T::StyleType*>& itemStyles();
 		template <class T> static QMap<QString, typename T::StyleType*>& layoutStyles();
@@ -56,6 +47,7 @@ class VISUALIZATIONBASE_API Styles
 		static void loadQColor(QColor& value);
 		static void loadQPen(QPen& value);
 		static void loadQFont(QFont& value);
+		static void loadQBrush(QBrush& value);
 
 	public:
 
@@ -144,36 +136,30 @@ template<class T> typename T::StyleType* Styles::loadStyle(const QString& object
 {
 	QMutexLocker locker(&accessMutex);
 
-	currentPath = QDir::current().absoluteFilePath(STYLES_DIRECTORY_NAME + "/" + objectClass + "/" + T::className());
-	QDomDocument doc = openStyleDoc(currentPath + "/" + styleName);
-	if (doc.isNull()) return NULL;
-
-	QList<Prototype> proto;
-	openNode(doc, "style", proto);
+	StyleNode::setBaseFolder(STYLES_DIRECTORY_NAME);
+	root = new StyleNode(styleName, objectClass + "/" + T::className());
 
 	typename T::StyleType* style = new typename T::StyleType();
-	style->load();
+	load("style", *style);
+
+	delete root;
+	root = NULL;
+
 	return style;
 }
 
 template <class T> void Styles::load(const QString& propertyName, T& value)
 {
-	QDomElement oldElem = elem;
-	QList<Prototype>* oldPrototypes = prototypes;
-
-	QList<Prototype> proto;
-	openNode(elem, propertyName, proto);
-
+	nodePath.append(propertyName);
 	load(value);
-
-	elem = oldElem;
-	prototypes = oldPrototypes;
+	nodePath.removeLast();
 }
 
 template <class T> inline void Styles::load(T& value) { value.load(); }
 template <> inline void Styles::load<QPen>(QPen& value) { loadQPen(value); }
 template <> inline void Styles::load<QColor>(QColor& value) { loadQColor(value); }
 template <> inline void Styles::load<QFont>(QFont& value) { loadQFont(value); }
+template <> inline void Styles::load<QBrush>(QBrush& value) { loadQBrush(value); }
 
 }
 

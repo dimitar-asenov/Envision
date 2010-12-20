@@ -7,6 +7,8 @@
 
 #include "items/VText.h"
 
+#include "Styles.h"
+
 #include <QtGui/QPainter>
 #include <QtGui/QFontMetrics>
 
@@ -15,6 +17,7 @@ namespace Visualization {
 VText::VText(Item* parent, Model::Text *text, TextStyle *style_) :
 	ModelItem(parent, text), style(style_)
 {
+	if (style == NULL) style = Styles::item<VText>("default");
 }
 
 void VText::determineChildren()

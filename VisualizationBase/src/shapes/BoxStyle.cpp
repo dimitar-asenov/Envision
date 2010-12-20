@@ -7,6 +7,8 @@
 
 #include "shapes/BoxStyle.h"
 
+#include "Styles.h"
+
 namespace Visualization {
 
 BoxStyle::BoxStyle() :
@@ -18,6 +20,18 @@ BoxStyle* BoxStyle::getDefault()
 {
 	static BoxStyle defaultStyle;
 	return &defaultStyle;
+}
+
+void BoxStyle::load()
+{
+	ShapeStyle::load();
+	Styles::load("backgroundBrush", background_);
+	Styles::load("cornerType", (int&)corner_);
+	Styles::load("cornerRadius", cornerRadius_);
+	Styles::load("shadowBrush", shadow_);
+	Styles::load("shadowXOffset", xShadowOffset_);
+	Styles::load("shadowYOffset", yShadowOffset_);
+	Styles::load("shadowIsPartOfSize", shadowIsPartOfSize_);
 }
 
 void BoxStyle::setBackground(const QBrush& brush)

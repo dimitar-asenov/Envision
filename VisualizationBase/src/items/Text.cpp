@@ -15,7 +15,7 @@
 namespace Visualization {
 
 Text::Text(Item* parent, const QString& text_) :
-	Item(parent), text(text_), style(Styles::item<Text>("distributed"))
+	Item(parent), text(text_), style(Styles::item<Text>("default"))
 {
 }
 

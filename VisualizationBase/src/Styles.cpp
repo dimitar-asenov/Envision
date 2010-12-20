@@ -14,106 +14,43 @@
 namespace Visualization {
 
 const QString Styles::STYLES_DIRECTORY_NAME = "styles";
-const QString Styles::XML_DOM_TYPE = "EnvisionVisualizationStyle";
 
 QMutex Styles::accessMutex;
-QDomElement Styles::elem;
-QString Styles::currentPath;
-QList<Prototype>* Styles::prototypes = NULL;
+QList< QString > Styles::nodePath;
+StyleNode* Styles::root;
 
-QDomDocument Styles::openStyleDoc(const QString& path)
+
+QString Styles::getProperty(const QString& name)
 {
-	QDomDocument doc = QDomDocument(XML_DOM_TYPE);
-	QFile file(path);
-	if ( !file.open(QIODevice::ReadOnly) ) return QDomDocument();
-	if ( !doc.setContent(&file) )
-	{
-		file.close();
-		throw VisualizationException("Reading of the XML structure of file " + file.fileName() + " failed.");
-	}
-	file.close();
-	return doc;
+	QStringList newPath = nodePath;
+	newPath.append(name);
+	return root->getProperty(newPath);
 }
 
-void Styles::openNode(QDomNode node, const QString& property, QList<Prototype>& prototypes_)
-{
-	elem = getProperty(node, property);
-	prototypes = &prototypes_;
-	loadElementPrototypes();
-}
-
-void Styles::loadElementPrototypes()
-{
-	QDomElement e = elem;
-	QString path = currentPath;
-	QString newPath;
-
-	while ( e.hasAttribute("prototype") )
-	{
-		QString prototypePath = e.attribute("prototype");
-		prototypes->append(Prototype());
-
-		// Try to use a relative location.
-		newPath = path + "/" + prototypePath;
-		prototypes->last().doc = openStyleDoc(newPath);
-
-		// Try to use a location starting from the root of the styles folder
-		if ( prototypes->last().doc.isNull() )
-		{
-			newPath = QDir::current().absoluteFilePath(STYLES_DIRECTORY_NAME + "/" + prototypePath);
-			prototypes->last().doc = openStyleDoc(newPath);
-		}
-
-		// If prototype is not found, fail
-		if ( prototypes->last().doc.isNull() ) throw VisualizationException("Could not find the prototype style " + prototypePath);
-
-		prototypes->last().elem = prototypes->last().doc.firstChildElement("style");
-		if ( prototypes->last().elem.isNull() ) throw VisualizationException("Invalid prototype file '" + prototypePath
-				+ "'. The file does not define a style.");
-
-		path = newPath;
-		e = prototypes->last().elem;
-	}
-}
-
-QDomElement Styles::getProperty(QDomNode& root, const QString& name)
-{
-	QDomElement elem = root.firstChildElement(name);
-
-	int index = 0;
-	while (elem.isNull() && prototypes && index < prototypes->size())
-	{
-		elem = prototypes->at(index).elem.firstChildElement(name);
-		++index;
-	}
-
-	if (!elem.isNull()) return elem;
-	else throw VisualizationException("Invalid style file, property '" + name + "' is missing.");
-}
 
 void Styles::load(const QString& propertyName, int& value)
 {
 	bool ok = true;
 
-	value = getProperty(elem,propertyName).firstChild().nodeValue().toInt(&ok);
+	value = getProperty(propertyName).toInt(&ok);
 	if ( !ok ) throw VisualizationException("Could read integer value property '" + propertyName + "'");
 }
 
 void Styles::load(const QString& propertyName, bool& value)
 {
-	value = getProperty(elem,propertyName).firstChild().nodeValue().compare("true", Qt::CaseInsensitive) == 0;
+	value = getProperty(propertyName).compare("true", Qt::CaseInsensitive) == 0;
 }
 
 void Styles::load(const QString& propertyName, QString& value)
 {
-	value = getProperty(elem,propertyName).firstChild().nodeValue();
+	value = getProperty(propertyName);
 }
 
 void Styles::load(const QString& propertyName, double& value)
 {
 	bool ok = true;
 
-	value = getProperty(elem,propertyName).firstChild().nodeValue().toDouble(&ok);
+	value = getProperty(propertyName).toDouble(&ok);
 	if ( !ok ) throw VisualizationException("Could read double value property '" + propertyName + "'");
 }
 
@@ -162,6 +99,16 @@ void Styles::loadQFont(QFont& value)
 	if ( pixelSize ) value.setPixelSize(size);
 	else value.setPointSize(size);
 	value.setStyle((QFont::Style) style);
+}
+
+void Styles::loadQBrush(QBrush& value)
+{
+	int style;
+	QColor color;
+
+	Styles::load("style", style);
+	Styles::load("color", color);
+	value = QBrush(color, (Qt::BrushStyle) style);
 }
 
 }

@@ -32,6 +32,7 @@ class VISUALIZATIONBASE_API BoxStyle : public ShapeStyle
 
 	public:
 		BoxStyle();
+		virtual void load();
 
 		void setBackground(const QBrush& brush);
 
