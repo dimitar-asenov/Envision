@@ -11,6 +11,7 @@
 #include "visualizationbase_api.h"
 
 #include "Item.h"
+#include "Styles.h"
 #include "LayoutStyle.h"
 #include "shapes/Shape.h"
 

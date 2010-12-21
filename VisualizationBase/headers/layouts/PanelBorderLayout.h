@@ -30,7 +30,7 @@ class VISUALIZATIONBASE_API PanelBorderLayout: public Layout
 		void setPanel(bool enable, PanelLayout*& panel, const PanelLayoutStyle& style);
 
 	public:
-		PanelBorderLayout(Item* parent, const PanelBorderLayoutStyle* style = PanelBorderLayoutStyle::getDefault());
+		PanelBorderLayout(Item* parent, const PanelBorderLayoutStyle* style = Styles::layout<PanelBorderLayout>("default"));
 
 		void setTop(bool enable = true);
 		void setLeft(bool enable = true);

@@ -9,7 +9,6 @@
 
 #include "items/Text.h"
 #include "shapes/Box.h"
-#include "Styles.h"
 
 #include <QtCore/QString>
 #include <QtCore/QPair>
@@ -17,9 +16,9 @@
 
 namespace Visualization {
 
-VExtendable::VExtendable(Item* parent, Model::ExtendableNode* node) :
-	ModelItem(parent, node, Styles::item<VExtendable>("default")), layout(this, &style()->borderStyle()), header(NULL, &style()->headerStyle()),
-			attributes(NULL, &style()->attributesStyle())
+VExtendable::VExtendable(Item* parent, Model::ExtendableNode* node, const VExtendableStyle* style) :
+	ModelItem(parent, node, style), layout(this, &style->borderStyle()), header(NULL, &style->headerStyle()),
+			attributes(NULL, &style->attributesStyle())
 {
 	layout.setTop(true);
 	layout.top()->setMiddle(&header);

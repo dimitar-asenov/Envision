@@ -11,6 +11,7 @@
 #include "visualizationbase_api.h"
 
 #include "ModelItem.h"
+#include "Styles.h"
 #include "items/VExtendableStyle.h"
 #include "layouts/SequentialLayout.h"
 #include "layouts/PanelBorderLayout.h"
@@ -32,7 +33,7 @@ class VISUALIZATIONBASE_API VExtendable : public ModelItem
 		void updateState();
 
 	public:
-		VExtendable(Item* parent, Model::ExtendableNode* node);
+		VExtendable(Item* parent, Model::ExtendableNode* node, const VExtendableStyle* style = Styles::item<VExtendable>("default"));
 };
 
 }

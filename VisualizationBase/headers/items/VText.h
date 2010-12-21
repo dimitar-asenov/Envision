@@ -14,6 +14,7 @@
 #include "../ModelItem.h"
 #include "ModelBase/headers/nodes/Text.h"
 #include "VisualizationException.h"
+#include "Styles.h"
 
 #include <QtGui/QStaticText>
 
@@ -30,7 +31,7 @@ class VISUALIZATIONBASE_API VText : public ModelItem
 		qreal yOffset;
 
 	public:
-		VText(Item* parent, Model::Text *text, const TextStyle *style = NULL);
+		VText(Item* parent, Model::Text *text, const TextStyle *style = Styles::item<VText>("default"));
 
 		virtual void determineChildren();
 		virtual void updateState();

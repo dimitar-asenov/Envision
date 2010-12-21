@@ -30,7 +30,7 @@ class VISUALIZATIONBASE_API PanelLayout: public Layout
 		void setItem(Item* item, Item*& position);
 
 	public:
-		PanelLayout(Item* parent, const PanelLayoutStyle* style = PanelLayoutStyle::getDefault());
+		PanelLayout(Item* parent, const PanelLayoutStyle* style = Styles::layout<PanelLayout>("default"));
 
 		void setFirst(Item* item);
 		void setMiddle(Item* item);

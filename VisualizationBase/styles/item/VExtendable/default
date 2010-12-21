@@ -11,5 +11,9 @@
 	<headerStyle prototypes="layout/SequentialLayout/default">
 		<shape prototypes="shape/Box/default">Box</shape>
 	</headerStyle>
-	<attributesStyle prototypes="layout/SequentialLayout/default" />
+	<attributesStyle prototypes="layout/SequentialLayout/default">
+		<direction>2</direction>
+		<alignment>1</alignment>
+		<spaceBetweenElements>5</spaceBetweenElements>
+	</attributesStyle>	
 </style>
