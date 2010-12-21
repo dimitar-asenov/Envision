@@ -16,7 +16,7 @@ namespace Visualization {
 Item::Item(Item* parent, const ItemStyle* style) :
 	QGraphicsItem(parent), style_(style), shape_(NULL), needsUpdate_(true)
 {
-	if (style_->hasShape()) shape_ = style_->createShape(this);
+	if (style_ && style_->hasShape()) shape_ = style_->createShape(this);
 }
 
 Item::~Item()

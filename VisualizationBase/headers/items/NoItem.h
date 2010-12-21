@@ -14,8 +14,10 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API NoItem: public Visualization::Item
+class VISUALIZATIONBASE_API NoItem: public Item
 {
+	ITEM_COMMON(NoItem, Item)
+
 	protected:
 		virtual void determineChildren();
 		virtual void updateState();
