@@ -28,7 +28,10 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/StyleNode.h \
+HEADERS += headers/ItemMacros.h \
+    headers/ItemStyle.h \
+    headers/items/VExtendableStyle.h \
+    headers/StyleNode.h \
     headers/Styles.h \
     headers/layouts/LayoutStyle.h \
     headers/layouts/PanelBorderLayoutStyle.h \
@@ -59,7 +62,9 @@ HEADERS += headers/StyleNode.h \
     src/visualizationbase.h \
     headers/VisualizationException.h \
     headers/visualizationbase_api.h
-SOURCES += src/StyleNode.cpp \
+SOURCES += src/ItemStyle.cpp \
+    src/items/VExtendableStyle.cpp \
+    src/StyleNode.cpp \
     src/Styles.cpp \
     src/layouts/LayoutStyle.cpp \
     src/layouts/PanelBorderLayoutStyle.cpp \

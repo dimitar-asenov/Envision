@@ -15,6 +15,9 @@
 
 #include "VisualizationException.h"
 
+#include <QtCore/QString>
+#include <QtCore/QMap>
+
 namespace Visualization {
 
 class VISUALIZATIONBASE_API Shape
@@ -31,6 +34,13 @@ class VISUALIZATIONBASE_API Shape
 		int height_;
 		int xOffset_;
 		int yOffset_;
+
+		typedef Shape* (*ShapeConstructor)(Item* parent);
+		typedef ShapeStyle* (*ShapeStyleConstructor)();
+		static QMap<QString, ShapeConstructor> shapeConstructors;
+		static QMap<QString, ShapeStyleConstructor> shapeStyleConstructors;
+		template <class Base, class Actual> static Base* makeDefaultStyle();
+		template <class Base, class Actual> static Base* makeDefaultShape(Item* parent);
 
 	protected:
 		int width() const;
@@ -76,6 +86,10 @@ class VISUALIZATIONBASE_API Shape
 		virtual int getOutterHeight(int innerHeight) const;
 
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) = 0;
+
+		template <class ShapeClass> static void registerShape();
+		static Shape* createNewShape(const QString& shapeName, Item* parent);
+		static ShapeStyle* createNewShapeStyle(const QString& shapeName);
 };
 
 inline const QString& Shape::className() {static QString name("Shape"); return name;}
@@ -88,6 +102,19 @@ inline Shape::SizeType Shape::sizeSpecified() const { return sizeToUse; }
 inline ShapeStyle* Shape::style() const {	return style_; }
 
 inline void Shape::setParentNeedsUpdate() { parent->setUpdateNeeded(); }
+
+
+template <class Base, class Actual> inline Base* Shape::makeDefaultStyle() { return new Actual(); }
+template <class Base, class Actual> inline Base* Shape::makeDefaultShape(Item* parent) {return new Actual(parent); };
+
+template <class ShapeClass> inline void Shape::registerShape()
+{
+	if (shapeConstructors.contains(ShapeClass::className()))
+		throw VisualizationException("Trying to register an already registered shape type " + ShapeClass::className());
+
+	shapeConstructors.insert(ShapeClass::className(),makeDefaultShape<Shape,ShapeClass>);
+	shapeStyleConstructors.insert(ShapeClass::className(),makeDefaultStyle<ShapeStyle,typename ShapeClass::StyleType>);
+}
 
 }
 

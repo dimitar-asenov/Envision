@@ -18,12 +18,9 @@ namespace Visualization {
 
 class VISUALIZATIONBASE_API PanelLayout: public Layout
 {
-	public:
-		typedef PanelLayoutStyle StyleType;
+	ITEM_COMMON(PanelLayout, Layout)
 
 	private:
-		PanelLayoutStyle* style;
-
 		Item* first_;
 		Item* middle_;
 		Item* last_;
@@ -32,13 +29,8 @@ class VISUALIZATIONBASE_API PanelLayout: public Layout
 
 		void setItem(Item* item, Item*& position);
 
-	protected:
-		virtual const PanelLayoutStyle* getStyle() const;
-
 	public:
-		PanelLayout(Item* parent, PanelLayoutStyle* style = PanelLayoutStyle::getDefault());
-		static const QString& className();
-		void setStyle(PanelLayoutStyle* style = PanelLayoutStyle::getDefault());
+		PanelLayout(Item* parent, const PanelLayoutStyle* style = PanelLayoutStyle::getDefault());
 
 		void setFirst(Item* item);
 		void setMiddle(Item* item);
@@ -51,8 +43,6 @@ class VISUALIZATIONBASE_API PanelLayout: public Layout
 		void setMinimalLength(int minimalLength);
 		virtual void updateState();
 };
-
-inline const QString& PanelLayout::className() {static QString name("PanelLayout"); return name;}
 
 inline void PanelLayout::setFirst(Item* item) { setItem(item, first_); }
 inline void PanelLayout::setMiddle(Item* item) { setItem(item, middle_); }

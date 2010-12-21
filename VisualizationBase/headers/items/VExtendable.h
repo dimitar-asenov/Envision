@@ -11,6 +11,7 @@
 #include "visualizationbase_api.h"
 
 #include "ModelItem.h"
+#include "items/VExtendableStyle.h"
 #include "layouts/SequentialLayout.h"
 #include "layouts/PanelBorderLayout.h"
 #include "ModelBase/headers/nodes/Extendable/ExtendableNode.h"
@@ -19,6 +20,8 @@ namespace Visualization {
 
 class VISUALIZATIONBASE_API VExtendable : public ModelItem
 {
+	ITEM_COMMON(VExtendable, ModelItem)
+
 	private:
 		PanelBorderLayout layout;
 		SequentialLayout header;
@@ -30,10 +33,7 @@ class VISUALIZATIONBASE_API VExtendable : public ModelItem
 
 	public:
 		VExtendable(Item* parent, Model::ExtendableNode* node);
-		static const QString& className();
 };
-
-inline const QString& VExtendable::className() {static QString name("VExtendable"); return name;}
 
 }
 

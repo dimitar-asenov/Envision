@@ -1,0 +1,53 @@
+/***********************************************************************************************************************
+ * ItemStyle.cpp
+ *
+ *  Created on: Dec 21, 2010
+ *      Author: Dimitar Asenov
+ **********************************************************************************************************************/
+
+#include "ItemStyle.h"
+
+#include "shapes/Shape.h"
+#include "shapes/ShapeStyle.h"
+#include "Styles.h"
+
+namespace Visualization {
+
+ItemStyle::ItemStyle()
+{
+	// TODO Auto-generated constructor stub
+
+}
+
+ItemStyle::~ItemStyle()
+{
+	if ( shapeStyle_ )
+	{
+		delete shapeStyle_;
+		shapeStyle_ = NULL;
+	}
+}
+
+Shape* ItemStyle::createShape(Item* parent) const
+{
+	if (shapeName_.isEmpty()) return NULL;
+
+	Shape* shape = Shape::createNewShape(shapeName_, parent);
+	shape->setStyle(shapeStyle_);
+	return shape;
+}
+
+void ItemStyle::load()
+{
+	QString shape;
+	Styles::load("shape", shapeName_);
+
+	if ( !shapeName_.isEmpty() )
+	{
+		shapeStyle_ = Shape::createNewShapeStyle(shapeName_);
+		Styles::load("shape", *shapeStyle_);
+	}
+	else shapeStyle_ = NULL;
+}
+
+}

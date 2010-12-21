@@ -14,10 +14,10 @@
 
 namespace Visualization {
 
-VText::VText(Item* parent, Model::Text *text, TextStyle *style_) :
-	ModelItem(parent, text), style(style_)
+VText::VText(Item* parent, Model::Text *text, const TextStyle *style_) :
+	ModelItem(parent, text, style_)
 {
-	if (style == NULL) style = Styles::item<VText>("default");
+	if (style_ == NULL) setStyle( Styles::item<VText>("default") );
 }
 
 void VText::determineChildren()
@@ -29,7 +29,7 @@ void VText::updateState()
 	Model::Text* textNode = static_cast<Model::Text*> (getNode());
 
 	text.setText(textNode->get());
-	QFontMetrics qfm(style->font());
+	QFontMetrics qfm(style()->font());
 
 	bounding_rect = qfm.boundingRect(text.text());
 	xOffset = - bounding_rect.left();
@@ -41,8 +41,8 @@ void VText::updateState()
 
 void VText::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-	painter->setPen(style->pen());
-	painter->setFont(style->font());
+	painter->setPen(style()->pen());
+	painter->setFont(style()->font());
 	painter->drawStaticText(0, 0, text);
 }
 

@@ -15,12 +15,12 @@
 namespace Visualization {
 
 Text::Text(Item* parent, const QString& text_) :
-	Item(parent), text(text_), style(Styles::item<Text>("default"))
+	Item(parent, Styles::item<Text>("default")), text(text_)
 {
 }
 
-Text::Text(Item* parent, TextStyle *style_, const QString& text_) :
-	Item(parent), text(text_), style(style_)
+Text::Text(Item* parent, const TextStyle *style_, const QString& text_) :
+	Item(parent, style_), text(text_)
 {
 }
 
@@ -30,7 +30,7 @@ void Text::determineChildren()
 
 void Text::updateState()
 {
-	QFontMetrics qfm(style->font());
+	QFontMetrics qfm(style()->font());
 
 	bounding_rect = qfm.boundingRect(text.text());
 	xOffset = - bounding_rect.left();
@@ -42,8 +42,8 @@ void Text::updateState()
 
 void Text::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-	painter->setPen(style->pen());
-	painter->setFont(style->font());
+	painter->setPen(style()->pen());
+	painter->setFont(style()->font());
 	painter->drawStaticText(0, 0, text);
 }
 

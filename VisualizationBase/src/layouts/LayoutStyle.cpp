@@ -36,6 +36,7 @@ void LayoutStyle::setMargins(int left, int right, int top, int bottom)
 
 void LayoutStyle::load()
 {
+	ItemStyle::load();
 	Styles::load("leftMargin", leftMargin_);
 	Styles::load("topMargin", topMargin_);
 	Styles::load("rightMargin", rightMargin_);

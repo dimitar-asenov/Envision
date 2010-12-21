@@ -24,6 +24,7 @@ TextStyle* TextStyle::getDefault()
 
 void TextStyle::load()
 {
+	ItemStyle::load();
 	Styles::load("pen", pen_);
 	Styles::load("font", font_);
 }

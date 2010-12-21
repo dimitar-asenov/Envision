@@ -18,8 +18,6 @@ namespace Visualization {
 class BoxTest : public Item
 {
 	private:
-		SequentialLayoutStyle style;
-		BoxStyle boxStyle;
 		SequentialLayout items;
 
 	public:

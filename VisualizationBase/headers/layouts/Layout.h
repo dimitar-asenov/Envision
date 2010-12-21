@@ -16,16 +16,16 @@
 
 namespace Visualization {
 
-class Layout: public Item
+class VISUALIZATIONBASE_API Layout: public Item
 {
+	ITEM_COMMON(Layout, Item)
+
 	protected:
 		int xOffset() const;
 		int yOffset() const;
 
-		virtual const LayoutStyle* getStyle() const = 0;
-
 	public:
-		Layout(Item* parent);
+		Layout(Item* parent, const LayoutStyle* style);
 
 		void setInnerSize(int width, int height);
 

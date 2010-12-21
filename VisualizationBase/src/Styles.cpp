@@ -23,7 +23,6 @@ QMutex Styles::accessMutex;
 QList< QString > Styles::nodePath;
 StyleNode* Styles::root;
 
-
 QString Styles::getProperty(const QString& name)
 {
 	QStringList newPath = nodePath;

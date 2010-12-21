@@ -9,7 +9,9 @@
 
 #include "VisualizationManager.h"
 #include "BinaryNode.h"
+#include "shapes/Box.h"
 #include "SelfTest/headers/SelfTestSuite.h"
+
 
 Q_EXPORT_PLUGIN2( visualizationbase, Visualization::VisualizationBase )
 
@@ -19,6 +21,7 @@ namespace Visualization
 	bool VisualizationBase::initialize(Envision::EnvisionManager& manager)
 	{
 		VisualizationManager::init(&manager);
+		Shape::registerShape<Box>();
 		return true;
 	}
 

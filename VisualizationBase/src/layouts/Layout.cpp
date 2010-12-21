@@ -9,8 +9,8 @@
 
 namespace Visualization {
 
-Layout::Layout(Item* parent) :
-	Item(parent)
+Layout::Layout(Item* parent, const LayoutStyle* style) :
+	Item(parent, style)
 {
 }
 
@@ -18,16 +18,16 @@ void Layout::setInnerSize(int width_, int height_)
 {
 	if ( getShape() )
 	{
-		getShape()->setOffset(getStyle()->leftMargin(), getStyle()->topMargin());
+		getShape()->setOffset(style()->leftMargin(), style()->topMargin());
 		getShape()->setInnerSize(width_, height_);
-		size.setWidth(width() + getStyle()->leftMargin() + getStyle()->rightMargin());
-		size.setHeight(height() + getStyle()->topMargin() + getStyle()->bottomMargin());
+		size.setWidth(width() + style()->leftMargin() + style()->rightMargin());
+		size.setHeight(height() + style()->topMargin() + style()->bottomMargin());
 	}
 	else
 	{
 		bounding_rect = QRectF();
-		size.setWidth(width_ + getStyle()->leftMargin() + getStyle()->rightMargin());
-		size.setHeight(height_ + getStyle()->topMargin() + getStyle()->bottomMargin());
+		size.setWidth(width_ + style()->leftMargin() + style()->rightMargin());
+		size.setHeight(height_ + style()->topMargin() + style()->bottomMargin());
 	}
 
 }
@@ -51,13 +51,13 @@ bool Layout::needsUpdate()
 int Layout::xOffset() const
 {
 	if ( getShape() ) return getShape()->contentLeft();
-	else return getStyle()->leftMargin();
+	else return style()->leftMargin();
 }
 
 int Layout::yOffset() const
 {
 	if ( getShape() ) return getShape()->contentTop();
-	else return getStyle()->leftMargin();
+	else return style()->leftMargin();
 }
 
 void Layout::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)

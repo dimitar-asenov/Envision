@@ -17,20 +17,13 @@ namespace Visualization {
 
 class VISUALIZATIONBASE_API SequentialLayout: public Layout
 {
-	public:
-		typedef SequentialLayoutStyle StyleType;
+	ITEM_COMMON(SequentialLayout, Layout)
 
 	private:
-		SequentialLayoutStyle* style;
 		QVector<Item*> items;
 
-	protected:
-		virtual const SequentialLayoutStyle* getStyle() const;
-
 	public:
-		SequentialLayout(Item* parent, SequentialLayoutStyle* style = SequentialLayoutStyle::getDefault());
-		static const QString& className();
-		void setStyle(SequentialLayoutStyle* style = SequentialLayoutStyle::getDefault());
+		SequentialLayout(Item* parent, const SequentialLayoutStyle* style = SequentialLayoutStyle::getDefault());
 
 		int length() const;
 
@@ -44,12 +37,7 @@ class VISUALIZATIONBASE_API SequentialLayout: public Layout
 		virtual void updateState();
 };
 
-inline const QString& SequentialLayout::className() {static QString name("SequentialLayout"); return name;}
-
-template <class T> T* SequentialLayout::at(int index)
-{
-	return static_cast<T*> (items[index]);
-}
+template <class T> T* SequentialLayout::at(int index) { return static_cast<T*> (items[index]); }
 
 }
 

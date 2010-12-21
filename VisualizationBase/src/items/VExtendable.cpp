@@ -9,7 +9,6 @@
 
 #include "items/Text.h"
 #include "shapes/Box.h"
-
 #include "Styles.h"
 
 #include <QtCore/QString>
@@ -19,13 +18,12 @@
 namespace Visualization {
 
 VExtendable::VExtendable(Item* parent, Model::ExtendableNode* node) :
-	ModelItem(parent, node, new Box(this)), layout(this, Styles::layout<PanelBorderLayout>("default")), header(NULL), attributes(NULL)
+	ModelItem(parent, node, Styles::item<VExtendable>("default")), layout(this, &style()->borderStyle()), header(NULL, &style()->headerStyle()),
+			attributes(NULL, &style()->attributesStyle())
 {
-	setShape(new Box(this, Styles::shape<Box>("default")));
 	layout.setTop(true);
 	layout.top()->setMiddle(&header);
 	layout.setContent(&attributes);
-	header.setShape(new Box(&header, Styles::shape<Box>("default")));
 	header.append(new Text(&header, node->getTypeName()));
 }
 
@@ -68,7 +66,7 @@ void VExtendable::determineChildren()
 		if ( changed )
 		{
 			SequentialLayout* s = new SequentialLayout(&attributes);
-			s->append(new Text(s,attr[i].first));
+			s->append(new Text(s, attr[i].first));
 			s->append(renderer()->render(s, attr[i].second));
 			attributes.append(s);
 		}
@@ -78,9 +76,12 @@ void VExtendable::determineChildren()
 
 void VExtendable::updateState()
 {
-	getShape()->setOffset(layout.getXOffsetForExternalShape(), layout.getYOffsetForExternalShape());
-	getShape()->setOutterSize(layout.getOutterWidthForExternalShape(), layout.getOutterHeightForExternalShape());
-	size.setHeight(layout.height());
+	if ( getShape() )
+	{
+		getShape()->setOffset(layout.getXOffsetForExternalShape(), layout.getYOffsetForExternalShape());
+		getShape()->setOutterSize(layout.getOutterWidthForExternalShape(), layout.getOutterHeightForExternalShape());
+	}
+	size .setHeight(layout.height());
 	size.setWidth(layout.width());
 }
 

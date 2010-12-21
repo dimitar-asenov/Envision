@@ -10,20 +10,9 @@
 
 namespace Visualization {
 
-SequentialLayout::SequentialLayout(Item* parent, SequentialLayoutStyle* style_) :
-	Layout(parent), style(style_)
+SequentialLayout::SequentialLayout(Item* parent, const SequentialLayoutStyle* style) :
+	Layout(parent, style)
 {
-}
-
-const SequentialLayoutStyle* SequentialLayout::getStyle() const
-{
-	return style;
-}
-
-void SequentialLayout::setStyle(SequentialLayoutStyle* style_)
-{
-	style = style_;
-	setUpdateNeeded();
 }
 
 int SequentialLayout::length() const
@@ -72,18 +61,18 @@ void SequentialLayout::updateState()
 		if ( maxChildWidth < items[i]->width() ) maxChildWidth = items[i]->width();
 		if ( maxChildHeight < items[i]->height() ) maxChildHeight = items[i]->height();
 
-		sizeWidth += items[i]->width() + (i > 0 ? style->spaceBetweenElements() : 0);
-		sizeHeight += items[i]->height() + (i > 0 ? style->spaceBetweenElements() : 0);
+		sizeWidth += items[i]->width() + (i > 0 ? style()->spaceBetweenElements() : 0);
+		sizeHeight += items[i]->height() + (i > 0 ? style()->spaceBetweenElements() : 0);
 	}
 
 	// Determine what sort of sequence we're building
-	bool horizontal = style->direction() == SequentialLayoutStyle::LeftToRight || style->direction() == SequentialLayoutStyle::RightToLeft;
-	bool forward = style->direction() == SequentialLayoutStyle::LeftToRight || style->direction() == SequentialLayoutStyle::TopToBottom;
+	bool horizontal = style()->direction() == SequentialLayoutStyle::LeftToRight || style()->direction() == SequentialLayoutStyle::RightToLeft;
+	bool forward = style()->direction() == SequentialLayoutStyle::LeftToRight || style()->direction() == SequentialLayoutStyle::TopToBottom;
 
 
 	// Set the size
-	if (horizontal) sizeHeight = style->topMargin() + maxChildHeight + style->bottomMargin();
-	else sizeWidth = style->leftMargin() + maxChildWidth + style->rightMargin();
+	if (horizontal) sizeHeight = style()->topMargin() + maxChildHeight + style()->bottomMargin();
+	else sizeWidth = style()->leftMargin() + maxChildWidth + style()->rightMargin();
 
 	setInnerSize(sizeWidth, sizeHeight);
 
@@ -104,8 +93,8 @@ void SequentialLayout::updateState()
 		step = -1;
 	}
 
-	int w = style->leftMargin();
-	int h = style->topMargin();
+	int w = style()->leftMargin();
+	int h = style()->topMargin();
 
 	// Set the positions of all elements
 	for (int i = begin; i != end; i += step)
@@ -113,20 +102,20 @@ void SequentialLayout::updateState()
 		if ( horizontal )
 		{
 			int y = h;
-			if ( style->alignment() == SequentialLayoutStyle::BottomAlignment ) y += maxChildHeight - items[i]->height();
-			if ( style->alignment() == SequentialLayoutStyle::CenterAlignment ) y += (maxChildHeight - items[i]->height()) / 2;
+			if ( style()->alignment() == SequentialLayoutStyle::BottomAlignment ) y += maxChildHeight - items[i]->height();
+			if ( style()->alignment() == SequentialLayoutStyle::CenterAlignment ) y += (maxChildHeight - items[i]->height()) / 2;
 
-			if ( i != begin ) w += style->spaceBetweenElements();
+			if ( i != begin ) w += style()->spaceBetweenElements();
 			items[i]->setPos(w + xOffset(), y + yOffset());
 			w += items[i]->width();
 		}
 		else
 		{
 			int x = w;
-			if ( style->alignment() == SequentialLayoutStyle::RightAlignment ) x += maxChildWidth - items[i]->width();
-			if ( style->alignment() == SequentialLayoutStyle::CenterAlignment ) x += (maxChildWidth - items[i]->width()) / 2;
+			if ( style()->alignment() == SequentialLayoutStyle::RightAlignment ) x += maxChildWidth - items[i]->width();
+			if ( style()->alignment() == SequentialLayoutStyle::CenterAlignment ) x += (maxChildWidth - items[i]->width()) / 2;
 
-			if ( i != begin ) h += style->spaceBetweenElements();
+			if ( i != begin ) h += style()->spaceBetweenElements();
 			items[i]->setPos(x + xOffset(), h + yOffset());
 			h += items[i]->height();
 		}

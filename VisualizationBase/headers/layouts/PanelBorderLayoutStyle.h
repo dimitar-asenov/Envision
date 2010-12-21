@@ -32,10 +32,10 @@ class VISUALIZATIONBASE_API PanelBorderLayoutStyle : public LayoutStyle
 		PanelBorderLayoutStyle();
 		virtual void load();
 
-		PanelLayoutStyle& topStyle();
-		PanelLayoutStyle& leftStyle();
-		PanelLayoutStyle& bottomStyle();
-		PanelLayoutStyle& rightStyle();
+		const PanelLayoutStyle& topStyle() const;
+		const PanelLayoutStyle& leftStyle() const;
+		const PanelLayoutStyle& bottomStyle() const;
+		const PanelLayoutStyle& rightStyle() const;
 
 		int leftInnerMargin() const;
 		int rightInnerMargin() const;
@@ -47,10 +47,10 @@ class VISUALIZATIONBASE_API PanelBorderLayoutStyle : public LayoutStyle
 		static PanelBorderLayoutStyle* getDefault();
 };
 
-inline PanelLayoutStyle& PanelBorderLayoutStyle::topStyle() { return topStyle_; }
-inline PanelLayoutStyle& PanelBorderLayoutStyle::leftStyle() { return leftStyle_; }
-inline PanelLayoutStyle& PanelBorderLayoutStyle::bottomStyle() { return bottomStyle_; }
-inline PanelLayoutStyle& PanelBorderLayoutStyle::rightStyle() { return rightStyle_; }
+inline const PanelLayoutStyle& PanelBorderLayoutStyle::topStyle() const { return topStyle_; }
+inline const PanelLayoutStyle& PanelBorderLayoutStyle::leftStyle() const { return leftStyle_; }
+inline const PanelLayoutStyle& PanelBorderLayoutStyle::bottomStyle() const { return bottomStyle_; }
+inline const PanelLayoutStyle& PanelBorderLayoutStyle::rightStyle() const { return rightStyle_; }
 inline int PanelBorderLayoutStyle::leftInnerMargin() const { return leftInnerMargin_; }
 inline int PanelBorderLayoutStyle::rightInnerMargin() const { return rightInnerMargin_; }
 inline int PanelBorderLayoutStyle::topInnerMargin() const { return topInnerMargin_; }

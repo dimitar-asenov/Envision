@@ -12,6 +12,8 @@
 #include "VisualizationException.h"
 
 #include "StyleNode.h"
+#include "shapes/Shape.h"
+#include "shapes/ShapeStyle.h"
 
 #include <QtXml/QDomDocument>
 #include <QtCore/QMutex>
@@ -58,7 +60,6 @@ class VISUALIZATIONBASE_API Styles
 		static void loadQRadialGradient(QRadialGradient& value);
 
 	public:
-
 		static void load(const QString& propertyName, int& value);
 		static void load(const QString& propertyName, bool& value);
 		static void load(const QString& propertyName, QString& value);

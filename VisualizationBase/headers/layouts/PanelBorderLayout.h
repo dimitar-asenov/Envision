@@ -18,27 +18,19 @@ namespace Visualization {
 
 class VISUALIZATIONBASE_API PanelBorderLayout: public Layout
 {
-	public:
-		typedef PanelBorderLayoutStyle StyleType;
+	ITEM_COMMON(PanelBorderLayout, Layout)
 
 	private:
-		PanelBorderLayoutStyle* style;
-
 		PanelLayout* top_;
 		PanelLayout* left_;
 		PanelLayout* bottom_;
 		PanelLayout* right_;
 		Item* content_;
 
-		void setPanel(bool enable, PanelLayout*& panel, PanelLayoutStyle& style);
-
-	protected:
-		virtual const PanelBorderLayoutStyle* getStyle() const;
+		void setPanel(bool enable, PanelLayout*& panel, const PanelLayoutStyle& style);
 
 	public:
-		PanelBorderLayout(Item* parent, PanelBorderLayoutStyle* style = PanelBorderLayoutStyle::getDefault());
-		static const QString& className();
-		void setStyle(PanelBorderLayoutStyle* style = PanelBorderLayoutStyle::getDefault());
+		PanelBorderLayout(Item* parent, const PanelBorderLayoutStyle* style = PanelBorderLayoutStyle::getDefault());
 
 		void setTop(bool enable = true);
 		void setLeft(bool enable = true);
@@ -60,12 +52,10 @@ class VISUALIZATIONBASE_API PanelBorderLayout: public Layout
 		virtual void updateState();
 };
 
-inline const QString& PanelBorderLayout::className() {static QString name("PanelBorderLayout"); return name;}
-
-inline void PanelBorderLayout::setTop(bool enable) { setPanel(enable, top_, style->topStyle()); };
-inline void PanelBorderLayout::setLeft(bool enable) { setPanel(enable, left_, style->leftStyle()); };
-inline void PanelBorderLayout::setBottom(bool enable) { setPanel(enable, bottom_, style->bottomStyle()); };
-inline void PanelBorderLayout::setRight(bool enable) { setPanel(enable, right_, style->rightStyle()); };
+inline void PanelBorderLayout::setTop(bool enable) { setPanel(enable, top_, style()->topStyle()); };
+inline void PanelBorderLayout::setLeft(bool enable) { setPanel(enable, left_, style()->leftStyle()); };
+inline void PanelBorderLayout::setBottom(bool enable) { setPanel(enable, bottom_, style()->bottomStyle()); };
+inline void PanelBorderLayout::setRight(bool enable) { setPanel(enable, right_, style()->rightStyle()); };
 
 inline PanelLayout* PanelBorderLayout::top() { return top_; }
 inline PanelLayout* PanelBorderLayout::left() { return left_; }

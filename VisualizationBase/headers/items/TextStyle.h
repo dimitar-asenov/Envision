@@ -10,12 +10,14 @@
 
 #include "visualizationbase_api.h"
 
+#include "ItemStyle.h"
+
 #include <QtGui/QPen>
 #include <QtGui/QFont>
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API TextStyle
+class VISUALIZATIONBASE_API TextStyle : public ItemStyle
 {
 	private:
 		QPen pen_;
@@ -25,14 +27,14 @@ class VISUALIZATIONBASE_API TextStyle
 		TextStyle();
 		void load();
 
-		QPen& pen();
-		QFont& font();
+		const QPen& pen() const;
+		const QFont& font() const;
 
 		static TextStyle* getDefault();
 };
 
-inline QPen& TextStyle::pen() { return pen_; };
-inline QFont& TextStyle::font() { return font_; };
+inline const QPen& TextStyle::pen() const { return pen_; };
+inline const QFont& TextStyle::font() const { return font_; };
 
 }
 

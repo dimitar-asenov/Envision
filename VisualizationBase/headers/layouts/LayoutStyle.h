@@ -10,9 +10,11 @@
 
 #include "visualizationbase_api.h"
 
+#include "ItemStyle.h"
+
 namespace Visualization {
 
-class VISUALIZATIONBASE_API LayoutStyle
+class VISUALIZATIONBASE_API LayoutStyle : public ItemStyle
 {
 	public:
 		enum Orientation { HorizontalOrientation, VerticalOrientation};

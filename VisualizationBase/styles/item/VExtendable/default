@@ -1,0 +1,9 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style>
+	<shape prototypes="shape/Box/default">Box</shape>
+	<borderStyle prototypes="layout/PanelBorderLayout/default" />
+	<headerStyle prototypes="layout/SequentialLayout/default">
+		<shape prototypes="shape/Box/default">Box</shape>
+	</headerStyle>
+	<attributesStyle prototypes="layout/SequentialLayout/default" />
+</style>

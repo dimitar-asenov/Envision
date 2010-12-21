@@ -6,15 +6,17 @@
  **********************************************************************************************************************/
 
 #include "Item.h"
+#include "ItemStyle.h"
 #include "shapes/Shape.h"
 #include "shapes/ShapeStyle.h"
 #include "VisualizationException.h"
 
 namespace Visualization {
 
-Item::Item(Item* parent, Shape *shape) :
-	QGraphicsItem(parent), shape_(shape), needsUpdate_(true)
+Item::Item(Item* parent, const ItemStyle* style) :
+	QGraphicsItem(parent), style_(style), shape_(NULL), needsUpdate_(true)
 {
+	if (style_->hasShape()) shape_ = style_->createShape(this);
 }
 
 Item::~Item()
@@ -24,16 +26,6 @@ Item::~Item()
 		delete shape_;
 		shape_ = NULL;
 	}
-}
-
-QRectF Item::boundingRect() const
-{
-	return bounding_rect;
-}
-
-bool Item::needsUpdate()
-{
-	return needsUpdate_;
 }
 
 void Item::updateSubtreeState()
@@ -55,19 +47,6 @@ void Item::updateChildren()
 		Item* item = static_cast<Item*> (*child);
 		item->updateSubtreeState();
 	}
-}
-
-void Item::setShape(Shape* shape)
-{
-	shape_ = shape;
-	needsUpdate_ = true;
-}
-
-void Item::setShapeStyle(ShapeStyle* style)
-{
-	if (!shape_) throw VisualizationException("Trying to set the style of a shape for an item, but no shape was specified.");
-	shape_->setStyle(style);
-	needsUpdate_ = true;
 }
 
 void Item::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)

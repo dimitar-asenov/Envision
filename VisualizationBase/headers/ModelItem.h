@@ -24,7 +24,7 @@ class VISUALIZATIONBASE_API ModelItem: public Item
 		int revision;
 
 	public:
-		ModelItem(Item* parent, Model::Node* node, Shape *shape = NULL);
+		ModelItem(Item* parent, Model::Node* node, const ItemStyle *style = NULL);
 
 		virtual void updateSubtreeState();
 		virtual bool needsUpdate();

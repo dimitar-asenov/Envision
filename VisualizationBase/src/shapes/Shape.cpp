@@ -10,6 +10,9 @@
 #include <cmath>
 namespace Visualization {
 
+QMap<QString, Shape::ShapeConstructor> Shape::shapeConstructors;
+QMap<QString, Shape::ShapeStyleConstructor> Shape::shapeStyleConstructors;
+
 Shape::Shape(Item* parent_, ShapeStyle *style) :
 	parent(parent_), style_(style), width_(0), height_(0), xOffset_(0), yOffset_(0)
 {
@@ -119,6 +122,18 @@ int Shape::getOutterHeight(int innerHeight) const
 {
 	if (style_) return innerHeight + std::ceil(style_->outline().width());
 	return innerHeight;
+}
+
+Shape* Shape::createNewShape(const QString& shapeName, Item* parent)
+{
+	if (shapeConstructors.contains(shapeName)) return shapeConstructors.value(shapeName)(parent);
+	else throw VisualizationException("Trying to create a new shape for an unregistered type " + shapeName);
+}
+
+ShapeStyle* Shape::createNewShapeStyle(const QString& shapeName)
+{
+	if (shapeStyleConstructors.contains(shapeName)) return shapeStyleConstructors.value(shapeName)();
+	else throw VisualizationException("Trying to create a new shape style for an unregistered shape type " + shapeName);
 }
 
 }

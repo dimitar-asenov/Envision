@@ -9,23 +9,12 @@
 
 namespace Visualization {
 
-PanelBorderLayout::PanelBorderLayout(Item* parent, PanelBorderLayoutStyle* style_) :
-	Layout(parent), style(style_), top_(new PanelLayout(this, &style->topStyle())), left_(NULL), bottom_(NULL), right_(NULL), content_(NULL)
+PanelBorderLayout::PanelBorderLayout(Item* parent, const PanelBorderLayoutStyle* style) :
+	Layout(parent, style), top_(new PanelLayout(this, &style->topStyle())), left_(NULL), bottom_(NULL), right_(NULL), content_(NULL)
 {
 }
 
-const PanelBorderLayoutStyle* PanelBorderLayout::getStyle() const
-{
-	return style;
-}
-
-void PanelBorderLayout::setStyle(PanelBorderLayoutStyle* style_)
-{
-	style = style_;
-	setUpdateNeeded();
-}
-
-void PanelBorderLayout::setPanel(bool enable, PanelLayout*& panel, PanelLayoutStyle& style)
+void PanelBorderLayout::setPanel(bool enable, PanelLayout*& panel, const PanelLayoutStyle& style)
 {
 	if ( enable && !panel ) panel = new PanelLayout(this, &style);
 	if ( !enable && panel )
@@ -51,7 +40,7 @@ void PanelBorderLayout::updateState()
 	int innerHeight = content_ ? content_->height() : 0;
 
 	// Compute middle sizes
-	int middleWidth = innerWidth + style->leftInnerMargin() + style->rightInnerMargin();
+	int middleWidth = innerWidth + style()->leftInnerMargin() + style()->rightInnerMargin();
 	if ( left_ ) middleWidth += left_->width() / 2;
 	if ( right_ ) middleWidth += right_->width() / 2;
 
@@ -87,10 +76,10 @@ void PanelBorderLayout::updateState()
 	}
 
 	// Compute outter sizes
-	int outterWidth = innerWidth + style->leftInnerMargin() + style->rightInnerMargin();
+	int outterWidth = innerWidth + style()->leftInnerMargin() + style()->rightInnerMargin();
 	if ( left_ ) outterWidth += left_->width();
 	if ( right_ ) outterWidth += right_->width();
-	int outterHeight = innerHeight + style->topInnerMargin() + style->bottomInnerMargin();
+	int outterHeight = innerHeight + style()->topInnerMargin() + style()->bottomInnerMargin();
 	if ( top_ ) outterHeight += top_->height();
 	if ( bottom_ ) outterHeight += bottom_->height();
 
@@ -99,12 +88,12 @@ void PanelBorderLayout::updateState()
 	// Set positions
 	int x = xOffset();
 	int x2 = x + (left_ ? left_->width() / 2 : 0);
-	int x3 = x + style->leftInnerMargin() + (left_ ? left_->width() : 0);
-	int x4 = x3 + style->rightInnerMargin() + (content_ ? content_->width() : 0);
+	int x3 = x + style()->leftInnerMargin() + (left_ ? left_->width() : 0);
+	int x4 = x3 + style()->rightInnerMargin() + (content_ ? content_->width() : 0);
 
 	int y = yOffset();
-	int y2 = y + (top_ ? top_->height() : 0) + style->topInnerMargin();
-	int y3 = y2 + innerHeight + style->bottomInnerMargin();
+	int y2 = y + (top_ ? top_->height() : 0) + style()->topInnerMargin();
+	int y3 = y2 + innerHeight + style()->bottomInnerMargin();
 
 	if ( top_ ) top_->setPos(x2, y);
 	if ( left_ ) left_->setPos(x, y2);
@@ -125,12 +114,12 @@ int PanelBorderLayout::getYOffsetForExternalShape() const
 
 int PanelBorderLayout::getOutterWidthForExternalShape() const
 {
-	return width() - style->leftMargin() - style->rightMargin() - (left_ ? left_->width() / 2 : 0);
+	return width() - style()->leftMargin() - style()->rightMargin() - (left_ ? left_->width() / 2 : 0);
 }
 
 int PanelBorderLayout::getOutterHeightForExternalShape() const
 {
-	return height() - style->topMargin() - style->bottomMargin() - (top_ ? top_->height() / 2 : 0);
+	return height() - style()->topMargin() - style()->bottomMargin() - (top_ ? top_->height() / 2 : 0);
 }
 
 }
