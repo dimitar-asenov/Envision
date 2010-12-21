@@ -24,6 +24,7 @@ class VISUALIZATIONBASE_API PanelLayoutStyle : public LayoutStyle
 
 	public:
 		PanelLayoutStyle();
+		virtual void load();
 
 		Orientation orientation() const;
 		Alignment alignment() const;

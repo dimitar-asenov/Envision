@@ -19,7 +19,7 @@
 namespace Visualization {
 
 VExtendable::VExtendable(Item* parent, Model::ExtendableNode* node) :
-	ModelItem(parent, node, new Box(this)), layout(this), header(NULL), attributes(NULL)
+	ModelItem(parent, node, new Box(this)), layout(this, Styles::layout<PanelBorderLayout>("default")), header(NULL), attributes(NULL)
 {
 	setShape(new Box(this, Styles::shape<Box>("default")));
 	layout.setTop(true);

@@ -6,6 +6,7 @@
  **********************************************************************************************************************/
 
 #include "layouts/PanelLayoutStyle.h"
+#include "Styles.h"
 
 namespace Visualization {
 
@@ -35,4 +36,11 @@ void PanelLayoutStyle::setSpaceBetweenElements(int space)
 	if ( space >= 0 ) spaceBetweenElements_ = space;
 }
 
+void PanelLayoutStyle::load()
+{
+	LayoutStyle::load();
+	Styles::load("orientation", (int&) orientation_);
+	Styles::load("alignment", (int&) alignment_);
+	Styles::load("spaceBetweenElements", spaceBetweenElements_);
+}
 }

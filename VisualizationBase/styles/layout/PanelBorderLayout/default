@@ -1,0 +1,11 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="../Layout/default">
+	<leftInnerMargin>5</leftInnerMargin>
+	<topInnerMargin>5</topInnerMargin>
+	<rightInnerMargin>5</rightInnerMargin>
+	<bottomInnerMargin>5</bottomInnerMargin>
+	<topPanelStyle prototypes="../PanelLayout/default" />
+	<leftPanelStyle prototypes="../PanelLayout/default" />
+	<bottomPanelStyle prototypes="../PanelLayout/default" />
+	<rightPanelStyle prototypes="../PanelLayout/default" />
+</style>

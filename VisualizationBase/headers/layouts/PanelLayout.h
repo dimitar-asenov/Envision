@@ -37,6 +37,7 @@ class VISUALIZATIONBASE_API PanelLayout: public Layout
 
 	public:
 		PanelLayout(Item* parent, PanelLayoutStyle* style = PanelLayoutStyle::getDefault());
+		static const QString& className();
 		void setStyle(PanelLayoutStyle* style = PanelLayoutStyle::getDefault());
 
 		void setFirst(Item* item);
@@ -50,6 +51,8 @@ class VISUALIZATIONBASE_API PanelLayout: public Layout
 		void setMinimalLength(int minimalLength);
 		virtual void updateState();
 };
+
+inline const QString& PanelLayout::className() {static QString name("PanelLayout"); return name;}
 
 inline void PanelLayout::setFirst(Item* item) { setItem(item, first_); }
 inline void PanelLayout::setMiddle(Item* item) { setItem(item, middle_); }

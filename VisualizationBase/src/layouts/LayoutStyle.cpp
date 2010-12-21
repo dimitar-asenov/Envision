@@ -6,6 +6,7 @@
  **********************************************************************************************************************/
 
 #include "layouts/LayoutStyle.h"
+#include "Styles.h"
 
 namespace Visualization {
 
@@ -31,6 +32,14 @@ void LayoutStyle::setMargins(int left, int right, int top, int bottom)
 	if ( right >= 0 ) rightMargin_ = right;
 	if ( top >= 0 ) topMargin_ = top;
 	if ( bottom >= 0 ) bottomMargin_ = bottom;
+}
+
+void LayoutStyle::load()
+{
+	Styles::load("leftMargin", leftMargin_);
+	Styles::load("topMargin", topMargin_);
+	Styles::load("rightMargin", rightMargin_);
+	Styles::load("bottomMargin", bottomMargin_);
 }
 
 }

@@ -23,6 +23,7 @@ class VISUALIZATIONBASE_API SequentialLayoutStyle : public LayoutStyle
 
 	public:
 		SequentialLayoutStyle();
+		virtual void load();
 
 		Direction direction() const;
 		Alignment alignment() const;

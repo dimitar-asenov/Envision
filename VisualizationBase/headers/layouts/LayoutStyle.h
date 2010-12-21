@@ -27,6 +27,7 @@ class VISUALIZATIONBASE_API LayoutStyle
 
 	public:
 		LayoutStyle(int leftMargin = 0, int rightMargin = 0, int topMargin = 0, int bottomMargin = 0);
+		virtual void load();
 
 		int leftMargin() const;
 		int rightMargin() const;

@@ -29,6 +29,7 @@ class VISUALIZATIONBASE_API SequentialLayout: public Layout
 
 	public:
 		SequentialLayout(Item* parent, SequentialLayoutStyle* style = SequentialLayoutStyle::getDefault());
+		static const QString& className();
 		void setStyle(SequentialLayoutStyle* style = SequentialLayoutStyle::getDefault());
 
 		int length() const;
@@ -42,6 +43,8 @@ class VISUALIZATIONBASE_API SequentialLayout: public Layout
 
 		virtual void updateState();
 };
+
+inline const QString& SequentialLayout::className() {static QString name("SequentialLayout"); return name;}
 
 template <class T> T* SequentialLayout::at(int index)
 {

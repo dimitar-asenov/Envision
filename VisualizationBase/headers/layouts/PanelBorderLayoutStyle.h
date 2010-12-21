@@ -30,6 +30,7 @@ class VISUALIZATIONBASE_API PanelBorderLayoutStyle : public LayoutStyle
 
 	public:
 		PanelBorderLayoutStyle();
+		virtual void load();
 
 		PanelLayoutStyle& topStyle();
 		PanelLayoutStyle& leftStyle();

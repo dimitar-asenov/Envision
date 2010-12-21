@@ -1,0 +1,6 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="../Layout/default">
+	<direction>0</direction>
+	<alignment>0</alignment>
+	<spaceBetweenElements>0</spaceBetweenElements>
+</style>

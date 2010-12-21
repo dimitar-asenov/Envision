@@ -6,6 +6,7 @@
  **********************************************************************************************************************/
 
 #include "layouts/SequentialLayoutStyle.h"
+#include "Styles.h"
 
 namespace Visualization {
 
@@ -33,6 +34,14 @@ void SequentialLayoutStyle::setAlignment(Alignment alignment)
 void SequentialLayoutStyle::setSpaceBetweenElements(int space)
 {
 	if ( space >= 0 ) spaceBetweenElements_ = space;
+}
+
+void SequentialLayoutStyle::load()
+{
+	LayoutStyle::load();
+	Styles::load("direction", (int&) direction_);
+	Styles::load("alignment", (int&) alignment_);
+	Styles::load("spaceBetweenElements", spaceBetweenElements_);
 }
 
 }

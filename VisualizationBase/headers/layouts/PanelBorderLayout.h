@@ -37,6 +37,7 @@ class VISUALIZATIONBASE_API PanelBorderLayout: public Layout
 
 	public:
 		PanelBorderLayout(Item* parent, PanelBorderLayoutStyle* style = PanelBorderLayoutStyle::getDefault());
+		static const QString& className();
 		void setStyle(PanelBorderLayoutStyle* style = PanelBorderLayoutStyle::getDefault());
 
 		void setTop(bool enable = true);
@@ -58,6 +59,8 @@ class VISUALIZATIONBASE_API PanelBorderLayout: public Layout
 
 		virtual void updateState();
 };
+
+inline const QString& PanelBorderLayout::className() {static QString name("PanelBorderLayout"); return name;}
 
 inline void PanelBorderLayout::setTop(bool enable) { setPanel(enable, top_, style->topStyle()); };
 inline void PanelBorderLayout::setLeft(bool enable) { setPanel(enable, left_, style->leftStyle()); };
