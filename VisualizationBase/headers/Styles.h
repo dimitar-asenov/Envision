@@ -13,17 +13,22 @@
 
 #include "StyleNode.h"
 
+#include <QtXml/QDomDocument>
 #include <QtCore/QMutex>
 #include <QtCore/QMutexLocker>
-#include <QtXml/QDomDocument>
 #include <QtCore/QMap>
 #include <QtCore/QDir>
 #include <QtCore/QList>
+#include <QtCore/QPair>
+#include <QtCore/QVector>
 
 class QColor;
 class QPen;
 class QFont;
 class QBrush;
+class QLinearGradient;
+class QRadialGradient;
+class QPointF;
 
 namespace Visualization {
 
@@ -44,10 +49,13 @@ class VISUALIZATIONBASE_API Styles
 
 		template <class T> static typename T::StyleType* loadStyle(const QString& objectClass, const QString& styleName);
 
+		static void loadQPointF(QPointF& value);
 		static void loadQColor(QColor& value);
 		static void loadQPen(QPen& value);
 		static void loadQFont(QFont& value);
 		static void loadQBrush(QBrush& value);
+		static void loadQLinearGradient(QLinearGradient& value);
+		static void loadQRadialGradient(QRadialGradient& value);
 
 	public:
 
@@ -57,6 +65,9 @@ class VISUALIZATIONBASE_API Styles
 		static void load(const QString& propertyName, double& value);
 		template <class T> static void load(const QString& propertyName, T& value);
 		template <class T> static void load(T& value);
+		template <typename T> static void load(QVector<T>& value);
+		template <typename T> static void load(QList<T>& value);
+		template <typename F, typename S> static void load(QPair<F,S>& value);
 
 		template <class T> static typename T::StyleType* item(const QString& styleName = QString());
 		template <class T> static typename T::StyleType* layout(const QString& styleName = QString());
@@ -156,10 +167,43 @@ template <class T> void Styles::load(const QString& propertyName, T& value)
 }
 
 template <class T> inline void Styles::load(T& value) { value.load(); }
+template <> inline void Styles::load<QPointF>(QPointF& value) { loadQPointF(value); }
 template <> inline void Styles::load<QPen>(QPen& value) { loadQPen(value); }
 template <> inline void Styles::load<QColor>(QColor& value) { loadQColor(value); }
 template <> inline void Styles::load<QFont>(QFont& value) { loadQFont(value); }
 template <> inline void Styles::load<QBrush>(QBrush& value) { loadQBrush(value); }
+template <> inline void Styles::load<QLinearGradient>(QLinearGradient& value) { loadQLinearGradient(value); }
+template <> inline void Styles::load<QRadialGradient>(QRadialGradient& value) { loadQRadialGradient(value); }
+
+template <class T> void Styles::load(QVector<T>& value)
+{
+	QList<T> list;
+	load(list);
+	value = list.toVector();
+}
+
+template <typename T> void Styles::load(QList<T>& value)
+{
+	int length;
+	Styles::load("length", length);
+
+	value.clear();
+	for(int i = 0; i< length; ++i)
+	{
+		T element;
+		Styles::load("e"+QString::number(i), element);
+		value.append(element);
+	}
+}
+
+template <typename F, typename S> void Styles::load(QPair<F,S>& value)
+{
+	F first;
+	S second;
+	Styles::load("first", first);
+	Styles::load("second", second);
+	value = QPair<F,S>(first, second);
+}
 
 }
 

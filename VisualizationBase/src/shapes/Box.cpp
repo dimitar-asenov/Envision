@@ -39,29 +39,25 @@ QPainterPath Box::getRectanglePath(qreal x, qreal y, int width, int height)
 
 	if ( corner == BoxStyle::RightAngleCorner ) path.lineTo(width + x, y);
 	else if ( corner == BoxStyle::CutCorner ) path.lineTo(width + x - radius, y);
-	else
-		path.arcTo(width - 2 * radius + x, y, radius * 2, radius * 2, 0.0, 90.0);
+	else path.arcTo(width - 2 * radius + x, y, radius * 2, radius * 2, 0.0, 90.0);
 
 	path.lineTo(radius + x, y);
 
 	if ( corner == BoxStyle::RightAngleCorner ) path.lineTo(x, y);
 	else if ( corner == BoxStyle::CutCorner ) path.lineTo(x, radius + y);
-	else
-		path.arcTo(x, y, radius * 2, radius * 2, 90.0, 90.0);
+	else path.arcTo(x, y, radius * 2, radius * 2, 90.0, 90.0);
 
 	path.lineTo(x, height - radius + y);
 
 	if ( corner == BoxStyle::RightAngleCorner ) path.lineTo(x, height + y);
 	else if ( corner == BoxStyle::CutCorner ) path.lineTo(x + radius, height + y);
-	else
-		path.arcTo(x, height - 2 * radius + y, radius * 2, radius * 2, 180.0, 90.0);
+	else path.arcTo(x, height - 2 * radius + y, radius * 2, radius * 2, 180.0, 90.0);
 
 	path.lineTo(width - radius + x, height + y);
 
 	if ( corner == BoxStyle::RightAngleCorner ) path.lineTo(width + x, height + y);
 	else if ( corner == BoxStyle::CutCorner ) path.lineTo(x + width, height - radius + y);
-	else
-		path.arcTo(width - 2 * radius + x, height - 2 * radius + y, radius * 2, radius * 2, 270.0, 90.0);
+	else path.arcTo(width - 2 * radius + x, height - 2 * radius + y, radius * 2, radius * 2, 270.0, 90.0);
 
 	path.closeSubpath();
 	return path;
@@ -71,53 +67,50 @@ void Box::update()
 {
 	if ( sizeSpecified() == InnerSize )
 	{
-		contentBoxWidth = width() + 2*style()->cornerRadius() + style()->outline().width();
-		contentBoxHeight = height() + 2*style()->cornerRadius() + style()->outline().width();
+		contentBoxWidth = width() + 2 * style()->cornerRadius() + style()->outline().width();
+		contentBoxHeight = height() + 2 * style()->cornerRadius() + style()->outline().width();
 	}
 	else
 	{
 		contentBoxWidth = width();
 		contentBoxHeight = height();
 
-		if (style()->shadow() != Qt::NoBrush && style()->isShadowPartOfSize())
+		if ( style()->shadow() != Qt::NoBrush && style()->isShadowPartOfSize() )
 		{
 			contentBoxWidth -= style()->xShadowOffset();
 			contentBoxHeight -= style()->yShadowOffset();
 		}
 	}
 
-	if (style()->shadow() == Qt::NoBrush || !style()->isShadowPartOfSize())
-		setItemSize(std::ceil(contentBoxWidth), std::ceil(contentBoxHeight));
-	else
-		setItemSize(std::ceil(contentBoxWidth) + style()->xShadowOffset(), std::ceil(contentBoxHeight) + style()->yShadowOffset());
+	if ( style()->shadow() == Qt::NoBrush || !style()->isShadowPartOfSize() ) setItemSize(std::ceil(contentBoxWidth), std::ceil(contentBoxHeight));
+	else setItemSize(std::ceil(contentBoxWidth) + style()->xShadowOffset(), std::ceil(contentBoxHeight) + style()->yShadowOffset());
 
-	if (style()->shadow() == Qt::NoBrush)
-		setItemBoundingRect(xOffset(), yOffset(), std::ceil(contentBoxWidth), std::ceil(contentBoxHeight));
-	else
-		setItemBoundingRect(xOffset(), yOffset(), std::ceil(contentBoxWidth) + style()->xShadowOffset(), std::ceil(contentBoxHeight) + style()->yShadowOffset());
+	if ( style()->shadow() == Qt::NoBrush ) setItemBoundingRect(xOffset(), yOffset(), std::ceil(contentBoxWidth), std::ceil(contentBoxHeight));
+	else setItemBoundingRect(xOffset(), yOffset(), std::ceil(contentBoxWidth) + style()->xShadowOffset(), std::ceil(contentBoxHeight)
+			+ style()->yShadowOffset());
 }
 
 int Box::contentLeft()
 {
-	return xOffset() + style()->cornerRadius() + (style()->outline().width()+1)/2;
+	return xOffset() + style()->cornerRadius() + (style()->outline().width() + 1) / 2;
 }
 
 int Box::contentTop()
 {
-	return yOffset() + style()->cornerRadius() + (style()->outline().width()+1)/2;
+	return yOffset() + style()->cornerRadius() + (style()->outline().width() + 1) / 2;
 }
 
 int Box::getOutterWidth(int innerWidth) const
 {
-	int outterWidth = innerWidth + 2*style()->cornerRadius() + std::ceil(style()->outline().width());
-	if (style()->shadow() != Qt::NoBrush && style()->isShadowPartOfSize()) outterWidth += style()->xShadowOffset();
+	int outterWidth = innerWidth + 2 * style()->cornerRadius() + std::ceil(style()->outline().width());
+	if ( style()->shadow() != Qt::NoBrush && style()->isShadowPartOfSize() ) outterWidth += style()->xShadowOffset();
 	return outterWidth;
 }
 
 int Box::getOutterHeight(int innerHeight) const
 {
-	int outterHeight = innerHeight + 2*style()->cornerRadius() + std::ceil(style()->outline().width());
-	if (style()->shadow() != Qt::NoBrush && style()->isShadowPartOfSize()) outterHeight += style()->yShadowOffset();
+	int outterHeight = innerHeight + 2 * style()->cornerRadius() + std::ceil(style()->outline().width());
+	if ( style()->shadow() != Qt::NoBrush && style()->isShadowPartOfSize() ) outterHeight += style()->yShadowOffset();
 	return outterHeight;
 }
 
@@ -129,28 +122,49 @@ void Box::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 
 	qreal outlineWidth = style()->outline().width();
 	// Move the figure when using antialiasing. The outline will start at a pixel boundary. This makes it sharper.
-	if (painter->testRenderHint(QPainter::Antialiasing) ||  painter->testRenderHint(QPainter::HighQualityAntialiasing) )
-		if (style()->outline() != Qt::NoPen )
-		{
-			qreal intPart;
-			qreal fracPart = std::modf( outlineWidth / 2.0, &intPart );
+	if ( painter->testRenderHint(QPainter::Antialiasing) || painter->testRenderHint(QPainter::HighQualityAntialiasing) ) if ( style()->outline()
+			!= Qt::NoPen )
+	{
+		qreal intPart;
+		qreal fracPart = std::modf(outlineWidth / 2.0, &intPart);
 
-			x += fracPart;
-			y += fracPart;
-		}
+		x += fracPart;
+		y += fracPart;
+	}
 
 	// Draw shadow
 	if ( style()->shadow() != Qt::NoBrush )
 	{
 		painter->setPen(Qt::NoPen);
 		painter->setBrush(style()->shadow());
-		painter->drawPath(getRectanglePath(x + style()->xShadowOffset(), y + style()->yShadowOffset(), contentBoxWidth, contentBoxHeight));
+		painter->drawPath(getRectanglePath(xOffset() + style()->xShadowOffset(), yOffset() + style()->yShadowOffset(), contentBoxWidth, contentBoxHeight));
 	}
 
 	// Draw box.
 	painter->setPen(style()->outline());
-	painter->setBrush(style()->background());
-	painter->drawPath(getRectanglePath(x, y, contentBoxWidth - outlineWidth , contentBoxHeight - outlineWidth));
+
+	// Set the brush and fix the gradient if needed.
+	if ( style()->background().style() == Qt::LinearGradientPattern && style()->background().gradient()->coordinateMode() == QGradient::LogicalMode )
+	{
+		QLinearGradient g = *(static_cast<const QLinearGradient*> (style()->background().gradient()));
+		g.setStart(x + g.start().x(), y + g.start().y());
+		g.setFinalStop(x + g.finalStop().x(), y + g.finalStop().y());
+		painter->setBrush(g);
+
+	}
+	else if ( style()->background().style()  == Qt::RadialGradientPattern && style()->background().gradient()->coordinateMode() == QGradient::LogicalMode )
+	{
+		QRadialGradient g = *(static_cast<const QRadialGradient*> (style()->background().gradient()));
+		g.setCenter(x + g.center().x(), y + g.center().y());
+		g.setFocalPoint(x + g.focalPoint().x(), y + g.focalPoint().y());
+		painter->setBrush(g);
+	}
+	else
+	{
+		painter->setBrush(style()->background());;
+	}
+
+	painter->drawPath(getRectanglePath(x, y, contentBoxWidth - outlineWidth, contentBoxHeight - outlineWidth));
 }
 
 }
