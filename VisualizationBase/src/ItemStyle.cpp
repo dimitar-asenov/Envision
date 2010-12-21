@@ -41,6 +41,7 @@ void ItemStyle::load()
 {
 	QString shape;
 	Styles::load("shape", shapeName_);
+	shapeName_ = shapeName_.trimmed();
 
 	if ( !shapeName_.isEmpty() )
 	{
