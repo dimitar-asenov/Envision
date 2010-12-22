@@ -8,4 +8,11 @@
 			<style>1</style>
 		</shadowBrush>
 	</shape>
+	<headerStyle prototypes="layout/SequentialLayout/default">
+		<shape prototypes="shape/Box/default">
+			Box
+			<cornerType>1</cornerType>
+			<cornerRadius>5</cornerRadius>
+		</shape>
+	</headerStyle>
 </style>

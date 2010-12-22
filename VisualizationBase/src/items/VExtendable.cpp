@@ -59,7 +59,7 @@ void VExtendable::determineChildren()
 	// Clean up when switching styles
 	if ( expandedSwtiched() )
 	{
-		if (style()->expanded())
+		if ( style()->expanded() )
 		{
 			layout = new PanelBorderLayout(this, &style()->borderStyle());
 			attributes = new SequentialLayout(NULL, &style()->attributesStyle());
@@ -79,21 +79,34 @@ void VExtendable::determineChildren()
 		}
 	}
 
-	if (style()->expanded())
+	// TODO: find a better way and place to determine the style of children
+	header.setStyle(&style()->headerStyle());
+
+	if ( style()->expanded() )
 	{
+		layout->setStyle(&style()->borderStyle());
+		attributes->setStyle(&style()->attributesStyle());
+
 		// Set the attributes
 		// TODO this can be done smarter
 		QList<QPair<QString, Model::Node*> > attr = node->getAllAttributes();
 
 		bool changed = false;
+		int nameFound = 0; // This will become 1 if the name attribute was already encountered
 		for (int i = 0; i < attr.size(); ++i)
 		{
+			if ( attr[i].first == "name" )
+			{
+				nameFound = 1;
+				continue;
+			}
+
 			if ( !changed )
 			{
-				changed = attributes->length() <= i;
-				if ( !changed ) changed = attributes->at<SequentialLayout> (i)->at<ModelItem> (1)->getNode() != attr[i].second;
+				changed = attributes->length() + nameFound <= i;
+				if ( !changed ) changed = attributes->at<SequentialLayout> (i - nameFound)->at<ModelItem> (1)->getNode() != attr[i].second;
 
-				if ( changed ) for (int k = i; k < attributes->length(); ++k)
+				if ( changed ) while ( attributes->length() + nameFound > i )
 					attributes->remove(attributes->length() - 1);
 			}
 
@@ -111,7 +124,7 @@ void VExtendable::determineChildren()
 
 void VExtendable::updateState()
 {
-	if (style()->expanded())
+	if ( style()->expanded() )
 	{
 		if ( getShape() )
 		{
@@ -125,13 +138,13 @@ void VExtendable::updateState()
 	{
 		if ( getShape() )
 		{
-			getShape()->setOffset(0,0);
+			getShape()->setOffset(0, 0);
 			getShape()->setInnerSize(header.width(), header.height());
 			header.setPos(getShape()->contentLeft(), getShape()->contentTop());
 		}
 		else
 		{
-			bounding_rect.setRect(0,0,0,0);
+			bounding_rect.setRect(0, 0, 0, 0);
 			size.setWidth(header.width());
 			size.setHeight(header.height());
 		}
@@ -140,7 +153,7 @@ void VExtendable::updateState()
 
 void VExtendable::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-	if (getShape()) ModelItem::paint(painter, option, widget);
+	if ( getShape() ) ModelItem::paint(painter, option, widget);
 }
 
 void VExtendable::setExpanded(bool expanded)

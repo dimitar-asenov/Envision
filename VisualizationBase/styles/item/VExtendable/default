@@ -4,7 +4,11 @@
 	<shape />
 	<borderStyle prototypes="layout/PanelBorderLayout/default" />
 	<headerStyle prototypes="layout/SequentialLayout/default">
-		<shape prototypes="shape/Box/default">Box</shape>
+		<shape prototypes="shape/Box/default">
+			Box
+			<cornerType>2</cornerType>
+			<cornerRadius>2</cornerRadius>
+		</shape>
 	</headerStyle>
 	<attributesStyle prototypes="layout/SequentialLayout/default">
 		<direction>2</direction>
