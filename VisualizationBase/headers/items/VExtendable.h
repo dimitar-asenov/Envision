@@ -24,9 +24,11 @@ class VISUALIZATIONBASE_API VExtendable : public ModelItem
 	ITEM_COMMON(VExtendable, ModelItem)
 
 	private:
-		PanelBorderLayout layout;
 		SequentialLayout header;
-		SequentialLayout attributes;
+		PanelBorderLayout* layout; //only used when expanded
+		SequentialLayout* attributes; //only used when expanded
+
+		bool expandedSwtiched() const;
 
 	protected:
 		void determineChildren();
@@ -34,6 +36,11 @@ class VISUALIZATIONBASE_API VExtendable : public ModelItem
 
 	public:
 		VExtendable(Item* parent, Model::ExtendableNode* node, const VExtendableStyle* style = Styles::item<VExtendable>("default"));
+		virtual ~VExtendable();
+
+		void setExpanded(bool expanded = true);
+
+		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 };
 
 }

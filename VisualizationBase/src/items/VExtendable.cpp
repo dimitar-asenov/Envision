@@ -17,13 +17,23 @@
 namespace Visualization {
 
 VExtendable::VExtendable(Item* parent, Model::ExtendableNode* node, const VExtendableStyle* style) :
-	ModelItem(parent, node, style), layout(this, &style->borderStyle()), header(NULL, &style->headerStyle()),
-			attributes(NULL, &style->attributesStyle())
+	ModelItem(parent, node, style), header(this, &style->headerStyle()), layout(NULL), attributes(NULL)
 {
-	layout.setTop(true);
-	layout.top()->setMiddle(&header);
-	layout.setContent(&attributes);
 	header.append(new Text(&header, node->getTypeName()));
+}
+
+VExtendable::~VExtendable()
+{
+	if ( layout )
+	{
+		delete layout;
+		layout = NULL;
+	}
+	if ( attributes )
+	{
+		delete attributes;
+		attributes = NULL;
+	}
 }
 
 void VExtendable::determineChildren()
@@ -46,28 +56,54 @@ void VExtendable::determineChildren()
 		if ( header.length() > 1 ) header.remove(0);
 	}
 
-	// Set the attributes
-	// TODO this can be done smarter
-	QList<QPair<QString, Model::Node*> > attr = node->getAllAttributes();
-
-	bool changed = false;
-	for (int i = 0; i < attr.size(); ++i)
+	// Clean up when switching styles
+	if ( expandedSwtiched() )
 	{
-		if ( !changed )
+		if (style()->expanded())
 		{
-			changed = attributes.length() <= i;
-			if ( !changed ) changed = attributes.at<SequentialLayout> (i)->at<ModelItem> (1)->getNode() != attr[i].second;
+			layout = new PanelBorderLayout(this, &style()->borderStyle());
+			attributes = new SequentialLayout(NULL, &style()->attributesStyle());
 
-			if ( changed ) for (int k = i; k < attributes.length(); ++k)
-				attributes.remove(attributes.length() - 1);
+			layout->setTop(true);
+			layout->top()->setMiddle(&header);
+			layout->setContent(attributes);
 		}
-
-		if ( changed )
+		else
 		{
-			SequentialLayout* s = new SequentialLayout(&attributes);
-			s->append(new Text(s, attr[i].first));
-			s->append(renderer()->render(s, attr[i].second));
-			attributes.append(s);
+			layout->top()->setMiddle(NULL, false);
+			delete layout;
+			layout = NULL;
+			delete attributes;
+			attributes = NULL;
+			header.setParentItem(this);
+		}
+	}
+
+	if (style()->expanded())
+	{
+		// Set the attributes
+		// TODO this can be done smarter
+		QList<QPair<QString, Model::Node*> > attr = node->getAllAttributes();
+
+		bool changed = false;
+		for (int i = 0; i < attr.size(); ++i)
+		{
+			if ( !changed )
+			{
+				changed = attributes->length() <= i;
+				if ( !changed ) changed = attributes->at<SequentialLayout> (i)->at<ModelItem> (1)->getNode() != attr[i].second;
+
+				if ( changed ) for (int k = i; k < attributes->length(); ++k)
+					attributes->remove(attributes->length() - 1);
+			}
+
+			if ( changed )
+			{
+				SequentialLayout* s = new SequentialLayout(attributes);
+				s->append(new Text(s, attr[i].first));
+				s->append(renderer()->render(s, attr[i].second));
+				attributes->append(s);
+			}
 		}
 	}
 
@@ -75,13 +111,50 @@ void VExtendable::determineChildren()
 
 void VExtendable::updateState()
 {
-	if ( getShape() )
+	if (style()->expanded())
 	{
-		getShape()->setOffset(layout.getXOffsetForExternalShape(), layout.getYOffsetForExternalShape());
-		getShape()->setOutterSize(layout.getOutterWidthForExternalShape(), layout.getOutterHeightForExternalShape());
+		if ( getShape() )
+		{
+			getShape()->setOffset(layout->getXOffsetForExternalShape(), layout->getYOffsetForExternalShape());
+			getShape()->setOutterSize(layout->getOutterWidthForExternalShape(), layout->getOutterHeightForExternalShape());
+		}
+		size.setHeight(layout->height());
+		size.setWidth(layout->width());
 	}
-	size .setHeight(layout.height());
-	size.setWidth(layout.width());
+	else
+	{
+		if ( getShape() )
+		{
+			getShape()->setOffset(0,0);
+			getShape()->setInnerSize(header.width(), header.height());
+			header.setPos(getShape()->contentLeft(), getShape()->contentTop());
+		}
+		else
+		{
+			bounding_rect.setRect(0,0,0,0);
+			size.setWidth(header.width());
+			size.setHeight(header.height());
+		}
+	}
+}
+
+void VExtendable::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+	if (getShape()) ModelItem::paint(painter, option, widget);
+}
+
+void VExtendable::setExpanded(bool expanded)
+{
+	if ( expanded != style()->expanded() )
+	{
+		if ( expanded ) setStyle(Styles::item<VExtendable>("expanded"));
+		else setStyle(Styles::item<VExtendable>("default"));
+	}
+}
+
+inline bool VExtendable::expandedSwtiched() const
+{
+	return (layout && attributes) != style()->expanded();
 }
 
 }

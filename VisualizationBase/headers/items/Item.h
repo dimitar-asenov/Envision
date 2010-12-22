@@ -49,7 +49,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		virtual bool needsUpdate();
 		virtual void updateSubtreeState();
 
-		virtual void setStyle(ItemStyle* style);
+		virtual void setStyle(const ItemStyle* style);
 		const ItemStyle* style() const;
 		Shape* getShape() const;
 
@@ -60,7 +60,6 @@ inline int Item::width() const { return size.width(); }
 inline int Item::height() const { return size.height(); }
 inline const ItemStyle* Item::style() const { return style_; }
 inline Shape* Item::getShape() const {	return shape_; }
-inline void Item::setStyle(ItemStyle* style) { style_ = style; needsUpdate_ = true; }
 inline void Item::setUpdateNeeded() { needsUpdate_ = true; }
 inline QRectF Item::boundingRect() const { return bounding_rect; }
 inline bool Item::needsUpdate() { return needsUpdate_; }

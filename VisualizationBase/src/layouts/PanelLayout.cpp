@@ -15,9 +15,9 @@ PanelLayout::PanelLayout(Item* parent, const PanelLayoutStyle* style) :
 {
 }
 
-void PanelLayout::setItem(Item* item, Item*& position)
+void PanelLayout::setItem(Item* item, Item*& position, bool deleteOldItem)
 {
-	delete position;
+	if (deleteOldItem) delete position;
 	if ( !item ) item = new NoItem(this);
 	item->setParentItem(this);
 	position = item;

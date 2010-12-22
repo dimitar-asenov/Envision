@@ -25,9 +25,9 @@ void PanelBorderLayout::setPanel(bool enable, PanelLayout*& panel, const PanelLa
 	setUpdateNeeded();
 }
 
-void PanelBorderLayout::setContent(Item* content)
+void PanelBorderLayout::setContent(Item* content, bool deleteOldContent)
 {
-	if ( content_ ) delete content_;
+	if ( deleteOldContent && content_ ) delete content_;
 	if ( content ) content->setParentItem(this);
 	content_ = content;
 	setUpdateNeeded();

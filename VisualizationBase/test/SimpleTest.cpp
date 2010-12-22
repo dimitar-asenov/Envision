@@ -104,8 +104,9 @@ TEST(VisualizationBase, ExtendableTest)
 	right->name()->set("right node");
 	model.endModification();
 
-	ModelItem* t = renderer->render(NULL, root);
+	VExtendable* t = dynamic_cast<VExtendable*> (renderer->render(NULL, root));
 	t->setFlag(QGraphicsItem::ItemIsMovable);
+	t->setExpanded();
 	scene->addItem(t);
 	t->updateSubtreeState();
 

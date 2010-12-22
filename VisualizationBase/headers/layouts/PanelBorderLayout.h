@@ -36,7 +36,7 @@ class VISUALIZATIONBASE_API PanelBorderLayout: public Layout
 		void setLeft(bool enable = true);
 		void setBottom(bool enable = true);
 		void setRight(bool enable = true);
-		void setContent(Item* content);
+		void setContent(Item* content, bool deleteOldContent = true);
 
 		PanelLayout* top();
 		PanelLayout* left();

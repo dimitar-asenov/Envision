@@ -25,9 +25,9 @@ public:																																					\
 	typedef StyleTypeName StyleType;																												\
 	static const QString& className() { static QString name(#ItemClass); return name; }											\
 	const StyleType* style() const { return static_cast<const StyleType*> (BaseClass::style()); }							\
-	virtual void setStyle(ItemStyle* style)																									\
+	virtual void setStyle(const ItemStyle* style)																							\
 	{																																						\
-		StyleType* s = dynamic_cast<StyleType*> (style);																					\
+		const StyleType* s = dynamic_cast<const StyleType*> (style);																	\
 		if (!s) throw VisualizationException("Invalid style type when calling " #ItemClass "::setStyle");					\
 		Item::setStyle(s);																															\
 	}																																						\

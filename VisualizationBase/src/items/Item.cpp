@@ -14,9 +14,9 @@
 namespace Visualization {
 
 Item::Item(Item* parent, const ItemStyle* style) :
-	QGraphicsItem(parent), style_(style), shape_(NULL), needsUpdate_(true)
+	QGraphicsItem(parent), style_(NULL), shape_(NULL), needsUpdate_(true)
 {
-	if (style_ && style_->hasShape()) shape_ = style_->createShape(this);
+	setStyle(style);
 }
 
 Item::~Item()
@@ -26,6 +26,14 @@ Item::~Item()
 		delete shape_;
 		shape_ = NULL;
 	}
+}
+
+void Item::setStyle(const ItemStyle* style)
+{
+	if (shape_) delete shape_;
+	style_ = style;
+	if (style && style->hasShape()) shape_ = style->createShape(this);
+	needsUpdate_ = true;
 }
 
 void Item::updateSubtreeState()

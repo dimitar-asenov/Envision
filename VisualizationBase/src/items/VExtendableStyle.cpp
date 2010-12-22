@@ -25,6 +25,7 @@ VExtendableStyle* VExtendableStyle::getDefault()
 void VExtendableStyle::load()
 {
 	ItemStyle::load();
+	Styles::load("expanded", expanded_);
 	Styles::load("borderStyle", borderStyle_);
 	Styles::load("headerStyle", headerStyle_);
 	Styles::load("attributesStyle", attributesStyle_);

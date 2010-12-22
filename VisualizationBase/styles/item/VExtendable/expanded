@@ -1,0 +1,11 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="default">
+	<expanded>true</expanded>
+	<shape prototypes="shape/Box/default">
+		Box
+		<cornerRadius>10</cornerRadius>
+		<shadowBrush>
+			<style>1</style>
+		</shadowBrush>
+	</shape>
+</style>

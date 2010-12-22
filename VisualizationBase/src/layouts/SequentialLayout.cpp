@@ -41,9 +41,9 @@ void SequentialLayout::insert(Item* item, int position)
 	setUpdateNeeded();
 }
 
-void SequentialLayout::remove(int index)
+void SequentialLayout::remove(int index, bool deleteItem)
 {
-	delete items[index];
+	if (deleteItem) delete items[index];
 	items.remove(index);
 	setUpdateNeeded();
 }
