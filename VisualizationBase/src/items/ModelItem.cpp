@@ -5,7 +5,9 @@
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "ModelItem.h"
+#include "items/ModelItem.h"
+#include "Scene.h"
+#include "VisualizationException.h"
 
 namespace Visualization {
 
@@ -23,5 +25,11 @@ void ModelItem::updateSubtreeState()
 	Item::updateSubtreeState();
 	revision = node->getRevision();
 }
+
+ModelRenderer* ModelItem::renderer()
+{
+	if ( (static_cast<Scene*>(scene()))->renderer() ) return (static_cast<Scene*>(scene()))->renderer();
+	throw VisualizationException("The scene of a ModelItem has no renderer.");
+};
 
 }

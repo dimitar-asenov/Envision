@@ -8,10 +8,10 @@
 #ifndef BOXTEST_H_
 #define BOXTEST_H_
 
+#include "items/Item.h"
 #include "layouts/SequentialLayoutStyle.h"
 #include "layouts/SequentialLayout.h"
 #include "shapes/BoxStyle.h"
-#include "Item.h"
 
 namespace Visualization {
 

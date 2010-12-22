@@ -12,7 +12,6 @@
 
 #include "Item.h"
 #include "ModelRenderer.h"
-#include "ModelScene.h"
 #include "ModelBase/headers/nodes/Node.h"
 
 namespace Visualization {
@@ -35,7 +34,7 @@ class VISUALIZATIONBASE_API ModelItem: public Item
 };
 
 inline Model::Node* ModelItem::getNode() { return node; };
-inline ModelRenderer* ModelItem::renderer() { return (static_cast<ModelScene*>(scene()))->renderer();} ;
+
 }
 
 #endif /* MODELITEM_H_ */

@@ -7,7 +7,7 @@
 
 #include "ModelRenderer.h"
 #include "VisualizationException.h"
-#include "ModelItem.h"
+#include "items/ModelItem.h"
 
 namespace Visualization {
 

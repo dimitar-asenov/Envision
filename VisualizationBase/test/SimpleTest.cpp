@@ -7,7 +7,7 @@
 
 #include "visualizationbase.h"
 #include "VisualizationManager.h"
-#include "ModelScene.h"
+#include "Scene.h"
 #include "View.h"
 #include "SelfTest/headers/SelfTestSuite.h"
 #include "BoxTest.h"
@@ -85,7 +85,7 @@ namespace Visualization {
 
 TEST(VisualizationBase, ExtendableTest)
 {
-	ModelScene* scene = new ModelScene();
+	Scene* scene = new Scene();
 	ModelRenderer* renderer = new ModelRenderer();
 
 	renderer->registerVisualization(BinaryNode::getTypeIdStatic(), createVisualization<VExtendable, BinaryNode>);
@@ -105,6 +105,7 @@ TEST(VisualizationBase, ExtendableTest)
 	model.endModification();
 
 	ModelItem* t = renderer->render(NULL, root);
+	t->setFlag(QGraphicsItem::ItemIsMovable);
 	scene->addItem(t);
 	t->updateSubtreeState();
 

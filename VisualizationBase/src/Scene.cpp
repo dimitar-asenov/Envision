@@ -10,13 +10,9 @@
 
 namespace Visualization {
 
-Scene::Scene() : QGraphicsScene(VisualizationManager::instance().getMainWindow())
+Scene::Scene() : QGraphicsScene(VisualizationManager::instance().getMainWindow()), renderer_(NULL)
 {
-}
-
-Scene::~Scene()
-{
-	// TODO Auto-generated destructor stub
+	// TODO Auto-generated constructor stub
 }
 
 }

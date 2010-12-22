@@ -10,7 +10,7 @@
 
 #include "visualizationbase_api.h"
 
-#include "ItemStyle.h"
+#include "../items/ItemStyle.h"
 
 namespace Visualization {
 

@@ -5,8 +5,7 @@
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "ItemStyle.h"
-
+#include "items/ItemStyle.h"
 #include "shapes/Shape.h"
 #include "shapes/ShapeStyle.h"
 #include "Styles.h"

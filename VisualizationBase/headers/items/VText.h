@@ -10,8 +10,8 @@
 
 #include "visualizationbase_api.h"
 
+#include "ModelItem.h"
 #include "TextStyle.h"
-#include "../ModelItem.h"
 #include "ModelBase/headers/nodes/Text.h"
 #include "VisualizationException.h"
 #include "Styles.h"

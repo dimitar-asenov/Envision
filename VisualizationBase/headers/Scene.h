@@ -9,6 +9,7 @@
 #define SCENE_H_
 
 #include "visualizationbase_api.h"
+#include "ModelRenderer.h"
 
 #include <QtGui/QGraphicsScene>
 
@@ -16,10 +17,18 @@ namespace Visualization {
 
 class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 {
+	private:
+		ModelRenderer* renderer_;
+
 	public:
 		Scene();
-		virtual ~Scene();
+		void setRenderer(ModelRenderer* renderer);
+
+		ModelRenderer* renderer();
 };
+
+inline void Scene::setRenderer(ModelRenderer* renderer) { renderer_ = renderer; }
+inline ModelRenderer* Scene::renderer() { return renderer_; }
 
 }
 

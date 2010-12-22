@@ -10,9 +10,8 @@
 
 #include "visualizationbase_api.h"
 
+#include "Item.h"
 #include "TextStyle.h"
-#include "../Item.h"
-
 #include "VisualizationException.h"
 
 #include <QtGui/QStaticText>

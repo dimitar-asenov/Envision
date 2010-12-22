@@ -10,7 +10,7 @@
 
 #include "visualizationbase_api.h"
 
-#include "../Item.h"
+#include "../items/Item.h"
 #include "ShapeStyle.h"
 
 #include "VisualizationException.h"

@@ -28,8 +28,10 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/ItemMacros.h \
-    headers/ItemStyle.h \
+HEADERS += headers/items/Item.h \
+    headers/items/ItemMacros.h \
+    headers/items/ItemStyle.h \
+    headers/items/ModelItem.h \
     headers/items/VExtendableStyle.h \
     headers/StyleNode.h \
     headers/Styles.h \
@@ -52,17 +54,16 @@ HEADERS += headers/ItemMacros.h \
     headers/layouts/Layout.h \
     headers/layouts/SequentialLayoutStyle.h \
     headers/layouts/SequentialLayout.h \
-    headers/ModelItem.h \
-    headers/Item.h \
     headers/ModelRenderer.h \
-    headers/ModelScene.h \
     headers/VisualizationManager.h \
     headers/View.h \
     headers/Scene.h \
     src/visualizationbase.h \
     headers/VisualizationException.h \
     headers/visualizationbase_api.h
-SOURCES += src/ItemStyle.cpp \
+SOURCES += src/items/Item.cpp \
+    src/items/ItemStyle.cpp \
+    src/items/ModelItem.cpp \
     src/items/VExtendableStyle.cpp \
     src/StyleNode.cpp \
     src/Styles.cpp \
@@ -85,10 +86,7 @@ SOURCES += src/ItemStyle.cpp \
     src/layouts/Layout.cpp \
     src/layouts/SequentialLayoutStyle.cpp \
     src/layouts/SequentialLayout.cpp \
-    src/ModelItem.cpp \
-    src/Item.cpp \
     src/ModelRenderer.cpp \
-    src/ModelScene.cpp \
     test/SimpleTest.cpp \
     src/VisualizationManager.cpp \
     src/visualizationbase.cpp \
