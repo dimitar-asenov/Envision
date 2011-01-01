@@ -14,6 +14,16 @@
 
 namespace SelfTest {
 
+/**
+ * The TestResults class describes the outcome of series of tests run consecutively.
+ *
+ * Two things are logged here:
+ * 	- Fine-grained: checks (assertions).  A single test may consist of many such checks.
+ * 	- Coarse-grained: tests.
+ *
+ * Typically a check is only logged if it fails, providing failure details.
+ * A test should be logged in all cases (failure or success).
+ */
 class SELFTEST_API TestResults
 {
 	private:
@@ -47,6 +57,9 @@ class SELFTEST_API TestResults
 		const QList<TestResult>& getTestResults() const;
 		const QList<TestResult>& getCheckResults() const;
 
+		/**
+		 * Prints a summary of the test results to the standard output.
+		 */
 		void printResultStatistics() const;
 };
 

@@ -13,6 +13,13 @@
 
 namespace SelfTest {
 
+/**
+ * The TestResult class describes the outcome of a single test or check.
+ *
+ * An outcome consists of two fields:
+ * 	- Outcome code (passed, failed)
+ * 	- Outcome message (optional)
+ */
 class SELFTEST_API TestResult
 {
 	public:

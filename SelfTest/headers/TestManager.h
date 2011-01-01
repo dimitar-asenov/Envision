@@ -15,17 +15,39 @@
 
 namespace SelfTest {
 
+/**
+ * The TestManager class manages test registrations and execution for each plug-in.
+ *
+ * @param T
+ * 				The plug-in class for this plug-in. This is the class that implements the EnvisionPlugin interface.
+ */
 template<class T>
 class TestManager
 {
 	private:
+		/**
+		 * This is a static class. Object of this class can not be created.
+		 */
 		TestManager()
 		{
 		}
+
+		/**
+		 * A list of all test constructors. Test classes are not created unless requested.
+		 */
 		static QMap<QString, Test::TestConstructor>* testConstructors;
 
 	public:
 
+		/**
+		 * Adds a new test to the list of tests.
+		 *
+		 * @param test
+		 * 				The constructor of the test class that implements this test.
+		 *
+		 * @param name
+		 * 				The name of this test.
+		 */
 		static void add(Test::TestConstructor test, const QString &name)
 		{
 			static QMap<QString, Test::TestConstructor> constructors;
@@ -33,6 +55,9 @@ class TestManager
 			testConstructors->insert(name, test);
 		}
 
+		/**
+		 * Runs all tests registered for this plug-in.
+		 */
 		static TestResults runAllTests()
 		{
 			TestResults testRes;
@@ -50,6 +75,12 @@ class TestManager
 			return testRes;
 		}
 
+		/**
+		 * Runs the specified test for this plug-in.
+		 *
+		 * @param name
+		 * 				The string id of the test to run.
+		 */
 		static TestResults runTest(const QString &name)
 		{
 			TestResults testRes;
