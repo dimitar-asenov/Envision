@@ -13,6 +13,11 @@
 
 namespace Envision {
 
+/**
+ * The EnvisionException class is the base class of all exception classes in Envision.
+ *
+ * It provides simple facilities to store and print an error message.
+ */
 class EnvisionException
 {
 	private:

@@ -13,17 +13,24 @@
 
 namespace Envision {
 
+/**
+ * Specifies a plug-in dependency.
+ */
 struct PluginDependency
 {
 	QString id;
 	QString majorVersion;
 };
 
+
+/**
+ * Descibres a plug-in and specifies which plug-ins it depends on.
+ */
 struct PluginInfo
 {
 	QString id;
 	QString fullName;
-	QString version;
+	QString version;	// FORMAT: Major.Minor.other.version.numbers.or.strings
 	QList<PluginDependency> dependencies;
 };
 
