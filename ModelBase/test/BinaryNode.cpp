@@ -10,7 +10,7 @@
 namespace Model {
 
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(BinaryNode, ExtendableNode)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(BinaryNode)
+NODE_DEFINE_TYPE_REGISTRATION_METHODS(BinaryNode)
 
 ExtendableIndex BinaryNode::textIndex = ExtendableIndex();
 ExtendableIndex BinaryNode::leftIndex = ExtendableIndex();

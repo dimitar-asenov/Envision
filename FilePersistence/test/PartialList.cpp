@@ -10,7 +10,7 @@
 namespace FilePersistence {
 
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(PartialList, Model::ExtendableNode)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(PartialList)
+NODE_DEFINE_TYPE_REGISTRATION_METHODS(PartialList)
 
 Model::ExtendableIndex PartialList::listIndex = Model::ExtendableIndex();
 

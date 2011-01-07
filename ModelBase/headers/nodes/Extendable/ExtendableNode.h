@@ -102,16 +102,6 @@ class MODELBASE_API ExtendableNode: public Node
 		}
 };
 
-template<class T> Node* createNewExtendableNode(Node* parent, Model* model)
-{
-	return new T(parent, model, ExtendableNode::getMetaData<T>());
-}
-
-template<class T> Node* createExtendableNodeFromPersistence(Node *parent, NodeIdType id, PersistentStore &store, bool partialLoadHint)
-{
-	return new T(parent, id, store, partialLoadHint, ExtendableNode::getMetaData<T>());
-}
-
 }
 
 #endif /* EXTENDABLENODE_H_ */

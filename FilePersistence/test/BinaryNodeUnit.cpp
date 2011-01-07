@@ -10,7 +10,7 @@
 namespace FilePersistence {
 
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(BinaryNodeUnit, BinaryNode)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(BinaryNodeUnit)
+NODE_DEFINE_TYPE_REGISTRATION_METHODS(BinaryNodeUnit)
 
 void BinaryNodeUnit::init()
 {

@@ -67,6 +67,8 @@
 		static int typeId;																															\
 																																							\
 	public:																																				\
+		className(::Model::Node* parent, ::Model::Model* model);																			\
+		className(::Model::Node *parent, ::Model::NodeIdType id, ::Model::PersistentStore &store, bool partialLoadHint);\
 		className(::Model::Node* parent, ::Model::Model* model, ::Model::AttributeChain& metaData);							\
 		className(::Model::Node *parent, ::Model::NodeIdType id, ::Model::PersistentStore &store, bool partialLoadHint, ::Model::AttributeChain& metaData); \
 																																							\
@@ -77,7 +79,6 @@
 																																							\
 	private:
 /*********************************************************************************************************************/
-
 
 /**
  * Defines standard empty constructors for a new Node type which just call their parent constructors.
@@ -110,13 +111,18 @@
  * Use this macro in the .cpp file that defines the new Node type.
  */
 #define EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(className, parentName)																\
+	className::className(::Model::Node* parent, ::Model::Model* model)																\
+		: parentName (parent, model, ExtendableNode::getMetaData<className>()) {}													\
+		  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	\
+	className::className(::Model::Node *parent, ::Model::NodeIdType id, ::Model::PersistentStore &store, bool partialLoadHint)\
+		: parentName (parent, id, store, partialLoadHint, ExtendableNode::getMetaData<className>()) {}						\
+		  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	   \
 	className::className(::Model::Node* parent, ::Model::Model* model, ::Model::AttributeChain& metaData)					\
 		: parentName (parent, model, metaData) {}																								\
 																																							\
 	className::className(::Model::Node *parent, ::Model::NodeIdType id, ::Model::PersistentStore &store, bool partialLoadHint, ::Model::AttributeChain& metaData)\
 		: parentName (parent, id, store, partialLoadHint, metaData) {}
 /*********************************************************************************************************************/
-
 
 /**
  * Defines standard static methods that register the new Node type's constructors and a virtual getTypeName method
@@ -146,38 +152,6 @@ int className::getTypeIdStatic()																													\
 void className::registerNodeType()																												\
 {																																							\
 	typeId = Node::registerNodeType(#className, ::Model::createNewNode< className >, ::Model::createNodeFromPersistence< className >);\
-}
-/*********************************************************************************************************************/
-
-/**
- * Defines standard static methods that register the new Node type's constructors and a virtual getTypeName method
- * that returns the name of this class.
- *
- * @param className
- * 			The name of the class being defined. This class must inherit from from ExtendableNode, directly or
- * 			indirectly.
- *
- * Use this macro in the .cpp file that defines the new Node type.
- */
-#define EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(className)																	\
-QString className::getTypeName()	const																											\
-{																																							\
-	return #className;																																\
-}																																							\
-																																							\
-int className::typeId = -1; /* This must be set to the result of Node::registerNodeType */									\
-int className::getTypeId()	const																													\
-{																																							\
-	return typeId;																																		\
-}																																							\
-int className::getTypeIdStatic()																													\
-{																																							\
-	return typeId;																																		\
-}																																							\
-																																							\
-void className::registerNodeType()																												\
-{																																							\
-	typeId = Node::registerNodeType(#className, ::Model::createNewExtendableNode< className >, ::Model::createExtendableNodeFromPersistence< className >);\
 }
 /*********************************************************************************************************************/
 
