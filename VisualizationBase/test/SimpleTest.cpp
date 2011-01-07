@@ -13,11 +13,13 @@
 #include "BoxTest.h"
 #include "items/VText.h"
 #include "items/VExtendable.h"
+#include "items/VList.h"
 #include "ModelRenderer.h"
 
 #include "BinaryNode.h"
 
 #include "ModelBase/headers/nodes/Text.h"
+#include "ModelBase/headers/nodes/List.h"
 #include "ModelBase/headers/Model.h"
 
 #include <QtGui/QDesktopWidget>
@@ -90,37 +92,49 @@ TEST(VisualizationBase, ExtendableTest)
 
 	renderer->registerVisualization(BinaryNode::getTypeIdStatic(), createVisualization<VExtendable, BinaryNode>);
 	renderer->registerVisualization(Model::Text::getTypeIdStatic(), createVisualization<VText, Model::Text>);
+	renderer->registerVisualization(Model::List::getTypeIdStatic(), createVisualization<VList, Model::List>);
 
 	scene->setRenderer(renderer);
 
 	Model::Model model;
-	BinaryNode* root = static_cast<BinaryNode*> (model.createRoot("BinaryNode"));
+	Model::List* list = static_cast<Model::List*> (model.createRoot("List"));
 
-	model.beginModification(root, "set");
-	root->name()->set("Root node");
-	BinaryNode* left = root->makeLeftNode("BinaryNode");
-	BinaryNode* right = root->makeRightNode("BinaryNode");
+	model.beginModification(list, "set");
+	BinaryNode* first = list->append<BinaryNode>();
+	BinaryNode* second = list->append<BinaryNode>();
+	Model::Text* third = list->append<Model::Text>();
+
+	first->name()->set("First node");
+	BinaryNode* left = first->makeLeftNode("BinaryNode");
+	BinaryNode* right = first->makeRightNode("BinaryNode");
 	left->name()->set("left node");
 	right->name()->set("right node");
+
+	second->name()->set("Empty node");
+
+	third->set("Some independent text");
 	model.endModification();
 
-	VExtendable* t = dynamic_cast<VExtendable*> (renderer->render(NULL, root));
-	t->setFlag(QGraphicsItem::ItemIsMovable);
-	t->setExpanded();
-	scene->addItem(t);
-	t->updateSubtreeState();
+	VList* l = dynamic_cast<VList*> (renderer->render(NULL, list));
+	l->setFlag(QGraphicsItem::ItemIsMovable);
+	scene->addItem(l);
+	l->updateSubtreeState();
 
+	l->at<VExtendable>(0)->setExpanded();
+	l->updateSubtreeState();
+
+	// Create view
 	View* view = new View(scene);
 	view->setRenderHint(QPainter::Antialiasing);
 	view->setRenderHint(QPainter::TextAntialiasing);
 	view->parentWidget()->resize(1200,700);
 
+	// Center Window
 	QRect descktop( QApplication::desktop()->screenGeometry() );
 	int leftPos = descktop.width()/2-view->parentWidget()->width()/2;
 	int topPos = descktop.height()/2-view->parentWidget()->height()/2;
 	view->parentWidget()->move(leftPos,topPos);
 
-	CHECK_INT_EQUAL(1, 1);
 
 	CHECK_CONDITION(view != NULL);
 	//delete view;

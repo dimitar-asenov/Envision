@@ -10,10 +10,8 @@
 
 namespace Visualization {
 
-VExtendableStyle::VExtendableStyle()
+VExtendableStyle::VExtendableStyle() : expanded_(true)
 {
-	// TODO Auto-generated constructor stub
-
 }
 
 VExtendableStyle* VExtendableStyle::getDefault()

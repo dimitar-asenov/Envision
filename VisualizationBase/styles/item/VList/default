@@ -1,0 +1,13 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style>
+	<shape />
+	<itemsStyle prototypes="layout/SequentialLayout/default">
+		<shape prototypes="shape/Box/default">
+			Box
+			<cornerType>0</cornerType>
+			<cornerRadius>5</cornerRadius>
+		</shape>
+		<direction>2</direction>
+		<spaceBetweenElements>5</spaceBetweenElements>
+	</itemsStyle>
+</style>

@@ -8,7 +8,6 @@
 #include "items/VExtendable.h"
 
 #include "items/Text.h"
-#include "shapes/Box.h"
 
 #include <QtCore/QString>
 #include <QtCore/QPair>

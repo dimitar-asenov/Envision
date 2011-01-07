@@ -28,12 +28,23 @@ Item::~Item()
 	}
 }
 
+void Item::setUpdateNeeded()
+{
+	needsUpdate_ = true;
+	Item* parent = static_cast<Item*> (parentItem());
+	while (parent)
+	{
+		parent->needsUpdate_ = true;
+		parent = static_cast<Item*> (parent->parentItem());
+	}
+}
+
 void Item::setStyle(const ItemStyle* style)
 {
 	if (shape_) delete shape_;
 	style_ = style;
 	if (style && style->hasShape()) shape_ = style->createShape(this);
-	needsUpdate_ = true;
+	setUpdateNeeded();
 }
 
 void Item::updateSubtreeState()

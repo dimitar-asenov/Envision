@@ -28,7 +28,9 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/items/Item.h \
+HEADERS += headers/items/VListStyle.h \
+    headers/items/VList.h \
+    headers/items/Item.h \
     headers/items/ItemMacros.h \
     headers/items/ItemStyle.h \
     headers/items/ModelItem.h \
@@ -61,7 +63,9 @@ HEADERS += headers/items/Item.h \
     src/visualizationbase.h \
     headers/VisualizationException.h \
     headers/visualizationbase_api.h
-SOURCES += src/items/Item.cpp \
+SOURCES += src/items/VListStyle.cpp \
+    src/items/VList.cpp \
+    src/items/Item.cpp \
     src/items/ItemStyle.cpp \
     src/items/ModelItem.cpp \
     src/items/VExtendableStyle.cpp \

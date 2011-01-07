@@ -10,7 +10,7 @@
 namespace Visualization {
 
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(BinaryNode, Model::ExtendableNode)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(BinaryNode)
+NODE_DEFINE_TYPE_REGISTRATION_METHODS(BinaryNode)
 
 Model::ExtendableIndex BinaryNode::nameIndex = Model::ExtendableIndex();
 Model::ExtendableIndex BinaryNode::leftIndex = Model::ExtendableIndex();
