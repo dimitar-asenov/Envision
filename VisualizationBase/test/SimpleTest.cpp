@@ -8,7 +8,7 @@
 #include "visualizationbase.h"
 #include "VisualizationManager.h"
 #include "Scene.h"
-#include "View.h"
+#include "views/MainView.h"
 #include "SelfTest/headers/SelfTestSuite.h"
 #include "BoxTest.h"
 #include "items/VText.h"
@@ -124,17 +124,14 @@ TEST(VisualizationBase, ExtendableTest)
 	l->updateSubtreeState();
 
 	// Create view
-	View* view = new View(scene);
-	view->setRenderHint(QPainter::Antialiasing);
-	view->setRenderHint(QPainter::TextAntialiasing);
-	view->parentWidget()->resize(1200,700);
+	MainView* view = new MainView(scene);
+	VisualizationManager::instance().getMainWindow()->resize(1200,700);
 
 	// Center Window
 	QRect descktop( QApplication::desktop()->screenGeometry() );
-	int leftPos = descktop.width()/2-view->parentWidget()->width()/2;
-	int topPos = descktop.height()/2-view->parentWidget()->height()/2;
-	view->parentWidget()->move(leftPos,topPos);
-
+	int leftPos = descktop.width()/2-VisualizationManager::instance().getMainWindow()->width()/2;
+	int topPos = descktop.height()/2-VisualizationManager::instance().getMainWindow()->height()/2;
+	VisualizationManager::instance().getMainWindow()->move(leftPos,topPos);
 
 	CHECK_CONDITION(view != NULL);
 	//delete view;

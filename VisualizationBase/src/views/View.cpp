@@ -5,9 +5,11 @@
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "View.h"
+#include "views/View.h"
 #include "Scene.h"
 #include "VisualizationManager.h"
+
+#include <QtGui/QScrollBar>
 
 namespace Visualization {
 
@@ -23,6 +25,16 @@ View::View(Scene* scene, View *parent) :
 
 View::~View()
 {
+}
+
+QRectF View::visibleRect()
+{
+	return mapToScene(rect()).boundingRect();
+
+//	QPointF topLeft(horizontalScrollBar()->value(), verticalScrollBar()->value());
+//	QPointF bottomRight = topLeft + viewport()->rect().bottomRight();
+//	QMatrix mat = matrix().inverted();
+//	return mat.mapRect(QRectF(topLeft, bottomRight));
 }
 
 }

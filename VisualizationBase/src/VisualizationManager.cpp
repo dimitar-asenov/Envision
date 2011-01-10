@@ -6,7 +6,7 @@
  **********************************************************************************************************************/
 
 #include "VisualizationManager.h"
-#include "View.h"
+#include "views/View.h"
 
 namespace Visualization {
 

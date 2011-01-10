@@ -28,7 +28,10 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/items/VListStyle.h \
+HEADERS += headers/views/MiniMap.h \
+    headers/views/View.h \
+    headers/views/MainView.h \
+    headers/items/VListStyle.h \
     headers/items/VList.h \
     headers/items/Item.h \
     headers/items/ItemMacros.h \
@@ -58,12 +61,14 @@ HEADERS += headers/items/VListStyle.h \
     headers/layouts/SequentialLayout.h \
     headers/ModelRenderer.h \
     headers/VisualizationManager.h \
-    headers/View.h \
     headers/Scene.h \
     src/visualizationbase.h \
     headers/VisualizationException.h \
     headers/visualizationbase_api.h
-SOURCES += src/items/VListStyle.cpp \
+SOURCES += src/views/MiniMap.cpp \
+    src/views/MainView.cpp \
+    src/views/View.cpp \
+    src/items/VListStyle.cpp \
     src/items/VList.cpp \
     src/items/Item.cpp \
     src/items/ItemStyle.cpp \
@@ -95,5 +100,4 @@ SOURCES += src/items/VListStyle.cpp \
     src/VisualizationManager.cpp \
     src/visualizationbase.cpp \
     src/VisualizationException.cpp \
-    src/View.cpp \
     src/Scene.cpp
