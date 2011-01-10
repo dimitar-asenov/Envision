@@ -12,21 +12,21 @@ namespace TestNodes {
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(BinaryNode, Model::ExtendableNode)
 NODE_DEFINE_TYPE_REGISTRATION_METHODS(BinaryNode)
 
-Model::ExtendableIndex BinaryNode::textIndex = Model::ExtendableIndex();
+Model::ExtendableIndex BinaryNode::nameIndex = Model::ExtendableIndex();
 Model::ExtendableIndex BinaryNode::leftIndex = Model::ExtendableIndex();
 Model::ExtendableIndex BinaryNode::rightIndex = Model::ExtendableIndex();
 
 void BinaryNode::init()
 {
 	registerNodeType();
-	textIndex = registerNewAttribute<BinaryNode> ("text", "Text", false, false, true);
+	nameIndex = registerNewAttribute<BinaryNode> ("name", "Text", false, false, true);
 	leftIndex = registerNewAttribute<BinaryNode> ("left", "BinaryNode", false, true, true);
 	rightIndex = registerNewAttribute<BinaryNode> ("right", "BinaryNode", false, true, true);
 }
 
-Model::Text* BinaryNode::text()
+Model::Text* BinaryNode::name()
 {
-	return static_cast<Model::Text*> (get(textIndex));
+	return static_cast<Model::Text*> (get(nameIndex));
 }
 
 BinaryNode* BinaryNode::left()

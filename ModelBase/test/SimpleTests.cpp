@@ -28,7 +28,7 @@ TEST(ModelBase, ExtendableMetaData)
 	CHECK_INT_EQUAL(0, metaUnit.size());
 	CHECK_CONDITION( metaUnit.getLevel(0) == &metaExt);
 
-	CHECK_STR_EQUAL("text", metaExt[0].name());
+	CHECK_STR_EQUAL("name", metaExt[0].name());
 	CHECK_STR_EQUAL("left", metaExt[1].name());
 	CHECK_STR_EQUAL("right", metaExt[2].name());
 	CHECK_STR_EQUAL("x", metaExt[3].name());
@@ -63,7 +63,7 @@ TEST(ModelBase, SimpleModelCreation)
 
 	CHECK_CONDITION( root->getModel() == &model );
 
-	CHECK_CONDITION( root->text()->getModel() == &model );
+	CHECK_CONDITION( root->name()->getModel() == &model );
 }
 
 TEST(ModelBase, RemoveOptional)
@@ -103,17 +103,17 @@ TEST(ModelBase, ChildNodeRetrieval)
 	CHECK_INT_EQUAL(4, left->getId());
 	CHECK_INT_EQUAL(8, right->getId());
 
-	CHECK_CONDITION(root->getChild(1) == root->text());
+	CHECK_CONDITION(root->getChild(1) == root->name());
 	CHECK_CONDITION(root->getChild(4) == left);
 	CHECK_CONDITION(root->getChild(8) == right);
 
-	CHECK_CONDITION(root->hasAttribute("text"));
+	CHECK_CONDITION(root->hasAttribute("name"));
 	CHECK_CONDITION(root->hasAttribute("left"));
 	CHECK_CONDITION(root->hasAttribute("right"));
 
 	CHECK_CONDITION(root->hasAttribute("another") == false);
 
-	CHECK_CONDITION(root->get("text") == root->text());
+	CHECK_CONDITION(root->get("name") == root->name());
 	CHECK_CONDITION(root->get("left") == left);
 	CHECK_CONDITION(root->get("right") == right);
 }

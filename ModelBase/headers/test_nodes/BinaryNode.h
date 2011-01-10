@@ -21,14 +21,14 @@ class MODELBASE_API BinaryNode: public Model::ExtendableNode
 	EXTENDABLENODE_DECLARE_STANDARD_CONSTRUCTORS(BinaryNode)
 
 	private:
-		static Model::ExtendableIndex textIndex;
+		static Model::ExtendableIndex nameIndex;
 		static Model::ExtendableIndex leftIndex;
 		static Model::ExtendableIndex rightIndex;
 
 	public:
 		static void init();
 
-		Model::Text* text();
+		Model::Text* name();
 		BinaryNode* left();
 		BinaryNode* right();
 

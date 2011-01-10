@@ -25,20 +25,20 @@ TEST(ModelBase, PersistenceSave)
 
 	model.save(store);
 
-	CHECK_STR_EQUAL("BinaryNode,root,full,Text,text,full,,Integer,x,full,0,Integer,y,full,0,", store.getSaved());
+	CHECK_STR_EQUAL("BinaryNode,root,full,Text,name,full,,Integer,x,full,0,Integer,y,full,0,", store.getSaved());
 
 	model.beginModification(root, "make tree");
 	root->makeLeftNode();
 	root->makeRightNode();
-	root->text()->set("Troot");
-	root->left()->text()->set("Tleft");
-	root->right()->text()->set("Tright");
+	root->name()->set("Troot");
+	root->left()->name()->set("Tleft");
+	root->right()->name()->set("Tright");
 	model.endModification();
 
 	store.clear();
 	model.save(store);
 
-	CHECK_STR_EQUAL("BinaryNode,root,full,Text,text,full,Troot,BinaryNode,left,full,Text,text,full,Tleft,Integer,x,full,0,Integer,y,full,0,BinaryNode,right,full,Text,text,full,Tright,Integer,x,full,0,Integer,y,full,0,Integer,x,full,0,Integer,y,full,0,", store.getSaved());
+	CHECK_STR_EQUAL("BinaryNode,root,full,Text,name,full,Troot,BinaryNode,left,full,Text,name,full,Tleft,Integer,x,full,0,Integer,y,full,0,BinaryNode,right,full,Text,name,full,Tright,Integer,x,full,0,Integer,y,full,0,Integer,x,full,0,Integer,y,full,0,", store.getSaved());
 }
 
 }

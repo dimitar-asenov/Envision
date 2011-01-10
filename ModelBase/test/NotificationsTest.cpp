@@ -34,9 +34,9 @@ TEST(ModelBase, ModificationNotificationTests)
 	CHECK_CONDITION(nl.modifiedNodes[0] == root);
 
 	model.beginModification(left, "modify");
-	left->text()->set("Left text");
+	left->name()->set("Left text");
 	model.changeModificationTarget(right);
-	right->text()->set("Right text");
+	right->name()->set("Right text");
 	model.endModification();
 
 	CHECK_INT_EQUAL(2, nl.modifiedNodes.size());

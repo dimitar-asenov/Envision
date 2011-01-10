@@ -29,26 +29,26 @@ TEST(ModelBase, SingleWriteUnitCheck)
 	TestNodes::BinaryNode* two = root->left()->makeRightNode("BinaryNodeAccessUnit");
 	model.endModification();
 
-	CHECK_STR_EQUAL(QString(), root->text()->get());
-	CHECK_STR_EQUAL(QString(), left->text()->get());
-	CHECK_STR_EQUAL(QString(), right->text()->get());
-	CHECK_STR_EQUAL(QString(), one->text()->get());
-	CHECK_STR_EQUAL(QString(), two->text()->get());
+	CHECK_STR_EQUAL(QString(), root->name()->get());
+	CHECK_STR_EQUAL(QString(), left->name()->get());
+	CHECK_STR_EQUAL(QString(), right->name()->get());
+	CHECK_STR_EQUAL(QString(), one->name()->get());
+	CHECK_STR_EQUAL(QString(), two->name()->get());
 
 	model.beginModification(root, "Modify root");
 
-	root->text()->set("This is ok");
-	CHECK_STR_EQUAL("This is ok", root->text()->get());
+	root->name()->set("This is ok");
+	CHECK_STR_EQUAL("This is ok", root->name()->get());
 
-	CHECK_FOR_EXCEPTION(ModelException, one->text()->set("This should fail"));
-	CHECK_STR_EQUAL(QString(), one->text()->get());
+	CHECK_FOR_EXCEPTION(ModelException, one->name()->set("This should fail"));
+	CHECK_STR_EQUAL(QString(), one->name()->get());
 
 	model.changeModificationTarget(one);
-	CHECK_FOR_EXCEPTION(ModelException, root->text()->set("This should fail"));
-	CHECK_STR_EQUAL("This is ok", root->text()->get());
+	CHECK_FOR_EXCEPTION(ModelException, root->name()->set("This should fail"));
+	CHECK_STR_EQUAL("This is ok", root->name()->get());
 
-	one->text()->set("one set");
-	CHECK_STR_EQUAL("one set", one->text()->get());
+	one->name()->set("one set");
+	CHECK_STR_EQUAL("one set", one->name()->get());
 
 	model.endModification();
 
@@ -56,21 +56,21 @@ TEST(ModelBase, SingleWriteUnitCheck)
 	model.undo();
 	model.endModification();
 
-	CHECK_STR_EQUAL(QString(), root->text()->get());
-	CHECK_STR_EQUAL(QString(), left->text()->get());
-	CHECK_STR_EQUAL(QString(), right->text()->get());
-	CHECK_STR_EQUAL(QString(), one->text()->get());
-	CHECK_STR_EQUAL(QString(), two->text()->get());
+	CHECK_STR_EQUAL(QString(), root->name()->get());
+	CHECK_STR_EQUAL(QString(), left->name()->get());
+	CHECK_STR_EQUAL(QString(), right->name()->get());
+	CHECK_STR_EQUAL(QString(), one->name()->get());
+	CHECK_STR_EQUAL(QString(), two->name()->get());
 
 	model.beginModification(NULL);
 	model.redo();
 	model.endModification();
 
-	CHECK_STR_EQUAL("This is ok", root->text()->get());
-	CHECK_STR_EQUAL(QString(), left->text()->get());
-	CHECK_STR_EQUAL(QString(), right->text()->get());
-	CHECK_STR_EQUAL("one set", one->text()->get());
-	CHECK_STR_EQUAL(QString(), two->text()->get());
+	CHECK_STR_EQUAL("This is ok", root->name()->get());
+	CHECK_STR_EQUAL(QString(), left->name()->get());
+	CHECK_STR_EQUAL(QString(), right->name()->get());
+	CHECK_STR_EQUAL("one set", one->name()->get());
+	CHECK_STR_EQUAL(QString(), two->name()->get());
 }
 
 }
