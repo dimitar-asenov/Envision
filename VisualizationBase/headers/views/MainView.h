@@ -36,7 +36,7 @@ class VISUALIZATIONBASE_API MainView: public View
 	private:
 		MiniMap* miniMap;
 
-		static const int SCALING_FACTOR = 10;
+		static const int SCALING_FACTOR = 2;
 		int scaleLevel;
 };
 
