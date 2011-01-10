@@ -31,6 +31,7 @@ class VISUALIZATIONBASE_API MainView: public View
 	protected:
 		virtual void resizeEvent( QResizeEvent *event );
 		virtual void wheelEvent(QWheelEvent *event);
+		virtual void scrollContentsBy(int dx, int dy);
 
 	private:
 		MiniMap* miniMap;

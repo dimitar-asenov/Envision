@@ -22,7 +22,6 @@ class VISUALIZATIONBASE_API MiniMap : public View
 
 	public:
 		MiniMap(Scene *scene, View *parent);
-		virtual ~MiniMap();
 
 		void updatePosition();
 
@@ -37,6 +36,8 @@ class VISUALIZATIONBASE_API MiniMap : public View
 	protected:
 		virtual void resizeEvent(QResizeEvent *event);
 		virtual void paintEvent(QPaintEvent *event);
+		virtual void mouseMoveEvent(QMouseEvent *event);
+		virtual void mousePressEvent(QMouseEvent *event);
 
 	private:
 		View *parent;

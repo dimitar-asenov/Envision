@@ -8,6 +8,12 @@
 #include "views/MiniMap.h"
 #include "Scene.h"
 
+#include <QtGui/QMouseEvent>
+
+#include <QtCore/QDebug>
+
+#include <cmath>
+
 namespace Visualization {
 
 MiniMap::MiniMap(Scene *scene, View *parent_) : View(scene, parent_), parent(parent_), margin(DEFAULT_MARGIN)
@@ -19,11 +25,6 @@ MiniMap::MiniMap(Scene *scene, View *parent_) : View(scene, parent_), parent(par
 	setRenderHint(QPainter::Antialiasing);
 
 	connect(scene, SIGNAL(sceneRectChanged(const QRectF &)), this, SLOT(sceneRectChanged(const QRectF &)));
-}
-
-MiniMap::~MiniMap()
-{
-	// TODO Auto-generated destructor stub
 }
 
 void MiniMap::updatePosition()
@@ -57,6 +58,18 @@ void MiniMap::paintEvent(QPaintEvent *event)
 	painter.drawRect(drawnRect);
 }
 
+void MiniMap::mouseMoveEvent(QMouseEvent *event)
+{
+	View::mouseMoveEvent(event);
+	parent->centerOn(mapToScene(QRect(event->pos(), QSize(2, 2))).boundingRect().center());
+}
+
+void MiniMap::mousePressEvent(QMouseEvent *event)
+{
+	View::mousePressEvent(event);
+	parent->centerOn(mapToScene(QRect(event->pos(), QSize(2, 2))).boundingRect().center());
+}
+
 void MiniMap::updateMap()
 {
 	QRectF maxRect;
@@ -72,11 +85,16 @@ void MiniMap::updateMap()
 	qreal rectX = margin + (visibleRect.x() - maxRect.x())*scale;
 	qreal rectY = margin + (visibleRect.y() - maxRect.y())*scale;
 
-	if (xScale < yScale) rectY += (height() - 2*(frameWidth() + margin) - visibleRect.height()*scale) / 2;
-	else rectX += (width() - 2*(frameWidth() + margin) - visibleRect.width()*scale) / 2;
+	if (xScale < yScale) rectY += (height() - 2*(frameWidth() + margin) - maxRect.height()*scale) / 2;
+	else rectX += (width() - 2*(frameWidth() + margin) - maxRect.width()*scale) / 2;
 
-	drawnRect.setRect(rectX, rectY, visibleRect.width()*scale, visibleRect.height()*scale);
+	// Below we subtract 0.5 and take the ceiling. This rounds the number. We further subtract 1 in order to compensate
+	// for the pen width of the drawn rectangle.
+	drawnRect.setRect(rectX, rectY, ceil(visibleRect.width()*scale - 1.5), ceil(visibleRect.height()*scale - 1.5));
+
 	setTransform(QTransform::fromScale(scale,scale).translate(margin, margin));
+
+	viewport()->update();
 }
 
 }

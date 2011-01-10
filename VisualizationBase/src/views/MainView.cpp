@@ -10,6 +10,8 @@
 
 #include <QtGui/QWheelEvent>
 
+#include <QtCore/QtDebug>
+
 namespace Visualization {
 
 MainView::MainView(Scene *scene) :
@@ -17,6 +19,8 @@ MainView::MainView(Scene *scene) :
 {
 	setRenderHint(QPainter::Antialiasing);
 	setRenderHint(QPainter::TextAntialiasing);
+
+	setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
 
 	setMiniMapSize(MINIMAP_DEFAULT_WIDTH, MINIMAP_DEFAULT_HEIGHT);
 }
@@ -54,10 +58,18 @@ void MainView::wheelEvent(QWheelEvent *event)
 	if ( event->delta() > 0 ) scaleLevel--;
 	else scaleLevel++;
 
-	if (scaleLevel <= 0 ) scaleLevel = 1;
-	qreal scaleFactor = SCALING_FACTOR / (qreal)scaleLevel;
+	if ( scaleLevel <= 0 ) scaleLevel = 1;
+	qreal scaleFactor = SCALING_FACTOR / (qreal) scaleLevel;
 	setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
 
+	if ( miniMap ) miniMap->visibleRectChanged();
+
+}
+
+void MainView::scrollContentsBy(int dx, int dy)
+{
+	View::scrollContentsBy(dx, dy);
+	if ( miniMap ) miniMap->visibleRectChanged();
 }
 
 }
