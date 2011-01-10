@@ -8,7 +8,7 @@
 #include "filepersistence.h"
 #include "FileStore.h"
 #include "SelfTest/headers/SelfTestSuite.h"
-#include "BinaryNode.h"
+#include "ModelBase/headers/test_nodes/BinaryNode.h"
 #include "ModelBase/headers/Model.h"
 #include "ModelBase/headers/nodes/Integer.h"
 #include "ModelBase/headers/nodes/Text.h"
@@ -26,7 +26,7 @@ TEST(FilePersistence, LoadRootOnly)
 	store.setBaseFolder(testDir);
 
 	model.load(store, "rootOnly");
-	BinaryNode* root = dynamic_cast<BinaryNode*> (model.getRoot());
+	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.getRoot());
 
 	CHECK_STR_EQUAL("BinaryNode", root->getTypeName() );
 	CHECK_STR_EQUAL("Title", root->text()->get() );
@@ -42,7 +42,7 @@ TEST(FilePersistence, LoadModeNodesSingleUnitOnly)
 	store.setBaseFolder(testDir);
 
 	model.load(store, "2Children");
-	BinaryNode* root = dynamic_cast<BinaryNode*> (model.getRoot());
+	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.getRoot());
 
 	CHECK_STR_EQUAL("BinaryNode", root->getTypeName() );
 	CHECK_STR_EQUAL("Root", root->text()->get() );
@@ -66,13 +66,13 @@ TEST(FilePersistence, LoadMultipleUnits)
 	store.setBaseFolder(testDir);
 
 	model.load(store, "units");
-	BinaryNode* root = dynamic_cast<BinaryNode*> (model.getRoot());
+	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.getRoot());
 
 	CHECK_STR_EQUAL("BinaryNode", root->getTypeName() );
 	CHECK_STR_EQUAL("Root", root->text()->get() );
 	CHECK_CONDITION(root->left() != NULL);
 	CHECK_CONDITION(root->right() != NULL);
-	CHECK_STR_EQUAL("BinaryNodeUnit", root->left()->getTypeName() );
+	CHECK_STR_EQUAL("BinaryNodePersistenceUnit", root->left()->getTypeName() );
 	CHECK_STR_EQUAL("Left child", root->left()->text()->get() );
 	CHECK_CONDITION(root->left()->left() != NULL);
 	CHECK_CONDITION(root->left()->right() == NULL);

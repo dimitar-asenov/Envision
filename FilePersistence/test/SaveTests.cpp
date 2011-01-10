@@ -8,7 +8,7 @@
 #include "filepersistence.h"
 #include "FileStore.h"
 #include "SelfTest/headers/SelfTestSuite.h"
-#include "BinaryNode.h"
+#include "ModelBase/headers/test_nodes/BinaryNode.h"
 #include "ModelBase/headers/Model.h"
 #include "ModelBase/headers/nodes/Integer.h"
 #include "ModelBase/headers/nodes/Text.h"
@@ -25,7 +25,7 @@ TEST(FilePersistence, SaveRootOnly)
 	FileStore store;
 	store.setBaseFolder(testDir);
 
-	BinaryNode* root = dynamic_cast<BinaryNode*> (model.createRoot("BinaryNode"));
+	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.createRoot("BinaryNode"));
 
 	model.beginModification(root->text(), "set title");
 	root->text()->set("Title");
@@ -43,12 +43,12 @@ TEST(FilePersistence, SaveModeNodesSingleUnitOnly)
 	FileStore store;
 	store.setBaseFolder(testDir);
 
-	BinaryNode* root = dynamic_cast<BinaryNode*> (model.createRoot("BinaryNode"));
+	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.createRoot("BinaryNode"));
 
 	model.beginModification(root, "set title");
 	root->text()->set("Root");
-	BinaryNode* left = root->makeLeftNode();
-	BinaryNode* right = root->makeRightNode();
+	TestNodes::BinaryNode* left = root->makeLeftNode();
+	TestNodes::BinaryNode* right = root->makeRightNode();
 
 	left->text()->set("Left child");
 	right->text()->set("Right child");
@@ -65,15 +65,15 @@ TEST(FilePersistence, SaveMultipleUnits)
 	FileStore store;
 	store.setBaseFolder(testDir);
 
-	BinaryNode* root = dynamic_cast<BinaryNode*> (model.createRoot("BinaryNode"));
+	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.createRoot("BinaryNode"));
 
 	model.beginModification(root, "set title");
 	root->text()->set("Root");
-	BinaryNode* left = root->makeLeftNode("BinaryNodeUnit");
-	BinaryNode* right = root->makeRightNode();
+	TestNodes::BinaryNode* left = root->makeLeftNode("BinaryNodePersistenceUnit");
+	TestNodes::BinaryNode* right = root->makeRightNode();
 
 	left->text()->set("Left child");
-	BinaryNode* leftleft = left->makeLeftNode();
+	TestNodes::BinaryNode* leftleft = left->makeLeftNode();
 	leftleft->text()->set("in a new unit");
 	right->text()->set("Right child");
 	model.endModification();

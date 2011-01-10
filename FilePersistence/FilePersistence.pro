@@ -25,20 +25,14 @@ pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
-HEADERS += test/PartialList.h \
-    test/BinaryNode.h \
-    test/BinaryNodeUnit.h \
-    headers/FilePersistenceException.h \
+HEADERS += headers/FilePersistenceException.h \
     headers/FileStore.h \
     headers/filepersistence_api.h \
     src/filepersistence.h
-SOURCES += test/PartialList.cpp \
-    test/PartialNodeTests.cpp \
+SOURCES += test/PartialNodeTests.cpp \
     src/FilePersistenceException.cpp \
     test/LoadTests.cpp \
     test/SaveTests.cpp \
-    test/BinaryNode.cpp \
-    test/BinaryNodeUnit.cpp \
     src/FileStore.cpp \
     src/filepersistence.cpp
 RESOURCES = FilePersistence.qrc

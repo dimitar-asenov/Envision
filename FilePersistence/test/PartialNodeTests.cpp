@@ -7,7 +7,7 @@
 
 #include "filepersistence.h"
 #include "FileStore.h"
-#include "PartialList.h"
+#include "ModelBase/headers/test_nodes/PartialList.h"
 #include "SelfTest/headers/SelfTestSuite.h"
 #include "ModelBase/headers/Model.h"
 #include "ModelBase/headers/nodes/Text.h"
@@ -26,7 +26,7 @@ TEST(FilePersistence, LoadingList)
 	store.setBaseFolder(testDir);
 
 	model.load(store, "partial");
-	PartialList* root = dynamic_cast<PartialList*> (model.getRoot());
+	TestNodes::PartialList* root = dynamic_cast<TestNodes::PartialList*> (model.getRoot());
 	CHECK_CONDITION(root != NULL);
 
 	Model::List* list = root->list();
@@ -72,7 +72,7 @@ TEST(FilePersistence, SaveList)
 	FileStore store;
 	store.setBaseFolder(testDir);
 
-	PartialList* root = dynamic_cast<PartialList*> (model.createRoot("PartialList"));
+	TestNodes::PartialList* root = dynamic_cast<TestNodes::PartialList*> (model.createRoot("PartialList"));
 
 	model.beginModification(root, "create ");
 	root->list()->setReferenceName("TheList");

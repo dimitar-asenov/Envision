@@ -6,9 +6,9 @@
  **********************************************************************************************************************/
 
 #include "filepersistence.h"
-#include "BinaryNode.h"
-#include "BinaryNodeUnit.h"
-#include "PartialList.h"
+#include "ModelBase/headers/test_nodes/BinaryNode.h"
+#include "ModelBase/headers/test_nodes/BinaryNodePersistenceUnit.h"
+#include "ModelBase/headers/test_nodes/PartialList.h"
 
 #include "SelfTest/headers/SelfTestSuite.h"
 
@@ -26,9 +26,9 @@ bool FilePersistence::initialize(Envision::EnvisionManager&)
 
 void FilePersistence::selfTest(QString)
 {
-	BinaryNode::init();
-	BinaryNodeUnit::init();
-	PartialList::init();
+	TestNodes::BinaryNode::init();
+	TestNodes::BinaryNodePersistenceUnit::init();
+	TestNodes::PartialList::init();
 	SelfTest::TestManager<FilePersistence>::runAllTests().printResultStatistics();
 }
 
