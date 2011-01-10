@@ -8,7 +8,7 @@
 #ifndef BINARYNODEACCESSUNIT_H_
 #define BINARYNODEACCESSUNIT_H_
 
-#include "modelbase_api.h"
+#include "../modelbase_api.h"
 
 #include "BinaryNode.h"
 #include "../NodeReadWriteLock.h"

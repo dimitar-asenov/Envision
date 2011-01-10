@@ -8,7 +8,7 @@
 #ifndef BINARYWITHPOSITION_H_
 #define BINARYWITHPOSITION_H_
 
-#include "modelbase_api.h"
+#include "../modelbase_api.h"
 
 #include "BinaryNode.h"
 

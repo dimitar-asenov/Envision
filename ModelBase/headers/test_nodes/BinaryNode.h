@@ -8,7 +8,7 @@
 #ifndef BINARYNODE_H_
 #define BINARYNODE_H_
 
-#include "modelbase_api.h"
+#include "../modelbase_api.h"
 
 #include "../nodes/Extendable/ExtendableNode.h"
 #include "../nodes/nodeMacros.h"
