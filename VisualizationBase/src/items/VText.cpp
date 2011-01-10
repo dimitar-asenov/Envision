@@ -25,10 +25,10 @@ void VText::updateState()
 {
 	Model::Text* textNode = static_cast<Model::Text*> (getNode());
 
-	text.setText(textNode->get());
+	text = textNode->get();
 	QFontMetrics qfm(style()->font());
 
-	bounding_rect = qfm.boundingRect(text.text());
+	bounding_rect = qfm.boundingRect(text);
 	xOffset = - bounding_rect.left();
 	yOffset = - bounding_rect.top();
 	bounding_rect.moveTopLeft(QPointF(0,0));
@@ -40,7 +40,7 @@ void VText::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *
 {
 	painter->setPen(style()->pen());
 	painter->setFont(style()->font());
-	painter->drawStaticText(0, 0, text);
+	painter->drawText(xOffset, yOffset, text);
 }
 
 }

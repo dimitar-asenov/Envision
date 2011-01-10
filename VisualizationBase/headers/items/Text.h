@@ -23,7 +23,7 @@ class VISUALIZATIONBASE_API Text : public Item
 	ITEM_COMMON(Text, Item)
 
 	private:
-		QStaticText text;
+		QString text;
 
 		qreal xOffset;
 		qreal yOffset;
@@ -41,7 +41,7 @@ class VISUALIZATIONBASE_API Text : public Item
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 };
 
-inline void Text::setText(const QString& newText) { text.setText(newText); setUpdateNeeded(); }
+inline void Text::setText(const QString& newText) { text = newText; setUpdateNeeded(); }
 
 }
 

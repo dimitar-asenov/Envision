@@ -25,7 +25,7 @@ class VISUALIZATIONBASE_API VText : public ModelItem
 	ITEM_COMMON_CUSTOM_STYLENAME(VText, ModelItem, TextStyle)
 
 	private:
-		QStaticText text;
+		QString text;
 
 		qreal xOffset;
 		qreal yOffset;
