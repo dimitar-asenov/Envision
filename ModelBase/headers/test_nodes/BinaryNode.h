@@ -8,25 +8,27 @@
 #ifndef BINARYNODE_H_
 #define BINARYNODE_H_
 
-#include "nodes/Extendable/ExtendableNode.h"
-#include "nodes/nodeMacros.h"
-#include "nodes/Text.h"
+#include "modelbase_api.h"
 
-namespace Model {
+#include "../nodes/Extendable/ExtendableNode.h"
+#include "../nodes/nodeMacros.h"
+#include "../nodes/Text.h"
 
-class BinaryNode: public ExtendableNode
+namespace TestNodes {
+
+class MODELBASE_API BinaryNode: public Model::ExtendableNode
 {
 	EXTENDABLENODE_DECLARE_STANDARD_CONSTRUCTORS(BinaryNode)
 
 	private:
-		static ExtendableIndex textIndex;
-		static ExtendableIndex leftIndex;
-		static ExtendableIndex rightIndex;
+		static Model::ExtendableIndex textIndex;
+		static Model::ExtendableIndex leftIndex;
+		static Model::ExtendableIndex rightIndex;
 
 	public:
 		static void init();
 
-		Text* text();
+		Model::Text* text();
 		BinaryNode* left();
 		BinaryNode* right();
 

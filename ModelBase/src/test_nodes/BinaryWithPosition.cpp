@@ -5,13 +5,13 @@
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "BinaryWithPosition.h"
+#include "test_nodes/BinaryWithPosition.h"
 #include "nodes/Integer.h"
 
-namespace Model {
+namespace TestNodes {
 
-ExtendableIndex BinaryWithPosition::xIndex = ExtendableIndex();
-ExtendableIndex BinaryWithPosition::yIndex = ExtendableIndex();
+Model::ExtendableIndex BinaryWithPosition::xIndex = Model::ExtendableIndex();
+Model::ExtendableIndex BinaryWithPosition::yIndex = Model::ExtendableIndex();
 
 BinaryWithPosition::BinaryWithPosition(BinaryNode* binary) :
 	binaryNode(binary)
@@ -29,18 +29,18 @@ BinaryNode* BinaryWithPosition::binary()
 
 int BinaryWithPosition::x()
 {
-	return static_cast<Integer*> (binaryNode->get(xIndex))->get();
+	return static_cast<Model::Integer*> (binaryNode->get(xIndex))->get();
 }
 
 int BinaryWithPosition::y()
 {
-	return static_cast<Integer*> (binaryNode->get(yIndex))->get();
+	return static_cast<Model::Integer*> (binaryNode->get(yIndex))->get();
 }
 
 void BinaryWithPosition::set(int x, int y)
 {
-	static_cast<Integer*> (binaryNode->get(xIndex))->set(x);
-	static_cast<Integer*> (binaryNode->get(yIndex))->set(y);
+	static_cast<Model::Integer*> (binaryNode->get(xIndex))->set(x);
+	static_cast<Model::Integer*> (binaryNode->get(yIndex))->set(y);
 }
 
 void BinaryWithPosition::init()

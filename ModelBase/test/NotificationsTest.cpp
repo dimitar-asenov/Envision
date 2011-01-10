@@ -7,7 +7,7 @@
 
 #include "modelbase.h"
 #include "SelfTest/headers/SelfTestSuite.h"
-#include "BinaryNode.h"
+#include "test_nodes/BinaryNode.h"
 #include "Model.h"
 #include "NotificationListener.h"
 
@@ -21,13 +21,13 @@ TEST(ModelBase, ModificationNotificationTests)
 	CHECK_CONDITION(nl.root == NULL);
 	CHECK_INT_EQUAL(0, nl.modifiedNodes.size());
 
-	BinaryNode* root = dynamic_cast<BinaryNode*> (model.createRoot("BinaryNode"));
+	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.createRoot("BinaryNode"));
 
 	CHECK_CONDITION(root == nl.root);
 
 	model.beginModification(root, "make tree");
-	BinaryNode* left = root->makeLeftNode();
-	BinaryNode* right = root->makeRightNode();
+	TestNodes::BinaryNode* left = root->makeLeftNode();
+	TestNodes::BinaryNode* right = root->makeRightNode();
 	model.endModification();
 
 	CHECK_INT_EQUAL(1, nl.modifiedNodes.size());

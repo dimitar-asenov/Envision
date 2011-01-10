@@ -7,8 +7,6 @@
 
 #include "modelbase.h"
 #include "SelfTest/headers/SelfTestSuite.h"
-#include "BinaryNode.h"
-#include "BinaryNodeUnit.h"
 #include "Model.h"
 #include "nodes/Text.h"
 #include "nodes/Integer.h"

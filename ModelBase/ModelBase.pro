@@ -25,7 +25,10 @@ pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
-HEADERS += headers/commands/ListRemove.h \
+HEADERS += headers/test_nodes/BinaryNodeAccessUnit.h \
+    headers/test_nodes/BinaryNode.h \
+    headers/test_nodes/BinaryWithPosition.h \
+    headers/commands/ListRemove.h \
     headers/commands/ListInsert.h \
     headers/commands/NameChange.h \
     headers/commands/PointerFieldSet.h \
@@ -38,7 +41,6 @@ HEADERS += headers/commands/ListRemove.h \
     headers/nodes/Extendable/AttributeChain.h \
     headers/nodes/Extendable/ExtendableIndex.h \
     headers/nodes/Extendable/ExtendableNode.h \
-    test/BinaryNodeUnit.h \
     src/commands/SetModificationTarget.h \
     headers/InterruptibleThread.h \
     headers/NodeReadWriteLock.h \
@@ -47,15 +49,16 @@ HEADERS += headers/commands/ListRemove.h \
     test/PersistentStoreMock.h \
     headers/ModelException.h \
     headers/nodes/Integer.h \
-    test/BinaryWithPosition.h \
     headers/nodes/Text.h \
-    test/BinaryNode.h \
     headers/commands/ExtendedNodeOptional.h \
     headers/Model.h \
     headers/PersistentStore.h \
     headers/modelbase_api.h \
     src/modelbase.h
-SOURCES += test/ListTest.cpp \
+SOURCES += src/test_nodes/BinaryNodeAccessUnit.cpp \
+    src/test_nodes/BinaryNode.cpp \
+    src/test_nodes/BinaryWithPosition.cpp \
+    test/ListTest.cpp \
     src/commands/ListRemove.cpp \
     src/commands/ListInsert.cpp \
     src/commands/NameChange.cpp \
@@ -69,7 +72,6 @@ SOURCES += test/ListTest.cpp \
     src/nodes/Extendable/ExtendableNode.cpp \
     src/commands/UndoCommand.cpp \
     test/ConcurrencyTests.cpp \
-    test/BinaryNodeUnit.cpp \
     src/commands/SetModificationTarget.cpp \
     src/NodeReadWriteLock.cpp \
     src/nodes/Reference.cpp \
@@ -78,11 +80,9 @@ SOURCES += test/ListTest.cpp \
     src/ModelException.cpp \
     test/PositionTests.cpp \
     src/nodes/Integer.cpp \
-    test/BinaryWithPosition.cpp \
     test/UndoRedoTests.cpp \
     test/SimpleTests.cpp \
     src/nodes/Text.cpp \
-    test/BinaryNode.cpp \
     src/commands/ExtendedNodeOptional.cpp \
     src/Model.cpp \
     src/modelbase.cpp

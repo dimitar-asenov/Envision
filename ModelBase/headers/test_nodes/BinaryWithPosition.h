@@ -8,17 +8,18 @@
 #ifndef BINARYWITHPOSITION_H_
 #define BINARYWITHPOSITION_H_
 
+#include "modelbase_api.h"
+
 #include "BinaryNode.h"
 
-namespace Model {
+namespace TestNodes {
 
-
-class BinaryWithPosition
+class MODELBASE_API BinaryWithPosition
 {
 	private:
 		BinaryNode* binaryNode;
-		static ExtendableIndex xIndex;
-		static ExtendableIndex yIndex;
+		static Model::ExtendableIndex xIndex;
+		static Model::ExtendableIndex yIndex;
 
 	public:
 		BinaryWithPosition(BinaryNode* binary);

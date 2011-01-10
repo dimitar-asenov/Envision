@@ -7,8 +7,8 @@
 
 #include "modelbase.h"
 #include "SelfTest/headers/SelfTestSuite.h"
-#include "BinaryNode.h"
-#include "BinaryWithPosition.h"
+#include "test_nodes/BinaryNode.h"
+#include "test_nodes/BinaryWithPosition.h"
 #include "Model.h"
 #include "nodes/Integer.h"
 
@@ -17,12 +17,12 @@ namespace Model {
 TEST(ModelBase, PositionExtension)
 {
 	Model model;
-	BinaryNode* root = dynamic_cast<BinaryNode*> (model.createRoot("BinaryNode"));
+	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.createRoot("BinaryNode"));
 
 	CHECK_CONDITION(root->hasAttribute("x"));
 	CHECK_CONDITION(root->hasAttribute("y"));
 
-	BinaryWithPosition pos(root);
+	TestNodes::BinaryWithPosition pos(root);
 
 	CHECK_CONDITION( pos.binary() == root );
 	CHECK_INT_EQUAL( 0, pos.x() );

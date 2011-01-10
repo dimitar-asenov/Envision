@@ -7,7 +7,7 @@
 
 #include "modelbase.h"
 #include "SelfTest/headers/SelfTestSuite.h"
-#include "BinaryNode.h"
+#include "test_nodes/BinaryNode.h"
 #include "Model.h"
 #include "nodes/Text.h"
 
@@ -16,7 +16,7 @@ namespace Model {
 TEST(ModelBase, UndoRedoTextSet)
 {
 	Model model;
-	BinaryNode* root = dynamic_cast<BinaryNode*> (model.createRoot("BinaryNode"));
+	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.createRoot("BinaryNode"));
 
 	CHECK_CONDITION(root->text()->get().isNull());
 	CHECK_INT_EQUAL(0, root->text()->getRevision());
@@ -62,7 +62,7 @@ TEST(ModelBase, UndoRedoTextSet)
 TEST(ModelBase, UndoRedoOptionalNodes)
 {
 	Model model;
-	BinaryNode* root = dynamic_cast<BinaryNode*> (model.createRoot("BinaryNode"));
+	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.createRoot("BinaryNode"));
 
 	CHECK_INT_EQUAL(0, root->text()->getRevision());
 	CHECK_INT_EQUAL(0, root->getRevision());
@@ -70,7 +70,7 @@ TEST(ModelBase, UndoRedoOptionalNodes)
 	CHECK_CONDITION(root->right() == NULL);
 
 	model.beginModification(root, "testing");
-	BinaryNode* left = root->makeLeftNode();
+	TestNodes::BinaryNode* left = root->makeLeftNode();
 	model.endModification();
 	CHECK_INT_EQUAL(0, root->text()->getRevision());
 	CHECK_INT_EQUAL(1, root->getRevision());
@@ -81,7 +81,7 @@ TEST(ModelBase, UndoRedoOptionalNodes)
 	CHECK_INT_EQUAL(0, left->getRevision());
 
 	model.beginModification(root, "testing");
-	BinaryNode* right = root->makeRightNode();
+	TestNodes::BinaryNode* right = root->makeRightNode();
 	model.endModification();
 	CHECK_INT_EQUAL(0, root->text()->getRevision());
 	CHECK_INT_EQUAL(2, root->getRevision());

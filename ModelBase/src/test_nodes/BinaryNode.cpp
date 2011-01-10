@@ -5,16 +5,16 @@
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "BinaryNode.h"
+#include "test_nodes/BinaryNode.h"
 
-namespace Model {
+namespace TestNodes {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(BinaryNode, ExtendableNode)
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(BinaryNode, Model::ExtendableNode)
 NODE_DEFINE_TYPE_REGISTRATION_METHODS(BinaryNode)
 
-ExtendableIndex BinaryNode::textIndex = ExtendableIndex();
-ExtendableIndex BinaryNode::leftIndex = ExtendableIndex();
-ExtendableIndex BinaryNode::rightIndex = ExtendableIndex();
+Model::ExtendableIndex BinaryNode::textIndex = Model::ExtendableIndex();
+Model::ExtendableIndex BinaryNode::leftIndex = Model::ExtendableIndex();
+Model::ExtendableIndex BinaryNode::rightIndex = Model::ExtendableIndex();
 
 void BinaryNode::init()
 {
@@ -24,9 +24,9 @@ void BinaryNode::init()
 	rightIndex = registerNewAttribute<BinaryNode> ("right", "BinaryNode", false, true, true);
 }
 
-Text* BinaryNode::text()
+Model::Text* BinaryNode::text()
 {
-	return static_cast<Text*> (get(textIndex));
+	return static_cast<Model::Text*> (get(textIndex));
 }
 
 BinaryNode* BinaryNode::left()

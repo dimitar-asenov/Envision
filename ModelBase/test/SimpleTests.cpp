@@ -7,8 +7,8 @@
 
 #include "modelbase.h"
 #include "SelfTest/headers/SelfTestSuite.h"
-#include "BinaryNode.h"
-#include "BinaryNodeUnit.h"
+#include "test_nodes/BinaryNode.h"
+#include "test_nodes/BinaryNodeAccessUnit.h"
 #include "Model.h"
 #include "nodes/Text.h"
 #include "nodes/Integer.h"
@@ -18,8 +18,8 @@ namespace Model {
 
 TEST(ModelBase, ExtendableMetaData)
 {
-	AttributeChain& metaExt = ExtendableNode::getMetaData<BinaryNode>();
-	AttributeChain& metaUnit = ExtendableNode::getMetaData<BinaryNodeUnit>();
+	AttributeChain& metaExt = ExtendableNode::getMetaData<TestNodes::BinaryNode>();
+	AttributeChain& metaUnit = ExtendableNode::getMetaData<TestNodes::BinaryNodeAccessUnit>();
 
 	CHECK_INT_EQUAL(1, metaExt.getNumLevels());
 	CHECK_INT_EQUAL(2, metaUnit.getNumLevels());
@@ -58,7 +58,7 @@ TEST(ModelBase, SimpleModelCreation)
 	Model model;
 	CHECK_CONDITION( model.getRoot() == NULL );
 
-	BinaryNode* root = dynamic_cast<BinaryNode*> (model.createRoot("BinaryNode"));
+	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.createRoot("BinaryNode"));
 	CHECK_CONDITION( model.getRoot() == root );
 
 	CHECK_CONDITION( root->getModel() == &model );
@@ -69,10 +69,10 @@ TEST(ModelBase, SimpleModelCreation)
 TEST(ModelBase, RemoveOptional)
 {
 	Model model;
-	BinaryNode* root = dynamic_cast<BinaryNode*> (model.createRoot("BinaryNode"));
+	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.createRoot("BinaryNode"));
 
 	model.beginModification(root, "Making left node");
-	BinaryNode* left = root->makeLeftNode();
+	TestNodes::BinaryNode* left = root->makeLeftNode();
 	model.endModification();
 	CHECK_CONDITION( root->left() == left );
 	CHECK_CONDITION( root->left() != NULL );
@@ -92,11 +92,11 @@ TEST(ModelBase, RemoveOptional)
 TEST(ModelBase, ChildNodeRetrieval)
 {
 	Model model;
-	BinaryNode* root = dynamic_cast<BinaryNode*> (model.createRoot("BinaryNode"));
+	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.createRoot("BinaryNode"));
 
 	model.beginModification(root, "Making nodes");
-	BinaryNode* left = root->makeLeftNode();
-	BinaryNode* right = root->makeRightNode();
+	TestNodes::BinaryNode* left = root->makeLeftNode();
+	TestNodes::BinaryNode* right = root->makeRightNode();
 	model.endModification();
 
 	CHECK_INT_EQUAL(0, root->getId());
@@ -121,7 +121,7 @@ TEST(ModelBase, ChildNodeRetrieval)
 TEST(ModelBase, ProperRegistration)
 {
 	Model model;
-	BinaryNode* root = dynamic_cast<BinaryNode*> (model.createRoot("BinaryNode"));
+	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.createRoot("BinaryNode"));
 	CHECK_CONDITION(root->getTypeId() >= 0);
 
 	Model model2;

@@ -12,9 +12,9 @@
 #include "nodes/Integer.h"
 #include "nodes/Reference.h"
 #include "nodes/List.h"
-#include "BinaryNode.h"
-#include "BinaryWithPosition.h"
-#include "BinaryNodeUnit.h"
+#include "test_nodes/BinaryNode.h"
+#include "test_nodes/BinaryWithPosition.h"
+#include "test_nodes/BinaryNodeAccessUnit.h"
 
 using namespace Logger;
 
@@ -36,9 +36,9 @@ bool ModelBase::initialize(Envision::EnvisionManager&)
 
 void ModelBase::selfTest(QString)
 {
-	BinaryNode::init();
-	BinaryWithPosition::init();
-	BinaryNodeUnit::init();
+	TestNodes::BinaryNode::init();
+	TestNodes::BinaryWithPosition::init();
+	TestNodes::BinaryNodeAccessUnit::init();
 	SelfTest::TestManager<ModelBase>::runAllTests().printResultStatistics();
 }
 

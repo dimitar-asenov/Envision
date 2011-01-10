@@ -7,9 +7,9 @@
 
 #include "modelbase.h"
 #include "SelfTest/headers/SelfTestSuite.h"
-#include "BinaryNode.h"
-#include "BinaryWithPosition.h"
-#include "BinaryNodeUnit.h"
+#include "test_nodes/BinaryNode.h"
+#include "test_nodes/BinaryWithPosition.h"
+#include "test_nodes/BinaryNodeAccessUnit.h"
 #include "Model.h"
 #include "nodes/Integer.h"
 #include "nodes/Text.h"
@@ -20,13 +20,13 @@ TEST(ModelBase, SingleWriteUnitCheck)
 {
 	Model model;
 
-	BinaryNode* root = dynamic_cast<BinaryNode*> (model.createRoot("BinaryNode"));
+	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.createRoot("BinaryNode"));
 
 	model.beginModification(root, "make tree");
-	BinaryNode* left = root->makeLeftNode();
-	BinaryNode* right = root->makeRightNode("BinaryNodeUnit");
-	BinaryNode* one = root->left()->makeLeftNode("BinaryNodeUnit");
-	BinaryNode* two = root->left()->makeRightNode("BinaryNodeUnit");
+	TestNodes::BinaryNode* left = root->makeLeftNode();
+	TestNodes::BinaryNode* right = root->makeRightNode("BinaryNodeAccessUnit");
+	TestNodes::BinaryNode* one = root->left()->makeLeftNode("BinaryNodeAccessUnit");
+	TestNodes::BinaryNode* two = root->left()->makeRightNode("BinaryNodeAccessUnit");
 	model.endModification();
 
 	CHECK_STR_EQUAL(QString(), root->text()->get());
