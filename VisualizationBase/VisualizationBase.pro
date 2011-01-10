@@ -46,7 +46,6 @@ HEADERS += headers/views/MiniMap.h \
     headers/items/NoItem.h \
     headers/layouts/PanelLayoutStyle.h \
     headers/layouts/PanelLayout.h \
-    test/BinaryNode.h \
     headers/items/VExtendable.h \
     headers/items/VText.h \
     headers/items/TextStyle.h \
@@ -82,7 +81,6 @@ SOURCES += src/views/MiniMap.cpp \
     src/items/NoItem.cpp \
     src/layouts/PanelLayoutStyle.cpp \
     src/layouts/PanelLayout.cpp \
-    test/BinaryNode.cpp \
     src/items/VExtendable.cpp \
     src/items/VText.cpp \
     src/items/TextStyle.cpp \

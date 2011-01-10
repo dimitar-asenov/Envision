@@ -16,7 +16,7 @@
 #include "items/VList.h"
 #include "ModelRenderer.h"
 
-#include "BinaryNode.h"
+#include "ModelBase/headers/test_nodes/BinaryNode.h"
 
 #include "ModelBase/headers/nodes/Text.h"
 #include "ModelBase/headers/nodes/List.h"
@@ -90,7 +90,7 @@ TEST(VisualizationBase, ExtendableTest)
 	Scene* scene = new Scene();
 	ModelRenderer* renderer = new ModelRenderer();
 
-	renderer->registerVisualization(BinaryNode::getTypeIdStatic(), createVisualization<VExtendable, BinaryNode>);
+	renderer->registerVisualization(TestNodes::BinaryNode::getTypeIdStatic(), createVisualization<VExtendable, TestNodes::BinaryNode>);
 	renderer->registerVisualization(Model::Text::getTypeIdStatic(), createVisualization<VText, Model::Text>);
 	renderer->registerVisualization(Model::List::getTypeIdStatic(), createVisualization<VList, Model::List>);
 
@@ -100,13 +100,13 @@ TEST(VisualizationBase, ExtendableTest)
 	Model::List* list = static_cast<Model::List*> (model.createRoot("List"));
 
 	model.beginModification(list, "set");
-	BinaryNode* first = list->append<BinaryNode>();
-	BinaryNode* second = list->append<BinaryNode>();
+	TestNodes::BinaryNode* first = list->append<TestNodes::BinaryNode>();
+	TestNodes::BinaryNode* second = list->append<TestNodes::BinaryNode>();
 	Model::Text* third = list->append<Model::Text>();
 
 	first->name()->set("First node");
-	BinaryNode* left = first->makeLeftNode("BinaryNode");
-	BinaryNode* right = first->makeRightNode("BinaryNode");
+	TestNodes::BinaryNode* left = first->makeLeftNode("BinaryNode");
+	TestNodes::BinaryNode* right = first->makeRightNode("BinaryNode");
 	left->name()->set("left node");
 	right->name()->set("right node");
 

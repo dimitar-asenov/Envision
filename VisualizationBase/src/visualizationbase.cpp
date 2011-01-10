@@ -8,7 +8,7 @@
 #include "visualizationbase.h"
 
 #include "VisualizationManager.h"
-#include "BinaryNode.h"
+#include "ModelBase/headers/test_nodes/BinaryNode.h"
 #include "shapes/Box.h"
 #include "SelfTest/headers/SelfTestSuite.h"
 
@@ -27,7 +27,7 @@ namespace Visualization
 
 	void VisualizationBase::selfTest(QString)
 	{
-		BinaryNode::init();
+		TestNodes::BinaryNode::init();
 		SelfTest::TestManager<VisualizationBase>::runAllTests().printResultStatistics();
 	}
 
