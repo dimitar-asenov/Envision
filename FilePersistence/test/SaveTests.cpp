@@ -27,8 +27,8 @@ TEST(FilePersistence, SaveRootOnly)
 
 	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.createRoot("BinaryNode"));
 
-	model.beginModification(root->text(), "set title");
-	root->text()->set("Title");
+	model.beginModification(root->name(), "set title");
+	root->name()->set("Title");
 	model.endModification();
 
 	store.saveModel(model, "rootOnly");
@@ -46,12 +46,12 @@ TEST(FilePersistence, SaveModeNodesSingleUnitOnly)
 	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.createRoot("BinaryNode"));
 
 	model.beginModification(root, "set title");
-	root->text()->set("Root");
+	root->name()->set("Root");
 	TestNodes::BinaryNode* left = root->makeLeftNode();
 	TestNodes::BinaryNode* right = root->makeRightNode();
 
-	left->text()->set("Left child");
-	right->text()->set("Right child");
+	left->name()->set("Left child");
+	right->name()->set("Right child");
 	model.endModification();
 
 	store.saveModel(model, "2Children");
@@ -68,14 +68,14 @@ TEST(FilePersistence, SaveMultipleUnits)
 	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.createRoot("BinaryNode"));
 
 	model.beginModification(root, "set title");
-	root->text()->set("Root");
+	root->name()->set("Root");
 	TestNodes::BinaryNode* left = root->makeLeftNode("BinaryNodePersistenceUnit");
 	TestNodes::BinaryNode* right = root->makeRightNode();
 
-	left->text()->set("Left child");
+	left->name()->set("Left child");
 	TestNodes::BinaryNode* leftleft = left->makeLeftNode();
-	leftleft->text()->set("in a new unit");
-	right->text()->set("Right child");
+	leftleft->name()->set("in a new unit");
+	right->name()->set("Right child");
 	model.endModification();
 
 	store.saveModel(model, "units");

@@ -1,10 +1,10 @@
 <!DOCTYPE EnvisionFilePersistence>
 <BinaryNode id="0" name="2Children" partial="0">
- <Text id="1" name="text" partial="0">Root</Text>
+ <Text id="1" name="name" partial="0">Root</Text>
  <BinaryNode id="2" name="left" partial="0">
-  <Text id="3" name="text" partial="0">Left child</Text>
+  <Text id="3" name="name" partial="0">Left child</Text>
  </BinaryNode>
  <BinaryNode id="4" name="right" partial="0">
-  <Text id="5" name="text" partial="0">Right child</Text>
+  <Text id="5" name="name" partial="0">Right child</Text>
  </BinaryNode>
 </BinaryNode>
