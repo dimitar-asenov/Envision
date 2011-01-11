@@ -9,6 +9,8 @@
 
 namespace Visualization {
 
+ITEM_COMMON_DEFINITIONS( Layout )
+
 Layout::Layout(Item* parent, const LayoutStyle* style) :
 	Item(parent, style)
 {

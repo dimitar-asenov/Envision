@@ -28,7 +28,8 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/views/MiniMap.h \
+HEADERS += headers/InteractionHandler.h \
+    headers/views/MiniMap.h \
     headers/views/View.h \
     headers/views/MainView.h \
     headers/items/VListStyle.h \
@@ -64,7 +65,8 @@ HEADERS += headers/views/MiniMap.h \
     src/visualizationbase.h \
     headers/VisualizationException.h \
     headers/visualizationbase_api.h
-SOURCES += src/views/MiniMap.cpp \
+SOURCES += src/InteractionHandler.cpp \
+    src/views/MiniMap.cpp \
     src/views/MainView.cpp \
     src/views/View.cpp \
     src/items/VListStyle.cpp \

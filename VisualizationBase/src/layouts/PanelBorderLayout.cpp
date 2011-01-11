@@ -9,6 +9,8 @@
 
 namespace Visualization {
 
+ITEM_COMMON_DEFINITIONS( PanelBorderLayout )
+
 PanelBorderLayout::PanelBorderLayout(Item* parent, const PanelBorderLayoutStyle* style) :
 	Layout(parent, style), top_(new PanelLayout(this, &style->topStyle())), left_(NULL), bottom_(NULL), right_(NULL), content_(NULL)
 {

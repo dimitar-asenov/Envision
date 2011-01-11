@@ -12,6 +12,8 @@
 
 namespace Visualization {
 
+ITEM_COMMON_DEFINITIONS(VText)
+
 VText::VText(Item* parent, Model::Text *text, const TextStyle *style) :
 	ModelItem(parent, text, style)
 {

@@ -24,6 +24,7 @@
 public:																																					\
 	typedef StyleTypeName StyleType;																												\
 	static const QString& className() { static QString name(#ItemClass); return name; }											\
+																																							\
 	const StyleType* style() const { return static_cast<const StyleType*> (BaseClass::style()); }							\
 	virtual void setStyle(const ItemStyle* style)																							\
 	{																																						\
@@ -31,7 +32,13 @@ public:																																					\
 		if (!s) throw VisualizationException("Invalid style type when calling " #ItemClass "::setStyle");					\
 		Item::setStyle(s);																															\
 	}																																						\
-private:
+																																							\
+	virtual InteractionHandler* handler() const { return handler_; };																	\
+	static void setInteractionHandler(InteractionHandler* handler) {handler_ = handler;}										\
+																																							\
+private:																																					\
+	static InteractionHandler* handler_;																										\
+
 
 /**
  * Defines standard methods that every item should implement. These include class name information and style handling.
@@ -43,5 +50,13 @@ private:
  * 			The base class of ItemClass. This class must inherit from from Item, directly or indirectly.
  */
 #define ITEM_COMMON( ItemClass, BaseClass) ITEM_COMMON_CUSTOM_STYLENAME(ItemClass, BaseClass, ItemClass##Style)
+
+/**
+ * Defines standard methods and members that every item should implement.
+ *
+ * @param ItemClass
+ * 			The name of the class being defined.
+ */
+#define ITEM_COMMON_DEFINITIONS( ItemClass ) InteractionHandler* ItemClass::handler_ = InteractionHandler::instance();
 
 #endif /* ITEMMACROS_H_ */

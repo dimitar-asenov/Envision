@@ -14,6 +14,8 @@
 
 namespace Visualization {
 
+ITEM_COMMON_DEFINITIONS(Text)
+
 Text::Text(Item* parent, const QString& text_) :
 	Item(parent, Styles::item<Text>("default")), text(text_)
 {

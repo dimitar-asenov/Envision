@@ -10,6 +10,8 @@
 
 namespace Visualization {
 
+ITEM_COMMON_DEFINITIONS( PanelLayout )
+
 PanelLayout::PanelLayout(Item* parent, const PanelLayoutStyle* style) :
 	Layout(parent, style), first_(new NoItem(this)), middle_(new NoItem(this)), last_(new NoItem(this)), minimalLength(0)
 {

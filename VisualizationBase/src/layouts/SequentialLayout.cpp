@@ -10,6 +10,8 @@
 
 namespace Visualization {
 
+ITEM_COMMON_DEFINITIONS( SequentialLayout )
+
 SequentialLayout::SequentialLayout(Item* parent, const SequentialLayoutStyle* style) :
 	Layout(parent, style)
 {
