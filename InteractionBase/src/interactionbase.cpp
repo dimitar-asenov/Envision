@@ -6,9 +6,13 @@
  **********************************************************************************************************************/
 
 #include "interactionbase.h"
+
 #include "HText.h"
+#include "VisualizationBase/headers/items/Text.h"
+#include "ModelBase/headers/test_nodes/BinaryNode.h"
 
 #include "SelfTest/headers/SelfTestSuite.h"
+
 
 Q_EXPORT_PLUGIN2( interactionbase, Interaction::InteractionBase )
 
@@ -22,6 +26,8 @@ bool InteractionBase::initialize(Envision::EnvisionManager&)
 
 void InteractionBase::selfTest(QString testid)
 {
+	TestNodes::BinaryNode::init();
+
 	if (testid.isEmpty()) SelfTest::TestManager<InteractionBase>::runAllTests().printResultStatistics();
 	else SelfTest::TestManager<InteractionBase>::runTest(testid).printResultStatistics();
 }

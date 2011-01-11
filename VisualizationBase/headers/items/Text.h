@@ -62,6 +62,9 @@ class VISUALIZATIONBASE_API Text : public Item
 		void setText(const QString& newText);
 
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+
+		void setSelected(int xBegin, int xEnd);
+		static void resetSelected();
 };
 
 inline void Text::setText(const QString& newText) { text = newText; setUpdateNeeded(); }

@@ -94,4 +94,26 @@ void Text::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 	}
 }
 
+void Text::setSelected(int /*xBegin*/, int /*xEnd*/)
+{
+	//TODO this
+	selectionBegin = 1;
+	selectionEnd = 2;
+
+	resetSelected();
+	selected = this;
+	setUpdateNeeded();
+}
+
+void Text::resetSelected()
+{
+	//TODO figure out when to call update.
+	if (selected)
+	{
+		selected->setUpdateNeeded();
+		selected->update();
+	}
+	selected = NULL;
+}
+
 }

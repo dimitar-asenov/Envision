@@ -7,6 +7,8 @@
 
 #include "HText.h"
 
+#include <QtCore/QDebug>
+
 namespace Interaction {
 
 HText::HText()
@@ -21,7 +23,11 @@ HText* HText::instance()
 
 void HText::mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
-	InteractionHandler::mousePressEvent(target, event);
+	qDebug() << "here";
+	Visualization::Text* t = static_cast<Visualization::Text*> (target);
+	t->setSelected(event->pos().x(),event->pos().x()+1);
+	t->updateSubtreeState();
+	t->update();
 }
 
 }
