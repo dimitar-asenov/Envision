@@ -8,7 +8,7 @@
 #ifndef VIEW_H_
 #define VIEW_H_
 
-#include "visualizationbase_api.h"
+#include "../visualizationbase_api.h"
 
 #include <QtGui/QGraphicsView>
 

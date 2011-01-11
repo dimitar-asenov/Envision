@@ -8,7 +8,7 @@
 #ifndef PANELLAYOUTSTYLE_H_
 #define PANELLAYOUTSTYLE_H_
 
-#include "visualizationbase_api.h"
+#include "../visualizationbase_api.h"
 
 #include "LayoutStyle.h"
 #include "SequentialLayoutStyle.h"

@@ -8,12 +8,12 @@
 #ifndef VLIST_H_
 #define VLIST_H_
 
-#include "visualizationbase_api.h"
+#include "../visualizationbase_api.h"
 
 #include "ModelItem.h"
-#include "Styles.h"
 #include "VListStyle.h"
-#include "layouts/SequentialLayout.h"
+#include "../Styles.h"
+#include "../layouts/SequentialLayout.h"
 #include "ModelBase/headers/nodes/List.h"
 
 namespace Visualization {

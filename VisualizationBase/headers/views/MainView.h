@@ -8,7 +8,7 @@
 #ifndef MAINVIEW_H_
 #define MAINVIEW_H_
 
-#include "visualizationbase_api.h"
+#include "../visualizationbase_api.h"
 
 #include "View.h"
 #include "MiniMap.h"

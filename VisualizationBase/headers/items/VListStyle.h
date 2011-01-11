@@ -8,9 +8,9 @@
 #ifndef VLISTSTYLE_H_
 #define VLISTSTYLE_H_
 
-#include "visualizationbase_api.h"
+#include "../visualizationbase_api.h"
 
-#include "layouts/SequentialLayoutStyle.h"
+#include "../layouts/SequentialLayoutStyle.h"
 
 namespace Visualization {
 

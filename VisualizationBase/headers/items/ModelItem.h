@@ -8,10 +8,10 @@
 #ifndef MODELITEM_H_
 #define MODELITEM_H_
 
-#include "visualizationbase_api.h"
+#include "../visualizationbase_api.h"
 
 #include "Item.h"
-#include "ModelRenderer.h"
+#include "../ModelRenderer.h"
 #include "ModelBase/headers/nodes/Node.h"
 
 namespace Visualization {

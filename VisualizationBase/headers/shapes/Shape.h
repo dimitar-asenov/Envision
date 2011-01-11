@@ -8,12 +8,12 @@
 #ifndef SHAPE_H_
 #define SHAPE_H_
 
-#include "visualizationbase_api.h"
+#include "../visualizationbase_api.h"
 
 #include "../items/Item.h"
 #include "ShapeStyle.h"
 
-#include "VisualizationException.h"
+#include "../VisualizationException.h"
 
 #include <QtCore/QString>
 #include <QtCore/QMap>

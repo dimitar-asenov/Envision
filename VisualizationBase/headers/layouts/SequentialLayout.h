@@ -8,7 +8,7 @@
 #ifndef SEQUENTIALLAYOUT_H_
 #define SEQUENTIALLAYOUT_H_
 
-#include "visualizationbase_api.h"
+#include "../visualizationbase_api.h"
 
 #include "Layout.h"
 #include "SequentialLayoutStyle.h"

@@ -8,7 +8,7 @@
 #ifndef SHAPESTYLE_H_
 #define SHAPESTYLE_H_
 
-#include "visualizationbase_api.h"
+#include "../visualizationbase_api.h"
 
 #include <QtGui/QPen>
 

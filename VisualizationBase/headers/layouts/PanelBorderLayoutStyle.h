@@ -8,7 +8,7 @@
 #ifndef PANELBORDERLAYOUTSTYLE_H_
 #define PANELBORDERLAYOUTSTYLE_H_
 
-#include "visualizationbase_api.h"
+#include "../visualizationbase_api.h"
 
 #include "LayoutStyle.h"
 #include "PanelLayoutStyle.h"

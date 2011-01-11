@@ -8,9 +8,9 @@
 #ifndef VEXTENDABLESTYLE_H_
 #define VEXTENDABLESTYLE_H_
 
-#include "visualizationbase_api.h"
+#include "../visualizationbase_api.h"
 
-#include "layouts/PanelBorderLayoutStyle.h"
+#include "../layouts/PanelBorderLayoutStyle.h"
 
 namespace Visualization {
 

@@ -8,7 +8,7 @@
 #ifndef TEXTSTYLE_H_
 #define TEXTSTYLE_H_
 
-#include "visualizationbase_api.h"
+#include "../visualizationbase_api.h"
 
 #include "ItemStyle.h"
 

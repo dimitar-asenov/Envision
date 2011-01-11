@@ -8,7 +8,7 @@
 #ifndef LAYOUTSTYLE_H_
 #define LAYOUTSTYLE_H_
 
-#include "visualizationbase_api.h"
+#include "../visualizationbase_api.h"
 
 #include "../items/ItemStyle.h"
 

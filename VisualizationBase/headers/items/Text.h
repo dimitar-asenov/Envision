@@ -8,11 +8,11 @@
 #ifndef TEXT_H_
 #define TEXT_H_
 
-#include "visualizationbase_api.h"
+#include "../visualizationbase_api.h"
 
 #include "Item.h"
 #include "TextStyle.h"
-#include "VisualizationException.h"
+#include "../VisualizationException.h"
 
 #include <QtGui/QStaticText>
 

@@ -8,12 +8,12 @@
 #ifndef LAYOUT_H_
 #define LAYOUT_H_
 
-#include "visualizationbase_api.h"
+#include "../visualizationbase_api.h"
 
-#include "../items/Item.h"
-#include "Styles.h"
 #include "LayoutStyle.h"
-#include "shapes/Shape.h"
+#include "../items/Item.h"
+#include "../Styles.h"
+#include "../shapes/Shape.h"
 
 namespace Visualization {
 

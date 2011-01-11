@@ -8,7 +8,7 @@
 #ifndef ITEMSTYLE_H_
 #define ITEMSTYLE_H_
 
-#include "visualizationbase_api.h"
+#include "../visualizationbase_api.h"
 
 #include <QtCore/QString>
 

@@ -8,7 +8,7 @@
 #ifndef ITEM_H_
 #define ITEM_H_
 
-#include "visualizationbase_api.h"
+#include "../visualizationbase_api.h"
 #include "ItemMacros.h"
 #include "../InteractionHandler.h"
 

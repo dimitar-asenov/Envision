@@ -8,13 +8,13 @@
 #ifndef VEXTENDABLE_H_
 #define VEXTENDABLE_H_
 
-#include "visualizationbase_api.h"
+#include "../visualizationbase_api.h"
 
 #include "ModelItem.h"
-#include "Styles.h"
-#include "items/VExtendableStyle.h"
-#include "layouts/SequentialLayout.h"
-#include "layouts/PanelBorderLayout.h"
+#include "../Styles.h"
+#include "VExtendableStyle.h"
+#include "../layouts/SequentialLayout.h"
+#include "../layouts/PanelBorderLayout.h"
 #include "ModelBase/headers/nodes/Extendable/ExtendableNode.h"
 
 namespace Visualization {

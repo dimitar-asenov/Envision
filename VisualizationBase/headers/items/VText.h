@@ -8,13 +8,13 @@
 #ifndef VTEXT_H_
 #define VTEXT_H_
 
-#include "visualizationbase_api.h"
+#include "../visualizationbase_api.h"
 
 #include "ModelItem.h"
 #include "TextStyle.h"
 #include "ModelBase/headers/nodes/Text.h"
-#include "VisualizationException.h"
-#include "Styles.h"
+#include "../VisualizationException.h"
+#include "../Styles.h"
 
 #include <QtGui/QStaticText>
 
