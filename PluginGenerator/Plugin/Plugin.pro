@@ -20,5 +20,5 @@ pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target pluginmeta
 HEADERS += headers/PLUGINNAME_LOWERCASE_api.h \
-    PLUGINNAME_LOWERCASE.h
+    src/PLUGINNAME_LOWERCASE.h
 SOURCES += src/PLUGINNAME_LOWERCASE.cpp

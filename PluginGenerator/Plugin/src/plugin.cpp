@@ -16,7 +16,7 @@ bool PLUGINNAME::initialize(Envision::EnvisionManager&)
 	return true;
 }
 
-void PLUGINNAME::selfTest(QString testId)
+void PLUGINNAME::selfTest(QString)
 {
 }
 
