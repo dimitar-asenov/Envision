@@ -12,6 +12,9 @@ INCLUDEPATH += ./headers \
     $${ENVISION_ROOT_DIR}
 TARGET = PLUGINNAME_LOWERCASE
 DEFINES += PLUGINNAME_UPPERCASE_LIBRARY
+win32:LIBS += -L$${PLUGINS_DIR} \
+    -llogger \
+    -lselftest
 QT = core
 TEMPLATE = lib
 CONFIG += plugin warn_on thread

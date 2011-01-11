@@ -4,6 +4,8 @@
 	<comment></comment>
 	<projects>
 		<project>Core</project>
+		<project>Logger</project>
+		<project>SelfTest</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

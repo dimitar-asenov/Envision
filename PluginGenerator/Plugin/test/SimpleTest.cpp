@@ -1,5 +1,5 @@
 /***********************************************************************************************************************
- * PLUGINNAME_LOWERCASE.cpp
+ * SimpleTest.cpp
  *
  *  Created on: DATE
  *      Author: AUTHOR
@@ -8,19 +8,11 @@
 #include "PLUGINNAME_LOWERCASE.h"
 #include "SelfTest/headers/SelfTestSuite.h"
 
-Q_EXPORT_PLUGIN2( PLUGINNAME_LOWERCASE, NAMESPACE::PLUGINNAME )
-
 namespace NAMESPACE {
 
-bool PLUGINNAME::initialize(Envision::EnvisionManager&)
+TEST(PLUGINNAME, SimpleTest)
 {
-	return true;
-}
-
-void PLUGINNAME::selfTest(QString testid)
-{
-	if (testid.isEmpty()) SelfTest::TestManager<PLUGINNAME>::runAllTests().printResultStatistics();
-	else SelfTest::TestManager<PLUGINNAME>::runTest(testid).printResultStatistics();
+	CHECK_INT_EQUAL(1,1);
 }
 
 }

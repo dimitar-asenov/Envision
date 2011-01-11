@@ -1,5 +1,7 @@
 <!DOCTYPE EnvisionPlugin>
 <plugin id="PLUGINNAME_LOWERCASE" name="PLUGIN_FULL_NAME" version="1.0.0">
 	<dependencies>
+		<dependency pluginid="logger" version="0" />
+		<dependency pluginid="selftest" version="0" />
 	</dependencies>
 </plugin>
