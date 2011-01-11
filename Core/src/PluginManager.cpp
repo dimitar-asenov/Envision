@@ -79,6 +79,14 @@ void PluginManager::loadAllPlugins(EnvisionManager& envisionManager)
 			}
 		}
 	}
+
+	// Check if there are any plug-ins with unmet dependencies
+	if (plugins.size() > 0)
+	{
+		QTextStream out(stdout);
+		out<< "Warning: The following plug-ins have not been loaded because their dependencies are not satisfied" << endl;
+		for (int i = 0; i< plugins.size(); ++i) out << "  " << plugins.at(i) << endl;
+	}
 }
 
 bool PluginManager::isPluginLoaded(QString pluginId)
