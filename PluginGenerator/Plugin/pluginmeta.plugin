@@ -1,0 +1,5 @@
+<!DOCTYPE EnvisionPlugin>
+<plugin id="PLUGINNAME_LOWERCASE" name="PLUGIN_FULL_NAME" version="1.0.0">
+	<dependencies>
+	</dependencies>
+</plugin>
