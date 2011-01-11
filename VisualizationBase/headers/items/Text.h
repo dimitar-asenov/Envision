@@ -28,6 +28,29 @@ class VISUALIZATIONBASE_API Text : public Item
 		qreal xOffset;
 		qreal yOffset;
 
+		/**
+		 * This is the text item that is currently selected. If this is NULL a text item is not currently selected. If the
+		 * current item is equal to the selected item, then additional drawing takes place. This is the vertical caret.
+		 * The selected part of the text is drawn using a different font specified in the style.
+		 */
+		static Text* selected;
+
+		/**
+		 * selectionBegin and selectionEnd indicate the character positions at which the selection begins and ends. If
+		 * the user selected the text by dragging from right to left then selectionEnd < selectionBegin.
+		 */
+		static int selectionBegin;
+		static int selectionEnd;
+
+		/**
+		 * selectionXBegin and selectionXEnd indicate the beginning and end (along the X direction) where the selection
+		 * background must be drawn.
+		 */
+		static int selectionXBegin;
+		static int selectionXEnd;
+
+		static int caretX;
+
 	protected:
 		virtual void determineChildren();
 		virtual void updateState();

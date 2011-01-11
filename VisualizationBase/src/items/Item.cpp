@@ -16,6 +16,7 @@ namespace Visualization {
 Item::Item(Item* parent, const ItemStyle* style) :
 	QGraphicsItem(parent), style_(NULL), shape_(NULL), needsUpdate_(true)
 {
+	setFlag(QGraphicsItem::ItemHasNoContents);
 	setStyle(style);
 }
 
@@ -43,7 +44,12 @@ void Item::setStyle(const ItemStyle* style)
 {
 	if (shape_) delete shape_;
 	style_ = style;
-	if (style && style->hasShape()) shape_ = style->createShape(this);
+	if (style && style->hasShape())
+	{
+		shape_ = style->createShape(this);
+		setFlag(QGraphicsItem::ItemHasNoContents, false);
+	}
+	else setFlag(QGraphicsItem::ItemHasNoContents);
 	setUpdateNeeded();
 }
 

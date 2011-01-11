@@ -25,6 +25,7 @@ void VText::determineChildren()
 
 void VText::updateState()
 {
+	setFlag(QGraphicsItem::ItemHasNoContents, false);
 	Model::Text* textNode = static_cast<Model::Text*> (getNode());
 
 	text = textNode->get();

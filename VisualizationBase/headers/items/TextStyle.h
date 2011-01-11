@@ -22,6 +22,8 @@ class VISUALIZATIONBASE_API TextStyle : public ItemStyle
 	private:
 		QPen pen_;
 		QFont font_;
+		QPen selectionPen_;
+		QFont selectionFont_;
 
 	public:
 		TextStyle();
@@ -29,12 +31,16 @@ class VISUALIZATIONBASE_API TextStyle : public ItemStyle
 
 		const QPen& pen() const;
 		const QFont& font() const;
+		const QPen& selectionPen() const;
+		const QFont& selectionFont() const;
 
 		static TextStyle* getDefault();
 };
 
 inline const QPen& TextStyle::pen() const { return pen_; };
 inline const QFont& TextStyle::font() const { return font_; };
+inline const QPen& TextStyle::selectionPen() const { return selectionPen_; };
+inline const QFont& TextStyle::selectionFont() const { return selectionFont_; };
 
 }
 
