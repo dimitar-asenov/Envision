@@ -5,8 +5,8 @@
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef TEXT_H_
-#define TEXT_H_
+#ifndef VISUALIZATION_TEXT_H_
+#define VISUALIZATION_TEXT_H_
 
 #include "../visualizationbase_api.h"
 
@@ -68,4 +68,4 @@ inline void Text::setText(const QString& newText) { text = newText; setUpdateNee
 
 }
 
-#endif /* TEXT_H_ */
+#endif /* VISUALIZATION_TEXT_H_ */
