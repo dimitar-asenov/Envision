@@ -50,7 +50,7 @@ fi
 
 echo "Creating project folder from template..."
 cp -R Plugin $PLUGIN_DIR
-rm -rf `find ./ -name '.svn'`
+rm -rf `find $PLUGIN_DIR/ -name '.svn'`
 
 
 echo "Adjusting source code..."
