@@ -10,8 +10,6 @@
 
 #include <QtGui/QWheelEvent>
 
-#include <QtCore/QtDebug>
-
 namespace Visualization {
 
 MainView::MainView(Scene *scene) :
@@ -63,7 +61,6 @@ void MainView::wheelEvent(QWheelEvent *event)
 	setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
 
 	if ( miniMap ) miniMap->visibleRectChanged();
-
 }
 
 void MainView::scrollContentsBy(int dx, int dy)
