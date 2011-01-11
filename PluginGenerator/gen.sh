@@ -1,6 +1,6 @@
 #!/bin/bash
 
-WORKSPACE_DIR="../"
+WORKSPACE_DIR=".."
 DATE_FORMAT="%b %d, %Y"
 
 
@@ -40,7 +40,7 @@ AUTHOR=$4
 DATE=`date +"$DATE_FORMAT"`
 
 PLUGIN_DIR=$WORKSPACE_DIR/$PLUGIN_NAME
-FILE_LIST="$PLUGIN_DIR/.project $PLUGIN_DIR/.cproject $PLUGIN_DIR/*.* $PLUGIN_DIR/headers/*.* $PLUGIN_DIR/src/*.*"
+FILE_LIST="$PLUGIN_DIR/.project $PLUGIN_DIR/.cproject $PLUGIN_DIR/*.* $PLUGIN_DIR/headers/*.* $PLUGIN_DIR/src/*.* $PLUGIN_DIR/test/*.*"
 
 if [ -d $PLUGIN_DIR ]
 then
