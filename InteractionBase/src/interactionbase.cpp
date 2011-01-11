@@ -6,6 +6,8 @@
  **********************************************************************************************************************/
 
 #include "interactionbase.h"
+#include "HText.h"
+
 #include "SelfTest/headers/SelfTestSuite.h"
 
 Q_EXPORT_PLUGIN2( interactionbase, Interaction::InteractionBase )
@@ -14,6 +16,7 @@ namespace Interaction {
 
 bool InteractionBase::initialize(Envision::EnvisionManager&)
 {
+	Visualization::Text::setInteractionHandler(HText::instance());
 	return true;
 }
 
