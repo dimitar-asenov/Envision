@@ -5,8 +5,8 @@
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef TEXT_H_
-#define TEXT_H_
+#ifndef MODEL_TEXT_H_
+#define MODEL_TEXT_H_
 
 #include "Node.h"
 #include "nodeMacros.h"
@@ -38,4 +38,4 @@ class MODELBASE_API Text: public Node
 
 }
 
-#endif /* TEXT_H_ */
+#endif /* MODEL_TEXT_H_ */
