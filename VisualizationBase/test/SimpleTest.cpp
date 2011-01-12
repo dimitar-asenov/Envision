@@ -96,10 +96,10 @@ TEST(VisualizationBase, ExtendableTest)
 
 	scene->setRenderer(renderer);
 
-	Model::Model model;
-	Model::List* list = static_cast<Model::List*> (model.createRoot("List"));
+	Model::Model* model = new Model::Model();
+	Model::List* list = static_cast<Model::List*> (model->createRoot("List"));
 
-	model.beginModification(list, "set");
+	model->beginModification(list, "set");
 	TestNodes::BinaryNode* first = list->append<TestNodes::BinaryNode>();
 	TestNodes::BinaryNode* second = list->append<TestNodes::BinaryNode>();
 	Model::Text* third = list->append<Model::Text>();
@@ -113,15 +113,15 @@ TEST(VisualizationBase, ExtendableTest)
 	second->name()->set("Empty node");
 
 	third->set("Some independent text");
-	model.endModification();
+	model->endModification();
 
 	VList* l = dynamic_cast<VList*> (renderer->render(NULL, list));
 	l->setFlag(QGraphicsItem::ItemIsMovable);
-	scene->addItem(l);
-	l->updateSubtreeState();
+	scene->addTopLevelItem(l);
+	scene->updateTopLevelItems();
 
 	l->at<VExtendable>(0)->setExpanded();
-	l->updateSubtreeState();
+	scene->updateTopLevelItems();
 
 	// Create view
 	MainView* view = new MainView(scene);

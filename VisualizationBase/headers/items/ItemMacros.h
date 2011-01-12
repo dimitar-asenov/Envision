@@ -26,13 +26,7 @@ public:																																					\
 	static const QString& className() { static QString name(#ItemClass); return name; }											\
 																																							\
 	const StyleType* style() const { return static_cast<const StyleType*> (BaseClass::style()); }							\
-	virtual void setStyle(const ItemStyle* style)																							\
-	{																																						\
-		const StyleType* s = dynamic_cast<const StyleType*> (style);																	\
-		if (!s) throw VisualizationException("Invalid style type when calling " #ItemClass "::setStyle");					\
-		Item::setStyle(s);																															\
-	}																																						\
-																																							\
+	virtual void setStyle(const ItemStyle* style);																							\
 	virtual InteractionHandler* handler() const { return handler_; };																	\
 	static void setInteractionHandler(InteractionHandler* handler) {handler_ = handler;}										\
 																																							\
@@ -57,6 +51,15 @@ private:																																					\
  * @param ItemClass
  * 			The name of the class being defined.
  */
-#define ITEM_COMMON_DEFINITIONS( ItemClass ) InteractionHandler* ItemClass::handler_ = InteractionHandler::instance();
+#define ITEM_COMMON_DEFINITIONS( ItemClass )																									\
+InteractionHandler* ItemClass::handler_ = InteractionHandler::instance();															\
+																																							\
+void ItemClass::setStyle(const ItemStyle* style)																							\
+{																																							\
+	const StyleType* s = dynamic_cast<const StyleType*> (style);																		\
+	if (!s) throw VisualizationException("Invalid style type when calling " #ItemClass "::setStyle");						\
+	Item::setStyle(s);																																\
+}																																							\
+
 
 #endif /* ITEMMACROS_H_ */
