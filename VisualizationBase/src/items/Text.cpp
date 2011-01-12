@@ -25,6 +25,7 @@ int Text::caretX = 0;
 Text::Text(Item* parent, const QString& text_) :
 	Item(parent, Styles::item<Text>("default")), text(text_)
 {
+	setFlag(QGraphicsItem::ItemIsFocusable);
 }
 
 Text::Text(Item* parent, const TextStyle *style_, const QString& text_) :
@@ -93,6 +94,12 @@ void Text::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 				xend = selectionBegin;
 			}
 
+			// Draw selection background
+			painter->setPen(Qt::NoPen);
+			painter->setBrush(style()->selectionBackground());
+			painter->drawRect(xOffset + selectionXBegin, 0, selectionXEnd - selectionXBegin, bounding_rect.height());
+			painter->setBrush(Qt::NoBrush);
+
 			// Draw selected text
 			painter->setPen(style()->selectionPen());
 			painter->setFont(style()->selectionFont());
@@ -126,7 +133,6 @@ void Text::setSelected(int xBegin, int xEnd)
 		width = new_width;
 	}
 
-	resetSelected();
 	selected = this;
 	setUpdateNeeded();
 }

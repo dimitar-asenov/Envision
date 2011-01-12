@@ -28,9 +28,13 @@ void TextStyle::load()
 	ItemStyle::load();
 	Styles::load("pen", pen_);
 	Styles::load("font", font_);
+	Styles::load("caretPen", caretPen_);
 	Styles::load("selectionPen", selectionPen_);
 	Styles::load("selectionFont", selectionFont_);
-	Styles::load("caretPen", caretPen_);
+
+	QColor col;
+	Styles::load("selectionBackground", col);
+	selectionBackground_ = QBrush(col);
 }
 
 }

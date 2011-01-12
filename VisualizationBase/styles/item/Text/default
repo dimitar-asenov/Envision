@@ -26,12 +26,18 @@
 		<color>
 			<alpha>255</alpha>
 			<red>255</red>
-			<green>0</green>
-			<blue>0</blue>
+			<green>255</green>
+			<blue>255</blue>
 		</color>
 		<capStyle>0</capStyle>
 		<joinStyle>0</joinStyle>
 	</selectionPen>
+	<selectionBackground>
+		<alpha>255</alpha>
+		<red>0</red>
+		<green>0</green>
+		<blue>0</blue>
+	</selectionBackground>
 	<selectionFont>
 		<family></family>
 		<size>15</size>
@@ -44,8 +50,8 @@
 		<style>1</style>
 		<color>
 			<alpha>255</alpha>
-			<red>0</red>
-			<green>0</green>
+			<red>128</red>
+			<green>64</green>
 			<blue>0</blue>
 		</color>
 		<capStyle>0</capStyle>
