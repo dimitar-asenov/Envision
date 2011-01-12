@@ -9,6 +9,7 @@
 
 #include "HText.h"
 #include "VisualizationBase/headers/items/Text.h"
+#include "VisualizationBase/headers/items/VText.h"
 #include "ModelBase/headers/test_nodes/BinaryNode.h"
 
 #include "SelfTest/headers/SelfTestSuite.h"
@@ -21,6 +22,7 @@ namespace Interaction {
 bool InteractionBase::initialize(Envision::EnvisionManager&)
 {
 	Visualization::Text::setInteractionHandler(HText::instance());
+	Visualization::VText::setInteractionHandler(HText::instance());
 	return true;
 }
 

@@ -11,7 +11,6 @@
 #include "interactionbase_api.h"
 
 #include "VisualizationBase/headers/items/Item.h"
-#include "VisualizationBase/headers/items/Text.h"
 #include "VisualizationBase/headers/InteractionHandler.h"
 
 namespace Interaction {
