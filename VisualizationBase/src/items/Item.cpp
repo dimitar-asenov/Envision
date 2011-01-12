@@ -61,6 +61,7 @@ void Item::updateSubtreeState()
 		updateChildren();
 		updateState();
 		needsUpdate_ = false;
+		update();
 	}
 }
 

@@ -19,12 +19,17 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 {
 	private:
 		ModelRenderer* renderer_;
+		QList<Item*> topLevelItems;
 
 	public:
 		Scene();
 		void setRenderer(ModelRenderer* renderer);
 
 		ModelRenderer* renderer();
+
+		void addTopLevelItem(Item* item);
+		void removeTopLevelItem(Item* item);
+		void updateTopLevelItems();
 };
 
 inline void Scene::setRenderer(ModelRenderer* renderer) { renderer_ = renderer; }

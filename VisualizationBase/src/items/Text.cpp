@@ -111,7 +111,6 @@ void Text::resetSelected()
 	if (selected)
 	{
 		selected->setUpdateNeeded();
-		selected->update();
 	}
 	selected = NULL;
 }
