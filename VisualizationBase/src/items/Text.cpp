@@ -59,7 +59,7 @@ void Text::updateState()
 		}
 
 		selectionXBegin = qfm.width(text, xstart);
-		selectionXEnd = qfm.width(text, xend+1);
+		selectionXEnd = qfm.width(text, xend);
 		caretX = (selectionBegin > selectionEnd) ? selectionXBegin : selectionXEnd;
 	}
 }
@@ -74,31 +74,57 @@ void Text::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 	}
 	else
 	{
-		int xstart = selectionBegin;
-		int xend = selectionEnd;
-		if ( xstart > xend )
+		if (selectionXBegin == selectionXEnd)
 		{
-			xstart = selectionEnd;
-			xend = selectionBegin;
+			// No text is selected, draw all text at once using normal style
+			painter->setPen(style()->pen());
+			painter->setFont(style()->font());
+			painter->drawText(xOffset, yOffset, text);
+		}
+		else
+		{
+			// Some text is selected, draw it differently than non-selected text.
+
+			int xstart = selectionBegin;
+			int xend = selectionEnd;
+			if ( xstart > xend )
+			{
+				xstart = selectionEnd;
+				xend = selectionBegin;
+			}
+
+			// Draw selected text
+			painter->setPen(style()->selectionPen());
+			painter->setFont(style()->selectionFont());
+			painter->drawText(xOffset + selectionXBegin, yOffset, text.mid(xstart, xend - xstart));
+
+			// Draw non-selected text
+			painter->setPen(style()->pen());
+			painter->setFont(style()->font());
+			painter->drawText(xOffset, yOffset, text.left(xstart));
+			painter->drawText(xOffset + selectionXEnd, yOffset, text.mid(xend));
 		}
 
-		painter->setPen(style()->selectionPen());
-		painter->setFont(style()->selectionFont());
-		painter->drawText(xOffset + selectionXBegin, yOffset, text.mid(xstart, xend - xstart+1));
-
-		painter->setPen(style()->pen());
-		painter->setFont(style()->font());
-		painter->drawText(xOffset, yOffset, text.left(xstart));
-		painter->drawText(xOffset + selectionXEnd, yOffset, text.mid(xend+1));
-		painter->drawLine(caretX, bounding_rect.top()+1, caretX, bounding_rect.bottom()-1);
+		// Draw caret
+		painter->setPen(style()->caretPen());
+		painter->drawLine(xOffset + caretX, bounding_rect.top()+1, xOffset + caretX, bounding_rect.bottom()-1);
 	}
 }
 
-void Text::setSelected(int /*xBegin*/, int /*xEnd*/)
+void Text::setSelected(int xBegin, int xEnd)
 {
-	//TODO this
-	selectionBegin = 1;
-	selectionEnd = 2;
+	selectionBegin = 0;
+	selectionEnd = 0;
+
+	QFontMetrics qfm(style()->font());
+	int width = 0;
+	for (int i = 1; i<= text.length(); ++i)
+	{
+		int new_width = qfm.width(text, i);
+		if (xBegin > (new_width + width + 1 ) / 2 ) selectionBegin++;
+		if (xEnd   > (new_width + width + 1 ) / 2 ) selectionEnd++;
+		width = new_width;
+	}
 
 	resetSelected();
 	selected = this;
@@ -107,11 +133,7 @@ void Text::setSelected(int /*xBegin*/, int /*xEnd*/)
 
 void Text::resetSelected()
 {
-	//TODO figure out when to call update.
-	if (selected)
-	{
-		selected->setUpdateNeeded();
-	}
+	if (selected) selected->setUpdateNeeded();
 	selected = NULL;
 }
 

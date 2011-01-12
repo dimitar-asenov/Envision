@@ -19,6 +19,7 @@ namespace Visualization {
 class Shape;
 class ShapeStyle;
 class ItemStyle;
+class Scene;
 
 class VISUALIZATIONBASE_API Item : public QGraphicsItem
 {
@@ -97,6 +98,8 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 	public:
 		Item(Item* parent, const ItemStyle* style = NULL);
 		virtual ~Item();
+
+		Scene* scene() const;
 
 		QRectF boundingRect() const;
 		int width() const;

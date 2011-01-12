@@ -24,6 +24,7 @@ class VISUALIZATIONBASE_API TextStyle : public ItemStyle
 		QFont font_;
 		QPen selectionPen_;
 		QFont selectionFont_;
+		QPen caretPen_;
 
 	public:
 		TextStyle();
@@ -33,6 +34,7 @@ class VISUALIZATIONBASE_API TextStyle : public ItemStyle
 		const QFont& font() const;
 		const QPen& selectionPen() const;
 		const QFont& selectionFont() const;
+		const QPen& caretPen() const;
 
 		static TextStyle* getDefault();
 };
@@ -41,6 +43,7 @@ inline const QPen& TextStyle::pen() const { return pen_; };
 inline const QFont& TextStyle::font() const { return font_; };
 inline const QPen& TextStyle::selectionPen() const { return selectionPen_; };
 inline const QFont& TextStyle::selectionFont() const { return selectionFont_; };
+inline const QPen& TextStyle::caretPen() const { return caretPen_; };
 
 }
 

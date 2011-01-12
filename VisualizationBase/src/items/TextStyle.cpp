@@ -30,6 +30,7 @@ void TextStyle::load()
 	Styles::load("font", font_);
 	Styles::load("selectionPen", selectionPen_);
 	Styles::load("selectionFont", selectionFont_);
+	Styles::load("caretPen", caretPen_);
 }
 
 }

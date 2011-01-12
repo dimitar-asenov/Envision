@@ -10,6 +10,7 @@
 #include "shapes/Shape.h"
 #include "shapes/ShapeStyle.h"
 #include "VisualizationException.h"
+#include "Scene.h"
 
 namespace Visualization {
 
@@ -90,6 +91,12 @@ InteractionHandler* Item::handler() const
 void Item::execute(QString command)
 {
 	handler()->command(this, command);
+}
+
+
+Scene* Item::scene() const
+{
+	return static_cast<Visualization::Scene*> (QGraphicsItem::scene());
 }
 
 /***********************************************************************************************************************
