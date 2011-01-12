@@ -23,6 +23,8 @@ class INTERACTIONBASE_API HText : public Visualization::InteractionHandler
 
 	public:
 		virtual void mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event);
+		virtual void mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event);
+		virtual void focusOutEvent(Visualization::Item *target, QFocusEvent *event);
 		static HText* instance();
 };
 
