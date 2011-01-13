@@ -25,14 +25,13 @@ void Layout::setInnerSize(int width_, int height_)
 	{
 		getShape()->setOffset(style()->leftMargin(), style()->topMargin());
 		getShape()->setInnerSize(width_, height_);
-		size.setWidth(width() + style()->leftMargin() + style()->rightMargin());
-		size.setHeight(height() + style()->topMargin() + style()->bottomMargin());
+		setWidth(width() + style()->leftMargin() + style()->rightMargin());
+		setHeight(height() + style()->topMargin() + style()->bottomMargin());
 	}
 	else
 	{
-		size.setWidth(width_ + style()->leftMargin() + style()->rightMargin());
-		size.setHeight(height_ + style()->topMargin() + style()->bottomMargin());
-		bounding_rect = QRectF(0,0,size.width(), size.height());
+		setWidth(width_ + style()->leftMargin() + style()->rightMargin());
+		setHeight(height_ + style()->topMargin() + style()->bottomMargin());
 	}
 
 }

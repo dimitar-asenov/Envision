@@ -11,8 +11,6 @@ namespace Visualization {
 
 NoItem::NoItem(Item* parent) : Item(parent)
 {
-	size.setHeight(0);
-	size.setWidth(0);
 }
 
 bool NoItem::needsUpdate()

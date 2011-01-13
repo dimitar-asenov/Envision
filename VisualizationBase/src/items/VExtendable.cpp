@@ -132,8 +132,7 @@ void VExtendable::updateState()
 			getShape()->setOffset(layout->getXOffsetForExternalShape(), layout->getYOffsetForExternalShape());
 			getShape()->setOutterSize(layout->getOutterWidthForExternalShape(), layout->getOutterHeightForExternalShape());
 		}
-		size.setHeight(layout->height());
-		size.setWidth(layout->width());
+		setSize(layout->size().width() + layout->getXOffsetForExternalShape(), layout->size().height() + layout->getYOffsetForExternalShape());
 	}
 	else
 	{
@@ -143,12 +142,7 @@ void VExtendable::updateState()
 			getShape()->setInnerSize(header.width(), header.height());
 			header.setPos(getShape()->contentLeft(), getShape()->contentTop());
 		}
-		else
-		{
-			bounding_rect = header.boundingRect();
-			size.setWidth(header.width());
-			size.setHeight(header.height());
-		}
+		else setSize(header.size());
 	}
 }
 

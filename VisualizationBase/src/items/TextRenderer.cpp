@@ -58,12 +58,10 @@ template<class T> void TextRenderer<T>::updateState()
 	this->setFlag(QGraphicsItem::ItemHasNoContents, false);
 	QFontMetrics qfm(style()->font());
 
-	this->bounding_rect = qfm.boundingRect(text);
-	xOffset = -this->bounding_rect.left();
-	yOffset = -this->bounding_rect.top();
-	this->bounding_rect.moveTopLeft(QPointF(0, 0));
-	this->size.setWidth(this->bounding_rect.width());
-	this->size.setHeight(this->bounding_rect.height());
+	QRectF bound = qfm.boundingRect(text);
+	xOffset = -bound.left();
+	yOffset = -bound.top();
+	this->setSize(bound.size());
 
 	if ( selected == this )
 	{
@@ -113,7 +111,7 @@ template<class T> void TextRenderer<T>::paint(QPainter *painter, const QStyleOpt
 			// Draw selection background
 			painter->setPen(Qt::NoPen);
 			painter->setBrush(style()->selectionBackground());
-			painter->drawRect(xOffset + selectionXBegin, 0, selectionXEnd - selectionXBegin, this->bounding_rect.height());
+			painter->drawRect(xOffset + selectionXBegin, 0, selectionXEnd - selectionXBegin, this->height());
 			painter->setBrush(Qt::NoBrush);
 
 			// Draw selected text
@@ -130,7 +128,7 @@ template<class T> void TextRenderer<T>::paint(QPainter *painter, const QStyleOpt
 
 		// Draw caret
 		painter->setPen(style()->caretPen());
-		painter->drawLine(xOffset + caretX, this->bounding_rect.top() + 1, xOffset + caretX, this->bounding_rect.bottom() - 1);
+		painter->drawLine(xOffset + caretX, 1, xOffset + caretX, this->height() - 1);
 	}
 }
 

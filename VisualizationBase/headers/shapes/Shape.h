@@ -59,7 +59,6 @@ class VISUALIZATIONBASE_API Shape
 		ShapeStyle* style() const;
 
 		void setItemSize(int width, int height);
-		void setItemBoundingRect(int x, int y, int width, int height);
 		void setParentNeedsUpdate();
 
 		virtual void update() = 0;

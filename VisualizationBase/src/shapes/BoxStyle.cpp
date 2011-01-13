@@ -12,7 +12,7 @@
 namespace Visualization {
 
 BoxStyle::BoxStyle() :
-		background_(QColor(0xAA, 0xFF, 0xCC, 0xFF)), corner_(RightAngleCorner), cornerRadius_(5), shadow_(Qt::NoBrush), xShadowOffset_(3), yShadowOffset_(3), shadowIsPartOfSize_(false)
+		background_(QColor(0xAA, 0xFF, 0xCC, 0xFF)), corner_(RightAngleCorner), cornerRadius_(5), shadow_(Qt::NoBrush), xShadowOffset_(3), yShadowOffset_(3)
 {
 }
 
@@ -31,7 +31,6 @@ void BoxStyle::load()
 	Styles::load("shadowBrush", shadow_);
 	Styles::load("shadowXOffset", xShadowOffset_);
 	Styles::load("shadowYOffset", yShadowOffset_);
-	Styles::load("shadowIsPartOfSize", shadowIsPartOfSize_);
 }
 
 void BoxStyle::setBackground(const QBrush& brush)
@@ -45,12 +44,11 @@ void BoxStyle::setCorner(BoxStyle::CornerType type, int radius)
 	cornerRadius_ = radius;
 }
 
-void BoxStyle::setShadow(const QBrush& brush, int xOffset, int yOffset, bool partOfSize)
+void BoxStyle::setShadow(const QBrush& brush, int xOffset, int yOffset)
 {
 	shadow_ = brush;
 	xShadowOffset_ = xOffset;
 	yShadowOffset_ = yOffset;
-	shadowIsPartOfSize_ = partOfSize;
 }
 
 }

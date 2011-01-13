@@ -24,14 +24,7 @@ Shape::~Shape()
 
 void Shape::setItemSize(int width, int height)
 {
-	parent->size.setWidth(width);
-	parent->size.setHeight(height);
-	setParentNeedsUpdate();
-}
-
-void Shape::setItemBoundingRect(int x, int y, int width, int height)
-{
-	parent->bounding_rect.setRect(x, y, width, height);
+	parent->setSize(width, height);
 	setParentNeedsUpdate();
 }
 

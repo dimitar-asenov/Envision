@@ -28,7 +28,6 @@ class VISUALIZATIONBASE_API BoxStyle : public ShapeStyle
 		QBrush shadow_;
 		int xShadowOffset_;
 		int yShadowOffset_;
-		bool shadowIsPartOfSize_;
 
 	public:
 		BoxStyle();
@@ -37,7 +36,7 @@ class VISUALIZATIONBASE_API BoxStyle : public ShapeStyle
 		void setBackground(const QBrush& brush);
 
 		void setCorner(CornerType type, int radius);
-		void setShadow(const QBrush& brush, int xOffset, int yOffset, bool partOfSize);
+		void setShadow(const QBrush& brush, int xOffset, int yOffset);
 
 		const QBrush& background() const;
 
@@ -47,7 +46,6 @@ class VISUALIZATIONBASE_API BoxStyle : public ShapeStyle
 		const QBrush& shadow() const;
 		int xShadowOffset() const;
 		int yShadowOffset() const;
-		bool isShadowPartOfSize() const;
 
 
 		static BoxStyle* getDefault();
@@ -59,7 +57,6 @@ inline int BoxStyle::cornerRadius() const { return cornerRadius_; };
 inline const QBrush& BoxStyle::shadow() const { return shadow_; };
 inline int BoxStyle::xShadowOffset() const { return xShadowOffset_; };
 inline int BoxStyle::yShadowOffset() const { return yShadowOffset_; };
-inline bool BoxStyle::isShadowPartOfSize() const { return shadowIsPartOfSize_; }
 
 }
 

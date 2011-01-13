@@ -26,6 +26,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 	private:
 		friend class Shape;
 		friend class InteractionHandler;
+		QRectF boundingRect_;
 		const ItemStyle* style_;
 		Shape* shape_;
 		bool needsUpdate_;
@@ -61,8 +62,11 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		void defaultFocusOutEvent(QFocusEvent *event);
 
 	protected:
-		QRectF bounding_rect;
-		QSize size;
+
+		void setWidth(int width);
+		void setHeight(int height);
+		void setSize(int widht, int height);
+		void setSize(const QSizeF& size);
 
 		virtual void determineChildren() = 0;
 		virtual void updateState() = 0;
@@ -101,9 +105,10 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 
 		Scene* scene() const;
 
-		QRectF boundingRect() const;
+		virtual QRectF boundingRect() const;
 		int width() const;
 		int height() const;
+		QSizeF size() const;
 
 		void setUpdateNeeded();
 
@@ -120,11 +125,15 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		void execute(QString command);
 };
 
-inline int Item::width() const { return size.width(); }
-inline int Item::height() const { return size.height(); }
+inline int Item::width() const { return boundingRect_.width(); }
+inline int Item::height() const { return boundingRect_.height(); }
+inline QSizeF Item::size() const { return boundingRect_.size();}
+inline void Item::setWidth(int width)  { boundingRect_.setWidth(width); };
+inline void Item::setHeight(int height) { boundingRect_.setHeight(height);};
+inline void Item::setSize(int width, int height) { boundingRect_.setSize(QSizeF(width, height)); };
+inline void Item::setSize(const QSizeF& size) { boundingRect_.setSize(size); };
 inline const ItemStyle* Item::style() const { return style_; }
 inline Shape* Item::getShape() const {	return shape_; }
-inline QRectF Item::boundingRect() const { return bounding_rect; }
 inline bool Item::needsUpdate() { return needsUpdate_; }
 
 }

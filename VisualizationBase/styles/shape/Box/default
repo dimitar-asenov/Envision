@@ -43,5 +43,4 @@
 	</shadowBrush>
 	<shadowXOffset>1</shadowXOffset>
 	<shadowYOffset>1</shadowYOffset>
-	<shadowIsPartOfSize>true</shadowIsPartOfSize>
 </style>

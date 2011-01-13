@@ -32,6 +32,11 @@ Item::~Item()
 	}
 }
 
+QRectF Item::boundingRect() const
+{
+	return boundingRect_;
+}
+
 void Item::setUpdateNeeded()
 {
 	needsUpdate_ = true;

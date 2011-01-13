@@ -52,9 +52,7 @@ void VList::determineChildren()
 
 void VList::updateState()
 {
-	bounding_rect = items_.boundingRect();
-	size.setWidth(items_.width());
-	size.setHeight(items_.height());
+	setSize( items_.size() );
 }
 
 void VList::paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *)

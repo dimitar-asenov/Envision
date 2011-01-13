@@ -75,19 +75,21 @@ void Box::update()
 		contentBoxWidth = width();
 		contentBoxHeight = height();
 
-		if ( style()->shadow() != Qt::NoBrush && style()->isShadowPartOfSize() )
+		if ( style()->shadow() != Qt::NoBrush )
 		{
 			contentBoxWidth -= style()->xShadowOffset();
 			contentBoxHeight -= style()->yShadowOffset();
 		}
 	}
 
-	if ( style()->shadow() == Qt::NoBrush || !style()->isShadowPartOfSize() ) setItemSize(std::ceil(contentBoxWidth), std::ceil(contentBoxHeight));
-	else setItemSize(std::ceil(contentBoxWidth) + style()->xShadowOffset(), std::ceil(contentBoxHeight) + style()->yShadowOffset());
-
-	if ( style()->shadow() == Qt::NoBrush ) setItemBoundingRect(xOffset(), yOffset(), std::ceil(contentBoxWidth), std::ceil(contentBoxHeight));
-	else setItemBoundingRect(xOffset(), yOffset(), std::ceil(contentBoxWidth) + style()->xShadowOffset(), std::ceil(contentBoxHeight)
-			+ style()->yShadowOffset());
+	if ( style()->shadow() == Qt::NoBrush )
+	{
+		setItemSize(xOffset() + std::ceil(contentBoxWidth), yOffset() + std::ceil(contentBoxHeight));
+	}
+	else
+	{
+		setItemSize(xOffset() + std::ceil(contentBoxWidth) + style()->xShadowOffset(), yOffset() + std::ceil(contentBoxHeight) + style()->yShadowOffset());
+	}
 }
 
 int Box::contentLeft()
@@ -103,14 +105,14 @@ int Box::contentTop()
 int Box::getOutterWidth(int innerWidth) const
 {
 	int outterWidth = innerWidth + 2 * style()->cornerRadius() + std::ceil(style()->outline().width());
-	if ( style()->shadow() != Qt::NoBrush && style()->isShadowPartOfSize() ) outterWidth += style()->xShadowOffset();
+	if ( style()->shadow() != Qt::NoBrush ) outterWidth += style()->xShadowOffset();
 	return outterWidth;
 }
 
 int Box::getOutterHeight(int innerHeight) const
 {
 	int outterHeight = innerHeight + 2 * style()->cornerRadius() + std::ceil(style()->outline().width());
-	if ( style()->shadow() != Qt::NoBrush && style()->isShadowPartOfSize() ) outterHeight += style()->yShadowOffset();
+	if ( style()->shadow() != Qt::NoBrush ) outterHeight += style()->yShadowOffset();
 	return outterHeight;
 }
 
