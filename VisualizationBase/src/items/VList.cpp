@@ -8,8 +8,6 @@
 #include "items/VList.h"
 #include "items/Text.h"
 
-#include <QtCore/QDebug>
-
 namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(VList)
@@ -50,7 +48,6 @@ void VList::determineChildren()
 
 		if ( changed ) items_.append(renderer()->render(NULL, list->at<Model::Node> (i)));
 	}
-
 }
 
 void VList::updateState()
