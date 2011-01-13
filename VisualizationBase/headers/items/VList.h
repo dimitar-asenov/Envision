@@ -36,7 +36,6 @@ class VISUALIZATIONBASE_API VList: public ModelItem
 		int length() const;
 		template <class T> T* at(int index);
 
-
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 };
 

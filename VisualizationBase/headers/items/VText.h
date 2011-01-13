@@ -20,7 +20,7 @@ namespace Visualization {
 
 class VISUALIZATIONBASE_API VText : public TextRenderer<ModelItem>
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VText, ModelItem, TextStyle)
+	ITEM_COMMON_CUSTOM_STYLENAME(VText, TextRenderer<ModelItem>, TextStyle)
 
 	public:
 		VText(Item* parent, Model::Text *text, const TextStyle *style = Styles::item<VText>("default"));

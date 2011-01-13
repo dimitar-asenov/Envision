@@ -14,6 +14,9 @@ ITEM_COMMON_DEFINITIONS( Layout )
 Layout::Layout(Item* parent, const LayoutStyle* style) :
 	Item(parent, style)
 {
+	setFlag(QGraphicsItem::ItemIsSelectable, false);
+	setFlag(QGraphicsItem::ItemIsFocusable, false);
+	setAcceptedMouseButtons(0);
 }
 
 void Layout::setInnerSize(int width_, int height_)
@@ -27,9 +30,9 @@ void Layout::setInnerSize(int width_, int height_)
 	}
 	else
 	{
-		bounding_rect = QRectF();
 		size.setWidth(width_ + style()->leftMargin() + style()->rightMargin());
 		size.setHeight(height_ + style()->topMargin() + style()->bottomMargin());
+		bounding_rect = QRectF(0,0,size.width(), size.height());
 	}
 
 }

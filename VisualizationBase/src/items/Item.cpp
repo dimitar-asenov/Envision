@@ -18,6 +18,8 @@ Item::Item(Item* parent, const ItemStyle* style) :
 	QGraphicsItem(parent), style_(NULL), shape_(NULL), needsUpdate_(true)
 {
 	setFlag(QGraphicsItem::ItemHasNoContents);
+	setFlag(QGraphicsItem::ItemIsFocusable);
+	setFlag(QGraphicsItem::ItemIsSelectable);
 	setStyle(style);
 }
 
@@ -60,6 +62,7 @@ void Item::updateSubtreeState()
 	{
 		determineChildren();
 		updateChildren();
+		prepareGeometryChange();
 		updateState();
 		needsUpdate_ = false;
 		update();

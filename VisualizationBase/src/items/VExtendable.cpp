@@ -145,7 +145,7 @@ void VExtendable::updateState()
 		}
 		else
 		{
-			bounding_rect.setRect(0, 0, 0, 0);
+			bounding_rect = header.boundingRect();
 			size.setWidth(header.width());
 			size.setHeight(header.height());
 		}

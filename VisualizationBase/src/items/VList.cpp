@@ -8,6 +8,8 @@
 #include "items/VList.h"
 #include "items/Text.h"
 
+#include <QtCore/QDebug>
+
 namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(VList)
@@ -15,6 +17,9 @@ ITEM_COMMON_DEFINITIONS(VList)
 VList::VList(Item* parent, Model::List* node, const VListStyle* style) :
 	ModelItem(parent, node, style), items_(this, &style->itemsStyle())
 {
+	// TODO remove this from here, it was used just for testing
+	setFlag(QGraphicsItem::ItemIsMovable);
+	setFlag(QGraphicsItem::ItemHasNoContents, false);
 }
 
 VList::~VList()
@@ -50,9 +55,9 @@ void VList::determineChildren()
 
 void VList::updateState()
 {
-	bounding_rect = QRectF();
-	size.setHeight(items_.height());
+	bounding_rect = items_.boundingRect();
 	size.setWidth(items_.width());
+	size.setHeight(items_.height());
 }
 
 void VList::paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *)

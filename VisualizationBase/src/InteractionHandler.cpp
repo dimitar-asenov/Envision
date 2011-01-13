@@ -7,6 +7,7 @@
 
 #include "InteractionHandler.h"
 #include "items/Item.h"
+#include "Scene.h"
 
 namespace Visualization {
 
@@ -33,8 +34,29 @@ void InteractionHandler::keyReleaseEvent(Item *target, QKeyEvent *event) { targe
 
 // Mouse events
 void InteractionHandler::mouseDoubleClickEvent(Item *target, QGraphicsSceneMouseEvent *event) { target->defaultMouseDoubleClickEvent(event); }
-void InteractionHandler::mouseMoveEvent(Item *target, QGraphicsSceneMouseEvent *event) { target->defaultMouseMoveEvent(event); }
-void InteractionHandler::mousePressEvent(Item *target, QGraphicsSceneMouseEvent *event) { target->defaultMousePressEvent(event); }
+
+void InteractionHandler::mousePressEvent(Item *target, QGraphicsSceneMouseEvent *event)
+{
+	if (event->button() == Qt::LeftButton)
+	{
+		QPainterPath path;
+		path.addRect( QRectF(event->scenePos(), event->scenePos()).adjusted(0,0,1,1) );
+		target->scene()->setSelectionArea(path, Qt::IntersectsItemShape);
+	}
+	//target->defaultMousePressEvent(event);
+}
+
+void InteractionHandler::mouseMoveEvent(Item *target, QGraphicsSceneMouseEvent *event)
+{
+	if (!event->buttonDownPos( Qt::LeftButton).isNull())
+	{
+		QPainterPath path;
+		path.addRect( QRectF(event->buttonDownScenePos(Qt::LeftButton), event->scenePos()) );
+		target->scene()->setSelectionArea(path, Qt::IntersectsItemShape);
+	}
+	target->defaultMouseMoveEvent(event);
+}
+
 void InteractionHandler::mouseReleaseEvent(Item *target, QGraphicsSceneMouseEvent *event) { target->defaultMouseReleaseEvent(event); }
 void InteractionHandler::wheelEvent(Item *target, QGraphicsSceneWheelEvent *event) { target->defaultWheelEvent(event); }
 

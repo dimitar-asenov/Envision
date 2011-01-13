@@ -25,13 +25,11 @@ template<class T> int TextRenderer<T>::caretX = 0;
 template<class T> TextRenderer<T>::TextRenderer(Item* parent, const TextStyle *style, const QString& text_) :
 	T(parent, style), text(text_)
 {
-	this->setFlag(QGraphicsItem::ItemIsFocusable);
 }
 
 template<class T> TextRenderer<T>::TextRenderer(Item* parent, Model::Node *node, const TextStyle *style) :
 	T(parent, node, style)
-{
-	this->setFlag(QGraphicsItem::ItemIsFocusable);
+{;
 }
 
 template<class T> const TextStyle* TextRenderer<T>::style() const

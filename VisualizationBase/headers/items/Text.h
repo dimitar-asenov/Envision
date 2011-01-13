@@ -16,7 +16,7 @@ namespace Visualization {
 
 class VISUALIZATIONBASE_API Text : public TextRenderer<Item>
 {
-	ITEM_COMMON(Text, Item)
+	ITEM_COMMON(Text, TextRenderer<Item>)
 
 	public:
 		Text(Item* parent, const QString& text = QString());
