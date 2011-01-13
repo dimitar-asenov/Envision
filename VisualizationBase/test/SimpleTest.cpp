@@ -116,7 +116,6 @@ TEST(VisualizationBase, ExtendableTest)
 	model->endModification();
 
 	VList* l = dynamic_cast<VList*> (renderer->render(NULL, list));
-	l->setFlag(QGraphicsItem::ItemIsMovable);
 	scene->addTopLevelItem(l);
 	scene->updateTopLevelItems();
 

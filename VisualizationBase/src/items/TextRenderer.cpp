@@ -49,6 +49,23 @@ template<class T> void TextRenderer<T>::setText(const QString& newText)
 	text = newText;
 }
 
+template<class T> QString TextRenderer<T>::getText(bool onlySelected)
+{
+	if (onlySelected && selected == this)
+	{
+		int xstart = selectionBegin;
+		int xend = selectionEnd;
+		if ( xstart > xend )
+		{
+			xstart = selectionEnd;
+			xend = selectionBegin;
+		}
+
+		return text.mid(xstart, xend - xstart);
+	}
+	else return text;
+}
+
 template<class T> void TextRenderer<T>::determineChildren()
 {
 }

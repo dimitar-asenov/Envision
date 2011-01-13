@@ -15,8 +15,6 @@ ITEM_COMMON_DEFINITIONS(VList)
 VList::VList(Item* parent, Model::List* node, const VListStyle* style) :
 	ModelItem(parent, node, style), items_(this, &style->itemsStyle())
 {
-	// TODO remove this from here, it was used just for testing
-	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(QGraphicsItem::ItemHasNoContents, false);
 }
 

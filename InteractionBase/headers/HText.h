@@ -20,6 +20,8 @@ class INTERACTIONBASE_API HText : public GenericHandler
 		HText();
 
 	public:
+		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event);
+
 		virtual void mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event);
 		virtual void mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event);
 		virtual void focusOutEvent(Visualization::Item *target, QFocusEvent *event);

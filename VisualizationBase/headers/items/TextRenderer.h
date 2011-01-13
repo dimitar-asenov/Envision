@@ -60,6 +60,7 @@ class VISUALIZATIONBASE_API TextRenderer : public T
 			virtual void setStyle(const ItemStyle* style);
 
 			void setText(const QString& newText);
+			QString getText(bool onlySelected = true);
 
 			virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 

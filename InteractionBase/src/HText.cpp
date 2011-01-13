@@ -11,6 +11,9 @@
 #include "VisualizationBase/headers/items/ModelItem.h"
 #include "VisualizationBase/headers/Scene.h"
 
+#include <QtGui/QClipboard>
+#include <QtGui/QApplication>
+
 namespace Interaction {
 
 HText::HText()
@@ -21,6 +24,24 @@ HText* HText::instance()
 {
 	static HText h;
 	return &h;
+}
+
+void HText::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
+{
+	if (event->key() == Qt::Key_C && event->modifiers() == Qt::ControlModifier)
+	{
+		QString text;
+		Visualization::TextRenderer < Visualization::Item > *ti = dynamic_cast<Visualization::TextRenderer<Visualization::Item>*> (target);
+		if ( ti ) text = ti->getText();
+		else
+		{
+			Visualization::TextRenderer < Visualization::ModelItem > *tmi
+						= dynamic_cast<Visualization::TextRenderer<Visualization::ModelItem>*> (target);
+			if ( tmi ) text = tmi->getText();
+		}
+
+		if (!text.isEmpty()) QApplication::clipboard()->setText(text);
+	}
 }
 
 void HText::mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
@@ -39,7 +60,7 @@ void HText::mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEven
 		target->scene()->clearSelection();
 		target->scene()->updateTopLevelItems();
 	}
-	else InteractionHandler::mousePressEvent(target, event);
+	else GenericHandler::mousePressEvent(target, event);
 }
 
 void HText::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
@@ -66,7 +87,7 @@ void HText::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent
 			if ( tmi ) tmi->resetSelected();
 		}
 
-		InteractionHandler::mouseMoveEvent(target, event);
+		GenericHandler::mouseMoveEvent(target, event);
 	}
 
 	target->scene()->updateTopLevelItems();

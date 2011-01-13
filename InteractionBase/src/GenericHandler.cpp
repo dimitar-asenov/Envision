@@ -38,6 +38,32 @@ void GenericHandler::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneM
 		QPainterPath path;
 		path.addRect( QRectF(event->buttonDownScenePos(Qt::LeftButton), event->scenePos()) );
 		target->scene()->setSelectionArea(path, Qt::IntersectsItemShape);
+
+		// Filter out items for which the selection is completely internal.
+		QList<QGraphicsItem*> selection = target->scene()->selectedItems();
+		for (int i = 0; i<selection.size(); ++i)
+		{
+			if (  selection.at(i)->contains(selection.at(i)->mapFromScene(event->buttonDownScenePos(Qt::LeftButton)))
+				&& selection.at(i)->contains(selection.at(i)->mapFromScene(event->scenePos())))
+				selection.at(i)->setSelected(false);
+		}
+
+		// Filter out items whose parent is also included in the selection.
+		selection = target->scene()->selectedItems();
+		for (int i = 0; i<selection.size(); ++i)
+		{
+			QGraphicsItem* parent = selection.at(i)->parentItem();
+			while (parent)
+			{
+				if (selection.contains(parent))
+				{
+					selection.at(i)->setSelected(false);
+					break;
+				}
+				parent = parent->parentItem();
+			}
+		}
+
 	}
 
 	InteractionHandler::mouseMoveEvent(target, event);
