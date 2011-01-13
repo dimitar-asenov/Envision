@@ -13,6 +13,8 @@
 #include "commands/ListRemove.h"
 #include "nodes/nodeMacros.h"
 
+#include "Core/headers/global.h"
+
 namespace Model {
 
 const char* REFERENCE_NAME_NODE_ID = "ModelBaseListRefName";
@@ -54,7 +56,7 @@ List::List(Node *parent, NodeIdType id, PersistentStore &store, bool partialHint
 List::~List()
 {
 	for (int i = 0; i < nodes.size(); ++i)
-		delete nodes[i];
+		SAFE_DELETE( nodes[i] );
 }
 
 void List::loadSubNodes(QList<LoadedNode>& nodeList)

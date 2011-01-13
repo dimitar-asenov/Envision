@@ -7,6 +7,8 @@
 
 #include "nodes/Extendable/ExtendableNode.h"
 
+#include "Core/headers/global.h"
+
 namespace Model {
 
 ExtendableNode::ExtendableNode(Node *parent, Model* model, AttributeChain& metaData) :
@@ -43,7 +45,7 @@ ExtendableNode::~ExtendableNode()
 {
 	for (int level = 0; level < subnodes.size(); ++level)
 		for (int i = 0; i < subnodes[level].size(); ++i)
-			if ( subnodes[level][i] ) delete subnodes[level][i];
+			if ( subnodes[level][i] ) SAFE_DELETE( subnodes[level][i] );
 }
 
 Node* ExtendableNode::get(const ExtendableIndex &attributeIndex)

@@ -8,6 +8,8 @@
 #include "commands/ExtendedNodeOptional.h"
 #include "nodes/Node.h"
 
+#include "Core/headers/global.h"
+
 namespace Model {
 
 ExtendedNodeOptional::ExtendedNodeOptional(Node* target, Node* attribute_, const ExtendableIndex &attributeIndex_, QVector< QVector<Node*> >* subnodes_, bool created_) :
@@ -17,8 +19,8 @@ ExtendedNodeOptional::ExtendedNodeOptional(Node* target, Node* attribute_, const
 
 ExtendedNodeOptional::~ExtendedNodeOptional()
 {
-	if ( created && isUndone() ) delete attribute;
-	if ( !created && !isUndone() ) delete attribute;
+	if ( created && isUndone() ) SAFE_DELETE(attribute);
+	if ( !created && !isUndone() ) SAFE_DELETE(attribute);
 }
 
 void ExtendedNodeOptional::redo()

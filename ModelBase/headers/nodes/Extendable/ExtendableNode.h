@@ -13,6 +13,7 @@
 #include "../../ModelException.h"
 #include "../../commands/ExtendedNodeOptional.h"
 
+#include "Core/headers/global.h"
 #include <QtCore/QString>
 #include <QtCore/QVector>
 #include <QtCore/QPair>
@@ -63,7 +64,7 @@ class MODELBASE_API ExtendableNode: public Node
 
 				if ( nodeSpecific == NULL )
 				{
-					if (nodeGeneric) delete nodeGeneric;
+					if (nodeGeneric) SAFE_DELETE(nodeGeneric);
 					throw ModelException("Could not create optional node with the type " + creationType
 							+ ". This type is not compatible with the expected node type of this attribute.");
 				}

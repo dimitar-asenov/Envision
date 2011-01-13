@@ -8,6 +8,8 @@
 #include "commands/ListInsert.h"
 #include "nodes/Node.h"
 
+#include "Core/headers/global.h"
+
 #include <QtCore/QVector>
 
 namespace Model {
@@ -19,7 +21,7 @@ ListInsert::ListInsert(Node *target, QVector<Node*>& nodes_, Node* newNode_, int
 
 ListInsert::~ListInsert()
 {
-	if ( isUndone() && newNode ) delete newNode;
+	if ( isUndone() && newNode ) SAFE_DELETE(newNode);
 }
 
 void ListInsert::redo()

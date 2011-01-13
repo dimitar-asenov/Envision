@@ -11,6 +11,8 @@
 #include "nodes/Node.h"
 #include "Model.h"
 
+#include "Core/headers/global.h"
+
 namespace Model {
 
 NameChange::NameChange(Node *target, const QString& oldName_, const QString& newName_, UndoCommand* command_) :
@@ -25,7 +27,7 @@ NameChange::NameChange(Node *target, Text* text_, const QString& newName_) :
 
 NameChange::~NameChange()
 {
-	delete command;
+	SAFE_DELETE(command);
 }
 
 void NameChange::redo()

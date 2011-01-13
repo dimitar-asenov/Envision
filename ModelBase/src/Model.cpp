@@ -10,6 +10,8 @@
 #include "commands/UndoCommand.h"
 #include "commands/SetModificationTarget.h"
 
+#include "Core/headers/global.h"
+
 namespace Model {
 
 QList<Model*> Model::loadedModels;
@@ -27,7 +29,7 @@ Model::~Model()
 
 	// TODO Make sure to persist and destroy the tree in a nice way.
 	// TODO Emit a signal that this model is no longer valid.
-	delete root;
+	SAFE_DELETE( root );
 }
 
 void Model::beginModification(Node* modificationTarget, const QString &text)

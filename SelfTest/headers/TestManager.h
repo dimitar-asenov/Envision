@@ -11,6 +11,9 @@
 #include "selftest_api.h"
 #include "Test.h"
 #include "TestResults.h"
+
+#include "Core/headers/global.h"
+
 #include <QtCore/QMap>
 
 namespace SelfTest {
@@ -68,7 +71,7 @@ class TestManager
 				{
 					Test* test = (*testConstructor)();
 					test->run(testRes);
-					delete test;
+					SAFE_DELETE(test);
 				}
 			}
 
@@ -88,7 +91,7 @@ class TestManager
 			{
 				Test* test = testConstructors->value(name)();
 				test->run(testRes);
-				delete test;
+				SAFE_DELETE(test);
 			}
 
 			return testRes;

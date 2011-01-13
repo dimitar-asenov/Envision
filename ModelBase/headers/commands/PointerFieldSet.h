@@ -10,6 +10,8 @@
 
 #include "FieldSet.h"
 
+#include "Core/headers/global.h"
+
 namespace Model {
 
 template<class T>
@@ -23,8 +25,8 @@ class PointerFieldSet: public FieldSet<T*>
 
 		~PointerFieldSet()
 		{
-			if (this->isUndone() && this->newValue) delete this->newValue;
-			if (!this->isUndone() && this->oldValue) delete this->oldValue;
+			if (this->isUndone() && this->newValue) SAFE_DELETE(this->newValue);
+			if (!this->isUndone() && this->oldValue) SAFE_DELETE(this->oldValue);
 		}
 };
 
