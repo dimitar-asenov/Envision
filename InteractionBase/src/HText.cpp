@@ -6,9 +6,10 @@
  **********************************************************************************************************************/
 
 #include "HText.h"
-#include "VisualizationBase/headers/Scene.h"
+
 #include "VisualizationBase/headers/items/TextRenderer.h"
 #include "VisualizationBase/headers/items/ModelItem.h"
+#include "VisualizationBase/headers/Scene.h"
 
 namespace Interaction {
 
@@ -35,6 +36,7 @@ void HText::mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEven
 			if ( tmi ) tmi->setSelected(event->pos().x(), event->pos().x());
 		}
 
+		target->scene()->clearSelection();
 		target->scene()->updateTopLevelItems();
 	}
 	else InteractionHandler::mousePressEvent(target, event);
@@ -42,16 +44,32 @@ void HText::mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEven
 
 void HText::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
-	Visualization::TextRenderer < Visualization::Item > *ti = dynamic_cast<Visualization::TextRenderer<Visualization::Item>*> (target);
-	if ( ti ) ti->setSelected(event->buttonDownPos(Qt::LeftButton).x(), event->pos().x());
+	if (!event->buttonDownPos(Qt::LeftButton).isNull() && target->contains( event->pos() ))
+	{
+		Visualization::TextRenderer < Visualization::Item > *ti = dynamic_cast<Visualization::TextRenderer<Visualization::Item>*> (target);
+		if ( ti ) ti->setSelected(event->buttonDownPos(Qt::LeftButton).x(), event->pos().x());
+		else
+		{
+			Visualization::TextRenderer < Visualization::ModelItem > *tmi = dynamic_cast<Visualization::TextRenderer<Visualization::ModelItem>*> (target);
+			if ( tmi ) tmi->setSelected(event->buttonDownPos(Qt::LeftButton).x(), event->pos().x());
+		}
+
+		target->scene()->clearSelection();
+	}
 	else
 	{
-		Visualization::TextRenderer < Visualization::ModelItem > *tmi = dynamic_cast<Visualization::TextRenderer<Visualization::ModelItem>*> (target);
-		if ( tmi ) tmi->setSelected(event->buttonDownPos(Qt::LeftButton).x(), event->pos().x());
+		Visualization::TextRenderer < Visualization::Item > *ti = dynamic_cast<Visualization::TextRenderer<Visualization::Item>*> (target);
+		if ( ti ) ti->resetSelected();
+		else
+		{
+			Visualization::TextRenderer < Visualization::ModelItem > *tmi = dynamic_cast<Visualization::TextRenderer<Visualization::ModelItem>*> (target);
+			if ( tmi ) tmi->resetSelected();
+		}
+
+		InteractionHandler::mouseMoveEvent(target, event);
 	}
 
 	target->scene()->updateTopLevelItems();
-	InteractionHandler::mouseMoveEvent(target, event);
 }
 
 void HText::focusOutEvent(Visualization::Item *target, QFocusEvent *)

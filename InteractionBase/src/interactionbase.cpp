@@ -7,7 +7,11 @@
 
 #include "interactionbase.h"
 
+#include "GenericHandler.h"
 #include "HText.h"
+
+#include "VisualizationBase/headers/items/VExtendable.h"
+#include "VisualizationBase/headers/items/VList.h"
 #include "VisualizationBase/headers/items/Text.h"
 #include "VisualizationBase/headers/items/VText.h"
 #include "ModelBase/headers/test_nodes/BinaryNode.h"
@@ -21,6 +25,8 @@ namespace Interaction {
 
 bool InteractionBase::initialize(Envision::EnvisionManager&)
 {
+	Visualization::VExtendable::setInteractionHandler(GenericHandler::instance());
+	Visualization::VList::setInteractionHandler(GenericHandler::instance());
 	Visualization::Text::setInteractionHandler(HText::instance());
 	Visualization::VText::setInteractionHandler(HText::instance());
 	return true;

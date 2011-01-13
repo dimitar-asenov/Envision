@@ -132,7 +132,7 @@ void VExtendable::updateState()
 			getShape()->setOffset(layout->getXOffsetForExternalShape(), layout->getYOffsetForExternalShape());
 			getShape()->setOutterSize(layout->getOutterWidthForExternalShape(), layout->getOutterHeightForExternalShape());
 		}
-		setSize(layout->size().width() + layout->getXOffsetForExternalShape(), layout->size().height() + layout->getYOffsetForExternalShape());
+		setSize( layout->size() );
 	}
 	else
 	{

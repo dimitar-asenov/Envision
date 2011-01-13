@@ -1,31 +1,32 @@
 /***********************************************************************************************************************
- * HText.h
+ * GenericHandler.h
  *
- *  Created on: Jan 11, 2011
+ *  Created on: Jan 13, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef HTEXT_H_
-#define HTEXT_H_
+#ifndef GENERICHANDLER_H_
+#define GENERICHANDLER_H_
 
 #include "interactionbase_api.h"
 
-#include "GenericHandler.h"
+#include "VisualizationBase/headers/items/Item.h"
+#include "VisualizationBase/headers/InteractionHandler.h"
 
 namespace Interaction {
 
-class INTERACTIONBASE_API HText : public GenericHandler
+class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHandler
 {
 	protected:
-		HText();
+		GenericHandler();
 
 	public:
+		static GenericHandler* instance();
+
 		virtual void mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event);
 		virtual void mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event);
-		virtual void focusOutEvent(Visualization::Item *target, QFocusEvent *event);
-		static HText* instance();
 };
 
 }
 
-#endif /* HTEXT_H_ */
+#endif /* GENERICHANDLER_H_ */
