@@ -24,6 +24,7 @@ class VISUALIZATIONBASE_API SequentialLayout: public Layout
 
 	public:
 		SequentialLayout(Item* parent, const SequentialLayoutStyle* style = Styles::layout<SequentialLayout>("default"));
+		~SequentialLayout();
 
 		int length() const;
 

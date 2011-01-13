@@ -25,16 +25,8 @@ VExtendable::VExtendable(Item* parent, Model::ExtendableNode* node, const VExten
 
 VExtendable::~VExtendable()
 {
-	if ( layout )
-	{
-		delete layout;
-		layout = NULL;
-	}
-	if ( attributes )
-	{
-		delete attributes;
-		attributes = NULL;
-	}
+	SAFE_DELETE_ITEM(layout);
+	SAFE_DELETE_ITEM(attributes);
 }
 
 void VExtendable::determineChildren()
@@ -71,12 +63,13 @@ void VExtendable::determineChildren()
 		}
 		else
 		{
+			// This is the header. We do not want this to be removed by layout's destructor
 			layout->top()->setMiddle(NULL, false);
-			delete layout;
-			layout = NULL;
-			delete attributes;
-			attributes = NULL;
 			header.setParentItem(this);
+
+			SAFE_DELETE_ITEM(layout);
+
+			attributes = NULL; // This was automatically deleted by layout's destructor
 		}
 	}
 
@@ -142,7 +135,11 @@ void VExtendable::updateState()
 			getShape()->setInnerSize(header.width(), header.height());
 			header.setPos(getShape()->contentLeft(), getShape()->contentTop());
 		}
-		else setSize(header.size());
+		else
+		{
+			setSize(header.size());
+			header.setPos(0,0);
+		}
 	}
 }
 

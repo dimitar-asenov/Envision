@@ -12,6 +12,8 @@
 #include "ItemMacros.h"
 #include "../InteractionHandler.h"
 
+#include "Core/headers/global.h"
+
 #include <QtGui/QGraphicsItem>
 
 namespace Visualization {
@@ -123,6 +125,8 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 
 		virtual InteractionHandler* handler() const;
 		void execute(QString command);
+
+		void removeFromScene();
 };
 
 inline int Item::width() const { return boundingRect_.width(); }
@@ -136,6 +140,14 @@ inline const ItemStyle* Item::style() const { return style_; }
 inline Shape* Item::getShape() const {	return shape_; }
 inline bool Item::needsUpdate() { return needsUpdate_; }
 
+template <class T> inline void SAFE_DELETE_ITEM( T* & item)
+{
+	if (item)
+	{
+		item->removeFromScene();
+		SAFE_DELETE(item);
+	}
+}
 }
 
 #endif /* ITEM_H_ */

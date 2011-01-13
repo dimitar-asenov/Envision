@@ -16,20 +16,25 @@ PanelBorderLayout::PanelBorderLayout(Item* parent, const PanelBorderLayoutStyle*
 {
 }
 
+PanelBorderLayout::~PanelBorderLayout()
+{
+	SAFE_DELETE_ITEM(top_);
+	SAFE_DELETE_ITEM(left_);
+	SAFE_DELETE_ITEM(bottom_);
+	SAFE_DELETE_ITEM(right_);
+	SAFE_DELETE_ITEM(content_);
+}
+
 void PanelBorderLayout::setPanel(bool enable, PanelLayout*& panel, const PanelLayoutStyle& style)
 {
 	if ( enable && !panel ) panel = new PanelLayout(this, &style);
-	if ( !enable && panel )
-	{
-		delete panel;
-		panel = NULL;
-	}
+	if ( !enable && panel ) SAFE_DELETE_ITEM(panel);
 	setUpdateNeeded();
 }
 
 void PanelBorderLayout::setContent(Item* content, bool deleteOldContent)
 {
-	if ( deleteOldContent && content_ ) delete content_;
+	if ( deleteOldContent && content_ ) SAFE_DELETE_ITEM(content_);
 	if ( content ) content->setParentItem(this);
 	content_ = content;
 	setUpdateNeeded();

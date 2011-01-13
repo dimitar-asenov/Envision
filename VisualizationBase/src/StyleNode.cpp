@@ -9,6 +9,8 @@
 
 #include "VisualizationException.h"
 
+#include "Core/headers/global.h"
+
 #include <QtCore/QFileInfo>
 #include <QtCore/QDir>
 
@@ -77,11 +79,11 @@ void StyleNode::init()
 StyleNode::~StyleNode()
 {
 	for (int i = 0; i < prototypes.size(); ++i)
-		delete prototypes[i];
+		SAFE_DELETE(prototypes[i]);
 	prototypes.clear();
 
 	for (int i = 0; i < children.size(); ++i)
-		delete children[i];
+		SAFE_DELETE(children[i]);
 	children.clear();
 }
 

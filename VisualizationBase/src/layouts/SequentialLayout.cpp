@@ -17,6 +17,11 @@ SequentialLayout::SequentialLayout(Item* parent, const SequentialLayoutStyle* st
 {
 }
 
+SequentialLayout::~SequentialLayout()
+{
+	for (int i = 0; i<items.size(); i++) SAFE_DELETE_ITEM( items[i]);
+}
+
 int SequentialLayout::length() const
 {
 	return items.size();
@@ -43,9 +48,9 @@ void SequentialLayout::insert(Item* item, int position)
 	setUpdateNeeded();
 }
 
-void SequentialLayout::remove(int index, bool deleteItem)
+void SequentialLayout::remove(int index, bool deleteItem_)
 {
-	if (deleteItem) delete items[index];
+	if (deleteItem_) SAFE_DELETE_ITEM( items[index]);
 	items.remove(index);
 	setUpdateNeeded();
 }

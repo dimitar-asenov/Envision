@@ -62,6 +62,7 @@ TEST(InteractionBase, TextSelect)
 	VList* l = dynamic_cast<VList*> (renderer->render(NULL, list));
 	scene->addTopLevelItem(l);
 	scene->updateTopLevelItems();
+	QApplication::processEvents();
 
 	l->at<VExtendable>(0)->setExpanded();
 	scene->updateTopLevelItems();
@@ -77,8 +78,6 @@ TEST(InteractionBase, TextSelect)
 	VisualizationManager::instance().getMainWindow()->move(leftPos,topPos);
 
 	CHECK_CONDITION(view != NULL);
-	//delete view;
-	//delete scene;
 }
 
 }

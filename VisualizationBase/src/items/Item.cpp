@@ -25,11 +25,7 @@ Item::Item(Item* parent, const ItemStyle* style) :
 
 Item::~Item()
 {
-	if ( shape_ )
-	{
-		delete shape_;
-		shape_ = NULL;
-	}
+	SAFE_DELETE(shape_);
 }
 
 QRectF Item::boundingRect() const
@@ -50,7 +46,7 @@ void Item::setUpdateNeeded()
 
 void Item::setStyle(const ItemStyle* style)
 {
-	if (shape_) delete shape_;
+	SAFE_DELETE(shape_);
 	style_ = style;
 	if (style && style->hasShape())
 	{
@@ -105,6 +101,11 @@ void Item::execute(QString command)
 Scene* Item::scene() const
 {
 	return static_cast<Visualization::Scene*> (QGraphicsItem::scene());
+}
+
+void Item::removeFromScene()
+{
+	if ( scene() ) scene()->removeItem(this);
 }
 
 /***********************************************************************************************************************

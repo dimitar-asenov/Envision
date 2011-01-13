@@ -17,10 +17,16 @@ PanelLayout::PanelLayout(Item* parent, const PanelLayoutStyle* style) :
 {
 }
 
+PanelLayout::~PanelLayout()
+{
+	SAFE_DELETE_ITEM(first_);
+	SAFE_DELETE_ITEM(middle_);
+	SAFE_DELETE_ITEM(last_);
+}
 void PanelLayout::setItem(Item* item, Item*& position, bool deleteOldItem)
 {
-	if (deleteOldItem) delete position;
-	if ( !item ) item = new NoItem(this);
+	if (deleteOldItem) SAFE_DELETE_ITEM( position );
+	if ( !item ) item = new NoItem(NULL);
 	item->setParentItem(this);
 	position = item;
 	setUpdateNeeded();

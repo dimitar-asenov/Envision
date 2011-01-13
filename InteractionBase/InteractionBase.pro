@@ -27,11 +27,13 @@ pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
-HEADERS += headers/GenericHandler.h \
+HEADERS += headers/HExtendable.h \
+    headers/GenericHandler.h \
     headers/HText.h \
     headers/interactionbase_api.h \
     src/interactionbase.h
-SOURCES += src/GenericHandler.cpp \
+SOURCES += src/HExtendable.cpp \
+    src/GenericHandler.cpp \
     src/HText.cpp \
     test/SimpleTest.cpp \
     src/interactionbase.cpp

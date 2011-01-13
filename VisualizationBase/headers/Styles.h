@@ -15,6 +15,7 @@
 #include "shapes/Shape.h"
 #include "shapes/ShapeStyle.h"
 
+#include "Core/headers/global.h"
 #include <QtXml/QDomDocument>
 #include <QtCore/QMutex>
 #include <QtCore/QMutexLocker>
@@ -154,8 +155,7 @@ template<class T> typename T::StyleType* Styles::loadStyle(const QString& object
 	typename T::StyleType* style = new typename T::StyleType();
 	load("style", *style);
 
-	delete root;
-	root = NULL;
+	SAFE_DELETE(root);
 
 	return style;
 }

@@ -39,9 +39,12 @@ class VISUALIZATIONBASE_API VExtendable : public ModelItem
 		virtual ~VExtendable();
 
 		void setExpanded(bool expanded = true);
+		bool expanded() const;
 
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 };
+
+inline bool VExtendable::expanded() const { return style()->expanded(); }
 
 }
 

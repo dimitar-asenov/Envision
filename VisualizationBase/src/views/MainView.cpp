@@ -8,6 +8,7 @@
 #include "views/MainView.h"
 #include "Scene.h"
 
+#include "Core/headers/global.h"
 #include <QtGui/QWheelEvent>
 
 namespace Visualization {
@@ -25,11 +26,7 @@ MainView::MainView(Scene *scene) :
 
 MainView::~MainView()
 {
-	if ( miniMap )
-	{
-		delete miniMap;
-		miniMap = NULL;
-	}
+	SAFE_DELETE(miniMap);
 }
 
 void MainView::setMiniMapSize(int width, int height)

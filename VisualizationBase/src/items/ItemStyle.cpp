@@ -20,11 +20,7 @@ ItemStyle::ItemStyle()
 
 ItemStyle::~ItemStyle()
 {
-	if ( shapeStyle_ )
-	{
-		delete shapeStyle_;
-		shapeStyle_ = NULL;
-	}
+	SAFE_DELETE(shapeStyle_);
 }
 
 Shape* ItemStyle::createShape(Item* parent) const

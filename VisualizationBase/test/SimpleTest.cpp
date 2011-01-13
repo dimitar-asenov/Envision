@@ -49,8 +49,6 @@ namespace Visualization {
 //	CHECK_INT_EQUAL(1, 1);
 //
 //	CHECK_CONDITION(view != NULL);
-//	//delete view;
-//	//delete scene;
 //}
 
 //TEST(VisualizationBase, ModelTextTest)
@@ -81,8 +79,6 @@ namespace Visualization {
 //	CHECK_INT_EQUAL(1, 1);
 //
 //	CHECK_CONDITION(view != NULL);
-//	//delete view;
-//	//delete scene;
 //}
 
 TEST(VisualizationBase, ExtendableTest)
@@ -118,6 +114,7 @@ TEST(VisualizationBase, ExtendableTest)
 	VList* l = dynamic_cast<VList*> (renderer->render(NULL, list));
 	scene->addTopLevelItem(l);
 	scene->updateTopLevelItems();
+	QApplication::processEvents();
 
 	l->at<VExtendable>(0)->setExpanded();
 	scene->updateTopLevelItems();
@@ -133,8 +130,6 @@ TEST(VisualizationBase, ExtendableTest)
 	VisualizationManager::instance().getMainWindow()->move(leftPos,topPos);
 
 	CHECK_CONDITION(view != NULL);
-	//delete view;
-	//delete scene;
 }
 
 }

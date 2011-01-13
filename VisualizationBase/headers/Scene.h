@@ -30,6 +30,9 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		void addTopLevelItem(Item* item);
 		void removeTopLevelItem(Item* item);
 		void updateTopLevelItems();
+
+		virtual void customEvent(QEvent *event);
+
 };
 
 inline void Scene::setRenderer(ModelRenderer* renderer) { renderer_ = renderer; }

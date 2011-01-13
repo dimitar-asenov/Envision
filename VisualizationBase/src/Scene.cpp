@@ -9,7 +9,17 @@
 #include "VisualizationManager.h"
 #include "items/Item.h"
 
+#include <QtGui/QApplication>
+#include <QtCore/QEvent>
+
 namespace Visualization {
+
+class UpdateSceneEvent : public QEvent
+{
+	public:
+		static const QEvent::Type EventType = (QEvent::Type) (User + 1);
+		UpdateSceneEvent() : QEvent(EventType){};
+};
 
 Scene::Scene() : QGraphicsScene(VisualizationManager::instance().getMainWindow()), renderer_(NULL)
 {
@@ -30,7 +40,18 @@ void Scene::removeTopLevelItem(Item* item)
 
 void Scene::updateTopLevelItems()
 {
-	for (int i = 0; i<topLevelItems.size(); ++i) topLevelItems.at(i)->updateSubtreeState();
+	QApplication::postEvent(this, new UpdateSceneEvent());
 }
+
+void Scene::customEvent(QEvent *event)
+{
+	if ( event->type() == UpdateSceneEvent::EventType )
+	{
+		for (int i = 0; i<topLevelItems.size(); ++i) topLevelItems.at(i)->updateSubtreeState();
+	}
+	else
+		QGraphicsScene::customEvent(event);
+}
+
 
 }
