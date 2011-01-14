@@ -25,8 +25,18 @@ VExtendable::VExtendable(Item* parent, Model::ExtendableNode* node, const VExten
 
 VExtendable::~VExtendable()
 {
-	SAFE_DELETE_ITEM(layout);
-	SAFE_DELETE_ITEM(attributes);
+	if ( style()->expanded() )
+	{
+		// This is the header. We do not want this to be removed by layout's destructor
+		layout->top()->setMiddle(NULL, false);
+		header.removeFromScene();
+		SAFE_DELETE_ITEM(layout);
+		attributes = NULL; // This was automatically deleted by layout's destructor
+	}
+	else
+	{
+		header.removeFromScene();
+	}
 }
 
 void VExtendable::determineChildren()

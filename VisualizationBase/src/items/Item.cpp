@@ -106,6 +106,7 @@ Scene* Item::scene() const
 void Item::removeFromScene()
 {
 	if ( scene() ) scene()->removeItem(this);
+	setParentItem(NULL);
 }
 
 /***********************************************************************************************************************
