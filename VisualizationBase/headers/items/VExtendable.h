@@ -24,7 +24,7 @@ class VISUALIZATIONBASE_API VExtendable : public ModelItem
 	ITEM_COMMON(VExtendable, ModelItem)
 
 	private:
-		SequentialLayout header;
+		SequentialLayout* header;
 		PanelBorderLayout* layout; //only used when expanded
 		SequentialLayout* attributes; //only used when expanded
 

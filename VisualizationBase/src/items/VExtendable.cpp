@@ -18,25 +18,22 @@ namespace Visualization {
 ITEM_COMMON_DEFINITIONS(VExtendable)
 
 VExtendable::VExtendable(Item* parent, Model::ExtendableNode* node, const VExtendableStyle* style) :
-	ModelItem(parent, node, style), header(this, &style->headerStyle()), layout(NULL), attributes(NULL)
+	ModelItem(parent, node, style), header( new SequentialLayout(this, &style->headerStyle())), layout(NULL), attributes(NULL)
 {
-	header.append(new Text(&header, node->getTypeName()));
+	header->append(new Text(header, node->getTypeName()));
 }
 
 VExtendable::~VExtendable()
 {
 	if ( style()->expanded() )
 	{
-		// This is the header. We do not want this to be removed by layout's destructor
-		layout->top()->setMiddle(NULL, false);
-		header.removeFromScene();
 		SAFE_DELETE_ITEM(layout);
-		attributes = NULL; // This was automatically deleted by layout's destructor
+
+		// These were automatically deleted by layout's destructor
+		header = NULL ;
+		attributes = NULL;
 	}
-	else
-	{
-		header.removeFromScene();
-	}
+	else SAFE_DELETE_ITEM(header);
 }
 
 void VExtendable::determineChildren()
@@ -47,16 +44,16 @@ void VExtendable::determineChildren()
 	if ( node->hasAttribute("name") )
 	{
 		Model::Node* name = node->get("name");
-		if ( header.length() == 1 ) header.prepend(renderer()->render(&header, name));
-		if ( header.length() == 2 && header.at<ModelItem> (0)->getNode() != name )
+		if ( header->length() == 1 ) header->prepend(renderer()->render(header, name));
+		if ( header->length() == 2 && header->at<ModelItem> (0)->getNode() != name )
 		{
-			header.remove(0);
-			header.prepend(renderer()->render(&header, name));
+			header->remove(0);
+			header->prepend(renderer()->render(header, name));
 		}
 	}
 	else
 	{
-		if ( header.length() > 1 ) header.remove(0);
+		if ( header->length() > 1 ) header->remove(0);
 	}
 
 	// Clean up when switching styles
@@ -68,14 +65,14 @@ void VExtendable::determineChildren()
 			attributes = new SequentialLayout(NULL, &style()->attributesStyle());
 
 			layout->setTop(true);
-			layout->top()->setMiddle(&header);
+			layout->top()->setMiddle(header);
 			layout->setContent(attributes);
 		}
 		else
 		{
 			// This is the header. We do not want this to be removed by layout's destructor
 			layout->top()->setMiddle(NULL, false);
-			header.setParentItem(this);
+			header->setParentItem(this);
 
 			SAFE_DELETE_ITEM(layout);
 
@@ -84,7 +81,7 @@ void VExtendable::determineChildren()
 	}
 
 	// TODO: find a better way and place to determine the style of children
-	header.setStyle(&style()->headerStyle());
+	header->setStyle(&style()->headerStyle());
 
 	if ( style()->expanded() )
 	{
@@ -142,13 +139,13 @@ void VExtendable::updateState()
 		if ( getShape() )
 		{
 			getShape()->setOffset(0, 0);
-			getShape()->setInnerSize(header.width(), header.height());
-			header.setPos(getShape()->contentLeft(), getShape()->contentTop());
+			getShape()->setInnerSize(header->width(), header->height());
+			header->setPos(getShape()->contentLeft(), getShape()->contentTop());
 		}
 		else
 		{
-			setSize(header.size());
-			header.setPos(0,0);
+			setSize(header->size());
+			header->setPos(0,0);
 		}
 	}
 }
