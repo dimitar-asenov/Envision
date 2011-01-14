@@ -50,6 +50,7 @@ class VISUALIZATIONBASE_API PanelBorderLayout: public Layout
 		int getOutterWidthForExternalShape() const;
 		int getOutterHeightForExternalShape() const;
 
+		virtual void determineChildren();
 		virtual void updateState();
 };
 

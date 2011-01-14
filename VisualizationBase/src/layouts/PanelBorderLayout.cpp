@@ -40,6 +40,14 @@ void PanelBorderLayout::setContent(Item* content, bool deleteOldContent)
 	setUpdateNeeded();
 }
 
+void PanelBorderLayout::determineChildren()
+{
+	if (top_) top_->setMinimalLength(0);
+	if (left_) left_->setMinimalLength(0);
+	if (right_) right_->setMinimalLength(0);
+	if (bottom_) bottom_->setMinimalLength(0);
+}
+
 void PanelBorderLayout::updateState()
 {
 	// Get content size
