@@ -16,11 +16,6 @@ namespace Interaction {
 
 class INTERACTIONBASE_API HText : public GenericHandler
 {
-	private:
-		static void setSelected(Visualization::Item *target, int xBegin, int xEnd);
-		static void resetSelected(Visualization::Item *target);
-		static bool isEditable(Visualization::Item *target);
-
 	protected:
 		HText();
 

@@ -86,7 +86,7 @@ void HText::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	}
 	else
 	{
-		if (isEditable(target))
+		if (TEXTRENDERER_GET(isEditable))
 		{
 			switch (event->key())
 			{
@@ -121,7 +121,7 @@ void HText::mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEven
 {
 	if ( event->button() == Qt::LeftButton )
 	{
-		setSelected(target, event->pos().x(), event->pos().x());
+		TEXTRENDERER_SET2(setSelected, event->pos().x(), event->pos().x());
 		target->scene()->clearSelection();
 		target->scene()->updateTopLevelItems();
 	}
@@ -132,12 +132,12 @@ void HText::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent
 {
 	if (!event->buttonDownPos(Qt::LeftButton).isNull() && target->contains( event->pos() ))
 	{
-		setSelected(target, event->buttonDownPos(Qt::LeftButton).x(), event->pos().x());
+		TEXTRENDERER_SET2(setSelected, event->buttonDownPos(Qt::LeftButton).x(), event->pos().x());
 		target->scene()->clearSelection();
 	}
 	else
 	{
-		resetSelected(target);
+		TEXTRENDERER_SET(resetSelected);
 		GenericHandler::mouseMoveEvent(target, event);
 	}
 
@@ -146,7 +146,7 @@ void HText::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent
 
 void HText::focusOutEvent(Visualization::Item *target, QFocusEvent *)
 {
-	resetSelected(target);
+	TEXTRENDERER_SET(resetSelected);
 }
 
 void HText::setNewText(Visualization::Item *target, const QString& newText)
@@ -167,39 +167,6 @@ void HText::setNewText(Visualization::Item *target, const QString& newText)
 }
 
 // TextRenderer interface routines.
-void HText::setSelected(Visualization::Item *target, int xBegin, int xEnd)
-{
-	Visualization::TextRenderer < Visualization::Item > *ti = dynamic_cast<Visualization::TextRenderer<Visualization::Item>*> (target);
-	if ( ti ) ti->setSelected(xBegin, xEnd);
-	else
-	{
-		Visualization::TextRenderer < Visualization::ModelItem > *tmi = dynamic_cast<Visualization::TextRenderer<Visualization::ModelItem>*> (target);
-		if ( tmi ) tmi->setSelected(xBegin, xEnd);
-	}
-}
-
-void HText::resetSelected(Visualization::Item *target)
-{
-	Visualization::TextRenderer < Visualization::Item > *ti = dynamic_cast<Visualization::TextRenderer<Visualization::Item>*> (target);
-	if ( ti ) ti->resetSelected();
-	else
-	{
-		Visualization::TextRenderer < Visualization::ModelItem > *tmi = dynamic_cast<Visualization::TextRenderer<Visualization::ModelItem>*> (target);
-		if ( tmi ) tmi->resetSelected();
-	}
-}
-
-bool HText::isEditable(Visualization::Item *target)
-{
-	Visualization::TextRenderer < Visualization::Item > *ti = dynamic_cast<Visualization::TextRenderer<Visualization::Item>*> (target);
-	if ( ti ) return ti->isEditable();
-
-	Visualization::TextRenderer < Visualization::ModelItem > *tmi = dynamic_cast<Visualization::TextRenderer<Visualization::ModelItem>*> (target);
-	if ( tmi ) return tmi->isEditable();
-
-	return false;
-}
-
 void HText::moveCaret(Visualization::Item *target, QKeyEvent *event)
 {
 	switch (event->key())
