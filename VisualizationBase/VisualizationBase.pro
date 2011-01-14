@@ -45,7 +45,6 @@ HEADERS += headers/items/TextRenderer.h \
     headers/layouts/LayoutStyle.h \
     headers/layouts/PanelBorderLayoutStyle.h \
     headers/layouts/PanelBorderLayout.h \
-    headers/items/NoItem.h \
     headers/layouts/PanelLayoutStyle.h \
     headers/layouts/PanelLayout.h \
     headers/items/VExtendable.h \
@@ -82,7 +81,6 @@ SOURCES += src/items/TextRenderer.cpp \
     src/layouts/LayoutStyle.cpp \
     src/layouts/PanelBorderLayoutStyle.cpp \
     src/layouts/PanelBorderLayout.cpp \
-    src/items/NoItem.cpp \
     src/layouts/PanelLayoutStyle.cpp \
     src/layouts/PanelLayout.cpp \
     src/items/VExtendable.cpp \

@@ -6,14 +6,13 @@
  **********************************************************************************************************************/
 
 #include "layouts/PanelLayout.h"
-#include "items/NoItem.h"
 
 namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS( PanelLayout )
 
 PanelLayout::PanelLayout(Item* parent, const PanelLayoutStyle* style) :
-	Layout(parent, style), first_(new NoItem(this)), middle_(new NoItem(this)), last_(new NoItem(this)), minimalLength(0)
+	Layout(parent, style), first_(NULL), middle_(NULL), last_(NULL), minimalLength(0)
 {
 }
 
@@ -26,18 +25,22 @@ PanelLayout::~PanelLayout()
 void PanelLayout::setItem(Item* item, Item*& position, bool deleteOldItem)
 {
 	if (deleteOldItem) SAFE_DELETE_ITEM( position );
-	if ( !item ) item = new NoItem(NULL);
-	item->setParentItem(this);
+	if ( item ) item->setParentItem(this);
 	position = item;
 	setUpdateNeeded();
 }
 
 void PanelLayout::updateState()
 {
+	QRect first, middle, last;
+	if (first_) first.setSize( QSize(first_->width(), first_->height()) );
+	if (middle_) middle.setSize( QSize(middle_->width(), middle_->height()) );
+	if (last_) last.setSize( QSize(last_->width(), last_->height()) );
+
 	if ( style()->orientation() == PanelLayoutStyle::HorizontalOrientation )
 	{
 		// Get the width of the area where we should put the sequential components
-		int width = first_->width() + middle_->width() + last_->width() + 2 * style()->spaceBetweenElements();
+		int width = first.width() + middle.width() + last.width() + 2 * style()->spaceBetweenElements();
 
 		int outterWidth = width + style()->leftMargin() + style()->rightMargin();
 		if ( getShape() ) outterWidth = getShape()->getOutterWidth(outterWidth);
@@ -45,9 +48,9 @@ void PanelLayout::updateState()
 		if ( minimalLength > outterWidth ) width += minimalLength - outterWidth;
 
 		// Get the height
-		int maxChildHeight = first_->height();
-		if ( middle_->height() > maxChildHeight ) maxChildHeight = middle_->height();
-		if ( last_->height() > maxChildHeight ) maxChildHeight = last_->height();
+		int maxChildHeight = first.height();
+		if ( middle.height() > maxChildHeight ) maxChildHeight = middle.height();
+		if ( last.height() > maxChildHeight ) maxChildHeight = last.height();
 
 		// Set the size
 		setInnerSize(width, maxChildHeight);
@@ -57,25 +60,25 @@ void PanelLayout::updateState()
 
 		// Begin
 		int x = xOffset();
-		if ( style()->alignment() == PanelLayoutStyle::BottomAlignment ) first_->setPos(x, y + maxChildHeight - first_->height());
-		if ( style()->alignment() == PanelLayoutStyle::CenterAlignment ) first_->setPos(x, y + (maxChildHeight - first_->height()) / 2);
+		if ( style()->alignment() == PanelLayoutStyle::BottomAlignment ) first.moveTo(x, y + maxChildHeight - first.height());
+		if ( style()->alignment() == PanelLayoutStyle::CenterAlignment ) first.moveTo(x, y + (maxChildHeight - first.height()) / 2);
 
 		// End
-		x = xOffset() + width - last_->width();
-		if ( style()->alignment() == PanelLayoutStyle::BottomAlignment ) last_->setPos(x, y + maxChildHeight - last_->height());
-		if ( style()->alignment() == PanelLayoutStyle::CenterAlignment ) last_->setPos(x, y + (maxChildHeight - last_->height()) / 2);
+		x = xOffset() + width - last.width();
+		if ( style()->alignment() == PanelLayoutStyle::BottomAlignment ) last.moveTo(x, y + maxChildHeight - last.height());
+		if ( style()->alignment() == PanelLayoutStyle::CenterAlignment ) last.moveTo(x, y + (maxChildHeight - last.height()) / 2);
 
 		// Center
-		x = xOffset() + (width - middle_->width()) / 2;
-		int minX = first_->pos().x() + first_->width() + style()->spaceBetweenElements();
+		x = xOffset() + (width - middle.width()) / 2;
+		int minX = first.x() + first.width() + style()->spaceBetweenElements();
 		if ( x < minX ) x = minX;
-		if ( style()->alignment() == PanelLayoutStyle::BottomAlignment ) middle_->setPos(x, y + maxChildHeight - middle_->height());
-		if ( style()->alignment() == PanelLayoutStyle::CenterAlignment ) middle_->setPos(x, y + (maxChildHeight - middle_->height()) / 2);
+		if ( style()->alignment() == PanelLayoutStyle::BottomAlignment ) middle.moveTo(x, y + maxChildHeight - middle.height());
+		if ( style()->alignment() == PanelLayoutStyle::CenterAlignment ) middle.moveTo(x, y + (maxChildHeight - middle.height()) / 2);
 	}
 	else
 	{
 		// Get the height of the area where we should put the sequential components
-		int height = first_->height() + middle_->height() + last_->height() + 2 * style()->spaceBetweenElements();
+		int height = first.height() + middle.height() + last.height() + 2 * style()->spaceBetweenElements();
 
 		int outterHeight = height + style()->topMargin() + style()->bottomMargin();
 		if ( getShape() ) outterHeight = getShape()->getOutterHeight(outterHeight);
@@ -83,9 +86,9 @@ void PanelLayout::updateState()
 		if ( minimalLength > outterHeight ) height += minimalLength - outterHeight;
 
 		// Get the width
-		int maxChildWidth = first_->width();
-		if ( middle_->width() > maxChildWidth ) maxChildWidth = middle_->width();
-		if ( last_->width() > maxChildWidth ) maxChildWidth = last_->width();
+		int maxChildWidth = first.width();
+		if ( middle.width() > maxChildWidth ) maxChildWidth = middle.width();
+		if ( last.width() > maxChildWidth ) maxChildWidth = last.width();
 
 		// Set the size
 		setInnerSize(maxChildWidth, height);
@@ -95,21 +98,25 @@ void PanelLayout::updateState()
 
 		// Begin
 		int y = yOffset();
-		if ( style()->alignment() == PanelLayoutStyle::RightAlignment ) first_->setPos(x + maxChildWidth - first_->width(), y);
-		if ( style()->alignment() == PanelLayoutStyle::CenterAlignment ) first_->setPos(x + (maxChildWidth - first_->width()) / 2, y);
+		if ( style()->alignment() == PanelLayoutStyle::RightAlignment ) first.moveTo(x + maxChildWidth - first.width(), y);
+		if ( style()->alignment() == PanelLayoutStyle::CenterAlignment ) first.moveTo(x + (maxChildWidth - first.width()) / 2, y);
 
 		// End
-		y = yOffset() + height - last_->height();
-		if ( style()->alignment() == PanelLayoutStyle::RightAlignment ) last_->setPos(x + maxChildWidth - last_->width(), y);
-		if ( style()->alignment() == PanelLayoutStyle::CenterAlignment ) last_->setPos(x + (maxChildWidth - last_->width()) / 2, y);
+		y = yOffset() + height - last.height();
+		if ( style()->alignment() == PanelLayoutStyle::RightAlignment ) last.moveTo(x + maxChildWidth - last.width(), y);
+		if ( style()->alignment() == PanelLayoutStyle::CenterAlignment ) last.moveTo(x + (maxChildWidth - last.width()) / 2, y);
 
 		// Center
 		y = yOffset() + (height - middle_->height()) / 2;
-		int minY = first_->pos().y() + first_->height() + style()->spaceBetweenElements();
+		int minY = first.y() + first.height() + style()->spaceBetweenElements();
 		if ( y < minY ) y = minY;
-		if ( style()->alignment() == PanelLayoutStyle::RightAlignment ) middle_->setPos(x + maxChildWidth - middle_->width(), y);
-		if ( style()->alignment() == PanelLayoutStyle::CenterAlignment ) middle_->setPos(x + (maxChildWidth - middle_->width()) / 2, y);
+		if ( style()->alignment() == PanelLayoutStyle::RightAlignment ) middle.moveTo(x + maxChildWidth - middle.width(), y);
+		if ( style()->alignment() == PanelLayoutStyle::CenterAlignment ) middle.moveTo(x + (maxChildWidth - middle.width()) / 2, y);
 	}
+
+	if (first_) first_->setPos(first.topLeft());
+	if (middle_) middle_->setPos(middle.topLeft());
+	if (last_) last_->setPos(last.topLeft());
 }
 
 }
