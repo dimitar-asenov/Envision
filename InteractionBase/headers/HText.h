@@ -16,6 +16,11 @@ namespace Interaction {
 
 class INTERACTIONBASE_API HText : public GenericHandler
 {
+	private:
+		static QString getText(Visualization::Item *target);
+		static void setSelected(Visualization::Item *target, int xBegin, int xEnd);
+		static void resetSelected(Visualization::Item *target);
+
 	protected:
 		HText();
 

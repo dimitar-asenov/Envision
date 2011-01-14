@@ -30,16 +30,7 @@ void HText::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
 	if (event->key() == Qt::Key_C && event->modifiers() == Qt::ControlModifier)
 	{
-		QString text;
-		Visualization::TextRenderer < Visualization::Item > *ti = dynamic_cast<Visualization::TextRenderer<Visualization::Item>*> (target);
-		if ( ti ) text = ti->getText();
-		else
-		{
-			Visualization::TextRenderer < Visualization::ModelItem > *tmi
-						= dynamic_cast<Visualization::TextRenderer<Visualization::ModelItem>*> (target);
-			if ( tmi ) text = tmi->getText();
-		}
-
+		QString text = getText(target);
 		if (!text.isEmpty()) QApplication::clipboard()->setText(text);
 	}
 }
@@ -48,15 +39,7 @@ void HText::mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEven
 {
 	if ( event->button() == Qt::LeftButton )
 	{
-		Visualization::TextRenderer < Visualization::Item > *ti = dynamic_cast<Visualization::TextRenderer<Visualization::Item>*> (target);
-		if ( ti ) ti->setSelected(event->pos().x(), event->pos().x());
-		else
-		{
-			Visualization::TextRenderer < Visualization::ModelItem > *tmi
-					= dynamic_cast<Visualization::TextRenderer<Visualization::ModelItem>*> (target);
-			if ( tmi ) tmi->setSelected(event->pos().x(), event->pos().x());
-		}
-
+		setSelected(target, event->pos().x(), event->pos().x());
 		target->scene()->clearSelection();
 		target->scene()->updateTopLevelItems();
 	}
@@ -67,26 +50,12 @@ void HText::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent
 {
 	if (!event->buttonDownPos(Qt::LeftButton).isNull() && target->contains( event->pos() ))
 	{
-		Visualization::TextRenderer < Visualization::Item > *ti = dynamic_cast<Visualization::TextRenderer<Visualization::Item>*> (target);
-		if ( ti ) ti->setSelected(event->buttonDownPos(Qt::LeftButton).x(), event->pos().x());
-		else
-		{
-			Visualization::TextRenderer < Visualization::ModelItem > *tmi = dynamic_cast<Visualization::TextRenderer<Visualization::ModelItem>*> (target);
-			if ( tmi ) tmi->setSelected(event->buttonDownPos(Qt::LeftButton).x(), event->pos().x());
-		}
-
+		setSelected(target, event->buttonDownPos(Qt::LeftButton).x(), event->pos().x());
 		target->scene()->clearSelection();
 	}
 	else
 	{
-		Visualization::TextRenderer < Visualization::Item > *ti = dynamic_cast<Visualization::TextRenderer<Visualization::Item>*> (target);
-		if ( ti ) ti->resetSelected();
-		else
-		{
-			Visualization::TextRenderer < Visualization::ModelItem > *tmi = dynamic_cast<Visualization::TextRenderer<Visualization::ModelItem>*> (target);
-			if ( tmi ) tmi->resetSelected();
-		}
-
+		resetSelected(target);
 		GenericHandler::mouseMoveEvent(target, event);
 	}
 
@@ -95,13 +64,37 @@ void HText::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent
 
 void HText::focusOutEvent(Visualization::Item *target, QFocusEvent *)
 {
+	resetSelected(target);
+}
+
+// TextRenderer interface routines.
+QString HText::getText(Visualization::Item *target)
+{
 	Visualization::TextRenderer < Visualization::Item > *ti = dynamic_cast<Visualization::TextRenderer<Visualization::Item>*> (target);
-		if ( ti ) ti->resetSelected();
-		else
-		{
-			Visualization::TextRenderer < Visualization::ModelItem > *tmi = dynamic_cast<Visualization::TextRenderer<Visualization::ModelItem>*> (target);
-			if ( tmi ) tmi->resetSelected();
-		}
+	if ( ti ) return ti->getText();
+
+	Visualization::TextRenderer < Visualization::ModelItem > *tmi = dynamic_cast<Visualization::TextRenderer<Visualization::ModelItem>*> (target);
+	if ( tmi ) return tmi->getText();
+
+	return QString();
+}
+
+void HText::setSelected(Visualization::Item *target, int xBegin, int xEnd)
+{
+	Visualization::TextRenderer < Visualization::Item > *ti = dynamic_cast<Visualization::TextRenderer<Visualization::Item>*> (target);
+	if ( ti ) return ti->setSelected(xBegin, xEnd);
+
+	Visualization::TextRenderer < Visualization::ModelItem > *tmi = dynamic_cast<Visualization::TextRenderer<Visualization::ModelItem>*> (target);
+	if ( tmi ) return tmi->setSelected(xBegin, xEnd);
+}
+
+void HText::resetSelected(Visualization::Item *target)
+{
+	Visualization::TextRenderer < Visualization::Item > *ti = dynamic_cast<Visualization::TextRenderer<Visualization::Item>*> (target);
+	if ( ti ) return ti->resetSelected();
+
+	Visualization::TextRenderer < Visualization::ModelItem > *tmi = dynamic_cast<Visualization::TextRenderer<Visualization::ModelItem>*> (target);
+	if ( tmi ) return tmi->resetSelected();
 }
 
 }
