@@ -25,6 +25,8 @@ class VISUALIZATIONBASE_API TextRenderer : public T
 			qreal xOffset;
 			qreal yOffset;
 
+			bool editable;
+
 			/**
 			 * This is the text item that is currently selected. If this is NULL a text item is not currently selected. If the
 			 * current item is equal to the selected item, then additional drawing takes place. This is the vertical caret.
@@ -52,6 +54,8 @@ class VISUALIZATIONBASE_API TextRenderer : public T
 			virtual void determineChildren();
 			virtual void updateState();
 
+			void setText(const QString& newText);
+
 		public:
 			TextRenderer(Item* parent, const TextStyle *style, const QString& text = QString());
 			TextRenderer(Item* parent, Model::Node *node, const TextStyle *style);
@@ -59,13 +63,22 @@ class VISUALIZATIONBASE_API TextRenderer : public T
 			const TextStyle* style() const;
 			virtual void setStyle(const ItemStyle* style);
 
-			void setText(const QString& newText);
-			QString getText(bool onlySelected = true);
+			QString getText();
+			QString getSelectedText();
+
+			bool isEditable();
+			void setEditable(bool editable);
 
 			virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
 			void setSelected(int xBegin, int xEnd);
+			void setCaretPosition(int beforeCharacter);
 			static void resetSelected();
+
+			static int caretPosition();
+			static int selectionFirstInxed();
+			static int selectionLastIndex();
+
 };
 
 }

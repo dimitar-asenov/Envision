@@ -21,6 +21,8 @@ class VISUALIZATIONBASE_API Text : public TextRenderer<Item>
 	public:
 		Text(Item* parent, const QString& text = QString());
 		Text(Item* parent, const TextStyle *style, const QString& text = QString());
+
+		void setText(const QString& newText);
 };
 
 }

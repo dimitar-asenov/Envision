@@ -23,12 +23,12 @@ template<class T> int TextRenderer<T>::selectionXEnd = 0;
 template<class T> int TextRenderer<T>::caretX = 0;
 
 template<class T> TextRenderer<T>::TextRenderer(Item* parent, const TextStyle *style, const QString& text_) :
-	T(parent, style), text(text_)
+	T(parent, style), text(text_), editable(true)
 {
 }
 
 template<class T> TextRenderer<T>::TextRenderer(Item* parent, Model::Node *node, const TextStyle *style) :
-	T(parent, node, style)
+	T(parent, node, style), editable(true)
 {;
 }
 
@@ -49,9 +49,14 @@ template<class T> void TextRenderer<T>::setText(const QString& newText)
 	text = newText;
 }
 
-template<class T> QString TextRenderer<T>::getText(bool onlySelected)
+template<class T> QString TextRenderer<T>::getText()
 {
-	if (onlySelected && selected == this)
+	return text;
+}
+
+template<class T> QString TextRenderer<T>::getSelectedText()
+{
+	if (selected == this)
 	{
 		int xstart = selectionBegin;
 		int xend = selectionEnd;
@@ -63,7 +68,17 @@ template<class T> QString TextRenderer<T>::getText(bool onlySelected)
 
 		return text.mid(xstart, xend - xstart);
 	}
-	else return text;
+	else return QString();
+}
+
+template<class T> bool TextRenderer<T>::isEditable()
+{
+	return editable;
+}
+
+template<class T> void TextRenderer<T>::setEditable(bool editable_)
+{
+	editable = editable_;
 }
 
 template<class T> void TextRenderer<T>::determineChildren()
@@ -172,6 +187,29 @@ template<class T> void TextRenderer<T>::resetSelected()
 {
 	if ( selected ) selected->setUpdateNeeded();
 	selected = NULL;
+}
+
+template<class T> int TextRenderer<T>::selectionFirstInxed()
+{
+	return selectionBegin < selectionEnd ? selectionBegin : selectionEnd;
+}
+
+template<class T> int TextRenderer<T>::selectionLastIndex()
+{
+	return selectionBegin > selectionEnd ? selectionBegin : selectionEnd;
+}
+
+template<class T> int TextRenderer<T>::caretPosition()
+{
+	return selectionEnd;
+}
+
+template<class T> void TextRenderer<T>::setCaretPosition(int beforeCharacter)
+{
+	selectionBegin = beforeCharacter;
+	selectionEnd = beforeCharacter;
+	selected = this;
+	this->setUpdateNeeded();
 }
 
 // Specialization of constructors
