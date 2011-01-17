@@ -92,7 +92,7 @@ InteractionHandler* Item::handler() const
 	return InteractionHandler::instance();
 }
 
-void Item::execute(QString command)
+void Item::execute(const QString& command)
 {
 	handler()->command(this, command);
 }

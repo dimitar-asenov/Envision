@@ -26,7 +26,7 @@ InteractionHandler* InteractionHandler::instance()
 }
 
 // Command events
-void InteractionHandler::command(Item *, QString) {}
+void InteractionHandler::command(Item *, const QString&) {}
 
 // Keyboard events
 void InteractionHandler::keyPressEvent(Item *target, QKeyEvent *event) { target->defaultKeyPressEvent(event); }

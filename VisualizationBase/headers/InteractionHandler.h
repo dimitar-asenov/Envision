@@ -57,7 +57,7 @@ class VISUALIZATIONBASE_API InteractionHandler
 		virtual void focusOutEvent(Item *target, QFocusEvent *event);
 
 		// Command events
-		virtual void command(Item *target, QString command);
+		virtual void command(Item *target, const QString& command);
 
 		// Destructor
 		virtual ~InteractionHandler();
