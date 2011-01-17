@@ -28,7 +28,8 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/items/TextRenderer.h \
+HEADERS += headers/items/SceneHandlerItem.h \
+    headers/items/TextRenderer.h \
     headers/InteractionHandler.h \
     headers/views/MiniMap.h \
     headers/views/View.h \
@@ -65,7 +66,8 @@ HEADERS += headers/items/TextRenderer.h \
     src/visualizationbase.h \
     headers/VisualizationException.h \
     headers/visualizationbase_api.h
-SOURCES += src/items/TextRenderer.cpp \
+SOURCES += src/items/SceneHandlerItem.cpp \
+    src/items/TextRenderer.cpp \
     src/InteractionHandler.cpp \
     src/views/MiniMap.cpp \
     src/views/MainView.cpp \

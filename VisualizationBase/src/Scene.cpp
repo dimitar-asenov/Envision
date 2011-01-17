@@ -8,6 +8,7 @@
 #include "Scene.h"
 #include "VisualizationManager.h"
 #include "items/Item.h"
+#include "items/SceneHandlerItem.h"
 
 #include <QtGui/QApplication>
 #include <QtCore/QEvent>
@@ -21,7 +22,7 @@ class UpdateSceneEvent : public QEvent
 		UpdateSceneEvent() : QEvent(EventType){};
 };
 
-Scene::Scene() : QGraphicsScene(VisualizationManager::instance().getMainWindow()), renderer_(NULL)
+Scene::Scene() : QGraphicsScene(VisualizationManager::instance().getMainWindow()), renderer_(NULL), sceneHandlerItem_(new SceneHandlerItem(this))
 {
 	// TODO Auto-generated constructor stub
 }
