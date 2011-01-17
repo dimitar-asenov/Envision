@@ -27,7 +27,8 @@ pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
-HEADERS += headers/commands/CommandHelp.h \
+HEADERS += headers/commands/CommandExecutionEngine.h \
+    headers/commands/CommandHelp.h \
     headers/commands/CommandError.h \
     headers/commands/CommandSuggestion.h \
     headers/commands/CommandResult.h \
@@ -37,7 +38,8 @@ HEADERS += headers/commands/CommandHelp.h \
     headers/HText.h \
     headers/interactionbase_api.h \
     src/interactionbase.h
-SOURCES += src/commands/CommandHelp.cpp \
+SOURCES += src/commands/CommandExecutionEngine.cpp \
+    src/commands/CommandHelp.cpp \
     src/commands/CommandError.cpp \
     src/commands/CommandSuggestion.cpp \
     src/commands/CommandResult.cpp \

@@ -19,13 +19,17 @@
 
 #include "SelfTest/headers/SelfTestSuite.h"
 
+using namespace Logger;
 
 Q_EXPORT_PLUGIN2( interactionbase, Interaction::InteractionBase )
 
 namespace Interaction {
 
+Log* InteractionBase::logger = NULL;
+
 bool InteractionBase::initialize(Envision::EnvisionManager&)
 {
+	logger = Logger::Log::getLogger("interactionbase");
 	Visualization::VExtendable::setInteractionHandler(HExtendable::instance());
 	Visualization::VList::setInteractionHandler(GenericHandler::instance());
 	Visualization::Text::setInteractionHandler(HText::instance());
@@ -39,6 +43,11 @@ void InteractionBase::selfTest(QString testid)
 
 	if (testid.isEmpty()) SelfTest::TestManager<InteractionBase>::runAllTests().printResultStatistics();
 	else SelfTest::TestManager<InteractionBase>::runTest(testid).printResultStatistics();
+}
+
+Log* InteractionBase::log()
+{
+	return logger;
 }
 
 }

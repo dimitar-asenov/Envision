@@ -23,6 +23,8 @@ class INTERACTIONBASE_API CommandResult
 		enum Code {OK, CanNotInterpret, Error};
 
 		CommandResult(Code resultCode = OK);
+		CommandResult(CommandError* error);
+		CommandResult(CommandError* error, CommandSuggestion* suggestion);
 		virtual ~CommandResult();
 
 		Code code() const;

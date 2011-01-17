@@ -7,6 +7,8 @@
 
 #include "commands/CommandSuggestion.h"
 
+#include "VisualizationBase/headers/items/Item.h"
+
 namespace Interaction {
 
 CommandSuggestion::CommandSuggestion(const QString& suggestion, const QString& description, Visualization::Item* visualization) :
@@ -16,6 +18,7 @@ CommandSuggestion::CommandSuggestion(const QString& suggestion, const QString& d
 
 CommandSuggestion::~CommandSuggestion()
 {
+	SAFE_DELETE_ITEM(suggestionVisualization);
 }
 
 }

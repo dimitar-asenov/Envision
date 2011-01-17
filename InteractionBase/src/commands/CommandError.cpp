@@ -16,6 +16,7 @@ CommandError::CommandError(const QString& message, Visualization::Item* visualiz
 
 CommandError::~CommandError()
 {
+	SAFE_DELETE_ITEM(visualization_);
 }
 
 }

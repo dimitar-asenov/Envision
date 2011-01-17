@@ -15,17 +15,37 @@
 
 namespace Interaction {
 
+class Command;
+class CommandExecutionEngine;
+
 class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHandler
 {
-	protected:
-		GenericHandler();
-
 	public:
 		static GenericHandler* instance();
 
+		const QList<Command*>& commands();
+		void addCommand(Command* command);
+
+		void setCommandExecutionEngine(CommandExecutionEngine *engine);
+
+		// Mouse events
 		virtual void mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event);
 		virtual void mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event);
+
+		// Command events
+		virtual void command(Visualization::Item *target, const QString& command);
+
+	protected:
+		GenericHandler();
+
+	private:
+		QList<Command*> supportedCommands;
+		CommandExecutionEngine* executionEngine;
 };
+
+inline const QList<Command*>& GenericHandler::commands() { return supportedCommands; }
+inline void GenericHandler::addCommand(Command* command) { supportedCommands.append(command); }
+inline void GenericHandler::setCommandExecutionEngine(CommandExecutionEngine *engine) { executionEngine = engine; };
 
 }
 

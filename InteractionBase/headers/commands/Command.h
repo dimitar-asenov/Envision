@@ -16,6 +16,7 @@
 
 #include "VisualizationBase/headers/items/Item.h"
 
+#include <QtCore/QStringList>
 #include <QtCore/QList>
 
 namespace Interaction {
@@ -23,15 +24,13 @@ namespace Interaction {
 class INTERACTIONBASE_API Command
 {
 	public:
-		enum InterpretationPossible {No, Yes, DontKnow};
-
 		virtual ~Command();
 
-		virtual InterpretationPossible canInterpret(Visualization::Item* source, Visualization::Item* target, const QString& command);
-		virtual CommandResult execute(Visualization::Item* source, Visualization::Item* target, const QString& command) = 0;
+		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target, const QStringList& commandTokens);
+		virtual CommandResult* execute(Visualization::Item* source, Visualization::Item* target, const QStringList& commandTokens) = 0;
 
 		virtual QList<CommandSuggestion*> suggest(Visualization::Item* source, Visualization::Item* target, const QString& textSoFar);
-		virtual QList<QString> commandForms(Visualization::Item* source, Visualization::Item* target, const QString& textSoFar) = 0;
+		virtual QStringList commandForms(Visualization::Item* source, Visualization::Item* target, const QString& textSoFar) = 0;
 		virtual QList<CommandHelp*> extendedHelp(Visualization::Item* source, Visualization::Item* target, const QString& commandForm = QString());
 };
 

@@ -10,6 +10,8 @@
 
 #include "EnvisionPlugin.h"
 
+#include "Logger/headers/Log.h"
+
 namespace Interaction {
 
 /**
@@ -28,6 +30,11 @@ class InteractionBase : public QObject, public Envision::EnvisionPlugin
 	public:
 		bool initialize(Envision::EnvisionManager&);
 		void selfTest(QString testid);
+
+		static Logger::Log* log();
+
+	private:
+		static Logger::Log* logger;
 };
 
 }

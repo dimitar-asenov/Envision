@@ -7,11 +7,14 @@
 
 #include "GenericHandler.h"
 
+#include "commands/CommandExecutionEngine.h"
+
 #include "VisualizationBase/headers/Scene.h"
 
 namespace Interaction {
 
-GenericHandler::GenericHandler()
+GenericHandler::GenericHandler() :
+	executionEngine(CommandExecutionEngine::instance())
 {
 }
 
@@ -19,6 +22,11 @@ GenericHandler* GenericHandler::instance()
 {
 	static GenericHandler h;
 	return &h;
+}
+
+void GenericHandler::command(Visualization::Item *target, const QString& command)
+{
+	executionEngine->execute(target, command);
 }
 
 void GenericHandler::mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)

@@ -13,9 +13,9 @@ Command::~Command()
 {
 }
 
-Command::InterpretationPossible Command::canInterpret(Visualization::Item*, Visualization::Item*, const QString&)
+bool Command::canInterpret(Visualization::Item*, Visualization::Item*, const QStringList&)
 {
-	return DontKnow;
+	return true;
 }
 
 QList<CommandSuggestion*> Command::suggest(Visualization::Item*, Visualization::Item*, const QString&)
