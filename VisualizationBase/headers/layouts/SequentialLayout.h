@@ -32,6 +32,7 @@ class VISUALIZATIONBASE_API SequentialLayout: public Layout
 		void prepend(Item* item);
 		void insert(Item* item, int position);
 		void remove(int index, bool deleteItem = true);
+		void removeAll(bool deleteItems = true);
 
 		template <class T> T* at(int index);
 

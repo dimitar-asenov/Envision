@@ -15,6 +15,8 @@
 
 namespace Visualization {
 
+const int MIN_TEXT_WIDTH = 10;
+
 template<class T> TextRenderer<T>* TextRenderer<T>::selected = NULL;
 template<class T> int TextRenderer<T>::selectionBegin = 0;
 template<class T> int TextRenderer<T>::selectionEnd = 0;
@@ -90,7 +92,15 @@ template<class T> void TextRenderer<T>::updateGeometry(int, int)
 	this->setFlag(QGraphicsItem::ItemHasNoContents, false);
 	QFontMetrics qfm(style()->font());
 
-	QRectF bound = qfm.boundingRect(text);
+	QRectF bound;
+	if (text.isEmpty()) bound.setRect(0, 0, MIN_TEXT_WIDTH, qfm.height());
+	else
+	{
+		bound = qfm.boundingRect(text);
+		if (bound.width() < qfm.width(text)) bound.setWidth(qfm.width(text));
+		if (bound.height() < qfm.height()) bound.setHeight(qfm.height());
+	}
+
 	xOffset = -bound.left();
 	yOffset = -bound.top();
 	this->setSize(bound.size());

@@ -55,6 +55,12 @@ void SequentialLayout::remove(int index, bool deleteItem_)
 	setUpdateNeeded();
 }
 
+void SequentialLayout::removeAll(bool deleteItems)
+{
+	if (deleteItems) while (!items.isEmpty()) SAFE_DELETE_ITEM(items.last());
+	items.clear();
+}
+
 void SequentialLayout::updateGeometry(int, int)
 {
 	// Get the maximum width and height of any element.
