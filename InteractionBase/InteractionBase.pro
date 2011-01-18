@@ -25,9 +25,14 @@ CONFIG += plugin \
 target.path = $$PLUGINS_DIR
 pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
+styles.path = $${BUILD_DIR}/styles
+styles.files = styles/*
 INSTALLS += target \
-    pluginmeta
-HEADERS += headers/commands/CommandExecutionEngine.h \
+    pluginmeta \
+    styles
+HEADERS += headers/vis/TextAndDescriptionStyle.h \
+    headers/vis/TextAndDescription.h \
+    headers/commands/CommandExecutionEngine.h \
     headers/commands/CommandHelp.h \
     headers/commands/CommandError.h \
     headers/commands/CommandSuggestion.h \
@@ -38,7 +43,9 @@ HEADERS += headers/commands/CommandExecutionEngine.h \
     headers/HText.h \
     headers/interactionbase_api.h \
     src/interactionbase.h
-SOURCES += src/commands/CommandExecutionEngine.cpp \
+SOURCES += src/vis/TextAndDescriptionStyle.cpp \
+    src/vis/TextAndDescription.cpp \
+    src/commands/CommandExecutionEngine.cpp \
     src/commands/CommandHelp.cpp \
     src/commands/CommandError.cpp \
     src/commands/CommandSuggestion.cpp \
