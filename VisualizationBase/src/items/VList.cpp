@@ -48,9 +48,16 @@ void VList::determineChildren()
 	}
 }
 
-void VList::updateGeometry(int, int)
+void VList::updateGeometry(int availableWidth, int availableHeight)
 {
+	if ( items_.sizeDependsOnParent() && (availableWidth > 0 || availableHeight > 0))
+		items_.changeGeometry(availableWidth, availableHeight);
 	setSize( items_.size() );
+}
+
+bool VList::sizeDependsOnParent() const
+{
+	return items_.sizeDependsOnParent();
 }
 
 void VList::paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *)

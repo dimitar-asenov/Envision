@@ -76,6 +76,15 @@ void SequentialLayout::updateGeometry(int, int)
 	bool horizontal = style()->direction() == SequentialLayoutStyle::LeftToRight || style()->direction() == SequentialLayoutStyle::RightToLeft;
 	bool forward = style()->direction() == SequentialLayoutStyle::LeftToRight || style()->direction() == SequentialLayoutStyle::TopToBottom;
 
+	// Update the geometry of children whose size varies
+	for (int i = 0; i != items.size(); ++i)
+	{
+		if (items[i]->sizeDependsOnParent())
+		{
+			if (horizontal) items[i]->changeGeometry(0, maxChildHeight);
+			else items[i]->changeGeometry(maxChildWidth, 0);
+		}
+	}
 
 	// Set the size
 	if (horizontal) sizeHeight = style()->topMargin() + maxChildHeight + style()->bottomMargin();

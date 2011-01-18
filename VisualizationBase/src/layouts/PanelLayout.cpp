@@ -30,6 +30,11 @@ void PanelLayout::setItem(Item* item, Item*& position, bool deleteOldItem)
 	setUpdateNeeded();
 }
 
+bool PanelLayout::sizeDependsOnParent() const
+{
+	return true;
+}
+
 void PanelLayout::updateGeometry(int availableWidth, int availableHeight)
 {
 	QRect first, middle, last;

@@ -58,6 +58,10 @@ void PanelBorderLayout::updateGeometry(int, int)
 	if ( left_ && left_->height() > innerHeight ) innerHeight = left_->height();
 	if ( right_ && right_->height() > innerHeight ) innerHeight = right_->height();
 
+	//Adjust the size of the content if necessary
+	if (content_ && content_->sizeDependsOnParent())
+		content_->changeGeometry(innerWidth + (maxMiddleWidth - middleWidth), innerHeight);
+
 	//Adjust panels and/or the inner size
 	if ( maxMiddleWidth > middleWidth ) innerWidth += maxMiddleWidth - middleWidth;
 	if ( top_ && maxMiddleWidth > top_->width() ) top_->changeGeometry(maxMiddleWidth, 0);
