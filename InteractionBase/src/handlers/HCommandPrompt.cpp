@@ -8,6 +8,10 @@
 #include "handlers/HCommandPrompt.h"
 
 #include "vis/CommandPrompt.h"
+#include "commands/CommandExecutionEngine.h"
+#include "commands/CommandResult.h"
+
+#include "VisualizationBase/headers/Scene.h"
 
 #include <QtCore/QtDebug>
 
@@ -30,6 +34,19 @@ void HCommandPrompt::keyReleaseEvent(Visualization::Item *target, QKeyEvent *eve
 		CommandPrompt* prompt = static_cast<CommandPrompt*> (target);
 		qDebug() << prompt->text();
 		prompt->commandReceiver()->execute(prompt->text());
+
+		CommandResult* result = executionEngine()->result();
+
+		if ( result->code() == CommandResult::OK)
+		{
+
+		}
+		else
+		{
+			prompt->setSuggestions(result->suggestions());
+			prompt->setErrors(result->errors());
+			prompt->scene()->updateTopLevelItems();
+		}
 	}
 	else GenericHandler::keyReleaseEvent(target, event);
 }

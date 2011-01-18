@@ -15,7 +15,7 @@
 namespace Interaction {
 
 GenericHandler::GenericHandler() :
-	executionEngine(CommandExecutionEngine::instance()), prompt_(NULL)
+	executionEngine_(CommandExecutionEngine::instance()), prompt_(NULL)
 {
 }
 
@@ -43,7 +43,7 @@ void GenericHandler::newCommandPrompt(Visualization::Item* commandReceiver)
 
 void GenericHandler::command(Visualization::Item *target, const QString& command)
 {
-	executionEngine->execute(target, command);
+	executionEngine_->execute(target, command);
 }
 
 void GenericHandler::keyReleaseEvent(Visualization::Item *target, QKeyEvent *event)
