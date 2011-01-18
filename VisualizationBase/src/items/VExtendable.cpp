@@ -150,11 +150,6 @@ void VExtendable::updateGeometry(int, int)
 	}
 }
 
-void VExtendable::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-{
-	if ( getShape() ) ModelItem::paint(painter, option, widget);
-}
-
 void VExtendable::setExpanded(bool expanded)
 {
 	if ( expanded != style()->expanded() )

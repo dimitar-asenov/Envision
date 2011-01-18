@@ -105,6 +105,18 @@ int Shape::contentTop()
 	return yOffset_;
 }
 
+int Shape::getInnerWidth(int outterWidth) const
+{
+	if (style_) return outterWidth - std::ceil(style_->outline().width());
+	return outterWidth;
+}
+
+int Shape::getInnerHeight(int outterHeight) const
+{
+	if (style_) return outterHeight - std::ceil(style_->outline().width());
+	return outterHeight;
+}
+
 int Shape::getOutterWidth(int innerWidth) const
 {
 	if (style_) return innerWidth + std::ceil(style_->outline().width());

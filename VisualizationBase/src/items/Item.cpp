@@ -95,11 +95,38 @@ void Item::updateChildren()
 	}
 }
 
+void Item::updateGeometry(Item* content, int availableWidth, int availableHeight)
+{
+	if (style()->hasShape())
+	{
+		int width = getShape()->getInnerWidth(availableWidth);
+		int height = getShape()->getInnerHeight(availableHeight);
+
+		if (content->sizeDependsOnParent() && (availableWidth > 0 || availableHeight > 0))
+			content->changeGeometry(width, height);
+
+		if (content->width() > width ) width = content->width();
+		if (content->height() > height ) height = content->height();
+
+		getShape()->setOffset(0, 0);
+
+		if ( sizeDependsOnParent() ) getShape()->setInnerSize(width, height);
+		else getShape()->setInnerSize(content->width(), content->height());
+
+		content->setPos(getShape()->contentLeft(), getShape()->contentTop());
+	}
+	else
+	{
+		if (content->sizeDependsOnParent() && (availableWidth > 0 || availableHeight > 0))
+			content->changeGeometry(availableWidth, availableHeight);
+		content->setPos(0,0);
+		setSize(content->size());
+	}
+}
+
 void Item::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
 	if ( shape_ ) shape_->paint(painter, option, widget);
-	else
-		throw VisualizationException("Calling Item::paint without specifying a shape.");
 }
 
 InteractionHandler* Item::handler() const

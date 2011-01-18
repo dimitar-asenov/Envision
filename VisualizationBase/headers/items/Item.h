@@ -72,6 +72,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 
 		virtual void determineChildren() = 0;
 		virtual void updateGeometry(int availableWidth, int availableHeight) = 0;
+		void updateGeometry(Item* content, int availableWidth, int availableHeight);
 
 		//Event handlers
 		// Keyboard events

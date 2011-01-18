@@ -102,6 +102,20 @@ int Box::contentTop()
 	return yOffset() + style()->cornerRadius() + (style()->outline().width() + 1) / 2;
 }
 
+int Box::getInnerWidth(int outterWidth) const
+{
+	int innerWidth = outterWidth - 2 * style()->cornerRadius() - std::ceil(style()->outline().width());
+	if ( style()->shadow() != Qt::NoBrush ) innerWidth -= style()->xShadowOffset();
+	return innerWidth;
+}
+
+int Box::getInnerHeight(int outterHeight) const
+{
+	int innerHeight = outterHeight - 2 * style()->cornerRadius() - std::ceil(style()->outline().width());
+	if ( style()->shadow() != Qt::NoBrush ) innerHeight -= style()->yShadowOffset();
+	return innerHeight;
+}
+
 int Box::getOutterWidth(int innerWidth) const
 {
 	int outterWidth = innerWidth + 2 * style()->cornerRadius() + std::ceil(style()->outline().width());

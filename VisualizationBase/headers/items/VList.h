@@ -37,7 +37,6 @@ class VISUALIZATIONBASE_API VList: public ModelItem
 		template <class T> T* at(int index);
 
 		virtual bool sizeDependsOnParent() const;
-		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 };
 
 inline int VList::length() const { return items_.length(); }

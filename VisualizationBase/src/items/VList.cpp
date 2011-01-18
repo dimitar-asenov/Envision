@@ -50,20 +50,12 @@ void VList::determineChildren()
 
 void VList::updateGeometry(int availableWidth, int availableHeight)
 {
-	if ( items_.sizeDependsOnParent() && (availableWidth > 0 || availableHeight > 0))
-		items_.changeGeometry(availableWidth, availableHeight);
-	setSize( items_.size() );
+	Item::updateGeometry(&items_, availableWidth, availableHeight);
 }
 
 bool VList::sizeDependsOnParent() const
 {
 	return items_.sizeDependsOnParent();
-}
-
-void VList::paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *)
-{
-	// Currently, a shape on the list itself is not supported. Put a shape on the layout instead.
-	//if ( getShape() ) ModelItem::paint(painter, option, widget);
 }
 
 }

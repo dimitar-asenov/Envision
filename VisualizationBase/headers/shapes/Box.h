@@ -36,6 +36,8 @@ class VISUALIZATIONBASE_API Box: public Shape
 		virtual void update();
 		virtual int contentLeft();
 		virtual int contentTop();
+		virtual int getInnerWidth(int outterWidth) const;
+		virtual int getInnerHeight(int outterHeight) const;
 		virtual int getOutterWidth(int innerWidth) const;
 		virtual int getOutterHeight(int innerHeight) const;
 

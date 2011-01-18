@@ -26,12 +26,12 @@ public:																																					\
 	static const QString& className() { static QString name(#ItemClass); return name; }											\
 																																							\
 	const StyleType* style() const { return static_cast<const StyleType*> (BaseClass::style()); }							\
-	virtual void setStyle(const ItemStyle* style);																							\
-	virtual InteractionHandler* handler() const { return handler_; };																	\
-	static void setInteractionHandler(InteractionHandler* handler) {handler_ = handler;}										\
+	virtual void setStyle(const Visualization::ItemStyle* style);																		\
+	virtual Visualization::InteractionHandler* handler() const { return handler_; };												\
+	static void setInteractionHandler(Visualization::InteractionHandler* handler) {handler_ = handler;}					\
 																																							\
 private:																																					\
-	static InteractionHandler* handler_;																										\
+	static Visualization::InteractionHandler* handler_;																					\
 
 
 /**
@@ -52,12 +52,12 @@ private:																																					\
  * 			The name of the class being defined.
  */
 #define ITEM_COMMON_DEFINITIONS( ItemClass )																									\
-InteractionHandler* ItemClass::handler_ = InteractionHandler::instance();															\
+Visualization::InteractionHandler* ItemClass::handler_ = Visualization::InteractionHandler::instance();					\
 																																							\
-void ItemClass::setStyle(const ItemStyle* style)																							\
+void ItemClass::setStyle(const Visualization::ItemStyle* style)																		\
 {																																							\
 	const StyleType* s = dynamic_cast<const StyleType*> (style);																		\
-	if (!s) throw VisualizationException("Invalid style type when calling " #ItemClass "::setStyle");						\
+	if (!s) throw Visualization::VisualizationException("Invalid style type when calling " #ItemClass "::setStyle");	\
 	Item::setStyle(s);																																\
 }																																							\
 
