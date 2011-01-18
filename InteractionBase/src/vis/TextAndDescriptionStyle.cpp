@@ -11,10 +11,6 @@
 
 namespace Interaction {
 
-TextAndDescriptionStyle::TextAndDescriptionStyle()
-{
-}
-
 TextAndDescriptionStyle* TextAndDescriptionStyle::getDefault()
 {
 	static TextAndDescriptionStyle defaultStyle;

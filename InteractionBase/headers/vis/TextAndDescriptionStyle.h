@@ -24,7 +24,6 @@ class INTERACTIONBASE_API TextAndDescriptionStyle : public Visualization::ItemSt
 		Visualization::TextStyle description_;
 
 	public:
-		TextAndDescriptionStyle();
 		void load();
 
 		const Visualization::SequentialLayoutStyle& layout() const;

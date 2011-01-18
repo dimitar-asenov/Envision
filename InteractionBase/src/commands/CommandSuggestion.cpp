@@ -18,7 +18,8 @@ CommandSuggestion::CommandSuggestion(const QString& suggestion, const QString& d
 
 CommandSuggestion::~CommandSuggestion()
 {
-	SAFE_DELETE_ITEM(suggestionVisualization);
+	// do not delete this, this is the reponsibility of the object handling this suggestion.
+	suggestionVisualization = NULL;
 }
 
 }

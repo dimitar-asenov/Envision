@@ -30,7 +30,9 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/vis/TextAndDescriptionStyle.h \
+HEADERS += headers/vis/CommandPromptStyle.h \
+    headers/vis/CommandPrompt.h \
+    headers/vis/TextAndDescriptionStyle.h \
     headers/vis/TextAndDescription.h \
     headers/commands/CommandExecutionEngine.h \
     headers/commands/CommandHelp.h \
@@ -43,7 +45,9 @@ HEADERS += headers/vis/TextAndDescriptionStyle.h \
     headers/HText.h \
     headers/interactionbase_api.h \
     src/interactionbase.h
-SOURCES += src/vis/TextAndDescriptionStyle.cpp \
+SOURCES += src/vis/CommandPromptStyle.cpp \
+    src/vis/CommandPrompt.cpp \
+    src/vis/TextAndDescriptionStyle.cpp \
     src/vis/TextAndDescription.cpp \
     src/commands/CommandExecutionEngine.cpp \
     src/commands/CommandHelp.cpp \

@@ -8,13 +8,14 @@
 #include "GenericHandler.h"
 
 #include "commands/CommandExecutionEngine.h"
+#include "vis/CommandPrompt.h"
 
 #include "VisualizationBase/headers/Scene.h"
 
 namespace Interaction {
 
 GenericHandler::GenericHandler() :
-	executionEngine(CommandExecutionEngine::instance())
+	executionEngine(CommandExecutionEngine::instance()), prompt_(NULL)
 {
 }
 
@@ -24,9 +25,33 @@ GenericHandler* GenericHandler::instance()
 	return &h;
 }
 
+void GenericHandler::removeCommandPrompt()
+{
+	SAFE_DELETE_ITEM(prompt_);
+}
+
+void GenericHandler::newCommandPrompt(Visualization::Item* commandReceiver)
+{
+	removeCommandPrompt();
+	prompt_ = new CommandPrompt(commandReceiver);
+	prompt_->setPos( commandReceiver->mapToScene(commandReceiver->pos()));
+	commandReceiver->scene()->addTopLevelItem(prompt_);
+	prompt_->initializeCommand();
+	commandReceiver->scene()->updateTopLevelItems();
+}
+
 void GenericHandler::command(Visualization::Item *target, const QString& command)
 {
 	executionEngine->execute(target, command);
+}
+
+void GenericHandler::keyReleaseEvent(Visualization::Item *target, QKeyEvent *event)
+{
+	if (event->key() == Qt::Key_Escape)
+	{
+		newCommandPrompt(target);
+	}
+	else InteractionHandler::keyReleaseEvent(target, event);
 }
 
 void GenericHandler::mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)

@@ -17,6 +17,7 @@ namespace Interaction {
 
 class Command;
 class CommandExecutionEngine;
+class CommandPrompt;
 
 class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHandler
 {
@@ -27,6 +28,13 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 		void addCommand(Command* command);
 
 		void setCommandExecutionEngine(CommandExecutionEngine *engine);
+
+		CommandPrompt* prompt();
+		void removeCommandPrompt();
+		void newCommandPrompt(Visualization::Item* commandRecevier);
+
+		// Keyboard events
+		virtual void keyReleaseEvent(Visualization::Item *target, QKeyEvent *event);
 
 		// Mouse events
 		virtual void mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event);
@@ -41,11 +49,13 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 	private:
 		QList<Command*> supportedCommands;
 		CommandExecutionEngine* executionEngine;
+		CommandPrompt* prompt_;
 };
 
 inline const QList<Command*>& GenericHandler::commands() { return supportedCommands; }
 inline void GenericHandler::addCommand(Command* command) { supportedCommands.append(command); }
 inline void GenericHandler::setCommandExecutionEngine(CommandExecutionEngine *engine) { executionEngine = engine; };
+inline CommandPrompt* GenericHandler::prompt() { return prompt_; }
 
 }
 

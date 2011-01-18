@@ -31,8 +31,8 @@ class INTERACTIONBASE_API TextAndDescription : public Visualization::Item
 		void setContents(const QString& text, const QString& description);
 
 	protected:
-		void determineChildren();
-		void updateGeometry(int availableWidth, int availableHeight);
+		virtual void determineChildren();
+		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
 		Visualization::SequentialLayout* layout;

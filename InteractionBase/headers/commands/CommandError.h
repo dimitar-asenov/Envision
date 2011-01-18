@@ -21,7 +21,7 @@ class INTERACTIONBASE_API CommandError
 		virtual ~CommandError();
 
 		const QString& message();
-		const QList<QString>& resolutionTips();
+		const QStringList& resolutionTips();
 		Visualization::Item* visualization();
 
 		void setMessage(const QString& message);
@@ -30,12 +30,12 @@ class INTERACTIONBASE_API CommandError
 
 	private:
 		QString message_;
-		QList<QString> resolutionTips_;
+		QStringList resolutionTips_;
 		Visualization::Item* visualization_;
 };
 
 inline const QString& CommandError::message() { return message_; }
-inline const QList<QString>& CommandError::resolutionTips() { return resolutionTips_; }
+inline const QStringList& CommandError::resolutionTips() { return resolutionTips_; }
 inline Visualization::Item* CommandError::visualization() { return visualization_; }
 inline void CommandError::setMessage(const QString& message) { message_ = message; }
 inline void CommandError::addResolutionTip(const QString& resolutionTip) { resolutionTips_.append(resolutionTip); }
