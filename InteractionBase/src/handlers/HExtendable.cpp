@@ -5,7 +5,7 @@
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "HExtendable.h"
+#include "handlers/HExtendable.h"
 
 #include "VisualizationBase/headers/items/VExtendable.h"
 #include "VisualizationBase/headers/Scene.h"

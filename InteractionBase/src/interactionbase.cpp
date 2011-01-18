@@ -7,9 +7,12 @@
 
 #include "interactionbase.h"
 
-#include "GenericHandler.h"
-#include "HText.h"
-#include "HExtendable.h"
+#include "handlers/GenericHandler.h"
+#include "handlers/HText.h"
+#include "handlers/HExtendable.h"
+#include "handlers/HCommandPrompt.h"
+
+#include "vis/CommandPrompt.h"
 
 #include "VisualizationBase/headers/items/VExtendable.h"
 #include "VisualizationBase/headers/items/VList.h"
@@ -34,6 +37,7 @@ bool InteractionBase::initialize(Envision::EnvisionManager&)
 	Visualization::VList::setInteractionHandler(GenericHandler::instance());
 	Visualization::Text::setInteractionHandler(HText::instance());
 	Visualization::VText::setInteractionHandler(HText::instance());
+	CommandPrompt::setInteractionHandler(HCommandPrompt::instance());
 	return true;
 }
 

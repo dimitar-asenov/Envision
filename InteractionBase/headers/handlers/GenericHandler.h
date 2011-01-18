@@ -8,7 +8,7 @@
 #ifndef GENERICHANDLER_H_
 #define GENERICHANDLER_H_
 
-#include "interactionbase_api.h"
+#include "../interactionbase_api.h"
 
 #include "VisualizationBase/headers/items/Item.h"
 #include "VisualizationBase/headers/InteractionHandler.h"

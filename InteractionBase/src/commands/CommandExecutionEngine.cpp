@@ -8,7 +8,7 @@
 #include "commands/Command.h"
 #include "commands/CommandExecutionEngine.h"
 #include "commands/CommandResult.h"
-#include "GenericHandler.h"
+#include "handlers/GenericHandler.h"
 
 #include "interactionbase.h"
 

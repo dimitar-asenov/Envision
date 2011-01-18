@@ -30,7 +30,11 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/vis/CommandPromptStyle.h \
+HEADERS += headers/handlers/GenericHandler.h \
+    headers/handlers/HCommandPrompt.h \
+    headers/handlers/HExtendable.h \
+    headers/handlers/HText.h \
+    headers/vis/CommandPromptStyle.h \
     headers/vis/CommandPrompt.h \
     headers/vis/TextAndDescriptionStyle.h \
     headers/vis/TextAndDescription.h \
@@ -40,12 +44,13 @@ HEADERS += headers/vis/CommandPromptStyle.h \
     headers/commands/CommandSuggestion.h \
     headers/commands/CommandResult.h \
     headers/commands/Command.h \
-    headers/HExtendable.h \
-    headers/GenericHandler.h \
-    headers/HText.h \
     headers/interactionbase_api.h \
     src/interactionbase.h
-SOURCES += src/vis/CommandPromptStyle.cpp \
+SOURCES += src/handlers/GenericHandler.cpp \
+    src/handlers/HCommandPrompt.cpp \
+    src/handlers/HExtendable.cpp \
+    src/handlers/HText.cpp \
+    src/vis/CommandPromptStyle.cpp \
     src/vis/CommandPrompt.cpp \
     src/vis/TextAndDescriptionStyle.cpp \
     src/vis/TextAndDescription.cpp \
@@ -55,8 +60,5 @@ SOURCES += src/vis/CommandPromptStyle.cpp \
     src/commands/CommandSuggestion.cpp \
     src/commands/CommandResult.cpp \
     src/commands/Command.cpp \
-    src/HExtendable.cpp \
-    src/GenericHandler.cpp \
-    src/HText.cpp \
     test/SimpleTest.cpp \
     src/interactionbase.cpp

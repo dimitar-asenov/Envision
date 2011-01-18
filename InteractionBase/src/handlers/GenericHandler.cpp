@@ -5,7 +5,7 @@
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "GenericHandler.h"
+#include "handlers/GenericHandler.h"
 
 #include "commands/CommandExecutionEngine.h"
 #include "vis/CommandPrompt.h"
@@ -27,6 +27,7 @@ GenericHandler* GenericHandler::instance()
 
 void GenericHandler::removeCommandPrompt()
 {
+	if (prompt_) prompt_->scene()->removeTopLevelItem(prompt_);
 	SAFE_DELETE_ITEM(prompt_);
 }
 

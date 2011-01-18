@@ -8,7 +8,7 @@
 #ifndef HEXTENDABLE_H_
 #define HEXTENDABLE_H_
 
-#include "interactionbase_api.h"
+#include "../interactionbase_api.h"
 
 #include "GenericHandler.h"
 

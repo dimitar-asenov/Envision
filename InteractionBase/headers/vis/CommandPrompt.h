@@ -35,6 +35,7 @@ class INTERACTIONBASE_API CommandPrompt : public Visualization::Item
 
 		Visualization::Item* commandReceiver();
 
+		QString text() const;
 		void initializeCommand();
 
 	protected:
@@ -55,6 +56,7 @@ class INTERACTIONBASE_API CommandPrompt : public Visualization::Item
 };
 
 inline Visualization::Item* CommandPrompt::commandReceiver() { return commandReceiver_; }
+inline QString CommandPrompt::text() const {return command->getText();}
 
 }
 
