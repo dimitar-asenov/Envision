@@ -35,7 +35,7 @@ class VISUALIZATIONBASE_API SequentialLayout: public Layout
 
 		template <class T> T* at(int index);
 
-		virtual void updateState();
+		virtual void updateGeometry(int availableWidth, int availableHeight);
 };
 
 template <class T> T* SequentialLayout::at(int index) { return static_cast<T*> (items[index]); }

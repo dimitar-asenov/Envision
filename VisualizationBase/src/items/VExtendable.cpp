@@ -123,7 +123,7 @@ void VExtendable::determineChildren()
 
 }
 
-void VExtendable::updateState()
+void VExtendable::updateGeometry(int, int)
 {
 	if ( style()->expanded() )
 	{

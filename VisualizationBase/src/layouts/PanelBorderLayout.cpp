@@ -40,15 +40,7 @@ void PanelBorderLayout::setContent(Item* content, bool deleteOldContent)
 	setUpdateNeeded();
 }
 
-void PanelBorderLayout::determineChildren()
-{
-	if (top_) top_->setMinimalLength(0);
-	if (left_) left_->setMinimalLength(0);
-	if (right_) right_->setMinimalLength(0);
-	if (bottom_) bottom_->setMinimalLength(0);
-}
-
-void PanelBorderLayout::updateState()
+void PanelBorderLayout::updateGeometry(int, int)
 {
 	// Get content size
 	int innerWidth = content_ ? content_->width() : 0;
@@ -68,27 +60,10 @@ void PanelBorderLayout::updateState()
 
 	//Adjust panels and/or the inner size
 	if ( maxMiddleWidth > middleWidth ) innerWidth += maxMiddleWidth - middleWidth;
-	if ( top_ && maxMiddleWidth > top_->width() )
-	{
-		top_->setMinimalLength(maxMiddleWidth);
-		top_->updateSubtreeState();
-	}
-	if ( bottom_ && maxMiddleWidth > bottom_->width() )
-	{
-		bottom_->setMinimalLength(maxMiddleWidth);
-		bottom_->updateSubtreeState();
-	}
-
-	if ( left_ && innerHeight > left_->height() )
-	{
-		left_->setMinimalLength(innerHeight);
-		left_->updateSubtreeState();
-	}
-	if ( right_ && innerHeight > right_->height() )
-	{
-		right_->setMinimalLength(innerHeight);
-		right_->updateSubtreeState();
-	}
+	if ( top_ && maxMiddleWidth > top_->width() ) top_->changeGeometry(maxMiddleWidth, 0);
+	if ( bottom_ && maxMiddleWidth > bottom_->width() ) bottom_->changeGeometry(maxMiddleWidth, 0);
+	if ( left_ && innerHeight > left_->height() ) left_->changeGeometry(0, innerHeight);
+	if ( right_ && innerHeight > right_->height() ) right_->changeGeometry(0, innerHeight);
 
 	// Compute outter sizes
 	int outterWidth = innerWidth + style()->leftInnerMargin() + style()->rightInnerMargin();

@@ -85,7 +85,7 @@ template<class T> void TextRenderer<T>::determineChildren()
 {
 }
 
-template<class T> void TextRenderer<T>::updateState()
+template<class T> void TextRenderer<T>::updateGeometry(int, int)
 {
 	this->setFlag(QGraphicsItem::ItemHasNoContents, false);
 	QFontMetrics qfm(style()->font());

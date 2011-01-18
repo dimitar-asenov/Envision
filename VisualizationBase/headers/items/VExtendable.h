@@ -32,7 +32,7 @@ class VISUALIZATIONBASE_API VExtendable : public ModelItem
 
 	protected:
 		void determineChildren();
-		void updateState();
+		void updateGeometry(int availableWidth, int availableHeight);
 
 	public:
 		VExtendable(Item* parent, Model::ExtendableNode* node, const VExtendableStyle* style = Styles::item<VExtendable>("default"));

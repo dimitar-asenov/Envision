@@ -24,7 +24,7 @@ class BoxTest : public Item
 		BoxTest(Item* parent, int sub);
 
 		void determineChildren();
-		void updateState();
+		void updateGeometry(int availableWidth, int availableHeight);
 };
 
 }

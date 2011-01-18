@@ -50,8 +50,7 @@ class VISUALIZATIONBASE_API PanelBorderLayout: public Layout
 		int getOutterWidthForExternalShape() const;
 		int getOutterHeightForExternalShape() const;
 
-		virtual void determineChildren();
-		virtual void updateState();
+		virtual void updateGeometry(int availableWidth, int availableHeight);
 };
 
 inline void PanelBorderLayout::setTop(bool enable) { setPanel(enable, top_, style()->topStyle()); };

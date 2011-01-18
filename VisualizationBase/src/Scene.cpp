@@ -48,7 +48,7 @@ void Scene::customEvent(QEvent *event)
 {
 	if ( event->type() == UpdateSceneEvent::EventType )
 	{
-		for (int i = 0; i<topLevelItems.size(); ++i) topLevelItems.at(i)->updateSubtreeState();
+		for (int i = 0; i<topLevelItems.size(); ++i) topLevelItems.at(i)->updateSubtree();
 	}
 	else
 		QGraphicsScene::customEvent(event);

@@ -26,7 +26,7 @@ class VISUALIZATIONBASE_API SceneHandlerItem : public Item
 
 	protected:
 		virtual void determineChildren();
-		virtual void updateState();
+		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
 		static InteractionHandler* handler_;

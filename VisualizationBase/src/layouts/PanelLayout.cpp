@@ -12,7 +12,7 @@ namespace Visualization {
 ITEM_COMMON_DEFINITIONS( PanelLayout )
 
 PanelLayout::PanelLayout(Item* parent, const PanelLayoutStyle* style) :
-	Layout(parent, style), first_(NULL), middle_(NULL), last_(NULL), minimalLength(0)
+	Layout(parent, style), first_(NULL), middle_(NULL), last_(NULL)
 {
 }
 
@@ -30,12 +30,13 @@ void PanelLayout::setItem(Item* item, Item*& position, bool deleteOldItem)
 	setUpdateNeeded();
 }
 
-void PanelLayout::updateState()
+void PanelLayout::updateGeometry(int availableWidth, int availableHeight)
 {
 	QRect first, middle, last;
 	if (first_) first.setSize( QSize(first_->width(), first_->height()) );
 	if (middle_) middle.setSize( QSize(middle_->width(), middle_->height()) );
 	if (last_) last.setSize( QSize(last_->width(), last_->height()) );
+
 
 	if ( style()->orientation() == PanelLayoutStyle::HorizontalOrientation )
 	{
@@ -45,7 +46,7 @@ void PanelLayout::updateState()
 		int outterWidth = width + style()->leftMargin() + style()->rightMargin();
 		if ( getShape() ) outterWidth = getShape()->getOutterWidth(outterWidth);
 
-		if ( minimalLength > outterWidth ) width += minimalLength - outterWidth;
+		if ( availableWidth > outterWidth ) width += availableWidth - outterWidth;
 
 		// Get the height
 		int maxChildHeight = first.height();
@@ -83,7 +84,7 @@ void PanelLayout::updateState()
 		int outterHeight = height + style()->topMargin() + style()->bottomMargin();
 		if ( getShape() ) outterHeight = getShape()->getOutterHeight(outterHeight);
 
-		if ( minimalLength > outterHeight ) height += minimalLength - outterHeight;
+		if ( availableHeight > outterHeight ) height += availableHeight - outterHeight;
 
 		// Get the width
 		int maxChildWidth = first.width();

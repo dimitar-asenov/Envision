@@ -44,6 +44,11 @@ void Item::setUpdateNeeded()
 	}
 }
 
+bool Item::needsUpdate()
+{
+	return needsUpdate_;
+}
+
 void Item::setStyle(const ItemStyle* style)
 {
 	SAFE_DELETE(shape_);
@@ -57,17 +62,27 @@ void Item::setStyle(const ItemStyle* style)
 	setUpdateNeeded();
 }
 
-void Item::updateSubtreeState()
+bool Item::sizeDependsOnParent() const
+{
+	return false;
+}
+
+void Item::updateSubtree()
 {
 	if ( needsUpdate_ || needsUpdate())
 	{
 		determineChildren();
 		updateChildren();
-		prepareGeometryChange();
-		updateState();
+		changeGeometry();
 		needsUpdate_ = false;
-		update();
 	}
+}
+
+void Item::changeGeometry(int availableWidth, int availableHeight)
+{
+	prepareGeometryChange();
+	updateGeometry(availableWidth, availableHeight);
+	update();
 }
 
 void Item::updateChildren()
@@ -76,7 +91,7 @@ void Item::updateChildren()
 	for (QList<QGraphicsItem *>::iterator child = children.begin(); child != children.end(); ++child)
 	{
 		Item* item = static_cast<Item*> (*child);
-		item->updateSubtreeState();
+		item->updateSubtree();
 	}
 }
 

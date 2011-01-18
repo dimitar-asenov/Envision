@@ -48,7 +48,7 @@ void VList::determineChildren()
 	}
 }
 
-void VList::updateState()
+void VList::updateGeometry(int, int)
 {
 	setSize( items_.size() );
 }

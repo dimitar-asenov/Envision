@@ -52,7 +52,7 @@ class VISUALIZATIONBASE_API TextRenderer : public T
 
 		protected:
 			virtual void determineChildren();
-			virtual void updateState();
+			virtual void updateGeometry(int availableWidth, int availableHeight);
 
 			void setText(const QString& newText);
 

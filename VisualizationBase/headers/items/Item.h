@@ -71,7 +71,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		void setSize(const QSizeF& size);
 
 		virtual void determineChildren() = 0;
-		virtual void updateState() = 0;
+		virtual void updateGeometry(int availableWidth, int availableHeight) = 0;
 
 		//Event handlers
 		// Keyboard events
@@ -111,11 +111,13 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		int width() const;
 		int height() const;
 		QSizeF size() const;
+		virtual bool sizeDependsOnParent() const;
 
 		void setUpdateNeeded();
 
 		virtual bool needsUpdate();
-		virtual void updateSubtreeState();
+		virtual void updateSubtree();
+		virtual void changeGeometry(int availableWidth = 0, int availableHeight = 0);
 
 		virtual void setStyle(const ItemStyle* style);
 		const ItemStyle* style() const;
@@ -138,7 +140,6 @@ inline void Item::setSize(int width, int height) { boundingRect_.setSize(QSizeF(
 inline void Item::setSize(const QSizeF& size) { boundingRect_.setSize(size); };
 inline const ItemStyle* Item::style() const { return style_; }
 inline Shape* Item::getShape() const {	return shape_; }
-inline bool Item::needsUpdate() { return needsUpdate_; }
 
 template <class T> inline void SAFE_DELETE_ITEM( T* & item)
 {

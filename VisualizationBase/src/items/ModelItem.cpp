@@ -22,7 +22,7 @@ bool ModelItem::needsUpdate()
 
 void ModelItem::updateSubtreeState()
 {
-	Item::updateSubtreeState();
+	Item::updateSubtree();
 	revision = node->getRevision();
 }
 

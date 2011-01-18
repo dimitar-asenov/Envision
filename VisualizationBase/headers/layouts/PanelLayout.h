@@ -25,8 +25,6 @@ class VISUALIZATIONBASE_API PanelLayout: public Layout
 		Item* middle_;
 		Item* last_;
 
-		int minimalLength;
-
 		void setItem(Item* item, Item*& position, bool deleteOldItem);
 
 	public:
@@ -41,8 +39,7 @@ class VISUALIZATIONBASE_API PanelLayout: public Layout
 		template <class T> T* middle();
 		template <class T> T* last();
 
-		void setMinimalLength(int minimalLength);
-		virtual void updateState();
+		virtual void updateGeometry(int availableWidth, int availableHeight);
 };
 
 inline void PanelLayout::setFirst(Item* item, bool deleteOldItem) { setItem(item, first_, deleteOldItem); }
@@ -52,8 +49,6 @@ inline void PanelLayout::setLast(Item* item, bool deleteOldItem) { setItem(item,
 template <class T> inline T* PanelLayout::first() { return static_cast<T*> (first_); };
 template <class T> inline T* PanelLayout::middle() { return static_cast<T*> (middle_); };
 template <class T> inline T* PanelLayout::last() { return static_cast<T*> (last_); };
-
-inline void PanelLayout::setMinimalLength(int length) { minimalLength = length; setUpdateNeeded(); };
 
 }
 

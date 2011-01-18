@@ -16,11 +16,11 @@ VText::VText(Item* parent, Model::Text *text, const TextStyle *style) :
 {
 }
 
-void VText::updateState()
+void VText::updateGeometry(int availableWidth, int availableHeight)
 {
 	Model::Text* textNode = static_cast<Model::Text*> (getNode());
 	setText( textNode->get() );
-	TextRenderer<ModelItem>::updateState();
+	TextRenderer<ModelItem>::updateGeometry(availableWidth, availableHeight);
 }
 
 }

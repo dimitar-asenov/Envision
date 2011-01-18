@@ -22,7 +22,7 @@ void SceneHandlerItem::determineChildren()
 {
 }
 
-void SceneHandlerItem::updateState()
+void SceneHandlerItem::updateGeometry(int, int)
 {
 }
 
