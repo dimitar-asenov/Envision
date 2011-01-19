@@ -32,10 +32,9 @@ void HCommandPrompt::keyReleaseEvent(Visualization::Item *target, QKeyEvent *eve
 	if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)
 	{
 		CommandPrompt* prompt = static_cast<CommandPrompt*> (target);
-		qDebug() << prompt->text();
 		prompt->commandReceiver()->execute(prompt->text());
 
-		CommandResult* result = executionEngine()->result();
+		CommandResult* result = executionEngine()->acquireResult();
 
 		if ( result->code() == CommandResult::OK)
 		{
@@ -43,8 +42,7 @@ void HCommandPrompt::keyReleaseEvent(Visualization::Item *target, QKeyEvent *eve
 		}
 		else
 		{
-			prompt->setSuggestions(result->suggestions());
-			prompt->setErrors(result->errors());
+			prompt->setResult(result);
 			prompt->scene()->updateTopLevelItems();
 		}
 	}

@@ -26,7 +26,7 @@ class INTERACTIONBASE_API CommandExecutionEngine
 		static CommandExecutionEngine* instance();
 
 		virtual void execute(Visualization::Item *target, const QString& command);
-		CommandResult* result();
+		CommandResult* acquireResult();
 		void deleteLastCommandResult();
 
 	protected:
@@ -41,9 +41,8 @@ class INTERACTIONBASE_API CommandExecutionEngine
 
 	private:
 		CommandResult* lastCommandResult;
+		bool resultIsExternallyAcquired;
 };
-
-inline CommandResult* CommandExecutionEngine::result() { return lastCommandResult; }
 
 }
 

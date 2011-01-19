@@ -22,7 +22,7 @@ const char* QUOTE_SYMBOLS = "\"'`";
 const char* ESCAPE_SYMBOLS = "\\";
 
 CommandExecutionEngine::CommandExecutionEngine() :
-	lastCommandResult(NULL)
+	lastCommandResult(NULL), resultIsExternallyAcquired(false)
 {
 }
 
@@ -31,9 +31,17 @@ CommandExecutionEngine::~CommandExecutionEngine()
 	deleteLastCommandResult();
 }
 
+CommandResult* CommandExecutionEngine::acquireResult()
+{
+	resultIsExternallyAcquired = true;
+	return lastCommandResult;
+}
+
 void CommandExecutionEngine::deleteLastCommandResult()
 {
-	SAFE_DELETE(lastCommandResult);
+	if (resultIsExternallyAcquired ) lastCommandResult = NULL;
+	else SAFE_DELETE(lastCommandResult);
+	resultIsExternallyAcquired = false;
 }
 
 CommandExecutionEngine* CommandExecutionEngine::instance()

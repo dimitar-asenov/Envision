@@ -16,8 +16,7 @@ CommandError::CommandError(const QString& message, Visualization::Item* visualiz
 
 CommandError::~CommandError()
 {
-	// Do not delete this, this is the responsibility of the object handling this error.
-	visualization_ = NULL;
+	SAFE_DELETE_ITEM(visualization_);
 }
 
 }

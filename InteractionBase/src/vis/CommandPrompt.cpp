@@ -20,7 +20,8 @@ CommandPrompt::CommandPrompt(Item* commandReceiver, const CommandPromptStyle* st
 	layout(new SequentialLayout(this, &style->layout())),
 	suggestionContainer(new SequentialLayout(NULL, &style->suggestionContainer())),
 	errorContainer(new SequentialLayout(NULL, &style->errorContainer())),
-	command( new Text(NULL, &style->commandText()))
+	command( new Text(NULL, &style->commandText())),
+	result(NULL)
 {
 	setFlag(QGraphicsItem::ItemIsMovable);
 
@@ -33,8 +34,8 @@ CommandPrompt::~CommandPrompt()
 {
 	commandReceiver_ = NULL; // This item is completely out of our control, we just know about it.
 
-	deleteMessages(suggestions, suggestionContainer);
-	deleteMessages(errors, errorContainer);
+	removeResult();
+	removeSuggestions();
 
 	SAFE_DELETE_ITEM(layout);
 
@@ -60,52 +61,106 @@ void CommandPrompt::updateGeometry(int availableWidth, int availableHeight)
 	Item::updateGeometry(layout, availableWidth, availableHeight);
 }
 
-template <class T>
-void CommandPrompt::deleteMessages(QList<T*>& messages, Visualization::SequentialLayout*& containerLayout)
+void CommandPrompt::setResult(CommandResult* result_)
 {
-	for (int i = 0; i<messages.size(); ++i) SAFE_DELETE(messages[i]);
-	messages.clear();
-	containerLayout->removeAll(true);
-}
+	removeResult();
+	result = result_;
 
-void CommandPrompt::setSuggestions(const QList<CommandSuggestion*>& suggestions_)
-{
-	deleteMessages(suggestions, suggestionContainer);
-	suggestions = suggestions_;
-
-	// Create visualization if one is missing.
-	for (int i = 0; i<suggestions.size(); ++i)
+	// Add the errors to the list
+	for (int i = 0; i<result->errors().size(); ++i)
 	{
-		if (suggestions[i]->visualization() == NULL)
-		{
-			TextAndDescription* vis = new TextAndDescription(NULL, &style()->defaultSuggestion());
-			vis->setContents(suggestions[i]->suggestion(), suggestions[i]->description());
-			suggestions[i]->setVisualization(vis);
-		}
-
-		// Add the visualization to the container layout
-		suggestionContainer->append(suggestions[i]->visualization());
-	}
-}
-
-void CommandPrompt::setErrors(const QList<CommandError*>& errors_)
-{
-	deleteMessages(errors, errorContainer);
-	errors = errors_;
-
-	// Create visualization if one is missing.
-	for (int i = 0; i<errors.size(); ++i)
-	{
-		if (errors[i]->visualization() == NULL)
+		// Create visualization if one is missing.
+		if (result->errors()[i]->visualization() == NULL)
 		{
 			TextAndDescription* vis = new TextAndDescription(NULL, &style()->defaultError());
-			vis->setContents(errors[i]->message(), errors[i]->resolutionTips().join(" OR "));
-			errors[i]->setVisualization(vis);
+			vis->setContents(result->errors()[i]->message(), result->errors()[i]->resolutionTips().join(" OR "));
+			result->errors()[i]->setVisualization(vis);
 		}
 
 		// Add the visualization to the container layout
-		errorContainer->append(errors[i]->visualization());
+		errorContainer->append(result->errors()[i]->visualization());
 	}
+
+	// Add the suggestions to the list
+	for (int i = 0; i<result->suggestions().size(); ++i)
+	{
+		// Create visualization if one is missing.
+		if (result->suggestions()[i]->visualization() == NULL)
+		{
+			TextAndDescription* vis = new TextAndDescription(NULL, &style()->defaultSuggestion());
+			vis->setContents(result->suggestions()[i]->suggestion(), result->suggestions()[i]->description());
+			result->suggestions()[i]->setVisualization(vis);
+		}
+
+		// Add the visualization to the container layout
+		suggestionContainer->append(result->suggestions()[i]->visualization());
+	}
+	setUpdateNeeded();
+}
+
+void CommandPrompt::removeResult()
+{
+	if (result)
+	{
+		// Remove all suggestion visual items contributed by the result.
+		for (int i = 0; i<result->suggestions().size(); ++i)
+			suggestionContainer->removeAll(result->suggestions().at(i)->visualization(), false);
+
+		// Remove all error visual items contributed by the result.
+		for (int i = 0; i<result->errors().size(); ++i)
+			errorContainer->removeAll(result->errors().at(i)->visualization(), false);
+	}
+	SAFE_DELETE(result);
+	setUpdateNeeded();
+}
+
+void CommandPrompt::addSuggestion(CommandSuggestion* suggestion)
+{
+	suggestions.append(suggestion);
+
+	// Create visualization if one is missing.
+	if (suggestion->visualization() == NULL)
+	{
+		TextAndDescription* vis = new TextAndDescription(NULL, &style()->defaultSuggestion());
+		vis->setContents(suggestion->suggestion(), suggestion->description());
+		suggestion->setVisualization(vis);
+	}
+
+	// Add the visualization to the container layout
+	suggestionContainer->append(suggestion->visualization());
+
+	setUpdateNeeded();
+}
+
+void CommandPrompt::addSuggestions(const QList<CommandSuggestion*>& suggestions_)
+{
+	for (int i = 0; i < suggestions_.size(); ++i)
+	{
+		suggestions.append(suggestions_[i]);
+
+		// Create visualization if one is missing.
+		if (suggestions.last()->visualization() == NULL)
+		{
+			TextAndDescription* vis = new TextAndDescription(NULL, &style()->defaultSuggestion());
+			vis->setContents(suggestions.last()->suggestion(), suggestions.last()->description());
+			suggestions.last()->setVisualization(vis);
+		}
+
+		// Add the visualization to the container layout
+		suggestionContainer->append(suggestions.last()->visualization());
+	}
+	setUpdateNeeded();
+}
+
+void CommandPrompt::removeSuggestions()
+{
+	for (int i = 0; i<suggestions.size(); ++i)
+	{
+		suggestionContainer->removeAll(suggestions.at(i)->visualization(), false);
+		SAFE_DELETE(suggestions[i]);
+	}
+	suggestions.clear();
+	setUpdateNeeded();
 }
 
 }

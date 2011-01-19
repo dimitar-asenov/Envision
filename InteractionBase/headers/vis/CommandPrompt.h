@@ -11,7 +11,7 @@
 #include "interactionbase_api.h"
 #include "CommandPromptStyle.h"
 #include "../commands/CommandSuggestion.h"
-#include "../commands/CommandError.h"
+#include "../commands/CommandResult.h"
 
 #include "VisualizationBase/headers/Styles.h"
 #include "VisualizationBase/headers/items/Item.h"
@@ -30,8 +30,12 @@ class INTERACTIONBASE_API CommandPrompt : public Visualization::Item
 		CommandPrompt(Visualization::Item* commandReceiver, const CommandPromptStyle* style = Visualization::Styles::item<CommandPrompt>("default"));
 		virtual ~CommandPrompt();
 
-		void setSuggestions(const QList<CommandSuggestion*>& suggestions);
-		void setErrors(const QList<CommandError*>& errors);
+		void setResult(CommandResult* result);
+		void addSuggestion(CommandSuggestion* suggestion);
+		void addSuggestions(const QList<CommandSuggestion*>& suggestions);
+
+		void removeResult();
+		void removeSuggestions();
 
 		Visualization::Item* commandReceiver();
 
@@ -48,11 +52,11 @@ class INTERACTIONBASE_API CommandPrompt : public Visualization::Item
 		Visualization::SequentialLayout* suggestionContainer;
 		Visualization::SequentialLayout* errorContainer;
 		Visualization::Text* command;
-		QList<CommandSuggestion*> suggestions;
-		QList<CommandError*> errors;
 
-		template <class T>
-		void deleteMessages(QList<T*>& messages, Visualization::SequentialLayout*& containerLayout);
+		CommandResult* result;
+		QList<CommandSuggestion*> suggestions;	//Suggestions from the result do not appear here.
+
+
 };
 
 inline Visualization::Item* CommandPrompt::commandReceiver() { return commandReceiver_; }
