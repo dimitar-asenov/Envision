@@ -42,6 +42,9 @@ class INTERACTIONBASE_API CommandPrompt : public Visualization::Item
 		QString text() const;
 		void initializeCommand();
 
+		void showPrompt();
+		void hidePrompt();
+
 	protected:
 		virtual void determineChildren();
 		virtual void updateGeometry(int availableWidth, int availableHeight);
@@ -52,6 +55,9 @@ class INTERACTIONBASE_API CommandPrompt : public Visualization::Item
 		Visualization::SequentialLayout* suggestionContainer;
 		Visualization::SequentialLayout* errorContainer;
 		Visualization::Text* command;
+
+		int commandSelectedFirst;
+		int commandSelectedLast;
 
 		CommandResult* result;
 		QList<CommandSuggestion*> suggestions;	//Suggestions from the result do not appear here.

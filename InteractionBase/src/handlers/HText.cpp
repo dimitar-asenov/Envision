@@ -121,7 +121,7 @@ void HText::mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEven
 {
 	if ( event->button() == Qt::LeftButton )
 	{
-		TEXTRENDERER_SET2(setSelected, event->pos().x(), event->pos().x());
+		TEXTRENDERER_SET2(setSelectedByDrag, event->pos().x(), event->pos().x());
 		target->scene()->clearSelection();
 		target->scene()->updateTopLevelItems();
 	}
@@ -132,7 +132,7 @@ void HText::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent
 {
 	if (!event->buttonDownPos(Qt::LeftButton).isNull() && target->contains( event->pos() ))
 	{
-		TEXTRENDERER_SET2(setSelected, event->buttonDownPos(Qt::LeftButton).x(), event->pos().x());
+		TEXTRENDERER_SET2(setSelectedByDrag, event->buttonDownPos(Qt::LeftButton).x(), event->pos().x());
 		target->scene()->clearSelection();
 	}
 	else

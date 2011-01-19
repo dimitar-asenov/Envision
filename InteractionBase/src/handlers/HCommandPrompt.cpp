@@ -29,9 +29,14 @@ HCommandPrompt* HCommandPrompt::instance()
 
 void HCommandPrompt::keyReleaseEvent(Visualization::Item *target, QKeyEvent *event)
 {
-	if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)
+	CommandPrompt* prompt = static_cast<CommandPrompt*> (target);
+
+	if (event->key() == Qt::Key_Escape)
 	{
-		CommandPrompt* prompt = static_cast<CommandPrompt*> (target);
+		prompt->hidePrompt();
+	}
+	else if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)
+	{
 		prompt->commandReceiver()->execute(prompt->text());
 
 		CommandResult* result = executionEngine()->acquireResult();

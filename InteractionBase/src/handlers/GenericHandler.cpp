@@ -31,14 +31,22 @@ void GenericHandler::removeCommandPrompt()
 	SAFE_DELETE_ITEM(prompt_);
 }
 
-void GenericHandler::newCommandPrompt(Visualization::Item* commandReceiver)
+void GenericHandler::showCommandPrompt(Visualization::Item* commandReceiver)
 {
-	removeCommandPrompt();
-	prompt_ = new CommandPrompt(commandReceiver);
-	prompt_->setPos( commandReceiver->mapToScene(commandReceiver->pos()));
-	commandReceiver->scene()->addTopLevelItem(prompt_);
-	prompt_->initializeCommand();
-	commandReceiver->scene()->updateTopLevelItems();
+	if (prompt_ && prompt_->commandReceiver() == commandReceiver)
+	{
+		prompt_->showPrompt();
+		commandReceiver->scene()->updateTopLevelItems();
+	}
+	else
+	{
+		removeCommandPrompt();
+		prompt_ = new CommandPrompt(commandReceiver);
+		prompt_->setPos( commandReceiver->mapToScene(commandReceiver->pos()));
+		commandReceiver->scene()->addTopLevelItem(prompt_);
+		prompt_->initializeCommand();
+		commandReceiver->scene()->updateTopLevelItems();
+	}
 }
 
 void GenericHandler::command(Visualization::Item *target, const QString& command)
@@ -48,9 +56,10 @@ void GenericHandler::command(Visualization::Item *target, const QString& command
 
 void GenericHandler::keyReleaseEvent(Visualization::Item *target, QKeyEvent *event)
 {
-	if (event->key() == Qt::Key_Escape)
+	// Only show the command prompt if this event was not received within it.
+	if (event->key() == Qt::Key_Escape && !(prompt_ && prompt_->isAncestorOf(target)) )
 	{
-		newCommandPrompt(target);
+		showCommandPrompt(target);
 	}
 	else InteractionHandler::keyReleaseEvent(target, event);
 }

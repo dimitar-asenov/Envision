@@ -32,7 +32,7 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 
 		CommandPrompt* prompt();
 		void removeCommandPrompt();
-		void newCommandPrompt(Visualization::Item* commandRecevier);
+		void showCommandPrompt(Visualization::Item* commandRecevier);
 
 		// Keyboard events
 		virtual void keyReleaseEvent(Visualization::Item *target, QKeyEvent *event);

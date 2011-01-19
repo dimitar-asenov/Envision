@@ -8,6 +8,8 @@
 #include "vis/CommandPrompt.h"
 #include "vis/TextAndDescription.h"
 
+#include "VisualizationBase/headers/Scene.h"
+
 using namespace Visualization;
 
 namespace Interaction {
@@ -49,7 +51,22 @@ void CommandPrompt::initializeCommand()
 {
 	command->setText("Type a command");
 	command->setFocus();
-	command->setSelected(1000, 0);
+	command->selectAll();
+}
+
+void CommandPrompt::showPrompt()
+{
+	show();
+	command->setFocus();
+	command->setSelectedCharacters(commandSelectedFirst, commandSelectedLast);
+}
+
+void CommandPrompt::hidePrompt()
+{
+	commandSelectedFirst = command->selectionFirstInxed();
+	commandSelectedLast = command->selectionLastIndex();
+	hide();
+	commandReceiver_->setFocus();
 }
 
 void CommandPrompt::determineChildren()
