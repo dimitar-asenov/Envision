@@ -57,7 +57,7 @@ void SequentialLayout::remove(int index, bool deleteItem_)
 
 void SequentialLayout::removeAll(bool deleteItems)
 {
-	if (deleteItems) while (!items.isEmpty()) SAFE_DELETE_ITEM(items.last());
+	if (deleteItems) for (int i = 0; i<items.size(); ++i) SAFE_DELETE_ITEM(items[i]);
 	items.clear();
 }
 
