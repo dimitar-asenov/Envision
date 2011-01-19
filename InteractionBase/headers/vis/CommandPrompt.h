@@ -37,10 +37,14 @@ class INTERACTIONBASE_API CommandPrompt : public Visualization::Item
 		void removeResult();
 		void removeSuggestions();
 
+		CommandResult* result();
+		QList<CommandSuggestion*>& suggestions();
+
 		Visualization::Item* commandReceiver();
 
 		QString text() const;
 		void initializeCommand();
+		void takeSuggestion(CommandSuggestion* suggestion);
 
 		void showPrompt();
 		void hidePrompt();
@@ -59,8 +63,8 @@ class INTERACTIONBASE_API CommandPrompt : public Visualization::Item
 		int commandSelectedFirst;
 		int commandSelectedLast;
 
-		CommandResult* result;
-		QList<CommandSuggestion*> suggestions;	//Suggestions from the result do not appear here.
+		CommandResult* result_;
+		QList<CommandSuggestion*> suggestions_;	//Suggestions from the result do not appear here.
 
 		// This is true when the item is created and is set to false after the first update.
 		bool justCreated;
@@ -68,6 +72,9 @@ class INTERACTIONBASE_API CommandPrompt : public Visualization::Item
 
 inline Visualization::Item* CommandPrompt::commandReceiver() { return commandReceiver_; }
 inline QString CommandPrompt::text() const {return command->getText();}
+
+inline CommandResult* CommandPrompt::result() { return result_; }
+inline QList<CommandSuggestion*>& CommandPrompt::suggestions() { return suggestions_; }
 
 }
 

@@ -7,6 +7,8 @@
 
 #include "vis/CommandPrompt.h"
 #include "vis/TextAndDescription.h"
+#include "handlers/GenericHandler.h"
+#include "commands/CommandExecutionEngine.h"
 
 #include "VisualizationBase/headers/Scene.h"
 
@@ -37,14 +39,14 @@ CommandPrompt::CommandPrompt(Item* commandReceiver, const CommandPromptStyle* st
 	suggestionContainer(new SequentialLayout(NULL, &style->suggestionContainer())),
 	errorContainer(new SequentialLayout(NULL, &style->errorContainer())),
 	command( new Text(NULL, &style->commandText())),
-	result(NULL),
+	result_(NULL),
 	justCreated(true)
 {
 	setFlag(QGraphicsItem::ItemIsMovable);
 
 	layout->append(command);
-	layout->append(suggestionContainer);
 	layout->append(errorContainer);
+	layout->append(suggestionContainer);
 }
 
 CommandPrompt::~CommandPrompt()
@@ -69,6 +71,13 @@ void CommandPrompt::initializeCommand()
 	command->selectAll();
 }
 
+void CommandPrompt::takeSuggestion(CommandSuggestion* suggestion)
+{
+	command->setText(suggestion->suggestion());
+	command->setFocus();
+	command->setCaretPosition(suggestion->suggestion().size());
+}
+
 void CommandPrompt::showPrompt()
 {
 	show();
@@ -86,6 +95,13 @@ void CommandPrompt::hidePrompt()
 
 void CommandPrompt::determineChildren()
 {
+	GenericHandler* h = dynamic_cast<GenericHandler*> (handler());
+
+	if (h)
+	{
+		removeSuggestions();
+		addSuggestions( h->executionEngine()->autoComplete(commandReceiver_, command->getText()));
+	}
 }
 
 void CommandPrompt::updateGeometry(int availableWidth, int availableHeight)
@@ -113,10 +129,10 @@ void CommandPrompt::updateGeometry(int availableWidth, int availableHeight)
 	}
 }
 
-void CommandPrompt::setResult(CommandResult* result_)
+void CommandPrompt::setResult(CommandResult* result)
 {
 	removeResult();
-	result = result_;
+	result_ = result;
 
 	// Add the errors to the list
 	for (int i = 0; i<result->errors().size(); ++i)
@@ -152,23 +168,23 @@ void CommandPrompt::setResult(CommandResult* result_)
 
 void CommandPrompt::removeResult()
 {
-	if (result)
+	if (result_)
 	{
 		// Remove all suggestion visual items contributed by the result.
-		for (int i = 0; i<result->suggestions().size(); ++i)
-			suggestionContainer->removeAll(result->suggestions().at(i)->visualization(), false);
+		for (int i = 0; i<result_->suggestions().size(); ++i)
+			suggestionContainer->removeAll(result_->suggestions().at(i)->visualization(), false);
 
 		// Remove all error visual items contributed by the result.
-		for (int i = 0; i<result->errors().size(); ++i)
-			errorContainer->removeAll(result->errors().at(i)->visualization(), false);
+		for (int i = 0; i<result_->errors().size(); ++i)
+			errorContainer->removeAll(result_->errors().at(i)->visualization(), false);
 	}
-	SAFE_DELETE(result);
+	SAFE_DELETE(result_);
 	setUpdateNeeded();
 }
 
 void CommandPrompt::addSuggestion(CommandSuggestion* suggestion)
 {
-	suggestions.append(suggestion);
+	suggestions_.append(suggestion);
 
 	// Create visualization if one is missing.
 	if (suggestion->visualization() == NULL)
@@ -184,34 +200,34 @@ void CommandPrompt::addSuggestion(CommandSuggestion* suggestion)
 	setUpdateNeeded();
 }
 
-void CommandPrompt::addSuggestions(const QList<CommandSuggestion*>& suggestions_)
+void CommandPrompt::addSuggestions(const QList<CommandSuggestion*>& suggestions)
 {
-	for (int i = 0; i < suggestions_.size(); ++i)
+	for (int i = 0; i < suggestions.size(); ++i)
 	{
-		suggestions.append(suggestions_[i]);
+		suggestions_.append(suggestions[i]);
 
 		// Create visualization if one is missing.
-		if (suggestions.last()->visualization() == NULL)
+		if (suggestions_.last()->visualization() == NULL)
 		{
 			TextAndDescription* vis = new TextAndDescription(NULL, &style()->defaultSuggestion());
-			vis->setContents(suggestions.last()->suggestion(), suggestions.last()->description());
-			suggestions.last()->setVisualization(vis);
+			vis->setContents(suggestions_.last()->suggestion(), suggestions_.last()->description());
+			suggestions_.last()->setVisualization(vis);
 		}
 
 		// Add the visualization to the container layout
-		suggestionContainer->append(suggestions.last()->visualization());
+		suggestionContainer->append(suggestions_.last()->visualization());
 	}
 	setUpdateNeeded();
 }
 
 void CommandPrompt::removeSuggestions()
 {
-	for (int i = 0; i<suggestions.size(); ++i)
+	for (int i = 0; i<suggestions_.size(); ++i)
 	{
-		suggestionContainer->removeAll(suggestions.at(i)->visualization(), false);
-		SAFE_DELETE(suggestions[i]);
+		suggestionContainer->removeAll(suggestions_.at(i)->visualization(), false);
+		SAFE_DELETE(suggestions_[i]);
 	}
-	suggestions.clear();
+	suggestions_.clear();
 	setUpdateNeeded();
 }
 

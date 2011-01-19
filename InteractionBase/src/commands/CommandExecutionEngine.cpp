@@ -8,6 +8,7 @@
 #include "commands/Command.h"
 #include "commands/CommandExecutionEngine.h"
 #include "commands/CommandResult.h"
+#include "commands/CommandSuggestion.h"
 #include "handlers/GenericHandler.h"
 
 #include "interactionbase.h"
@@ -63,15 +64,7 @@ void CommandExecutionEngine::execute(Visualization::Item *originator, const QStr
 		return;
 	}
 
-	// First extract navigation information if any
-	QString simplified = trimmed.simplified(); // Note that this will destroy any spacing within quotations.
-	QString navigation;
-	if ( simplified.startsWith("~ ") || simplified.startsWith(".. ") || simplified.startsWith(". ") || simplified.startsWith("../")
-			|| simplified.startsWith("./") || simplified.startsWith("/") )
-	{
-		navigation = trimmed.left(simplified.indexOf(' '));
-		trimmed = trimmed.mid(navigation.size()).trimmed();
-	}
+	QString navigation = extractNavigationString(trimmed);
 
 	// This is the node where we begin trying to process the command
 	Visualization::Item* source = originator;
@@ -140,6 +133,60 @@ void CommandExecutionEngine::execute(Visualization::Item *originator, const QStr
 		lastCommandResult = new CommandResult(new CommandError("Unknown command '" + command + "' "));
 		InteractionBase::log()->add(Logger::Log::LOGWARNING, "Unknown command: " + command);
 	}
+}
+
+QList<CommandSuggestion*> CommandExecutionEngine::autoComplete(Visualization::Item *originator, const QString& textSoFar)
+{
+	QList<CommandSuggestion*> result;
+
+	QString trimmed = textSoFar.trimmed();
+	QString navigation = extractNavigationString(trimmed);
+
+	if (!trimmed.isEmpty())
+	{
+		// This is the node where we begin trying to process the command
+		Visualization::Item* source = originator;
+		// Alter the source node according to the requested navigation location.
+		if (!navigation.isEmpty()) source = navigate(originator, navigation);
+		// This is the node (source or one of its ancestors) where we manage to process the command.
+		Visualization::Item* target = source;
+
+		// Get suggestion from item and parents
+		while(target != NULL)
+		{
+			GenericHandler* handler = dynamic_cast<GenericHandler*> (target->handler());
+			if (handler)
+				for(int i = 0; i< handler->commands().size(); ++i)
+					result.append( handler->commands().at(i)->suggest(source, target, trimmed) );
+
+			target = static_cast<Visualization::Item*> (target->parentItem());
+		}
+
+		// Get suggestions from the scene handler item
+		GenericHandler* handler = dynamic_cast<GenericHandler*> (source->scene()->sceneHandlerItem()->handler());
+		if ( handler )
+			for (int i = 0; i < handler->commands().size(); ++i)
+				result.append( handler->commands().at(i)->suggest(source, target, trimmed) );
+	}
+
+	return result;
+}
+
+QString CommandExecutionEngine::extractNavigationString(QString& command)
+{
+	// Extract navigation information if any
+	QString trimmed = command.trimmed();
+	QString simplified = trimmed.simplified(); // Note that this will destroy any spacing within quotations.
+	QString navigation;
+
+	if ( simplified.startsWith("~ ") || simplified.startsWith(".. ") || simplified.startsWith(". ") || simplified.startsWith("../")
+			|| simplified.startsWith("./") || simplified.startsWith("/") )
+	{
+		navigation = trimmed.left(simplified.indexOf(' '));
+		command = trimmed.mid(navigation.size()).trimmed();
+	}
+
+	return navigation;
 }
 
 Visualization::Item* CommandExecutionEngine::navigate(Visualization::Item *originator, const QString&)

@@ -27,6 +27,9 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 		static CommandExecutionEngine* executionEngine();
 		static void setCommandExecutionEngine(CommandExecutionEngine *engine);
 
+		/**
+		 * TODO: Commands are not inherited when the handler is inherited. Is this right?
+		 */
 		const QList<Command*>& commands();
 		void addCommand(Command* command);
 

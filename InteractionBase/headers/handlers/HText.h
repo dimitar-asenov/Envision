@@ -16,14 +16,6 @@ namespace Interaction {
 
 class INTERACTIONBASE_API HText : public GenericHandler
 {
-	protected:
-		HText();
-
-		virtual void setNewText(Visualization::Item *target, const QString& newText);
-		void moveCaret(Visualization::Item *target, QKeyEvent *event);
-		void erase(Visualization::Item *target, bool forwards, bool onlyDeleteIfSelected);
-		void insertText(Visualization::Item *target, const QString& textToInsert);
-
 	public:
 		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event);
 
@@ -31,6 +23,14 @@ class INTERACTIONBASE_API HText : public GenericHandler
 		virtual void mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event);
 		virtual void focusOutEvent(Visualization::Item *target, QFocusEvent *event);
 		static HText* instance();
+
+	protected:
+		HText();
+
+		virtual void setNewText(Visualization::Item *target, const QString& newText);
+		void moveCaret(Visualization::Item *target, QKeyEvent *event);
+		void erase(Visualization::Item *target, bool forwards, bool onlyDeleteIfSelected);
+		void insertText(Visualization::Item *target, const QString& textToInsert);
 };
 
 }

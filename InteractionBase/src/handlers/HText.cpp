@@ -102,6 +102,9 @@ void HText::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 				case Qt::Key_Right:
 					moveCaret(target, event);
 					break;
+				case Qt::Key_Tab:
+					GenericHandler::keyPressEvent(target, event);
+					break;
 
 				default:
 					{

@@ -11,9 +11,11 @@
 #include "handlers/HText.h"
 #include "handlers/HExtendable.h"
 #include "handlers/HCommandPrompt.h"
+#include "handlers/HSceneHandlerItem.h"
 
 #include "vis/CommandPrompt.h"
 
+#include "VisualizationBase/headers/items/SceneHandlerItem.h"
 #include "VisualizationBase/headers/items/VExtendable.h"
 #include "VisualizationBase/headers/items/VList.h"
 #include "VisualizationBase/headers/items/Text.h"
@@ -33,6 +35,7 @@ Log* InteractionBase::logger = NULL;
 bool InteractionBase::initialize(Envision::EnvisionManager&)
 {
 	logger = Logger::Log::getLogger("interactionbase");
+	Visualization::SceneHandlerItem::setInteractionHandler(HSceneHandlerItem::instance());
 	Visualization::VExtendable::setInteractionHandler(HExtendable::instance());
 	Visualization::VList::setInteractionHandler(GenericHandler::instance());
 	Visualization::Text::setInteractionHandler(HText::instance());

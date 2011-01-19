@@ -13,8 +13,6 @@
 
 #include "VisualizationBase/headers/Scene.h"
 
-#include <QtCore/QtDebug>
-
 namespace Interaction {
 
 HCommandPrompt::HCommandPrompt()
@@ -48,6 +46,18 @@ void HCommandPrompt::keyReleaseEvent(Visualization::Item *target, QKeyEvent *eve
 		else
 		{
 			prompt->setResult(result);
+			prompt->scene()->updateTopLevelItems();
+		}
+	}
+	else if (event->key() == Qt::Key_Tab)
+	{
+		int numSuggestions = prompt->suggestions().size();
+		if (prompt->result()) numSuggestions += prompt->result()->suggestions().size();
+
+		if ( numSuggestions  == 1)
+		{
+			if ( prompt->suggestions().size() == 1 ) prompt->takeSuggestion(prompt->suggestions().first());
+			else prompt->takeSuggestion(prompt->result()->suggestions().first());
 			prompt->scene()->updateTopLevelItems();
 		}
 	}

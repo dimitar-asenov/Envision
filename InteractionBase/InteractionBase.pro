@@ -30,7 +30,9 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/handlers/GenericHandler.h \
+HEADERS += headers/commands/CSceneHandlerItemExit.h \
+    headers/handlers/HSceneHandlerItem.h \
+    headers/handlers/GenericHandler.h \
     headers/handlers/HCommandPrompt.h \
     headers/handlers/HExtendable.h \
     headers/handlers/HText.h \
@@ -46,7 +48,9 @@ HEADERS += headers/handlers/GenericHandler.h \
     headers/commands/Command.h \
     headers/interactionbase_api.h \
     src/interactionbase.h
-SOURCES += src/handlers/GenericHandler.cpp \
+SOURCES += src/commands/CSceneHandlerItemExit.cpp \
+    src/handlers/HSceneHandlerItem.cpp \
+    src/handlers/GenericHandler.cpp \
     src/handlers/HCommandPrompt.cpp \
     src/handlers/HExtendable.cpp \
     src/handlers/HText.cpp \

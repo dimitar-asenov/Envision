@@ -18,6 +18,7 @@
 namespace Interaction {
 
 class CommandResult;
+class CommandSuggestion;
 
 class INTERACTIONBASE_API CommandExecutionEngine
 {
@@ -26,12 +27,15 @@ class INTERACTIONBASE_API CommandExecutionEngine
 		static CommandExecutionEngine* instance();
 
 		virtual void execute(Visualization::Item *target, const QString& command);
+		virtual QList<CommandSuggestion*> autoComplete(Visualization::Item *target, const QString& textSoFar);
+
 		CommandResult* acquireResult();
 		void deleteLastCommandResult();
 
 	protected:
 		CommandExecutionEngine();
 
+		virtual QString extractNavigationString(QString& command);
 		virtual Visualization::Item* navigate(Visualization::Item *originator, const QString& navigationString);
 
 		virtual QStringList tokenize(const QString&string, const QString& quoteSymbols, const QString& escapeSymbols);

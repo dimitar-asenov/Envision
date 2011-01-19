@@ -31,6 +31,42 @@
 		<alignment>1</alignment>
 	</errorContainer>
 	<commandText prototypes="item/Text/default" />
-	<defaultSuggestion prototypes="item/TextAndDescription/default" />
-	<defaultError prototypes="item/TextAndDescription/default" />
+	<defaultSuggestion prototypes="item/TextAndDescription/default">
+		<shape prototypes="shape/Box/default">
+			Box
+			<backgroundBrush>
+				<gradient>
+					<stopPoints>
+						<e1>
+							<second>
+								<alpha>255</alpha>
+								<red>200</red>
+								<green>255</green>
+								<blue>200</blue>
+							</second>
+						</e1>	
+					</stopPoints>
+				</gradient>
+			</backgroundBrush>
+		</shape>
+	</defaultSuggestion>
+	<defaultError prototypes="item/TextAndDescription/default">
+		<shape prototypes="shape/Box/default">
+			Box
+			<backgroundBrush>
+				<gradient>
+					<stopPoints>
+						<e1>
+							<second>
+								<alpha>255</alpha>
+								<red>255</red>
+								<green>200</green>
+								<blue>200</blue>
+							</second>
+						</e1>	
+					</stopPoints>
+				</gradient>
+			</backgroundBrush>
+		</shape>
+	</defaultError>
 </style>
