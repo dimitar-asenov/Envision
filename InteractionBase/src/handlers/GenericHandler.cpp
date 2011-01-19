@@ -14,8 +14,10 @@
 
 namespace Interaction {
 
-GenericHandler::GenericHandler() :
-	executionEngine_(CommandExecutionEngine::instance()), prompt_(NULL)
+CommandExecutionEngine* GenericHandler::executionEngine_ = CommandExecutionEngine::instance();
+CommandPrompt* GenericHandler::prompt_ = NULL;
+
+GenericHandler::GenericHandler()
 {
 }
 
@@ -23,6 +25,21 @@ GenericHandler* GenericHandler::instance()
 {
 	static GenericHandler h;
 	return &h;
+}
+
+CommandExecutionEngine* GenericHandler::executionEngine()
+{
+	return executionEngine_;
+}
+
+void GenericHandler::setCommandExecutionEngine(CommandExecutionEngine *engine)
+{
+	executionEngine_ = engine;
+}
+
+CommandPrompt* GenericHandler::prompt()
+{
+	return prompt_;
 }
 
 void GenericHandler::removeCommandPrompt()

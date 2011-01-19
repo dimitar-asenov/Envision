@@ -24,11 +24,11 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 	public:
 		static GenericHandler* instance();
 
+		static CommandExecutionEngine* executionEngine();
+		static void setCommandExecutionEngine(CommandExecutionEngine *engine);
+
 		const QList<Command*>& commands();
 		void addCommand(Command* command);
-
-		CommandExecutionEngine* executionEngine();
-		void setCommandExecutionEngine(CommandExecutionEngine *engine);
 
 		CommandPrompt* prompt();
 		void removeCommandPrompt();
@@ -49,15 +49,13 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 
 	private:
 		QList<Command*> supportedCommands;
-		CommandExecutionEngine* executionEngine_;
-		CommandPrompt* prompt_;
+
+		static CommandExecutionEngine* executionEngine_;
+		static CommandPrompt* prompt_;
 };
 
 inline const QList<Command*>& GenericHandler::commands() { return supportedCommands; }
 inline void GenericHandler::addCommand(Command* command) { supportedCommands.append(command); }
-inline CommandExecutionEngine* GenericHandler::executionEngine() { return executionEngine_; }
-inline void GenericHandler::setCommandExecutionEngine(CommandExecutionEngine *engine) { executionEngine_ = engine; }
-inline CommandPrompt* GenericHandler::prompt() { return prompt_; }
 
 }
 
