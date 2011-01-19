@@ -29,9 +29,11 @@ class VISUALIZATIONBASE_API MainView: public View
 		static const int MINIMAP_DEFAULT_HEIGHT = 200;
 
 	protected:
+		virtual bool event(QEvent *event);
 		virtual void resizeEvent( QResizeEvent *event );
 		virtual void wheelEvent(QWheelEvent *event);
 		virtual void scrollContentsBy(int dx, int dy);
+
 
 	private:
 		MiniMap* miniMap;

@@ -38,6 +38,28 @@ void MainView::setMiniMapSize(int width, int height)
 	}
 }
 
+bool MainView::event( QEvent *event )
+{
+	switch (event->type())
+	{
+		case QEvent::KeyPress :
+		{
+			QKeyEvent *k = (QKeyEvent *)event;
+			View::keyPressEvent(k);
+			if (k->key() == Qt::Key_Backtab || k->key() == Qt::Key_Tab ) event->accept();
+			return true;
+		}
+		case QEvent::KeyRelease :
+		{
+			QKeyEvent *k = (QKeyEvent *)event;
+			View::keyReleaseEvent(k);
+			if (k->key() == Qt::Key_Backtab || k->key() == Qt::Key_Tab ) event->accept();
+			return true;
+		}
+		default: return View::event( event );
+	}
+}
+
 void MainView::resizeEvent(QResizeEvent *event)
 {
 	View::resizeEvent(event);
