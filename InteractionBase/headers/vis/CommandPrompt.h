@@ -62,7 +62,8 @@ class INTERACTIONBASE_API CommandPrompt : public Visualization::Item
 		CommandResult* result;
 		QList<CommandSuggestion*> suggestions;	//Suggestions from the result do not appear here.
 
-
+		// This is true when the item is created and is set to false after the first update.
+		bool justCreated;
 };
 
 inline Visualization::Item* CommandPrompt::commandReceiver() { return commandReceiver_; }

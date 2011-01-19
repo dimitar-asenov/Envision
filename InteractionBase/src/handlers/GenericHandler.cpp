@@ -59,7 +59,6 @@ void GenericHandler::showCommandPrompt(Visualization::Item* commandReceiver)
 	{
 		removeCommandPrompt();
 		prompt_ = new CommandPrompt(commandReceiver);
-		prompt_->setPos( commandReceiver->mapToScene(commandReceiver->pos()));
 		commandReceiver->scene()->addTopLevelItem(prompt_);
 		prompt_->initializeCommand();
 		commandReceiver->scene()->updateTopLevelItems();

@@ -14,6 +14,20 @@ using namespace Visualization;
 
 namespace Interaction {
 
+/**
+ * Specifies the minimal height of the commandReceiver item which will make a new prompt appear in the center of the
+ * item.
+ *
+ * If the receiver item's height is less than this number, then the prompt will be placed directly under the item.
+ * Otherwise the prompt will be centered inside the item.
+ */
+const int COMMAND_RECEIVER_ITEM_MIN_PROMPT_CENTER_HEIGHT = 50;
+
+/**
+ * The distance between a prompt which is shown under the command receiver item and that item.
+ */
+const int PROMPT_TO_RECEIVER_DISTANCE = 3;
+
 ITEM_COMMON_DEFINITIONS(CommandPrompt)
 
 CommandPrompt::CommandPrompt(Item* commandReceiver, const CommandPromptStyle* style) :
@@ -23,7 +37,8 @@ CommandPrompt::CommandPrompt(Item* commandReceiver, const CommandPromptStyle* st
 	suggestionContainer(new SequentialLayout(NULL, &style->suggestionContainer())),
 	errorContainer(new SequentialLayout(NULL, &style->errorContainer())),
 	command( new Text(NULL, &style->commandText())),
-	result(NULL)
+	result(NULL),
+	justCreated(true)
 {
 	setFlag(QGraphicsItem::ItemIsMovable);
 
@@ -76,6 +91,26 @@ void CommandPrompt::determineChildren()
 void CommandPrompt::updateGeometry(int availableWidth, int availableHeight)
 {
 	Item::updateGeometry(layout, availableWidth, availableHeight);
+
+	// Set the position of the prompt
+	if (justCreated)
+	{
+		QPointF promptPos = commandReceiver_->mapToScene(0,0);
+		if (commandReceiver_->height() < COMMAND_RECEIVER_ITEM_MIN_PROMPT_CENTER_HEIGHT)
+		{
+			// Show the prompt under the receiver item.
+			promptPos.setY( promptPos.y() + commandReceiver_->height() + PROMPT_TO_RECEIVER_DISTANCE);
+		}
+		else
+		{
+			// Show the prompt at the center of the receiver item.
+			promptPos.setX( (commandReceiver_->width()-width()) / 2 );
+			promptPos.setY( (commandReceiver_->height()-height()) / 2 );
+		}
+
+		setPos(promptPos);
+		justCreated = false;
+	}
 }
 
 void CommandPrompt::setResult(CommandResult* result_)
