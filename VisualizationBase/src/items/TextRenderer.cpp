@@ -174,7 +174,23 @@ template<class T> void TextRenderer<T>::paint(QPainter *painter, const QStyleOpt
 	}
 }
 
-template<class T> void TextRenderer<T>::setSelected(int xBegin, int xEnd)
+template<class T> void TextRenderer<T>::selectAll()
+{
+	selectionBegin = 0;
+	selectionEnd = text.length();
+	selected = this;
+	this->setUpdateNeeded();
+}
+
+template<class T> void TextRenderer<T>::setSelectedCharacters(int first, int last)
+{
+	selectionBegin = first;
+	selectionEnd = last;
+	selected = this;
+	this->setUpdateNeeded();
+}
+
+template<class T> void TextRenderer<T>::setSelectedByDrag(int xBegin, int xEnd)
 {
 	selectionBegin = 0;
 	selectionEnd = 0;
@@ -216,10 +232,7 @@ template<class T> int TextRenderer<T>::caretPosition()
 
 template<class T> void TextRenderer<T>::setCaretPosition(int beforeCharacter)
 {
-	selectionBegin = beforeCharacter;
-	selectionEnd = beforeCharacter;
-	selected = this;
-	this->setUpdateNeeded();
+	setSelectedCharacters(beforeCharacter,beforeCharacter);
 }
 
 // Specialization of constructors

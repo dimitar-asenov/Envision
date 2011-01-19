@@ -37,6 +37,8 @@ class VISUALIZATIONBASE_API TextRenderer : public T
 			/**
 			 * selectionBegin and selectionEnd indicate the character positions at which the selection begins and ends. If
 			 * the user selected the text by dragging from right to left then selectionEnd < selectionBegin.
+			 *
+			 * If the entire text is selected then selectionBegin=0 and selectionEnd=text.length() (or vice versa).
 			 */
 			static int selectionBegin;
 			static int selectionEnd;
@@ -71,7 +73,9 @@ class VISUALIZATIONBASE_API TextRenderer : public T
 
 			virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
-			void setSelected(int xBegin, int xEnd);
+			void selectAll();
+			void setSelectedByDrag(int xBegin, int xEnd);
+			void setSelectedCharacters(int first, int last);
 			void setCaretPosition(int beforeCharacter);
 			static void resetSelected();
 
