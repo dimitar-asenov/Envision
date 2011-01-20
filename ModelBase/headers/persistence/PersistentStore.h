@@ -8,7 +8,7 @@
 #ifndef PERSISTENTSTORE_H_
 #define PERSISTENTSTORE_H_
 
-#include "modelbase_api.h"
+#include "../modelbase_api.h"
 
 #include <QtCore/QString>
 #include <QtCore/QList>
@@ -19,6 +19,7 @@ typedef long long NodeIdType;
 
 class Node;
 class Model;
+class PersistedNode;
 
 struct MODELBASE_API LoadedNode
 {
@@ -40,6 +41,8 @@ class PersistentStore
 		virtual QList<LoadedNode> loadAllSubNodes(Node* parent) = 0;
 		virtual Node* loadSubNode(Node* parent, const QString& name) = 0;
 		virtual QList<LoadedNode> loadPartialNode(Node* partialNode) = 0;
+		virtual PersistedNode* loadCompleteNodeSubtree(const QString& modelName, NodeIdType persistenceUnitId, NodeIdType nodeId) = 0;
+
 		virtual int loadIntValue() = 0;
 		virtual QString loadStringValue() = 0;
 		virtual double loadFloatValue() = 0;

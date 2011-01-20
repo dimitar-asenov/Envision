@@ -10,7 +10,7 @@
 
 #include "filepersistence_api.h"
 
-#include "ModelBase/headers/PersistentStore.h"
+#include "ModelBase/headers/persistence/PersistentStore.h"
 
 #include <QtXml/QDomDocument>
 #include <QtCore/QStringList>
@@ -55,6 +55,8 @@ class FILEPERSISTENCE_API FileStore: public Model::PersistentStore
 		Model::LoadedNode loadNode(QDomElement& nodeElement, Model::Node* parent);
 		void saveNodeDirectly(const Model::Node *node, const QString &name, bool partialLoadHint);
 
+		Model::PersistedNode* loadNodeSubtree();
+
 		/**
 		 * Returns the name of the persistent unit that corresponds to the specified node.
 		 *
@@ -98,6 +100,8 @@ class FILEPERSISTENCE_API FileStore: public Model::PersistentStore
 		virtual QList<Model::LoadedNode> loadAllSubNodes(Model::Node* parent);
 		virtual Model::Node* loadSubNode(Model::Node* parent, const QString& name);
 		virtual QList<Model::LoadedNode> loadPartialNode(Model::Node* partialNode);
+		virtual Model::PersistedNode* loadCompleteNodeSubtree(const QString& modelName, Model::NodeIdType persistenceUnitId, Model::NodeIdType nodeId);
+
 		virtual int loadIntValue();
 		virtual QString loadStringValue();
 		virtual double loadFloatValue();

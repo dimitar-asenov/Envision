@@ -65,6 +65,11 @@ QList<LoadedNode> PersistentStoreMock::loadPartialNode(Node*)
 	return QList<LoadedNode>();
 }
 
+PersistedNode* PersistentStoreMock::loadCompleteNodeSubtree(const QString&, NodeIdType, NodeIdType)
+{
+	return NULL;
+}
+
 int PersistentStoreMock::loadIntValue()
 {
 	return 0;

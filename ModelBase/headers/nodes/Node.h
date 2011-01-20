@@ -9,7 +9,7 @@
 #define NODE_H_
 
 #include "../modelbase_api.h"
-#include "../PersistentStore.h"
+#include "../persistence/PersistentStore.h"
 
 #include <QtCore/QString>
 #include <QtCore/QMutex>
@@ -117,6 +117,8 @@ class MODELBASE_API Node
 		virtual void save(PersistentStore &store) const = 0;
 		virtual void loadFully(PersistentStore &store);
 
+		//TODO In the comment below the part that explains things about the revision is incorrect. The persistence store
+		//does not care about this currently. Either change the comment or fix this.
 		/**
 		 * Returns true if this node should be persisted in a new persistence unit. This is typically a per class value.
 		 *
@@ -129,7 +131,7 @@ class MODELBASE_API Node
 		 * class should return true as the result of this method.
 		 *
 		 * NOTE: The persistence engine will save the ID and last revision of all objects that which are marked as a new
-		 * persistence unit. Therefore this options should be used with care. Only node types closer to the root are
+		 * persistence unit. Therefore this option should be used with care. Only node types closer to the root are
 		 * suitable for being new persistence units. Nodes closer to the leafs, such as expressions and text values should
 		 * not be new persistence units, as this will greatly increase the memory required by the persistence engine.
 		 */

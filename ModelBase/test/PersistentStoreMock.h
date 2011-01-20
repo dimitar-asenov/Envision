@@ -8,7 +8,7 @@
 #ifndef PERSISTENTSTOREMOCK_H_
 #define PERSISTENTSTOREMOCK_H_
 
-#include "PersistentStore.h"
+#include "persistence/PersistentStore.h"
 
 namespace Model {
 
@@ -31,6 +31,8 @@ class PersistentStoreMock: public PersistentStore
 		QList<LoadedNode> loadAllSubNodes(Node* parent);
 		Node* loadSubNode(Node* parent, const QString& name);
 		QList<LoadedNode> loadPartialNode(Node* partialNode);
+		PersistedNode* loadCompleteNodeSubtree(const QString& modelName, NodeIdType persistenceUnitId, NodeIdType nodeId);
+
 		int loadIntValue();
 		QString loadStringValue();
 		double loadFloatValue();

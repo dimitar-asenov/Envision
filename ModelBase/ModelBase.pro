@@ -25,7 +25,10 @@ pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
-HEADERS += headers/test_nodes/BinaryNodePersistenceUnit.h \
+HEADERS += headers/persistence/PersistentStore.h \
+    headers/persistence/PersistedValue.h \
+    headers/persistence/PersistedNode.h \
+    headers/test_nodes/BinaryNodePersistenceUnit.h \
     headers/test_nodes/PartialList.h \
     headers/test_nodes/BinaryNodeAccessUnit.h \
     headers/test_nodes/BinaryNode.h \
@@ -54,10 +57,10 @@ HEADERS += headers/test_nodes/BinaryNodePersistenceUnit.h \
     headers/nodes/Text.h \
     headers/commands/ExtendedNodeOptional.h \
     headers/Model.h \
-    headers/PersistentStore.h \
     headers/modelbase_api.h \
     src/modelbase.h
-SOURCES += src/test_nodes/BinaryNodePersistenceUnit.cpp \
+SOURCES += src/persistence/PersistedNode.cpp \
+    src/test_nodes/BinaryNodePersistenceUnit.cpp \
     src/test_nodes/PartialList.cpp \
     src/test_nodes/BinaryNodeAccessUnit.cpp \
     src/test_nodes/BinaryNode.cpp \

@@ -7,9 +7,12 @@
 
 #include "FileStore.h"
 #include "FilePersistenceException.h"
+
 #include "ModelBase/headers/Model.h"
 #include "ModelBase/headers/nodes/Node.h"
 #include "ModelBase/headers/ModelException.h"
+#include "ModelBase/headers/persistence/PersistedNode.h"
+#include "ModelBase/headers/persistence/PersistedValue.h"
 
 namespace FilePersistence {
 
@@ -371,7 +374,7 @@ QList<Model::LoadedNode> FileStore::loadPartialNode(Model::Node* partialNode)
 		QString filename = getPersistenceUnitName(partialNode, &depth);
 		QDomElement rootElem = loadDoc(filename).firstChildElement();
 
-		// Search through the content in order to find the requested node it.
+		// Search through the content in order to find the requested node id.
 		QDomElement targetElem = findElementById(rootElem, QString::number(partialNode->getId()), depth);
 		if (targetElem.isNull()) throw FilePersistenceException("Could not find the persisted data for partial node with id " + QString::number(partialNode->getId()));
 
@@ -389,6 +392,67 @@ QList<Model::LoadedNode> FileStore::loadPartialNode(Model::Node* partialNode)
 
 	working = false;
 	storeAccess.unlock();
+
+	return result;
+}
+
+Model::PersistedNode* FileStore::loadCompleteNodeSubtree(const QString& modelName, Model::NodeIdType persistenceUnitId, Model::NodeIdType nodeId)
+{
+	storeAccess.lock();
+	working = true;
+
+	Model::PersistedNode* result = NULL;
+
+	try
+	{
+		modelDir = baseFolder.path() + QDir::toNativeSeparators("/" + modelName);
+		if ( !modelDir.exists() ) throw FilePersistenceException("Can not find root node folder " + modelDir.path());
+
+		QString filename;
+		if (persistenceUnitId > 0) filename = QString::number(persistenceUnitId);
+		else filename = modelName;
+		QDomElement rootElem = loadDoc(filename).firstChildElement();
+
+		// Search through the content in order to find the requested node id.
+		QDomElement targetElem = findElementById(rootElem, QString::number(nodeId), -1);
+		if (targetElem.isNull()) throw FilePersistenceException("Could not find the persisted data for partial node with id " + QString::number(nodeId));
+
+		currentParent = &targetElem;
+
+		// Load the node and return it.
+		result = loadNodeSubtree();
+	}
+	catch (Model::ModelException& e)
+	{
+		working = false;
+		storeAccess.unlock();
+		throw;
+	}
+
+	working = false;
+	storeAccess.unlock();
+
+	return result;
+}
+
+Model::PersistedNode* FileStore::loadNodeSubtree()
+{
+	checkIsWorking();
+
+	Model::PersistedNode* result = NULL;
+
+	QDomElement elem = currentParent->firstChildElement();
+	while ( !elem.isNull() )
+	{
+		Model::LoadedNode ln;
+		if ( elem.tagName() == XML_NEWUNIT_NODE_TAG ) ln = loadNewPersistenceUnit(elem.firstChild().nodeValue(), parent);
+		else
+			ln = loadNode(elem, parent);
+
+		result.append(ln);
+
+		elem = elem.nextSiblingElement();
+	}
 
 	return result;
 }
