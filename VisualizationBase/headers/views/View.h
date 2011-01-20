@@ -22,6 +22,7 @@ class VISUALIZATIONBASE_API View : public QGraphicsView
 		View(Scene *scene, View *parent = NULL);
 		virtual ~View();
 		QRectF visibleRect();
+		Scene* scene();
 };
 
 }

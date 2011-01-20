@@ -46,7 +46,6 @@ void HCommandPrompt::keyReleaseEvent(Visualization::Item *target, QKeyEvent *eve
 		else
 		{
 			prompt->setResult(result);
-			prompt->scene()->updateTopLevelItems();
 		}
 	}
 	else if (event->key() == Qt::Key_Tab)
@@ -58,7 +57,6 @@ void HCommandPrompt::keyReleaseEvent(Visualization::Item *target, QKeyEvent *eve
 		{
 			if ( prompt->suggestions().size() == 1 ) prompt->takeSuggestion(prompt->suggestions().first());
 			else prompt->takeSuggestion(prompt->result()->suggestions().first());
-			prompt->scene()->updateTopLevelItems();
 		}
 	}
 	else GenericHandler::keyReleaseEvent(target, event);

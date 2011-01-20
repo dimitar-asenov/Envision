@@ -29,13 +29,18 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 
 		void addTopLevelItem(Item* item);
 		void removeTopLevelItem(Item* item);
-		void updateTopLevelItems();
+		void scheduleUpdate();
 
 		virtual void customEvent(QEvent *event);
 
 		virtual SceneHandlerItem* sceneHandlerItem();
 
+	protected:
+		bool event(QEvent *event);
+
 	private:
+		bool needsUpdate;
+
 		ModelRenderer* renderer_;
 		SceneHandlerItem* sceneHandlerItem_;
 		QList<Item*> topLevelItems;

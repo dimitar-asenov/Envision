@@ -49,6 +49,7 @@ bool MainView::event( QEvent *event )
 			if (k->key() == Qt::Key_Backtab || k->key() == Qt::Key_Tab ) event->accept();
 			return true;
 		}
+		break;
 		case QEvent::KeyRelease :
 		{
 			QKeyEvent *k = (QKeyEvent *)event;
@@ -56,6 +57,7 @@ bool MainView::event( QEvent *event )
 			if (k->key() == Qt::Key_Backtab || k->key() == Qt::Key_Tab ) event->accept();
 			return true;
 		}
+		break;
 		default: return View::event( event );
 	}
 }

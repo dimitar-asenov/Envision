@@ -61,11 +61,11 @@ TEST(InteractionBase, TextSelect)
 
 	VList* l = dynamic_cast<VList*> (renderer->render(NULL, list));
 	scene->addTopLevelItem(l);
-	scene->updateTopLevelItems();
+	scene->scheduleUpdate();
 	QApplication::processEvents();
 
 	l->at<VExtendable>(0)->setExpanded();
-	scene->updateTopLevelItems();
+	scene->scheduleUpdate();
 
 	// Create view
 	MainView* view = new MainView(scene);

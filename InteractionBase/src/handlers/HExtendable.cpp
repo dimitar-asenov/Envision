@@ -29,7 +29,6 @@ void HExtendable::mouseDoubleClickEvent(Visualization::Item *target, QGraphicsSc
 	{
 		Visualization::VExtendable *ext = dynamic_cast<Visualization::VExtendable*> (target);
 		ext->setExpanded(! ext->expanded());
-		target->scene()->updateTopLevelItems();
 	}
 	else GenericHandler::mouseDoubleClickEvent(target, event);
 }

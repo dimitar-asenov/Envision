@@ -30,11 +30,11 @@ View::~View()
 QRectF View::visibleRect()
 {
 	return mapToScene(rect()).boundingRect();
+}
 
-//	QPointF topLeft(horizontalScrollBar()->value(), verticalScrollBar()->value());
-//	QPointF bottomRight = topLeft + viewport()->rect().bottomRight();
-//	QMatrix mat = matrix().inverted();
-//	return mat.mapRect(QRectF(topLeft, bottomRight));
+Scene* View::scene()
+{
+	return static_cast<Scene*> (QGraphicsView::scene());
 }
 
 }

@@ -50,6 +50,7 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 	protected:
 		GenericHandler();
 
+		virtual void filterSelectedItems(Visualization::Item *target, QGraphicsSceneMouseEvent *event);
 	private:
 		QList<Command*> supportedCommands;
 

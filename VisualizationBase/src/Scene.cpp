@@ -23,7 +23,7 @@ class UpdateSceneEvent : public QEvent
 		UpdateSceneEvent() : QEvent(EventType){};
 };
 
-Scene::Scene() : QGraphicsScene(VisualizationManager::instance().getMainWindow()), renderer_(NULL), sceneHandlerItem_(new SceneHandlerItem(this))
+Scene::Scene() : QGraphicsScene(VisualizationManager::instance().getMainWindow()), needsUpdate(false), renderer_(NULL), sceneHandlerItem_(new SceneHandlerItem(this))
 {
 	// TODO Auto-generated constructor stub
 }
@@ -50,9 +50,13 @@ void Scene::removeTopLevelItem(Item* item)
 	removeItem(item);
 }
 
-void Scene::updateTopLevelItems()
+void Scene::scheduleUpdate()
 {
-	QApplication::postEvent(this, new UpdateSceneEvent());
+	if (!needsUpdate)
+	{
+		needsUpdate = true;
+		QApplication::postEvent(this, new UpdateSceneEvent());
+	}
 }
 
 void Scene::customEvent(QEvent *event)
@@ -73,9 +77,22 @@ void Scene::customEvent(QEvent *event)
 			addItem(selections.last());
 			selections.last()->updateSubtree();
 		}
+		needsUpdate = false;
 	}
 	else
 		QGraphicsScene::customEvent(event);
+}
+
+bool Scene::event(QEvent *event)
+{
+	if (event->type() != UpdateSceneEvent::EventType &&
+		 event->type() != QEvent::MetaCall  &&
+		 event->type() != QEvent::GraphicsSceneMouseMove &&
+		 event->type() !=QEvent::GraphicsSceneHoverMove
+		)
+		scheduleUpdate();
+
+	return QGraphicsScene::event(event);
 }
 
 

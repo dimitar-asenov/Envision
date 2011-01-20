@@ -76,7 +76,6 @@ void HText::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			case Qt::Key_V:
 				{
 					insertText(target, QApplication::clipboard()->text());
-					target->scene()->updateTopLevelItems();
 				}
 				break;
 			default:
@@ -113,8 +112,6 @@ void HText::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 					}
 					break;
 			}
-
-			if (event->isAccepted()) target->scene()->updateTopLevelItems();
 		}
 		else GenericHandler::keyPressEvent(target, event);
 	}
@@ -125,10 +122,9 @@ void HText::mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEven
 	if ( event->button() == Qt::LeftButton )
 	{
 		TEXTRENDERER_SET2(setSelectedByDrag, event->pos().x(), event->pos().x());
-		target->scene()->clearSelection();
-		target->scene()->updateTopLevelItems();
 	}
-	else GenericHandler::mousePressEvent(target, event);
+
+	GenericHandler::mousePressEvent(target, event);
 }
 
 void HText::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
@@ -144,7 +140,7 @@ void HText::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent
 		GenericHandler::mouseMoveEvent(target, event);
 	}
 
-	target->scene()->updateTopLevelItems();
+	target->scene()->scheduleUpdate();
 }
 
 void HText::focusOutEvent(Visualization::Item *target, QFocusEvent *)
