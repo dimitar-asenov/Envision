@@ -26,8 +26,8 @@ class VISUALIZATIONBASE_API VList: public ModelItem
 		SequentialLayout items_;
 
 	protected:
-		void determineChildren();
-		void updateGeometry(int availableWidth, int availableHeight);
+		virtual void determineChildren();
+		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	public:
 		VList(Item* parent, Model::List* node, const VListStyle* style = Styles::item<VList>("default"));

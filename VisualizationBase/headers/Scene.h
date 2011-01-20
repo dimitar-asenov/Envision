@@ -16,15 +16,13 @@
 namespace Visualization {
 
 class SceneHandlerItem;
+class SelectedItem;
+
 class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 {
-	private:
-		ModelRenderer* renderer_;
-		SceneHandlerItem* sceneHandlerItem_;
-		QList<Item*> topLevelItems;
-
 	public:
 		Scene();
+		virtual ~Scene();
 		void setRenderer(ModelRenderer* renderer);
 
 		ModelRenderer* renderer();
@@ -37,6 +35,11 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 
 		virtual SceneHandlerItem* sceneHandlerItem();
 
+	private:
+		ModelRenderer* renderer_;
+		SceneHandlerItem* sceneHandlerItem_;
+		QList<Item*> topLevelItems;
+		QList<SelectedItem*> selections;
 };
 
 inline void Scene::setRenderer(ModelRenderer* renderer) { renderer_ = renderer; }

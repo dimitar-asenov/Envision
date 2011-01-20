@@ -28,7 +28,9 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/items/SceneHandlerItem.h \
+HEADERS += headers/items/SelectedItemStyle.h \
+    headers/items/SelectedItem.h \
+    headers/items/SceneHandlerItem.h \
     headers/items/TextRenderer.h \
     headers/InteractionHandler.h \
     headers/views/MiniMap.h \
@@ -66,7 +68,9 @@ HEADERS += headers/items/SceneHandlerItem.h \
     src/visualizationbase.h \
     headers/VisualizationException.h \
     headers/visualizationbase_api.h
-SOURCES += src/items/SceneHandlerItem.cpp \
+SOURCES += src/items/SelectedItemStyle.cpp \
+    src/items/SelectedItem.cpp \
+    src/items/SceneHandlerItem.cpp \
     src/items/TextRenderer.cpp \
     src/InteractionHandler.cpp \
     src/views/MiniMap.cpp \

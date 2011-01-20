@@ -103,6 +103,9 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		virtual void focusOutEvent(QFocusEvent *event);
 
 	public:
+		const static int LAYER_DEFAULT_Z = 0;
+		const static int LAYER_SELECTION_Z = 100;
+
 		Item(Item* parent, const ItemStyle* style = NULL);
 		virtual ~Item();
 

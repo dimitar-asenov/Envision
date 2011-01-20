@@ -21,6 +21,7 @@ Item::Item(Item* parent, const ItemStyle* style) :
 	setFlag(QGraphicsItem::ItemIsFocusable);
 	setFlag(QGraphicsItem::ItemIsSelectable);
 	setStyle(style);
+	setZValue(LAYER_DEFAULT_Z);
 }
 
 Item::~Item()
