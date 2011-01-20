@@ -122,7 +122,7 @@ void GenericHandler::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneM
 				parent = parent->parentItem();
 			}
 		}
-
+		target->scene()->updateTopLevelItems();
 	}
 
 	InteractionHandler::mouseMoveEvent(target, event);
