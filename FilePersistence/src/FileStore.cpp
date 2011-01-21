@@ -16,20 +16,10 @@
 
 namespace FilePersistence {
 
-const char* XML_DOM_TYPE = "EnvisionFilePersistence";
 const char* XML_NEWUNIT_NODE_TAG = "persistencenewunit";
 
-const int MAX_DOUBLE_PRECISION = 15;
-
-const int ATTRIBUTE_TRUE = 1;
-const int ATTRIBUTE_FALSE = 0;
-
-const QString PREFIX_STRING = QString("S_");
-const QString PREFIX_INTEGER = QString("I_");
-const QString PREFIX_DOUBLE = QString("D_");
-
 FileStore::FileStore() : // TODO the Envision folder should be taken from the environment not hardcoded.
-	baseFolder(QDir::home().path() + QDir::toNativeSeparators("/Envision/projects")), working(false), currentDoc(NULL), currentParent(NULL)
+	baseFolder(QDir::home().path() + QDir::toNativeSeparators("/Envision/projects")), working(false), xml(NULL)
 {
 }
 
@@ -42,7 +32,7 @@ void FileStore::setBaseFolder(const QString& path)
 	baseFolder = path;
 }
 
-QString FileStore::getPersistenceUnitName(const Model::Node *node, int* atDepth)
+QString FileStore::getPersistenceUnitName(const Model::Node *node, int* atDepth) const
 {
 	// Find the parent which is a persistent unit, if any
 	// Record the depth of the current node relative to the persistent unit root.
@@ -66,22 +56,6 @@ QString FileStore::getPersistenceUnitName(const Model::Node *node, int* atDepth)
 	if ( atDepth ) *atDepth = depth;
 
 	return name;
-}
-
-QStringList FileStore::getChildrenNames(const QDomElement* elem) const
-{
-	QStringList names;
-
-	QDomElement child = elem->firstChildElement();
-	while ( !child.isNull() )
-	{
-		QString name = child.attribute("name", QString());
-		if (!name.isEmpty()) names.append(name);
-
-		child = child.nextSiblingElement();
-	}
-
-	return names;
 }
 
 //**********************************************************************************************************************
@@ -122,67 +96,52 @@ void FileStore::saveModel(Model::Model& model, const QString &name)
 void FileStore::saveStringValue(const QString &value)
 {
 	checkIsWorking();
-
-	QDomText text = currentDoc->createTextNode(PREFIX_STRING + value);
-	currentParent->appendChild(text);
+	xml->saveStringValue(value);
 }
 
 void FileStore::saveIntValue(int value)
 {
 	checkIsWorking();
-
-	QDomText text = currentDoc->createTextNode(PREFIX_INTEGER + QString::number(value));
-	currentParent->appendChild(text);
+	xml->saveIntValue(value);
 }
 
 void FileStore::saveFloatValue(double value)
 {
 	checkIsWorking();
-
-	QDomText text = currentDoc->createTextNode(PREFIX_INTEGER + QString::number(value, 'f', MAX_DOUBLE_PRECISION));
-	currentParent->appendChild(text);
+	xml->saveFloatValue(value);
 }
 
 void FileStore::saveNewPersistenceUnit(const Model::Node *node, const QString &name, bool partialLoadHint)
 {
 	checkIsWorking();
 
-	QDomDocument* oldDoc = currentDoc;
-	QDomElement* oldParent = currentParent;
+	XMLModel* oldXML = xml;
 
-	if ( currentDoc != NULL ) // If this is not the root node, then we should put a reference to this node
+	if ( xml != NULL ) // If this is not the root node, then we should put a reference to this node
 	{
-		QDomElement container = currentDoc->createElement(XML_NEWUNIT_NODE_TAG);
-		container.setAttribute("name", name);
-		QDomText text = currentDoc->createTextNode(QString::number(node->getId()));
-		container.appendChild(text);
-		currentParent->appendChild(container);
+		xml->beginSaveChildNode(XML_NEWUNIT_NODE_TAG);
+		xml->setName(name);
+		xml->saveStringValue(QString::number(node->getId()));
+		xml->endSaveChildNode();
 	}
 
-	QDomDocument doc(XML_DOM_TYPE);
-	currentDoc = &doc;
-
-	// We need a fake element since currentParent is of type QDomElement and QDomDocument is not
-	QDomElement fakeElem = currentDoc->createElement(node->getTypeName());
-	currentParent = &fakeElem;
-
+	xml = new XMLModel();
 	saveNodeDirectly(node, name, partialLoadHint);
-	currentDoc->appendChild(fakeElem.firstChild());
 
 	QString filename;
-	if ( oldDoc == NULL ) filename = name; // This is the root of the model, save the file name
+	if ( oldXML == NULL ) filename = name; // This is the root of the model, save the file name
 	else
 		filename = QString::number(node->getId()); // This is not the root, so save by id
 
 	QFile file(modelDir.absoluteFilePath(filename));
-	if ( !file.open(QIODevice::WriteOnly | QIODevice::Truncate) ) throw FilePersistenceException("Could not open file " + file.fileName());
+	if ( !file.open(QIODevice::WriteOnly | QIODevice::Truncate) ) throw FilePersistenceException("Could not open file " + file.fileName() + ". " +file.errorString());
 
 	QTextStream ts(&file);
-	ts << doc.toString();
+	ts << xml->documentText();
 	file.close();
 
-	currentParent = oldParent;
-	currentDoc = oldDoc;
+	SAFE_DELETE(xml);
+	xml = oldXML;
 }
 
 void FileStore::saveNode(const Model::Node *node, const QString &name, bool partialLoadHint)
@@ -196,14 +155,11 @@ void FileStore::saveNode(const Model::Node *node, const QString &name, bool part
 
 void FileStore::saveNodeDirectly(const Model::Node *node, const QString &name, bool partialLoadHint)
 {
-	QDomElement* oldParent = currentParent;
+	xml->beginSaveChildNode(node->getTypeName());
+	xml->setName(name);
+	xml->setId(node->getId());
+	xml->setPartialHint(partialLoadHint);
 
-	QDomElement elem = currentDoc->createElement(node->getTypeName());
-	elem.setAttribute("name", name);
-	elem.setAttribute("id", QString::number(node->getId()));
-	elem.setAttribute("partial", partialLoadHint ? ATTRIBUTE_TRUE : ATTRIBUTE_FALSE);
-
-	currentParent = &elem;
 	node->save(*this);
 
 	if ( !node->isFullyLoaded() )
@@ -212,7 +168,7 @@ void FileStore::saveNodeDirectly(const Model::Node *node, const QString &name, b
 		// persisted and was not saved so far, we will read it back from the persistent store and store it again.
 
 		// Get a list of sub nodes which have already been persisted.
-		QStringList persistedChildren = getChildrenNames(currentParent);
+		QStringList persistedChildren = xml->getChildrenNames();
 
 		// Load the old persisted version of this node
 		int depth;
@@ -220,29 +176,24 @@ void FileStore::saveNodeDirectly(const Model::Node *node, const QString &name, b
 
 		// TODO this will fail if the rootDir of the FileStore has changed in the mean time. E.g when saving in a new
 		// location.
-		QDomElement rootElem = loadDoc(filename).firstChildElement();
+		XMLModel* persisted = new XMLModel(modelDir.absoluteFilePath(filename));
 
-		// Search through the content in order to find the requested node.
-		QDomElement oldElem = findElementById(rootElem, QString::number(node->getId()), depth);
+		if ( persisted->goToElement(node->getId()) == false )
+			throw FilePersistenceException("Could not find the persistent unit for partial node with id " + QString::number(node->getId()));
+		persisted->goToFirstChild();
 
-		if (oldElem.isNull()) throw FilePersistenceException("Could not find the persistent unit for partial node with id " + QString::number(node->getId()));
-
-		QDomElement child = oldElem.firstChildElement();
-		while ( !child.isNull() )
+		while (true)
 		{
-			QString name = child.attribute("name", QString());
-			if (!persistedChildren.contains(name))
-			{
-				currentParent->appendChild( currentDoc->importNode(child, true) );
-			}
+			if (!persistedChildren.contains(persisted->getName())) xml->importChildFromXML(persisted->getCurrentElement());
 
-			child = child.nextSiblingElement();
+			if (persisted->hasNext()) persisted->loadNext();
+			else break;
 		}
 
+		SAFE_DELETE(persisted);
 	}
-	currentParent = oldParent;
 
-	currentParent->appendChild(elem);
+	xml->endSaveChildNode();
 }
 
 Model::Node* FileStore::loadRootNode(const QString &name)
@@ -273,24 +224,17 @@ Model::Node* FileStore::loadRootNode(const QString &name)
 
 Model::LoadedNode FileStore::loadNewPersistenceUnit(const QString& name, Model::Node* parent)
 {
-	QDomElement elem = loadDoc(name).firstChildElement();
-	return loadNode(elem, parent);
+	XMLModel* oldXML = xml;
+	xml = new XMLModel(modelDir.absoluteFilePath(name));
+	xml->goToFirstChild();
+	Model::LoadedNode ln =  loadNode(parent);
+
+	SAFE_DELETE(xml);
+	xml = oldXML;
+
+	return ln;
 }
 
-QDomDocument FileStore::loadDoc(const QString& name) const
-{
-	QDomDocument doc(XML_DOM_TYPE);
-	QFile file(modelDir.absoluteFilePath(name));
-	if ( !file.open(QIODevice::ReadOnly) ) throw FilePersistenceException("Could not open file " + file.fileName() + ".");
-
-	if ( !doc.setContent(&file) )
-	{
-		file.close();
-		throw FilePersistenceException("Reading of the XML structure of file " + file.fileName() + " failed.");
-	}
-	file.close();
-	return doc;
-}
 
 QList<Model::LoadedNode> FileStore::loadAllSubNodes(Model::Node* parent)
 {
@@ -298,41 +242,31 @@ QList<Model::LoadedNode> FileStore::loadAllSubNodes(Model::Node* parent)
 
 	QList < Model::LoadedNode > result;
 
-	QDomElement elem = currentParent->firstChildElement();
-	while ( !elem.isNull() )
+	if (xml->hasChildren())
 	{
-		Model::LoadedNode ln;
-		if ( elem.tagName() == XML_NEWUNIT_NODE_TAG ) ln = loadNewPersistenceUnit(elem.firstChild().nodeValue(), parent);
-		else
-			ln = loadNode(elem, parent);
+		xml->goToFirstChild();
+		while ( true )
+		{
+			Model::LoadedNode ln;
+			if ( xml->getType() == XML_NEWUNIT_NODE_TAG ) ln = loadNewPersistenceUnit(xml->loadStringValue(), parent);
+			else ln = loadNode(parent);
 
-		result.append(ln);
+			result.append(ln);
 
-		elem = elem.nextSiblingElement();
+			if (xml->hasNext()) xml->loadNext();
+			else break;
+		}
+		xml->goToParent();
 	}
 
 	return result;
 }
 
-Model::LoadedNode FileStore::loadNode(QDomElement& nodeElement, Model::Node* parent)
+Model::LoadedNode FileStore::loadNode(Model::Node* parent)
 {
-	QDomElement* oldParent = currentParent;
-	currentParent = &nodeElement;
-
-	QString nodeType = nodeElement.tagName();
-
-	bool ok = true;
-	Model::NodeIdType id = nodeElement.attribute("id", "error").toLongLong(&ok);
-	if ( !ok ) throw FilePersistenceException("Could not read node id " + nodeElement.attribute("id"));
-
-	int partial = nodeElement.attribute("partial", "error").toInt(&ok);
-	if ( !ok ) throw FilePersistenceException("Could not read node partial hint " + nodeElement.attribute("partial"));
-	if ( partial != ATTRIBUTE_TRUE && partial != ATTRIBUTE_FALSE ) throw FilePersistenceException("Invalid partial hint " + nodeElement.attribute("partial"));
-
 	Model::LoadedNode node;
-	node.name = nodeElement.attribute("name");
-	node.node = Model::Node::createNewNode(nodeType, parent, id, *this, partial == ATTRIBUTE_TRUE);
-	currentParent = oldParent;
+	node.name = xml->getName();
+	node.node = Model::Node::createNewNode(xml->getType(), parent, xml->getId(), *this, xml->getPartialHint());
 
 	return node;
 }
@@ -341,23 +275,16 @@ Model::Node* FileStore::loadSubNode(Model::Node* parent, const QString& name)
 {
 	checkIsWorking();
 
-	QDomElement elem = currentParent->firstChildElement();
-	while ( !elem.isNull() )
-	{
-		if ( elem.attribute("name", QString()) == name )
-		{
-			Model::LoadedNode ln;
-			if ( elem.tagName() == XML_NEWUNIT_NODE_TAG ) ln = loadNewPersistenceUnit(elem.firstChild().nodeValue(), parent);
-			else
-				ln = loadNode(elem, parent);
+	if (!xml->hasChild(name)) return NULL;
+	xml->beginLoadChildNode(name);
 
-			return ln.node;
-		}
+	Model::LoadedNode ln;
+	if ( xml->getType() == XML_NEWUNIT_NODE_TAG ) ln = loadNewPersistenceUnit(xml->loadStringValue(), parent);
+	else ln = loadNode(parent);
 
-		elem = elem.nextSiblingElement();
-	}
+	xml->endLoadChildNode();
 
-	return NULL;
+	return ln.node;
 }
 
 QList<Model::LoadedNode> FileStore::loadPartialNode(Model::Node* partialNode)
@@ -370,22 +297,21 @@ QList<Model::LoadedNode> FileStore::loadPartialNode(Model::Node* partialNode)
 
 	try
 	{
-
 		modelDir = baseFolder.path() + QDir::toNativeSeparators("/" + partialNode->getModel()->getName());
 		if ( !modelDir.exists() ) throw FilePersistenceException("Can not find root node folder " + modelDir.path());
 
 		int depth;
 		QString filename = getPersistenceUnitName(partialNode, &depth);
-		QDomElement rootElem = loadDoc(filename).firstChildElement();
+		xml = new XMLModel(modelDir.absoluteFilePath(filename));
 
 		// Search through the content in order to find the requested node id.
-		QDomElement targetElem = findElementById(rootElem, QString::number(partialNode->getId()), depth);
-		if (targetElem.isNull()) throw FilePersistenceException("Could not find the persisted data for partial node with id " + QString::number(partialNode->getId()));
-
-		currentParent = &targetElem;
+		if (!xml->goToElement(partialNode->getId()) )
+			throw FilePersistenceException("Could not find the persisted data for partial node with id " + QString::number(partialNode->getId()));
 
 		// Load all subnodes and return them
 		result = loadAllSubNodes(partialNode);
+
+		SAFE_DELETE(xml);
 	}
 	catch (Model::ModelException& e)
 	{
@@ -415,16 +341,17 @@ Model::PersistedNode* FileStore::loadCompleteNodeSubtree(const QString& modelNam
 		QString filename;
 		if (persistenceUnitId > 0) filename = QString::number(persistenceUnitId);
 		else filename = modelName;
-		QDomElement rootElem = loadDoc(filename).firstChildElement();
+
+		xml = new XMLModel(modelDir.absoluteFilePath(filename));
 
 		// Search through the content in order to find the requested node id.
-		QDomElement targetElem = findElementById(rootElem, QString::number(nodeId), -1);
-		if (targetElem.isNull()) throw FilePersistenceException("Could not find the persisted data for partial node with id " + QString::number(nodeId));
-
-		currentParent = &targetElem;
+		if (!xml->goToElement(nodeId) )
+			throw FilePersistenceException("Could not find the persisted data for partial node with id " + QString::number(nodeId));
 
 		// Load the node and return it.
 		result = loadNodeData();
+
+		SAFE_DELETE(xml);
 	}
 	catch (Model::ModelException& e)
 	{
@@ -443,24 +370,24 @@ Model::PersistedNode* FileStore::loadNodeData()
 {
 	checkIsWorking();
 
-	if (currentParent->tagName() == XML_NEWUNIT_NODE_TAG) return loadPersistentUnitData();
+	if (xml->getType() == XML_NEWUNIT_NODE_TAG) return loadPersistentUnitData();
 
 	Model::PersistedNode* result = NULL;
 
 	// Determine the type of the node
-	if ( currentParent->firstChild().nodeValue().startsWith(PREFIX_STRING) )
+	if ( xml->isString() )
 	{
 		Model::PersistedValue<QString> *val = new Model::PersistedValue<QString>();
 		val->set( loadStringValue() );
 		result = val;
 	}
-	else if ( currentParent->firstChild().nodeValue().startsWith(PREFIX_INTEGER) )
+	else if ( xml->isInteger() )
 	{
 		Model::PersistedValue<int> *val = new Model::PersistedValue<int>();
 		val->set( loadIntValue() );
 		result = val;
 	}
-	else if ( currentParent->firstChild().nodeValue().startsWith(PREFIX_DOUBLE) )
+	else if ( xml->isDouble() )
 	{
 		Model::PersistedValue<double> *val = new Model::PersistedValue<double>();
 		val->set( loadFloatValue() );
@@ -471,38 +398,27 @@ Model::PersistedNode* FileStore::loadNodeData()
 		Model::PersistedValue< QList<Model::PersistedNode*> > *val = new Model::PersistedValue< QList<Model::PersistedNode*> >();
 		result = val;
 
-		QDomElement elem = currentParent->firstChildElement();
-		while ( !elem.isNull() )
+		if (xml->hasChildren())
 		{
-			Model::PersistedNode* child;
+			xml->goToFirstChild();
+			while(true)
+			{
+				Model::PersistedNode* child;
+				child = loadNodeData();
 
-			QDomElement* oldParent = currentParent;
-			currentParent = &elem;
-			child = loadNodeData();
-			currentParent = oldParent;
+				val->value().append(child);
 
-			val->value().append(child);
-
-			elem = elem.nextSiblingElement();
+				if (xml->hasNext()) xml->loadNext();
+				else break;
+			}
+			xml->goToParent();
 		}
 	}
 
-	// Put the standard node attributes
-	QString nodeType = currentParent->tagName();
-	QString nodeName = currentParent->attribute("name");
-
-	bool ok = true;
-	Model::NodeIdType id = currentParent->attribute("id", "error").toLongLong(&ok);
-	if ( !ok ) throw FilePersistenceException("Could not read node id " + currentParent->attribute("id"));
-
-	int partial = currentParent->attribute("partial", "error").toInt(&ok);
-	if ( !ok ) throw FilePersistenceException("Could not read node partial hint " + currentParent->attribute("partial"));
-	if ( partial != ATTRIBUTE_TRUE && partial != ATTRIBUTE_FALSE ) throw FilePersistenceException("Invalid partial hint " + currentParent->attribute("partial"));
-
-	result->setId(id);
-	result->setType(nodeType);
-	result->setName(nodeName);
-	result->setPartialHint(partial == ATTRIBUTE_TRUE);
+	result->setId(xml->getId());
+	result->setType(xml->getType());
+	result->setName(xml->getName());
+	result->setPartialHint(xml->getPartialHint());
 	result->setNewPersistenceUnit(false);
 
 	return result;
@@ -511,67 +427,37 @@ Model::PersistedNode* FileStore::loadNodeData()
 Model::PersistedNode* FileStore::loadPersistentUnitData( )
 {
 	checkIsWorking();
-	QDomDocument doc = loadDoc(currentParent->firstChild().nodeValue());
 
-	QDomElement *oldParent = currentParent;
-	QDomElement first = doc.firstChildElement();
-	currentParent = &first;
+	XMLModel* oldXML = xml;
+	xml = new XMLModel(modelDir.absoluteFilePath(oldXML->loadStringValue()));
+	xml->goToFirstChild();
+
 	Model::PersistedNode* result = loadNodeData();
-	currentParent = oldParent;
-
 	result->setNewPersistenceUnit(true);
+
+	SAFE_DELETE(xml);
+	xml = oldXML;
+
 	return result;
 }
 
-QDomElement FileStore::findElementById(QDomElement root, const QString& id, int depthLimit)
-{
-	if ( depthLimit <= 0 && root.attribute("id", QString()) == id ) return root;
-
-	// If we are at the depth limit and the previous check was unsuccessful return a null element
-	// If the procedure was started with depthLimit == -1 we will continue searching
-	if ( depthLimit == 0 ) return QDomElement();
-
-	QDomElement elem = root.firstChildElement();
-	while ( !elem.isNull() )
-	{
-		QDomElement r = findElementById(elem, id, depthLimit - 1);
-		if ( !r.isNull() ) return r;
-
-		elem = elem.nextSiblingElement();
-	}
-
-	return QDomElement();
-}
 
 int FileStore::loadIntValue()
 {
 	checkIsWorking();
-
-	bool ok = true;
-
-	int res = currentParent->firstChild().nodeValue().mid(PREFIX_INTEGER.size()).toInt(&ok);
-	if ( !ok ) throw FilePersistenceException("Could read integer value " + currentParent->firstChild().nodeValue());
-
-	return res;
+	return xml->loadIntValue();
 }
 
 QString FileStore::loadStringValue()
 {
 	checkIsWorking();
-
-	return currentParent->firstChild().nodeValue().mid(PREFIX_STRING.size());
+	return xml->loadStringValue();
 }
 
 double FileStore::loadFloatValue()
 {
 	checkIsWorking();
-
-	bool ok = true;
-
-	double res = currentParent->firstChild().nodeValue().mid(PREFIX_DOUBLE.size()).toDouble(&ok);
-	if ( !ok ) throw FilePersistenceException("Could read real value " + currentParent->firstChild().nodeValue());
-
-	return res;
+	return xml->loadFloatValue();
 }
 
 void FileStore::checkIsWorking()

@@ -28,6 +28,7 @@ TEST(FilePersistence, LoadRootOnly)
 	model.load(store, "rootOnly");
 	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.getRoot());
 
+	CHECK_CONDITION(root);
 	CHECK_STR_EQUAL("BinaryNode", root->getTypeName() );
 	CHECK_STR_EQUAL("Title", root->name()->get() );
 	CHECK_CONDITION(root->left() == NULL);

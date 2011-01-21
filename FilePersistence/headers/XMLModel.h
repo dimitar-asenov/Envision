@@ -23,38 +23,51 @@ class FILEPERSISTENCE_API XMLModel
 {
 	public:
 		XMLModel();
+		XMLModel(const QString& filename);
 		virtual ~XMLModel();
 
 		void saveStringValue(const QString &value);
 		void saveIntValue(int value);
 		void saveFloatValue(double value);
 
-		void beginSaveNode(const QString &tag);
-		void endSaveNode();
+		void beginSaveChildNode(const QString &tag);
+		void endSaveChildNode();
+		void importChildFromXML(QDomElement child);
+		void saveNext(const QString& tag);
 
 		void setId(Model::NodeIdType id);
 		void setName(const QString& name);
 		void setPartialHint(bool partialHint);
 
-		int loadIntValue();
-		QString loadStringValue();
-		double loadFloatValue();
+		int loadIntValue() const;
+		QString loadStringValue() const;
+		double loadFloatValue() const;
 
-		bool hasChildNode(const QString& nodeName);
+		bool hasChild(const QString& nodeName) const;
+		bool hasChildren() const;
 		void beginLoadChildNode(const QString& nodeName);
 		void endLoadChildNode();
+		QStringList getChildrenNames() const;
 
-		bool hasNext();
-		void next();
+		bool hasNext() const;
+		void loadNext();
+		bool goToElement(Model::NodeIdType id, bool startFromRoot = true);
+		void goToFirstChild();
+		void goToParent();
 
-		QString getType();
-		Model::NodeIdType getId();
-		QString getName();
-		bool getPartialHint();
+		QString getType() const;
+		Model::NodeIdType getId() const;
+		QString getName() const;
+		bool getPartialHint() const;
 
-		QString documentText();
-		void setDocument(const QString& text);
-		void setDocument(QFile file);
+		QDomElement getCurrentElement() const;
+
+		bool isString() const;
+		bool isInteger() const;
+		bool isDouble() const;
+
+		QString documentText() const;
+		void setDocumentText(const QString& text);
 
 	private:
 		QDomDocument doc;

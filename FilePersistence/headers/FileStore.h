@@ -9,10 +9,10 @@
 #define FILESTORE_H_
 
 #include "filepersistence_api.h"
+#include "XMLModel.h"
 
 #include "ModelBase/headers/persistence/PersistentStore.h"
 
-#include <QtXml/QDomDocument>
 #include <QtCore/QStringList>
 #include <QtCore/QDir>
 #include <QtCore/QMutex>
@@ -38,21 +38,9 @@ class FILEPERSISTENCE_API FileStore: public Model::PersistentStore
 		 */
 		QDir modelDir;
 
-		/**
-		 * This is the XML DOM document that corresponds to the current persistence unit that is being saved or loaded. Note
-		 * that this changes every time when a new persistence unit is saved/loaded.
-		 */
-		QDomDocument* currentDoc;
-
-		/**
-		 * This is the parent element where all other saved/load elements and text should go. This changes every time a
-		 * new node is saved or loaded.
-		 */
-		QDomElement* currentParent;
-
 		void saveNewPersistenceUnit(const Model::Node *node, const QString &name, bool partialLoadHint);
 		Model::LoadedNode loadNewPersistenceUnit(const QString& name, Model::Node* parent);
-		Model::LoadedNode loadNode(QDomElement& nodeElement, Model::Node* parent);
+		Model::LoadedNode loadNode(Model::Node* parent);
 		void saveNodeDirectly(const Model::Node *node, const QString &name, bool partialLoadHint);
 
 		Model::PersistedNode* loadNodeData();
@@ -64,7 +52,7 @@ class FILEPERSISTENCE_API FileStore: public Model::PersistentStore
 		 * If the atDepth argument is not NULL, the depth at which the node is found relative to the persistent unit
 		 * will be saved there.
 		 */
-		QString getPersistenceUnitName(const Model::Node *node, int* atDepth = NULL);
+		QString getPersistenceUnitName(const Model::Node *node, int* atDepth = NULL) const;
 
 		/**
 		 * When started with -1 it searches through the entire tree. Otherwise expects to find before or at the specified
@@ -72,16 +60,9 @@ class FILEPERSISTENCE_API FileStore: public Model::PersistentStore
 		 */
 		QDomElement findElementById(QDomElement root, const QString& id, int depthLimit);
 
-		/**
-		 * Loads the document with the specified name.
-		 *
-		 * This document should represent a node in the current model.
-		 */
-		QDomDocument loadDoc(const QString& name ) const;
-
-		QStringList getChildrenNames(const QDomElement* elem) const;
-
 		void checkIsWorking();
+
+		XMLModel* xml;
 
 	public:
 		FileStore();

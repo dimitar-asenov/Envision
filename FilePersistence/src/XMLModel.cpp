@@ -26,6 +26,22 @@ XMLModel::XMLModel() :
 {
 }
 
+XMLModel::XMLModel(const QString& filename) :
+	doc(XML_DOM_TYPE)
+{
+	QFile file(filename);
+	if ( !file.open(QIODevice::ReadOnly) ) throw FilePersistenceException("Could not open file " + file.fileName() + ".");
+
+	QString error;
+	int line, col;
+	if ( !doc.setContent(&file, &error, &line, &col) )
+	{
+		file.close();
+		throw FilePersistenceException("Reading of the XML structure of file " + file.fileName() + " failed." + error + " line: " + line + " col: " + col);
+	}
+	file.close();
+}
+
 XMLModel::~XMLModel()
 {
 }
@@ -48,13 +64,16 @@ void XMLModel::saveFloatValue(double value)
 	elem.appendChild(text);
 }
 
-void XMLModel::beginSaveNode(const QString &tag)
+void XMLModel::beginSaveChildNode(const QString &tag)
 {
-	elem = doc.createElement(tag);
+	QDomElement child = doc.createElement(tag);
+	if (elem.isNull()) doc.appendChild(child);
+	else elem.appendChild(child);
+	elem = child;
 	elemStack.append(elem);
 }
 
-void XMLModel::endSaveNode()
+void XMLModel::endSaveChildNode()
 {
 	if (!elemStack.isEmpty())
 	{
@@ -63,6 +82,18 @@ void XMLModel::endSaveNode()
 		else elem = elemStack.last();
 	}
 	else throw FilePersistenceException("Invalid call to endSaveNode - element stack is empty.");
+}
+
+void XMLModel::importChildFromXML(QDomElement child)
+{
+	elem.appendChild(doc.importNode(child, true));
+}
+
+void XMLModel::saveNext(const QString& tag)
+{
+	elem = doc.createElement(tag);
+	elemStack.removeLast();
+	elemStack.append(elem);
 }
 
 void XMLModel::setId(Model::NodeIdType id)
@@ -80,7 +111,7 @@ void XMLModel::setPartialHint(bool partialHint)
 	elem.setAttribute("partial", partialHint ? ATTRIBUTE_TRUE : ATTRIBUTE_FALSE);
 }
 
-int XMLModel::loadIntValue()
+int XMLModel::loadIntValue() const
 {
 	bool ok = true;
 
@@ -90,12 +121,12 @@ int XMLModel::loadIntValue()
 	return res;
 }
 
-QString XMLModel::loadStringValue()
+QString XMLModel::loadStringValue() const
 {
 	return elem.firstChild().nodeValue().mid(PREFIX_STRING.size());
 }
 
-double XMLModel::loadFloatValue()
+double XMLModel::loadFloatValue() const
 {
 	bool ok = true;
 
@@ -105,15 +136,37 @@ double XMLModel::loadFloatValue()
 	return res;
 }
 
-bool XMLModel::hasChildNode(const QString& nodeName)
+bool XMLModel::hasChildren() const
 {
-	return !elem.firstChildElement(nodeName).isNull();
+	return !elem.firstChildElement().isNull();
+}
+
+bool XMLModel::hasChild(const QString& nodeName) const
+{
+	QDomElement child = elem.firstChildElement();
+	while (!child.isNull())
+	{
+		if (child.attribute("name") == nodeName) return true;
+		child = child.nextSiblingElement();
+	}
+	return false;
 }
 
 void XMLModel::beginLoadChildNode(const QString& nodeName)
 {
-	elem = elem.firstChildElement(nodeName);
-	if (elem.isNull()) throw FilePersistenceException("No child with the name '" + nodeName + "' exists.");
+	QDomElement child;
+	if (elem.isNull()) child = doc.firstChildElement();
+	else child = elem.firstChildElement();
+
+	while(!child.isNull())
+	{
+		if (child.attribute("name") == nodeName) break;
+		child = child.nextSiblingElement();
+	}
+
+	if (child.isNull()) throw FilePersistenceException("No child with the name '" + nodeName + "' exists.");
+
+	elem = child;
 	elemStack.append(elem);
 }
 
@@ -128,12 +181,28 @@ void XMLModel::endLoadChildNode()
 	else throw FilePersistenceException("Invalid call to endLoadChildNode - element stack is empty.");
 }
 
-bool XMLModel::hasNext()
+QStringList XMLModel::getChildrenNames() const
+{
+	QStringList names;
+
+	QDomElement child = elem.firstChildElement();
+	while ( !child.isNull() )
+	{
+		QString name = child.attribute("name", QString());
+		if (!name.isEmpty()) names.append(name);
+
+		child = child.nextSiblingElement();
+	}
+
+	return names;
+}
+
+bool XMLModel::hasNext() const
 {
 	return !elem.nextSiblingElement().isNull();
 }
 
-void XMLModel::next()
+void XMLModel::loadNext()
 {
 	elem = elem.nextSiblingElement();
 	if (elem.isNull()) throw FilePersistenceException("Element does not have a next sibling");
@@ -141,12 +210,59 @@ void XMLModel::next()
 	elemStack.append(elem);
 }
 
-QString XMLModel::getType()
+bool XMLModel::goToElement(Model::NodeIdType id, bool startFromRoot)
+{
+	if (startFromRoot)
+	{
+		elemStack.clear();
+		elem = doc.firstChildElement();
+		elemStack.append(elem);
+	}
+
+	if (elem.isNull()) return false;
+
+	if ( elem.hasAttribute("id") && getId() == id) return true;
+
+	QDomElement child = elem.firstChildElement();
+	while ( !child.isNull() )
+	{
+		elem = child;
+		elemStack.append(elem);
+
+		if ( goToElement(id, false) ) return true;
+
+		elemStack.removeLast();
+		elem = elemStack.last();
+		child = child.nextSiblingElement();
+	}
+
+	return false;
+}
+
+void XMLModel::goToFirstChild()
+{
+	if (elem.isNull()) elem = doc.firstChildElement();
+	else
+	{
+		if (elem.firstChildElement().isNull()) throw FilePersistenceException("Element does not have child nodes");
+		elem = elem.firstChildElement();
+	}
+	elemStack.append(elem);
+}
+
+void XMLModel::goToParent()
+{
+	if (elemStack.isEmpty()) throw FilePersistenceException("Can not go to parent in XMLModel::goToParent");
+	elemStack.removeLast();
+	elem = elemStack.last();
+}
+
+QString XMLModel::getType() const
 {
 	return elem.tagName();
 }
 
-Model::NodeIdType XMLModel::getId()
+Model::NodeIdType XMLModel::getId() const
 {
 	if ( elem.hasAttribute("id") )
 	{
@@ -158,13 +274,13 @@ Model::NodeIdType XMLModel::getId()
 	else throw FilePersistenceException("Id not found for node of type: " + elem.tagName());
 }
 
-QString XMLModel::getName()
+QString XMLModel::getName() const
 {
 	if ( elem.hasAttribute("name") ) return elem.attribute("name");
 	else throw FilePersistenceException("Name not found for node of type: " + elem.tagName());
 }
 
-bool XMLModel::getPartialHint()
+bool XMLModel::getPartialHint() const
 {
 	if ( elem.hasAttribute("partial") )
 	{
@@ -177,27 +293,37 @@ bool XMLModel::getPartialHint()
 	else throw FilePersistenceException("Partial hint not found for node of type: " + elem.tagName());
 }
 
-QString XMLModel::documentText()
+QDomElement XMLModel::getCurrentElement() const
+{
+	return elem;
+}
+
+bool XMLModel::isString() const
+{
+	return elem.firstChild().nodeValue().startsWith(PREFIX_STRING);
+}
+
+bool XMLModel::isInteger() const
+{
+	return elem.firstChild().nodeValue().startsWith(PREFIX_INTEGER);
+}
+
+bool XMLModel::isDouble() const
+{
+	return elem.firstChild().nodeValue().startsWith(PREFIX_DOUBLE);
+}
+
+QString XMLModel::documentText() const
 {
 	return doc.toString();
 }
 
-void XMLModel::setDocument(QFile file)
-{
-	if ( !file.open(QIODevice::ReadOnly) ) throw FilePersistenceException("Could not open file " + file.fileName() + ".");
-
-	if ( !doc.setContent(&file) )
-	{
-		file.close();
-		throw FilePersistenceException("Reading of the XML structure of file " + file.fileName() + " failed.");
-	}
-	file.close();
-}
-
-void XMLModel::setDocument(const QString& text)
+void XMLModel::setDocumentText(const QString& text)
 {
 	if ( !doc.setContent(text) )
 		throw FilePersistenceException("Reading of the XML structure of the specified text failed in XMLModel::setDocument");
+
+	elemStack.clear();
 }
 
 }

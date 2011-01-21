@@ -85,7 +85,50 @@ TEST(FilePersistence, SaveList)
 	store.saveModel(model, "partial");
 
 	CHECK_TEXT_FILES_EQUAL(":/FilePersistence/test/persisted/partial/partial", testDir + "/partial/partial");
+}
 
+TEST(FilePersistence, ReSaveList)
+{
+	QString srcDir(":/FilePersistence/test/persisted");
+	QString destDir(QDir::tempPath() + "/Envision/FilePersistence/tests");
+
+	QFile src(srcDir + "/partial/partial");
+	QFile dest(destDir + "/partialResave/partialResave");
+
+	if (dest.exists())
+	{
+		bool removed = dest.remove();
+		CHECK_CONDITION(removed);
+	}
+
+	if (!QDir(destDir + "/partialResave").exists())
+		QDir().mkdir(destDir + "/partialResave");
+	bool copied = src.copy(dest.fileName());
+	CHECK_CONDITION(copied);
+
+	bool permissionOk = dest.setPermissions(QFile::ReadOwner | QFile::WriteOwner);
+	CHECK_CONDITION(permissionOk);
+
+	Model::Model model;
+	FileStore store;
+	store.setBaseFolder(destDir);
+
+	model.load(store, "partialResave");
+	TestNodes::PartialList* root = dynamic_cast<TestNodes::PartialList*> (model.getRoot());
+
+	CHECK_CONDITION(root->list()->isFullyLoaded() == false);
+	CHECK_STR_EQUAL("TheList", root->list()->getReferenceName());
+	CHECK_CONDITION(root->list()->isFullyLoaded() == false);
+
+	model.beginModification(root, "create ");
+	root->list()->setReferenceName("NewReference");
+	model.endModification();
+
+	CHECK_CONDITION(root->list()->isFullyLoaded() == false);
+	store.saveModel(model, "partialResave");
+	CHECK_CONDITION(root->list()->isFullyLoaded() == false);
+
+	CHECK_TEXT_FILES_EQUAL(":/FilePersistence/test/persisted/partialResave/partialResave", destDir + "/partialResave/partialResave");
 }
 
 }
