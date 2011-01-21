@@ -55,7 +55,8 @@ class FILEPERSISTENCE_API FileStore: public Model::PersistentStore
 		Model::LoadedNode loadNode(QDomElement& nodeElement, Model::Node* parent);
 		void saveNodeDirectly(const Model::Node *node, const QString &name, bool partialLoadHint);
 
-		Model::PersistedNode* loadNodeSubtree();
+		Model::PersistedNode* loadNodeData();
+		Model::PersistedNode* loadPersistentUnitData();
 
 		/**
 		 * Returns the name of the persistent unit that corresponds to the specified node.

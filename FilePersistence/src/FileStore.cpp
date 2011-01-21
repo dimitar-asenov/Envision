@@ -24,6 +24,10 @@ const int MAX_DOUBLE_PRECISION = 15;
 const int ATTRIBUTE_TRUE = 1;
 const int ATTRIBUTE_FALSE = 0;
 
+const QString PREFIX_STRING = QString("S_");
+const QString PREFIX_INTEGER = QString("I_");
+const QString PREFIX_DOUBLE = QString("D_");
+
 FileStore::FileStore() : // TODO the Envision folder should be taken from the environment not hardcoded.
 	baseFolder(QDir::home().path() + QDir::toNativeSeparators("/Envision/projects")), working(false), currentDoc(NULL), currentParent(NULL)
 {
@@ -119,7 +123,7 @@ void FileStore::saveStringValue(const QString &value)
 {
 	checkIsWorking();
 
-	QDomText text = currentDoc->createTextNode(value);
+	QDomText text = currentDoc->createTextNode(PREFIX_STRING + value);
 	currentParent->appendChild(text);
 }
 
@@ -127,7 +131,7 @@ void FileStore::saveIntValue(int value)
 {
 	checkIsWorking();
 
-	QDomText text = currentDoc->createTextNode(QString::number(value));
+	QDomText text = currentDoc->createTextNode(PREFIX_INTEGER + QString::number(value));
 	currentParent->appendChild(text);
 }
 
@@ -135,7 +139,7 @@ void FileStore::saveFloatValue(double value)
 {
 	checkIsWorking();
 
-	QDomText text = currentDoc->createTextNode(QString::number(value, 'f', MAX_DOUBLE_PRECISION));
+	QDomText text = currentDoc->createTextNode(PREFIX_INTEGER + QString::number(value, 'f', MAX_DOUBLE_PRECISION));
 	currentParent->appendChild(text);
 }
 
@@ -420,7 +424,7 @@ Model::PersistedNode* FileStore::loadCompleteNodeSubtree(const QString& modelNam
 		currentParent = &targetElem;
 
 		// Load the node and return it.
-		result = loadNodeSubtree();
+		result = loadNodeData();
 	}
 	catch (Model::ModelException& e)
 	{
@@ -435,25 +439,87 @@ Model::PersistedNode* FileStore::loadCompleteNodeSubtree(const QString& modelNam
 	return result;
 }
 
-Model::PersistedNode* FileStore::loadNodeSubtree()
+Model::PersistedNode* FileStore::loadNodeData()
 {
 	checkIsWorking();
 
+	if (currentParent->tagName() == XML_NEWUNIT_NODE_TAG) return loadPersistentUnitData();
+
 	Model::PersistedNode* result = NULL;
 
-	QDomElement elem = currentParent->firstChildElement();
-	while ( !elem.isNull() )
+	// Determine the type of the node
+	if ( currentParent->firstChild().nodeValue().startsWith(PREFIX_STRING) )
 	{
-		Model::LoadedNode ln;
-		if ( elem.tagName() == XML_NEWUNIT_NODE_TAG ) ln = loadNewPersistenceUnit(elem.firstChild().nodeValue(), parent);
-		else
-			ln = loadNode(elem, parent);
+		Model::PersistedValue<QString> *val = new Model::PersistedValue<QString>();
+		val->set( loadStringValue() );
+		result = val;
+	}
+	else if ( currentParent->firstChild().nodeValue().startsWith(PREFIX_INTEGER) )
+	{
+		Model::PersistedValue<int> *val = new Model::PersistedValue<int>();
+		val->set( loadIntValue() );
+		result = val;
+	}
+	else if ( currentParent->firstChild().nodeValue().startsWith(PREFIX_DOUBLE) )
+	{
+		Model::PersistedValue<double> *val = new Model::PersistedValue<double>();
+		val->set( loadFloatValue() );
+		result = val;
+	}
+	else
+	{
+		Model::PersistedValue< QList<Model::PersistedNode*> > *val = new Model::PersistedValue< QList<Model::PersistedNode*> >();
+		result = val;
 
-		result.append(ln);
+		QDomElement elem = currentParent->firstChildElement();
+		while ( !elem.isNull() )
+		{
+			Model::PersistedNode* child;
 
-		elem = elem.nextSiblingElement();
+			QDomElement* oldParent = currentParent;
+			currentParent = &elem;
+			child = loadNodeData();
+			currentParent = oldParent;
+
+			val->value().append(child);
+
+			elem = elem.nextSiblingElement();
+		}
 	}
 
+	// Put the standard node attributes
+	QString nodeType = currentParent->tagName();
+	QString nodeName = currentParent->attribute("name");
+
+	bool ok = true;
+	Model::NodeIdType id = currentParent->attribute("id", "error").toLongLong(&ok);
+	if ( !ok ) throw FilePersistenceException("Could not read node id " + currentParent->attribute("id"));
+
+	int partial = currentParent->attribute("partial", "error").toInt(&ok);
+	if ( !ok ) throw FilePersistenceException("Could not read node partial hint " + currentParent->attribute("partial"));
+	if ( partial != ATTRIBUTE_TRUE && partial != ATTRIBUTE_FALSE ) throw FilePersistenceException("Invalid partial hint " + currentParent->attribute("partial"));
+
+	result->setId(id);
+	result->setType(nodeType);
+	result->setName(nodeName);
+	result->setPartialHint(partial == ATTRIBUTE_TRUE);
+	result->setNewPersistenceUnit(false);
+
+	return result;
+}
+
+Model::PersistedNode* FileStore::loadPersistentUnitData( )
+{
+	checkIsWorking();
+	QDomDocument doc = loadDoc(currentParent->firstChild().nodeValue());
+
+	QDomElement *oldParent = currentParent;
+	QDomElement first = doc.firstChildElement();
+	currentParent = &first;
+	Model::PersistedNode* result = loadNodeData();
+	currentParent = oldParent;
+
+	result->setNewPersistenceUnit(true);
 	return result;
 }
 
@@ -483,7 +549,7 @@ int FileStore::loadIntValue()
 
 	bool ok = true;
 
-	int res = currentParent->firstChild().nodeValue().toInt(&ok);
+	int res = currentParent->firstChild().nodeValue().mid(PREFIX_INTEGER.size()).toInt(&ok);
 	if ( !ok ) throw FilePersistenceException("Could read integer value " + currentParent->firstChild().nodeValue());
 
 	return res;
@@ -493,7 +559,7 @@ QString FileStore::loadStringValue()
 {
 	checkIsWorking();
 
-	return currentParent->firstChild().nodeValue();
+	return currentParent->firstChild().nodeValue().mid(PREFIX_STRING.size());
 }
 
 double FileStore::loadFloatValue()
@@ -502,7 +568,7 @@ double FileStore::loadFloatValue()
 
 	bool ok = true;
 
-	double res = currentParent->firstChild().nodeValue().toDouble(&ok);
+	double res = currentParent->firstChild().nodeValue().mid(PREFIX_DOUBLE.size()).toDouble(&ok);
 	if ( !ok ) throw FilePersistenceException("Could read real value " + currentParent->firstChild().nodeValue());
 
 	return res;

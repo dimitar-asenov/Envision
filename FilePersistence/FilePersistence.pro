@@ -29,7 +29,8 @@ HEADERS += headers/FilePersistenceException.h \
     headers/FileStore.h \
     headers/filepersistence_api.h \
     src/filepersistence.h
-SOURCES += test/PartialNodeTests.cpp \
+SOURCES += test/LoadNodeDataTests.cpp \
+    test/PartialNodeTests.cpp \
     src/FilePersistenceException.cpp \
     test/LoadTests.cpp \
     test/SaveTests.cpp \
