@@ -25,11 +25,15 @@ pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
-HEADERS += headers/FilePersistenceException.h \
+HEADERS += headers/XMLModel.h \
+    headers/SystemClipboard.h \
+    headers/FilePersistenceException.h \
     headers/FileStore.h \
     headers/filepersistence_api.h \
     src/filepersistence.h
-SOURCES += test/LoadNodeDataTests.cpp \
+SOURCES += src/XMLModel.cpp \
+    src/SystemClipboard.cpp \
+    test/LoadNodeDataTests.cpp \
     test/PartialNodeTests.cpp \
     src/FilePersistenceException.cpp \
     test/LoadTests.cpp \
