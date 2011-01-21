@@ -25,7 +25,8 @@ pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
-HEADERS += headers/persistence/PersistentStore.h \
+HEADERS += headers/persistence/ClipboardStore.h \
+    headers/persistence/PersistentStore.h \
     headers/persistence/PersistedValue.h \
     headers/persistence/PersistedNode.h \
     headers/test_nodes/BinaryNodePersistenceUnit.h \
