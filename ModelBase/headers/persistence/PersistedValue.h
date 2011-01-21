@@ -11,6 +11,8 @@
 #include "../modelbase_api.h"
 #include "PersistedNode.h"
 
+#include "Core/headers/global.h"
+
 namespace Model {
 
 template <class T>
@@ -32,10 +34,10 @@ class MODELBASE_API PersistedValue < QList<T*> >: public PersistedNode
 {
 	public:
 		~PersistedValue();
-		T& value();
+		QList<T*>& value();
 
 	private:
-		T value_;
+		QList<T*> value_;
 };
 
 template <class T> PersistedValue< QList<T*> >::~PersistedValue()
@@ -44,7 +46,7 @@ template <class T> PersistedValue< QList<T*> >::~PersistedValue()
 	value_.clear();
 }
 
-template <class T> inline T& PersistedValue< QList<T*> >::value() { return value_; }
+template <class T> inline QList<T*>& PersistedValue< QList<T*> >::value() { return value_; }
 
 }
 
