@@ -28,7 +28,7 @@ class FILEPERSISTENCE_API XMLModel
 
 		void saveStringValue(const QString &value);
 		void saveIntValue(int value);
-		void saveFloatValue(double value);
+		void saveDoubleValue(double value);
 
 		void beginSaveChildNode(const QString &tag);
 		void endSaveChildNode();
@@ -41,7 +41,7 @@ class FILEPERSISTENCE_API XMLModel
 
 		int loadIntValue() const;
 		QString loadStringValue() const;
-		double loadFloatValue() const;
+		double loadDoubleValue() const;
 
 		bool hasChild(const QString& nodeName) const;
 		bool hasChildren() const;
@@ -54,6 +54,7 @@ class FILEPERSISTENCE_API XMLModel
 		bool goToElement(Model::NodeIdType id, bool startFromRoot = true);
 		void goToFirstChild();
 		void goToParent();
+		void goToRoot();
 
 		QString getType() const;
 		Model::NodeIdType getId() const;

@@ -32,28 +32,13 @@ void FileStore::setBaseFolder(const QString& path)
 	baseFolder = path;
 }
 
-QString FileStore::getPersistenceUnitName(const Model::Node *node, int* atDepth) const
+QString FileStore::getPersistenceUnitName(const Model::Node *node) const
 {
-	// Find the parent which is a persistent unit, if any
-	// Record the depth of the current node relative to the persistent unit root.
-	int depth = 0;
-	const Model::Node* persistentUnitNode = node;
-	while ( persistentUnitNode && persistentUnitNode->isNewPersistenceUnit() == false )
-	{
-		persistentUnitNode = persistentUnitNode->getParent();
-		++depth;
-	}
+	Model::NodeIdType persistenceUnitId = node->persistentUnitId();
 
-	// Find the name of the unit. This is either the id or the model name
 	QString name;
-	if ( persistentUnitNode ) name = QString::number(persistentUnitNode->getId());
-	else
-	{
-		--depth; // In this case we decrement depth one more time than actually needed.
-		name = node->getModel()->getName();
-	}
-
-	if ( atDepth ) *atDepth = depth;
+	if (persistenceUnitId == 0) name = node->getModel()->getName();
+	else name = QString::number(persistenceUnitId);
 
 	return name;
 }
@@ -105,10 +90,10 @@ void FileStore::saveIntValue(int value)
 	xml->saveIntValue(value);
 }
 
-void FileStore::saveFloatValue(double value)
+void FileStore::saveDoubleValue(double value)
 {
 	checkIsWorking();
-	xml->saveFloatValue(value);
+	xml->saveDoubleValue(value);
 }
 
 void FileStore::saveNewPersistenceUnit(const Model::Node *node, const QString &name, bool partialLoadHint)
@@ -162,6 +147,7 @@ void FileStore::saveNodeDirectly(const Model::Node *node, const QString &name, b
 
 	node->save(*this);
 
+	// TODO this should rely on the loadCompleteNodeSubtree method of the previous store of node instead.
 	if ( !node->isFullyLoaded() )
 	{
 		// Persist sub nodes which have not been loaded. Each subnode has a unique name. If a node was previously
@@ -171,8 +157,7 @@ void FileStore::saveNodeDirectly(const Model::Node *node, const QString &name, b
 		QStringList persistedChildren = xml->getChildrenNames();
 
 		// Load the old persisted version of this node
-		int depth;
-		QString filename = getPersistenceUnitName(node, &depth);
+		QString filename = getPersistenceUnitName(node);
 
 		// TODO this will fail if the rootDir of the FileStore has changed in the mean time. E.g when saving in a new
 		// location.
@@ -300,8 +285,7 @@ QList<Model::LoadedNode> FileStore::loadPartialNode(Model::Node* partialNode)
 		modelDir = baseFolder.path() + QDir::toNativeSeparators("/" + partialNode->getModel()->getName());
 		if ( !modelDir.exists() ) throw FilePersistenceException("Can not find root node folder " + modelDir.path());
 
-		int depth;
-		QString filename = getPersistenceUnitName(partialNode, &depth);
+		QString filename = getPersistenceUnitName(partialNode);
 		xml = new XMLModel(modelDir.absoluteFilePath(filename));
 
 		// Search through the content in order to find the requested node id.
@@ -390,7 +374,7 @@ Model::PersistedNode* FileStore::loadNodeData()
 	else if ( xml->isDouble() )
 	{
 		Model::PersistedValue<double> *val = new Model::PersistedValue<double>();
-		val->set( loadFloatValue() );
+		val->set( loadDoubleValue() );
 		result = val;
 	}
 	else
@@ -454,10 +438,10 @@ QString FileStore::loadStringValue()
 	return xml->loadStringValue();
 }
 
-double FileStore::loadFloatValue()
+double FileStore::loadDoubleValue()
 {
 	checkIsWorking();
-	return xml->loadFloatValue();
+	return xml->loadDoubleValue();
 }
 
 void FileStore::checkIsWorking()

@@ -58,7 +58,7 @@ void XMLModel::saveIntValue(int value)
 	elem.appendChild(text);
 }
 
-void XMLModel::saveFloatValue(double value)
+void XMLModel::saveDoubleValue(double value)
 {
 	QDomText text = doc.createTextNode(PREFIX_INTEGER + QString::number(value, 'f', MAX_DOUBLE_PRECISION));
 	elem.appendChild(text);
@@ -126,7 +126,7 @@ QString XMLModel::loadStringValue() const
 	return elem.firstChild().nodeValue().mid(PREFIX_STRING.size());
 }
 
-double XMLModel::loadFloatValue() const
+double XMLModel::loadDoubleValue() const
 {
 	bool ok = true;
 
@@ -255,6 +255,13 @@ void XMLModel::goToParent()
 	if (elemStack.isEmpty()) throw FilePersistenceException("Can not go to parent in XMLModel::goToParent");
 	elemStack.removeLast();
 	elem = elemStack.last();
+}
+
+void XMLModel::goToRoot()
+{
+	elemStack.clear();
+	elem = doc.firstChildElement();
+	elemStack.append(elem);
 }
 
 QString XMLModel::getType() const

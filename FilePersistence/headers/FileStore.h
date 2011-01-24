@@ -48,11 +48,8 @@ class FILEPERSISTENCE_API FileStore: public Model::PersistentStore
 
 		/**
 		 * Returns the name of the persistent unit that corresponds to the specified node.
-		 *
-		 * If the atDepth argument is not NULL, the depth at which the node is found relative to the persistent unit
-		 * will be saved there.
 		 */
-		QString getPersistenceUnitName(const Model::Node *node, int* atDepth = NULL) const;
+		QString getPersistenceUnitName(const Model::Node *node) const;
 
 		/**
 		 * When started with -1 it searches through the entire tree. Otherwise expects to find before or at the specified
@@ -75,7 +72,7 @@ class FILEPERSISTENCE_API FileStore: public Model::PersistentStore
 
 		virtual void saveStringValue(const QString &value);
 		virtual void saveIntValue(int value);
-		virtual void saveFloatValue(double value);
+		virtual void saveDoubleValue(double value);
 		virtual void saveNode(const Model::Node *node, const QString &name, bool partialLoadHint);
 
 		virtual Model::Node* loadRootNode(const QString &name);
@@ -86,7 +83,7 @@ class FILEPERSISTENCE_API FileStore: public Model::PersistentStore
 
 		virtual int loadIntValue();
 		virtual QString loadStringValue();
-		virtual double loadFloatValue();
+		virtual double loadDoubleValue();
 };
 
 }
