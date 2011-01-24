@@ -25,7 +25,8 @@ class MODELBASE_API Integer: public Node
 		int  get() const;
 		void set(int newval);
 
-		void save(PersistentStore &store) const;
+		virtual void save(PersistentStore &store) const;
+		virtual void load(PersistentStore &store);
 };
 
 }

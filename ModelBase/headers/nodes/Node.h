@@ -115,6 +115,7 @@ class MODELBASE_API Node
 		 *
 		 */
 		virtual void save(PersistentStore &store) const = 0;
+		virtual void load(PersistentStore &store) = 0;
 		virtual void loadFully(PersistentStore &store);
 
 		//TODO In the comment below the part that explains things about the revision is incorrect. The persistence store

@@ -33,7 +33,8 @@ class MODELBASE_API Text: public Node
 
 		void set(const QString &newText);
 
-		void save(PersistentStore &store) const;
+		virtual void save(PersistentStore &store) const;
+		virtual void load(PersistentStore &store);
 };
 
 }

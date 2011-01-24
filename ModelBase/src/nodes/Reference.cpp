@@ -46,6 +46,11 @@ void Reference::save(PersistentStore &store) const
 	store.saveStringValue(path);
 }
 
+void Reference::load(PersistentStore &store)
+{
+	set(store.loadStringValue());
+}
+
 Node* Reference::getTargetFromSymbolicPath(const QString &path)
 {
 	return getTargetFromLocalPath(path);

@@ -43,6 +43,11 @@ void Text::save(PersistentStore &store) const
 	store.saveStringValue(text);
 }
 
+void Text::load(PersistentStore &store)
+{
+	set(store.loadStringValue());
+}
+
 FieldSet<QString>* Text::getSetCommand(const QString& newText)
 {
 	return new FieldSet<QString> (this, text, newText);

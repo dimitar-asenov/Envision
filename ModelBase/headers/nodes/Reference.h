@@ -28,7 +28,8 @@ class MODELBASE_API Reference: public Node
 		void set(Node* target);
 		void set(const QString &path);
 
-		void save(PersistentStore &store) const;
+		virtual void save(PersistentStore &store) const;
+		virtual void load(PersistentStore &store);
 
 	protected:
 		virtual Node* getTargetFromSymbolicPath(const QString &path);

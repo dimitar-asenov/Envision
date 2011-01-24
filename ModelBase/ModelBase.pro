@@ -25,7 +25,8 @@ pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
-HEADERS += headers/persistence/ClipboardStore.h \
+HEADERS += headers/commands/ExtendedNodeChild.h \
+    headers/persistence/ClipboardStore.h \
     headers/persistence/PersistentStore.h \
     headers/persistence/PersistedValue.h \
     headers/persistence/PersistedNode.h \
@@ -56,11 +57,11 @@ HEADERS += headers/persistence/ClipboardStore.h \
     headers/ModelException.h \
     headers/nodes/Integer.h \
     headers/nodes/Text.h \
-    headers/commands/ExtendedNodeOptional.h \
     headers/Model.h \
     headers/modelbase_api.h \
     src/modelbase.h
-SOURCES += src/persistence/PersistedNode.cpp \
+SOURCES += src/commands/ExtendedNodeChild.cpp \
+    src/persistence/PersistedNode.cpp \
     src/test_nodes/BinaryNodePersistenceUnit.cpp \
     src/test_nodes/PartialList.cpp \
     src/test_nodes/BinaryNodeAccessUnit.cpp \
@@ -91,6 +92,5 @@ SOURCES += src/persistence/PersistedNode.cpp \
     test/UndoRedoTests.cpp \
     test/SimpleTests.cpp \
     src/nodes/Text.cpp \
-    src/commands/ExtendedNodeOptional.cpp \
     src/Model.cpp \
     src/modelbase.cpp

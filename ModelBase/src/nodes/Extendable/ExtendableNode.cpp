@@ -39,6 +39,8 @@ ExtendableNode::ExtendableNode(Node *parent, NodeIdType id, PersistentStore &sto
 
 		subnodes[index.level()][index.index()] = ln->node;
 	}
+
+	verifyHasAllMandatoryAttributes();
 }
 
 ExtendableNode::~ExtendableNode()
@@ -111,7 +113,7 @@ void ExtendableNode::removeOptional(const ExtendableIndex &attributeIndex)
 {
 	if ( meta.getAttribute(attributeIndex).optional() )
 	{
-		execute(new ExtendedNodeOptional(this, subnodes[attributeIndex.level()][attributeIndex.index()], attributeIndex, &subnodes, false));
+		execute(new ExtendedNodeChild(this, subnodes[attributeIndex.level()][attributeIndex.index()], attributeIndex, &subnodes, false));
 	}
 	else
 		throw ModelException("Trying to remove a non-optional attribute");
@@ -125,7 +127,42 @@ void ExtendableNode::save(PersistentStore &store) const
 		for (int i = 0; i < currentLevel->size(); ++i)
 			if ( subnodes[level][i] != NULL && currentLevel->at(i).persistent() ) store.saveNode(subnodes[level][i], currentLevel->at(i).name(), currentLevel->at(i).partialHint());
 	}
+}
 
+void ExtendableNode::load(PersistentStore &store)
+{
+	removeAllNodes();
+
+	QList<LoadedNode> children = store.loadAllSubNodes(this);
+
+	for (QList<LoadedNode>::iterator ln = children.begin(); ln != children.end(); ln++)
+	{
+		ExtendableIndex index = meta.getIndexForAttribute(ln->name);
+		if ( !index.isValid() ) throw ModelException("Node has attribute " + ln->name + " in persistent store, but this attribute is not registered");
+
+		execute(new ExtendedNodeChild(this, ln->node, ExtendableIndex(index.level(),index.index()), &subnodes, true));
+	}
+
+	verifyHasAllMandatoryAttributes();
+}
+
+void ExtendableNode::removeAllNodes()
+{
+	for (int level = 0; level < subnodes.size(); ++level)
+		for (int i = 0; i < subnodes[level].size(); ++i)
+			if ( subnodes[level][i] ) execute(new ExtendedNodeChild(this, subnodes[level][i], ExtendableIndex(level,i), &subnodes, false));
+}
+
+void ExtendableNode::verifyHasAllMandatoryAttributes()
+{
+	for (int level = 0; level < meta.getNumLevels(); ++level)
+	{
+		AttributeChain* currentLevel = meta.getLevel(level);
+
+		for (int i = 0; i < currentLevel->size(); ++i)
+			if ( subnodes[level][i] == NULL && (*currentLevel)[i].optional() == false )
+				throw ModelException("An ExtendableNode has an uninitialized mandatory attribute " + (*currentLevel)[i].name());
+	}
 }
 
 }

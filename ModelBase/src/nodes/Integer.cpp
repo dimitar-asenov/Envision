@@ -38,5 +38,10 @@ void Integer::save(PersistentStore &store) const
 	store.saveIntValue(integer);
 }
 
+void Integer::load(PersistentStore &store)
+{
+	set(store.loadIntValue());
+}
+
 }
 

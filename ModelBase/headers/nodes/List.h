@@ -12,6 +12,7 @@
 #include "../Model.h"
 #include "../commands/ListInsert.h"
 #include "../ModelException.h"
+#include "../persistence/ClipboardStore.h"
 
 #include <QtCore/QVector>
 
@@ -34,8 +35,9 @@ class List: public Node
 		List(Node *parent, NodeIdType id, PersistentStore &store, bool partialHint);
 		virtual ~List();
 
-		void save(PersistentStore &store) const;
-		void loadFully(PersistentStore &store);
+		virtual void save(PersistentStore &store) const;
+		virtual void load(PersistentStore &store);
+		virtual void loadFully(PersistentStore &store);
 
 		QString getTypeName() const;
 		int getTypeId() const;
@@ -57,9 +59,11 @@ class List: public Node
 		template <class T> T* append();
 		template <class T> T* prepend();
 		template <class T> T* insert(int position);
+		void paste(ClipboardStore& clipboard, int position);
 
 		void remove(int index);
 		void remove(Node* instance);
+		void clear();
 
 		static void registerNodeType();
 };

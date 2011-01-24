@@ -259,6 +259,11 @@ void SystemClipboard::next()
 	else throw FilePersistenceException("Could not find next clipboard element.");
 }
 
+QString SystemClipboard::type() const
+{
+	return xml->getType();
+}
+
 Node* SystemClipboard::create(::Model::Model* model, Node* parent)
 {
 	Node* node = Node::createNewNode(xml->getType(), parent, model->generateNextId(), *this, false);

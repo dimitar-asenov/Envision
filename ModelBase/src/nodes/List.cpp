@@ -90,6 +90,34 @@ void List::save(PersistentStore &store) const
 
 }
 
+void List::load(PersistentStore &store)
+{
+	if (!fullyLoaded) loadFully(* (getModel()->getLastUsedStore()));
+
+	clear();
+
+	QList<LoadedNode> children = store.loadAllSubNodes(this);
+	for (QList<LoadedNode>::iterator ln = children.begin(); ln != children.end(); ln++)
+	{
+		if ( ln->name == REFERENCE_NAME_NODE_ID )
+		{
+			Text* text = dynamic_cast<Text*> (ln->node);
+			if ( !text ) throw ModelException("Invalid List reference name specification in persistent store.");
+
+			setReferenceName(text->get());
+			SAFE_DELETE(text);
+		}
+		else
+		{
+			bool ok = true;
+			int index = ln->name.toInt(&ok);
+			if ( !ok ) throw ModelException("Could not read the index of a list item. Index value is: " + ln->name);
+
+			execute(new ListInsert(this, nodes, ln->node, index));
+		}
+	}
+}
+
 void List::loadFully(PersistentStore &store)
 {
 	if ( !fullyLoaded )
@@ -163,6 +191,26 @@ void List::remove(Node* instance)
 
 	int index = nodes.indexOf(instance);
 	if ( index >= 0 ) remove(index);
+}
+
+void List::clear()
+{
+	if (!fullyLoaded) loadFully(* (getModel()->getLastUsedStore()));
+
+	while (!nodes.isEmpty()) remove(0);
+}
+
+void List::paste(ClipboardStore& clipboard, int position)
+{
+	if (!fullyLoaded) loadFully(* (getModel()->getLastUsedStore()));
+
+	for (int i = 0; i<clipboard.numNodes(); ++i)
+	{
+		Node* newNode = clipboard.create(getModel(), this);
+		execute(new ListInsert(this, nodes, newNode, position+i));
+
+		if (clipboard.hasNext() ) clipboard.next();
+	}
 }
 
 }

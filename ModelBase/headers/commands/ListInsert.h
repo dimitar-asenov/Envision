@@ -18,6 +18,7 @@ class ListInsert: public UndoCommand
 		QVector<Node*>& nodes;
 		Node* newNode;
 		int insertPosition;
+		int oldSize;
 
 	public:
 		ListInsert(Node *target, QVector<Node*>& nodes, Node* newNode, int position);

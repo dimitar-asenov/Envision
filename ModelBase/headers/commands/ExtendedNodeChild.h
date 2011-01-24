@@ -1,12 +1,12 @@
 /***********************************************************************************************************************
- * ExtendedNodeOptional.h
+ * ExtendedNodeChild.h
  *
  *  Created on: Nov 8, 2010
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef EXTENDEDNODEOPTIONAL_H_
-#define EXTENDEDNODEOPTIONAL_H_
+#ifndef EXTENDEDNODECHILD_H_
+#define EXTENDEDNODECHILD_H_
 
 #include "UndoCommand.h"
 #include "../nodes/Extendable/ExtendableIndex.h"
@@ -16,7 +16,7 @@ namespace Model {
 
 class Node;
 
-class ExtendedNodeOptional: public UndoCommand
+class ExtendedNodeChild: public UndoCommand
 {
 	private:
 		Node* attribute;
@@ -25,8 +25,8 @@ class ExtendedNodeOptional: public UndoCommand
 		bool created;
 
 	public:
-		ExtendedNodeOptional(Node* target, Node* attribute, const ExtendableIndex &attributeIndex, QVector< QVector<Node*> >* subnodes, bool created);
-		virtual ~ExtendedNodeOptional();
+		ExtendedNodeChild(Node* target, Node* attribute, const ExtendableIndex &attributeIndex, QVector< QVector<Node*> >* subnodes, bool created);
+		virtual ~ExtendedNodeChild();
 
 		void redo();
 		void undo();
@@ -34,4 +34,4 @@ class ExtendedNodeOptional: public UndoCommand
 
 }
 
-#endif /* EXTENDEDNODEOPTIONAL_H_ */
+#endif /* EXTENDEDNODECHILD_H_ */

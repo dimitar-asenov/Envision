@@ -48,6 +48,7 @@ class FILEPERSISTENCE_API SystemClipboard : public Model::ClipboardStore
 		virtual int numNodes() const;
 		virtual bool hasNext() const;
 		virtual void next();
+		virtual QString type() const;
 		virtual Model::Node* create(Model::Model* model, Model::Node* parent);
 
 	private:
