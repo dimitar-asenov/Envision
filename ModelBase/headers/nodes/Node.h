@@ -137,6 +137,18 @@ class MODELBASE_API Node
 		 */
 		virtual bool isNewPersistenceUnit() const;
 
+		/**
+		 * Returns the id of the persistent unit to which this node belongs. If this is the root persistent unit, returns
+		 * 0.
+		 */
+		NodeIdType persistentUnitId() const;
+
+		/**
+		 * Returns the node that defines the persistent unit for this node.
+		 */
+		Node* persistentUnitNode();
+
+
 		virtual QString getTypeName() const = 0;
 		virtual int getTypeId() const = 0;
 

@@ -33,7 +33,7 @@ class MODELBASE_API PersistentStore
 		virtual void saveModel(Model& model, const QString &name) = 0;
 		virtual void saveStringValue(const QString &value) = 0;
 		virtual void saveIntValue(int value) = 0;
-		virtual void saveFloatValue(double value) = 0;
+		virtual void saveDoubleValue(double value) = 0;
 		virtual void saveNode(const Node *node, const QString &name, bool partialLoadHint) = 0;
 
 		virtual Node* loadRootNode(const QString &name) = 0;
@@ -44,7 +44,7 @@ class MODELBASE_API PersistentStore
 
 		virtual int loadIntValue() = 0;
 		virtual QString loadStringValue() = 0;
-		virtual double loadFloatValue() = 0;
+		virtual double loadDoubleValue() = 0;
 
 		virtual ~PersistentStore() {};
 };

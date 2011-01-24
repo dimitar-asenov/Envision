@@ -34,7 +34,7 @@ void PersistentStoreMock::saveIntValue(int value)
 	savedData.append(QString::number(value) + ",");
 }
 
-void PersistentStoreMock::saveFloatValue(double value)
+void PersistentStoreMock::saveDoubleValue(double value)
 {
 	savedData.append(QString::number(value) + ",");
 }
@@ -80,7 +80,7 @@ QString PersistentStoreMock::loadStringValue()
 	return QString();
 }
 
-double PersistentStoreMock::loadFloatValue()
+double PersistentStoreMock::loadDoubleValue()
 {
 	return 0.0;
 }

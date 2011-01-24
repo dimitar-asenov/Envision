@@ -141,6 +141,31 @@ bool Node::isNewPersistenceUnit() const
 	return false;
 }
 
+NodeIdType Node::persistentUnitId() const
+{
+	const Node* persistentUnitNode = this;
+	while ( persistentUnitNode && persistentUnitNode->isNewPersistenceUnit() == false )
+		persistentUnitNode = persistentUnitNode->getParent();
+
+	if (persistentUnitNode == NULL || persistentUnitNode->getParent() == NULL) return 0;
+	else return persistentUnitNode->getId();
+}
+
+Node* Node::persistentUnitNode()
+{
+	Node* persistentUnitNode = this;
+	Node* prev = this;
+
+	while ( persistentUnitNode && persistentUnitNode->isNewPersistenceUnit() == false )
+	{
+		prev = persistentUnitNode;
+		persistentUnitNode = persistentUnitNode->getParent();
+	}
+
+	if (persistentUnitNode) return persistentUnitNode;
+	else return prev;
+}
+
 int Node::getRevision() const
 {
 	return revision;
