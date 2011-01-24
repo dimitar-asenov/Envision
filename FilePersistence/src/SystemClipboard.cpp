@@ -21,6 +21,8 @@ using namespace Model;
 
 namespace FilePersistence {
 
+static const QString CLIPBOARD_TAG = "clipboard";
+
 SystemClipboard::SystemClipboard() :
 	xml(NULL), numNodes_(0)
 {
@@ -54,7 +56,11 @@ void SystemClipboard::saveModel(::Model::Model& model, const QString &name)
 		SAFE_DELETE(xml);
 		xml = new XMLModel();
 
+		xml->beginSaveChildNode(CLIPBOARD_TAG);
 		saveNode(model.getRoot(), name, false);
+		xml->endSaveChildNode();
+
+		QApplication::clipboard()->setText(xml->documentText());
 
 		SAFE_DELETE(xml);
 		numNodes_ = 0;
@@ -224,7 +230,7 @@ void SystemClipboard::putNodes(const QList<const Node*>& nodes)
 	{
 		SAFE_DELETE(xml);
 		xml = new XMLModel();
-		xml->beginSaveChildNode("clipboard");
+		xml->beginSaveChildNode(CLIPBOARD_TAG);
 
 		for(int i = 0; i<nodes.size(); ++i)
 		{
@@ -238,6 +244,8 @@ void SystemClipboard::putNodes(const QList<const Node*>& nodes)
 		}
 
 		xml->endSaveChildNode();
+		QApplication::clipboard()->setText(xml->documentText());
+
 		SAFE_DELETE(xml);
 		numNodes_ = 0;
 	}

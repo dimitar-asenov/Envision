@@ -31,7 +31,8 @@ HEADERS += headers/XMLModel.h \
     headers/FileStore.h \
     headers/filepersistence_api.h \
     src/filepersistence.h
-SOURCES += src/XMLModel.cpp \
+SOURCES += test/ClipboardTests.cpp \
+    src/XMLModel.cpp \
     src/SystemClipboard.cpp \
     test/LoadNodeDataTests.cpp \
     test/PartialNodeTests.cpp \
