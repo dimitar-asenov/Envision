@@ -1,27 +1,28 @@
 /***********************************************************************************************************************
- * ListInsert.h
+ * ListPut.h
  *
- *  Created on: Dec 7, 2010
+ *  Created on: Jan 24, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef LISTINSERT_H_
-#define LISTINSERT_H_
+#ifndef LISTPUT_H_
+#define LISTPUT_H_
 
 #include "UndoCommand.h"
 
 namespace Model {
 
-class ListInsert: public UndoCommand
+class ListPut: public UndoCommand
 {
 	private:
 		QVector<Node*>& nodes;
 		Node* newNode;
-		int insertPosition;
+		int putPosition;
+		int oldSize;
 
 	public:
-		ListInsert(Node *target, QVector<Node*>& nodes, Node* newNode, int position);
-		virtual ~ListInsert();
+		ListPut(Node *target, QVector<Node*>& nodes, Node* newNode, int position);
+		virtual ~ListPut();
 
 		void redo();
 		void undo();
@@ -29,4 +30,4 @@ class ListInsert: public UndoCommand
 
 }
 
-#endif /* LISTINSERT_H_ */
+#endif /* LISTPUT_H_ */

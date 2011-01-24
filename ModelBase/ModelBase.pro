@@ -25,7 +25,8 @@ pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
-HEADERS += headers/commands/ExtendedNodeChild.h \
+HEADERS += headers/commands/ListPut.h \
+    headers/commands/ExtendedNodeChild.h \
     headers/persistence/ClipboardStore.h \
     headers/persistence/PersistentStore.h \
     headers/persistence/PersistedValue.h \
@@ -60,7 +61,8 @@ HEADERS += headers/commands/ExtendedNodeChild.h \
     headers/Model.h \
     headers/modelbase_api.h \
     src/modelbase.h
-SOURCES += src/commands/ExtendedNodeChild.cpp \
+SOURCES += src/commands/ListPut.cpp \
+    src/commands/ExtendedNodeChild.cpp \
     src/persistence/PersistedNode.cpp \
     src/test_nodes/BinaryNodePersistenceUnit.cpp \
     src/test_nodes/PartialList.cpp \

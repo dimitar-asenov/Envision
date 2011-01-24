@@ -11,6 +11,7 @@
 #include "commands/PointerFieldSet.h"
 #include "commands/NameChange.h"
 #include "commands/ListRemove.h"
+#include "commands/ListPut.h"
 #include "nodes/nodeMacros.h"
 
 #include "Core/headers/global.h"
@@ -113,7 +114,7 @@ void List::load(PersistentStore &store)
 			int index = ln->name.toInt(&ok);
 			if ( !ok ) throw ModelException("Could not read the index of a list item. Index value is: " + ln->name);
 
-			execute(new ListInsert(this, nodes, ln->node, index));
+			execute(new ListPut(this, nodes, ln->node, index));
 		}
 	}
 }

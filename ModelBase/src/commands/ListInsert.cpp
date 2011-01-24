@@ -15,7 +15,7 @@
 namespace Model {
 
 ListInsert::ListInsert(Node *target, QVector<Node*>& nodes_, Node* newNode_, int position) :
-	UndoCommand(target, "insert node"), nodes(nodes_), newNode(newNode_), insertPosition(position), oldSize(nodes_.size())
+	UndoCommand(target, "insert node"), nodes(nodes_), newNode(newNode_), insertPosition(position)
 {
 }
 
@@ -26,15 +26,13 @@ ListInsert::~ListInsert()
 
 void ListInsert::redo()
 {
-	if ( insertPosition >= nodes.size() ) nodes.resize(insertPosition + 1);
-	nodes[insertPosition] = newNode;
+	nodes.insert(insertPosition, newNode);
 	UndoCommand::redo();
 }
 
 void ListInsert::undo()
 {
-	nodes[insertPosition] = NULL;
-	if (nodes.size() != oldSize) nodes.resize(oldSize);
+	nodes.remove(insertPosition);
 	UndoCommand::undo();
 }
 
