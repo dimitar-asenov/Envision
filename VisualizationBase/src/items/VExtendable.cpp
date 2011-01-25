@@ -101,13 +101,18 @@ void VExtendable::determineChildren()
 		// TODO this can be done smarter
 		QList<QPair<QString, Model::Node*> > attr = node->getAllAttributes();
 
+		// Remove extra elements
+		while (attr.size() < attributes->length()) attributes->remove(attributes->length()-1);
+
 		bool changed = false;
 		int nameFound = 0; // This will become 1 if the name attribute was already encountered
+
 		for (int i = 0; i < attr.size(); ++i)
 		{
 			if ( attr[i].first == "name" )
 			{
 				nameFound = 1;
+				while (attr.size() < attributes->length() + 1) attributes->remove(attributes->length()-1); // TODO is this OK here, it's a mess.
 				continue;
 			}
 

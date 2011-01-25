@@ -109,6 +109,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 							item->getNode()->model()->endModification();
 							target->setUpdateNeeded();
 						}
+						else InteractionHandler::keyPressEvent(target, event);
 					}
 					else InteractionHandler::keyPressEvent(target, event);
 				}
