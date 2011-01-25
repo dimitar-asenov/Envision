@@ -21,13 +21,13 @@ class PersistentStoreMock: public PersistentStore
 		PersistentStoreMock();
 		~PersistentStoreMock();
 
-		void saveModel(Model& model, const QString &name);
+
 		void saveStringValue(const QString &value);
 		void saveIntValue(int value);
 		void saveDoubleValue(double value);
 		void saveNode(const Node *node, const QString &name, bool partialLoadHint);
 
-		Node* loadRootNode(const QString &name);
+
 		QList<LoadedNode> loadAllSubNodes(Node* parent);
 		Node* loadSubNode(Node* parent, const QString& name);
 		QList<LoadedNode> loadPartialNode(Node* partialNode);
@@ -37,9 +37,13 @@ class PersistentStoreMock: public PersistentStore
 		QString loadStringValue();
 		double loadDoubleValue();
 
-
 		const QString& getSaved() const;
 		void clear();
+
+	protected:
+		void saveModel(Model* model, const QString &name);
+		Node* loadModel(Model* model, const QString &name);
+
 };
 
 }

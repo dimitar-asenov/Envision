@@ -19,9 +19,9 @@ PersistentStoreMock::~PersistentStoreMock()
 {
 }
 
-void PersistentStoreMock::saveModel(Model& model, const QString &name)
+void PersistentStoreMock::saveModel(Model* model, const QString &name)
 {
-	saveNode(model.getRoot(), name, false);
+	saveNode(model->getRoot(), name, false);
 }
 
 void PersistentStoreMock::saveStringValue(const QString &value)
@@ -45,7 +45,7 @@ void PersistentStoreMock::saveNode(const Node *node, const QString &name, bool p
 	node->save(*this);
 }
 
-Node* PersistentStoreMock::loadRootNode(const QString &)
+Node* PersistentStoreMock::loadModel(Model*, const QString &)
 {
 	return NULL;
 }
