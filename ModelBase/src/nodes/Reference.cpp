@@ -8,6 +8,7 @@
 #include "nodes/Reference.h"
 #include "commands/FieldSet.h"
 #include "Model.h"
+#include "ModelException.h"
 
 #include <QtCore/QStringList>
 
@@ -48,6 +49,9 @@ void Reference::save(PersistentStore &store) const
 
 void Reference::load(PersistentStore &store)
 {
+	if (store.currentNodeType() != typeName())
+		throw ModelException("Trying to load a Reference node from an incompatible node type " + store.currentNodeType());
+
 	set(store.loadStringValue());
 }
 

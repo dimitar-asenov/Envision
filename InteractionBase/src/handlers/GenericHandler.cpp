@@ -12,6 +12,8 @@
 
 #include "VisualizationBase/headers/Scene.h"
 #include "VisualizationBase/headers/items/ModelItem.h"
+#include "FilePersistence/headers/SystemClipboard.h"
+#include "ModelBase/headers/nodes/List.h"
 
 namespace Interaction {
 
@@ -67,6 +69,55 @@ void GenericHandler::showCommandPrompt(Visualization::Item* commandReceiver)
 void GenericHandler::command(Visualization::Item *target, const QString& command)
 {
 	executionEngine_->execute(target, command);
+}
+
+void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
+{
+	if (event->modifiers() == Qt::ControlModifier)
+	{
+		switch (event->key())
+		{
+			case Qt::Key_C:
+				{
+					QList<const Model::Node*> nodesToCopy;
+					QList<QGraphicsItem*> selected = target->scene()->selectedItems();
+
+					for (int i = 0; i<selected.size(); ++i)
+					{
+						Visualization::ModelItem* item = dynamic_cast<Visualization::ModelItem*> (selected.at(i));
+						if (item) nodesToCopy.append(item->getNode());
+					}
+
+					if (nodesToCopy.size() > 0)
+					{
+						FilePersistence::SystemClipboard clipboard;
+						arrangeNodesForClipboard(nodesToCopy);
+						clipboard.putNodes(nodesToCopy);
+					}
+				}
+				break;
+			case Qt::Key_V:
+				{
+					FilePersistence::SystemClipboard clipboard;
+					if (clipboard.numNodes() == 1 && target->scene()->selectedItems().size() == 1 && target->isSelected())
+					{
+						Visualization::ModelItem* item = dynamic_cast<Visualization::ModelItem*> (target);
+						if (item && item->getNode()->typeName() == clipboard.currentNodeType())
+						{
+							item->getNode()->model()->beginModification(item->getNode(), "paste");
+							item->getNode()->load(clipboard);
+							item->getNode()->model()->endModification();
+							target->setUpdateNeeded();
+						}
+					}
+					else InteractionHandler::keyPressEvent(target, event);
+				}
+				break;
+			default:
+				InteractionHandler::keyPressEvent(target, event);
+				break;
+		}
+	}
 }
 
 void GenericHandler::keyReleaseEvent(Visualization::Item *target, QKeyEvent *event)
@@ -141,6 +192,34 @@ void GenericHandler::filterSelectedItems(Visualization::Item *target, QGraphicsS
 				selection.at(i)->setSelected(false);
 				selection.removeAt(i);
 			}
+}
+
+void GenericHandler::arrangeNodesForClipboard(QList<const Model::Node*>& list)
+{
+	if (list.size() > 0)
+	{
+		// Determine if all nodes are elements of a list
+		const Model::List* parent = dynamic_cast<const Model::List*> (list.first());
+		if (parent)
+		{
+			for (int i = 1; i<list.size(); ++i)
+				if (list[i]->parent() != parent)
+				{
+					parent = NULL;
+					break;
+				}
+		}
+
+		if (parent)
+		{
+			// The selection consists only of nodes which are elements of the same list. Arrange them properly
+			// according to the list's order.
+			// Bubble sort
+			for (int i = list.size() - 1; i > 0; --i)
+				for (int k = 0; k < i; ++k)
+					if (parent->indexOf(list[k]) > parent->indexOf(list[k+1])) list.swap(k, k+1);
+		}
+	}
 }
 
 }

@@ -328,6 +328,13 @@ QList<Model::LoadedNode> FileStore::loadPartialNode(Model::Node* partialNode)
 	return result;
 }
 
+QString FileStore::currentNodeType() const
+{
+	checkIsWorking();
+
+	return xml->getType();
+}
+
 Model::PersistedNode* FileStore::loadCompleteNodeSubtree(const QString& modelName, Model::NodeIdType persistenceUnitId, Model::NodeIdType nodeId)
 {
 	storeAccess.lock();
@@ -462,7 +469,7 @@ double FileStore::loadDoubleValue()
 	return xml->loadDoubleValue();
 }
 
-void FileStore::checkIsWorking()
+void FileStore::checkIsWorking() const
 {
 	if ( !working ) throw FilePersistenceException("Performing an illegal file persistence operation.");
 }

@@ -24,7 +24,6 @@ class MODELBASE_API ClipboardStore: public PersistentStore
 		virtual int numNodes() const = 0;
 		virtual bool hasNext() const = 0;
 		virtual void next() = 0;
-		virtual QString type() const = 0;
 		virtual Node* create(Model* model, Node* parent) = 0;
 };
 

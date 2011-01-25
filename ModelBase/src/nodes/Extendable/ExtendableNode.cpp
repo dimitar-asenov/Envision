@@ -131,6 +131,9 @@ void ExtendableNode::save(PersistentStore &store) const
 
 void ExtendableNode::load(PersistentStore &store)
 {
+	if (store.currentNodeType() != typeName())
+		throw ModelException("Trying to load an Extendable node from an incompatible node type " + store.currentNodeType());
+
 	removeAllNodes();
 
 	QList<LoadedNode> children = store.loadAllSubNodes(this);

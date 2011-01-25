@@ -179,6 +179,11 @@ LoadedNode SystemClipboard::loadNode(Node* parent)
 	return node;
 }
 
+QString SystemClipboard::currentNodeType() const
+{
+	return xml->getType();
+}
+
 QList<LoadedNode> SystemClipboard::loadPartialNode(Node*)
 {
 	throw FilePersistenceException("The loadPartialNode(...) method is not supported in the SystemClipboard store. This might indicate that an object only partially loaded itself, ignoring the provided partial hint.");
@@ -280,11 +285,6 @@ void SystemClipboard::next()
 {
 	if (xml->hasNext()) xml->loadNext();
 	else throw FilePersistenceException("Could not find next clipboard element.");
-}
-
-QString SystemClipboard::type() const
-{
-	return xml->getType();
 }
 
 Node* SystemClipboard::create(::Model::Model* model, Node* parent)

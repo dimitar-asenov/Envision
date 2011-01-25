@@ -13,6 +13,10 @@
 #include "VisualizationBase/headers/items/Item.h"
 #include "VisualizationBase/headers/InteractionHandler.h"
 
+#include <QtCore/QList>
+
+namespace Model { class Node; }
+
 namespace Interaction {
 
 class Command;
@@ -38,6 +42,7 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 		void showCommandPrompt(Visualization::Item* commandRecevier);
 
 		// Keyboard events
+		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event);
 		virtual void keyReleaseEvent(Visualization::Item *target, QKeyEvent *event);
 
 		// Mouse events
@@ -51,11 +56,15 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 		GenericHandler();
 
 		virtual void filterSelectedItems(Visualization::Item *target, QGraphicsSceneMouseEvent *event);
+		virtual void arrangeNodesForClipboard(QList<const Model::Node*>& list);
+
 	private:
 		QList<Command*> supportedCommands;
 
 		static CommandExecutionEngine* executionEngine_;
 		static CommandPrompt* prompt_;
+
+
 };
 
 inline const QList<Command*>& GenericHandler::commands() { return supportedCommands; }

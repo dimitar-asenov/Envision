@@ -57,7 +57,7 @@ class FILEPERSISTENCE_API FileStore: public Model::PersistentStore
 		 */
 		QDomElement findElementById(QDomElement root, const QString& id, int depthLimit);
 
-		void checkIsWorking();
+		void checkIsWorking() const;
 
 		XMLModel* xml;
 
@@ -75,6 +75,7 @@ class FILEPERSISTENCE_API FileStore: public Model::PersistentStore
 
 		virtual QList<Model::LoadedNode> loadAllSubNodes(Model::Node* parent);
 		virtual Model::Node* loadSubNode(Model::Node* parent, const QString& name);
+		virtual QString currentNodeType() const;
 		virtual QList<Model::LoadedNode> loadPartialNode(Model::Node* partialNode);
 		virtual Model::PersistedNode* loadCompleteNodeSubtree(const QString& modelName, Model::NodeIdType persistenceUnitId, Model::NodeIdType nodeId);
 

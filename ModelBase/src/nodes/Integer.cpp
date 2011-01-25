@@ -7,6 +7,7 @@
 
 #include "nodes/Integer.h"
 #include "commands/FieldSet.h"
+#include "ModelException.h"
 
 namespace Model {
 
@@ -40,6 +41,9 @@ void Integer::save(PersistentStore &store) const
 
 void Integer::load(PersistentStore &store)
 {
+	if (store.currentNodeType() != typeName())
+		throw ModelException("Trying to load an Integer node from an incompatible node type " + store.currentNodeType());
+
 	set(store.loadIntValue());
 }
 

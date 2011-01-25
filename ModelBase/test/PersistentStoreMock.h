@@ -22,27 +22,28 @@ class PersistentStoreMock: public PersistentStore
 		~PersistentStoreMock();
 
 
-		void saveStringValue(const QString &value);
-		void saveIntValue(int value);
-		void saveDoubleValue(double value);
-		void saveNode(const Node *node, const QString &name, bool partialLoadHint);
+		virtual void saveStringValue(const QString &value);
+		virtual void saveIntValue(int value);
+		virtual void saveDoubleValue(double value);
+		virtual void saveNode(const Node *node, const QString &name, bool partialLoadHint);
 
 
-		QList<LoadedNode> loadAllSubNodes(Node* parent);
-		Node* loadSubNode(Node* parent, const QString& name);
-		QList<LoadedNode> loadPartialNode(Node* partialNode);
-		PersistedNode* loadCompleteNodeSubtree(const QString& modelName, NodeIdType persistenceUnitId, NodeIdType nodeId);
+		virtual QList<LoadedNode> loadAllSubNodes(Node* parent);
+		virtual Node* loadSubNode(Node* parent, const QString& name);
+		virtual QList<LoadedNode> loadPartialNode(Node* partialNode);
+		virtual PersistedNode* loadCompleteNodeSubtree(const QString& modelName, NodeIdType persistenceUnitId, NodeIdType nodeId);
+		virtual QString currentNodeType() const;
 
-		int loadIntValue();
-		QString loadStringValue();
-		double loadDoubleValue();
+		virtual int loadIntValue();
+		virtual QString loadStringValue();
+		virtual double loadDoubleValue();
 
 		const QString& getSaved() const;
 		void clear();
 
 	protected:
-		void saveModel(Model* model, const QString &name);
-		Node* loadModel(Model* model, const QString &name);
+		virtual void saveModel(Model* model, const QString &name);
+		virtual Node* loadModel(Model* model, const QString &name);
 
 };
 

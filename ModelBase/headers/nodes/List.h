@@ -51,6 +51,8 @@ class List: public Node
 		template <class T> T* last();
 		template <class T> T* at(int i);
 
+		int indexOf(const Node* item) const;
+
 		template <class T> T* append();
 		template <class T> T* prepend();
 		template <class T> T* insert(int position);

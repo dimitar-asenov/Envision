@@ -31,6 +31,7 @@ class FILEPERSISTENCE_API SystemClipboard : public Model::ClipboardStore
 
 		virtual QList<Model::LoadedNode> loadAllSubNodes(Model::Node* parent);
 		virtual Model::Node* loadSubNode(Model::Node* parent, const QString& name);
+		virtual QString currentNodeType() const;
 		virtual QList<Model::LoadedNode> loadPartialNode(Model::Node* partialNode);
 		virtual Model::PersistedNode* loadCompleteNodeSubtree(const QString& modelName, Model::NodeIdType persistenceUnitId, Model::NodeIdType nodeId);
 
@@ -46,7 +47,6 @@ class FILEPERSISTENCE_API SystemClipboard : public Model::ClipboardStore
 		virtual int numNodes() const;
 		virtual bool hasNext() const;
 		virtual void next();
-		virtual QString type() const;
 		virtual Model::Node* create(Model::Model* model, Model::Node* parent);
 
 	protected:

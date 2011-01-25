@@ -90,6 +90,9 @@ void List::save(PersistentStore &store) const
 
 void List::load(PersistentStore &store)
 {
+	if (store.currentNodeType() != typeName())
+		throw ModelException("Trying to load a List node from an incompatible node type " + store.currentNodeType());
+
 	if (!fullyLoaded) loadFully(* (model()->store()));
 
 	clear();
@@ -174,6 +177,13 @@ int List::size()
 	if (!fullyLoaded) loadFully(* (model()->store()));
 
 	return nodes.size();
+}
+
+int List::indexOf(const Node* item) const
+{
+	// TODO: is this a QT bug, this is fishy
+	Node *i = const_cast<Node *> (item); // <--- Workaround, since the call below can't be made with item.
+	return nodes.indexOf(i);
 }
 
 void List::remove(int index)
