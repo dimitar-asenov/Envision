@@ -20,6 +20,7 @@ class MODELBASE_API ClipboardStore: public PersistentStore
 		virtual void putNode(const Node* node) = 0;
 		virtual void putNodes(const QList<const Node*>& nodes) = 0;
 
+		virtual bool readClipboard() = 0;
 		virtual int numNodes() const = 0;
 		virtual bool hasNext() const = 0;
 		virtual void next() = 0;
