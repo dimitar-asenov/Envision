@@ -65,23 +65,27 @@ void HText::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
 	if (event->modifiers() == Qt::ControlModifier)
 	{
-		switch (event->key())
+		if (target->scene()->selectedItems().size() == 0 || (target->isSelected() && target->scene()->selectedItems().size() == 1))
 		{
-			case Qt::Key_C:
-				{
-					QString text = TEXTRENDERER_GET(getSelectedText);
-					if (!text.isEmpty()) QApplication::clipboard()->setText(text);
-				}
-				break;
-			case Qt::Key_V:
-				{
-					insertText(target, QApplication::clipboard()->text());
-				}
-				break;
-			default:
-				GenericHandler::keyPressEvent(target, event);
-				break;
+			switch (event->key())
+			{
+				case Qt::Key_C:
+					{
+						QString text = TEXTRENDERER_GET(getSelectedText);
+						if (!text.isEmpty()) QApplication::clipboard()->setText(text);
+					}
+					break;
+				case Qt::Key_V:
+					{
+						if (TEXTRENDERER_GET(isEditable)) insertText(target, QApplication::clipboard()->text());
+					}
+					break;
+				default:
+					GenericHandler::keyPressEvent(target, event);
+					break;
+			}
 		}
+		else GenericHandler::keyPressEvent(target, event);
 	}
 	else
 	{
@@ -136,7 +140,7 @@ void HText::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent
 	}
 	else
 	{
-		TEXTRENDERER_SET(resetSelected);
+		target->setUpdateNeeded();
 		GenericHandler::mouseMoveEvent(target, event);
 	}
 
@@ -145,7 +149,7 @@ void HText::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent
 
 void HText::focusOutEvent(Visualization::Item *target, QFocusEvent *)
 {
-	TEXTRENDERER_SET(resetSelected);
+	target->setUpdateNeeded();
 }
 
 void HText::setNewText(Visualization::Item *target, const QString& newText)

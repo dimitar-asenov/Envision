@@ -11,6 +11,7 @@
 #include "vis/CommandPrompt.h"
 
 #include "VisualizationBase/headers/Scene.h"
+#include "VisualizationBase/headers/items/ModelItem.h"
 
 namespace Interaction {
 
@@ -99,30 +100,47 @@ void GenericHandler::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneM
 
 void GenericHandler::filterSelectedItems(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
-	// Filter out items for which the selection is completely internal.
 	QList<QGraphicsItem*> selection = target->scene()->selectedItems();
-	for (int i = 0; i<selection.size(); ++i)
+
+	// Filter out items for which the selection is completely internal.
+	for (int i = selection.size()-1; i>=0; --i)
 	{
 		if (  selection.at(i)->contains(selection.at(i)->mapFromScene(event->buttonDownScenePos(Qt::LeftButton)))
 			&& selection.at(i)->contains(selection.at(i)->mapFromScene(event->scenePos())))
+		{
 			selection.at(i)->setSelected(false);
+			selection.removeAt(i);
+		}
 	}
 
 	// Filter out items whose parent is also included in the selection.
-	selection = target->scene()->selectedItems();
-	for (int i = 0; i<selection.size(); ++i)
-	{
-		QGraphicsItem* parent = selection.at(i)->parentItem();
-		while (parent)
-		{
-			if (selection.contains(parent))
+	for (int i = selection.size() - 1; i>=0; --i)
+		for(int k = selection.size() - 1; k>=0; --k)
+			if (k!=i && selection.at(k)->isAncestorOf(selection.at(i)))
 			{
 				selection.at(i)->setSelected(false);
+				selection.removeAt(i);
 				break;
 			}
-			parent = parent->parentItem();
+
+	// Check if there are any selected model items remaining.
+	bool modelItemSelected = false;
+	selection = target->scene()->selectedItems();
+	for (int i = 0; i<selection.size(); ++i)
+		if (dynamic_cast<Visualization::ModelItem*> (selection.at(i)))
+		{
+			modelItemSelected = true;
+			break;
 		}
-	}
+
+	// If there is at least one model item, discard all items which are not model items.
+	if (modelItemSelected)
+		for (int i = selection.size() - 1; i>=0; --i)
+			if (dynamic_cast<Visualization::ModelItem*> (selection.at(i)) == NULL)
+			{
+				selection.at(i)->setSelected(false);
+				selection.removeAt(i);
+			}
 }
 
 }
