@@ -33,18 +33,16 @@ List::List(Node *parent, NodeIdType id, PersistentStore &store, bool partialHint
 {
 	fullyLoaded = !partialHint;
 
-	if ( partialHint )
+	Node* n = store.loadSubNode(parent, REFERENCE_NAME_NODE_ID);
+	if ( n )
 	{
-		Node* n = store.loadSubNode(parent, REFERENCE_NAME_NODE_ID);
-		if ( n )
-		{
-			Text* text = dynamic_cast<Text*> (n);
-			if ( !text ) throw ModelException("Invalid List reference name specification in persistent store.");
+		Text* text = dynamic_cast<Text*> (n);
+		if ( !text ) throw ModelException("Invalid List reference name specification in persistent store.");
 
-			referenceName = text;
-		}
+		referenceName = text;
 	}
-	else
+
+	if ( fullyLoaded )
 	{
 		QList<LoadedNode> children = store.loadAllSubNodes(this);
 		loadSubNodes(children);
@@ -93,7 +91,7 @@ void List::save(PersistentStore &store) const
 
 void List::load(PersistentStore &store)
 {
-	if (!fullyLoaded) loadFully(* (getModel()->getLastUsedStore()));
+	if (!fullyLoaded) loadFully(* (getModel()->store()));
 
 	clear();
 
@@ -132,7 +130,7 @@ void List::loadFully(PersistentStore &store)
 
 Node* List::getChild(NodeIdType id)
 {
-	if (!fullyLoaded) loadFully(* (getModel()->getLastUsedStore()));
+	if (!fullyLoaded) loadFully(* (getModel()->store()));
 
 	if ( referenceName->getId() == id ) return referenceName;
 
@@ -144,7 +142,7 @@ Node* List::getChild(NodeIdType id)
 
 Node* List::getChild(const QString& name)
 {
-	if (!fullyLoaded) loadFully(* (getModel()->getLastUsedStore()));
+	if (!fullyLoaded) loadFully(* (getModel()->store()));
 
 	if ( name.isEmpty() ) return NULL;
 
@@ -174,21 +172,21 @@ void List::setReferenceName(const QString &name)
 
 int List::size()
 {
-	if (!fullyLoaded) loadFully(* (getModel()->getLastUsedStore()));
+	if (!fullyLoaded) loadFully(* (getModel()->store()));
 
 	return nodes.size();
 }
 
 void List::remove(int index)
 {
-	if (!fullyLoaded) loadFully(* (getModel()->getLastUsedStore()));
+	if (!fullyLoaded) loadFully(* (getModel()->store()));
 
 	execute(new ListRemove(this, nodes, index));
 }
 
 void List::remove(Node* instance)
 {
-	if (!fullyLoaded) loadFully(* (getModel()->getLastUsedStore()));
+	if (!fullyLoaded) loadFully(* (getModel()->store()));
 
 	int index = nodes.indexOf(instance);
 	if ( index >= 0 ) remove(index);
@@ -196,14 +194,14 @@ void List::remove(Node* instance)
 
 void List::clear()
 {
-	if (!fullyLoaded) loadFully(* (getModel()->getLastUsedStore()));
+	if (!fullyLoaded) loadFully(* (getModel()->store()));
 
 	while (!nodes.isEmpty()) remove(0);
 }
 
 void List::paste(ClipboardStore& clipboard, int position)
 {
-	if (!fullyLoaded) loadFully(* (getModel()->getLastUsedStore()));
+	if (!fullyLoaded) loadFully(* (getModel()->store()));
 
 	for (int i = 0; i<clipboard.numNodes(); ++i)
 	{

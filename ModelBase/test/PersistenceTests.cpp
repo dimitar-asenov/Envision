@@ -23,7 +23,8 @@ TEST(ModelBase, PersistenceSave)
 
 	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.createRoot("BinaryNode"));
 
-	model.save(store);
+	model.setName("root");
+	model.save(&store);
 
 	CHECK_STR_EQUAL("BinaryNode,root,full,Text,name,full,,Integer,x,full,0,Integer,y,full,0,", store.getSaved());
 
@@ -36,7 +37,7 @@ TEST(ModelBase, PersistenceSave)
 	model.endModification();
 
 	store.clear();
-	model.save(store);
+	model.save();
 
 	CHECK_STR_EQUAL("BinaryNode,root,full,Text,name,full,Troot,BinaryNode,left,full,Text,name,full,Tleft,Integer,x,full,0,Integer,y,full,0,BinaryNode,right,full,Text,name,full,Tright,Integer,x,full,0,Integer,y,full,0,Integer,x,full,0,Integer,y,full,0,", store.getSaved());
 }

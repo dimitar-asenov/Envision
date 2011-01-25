@@ -130,11 +130,12 @@ class MODELBASE_API Model: public QObject
 		NodeIdType nextId;
 
 		/**
-		 * The persistent store which was last used to save or load this model.
+		 * The persistent store where the model is currently stored.
 		 *
 		 * This is used in calls to Node::loadFully when a partially loaded node needs to load its entire contents.
+		 * It can also be used by other stores when the model needs to be saved to a different location.
 		 */
-		PersistentStore* lastUsedStore;
+		PersistentStore* store_;
 
 		/**
 		 * A list of all Model objects that are currently instantiated. This is used to find the Model corresponding to a
@@ -286,6 +287,21 @@ class MODELBASE_API Model: public QObject
 		NodeIdType generateNextId();
 
 		/**
+		 * Returns an id which is larger by 1 than all other node ids in this model.
+		 */
+		NodeIdType maxId() const;
+
+		/**
+		 * Sets the next id for this model.
+		 *
+		 * The next id is used whenever a new object is created. Each time an object is created its id is obtained by the
+		 * generateNextId() method.
+		 *
+		 * This method should only be used by a persistent store when loading the complete model.
+		 */
+		void setNextId(NodeIdType id);
+
+		/**
 		 * Creates a new root node with the specified type.
 		 *
 		 * If a root node already exists this method will not do anything. If a new root is created the rootCreated signal
@@ -333,15 +349,21 @@ class MODELBASE_API Model: public QObject
 		void redo();
 
 		/**
-		 * Saves the current model tree in the specified persistent store.
+		 * Saves the model tree in persistent store of the model.
+		 *
+		 * If this model does not have a current store, the store argument must not be NULL. In that case the provided
+		 * store will become the current store of the model.
 		 *
 		 * @param store
-		 * 				The persistent store where the model should be saved.
+		 * 				The persistent store where the model should be saved. If this is NULL the current store will be
+		 * 				used. The current store is the one from which the model was loaded. If this is not NULL it will
+		 * 				be used instead of the current store.
 		 */
-		void save(PersistentStore& store);
+		void save(PersistentStore* store = NULL);
 
 		/**
-		 * Loads the current model tree from the specified persistent store.
+		 * Loads the current model tree from the specified persistent store. The provided store will become the current
+		 * store of the model.
 		 *
 		 * If this model already has a root node, this method does nothing.
 		 *
@@ -351,20 +373,20 @@ class MODELBASE_API Model: public QObject
 		 * @param name
 		 * 				The model name in the persistent store which contains the model tree.
 		 */
-		void load(PersistentStore& store, const QString& name);
+		void load(PersistentStore* store, const QString& name);
 
 		/**
 		 * Returns the model object that has as its root node the node indicated.
 		 */
-		static Model* getModel(Node* root);
+		static Model* findModel(Node* root);
 
 		/**
-		 * Returns the store last used to save or load this model.
+		 * Returns the current store for this model.
 		 *
-		 * If this model was created rather than loaded and has not been saved to a persistent store yet this method will
-		 * return NULL.
+		 * The current store is the store used to load the model. If this model was created rather than loaded and has
+		 * not been saved to a persistent store yet this method will return NULL.
 		 */
-		PersistentStore* getLastUsedStore();
+		PersistentStore* store();
 
 		/**
 		 * Causes a nameModified signal to be emitted.
@@ -439,6 +461,20 @@ class MODELBASE_API Model: public QObject
 		void nodePartiallyLoaded(Node* node);
 
 };
+
+inline NodeReadWriteLock* Model::getRootLock() { return &rootLock; }
+
+inline Node* Model::getRoot(){ return root; }
+inline QString Model::getName() { return name; }
+inline void Model::setName(const QString& name_) { name = name_; }
+
+inline NodeIdType Model::maxId() const { return nextId; }
+inline void Model::setNextId(NodeIdType id) { nextId = id; }
+
+inline PersistentStore* Model::store() { return store_; }
+inline void Model::emitNameModified(Node* node, const QString &oldName) { emit nameModified(node, oldName); }
+inline void Model::emitNodeFullyLoaded(Node* node) { emit nodeFullyLoaded(node); }
+inline void Model::emitNodePartiallyLoaded(Node* node) { emit nodePartiallyLoaded(node); }
 
 }
 

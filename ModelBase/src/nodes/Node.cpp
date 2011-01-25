@@ -106,7 +106,7 @@ Node* Node::getLowestCommonAncestor(Node* other)
  **********************************************************************************************************************/
 Model* Node::getModel() const
 {
-	return Model::getModel(getRoot());
+	return Model::findModel(getRoot());
 }
 
 Node* Node::getRoot() const

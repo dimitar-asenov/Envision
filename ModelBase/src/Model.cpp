@@ -17,7 +17,7 @@ namespace Model {
 QList<Model*> Model::loadedModels;
 
 Model::Model() :
-	root(NULL), currentModificationTarget(NULL), currentModificationLock(NULL), pushedNewCommandsOnTheStack(false), performedUndoRedo(false), modificationInProgress(false), nextId(0), lastUsedStore(NULL)
+	root(NULL), currentModificationTarget(NULL), currentModificationLock(NULL), pushedNewCommandsOnTheStack(false), performedUndoRedo(false), modificationInProgress(false), nextId(0), store_(NULL)
 {
 	commands.setUndoLimit(100);
 	loadedModels.append(this);
@@ -79,11 +79,6 @@ void Model::endExclusiveRead()
 	exclusiveAccess.unlock();
 }
 
-NodeReadWriteLock* Model::getRootLock()
-{
-	return &rootLock;
-}
-
 bool Model::canBeModified(const Node* node) const
 {
 	// Check that we are in a modification block
@@ -97,21 +92,6 @@ bool Model::canBeModified(const Node* node) const
 
 	// Check that the access lock for this node is the current modification lock.
 	return node->getAccessLock() == currentModificationLock;
-}
-
-Node* Model::getRoot()
-{
-	return root;
-}
-
-QString Model::getName()
-{
-	return name;
-}
-
-void Model::setName(const QString& name_)
-{
-	name = name_;
 }
 
 NodeIdType Model::generateNextId()
@@ -153,25 +133,36 @@ void Model::redo()
 	commands.redo();
 }
 
-void Model::save(PersistentStore& store)
+void Model::save(PersistentStore* store)
 {
-	if ( root ) store.saveNode(root, "root", false);
-	lastUsedStore = &store;
+	if (name.isEmpty()) throw ModelException("Saving a model without a name");
+
+	if (root)
+	{
+		if (store) store->saveModel(this, name);
+		else if (store_) store_->saveModel(this, name);
+		else throw ModelException("Saving model '" + name + "' without specifying a persistent store");
+	}
+
+	if (store && !store_) store_ = store;
 }
 
-void Model::load(PersistentStore& store, const QString& name_)
+void Model::load(PersistentStore* store, const QString& name_)
 {
+	if (name_.isEmpty()) throw ModelException("Loading a model without specifying a name");
+	if (!store) throw ModelException("Loading model '" + name_ + "' without specifying a persistent store");
+
 	name = name_;
 	if ( root == NULL )
 	{
-		lastUsedStore = &store;
+		store_ = store;
 		commands.clear();
-		root = store.loadRootNode(name);
+		root = store_->loadModel(this, name);
 		emit rootCreated(root);
 	}
 }
 
-Model* Model::getModel(Node* root)
+Model* Model::findModel(Node* root)
 {
 	for (QList<Model*>::iterator model = loadedModels.begin(); model != loadedModels.end(); model++)
 	{
@@ -191,26 +182,6 @@ Node* Model::createRoot(const QString &typeName)
 	}
 
 	return root;
-}
-
-PersistentStore* Model::getLastUsedStore()
-{
-	return lastUsedStore;
-}
-
-void Model::emitNameModified(Node* node, const QString &oldName)
-{
-	emit nameModified(node, oldName);
-}
-
-void Model::emitNodeFullyLoaded(Node* node)
-{
-	emit nodeFullyLoaded(node);
-}
-
-void Model::emitNodePartiallyLoaded(Node* node)
-{
-	emit nodePartiallyLoaded(node);
 }
 
 }

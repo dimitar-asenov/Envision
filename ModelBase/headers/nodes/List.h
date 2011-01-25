@@ -70,7 +70,7 @@ class List: public Node
 
 template <class T> T* List::first()
 {
-	if (!fullyLoaded) loadFully(* (getModel()->getLastUsedStore()));
+	if (!fullyLoaded) loadFully(* (getModel()->store()));
 
 	if ( nodes.isEmpty() ) throw ModelException("Trying to access the first element of an empty list.");
 	return static_cast<T*> (nodes.first());
@@ -78,7 +78,7 @@ template <class T> T* List::first()
 
 template <class T> T* List::last()
 {
-	if (!fullyLoaded) loadFully(* (getModel()->getLastUsedStore()));
+	if (!fullyLoaded) loadFully(* (getModel()->store()));
 
 	if ( nodes.isEmpty() ) throw ModelException("Trying to access the last element of an empty list.");
 	return static_cast<T*> (nodes.last());
@@ -86,7 +86,7 @@ template <class T> T* List::last()
 
 template <class T> T* List::at(int i)
 {
-	if (!fullyLoaded) loadFully(* (getModel()->getLastUsedStore()));
+	if (!fullyLoaded) loadFully(* (getModel()->store()));
 
 	return static_cast<T*> (nodes[i]);
 }
@@ -94,7 +94,7 @@ template <class T> T* List::at(int i)
 template <class T>
 T* List::append()
 {
-	if (!fullyLoaded) loadFully(* (getModel()->getLastUsedStore()));
+	if (!fullyLoaded) loadFully(* (getModel()->store()));
 
 	return insert<T>(nodes.size());
 }
@@ -102,7 +102,7 @@ T* List::append()
 template <class T>
 T* List::prepend()
 {
-	if (!fullyLoaded) loadFully(* (getModel()->getLastUsedStore()));
+	if (!fullyLoaded) loadFully(* (getModel()->store()));
 
 	return insert<T>(0);
 }
@@ -110,7 +110,7 @@ T* List::prepend()
 template <class T>
 T* List::insert(int position)
 {
-	if (!fullyLoaded) loadFully(* (getModel()->getLastUsedStore()));
+	if (!fullyLoaded) loadFully(* (getModel()->store()));
 
 	T* newNode = new T(this, NULL);
 	if (! Node::isTypeRegistered(newNode->getTypeName())) throw ModelException("Trying to create a list entry of an unregistered type.");
