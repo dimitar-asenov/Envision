@@ -9,6 +9,7 @@
 #define LIST_H_
 
 #include "Node.h"
+#include "nodeMacros.h"
 #include "../Model.h"
 #include "../commands/ListInsert.h"
 #include "../ModelException.h"
@@ -22,32 +23,26 @@ class Text;
 
 class List: public Node
 {
+	NODE_DECLARE_STANDARD_CONSTRUCTORS(List)
+
 	private:
 		QVector<Node*> nodes;
-		Text* referenceName;
+		Text* referenceName_;
 
 		void loadSubNodes(QList<LoadedNode>& nodeList);
 
-		static int typeId;
-
 	public:
-		List(Node *parent, Model* model);
-		List(Node *parent, NodeIdType id, PersistentStore &store, bool partialHint);
 		virtual ~List();
 
 		virtual void save(PersistentStore &store) const;
 		virtual void load(PersistentStore &store);
 		virtual void loadFully(PersistentStore &store);
 
-		QString getTypeName() const;
-		int getTypeId() const;
-		static int getTypeIdStatic();
+		virtual Node* child(NodeIdType id);
+		virtual Node* child(const QString& name);
 
-		Node* getChild(NodeIdType id);
-		Node* getChild(const QString& name);
-
-		QString getReferenceName() const;
-		QString getChildReferenceName(const Node* child) const;
+		virtual QString referenceName() const;
+		virtual QString childReferenceName(const Node* child) const;
 
 		void setReferenceName(const QString &name);
 
@@ -64,13 +59,11 @@ class List: public Node
 		void remove(int index);
 		void remove(Node* instance);
 		void clear();
-
-		static void registerNodeType();
 };
 
 template <class T> T* List::first()
 {
-	if (!fullyLoaded) loadFully(* (getModel()->store()));
+	if (!fullyLoaded) loadFully(* (model()->store()));
 
 	if ( nodes.isEmpty() ) throw ModelException("Trying to access the first element of an empty list.");
 	return static_cast<T*> (nodes.first());
@@ -78,7 +71,7 @@ template <class T> T* List::first()
 
 template <class T> T* List::last()
 {
-	if (!fullyLoaded) loadFully(* (getModel()->store()));
+	if (!fullyLoaded) loadFully(* (model()->store()));
 
 	if ( nodes.isEmpty() ) throw ModelException("Trying to access the last element of an empty list.");
 	return static_cast<T*> (nodes.last());
@@ -86,7 +79,7 @@ template <class T> T* List::last()
 
 template <class T> T* List::at(int i)
 {
-	if (!fullyLoaded) loadFully(* (getModel()->store()));
+	if (!fullyLoaded) loadFully(* (model()->store()));
 
 	return static_cast<T*> (nodes[i]);
 }
@@ -94,7 +87,7 @@ template <class T> T* List::at(int i)
 template <class T>
 T* List::append()
 {
-	if (!fullyLoaded) loadFully(* (getModel()->store()));
+	if (!fullyLoaded) loadFully(* (model()->store()));
 
 	return insert<T>(nodes.size());
 }
@@ -102,7 +95,7 @@ T* List::append()
 template <class T>
 T* List::prepend()
 {
-	if (!fullyLoaded) loadFully(* (getModel()->store()));
+	if (!fullyLoaded) loadFully(* (model()->store()));
 
 	return insert<T>(0);
 }
@@ -110,10 +103,10 @@ T* List::prepend()
 template <class T>
 T* List::insert(int position)
 {
-	if (!fullyLoaded) loadFully(* (getModel()->store()));
+	if (!fullyLoaded) loadFully(* (model()->store()));
 
 	T* newNode = new T(this, NULL);
-	if (! Node::isTypeRegistered(newNode->getTypeName())) throw ModelException("Trying to create a list entry of an unregistered type.");
+	if (! Node::isTypeRegistered(newNode->typeName())) throw ModelException("Trying to create a list entry of an unregistered type.");
 
 	execute(new ListInsert(this, nodes, newNode, position));
 	return newNode;

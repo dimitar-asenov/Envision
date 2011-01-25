@@ -18,13 +18,13 @@ SetModificationTarget::SetModificationTarget(Node* &field_, NodeReadWriteLock* &
 
 void SetModificationTarget::redo()
 {
-	if (oldTarget) oldTarget->getAccessLock()->unlock();
-	if (newTarget) newTarget->getAccessLock()->lockForWrite(newTarget);
+	if (oldTarget) oldTarget->accessLock()->unlock();
+	if (newTarget) newTarget->accessLock()->lockForWrite(newTarget);
 
 	field = newTarget;
 	if ( newTarget && !modifiedTargets.contains(newTarget) ) modifiedTargets.append(newTarget);
 
-	if (field) lock = field->getAccessLock();
+	if (field) lock = field->accessLock();
 	else lock = NULL;
 
 	UndoCommand::redo();
@@ -32,13 +32,13 @@ void SetModificationTarget::redo()
 
 void SetModificationTarget::undo()
 {
-	if (newTarget) newTarget->getAccessLock()->unlock();
-	if (oldTarget) oldTarget->getAccessLock()->lockForWrite(oldTarget);
+	if (newTarget) newTarget->accessLock()->unlock();
+	if (oldTarget) oldTarget->accessLock()->lockForWrite(oldTarget);
 
 	field = oldTarget;
 	if ( oldTarget && !modifiedTargets.contains(oldTarget) ) modifiedTargets.append(oldTarget);
 
-	if (field) lock = field->getAccessLock();
+	if (field) lock = field->accessLock();
 	else lock = NULL;
 
 	UndoCommand::undo();

@@ -158,9 +158,9 @@ void HText::setNewText(Visualization::Item *target, const QString& newText)
 		if ( v )
 		{
 			Model::Text* modText = static_cast<Model::Text*> (v->getNode());
-			modText->getModel()->beginModification(modText, "Set text");
+			modText->model()->beginModification(modText, "Set text");
 			modText->set(newText);
-			modText->getModel()->endModification();
+			modText->model()->endModification();
 		}
 	}
 }

@@ -34,9 +34,9 @@ TEST(InteractionBase, TextSelect)
 	Scene* scene = new Scene();
 	ModelRenderer* renderer = new ModelRenderer();
 
-	renderer->registerVisualization(TestNodes::BinaryNode::getTypeIdStatic(), createVisualization<VExtendable, TestNodes::BinaryNode>);
-	renderer->registerVisualization(Model::Text::getTypeIdStatic(), createVisualization<VText, Model::Text>);
-	renderer->registerVisualization(Model::List::getTypeIdStatic(), createVisualization<VList, Model::List>);
+	renderer->registerVisualization(TestNodes::BinaryNode::typeIdStatic(), createVisualization<VExtendable, TestNodes::BinaryNode>);
+	renderer->registerVisualization(Model::Text::typeIdStatic(), createVisualization<VText, Model::Text>);
+	renderer->registerVisualization(Model::List::typeIdStatic(), createVisualization<VList, Model::List>);
 
 	scene->setRenderer(renderer);
 

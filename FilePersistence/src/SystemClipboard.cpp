@@ -70,7 +70,7 @@ void SystemClipboard::saveDoubleValue(double value)
 
 void SystemClipboard::saveNode(const Node *node, const QString &name, bool)
 {
-	xml->beginSaveChildNode(node->getTypeName());
+	xml->beginSaveChildNode(node->typeName());
 	xml->setName(name);
 	xml->setPartialHint(false);
 
@@ -84,7 +84,7 @@ void SystemClipboard::saveNode(const Node *node, const QString &name, bool)
 		// Get a list of sub nodes which have already been persisted.
 		QStringList persistedChildren = xml->getChildrenNames();
 
-		PersistedNode* persisted = node->getModel()->store()->loadCompleteNodeSubtree(node->getModel()->name(), node->persistentUnitId(), node->getId());
+		PersistedNode* persisted = node->model()->store()->loadCompleteNodeSubtree(node->model()->name(), node->persistentUnitId(), node->id());
 
 		if (!persisted) throw FilePersistenceException("Could not load node subtree from old persistent store.");
 		PersistedValue< QList<PersistedNode*> >* composite = dynamic_cast<PersistedValue< QList<PersistedNode*> >* > (persisted);
@@ -174,7 +174,7 @@ LoadedNode SystemClipboard::loadNode(Node* parent)
 
 	LoadedNode node;
 	node.name = xml->getName();
-	node.node = Node::createNewNode(xml->getType(), parent, parent->getModel()->generateNextId(), *this, false);
+	node.node = Node::createNewNode(xml->getType(), parent, parent->model()->generateNextId(), *this, false);
 
 	return node;
 }
@@ -222,7 +222,7 @@ void SystemClipboard::putNodes(const QList<const Node*>& nodes)
 
 		for(int i = 0; i<nodes.size(); ++i)
 		{
-			xml->beginSaveChildNode(nodes[i]->getTypeName());
+			xml->beginSaveChildNode(nodes[i]->typeName());
 			xml->setName(QString::number(i));
 			xml->setPartialHint(false);
 

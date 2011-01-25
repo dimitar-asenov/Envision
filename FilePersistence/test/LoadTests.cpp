@@ -29,7 +29,7 @@ TEST(FilePersistence, LoadRootOnly)
 	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.root());
 
 	CHECK_CONDITION(root);
-	CHECK_STR_EQUAL("BinaryNode", root->getTypeName() );
+	CHECK_STR_EQUAL("BinaryNode", root->typeName() );
 	CHECK_STR_EQUAL("Title", root->name()->get() );
 	CHECK_CONDITION(root->left() == NULL);
 	CHECK_CONDITION(root->right() == NULL);
@@ -50,15 +50,15 @@ TEST(FilePersistence, LoadModeNodesSingleUnitOnly)
 	model.load(&store, "2Children");
 	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.root());
 
-	CHECK_STR_EQUAL("BinaryNode", root->getTypeName() );
+	CHECK_STR_EQUAL("BinaryNode", root->typeName() );
 	CHECK_STR_EQUAL("Root", root->name()->get() );
 	CHECK_CONDITION(root->left() != NULL);
 	CHECK_CONDITION(root->right() != NULL);
-	CHECK_STR_EQUAL("BinaryNode", root->left()->getTypeName() );
+	CHECK_STR_EQUAL("BinaryNode", root->left()->typeName() );
 	CHECK_STR_EQUAL("Left child", root->left()->name()->get() );
 	CHECK_CONDITION(root->left()->left() == NULL);
 	CHECK_CONDITION(root->left()->right() == NULL);
-	CHECK_STR_EQUAL("BinaryNode", root->right()->getTypeName() );
+	CHECK_STR_EQUAL("BinaryNode", root->right()->typeName() );
 	CHECK_STR_EQUAL("Right child", root->right()->name()->get() );
 	CHECK_CONDITION(root->right()->left() == NULL);
 	CHECK_CONDITION(root->right()->right() == NULL);
@@ -74,19 +74,19 @@ TEST(FilePersistence, LoadMultipleUnits)
 	model.load(&store, "units");
 	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.root());
 
-	CHECK_STR_EQUAL("BinaryNode", root->getTypeName() );
+	CHECK_STR_EQUAL("BinaryNode", root->typeName() );
 	CHECK_STR_EQUAL("Root", root->name()->get() );
 	CHECK_CONDITION(root->left() != NULL);
 	CHECK_CONDITION(root->right() != NULL);
-	CHECK_STR_EQUAL("BinaryNodePersistenceUnit", root->left()->getTypeName() );
+	CHECK_STR_EQUAL("BinaryNodePersistenceUnit", root->left()->typeName() );
 	CHECK_STR_EQUAL("Left child", root->left()->name()->get() );
 	CHECK_CONDITION(root->left()->left() != NULL);
 	CHECK_CONDITION(root->left()->right() == NULL);
-	CHECK_STR_EQUAL("BinaryNode", root->left()->left()->getTypeName() );
+	CHECK_STR_EQUAL("BinaryNode", root->left()->left()->typeName() );
 	CHECK_STR_EQUAL("in a new unit", root->left()->left()->name()->get() );
 	CHECK_CONDITION(root->left()->left()->left() == NULL);
 	CHECK_CONDITION(root->left()->left()->right() == NULL);
-	CHECK_STR_EQUAL("BinaryNode", root->right()->getTypeName() );
+	CHECK_STR_EQUAL("BinaryNode", root->right()->typeName() );
 	CHECK_STR_EQUAL("Right child", root->right()->name()->get() );
 	CHECK_CONDITION(root->right()->left() == NULL);
 	CHECK_CONDITION(root->right()->right() == NULL);

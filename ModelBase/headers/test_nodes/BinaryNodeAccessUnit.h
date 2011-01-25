@@ -20,12 +20,12 @@ class MODELBASE_API BinaryNodeAccessUnit: public BinaryNode
 	EXTENDABLENODE_DECLARE_STANDARD_CONSTRUCTORS(BinaryNodeAccessUnit)
 
 	private:
-		Model::NodeReadWriteLock accessLock;
+		Model::NodeReadWriteLock accessLock_;
 
 	public:
 		static void init();
 
-		virtual Model::NodeReadWriteLock* getAccessLock() const;
+		virtual Model::NodeReadWriteLock* accessLock() const;
 };
 
 }

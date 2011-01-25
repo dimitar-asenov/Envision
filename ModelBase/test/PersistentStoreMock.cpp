@@ -41,7 +41,7 @@ void PersistentStoreMock::saveDoubleValue(double value)
 
 void PersistentStoreMock::saveNode(const Node *node, const QString &name, bool partialLoadHint)
 {
-	savedData.append(node->getTypeName() + "," + name + "," + (partialLoadHint ? "partial," : "full,"));
+	savedData.append(node->typeName() + "," + name + "," + (partialLoadHint ? "partial," : "full,"));
 	node->save(*this);
 }
 

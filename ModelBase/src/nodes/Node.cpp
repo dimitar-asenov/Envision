@@ -21,27 +21,29 @@ namespace Model {
 /***********************************************************************************************************************
  * STATIC MEMBERS
  **********************************************************************************************************************/
-int Node::numRegisteredTypes = 0;
+int Node::numRegisteredTypes_ = 0;
 QMap<QString, Node::NodeConstructor> Node::nodeConstructorRegister;
 QMap<QString, Node::NodePersistenceConstructor> Node::nodePersistenceConstructorRegister;
 
 /***********************************************************************************************************************
  * CONSTRUCTORS AND DESTRUCTORS
  **********************************************************************************************************************/
-Node::Node(Node* parent_, Model* model_) :
-	parent(parent_), id(0), revision(0), fullyLoaded(true)
+Node::Node(Node* parent, Model* argModel) :
+	parent_(parent), id_(0), revision_(0), fullyLoaded(true)
 {
-	Model *model = model_;
-	if ( model == NULL ) model = getModel();
-	else if ( getModel() != NULL ) throw ModelException("Constructing a new Node with an explicitly specified model and existing parent model");
+	Model* ownModel = model();
 
-	if ( model == NULL ) throw ModelException("Constructing a node without a valid model");
+	if (ownModel && argModel)
+		throw ModelException("Constructing a new Node with an explicitly specified model and existing parent model");
 
-	id = model->generateNextId();
+	if (!ownModel && !argModel) throw ModelException("Constructing a node without a valid model");
+
+	if (ownModel) id_ = ownModel->generateNextId();
+	else id_ = argModel->generateNextId();
 }
 
-Node::Node(Node* parent_, NodeIdType id_) :
-	parent(parent_), id(id_), revision(0), fullyLoaded(true)
+Node::Node(Node* parent, NodeIdType id) :
+	parent_(parent), id_(id), revision_(0), fullyLoaded(true)
 {
 }
 
@@ -61,14 +63,14 @@ void Node::execute(UndoCommand *command)
 {
 	if ( this != command->getTarget() ) throw ModelException("Command target differs from current node when executing commands");
 
-	Model* model = getModel();
+	Model* m = model();
 
-	if ( !model->canBeModified(this) ) throw ModelException("Can not modify the current node.");
+	if ( !m->canBeModified(this) ) throw ModelException("Can not modify the current node.");
 
-	model->pushCommandOnUndoStack(command);
+	m->pushCommandOnUndoStack(command);
 }
 
-Node* Node::getLowestCommonAncestor(Node* other)
+Node* Node::lowestCommonAncestor(Node* other)
 {
 	QList<Node*> thisParents;
 	QList<Node*> otherParents;
@@ -78,7 +80,7 @@ Node* Node::getLowestCommonAncestor(Node* other)
 	while ( n )
 	{
 		thisParents.prepend(n);
-		n = n->getParent();
+		n = n->parent();
 	}
 
 	// Get all parents of the other node
@@ -86,7 +88,7 @@ Node* Node::getLowestCommonAncestor(Node* other)
 	while ( n )
 	{
 		otherParents.prepend(n);
-		n = n->getParent();
+		n = n->parent();
 	}
 
 	// Find the lowest common ancestor
@@ -104,36 +106,36 @@ Node* Node::getLowestCommonAncestor(Node* other)
 /***********************************************************************************************************************
  * GETTERS AND SETTERS
  **********************************************************************************************************************/
-Model* Node::getModel() const
+Model* Node::model() const
 {
-	return Model::findModel(getRoot());
+	return Model::findModel(root());
 }
 
-Node* Node::getRoot() const
+Node* Node::root() const
 {
-	if ( parent == NULL ) return const_cast<Node*> (this);
-
-	return parent->getRoot();
+	const Node* root = this;
+	while (root->parent()) root = root->parent();
+	return const_cast<Node*> (root);
 }
 
-Node* Node::getParent() const
+Node* Node::parent() const
 {
-	return parent;
+	return parent_;
 }
 
-Node* Node::getChild(NodeIdType)
+Node* Node::child(NodeIdType)
 {
 	return NULL;
 }
 
-Node* Node::getChild(const QString&)
+Node* Node::child(const QString&)
 {
 	return NULL;
 }
 
-NodeIdType Node::getId() const
+NodeIdType Node::id() const
 {
-	return id;
+	return id_;
 }
 
 bool Node::isNewPersistenceUnit() const
@@ -145,10 +147,10 @@ NodeIdType Node::persistentUnitId() const
 {
 	const Node* persistentUnitNode = this;
 	while ( persistentUnitNode && persistentUnitNode->isNewPersistenceUnit() == false )
-		persistentUnitNode = persistentUnitNode->getParent();
+		persistentUnitNode = persistentUnitNode->parent();
 
-	if (persistentUnitNode == NULL || persistentUnitNode->getParent() == NULL) return 0;
-	else return persistentUnitNode->getId();
+	if (persistentUnitNode == NULL || persistentUnitNode->parent() == NULL) return 0;
+	else return persistentUnitNode->id();
 }
 
 Node* Node::persistentUnitNode()
@@ -159,26 +161,26 @@ Node* Node::persistentUnitNode()
 	while ( persistentUnitNode && persistentUnitNode->isNewPersistenceUnit() == false )
 	{
 		prev = persistentUnitNode;
-		persistentUnitNode = persistentUnitNode->getParent();
+		persistentUnitNode = persistentUnitNode->parent();
 	}
 
 	if (persistentUnitNode) return persistentUnitNode;
 	else return prev;
 }
 
-int Node::getRevision() const
+int Node::revision() const
 {
-	return revision;
+	return revision_;
 }
 
 void Node::incrementRevision()
 {
-	revision++;
+	revision_++;
 }
 
 void Node::addToRevision(int valueToAdd)
 {
-	revision += valueToAdd;
+	revision_ += valueToAdd;
 }
 
 bool Node::isFullyLoaded() const
@@ -186,21 +188,21 @@ bool Node::isFullyLoaded() const
 	return fullyLoaded;
 }
 
-QString Node::getReferenceName() const
+QString Node::referenceName() const
 {
 	return QString();
 }
 
-QString Node::getChildReferenceName(const Node*) const
+QString Node::childReferenceName(const Node*) const
 {
 	return QString();
 }
 
-NodeReadWriteLock* Node::getAccessLock() const
+NodeReadWriteLock* Node::accessLock() const
 {
-	if ( parent ) return parent->getAccessLock();
+	if ( parent_ ) return parent_->accessLock();
 	else
-		return getModel()->rootLock();
+		return model()->rootLock();
 }
 /***********************************************************************************************************************
  * STATIC METHODS
@@ -214,8 +216,8 @@ int Node::registerNodeType(const QString &type, const NodeConstructor constructo
 
 	ModelBase::log()->add(Log::LOGINFO, "Registered new node type " + type);
 
-	++numRegisteredTypes;
-	return numRegisteredTypes - 1;
+	++numRegisteredTypes_;
+	return numRegisteredTypes_ - 1;
 }
 
 Node* Node::createNewNode(const QString &type, Node* parent, Model* model)

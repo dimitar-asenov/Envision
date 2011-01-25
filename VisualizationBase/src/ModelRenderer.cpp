@@ -17,7 +17,7 @@ ModelRenderer::ModelRenderer()
 
 ModelItem* ModelRenderer::render(Item* parent, Model::Node* node)
 {
-	int nodeTypeId = node->getTypeId();
+	int nodeTypeId = node->typeId();
 	if (nodeTypeId >= visualizations.size() || !visualizations[nodeTypeId]) throw VisualizationException("Trying to render a node type that has no registered visualization.");
 	return visualizations[nodeTypeId](parent, node);
 }

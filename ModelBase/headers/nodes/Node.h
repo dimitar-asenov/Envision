@@ -28,11 +28,11 @@ class MODELBASE_API Node
 		typedef Node* (*NodePersistenceConstructor)(Node *parent, NodeIdType id, PersistentStore &store, bool partialLoadHint);
 
 	private:
-		Node* parent;
-		NodeIdType id;
-		int revision;
+		Node* parent_;
+		NodeIdType id_;
+		int revision_;
 
-		static int numRegisteredTypes;
+		static int numRegisteredTypes_;
 		static QMap<QString, NodeConstructor> nodeConstructorRegister;
 		static QMap<QString, NodePersistenceConstructor> nodePersistenceConstructorRegister;
 
@@ -44,9 +44,9 @@ class MODELBASE_API Node
 		Node(Node* parent, NodeIdType id);
 		virtual ~Node();
 
-		Model* getModel() const;
-		Node* getRoot() const;
-		Node* getParent() const;
+		Model* model() const;
+		Node* root() const;
+		Node* parent() const;
 
 		/**
 		 * Returns the child node with the specified id.
@@ -56,7 +56,7 @@ class MODELBASE_API Node
 		 *
 		 * If this is a partially loaded node, this method will cause the node to fully load.
 		 */
-		virtual Node* getChild(NodeIdType id);
+		virtual Node* child(NodeIdType id);
 
 		/**
 		 * Returns the child node with the specified name.
@@ -67,10 +67,10 @@ class MODELBASE_API Node
 		 *
 		 * If this is a partially loaded node, this method will cause the node to fully load.
 		 */
-		virtual Node* getChild(const QString& name);
+		virtual Node* child(const QString& name);
 
-		NodeIdType getId() const;
-		int getRevision() const;
+		NodeIdType id() const;
+		int revision() const;
 		void incrementRevision();
 		void addToRevision(int valueToAdd);
 		bool isFullyLoaded() const;
@@ -84,9 +84,9 @@ class MODELBASE_API Node
 		 * The default implementation just asks for the lock of the parent, or if the parent is NULL for the root lock of
 		 * the model.
 		 */
-		virtual NodeReadWriteLock* getAccessLock() const;
+		virtual NodeReadWriteLock* accessLock() const;
 
-		Node* getLowestCommonAncestor(Node* other);
+		Node* lowestCommonAncestor(Node* other);
 
 		/**
 		 * Executes the specified command and pushes it on the undo stack.
@@ -99,12 +99,12 @@ class MODELBASE_API Node
 		 * This name should be unique between all siblings. If the returned value is a null string ( QString.isNull()
 		 * returns true ) this means that this node can not be referenced.
 		 */
-		virtual QString getReferenceName() const;
+		virtual QString referenceName() const;
 
 		/**
 		 * Returns a name under which this node knows the specified child or QString::null if the child is unknown.
 		 */
-		virtual QString getChildReferenceName(const Node* child) const;
+		virtual QString childReferenceName(const Node* child) const;
 
 		/**
 		 * Saves the current node to a persistent store.
@@ -150,8 +150,8 @@ class MODELBASE_API Node
 		Node* persistentUnitNode();
 
 
-		virtual QString getTypeName() const = 0;
-		virtual int getTypeId() const = 0;
+		virtual const QString& typeName() const = 0;
+		virtual int typeId() const = 0;
 
 		static int registerNodeType(const QString &type, const NodeConstructor constructor, const NodePersistenceConstructor persistenceconstructor);
 

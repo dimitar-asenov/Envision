@@ -32,10 +32,10 @@ TEST(FilePersistence, LoadingList)
 	Model::List* list = root->list();
 
 	CHECK_CONDITION(list != NULL);
-	CHECK_STR_EQUAL("List", list->getTypeName() );
-	CHECK_STR_EQUAL("TheList", list->getReferenceName());
+	CHECK_STR_EQUAL("List", list->typeName() );
+	CHECK_STR_EQUAL("TheList", list->referenceName());
 	CHECK_CONDITION(list->isFullyLoaded() == false);
-	CHECK_INT_EQUAL(1, list->getId());
+	CHECK_INT_EQUAL(1, list->id());
 
 	list->loadFully(store);
 
@@ -49,19 +49,19 @@ TEST(FilePersistence, LoadingList)
 
 	CHECK_CONDITION(one != NULL);
 	CHECK_STR_EQUAL("one", one->get());
-	CHECK_INT_EQUAL(3, one->getId());
+	CHECK_INT_EQUAL(3, one->id());
 
 	CHECK_CONDITION(two != NULL);
 	CHECK_STR_EQUAL("two", two->get());
-	CHECK_INT_EQUAL(4, two->getId())
+	CHECK_INT_EQUAL(4, two->id())
 
 	CHECK_CONDITION(three != NULL);
 	CHECK_STR_EQUAL("three", three->get());
-	CHECK_INT_EQUAL(5, three->getId())
+	CHECK_INT_EQUAL(5, three->id())
 
 	CHECK_CONDITION(four != NULL);
 	CHECK_STR_EQUAL("four", four->get());
-	CHECK_INT_EQUAL(6, four->getId());
+	CHECK_INT_EQUAL(6, four->id());
 
 }
 
@@ -121,7 +121,7 @@ TEST(FilePersistence, ReSaveList)
 	TestNodes::PartialList* root = dynamic_cast<TestNodes::PartialList*> (model.root());
 
 	CHECK_CONDITION(root->list()->isFullyLoaded() == false);
-	CHECK_STR_EQUAL("TheList", root->list()->getReferenceName());
+	CHECK_STR_EQUAL("TheList", root->list()->referenceName());
 	CHECK_CONDITION(root->list()->isFullyLoaded() == false);
 
 	model.beginModification(root, "create ");

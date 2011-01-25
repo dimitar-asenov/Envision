@@ -31,15 +31,17 @@
  */
 #define NODE_DECLARE_STANDARD_CONSTRUCTORS(className)																						\
 	private:																																				\
-		static int typeId;																															\
+		static int typeId_;																															\
+		static const QString typeName_;																											\
 																																							\
 	public:																																				\
 		className(::Model::Node* parent, ::Model::Model* model);																			\
 		className(::Model::Node *parent, ::Model::NodeIdType id, ::Model::PersistentStore &store, bool partialLoadHint);\
 																																							\
-		QString getTypeName() const;																												\
-		int getTypeId() const;																														\
-		static int getTypeIdStatic();																												\
+		virtual const QString& typeName() const;																								\
+		virtual int typeId() const;																												\
+		static const QString& typeNameStatic();																								\
+		static int typeIdStatic();																													\
 		static void registerNodeType();																											\
 																																							\
 	private:
@@ -64,7 +66,8 @@
  */
 #define EXTENDABLENODE_DECLARE_STANDARD_CONSTRUCTORS(className)																		\
 	private:																																				\
-		static int typeId;																															\
+		static int typeId_;																															\
+		static const QString typeName_;																											\
 																																							\
 	public:																																				\
 		className(::Model::Node* parent, ::Model::Model* model);																			\
@@ -72,9 +75,10 @@
 		className(::Model::Node* parent, ::Model::Model* model, ::Model::AttributeChain& metaData);							\
 		className(::Model::Node *parent, ::Model::NodeIdType id, ::Model::PersistentStore &store, bool partialLoadHint, ::Model::AttributeChain& metaData); \
 																																							\
-		QString getTypeName() const;																												\
-		int getTypeId() const;																														\
-		static int getTypeIdStatic();																												\
+		virtual const QString& typeName() const;																								\
+		virtual int typeId() const;																												\
+		static const QString& typeNameStatic();																								\
+		static int typeIdStatic();																													\
 		static void registerNodeType();																											\
 																																							\
 	private:
@@ -134,24 +138,30 @@
  * Use this macro in the .cpp file that defines the new Node type.
  */
 #define NODE_DEFINE_TYPE_REGISTRATION_METHODS(className)																					\
-QString className::getTypeName()	const																											\
+int className::typeId_ = -1; /* This must be set to the result of Node::registerNodeType */									\
+const QString className::typeName_ = QString(#className);																				\
+																																							\
+const QString& className::typeName() const																									\
 {																																							\
-	return #className;																																\
+	return typeName_;																																	\
 }																																							\
 																																							\
-int className::typeId = -1; /* This must be set to the result of Node::registerNodeType */									\
-int className::getTypeId()	const																													\
+int className::typeId()	const																														\
 {																																							\
-	return typeId;																																		\
+	return typeId_;																																	\
 }																																							\
-int className::getTypeIdStatic()																													\
+int className::typeIdStatic()																														\
 {																																							\
-	return typeId;																																		\
+	return typeId_;																																	\
+}																																							\
+const QString& className::typeNameStatic()																									\
+{																																							\
+	return typeName_;																																	\
 }																																							\
 																																							\
 void className::registerNodeType()																												\
 {																																							\
-	typeId = Node::registerNodeType(#className, ::Model::createNewNode< className >, ::Model::createNodeFromPersistence< className >);\
+	typeId_ = Node::registerNodeType(#className, ::Model::createNewNode< className >, ::Model::createNodeFromPersistence< className >);\
 }
 /*********************************************************************************************************************/
 

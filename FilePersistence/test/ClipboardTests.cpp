@@ -118,11 +118,11 @@ TEST(FilePersistence, PasteBinaryFromClipboard)
 	CHECK_STR_EQUAL("Root", left->name()->get());
 	CHECK_CONDITION(left->left());
 	CHECK_CONDITION(left->right());
-	CHECK_INT_EQUAL(6, left->name()->getId());
-	CHECK_INT_EQUAL(7, left->left()->getId());
-	CHECK_INT_EQUAL(8, left->left()->name()->getId());
-	CHECK_INT_EQUAL(9, left->right()->getId());
-	CHECK_INT_EQUAL(10, left->right()->name()->getId());
+	CHECK_INT_EQUAL(6, left->name()->id());
+	CHECK_INT_EQUAL(7, left->left()->id());
+	CHECK_INT_EQUAL(8, left->left()->name()->id());
+	CHECK_INT_EQUAL(9, left->right()->id());
+	CHECK_INT_EQUAL(10, left->right()->name()->id());
 	CHECK_STR_EQUAL("Left child", left->left()->name()->get());
 	CHECK_STR_EQUAL("Right child", left->right()->name()->get());
 }
@@ -151,10 +151,10 @@ TEST(FilePersistence, PasteListFromClipboard)
 	root->load(sc);
 	model.endModification();
 
-	CHECK_STR_EQUAL("Under", root->getReferenceName());
+	CHECK_STR_EQUAL("Under", root->referenceName());
 	CHECK_INT_EQUAL(1, root->size());
-	CHECK_INT_EQUAL(0, root->getId());
-	CHECK_INT_EQUAL(8,root->at<Model::Node>(0)->getId());
+	CHECK_INT_EQUAL(0, root->id());
+	CHECK_INT_EQUAL(8,root->at<Model::Node>(0)->id());
 	CHECK_STR_EQUAL("third",root->at<Model::Text>(0)->get());
 }
 
@@ -186,9 +186,9 @@ TEST(FilePersistence, PasteInListFromClipboard)
 	model.endModification();
 
 	CHECK_INT_EQUAL(5, root->size());
-	CHECK_INT_EQUAL(0, root->getId());
-	CHECK_INT_EQUAL(7, root->at<Model::Node>(3)->getId());
-	CHECK_INT_EQUAL(8, root->at<Model::Node>(4)->getId());
+	CHECK_INT_EQUAL(0, root->id());
+	CHECK_INT_EQUAL(7, root->at<Model::Node>(3)->id());
+	CHECK_INT_EQUAL(8, root->at<Model::Node>(4)->id());
 	CHECK_STR_EQUAL("first",root->at<Model::Text>(3)->get());
 	CHECK_INT_EQUAL(1, root->at<Model::List>(4)->size());
 	CHECK_STR_EQUAL("third",root->at<Model::List>(4)->at<Model::Text>(0)->get());

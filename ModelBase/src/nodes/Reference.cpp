@@ -75,13 +75,13 @@ Node* Reference::getTargetFromLocalPath(const QString &path)
 		if ( step == parts.begin() && step->isEmpty() )
 		{
 			//This means that the string begins with "/" so start from root
-			n = getRoot();
+			n = root();
 			continue;
 		}
 
-		if ( *step == ".." ) n = n->getParent();
+		if ( *step == ".." ) n = n->parent();
 		else
-			n = n->getChild(*step);
+			n = n->child(*step);
 
 		if ( n == NULL ) return NULL;
 	}
@@ -93,7 +93,7 @@ QString Reference::getLocalPathToTarget(Node *target)
 {
 	if ( target == NULL ) return QString();
 
-	Node* parent = getLowestCommonAncestor(target);
+	Node* parent = lowestCommonAncestor(target);
 
 	if ( parent == NULL ) return QString();
 
@@ -105,7 +105,7 @@ QString Reference::getLocalPathToTarget(Node *target)
 	{
 		if ( up.size() > 0 ) up += "/";
 		up += "..";
-		n = n->getParent();
+		n = n->parent();
 	}
 
 	// Get the names under which each node starting from parent can be used to navigate to the target
@@ -114,8 +114,8 @@ QString Reference::getLocalPathToTarget(Node *target)
 	while ( n != parent )
 	{
 		if ( down.size() > 0 ) down.prepend("/");
-		down.prepend(n->getParent()->getChildReferenceName(n));
-		n = n->getParent();
+		down.prepend(n->parent()->childReferenceName(n));
+		n = n->parent();
 	}
 
 	QString completePath = "local:";

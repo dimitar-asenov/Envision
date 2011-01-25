@@ -18,9 +18,9 @@ void BinaryNodeAccessUnit::init()
 	registerNodeType();
 }
 
-Model::NodeReadWriteLock* BinaryNodeAccessUnit::getAccessLock() const
+Model::NodeReadWriteLock* BinaryNodeAccessUnit::accessLock() const
 {
-	return & (const_cast<BinaryNodeAccessUnit*> (this) )->accessLock; // TODO const cast madness. What is the best way to use these?
+	return & (const_cast<BinaryNodeAccessUnit*> (this) )->accessLock_; // TODO const cast madness. What is the best way to use these?
 }
 
 }

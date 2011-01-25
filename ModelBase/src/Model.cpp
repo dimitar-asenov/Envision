@@ -87,11 +87,11 @@ bool Model::canBeModified(const Node* node) const
 	// Check that this node has as a parent the current modification target.
 	const Node* n = node;
 	while ( n != NULL && n != currentModificationTarget )
-		n = n->getParent();
+		n = n->parent();
 	if ( n == NULL ) return false;
 
 	// Check that the access lock for this node is the current modification lock.
-	return node->getAccessLock() == currentModificationLock;
+	return node->accessLock() == currentModificationLock;
 }
 
 NodeIdType Model::generateNextId()

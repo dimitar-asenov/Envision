@@ -20,7 +20,7 @@ ITEM_COMMON_DEFINITIONS(VExtendable)
 VExtendable::VExtendable(Item* parent, Model::ExtendableNode* node, const VExtendableStyle* style) :
 	ModelItem(parent, node, style), header( new SequentialLayout(this, &style->headerStyle())), layout(NULL), attributes(NULL)
 {
-	header->append(new Text(header, node->getTypeName()));
+	header->append(new Text(header, node->typeName()));
 }
 
 VExtendable::~VExtendable()

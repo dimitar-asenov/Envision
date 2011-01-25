@@ -17,13 +17,13 @@ ModelItem::ModelItem(Item* parent, Model::Node* node_, const ItemStyle *style) :
 
 bool ModelItem::needsUpdate()
 {
-	return revision != node->getRevision();
+	return revision != node->revision();
 }
 
 void ModelItem::updateSubtreeState()
 {
 	Item::updateSubtree();
-	revision = node->getRevision();
+	revision = node->revision();
 }
 
 ModelRenderer* ModelItem::renderer()

@@ -28,7 +28,7 @@ void UndoCommand::redo()
 	while ( n )
 	{
 		n->incrementRevision();
-		n = n->getParent();
+		n = n->parent();
 	}
 
 	// set command state to done
@@ -43,7 +43,7 @@ void UndoCommand::undo()
 	while ( n )
 	{
 		n->addToRevision(-1);
-		n = n->getParent();
+		n = n->parent();
 	}
 
 	// set command state to done

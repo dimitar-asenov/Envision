@@ -62,23 +62,23 @@ Node* ExtendableNode::get(const QString &attributeName) const
 	return NULL;
 }
 
-Node* ExtendableNode::getChild(NodeIdType id)
+Node* ExtendableNode::child(NodeIdType id)
 {
 	Node* res = NULL;
 
 	for (int level = 0; level < subnodes.size(); ++level)
 		for (int i = 0; i < subnodes[level].size(); ++i)
-			if ( subnodes[level][i]->getId() == id ) res = subnodes[level][i];
+			if ( subnodes[level][i]->id() == id ) res = subnodes[level][i];
 
 	return res;
 }
 
-Node* ExtendableNode::getChild(const QString& name)
+Node* ExtendableNode::child(const QString& name)
 {
 	return get(name);
 }
 
-QString ExtendableNode::getChildReferenceName(const Node* child) const
+QString ExtendableNode::childReferenceName(const Node* child) const
 {
 	for (int level = 0; level < subnodes.size(); ++level)
 	{

@@ -61,9 +61,9 @@ TEST(ModelBase, SimpleModelCreation)
 	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.createRoot("BinaryNode"));
 	CHECK_CONDITION( model.root() == root );
 
-	CHECK_CONDITION( root->getModel() == &model );
+	CHECK_CONDITION( root->model() == &model );
 
-	CHECK_CONDITION( root->name()->getModel() == &model );
+	CHECK_CONDITION( root->name()->model() == &model );
 }
 
 TEST(ModelBase, RemoveOptional)
@@ -99,13 +99,13 @@ TEST(ModelBase, ChildNodeRetrieval)
 	TestNodes::BinaryNode* right = root->makeRightNode();
 	model.endModification();
 
-	CHECK_INT_EQUAL(0, root->getId());
-	CHECK_INT_EQUAL(4, left->getId());
-	CHECK_INT_EQUAL(8, right->getId());
+	CHECK_INT_EQUAL(0, root->id());
+	CHECK_INT_EQUAL(4, left->id());
+	CHECK_INT_EQUAL(8, right->id());
 
-	CHECK_CONDITION(root->getChild(1) == root->name());
-	CHECK_CONDITION(root->getChild(4) == left);
-	CHECK_CONDITION(root->getChild(8) == right);
+	CHECK_CONDITION(root->child(1) == root->name());
+	CHECK_CONDITION(root->child(4) == left);
+	CHECK_CONDITION(root->child(8) == right);
 
 	CHECK_CONDITION(root->hasAttribute("name"));
 	CHECK_CONDITION(root->hasAttribute("left"));
@@ -122,25 +122,25 @@ TEST(ModelBase, ProperRegistration)
 {
 	Model model;
 	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.createRoot("BinaryNode"));
-	CHECK_CONDITION(root->getTypeId() >= 0);
+	CHECK_CONDITION(root->typeId() >= 0);
 
 	Model model2;
 	Text* t = dynamic_cast<Text*> (model2.createRoot("Text"));
-	CHECK_CONDITION(t->getTypeId() >= 0);
-	CHECK_CONDITION(t->getTypeId() != root->getTypeId());
+	CHECK_CONDITION(t->typeId() >= 0);
+	CHECK_CONDITION(t->typeId() != root->typeId());
 
 	Model model3;
 	Integer* i = dynamic_cast<Integer*> (model3.createRoot("Integer"));
-	CHECK_CONDITION(i->getTypeId() >= 0);
-	CHECK_CONDITION(i->getTypeId() != root->getTypeId());
-	CHECK_CONDITION(i->getTypeId() != t->getTypeId());
+	CHECK_CONDITION(i->typeId() >= 0);
+	CHECK_CONDITION(i->typeId() != root->typeId());
+	CHECK_CONDITION(i->typeId() != t->typeId());
 
 	Model model4;
 	Reference* r = dynamic_cast<Reference*> (model4.createRoot("Reference"));
-	CHECK_CONDITION(r->getTypeId() >= 0);
-	CHECK_CONDITION(r->getTypeId() != root->getTypeId());
-	CHECK_CONDITION(r->getTypeId() != t->getTypeId());
-	CHECK_CONDITION(r->getTypeId() != i->getTypeId());
+	CHECK_CONDITION(r->typeId() >= 0);
+	CHECK_CONDITION(r->typeId() != root->typeId());
+	CHECK_CONDITION(r->typeId() != t->typeId());
+	CHECK_CONDITION(r->typeId() != i->typeId());
 }
 
 }
