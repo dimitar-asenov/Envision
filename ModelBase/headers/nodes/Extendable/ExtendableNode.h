@@ -79,9 +79,9 @@ T* ExtendableNode::createOptional(const ExtendableIndex &attributeIndex, const Q
 {
 	if ( !attributeIndex.isValid() ) throw ModelException("Trying to create an optional attribute with an invalid Index");
 
-	if ( meta.getAttribute(attributeIndex).optional() )
+	if ( meta.attribute(attributeIndex).optional() )
 	{
-		QString creationType = meta.getAttribute(attributeIndex).type();
+		QString creationType = meta.attribute(attributeIndex).type();
 		if ( !type.isEmpty() ) creationType = type;
 
 		Node* nodeGeneric = Node::createNewNode(creationType, this);
@@ -116,7 +116,7 @@ ExtendableIndex ExtendableNode::registerNewAttribute(const QString &attributeNam
 
 	getMetaData<T> ().append(Attribute(attributeName, attributeType, isOptional, canBePartiallyLoaded, isPersistent));
 
-	return ExtendableIndex(getMetaData<T> ().getNumLevels() - 1, getMetaData<T> ().size() - 1);
+	return ExtendableIndex(getMetaData<T> ().numLevels() - 1, getMetaData<T> ().size() - 1);
 }
 
 }

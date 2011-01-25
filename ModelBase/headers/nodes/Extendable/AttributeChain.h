@@ -20,22 +20,22 @@ namespace Model {
 class MODELBASE_API AttributeChain: public QVector<Attribute>
 {
 	private:
-		AttributeChain* parent;
+		AttributeChain* parent_;
 
-		int numLevels; // The number of levels of attributes, including this one.
+		int numLevels_; // The number of levels of attributes, including this one.
 
 	public:
 		AttributeChain();
 
 		void setParent(AttributeChain* newParent);
-		AttributeChain* getParent();
+		AttributeChain* parent();
 
-		int getRecursiveSize() const;
-		int getNumLevels() const;
+		int recursiveSize() const;
+		int numLevels() const;
 
-		AttributeChain* getLevel(int level);
-		ExtendableIndex getIndexForAttribute(const QString &name) const;
-		const Attribute& getAttribute(const ExtendableIndex &index);
+		AttributeChain* level(int level);
+		ExtendableIndex indexForAttribute(const QString &name) const;
+		const Attribute& attribute(const ExtendableIndex &index);
 		bool hasAttribute(const QString &name) const;
 };
 

@@ -33,13 +33,13 @@ NameChange::~NameChange()
 void NameChange::redo()
 {
 	command->redo();
-	UndoCommand::getTarget()->model()->emitNameModified(UndoCommand::getTarget(), oldName);
+	UndoCommand::target()->model()->emitNameModified(UndoCommand::target(), oldName);
 }
 
 void NameChange::undo()
 {
 	command->undo();
-	UndoCommand::getTarget()->model()->emitNameModified(UndoCommand::getTarget(), newName);
+	UndoCommand::target()->model()->emitNameModified(UndoCommand::target(), newName);
 }
 
 }

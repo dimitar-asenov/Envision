@@ -26,9 +26,9 @@ class NameChange: public UndoCommand
 	public:
 		NameChange(Node *target, const QString& oldName, const QString& newName, UndoCommand* command);
 		NameChange(Node *target, Text* text, const QString& newName);
-		~NameChange();
-		void redo();
-		void undo();
+		virtual ~NameChange();
+		virtual void redo();
+		virtual void undo();
 };
 
 }

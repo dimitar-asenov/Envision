@@ -24,8 +24,8 @@ class ListPut: public UndoCommand
 		ListPut(Node *target, QVector<Node*>& nodes, Node* newNode, int position);
 		virtual ~ListPut();
 
-		void redo();
-		void undo();
+		virtual void redo();
+		virtual void undo();
 };
 
 }

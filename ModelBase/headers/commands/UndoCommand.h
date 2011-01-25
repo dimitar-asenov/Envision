@@ -18,15 +18,15 @@ class Node;
 class MODELBASE_API UndoCommand: public QUndoCommand
 {
 	private:
-		Node* target;
+		Node* target_;
 		bool undone;
 
 	public:
 		UndoCommand(Node* target, const QString & text);
 		virtual ~UndoCommand();
 
-		void redo();
-		void undo();
+		virtual void redo();
+		virtual void undo();
 
 		/**
 		 * Returns whether the command has been undone since it was applied.
@@ -43,8 +43,11 @@ class MODELBASE_API UndoCommand: public QUndoCommand
 		 */
 		bool isUndone();
 
-		Node* getTarget();
+		Node* target();
 };
+
+inline bool UndoCommand::isUndone() { return undone; }
+inline Node* UndoCommand::target() { return target_; }
 
 }
 

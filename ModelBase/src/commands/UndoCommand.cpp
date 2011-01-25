@@ -10,8 +10,8 @@
 
 namespace Model {
 
-UndoCommand::UndoCommand(Node* target_, const QString & text) :
-	QUndoCommand(text), target(target_), undone(false)
+UndoCommand::UndoCommand(Node* target, const QString & text) :
+	QUndoCommand(text), target_(target), undone(false)
 {
 
 }
@@ -23,7 +23,7 @@ UndoCommand::~UndoCommand()
 void UndoCommand::redo()
 {
 	// Increment the revision counter of this node and all parents
-	Node* n = target;
+	Node* n = target_;
 
 	while ( n )
 	{
@@ -38,7 +38,7 @@ void UndoCommand::redo()
 void UndoCommand::undo()
 {
 	// Decrement the revision counter of this node and all parents
-	Node* n = target;
+	Node* n = target_;
 
 	while ( n )
 	{
@@ -48,16 +48,6 @@ void UndoCommand::undo()
 
 	// set command state to done
 	undone = true;
-}
-
-bool UndoCommand::isUndone()
-{
-	return undone;
-}
-
-Node* UndoCommand::getTarget()
-{
-	return target;
 }
 
 }

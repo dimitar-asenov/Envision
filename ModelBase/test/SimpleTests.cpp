@@ -21,12 +21,12 @@ TEST(ModelBase, ExtendableMetaData)
 	AttributeChain& metaExt = ExtendableNode::getMetaData<TestNodes::BinaryNode>();
 	AttributeChain& metaUnit = ExtendableNode::getMetaData<TestNodes::BinaryNodeAccessUnit>();
 
-	CHECK_INT_EQUAL(1, metaExt.getNumLevels());
-	CHECK_INT_EQUAL(2, metaUnit.getNumLevels());
+	CHECK_INT_EQUAL(1, metaExt.numLevels());
+	CHECK_INT_EQUAL(2, metaUnit.numLevels());
 
 	CHECK_INT_EQUAL(5, metaExt.size());
 	CHECK_INT_EQUAL(0, metaUnit.size());
-	CHECK_CONDITION( metaUnit.getLevel(0) == &metaExt);
+	CHECK_CONDITION( metaUnit.level(0) == &metaExt);
 
 	CHECK_STR_EQUAL("name", metaExt[0].name());
 	CHECK_STR_EQUAL("left", metaExt[1].name());

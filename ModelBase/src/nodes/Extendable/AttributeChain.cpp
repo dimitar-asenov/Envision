@@ -10,81 +10,81 @@
 namespace Model {
 
 AttributeChain::AttributeChain() :
-	parent(NULL), numLevels(1)
+	parent_(NULL), numLevels_(1)
 {
 }
 
 void AttributeChain::setParent(AttributeChain* newParent)
 {
-	parent = newParent;
+	parent_ = newParent;
 
 	// Compute the number of levels
-	numLevels = 1;
-	AttributeChain* ac = parent;
+	numLevels_ = 1;
+	AttributeChain* ac = parent_;
 	while ( ac )
 	{
-		numLevels++;
-		ac = ac->parent;
+		numLevels_++;
+		ac = ac->parent_;
 	}
 }
 
-AttributeChain* AttributeChain::getParent()
+AttributeChain* AttributeChain::parent()
 {
-	return parent;
+	return parent_;
 }
 
-int AttributeChain::getRecursiveSize() const
+int AttributeChain::recursiveSize() const
 {
 	const AttributeChain* ac = this;
 
 	int result = 0;
 	while ( ac )
 	{
-		result += size();
-		ac = ac->parent;
+		result += ac->size();
+		ac = ac->parent_;
 	}
 
 	return result;
 }
 
-int AttributeChain::getNumLevels() const
+int AttributeChain::numLevels() const
 {
-	return numLevels;
+	return numLevels_;
 }
 
-AttributeChain* AttributeChain::getLevel(int level)
+AttributeChain* AttributeChain::level(int level)
 {
-	int goBack = numLevels - 1 - level;
+	int goBack = numLevels_ - 1 - level;
 
 	AttributeChain* ac = this;
 	while ( goBack > 0 )
 	{
-		ac = ac->parent;
+		ac = ac->parent_;
 		goBack--;
 	}
 
 	return ac;
 }
 
-ExtendableIndex AttributeChain::getIndexForAttribute(const QString &name) const
+ExtendableIndex AttributeChain::indexForAttribute(const QString &name) const
 {
 	const AttributeChain* ac = this;
-	int level = numLevels - 1;
+	int level = numLevels_ - 1;
 	while ( ac )
 	{
 		int index = ac->indexOf(name);
 		if ( index >= 0 ) return ExtendableIndex(level, index);
 
 		--level;
-		ac = ac->parent;
+		ac = ac->parent_;
 	}
 
 	return ExtendableIndex();
 }
 
-const Attribute& AttributeChain::getAttribute(const ExtendableIndex &index)
+const Attribute& AttributeChain::attribute(const ExtendableIndex &index)
 {
-	return getLevel(index.level())->at(index.index());
+	return level(index.level())->at(index.index());
 }
 
 bool AttributeChain::hasAttribute(const QString &name) const
@@ -95,7 +95,7 @@ bool AttributeChain::hasAttribute(const QString &name) const
 		int index = ac->indexOf(name);
 		if ( index >= 0 ) return true;
 
-		ac = ac->parent;
+		ac = ac->parent_;
 	}
 
 	return false;

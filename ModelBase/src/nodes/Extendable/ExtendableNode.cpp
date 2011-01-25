@@ -12,11 +12,11 @@
 namespace Model {
 
 ExtendableNode::ExtendableNode(Node *parent, Model* model, AttributeChain& metaData) :
-	Node(parent, model), meta(metaData), subnodes(meta.getNumLevels())
+	Node(parent, model), meta(metaData), subnodes(meta.numLevels())
 {
-	for (int level = 0; level < meta.getNumLevels(); ++level)
+	for (int level = 0; level < meta.numLevels(); ++level)
 	{
-		AttributeChain* currentLevel = meta.getLevel(level);
+		AttributeChain* currentLevel = meta.level(level);
 		subnodes[level] = QVector<Node*> (currentLevel->size(), NULL);
 
 		for (int i = 0; i < currentLevel->size(); ++i)
@@ -25,16 +25,16 @@ ExtendableNode::ExtendableNode(Node *parent, Model* model, AttributeChain& metaD
 }
 
 ExtendableNode::ExtendableNode(Node *parent, NodeIdType id, PersistentStore &store, bool, AttributeChain& metaData) :
-	Node(parent, id), meta(metaData), subnodes(meta.getNumLevels())
+	Node(parent, id), meta(metaData), subnodes(meta.numLevels())
 {
-	for (int level = 0; level < meta.getNumLevels(); ++level)
-		subnodes[level] = QVector<Node*> (meta.getLevel(level)->size(), NULL);
+	for (int level = 0; level < meta.numLevels(); ++level)
+		subnodes[level] = QVector<Node*> (meta.level(level)->size(), NULL);
 
 	QList<LoadedNode> children = store.loadAllSubNodes(this);
 
 	for (QList<LoadedNode>::iterator ln = children.begin(); ln != children.end(); ln++)
 	{
-		ExtendableIndex index = meta.getIndexForAttribute(ln->name);
+		ExtendableIndex index = meta.indexForAttribute(ln->name);
 		if ( !index.isValid() ) throw ModelException("Node has attribute " + ln->name + " in persistent store, but this attribute is not registered");
 
 		subnodes[index.level()][index.index()] = ln->node;
@@ -57,7 +57,7 @@ Node* ExtendableNode::get(const ExtendableIndex &attributeIndex)
 
 Node* ExtendableNode::get(const QString &attributeName) const
 {
-	ExtendableIndex index = meta.getIndexForAttribute(attributeName);
+	ExtendableIndex index = meta.indexForAttribute(attributeName);
 	if ( index.isValid() ) return subnodes[index.level()][index.index()];
 	return NULL;
 }
@@ -83,7 +83,7 @@ QString ExtendableNode::childReferenceName(const Node* child) const
 	for (int level = 0; level < subnodes.size(); ++level)
 	{
 		int index = subnodes[level].indexOf(const_cast<Node*> (child)); // TODO find a way to do this cleanly
-		if ( index >= 0 ) return meta.getAttribute(ExtendableIndex(level, index)).name();
+		if ( index >= 0 ) return meta.attribute(ExtendableIndex(level, index)).name();
 	}
 
 	return QString();
@@ -98,9 +98,9 @@ QList< QPair<QString, Node*> > ExtendableNode::getAllAttributes(bool includeNull
 {
 	QList< QPair<QString, Node*> > result;
 
-	for (int level = 0; level < meta.getNumLevels(); ++level)
+	for (int level = 0; level < meta.numLevels(); ++level)
 	{
-		AttributeChain* currentLevel = meta.getLevel(level);
+		AttributeChain* currentLevel = meta.level(level);
 
 		for (int i = 0; i < currentLevel->size(); ++i)
 			if ( subnodes[level][i] || includeNullValues ) result.append(QPair<QString,Node*>((*currentLevel)[i].name(),subnodes[level][i]));
@@ -111,7 +111,7 @@ QList< QPair<QString, Node*> > ExtendableNode::getAllAttributes(bool includeNull
 
 void ExtendableNode::removeOptional(const ExtendableIndex &attributeIndex)
 {
-	if ( meta.getAttribute(attributeIndex).optional() )
+	if ( meta.attribute(attributeIndex).optional() )
 	{
 		execute(new ExtendedNodeChild(this, subnodes[attributeIndex.level()][attributeIndex.index()], attributeIndex, &subnodes, false));
 	}
@@ -121,9 +121,9 @@ void ExtendableNode::removeOptional(const ExtendableIndex &attributeIndex)
 
 void ExtendableNode::save(PersistentStore &store) const
 {
-	for (int level = 0; level < meta.getNumLevels(); ++level)
+	for (int level = 0; level < meta.numLevels(); ++level)
 	{
-		AttributeChain* currentLevel = meta.getLevel(level);
+		AttributeChain* currentLevel = meta.level(level);
 		for (int i = 0; i < currentLevel->size(); ++i)
 			if ( subnodes[level][i] != NULL && currentLevel->at(i).persistent() ) store.saveNode(subnodes[level][i], currentLevel->at(i).name(), currentLevel->at(i).partialHint());
 	}
@@ -137,7 +137,7 @@ void ExtendableNode::load(PersistentStore &store)
 
 	for (QList<LoadedNode>::iterator ln = children.begin(); ln != children.end(); ln++)
 	{
-		ExtendableIndex index = meta.getIndexForAttribute(ln->name);
+		ExtendableIndex index = meta.indexForAttribute(ln->name);
 		if ( !index.isValid() ) throw ModelException("Node has attribute " + ln->name + " in persistent store, but this attribute is not registered");
 
 		execute(new ExtendedNodeChild(this, ln->node, ExtendableIndex(index.level(),index.index()), &subnodes, true));
@@ -155,9 +155,9 @@ void ExtendableNode::removeAllNodes()
 
 void ExtendableNode::verifyHasAllMandatoryAttributes()
 {
-	for (int level = 0; level < meta.getNumLevels(); ++level)
+	for (int level = 0; level < meta.numLevels(); ++level)
 	{
-		AttributeChain* currentLevel = meta.getLevel(level);
+		AttributeChain* currentLevel = meta.level(level);
 
 		for (int i = 0; i < currentLevel->size(); ++i)
 			if ( subnodes[level][i] == NULL && (*currentLevel)[i].optional() == false )

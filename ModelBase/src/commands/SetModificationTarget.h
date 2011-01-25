@@ -26,8 +26,8 @@ class SetModificationTarget: public UndoCommand
 
 	public:
 		SetModificationTarget(Node* &field, NodeReadWriteLock* &lock, QList<Node*>& modifiedTargets, Node* newTarget);
-		void redo();
-		void undo();
+		virtual void redo();
+		virtual void undo();
 };
 
 }

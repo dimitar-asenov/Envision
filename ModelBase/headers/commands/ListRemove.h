@@ -23,8 +23,8 @@ class ListRemove: public UndoCommand
 		ListRemove(Node *target, QVector<Node*>& nodes, int position);
 		virtual ~ListRemove();
 
-		void redo();
-		void undo();
+		virtual void redo();
+		virtual void undo();
 };
 
 }

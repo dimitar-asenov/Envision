@@ -28,8 +28,8 @@ class ExtendedNodeChild: public UndoCommand
 		ExtendedNodeChild(Node* target, Node* attribute, const ExtendableIndex &attributeIndex, QVector< QVector<Node*> >* subnodes, bool created);
 		virtual ~ExtendedNodeChild();
 
-		void redo();
-		void undo();
+		virtual void redo();
+		virtual void undo();
 };
 
 }

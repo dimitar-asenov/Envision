@@ -27,13 +27,13 @@ class FieldSet: public UndoCommand
 		{
 		}
 
-		void redo()
+		virtual void redo()
 		{
 			field = newValue;
 			UndoCommand::redo();
 		}
 
-		void undo()
+		virtual void undo()
 		{
 			field = oldValue;
 			UndoCommand::undo();

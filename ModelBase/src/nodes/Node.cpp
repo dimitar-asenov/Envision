@@ -61,7 +61,7 @@ void Node::loadFully(PersistentStore&)
 
 void Node::execute(UndoCommand *command)
 {
-	if ( this != command->getTarget() ) throw ModelException("Command target differs from current node when executing commands");
+	if ( this != command->target() ) throw ModelException("Command target differs from current node when executing commands");
 
 	Model* m = model();
 

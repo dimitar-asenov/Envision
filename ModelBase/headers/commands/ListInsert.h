@@ -23,8 +23,8 @@ class ListInsert: public UndoCommand
 		ListInsert(Node *target, QVector<Node*>& nodes, Node* newNode, int position);
 		virtual ~ListInsert();
 
-		void redo();
-		void undo();
+		virtual void redo();
+		virtual void undo();
 };
 
 }
