@@ -35,6 +35,7 @@ class FILEPERSISTENCE_API XMLModel
 		void importChildFromXML(QDomElement child);
 		void saveNext(const QString& tag);
 
+		void setNextId(Model::NodeIdType id);
 		void setId(Model::NodeIdType id);
 		void setName(const QString& name);
 		void setPartialHint(bool partialHint);
@@ -57,6 +58,7 @@ class FILEPERSISTENCE_API XMLModel
 		void goToRoot();
 
 		QString getType() const;
+		Model::NodeIdType getNextId() const;
 		Model::NodeIdType getId() const;
 		QString getName() const;
 		bool getPartialHint() const;

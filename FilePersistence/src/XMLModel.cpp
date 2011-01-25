@@ -96,6 +96,11 @@ void XMLModel::saveNext(const QString& tag)
 	elemStack.append(elem);
 }
 
+void XMLModel::setNextId(Model::NodeIdType id)
+{
+	elem.setAttribute("nextid", QString::number(id));
+}
+
 void XMLModel::setId(Model::NodeIdType id)
 {
 	elem.setAttribute("id", QString::number(id));
@@ -267,6 +272,18 @@ void XMLModel::goToRoot()
 QString XMLModel::getType() const
 {
 	return elem.tagName();
+}
+
+Model::NodeIdType XMLModel::getNextId() const
+{
+	if ( elem.hasAttribute("nextid") )
+	{
+		bool ok = true;
+		Model::NodeIdType id = elem.attribute("nextid", "error").toInt(&ok);
+		if (ok) return id;
+		else throw FilePersistenceException("Incorrect next id '" + elem.attribute("nextid") + "' for node of type: " + elem.tagName());
+	}
+	else throw FilePersistenceException("Next id not found for node of type: " + elem.tagName());
 }
 
 Model::NodeIdType XMLModel::getId() const

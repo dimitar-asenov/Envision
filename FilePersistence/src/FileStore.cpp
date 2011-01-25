@@ -47,11 +47,11 @@ QString FileStore::getPersistenceUnitName(const Model::Node *node) const
 // Methods from Persistent Store
 //**********************************************************************************************************************
 
-void FileStore::saveModel(Model::Model& model, const QString &name)
+void FileStore::saveModel(Model::Model* model, const QString &name)
 {
 	storeAccess.lock();
 	working = true;
-	model.beginExclusiveRead();
+	model->beginExclusiveRead();
 
 	try
 	{
@@ -64,16 +64,16 @@ void FileStore::saveModel(Model::Model& model, const QString &name)
 
 		if ( !modelDir.exists() ) throw FilePersistenceException("Error opening model folder " + modelDir.path());
 
-		saveNewPersistenceUnit(model.getRoot(), name, false);
+		saveNewPersistenceUnit(model->getRoot(), name, false);
 	}
 	catch (Model::ModelException& e)
 	{
-		model.endExclusiveRead();
+		model->endExclusiveRead();
 		working = false;
 		storeAccess.unlock();
 		throw;
 	}
-	model.endExclusiveRead();
+	model->endExclusiveRead();
 	working = false;
 	storeAccess.unlock();
 }
@@ -102,7 +102,7 @@ void FileStore::saveNewPersistenceUnit(const Model::Node *node, const QString &n
 
 	XMLModel* oldXML = xml;
 
-	if ( xml != NULL ) // If this is not the root node, then we should put a reference to this node
+	if ( node->getParent() ) // If this is not the root node, then we should put a reference to this node
 	{
 		xml->beginSaveChildNode(XML_NEWUNIT_NODE_TAG);
 		xml->setName(name);
@@ -111,7 +111,18 @@ void FileStore::saveNewPersistenceUnit(const Model::Node *node, const QString &n
 	}
 
 	xml = new XMLModel();
-	saveNodeDirectly(node, name, partialLoadHint);
+
+	if (oldXML == NULL)
+	{
+		// If this is the root node save the model information
+		xml->beginSaveChildNode("model");
+		xml->setNextId(node->getModel()->maxId());
+
+		saveNodeDirectly(node, name, partialLoadHint);
+
+		xml->endSaveChildNode();
+	}
+	else saveNodeDirectly(node, name, partialLoadHint);
 
 	QString filename;
 	if ( oldXML == NULL ) filename = name; // This is the root of the model, save the file name
@@ -181,7 +192,7 @@ void FileStore::saveNodeDirectly(const Model::Node *node, const QString &name, b
 	xml->endSaveChildNode();
 }
 
-Model::Node* FileStore::loadRootNode(const QString &name)
+Model::Node* FileStore::loadModel(Model::Model* model, const QString &name)
 {
 	storeAccess.lock();
 	working = true;
@@ -192,10 +203,17 @@ Model::Node* FileStore::loadRootNode(const QString &name)
 		modelDir = baseFolder.path() + QDir::toNativeSeparators("/" + name);
 		if ( !modelDir.exists() ) throw FilePersistenceException("Can not find root node folder " + modelDir.path());
 
-		ln = loadNewPersistenceUnit(name, NULL);
+		xml = new XMLModel(modelDir.absoluteFilePath(name));
+		xml->goToFirstChild();
+		model->setNextId(xml->getNextId());
+		xml->goToFirstChild();
+		ln =  loadNode(NULL);
+
+		SAFE_DELETE(xml);
 	}
 	catch (Model::ModelException& e)
 	{
+		SAFE_DELETE(xml);
 		working = false;
 		storeAccess.unlock();
 		throw;

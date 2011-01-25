@@ -25,7 +25,7 @@ TEST(FilePersistence, LoadingList)
 	FileStore store;
 	store.setBaseFolder(testDir);
 
-	model.load(store, "partial");
+	model.load(&store, "partial");
 	TestNodes::PartialList* root = dynamic_cast<TestNodes::PartialList*> (model.getRoot());
 	CHECK_CONDITION(root != NULL);
 
@@ -82,7 +82,8 @@ TEST(FilePersistence, SaveList)
 	root->list()->append<Model::Text>()->set("four");
 	model.endModification();
 
-	store.saveModel(model, "partial");
+	model.setName("partial");
+	model.save(&store);
 
 	CHECK_TEXT_FILES_EQUAL(":/FilePersistence/test/persisted/partial/partial", testDir + "/partial/partial");
 }
@@ -102,7 +103,10 @@ TEST(FilePersistence, ReSaveList)
 	}
 
 	if (!QDir(destDir + "/partialResave").exists())
-		QDir().mkdir(destDir + "/partialResave");
+	{
+		bool createdDir = QDir().mkpath(destDir + "/partialResave");
+		CHECK_CONDITION(createdDir);
+	}
 	bool copied = src.copy(dest.fileName());
 	CHECK_CONDITION(copied);
 
@@ -113,7 +117,7 @@ TEST(FilePersistence, ReSaveList)
 	FileStore store;
 	store.setBaseFolder(destDir);
 
-	model.load(store, "partialResave");
+	model.load(&store, "partialResave");
 	TestNodes::PartialList* root = dynamic_cast<TestNodes::PartialList*> (model.getRoot());
 
 	CHECK_CONDITION(root->list()->isFullyLoaded() == false);
@@ -125,7 +129,8 @@ TEST(FilePersistence, ReSaveList)
 	model.endModification();
 
 	CHECK_CONDITION(root->list()->isFullyLoaded() == false);
-	store.saveModel(model, "partialResave");
+	model.setName("partialResave");
+	model.save(&store);
 	CHECK_CONDITION(root->list()->isFullyLoaded() == false);
 
 	CHECK_TEXT_FILES_EQUAL(":/FilePersistence/test/persisted/partialResave/partialResave", destDir + "/partialResave/partialResave");

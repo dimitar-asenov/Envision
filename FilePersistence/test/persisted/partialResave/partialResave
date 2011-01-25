@@ -1,10 +1,12 @@
 <!DOCTYPE EnvisionFilePersistence>
-<PartialList id="0" name="partialResave" partial="0">
- <List id="1" name="list" partial="1">
-  <Text id="2" name="ModelBaseListRefName" partial="0">S_NewReference</Text>
-  <Text id="3" name="0" partial="0">S_one</Text>
-  <Text id="4" name="1" partial="0">S_two</Text>
-  <Text id="5" name="2" partial="0">S_three</Text>
-  <Text id="6" name="3" partial="0">S_four</Text>
- </List>
-</PartialList>
+<model nextid="7">
+ <PartialList id="0" name="partialResave" partial="0">
+  <List id="1" name="list" partial="1">
+   <Text id="2" name="ModelBaseListRefName" partial="0">S_NewReference</Text>
+   <Text id="3" name="0" partial="0">S_one</Text>
+   <Text id="4" name="1" partial="0">S_two</Text>
+   <Text id="5" name="2" partial="0">S_three</Text>
+   <Text id="6" name="3" partial="0">S_four</Text>
+  </List>
+ </PartialList>
+</model>

@@ -31,7 +31,8 @@ TEST(FilePersistence, SaveRootOnly)
 	root->name()->set("Title");
 	model.endModification();
 
-	store.saveModel(model, "rootOnly");
+	model.setName("rootOnly");
+	model.save(&store);
 
 	CHECK_TEXT_FILES_EQUAL(":/FilePersistence/test/persisted/rootOnly/rootOnly", testDir + "/rootOnly/rootOnly");
 }
@@ -54,7 +55,8 @@ TEST(FilePersistence, SaveModeNodesSingleUnitOnly)
 	right->name()->set("Right child");
 	model.endModification();
 
-	store.saveModel(model, "2Children");
+	model.setName("2Children");
+	model.save(&store);
 	CHECK_TEXT_FILES_EQUAL(":/FilePersistence/test/persisted/2Children/2Children", testDir + "/2Children/2Children");
 }
 
@@ -78,7 +80,8 @@ TEST(FilePersistence, SaveMultipleUnits)
 	right->name()->set("Right child");
 	model.endModification();
 
-	store.saveModel(model, "units");
+	model.setName("units");
+	model.save(&store);
 	CHECK_TEXT_FILES_EQUAL(":/FilePersistence/test/persisted/units/units", testDir + "/units/units");
 	CHECK_TEXT_FILES_EQUAL(":/FilePersistence/test/persisted/units/2", testDir + "/units/2");
 }

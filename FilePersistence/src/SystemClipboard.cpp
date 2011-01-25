@@ -26,21 +26,7 @@ static const QString CLIPBOARD_TAG = "clipboard";
 SystemClipboard::SystemClipboard() :
 	xml(NULL), numNodes_(0)
 {
-	if (!QApplication::clipboard()->text().isEmpty())
-	{
-		try
-		{
-			xml = new XMLModel();
-			xml->setDocumentText(QApplication::clipboard()->text());
-			xml->goToRoot();
-			numNodes_ = xml->getChildrenNames().size();
-			xml->goToFirstChild();
-		}
-		catch(FilePersistenceException&)
-		{
-			SAFE_DELETE(xml);
-		}
-	}
+	readClipboard();
 }
 
 SystemClipboard::~SystemClipboard()
@@ -49,15 +35,15 @@ SystemClipboard::~SystemClipboard()
 }
 
 // Methods from Persistent Store
-void SystemClipboard::saveModel(::Model::Model& model, const QString &name)
+void SystemClipboard::saveModel(::Model::Model* model, const QString &name)
 {
-	if (model.getRoot())
+	if (model->getRoot())
 	{
 		SAFE_DELETE(xml);
 		xml = new XMLModel();
 
 		xml->beginSaveChildNode(CLIPBOARD_TAG);
-		saveNode(model.getRoot(), name, false);
+		saveNode(model->getRoot(), name, false);
 		xml->endSaveChildNode();
 
 		QApplication::clipboard()->setText(xml->documentText());
@@ -98,7 +84,7 @@ void SystemClipboard::saveNode(const Node *node, const QString &name, bool)
 		// Get a list of sub nodes which have already been persisted.
 		QStringList persistedChildren = xml->getChildrenNames();
 
-		PersistedNode* persisted = node->getModel()->getLastUsedStore()->loadCompleteNodeSubtree(node->getModel()->getName(), node->persistentUnitId(), node->getId());
+		PersistedNode* persisted = node->getModel()->store()->loadCompleteNodeSubtree(node->getModel()->getName(), node->persistentUnitId(), node->getId());
 
 		if (!persisted) throw FilePersistenceException("Could not load node subtree from old persistent store.");
 		PersistedValue< QList<PersistedNode*> >* composite = dynamic_cast<PersistedValue< QList<PersistedNode*> >* > (persisted);
@@ -146,9 +132,9 @@ void SystemClipboard::saveNodeFromOldStore(PersistedNode* node)
 	xml->endSaveChildNode();
 }
 
-Node* SystemClipboard::loadRootNode(const QString &)
+Node* SystemClipboard::loadModel(::Model::Model*, const QString &)
 {
-	throw FilePersistenceException("The clipboard does not support the loadRootNode() method.");
+	throw FilePersistenceException("The clipboard does not support the loadModel() method.");
 }
 
 QList<LoadedNode> SystemClipboard::loadAllSubNodes(Node* parent)
@@ -184,9 +170,11 @@ Node* SystemClipboard::loadSubNode(Node* parent, const QString& name)
 
 LoadedNode SystemClipboard::loadNode(Node* parent)
 {
+	if (!parent) throw FilePersistenceException("Can not load a not from clipboard without a parent.");
+
 	LoadedNode node;
 	node.name = xml->getName();
-	node.node = Node::createNewNode(xml->getType(), parent, xml->getId(), *this, false);
+	node.node = Node::createNewNode(xml->getType(), parent, parent->getModel()->generateNextId(), *this, false);
 
 	return node;
 }
@@ -249,6 +237,33 @@ void SystemClipboard::putNodes(const QList<const Node*>& nodes)
 		SAFE_DELETE(xml);
 		numNodes_ = 0;
 	}
+}
+
+bool SystemClipboard::readClipboard()
+{
+	numNodes_ = 0;
+	SAFE_DELETE(xml);
+
+	bool clipboardContainsEnvisionData = false;
+	if (!QApplication::clipboard()->text().isEmpty())
+	{
+		try
+		{
+			xml = new XMLModel();
+			xml->setDocumentText(QApplication::clipboard()->text());
+			xml->goToRoot();
+			numNodes_ = xml->getChildrenNames().size();
+			xml->goToFirstChild();
+			clipboardContainsEnvisionData = true;
+		}
+		catch (FilePersistenceException&)
+		{
+			SAFE_DELETE(xml);
+			clipboardContainsEnvisionData = false;
+		}
+	}
+
+	return clipboardContainsEnvisionData && numNodes_ > 0;
 }
 
 int SystemClipboard::numNodes() const

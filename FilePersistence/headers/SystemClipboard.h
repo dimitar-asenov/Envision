@@ -24,14 +24,11 @@ class FILEPERSISTENCE_API SystemClipboard : public Model::ClipboardStore
 		virtual ~SystemClipboard();
 
 		// Methods from Persistent Store
-		virtual void saveModel(Model::Model& model, const QString &name);
-
 		virtual void saveStringValue(const QString &value);
 		virtual void saveIntValue(int value);
 		virtual void saveDoubleValue(double value);
 		virtual void saveNode(const Model::Node *node, const QString &name, bool partialLoadHint);
 
-		virtual Model::Node* loadRootNode(const QString &name);
 		virtual QList<Model::LoadedNode> loadAllSubNodes(Model::Node* parent);
 		virtual Model::Node* loadSubNode(Model::Node* parent, const QString& name);
 		virtual QList<Model::LoadedNode> loadPartialNode(Model::Node* partialNode);
@@ -45,11 +42,16 @@ class FILEPERSISTENCE_API SystemClipboard : public Model::ClipboardStore
 		virtual void putNode(const Model::Node* node);
 		virtual void putNodes(const QList<const Model::Node*>& nodes);
 
+		virtual bool readClipboard();
 		virtual int numNodes() const;
 		virtual bool hasNext() const;
 		virtual void next();
 		virtual QString type() const;
 		virtual Model::Node* create(Model::Model* model, Model::Node* parent);
+
+	protected:
+		virtual void saveModel(Model::Model* model, const QString &name);
+		virtual Model::Node* loadModel(Model::Model* model, const QString &name);
 
 	private:
 		XMLModel* xml;
