@@ -8,6 +8,7 @@
 #include "items/TextRenderer.h"
 
 #include "items/ModelItem.h"
+#include "Scene.h"
 #include "VisualizationException.h"
 
 #include <QtGui/QPainter>
@@ -57,7 +58,7 @@ template<class T> QString TextRenderer<T>::getText()
 
 template<class T> QString TextRenderer<T>::getSelectedText()
 {
-	if (this->hasFocus())
+	if (isSelectedForInput())
 	{
 		int xstart = selectionBegin;
 		int xend = selectionEnd;
@@ -70,6 +71,11 @@ template<class T> QString TextRenderer<T>::getSelectedText()
 		return text.mid(xstart, xend - xstart);
 	}
 	else return QString();
+}
+
+template<class T> bool TextRenderer<T>::isSelectedForInput() const
+{
+	return this->hasFocus() && this->scene()->selectedItems().size() == 0;
 }
 
 template<class T> bool TextRenderer<T>::isEditable()
@@ -104,7 +110,7 @@ template<class T> void TextRenderer<T>::updateGeometry(int, int)
 	yOffset = -bound.top();
 	this->setSize(bound.size());
 
-	if ( this->hasFocus() )
+	if ( isSelectedForInput() )
 	{
 		int xstart = selectionBegin;
 		int xend = selectionEnd;
@@ -122,7 +128,7 @@ template<class T> void TextRenderer<T>::updateGeometry(int, int)
 
 template<class T> void TextRenderer<T>::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-	if ( !this->hasFocus() )
+	if ( !isSelectedForInput() )
 	{
 		painter->setPen(style()->pen());
 		painter->setFont(style()->font());
