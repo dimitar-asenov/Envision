@@ -37,7 +37,7 @@ QString FileStore::getPersistenceUnitName(const Model::Node *node) const
 	Model::NodeIdType persistenceUnitId = node->persistentUnitId();
 
 	QString name;
-	if (persistenceUnitId == 0) name = node->getModel()->getName();
+	if (persistenceUnitId == 0) name = node->getModel()->name();
 	else name = QString::number(persistenceUnitId);
 
 	return name;
@@ -64,7 +64,7 @@ void FileStore::saveModel(Model::Model* model, const QString &name)
 
 		if ( !modelDir.exists() ) throw FilePersistenceException("Error opening model folder " + modelDir.path());
 
-		saveNewPersistenceUnit(model->getRoot(), name, false);
+		saveNewPersistenceUnit(model->root(), name, false);
 	}
 	catch (Model::ModelException& e)
 	{
@@ -300,7 +300,7 @@ QList<Model::LoadedNode> FileStore::loadPartialNode(Model::Node* partialNode)
 
 	try
 	{
-		modelDir = baseFolder.path() + QDir::toNativeSeparators("/" + partialNode->getModel()->getName());
+		modelDir = baseFolder.path() + QDir::toNativeSeparators("/" + partialNode->getModel()->name());
 		if ( !modelDir.exists() ) throw FilePersistenceException("Can not find root node folder " + modelDir.path());
 
 		QString filename = getPersistenceUnitName(partialNode);

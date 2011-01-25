@@ -46,10 +46,10 @@ class MODELBASE_API Model: public QObject
 	private:
 
 		/** The name of this model. This name will be used to save the model in the persistent store. */
-		QString name;
+		QString name_;
 
 		/** The root node for this model */
-		Node* root;
+		Node* root_;
 
 		/** The command stack that hold the undo history */
 		QUndoStack commands;
@@ -67,7 +67,7 @@ class MODELBASE_API Model: public QObject
 		 * The lock corresponding to the root access unit. This is used by synchronized readers and by writers to control
 		 * access to the root unit.
 		 */
-		NodeReadWriteLock rootLock;
+		NodeReadWriteLock rootLock_;
 
 		/**
 		 * The test message associated with the current modification operation. This text is only used to describe the
@@ -242,7 +242,7 @@ class MODELBASE_API Model: public QObject
 		/**
 		 * Returns the lock corresponding to the top-most (root) access unit.
 		 */
-		NodeReadWriteLock* getRootLock();
+		NodeReadWriteLock* rootLock();
 
 		/**
 		 * Checks if a node can be modified.
@@ -264,12 +264,12 @@ class MODELBASE_API Model: public QObject
 		 *
 		 * If the root node has not been created yet, this method will return NULL.
 		 */
-		Node* getRoot();
+		Node* root();
 
 		/**
 		 * Returns the name of the model. This is the name under which this model can be found in the persistent store.
 		 */
-		QString getName();
+		QString name();
 
 		/**
 		 * Sets the name of the model. This is the name under which this model will be save in the persistent store.
@@ -462,11 +462,11 @@ class MODELBASE_API Model: public QObject
 
 };
 
-inline NodeReadWriteLock* Model::getRootLock() { return &rootLock; }
+inline NodeReadWriteLock* Model::rootLock() { return &rootLock_; }
 
-inline Node* Model::getRoot(){ return root; }
-inline QString Model::getName() { return name; }
-inline void Model::setName(const QString& name_) { name = name_; }
+inline Node* Model::root(){ return root_; }
+inline QString Model::name() { return name_; }
+inline void Model::setName(const QString& name) { name_ = name; }
 
 inline NodeIdType Model::maxId() const { return nextId; }
 inline void Model::setNextId(NodeIdType id) { nextId = id; }

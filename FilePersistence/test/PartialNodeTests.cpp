@@ -26,7 +26,7 @@ TEST(FilePersistence, LoadingList)
 	store.setBaseFolder(testDir);
 
 	model.load(&store, "partial");
-	TestNodes::PartialList* root = dynamic_cast<TestNodes::PartialList*> (model.getRoot());
+	TestNodes::PartialList* root = dynamic_cast<TestNodes::PartialList*> (model.root());
 	CHECK_CONDITION(root != NULL);
 
 	Model::List* list = root->list();
@@ -118,7 +118,7 @@ TEST(FilePersistence, ReSaveList)
 	store.setBaseFolder(destDir);
 
 	model.load(&store, "partialResave");
-	TestNodes::PartialList* root = dynamic_cast<TestNodes::PartialList*> (model.getRoot());
+	TestNodes::PartialList* root = dynamic_cast<TestNodes::PartialList*> (model.root());
 
 	CHECK_CONDITION(root->list()->isFullyLoaded() == false);
 	CHECK_STR_EQUAL("TheList", root->list()->getReferenceName());

@@ -26,7 +26,7 @@ TEST(FilePersistence, LoadRootOnly)
 	store.setBaseFolder(testDir);
 
 	model.load(&store, "rootOnly");
-	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.getRoot());
+	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.root());
 
 	CHECK_CONDITION(root);
 	CHECK_STR_EQUAL("BinaryNode", root->getTypeName() );
@@ -48,7 +48,7 @@ TEST(FilePersistence, LoadModeNodesSingleUnitOnly)
 	store.setBaseFolder(testDir);
 
 	model.load(&store, "2Children");
-	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.getRoot());
+	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.root());
 
 	CHECK_STR_EQUAL("BinaryNode", root->getTypeName() );
 	CHECK_STR_EQUAL("Root", root->name()->get() );
@@ -72,7 +72,7 @@ TEST(FilePersistence, LoadMultipleUnits)
 	store.setBaseFolder(testDir);
 
 	model.load(&store, "units");
-	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.getRoot());
+	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.root());
 
 	CHECK_STR_EQUAL("BinaryNode", root->getTypeName() );
 	CHECK_STR_EQUAL("Root", root->name()->get() );

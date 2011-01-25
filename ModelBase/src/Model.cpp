@@ -17,7 +17,7 @@ namespace Model {
 QList<Model*> Model::loadedModels;
 
 Model::Model() :
-	root(NULL), currentModificationTarget(NULL), currentModificationLock(NULL), pushedNewCommandsOnTheStack(false), performedUndoRedo(false), modificationInProgress(false), nextId(0), store_(NULL)
+	root_(NULL), currentModificationTarget(NULL), currentModificationLock(NULL), pushedNewCommandsOnTheStack(false), performedUndoRedo(false), modificationInProgress(false), nextId(0), store_(NULL)
 {
 	commands.setUndoLimit(100);
 	loadedModels.append(this);
@@ -29,7 +29,7 @@ Model::~Model()
 
 	// TODO Make sure to persist and destroy the tree in a nice way.
 	// TODO Emit a signal that this model is no longer valid.
-	SAFE_DELETE( root );
+	SAFE_DELETE( root_ );
 }
 
 void Model::beginModification(Node* modificationTarget, const QString &text)
@@ -96,7 +96,7 @@ bool Model::canBeModified(const Node* node) const
 
 NodeIdType Model::generateNextId()
 {
-	if ( root != NULL && !modificationInProgress ) throw ModelException("Creating a new node without calling Model.beginModification() first");
+	if ( root_ != NULL && !modificationInProgress ) throw ModelException("Creating a new node without calling Model.beginModification() first");
 
 	return nextId++;
 }
@@ -135,30 +135,30 @@ void Model::redo()
 
 void Model::save(PersistentStore* store)
 {
-	if (name.isEmpty()) throw ModelException("Saving a model without a name");
+	if (name_.isEmpty()) throw ModelException("Saving a model without a name");
 
-	if (root)
+	if (root_)
 	{
-		if (store) store->saveModel(this, name);
-		else if (store_) store_->saveModel(this, name);
-		else throw ModelException("Saving model '" + name + "' without specifying a persistent store");
+		if (store) store->saveModel(this, name_);
+		else if (store_) store_->saveModel(this, name_);
+		else throw ModelException("Saving model '" + name_ + "' without specifying a persistent store");
 	}
 
 	if (store && !store_) store_ = store;
 }
 
-void Model::load(PersistentStore* store, const QString& name_)
+void Model::load(PersistentStore* store, const QString& name)
 {
-	if (name_.isEmpty()) throw ModelException("Loading a model without specifying a name");
-	if (!store) throw ModelException("Loading model '" + name_ + "' without specifying a persistent store");
+	if (name.isEmpty()) throw ModelException("Loading a model without specifying a name");
+	if (!store) throw ModelException("Loading model '" + name + "' without specifying a persistent store");
 
-	name = name_;
-	if ( root == NULL )
+	name_ = name;
+	if ( root_ == NULL )
 	{
 		store_ = store;
 		commands.clear();
-		root = store_->loadModel(this, name);
-		emit rootCreated(root);
+		root_ = store_->loadModel(this, name_);
+		emit rootCreated(root_);
 	}
 }
 
@@ -166,7 +166,7 @@ Model* Model::findModel(Node* root)
 {
 	for (QList<Model*>::iterator model = loadedModels.begin(); model != loadedModels.end(); model++)
 	{
-		if ( (*model)->getRoot() == root ) return *model;
+		if ( (*model)->root() == root ) return *model;
 	}
 
 	return NULL;
@@ -174,14 +174,14 @@ Model* Model::findModel(Node* root)
 
 Node* Model::createRoot(const QString &typeName)
 {
-	if ( root == NULL )
+	if ( root_ == NULL )
 	{
 		commands.clear();
-		root = Node::createNewNode(typeName, NULL, this);
-		emit rootCreated(root);
+		root_ = Node::createNewNode(typeName, NULL, this);
+		emit rootCreated(root_);
 	}
 
-	return root;
+	return root_;
 }
 
 }

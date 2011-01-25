@@ -56,10 +56,10 @@ TEST(ModelBase, ExtendableMetaData)
 TEST(ModelBase, SimpleModelCreation)
 {
 	Model model;
-	CHECK_CONDITION( model.getRoot() == NULL );
+	CHECK_CONDITION( model.root() == NULL );
 
 	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.createRoot("BinaryNode"));
-	CHECK_CONDITION( model.getRoot() == root );
+	CHECK_CONDITION( model.root() == root );
 
 	CHECK_CONDITION( root->getModel() == &model );
 

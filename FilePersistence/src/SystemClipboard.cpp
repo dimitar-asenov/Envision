@@ -37,13 +37,13 @@ SystemClipboard::~SystemClipboard()
 // Methods from Persistent Store
 void SystemClipboard::saveModel(::Model::Model* model, const QString &name)
 {
-	if (model->getRoot())
+	if (model->root())
 	{
 		SAFE_DELETE(xml);
 		xml = new XMLModel();
 
 		xml->beginSaveChildNode(CLIPBOARD_TAG);
-		saveNode(model->getRoot(), name, false);
+		saveNode(model->root(), name, false);
 		xml->endSaveChildNode();
 
 		QApplication::clipboard()->setText(xml->documentText());
@@ -84,7 +84,7 @@ void SystemClipboard::saveNode(const Node *node, const QString &name, bool)
 		// Get a list of sub nodes which have already been persisted.
 		QStringList persistedChildren = xml->getChildrenNames();
 
-		PersistedNode* persisted = node->getModel()->store()->loadCompleteNodeSubtree(node->getModel()->getName(), node->persistentUnitId(), node->getId());
+		PersistedNode* persisted = node->getModel()->store()->loadCompleteNodeSubtree(node->getModel()->name(), node->persistentUnitId(), node->getId());
 
 		if (!persisted) throw FilePersistenceException("Could not load node subtree from old persistent store.");
 		PersistedValue< QList<PersistedNode*> >* composite = dynamic_cast<PersistedValue< QList<PersistedNode*> >* > (persisted);

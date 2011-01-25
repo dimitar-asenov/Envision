@@ -34,7 +34,7 @@ TEST(FilePersistence, CopyToClipboard)
 	model.load(&store, "2Children");
 	SystemClipboard sc;
 
-	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.getRoot());
+	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.root());
 
 	sc.putNode(root);
 
@@ -58,7 +58,7 @@ TEST(FilePersistence, CopyPartialToClipboard)
 	store.setBaseFolder(testDir);
 
 	model.load(&store, "partial");
-	TestNodes::PartialList* root = dynamic_cast<TestNodes::PartialList*> (model.getRoot());
+	TestNodes::PartialList* root = dynamic_cast<TestNodes::PartialList*> (model.root());
 	CHECK_CONDITION(root != NULL);
 
 	SystemClipboard sc;
@@ -78,7 +78,7 @@ TEST(FilePersistence, PasteTextFromClipboard)
 	model.load(&store, "2Children");
 	SystemClipboard sc;
 
-	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.getRoot());
+	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.root());
 
 	sc.putNode(root->name());
 
@@ -102,7 +102,7 @@ TEST(FilePersistence, PasteBinaryFromClipboard)
 	model.load(&store, "2Children");
 	SystemClipboard sc;
 
-	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.getRoot());
+	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.root());
 
 	sc.putNode(root);
 

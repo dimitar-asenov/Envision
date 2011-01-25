@@ -200,7 +200,7 @@ NodeReadWriteLock* Node::getAccessLock() const
 {
 	if ( parent ) return parent->getAccessLock();
 	else
-		return getModel()->getRootLock();
+		return getModel()->rootLock();
 }
 /***********************************************************************************************************************
  * STATIC METHODS

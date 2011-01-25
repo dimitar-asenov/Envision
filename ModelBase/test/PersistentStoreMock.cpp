@@ -21,7 +21,7 @@ PersistentStoreMock::~PersistentStoreMock()
 
 void PersistentStoreMock::saveModel(Model* model, const QString &name)
 {
-	saveNode(model->getRoot(), name, false);
+	saveNode(model->root(), name, false);
 }
 
 void PersistentStoreMock::saveStringValue(const QString &value)
