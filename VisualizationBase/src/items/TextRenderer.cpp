@@ -17,7 +17,6 @@ namespace Visualization {
 
 const int MIN_TEXT_WIDTH = 10;
 
-template<class T> TextRenderer<T>* TextRenderer<T>::selected = NULL;
 template<class T> int TextRenderer<T>::selectionBegin = 0;
 template<class T> int TextRenderer<T>::selectionEnd = 0;
 template<class T> int TextRenderer<T>::selectionXBegin = 0;
@@ -58,7 +57,7 @@ template<class T> QString TextRenderer<T>::getText()
 
 template<class T> QString TextRenderer<T>::getSelectedText()
 {
-	if (selected == this)
+	if (this->hasFocus())
 	{
 		int xstart = selectionBegin;
 		int xend = selectionEnd;
@@ -105,7 +104,7 @@ template<class T> void TextRenderer<T>::updateGeometry(int, int)
 	yOffset = -bound.top();
 	this->setSize(bound.size());
 
-	if ( selected == this )
+	if ( this->hasFocus() )
 	{
 		int xstart = selectionBegin;
 		int xend = selectionEnd;
@@ -123,7 +122,7 @@ template<class T> void TextRenderer<T>::updateGeometry(int, int)
 
 template<class T> void TextRenderer<T>::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-	if ( selected != this )
+	if ( !this->hasFocus() )
 	{
 		painter->setPen(style()->pen());
 		painter->setFont(style()->font());
@@ -178,7 +177,7 @@ template<class T> void TextRenderer<T>::selectAll()
 {
 	selectionBegin = 0;
 	selectionEnd = text.length();
-	selected = this;
+	this->setFocus();
 	this->setUpdateNeeded();
 }
 
@@ -186,7 +185,7 @@ template<class T> void TextRenderer<T>::setSelectedCharacters(int first, int las
 {
 	selectionBegin = first;
 	selectionEnd = last;
-	selected = this;
+	this->setFocus();
 	this->setUpdateNeeded();
 }
 
@@ -205,14 +204,8 @@ template<class T> void TextRenderer<T>::setSelectedByDrag(int xBegin, int xEnd)
 		width = new_width;
 	}
 
-	selected = this;
+	this->setFocus();
 	this->setUpdateNeeded();
-}
-
-template<class T> void TextRenderer<T>::resetSelected()
-{
-	if ( selected ) selected->setUpdateNeeded();
-	selected = NULL;
 }
 
 template<class T> int TextRenderer<T>::selectionFirstInxed()

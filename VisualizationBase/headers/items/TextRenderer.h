@@ -28,13 +28,6 @@ class VISUALIZATIONBASE_API TextRenderer : public T
 			bool editable;
 
 			/**
-			 * This is the text item that is currently selected. If this is NULL a text item is not currently selected. If the
-			 * current item is equal to the selected item, then additional drawing takes place. This is the vertical caret.
-			 * The selected part of the text is drawn using a different font specified in the style.
-			 */
-			static TextRenderer* selected;
-
-			/**
 			 * selectionBegin and selectionEnd indicate the character positions at which the selection begins and ends. If
 			 * the user selected the text by dragging from right to left then selectionEnd < selectionBegin.
 			 *
@@ -77,7 +70,6 @@ class VISUALIZATIONBASE_API TextRenderer : public T
 			void setSelectedByDrag(int xBegin, int xEnd);
 			void setSelectedCharacters(int first, int last);
 			void setCaretPosition(int beforeCharacter);
-			static void resetSelected();
 
 			static int caretPosition();
 			static int selectionFirstInxed();
