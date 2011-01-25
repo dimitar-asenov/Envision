@@ -21,7 +21,7 @@ Layout::Layout(Item* parent, const LayoutStyle* style) :
 
 void Layout::setInnerSize(int width_, int height_)
 {
-	if ( getShape() )
+	if ( hasShape() )
 	{
 		getShape()->setOffset(style()->leftMargin(), style()->topMargin());
 		getShape()->setInnerSize(width_, height_);
@@ -54,19 +54,19 @@ bool Layout::needsUpdate()
 
 int Layout::xOffset() const
 {
-	if ( getShape() ) return getShape()->contentLeft();
+	if ( hasShape() ) return getShape()->contentLeft();
 	else return style()->leftMargin();
 }
 
 int Layout::yOffset() const
 {
-	if ( getShape() ) return getShape()->contentTop();
+	if ( hasShape() ) return getShape()->contentTop();
 	else return style()->leftMargin();
 }
 
 void Layout::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-	if ( getShape() ) Item::paint(painter, option, widget);
+	if ( hasShape() ) Item::paint(painter, option, widget);
 }
 
 }

@@ -28,6 +28,7 @@ class VISUALIZATIONBASE_API VExtendable : public ModelItem
 		PanelBorderLayout* layout; //only used when expanded
 		SequentialLayout* attributes; //only used when expanded
 
+		bool expanded_;
 		bool expandedSwtiched() const;
 
 	protected:
@@ -42,7 +43,7 @@ class VISUALIZATIONBASE_API VExtendable : public ModelItem
 		bool expanded() const;
 };
 
-inline bool VExtendable::expanded() const { return style()->expanded(); }
+inline bool VExtendable::expanded() const { return expanded_; }
 
 }
 

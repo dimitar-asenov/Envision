@@ -54,12 +54,28 @@ void Item::setStyle(const ItemStyle* style)
 {
 	SAFE_DELETE(shape_);
 	style_ = style;
-	if (style && style->hasShape())
+	useShape();
+	setUpdateNeeded();
+}
+
+void Item::useShape()
+{
+	if (!shape_)
 	{
-		shape_ = style->createShape(this);
-		setFlag(QGraphicsItem::ItemHasNoContents, false);
+		if (style_ && style_->hasShape())
+		{
+			shape_ = style_->createShape(this);
+			setFlag(QGraphicsItem::ItemHasNoContents, false);
+		}
+		else setFlag(QGraphicsItem::ItemHasNoContents);
+		setUpdateNeeded();
 	}
-	else setFlag(QGraphicsItem::ItemHasNoContents);
+}
+
+void Item::removeShape()
+{
+	SAFE_DELETE(shape_);
+	setFlag(QGraphicsItem::ItemHasNoContents);
 	setUpdateNeeded();
 }
 
@@ -98,7 +114,7 @@ void Item::updateChildren()
 
 void Item::updateGeometry(Item* content, int availableWidth, int availableHeight)
 {
-	if (style()->hasShape())
+	if (hasShape())
 	{
 		int width = getShape()->getInnerWidth(availableWidth);
 		int height = getShape()->getInnerHeight(availableHeight);

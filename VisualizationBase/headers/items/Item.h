@@ -125,7 +125,10 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 
 		virtual void setStyle(const ItemStyle* style);
 		const ItemStyle* style() const;
+		bool hasShape() const;
 		Shape* getShape() const;
+		void useShape();
+		void removeShape();
 
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
@@ -143,6 +146,7 @@ inline void Item::setHeight(int height) { boundingRect_.setHeight(height);};
 inline void Item::setSize(int width, int height) { boundingRect_.setSize(QSizeF(width, height)); };
 inline void Item::setSize(const QSizeF& size) { boundingRect_.setSize(size); };
 inline const ItemStyle* Item::style() const { return style_; }
+inline bool Item::hasShape() const { return shape_; }
 inline Shape* Item::getShape() const {	return shape_; }
 
 template <class T> inline void SAFE_DELETE_ITEM( T* & item)

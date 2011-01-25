@@ -19,6 +19,7 @@ class VISUALIZATIONBASE_API VExtendableStyle : public ItemStyle
 	private:
 		PanelBorderLayoutStyle borderStyle_;
 		SequentialLayoutStyle headerStyle_;
+		SequentialLayoutStyle smallHeaderStyle_;
 		SequentialLayoutStyle attributesStyle_;
 		bool expanded_;
 
@@ -28,6 +29,7 @@ class VISUALIZATIONBASE_API VExtendableStyle : public ItemStyle
 
 		const PanelBorderLayoutStyle& borderStyle() const;
 		const SequentialLayoutStyle&  headerStyle() const;
+		const SequentialLayoutStyle&  smallHeaderStyle() const;
 		const SequentialLayoutStyle&  attributesStyle() const;
 		bool expanded() const;
 
@@ -36,6 +38,7 @@ class VISUALIZATIONBASE_API VExtendableStyle : public ItemStyle
 
 inline const PanelBorderLayoutStyle& VExtendableStyle::borderStyle() const {return borderStyle_; }
 inline const SequentialLayoutStyle& VExtendableStyle::headerStyle() const {return headerStyle_; }
+inline const SequentialLayoutStyle& VExtendableStyle::smallHeaderStyle() const {return smallHeaderStyle_; }
 inline const SequentialLayoutStyle& VExtendableStyle::attributesStyle() const {return attributesStyle_; }
 inline bool VExtendableStyle::expanded() const { return expanded_; };
 

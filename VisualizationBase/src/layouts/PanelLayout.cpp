@@ -49,7 +49,7 @@ void PanelLayout::updateGeometry(int availableWidth, int availableHeight)
 		int width = first.width() + middle.width() + last.width() + 2 * style()->spaceBetweenElements();
 
 		int outterWidth = width + style()->leftMargin() + style()->rightMargin();
-		if ( getShape() ) outterWidth = getShape()->getOutterWidth(outterWidth);
+		if ( hasShape() ) outterWidth = getShape()->getOutterWidth(outterWidth);
 
 		if ( availableWidth > outterWidth ) width += availableWidth - outterWidth;
 
@@ -87,7 +87,7 @@ void PanelLayout::updateGeometry(int availableWidth, int availableHeight)
 		int height = first.height() + middle.height() + last.height() + 2 * style()->spaceBetweenElements();
 
 		int outterHeight = height + style()->topMargin() + style()->bottomMargin();
-		if ( getShape() ) outterHeight = getShape()->getOutterHeight(outterHeight);
+		if ( hasShape() ) outterHeight = getShape()->getOutterHeight(outterHeight);
 
 		if ( availableHeight > outterHeight ) height += availableHeight - outterHeight;
 

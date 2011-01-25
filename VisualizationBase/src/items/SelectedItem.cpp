@@ -36,7 +36,7 @@ void SelectedItem::determineChildren()
 
 void SelectedItem::updateGeometry(int, int)
 {
-	if (style()->hasShape())
+	if (hasShape())
 	{
 		getShape()->setInnerSize(selectedItem_->width(), selectedItem_->height());
 		QPointF pos = QPointF( getShape()->contentLeft(), getShape()->contentTop() );
