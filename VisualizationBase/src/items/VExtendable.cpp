@@ -13,6 +13,8 @@
 #include <QtCore/QPair>
 #include <QtCore/QList>
 
+#include <QtCore/QDebug>
+
 namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(VExtendable)
@@ -109,14 +111,14 @@ void VExtendable::determineChildren()
 			bool found = false;
 			for (int k = 0; k<attr.size(); ++k)
 			{
-				if (attr[k].second == attributes->at<ModelItem>(i)->getNode())
+				if (attr[k].second == attributes->at<SequentialLayout>(i)->at<ModelItem>(1)->getNode())
 				{
 					found = true;
 					break;
 				}
 			}
 
-			if (!found) attributes->remove(i);
+			if (!found) { attributes->remove(i); qDebug() << "remove" << i;}
 		}
 
 		int attributeIndex = 0;
@@ -124,7 +126,7 @@ void VExtendable::determineChildren()
 		{
 			if ( attr[i].first == "name" ) continue;
 
-			if (attributes->length() <= i || attributes->at<ModelItem>(attributeIndex)->getNode() != attr[i].second)
+			if (attributes->length() <= attributeIndex || attributes->at<SequentialLayout>(attributeIndex)->at<ModelItem>(1)->getNode() != attr[i].second)
 			{
 				SequentialLayout* s = new SequentialLayout(attributes);
 				s->append(new Text(s, attr[i].first));
