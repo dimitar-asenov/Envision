@@ -98,40 +98,41 @@ void VExtendable::determineChildren()
 	if ( expanded_ )
 	{
 		// Set the attributes
-		// TODO this can be done smarter
+		// NOTE: This procedure assumes that the order of the named attributes will never change. Attributes might be
+		// deleted or added but their ordering should be kept constant.
+		// TODO: document this somewhere more visible.
 		QList<QPair<QString, Model::Node*> > attr = node->getAllAttributes();
 
-		// Remove extra elements
-		while (attr.size() < attributes->length()) attributes->remove(attributes->length()-1);
+		// Remove elements from attributes which are outdated
+		for(int i = attributes->length() - 1; i>=0; --i)
+		{
+			bool found = false;
+			for (int k = 0; k<attr.size(); ++k)
+			{
+				if (attr[k].second == attributes->at<ModelItem>(i)->getNode())
+				{
+					found = true;
+					break;
+				}
+			}
 
-		bool changed = false;
-		int nameFound = 0; // This will become 1 if the name attribute was already encountered
+			if (!found) attributes->remove(i);
+		}
 
+		int attributeIndex = 0;
 		for (int i = 0; i < attr.size(); ++i)
 		{
-			if ( attr[i].first == "name" )
-			{
-				nameFound = 1;
-				while (attr.size() < attributes->length() + 1) attributes->remove(attributes->length()-1); // TODO is this OK here, it's a mess.
-				continue;
-			}
+			if ( attr[i].first == "name" ) continue;
 
-			if ( !changed )
-			{
-				changed = attributes->length() + nameFound <= i;
-				if ( !changed ) changed = attributes->at<SequentialLayout> (i - nameFound)->at<ModelItem> (1)->getNode() != attr[i].second;
-
-				if ( changed ) while ( attributes->length() + nameFound > i )
-					attributes->remove(attributes->length() - 1);
-			}
-
-			if ( changed )
+			if (attributes->length() <= i || attributes->at<ModelItem>(attributeIndex)->getNode() != attr[i].second)
 			{
 				SequentialLayout* s = new SequentialLayout(attributes);
 				s->append(new Text(s, attr[i].first));
 				s->append(renderer()->render(s, attr[i].second));
-				attributes->append(s);
+				attributes->insert(s, attributeIndex);
 			}
+
+			++attributeIndex;
 		}
 	}
 
