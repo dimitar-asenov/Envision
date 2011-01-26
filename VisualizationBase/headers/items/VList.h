@@ -35,6 +35,7 @@ class VISUALIZATIONBASE_API VList: public ModelItem
 
 		int length() const;
 		template <class T> T* at(int index);
+		int focusedElementIndex() const;
 
 		virtual bool sizeDependsOnParent() const;
 };

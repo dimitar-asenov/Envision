@@ -162,6 +162,11 @@ Scene* Item::scene() const
 	return static_cast<Visualization::Scene*> (QGraphicsItem::scene());
 }
 
+bool Item::childHasFocus() const
+{
+	return QGraphicsItem::scene()->focusItem() == this || QGraphicsItem::isAncestorOf( QGraphicsItem::scene()->focusItem() );
+}
+
 void Item::removeFromScene()
 {
 	if ( scene() ) scene()->removeItem(this);

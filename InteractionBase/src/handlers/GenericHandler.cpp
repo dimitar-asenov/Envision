@@ -77,7 +77,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 	{
 		switch (event->key())
 		{
-			case Qt::Key_C:
+/* Copy */	case Qt::Key_C:
 				{
 					QList<const Model::Node*> nodesToCopy;
 					QList<QGraphicsItem*> selected = target->scene()->selectedItems();
@@ -96,7 +96,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 					}
 				}
 				break;
-			case Qt::Key_V:
+/* Paste */	case Qt::Key_V:
 				{
 					FilePersistence::SystemClipboard clipboard;
 					if (clipboard.numNodes() == 1 && target->scene()->selectedItems().size() == 1 && target->isSelected())
@@ -114,11 +114,38 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 					else InteractionHandler::keyPressEvent(target, event);
 				}
 				break;
+/* Undo */	case Qt::Key_Z:
+				{
+					Visualization::ModelItem* item = dynamic_cast<Visualization::ModelItem*> (target);
+					if (item)
+					{
+						item->getNode()->model()->beginModification(NULL, "undo");
+						item->getNode()->model()->undo();
+						item->getNode()->model()->endModification();
+						target->setUpdateNeeded();
+					}
+					else InteractionHandler::keyPressEvent(target, event);
+				}
+				break;
+/* Redo */	case Qt::Key_Y:
+				{
+					Visualization::ModelItem* item = dynamic_cast<Visualization::ModelItem*> (target);
+					if (item)
+					{
+						item->getNode()->model()->beginModification(NULL, "redo");
+						item->getNode()->model()->redo();
+						item->getNode()->model()->endModification();
+						target->setUpdateNeeded();
+					}
+					else InteractionHandler::keyPressEvent(target, event);
+				}
+				break;
 			default:
 				InteractionHandler::keyPressEvent(target, event);
 				break;
 		}
 	}
+	else InteractionHandler::keyPressEvent(target, event);
 }
 
 void GenericHandler::keyReleaseEvent(Visualization::Item *target, QKeyEvent *event)

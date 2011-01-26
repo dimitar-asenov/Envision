@@ -52,6 +52,14 @@ void VList::determineChildren()
 	while (items_.length() > list->size()) items_.remove(items_.length()-1);
 }
 
+int VList::focusedElementIndex() const
+{
+	for (int i = 0; i<items_.length(); ++i)
+		if ( items_.at<ModelItem>(i)->childHasFocus()) return i;
+
+	return -1;
+}
+
 void VList::updateGeometry(int availableWidth, int availableHeight)
 {
 	Item::updateGeometry(&items_, availableWidth, availableHeight);

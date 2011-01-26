@@ -38,11 +38,13 @@ class VISUALIZATIONBASE_API SequentialLayout: public Layout
 		void clear(bool deleteItems = true);
 
 		template <class T> T* at(int index);
+		template <class T> T* at(int index) const;
 
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 };
 
 template <class T> T* SequentialLayout::at(int index) { return static_cast<T*> (items[index]); }
+template <class T> T* SequentialLayout::at(int index) const { return static_cast<T*> (items[index]); }
 
 }
 

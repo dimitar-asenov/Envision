@@ -111,6 +111,8 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 
 		Scene* scene() const;
 
+		bool childHasFocus() const;
+
 		virtual QRectF boundingRect() const;
 		int width() const;
 		int height() const;

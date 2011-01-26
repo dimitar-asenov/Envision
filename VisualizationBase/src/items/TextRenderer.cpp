@@ -125,7 +125,7 @@ template<class T> void TextRenderer<T>::paint(QPainter *painter, const QStyleOpt
 {
 	int numSelected = this->scene()->selectedItems().size();
 
-	if ( !this->hasFocus() || numSelected > 1 )
+	if ( !this->hasFocus() || numSelected > 1  || (numSelected == 1 && !this->isSelected()))
 	{
 		painter->setPen(style()->pen());
 		painter->setFont(style()->font());
@@ -133,7 +133,7 @@ template<class T> void TextRenderer<T>::paint(QPainter *painter, const QStyleOpt
 	}
 	else
 	{
-		if ( selectionXBegin == selectionXEnd || numSelected == 1)
+		if ( selectionXBegin == selectionXEnd || numSelected == 1 )
 		{
 			// No text is selected, draw all text at once using normal style
 			painter->setPen(style()->pen());

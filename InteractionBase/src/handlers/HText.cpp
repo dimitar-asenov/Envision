@@ -18,6 +18,8 @@
 #include <QtGui/QClipboard>
 #include <QtGui/QApplication>
 
+#include <QtCore/QDebug>
+
 //**********************************************************************************************************************
 #define TEXTRENDERER_GET(method)		(																												\
 	( dynamic_cast<Visualization::TextRenderer<Visualization::Item>*> (target)	) ?													\
@@ -51,7 +53,7 @@
 
 namespace Interaction {
 
-HText::HText()
+HText::HText() : doubleClick(false)
 {
 }
 
@@ -65,7 +67,7 @@ void HText::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
 	if (event->modifiers() == Qt::ControlModifier)
 	{
-		if (target->scene()->selectedItems().size() == 0 || (target->isSelected() && target->scene()->selectedItems().size() == 0))
+		if (target->scene()->selectedItems().size() == 0 || (target->isSelected() && target->scene()->selectedItems().size() == 1))
 		{
 			switch (event->key())
 			{
@@ -73,11 +75,17 @@ void HText::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 					{
 						QString text = TEXTRENDERER_GET(getSelectedText);
 						if (!text.isEmpty()) QApplication::clipboard()->setText(text);
+						else GenericHandler::keyPressEvent(target, event);
 					}
 					break;
 				case Qt::Key_V:
 					{
-						if (TEXTRENDERER_GET(isEditable)) insertText(target, QApplication::clipboard()->text());
+						if (TEXTRENDERER_GET(isEditable))
+						{
+							erase(target, true, true);
+							target->updateSubtree();
+							insertText(target, QApplication::clipboard()->text());
+						}
 					}
 					break;
 				default:
@@ -87,7 +95,7 @@ void HText::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		}
 		else GenericHandler::keyPressEvent(target, event);
 	}
-	else
+	else if ( ! (event->modifiers() & Qt::ControlModifier))
 	{
 		if (TEXTRENDERER_GET(isEditable))
 		{
@@ -119,16 +127,37 @@ void HText::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		}
 		else GenericHandler::keyPressEvent(target, event);
 	}
+	else GenericHandler::keyPressEvent(target, event);
+
 }
 
 void HText::mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
+	doubleClick = false;
 	if ( event->button() == Qt::LeftButton )
 	{
 		TEXTRENDERER_SET2(setSelectedByDrag, event->pos().x(), event->pos().x());
 	}
 
 	GenericHandler::mousePressEvent(target, event);
+}
+
+void HText::mouseReleaseEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
+{
+	if ( doubleClick ) doubleClick = false;
+	else GenericHandler::mouseReleaseEvent(target, event);
+}
+
+void HText::mouseDoubleClickEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
+{
+	doubleClick = true;
+	qDebug() << "double" << target;
+	if ( event->button() == Qt::LeftButton )
+	{
+		target->scene()->clearSelection();
+		TEXTRENDERER_SET(selectAll);
+	}
+	else GenericHandler::mousePressEvent(target, event);
 }
 
 void HText::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)

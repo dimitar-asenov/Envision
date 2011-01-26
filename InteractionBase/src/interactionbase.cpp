@@ -9,6 +9,7 @@
 
 #include "handlers/GenericHandler.h"
 #include "handlers/HText.h"
+#include "handlers/HList.h"
 #include "handlers/HExtendable.h"
 #include "handlers/HCommandPrompt.h"
 #include "handlers/HSceneHandlerItem.h"
@@ -37,7 +38,7 @@ bool InteractionBase::initialize(Envision::EnvisionManager&)
 	logger = Logger::Log::getLogger("interactionbase");
 	Visualization::SceneHandlerItem::setInteractionHandler(HSceneHandlerItem::instance());
 	Visualization::VExtendable::setInteractionHandler(HExtendable::instance());
-	Visualization::VList::setInteractionHandler(GenericHandler::instance());
+	Visualization::VList::setInteractionHandler(HList::instance());
 	Visualization::Text::setInteractionHandler(HText::instance());
 	Visualization::VText::setInteractionHandler(HText::instance());
 	CommandPrompt::setInteractionHandler(HCommandPrompt::instance());
