@@ -167,6 +167,39 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 				break;
 		}
 	}
+	else if (event->modifiers() == 0)
+	{
+		bool processed = false;
+		switch( event->key() )
+		{
+			case Qt::Key_Up:
+			{
+				setFocusDirection(FROM_BOTTOM);
+				processed = target->focusChild(Visualization::Item::FOCUS_UP);
+			}
+			break;
+			case Qt::Key_Down:
+			{
+				setFocusDirection(FROM_TOP);
+				processed = target->focusChild(Visualization::Item::FOCUS_DOWN);
+			}
+			break;
+			case Qt::Key_Left:
+			{
+				setFocusDirection(FROM_RIGHT);
+				processed = target->focusChild(Visualization::Item::FOCUS_LEFT);
+			}
+			break;
+			case Qt::Key_Right:
+			{
+				setFocusDirection(FROM_LEFT);
+				processed = target->focusChild(Visualization::Item::FOCUS_RIGHT);
+			}
+			break;
+		}
+
+		if (!processed) InteractionHandler::keyPressEvent(target, event);
+	}
 	else InteractionHandler::keyPressEvent(target, event);
 }
 
@@ -197,6 +230,18 @@ void GenericHandler::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneM
 	}
 
 	InteractionHandler::mouseMoveEvent(target, event);
+}
+
+void GenericHandler::focusInEvent(Visualization::Item *target, QFocusEvent *event)
+{
+	// Here we choose which child to focus.
+	if (focusDirection_ == GenericHandler::NOT_SPECIFIED) target->focusChild(Visualization::Item::FOCUS_DEFAULT);
+	else if (focusDirection_ == GenericHandler::FROM_LEFT ) target->focusChild(Visualization::Item::FOCUS_LEFTMOST);
+	else if (focusDirection_ == GenericHandler::FROM_RIGHT ) target->focusChild(Visualization::Item::FOCUS_RIGHTMOST);
+	else if (focusDirection_ == GenericHandler::FROM_TOP ) target->focusChild(Visualization::Item::FOCUS_TOPMOST);
+	else if (focusDirection_ == GenericHandler::FROM_BOTTOM ) target->focusChild(Visualization::Item::FOCUS_BOTTOMMOST);
+
+	InteractionHandler::focusInEvent(target, event);
 }
 
 void GenericHandler::filterSelectedItems(Visualization::Item *target, QGraphicsSceneMouseEvent *event)

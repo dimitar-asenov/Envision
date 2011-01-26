@@ -38,6 +38,7 @@ class VISUALIZATIONBASE_API VList: public ModelItem
 		int focusedElementIndex() const;
 
 		virtual bool sizeDependsOnParent() const;
+		virtual bool focusChild(FocusTarget location);
 };
 
 inline int VList::length() const { return items_.length(); }

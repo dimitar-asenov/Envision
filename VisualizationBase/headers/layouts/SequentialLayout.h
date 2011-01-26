@@ -41,6 +41,10 @@ class VISUALIZATIONBASE_API SequentialLayout: public Layout
 		template <class T> T* at(int index) const;
 
 		virtual void updateGeometry(int availableWidth, int availableHeight);
+
+		int focusedElementIndex() const;
+		virtual bool focusChild(FocusTarget location);
+
 };
 
 template <class T> T* SequentialLayout::at(int index) { return static_cast<T*> (items[index]); }

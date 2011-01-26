@@ -23,7 +23,7 @@ class VISUALIZATIONBASE_API PanelBorderLayout: public Layout
 	private:
 		PanelLayout* top_;
 		PanelLayout* left_;
-		PanelLayout* bottom_;
+		PanelLayout* top_;
 		PanelLayout* right_;
 		Item* content_;
 
@@ -51,6 +51,7 @@ class VISUALIZATIONBASE_API PanelBorderLayout: public Layout
 		int getOutterHeightForExternalShape() const;
 
 		virtual void updateGeometry(int availableWidth, int availableHeight);
+		virtual bool focusChild(FocusTarget location);
 };
 
 inline void PanelBorderLayout::setTop(bool enable) { setPanel(enable, top_, style()->topStyle()); };

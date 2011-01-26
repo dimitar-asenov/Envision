@@ -160,4 +160,97 @@ void SequentialLayout::updateGeometry(int, int)
 	}
 }
 
+int SequentialLayout::focusedElementIndex() const
+{
+	for (int i = 0; i<items.size(); ++i)
+		if ( items[i]->childHasFocus()) return i;
+
+	return -1;
+}
+
+bool SequentialLayout::focusChild(FocusTarget location)
+{
+	if (items.isEmpty()) return false;
+
+	bool horizontal = style()->direction() == SequentialLayoutStyle::LeftToRight || style()->direction() == SequentialLayoutStyle::RightToLeft;
+	bool forward = style()->direction() == SequentialLayoutStyle::LeftToRight || style()->direction() == SequentialLayoutStyle::TopToBottom;
+	int current = focusedElementIndex();
+	int max = items.size() - 1;
+
+	Item* toFocus = NULL;
+
+	switch (location)
+	{
+		case FOCUS_DEFAULT:
+			{
+				if (forward) toFocus = items.first();
+				else toFocus = items.last();
+			}
+			break;
+		case FOCUS_TOPMOST:
+			{
+				if (forward) toFocus = items.first();
+				else toFocus = items.last();
+			}
+			break;
+		case FOCUS_BOTTOMMOST:
+			{
+				if ( forward ) toFocus = items.last();
+				else toFocus = items.first();
+			}
+			break;
+		case FOCUS_LEFTMOST:
+			{
+				if ( forward ) toFocus = items.first();
+				else toFocus = items.last();
+			}
+			break;
+		case FOCUS_RIGHTMOST:
+			{
+				if ( forward ) toFocus = items.last();
+				else toFocus = items.first();
+			}
+			break;
+		case FOCUS_UP:
+			{
+				if (current >= 0 && !horizontal)
+				{
+					if (forward && current > 0) toFocus = items[current-1];
+					else if (!forward && current < max) toFocus = items[current+1];
+				}
+			}
+			break;
+		case FOCUS_DOWN:
+			{
+				if (current >= 0 && !horizontal)
+				{
+					if (forward && current < max) toFocus = items[current+1];
+					else if (!forward && current > 0) toFocus = items[current-1];
+				}
+			}
+			break;
+		case FOCUS_LEFT:
+			{
+				if (current >= 0 && horizontal)
+				{
+					if (forward && current > 0) toFocus = items[current-1];
+					else if (!forward && current < max) toFocus = items[current+1];
+				}
+			}
+			break;
+		case FOCUS_RIGHT:
+			{
+				if (current >= 0 && horizontal)
+				{
+					if (forward && current < max) toFocus = items[current+1];
+					else if (!forward && current > 0) toFocus = items[current-1];
+				}
+			}
+			break;
+	}
+
+	Item::focusChild(toFocus);
+	return toFocus;
+}
+
 }

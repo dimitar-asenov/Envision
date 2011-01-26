@@ -141,6 +141,26 @@ void Item::updateGeometry(Item* content, int availableWidth, int availableHeight
 	}
 }
 
+bool Item::focusChild(FocusTarget)
+{
+	return false;
+}
+
+void Item::focusChild(Item* child, FocusTarget location)
+{
+	if (child)
+	{
+		if (child->flags() & QGraphicsItem::ItemIsFocusable)
+		{
+			child->scene()->clearSelection();
+			child->setSelected(true);
+			child->setFocus();
+			child->setUpdateNeeded();
+		}
+		else child->focusChild(location);
+	}
+}
+
 void Item::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
 	if ( shape_ ) shape_->paint(painter, option, widget);

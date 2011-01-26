@@ -132,6 +132,10 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		void useShape();
 		void removeShape();
 
+		enum FocusTarget {FOCUS_DEFAULT, FOCUS_TOPMOST, FOCUS_BOTTOMMOST, FOCUS_LEFTMOST, FOCUS_RIGHTMOST, FOCUS_UP, FOCUS_DOWN, FOCUS_LEFT, FOCUS_RIGHT};
+		virtual bool focusChild(FocusTarget location);
+		void focusChild(Item* child, FocusTarget location);
+
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
 		virtual InteractionHandler* handler() const;

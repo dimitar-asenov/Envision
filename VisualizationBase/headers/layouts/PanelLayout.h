@@ -41,6 +41,7 @@ class VISUALIZATIONBASE_API PanelLayout: public Layout
 
 		virtual bool sizeDependsOnParent() const;
 		virtual void updateGeometry(int availableWidth, int availableHeight);
+		virtual bool focusChild(FocusTarget location);
 };
 
 inline void PanelLayout::setFirst(Item* item, bool deleteOldItem) { setItem(item, first_, deleteOldItem); }

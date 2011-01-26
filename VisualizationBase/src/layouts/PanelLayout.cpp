@@ -125,4 +125,66 @@ void PanelLayout::updateGeometry(int availableWidth, int availableHeight)
 	if (last_) last_->setPos(last.topLeft());
 }
 
+bool PanelLayout::focusChild(FocusTarget location)
+{
+	Item* toFocus = NULL;
+	Item* f = first_ ? first_ : (middle_ ? middle_ : last_);
+	Item* l = last_ ? last_ : (middle_ ? middle_ : first_);
+
+	if (f == NULL) return false;
+
+	// Find out which is the current item and get the previous and next if any
+	Item* prev = NULL;
+	Item* next = NULL;
+	if (first_ && first_->childHasFocus())
+	{
+		next = middle_ ? middle_ : last_;
+	}
+	else if (middle_ && middle_->childHasFocus())
+	{
+		prev = first_;
+		next = last_;
+	}
+	else if (last_ && last_-childHasFocus())
+	{
+		prev = middle_ ? middle_ : first_;
+	}
+
+	bool horizontal = style()->orientation() == PanelLayoutStyle::HorizontalOrientation;
+
+	switch (location)
+	{
+		case FOCUS_DEFAULT:
+			toFocus = f;
+			break;
+		case FOCUS_TOPMOST:
+			toFocus = f;
+			break;
+		case FOCUS_BOTTOMMOST:
+			toFocus = l;
+			break;
+		case FOCUS_LEFTMOST:
+			toFocus = f;
+			break;
+		case FOCUS_RIGHTMOST:
+			toFocus = l;
+			break;
+		case FOCUS_UP:
+			if (!horizontal) toFocus = prev;
+			break;
+		case FOCUS_DOWN:
+			if (!horizontal) toFocus = next;
+			break;
+		case FOCUS_LEFT:
+			if (horizontal) toFocus = prev;
+			break;
+		case FOCUS_RIGHT:
+			if (horizontal) toFocus = next;
+			break;
+	}
+
+	Item::focusChild(toFocus);
+	return toFocus;
+}
+
 }

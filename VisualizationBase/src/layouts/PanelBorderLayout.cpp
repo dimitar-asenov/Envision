@@ -116,4 +116,93 @@ int PanelBorderLayout::getOutterHeightForExternalShape() const
 	return height() - style()->topMargin() - style()->bottomMargin() - (top_ ? top_->height() / 2 : 0);
 }
 
+bool PanelBorderLayout::focusChild(FocusTarget location)
+{
+	if (items.isEmpty()) return false;
+
+	Item* toFocus = NULL;
+	Item* current = NULL;
+	if (content_ && content_->childHasFocus()) current = content_;
+	else if (top_ && top_->childHasFocus()) current = top_;
+	else if (left_ && left_->childHasFocus()) current = left_;
+	else if (right_ && right_->childHasFocus()) current = right_;
+	else if (bottom_ && bottom_->childHasFocus()) current = bottom_;
+
+	switch (location)
+	{
+		case FOCUS_DEFAULT:
+			{
+				if (content_) toFocus = content_;
+				else if (top_) toFocus = top_;
+				else if (left_) toFocus = left_;
+				else if (right_) toFocus = right_;
+				else toFocus = bottom_;
+			}
+			break;
+		case FOCUS_TOPMOST:
+			{
+				if (top_) toFocus = top_;
+				else if (content_) toFocus = content_;
+				else if (left_) toFocus = left_;
+				else if (right_) toFocus = right_;
+				else toFocus = bottom_;
+			}
+			break;
+		case FOCUS_BOTTOMMOST:
+			{
+				if (bottom_) toFocus = bottom_;
+				else if (content_) toFocus = content_;
+				else if (right_) toFocus = right_;
+				else if (left_) toFocus = left_;
+				else toFocus = top_;
+			}
+			break;
+		case FOCUS_LEFTMOST:
+			{
+				if (left_) toFocus = left_;
+				else if (content_) toFocus = content_;
+				else if (top_) toFocus = top_;
+				else if (bottom_) toFocus = bottom_;
+				else toFocus = right_;
+			}
+			break;
+		case FOCUS_RIGHTMOST:
+			{
+				if (right_) toFocus = right_;
+				else if (content_) toFocus = content_;
+				else if (bottom_) toFocus = bottom_;
+				else if (top_) toFocus = top_;
+				else toFocus = left_;
+			}
+			break;
+		case FOCUS_UP:
+			{
+				if (current == bottom_) toFocus = content_ ? content_ : top_;
+				if (current == content_) toFocus = top_;
+			}
+			break;
+		case FOCUS_DOWN:
+			{
+				if (current == top_) toFocus = content_ ? content_ : bottom_;
+				if (current == content_) toFocus = bottom_;
+			}
+			break;
+		case FOCUS_LEFT:
+			{
+				if (current == right_) toFocus = content_ ? content_ : left_;
+				if (current == content_) toFocus = left_;
+			}
+			break;
+		case FOCUS_RIGHT:
+			{
+				if (current == left_) toFocus = content_ ? content_ : right_;
+				if (current == content_) toFocus = right_;
+			}
+			break;
+	}
+
+	Item::focusChild(toFocus);
+	return toFocus;
+}
+
 }

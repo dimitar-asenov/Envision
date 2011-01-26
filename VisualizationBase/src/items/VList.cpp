@@ -54,10 +54,7 @@ void VList::determineChildren()
 
 int VList::focusedElementIndex() const
 {
-	for (int i = 0; i<items_.length(); ++i)
-		if ( items_.at<ModelItem>(i)->childHasFocus()) return i;
-
-	return -1;
+	return items_.focusedElementIndex();
 }
 
 void VList::updateGeometry(int availableWidth, int availableHeight)
@@ -68,6 +65,11 @@ void VList::updateGeometry(int availableWidth, int availableHeight)
 bool VList::sizeDependsOnParent() const
 {
 	return items_.sizeDependsOnParent();
+}
+
+bool VList::focusChild(FocusTarget location)
+{
+	return items_.focusChild(location);
 }
 
 }
