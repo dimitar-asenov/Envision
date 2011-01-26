@@ -58,7 +58,7 @@ template<class T> QString TextRenderer<T>::getText()
 
 template<class T> QString TextRenderer<T>::getSelectedText()
 {
-	if (isSelectedForInput())
+	if (this->hasFocus())
 	{
 		int xstart = selectionBegin;
 		int xend = selectionEnd;
@@ -71,11 +71,6 @@ template<class T> QString TextRenderer<T>::getSelectedText()
 		return text.mid(xstart, xend - xstart);
 	}
 	else return QString();
-}
-
-template<class T> bool TextRenderer<T>::isSelectedForInput() const
-{
-	return this->hasFocus() && this->scene()->selectedItems().size() == 0;
 }
 
 template<class T> bool TextRenderer<T>::isEditable()
@@ -110,7 +105,7 @@ template<class T> void TextRenderer<T>::updateGeometry(int, int)
 	yOffset = -bound.top();
 	this->setSize(bound.size());
 
-	if ( isSelectedForInput() )
+	if ( this->hasFocus() )
 	{
 		int xstart = selectionBegin;
 		int xend = selectionEnd;
@@ -128,7 +123,9 @@ template<class T> void TextRenderer<T>::updateGeometry(int, int)
 
 template<class T> void TextRenderer<T>::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-	if ( !isSelectedForInput() )
+	int numSelected = this->scene()->selectedItems().size();
+
+	if ( !this->hasFocus() || numSelected > 1 )
 	{
 		painter->setPen(style()->pen());
 		painter->setFont(style()->font());
@@ -136,7 +133,7 @@ template<class T> void TextRenderer<T>::paint(QPainter *painter, const QStyleOpt
 	}
 	else
 	{
-		if ( selectionXBegin == selectionXEnd )
+		if ( selectionXBegin == selectionXEnd || numSelected == 1)
 		{
 			// No text is selected, draw all text at once using normal style
 			painter->setPen(style()->pen());
@@ -146,7 +143,6 @@ template<class T> void TextRenderer<T>::paint(QPainter *painter, const QStyleOpt
 		else
 		{
 			// Some text is selected, draw it differently than non-selected text.
-
 			int xstart = selectionBegin;
 			int xend = selectionEnd;
 			if ( xstart > xend )
@@ -174,8 +170,11 @@ template<class T> void TextRenderer<T>::paint(QPainter *painter, const QStyleOpt
 		}
 
 		// Draw caret
-		painter->setPen(style()->caretPen());
-		painter->drawLine(xOffset + caretX, 1, xOffset + caretX, this->height() - 1);
+		if ( selectionXBegin == selectionXEnd || numSelected == 0)
+		{
+			painter->setPen(style()->caretPen());
+			painter->drawLine(xOffset + caretX, 1, xOffset + caretX, this->height() - 1);
+		}
 	}
 }
 

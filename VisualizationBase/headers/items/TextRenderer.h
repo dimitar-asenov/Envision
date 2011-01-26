@@ -45,8 +45,6 @@ class VISUALIZATIONBASE_API TextRenderer : public T
 
 			static int caretX;
 
-			bool isSelectedForInput() const;
-
 		protected:
 			virtual void determineChildren();
 			virtual void updateGeometry(int availableWidth, int availableHeight);
