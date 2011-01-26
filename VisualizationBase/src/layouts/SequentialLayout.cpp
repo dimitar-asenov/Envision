@@ -48,6 +48,14 @@ void SequentialLayout::insert(Item* item, int position)
 	setUpdateNeeded();
 }
 
+void SequentialLayout::swap(int i, int j)
+{
+	Item* t = items[i];
+	items[i] = items[j];
+	items[j] = t;
+	setUpdateNeeded();
+}
+
 void SequentialLayout::remove(int index, bool deleteItem_)
 {
 	if (deleteItem_) SAFE_DELETE_ITEM( items[index]);

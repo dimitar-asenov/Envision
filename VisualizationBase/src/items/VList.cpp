@@ -30,22 +30,26 @@ void VList::determineChildren()
 	items_.setStyle(&style()->itemsStyle());
 
 	// Set the children
-	// TODO this can be done smarter
-
-	bool changed = false;
 	for (int i = 0; i < list->size(); ++i)
 	{
-		if ( !changed )
+		// Try to find an existing visualization for this node.
+		int p = i;
+		while (p < items_.length() && items_.at<ModelItem>(p)->getNode() != list->at<Model::Node>(i)) ++p;
+
+		if (p < items_.length() )
 		{
-			changed = items_.length() <= i;
-			if ( !changed ) changed = items_.at<ModelItem> (i)->getNode() != list->at<Model::Node> (i);
-
-			if ( changed ) while ( items_.length() > i )
-				items_.remove(items_.length() - 1);
+			// Visualization exists. Swap it if it is not here
+			if (p != i) items_.swap(i,p);
 		}
-
-		if ( changed ) items_.append(renderer()->render(NULL, list->at<Model::Node> (i)));
+		else
+		{
+			// Visualization does not exist. Make a new one.
+			items_.insert(renderer()->render(NULL, list->at<Model::Node> (i)), i);
+		}
 	}
+
+	// Remove extra elements.
+	while (items_.length() > list->size()) items_.remove(items_.length()-1);
 }
 
 void VList::updateGeometry(int availableWidth, int availableHeight)

@@ -13,8 +13,6 @@
 #include <QtCore/QPair>
 #include <QtCore/QList>
 
-#include <QtCore/QDebug>
-
 namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(VExtendable)
@@ -118,7 +116,7 @@ void VExtendable::determineChildren()
 				}
 			}
 
-			if (!found) { attributes->remove(i); qDebug() << "remove" << i;}
+			if (!found) attributes->remove(i);
 		}
 
 		int attributeIndex = 0;

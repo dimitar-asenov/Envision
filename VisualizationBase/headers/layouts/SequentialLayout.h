@@ -31,6 +31,7 @@ class VISUALIZATIONBASE_API SequentialLayout: public Layout
 		void append(Item* item);
 		void prepend(Item* item);
 		void insert(Item* item, int position);
+		void swap(int i, int j);
 
 		void remove(int index, bool deleteItem = true);
 		void removeAll(Item* item, bool deleteItem = true);
