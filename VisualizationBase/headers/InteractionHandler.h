@@ -29,6 +29,10 @@ class VISUALIZATIONBASE_API InteractionHandler
 
 	public:
 
+		// Event filters,
+		virtual void beforeEvent(Item *target, QEvent* event);
+		virtual void afterEvent(Item *target, QEvent* event);
+
 		// Keyboard events
 		virtual void keyPressEvent(Item *target, QKeyEvent *event);
 		virtual void keyReleaseEvent(Item *target, QKeyEvent *event);

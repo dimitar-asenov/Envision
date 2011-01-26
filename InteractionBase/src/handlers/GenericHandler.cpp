@@ -19,6 +19,7 @@ namespace Interaction {
 
 CommandExecutionEngine* GenericHandler::executionEngine_ = CommandExecutionEngine::instance();
 CommandPrompt* GenericHandler::prompt_ = NULL;
+GenericHandler::FocusDirection GenericHandler::focusDirection_ = NOT_SPECIFIED;
 
 GenericHandler::GenericHandler()
 {
@@ -38,6 +39,16 @@ CommandExecutionEngine* GenericHandler::executionEngine()
 void GenericHandler::setCommandExecutionEngine(CommandExecutionEngine *engine)
 {
 	executionEngine_ = engine;
+}
+
+void GenericHandler::setFocusDirection(FocusDirection direction)
+{
+	focusDirection_ = direction;
+}
+
+GenericHandler::FocusDirection GenericHandler::focusDirection()
+{
+	return focusDirection_;
 }
 
 CommandPrompt* GenericHandler::prompt()
@@ -69,6 +80,17 @@ void GenericHandler::showCommandPrompt(Visualization::Item* commandReceiver)
 void GenericHandler::command(Visualization::Item *target, const QString& command)
 {
 	executionEngine_->execute(target, command);
+}
+
+void GenericHandler::beforeEvent(Visualization::Item *, QEvent* event)
+{
+	if (event->type() == QEvent::GraphicsSceneMouseMove ||
+		 event->type() == QEvent::GraphicsSceneMousePress ||
+		 event->type() == QEvent::GraphicsSceneMouseDoubleClick ||
+		 event->type() == QEvent::KeyPress)
+	{
+		focusDirection_ = NOT_SPECIFIED;
+	}
 }
 
 void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event)

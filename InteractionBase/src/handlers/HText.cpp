@@ -17,7 +17,6 @@
 
 #include <QtGui/QClipboard>
 #include <QtGui/QApplication>
-
 //**********************************************************************************************************************
 #define TEXTRENDERER_GET(method)		(																												\
 	( dynamic_cast<Visualization::TextRenderer<Visualization::Item>*> (target)	) ?													\
@@ -176,6 +175,22 @@ void HText::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent
 void HText::focusOutEvent(Visualization::Item *target, QFocusEvent *)
 {
 	target->setUpdateNeeded();
+}
+
+void HText::focusInEvent(Visualization::Item *target, QFocusEvent *event)
+{
+	GenericHandler::FocusDirection dir = GenericHandler::focusDirection();
+
+	int size = TEXTRENDERER_GET(getText).length();
+
+	if (size > 0)
+	{
+		// Here we choose which child to focus.
+		if (dir == GenericHandler::FROM_LEFT) { TEXTRENDERER_SET1(setCaretPosition, 0) }
+		else if (dir == GenericHandler::FROM_RIGHT) {TEXTRENDERER_SET1(setCaretPosition, size)} ;
+	}
+
+	GenericHandler::focusInEvent(target, event);
 }
 
 void HText::setNewText(Visualization::Item *target, const QString& newText)

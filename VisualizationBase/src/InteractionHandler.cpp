@@ -25,6 +25,10 @@ InteractionHandler* InteractionHandler::instance()
 	return &h;
 }
 
+// Event filters,
+void InteractionHandler::beforeEvent(Item *, QEvent*) {}
+void InteractionHandler::afterEvent(Item *, QEvent*) {}
+
 // Command events
 void InteractionHandler::command(Item *, const QString&) {}
 

@@ -182,7 +182,7 @@ template<class T> void TextRenderer<T>::selectAll()
 {
 	selectionBegin = 0;
 	selectionEnd = text.length();
-	this->setFocus();
+	if (!this->hasFocus()) this->setFocus();
 	this->setUpdateNeeded();
 }
 
@@ -190,7 +190,7 @@ template<class T> void TextRenderer<T>::setSelectedCharacters(int first, int las
 {
 	selectionBegin = first;
 	selectionEnd = last;
-	this->setFocus();
+	if (!this->hasFocus()) this->setFocus();
 	this->setUpdateNeeded();
 }
 

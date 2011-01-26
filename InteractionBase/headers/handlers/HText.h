@@ -23,6 +23,7 @@ class INTERACTIONBASE_API HText : public GenericHandler
 		virtual void mouseReleaseEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event);
 		virtual void mouseDoubleClickEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event);
 		virtual void mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event);
+		virtual void focusInEvent(Visualization::Item *target, QFocusEvent *event);
 		virtual void focusOutEvent(Visualization::Item *target, QFocusEvent *event);
 		static HText* instance();
 

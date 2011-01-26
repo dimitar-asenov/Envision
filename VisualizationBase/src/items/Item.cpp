@@ -178,31 +178,116 @@ void Item::removeFromScene()
  * object.
  **********************************************************************************************************************/
 // Keyboard events
-void Item::keyPressEvent(QKeyEvent *event) { handler()->keyPressEvent(this, event); }
-void Item::keyReleaseEvent(QKeyEvent *event) { handler()->keyReleaseEvent(this, event); }
+void Item::keyPressEvent(QKeyEvent *event)
+{
+	handler()->beforeEvent(this, event);
+	handler()->keyPressEvent(this, event);
+	handler()->afterEvent(this, event);
+}
+void Item::keyReleaseEvent(QKeyEvent *event)
+{
+	handler()->beforeEvent(this, event);
+	handler()->keyReleaseEvent(this, event);
+	handler()->afterEvent(this, event);
+}
 
 // Mouse events
-void Item::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) { handler()->mouseDoubleClickEvent(this, event); }
-void Item::mouseMoveEvent(QGraphicsSceneMouseEvent *event) { handler()->mouseMoveEvent(this, event); }
-void Item::mousePressEvent(QGraphicsSceneMouseEvent *event) { handler()->mousePressEvent(this, event); }
-void Item::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) { handler()->mouseReleaseEvent(this, event); }
-void Item::wheelEvent(QGraphicsSceneWheelEvent *event) { handler()->wheelEvent(this, event); }
+void Item::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
+{
+	handler()->beforeEvent(this, event);
+	handler()->mouseDoubleClickEvent(this, event);
+	handler()->afterEvent(this, event);
+}
+void Item::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
+	handler()->beforeEvent(this, event);
+	handler()->mouseMoveEvent(this, event);
+	handler()->afterEvent(this, event);
+}
+void Item::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+	handler()->beforeEvent(this, event);
+	handler()->mousePressEvent(this, event);
+	handler()->afterEvent(this, event);
+}
+void Item::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+	handler()->beforeEvent(this, event);
+	handler()->mouseReleaseEvent(this, event);
+	handler()->afterEvent(this, event);
+}
+void Item::wheelEvent(QGraphicsSceneWheelEvent *event)
+{
+	handler()->beforeEvent(this, event);
+	handler()->wheelEvent(this, event);
+	handler()->afterEvent(this, event);
+}
 
-void Item::hoverEnterEvent(QGraphicsSceneHoverEvent *event) { handler()->hoverEnterEvent(this, event); }
-void Item::hoverLeaveEvent(QGraphicsSceneHoverEvent *event) { handler()->hoverLeaveEvent(this, event); }
-void Item::hoverMoveEvent(QGraphicsSceneHoverEvent *event) { handler()->hoverMoveEvent(this, event); }
+void Item::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
+{
+	handler()->beforeEvent(this, event);
+	handler()->hoverEnterEvent(this, event);
+	handler()->afterEvent(this, event);
+}
+void Item::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
+{
+	handler()->beforeEvent(this, event);
+	handler()->hoverLeaveEvent(this, event);
+	handler()->afterEvent(this, event);
+}
+void Item::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
+{
+	handler()->beforeEvent(this, event);
+	handler()->hoverMoveEvent(this, event);
+	handler()->afterEvent(this, event);
+}
 
-void Item::dragEnterEvent(QGraphicsSceneDragDropEvent *event) { handler()->dragEnterEvent(this, event); }
-void Item::dragLeaveEvent(QGraphicsSceneDragDropEvent *event) { handler()->dragLeaveEvent(this, event); }
-void Item::dragMoveEvent(QGraphicsSceneDragDropEvent *event) { handler()->dragMoveEvent(this, event); }
-void Item::dropEvent(QGraphicsSceneDragDropEvent *event) { handler()->dropEvent(this, event); }
+void Item::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
+{
+	handler()->beforeEvent(this, event);
+	handler()->dragEnterEvent(this, event);
+	handler()->afterEvent(this, event);
+}
+void Item::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
+{
+	handler()->beforeEvent(this, event);
+	handler()->dragLeaveEvent(this, event);
+	handler()->afterEvent(this, event);
+}
+void Item::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
+{
+	handler()->beforeEvent(this, event);
+	handler()->dragMoveEvent(this, event);
+	handler()->afterEvent(this, event);
+}
+void Item::dropEvent(QGraphicsSceneDragDropEvent *event)
+{
+	handler()->beforeEvent(this, event);
+	handler()->dropEvent(this, event);
+	handler()->afterEvent(this, event);
+}
 
 // Menu events
-void Item::contextMenuEvent(QGraphicsSceneContextMenuEvent *event) { handler()->contextMenuEvent(this, event); }
+void Item::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
+{
+	handler()->beforeEvent(this, event);
+	handler()->contextMenuEvent(this, event);
+	handler()->afterEvent(this, event);
+}
 
 // Focus events
-void Item::focusInEvent(QFocusEvent *event) { handler()->focusInEvent(this, event); }
-void Item::focusOutEvent(QFocusEvent *event) { handler()->focusOutEvent(this, event); }
+void Item::focusInEvent(QFocusEvent *event)
+{
+	handler()->beforeEvent(this, event);
+	handler()->focusInEvent(this, event);
+	handler()->afterEvent(this, event);
+}
+void Item::focusOutEvent(QFocusEvent *event)
+{
+	handler()->beforeEvent(this, event);
+	handler()->focusOutEvent(this, event);
+	handler()->afterEvent(this, event);
+}
 
 /***********************************************************************************************************************
  * Default Event handling methods. These methods can be called from the event handler and they will simply call the

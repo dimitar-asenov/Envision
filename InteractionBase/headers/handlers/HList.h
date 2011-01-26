@@ -18,6 +18,7 @@ class INTERACTIONBASE_API HList : public GenericHandler
 {
 	public:
 		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event);
+		virtual void focusInEvent(Visualization::Item *target, QFocusEvent *event);
 
 		static HList* instance();
 
