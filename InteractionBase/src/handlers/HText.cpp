@@ -18,8 +18,6 @@
 #include <QtGui/QClipboard>
 #include <QtGui/QApplication>
 
-#include <QtCore/QDebug>
-
 //**********************************************************************************************************************
 #define TEXTRENDERER_GET(method)		(																												\
 	( dynamic_cast<Visualization::TextRenderer<Visualization::Item>*> (target)	) ?													\
@@ -151,7 +149,6 @@ void HText::mouseReleaseEvent(Visualization::Item *target, QGraphicsSceneMouseEv
 void HText::mouseDoubleClickEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
 	doubleClick = true;
-	qDebug() << "double" << target;
 	if ( event->button() == Qt::LeftButton )
 	{
 		target->scene()->clearSelection();
