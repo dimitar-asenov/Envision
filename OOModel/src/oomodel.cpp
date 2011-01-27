@@ -7,6 +7,9 @@
 
 #include "oomodel.h"
 #include "SelfTest/headers/SelfTestSuite.h"
+#include "Project.h"
+#include "Module.h"
+#include "Class.h"
 
 Q_EXPORT_PLUGIN2( oomodel, OOModel::OOModel )
 
@@ -14,6 +17,10 @@ namespace OOModel {
 
 bool OOModel::initialize(Envision::EnvisionManager&)
 {
+	Project::init();
+	Module::init();
+	Class::init();
+
 	return true;
 }
 
