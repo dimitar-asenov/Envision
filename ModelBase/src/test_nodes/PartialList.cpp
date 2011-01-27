@@ -10,7 +10,7 @@
 namespace TestNodes {
 
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(PartialList, Model::ExtendableNode)
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(PartialList)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(PartialList, Model::ExtendableNode)
 
 Model::ExtendableIndex PartialList::listIndex = Model::ExtendableIndex();
 
