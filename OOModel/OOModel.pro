@@ -14,7 +14,8 @@ TARGET = oomodel
 DEFINES += OOMODEL_LIBRARY
 win32:LIBS += -L$${PLUGINS_DIR} \
     -llogger \
-    -lselftest
+    -lselftest \
+    -lmodelbase
 QT = core
 TEMPLATE = lib
 CONFIG += plugin warn_on thread
