@@ -27,9 +27,9 @@
  *
  * class MyNewNode : public Node
  * {
- * 	NODE_DECLARE_STANDARD_CONSTRUCTORS( MyNewNode )
+ * 	NODE_DECLARE_STANDARD_METHODS( MyNewNode )
  */
-#define NODE_DECLARE_STANDARD_CONSTRUCTORS(className)																						\
+#define NODE_DECLARE_STANDARD_METHODS(className)																							\
 	private:																																				\
 		static int typeId_;																															\
 		static const QString typeName_;																											\
@@ -62,9 +62,9 @@
  *
  * class MyNewNode : public ExtendableNode
  * {
- * 	EXTENDABLENODE_DECLARE_STANDARD_CONSTRUCTORS( MyNewNode )
+ * 	EXTENDABLENODE_DECLARE_STANDARD_METHODS( MyNewNode )
  */
-#define EXTENDABLENODE_DECLARE_STANDARD_CONSTRUCTORS(className)																		\
+#define EXTENDABLENODE_DECLARE_STANDARD_METHODS(className)																				\
 	private:																																				\
 		static int typeId_;																															\
 		static const QString typeName_;																											\
@@ -74,6 +74,13 @@
 		className(::Model::Node *parent, ::Model::NodeIdType id, ::Model::PersistentStore &store, bool partialLoadHint);\
 		className(::Model::Node* parent, ::Model::Model* model, ::Model::AttributeChain& metaData);							\
 		className(::Model::Node *parent, ::Model::NodeIdType id, ::Model::PersistentStore &store, bool partialLoadHint, ::Model::AttributeChain& metaData); \
+																																							\
+		static ::Model::AttributeChain& getMetaData();																						\
+		static ::Model::ExtendableIndex registerNewAttribute(const QString &attributeName,										\
+				const QString &attributeType, bool canBePartiallyLoaded, bool isOptional, bool isPersistent)					\
+				{	return ExtendableNode::registerNewAttribute(getMetaData(), attributeName, attributeType, 					\
+					canBePartiallyLoaded, isOptional, isPersistent );																		\
+				}																																			\
 																																							\
 		virtual const QString& typeName() const;																								\
 		virtual int typeId() const;																												\
@@ -116,10 +123,10 @@
  */
 #define EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(className, parentName)																\
 	className::className(::Model::Node* parent, ::Model::Model* model)																\
-		: parentName (parent, model, ExtendableNode::getMetaData<className>()) {}													\
+		: parentName (parent, model, className::getMetaData()) {}																		\
 		  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	\
 	className::className(::Model::Node *parent, ::Model::NodeIdType id, ::Model::PersistentStore &store, bool partialLoadHint)\
-		: parentName (parent, id, store, partialLoadHint, ExtendableNode::getMetaData<className>()) {}						\
+		: parentName (parent, id, store, partialLoadHint, className::getMetaData()) {}											\
 		  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	   \
 	className::className(::Model::Node* parent, ::Model::Model* model, ::Model::AttributeChain& metaData)					\
 		: parentName (parent, model, metaData) {}																								\
@@ -163,6 +170,52 @@ void className::registerNodeType()																												\
 {																																							\
 	typeId_ = Node::registerNodeType(#className, ::Model::createNewNode< className >, ::Model::createNodeFromPersistence< className >);\
 }
+/*********************************************************************************************************************/
+
+/**
+ * Defines standard static methods that register the new Node type's constructors and a virtual getTypeName method
+ * that returns the name of this class.
+ *
+ * @param className
+ * 			The name of the class being defined. This class must inherit from from ExtendableNode, directly or
+ * 			indirectly.
+ *
+ * Use this macro in the .cpp file that defines the new Node type.
+ */
+#define EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(className, parentName)													\
+int className::typeId_ = -1; /* This must be set to the result of Node::registerNodeType */									\
+const QString className::typeName_ = QString(#className);																				\
+																																							\
+const QString& className::typeName() const																									\
+{																																							\
+	return typeName_;																																	\
+}																																							\
+																																							\
+int className::typeId()	const																														\
+{																																							\
+	return typeId_;																																	\
+}																																							\
+int className::typeIdStatic()																														\
+{																																							\
+	return typeId_;																																	\
+}																																							\
+const QString& className::typeNameStatic()																									\
+{																																							\
+	return typeName_;																																	\
+}																																							\
+																																							\
+void className::registerNodeType()																												\
+{																																							\
+	className::getMetaData().setParent(&parentName::getMetaData());																	\
+	typeId_ = Node::registerNodeType(#className, ::Model::createNewNode< className >, ::Model::createNodeFromPersistence< className >);\
+}																																							\
+																																							\
+::Model::AttributeChain& className::getMetaData()																							\
+{																																							\
+	static ::Model::AttributeChain descriptions;																								\
+	return descriptions;																																\
+}																																							\
+
 /*********************************************************************************************************************/
 
 #endif /* NODEMACROS_H_ */

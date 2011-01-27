@@ -18,7 +18,7 @@ namespace TestNodes {
 
 class MODELBASE_API BinaryNode: public Model::ExtendableNode
 {
-	EXTENDABLENODE_DECLARE_STANDARD_CONSTRUCTORS(BinaryNode)
+	EXTENDABLENODE_DECLARE_STANDARD_METHODS(BinaryNode)
 
 	private:
 		static Model::ExtendableIndex nameIndex;
@@ -39,6 +39,16 @@ class MODELBASE_API BinaryNode: public Model::ExtendableNode
 		void removeRightNode();
 
 };
+
+inline Model::Text* BinaryNode::name() { return static_cast<Model::Text*> (get(nameIndex)); }
+inline BinaryNode* BinaryNode::left() { return static_cast<BinaryNode*> (get(leftIndex)); }
+inline BinaryNode* BinaryNode::right() { return static_cast<BinaryNode*> (get(rightIndex)); }
+
+inline BinaryNode* BinaryNode::makeLeftNode(const QString &type) { return createOptional<BinaryNode>(leftIndex, type); }
+inline BinaryNode* BinaryNode::makeRightNode(const QString &type) { return createOptional<BinaryNode>(rightIndex, type); }
+
+inline void BinaryNode::removeLeftNode() { removeOptional(leftIndex); }
+inline void BinaryNode::removeRightNode() { removeOptional(rightIndex); }
 
 }
 

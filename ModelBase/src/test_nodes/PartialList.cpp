@@ -17,12 +17,7 @@ Model::ExtendableIndex PartialList::listIndex = Model::ExtendableIndex();
 void PartialList::init()
 {
 	registerNodeType();
-	listIndex = registerNewAttribute<PartialList> ("list", "List", true, false, true);
-}
-
-Model::List* PartialList::list()
-{
-	return static_cast<Model::List*> (get(listIndex));
+	listIndex = registerNewAttribute("list", "List", true, false, true);
 }
 
 

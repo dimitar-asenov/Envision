@@ -18,8 +18,8 @@ namespace Model {
 
 TEST(ModelBase, ExtendableMetaData)
 {
-	AttributeChain& metaExt = ExtendableNode::getMetaData<TestNodes::BinaryNode>();
-	AttributeChain& metaUnit = ExtendableNode::getMetaData<TestNodes::BinaryNodeAccessUnit>();
+	AttributeChain& metaExt = TestNodes::BinaryNode::getMetaData();
+	AttributeChain& metaUnit = TestNodes::BinaryNodeAccessUnit::getMetaData();
 
 	CHECK_INT_EQUAL(1, metaExt.numLevels());
 	CHECK_INT_EQUAL(2, metaUnit.numLevels());

@@ -22,21 +22,6 @@ BinaryWithPosition::~BinaryWithPosition()
 {
 }
 
-BinaryNode* BinaryWithPosition::binary()
-{
-	return binaryNode;
-}
-
-int BinaryWithPosition::x()
-{
-	return static_cast<Model::Integer*> (binaryNode->get(xIndex))->get();
-}
-
-int BinaryWithPosition::y()
-{
-	return static_cast<Model::Integer*> (binaryNode->get(yIndex))->get();
-}
-
 void BinaryWithPosition::set(int x, int y)
 {
 	static_cast<Model::Integer*> (binaryNode->get(xIndex))->set(x);
@@ -45,8 +30,8 @@ void BinaryWithPosition::set(int x, int y)
 
 void BinaryWithPosition::init()
 {
-	xIndex = BinaryNode::registerNewAttribute<BinaryNode>("x", "Integer", false, false, true);
-	yIndex = BinaryNode::registerNewAttribute<BinaryNode>("y", "Integer", false, false, true);
+	xIndex = BinaryNode::registerNewAttribute("x", "Integer", false, false, true);
+	yIndex = BinaryNode::registerNewAttribute("y", "Integer", false, false, true);
 }
 
 }

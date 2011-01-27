@@ -50,6 +50,21 @@ ExtendableNode::~ExtendableNode()
 			if ( subnodes[level][i] ) SAFE_DELETE( subnodes[level][i] );
 }
 
+AttributeChain& ExtendableNode::getMetaData()
+{
+	static AttributeChain descriptions;
+	return descriptions;
+}
+
+ExtendableIndex ExtendableNode::registerNewAttribute(AttributeChain& metaData, const QString &attributeName, const QString &attributeType, bool canBePartiallyLoaded, bool isOptional, bool isPersistent)
+{
+	if ( metaData.hasAttribute(attributeName) ) throw ModelException("Trying to register new attribute " + attributeName + " but this name already exists");
+
+	metaData.append(Attribute(attributeName, attributeType, isOptional, canBePartiallyLoaded, isPersistent));
+
+	return ExtendableIndex(metaData.numLevels() - 1, metaData.size() - 1);
+}
+
 Node* ExtendableNode::get(const ExtendableIndex &attributeIndex)
 {
 	return subnodes[attributeIndex.level()][attributeIndex.index()];

@@ -10,11 +10,10 @@
 namespace TestNodes {
 
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(BinaryNodeAccessUnit, BinaryNode)
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(BinaryNodeAccessUnit)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(BinaryNodeAccessUnit, BinaryNode)
 
 void BinaryNodeAccessUnit::init()
 {
-	BinaryNodeAccessUnit::setParentMeta<BinaryNodeAccessUnit, BinaryNode>();
 	registerNodeType();
 }
 

@@ -23,7 +23,7 @@ class Text;
 
 class List: public Node
 {
-	NODE_DECLARE_STANDARD_CONSTRUCTORS(List)
+	NODE_DECLARE_STANDARD_METHODS(List)
 
 	private:
 		QVector<Node*> nodes;

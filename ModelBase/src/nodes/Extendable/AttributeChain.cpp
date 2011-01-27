@@ -6,6 +6,7 @@
  **********************************************************************************************************************/
 
 #include "nodes/Extendable/AttributeChain.h"
+#include "nodes/Extendable/ExtendableNode.h"
 
 namespace Model {
 
@@ -16,6 +17,9 @@ AttributeChain::AttributeChain() :
 
 void AttributeChain::setParent(AttributeChain* newParent)
 {
+	if (newParent == this) return;
+	if (newParent == &ExtendableNode::getMetaData() ) return;
+
 	parent_ = newParent;
 
 	// Compute the number of levels

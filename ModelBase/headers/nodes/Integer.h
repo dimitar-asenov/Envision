@@ -15,7 +15,7 @@ namespace Model {
 
 class MODELBASE_API Integer: public Node
 {
-	NODE_DECLARE_STANDARD_CONSTRUCTORS(Integer)
+	NODE_DECLARE_STANDARD_METHODS(Integer)
 
 	private:
 		int integer;

@@ -9,6 +9,7 @@
 #define BINARYWITHPOSITION_H_
 
 #include "../modelbase_api.h"
+#include "../nodes/Integer.h"
 
 #include "BinaryNode.h"
 
@@ -33,6 +34,10 @@ class MODELBASE_API BinaryWithPosition
 
 		static void init();
 };
+
+inline BinaryNode* BinaryWithPosition::binary() { return binaryNode; }
+inline int BinaryWithPosition::x() { return static_cast<Model::Integer*> (binaryNode->get(xIndex))->get(); }
+inline int BinaryWithPosition::y() { return static_cast<Model::Integer*> (binaryNode->get(yIndex))->get(); }
 
 }
 

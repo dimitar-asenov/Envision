@@ -10,7 +10,7 @@
 namespace TestNodes {
 
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(BinaryNode, Model::ExtendableNode)
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(BinaryNode)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(BinaryNode, Model::ExtendableNode)
 
 Model::ExtendableIndex BinaryNode::nameIndex = Model::ExtendableIndex();
 Model::ExtendableIndex BinaryNode::leftIndex = Model::ExtendableIndex();
@@ -19,44 +19,9 @@ Model::ExtendableIndex BinaryNode::rightIndex = Model::ExtendableIndex();
 void BinaryNode::init()
 {
 	registerNodeType();
-	nameIndex = registerNewAttribute<BinaryNode> ("name", "Text", false, false, true);
-	leftIndex = registerNewAttribute<BinaryNode> ("left", "BinaryNode", false, true, true);
-	rightIndex = registerNewAttribute<BinaryNode> ("right", "BinaryNode", false, true, true);
-}
-
-Model::Text* BinaryNode::name()
-{
-	return static_cast<Model::Text*> (get(nameIndex));
-}
-
-BinaryNode* BinaryNode::left()
-{
-	return static_cast<BinaryNode*> (get(leftIndex));
-}
-
-BinaryNode* BinaryNode::right()
-{
-	return static_cast<BinaryNode*> (get(rightIndex));
-}
-
-BinaryNode* BinaryNode::makeLeftNode(const QString &type)
-{
-	return createOptional<BinaryNode>(leftIndex, type);
-}
-
-BinaryNode* BinaryNode::makeRightNode(const QString &type)
-{
-	return createOptional<BinaryNode>(rightIndex, type);
-}
-
-void BinaryNode::removeLeftNode()
-{
-	removeOptional(leftIndex);
-}
-
-void BinaryNode::removeRightNode()
-{
-	removeOptional(rightIndex);
+	nameIndex = registerNewAttribute("name", "Text", false, false, true);
+	leftIndex = registerNewAttribute("left", "BinaryNode", false, true, true);
+	rightIndex = registerNewAttribute("right", "BinaryNode", false, true, true);
 }
 
 }

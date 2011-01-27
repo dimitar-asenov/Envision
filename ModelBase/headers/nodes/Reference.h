@@ -17,7 +17,7 @@ namespace Model {
 
 class MODELBASE_API Reference: public Node
 {
-	NODE_DECLARE_STANDARD_CONSTRUCTORS( Reference )
+	NODE_DECLARE_STANDARD_METHODS( Reference )
 
 	private:
 		QString path;

@@ -17,7 +17,7 @@ namespace TestNodes {
 
 class MODELBASE_API BinaryNodeAccessUnit: public BinaryNode
 {
-	EXTENDABLENODE_DECLARE_STANDARD_CONSTRUCTORS(BinaryNodeAccessUnit)
+	EXTENDABLENODE_DECLARE_STANDARD_METHODS(BinaryNodeAccessUnit)
 
 	private:
 		Model::NodeReadWriteLock accessLock_;
