@@ -41,6 +41,8 @@ class VISUALIZATIONBASE_API VExtendable : public ModelItem
 
 		void setExpanded(bool expanded = true);
 		bool expanded() const;
+
+		virtual bool focusChild(FocusTarget location);
 };
 
 inline bool VExtendable::expanded() const { return expanded_; }

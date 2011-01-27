@@ -161,13 +161,13 @@ bool PanelLayout::focusChild(FocusTarget location)
 			toFocus = f;
 			break;
 		case FOCUS_BOTTOMMOST:
-			toFocus = l;
+			toFocus = horizontal ? f : l;
 			break;
 		case FOCUS_LEFTMOST:
 			toFocus = f;
 			break;
 		case FOCUS_RIGHTMOST:
-			toFocus = l;
+			toFocus =  horizontal ? l : f;
 			break;
 		case FOCUS_UP:
 			if (!horizontal) toFocus = prev;
@@ -183,8 +183,7 @@ bool PanelLayout::focusChild(FocusTarget location)
 			break;
 	}
 
-	Item::focusChild(toFocus);
-	return toFocus;
+	return Item::focusChild(toFocus);
 }
 
 }

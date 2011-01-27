@@ -195,8 +195,8 @@ bool SequentialLayout::focusChild(FocusTarget location)
 			break;
 		case FOCUS_BOTTOMMOST:
 			{
-				if ( forward ) toFocus = items.last();
-				else toFocus = items.first();
+				if ( forward == horizontal) toFocus = items.first();
+				else toFocus = items.last();
 			}
 			break;
 		case FOCUS_LEFTMOST:
@@ -207,8 +207,8 @@ bool SequentialLayout::focusChild(FocusTarget location)
 			break;
 		case FOCUS_RIGHTMOST:
 			{
-				if ( forward ) toFocus = items.last();
-				else toFocus = items.first();
+				if ( (forward || horizontal) && !(forward && horizontal) ) toFocus = items.first();
+				else toFocus = items.last();
 			}
 			break;
 		case FOCUS_UP:
@@ -249,8 +249,7 @@ bool SequentialLayout::focusChild(FocusTarget location)
 			break;
 	}
 
-	Item::focusChild(toFocus);
-	return toFocus;
+	return Item::focusChild(toFocus);
 }
 
 }

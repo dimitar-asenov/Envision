@@ -134,7 +134,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 
 		enum FocusTarget {FOCUS_DEFAULT, FOCUS_TOPMOST, FOCUS_BOTTOMMOST, FOCUS_LEFTMOST, FOCUS_RIGHTMOST, FOCUS_UP, FOCUS_DOWN, FOCUS_LEFT, FOCUS_RIGHT};
 		virtual bool focusChild(FocusTarget location);
-		void focusChild(Item* child, FocusTarget location);
+		bool focusChild(Item* child);
 
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 

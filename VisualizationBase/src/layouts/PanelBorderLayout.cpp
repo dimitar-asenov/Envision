@@ -118,7 +118,7 @@ int PanelBorderLayout::getOutterHeightForExternalShape() const
 
 bool PanelBorderLayout::focusChild(FocusTarget location)
 {
-	if (items.isEmpty()) return false;
+	if (!content_ && !top_ && !left_ & !bottom_ && !right_) return false;
 
 	Item* toFocus = NULL;
 	Item* current = NULL;
@@ -152,8 +152,8 @@ bool PanelBorderLayout::focusChild(FocusTarget location)
 			{
 				if (bottom_) toFocus = bottom_;
 				else if (content_) toFocus = content_;
-				else if (right_) toFocus = right_;
 				else if (left_) toFocus = left_;
+				else if (right_) toFocus = right_;
 				else toFocus = top_;
 			}
 			break;
@@ -170,8 +170,8 @@ bool PanelBorderLayout::focusChild(FocusTarget location)
 			{
 				if (right_) toFocus = right_;
 				else if (content_) toFocus = content_;
-				else if (bottom_) toFocus = bottom_;
 				else if (top_) toFocus = top_;
+				else if (bottom_) toFocus = bottom_;
 				else toFocus = left_;
 			}
 			break;
@@ -201,8 +201,7 @@ bool PanelBorderLayout::focusChild(FocusTarget location)
 			break;
 	}
 
-	Item::focusChild(toFocus);
-	return toFocus;
+	return Item::focusChild(toFocus);
 }
 
 }

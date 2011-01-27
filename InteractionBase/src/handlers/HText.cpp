@@ -17,6 +17,7 @@
 
 #include <QtGui/QClipboard>
 #include <QtGui/QApplication>
+
 //**********************************************************************************************************************
 #define TEXTRENDERER_GET(method)		(																												\
 	( dynamic_cast<Visualization::TextRenderer<Visualization::Item>*> (target)	) ?													\
@@ -71,6 +72,8 @@ void HText::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 				case Qt::Key_C:
 					{
 						QString text = TEXTRENDERER_GET(getSelectedText);
+						if (text.isEmpty() && !TEXTRENDERER_GET(isEditable) && target->isSelected()) text = TEXTRENDERER_GET(getText);
+
 						if (!text.isEmpty()) QApplication::clipboard()->setText(text);
 						else GenericHandler::keyPressEvent(target, event);
 					}

@@ -146,19 +146,17 @@ bool Item::focusChild(FocusTarget)
 	return false;
 }
 
-void Item::focusChild(Item* child, FocusTarget location)
+bool Item::focusChild(Item* child)
 {
 	if (child)
 	{
-		if (child->flags() & QGraphicsItem::ItemIsFocusable)
-		{
-			child->scene()->clearSelection();
-			child->setSelected(true);
-			child->setFocus();
-			child->setUpdateNeeded();
-		}
-		else child->focusChild(location);
+		child->scene()->clearSelection();
+		if (child->flags() & QGraphicsItem::ItemIsSelectable) child->setSelected(true);
+		child->setFocus();
+		child->setUpdateNeeded();
+		return true;
 	}
+	else return false;
 }
 
 void Item::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)

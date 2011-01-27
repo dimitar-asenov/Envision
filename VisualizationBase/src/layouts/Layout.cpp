@@ -15,7 +15,7 @@ Layout::Layout(Item* parent, const LayoutStyle* style) :
 	Item(parent, style)
 {
 	setFlag(QGraphicsItem::ItemIsSelectable, false);
-	setFlag(QGraphicsItem::ItemIsFocusable, false);
+	//setFlag(QGraphicsItem::ItemIsFocusable, false);
 	setAcceptedMouseButtons(0);
 }
 

@@ -23,7 +23,7 @@ class VISUALIZATIONBASE_API PanelBorderLayout: public Layout
 	private:
 		PanelLayout* top_;
 		PanelLayout* left_;
-		PanelLayout* top_;
+		PanelLayout* bottom_;
 		PanelLayout* right_;
 		Item* content_;
 

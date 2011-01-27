@@ -170,7 +170,7 @@ template<class T> void TextRenderer<T>::paint(QPainter *painter, const QStyleOpt
 		}
 
 		// Draw caret
-		if ( selectionXBegin == selectionXEnd || numSelected == 0)
+		if ( (selectionXBegin == selectionXEnd && editable) || numSelected == 0)
 		{
 			painter->setPen(style()->caretPen());
 			painter->drawLine(xOffset + caretX, 1, xOffset + caretX, this->height() - 1);
