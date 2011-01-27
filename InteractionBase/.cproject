@@ -117,6 +117,11 @@
 				<pathentry kind="src" path=""/>
 				<pathentry kind="out" path=""/>
 				<pathentry kind="prj" path="/Core"/>
+				<pathentry kind="prj" path="/Logger"/>
+				<pathentry kind="prj" path="/SelfTest"/>
+				<pathentry kind="prj" path="/ModelBase"/>
+				<pathentry kind="prj" path="/VisualizationBase"/>
+				<pathentry kind="prj" path="/FilePersistence"/>
 			</storageModule>
 		</cconfiguration>
 	</storageModule>
