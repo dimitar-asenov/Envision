@@ -11,10 +11,11 @@
 #include "oomodel_api.h"
 
 #include "common/attributeMacros.h"
+#include "Module.h"
 
 #include "ModelBase/headers/nodes/Extendable/ExtendableNode.h"
 #include "ModelBase/headers/nodes/Text.h"
-#include "ModelBase/headers/nodes/List.h"
+#include "ModelBase/headers/nodes/TypedList.h"
 #include "ModelBase/headers/nodes/nodeMacros.h"
 
 namespace OOModel {
@@ -24,8 +25,8 @@ class OOMODEL_API Project : public Model::ExtendableNode
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Project)
 
 	ATTRIBUTE_OOP_NAME
-	ATTRIBUTE(Model::List, projects)
-	ATTRIBUTE(Model::List, modules)
+	ATTRIBUTE(Model::TypedList<Project>, projects)
+	ATTRIBUTE(Model::TypedList<Module>, modules)
 
 	public:
 		virtual QString referenceName() const;

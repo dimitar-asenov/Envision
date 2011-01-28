@@ -23,6 +23,11 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	// Initialize common nodes
 	Visibility::registerNodeType();
 
+	// Initialize TypedList instantiations
+	Model::TypedList<Project>::registerNodeType();
+	Model::TypedList<Module>::registerNodeType();
+	Model::TypedList<Class>::registerNodeType();
+
 	Project::init();
 	Module::init();
 	Class::init();

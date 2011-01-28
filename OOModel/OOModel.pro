@@ -33,7 +33,8 @@ HEADERS += headers/OOModelException.h \
     headers/Module.h \
     headers/oomodel_api.h \
     src/oomodel.h
-SOURCES += src/common/Visibility.cpp \
+SOURCES += src/TypedListInstantiations.cpp \
+    src/common/Visibility.cpp \
     src/OOModelException.cpp \
     src/Class.cpp \
     src/Project.cpp \
