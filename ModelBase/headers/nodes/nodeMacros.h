@@ -304,7 +304,7 @@ private:																																					\
 		static ::Model::ExtendableIndex name##Index;																							\
 public:																																					\
 		type* name##Node() { return static_cast<type*> (get(name##Index)); }															\
-		valueType name() { return (static_cast<type*> (get(name##Index)))->get(); }												\
+		valueType name() const { return (static_cast<type*> (get(name##Index)))->get(); }										\
 		void setMethodName(const valueType& val) { (static_cast<type*> (get(name##Index)))->set(val); }						\
 private:																																					\
 
@@ -336,7 +336,7 @@ private:																																					\
 		static ::Model::ExtendableIndex name##Index;																							\
 public:																																					\
 		type* name##Node() { return static_cast<type*> (get(name##Index)); }															\
-		returnValueType name() { return (static_cast<type*> (get(name##Index)))->get(); }										\
+		returnValueType name() const { return (static_cast<type*> (get(name##Index)))->get(); }								\
 		void setMethodName(const valueType& val) { (static_cast<type*> (get(name##Index)))->set(val); }						\
 private:																																					\
 

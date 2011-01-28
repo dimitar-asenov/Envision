@@ -71,7 +71,7 @@ ExtendableIndex ExtendableNode::registerNewAttribute(AttributeChain& metaData, c
 }
 
 
-Node* ExtendableNode::get(const ExtendableIndex &attributeIndex)
+Node* ExtendableNode::get(const ExtendableIndex &attributeIndex) const
 {
 	return subnodes[attributeIndex.level()][attributeIndex.index()];
 }

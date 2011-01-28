@@ -41,7 +41,7 @@ class MODELBASE_API ExtendableNode: public Node
 		ExtendableNode(Node *parent, NodeIdType id, PersistentStore &store, bool partialHint, AttributeChain& metaData);
 		virtual ~ExtendableNode();
 
-		Node* get(const ExtendableIndex &attributeIndex);
+		Node* get(const ExtendableIndex &attributeIndex) const;
 		Node* get(const QString &attributeName) const;
 
 		virtual Node* child(NodeIdType id);
