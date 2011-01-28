@@ -275,7 +275,7 @@ void className::init()																																\
 private:																																					\
 		static ::Model::ExtendableIndex name##Index;																							\
 public:																																					\
-		type* name() { return static_cast<type*> (get(name##Index)); }																	\
+		type* name() { return static_cast< type* > (get(name##Index)); }																\
 private:																																					\
 
 /*********************************************************************************************************************/
