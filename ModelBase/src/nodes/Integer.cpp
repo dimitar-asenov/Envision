@@ -8,6 +8,7 @@
 #include "nodes/Integer.h"
 #include "commands/FieldSet.h"
 #include "ModelException.h"
+#include "nodes/TypedListDefinition.h"
 
 namespace Model {
 
@@ -42,5 +43,6 @@ void Integer::load(PersistentStore &store)
 	set(store.loadIntValue());
 }
 
+template class TypedList<Integer>;
 }
 

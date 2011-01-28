@@ -9,6 +9,7 @@
 #include "commands/FieldSet.h"
 #include "Model.h"
 #include "ModelException.h"
+#include "nodes/TypedListDefinition.h"
 
 #include <QtCore/QStringList>
 
@@ -124,5 +125,7 @@ QString Reference::getLocalPathToTarget(Node *target)
 
 	return completePath;
 }
+
+template class TypedList<Reference>;
 
 }
