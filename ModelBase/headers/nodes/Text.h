@@ -37,6 +37,9 @@ class MODELBASE_API Text: public Node
 		virtual void load(PersistentStore &store);
 };
 
+inline const QString& Text::get() const { return text; }
+inline Text::operator const QString&() const { return text; }
+
 }
 
 #endif /* MODEL_TEXT_H_ */

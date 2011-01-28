@@ -24,16 +24,6 @@ Text::Text(Node *parent, NodeIdType id, PersistentStore &store, bool) :
 	text = store.loadStringValue();
 }
 
-const QString& Text::get() const
-{
-	return text;
-}
-
-Text::operator const QString&() const
-{
-	return text;
-}
-
 void Text::set(const QString &newText)
 {
 	execute(getSetCommand(newText));

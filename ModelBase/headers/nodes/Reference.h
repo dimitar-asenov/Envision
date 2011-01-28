@@ -38,8 +38,9 @@ class MODELBASE_API Reference: public Node
 		// These are the default implementation of the symbolic lookup functions
 		Node* getTargetFromLocalPath(const QString &path);
 		QString getLocalPathToTarget(Node* target);
-
 };
+
+inline Node* Reference::get() { return getTargetFromSymbolicPath(path); }
 
 }
 

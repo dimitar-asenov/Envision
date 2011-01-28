@@ -29,6 +29,8 @@ class MODELBASE_API Integer: public Node
 		virtual void load(PersistentStore &store);
 };
 
+inline int Integer::get() const { return integer; }
+
 }
 
 #endif /* INTEGER_H_ */

@@ -27,11 +27,6 @@ Reference::Reference(Node *parent, NodeIdType id, PersistentStore &store, bool) 
 	path = store.loadStringValue();
 }
 
-Node* Reference::get()
-{
-	return getTargetFromSymbolicPath(path);
-}
-
 void Reference::set(Node* target)
 {
 	set( getSymbolicPathToTarget(target) );

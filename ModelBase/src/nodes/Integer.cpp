@@ -24,11 +24,6 @@ Integer::Integer(Node *parent, NodeIdType id, PersistentStore &store, bool) :
 	integer = store.loadIntValue();
 }
 
-int Integer::get() const
-{
-	return integer;
-}
-
 void Integer::set(const int& value)
 {
 	execute(new FieldSet<int> (this, integer, value));
