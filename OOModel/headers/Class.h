@@ -11,6 +11,7 @@
 #include "oomodel_api.h"
 
 #include "common/attributeMacros.h"
+#include "common/Visibility.h"
 
 #include "ModelBase/headers/nodes/Extendable/ExtendableNode.h"
 #include "ModelBase/headers/nodes/Text.h"
@@ -26,6 +27,7 @@ class OOMODEL_API Class : public Model::ExtendableNode
 	ATTRIBUTE_OOP_NAME
 	ATTRIBUTE(Model::List, fields)
 	ATTRIBUTE(Model::List, methods)
+	ATTRIBUTE_OOP_VISIBILITY
 
 	public:
 		static void init();

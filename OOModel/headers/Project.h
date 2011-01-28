@@ -10,7 +10,10 @@
 
 #include "oomodel_api.h"
 
+#include "common/attributeMacros.h"
+
 #include "ModelBase/headers/nodes/Extendable/ExtendableNode.h"
+#include "ModelBase/headers/nodes/Text.h"
 #include "ModelBase/headers/nodes/List.h"
 #include "ModelBase/headers/nodes/nodeMacros.h"
 
@@ -20,19 +23,13 @@ class OOMODEL_API Project : public Model::ExtendableNode
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Project)
 
-	private:
-		static Model::ExtendableIndex projectsIndex;
-		static Model::ExtendableIndex modulesIndex;
+	ATTRIBUTE_OOP_NAME
+	ATTRIBUTE(Model::List, projects)
+	ATTRIBUTE(Model::List, modules)
 
 	public:
 		static void init();
-
-		Model::List* projects();
-		Model::List* modules();
 };
-
-inline Model::List* Project::projects() { return static_cast<Model::List*> (get(projectsIndex)); }
-inline Model::List* Project::modules() { return static_cast<Model::List*> (get(modulesIndex)); }
 
 }
 

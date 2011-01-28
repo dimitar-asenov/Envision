@@ -7,6 +7,9 @@
 
 #include "oomodel.h"
 #include "SelfTest/headers/SelfTestSuite.h"
+
+#include "common/Visibility.h"
+
 #include "Project.h"
 #include "Module.h"
 #include "Class.h"
@@ -17,6 +20,9 @@ namespace OOModel {
 
 bool OOModel::initialize(Envision::EnvisionManager&)
 {
+	// Initialize common nodes
+	Visibility::registerNodeType();
+
 	Project::init();
 	Module::init();
 	Class::init();
