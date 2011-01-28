@@ -1,0 +1,8 @@
+<!DOCTYPE EnvisionFilePersistence>
+<model nextid="4">
+ <TypedListOfText id="0" name="typedList" partial="0">
+  <Text id="1" name="ModelBaseListRefName" partial="0">S_TypedList</Text>
+  <Text id="2" name="0" partial="0">S_one</Text>
+  <Text id="3" name="1" partial="0">S_two</Text>
+ </TypedListOfText>
+</model>

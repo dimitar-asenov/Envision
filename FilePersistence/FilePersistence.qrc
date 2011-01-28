@@ -6,5 +6,6 @@
         <file>test/persisted/units/units</file>
         <file>test/persisted/partial/partial</file>
         <file>test/persisted/partialResave/partialResave</file>
+        <file>test/persisted/typedList/typedList</file>
     </qresource>
 </RCC>
