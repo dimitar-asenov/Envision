@@ -11,8 +11,8 @@
 #ifndef NODEMACROS_H_
 #define NODEMACROS_H_
 
-#include "nodes/Extendable/Attribute.h"
-#include "nodes/Extendable/ExtendableIndex.h"
+#include "ModelBase/headers/nodes/Extendable/Attribute.h"
+#include "ModelBase/headers/nodes/Extendable/ExtendableIndex.h"
 
 #include <QtCore/QString>
 #include <QtCore/QList>
