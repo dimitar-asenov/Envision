@@ -25,12 +25,11 @@ TypedList<T>::TypedList(::Model::Node *parent, ::Model::NodeIdType id, ::Model::
 }
 
 template<class T> int TypedList<T>::typeId_ = -1; /* This must be set to the result of Node::registerNodeType */
-template<class T> const QString TypedList<T>::typeName_ = QString("TypedListOf") + T::typeNameStatic();
 
 template<class T>
 const QString& TypedList<T>::typeName() const
 {
-	return typeName_;
+	return typeNameStatic();
 }
 
 template<class T>
@@ -48,6 +47,7 @@ int TypedList<T>::typeIdStatic()
 template<class T>
 const QString& TypedList<T>::typeNameStatic()
 {
+	static QString typeName_(QString("TypedListOf") + T::typeNameStatic());
 	return typeName_;
 }
 

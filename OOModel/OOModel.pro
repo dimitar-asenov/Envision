@@ -25,7 +25,10 @@ pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
-HEADERS += headers/OOModelException.h \
+HEADERS += headers/Statement.h \
+    headers/MethodItem.h \
+    headers/Method.h \
+    headers/OOModelException.h \
     headers/common/Visibility.h \
     headers/common/attributeMacros.h \
     headers/Project.h \
@@ -33,7 +36,10 @@ HEADERS += headers/OOModelException.h \
     headers/Module.h \
     headers/oomodel_api.h \
     src/oomodel.h
-SOURCES += src/TypedListInstantiations.cpp \
+SOURCES += src/Statement.cpp \
+    src/MethodItem.cpp \
+    src/Method.cpp \
+    src/TypedListInstantiations.cpp \
     src/common/Visibility.cpp \
     src/OOModelException.cpp \
     src/Class.cpp \

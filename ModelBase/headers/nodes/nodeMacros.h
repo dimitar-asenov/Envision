@@ -39,7 +39,6 @@
 #define NODE_DECLARE_STANDARD_METHODS(className)																							\
 	private:																																				\
 		static int typeId_;																															\
-		static const QString typeName_;																											\
 																																							\
 	public:																																				\
 		className(::Model::Node* parent, ::Model::Model* model);																			\
@@ -74,7 +73,6 @@
 #define EXTENDABLENODE_DECLARE_STANDARD_METHODS(className)																				\
 	private:																																				\
 		static int typeId_;																															\
-		static const QString typeName_;																											\
 																																							\
 	public:																																				\
 		className(::Model::Node* parent, ::Model::Model* model);																			\
@@ -159,11 +157,10 @@
  */
 #define NODE_DEFINE_TYPE_REGISTRATION_METHODS(className)																					\
 int className::typeId_ = -1; /* This must be set to the result of Node::registerNodeType */									\
-const QString className::typeName_ = QString(#className);																				\
 																																							\
 const QString& className::typeName() const																									\
 {																																							\
-	return typeName_;																																	\
+	return typeNameStatic();																														\
 }																																							\
 																																							\
 int className::typeId()	const																														\
@@ -176,6 +173,7 @@ int className::typeIdStatic()																														\
 }																																							\
 const QString& className::typeNameStatic()																									\
 {																																							\
+	static QString typeName_(#className);																										\
 	return typeName_;																																	\
 }																																							\
 																																							\
@@ -197,11 +195,10 @@ void className::registerNodeType()																												\
  */
 #define EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(className, parentName)													\
 int className::typeId_ = -1; /* This must be set to the result of Node::registerNodeType */									\
-const QString className::typeName_ = QString(#className);																				\
 																																							\
 const QString& className::typeName() const																									\
 {																																							\
-	return typeName_;																																	\
+	return typeNameStatic();																														\
 }																																							\
 																																							\
 int className::typeId()	const																														\
@@ -214,6 +211,7 @@ int className::typeIdStatic()																														\
 }																																							\
 const QString& className::typeNameStatic()																									\
 {																																							\
+	static QString typeName_(#className);																										\
 	return typeName_;																																	\
 }																																							\
 																																							\

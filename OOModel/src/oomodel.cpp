@@ -13,6 +13,9 @@
 #include "Project.h"
 #include "Module.h"
 #include "Class.h"
+#include "Method.h"
+#include "MethodItem.h"
+#include "Statement.h"
 
 Q_EXPORT_PLUGIN2( oomodel, OOModel::OOModel )
 
@@ -27,10 +30,16 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	Model::TypedList<Project>::registerNodeType();
 	Model::TypedList<Module>::registerNodeType();
 	Model::TypedList<Class>::registerNodeType();
+	Model::TypedList<Method>::registerNodeType();
+	Model::TypedList<MethodItem>::registerNodeType();
+	Model::TypedList<Statement>::registerNodeType();
 
 	Project::init();
 	Module::init();
 	Class::init();
+	Method::init();
+	MethodItem::init();
+	Statement::init();
 
 	return true;
 }
