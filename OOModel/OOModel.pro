@@ -25,15 +25,13 @@ pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
-HEADERS += headers/common/Name.h \
-    headers/common/NameBase.h \
+HEADERS += headers/common/attributeMacros.h \
     headers/Project.h \
     headers/Class.h \
     headers/Module.h \
     headers/oomodel_api.h \
     src/oomodel.h
-SOURCES += src/common/NameBase.cpp \
-    src/Class.cpp \
+SOURCES += src/Class.cpp \
     src/Project.cpp \
     src/Module.cpp \
     src/oomodel.cpp \

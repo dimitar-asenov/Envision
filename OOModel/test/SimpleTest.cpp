@@ -20,11 +20,11 @@ TEST(OOModel, SimpleTest)
 	Class* root = dynamic_cast<Class*> (model.createRoot("Class"));
 
 	CHECK_CONDITION(root != NULL);
-	CHECK_CONDITION(root->name()->get().isEmpty());
+	CHECK_CONDITION(root->name().isEmpty());
 	model.beginModification(root, "setName");
-	root->name()->set("Test");
+	root->setName("Test");
 	model.endModification();
-	CHECK_STR_EQUAL("Test", root->name()->get());
+	CHECK_STR_EQUAL("Test", root->name());
 }
 
 }
