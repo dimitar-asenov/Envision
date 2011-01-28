@@ -55,6 +55,7 @@ List::~List()
 {
 	for (int i = 0; i < nodes.size(); ++i)
 		SAFE_DELETE( nodes[i] );
+	SAFE_DELETE(referenceName_);
 }
 
 void List::loadSubNodes(QList<LoadedNode>& nodeList)

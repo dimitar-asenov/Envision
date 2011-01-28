@@ -25,7 +25,9 @@ pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
-HEADERS += headers/commands/ListPut.h \
+HEADERS += headers/nodes/TypedListDefinition.h \
+    headers/nodes/TypedList.h \
+    headers/commands/ListPut.h \
     headers/commands/ExtendedNodeChild.h \
     headers/persistence/ClipboardStore.h \
     headers/persistence/PersistentStore.h \

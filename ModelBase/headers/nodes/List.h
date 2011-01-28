@@ -8,6 +8,8 @@
 #ifndef LIST_H_
 #define LIST_H_
 
+#include "../modelbase_api.h"
+
 #include "Node.h"
 #include "nodeMacros.h"
 #include "../Model.h"
@@ -21,7 +23,7 @@ namespace Model {
 
 class Text;
 
-class List: public Node
+class MODELBASE_API List: public Node
 {
 	NODE_DECLARE_STANDARD_METHODS(List)
 
