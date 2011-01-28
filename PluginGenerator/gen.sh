@@ -64,8 +64,10 @@ sed -i -e "s/DATE/$DATE/g" $FILE_LIST
 
 echo "Renaming files..."
 mv $PLUGIN_DIR/headers/plugin_api.h $PLUGIN_DIR/headers/${PLUGIN_NAME_LOWER}_api.h
+mv $PLUGIN_DIR/headers/PluginException.h $PLUGIN_DIR/headers/${PLUGIN_NAME}Exception.h
 mv $PLUGIN_DIR/src/plugin.h $PLUGIN_DIR/src/${PLUGIN_NAME_LOWER}.h
 mv $PLUGIN_DIR/src/plugin.cpp $PLUGIN_DIR/src/${PLUGIN_NAME_LOWER}.cpp
+mv $PLUGIN_DIR/src/PluginException.cpp $PLUGIN_DIR/src/${PLUGIN_NAME}Exception.cpp
 mv $PLUGIN_DIR/Plugin.launch $PLUGIN_DIR/${PLUGIN_NAME}.launch
 mv $PLUGIN_DIR/Plugin.pro $PLUGIN_DIR/${PLUGIN_NAME}.pro
 mv $PLUGIN_DIR/pluginmeta.plugin $PLUGIN_DIR/${PLUGIN_NAME_LOWER}.plugin

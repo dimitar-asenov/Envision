@@ -22,7 +22,9 @@ target.path = $$PLUGINS_DIR
 pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target pluginmeta
-HEADERS += headers/PLUGINNAME_LOWERCASE_api.h \
+HEADERS += headers/PLUGINNAMEException.h \
+	headers/PLUGINNAME_LOWERCASE_api.h \
     src/PLUGINNAME_LOWERCASE.h
-SOURCES += src/PLUGINNAME_LOWERCASE.cpp \
+SOURCES += src/PLUGINNAMEException.cpp \
+	src/PLUGINNAME_LOWERCASE.cpp \
 	test/SimpleTest.cpp
