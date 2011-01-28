@@ -29,7 +29,7 @@ int Integer::get() const
 	return integer;
 }
 
-void Integer::set(int value)
+void Integer::set(const int& value)
 {
 	execute(new FieldSet<int> (this, integer, value));
 }
