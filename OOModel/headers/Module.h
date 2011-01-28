@@ -25,6 +25,9 @@ class OOMODEL_API Module : public Model::ExtendableNode
 
 	ATTRIBUTE_OOP_NAME
 	ATTRIBUTE(Model::List, classes);
+
+	public:
+		virtual QString referenceName() const;
 };
 
 }

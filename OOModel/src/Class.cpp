@@ -17,4 +17,10 @@ REGISTER_ATTRIBUTE(Class, fields, List, false, false, true)
 REGISTER_ATTRIBUTE(Class, methods, List, false, false, true)
 REGISTER_ATTRIBUTE(Class, visibility, Visibility, false, false, true)
 
+
+QString Class::referenceName() const
+{
+	return name();
+}
+
 }

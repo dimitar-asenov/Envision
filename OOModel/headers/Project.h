@@ -26,6 +26,9 @@ class OOMODEL_API Project : public Model::ExtendableNode
 	ATTRIBUTE_OOP_NAME
 	ATTRIBUTE(Model::List, projects)
 	ATTRIBUTE(Model::List, modules)
+
+	public:
+		virtual QString referenceName() const;
 };
 
 }

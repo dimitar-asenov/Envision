@@ -15,4 +15,9 @@ EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(Module, Model::ExtendableNode)
 REGISTER_ATTRIBUTE(Module, name, Text, false, false, true)
 REGISTER_ATTRIBUTE(Module, classes, List, false, false, true)
 
+QString Module::referenceName() const
+{
+	return name();
+}
+
 }
