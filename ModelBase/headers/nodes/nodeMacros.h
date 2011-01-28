@@ -95,7 +95,7 @@
 		static void registerNodeType();																											\
 																																							\
 	private:																																				\
-		static QList<QPair< ::Model::ExtendableIndex&, ::Model::Attribute> > attributesToRegisterAtInitialization_;		\
+		static QList<QPair< ::Model::ExtendableIndex&, ::Model::Attribute> >& attributesToRegisterAtInitialization_();	\
 		static ::Model::ExtendableIndex addAttributeToInitialRegistrationList_														\
 				(::Model::ExtendableIndex& index, const QString &attributeName, const QString &attributeType, 				\
 					bool canBePartiallyLoaded, bool isOptional, bool isPersistent);													\
@@ -227,7 +227,11 @@ void className::registerNodeType()																												\
 	return descriptions;																																\
 }																																							\
 																																							\
-QList<QPair< ::Model::ExtendableIndex&, ::Model::Attribute> > className::attributesToRegisterAtInitialization_;		\
+QList<QPair< ::Model::ExtendableIndex&, ::Model::Attribute> >& className::attributesToRegisterAtInitialization_()		\
+{																																							\
+	static QList<QPair< ::Model::ExtendableIndex&, ::Model::Attribute> > a;															\
+	return a;																																			\
+}																																							\
 																																							\
 ::Model::ExtendableIndex className::registerNewAttribute(const QString &attributeName,											\
 	const QString &attributeType, bool canBePartiallyLoaded, bool isOptional, bool isPersistent)								\
@@ -245,7 +249,7 @@ QList<QPair< ::Model::ExtendableIndex&, ::Model::Attribute> > className::attribu
 	const QString &attributeName, const QString &attributeType, bool canBePartiallyLoaded, bool isOptional,				\
 			 bool isPersistent)																														\
 {																																							\
-	attributesToRegisterAtInitialization_.append(QPair< ::Model::ExtendableIndex&, ::Model::Attribute>(index,			\
+	attributesToRegisterAtInitialization_().append(QPair< ::Model::ExtendableIndex&, ::Model::Attribute>(index,			\
 			::Model::Attribute(attributeName, attributeType, isOptional, canBePartiallyLoaded, isPersistent)));			\
 	return ::Model::ExtendableIndex();																											\
 }																																							\
@@ -253,9 +257,9 @@ QList<QPair< ::Model::ExtendableIndex&, ::Model::Attribute> > className::attribu
 void className::init()																																\
 {																																							\
 	registerNodeType();																																\
-	for (int i = 0; i<attributesToRegisterAtInitialization_.size(); ++i)																\
-		attributesToRegisterAtInitialization_.at(i).first =																				\
-				registerNewAttribute(attributesToRegisterAtInitialization_.at(i).second);											\
+	for (int i = 0; i<attributesToRegisterAtInitialization_().size(); ++i)															\
+		attributesToRegisterAtInitialization_().at(i).first =																				\
+				registerNewAttribute(attributesToRegisterAtInitialization_().at(i).second);										\
 }
 /*********************************************************************************************************************/
 
