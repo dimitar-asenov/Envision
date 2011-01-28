@@ -12,11 +12,6 @@ namespace TestNodes {
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(BinaryNodePersistenceUnit, BinaryNode)
 EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(BinaryNodePersistenceUnit, BinaryNode)
 
-void BinaryNodePersistenceUnit::init()
-{
-	registerNodeType();
-}
-
 bool BinaryNodePersistenceUnit::isNewPersistenceUnit() const
 {
 	return true;

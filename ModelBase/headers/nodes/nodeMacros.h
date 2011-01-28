@@ -11,6 +11,13 @@
 #ifndef NODEMACROS_H_
 #define NODEMACROS_H_
 
+#include "nodes/Extendable/Attribute.h"
+#include "nodes/Extendable/ExtendableIndex.h"
+
+#include <QtCore/QString>
+#include <QtCore/QList>
+#include <QtCore/QPair>
+
 /**
  * Declares standard constructors and standard static methods for registering the constructors of a class inheriting
  * Node.
@@ -75,12 +82,13 @@
 		className(::Model::Node* parent, ::Model::Model* model, ::Model::AttributeChain& metaData);							\
 		className(::Model::Node *parent, ::Model::NodeIdType id, ::Model::PersistentStore &store, bool partialLoadHint, ::Model::AttributeChain& metaData); \
 																																							\
+		static void init();																															\
+																																							\
 		static ::Model::AttributeChain& getMetaData();																						\
 		static ::Model::ExtendableIndex registerNewAttribute(const QString &attributeName,										\
-				const QString &attributeType, bool canBePartiallyLoaded, bool isOptional, bool isPersistent)					\
-				{	return ExtendableNode::registerNewAttribute(getMetaData(), attributeName, attributeType, 					\
-					canBePartiallyLoaded, isOptional, isPersistent );																		\
-				}																																			\
+				const QString &attributeType, bool canBePartiallyLoaded, bool isOptional, bool isPersistent);				\
+																																							\
+		static ::Model::ExtendableIndex registerNewAttribute(const ::Model::Attribute& attribute);							\
 																																							\
 		virtual const QString& typeName() const;																								\
 		virtual int typeId() const;																												\
@@ -88,7 +96,12 @@
 		static int typeIdStatic();																													\
 		static void registerNodeType();																											\
 																																							\
-	private:
+	private:																																				\
+		static QList<QPair< ::Model::ExtendableIndex&, ::Model::Attribute> > attributesToRegisterAtInitialization_;		\
+		static ::Model::ExtendableIndex addAttributeToInitialRegistrationList_														\
+				(::Model::ExtendableIndex& index, const QString &attributeName, const QString &attributeType, 				\
+					bool canBePartiallyLoaded, bool isOptional, bool isPersistent);													\
+
 /*********************************************************************************************************************/
 
 /**
@@ -215,7 +228,37 @@ void className::registerNodeType()																												\
 	static ::Model::AttributeChain descriptions;																								\
 	return descriptions;																																\
 }																																							\
-
+																																							\
+QList<QPair< ::Model::ExtendableIndex&, ::Model::Attribute> > className::attributesToRegisterAtInitialization_;		\
+																																							\
+::Model::ExtendableIndex className::registerNewAttribute(const QString &attributeName,											\
+	const QString &attributeType, bool canBePartiallyLoaded, bool isOptional, bool isPersistent)								\
+{																																							\
+	return ExtendableNode::registerNewAttribute(getMetaData(), attributeName, attributeType, 									\
+					canBePartiallyLoaded, isOptional, isPersistent );																		\
+}																																							\
+																																							\
+::Model::ExtendableIndex className::registerNewAttribute(const ::Model::Attribute& attribute)								\
+{																																							\
+	return ExtendableNode::registerNewAttribute(getMetaData(), attribute);															\
+}																																							\
+																																							\
+::Model::ExtendableIndex className::addAttributeToInitialRegistrationList_ (::Model::ExtendableIndex& index,			\
+	const QString &attributeName, const QString &attributeType, bool canBePartiallyLoaded, bool isOptional,				\
+			 bool isPersistent)																														\
+{																																							\
+	attributesToRegisterAtInitialization_.append(QPair< ::Model::ExtendableIndex&, ::Model::Attribute>(index,			\
+			::Model::Attribute(attributeName, attributeType, isOptional, canBePartiallyLoaded, isPersistent)));			\
+	return ::Model::ExtendableIndex();																											\
+}																																							\
+																																							\
+void className::init()																																\
+{																																							\
+	registerNodeType();																																\
+	for (int i = 0; i<attributesToRegisterAtInitialization_.size(); ++i)																\
+		attributesToRegisterAtInitialization_.at(i).first =																				\
+				registerNewAttribute(attributesToRegisterAtInitialization_.at(i).second);											\
+}
 /*********************************************************************************************************************/
 
 /**
@@ -298,5 +341,25 @@ public:																																					\
 private:																																					\
 
 /*********************************************************************************************************************/
+
+ /**
+  * Registers an attribute that was previously declared using an ATTRIBUTE macro or specified manually.
+  *
+  * @param className
+  * 				The name of the class where this attribute was declared
+  * @param attributeName
+  * 				The name of the attribute
+  * @param attributeType
+  * 				The type of the attribute. This should only include the final type, without any namespace specifiers
+  * @param partial
+  * 				Whether this attribute should be partially loaded when reading from a persistent store
+  * @param optional
+  * 				Whether this attribute is optional
+  * @param persistent
+  * 				Whether this attribute should be persisted when saving the object to a persistent store.
+  */
+ #define REGISTER_ATTRIBUTE(className, attributeName, attributeType, partial, optional, persistent)						\
+::Model::ExtendableIndex className::attributeName##Index = addAttributeToInitialRegistrationList_(							\
+		attributeName##Index, #attributeName, #attributeType, partial, optional, persistent);
 
 #endif /* NODEMACROS_H_ */

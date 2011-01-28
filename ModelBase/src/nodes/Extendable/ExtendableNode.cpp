@@ -58,12 +58,18 @@ AttributeChain& ExtendableNode::getMetaData()
 
 ExtendableIndex ExtendableNode::registerNewAttribute(AttributeChain& metaData, const QString &attributeName, const QString &attributeType, bool canBePartiallyLoaded, bool isOptional, bool isPersistent)
 {
-	if ( metaData.hasAttribute(attributeName) ) throw ModelException("Trying to register new attribute " + attributeName + " but this name already exists");
+	return registerNewAttribute(metaData, Attribute(attributeName, attributeType, isOptional, canBePartiallyLoaded, isPersistent));
+}
 
-	metaData.append(Attribute(attributeName, attributeType, isOptional, canBePartiallyLoaded, isPersistent));
+ExtendableIndex ExtendableNode::registerNewAttribute(AttributeChain& metaData, const Attribute& attribute)
+{
+	if ( metaData.hasAttribute(attribute.name()) ) throw ModelException("Trying to register new attribute " + attribute.name() + " but this name already exists");
+
+	metaData.append(attribute);
 
 	return ExtendableIndex(metaData.numLevels() - 1, metaData.size() - 1);
 }
+
 
 Node* ExtendableNode::get(const ExtendableIndex &attributeIndex)
 {

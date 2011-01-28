@@ -34,6 +34,7 @@ class MODELBASE_API ExtendableNode: public Node
 		static ExtendableIndex registerNewAttribute(AttributeChain& metaData, const QString &attributeName,
 				const QString &attributeType, bool canBePartiallyLoaded, bool isOptional, bool isPersistent);
 
+		static ExtendableIndex registerNewAttribute(AttributeChain& metaData, const Attribute& attribute);
 	public:
 
 		ExtendableNode(Node *parent, Model* model, AttributeChain& metaData);

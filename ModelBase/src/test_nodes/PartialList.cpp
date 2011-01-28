@@ -12,13 +12,6 @@ namespace TestNodes {
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(PartialList, Model::ExtendableNode)
 EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(PartialList, Model::ExtendableNode)
 
-Model::ExtendableIndex PartialList::listIndex = Model::ExtendableIndex();
-
-void PartialList::init()
-{
-	registerNodeType();
-	listIndex = registerNewAttribute("list", "List", true, false, true);
-}
-
+REGISTER_ATTRIBUTE(PartialList, list, List, true, false, true)
 
 }

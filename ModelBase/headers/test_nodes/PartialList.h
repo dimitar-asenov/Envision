@@ -19,17 +19,8 @@ namespace TestNodes {
 class MODELBASE_API PartialList: public Model::ExtendableNode
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(PartialList)
-
-	private:
-		static Model::ExtendableIndex listIndex;
-
-	public:
-		static void init();
-
-		Model::List* list();
+	ATTRIBUTE(Model::List, list)
 };
-
-inline Model::List* PartialList::list() { return static_cast<Model::List*> (get(listIndex)); }
 
 }
 

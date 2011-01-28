@@ -19,8 +19,6 @@ class MODELBASE_API BinaryNodePersistenceUnit: public BinaryNode
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(BinaryNodePersistenceUnit)
 
 	public:
-		static void init();
-
 		virtual bool isNewPersistenceUnit() const;
 };
 

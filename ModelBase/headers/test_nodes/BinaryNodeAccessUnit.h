@@ -23,8 +23,6 @@ class MODELBASE_API BinaryNodeAccessUnit: public BinaryNode
 		Model::NodeReadWriteLock accessLock_;
 
 	public:
-		static void init();
-
 		virtual Model::NodeReadWriteLock* accessLock() const;
 };
 
