@@ -28,9 +28,6 @@ class OOMODEL_API Class : public Model::ExtendableNode
 	ATTRIBUTE(Model::List, fields)
 	ATTRIBUTE(Model::List, methods)
 	ATTRIBUTE_OOP_VISIBILITY
-
-	public:
-		static void init();
 };
 
 }
