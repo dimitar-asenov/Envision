@@ -283,6 +283,24 @@ private:																																					\
 /*********************************************************************************************************************/
 
 /**
+ * Declares a private attribute for a class inheriting from ExtendableNode or for a class providing an extension to an
+ * ExtendableNode.
+ *
+ * @param type
+ * 				The node type of the attribute
+ * @param name
+ * 				The name of the attribute. A method called name() will be created that can be used to access this
+ * 				attribute.
+ */
+#define PRIVATE_ATTRIBUTE(type, name)																											\
+private:																																					\
+		static ::Model::ExtendableIndex name##Index;																							\
+		type* name() { return static_cast< type* > (get(name##Index)); }																\
+private:																																					\
+
+/*********************************************************************************************************************/
+
+/**
  * Declares an attribute for a class inheriting from ExtendableNode or for a class providing an extension to an
  * ExtendableNode. The attribute must have a get() and a set() method.
  *
@@ -305,6 +323,33 @@ private:																																					\
 private:																																					\
 		static ::Model::ExtendableIndex name##Index;																							\
 public:																																					\
+		type* name##Node() { return static_cast<type*> (get(name##Index)); }															\
+		valueType name() const { return (static_cast<type*> (get(name##Index)))->get(); }										\
+		void setMethodName(const valueType& val) { (static_cast<type*> (get(name##Index)))->set(val); }						\
+private:																																					\
+
+/**
+ * Declares a private attribute for a class inheriting from ExtendableNode or for a class providing an extension to an
+ * ExtendableNode. The attribute must have a get() and a set() method.
+ *
+ * Defines three methods for this attribute:
+ * 	- A method to return the node itself
+ * 	- A method to return the simple value this node represents
+ * 	- A method to set the simple value of this node.
+ *
+ * @param type
+ * 				The node type of the attribute
+ * @param name
+ * 				The name of the attribute. A method called name() will be created that can be used to access this
+ * 				attribute.
+ * @param setMethodName
+ * 				The name of the set method that will set the value of this attibute.
+ * @param valueType
+ * 				The type of the simple value for this attribute.
+ */
+#define PRIVATE_ATTRIBUTE_VALUE(type, name, setMethodName, valueType)																\
+private:																																					\
+		static ::Model::ExtendableIndex name##Index;																							\
 		type* name##Node() { return static_cast<type*> (get(name##Index)); }															\
 		valueType name() const { return (static_cast<type*> (get(name##Index)))->get(); }										\
 		void setMethodName(const valueType& val) { (static_cast<type*> (get(name##Index)))->set(val); }						\

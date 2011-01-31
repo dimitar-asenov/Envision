@@ -32,8 +32,8 @@ class MODELBASE_API BinaryNode: public Model::ExtendableNode
 		void removeRightNode();
 
 };
-inline BinaryNode* BinaryNode::makeLeftNode(const QString &type) { return createOptional<BinaryNode>(leftIndex, type); }
-inline BinaryNode* BinaryNode::makeRightNode(const QString &type) { return createOptional<BinaryNode>(rightIndex, type); }
+inline BinaryNode* BinaryNode::makeLeftNode(const QString &type) { return set<BinaryNode>(leftIndex, type); }
+inline BinaryNode* BinaryNode::makeRightNode(const QString &type) { return set<BinaryNode>(rightIndex, type); }
 
 inline void BinaryNode::removeLeftNode() { removeOptional(leftIndex); }
 inline void BinaryNode::removeRightNode() { removeOptional(rightIndex); }

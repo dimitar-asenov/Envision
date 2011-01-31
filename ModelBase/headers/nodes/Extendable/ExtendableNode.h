@@ -50,7 +50,7 @@ class MODELBASE_API ExtendableNode: public Node
 		virtual QString childReferenceName(const Node* child) const;
 
 		template<class T>
-		T* createOptional(const ExtendableIndex &attributeIndex, const QString& type = QString());
+		T* set(const ExtendableIndex &attributeIndex, const QString& type = QString());
 
 		void removeOptional(const ExtendableIndex &attributeIndex);
 
@@ -65,31 +65,28 @@ class MODELBASE_API ExtendableNode: public Node
 };
 
 template<class T>
-T* ExtendableNode::createOptional(const ExtendableIndex &attributeIndex, const QString& type)
+T* ExtendableNode::set(const ExtendableIndex &attributeIndex, const QString& type)
 {
-	if ( !attributeIndex.isValid() ) throw ModelException("Trying to create an optional attribute with an invalid Index");
+	if ( !attributeIndex.isValid() ) throw ModelException("Trying to set an attribute with an invalid Index");
 
-	if ( meta.attribute(attributeIndex).optional() )
+	QString creationType = meta.attribute(attributeIndex).type();
+	if ( !type.isEmpty() ) creationType = type;
+
+	Node* nodeGeneric = Node::createNewNode(creationType, this);
+	T* nodeSpecific = dynamic_cast<T*> (nodeGeneric);
+
+	if ( nodeSpecific == NULL )
 	{
-		QString creationType = meta.attribute(attributeIndex).type();
-		if ( !type.isEmpty() ) creationType = type;
-
-		Node* nodeGeneric = Node::createNewNode(creationType, this);
-		T* nodeSpecific = dynamic_cast<T*> (nodeGeneric);
-
-		if ( nodeSpecific == NULL )
-		{
-			if (nodeGeneric) SAFE_DELETE(nodeGeneric);
-			throw ModelException("Could not create optional node with the type " + creationType
-					+ ". This type is not compatible with the expected node type of this attribute.");
-		}
-
-		execute(new ExtendedNodeChild(this, nodeSpecific, attributeIndex, &subnodes, true));
-
-		return nodeSpecific;
+		if (nodeGeneric) SAFE_DELETE(nodeGeneric);
+		throw ModelException("Could not create a node with the type " + creationType
+				+ ". This type is not compatible with the expected node type of this attribute.");
 	}
-	else
-		throw ModelException("Trying to create a non-optional attribute");
+
+	if (subnodes[attributeIndex.level()][attributeIndex.index()]) removeOptional(attributeIndex);
+
+	execute(new ExtendedNodeChild(this, nodeSpecific, attributeIndex, &subnodes, true));
+
+	return nodeSpecific;
 }
 
 }
