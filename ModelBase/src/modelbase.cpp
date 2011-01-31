@@ -10,6 +10,9 @@
 
 #include "nodes/Text.h"
 #include "nodes/Integer.h"
+#include "nodes/Float.h"
+#include "nodes/Boolean.h"
+#include "nodes/Character.h"
 #include "nodes/Reference.h"
 #include "nodes/List.h"
 #include "nodes/TypedList.h"
@@ -30,11 +33,17 @@ bool ModelBase::initialize(Envision::EnvisionManager&)
 	logger = Logger::Log::getLogger("modelbase");
 	Text::registerNodeType();
 	Integer::registerNodeType();
+	Float::registerNodeType();
+	Boolean::registerNodeType();
+	Character::registerNodeType();
 	Reference::registerNodeType();
 	List::registerNodeType();
 
 	TypedList<Text>::registerNodeType();
 	TypedList<Integer>::registerNodeType();
+	TypedList<Float>::registerNodeType();
+	TypedList<Boolean>::registerNodeType();
+	TypedList<Character>::registerNodeType();
 	TypedList<Reference>::registerNodeType();
 
 	return true;
