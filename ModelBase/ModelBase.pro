@@ -25,7 +25,8 @@ pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
-HEADERS += headers/nodes/Float.h \
+HEADERS += headers/nodes/Boolean.h \
+    headers/nodes/Float.h \
     headers/nodes/TypedListDefinition.h \
     headers/nodes/TypedList.h \
     headers/commands/ListPut.h \
@@ -64,7 +65,8 @@ HEADERS += headers/nodes/Float.h \
     headers/Model.h \
     headers/modelbase_api.h \
     src/modelbase.h
-SOURCES += src/nodes/Float.cpp \
+SOURCES += src/nodes/Boolean.cpp \
+    src/nodes/Float.cpp \
     src/commands/ListPut.cpp \
     src/commands/ExtendedNodeChild.cpp \
     src/persistence/PersistedNode.cpp \
