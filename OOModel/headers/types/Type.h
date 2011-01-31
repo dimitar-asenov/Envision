@@ -1,23 +1,25 @@
 /***********************************************************************************************************************
- * Statement.h
+ * Type.h
  *
- *  Created on: Jan 28, 2011
+ *  Created on: Jan 31, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef STATEMENT_H_
-#define STATEMENT_H_
+#ifndef TYPE_H_
+#define TYPE_H_
 
 #include "oomodel_api.h"
-#include "MethodItem.h"
+
+#include "ModelBase/headers/nodes/Extendable/ExtendableNode.h"
+#include "ModelBase/headers/nodes/nodeMacros.h"
 
 namespace OOModel {
 
-class OOMODEL_API Statement: public MethodItem
+class OOMODEL_API Type : public Model::ExtendableNode
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Statement);
+	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Type)
 };
 
 }
 
-#endif /* STATEMENT_H_ */
+#endif /* TYPE_H_ */

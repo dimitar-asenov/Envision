@@ -14,6 +14,7 @@ EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(Method, Model::ExtendableNode)
 
 REGISTER_ATTRIBUTE(Method, name, Text, false, false, true)
 REGISTER_ATTRIBUTE(Method, items, TypedListOfMethodItem, false, false, true)
+REGISTER_ATTRIBUTE(Method, arguments, TypedListOfMethodArgument, false, false, true)
 REGISTER_ATTRIBUTE(Method, visibility, Visibility, false, false, true)
 
 QString Method::referenceName() const

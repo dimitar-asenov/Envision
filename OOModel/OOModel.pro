@@ -25,7 +25,25 @@ pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
-HEADERS += headers/Statement.h \
+HEADERS += headers/expressions/BinaryOperation.h \
+    headers/expressions/UnaryOperation.h \
+    headers/expressions/MethodCall.h \
+    headers/MethodArgument.h \
+    headers/types/NamedType.h \
+    headers/types/PrimitiveType.h \
+    headers/types/Type.h \
+    headers/expressions/NewExpression.h \
+    headers/OOReference.h \
+    headers/expressions/VariableAccess.h \
+    headers/expressions/ThisExpression.h \
+    headers/expressions/NullLiteral.h \
+    headers/expressions/CharacterLiteral.h \
+    headers/expressions/BooleanLiteral.h \
+    headers/expressions/StringLiteral.h \
+    headers/expressions/FloatLiteral.h \
+    headers/expressions/IntegerLiteral.h \
+    headers/statements/Statement.h \
+    headers/expressions/Expression.h \
     headers/MethodItem.h \
     headers/Method.h \
     headers/OOModelException.h \
@@ -36,7 +54,25 @@ HEADERS += headers/Statement.h \
     headers/Module.h \
     headers/oomodel_api.h \
     src/oomodel.h
-SOURCES += src/Statement.cpp \
+SOURCES += src/expressions/BinaryOperation.cpp \
+    headers/expressions/UnaryOperation.cpp \
+    src/expressions/MethodCall.cpp \
+    src/MethodArgument.cpp \
+    src/types/NamedType.cpp \
+    src/types/PrimitiveType.cpp \
+    src/types/Type.cpp \
+    src/expressions/NewExpression.cpp \
+    src/OOReference.cpp \
+    src/expressions/VariableAccess.cpp \
+    src/expressions/ThisExpression.cpp \
+    src/expressions/NullLiteral.cpp \
+    src/expressions/CharacterLiteral.cpp \
+    src/expressions/BooleanLiteral.cpp \
+    src/expressions/StringLiteral.cpp \
+    src/expressions/FloatLiteral.cpp \
+    src/expressions/IntegerLiteral.cpp \
+    src/statements/Statement.cpp \
+    src/expressions/Expression.cpp \
     src/MethodItem.cpp \
     src/Method.cpp \
     src/TypedListInstantiations.cpp \
