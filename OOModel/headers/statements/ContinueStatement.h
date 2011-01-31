@@ -1,26 +1,22 @@
 /***********************************************************************************************************************
- * NewExpression.h
+ * ContinueStatement.h
  *
  *  Created on: Jan 31, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef NEWEXPRESSION_H_
-#define NEWEXPRESSION_H_
+#ifndef CONTINUESTATEMENT_H_
+#define CONTINUESTATEMENT_H_
 
-#include "Expression.h"
-#include "../types/Type.h"
+#include "Statement.h"
 
 namespace OOModel {
 
-class OOMODEL_API NewExpression: public Expression
+class OOMODEL_API ContinueStatement: public Statement
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(NewExpression)
-
-	ATTRIBUTE(Type, type);
-	ATTRIBUTE(Expression, amount);
+	EXTENDABLENODE_DECLARE_STANDARD_METHODS(ContinueStatement)
 };
 
 }
 
-#endif /* NEWEXPRESSION_H_ */
+#endif /* CONTINUESTATEMENT_H_ */

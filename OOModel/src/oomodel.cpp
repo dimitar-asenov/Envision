@@ -15,9 +15,19 @@
 #include "Class.h"
 #include "Method.h"
 #include "MethodItem.h"
-#include "MethodArgument.h"
+#include "FormalArgument.h"
 
 #include "statements/Statement.h"
+#include "statements/Block.h"
+#include "statements/BreakStatement.h"
+#include "statements/ContinueStatement.h"
+#include "statements/ForEachStatement.h"
+#include "statements/IfStatement.h"
+#include "statements/LoopStatement.h"
+#include "statements/ReturnStatement.h"
+#include "statements/SwitchCase.h"
+#include "statements/SwitchStatement.h"
+#include "statements/VariableDeclaration.h"
 
 #include "expressions/Expression.h"
 #include "expressions/IntegerLiteral.h"
@@ -32,6 +42,7 @@
 #include "expressions/MethodCall.h"
 #include "expressions/UnaryOperation.h"
 #include "expressions/BinaryOperation.h"
+#include "expressions/CastExpression.h"
 
 #include "types/Type.h"
 #include "types/PrimitiveType.h"
@@ -52,9 +63,19 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	Model::TypedList<Class>::registerNodeType();
 	Model::TypedList<Method>::registerNodeType();
 	Model::TypedList<MethodItem>::registerNodeType();
-	Model::TypedList<MethodArgument>::registerNodeType();
+	Model::TypedList<FormalArgument>::registerNodeType();
 
 	Model::TypedList<Statement>::registerNodeType();
+	Model::TypedList<Block>::registerNodeType();
+	Model::TypedList<BreakStatement>::registerNodeType();
+	Model::TypedList<ContinueStatement>::registerNodeType();
+	Model::TypedList<ForEachStatement>::registerNodeType();
+	Model::TypedList<IfStatement>::registerNodeType();
+	Model::TypedList<LoopStatement>::registerNodeType();
+	Model::TypedList<ReturnStatement>::registerNodeType();
+	Model::TypedList<SwitchCase>::registerNodeType();
+	Model::TypedList<SwitchStatement>::registerNodeType();
+	Model::TypedList<VariableDeclaration>::registerNodeType();
 
 	Model::TypedList<Expression>::registerNodeType();
 	Model::TypedList<IntegerLiteral>::registerNodeType();
@@ -69,6 +90,7 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	Model::TypedList<MethodCall>::registerNodeType();
 	Model::TypedList<UnaryOperation>::registerNodeType();
 	Model::TypedList<BinaryOperation>::registerNodeType();
+	Model::TypedList<CastExpression>::registerNodeType();
 
 	Model::TypedList<Type>::registerNodeType();
 	Model::TypedList<PrimitiveType>::registerNodeType();
@@ -80,9 +102,19 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	Class::init();
 	Method::init();
 	MethodItem::init();
-	MethodArgument::init();
+	FormalArgument::init();
 
 	Statement::init();
+	Block::init();
+	BreakStatement::init();
+	ContinueStatement::init();
+	ForEachStatement::init();
+	IfStatement::init();
+	LoopStatement::init();
+	ReturnStatement::init();
+	SwitchCase::init();
+	SwitchStatement::init();
+	VariableDeclaration::init();
 
 	Expression::init();
 	IntegerLiteral::init();
@@ -97,6 +129,7 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	MethodCall::init();
 	UnaryOperation::init();
 	BinaryOperation::init();
+	CastExpression::init();
 
 	Type::init();
 	PrimitiveType::init();

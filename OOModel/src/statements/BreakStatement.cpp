@@ -1,26 +1,15 @@
 /***********************************************************************************************************************
- * NewExpression.h
+ * BreakStatement.cpp
  *
  *  Created on: Jan 31, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef NEWEXPRESSION_H_
-#define NEWEXPRESSION_H_
-
-#include "Expression.h"
-#include "../types/Type.h"
+#include "statements/BreakStatement.h"
 
 namespace OOModel {
 
-class OOMODEL_API NewExpression: public Expression
-{
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(NewExpression)
-
-	ATTRIBUTE(Type, type);
-	ATTRIBUTE(Expression, amount);
-};
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(BreakStatement, Statement)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(BreakStatement, Statement)
 
 }
-
-#endif /* NEWEXPRESSION_H_ */

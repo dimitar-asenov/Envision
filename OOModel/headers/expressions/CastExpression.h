@@ -1,26 +1,26 @@
 /***********************************************************************************************************************
- * NewExpression.h
+ * CastExpression.h
  *
  *  Created on: Jan 31, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef NEWEXPRESSION_H_
-#define NEWEXPRESSION_H_
+#ifndef CASTEXPRESSION_H_
+#define CASTEXPRESSION_H_
 
 #include "Expression.h"
 #include "../types/Type.h"
 
 namespace OOModel {
 
-class OOMODEL_API NewExpression: public Expression
+class OOMODEL_API CastExpression: public Expression
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(NewExpression)
+	EXTENDABLENODE_DECLARE_STANDARD_METHODS(CastExpression)
 
 	ATTRIBUTE(Type, type);
-	ATTRIBUTE(Expression, amount);
+	ATTRIBUTE(Expression, expr);
 };
 
 }
 
-#endif /* NEWEXPRESSION_H_ */
+#endif /* CASTEXPRESSION_H_ */

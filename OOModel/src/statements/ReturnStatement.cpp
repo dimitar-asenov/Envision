@@ -1,26 +1,17 @@
 /***********************************************************************************************************************
- * NewExpression.h
+ * ReturnStatement.cpp
  *
  *  Created on: Jan 31, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef NEWEXPRESSION_H_
-#define NEWEXPRESSION_H_
-
-#include "Expression.h"
-#include "../types/Type.h"
+#include "statements/ReturnStatement.h"
 
 namespace OOModel {
 
-class OOMODEL_API NewExpression: public Expression
-{
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(NewExpression)
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(ReturnStatement, Statement)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(ReturnStatement, Statement)
 
-	ATTRIBUTE(Type, type);
-	ATTRIBUTE(Expression, amount);
-};
+REGISTER_ATTRIBUTE(ReturnStatement, value, Expression, false, false, true)
 
 }
-
-#endif /* NEWEXPRESSION_H_ */

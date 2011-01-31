@@ -1,40 +1,31 @@
 /***********************************************************************************************************************
- * Method.h
+ * FormalArgument.h
  *
- *  Created on: Jan 28, 2011
+ *  Created on: Jan 31, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef METHOD_H_
-#define METHOD_H_
+#ifndef FORMALARGUMENT_H_
+#define FORMALARGUMENT_H_
 
 #include "oomodel_api.h"
 
 #include "common/attributeMacros.h"
-#include "common/Visibility.h"
-#include "MethodItem.h"
-#include "FormalArgument.h"
+#include "types/Type.h"
 
 #include "ModelBase/headers/nodes/Extendable/ExtendableNode.h"
 #include "ModelBase/headers/nodes/Text.h"
-#include "ModelBase/headers/nodes/TypedList.h"
 #include "ModelBase/headers/nodes/nodeMacros.h"
 
 namespace OOModel {
 
-class OOMODEL_API Method : public Model::ExtendableNode
+class OOMODEL_API FormalArgument : public Model::ExtendableNode
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Method)
-
+	EXTENDABLENODE_DECLARE_STANDARD_METHODS(FormalArgument)
 	ATTRIBUTE_OOP_NAME
-	ATTRIBUTE(Model::TypedList<MethodItem>, items);
-	ATTRIBUTE(Model::TypedList<FormalArgument>, arguments);
-	ATTRIBUTE_OOP_VISIBILITY
-
-	public:
-		virtual QString referenceName() const;
+	ATTRIBUTE(Type, type)
 };
 
 }
 
-#endif /* METHOD_H_ */
+#endif /* FORMALARGUMENT_H_ */

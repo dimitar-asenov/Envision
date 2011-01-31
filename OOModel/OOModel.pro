@@ -25,10 +25,21 @@ pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
-HEADERS += headers/expressions/BinaryOperation.h \
+HEADERS += headers/statements/ForEachStatement.h \
+    headers/statements/SwitchCase.h \
+    headers/statements/SwitchStatement.h \
+    headers/statements/VariableDeclaration.h \
+    headers/statements/ReturnStatement.h \
+    headers/statements/ContinueStatement.h \
+    headers/statements/BreakStatement.h \
+    headers/FormalArgument.h \
+    headers/statements/LoopStatement.h \
+    headers/statements/IfStatement.h \
+    headers/statements/Block.h \
+    headers/expressions/CastExpression.h \
+    headers/expressions/BinaryOperation.h \
     headers/expressions/UnaryOperation.h \
     headers/expressions/MethodCall.h \
-    headers/MethodArgument.h \
     headers/types/NamedType.h \
     headers/types/PrimitiveType.h \
     headers/types/Type.h \
@@ -54,10 +65,21 @@ HEADERS += headers/expressions/BinaryOperation.h \
     headers/Module.h \
     headers/oomodel_api.h \
     src/oomodel.h
-SOURCES += src/expressions/BinaryOperation.cpp \
+SOURCES += src/statements/ReturnStatement.cpp \
+    src/statements/SwitchCase.cpp \
+    src/statements/SwitchStatement.cpp \
+    src/statements/VariableDeclaration.cpp \
+    src/statements/ContinueStatement.cpp \
+    src/statements/BreakStatement.cpp \
+    src/FormalArgument.cpp \
+    src/statements/ForAllStatement.cpp \
+    src/statements/LoopStatement.cpp \
+    src/statements/IfStatement.cpp \
+    src/statements/Block.cpp \
+    src/expressions/CastExpression.cpp \
+    src/expressions/BinaryOperation.cpp \
     headers/expressions/UnaryOperation.cpp \
     src/expressions/MethodCall.cpp \
-    src/MethodArgument.cpp \
     src/types/NamedType.cpp \
     src/types/PrimitiveType.cpp \
     src/types/Type.cpp \

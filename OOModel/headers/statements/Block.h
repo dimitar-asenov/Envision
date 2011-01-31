@@ -1,26 +1,26 @@
 /***********************************************************************************************************************
- * NewExpression.h
+ * Block.h
  *
  *  Created on: Jan 31, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef NEWEXPRESSION_H_
-#define NEWEXPRESSION_H_
+#ifndef BLOCK_H_
+#define BLOCK_H_
 
-#include "Expression.h"
-#include "../types/Type.h"
+#include "Statement.h"
+
+#include "ModelBase/headers/nodes/TypedList.h"
 
 namespace OOModel {
 
-class OOMODEL_API NewExpression: public Expression
+class OOMODEL_API Block: public Statement
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(NewExpression)
+	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Block)
 
-	ATTRIBUTE(Type, type);
-	ATTRIBUTE(Expression, amount);
+	ATTRIBUTE(Model::TypedList<Statement>, statements);
 };
 
 }
 
-#endif /* NEWEXPRESSION_H_ */
+#endif /* BLOCK_H_ */

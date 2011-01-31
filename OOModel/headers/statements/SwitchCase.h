@@ -1,31 +1,30 @@
 /***********************************************************************************************************************
- * MethodArgument.h
+ * SwitchCase.h
  *
  *  Created on: Jan 31, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef METHODARGUMENT_H_
-#define METHODARGUMENT_H_
+#ifndef SWITCHCASE_H_
+#define SWITCHCASE_H_
 
-#include "oomodel_api.h"
-
-#include "common/attributeMacros.h"
-#include "types/Type.h"
+#include "../oomodel_api.h"
+#include "Statement.h"
+#include "../expressions/Expression.h"
 
 #include "ModelBase/headers/nodes/Extendable/ExtendableNode.h"
-#include "ModelBase/headers/nodes/Text.h"
 #include "ModelBase/headers/nodes/nodeMacros.h"
 
 namespace OOModel {
 
-class OOMODEL_API MethodArgument : public Model::ExtendableNode
+class OOMODEL_API SwitchCase : public Model::ExtendableNode
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(MethodArgument)
-	ATTRIBUTE_OOP_NAME
-	ATTRIBUTE(Type, type)
+	EXTENDABLENODE_DECLARE_STANDARD_METHODS(SwitchCase)
+
+	ATTRIBUTE(Expression, expr)
+	ATTRIBUTE(Statement, statement)
 };
 
 }
 
-#endif /* METHODARGUMENT_H_ */
+#endif /* SWITCHCASE_H_ */
