@@ -17,7 +17,7 @@ win32:LIBS += -L$${PLUGINS_DIR} \
     -lmodelbase \
     -lfilepersistence \
     -lvisualizationbase
-QT = core
+QT = core gui
 TEMPLATE = lib
 CONFIG += plugin \
     warn_on \
