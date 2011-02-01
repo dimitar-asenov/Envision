@@ -8,7 +8,7 @@
 #ifndef EXPRESSION_H_
 #define EXPRESSION_H_
 
-#include "oomodel_api.h"
+#include "../oomodel_api.h"
 
 #include "ModelBase/headers/nodes/Extendable/ExtendableNode.h"
 #include "ModelBase/headers/nodes/nodeMacros.h"

@@ -15,7 +15,8 @@ win32:LIBS += -L$${PLUGINS_DIR} \
     -llogger \
     -lselftest \
     -lmodelbase
-QT = core gui
+QT = core \
+    gui
 TEMPLATE = lib
 CONFIG += plugin \
     warn_on \
@@ -25,7 +26,8 @@ pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
-HEADERS += headers/statements/AssignmentStatement.h \
+HEADERS += headers/TypedListInstantiations.h \
+    headers/statements/AssignmentStatement.h \
     headers/expressions/ReferenceExpression.h \
     headers/expressions/MethodCallExpression.h \
     headers/statements/MethodCallStatement.h \
