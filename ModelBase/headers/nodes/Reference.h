@@ -20,13 +20,15 @@ class MODELBASE_API Reference: public Node
 	NODE_DECLARE_STANDARD_METHODS( Reference )
 
 	private:
-		QString path;
+		QString path_;
 
 	public:
 
 		Node* get();
 		void set(Node* target);
 		void set(const QString &path);
+
+		const QString& path() const;
 
 		virtual void save(PersistentStore &store) const;
 		virtual void load(PersistentStore &store);
@@ -40,7 +42,8 @@ class MODELBASE_API Reference: public Node
 		QString getLocalPathToTarget(Node* target);
 };
 
-inline Node* Reference::get() { return getTargetFromSymbolicPath(path); }
+inline Node* Reference::get() { return getTargetFromSymbolicPath(path_); }
+inline const QString& Reference::path() const { return path_; }
 
 }
 

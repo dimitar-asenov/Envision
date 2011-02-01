@@ -24,7 +24,7 @@ Reference::Reference(Node *parent, Model* model) :
 Reference::Reference(Node *parent, NodeIdType id, PersistentStore &store, bool) :
 	Node(parent, id)
 {
-	path = store.loadStringValue();
+	path_ = store.loadStringValue();
 }
 
 void Reference::set(Node* target)
@@ -34,12 +34,12 @@ void Reference::set(Node* target)
 
 void Reference::set(const QString &new_path)
 {
-	execute(new FieldSet<QString> (this, path, new_path));
+	execute(new FieldSet<QString> (this, path_, new_path));
 }
 
 void Reference::save(PersistentStore &store) const
 {
-	store.saveStringValue(path);
+	store.saveStringValue(path_);
 }
 
 void Reference::load(PersistentStore &store)
