@@ -14,7 +14,7 @@
 namespace Model {
 
 template<class T>
-class FieldSet: public UndoCommand
+class MODELBASE_API FieldSet: public UndoCommand
 {
 	protected:
 		T& field;

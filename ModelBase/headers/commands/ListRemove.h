@@ -12,7 +12,7 @@
 
 namespace Model {
 
-class ListRemove: public UndoCommand
+class MODELBASE_API ListRemove: public UndoCommand
 {
 	private:
 		QVector<Node*>& nodes;

@@ -16,7 +16,7 @@ namespace Model {
 
 class Node;
 
-class ExtendedNodeChild: public UndoCommand
+class MODELBASE_API ExtendedNodeChild: public UndoCommand
 {
 	private:
 		Node* newVal;

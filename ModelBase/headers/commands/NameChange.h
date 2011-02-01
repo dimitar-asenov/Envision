@@ -16,7 +16,7 @@ namespace Model {
 
 class Text;
 
-class NameChange: public UndoCommand
+class MODELBASE_API NameChange: public UndoCommand
 {
 	private:
 		QString oldName;
