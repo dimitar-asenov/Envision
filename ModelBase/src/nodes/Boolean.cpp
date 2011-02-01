@@ -8,7 +8,6 @@
 #include "nodes/Boolean.h"
 #include "commands/FieldSet.h"
 #include "ModelException.h"
-#include "nodes/TypedListDefinition.h"
 
 namespace Model {
 
@@ -43,7 +42,5 @@ void Boolean::load(PersistentStore &store)
 	bool val = store.loadIntValue();
 	set(val);
 }
-
-template class TypedList<Boolean>;
 
 }

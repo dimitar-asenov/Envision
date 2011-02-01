@@ -5,12 +5,27 @@
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "TypedList.h"
-
 #ifndef TYPEDLISTDEFINITION_H_
 #define TYPEDLISTDEFINITION_H_
 
+#ifndef TYPEDLIST_H_
+#define TYPEDLIST_H_
+#endif /* TYPEDLIST_H_ */
+
+#include "List.h"
+
 namespace Model {
+
+template <class T>
+class Q_DECL_EXPORT TypedList: public List
+{
+	NODE_DECLARE_STANDARD_METHODS(TypedList)
+
+	public:
+		T* first();
+		T* last();
+		T* at(int i);
+};
 
 template<class T>
 TypedList<T>::TypedList(::Model::Node* parent, ::Model::Model* model) :

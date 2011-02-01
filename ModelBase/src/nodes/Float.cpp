@@ -8,7 +8,6 @@
 #include "nodes/Float.h"
 #include "commands/FieldSet.h"
 #include "ModelException.h"
-#include "nodes/TypedListDefinition.h"
 
 namespace Model {
 
@@ -42,7 +41,5 @@ void Float::load(PersistentStore &store)
 
 	set(store.loadDoubleValue());
 }
-
-template class TypedList<Float>;
 
 }

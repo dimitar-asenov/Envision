@@ -8,7 +8,6 @@
 #include "nodes/Text.h"
 #include "commands/FieldSet.h"
 #include "ModelException.h"
-#include "nodes/TypedListDefinition.h"
 
 namespace Model {
 
@@ -48,5 +47,4 @@ FieldSet<QString>* Text::getSetCommand(const QString& newText)
 	return new FieldSet<QString> (this, text, newText);
 }
 
-template class TypedList<Text>;
 }

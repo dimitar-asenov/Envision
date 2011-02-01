@@ -8,7 +8,6 @@
 #include "nodes/Character.h"
 #include "commands/FieldSet.h"
 #include "ModelException.h"
-#include "nodes/TypedListDefinition.h"
 
 namespace Model {
 
@@ -48,7 +47,5 @@ void Character::load(PersistentStore &store)
 
 	set(t[0]);
 }
-
-template class TypedList<Character>;
 
 }
