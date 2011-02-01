@@ -15,7 +15,7 @@ win32:LIBS += -L$${PLUGINS_DIR} \
     -llogger \
     -lselftest \
     -lmodelbase
-QT = core
+QT = core gui
 TEMPLATE = lib
 CONFIG += plugin \
     warn_on \

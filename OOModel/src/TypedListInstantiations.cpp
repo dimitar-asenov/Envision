@@ -5,7 +5,6 @@
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "ModelBase/headers/nodes/TypedList.h"
 #include "ModelBase/headers/nodes/TypedListDefinition.h"
 
 #include "Project.h"
