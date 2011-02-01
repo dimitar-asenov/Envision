@@ -12,7 +12,7 @@
 #include "ModelBase/headers/Model.h"
 #include "ModelBase/headers/nodes/Text.h"
 #include "ModelBase/headers/nodes/List.h"
-#include "ModelBase/headers/nodes/TypedList.h"
+#include "ModelBase/headers/TypedListInstantiations.h"
 
 #include <QtCore/QTextStream>
 #include <QtCore/QFile>
