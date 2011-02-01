@@ -29,6 +29,7 @@
 #include "statements/SwitchStatement.h"
 #include "statements/VariableDeclaration.h"
 #include "statements/MethodCallStatement.h"
+#include "statements/AssignmentStatement.h"
 
 #include "expressions/Expression.h"
 #include "expressions/IntegerLiteral.h"
@@ -71,6 +72,7 @@ template class Model::TypedList<OOModel::SwitchCase>;
 template class Model::TypedList<OOModel::SwitchStatement>;
 template class Model::TypedList<OOModel::VariableDeclaration>;
 template class Model::TypedList<OOModel::MethodCallStatement>;
+template class Model::TypedList<OOModel::AssignmentStatement>;
 
 template class Model::TypedList<OOModel::Expression>;
 template class Model::TypedList<OOModel::IntegerLiteral>;

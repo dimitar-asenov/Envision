@@ -32,6 +32,7 @@
 #include "statements/SwitchStatement.h"
 #include "statements/VariableDeclaration.h"
 #include "statements/MethodCallStatement.h"
+#include "statements/AssignmentStatement.h"
 
 #include "expressions/Expression.h"
 #include "expressions/IntegerLiteral.h"
@@ -86,6 +87,7 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	Model::TypedList<SwitchStatement>::registerNodeType();
 	Model::TypedList<VariableDeclaration>::registerNodeType();
 	Model::TypedList<MethodCallStatement>::registerNodeType();
+	Model::TypedList<AssignmentStatement>::registerNodeType();
 
 	Model::TypedList<Expression>::registerNodeType();
 	Model::TypedList<IntegerLiteral>::registerNodeType();
@@ -128,6 +130,7 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	SwitchStatement::init();
 	VariableDeclaration::init();
 	MethodCallStatement::init();
+	AssignmentStatement::init();
 
 	Expression::init();
 	IntegerLiteral::init();
