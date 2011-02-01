@@ -16,9 +16,11 @@
 namespace Model {
 
 template <class T>
-class MODELBASE_API PersistedValue: public PersistedNode
+class PersistedValue: public PersistedNode
 {
 	public:
+		PersistedValue();
+		virtual ~PersistedValue();
 		void set(const T& value);
 		T& value();
 
@@ -26,11 +28,13 @@ class MODELBASE_API PersistedValue: public PersistedNode
 		T value_;
 };
 
+template <class T> PersistedValue<T>::PersistedValue(){};
+template <class T> PersistedValue<T>::~PersistedValue(){};
 template <class T> inline void PersistedValue<T>::set(const T& value) { value_ = value; }
 template <class T> inline T& PersistedValue<T>::value() { return value_; }
 
 template < class T>
-class MODELBASE_API PersistedValue < QList<T*> >: public PersistedNode
+class PersistedValue < QList<T*> >: public PersistedNode
 {
 	public:
 		~PersistedValue();
