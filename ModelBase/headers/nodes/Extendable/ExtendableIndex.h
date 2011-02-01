@@ -8,9 +8,11 @@
 #ifndef EXTENDABLEINDEX_H_
 #define EXTENDABLEINDEX_H_
 
+#include "../../modelbase_api.h"
+
 namespace Model {
 
-class ExtendableIndex
+class MODELBASE_API ExtendableIndex
 {
 	private:
 		int level_;

@@ -12,7 +12,7 @@
 
 namespace Model {
 
-class ListInsert: public UndoCommand
+class MODELBASE_API ListInsert: public UndoCommand
 {
 	private:
 		QVector<Node*>& nodes;
