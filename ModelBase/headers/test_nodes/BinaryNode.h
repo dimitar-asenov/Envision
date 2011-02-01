@@ -20,20 +20,15 @@ class MODELBASE_API BinaryNode: public Model::ExtendableNode
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(BinaryNode)
 
-	ATTRIBUTE(Model::Text, name)
-	ATTRIBUTE(BinaryNode, left)
-	ATTRIBUTE(BinaryNode, right)
+	ATTRIBUTE(Model::Text, name, setName)
+	ATTRIBUTE(BinaryNode, left, setLeft)
+	ATTRIBUTE(BinaryNode, right, setRight)
 
 	public:
-		BinaryNode* makeLeftNode(const QString &type = QString());
-		BinaryNode* makeRightNode(const QString &type = QString());
-
 		void removeLeftNode();
 		void removeRightNode();
 
 };
-inline BinaryNode* BinaryNode::makeLeftNode(const QString &type) { return set<BinaryNode>(leftIndex, type); }
-inline BinaryNode* BinaryNode::makeRightNode(const QString &type) { return set<BinaryNode>(rightIndex, type); }
 
 inline void BinaryNode::removeLeftNode() { removeOptional(leftIndex); }
 inline void BinaryNode::removeRightNode() { removeOptional(rightIndex); }

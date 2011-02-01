@@ -70,7 +70,7 @@ TEST(ModelBase, UndoRedoOptionalNodes)
 	CHECK_CONDITION(root->right() == NULL);
 
 	model.beginModification(root, "testing");
-	TestNodes::BinaryNode* left = root->makeLeftNode();
+	TestNodes::BinaryNode* left = root->setLeft<TestNodes::BinaryNode>();
 	model.endModification();
 	CHECK_INT_EQUAL(0, root->name()->revision());
 	CHECK_INT_EQUAL(1, root->revision());
@@ -81,7 +81,7 @@ TEST(ModelBase, UndoRedoOptionalNodes)
 	CHECK_INT_EQUAL(0, left->revision());
 
 	model.beginModification(root, "testing");
-	TestNodes::BinaryNode* right = root->makeRightNode();
+	TestNodes::BinaryNode* right = root->setRight<TestNodes::BinaryNode>();
 	model.endModification();
 	CHECK_INT_EQUAL(0, root->name()->revision());
 	CHECK_INT_EQUAL(2, root->revision());

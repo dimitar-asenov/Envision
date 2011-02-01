@@ -23,10 +23,10 @@ TEST(ModelBase, SingleWriteUnitCheck)
 	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.createRoot("BinaryNode"));
 
 	model.beginModification(root, "make tree");
-	TestNodes::BinaryNode* left = root->makeLeftNode();
-	TestNodes::BinaryNode* right = root->makeRightNode("BinaryNodeAccessUnit");
-	TestNodes::BinaryNode* one = root->left()->makeLeftNode("BinaryNodeAccessUnit");
-	TestNodes::BinaryNode* two = root->left()->makeRightNode("BinaryNodeAccessUnit");
+	TestNodes::BinaryNode* left = root->setLeft<TestNodes::BinaryNode>();
+	TestNodes::BinaryNode* right = root->setRight<TestNodes::BinaryNodeAccessUnit>();
+	TestNodes::BinaryNode* one = root->left()->setLeft<TestNodes::BinaryNodeAccessUnit>();
+	TestNodes::BinaryNode* two = root->left()->setRight<TestNodes::BinaryNodeAccessUnit>();
 	model.endModification();
 
 	CHECK_STR_EQUAL(QString(), root->name()->get());

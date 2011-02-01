@@ -101,8 +101,8 @@ TEST(VisualizationBase, ExtendableTest)
 	Model::Text* third = list->append<Model::Text>();
 
 	first->name()->set("First node");
-	TestNodes::BinaryNode* left = first->makeLeftNode("BinaryNode");
-	TestNodes::BinaryNode* right = first->makeRightNode("BinaryNode");
+	TestNodes::BinaryNode* left = first->setLeft<TestNodes::BinaryNode>();
+	TestNodes::BinaryNode* right = first->setRight<TestNodes::BinaryNode>();
 	left->name()->set("left node");
 	right->name()->set("right node");
 

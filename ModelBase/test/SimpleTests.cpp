@@ -72,7 +72,7 @@ TEST(ModelBase, RemoveOptional)
 	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.createRoot("BinaryNode"));
 
 	model.beginModification(root, "Making left node");
-	TestNodes::BinaryNode* left = root->makeLeftNode();
+	TestNodes::BinaryNode* left = root->setLeft<TestNodes::BinaryNode>();
 	model.endModification();
 	CHECK_CONDITION( root->left() == left );
 	CHECK_CONDITION( root->left() != NULL );
@@ -83,7 +83,7 @@ TEST(ModelBase, RemoveOptional)
 	CHECK_CONDITION( root->left() == NULL);
 
 	model.beginModification(root, "Making left node");
-	root->makeLeftNode();
+	root->setLeft<TestNodes::BinaryNode>();
 	model.endModification();
 	CHECK_CONDITION( root->left() != left );
 	CHECK_CONDITION( root->left() != NULL );
@@ -95,8 +95,8 @@ TEST(ModelBase, ChildNodeRetrieval)
 	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.createRoot("BinaryNode"));
 
 	model.beginModification(root, "Making nodes");
-	TestNodes::BinaryNode* left = root->makeLeftNode();
-	TestNodes::BinaryNode* right = root->makeRightNode();
+	TestNodes::BinaryNode* left = root->setLeft<TestNodes::BinaryNode>();
+	TestNodes::BinaryNode* right = root->setRight<TestNodes::BinaryNode>();
 	model.endModification();
 
 	CHECK_INT_EQUAL(0, root->id());

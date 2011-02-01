@@ -26,8 +26,8 @@ TEST(ModelBase, ModificationNotificationTests)
 	CHECK_CONDITION(root == nl.root);
 
 	model.beginModification(root, "make tree");
-	TestNodes::BinaryNode* left = root->makeLeftNode();
-	TestNodes::BinaryNode* right = root->makeRightNode();
+	TestNodes::BinaryNode* left = root->setLeft<TestNodes::BinaryNode>();
+	TestNodes::BinaryNode* right = root->setRight<TestNodes::BinaryNode>();
 	model.endModification();
 
 	CHECK_INT_EQUAL(1, nl.modifiedNodes.size());

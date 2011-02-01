@@ -9,6 +9,7 @@
 #include "FileStore.h"
 #include "SelfTest/headers/SelfTestSuite.h"
 #include "ModelBase/headers/test_nodes/BinaryNode.h"
+#include "ModelBase/headers/test_nodes/BinaryNodePersistenceUnit.h"
 #include "ModelBase/headers/Model.h"
 #include "ModelBase/headers/nodes/Integer.h"
 #include "ModelBase/headers/nodes/Text.h"
@@ -48,8 +49,8 @@ TEST(FilePersistence, SaveModeNodesSingleUnitOnly)
 
 	model.beginModification(root, "set title");
 	root->name()->set("Root");
-	TestNodes::BinaryNode* left = root->makeLeftNode();
-	TestNodes::BinaryNode* right = root->makeRightNode();
+	TestNodes::BinaryNode* left = root->setLeft<TestNodes::BinaryNode>();
+	TestNodes::BinaryNode* right = root->setRight<TestNodes::BinaryNode>();
 
 	left->name()->set("Left child");
 	right->name()->set("Right child");
@@ -71,11 +72,11 @@ TEST(FilePersistence, SaveMultipleUnits)
 
 	model.beginModification(root, "set title");
 	root->name()->set("Root");
-	TestNodes::BinaryNode* left = root->makeLeftNode("BinaryNodePersistenceUnit");
-	TestNodes::BinaryNode* right = root->makeRightNode();
+	TestNodes::BinaryNode* left = root->setLeft<TestNodes::BinaryNodePersistenceUnit>();
+	TestNodes::BinaryNode* right = root->setRight<TestNodes::BinaryNode>();
 
 	left->name()->set("Left child");
-	TestNodes::BinaryNode* leftleft = left->makeLeftNode();
+	TestNodes::BinaryNode* leftleft = left->setLeft<TestNodes::BinaryNode>();
 	leftleft->name()->set("in a new unit");
 	right->name()->set("Right child");
 	model.endModification();

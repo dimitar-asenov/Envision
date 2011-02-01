@@ -272,12 +272,15 @@ void className::init()																																\
  * @param name
  * 				The name of the attribute. A method called name() will be created that can be used to access this
  * 				attribute.
+ * @param setMethodName
+ * 				The name of the set method that will set a new node for this attibute.
  */
-#define ATTRIBUTE(type, name)																														\
+#define ATTRIBUTE(type, name, setMethodName)																									\
 private:																																					\
 		static ::Model::ExtendableIndex name##Index;																							\
 public:																																					\
 		type* name() { return static_cast< type* > (get(name##Index)); }																\
+		template <class T> T* setMethodName() { return set<T>(name##Index,T::typeNameStatic()); }								\
 private:																																					\
 
 /*********************************************************************************************************************/
@@ -291,11 +294,14 @@ private:																																					\
  * @param name
  * 				The name of the attribute. A method called name() will be created that can be used to access this
  * 				attribute.
+ * @param setMethodName
+ * 				The name of the set method that will set a new node for this attibute.
  */
-#define PRIVATE_ATTRIBUTE(type, name)																											\
+#define PRIVATE_ATTRIBUTE(type, name, setMethodName)																						\
 private:																																					\
 		static ::Model::ExtendableIndex name##Index;																							\
 		type* name() { return static_cast< type* > (get(name##Index)); }																\
+		template <class T> T* setMethodName() { return set<T>(name##Index,T::typeNameStatic()); }								\
 private:																																					\
 
 /*********************************************************************************************************************/
