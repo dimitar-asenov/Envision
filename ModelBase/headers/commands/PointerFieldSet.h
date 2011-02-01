@@ -15,7 +15,7 @@
 namespace Model {
 
 template<class T>
-class MODELBASE_API PointerFieldSet: public FieldSet<T*>
+class PointerFieldSet: public FieldSet<T*>
 {
 	public:
 		PointerFieldSet(Node *target, T* &fieldToSet, T* setTo) :
