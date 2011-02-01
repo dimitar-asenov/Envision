@@ -8,14 +8,12 @@
 #ifndef TYPEDLIST_H_
 #define TYPEDLIST_H_
 
-#include "../modelbase_api.h"
-
 #include "List.h"
 
 namespace Model {
 
 template <class T>
-class MODELBASE_API TypedList: public List
+class TypedList: public List
 {
 	NODE_DECLARE_STANDARD_METHODS(TypedList)
 
