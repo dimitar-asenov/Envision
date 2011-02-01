@@ -19,13 +19,13 @@ class Node;
 class ExtendedNodeChild: public UndoCommand
 {
 	private:
-		Node* attribute;
+		Node* newVal;
+		Node* oldVal;
 		ExtendableIndex attributeIndex;
 		QVector< QVector<Node*> >* subnodes;
-		bool created;
 
 	public:
-		ExtendedNodeChild(Node* target, Node* attribute, const ExtendableIndex &attributeIndex, QVector< QVector<Node*> >* subnodes, bool created);
+		ExtendedNodeChild(Node* target, Node* newValue, const ExtendableIndex &attributeIndex, QVector< QVector<Node*> >* subnodes);
 		virtual ~ExtendedNodeChild();
 
 		virtual void redo();

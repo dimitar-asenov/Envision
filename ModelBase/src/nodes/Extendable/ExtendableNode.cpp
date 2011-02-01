@@ -134,7 +134,7 @@ void ExtendableNode::removeOptional(const ExtendableIndex &attributeIndex)
 {
 	if ( meta.attribute(attributeIndex).optional() )
 	{
-		execute(new ExtendedNodeChild(this, subnodes[attributeIndex.level()][attributeIndex.index()], attributeIndex, &subnodes, false));
+		execute(new ExtendedNodeChild(this, NULL, attributeIndex, &subnodes));
 	}
 	else
 		throw ModelException("Trying to remove a non-optional attribute");
@@ -164,7 +164,7 @@ void ExtendableNode::load(PersistentStore &store)
 		ExtendableIndex index = meta.indexForAttribute(ln->name);
 		if ( !index.isValid() ) throw ModelException("Node has attribute " + ln->name + " in persistent store, but this attribute is not registered");
 
-		execute(new ExtendedNodeChild(this, ln->node, ExtendableIndex(index.level(),index.index()), &subnodes, true));
+		execute(new ExtendedNodeChild(this, ln->node, ExtendableIndex(index.level(),index.index()), &subnodes));
 	}
 
 	verifyHasAllMandatoryAttributes();
@@ -174,7 +174,7 @@ void ExtendableNode::removeAllNodes()
 {
 	for (int level = 0; level < subnodes.size(); ++level)
 		for (int i = 0; i < subnodes[level].size(); ++i)
-			if ( subnodes[level][i] ) execute(new ExtendedNodeChild(this, subnodes[level][i], ExtendableIndex(level,i), &subnodes, false));
+			if ( subnodes[level][i] ) execute(new ExtendedNodeChild(this, NULL, ExtendableIndex(level,i), &subnodes));
 }
 
 void ExtendableNode::verifyHasAllMandatoryAttributes()

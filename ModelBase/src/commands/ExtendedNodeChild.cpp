@@ -12,29 +12,28 @@
 
 namespace Model {
 
-ExtendedNodeChild::ExtendedNodeChild(Node* target, Node* attribute_, const ExtendableIndex &attributeIndex_, QVector< QVector<Node*> >* subnodes_, bool created_) :
-	UndoCommand(target, created_ ? "create node" : "remove node"), attribute(attribute_), attributeIndex(attributeIndex_), subnodes(subnodes_), created(created_)
+ExtendedNodeChild::ExtendedNodeChild(Node* target, Node* newValue_, const ExtendableIndex &attributeIndex_, QVector< QVector<Node*> >* subnodes_) :
+	UndoCommand(target, "set node"), newVal(newValue_), oldVal((*subnodes_)[attributeIndex_.level()][attributeIndex_.index()]),
+	attributeIndex(attributeIndex_), subnodes(subnodes_)
 {
 }
 
 ExtendedNodeChild::~ExtendedNodeChild()
 {
-	if ( created && isUndone() ) SAFE_DELETE(attribute);
-	if ( !created && !isUndone() ) SAFE_DELETE(attribute);
+	if ( isUndone() ) SAFE_DELETE(newVal);
+	else SAFE_DELETE(oldVal);
 }
 
 void ExtendedNodeChild::redo()
 {
-	if (created) (*subnodes)[attributeIndex.level()][attributeIndex.index()] = attribute;
-	else (*subnodes)[attributeIndex.level()][attributeIndex.index()] = NULL;
+	(*subnodes)[attributeIndex.level()][attributeIndex.index()] = newVal;
 
 	UndoCommand::redo();
 }
 
 void ExtendedNodeChild::undo()
 {
-	if (created) (*subnodes)[attributeIndex.level()][attributeIndex.index()] = NULL;
-	else (*subnodes)[attributeIndex.level()][attributeIndex.index()] = attribute;
+	(*subnodes)[attributeIndex.level()][attributeIndex.index()] = oldVal;
 
 	UndoCommand::undo();
 }

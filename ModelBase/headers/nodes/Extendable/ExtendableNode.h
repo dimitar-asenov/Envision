@@ -82,9 +82,7 @@ T* ExtendableNode::set(const ExtendableIndex &attributeIndex, const QString& typ
 				+ ". This type is not compatible with the expected node type of this attribute.");
 	}
 
-	if (subnodes[attributeIndex.level()][attributeIndex.index()]) removeOptional(attributeIndex);
-
-	execute(new ExtendedNodeChild(this, nodeSpecific, attributeIndex, &subnodes, true));
+	execute(new ExtendedNodeChild(this, nodeSpecific, attributeIndex, &subnodes));
 
 	return nodeSpecific;
 }
