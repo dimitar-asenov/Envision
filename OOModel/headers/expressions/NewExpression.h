@@ -17,8 +17,8 @@ class OOMODEL_API NewExpression: public Expression
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(NewExpression)
 
-	ATTRIBUTE(Type, type);
-	ATTRIBUTE(Expression, amount);
+	ATTRIBUTE(Type, type, setType);
+	ATTRIBUTE(Expression, amount, setAmount);
 };
 
 }

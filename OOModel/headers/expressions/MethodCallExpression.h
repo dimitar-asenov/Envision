@@ -1,12 +1,12 @@
 /***********************************************************************************************************************
- * MethodCall.h
+ * MethodCallExpression.h
  *
  *  Created on: Jan 31, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef METHODCALL_H_
-#define METHODCALL_H_
+#ifndef METHODCALLEXPRESSION_H_
+#define METHODCALLEXPRESSION_H_
 
 #include "Expression.h"
 #include "../OOReference.h"
@@ -15,15 +15,15 @@
 
 namespace OOModel {
 
-class OOMODEL_API MethodCall: public Expression
+class OOMODEL_API MethodCallExpression: public Expression
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(MethodCall)
+	EXTENDABLENODE_DECLARE_STANDARD_METHODS(MethodCallExpression)
 
-	ATTRIBUTE(Expression, prefix)
-	ATTRIBUTE(OOReference, ref)
-	ATTRIBUTE(Model::TypedList<Expression>, arguments)
+	ATTRIBUTE(Expression, prefix, setPrefix)
+	ATTRIBUTE(OOReference, ref, setRef)
+	ATTRIBUTE(Model::TypedList<Expression>, arguments, setArguments)
 };
 
 }
 
-#endif /* METHODCALL_H_ */
+#endif /* METHODCALLEXPRESSION_H_ */

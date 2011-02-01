@@ -13,10 +13,10 @@
 #include "common/attributeMacros.h"
 #include "common/Visibility.h"
 #include "Method.h"
+#include "Field.h"
 
 #include "ModelBase/headers/nodes/Extendable/ExtendableNode.h"
 #include "ModelBase/headers/nodes/Text.h"
-#include "ModelBase/headers/nodes/List.h"
 #include "ModelBase/headers/nodes/TypedList.h"
 #include "ModelBase/headers/nodes/nodeMacros.h"
 
@@ -27,8 +27,8 @@ class OOMODEL_API Class : public Model::ExtendableNode
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Class)
 
 	ATTRIBUTE_OOP_NAME
-	ATTRIBUTE(Model::List, fields)
-	ATTRIBUTE(Model::TypedList<Method>, methods)
+	ATTRIBUTE(Model::TypedList<Field>, fields, setFields)
+	ATTRIBUTE(Model::TypedList<Method>, methods, setMethods)
 	ATTRIBUTE_OOP_VISIBILITY
 
 	public:

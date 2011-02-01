@@ -17,7 +17,7 @@ class OOMODEL_API ReturnStatement: public Statement
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(ReturnStatement)
 
-	ATTRIBUTE(Expression, value);
+	ATTRIBUTE(Expression, value, setValue);
 };
 
 }

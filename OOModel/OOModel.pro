@@ -25,7 +25,12 @@ pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
-HEADERS += headers/statements/ForEachStatement.h \
+HEADERS += headers/expressions/ReferenceExpression.h \
+    headers/expressions/MethodCallExpression.h \
+    headers/statements/MethodCallStatement.h \
+    headers/common/Static.h \
+    headers/Field.h \
+    headers/statements/ForEachStatement.h \
     headers/statements/SwitchCase.h \
     headers/statements/SwitchStatement.h \
     headers/statements/VariableDeclaration.h \
@@ -39,7 +44,6 @@ HEADERS += headers/statements/ForEachStatement.h \
     headers/expressions/CastExpression.h \
     headers/expressions/BinaryOperation.h \
     headers/expressions/UnaryOperation.h \
-    headers/expressions/MethodCall.h \
     headers/types/NamedType.h \
     headers/types/PrimitiveType.h \
     headers/types/Type.h \
@@ -65,7 +69,13 @@ HEADERS += headers/statements/ForEachStatement.h \
     headers/Module.h \
     headers/oomodel_api.h \
     src/oomodel.h
-SOURCES += src/statements/ReturnStatement.cpp \
+SOURCES += src/expressions/ReferenceExpression.cpp \
+    src/expressions/MethodCallExpression.cpp \
+    src/statements/MethodCallStatement.cpp \
+    src/common/Static.cpp \
+    src/Field.cpp \
+    test/JavaTest.cpp \
+    src/statements/ReturnStatement.cpp \
     src/statements/SwitchCase.cpp \
     src/statements/SwitchStatement.cpp \
     src/statements/VariableDeclaration.cpp \
@@ -79,7 +89,6 @@ SOURCES += src/statements/ReturnStatement.cpp \
     src/expressions/CastExpression.cpp \
     src/expressions/BinaryOperation.cpp \
     headers/expressions/UnaryOperation.cpp \
-    src/expressions/MethodCall.cpp \
     src/types/NamedType.cpp \
     src/types/PrimitiveType.cpp \
     src/types/Type.cpp \

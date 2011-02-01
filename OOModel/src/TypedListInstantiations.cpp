@@ -14,6 +14,8 @@
 #include "Method.h"
 #include "MethodItem.h"
 #include "FormalArgument.h"
+#include "Field.h"
+#include "OOReference.h"
 
 #include "statements/Statement.h"
 #include "statements/Block.h"
@@ -26,6 +28,7 @@
 #include "statements/SwitchCase.h"
 #include "statements/SwitchStatement.h"
 #include "statements/VariableDeclaration.h"
+#include "statements/MethodCallStatement.h"
 
 #include "expressions/Expression.h"
 #include "expressions/IntegerLiteral.h"
@@ -37,10 +40,11 @@
 #include "expressions/ThisExpression.h"
 #include "expressions/VariableAccess.h"
 #include "expressions/NewExpression.h"
-#include "expressions/MethodCall.h"
+#include "expressions/MethodCallExpression.h"
 #include "expressions/UnaryOperation.h"
 #include "expressions/BinaryOperation.h"
 #include "expressions/CastExpression.h"
+#include "expressions/ReferenceExpression.h"
 
 #include "types/Type.h"
 #include "types/PrimitiveType.h"
@@ -52,6 +56,8 @@ template class Model::TypedList<OOModel::Module>;
 template class Model::TypedList<OOModel::Method>;
 template class Model::TypedList<OOModel::MethodItem>;
 template class Model::TypedList<OOModel::FormalArgument>;
+template class Model::TypedList<OOModel::Field>;
+template class Model::TypedList<OOModel::OOReference>;
 
 template class Model::TypedList<OOModel::Statement>;
 template class Model::TypedList<OOModel::Block>;
@@ -64,6 +70,7 @@ template class Model::TypedList<OOModel::ReturnStatement>;
 template class Model::TypedList<OOModel::SwitchCase>;
 template class Model::TypedList<OOModel::SwitchStatement>;
 template class Model::TypedList<OOModel::VariableDeclaration>;
+template class Model::TypedList<OOModel::MethodCallStatement>;
 
 template class Model::TypedList<OOModel::Expression>;
 template class Model::TypedList<OOModel::IntegerLiteral>;
@@ -75,10 +82,11 @@ template class Model::TypedList<OOModel::NullLiteral>;
 template class Model::TypedList<OOModel::ThisExpression>;
 template class Model::TypedList<OOModel::VariableAccess>;
 template class Model::TypedList<OOModel::NewExpression>;
-template class Model::TypedList<OOModel::MethodCall>;
+template class Model::TypedList<OOModel::MethodCallExpression>;
 template class Model::TypedList<OOModel::UnaryOperation>;
 template class Model::TypedList<OOModel::BinaryOperation>;
 template class Model::TypedList<OOModel::CastExpression>;
+template class Model::TypedList<OOModel::ReferenceExpression>;
 
 template class Model::TypedList<OOModel::Type>;
 template class Model::TypedList<OOModel::PrimitiveType>;

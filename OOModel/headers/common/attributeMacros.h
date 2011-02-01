@@ -32,4 +32,16 @@
 
 /*********************************************************************************************************************/
 
+/**
+ * Declares a 'static' attribute of type OOModel::Static.
+ *
+ * The attribute node can be accessed via statNode()
+ * The visibility type is accessible via stat()
+ * A new value can be set via setStat()
+ */
+#define ATTRIBUTE_OOP_STATIC																											\
+	ATTRIBUTE_VALUE(::OOModel::Static, stat, setStat, ::OOModel::Static::StaticType)
+
+/*********************************************************************************************************************/
+
 #endif /* ATTRIBUTEMACROS_H_ */

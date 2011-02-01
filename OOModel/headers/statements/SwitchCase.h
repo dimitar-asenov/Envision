@@ -21,8 +21,8 @@ class OOMODEL_API SwitchCase : public Model::ExtendableNode
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(SwitchCase)
 
-	ATTRIBUTE(Expression, expr)
-	ATTRIBUTE(Statement, statement)
+	ATTRIBUTE(Expression, expr, setExpr)
+	ATTRIBUTE(Statement, statement, setStatement)
 };
 
 }

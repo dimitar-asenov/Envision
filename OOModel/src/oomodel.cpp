@@ -9,6 +9,7 @@
 #include "SelfTest/headers/SelfTestSuite.h"
 
 #include "common/Visibility.h"
+#include "common/Static.h"
 
 #include "Project.h"
 #include "Module.h"
@@ -16,6 +17,8 @@
 #include "Method.h"
 #include "MethodItem.h"
 #include "FormalArgument.h"
+#include "Field.h"
+#include "OOReference.h"
 
 #include "statements/Statement.h"
 #include "statements/Block.h"
@@ -28,6 +31,7 @@
 #include "statements/SwitchCase.h"
 #include "statements/SwitchStatement.h"
 #include "statements/VariableDeclaration.h"
+#include "statements/MethodCallStatement.h"
 
 #include "expressions/Expression.h"
 #include "expressions/IntegerLiteral.h"
@@ -39,10 +43,11 @@
 #include "expressions/ThisExpression.h"
 #include "expressions/VariableAccess.h"
 #include "expressions/NewExpression.h"
-#include "expressions/MethodCall.h"
+#include "expressions/MethodCallExpression.h"
 #include "expressions/UnaryOperation.h"
 #include "expressions/BinaryOperation.h"
 #include "expressions/CastExpression.h"
+#include "expressions/ReferenceExpression.h"
 
 #include "types/Type.h"
 #include "types/PrimitiveType.h"
@@ -56,6 +61,8 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 {
 	// Initialize common nodes
 	Visibility::registerNodeType();
+	Static::registerNodeType();
+	OOReference::registerNodeType();
 
 	// Register TypedList instantiations
 	Model::TypedList<Project>::registerNodeType();
@@ -64,6 +71,8 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	Model::TypedList<Method>::registerNodeType();
 	Model::TypedList<MethodItem>::registerNodeType();
 	Model::TypedList<FormalArgument>::registerNodeType();
+	Model::TypedList<Field>::registerNodeType();
+	Model::TypedList<OOReference>::registerNodeType();
 
 	Model::TypedList<Statement>::registerNodeType();
 	Model::TypedList<Block>::registerNodeType();
@@ -76,6 +85,7 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	Model::TypedList<SwitchCase>::registerNodeType();
 	Model::TypedList<SwitchStatement>::registerNodeType();
 	Model::TypedList<VariableDeclaration>::registerNodeType();
+	Model::TypedList<MethodCallStatement>::registerNodeType();
 
 	Model::TypedList<Expression>::registerNodeType();
 	Model::TypedList<IntegerLiteral>::registerNodeType();
@@ -87,10 +97,11 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	Model::TypedList<ThisExpression>::registerNodeType();
 	Model::TypedList<VariableAccess>::registerNodeType();
 	Model::TypedList<NewExpression>::registerNodeType();
-	Model::TypedList<MethodCall>::registerNodeType();
+	Model::TypedList<MethodCallExpression>::registerNodeType();
 	Model::TypedList<UnaryOperation>::registerNodeType();
 	Model::TypedList<BinaryOperation>::registerNodeType();
 	Model::TypedList<CastExpression>::registerNodeType();
+	Model::TypedList<ReferenceExpression>::registerNodeType();
 
 	Model::TypedList<Type>::registerNodeType();
 	Model::TypedList<PrimitiveType>::registerNodeType();
@@ -103,6 +114,7 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	Method::init();
 	MethodItem::init();
 	FormalArgument::init();
+	Field::init();
 
 	Statement::init();
 	Block::init();
@@ -115,6 +127,7 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	SwitchCase::init();
 	SwitchStatement::init();
 	VariableDeclaration::init();
+	MethodCallStatement::init();
 
 	Expression::init();
 	IntegerLiteral::init();
@@ -126,10 +139,11 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	ThisExpression::init();
 	VariableAccess::init();
 	NewExpression::init();
-	MethodCall::init();
+	MethodCallExpression::init();
 	UnaryOperation::init();
 	BinaryOperation::init();
 	CastExpression::init();
+	ReferenceExpression::init();
 
 	Type::init();
 	PrimitiveType::init();

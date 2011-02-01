@@ -18,7 +18,7 @@ class OOMODEL_API NamedType : public Type
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(NamedType)
 
-	ATTRIBUTE(OOReference, type);
+	ATTRIBUTE(OOReference, type, setType);
 };
 
 }

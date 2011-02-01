@@ -1,26 +1,25 @@
 /***********************************************************************************************************************
- * VariableAccess.h
+ * ReferenceExpression.h
  *
- *  Created on: Jan 31, 2011
+ *  Created on: Feb 1, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef VARIABLEACCESS_H_
-#define VARIABLEACCESS_H_
+#ifndef REFERENCEEXPRESSION_H_
+#define REFERENCEEXPRESSION_H_
 
 #include "Expression.h"
 #include "../OOReference.h"
 
 namespace OOModel {
 
-class OOMODEL_API VariableAccess: public Expression
+class OOMODEL_API ReferenceExpression: public Expression
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(VariableAccess)
+	EXTENDABLENODE_DECLARE_STANDARD_METHODS(ReferenceExpression)
 
-	ATTRIBUTE(Expression, prefix, setPrefix)
 	ATTRIBUTE(OOReference, ref, setRef)
 };
 
 }
 
-#endif /* VARIABLEACCESS_H_ */
+#endif /* REFERENCEEXPRESSION_H_ */

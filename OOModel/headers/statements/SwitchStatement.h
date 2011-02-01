@@ -23,8 +23,8 @@ class OOMODEL_API SwitchStatement: public Statement
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(SwitchStatement)
 
-	ATTRIBUTE(Expression, switchVar);
-	ATTRIBUTE(Model::TypedList<SwitchCase>, cases)
+	ATTRIBUTE(Expression, switchVar, setSwitchVar);
+	ATTRIBUTE(Model::TypedList<SwitchCase>, cases, setCases)
 };
 
 }

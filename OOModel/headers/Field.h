@@ -1,39 +1,37 @@
 /***********************************************************************************************************************
- * Module.h
+ * Field.h
  *
- *  Created on: Jan 27, 2011
+ *  Created on: Feb 1, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef MODULE_H_
-#define MODULE_H_
+#ifndef FIELD_H_
+#define FIELD_H_
 
 #include "oomodel_api.h"
 
 #include "common/attributeMacros.h"
-#include "Class.h"
+#include "common/Visibility.h"
+#include "common/Static.h"
+#include "types/Type.h"
 
 #include "ModelBase/headers/nodes/Extendable/ExtendableNode.h"
 #include "ModelBase/headers/nodes/Text.h"
-#include "ModelBase/headers/nodes/TypedList.h"
 #include "ModelBase/headers/nodes/nodeMacros.h"
 
 namespace OOModel {
 
-class Project;
-
-class OOMODEL_API Module : public Model::ExtendableNode
+class OOMODEL_API Field : public Model::ExtendableNode
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Module)
+	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Field)
 
 	ATTRIBUTE_OOP_NAME
-	ATTRIBUTE(Model::TypedList<Module>, modules, setModules);
-	ATTRIBUTE(Model::TypedList<Class>, classes, setClasses);
-
-	public:
-		virtual QString referenceName() const;
+	ATTRIBUTE(Type, type, setType)
+	ATTRIBUTE_OOP_VISIBILITY
+	ATTRIBUTE_OOP_STATIC
 };
+
 
 }
 
-#endif /* MODULE_H_ */
+#endif /* FIELD_H_ */

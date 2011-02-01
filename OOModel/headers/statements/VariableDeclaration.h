@@ -20,8 +20,8 @@ class OOMODEL_API VariableDeclaration: public Statement
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(VariableDeclaration)
 
-	ATTRIBUTE(FormalArgument, var);
-	ATTRIBUTE(Expression, initialValue);
+	ATTRIBUTE(FormalArgument, var, setVar);
+	ATTRIBUTE(Expression, initialValue, setInitialValue);
 };
 
 }

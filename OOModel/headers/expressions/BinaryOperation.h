@@ -18,8 +18,8 @@ class OOMODEL_API BinaryOperation: public Expression
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(BinaryOperation)
 
-	ATTRIBUTE(Expression, left)
-	ATTRIBUTE(Expression, right)
+	ATTRIBUTE(Expression, left, setLeft)
+	ATTRIBUTE(Expression, right, setRight)
 	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, opr, setOpr, int);
 
 	public:

@@ -20,9 +20,9 @@ class OOMODEL_API ForEachStatement: public Statement
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(ForEachStatement)
 
-	ATTRIBUTE(FormalArgument, var);
-	ATTRIBUTE(Expression, collection);
-	ATTRIBUTE(Statement, body);
+	ATTRIBUTE(FormalArgument, var, setVar);
+	ATTRIBUTE(Expression, collection, setCollection);
+	ATTRIBUTE(Statement, body, setBody);
 };
 
 }

@@ -18,10 +18,10 @@ class OOMODEL_API LoopStatement: public Statement
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(LoopStatement)
 
-	ATTRIBUTE(Expression, condition);
-	ATTRIBUTE(Statement, initStep);
-	ATTRIBUTE(Statement, updateStep);
-	ATTRIBUTE(Statement, body);
+	ATTRIBUTE(Expression, condition, setCondition);
+	ATTRIBUTE(Statement, initStep, setInitStep);
+	ATTRIBUTE(Statement, updateStep, setUpdateStep);
+	ATTRIBUTE(Statement, body, setBody);
 };
 
 }

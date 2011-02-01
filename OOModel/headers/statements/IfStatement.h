@@ -18,9 +18,9 @@ class OOMODEL_API IfStatement: public Statement
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(IfStatement)
 
-	ATTRIBUTE(Expression, condition);
-	ATTRIBUTE(Statement, thenBranch);
-	ATTRIBUTE(Statement, elseBranch);
+	ATTRIBUTE(Expression, condition, setCondition);
+	ATTRIBUTE(Statement, thenBranch, setThenBranch);
+	ATTRIBUTE(Statement, elseBranch, setElseBranch);
 };
 
 }
