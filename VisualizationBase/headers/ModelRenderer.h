@@ -29,17 +29,17 @@ class VISUALIZATIONBASE_API ModelRenderer
 		virtual ModelItem* render(Item* parent, Model::Node* node);
 
 		void registerVisualization(int typeId, ItemConstructor visualization);
-		void setUseDefaultExtendedNodeVisualizatoin(bool useDefault);
+		void setUseDefaultVisualizations(bool useDefault);
 
 	private:
 		QVector<ItemConstructor> visualizations;
 
-		bool useDefaultExtendableNodeVisualization_;
+		bool useDefaultVisualizations_;
 };
 
-inline void ModelRenderer::setUseDefaultExtendedNodeVisualizatoin(bool useDefault)
+inline void ModelRenderer::setUseDefaultVisualizations(bool useDefault)
 {
-	useDefaultExtendableNodeVisualization_ = useDefault;
+	useDefaultVisualizations_ = useDefault;
 }
 
 template<class VIS, class NODE>
