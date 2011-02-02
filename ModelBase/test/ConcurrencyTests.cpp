@@ -8,7 +8,6 @@
 #include "modelbase.h"
 #include "SelfTest/headers/SelfTestSuite.h"
 #include "test_nodes/BinaryNode.h"
-#include "test_nodes/BinaryWithPosition.h"
 #include "test_nodes/BinaryNodeAccessUnit.h"
 #include "Model.h"
 #include "nodes/Integer.h"

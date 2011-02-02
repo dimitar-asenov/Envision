@@ -11,41 +11,17 @@
 #include "../modelbase_api.h"
 #include "../nodes/Extendable/ExtendableNode.h"
 #include "../nodes/Integer.h"
-#include <QtCore/QVector>
+#include "../nodes/nodeMacros.h"
 
 namespace TestNodes {
 
 class MODELBASE_API PositionExtension
 {
-	private:
-		Model::ExtendableNode* self_;
-		Model::ExtendableIndex xIndex;
-		Model::ExtendableIndex yIndex;
+	DECLARE_EXTENSION(PositionExtension)
 
-		static int extensionId_;
-
-	public:
-		PositionExtension(Model::ExtendableNode* self, const QVector<Model::ExtendableIndex>& extensionAttributes);
-
-		int x();
-		int y();
-		void set(int x, int y);
-
-		static void registerExtension();
-		static int extensionId();
-		template <class T> static void extendNode(QVector<Model::ExtendableIndex>& extensionAttributes);
+	EXTENSION_ATTRIBUTE_VALUE(Model::Integer, x, setX, int)
+	EXTENSION_ATTRIBUTE_VALUE(Model::Integer, y, setY, int)
 };
-
-inline int PositionExtension::extensionId() { return extensionId_; }
-
-template <class T> void PositionExtension::extendNode(QVector<Model::ExtendableIndex>& extensionAttributes)
-{
-	extensionAttributes.append(T::registerNewAttribute("x", "Integer", false, false, true));
-	extensionAttributes.append(T::registerNewAttribute("y", "Integer", false, false, true));
-}
-
-inline int PositionExtension::x() { return static_cast<Model::Integer*> (self_->get(xIndex))->get(); }
-inline int PositionExtension::y() { return static_cast<Model::Integer*> (self_->get(yIndex))->get(); }
 
 }
 

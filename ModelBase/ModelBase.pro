@@ -42,7 +42,6 @@ HEADERS += headers/test_nodes/PositionExtension.h \
     headers/test_nodes/PartialList.h \
     headers/test_nodes/BinaryNodeAccessUnit.h \
     headers/test_nodes/BinaryNode.h \
-    headers/test_nodes/BinaryWithPosition.h \
     headers/commands/ListRemove.h \
     headers/commands/ListInsert.h \
     headers/commands/NameChange.h \
@@ -80,7 +79,6 @@ SOURCES += src/test_nodes/PositionExtension.cpp \
     src/test_nodes/PartialList.cpp \
     src/test_nodes/BinaryNodeAccessUnit.cpp \
     src/test_nodes/BinaryNode.cpp \
-    src/test_nodes/BinaryWithPosition.cpp \
     test/ListTest.cpp \
     src/commands/ListRemove.cpp \
     src/commands/ListInsert.cpp \

@@ -9,22 +9,8 @@
 
 namespace TestNodes {
 
-int extensionId_ = -1;
-
-void PositionExtension::registerExtension()
-{
-	extensionId_ = Model::ExtendableNode::registerExtensionId();
-};
-
-PositionExtension::PositionExtension(Model::ExtendableNode* self, const QVector<Model::ExtendableIndex>& extensionAttributes) :
-	self_(self), xIndex(extensionAttributes[0]), yIndex(extensionAttributes[1])
-{
-}
-
-void PositionExtension::set(int x, int y)
-{
-	static_cast<Model::Integer*> (self_->get(xIndex))->set(x);
-	static_cast<Model::Integer*> (self_->get(yIndex))->set(y);
-}
+DEFINE_EXTENSION(PositionExtension)
+REGISTER_EXTENSION_ATTRIBUTE(PositionExtension, x, Integer, false, false, true)
+REGISTER_EXTENSION_ATTRIBUTE(PositionExtension, y, Integer, false, false, true)
 
 }

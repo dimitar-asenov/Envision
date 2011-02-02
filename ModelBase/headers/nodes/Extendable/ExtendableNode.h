@@ -106,8 +106,8 @@ T* ExtendableNode::set(const ExtendableIndex &attributeIndex, const QString& typ
 }
 
 inline int ExtendableNode::typeIdStatic() { return typeId_;}
+inline int ExtendableNode::registerExtensionId() { return nextExtensionId_++; }
 
-int ExtendableNode::registerExtensionId() { return nextExtensionId_++; }
 template <class T> T* ExtendableNode::extension()
 {
 	AttributeChain& topMeta = topLevelMeta();

@@ -8,7 +8,6 @@
 #include "modelbase.h"
 #include "SelfTest/headers/SelfTestSuite.h"
 #include "test_nodes/BinaryNode.h"
-#include "test_nodes/BinaryWithPosition.h"
 #include "Model.h"
 #include "nodes/Integer.h"
 #include "nodes/Text.h"
@@ -26,7 +25,7 @@ TEST(ModelBase, PersistenceSave)
 	model.setName("root");
 	model.save(&store);
 
-	CHECK_STR_EQUAL("BinaryNode,root,full,Text,name,full,,Integer,x,full,0,Integer,y,full,0,", store.getSaved());
+	CHECK_STR_EQUAL("BinaryNode,root,full,Text,name,full,,Integer,_ext_PositionExtension_x,full,0,Integer,_ext_PositionExtension_y,full,0,", store.getSaved());
 
 	model.beginModification(root, "make tree");
 	root->setLeft<TestNodes::BinaryNode>();
@@ -39,7 +38,7 @@ TEST(ModelBase, PersistenceSave)
 	store.clear();
 	model.save();
 
-	CHECK_STR_EQUAL("BinaryNode,root,full,Text,name,full,Troot,BinaryNode,left,full,Text,name,full,Tleft,Integer,x,full,0,Integer,y,full,0,BinaryNode,right,full,Text,name,full,Tright,Integer,x,full,0,Integer,y,full,0,Integer,x,full,0,Integer,y,full,0,", store.getSaved());
+	CHECK_STR_EQUAL("BinaryNode,root,full,Text,name,full,Troot,BinaryNode,left,full,Text,name,full,Tleft,Integer,_ext_PositionExtension_x,full,0,Integer,_ext_PositionExtension_y,full,0,BinaryNode,right,full,Text,name,full,Tright,Integer,_ext_PositionExtension_x,full,0,Integer,_ext_PositionExtension_y,full,0,Integer,_ext_PositionExtension_x,full,0,Integer,_ext_PositionExtension_y,full,0,", store.getSaved());
 }
 
 }

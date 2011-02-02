@@ -17,9 +17,10 @@
 #include "nodes/Extendable/ExtendableNode.h"
 #include "nodes/List.h"
 #include "nodes/TypedList.h"
+
 #include "test_nodes/BinaryNode.h"
-#include "test_nodes/BinaryWithPosition.h"
 #include "test_nodes/BinaryNodeAccessUnit.h"
+#include "test_nodes/PositionExtension.h"
 
 using namespace Logger;
 
@@ -54,8 +55,11 @@ bool ModelBase::initialize(Envision::EnvisionManager&)
 void ModelBase::selfTest(QString)
 {
 	TestNodes::BinaryNode::init();
-	TestNodes::BinaryWithPosition::init();
 	TestNodes::BinaryNodeAccessUnit::init();
+
+	TestNodes::PositionExtension::registerExtension();
+	TestNodes::BinaryNode::registerNewExtension<TestNodes::PositionExtension>();
+
 	SelfTest::TestManager<ModelBase>::runAllTests().printResultStatistics();
 }
 

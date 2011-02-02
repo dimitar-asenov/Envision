@@ -14,6 +14,7 @@
 #include "ModelBase/headers/nodes/Extendable/Attribute.h"
 #include "ModelBase/headers/nodes/Extendable/ExtendableIndex.h"
 
+#include <QtCore/QVector>
 #include <QtCore/QString>
 #include <QtCore/QList>
 #include <QtCore/QPair>
@@ -87,7 +88,7 @@
 		template <class T> static void registerNewExtension()																				\
 		{																																					\
 			if (getMetaData().hasExtensionInHierarchy(T::extensionId()) == false) 													\
-				T::extendNode< className >(getMetaData().addExtension(T::extensionId()));											\
+				T::template extendNode< className >(getMetaData().addExtension(T::extensionId()));								\
 		}																																					\
 																																							\
 		virtual const QString& typeName() const;																								\
@@ -276,8 +277,7 @@ void className::init()																																\
 /*********************************************************************************************************************/
 
 /**
- * Declares an attribute for a class inheriting from ExtendableNode or for a class providing an extension to an
- * ExtendableNode.
+ * Declares an attribute for a class inheriting from ExtendableNode.
  *
  * @param type
  * 				The node type of the attribute
@@ -298,8 +298,7 @@ private:																																					\
 /*********************************************************************************************************************/
 
 /**
- * Declares a private attribute for a class inheriting from ExtendableNode or for a class providing an extension to an
- * ExtendableNode.
+ * Declares a private attribute for a class inheriting from ExtendableNode.
  *
  * @param type
  * 				The node type of the attribute
@@ -319,8 +318,8 @@ private:																																					\
 /*********************************************************************************************************************/
 
 /**
- * Declares an attribute for a class inheriting from ExtendableNode or for a class providing an extension to an
- * ExtendableNode. The attribute must have a get() and a set() method.
+ * Declares an attribute for a class inheriting from ExtendableNode. The attribute must have a get() and a set()
+ * method.
  *
  * Defines three methods for this attribute:
  * 	- A method to return the node itself
@@ -346,9 +345,11 @@ public:																																					\
 		void setMethodName(const valueType& val) { (static_cast<type*> (get(name##Index)))->set(val); }						\
 private:																																					\
 
+/*********************************************************************************************************************/
+
 /**
- * Declares a private attribute for a class inheriting from ExtendableNode or for a class providing an extension to an
- * ExtendableNode. The attribute must have a get() and a set() method.
+ * Declares a private attribute for a class inheriting from ExtendableNode. The attribute must have a get() and a
+ * set() method.
  *
  * Defines three methods for this attribute:
  * 	- A method to return the node itself
@@ -376,8 +377,8 @@ private:																																					\
 /*********************************************************************************************************************/
 
 /**
- * Declares an attribute for a class inheriting from ExtendableNode or for a class providing an extension to an
- * ExtendableNode. The attribute must have a get() and a set() method.
+ * Declares an attribute for a class inheriting from ExtendableNode. The attribute must have a get() and a set()
+ * method.
  *
  * Defines three methods for this attribute:
  * 	- A method to return the node itself
@@ -427,4 +428,223 @@ private:																																					\
 ::Model::ExtendableIndex className::attributeName##Index = addAttributeToInitialRegistrationList_(							\
 		attributeName##Index, #attributeName, #attributeType, partial, optional, persistent);
 
+/**
+ * Declares standard attributes and methods needed for each extension class.
+ *
+ *	This macro should appear on the first line of the declaration of a class that is an extension for objects of type
+ *	ExtendableNode or derived classes.
+ *
+ * @param className
+ * 				The name of the extension lass that is being declared
+ */
+#define DECLARE_EXTENSION(className)																											\
+private:																																					\
+	::Model::ExtendableNode* self_;																												\
+	const QVector< ::Model::ExtendableIndex >& attr_;																						\
+																																							\
+	static int extensionId_;																														\
+	static QList< ::Model::Attribute >& attributesToRegister_();																		\
+	static int addAttributeToRegister_( ::Model::Attribute attribute);																\
+																																							\
+public:																																					\
+	className( ::Model::ExtendableNode* self, const QVector< ::Model::ExtendableIndex>& extensionAttributes);			\
+																																							\
+	static void registerExtension();																												\
+	static int extensionId() { return extensionId_; }																						\
+																																							\
+	template <class T> static void extendNode(QVector<Model::ExtendableIndex>& extensionAttributes)							\
+	{																																						\
+		for (int i = 0; i<attributesToRegister_().size(); ++i)																			\
+			extensionAttributes.append( T::registerNewAttribute(attributesToRegister_()[i]) );									\
+	}																																						\
+																																							\
+private:
+/*********************************************************************************************************************/
+
+/**
+ * Defines standard attributes and methods needed for each extension class.
+ *
+ *	Use this in the beginning of the source (.cpp) file that belongs to the corresponding class declaration.
+ *
+ * @param className
+ * 				The name of the extension lass that is being defined
+ */
+#define DEFINE_EXTENSION(className)																												\
+int className::extensionId_ = -1;																												\
+QList< ::Model::Attribute >& className::attributesToRegister_()																		\
+{																																							\
+	static QList< ::Model::Attribute > at;																										\
+	return at;																																			\
+}																																							\
+																																							\
+int className::addAttributeToRegister_( ::Model::Attribute attribute )																\
+{																																							\
+	attributesToRegister_().append( attribute );																								\
+	return attributesToRegister_().size()-1;																									\
+}																																							\
+																																							\
+className::className(::Model::ExtendableNode* self, const QVector< ::Model::ExtendableIndex>& extensionAttributes) :	\
+	self_(self), attr_(extensionAttributes) {}																								\
+																																							\
+void className::registerExtension()																												\
+{																																							\
+	extensionId_ = ::Model::ExtendableNode::registerExtensionId();																		\
+}																																							\
+
+/*********************************************************************************************************************/
+
+/**
+ * Declares an attribute for a class providing an extension to ExtendableNode.
+ *
+ * @param type
+ * 				The node type of the attribute
+ * @param name
+ * 				The name of the attribute. A method called name() will be created that can be used to access this
+ * 				attribute.
+ * @param setMethodName
+ * 				The name of the set method that will set a new node for this attibute.
+ */
+#define EXTENSION_ATTRIBUTE(type, name, setMethodName)																					\
+private:																																					\
+		static int name##Index;																														\
+public:																																					\
+		type* name() { return static_cast< type* > (self_->get(attr_[name##Index])); }											\
+		template <class T> T* setMethodName() { return self_->set<T>(attr_[name##Index],T::typeNameStatic()); }			\
+private:																																					\
+
+/*********************************************************************************************************************/
+
+/**
+ * Declares a private attribute for a class providing an extension to ExtendableNode.
+ *
+ * @param type
+ * 				The node type of the attribute
+ * @param name
+ * 				The name of the attribute. A method called name() will be created that can be used to access this
+ * 				attribute.
+ * @param setMethodName
+ * 				The name of the set method that will set a new node for this attibute.
+ */
+#define EXTENSION_PRIVATE_ATTRIBUTE(type, name, setMethodName)																			\
+private:																																					\
+		static int name##Index;																														\
+																																							\
+		type* name() { return static_cast< type* > (self_->get(attr_[name##Index])); }											\
+		template <class T> T* setMethodName() { return self_->set<T>(attr_[name##Index],T::typeNameStatic()); }			\
+private:																																					\
+
+/*********************************************************************************************************************/
+
+/**
+ * Declares an attribute for a class providing an extension to ExtendableNode. The attribute must have a get() and
+ * a set() method.
+ *
+ * Defines three methods for this attribute:
+ * 	- A method to return the node itself
+ * 	- A method to return the simple value this node represents
+ * 	- A method to set the simple value of this node.
+ *
+ * @param type
+ * 				The node type of the attribute
+ * @param name
+ * 				The name of the attribute. A method called name() will be created that can be used to access this
+ * 				attribute.
+ * @param setMethodName
+ * 				The name of the set method that will set the value of this attibute.
+ * @param valueType
+ * 				The type of the simple value for this attribute.
+ */
+#define EXTENSION_ATTRIBUTE_VALUE(type, name, setMethodName, valueType)																\
+private:																																					\
+		static int name##Index;																														\
+public:																																					\
+		type* name##Node() { return static_cast< type* > (self_->get(attr_[name##Index])); }									\
+		valueType name() const { return (static_cast<type*> (self_->get(attr_[name##Index])))->get(); }						\
+		void setMethodName(const valueType& val) { (static_cast<type*> (self_->get(attr_[name##Index])))->set(val); }	\
+private:																																					\
+
+/*********************************************************************************************************************/
+
+/**
+ * Declares a private attribute for a class providing an extension to ExtendableNode. The attribute must have a get()
+ * and a set() method.
+ *
+ * Defines three methods for this attribute:
+ * 	- A method to return the node itself
+ * 	- A method to return the simple value this node represents
+ * 	- A method to set the simple value of this node.
+ *
+ * @param type
+ * 				The node type of the attribute
+ * @param name
+ * 				The name of the attribute. A method called name() will be created that can be used to access this
+ * 				attribute.
+ * @param setMethodName
+ * 				The name of the set method that will set the value of this attibute.
+ * @param valueType
+ * 				The type of the simple value for this attribute.
+ */
+#define EXTENSION_PRIVATE_ATTRIBUTE_VALUE(type, name, setMethodName, valueType)													\
+private:																																					\
+		static int name##Index;																														\
+																																							\
+		type* name##Node() { return static_cast< type* > (self_->get(attr_[name##Index])); }									\
+		valueType name() const { return (static_cast<type*> (self_->get(attr_[name##Index])))->get(); }						\
+		void setMethodName(const valueType& val) { (static_cast<type*> (self_->get(attr_[name##Index])))->set(val); }	\
+private:																																					\
+
+/*********************************************************************************************************************/
+/**
+ * Declares an attribute for a class providing an extension to ExtendableNode. The attribute must have a get() and
+ * a set() method.
+ *
+ * Defines three methods for this attribute:
+ * 	- A method to return the node itself
+ * 	- A method to return the simple value this node represents
+ * 	- A method to set the simple value of this node.
+ *
+ * @param type
+ * 				The node type of the attribute
+ * @param name
+ * 				The name of the attribute. A method called name() will be created that can be used to access this
+ * 				attribute.
+ * @param setMethodName
+ * 				The name of the set method that will set the value of this attibute.
+ * @param valueType
+ * 				The type of the simple value for this attribute.
+ * @param returnValueType
+ * 				The type of the returned value.
+ */
+#define EXTENSION_ATTRIBUTE_VALUE_CUSTOM_RETURN(type, name, setMethodName, valueType, returnValueType)					\
+private:																																					\
+		static int name##Index;																														\
+public:																																					\
+		type* name##Node() { return static_cast< type* > (self_->get(attr_[name##Index])); }									\
+		returnValueType name() const { return (static_cast<type*> (self_->get(attr_[name##Index])))->get(); }				\
+		void setMethodName(const valueType& val) { (static_cast<type*> (self_->get(attr_[name##Index])))->set(val); }	\
+private:																																					\
+
+/*********************************************************************************************************************/
+
+ /**
+  * Registers an attribute for an extension that was previously declared e.g using an EXTENSION_ATTRIBUTE macro.
+  *
+  * @param className
+  * 				The name of the class where this attribute was declared
+  * @param attributeName
+  * 				The name of the attribute
+  * @param attributeType
+  * 				The type of the attribute. This should only include the final type, without any namespace specifiers
+  * @param partial
+  * 				Whether this attribute should be partially loaded when reading from a persistent store
+  * @param optional
+  * 				Whether this attribute is optional
+  * @param persistent
+  * 				Whether this attribute should be persisted when saving the object to a persistent store.
+  */
+ #define REGISTER_EXTENSION_ATTRIBUTE(className, attributeName, attributeType, partial, optional, persistent)			\
+int className::attributeName##Index = className::addAttributeToRegister_(															\
+	::Model::Attribute("_ext_" #className "_" #attributeName, #attributeType, optional, partial, persistent));			\
+
+/*********************************************************************************************************************/
 #endif /* NODEMACROS_H_ */

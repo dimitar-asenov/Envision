@@ -35,7 +35,7 @@ void ExtendableNode::registerNodeType()
 	typeId_ = Node::registerNodeType("ExtendableNode", ::Model::createNewNode< ExtendableNode >, ::Model::createNodeFromPersistence< ExtendableNode >);
 }
 
-virtual AttributeChain& ExtendableNode::topLevelMeta()
+AttributeChain& ExtendableNode::topLevelMeta()
 {
 	return meta;
 }

@@ -31,8 +31,8 @@ TEST(ModelBase, ExtendableMetaData)
 	CHECK_STR_EQUAL("name", metaExt[0].name());
 	CHECK_STR_EQUAL("left", metaExt[1].name());
 	CHECK_STR_EQUAL("right", metaExt[2].name());
-	CHECK_STR_EQUAL("x", metaExt[3].name());
-	CHECK_STR_EQUAL("y", metaExt[4].name());
+	CHECK_STR_EQUAL("_ext_PositionExtension_x", metaExt[3].name());
+	CHECK_STR_EQUAL("_ext_PositionExtension_y", metaExt[4].name());
 
 	CHECK_STR_EQUAL("Text", metaExt[0].type());
 	CHECK_STR_EQUAL("BinaryNode", metaExt[1].type());
