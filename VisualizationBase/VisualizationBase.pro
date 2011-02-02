@@ -15,7 +15,9 @@ win32:LIBS += -L$${PLUGINS_DIR} \
     -llogger \
     -lselftest \
     -lmodelbase
-QT = core gui xml
+QT = core \
+    gui \
+    xml
 TEMPLATE = lib
 CONFIG += plugin \
     warn_on \
@@ -28,7 +30,10 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/items/SelectedItemStyle.h \
+HEADERS += headers/layouts/PositionLayoutStyle.h \
+    headers/layouts/PositionLayout.h \
+    headers/node_extensions/Position.h \
+    headers/items/SelectedItemStyle.h \
     headers/items/SelectedItem.h \
     headers/items/SceneHandlerItem.h \
     headers/items/TextRenderer.h \
@@ -68,7 +73,8 @@ HEADERS += headers/items/SelectedItemStyle.h \
     src/visualizationbase.h \
     headers/VisualizationException.h \
     headers/visualizationbase_api.h
-SOURCES += src/items/SelectedItemStyle.cpp \
+SOURCES += src/node_extensions/Position.cpp \
+    src/items/SelectedItemStyle.cpp \
     src/items/SelectedItem.cpp \
     src/items/SceneHandlerItem.cpp \
     src/items/TextRenderer.cpp \

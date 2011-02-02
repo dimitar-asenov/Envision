@@ -14,6 +14,8 @@
 #include "items/VExtendable.h"
 #include "items/VList.h"
 
+#include "node_extensions/Position.h"
+
 #include "ModelBase/headers/test_nodes/BinaryNode.h"
 #include "SelfTest/headers/SelfTestSuite.h"
 
@@ -30,7 +32,10 @@ namespace Visualization
 		VisualizationManager::init(&manager);
 		Shape::registerShape<Box>();
 
-		// Initialize visualizations
+		// Register extensions
+		Position::registerExtension();
+
+		// Register visualizations
 		Scene::defaultRenderer()->registerVisualization(Model::Text::typeIdStatic(), createVisualization<VText, Model::Text>);
 		Scene::defaultRenderer()->registerVisualization(Model::ExtendableNode::typeIdStatic(), createVisualization<VExtendable, Model::ExtendableNode>);
 		Scene::defaultRenderer()->registerVisualization(Model::List::typeIdStatic(), createVisualization<VList, Model::List>);
