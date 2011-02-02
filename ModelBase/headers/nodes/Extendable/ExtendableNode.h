@@ -30,6 +30,8 @@ class MODELBASE_API ExtendableNode: public Node
 		void removeAllNodes();
 		void verifyHasAllMandatoryAttributes();
 
+		static int typeId_;
+
 	protected:
 		static ExtendableIndex registerNewAttribute(AttributeChain& metaData, const QString &attributeName,
 				const QString &attributeType, bool canBePartiallyLoaded, bool isOptional, bool isPersistent);
@@ -39,6 +41,10 @@ class MODELBASE_API ExtendableNode: public Node
 
 		ExtendableNode(Node *parent, Model* model, AttributeChain& metaData);
 		ExtendableNode(Node *parent, NodeIdType id, PersistentStore &store, bool partialHint, AttributeChain& metaData);
+
+		ExtendableNode(Node *parent, Model* model);
+		ExtendableNode(Node *parent, NodeIdType id, PersistentStore &store, bool partialHint);
+
 		virtual ~ExtendableNode();
 
 		Node* get(const ExtendableIndex &attributeIndex) const;
@@ -62,6 +68,12 @@ class MODELBASE_API ExtendableNode: public Node
 		QList< QPair<QString, Node*> > getAllAttributes(bool includeNullValues = false);
 
 		static AttributeChain& getMetaData();
+
+		virtual const QString& typeName() const;
+		virtual int typeId() const;
+		static const QString& typeNameStatic();
+		static int typeIdStatic();
+		static void registerNodeType();
 };
 
 template<class T>
@@ -86,6 +98,8 @@ T* ExtendableNode::set(const ExtendableIndex &attributeIndex, const QString& typ
 
 	return nodeSpecific;
 }
+
+inline int ExtendableNode::typeIdStatic() { return typeId_;}
 
 }
 

@@ -14,6 +14,7 @@
 #include "nodes/Boolean.h"
 #include "nodes/Character.h"
 #include "nodes/Reference.h"
+#include "nodes/Extendable/ExtendableNode.h"
 #include "nodes/List.h"
 #include "nodes/TypedList.h"
 #include "test_nodes/BinaryNode.h"
@@ -37,6 +38,7 @@ bool ModelBase::initialize(Envision::EnvisionManager&)
 	Boolean::registerNodeType();
 	Character::registerNodeType();
 	Reference::registerNodeType();
+	ExtendableNode::registerNodeType();
 	List::registerNodeType();
 
 	TypedList<Text>::registerNodeType();

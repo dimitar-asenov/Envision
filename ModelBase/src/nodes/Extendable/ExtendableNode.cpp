@@ -11,6 +11,41 @@
 
 namespace Model {
 
+int ExtendableNode::typeId_ = -1; /* This must be set to the result of Node::registerNodeType */
+
+const QString& ExtendableNode::typeName() const
+{
+	return typeNameStatic();
+}
+
+int ExtendableNode::typeId()	const
+{
+	return typeId_;
+}
+
+const QString& ExtendableNode::typeNameStatic()
+{
+	static QString typeName_("ExtendableNode");
+	return typeName_;
+}
+
+void ExtendableNode::registerNodeType()
+{
+	typeId_ = Node::registerNodeType("ExtendableNode", ::Model::createNewNode< ExtendableNode >, ::Model::createNodeFromPersistence< ExtendableNode >);
+}
+
+ExtendableNode::ExtendableNode(Node *parent, Model* model) :
+	Node(parent, model), meta(ExtendableNode::getMetaData())
+{
+	throw ModelException("Constructing an ExtendableNode class directly, without specifying meta data");
+}
+
+ExtendableNode::ExtendableNode(Node *parent, NodeIdType id, PersistentStore &, bool) :
+	Node(parent, id), meta(ExtendableNode::getMetaData())
+{
+	throw ModelException("Constructing an ExtendableNode class directly, without specifying meta data");
+}
+
 ExtendableNode::ExtendableNode(Node *parent, Model* model, AttributeChain& metaData) :
 	Node(parent, model), meta(metaData), subnodes(meta.numLevels())
 {
