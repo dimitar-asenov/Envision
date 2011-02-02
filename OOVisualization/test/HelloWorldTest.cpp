@@ -47,37 +47,10 @@ namespace OOVisualization {
 TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 {
 	Scene* scene = new Scene();
-	ModelRenderer* renderer = new ModelRenderer();
 
-	renderer->registerVisualization(Visibility::typeIdStatic(), createVisualization<VVisibility, Visibility>);
-	renderer->registerVisualization(Static::typeIdStatic(), createVisualization<VStatic, Static>);
-	renderer->registerVisualization(OOReference::typeIdStatic(), createVisualization<VOOReference, OOReference>);
-
-	renderer->registerVisualization(Model::Text::typeIdStatic(), createVisualization<VText, Model::Text>);
-	renderer->registerVisualization(Model::List::typeIdStatic(), createVisualization<VList, Model::List>);
-	renderer->registerVisualization(Project::typeIdStatic(), createVisualization<VExtendable, Model::ExtendableNode>);
-	renderer->registerVisualization(Class::typeIdStatic(), createVisualization<VExtendable, Model::ExtendableNode>);
-	renderer->registerVisualization(Module::typeIdStatic(), createVisualization<VExtendable, Model::ExtendableNode>);
-	renderer->registerVisualization(Method::typeIdStatic(), createVisualization<VExtendable, Model::ExtendableNode>);
-	renderer->registerVisualization(FormalArgument::typeIdStatic(), createVisualization<VExtendable, Model::ExtendableNode>);
-	renderer->registerVisualization(Field::typeIdStatic(), createVisualization<VExtendable, Model::ExtendableNode>);
-	renderer->registerVisualization(NamedType::typeIdStatic(), createVisualization<VExtendable, Model::ExtendableNode>);
-	renderer->registerVisualization(StringLiteral::typeIdStatic(), createVisualization<VExtendable, Model::ExtendableNode>);
-	renderer->registerVisualization(VariableAccess::typeIdStatic(), createVisualization<VExtendable, Model::ExtendableNode>);
-	renderer->registerVisualization(ReferenceExpression::typeIdStatic(), createVisualization<VExtendable, Model::ExtendableNode>);
-	renderer->registerVisualization(MethodCallStatement::typeIdStatic(), createVisualization<VExtendable, Model::ExtendableNode>);
-
-	renderer->registerVisualization(Model::TypedList<Project>::typeIdStatic(), createVisualization<VList, Model::List >);
-	renderer->registerVisualization(Model::TypedList<Module>::typeIdStatic(), createVisualization<VList, Model::List >);
-	renderer->registerVisualization(Model::TypedList<Class>::typeIdStatic(), createVisualization<VList, Model::List >);
-	renderer->registerVisualization(Model::TypedList<Project>::typeIdStatic(), createVisualization<VList, Model::List >);
-	renderer->registerVisualization(Model::TypedList<Field>::typeIdStatic(), createVisualization<VList, Model::List >);
-	renderer->registerVisualization(Model::TypedList<Method>::typeIdStatic(), createVisualization<VList, Model::List >);
-	renderer->registerVisualization(Model::TypedList<MethodItem>::typeIdStatic(), createVisualization<VList, Model::List >);
-	renderer->registerVisualization(Model::TypedList<FormalArgument>::typeIdStatic(), createVisualization<VList, Model::List >);
-	renderer->registerVisualization(Model::TypedList<Expression>::typeIdStatic(), createVisualization<VList, Model::List >);
-
-	scene->setRenderer(renderer);
+	scene->defaultRenderer()->registerVisualization(Visibility::typeIdStatic(), createVisualization<VVisibility, Visibility>);
+	scene->defaultRenderer()->registerVisualization(Static::typeIdStatic(), createVisualization<VStatic, Static>);
+	scene->defaultRenderer()->registerVisualization(OOReference::typeIdStatic(), createVisualization<VOOReference, OOReference>);
 
 	////////////////////////////////////////////////// Create Model
 	Model::Model* model = new Model::Model();
@@ -147,18 +120,11 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 
 	////////////////////////////////////////////////// Set Scene
 
-	scene->addTopLevelItem( renderer->render(NULL, prj) );
+	scene->addTopLevelItem( scene->defaultRenderer()->render(NULL, prj) );
 	scene->scheduleUpdate();
 
 	// Create view
 	MainView* view = new MainView(scene);
-	VisualizationManager::instance().getMainWindow()->resize(1200,700);
-
-	// Center Window
-	QRect descktop( QApplication::desktop()->screenGeometry() );
-	int leftPos = descktop.width()/2-VisualizationManager::instance().getMainWindow()->width()/2;
-	int topPos = descktop.height()/2-VisualizationManager::instance().getMainWindow()->height()/2;
-	VisualizationManager::instance().getMainWindow()->move(leftPos,topPos);
 
 	CHECK_CONDITION(view != NULL);
 }
