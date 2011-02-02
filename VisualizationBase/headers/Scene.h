@@ -26,6 +26,7 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		void setRenderer(ModelRenderer* renderer);
 
 		ModelRenderer* renderer();
+		static ModelRenderer* defaultRenderer();
 
 		void addTopLevelItem(Item* item);
 		void removeTopLevelItem(Item* item);
@@ -45,10 +46,13 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		SceneHandlerItem* sceneHandlerItem_;
 		QList<Item*> topLevelItems;
 		QList<SelectedItem*> selections;
+
+		static ModelRenderer defaultRenderer_;
 };
 
 inline void Scene::setRenderer(ModelRenderer* renderer) { renderer_ = renderer; }
-inline ModelRenderer* Scene::renderer() { return renderer_; }
+inline ModelRenderer* Scene::renderer() { return renderer_? renderer_ : (&defaultRenderer_); }
+inline ModelRenderer* Scene::defaultRenderer() { return &defaultRenderer_; }
 inline SceneHandlerItem* Scene::sceneHandlerItem() {return sceneHandlerItem_; }
 
 

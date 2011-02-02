@@ -23,22 +23,32 @@ class VISUALIZATIONBASE_API ModelRenderer
 	public:
 		typedef ModelItem* (*ItemConstructor)(Item* parent, Model::Node* node);
 
+		ModelRenderer();
+		virtual ~ModelRenderer();
+
+		virtual ModelItem* render(Item* parent, Model::Node* node);
+
+		void registerVisualization(int typeId, ItemConstructor visualization);
+		void setUseDefaultExtendedNodeVisualizatoin(bool useDefault);
+
 	private:
 		QVector<ItemConstructor> visualizations;
 
-	public:
-		ModelRenderer();
-
-		ModelItem* render(Item* parent, Model::Node* node);
-
-		void registerVisualization(int typeId, ItemConstructor visualization);
+		bool useDefaultExtendableNodeVisualization_;
 };
+
+inline void ModelRenderer::setUseDefaultExtendedNodeVisualizatoin(bool useDefault)
+{
+	useDefaultExtendableNodeVisualization_ = useDefault;
+}
 
 template<class VIS, class NODE>
 ModelItem* createVisualization(Item* parent, Model::Node* node)
 {
 	return new VIS(parent, static_cast<NODE*> (node));
 }
+
+
 
 }
 

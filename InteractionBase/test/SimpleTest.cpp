@@ -8,22 +8,17 @@
 #include "interactionbase.h"
 #include "SelfTest/headers/SelfTestSuite.h"
 
-#include "VisualizationBase/headers/VisualizationManager.h"
 #include "VisualizationBase/headers/Scene.h"
 #include "VisualizationBase/headers/views/MainView.h"
-#include "VisualizationBase/headers/items/VText.h"
-#include "VisualizationBase/headers/items/VExtendable.h"
 #include "VisualizationBase/headers/items/VList.h"
-#include "VisualizationBase/headers/ModelRenderer.h"
+#include "VisualizationBase/headers/items/VExtendable.h"
 
 #include "ModelBase/headers/test_nodes/BinaryNode.h"
 #include "ModelBase/headers/nodes/Text.h"
 #include "ModelBase/headers/nodes/List.h"
 #include "ModelBase/headers/Model.h"
 
-#include <QtGui/QDesktopWidget>
 #include <QtGui/QApplication>
-#include <QtCore/QCoreApplication>
 
 namespace Interaction {
 
@@ -32,13 +27,6 @@ using namespace Visualization;
 TEST(InteractionBase, TextSelect)
 {
 	Scene* scene = new Scene();
-	ModelRenderer* renderer = new ModelRenderer();
-
-	renderer->registerVisualization(TestNodes::BinaryNode::typeIdStatic(), createVisualization<VExtendable, TestNodes::BinaryNode>);
-	renderer->registerVisualization(Model::Text::typeIdStatic(), createVisualization<VText, Model::Text>);
-	renderer->registerVisualization(Model::List::typeIdStatic(), createVisualization<VList, Model::List>);
-
-	scene->setRenderer(renderer);
 
 	Model::Model* model = new Model::Model();
 	Model::List* list = static_cast<Model::List*> (model->createRoot("List"));
@@ -59,7 +47,7 @@ TEST(InteractionBase, TextSelect)
 	third->set("Some independent text");
 	model->endModification();
 
-	VList* l = dynamic_cast<VList*> (renderer->render(NULL, list));
+	VList* l = dynamic_cast<VList*> (scene->renderer()->render(NULL, list));
 	scene->addTopLevelItem(l);
 	scene->scheduleUpdate();
 	QApplication::processEvents();
@@ -69,14 +57,6 @@ TEST(InteractionBase, TextSelect)
 
 	// Create view
 	MainView* view = new MainView(scene);
-	VisualizationManager::instance().getMainWindow()->resize(1200,700);
-
-	// Center Window
-	QRect descktop( QApplication::desktop()->screenGeometry() );
-	int leftPos = descktop.width()/2-VisualizationManager::instance().getMainWindow()->width()/2;
-	int topPos = descktop.height()/2-VisualizationManager::instance().getMainWindow()->height()/2;
-	VisualizationManager::instance().getMainWindow()->move(leftPos,topPos);
-
 	CHECK_CONDITION(view != NULL);
 }
 

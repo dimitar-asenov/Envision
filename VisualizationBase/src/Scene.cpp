@@ -16,6 +16,8 @@
 
 namespace Visualization {
 
+ModelRenderer Scene::defaultRenderer_;
+
 class UpdateSceneEvent : public QEvent
 {
 	public:
