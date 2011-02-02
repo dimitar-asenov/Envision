@@ -106,4 +106,38 @@ bool AttributeChain::hasAttribute(const QString &name) const
 
 }
 
+bool AttributeChain::hasExtensionInHierarchy(int extensionId) const
+{
+	const AttributeChain* ac = this;
+	while ( ac )
+	{
+		if (ac->extensions_.contains(extensionId)) return true;
+		ac = ac->parent_;
+	}
+
+	return false;
+}
+
+QVector<ExtendableIndex>& AttributeChain::addExtension(int extensionId)
+{
+	if (hasExtensionInHierarchy(extensionId)) throw ModelException("Adding an extension which has already exists in the type hierarchy");
+	extensions_.insert(extensionId, QVector<ExtendableIndex>());
+	return extensions_[extensionId];
+}
+
+const QVector<ExtendableIndex>& AttributeChain::extension(int extensionId) const
+{
+	// We need the cast here since otherwise ac->extentions_ is const below, which leads QMap<>::[] to give back a
+	// temporary copy not a const reference
+	AttributeChain* ac = const_cast<AttributeChain*> (this);
+
+	while ( ac )
+	{
+		if (ac->extensions_.contains(extensionId)) return ac->extensions_[extensionId];
+		ac = ac->parent_;
+	}
+
+	throw ModelException("Unknown extension requested. Extension Id is: " + QString::number(extensionId));
+}
+
 }

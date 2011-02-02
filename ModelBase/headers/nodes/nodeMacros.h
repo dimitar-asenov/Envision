@@ -37,9 +37,6 @@
  * 	NODE_DECLARE_STANDARD_METHODS( MyNewNode )
  */
 #define NODE_DECLARE_STANDARD_METHODS(className)																							\
-	private:																																				\
-		static int typeId_;																															\
-																																							\
 	public:																																				\
 		className(::Model::Node* parent, ::Model::Model* model);																			\
 		className(::Model::Node *parent, ::Model::NodeIdType id, ::Model::PersistentStore &store, bool partialLoadHint);\
@@ -50,7 +47,9 @@
 		static int typeIdStatic();																													\
 		static void registerNodeType();																											\
 																																							\
-	private:
+	private:																																				\
+		static int typeId_;																															\
+
 /*********************************************************************************************************************/
 
 /**
@@ -71,9 +70,6 @@
  * 	EXTENDABLENODE_DECLARE_STANDARD_METHODS( MyNewNode )
  */
 #define EXTENDABLENODE_DECLARE_STANDARD_METHODS(className)																				\
-	private:																																				\
-		static int typeId_;																															\
-																																							\
 	public:																																				\
 		className(::Model::Node* parent, ::Model::Model* model);																			\
 		className(::Model::Node *parent, ::Model::NodeIdType id, ::Model::PersistentStore &store, bool partialLoadHint);\
@@ -88,13 +84,24 @@
 																																							\
 		static ::Model::ExtendableIndex registerNewAttribute(const ::Model::Attribute& attribute);							\
 																																							\
+		template <class T> static void registerNewExtension()																				\
+		{																																					\
+			if (getMetaData().hasExtensionInHierarchy(T::extensionId()) == false) 													\
+				T::extendNode< className >(getMetaData().addExtension(T::extensionId()));											\
+		}																																					\
+																																							\
 		virtual const QString& typeName() const;																								\
 		virtual int typeId() const;																												\
 		static const QString& typeNameStatic();																								\
 		static int typeIdStatic();																													\
 		static void registerNodeType();																											\
 																																							\
+	protected:																																			\
+		virtual ::Model::AttributeChain& topLevelMeta();																					\
+																																							\
 	private:																																				\
+		static int typeId_;																															\
+																																							\
 		static QList<QPair< ::Model::ExtendableIndex&, ::Model::Attribute> >& attributesToRegisterAtInitialization_();	\
 		static ::Model::ExtendableIndex addAttributeToInitialRegistrationList_														\
 				(::Model::ExtendableIndex& index, const QString &attributeName, const QString &attributeType, 				\
@@ -225,6 +232,11 @@ void className::registerNodeType()																												\
 {																																							\
 	static ::Model::AttributeChain descriptions;																								\
 	return descriptions;																																\
+}																																							\
+																																							\
+::Model::AttributeChain& className::topLevelMeta()																							\
+{																																							\
+	return getMetaData();																															\
 }																																							\
 																																							\
 QList<QPair< ::Model::ExtendableIndex&, ::Model::Attribute> >& className::attributesToRegisterAtInitialization_()		\

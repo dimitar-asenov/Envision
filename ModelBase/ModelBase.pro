@@ -25,8 +25,9 @@ pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
-HEADERS += headers/TypedListInstantiations.h \
-	headers/nodes/Character.h \
+HEADERS += headers/test_nodes/PositionExtension.h \
+    headers/TypedListInstantiations.h \
+    headers/nodes/Character.h \
     headers/nodes/Boolean.h \
     headers/nodes/Float.h \
     headers/nodes/TypedListDefinition.h \
@@ -67,8 +68,9 @@ HEADERS += headers/TypedListInstantiations.h \
     headers/Model.h \
     headers/modelbase_api.h \
     src/modelbase.h
-SOURCES += src/TypedListInstantiations.cpp \
-	src/nodes/Character.cpp \
+SOURCES += src/test_nodes/PositionExtension.cpp \
+    src/TypedListInstantiations.cpp \
+    src/nodes/Character.cpp \
     src/nodes/Boolean.cpp \
     src/nodes/Float.cpp \
     src/commands/ListPut.cpp \

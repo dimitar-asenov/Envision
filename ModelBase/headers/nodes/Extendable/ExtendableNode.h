@@ -31,12 +31,15 @@ class MODELBASE_API ExtendableNode: public Node
 		void verifyHasAllMandatoryAttributes();
 
 		static int typeId_;
+		static int nextExtensionId_;
 
 	protected:
 		static ExtendableIndex registerNewAttribute(AttributeChain& metaData, const QString &attributeName,
 				const QString &attributeType, bool canBePartiallyLoaded, bool isOptional, bool isPersistent);
 
 		static ExtendableIndex registerNewAttribute(AttributeChain& metaData, const Attribute& attribute);
+
+		virtual AttributeChain& topLevelMeta();
 	public:
 
 		ExtendableNode(Node *parent, Model* model, AttributeChain& metaData);
@@ -74,6 +77,9 @@ class MODELBASE_API ExtendableNode: public Node
 		static const QString& typeNameStatic();
 		static int typeIdStatic();
 		static void registerNodeType();
+		static int registerExtensionId();
+
+		template <class T> T* extension();
 };
 
 template<class T>
@@ -100,6 +106,14 @@ T* ExtendableNode::set(const ExtendableIndex &attributeIndex, const QString& typ
 }
 
 inline int ExtendableNode::typeIdStatic() { return typeId_;}
+
+int ExtendableNode::registerExtensionId() { return nextExtensionId_++; }
+template <class T> T* ExtendableNode::extension()
+{
+	AttributeChain& topMeta = topLevelMeta();
+	if (topMeta.hasExtensionInHierarchy(T::extensionId())) return new T(this, topMeta.extension(T::extensionId()));
+	else return NULL;
+}
 
 }
 

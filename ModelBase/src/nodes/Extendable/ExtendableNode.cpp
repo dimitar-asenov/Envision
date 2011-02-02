@@ -12,6 +12,7 @@
 namespace Model {
 
 int ExtendableNode::typeId_ = -1; /* This must be set to the result of Node::registerNodeType */
+int ExtendableNode::nextExtensionId_ = 0;
 
 const QString& ExtendableNode::typeName() const
 {
@@ -32,6 +33,11 @@ const QString& ExtendableNode::typeNameStatic()
 void ExtendableNode::registerNodeType()
 {
 	typeId_ = Node::registerNodeType("ExtendableNode", ::Model::createNewNode< ExtendableNode >, ::Model::createNodeFromPersistence< ExtendableNode >);
+}
+
+virtual AttributeChain& ExtendableNode::topLevelMeta()
+{
+	return meta;
 }
 
 ExtendableNode::ExtendableNode(Node *parent, Model* model) :
