@@ -25,8 +25,6 @@ class VISUALIZATIONBASE_API PositionLayout : public Layout
 		QVector<ModelItem*> items;
 		QVector<const Position*> positions;
 
-		int toGrid(const int& pos) const;
-
 	public:
 		PositionLayout(Item* parent, const PositionLayoutStyle* style = Styles::layout<PositionLayout>("default"));
 		~PositionLayout();
@@ -55,6 +53,7 @@ class VISUALIZATIONBASE_API PositionLayout : public Layout
 		int focusedElementIndex() const;
 		virtual bool focusChild(FocusTarget location);
 
+		int toGrid(const int& pos) const;
 };
 
 template <class T> T* PositionLayout::at(int index) { return static_cast<T*> (items[index]); }

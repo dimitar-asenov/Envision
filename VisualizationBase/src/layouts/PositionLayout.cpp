@@ -8,6 +8,8 @@
 #include "layouts/PositionLayout.h"
 #include "shapes/Shape.h"
 
+#include "ModelBase/headers/Model.h"
+
 namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS( PositionLayout )
@@ -15,6 +17,7 @@ ITEM_COMMON_DEFINITIONS( PositionLayout )
 PositionLayout::PositionLayout(Item* parent, const PositionLayoutStyle* style) :
 	Layout(parent, style)
 {
+	setAcceptedMouseButtons(Qt::LeftButton);
 }
 
 PositionLayout::~PositionLayout()
@@ -77,7 +80,7 @@ void PositionLayout::clear(bool deleteItems)
 
 inline int PositionLayout::toGrid(const int& pos) const
 {
-	return pos + (pos >=0) ? (-(pos % style()->gridSize())) : ( (-pos) % style()->gridSize());
+	return pos + ( (pos >=0) ? (-(pos % style()->gridSize())) : ( (-pos) % style()->gridSize()) );
 }
 
 void PositionLayout::updateGeometry(int, int)
@@ -97,7 +100,9 @@ void PositionLayout::updateGeometry(int, int)
 	int sizeHeight = bottomRight.y() - topLeft.y() + style()->topMargin() + style()->bottomMargin();
 	setInnerSize(sizeWidth, sizeHeight);
 
-	for (int i =0; i<items.size(); ++i) items[i]->setPos( xOffset() + toGrid(positions[i]->x()) - topLeft.x(), yOffset() +  toGrid(positions[i]->y()) - topLeft.y());
+	for (int i =0; i<items.size(); ++i)
+		items[i]->setPos( xOffset() + toGrid(positions[i]->x()) - topLeft.x(), yOffset() +  toGrid(positions[i]->y()) - topLeft.y());
+
 }
 
 int PositionLayout::focusedElementIndex() const
