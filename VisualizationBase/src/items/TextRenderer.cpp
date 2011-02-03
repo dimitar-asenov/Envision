@@ -10,6 +10,7 @@
 #include "items/ModelItem.h"
 #include "Scene.h"
 #include "VisualizationException.h"
+#include "shapes/Shape.h"
 
 #include <QtGui/QPainter>
 #include <QtGui/QFontMetrics>
@@ -101,9 +102,18 @@ template<class T> void TextRenderer<T>::updateGeometry(int, int)
 		if (bound.height() < qfm.height()) bound.setHeight(qfm.height());
 	}
 
-	xOffset = -bound.left();
-	yOffset = -bound.top();
-	this->setSize(bound.size());
+	if (this->hasShape())
+	{
+		this->getShape()->setInnerSize(bound.width(), bound.height());
+		xOffset = -bound.left() + this->getShape()->contentLeft();
+		yOffset = -bound.top() + this->getShape()->contentTop();
+	}
+	else
+	{
+		xOffset = -bound.left();
+		yOffset = -bound.top();
+		this->setSize(bound.size());
+	}
 
 	if ( this->hasFocus() )
 	{
@@ -121,8 +131,10 @@ template<class T> void TextRenderer<T>::updateGeometry(int, int)
 	}
 }
 
-template<class T> void TextRenderer<T>::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
+template<class T> void TextRenderer<T>::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+	T::paint(painter, option, widget);
+
 	int numSelected = this->scene()->selectedItems().size();
 
 	if ( !this->hasFocus() || numSelected > 1  || (numSelected == 1 && !this->isSelected()))
