@@ -17,7 +17,8 @@ win32:LIBS += -L$${PLUGINS_DIR} \
     -lmodelbase \
     -lfilepersistence \
     -lvisualizationbase
-QT = core gui
+QT = core \
+    gui
 TEMPLATE = lib
 CONFIG += plugin \
     warn_on \
@@ -30,7 +31,8 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/handlers/HList.h \
+HEADERS += headers/handlers/HPositionLayout.h \
+    headers/handlers/HList.h \
     headers/commands/CSceneHandlerItemExit.h \
     headers/handlers/HSceneHandlerItem.h \
     headers/handlers/GenericHandler.h \
@@ -49,7 +51,8 @@ HEADERS += headers/handlers/HList.h \
     headers/commands/Command.h \
     headers/interactionbase_api.h \
     src/interactionbase.h
-SOURCES += src/handlers/HList.cpp \
+SOURCES += src/handlers/HPositionLayout.cpp \
+    src/handlers/HList.cpp \
     src/commands/CSceneHandlerItemExit.cpp \
     src/handlers/HSceneHandlerItem.cpp \
     src/handlers/GenericHandler.cpp \

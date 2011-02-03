@@ -13,6 +13,7 @@
 #include "handlers/HExtendable.h"
 #include "handlers/HCommandPrompt.h"
 #include "handlers/HSceneHandlerItem.h"
+#include "handlers/HPositionLayout.h"
 
 #include "vis/CommandPrompt.h"
 
@@ -24,6 +25,7 @@
 #include "VisualizationBase/headers/layouts/SequentialLayout.h"
 #include "VisualizationBase/headers/layouts/PanelLayout.h"
 #include "VisualizationBase/headers/layouts/PanelBorderLayout.h"
+#include "VisualizationBase/headers/layouts/PositionLayout.h"
 #include "ModelBase/headers/test_nodes/BinaryNode.h"
 
 #include "SelfTest/headers/SelfTestSuite.h"
@@ -47,6 +49,7 @@ bool InteractionBase::initialize(Envision::EnvisionManager&)
 	Visualization::SequentialLayout::setInteractionHandler(GenericHandler::instance());
 	Visualization::PanelLayout::setInteractionHandler(GenericHandler::instance());
 	Visualization::PanelBorderLayout::setInteractionHandler(GenericHandler::instance());
+	Visualization::PositionLayout::setInteractionHandler(HPositionLayout::instance());
 	CommandPrompt::setInteractionHandler(HCommandPrompt::instance());
 	return true;
 }

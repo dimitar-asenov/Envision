@@ -14,6 +14,7 @@
 #include "VisualizationBase/headers/items/ModelItem.h"
 #include "FilePersistence/headers/SystemClipboard.h"
 #include "ModelBase/headers/nodes/List.h"
+#include "ModelBase/headers/nodes/Extendable/ExtendableNode.h"
 
 namespace Interaction {
 
@@ -215,12 +216,13 @@ void GenericHandler::keyReleaseEvent(Visualization::Item *target, QKeyEvent *eve
 
 void GenericHandler::mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
-	InteractionHandler::mousePressEvent(target, event);
+	if (event->button() == Qt::LeftButton && event->modifiers() == Qt::ControlModifier) event->ignore();
+	else InteractionHandler::mousePressEvent(target, event);
 }
 
 void GenericHandler::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
-	if (!event->buttonDownPos( Qt::LeftButton).isNull())
+	if (event->modifiers() == 0 && !event->buttonDownPos( Qt::LeftButton).isNull() )
 	{
 		QPainterPath path;
 		path.addRect( QRectF(event->buttonDownScenePos(Qt::LeftButton), event->scenePos()) );
@@ -228,8 +230,7 @@ void GenericHandler::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneM
 		filterSelectedItems(target, event);
 		target->scene()->scheduleUpdate();
 	}
-
-	InteractionHandler::mouseMoveEvent(target, event);
+	else InteractionHandler::mouseMoveEvent(target, event);
 }
 
 void GenericHandler::focusInEvent(Visualization::Item *target, QFocusEvent *event)

@@ -134,7 +134,7 @@ void HText::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 void HText::mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
 	doubleClick = false;
-	if ( event->button() == Qt::LeftButton )
+	if ( event->modifiers() == 0 && event->button() == Qt::LeftButton )
 	{
 		TEXTRENDERER_SET2(setSelectedByDrag, event->pos().x(), event->pos().x());
 	}
@@ -144,14 +144,14 @@ void HText::mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEven
 
 void HText::mouseReleaseEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
-	if ( doubleClick ) doubleClick = false;
+	if ( event->modifiers() == 0 && doubleClick ) doubleClick = false;
 	else GenericHandler::mouseReleaseEvent(target, event);
 }
 
 void HText::mouseDoubleClickEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
 	doubleClick = true;
-	if ( event->button() == Qt::LeftButton )
+	if ( event->modifiers() == 0 && event->button() == Qt::LeftButton )
 	{
 		target->scene()->clearSelection();
 		TEXTRENDERER_SET(selectAll);
@@ -161,18 +161,22 @@ void HText::mouseDoubleClickEvent(Visualization::Item *target, QGraphicsSceneMou
 
 void HText::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
-	if (!event->buttonDownPos(Qt::LeftButton).isNull() && target->contains( event->pos() ))
+	if (event->modifiers() == 0)
 	{
-		TEXTRENDERER_SET2(setSelectedByDrag, event->buttonDownPos(Qt::LeftButton).x(), event->pos().x());
-		target->scene()->clearSelection();
-	}
-	else
-	{
-		target->setUpdateNeeded();
-		GenericHandler::mouseMoveEvent(target, event);
-	}
+		if (!event->buttonDownPos(Qt::LeftButton).isNull() && target->contains( event->pos() ))
+		{
+			TEXTRENDERER_SET2(setSelectedByDrag, event->buttonDownPos(Qt::LeftButton).x(), event->pos().x());
+			target->scene()->clearSelection();
+		}
+		else
+		{
+			target->setUpdateNeeded();
+			GenericHandler::mouseMoveEvent(target, event);
+		}
 
-	target->scene()->scheduleUpdate();
+		target->scene()->scheduleUpdate();
+	}
+	else GenericHandler::mouseMoveEvent(target, event);
 }
 
 void HText::focusOutEvent(Visualization::Item *target, QFocusEvent *)

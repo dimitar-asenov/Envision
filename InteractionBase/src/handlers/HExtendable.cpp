@@ -25,7 +25,7 @@ HExtendable* HExtendable::instance()
 
 void HExtendable::mouseDoubleClickEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
-	if (event->button() == Qt::LeftButton)
+	if (event->modifiers() == 0 && event->button() == Qt::LeftButton)
 	{
 		Visualization::VExtendable *ext = dynamic_cast<Visualization::VExtendable*> (target);
 		ext->setExpanded(! ext->expanded());
