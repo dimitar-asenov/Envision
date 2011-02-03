@@ -13,6 +13,7 @@
 #include "OOModel/headers/Project.h"
 #include "OOModel/headers/Module.h"
 #include "OOModel/headers/Class.h"
+#include "OOModel/headers/Method.h"
 
 #include "VisualizationBase/headers/Scene.h"
 #include "VisualizationBase/headers/node_extensions/Position.h"
@@ -32,6 +33,7 @@ bool OOVisualization::initialize(Envision::EnvisionManager&)
 	Project::registerNewExtension<Position>();
 	Module::registerNewExtension<Position>();
 	Class::registerNewExtension<Position>();
+	Method::registerNewExtension<Position>();
 
 	// Register visualizations
 	Scene::defaultRenderer()->registerVisualization(Project::typeIdStatic(), createVisualization<VProject, Project>);
