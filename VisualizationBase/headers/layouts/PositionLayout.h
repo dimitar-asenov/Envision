@@ -22,7 +22,9 @@ class PositionLayout : public Layout
 
 	private:
 		QVector<Item*> items;
-		QVector<Position*> positions;
+		QVector<const Position*> positions;
+
+		int toGrid(const int& pos) const;
 
 	public:
 		PositionLayout(Item* parent, const PositionLayoutStyle* style = Styles::layout<PositionLayout>("default"));

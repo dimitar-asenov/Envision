@@ -1,4 +1,5 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="../Layout/default">
 	<spaceBetweenElements>0</spaceBetweenElements>
+	<gridSize>20</gridSize>
 </style>

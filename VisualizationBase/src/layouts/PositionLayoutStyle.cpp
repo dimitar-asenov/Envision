@@ -11,7 +11,7 @@
 namespace Visualization {
 
 PositionLayoutStyle::PositionLayoutStyle() :
-	spaceBetweenElements_(10)
+	spaceBetweenElements_(10), gridSize_(20)
 {
 }
 
@@ -21,15 +21,11 @@ PositionLayoutStyle* PositionLayoutStyle::getDefault()
 	return &s;
 }
 
-void PositionLayoutStyle::setSpaceBetweenElements(int space)
-{
-	if ( space >= 0 ) spaceBetweenElements_ = space;
-}
-
 void PositionLayoutStyle::load()
 {
 	LayoutStyle::load();
 	Styles::load("spaceBetweenElements", spaceBetweenElements_);
+	Styles::load("gridSize", gridSize_);
 }
 
 }

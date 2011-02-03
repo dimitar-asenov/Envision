@@ -60,9 +60,29 @@ void PositionLayout::clear(bool deleteItems)
 	items.clear();
 }
 
+inline int PositionLayout::toGrid(const int& pos) const
+{
+	return pos + (pos >=0) ? (-(pos % style()->gridSize())) : ( (-pos) % style()->gridSize());
+}
+
 void PositionLayout::updateGeometry(int, int)
 {
-	//TODO: Implement this.
+	QPoint topLeft;
+	QPoint bottomRight;
+
+	for(int i = 0; i<items.size(); ++i)
+	{
+		if (i==0 || topLeft.x() > toGrid(positions[i]->x()) ) topLeft.setX( toGrid(positions[i]->x()) );
+		if (i==0 || topLeft.y() > toGrid(positions[i]->y()) ) topLeft.setY( toGrid(positions[i]->y()) );
+		if (i==0 || bottomRight.x() < toGrid(positions[i]->x()) + items[i]->width()  ) bottomRight.setX( toGrid(positions[i]->x()) + items[i]->width() );
+		if (i==0 || bottomRight.y() < toGrid(positions[i]->y()) + items[i]->height() ) bottomRight.setY( toGrid(positions[i]->y()) + items[i]->height() );
+	}
+
+	int sizeWidth = bottomRight.x() - topLeft.x() + style()->leftMargin() + style()->rightMargin();
+	int sizeHeight = bottomRight.y() - topLeft.y() + style()->topMargin() + style()->bottomMargin();
+	setInnerSize(sizeWidth, sizeHeight);
+
+	for (int i =0; i<items.size(); ++i) items[i]->setPos( xOffset() + toGrid(positions[i]->x()) - topLeft.x(), yOffset() +  toGrid(positions[i]->y()) - topLeft.y());
 }
 
 int PositionLayout::focusedElementIndex() const

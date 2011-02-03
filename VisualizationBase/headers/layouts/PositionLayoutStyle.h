@@ -18,19 +18,20 @@ class VISUALIZATIONBASE_API PositionLayoutStyle : public LayoutStyle
 {
 	private:
 		int spaceBetweenElements_;
+		int gridSize_;
 
 	public:
 		PositionLayoutStyle();
 		virtual void load();
 
 		int spaceBetweenElements() const;
-
-		void setSpaceBetweenElements(int space);
+		int gridSize() const;
 
 		static PositionLayoutStyle* getDefault();
 };
 
 inline int PositionLayoutStyle::spaceBetweenElements() const {	return spaceBetweenElements_; }
+inline int PositionLayoutStyle::gridSize() const {	return gridSize_; }
 
 }
 
