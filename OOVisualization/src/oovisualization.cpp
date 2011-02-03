@@ -17,6 +17,8 @@
 #include "VisualizationBase/headers/Scene.h"
 #include "VisualizationBase/headers/node_extensions/Position.h"
 
+#include "InteractionBase/headers/handlers/GenericHandler.h"
+
 Q_EXPORT_PLUGIN2( oovisualization, OOVisualization::OOVisualization )
 
 using namespace OOModel;
@@ -33,6 +35,11 @@ bool OOVisualization::initialize(Envision::EnvisionManager&)
 
 	// Register visualizations
 	Scene::defaultRenderer()->registerVisualization(Project::typeIdStatic(), createVisualization<VProject, Project>);
+
+	// Register handlers
+	// TODO: move this to a better place i.e. OOInteraction Plugin
+	// TODO: when you do that remove the dependency in the .plugin meta file
+	VProject::setInteractionHandler(Interaction::GenericHandler::instance());
 
 	return true;
 }

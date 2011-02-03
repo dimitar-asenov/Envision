@@ -32,6 +32,7 @@
 #include "VisualizationBase/headers/items/VExtendable.h"
 #include "VisualizationBase/headers/items/VText.h"
 #include "VisualizationBase/headers/items/VList.h"
+#include "VisualizationBase/headers/node_extensions/Position.h"
 
 #include "ModelBase/headers/Model.h"
 
@@ -115,7 +116,11 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	ReferenceExpression* ref = va->setPrefix<ReferenceExpression>();
 	ref->ref()->set("lib:Java,class:System");
 
+	// set positions
+	java->extension<Position>()->setX(200);
+
 	model->endModification();
+	CHECK_INT_EQUAL(200, java->extension<Position>()->x());
 	CHECK_STR_EQUAL("Java", java->name());
 
 	////////////////////////////////////////////////// Set Scene
