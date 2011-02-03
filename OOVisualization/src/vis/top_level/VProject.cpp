@@ -115,9 +115,14 @@ void VProject::determineChildren()
 			content->insert(renderer()->render(NULL, node->classes()->at(k)));
 }
 
-void VProject::updateGeometry(int availableWidth, int availableHeight)
+void VProject::updateGeometry(int, int)
 {
-	ModelItem::updateGeometry(layout, availableWidth, availableHeight);
+	if ( hasShape() )
+	{
+		getShape()->setOffset(layout->getXOffsetForExternalShape(), layout->getYOffsetForExternalShape());
+		getShape()->setOutterSize(layout->getOutterWidthForExternalShape(), layout->getOutterHeightForExternalShape());
+	}
+	setSize( layout->size() );
 }
 
 bool VProject::focusChild(FocusTarget location)
