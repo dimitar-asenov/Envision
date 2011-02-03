@@ -8,12 +8,32 @@
 #include "oovisualization.h"
 #include "SelfTest/headers/SelfTestSuite.h"
 
+#include "vis/top_level/VProject.h"
+
+#include "OOModel/headers/Project.h"
+#include "OOModel/headers/Module.h"
+#include "OOModel/headers/Class.h"
+
+#include "VisualizationBase/headers/Scene.h"
+#include "VisualizationBase/headers/node_extensions/Position.h"
+
 Q_EXPORT_PLUGIN2( oovisualization, OOVisualization::OOVisualization )
+
+using namespace OOModel;
+using namespace Visualization;
 
 namespace OOVisualization {
 
 bool OOVisualization::initialize(Envision::EnvisionManager&)
 {
+	// Register extensions
+	Project::registerNewExtension<Position>();
+	Module::registerNewExtension<Position>();
+	Class::registerNewExtension<Position>();
+
+	// Register visualizations
+	Scene::defaultRenderer()->registerVisualization(Project::typeIdStatic(), createVisualization<VProject, Project>);
+
 	return true;
 }
 

@@ -9,19 +9,20 @@
 #define POSITIONLAYOUT_H_
 
 #include "../visualizationbase_api.h"
-#include "node_extensions/Position.h"
+#include "../node_extensions/Position.h"
 
+#include "../items/ModelItem.h"
 #include "Layout.h"
 #include "PositionLayoutStyle.h"
 
-namespace VISUALIZATIONBASE_API Visualization {
+namespace  Visualization {
 
-class PositionLayout : public Layout
+class VISUALIZATIONBASE_API PositionLayout : public Layout
 {
 	ITEM_COMMON(PositionLayout, Layout)
 
 	private:
-		QVector<Item*> items;
+		QVector<ModelItem*> items;
 		QVector<const Position*> positions;
 
 		int toGrid(const int& pos) const;
@@ -41,8 +42,10 @@ class PositionLayout : public Layout
 		 */
 		void insert(Item* item);
 
+		void remove(int index, bool deleteItem = true);
 		void removeAll(Item* item, bool deleteItem = true);
 		void clear(bool deleteItems = true);
+		bool hasNode(Model::Node* node);
 
 		template <class T> T* at(int index);
 		template <class T> T* at(int index) const;

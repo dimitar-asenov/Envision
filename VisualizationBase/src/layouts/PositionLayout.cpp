@@ -27,6 +27,14 @@ int PositionLayout::length() const
 	return items.size();
 }
 
+bool PositionLayout::hasNode(Model::Node* node)
+{
+	for(int i=0; i<items.size(); ++i)
+		if (items[i]->getNode() == node) return true;
+
+	return false;
+}
+
 void PositionLayout::insert(Item* item)
 {
 	// Check whether this item has a position associated with it
@@ -41,8 +49,15 @@ void PositionLayout::insert(Item* item)
 	if (!pos) throw VisualizationException("Adding a ModelItem whose node does not have a Position extension to a PositionLayout");
 
 	item->setParentItem(this);
-	items.append(item);
+	items.append(mi);
 	positions.append(pos);
+	setUpdateNeeded();
+}
+
+void PositionLayout::remove(int index, bool deleteItem)
+{
+	if (deleteItem) SAFE_DELETE_ITEM( items[index]);
+	items.remove(index);
 	setUpdateNeeded();
 }
 
@@ -93,7 +108,7 @@ int PositionLayout::focusedElementIndex() const
 	return -1;
 }
 
-bool PositionLayout::focusChild(FocusTarget location)
+bool PositionLayout::focusChild(FocusTarget)
 {
 	if (items.isEmpty()) return false;
 

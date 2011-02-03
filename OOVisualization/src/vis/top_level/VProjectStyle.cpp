@@ -6,18 +6,26 @@
  **********************************************************************************************************************/
 
 #include "vis/top_level/VProjectStyle.h"
+#include "VisualizationBase/headers/Styles.h"
 
 namespace OOVisualization {
 
 VProjectStyle::VProjectStyle()
 {
-	// TODO Auto-generated constructor stub
-
 }
 
-VProjectStyle::~VProjectStyle()
+VProjectStyle* VProjectStyle::getDefault()
 {
-	// TODO Auto-generated destructor stub
+	static VProjectStyle defaultStyle;
+	return &defaultStyle;
+}
+
+void VProjectStyle::load()
+{
+	ItemStyle::load();
+	Visualization::Styles::load("borderStyle", borderStyle_);
+	Visualization::Styles::load("headerStyle", headerStyle_);
+	Visualization::Styles::load("contentStyle", contentStyle_);
 }
 
 }

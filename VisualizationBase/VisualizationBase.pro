@@ -73,7 +73,9 @@ HEADERS += headers/layouts/PositionLayoutStyle.h \
     src/visualizationbase.h \
     headers/VisualizationException.h \
     headers/visualizationbase_api.h
-SOURCES += src/node_extensions/Position.cpp \
+SOURCES += src/layouts/PositionLayoutStyle.cpp \
+    src/layouts/PositionLayout.cpp \
+    src/node_extensions/Position.cpp \
     src/items/SelectedItemStyle.cpp \
     src/items/SelectedItem.cpp \
     src/items/SceneHandlerItem.cpp \
