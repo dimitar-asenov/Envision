@@ -98,12 +98,14 @@ void Styles::loadQFont(QFont& value)
 	bool pixelSize;
 	int weight;
 	int style;
+	bool underline;
 
 	Styles::load("family", family);
 	Styles::load("size", size);
 	Styles::load("sizeIsInPixels", pixelSize);
 	Styles::load("weight", weight);
 	Styles::load("style", style);
+	Styles::load("underline", underline);
 
 	value = QFont();
 	if ( !family.isEmpty() ) value.setFamily(family);
@@ -111,6 +113,7 @@ void Styles::loadQFont(QFont& value)
 	if ( pixelSize ) value.setPixelSize(size);
 	else value.setPointSize(size);
 	value.setStyle((QFont::Style) style);
+	value.setUnderline(underline);
 }
 
 void Styles::loadQBrush(QBrush& value)

@@ -19,6 +19,7 @@
 		<sizeIsInPixels>true</sizeIsInPixels>
 		<weight>1</weight>
 		<style>0</style>
+		<underline>false</underline>
 	</font>
 	<selectionPen>
 		<width>1.0</width>
@@ -44,6 +45,7 @@
 		<sizeIsInPixels>true</sizeIsInPixels>
 		<weight>1</weight>
 		<style>0</style>
+		<underline>false</underline>
 	</selectionFont>
 	<caretPen>
 		<width>2.0</width>
