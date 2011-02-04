@@ -13,6 +13,7 @@
 #include "vis/top_level/VClass.h"
 #include "vis/top_level/VMethod.h"
 #include "vis/elements/VField.h"
+#include "vis/VOOReference.h"
 
 #include "OOModel/headers/Project.h"
 #include "OOModel/headers/Module.h"
@@ -24,6 +25,7 @@
 #include "VisualizationBase/headers/node_extensions/Position.h"
 
 #include "InteractionBase/headers/handlers/GenericHandler.h"
+#include "InteractionBase/headers/handlers/HText.h"
 
 Q_EXPORT_PLUGIN2( oovisualization, OOVisualization::OOVisualization )
 
@@ -55,6 +57,7 @@ bool OOVisualization::initialize(Envision::EnvisionManager&)
 	VClass::setInteractionHandler(Interaction::GenericHandler::instance());
 	VMethod::setInteractionHandler(Interaction::GenericHandler::instance());
 	VField::setInteractionHandler(Interaction::GenericHandler::instance());
+	VOOReference::setInteractionHandler(Interaction::HText::instance());
 
 	return true;
 }
