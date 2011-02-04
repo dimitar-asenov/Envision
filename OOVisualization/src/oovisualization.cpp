@@ -11,6 +11,7 @@
 #include "vis/top_level/VProject.h"
 #include "vis/top_level/VModule.h"
 #include "vis/top_level/VClass.h"
+#include "vis/top_level/VMethod.h"
 
 #include "OOModel/headers/Project.h"
 #include "OOModel/headers/Module.h"
@@ -41,6 +42,7 @@ bool OOVisualization::initialize(Envision::EnvisionManager&)
 	Scene::defaultRenderer()->registerVisualization(Project::typeIdStatic(), createVisualization<VProject, Project>);
 	Scene::defaultRenderer()->registerVisualization(Module::typeIdStatic(), createVisualization<VModule, Module>);
 	Scene::defaultRenderer()->registerVisualization(Class::typeIdStatic(), createVisualization<VClass, Class>);
+	Scene::defaultRenderer()->registerVisualization(Method::typeIdStatic(), createVisualization<VMethod, Method>);
 
 	// Register handlers
 	// TODO: move this to a better place i.e. OOInteraction Plugin
@@ -48,6 +50,7 @@ bool OOVisualization::initialize(Envision::EnvisionManager&)
 	VProject::setInteractionHandler(Interaction::GenericHandler::instance());
 	VModule::setInteractionHandler(Interaction::GenericHandler::instance());
 	VClass::setInteractionHandler(Interaction::GenericHandler::instance());
+	VMethod::setInteractionHandler(Interaction::GenericHandler::instance());
 
 	return true;
 }

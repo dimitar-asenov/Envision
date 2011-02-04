@@ -43,7 +43,9 @@ HEADERS += headers/vis/top_level/VClassStyle.h \
     headers/OOVisualizationException.h \
     headers/oovisualization_api.h \
     src/oovisualization.h
-SOURCES += src/vis/top_level/VClass.cpp \
+SOURCES += src/vis/top_level/VMethodStyle.cpp \
+    src/vis/top_level/VMethod.cpp \
+    src/vis/top_level/VClass.cpp \
     src/vis/top_level/VClassStyle.cpp \
     src/vis/top_level/VModule.cpp \
     src/vis/top_level/VModuleStyle.cpp \
