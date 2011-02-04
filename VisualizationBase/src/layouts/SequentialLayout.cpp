@@ -8,6 +8,10 @@
 #include "layouts/SequentialLayout.h"
 #include "shapes/Shape.h"
 
+#include "items/ModelItem.h"
+
+#include "ModelBase/headers/nodes/Node.h"
+
 namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS( SequentialLayout )
@@ -75,6 +79,37 @@ void SequentialLayout::clear(bool deleteItems)
 {
 	if (deleteItems) for (int i = 0; i<items.size(); ++i) SAFE_DELETE_ITEM(items[i]);
 	items.clear();
+}
+
+void SequentialLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes, ModelRenderer* renderer)
+{
+	// Inserts elements that are not yet visualized and adjusts the order to match that in 'nodes'.
+	for (int i = 0; i < nodes.size(); ++i)
+	{
+		if (i >= items.size() ) append( renderer->render(NULL, nodes[i]));	// This node is new
+		else if ( (static_cast<ModelItem*> (items[i]))->getNode() == nodes[i] )	continue;	// This node is already there
+		else
+		{
+			// This node might appear somewhere ahead, we should look for it
+			bool found = false;
+			for (int k = i + 1; k<items.size(); ++k)
+			{
+				if ( (static_cast<ModelItem*> (items[k]))->getNode() == nodes[i] )
+				{
+					// We found this node, swap the visualizations
+					swap(i, k);
+					found = true;
+					break;
+				}
+			}
+
+			// The node was not found, insert a visualization here
+			if (!found ) insert( renderer->render(NULL, nodes[i]), i);
+		}
+	}
+
+	// Remove excess items
+	while (items.size() > nodes.size()) remove(items.size()-1);
 }
 
 void SequentialLayout::updateGeometry(int, int)

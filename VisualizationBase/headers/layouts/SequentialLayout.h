@@ -13,7 +13,13 @@
 #include "Layout.h"
 #include "SequentialLayoutStyle.h"
 
+#include <QtCore/QList>
+
+namespace Model { class Node; }
+
 namespace Visualization {
+
+class ModelRenderer;
 
 class VISUALIZATIONBASE_API SequentialLayout: public Layout
 {
@@ -39,6 +45,8 @@ class VISUALIZATIONBASE_API SequentialLayout: public Layout
 
 		template <class T> T* at(int index);
 		template <class T> T* at(int index) const;
+
+		void synchronizeWithNodes(const QList<Model::Node*>& nodes, ModelRenderer* renderer);
 
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 

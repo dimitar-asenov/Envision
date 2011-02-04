@@ -141,7 +141,8 @@ QDomElement StyleNode::getElement(QStringList path)
 QString StyleNode::getProperty(QStringList path)
 {
 	QDomElement e = getElement(path);
-	if (e.isNull()) throw VisualizationException("Could not find the style property '"+ path.last() + "'.");
+	if (e.isNull())
+		throw VisualizationException("Could not find the style property '"+ path.join("/") + "'.");
 	return e.firstChild().nodeValue();
 }
 

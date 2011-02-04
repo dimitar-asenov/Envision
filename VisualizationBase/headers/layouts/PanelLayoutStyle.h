@@ -11,7 +11,6 @@
 #include "../visualizationbase_api.h"
 
 #include "LayoutStyle.h"
-#include "SequentialLayoutStyle.h"
 
 namespace Visualization {
 
