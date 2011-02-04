@@ -31,7 +31,9 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/vis/top_level/VModuleStyle.h \
+HEADERS += headers/vis/top_level/VClassStyle.h \
+    headers/vis/top_level/VClass.h \
+    headers/vis/top_level/VModuleStyle.h \
     headers/vis/top_level/VModule.h \
     headers/vis/top_level/VProjectStyle.h \
     headers/vis/top_level/VProject.h \
@@ -41,7 +43,9 @@ HEADERS += headers/vis/top_level/VModuleStyle.h \
     headers/OOVisualizationException.h \
     headers/oovisualization_api.h \
     src/oovisualization.h
-SOURCES += src/vis/top_level/VModule.cpp \
+SOURCES += src/vis/top_level/VClass.cpp \
+    src/vis/top_level/VClassStyle.cpp \
+    src/vis/top_level/VModule.cpp \
     src/vis/top_level/VModuleStyle.cpp \
     src/vis/top_level/VProjectStyle.cpp \
     src/vis/top_level/VProject.cpp \

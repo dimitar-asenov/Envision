@@ -11,7 +11,6 @@
 
 #include "VisualizationBase/headers/layouts/PanelBorderLayout.h"
 #include "VisualizationBase/headers/layouts/PositionLayout.h"
-#include "VisualizationBase/headers/layouts/PositionLayoutStyle.h"
 #include "VisualizationBase/headers/items/VText.h"
 
 using namespace Visualization;
