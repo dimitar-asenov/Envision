@@ -125,6 +125,8 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		virtual void updateSubtree();
 		virtual void changeGeometry(int availableWidth = 0, int availableHeight = 0);
 
+		virtual bool isEmpty() const;
+
 		virtual void setStyle(const ItemStyle* style);
 		const ItemStyle* style() const;
 		bool hasShape() const;

@@ -127,6 +127,14 @@ inline int PositionLayout::toGrid(const int& pos) const
 	return pos + ( (mod !=0) ? add : 0 );
 }
 
+bool PositionLayout::isEmpty() const
+{
+	for(int i = 0; i<items.size(); ++i)
+		if (!items[i]->isEmpty()) return false;
+
+	return true;
+}
+
 void PositionLayout::updateGeometry(int, int)
 {
 	QPoint topLeft;
@@ -147,6 +155,8 @@ void PositionLayout::updateGeometry(int, int)
 	for (int i =0; i<items.size(); ++i)
 		items[i]->setPos( xOffset() + toGrid(positions[i]->x()) - topLeft.x(), yOffset() +  toGrid(positions[i]->y()) - topLeft.y());
 
+	// Set Size to 0 when there are no children and shape is not drawn
+	if (items.size() == 0 && !style()->drawShapeWhenEmpty()) setSize(0,0);
 }
 
 int PositionLayout::focusedElementIndex() const

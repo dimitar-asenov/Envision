@@ -112,6 +112,14 @@ void SequentialLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes, Mo
 	while (items.size() > nodes.size()) remove(items.size()-1);
 }
 
+bool SequentialLayout::isEmpty() const
+{
+	for(int i = 0; i<items.size(); ++i)
+		if (!items[i]->isEmpty()) return false;
+
+	return true;
+}
+
 void SequentialLayout::updateGeometry(int, int)
 {
 	// Get the maximum width and height of any element.

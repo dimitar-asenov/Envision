@@ -5,4 +5,5 @@
 	<topMargin>0</topMargin>
 	<rightMargin>0</rightMargin>
 	<bottomMargin>0</bottomMargin>
+	<drawShapeWhenEmpty>false</drawShapeWhenEmpty>
 </style>

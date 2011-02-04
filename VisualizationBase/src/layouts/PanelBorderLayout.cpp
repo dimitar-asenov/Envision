@@ -40,6 +40,15 @@ void PanelBorderLayout::setContent(Item* content, bool deleteOldContent)
 	setUpdateNeeded();
 }
 
+bool PanelBorderLayout::isEmpty() const
+{
+	return ( top_ == NULL || top_->isEmpty())
+			&& ( left_ == NULL || left_->isEmpty())
+			&& ( content_ == NULL || content_->isEmpty())
+			&& ( right_ == NULL || right_->isEmpty())
+			&& ( bottom_ == NULL || bottom_->isEmpty());
+}
+
 void PanelBorderLayout::updateGeometry(int, int)
 {
 	// Get content size

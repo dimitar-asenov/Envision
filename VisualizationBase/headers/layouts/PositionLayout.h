@@ -52,14 +52,18 @@ class VISUALIZATIONBASE_API PositionLayout : public Layout
 		template <class T> T* at(int index);
 		template <class T> T* at(int index) const;
 
+		int toGrid(const int& pos) const;
+
 		void synchronizeWithNodes(const QList<Model::Node*>& nodes, ModelRenderer* renderer);
+
+		virtual bool isEmpty() const;
 
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 		int focusedElementIndex() const;
 		virtual bool focusChild(FocusTarget location);
 
-		int toGrid(const int& pos) const;
+
 };
 
 template <class T> T* PositionLayout::at(int index) { return static_cast<T*> (items[index]); }

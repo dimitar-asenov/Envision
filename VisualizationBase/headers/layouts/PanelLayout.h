@@ -39,6 +39,8 @@ class VISUALIZATIONBASE_API PanelLayout: public Layout
 		template <class T> T* middle();
 		template <class T> T* last();
 
+		virtual bool isEmpty() const;
+
 		virtual bool sizeDependsOnParent() const;
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 		virtual bool focusChild(FocusTarget location);

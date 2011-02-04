@@ -21,19 +21,22 @@ Layout::Layout(Item* parent, const LayoutStyle* style) :
 
 void Layout::setInnerSize(int width_, int height_)
 {
-	if ( hasShape() )
-	{
-		getShape()->setOffset(style()->leftMargin(), style()->topMargin());
-		getShape()->setInnerSize(width_, height_);
-		setWidth(width() + style()->leftMargin() + style()->rightMargin());
-		setHeight(height() + style()->topMargin() + style()->bottomMargin());
-	}
+	if (isEmpty() && !style()->drawShapeWhenEmpty()) setSize(0,0);
 	else
 	{
-		setWidth(width_ + style()->leftMargin() + style()->rightMargin());
-		setHeight(height_ + style()->topMargin() + style()->bottomMargin());
+		if ( hasShape() )
+		{
+			getShape()->setOffset(style()->leftMargin(), style()->topMargin());
+			getShape()->setInnerSize(width_, height_);
+			setWidth(width() + style()->leftMargin() + style()->rightMargin());
+			setHeight(height() + style()->topMargin() + style()->bottomMargin());
+		}
+		else
+		{
+			setWidth(width_ + style()->leftMargin() + style()->rightMargin());
+			setHeight(height_ + style()->topMargin() + style()->bottomMargin());
+		}
 	}
-
 }
 
 void Layout::determineChildren()
@@ -66,7 +69,7 @@ int Layout::yOffset() const
 
 void Layout::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-	if ( hasShape() ) Item::paint(painter, option, widget);
+	if ( hasShape() && (style()->drawShapeWhenEmpty() || !isEmpty()) ) Item::paint(painter, option, widget);
 }
 
 }

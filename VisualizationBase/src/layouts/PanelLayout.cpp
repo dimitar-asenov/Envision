@@ -35,6 +35,13 @@ bool PanelLayout::sizeDependsOnParent() const
 	return true;
 }
 
+bool PanelLayout::isEmpty() const
+{
+	return ( first_ == NULL || first_->isEmpty() )
+			&& ( middle_ == NULL || middle_->isEmpty() )
+			&& (last_ == NULL || last_->isEmpty() );
+}
+
 void PanelLayout::updateGeometry(int availableWidth, int availableHeight)
 {
 	QRect first, middle, last;

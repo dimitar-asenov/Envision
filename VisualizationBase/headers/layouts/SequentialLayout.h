@@ -48,6 +48,8 @@ class VISUALIZATIONBASE_API SequentialLayout: public Layout
 
 		void synchronizeWithNodes(const QList<Model::Node*>& nodes, ModelRenderer* renderer);
 
+		virtual bool isEmpty() const;
+
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 		int focusedElementIndex() const;

@@ -50,6 +50,8 @@ class VISUALIZATIONBASE_API PanelBorderLayout: public Layout
 		int getOutterWidthForExternalShape() const;
 		int getOutterHeightForExternalShape() const;
 
+		virtual bool isEmpty() const;
+
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 		virtual bool focusChild(FocusTarget location);
 };

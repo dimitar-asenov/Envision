@@ -141,6 +141,11 @@ void Item::updateGeometry(Item* content, int availableWidth, int availableHeight
 	}
 }
 
+bool Item::isEmpty() const
+{
+	return false;
+}
+
 bool Item::focusChild(FocusTarget)
 {
 	return false;
