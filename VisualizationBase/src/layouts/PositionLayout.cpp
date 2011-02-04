@@ -80,7 +80,9 @@ void PositionLayout::clear(bool deleteItems)
 
 inline int PositionLayout::toGrid(const int& pos) const
 {
-	return pos + ( (pos >=0) ? (-(pos % style()->gridSize())) : ( (-pos) % style()->gridSize()) );
+	int mod = (pos >=0) ? ( pos % style()->gridSize() ) : ( (-pos) % style()->gridSize() );
+	int add = (pos >=0) ? ( style()->gridSize() - mod) : mod;
+	return pos + ( (mod !=0) ? add : 0 );
 }
 
 void PositionLayout::updateGeometry(int, int)
