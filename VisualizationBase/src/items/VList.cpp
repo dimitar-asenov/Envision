@@ -29,27 +29,7 @@ void VList::determineChildren()
 	// TODO: find a better way and place to determine the style of children
 	items_.setStyle(&style()->itemsStyle());
 
-	// Set the children
-	for (int i = 0; i < list->size(); ++i)
-	{
-		// Try to find an existing visualization for this node.
-		int p = i;
-		while (p < items_.length() && items_.at<ModelItem>(p)->getNode() != list->at<Model::Node>(i)) ++p;
-
-		if (p < items_.length() )
-		{
-			// Visualization exists. Swap it if it is not here
-			if (p != i) items_.swap(i,p);
-		}
-		else
-		{
-			// Visualization does not exist. Make a new one.
-			items_.insert(renderer()->render(NULL, list->at<Model::Node> (i)), i);
-		}
-	}
-
-	// Remove extra elements.
-	while (items_.length() > list->size()) items_.remove(items_.length()-1);
+	items_.synchronizeWithNodes(list->nodes().toList(), renderer());
 }
 
 int VList::focusedElementIndex() const
