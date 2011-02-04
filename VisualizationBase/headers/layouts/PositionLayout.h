@@ -17,6 +17,8 @@
 
 namespace  Visualization {
 
+class ModelRenderer;
+
 class VISUALIZATIONBASE_API PositionLayout : public Layout
 {
 	ITEM_COMMON(PositionLayout, Layout)
@@ -24,6 +26,8 @@ class VISUALIZATIONBASE_API PositionLayout : public Layout
 	private:
 		QVector<ModelItem*> items;
 		QVector<const Position*> positions;
+
+		void swap(int i, int j);
 
 	public:
 		PositionLayout(Item* parent, const PositionLayoutStyle* style = Styles::layout<PositionLayout>("default"));
@@ -47,6 +51,8 @@ class VISUALIZATIONBASE_API PositionLayout : public Layout
 
 		template <class T> T* at(int index);
 		template <class T> T* at(int index) const;
+
+		void synchronizeWithNodes(const QList<Model::Node*>& nodes, ModelRenderer* renderer);
 
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 

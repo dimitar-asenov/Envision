@@ -78,6 +78,48 @@ void PositionLayout::clear(bool deleteItems)
 	items.clear();
 }
 
+void PositionLayout::swap(int i, int j)
+{
+	ModelItem* t = items[i];
+	items[i] = items[j];
+	items[j] = t;
+}
+
+void PositionLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes, ModelRenderer* renderer)
+{
+	// Inserts elements that are not yet visualized and adjusts the order to match that in 'nodes'.
+	for (int i = 0; i < nodes.size(); ++i)
+	{
+		if (i >= items.size() ) insert( renderer->render(NULL, nodes[i]));	// This node is new
+		else if ( (static_cast<ModelItem*> (items[i]))->getNode() == nodes[i] )	continue;	// This node is already there
+		else
+		{
+			// This node might appear somewhere ahead, we should look for it
+			bool found = false;
+			for (int k = i + 1; k<items.size(); ++k)
+			{
+				if ( (static_cast<ModelItem*> (items[k]))->getNode() == nodes[i] )
+				{
+					// We found this node, swap the visualizations
+					swap(i, k);
+					found = true;
+					break;
+				}
+			}
+
+			// The node was not found, insert a visualization here
+			if (!found )
+			{
+				insert( renderer->render(NULL, nodes[i]) );
+				swap(i, items.size()-1);
+			}
+		}
+	}
+
+	// Remove excess items
+	while (items.size() > nodes.size()) remove(items.size()-1);
+}
+
 inline int PositionLayout::toGrid(const int& pos) const
 {
 	int mod = (pos >=0) ? ( pos % style()->gridSize() ) : ( (-pos) % style()->gridSize() );

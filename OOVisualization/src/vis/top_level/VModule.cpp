@@ -51,41 +51,10 @@ void VModule::determineChildren()
 	content->setStyle(&style()->contentStyle());
 	layout->setStyle(&style()->borderStyle());
 
-	// Remove elements from attributes which are outdated
-	for(int i = content->length() - 1; i>=0; --i)
-	{
-		bool found = false;
-
-		// Modules
-		if (!found)
-			for (int k = 0; k<node->modules()->size(); ++k)
-				if (node->modules()->at(k) == content->at<ModelItem>(i)->getNode())
-				{
-					found = true;
-					break;
-				}
-
-		// Classes
-		if (!found)
-			for (int k = 0; k<node->classes()->size(); ++k)
-				if (node->classes()->at(k) == content->at<ModelItem>(i)->getNode())
-				{
-					found = true;
-					break;
-				}
-
-		if (!found) content->remove(i);
-	}
-
-	// Add new Modules
-	for (int k = 0; k<node->modules()->size(); ++k)
-		if ( !content->hasNode( node->modules()->at(k) ) )
-			content->insert(renderer()->render(NULL, node->modules()->at(k)));
-
-	// Add new Classes
-	for (int k = 0; k<node->classes()->size(); ++k)
-		if ( !content->hasNode( node->classes()->at(k) ) )
-			content->insert(renderer()->render(NULL, node->classes()->at(k)));
+	QList<Model::Node*> nodes;
+	for (int k = 0; k<node->modules()->size(); ++k) nodes.append(node->modules()->at(k));
+	for (int k = 0; k<node->classes()->size(); ++k) nodes.append(node->classes()->at(k));
+	content->synchronizeWithNodes(nodes, renderer());
 }
 
 void VModule::updateGeometry(int, int)

@@ -50,68 +50,12 @@ void VProject::determineChildren()
 	content->setStyle(&style()->contentStyle());
 	layout->setStyle(&style()->borderStyle());
 
-	// Remove elements from attributes which are outdated
-	for(int i = content->length() - 1; i>=0; --i)
-	{
-		bool found = false;
-
-		// Projects
-		for (int k = 0; k<node->projects()->size(); ++k)
-			if (node->projects()->at(k) == content->at<ModelItem>(i)->getNode())
-			{
-				found = true;
-				break;
-			}
-
-		// Libraries
-		if (!found)
-			for (int k = 0; k<node->libraries()->size(); ++k)
-				if (node->libraries()->at(k) == content->at<ModelItem>(i)->getNode())
-				{
-					found = true;
-					break;
-				}
-
-		// Modules
-		if (!found)
-			for (int k = 0; k<node->modules()->size(); ++k)
-				if (node->modules()->at(k) == content->at<ModelItem>(i)->getNode())
-				{
-					found = true;
-					break;
-				}
-
-		// Classes
-		if (!found)
-			for (int k = 0; k<node->classes()->size(); ++k)
-				if (node->classes()->at(k) == content->at<ModelItem>(i)->getNode())
-				{
-					found = true;
-					break;
-				}
-
-		if (!found) content->remove(i);
-	}
-
-	// Add new projects
-	for (int k = 0; k<node->projects()->size(); ++k)
-		if ( !content->hasNode( node->projects()->at(k) ) )
-			content->insert(renderer()->render(NULL, node->projects()->at(k)));
-
-	// Add new Libraries
-	for (int k = 0; k<node->libraries()->size(); ++k)
-		if ( !content->hasNode( node->libraries()->at(k) ) )
-			content->insert(renderer()->render(NULL, node->libraries()->at(k)));
-
-	// Add new Modules
-	for (int k = 0; k<node->modules()->size(); ++k)
-		if ( !content->hasNode( node->modules()->at(k) ) )
-			content->insert(renderer()->render(NULL, node->modules()->at(k)));
-
-	// Add new Classes
-	for (int k = 0; k<node->classes()->size(); ++k)
-		if ( !content->hasNode( node->classes()->at(k) ) )
-			content->insert(renderer()->render(NULL, node->classes()->at(k)));
+	QList<Model::Node*> nodes;
+	for (int k = 0; k<node->projects()->size(); ++k) nodes.append(node->projects()->at(k));
+	for (int k = 0; k<node->libraries()->size(); ++k) nodes.append(node->libraries()->at(k));
+	for (int k = 0; k<node->modules()->size(); ++k) nodes.append(node->modules()->at(k));
+	for (int k = 0; k<node->classes()->size(); ++k) nodes.append(node->classes()->at(k));
+	content->synchronizeWithNodes(nodes, renderer());
 }
 
 void VProject::updateGeometry(int, int)
