@@ -12,11 +12,13 @@
 #include "vis/top_level/VModule.h"
 #include "vis/top_level/VClass.h"
 #include "vis/top_level/VMethod.h"
+#include "vis/elements/VField.h"
 
 #include "OOModel/headers/Project.h"
 #include "OOModel/headers/Module.h"
 #include "OOModel/headers/Class.h"
 #include "OOModel/headers/Method.h"
+#include "OOModel/headers/Field.h"
 
 #include "VisualizationBase/headers/Scene.h"
 #include "VisualizationBase/headers/node_extensions/Position.h"
@@ -43,6 +45,7 @@ bool OOVisualization::initialize(Envision::EnvisionManager&)
 	Scene::defaultRenderer()->registerVisualization(Module::typeIdStatic(), createVisualization<VModule, Module>);
 	Scene::defaultRenderer()->registerVisualization(Class::typeIdStatic(), createVisualization<VClass, Class>);
 	Scene::defaultRenderer()->registerVisualization(Method::typeIdStatic(), createVisualization<VMethod, Method>);
+	Scene::defaultRenderer()->registerVisualization(Field::typeIdStatic(), createVisualization<VField, Field>);
 
 	// Register handlers
 	// TODO: move this to a better place i.e. OOInteraction Plugin
@@ -51,6 +54,7 @@ bool OOVisualization::initialize(Envision::EnvisionManager&)
 	VModule::setInteractionHandler(Interaction::GenericHandler::instance());
 	VClass::setInteractionHandler(Interaction::GenericHandler::instance());
 	VMethod::setInteractionHandler(Interaction::GenericHandler::instance());
+	VField::setInteractionHandler(Interaction::GenericHandler::instance());
 
 	return true;
 }

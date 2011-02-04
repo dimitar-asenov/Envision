@@ -71,7 +71,8 @@ void VMethod::determineChildren()
 	layout_->setStyle( &style()->border() );
 
 	if (node->stat() == Static::INSTANCE_VARIABLE) name_->setStyle( &style()->name() );
-	else name_->setStyle( &style()->nameStatic());
+	else if (node->stat() == Static::CLASS_VARIABLE ) name_->setStyle( &style()->nameStatic());
+	else throw OOVisualizationException("Unknown static type in VMethod::determineChildren");
 
 	visibility_->setStyle( &style()->visibility() );
 	header_->setStyle( &style()->header() );

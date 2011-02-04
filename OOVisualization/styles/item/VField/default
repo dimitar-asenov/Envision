@@ -1,0 +1,29 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style>
+	<shape />
+	<container prototypes="layout/SequentialLayout/default" />
+	<nameDefault prototypes="item/Text/default" />
+	<namePublic prototypes="item/Text/default" />
+	<namePrivate prototypes="item/Text/default" />
+	<nameProtected prototypes="item/Text/default" />
+	<nameStaticDefault prototypes="item/Text/default">
+		<font>
+			<underline>true</underline>
+		</font>
+	</nameStaticDefault>
+	<nameStaticPublic prototypes="item/Text/default">
+		<font>
+			<underline>true</underline>
+		</font>
+	</nameStaticPublic>
+	<nameStaticPrivate prototypes="item/Text/default">
+		<font>
+			<underline>true</underline>
+		</font>
+	</nameStaticPrivate>
+	<nameStaticProtected prototypes="item/Text/default">
+		<font>
+			<underline>true</underline>
+		</font>
+	</nameStaticProtected>
+</style>
