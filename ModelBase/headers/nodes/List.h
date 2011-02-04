@@ -28,7 +28,7 @@ class MODELBASE_API List: public Node
 	NODE_DECLARE_STANDARD_METHODS(List)
 
 	private:
-		QVector<Node*> nodes;
+		QVector<Node*> nodes_;
 		Text* referenceName_;
 
 		void loadSubNodes(QList<LoadedNode>& nodeList);
@@ -63,37 +63,41 @@ class MODELBASE_API List: public Node
 		void remove(int index);
 		void remove(Node* instance);
 		void clear();
+
+		const QVector<Node*>& nodes();
 };
 
 template <class T> T* List::first()
 {
 	if (!fullyLoaded) loadFully(* (model()->store()));
 
-	if ( nodes.isEmpty() ) throw ModelException("Trying to access the first element of an empty list.");
-	return static_cast<T*> (nodes.first());
+	if ( nodes_.isEmpty() ) throw ModelException("Trying to access the first element of an empty list.");
+	return static_cast<T*> (nodes_.first());
 }
 
 template <class T> T* List::last()
 {
 	if (!fullyLoaded) loadFully(* (model()->store()));
 
-	if ( nodes.isEmpty() ) throw ModelException("Trying to access the last element of an empty list.");
-	return static_cast<T*> (nodes.last());
+	if ( nodes_.isEmpty() ) throw ModelException("Trying to access the last element of an empty list.");
+	return static_cast<T*> (nodes_.last());
 }
 
 template <class T> T* List::at(int i)
 {
 	if (!fullyLoaded) loadFully(* (model()->store()));
 
-	return static_cast<T*> (nodes[i]);
+	return static_cast<T*> (nodes_[i]);
 }
+
+inline const QVector<Node*>& List::nodes() { return nodes_; }
 
 template <class T>
 T* List::append()
 {
 	if (!fullyLoaded) loadFully(* (model()->store()));
 
-	return insert<T>(nodes.size());
+	return insert<T>(nodes_.size());
 }
 
 template <class T>
@@ -112,7 +116,7 @@ T* List::insert(int position)
 	T* newNode = new T(this, NULL);
 	if (! Node::isTypeRegistered(newNode->typeName())) throw ModelException("Trying to create a list entry of an unregistered type.");
 
-	execute(new ListInsert(this, nodes, newNode, position));
+	execute(new ListInsert(this, nodes_, newNode, position));
 	return newNode;
 }
 

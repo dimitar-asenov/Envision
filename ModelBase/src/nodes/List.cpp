@@ -53,8 +53,8 @@ List::List(Node *parent, NodeIdType id, PersistentStore &store, bool partialHint
 
 List::~List()
 {
-	for (int i = 0; i < nodes.size(); ++i)
-		SAFE_DELETE( nodes[i] );
+	for (int i = 0; i < nodes_.size(); ++i)
+		SAFE_DELETE( nodes_[i] );
 	SAFE_DELETE(referenceName_);
 }
 
@@ -69,8 +69,8 @@ void List::loadSubNodes(QList<LoadedNode>& nodeList)
 
 			if ( !ok ) throw ModelException("Could not read the index of a list item. Index value is: " + ln->name);
 
-			if ( index >= nodes.size() ) nodes.resize(index + 1);
-			nodes[index] = ln->node;
+			if ( index >= nodes_.size() ) nodes_.resize(index + 1);
+			nodes_[index] = ln->node;
 		}
 	}
 }
@@ -80,8 +80,8 @@ void List::save(PersistentStore &store) const
 	store.saveNode(referenceName_, REFERENCE_NAME_NODE_ID, false);
 
 	if ( fullyLoaded )
-		for (int i = 0; i < nodes.size(); ++i)
-			store.saveNode(nodes[i], QString::number(i), false);
+		for (int i = 0; i < nodes_.size(); ++i)
+			store.saveNode(nodes_[i], QString::number(i), false);
 
 	// TODO Document this somewhere useful. Like in the Persistent store interface.
 	// If the node is partially loaded the Store will automatically fill in the missing fields by taking the old version
@@ -115,7 +115,7 @@ void List::load(PersistentStore &store)
 			int index = ln->name.toInt(&ok);
 			if ( !ok ) throw ModelException("Could not read the index of a list item. Index value is: " + ln->name);
 
-			execute(new ListPut(this, nodes, ln->node, index));
+			execute(new ListPut(this, nodes_, ln->node, index));
 		}
 	}
 }
@@ -137,8 +137,8 @@ Node* List::child(NodeIdType id)
 
 	if ( referenceName_->id() == id ) return referenceName_;
 
-	for (int i = 0; i < nodes.size(); ++i)
-		if ( nodes[i]->id() == id ) return nodes[i];
+	for (int i = 0; i < nodes_.size(); ++i)
+		if ( nodes_[i]->id() == id ) return nodes_[i];
 
 	return NULL;
 }
@@ -149,8 +149,8 @@ Node* List::child(const QString& name)
 
 	if ( name.isEmpty() ) return NULL;
 
-	for (int i = 0; i < nodes.size(); ++i)
-		if ( nodes[i]->referenceName() == name ) return nodes[i];
+	for (int i = 0; i < nodes_.size(); ++i)
+		if ( nodes_[i]->referenceName() == name ) return nodes_[i];
 
 	return NULL;
 }
@@ -162,8 +162,8 @@ QString List::referenceName() const
 
 QString List::childReferenceName(const Node* child) const
 {
-	for (int i = 0; i < nodes.size(); ++i)
-		if ( nodes[i] == child ) return nodes[i]->referenceName();
+	for (int i = 0; i < nodes_.size(); ++i)
+		if ( nodes_[i] == child ) return nodes_[i]->referenceName();
 
 	return QString();
 }
@@ -177,28 +177,28 @@ int List::size()
 {
 	if (!fullyLoaded) loadFully(* (model()->store()));
 
-	return nodes.size();
+	return nodes_.size();
 }
 
 int List::indexOf(const Node* item) const
 {
 	// TODO: is this a QT bug, this is fishy
 	Node *i = const_cast<Node *> (item); // <--- Workaround, since the call below can't be made with item.
-	return nodes.indexOf(i);
+	return nodes_.indexOf(i);
 }
 
 void List::remove(int index)
 {
 	if (!fullyLoaded) loadFully(* (model()->store()));
 
-	execute(new ListRemove(this, nodes, index));
+	execute(new ListRemove(this, nodes_, index));
 }
 
 void List::remove(Node* instance)
 {
 	if (!fullyLoaded) loadFully(* (model()->store()));
 
-	int index = nodes.indexOf(instance);
+	int index = nodes_.indexOf(instance);
 	if ( index >= 0 ) remove(index);
 }
 
@@ -206,7 +206,7 @@ void List::clear()
 {
 	if (!fullyLoaded) loadFully(* (model()->store()));
 
-	while (!nodes.isEmpty()) remove(0);
+	while (!nodes_.isEmpty()) remove(0);
 }
 
 void List::paste(ClipboardStore& clipboard, int position)
@@ -216,7 +216,7 @@ void List::paste(ClipboardStore& clipboard, int position)
 	for (int i = 0; i<clipboard.numNodes(); ++i)
 	{
 		Node* newNode = clipboard.create(model(), this);
-		execute(new ListInsert(this, nodes, newNode, position+i));
+		execute(new ListInsert(this, nodes_, newNode, position+i));
 
 		if (clipboard.hasNext() ) clipboard.next();
 	}
