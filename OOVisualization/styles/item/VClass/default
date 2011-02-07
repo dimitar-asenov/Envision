@@ -8,7 +8,9 @@
 		</shadowBrush>
 	</shape>
 	<border prototypes="layout/PanelBorderLayout/default" />
-	<topContainer prototypes="layout/SequentialLayout/default" />
+	<topContainer prototypes="layout/SequentialLayout/default">
+		<spaceBetweenElements>10</spaceBetweenElements>
+	</topContainer>
 	<header prototypes="layout/SequentialLayout/default">
 		<shape prototypes="shape/Box/default">
 			Box

@@ -21,6 +21,8 @@ void ClassIconStyle::load()
 {
 	IconStyle::load();
 	Visualization::Styles::load("width", width_);
+	Visualization::Styles::load("rectWidth", rectWidth_);
+	Visualization::Styles::load("rectHeight", rectHeight_);
 }
 
 }

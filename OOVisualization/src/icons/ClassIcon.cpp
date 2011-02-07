@@ -9,6 +9,8 @@
 
 #include <QtGui/QPainter>
 
+#include <cmath>
+
 namespace OOVisualization {
 
 ITEM_COMMON_DEFINITIONS(ClassIcon)
@@ -27,31 +29,49 @@ void ClassIcon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 {
 	Icon::paint(painter, option, widget);
 
-	int halfWidth = style()->width() / 2;
+	int width = style()->width();
+	int halfWidth = width / 2;
 
-	QRadialGradient gradient(halfWidth, halfWidth, halfWidth, halfWidth, halfWidth);
+	QRadialGradient gradient(halfWidth, halfWidth, halfWidth);
 	gradient.setColorAt(0, Qt::white);
+	gradient.setColorAt(0.3, Qt::white);
 	gradient.setColorAt(1, Qt::transparent);
 	painter->setBrush(QBrush(gradient));
 	painter->setPen(Qt::NoPen);
 	painter->drawRect(xOffset(), yOffset(), style()->width(), style()->width());
 
 	painter->setBrush(Qt::white);
-
 	painter->setPen( style()->outline());
 
-	// TODO: Fix the random magic numbers below
-	int contentWidth = style()->width() / 2 - 2*style()->outline().width();
-	int contentHeight = style()->width() / 3;
+	qreal x = xOffset();
+	qreal y = yOffset();
 
-	painter->drawRect(xOffset() + (style()->width() - contentWidth) / 2, yOffset() + 2, contentWidth, contentHeight);
-	painter->drawRect(xOffset() + 1, yOffset() + style()->width() - 2 - contentHeight, contentWidth, contentHeight);
-	painter->drawRect(xOffset() + style()->width() - 1 - contentWidth, yOffset() + style()->width() - 2 - contentHeight, contentWidth, contentHeight);
+	// Move the figure when using antialiasing. The outline will start at a pixel boundary. This makes it sharper.
+	qreal outlineWidth = style()->outline().width();
+	if ( painter->testRenderHint(QPainter::Antialiasing) || painter->testRenderHint(QPainter::HighQualityAntialiasing) )
+		if ( style()->outline() != Qt::NoPen )
+		{
+			qreal intPart;
+			qreal fracPart = std::modf(outlineWidth / 2.0, &intPart);
 
-	painter->drawLine(xOffset() + 1 + contentWidth / 2, yOffset() + halfWidth, xOffset() + style()->width() - 1 - contentWidth / 2, yOffset() + halfWidth);
-	painter->drawLine(xOffset() + halfWidth, yOffset() + 2 + contentHeight, xOffset() + halfWidth, halfWidth);
-	painter->drawLine(xOffset() + 1 + contentWidth / 2, yOffset() + halfWidth, xOffset() + 1 + contentWidth / 2, yOffset() + style()->width() - 2 - contentHeight);
-	painter->drawLine(xOffset() + style()->width() - 1 - contentWidth / 2, yOffset() + halfWidth, xOffset() + style()->width() - 1 - contentWidth / 2, yOffset() + style()->width() - 2 - contentHeight);
+			x += fracPart;
+			y += fracPart;
+		}
+
+	int restX = (halfWidth - style()->rectWidth())/2;
+	int restY = (halfWidth - style()->rectHeight())/2;
+
+	// Draw the lines exactly in the middle. These are independent of how big the rectangles are.
+	painter->drawLine(QLineF(x + halfWidth / 2, y + halfWidth, x + halfWidth*3 / 2, y + halfWidth));
+	painter->drawLine(QLineF(x + halfWidth, y + halfWidth, x + halfWidth, y+ halfWidth/2));
+	painter->drawLine(QLineF(x + halfWidth/2, y + halfWidth, x + halfWidth/2, y + halfWidth*3/2));
+	painter->drawLine(QLineF(x + halfWidth*3/2, y + halfWidth, x + halfWidth*3/2, y + halfWidth*3/2));
+
+	painter->drawRect(QRectF(x + ((width - style()->rectWidth()) / 2), y + restY, style()->rectWidth(), style()->rectHeight()));
+	painter->drawRect(QRectF(x + restX, y + halfWidth + restY, style()->rectWidth(), style()->rectHeight()));
+	painter->drawRect(QRectF(x + halfWidth + restX, y + halfWidth + restY, style()->rectWidth(), style()->rectHeight()));
+
+
 
 }
 
