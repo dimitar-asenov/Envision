@@ -30,7 +30,9 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/items/VInteger.h \
+HEADERS += headers/icons/IconStyle.h \
+    headers/icons/Icon.h \
+    headers/items/VInteger.h \
     headers/layouts/PositionLayoutStyle.h \
     headers/layouts/PositionLayout.h \
     headers/node_extensions/Position.h \
@@ -74,7 +76,9 @@ HEADERS += headers/items/VInteger.h \
     src/visualizationbase.h \
     headers/VisualizationException.h \
     headers/visualizationbase_api.h
-SOURCES += src/items/VInteger.cpp \
+SOURCES += src/icons/IconStyle.cpp \
+    src/icons/Icon.cpp \
+    src/items/VInteger.cpp \
     src/layouts/PositionLayoutStyle.cpp \
     src/layouts/PositionLayout.cpp \
     src/node_extensions/Position.cpp \
