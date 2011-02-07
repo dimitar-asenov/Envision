@@ -49,6 +49,7 @@ class VISUALIZATIONBASE_API Styles
 		template <class T> static QMap<QString, typename T::StyleType*>& itemStyles();
 		template <class T> static QMap<QString, typename T::StyleType*>& layoutStyles();
 		template <class T> static QMap<QString, typename T::StyleType*>& shapeStyles();
+		template <class T> static QMap<QString, typename T::StyleType*>& iconStyles();
 
 		template <class T> static typename T::StyleType* loadStyle(const QString& objectClass, const QString& styleName);
 
@@ -74,6 +75,7 @@ class VISUALIZATIONBASE_API Styles
 		template <class T> static typename T::StyleType* item(const QString& styleName = QString());
 		template <class T> static typename T::StyleType* layout(const QString& styleName = QString());
 		template <class T> static typename T::StyleType* shape(const QString& styleName = QString());
+		template <class T> static typename T::StyleType* icon(const QString& styleName = QString());
 };
 
 template<class T> QMap<QString, typename T::StyleType*>& Styles::itemStyles()
@@ -89,6 +91,12 @@ template<class T> QMap<QString, typename T::StyleType*>& Styles::layoutStyles()
 }
 
 template<class T> QMap<QString, typename T::StyleType*>& Styles::shapeStyles()
+{
+	static QMap<QString, typename T::StyleType*> styles;
+	return styles;
+}
+
+template<class T> QMap<QString, typename T::StyleType*>& Styles::iconStyles()
 {
 	static QMap<QString, typename T::StyleType*> styles;
 	return styles;
@@ -143,6 +151,23 @@ template<class T> typename T::StyleType* Styles::shape(const QString& styleName)
 	}
 
 	throw VisualizationException("Could not find the shape style '" + styleName + "'");
+}
+
+template<class T> typename T::StyleType* Styles::icon(const QString& styleName)
+{
+	if ( styleName.isNull() ) return T::StyleType::getDefault();
+	if ( iconStyles<T> ().contains(styleName) ) return iconStyles<T> ().value(styleName);
+	else
+	{
+		typename T::StyleType* style = loadStyle<T> ("icon", styleName);
+		if ( style )
+		{
+			iconStyles<T> ().insert(styleName, style);
+			return style;
+		}
+	}
+
+	throw VisualizationException("Could not find the icon style '" + styleName + "'");
 }
 
 template<class T> typename T::StyleType* Styles::loadStyle(const QString& objectClass, const QString& styleName)
