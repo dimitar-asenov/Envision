@@ -70,9 +70,6 @@ void ClassIcon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	painter->drawRect(QRectF(x + ((width - style()->rectWidth()) / 2), y + restY, style()->rectWidth(), style()->rectHeight()));
 	painter->drawRect(QRectF(x + restX, y + halfWidth + restY, style()->rectWidth(), style()->rectHeight()));
 	painter->drawRect(QRectF(x + halfWidth + restX, y + halfWidth + restY, style()->rectWidth(), style()->rectHeight()));
-
-
-
 }
 
 }
