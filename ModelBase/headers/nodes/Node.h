@@ -49,6 +49,23 @@ class MODELBASE_API Node
 		Node* parent() const;
 
 		/**
+		 * Returns the node which can be reached from the current node using the specified path.
+		 *
+		 * If the node can not be found, this method returns NULL.
+		 *
+		 * NOTE: If the current node is not fully loaded, calling this method might load it fully in case the target node
+		 * is a child node.
+		 *
+		 * @param source
+		 * 				The node with respect to which the search should be performed. Depending on the source the results
+		 * 				might be different. For example it might make a difference whether the source is a child node of
+		 * 				the current node or not.
+		 * @param path
+		 * 				The string that identifies the path to the desired target node.
+		 */
+		virtual Node* navigateTo(Node* source, QString path);
+
+		/**
 		 * Returns the child node with the specified id.
 		 *
 		 * Only direct children should be considered. If there is no child node with the specified id this method returns

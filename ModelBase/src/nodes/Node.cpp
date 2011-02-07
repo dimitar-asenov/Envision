@@ -123,6 +123,12 @@ Node* Node::parent() const
 	return parent_;
 }
 
+Node* Node::navigateTo(Node* source, QString path)
+{
+	if (parent_) return parent_->navigateTo(source, path);
+	else return NULL;
+}
+
 Node* Node::child(NodeIdType)
 {
 	return NULL;
