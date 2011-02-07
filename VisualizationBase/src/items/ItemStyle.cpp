@@ -35,6 +35,7 @@ Shape* ItemStyle::createShape(Item* parent) const
 void ItemStyle::load()
 {
 	QString shape;
+	Styles::load("drawsOnlyShape", drawsOnlyShape_);
 	Styles::load("shape", shapeName_);
 	shapeName_ = shapeName_.trimmed();
 

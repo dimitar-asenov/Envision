@@ -17,7 +17,7 @@ namespace Visualization {
 Item::Item(Item* parent, const ItemStyle* style) :
 	QGraphicsItem(parent), style_(NULL), shape_(NULL), needsUpdate_(true)
 {
-	setFlag(QGraphicsItem::ItemHasNoContents);
+	if ( !style || style->drawsOnlyShape() ) setFlag(QGraphicsItem::ItemHasNoContents);
 	setFlag(QGraphicsItem::ItemIsFocusable);
 	setFlag(QGraphicsItem::ItemIsSelectable);
 	setStyle(style);
@@ -67,7 +67,10 @@ void Item::useShape()
 			shape_ = style_->createShape(this);
 			setFlag(QGraphicsItem::ItemHasNoContents, false);
 		}
-		else setFlag(QGraphicsItem::ItemHasNoContents);
+		else
+		{
+			if (!style_ || style_->drawsOnlyShape() ) setFlag(QGraphicsItem::ItemHasNoContents);
+		}
 		setUpdateNeeded();
 	}
 }
@@ -75,7 +78,7 @@ void Item::useShape()
 void Item::removeShape()
 {
 	SAFE_DELETE(shape_);
-	setFlag(QGraphicsItem::ItemHasNoContents);
+	if (!style_ || style_->drawsOnlyShape()) setFlag(QGraphicsItem::ItemHasNoContents);
 	setUpdateNeeded();
 }
 

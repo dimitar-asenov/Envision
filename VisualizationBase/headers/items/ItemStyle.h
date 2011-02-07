@@ -23,6 +23,7 @@ class VISUALIZATIONBASE_API ItemStyle
 	private:
 		ShapeStyle* shapeStyle_;
 		QString shapeName_;
+		bool drawsOnlyShape_;
 
 	public:
 		ItemStyle();
@@ -32,9 +33,12 @@ class VISUALIZATIONBASE_API ItemStyle
 		bool hasShape() const;
 
 		virtual void load();
+
+		bool drawsOnlyShape() const;
 };
 
 inline bool ItemStyle::hasShape() const { return !shapeName_.isEmpty(); }
+inline bool ItemStyle::drawsOnlyShape() const { return drawsOnlyShape_; }
 
 }
 
