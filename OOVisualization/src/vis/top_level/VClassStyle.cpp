@@ -24,8 +24,10 @@ void VClassStyle::load()
 {
 	ItemStyle::load();
 	Visualization::Styles::load("border", border_);
+	Visualization::Styles::load("topContainer", topContainer_);
 	Visualization::Styles::load("name", name_);
 	Visualization::Styles::load("visibility", visibility_);
+	Visualization::Styles::load("icon", icon_);
 	Visualization::Styles::load("header", header_);
 	Visualization::Styles::load("content", content_);
 	Visualization::Styles::load("fieldContainer", fieldContainer_);

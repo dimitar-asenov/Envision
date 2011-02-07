@@ -28,6 +28,7 @@ namespace OOModel {
 namespace OOVisualization {
 
 class VVisibility;
+class ClassIcon;
 
 class OOVISUALIZATION_API VClass : public Visualization::ModelItem
 {
@@ -45,8 +46,10 @@ class OOVISUALIZATION_API VClass : public Visualization::ModelItem
 
 	private:
 		Visualization::PanelBorderLayout* layout_;
+		Visualization::SequentialLayout* topContainer_;
 		Visualization::VText* name_;
 		VVisibility* visibility_;
+		ClassIcon* icon_;
 		Visualization::SequentialLayout* header_;
 		Visualization::PositionLayout* content_;
 		Visualization::SequentialLayout* fieldContainer_;

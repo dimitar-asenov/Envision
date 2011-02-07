@@ -8,6 +8,7 @@
 #include "vis/top_level/VClass.h"
 #include "OOVisualizationException.h"
 #include "vis/VVisibility.h"
+#include "icons/ClassIcon.h"
 
 #include "OOModel/headers/Class.h"
 
@@ -26,8 +27,10 @@ ITEM_COMMON_DEFINITIONS(VClass)
 VClass::VClass(Item* parent, Class* node, const VClassStyle* style) :
 	ModelItem(parent, node, style),
 	layout_( new PanelBorderLayout(this, &style->border()) ),
+	topContainer_(new SequentialLayout(NULL, &style->topContainer()) ),
 	name_(new VText(NULL, node->nameNode(), &style->name()) ),
 	visibility_(new VVisibility(NULL, node->visibilityNode(), &style->visibility()) ),
+	icon_( new ClassIcon(NULL, &style->icon()) ),
 	header_( new SequentialLayout(NULL, &style->header()) ),
 	content_( new PositionLayout(NULL, &style->content()) ),
 	fieldContainer_(new SequentialLayout(NULL, &style->fieldContainer()) ),
@@ -37,7 +40,9 @@ VClass::VClass(Item* parent, Class* node, const VClassStyle* style) :
 	defaultFieldArea_(new SequentialLayout(NULL, &style->defaultFieldArea()) )
 {
 	layout_->setTop(true);
-	layout_->top()->setFirst(header_);
+	layout_->top()->setFirst(topContainer_);
+	topContainer_->append(icon_);
+	topContainer_->append(header_);
 	header_->append(visibility_);
 	header_->append(name_);
 
@@ -56,6 +61,8 @@ VClass::~VClass()
 	SAFE_DELETE_ITEM(layout_);
 
 	// These were automatically deleted by layout's destructor
+	icon_ = NULL;
+	topContainer_ = NULL;
 	name_ = NULL;
 	visibility_ = NULL;
 	header_ = NULL;
@@ -76,8 +83,10 @@ void VClass::determineChildren()
 	//			what's the reason they are being updated.
 	// The style needs to be updated every time since if our own style changes, so will that of the children.
 	layout_->setStyle( &style()->border() );
+	topContainer_->setStyle( &style()->topContainer() );
 	name_->setStyle( &style()->name() );
 	visibility_->setStyle( &style()->visibility() );
+	icon_->setStyle(&style()->icon());
 	header_->setStyle( &style()->header() );
 	content_->setStyle( &style()->content() );
 	fieldContainer_->setStyle( &style()->fieldContainer() );

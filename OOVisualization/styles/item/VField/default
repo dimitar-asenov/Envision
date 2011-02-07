@@ -1,5 +1,5 @@
 <!DOCTYPE EnvisionVisualizationStyle>
-<style>
+<style prototypes="item/Item/default">
 	<shape />
 	<container prototypes="layout/SequentialLayout/default" />
 	<nameDefault prototypes="item/Text/default" />

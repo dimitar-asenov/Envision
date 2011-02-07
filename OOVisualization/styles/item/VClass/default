@@ -1,5 +1,5 @@
 <!DOCTYPE EnvisionVisualizationStyle>
-<style>
+<style prototypes="item/Item/default">
 	<shape prototypes="shape/Box/default">
 		Box
 		<cornerRadius>10</cornerRadius>
@@ -8,6 +8,7 @@
 		</shadowBrush>
 	</shape>
 	<border prototypes="layout/PanelBorderLayout/default" />
+	<topContainer prototypes="layout/SequentialLayout/default" />
 	<header prototypes="layout/SequentialLayout/default">
 		<shape prototypes="shape/Box/default">
 			Box
@@ -40,6 +41,7 @@
 			</color>
 		</pen>
 	</name>
+	<icon prototypes="icon/ClassIcon/default" />
 	<visibility prototypes="item/Text/default" />
 	<content prototypes="layout/PositionLayout/default" />
 	<fieldContainer prototypes="layout/SequentialLayout/default">
