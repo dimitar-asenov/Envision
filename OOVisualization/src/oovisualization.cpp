@@ -17,11 +17,17 @@
 #include "icons/ClassIcon.h"
 #include "icons/MethodIcon.h"
 
+#include "expressions/VVariableAccess.h"
+#include "expressions/VReferenceExpression.h"
+
 #include "OOModel/headers/Project.h"
 #include "OOModel/headers/Module.h"
 #include "OOModel/headers/Class.h"
 #include "OOModel/headers/Method.h"
 #include "OOModel/headers/Field.h"
+
+#include "OOModel/headers/expressions/ReferenceExpression.h"
+#include "OOModel/headers/expressions/VariableAccess.h"
 
 #include "VisualizationBase/headers/Scene.h"
 #include "VisualizationBase/headers/node_extensions/Position.h"
@@ -50,6 +56,8 @@ bool OOVisualization::initialize(Envision::EnvisionManager&)
 	Scene::defaultRenderer()->registerVisualization(Class::typeIdStatic(), createVisualization<VClass, Class>);
 	Scene::defaultRenderer()->registerVisualization(Method::typeIdStatic(), createVisualization<VMethod, Method>);
 	Scene::defaultRenderer()->registerVisualization(Field::typeIdStatic(), createVisualization<VField, Field>);
+	Scene::defaultRenderer()->registerVisualization(ReferenceExpression::typeIdStatic(), createVisualization<VReferenceExpression, ReferenceExpression>);
+	Scene::defaultRenderer()->registerVisualization(VariableAccess::typeIdStatic(), createVisualization<VVariableAccess, VariableAccess>);
 
 	// Register handlers
 	// TODO: move this to a better place i.e. OOInteraction Plugin
@@ -61,6 +69,8 @@ bool OOVisualization::initialize(Envision::EnvisionManager&)
 	VField::setInteractionHandler(Interaction::GenericHandler::instance());
 	ClassIcon::setInteractionHandler(Interaction::GenericHandler::instance());
 	MethodIcon::setInteractionHandler(Interaction::GenericHandler::instance());
+	VReferenceExpression::setInteractionHandler(Interaction::GenericHandler::instance());
+	VVariableAccess::setInteractionHandler(Interaction::GenericHandler::instance());
 
 	return true;
 }

@@ -31,7 +31,11 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/icons/MethodIconStyle.h \
+HEADERS += headers/expressions/VVariableAccessStyle.h \
+    headers/expressions/VVariableAccess.h \
+    headers/expressions/VReferenceExpressionStyle.h \
+    headers/expressions/VReferenceExpression.h \
+    headers/icons/MethodIconStyle.h \
     headers/icons/MethodIcon.h \
     headers/icons/ClassIconStyle.h \
     headers/icons/ClassIcon.h \
@@ -48,7 +52,11 @@ HEADERS += headers/icons/MethodIconStyle.h \
     headers/OOVisualizationException.h \
     headers/oovisualization_api.h \
     src/oovisualization.h
-SOURCES += src/icons/MethodIcon.cpp \
+SOURCES += src/expressions/VVariableAccessStyle.cpp \
+    src/expressions/VVariableAccess.cpp \
+    src/expressions/VReferenceExpression.cpp \
+    src/expressions/VReferenceExpressionStyle.cpp \
+    src/icons/MethodIcon.cpp \
     src/icons/MethodIconStyle.cpp \
     src/icons/ClassIcon.cpp \
     src/icons/ClassIconStyle.cpp \

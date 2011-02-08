@@ -1,0 +1,7 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/Item/default">
+	<shape />
+	<container prototypes="layout/SequentialLayout/default" />
+	<name prototypes="item/Text/default" />
+	<separator prototypes="item/Text/default" />
+</style>

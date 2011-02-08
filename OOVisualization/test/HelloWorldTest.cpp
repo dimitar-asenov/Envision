@@ -112,7 +112,8 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	va->ref()->set("field:out");
 
 	ReferenceExpression* ref = va->setPrefix<ReferenceExpression>();
-	ref->ref()->set("lib:Java,class:System");
+	ref->ref()->set("class:System");
+	ref->setPrefix<ReferenceExpression>()->ref()->set("lib:Java");
 
 	// set positions
 	java->extension<Position>()->setX(200);
