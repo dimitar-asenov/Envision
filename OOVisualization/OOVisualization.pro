@@ -31,7 +31,8 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/statements/VMethodCallStatementStyle.h \
+HEADERS += headers/literals/VStringLiteral.h \
+    headers/statements/VMethodCallStatementStyle.h \
     headers/statements/VMethodCallStatement.h \
     headers/expressions/VVariableAccessStyle.h \
     headers/expressions/VVariableAccess.h \
@@ -54,7 +55,8 @@ HEADERS += headers/statements/VMethodCallStatementStyle.h \
     headers/OOVisualizationException.h \
     headers/oovisualization_api.h \
     src/oovisualization.h
-SOURCES += src/statements/VMethodCallStatement.cpp \
+SOURCES += src/literals/VStringLiteral.cpp \
+    src/statements/VMethodCallStatement.cpp \
     src/statements/VMethodCallStatementStyle.cpp \
     src/expressions/VVariableAccessStyle.cpp \
     src/expressions/VVariableAccess.cpp \
