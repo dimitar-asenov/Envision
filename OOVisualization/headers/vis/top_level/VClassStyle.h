@@ -23,9 +23,10 @@ class OOVISUALIZATION_API VClassStyle : public Visualization::ItemStyle
 {
 	private:
 		Visualization::PanelBorderLayoutStyle border_;
-		Visualization::SequentialLayoutStyle topContainer_;
-		Visualization::TextStyle name_;
-		Visualization::TextStyle visibility_;
+		Visualization::TextStyle nameDefault_;
+		Visualization::TextStyle namePublic_;
+		Visualization::TextStyle namePrivate_;
+		Visualization::TextStyle nameProtected_;
 		ClassIconStyle icon_;
 		Visualization::SequentialLayoutStyle header_;
 		Visualization::PositionLayoutStyle content_;
@@ -40,9 +41,10 @@ class OOVISUALIZATION_API VClassStyle : public Visualization::ItemStyle
 		void load();
 
 		const Visualization::PanelBorderLayoutStyle& border() const;
-		const Visualization::SequentialLayoutStyle& topContainer() const;
-		const Visualization::TextStyle& name() const;
-		const Visualization::TextStyle& visibility() const;
+		const Visualization::TextStyle& nameDefault() const;
+		const Visualization::TextStyle& namePublic() const;
+		const Visualization::TextStyle& namePrivate() const;
+		const Visualization::TextStyle& nameProtected() const;
 		const ClassIconStyle& icon() const;
 		const Visualization::SequentialLayoutStyle& header() const;
 		const Visualization::PositionLayoutStyle& content() const;
@@ -56,9 +58,10 @@ class OOVISUALIZATION_API VClassStyle : public Visualization::ItemStyle
 };
 
 inline const Visualization::PanelBorderLayoutStyle& VClassStyle::border() const { return border_; }
-inline const Visualization::SequentialLayoutStyle& VClassStyle::topContainer() const { return topContainer_; }
-inline const Visualization::TextStyle& VClassStyle::name() const { return name_; }
-inline const Visualization::TextStyle& VClassStyle::visibility() const { return visibility_; }
+inline const Visualization::TextStyle& VClassStyle::nameDefault() const { return nameDefault_; }
+inline const Visualization::TextStyle& VClassStyle::namePublic() const { return namePublic_; }
+inline const Visualization::TextStyle& VClassStyle::namePrivate() const { return namePrivate_; }
+inline const Visualization::TextStyle& VClassStyle::nameProtected() const { return nameProtected_; }
 inline const ClassIconStyle& VClassStyle::icon() const { return icon_; }
 inline const Visualization::SequentialLayoutStyle& VClassStyle::header() const { return header_; }
 inline const Visualization::PositionLayoutStyle& VClassStyle::content() const { return content_; }

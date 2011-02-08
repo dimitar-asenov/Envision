@@ -21,12 +21,16 @@ class OOVISUALIZATION_API VMethodStyle : public Visualization::ItemStyle
 {
 	private:
 		Visualization::PanelBorderLayoutStyle border_;
-		Visualization::TextStyle name_;
-		Visualization::TextStyle nameStatic_;
-		Visualization::TextStyle visibility_;
+		Visualization::TextStyle nameDefault_;
+		Visualization::TextStyle namePublic_;
+		Visualization::TextStyle namePrivate_;
+		Visualization::TextStyle nameProtected_;
+		Visualization::TextStyle nameStaticDefault_;
+		Visualization::TextStyle nameStaticPublic_;
+		Visualization::TextStyle nameStaticPrivate_;
+		Visualization::TextStyle nameStaticProtected_;
 		MethodIconStyle icon_;
 		Visualization::SequentialLayoutStyle header_;
-		Visualization::SequentialLayoutStyle nameContainer_;
 		Visualization::SequentialLayoutStyle content_;
 		Visualization::SequentialLayoutStyle arguments_;
 		Visualization::SequentialLayoutStyle results_;
@@ -36,12 +40,16 @@ class OOVISUALIZATION_API VMethodStyle : public Visualization::ItemStyle
 		void load();
 
 		const Visualization::PanelBorderLayoutStyle& border() const;
-		const Visualization::TextStyle& name() const;
-		const Visualization::TextStyle& nameStatic() const;
-		const Visualization::TextStyle& visibility() const;
+		const Visualization::TextStyle& nameDefault() const;
+		const Visualization::TextStyle& namePublic() const;
+		const Visualization::TextStyle& namePrivate() const;
+		const Visualization::TextStyle& nameProtected() const;
+		const Visualization::TextStyle& nameStaticDefault() const;
+		const Visualization::TextStyle& nameStaticPublic() const;
+		const Visualization::TextStyle& nameStaticPrivate() const;
+		const Visualization::TextStyle& nameStaticProtected() const;
 		const MethodIconStyle& icon() const;
 		const Visualization::SequentialLayoutStyle& header() const;
-		const Visualization::SequentialLayoutStyle& nameContainer() const;
 		const Visualization::SequentialLayoutStyle& content() const;
 		const Visualization::SequentialLayoutStyle& arguments() const;
 		const Visualization::SequentialLayoutStyle& results() const;
@@ -50,12 +58,16 @@ class OOVISUALIZATION_API VMethodStyle : public Visualization::ItemStyle
 };
 
 inline const Visualization::PanelBorderLayoutStyle& VMethodStyle::border() const { return border_; }
-inline const Visualization::TextStyle& VMethodStyle::name() const { return name_; }
-inline const Visualization::TextStyle& VMethodStyle::nameStatic() const { return nameStatic_; }
-inline const Visualization::TextStyle& VMethodStyle::visibility() const { return visibility_; }
+inline const Visualization::TextStyle& VMethodStyle::nameDefault() const { return nameDefault_; }
+inline const Visualization::TextStyle& VMethodStyle::namePublic() const { return namePublic_; }
+inline const Visualization::TextStyle& VMethodStyle::namePrivate() const { return namePrivate_; }
+inline const Visualization::TextStyle& VMethodStyle::nameProtected() const { return nameProtected_; }
+inline const Visualization::TextStyle& VMethodStyle::nameStaticDefault() const { return nameStaticDefault_; }
+inline const Visualization::TextStyle& VMethodStyle::nameStaticPublic() const { return nameStaticPublic_; }
+inline const Visualization::TextStyle& VMethodStyle::nameStaticPrivate() const { return nameStaticPrivate_; }
+inline const Visualization::TextStyle& VMethodStyle::nameStaticProtected() const { return nameStaticProtected_; }
 inline const MethodIconStyle& VMethodStyle::icon() const { return icon_; }
 inline const Visualization::SequentialLayoutStyle& VMethodStyle::header() const { return header_; }
-inline const Visualization::SequentialLayoutStyle& VMethodStyle::nameContainer() const { return nameContainer_; }
 inline const Visualization::SequentialLayoutStyle& VMethodStyle::content() const { return content_; }
 inline const Visualization::SequentialLayoutStyle& VMethodStyle::arguments() const { return arguments_; }
 inline const Visualization::SequentialLayoutStyle& VMethodStyle::results() const { return results_; }

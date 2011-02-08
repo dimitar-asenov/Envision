@@ -18,17 +18,37 @@
 							<first>1.0</first>
 							<second>
 								<alpha>255</alpha>
-								<red>192</red>
-								<green>192</green>
-								<blue>255</blue>
+								<red>0</red>
+								<green>0</green>
+								<blue>100</blue>
 							</second>
 						</e1>	
 					</stopPoints>
 				</gradient>
 			</backgroundBrush>
-			<cornerType>0</cornerType>
+			<cornerType>1</cornerType>
 			<cornerRadius>5</cornerRadius>
 		</shape>
+		<pen>
+			<width>1.0</width>
+			<style>1</style>
+			<color>
+				<alpha>255</alpha>
+				<red>255</red>
+				<green>255</green>
+				<blue>255</blue>
+			</color>
+			<capStyle>0</capStyle>
+			<joinStyle>0</joinStyle>
+		</pen>
+		<font>
+			<size>20</size>
+			<sizeIsInPixels>true</sizeIsInPixels>
+		</font>
+		<selectionFont>
+			<size>20</size>
+			<sizeIsInPixels>true</sizeIsInPixels>
+		</selectionFont>
 	</headerStyle>
 	<contentStyle prototypes="layout/PositionLayout/default" />
 </style>

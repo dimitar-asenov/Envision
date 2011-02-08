@@ -26,7 +26,6 @@ namespace OOModel {
 
 namespace OOVisualization {
 
-class VVisibility;
 class MethodIcon;
 
 class OOVISUALIZATION_API VMethod : public Visualization::ModelItem
@@ -45,13 +44,11 @@ class OOVISUALIZATION_API VMethod : public Visualization::ModelItem
 
 	private:
 		Visualization::PanelBorderLayout* layout_;
-		Visualization::VText* name_;
-		VVisibility* visibility_;
-		MethodIcon* icon_;
 		Visualization::SequentialLayout* header_;
-		Visualization::SequentialLayout* nameContainer_;
-		Visualization::SequentialLayout* content_;
+		MethodIcon* icon_;
+		Visualization::VText* name_;
 		Visualization::SequentialLayout* arguments_;
+		Visualization::SequentialLayout* content_;
 		Visualization::SequentialLayout* results_;
 };
 
