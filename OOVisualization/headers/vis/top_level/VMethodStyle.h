@@ -9,6 +9,7 @@
 #define VMETHODSTYLE_H_
 
 #include "../../oovisualization_api.h"
+#include "icons/MethodIconStyle.h"
 
 #include "VisualizationBase/headers/items/TextStyle.h"
 #include "VisualizationBase/headers/layouts/PanelBorderLayoutStyle.h"
@@ -23,6 +24,7 @@ class OOVISUALIZATION_API VMethodStyle : public Visualization::ItemStyle
 		Visualization::TextStyle name_;
 		Visualization::TextStyle nameStatic_;
 		Visualization::TextStyle visibility_;
+		MethodIconStyle icon_;
 		Visualization::SequentialLayoutStyle header_;
 		Visualization::SequentialLayoutStyle nameContainer_;
 		Visualization::SequentialLayoutStyle content_;
@@ -37,6 +39,7 @@ class OOVISUALIZATION_API VMethodStyle : public Visualization::ItemStyle
 		const Visualization::TextStyle& name() const;
 		const Visualization::TextStyle& nameStatic() const;
 		const Visualization::TextStyle& visibility() const;
+		const MethodIconStyle& icon() const;
 		const Visualization::SequentialLayoutStyle& header() const;
 		const Visualization::SequentialLayoutStyle& nameContainer() const;
 		const Visualization::SequentialLayoutStyle& content() const;
@@ -50,6 +53,7 @@ inline const Visualization::PanelBorderLayoutStyle& VMethodStyle::border() const
 inline const Visualization::TextStyle& VMethodStyle::name() const { return name_; }
 inline const Visualization::TextStyle& VMethodStyle::nameStatic() const { return nameStatic_; }
 inline const Visualization::TextStyle& VMethodStyle::visibility() const { return visibility_; }
+inline const MethodIconStyle& VMethodStyle::icon() const { return icon_; }
 inline const Visualization::SequentialLayoutStyle& VMethodStyle::header() const { return header_; }
 inline const Visualization::SequentialLayoutStyle& VMethodStyle::nameContainer() const { return nameContainer_; }
 inline const Visualization::SequentialLayoutStyle& VMethodStyle::content() const { return content_; }

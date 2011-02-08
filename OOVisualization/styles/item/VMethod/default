@@ -15,6 +15,7 @@
 		</font>
 	</nameStatic>
 	<visibility prototypes="item/Text/default" />
+	<icon prototypes="icon/MethodIcon/default" />
 	<header prototypes="layout/SequentialLayout/default" />
 	<nameContainer prototypes="layout/SequentialLayout/default">
 		<shape prototypes="shape/Box/default">

@@ -118,9 +118,8 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 
 	// set positions
 	java->extension<Position>()->setX(200);
-	system->extension<Position>()->setX(0);
-	string->extension<Position>()->setX(200);
-	io->extension<Position>()->setX(300);
+	string->extension<Position>()->setY(100);
+	io->extension<Position>()->setX(250);
 
 	model->endModification();
 	CHECK_INT_EQUAL(200, java->extension<Position>()->x());

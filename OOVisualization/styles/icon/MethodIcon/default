@@ -1,0 +1,19 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="icon/Icon/default">
+	<width>30</width>
+	<numTeeth>10</numTeeth>
+	<innerRadius>4</innerRadius>
+	<middleRadius>7</middleRadius>
+	<outterRadius>9</outterRadius>
+	<posFirst><x>8.5</x><y>8.5</y></posFirst>
+	<posSecond><x>20</x><y>20</y></posSecond>
+	<brush>
+		<style>1</style>
+		<color>
+			<alpha>255</alpha>
+			<red>192</red>
+			<green>192</green>
+			<blue>192</blue>
+		</color>
+	</brush>
+</style>

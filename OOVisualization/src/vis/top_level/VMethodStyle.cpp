@@ -27,6 +27,7 @@ void VMethodStyle::load()
 	Visualization::Styles::load("name", name_);
 	Visualization::Styles::load("nameStatic", nameStatic_);
 	Visualization::Styles::load("visibility", visibility_);
+	Visualization::Styles::load("icon", icon_);
 	Visualization::Styles::load("header", header_);
 	Visualization::Styles::load("nameContainer", nameContainer_);
 	Visualization::Styles::load("content", content_);

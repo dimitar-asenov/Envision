@@ -8,6 +8,7 @@
 #include "vis/top_level/VMethod.h"
 #include "OOVisualizationException.h"
 #include "vis/VVisibility.h"
+#include "icons/MethodIcon.h"
 
 #include "OOModel/headers/Method.h"
 
@@ -27,6 +28,7 @@ VMethod::VMethod(Item* parent, Method* node, const VMethodStyle* style) :
 	layout_( new PanelBorderLayout(this, &style->border()) ),
 	name_(new VText(NULL, node->nameNode(), &style->name()) ),
 	visibility_(new VVisibility(NULL, node->visibilityNode(), &style->visibility()) ),
+	icon_(new MethodIcon(NULL, &style->icon())),
 	header_( new SequentialLayout(NULL, &style->header()) ),
 	nameContainer_( new SequentialLayout(NULL, &style->nameContainer()) ),
 	content_( new SequentialLayout(NULL, &style->content()) ),
@@ -36,6 +38,7 @@ VMethod::VMethod(Item* parent, Method* node, const VMethodStyle* style) :
 	layout_->setTop(true);
 	layout_->top()->setFirst(header_);
 	header_->append(nameContainer_);
+	nameContainer_->append(icon_);
 	nameContainer_->append(visibility_);
 	nameContainer_->append(name_);
 	header_->append(arguments_);
@@ -53,6 +56,7 @@ VMethod::~VMethod()
 	// These were automatically deleted by layout's destructor
 	name_ = NULL;
 	visibility_ = NULL;
+	icon_ = NULL;
 	header_ = NULL;
 	nameContainer_ = NULL;
 	content_ = NULL;
@@ -75,6 +79,7 @@ void VMethod::determineChildren()
 	else throw OOVisualizationException("Unknown static type in VMethod::determineChildren");
 
 	visibility_->setStyle( &style()->visibility() );
+	icon_->setStyle( &style()->icon());
 	header_->setStyle( &style()->header() );
 	nameContainer_->setStyle( &style()->nameContainer() );
 	content_->setStyle( &style()->content() );

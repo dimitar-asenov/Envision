@@ -31,7 +31,9 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/icons/ClassIconStyle.h \
+HEADERS += headers/icons/MethodIconStyle.h \
+    headers/icons/MethodIcon.h \
+    headers/icons/ClassIconStyle.h \
     headers/icons/ClassIcon.h \
     headers/vis/elements/VFieldStyle.h \
     headers/vis/elements/VField.h \
@@ -47,7 +49,9 @@ HEADERS += headers/icons/ClassIconStyle.h \
     headers/OOVisualizationException.h \
     headers/oovisualization_api.h \
     src/oovisualization.h
-SOURCES += src/icons/ClassIcon.cpp \
+SOURCES += src/icons/MethodIcon.cpp \
+    src/icons/MethodIconStyle.cpp \
+    src/icons/ClassIcon.cpp \
     src/icons/ClassIconStyle.cpp \
     src/vis/elements/VFieldStyle.cpp \
     src/vis/elements/VField.cpp \
