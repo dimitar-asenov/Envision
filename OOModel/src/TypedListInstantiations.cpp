@@ -14,7 +14,6 @@
 #include "MethodItem.h"
 #include "FormalArgument.h"
 #include "Field.h"
-#include "OOReference.h"
 
 #include "statements/Statement.h"
 #include "statements/Block.h"
@@ -57,7 +56,6 @@ template class Model::TypedList<OOModel::Method>;
 template class Model::TypedList<OOModel::MethodItem>;
 template class Model::TypedList<OOModel::FormalArgument>;
 template class Model::TypedList<OOModel::Field>;
-template class Model::TypedList<OOModel::OOReference>;
 
 template class Model::TypedList<OOModel::Statement>;
 template class Model::TypedList<OOModel::Block>;

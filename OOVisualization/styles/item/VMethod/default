@@ -3,9 +3,15 @@
 	<shape prototypes="shape/Box/default">
 		Box
 		<cornerRadius>10</cornerRadius>
-		<shadowBrush>
+		<backgroundBrush>
 			<style>1</style>
-		</shadowBrush>
+			<color>
+				<alpha>255</alpha>
+				<red>255</red>
+				<green>255</green>
+				<blue>255</blue>
+			</color>
+		</backgroundBrush>
 	</shape>
 	<border prototypes="layout/PanelBorderLayout/default" />
 	<nameDefault prototypes="default.nameDefault" />

@@ -12,6 +12,7 @@
 #include "Scene.h"
 #include "items/VText.h"
 #include "items/VInteger.h"
+#include "items/VReference.h"
 #include "items/VExtendable.h"
 #include "items/VList.h"
 
@@ -39,6 +40,7 @@ namespace Visualization
 		// Register visualizations
 		Scene::defaultRenderer()->registerVisualization(Model::Text::typeIdStatic(), createVisualization<VText, Model::Text>);
 		Scene::defaultRenderer()->registerVisualization(Model::Integer::typeIdStatic(), createVisualization<VInteger, Model::Integer>);
+		Scene::defaultRenderer()->registerVisualization(Model::Reference::typeIdStatic(), createVisualization<VReference, Model::Reference>);
 		Scene::defaultRenderer()->registerVisualization(Model::ExtendableNode::typeIdStatic(), createVisualization<VExtendable, Model::ExtendableNode>);
 		Scene::defaultRenderer()->registerVisualization(Model::List::typeIdStatic(), createVisualization<VList, Model::List>);
 

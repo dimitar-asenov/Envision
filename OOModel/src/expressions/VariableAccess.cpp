@@ -13,7 +13,7 @@ EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(VariableAccess, Expression)
 EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(VariableAccess, Expression)
 
 REGISTER_ATTRIBUTE(VariableAccess, prefix, Expression, false, true, true)
-REGISTER_ATTRIBUTE(VariableAccess, ref, OOReference, false, false, true)
+REGISTER_ATTRIBUTE(VariableAccess, ref, Reference, false, false, true)
 
 
 }

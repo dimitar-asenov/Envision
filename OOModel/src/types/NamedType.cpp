@@ -12,6 +12,6 @@ namespace OOModel {
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(NamedType, Type)
 EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(NamedType, Type)
 
-REGISTER_ATTRIBUTE(NamedType, type, OOReference, false, false, true)
+REGISTER_ATTRIBUTE(NamedType, type, Reference, false, false, true)
 
 }

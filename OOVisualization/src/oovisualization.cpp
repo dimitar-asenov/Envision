@@ -13,7 +13,9 @@
 #include "vis/top_level/VClass.h"
 #include "vis/top_level/VMethod.h"
 #include "vis/elements/VField.h"
-#include "vis/VOOReference.h"
+
+#include "icons/ClassIcon.h"
+#include "icons/MethodIcon.h"
 
 #include "OOModel/headers/Project.h"
 #include "OOModel/headers/Module.h"
@@ -57,7 +59,8 @@ bool OOVisualization::initialize(Envision::EnvisionManager&)
 	VClass::setInteractionHandler(Interaction::GenericHandler::instance());
 	VMethod::setInteractionHandler(Interaction::GenericHandler::instance());
 	VField::setInteractionHandler(Interaction::GenericHandler::instance());
-	VOOReference::setInteractionHandler(Interaction::HText::instance());
+	ClassIcon::setInteractionHandler(Interaction::GenericHandler::instance());
+	MethodIcon::setInteractionHandler(Interaction::GenericHandler::instance());
 
 	return true;
 }

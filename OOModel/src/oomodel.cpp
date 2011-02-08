@@ -18,7 +18,6 @@
 #include "MethodItem.h"
 #include "FormalArgument.h"
 #include "Field.h"
-#include "OOReference.h"
 
 #include "statements/Statement.h"
 #include "statements/Block.h"
@@ -63,7 +62,6 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	// Initialize common nodes
 	Visibility::registerNodeType();
 	Static::registerNodeType();
-	OOReference::registerNodeType();
 
 	// Register TypedList instantiations
 	Model::TypedList<Project>::registerNodeType();
@@ -73,7 +71,6 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	Model::TypedList<MethodItem>::registerNodeType();
 	Model::TypedList<FormalArgument>::registerNodeType();
 	Model::TypedList<Field>::registerNodeType();
-	Model::TypedList<OOReference>::registerNodeType();
 
 	Model::TypedList<Statement>::registerNodeType();
 	Model::TypedList<Block>::registerNodeType();

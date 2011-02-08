@@ -51,7 +51,6 @@ HEADERS += headers/TypedListInstantiations.h \
     headers/types/PrimitiveType.h \
     headers/types/Type.h \
     headers/expressions/NewExpression.h \
-    headers/OOReference.h \
     headers/expressions/VariableAccess.h \
     headers/expressions/ThisExpression.h \
     headers/expressions/NullLiteral.h \
@@ -97,7 +96,6 @@ SOURCES += src/statements/AssignmentStatement.cpp \
     src/types/PrimitiveType.cpp \
     src/types/Type.cpp \
     src/expressions/NewExpression.cpp \
-    src/OOReference.cpp \
     src/expressions/VariableAccess.cpp \
     src/expressions/ThisExpression.cpp \
     src/expressions/NullLiteral.cpp \

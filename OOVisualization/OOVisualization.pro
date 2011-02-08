@@ -43,7 +43,6 @@ HEADERS += headers/icons/MethodIconStyle.h \
     headers/vis/top_level/VModule.h \
     headers/vis/top_level/VProjectStyle.h \
     headers/vis/top_level/VProject.h \
-    headers/vis/VOOReference.h \
     headers/vis/VStatic.h \
     headers/vis/VVisibility.h \
     headers/OOVisualizationException.h \
@@ -63,7 +62,6 @@ SOURCES += src/icons/MethodIcon.cpp \
     src/vis/top_level/VModuleStyle.cpp \
     src/vis/top_level/VProjectStyle.cpp \
     src/vis/top_level/VProject.cpp \
-    src/vis/VOOReference.cpp \
     src/vis/VStatic.cpp \
     src/vis/VVisibility.cpp \
     test/HelloWorldTest.cpp \

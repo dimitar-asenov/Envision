@@ -9,7 +9,8 @@
 #define REFERENCEEXPRESSION_H_
 
 #include "Expression.h"
-#include "../OOReference.h"
+
+#include "ModelBase/headers/nodes/Reference.h"
 
 namespace OOModel {
 
@@ -17,7 +18,8 @@ class OOMODEL_API ReferenceExpression: public Expression
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(ReferenceExpression)
 
-	ATTRIBUTE(OOReference, ref, setRef)
+	ATTRIBUTE(Expression, prefix, setPrefix)
+	ATTRIBUTE(Model::Reference, ref, setRef)
 };
 
 }

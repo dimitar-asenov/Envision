@@ -9,7 +9,6 @@
 #include "SelfTest/headers/SelfTestSuite.h"
 #include "vis/VVisibility.h"
 #include "vis/VStatic.h"
-#include "vis/VOOReference.h"
 
 #include "OOModel/headers/Project.h"
 #include "OOModel/headers/Class.h"
@@ -51,7 +50,6 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 
 	scene->defaultRenderer()->registerVisualization(Visibility::typeIdStatic(), createVisualization<VVisibility, Visibility>);
 	scene->defaultRenderer()->registerVisualization(Static::typeIdStatic(), createVisualization<VStatic, Static>);
-	scene->defaultRenderer()->registerVisualization(OOReference::typeIdStatic(), createVisualization<VOOReference, OOReference>);
 
 	////////////////////////////////////////////////// Create Model
 	Model::Model* model = new Model::Model();

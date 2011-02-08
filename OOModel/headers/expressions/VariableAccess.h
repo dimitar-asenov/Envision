@@ -9,7 +9,7 @@
 #define VARIABLEACCESS_H_
 
 #include "Expression.h"
-#include "../OOReference.h"
+#include "ModelBase/headers/nodes/Reference.h"
 
 namespace OOModel {
 
@@ -18,7 +18,7 @@ class OOMODEL_API VariableAccess: public Expression
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(VariableAccess)
 
 	ATTRIBUTE(Expression, prefix, setPrefix)
-	ATTRIBUTE(OOReference, ref, setRef)
+	ATTRIBUTE(Model::Reference, ref, setRef)
 };
 
 }

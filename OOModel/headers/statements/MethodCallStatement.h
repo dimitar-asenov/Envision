@@ -10,7 +10,7 @@
 
 #include "Statement.h"
 
-#include "../OOReference.h"
+#include "ModelBase/headers/nodes/Reference.h"
 #include "../expressions/Expression.h"
 
 #include "ModelBase/headers/nodes/TypedList.h"
@@ -22,7 +22,7 @@ class OOMODEL_API MethodCallStatement: public Statement
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(MethodCallStatement)
 
 	ATTRIBUTE(Expression, prefix, setPrefix)
-	ATTRIBUTE(OOReference, ref, setRef)
+	ATTRIBUTE(Model::Reference, ref, setRef)
 	ATTRIBUTE(Model::TypedList<Expression>, arguments, setArguments)
 
 	public:

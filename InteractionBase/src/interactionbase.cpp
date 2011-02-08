@@ -22,6 +22,8 @@
 #include "VisualizationBase/headers/items/VList.h"
 #include "VisualizationBase/headers/items/Text.h"
 #include "VisualizationBase/headers/items/VText.h"
+#include "VisualizationBase/headers/items/VInteger.h"
+#include "VisualizationBase/headers/items/VReference.h"
 #include "VisualizationBase/headers/layouts/SequentialLayout.h"
 #include "VisualizationBase/headers/layouts/PanelLayout.h"
 #include "VisualizationBase/headers/layouts/PanelBorderLayout.h"
@@ -46,6 +48,8 @@ bool InteractionBase::initialize(Envision::EnvisionManager&)
 	Visualization::VList::setInteractionHandler(HList::instance());
 	Visualization::Text::setInteractionHandler(HText::instance());
 	Visualization::VText::setInteractionHandler(HText::instance());
+	Visualization::VInteger::setInteractionHandler(HText::instance());
+	Visualization::VReference::setInteractionHandler(HText::instance());
 	Visualization::SequentialLayout::setInteractionHandler(GenericHandler::instance());
 	Visualization::PanelLayout::setInteractionHandler(GenericHandler::instance());
 	Visualization::PanelBorderLayout::setInteractionHandler(GenericHandler::instance());
