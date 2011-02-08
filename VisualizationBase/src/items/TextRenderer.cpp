@@ -114,6 +114,13 @@ template<class T> void TextRenderer<T>::updateGeometry(int, int)
 		this->setSize(bound.size());
 	}
 
+	// Correct underline, otherwise it is drawn in the middle of two pixels and appears fat and transparent.
+	if (style()->font().underline() && qfm.lineWidth() % 2)
+	{
+		xOffset += 0.5;
+		yOffset += 0.5;
+	}
+
 	if ( this->hasFocus() )
 	{
 		int xstart = selectionBegin;
@@ -140,7 +147,7 @@ template<class T> void TextRenderer<T>::paint(QPainter *painter, const QStyleOpt
 	{
 		painter->setPen(style()->pen());
 		painter->setFont(style()->font());
-		painter->drawText(xOffset, yOffset, text);
+		painter->drawText(QPointF(xOffset, yOffset), text);
 	}
 	else
 	{
@@ -149,7 +156,7 @@ template<class T> void TextRenderer<T>::paint(QPainter *painter, const QStyleOpt
 			// No text is selected, draw all text at once using normal style
 			painter->setPen(style()->pen());
 			painter->setFont(style()->font());
-			painter->drawText(xOffset, yOffset, text);
+			painter->drawText(QPointF(xOffset, yOffset), text);
 		}
 		else
 		{
@@ -171,13 +178,13 @@ template<class T> void TextRenderer<T>::paint(QPainter *painter, const QStyleOpt
 			// Draw selected text
 			painter->setPen(style()->selectionPen());
 			painter->setFont(style()->selectionFont());
-			painter->drawText(xOffset + selectionXBegin, yOffset, text.mid(xstart, xend - xstart));
+			painter->drawText(QPointF(xOffset + selectionXBegin, yOffset), text.mid(xstart, xend - xstart));
 
 			// Draw non-selected text
 			painter->setPen(style()->pen());
 			painter->setFont(style()->font());
 			painter->drawText(xOffset, yOffset, text.left(xstart));
-			painter->drawText(xOffset + selectionXEnd, yOffset, text.mid(xend));
+			painter->drawText(QPointF(xOffset + selectionXEnd, yOffset), text.mid(xend));
 		}
 
 		// Draw caret
