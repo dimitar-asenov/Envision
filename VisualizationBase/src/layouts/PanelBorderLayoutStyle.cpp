@@ -52,6 +52,9 @@ void PanelBorderLayoutStyle::load()
 	Styles::load("rightInnerMargin", rightInnerMargin_);
 	Styles::load("topInnerMargin", topInnerMargin_);
 	Styles::load("bottomInnerMargin", bottomInnerMargin_);
+
+	Styles::load("isLeftProtrusionFixed", leftProtrusionFixed_);
+	if (leftProtrusionFixed_) Styles::load("leftProtrusion", leftProtrusion_);
 }
 
 }

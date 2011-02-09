@@ -8,4 +8,6 @@
 	<leftPanelStyle prototypes="../PanelLayout/default" />
 	<bottomPanelStyle prototypes="../PanelLayout/default" />
 	<rightPanelStyle prototypes="../PanelLayout/default" />
+	<isLeftProtrusionFixed>true</isLeftProtrusionFixed>
+	<leftProtrusion>10</leftProtrusion>
 </style>

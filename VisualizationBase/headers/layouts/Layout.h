@@ -31,7 +31,6 @@ class VISUALIZATIONBASE_API Layout: public Item
 		void setInnerSize(int width, int height);
 
 		virtual void determineChildren();
-		virtual bool needsUpdate();
 
 		virtual void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget);
 };

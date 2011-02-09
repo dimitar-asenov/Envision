@@ -52,62 +52,98 @@ bool PanelBorderLayout::isEmpty() const
 void PanelBorderLayout::updateGeometry(int, int)
 {
 	// Get content size
-	int innerWidth = content_ ? content_->width() : 0;
-	int innerHeight = content_ ? content_->height() : 0;
+	int contentWidth = content_ ? content_->width() : 0;
+	int contentHeight = content_ ? content_->height() : 0;
 
 	// Compute middle sizes
-	int middleWidth = innerWidth + style()->leftInnerMargin() + style()->rightInnerMargin();
-	if ( left_ ) middleWidth += left_->width() / 2;
+	int middleWidth = contentWidth + style()->leftInnerMargin() + style()->rightInnerMargin();
+	if ( left_ && !style()->isLeftProtrusionFixed()) middleWidth += left_->width() / 2;
 	if ( right_ ) middleWidth += right_->width() / 2;
+
+	if (style()->isLeftProtrusionFixed())
+	{
+		int extra = (left_ ? left_->width() : 0) - style()->leftProtrusion();
+		if (extra > 0) middleWidth += extra;
+	}
 
 	int maxMiddleWidth = middleWidth;
 	if ( top_ && top_->width() > maxMiddleWidth ) maxMiddleWidth = top_->width();
 	if ( bottom_ && bottom_->width() > maxMiddleWidth ) maxMiddleWidth = bottom_->width();
 
-	if ( left_ && left_->height() > innerHeight ) innerHeight = left_->height();
-	if ( right_ && right_->height() > innerHeight ) innerHeight = right_->height();
+	if ( left_ && left_->height() > contentHeight ) contentHeight = left_->height();
+	if ( right_ && right_->height() > contentHeight ) contentHeight = right_->height();
 
 	//Adjust the size of the content if necessary
 	if (content_ && content_->sizeDependsOnParent())
-		content_->changeGeometry(innerWidth + (maxMiddleWidth - middleWidth), innerHeight);
+		content_->changeGeometry(contentWidth + (maxMiddleWidth - middleWidth), contentHeight);
 
 	//Adjust panels and/or the inner size
-	if ( maxMiddleWidth > middleWidth ) innerWidth += maxMiddleWidth - middleWidth;
+	if ( maxMiddleWidth > middleWidth ) contentWidth += maxMiddleWidth - middleWidth;
 	if ( top_ && maxMiddleWidth > top_->width() ) top_->changeGeometry(maxMiddleWidth, 0);
 	if ( bottom_ && maxMiddleWidth > bottom_->width() ) bottom_->changeGeometry(maxMiddleWidth, 0);
-	if ( left_ && innerHeight > left_->height() ) left_->changeGeometry(0, innerHeight);
-	if ( right_ && innerHeight > right_->height() ) right_->changeGeometry(0, innerHeight);
+	if ( left_ && contentHeight > left_->height() ) left_->changeGeometry(0, contentHeight);
+	if ( right_ && contentHeight > right_->height() ) right_->changeGeometry(0, contentHeight);
 
 	// Compute outter sizes
-	int outterWidth = innerWidth + style()->leftInnerMargin() + style()->rightInnerMargin();
-	if ( left_ ) outterWidth += left_->width();
+	int outterWidth = contentWidth + style()->leftInnerMargin() + style()->rightInnerMargin();
+
+	int extraLeft = 0;
+	if ( style()->isLeftProtrusionFixed() && style()->leftProtrusion() > 0) extraLeft = style()->leftProtrusion();
+	if ( left_ && left_->width() > extraLeft) extraLeft = left_->width();
+	outterWidth += extraLeft;
+
 	if ( right_ ) outterWidth += right_->width();
-	int outterHeight = innerHeight + style()->topInnerMargin() + style()->bottomInnerMargin();
+	int outterHeight = contentHeight + style()->topInnerMargin() + style()->bottomInnerMargin();
 	if ( top_ ) outterHeight += top_->height();
 	if ( bottom_ ) outterHeight += bottom_->height();
 
 	setInnerSize(outterWidth, outterHeight);
 
 	// Set positions
-	int x = xOffset();
-	int x2 = x + (left_ ? left_->width() / 2 : 0);
-	int x3 = x + style()->leftInnerMargin() + (left_ ? left_->width() : 0);
-	int x4 = x3 + style()->rightInnerMargin() + (content_ ? content_->width() : 0);
+	int xLeft = xOffset();
+	int xTop = xLeft;
+	int xContent;
+	int xRight;
 
-	int y = yOffset();
-	int y2 = y + (top_ ? top_->height() : 0) + style()->topInnerMargin();
-	int y3 = y2 + innerHeight + style()->bottomInnerMargin();
+	if (style()->isLeftProtrusionFixed())
+	{
+		if ( style()->leftProtrusion() < 0) xLeft -= style()->leftProtrusion();
+		else xTop += style()->leftProtrusion();
 
-	if ( top_ ) top_->setPos(x2, y);
-	if ( left_ ) left_->setPos(x, y2);
-	if ( content_ ) content_->setPos(x3, y2);
-	if ( right_ ) right_->setPos(x4, y2);
-	if ( bottom_ ) bottom_->setPos(x2, y3);
+		xContent = xLeft + (left_ ? left_->width() : 0) + style()->leftInnerMargin();
+		if (xContent < xOffset() + style()->leftProtrusion() + style()->leftInnerMargin())
+			xContent = xOffset() + style()->leftProtrusion() + style()->leftInnerMargin();
+	}
+	else
+	{
+		xTop = xLeft + (left_ ? left_->width() / 2 : 0);
+		xContent = xLeft + (left_ ? left_->width() : 0) + style()->leftInnerMargin();
+	}
+
+	xRight = xContent + (content_ ? content_->width() : 0) + style()->rightInnerMargin();
+
+	int yTop = yOffset();
+	int yContent = yTop + (top_ ? top_->height() : 0) + style()->topInnerMargin();
+	int yBottom = yContent + contentHeight + style()->bottomInnerMargin();
+
+	if ( top_ ) top_->setPos(xTop, yTop);
+	if ( left_ ) left_->setPos(xLeft, yContent);
+	if ( content_ ) content_->setPos(xContent, yContent);
+	if ( right_ ) right_->setPos(xRight, yContent);
+	if ( bottom_ ) bottom_->setPos(xTop, yBottom);
 }
 
 int PanelBorderLayout::getXOffsetForExternalShape() const
 {
-	return xOffset() + (left_ ? left_->width() / 2 : 0);
+	int l;
+	if (style()->isLeftProtrusionFixed())
+	{
+		if (style()->leftProtrusion() > 0) l = xOffset() + style()->leftProtrusion();
+		else l = xOffset();
+	}
+	else l = xOffset() + (left_ ? left_->width() / 2 : 0);
+
+	return l;
 }
 
 int PanelBorderLayout::getYOffsetForExternalShape() const
@@ -117,7 +153,15 @@ int PanelBorderLayout::getYOffsetForExternalShape() const
 
 int PanelBorderLayout::getOutterWidthForExternalShape() const
 {
-	return width() - style()->leftMargin() - style()->rightMargin() - (left_ ? left_->width() / 2 : 0);
+	int l;
+	if (style()->isLeftProtrusionFixed())
+	{
+		if (style()->leftProtrusion() > 0) l = style()->leftProtrusion();
+		else l = 0;
+	}
+	else l = left_ ? left_->width() / 2 : 0;
+
+	return width() - style()->leftMargin() - style()->rightMargin() - l;
 }
 
 int PanelBorderLayout::getOutterHeightForExternalShape() const

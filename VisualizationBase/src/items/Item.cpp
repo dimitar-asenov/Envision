@@ -52,6 +52,7 @@ bool Item::needsUpdate()
 
 void Item::setStyle(const ItemStyle* style)
 {
+	if (style == style_) return;
 	SAFE_DELETE(shape_);
 	style_ = style;
 	useShape();

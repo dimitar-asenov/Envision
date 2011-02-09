@@ -28,6 +28,9 @@ class VISUALIZATIONBASE_API PanelBorderLayoutStyle : public LayoutStyle
 		int topInnerMargin_;
 		int bottomInnerMargin_;
 
+		bool leftProtrusionFixed_;
+		int leftProtrusion_;
+
 	public:
 		PanelBorderLayoutStyle();
 		virtual void load();
@@ -44,6 +47,9 @@ class VISUALIZATIONBASE_API PanelBorderLayoutStyle : public LayoutStyle
 		void setInnerMargins(int marginSize);
 		void setInnerMargins(int left, int right, int top, int bottom);
 
+		bool isLeftProtrusionFixed() const;
+		int leftProtrusion() const;
+
 		static PanelBorderLayoutStyle* getDefault();
 };
 
@@ -55,6 +61,9 @@ inline int PanelBorderLayoutStyle::leftInnerMargin() const { return leftInnerMar
 inline int PanelBorderLayoutStyle::rightInnerMargin() const { return rightInnerMargin_; }
 inline int PanelBorderLayoutStyle::topInnerMargin() const { return topInnerMargin_; }
 inline int PanelBorderLayoutStyle::bottomInnerMargin() const {return bottomInnerMargin_; }
+
+inline bool PanelBorderLayoutStyle::isLeftProtrusionFixed() const { return leftProtrusionFixed_; }
+inline int PanelBorderLayoutStyle::leftProtrusion() const { return leftProtrusion_; }
 }
 
 #endif /* PANELBORDERLAYOUTSTYLE_H_ */
