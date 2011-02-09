@@ -1,7 +1,9 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/Item/default">
 	<shape />
-	<container prototypes="layout/SequentialLayout/default" />
+	<container prototypes="layout/SequentialLayout/default">
+		<spaceBetweenElements>10</spaceBetweenElements>
+	</container>
 	<nameDefault prototypes="item/Text/default" />
 	<namePublic prototypes="item/Text/default" />
 	<namePrivate prototypes="item/Text/default" />

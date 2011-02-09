@@ -24,6 +24,8 @@
 
 #include "statements/VMethodCallStatement.h"
 
+#include "types/VNamedType.h"
+
 #include "OOModel/headers/Project.h"
 #include "OOModel/headers/Module.h"
 #include "OOModel/headers/Class.h"
@@ -35,6 +37,8 @@
 #include "OOModel/headers/expressions/StringLiteral.h"
 
 #include "OOModel/headers/statements/MethodCallStatement.h"
+
+#include "OOModel/headers/types/NamedType.h"
 
 #include "VisualizationBase/headers/Scene.h"
 #include "VisualizationBase/headers/node_extensions/Position.h"
@@ -67,6 +71,7 @@ bool OOVisualization::initialize(Envision::EnvisionManager&)
 	Scene::defaultRenderer()->registerVisualization(VariableAccess::typeIdStatic(), createVisualization<VVariableAccess, VariableAccess>);
 	Scene::defaultRenderer()->registerVisualization(StringLiteral::typeIdStatic(), createVisualization<VStringLiteral, StringLiteral>);
 	Scene::defaultRenderer()->registerVisualization(MethodCallStatement::typeIdStatic(), createVisualization<VMethodCallStatement, MethodCallStatement>);
+	Scene::defaultRenderer()->registerVisualization(NamedType::typeIdStatic(), createVisualization<VNamedType, NamedType>);
 
 	// Register handlers
 	// TODO: move this to a better place i.e. OOInteraction Plugin

@@ -80,7 +80,7 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	FormalArgument* arg = println->arguments()->append<FormalArgument>();
 	arg->setName("x");
 	NamedType* argType = arg->setType<NamedType>();
-	argType->type()->set("class:String");
+	argType->type()->ref()->set("class:String");
 
 	Class* system = java->classes()->append<Class>();
 	system->setName("System");
@@ -90,7 +90,8 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	out->setVisibility(Visibility::PUBLIC);
 	out->setStat(Static::CLASS_VARIABLE);
 	NamedType* outtype = out->setType<NamedType>();
-	outtype->type()->set("mod:io,class:PrintStream");
+	outtype->type()->ref()->set("class:PrintStream");
+	outtype->type()->setPrefix<ReferenceExpression>()->ref()->set("mod:io");
 
 	// Build a simple HelloWorld Application
 	Class* hello = prj->classes()->append<Class>();
@@ -116,7 +117,7 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	ref->setPrefix<ReferenceExpression>()->ref()->set("lib:Java");
 
 	// set positions
-	java->extension<Position>()->setX(200);
+	java->extension<Position>()->setX(350);
 	string->extension<Position>()->setY(100);
 	io->extension<Position>()->setX(250);
 

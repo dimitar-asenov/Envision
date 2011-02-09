@@ -13,7 +13,10 @@
 			</color>
 		</backgroundBrush>
 	</shape>
-	<border prototypes="layout/PanelBorderLayout/default" />
+	<border prototypes="layout/PanelBorderLayout/default">
+		<isLeftProtrusionFixed>true</isLeftProtrusionFixed>
+		<leftProtrusion>10</leftProtrusion>
+	</border>
 	<header prototypes="layout/SequentialLayout/default">
 		<spaceBetweenElements>10</spaceBetweenElements>
 	</header>
