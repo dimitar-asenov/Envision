@@ -1,12 +1,12 @@
 /***********************************************************************************************************************
- * VProjectStyle.h
+ * VLibraryStyle.h
  *
- *  Created on: Feb 2, 2011
+ *  Created on: Feb 9, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef VPROJECTSTYLE_H_
-#define VPROJECTSTYLE_H_
+#ifndef VLIBRARYSTYLE_H_
+#define VLIBRARYSTYLE_H_
 
 #include "../../oovisualization_api.h"
 
@@ -18,7 +18,7 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VProjectStyle : public Visualization::ItemStyle
+class OOVISUALIZATION_API VLibraryStyle : public Visualization::ItemStyle
 {
 	private:
 		Visualization::PanelBorderLayoutStyle border_;
@@ -36,15 +36,14 @@ class OOVISUALIZATION_API VProjectStyle : public Visualization::ItemStyle
 		const Visualization::SVGIconStyle&  icon() const;
 		const Visualization::PositionLayoutStyle&  content() const;
 
-		static VProjectStyle* getDefault();
+		static VLibraryStyle* getDefault();
 };
 
-inline const Visualization::PanelBorderLayoutStyle& VProjectStyle::border() const {return border_; }
-inline const Visualization::SequentialLayoutStyle& VProjectStyle::header() const {return header_; }
-inline const Visualization::TextStyle& VProjectStyle::name() const {return name_; }
-inline const Visualization::SVGIconStyle& VProjectStyle::icon() const {return icon_; }
-inline const Visualization::PositionLayoutStyle& VProjectStyle::content() const {return content_; }
-
+inline const Visualization::PanelBorderLayoutStyle& VLibraryStyle::border() const {return border_; }
+inline const Visualization::SequentialLayoutStyle& VLibraryStyle::header() const {return header_; }
+inline const Visualization::TextStyle& VLibraryStyle::name() const {return name_; }
+inline const Visualization::SVGIconStyle& VLibraryStyle::icon() const {return icon_; }
+inline const Visualization::PositionLayoutStyle& VLibraryStyle::content() const {return content_; }
 }
 
-#endif /* VPROJECTSTYLE_H_ */
+#endif /* VLIBRARYSTYLE_H_ */

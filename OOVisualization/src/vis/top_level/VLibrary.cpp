@@ -1,13 +1,12 @@
 /***********************************************************************************************************************
- * VProject.cpp
+ * VLibrary.cpp
  *
- *  Created on: Feb 2, 2011
+ *  Created on: Feb 9, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "vis/top_level/VProject.h"
+#include "vis/top_level/VLibrary.h"
 
-#include "OOModel/headers/Project.h"
 #include "OOModel/headers/Library.h"
 
 #include "VisualizationBase/headers/layouts/PanelBorderLayout.h"
@@ -19,9 +18,9 @@ using namespace Visualization;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VProject)
+ITEM_COMMON_DEFINITIONS(VLibrary)
 
-VProject::VProject(Item* parent, OOModel::Project* node, const VProjectStyle* style) :
+VLibrary::VLibrary(Item* parent, OOModel::Library* node, const VLibraryStyle* style) :
 	ModelItem(parent, node, style),
 	layout(new PanelBorderLayout(this, &style->border())),
 	header(new SequentialLayout(NULL, &style->header())),
@@ -35,7 +34,7 @@ VProject::VProject(Item* parent, OOModel::Project* node, const VProjectStyle* st
 	layout->setContent(content);
 }
 
-VProject::~VProject()
+VLibrary::~VLibrary()
 {
 	SAFE_DELETE_ITEM(layout);
 
@@ -45,9 +44,9 @@ VProject::~VProject()
 	content = NULL;
 }
 
-void VProject::determineChildren()
+void VLibrary::determineChildren()
 {
-	OOModel::Project* node = static_cast<OOModel::Project*> (getNode());
+	OOModel::Library* node = static_cast<OOModel::Library*> (getNode());
 
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
 	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
@@ -67,7 +66,7 @@ void VProject::determineChildren()
 	content->synchronizeWithNodes(nodes, renderer());
 }
 
-void VProject::updateGeometry(int, int)
+void VLibrary::updateGeometry(int, int)
 {
 	if ( hasShape() )
 	{
@@ -77,7 +76,7 @@ void VProject::updateGeometry(int, int)
 	setSize( layout->size() );
 }
 
-bool VProject::focusChild(FocusTarget location)
+bool VLibrary::focusChild(FocusTarget location)
 {
 	return layout->focusChild(location);
 }

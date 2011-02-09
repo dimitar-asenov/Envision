@@ -31,7 +31,9 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/vis/elements/VFormalArgumentStyle.h \
+HEADERS += headers/vis/top_level/VLibraryStyle.h \
+    headers/vis/top_level/VLibrary.h \
+    headers/vis/elements/VFormalArgumentStyle.h \
     headers/vis/elements/VFormalArgument.h \
     headers/types/VNamedType.h \
     headers/literals/VStringLiteral.h \
@@ -58,7 +60,9 @@ HEADERS += headers/vis/elements/VFormalArgumentStyle.h \
     headers/OOVisualizationException.h \
     headers/oovisualization_api.h \
     src/oovisualization.h
-SOURCES += src/vis/elements/VFormalArgument.cpp \
+SOURCES += src/vis/top_level/VLibrary.cpp \
+    src/vis/top_level/VLibraryStyle.cpp \
+    src/vis/elements/VFormalArgument.cpp \
     src/vis/elements/VFormalArgumentStyle.cpp \
     src/types/VNamedType.cpp \
     src/literals/VStringLiteral.cpp \

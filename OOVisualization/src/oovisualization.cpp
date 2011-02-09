@@ -9,6 +9,7 @@
 #include "SelfTest/headers/SelfTestSuite.h"
 
 #include "vis/top_level/VProject.h"
+#include "vis/top_level/VLibrary.h"
 #include "vis/top_level/VModule.h"
 #include "vis/top_level/VClass.h"
 #include "vis/top_level/VMethod.h"
@@ -28,6 +29,7 @@
 #include "types/VNamedType.h"
 
 #include "OOModel/headers/Project.h"
+#include "OOModel/headers/Library.h"
 #include "OOModel/headers/Module.h"
 #include "OOModel/headers/Class.h"
 #include "OOModel/headers/Method.h"
@@ -65,6 +67,7 @@ bool OOVisualization::initialize(Envision::EnvisionManager&)
 
 	// Register visualizations
 	Scene::defaultRenderer()->registerVisualization(Project::typeIdStatic(), createVisualization<VProject, Project>);
+	Scene::defaultRenderer()->registerVisualization(Library::typeIdStatic(), createVisualization<VLibrary, Library>);
 	Scene::defaultRenderer()->registerVisualization(Module::typeIdStatic(), createVisualization<VModule, Module>);
 	Scene::defaultRenderer()->registerVisualization(Class::typeIdStatic(), createVisualization<VClass, Class>);
 	Scene::defaultRenderer()->registerVisualization(Method::typeIdStatic(), createVisualization<VMethod, Method>);
@@ -80,6 +83,7 @@ bool OOVisualization::initialize(Envision::EnvisionManager&)
 	// TODO: move this to a better place i.e. OOInteraction Plugin
 	// TODO: when you do that remove the dependency in the .plugin meta file
 	VProject::setInteractionHandler(Interaction::GenericHandler::instance());
+	VLibrary::setInteractionHandler(Interaction::GenericHandler::instance());
 	VModule::setInteractionHandler(Interaction::GenericHandler::instance());
 	VClass::setInteractionHandler(Interaction::GenericHandler::instance());
 	VMethod::setInteractionHandler(Interaction::GenericHandler::instance());

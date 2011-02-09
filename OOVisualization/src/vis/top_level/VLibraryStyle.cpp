@@ -1,22 +1,22 @@
 /***********************************************************************************************************************
- * VProjectStyle.cpp
+ * VLibraryStyle.cpp
  *
- *  Created on: Feb 2, 2011
+ *  Created on: Feb 9, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "vis/top_level/VProjectStyle.h"
+#include "vis/top_level/VLibraryStyle.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace OOVisualization {
 
-VProjectStyle* VProjectStyle::getDefault()
+VLibraryStyle* VLibraryStyle::getDefault()
 {
-	static VProjectStyle defaultStyle;
+	static VLibraryStyle defaultStyle;
 	return &defaultStyle;
 }
 
-void VProjectStyle::load()
+void VLibraryStyle::load()
 {
 	ItemStyle::load();
 	Visualization::Styles::load("border", border_);

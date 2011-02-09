@@ -11,6 +11,7 @@
 #include "vis/VStatic.h"
 
 #include "OOModel/headers/Project.h"
+#include "OOModel/headers/Library.h"
 #include "OOModel/headers/Class.h"
 #include "OOModel/headers/Module.h"
 #include "OOModel/headers/FormalArgument.h"
@@ -59,7 +60,7 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	prj->setName("HelloWorld");
 
 	// Build a simple Java Library
-	Project* java = prj->libraries()->append<Project>();
+	Library* java = prj->libraries()->append<Library>();
 	java->setName("Java");
 
 	Class* string = java->classes()->append<Class>();
@@ -117,7 +118,8 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	ref->setPrefix<ReferenceExpression>()->ref()->set("lib:Java");
 
 	// set positions
-	java->extension<Position>()->setX(350);
+	java->extension<Position>()->setX(150);
+	java->extension<Position>()->setY(100);
 	string->extension<Position>()->setY(100);
 	io->extension<Position>()->setX(250);
 
