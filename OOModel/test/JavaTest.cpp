@@ -53,7 +53,7 @@ TEST(OOModel, JavaLibraryAndHelloWorldTest)
 	FormalArgument* arg = println->arguments()->append<FormalArgument>();
 	arg->setName("x");
 	NamedType* argType = arg->setType<NamedType>();
-	argType->type()->set("class:String");
+	argType->type()->ref()->set("class:String");
 
 	Class* system = java->classes()->append<Class>();
 	system->setName("System");
@@ -63,7 +63,8 @@ TEST(OOModel, JavaLibraryAndHelloWorldTest)
 	out->setVisibility(Visibility::PUBLIC);
 	out->setStat(Static::CLASS_VARIABLE);
 	NamedType* outtype = out->setType<NamedType>();
-	outtype->type()->set("mod:io,class:PrintStream");
+	outtype->type()->ref()->set("class:PrintStream");
+	outtype->type()->setPrefix<ReferenceExpression>()->ref()->set("mod:io");
 
 	// Build a simple HelloWorld Application
 	Class* hello = prj->classes()->append<Class>();

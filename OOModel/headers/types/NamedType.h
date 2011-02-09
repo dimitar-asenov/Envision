@@ -10,7 +10,7 @@
 
 #include "Type.h"
 
-#include "ModelBase/headers/nodes/Reference.h"
+#include "../expressions/ReferenceExpression.h"
 
 namespace OOModel {
 
@@ -18,7 +18,7 @@ class OOMODEL_API NamedType : public Type
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(NamedType)
 
-	ATTRIBUTE(Model::Reference, type, setType);
+	ATTRIBUTE(ReferenceExpression, type, setType);
 };
 
 }
