@@ -14,6 +14,7 @@ namespace OOModel {
 
 class Class;
 class Project;
+class Library;
 class Module;
 class Method;
 class MethodItem;
@@ -58,6 +59,7 @@ class NamedType;
 
 template class Q_DECL_IMPORT Model::TypedList<OOModel::Class>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::Project>;
+template class Q_DECL_IMPORT Model::TypedList<OOModel::Library>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::Module>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::Method>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::MethodItem>;

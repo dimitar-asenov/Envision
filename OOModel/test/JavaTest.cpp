@@ -9,6 +9,7 @@
 #include "SelfTest/headers/SelfTestSuite.h"
 
 #include "Project.h"
+#include "Library.h"
 #include "Class.h"
 #include "Module.h"
 #include "FormalArgument.h"
@@ -32,7 +33,7 @@ TEST(OOModel, JavaLibraryAndHelloWorldTest)
 	prj->setName("HelloWorld");
 
 	// Build a simple Java Library
-	Project* java = prj->libraries()->append<Project>();
+	Library* java = prj->libraries()->append<Library>();
 	java->setName("Java");
 
 	Class* string = java->classes()->append<Class>();

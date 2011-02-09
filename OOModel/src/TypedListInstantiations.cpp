@@ -8,6 +8,7 @@
 #include "ModelBase/headers/nodes/TypedListDefinition.h"
 
 #include "Project.h"
+#include "Library.h"
 #include "Module.h"
 #include "Class.h"
 #include "Method.h"
@@ -51,6 +52,7 @@
 
 template class Model::TypedList<OOModel::Class>;
 template class Model::TypedList<OOModel::Project>;
+template class Model::TypedList<OOModel::Library>;
 template class Model::TypedList<OOModel::Module>;
 template class Model::TypedList<OOModel::Method>;
 template class Model::TypedList<OOModel::MethodItem>;

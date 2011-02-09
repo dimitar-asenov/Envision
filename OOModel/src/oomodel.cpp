@@ -12,6 +12,7 @@
 #include "common/Static.h"
 
 #include "Project.h"
+#include "Library.h"
 #include "Module.h"
 #include "Class.h"
 #include "Method.h"
@@ -65,6 +66,7 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 
 	// Register TypedList instantiations
 	Model::TypedList<Project>::registerNodeType();
+	Model::TypedList<Library>::registerNodeType();
 	Model::TypedList<Module>::registerNodeType();
 	Model::TypedList<Class>::registerNodeType();
 	Model::TypedList<Method>::registerNodeType();
@@ -108,6 +110,7 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 
 	// Initialize OO Node types
 	Project::init();
+	Library::init();
 	Module::init();
 	Class::init();
 	Method::init();

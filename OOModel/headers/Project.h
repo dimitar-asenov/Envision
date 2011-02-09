@@ -21,13 +21,15 @@
 
 namespace OOModel {
 
+class Library;
+
 class OOMODEL_API Project : public Model::ExtendableNode
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Project)
 
 	ATTRIBUTE_OOP_NAME
 	ATTRIBUTE(Model::TypedList<Project>, projects, setProjects)
-	ATTRIBUTE(Model::TypedList<Project>, libraries, setLibraries)
+	ATTRIBUTE(Model::TypedList<Library>, libraries, setLibraries)
 	ATTRIBUTE(Model::TypedList<Module>, modules, setModules)
 	ATTRIBUTE(Model::TypedList<Class>, classes, setClasses)
 
