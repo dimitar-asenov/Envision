@@ -17,7 +17,8 @@ win32:LIBS += -L$${PLUGINS_DIR} \
     -lmodelbase
 QT = core \
     gui \
-    xml
+    xml \
+    svg
 TEMPLATE = lib
 CONFIG += plugin \
     warn_on \

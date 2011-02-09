@@ -7,8 +7,9 @@
 			<style>1</style>
 		</shadowBrush>
 	</shape>
-	<borderStyle prototypes="layout/PanelBorderLayout/default" />
-	<headerStyle prototypes="item/Text/default">
+	<border prototypes="layout/PanelBorderLayout/default" />
+	<header prototypes="layout/SequentialLayout/default" />
+	<name prototypes="item/Text/default">
 		<shape prototypes="shape/Box/default">
 			Box
 			<backgroundBrush>
@@ -49,6 +50,9 @@
 			<size>30</size>
 			<sizeIsInPixels>true</sizeIsInPixels>
 		</selectionFont>
-	</headerStyle>
-	<contentStyle prototypes="layout/PositionLayout/default" />
+	</name>
+	<icon prototypes="icon/SVGIcon/default">
+		<filename>styles/icon/AJ_Books.svg</filename>
+	</icon>
+	<content prototypes="layout/PositionLayout/default" />
 </style>

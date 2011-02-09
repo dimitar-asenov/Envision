@@ -23,9 +23,11 @@ VProjectStyle* VProjectStyle::getDefault()
 void VProjectStyle::load()
 {
 	ItemStyle::load();
-	Visualization::Styles::load("borderStyle", borderStyle_);
-	Visualization::Styles::load("headerStyle", headerStyle_);
-	Visualization::Styles::load("contentStyle", contentStyle_);
+	Visualization::Styles::load("border", border_);
+	Visualization::Styles::load("header", header_);
+	Visualization::Styles::load("name", name_);
+	Visualization::Styles::load("icon", icon_);
+	Visualization::Styles::load("content", content_);
 }
 
 }

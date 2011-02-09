@@ -11,6 +11,11 @@ namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(SVGIcon)
 
+SVGIcon::SVGIcon(Item* parent, const QString& iconStyleName) :
+	Icon(parent, Styles::icon<SVGIcon>(iconStyleName))
+{
+}
+
 SVGIcon::SVGIcon(Item* parent, const SVGIconStyle *style) :
 	Icon(parent, style)
 {
@@ -18,14 +23,14 @@ SVGIcon::SVGIcon(Item* parent, const SVGIconStyle *style) :
 
 void SVGIcon::updateGeometry(int, int)
 {
-	setInnerSize(style()->renderer().defaultSize().width(), style()->renderer().defaultSize().height());
+	setInnerSize(style()->width(), style()->height());
 }
 
 void SVGIcon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
 	Icon::paint(painter, option, widget);
 
-	style()->paint(painter);
+	style()->paint(painter, xOffset(), yOffset() );
 }
 
 }

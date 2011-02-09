@@ -1,4 +1,6 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="icon/Icon/default">
 	<filename></filename>
+	<width>30</width>
+	<height>30</height>
 </style>

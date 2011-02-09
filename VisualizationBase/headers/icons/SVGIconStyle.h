@@ -21,20 +21,24 @@ class VISUALIZATIONBASE_API SVGIconStyle : public IconStyle
 	private:
 		QString filename_;
 		QSvgRenderer renderer_;
+		int width_;
+		int height_;
 
 	public:
 		virtual void load();
 
 		const QString& filename() const;
-		const QSvgRenderer& renderer() const;
+		int width() const;
+		int height() const;
 
-		void paint(QPainter* painter) const;
+		void paint(QPainter* painter, int x, int y) const;
 
 		static SVGIconStyle* getDefault();
 };
 
 inline const QString& SVGIconStyle::filename() const { return filename_; }
-inline const QSvgRenderer& SVGIconStyle::renderer() const { return renderer_; }
+inline int SVGIconStyle::width() const { return width_; }
+inline int SVGIconStyle::height() const { return height_; }
 
 }
 

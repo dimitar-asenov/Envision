@@ -18,6 +18,7 @@ namespace Visualization {
 	class VText;
 	class PanelBorderLayout;
 	class PositionLayout;
+	class SequentialLayout;
 }
 
 namespace OOModel {
@@ -41,8 +42,9 @@ class OOVISUALIZATION_API VProject : public Visualization::ModelItem
 		void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		Visualization::VText* header;
 		Visualization::PanelBorderLayout* layout;
+		Visualization::SequentialLayout* header;
+		Visualization::VText* name;
 		Visualization::PositionLayout* content;
 };
 
