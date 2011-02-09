@@ -2,13 +2,36 @@
 <style prototypes="item/Item/default">
 	<shape prototypes="shape/Box/default">
 		Box
+		<backgroundBrush>
+			<gradient>
+				<stopPoints>
+					<e1>
+						<first>1.0</first>
+						<second>
+							<alpha>255</alpha>
+							<red>100</red>
+							<green>100</green>
+							<blue>200</blue>
+						</second>
+					</e1>	
+				</stopPoints>
+			</gradient>
+		</backgroundBrush>
 		<cornerRadius>10</cornerRadius>
 		<shadowBrush>
 			<style>1</style>
 		</shadowBrush>
 	</shape>
-	<borderStyle prototypes="layout/PanelBorderLayout/default" />
-	<headerStyle prototypes="item/Text/default">
+	<border prototypes="layout/PanelBorderLayout/default" />
+	<header prototypes="layout/SequentialLayout/default">
+		<spaceBetweenElements>10</spaceBetweenElements>
+	</header>
+	<icon prototypes="icon/SVGIcon/default">
+		<filename>styles/icon/module.svg</filename>
+		<width>40</width>
+		<height>40</height>
+	</icon>
+	<name prototypes="item/Text/default">
 		<shape prototypes="shape/Box/default">
 			Box
 			<backgroundBrush>
@@ -49,6 +72,6 @@
 			<size>20</size>
 			<sizeIsInPixels>true</sizeIsInPixels>
 		</selectionFont>
-	</headerStyle>
-	<contentStyle prototypes="layout/PositionLayout/default" />
+	</name>
+	<content prototypes="layout/PositionLayout/default" />
 </style>
