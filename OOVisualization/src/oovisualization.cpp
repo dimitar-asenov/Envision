@@ -13,6 +13,7 @@
 #include "vis/top_level/VClass.h"
 #include "vis/top_level/VMethod.h"
 #include "vis/elements/VField.h"
+#include "vis/elements/VFormalArgument.h"
 
 #include "icons/ClassIcon.h"
 #include "icons/MethodIcon.h"
@@ -31,6 +32,7 @@
 #include "OOModel/headers/Class.h"
 #include "OOModel/headers/Method.h"
 #include "OOModel/headers/Field.h"
+#include "OOModel/headers/FormalArgument.h"
 
 #include "OOModel/headers/expressions/ReferenceExpression.h"
 #include "OOModel/headers/expressions/VariableAccess.h"
@@ -67,6 +69,7 @@ bool OOVisualization::initialize(Envision::EnvisionManager&)
 	Scene::defaultRenderer()->registerVisualization(Class::typeIdStatic(), createVisualization<VClass, Class>);
 	Scene::defaultRenderer()->registerVisualization(Method::typeIdStatic(), createVisualization<VMethod, Method>);
 	Scene::defaultRenderer()->registerVisualization(Field::typeIdStatic(), createVisualization<VField, Field>);
+	Scene::defaultRenderer()->registerVisualization(FormalArgument::typeIdStatic(), createVisualization<VFormalArgument, FormalArgument>);
 	Scene::defaultRenderer()->registerVisualization(ReferenceExpression::typeIdStatic(), createVisualization<VReferenceExpression, ReferenceExpression>);
 	Scene::defaultRenderer()->registerVisualization(VariableAccess::typeIdStatic(), createVisualization<VVariableAccess, VariableAccess>);
 	Scene::defaultRenderer()->registerVisualization(StringLiteral::typeIdStatic(), createVisualization<VStringLiteral, StringLiteral>);
@@ -81,6 +84,7 @@ bool OOVisualization::initialize(Envision::EnvisionManager&)
 	VClass::setInteractionHandler(Interaction::GenericHandler::instance());
 	VMethod::setInteractionHandler(Interaction::GenericHandler::instance());
 	VField::setInteractionHandler(Interaction::GenericHandler::instance());
+	VFormalArgument::setInteractionHandler(Interaction::GenericHandler::instance());
 	ClassIcon::setInteractionHandler(Interaction::GenericHandler::instance());
 	MethodIcon::setInteractionHandler(Interaction::GenericHandler::instance());
 	VReferenceExpression::setInteractionHandler(Interaction::GenericHandler::instance());

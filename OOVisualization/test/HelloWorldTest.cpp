@@ -122,7 +122,7 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	io->extension<Position>()->setX(250);
 
 	model->endModification();
-	CHECK_INT_EQUAL(200, java->extension<Position>()->x());
+	CHECK_INT_EQUAL(350, java->extension<Position>()->x());
 	CHECK_STR_EQUAL("Java", java->name());
 
 	////////////////////////////////////////////////// Set Scene

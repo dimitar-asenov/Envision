@@ -1,15 +1,15 @@
 /***********************************************************************************************************************
- * VField.h
+ * VFormalArgument.h
  *
- *  Created on: Feb 4, 2011
+ *  Created on: Feb 9, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef VFIELD_H_
-#define VFIELD_H_
+#ifndef VFORMALARGUMENT_H_
+#define VFORMALARGUMENT_H_
 
 #include "../../oovisualization_api.h"
-#include "VFieldStyle.h"
+#include "VFormalArgumentStyle.h"
 
 #include "VisualizationBase/headers/items/ModelItem.h"
 #include "VisualizationBase/headers/Styles.h"
@@ -20,18 +20,18 @@ namespace Visualization {
 }
 
 namespace OOModel {
-	class Field;
+	class FormalArgument;
 }
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VField : public Visualization::ModelItem
+class OOVISUALIZATION_API VFormalArgument : public Visualization::ModelItem
 {
-	ITEM_COMMON(VField, Visualization::ModelItem)
+	ITEM_COMMON(VFormalArgument, Visualization::ModelItem)
 
 	public:
-		VField(Item* parent, OOModel::Field* node, const VFieldStyle* style = Visualization::Styles::item<VField>("default"));
-		virtual ~VField();
+		VFormalArgument(Item* parent, OOModel::FormalArgument* node, const VFormalArgumentStyle* style = Visualization::Styles::item<VFormalArgument>("default"));
+		virtual ~VFormalArgument();
 
 		virtual bool focusChild(FocusTarget location);
 
@@ -44,6 +44,7 @@ class OOVISUALIZATION_API VField : public Visualization::ModelItem
 		Visualization::VText* name_;
 		Visualization::ModelItem* type_;
 };
+
 }
 
-#endif /* VFIELD_H_ */
+#endif /* VFORMALARGUMENT_H_ */

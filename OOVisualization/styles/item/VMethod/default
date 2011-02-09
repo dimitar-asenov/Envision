@@ -27,7 +27,22 @@
 		<spaceBetweenElements>10</spaceBetweenElements>
 	</header>
 	<content prototypes="layout/SequentialLayout/default" />
-	<arguments prototypes="layout/SequentialLayout/default" />
+	<arguments prototypes="layout/SequentialLayout/default">
+		<shape prototypes="shape/Box/default">
+			Box
+			<cornerRadius>3</cornerRadius>
+			<cornerType>2</cornerType>
+			<backgroundBrush>
+				<style>1</style>
+				<color>
+					<alpha>255</alpha>
+					<red>255</red>
+					<green>255</green>
+					<blue>255</blue>
+				</color>
+			</backgroundBrush>
+		</shape>
+	</arguments>
 	<results prototypes="layout/SequentialLayout/default">
 		<direction>2</direction>
 		<alignment>1</alignment>
