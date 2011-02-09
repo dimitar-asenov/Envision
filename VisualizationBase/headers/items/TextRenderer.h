@@ -49,8 +49,6 @@ class VISUALIZATIONBASE_API TextRenderer : public T
 			virtual void determineChildren();
 			virtual void updateGeometry(int availableWidth, int availableHeight);
 
-			void setText(const QString& newText);
-
 		public:
 			TextRenderer(Item* parent, const TextStyle *style, const QString& text = QString());
 			TextRenderer(Item* parent, Model::Node *node, const TextStyle *style);
@@ -58,6 +56,7 @@ class VISUALIZATIONBASE_API TextRenderer : public T
 			const TextStyle* style() const;
 			virtual void setStyle(const ItemStyle* style);
 
+			virtual void setText(const QString& newText);
 			QString getText();
 			QString getSelectedText();
 

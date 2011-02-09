@@ -25,8 +25,8 @@ class OOVISUALIZATION_API VStringLiteral : public Visualization::TextRenderer<Vi
 
 	public:
 		VStringLiteral(Item* parent, OOModel::StringLiteral *literal, const Visualization::TextStyle *style = Visualization::Styles::item<VStringLiteral>("default"));
-
 		virtual void updateGeometry(int availableWidth, int availableHeight);
+		virtual void setText(const QString& newText);
 };
 
 }

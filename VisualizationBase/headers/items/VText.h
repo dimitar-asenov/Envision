@@ -26,6 +26,7 @@ class VISUALIZATIONBASE_API VText : public TextRenderer<ModelItem>
 		VText(Item* parent, Model::Text *text, const TextStyle *style = Styles::item<VText>("default"));
 
 		virtual void updateGeometry(int availableWidth, int availableHeight);
+		virtual void setText(const QString& newText);
 };
 
 }

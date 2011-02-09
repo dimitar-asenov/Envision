@@ -30,7 +30,9 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/items/VReference.h \
+HEADERS += headers/icons/SVGIcon.h \
+    headers/icons/SVGIconStyle.h \
+    headers/items/VReference.h \
     headers/icons/IconStyle.h \
     headers/icons/Icon.h \
     headers/items/VInteger.h \
@@ -77,7 +79,9 @@ HEADERS += headers/items/VReference.h \
     src/visualizationbase.h \
     headers/VisualizationException.h \
     headers/visualizationbase_api.h
-SOURCES += src/items/VReference.cpp \
+SOURCES += src/icons/SVGIconStyle.cpp \
+    src/icons/SVGIcon.cpp \
+    src/items/VReference.cpp \
     src/icons/IconStyle.cpp \
     src/icons/Icon.cpp \
     src/items/VInteger.cpp \

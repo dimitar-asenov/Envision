@@ -80,7 +80,7 @@ bool OOVisualization::initialize(Envision::EnvisionManager&)
 	MethodIcon::setInteractionHandler(Interaction::GenericHandler::instance());
 	VReferenceExpression::setInteractionHandler(Interaction::GenericHandler::instance());
 	VVariableAccess::setInteractionHandler(Interaction::GenericHandler::instance());
-	VStringLiteral::setInteractionHandler(Interaction::GenericHandler::instance());
+	VStringLiteral::setInteractionHandler(Interaction::HText::instance());
 	VMethodCallStatement::setInteractionHandler(Interaction::GenericHandler::instance());
 
 	return true;

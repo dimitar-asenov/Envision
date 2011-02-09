@@ -7,8 +7,6 @@
 
 #include "handlers/HText.h"
 
-#include "VisualizationBase/headers/items/Text.h"
-#include "VisualizationBase/headers/items/VText.h"
 #include "VisualizationBase/headers/items/TextRenderer.h"
 #include "VisualizationBase/headers/items/ModelItem.h"
 #include "VisualizationBase/headers/Scene.h"
@@ -200,23 +198,6 @@ void HText::focusInEvent(Visualization::Item *target, QFocusEvent *event)
 	GenericHandler::focusInEvent(target, event);
 }
 
-void HText::setNewText(Visualization::Item *target, const QString& newText)
-{
-	Visualization::Text *t = dynamic_cast<Visualization::Text*> (target);
-	if ( t ) t->setText(newText);
-	else
-	{
-		Visualization::VText *v = dynamic_cast<Visualization::VText*> (target);
-		if ( v )
-		{
-			Model::Text* modText = static_cast<Model::Text*> (v->getNode());
-			modText->model()->beginModification(modText, "Set text");
-			modText->set(newText);
-			modText->model()->endModification();
-		}
-	}
-}
-
 // TextRenderer interface routines.
 void HText::moveCaret(Visualization::Item *target, QKeyEvent *event)
 {
@@ -249,7 +230,7 @@ void HText::erase(Visualization::Item *target, bool forwards, bool onlyDeleteIfS
 	{
 		// There is some text that is selected
 		newText = newText.left(selFirst) + newText.mid(selLast);
-		setNewText(target, newText);
+		TEXTRENDERER_SET1(setText, newText);
 		TEXTRENDERER_SET1(setCaretPosition, selFirst);
 	}
 	else
@@ -262,7 +243,7 @@ void HText::erase(Visualization::Item *target, bool forwards, bool onlyDeleteIfS
 			{
 				// delete was pressed
 				newText = newText.left(caret) + newText.mid(caret+1);
-				setNewText(target, newText);
+				TEXTRENDERER_SET1(setText, newText);
 			}
 			else
 			{
@@ -270,7 +251,7 @@ void HText::erase(Visualization::Item *target, bool forwards, bool onlyDeleteIfS
 				if (caret > 0)
 				{
 					newText = newText.left(caret-1) + newText.mid(caret);
-					setNewText(target, newText);
+					TEXTRENDERER_SET1(setText, newText);
 					TEXTRENDERER_SET1(setCaretPosition, caret-1);
 				}
 			}
@@ -284,7 +265,7 @@ void HText::insertText(Visualization::Item *target, const QString& textToInsert)
 	QString newText = TEXTRENDERER_GET(getText);
 	int caret = TEXTRENDERER_GET(caretPosition);
 	newText.insert(caret, textToInsert);
-	setNewText(target, newText);
+	TEXTRENDERER_SET1(setText, newText);
 	caret += textToInsert.size();
 	TEXTRENDERER_SET1(setCaretPosition, caret);
 }
