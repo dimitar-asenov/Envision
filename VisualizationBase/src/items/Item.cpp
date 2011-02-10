@@ -90,7 +90,11 @@ bool Item::sizeDependsOnParent() const
 
 void Item::updateSubtree()
 {
-	if ( needsUpdate_ || needsUpdate())
+	// It is important to update items regradless of their state when their size depends on the parent.
+	// It is safe to assume that an item is updated before its parent item is updated. When an item's size depends on the
+	// parent's size, we must first update the item without providing any size constraints, so that the item can report a
+	// minimum size during the parent's update procedure.
+	if ( needsUpdate_ || needsUpdate() || sizeDependsOnParent())
 	{
 		determineChildren();
 		updateChildren();

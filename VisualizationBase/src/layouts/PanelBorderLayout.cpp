@@ -51,17 +51,6 @@ bool PanelBorderLayout::isEmpty() const
 
 void PanelBorderLayout::updateGeometry(int, int)
 {
-	// Reset the size of all components. We need to do this in situations like the following:
-	// - Content gets resized and is now wider than top or bottom.
-	//	- Content gets resized and is now a little less wide than before.
-	// - The top or bottom are not automatically updated by the generic update mechanism
-	// - The border on the right ends up staying where it is since top or bottom is still considered to be as large as before.
-	if (top_) top_->changeGeometry(0,0);
-	if (left_) left_->changeGeometry(0,0);
-	if (content_) content_->changeGeometry(0,0);
-	if (right_) right_->changeGeometry(0,0);
-	if (bottom_) bottom_->changeGeometry(0,0);
-
 	// Get content size
 	int contentWidth = content_ ? content_->width() : 0;
 	int contentHeight = content_ ? content_->height() : 0;
