@@ -18,17 +18,20 @@ class VISUALIZATIONBASE_API VListStyle : public ItemStyle
 {
 	private:
 		SequentialLayoutStyle itemsStyle_;
+		bool drawShapeWhenEmpty_;
 
 	public:
 		VListStyle();
 		virtual void load();
 
 		const SequentialLayoutStyle&  itemsStyle() const;
+		bool drawShapeWhenEmpty() const;
 
 		static VListStyle* getDefault();
 };
 
 inline const SequentialLayoutStyle& VListStyle::itemsStyle() const {return itemsStyle_; }
+inline bool VListStyle::drawShapeWhenEmpty() const {return drawShapeWhenEmpty_; }
 
 }
 

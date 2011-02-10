@@ -24,6 +24,7 @@ void VListStyle::load()
 {
 	ItemStyle::load();
 	Styles::load("itemsStyle", itemsStyle_);
+	Styles::load("drawShapeWhenEmpty", drawShapeWhenEmpty_);
 }
 
 }
