@@ -12,6 +12,7 @@
 #include "icons/MethodIconStyle.h"
 
 #include "VisualizationBase/headers/items/TextStyle.h"
+#include "VisualizationBase/headers/items/VListStyle.h"
 #include "VisualizationBase/headers/layouts/PanelBorderLayoutStyle.h"
 #include "VisualizationBase/headers/layouts/SequentialLayoutStyle.h"
 
@@ -31,9 +32,9 @@ class OOVISUALIZATION_API VMethodStyle : public Visualization::ItemStyle
 		Visualization::TextStyle nameStaticProtected_;
 		MethodIconStyle icon_;
 		Visualization::SequentialLayoutStyle header_;
-		Visualization::SequentialLayoutStyle content_;
-		Visualization::SequentialLayoutStyle arguments_;
-		Visualization::SequentialLayoutStyle results_;
+		Visualization::VListStyle content_;
+		Visualization::VListStyle arguments_;
+		Visualization::VListStyle results_;
 
 	public:
 		VMethodStyle();
@@ -50,9 +51,9 @@ class OOVISUALIZATION_API VMethodStyle : public Visualization::ItemStyle
 		const Visualization::TextStyle& nameStaticProtected() const;
 		const MethodIconStyle& icon() const;
 		const Visualization::SequentialLayoutStyle& header() const;
-		const Visualization::SequentialLayoutStyle& content() const;
-		const Visualization::SequentialLayoutStyle& arguments() const;
-		const Visualization::SequentialLayoutStyle& results() const;
+		const Visualization::VListStyle& content() const;
+		const Visualization::VListStyle& arguments() const;
+		const Visualization::VListStyle& results() const;
 
 		static VMethodStyle* getDefault();
 };
@@ -68,9 +69,9 @@ inline const Visualization::TextStyle& VMethodStyle::nameStaticPrivate() const {
 inline const Visualization::TextStyle& VMethodStyle::nameStaticProtected() const { return nameStaticProtected_; }
 inline const MethodIconStyle& VMethodStyle::icon() const { return icon_; }
 inline const Visualization::SequentialLayoutStyle& VMethodStyle::header() const { return header_; }
-inline const Visualization::SequentialLayoutStyle& VMethodStyle::content() const { return content_; }
-inline const Visualization::SequentialLayoutStyle& VMethodStyle::arguments() const { return arguments_; }
-inline const Visualization::SequentialLayoutStyle& VMethodStyle::results() const { return results_; }
+inline const Visualization::VListStyle& VMethodStyle::content() const { return content_; }
+inline const Visualization::VListStyle& VMethodStyle::arguments() const { return arguments_; }
+inline const Visualization::VListStyle& VMethodStyle::results() const { return results_; }
 
 }
 

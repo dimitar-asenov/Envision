@@ -14,6 +14,7 @@
 #include "VisualizationBase/headers/layouts/PanelBorderLayout.h"
 #include "VisualizationBase/headers/layouts/SequentialLayout.h"
 #include "VisualizationBase/headers/items/VText.h"
+#include "VisualizationBase/headers/items/VList.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -28,9 +29,9 @@ VMethod::VMethod(Item* parent, Method* node, const VMethodStyle* style) :
 	header_( new SequentialLayout(NULL, &style->header()) ),
 	icon_(new MethodIcon(NULL, &style->icon())),
 	name_(new VText(NULL, node->nameNode(), &style->nameDefault()) ),
-	arguments_(new SequentialLayout(NULL, &style->arguments()) ),
-	content_( new SequentialLayout(NULL, &style->content()) ),
-	results_(new SequentialLayout(NULL, &style->results()) )
+	arguments_(new VList(NULL, node->arguments(), &style->arguments()) ),
+	content_( new VList(NULL, node->items(), &style->content()) ),
+	results_(new VList(NULL, node->results(), &style->results()) )
 {
 	layout_->setTop(true);
 	layout_->top()->setFirst(header_);
@@ -90,11 +91,6 @@ void VMethod::determineChildren()
 	content_->setStyle( &style()->content() );
 	arguments_->setStyle( &style()->arguments() );
 	results_->setStyle( &style()->results() );
-
-	// Synchronize containers
-	content_->synchronizeWithNodes(node->items()->nodes().toList(), renderer() );
-	arguments_->synchronizeWithNodes(node->arguments()->nodes().toList(), renderer() );
-	results_->synchronizeWithNodes(node->results()->nodes().toList(), renderer() );
 }
 
 void VMethod::updateGeometry(int, int)

@@ -16,6 +16,7 @@
 
 namespace Visualization {
 	class VText;
+	class VList;
 	class PanelBorderLayout;
 	class SequentialLayout;
 }
@@ -47,9 +48,9 @@ class OOVISUALIZATION_API VMethod : public Visualization::ModelItem
 		Visualization::SequentialLayout* header_;
 		MethodIcon* icon_;
 		Visualization::VText* name_;
-		Visualization::SequentialLayout* arguments_;
-		Visualization::SequentialLayout* content_;
-		Visualization::SequentialLayout* results_;
+		Visualization::VList* arguments_;
+		Visualization::VList* content_;
+		Visualization::VList* results_;
 };
 
 }

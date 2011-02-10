@@ -26,8 +26,14 @@
 	<header prototypes="layout/SequentialLayout/default">
 		<spaceBetweenElements>10</spaceBetweenElements>
 	</header>
-	<content prototypes="layout/SequentialLayout/default" />
-	<arguments prototypes="layout/SequentialLayout/default">
+	<content prototypes="item/VList/default">
+		<shape />
+		<itemsStyle prototypes="layout/SequentialLayout/default">
+			<direction>2</direction>
+			<spaceBetweenElements>0</spaceBetweenElements>
+		</itemsStyle>
+	</content>
+	<arguments prototypes="item/VList/default">
 		<shape prototypes="shape/Box/default">
 			Box
 			<cornerRadius>3</cornerRadius>
@@ -42,9 +48,16 @@
 				</color>
 			</backgroundBrush>
 		</shape>
+		<itemsStyle prototypes="layout/SequentialLayout/default">
+			<direction>0</direction>
+			<spaceBetweenElements>5</spaceBetweenElements>
+		</itemsStyle>
 	</arguments>
-	<results prototypes="layout/SequentialLayout/default">
-		<direction>2</direction>
-		<alignment>1</alignment>
+	<results prototypes="item/VList/default">
+		<itemsStyle prototypes="layout/SequentialLayout/default">
+			<direction>2</direction>
+			<alignment>1</alignment>
+			<spaceBetweenElements>5</spaceBetweenElements>
+		</itemsStyle>
 	</results>
 </style>
