@@ -51,6 +51,13 @@ bool PanelBorderLayout::isEmpty() const
 
 void PanelBorderLayout::updateGeometry(int, int)
 {
+	//TODO: Find a generic way of doing this and consider performance
+	//Set Styles
+	if (top_) top_->setStyle(&style()->topStyle());
+	if (left_) left_->setStyle(&style()->leftStyle());
+	if (right_) right_->setStyle(&style()->rightStyle());
+	if (bottom_) bottom_->setStyle(&style()->bottomStyle());
+
 	// Get content size
 	int contentWidth = content_ ? content_->width() : 0;
 	int contentHeight = content_ ? content_->height() : 0;

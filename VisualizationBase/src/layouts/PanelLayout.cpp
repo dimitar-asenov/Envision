@@ -120,7 +120,7 @@ void PanelLayout::updateGeometry(int availableWidth, int availableHeight)
 		if ( style()->alignment() == PanelLayoutStyle::CenterAlignment ) last.moveTo(x + (maxChildWidth - last.width()) / 2, y);
 
 		// Center
-		y = yOffset() + (height - middle_->height()) / 2;
+		y = yOffset() + (height - middle.height()) / 2;
 		int minY = first.y() + first.height() + style()->spaceBetweenElements();
 		if ( y < minY ) y = minY;
 		if ( style()->alignment() == PanelLayoutStyle::RightAlignment ) middle.moveTo(x + maxChildWidth - middle.width(), y);

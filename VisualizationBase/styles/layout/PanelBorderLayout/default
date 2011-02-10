@@ -5,9 +5,13 @@
 	<rightInnerMargin>5</rightInnerMargin>
 	<bottomInnerMargin>5</bottomInnerMargin>
 	<topPanelStyle prototypes="../PanelLayout/default" />
-	<leftPanelStyle prototypes="../PanelLayout/default" />
+	<leftPanelStyle prototypes="../PanelLayout/default">
+		<orientation>1</orientation>
+	</leftPanelStyle>
 	<bottomPanelStyle prototypes="../PanelLayout/default" />
-	<rightPanelStyle prototypes="../PanelLayout/default" />
+	<rightPanelStyle prototypes="../PanelLayout/default">
+		<orientation>1</orientation>
+	</rightPanelStyle>
 	<isLeftProtrusionFixed>false</isLeftProtrusionFixed>
 	<leftProtrusion>10</leftProtrusion>
 </style>
