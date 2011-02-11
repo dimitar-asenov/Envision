@@ -148,15 +148,13 @@ void PositionLayout::updateGeometry(int, int)
 		if (i==0 || bottomRight.y() < toGrid(positions[i]->y()) + items[i]->height() ) bottomRight.setY( toGrid(positions[i]->y()) + items[i]->height() );
 	}
 
-	int sizeWidth = bottomRight.x() - topLeft.x() + style()->leftMargin() + style()->rightMargin();
-	int sizeHeight = bottomRight.y() - topLeft.y() + style()->topMargin() + style()->bottomMargin();
+	int sizeWidth = bottomRight.x() - topLeft.x() + style()->leftInnerMargin() + style()->rightInnerMargin();
+	int sizeHeight = bottomRight.y() - topLeft.y() + style()->topInnerMargin() + style()->bottomInnerMargin();
 	setInnerSize(sizeWidth, sizeHeight);
 
 	for (int i =0; i<items.size(); ++i)
-		items[i]->setPos( xOffset() + toGrid(positions[i]->x()) - topLeft.x(), yOffset() +  toGrid(positions[i]->y()) - topLeft.y());
-
-	// Set Size to 0 when there are no children and shape is not drawn
-	if (items.size() == 0 && !style()->drawShapeWhenEmpty()) setSize(0,0);
+		items[i]->setPos( xOffset() + style()->leftInnerMargin() + toGrid(positions[i]->x()) - topLeft.x(),
+								yOffset() + style()->topInnerMargin() + toGrid(positions[i]->y()) - topLeft.y());
 }
 
 int PositionLayout::focusedElementIndex() const

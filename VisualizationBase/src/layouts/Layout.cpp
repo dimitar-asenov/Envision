@@ -52,7 +52,7 @@ int Layout::xOffset() const
 int Layout::yOffset() const
 {
 	if ( hasShape() ) return getShape()->contentTop();
-	else return style()->leftMargin();
+	else return style()->topMargin();
 }
 
 void Layout::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)

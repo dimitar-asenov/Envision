@@ -1,5 +1,9 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="../Layout/default">
+	<leftInnerMargin>5</leftInnerMargin>
+	<topInnerMargin>5</topInnerMargin>
+	<rightInnerMargin>5</rightInnerMargin>
+	<bottomInnerMargin>5</bottomInnerMargin>
 	<spaceBetweenElements>0</spaceBetweenElements>
 	<gridSize>20</gridSize>
 </style>

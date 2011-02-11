@@ -24,6 +24,10 @@ PositionLayoutStyle* PositionLayoutStyle::getDefault()
 void PositionLayoutStyle::load()
 {
 	LayoutStyle::load();
+	Styles::load("leftInnerMargin", leftInnerMargin_);
+	Styles::load("rightInnerMargin", rightInnerMargin_);
+	Styles::load("topInnerMargin", topInnerMargin_);
+	Styles::load("bottomInnerMargin", bottomInnerMargin_);
 	Styles::load("spaceBetweenElements", spaceBetweenElements_);
 	Styles::load("gridSize", gridSize_);
 }
