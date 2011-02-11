@@ -29,13 +29,17 @@ void HPositionLayout::mousePressEvent(Visualization::Item *target, QGraphicsScen
 	{
 		Visualization::PositionLayout* layout = static_cast<Visualization::PositionLayout*> (target);
 
-		//Find out which of the children has the cursor
+		// Find out which of the children has the cursor.
+		// If there is only child or there is no child selected do not allow movement and ignore this event.
 		Visualization::ModelItem* itemToMove = NULL;
-		for(int i = 0; i<layout->length(); ++i)
+		if (layout->length() >=2)
 		{
-			itemToMove = layout->at<Visualization::ModelItem>(i);
-			if (itemToMove->contains(itemToMove->mapFromParent(event->pos()))) break;
-			else itemToMove = NULL;
+			for(int i = 0; i<layout->length(); ++i)
+			{
+				itemToMove = layout->at<Visualization::ModelItem>(i);
+				if (itemToMove->contains(itemToMove->mapFromParent(event->pos()))) break;
+				else itemToMove = NULL;
+			}
 		}
 
 		if (itemToMove)
@@ -52,8 +56,9 @@ void HPositionLayout::mousePressEvent(Visualization::Item *target, QGraphicsScen
 			currentItem = itemToMove;
 			currentItemPosition = pos;
 		}
+		else event->ignore();
 	}
-	else GenericHandler::mousePressEvent(target, event);
+	else event->ignore();//GenericHandler::mousePressEvent(target, event);
 }
 
 void HPositionLayout::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)

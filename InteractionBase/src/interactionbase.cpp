@@ -27,6 +27,7 @@
 #include "VisualizationBase/headers/items/VCharacter.h"
 #include "VisualizationBase/headers/items/VBoolean.h"
 #include "VisualizationBase/headers/items/VReference.h"
+#include "VisualizationBase/headers/icons/SVGIcon.h"
 #include "VisualizationBase/headers/layouts/SequentialLayout.h"
 #include "VisualizationBase/headers/layouts/PanelLayout.h"
 #include "VisualizationBase/headers/layouts/PanelBorderLayout.h"
@@ -56,6 +57,7 @@ bool InteractionBase::initialize(Envision::EnvisionManager&)
 	Visualization::VCharacter::setInteractionHandler(HText::instance());
 	Visualization::VBoolean::setInteractionHandler(HText::instance());
 	Visualization::VReference::setInteractionHandler(HText::instance());
+	Visualization::SVGIcon::setInteractionHandler(GenericHandler::instance());
 	Visualization::SequentialLayout::setInteractionHandler(GenericHandler::instance());
 	Visualization::PanelLayout::setInteractionHandler(GenericHandler::instance());
 	Visualization::PanelBorderLayout::setInteractionHandler(GenericHandler::instance());
