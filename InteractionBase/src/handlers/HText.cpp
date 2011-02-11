@@ -24,6 +24,13 @@
 //**********************************************************************************************************************
 
 //**********************************************************************************************************************
+#define TEXTRENDERER_GET1(method, arg1)		(																									\
+	( dynamic_cast<Visualization::TextRenderer<Visualization::Item>*> (target)	) ?													\
+	( (dynamic_cast<Visualization::TextRenderer<Visualization::Item>*> (target))->method(arg1)	) :							\
+	( (dynamic_cast<Visualization::TextRenderer<Visualization::ModelItem>*> (target))->method(arg1)	)	)
+//**********************************************************************************************************************
+
+//**********************************************************************************************************************
 #define TEXTRENDERER_SET(method)																														\
 	if (dynamic_cast<Visualization::TextRenderer<Visualization::Item>*> (target))														\
 		(dynamic_cast<Visualization::TextRenderer<Visualization::Item>*> (target))->method();										\
@@ -230,8 +237,10 @@ void HText::erase(Visualization::Item *target, bool forwards, bool onlyDeleteIfS
 	{
 		// There is some text that is selected
 		newText = newText.left(selFirst) + newText.mid(selLast);
-		TEXTRENDERER_SET1(setText, newText);
-		TEXTRENDERER_SET1(setCaretPosition, selFirst);
+		if ( TEXTRENDERER_GET1(setText, newText) )
+		{
+			TEXTRENDERER_SET1(setCaretPosition, selFirst);
+		}
 	}
 	else
 	{
@@ -251,8 +260,10 @@ void HText::erase(Visualization::Item *target, bool forwards, bool onlyDeleteIfS
 				if (caret > 0)
 				{
 					newText = newText.left(caret-1) + newText.mid(caret);
-					TEXTRENDERER_SET1(setText, newText);
-					TEXTRENDERER_SET1(setCaretPosition, caret-1);
+					if ( TEXTRENDERER_GET1(setText, newText) )
+					{
+						TEXTRENDERER_SET1(setCaretPosition, caret-1);
+					}
 				}
 			}
 		}
@@ -265,9 +276,11 @@ void HText::insertText(Visualization::Item *target, const QString& textToInsert)
 	QString newText = TEXTRENDERER_GET(getText);
 	int caret = TEXTRENDERER_GET(caretPosition);
 	newText.insert(caret, textToInsert);
-	TEXTRENDERER_SET1(setText, newText);
-	caret += textToInsert.size();
-	TEXTRENDERER_SET1(setCaretPosition, caret);
+	if ( TEXTRENDERER_GET1(setText, newText) )
+	{
+		caret += textToInsert.size();
+		TEXTRENDERER_SET1(setCaretPosition, caret);
+	}
 }
 
 }
