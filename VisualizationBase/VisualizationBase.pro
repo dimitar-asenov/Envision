@@ -31,7 +31,10 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/icons/SVGIcon.h \
+HEADERS += headers/items/VCharacter.h \
+    headers/items/VBoolean.h \
+    headers/items/VFloat.h \
+    headers/icons/SVGIcon.h \
     headers/icons/SVGIconStyle.h \
     headers/items/VReference.h \
     headers/icons/IconStyle.h \
@@ -80,7 +83,10 @@ HEADERS += headers/icons/SVGIcon.h \
     src/visualizationbase.h \
     headers/VisualizationException.h \
     headers/visualizationbase_api.h
-SOURCES += src/icons/SVGIconStyle.cpp \
+SOURCES += src/items/VCharacter.cpp \
+    src/items/VBoolean.cpp \
+    src/items/VFloat.cpp \
+    src/icons/SVGIconStyle.cpp \
     src/icons/SVGIcon.cpp \
     src/items/VReference.cpp \
     src/icons/IconStyle.cpp \

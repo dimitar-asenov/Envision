@@ -19,7 +19,7 @@ VInteger::VInteger(Item* parent, Model::Integer *integer, const TextStyle *style
 void VInteger::updateGeometry(int availableWidth, int availableHeight)
 {
 	Model::Integer* intNode = static_cast<Model::Integer*> (getNode());
-	setText( QString::number(intNode->get()) );
+	TextRenderer<ModelItem>::setText( QString::number(intNode->get()) );
 	TextRenderer<ModelItem>::updateGeometry(availableWidth, availableHeight);
 }
 

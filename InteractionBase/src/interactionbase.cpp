@@ -23,6 +23,9 @@
 #include "VisualizationBase/headers/items/Text.h"
 #include "VisualizationBase/headers/items/VText.h"
 #include "VisualizationBase/headers/items/VInteger.h"
+#include "VisualizationBase/headers/items/VFloat.h"
+#include "VisualizationBase/headers/items/VCharacter.h"
+#include "VisualizationBase/headers/items/VBoolean.h"
 #include "VisualizationBase/headers/items/VReference.h"
 #include "VisualizationBase/headers/layouts/SequentialLayout.h"
 #include "VisualizationBase/headers/layouts/PanelLayout.h"
@@ -49,6 +52,9 @@ bool InteractionBase::initialize(Envision::EnvisionManager&)
 	Visualization::Text::setInteractionHandler(HText::instance());
 	Visualization::VText::setInteractionHandler(HText::instance());
 	Visualization::VInteger::setInteractionHandler(HText::instance());
+	Visualization::VFloat::setInteractionHandler(HText::instance());
+	Visualization::VCharacter::setInteractionHandler(HText::instance());
+	Visualization::VBoolean::setInteractionHandler(HText::instance());
 	Visualization::VReference::setInteractionHandler(HText::instance());
 	Visualization::SequentialLayout::setInteractionHandler(GenericHandler::instance());
 	Visualization::PanelLayout::setInteractionHandler(GenericHandler::instance());
