@@ -47,10 +47,11 @@ template<class T> void TextRenderer<T>::setStyle(const ItemStyle* style)
 	T::setStyle(s);
 }
 
-template<class T> void TextRenderer<T>::setText(const QString& newText)
+template<class T> bool TextRenderer<T>::setText(const QString& newText)
 {
 	text = newText;
 	this->setUpdateNeeded();
+	return true;
 }
 
 template<class T> QString TextRenderer<T>::getText()

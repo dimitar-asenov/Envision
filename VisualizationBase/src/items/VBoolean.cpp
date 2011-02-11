@@ -20,7 +20,7 @@ VBoolean::VBoolean(Item* parent, Model::Boolean *node, const TextStyle *style) :
 	else TextRenderer<ModelItem>::setText( "false" );
 }
 
-void VBoolean::setText(const QString& newText)
+bool VBoolean::setText(const QString& newText)
 {
 	if (newText.contains(' ') || newText.compare("true", Qt::CaseInsensitive) == 0 || newText.compare("false", Qt::CaseInsensitive) == 0)
 	{
@@ -30,9 +30,11 @@ void VBoolean::setText(const QString& newText)
 		else if ( newText.compare("true", Qt::CaseInsensitive) == 0 ) node->set(true);
 		else node->set(false);
 		node->model()->endModification();
-		TextRenderer<ModelItem>::setText(newText.toLower());
-		TextRenderer<ModelItem>::setCaretPosition(0);
+		if (node->get()) TextRenderer<ModelItem>::setText( "true" );
+		else TextRenderer<ModelItem>::setText( "false" );
+		return true;
 	}
+	else return false;
 }
 
 }

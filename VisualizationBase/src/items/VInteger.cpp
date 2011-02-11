@@ -19,7 +19,7 @@ VInteger::VInteger(Item* parent, Model::Integer *integer, const TextStyle *style
 	TextRenderer<ModelItem>::setText( QString::number(integer->get()) );
 }
 
-void VInteger::setText(const QString& newText)
+bool VInteger::setText(const QString& newText)
 {
 	bool ok = false;
 	int value = newText.toInt(&ok);
@@ -30,7 +30,9 @@ void VInteger::setText(const QString& newText)
 		node->set(value);
 		node->model()->endModification();
 		TextRenderer<ModelItem>::setText(newText);
+		return true;
 	}
+	else return false;
 }
 
 }

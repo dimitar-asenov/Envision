@@ -19,7 +19,7 @@ VCharacter::VCharacter(Item* parent, Model::Character *node, const TextStyle *st
 	TextRenderer<ModelItem>::setText( node->get() );
 }
 
-void VCharacter::setText(const QString& newText)
+bool VCharacter::setText(const QString& newText)
 {
 	if (newText.length() == 1)
 	{
@@ -28,7 +28,9 @@ void VCharacter::setText(const QString& newText)
 		node->set(newText[0]);
 		node->model()->endModification();
 		TextRenderer<ModelItem>::setText(newText[0]);
+		return true;
 	}
+	else return false;
 }
 
 }

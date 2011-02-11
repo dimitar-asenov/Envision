@@ -24,7 +24,7 @@ class VISUALIZATIONBASE_API VCharacter : public TextRenderer<ModelItem>
 
 	public:
 		VCharacter(Item* parent, Model::Character *node, const TextStyle *style = Styles::item<VCharacter>("default"));
-		virtual void setText(const QString& newText);
+		virtual bool setText(const QString& newText);
 };
 
 }

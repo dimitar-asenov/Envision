@@ -24,7 +24,7 @@ class VISUALIZATIONBASE_API VInteger : public TextRenderer<ModelItem>
 
 	public:
 		VInteger(Item* parent, Model::Integer *integer, const TextStyle *style = Styles::item<VInteger>("default"));
-		virtual void setText(const QString& newText);
+		virtual bool setText(const QString& newText);
 };
 
 }

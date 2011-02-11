@@ -24,7 +24,7 @@ class VISUALIZATIONBASE_API VText : public TextRenderer<ModelItem>
 
 	public:
 		VText(Item* parent, Model::Text *text, const TextStyle *style = Styles::item<VText>("default"));
-		virtual void setText(const QString& newText);
+		virtual bool setText(const QString& newText);
 };
 
 }

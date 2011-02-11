@@ -19,13 +19,13 @@ VText::VText(Item* parent, Model::Text *text, const TextStyle *style) :
 	TextRenderer<ModelItem>::setText(text->get());
 }
 
-void VText::setText(const QString& newText)
+bool VText::setText(const QString& newText)
 {
 	Model::Text* textNode = static_cast<Model::Text*> (getNode());
 	textNode->model()->beginModification(textNode, "Set text");
 	textNode->set(newText);
 	textNode->model()->endModification();
-	TextRenderer<ModelItem>::setText(newText);
+	return TextRenderer<ModelItem>::setText(newText);
 }
 
 }

@@ -19,7 +19,7 @@ VFloat::VFloat(Item* parent, Model::Float *node, const TextStyle *style) :
 	TextRenderer<ModelItem>::setText( QString::number(node->get()) );
 }
 
-void VFloat::setText(const QString& newText)
+bool VFloat::setText(const QString& newText)
 {
 	bool ok = false;
 	double value = newText.toDouble(&ok);
@@ -30,7 +30,9 @@ void VFloat::setText(const QString& newText)
 		node->set(value);
 		node->model()->endModification();
 		TextRenderer<ModelItem>::setText(newText);
+		return true;
 	}
+	else return false;
 }
 
 }

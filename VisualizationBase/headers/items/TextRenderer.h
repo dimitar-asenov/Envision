@@ -56,7 +56,15 @@ class VISUALIZATIONBASE_API TextRenderer : public T
 			const TextStyle* style() const;
 			virtual void setStyle(const ItemStyle* style);
 
-			virtual void setText(const QString& newText);
+			/**
+			 * Sets the text of this item.
+			 *
+			 * Returns true if the text has been set, false otherwise.
+			 *
+			 * @param newText
+			 * 				the string to set as the new text.
+			 */
+			virtual bool setText(const QString& newText);
 			QString getText();
 			QString getSelectedText();
 
