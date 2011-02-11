@@ -31,7 +31,8 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/statements/VVariableDeclarationStyle.h \
+HEADERS += headers/literals/VNullLiteral.h \
+    headers/statements/VVariableDeclarationStyle.h \
     headers/statements/VVariableDeclaration.h \
     headers/literals/VBooleanLiteral.h \
     headers/literals/VCharacterLiteral.h \
@@ -70,7 +71,8 @@ HEADERS += headers/statements/VVariableDeclarationStyle.h \
     headers/OOVisualizationException.h \
     headers/oovisualization_api.h \
     src/oovisualization.h
-SOURCES += src/statements/VVariableDeclaration.cpp \
+SOURCES += src/literals/VNullLiteral.cpp \
+    src/statements/VVariableDeclaration.cpp \
     src/statements/VVariableDeclarationStyle.cpp \
     src/literals/VBooleanLiteral.cpp \
     src/literals/VCharacterLiteral.cpp \

@@ -1,0 +1,7 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/Symbol/default">
+	<font>
+		<weight>100</weight>
+	</font>
+	<symbol>∅</symbol>
+</style>

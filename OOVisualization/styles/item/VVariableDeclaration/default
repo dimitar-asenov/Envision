@@ -4,6 +4,7 @@
 		<spaceBetweenElements>5</spaceBetweenElements>
 	</container>
 	<name prototypes="item/Text/default" />
-	<assignmentStyle prototypes="item/Text/default"/>
-	<assignmentSymbol>←</assignmentSymbol>
+	<assignmentSymbol prototypes="item/Symbol/default">
+		<symbol>←</symbol>
+	</assignmentSymbol>
 </style>

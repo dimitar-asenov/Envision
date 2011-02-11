@@ -28,6 +28,7 @@
 #include "literals/VFloatLiteral.h"
 #include "literals/VCharacterLiteral.h"
 #include "literals/VBooleanLiteral.h"
+#include "literals/VNullLiteral.h"
 
 #include "statements/VMethodCallStatement.h"
 #include "statements/VVariableDeclaration.h"

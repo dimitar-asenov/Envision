@@ -15,7 +15,7 @@
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
-	class Text;
+	class Symbol;
 	class VText;
 	class SequentialLayout;
 }
@@ -44,7 +44,7 @@ class OOVISUALIZATION_API VVariableDeclaration : public Visualization::ModelItem
 		Visualization::SequentialLayout* container_;
 		Visualization::VText* name_;
 		Visualization::ModelItem* type_;
-		Visualization::Text* assignmentSymbol_;
+		Visualization::Symbol* assignmentSymbol_;
 		Visualization::ModelItem* initialValue_;
 };
 

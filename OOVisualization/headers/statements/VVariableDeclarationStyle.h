@@ -11,6 +11,7 @@
 #include "../oovisualization_api.h"
 
 #include "VisualizationBase/headers/items/TextStyle.h"
+#include "VisualizationBase/headers/items/SymbolStyle.h"
 #include "VisualizationBase/headers/layouts/SequentialLayout.h"
 
 namespace OOVisualization {
@@ -20,24 +21,21 @@ class OOVISUALIZATION_API VVariableDeclarationStyle : public Visualization::Item
 	private:
 		Visualization::SequentialLayoutStyle container_;
 		Visualization::TextStyle name_;
-		Visualization::TextStyle assignmentStyle_;
-		QString assignmentSymbol_;
+		Visualization::SymbolStyle assignmentSymbol_;
 
 	public:
 		void load();
 
 		const Visualization::SequentialLayoutStyle& container() const;
 		const Visualization::TextStyle& name() const;
-		const Visualization::TextStyle& assignmentStyle() const;
-		const QString& assignmentSymbol() const;
+		const Visualization::SymbolStyle& assignmentSymbol() const;
 
 		static VVariableDeclarationStyle* getDefault();
 };
 
 inline const Visualization::SequentialLayoutStyle& VVariableDeclarationStyle::container() const { return container_; }
 inline const Visualization::TextStyle& VVariableDeclarationStyle::name() const { return name_; }
-inline const Visualization::TextStyle& VVariableDeclarationStyle::assignmentStyle() const { return assignmentStyle_; }
-inline const QString& VVariableDeclarationStyle::assignmentSymbol() const { return assignmentSymbol_; }
+inline const Visualization::SymbolStyle& VVariableDeclarationStyle::assignmentSymbol() const { return assignmentSymbol_; }
 
 }
 

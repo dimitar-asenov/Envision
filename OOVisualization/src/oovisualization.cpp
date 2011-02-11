@@ -49,6 +49,7 @@ bool OOVisualization::initialize(Envision::EnvisionManager&)
 	Scene::defaultRenderer()->registerVisualization(FloatLiteral::typeIdStatic(), createVisualization<VFloatLiteral, FloatLiteral>);
 	Scene::defaultRenderer()->registerVisualization(CharacterLiteral::typeIdStatic(), createVisualization<VCharacterLiteral, CharacterLiteral>);
 	Scene::defaultRenderer()->registerVisualization(BooleanLiteral::typeIdStatic(), createVisualization<VBooleanLiteral, BooleanLiteral>);
+	Scene::defaultRenderer()->registerVisualization(NullLiteral::typeIdStatic(), createVisualization<VNullLiteral, NullLiteral>);
 	Scene::defaultRenderer()->registerVisualization(MethodCallStatement::typeIdStatic(), createVisualization<VMethodCallStatement, MethodCallStatement>);
 	Scene::defaultRenderer()->registerVisualization(VariableDeclaration::typeIdStatic(), createVisualization<VVariableDeclaration, VariableDeclaration>);
 	Scene::defaultRenderer()->registerVisualization(NamedType::typeIdStatic(), createVisualization<VNamedType, NamedType>);
@@ -74,6 +75,7 @@ bool OOVisualization::initialize(Envision::EnvisionManager&)
 	VFloatLiteral::setInteractionHandler(Interaction::GenericHandler::instance());
 	VCharacterLiteral::setInteractionHandler(Interaction::GenericHandler::instance());
 	VBooleanLiteral::setInteractionHandler(Interaction::GenericHandler::instance());
+	VNullLiteral::setInteractionHandler(Interaction::GenericHandler::instance());
 	VMethodCallStatement::setInteractionHandler(Interaction::GenericHandler::instance());
 	VVariableDeclaration::setInteractionHandler(Interaction::GenericHandler::instance());
 

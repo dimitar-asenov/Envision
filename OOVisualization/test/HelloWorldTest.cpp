@@ -140,6 +140,11 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	var6->setType<PrimitiveType>()->setType(PrimitiveType::UNSIGNED_LONG);
 	var6->setInitialValue<IntegerLiteral>()->setValue(1000);
 
+	VariableDeclaration* var7 = factorial->items()->append<VariableDeclaration>();
+	var7->setName("var7");
+	var7->setType<PrimitiveType>()->setType(PrimitiveType::VOID);
+	var7->setInitialValue<NullLiteral>();
+
 	// set positions
 	factorial->extension<Position>()->setY(100);
 	java->extension<Position>()->setX(160);

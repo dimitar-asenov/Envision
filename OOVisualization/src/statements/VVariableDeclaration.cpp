@@ -10,7 +10,7 @@
 #include "OOModel/headers/statements/VariableDeclaration.h"
 
 #include "VisualizationBase/headers/layouts/SequentialLayout.h"
-#include "VisualizationBase/headers/items/Text.h"
+#include "VisualizationBase/headers/items/Symbol.h"
 #include "VisualizationBase/headers/items/VText.h"
 
 using namespace Visualization;
@@ -70,13 +70,12 @@ void VVariableDeclaration::determineChildren()
 			}
 
 			initialValue_ = renderer()->render(NULL, node->initialValue());
-			assignmentSymbol_ = new Text(NULL, &style()->assignmentStyle(), style()->assignmentSymbol() );
+			assignmentSymbol_ = new Symbol(NULL, &style()->assignmentSymbol() );
 			container_->append(assignmentSymbol_);
 			container_->append(initialValue_);
 		}
 
-		assignmentSymbol_->setText( style()->assignmentSymbol() );
-		assignmentSymbol_->setStyle( &style()->assignmentStyle());
+		assignmentSymbol_->setStyle( &style()->assignmentSymbol());
 	}
 	else
 	{

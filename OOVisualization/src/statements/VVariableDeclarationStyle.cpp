@@ -22,7 +22,6 @@ void VVariableDeclarationStyle::load()
 
 	Visualization::Styles::load("container", container_);
 	Visualization::Styles::load("name", name_);
-	Visualization::Styles::load("assignmentStyle", assignmentStyle_);
 	Visualization::Styles::load("assignmentSymbol", assignmentSymbol_);
 }
 
