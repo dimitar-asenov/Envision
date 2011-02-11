@@ -10,18 +10,30 @@
 
 #include "../oovisualization_api.h"
 
-#include "VisualizationBase/headers/items/VText.h"
+#include "VisualizationBase/headers/items/ModelItem.h"
+#include "VisualizationBase/headers/items/TextStyle.h"
+#include "VisualizationBase/headers/Styles.h"
 
 #include "OOModel/headers/expressions/StringLiteral.h"
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VStringLiteral : public Visualization::VText
+class OOVISUALIZATION_API VStringLiteral : public Visualization::ModelItem
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VStringLiteral, Visualization::VText, Visualization::TextStyle)
+	ITEM_COMMON_CUSTOM_STYLENAME(VStringLiteral, Visualization::ModelItem, Visualization::TextStyle)
 
 	public:
 		VStringLiteral(Item* parent, OOModel::StringLiteral *literal, const Visualization::TextStyle *style = Visualization::Styles::item<VStringLiteral>("default"));
+		virtual ~VStringLiteral();
+
+		virtual bool focusChild(FocusTarget location);
+
+	protected:
+		virtual void determineChildren();
+		virtual void updateGeometry(int availableWidth, int availableHeight);
+
+	private:
+		Visualization::ModelItem* vis_;
 };
 
 }

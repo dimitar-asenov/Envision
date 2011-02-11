@@ -10,18 +10,30 @@
 
 #include "../oovisualization_api.h"
 
-#include "VisualizationBase/headers/items/VBoolean.h"
+#include "VisualizationBase/headers/items/ModelItem.h"
+#include "VisualizationBase/headers/items/TextStyle.h"
+#include "VisualizationBase/headers/Styles.h"
 
 #include "OOModel/headers/expressions/BooleanLiteral.h"
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VBooleanLiteral : public Visualization::VBoolean
+class OOVISUALIZATION_API VBooleanLiteral : public Visualization::ModelItem
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VBooleanLiteral, Visualization::VBoolean, Visualization::TextStyle)
+	ITEM_COMMON_CUSTOM_STYLENAME(VBooleanLiteral, Visualization::ModelItem, Visualization::TextStyle)
 
 	public:
 		VBooleanLiteral(Item* parent, OOModel::BooleanLiteral *literal, const Visualization::TextStyle *style = Visualization::Styles::item<VBooleanLiteral>("default"));
+		virtual ~VBooleanLiteral();
+
+		virtual bool focusChild(FocusTarget location);
+
+	protected:
+		virtual void determineChildren();
+		virtual void updateGeometry(int availableWidth, int availableHeight);
+
+	private:
+		Visualization::ModelItem* vis_;
 };
 
 }
