@@ -1,20 +1,20 @@
 /***********************************************************************************************************************
- * VStringLiteral.cpp
+ * VBooleanLiteral.cpp
  *
- *  Created on: Feb 8, 2011
+ *  Created on: Feb 11, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "literals/VStringLiteral.h"
+#include "literals/VBooleanLiteral.h"
 
 #include "ModelBase/headers/Model.h"
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VStringLiteral)
+ITEM_COMMON_DEFINITIONS(VBooleanLiteral)
 
-VStringLiteral::VStringLiteral(Item* parent, OOModel::StringLiteral *literal, const Visualization::TextStyle *style) :
-	VText(parent, literal->valueNode(), style)
+VBooleanLiteral::VBooleanLiteral(Item* parent, OOModel::BooleanLiteral *literal, const Visualization::TextStyle *style) :
+	VBoolean(parent, literal->valueNode(), style)
 {
 }
 

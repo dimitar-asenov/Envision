@@ -16,13 +16,7 @@ ITEM_COMMON_DEFINITIONS(VText)
 VText::VText(Item* parent, Model::Text *text, const TextStyle *style) :
 	TextRenderer<ModelItem>(parent, text, style)
 {
-}
-
-void VText::updateGeometry(int availableWidth, int availableHeight)
-{
-	Model::Text* textNode = static_cast<Model::Text*> (getNode());
-	setText( textNode->get() );
-	TextRenderer<ModelItem>::updateGeometry(availableWidth, availableHeight);
+	TextRenderer<ModelItem>::setText(text->get());
 }
 
 void VText::setText(const QString& newText)

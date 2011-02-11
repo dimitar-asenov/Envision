@@ -31,7 +31,11 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/vis/elements/VFormalResultStyle.h \
+HEADERS += headers/literals/VBooleanLiteral.h \
+    headers/literals/VCharacterLiteral.h \
+    headers/literals/VFloatLiteral.h \
+    headers/literals/VIntegerLiteral.h \
+    headers/vis/elements/VFormalResultStyle.h \
     headers/vis/elements/VFormalResult.h \
     headers/allOOVisualizations.h \
     headers/types/VPrimitiveType.h \
@@ -64,7 +68,11 @@ HEADERS += headers/vis/elements/VFormalResultStyle.h \
     headers/OOVisualizationException.h \
     headers/oovisualization_api.h \
     src/oovisualization.h
-SOURCES += src/vis/elements/VFormalResult.cpp \
+SOURCES += src/literals/VBooleanLiteral.cpp \
+    src/literals/VCharacterLiteral.cpp \
+    src/literals/VFloatLiteral.cpp \
+    src/literals/VIntegerLiteral.cpp \
+    src/vis/elements/VFormalResult.cpp \
     src/vis/elements/VFormalResultStyle.cpp \
     src/types/VPrimitiveType.cpp \
     src/vis/top_level/VLibrary.cpp \

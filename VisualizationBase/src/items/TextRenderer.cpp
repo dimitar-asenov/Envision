@@ -50,6 +50,7 @@ template<class T> void TextRenderer<T>::setStyle(const ItemStyle* style)
 template<class T> void TextRenderer<T>::setText(const QString& newText)
 {
 	text = newText;
+	this->setUpdateNeeded();
 }
 
 template<class T> QString TextRenderer<T>::getText()

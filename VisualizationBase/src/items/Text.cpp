@@ -23,10 +23,4 @@ Text::Text(Item* parent, const TextStyle *style, const QString& text) :
 {
 }
 
-void Text::setText(const QString& newText)
-{
-	TextRenderer<Item>::setText(newText);
-	setUpdateNeeded();
-}
-
 }

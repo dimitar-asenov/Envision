@@ -1,20 +1,20 @@
 /***********************************************************************************************************************
- * VStringLiteral.cpp
+ * VCharacterLiteral.cpp
  *
- *  Created on: Feb 8, 2011
+ *  Created on: Feb 11, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "literals/VStringLiteral.h"
+#include "literals/VCharacterLiteral.h"
 
 #include "ModelBase/headers/Model.h"
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VStringLiteral)
+ITEM_COMMON_DEFINITIONS(VCharacterLiteral)
 
-VStringLiteral::VStringLiteral(Item* parent, OOModel::StringLiteral *literal, const Visualization::TextStyle *style) :
-	VText(parent, literal->valueNode(), style)
+VCharacterLiteral::VCharacterLiteral(Item* parent, OOModel::CharacterLiteral *literal, const Visualization::TextStyle *style) :
+	VCharacter(parent, literal->valueNode(), style)
 {
 }
 

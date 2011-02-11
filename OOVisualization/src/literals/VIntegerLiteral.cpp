@@ -1,20 +1,20 @@
 /***********************************************************************************************************************
- * VStringLiteral.cpp
+ * VIntegerLiteral.cpp
  *
- *  Created on: Feb 8, 2011
+ *  Created on: Feb 11, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "literals/VStringLiteral.h"
+#include "literals/VIntegerLiteral.h"
 
 #include "ModelBase/headers/Model.h"
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VStringLiteral)
+ITEM_COMMON_DEFINITIONS(VIntegerLiteral)
 
-VStringLiteral::VStringLiteral(Item* parent, OOModel::StringLiteral *literal, const Visualization::TextStyle *style) :
-	VText(parent, literal->valueNode(), style)
+VIntegerLiteral::VIntegerLiteral(Item* parent, OOModel::IntegerLiteral *literal, const Visualization::TextStyle *style) :
+	VInteger(parent, literal->valueNode(), style)
 {
 }
 

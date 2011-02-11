@@ -24,6 +24,10 @@
 #include "expressions/VReferenceExpression.h"
 
 #include "literals/VStringLiteral.h"
+#include "literals/VIntegerLiteral.h"
+#include "literals/VFloatLiteral.h"
+#include "literals/VCharacterLiteral.h"
+#include "literals/VBooleanLiteral.h"
 
 #include "statements/VMethodCallStatement.h"
 

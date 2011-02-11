@@ -24,8 +24,7 @@ class VISUALIZATIONBASE_API VFloat : public TextRenderer<ModelItem>
 
 	public:
 		VFloat(Item* parent, Model::Float *node, const TextStyle *style = Styles::item<VFloat>("default"));
-
-		virtual void updateGeometry(int availableWidth, int availableHeight);
+		virtual void setText(const QString& newText);
 };
 
 }

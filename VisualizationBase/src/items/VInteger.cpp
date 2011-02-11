@@ -7,6 +7,8 @@
 
 #include "items/VInteger.h"
 
+#include "ModelBase/headers/Model.h"
+
 namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(VInteger)
@@ -14,13 +16,21 @@ ITEM_COMMON_DEFINITIONS(VInteger)
 VInteger::VInteger(Item* parent, Model::Integer *integer, const TextStyle *style) :
 	TextRenderer<ModelItem>(parent, integer, style)
 {
+	TextRenderer<ModelItem>::setText( QString::number(integer->get()) );
 }
 
-void VInteger::updateGeometry(int availableWidth, int availableHeight)
+void VInteger::setText(const QString& newText)
 {
-	Model::Integer* intNode = static_cast<Model::Integer*> (getNode());
-	TextRenderer<ModelItem>::setText( QString::number(intNode->get()) );
-	TextRenderer<ModelItem>::updateGeometry(availableWidth, availableHeight);
+	bool ok = false;
+	int value = newText.toInt(&ok);
+	if (ok)
+	{
+		Model::Integer* node = static_cast<Model::Integer*> (getNode());
+		node->model()->beginModification(node, "Set integer");
+		node->set(value);
+		node->model()->endModification();
+		TextRenderer<ModelItem>::setText(newText);
+	}
 }
 
 }

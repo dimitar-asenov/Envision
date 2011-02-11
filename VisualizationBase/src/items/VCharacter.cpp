@@ -7,6 +7,8 @@
 
 #include "items/VCharacter.h"
 
+#include "ModelBase/headers/Model.h"
+
 namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(VCharacter)
@@ -14,13 +16,19 @@ ITEM_COMMON_DEFINITIONS(VCharacter)
 VCharacter::VCharacter(Item* parent, Model::Character *node, const TextStyle *style) :
 	TextRenderer<ModelItem>(parent, node, style)
 {
+	TextRenderer<ModelItem>::setText( node->get() );
 }
 
-void VCharacter::updateGeometry(int availableWidth, int availableHeight)
+void VCharacter::setText(const QString& newText)
 {
-	Model::Character* node = static_cast<Model::Character*> (getNode());
-	TextRenderer<ModelItem>::setText( node->get() );
-	TextRenderer<ModelItem>::updateGeometry(availableWidth, availableHeight);
+	if (newText.length() == 1)
+	{
+		Model::Character* node = static_cast<Model::Character*> (getNode());
+		node->model()->beginModification(node, "Set character");
+		node->set(newText[0]);
+		node->model()->endModification();
+		TextRenderer<ModelItem>::setText(newText[0]);
+	}
 }
 
 }

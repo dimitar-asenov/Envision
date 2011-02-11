@@ -45,6 +45,10 @@ bool OOVisualization::initialize(Envision::EnvisionManager&)
 	Scene::defaultRenderer()->registerVisualization(ReferenceExpression::typeIdStatic(), createVisualization<VReferenceExpression, ReferenceExpression>);
 	Scene::defaultRenderer()->registerVisualization(VariableAccess::typeIdStatic(), createVisualization<VVariableAccess, VariableAccess>);
 	Scene::defaultRenderer()->registerVisualization(StringLiteral::typeIdStatic(), createVisualization<VStringLiteral, StringLiteral>);
+	Scene::defaultRenderer()->registerVisualization(IntegerLiteral::typeIdStatic(), createVisualization<VIntegerLiteral, IntegerLiteral>);
+	Scene::defaultRenderer()->registerVisualization(FloatLiteral::typeIdStatic(), createVisualization<VFloatLiteral, FloatLiteral>);
+	Scene::defaultRenderer()->registerVisualization(CharacterLiteral::typeIdStatic(), createVisualization<VCharacterLiteral, CharacterLiteral>);
+	Scene::defaultRenderer()->registerVisualization(BooleanLiteral::typeIdStatic(), createVisualization<VBooleanLiteral, BooleanLiteral>);
 	Scene::defaultRenderer()->registerVisualization(MethodCallStatement::typeIdStatic(), createVisualization<VMethodCallStatement, MethodCallStatement>);
 	Scene::defaultRenderer()->registerVisualization(NamedType::typeIdStatic(), createVisualization<VNamedType, NamedType>);
 	Scene::defaultRenderer()->registerVisualization(PrimitiveType::typeIdStatic(), createVisualization<VPrimitiveType, PrimitiveType>);
@@ -65,6 +69,10 @@ bool OOVisualization::initialize(Envision::EnvisionManager&)
 	VReferenceExpression::setInteractionHandler(Interaction::GenericHandler::instance());
 	VVariableAccess::setInteractionHandler(Interaction::GenericHandler::instance());
 	VStringLiteral::setInteractionHandler(Interaction::HText::instance());
+	VIntegerLiteral::setInteractionHandler(Interaction::HText::instance());
+	VFloatLiteral::setInteractionHandler(Interaction::HText::instance());
+	VCharacterLiteral::setInteractionHandler(Interaction::HText::instance());
+	VBooleanLiteral::setInteractionHandler(Interaction::HText::instance());
 	VMethodCallStatement::setInteractionHandler(Interaction::GenericHandler::instance());
 
 	return true;
