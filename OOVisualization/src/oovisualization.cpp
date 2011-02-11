@@ -69,11 +69,11 @@ bool OOVisualization::initialize(Envision::EnvisionManager&)
 	MethodIcon::setInteractionHandler(Interaction::GenericHandler::instance());
 	VReferenceExpression::setInteractionHandler(Interaction::GenericHandler::instance());
 	VVariableAccess::setInteractionHandler(Interaction::GenericHandler::instance());
-	VStringLiteral::setInteractionHandler(Interaction::HText::instance());
-	VIntegerLiteral::setInteractionHandler(Interaction::HText::instance());
-	VFloatLiteral::setInteractionHandler(Interaction::HText::instance());
-	VCharacterLiteral::setInteractionHandler(Interaction::HText::instance());
-	VBooleanLiteral::setInteractionHandler(Interaction::HText::instance());
+	VStringLiteral::setInteractionHandler(Interaction::GenericHandler::instance());
+	VIntegerLiteral::setInteractionHandler(Interaction::GenericHandler::instance());
+	VFloatLiteral::setInteractionHandler(Interaction::GenericHandler::instance());
+	VCharacterLiteral::setInteractionHandler(Interaction::GenericHandler::instance());
+	VBooleanLiteral::setInteractionHandler(Interaction::GenericHandler::instance());
 	VMethodCallStatement::setInteractionHandler(Interaction::GenericHandler::instance());
 	VVariableDeclaration::setInteractionHandler(Interaction::GenericHandler::instance());
 
