@@ -10,9 +10,11 @@
 
 #include "Statement.h"
 
-#include "../FormalArgument.h"
+#include "../common/attributeMacros.h"
+#include "../types/Type.h"
 #include "../expressions/Expression.h"
 
+#include "ModelBase/headers/nodes/Text.h"
 
 namespace OOModel {
 
@@ -20,7 +22,8 @@ class OOMODEL_API VariableDeclaration: public Statement
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(VariableDeclaration)
 
-	ATTRIBUTE(FormalArgument, var, setVar);
+	ATTRIBUTE_OOP_NAME
+	ATTRIBUTE(Type, type, setType)
 	ATTRIBUTE(Expression, initialValue, setInitialValue);
 };
 
