@@ -111,6 +111,15 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	factorial->arguments()->append<FormalArgument>()->setType<PrimitiveType>()->setType(PrimitiveType::INT);
 	factorial->arguments()->at(0)->setName("x");
 
+	VariableDeclaration* var1 = factorial->items()->append<VariableDeclaration>();
+	var1->setName("var1");
+	var1->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+
+	VariableDeclaration* var2 = factorial->items()->append<VariableDeclaration>();
+	var2->setName("var2");
+	var2->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+	var2->setInitialValue<IntegerLiteral>()->setValue(42);
+
 	// set positions
 	factorial->extension<Position>()->setY(100);
 	java->extension<Position>()->setX(160);

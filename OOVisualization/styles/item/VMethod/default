@@ -32,6 +32,7 @@
 	<content prototypes="item/VList/default">
 		<shape />
 		<itemsStyle prototypes="layout/SequentialLayout/default">
+			<alignment>1</alignment>
 			<direction>2</direction>
 			<spaceBetweenElements>0</spaceBetweenElements>
 		</itemsStyle>

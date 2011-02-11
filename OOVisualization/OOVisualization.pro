@@ -31,7 +31,9 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/literals/VBooleanLiteral.h \
+HEADERS += headers/statements/VVariableDeclarationStyle.h \
+    headers/statements/VVariableDeclaration.h \
+    headers/literals/VBooleanLiteral.h \
     headers/literals/VCharacterLiteral.h \
     headers/literals/VFloatLiteral.h \
     headers/literals/VIntegerLiteral.h \
@@ -68,7 +70,9 @@ HEADERS += headers/literals/VBooleanLiteral.h \
     headers/OOVisualizationException.h \
     headers/oovisualization_api.h \
     src/oovisualization.h
-SOURCES += src/literals/VBooleanLiteral.cpp \
+SOURCES += src/statements/VVariableDeclaration.cpp \
+    src/statements/VVariableDeclarationStyle.cpp \
+    src/literals/VBooleanLiteral.cpp \
     src/literals/VCharacterLiteral.cpp \
     src/literals/VFloatLiteral.cpp \
     src/literals/VIntegerLiteral.cpp \

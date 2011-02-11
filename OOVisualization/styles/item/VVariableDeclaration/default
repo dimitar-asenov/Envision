@@ -1,0 +1,9 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/Item/default">
+	<container prototypes="layout/SequentialLayout/default">
+		<spaceBetweenElements>5</spaceBetweenElements>
+	</container>
+	<name prototypes="item/Text/default" />
+	<assignmentStyle prototypes="item/Text/default"/>
+	<assignmentSymbol>←</assignmentSymbol>
+</style>

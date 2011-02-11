@@ -30,6 +30,7 @@
 #include "literals/VBooleanLiteral.h"
 
 #include "statements/VMethodCallStatement.h"
+#include "statements/VVariableDeclaration.h"
 
 #include "types/VNamedType.h"
 #include "types/VPrimitiveType.h"
