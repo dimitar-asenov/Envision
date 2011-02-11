@@ -117,8 +117,28 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 
 	VariableDeclaration* var2 = factorial->items()->append<VariableDeclaration>();
 	var2->setName("var2");
-	var2->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+	var2->setType<PrimitiveType>()->setType(PrimitiveType::LONG);
 	var2->setInitialValue<IntegerLiteral>()->setValue(42);
+
+	VariableDeclaration* var3 = factorial->items()->append<VariableDeclaration>();
+	var3->setName("var3");
+	var3->setType<PrimitiveType>()->setType(PrimitiveType::BOOLEAN);
+	var3->setInitialValue<BooleanLiteral>()->setValue(true);
+
+	VariableDeclaration* var4 = factorial->items()->append<VariableDeclaration>();
+	var4->setName("var4");
+	var4->setType<PrimitiveType>()->setType(PrimitiveType::CHAR);
+	var4->setInitialValue<CharacterLiteral>()->setValue('r');
+
+	VariableDeclaration* var5 = factorial->items()->append<VariableDeclaration>();
+	var5->setName("var5");
+	var5->setType<PrimitiveType>()->setType(PrimitiveType::DOUBLE);
+	var5->setInitialValue<FloatLiteral>()->setValue(123.112311096123);
+
+	VariableDeclaration* var6 = factorial->items()->append<VariableDeclaration>();
+	var6->setName("var6");
+	var6->setType<PrimitiveType>()->setType(PrimitiveType::UNSIGNED_LONG);
+	var6->setInitialValue<IntegerLiteral>()->setValue(1000);
 
 	// set positions
 	factorial->extension<Position>()->setY(100);
