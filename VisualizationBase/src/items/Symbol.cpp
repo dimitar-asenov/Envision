@@ -1,27 +1,26 @@
 /***********************************************************************************************************************
- * Text.cpp
+ * Symbol.cpp
  *
- *  Created on: Dec 14, 2010
+ *  Created on: Feb 11, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "items/Text.h"
+#include "items/Symbol.h"
 
 #include "Styles.h"
 
 namespace Visualization {
-ITEM_COMMON_DEFINITIONS(Text)
+ITEM_COMMON_DEFINITIONS(Symbol)
 
-Text::Text(Item* parent, const QString& text) :
-	TextRenderer<Item>(parent, Styles::item<Text>("darkGrey"), text)
+Symbol::Symbol(Item* parent, const SymbolStyle *style) :
+	TextRenderer<Item>(parent, style, style->symbol())
 {
 	setEditable(false);
 }
 
-Text::Text(Item* parent, const TextStyle *style, const QString& text) :
-	TextRenderer<Item>(parent, style, text)
+bool Symbol::setText(const QString&)
 {
-	setEditable(false);
+	return false;
 }
 
 }

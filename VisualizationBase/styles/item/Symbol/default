@@ -1,0 +1,7 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="../Text/default">
+	<font>
+		<weight>50</weight>
+	</font>
+	<symbol>.</symbol>
+</style>
