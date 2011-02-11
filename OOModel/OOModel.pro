@@ -26,7 +26,9 @@ pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
-HEADERS += headers/Library.h \
+HEADERS += headers/FormalResult.h \
+    headers/allOOModelNodes.h \
+    headers/Library.h \
     headers/TypedListInstantiations.h \
     headers/statements/AssignmentStatement.h \
     headers/expressions/ReferenceExpression.h \
@@ -72,7 +74,8 @@ HEADERS += headers/Library.h \
     headers/Module.h \
     headers/oomodel_api.h \
     src/oomodel.h
-SOURCES += src/Library.cpp \
+SOURCES += src/FormalResult.cpp \
+    src/Library.cpp \
     src/statements/AssignmentStatement.cpp \
     src/expressions/ReferenceExpression.cpp \
     src/expressions/MethodCallExpression.cpp \

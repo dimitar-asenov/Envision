@@ -20,7 +20,7 @@ class OOMODEL_API PrimitiveType : public Type
 	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, val, setVal, int);
 
 	public:
-		enum PrimitiveTypes {INT, LONG, FLOAT, DOUBLE, BOOLEAN, CHAR, VOID};
+		enum PrimitiveTypes {INT, LONG, UNSIGNED_INT, UNSIGNED_LONG, FLOAT, DOUBLE, BOOLEAN, CHAR, VOID};
 
 		PrimitiveTypes type() const;
 		void setType(const PrimitiveTypes& type);

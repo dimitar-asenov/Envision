@@ -15,7 +15,7 @@ EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(Method, Model::ExtendableNode)
 REGISTER_ATTRIBUTE(Method, name, Text, false, false, true)
 REGISTER_ATTRIBUTE(Method, items, TypedListOfMethodItem, false, false, true)
 REGISTER_ATTRIBUTE(Method, arguments, TypedListOfFormalArgument, false, false, true)
-REGISTER_ATTRIBUTE(Method, results, TypedListOfFormalArgument, false, false, true)
+REGISTER_ATTRIBUTE(Method, results, TypedListOfFormalResult, false, false, true)
 REGISTER_ATTRIBUTE(Method, visibility, Visibility, false, false, true)
 REGISTER_ATTRIBUTE(Method, stat, Static, false, false, true)
 

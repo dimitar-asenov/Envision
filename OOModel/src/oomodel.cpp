@@ -6,53 +6,9 @@
  **********************************************************************************************************************/
 
 #include "oomodel.h"
+#include "allOOModelNodes.h"
+
 #include "SelfTest/headers/SelfTestSuite.h"
-
-#include "common/Visibility.h"
-#include "common/Static.h"
-
-#include "Project.h"
-#include "Library.h"
-#include "Module.h"
-#include "Class.h"
-#include "Method.h"
-#include "MethodItem.h"
-#include "FormalArgument.h"
-#include "Field.h"
-
-#include "statements/Statement.h"
-#include "statements/Block.h"
-#include "statements/BreakStatement.h"
-#include "statements/ContinueStatement.h"
-#include "statements/ForEachStatement.h"
-#include "statements/IfStatement.h"
-#include "statements/LoopStatement.h"
-#include "statements/ReturnStatement.h"
-#include "statements/SwitchCase.h"
-#include "statements/SwitchStatement.h"
-#include "statements/VariableDeclaration.h"
-#include "statements/MethodCallStatement.h"
-#include "statements/AssignmentStatement.h"
-
-#include "expressions/Expression.h"
-#include "expressions/IntegerLiteral.h"
-#include "expressions/FloatLiteral.h"
-#include "expressions/StringLiteral.h"
-#include "expressions/BooleanLiteral.h"
-#include "expressions/CharacterLiteral.h"
-#include "expressions/NullLiteral.h"
-#include "expressions/ThisExpression.h"
-#include "expressions/VariableAccess.h"
-#include "expressions/NewExpression.h"
-#include "expressions/MethodCallExpression.h"
-#include "expressions/UnaryOperation.h"
-#include "expressions/BinaryOperation.h"
-#include "expressions/CastExpression.h"
-#include "expressions/ReferenceExpression.h"
-
-#include "types/Type.h"
-#include "types/PrimitiveType.h"
-#include "types/NamedType.h"
 
 Q_EXPORT_PLUGIN2( oomodel, OOModel::OOModel )
 
@@ -72,6 +28,7 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	Model::TypedList<Method>::registerNodeType();
 	Model::TypedList<MethodItem>::registerNodeType();
 	Model::TypedList<FormalArgument>::registerNodeType();
+	Model::TypedList<FormalResult>::registerNodeType();
 	Model::TypedList<Field>::registerNodeType();
 
 	Model::TypedList<Statement>::registerNodeType();
@@ -116,6 +73,7 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	Method::init();
 	MethodItem::init();
 	FormalArgument::init();
+	FormalResult::init();
 	Field::init();
 
 	Statement::init();

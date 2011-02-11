@@ -15,6 +15,7 @@
 #include "common/Static.h"
 #include "MethodItem.h"
 #include "FormalArgument.h"
+#include "FormalResult.h"
 
 #include "ModelBase/headers/nodes/Extendable/ExtendableNode.h"
 #include "ModelBase/headers/nodes/Text.h"
@@ -30,7 +31,7 @@ class OOMODEL_API Method : public Model::ExtendableNode
 	ATTRIBUTE_OOP_NAME
 	ATTRIBUTE(Model::TypedList<MethodItem>, items, setItems);
 	ATTRIBUTE(Model::TypedList<FormalArgument>, arguments, setArguments);
-	ATTRIBUTE(Model::TypedList<FormalArgument>, results, setResults);
+	ATTRIBUTE(Model::TypedList<FormalResult>, results, setResults);
 	ATTRIBUTE_OOP_VISIBILITY
 	ATTRIBUTE_OOP_STATIC
 
