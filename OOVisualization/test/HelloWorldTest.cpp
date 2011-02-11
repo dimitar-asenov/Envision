@@ -10,20 +10,7 @@
 #include "vis/VVisibility.h"
 #include "vis/VStatic.h"
 
-#include "OOModel/headers/Project.h"
-#include "OOModel/headers/Library.h"
-#include "OOModel/headers/Class.h"
-#include "OOModel/headers/Module.h"
-#include "OOModel/headers/FormalArgument.h"
-#include "OOModel/headers/Field.h"
-#include "OOModel/headers/types/NamedType.h"
-#include "OOModel/headers/expressions/StringLiteral.h"
-#include "OOModel/headers/expressions/VariableAccess.h"
-#include "OOModel/headers/expressions/ReferenceExpression.h"
-#include "OOModel/headers/statements/MethodCallStatement.h"
-#include "OOModel/headers/TypedListInstantiations.h"
-#include "OOModel/headers/common/Visibility.h"
-#include "OOModel/headers/common/Static.h"
+#include "OOModel/headers/allOOModelNodes.h"
 
 #include "VisualizationBase/headers/VisualizationManager.h"
 #include "VisualizationBase/headers/Scene.h"
@@ -117,11 +104,19 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	ref->ref()->set("class:System");
 	ref->setPrefix<ReferenceExpression>()->ref()->set("lib:Java");
 
+	// Add a second method
+	Method* factorial = hello->methods()->append<Method>();
+	factorial->setName("factorial");
+	factorial->results()->append<FormalResult>()->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+	factorial->arguments()->append<FormalArgument>()->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+	factorial->arguments()->at(0)->setName("x");
+
 	// set positions
-	java->extension<Position>()->setX(150);
+	factorial->extension<Position>()->setY(100);
+	java->extension<Position>()->setX(160);
 	java->extension<Position>()->setY(100);
 	string->extension<Position>()->setY(100);
-	io->extension<Position>()->setX(250);
+	io->extension<Position>()->setX(240);
 
 	model->endModification();
 	CHECK_INT_EQUAL(150, java->extension<Position>()->x());

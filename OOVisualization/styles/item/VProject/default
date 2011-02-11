@@ -2,6 +2,15 @@
 <style prototypes="item/Item/default">
 	<shape prototypes="shape/Box/default">
 		Box
+		<outline>
+			<width>4</width>
+			<color>
+				<alpha>255</alpha>
+				<red>60</red>
+				<green>60</green>
+				<blue>60</blue>
+			</color>
+		</outline>
 		<backgroundBrush>
 			<gradient>
 				<stopPoints>
@@ -18,9 +27,6 @@
 			</gradient>
 		</backgroundBrush>
 		<cornerRadius>10</cornerRadius>
-		<shadowBrush>
-			<style>1</style>
-		</shadowBrush>
 	</shape>
 	<border prototypes="layout/PanelBorderLayout/default" />
 	<header prototypes="layout/SequentialLayout/default" />
