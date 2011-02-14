@@ -31,7 +31,9 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/expressions/VThisExpression.h \
+HEADERS += headers/expressions/VCastExpressionStyle.h \
+    headers/expressions/VCastExpression.h \
+    headers/expressions/VThisExpression.h \
     headers/expressions/VMethodCallExpressionStyle.h \
     headers/expressions/VMethodCallExpression.h \
     headers/literals/VNullLiteral.h \
@@ -74,7 +76,9 @@ HEADERS += headers/expressions/VThisExpression.h \
     headers/OOVisualizationException.h \
     headers/oovisualization_api.h \
     src/oovisualization.h
-SOURCES += src/expressions/VThisExpression.cpp \
+SOURCES += src/expressions/VCastExpression.cpp \
+    src/expressions/VCastExpressionStyle.cpp \
+    src/expressions/VThisExpression.cpp \
     src/expressions/VMethodCallExpression.cpp \
     src/literals/VNullLiteral.cpp \
     src/statements/VVariableDeclaration.cpp \
