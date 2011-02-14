@@ -1,15 +1,15 @@
 /***********************************************************************************************************************
- * VMethodCallStatement.h
+ * VMethodCallExpression.h
  *
- *  Created on: Feb 8, 2011
+ *  Created on: Feb 14, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef VMETHODCALLSTATEMENT_H_
-#define VMETHODCALLSTATEMENT_H_
+#ifndef VMETHODCALLEXPRESSION_H_
+#define VMETHODCALLEXPRESSION_H_
 
 #include "../oovisualization_api.h"
-#include "VMethodCallStatementStyle.h"
+#include "VMethodCallExpressionStyle.h"
 
 #include "VisualizationBase/headers/items/ModelItem.h"
 #include "VisualizationBase/headers/Styles.h"
@@ -22,18 +22,18 @@ namespace Visualization {
 }
 
 namespace OOModel {
-	class MethodCallStatement;
+	class MethodCallExpression;
 }
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VMethodCallStatement : public Visualization::ModelItem
+class OOVISUALIZATION_API VMethodCallExpression : public Visualization::ModelItem
 {
-	ITEM_COMMON(VMethodCallStatement, Visualization::ModelItem)
+	ITEM_COMMON(VMethodCallExpression, Visualization::ModelItem)
 
 	public:
-		VMethodCallStatement(Item* parent, OOModel::MethodCallStatement* node, const VMethodCallStatementStyle* style = Visualization::Styles::item<VMethodCallStatement>("default"));
-		virtual ~VMethodCallStatement();
+		VMethodCallExpression(Item* parent, OOModel::MethodCallExpression* node, const VMethodCallExpressionStyle* style = Visualization::Styles::item<VMethodCallExpression>("default"));
+		virtual ~VMethodCallExpression();
 
 		virtual bool focusChild(FocusTarget location);
 
@@ -51,4 +51,4 @@ class OOVISUALIZATION_API VMethodCallStatement : public Visualization::ModelItem
 
 }
 
-#endif /* VMETHODCALLSTATEMENT_H_ */
+#endif /* VMETHODCALLEXPRESSION_H_ */

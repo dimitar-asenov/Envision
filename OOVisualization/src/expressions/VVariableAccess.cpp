@@ -11,6 +11,7 @@
 
 #include "VisualizationBase/headers/layouts/SequentialLayout.h"
 #include "VisualizationBase/headers/items/Text.h"
+#include "VisualizationBase/headers/items/Symbol.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -56,10 +57,9 @@ void VVariableAccess::determineChildren()
 		if (!prefix_)
 		{
 			prefix_ = renderer()->render(NULL,node->prefix());
-			separator_ = new Text(NULL);
+			separator_ = new Symbol(NULL, &style()->separator());
 			container_->prepend(separator_);
 			container_->prepend(prefix_);
-			separator_->setText(".");
 		}
 	}
 	else

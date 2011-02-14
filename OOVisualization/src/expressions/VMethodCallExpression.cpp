@@ -1,13 +1,13 @@
 /***********************************************************************************************************************
- * VMethodCallStatement.cpp
+ * VMethodCallExpression.cpp
  *
- *  Created on: Feb 8, 2011
+ *  Created on: Feb 14, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "statements/VMethodCallStatement.h"
+#include "expressions/VMethodCallExpression.h"
 
-#include "OOModel/headers/statements/MethodCallStatement.h"
+#include "OOModel/headers/expressions/MethodCallExpression.h"
 
 #include "VisualizationBase/headers/layouts/SequentialLayout.h"
 #include "VisualizationBase/headers/items/Text.h"
@@ -19,9 +19,9 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VMethodCallStatement)
+ITEM_COMMON_DEFINITIONS(VMethodCallExpression)
 
-VMethodCallStatement::VMethodCallStatement(Item* parent, MethodCallStatement* node, const VMethodCallStatementStyle* style) :
+VMethodCallExpression::VMethodCallExpression(Item* parent, MethodCallExpression* node, const VMethodCallExpressionStyle* style) :
 	ModelItem(parent, node, style),
 	container_( new SequentialLayout(this, &style->container()) ),
 	name_(new Text(NULL, &style->name()) ),
@@ -33,7 +33,7 @@ VMethodCallStatement::VMethodCallStatement(Item* parent, MethodCallStatement* no
 	container_->append(arguments_);
 }
 
-VMethodCallStatement::~VMethodCallStatement()
+VMethodCallExpression::~VMethodCallExpression()
 {
 	SAFE_DELETE_ITEM(container_);
 
@@ -44,9 +44,9 @@ VMethodCallStatement::~VMethodCallStatement()
 	arguments_ = NULL;
 }
 
-void VMethodCallStatement::determineChildren()
+void VMethodCallExpression::determineChildren()
 {
-	MethodCallStatement* node = static_cast<MethodCallStatement*> (getNode());
+	MethodCallExpression* node = static_cast<MethodCallExpression*> (getNode());
 
 	bool newHasPrefix = node->prefix() != NULL;
 
@@ -90,12 +90,12 @@ void VMethodCallStatement::determineChildren()
 	name_->setText(node->ref()->path().split(',').last().split(':').last());
 }
 
-void VMethodCallStatement::updateGeometry(int availableWidth, int availableHeight)
+void VMethodCallExpression::updateGeometry(int availableWidth, int availableHeight)
 {
 	Item::updateGeometry(container_, availableWidth, availableHeight);
 }
 
-bool VMethodCallStatement::focusChild(FocusTarget location)
+bool VMethodCallExpression::focusChild(FocusTarget location)
 {
 	return container_->focusChild(location);
 }

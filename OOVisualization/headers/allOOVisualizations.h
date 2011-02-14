@@ -21,6 +21,7 @@
 #include "icons/MethodIcon.h"
 
 #include "expressions/VVariableAccess.h"
+#include "expressions/VMethodCallExpression.h"
 #include "expressions/VReferenceExpression.h"
 
 #include "literals/VStringLiteral.h"

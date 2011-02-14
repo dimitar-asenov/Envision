@@ -16,6 +16,7 @@
 
 namespace Visualization {
 	class Text;
+	class Symbol;
 	class SequentialLayout;
 }
 
@@ -42,7 +43,7 @@ class OOVISUALIZATION_API VReferenceExpression : public Visualization::ModelItem
 	private:
 		Visualization::SequentialLayout* container_;
 		Visualization::Text* name_;
-		Visualization::Text* separator_;
+		Visualization::Symbol* separator_;
 		Visualization::ModelItem* prefix_;
 };
 

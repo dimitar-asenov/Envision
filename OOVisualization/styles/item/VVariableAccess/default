@@ -3,5 +3,5 @@
 	<shape />
 	<container prototypes="layout/SequentialLayout/default" />
 	<name prototypes="item/Text/default" />
-	<separator prototypes="item/Text/default" />
+	<separator prototypes="item/Symbol/default" />
 </style>
