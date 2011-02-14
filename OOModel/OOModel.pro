@@ -74,7 +74,8 @@ HEADERS += headers/FormalResult.h \
     headers/Module.h \
     headers/oomodel_api.h \
     src/oomodel.h
-SOURCES += src/FormalResult.cpp \
+SOURCES += src/expressions/UnaryOperation.cpp \
+    src/FormalResult.cpp \
     src/Library.cpp \
     src/statements/AssignmentStatement.cpp \
     src/expressions/ReferenceExpression.cpp \
@@ -96,7 +97,6 @@ SOURCES += src/FormalResult.cpp \
     src/statements/Block.cpp \
     src/expressions/CastExpression.cpp \
     src/expressions/BinaryOperation.cpp \
-    headers/expressions/UnaryOperation.cpp \
     src/types/NamedType.cpp \
     src/types/PrimitiveType.cpp \
     src/types/Type.cpp \
