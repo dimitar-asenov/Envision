@@ -138,15 +138,15 @@ void Box::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 
 	qreal outlineWidth = style()->outline().width();
 	// Move the figure when using antialiasing. The outline will start at a pixel boundary. This makes it sharper.
-	if ( painter->testRenderHint(QPainter::Antialiasing) || painter->testRenderHint(QPainter::HighQualityAntialiasing) ) if ( style()->outline()
-			!= Qt::NoPen )
-	{
-		qreal intPart;
-		qreal fracPart = std::modf(outlineWidth / 2.0, &intPart);
+	if ( painter->testRenderHint(QPainter::Antialiasing) || painter->testRenderHint(QPainter::HighQualityAntialiasing) )
+		if ( style()->outline().style() != Qt::NoPen)
+		{
+			qreal intPart;
+			qreal fracPart = std::modf(outlineWidth / 2.0, &intPart);
 
-		x += fracPart;
-		y += fracPart;
-	}
+			x += fracPart;
+			y += fracPart;
+		}
 
 	// Draw shadow
 	if ( style()->shadow() != Qt::NoBrush )
