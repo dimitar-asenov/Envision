@@ -26,6 +26,7 @@
 #include "expressions/VThisExpression.h"
 #include "expressions/VCastExpression.h"
 #include "expressions/VNewExpression.h"
+#include "expressions/VUnaryOperation.h"
 
 #include "literals/VStringLiteral.h"
 #include "literals/VIntegerLiteral.h"

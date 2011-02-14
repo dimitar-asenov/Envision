@@ -174,6 +174,13 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	newExpr->setType<PrimitiveType>()->setType(PrimitiveType::INT);
 	newExpr->setAmount<VariableAccess>()->ref()->set("local:var2");
 
+	VariableDeclaration* var13 = factorial->items()->append<VariableDeclaration>();
+	var13->setName("var13");
+	var13->setType<PrimitiveType>()->setType(PrimitiveType::BOOLEAN);
+	UnaryOperation* uOp = var13->setInitialValue<UnaryOperation>();
+	uOp->setOp(UnaryOperation::NOT);
+	uOp->setOperand<BooleanLiteral>()->setValue(false);
+
 	// set positions
 	factorial->extension<Position>()->setY(100);
 	java->extension<Position>()->setX(160);
