@@ -48,6 +48,7 @@ bool OOVisualization::initialize(Envision::EnvisionManager&)
 	Scene::defaultRenderer()->registerVisualization(CastExpression::typeIdStatic(), createVisualization<VCastExpression, CastExpression>);
 	Scene::defaultRenderer()->registerVisualization(NewExpression::typeIdStatic(), createVisualization<VNewExpression, NewExpression>);
 	Scene::defaultRenderer()->registerVisualization(UnaryOperation::typeIdStatic(), createVisualization<VUnaryOperation, UnaryOperation>);
+	Scene::defaultRenderer()->registerVisualization(BinaryOperation::typeIdStatic(), createVisualization<VBinaryOperation, BinaryOperation>);
 	Scene::defaultRenderer()->registerVisualization(ThisExpression::typeIdStatic(), createVisualization<VThisExpression, ThisExpression>);
 	Scene::defaultRenderer()->registerVisualization(StringLiteral::typeIdStatic(), createVisualization<VStringLiteral, StringLiteral>);
 	Scene::defaultRenderer()->registerVisualization(IntegerLiteral::typeIdStatic(), createVisualization<VIntegerLiteral, IntegerLiteral>);
@@ -80,6 +81,7 @@ bool OOVisualization::initialize(Envision::EnvisionManager&)
 	VCastExpression::setInteractionHandler(Interaction::GenericHandler::instance());
 	VNewExpression::setInteractionHandler(Interaction::GenericHandler::instance());
 	VUnaryOperation::setInteractionHandler(Interaction::GenericHandler::instance());
+	VBinaryOperation::setInteractionHandler(Interaction::GenericHandler::instance());
 	VStringLiteral::setInteractionHandler(Interaction::GenericHandler::instance());
 	VIntegerLiteral::setInteractionHandler(Interaction::GenericHandler::instance());
 	VFloatLiteral::setInteractionHandler(Interaction::GenericHandler::instance());

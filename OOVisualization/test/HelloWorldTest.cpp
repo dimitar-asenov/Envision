@@ -177,9 +177,32 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	VariableDeclaration* var13 = factorial->items()->append<VariableDeclaration>();
 	var13->setName("var13");
 	var13->setType<PrimitiveType>()->setType(PrimitiveType::BOOLEAN);
-	UnaryOperation* uOp = var13->setInitialValue<UnaryOperation>();
-	uOp->setOp(UnaryOperation::NOT);
-	uOp->setOperand<BooleanLiteral>()->setValue(false);
+	UnaryOperation* uOp1 = var13->setInitialValue<UnaryOperation>();
+	uOp1->setOp(UnaryOperation::NOT);
+	uOp1->setOperand<BooleanLiteral>()->setValue(false);
+
+	VariableDeclaration* var14 = factorial->items()->append<VariableDeclaration>();
+	var14->setName("var14");
+	var14->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+	UnaryOperation* uOp2 = var14->setInitialValue<UnaryOperation>();
+	uOp2->setOp(UnaryOperation::INCREMENT);
+	uOp2->setOperand<IntegerLiteral>()->setValue(10);
+
+	VariableDeclaration* var15 = factorial->items()->append<VariableDeclaration>();
+	var15->setName("var15");
+	var15->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+	BinaryOperation* binOp1 = var15->setInitialValue<BinaryOperation>();
+	binOp1->setOp(BinaryOperation::PLUS);
+	binOp1->setLeft<IntegerLiteral>()->setValue(41);
+	binOp1->setRight<IntegerLiteral>()->setValue(1);
+
+	VariableDeclaration* var16 = factorial->items()->append<VariableDeclaration>();
+	var16->setName("var16");
+	var16->setType<PrimitiveType>()->setType(PrimitiveType::BOOLEAN);
+	BinaryOperation* binOp2 = var16->setInitialValue<BinaryOperation>();
+	binOp2->setOp(BinaryOperation::LESS_EQUALS);
+	binOp2->setLeft<IntegerLiteral>()->setValue(41);
+	binOp2->setRight<IntegerLiteral>()->setValue(1);
 
 	// set positions
 	factorial->extension<Position>()->setY(100);
