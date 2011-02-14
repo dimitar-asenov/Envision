@@ -150,6 +150,11 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	var8->setType<PrimitiveType>()->setType(PrimitiveType::INT);
 	var8->setInitialValue<MethodCallExpression>()->ref()->set("met:getId");
 
+	VariableDeclaration* var9 = factorial->items()->append<VariableDeclaration>();
+	var9->setName("var9");
+	var9->setType<PrimitiveType>()->setType(PrimitiveType::VOID);
+	var9->setInitialValue<ThisExpression>();
+
 	// set positions
 	factorial->extension<Position>()->setY(100);
 	java->extension<Position>()->setX(160);

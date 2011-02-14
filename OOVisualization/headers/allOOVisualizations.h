@@ -23,6 +23,7 @@
 #include "expressions/VVariableAccess.h"
 #include "expressions/VMethodCallExpression.h"
 #include "expressions/VReferenceExpression.h"
+#include "expressions/VThisExpression.h"
 
 #include "literals/VStringLiteral.h"
 #include "literals/VIntegerLiteral.h"
