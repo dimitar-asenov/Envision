@@ -18,7 +18,7 @@ SymbolStyle* SymbolStyle::getDefault()
 
 void SymbolStyle::load()
 {
-	ItemStyle::load();
+	TextStyle::load();
 
 	Styles::load("symbol", symbol_);
 }
