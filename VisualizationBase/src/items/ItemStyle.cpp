@@ -12,10 +12,9 @@
 
 namespace Visualization {
 
-ItemStyle::ItemStyle()
+ItemStyle::ItemStyle() :
+	shapeStyle_(NULL)
 {
-	// TODO Auto-generated constructor stub
-
 }
 
 ItemStyle::~ItemStyle()
