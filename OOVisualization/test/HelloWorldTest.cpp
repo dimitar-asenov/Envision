@@ -162,6 +162,18 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	cast->setType<PrimitiveType>()->setType(PrimitiveType::INT);
 	cast->setExpr<StringLiteral>()->setValue("five");
 
+	VariableDeclaration* var11 = factorial->items()->append<VariableDeclaration>();
+	var11->setName("var11");
+	var11->setType<PrimitiveType>()->setType(PrimitiveType::VOID);
+	var11->setInitialValue<NewExpression>()->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+
+	VariableDeclaration* var12 = factorial->items()->append<VariableDeclaration>();
+	var12->setName("var12");
+	var12->setType<PrimitiveType>()->setType(PrimitiveType::VOID);
+	NewExpression* newExpr = var12->setInitialValue<NewExpression>();
+	newExpr->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+	newExpr->setAmount<VariableAccess>()->ref()->set("local:var2");
+
 	// set positions
 	factorial->extension<Position>()->setY(100);
 	java->extension<Position>()->setX(160);

@@ -1,0 +1,31 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/Item/default">
+	<container prototypes="layout/SequentialLayout/default">
+		<shape prototypes="shape/Box/default">
+			Box
+			<backgroundBrush>
+				<style>1</style>
+				<color>
+					<alpha>255</alpha>
+					<red>200</red>
+					<green>255</green>
+					<blue>200</blue>
+				</color>
+			</backgroundBrush>
+			<outline>
+				<style>0</style>
+			</outline>
+			<cornerRadius>2</cornerRadius>
+			<cornerType>2</cornerType>
+		</shape>
+	</container>
+	<newSymbol prototypes="item/Symbol/default">
+		<font>
+			<weight>75</weight>
+		</font>
+		<symbol>new</symbol>
+	</newSymbol>
+	<amountSymbol prototypes="item/Symbol/default">
+		<symbol>#</symbol>
+	</amountSymbol>
+</style>

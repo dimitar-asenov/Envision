@@ -25,6 +25,7 @@
 #include "expressions/VReferenceExpression.h"
 #include "expressions/VThisExpression.h"
 #include "expressions/VCastExpression.h"
+#include "expressions/VNewExpression.h"
 
 #include "literals/VStringLiteral.h"
 #include "literals/VIntegerLiteral.h"

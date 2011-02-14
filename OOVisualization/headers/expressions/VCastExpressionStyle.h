@@ -10,7 +10,6 @@
 
 #include "../oovisualization_api.h"
 
-#include "VisualizationBase/headers/items/TextStyle.h"
 #include "VisualizationBase/headers/items/SymbolStyle.h"
 #include "VisualizationBase/headers/layouts/SequentialLayout.h"
 
