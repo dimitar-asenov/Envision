@@ -1,0 +1,42 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/Item/default">
+	<operators>
+		<length>12</length>
+		<e0 prototypes="default.operand">
+			<inSymbol><symbol>←</symbol></inSymbol>
+		</e0>
+		<e1 prototypes="default.operand">
+			<inSymbol><symbol>←+</symbol></inSymbol>
+		</e1>
+		<e2 prototypes="default.operand">
+			<inSymbol><symbol>←-</symbol></inSymbol>
+		</e2>
+		<e3 prototypes="default.operand">
+			<inSymbol><symbol>←*</symbol></inSymbol>
+		</e3>
+		<e4 prototypes="default.operand">
+			<inSymbol><symbol>←/</symbol></inSymbol>
+		</e4>
+		<e5 prototypes="default.operand">
+			<inSymbol><symbol>←∧</symbol></inSymbol>
+		</e5>
+		<e6 prototypes="default.operand">
+			<inSymbol><symbol>←∨</symbol></inSymbol>
+		</e6>
+		<e7 prototypes="default.operand">
+			<inSymbol><symbol>←⊻</symbol></inSymbol>
+		</e7>
+		<e8 prototypes="default.operand">
+			<inSymbol><symbol>←%</symbol></inSymbol>
+		</e8>
+		<e9 prototypes="default.operand">
+			<inSymbol><symbol>←&lt;&lt;</symbol></inSymbol>
+		</e9>
+		<e10 prototypes="default.operand">
+			<inSymbol><symbol>←&gt;&gt;</symbol></inSymbol>
+		</e10>
+		<e11 prototypes="default.operand">
+			<inSymbol><symbol>←&gt;&gt;&gt;</symbol></inSymbol>
+		</e11>
+	</operators>
+</style>

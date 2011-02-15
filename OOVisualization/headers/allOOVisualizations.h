@@ -38,6 +38,7 @@
 
 #include "statements/VMethodCallStatement.h"
 #include "statements/VVariableDeclaration.h"
+#include "statements/VAssignmentStatement.h"
 
 #include "types/VNamedType.h"
 #include "types/VPrimitiveType.h"
