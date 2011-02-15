@@ -54,35 +54,35 @@ void VBinaryOperation::determineChildren()
 		container_->append(right_);
 	}
 
-	// Remove the prefix, infix and postfix symbols
-	if (pre_)
+	// Remove the prefix, infix and postfix symbols if they are not there any more
+	if (in_ && style()->op( node->op() ).inSymbol().symbol().isEmpty() )
+	{
+		container_->remove( (pre_?2:1) );
+		in_ = NULL;
+	}
+	if (pre_ && style()->op( node->op() ).preSymbol().symbol().isEmpty())
 	{
 		container_->remove(0);
 		pre_ = NULL;
 	}
-	if (in_)
+	if (post_ && style()->op( node->op() ).postSymbol().symbol().isEmpty() )
 	{
-		container_->remove(1);
-		in_ = NULL;
-	}
-	if (post_)
-	{
-		container_->remove(2);
+		container_->remove(container_->length()-1);
 		post_ = NULL;
 	}
 
-	// Rebuild the prefix, infix and postfix symbols
-	if (! style()->op( node->op() ).inSymbol().symbol().isEmpty() )
+	// Rebuild the prefix, infix and postfix symbols if needed
+	if (!in_ && !style()->op( node->op() ).inSymbol().symbol().isEmpty() )
 	{
 		in_ = new Symbol(NULL, &style()->op( node->op() ).inSymbol());
-		container_->insert(in_, 1);
+		container_->insert(in_, (pre_?2:1) );
 	}
-	if (! style()->op( node->op() ).preSymbol().symbol().isEmpty() )
+	if (!pre_ && !style()->op( node->op() ).preSymbol().symbol().isEmpty() )
 	{
 		pre_ = new Symbol(NULL, &style()->op( node->op() ).preSymbol());
 		container_->prepend(pre_);
 	}
-	if (! style()->op( node->op() ).postSymbol().symbol().isEmpty() )
+	if (!post_ && !style()->op( node->op() ).postSymbol().symbol().isEmpty() )
 	{
 		post_ = new Symbol(NULL, &style()->op( node->op() ).postSymbol());
 		container_->append(post_);
