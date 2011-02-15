@@ -40,6 +40,7 @@
 #include "statements/VVariableDeclaration.h"
 #include "statements/VAssignmentStatement.h"
 #include "statements/VBlock.h"
+#include "statements/VReturnStatement.h"
 
 #include "types/VNamedType.h"
 #include "types/VPrimitiveType.h"

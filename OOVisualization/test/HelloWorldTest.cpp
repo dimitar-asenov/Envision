@@ -210,6 +210,8 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	assign->setLeft<VariableAccess>()->ref()->set("local:var1");
 	assign->setRight<IntegerLiteral>()->setValue(84);
 
+	factorial->items()->append<ReturnStatement>()->values()->append<IntegerLiteral>()->setValue(24);
+
 	// set positions
 	factorial->extension<Position>()->setY(100);
 	java->extension<Position>()->setX(160);

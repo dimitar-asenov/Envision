@@ -1,0 +1,24 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/Item/default">
+	<shape prototypes="shape/Box/default">
+		Box
+		<backgroundBrush>
+			<style>1</style>
+			<color>
+				<alpha>255</alpha>
+				<red>255</red>
+				<green>128</green>
+				<blue>128</blue>
+			</color>
+		</backgroundBrush>
+	</shape>
+	<container prototypes="layout/SequentialLayout/default">
+		<spaceBetweenElements>5</spaceBetweenElements>
+	</container>
+	<symbol prototypes="item/Symbol/default">
+		<symbol>⏎</symbol>
+	</symbol>
+	<values prototypes="item/VList/default">
+		<shape/>
+	</values>
+</style>

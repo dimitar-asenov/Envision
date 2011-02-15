@@ -20,7 +20,7 @@ ITEM_COMMON_DEFINITIONS(VBlock)
 
 VBlock::VBlock(Item* parent, Block* node, const VBlockStyle* style) :
 	ModelItem(parent, node, style),
-	items_( NULL)
+	items_( new VList(this, node->items()) )
 {
 }
 
@@ -31,12 +31,6 @@ VBlock::~VBlock()
 
 void VBlock::determineChildren()
 {
-	if (!items_)
-	{
-		Block* node = static_cast<Block*> (getNode());
-		items_ = static_cast<Visualization::VList* > (renderer()->render(this, node->items() ));
-	}
-
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
 	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
 	//			what's the reason they are being updated.
