@@ -11,13 +11,15 @@
 #include "Statement.h"
 #include "../expressions/Expression.h"
 
+#include "ModelBase/headers/nodes/TypedList.h"
+
 namespace OOModel {
 
 class OOMODEL_API ReturnStatement: public Statement
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(ReturnStatement)
 
-	ATTRIBUTE(Expression, value, setValue);
+	ATTRIBUTE(Model::TypedList<Expression>, values, setValues);
 };
 
 }
