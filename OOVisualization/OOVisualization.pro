@@ -31,7 +31,9 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/statements/VAssignmentStatement.h \
+HEADERS += headers/statements/VBlockStyle.h \
+    headers/statements/VBlock.h \
+    headers/statements/VAssignmentStatement.h \
     headers/expressions/VBinaryOperation.h \
     headers/expressions/VUnaryOperation.h \
     headers/expressions/OperatorStyle.h \
@@ -82,7 +84,9 @@ HEADERS += headers/statements/VAssignmentStatement.h \
     headers/OOVisualizationException.h \
     headers/oovisualization_api.h \
     src/oovisualization.h
-SOURCES += src/statements/VAssignmentStatement.cpp \
+SOURCES += src/statements/VBlock.cpp \
+    src/statements/VBlockStyle.cpp \
+    src/statements/VAssignmentStatement.cpp \
     src/expressions/VBinaryOperation.cpp \
     src/expressions/VUnaryOperation.cpp \
     src/expressions/OperatorStyle.cpp \

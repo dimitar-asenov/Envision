@@ -204,7 +204,9 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	binOp2->setLeft<IntegerLiteral>()->setValue(41);
 	binOp2->setRight<IntegerLiteral>()->setValue(1);
 
-	AssignmentStatement* assign = factorial->items()->append<AssignmentStatement>();
+	Block* block = factorial->items()->append<Block>();
+
+	AssignmentStatement* assign = block->items()->append<AssignmentStatement>();
 	assign->setLeft<VariableAccess>()->ref()->set("local:var1");
 	assign->setRight<IntegerLiteral>()->setValue(84);
 

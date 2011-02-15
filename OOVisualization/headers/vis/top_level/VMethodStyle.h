@@ -37,7 +37,6 @@ class OOVISUALIZATION_API VMethodStyle : public Visualization::ItemStyle
 		Visualization::VListStyle results_;
 
 	public:
-		VMethodStyle();
 		void load();
 
 		const Visualization::PanelBorderLayoutStyle& border() const;

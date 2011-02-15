@@ -10,10 +10,6 @@
 
 namespace OOVisualization {
 
-VMethodStyle::VMethodStyle()
-{
-}
-
 VMethodStyle* VMethodStyle::getDefault()
 {
 	static VMethodStyle defaultStyle;

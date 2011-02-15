@@ -1,0 +1,57 @@
+/***********************************************************************************************************************
+ * VBlock.cpp
+ *
+ *  Created on: Feb 15, 2011
+ *      Author: Dimitar Asenov
+ **********************************************************************************************************************/
+
+#include "statements/VBlock.h"
+
+#include "OOModel/headers/statements/Block.h"
+
+#include "VisualizationBase/headers/items/VList.h"
+
+using namespace Visualization;
+using namespace OOModel;
+
+namespace OOVisualization {
+
+ITEM_COMMON_DEFINITIONS(VBlock)
+
+VBlock::VBlock(Item* parent, Block* node, const VBlockStyle* style) :
+	ModelItem(parent, node, style),
+	items_( NULL)
+{
+}
+
+VBlock::~VBlock()
+{
+	SAFE_DELETE_ITEM(items_);
+}
+
+void VBlock::determineChildren()
+{
+	if (!items_)
+	{
+		Block* node = static_cast<Block*> (getNode());
+		items_ = static_cast<Visualization::VList* > (renderer()->render(this, node->items() ));
+	}
+
+	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
+	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
+	//			what's the reason they are being updated.
+	// The style needs to be updated every time since if our own style changes, so will that of the children.
+	items_->setStyle( &style()->items() );
+}
+
+void VBlock::updateGeometry(int availableWidth, int availableHeight)
+{
+	Item::updateGeometry(items_, availableWidth, availableHeight );
+}
+
+bool VBlock::focusChild(FocusTarget location)
+{
+	return items_->focusChild(location);
+}
+
+}
