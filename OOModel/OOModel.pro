@@ -26,7 +26,8 @@ pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
-HEADERS += headers/FormalResult.h \
+HEADERS += headers/StatementItem.h \
+    headers/FormalResult.h \
     headers/allOOModelNodes.h \
     headers/Library.h \
     headers/TypedListInstantiations.h \
@@ -64,7 +65,6 @@ HEADERS += headers/FormalResult.h \
     headers/expressions/IntegerLiteral.h \
     headers/statements/Statement.h \
     headers/expressions/Expression.h \
-    headers/MethodItem.h \
     headers/Method.h \
     headers/OOModelException.h \
     headers/common/Visibility.h \
@@ -74,7 +74,8 @@ HEADERS += headers/FormalResult.h \
     headers/Module.h \
     headers/oomodel_api.h \
     src/oomodel.h
-SOURCES += src/expressions/UnaryOperation.cpp \
+SOURCES += src/StatementItem.cpp \
+    src/expressions/UnaryOperation.cpp \
     src/FormalResult.cpp \
     src/Library.cpp \
     src/statements/AssignmentStatement.cpp \
@@ -111,7 +112,6 @@ SOURCES += src/expressions/UnaryOperation.cpp \
     src/expressions/IntegerLiteral.cpp \
     src/statements/Statement.cpp \
     src/expressions/Expression.cpp \
-    src/MethodItem.cpp \
     src/Method.cpp \
     src/TypedListInstantiations.cpp \
     src/common/Visibility.cpp \

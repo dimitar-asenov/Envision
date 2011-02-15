@@ -13,7 +13,7 @@
 #include "Module.h"
 #include "Class.h"
 #include "Method.h"
-#include "MethodItem.h"
+#include "StatementItem.h"
 #include "FormalArgument.h"
 #include "FormalResult.h"
 #include "Field.h"

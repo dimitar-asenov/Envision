@@ -26,7 +26,7 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	Model::TypedList<Module>::registerNodeType();
 	Model::TypedList<Class>::registerNodeType();
 	Model::TypedList<Method>::registerNodeType();
-	Model::TypedList<MethodItem>::registerNodeType();
+	Model::TypedList<StatementItem>::registerNodeType();
 	Model::TypedList<FormalArgument>::registerNodeType();
 	Model::TypedList<FormalResult>::registerNodeType();
 	Model::TypedList<Field>::registerNodeType();
@@ -71,7 +71,7 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	Module::init();
 	Class::init();
 	Method::init();
-	MethodItem::init();
+	StatementItem::init();
 	FormalArgument::init();
 	FormalResult::init();
 	Field::init();

@@ -14,7 +14,7 @@ template class Model::TypedList<OOModel::Project>;
 template class Model::TypedList<OOModel::Library>;
 template class Model::TypedList<OOModel::Module>;
 template class Model::TypedList<OOModel::Method>;
-template class Model::TypedList<OOModel::MethodItem>;
+template class Model::TypedList<OOModel::StatementItem>;
 template class Model::TypedList<OOModel::FormalArgument>;
 template class Model::TypedList<OOModel::FormalResult>;
 template class Model::TypedList<OOModel::Field>;

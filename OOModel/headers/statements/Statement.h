@@ -9,11 +9,11 @@
 #define STATEMENT_H_
 
 #include "../oomodel_api.h"
-#include "../MethodItem.h"
+#include "../StatementItem.h"
 
 namespace OOModel {
 
-class OOMODEL_API Statement: public MethodItem
+class OOMODEL_API Statement: public StatementItem
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Statement);
 };

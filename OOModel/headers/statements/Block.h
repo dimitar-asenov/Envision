@@ -18,7 +18,7 @@ class OOMODEL_API Block: public Statement
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Block)
 
-	ATTRIBUTE(Model::TypedList<Statement>, statements, setStatements);
+	ATTRIBUTE(Model::TypedList<StatementItem>, items, setItems);
 };
 
 }
