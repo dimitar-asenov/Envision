@@ -135,11 +135,12 @@ void Styles::loadQBrush(QBrush& value)
 		Styles::load("gradient",gradient);
 		value = QBrush(gradient);
 	}
-	else
+	else if (style != Qt::NoBrush)
 	{
 		Styles::load("color", color);
 		value = QBrush(color, (Qt::BrushStyle) style);
 	}
+	else value = QBrush();
 }
 
 void Styles::loadQLinearGradient(QLinearGradient& value)
