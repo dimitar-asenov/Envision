@@ -21,6 +21,7 @@
 #include "VisualizationBase/headers/items/VExtendable.h"
 #include "VisualizationBase/headers/items/VList.h"
 #include "VisualizationBase/headers/items/Text.h"
+#include "VisualizationBase/headers/items/Symbol.h"
 #include "VisualizationBase/headers/items/VText.h"
 #include "VisualizationBase/headers/items/VInteger.h"
 #include "VisualizationBase/headers/items/VFloat.h"
@@ -51,6 +52,7 @@ bool InteractionBase::initialize(Envision::EnvisionManager&)
 	Visualization::VExtendable::setInteractionHandler(HExtendable::instance());
 	Visualization::VList::setInteractionHandler(HList::instance());
 	Visualization::Text::setInteractionHandler(HText::instance());
+	Visualization::Symbol::setInteractionHandler(HText::instance());
 	Visualization::VText::setInteractionHandler(HText::instance());
 	Visualization::VInteger::setInteractionHandler(HText::instance());
 	Visualization::VFloat::setInteractionHandler(HText::instance());
