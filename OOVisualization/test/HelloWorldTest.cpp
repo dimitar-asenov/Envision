@@ -215,7 +215,10 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	AssignmentStatement* assign = block->items()->append<AssignmentStatement>();
 	assign->setLeft<VariableAccess>()->ref()->set("local:var1");
 	assign->setOp(AssignmentStatement::ASSIGN);
-	assign->setRight<IntegerLiteral>()->setValue(84);
+	BinaryOperation* arrayAccess = assign->setRight<BinaryOperation>();
+	arrayAccess->setLeft<VariableAccess>()->ref()->set("global:someArray");
+	arrayAccess->setOp(BinaryOperation::ARRAY_INDEX);
+	arrayAccess->setRight<IntegerLiteral>()->setValue(4);
 
 	LoopStatement* loop = factorial->items()->append<LoopStatement>();
 	VariableDeclaration* initStep = loop->setInitStep<VariableDeclaration>();
