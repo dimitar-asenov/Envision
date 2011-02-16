@@ -1,0 +1,95 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/Item/default">
+	<shape prototypes="shape/Box/default">
+		Box
+		<outline>
+			<width>1</width>
+			<color>
+				<alpha>255</alpha>
+				<red>128</red>
+				<green>128</green>
+				<blue>128</blue>
+			</color>
+		</outline>
+		<backgroundBrush>
+			<gradient>
+				<stopPoints>
+					<e1>
+						<first>1.0</first>
+						<second>
+							<alpha>255</alpha>
+							<red>200</red>
+							<green>200</green>
+							<blue>255</blue>
+						</second>
+					</e1>	
+				</stopPoints>
+			</gradient>
+		</backgroundBrush>
+		<cornerRadius>4</cornerRadius>
+	</shape>
+	<layout prototypes="layout/PanelBorderLayout/default">
+		<leftInnerMargin>1</leftInnerMargin>
+		<rightInnerMargin>0</rightInnerMargin>
+		<bottomInnerMargin>0</bottomInnerMargin>
+	</layout>
+	<header prototypes="layout/SequentialLayout/default">
+		<spaceBetweenElements>5</spaceBetweenElements>
+	</header>
+	<icon prototypes="icon/SVGIcon/default">
+		<filename>styles/icon/if.svg</filename>
+		<width>30</width>
+		<height>30</height>
+	</icon>
+	<condition prototypes="layout/SequentialLayout/default">
+		<shape prototypes="shape/Box/default">
+			Box
+			<backgroundBrush>
+				<style>1</style>
+				<color>
+					<alpha>255</alpha>
+					<red>255</red>
+					<green>255</green>
+					<blue>255</blue>
+				</color>
+			</backgroundBrush>
+			<cornerRadius>2</cornerRadius>
+			<cornerType>2</cornerType>
+		</shape>
+	</condition>
+	<content prototypes="layout/SequentialLayout/default" />
+	<thenBranch prototypes="layout/SequentialLayout/default">
+		<shape prototypes="shape/Box/default">
+			Box
+			<outline><style>0</style></outline>
+			<backgroundBrush>
+				<style>1</style>
+				<color>
+					<alpha>255</alpha>
+					<red>200</red>
+					<green>255</green>
+					<blue>200</blue>
+				</color>
+			</backgroundBrush>
+			<cornerRadius>4</cornerRadius>
+			<cornerType>1</cornerType>
+		</shape>
+	</thenBranch>
+	<elseBranch prototypes="layout/SequentialLayout/default">
+		<shape prototypes="shape/Box/default">
+			Box
+			<outline><style>0</style></outline>
+			<backgroundBrush>
+				<style>1</style>
+				<color>
+					<alpha>255</alpha>
+					<red>255</red>
+					<green>200</green>
+					<blue>200</blue>
+				</color>
+			</backgroundBrush>
+			<cornerRadius>4</cornerRadius>
+			<cornerType>1</cornerType>
+		</shape>
+	</elseBranch>
+</style>

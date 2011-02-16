@@ -31,7 +31,9 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/statements/VReturnStatementStyle.h \
+HEADERS += headers/statements/VIfStatementStyle.h \
+    headers/statements/VIfStatement.h \
+    headers/statements/VReturnStatementStyle.h \
     headers/statements/VReturnStatement.h \
     headers/statements/VBlockStyle.h \
     headers/statements/VBlock.h \
@@ -86,7 +88,9 @@ HEADERS += headers/statements/VReturnStatementStyle.h \
     headers/OOVisualizationException.h \
     headers/oovisualization_api.h \
     src/oovisualization.h
-SOURCES += src/statements/VReturnStatement.cpp \
+SOURCES += src/statements/VIfStatement.cpp \
+    src/statements/VIfStatementStyle.cpp \
+    src/statements/VReturnStatement.cpp \
     src/statements/VReturnStatementStyle.cpp \
     src/statements/VBlock.cpp \
     src/statements/VBlockStyle.cpp \

@@ -204,6 +204,18 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	binOp2->setLeft<IntegerLiteral>()->setValue(41);
 	binOp2->setRight<IntegerLiteral>()->setValue(1);
 
+	IfStatement* ifs = factorial->items()->append<IfStatement>();
+	BinaryOperation* ifCond = ifs->setCondition<BinaryOperation>();
+	ifCond->setLeft<VariableAccess>()->ref()->set("local:var14");
+	ifCond->setOp(BinaryOperation::NOT_EQUALS);
+	ifCond->setRight<IntegerLiteral>()->setValue(10);
+	UnaryOperation* thenBranch = ifs->setThenBranch<UnaryOperation>();
+	thenBranch->setOp(UnaryOperation::INCREMENT);
+	thenBranch->setOperand<VariableAccess>()->ref()->set("local:var14");
+	UnaryOperation* elseBranch = ifs->setElseBranch<UnaryOperation>();
+	elseBranch->setOp(UnaryOperation::DECREMENT);
+	elseBranch->setOperand<VariableAccess>()->ref()->set("local:var14");
+
 	Block* block = factorial->items()->append<Block>();
 
 	AssignmentStatement* assign = block->items()->append<AssignmentStatement>();

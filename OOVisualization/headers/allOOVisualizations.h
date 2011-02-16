@@ -41,6 +41,7 @@
 #include "statements/VAssignmentStatement.h"
 #include "statements/VBlock.h"
 #include "statements/VReturnStatement.h"
+#include "statements/VIfStatement.h"
 
 #include "types/VNamedType.h"
 #include "types/VPrimitiveType.h"
