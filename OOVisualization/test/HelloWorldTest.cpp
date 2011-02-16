@@ -7,8 +7,6 @@
 
 #include "oovisualization.h"
 #include "SelfTest/headers/SelfTestSuite.h"
-#include "vis/VVisibility.h"
-#include "vis/VStatic.h"
 
 #include "OOModel/headers/allOOModelNodes.h"
 
@@ -35,9 +33,6 @@ namespace OOVisualization {
 TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 {
 	Scene* scene = new Scene();
-
-	scene->defaultRenderer()->registerVisualization(Visibility::typeIdStatic(), createVisualization<VVisibility, Visibility>);
-	scene->defaultRenderer()->registerVisualization(Static::typeIdStatic(), createVisualization<VStatic, Static>);
 
 	////////////////////////////////////////////////// Create Model
 	Model::Model* model = new Model::Model();
