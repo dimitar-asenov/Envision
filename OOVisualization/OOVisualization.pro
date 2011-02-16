@@ -31,7 +31,9 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/statements/VLoopStatementStyle.h \
+HEADERS += headers/statements/VForEachStatementStyle.h \
+    headers/statements/VForEachStatement.h \
+    headers/statements/VLoopStatementStyle.h \
     headers/statements/VLoopStatement.h \
     headers/elements/VField.h \
     headers/elements/VFieldStyle.h \
@@ -92,7 +94,9 @@ HEADERS += headers/statements/VLoopStatementStyle.h \
     headers/OOVisualizationException.h \
     headers/oovisualization_api.h \
     src/oovisualization.h
-SOURCES += src/statements/VLoopStatement.cpp \
+SOURCES += src/statements/VForEachStatement.cpp \
+    src/statements/VForEachStatementStyle.cpp \
+    src/statements/VLoopStatement.cpp \
     src/statements/VLoopStatementStyle.cpp \
     src/elements/VField.cpp \
     src/elements/VFieldStyle.cpp \

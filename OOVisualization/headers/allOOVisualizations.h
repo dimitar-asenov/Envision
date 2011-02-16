@@ -43,6 +43,7 @@
 #include "statements/VReturnStatement.h"
 #include "statements/VIfStatement.h"
 #include "statements/VLoopStatement.h"
+#include "statements/VForEachStatement.h"
 
 #include "types/VNamedType.h"
 #include "types/VPrimitiveType.h"

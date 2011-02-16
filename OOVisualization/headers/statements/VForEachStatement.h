@@ -1,37 +1,38 @@
 /***********************************************************************************************************************
- * VLoopStatement.h
+ * VForEachStatement.h
  *
  *  Created on: Feb 16, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef VLOOPSTATEMENT_H_
-#define VLOOPSTATEMENT_H_
+#ifndef VFOREACHSTATEMENT_H_
+#define VFOREACHSTATEMENT_H_
 
 #include "../oovisualization_api.h"
-#include "VLoopStatementStyle.h"
+#include "VForEachStatementStyle.h"
 
 #include "VisualizationBase/headers/items/ModelItem.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
 	class PanelBorderLayout;
+	class VText;
 	class SequentialLayout;
 }
 
 namespace OOModel {
-	class LoopStatement;
+	class ForEachStatement;
 }
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VLoopStatement : public Visualization::ModelItem
+class OOVISUALIZATION_API VForEachStatement : public Visualization::ModelItem
 {
-	ITEM_COMMON(VLoopStatement, Visualization::ModelItem)
+	ITEM_COMMON(VForEachStatement, Visualization::ModelItem)
 
 	public:
-		VLoopStatement(Item* parent, OOModel::LoopStatement* node, const VLoopStatementStyle* style = Visualization::Styles::item<VLoopStatement>("default"));
-		virtual ~VLoopStatement();
+		VForEachStatement(Item* parent, OOModel::ForEachStatement* node, const VForEachStatementStyle* style = Visualization::Styles::item<VForEachStatement>("default"));
+		virtual ~VForEachStatement();
 
 		virtual bool focusChild(FocusTarget location);
 
@@ -43,16 +44,15 @@ class OOVISUALIZATION_API VLoopStatement : public Visualization::ModelItem
 		Visualization::PanelBorderLayout* layout;
 		Visualization::SequentialLayout* header;
 
-		Visualization::SequentialLayout* conditionBackground;
-		Visualization::SequentialLayout* initStepBackground;
-		Visualization::SequentialLayout* updateStepBackground;
+		Visualization::SequentialLayout* varContainer;
+		Visualization::SequentialLayout* collectionBackground;
 
-		Visualization::ModelItem* condition;
-		Visualization::ModelItem* initStep;
-		Visualization::ModelItem* updateStep;
+		Visualization::VText* varName;
+		Visualization::ModelItem* collection;
+		Visualization::ModelItem* varType;
 		Visualization::ModelItem* body;
 };
 
 }
 
-#endif /* VLOOPSTATEMENT_H_ */
+#endif /* VFOREACHSTATEMENT_H_ */

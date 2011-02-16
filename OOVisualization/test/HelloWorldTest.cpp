@@ -232,9 +232,20 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	loopBodyAssignment->setOp(AssignmentStatement::TIMES_ASSIGN);
 	loopBodyAssignment->setRight<IntegerLiteral>()->setValue(2);
 
-	AssignmentStatement* assign = block->items()->append<AssignmentStatement>();
-	assign->setLeft<VariableAccess>()->ref()->set("local:var1");
-	assign->setRight<IntegerLiteral>()->setValue(84);
+	AssignmentStatement* assignLoop = block->items()->append<AssignmentStatement>();
+	assignLoop->setLeft<VariableAccess>()->ref()->set("local:var1");
+	assignLoop->setOp(AssignmentStatement::ASSIGN);
+	assignLoop->setRight<IntegerLiteral>()->setValue(84);
+
+	ForEachStatement* forEach = factorial->items()->append<ForEachStatement>();
+	forEach->setVarName("elem");
+	forEach->setVarType<PrimitiveType>()->setType(PrimitiveType::UNSIGNED_INT);
+	forEach->setCollection<VariableAccess>()->ref()->set("global:SomeCollection");
+	AssignmentStatement* assignEach = forEach->setBody<AssignmentStatement>();
+	assignEach->setLeft<VariableAccess>()->ref()->set("local:var1");
+	assignEach->setOp(AssignmentStatement::DIVIDE_ASSIGN);
+	assignEach->setRight<VariableAccess>()->ref()->set("loop:elem");
+
 
 	factorial->items()->append<ReturnStatement>()->values()->append<IntegerLiteral>()->setValue(24);
 
