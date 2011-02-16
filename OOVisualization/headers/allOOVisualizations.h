@@ -44,6 +44,8 @@
 #include "statements/VIfStatement.h"
 #include "statements/VLoopStatement.h"
 #include "statements/VForEachStatement.h"
+#include "statements/VBreakStatement.h"
+#include "statements/VContinueStatement.h"
 
 #include "types/VNamedType.h"
 #include "types/VPrimitiveType.h"

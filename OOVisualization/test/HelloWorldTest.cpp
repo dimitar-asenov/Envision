@@ -212,6 +212,10 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	elseBranch->setOperand<VariableAccess>()->ref()->set("local:var14");
 
 	Block* block = factorial->items()->append<Block>();
+	AssignmentStatement* assign = block->items()->append<AssignmentStatement>();
+	assign->setLeft<VariableAccess>()->ref()->set("local:var1");
+	assign->setOp(AssignmentStatement::ASSIGN);
+	assign->setRight<IntegerLiteral>()->setValue(84);
 
 	LoopStatement* loop = factorial->items()->append<LoopStatement>();
 	VariableDeclaration* initStep = loop->setInitStep<VariableDeclaration>();
@@ -231,11 +235,9 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	loopBodyAssignment->setLeft<VariableAccess>()->ref()->set("local:var14");
 	loopBodyAssignment->setOp(AssignmentStatement::TIMES_ASSIGN);
 	loopBodyAssignment->setRight<IntegerLiteral>()->setValue(2);
+	loopBody->items()->append<ContinueStatement>();
+	loopBody->items()->append<BreakStatement>();
 
-	AssignmentStatement* assignLoop = block->items()->append<AssignmentStatement>();
-	assignLoop->setLeft<VariableAccess>()->ref()->set("local:var1");
-	assignLoop->setOp(AssignmentStatement::ASSIGN);
-	assignLoop->setRight<IntegerLiteral>()->setValue(84);
 
 	ForEachStatement* forEach = factorial->items()->append<ForEachStatement>();
 	forEach->setVarName("elem");
