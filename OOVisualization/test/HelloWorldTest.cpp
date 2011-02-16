@@ -213,6 +213,25 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 
 	Block* block = factorial->items()->append<Block>();
 
+	LoopStatement* loop = factorial->items()->append<LoopStatement>();
+	VariableDeclaration* initStep = loop->setInitStep<VariableDeclaration>();
+	initStep->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+	initStep->setName("i");
+	initStep->setInitialValue<IntegerLiteral>()->setValue(0);
+	BinaryOperation* loopCondition = loop->setCondition<BinaryOperation>();
+	loopCondition->setLeft<VariableAccess>()->ref()->set("local:i");
+	loopCondition->setOp(BinaryOperation::LESS);
+	loopCondition->setRight<VariableAccess>()->ref()->set("local:x");
+	AssignmentStatement* updateStep = loop->setUpdateStep<AssignmentStatement>();
+	updateStep->setLeft<VariableAccess>()->ref()->set("local:i");
+	updateStep->setOp(AssignmentStatement::PLUS_ASSIGN);
+	updateStep->setRight<IntegerLiteral>()->setValue(1);
+	Block* loopBody = loop->setBody<Block>();
+	AssignmentStatement* loopBodyAssignment = loopBody->items()->append<AssignmentStatement>();
+	loopBodyAssignment->setLeft<VariableAccess>()->ref()->set("local:var14");
+	loopBodyAssignment->setOp(AssignmentStatement::TIMES_ASSIGN);
+	loopBodyAssignment->setRight<IntegerLiteral>()->setValue(2);
+
 	AssignmentStatement* assign = block->items()->append<AssignmentStatement>();
 	assign->setLeft<VariableAccess>()->ref()->set("local:var1");
 	assign->setRight<IntegerLiteral>()->setValue(84);

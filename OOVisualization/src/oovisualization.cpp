@@ -62,6 +62,7 @@ bool OOVisualization::initialize(Envision::EnvisionManager&)
 	Scene::defaultRenderer()->registerVisualization(Block::typeIdStatic(), createVisualization<VBlock, Block>);
 	Scene::defaultRenderer()->registerVisualization(ReturnStatement::typeIdStatic(), createVisualization<VReturnStatement, ReturnStatement>);
 	Scene::defaultRenderer()->registerVisualization(IfStatement::typeIdStatic(), createVisualization<VIfStatement, IfStatement>);
+	Scene::defaultRenderer()->registerVisualization(LoopStatement::typeIdStatic(), createVisualization<VLoopStatement, LoopStatement>);
 	Scene::defaultRenderer()->registerVisualization(NamedType::typeIdStatic(), createVisualization<VNamedType, NamedType>);
 	Scene::defaultRenderer()->registerVisualization(PrimitiveType::typeIdStatic(), createVisualization<VPrimitiveType, PrimitiveType>);
 
@@ -96,6 +97,7 @@ bool OOVisualization::initialize(Envision::EnvisionManager&)
 	VVariableDeclaration::setInteractionHandler(Interaction::GenericHandler::instance());
 	VAssignmentStatement::setInteractionHandler(Interaction::GenericHandler::instance());
 	VIfStatement::setInteractionHandler(Interaction::GenericHandler::instance());
+	VLoopStatement::setInteractionHandler(Interaction::GenericHandler::instance());
 	VBlock::setInteractionHandler(Interaction::GenericHandler::instance());
 	VReturnStatement::setInteractionHandler(Interaction::GenericHandler::instance());
 
