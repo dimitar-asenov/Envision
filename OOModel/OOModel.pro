@@ -74,7 +74,8 @@ HEADERS += headers/StatementItem.h \
     headers/Module.h \
     headers/oomodel_api.h \
     src/oomodel.h
-SOURCES += src/StatementItem.cpp \
+SOURCES += src/statements/ForEachStatement.cpp \
+    src/StatementItem.cpp \
     src/expressions/UnaryOperation.cpp \
     src/FormalResult.cpp \
     src/Library.cpp \
@@ -92,7 +93,6 @@ SOURCES += src/StatementItem.cpp \
     src/statements/ContinueStatement.cpp \
     src/statements/BreakStatement.cpp \
     src/FormalArgument.cpp \
-    src/statements/ForAllStatement.cpp \
     src/statements/LoopStatement.cpp \
     src/statements/IfStatement.cpp \
     src/statements/Block.cpp \
