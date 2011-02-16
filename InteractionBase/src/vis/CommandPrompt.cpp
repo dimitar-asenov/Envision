@@ -43,6 +43,7 @@ CommandPrompt::CommandPrompt(Item* commandReceiver, const CommandPromptStyle* st
 	justCreated(true)
 {
 	setFlag(QGraphicsItem::ItemIsMovable);
+	command->setEditable(true);
 
 	layout->append(command);
 	layout->append(errorContainer);
