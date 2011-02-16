@@ -31,7 +31,25 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/statements/VIfStatementStyle.h \
+HEADERS += headers/elements/VField.h \
+    headers/elements/VFieldStyle.h \
+    headers/elements/VFormalArgument.h \
+    headers/elements/VFormalArgumentStyle.h \
+    headers/elements/VFormalResult.h \
+    headers/elements/VFormalResultStyle.h \
+    headers/elements/VStatic.h \
+    headers/elements/VVisibility.h \
+    headers/top_level/VClass.h \
+    headers/top_level/VClassStyle.h \
+    headers/top_level/VLibrary.h \
+    headers/top_level/VLibraryStyle.h \
+    headers/top_level/VMethod.h \
+    headers/top_level/VMethodStyle.h \
+    headers/top_level/VModule.h \
+    headers/top_level/VModuleStyle.h \
+    headers/top_level/VProject.h \
+    headers/top_level/VProjectStyle.h \
+    headers/statements/VIfStatementStyle.h \
     headers/statements/VIfStatement.h \
     headers/statements/VReturnStatementStyle.h \
     headers/statements/VReturnStatement.h \
@@ -55,14 +73,8 @@ HEADERS += headers/statements/VIfStatementStyle.h \
     headers/literals/VCharacterLiteral.h \
     headers/literals/VFloatLiteral.h \
     headers/literals/VIntegerLiteral.h \
-    headers/vis/elements/VFormalResultStyle.h \
-    headers/vis/elements/VFormalResult.h \
     headers/allOOVisualizations.h \
     headers/types/VPrimitiveType.h \
-    headers/vis/top_level/VLibraryStyle.h \
-    headers/vis/top_level/VLibrary.h \
-    headers/vis/elements/VFormalArgumentStyle.h \
-    headers/vis/elements/VFormalArgument.h \
     headers/types/VNamedType.h \
     headers/literals/VStringLiteral.h \
     headers/statements/VMethodCallStatementStyle.h \
@@ -75,20 +87,28 @@ HEADERS += headers/statements/VIfStatementStyle.h \
     headers/icons/MethodIcon.h \
     headers/icons/ClassIconStyle.h \
     headers/icons/ClassIcon.h \
-    headers/vis/elements/VFieldStyle.h \
-    headers/vis/elements/VField.h \
-    headers/vis/top_level/VClassStyle.h \
-    headers/vis/top_level/VClass.h \
-    headers/vis/top_level/VModuleStyle.h \
-    headers/vis/top_level/VModule.h \
-    headers/vis/top_level/VProjectStyle.h \
-    headers/vis/top_level/VProject.h \
-    headers/vis/VStatic.h \
-    headers/vis/VVisibility.h \
     headers/OOVisualizationException.h \
     headers/oovisualization_api.h \
     src/oovisualization.h
-SOURCES += src/statements/VIfStatement.cpp \
+SOURCES += src/elements/VField.cpp \
+    src/elements/VFieldStyle.cpp \
+    src/elements/VFormalArgument.cpp \
+    src/elements/VFormalArgumentStyle.cpp \
+    src/elements/VFormalResult.cpp \
+    src/elements/VFormalResultStyle.cpp \
+    src/elements/VStatic.cpp \
+    src/elements/VVisibility.cpp \
+    src/top_level/VClass.cpp \
+    src/top_level/VClassStyle.cpp \
+    src/top_level/VLibrary.cpp \
+    src/top_level/VLibraryStyle.cpp \
+    src/top_level/VMethod.cpp \
+    src/top_level/VMethodStyle.cpp \
+    src/top_level/VModule.cpp \
+    src/top_level/VModuleStyle.cpp \
+    src/top_level/VProject.cpp \
+    src/top_level/VProjectStyle.cpp \
+    src/statements/VIfStatement.cpp \
     src/statements/VIfStatementStyle.cpp \
     src/statements/VReturnStatement.cpp \
     src/statements/VReturnStatementStyle.cpp \
@@ -111,13 +131,7 @@ SOURCES += src/statements/VIfStatement.cpp \
     src/literals/VCharacterLiteral.cpp \
     src/literals/VFloatLiteral.cpp \
     src/literals/VIntegerLiteral.cpp \
-    src/vis/elements/VFormalResult.cpp \
-    src/vis/elements/VFormalResultStyle.cpp \
     src/types/VPrimitiveType.cpp \
-    src/vis/top_level/VLibrary.cpp \
-    src/vis/top_level/VLibraryStyle.cpp \
-    src/vis/elements/VFormalArgument.cpp \
-    src/vis/elements/VFormalArgumentStyle.cpp \
     src/types/VNamedType.cpp \
     src/literals/VStringLiteral.cpp \
     src/statements/VMethodCallStatement.cpp \
@@ -130,18 +144,6 @@ SOURCES += src/statements/VIfStatement.cpp \
     src/icons/MethodIconStyle.cpp \
     src/icons/ClassIcon.cpp \
     src/icons/ClassIconStyle.cpp \
-    src/vis/elements/VFieldStyle.cpp \
-    src/vis/elements/VField.cpp \
-    src/vis/top_level/VMethodStyle.cpp \
-    src/vis/top_level/VMethod.cpp \
-    src/vis/top_level/VClass.cpp \
-    src/vis/top_level/VClassStyle.cpp \
-    src/vis/top_level/VModule.cpp \
-    src/vis/top_level/VModuleStyle.cpp \
-    src/vis/top_level/VProjectStyle.cpp \
-    src/vis/top_level/VProject.cpp \
-    src/vis/VStatic.cpp \
-    src/vis/VVisibility.cpp \
     test/HelloWorldTest.cpp \
     src/OOVisualizationException.cpp \
     src/oovisualization.cpp
