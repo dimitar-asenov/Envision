@@ -8,14 +8,14 @@
 #ifndef ALLOOVISUALIZATIONS_H_
 #define ALLOOVISUALIZATIONS_H_
 
-#include "vis/top_level/VProject.h"
-#include "vis/top_level/VLibrary.h"
-#include "vis/top_level/VModule.h"
-#include "vis/top_level/VClass.h"
-#include "vis/top_level/VMethod.h"
-#include "vis/elements/VField.h"
-#include "vis/elements/VFormalArgument.h"
-#include "vis/elements/VFormalResult.h"
+#include "top_level/VProject.h"
+#include "top_level/VLibrary.h"
+#include "top_level/VModule.h"
+#include "top_level/VClass.h"
+#include "top_level/VMethod.h"
+#include "elements/VField.h"
+#include "elements/VFormalArgument.h"
+#include "elements/VFormalResult.h"
 
 #include "icons/ClassIcon.h"
 #include "icons/MethodIcon.h"
