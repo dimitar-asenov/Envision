@@ -15,6 +15,7 @@
 #include "VisualizationBase/headers/layouts/PositionLayout.h"
 #include "VisualizationBase/headers/layouts/SequentialLayout.h"
 #include "VisualizationBase/headers/items/VText.h"
+#include "VisualizationBase/headers/items/VList.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -29,6 +30,7 @@ VClass::VClass(Item* parent, Class* node, const VClassStyle* style) :
 	header_( new SequentialLayout(NULL, &style->header()) ),
 	icon_( new ClassIcon(NULL, &style->icon()) ),
 	name_(new VText(NULL, node->nameNode(), &style->nameDefault()) ),
+	baseClasses_( new VList(NULL, node->baseClasses(), &style->baseClasses()) ),
 	content_( new PositionLayout(NULL, &style->content()) ),
 	fieldContainer_(new SequentialLayout(NULL, &style->fieldContainer()) ),
 	publicFieldArea_(new SequentialLayout(NULL, &style->publicFieldArea()) ),
@@ -40,6 +42,7 @@ VClass::VClass(Item* parent, Class* node, const VClassStyle* style) :
 	layout_->top()->setFirst(header_);
 	header_->append(icon_);
 	header_->append(name_);
+	header_->append(baseClasses_);
 
 	layout_->setLeft(true);
 	layout_->left()->setFirst(fieldContainer_);
@@ -59,6 +62,7 @@ VClass::~VClass()
 	header_ = NULL;
 	icon_ = NULL;
 	name_ = NULL;
+	baseClasses_ = NULL;
 	content_ = NULL;
 	fieldContainer_ = NULL;
 	publicFieldArea_ = NULL;
@@ -79,6 +83,7 @@ void VClass::determineChildren()
 	icon_->setStyle(&style()->icon());
 	header_->setStyle( &style()->header() );
 	content_->setStyle( &style()->content() );
+	baseClasses_->setStyle( &style()->baseClasses() );
 	fieldContainer_->setStyle( &style()->fieldContainer() );
 	publicFieldArea_->setStyle( &style()->publicFieldArea() );
 	privateFieldArea_->setStyle( &style()->privateFieldArea() );

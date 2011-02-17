@@ -16,6 +16,7 @@
 
 namespace Visualization {
 	class VText;
+	class VList;
 	class PanelBorderLayout;
 	class SequentialLayout;
 	class PositionLayout;
@@ -48,6 +49,7 @@ class OOVISUALIZATION_API VClass : public Visualization::ModelItem
 		Visualization::SequentialLayout* header_;
 		ClassIcon* icon_;
 		Visualization::VText* name_;
+		Visualization::VList* baseClasses_;
 		Visualization::PositionLayout* content_;
 		Visualization::SequentialLayout* fieldContainer_;
 		Visualization::SequentialLayout* publicFieldArea_;

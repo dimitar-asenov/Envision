@@ -24,6 +24,11 @@
 	<namePublic prototypes="default.namePublic" />
 	<namePrivate prototypes="default.namePrivate" />
 	<nameProtected prototypes="default.nameProtected" />
+	<baseClasses prototypes="item/VList/default">
+		<itemsStyle>
+			<direction>0</direction>
+		</itemsStyle>
+	</baseClasses>
 	<icon prototypes="icon/ClassIcon/default" />
 	<visibility prototypes="item/Text/default" />
 	<content prototypes="layout/PositionLayout/default" />

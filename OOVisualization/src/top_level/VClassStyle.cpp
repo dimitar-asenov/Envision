@@ -30,6 +30,7 @@ void VClassStyle::load()
 	Visualization::Styles::load("nameProtected", nameProtected_);
 	Visualization::Styles::load("icon", icon_);
 	Visualization::Styles::load("header", header_);
+	Visualization::Styles::load("baseClasses", baseClasses_);
 	Visualization::Styles::load("content", content_);
 	Visualization::Styles::load("fieldContainer", fieldContainer_);
 	Visualization::Styles::load("publicFieldArea", publicFieldArea_);
