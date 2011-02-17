@@ -26,15 +26,16 @@ pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
-HEADERS += headers/top_level/Class.h \
+HEADERS += headers/elements/FormalArgument.h \
+    headers/elements/FormalResult.h \
+    headers/elements/StatementItem.h \
+    headers/top_level/Class.h \
     headers/top_level/Field.h \
     headers/top_level/Library.h \
     headers/top_level/Method.h \
     headers/top_level/Module.h \
     headers/top_level/Project.h \
     headers/types/ArrayType.h \
-    headers/StatementItem.h \
-    headers/FormalResult.h \
     headers/allOOModelNodes.h \
     headers/TypedListInstantiations.h \
     headers/statements/AssignmentStatement.h \
@@ -49,7 +50,6 @@ HEADERS += headers/top_level/Class.h \
     headers/statements/ReturnStatement.h \
     headers/statements/ContinueStatement.h \
     headers/statements/BreakStatement.h \
-    headers/FormalArgument.h \
     headers/statements/LoopStatement.h \
     headers/statements/IfStatement.h \
     headers/statements/Block.h \
@@ -75,7 +75,10 @@ HEADERS += headers/top_level/Class.h \
     headers/common/attributeMacros.h \
     headers/oomodel_api.h \
     src/oomodel.h
-SOURCES += src/top_level/Class.cpp \
+SOURCES += src/elements/FormalArgument.cpp \
+    src/elements/FormalResult.cpp \
+    src/elements/StatementItem.cpp \
+    src/top_level/Class.cpp \
     src/top_level/Field.cpp \
     src/top_level/Library.cpp \
     src/top_level/Method.cpp \
@@ -83,9 +86,7 @@ SOURCES += src/top_level/Class.cpp \
     src/top_level/Project.cpp \
     src/types/ArrayType.cpp \
     src/statements/ForEachStatement.cpp \
-    src/StatementItem.cpp \
     src/expressions/UnaryOperation.cpp \
-    src/FormalResult.cpp \
     src/statements/AssignmentStatement.cpp \
     src/expressions/ReferenceExpression.cpp \
     src/expressions/MethodCallExpression.cpp \
@@ -98,7 +99,6 @@ SOURCES += src/top_level/Class.cpp \
     src/statements/VariableDeclaration.cpp \
     src/statements/ContinueStatement.cpp \
     src/statements/BreakStatement.cpp \
-    src/FormalArgument.cpp \
     src/statements/LoopStatement.cpp \
     src/statements/IfStatement.cpp \
     src/statements/Block.cpp \

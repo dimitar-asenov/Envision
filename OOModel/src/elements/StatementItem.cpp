@@ -5,7 +5,7 @@
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "StatementItem.h"
+#include "elements/StatementItem.h"
 
 namespace OOModel {
 

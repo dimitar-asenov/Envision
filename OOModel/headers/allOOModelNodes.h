@@ -8,15 +8,12 @@
 #ifndef ALLOOMODELNODES_H_
 #define ALLOOMODELNODES_H_
 
-#include "Project.h"
-#include "Library.h"
-#include "Module.h"
-#include "Class.h"
-#include "Method.h"
-#include "StatementItem.h"
-#include "FormalArgument.h"
-#include "FormalResult.h"
-#include "Field.h"
+#include "top_level/Project.h"
+#include "top_level/Library.h"
+#include "top_level/Module.h"
+#include "top_level/Class.h"
+#include "top_level/Method.h"
+#include "top_level/Field.h"
 
 #include "statements/Statement.h"
 #include "statements/Block.h"
@@ -53,7 +50,10 @@
 #include "types/NamedType.h"
 #include "types/ArrayType.h"
 
-#include "common/Visibility.h"
-#include "common/Static.h"
+#include "elements/Visibility.h"
+#include "elements/Static.h"
+#include "elements/StatementItem.h"
+#include "elements/FormalArgument.h"
+#include "elements/FormalResult.h"
 
 #endif /* ALLOOMODELNODES_H_ */

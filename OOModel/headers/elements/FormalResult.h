@@ -1,14 +1,14 @@
 /***********************************************************************************************************************
- * FormalArgument.h
+ * FormalResult.h
  *
- *  Created on: Jan 31, 2011
+ *  Created on: Feb 11, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef FORMALARGUMENT_H_
-#define FORMALARGUMENT_H_
+#ifndef FORMALRESULT_H_
+#define FORMALRESULT_H_
 
-#include "oomodel_api.h"
+#include "../oomodel_api.h"
 
 #include "common/attributeMacros.h"
 #include "types/Type.h"
@@ -19,13 +19,13 @@
 
 namespace OOModel {
 
-class OOMODEL_API FormalArgument : public Model::ExtendableNode
+class OOMODEL_API FormalResult : public Model::ExtendableNode
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(FormalArgument)
+	EXTENDABLENODE_DECLARE_STANDARD_METHODS(FormalResult)
 	ATTRIBUTE_OOP_NAME
 	ATTRIBUTE(Type, type, setType)
 };
 
 }
 
-#endif /* FORMALARGUMENT_H_ */
+#endif /* FORMALRESULT_H_ */

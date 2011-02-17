@@ -5,7 +5,7 @@
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "FormalResult.h"
+#include "elements/FormalResult.h"
 
 namespace OOModel {
 

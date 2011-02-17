@@ -8,7 +8,7 @@
 #ifndef STATEMENTITEM_H_
 #define STATEMENTITEM_H_
 
-#include "oomodel_api.h"
+#include "../oomodel_api.h"
 
 #include "ModelBase/headers/nodes/Extendable/ExtendableNode.h"
 #include "ModelBase/headers/nodes/nodeMacros.h"
