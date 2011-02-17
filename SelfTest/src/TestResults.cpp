@@ -86,20 +86,22 @@ const QList<TestResult>& TestResults::getCheckResults() const
 void TestResults::printResultStatistics() const
 {
 	QTextStream out(stdout);
+	QTextStream err(stderr);
 	out << "--------------------------" << endl;
 	out << "Total executed tests : " << getNumExecutedTests() << "\t(" << getNumExecutedChecks() << ")" << endl;
 	out << "Passed               : " << numPassedTests << "\t(" << getNumPassedChecks() << ")" << endl;
 	out << "Failed               : " << numFailedTests << "\t(" << getNumFailedChecks() << ")" << endl;
 	out << "--------------------------" << endl;
+	out.flush();
 
 	if ( numFailedChecks > 0 || numFailedTests > 0)
 	{
-		out << endl << "Error messages" << endl;
+		err << endl << "Error messages" << endl;
 		for (QList<TestResult>::const_iterator r = testResults.begin(); r != testResults.end(); r++)
-			if ( r->isFailed() ) out << "Test FAILED: " << r->getMessage() << endl;
+			if ( r->isFailed() ) err << "Test FAILED: " << r->getMessage() << endl;
 
 		for (QList<TestResult>::const_iterator r = checkResults.begin(); r != checkResults.end(); r++)
-					if ( r->isFailed() ) out << "Failure:" << r->getMessage() << endl;
+					if ( r->isFailed() ) err << "Failure:" << r->getMessage() << endl;
 	}
 }
 
