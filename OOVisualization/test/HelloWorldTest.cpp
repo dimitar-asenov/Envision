@@ -48,6 +48,7 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	Class* string = java->classes()->append<Class>();
 	string->setName("String");
 	string->setVisibility(Visibility::PUBLIC);
+	string->baseClasses()->append<NamedType>()->type()->ref()->set("class:Object");
 
 	Module* io = java->modules()->append<Module>();
 	io->setName("io");
@@ -85,7 +86,10 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	main->setName("main");
 	main->setVisibility(Visibility::PUBLIC);
 	main->setStat(Static::CLASS_VARIABLE);
-	//TODO make an array argument
+
+	FormalArgument* mainArgs = main->arguments()->append<FormalArgument>();
+	mainArgs->setName("args");
+	mainArgs->setType<ArrayType>()->setType<NamedType>()->type()->ref()->set("class:String");
 
 	MethodCallStatement* callPrintln = main->items()->append<MethodCallStatement>();
 	StringLiteral* helloStr = callPrintln->arguments()->append<StringLiteral>();
@@ -256,13 +260,12 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 
 	// set positions
 	factorial->extension<Position>()->setY(100);
-	java->extension<Position>()->setX(160);
-	java->extension<Position>()->setY(100);
+	java->extension<Position>()->setX(340);
 	string->extension<Position>()->setY(100);
 	io->extension<Position>()->setX(240);
 
 	model->endModification();
-	CHECK_INT_EQUAL(160, java->extension<Position>()->x());
+	CHECK_INT_EQUAL(240, java->extension<Position>()->x());
 	CHECK_STR_EQUAL("Java", java->name());
 
 	////////////////////////////////////////////////// Set Scene

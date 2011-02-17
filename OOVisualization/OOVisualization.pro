@@ -31,7 +31,9 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/statements/VContinueStatement.h \
+HEADERS += headers/types/VArrayTypeStyle.h \
+    headers/types/VArrayType.h \
+    headers/statements/VContinueStatement.h \
     headers/statements/VBreakStatement.h \
     headers/statements/VForEachStatementStyle.h \
     headers/statements/VForEachStatement.h \
@@ -96,7 +98,9 @@ HEADERS += headers/statements/VContinueStatement.h \
     headers/OOVisualizationException.h \
     headers/oovisualization_api.h \
     src/oovisualization.h
-SOURCES += src/statements/VContinueStatement.cpp \
+SOURCES += headers/types/VArrayTypeStyle.cpp \
+    src/types/VArrayType.cpp \
+    src/statements/VContinueStatement.cpp \
     src/statements/VBreakStatement.cpp \
     src/statements/VForEachStatement.cpp \
     src/statements/VForEachStatementStyle.cpp \

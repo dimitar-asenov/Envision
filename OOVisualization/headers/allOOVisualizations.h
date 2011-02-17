@@ -49,5 +49,6 @@
 
 #include "types/VNamedType.h"
 #include "types/VPrimitiveType.h"
+#include "types/VArrayType.h"
 
 #endif /* ALLOOVISUALIZATIONS_H_ */

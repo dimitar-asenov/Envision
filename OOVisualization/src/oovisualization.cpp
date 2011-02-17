@@ -68,6 +68,7 @@ bool OOVisualization::initialize(Envision::EnvisionManager&)
 	Scene::defaultRenderer()->registerVisualization(ContinueStatement::typeIdStatic(), createVisualization<VContinueStatement, ContinueStatement>);
 	Scene::defaultRenderer()->registerVisualization(NamedType::typeIdStatic(), createVisualization<VNamedType, NamedType>);
 	Scene::defaultRenderer()->registerVisualization(PrimitiveType::typeIdStatic(), createVisualization<VPrimitiveType, PrimitiveType>);
+	Scene::defaultRenderer()->registerVisualization(ArrayType::typeIdStatic(), createVisualization<VArrayType, ArrayType>);
 
 	// Register handlers
 	// TODO: move this to a better place i.e. OOInteraction Plugin
@@ -106,6 +107,9 @@ bool OOVisualization::initialize(Envision::EnvisionManager&)
 	VContinueStatement::setInteractionHandler(Interaction::GenericHandler::instance());
 	VBlock::setInteractionHandler(Interaction::GenericHandler::instance());
 	VReturnStatement::setInteractionHandler(Interaction::GenericHandler::instance());
+	VPrimitiveType::setInteractionHandler(Interaction::GenericHandler::instance());
+	VNamedType::setInteractionHandler(Interaction::GenericHandler::instance());
+	VArrayType::setInteractionHandler(Interaction::GenericHandler::instance());
 
 	return true;
 }
