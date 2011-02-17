@@ -7,7 +7,7 @@
 
 #include "elements/VFormalArgument.h"
 
-#include "OOModel/headers/FormalArgument.h"
+#include "OOModel/headers/elements/FormalArgument.h"
 
 #include "VisualizationBase/headers/layouts/SequentialLayout.h"
 #include "VisualizationBase/headers/items/VText.h"

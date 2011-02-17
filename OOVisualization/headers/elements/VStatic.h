@@ -15,7 +15,7 @@
 #include "VisualizationBase/headers/items/TextStyle.h"
 #include "VisualizationBase/headers/Styles.h"
 
-#include "OOModel/headers/common/Static.h"
+#include "OOModel/headers/elements/Static.h"
 
 namespace OOVisualization {
 

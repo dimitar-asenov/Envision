@@ -10,7 +10,7 @@
 
 #include "../oomodel_api.h"
 
-#include "attributeMacros.h"
+#include "../attributeMacros.h"
 #include "Module.h"
 #include "Class.h"
 

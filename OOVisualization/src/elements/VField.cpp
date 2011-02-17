@@ -9,7 +9,7 @@
 #include "OOVisualizationException.h"
 #include "elements/VVisibility.h"
 
-#include "OOModel/headers/Field.h"
+#include "OOModel/headers/top_level/Field.h"
 
 #include "VisualizationBase/headers/layouts/SequentialLayout.h"
 #include "VisualizationBase/headers/items/VText.h"

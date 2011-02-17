@@ -9,7 +9,7 @@
 #define STATEMENT_H_
 
 #include "../oomodel_api.h"
-#include "elements/StatementItem.h"
+#include "../elements/StatementItem.h"
 
 namespace OOModel {
 

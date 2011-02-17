@@ -9,7 +9,7 @@
 #include "OOVisualizationException.h"
 #include "icons/ClassIcon.h"
 
-#include "OOModel/headers/Class.h"
+#include "OOModel/headers/top_level/Class.h"
 
 #include "VisualizationBase/headers/layouts/PanelBorderLayout.h"
 #include "VisualizationBase/headers/layouts/PositionLayout.h"

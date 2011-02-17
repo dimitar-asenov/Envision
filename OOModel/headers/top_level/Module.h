@@ -10,7 +10,7 @@
 
 #include "../oomodel_api.h"
 
-#include "attributeMacros.h"
+#include "../attributeMacros.h"
 #include "Class.h"
 
 #include "ModelBase/headers/nodes/Extendable/ExtendableNode.h"

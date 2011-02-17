@@ -7,7 +7,7 @@
 
 #include "elements/VFormalResult.h"
 
-#include "OOModel/headers/FormalResult.h"
+#include "OOModel/headers/elements/FormalResult.h"
 
 #include "VisualizationBase/headers/layouts/SequentialLayout.h"
 #include "VisualizationBase/headers/items/VText.h"

@@ -9,7 +9,7 @@
 #include "OOVisualizationException.h"
 #include "icons/MethodIcon.h"
 
-#include "OOModel/headers/Method.h"
+#include "OOModel/headers/top_level/Method.h"
 
 #include "VisualizationBase/headers/layouts/PanelBorderLayout.h"
 #include "VisualizationBase/headers/layouts/SequentialLayout.h"

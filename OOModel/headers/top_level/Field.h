@@ -10,10 +10,10 @@
 
 #include "../oomodel_api.h"
 
-#include "attributeMacros.h"
-#include "elements/Visibility.h"
-#include "elements/Static.h"
-#include "types/Type.h"
+#include "../attributeMacros.h"
+#include "../elements/Visibility.h"
+#include "../elements/Static.h"
+#include "../types/Type.h"
 
 #include "ModelBase/headers/nodes/Extendable/ExtendableNode.h"
 #include "ModelBase/headers/nodes/Text.h"

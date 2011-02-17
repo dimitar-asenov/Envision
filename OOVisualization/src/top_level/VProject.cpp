@@ -7,8 +7,8 @@
 
 #include "top_level/VProject.h"
 
-#include "OOModel/headers/Project.h"
-#include "OOModel/headers/Library.h"
+#include "OOModel/headers/top_level/Project.h"
+#include "OOModel/headers/top_level/Library.h"
 
 #include "VisualizationBase/headers/layouts/PanelBorderLayout.h"
 #include "VisualizationBase/headers/layouts/PositionLayout.h"

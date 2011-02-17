@@ -7,7 +7,7 @@
 
 #include "top_level/VLibrary.h"
 
-#include "OOModel/headers/Library.h"
+#include "OOModel/headers/top_level/Library.h"
 
 #include "VisualizationBase/headers/layouts/PanelBorderLayout.h"
 #include "VisualizationBase/headers/layouts/PositionLayout.h"
