@@ -52,7 +52,7 @@ class VISUALIZATIONBASE_API TextRenderer : public Item
 			virtual void updateGeometry(int availableWidth, int availableHeight);
 
 		public:
-			TextRenderer(Item* parent, const TextStyle *style, const QString& text = QString());
+			TextRenderer(Item* parent, const StyleType *style, const QString& text = QString());
 
 			/**
 			 * Sets the text of this item.

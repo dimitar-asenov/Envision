@@ -20,7 +20,7 @@ class VISUALIZATIONBASE_API Symbol : public TextRenderer
 	ITEM_COMMON(Symbol)
 
 	public:
-		Symbol(Item* parent, const SymbolStyle *style);
+		Symbol(Item* parent, const StyleType *style);
 		virtual bool setText(const QString& newText);
 };
 

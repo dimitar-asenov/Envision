@@ -11,7 +11,7 @@ namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS( Layout )
 
-Layout::Layout(Item* parent, const LayoutStyle* style) :
+Layout::Layout(Item* parent, const StyleType* style) :
 	Item(parent, style)
 {
 	setFlag(QGraphicsItem::ItemIsSelectable, false);

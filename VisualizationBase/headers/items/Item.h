@@ -110,7 +110,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		const static int LAYER_DEFAULT_Z = 0;
 		const static int LAYER_SELECTION_Z = 100;
 
-		Item(Item* parent, const ItemStyle* style = NULL);
+		Item(Item* parent, const StyleType* style = NULL);
 		virtual ~Item();
 
 		Scene* scene() const;

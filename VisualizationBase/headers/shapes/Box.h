@@ -27,7 +27,7 @@ class VISUALIZATIONBASE_API Box: public Shape
 		QPainterPath getRectanglePath(qreal x, qreal y, int width, int height);
 
 	public:
-		Box(Item *parent, BoxStyle *style = BoxStyle::getDefault());
+		Box(Item *parent, StyleType *style = StyleType::getDefault());
 		static const QString& className();
 
 		BoxStyle* style() const;

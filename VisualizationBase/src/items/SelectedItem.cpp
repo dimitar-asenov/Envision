@@ -11,7 +11,7 @@ namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(SelectedItem)
 
-SelectedItem::SelectedItem(Item* selectedItem, const SelectedItemStyle* style) :
+SelectedItem::SelectedItem(Item* selectedItem, const StyleType* style) :
 	Item(NULL, style), selectedItem_(selectedItem)
 {
 	setFlags(0);

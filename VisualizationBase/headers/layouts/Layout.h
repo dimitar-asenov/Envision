@@ -26,7 +26,7 @@ class VISUALIZATIONBASE_API Layout: public Item
 		int yOffset() const;
 
 	public:
-		Layout(Item* parent, const LayoutStyle* style);
+		Layout(Item* parent, const StyleType* style);
 
 		void setInnerSize(int width, int height);
 

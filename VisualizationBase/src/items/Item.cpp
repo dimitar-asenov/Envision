@@ -15,7 +15,7 @@
 
 namespace Visualization {
 
-Item::Item(Item* parent, const ItemStyle* style) :
+Item::Item(Item* parent, const StyleType* style) :
 	QGraphicsItem(parent), style_(NULL), shape_(NULL), needsUpdate_(true)
 {
 	if ( !style || style->drawsOnlyShape() ) setFlag(QGraphicsItem::ItemHasNoContents);

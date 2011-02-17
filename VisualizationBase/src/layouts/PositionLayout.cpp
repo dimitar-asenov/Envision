@@ -15,7 +15,7 @@ namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS( PositionLayout )
 
-PositionLayout::PositionLayout(Item* parent, const PositionLayoutStyle* style) :
+PositionLayout::PositionLayout(Item* parent, const StyleType* style) :
 	Layout(parent, style)
 {
 	setAcceptedMouseButtons(Qt::LeftButton);

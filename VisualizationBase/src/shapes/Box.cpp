@@ -14,7 +14,7 @@
 
 namespace Visualization {
 
-Box::Box(Item *parent, BoxStyle *style) :
+Box::Box(Item *parent, StyleType *style) :
 	Shape(parent, style)
 {
 }

@@ -21,7 +21,7 @@ class VISUALIZATIONBASE_API SelectedItem: public Item
 	ITEM_COMMON(SelectedItem)
 
 	public:
-		SelectedItem(Item* selectedItem, const SelectedItemStyle* style = Styles::item<SelectedItem>("default"));
+		SelectedItem(Item* selectedItem, const StyleType* style = Styles::item<SelectedItem>("default"));
 		virtual ~SelectedItem();
 
 		virtual bool needsUpdate();

@@ -27,7 +27,7 @@ int TextRenderer::selectionXBegin = 0;
 int TextRenderer::selectionXEnd = 0;
 int TextRenderer::caretX = 0;
 
-TextRenderer::TextRenderer(Item* parent, const TextStyle *style, const QString& text_) :
+TextRenderer::TextRenderer(Item* parent, const StyleType *style, const QString& text_) :
 	Item(parent, style), text(text_), editable(true)
 {
 }
