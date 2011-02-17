@@ -11,16 +11,15 @@ namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(VReference)
 
-VReference::VReference(Item* parent, Model::Reference *ref, const TextStyle *style) :
-	TextRenderer<ModelItem>(parent, ref, style)
+VReference::VReference(Item* parent, NodeType *node, const StyleType *style) :
+	ItemWithNode<TextRenderer, Model::Reference>(parent, node, style)
 {
 }
 
 void VReference::updateGeometry(int availableWidth, int availableHeight)
 {
-	Model::Reference* refNode = static_cast<Model::Reference*> (getNode());
-	setText( refNode->path() );
-	TextRenderer<ModelItem>::updateGeometry(availableWidth, availableHeight);
+	setText( node()->path() );
+	TextRenderer::updateGeometry(availableWidth, availableHeight);
 }
 
 }

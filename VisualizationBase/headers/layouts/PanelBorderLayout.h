@@ -18,7 +18,7 @@ namespace Visualization {
 
 class VISUALIZATIONBASE_API PanelBorderLayout: public Layout
 {
-	ITEM_COMMON(PanelBorderLayout, Layout)
+	ITEM_COMMON(PanelBorderLayout)
 
 	private:
 		PanelLayout* top_;

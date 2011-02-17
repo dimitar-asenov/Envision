@@ -18,7 +18,7 @@ namespace Visualization {
 
 class VISUALIZATIONBASE_API Icon: public Item
 {
-	ITEM_COMMON(Icon, Item)
+	ITEM_COMMON(Icon)
 
 	protected:
 		virtual void determineChildren();

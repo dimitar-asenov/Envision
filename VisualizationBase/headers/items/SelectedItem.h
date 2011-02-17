@@ -18,7 +18,7 @@ namespace Visualization {
 
 class VISUALIZATIONBASE_API SelectedItem: public Item
 {
-	ITEM_COMMON(SelectedItem, Item)
+	ITEM_COMMON(SelectedItem)
 
 	public:
 		SelectedItem(Item* selectedItem, const SelectedItemStyle* style = Styles::item<SelectedItem>("default"));

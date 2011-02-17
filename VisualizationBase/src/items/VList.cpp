@@ -12,8 +12,8 @@ namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(VList)
 
-VList::VList(Item* parent, Model::List* node, const VListStyle* style) :
-	ModelItem(parent, node, style), items_(this, &style->itemsStyle())
+VList::VList(Item* parent, NodeType* node, const StyleType* style) :
+	ItemWithNode<Item, Model::List>(parent, node, style), items_(this, &style->itemsStyle())
 {
 }
 
@@ -23,12 +23,11 @@ VList::~VList()
 
 void VList::determineChildren()
 {
-	Model::List* list = static_cast<Model::List*> (getNode());
 
 	// TODO: find a better way and place to determine the style of children
 	items_.setStyle(&style()->itemsStyle());
 
-	items_.synchronizeWithNodes(list->nodes().toList(), renderer());
+	items_.synchronizeWithNodes(node()->nodes().toList(), renderer());
 }
 
 int VList::focusedElementIndex() const
@@ -58,7 +57,7 @@ bool VList::focusChild(FocusTarget location)
 
 void VList::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-	if ( hasShape() && (style()->drawShapeWhenEmpty() || !isEmpty()) ) ModelItem::paint(painter, option, widget);
+	if ( hasShape() && (style()->drawShapeWhenEmpty() || !isEmpty()) ) Item::paint(painter, option, widget);
 }
 
 }

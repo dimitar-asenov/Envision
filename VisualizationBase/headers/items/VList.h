@@ -10,7 +10,7 @@
 
 #include "../visualizationbase_api.h"
 
-#include "ModelItem.h"
+#include "ItemWithNode.h"
 #include "VListStyle.h"
 #include "../Styles.h"
 #include "../layouts/SequentialLayout.h"
@@ -18,9 +18,9 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API VList: public ModelItem
+class VISUALIZATIONBASE_API VList: public ItemWithNode<Item, Model::List>
 {
-	ITEM_COMMON(VList, ModelItem)
+	ITEM_COMMON(VList)
 
 	private:
 		SequentialLayout items_;
@@ -30,7 +30,7 @@ class VISUALIZATIONBASE_API VList: public ModelItem
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	public:
-		VList(Item* parent, Model::List* node, const VListStyle* style = Styles::item<VList>("default"));
+		VList(Item* parent, NodeType* node, const StyleType* style = Styles::item<VList>("default"));
 		virtual ~VList();
 
 		int length() const;

@@ -13,25 +13,24 @@ namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(VBoolean)
 
-VBoolean::VBoolean(Item* parent, Model::Boolean *node, const TextStyle *style) :
-	TextRenderer<ModelItem>(parent, node, style)
+VBoolean::VBoolean(Item* parent, NodeType *node, const StyleType *style) :
+	ItemWithNode< TextRenderer, Model::Boolean >(parent, node, style)
 {
-	if (node->get()) TextRenderer<ModelItem>::setText( "true" );
-	else TextRenderer<ModelItem>::setText( "false" );
+	if (node->get()) TextRenderer::setText( "true" );
+	else TextRenderer::setText( "false" );
 }
 
 bool VBoolean::setText(const QString& newText)
 {
 	if (newText.contains(' ') || newText.compare("true", Qt::CaseInsensitive) == 0 || newText.compare("false", Qt::CaseInsensitive) == 0)
 	{
-		Model::Boolean* node = static_cast<Model::Boolean*> (getNode());
-		node->model()->beginModification(node, "Set boolean");
-		if ( newText.contains(' ') ) node->set( !node->get() );
-		else if ( newText.compare("true", Qt::CaseInsensitive) == 0 ) node->set(true);
-		else node->set(false);
-		node->model()->endModification();
-		if (node->get()) TextRenderer<ModelItem>::setText( "true" );
-		else TextRenderer<ModelItem>::setText( "false" );
+		node()->model()->beginModification(node(), "Set boolean");
+		if ( newText.contains(' ') ) node()->set( !node()->get() );
+		else if ( newText.compare("true", Qt::CaseInsensitive) == 0 ) node()->set(true);
+		else node()->set(false);
+		node()->model()->endModification();
+		if (node()->get()) TextRenderer::setText( "true" );
+		else TextRenderer::setText( "false" );
 		return true;
 	}
 	else return false;

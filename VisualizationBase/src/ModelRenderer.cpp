@@ -7,7 +7,6 @@
 
 #include "ModelRenderer.h"
 #include "VisualizationException.h"
-#include "items/ModelItem.h"
 #include "items/VExtendable.h"
 
 #include "ModelBase/headers/nodes/Extendable/ExtendableNode.h"
@@ -24,7 +23,7 @@ ModelRenderer::~ModelRenderer()
 {
 }
 
-ModelItem* ModelRenderer::render(Item* parent, Model::Node* node)
+Item* ModelRenderer::render(Item* parent, Model::Node* node)
 {
 	int nodeTypeId = node->typeId();
 	if (nodeTypeId >= visualizations.size() || !visualizations[nodeTypeId])

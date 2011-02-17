@@ -11,19 +11,19 @@
 #include "../visualizationbase_api.h"
 
 #include "TextRenderer.h"
-#include "ModelItem.h"
+#include "ItemWithNode.h"
 #include "TextStyle.h"
 #include "ModelBase/headers/nodes/Integer.h"
 #include "../Styles.h"
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API VInteger : public TextRenderer<ModelItem>
+class VISUALIZATIONBASE_API VInteger : public ItemWithNode<TextRenderer, Model::Integer>
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VInteger, TextRenderer<ModelItem>, TextStyle)
+	ITEM_COMMON_CUSTOM_STYLENAME(VInteger, TextStyle)
 
 	public:
-		VInteger(Item* parent, Model::Integer *integer, const TextStyle *style = Styles::item<VInteger>("default"));
+		VInteger(Item* parent, NodeType *node, const StyleType *style = Styles::item<VInteger>("default"));
 		virtual bool setText(const QString& newText);
 };
 

@@ -11,19 +11,19 @@
 #include "../visualizationbase_api.h"
 
 #include "TextRenderer.h"
-#include "ModelItem.h"
+#include "ItemWithNode.h"
 #include "TextStyle.h"
 #include "ModelBase/headers/nodes/Boolean.h"
 #include "../Styles.h"
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API VBoolean : public TextRenderer<ModelItem>
+class VISUALIZATIONBASE_API VBoolean : public ItemWithNode<TextRenderer, Model::Boolean>
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VBoolean, TextRenderer<ModelItem>, TextStyle)
+	ITEM_COMMON_CUSTOM_STYLENAME(VBoolean, TextStyle)
 
 	public:
-		VBoolean(Item* parent, Model::Boolean *node, const TextStyle *style = Styles::item<VBoolean>("default"));
+		VBoolean(Item* parent, NodeType *node, const StyleType *style = Styles::item<VBoolean>("default"));
 		virtual bool setText(const QString& newText);
 };
 

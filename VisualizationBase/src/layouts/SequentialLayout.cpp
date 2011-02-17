@@ -7,8 +7,8 @@
 
 #include "layouts/SequentialLayout.h"
 #include "shapes/Shape.h"
-
-#include "items/ModelItem.h"
+#include "items/ItemWithNode.h"
+#include "ModelRenderer.h"
 
 #include "ModelBase/headers/nodes/Node.h"
 
@@ -87,14 +87,14 @@ void SequentialLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes, Mo
 	for (int i = 0; i < nodes.size(); ++i)
 	{
 		if (i >= items.size() ) append( renderer->render(NULL, nodes[i]));	// This node is new
-		else if ( (static_cast<ModelItem*> (items[i]))->getNode() == nodes[i] )	continue;	// This node is already there
+		else if ( items[i]->node() == nodes[i] )	continue;	// This node is already there
 		else
 		{
 			// This node might appear somewhere ahead, we should look for it
 			bool found = false;
 			for (int k = i + 1; k<items.size(); ++k)
 			{
-				if ( (static_cast<ModelItem*> (items[k]))->getNode() == nodes[i] )
+				if ( items[k]->node() == nodes[i] )
 				{
 					// We found this node, swap the visualizations
 					swap(i, k);

@@ -11,6 +11,7 @@
 #include "shapes/ShapeStyle.h"
 #include "VisualizationException.h"
 #include "Scene.h"
+#include "ModelRenderer.h"
 
 namespace Visualization {
 
@@ -94,12 +95,13 @@ void Item::updateSubtree()
 	// It is safe to assume that an item is updated before its parent item is updated. When an item's size depends on the
 	// parent's size, we must first update the item without providing any size constraints, so that the item can report a
 	// minimum size during the parent's update procedure.
-	if ( needsUpdate_ || needsUpdate() || sizeDependsOnParent())
+	if ( needsUpdate_ || needsUpdate() || sizeDependsOnParent() || (hasNode() && revision() != node()->revision()))
 	{
 		determineChildren();
 		updateChildren();
 		changeGeometry();
 		needsUpdate_ = false;
+		if (hasNode()) setRevision( node()->revision() );
 	}
 }
 
@@ -193,6 +195,25 @@ Scene* Item::scene() const
 	return static_cast<Visualization::Scene*> (QGraphicsItem::scene());
 }
 
+bool Item::hasNode() const
+{
+	return false;
+}
+
+Model::Node* Item::node() const
+{
+	return NULL;
+}
+
+int Item::revision() const
+{
+	return -1;
+}
+
+void Item::setRevision(int)
+{
+}
+
 bool Item::childHasFocus() const
 {
 	return QGraphicsItem::scene()->focusItem() == this || QGraphicsItem::isAncestorOf( QGraphicsItem::scene()->focusItem() );
@@ -204,6 +225,12 @@ void Item::removeFromScene()
 	setParentItem(NULL);
 }
 
+
+ModelRenderer* Item::renderer()
+{
+	if ( (static_cast<Scene*>(scene()))->renderer() ) return (static_cast<Scene*>(scene()))->renderer();
+	throw VisualizationException("The scene of an Item has no renderer.");
+};
 /***********************************************************************************************************************
  * Reimplemented Event handling methods. These simply dispatch the method call to the interaction handler of this
  * object.

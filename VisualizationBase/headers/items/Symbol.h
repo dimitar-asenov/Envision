@@ -15,9 +15,9 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API Symbol : public TextRenderer<Item>
+class VISUALIZATIONBASE_API Symbol : public TextRenderer
 {
-	ITEM_COMMON(Symbol, TextRenderer<Item>)
+	ITEM_COMMON(Symbol)
 
 	public:
 		Symbol(Item* parent, const SymbolStyle *style);

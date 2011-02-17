@@ -13,10 +13,10 @@ namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(VInteger)
 
-VInteger::VInteger(Item* parent, Model::Integer *integer, const TextStyle *style) :
-	TextRenderer<ModelItem>(parent, integer, style)
+VInteger::VInteger(Item* parent, NodeType *node, const StyleType *style) :
+	ItemWithNode<TextRenderer, Model::Integer>(parent, node, style)
 {
-	TextRenderer<ModelItem>::setText( QString::number(integer->get()) );
+	TextRenderer::setText( QString::number(node->get()) );
 }
 
 bool VInteger::setText(const QString& newText)
@@ -25,11 +25,10 @@ bool VInteger::setText(const QString& newText)
 	int value = newText.toInt(&ok);
 	if (ok)
 	{
-		Model::Integer* node = static_cast<Model::Integer*> (getNode());
-		node->model()->beginModification(node, "Set integer");
-		node->set(value);
-		node->model()->endModification();
-		TextRenderer<ModelItem>::setText(newText);
+		node()->model()->beginModification(node(), "Set integer");
+		node()->set(value);
+		node()->model()->endModification();
+		TextRenderer::setText(newText);
 		return true;
 	}
 	else return false;

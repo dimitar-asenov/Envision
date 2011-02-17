@@ -13,13 +13,13 @@ namespace Visualization {
 ITEM_COMMON_DEFINITIONS(Text)
 
 Text::Text(Item* parent, const QString& text) :
-	TextRenderer<Item>(parent, Styles::item<Text>("darkGrey"), text)
+	TextRenderer(parent, Styles::item<Text>("darkGrey"), text)
 {
 	setEditable(false);
 }
 
-Text::Text(Item* parent, const TextStyle *style, const QString& text) :
-	TextRenderer<Item>(parent, style, text)
+Text::Text(Item* parent, const StyleType *style, const QString& text) :
+	TextRenderer(parent, style, text)
 {
 	setEditable(false);
 }

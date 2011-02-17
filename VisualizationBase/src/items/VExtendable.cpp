@@ -6,8 +6,8 @@
  **********************************************************************************************************************/
 
 #include "items/VExtendable.h"
-
 #include "items/Text.h"
+#include "ModelRenderer.h"
 
 #include <QtCore/QString>
 #include <QtCore/QPair>
@@ -17,8 +17,12 @@ namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(VExtendable)
 
-VExtendable::VExtendable(Item* parent, Model::ExtendableNode* node, const VExtendableStyle* style) :
-	ModelItem(parent, node, style), header( new SequentialLayout(this, &style->smallHeaderStyle())), layout(NULL), attributes(NULL), expanded_(style->expanded())
+VExtendable::VExtendable(Item* parent, NodeType* node, const StyleType* style) :
+	ItemWithNode<Item, Model::ExtendableNode>(parent, node, style),
+	header( new SequentialLayout(this, &style->smallHeaderStyle())),
+	layout(NULL),
+	attributes(NULL),
+	expanded_(style->expanded())
 {
 	header->append(new Text(header, node->typeName()));
 	if (!expanded_) removeShape();
@@ -39,14 +43,12 @@ VExtendable::~VExtendable()
 
 void VExtendable::determineChildren()
 {
-	Model::ExtendableNode* node = static_cast<Model::ExtendableNode*> (getNode());
-
 	// Set the name if any
-	if ( node->hasAttribute("name") )
+	if ( node()->hasAttribute("name") )
 	{
-		Model::Node* name = node->get("name");
+		Model::Node* name = node()->get("name");
 		if ( header->length() == 1 ) header->prepend(renderer()->render(header, name));
-		if ( header->length() == 2 && header->at<ModelItem> (0)->getNode() != name )
+		if ( header->length() == 2 && header->at<Item>(0)->node() != name )
 		{
 			header->remove(0);
 			header->prepend(renderer()->render(header, name));
@@ -101,7 +103,7 @@ void VExtendable::determineChildren()
 		// NOTE: This procedure assumes that the order of the named attributes will never change. Attributes might be
 		// deleted or added but their ordering should be kept constant.
 		// TODO: document this somewhere more visible.
-		QList<QPair<QString, Model::Node*> > attr = node->getAllAttributes();
+		QList<QPair<QString, Model::Node*> > attr = node()->getAllAttributes();
 
 		// Remove elements from attributes which are outdated
 		for(int i = attributes->length() - 1; i>=0; --i)
@@ -109,7 +111,7 @@ void VExtendable::determineChildren()
 			bool found = false;
 			for (int k = 0; k<attr.size(); ++k)
 			{
-				if (attr[k].second == attributes->at<SequentialLayout>(i)->at<ModelItem>(1)->getNode())
+				if (attr[k].second == attributes->at<SequentialLayout>(i)->at<Item>(1)->node())
 				{
 					found = true;
 					break;
@@ -124,7 +126,7 @@ void VExtendable::determineChildren()
 		{
 			if ( attr[i].first == "name" ) continue;
 
-			if (attributes->length() <= attributeIndex || attributes->at<SequentialLayout>(attributeIndex)->at<ModelItem>(1)->getNode() != attr[i].second)
+			if (attributes->length() <= attributeIndex || attributes->at<SequentialLayout>(attributeIndex)->at<Item>(1)->node() != attr[i].second)
 			{
 				SequentialLayout* s = new SequentialLayout(attributes);
 				s->append(new Text(s, attr[i].first));

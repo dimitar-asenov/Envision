@@ -13,7 +13,7 @@ namespace Visualization {
 ITEM_COMMON_DEFINITIONS(Symbol)
 
 Symbol::Symbol(Item* parent, const SymbolStyle *style) :
-	TextRenderer<Item>(parent, style, style->symbol())
+	TextRenderer(parent, style, style->symbol())
 {
 	setEditable(false);
 }

@@ -12,6 +12,8 @@
 #include "ItemMacros.h"
 #include "../InteractionHandler.h"
 
+#include "ModelBase/headers/nodes/Node.h"
+
 #include "Core/headers/global.h"
 
 #include <QtGui/QGraphicsItem>
@@ -22,6 +24,7 @@ class Shape;
 class ShapeStyle;
 class ItemStyle;
 class Scene;
+class ModelRenderer;
 
 class VISUALIZATIONBASE_API Item : public QGraphicsItem
 {
@@ -103,6 +106,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		virtual void focusOutEvent(QFocusEvent *event);
 
 	public:
+		typedef ItemStyle StyleType;
 		const static int LAYER_DEFAULT_Z = 0;
 		const static int LAYER_SELECTION_Z = 100;
 
@@ -110,6 +114,11 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		virtual ~Item();
 
 		Scene* scene() const;
+
+		virtual bool hasNode() const;
+		virtual Model::Node* node() const;
+		virtual int revision() const;
+		virtual void setRevision(int newRevision);
 
 		bool childHasFocus() const;
 
@@ -144,6 +153,8 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		void execute(const QString& command);
 
 		void removeFromScene();
+
+		ModelRenderer* renderer();
 };
 
 inline int Item::width() const { return boundingRect_.width(); }

@@ -13,10 +13,10 @@ namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(VFloat)
 
-VFloat::VFloat(Item* parent, Model::Float *node, const TextStyle *style) :
-	TextRenderer<ModelItem>(parent, node, style)
+VFloat::VFloat(Item* parent, NodeType *node, const StyleType *style) :
+	ItemWithNode< TextRenderer, Model::Float >(parent, node, style)
 {
-	TextRenderer<ModelItem>::setText( QString::number(node->get()) );
+	TextRenderer::setText( QString::number(node->get()) );
 }
 
 bool VFloat::setText(const QString& newText)
@@ -25,11 +25,10 @@ bool VFloat::setText(const QString& newText)
 	double value = newText.toDouble(&ok);
 	if (ok)
 	{
-		Model::Float* node = static_cast<Model::Float*> (getNode());
-		node->model()->beginModification(node, "Set float");
-		node->set(value);
-		node->model()->endModification();
-		TextRenderer<ModelItem>::setText(newText);
+		node()->model()->beginModification(node(), "Set float");
+		node()->set(value);
+		node()->model()->endModification();
+		TextRenderer::setText(newText);
 		return true;
 	}
 	else return false;

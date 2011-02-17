@@ -23,7 +23,7 @@ class ModelRenderer;
 
 class VISUALIZATIONBASE_API SequentialLayout: public Layout
 {
-	ITEM_COMMON(SequentialLayout, Layout)
+	ITEM_COMMON(SequentialLayout)
 
 	private:
 		QVector<Item*> items;

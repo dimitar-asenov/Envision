@@ -11,19 +11,19 @@
 #include "../visualizationbase_api.h"
 
 #include "TextRenderer.h"
-#include "ModelItem.h"
+#include "ItemWithNode.h"
 #include "TextStyle.h"
 #include "ModelBase/headers/nodes/Reference.h"
 #include "../Styles.h"
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API VReference : public TextRenderer<ModelItem>
+class VISUALIZATIONBASE_API VReference : public ItemWithNode<TextRenderer, Model::Reference>
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VReference, TextRenderer<ModelItem>, TextStyle)
+	ITEM_COMMON_CUSTOM_STYLENAME(VReference, TextStyle)
 
 	public:
-		VReference(Item* parent, Model::Reference *ref, const TextStyle *style = Styles::item<VReference>("default"));
+		VReference(Item* parent, NodeType *node, const StyleType *style = Styles::item<VReference>("default"));
 
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 };

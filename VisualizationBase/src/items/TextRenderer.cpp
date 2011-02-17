@@ -7,7 +7,7 @@
 
 #include "items/TextRenderer.h"
 
-#include "items/ModelItem.h"
+#include "items/ItemWithNode.h"
 #include "Scene.h"
 #include "VisualizationException.h"
 #include "shapes/Shape.h"
@@ -17,49 +17,34 @@
 
 namespace Visualization {
 
+ITEM_COMMON_DEFINITIONS(TextRenderer)
+
 const int MIN_TEXT_WIDTH = 10;
 
-template<class T> int TextRenderer<T>::selectionBegin = 0;
-template<class T> int TextRenderer<T>::selectionEnd = 0;
-template<class T> int TextRenderer<T>::selectionXBegin = 0;
-template<class T> int TextRenderer<T>::selectionXEnd = 0;
-template<class T> int TextRenderer<T>::caretX = 0;
+int TextRenderer::selectionBegin = 0;
+int TextRenderer::selectionEnd = 0;
+int TextRenderer::selectionXBegin = 0;
+int TextRenderer::selectionXEnd = 0;
+int TextRenderer::caretX = 0;
 
-template<class T> TextRenderer<T>::TextRenderer(Item* parent, const TextStyle *style, const QString& text_) :
-	T(parent, style), text(text_), editable(true)
+TextRenderer::TextRenderer(Item* parent, const TextStyle *style, const QString& text_) :
+	Item(parent, style), text(text_), editable(true)
 {
 }
 
-template<class T> TextRenderer<T>::TextRenderer(Item* parent, Model::Node *node, const TextStyle *style) :
-	T(parent, node, style), editable(true)
-{;
-}
-
-template<class T> const TextStyle* TextRenderer<T>::style() const
-{
-	return static_cast<const TextStyle*> (T::style());
-}
-
-template<class T> void TextRenderer<T>::setStyle(const ItemStyle* style)
-{
-	const TextStyle* s = dynamic_cast<const TextStyle*> (style);
-	if ( !s ) throw VisualizationException("Invalid style type when calling TextRenderer::setStyle");
-	T::setStyle(s);
-}
-
-template<class T> bool TextRenderer<T>::setText(const QString& newText)
+bool TextRenderer::setText(const QString& newText)
 {
 	text = newText;
 	this->setUpdateNeeded();
 	return true;
 }
 
-template<class T> QString TextRenderer<T>::getText()
+QString TextRenderer::getText()
 {
 	return text;
 }
 
-template<class T> QString TextRenderer<T>::getSelectedText()
+QString TextRenderer::getSelectedText()
 {
 	if (this->hasFocus())
 	{
@@ -76,21 +61,21 @@ template<class T> QString TextRenderer<T>::getSelectedText()
 	else return QString();
 }
 
-template<class T> bool TextRenderer<T>::isEditable()
+bool TextRenderer::isEditable()
 {
 	return editable;
 }
 
-template<class T> void TextRenderer<T>::setEditable(bool editable_)
+void TextRenderer::setEditable(bool editable_)
 {
 	editable = editable_;
 }
 
-template<class T> void TextRenderer<T>::determineChildren()
+void TextRenderer::determineChildren()
 {
 }
 
-template<class T> void TextRenderer<T>::updateGeometry(int, int)
+void TextRenderer::updateGeometry(int, int)
 {
 	QFontMetrics qfm(style()->font());
 
@@ -139,9 +124,9 @@ template<class T> void TextRenderer<T>::updateGeometry(int, int)
 	}
 }
 
-template<class T> void TextRenderer<T>::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void TextRenderer::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-	T::paint(painter, option, widget);
+	Item::paint(painter, option, widget);
 
 	int numSelected = this->scene()->selectedItems().size();
 
@@ -198,7 +183,7 @@ template<class T> void TextRenderer<T>::paint(QPainter *painter, const QStyleOpt
 	}
 }
 
-template<class T> void TextRenderer<T>::selectAll()
+void TextRenderer::selectAll()
 {
 	selectionBegin = 0;
 	selectionEnd = text.length();
@@ -206,7 +191,7 @@ template<class T> void TextRenderer<T>::selectAll()
 	this->setUpdateNeeded();
 }
 
-template<class T> void TextRenderer<T>::setSelectedCharacters(int first, int last)
+void TextRenderer::setSelectedCharacters(int first, int last)
 {
 	selectionBegin = first;
 	selectionEnd = last;
@@ -214,7 +199,7 @@ template<class T> void TextRenderer<T>::setSelectedCharacters(int first, int las
 	this->setUpdateNeeded();
 }
 
-template<class T> void TextRenderer<T>::setSelectedByDrag(int xBegin, int xEnd)
+void TextRenderer::setSelectedByDrag(int xBegin, int xEnd)
 {
 	selectionBegin = 0;
 	selectionEnd = 0;
@@ -233,41 +218,24 @@ template<class T> void TextRenderer<T>::setSelectedByDrag(int xBegin, int xEnd)
 	this->setUpdateNeeded();
 }
 
-template<class T> int TextRenderer<T>::selectionFirstInxed()
+int TextRenderer::selectionFirstInxed()
 {
 	return selectionBegin < selectionEnd ? selectionBegin : selectionEnd;
 }
 
-template<class T> int TextRenderer<T>::selectionLastIndex()
+int TextRenderer::selectionLastIndex()
 {
 	return selectionBegin > selectionEnd ? selectionBegin : selectionEnd;
 }
 
-template<class T> int TextRenderer<T>::caretPosition()
+int TextRenderer::caretPosition()
 {
 	return selectionEnd;
 }
 
-template<class T> void TextRenderer<T>::setCaretPosition(int beforeCharacter)
+void TextRenderer::setCaretPosition(int beforeCharacter)
 {
 	setSelectedCharacters(beforeCharacter,beforeCharacter);
 }
-
-// Specialization of constructors
-template<> TextRenderer<ModelItem>::TextRenderer(Item* parent, const TextStyle *style, const QString& text_) :
-	ModelItem(parent, NULL, style), text(text_)
-{
-	throw VisualizationException("Creating a TextRenderer<ModelItem> by calling an inappropriate constructor");
-}
-
-template<> TextRenderer<Item>::TextRenderer(Item* parent, Model::Node *, const TextStyle *style) :
-	Item(parent, style)
-{
-	throw VisualizationException("Creating a TextRenderer<Item> by calling an inappropriate constructor");
-}
-
-// Explicit instantiations
-template class TextRenderer<Item> ;
-template class TextRenderer<ModelItem> ;
 
 }

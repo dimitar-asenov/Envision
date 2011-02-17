@@ -31,7 +31,8 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/items/SymbolStyle.h \
+HEADERS += headers/items/ItemWithNode.h \
+    headers/items/SymbolStyle.h \
     headers/items/Symbol.h \
     headers/items/VCharacter.h \
     headers/items/VBoolean.h \
@@ -58,7 +59,6 @@ HEADERS += headers/items/SymbolStyle.h \
     headers/items/Item.h \
     headers/items/ItemMacros.h \
     headers/items/ItemStyle.h \
-    headers/items/ModelItem.h \
     headers/items/VExtendableStyle.h \
     headers/StyleNode.h \
     headers/Styles.h \
@@ -111,7 +111,6 @@ SOURCES += src/items/Symbol.cpp \
     src/items/VList.cpp \
     src/items/Item.cpp \
     src/items/ItemStyle.cpp \
-    src/items/ModelItem.cpp \
     src/items/VExtendableStyle.cpp \
     src/StyleNode.cpp \
     src/Styles.cpp \

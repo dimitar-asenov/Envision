@@ -11,19 +11,19 @@
 #include "../visualizationbase_api.h"
 
 #include "TextRenderer.h"
-#include "ModelItem.h"
+#include "ItemWithNode.h"
 #include "TextStyle.h"
 #include "ModelBase/headers/nodes/Float.h"
 #include "../Styles.h"
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API VFloat : public TextRenderer<ModelItem>
+class VISUALIZATIONBASE_API VFloat : public ItemWithNode<TextRenderer, Model::Float>
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VFloat, TextRenderer<ModelItem>, TextStyle)
+	ITEM_COMMON_CUSTOM_STYLENAME(VFloat, TextStyle)
 
 	public:
-		VFloat(Item* parent, Model::Float *node, const TextStyle *style = Styles::item<VFloat>("default"));
+		VFloat(Item* parent, NodeType *node, const StyleType *style = Styles::item<VFloat>("default"));
 		virtual bool setText(const QString& newText);
 };
 

@@ -16,17 +16,16 @@
 namespace Visualization {
 
 class Item;
-class ModelItem;
 
 class VISUALIZATIONBASE_API ModelRenderer
 {
 	public:
-		typedef ModelItem* (*ItemConstructor)(Item* parent, Model::Node* node);
+		typedef Item* (*ItemConstructor)(Item* parent, Model::Node* node);
 
 		ModelRenderer();
 		virtual ~ModelRenderer();
 
-		virtual ModelItem* render(Item* parent, Model::Node* node);
+		virtual Item* render(Item* parent, Model::Node* node);
 
 		void registerVisualization(int typeId, ItemConstructor visualization);
 		void setUseDefaultVisualizations(bool useDefault);
@@ -43,7 +42,7 @@ inline void ModelRenderer::setUseDefaultVisualizations(bool useDefault)
 }
 
 template<class VIS, class NODE>
-ModelItem* createVisualization(Item* parent, Model::Node* node)
+Item* createVisualization(Item* parent, Model::Node* node)
 {
 	return new VIS(parent, static_cast<NODE*> (node));
 }

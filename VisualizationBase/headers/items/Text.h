@@ -14,13 +14,13 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API Text : public TextRenderer<Item>
+class VISUALIZATIONBASE_API Text : public TextRenderer
 {
-	ITEM_COMMON(Text, TextRenderer<Item>)
+	ITEM_COMMON(Text)
 
 	public:
 		Text(Item* parent, const QString& text = QString());
-		Text(Item* parent, const TextStyle *style, const QString& text = QString());
+		Text(Item* parent, const StyleType *style, const QString& text = QString());
 };
 
 }

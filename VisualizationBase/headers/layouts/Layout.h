@@ -19,7 +19,7 @@ namespace Visualization {
 
 class VISUALIZATIONBASE_API Layout: public Item
 {
-	ITEM_COMMON(Layout, Item)
+	ITEM_COMMON(Layout)
 
 	protected:
 		int xOffset() const;

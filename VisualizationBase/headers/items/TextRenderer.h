@@ -11,14 +11,16 @@
 #include "../visualizationbase_api.h"
 
 #include "Item.h"
+#include "ItemMacros.h"
 #include "TextStyle.h"
 #include "ModelBase/headers/nodes/Node.h"
 
 namespace Visualization {
 
-template <class T>
-class VISUALIZATIONBASE_API TextRenderer : public T
+class VISUALIZATIONBASE_API TextRenderer : public Item
 {
+	ITEM_COMMON_CUSTOM_STYLENAME(TextRenderer, TextStyle)
+
 	private:
 			QString text;
 
@@ -51,10 +53,6 @@ class VISUALIZATIONBASE_API TextRenderer : public T
 
 		public:
 			TextRenderer(Item* parent, const TextStyle *style, const QString& text = QString());
-			TextRenderer(Item* parent, Model::Node *node, const TextStyle *style);
-
-			const TextStyle* style() const;
-			virtual void setStyle(const ItemStyle* style);
 
 			/**
 			 * Sets the text of this item.

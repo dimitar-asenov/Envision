@@ -13,19 +13,18 @@ namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(VText)
 
-VText::VText(Item* parent, Model::Text *text, const TextStyle *style) :
-	TextRenderer<ModelItem>(parent, text, style)
+VText::VText(Item* parent, NodeType* node, const StyleType* style) :
+	ItemWithNode<TextRenderer, Model::Text>(parent, node, style)
 {
-	TextRenderer<ModelItem>::setText(text->get());
+	TextRenderer::setText(node->get());
 }
 
 bool VText::setText(const QString& newText)
 {
-	Model::Text* textNode = static_cast<Model::Text*> (getNode());
-	textNode->model()->beginModification(textNode, "Set text");
-	textNode->set(newText);
-	textNode->model()->endModification();
-	return TextRenderer<ModelItem>::setText(newText);
+	node()->model()->beginModification(node(), "Set text");
+	node()->set(newText);
+	node()->model()->endModification();
+	return TextRenderer::setText(newText);
 }
 
 }

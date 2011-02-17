@@ -7,6 +7,7 @@
 
 #include "layouts/PositionLayout.h"
 #include "shapes/Shape.h"
+#include "ModelRenderer.h"
 
 #include "ModelBase/headers/Model.h"
 
@@ -30,10 +31,10 @@ int PositionLayout::length() const
 	return items.size();
 }
 
-bool PositionLayout::hasNode(Model::Node* node)
+bool PositionLayout::containsNode(Model::Node* node_)
 {
 	for(int i=0; i<items.size(); ++i)
-		if (items[i]->getNode() == node) return true;
+		if (items[i]->node() == node_) return true;
 
 	return false;
 }
@@ -41,18 +42,17 @@ bool PositionLayout::hasNode(Model::Node* node)
 void PositionLayout::insert(Item* item)
 {
 	// Check whether this item has a position associated with it
-	ModelItem* mi = dynamic_cast<ModelItem*> (item);
-	if (!mi) throw VisualizationException("Adding an Item that is not a ModelItem to a PositionLayout");
+	if ( !item->hasNode() ) throw VisualizationException("Adding an Item that has no node to a PositionLayout");
 
-	Model::ExtendableNode* node = dynamic_cast<Model::ExtendableNode*> (mi->getNode());
-	if (!node) throw VisualizationException("Adding a ModelItem that does not implement ExtendableNode to a PositionLayout");
+	Model::ExtendableNode* extNode = dynamic_cast<Model::ExtendableNode*> (item->node());
+	if (!extNode) throw VisualizationException("Adding an Item that does not implement ExtendableNode to a PositionLayout");
 
-	Position* pos = node->extension<Position>();
+	Position* pos = extNode->extension<Position>();
 
-	if (!pos) throw VisualizationException("Adding a ModelItem whose node does not have a Position extension to a PositionLayout");
+	if (!pos) throw VisualizationException("Adding a Item whose node does not have a Position extension to a PositionLayout");
 
 	item->setParentItem(this);
-	items.append(mi);
+	items.append(item);
 	positions.append(pos);
 	setUpdateNeeded();
 }
@@ -80,7 +80,7 @@ void PositionLayout::clear(bool deleteItems)
 
 void PositionLayout::swap(int i, int j)
 {
-	ModelItem* t = items[i];
+	Item* t = items[i];
 	items[i] = items[j];
 	items[j] = t;
 }
@@ -91,14 +91,14 @@ void PositionLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes, Mode
 	for (int i = 0; i < nodes.size(); ++i)
 	{
 		if (i >= items.size() ) insert( renderer->render(NULL, nodes[i]));	// This node is new
-		else if ( (static_cast<ModelItem*> (items[i]))->getNode() == nodes[i] )	continue;	// This node is already there
+		else if ( items[i]->node() == nodes[i] )	continue;	// This node is already there
 		else
 		{
 			// This node might appear somewhere ahead, we should look for it
 			bool found = false;
 			for (int k = i + 1; k<items.size(); ++k)
 			{
-				if ( (static_cast<ModelItem*> (items[k]))->getNode() == nodes[i] )
+				if ( items[k]->node() == nodes[i] )
 				{
 					// We found this node, swap the visualizations
 					swap(i, k);

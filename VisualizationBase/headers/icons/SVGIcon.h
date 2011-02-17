@@ -15,7 +15,7 @@ namespace Visualization {
 
 class VISUALIZATIONBASE_API SVGIcon : public Icon
 {
-	ITEM_COMMON(SVGIcon, Icon)
+	ITEM_COMMON(SVGIcon)
 
 	public:
 		SVGIcon(Item* parent, const SVGIconStyle *style = Styles::icon<SVGIcon>("default"));

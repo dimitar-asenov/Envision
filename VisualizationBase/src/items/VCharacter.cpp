@@ -13,21 +13,20 @@ namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(VCharacter)
 
-VCharacter::VCharacter(Item* parent, Model::Character *node, const TextStyle *style) :
-	TextRenderer<ModelItem>(parent, node, style)
+VCharacter::VCharacter(Item* parent, NodeType *node, const StyleType *style) :
+	ItemWithNode< TextRenderer, Model::Character >(parent, node, style)
 {
-	TextRenderer<ModelItem>::setText( node->get() );
+	TextRenderer::setText( node->get() );
 }
 
 bool VCharacter::setText(const QString& newText)
 {
 	if (newText.length() == 1)
 	{
-		Model::Character* node = static_cast<Model::Character*> (getNode());
-		node->model()->beginModification(node, "Set character");
-		node->set(newText[0]);
-		node->model()->endModification();
-		TextRenderer<ModelItem>::setText(newText[0]);
+		node()->model()->beginModification(node(), "Set character");
+		node()->set(newText[0]);
+		node()->model()->endModification();
+		TextRenderer::setText(newText[0]);
 		return true;
 	}
 	else return false;

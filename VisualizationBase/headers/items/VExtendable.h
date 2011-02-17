@@ -10,7 +10,7 @@
 
 #include "../visualizationbase_api.h"
 
-#include "ModelItem.h"
+#include "ItemWithNode.h"
 #include "../Styles.h"
 #include "VExtendableStyle.h"
 #include "../layouts/SequentialLayout.h"
@@ -19,9 +19,9 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API VExtendable : public ModelItem
+class VISUALIZATIONBASE_API VExtendable : public ItemWithNode<Item, Model::ExtendableNode>
 {
-	ITEM_COMMON(VExtendable, ModelItem)
+	ITEM_COMMON(VExtendable)
 
 	private:
 		SequentialLayout* header;
@@ -36,7 +36,7 @@ class VISUALIZATIONBASE_API VExtendable : public ModelItem
 		void updateGeometry(int availableWidth, int availableHeight);
 
 	public:
-		VExtendable(Item* parent, Model::ExtendableNode* node, const VExtendableStyle* style = Styles::item<VExtendable>("default"));
+		VExtendable(Item* parent, NodeType* node, const StyleType* style = Styles::item<VExtendable>("default"));
 		virtual ~VExtendable();
 
 		void setExpanded(bool expanded = true);

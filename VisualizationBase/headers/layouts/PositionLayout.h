@@ -11,7 +11,7 @@
 #include "../visualizationbase_api.h"
 #include "../node_extensions/Position.h"
 
-#include "../items/ModelItem.h"
+#include "../items/ItemWithNode.h"
 #include "Layout.h"
 #include "PositionLayoutStyle.h"
 
@@ -21,10 +21,10 @@ class ModelRenderer;
 
 class VISUALIZATIONBASE_API PositionLayout : public Layout
 {
-	ITEM_COMMON(PositionLayout, Layout)
+	ITEM_COMMON(PositionLayout)
 
 	private:
-		QVector<ModelItem*> items;
+		QVector<Item*> items;
 		QVector<const Position*> positions;
 
 		void swap(int i, int j);
@@ -47,7 +47,7 @@ class VISUALIZATIONBASE_API PositionLayout : public Layout
 		void remove(int index, bool deleteItem = true);
 		void removeAll(Item* item, bool deleteItem = true);
 		void clear(bool deleteItems = true);
-		bool hasNode(Model::Node* node);
+		bool containsNode(Model::Node* node);
 
 		template <class T> T* at(int index);
 		template <class T> T* at(int index) const;
