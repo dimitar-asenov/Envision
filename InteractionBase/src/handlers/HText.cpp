@@ -70,14 +70,13 @@ void HText::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
 	if (event->modifiers() == Qt::ControlModifier)
 	{
-		if (target->scene()->selectedItems().size() == 0 || (target->isSelected() && target->scene()->selectedItems().size() == 1))
+		if (target->scene()->selectedItems().size() == 0)
 		{
 			switch (event->key())
 			{
 				case Qt::Key_C:
 					{
 						QString text = TEXTRENDERER_GET(getSelectedText);
-						if (text.isEmpty() && !TEXTRENDERER_GET(isEditable) && target->isSelected()) text = TEXTRENDERER_GET(getText);
 
 						if (!text.isEmpty()) QApplication::clipboard()->setText(text);
 						else GenericHandler::keyPressEvent(target, event);

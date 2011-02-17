@@ -105,14 +105,33 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 					QList<const Model::Node*> nodesToCopy;
 					QList<QGraphicsItem*> selected = target->scene()->selectedItems();
 
+					// Get all items from the current selection that are model items.
 					for (int i = 0; i<selected.size(); ++i)
 					{
 						Visualization::ModelItem* item = dynamic_cast<Visualization::ModelItem*> (selected.at(i));
 						if (item) nodesToCopy.append(item->getNode());
 					}
 
+					// In case there is exactly one selected item that is not a model item try to find the first parent that it has which is a model item.
+					if (nodesToCopy.size() == 0 && selected.size() == 1)
+					{
+						Visualization::Item* item = static_cast<Visualization::Item*> (selected.at(0));
+						while (item)
+						{
+							Visualization::ModelItem* modelItem = dynamic_cast<Visualization::ModelItem*> (item);
+							if (modelItem)
+							{
+								nodesToCopy.append(modelItem->getNode());
+								break;
+							}
+
+							item = static_cast<Visualization::Item*> ( item->parentItem() );
+						}
+					}
+
 					if (nodesToCopy.size() > 0)
 					{
+
 						FilePersistence::SystemClipboard clipboard;
 						arrangeNodesForClipboard(nodesToCopy);
 						clipboard.putNodes(nodesToCopy);
