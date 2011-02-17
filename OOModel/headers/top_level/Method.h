@@ -10,12 +10,12 @@
 
 #include "../oomodel_api.h"
 
-#include "common/attributeMacros.h"
-#include "common/Visibility.h"
-#include "common/Static.h"
-#include "StatementItem.h"
-#include "FormalArgument.h"
-#include "FormalResult.h"
+#include "attributeMacros.h"
+#include "elements/Visibility.h"
+#include "elements/Static.h"
+#include "elements/StatementItem.h"
+#include "elements/FormalArgument.h"
+#include "elements/FormalResult.h"
 
 #include "ModelBase/headers/nodes/Extendable/ExtendableNode.h"
 #include "ModelBase/headers/nodes/Text.h"
