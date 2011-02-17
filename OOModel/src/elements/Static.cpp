@@ -5,7 +5,7 @@
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "common/Static.h"
+#include "elements/Static.h"
 #include "ModelBase/headers/commands/FieldSet.h"
 #include "OOModelException.h"
 

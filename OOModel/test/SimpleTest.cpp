@@ -8,8 +8,7 @@
 #include "oomodel.h"
 #include "SelfTest/headers/SelfTestSuite.h"
 
-#include "Class.h"
-#include "Project.h"
+#include "allOOModelNodes.h"
 
 #include "ModelBase/headers/Model.h"
 

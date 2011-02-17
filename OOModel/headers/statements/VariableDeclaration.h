@@ -10,7 +10,7 @@
 
 #include "Statement.h"
 
-#include "../common/attributeMacros.h"
+#include "../attributeMacros.h"
 #include "../types/Type.h"
 #include "../expressions/Expression.h"
 

@@ -8,17 +8,7 @@
 #include "oomodel.h"
 #include "SelfTest/headers/SelfTestSuite.h"
 
-#include "Project.h"
-#include "Library.h"
-#include "Class.h"
-#include "Module.h"
-#include "FormalArgument.h"
-#include "Field.h"
-#include "types/NamedType.h"
-#include "expressions/StringLiteral.h"
-#include "expressions/VariableAccess.h"
-#include "expressions/ReferenceExpression.h"
-#include "statements/MethodCallStatement.h"
+#include "allOOModelNodes.h"
 
 #include "ModelBase/headers/Model.h"
 

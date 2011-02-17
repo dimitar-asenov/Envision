@@ -5,7 +5,7 @@
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "common/Visibility.h"
+#include "elements/Visibility.h"
 #include "ModelBase/headers/commands/FieldSet.h"
 #include "OOModelException.h"
 
