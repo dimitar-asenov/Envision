@@ -31,12 +31,12 @@ void HPositionLayout::mousePressEvent(Visualization::Item *target, QGraphicsScen
 
 		// Find out which of the children has the cursor.
 		// If there is only child or there is no child selected do not allow movement and ignore this event.
-		Visualization::ModelItem* itemToMove = NULL;
+		Visualization::Item* itemToMove = NULL;
 		if (layout->length() >=2)
 		{
 			for(int i = 0; i<layout->length(); ++i)
 			{
-				itemToMove = layout->at<Visualization::ModelItem>(i);
+				itemToMove = layout->at<Visualization::Item>(i);
 				if (itemToMove->contains(itemToMove->mapFromParent(event->pos()))) break;
 				else itemToMove = NULL;
 			}
@@ -44,7 +44,7 @@ void HPositionLayout::mousePressEvent(Visualization::Item *target, QGraphicsScen
 
 		if (itemToMove)
 		{
-			Model::ExtendableNode* ext = static_cast<Model::ExtendableNode*> (itemToMove->getNode());
+			Model::ExtendableNode* ext = static_cast<Model::ExtendableNode*> (itemToMove->node());
 			Visualization::Position* pos = ext->extension<Visualization::Position>();
 
 			target->scene()->clearSelection();
@@ -74,10 +74,10 @@ void HPositionLayout::mouseMoveEvent(Visualization::Item *target, QGraphicsScene
 
 			if (newX != currentItemPosition->x() || newY != currentItemPosition->y())
 			{
-				currentItem->getNode()->model()->beginModification(currentItem->getNode(),"Change position");
+				currentItem->node()->model()->beginModification(currentItem->node(),"Change position");
 				currentItemPosition->setX( newX );
 				currentItemPosition->setY( newY );
-				currentItem->getNode()->model()->endModification();
+				currentItem->node()->model()->endModification();
 				currentItem->setUpdateNeeded();
 				target->scene()->scheduleUpdate();
 			}

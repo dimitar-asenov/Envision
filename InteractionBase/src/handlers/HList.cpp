@@ -35,7 +35,7 @@ void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 
 		if (clipboard.numNodes() > 0 && selIndex >= 0)
 		{
-			Model::List* l = dynamic_cast<Model::List*> (list->getNode());
+			Model::List* l = dynamic_cast<Model::List*> (list->node());
 			FilePersistence::SystemClipboard clipboard;
 			l->model()->beginModification(l,"paste");
 			if (l) l->paste(clipboard, selIndex+1);

@@ -11,7 +11,6 @@
 #include "vis/CommandPrompt.h"
 
 #include "VisualizationBase/headers/Scene.h"
-#include "VisualizationBase/headers/items/ModelItem.h"
 #include "FilePersistence/headers/SystemClipboard.h"
 #include "ModelBase/headers/nodes/List.h"
 #include "ModelBase/headers/nodes/Extendable/ExtendableNode.h"
@@ -108,8 +107,8 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 					// Get all items from the current selection that are model items.
 					for (int i = 0; i<selected.size(); ++i)
 					{
-						Visualization::ModelItem* item = dynamic_cast<Visualization::ModelItem*> (selected.at(i));
-						if (item) nodesToCopy.append(item->getNode());
+						Visualization::Item* item = static_cast<Visualization::Item*> (selected.at(i));
+						if (item->hasNode()) nodesToCopy.append(item->node());
 					}
 
 					// In case there is exactly one selected item that is not a model item try to find the first parent that it has which is a model item.
@@ -118,10 +117,9 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 						Visualization::Item* item = static_cast<Visualization::Item*> (selected.at(0));
 						while (item)
 						{
-							Visualization::ModelItem* modelItem = dynamic_cast<Visualization::ModelItem*> (item);
-							if (modelItem)
+							if (item->hasNode())
 							{
-								nodesToCopy.append(modelItem->getNode());
+								nodesToCopy.append(item->node());
 								break;
 							}
 
@@ -143,12 +141,11 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 					FilePersistence::SystemClipboard clipboard;
 					if (clipboard.numNodes() == 1 && target->scene()->selectedItems().size() == 1 && target->isSelected())
 					{
-						Visualization::ModelItem* item = dynamic_cast<Visualization::ModelItem*> (target);
-						if (item && item->getNode()->typeName() == clipboard.currentNodeType())
+						if (target->hasNode() && target->node()->typeName() == clipboard.currentNodeType())
 						{
-							item->getNode()->model()->beginModification(item->getNode(), "paste");
-							item->getNode()->load(clipboard);
-							item->getNode()->model()->endModification();
+							target->node()->model()->beginModification(target->node(), "paste");
+							target->node()->load(clipboard);
+							target->node()->model()->endModification();
 							target->setUpdateNeeded();
 						}
 						else InteractionHandler::keyPressEvent(target, event);
@@ -158,12 +155,11 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 				break;
 /* Undo */	case Qt::Key_Z:
 				{
-					Visualization::ModelItem* item = dynamic_cast<Visualization::ModelItem*> (target);
-					if (item)
+					if (target->hasNode())
 					{
-						item->getNode()->model()->beginModification(NULL, "undo");
-						item->getNode()->model()->undo();
-						item->getNode()->model()->endModification();
+						target->node()->model()->beginModification(NULL, "undo");
+						target->node()->model()->undo();
+						target->node()->model()->endModification();
 						target->setUpdateNeeded();
 					}
 					else InteractionHandler::keyPressEvent(target, event);
@@ -171,12 +167,11 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 				break;
 /* Redo */	case Qt::Key_Y:
 				{
-					Visualization::ModelItem* item = dynamic_cast<Visualization::ModelItem*> (target);
-					if (item)
+					if (target->hasNode())
 					{
-						item->getNode()->model()->beginModification(NULL, "redo");
-						item->getNode()->model()->redo();
-						item->getNode()->model()->endModification();
+						target->node()->model()->beginModification(NULL, "redo");
+						target->node()->model()->redo();
+						target->node()->model()->endModification();
 						target->setUpdateNeeded();
 					}
 					else InteractionHandler::keyPressEvent(target, event);
@@ -293,7 +288,7 @@ void GenericHandler::filterSelectedItems(Visualization::Item *target, QGraphicsS
 	bool modelItemSelected = false;
 	selection = target->scene()->selectedItems();
 	for (int i = 0; i<selection.size(); ++i)
-		if (dynamic_cast<Visualization::ModelItem*> (selection.at(i)))
+		if ( (static_cast<Visualization::Item*> (selection.at(i)))->hasNode())
 		{
 			modelItemSelected = true;
 			break;
@@ -302,7 +297,7 @@ void GenericHandler::filterSelectedItems(Visualization::Item *target, QGraphicsS
 	// If there is at least one model item, discard all items which are not model items.
 	if (modelItemSelected)
 		for (int i = selection.size() - 1; i>=0; --i)
-			if (dynamic_cast<Visualization::ModelItem*> (selection.at(i)) == NULL)
+			if ((static_cast<Visualization::Item*> (selection.at(i)))->hasNode() == false)
 			{
 				selection.at(i)->setSelected(false);
 				selection.removeAt(i);

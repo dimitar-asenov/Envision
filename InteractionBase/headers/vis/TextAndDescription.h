@@ -20,10 +20,10 @@ namespace Interaction {
 
 class INTERACTIONBASE_API TextAndDescription : public Visualization::Item
 {
-	ITEM_COMMON(TextAndDescription, Visualization::Item)
+	ITEM_COMMON(TextAndDescription)
 
 	public:
-		TextAndDescription(Item* parent, const TextAndDescriptionStyle* style = Visualization::Styles::item<TextAndDescription>("default"));
+		TextAndDescription(Item* parent, const StyleType* style = Visualization::Styles::item<TextAndDescription>("default"));
 		virtual ~TextAndDescription();
 
 		virtual bool sizeDependsOnParent() const;

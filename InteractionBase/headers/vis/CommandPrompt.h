@@ -24,10 +24,10 @@ namespace Interaction {
 
 class INTERACTIONBASE_API CommandPrompt : public Visualization::Item
 {
-	ITEM_COMMON(CommandPrompt, Visualization::Item)
+	ITEM_COMMON(CommandPrompt)
 
 	public:
-		CommandPrompt(Visualization::Item* commandReceiver, const CommandPromptStyle* style = Visualization::Styles::item<CommandPrompt>("default"));
+		CommandPrompt(Visualization::Item* commandReceiver, const StyleType* style = Visualization::Styles::item<CommandPrompt>("default"));
 		virtual ~CommandPrompt();
 
 		void setResult(CommandResult* result);

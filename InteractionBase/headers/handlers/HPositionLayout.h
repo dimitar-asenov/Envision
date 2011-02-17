@@ -12,7 +12,7 @@
 
 #include "GenericHandler.h"
 
-#include "VisualizationBase/headers/items/ModelItem.h"
+#include "VisualizationBase/headers/items/Item.h"
 #include "VisualizationBase/headers/node_extensions/Position.h"
 
 namespace Interaction {
@@ -33,7 +33,7 @@ class INTERACTIONBASE_API HPositionLayout : public GenericHandler
 	private:
 		int originalX;
 		int originalY;
-		Visualization::ModelItem* currentItem;
+		Visualization::Item* currentItem;
 		Visualization::Position* currentItemPosition;
 
 };

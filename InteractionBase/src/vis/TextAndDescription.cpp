@@ -13,7 +13,7 @@ ITEM_COMMON_DEFINITIONS(TextAndDescription)
 
 using namespace Visualization;
 
-TextAndDescription::TextAndDescription(Item* parent, const TextAndDescriptionStyle* style) :
+TextAndDescription::TextAndDescription(Item* parent, const StyleType* style) :
 	Item(parent, style), layout(new SequentialLayout(this, &style->layout())), text( new Text(NULL, &style->text())),
 	description( new Text(NULL, &style->description()))
 {

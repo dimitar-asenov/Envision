@@ -32,7 +32,7 @@ const int PROMPT_TO_RECEIVER_DISTANCE = 3;
 
 ITEM_COMMON_DEFINITIONS(CommandPrompt)
 
-CommandPrompt::CommandPrompt(Item* commandReceiver, const CommandPromptStyle* style) :
+CommandPrompt::CommandPrompt(Item* commandReceiver, const StyleType* style) :
 	Item(NULL, style),
 	commandReceiver_(commandReceiver),
 	layout(new SequentialLayout(this, &style->layout())),
