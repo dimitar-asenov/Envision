@@ -26,7 +26,10 @@ pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
-HEADERS += headers/elements/FormalArgument.h \
+HEADERS += headers/attributeMacros.h \
+    headers/elements/Static.h \
+    headers/elements/Visibility.h \
+    headers/elements/FormalArgument.h \
     headers/elements/FormalResult.h \
     headers/elements/StatementItem.h \
     headers/top_level/Class.h \
@@ -42,7 +45,6 @@ HEADERS += headers/elements/FormalArgument.h \
     headers/expressions/ReferenceExpression.h \
     headers/expressions/MethodCallExpression.h \
     headers/statements/MethodCallStatement.h \
-    headers/common/Static.h \
     headers/statements/ForEachStatement.h \
     headers/statements/SwitchCase.h \
     headers/statements/SwitchStatement.h \
@@ -71,11 +73,11 @@ HEADERS += headers/elements/FormalArgument.h \
     headers/statements/Statement.h \
     headers/expressions/Expression.h \
     headers/OOModelException.h \
-    headers/common/Visibility.h \
-    headers/common/attributeMacros.h \
     headers/oomodel_api.h \
     src/oomodel.h
-SOURCES += src/elements/FormalArgument.cpp \
+SOURCES += src/elements/Static.cpp \
+    src/elements/Visibility.cpp \
+    src/elements/FormalArgument.cpp \
     src/elements/FormalResult.cpp \
     src/elements/StatementItem.cpp \
     src/top_level/Class.cpp \
@@ -91,7 +93,6 @@ SOURCES += src/elements/FormalArgument.cpp \
     src/expressions/ReferenceExpression.cpp \
     src/expressions/MethodCallExpression.cpp \
     src/statements/MethodCallStatement.cpp \
-    src/common/Static.cpp \
     test/JavaTest.cpp \
     src/statements/ReturnStatement.cpp \
     src/statements/SwitchCase.cpp \
@@ -119,7 +120,6 @@ SOURCES += src/elements/FormalArgument.cpp \
     src/statements/Statement.cpp \
     src/expressions/Expression.cpp \
     src/TypedListInstantiations.cpp \
-    src/common/Visibility.cpp \
     src/OOModelException.cpp \
     src/oomodel.cpp \
     test/SimpleTest.cpp
