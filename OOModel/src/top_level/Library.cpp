@@ -5,7 +5,7 @@
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "Library.h"
+#include "top_level/Library.h"
 
 namespace OOModel {
 

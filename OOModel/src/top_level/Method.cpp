@@ -5,7 +5,7 @@
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "Method.h"
+#include "top_level/Method.h"
 
 namespace OOModel {
 

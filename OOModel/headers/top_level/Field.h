@@ -8,7 +8,7 @@
 #ifndef FIELD_H_
 #define FIELD_H_
 
-#include "oomodel_api.h"
+#include "../oomodel_api.h"
 
 #include "common/attributeMacros.h"
 #include "common/Visibility.h"

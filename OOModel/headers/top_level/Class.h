@@ -8,7 +8,7 @@
 #ifndef CLASS_H_
 #define CLASS_H_
 
-#include "oomodel_api.h"
+#include "../oomodel_api.h"
 
 #include "common/attributeMacros.h"
 #include "common/Visibility.h"

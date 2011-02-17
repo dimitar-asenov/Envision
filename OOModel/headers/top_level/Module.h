@@ -8,7 +8,7 @@
 #ifndef MODULE_H_
 #define MODULE_H_
 
-#include "oomodel_api.h"
+#include "../oomodel_api.h"
 
 #include "common/attributeMacros.h"
 #include "Class.h"

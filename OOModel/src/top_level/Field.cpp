@@ -5,7 +5,7 @@
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "Field.h"
+#include "top_level/Field.h"
 
 namespace OOModel {
 

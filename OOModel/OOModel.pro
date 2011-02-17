@@ -26,17 +26,22 @@ pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
-HEADERS += headers/StatementItem.h \
+HEADERS += headers/top_level/Class.h \
+    headers/top_level/Field.h \
+    headers/top_level/Library.h \
+    headers/top_level/Method.h \
+    headers/top_level/Module.h \
+    headers/top_level/Project.h \
+    headers/types/ArrayType.h \
+    headers/StatementItem.h \
     headers/FormalResult.h \
     headers/allOOModelNodes.h \
-    headers/Library.h \
     headers/TypedListInstantiations.h \
     headers/statements/AssignmentStatement.h \
     headers/expressions/ReferenceExpression.h \
     headers/expressions/MethodCallExpression.h \
     headers/statements/MethodCallStatement.h \
     headers/common/Static.h \
-    headers/Field.h \
     headers/statements/ForEachStatement.h \
     headers/statements/SwitchCase.h \
     headers/statements/SwitchStatement.h \
@@ -65,26 +70,27 @@ HEADERS += headers/StatementItem.h \
     headers/expressions/IntegerLiteral.h \
     headers/statements/Statement.h \
     headers/expressions/Expression.h \
-    headers/Method.h \
     headers/OOModelException.h \
     headers/common/Visibility.h \
     headers/common/attributeMacros.h \
-    headers/Project.h \
-    headers/Class.h \
-    headers/Module.h \
     headers/oomodel_api.h \
     src/oomodel.h
-SOURCES += src/statements/ForEachStatement.cpp \
+SOURCES += src/top_level/Class.cpp \
+    src/top_level/Field.cpp \
+    src/top_level/Library.cpp \
+    src/top_level/Method.cpp \
+    src/top_level/Module.cpp \
+    src/top_level/Project.cpp \
+    src/types/ArrayType.cpp \
+    src/statements/ForEachStatement.cpp \
     src/StatementItem.cpp \
     src/expressions/UnaryOperation.cpp \
     src/FormalResult.cpp \
-    src/Library.cpp \
     src/statements/AssignmentStatement.cpp \
     src/expressions/ReferenceExpression.cpp \
     src/expressions/MethodCallExpression.cpp \
     src/statements/MethodCallStatement.cpp \
     src/common/Static.cpp \
-    src/Field.cpp \
     test/JavaTest.cpp \
     src/statements/ReturnStatement.cpp \
     src/statements/SwitchCase.cpp \
@@ -112,12 +118,8 @@ SOURCES += src/statements/ForEachStatement.cpp \
     src/expressions/IntegerLiteral.cpp \
     src/statements/Statement.cpp \
     src/expressions/Expression.cpp \
-    src/Method.cpp \
     src/TypedListInstantiations.cpp \
     src/common/Visibility.cpp \
     src/OOModelException.cpp \
-    src/Class.cpp \
-    src/Project.cpp \
-    src/Module.cpp \
     src/oomodel.cpp \
     test/SimpleTest.cpp

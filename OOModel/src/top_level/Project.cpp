@@ -5,7 +5,7 @@
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "Project.h"
+#include "top_level/Project.h"
 
 namespace OOModel {
 
