@@ -64,6 +64,7 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	Model::TypedList<Type>::registerNodeType();
 	Model::TypedList<PrimitiveType>::registerNodeType();
 	Model::TypedList<NamedType>::registerNodeType();
+	Model::TypedList<ArrayType>::registerNodeType();
 
 	// Initialize OO Node types
 	Project::init();
@@ -109,6 +110,7 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	Type::init();
 	PrimitiveType::init();
 	NamedType::init();
+	ArrayType::init();
 
 	return true;
 }

@@ -55,6 +55,7 @@ class ReferenceExpression;
 class Type;
 class PrimitiveType;
 class NamedType;
+class ArrayType;
 
 }
 
@@ -101,6 +102,7 @@ template class Q_DECL_IMPORT Model::TypedList<OOModel::ReferenceExpression>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::Type>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::PrimitiveType>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::NamedType>;
+template class Q_DECL_IMPORT Model::TypedList<OOModel::ArrayType>;
 
 
 #endif /* TYPEDLISTINSTANTIATIONS_H_ */

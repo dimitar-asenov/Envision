@@ -51,6 +51,7 @@
 #include "types/Type.h"
 #include "types/PrimitiveType.h"
 #include "types/NamedType.h"
+#include "types/ArrayType.h"
 
 #include "common/Visibility.h"
 #include "common/Static.h"

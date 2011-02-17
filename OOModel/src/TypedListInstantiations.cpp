@@ -52,3 +52,4 @@ template class Model::TypedList<OOModel::ReferenceExpression>;
 template class Model::TypedList<OOModel::Type>;
 template class Model::TypedList<OOModel::PrimitiveType>;
 template class Model::TypedList<OOModel::NamedType>;
+template class Model::TypedList<OOModel::ArrayType>;
