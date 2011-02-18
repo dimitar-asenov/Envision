@@ -11,6 +11,8 @@
 #include "../oovisualization_api.h"
 #include "VIfStatementStyle.h"
 
+#include "OOModel/headers/statements/IfStatement.h"
+
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/LayoutProvider.h"
 #include "VisualizationBase/headers/Styles.h"
@@ -19,10 +21,6 @@ namespace Visualization {
 	class PanelBorderLayout;
 	class PositionLayout;
 	class SequentialLayout;
-}
-
-namespace OOModel {
-	class IfStatement;
 }
 
 namespace OOVisualization {

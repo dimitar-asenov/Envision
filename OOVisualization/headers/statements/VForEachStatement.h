@@ -11,18 +11,16 @@
 #include "../oovisualization_api.h"
 #include "VForEachStatementStyle.h"
 
+#include "OOModel/headers/statements/ForEachStatement.h"
+
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/LayoutProvider.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
-	class PanelBorderLayout;
 	class VText;
 	class SequentialLayout;
-}
-
-namespace OOModel {
-	class ForEachStatement;
+	class PanelBorderLayout;
 }
 
 namespace OOVisualization {

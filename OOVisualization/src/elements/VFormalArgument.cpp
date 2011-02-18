@@ -7,8 +7,6 @@
 
 #include "elements/VFormalArgument.h"
 
-#include "OOModel/headers/elements/FormalArgument.h"
-
 #include "VisualizationBase/headers/items/VText.h"
 
 using namespace Visualization;

@@ -7,8 +7,6 @@
 
 #include "expressions/VReferenceExpression.h"
 
-#include "OOModel/headers/expressions/ReferenceExpression.h"
-
 #include "VisualizationBase/headers/items/Text.h"
 #include "VisualizationBase/headers/items/Symbol.h"
 

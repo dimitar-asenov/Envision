@@ -7,8 +7,6 @@
 
 #include "expressions/VMethodCallExpression.h"
 
-#include "OOModel/headers/expressions/MethodCallExpression.h"
-
 #include "VisualizationBase/headers/items/Text.h"
 #include "VisualizationBase/headers/items/Symbol.h"
 #include "VisualizationBase/headers/items/VList.h"

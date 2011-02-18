@@ -10,19 +10,15 @@
 
 #include "../oovisualization_api.h"
 
+#include "OOModel/headers/types/ArrayType.h"
+
 #include "VArrayTypeStyle.h"
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/LayoutProvider.h"
 #include "VisualizationBase/headers/Styles.h"
 
-#include "OOModel/headers/types/ArrayType.h"
-
 namespace Visualization {
 	class Symbol;
-}
-
-namespace OOModel {
-	class ArrayType;
 }
 
 namespace OOVisualization {

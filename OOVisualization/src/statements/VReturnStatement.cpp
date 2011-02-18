@@ -7,8 +7,6 @@
 
 #include "statements/VReturnStatement.h"
 
-#include "OOModel/headers/statements/ReturnStatement.h"
-
 #include "VisualizationBase/headers/items/Symbol.h"
 #include "VisualizationBase/headers/items/VList.h"
 

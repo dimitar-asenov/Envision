@@ -7,8 +7,6 @@
 
 #include "statements/VIfStatement.h"
 
-#include "OOModel/headers/statements/IfStatement.h"
-
 #include "VisualizationBase/headers/layouts/PanelBorderLayout.h"
 #include "VisualizationBase/headers/layouts/SequentialLayout.h"
 #include "VisualizationBase/headers/icons/SVGIcon.h"

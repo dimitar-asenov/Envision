@@ -7,8 +7,6 @@
 
 #include "expressions/VNewExpression.h"
 
-#include "OOModel/headers/expressions/NewExpression.h"
-
 #include "VisualizationBase/headers/items/Symbol.h"
 
 using namespace Visualization;

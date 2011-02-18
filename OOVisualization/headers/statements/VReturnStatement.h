@@ -11,6 +11,8 @@
 #include "../oovisualization_api.h"
 #include "VReturnStatementStyle.h"
 
+#include "OOModel/headers/statements/ReturnStatement.h"
+
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/LayoutProvider.h"
 #include "VisualizationBase/headers/Styles.h"
@@ -18,10 +20,6 @@
 namespace Visualization {
 	class Symbol;
 	class VList;
-}
-
-namespace OOModel {
-	class ReturnStatement;
 }
 
 namespace OOVisualization {

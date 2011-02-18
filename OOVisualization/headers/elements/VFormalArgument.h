@@ -11,16 +11,14 @@
 #include "../oovisualization_api.h"
 #include "VFormalArgumentStyle.h"
 
+#include "OOModel/headers/elements/FormalArgument.h"
+
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/LayoutProvider.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
 	class VText;
-}
-
-namespace OOModel {
-	class FormalArgument;
 }
 
 namespace OOVisualization {

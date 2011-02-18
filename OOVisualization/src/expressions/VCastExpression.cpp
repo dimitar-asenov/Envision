@@ -7,8 +7,6 @@
 
 #include "expressions/VCastExpression.h"
 
-#include "OOModel/headers/expressions/CastExpression.h"
-
 #include "VisualizationBase/headers/items/Symbol.h"
 
 using namespace Visualization;

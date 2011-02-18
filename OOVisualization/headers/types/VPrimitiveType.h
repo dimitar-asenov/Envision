@@ -10,16 +10,14 @@
 
 #include "../oovisualization_api.h"
 
+#include "OOModel/headers/types/PrimitiveType.h"
+
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/TextStyle.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
 	class Text;
-}
-
-namespace OOModel {
-	class PrimitiveType;
 }
 
 namespace OOVisualization {

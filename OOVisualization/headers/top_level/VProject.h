@@ -11,6 +11,8 @@
 #include "../oovisualization_api.h"
 #include "VProjectStyle.h"
 
+#include "OOModel/headers/top_level/Project.h"
+
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/LayoutProvider.h"
 #include "VisualizationBase/headers/Styles.h"
@@ -20,10 +22,6 @@ namespace Visualization {
 	class PanelBorderLayout;
 	class PositionLayout;
 	class SequentialLayout;
-}
-
-namespace OOModel {
-	class Project;
 }
 
 namespace OOVisualization {

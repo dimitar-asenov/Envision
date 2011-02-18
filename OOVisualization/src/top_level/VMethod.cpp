@@ -9,8 +9,6 @@
 #include "OOVisualizationException.h"
 #include "icons/MethodIcon.h"
 
-#include "OOModel/headers/top_level/Method.h"
-
 #include "VisualizationBase/headers/layouts/PanelBorderLayout.h"
 #include "VisualizationBase/headers/items/VText.h"
 #include "VisualizationBase/headers/items/VList.h"
@@ -60,7 +58,7 @@ void VMethod::determineChildren()
 	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
 	//			what's the reason they are being updated.
 	// The style needs to be updated every time since if our own style changes, so will that of the children.
-	layout_->setStyle( &style()->border() );
+	layout()->setStyle( &style()->border() );
 
 	if (node()->stat() == Static::INSTANCE_VARIABLE)
 	{

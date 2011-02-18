@@ -7,8 +7,6 @@
 
 #include "statements/VBlock.h"
 
-#include "OOModel/headers/statements/Block.h"
-
 #include "VisualizationBase/headers/items/VList.h"
 
 using namespace Visualization;

@@ -7,8 +7,6 @@
 
 #include "top_level/VModule.h"
 
-#include "OOModel/headers/top_level/Module.h"
-
 #include "VisualizationBase/headers/layouts/PanelBorderLayout.h"
 #include "VisualizationBase/headers/layouts/PositionLayout.h"
 #include "VisualizationBase/headers/layouts/PositionLayoutStyle.h"

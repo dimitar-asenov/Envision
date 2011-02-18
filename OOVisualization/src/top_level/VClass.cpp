@@ -9,8 +9,6 @@
 #include "OOVisualizationException.h"
 #include "icons/ClassIcon.h"
 
-#include "OOModel/headers/top_level/Class.h"
-
 #include "VisualizationBase/headers/layouts/PanelBorderLayout.h"
 #include "VisualizationBase/headers/layouts/PositionLayout.h"
 #include "VisualizationBase/headers/items/VText.h"
@@ -108,7 +106,7 @@ void VClass::determineChildren()
 
 	// Add new methods
 	for (int k = 0; k<node()->methods()->size(); ++k)
-		if ( !content_->hasNode( node()->methods()->at(k) ) )
+		if ( !content_->containsNode( node()->methods()->at(k) ) )
 			content_->insert(renderer()->render(NULL, node()->methods()->at(k)));
 
 	//////////////////////////////////////////////////////////////////////////////// Fields

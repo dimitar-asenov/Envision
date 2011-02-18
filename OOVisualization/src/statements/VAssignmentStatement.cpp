@@ -7,8 +7,6 @@
 
 #include "statements/VAssignmentStatement.h"
 
-#include "OOModel/headers/statements/AssignmentStatement.h"
-
 #include "VisualizationBase/headers/layouts/SequentialLayout.h"
 #include "VisualizationBase/headers/items/Symbol.h"
 

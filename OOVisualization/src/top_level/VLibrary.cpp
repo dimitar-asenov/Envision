@@ -7,14 +7,13 @@
 
 #include "top_level/VLibrary.h"
 
-#include "OOModel/headers/top_level/Library.h"
-
 #include "VisualizationBase/headers/layouts/PanelBorderLayout.h"
 #include "VisualizationBase/headers/layouts/PositionLayout.h"
 #include "VisualizationBase/headers/items/VText.h"
 #include "VisualizationBase/headers/icons/SVGIcon.h"
 
 using namespace Visualization;
+using namespace OOModel;
 
 namespace OOVisualization {
 

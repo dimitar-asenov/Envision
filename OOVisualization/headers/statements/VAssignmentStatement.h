@@ -11,16 +11,14 @@
 #include "../oovisualization_api.h"
 #include "../expressions/OperatorStyle.h"
 
+#include "OOModel/headers/statements/AssignmentStatement.h"
+
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/LayoutProvider.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
 	class Symbol;
-}
-
-namespace OOModel {
-	class AssignmentStatement;
 }
 
 namespace OOVisualization {

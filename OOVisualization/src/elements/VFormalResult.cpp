@@ -7,8 +7,6 @@
 
 #include "elements/VFormalResult.h"
 
-#include "OOModel/headers/elements/FormalResult.h"
-
 #include "VisualizationBase/headers/items/VText.h"
 
 using namespace Visualization;

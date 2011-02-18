@@ -7,8 +7,6 @@
 
 #include "types/VArrayType.h"
 
-#include "OOModel/headers/types/ArrayType.h"
-
 #include "VisualizationBase/headers/layouts/SequentialLayout.h"
 #include "VisualizationBase/headers/items/Symbol.h"
 

@@ -11,16 +11,14 @@
 #include "../oovisualization_api.h"
 #include "VNewExpressionStyle.h"
 
+#include "OOModel/headers/expressions/NewExpression.h"
+
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/LayoutProvider.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
 	class Symbol;
-}
-
-namespace OOModel {
-	class NewExpression;
 }
 
 namespace OOVisualization {

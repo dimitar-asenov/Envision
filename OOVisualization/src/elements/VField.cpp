@@ -8,8 +8,6 @@
 #include "elements/VField.h"
 #include "OOVisualizationException.h"
 
-#include "OOModel/headers/top_level/Field.h"
-
 #include "VisualizationBase/headers/items/VText.h"
 
 using namespace Visualization;

@@ -7,8 +7,6 @@
 
 #include "statements/VVariableDeclaration.h"
 
-#include "OOModel/headers/statements/VariableDeclaration.h"
-
 #include "VisualizationBase/headers/items/Symbol.h"
 #include "VisualizationBase/headers/items/VText.h"
 
@@ -31,9 +29,7 @@ VVariableDeclaration::VVariableDeclaration(Item* parent, NodeType* node, const S
 
 VVariableDeclaration::~VVariableDeclaration()
 {
-	SAFE_DELETE_ITEM(container_);
-
-	// These were automatically deleted by container's destructor
+	// These were automatically deleted by LayoutProvider's destructor
 	name_ = NULL;
 	type_ = NULL;
 	assignmentSymbol_ = NULL;

@@ -7,8 +7,6 @@
 
 #include "expressions/VBinaryOperation.h"
 
-#include "OOModel/headers/expressions/BinaryOperation.h"
-
 #include "VisualizationBase/headers/items/Symbol.h"
 
 using namespace Visualization;
@@ -61,7 +59,7 @@ void VBinaryOperation::determineChildren()
 	}
 	if (post_ && style()->op( node()->op() ).postSymbol().symbol().isEmpty() )
 	{
-		layout()->remove(container_->length()-1);
+		layout()->remove(layout()->length()-1);
 		post_ = NULL;
 	}
 

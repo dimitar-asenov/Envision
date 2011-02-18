@@ -11,6 +11,8 @@
 #include "../oovisualization_api.h"
 #include "VReferenceExpressionStyle.h"
 
+#include "OOModel/headers/expressions/ReferenceExpression.h"
+
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/LayoutProvider.h"
 #include "VisualizationBase/headers/Styles.h"
@@ -18,10 +20,6 @@
 namespace Visualization {
 	class Text;
 	class Symbol;
-}
-
-namespace OOModel {
-	class ReferenceExpression;
 }
 
 namespace OOVisualization {

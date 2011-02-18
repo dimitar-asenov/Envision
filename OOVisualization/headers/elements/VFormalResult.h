@@ -11,16 +11,14 @@
 #include "../oovisualization_api.h"
 #include "VFormalResultStyle.h"
 
+#include "OOModel/headers/elements/FormalResult.h"
+
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/LayoutProvider.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
 	class VText;
-}
-
-namespace OOModel {
-	class FormalResult;
 }
 
 namespace OOVisualization {

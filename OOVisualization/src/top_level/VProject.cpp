@@ -7,7 +7,6 @@
 
 #include "top_level/VProject.h"
 
-#include "OOModel/headers/top_level/Project.h"
 #include "OOModel/headers/top_level/Library.h"
 
 #include "VisualizationBase/headers/layouts/PanelBorderLayout.h"

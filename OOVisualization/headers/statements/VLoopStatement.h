@@ -11,6 +11,8 @@
 #include "../oovisualization_api.h"
 #include "VLoopStatementStyle.h"
 
+#include "OOModel/headers/statements/LoopStatement.h"
+
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/LayoutProvider.h"
 #include "VisualizationBase/headers/Styles.h"
@@ -18,10 +20,6 @@
 namespace Visualization {
 	class PanelBorderLayout;
 	class SequentialLayout;
-}
-
-namespace OOModel {
-	class LoopStatement;
 }
 
 namespace OOVisualization {

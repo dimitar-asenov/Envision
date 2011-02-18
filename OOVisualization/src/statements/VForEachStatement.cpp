@@ -7,10 +7,7 @@
 
 #include "statements/VForEachStatement.h"
 
-#include "OOModel/headers/statements/ForEachStatement.h"
-
 #include "VisualizationBase/headers/layouts/PanelBorderLayout.h"
-#include "VisualizationBase/headers/layouts/SequentialLayout.h"
 #include "VisualizationBase/headers/items/VText.h"
 #include "VisualizationBase/headers/icons/SVGIcon.h"
 

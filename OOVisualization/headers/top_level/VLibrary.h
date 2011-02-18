@@ -11,6 +11,8 @@
 #include "../oovisualization_api.h"
 #include "VLibraryStyle.h"
 
+#include "OOModel/headers/top_level/Library.h"
+
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/LayoutProvider.h"
 #include "VisualizationBase/headers/Styles.h"
@@ -19,10 +21,6 @@ namespace Visualization {
 	class VText;
 	class PanelBorderLayout;
 	class PositionLayout;
-}
-
-namespace OOModel {
-	class Library;
 }
 
 namespace OOVisualization {

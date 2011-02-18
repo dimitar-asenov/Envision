@@ -7,8 +7,6 @@
 
 #include "expressions/VVariableAccess.h"
 
-#include "OOModel/headers/expressions/VariableAccess.h"
-
 #include "VisualizationBase/headers/items/Text.h"
 #include "VisualizationBase/headers/items/Symbol.h"
 

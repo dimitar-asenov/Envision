@@ -11,15 +11,13 @@
 #include "../oovisualization_api.h"
 #include "VBlockStyle.h"
 
+#include "OOModel/headers/statements/Block.h"
+
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
 	class VList;
-}
-
-namespace OOModel {
-	class Block;
 }
 
 namespace OOVisualization {

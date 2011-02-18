@@ -7,8 +7,6 @@
 
 #include "expressions/VUnaryOperation.h"
 
-#include "OOModel/headers/expressions/UnaryOperation.h"
-
 #include "VisualizationBase/headers/layouts/SequentialLayout.h"
 #include "VisualizationBase/headers/items/Symbol.h"
 

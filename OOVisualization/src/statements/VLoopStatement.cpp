@@ -7,8 +7,6 @@
 
 #include "statements/VLoopStatement.h"
 
-#include "OOModel/headers/statements/LoopStatement.h"
-
 #include "VisualizationBase/headers/layouts/PanelBorderLayout.h"
 #include "VisualizationBase/headers/layouts/SequentialLayout.h"
 #include "VisualizationBase/headers/icons/SVGIcon.h"

@@ -8,8 +8,6 @@
 #include "types/VPrimitiveType.h"
 #include "OOVisualizationException.h"
 
-#include "OOModel/headers/types/PrimitiveType.h"
-
 #include "VisualizationBase/headers/items/Text.h"
 
 using namespace Visualization;

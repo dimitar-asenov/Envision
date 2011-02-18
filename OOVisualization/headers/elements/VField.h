@@ -11,16 +11,14 @@
 #include "../oovisualization_api.h"
 #include "VFieldStyle.h"
 
+#include "OOModel/headers/top_level/Field.h"
+
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/LayoutProvider.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
 	class VText;
-}
-
-namespace OOModel {
-	class Field;
 }
 
 namespace OOVisualization {
@@ -32,8 +30,6 @@ class OOVISUALIZATION_API VField : public Visualization::ItemWithNode< Visualiza
 	public:
 		VField(Item* parent, NodeType* node, const StyleType* style = Visualization::Styles::item<VField>("default"));
 		virtual ~VField();
-
-		virtual bool focusChild(FocusTarget location);
 
 	protected:
 		void determineChildren();
