@@ -12,12 +12,12 @@
 #include "VReturnStatementStyle.h"
 
 #include "VisualizationBase/headers/items/ItemWithNode.h"
+#include "VisualizationBase/headers/items/LayoutProvider.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
 	class Symbol;
 	class VList;
-	class SequentialLayout;
 }
 
 namespace OOModel {
@@ -26,22 +26,18 @@ namespace OOModel {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VReturnStatement : public Visualization::ModelItem
+class OOVISUALIZATION_API VReturnStatement : public Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::ReturnStatement>
 {
 	ITEM_COMMON(VReturnStatement)
 
 	public:
-		VReturnStatement(Item* parent, OOModel::ReturnStatement* node, const VReturnStatementStyle* style = Visualization::Styles::item<VReturnStatement>("default"));
+		VReturnStatement(Item* parent, NodeType* node, const StyleType* style = Visualization::Styles::item<VReturnStatement>("default"));
 		virtual ~VReturnStatement();
-
-		virtual bool focusChild(FocusTarget location);
 
 	protected:
 		void determineChildren();
-		void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		Visualization::SequentialLayout* container_;
 		Visualization::Symbol* symbol_;
 		Visualization::VList* values_;
 };

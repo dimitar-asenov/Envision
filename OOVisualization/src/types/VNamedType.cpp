@@ -14,8 +14,8 @@ namespace OOVisualization {
 
 ITEM_COMMON_DEFINITIONS(VNamedType)
 
-VNamedType::VNamedType(Item* parent, NamedType* node, const VReferenceExpressionStyle* style) :
-	ModelItem(parent, node, style),
+VNamedType::VNamedType(Item* parent, NodeType* node, const StyleType* style) :
+	ItemWithNode<Item, NamedType>(parent, node, style),
 	vis_( new VReferenceExpression(this, node->type(), style))
 {
 }

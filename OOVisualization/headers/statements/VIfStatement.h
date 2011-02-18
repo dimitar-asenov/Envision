@@ -12,6 +12,7 @@
 #include "VIfStatementStyle.h"
 
 #include "VisualizationBase/headers/items/ItemWithNode.h"
+#include "VisualizationBase/headers/items/LayoutProvider.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
@@ -26,30 +27,26 @@ namespace OOModel {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VIfStatement : public Visualization::ModelItem
+class OOVISUALIZATION_API VIfStatement : public Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::IfStatement>
 {
 	ITEM_COMMON(VIfStatement)
 
 	public:
-		VIfStatement(Item* parent, OOModel::IfStatement* node, const VIfStatementStyle* style = Visualization::Styles::item<VIfStatement>("default"));
+		VIfStatement(Item* parent, NodeType* node, const StyleType* style = Visualization::Styles::item<VIfStatement>("default"));
 		virtual ~VIfStatement();
-
-		virtual bool focusChild(FocusTarget location);
 
 	protected:
 		void determineChildren();
-		void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		Visualization::PanelBorderLayout* layout;
 		Visualization::SequentialLayout* header;
 		Visualization::SequentialLayout* conditionBackground;
-		Visualization::ModelItem* condition;
+		Visualization::Item* condition;
 		Visualization::SequentialLayout* content;
 		Visualization::SequentialLayout* thenBranchBackground;
 		Visualization::SequentialLayout* elseBranchBackground;
-		Visualization::ModelItem* thenBranch;
-		Visualization::ModelItem* elseBranch;
+		Visualization::Item* thenBranch;
+		Visualization::Item* elseBranch;
 };
 
 }

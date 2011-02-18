@@ -19,8 +19,8 @@ namespace OOVisualization {
 
 ITEM_COMMON_DEFINITIONS(VPrimitiveType)
 
-VPrimitiveType::VPrimitiveType(Item* parent, PrimitiveType* node, const TextStyle* style) :
-	ModelItem(parent, node, style),
+VPrimitiveType::VPrimitiveType(Item* parent, NodeType* node, const StyleType* style) :
+	ItemWithNode< Item, PrimitiveType>(parent, node, style),
 	vis_( new Text(this, style))
 {
 }
@@ -34,7 +34,7 @@ void VPrimitiveType::determineChildren()
 {
 	vis_->setStyle(style());
 
-	switch( (static_cast<PrimitiveType*> (getNode()))->type() )
+	switch( node()->type() )
 	{
 		case PrimitiveType::INT:
 			vis_->setText("int");

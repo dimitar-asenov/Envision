@@ -18,8 +18,8 @@ namespace OOVisualization {
 
 ITEM_COMMON_DEFINITIONS(VBlock)
 
-VBlock::VBlock(Item* parent, Block* node, const VBlockStyle* style) :
-	ModelItem(parent, node, style),
+VBlock::VBlock(Item* parent, NodeType* node, const StyleType* style) :
+	ItemWithNode<Item, Block>(parent, node, style),
 	items_( new VList(this, node->items()) )
 {
 }

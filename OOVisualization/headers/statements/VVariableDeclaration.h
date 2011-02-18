@@ -12,12 +12,12 @@
 #include "VVariableDeclarationStyle.h"
 
 #include "VisualizationBase/headers/items/ItemWithNode.h"
+#include "VisualizationBase/headers/items/LayoutProvider.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
 	class Symbol;
 	class VText;
-	class SequentialLayout;
 }
 
 namespace OOModel {
@@ -26,26 +26,22 @@ namespace OOModel {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VVariableDeclaration : public Visualization::ModelItem
+class OOVISUALIZATION_API VVariableDeclaration : public Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::VariableDeclaration>
 {
 	ITEM_COMMON(VVariableDeclaration)
 
 	public:
-		VVariableDeclaration(Item* parent, OOModel::VariableDeclaration* node, const VVariableDeclarationStyle* style = Visualization::Styles::item<VVariableDeclaration>("default"));
+		VVariableDeclaration(Item* parent, NodeType* node, const StyleType* style = Visualization::Styles::item<VVariableDeclaration>("default"));
 		virtual ~VVariableDeclaration();
-
-		virtual bool focusChild(FocusTarget location);
 
 	protected:
 		void determineChildren();
-		void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		Visualization::SequentialLayout* container_;
 		Visualization::VText* name_;
-		Visualization::ModelItem* type_;
+		Visualization::Item* type_;
 		Visualization::Symbol* assignmentSymbol_;
-		Visualization::ModelItem* initialValue_;
+		Visualization::Item* initialValue_;
 };
 
 }

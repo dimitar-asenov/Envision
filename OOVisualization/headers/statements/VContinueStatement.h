@@ -18,12 +18,12 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VContinueStatement : public Visualization::ModelItem
+class OOVISUALIZATION_API VContinueStatement : public Visualization::ItemWithNode< Visualization::Item, OOModel::ContinueStatement>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VContinueStatement, Visualization::SymbolStyle)
 
 	public:
-		VContinueStatement(Item* parent, OOModel::ContinueStatement *node, const Visualization::SymbolStyle *style = Visualization::Styles::item<VContinueStatement>("default"));
+		VContinueStatement(Item* parent, NodeType* node, const StyleType* style = Visualization::Styles::item<VContinueStatement>("default"));
 		virtual ~VContinueStatement();
 
 		virtual bool focusChild(FocusTarget location);

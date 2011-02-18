@@ -18,12 +18,12 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VIntegerLiteral : public Visualization::ModelItem
+class OOVISUALIZATION_API VIntegerLiteral : public Visualization::ItemWithNode< Visualization::Item, OOModel::IntegerLiteral>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VIntegerLiteral, Visualization::TextStyle)
 
 	public:
-		VIntegerLiteral(Item* parent, OOModel::IntegerLiteral *literal, const Visualization::TextStyle *style = Visualization::Styles::item<VIntegerLiteral>("default"));
+		VIntegerLiteral(Item* parent, NodeType *literal, const StyleType *style = Visualization::Styles::item<VIntegerLiteral>("default"));
 		virtual ~VIntegerLiteral();
 
 		virtual bool focusChild(FocusTarget location);
@@ -33,7 +33,7 @@ class OOVISUALIZATION_API VIntegerLiteral : public Visualization::ModelItem
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		Visualization::ModelItem* vis_;
+		Visualization::Item* vis_;
 };
 
 }

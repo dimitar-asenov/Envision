@@ -19,12 +19,12 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VVisibility : public Visualization::TextRenderer<Visualization::ModelItem>
+class OOVISUALIZATION_API VVisibility : public Visualization::ItemWithNode< Visualization::TextRenderer, OOModel::Visibility>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VVisibility, Visualization::TextStyle)
 
 	public:
-		VVisibility(Item* parent, OOModel::Visibility *vis, const Visualization::TextStyle *style = Visualization::Styles::item<VVisibility>("default"));
+		VVisibility(Item* parent, NodeType* vis, const StyleType* style = Visualization::Styles::item<VVisibility>("default"));
 
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 };

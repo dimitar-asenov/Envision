@@ -9,7 +9,6 @@
 
 #include "OOModel/headers/expressions/BinaryOperation.h"
 
-#include "VisualizationBase/headers/layouts/SequentialLayout.h"
 #include "VisualizationBase/headers/items/Symbol.h"
 
 using namespace Visualization;
@@ -19,9 +18,8 @@ namespace OOVisualization {
 
 ITEM_COMMON_DEFINITIONS(VBinaryOperation)
 
-VBinaryOperation::VBinaryOperation(Item* parent, BinaryOperation* node, const OperatorSequenceStyle* style) :
-	ModelItem(parent, node, style),
-	container_( new SequentialLayout(this, &style->op(node->op()).container()) ),
+VBinaryOperation::VBinaryOperation(Item* parent, NodeType* node, const StyleType* style) :
+	ItemWithNode<LayoutProvider<>, BinaryOperation>(parent, node, style),
 	pre_( NULL ),
 	in_( NULL ),
 	post_( NULL ),
@@ -32,9 +30,7 @@ VBinaryOperation::VBinaryOperation(Item* parent, BinaryOperation* node, const Op
 
 VBinaryOperation::~VBinaryOperation()
 {
-	SAFE_DELETE_ITEM(container_);
-
-	// These were automatically deleted by container's destructor
+	// These were automatically deleted by LayoutProvider's destructor
 	pre_ = NULL;
 	in_ = NULL;
 	post_ = NULL;
@@ -44,68 +40,56 @@ VBinaryOperation::~VBinaryOperation()
 
 void VBinaryOperation::determineChildren()
 {
-	BinaryOperation* node = static_cast<BinaryOperation*> (getNode());
-
 	if (!left_)
 	{
-		left_ = renderer()->render(NULL, node->left());
-		container_->append(left_);
-		right_ = renderer()->render(NULL, node->right());
-		container_->append(right_);
+		left_ = renderer()->render(NULL, node()->left());
+		layout()->append(left_);
+		right_ = renderer()->render(NULL, node()->right());
+		layout()->append(right_);
 	}
 
 	// Remove the prefix, infix and postfix symbols if they are not there any more
-	if (in_ && style()->op( node->op() ).inSymbol().symbol().isEmpty() )
+	if (in_ && style()->op( node()->op() ).inSymbol().symbol().isEmpty() )
 	{
-		container_->remove( (pre_?2:1) );
+		layout()->remove( (pre_?2:1) );
 		in_ = NULL;
 	}
-	if (pre_ && style()->op( node->op() ).preSymbol().symbol().isEmpty())
+	if (pre_ && style()->op( node()->op() ).preSymbol().symbol().isEmpty())
 	{
-		container_->remove(0);
+		layout()->remove(0);
 		pre_ = NULL;
 	}
-	if (post_ && style()->op( node->op() ).postSymbol().symbol().isEmpty() )
+	if (post_ && style()->op( node()->op() ).postSymbol().symbol().isEmpty() )
 	{
-		container_->remove(container_->length()-1);
+		layout()->remove(container_->length()-1);
 		post_ = NULL;
 	}
 
 	// Rebuild the prefix, infix and postfix symbols if needed
-	if (!in_ && !style()->op( node->op() ).inSymbol().symbol().isEmpty() )
+	if (!in_ && !style()->op( node()->op() ).inSymbol().symbol().isEmpty() )
 	{
-		in_ = new Symbol(NULL, &style()->op( node->op() ).inSymbol());
-		container_->insert(in_, (pre_?2:1) );
+		in_ = new Symbol(NULL, &style()->op( node()->op() ).inSymbol());
+		layout()->insert(in_, (pre_?2:1) );
 	}
-	if (!pre_ && !style()->op( node->op() ).preSymbol().symbol().isEmpty() )
+	if (!pre_ && !style()->op( node()->op() ).preSymbol().symbol().isEmpty() )
 	{
-		pre_ = new Symbol(NULL, &style()->op( node->op() ).preSymbol());
-		container_->prepend(pre_);
+		pre_ = new Symbol(NULL, &style()->op( node()->op() ).preSymbol());
+		layout()->prepend(pre_);
 	}
-	if (!post_ && !style()->op( node->op() ).postSymbol().symbol().isEmpty() )
+	if (!post_ && !style()->op( node()->op() ).postSymbol().symbol().isEmpty() )
 	{
-		post_ = new Symbol(NULL, &style()->op( node->op() ).postSymbol());
-		container_->append(post_);
+		post_ = new Symbol(NULL, &style()->op( node()->op() ).postSymbol());
+		layout()->append(post_);
 	}
 
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
 	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
 	//			what's the reason they are being updated.
 	// The style needs to be updated every time since if our own style changes, so will that of the children.
-	container_->setStyle( &style()->op(node->op()).container());
-	if (pre_) pre_->setStyle( &style()->op(node->op()).preSymbol());
-	if (in_) in_->setStyle( &style()->op(node->op()).inSymbol());
-	if (post_) post_->setStyle( &style()->op(node->op()).postSymbol());
-}
-
-void VBinaryOperation::updateGeometry(int availableWidth, int availableHeight)
-{
-	Item::updateGeometry(container_, availableWidth, availableHeight);
-}
-
-bool VBinaryOperation::focusChild(FocusTarget location)
-{
-	return container_->focusChild(location);
+	layout()->setStyle( &style()->op(node()->op()).container());
+	if (pre_) pre_->setStyle( &style()->op(node()->op()).preSymbol());
+	if (in_) in_->setStyle( &style()->op(node()->op()).inSymbol());
+	if (post_) post_->setStyle( &style()->op(node()->op()).postSymbol());
 }
 
 }

@@ -24,12 +24,12 @@ namespace OOModel {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VBlock : public Visualization::ModelItem
+class OOVISUALIZATION_API VBlock : public Visualization::ItemWithNode< Visualization::Item, OOModel::Block>
 {
 	ITEM_COMMON(VBlock)
 
 	public:
-		VBlock(Item* parent, OOModel::Block* node, const VBlockStyle* style = Visualization::Styles::item<VBlock>("default"));
+		VBlock(Item* parent, NodeType* node, const StyleType* style = Visualization::Styles::item<VBlock>("default"));
 		virtual ~VBlock();
 
 		virtual bool focusChild(FocusTarget location);

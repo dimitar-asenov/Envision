@@ -18,8 +18,8 @@ namespace OOVisualization {
 
 ITEM_COMMON_DEFINITIONS(VNullLiteral)
 
-VNullLiteral::VNullLiteral(Item* parent, NullLiteral* node, const SymbolStyle* style) :
-	ModelItem(parent, node, style),
+VNullLiteral::VNullLiteral(Item* parent, NodeType* node, const StyleType* style) :
+	ItemWithNode<Item, NullLiteral>(parent, node, style),
 	vis_(new Symbol(this, style))
 {
 }

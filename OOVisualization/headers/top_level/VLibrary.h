@@ -12,13 +12,13 @@
 #include "VLibraryStyle.h"
 
 #include "VisualizationBase/headers/items/ItemWithNode.h"
+#include "VisualizationBase/headers/items/LayoutProvider.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
 	class VText;
 	class PanelBorderLayout;
 	class PositionLayout;
-	class SequentialLayout;
 }
 
 namespace OOModel {
@@ -27,22 +27,18 @@ namespace OOModel {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VLibrary : public Visualization::ModelItem
+class OOVISUALIZATION_API VLibrary : public Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::Library>
 {
 	ITEM_COMMON(VLibrary)
 
 	public:
-		VLibrary(Item* parent, OOModel::Library* node, const VLibraryStyle* style = Visualization::Styles::item<VLibrary>("default"));
+		VLibrary(Item* parent, NodeType* node, const StyleType* style = Visualization::Styles::item<VLibrary>("default"));
 		virtual ~VLibrary();
-
-		virtual bool focusChild(FocusTarget location);
 
 	protected:
 		void determineChildren();
-		void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		Visualization::PanelBorderLayout* layout;
 		Visualization::SequentialLayout* header;
 		Visualization::VText* name;
 		Visualization::PositionLayout* content;

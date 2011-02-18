@@ -14,14 +14,14 @@
 #include "VisualizationBase/headers/icons/SVGIcon.h"
 
 using namespace Visualization;
+using namespace OOModel;
 
 namespace OOVisualization {
 
 ITEM_COMMON_DEFINITIONS(VIfStatement)
 
-VIfStatement::VIfStatement(Item* parent, OOModel::IfStatement* node, const VIfStatementStyle* style) :
-	ModelItem(parent, node, style),
-	layout(new PanelBorderLayout(this, &style->layout())),
+VIfStatement::VIfStatement(Item* parent, NodeType* node, const StyleType* style) :
+	ItemWithNode<LayoutProvider<PanelBorderLayout>, IfStatement>(parent, node, style),
 	header(new SequentialLayout(NULL, &style->header())),
 	conditionBackground(new SequentialLayout(NULL, &style->condition())),
 	condition(NULL),
@@ -31,19 +31,17 @@ VIfStatement::VIfStatement(Item* parent, OOModel::IfStatement* node, const VIfSt
 	thenBranch(NULL),
 	elseBranch(NULL)
 {
-	layout->setTop(true);
-	layout->top()->setFirst(header);
+	layout()->setTop(true);
+	layout()->top()->setFirst(header);
 	header->append(new SVGIcon(NULL, &style->icon()));
 	header->append(conditionBackground);
-	layout->setContent(content);
+	layout()->setContent(content);
 	content->append(thenBranchBackground);
 }
 
 VIfStatement::~VIfStatement()
 {
-	SAFE_DELETE_ITEM(layout);
-
-	// These were automatically deleted by layout's destructor
+	// These were automatically deleted by LayoutProvider's destructor
 	header = NULL;
 	conditionBackground = NULL;
 	condition = NULL;
@@ -56,27 +54,25 @@ VIfStatement::~VIfStatement()
 
 void VIfStatement::determineChildren()
 {
-	OOModel::IfStatement* node = static_cast<OOModel::IfStatement*> (getNode());
-
 	if (!condition)
 	{
-		condition = renderer()->render(NULL, node->condition());
+		condition = renderer()->render(NULL, node()->condition());
 		conditionBackground->append(condition);
-		thenBranch = renderer()->render(NULL, node->thenBranch());
+		thenBranch = renderer()->render(NULL, node()->thenBranch());
 		thenBranchBackground->append(thenBranch);
 	}
 
-	if (elseBranch && elseBranch->getNode() != node->elseBranch())
+	if (elseBranch && elseBranch->node() != node()->elseBranch())
 	{
 		content->remove(1);
 		elseBranch = NULL;
 		elseBranchBackground = NULL;
 	}
 
-	if (!elseBranch && node->elseBranch())
+	if (!elseBranch && node()->elseBranch())
 	{
 		elseBranchBackground = new SequentialLayout(NULL, &style()->elseBranch());
-		elseBranch = renderer()->render(NULL, node->elseBranch());
+		elseBranch = renderer()->render(NULL, node()->elseBranch());
 		elseBranchBackground->append(elseBranch);
 		content->append(elseBranchBackground);
 	}
@@ -85,27 +81,12 @@ void VIfStatement::determineChildren()
 	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
 	//			what's the reason they are being updated.
 	// The style needs to be updated every time since if our own style changes, so will that of the children.
-	layout->setStyle(&style()->layout());
+	layout()->setStyle(&style()->layout());
 	header->setStyle(&style()->header());
 	header->at<SVGIcon>(0)->setStyle(&style()->icon());
 	conditionBackground->setStyle( &style()->condition() );
 	content->setStyle(&style()->content());
 	thenBranchBackground->setStyle( &style()->thenBranch() );
-}
-
-void VIfStatement::updateGeometry(int, int)
-{
-	if ( hasShape() )
-	{
-		getShape()->setOffset(layout->getXOffsetForExternalShape(), layout->getYOffsetForExternalShape());
-		getShape()->setOutterSize(layout->getOutterWidthForExternalShape(), layout->getOutterHeightForExternalShape());
-	}
-	setSize( layout->size() );
-}
-
-bool VIfStatement::focusChild(FocusTarget location)
-{
-	return layout->focusChild(location);
 }
 
 }

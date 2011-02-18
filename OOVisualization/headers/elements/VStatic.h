@@ -19,12 +19,12 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VStatic : public Visualization::TextRenderer<Visualization::ModelItem>
+class OOVISUALIZATION_API VStatic : public Visualization::ItemWithNode< Visualization::TextRenderer, OOModel::Static>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VStatic, Visualization::TextStyle)
 
 	public:
-		VStatic(Item* parent, OOModel::Static *stat, const Visualization::TextStyle *style = Visualization::Styles::item<VStatic>("default"));
+		VStatic(Item* parent, NodeType* stat, const StyleType* style = Visualization::Styles::item<VStatic>("default"));
 
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 };

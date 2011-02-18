@@ -12,13 +12,13 @@
 
 #include "VArrayTypeStyle.h"
 #include "VisualizationBase/headers/items/ItemWithNode.h"
+#include "VisualizationBase/headers/items/LayoutProvider.h"
 #include "VisualizationBase/headers/Styles.h"
 
 #include "OOModel/headers/types/ArrayType.h"
 
 namespace Visualization {
 	class Symbol;
-	class SequentialLayout;
 }
 
 namespace OOModel {
@@ -27,24 +27,21 @@ namespace OOModel {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VArrayType : public Visualization::ModelItem
+class OOVISUALIZATION_API VArrayType : public Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::ArrayType>
 {
 	ITEM_COMMON(VArrayType)
 
 	public:
-		VArrayType(Item* parent, OOModel::ArrayType* node, const VArrayTypeStyle* style = Visualization::Styles::item<VArrayType>("default"));
+		VArrayType(Item* parent, NodeType* node, const StyleType* style = Visualization::Styles::item<VArrayType>("default"));
 		virtual ~VArrayType();
 
-		virtual bool focusChild(FocusTarget location);
 
 	protected:
 		void determineChildren();
-		void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		Visualization::SequentialLayout* container_;
 		Visualization::Symbol* symbol_;
-		Visualization::ModelItem* type_;
+		Visualization::Item* type_;
 };
 
 }

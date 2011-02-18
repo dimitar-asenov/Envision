@@ -19,21 +19,18 @@ namespace OOVisualization {
 
 ITEM_COMMON_DEFINITIONS(VAssignmentStatement)
 
-VAssignmentStatement::VAssignmentStatement(Item* parent, AssignmentStatement* node, const OperatorSequenceStyle* style) :
-	ModelItem(parent, node, style),
-	container_( new SequentialLayout(this, &style->op(node->op()).container()) ),
+VAssignmentStatement::VAssignmentStatement(Item* parent, NodeType* node, const StyleType* style) :
+	ItemWithNode<LayoutProvider<>, AssignmentStatement>(parent, node, style),
 	assignmentSymbol_( new Symbol(NULL, &style->op( node->op() ).inSymbol()) ),
 	left_(NULL),
 	right_(NULL)
 {
-	container_->append(assignmentSymbol_);
+	layout()->append(assignmentSymbol_);
 }
 
 VAssignmentStatement::~VAssignmentStatement()
 {
-	SAFE_DELETE_ITEM(container_);
-
-	// These were automatically deleted by container's destructor
+	// These were automatically deleted by LayoutProvider's destructor
 	assignmentSymbol_ = NULL;
 	left_ = NULL;
 	right_ = NULL;
@@ -41,14 +38,12 @@ VAssignmentStatement::~VAssignmentStatement()
 
 void VAssignmentStatement::determineChildren()
 {
-	AssignmentStatement* node = static_cast<AssignmentStatement*> (getNode());
-
 	if (!left_)
 	{
-		left_ = renderer()->render(NULL, node->left());
-		container_->prepend(left_);
-		right_ = renderer()->render(NULL, node->right());
-		container_->append(right_);
+		left_ = renderer()->render(NULL, node()->left());
+		layout()->prepend(left_);
+		right_ = renderer()->render(NULL, node()->right());
+		layout()->append(right_);
 	}
 
 
@@ -56,18 +51,8 @@ void VAssignmentStatement::determineChildren()
 	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
 	//			what's the reason they are being updated.
 	// The style needs to be updated every time since if our own style changes, so will that of the children.
-	container_->setStyle( &style()->op(node->op()).container());
-	assignmentSymbol_->setStyle( &style()->op(node->op()).inSymbol());
-}
-
-void VAssignmentStatement::updateGeometry(int availableWidth, int availableHeight)
-{
-	Item::updateGeometry(container_, availableWidth, availableHeight);
-}
-
-bool VAssignmentStatement::focusChild(FocusTarget location)
-{
-	return container_->focusChild(location);
+	layout()->setStyle( &style()->op(node()->op()).container());
+	assignmentSymbol_->setStyle( &style()->op(node()->op()).inSymbol());
 }
 
 }

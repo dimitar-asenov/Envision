@@ -18,8 +18,8 @@ namespace OOVisualization {
 
 ITEM_COMMON_DEFINITIONS(VThisExpression)
 
-VThisExpression::VThisExpression(Item* parent, ThisExpression* node, const SymbolStyle* style) :
-	ModelItem(parent, node, style),
+VThisExpression::VThisExpression(Item* parent, NodeType* node, const StyleType* style) :
+	ItemWithNode<Item, ThisExpression>(parent, node, style),
 	vis_(new Symbol(this, style))
 {
 }
@@ -31,7 +31,7 @@ VThisExpression::~VThisExpression()
 
 void VThisExpression::determineChildren()
 {
-	vis_->setStyle( style());
+	vis_->setStyle(style());
 }
 
 void VThisExpression::updateGeometry(int availableWidth, int availableHeight)

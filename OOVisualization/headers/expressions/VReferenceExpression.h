@@ -12,12 +12,12 @@
 #include "VReferenceExpressionStyle.h"
 
 #include "VisualizationBase/headers/items/ItemWithNode.h"
+#include "VisualizationBase/headers/items/LayoutProvider.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
 	class Text;
 	class Symbol;
-	class SequentialLayout;
 }
 
 namespace OOModel {
@@ -26,25 +26,21 @@ namespace OOModel {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VReferenceExpression : public Visualization::ModelItem
+class OOVISUALIZATION_API VReferenceExpression : public Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::ReferenceExpression>
 {
 	ITEM_COMMON(VReferenceExpression)
 
 	public:
-		VReferenceExpression(Item* parent, OOModel::ReferenceExpression* node, const VReferenceExpressionStyle* style = Visualization::Styles::item<VReferenceExpression>("default"));
+		VReferenceExpression(Item* parent, NodeType* node, const StyleType* style = Visualization::Styles::item<VReferenceExpression>("default"));
 		virtual ~VReferenceExpression();
-
-		virtual bool focusChild(FocusTarget location);
 
 	protected:
 		void determineChildren();
-		void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		Visualization::SequentialLayout* container_;
 		Visualization::Text* name_;
 		Visualization::Symbol* separator_;
-		Visualization::ModelItem* prefix_;
+		Visualization::Item* prefix_;
 };
 
 }

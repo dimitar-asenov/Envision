@@ -12,6 +12,7 @@
 #include "VProjectStyle.h"
 
 #include "VisualizationBase/headers/items/ItemWithNode.h"
+#include "VisualizationBase/headers/items/LayoutProvider.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
@@ -27,22 +28,18 @@ namespace OOModel {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VProject : public Visualization::ModelItem
+class OOVISUALIZATION_API VProject : public Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::Project>
 {
 	ITEM_COMMON(VProject)
 
 	public:
-		VProject(Item* parent, OOModel::Project* node, const VProjectStyle* style = Visualization::Styles::item<VProject>("default"));
+		VProject(Item* parent, NodeType* node, const StyleType* style = Visualization::Styles::item<VProject>("default"));
 		virtual ~VProject();
-
-		virtual bool focusChild(FocusTarget location);
 
 	protected:
 		void determineChildren();
-		void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		Visualization::PanelBorderLayout* layout;
 		Visualization::SequentialLayout* header;
 		Visualization::VText* name;
 		Visualization::PositionLayout* content;

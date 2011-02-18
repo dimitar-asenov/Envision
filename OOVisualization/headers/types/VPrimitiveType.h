@@ -24,12 +24,12 @@ namespace OOModel {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VPrimitiveType : public Visualization::ModelItem
+class OOVISUALIZATION_API VPrimitiveType : public Visualization::ItemWithNode< Visualization::Item, OOModel::PrimitiveType>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VPrimitiveType, Visualization::TextStyle)
 
 	public:
-		VPrimitiveType(Item* parent, OOModel::PrimitiveType* node, const Visualization::TextStyle* style = Visualization::Styles::item<VPrimitiveType>("default"));
+		VPrimitiveType(Item* parent, NodeType* node, const StyleType* style = Visualization::Styles::item<VPrimitiveType>("default"));
 		virtual ~VPrimitiveType();
 
 		virtual bool focusChild(FocusTarget location);

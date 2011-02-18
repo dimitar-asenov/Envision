@@ -14,12 +14,12 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VNamedType : public Visualization::ModelItem
+class OOVISUALIZATION_API VNamedType : public Visualization::ItemWithNode< Visualization::Item, OOModel::NamedType>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VNamedType, VReferenceExpressionStyle)
 
 	public:
-		VNamedType(Item* parent, OOModel::NamedType* node, const VReferenceExpressionStyle* style = Visualization::Styles::item<VReferenceExpression>("default"));
+		VNamedType(Item* parent, NodeType* node, const StyleType* style = Visualization::Styles::item<VReferenceExpression>("default"));
 		virtual ~VNamedType();
 
 		virtual bool focusChild(FocusTarget location);

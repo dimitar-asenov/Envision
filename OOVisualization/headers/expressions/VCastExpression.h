@@ -12,11 +12,11 @@
 #include "VCastExpressionStyle.h"
 
 #include "VisualizationBase/headers/items/ItemWithNode.h"
+#include "VisualizationBase/headers/items/LayoutProvider.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
 	class Symbol;
-	class SequentialLayout;
 }
 
 namespace OOModel {
@@ -25,25 +25,21 @@ namespace OOModel {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VCastExpression : public Visualization::ModelItem
+class OOVISUALIZATION_API VCastExpression : public Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::CastExpression>
 {
 	ITEM_COMMON(VCastExpression)
 
 	public:
-		VCastExpression(Item* parent, OOModel::CastExpression* node, const VCastExpressionStyle* style = Visualization::Styles::item<VCastExpression>("default"));
+		VCastExpression(Item* parent, NodeType* node, const StyleType* style = Visualization::Styles::item<VCastExpression>("default"));
 		virtual ~VCastExpression();
-
-		virtual bool focusChild(FocusTarget location);
 
 	protected:
 		void determineChildren();
-		void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		Visualization::SequentialLayout* container_;
 		Visualization::Symbol* separator_;
-		Visualization::ModelItem* type_;
-		Visualization::ModelItem* expr_;
+		Visualization::Item* type_;
+		Visualization::Item* expr_;
 };
 
 }

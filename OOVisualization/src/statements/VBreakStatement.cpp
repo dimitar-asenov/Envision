@@ -17,7 +17,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VBreakStatement)
 
 VBreakStatement::VBreakStatement(Item* parent, BreakStatement* node, const SymbolStyle* style) :
-	ModelItem(parent, node, style),
+	ItemWithNode<Item, BreakStatement>(parent, node, style),
 	vis_(new Symbol(this, style))
 {
 }

@@ -18,12 +18,12 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VNullLiteral : public Visualization::ModelItem
+class OOVISUALIZATION_API VNullLiteral : public Visualization::ItemWithNode< Visualization::Item, OOModel::NullLiteral>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VNullLiteral, Visualization::SymbolStyle)
 
 	public:
-		VNullLiteral(Item* parent, OOModel::NullLiteral *literal, const Visualization::SymbolStyle *style = Visualization::Styles::item<VNullLiteral>("default"));
+		VNullLiteral(Item* parent, NodeType* literal, const StyleType* style = Visualization::Styles::item<VNullLiteral>("default"));
 		virtual ~VNullLiteral();
 
 		virtual bool focusChild(FocusTarget location);

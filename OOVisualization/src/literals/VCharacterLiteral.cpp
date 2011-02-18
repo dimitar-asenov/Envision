@@ -9,12 +9,16 @@
 
 #include "ModelBase/headers/Model.h"
 
+using namespace OOModel;
+using namespace Visualization;
+
 namespace OOVisualization {
 
 ITEM_COMMON_DEFINITIONS(VCharacterLiteral)
 
-VCharacterLiteral::VCharacterLiteral(Item* parent, OOModel::CharacterLiteral *literal, const Visualization::TextStyle *style) :
-	ModelItem(parent, literal, style), vis_(NULL)
+VCharacterLiteral::VCharacterLiteral(Item* parent, NodeType* literal, const StyleType* style) :
+	ItemWithNode<Item, CharacterLiteral>(parent, literal, style),
+	vis_(NULL)
 {
 }
 
@@ -25,8 +29,7 @@ VCharacterLiteral::~VCharacterLiteral()
 
 void VCharacterLiteral::determineChildren()
 {
-	OOModel::CharacterLiteral* literal = static_cast<OOModel::CharacterLiteral*> (getNode());
-	if (!vis_) vis_ = renderer()->render(this, literal->valueNode());
+	if (!vis_) vis_ = renderer()->render(this, node()->valueNode());
 	vis_->setStyle( style() );
 }
 

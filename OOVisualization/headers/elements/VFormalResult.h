@@ -12,11 +12,11 @@
 #include "VFormalResultStyle.h"
 
 #include "VisualizationBase/headers/items/ItemWithNode.h"
+#include "VisualizationBase/headers/items/LayoutProvider.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
 	class VText;
-	class SequentialLayout;
 }
 
 namespace OOModel {
@@ -25,24 +25,20 @@ namespace OOModel {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VFormalResult : public Visualization::ModelItem
+class OOVISUALIZATION_API VFormalResult : public Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::FormalResult>
 {
 	ITEM_COMMON(VFormalResult)
 
 	public:
-		VFormalResult(Item* parent, OOModel::FormalResult* node, const VFormalResultStyle* style = Visualization::Styles::item<VFormalResult>("default"));
+		VFormalResult(Item* parent, NodeType* node, const StyleType* style = Visualization::Styles::item<VFormalResult>("default"));
 		virtual ~VFormalResult();
-
-		virtual bool focusChild(FocusTarget location);
 
 	protected:
 		void determineChildren();
-		void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		Visualization::SequentialLayout* container_;
 		Visualization::VText* name_;
-		Visualization::ModelItem* type_;
+		Visualization::Item* type_;
 };
 
 }

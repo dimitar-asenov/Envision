@@ -12,6 +12,7 @@
 #include "VLoopStatementStyle.h"
 
 #include "VisualizationBase/headers/items/ItemWithNode.h"
+#include "VisualizationBase/headers/items/LayoutProvider.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
@@ -25,32 +26,28 @@ namespace OOModel {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VLoopStatement : public Visualization::ModelItem
+class OOVISUALIZATION_API VLoopStatement : public Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::LoopStatement>
 {
 	ITEM_COMMON(VLoopStatement)
 
 	public:
-		VLoopStatement(Item* parent, OOModel::LoopStatement* node, const VLoopStatementStyle* style = Visualization::Styles::item<VLoopStatement>("default"));
+		VLoopStatement(Item* parent, NodeType* node, const StyleType* style = Visualization::Styles::item<VLoopStatement>("default"));
 		virtual ~VLoopStatement();
-
-		virtual bool focusChild(FocusTarget location);
 
 	protected:
 		void determineChildren();
-		void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		Visualization::PanelBorderLayout* layout;
 		Visualization::SequentialLayout* header;
 
 		Visualization::SequentialLayout* conditionBackground;
 		Visualization::SequentialLayout* initStepBackground;
 		Visualization::SequentialLayout* updateStepBackground;
 
-		Visualization::ModelItem* condition;
-		Visualization::ModelItem* initStep;
-		Visualization::ModelItem* updateStep;
-		Visualization::ModelItem* body;
+		Visualization::Item* condition;
+		Visualization::Item* initStep;
+		Visualization::Item* updateStep;
+		Visualization::Item* body;
 };
 
 }

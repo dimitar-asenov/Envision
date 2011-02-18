@@ -18,12 +18,12 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VThisExpression : public Visualization::ModelItem
+class OOVISUALIZATION_API VThisExpression : public Visualization::ItemWithNode< Visualization::Item, OOModel::ThisExpression>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VThisExpression, Visualization::SymbolStyle)
 
 	public:
-		VThisExpression(Item* parent, OOModel::ThisExpression *expr, const Visualization::SymbolStyle *style = Visualization::Styles::item<VThisExpression>("default"));
+		VThisExpression(Item* parent, NodeType *expr, const StyleType *style = Visualization::Styles::item<VThisExpression>("default"));
 		virtual ~VThisExpression();
 
 		virtual bool focusChild(FocusTarget location);

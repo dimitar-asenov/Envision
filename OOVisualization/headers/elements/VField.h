@@ -12,11 +12,11 @@
 #include "VFieldStyle.h"
 
 #include "VisualizationBase/headers/items/ItemWithNode.h"
+#include "VisualizationBase/headers/items/LayoutProvider.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
 	class VText;
-	class SequentialLayout;
 }
 
 namespace OOModel {
@@ -25,24 +25,22 @@ namespace OOModel {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VField : public Visualization::ModelItem
+class OOVISUALIZATION_API VField : public Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::Field >
 {
 	ITEM_COMMON(VField)
 
 	public:
-		VField(Item* parent, OOModel::Field* node, const VFieldStyle* style = Visualization::Styles::item<VField>("default"));
+		VField(Item* parent, NodeType* node, const StyleType* style = Visualization::Styles::item<VField>("default"));
 		virtual ~VField();
 
 		virtual bool focusChild(FocusTarget location);
 
 	protected:
 		void determineChildren();
-		void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		Visualization::SequentialLayout* container_;
 		Visualization::VText* name_;
-		Visualization::ModelItem* type_;
+		Visualization::Item* type_;
 };
 }
 

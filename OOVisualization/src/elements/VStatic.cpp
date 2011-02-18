@@ -7,31 +7,33 @@
 
 #include "elements/VStatic.h"
 
+using namespace Visualization;
+using namespace OOModel;
+
 namespace OOVisualization {
 
 ITEM_COMMON_DEFINITIONS(VStatic)
 
-VStatic::VStatic(Item* parent, OOModel::Static *stat, const Visualization::TextStyle *style) :
-	Visualization::TextRenderer<Visualization::ModelItem>(parent, stat, style)
+VStatic::VStatic(Item* parent, NodeType* stat, const StyleType* style) :
+	ItemWithNode<TextRenderer, Static>(parent, stat, style)
 {
 }
 
 void VStatic::updateGeometry(int availableWidth, int availableHeight)
 {
-	OOModel::Static* statNode = static_cast<OOModel::Static*> (getNode());
-	switch (statNode->get())
+	switch (node()->get())
 	{
 		case OOModel::Static::CLASS_VARIABLE:
 			setText( "static" );
 			break;
 		case OOModel::Static::INSTANCE_VARIABLE:
-			setText( "no" );
+			setText( "not static" );
 			break;
 		default:
 			setText( "unknown static" );
 			break;
 	}
-	Visualization::TextRenderer<Visualization::ModelItem>::updateGeometry(availableWidth, availableHeight);
+	TextRenderer::updateGeometry(availableWidth, availableHeight);
 }
 
 }

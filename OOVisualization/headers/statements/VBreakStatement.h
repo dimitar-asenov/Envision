@@ -18,12 +18,12 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VBreakStatement : public Visualization::ModelItem
+class OOVISUALIZATION_API VBreakStatement : public Visualization::ItemWithNode< Visualization::Item, OOModel::BreakStatement>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VBreakStatement, Visualization::SymbolStyle)
 
 	public:
-		VBreakStatement(Item* parent, OOModel::BreakStatement *node, const Visualization::SymbolStyle *style = Visualization::Styles::item<VBreakStatement>("default"));
+		VBreakStatement(Item* parent, NodeType *node, const StyleType *style = Visualization::Styles::item<VBreakStatement>("default"));
 		virtual ~VBreakStatement();
 
 		virtual bool focusChild(FocusTarget location);

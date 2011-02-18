@@ -98,7 +98,7 @@ HEADERS += headers/types/VArrayTypeStyle.h \
     headers/OOVisualizationException.h \
     headers/oovisualization_api.h \
     src/oovisualization.h
-SOURCES += headers/types/VArrayTypeStyle.cpp \
+SOURCES += src/types/VArrayTypeStyle.cpp \
     src/types/VArrayType.cpp \
     src/statements/VContinueStatement.cpp \
     src/statements/VBreakStatement.cpp \

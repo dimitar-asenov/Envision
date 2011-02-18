@@ -17,7 +17,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VContinueStatement)
 
 VContinueStatement::VContinueStatement(Item* parent, ContinueStatement* node, const SymbolStyle* style) :
-	ModelItem(parent, node, style),
+	ItemWithNode<Item, ContinueStatement>(parent, node, style),
 	vis_(new Symbol(this, style))
 {
 }

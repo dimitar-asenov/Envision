@@ -12,11 +12,11 @@
 #include "OperatorStyle.h"
 
 #include "VisualizationBase/headers/items/ItemWithNode.h"
+#include "VisualizationBase/headers/items/LayoutProvider.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
 	class Symbol;
-	class SequentialLayout;
 }
 
 namespace OOModel {
@@ -25,27 +25,23 @@ namespace OOModel {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VBinaryOperation : public Visualization::ModelItem
+class OOVISUALIZATION_API VBinaryOperation : public Visualization::ItemWithNode<Visualization::LayoutProvider<>, OOModel::BinaryOperation>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VBinaryOperation, OperatorSequenceStyle)
 
 	public:
-		VBinaryOperation(Item* parent, OOModel::BinaryOperation* node, const OperatorSequenceStyle* style = Visualization::Styles::item<VBinaryOperation>("default"));
+		VBinaryOperation(Item* parent, NodeType* node, const StyleType* style = Visualization::Styles::item<VBinaryOperation>("default"));
 		virtual ~VBinaryOperation();
-
-		virtual bool focusChild(FocusTarget location);
 
 	protected:
 		void determineChildren();
-		void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		Visualization::SequentialLayout* container_;
 		Visualization::Symbol* pre_;
 		Visualization::Symbol* in_;
 		Visualization::Symbol* post_;
-		Visualization::ModelItem* left_;
-		Visualization::ModelItem* right_;
+		Visualization::Item* left_;
+		Visualization::Item* right_;
 };
 
 }

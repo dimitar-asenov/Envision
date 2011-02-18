@@ -12,13 +12,13 @@
 #include "VClassStyle.h"
 
 #include "VisualizationBase/headers/items/ItemWithNode.h"
+#include "VisualizationBase/headers/items/LayoutProvider.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
 	class VText;
 	class VList;
 	class PanelBorderLayout;
-	class SequentialLayout;
 	class PositionLayout;
 }
 
@@ -30,22 +30,18 @@ namespace OOVisualization {
 
 class ClassIcon;
 
-class OOVISUALIZATION_API VClass : public Visualization::ModelItem
+class OOVISUALIZATION_API VClass : public Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::Class>
 {
 	ITEM_COMMON(VClass)
 
 	public:
-		VClass(Item* parent, OOModel::Class* node, const VClassStyle* style = Visualization::Styles::item<VClass>("default"));
+		VClass(Item* parent, NodeType* node, const StyleType* style = Visualization::Styles::item<VClass>("default"));
 		virtual ~VClass();
-
-		virtual bool focusChild(FocusTarget location);
 
 	protected:
 		void determineChildren();
-		void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		Visualization::PanelBorderLayout* layout_;
 		Visualization::SequentialLayout* header_;
 		ClassIcon* icon_;
 		Visualization::VText* name_;

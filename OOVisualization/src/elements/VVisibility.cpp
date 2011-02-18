@@ -7,19 +7,21 @@
 
 #include "elements/VVisibility.h"
 
+using namespace Visualization;
+using namespace OOModel;
+
 namespace OOVisualization {
 
 ITEM_COMMON_DEFINITIONS(VVisibility)
 
-VVisibility::VVisibility(Item* parent, OOModel::Visibility *vis, const Visualization::TextStyle *style) :
-	Visualization::TextRenderer<Visualization::ModelItem>(parent, vis, style)
+VVisibility::VVisibility(Item* parent, NodeType* vis, const StyleType* style) :
+	ItemWithNode<TextRenderer, Visibility>(parent, vis, style)
 {
 }
 
 void VVisibility::updateGeometry(int availableWidth, int availableHeight)
 {
-	OOModel::Visibility* visNode = static_cast<OOModel::Visibility*> (getNode());
-	switch (visNode->get())
+	switch (node()->get())
 	{
 		case OOModel::Visibility::DEFAULT:
 			setText( "" );
@@ -37,7 +39,7 @@ void VVisibility::updateGeometry(int availableWidth, int availableHeight)
 			setText( "unknown visibility" );
 			break;
 	}
-	Visualization::TextRenderer<Visualization::ModelItem>::updateGeometry(availableWidth, availableHeight);
+	TextRenderer::updateGeometry(availableWidth, availableHeight);
 }
 
 }
