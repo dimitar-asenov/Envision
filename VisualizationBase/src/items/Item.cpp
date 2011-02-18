@@ -176,7 +176,7 @@ bool Item::focusChild(Item* child)
 
 void Item::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-	if ( shape_ ) shape_->paint(painter, option, widget);
+	if ( hasShape() && (style()->drawShapeWhenEmpty() || !isEmpty()) ) shape_->paint(painter, option, widget);
 }
 
 InteractionHandler* Item::handler() const

@@ -11,6 +11,7 @@
 #include "../visualizationbase_api.h"
 
 #include "ItemWithNode.h"
+#include "SingleLayout.h"
 #include "VListStyle.h"
 #include "../Styles.h"
 #include "../layouts/SequentialLayout.h"
@@ -18,33 +19,24 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API VList: public ItemWithNode<Item, Model::List>
+class VISUALIZATIONBASE_API VList: public ItemWithNode< SingleLayout<SequentialLayout>, Model::List>
 {
 	ITEM_COMMON(VList)
 
-	private:
-		SequentialLayout items_;
-
 	protected:
 		virtual void determineChildren();
-		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	public:
 		VList(Item* parent, NodeType* node, const StyleType* style = Styles::item<VList>("default"));
-		virtual ~VList();
 
 		int length() const;
 		template <class T> T* at(int index);
 		int focusedElementIndex() const;
-
-		virtual bool isEmpty() const;
-		virtual bool sizeDependsOnParent() const;
-		virtual bool focusChild(FocusTarget location);
-		virtual void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget);
 };
 
-inline int VList::length() const { return items_.length(); }
-template <class T> T* VList::at(int index) { return items_.at<T>(index); }
+inline int VList::length() const { return layout()->length(); }
+inline int VList::focusedElementIndex() const { return layout()->focusedElementIndex(); }
+template <class T> T* VList::at(int index) { return layout()->at<T>(index); }
 
 }
 

@@ -55,9 +55,4 @@ int Layout::yOffset() const
 	else return style()->topMargin();
 }
 
-void Layout::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-{
-	if ( hasShape() && (style()->drawShapeWhenEmpty() || !isEmpty()) ) Item::paint(painter, option, widget);
-}
-
 }

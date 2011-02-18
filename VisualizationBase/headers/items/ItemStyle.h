@@ -24,6 +24,7 @@ class VISUALIZATIONBASE_API ItemStyle
 		ShapeStyle* shapeStyle_;
 		QString shapeName_;
 		bool drawsOnlyShape_;
+		bool drawShapeWhenEmpty_;
 
 	public:
 		ItemStyle();
@@ -35,10 +36,12 @@ class VISUALIZATIONBASE_API ItemStyle
 		virtual void load();
 
 		bool drawsOnlyShape() const;
+		bool drawShapeWhenEmpty() const;
 };
 
 inline bool ItemStyle::hasShape() const { return !shapeName_.isEmpty(); }
 inline bool ItemStyle::drawsOnlyShape() const { return drawsOnlyShape_; }
+inline bool ItemStyle::drawShapeWhenEmpty() const {return drawShapeWhenEmpty_; }
 
 }
 

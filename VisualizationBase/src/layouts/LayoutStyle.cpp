@@ -41,7 +41,6 @@ void LayoutStyle::load()
 	Styles::load("topMargin", topMargin_);
 	Styles::load("rightMargin", rightMargin_);
 	Styles::load("bottomMargin", bottomMargin_);
-	Styles::load("drawShapeWhenEmpty", drawShapeWhenEmpty_);
 }
 
 }

@@ -35,6 +35,7 @@ void ItemStyle::load()
 {
 	QString shape;
 	Styles::load("drawsOnlyShape", drawsOnlyShape_);
+	Styles::load("drawShapeWhenEmpty", drawShapeWhenEmpty_);
 	Styles::load("shape", shapeName_);
 	shapeName_ = shapeName_.trimmed();
 

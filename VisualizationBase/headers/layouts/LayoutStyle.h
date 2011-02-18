@@ -26,7 +26,6 @@ class VISUALIZATIONBASE_API LayoutStyle : public ItemStyle
 		int rightMargin_;
 		int topMargin_;
 		int bottomMargin_;
-		bool drawShapeWhenEmpty_;
 
 	public:
 		LayoutStyle(int leftMargin = 0, int rightMargin = 0, int topMargin = 0, int bottomMargin = 0);
@@ -36,7 +35,6 @@ class VISUALIZATIONBASE_API LayoutStyle : public ItemStyle
 		int rightMargin() const;
 		int topMargin() const;
 		int bottomMargin() const;
-		bool drawShapeWhenEmpty() const;
 
 		void setMargins(int marginSize);
 		void setMargins(int left, int right, int top, int bottom);
@@ -46,7 +44,6 @@ inline int LayoutStyle::leftMargin() const { return leftMargin_; }
 inline int LayoutStyle::rightMargin() const { return rightMargin_; }
 inline int LayoutStyle::topMargin() const { return topMargin_; }
 inline int LayoutStyle::bottomMargin() const {return bottomMargin_; }
-inline bool LayoutStyle::drawShapeWhenEmpty() const {return drawShapeWhenEmpty_; }
 
 }
 

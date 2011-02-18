@@ -31,7 +31,9 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/items/ItemWithNode.h \
+HEADERS += headers/items/SingleLayout.h \
+    headers/items/SingleLayoutBase.h \
+    headers/items/ItemWithNode.h \
     headers/items/SymbolStyle.h \
     headers/items/Symbol.h \
     headers/items/VCharacter.h \
@@ -85,7 +87,8 @@ HEADERS += headers/items/ItemWithNode.h \
     src/visualizationbase.h \
     headers/VisualizationException.h \
     headers/visualizationbase_api.h
-SOURCES += src/items/Symbol.cpp \
+SOURCES += src/items/SingleLayoutBase.cpp \
+    src/items/Symbol.cpp \
     src/items/SymbolStyle.cpp \
     src/items/VCharacter.cpp \
     src/items/VBoolean.cpp \
