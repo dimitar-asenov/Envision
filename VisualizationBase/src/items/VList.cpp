@@ -13,7 +13,7 @@ namespace Visualization {
 ITEM_COMMON_DEFINITIONS(VList)
 
 VList::VList(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode< LayoutProvider<SequentialLayout>, Model::List>(parent, node, style)
+	ItemWithNode< LayoutProvider<>, Model::List>(parent, node, style)
 {
 }
 

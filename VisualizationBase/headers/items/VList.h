@@ -19,7 +19,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API VList: public ItemWithNode< LayoutProvider<SequentialLayout>, Model::List>
+class VISUALIZATIONBASE_API VList: public ItemWithNode< LayoutProvider<>, Model::List>
 {
 	ITEM_COMMON(VList)
 
