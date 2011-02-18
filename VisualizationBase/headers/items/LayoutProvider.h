@@ -8,13 +8,12 @@
 #ifndef LAYOUTPROVIDER_H_
 #define LAYOUTPROVIDER_H_
 
-#include "../visualizationbase_api.h"
-
 #include "LayoutProviderBase.h"
+#include "../layouts/SequentialLayout.h"
 
 namespace Visualization {
 
-template <class LayoutType>
+template <class LayoutType = SequentialLayout>
 class LayoutProvider : public LayoutProviderBase
 {
 	public:
