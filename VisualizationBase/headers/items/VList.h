@@ -11,7 +11,7 @@
 #include "../visualizationbase_api.h"
 
 #include "ItemWithNode.h"
-#include "SingleLayout.h"
+#include "LayoutProvider.h"
 #include "VListStyle.h"
 #include "../Styles.h"
 #include "../layouts/SequentialLayout.h"
@@ -19,7 +19,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API VList: public ItemWithNode< SingleLayout<SequentialLayout>, Model::List>
+class VISUALIZATIONBASE_API VList: public ItemWithNode< LayoutProvider<SequentialLayout>, Model::List>
 {
 	ITEM_COMMON(VList)
 

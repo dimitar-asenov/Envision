@@ -1,38 +1,38 @@
 /***********************************************************************************************************************
- * SingleLayout.h
+ * LayoutProvider.h
  *
  *  Created on: Feb 18, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef SINGLELAYOUT_H_
-#define SINGLELAYOUT_H_
+#ifndef LAYOUTPROVIDER_H_
+#define LAYOUTPROVIDER_H_
 
 #include "../visualizationbase_api.h"
 
-#include "SingleLayoutBase.h"
+#include "LayoutProviderBase.h"
 
 namespace Visualization {
 
 template <class LayoutType>
-class SingleLayout : public SingleLayoutBase
+class LayoutProvider : public LayoutProviderBase
 {
 	public:
-		SingleLayout(Item* parent, const StyleType *style);
+		LayoutProvider(Item* parent, const StyleType *style);
 
 		LayoutType* layout() const;
 };
 
 template <class LayoutType>
-inline LayoutType* SingleLayout<LayoutType>::layout() const { return static_cast<LayoutType*> (SingleLayoutBase::layout()); }
+inline LayoutType* LayoutProvider<LayoutType>::layout() const { return static_cast<LayoutType*> (LayoutProviderBase::layout()); }
 
 template <class LayoutType>
-SingleLayout<LayoutType>::SingleLayout(Item* parent, const StyleType *style) :
-	SingleLayoutBase(parent, style, new LayoutType(NULL))
+LayoutProvider<LayoutType>::LayoutProvider(Item* parent, const StyleType *style) :
+LayoutProviderBase(parent, style, new LayoutType(NULL))
 {
 	layout()->setParentItem(this);
 }
 
 }
 
-#endif /* SINGLELAYOUT_H_ */
+#endif /* LAYOUTPROVIDER_H_ */

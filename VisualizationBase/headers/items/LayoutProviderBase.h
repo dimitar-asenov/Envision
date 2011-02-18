@@ -1,12 +1,12 @@
 /***********************************************************************************************************************
- * SingleLayoutBase.h
+ * LayoutProviderBase.h
  *
  *  Created on: Feb 18, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef SINGLELAYOUTBASE_H_
-#define SINGLELAYOUTBASE_H_
+#ifndef LAYOUTPROVIDERBASE_H_
+#define LAYOUTPROVIDERBASE_H_
 
 #include "../visualizationbase_api.h"
 
@@ -16,13 +16,13 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API SingleLayoutBase : public Item
+class VISUALIZATIONBASE_API LayoutProviderBase : public Item
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(SingleLayoutBase, ItemStyle)
+	ITEM_COMMON_CUSTOM_STYLENAME(LayoutProviderBase, ItemStyle)
 
 	public:
-		SingleLayoutBase(Item* parent, const StyleType *style, Layout* layout);
-		virtual ~SingleLayoutBase();
+		LayoutProviderBase(Item* parent, const StyleType *style, Layout* layout);
+		virtual ~LayoutProviderBase();
 
 		virtual bool focusChild(FocusTarget location);
 		virtual bool sizeDependsOnParent() const;
@@ -37,8 +37,8 @@ class VISUALIZATIONBASE_API SingleLayoutBase : public Item
 		Layout* layout_;
 };
 
-inline Layout* SingleLayoutBase::layout() const { return layout_; }
+inline Layout* LayoutProviderBase::layout() const { return layout_; }
 
 }
 
-#endif /* SINGLELAYOUTBASE_H_ */
+#endif /* LAYOUTPROVIDERBASE_H_ */

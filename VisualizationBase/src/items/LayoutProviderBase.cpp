@@ -1,42 +1,42 @@
 /***********************************************************************************************************************
- * SingleLayoutBase.cpp
+ * LayoutProviderBase.cpp
  *
  *  Created on: Feb 18, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "items/SingleLayoutBase.h"
+#include "items/LayoutProviderBase.h"
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(SingleLayoutBase)
+ITEM_COMMON_DEFINITIONS(LayoutProviderBase)
 
-SingleLayoutBase::SingleLayoutBase(Item* parent, const StyleType *style, Layout* layout) :
+LayoutProviderBase::LayoutProviderBase(Item* parent, const StyleType *style, Layout* layout) :
 	Item(parent, style), layout_(layout)
 {
 }
 
-SingleLayoutBase::~SingleLayoutBase()
+LayoutProviderBase::~LayoutProviderBase()
 {
 	SAFE_DELETE_ITEM(layout_);
 }
 
-void SingleLayoutBase::updateGeometry(int availableWidth, int availableHeight)
+void LayoutProviderBase::updateGeometry(int availableWidth, int availableHeight)
 {
 	Item::updateGeometry(layout_, availableWidth, availableHeight);
 }
 
-bool SingleLayoutBase::focusChild(FocusTarget location)
+bool LayoutProviderBase::focusChild(FocusTarget location)
 {
 	return layout_->focusChild(location);
 }
 
-bool SingleLayoutBase::sizeDependsOnParent() const
+bool LayoutProviderBase::sizeDependsOnParent() const
 {
 	return layout_->sizeDependsOnParent();
 }
 
-bool SingleLayoutBase::isEmpty() const
+bool LayoutProviderBase::isEmpty() const
 {
 	return layout_->isEmpty();
 }
