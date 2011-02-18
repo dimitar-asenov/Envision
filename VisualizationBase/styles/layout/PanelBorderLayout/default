@@ -14,4 +14,6 @@
 	</rightPanelStyle>
 	<isLeftProtrusionFixed>false</isLeftProtrusionFixed>
 	<leftProtrusion>10</leftProtrusion>
+	<shapeOnlyOnContent>true</shapeOnlyOnContent>
+	<shape prototypes="shape/Box/default">Box</shape>
 </style>

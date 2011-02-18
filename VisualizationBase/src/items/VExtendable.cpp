@@ -140,31 +140,10 @@ void VExtendable::determineChildren()
 
 }
 
-void VExtendable::updateGeometry(int, int)
+void VExtendable::updateGeometry(int availableWidth, int availableHeight)
 {
-	if ( expanded_ )
-	{
-		if ( hasShape() )
-		{
-			getShape()->setOffset(layout->getXOffsetForExternalShape(), layout->getYOffsetForExternalShape());
-			getShape()->setOutterSize(layout->getOutterWidthForExternalShape(), layout->getOutterHeightForExternalShape());
-		}
-		setSize( layout->size() );
-	}
-	else
-	{
-		if ( hasShape() )
-		{
-			getShape()->setOffset(0, 0);
-			getShape()->setInnerSize(header->width(), header->height());
-			header->setPos(getShape()->contentLeft(), getShape()->contentTop());
-		}
-		else
-		{
-			setSize(header->size());
-			header->setPos(0,0);
-		}
-	}
+	if ( expanded_ ) Item::updateGeometry(layout, availableWidth, availableHeight);
+	else Item::updateGeometry(header, availableWidth, availableHeight);
 }
 
 void VExtendable::setExpanded(bool expanded)

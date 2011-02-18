@@ -31,6 +31,8 @@ class VISUALIZATIONBASE_API PanelBorderLayoutStyle : public LayoutStyle
 		bool leftProtrusionFixed_;
 		int leftProtrusion_;
 
+		bool shapeOnlyOnContent_;
+
 	public:
 		PanelBorderLayoutStyle();
 		virtual void load();
@@ -50,6 +52,8 @@ class VISUALIZATIONBASE_API PanelBorderLayoutStyle : public LayoutStyle
 		bool isLeftProtrusionFixed() const;
 		int leftProtrusion() const;
 
+		bool shapeOnlyOnContent() const;
+
 		static PanelBorderLayoutStyle* getDefault();
 };
 
@@ -64,6 +68,8 @@ inline int PanelBorderLayoutStyle::bottomInnerMargin() const {return bottomInner
 
 inline bool PanelBorderLayoutStyle::isLeftProtrusionFixed() const { return leftProtrusionFixed_; }
 inline int PanelBorderLayoutStyle::leftProtrusion() const { return leftProtrusion_; }
+
+inline bool PanelBorderLayoutStyle::shapeOnlyOnContent() const { return shapeOnlyOnContent_; }
 }
 
 #endif /* PANELBORDERLAYOUTSTYLE_H_ */

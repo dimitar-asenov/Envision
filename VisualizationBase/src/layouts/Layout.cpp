@@ -28,8 +28,8 @@ void Layout::setInnerSize(int width_, int height_)
 		{
 			getShape()->setOffset(style()->leftMargin(), style()->topMargin());
 			getShape()->setInnerSize(width_, height_);
-			setWidth(width() + style()->leftMargin() + style()->rightMargin());
-			setHeight(height() + style()->topMargin() + style()->bottomMargin());
+			setWidth(width() + style()->rightMargin());
+			setHeight(height() + style()->bottomMargin());
 		}
 		else
 		{

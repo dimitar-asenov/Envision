@@ -45,11 +45,6 @@ class VISUALIZATIONBASE_API PanelBorderLayout: public Layout
 		PanelLayout* right();
 		template <class T> T* content();
 
-		int getXOffsetForExternalShape() const;
-		int getYOffsetForExternalShape() const;
-		int getOutterWidthForExternalShape() const;
-		int getOutterHeightForExternalShape() const;
-
 		virtual bool isEmpty() const;
 
 		virtual void updateGeometry(int availableWidth, int availableHeight);

@@ -55,6 +55,8 @@ void PanelBorderLayoutStyle::load()
 
 	Styles::load("isLeftProtrusionFixed", leftProtrusionFixed_);
 	if (leftProtrusionFixed_) Styles::load("leftProtrusion", leftProtrusion_);
+
+	Styles::load("shapeOnlyOnContent", shapeOnlyOnContent_);
 }
 
 }

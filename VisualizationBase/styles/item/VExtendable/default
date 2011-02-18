@@ -1,13 +1,6 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/Item/default">
 	<expanded>false</expanded>
-	<shape prototypes="shape/Box/default">
-		Box
-		<cornerRadius>10</cornerRadius>
-		<shadowBrush>
-			<style>1</style>
-		</shadowBrush>
-	</shape>
 	<borderStyle prototypes="layout/PanelBorderLayout/default" />
 	<headerStyle prototypes="layout/SequentialLayout/default">
 		<shape prototypes="shape/Box/default">

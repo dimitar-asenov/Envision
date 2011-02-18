@@ -7,6 +7,8 @@
 
 #include "layouts/PanelBorderLayout.h"
 
+#include <QtCore/QDebug>
+
 namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS( PanelBorderLayout )
@@ -104,10 +106,43 @@ void PanelBorderLayout::updateGeometry(int, int)
 	if ( top_ ) outterHeight += top_->height();
 	if ( bottom_ ) outterHeight += bottom_->height();
 
-	setInnerSize(outterWidth, outterHeight);
+
+	if (hasShape() && style()->shapeOnlyOnContent())
+	{
+		// If the shape must cover only the content manually set the way it should look.
+
+		// Set shape position
+		int x = style()->leftMargin();
+		if (style()->isLeftProtrusionFixed())
+		{
+			if (style()->leftProtrusion() > 0) x += style()->leftProtrusion();
+		}
+		else x += left_ ? left_->width() / 2 : 0;
+
+		int y = style()->topMargin() + (top_ ? top_->height() / 2 : 0);
+		getShape()->setOffset(x, y);
+
+		// Set shape size
+		int middleHeight = outterHeight - y - (bottom_? (bottom_->height()/2) :0);
+		getShape()->setOutterSize(maxMiddleWidth, middleHeight);
+
+		// Set Layout size
+		setWidth(outterWidth + style()->leftMargin() + style()->rightMargin());
+		setHeight(outterHeight + style()->topMargin() + style()->bottomMargin());
+	}
+	else setInnerSize(outterWidth, outterHeight); // Use the default method when the shape must cover the entire layout.
+
+	// Determine the right offset to use.
+	int xOffset = style()->leftMargin();
+	int yOffset = style()->rightMargin();
+	if (hasShape() && !style()->shapeOnlyOnContent())
+	{
+		xOffset = getShape()->contentLeft();
+		yOffset = getShape()->contentTop();
+	}
 
 	// Set positions
-	int xLeft = xOffset();
+	int xLeft = xOffset;
 	int xTop = xLeft;
 	int xContent;
 	int xRight;
@@ -118,8 +153,8 @@ void PanelBorderLayout::updateGeometry(int, int)
 		else xTop += style()->leftProtrusion();
 
 		xContent = xLeft + (left_ ? left_->width() : 0) + style()->leftInnerMargin();
-		if (xContent < xOffset() + style()->leftProtrusion() + style()->leftInnerMargin())
-			xContent = xOffset() + style()->leftProtrusion() + style()->leftInnerMargin();
+		if (xContent < xOffset + style()->leftProtrusion() + style()->leftInnerMargin())
+			xContent = xOffset + style()->leftProtrusion() + style()->leftInnerMargin();
 	}
 	else
 	{
@@ -129,7 +164,7 @@ void PanelBorderLayout::updateGeometry(int, int)
 
 	xRight = xContent + (content_ ? content_->width() : 0) + style()->rightInnerMargin();
 
-	int yTop = yOffset();
+	int yTop = yOffset;
 	int yContent = yTop + (top_ ? top_->height() : 0) + style()->topInnerMargin();
 	int yBottom = yContent + contentHeight + style()->bottomInnerMargin();
 
@@ -138,42 +173,6 @@ void PanelBorderLayout::updateGeometry(int, int)
 	if ( content_ ) content_->setPos(xContent, yContent);
 	if ( right_ ) right_->setPos(xRight, yContent);
 	if ( bottom_ ) bottom_->setPos(xTop, yBottom);
-}
-
-int PanelBorderLayout::getXOffsetForExternalShape() const
-{
-	int l;
-	if (style()->isLeftProtrusionFixed())
-	{
-		if (style()->leftProtrusion() > 0) l = xOffset() + style()->leftProtrusion();
-		else l = xOffset();
-	}
-	else l = xOffset() + (left_ ? left_->width() / 2 : 0);
-
-	return l;
-}
-
-int PanelBorderLayout::getYOffsetForExternalShape() const
-{
-	return yOffset() + (top_ ? top_->height() / 2 : 0);
-}
-
-int PanelBorderLayout::getOutterWidthForExternalShape() const
-{
-	int l;
-	if (style()->isLeftProtrusionFixed())
-	{
-		if (style()->leftProtrusion() > 0) l = style()->leftProtrusion();
-		else l = 0;
-	}
-	else l = left_ ? left_->width() / 2 : 0;
-
-	return width() - style()->leftMargin() - style()->rightMargin() - l;
-}
-
-int PanelBorderLayout::getOutterHeightForExternalShape() const
-{
-	return height() - style()->topMargin() - style()->bottomMargin() - (top_ ? top_->height() / 2 : 0);
 }
 
 bool PanelBorderLayout::focusChild(FocusTarget location)
