@@ -11,7 +11,7 @@
 #include "../oovisualization_api.h"
 #include "VFormalResultStyle.h"
 
-#include "VisualizationBase/headers/items/ModelItem.h"
+#include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
@@ -27,7 +27,7 @@ namespace OOVisualization {
 
 class OOVISUALIZATION_API VFormalResult : public Visualization::ModelItem
 {
-	ITEM_COMMON(VFormalResult, Visualization::ModelItem)
+	ITEM_COMMON(VFormalResult)
 
 	public:
 		VFormalResult(Item* parent, OOModel::FormalResult* node, const VFormalResultStyle* style = Visualization::Styles::item<VFormalResult>("default"));

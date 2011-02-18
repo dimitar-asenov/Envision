@@ -11,7 +11,7 @@
 #include "../oovisualization_api.h"
 
 #include "VisualizationBase/headers/items/TextRenderer.h"
-#include "VisualizationBase/headers/items/ModelItem.h"
+#include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/TextStyle.h"
 #include "VisualizationBase/headers/Styles.h"
 
@@ -21,7 +21,7 @@ namespace OOVisualization {
 
 class OOVISUALIZATION_API VVisibility : public Visualization::TextRenderer<Visualization::ModelItem>
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VVisibility, Visualization::TextRenderer<Visualization::ModelItem>, Visualization::TextStyle)
+	ITEM_COMMON_CUSTOM_STYLENAME(VVisibility, Visualization::TextStyle)
 
 	public:
 		VVisibility(Item* parent, OOModel::Visibility *vis, const Visualization::TextStyle *style = Visualization::Styles::item<VVisibility>("default"));

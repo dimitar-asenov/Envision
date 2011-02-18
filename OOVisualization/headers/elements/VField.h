@@ -11,7 +11,7 @@
 #include "../oovisualization_api.h"
 #include "VFieldStyle.h"
 
-#include "VisualizationBase/headers/items/ModelItem.h"
+#include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
@@ -27,7 +27,7 @@ namespace OOVisualization {
 
 class OOVISUALIZATION_API VField : public Visualization::ModelItem
 {
-	ITEM_COMMON(VField, Visualization::ModelItem)
+	ITEM_COMMON(VField)
 
 	public:
 		VField(Item* parent, OOModel::Field* node, const VFieldStyle* style = Visualization::Styles::item<VField>("default"));

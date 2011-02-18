@@ -18,7 +18,7 @@ namespace OOVisualization {
 
 class OOVISUALIZATION_API MethodIcon : public Visualization::Icon
 {
-	ITEM_COMMON(MethodIcon, Visualization::Icon)
+	ITEM_COMMON(MethodIcon)
 
 	public:
 		MethodIcon(Item* parent, const MethodIconStyle *style = Visualization::Styles::icon<MethodIcon>("default"));

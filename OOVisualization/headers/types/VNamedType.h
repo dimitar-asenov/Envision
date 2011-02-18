@@ -16,7 +16,7 @@ namespace OOVisualization {
 
 class OOVISUALIZATION_API VNamedType : public Visualization::ModelItem
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VNamedType, Visualization::ModelItem, VReferenceExpressionStyle)
+	ITEM_COMMON_CUSTOM_STYLENAME(VNamedType, VReferenceExpressionStyle)
 
 	public:
 		VNamedType(Item* parent, OOModel::NamedType* node, const VReferenceExpressionStyle* style = Visualization::Styles::item<VReferenceExpression>("default"));

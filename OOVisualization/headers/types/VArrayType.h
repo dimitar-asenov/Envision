@@ -11,7 +11,7 @@
 #include "../oovisualization_api.h"
 
 #include "VArrayTypeStyle.h"
-#include "VisualizationBase/headers/items/ModelItem.h"
+#include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/Styles.h"
 
 #include "OOModel/headers/types/ArrayType.h"
@@ -29,7 +29,7 @@ namespace OOVisualization {
 
 class OOVISUALIZATION_API VArrayType : public Visualization::ModelItem
 {
-	ITEM_COMMON(VArrayType, Visualization::ModelItem)
+	ITEM_COMMON(VArrayType)
 
 	public:
 		VArrayType(Item* parent, OOModel::ArrayType* node, const VArrayTypeStyle* style = Visualization::Styles::item<VArrayType>("default"));

@@ -11,7 +11,7 @@
 #include "../oovisualization_api.h"
 #include "VLoopStatementStyle.h"
 
-#include "VisualizationBase/headers/items/ModelItem.h"
+#include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
@@ -27,7 +27,7 @@ namespace OOVisualization {
 
 class OOVISUALIZATION_API VLoopStatement : public Visualization::ModelItem
 {
-	ITEM_COMMON(VLoopStatement, Visualization::ModelItem)
+	ITEM_COMMON(VLoopStatement)
 
 	public:
 		VLoopStatement(Item* parent, OOModel::LoopStatement* node, const VLoopStatementStyle* style = Visualization::Styles::item<VLoopStatement>("default"));

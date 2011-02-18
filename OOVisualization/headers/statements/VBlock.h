@@ -11,7 +11,7 @@
 #include "../oovisualization_api.h"
 #include "VBlockStyle.h"
 
-#include "VisualizationBase/headers/items/ModelItem.h"
+#include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
@@ -26,7 +26,7 @@ namespace OOVisualization {
 
 class OOVISUALIZATION_API VBlock : public Visualization::ModelItem
 {
-	ITEM_COMMON(VBlock, Visualization::ModelItem)
+	ITEM_COMMON(VBlock)
 
 	public:
 		VBlock(Item* parent, OOModel::Block* node, const VBlockStyle* style = Visualization::Styles::item<VBlock>("default"));

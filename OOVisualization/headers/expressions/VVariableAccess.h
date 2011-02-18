@@ -11,7 +11,7 @@
 #include "../oovisualization_api.h"
 #include "VVariableAccessStyle.h"
 
-#include "VisualizationBase/headers/items/ModelItem.h"
+#include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
@@ -28,7 +28,7 @@ namespace OOVisualization {
 
 class OOVISUALIZATION_API VVariableAccess : public Visualization::ModelItem
 {
-	ITEM_COMMON(VVariableAccess, Visualization::ModelItem)
+	ITEM_COMMON(VVariableAccess)
 
 	public:
 		VVariableAccess(Item* parent, OOModel::VariableAccess* node, const VVariableAccessStyle* style = Visualization::Styles::item<VVariableAccess>("default"));

@@ -11,7 +11,7 @@
 #include "../oovisualization_api.h"
 #include "VLibraryStyle.h"
 
-#include "VisualizationBase/headers/items/ModelItem.h"
+#include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
@@ -29,7 +29,7 @@ namespace OOVisualization {
 
 class OOVISUALIZATION_API VLibrary : public Visualization::ModelItem
 {
-	ITEM_COMMON(VLibrary, Visualization::ModelItem)
+	ITEM_COMMON(VLibrary)
 
 	public:
 		VLibrary(Item* parent, OOModel::Library* node, const VLibraryStyle* style = Visualization::Styles::item<VLibrary>("default"));

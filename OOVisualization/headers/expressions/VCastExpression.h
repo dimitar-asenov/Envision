@@ -11,7 +11,7 @@
 #include "../oovisualization_api.h"
 #include "VCastExpressionStyle.h"
 
-#include "VisualizationBase/headers/items/ModelItem.h"
+#include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
@@ -27,7 +27,7 @@ namespace OOVisualization {
 
 class OOVISUALIZATION_API VCastExpression : public Visualization::ModelItem
 {
-	ITEM_COMMON(VCastExpression, Visualization::ModelItem)
+	ITEM_COMMON(VCastExpression)
 
 	public:
 		VCastExpression(Item* parent, OOModel::CastExpression* node, const VCastExpressionStyle* style = Visualization::Styles::item<VCastExpression>("default"));

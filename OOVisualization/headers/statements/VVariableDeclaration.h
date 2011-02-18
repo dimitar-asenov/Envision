@@ -11,7 +11,7 @@
 #include "../oovisualization_api.h"
 #include "VVariableDeclarationStyle.h"
 
-#include "VisualizationBase/headers/items/ModelItem.h"
+#include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
@@ -28,7 +28,7 @@ namespace OOVisualization {
 
 class OOVISUALIZATION_API VVariableDeclaration : public Visualization::ModelItem
 {
-	ITEM_COMMON(VVariableDeclaration, Visualization::ModelItem)
+	ITEM_COMMON(VVariableDeclaration)
 
 	public:
 		VVariableDeclaration(Item* parent, OOModel::VariableDeclaration* node, const VVariableDeclarationStyle* style = Visualization::Styles::item<VVariableDeclaration>("default"));

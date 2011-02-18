@@ -11,7 +11,7 @@
 #include "../oovisualization_api.h"
 #include "VForEachStatementStyle.h"
 
-#include "VisualizationBase/headers/items/ModelItem.h"
+#include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
@@ -28,7 +28,7 @@ namespace OOVisualization {
 
 class OOVISUALIZATION_API VForEachStatement : public Visualization::ModelItem
 {
-	ITEM_COMMON(VForEachStatement, Visualization::ModelItem)
+	ITEM_COMMON(VForEachStatement)
 
 	public:
 		VForEachStatement(Item* parent, OOModel::ForEachStatement* node, const VForEachStatementStyle* style = Visualization::Styles::item<VForEachStatement>("default"));

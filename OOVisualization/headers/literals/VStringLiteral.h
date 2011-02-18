@@ -10,7 +10,7 @@
 
 #include "../oovisualization_api.h"
 
-#include "VisualizationBase/headers/items/ModelItem.h"
+#include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/TextStyle.h"
 #include "VisualizationBase/headers/Styles.h"
 
@@ -20,7 +20,7 @@ namespace OOVisualization {
 
 class OOVISUALIZATION_API VStringLiteral : public Visualization::ModelItem
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VStringLiteral, Visualization::ModelItem, Visualization::TextStyle)
+	ITEM_COMMON_CUSTOM_STYLENAME(VStringLiteral, Visualization::TextStyle)
 
 	public:
 		VStringLiteral(Item* parent, OOModel::StringLiteral *literal, const Visualization::TextStyle *style = Visualization::Styles::item<VStringLiteral>("default"));

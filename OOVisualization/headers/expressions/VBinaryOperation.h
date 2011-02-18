@@ -11,7 +11,7 @@
 #include "../oovisualization_api.h"
 #include "OperatorStyle.h"
 
-#include "VisualizationBase/headers/items/ModelItem.h"
+#include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
@@ -27,7 +27,7 @@ namespace OOVisualization {
 
 class OOVISUALIZATION_API VBinaryOperation : public Visualization::ModelItem
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VBinaryOperation, Visualization::ModelItem, OperatorSequenceStyle)
+	ITEM_COMMON_CUSTOM_STYLENAME(VBinaryOperation, OperatorSequenceStyle)
 
 	public:
 		VBinaryOperation(Item* parent, OOModel::BinaryOperation* node, const OperatorSequenceStyle* style = Visualization::Styles::item<VBinaryOperation>("default"));

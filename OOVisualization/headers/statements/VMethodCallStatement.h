@@ -11,7 +11,7 @@
 #include "../oovisualization_api.h"
 #include "VMethodCallStatementStyle.h"
 
-#include "VisualizationBase/headers/items/ModelItem.h"
+#include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
@@ -29,7 +29,7 @@ namespace OOVisualization {
 
 class OOVISUALIZATION_API VMethodCallStatement : public Visualization::ModelItem
 {
-	ITEM_COMMON(VMethodCallStatement, Visualization::ModelItem)
+	ITEM_COMMON(VMethodCallStatement)
 
 	public:
 		VMethodCallStatement(Item* parent, OOModel::MethodCallStatement* node, const VMethodCallStatementStyle* style = Visualization::Styles::item<VMethodCallStatement>("default"));

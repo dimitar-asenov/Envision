@@ -11,7 +11,7 @@
 #include "../oovisualization_api.h"
 #include "VIfStatementStyle.h"
 
-#include "VisualizationBase/headers/items/ModelItem.h"
+#include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
@@ -28,7 +28,7 @@ namespace OOVisualization {
 
 class OOVISUALIZATION_API VIfStatement : public Visualization::ModelItem
 {
-	ITEM_COMMON(VIfStatement, Visualization::ModelItem)
+	ITEM_COMMON(VIfStatement)
 
 	public:
 		VIfStatement(Item* parent, OOModel::IfStatement* node, const VIfStatementStyle* style = Visualization::Styles::item<VIfStatement>("default"));

@@ -11,7 +11,7 @@
 #include "../oovisualization_api.h"
 #include "VProjectStyle.h"
 
-#include "VisualizationBase/headers/items/ModelItem.h"
+#include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
@@ -29,7 +29,7 @@ namespace OOVisualization {
 
 class OOVISUALIZATION_API VProject : public Visualization::ModelItem
 {
-	ITEM_COMMON(VProject, Visualization::ModelItem)
+	ITEM_COMMON(VProject)
 
 	public:
 		VProject(Item* parent, OOModel::Project* node, const VProjectStyle* style = Visualization::Styles::item<VProject>("default"));

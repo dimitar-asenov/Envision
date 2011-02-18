@@ -11,7 +11,7 @@
 #include "../oovisualization_api.h"
 #include "VClassStyle.h"
 
-#include "VisualizationBase/headers/items/ModelItem.h"
+#include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
@@ -32,7 +32,7 @@ class ClassIcon;
 
 class OOVISUALIZATION_API VClass : public Visualization::ModelItem
 {
-	ITEM_COMMON(VClass, Visualization::ModelItem)
+	ITEM_COMMON(VClass)
 
 	public:
 		VClass(Item* parent, OOModel::Class* node, const VClassStyle* style = Visualization::Styles::item<VClass>("default"));

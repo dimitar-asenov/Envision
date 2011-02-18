@@ -11,7 +11,7 @@
 #include "../oovisualization_api.h"
 #include "VFormalArgumentStyle.h"
 
-#include "VisualizationBase/headers/items/ModelItem.h"
+#include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
@@ -27,7 +27,7 @@ namespace OOVisualization {
 
 class OOVISUALIZATION_API VFormalArgument : public Visualization::ModelItem
 {
-	ITEM_COMMON(VFormalArgument, Visualization::ModelItem)
+	ITEM_COMMON(VFormalArgument)
 
 	public:
 		VFormalArgument(Item* parent, OOModel::FormalArgument* node, const VFormalArgumentStyle* style = Visualization::Styles::item<VFormalArgument>("default"));

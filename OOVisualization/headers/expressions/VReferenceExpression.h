@@ -11,7 +11,7 @@
 #include "../oovisualization_api.h"
 #include "VReferenceExpressionStyle.h"
 
-#include "VisualizationBase/headers/items/ModelItem.h"
+#include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
@@ -28,7 +28,7 @@ namespace OOVisualization {
 
 class OOVISUALIZATION_API VReferenceExpression : public Visualization::ModelItem
 {
-	ITEM_COMMON(VReferenceExpression, Visualization::ModelItem)
+	ITEM_COMMON(VReferenceExpression)
 
 	public:
 		VReferenceExpression(Item* parent, OOModel::ReferenceExpression* node, const VReferenceExpressionStyle* style = Visualization::Styles::item<VReferenceExpression>("default"));

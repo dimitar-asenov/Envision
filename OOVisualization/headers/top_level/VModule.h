@@ -11,7 +11,7 @@
 #include "../oovisualization_api.h"
 #include "VModuleStyle.h"
 
-#include "VisualizationBase/headers/items/ModelItem.h"
+#include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
@@ -29,7 +29,7 @@ namespace OOVisualization {
 
 class OOVISUALIZATION_API VModule : public Visualization::ModelItem
 {
-	ITEM_COMMON(VModule, Visualization::ModelItem)
+	ITEM_COMMON(VModule)
 
 	public:
 		VModule(Item* parent, OOModel::Module* node, const VModuleStyle* style = Visualization::Styles::item<VModule>("default"));

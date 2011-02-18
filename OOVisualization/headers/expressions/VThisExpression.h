@@ -10,7 +10,7 @@
 
 #include "../oovisualization_api.h"
 
-#include "VisualizationBase/headers/items/ModelItem.h"
+#include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/Symbol.h"
 #include "VisualizationBase/headers/Styles.h"
 
@@ -20,7 +20,7 @@ namespace OOVisualization {
 
 class OOVISUALIZATION_API VThisExpression : public Visualization::ModelItem
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VThisExpression, Visualization::ModelItem, Visualization::SymbolStyle)
+	ITEM_COMMON_CUSTOM_STYLENAME(VThisExpression, Visualization::SymbolStyle)
 
 	public:
 		VThisExpression(Item* parent, OOModel::ThisExpression *expr, const Visualization::SymbolStyle *style = Visualization::Styles::item<VThisExpression>("default"));

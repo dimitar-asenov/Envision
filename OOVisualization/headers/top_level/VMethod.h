@@ -11,7 +11,7 @@
 #include "../oovisualization_api.h"
 #include "VMethodStyle.h"
 
-#include "VisualizationBase/headers/items/ModelItem.h"
+#include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
@@ -31,7 +31,7 @@ class MethodIcon;
 
 class OOVISUALIZATION_API VMethod : public Visualization::ModelItem
 {
-	ITEM_COMMON(VMethod, Visualization::ModelItem)
+	ITEM_COMMON(VMethod)
 
 	public:
 		VMethod(Item* parent, OOModel::Method* node, const VMethodStyle* style = Visualization::Styles::item<VMethod>("default"));

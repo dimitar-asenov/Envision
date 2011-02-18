@@ -11,7 +11,7 @@
 #include "../oovisualization_api.h"
 #include "../expressions/OperatorStyle.h"
 
-#include "VisualizationBase/headers/items/ModelItem.h"
+#include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
@@ -27,7 +27,7 @@ namespace OOVisualization {
 
 class OOVISUALIZATION_API VAssignmentStatement : public Visualization::ModelItem
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VAssignmentStatement, Visualization::ModelItem, OperatorSequenceStyle)
+	ITEM_COMMON_CUSTOM_STYLENAME(VAssignmentStatement, OperatorSequenceStyle)
 
 	public:
 		VAssignmentStatement(Item* parent, OOModel::AssignmentStatement* node, const OperatorSequenceStyle* style = Visualization::Styles::item<VAssignmentStatement>("default"));

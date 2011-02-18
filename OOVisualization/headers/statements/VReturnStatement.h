@@ -11,7 +11,7 @@
 #include "../oovisualization_api.h"
 #include "VReturnStatementStyle.h"
 
-#include "VisualizationBase/headers/items/ModelItem.h"
+#include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
@@ -28,7 +28,7 @@ namespace OOVisualization {
 
 class OOVISUALIZATION_API VReturnStatement : public Visualization::ModelItem
 {
-	ITEM_COMMON(VReturnStatement, Visualization::ModelItem)
+	ITEM_COMMON(VReturnStatement)
 
 	public:
 		VReturnStatement(Item* parent, OOModel::ReturnStatement* node, const VReturnStatementStyle* style = Visualization::Styles::item<VReturnStatement>("default"));
