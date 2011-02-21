@@ -18,19 +18,19 @@ namespace OOVisualization {
 class OOVISUALIZATION_API VFormalResultStyle : public Visualization::ItemStyle
 {
 	private:
-		Visualization::SequentialLayoutStyle container_;
+		Visualization::SequentialLayoutStyle layout_;
 		Visualization::TextStyle name_;
 
 	public:
 		void load();
 
-		const Visualization::SequentialLayoutStyle& container() const;
+		const Visualization::SequentialLayoutStyle& layout() const;
 		const Visualization::TextStyle& name() const;
 
 		static VFormalResultStyle* getDefault();
 };
 
-inline const Visualization::SequentialLayoutStyle& VFormalResultStyle::container() const { return container_; }
+inline const Visualization::SequentialLayoutStyle& VFormalResultStyle::layout() const { return layout_; }
 inline const Visualization::TextStyle& VFormalResultStyle::name() const { return name_; }
 
 }

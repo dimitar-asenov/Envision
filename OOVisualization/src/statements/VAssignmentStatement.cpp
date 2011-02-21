@@ -49,7 +49,7 @@ void VAssignmentStatement::determineChildren()
 	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
 	//			what's the reason they are being updated.
 	// The style needs to be updated every time since if our own style changes, so will that of the children.
-	layout()->setStyle( &style()->op(node()->op()).container());
+	layout()->setStyle( &style()->op(node()->op()).layout());
 	assignmentSymbol_->setStyle( &style()->op(node()->op()).inSymbol());
 }
 

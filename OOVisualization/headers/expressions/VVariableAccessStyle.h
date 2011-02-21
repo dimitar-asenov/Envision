@@ -19,21 +19,21 @@ namespace OOVisualization {
 class OOVISUALIZATION_API VVariableAccessStyle : public Visualization::ItemStyle
 {
 	private:
-		Visualization::SequentialLayoutStyle container_;
+		Visualization::SequentialLayoutStyle layout_;
 		Visualization::TextStyle name_;
 		Visualization::SymbolStyle separator_;
 
 	public:
 		void load();
 
-		const Visualization::SequentialLayoutStyle& container() const;
+		const Visualization::SequentialLayoutStyle& layout() const;
 		const Visualization::TextStyle& name() const;
 		const Visualization::SymbolStyle& separator() const;
 
 		static VVariableAccessStyle* getDefault();
 };
 
-inline const Visualization::SequentialLayoutStyle& VVariableAccessStyle::container() const { return container_; }
+inline const Visualization::SequentialLayoutStyle& VVariableAccessStyle::layout() const { return layout_; }
 inline const Visualization::TextStyle& VVariableAccessStyle::name() const { return name_; }
 inline const Visualization::SymbolStyle& VVariableAccessStyle::separator() const { return separator_; }
 

@@ -23,7 +23,7 @@ VClassStyle* VClassStyle::getDefault()
 void VClassStyle::load()
 {
 	ItemStyle::load();
-	Visualization::Styles::load("border", border_);
+	Visualization::Styles::load("layout", layout_);
 	Visualization::Styles::load("nameDefault", nameDefault_);
 	Visualization::Styles::load("namePublic", namePublic_);
 	Visualization::Styles::load("namePrivate", namePrivate_);

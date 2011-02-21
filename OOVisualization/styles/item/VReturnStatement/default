@@ -12,9 +12,9 @@
 			</color>
 		</backgroundBrush>
 	</shape>
-	<container prototypes="layout/SequentialLayout/default">
+	<layout prototypes="layout/SequentialLayout/default">
 		<spaceBetweenElements>5</spaceBetweenElements>
-	</container>
+	</layout>
 	<symbol prototypes="item/Symbol/default">
 		<symbol>⏎</symbol>
 	</symbol>

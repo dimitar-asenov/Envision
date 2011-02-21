@@ -20,7 +20,7 @@ void VCastExpressionStyle::load()
 {
 	ItemStyle::load();
 
-	Visualization::Styles::load("container", container_);
+	Visualization::Styles::load("layout", layout_);
 	Visualization::Styles::load("separator", separator_);
 }
 

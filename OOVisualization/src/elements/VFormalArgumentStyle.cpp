@@ -20,7 +20,7 @@ void VFormalArgumentStyle::load()
 {
 	ItemStyle::load();
 
-	Visualization::Styles::load("container", container_);
+	Visualization::Styles::load("layout", layout_);
 	Visualization::Styles::load("name", name_);
 }
 

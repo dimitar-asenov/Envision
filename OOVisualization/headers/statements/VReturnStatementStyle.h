@@ -19,21 +19,21 @@ namespace OOVisualization {
 class OOVISUALIZATION_API VReturnStatementStyle : public Visualization::ItemStyle
 {
 	private:
-		Visualization::SequentialLayoutStyle container_;
+		Visualization::SequentialLayoutStyle layout_;
 		Visualization::SymbolStyle symbol_;
 		Visualization::VListStyle values_;
 
 	public:
 		void load();
 
-		const Visualization::SequentialLayoutStyle& container() const;
+		const Visualization::SequentialLayoutStyle& layout() const;
 		const Visualization::SymbolStyle& symbol() const;
 		const Visualization::VListStyle& values() const;
 
 		static VReturnStatementStyle* getDefault();
 };
 
-inline const Visualization::SequentialLayoutStyle& VReturnStatementStyle::container() const { return container_; }
+inline const Visualization::SequentialLayoutStyle& VReturnStatementStyle::layout() const { return layout_; }
 inline const Visualization::SymbolStyle& VReturnStatementStyle::symbol() const { return symbol_; }
 inline const Visualization::VListStyle& VReturnStatementStyle::values() const { return values_; }
 }

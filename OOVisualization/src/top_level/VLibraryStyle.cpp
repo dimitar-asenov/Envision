@@ -19,7 +19,7 @@ VLibraryStyle* VLibraryStyle::getDefault()
 void VLibraryStyle::load()
 {
 	ItemStyle::load();
-	Visualization::Styles::load("border", border_);
+	Visualization::Styles::load("layout", layout_);
 	Visualization::Styles::load("header", header_);
 	Visualization::Styles::load("name", name_);
 	Visualization::Styles::load("icon", icon_);

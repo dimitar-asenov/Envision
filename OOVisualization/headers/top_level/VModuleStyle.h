@@ -21,7 +21,7 @@ namespace OOVisualization {
 class OOVISUALIZATION_API VModuleStyle : public Visualization::ItemStyle
 {
 	private:
-		Visualization::PanelBorderLayoutStyle border_;
+		Visualization::PanelBorderLayoutStyle layout_;
 		Visualization::SequentialLayoutStyle header_;
 		Visualization::TextStyle name_;
 		Visualization::SVGIconStyle icon_;
@@ -31,7 +31,7 @@ class OOVISUALIZATION_API VModuleStyle : public Visualization::ItemStyle
 		VModuleStyle();
 		void load();
 
-		const Visualization::PanelBorderLayoutStyle& border() const;
+		const Visualization::PanelBorderLayoutStyle& layout() const;
 		const Visualization::SequentialLayoutStyle&  header() const;
 		const Visualization::TextStyle&  name() const;
 		const Visualization::SVGIconStyle&  icon() const;
@@ -40,7 +40,7 @@ class OOVISUALIZATION_API VModuleStyle : public Visualization::ItemStyle
 		static VModuleStyle* getDefault();
 };
 
-inline const Visualization::PanelBorderLayoutStyle& VModuleStyle::border() const {return border_; }
+inline const Visualization::PanelBorderLayoutStyle& VModuleStyle::layout() const {return layout_; }
 inline const Visualization::SequentialLayoutStyle& VModuleStyle::header() const {return header_; }
 inline const Visualization::TextStyle& VModuleStyle::name() const {return name_; }
 inline const Visualization::SVGIconStyle& VModuleStyle::icon() const {return icon_; }

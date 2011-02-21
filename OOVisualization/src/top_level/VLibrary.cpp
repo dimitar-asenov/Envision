@@ -49,7 +49,7 @@ void VLibrary::determineChildren()
 	header->setStyle(&style()->header());
 	name->setStyle(&style()->name());
 	content->setStyle(&style()->content());
-	layout()->setStyle(&style()->border());
+	layout()->setStyle(&style()->layout());
 	header->at<SVGIcon>(0)->setStyle(&style()->icon());
 
 	QList<Model::Node*> nodes;

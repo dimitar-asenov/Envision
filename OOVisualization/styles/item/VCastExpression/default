@@ -1,6 +1,6 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/Item/default">
-	<container prototypes="layout/SequentialLayout/default">
+	<layout prototypes="layout/SequentialLayout/default">
 		<shape prototypes="shape/Box/default">
 			Box
 			<backgroundBrush>
@@ -18,7 +18,7 @@
 			<cornerRadius>2</cornerRadius>
 			<cornerType>2</cornerType>
 		</shape>
-	</container>
+	</layout>
 	<separator prototypes="item/Symbol/default">
 		<symbol>≈</symbol>
 	</separator>

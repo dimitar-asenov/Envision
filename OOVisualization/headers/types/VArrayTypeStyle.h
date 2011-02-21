@@ -18,19 +18,19 @@ namespace OOVisualization {
 class OOVISUALIZATION_API VArrayTypeStyle : public Visualization::ItemStyle
 {
 	private:
-		Visualization::SequentialLayoutStyle container_;
+		Visualization::SequentialLayoutStyle layout_;
 		Visualization::SymbolStyle symbol_;
 
 	public:
 		void load();
 
-		const Visualization::SequentialLayoutStyle& container() const;
+		const Visualization::SequentialLayoutStyle& layout() const;
 		const Visualization::SymbolStyle& symbol() const;
 
 		static VArrayTypeStyle* getDefault();
 };
 
-inline const Visualization::SequentialLayoutStyle& VArrayTypeStyle::container() const { return container_; }
+inline const Visualization::SequentialLayoutStyle& VArrayTypeStyle::layout() const { return layout_; }
 inline const Visualization::SymbolStyle& VArrayTypeStyle::symbol() const { return symbol_; }
 
 }

@@ -18,7 +18,7 @@ namespace OOVisualization {
 class OOVISUALIZATION_API VFieldStyle : public Visualization::ItemStyle
 {
 	private:
-		Visualization::SequentialLayoutStyle container_;
+		Visualization::SequentialLayoutStyle layout_;
 		Visualization::TextStyle nameDefault_;
 		Visualization::TextStyle namePublic_;
 		Visualization::TextStyle namePrivate_;
@@ -32,7 +32,7 @@ class OOVISUALIZATION_API VFieldStyle : public Visualization::ItemStyle
 		VFieldStyle();
 		void load();
 
-		const Visualization::SequentialLayoutStyle& container() const;
+		const Visualization::SequentialLayoutStyle& layout() const;
 		const Visualization::TextStyle& nameDefault() const;
 		const Visualization::TextStyle& namePublic() const;
 		const Visualization::TextStyle& namePrivate() const;
@@ -45,7 +45,7 @@ class OOVISUALIZATION_API VFieldStyle : public Visualization::ItemStyle
 		static VFieldStyle* getDefault();
 };
 
-inline const Visualization::SequentialLayoutStyle& VFieldStyle::container() const { return container_; }
+inline const Visualization::SequentialLayoutStyle& VFieldStyle::layout() const { return layout_; }
 inline const Visualization::TextStyle& VFieldStyle::nameDefault() const { return nameDefault_; }
 inline const Visualization::TextStyle& VFieldStyle::namePublic() const { return namePublic_; }
 inline const Visualization::TextStyle& VFieldStyle::namePrivate() const { return namePrivate_; }

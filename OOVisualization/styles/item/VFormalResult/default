@@ -1,6 +1,6 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/Item/default">
 	<shape />
-	<container prototypes="layout/SequentialLayout/default" />
+	<layout prototypes="layout/SequentialLayout/default" />
 	<name prototypes="item/Text/default" />
 </style>

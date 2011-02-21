@@ -1,8 +1,8 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/Item/default">
 	<shape />
-	<container prototypes="layout/SequentialLayout/default">
+	<layout prototypes="layout/SequentialLayout/default">
 		<direction>2</direction>
-	</container>
+	</layout>
 	<name prototypes="item/Text/default" />
 </style>

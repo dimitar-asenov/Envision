@@ -20,7 +20,7 @@ void OperatorStyle::load()
 {
 	ItemStyle::load();
 
-	Visualization::Styles::load("container", container_);
+	Visualization::Styles::load("layout", layout_);
 	Visualization::Styles::load("preSymbol", preSymbol_);
 	Visualization::Styles::load("inSymbol", inSymbol_);
 	Visualization::Styles::load("postSymbol", postSymbol_);

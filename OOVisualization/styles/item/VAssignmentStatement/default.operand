@@ -1,8 +1,8 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/Item/default">
-	<container prototypes="layout/SequentialLayout/default">
+	<layout prototypes="layout/SequentialLayout/default">
 		<spaceBetweenElements>5</spaceBetweenElements>
-	</container>
+	</layout>
 	<preSymbol prototypes="item/Symbol/default"><symbol/></preSymbol>
 	<inSymbol prototypes="item/Symbol/default"><symbol/></inSymbol>
 	<postSymbol prototypes="item/Symbol/default"><symbol/></postSymbol>

@@ -1,6 +1,6 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/Item/default">
-	<border prototypes="layout/PanelBorderLayout/default">
+	<layout prototypes="layout/PanelBorderLayout/default">
 		<shape prototypes="shape/Box/default">
 			Box
 			<cornerRadius>10</cornerRadius>
@@ -16,7 +16,7 @@
 		</shape>
 		<isLeftProtrusionFixed>true</isLeftProtrusionFixed>
 		<leftProtrusion>10</leftProtrusion>
-	</border>
+	</layout>
 	<nameDefault prototypes="default.nameDefault" />
 	<namePublic prototypes="default.namePublic" />
 	<namePrivate prototypes="default.namePrivate" />

@@ -19,21 +19,21 @@ namespace OOVisualization {
 class OOVISUALIZATION_API VVariableDeclarationStyle : public Visualization::ItemStyle
 {
 	private:
-		Visualization::SequentialLayoutStyle container_;
+		Visualization::SequentialLayoutStyle layout_;
 		Visualization::TextStyle name_;
 		Visualization::SymbolStyle assignmentSymbol_;
 
 	public:
 		void load();
 
-		const Visualization::SequentialLayoutStyle& container() const;
+		const Visualization::SequentialLayoutStyle& layout() const;
 		const Visualization::TextStyle& name() const;
 		const Visualization::SymbolStyle& assignmentSymbol() const;
 
 		static VVariableDeclarationStyle* getDefault();
 };
 
-inline const Visualization::SequentialLayoutStyle& VVariableDeclarationStyle::container() const { return container_; }
+inline const Visualization::SequentialLayoutStyle& VVariableDeclarationStyle::layout() const { return layout_; }
 inline const Visualization::TextStyle& VVariableDeclarationStyle::name() const { return name_; }
 inline const Visualization::SymbolStyle& VVariableDeclarationStyle::assignmentSymbol() const { return assignmentSymbol_; }
 

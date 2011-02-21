@@ -18,7 +18,7 @@ namespace OOVisualization {
 class OOVISUALIZATION_API OperatorStyle : public Visualization::ItemStyle
 {
 	private:
-		Visualization::SequentialLayoutStyle container_;
+		Visualization::SequentialLayoutStyle layout_;
 		Visualization::SymbolStyle preSymbol_;
 		Visualization::SymbolStyle inSymbol_;
 		Visualization::SymbolStyle postSymbol_;
@@ -26,7 +26,7 @@ class OOVISUALIZATION_API OperatorStyle : public Visualization::ItemStyle
 	public:
 		void load();
 
-		const Visualization::SequentialLayoutStyle& container() const;
+		const Visualization::SequentialLayoutStyle& layout() const;
 		const Visualization::SymbolStyle& preSymbol() const;
 		const Visualization::SymbolStyle& inSymbol() const;
 		const Visualization::SymbolStyle& postSymbol() const;
@@ -34,7 +34,7 @@ class OOVISUALIZATION_API OperatorStyle : public Visualization::ItemStyle
 		static OperatorStyle* getDefault();
 };
 
-inline const Visualization::SequentialLayoutStyle& OperatorStyle::container() const { return container_; }
+inline const Visualization::SequentialLayoutStyle& OperatorStyle::layout() const { return layout_; }
 inline const Visualization::SymbolStyle& OperatorStyle::preSymbol() const { return preSymbol_; }
 inline const Visualization::SymbolStyle& OperatorStyle::inSymbol() const { return inSymbol_; }
 inline const Visualization::SymbolStyle& OperatorStyle::postSymbol() const { return postSymbol_; }
