@@ -25,6 +25,9 @@ class VISUALIZATIONBASE_API VText : public ItemWithNode<TextRenderer, Model::Tex
 	public:
 		VText(Item* parent, NodeType* node, const StyleType* style = Styles::item<VText>("default"));
 		virtual bool setText(const QString& newText);
+
+	protected:
+		virtual QString currentText();
 };
 
 }

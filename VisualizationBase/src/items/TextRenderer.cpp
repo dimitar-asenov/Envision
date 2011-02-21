@@ -27,24 +27,19 @@ int TextRenderer::selectionXBegin = 0;
 int TextRenderer::selectionXEnd = 0;
 int TextRenderer::caretX = 0;
 
-TextRenderer::TextRenderer(Item* parent, const StyleType *style, const QString& text_) :
-	Item(parent, style), text(text_), editable(true)
+TextRenderer::TextRenderer(Item* parent, const StyleType *style, const QString& text) :
+	Item(parent, style), text_(text), editable(true)
 {
 }
 
 bool TextRenderer::setText(const QString& newText)
 {
-	text = newText;
+	text_ = newText;
 	this->setUpdateNeeded();
 	return true;
 }
 
-QString TextRenderer::getText()
-{
-	return text;
-}
-
-QString TextRenderer::getSelectedText()
+QString TextRenderer::selectedText()
 {
 	if (this->hasFocus())
 	{
@@ -56,19 +51,9 @@ QString TextRenderer::getSelectedText()
 			xend = selectionBegin;
 		}
 
-		return text.mid(xstart, xend - xstart);
+		return text_.mid(xstart, xend - xstart);
 	}
 	else return QString();
-}
-
-bool TextRenderer::isEditable()
-{
-	return editable;
-}
-
-void TextRenderer::setEditable(bool editable_)
-{
-	editable = editable_;
 }
 
 void TextRenderer::determineChildren()
@@ -77,14 +62,15 @@ void TextRenderer::determineChildren()
 
 void TextRenderer::updateGeometry(int, int)
 {
+	text_ = currentText();
 	QFontMetrics qfm(style()->font());
 
 	QRectF bound;
-	if (text.isEmpty()) bound.setRect(0, 0, MIN_TEXT_WIDTH, qfm.height());
+	if (text_.isEmpty()) bound.setRect(0, 0, MIN_TEXT_WIDTH, qfm.height());
 	else
 	{
-		bound = qfm.boundingRect(text);
-		if (bound.width() < qfm.width(text)) bound.setWidth(qfm.width(text));
+		bound = qfm.boundingRect(text_);
+		if (bound.width() < qfm.width(text_)) bound.setWidth(qfm.width(text_));
 		if (bound.height() < qfm.height()) bound.setHeight(qfm.height());
 	}
 
@@ -118,8 +104,8 @@ void TextRenderer::updateGeometry(int, int)
 			xend = selectionBegin;
 		}
 
-		selectionXBegin = qfm.width(text, xstart);
-		selectionXEnd = qfm.width(text, xend);
+		selectionXBegin = qfm.width(text_, xstart);
+		selectionXEnd = qfm.width(text_, xend);
 		caretX = (selectionBegin > selectionEnd) ? selectionXBegin : selectionXEnd;
 	}
 }
@@ -134,7 +120,7 @@ void TextRenderer::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 	{
 		painter->setPen(style()->pen());
 		painter->setFont(style()->font());
-		painter->drawText(QPointF(xOffset, yOffset), text);
+		painter->drawText(QPointF(xOffset, yOffset), text_);
 	}
 	else
 	{
@@ -143,7 +129,7 @@ void TextRenderer::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 			// No text is selected, draw all text at once using normal style
 			painter->setPen(style()->pen());
 			painter->setFont(style()->font());
-			painter->drawText(QPointF(xOffset, yOffset), text);
+			painter->drawText(QPointF(xOffset, yOffset), text_);
 		}
 		else
 		{
@@ -165,13 +151,13 @@ void TextRenderer::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 			// Draw selected text
 			painter->setPen(style()->selectionPen());
 			painter->setFont(style()->selectionFont());
-			painter->drawText(QPointF(xOffset + selectionXBegin, yOffset), text.mid(xstart, xend - xstart));
+			painter->drawText(QPointF(xOffset + selectionXBegin, yOffset), text_.mid(xstart, xend - xstart));
 
 			// Draw non-selected text
 			painter->setPen(style()->pen());
 			painter->setFont(style()->font());
-			painter->drawText(xOffset, yOffset, text.left(xstart));
-			painter->drawText(QPointF(xOffset + selectionXEnd, yOffset), text.mid(xend));
+			painter->drawText(xOffset, yOffset, text_.left(xstart));
+			painter->drawText(QPointF(xOffset + selectionXEnd, yOffset), text_.mid(xend));
 		}
 
 		// Draw caret
@@ -186,7 +172,7 @@ void TextRenderer::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 void TextRenderer::selectAll()
 {
 	selectionBegin = 0;
-	selectionEnd = text.length();
+	selectionEnd = text_.length();
 	if (!this->hasFocus()) this->setFocus();
 	this->setUpdateNeeded();
 }
@@ -206,9 +192,9 @@ void TextRenderer::setSelectedByDrag(int xBegin, int xEnd)
 
 	QFontMetrics qfm(style()->font());
 	int width = 0;
-	for (int i = 1; i <= text.length(); ++i)
+	for (int i = 1; i <= text_.length(); ++i)
 	{
-		int new_width = qfm.width(text, i);
+		int new_width = qfm.width(text_, i);
 		if ( xBegin > (new_width + width + 1) / 2 ) selectionBegin++;
 		if ( xEnd > (new_width + width + 1) / 2 ) selectionEnd++;
 		width = new_width;
@@ -216,26 +202,6 @@ void TextRenderer::setSelectedByDrag(int xBegin, int xEnd)
 
 	this->setFocus();
 	this->setUpdateNeeded();
-}
-
-int TextRenderer::selectionFirstInxed()
-{
-	return selectionBegin < selectionEnd ? selectionBegin : selectionEnd;
-}
-
-int TextRenderer::selectionLastIndex()
-{
-	return selectionBegin > selectionEnd ? selectionBegin : selectionEnd;
-}
-
-int TextRenderer::caretPosition()
-{
-	return selectionEnd;
-}
-
-void TextRenderer::setCaretPosition(int beforeCharacter)
-{
-	setSelectedCharacters(beforeCharacter,beforeCharacter);
 }
 
 }

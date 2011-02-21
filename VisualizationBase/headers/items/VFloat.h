@@ -25,6 +25,9 @@ class VISUALIZATIONBASE_API VFloat : public ItemWithNode<TextRenderer, Model::Fl
 	public:
 		VFloat(Item* parent, NodeType *node, const StyleType *style = Styles::item<VFloat>("default"));
 		virtual bool setText(const QString& newText);
+
+	protected:
+		virtual QString currentText();
 };
 
 }

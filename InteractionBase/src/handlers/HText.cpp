@@ -39,7 +39,7 @@ void HText::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			{
 				case Qt::Key_C:
 					{
-						QString text = tr->getSelectedText();
+						QString text = tr->selectedText();
 
 						if (!text.isEmpty()) QApplication::clipboard()->setText(text);
 						else GenericHandler::keyPressEvent(target, event);
@@ -163,7 +163,7 @@ void HText::focusInEvent(Visualization::Item *target, QFocusEvent *event)
 
 	GenericHandler::FocusDirection dir = GenericHandler::focusDirection();
 
-	int size = tr->getText().length();
+	int size = tr->text().length();
 
 	if (size > 0)
 	{
@@ -185,15 +185,15 @@ void HText::moveCaret(Visualization::Item *target, QKeyEvent *event)
 		case Qt::Key_Left:
 			{
 				int position = tr->caretPosition();
-				if ( tr->getText().isEmpty() || position <= 0) event->ignore();
+				if ( tr->text().isEmpty() || position <= 0) event->ignore();
 				else tr->setCaretPosition(position - 1);
 			}
 			break;
 		case Qt::Key_Right:
 			{
 				int position = tr->caretPosition();
-				int size = tr->getText().size();
-				if ( tr->getText().isEmpty() || position >= size) event->ignore();
+				int size = tr->text().size();
+				if ( tr->text().isEmpty() || position >= size) event->ignore();
 				else tr->setCaretPosition(position + 1);
 			}
 			break;
@@ -203,7 +203,7 @@ void HText::erase(Visualization::Item *target, bool forwards, bool onlyDeleteIfS
 {
 	Visualization::TextRenderer* tr = static_cast<Visualization::TextRenderer*> (target);
 
-	QString newText = tr->getText();
+	QString newText = tr->text();
 	int selFirst = tr->selectionFirstInxed();
 	int selLast = tr->selectionLastIndex();
 
@@ -246,7 +246,7 @@ void HText::insertText(Visualization::Item *target, const QString& textToInsert)
 	Visualization::TextRenderer* tr = static_cast<Visualization::TextRenderer*> (target);
 
 	erase(target, true, true);
-	QString newText = tr->getText();
+	QString newText = tr->text();
 	int caret = tr->caretPosition();
 	newText.insert(caret, textToInsert);
 	if ( tr->setText(newText) )

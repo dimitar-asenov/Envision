@@ -71,7 +71,7 @@ class INTERACTIONBASE_API CommandPrompt : public Visualization::Item
 };
 
 inline Visualization::Item* CommandPrompt::commandReceiver() { return commandReceiver_; }
-inline QString CommandPrompt::text() const {return command->getText();}
+inline QString CommandPrompt::text() const {return command->text();}
 
 inline CommandResult* CommandPrompt::result() { return result_; }
 inline QList<CommandSuggestion*>& CommandPrompt::suggestions() { return suggestions_; }

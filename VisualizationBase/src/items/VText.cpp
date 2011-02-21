@@ -27,4 +27,9 @@ bool VText::setText(const QString& newText)
 	return TextRenderer::setText(newText);
 }
 
+QString VText::currentText()
+{
+	return node()->get();
+}
+
 }

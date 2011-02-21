@@ -41,31 +41,22 @@ VMethodCallExpression::~VMethodCallExpression()
 void VMethodCallExpression::determineChildren()
 {
 
-	bool newHasPrefix = node()->prefix() != NULL;
-
-	if (newHasPrefix)
+	// Remove the prefix and separator visualizations if the underlying nodes have changed.
+	if (prefix_ && prefix_->node() != node()->prefix())
 	{
-		if (prefix_ && prefix_->node() != node()->prefix())
-		{
-			layout()->remove(0);
-			layout()->remove(0);
-		}
-
-		if (!prefix_)
-		{
-			prefix_ = renderer()->render(NULL,node()->prefix());
-			separator_ = new Symbol(NULL, &style()->separator());
-			layout()->prepend(separator_);
-			layout()->prepend(prefix_);
-		}
+		layout()->removeAll(prefix_);
+		prefix_ = NULL;
+		layout()->removeAll(separator_);
+		separator_ = NULL;
 	}
-	else
+
+	// Create a prefix and separator visualizations if necessary.
+	if (!prefix_ && node()->prefix())
 	{
-		if (prefix_)
-		{
-			layout()->remove(0);
-			layout()->remove(0);
-		}
+		prefix_ = renderer()->render(NULL,node()->prefix());
+		separator_ = new Symbol(NULL, &style()->separator());
+		layout()->prepend(separator_);
+		layout()->prepend(prefix_);
 	}
 
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
@@ -75,10 +66,7 @@ void VMethodCallExpression::determineChildren()
 	layout()->setStyle( &style()->layout());
 	name_->setStyle( &style()->name());
 	arguments_->setStyle( &style()->arguments() );
-	if (prefix_)
-	{
-		separator_->setStyle( &style()->separator());
-	}
+	if (prefix_) separator_->setStyle( &style()->separator());
 
 	name_->setText(node()->ref()->path().split(',').last().split(':').last());
 }

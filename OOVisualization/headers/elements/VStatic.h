@@ -25,8 +25,10 @@ class OOVISUALIZATION_API VStatic : public Visualization::ItemWithNode< Visualiz
 
 	public:
 		VStatic(Item* parent, NodeType* stat, const StyleType* style = Visualization::Styles::item<VStatic>("default"));
+		virtual bool setText(const QString& newText);
 
-		virtual void updateGeometry(int availableWidth, int availableHeight);
+	protected:
+		virtual QString currentText();
 };
 
 }

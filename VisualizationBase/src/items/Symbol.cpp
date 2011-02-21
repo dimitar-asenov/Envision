@@ -23,4 +23,9 @@ bool Symbol::setText(const QString&)
 	return false;
 }
 
+QString Symbol::currentText()
+{
+	return style()->symbol();
+}
+
 }

@@ -19,21 +19,25 @@ VStatic::VStatic(Item* parent, NodeType* stat, const StyleType* style) :
 {
 }
 
-void VStatic::updateGeometry(int availableWidth, int availableHeight)
+bool VStatic::setText(const QString&)
+{
+	return false;
+}
+
+QString VStatic::currentText()
 {
 	switch (node()->get())
 	{
 		case OOModel::Static::CLASS_VARIABLE:
-			setText( "static" );
+			return "static";
 			break;
 		case OOModel::Static::INSTANCE_VARIABLE:
-			setText( "not static" );
+			return "not static";
 			break;
 		default:
-			setText( "unknown static" );
+			return "unknown static";
 			break;
 	}
-	TextRenderer::updateGeometry(availableWidth, availableHeight);
 }
 
 }

@@ -49,17 +49,17 @@ void VBinaryOperation::determineChildren()
 	// Remove the prefix, infix and postfix symbols if they are not there any more
 	if (in_ && style()->op( node()->op() ).inSymbol().symbol().isEmpty() )
 	{
-		layout()->remove( (pre_?2:1) );
+		layout()->removeAll( in_ );
 		in_ = NULL;
 	}
 	if (pre_ && style()->op( node()->op() ).preSymbol().symbol().isEmpty())
 	{
-		layout()->remove(0);
+		layout()->removeAll( pre_ );
 		pre_ = NULL;
 	}
 	if (post_ && style()->op( node()->op() ).postSymbol().symbol().isEmpty() )
 	{
-		layout()->remove(layout()->length()-1);
+		layout()->removeAll( post_ );
 		post_ = NULL;
 	}
 

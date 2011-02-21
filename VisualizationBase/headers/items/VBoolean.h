@@ -25,6 +25,9 @@ class VISUALIZATIONBASE_API VBoolean : public ItemWithNode<TextRenderer, Model::
 	public:
 		VBoolean(Item* parent, NodeType *node, const StyleType *style = Styles::item<VBoolean>("default"));
 		virtual bool setText(const QString& newText);
+
+	protected:
+		virtual QString currentText();
 };
 
 }

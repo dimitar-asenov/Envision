@@ -88,28 +88,10 @@ void VClass::determineChildren()
 	else if (node()->visibility() == Visibility::PROTECTED) name_->setStyle( &style()->nameProtected() );
 	else throw OOVisualizationException("Unknown visibility in VClass::determineChildren");
 
-	//////////////////////////////////////////////////////////////////////////////// Methods
-	// Remove methods that are outdated
-	for(int i = content_->length() - 1; i>=0; --i)
-	{
-		bool found = false;
+	// Synchronize methods
+	content_->synchronizeWithNodes(node()->methods()->nodes().toList(), renderer());
 
-		for (int k = 0; k<node()->methods()->size(); ++k)
-			if (node()->methods()->at(k) == content_->at<Item>(i)->node())
-			{
-				found = true;
-				break;
-			}
-
-		if (!found) content_->remove(i);
-	}
-
-	// Add new methods
-	for (int k = 0; k<node()->methods()->size(); ++k)
-		if ( !content_->containsNode( node()->methods()->at(k) ) )
-			content_->insert(renderer()->render(NULL, node()->methods()->at(k)));
-
-	//////////////////////////////////////////////////////////////////////////////// Fields
+	// Synchronize fields
 	QList<Model::Node*> publicFields;
 	QList<Model::Node*> privateFields;
 	QList<Model::Node*> protectedFields;

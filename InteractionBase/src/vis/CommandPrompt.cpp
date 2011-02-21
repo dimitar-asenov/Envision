@@ -101,7 +101,7 @@ void CommandPrompt::determineChildren()
 	if (h)
 	{
 		removeSuggestions();
-		addSuggestions( h->executionEngine()->autoComplete(commandReceiver_, command->getText()));
+		addSuggestions( h->executionEngine()->autoComplete(commandReceiver_, command->text()));
 	}
 }
 

@@ -45,8 +45,8 @@ void VNewExpression::determineChildren()
 
 	if (amount_ != NULL && amount_->node() != node()->amount())
 	{
-		layout()->remove(3);
-		layout()->remove(2);
+		layout()->removeAll(amount_);
+		layout()->removeAll(amountSymbol_);
 
 		amount_ = NULL;
 		amountSymbol_ = NULL;

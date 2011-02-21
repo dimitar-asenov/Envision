@@ -22,7 +22,7 @@ class VISUALIZATIONBASE_API TextRenderer : public Item
 	ITEM_COMMON_CUSTOM_STYLENAME(TextRenderer, TextStyle)
 
 	private:
-			QString text;
+			QString text_;
 
 			qreal xOffset;
 			qreal yOffset;
@@ -51,6 +51,18 @@ class VISUALIZATIONBASE_API TextRenderer : public Item
 			virtual void determineChildren();
 			virtual void updateGeometry(int availableWidth, int availableHeight);
 
+			/**
+			 * Returns the text of that is represented by the current item.
+			 *
+			 * This is an up-to-date value that may differ from the value of text(). E.G. If this is an instance of
+			 * ItemWithNode<TextRenderer, Text> and the text of the node has just changed, this method will returned the
+			 * current value of the node, whereas text() will still return the old value.
+			 *
+			 * When the TextRenderer is updated the value returned by currentText() is cached and will be subsequently
+			 * returned by text() and visualized on the screen.
+			 */
+			virtual QString currentText() = 0;
+
 		public:
 			TextRenderer(Item* parent, const StyleType *style, const QString& text = QString());
 
@@ -63,8 +75,17 @@ class VISUALIZATIONBASE_API TextRenderer : public Item
 			 * 				the string to set as the new text.
 			 */
 			virtual bool setText(const QString& newText);
-			QString getText();
-			QString getSelectedText();
+
+			/**
+			 * Returns the text of that is currently cached in this TextRenderer item.
+			 *
+			 * This is the last string that was visualized by this TextRenderer. This could be different compared to the
+			 * value of the text represented by this Item. E.G. If this is an instance of ItemWithNode<TextRenderer, Text>
+			 * and the text of the node has changed, this change is not automatically reflected. Only when the TextRenderer
+			 * is updated will the new text be cached.
+			 */
+			QString text();
+			QString selectedText();
 
 			bool isEditable();
 			void setEditable(bool editable);
@@ -81,6 +102,15 @@ class VISUALIZATIONBASE_API TextRenderer : public Item
 			static int selectionLastIndex();
 
 };
+
+
+inline QString TextRenderer::text() { return text_; }
+inline bool TextRenderer::isEditable() { return editable; }
+inline void TextRenderer::setEditable(bool editable_) { editable = editable_; }
+inline int TextRenderer::selectionFirstInxed() { return selectionBegin < selectionEnd ? selectionBegin : selectionEnd; }
+inline int TextRenderer::selectionLastIndex() { return selectionBegin > selectionEnd ? selectionBegin : selectionEnd; }
+inline int TextRenderer::caretPosition() { return selectionEnd; }
+inline void TextRenderer::setCaretPosition(int beforeCharacter) { setSelectedCharacters(beforeCharacter,beforeCharacter);}
 
 }
 

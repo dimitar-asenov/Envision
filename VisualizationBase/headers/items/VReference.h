@@ -24,8 +24,10 @@ class VISUALIZATIONBASE_API VReference : public ItemWithNode<TextRenderer, Model
 
 	public:
 		VReference(Item* parent, NodeType *node, const StyleType *style = Styles::item<VReference>("default"));
+		virtual bool setText(const QString& newText);
 
-		virtual void updateGeometry(int availableWidth, int availableHeight);
+	protected:
+		virtual QString currentText();
 };
 
 }

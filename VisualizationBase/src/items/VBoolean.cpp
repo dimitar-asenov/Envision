@@ -36,4 +36,9 @@ bool VBoolean::setText(const QString& newText)
 	else return false;
 }
 
+QString VBoolean::currentText()
+{
+	return node()->get() ? "true" : "false" ;
+}
+
 }

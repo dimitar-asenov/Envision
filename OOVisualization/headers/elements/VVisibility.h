@@ -25,8 +25,10 @@ class OOVISUALIZATION_API VVisibility : public Visualization::ItemWithNode< Visu
 
 	public:
 		VVisibility(Item* parent, NodeType* vis, const StyleType* style = Visualization::Styles::item<VVisibility>("default"));
+		virtual bool setText(const QString& newText);
 
-		virtual void updateGeometry(int availableWidth, int availableHeight);
+	protected:
+		virtual QString currentText();
 };
 
 }

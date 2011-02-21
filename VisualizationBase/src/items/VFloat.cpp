@@ -34,4 +34,9 @@ bool VFloat::setText(const QString& newText)
 	else return false;
 }
 
+QString VFloat::currentText()
+{
+	return QString::number( node()->get() );
+}
+
 }

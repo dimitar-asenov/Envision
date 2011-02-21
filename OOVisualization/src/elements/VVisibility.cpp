@@ -19,27 +19,31 @@ VVisibility::VVisibility(Item* parent, NodeType* vis, const StyleType* style) :
 {
 }
 
-void VVisibility::updateGeometry(int availableWidth, int availableHeight)
+bool VVisibility::setText(const QString&)
+{
+	return false;
+}
+
+QString VVisibility::currentText()
 {
 	switch (node()->get())
 	{
 		case OOModel::Visibility::DEFAULT:
-			setText( "" );
+			return "";
 			break;
 		case OOModel::Visibility::PUBLIC:
-			setText( "public" );
+			return "public";
 			break;
 		case OOModel::Visibility::PRIVATE:
-			setText( "private" );
+			return "private";
 			break;
 		case OOModel::Visibility::PROTECTED:
-			setText( "protected" );
+			return "protected";
 			break;
 		default:
-			setText( "unknown visibility" );
+			return "unknown visibility";
 			break;
 	}
-	TextRenderer::updateGeometry(availableWidth, availableHeight);
 }
 
 }

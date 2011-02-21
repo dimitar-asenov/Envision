@@ -25,6 +25,9 @@ class VISUALIZATIONBASE_API VInteger : public ItemWithNode<TextRenderer, Model::
 	public:
 		VInteger(Item* parent, NodeType *node, const StyleType *style = Styles::item<VInteger>("default"));
 		virtual bool setText(const QString& newText);
+
+	protected:
+		virtual QString currentText();
 };
 
 }

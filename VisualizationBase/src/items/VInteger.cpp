@@ -34,4 +34,9 @@ bool VInteger::setText(const QString& newText)
 	else return false;
 }
 
+QString VInteger::currentText()
+{
+	return QString::number( node()->get() );
+}
+
 }

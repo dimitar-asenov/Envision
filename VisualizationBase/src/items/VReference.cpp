@@ -7,6 +7,8 @@
 
 #include "items/VReference.h"
 
+#include "ModelBase/headers/Model.h"
+
 namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(VReference)
@@ -16,10 +18,18 @@ VReference::VReference(Item* parent, NodeType *node, const StyleType *style) :
 {
 }
 
-void VReference::updateGeometry(int availableWidth, int availableHeight)
+bool VReference::setText(const QString& newText)
 {
-	setText( node()->path() );
-	TextRenderer::updateGeometry(availableWidth, availableHeight);
+	// TODO: Check if this is a valid path?
+	node()->model()->beginModification(node(), "Set boolean");
+	node()->set(newText);
+	node()->model()->endModification();
+	return true;
+}
+
+QString VReference::currentText()
+{
+	return node()->path();
 }
 
 }

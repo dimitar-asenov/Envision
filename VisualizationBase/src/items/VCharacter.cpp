@@ -32,4 +32,10 @@ bool VCharacter::setText(const QString& newText)
 	else return false;
 }
 
+QString VCharacter::currentText()
+{
+	return node()->get();
+}
+
+
 }

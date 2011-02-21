@@ -51,31 +51,22 @@ void VVariableDeclaration::determineChildren()
 		layout()->prepend(type_);
 	}
 
-	if (node()->initialValue())
+	// Remove the prefix and separator visualizations if the underlying nodes have changed.
+	if (initialValue_ && initialValue_->node() != node()->initialValue())
 	{
-		if (initialValue_ == NULL || initialValue_->node() != node()->initialValue())
-		{
-			if (initialValue_)
-			{
-				layout()->remove(layout()->length()-1);
-				layout()->remove(layout()->length()-1);
-			}
-
-			initialValue_ = renderer()->render(NULL, node()->initialValue());
-			assignmentSymbol_ = new Symbol(NULL, &style()->assignmentSymbol() );
-			layout()->append(assignmentSymbol_);
-			layout()->append(initialValue_);
-		}
-
-		assignmentSymbol_->setStyle( &style()->assignmentSymbol());
+		layout()->removeAll(initialValue_);
+		initialValue_ = NULL;
+		layout()->removeAll(assignmentSymbol_);
+		assignmentSymbol_ = NULL;
 	}
-	else
+
+	// Create a prefix and separator visualizations if necessary.
+	if (!initialValue_ && node()->initialValue())
 	{
-		if (initialValue_)
-		{
-			layout()->remove(layout()->length()-1);
-			layout()->remove(layout()->length()-1);
-		}
+		initialValue_ = renderer()->render(NULL, node()->initialValue());
+		assignmentSymbol_ = new Symbol(NULL, &style()->assignmentSymbol() );
+		layout()->append(assignmentSymbol_);
+		layout()->append(initialValue_);
 	}
 }
 

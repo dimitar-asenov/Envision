@@ -44,12 +44,12 @@ void VUnaryOperation::determineChildren()
 	// Remove the prefix and postfix symbols if not there anymore
 	if (pre_ && style()->op( node()->op() ).preSymbol().symbol().isEmpty())
 	{
-		layout()->remove(0);
+		layout()->removeAll(pre_);
 		pre_ = NULL;
 	}
 	if (post_ && style()->op( node()->op() ).postSymbol().symbol().isEmpty())
 	{
-		layout()->remove(layout()->length()-1);
+		layout()->removeAll(post_);
 		post_ = NULL;
 	}
 

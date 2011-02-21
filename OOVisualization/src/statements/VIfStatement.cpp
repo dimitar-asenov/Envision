@@ -62,7 +62,7 @@ void VIfStatement::determineChildren()
 
 	if (elseBranch && elseBranch->node() != node()->elseBranch())
 	{
-		content->remove(1);
+		content->removeAll(elseBranchBackground);
 		elseBranch = NULL;
 		elseBranchBackground = NULL;
 	}

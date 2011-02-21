@@ -24,4 +24,10 @@ Text::Text(Item* parent, const StyleType *style, const QString& text) :
 	setEditable(false);
 }
 
+
+QString Text::currentText()
+{
+	return text();
+}
+
 }
