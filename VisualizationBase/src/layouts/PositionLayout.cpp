@@ -41,7 +41,7 @@ bool PositionLayout::containsNode(Model::Node* node_)
 
 void PositionLayout::insert(Item* item)
 {
-	// Check whether this item has a position associated with it
+	// Check whether this item has a node and a position associated with it
 	if ( !item->hasNode() ) throw VisualizationException("Adding an Item that has no node to a PositionLayout");
 
 	Model::ExtendableNode* extNode = dynamic_cast<Model::ExtendableNode*> (item->node());
@@ -60,14 +60,23 @@ void PositionLayout::insert(Item* item)
 void PositionLayout::remove(int index, bool deleteItem)
 {
 	if (deleteItem) SAFE_DELETE_ITEM( items[index]);
+	SAFE_DELETE( positions[index] );
 	items.remove(index);
+	positions.remove(index);
 	setUpdateNeeded();
 }
 
 void PositionLayout::removeAll(Item* item, bool deleteItem)
 {
 	for (int i = items.size() - 1; i>=0; --i)
-		if (items.at(i) == item) items.remove(i);
+	{
+		if (items.at(i) == item)
+		{
+			items.remove(i);
+			SAFE_DELETE( positions[i] );
+			positions.remove(i);
+		}
+	}
 	if (deleteItem) SAFE_DELETE_ITEM(item);
 	setUpdateNeeded();
 }
@@ -75,7 +84,9 @@ void PositionLayout::removeAll(Item* item, bool deleteItem)
 void PositionLayout::clear(bool deleteItems)
 {
 	if (deleteItems) for (int i = 0; i<items.size(); ++i) SAFE_DELETE_ITEM(items[i]);
+	for (int i = 0; i<positions.size(); ++i) SAFE_DELETE(positions[i]);
 	items.clear();
+	positions.clear();
 }
 
 void PositionLayout::swap(int i, int j)
@@ -83,6 +94,10 @@ void PositionLayout::swap(int i, int j)
 	Item* t = items[i];
 	items[i] = items[j];
 	items[j] = t;
+
+	Position* p = positions[i];
+	positions[i] = positions[j];
+	positions[j] = p;
 }
 
 void PositionLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes, ModelRenderer* renderer)
@@ -91,7 +106,7 @@ void PositionLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes, Mode
 	for (int i = 0; i < nodes.size(); ++i)
 	{
 		if (i >= items.size() ) insert( renderer->render(NULL, nodes[i]));	// This node is new
-		else if ( items[i]->node() == nodes[i] )	continue;	// This node is already there
+		else if ( items[i]->node() == nodes[i] ) continue;	// This node is already there
 		else
 		{
 			// This node might appear somewhere ahead, we should look for it

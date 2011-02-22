@@ -25,7 +25,7 @@ class VISUALIZATIONBASE_API PositionLayout : public Layout
 
 	private:
 		QVector<Item*> items;
-		QVector<const Position*> positions;
+		QVector<Position*> positions;
 
 		void swap(int i, int j);
 
