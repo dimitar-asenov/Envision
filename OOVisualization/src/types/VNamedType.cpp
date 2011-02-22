@@ -27,6 +27,7 @@ VNamedType::~VNamedType()
 
 void VNamedType::determineChildren()
 {
+	synchronizeItem(vis_, node()->type(), style());
 	vis_->setStyle(style());
 }
 
