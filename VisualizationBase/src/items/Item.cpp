@@ -225,6 +225,21 @@ void Item::removeFromScene()
 	setParentItem(NULL);
 }
 
+void Item::synchronizeItem(Item*& item, Model::Node* node)
+{
+	if (item && item->node() != node )
+	{
+		SAFE_DELETE_ITEM(item);
+		setUpdateNeeded();
+	}
+
+	if (!item && node)
+	{
+		item = renderer()->render(NULL, node);
+		item->setParentItem(this);
+		setUpdateNeeded();
+	}
+}
 
 ModelRenderer* Item::renderer()
 {

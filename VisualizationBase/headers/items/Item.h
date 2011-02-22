@@ -77,6 +77,10 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		virtual void updateGeometry(int availableWidth, int availableHeight) = 0;
 		void updateGeometry(Item* content, int availableWidth, int availableHeight);
 
+		void synchronizeItem(Item*& item, Model::Node* node);
+		template <class T> void synchronizeItem(T*& item, bool present, const typename T::StyleType* style);
+		template <class T> void synchronizeItem(T*& item, typename T::NodeType* node, const typename T::StyleType* style);
+
 		//Event handlers
 		// Keyboard events
 		virtual void keyPressEvent(QKeyEvent *event);
@@ -167,6 +171,38 @@ inline void Item::setSize(const QSizeF& size) { boundingRect_.setSize(size); };
 inline const ItemStyle* Item::style() const { return style_; }
 inline bool Item::hasShape() const { return shape_; }
 inline Shape* Item::getShape() const {	return shape_; }
+
+template <class T> void Item::synchronizeItem(T*& item, bool present, const typename T::StyleType* style)
+{
+	if (item && !present )
+	{
+		SAFE_DELETE_ITEM(item);
+		setUpdateNeeded();
+	}
+
+	if (!item && present)
+	{
+		item = new T(this, style);
+		item->setParent(this);
+		setUpdateNeeded();
+	}
+}
+
+template <class T> void Item::synchronizeItem(T*& item, typename T::NodeType* node, const typename T::StyleType* style)
+{
+	if (item && item->node() != node )
+	{
+		SAFE_DELETE_ITEM(item);
+		setUpdateNeeded();
+	}
+
+	if (!item && node)
+	{
+		item = new T(NULL, node, style);
+		item->setParentItem(this);
+		setUpdateNeeded();
+	}
+}
 
 template <class T> inline void SAFE_DELETE_ITEM( T* & item)
 {
