@@ -38,47 +38,23 @@ VBinaryOperation::~VBinaryOperation()
 
 void VBinaryOperation::determineChildren()
 {
-	if (!left_)
-	{
-		left_ = renderer()->render(NULL, node()->left());
-		layout()->append(left_);
-		right_ = renderer()->render(NULL, node()->right());
-		layout()->append(right_);
-	}
+	const OperatorStyle* opStyle = &style()->op( node()->op() );
 
-	// Remove the prefix, infix and postfix symbols if they are not there any more
-	if (in_ && style()->op( node()->op() ).inSymbol().symbol().isEmpty() )
-	{
-		layout()->removeAll( in_ );
-		in_ = NULL;
-	}
-	if (pre_ && style()->op( node()->op() ).preSymbol().symbol().isEmpty())
-	{
-		layout()->removeAll( pre_ );
-		pre_ = NULL;
-	}
-	if (post_ && style()->op( node()->op() ).postSymbol().symbol().isEmpty() )
-	{
-		layout()->removeAll( post_ );
-		post_ = NULL;
-	}
+	int index = 0;
 
-	// Rebuild the prefix, infix and postfix symbols if needed
-	if (!in_ && !style()->op( node()->op() ).inSymbol().symbol().isEmpty() )
-	{
-		in_ = new Symbol(NULL, &style()->op( node()->op() ).inSymbol());
-		layout()->insert(in_, (pre_?2:1) );
-	}
-	if (!pre_ && !style()->op( node()->op() ).preSymbol().symbol().isEmpty() )
-	{
-		pre_ = new Symbol(NULL, &style()->op( node()->op() ).preSymbol());
-		layout()->prepend(pre_);
-	}
-	if (!post_ && !style()->op( node()->op() ).postSymbol().symbol().isEmpty() )
-	{
-		post_ = new Symbol(NULL, &style()->op( node()->op() ).postSymbol());
-		layout()->append(post_);
-	}
+	layout()->synchronizeFirst(pre_ , !opStyle->preSymbol().symbol().isEmpty(), &opStyle->preSymbol());
+	index += pre_?1:0;
+
+	layout()->synchronizeMid(left_, node()->left(), index);
+	index += left_?1:0;
+
+	layout()->synchronizeMid(in_ , !opStyle->inSymbol().symbol().isEmpty(), &opStyle->inSymbol(), index);
+	index += in_?1:0;
+
+	layout()->synchronizeMid(right_, node()->right(), index);
+	index += right_?1:0;
+
+	layout()->synchronizeLast(post_ , !opStyle->postSymbol().symbol().isEmpty(), &opStyle->postSymbol());
 
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
 	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know

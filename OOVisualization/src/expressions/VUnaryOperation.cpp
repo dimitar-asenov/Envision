@@ -35,35 +35,16 @@ VUnaryOperation::~VUnaryOperation()
 
 void VUnaryOperation::determineChildren()
 {
-	if (!expr_)
-	{
-		expr_ = renderer()->render(NULL, node()->operand());
-		layout()->append(expr_);
-	}
+	const OperatorStyle* opStyle = &style()->op( node()->op() );
 
-	// Remove the prefix and postfix symbols if not there anymore
-	if (pre_ && style()->op( node()->op() ).preSymbol().symbol().isEmpty())
-	{
-		layout()->removeAll(pre_);
-		pre_ = NULL;
-	}
-	if (post_ && style()->op( node()->op() ).postSymbol().symbol().isEmpty())
-	{
-		layout()->removeAll(post_);
-		post_ = NULL;
-	}
+	int index = 0;
+	layout()->synchronizeFirst(pre_ , !opStyle->preSymbol().symbol().isEmpty(), &opStyle->preSymbol());
+	index += pre_?1:0;
 
-	// Rebuild the prefix and postfix symbols if needed
-	if (!pre_ && !style()->op( node()->op() ).preSymbol().symbol().isEmpty() )
-	{
-		pre_ = new Symbol(NULL, &style()->op( node()->op() ).preSymbol());
-		layout()->prepend(pre_);
-	}
-	if (!post_ && !style()->op( node()->op() ).postSymbol().symbol().isEmpty() )
-	{
-		post_ = new Symbol(NULL, &style()->op( node()->op() ).postSymbol());
-		layout()->append(post_);
-	}
+	layout()->synchronizeMid(expr_, node()->operand(), index);
+	index += expr_?1:0;
+
+	layout()->synchronizeLast(post_ , !opStyle->postSymbol().symbol().isEmpty(), &opStyle->postSymbol());
 
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
 	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know

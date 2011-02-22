@@ -37,29 +37,9 @@ VNewExpression::~VNewExpression()
 
 void VNewExpression::determineChildren()
 {
-	if (!type_)
-	{
-		type_ = renderer()->render(NULL, node()->type());
-		layout()->append(type_);
-	}
-
-	if (amount_ != NULL && amount_->node() != node()->amount())
-	{
-		layout()->removeAll(amount_);
-		layout()->removeAll(amountSymbol_);
-
-		amount_ = NULL;
-		amountSymbol_ = NULL;
-	}
-
-	if (amount_ == NULL && node()->amount() )
-	{
-		amount_ = renderer()->render(NULL, node()->amount());
-		amountSymbol_ = new Symbol(NULL, &style()->amountSymbol());
-		layout()->append(amountSymbol_);
-		layout()->append(amount_);
-	}
-
+	layout()->synchronizeMid(type_, node()->type(), 1);
+	layout()->synchronizeMid(amountSymbol_, node()->amount() != NULL, &style()->amountSymbol(), 2);
+	layout()->synchronizeLast(amount_, node()->amount());
 
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
 	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know

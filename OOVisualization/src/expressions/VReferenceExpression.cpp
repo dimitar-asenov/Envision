@@ -36,23 +36,8 @@ VReferenceExpression::~VReferenceExpression()
 
 void VReferenceExpression::determineChildren()
 {
-	// Remove the prefix and separator visualizations if the underlying nodes have changed.
-	if (prefix_ && prefix_->node() != node()->prefix())
-	{
-		layout()->removeAll(prefix_);
-		prefix_ = NULL;
-		layout()->removeAll(separator_);
-		separator_ = NULL;
-	}
-
-	// Create a prefix and separator visualizations if necessary.
-	if (!prefix_ && node()->prefix())
-	{
-		prefix_ = renderer()->render(NULL,node()->prefix());
-		separator_ = new Symbol(NULL, &style()->separator());
-		layout()->prepend(separator_);
-		layout()->prepend(prefix_);
-	}
+	layout()->synchronizeFirst(prefix_, node()->prefix());
+	layout()->synchronizeMid(separator_, node()->prefix() != NULL, &style()->separator(), 1);
 
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
 	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
@@ -60,10 +45,7 @@ void VReferenceExpression::determineChildren()
 	// The style needs to be updated every time since if our own style changes, so will that of the children.
 	layout()->setStyle( &style()->layout());
 	name_->setStyle( &style()->name());
-	if (prefix_)
-	{
-		separator_->setStyle( &style()->separator());
-	}
+	if (prefix_) separator_->setStyle( &style()->separator());
 
 	name_->setText(node()->ref()->path().split(',').last().split(':').last());
 }

@@ -35,14 +35,8 @@ VCastExpression::~VCastExpression()
 
 void VCastExpression::determineChildren()
 {
-	if (!type_)
-	{
-		type_ = renderer()->render(NULL, node()->type());
-		expr_ = renderer()->render(NULL, node()->expr());
-		layout()->prepend(type_);
-		layout()->append(expr_);
-	}
-
+	layout()->synchronizeFirst(type_, node()->type());
+	layout()->synchronizeLast(expr_, node()->expr());
 
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
 	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
