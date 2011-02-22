@@ -12,6 +12,7 @@
 
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/TextStyle.h"
+#include "VisualizationBase/headers/items/VText.h"
 #include "VisualizationBase/headers/Styles.h"
 
 #include "OOModel/headers/expressions/StringLiteral.h"
@@ -33,7 +34,7 @@ class OOVISUALIZATION_API VStringLiteral : public Visualization::ItemWithNode< V
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		Visualization::Item* vis_;
+		Visualization::VText* vis_;
 };
 
 }

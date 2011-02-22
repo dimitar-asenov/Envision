@@ -12,6 +12,7 @@
 
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/TextStyle.h"
+#include "VisualizationBase/headers/items/VCharacter.h"
 #include "VisualizationBase/headers/Styles.h"
 
 #include "OOModel/headers/expressions/CharacterLiteral.h"
@@ -33,7 +34,7 @@ class OOVISUALIZATION_API VCharacterLiteral : public Visualization::ItemWithNode
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		Visualization::Item* vis_;
+		Visualization::VCharacter* vis_;
 };
 
 }

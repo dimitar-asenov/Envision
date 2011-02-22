@@ -12,6 +12,7 @@
 
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/TextStyle.h"
+#include "VisualizationBase/headers/items/VFloat.h"
 #include "VisualizationBase/headers/Styles.h"
 
 #include "OOModel/headers/expressions/FloatLiteral.h"
@@ -33,7 +34,7 @@ class OOVISUALIZATION_API VFloatLiteral : public Visualization::ItemWithNode< Vi
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		Visualization::Item* vis_;
+		Visualization::VFloat* vis_;
 };
 
 }
