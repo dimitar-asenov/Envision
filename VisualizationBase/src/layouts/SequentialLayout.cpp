@@ -112,6 +112,32 @@ void SequentialLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes, Mo
 	while (items.size() > nodes.size()) remove(items.size()-1);
 }
 
+void SequentialLayout::synchronizeFirst(Item*& item, Model::Node* node)
+{
+	synchronizeMid(item, node, 0);
+}
+
+void SequentialLayout::synchronizeLast(Item*& item, Model::Node* node)
+{
+	synchronizeMid(item, node, length());
+}
+
+void SequentialLayout::synchronizeMid(Item*& item, Model::Node* node, int position)
+{
+	if (item && item->node() != node )
+	{
+		removeAll(item);
+		item = NULL;
+	}
+
+	if (!item && node)
+	{
+		item = renderer()->render(NULL, node);
+		insert(item, ((position > length()) ? length() : position) );
+	}
+
+}
+
 bool SequentialLayout::isEmpty() const
 {
 	for(int i = 0; i<items.size(); ++i)

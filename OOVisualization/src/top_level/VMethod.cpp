@@ -54,32 +54,62 @@ VMethod::~VMethod()
 
 void VMethod::determineChildren()
 {
+
+	const TextStyle* nameStyle = NULL;
+	if (node()->stat() == Static::INSTANCE_VARIABLE)
+	{
+		if (node()->visibility() == Visibility::DEFAULT) nameStyle = &style()->nameDefault();
+		else if (node()->visibility() == Visibility::PRIVATE) nameStyle = &style()->namePrivate();
+		else if (node()->visibility() == Visibility::PROTECTED) nameStyle = &style()->nameProtected();
+		else if (node()->visibility() == Visibility::PUBLIC) nameStyle = &style()->namePublic();
+		else throw OOVisualizationException("Unknown visibility type in VMethod::determineChildren");
+	}
+	else if (node()->stat() == Static::CLASS_VARIABLE)
+	{
+		if (node()->visibility() == Visibility::DEFAULT) nameStyle = &style()->nameStaticDefault();
+		else if (node()->visibility() == Visibility::PRIVATE)nameStyle = &style()->nameStaticPrivate();
+		else if (node()->visibility() == Visibility::PROTECTED) nameStyle = &style()->nameStaticProtected();
+		else if (node()->visibility() == Visibility::PUBLIC) nameStyle = &style()->nameStaticPublic();
+		else throw OOVisualizationException("Unknown visibility type in VMethod::determineChildren");
+	}
+	else throw OOVisualizationException("Unknown static type in VMethod::determineChildren");
+
+
+	header_->synchronizeMid(name_, node()->nameNode(), nameStyle, 1);
+	header_->synchronizeLast(arguments_, node()->arguments(), &style()->arguments());
+
+	if (results_ && results_->node() != node()->results() )
+	{
+		layout()->left()->setFirst(NULL);
+		results_ = NULL;
+	}
+
+	if (!results_ && node()->results())
+	{
+		results_ = new VList(NULL, node()->results(), &style()->results());
+		layout()->left()->setFirst(results_);
+	}
+
+	if (content_ && content_->node() != node()->items() )
+	{
+		layout()->setContent(NULL);
+		content_ = NULL;
+	}
+
+	if (!content_ && node()->items())
+	{
+		content_ = new VList(NULL, node()->items(), &style()->content());
+		layout()->setContent(content_);
+	}
+
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
 	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
 	//			what's the reason they are being updated.
 	// The style needs to be updated every time since if our own style changes, so will that of the children.
 	layout()->setStyle( &style()->layout() );
-
-	if (node()->stat() == Static::INSTANCE_VARIABLE)
-	{
-		if (node()->visibility() == Visibility::DEFAULT) name_->setStyle( &style()->nameDefault());
-		else if (node()->visibility() == Visibility::PRIVATE) name_->setStyle( &style()->namePrivate());
-		else if (node()->visibility() == Visibility::PROTECTED) name_->setStyle( &style()->nameProtected());
-		else if (node()->visibility() == Visibility::PUBLIC) name_->setStyle( &style()->namePublic());
-		else throw OOVisualizationException("Unknown visibility type in VMethod::determineChildren");
-	}
-	else if (node()->stat() == Static::CLASS_VARIABLE)
-	{
-		if (node()->visibility() == Visibility::DEFAULT) name_->setStyle( &style()->nameStaticDefault());
-		else if (node()->visibility() == Visibility::PRIVATE) name_->setStyle( &style()->nameStaticPrivate());
-		else if (node()->visibility() == Visibility::PROTECTED) name_->setStyle( &style()->nameStaticProtected());
-		else if (node()->visibility() == Visibility::PUBLIC) name_->setStyle( &style()->nameStaticPublic());
-		else throw OOVisualizationException("Unknown visibility type in VMethod::determineChildren");
-	}
-	else throw OOVisualizationException("Unknown static type in VMethod::determineChildren");
-
 	icon_->setStyle( &style()->icon());
 	header_->setStyle( &style()->header() );
+	name_->setStyle(nameStyle);
 	content_->setStyle( &style()->content() );
 	arguments_->setStyle( &style()->arguments() );
 	results_->setStyle( &style()->results() );
