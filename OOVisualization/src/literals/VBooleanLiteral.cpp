@@ -9,6 +9,7 @@
 
 #include "ModelBase/headers/Model.h"
 
+
 using namespace OOModel;
 using namespace Visualization;
 
@@ -29,7 +30,7 @@ VBooleanLiteral::~VBooleanLiteral()
 
 void VBooleanLiteral::determineChildren()
 {
-	if (!vis_) vis_ = renderer()->render(this, node()->valueNode());
+	synchronizeItem(vis_, node()->valueNode(), style());
 	vis_->setStyle( style() );
 }
 

@@ -29,7 +29,7 @@ VIntegerLiteral::~VIntegerLiteral()
 
 void VIntegerLiteral::determineChildren()
 {
-	if (!vis_) vis_ = renderer()->render(this, node()->valueNode());
+	synchronizeItem(vis_, node()->valueNode(), style());
 	vis_->setStyle( style() );
 }
 
