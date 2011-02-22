@@ -6,6 +6,7 @@
  **********************************************************************************************************************/
 
 #include "layouts/Layout.h"
+#include "ModelRenderer.h"
 
 namespace Visualization {
 
@@ -53,6 +54,33 @@ int Layout::yOffset() const
 {
 	if ( hasShape() ) return getShape()->contentTop();
 	else return style()->topMargin();
+}
+
+void Layout::synchronizeItem(Item*& layoutItem, Item*& externalItem, Model::Node* node)
+{
+	// When refactoring this method have in mind that layoutItem might point to the same item as externalItem.
+
+
+	if (externalItem != layoutItem)
+	{
+		SAFE_DELETE_ITEM(layoutItem);
+		setUpdateNeeded();
+	}
+
+	if (externalItem && externalItem->node() != node )
+	{
+		SAFE_DELETE_ITEM(externalItem);
+		layoutItem = NULL; // One of the safe deletes above deleted this item
+		setUpdateNeeded();
+	}
+
+	if (!externalItem && node)
+	{
+		externalItem = renderer()->render(NULL, node);
+		externalItem->setParentItem(this);
+		layoutItem = externalItem;
+		setUpdateNeeded();
+	}
 }
 
 }

@@ -39,6 +39,18 @@ class VISUALIZATIONBASE_API PanelLayout: public Layout
 		template <class T> T* middle();
 		template <class T> T* last();
 
+		void synchronizeFirst(Item*& item, Model::Node* node);
+		template <class T> void synchronizeFirst(T*& item, bool present, const typename T::StyleType* style);
+		template <class T> void synchronizeFirst(T*& item, typename T::NodeType* node, const typename T::StyleType* style);
+
+		void synchronizeMiddle(Item*& item, Model::Node* node);
+		template <class T> void synchronizeMiddle(T*& item, bool present, const typename T::StyleType* style);
+		template <class T> void synchronizeMiddle(T*& item, typename T::NodeType* node, const typename T::StyleType* style);
+
+		void synchronizeLast(Item*& item, Model::Node* node);
+		template <class T> void synchronizeLast(T*& item, bool present, const typename T::StyleType* style);
+		template <class T> void synchronizeLast(T*& item, typename T::NodeType* node, const typename T::StyleType* style);
+
 		virtual bool isEmpty() const;
 
 		virtual bool sizeDependsOnParent() const;
@@ -53,6 +65,45 @@ inline void PanelLayout::setLast(Item* item, bool deleteOldItem) { setItem(item,
 template <class T> inline T* PanelLayout::first() { return static_cast<T*> (first_); };
 template <class T> inline T* PanelLayout::middle() { return static_cast<T*> (middle_); };
 template <class T> inline T* PanelLayout::last() { return static_cast<T*> (last_); };
+
+inline void PanelLayout::synchronizeFirst(Item*& item, Model::Node* node)
+{
+	Layout::synchronizeItem(first_, item, node);
+}
+template <class T> inline void PanelLayout::synchronizeFirst(T*& item, bool present, const typename T::StyleType* style)
+{
+	Layout::synchronizeItem(first_, item, present, style);
+}
+template <class T> inline void PanelLayout::synchronizeFirst(T*& item, typename T::NodeType* node, const typename T::StyleType* style)
+{
+	Layout::synchronizeItem(first_, item, node, style);
+}
+
+inline void PanelLayout::synchronizeMiddle(Item*& item, Model::Node* node)
+{
+	Layout::synchronizeItem(middle_, item, node);
+}
+template <class T> inline void PanelLayout::synchronizeMiddle(T*& item, bool present, const typename T::StyleType* style)
+{
+	Layout::synchronizeItem(middle_, item, present, style);
+}
+template <class T> inline void PanelLayout::synchronizeMiddle(T*& item, typename T::NodeType* node, const typename T::StyleType* style)
+{
+	Layout::synchronizeItem(middle_, item, node, style);
+}
+
+inline void PanelLayout::synchronizeLast(Item*& item, Model::Node* node)
+{
+	Layout::synchronizeItem(last_, item, node);
+}
+template <class T> inline void PanelLayout::synchronizeLast(T*& item, bool present, const typename T::StyleType* style)
+{
+	Layout::synchronizeItem(last_, item, present, style);
+}
+template <class T> inline void PanelLayout::synchronizeLast(T*& item, typename T::NodeType* node, const typename T::StyleType* style)
+{
+	Layout::synchronizeItem(last_, item, node, style);
+}
 
 }
 

@@ -74,33 +74,10 @@ void VMethod::determineChildren()
 	}
 	else throw OOVisualizationException("Unknown static type in VMethod::determineChildren");
 
-
 	header_->synchronizeMid(name_, node()->nameNode(), nameStyle, 1);
 	header_->synchronizeLast(arguments_, node()->arguments(), &style()->arguments());
-
-	if (results_ && results_->node() != node()->results() )
-	{
-		layout()->left()->setFirst(NULL);
-		results_ = NULL;
-	}
-
-	if (!results_ && node()->results())
-	{
-		results_ = new VList(NULL, node()->results(), &style()->results());
-		layout()->left()->setFirst(results_);
-	}
-
-	if (content_ && content_->node() != node()->items() )
-	{
-		layout()->setContent(NULL);
-		content_ = NULL;
-	}
-
-	if (!content_ && node()->items())
-	{
-		content_ = new VList(NULL, node()->items(), &style()->content());
-		layout()->setContent(content_);
-	}
+	layout()->left()->synchronizeFirst(results_, node()->results(), &style()->results());
+	layout()->synchronizeContent(content_, node()->items(), &style()->content());
 
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
 	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know

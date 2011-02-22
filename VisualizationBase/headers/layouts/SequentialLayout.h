@@ -64,7 +64,6 @@ class VISUALIZATIONBASE_API SequentialLayout: public Layout
 		template <class T> void synchronizeFirst(T*& item, typename T::NodeType* node, const typename T::StyleType* style);
 		template <class T> void synchronizeLast(T*& item, typename T::NodeType* node, const typename T::StyleType* style);
 		template <class T> void synchronizeMid(T*& item, typename T::NodeType* node, const typename T::StyleType* style, int position);
-
 };
 
 template <class T> inline T* SequentialLayout::at(int index) { return static_cast<T*> (items[index]); }

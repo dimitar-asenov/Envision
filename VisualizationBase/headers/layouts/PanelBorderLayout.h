@@ -39,6 +39,10 @@ class VISUALIZATIONBASE_API PanelBorderLayout: public Layout
 		void setRight(bool enable = true);
 		void setContent(Item* content, bool deleteOldContent = true);
 
+		void synchronizeContent(Item*& item, Model::Node* node);
+		template <class T> void synchronizeContent(T*& item, bool present, const typename T::StyleType* style);
+		template <class T> void synchronizeContent(T*& item, typename T::NodeType* node, const typename T::StyleType* style);
+
 		PanelLayout* top();
 		PanelLayout* left();
 		PanelLayout* bottom();
@@ -61,6 +65,19 @@ inline PanelLayout* PanelBorderLayout::left() { return left_; }
 inline PanelLayout* PanelBorderLayout::bottom() { return bottom_; }
 inline PanelLayout* PanelBorderLayout::right() { return right_; }
 template <class T> inline T* PanelBorderLayout::content() { return content_; }
+
+inline void PanelBorderLayout::synchronizeContent(Item*& item, Model::Node* node)
+{
+	Layout::synchronizeItem(content_, item, node);
+}
+template <class T> inline void PanelBorderLayout::synchronizeContent(T*& item, bool present, const typename T::StyleType* style)
+{
+	Layout::synchronizeItem(content_, item, present, style);
+}
+template <class T> inline void PanelBorderLayout::synchronizeContent(T*& item, typename T::NodeType* node, const typename T::StyleType* style)
+{
+	Layout::synchronizeItem(content_, item, node, style);
+}
 
 }
 
