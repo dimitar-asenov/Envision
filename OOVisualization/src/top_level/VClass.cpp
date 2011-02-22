@@ -67,6 +67,14 @@ VClass::~VClass()
 
 void VClass::determineChildren()
 {
+	const TextStyle* nameStyle = NULL;
+
+	if (node()->visibility() == Visibility::DEFAULT) nameStyle = &style()->nameDefault();
+	else if (node()->visibility() == Visibility::PUBLIC) nameStyle = &style()->namePublic();
+	else if (node()->visibility() == Visibility::PRIVATE) nameStyle = &style()->namePrivate();
+	else if (node()->visibility() == Visibility::PROTECTED) nameStyle = &style()->nameProtected();
+	else throw OOVisualizationException("Unknown visibility in VClass::determineChildren");
+
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
 	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
 	//			what's the reason they are being updated.
@@ -74,6 +82,7 @@ void VClass::determineChildren()
 	layout()->setStyle( &style()->layout() );
 	icon_->setStyle(&style()->icon());
 	header_->setStyle( &style()->header() );
+	name_->setStyle( nameStyle );
 	content_->setStyle( &style()->content() );
 	baseClasses_->setStyle( &style()->baseClasses() );
 	fieldContainer_->setStyle( &style()->fieldContainer() );
@@ -82,11 +91,9 @@ void VClass::determineChildren()
 	protectedFieldArea_->setStyle( &style()->protectedFieldArea() );
 	defaultFieldArea_->setStyle( &style()->defaultFieldArea() );
 
-	if (node()->visibility() == Visibility::DEFAULT) name_->setStyle( &style()->nameDefault() );
-	else if (node()->visibility() == Visibility::PUBLIC) name_->setStyle( &style()->namePublic() );
-	else if (node()->visibility() == Visibility::PRIVATE) name_->setStyle( &style()->namePrivate() );
-	else if (node()->visibility() == Visibility::PROTECTED) name_->setStyle( &style()->nameProtected() );
-	else throw OOVisualizationException("Unknown visibility in VClass::determineChildren");
+	// Synchronize header
+	header_->synchronizeMid(name_, node()->nameNode(), nameStyle, 1);
+	header_->synchronizeLast(baseClasses_, node()->baseClasses(), &style()->baseClasses());
 
 	// Synchronize methods
 	content_->synchronizeWithNodes(node()->methods()->nodes().toList(), renderer());

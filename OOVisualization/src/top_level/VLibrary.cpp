@@ -52,6 +52,8 @@ void VLibrary::determineChildren()
 	layout()->setStyle(&style()->layout());
 	header->at<SVGIcon>(0)->setStyle(&style()->icon());
 
+	header->synchronizeMid(name, node()->nameNode(), &style()->name(), 1);
+
 	QList<Model::Node*> nodes;
 	for (int k = 0; k<node()->projects()->size(); ++k) nodes.append(node()->projects()->at(k));
 	for (int k = 0; k<node()->libraries()->size(); ++k) nodes.append(node()->libraries()->at(k));

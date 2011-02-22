@@ -53,6 +53,8 @@ void VModule::determineChildren()
 	layout()->setStyle(&style()->layout());
 	header->at<SVGIcon>(0)->setStyle(&style()->icon());
 
+	header->synchronizeMid(name, node()->nameNode(), &style()->name(), 1);
+
 	QList<Model::Node*> nodes;
 	for (int k = 0; k<node()->modules()->size(); ++k) nodes.append(node()->modules()->at(k));
 	for (int k = 0; k<node()->classes()->size(); ++k) nodes.append(node()->classes()->at(k));

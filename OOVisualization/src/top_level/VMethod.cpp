@@ -54,7 +54,6 @@ VMethod::~VMethod()
 
 void VMethod::determineChildren()
 {
-
 	const TextStyle* nameStyle = NULL;
 	if (node()->stat() == Static::INSTANCE_VARIABLE)
 	{
