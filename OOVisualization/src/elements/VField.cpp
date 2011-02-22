@@ -34,35 +34,33 @@ VField::~VField()
 
 void VField::determineChildren()
 {
-	if (type_ == NULL)
+	const TextStyle* nameStyle = NULL;
+	if (node()->stat() == Static::INSTANCE_VARIABLE)
 	{
-		type_ = renderer()->render(NULL,node()->type() );
-		layout()->append(type_);
+		if (node()->visibility() == Visibility::DEFAULT) nameStyle = &style()->nameDefault();
+		else if (node()->visibility() == Visibility::PRIVATE) nameStyle = &style()->namePrivate();
+		else if (node()->visibility() == Visibility::PROTECTED) nameStyle = &style()->nameProtected();
+		else if (node()->visibility() == Visibility::PUBLIC) nameStyle = &style()->namePublic();
+		else throw OOVisualizationException("Unknown visibility type in VField::determineChildren");
 	}
+	else if (node()->stat() == Static::CLASS_VARIABLE)
+	{
+		if (node()->visibility() == Visibility::DEFAULT) nameStyle = &style()->nameStaticDefault();
+		else if (node()->visibility() == Visibility::PRIVATE) nameStyle = &style()->nameStaticPrivate();
+		else if (node()->visibility() == Visibility::PROTECTED) nameStyle = &style()->nameStaticProtected();
+		else if (node()->visibility() == Visibility::PUBLIC) nameStyle = &style()->nameStaticPublic();
+		else throw OOVisualizationException("Unknown visibility type in VField::determineChildren");
+	}
+	else throw OOVisualizationException("Unknown static type in VField::determineChildren");
+
+	layout()->synchronizeFirst(name_, node()->nameNode(), nameStyle);
+	layout()->synchronizeLast(type_, node()->type());
 
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
 	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
 	//			what's the reason they are being updated.
 	// The style needs to be updated every time since if our own style changes, so will that of the children.
 	layout()->setStyle( &style()->layout() );
-
-	if (node()->stat() == Static::INSTANCE_VARIABLE)
-	{
-		if (node()->visibility() == Visibility::DEFAULT) name_->setStyle( &style()->nameDefault());
-		else if (node()->visibility() == Visibility::PRIVATE) name_->setStyle( &style()->namePrivate());
-		else if (node()->visibility() == Visibility::PROTECTED) name_->setStyle( &style()->nameProtected());
-		else if (node()->visibility() == Visibility::PUBLIC) name_->setStyle( &style()->namePublic());
-		else throw OOVisualizationException("Unknown visibility type in VField::determineChildren");
-	}
-	else if (node()->stat() == Static::CLASS_VARIABLE)
-	{
-		if (node()->visibility() == Visibility::DEFAULT) name_->setStyle( &style()->nameStaticDefault());
-		else if (node()->visibility() == Visibility::PRIVATE) name_->setStyle( &style()->nameStaticPrivate());
-		else if (node()->visibility() == Visibility::PROTECTED) name_->setStyle( &style()->nameStaticProtected());
-		else if (node()->visibility() == Visibility::PUBLIC) name_->setStyle( &style()->nameStaticPublic());
-		else throw OOVisualizationException("Unknown visibility type in VField::determineChildren");
-	}
-	else throw OOVisualizationException("Unknown static type in VField::determineChildren");
-
+	name_->setStyle(nameStyle);
 }
 }
