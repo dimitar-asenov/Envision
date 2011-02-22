@@ -53,6 +53,9 @@ class MODELBASE_API Node
 		 *
 		 * If the node can not be found, this method returns NULL.
 		 *
+		 * The default implementation invokes this method on its parent, or returns NULL if there is no parent.
+		 * Reimplement this method to provide custom lookup mechanisms.
+		 *
 		 * NOTE: If the current node is not fully loaded, calling this method might load it fully in case the target node
 		 * is a child node.
 		 *
