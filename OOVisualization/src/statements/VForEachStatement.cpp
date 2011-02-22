@@ -50,31 +50,10 @@ VForEachStatement::~VForEachStatement()
 
 void VForEachStatement::determineChildren()
 {
-	if (!body)
-	{
-		body = renderer()->render(NULL, node()->body());
-		layout()->setContent(body);
-	}
-
-	if (!collection)
-	{
-		collection = renderer()->render(NULL, node()->collection());
-		collectionBackground->append(collection);
-	}
-
-	// Remove nodes which have changed
-	if (varType && varType->node() != node()->varType())
-	{
-		varContainer->removeAll(varType);
-		varType = NULL;
-	}
-
-	// Create nodes which are present in the model
-	if (!varType && node()->varType())
-	{
-		varType = renderer()->render(NULL, node()->varType());
-		varContainer->prepend(varType);
-	}
+	layout()->synchronizeContent(body, node()->body());
+	collectionBackground->synchronizeFirst(collection, node()->collection());
+	varContainer->synchronizeFirst(varType, node()->varType());
+	varContainer->synchronizeLast(varName, node()->varNameNode(), &style()->varName());
 
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
 	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know

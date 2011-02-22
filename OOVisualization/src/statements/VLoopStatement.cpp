@@ -49,11 +49,10 @@ VLoopStatement::~VLoopStatement()
 
 void VLoopStatement::determineChildren()
 {
-	if (!body)
-	{
-		body = renderer()->render(NULL, node()->body());
-		layout()->setContent(body);
-	}
+	layout()->synchronizeContent(body, node()->body());
+
+	// TODO Find a better way to synchronize the condition, initStep and updateStep. Perhaps use make a new layout for
+	// Single items. That would be more of a shape provider.
 
 	// Remove nodes which have changed
 	if (initStep && initStep->node() != node()->initStep())

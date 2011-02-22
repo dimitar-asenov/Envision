@@ -52,13 +52,11 @@ VIfStatement::~VIfStatement()
 
 void VIfStatement::determineChildren()
 {
-	if (!condition)
-	{
-		condition = renderer()->render(NULL, node()->condition());
-		conditionBackground->append(condition);
-		thenBranch = renderer()->render(NULL, node()->thenBranch());
-		thenBranchBackground->append(thenBranch);
-	}
+	conditionBackground->synchronizeFirst(condition, node()->condition());
+	thenBranchBackground->synchronizeFirst(thenBranch, node()->thenBranch());
+
+	// TODO Find a better way to synchronize the Else background. Perhaps use make a new layout for Single items. That
+	// would be more of a shape provider.
 
 	if (elseBranch && elseBranch->node() != node()->elseBranch())
 	{

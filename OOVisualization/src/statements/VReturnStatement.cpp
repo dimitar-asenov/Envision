@@ -42,6 +42,8 @@ void VReturnStatement::determineChildren()
 	layout()->setStyle( &style()->layout());
 	symbol_->setStyle( &style()->symbol());
 	values_->setStyle( &style()->values() );
+
+	layout()->synchronizeLast(values_, node()->values(), &style()->values());
 }
 
 }

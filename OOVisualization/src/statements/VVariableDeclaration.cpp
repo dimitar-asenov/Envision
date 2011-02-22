@@ -45,29 +45,10 @@ void VVariableDeclaration::determineChildren()
 	layout()->setStyle( &style()->layout());
 	name_->setStyle( &style()->name());
 
-	if (type_ == NULL)
-	{
-		type_ = renderer()->render(NULL, node()->type());
-		layout()->prepend(type_);
-	}
-
-	// Remove the prefix and separator visualizations if the underlying nodes have changed.
-	if (initialValue_ && initialValue_->node() != node()->initialValue())
-	{
-		layout()->removeAll(initialValue_);
-		initialValue_ = NULL;
-		layout()->removeAll(assignmentSymbol_);
-		assignmentSymbol_ = NULL;
-	}
-
-	// Create a prefix and separator visualizations if necessary.
-	if (!initialValue_ && node()->initialValue())
-	{
-		initialValue_ = renderer()->render(NULL, node()->initialValue());
-		assignmentSymbol_ = new Symbol(NULL, &style()->assignmentSymbol() );
-		layout()->append(assignmentSymbol_);
-		layout()->append(initialValue_);
-	}
+	layout()->synchronizeFirst(type_, node()->type());
+	layout()->synchronizeMid(name_, node()->nameNode(), &style()->name(), 1);
+	layout()->synchronizeMid(assignmentSymbol_, node()->initialValue() != NULL, &style()->assignmentSymbol(), 2);
+	layout()->synchronizeLast(initialValue_, node()->initialValue());
 }
 
 }
