@@ -7,8 +7,6 @@
 
 #include "layouts/PanelBorderLayout.h"
 
-#include <QtCore/QDebug>
-
 namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS( PanelBorderLayout )

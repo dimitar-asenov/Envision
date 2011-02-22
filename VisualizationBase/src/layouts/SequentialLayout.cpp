@@ -69,9 +69,9 @@ void SequentialLayout::remove(int index, bool deleteItem_)
 
 void SequentialLayout::removeAll(Item* item, bool deleteItem)
 {
-	if (deleteItem) SAFE_DELETE_ITEM(item);
 	for (int i = items.size() - 1; i>=0; --i)
 		if (items.at(i) == item) items.remove(i);
+	if (deleteItem) SAFE_DELETE_ITEM(item);
 	setUpdateNeeded();
 }
 
