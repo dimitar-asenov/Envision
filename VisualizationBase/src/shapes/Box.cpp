@@ -33,6 +33,8 @@ QPainterPath Box::getRectanglePath(qreal x, qreal y, int width, int height)
 {
 	QPainterPath path;
 	int radius = style()->cornerRadius();
+	if (radius > width/2) radius = width/2;
+	if (radius > height/2) radius = height/2;
 	BoxStyle::CornerType corner = style()->corner();
 
 	path.moveTo(width + x, radius + y);
