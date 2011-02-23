@@ -48,9 +48,10 @@ private:																																					\
 #define ITEM_COMMON_DEFINITIONS( ItemClass )																									\
 Visualization::InteractionHandler* ItemClass::handler_ = Visualization::InteractionHandler::instance();					\
 																																							\
-void ItemClass::setStyle(const Visualization::ItemStyle* style)																		\
+void ItemClass::setStyle(const Visualization::ItemStyle* style_)																		\
 {																																							\
-	const StyleType* s = dynamic_cast<const StyleType*> (style);																		\
+	if (style_ == style()) return;																												\
+	const StyleType* s = dynamic_cast<const StyleType*> (style_);																		\
 	if (!s) throw Visualization::VisualizationException("Invalid style type when calling " #ItemClass "::setStyle");	\
 	Item::setStyle(s);																																\
 }																																							\
