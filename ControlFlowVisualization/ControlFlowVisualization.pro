@@ -28,12 +28,17 @@ pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
-HEADERS += headers/items/ControlFlowItemStyle.h \
+HEADERS += headers/allCFVisualizations.h \
+    headers/items/VMethodCFStyle.h \
+    headers/items/VMethodCF.h \
+    headers/items/ControlFlowItemStyle.h \
     headers/items/ControlFlowItem.h \
     headers/ControlFlowVisualizationException.h \
     headers/controlflowvisualization_api.h \
     src/controlflowvisualization.h
-SOURCES += src/items/ControlFlowItem.cpp \
+SOURCES += src/items/VMethodCF.cpp \
+    src/items/VMethodCFStyle.cpp \
+    src/items/ControlFlowItem.cpp \
     src/items/ControlFlowItemStyle.cpp \
     src/ControlFlowVisualizationException.cpp \
     src/controlflowvisualization.cpp \

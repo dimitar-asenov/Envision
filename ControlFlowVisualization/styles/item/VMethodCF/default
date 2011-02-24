@@ -1,0 +1,5 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/Item/default">
+	<standardMethod prototypes="item/VMethod/default" />
+	<showAsControlFlow>false<showAsControlFlow>
+</style>

@@ -41,12 +41,12 @@ class ControlFlowItem : public Visualization::Item
 		QList< QPoint > continues_;
 };
 
-const QPoint& ControlFlowItem::entrance() { return entrance_; }
-const QPoint& ControlFlowItem::exit() { return exit_; }
-const QList< QPoint >& ControlFlowItem::breaks() { return breaks_; }
-const QList< QPoint >& ControlFlowItem::continues() { return continues_; }
+inline const QPoint& ControlFlowItem::entrance() { return entrance_; }
+inline const QPoint& ControlFlowItem::exit() { return exit_; }
+inline const QList< QPoint >& ControlFlowItem::breaks() { return breaks_; }
+inline const QList< QPoint >& ControlFlowItem::continues() { return continues_; }
 
-void ControlFlowItem::setPreferredExit(PreferedExitDirection preference) { preferredExit_ = preference; }
+inline void ControlFlowItem::setPreferredExit(PreferedExitDirection preference) { preferredExit_ = preference; }
 
 }
 
