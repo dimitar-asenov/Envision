@@ -9,7 +9,7 @@
 #define VMETHODSTYLE_H_
 
 #include "../oovisualization_api.h"
-#include "icons/MethodIconStyle.h"
+#include "../icons/MethodIconStyle.h"
 
 #include "VisualizationBase/headers/items/TextStyle.h"
 #include "VisualizationBase/headers/items/VListStyle.h"
