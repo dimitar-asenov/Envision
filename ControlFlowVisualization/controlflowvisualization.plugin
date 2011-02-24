@@ -1,0 +1,11 @@
+<!DOCTYPE EnvisionPlugin>
+<plugin id="controlflowvisualization" name="A plug-in that enables the visualization of a Method as a control flow." version="1.0.0">
+	<dependencies>
+		<dependency pluginid="logger" version="0" />
+		<dependency pluginid="selftest" version="0" />
+		<dependency pluginid="modelbase" version="0" />
+		<dependency pluginid="oomodel" version="1" />
+		<dependency pluginid="visualizationbase" version="0" />
+		<dependency pluginid="oovisualization" version="0" />
+	</dependencies>
+</plugin>
