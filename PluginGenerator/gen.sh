@@ -72,4 +72,9 @@ mv $PLUGIN_DIR/Plugin.launch $PLUGIN_DIR/${PLUGIN_NAME}.launch
 mv $PLUGIN_DIR/Plugin.pro $PLUGIN_DIR/${PLUGIN_NAME}.pro
 mv $PLUGIN_DIR/pluginmeta.plugin $PLUGIN_DIR/${PLUGIN_NAME_LOWER}.plugin
 echo "DONE."
+echo
+echo "Note: Remember to configure the project dependencies:"
+echo "  - Include additional dependencies on other plugins in the .plugin file"
+echo "  - Include the corresponding library dependencies in the .pro file"
+echo "  - If using Eclipse, make the project dependent on the other projects it uses (Project Properties > Referenced Projects)"
 
