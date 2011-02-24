@@ -1,26 +1,25 @@
 /***********************************************************************************************************************
- * VMethodCFStyle.cpp
+ * VListCFStyle.cpp
  *
  *  Created on: Feb 24, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "items/VMethodCFStyle.h"
+#include "items/VListCFStyle.h"
 #include "VisualizationBase/headers/Styles.h"
 
 namespace ControlFlowVisualization {
 
-VMethodCFStyle* VMethodCFStyle::getDefault()
+VListCFStyle* VListCFStyle::getDefault()
 {
-	static VMethodCFStyle defaultStyle;
+	static VListCFStyle defaultStyle;
 	return &defaultStyle;
 }
 
-void VMethodCFStyle::load()
+void VListCFStyle::load()
 {
-	VMethodStyle::load();
-	Visualization::Styles::load("showAsControlFlow", showAsControlFlow_);
-	Visualization::Styles::load("contentCF", contentCF_);
+	ControlFlowItemStyle::load();
+	Visualization::Styles::load("sequence", sequence_);
 }
 
 }

@@ -26,9 +26,14 @@ CONFIG += plugin \
 target.path = $$PLUGINS_DIR
 pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
+styles.path = $${BUILD_DIR}/styles
+styles.files = styles/*
 INSTALLS += target \
-    pluginmeta
-HEADERS += headers/allCFVisualizations.h \
+    pluginmeta \
+    styles
+HEADERS += headers/items/VListCFStyle.h \
+    headers/items/VListCF.h \
+    headers/allCFVisualizations.h \
     headers/items/VMethodCFStyle.h \
     headers/items/VMethodCF.h \
     headers/items/ControlFlowItemStyle.h \
@@ -36,7 +41,9 @@ HEADERS += headers/allCFVisualizations.h \
     headers/ControlFlowVisualizationException.h \
     headers/controlflowvisualization_api.h \
     src/controlflowvisualization.h
-SOURCES += src/items/VMethodCF.cpp \
+SOURCES += src/items/VListCF.cpp \
+    src/items/VListCFStyle.cpp \
+    src/items/VMethodCF.cpp \
     src/items/VMethodCFStyle.cpp \
     src/items/ControlFlowItem.cpp \
     src/items/ControlFlowItemStyle.cpp \

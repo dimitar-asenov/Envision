@@ -26,7 +26,8 @@ VMethodCF::VMethodCF(Item* parent, NodeType* node, const StyleType* style) :
 	icon_(new MethodIcon(NULL, &style->icon())),
 	name_(new VText(NULL, node->nameNode(), &style->nameDefault()) ),
 	arguments_(new VList(NULL, node->arguments(), &style->arguments()) ),
-	content_( new VList(NULL, node->items(), &style->content()) ),
+	content_( NULL ),
+	contentCF_(NULL),
 	results_(new VList(NULL, node->results(), &style->results()) )
 {
 	layout()->setTop(true);
@@ -37,8 +38,6 @@ VMethodCF::VMethodCF(Item* parent, NodeType* node, const StyleType* style) :
 
 	layout()->setLeft(true);
 	layout()->left()->setFirst(results_);
-
-	layout()->setContent(content_);
 }
 
 VMethodCF::~VMethodCF()
@@ -48,6 +47,7 @@ VMethodCF::~VMethodCF()
 	icon_ = NULL;
 	name_ = NULL;
 	content_ = NULL;
+	contentCF_ = NULL;
 	arguments_ = NULL;
 	results_ = NULL;
 }
@@ -76,7 +76,10 @@ void VMethodCF::determineChildren()
 	header_->synchronizeMid(name_, node()->nameNode(), nameStyle, 1);
 	header_->synchronizeLast(arguments_, node()->arguments(), &style()->arguments());
 	layout()->left()->synchronizeFirst(results_, node()->results(), &style()->results());
-	layout()->synchronizeContent(content_, node()->items(), &style()->content());
+
+	if (style()->showAsControlFlow()) layout()->synchronizeContent(contentCF_, node()->items(), &style()->contentCF());
+	else layout()->synchronizeContent(content_, node()->items(), &style()->content());
+
 
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
 	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
@@ -86,7 +89,8 @@ void VMethodCF::determineChildren()
 	icon_->setStyle( &style()->icon());
 	header_->setStyle( &style()->header() );
 	name_->setStyle(nameStyle);
-	content_->setStyle( &style()->content() );
+	if (content_) content_->setStyle( &style()->content() );
+	if (contentCF_) contentCF_->setStyle( &style()->contentCF() );
 	arguments_->setStyle( &style()->arguments() );
 	results_->setStyle( &style()->results() );
 }

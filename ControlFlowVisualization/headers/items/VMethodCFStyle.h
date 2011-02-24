@@ -9,6 +9,7 @@
 #define VMETHODCFSTYLE_H_
 
 #include "../controlflowvisualization_api.h"
+#include "VListCFStyle.h"
 
 #include "OOVisualization/headers/top_level/VMethodStyle.h"
 
@@ -18,16 +19,19 @@ class CONTROLFLOWVISUALIZATION_API VMethodCFStyle : public OOVisualization::VMet
 {
 	private:
 		bool showAsControlFlow_;
+		VListCFStyle contentCF_;
 
 	public:
 		void load();
 
 		bool showAsControlFlow() const;
+		const VListCFStyle& contentCF() const;
 
 		static VMethodCFStyle* getDefault();
 };
 
 inline bool VMethodCFStyle::showAsControlFlow() const { return showAsControlFlow_; }
+inline const VListCFStyle& VMethodCFStyle::contentCF() const { return contentCF_; }
 
 }
 

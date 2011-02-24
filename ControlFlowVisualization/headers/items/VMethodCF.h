@@ -10,6 +10,7 @@
 
 #include "../controlflowvisualization_api.h"
 #include "VMethodCFStyle.h"
+#include "VListCF.h"
 
 #include "OOVisualization/headers/icons/MethodIcon.h"
 
@@ -27,7 +28,7 @@ namespace Visualization {
 
 namespace ControlFlowVisualization {
 
-class OOVISUALIZATION_API VMethodCF : public Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::Method>
+class CONTROLFLOWVISUALIZATION_API VMethodCF : public Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::Method>
 {
 	ITEM_COMMON(VMethodCF)
 
@@ -44,6 +45,7 @@ class OOVISUALIZATION_API VMethodCF : public Visualization::ItemWithNode< Visual
 		Visualization::VText* name_;
 		Visualization::VList* arguments_;
 		Visualization::VList* content_;
+		VListCF* contentCF_;
 		Visualization::VList* results_;
 };
 
