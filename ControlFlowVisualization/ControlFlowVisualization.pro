@@ -4,10 +4,9 @@ CONFIG(debug, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/DebugBuild
 PLUGINS_DIR = $${BUILD_DIR}/plugins
 CONFIG(debug, debug|release):DEFINES += DEBUG
 QMAKE_CXXFLAGS += -Werror
-
 INCLUDEPATH += ./headers \
-	./src \
-	./test \
+    ./src \
+    ./test \
     $${ENVISION_ROOT_DIR}/Core/headers \
     $${ENVISION_ROOT_DIR}
 TARGET = controlflowvisualization
@@ -21,14 +20,21 @@ win32:LIBS += -L$${PLUGINS_DIR} \
     -loovisualization
 QT = core
 TEMPLATE = lib
-CONFIG += plugin warn_on thread
+CONFIG += plugin \
+    warn_on \
+    thread
 target.path = $$PLUGINS_DIR
 pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
-INSTALLS += target pluginmeta
-HEADERS += headers/ControlFlowVisualizationException.h \
-	headers/controlflowvisualization_api.h \
+INSTALLS += target \
+    pluginmeta
+HEADERS += headers/items/ControlFlowItemStyle.h \
+    headers/items/ControlFlowItem.h \
+    headers/ControlFlowVisualizationException.h \
+    headers/controlflowvisualization_api.h \
     src/controlflowvisualization.h
-SOURCES += src/ControlFlowVisualizationException.cpp \
-	src/controlflowvisualization.cpp \
-	test/SimpleTest.cpp
+SOURCES += src/items/ControlFlowItem.cpp \
+    src/items/ControlFlowItemStyle.cpp \
+    src/ControlFlowVisualizationException.cpp \
+    src/controlflowvisualization.cpp \
+    test/SimpleTest.cpp
