@@ -75,6 +75,7 @@ void VListCF::appendSingle( Visualization::Item* item)
 	insertSingle(item, lengthSingle() );
 }
 
+//TODO these
 void VListCF::insertSingle( Visualization::Item* item, int pos);
 void VListCF::swapSingle(int i, int j);
 void VListCF::removeLastSingle();
