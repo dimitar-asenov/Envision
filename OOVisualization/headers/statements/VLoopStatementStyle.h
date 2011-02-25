@@ -12,6 +12,7 @@
 
 #include "VisualizationBase/headers/layouts/PanelBorderLayoutStyle.h"
 #include "VisualizationBase/headers/layouts/SequentialLayoutStyle.h"
+#include "VisualizationBase/headers/items/VListStyle.h"
 #include "VisualizationBase/headers/icons/SVGIconStyle.h"
 
 namespace OOVisualization {
@@ -25,6 +26,7 @@ class OOVISUALIZATION_API VLoopStatementStyle : public Visualization::ItemStyle
 		Visualization::SequentialLayoutStyle initStep_;
 		Visualization::SequentialLayoutStyle condition_;
 		Visualization::SequentialLayoutStyle updateStep_;
+		Visualization::VListStyle body_;
 
 	public:
 		void load();
@@ -36,6 +38,7 @@ class OOVISUALIZATION_API VLoopStatementStyle : public Visualization::ItemStyle
 		const Visualization::SequentialLayoutStyle& initStep() const;
 		const Visualization::SequentialLayoutStyle& condition() const;
 		const Visualization::SequentialLayoutStyle& updateStep() const;
+		const Visualization::VListStyle& body() const;
 
 		static VLoopStatementStyle* getDefault();
 };
@@ -47,6 +50,7 @@ inline const Visualization::SVGIconStyle& VLoopStatementStyle::icon() const { re
 inline const Visualization::SequentialLayoutStyle& VLoopStatementStyle::initStep() const { return initStep_; }
 inline const Visualization::SequentialLayoutStyle& VLoopStatementStyle::condition() const { return condition_; }
 inline const Visualization::SequentialLayoutStyle& VLoopStatementStyle::updateStep() const { return updateStep_; }
+inline const Visualization::VListStyle& VLoopStatementStyle::body() const { return body_; }
 
 }
 

@@ -12,6 +12,8 @@
 
 #include "../expressions/Expression.h"
 
+#include "ModelBase/headers/nodes/TypedList.h"
+
 namespace OOModel {
 
 class OOMODEL_API IfStatement: public Statement
@@ -19,8 +21,8 @@ class OOMODEL_API IfStatement: public Statement
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(IfStatement)
 
 	ATTRIBUTE(Expression, condition, setCondition);
-	ATTRIBUTE(Statement, thenBranch, setThenBranch);
-	ATTRIBUTE(Statement, elseBranch, setElseBranch);
+	ATTRIBUTE(Model::TypedList<StatementItem>, thenBranch, setThenBranch);
+	ATTRIBUTE(Model::TypedList<StatementItem>, elseBranch, setElseBranch);
 };
 
 }

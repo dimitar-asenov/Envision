@@ -12,6 +12,7 @@
 
 #include "VisualizationBase/headers/layouts/PanelBorderLayoutStyle.h"
 #include "VisualizationBase/headers/layouts/SequentialLayoutStyle.h"
+#include "VisualizationBase/headers/items/VListStyle.h"
 #include "VisualizationBase/headers/icons/SVGIconStyle.h"
 
 namespace OOVisualization {
@@ -25,8 +26,8 @@ class OOVISUALIZATION_API VIfStatementStyle : public Visualization::ItemStyle
 		Visualization::SequentialLayoutStyle condition_;
 
 		Visualization::SequentialLayoutStyle content_;
-		Visualization::SequentialLayoutStyle thenBranch_;
-		Visualization::SequentialLayoutStyle elseBranch_;
+		Visualization::VListStyle thenBranch_;
+		Visualization::VListStyle elseBranch_;
 
 	public:
 		void load();
@@ -37,8 +38,8 @@ class OOVISUALIZATION_API VIfStatementStyle : public Visualization::ItemStyle
 		const Visualization::SequentialLayoutStyle& condition() const;
 
 		const Visualization::SequentialLayoutStyle& content() const;
-		const Visualization::SequentialLayoutStyle& thenBranch() const;
-		const Visualization::SequentialLayoutStyle& elseBranch() const;
+		const Visualization::VListStyle& thenBranch() const;
+		const Visualization::VListStyle& elseBranch() const;
 
 		static VIfStatementStyle* getDefault();
 };
@@ -49,8 +50,8 @@ inline const Visualization::SVGIconStyle& VIfStatementStyle::icon() const { retu
 inline const Visualization::SequentialLayoutStyle& VIfStatementStyle::condition() const { return condition_; }
 
 inline const Visualization::SequentialLayoutStyle& VIfStatementStyle::content() const { return content_; }
-inline const Visualization::SequentialLayoutStyle& VIfStatementStyle::thenBranch() const { return thenBranch_; }
-inline const Visualization::SequentialLayoutStyle& VIfStatementStyle::elseBranch() const { return elseBranch_; }
+inline const Visualization::VListStyle& VIfStatementStyle::thenBranch() const { return thenBranch_; }
+inline const Visualization::VListStyle& VIfStatementStyle::elseBranch() const { return elseBranch_; }
 
 }
 

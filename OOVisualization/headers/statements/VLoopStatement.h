@@ -20,6 +20,7 @@
 namespace Visualization {
 	class PanelBorderLayout;
 	class SequentialLayout;
+	class VList;
 }
 
 namespace OOVisualization {
@@ -45,7 +46,7 @@ class OOVISUALIZATION_API VLoopStatement : public Visualization::ItemWithNode< V
 		Visualization::Item* condition;
 		Visualization::Item* initStep;
 		Visualization::Item* updateStep;
-		Visualization::Item* body;
+		Visualization::VList* body;
 };
 
 }

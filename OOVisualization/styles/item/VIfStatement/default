@@ -58,7 +58,7 @@
 		</shape>
 	</condition>
 	<content prototypes="layout/SequentialLayout/default" />
-	<thenBranch prototypes="layout/SequentialLayout/default">
+	<thenBranch prototypes="item/VList/default">
 		<shape prototypes="shape/Box/default">
 			Box
 			<outline><style>0</style></outline>
@@ -75,7 +75,7 @@
 			<cornerType>1</cornerType>
 		</shape>
 	</thenBranch>
-	<elseBranch prototypes="layout/SequentialLayout/default">
+	<elseBranch prototypes="item/VList/default">
 		<shape prototypes="shape/Box/default">
 			Box
 			<outline><style>0</style></outline>

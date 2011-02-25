@@ -9,6 +9,7 @@
 
 #include "VisualizationBase/headers/layouts/PanelBorderLayout.h"
 #include "VisualizationBase/headers/items/VText.h"
+#include "VisualizationBase/headers/items/VList.h"
 #include "VisualizationBase/headers/icons/SVGIcon.h"
 
 using namespace Visualization;
@@ -26,7 +27,7 @@ VForEachStatement::VForEachStatement(Item* parent, NodeType* node, const StyleTy
 	varName( new VText(NULL, node->varNameNode(), &style->varName())),
 	collection(NULL),
 	varType(NULL),
-	body(NULL)
+	body( NULL )
 {
 	layout()->setTop(true);
 	layout()->top()->setFirst(header);
@@ -50,7 +51,8 @@ VForEachStatement::~VForEachStatement()
 
 void VForEachStatement::determineChildren()
 {
-	layout()->synchronizeContent(body, node()->body());
+	layout()->synchronizeContent(body, node()->body(), &style()->body());
+
 	collectionBackground->synchronizeFirst(collection, node()->collection());
 	varContainer->synchronizeFirst(varType, node()->varType());
 	varContainer->synchronizeLast(varName, node()->varNameNode(), &style()->varName());
@@ -65,6 +67,7 @@ void VForEachStatement::determineChildren()
 	varContainer->setStyle( &style()->varContainer() );
 	collectionBackground->setStyle( &style()->collection() );
 	varName->setStyle( &style()->varName() );
+	body->setStyle(&style()->body());
 }
 
 }

@@ -12,6 +12,8 @@
 
 #include "../expressions/Expression.h"
 
+#include "ModelBase/headers/nodes/TypedList.h"
+
 namespace OOModel {
 
 class OOMODEL_API LoopStatement: public Statement
@@ -21,7 +23,7 @@ class OOMODEL_API LoopStatement: public Statement
 	ATTRIBUTE(Expression, condition, setCondition);
 	ATTRIBUTE(Statement, initStep, setInitStep);
 	ATTRIBUTE(Statement, updateStep, setUpdateStep);
-	ATTRIBUTE(Statement, body, setBody);
+	ATTRIBUTE(Model::TypedList<StatementItem>, body, setBody);
 };
 
 }

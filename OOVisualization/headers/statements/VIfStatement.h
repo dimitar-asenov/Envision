@@ -21,6 +21,7 @@ namespace Visualization {
 	class PanelBorderLayout;
 	class PositionLayout;
 	class SequentialLayout;
+	class VList;
 }
 
 namespace OOVisualization {
@@ -41,10 +42,8 @@ class OOVISUALIZATION_API VIfStatement : public Visualization::ItemWithNode< Vis
 		Visualization::SequentialLayout* conditionBackground;
 		Visualization::Item* condition;
 		Visualization::SequentialLayout* content;
-		Visualization::SequentialLayout* thenBranchBackground;
-		Visualization::SequentialLayout* elseBranchBackground;
-		Visualization::Item* thenBranch;
-		Visualization::Item* elseBranch;
+		Visualization::VList* thenBranch;
+		Visualization::VList* elseBranch;
 };
 
 }

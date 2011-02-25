@@ -25,6 +25,7 @@ void VForEachStatementStyle::load()
 	Visualization::Styles::load("varContainer", varContainer_);
 	Visualization::Styles::load("varName", varName_);
 	Visualization::Styles::load("collection", collection_);
+	Visualization::Styles::load("body", body_);
 }
 
 }

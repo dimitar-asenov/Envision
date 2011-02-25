@@ -25,6 +25,7 @@ void VLoopStatementStyle::load()
 	Visualization::Styles::load("initStep", initStep_);
 	Visualization::Styles::load("condition", condition_);
 	Visualization::Styles::load("updateStep", updateStep_);
+	Visualization::Styles::load("body", body_);
 }
 
 }

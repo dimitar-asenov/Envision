@@ -13,6 +13,7 @@
 #include "VisualizationBase/headers/layouts/PanelBorderLayoutStyle.h"
 #include "VisualizationBase/headers/layouts/SequentialLayoutStyle.h"
 #include "VisualizationBase/headers/items/TextStyle.h"
+#include "VisualizationBase/headers/items/VListStyle.h"
 #include "VisualizationBase/headers/icons/SVGIconStyle.h"
 
 namespace OOVisualization {
@@ -26,6 +27,7 @@ class OOVISUALIZATION_API VForEachStatementStyle : public Visualization::ItemSty
 		Visualization::SequentialLayoutStyle varContainer_;
 		Visualization::TextStyle varName_;
 		Visualization::SequentialLayoutStyle collection_;
+		Visualization::VListStyle body_;
 
 	public:
 		void load();
@@ -37,6 +39,7 @@ class OOVISUALIZATION_API VForEachStatementStyle : public Visualization::ItemSty
 		const Visualization::SequentialLayoutStyle& varContainer() const;
 		const Visualization::TextStyle& varName() const;
 		const Visualization::SequentialLayoutStyle& collection() const;
+		const Visualization::VListStyle& body() const;
 
 		static VForEachStatementStyle* getDefault();
 };
@@ -48,6 +51,7 @@ inline const Visualization::SVGIconStyle& VForEachStatementStyle::icon() const {
 inline const Visualization::SequentialLayoutStyle& VForEachStatementStyle::varContainer() const { return varContainer_; }
 inline const Visualization::TextStyle& VForEachStatementStyle::varName() const { return varName_; }
 inline const Visualization::SequentialLayoutStyle& VForEachStatementStyle::collection() const { return collection_; }
+inline const Visualization::VListStyle& VForEachStatementStyle::body() const { return body_; }
 
 }
 

@@ -9,6 +9,7 @@
 
 #include "VisualizationBase/headers/layouts/PanelBorderLayout.h"
 #include "VisualizationBase/headers/layouts/SequentialLayout.h"
+#include "VisualizationBase/headers/items/VList.h"
 #include "VisualizationBase/headers/icons/SVGIcon.h"
 
 using namespace Visualization;
@@ -27,7 +28,7 @@ VLoopStatement::VLoopStatement(Item* parent, NodeType* node, const StyleType* st
 	condition(NULL),
 	initStep(NULL),
 	updateStep(NULL),
-	body(NULL)
+	body( NULL )
 {
 	layout()->setTop(true);
 	layout()->top()->setFirst(header);
@@ -49,7 +50,7 @@ VLoopStatement::~VLoopStatement()
 
 void VLoopStatement::determineChildren()
 {
-	layout()->synchronizeContent(body, node()->body());
+	layout()->synchronizeContent(body, node()->body(), &style()->body());
 
 	// TODO Find a better way to synchronize the condition, initStep and updateStep. Perhaps use make a new layout for
 	// Single items. That would be more of a shape provider.
@@ -111,6 +112,7 @@ void VLoopStatement::determineChildren()
 	if (conditionBackground) conditionBackground->setStyle( &style()->condition() );
 	if (initStepBackground) initStepBackground->setStyle( &style()->initStep() );
 	if (updateStepBackground) updateStepBackground->setStyle( &style()->updateStep() );
+	body->setStyle(&style()->body());
 }
 
 }

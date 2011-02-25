@@ -208,10 +208,10 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	ifCond->setLeft<VariableAccess>()->ref()->set("local:var14");
 	ifCond->setOp(BinaryOperation::NOT_EQUALS);
 	ifCond->setRight<IntegerLiteral>()->setValue(10);
-	UnaryOperation* thenBranch = ifs->setThenBranch<UnaryOperation>();
+	UnaryOperation* thenBranch = ifs->thenBranch()->append<UnaryOperation>();
 	thenBranch->setOp(UnaryOperation::INCREMENT);
 	thenBranch->setOperand<VariableAccess>()->ref()->set("local:var14");
-	UnaryOperation* elseBranch = ifs->setElseBranch<UnaryOperation>();
+	UnaryOperation* elseBranch = ifs->elseBranch()->append<UnaryOperation>();
 	elseBranch->setOp(UnaryOperation::DECREMENT);
 	elseBranch->setOperand<VariableAccess>()->ref()->set("local:var14");
 
@@ -237,20 +237,19 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	updateStep->setLeft<VariableAccess>()->ref()->set("local:i");
 	updateStep->setOp(AssignmentStatement::PLUS_ASSIGN);
 	updateStep->setRight<IntegerLiteral>()->setValue(1);
-	Block* loopBody = loop->setBody<Block>();
-	AssignmentStatement* loopBodyAssignment = loopBody->items()->append<AssignmentStatement>();
+	AssignmentStatement* loopBodyAssignment = loop->body()->append<AssignmentStatement>();
 	loopBodyAssignment->setLeft<VariableAccess>()->ref()->set("local:var14");
 	loopBodyAssignment->setOp(AssignmentStatement::TIMES_ASSIGN);
 	loopBodyAssignment->setRight<IntegerLiteral>()->setValue(2);
-	loopBody->items()->append<ContinueStatement>();
-	loopBody->items()->append<BreakStatement>();
+	loop->body()->append<ContinueStatement>();
+	loop->body()->append<BreakStatement>();
 
 
 	ForEachStatement* forEach = factorial->items()->append<ForEachStatement>();
 	forEach->setVarName("elem");
 	forEach->setVarType<PrimitiveType>()->setType(PrimitiveType::UNSIGNED_INT);
 	forEach->setCollection<VariableAccess>()->ref()->set("global:SomeCollection");
-	AssignmentStatement* assignEach = forEach->setBody<AssignmentStatement>();
+	AssignmentStatement* assignEach = forEach->body()->append<AssignmentStatement>();
 	assignEach->setLeft<VariableAccess>()->ref()->set("local:var1");
 	assignEach->setOp(AssignmentStatement::DIVIDE_ASSIGN);
 	assignEach->setRight<VariableAccess>()->ref()->set("loop:elem");
