@@ -1,6 +1,5 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/Item/default">
-	<showAsControlFlow>false</showAsControlFlow>
 	<pinLength>5</pinLength>
 	<pin>
 		<width>1.0</width>

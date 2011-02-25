@@ -19,7 +19,6 @@ ControlFlowItemStyle* ControlFlowItemStyle::getDefault()
 void ControlFlowItemStyle::load()
 {
 	ItemStyle::load();
-	Visualization::Styles::load("showAsControlFlow", showAsControlFlow_);
 	Visualization::Styles::load("pinLength", pinLength_);
 	Visualization::Styles::load("pin", pin_);
 }

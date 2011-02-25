@@ -31,7 +31,11 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/items/VListCFStyle.h \
+HEADERS += headers/items/VLoopStatementCFStyle.h \
+    headers/items/VLoopStatementCF.h \
+    headers/items/VBreakStatementCF.h \
+    headers/items/VContinueStatementCF.h \
+    headers/items/VListCFStyle.h \
     headers/items/VListCF.h \
     headers/allCFVisualizations.h \
     headers/items/VMethodCFStyle.h \
@@ -41,7 +45,11 @@ HEADERS += headers/items/VListCFStyle.h \
     headers/ControlFlowVisualizationException.h \
     headers/controlflowvisualization_api.h \
     src/controlflowvisualization.h
-SOURCES += src/items/VListCF.cpp \
+SOURCES += src/items/VLoopStatementCF.cpp \
+    src/items/VLoopStatementCFStyle.cpp \
+    src/items/VBreakStatementCF.cpp \
+    src/items/VContinueStatementCF.cpp \
+    src/items/VListCF.cpp \
     src/items/VListCFStyle.cpp \
     src/items/VMethodCF.cpp \
     src/items/VMethodCFStyle.cpp \

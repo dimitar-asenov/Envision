@@ -1,7 +1,17 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/ControlFlowItem/default">
 	<sequence prototypes="layout/SequentialLayout/default">
-		<shape prototypes="shape/Box/default">Box</shape>
+		<shape prototypes="shape/Box/default">Box
+			<backgroundBrush>
+				<style>1</style>
+				<color>
+					<alpha>255</alpha>
+					<red>224</red>
+					<green>224</green>
+					<blue>224</blue>
+				</color>
+			</backgroundBrush>
+		</shape>
 		<direction>2</direction>
 		<alignment>1</alignment>
 	</sequence>

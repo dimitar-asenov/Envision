@@ -31,6 +31,8 @@ class ControlFlowItem : public Visualization::Item
 
 		void setPreferredExit(PreferedExitDirection preference);
 
+		bool showAsControlFlow() const;
+
 	protected:
 
 		PreferedExitDirection preferredExit_;
