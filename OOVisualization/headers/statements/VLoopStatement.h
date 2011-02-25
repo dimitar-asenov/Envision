@@ -34,7 +34,7 @@ class OOVISUALIZATION_API VLoopStatement : public Visualization::ItemWithNode< V
 		virtual ~VLoopStatement();
 
 	protected:
-		void determineChildren();
+		virtual void determineChildren();
 
 	private:
 		Visualization::SequentialLayout* header;
