@@ -32,34 +32,39 @@ bool VListCF::isEmpty() const
 
 void VListCF::determineChildren()
 {
-	//TODO this
+	// Get the single items from the list of composite items.
+	QList< Item* > items = extractSingleItems();
+
 	// Inserts elements that are not yet visualized and adjusts the order to match that in 'nodes'.
 	for (int i = 0; i < node()->size(); ++i)
 	{
-		if (i >= lengthSingle() ) appendSingle( renderer->render(NULL, node()->at<Node>(i)));	// This node is new
-		else if ( atSingle(i)->node() == node()->at<Node>(i) )	continue;	// This node is already there
+		if (i >= items.size() ) items.append( renderer()->render(NULL, node()->at<Node>(i)));	// This node is new
+		else if ( items[i]->node() == node()->at<Node>(i) )	continue;	// This node is already there
 		else
 		{
 			// This node might appear somewhere ahead, we should look for it
 			bool found = false;
-			for (int k = i + 1; k<lengthSingle(); ++k)
+			for (int k = i + 1; k<items.size(); ++k)
 			{
-				if ( atSingle(k)->node() == node()->at<Node>(i) )
+				if ( items[k]->node() == node()->at<Node>(i) )
 				{
 					// We found this node, swap the visualizations
-					swapSingle(i, k);
+					items.swap(i, k);
 					found = true;
 					break;
 				}
 			}
 
 			// The node was not found, insert a visualization here
-			if (!found ) insertSingle( renderer->render(NULL, node()->at<Node>(i)), i);
+			if (!found ) items.insert(i, renderer()->render(NULL, node()->at<Node>(i)));
 		}
 	}
 
 	// Remove excess items
-	while (lengthSingle() > node()->size()) removeLastSingle();
+	while (items.size() > node()->size()) items.removeLast();
+
+	// Convert the single items list back to a list of composite items.
+	buildCompositeItems(items);
 }
 
 void VListCF::updateGeometry(int, int)
@@ -67,49 +72,114 @@ void VListCF::updateGeometry(int, int)
 	breaks_.clear();
 	continues_.clear();
 
-	//TODO this
+	QList< QPoint > pos;
+	for(int i = 0; i<items_.size(); ++i) pos.append( QPoint() );
+
+	QPoint location;
+	QPoint topLeft;
+	QPoint bottomRight;
+
+	// Begin placing the elements in a virtual plane.
+	for(int i = 0; i < items_.size(); ++i)
+	{
+		ControlFlowItem* cfi = dynamic_cast<ControlFlowItem*> (items_[i]);
+		if (cfi)
+		{
+			pos[i] = QPoint( location.x() - cfi->entrance().x(), location.y());
+			if (cfi->exit().isNull()) exit_ = QPoint(0,0);
+			else
+			{
+				location.rx() += cfi->exit().x() - cfi->entrance().x();
+				exit_ = location;
+			}
+
+
+			// Process breaks and continues
+			for (int k = 0; k < cfi->breaks().size(); ++k)
+			{
+				QPoint br( cfi->breaks().at(k) + pos[i] );
+				if ( cfi->breaks().at(k).x() == 0) br.setX(0);
+				else br.setX(1);
+				breaks_.append( br);
+			}
+			for (int k = 0; k < cfi->continues().size(); ++k)
+			{
+				QPoint cnt( cfi->continues().at(k) + pos[i] );
+				if ( cfi->continues().at(k).x() == 0) cnt.setX(0);
+				else cnt.setX(1);
+				continues_.append( cnt );
+			}
+		}
+		else
+		{
+			location.ry() += style()->pinLength(); // There is a pin on top.
+			pos[i] = QPoint( location.x() - items_[i]->width()/2, location.y());
+			location.ry() += style()->pinLength(); // There is a pin on the bottom.
+			exit_ = location;
+		}
+
+		int pinSpace = cfi ? 0 : style()->pinLength();
+		if ( pos[i].x() - pinSpace < topLeft.x()) topLeft.setX( pos[i].x() - pinSpace );
+		if ( pos[i].x() + items_[i]->width() + pinSpace > bottomRight.y())  bottomRight.setY(pos[i].x() + items_[i]->width() + pinSpace);
+
+		location.ry() += items_[i]->height();
+	}
+
+	bottomRight.setY(location.y());
+
+	// Set the size
+	if ( hasShape() ) getShape()->setInnerSize(bottomRight.x() - topLeft.x(), bottomRight.y());
+	else setSize(bottomRight.x() - topLeft.x(), bottomRight.y());
+
+	// Set the positions of all elements
+	for (int i = 0; i < items_.size(); ++i) items_[i]->setPos(pos[i] - topLeft);
 }
 
-void VListCF::appendSingle( Visualization::Item* item)
+QList< Item* > VListCF::extractSingleItems()
 {
-	insertSingle(item, lengthSingle() );
-}
+	QList< Item* > result;
 
-//TODO these
-void VListCF::insertSingle( Visualization::Item* item, int pos);
-void VListCF::swapSingle(int i, int j);
-void VListCF::removeLastSingle();
-
-Visualization::Item* VListCF::atSingle(int pos)
-{
-	int index = pos;
-
-	for (int i = 0; i<items_.size(); ++i)
+	for (int i = items_.size() - 1; i>=0; --i)
 	{
 		SequentialLayout* seq = dynamic_cast<SequentialLayout*> (items_[i]);
 		if (seq)
 		{
-			if (index < seq->length()) return seq->at<Item>(index);
-			else index -= seq->length();
+			for (int k = seq->length()-1; k>=0; --k) result.prepend(seq->at<Item>(k));
+			seq->clear(false);
+			SAFE_DELETE_ITEM(seq);
+		}
+		else result.prepend(items_[i]);
+	}
+
+	items_.clear();
+	return result;
+}
+
+void VListCF::buildCompositeItems( QList< Item* >& singleItems )
+{
+	SequentialLayout* seq = NULL;
+
+	for(int i = 0; i<singleItems.size(); ++i)
+	{
+		ControlFlowItem* cfi = dynamic_cast<ControlFlowItem*> (singleItems[i]);
+		if (cfi)
+		{
+			if (seq) seq = NULL;
+
+			cfi->setParentItem(this);
+			items_.append(cfi);
+			cfi->setPreferredExit( preferredExit_ );
 		}
 		else
 		{
-			if (index == 0) return items_[i];
-			else --index;
+			if (!seq)
+			{
+				seq = new SequentialLayout(this, &style()->sequence());
+				items_.append(seq);
+			}
+
+			seq->append( singleItems[i]);
 		}
-	}
-
-	return NULL;
-}
-
-int VListCF::lengthSingle()
-{
-	int len = 0;
-	for (int i = 0; i<items_.size(); ++i)
-	{
-		SequentialLayout* seq = dynamic_cast<SequentialLayout*> (items_[i]);
-		if (seq) len += seq->length(); // This is a sequnce of Items which are not ControlFlowItems.
-		else ++len; // This is a single ControlFlowItem
 	}
 }
 

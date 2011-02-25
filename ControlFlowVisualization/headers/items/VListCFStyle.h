@@ -19,7 +19,7 @@ namespace ControlFlowVisualization {
 class CONTROLFLOWVISUALIZATION_API VListCFStyle : public ControlFlowItemStyle
 {
 	private:
-	Visualization::SequentialLayoutStyle sequence_;
+		Visualization::SequentialLayoutStyle sequence_;
 
 	public:
 		void load();

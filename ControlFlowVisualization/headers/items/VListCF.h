@@ -38,12 +38,8 @@ class CONTROLFLOWVISUALIZATION_API VListCF : public Visualization::ItemWithNode<
 	private:
 		QVector< Visualization::Item* > items_;
 
-		void appendSingle( Visualization::Item* item);
-		void insertSingle( Visualization::Item* item, int pos);
-		Visualization::Item* atSingle(int pos);
-		void swapSingle(int i, int j);
-		void removeLastSingle();
-		int lengthSingle();
+		QList< Visualization::Item* > extractSingleItems();
+		void buildCompositeItems( QList< Visualization::Item* >& singleItems );
 };
 
 }

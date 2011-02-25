@@ -2,5 +2,7 @@
 <style prototypes="item/ControlFlowItem/default">
 	<sequence prototypes="layout/SequentialLayout/default">
 		<shape prototypes="shape/Box/default">Box</shape>
+		<direction>2</direction>
+		<alignment>1</alignment>
 	</sequence>
 </style>
