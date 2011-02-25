@@ -63,6 +63,7 @@ void SequentialLayout::swap(int i, int j)
 void SequentialLayout::remove(int index, bool deleteItem_)
 {
 	if (deleteItem_) SAFE_DELETE_ITEM( items[index]);
+	else items[index]->setParentItem(NULL);
 	items.remove(index);
 	setUpdateNeeded();
 }
@@ -72,13 +73,19 @@ void SequentialLayout::removeAll(Item* item, bool deleteItem)
 	for (int i = items.size() - 1; i>=0; --i)
 		if (items.at(i) == item) items.remove(i);
 	if (deleteItem) SAFE_DELETE_ITEM(item);
+	else item->setParentItem(NULL);
 	setUpdateNeeded();
 }
 
 void SequentialLayout::clear(bool deleteItems)
 {
-	if (deleteItems) for (int i = 0; i<items.size(); ++i) SAFE_DELETE_ITEM(items[i]);
+	for (int i = 0; i<items.size(); ++i)
+	{
+		if (deleteItems) SAFE_DELETE_ITEM(items[i]);
+		else items[i]->setParentItem(NULL);
+	}
 	items.clear();
+	setUpdateNeeded();
 }
 
 void SequentialLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes, ModelRenderer* renderer)
