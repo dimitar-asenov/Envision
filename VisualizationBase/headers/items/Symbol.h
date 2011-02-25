@@ -12,6 +12,7 @@
 
 #include "TextRenderer.h"
 #include "SymbolStyle.h"
+#include "../Styles.h"
 
 namespace Visualization {
 
@@ -20,7 +21,7 @@ class VISUALIZATIONBASE_API Symbol : public TextRenderer
 	ITEM_COMMON(Symbol)
 
 	public:
-		Symbol(Item* parent, const StyleType *style);
+		Symbol(Item* parent, const StyleType *style = Styles::item<Symbol>("default"));
 		virtual bool setText(const QString& newText);
 
 	protected:
