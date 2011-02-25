@@ -120,7 +120,7 @@ void VListCF::updateGeometry(int, int)
 
 		int pinSpace = cfi ? 0 : style()->pinLength();
 		if ( pos[i].x() - pinSpace < topLeft.x()) topLeft.setX( pos[i].x() - pinSpace );
-		if ( pos[i].x() + items_[i]->width() + pinSpace > bottomRight.y())  bottomRight.setY(pos[i].x() + items_[i]->width() + pinSpace);
+		if ( pos[i].x() + items_[i]->width() + pinSpace > bottomRight.x())  bottomRight.setX(pos[i].x() + items_[i]->width() + pinSpace);
 
 		location.ry() += items_[i]->height();
 	}
