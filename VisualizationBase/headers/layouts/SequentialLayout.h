@@ -89,7 +89,9 @@ template <class T> void SequentialLayout::synchronizeMid(T*& item, bool present,
 
 	if (!item && present)
 	{
-		item = new T(NULL, style);
+		if (style) item = new T(NULL, style);
+		else item = new T(NULL);
+
 		insert(item, ((position > length()) ? length() : position) );
 	}
 }
@@ -114,7 +116,9 @@ template <class T> void SequentialLayout::synchronizeMid(T*& item, typename T::N
 
 	if (!item && node)
 	{
-		item = new T(NULL, node, style);
+		if (style) item = new T(NULL, node, style);
+		else item = new T(NULL, node);
+
 		insert(item, ((position > length()) ? length() : position) );
 	}
 }
