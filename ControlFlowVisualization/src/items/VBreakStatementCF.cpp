@@ -35,6 +35,9 @@ void VBreakStatementCF::determineChildren()
 
 void VBreakStatementCF::updateGeometry(int availableWidth, int availableHeight)
 {
+	clearConnectors();
+	breaks_.clear();
+
 	if (! showAsControlFlow() ) Item::updateGeometry(vis_, availableWidth, availableHeight);
 	else
 	{
@@ -42,12 +45,30 @@ void VBreakStatementCF::updateGeometry(int availableWidth, int availableHeight)
 		setSize(vis_->width() + 2*style()->pinLength(), vis_->height() + 2*style()->pinLength());
 	}
 
-	breaks_.clear();
-	if (preferredExit_ == ControlFlowItem::EXIT_LEFT) breaks_.append( QPoint(0, height()/2));
-	else breaks_.append( QPoint(width(), height()/2));
+	QList< QPoint > conn;
+	if (preferredBreakExit_ == ControlFlowItem::EXIT_LEFT)
+	{
+		breaks_.append( QPoint(0, height()/2));
+		conn.clear();
+		conn.append(breaks_.first() + QPoint(style()->pinLength(),0));
+		conn.append(breaks_.first());
+		addConnector(conn, false);
+	}
+	else
+	{
+		breaks_.append( QPoint(width(), height()/2));
+		conn.clear();
+		conn.append(breaks_.first() - QPoint(style()->pinLength(),0));
+		conn.append(breaks_.first());
+		addConnector(conn, false);
+	}
 
 	entrance_ = QPoint(width()/2, 0);
 	exit_ = QPoint(0,0);
+	conn.clear();
+	conn.append(entrance_);
+	conn.append(entrance_ + QPoint(0, style()->pinLength()));
+	addConnector(conn, true);
 }
 
 bool VBreakStatementCF::focusChild(FocusTarget location)

@@ -143,6 +143,8 @@ void VLoopStatementCF::determineChildren()
 
 void VLoopStatementCF::updateGeometry(int availableWidth, int availableHeight)
 {
+	clearConnectors();
+
 	if (!showAsControlFlow())
 	{
 		Item::updateGeometry(vis_, availableWidth, availableHeight);
@@ -197,10 +199,10 @@ void VLoopStatementCF::updateGeometry(int availableWidth, int availableHeight)
 	if (body)
 	{
 		bodyPos = QPoint( 2*style()->pinLength(), y);
-		if (right < bodyPos.x() + body->width())
-					right = bodyPos.x() + body->width();
+		if (right < bodyPos.x() + body->width() + 2*style()->pinLength() + style()->pin().width())
+					right = bodyPos.x() + body->width() + 2*style()->pinLength() + style()->pin().width();
 
-		y += body->height();
+		y += body->height() + style()->pinLength() + style()->pin().width();
 	}
 
 	// Set the size
@@ -209,13 +211,130 @@ void VLoopStatementCF::updateGeometry(int availableWidth, int availableHeight)
 
 	// Set the control flow elements
 	entrance_ = QPoint(-left, 0);
-	exit_ = QPoint( -left + bodyPos.x() + (body?body->exit().x():0), y);
+	exit_ = QPoint( -left, y);
 
-	// Set the position.
+	// Set the positions
 	if (initStep) initStepBackground->setPos(initPos - QPoint(left,0));
 	if (updateStep) updateStepBackground->setPos(updatePos - QPoint(left,0));
 	if (condition) conditionBackground->setPos(condPos - QPoint(left,0));
 	if (body) body->setPos(bodyPos - QPoint(left,0));
+
+	// Put connectors
+	QList< QPoint > conn;
+	y = style()->pinLength();
+	if (initStep)
+	{
+		conn.append(entrance_);
+		conn.append(entrance_ + QPoint(0, y));
+		addConnector(conn, true);
+		conn.clear();
+		y += initStepBackground->height();
+	}
+
+	conn.append(entrance_ + QPoint(0, y));
+	y += style()->pinLength();
+	conn.append(entrance_ + QPoint(0, y));
+	addConnector(conn, false);
+	conn.clear();
+
+	QPoint updateConnect(entrance_.x() + style()->pinLength(), y);
+
+	if (updateStep)
+	{
+		updateConnect.ry() += updateStepBackground->height()/2;
+		conn.append(updateConnect + QPoint(style()->pinLength(), 0));
+		conn.append(updateConnect - QPoint(style()->pinLength(), 0));
+		addConnector(conn, true);
+		conn.clear();
+
+		updateConnect.rx() += updateStepBackground->width() + 2*style()->pinLength();
+
+		conn.append(QPoint(entrance_.x(), y));
+		conn.append(QPoint(entrance_.x(), y + updateStepBackground->height()));
+		addConnector(conn, false);
+		conn.clear();
+
+		y += updateStepBackground->height();
+	}
+
+	conn.append(updateConnect);
+	conn.append(updateConnect - QPoint(style()->pinLength(), 0));
+	addConnector(conn, true);
+	conn.clear();
+
+	QPoint condTrueConnect;
+	QPoint condFalseConnect;
+
+	if (condition)
+	{
+		conn.append(QPoint(entrance_.x(), y));
+		y += style()->pinLength();
+		conn.append(QPoint(entrance_.x(), y));
+		addConnector(conn, true);
+		conn.clear();
+
+		condTrueConnect.setY(y + conditionBackground->height()/2);
+		condTrueConnect.setX(condPos.x() - left + conditionBackground->width() + style()->pinLength());
+
+		conn.append(condTrueConnect);
+		conn.append(condTrueConnect - QPoint(style()->pinLength(),0));
+		addConnector(conn, false);
+		conn.clear();
+
+		y += conditionBackground->height();
+
+		conn.append(QPoint(entrance_.x(), y));
+		y += style()->pinLength();
+		conn.append(QPoint(entrance_.x(), y));
+		addConnector(conn, false);
+		conn.clear();
+
+		condFalseConnect.setY(y);
+		condFalseConnect.setX(entrance_.x());
+	}
+
+	if (body)
+	{
+		QPoint bPos = body->pos().toPoint();
+
+		conn.append(condTrueConnect);
+		conn.append(QPoint(body->entrance().x() + bPos.x(), condTrueConnect.y()));
+		conn.append(body->entrance() + bPos);
+		addConnector(conn, false);
+		conn.clear();
+
+		QPoint bodyExit = body->exit();
+		if (bodyExit.isNull()) bodyExit = QPoint(body->width()/2, body->height());
+		bodyExit += bPos;
+
+		int r = right - left - style()->pin().width();
+		conn.append(bodyExit);
+		conn.append(QPoint(r, conn.last().y()));
+		conn.append(QPoint(conn.last().x(), updateConnect.y()));
+		conn.append(updateConnect);
+		addConnector(conn, false);
+		conn.clear();
+
+		// Process breaks and continues on the right sides.
+		for (int i = 0; i < body->breaks().size(); ++i)
+		{
+			QPoint br = body->breaks().at(i);
+			if (br.x() == 0)
+			{
+				conn.append(bPos + br);
+				conn.append(QPoint(condFalseConnect.x(), conn.last().y()));
+				addConnector(conn, true);
+				conn.clear();
+			}
+		}
+
+		// TODO Process breaks and continues on the opposite side.
+	}
+
+	conn.append(condFalseConnect);
+	conn.append(exit_);
+	addConnector(conn, false);
+	conn.clear();
 }
 
 

@@ -35,6 +35,9 @@ void VContinueStatementCF::determineChildren()
 
 void VContinueStatementCF::updateGeometry(int availableWidth, int availableHeight)
 {
+	clearConnectors();
+	continues_.clear();
+
 	if (! showAsControlFlow() ) Item::updateGeometry(vis_, availableWidth, availableHeight);
 	else
 	{
@@ -42,12 +45,30 @@ void VContinueStatementCF::updateGeometry(int availableWidth, int availableHeigh
 		setSize(vis_->width() + 2*style()->pinLength(), vis_->height() + 2*style()->pinLength());
 	}
 
-	continues_.clear();
-	if (preferredExit_ == ControlFlowItem::EXIT_LEFT) continues_.append( QPoint(0, height()/2));
-	else continues_.append( QPoint(width(), height()/2));
+	QList< QPoint > conn;
+	if (preferredContinueExit_ == ControlFlowItem::EXIT_LEFT)
+	{
+		continues_.append( QPoint(0, height()/2));
+		conn.clear();
+		conn.append(continues_.first() + QPoint(style()->pinLength(),0));
+		conn.append(continues_.first());
+		addConnector(conn, false);
+	}
+	else
+	{
+		continues_.append( QPoint(width(), height()/2));
+		conn.clear();
+		conn.append(continues_.first() - QPoint(style()->pinLength(),0));
+		conn.append(continues_.first());
+		addConnector(conn, false);
+	}
 
 	entrance_ = QPoint(width()/2, 0);
 	exit_ = QPoint(0,0);
+	conn.clear();
+	conn.append(entrance_);
+	conn.append(entrance_ + QPoint(0, style()->pinLength()));
+	addConnector(conn, true);
 }
 
 bool VContinueStatementCF::focusChild(FocusTarget location)

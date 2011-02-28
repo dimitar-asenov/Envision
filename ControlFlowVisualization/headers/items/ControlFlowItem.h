@@ -29,18 +29,31 @@ class ControlFlowItem : public Visualization::Item
 		const QList< QPoint >& breaks();
 		const QList< QPoint >& continues();
 
-		void setPreferredExit(PreferedExitDirection preference);
+		void setPreferredContinueExit(PreferedExitDirection preference);
+		void setPreferredBreakExit(PreferedExitDirection preference);
 
 		bool showAsControlFlow() const;
 
+		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+
 	protected:
 
-		PreferedExitDirection preferredExit_;
+		PreferedExitDirection preferredContinueExit_;
+		PreferedExitDirection preferredBreakExit_;
 
 		QPoint entrance_;
 		QPoint exit_;
 		QList< QPoint > breaks_;
 		QList< QPoint > continues_;
+
+		void addConnector(QList< QPoint >& points, bool arrowEnding);
+		void clearConnectors();
+
+	private:
+		QPainterPath connector(const QList< QPoint >& points, bool arrowEnding);
+
+		QList< QList< QPoint > > connectors_;
+		QList< bool > arrowEndings_;
 };
 
 inline const QPoint& ControlFlowItem::entrance() { return entrance_; }
@@ -48,7 +61,8 @@ inline const QPoint& ControlFlowItem::exit() { return exit_; }
 inline const QList< QPoint >& ControlFlowItem::breaks() { return breaks_; }
 inline const QList< QPoint >& ControlFlowItem::continues() { return continues_; }
 
-inline void ControlFlowItem::setPreferredExit(PreferedExitDirection preference) { preferredExit_ = preference; }
+inline void ControlFlowItem::setPreferredContinueExit(PreferedExitDirection preference) { preferredContinueExit_ = preference; }
+inline void ControlFlowItem::setPreferredBreakExit(PreferedExitDirection preference) { preferredBreakExit_ = preference; }
 
 }
 

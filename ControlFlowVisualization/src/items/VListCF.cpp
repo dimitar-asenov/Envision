@@ -71,6 +71,7 @@ void VListCF::updateGeometry(int, int)
 {
 	breaks_.clear();
 	continues_.clear();
+	clearConnectors();
 
 	QList< QPoint > pos;
 	for(int i = 0; i<items_.size(); ++i) pos.append( QPoint() );
@@ -86,6 +87,7 @@ void VListCF::updateGeometry(int, int)
 		if (cfi)
 		{
 			pos[i] = QPoint( location.x() - cfi->entrance().x(), location.y());
+
 			if (cfi->exit().isNull()) exit_ = QPoint(0,0);
 			else
 			{
@@ -131,8 +133,75 @@ void VListCF::updateGeometry(int, int)
 	if ( hasShape() ) getShape()->setInnerSize(bottomRight.x() - topLeft.x(), bottomRight.y());
 	else setSize(bottomRight.x() - topLeft.x(), bottomRight.y());
 
-	// Set the positions of all elements
-	for (int i = 0; i < items_.size(); ++i) items_[i]->setPos(pos[i] - topLeft);
+	// Set entrance
+	entrance_ = -topLeft;
+
+	// Set the positions of all elements and create the connectors
+	QList< QPoint > conn;
+	for (int i = 0; i < items_.size(); ++i)
+	{
+		// Set position
+		pos[i] -= topLeft;
+		items_[i]->setPos(pos[i]);
+
+		// Create connectors
+		conn.clear();
+
+		ControlFlowItem* cfi = dynamic_cast<ControlFlowItem*> (items_[i]);
+		if (cfi)
+		{
+			// Add connectors for breaks and continues
+			for (int k = 0; k < cfi->breaks().size(); ++k)
+			{
+				QPoint br( cfi->breaks().at(k) + pos[i] );
+				if ( cfi->breaks().at(k).x() == 0)
+				{
+					conn.append(br);
+					conn.append(QPoint(0, br.y()));
+					addConnector(conn, false);
+					conn.clear();
+				}
+				else
+				{
+					br.setX(pos[i].x() + items_[i]->width());
+					conn.append(br);
+					conn.append(QPoint(width(), br.y()));
+					addConnector(conn, false);
+					conn.clear();
+				}
+			}
+			for (int k = 0; k < cfi->continues().size(); ++k)
+			{
+				QPoint cont( cfi->continues().at(k) + pos[i] );
+				if ( cfi->continues().at(k).x() == 0)
+				{
+					conn.append(cont);
+					conn.append(QPoint(0, cont.y()));
+					addConnector(conn, false);
+					conn.clear();
+				}
+				else
+				{
+					cont.setX(pos[i].x() + items_[i]->width());
+					conn.append(cont);
+					conn.append(QPoint(width(), cont.y()));
+					addConnector(conn, false);
+					conn.clear();
+				}
+			}
+		}
+		else
+		{
+			int midPoint = pos[i].x() + items_[i]->width()/2;
+			conn.append( QPoint(midPoint, pos[i].y() - style()->pinLength() ));
+			conn.append( QPoint(midPoint, pos[i].y() ));
+			addConnector(conn, true);
+			conn.clear();
+			conn.append( QPoint(midPoint, pos[i].y() + items_[i]->height()  ));
+			conn.append( QPoint(midPoint, pos[i].y() + items_[i]->height() + style()->pinLength() ));
+			addConnector(conn, false);
+		}
+	}
 }
 
 QList< Item* > VListCF::extractSingleItems()
@@ -168,7 +237,8 @@ void VListCF::buildCompositeItems( QList< Item* >& singleItems )
 
 			cfi->setParentItem(this);
 			items_.append(cfi);
-			cfi->setPreferredExit( preferredExit_ );
+			cfi->setPreferredContinueExit( preferredContinueExit_ );
+			cfi->setPreferredBreakExit( preferredBreakExit_ );
 		}
 		else
 		{
