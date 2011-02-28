@@ -327,6 +327,18 @@ void VLoopStatementCF::updateGeometry(int availableWidth, int availableHeight)
 				conn.clear();
 			}
 		}
+		for (int i = 0; i < body->continues().size(); ++i)
+		{
+			QPoint cont = body->continues().at(i);
+			if (cont.x() > 0)
+			{
+				conn.append(QPoint(bPos.x() + body->width(), bPos.y() + cont.y() ));
+				conn.append(QPoint(r, conn.last().y()));
+				addConnector(conn, true);
+				conn.clear();
+			}
+		}
+
 
 		// TODO Process breaks and continues on the opposite side.
 	}

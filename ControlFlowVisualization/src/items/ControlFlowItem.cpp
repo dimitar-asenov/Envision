@@ -124,6 +124,7 @@ void ControlFlowItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 	}
 
 	painter->setPen( style()->pin());
+	painter->translate( style()->pin().width()/2.0, style()->pin().width()/2.0);
 
 	for(int i = 0; i < connectors_.size(); ++i)
 	{
