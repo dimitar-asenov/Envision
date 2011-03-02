@@ -45,30 +45,20 @@ void VBreakStatementCF::updateGeometry(int availableWidth, int availableHeight)
 		setSize(vis_->width() + 2*style()->pinLength(), vis_->height() + 2*style()->pinLength());
 	}
 
-	QList< QPoint > conn;
 	if (preferredBreakExit_ == ControlFlowItem::EXIT_LEFT)
 	{
 		breaks_.append( QPoint(0, height()/2));
-		conn.clear();
-		conn.append(breaks_.first() + QPoint(style()->pinLength(),0));
-		conn.append(breaks_.first());
-		addConnector(conn, false);
+		addConnector(breaks_.first() + QPoint(style()->pinLength(),0), breaks_.first(), false);
 	}
 	else
 	{
 		breaks_.append( QPoint(width(), height()/2));
-		conn.clear();
-		conn.append(breaks_.first() - QPoint(style()->pinLength(),0));
-		conn.append(breaks_.first());
-		addConnector(conn, false);
+		addConnector(breaks_.first()- QPoint(style()->pinLength(),0), breaks_.first(), false);
 	}
 
 	entrance_ = QPoint(width()/2, 0);
 	exit_ = QPoint(0,0);
-	conn.clear();
-	conn.append(entrance_);
-	conn.append(entrance_ + QPoint(0, style()->pinLength()));
-	addConnector(conn, true);
+	addConnector(entrance_, entrance_ + QPoint(0, style()->pinLength()), true);
 }
 
 bool VBreakStatementCF::focusChild(FocusTarget location)

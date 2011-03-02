@@ -28,7 +28,7 @@ bool ControlFlowVisualization::initialize(Envision::EnvisionManager&)
 	// Register visualizations
 	Scene::defaultRenderer()->registerVisualization(Method::typeIdStatic(), createVisualization<VMethodCF, Method>);
 //	Scene::defaultRenderer()->registerVisualization(Block::typeIdStatic(), createVisualization<VBlockCF, Block>);
-//	Scene::defaultRenderer()->registerVisualization(ReturnStatement::typeIdStatic(), createVisualization<VReturnStatementCF, ReturnStatement>);
+	Scene::defaultRenderer()->registerVisualization(ReturnStatement::typeIdStatic(), createVisualization<VReturnStatementCF, ReturnStatement>);
 	Scene::defaultRenderer()->registerVisualization(IfStatement::typeIdStatic(), createVisualization<VIfStatementCF, IfStatement>);
 	Scene::defaultRenderer()->registerVisualization(LoopStatement::typeIdStatic(), createVisualization<VLoopStatementCF, LoopStatement>);
 //	Scene::defaultRenderer()->registerVisualization(ForEachStatement::typeIdStatic(), createVisualization<VForEachStatementCF, ForEachStatement>);
@@ -45,7 +45,7 @@ bool ControlFlowVisualization::initialize(Envision::EnvisionManager&)
 	VBreakStatementCF::setInteractionHandler(Interaction::GenericHandler::instance());
 	VContinueStatementCF::setInteractionHandler(Interaction::GenericHandler::instance());
 //	VBlockCF::setInteractionHandler(Interaction::GenericHandler::instance());
-//	VReturnStatementCF::setInteractionHandler(Interaction::GenericHandler::instance());
+	VReturnStatementCF::setInteractionHandler(Interaction::GenericHandler::instance());
 
 	return true;
 }
