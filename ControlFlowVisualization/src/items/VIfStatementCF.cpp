@@ -109,6 +109,8 @@ void VIfStatementCF::determineChildren()
 void VIfStatementCF::updateGeometry(int availableWidth, int availableHeight)
 {
 	clearConnectors();
+	breaks_.clear();
+	continues_.clear();
 
 	if (!showAsControlFlow())
 	{
