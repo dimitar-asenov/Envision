@@ -52,18 +52,18 @@ void PanelLayout::updateGeometry(int availableWidth, int availableHeight)
 
 	if ( style()->orientation() == PanelLayoutStyle::HorizontalOrientation )
 	{
-		// Get the width of the area where we should put the sequential components
-		int width = first.width() + middle.width() + last.width() + 2 * style()->spaceBetweenElements();
-
-		int outterWidth = width + style()->leftMargin() + style()->rightMargin();
-		if ( hasShape() ) outterWidth = getShape()->getOutterWidth(outterWidth);
-
-		if ( availableWidth > outterWidth ) width += availableWidth - outterWidth;
-
 		// Get the height
 		int maxChildHeight = first.height();
 		if ( middle.height() > maxChildHeight ) maxChildHeight = middle.height();
 		if ( last.height() > maxChildHeight ) maxChildHeight = last.height();
+
+		// Get the width of the area where we should put the sequential components
+		int width = first.width() + middle.width() + last.width() + 2 * style()->spaceBetweenElements();
+
+		int outterWidth = width + style()->leftMargin() + style()->rightMargin();
+		if ( hasShape() ) outterWidth = getShape()->outterSize(outterWidth, maxChildHeight).width();
+
+		if ( availableWidth > outterWidth ) width += availableWidth - outterWidth;
 
 		// Set the size
 		setInnerSize(width, maxChildHeight);
@@ -90,18 +90,18 @@ void PanelLayout::updateGeometry(int availableWidth, int availableHeight)
 	}
 	else
 	{
-		// Get the height of the area where we should put the sequential components
-		int height = first.height() + middle.height() + last.height() + 2 * style()->spaceBetweenElements();
-
-		int outterHeight = height + style()->topMargin() + style()->bottomMargin();
-		if ( hasShape() ) outterHeight = getShape()->getOutterHeight(outterHeight);
-
-		if ( availableHeight > outterHeight ) height += availableHeight - outterHeight;
-
 		// Get the width
 		int maxChildWidth = first.width();
 		if ( middle.width() > maxChildWidth ) maxChildWidth = middle.width();
 		if ( last.width() > maxChildWidth ) maxChildWidth = last.width();
+
+		// Get the height of the area where we should put the sequential components
+		int height = first.height() + middle.height() + last.height() + 2 * style()->spaceBetweenElements();
+
+		int outterHeight = height + style()->topMargin() + style()->bottomMargin();
+		if ( hasShape() ) outterHeight = getShape()->outterSize(maxChildWidth, outterHeight).height();
+
+		if ( availableHeight > outterHeight ) height += availableHeight - outterHeight;
 
 		// Set the size
 		setInnerSize(maxChildWidth, height);

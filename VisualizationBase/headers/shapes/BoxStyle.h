@@ -8,7 +8,7 @@
 #ifndef BOXSTYLE_H_
 #define BOXSTYLE_H_
 
-#include "visualizationbase_api.h"
+#include "../visualizationbase_api.h"
 
 #include "ShapeStyle.h"
 

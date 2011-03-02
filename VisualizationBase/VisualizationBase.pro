@@ -31,7 +31,9 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/items/LayoutProvider.h \
+HEADERS += headers/shapes/DiamondStyle.h \
+    headers/shapes/Diamond.h \
+    headers/items/LayoutProvider.h \
     headers/items/LayoutProviderBase.h \
     headers/items/ItemWithNode.h \
     headers/items/SymbolStyle.h \
@@ -87,7 +89,9 @@ HEADERS += headers/items/LayoutProvider.h \
     src/visualizationbase.h \
     headers/VisualizationException.h \
     headers/visualizationbase_api.h
-SOURCES += src/items/LayoutProviderBase.cpp \
+SOURCES += src/shapes/Diamond.cpp \
+    src/shapes/DiamondStyle.cpp \
+    src/items/LayoutProviderBase.cpp \
     src/items/Symbol.cpp \
     src/items/SymbolStyle.cpp \
     src/items/VCharacter.cpp \

@@ -104,32 +104,32 @@ int Box::contentTop()
 	return yOffset() + style()->cornerRadius() + (style()->outline().width() + 1) / 2;
 }
 
-int Box::getInnerWidth(int outterWidth) const
+QSize Box::innerSize(QSize outterSize) const
 {
-	int innerWidth = outterWidth - 2 * style()->cornerRadius() - std::ceil(style()->outline().width());
-	if ( style()->shadow() != Qt::NoBrush ) innerWidth -= style()->xShadowOffset();
-	return innerWidth;
+	int innerWidth = outterSize.width() - 2 * style()->cornerRadius() - std::ceil(style()->outline().width());
+	int innerHeight = outterSize.height() - 2 * style()->cornerRadius() - std::ceil(style()->outline().width());
+
+	if ( style()->shadow() != Qt::NoBrush )
+	{
+		innerWidth -= style()->xShadowOffset();
+		innerHeight -= style()->yShadowOffset();
+	}
+
+	return QSize(innerWidth, innerHeight);
 }
 
-int Box::getInnerHeight(int outterHeight) const
+QSize Box::outterSize(QSize innerSize) const
 {
-	int innerHeight = outterHeight - 2 * style()->cornerRadius() - std::ceil(style()->outline().width());
-	if ( style()->shadow() != Qt::NoBrush ) innerHeight -= style()->yShadowOffset();
-	return innerHeight;
-}
+	int outterWidth = innerSize.width() + 2 * style()->cornerRadius() + std::ceil(style()->outline().width());
+	int outterHeight = innerSize.height() + 2 * style()->cornerRadius() + std::ceil(style()->outline().width());
 
-int Box::getOutterWidth(int innerWidth) const
-{
-	int outterWidth = innerWidth + 2 * style()->cornerRadius() + std::ceil(style()->outline().width());
-	if ( style()->shadow() != Qt::NoBrush ) outterWidth += style()->xShadowOffset();
-	return outterWidth;
-}
+	if ( style()->shadow() != Qt::NoBrush )
+	{
+		outterWidth += style()->xShadowOffset();
+		outterHeight += style()->yShadowOffset();
+	}
 
-int Box::getOutterHeight(int innerHeight) const
-{
-	int outterHeight = innerHeight + 2 * style()->cornerRadius() + std::ceil(style()->outline().width());
-	if ( style()->shadow() != Qt::NoBrush ) outterHeight += style()->yShadowOffset();
-	return outterHeight;
+	return QSize(outterWidth, outterHeight);
 }
 
 void Box::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)

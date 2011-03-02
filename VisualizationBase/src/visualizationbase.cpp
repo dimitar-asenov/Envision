@@ -9,6 +9,7 @@
 
 #include "VisualizationManager.h"
 #include "shapes/Box.h"
+#include "shapes/Diamond.h"
 #include "Scene.h"
 #include "items/VText.h"
 #include "items/VInteger.h"
@@ -36,6 +37,7 @@ namespace Visualization
 	{
 		VisualizationManager::init(&manager);
 		Shape::registerShape<Box>();
+		Shape::registerShape<Diamond>();
 
 		// Register extensions
 		Position::registerExtension();

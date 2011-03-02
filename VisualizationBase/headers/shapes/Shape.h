@@ -68,12 +68,7 @@ class VISUALIZATIONBASE_API Shape
 		virtual ~Shape();
 		static const QString& className();
 
-		void setInnerWidth(int width);
-		void setInnerHeight(int height);
-		void setInnerSize(int widht, int height);
-
-		void setOutterWidth(int width);
-		void setOutterHeight(int height);
+		void setInnerSize(int width, int height);
 		void setOutterSize(int width, int height);
 		void setOffset(int x, int y);
 
@@ -81,10 +76,11 @@ class VISUALIZATIONBASE_API Shape
 
 		virtual int contentLeft();
 		virtual int contentTop();
-		virtual int getInnerWidth(int outterWidth) const;
-		virtual int getInnerHeight(int outterHeight) const;
-		virtual int getOutterWidth(int innerWidth) const;
-		virtual int getOutterHeight(int innerHeight) const;
+
+		virtual QSize innerSize(QSize outterSize) const;
+		virtual QSize outterSize(QSize innerSize) const;
+		QSize innerSize(int outterWidth, int outterHeight) const;
+		QSize outterSize(int innerWidth, int innerHeight) const;
 
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) = 0;
 
@@ -104,6 +100,8 @@ inline ShapeStyle* Shape::style() const {	return style_; }
 
 inline void Shape::setParentNeedsUpdate() { parent->setUpdateNeeded(); }
 
+inline QSize Shape::innerSize(int outterWidth, int outterHeight) const { return innerSize(QSize(outterWidth, outterHeight)); }
+inline QSize Shape::outterSize(int innerWidth, int innerHeight) const { return outterSize(QSize(innerWidth, innerHeight)); }
 
 template <class Base, class Actual> inline Base* Shape::makeDefaultStyle() { return new Actual(); }
 template <class Base, class Actual> inline Base* Shape::makeDefaultShape(Item* parent) {return new Actual(parent); };

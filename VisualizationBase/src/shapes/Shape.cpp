@@ -28,46 +28,11 @@ void Shape::setItemSize(int width, int height)
 	setParentNeedsUpdate();
 }
 
-void Shape::setInnerWidth(int width)
-{
-	width_ = width;
-	if ( sizeToUse == OutterSize ) height_ = 0;
-	sizeToUse = InnerSize;
-	update();
-	setParentNeedsUpdate();
-}
-
-void Shape::setInnerHeight(int height)
-{
-	height_ = height;
-	if ( sizeToUse == OutterSize ) width_ = 0;
-	sizeToUse = InnerSize;
-	update();
-	setParentNeedsUpdate();
-}
-
 void Shape::setInnerSize(int width, int height)
 {
 	width_ = width;
 	height_ = height;
 	sizeToUse = InnerSize;
-	update();
-	setParentNeedsUpdate();
-}
-
-void Shape::setOutterWidth(int width)
-{
-	width_ = width;
-	if ( sizeToUse == InnerSize ) height_ = 0;
-	sizeToUse = OutterSize;
-	update();
-	setParentNeedsUpdate();
-}
-void Shape::setOutterHeight(int height)
-{
-	height_ = height;
-	if ( sizeToUse == InnerSize ) width_ = 0;
-	sizeToUse = OutterSize;
 	update();
 	setParentNeedsUpdate();
 }
@@ -105,28 +70,16 @@ int Shape::contentTop()
 	return yOffset_;
 }
 
-int Shape::getInnerWidth(int outterWidth) const
+QSize Shape::innerSize(QSize outterSize) const
 {
-	if (style_) return outterWidth - std::ceil(style_->outline().width());
-	return outterWidth;
+	if (style_) return QSize(outterSize.width() - std::ceil(style_->outline().width()), outterSize.height() - std::ceil(style_->outline().width()) );
+	return QSize(outterSize.width(), outterSize.height());
 }
 
-int Shape::getInnerHeight(int outterHeight) const
+QSize Shape::outterSize(QSize innerSize) const
 {
-	if (style_) return outterHeight - std::ceil(style_->outline().width());
-	return outterHeight;
-}
-
-int Shape::getOutterWidth(int innerWidth) const
-{
-	if (style_) return innerWidth + std::ceil(style_->outline().width());
-	return innerWidth;
-}
-
-int Shape::getOutterHeight(int innerHeight) const
-{
-	if (style_) return innerHeight + std::ceil(style_->outline().width());
-	return innerHeight;
+	if (style_) return QSize(innerSize.width() + std::ceil(style_->outline().width()), innerSize.height() + std::ceil(style_->outline().width()) );
+	return QSize(innerSize.width(), innerSize.height());
 }
 
 Shape* Shape::createNewShape(const QString& shapeName, Item* parent)

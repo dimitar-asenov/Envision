@@ -126,18 +126,17 @@ void Item::updateGeometry(Item* content, int availableWidth, int availableHeight
 {
 	if (hasShape())
 	{
-		int width = getShape()->getInnerWidth(availableWidth);
-		int height = getShape()->getInnerHeight(availableHeight);
+		QSize inner = getShape()->innerSize(availableWidth, availableHeight);
 
 		if (content->sizeDependsOnParent() && (availableWidth > 0 || availableHeight > 0))
-			content->changeGeometry(width, height);
+			content->changeGeometry(inner.width(), inner.height());
 
-		if (content->width() > width ) width = content->width();
-		if (content->height() > height ) height = content->height();
+		if (content->width() > inner.width() ) inner.setWidth( content->width() );
+		if (content->height() > inner.height() ) inner.setHeight( content->height() );
 
 		getShape()->setOffset(0, 0);
 
-		if ( sizeDependsOnParent() ) getShape()->setInnerSize(width, height);
+		if ( sizeDependsOnParent() ) getShape()->setInnerSize(inner.width(), inner.height());
 		else getShape()->setInnerSize(content->width(), content->height());
 
 		content->setPos(getShape()->contentLeft(), getShape()->contentTop());
