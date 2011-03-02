@@ -73,6 +73,17 @@ void VListCF::updateGeometry(int, int)
 	continues_.clear();
 	clearConnectors();
 
+	if (items_.isEmpty())
+	{
+		if ( hasShape() ) getShape()->setInnerSize(style()->pinLength(), style()->pinLength());
+			else setSize(style()->pinLength(), style()->pinLength());
+
+		entrance_ = QPoint(style()->pinLength()/2,0);
+		exit_ = QPoint(style()->pinLength()/2,style()->pinLength());
+		addConnector(entrance_, exit_, false);
+		return;
+	}
+
 	QList< QPoint > pos;
 	for(int i = 0; i<items_.size(); ++i) pos.append( QPoint() );
 

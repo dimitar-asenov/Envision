@@ -14,5 +14,6 @@
 #include "items/VBreakStatementCF.h"
 #include "items/VContinueStatementCF.h"
 #include "items/VLoopStatementCF.h"
+#include "items/VIfStatementCF.h"
 
 #endif /* ALLCFVISUALIZATIONS_H_ */

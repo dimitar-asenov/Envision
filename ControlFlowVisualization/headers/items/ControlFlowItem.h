@@ -47,6 +47,10 @@ class ControlFlowItem : public Visualization::Item
 		QList< QPoint > continues_;
 
 		void addConnector(QList< QPoint >& points, bool arrowEnding);
+		void addConnector(int xBegin, int yBegin, int xEnd, int yEnd, bool arrowEnding);
+		void addConnector(const QPoint& begin, const QPoint& end, bool arrowEnding);
+		void addToLastConnector(int x, int y);
+		void addToLastConnector(const QPoint& point);
 		void clearConnectors();
 
 	private:

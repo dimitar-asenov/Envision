@@ -1,0 +1,21 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/ControlFlowItem/default">
+	<condition prototypes="layout/SequentialLayout/default">
+		<shape prototypes="shape/Box/default">
+			Box
+			<backgroundBrush>
+				<style>1</style>
+				<color>
+					<alpha>255</alpha>
+					<red>255</red>
+					<green>255</green>
+					<blue>128</blue>
+				</color>
+			</backgroundBrush>
+			<cornerRadius>2</cornerRadius>
+			<cornerType>2</cornerType>
+		</shape>
+	</condition>
+	<thenBranch prototypes="item/VListCF/default"/>
+	<elseBranch prototypes="item/VListCF/default"/>
+</style>

@@ -124,6 +124,8 @@ void VLoopStatementCF::determineChildren()
 		if (initStepBackground) initStepBackground->setStyle( &style()->initStep() );
 		if (updateStepBackground) updateStepBackground->setStyle( &style()->updateStep() );
 		body->setStyle(&style()->body());
+		body->setPreferredBreakExit(ControlFlowItem::EXIT_LEFT);
+		body->setPreferredContinueExit(ControlFlowItem::EXIT_RIGHT);
 	}
 	else
 	{
@@ -348,7 +350,5 @@ void VLoopStatementCF::updateGeometry(int availableWidth, int availableHeight)
 	addConnector(conn, false);
 	conn.clear();
 }
-
-
 
 }

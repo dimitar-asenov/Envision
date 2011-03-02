@@ -31,7 +31,9 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/items/VLoopStatementCFStyle.h \
+HEADERS += headers/items/VIfStatementCFStyle.h \
+    headers/items/VIfStatementCF.h \
+    headers/items/VLoopStatementCFStyle.h \
     headers/items/VLoopStatementCF.h \
     headers/items/VBreakStatementCF.h \
     headers/items/VContinueStatementCF.h \
@@ -45,7 +47,9 @@ HEADERS += headers/items/VLoopStatementCFStyle.h \
     headers/ControlFlowVisualizationException.h \
     headers/controlflowvisualization_api.h \
     src/controlflowvisualization.h
-SOURCES += src/items/VLoopStatementCF.cpp \
+SOURCES += src/items/VIfStatementCF.cpp \
+    src/items/VIfStatementCFStyle.cpp \
+    src/items/VLoopStatementCF.cpp \
     src/items/VLoopStatementCFStyle.cpp \
     src/items/VBreakStatementCF.cpp \
     src/items/VContinueStatementCF.cpp \
