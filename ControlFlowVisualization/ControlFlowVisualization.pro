@@ -31,7 +31,9 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/items/VReturnStatementCF.h \
+HEADERS += headers/items/VBlockCFStyle.h \
+    headers/items/VBlockCF.h \
+    headers/items/VReturnStatementCF.h \
     headers/items/VIfStatementCFStyle.h \
     headers/items/VIfStatementCF.h \
     headers/items/VLoopStatementCFStyle.h \
@@ -48,7 +50,9 @@ HEADERS += headers/items/VReturnStatementCF.h \
     headers/ControlFlowVisualizationException.h \
     headers/controlflowvisualization_api.h \
     src/controlflowvisualization.h
-SOURCES += src/items/VReturnStatementCF.cpp \
+SOURCES += src/items/VBlockCF.cpp \
+    src/items/VBlockCFStyle.cpp \
+    src/items/VReturnStatementCF.cpp \
     src/items/VIfStatementCF.cpp \
     src/items/VIfStatementCFStyle.cpp \
     src/items/VLoopStatementCF.cpp \

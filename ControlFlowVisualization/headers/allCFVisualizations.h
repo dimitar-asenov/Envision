@@ -16,5 +16,6 @@
 #include "items/VLoopStatementCF.h"
 #include "items/VIfStatementCF.h"
 #include "items/VReturnStatementCF.h"
+#include "items/VBlockCF.h"
 
 #endif /* ALLCFVISUALIZATIONS_H_ */
