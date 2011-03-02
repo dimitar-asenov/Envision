@@ -138,7 +138,7 @@ void VIfStatementCF::updateGeometry(int availableWidth, int availableHeight)
 	int height = conditionBackground->height() + style()->pinLength();
 	int branchesTop = height;
 	height += ( thenBranch->height() > elseBranch->height() ) ? thenBranch->height() : elseBranch->height() ;
-	height += 2*style()->pinLength();
+	height += 3*style()->pinLength();
 
 	// Set the size
 	if ( hasShape() ) getShape()->setInnerSize(leftHalf + rightHalf, height);
@@ -163,14 +163,81 @@ void VIfStatementCF::updateGeometry(int availableWidth, int availableHeight)
 			elseBranch->pos().toPoint().x() + elseBranch->entrance().x(), style()->pinLength() + conditionBackground->height()/2, false);
 	addToLastConnector(elseBranch->pos().toPoint() + elseBranch->entrance());
 
-	// Process Connectors on the then Branch
+	// Process Connectors on the then branch
 	int thenBranchInnerBegin = height; // Height indicates no connectors on the inner side
 	for (int i = 0; i < thenBranch->breaks().size(); ++i)
 	{
-		QPoint br = thenBranch->breaks().at(i);
-		if (br.x() == 0) breaks_.append(thenBranch->pos().toPoint() + br);
-		else if (thenBranch->pos().x() + br.x() < thenBranchInnerBegin)
-			thenBranchInnerBegin = thenBranch->pos().x() + br.x();
+		QPoint p = thenBranch->breaks().at(i);
+		if (p.x() == 0) breaks_.append(thenBranch->pos().toPoint() + p);
+		else if (thenBranch->pos().y() + p.y() < thenBranchInnerBegin)
+			thenBranchInnerBegin = thenBranch->pos().y() + p.y();
+	}
+	for (int i = 0; i < thenBranch->continues().size(); ++i)
+	{
+		QPoint p = thenBranch->continues().at(i);
+		if (p.x() == 0) continues_.append(thenBranch->pos().toPoint() + p);
+		else if (thenBranch->pos().y() + p.y() < thenBranchInnerBegin)
+			thenBranchInnerBegin = thenBranch->pos().y() + p.y();
+	}
+
+	// Process Connectors on the else branch
+	int elseBranchInnerBegin = height; // Height indicates no connectors on the inner side
+	for (int i = 0; i < elseBranch->breaks().size(); ++i)
+	{
+		QPoint p = elseBranch->breaks().at(i);
+		if (p.x() > 0) breaks_.append(QPoint(1, elseBranch->pos().y() + p.y()));
+		else if (elseBranch->pos().y() + p.y() < elseBranchInnerBegin)
+			elseBranchInnerBegin = elseBranch->pos().y() + p.y();
+	}
+	for (int i = 0; i < elseBranch->continues().size(); ++i)
+	{
+		QPoint p = elseBranch->continues().at(i);
+		if (p.x() > 0) continues_.append(QPoint(1, elseBranch->pos().y() + p.y()));
+		else if (elseBranch->pos().y() + p.y() < elseBranchInnerBegin)
+			elseBranchInnerBegin = elseBranch->pos().y() + p.y();
+	}
+
+	// If there are any break or continue statements on the inside put the corresponding connectors
+	if (thenBranchInnerBegin < height)
+	{
+		addConnector(thenBranch->width(), thenBranchInnerBegin, thenBranch->width() , height - 3*style()->pinLength(), false);
+		addToLastConnector(width(), height - 3*style()->pinLength());
+
+		QPoint c = QPoint(1, height - 3*style()->pinLength());
+		if (preferredBreakExit_ == ControlFlowItem::EXIT_RIGHT) breaks_.append(c);
+		else continues_.append(c);
+	}
+
+	if (elseBranchInnerBegin < height)
+	{
+		addConnector(elseBranch->pos().x(), elseBranchInnerBegin, elseBranch->pos().x() , height - 2*style()->pinLength(), false);
+		addToLastConnector(0, height - 2*style()->pinLength());
+
+		QPoint c = QPoint(0, height - 2*style()->pinLength());
+		if (preferredBreakExit_ == ControlFlowItem::EXIT_LEFT) breaks_.append(c);
+		else continues_.append(c);
+	}
+
+	// Handle the exit and its connectors
+	if (thenBranch->exit().isNull() && elseBranch->exit().isNull()) exit_ = QPoint(0,0);
+	else if (thenBranch->exit().isNull())
+	{
+		exit_ = QPoint(elseBranch->pos().x() + elseBranch->exit().x(), height);
+		addConnector(elseBranch->pos().toPoint() + elseBranch->exit(), exit_, false);
+	}
+	else if (elseBranch->exit().isNull())
+	{
+		exit_ = QPoint(thenBranch->exit().x(), height);
+		addConnector(thenBranch->pos().toPoint() + thenBranch->exit(), exit_, false);
+	}
+	else
+	{
+		exit_ = QPoint(entrance_.x(), height);
+		int lineHeight = height - style()->pinLength();
+		addConnector(exit_ - QPoint(0,style()->pinLength()), exit_, false);
+		addConnector(thenBranch->pos().toPoint() + thenBranch->exit(), QPoint(thenBranch->pos().x() + thenBranch->exit().x(), lineHeight), false);
+		addToLastConnector(elseBranch->pos().x() + elseBranch->exit().x(), lineHeight);
+		addToLastConnector(elseBranch->pos().toPoint() + elseBranch->exit());
 	}
 
 }

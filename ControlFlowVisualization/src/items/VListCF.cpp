@@ -144,19 +144,16 @@ void VListCF::updateGeometry(int, int)
 	if ( hasShape() ) getShape()->setInnerSize(bottomRight.x() - topLeft.x(), bottomRight.y());
 	else setSize(bottomRight.x() - topLeft.x(), bottomRight.y());
 
-	// Set entrance
+	// Set entrance and exit
 	entrance_ = -topLeft;
+	if (!exit_.isNull()) exit_ = QPoint( exit_.x() -topLeft.x(), bottomRight.y());
 
 	// Set the positions of all elements and create the connectors
-	QList< QPoint > conn;
 	for (int i = 0; i < items_.size(); ++i)
 	{
 		// Set position
 		pos[i] -= topLeft;
 		items_[i]->setPos(pos[i]);
-
-		// Create connectors
-		conn.clear();
 
 		ControlFlowItem* cfi = dynamic_cast<ControlFlowItem*> (items_[i]);
 		if (cfi)
@@ -165,52 +162,29 @@ void VListCF::updateGeometry(int, int)
 			for (int k = 0; k < cfi->breaks().size(); ++k)
 			{
 				QPoint br( cfi->breaks().at(k) + pos[i] );
-				if ( cfi->breaks().at(k).x() == 0)
-				{
-					conn.append(br);
-					conn.append(QPoint(0, br.y()));
-					addConnector(conn, false);
-					conn.clear();
-				}
+				if ( cfi->breaks().at(k).x() == 0) addConnector(br, QPoint(0, br.y()), false);
 				else
 				{
 					br.setX(pos[i].x() + items_[i]->width());
-					conn.append(br);
-					conn.append(QPoint(width(), br.y()));
-					addConnector(conn, false);
-					conn.clear();
+					addConnector(br, QPoint(width(), br.y()), false);
 				}
 			}
 			for (int k = 0; k < cfi->continues().size(); ++k)
 			{
 				QPoint cont( cfi->continues().at(k) + pos[i] );
-				if ( cfi->continues().at(k).x() == 0)
-				{
-					conn.append(cont);
-					conn.append(QPoint(0, cont.y()));
-					addConnector(conn, false);
-					conn.clear();
-				}
+				if ( cfi->continues().at(k).x() == 0) addConnector(cont, QPoint(0, cont.y()), false);
 				else
 				{
 					cont.setX(pos[i].x() + items_[i]->width());
-					conn.append(cont);
-					conn.append(QPoint(width(), cont.y()));
-					addConnector(conn, false);
-					conn.clear();
+					addConnector(cont, QPoint(width(), cont.y()), false);
 				}
 			}
 		}
 		else
 		{
 			int midPoint = pos[i].x() + items_[i]->width()/2;
-			conn.append( QPoint(midPoint, pos[i].y() - style()->pinLength() ));
-			conn.append( QPoint(midPoint, pos[i].y() ));
-			addConnector(conn, true);
-			conn.clear();
-			conn.append( QPoint(midPoint, pos[i].y() + items_[i]->height()  ));
-			conn.append( QPoint(midPoint, pos[i].y() + items_[i]->height() + style()->pinLength() ));
-			addConnector(conn, false);
+			addConnector(midPoint, pos[i].y() - style()->pinLength(), midPoint, pos[i].y(), true);
+			addConnector(midPoint, pos[i].y() + items_[i]->height(), midPoint, pos[i].y() + items_[i]->height() + style()->pinLength(), false);
 		}
 	}
 }
