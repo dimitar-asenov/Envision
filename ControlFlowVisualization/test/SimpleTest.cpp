@@ -12,6 +12,7 @@
 
 #include "VisualizationBase/headers/Scene.h"
 #include "VisualizationBase/headers/views/MainView.h"
+#include "VisualizationBase/headers/node_extensions/Position.h"
 
 using namespace OOModel;
 using namespace Visualization;
@@ -24,9 +25,15 @@ TEST(ControlFlowVisualization, SimpleTest)
 
 	////////////////////////////////////////////////// Create Model
 	Model::Model* model = new Model::Model();
-	Method* met = dynamic_cast<Method*> (model->createRoot("Method"));
+	Class* cl = dynamic_cast<Class*> (model->createRoot("Class"));
 
-	model->beginModification(met, "make a flow control test method");
+	model->beginModification(cl, "make a few mewthods to test control flow visualization.");
+	cl->setName("ControlFlowTest");
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	// Complicated method
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	Method* met = cl->methods()->append<Method>();
 	met->setName("complicated");
 
 	VariableDeclaration* a = met->items()->append<VariableDeclaration>();
@@ -103,11 +110,81 @@ TEST(ControlFlowVisualization, SimpleTest)
 
 
 	met->items()->append<ReturnStatement>()->values()->append<IntegerLiteral>()->setValue(24);
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	// Sensible method
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+	Method* divbysix = cl->methods()->append<Method>();
+	divbysix->setName("findDivBySix");
+	divbysix->results()->append<FormalResult>()->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+	FormalArgument* arg = divbysix->arguments()->append<FormalArgument>();
+	arg->setName("numbers");
+	arg->setType<ArrayType>()->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+
+	VariableDeclaration* result = divbysix->items()->append<VariableDeclaration>();
+	result->setName("result");
+	result->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+	result->setInitialValue<IntegerLiteral>()->setValue(-1);
+
+	LoopStatement* sixloop = divbysix->items()->append<LoopStatement>();
+	VariableDeclaration* sixLoopInit = sixloop->setInitStep<VariableDeclaration>();
+	sixLoopInit->setName("i");
+	sixLoopInit->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+	sixLoopInit->setInitialValue<IntegerLiteral>()->setValue(0);
+	BinaryOperation* sixLoopCond = sixloop->setCondition<BinaryOperation>();
+	sixLoopCond->setLeft<VariableAccess>()->ref()->set("local:i");
+	sixLoopCond->setOp(BinaryOperation::LESS);
+	MethodCallExpression* sizeCall = sixLoopCond->setRight<MethodCallExpression>();
+	sizeCall->ref()->set("size");
+	sizeCall->setPrefix<VariableAccess>()->ref()->set("local:numbers");
+
+	//TODO test the visualization without the remaining parts of this method
+	AssignmentStatement* sixLoopUpdate = sixloop->setUpdateStep<AssignmentStatement>();
+	sixLoopUpdate->setLeft<VariableAccess>()->ref()->set("local:i");
+	sixLoopUpdate->setOp(AssignmentStatement::PLUS_ASSIGN);
+	sixLoopUpdate->setRight<IntegerLiteral>()->setValue(1);
+
+	VariableDeclaration* n = sixloop->body()->append<VariableDeclaration>();
+	n->setName("n");
+	n->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+	BinaryOperation* item = n->setInitialValue<BinaryOperation>();
+	item->setLeft<VariableAccess>()->ref()->set("local:numbers");
+	item->setOp(BinaryOperation::ARRAY_INDEX);
+	item->setRight<VariableAccess>()->ref()->set("local:i");
+
+	IfStatement* ifdiv2 = sixloop->body()->append<IfStatement>();
+	BinaryOperation* eq0 = ifdiv2->setCondition<BinaryOperation>();
+	eq0->setOp(BinaryOperation::EQUALS);
+	eq0->setRight<IntegerLiteral>()->setValue(0);
+	BinaryOperation* div2 = eq0->setLeft<BinaryOperation>();
+	div2->setLeft<VariableAccess>()->ref()->set("local:n");
+	div2->setOp(BinaryOperation::REMAINDER);
+	div2->setRight<IntegerLiteral>()->setValue(2);
+	ifdiv2->elseBranch()->append<ContinueStatement>();
+
+	IfStatement* ifdiv3 = ifdiv2->thenBranch()->append<IfStatement>();
+	eq0 = ifdiv3->setCondition<BinaryOperation>();
+	eq0->setOp(BinaryOperation::EQUALS);
+	eq0->setRight<IntegerLiteral>()->setValue(0);
+	BinaryOperation* div3 = eq0->setLeft<BinaryOperation>();
+	div3->setLeft<VariableAccess>()->ref()->set("local:n");
+	div3->setOp(BinaryOperation::REMAINDER);
+	div3->setRight<IntegerLiteral>()->setValue(3);
+
+	AssignmentStatement* resultFound = ifdiv3->thenBranch()->append<AssignmentStatement>();
+	resultFound->setLeft<VariableAccess>()->ref()->set("local:result");
+	resultFound->setOp(AssignmentStatement::ASSIGN);
+	resultFound->setRight<VariableAccess>()->ref()->set("local:i");
+	ifdiv3->thenBranch()->append<BreakStatement>();
+
+	divbysix->items()->append<ReturnStatement>()->values()->append<VariableAccess>()->ref()->set("local:result");
+
+	met->extension<Position>()->setX(400);
 	model->endModification();
 
 	////////////////////////////////////////////////// Set Scene
 
-	scene->addTopLevelItem( scene->defaultRenderer()->render(NULL, met) );
+	scene->addTopLevelItem( scene->defaultRenderer()->render(NULL, cl) );
 	scene->scheduleUpdate();
 
 	// Create view

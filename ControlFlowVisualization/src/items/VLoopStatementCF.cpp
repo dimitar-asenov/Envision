@@ -294,9 +294,10 @@ void VLoopStatementCF::updateGeometry(int availableWidth, int availableHeight)
 
 		if (!body->exit().isNull())
 		{
-			addConnector(body->exit(), QPoint(r, body->exit().y()), false );
+			addConnector(bPos + body->exit(), QPoint(r, bPos.y() + body->exit().y()), false );
 			addToLastConnector(r, updateConnect.y());
 			addToLastConnector(updateConnect);
+
 		} else if (lowestContinue > 0)
 		{
 			addConnector(r, lowestContinue, r, updateConnect.y(), false );
