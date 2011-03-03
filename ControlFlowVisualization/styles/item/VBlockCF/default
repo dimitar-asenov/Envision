@@ -1,0 +1,4 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/ControlFlowItem/default">
+	<statements prototypes="item/VListCF/default"/>
+</style>

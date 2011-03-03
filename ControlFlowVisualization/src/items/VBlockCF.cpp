@@ -56,8 +56,8 @@ void VBlockCF::determineChildren()
 		synchronizeItem(statements, node()->items(), &style()->statements());
 
 		statements->setStyle(&style()->statements());
-		statements->setPreferredBreakExit(ControlFlowItem::EXIT_LEFT);
-		statements->setPreferredContinueExit(ControlFlowItem::EXIT_RIGHT);
+		statements->setPreferredBreakExit(preferredBreakExit_);
+		statements->setPreferredContinueExit(preferredContinueExit_);
 	}
 	else
 	{
@@ -70,6 +70,8 @@ void VBlockCF::determineChildren()
 void VBlockCF::updateGeometry(int availableWidth, int availableHeight)
 {
 	clearConnectors();
+	breaks_.clear();
+	continues_.clear();
 
 	if (!showAsControlFlow())
 	{
@@ -77,7 +79,12 @@ void VBlockCF::updateGeometry(int availableWidth, int availableHeight)
 		return;
 	}
 
-	// TODO this, and add breaks and continues
+	Item::updateGeometry(statements, availableWidth, availableHeight);
+
+	entrance_ = statements->entrance();
+	exit_ = statements->exit();
+	breaks_ = statements->breaks();
+	continues_ = statements->continues();
 }
 
 }
