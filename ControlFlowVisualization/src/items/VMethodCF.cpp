@@ -77,8 +77,16 @@ void VMethodCF::determineChildren()
 	header_->synchronizeLast(arguments_, node()->arguments(), &style()->arguments());
 	layout()->left()->synchronizeFirst(results_, node()->results(), &style()->results());
 
-	if (style()->showAsControlFlow()) layout()->synchronizeContent(contentCF_, node()->items(), &style()->contentCF());
-	else layout()->synchronizeContent(content_, node()->items(), &style()->content());
+	if (style()->showAsControlFlow())
+	{
+		layout()->synchronizeContent(contentCF_, node()->items(), &style()->contentCF());
+		content_ = NULL;
+	}
+	else
+	{
+		layout()->synchronizeContent(content_, node()->items(), &style()->content());
+		contentCF_ = NULL;
+	}
 
 
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
