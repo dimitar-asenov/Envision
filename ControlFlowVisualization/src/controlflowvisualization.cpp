@@ -9,6 +9,8 @@
 #include "SelfTest/headers/SelfTestSuite.h"
 
 #include "allCFVisualizations.h"
+#include "handlers/HMethodCF.h"
+
 #include "OOModel/headers/allOOModelNodes.h"
 
 #include "VisualizationBase/headers/Scene.h"
@@ -39,7 +41,7 @@ bool ControlFlowVisualization::initialize(Envision::EnvisionManager&)
 	// TODO: replace this with custom handlers, possibly from OOInteraction Plugin
 	// TODO: when you do that fix dependencies in the .plugin meta file
 	VListCF::setInteractionHandler(Interaction::GenericHandler::instance());
-	VMethodCF::setInteractionHandler(Interaction::GenericHandler::instance());
+	VMethodCF::setInteractionHandler(HMethodCF::instance());
 	VIfStatementCF::setInteractionHandler(Interaction::GenericHandler::instance());
 	VLoopStatementCF::setInteractionHandler(Interaction::GenericHandler::instance());
 //	VForEachStatementCF::setInteractionHandler(Interaction::GenericHandler::instance());

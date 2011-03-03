@@ -38,7 +38,11 @@ void VBreakStatementCF::updateGeometry(int availableWidth, int availableHeight)
 	clearConnectors();
 	breaks_.clear();
 
-	if (! showAsControlFlow() ) Item::updateGeometry(vis_, availableWidth, availableHeight);
+	if (! showAsControlFlow() )
+	{
+		Item::updateGeometry(vis_, availableWidth, availableHeight);
+		return;
+	}
 	else
 	{
 		vis_->setPos(style()->pinLength(), style()->pinLength());

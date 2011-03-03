@@ -4,6 +4,7 @@
 	<comment></comment>
 	<projects>
 		<project>Core</project>
+		<project>InteractionBase</project>
 		<project>Logger</project>
 		<project>ModelBase</project>
 		<project>OOModel</project>

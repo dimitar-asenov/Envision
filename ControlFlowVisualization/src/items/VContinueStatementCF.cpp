@@ -38,7 +38,11 @@ void VContinueStatementCF::updateGeometry(int availableWidth, int availableHeigh
 	clearConnectors();
 	continues_.clear();
 
-	if (! showAsControlFlow() ) Item::updateGeometry(vis_, availableWidth, availableHeight);
+	if (! showAsControlFlow() )
+	{
+		Item::updateGeometry(vis_, availableWidth, availableHeight);
+		return;
+	}
 	else
 	{
 		vis_->setPos(style()->pinLength(), style()->pinLength());

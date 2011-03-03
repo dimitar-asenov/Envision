@@ -17,6 +17,7 @@ win32:LIBS += -L$${PLUGINS_DIR} \
     -lmodelbase \
     -loomodel \
     -lvisualizationbase \
+    -linteractionbase \
     -loovisualization
 QT = core
 TEMPLATE = lib
@@ -31,7 +32,8 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/items/VBlockCFStyle.h \
+HEADERS += headers/handlers/HMethodCF.h \
+    headers/items/VBlockCFStyle.h \
     headers/items/VBlockCF.h \
     headers/items/VReturnStatementCF.h \
     headers/items/VIfStatementCFStyle.h \
@@ -50,7 +52,8 @@ HEADERS += headers/items/VBlockCFStyle.h \
     headers/ControlFlowVisualizationException.h \
     headers/controlflowvisualization_api.h \
     src/controlflowvisualization.h
-SOURCES += src/items/VBlockCF.cpp \
+SOURCES += src/handlers/HMethodCF.cpp \
+    src/items/VBlockCF.cpp \
     src/items/VBlockCFStyle.cpp \
     src/items/VReturnStatementCF.cpp \
     src/items/VIfStatementCF.cpp \
