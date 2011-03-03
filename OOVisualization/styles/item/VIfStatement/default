@@ -19,9 +19,9 @@
 							<first>1.0</first>
 							<second>
 								<alpha>255</alpha>
-								<red>200</red>
-								<green>200</green>
-								<blue>255</blue>
+								<red>255</red>
+								<green>255</green>
+								<blue>224</blue>
 							</second>
 						</e1>	
 					</stopPoints>
