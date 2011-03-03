@@ -5,6 +5,7 @@
 	<name prototypes="item/Text/default" />
 	<separator prototypes="item/Symbol/default" />
 	<arguments prototypes="item/VList/default">
+		<drawShapeWhenEmpty>true</drawShapeWhenEmpty>
 		<shape prototypes="shape/Box/default">
 			Box
 			<backgroundBrush>
