@@ -23,6 +23,8 @@ namespace SelfTest {
  *
  * @param T
  * 				The plug-in class for this plug-in. This is the class that implements the EnvisionPlugin interface.
+ * 				It is necessary that each plug-in has its own instantiation of the TestManager, since this manager
+ * 				contains a list of all test cases that the plug-in has.
  */
 template<class T>
 class TestManager
