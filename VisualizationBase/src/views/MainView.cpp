@@ -107,31 +107,50 @@ void MainView::keyPressEvent(QKeyEvent *event)
 		QSvgGenerator svggen;
 		svggen.setResolution(90);
 
+
+
 		if (event->modifiers() & Qt::ShiftModifier)
 		{
 			// Print scene
 			printer.setOutputFileName("screenshot-scene.pdf");
-			printer.setPaperSize(QSize(scene()->sceneRect().width(), scene()->sceneRect().height()), QPrinter::Point);
+			printer.setPaperSize(scene()->sceneRect().size().toSize(), QPrinter::Point);
 			QPainter painter(&printer);
+			painter.setRenderHint(QPainter::Antialiasing);
 			scene()->render( &painter );
 
 			svggen.setFileName("screenshot-scene.svg");
-			svggen.setSize(QSize(scene()->sceneRect().width(), scene()->sceneRect().height()));
+			svggen.setSize(scene()->sceneRect().size().toSize());
 			QPainter svgPainter(&svggen);
+			svgPainter.setRenderHint(QPainter::Antialiasing);
 			scene()->render(&svgPainter);
+
+			QImage image(2 * scene()->sceneRect().size().toSize(), QImage::Format_ARGB32_Premultiplied);
+			QPainter pmapPainter(&image);
+			pmapPainter.setRenderHint(QPainter::Antialiasing);
+			//pmapPainter.scale(2,2);
+			scene()->render(&pmapPainter);
+			image.save("screenshot-scene.png");
 		}
 		else
 		{
 			// Print view
 			printer.setOutputFileName("screenshot-view.pdf");
-			printer.setPaperSize(QSize(viewport()->rect().width(), viewport()->rect().height()), QPrinter::Point);
+			printer.setPaperSize(viewport()->rect().size(), QPrinter::Point);
 			QPainter painter(&printer);
+			painter.setRenderHint(QPainter::Antialiasing);
 			render(&painter);
 
 			svggen.setFileName("screenshot-view.svg");
-			svggen.setSize(QSize(viewport()->rect().width(), viewport()->rect().height()));
+			svggen.setSize(viewport()->rect().size());
 			QPainter svgPainter(&svggen);
+			svgPainter.setRenderHint(QPainter::Antialiasing);
 			render(&svgPainter);
+
+			QImage image(2 * viewport()->rect().size(), QImage::Format_ARGB32_Premultiplied);
+			QPainter pmapPainter(&image);
+			pmapPainter.setRenderHint(QPainter::Antialiasing);
+			render(&pmapPainter);
+			image.save("screenshot-view.png");
 		}
 	}
 	else View::keyPressEvent(event);
