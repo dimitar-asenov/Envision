@@ -9,7 +9,10 @@
 #include "Scene.h"
 
 #include "Core/headers/global.h"
+
 #include <QtGui/QWheelEvent>
+#include <QtGui/QPrinter>
+#include <QtSvg/QSvgGenerator>
 
 namespace Visualization {
 
@@ -45,7 +48,7 @@ bool MainView::event( QEvent *event )
 		case QEvent::KeyPress :
 		{
 			QKeyEvent *k = (QKeyEvent *)event;
-			View::keyPressEvent(k);
+			keyPressEvent(k);
 			if (k->key() == Qt::Key_Backtab || k->key() == Qt::Key_Tab ) event->accept();
 			return true;
 		}
@@ -53,7 +56,7 @@ bool MainView::event( QEvent *event )
 		case QEvent::KeyRelease :
 		{
 			QKeyEvent *k = (QKeyEvent *)event;
-			View::keyReleaseEvent(k);
+			keyReleaseEvent(k);
 			if (k->key() == Qt::Key_Backtab || k->key() == Qt::Key_Tab ) event->accept();
 			return true;
 		}
@@ -88,6 +91,50 @@ void MainView::scrollContentsBy(int dx, int dy)
 {
 	View::scrollContentsBy(dx, dy);
 	if ( miniMap ) miniMap->visibleRectChanged();
+}
+
+void MainView::keyPressEvent(QKeyEvent *event)
+{
+	if ( (event->modifiers() & Qt::ControlModifier || event->modifiers() & Qt::ShiftModifier) && event->key() == Qt::Key_Print)
+	{
+		event->accept();
+
+		QPrinter printer;
+		printer.setOutputFormat(QPrinter::PdfFormat);
+		printer.setFullPage(true);
+		printer.setResolution(300);
+
+		QSvgGenerator svggen;
+		svggen.setResolution(90);
+
+		if (event->modifiers() & Qt::ShiftModifier)
+		{
+			// Print scene
+			printer.setOutputFileName("screenshot-scene.pdf");
+			printer.setPaperSize(QSize(scene()->sceneRect().width(), scene()->sceneRect().height()), QPrinter::Point);
+			QPainter painter(&printer);
+			scene()->render( &painter );
+
+			svggen.setFileName("screenshot-scene.svg");
+			svggen.setSize(QSize(scene()->sceneRect().width(), scene()->sceneRect().height()));
+			QPainter svgPainter(&svggen);
+			scene()->render(&svgPainter);
+		}
+		else
+		{
+			// Print view
+			printer.setOutputFileName("screenshot-view.pdf");
+			printer.setPaperSize(QSize(viewport()->rect().width(), viewport()->rect().height()), QPrinter::Point);
+			QPainter painter(&printer);
+			render(&painter);
+
+			svggen.setFileName("screenshot-view.svg");
+			svggen.setSize(QSize(viewport()->rect().width(), viewport()->rect().height()));
+			QPainter svgPainter(&svggen);
+			render(&svgPainter);
+		}
+	}
+	else View::keyPressEvent(event);
 }
 
 }

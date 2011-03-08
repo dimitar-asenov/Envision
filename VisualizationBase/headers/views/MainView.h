@@ -33,6 +33,7 @@ class VISUALIZATIONBASE_API MainView: public View
 		virtual void resizeEvent( QResizeEvent *event );
 		virtual void wheelEvent(QWheelEvent *event);
 		virtual void scrollContentsBy(int dx, int dy);
+		virtual void keyPressEvent (QKeyEvent *event);
 
 
 	private:
