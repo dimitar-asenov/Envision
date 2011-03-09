@@ -114,9 +114,9 @@ void TextRenderer::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 {
 	Item::paint(painter, option, widget);
 
-	int numSelected = this->scene()->selectedItems().size();
+	//int numSelected = this->scene()->selectedItems().size();
 
-	if ( !this->hasFocus() || numSelected > 1  || (numSelected == 1 && !this->isSelected()))
+	if ( !this->hasFocus() /*|| numSelected > 1  || (numSelected == 1 && !this->isSelected())*/)
 	{
 		painter->setPen(style()->pen());
 		painter->setFont(style()->font());
@@ -124,7 +124,7 @@ void TextRenderer::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 	}
 	else
 	{
-		if ( selectionXBegin == selectionXEnd || numSelected == 1 )
+		if ( selectionXBegin == selectionXEnd /*|| numSelected == 1*/ )
 		{
 			// No text is selected, draw all text at once using normal style
 			painter->setPen(style()->pen());
@@ -161,7 +161,7 @@ void TextRenderer::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 		}
 
 		// Draw caret
-		if ( (selectionXBegin == selectionXEnd && editable) || numSelected == 0)
+		if ( (/*selectionXBegin == selectionXEnd &&*/ editable) /*|| numSelected == 0*/)
 		{
 			painter->setPen(style()->caretPen());
 			painter->drawLine(xOffset + caretX, 1, xOffset + caretX, this->height() - 1);
