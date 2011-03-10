@@ -32,7 +32,7 @@ class OOVISUALIZATION_API VUnaryOperation : public Visualization::ItemWithNode< 
 		virtual ~VUnaryOperation();
 
 	protected:
-		void determineChildren();
+		virtual void determineChildren();
 
 	private:
 		Visualization::Symbol* pre_;

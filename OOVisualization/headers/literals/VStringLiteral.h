@@ -10,30 +10,36 @@
 
 #include "../oovisualization_api.h"
 
+#include "VStringLiteralStyle.h"
+
 #include "VisualizationBase/headers/items/ItemWithNode.h"
+#include "VisualizationBase/headers/items/LayoutProvider.h"
 #include "VisualizationBase/headers/items/TextStyle.h"
 #include "VisualizationBase/headers/items/VText.h"
 #include "VisualizationBase/headers/Styles.h"
 
 #include "OOModel/headers/expressions/StringLiteral.h"
 
+namespace Visualization {
+	class Symbol;
+}
+
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VStringLiteral : public Visualization::ItemWithNode< Visualization::Item, OOModel::StringLiteral>
+class OOVISUALIZATION_API VStringLiteral : public Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::StringLiteral>
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VStringLiteral, Visualization::TextStyle)
+	ITEM_COMMON(VStringLiteral)
 
 	public:
 		VStringLiteral(Item* parent, NodeType *literal, const StyleType *style = Visualization::Styles::item<VStringLiteral>("default"));
 		virtual ~VStringLiteral();
 
-		virtual bool focusChild(FocusTarget location);
-
 	protected:
 		virtual void determineChildren();
-		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
+		Visualization::Symbol* pre_;
+		Visualization::Symbol* post_;
 		Visualization::VText* vis_;
 };
 

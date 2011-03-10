@@ -7,6 +7,7 @@
 
 #include "literals/VStringLiteral.h"
 
+#include "VisualizationBase/headers/items/Symbol.h"
 #include "ModelBase/headers/Model.h"
 
 using namespace OOModel;
@@ -17,30 +18,40 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VStringLiteral)
 
 VStringLiteral::VStringLiteral(Item* parent, NodeType* literal, const StyleType* style) :
-	ItemWithNode<Item, StringLiteral>(parent, literal, style),
+	ItemWithNode< LayoutProvider<>, StringLiteral>(parent, literal, style),
+	pre_( NULL ),
+	post_( NULL ),
 	vis_(NULL)
 {
 }
 
 VStringLiteral::~VStringLiteral()
 {
-	SAFE_DELETE_ITEM(vis_);
+	// These were automatically deleted by LayoutProvider's destructor
+	pre_ = NULL;
+	post_ = NULL;
+	vis_ = NULL;
 }
 
 void VStringLiteral::determineChildren()
 {
-	synchronizeItem(vis_, node()->valueNode(), style());
-	vis_->setStyle( style() );
-}
+	int index = 0;
+	layout()->synchronizeFirst(pre_ , !style()->preSymbol().symbol().isEmpty(), &style()->preSymbol());
+	index += pre_?1:0;
 
-void VStringLiteral::updateGeometry(int availableWidth, int availableHeight)
-{
-	Item::updateGeometry(vis_, availableWidth, availableHeight);
-}
+	layout()->synchronizeMid(vis_, node()->valueNode(), &style()->string(), index);
+	index += vis_?1:0;
 
-bool VStringLiteral::focusChild(FocusTarget location)
-{
-	return vis_->focusChild(location);
+	layout()->synchronizeLast(post_ , !style()->postSymbol().symbol().isEmpty(), &style()->postSymbol());
+
+	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
+	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
+	//			what's the reason they are being updated.
+	// The style needs to be updated every time since if our own style changes, so will that of the children.
+	layout()->setStyle( &style()->layout());
+	vis_->setStyle( &style()->string() );
+	if (pre_) pre_->setStyle( &style()->preSymbol());
+	if (post_) post_->setStyle( &style()->postSymbol());
 }
 
 }
