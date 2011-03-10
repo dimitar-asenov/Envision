@@ -30,19 +30,52 @@ using namespace Visualization;
 
 namespace OOVisualization {
 
-TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
+// The methods below add a certain construct to an existing model or model entity.
+
+Class* addHelloWorld(Model::Model* model, Project* parent)
 {
-	Scene* scene = new Scene();
+	Class* hello = NULL;
 
-	////////////////////////////////////////////////// Create Model
-	Model::Model* model = new Model::Model();
-	Project* prj = dynamic_cast<Project*> (model->createRoot("Project"));
+	if (!parent) hello = dynamic_cast<Class*> (model->createRoot("Class"));
+	model->beginModification(parent ? static_cast<Model::Node*> (parent) :hello, "Adding a hello world class.");
+	if (!hello) hello = parent->classes()->append<Class>();
 
-	model->beginModification(prj, "build simple java library and a hello world app");
-	prj->setName("HelloWorld");
+	hello->setName("HelloWorld");
+	hello->setVisibility(Visibility::PUBLIC);
+	Method* main = hello->methods()->append<Method>();
 
-	// Build a simple Java Library
-	Library* java = prj->libraries()->append<Library>();
+	main->setName("main");
+	main->setVisibility(Visibility::PUBLIC);
+	main->setStat(Static::CLASS_VARIABLE);
+
+	FormalArgument* mainArgs = main->arguments()->append<FormalArgument>();
+	mainArgs->setName("args");
+	mainArgs->setType<ArrayType>()->setType<NamedType>()->type()->ref()->set("class:String");
+
+	MethodCallStatement* callPrintln = main->items()->append<MethodCallStatement>();
+	StringLiteral* helloStr = callPrintln->arguments()->append<StringLiteral>();
+	helloStr->setValue("Hello World");
+	callPrintln->ref()->set("met:println");
+
+	VariableAccess* va = callPrintln->setPrefix<VariableAccess>();
+	va->ref()->set("field:out");
+
+	ReferenceExpression* ref = va->setPrefix<ReferenceExpression>();
+	ref->ref()->set("class:System");
+	ref->setPrefix<ReferenceExpression>()->ref()->set("lib:Java");
+
+	model->endModification();
+	return hello;
+}
+
+Library* addJavaLibrary(Model::Model* model, Project* parent)
+{
+	Library* java = NULL;
+
+	if (!parent) java = dynamic_cast<Library*> (model->createRoot("Library"));
+	model->beginModification(parent? static_cast<Model::Node*> (parent) :java, "Adding a java library.");
+	if (!java) java = parent->libraries()->append<Library>();
+
 	java->setName("Java");
 
 	Class* string = java->classes()->append<Class>();
@@ -77,117 +110,106 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	outtype->type()->ref()->set("class:PrintStream");
 	outtype->type()->setPrefix<ReferenceExpression>()->ref()->set("mod:io");
 
-	// Build a simple HelloWorld Application
-	Class* hello = prj->classes()->append<Class>();
-	hello->setName("HelloWorld");
-	hello->setVisibility(Visibility::PUBLIC);
-	Method* main = hello->methods()->append<Method>();
+	// Set positions
+	java->extension<Position>()->setX(340);
+	string->extension<Position>()->setY(100);
+	io->extension<Position>()->setX(240);
 
-	main->setName("main");
-	main->setVisibility(Visibility::PUBLIC);
-	main->setStat(Static::CLASS_VARIABLE);
+	model->endModification();
+	return java;
+}
 
-	FormalArgument* mainArgs = main->arguments()->append<FormalArgument>();
-	mainArgs->setName("args");
-	mainArgs->setType<ArrayType>()->setType<NamedType>()->type()->ref()->set("class:String");
+Method* addLongMethod(Model::Model* model, Class* parent)
+{
+	Method* longMethod = NULL;
 
-	MethodCallStatement* callPrintln = main->items()->append<MethodCallStatement>();
-	StringLiteral* helloStr = callPrintln->arguments()->append<StringLiteral>();
-	helloStr->setValue("Hello World");
-	callPrintln->ref()->set("met:println");
+	if (!parent) longMethod = dynamic_cast<Method*> (model->createRoot("Method"));
+	model->beginModification(parent? static_cast<Model::Node*> (parent) : longMethod, "Adding a long method.");
+	if (!longMethod) longMethod = parent->methods()->append<Method>();
 
-	VariableAccess* va = callPrintln->setPrefix<VariableAccess>();
-	va->ref()->set("field:out");
+	longMethod->setName("aMethod");
+	longMethod->results()->append<FormalResult>()->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+	longMethod->arguments()->append<FormalArgument>()->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+	longMethod->arguments()->at(0)->setName("x");
 
-	ReferenceExpression* ref = va->setPrefix<ReferenceExpression>();
-	ref->ref()->set("class:System");
-	ref->setPrefix<ReferenceExpression>()->ref()->set("lib:Java");
-
-	// Add a second method
-	Method* factorial = hello->methods()->append<Method>();
-	factorial->setName("factorial");
-	factorial->results()->append<FormalResult>()->setType<PrimitiveType>()->setType(PrimitiveType::INT);
-	factorial->arguments()->append<FormalArgument>()->setType<PrimitiveType>()->setType(PrimitiveType::INT);
-	factorial->arguments()->at(0)->setName("x");
-
-	VariableDeclaration* var1 = factorial->items()->append<VariableDeclaration>();
+	VariableDeclaration* var1 = longMethod->items()->append<VariableDeclaration>();
 	var1->setName("var1");
 	var1->setType<PrimitiveType>()->setType(PrimitiveType::INT);
 
-	VariableDeclaration* var2 = factorial->items()->append<VariableDeclaration>();
+	VariableDeclaration* var2 = longMethod->items()->append<VariableDeclaration>();
 	var2->setName("var2");
 	var2->setType<PrimitiveType>()->setType(PrimitiveType::LONG);
 	var2->setInitialValue<IntegerLiteral>()->setValue(42);
 
-	VariableDeclaration* var3 = factorial->items()->append<VariableDeclaration>();
+	VariableDeclaration* var3 = longMethod->items()->append<VariableDeclaration>();
 	var3->setName("var3");
 	var3->setType<PrimitiveType>()->setType(PrimitiveType::BOOLEAN);
 	var3->setInitialValue<BooleanLiteral>()->setValue(true);
 
-	VariableDeclaration* var4 = factorial->items()->append<VariableDeclaration>();
+	VariableDeclaration* var4 = longMethod->items()->append<VariableDeclaration>();
 	var4->setName("var4");
 	var4->setType<PrimitiveType>()->setType(PrimitiveType::CHAR);
 	var4->setInitialValue<CharacterLiteral>()->setValue('r');
 
-	VariableDeclaration* var5 = factorial->items()->append<VariableDeclaration>();
+	VariableDeclaration* var5 = longMethod->items()->append<VariableDeclaration>();
 	var5->setName("var5");
 	var5->setType<PrimitiveType>()->setType(PrimitiveType::DOUBLE);
 	var5->setInitialValue<FloatLiteral>()->setValue(123.112311096123);
 
-	VariableDeclaration* var6 = factorial->items()->append<VariableDeclaration>();
+	VariableDeclaration* var6 = longMethod->items()->append<VariableDeclaration>();
 	var6->setName("var6");
 	var6->setType<PrimitiveType>()->setType(PrimitiveType::UNSIGNED_LONG);
 	var6->setInitialValue<IntegerLiteral>()->setValue(1000);
 
-	VariableDeclaration* var7 = factorial->items()->append<VariableDeclaration>();
+	VariableDeclaration* var7 = longMethod->items()->append<VariableDeclaration>();
 	var7->setName("var7");
 	var7->setType<PrimitiveType>()->setType(PrimitiveType::VOID);
 	var7->setInitialValue<NullLiteral>();
 
-	VariableDeclaration* var8 = factorial->items()->append<VariableDeclaration>();
+	VariableDeclaration* var8 = longMethod->items()->append<VariableDeclaration>();
 	var8->setName("var8");
 	var8->setType<PrimitiveType>()->setType(PrimitiveType::INT);
 	var8->setInitialValue<MethodCallExpression>()->ref()->set("met:getId");
 
-	VariableDeclaration* var9 = factorial->items()->append<VariableDeclaration>();
+	VariableDeclaration* var9 = longMethod->items()->append<VariableDeclaration>();
 	var9->setName("var9");
 	var9->setType<PrimitiveType>()->setType(PrimitiveType::VOID);
 	var9->setInitialValue<ThisExpression>();
 
-	VariableDeclaration* var10 = factorial->items()->append<VariableDeclaration>();
+	VariableDeclaration* var10 = longMethod->items()->append<VariableDeclaration>();
 	var10->setName("var10");
 	var10->setType<PrimitiveType>()->setType(PrimitiveType::INT);
 	CastExpression* cast = var10->setInitialValue<CastExpression>();
 	cast->setType<PrimitiveType>()->setType(PrimitiveType::INT);
 	cast->setExpr<StringLiteral>()->setValue("five");
 
-	VariableDeclaration* var11 = factorial->items()->append<VariableDeclaration>();
+	VariableDeclaration* var11 = longMethod->items()->append<VariableDeclaration>();
 	var11->setName("var11");
 	var11->setType<PrimitiveType>()->setType(PrimitiveType::VOID);
 	var11->setInitialValue<NewExpression>()->setType<PrimitiveType>()->setType(PrimitiveType::INT);
 
-	VariableDeclaration* var12 = factorial->items()->append<VariableDeclaration>();
+	VariableDeclaration* var12 = longMethod->items()->append<VariableDeclaration>();
 	var12->setName("var12");
 	var12->setType<PrimitiveType>()->setType(PrimitiveType::VOID);
 	NewExpression* newExpr = var12->setInitialValue<NewExpression>();
 	newExpr->setType<PrimitiveType>()->setType(PrimitiveType::INT);
 	newExpr->setAmount<VariableAccess>()->ref()->set("local:var2");
 
-	VariableDeclaration* var13 = factorial->items()->append<VariableDeclaration>();
+	VariableDeclaration* var13 = longMethod->items()->append<VariableDeclaration>();
 	var13->setName("var13");
 	var13->setType<PrimitiveType>()->setType(PrimitiveType::BOOLEAN);
 	UnaryOperation* uOp1 = var13->setInitialValue<UnaryOperation>();
 	uOp1->setOp(UnaryOperation::NOT);
 	uOp1->setOperand<BooleanLiteral>()->setValue(false);
 
-	VariableDeclaration* var14 = factorial->items()->append<VariableDeclaration>();
+	VariableDeclaration* var14 = longMethod->items()->append<VariableDeclaration>();
 	var14->setName("var14");
 	var14->setType<PrimitiveType>()->setType(PrimitiveType::INT);
 	UnaryOperation* uOp2 = var14->setInitialValue<UnaryOperation>();
 	uOp2->setOp(UnaryOperation::INCREMENT);
 	uOp2->setOperand<IntegerLiteral>()->setValue(10);
 
-	VariableDeclaration* var15 = factorial->items()->append<VariableDeclaration>();
+	VariableDeclaration* var15 = longMethod->items()->append<VariableDeclaration>();
 	var15->setName("var15");
 	var15->setType<PrimitiveType>()->setType(PrimitiveType::INT);
 	BinaryOperation* binOp1 = var15->setInitialValue<BinaryOperation>();
@@ -195,7 +217,7 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	binOp1->setLeft<IntegerLiteral>()->setValue(41);
 	binOp1->setRight<IntegerLiteral>()->setValue(1);
 
-	VariableDeclaration* var16 = factorial->items()->append<VariableDeclaration>();
+	VariableDeclaration* var16 = longMethod->items()->append<VariableDeclaration>();
 	var16->setName("var16");
 	var16->setType<PrimitiveType>()->setType(PrimitiveType::BOOLEAN);
 	BinaryOperation* binOp2 = var16->setInitialValue<BinaryOperation>();
@@ -203,7 +225,7 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	binOp2->setLeft<IntegerLiteral>()->setValue(41);
 	binOp2->setRight<IntegerLiteral>()->setValue(1);
 
-	IfStatement* ifs = factorial->items()->append<IfStatement>();
+	IfStatement* ifs = longMethod->items()->append<IfStatement>();
 	BinaryOperation* ifCond = ifs->setCondition<BinaryOperation>();
 	ifCond->setLeft<VariableAccess>()->ref()->set("local:var14");
 	ifCond->setOp(BinaryOperation::NOT_EQUALS);
@@ -215,7 +237,7 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	elseBranch->setOp(UnaryOperation::DECREMENT);
 	elseBranch->setOperand<VariableAccess>()->ref()->set("local:var14");
 
-	Block* block = factorial->items()->append<Block>();
+	Block* block = longMethod->items()->append<Block>();
 	AssignmentStatement* assign = block->items()->append<AssignmentStatement>();
 	assign->setLeft<VariableAccess>()->ref()->set("local:var1");
 	assign->setOp(AssignmentStatement::ASSIGN);
@@ -224,7 +246,7 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	arrayAccess->setOp(BinaryOperation::ARRAY_INDEX);
 	arrayAccess->setRight<IntegerLiteral>()->setValue(4);
 
-	LoopStatement* loop = factorial->items()->append<LoopStatement>();
+	LoopStatement* loop = longMethod->items()->append<LoopStatement>();
 	VariableDeclaration* initStep = loop->setInitStep<VariableDeclaration>();
 	initStep->setType<PrimitiveType>()->setType(PrimitiveType::INT);
 	initStep->setName("i");
@@ -245,7 +267,7 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	loop->body()->append<BreakStatement>();
 
 
-	ForEachStatement* forEach = factorial->items()->append<ForEachStatement>();
+	ForEachStatement* forEach = longMethod->items()->append<ForEachStatement>();
 	forEach->setVarName("elem");
 	forEach->setVarType<PrimitiveType>()->setType(PrimitiveType::UNSIGNED_INT);
 	forEach->setCollection<VariableAccess>()->ref()->set("global:SomeCollection");
@@ -254,22 +276,47 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	assignEach->setOp(AssignmentStatement::DIVIDE_ASSIGN);
 	assignEach->setRight<VariableAccess>()->ref()->set("loop:elem");
 
+	longMethod->items()->append<ReturnStatement>()->values()->append<IntegerLiteral>()->setValue(24);
 
-	factorial->items()->append<ReturnStatement>()->values()->append<IntegerLiteral>()->setValue(24);
-
-	// set positions
-	factorial->extension<Position>()->setY(100);
-	java->extension<Position>()->setX(340);
-	string->extension<Position>()->setY(100);
-	io->extension<Position>()->setX(240);
+	longMethod->extension<Position>()->setY(100);
 
 	model->endModification();
-	CHECK_INT_EQUAL(340, java->extension<Position>()->x());
-	CHECK_STR_EQUAL("Java", java->name());
+	return longMethod;
+}
+
+TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
+{
+	Scene* scene = new Scene();
+
+	////////////////////////////////////////////////// Create Model
+	Model::Model* model = new Model::Model();
+	Project* prj = NULL;
+
+	// Create project
+//	prj = dynamic_cast<Project*> (model->createRoot("Project"));
+//	model->beginModification(prj, "build simple java library and a hello world app");
+//	prj->setName("HelloWorld");
+//	model->endModification();
+
+	Library* java = NULL;
+//	java = addJavaLibrary(model, prj);
+
+	// Build a simple HelloWorld Application
+	Class* hello = NULL;
+//	hello = addHelloWorld(model, prj);
+
+//	// Add a second method
+	Method* longMethod = NULL;
+	longMethod = addLongMethod(model, hello);
 
 	////////////////////////////////////////////////// Set Scene
+	Model::Node* top_level = NULL;
+	if (prj) top_level = prj;
+	else if(hello) top_level = hello;
+	else if(java) top_level = java;
+	else top_level = longMethod;
 
-	scene->addTopLevelItem( scene->defaultRenderer()->render(NULL, prj) );
+	scene->addTopLevelItem( scene->defaultRenderer()->render(NULL, top_level) );
 	scene->scheduleUpdate();
 
 	// Create view
