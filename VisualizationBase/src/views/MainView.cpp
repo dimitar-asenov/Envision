@@ -124,7 +124,7 @@ void MainView::keyPressEvent(QKeyEvent *event)
 			svgPainter.setRenderHint(QPainter::Antialiasing);
 			scene()->render(&svgPainter);
 
-			QImage image(2 * scene()->sceneRect().size().toSize(), QImage::Format_ARGB32_Premultiplied);
+			QImage image(2 * scene()->sceneRect().size().toSize(), QImage::Format_ARGB32);
 			image.fill(Qt::transparent);
 			QPainter pmapPainter(&image);
 			pmapPainter.setRenderHint(QPainter::Antialiasing);
@@ -147,7 +147,7 @@ void MainView::keyPressEvent(QKeyEvent *event)
 			svgPainter.setRenderHint(QPainter::Antialiasing);
 			render(&svgPainter);
 
-			QImage image(2 * viewport()->rect().size(), QImage::Format_ARGB32_Premultiplied);
+			QImage image(2 * viewport()->rect().size(), QImage::Format_ARGB32);
 			image.fill(Qt::transparent);
 			QPainter pmapPainter(&image);
 			pmapPainter.setRenderHint(QPainter::Antialiasing);
