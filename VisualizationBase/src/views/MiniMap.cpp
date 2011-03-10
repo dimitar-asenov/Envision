@@ -31,7 +31,7 @@ void MiniMap::updatePosition()
 {
 	QGraphicsView* parent = static_cast<QGraphicsView*> (parentWidget());
 
-	move(frameWidth(),parent->viewport()->height() - height()-frameWidth());
+	move(frameWidth(),parent->viewport()->height() - height() + 2*frameWidth());
 }
 
 void MiniMap::resizeEvent( QResizeEvent *event )
