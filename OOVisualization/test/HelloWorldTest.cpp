@@ -284,6 +284,65 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 	return longMethod;
 }
 
+Method* addFactorial(Model::Model* model, Class* parent)
+{
+	Method* factorial = NULL;
+
+	if (!parent) factorial = dynamic_cast<Method*> (model->createRoot("Method"));
+	model->beginModification(parent? static_cast<Model::Node*> (parent) : factorial, "Adding a factorial method.");
+	if (!factorial) factorial = parent->methods()->append<Method>();
+
+	factorial->setName("factorial");
+	factorial->results()->append<FormalResult>()->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+	factorial->arguments()->append<FormalArgument>()->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+	factorial->arguments()->at(0)->setName("x");
+
+	VariableDeclaration* res = factorial->items()->append<VariableDeclaration>();
+	res->setName("result");
+	res->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+	res->setInitialValue<IntegerLiteral>()->setValue(1);
+
+	// Condition
+	IfStatement* ifs = factorial->items()->append<IfStatement>();
+	BinaryOperation* ifCond = ifs->setCondition<BinaryOperation>();
+	ifCond->setLeft<VariableAccess>()->ref()->set("local:x");
+	ifCond->setOp(BinaryOperation::GREATER_EQUALS);
+	ifCond->setRight<IntegerLiteral>()->setValue(0);
+
+	// Then
+	LoopStatement* loop = ifs->thenBranch()->append<LoopStatement>();
+	VariableDeclaration* initStep = loop->setInitStep<VariableDeclaration>();
+	initStep->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+	initStep->setName("i");
+	initStep->setInitialValue<IntegerLiteral>()->setValue(1);
+	BinaryOperation* loopCondition = loop->setCondition<BinaryOperation>();
+	loopCondition->setLeft<VariableAccess>()->ref()->set("local:i");
+	loopCondition->setOp(BinaryOperation::LESS_EQUALS);
+	loopCondition->setRight<VariableAccess>()->ref()->set("local:x");
+	AssignmentStatement* updateStep = loop->setUpdateStep<AssignmentStatement>();
+	updateStep->setLeft<VariableAccess>()->ref()->set("local:i");
+	updateStep->setOp(AssignmentStatement::PLUS_ASSIGN);
+	updateStep->setRight<IntegerLiteral>()->setValue(1);
+	AssignmentStatement* loopBodyAssignment = loop->body()->append<AssignmentStatement>();
+	loopBodyAssignment->setLeft<VariableAccess>()->ref()->set("local:result");
+	loopBodyAssignment->setOp(AssignmentStatement::TIMES_ASSIGN);
+	loopBodyAssignment->setRight<VariableAccess>()->ref()->set("local:i");
+
+	// Else
+	AssignmentStatement* elseBranch = ifs->elseBranch()->append<AssignmentStatement>();
+	elseBranch->setLeft<VariableAccess>()->ref()->set("local:result");
+	elseBranch->setOp(AssignmentStatement::ASSIGN);
+	elseBranch->setRight<IntegerLiteral>()->setValue(-1);
+
+	// Return
+	factorial->items()->append<ReturnStatement>()->values()->append<VariableAccess>()->ref()->set("local:result");
+
+	factorial->extension<Position>()->setY(100);
+
+	model->endModification();
+	return factorial;
+}
+
 TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 {
 	Scene* scene = new Scene();
@@ -307,14 +366,19 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 
 //	// Add a second method
 	Method* longMethod = NULL;
-	longMethod = addLongMethod(model, hello);
+//	longMethod = addLongMethod(model, hello);
+
+//	// Add a third method
+	Method* factorial = NULL;
+	factorial = addFactorial(model, hello);
 
 	////////////////////////////////////////////////// Set Scene
 	Model::Node* top_level = NULL;
 	if (prj) top_level = prj;
 	else if(hello) top_level = hello;
 	else if(java) top_level = java;
-	else top_level = longMethod;
+	else if (longMethod) top_level = longMethod;
+	else top_level = factorial;
 
 	scene->addTopLevelItem( scene->defaultRenderer()->render(NULL, top_level) );
 	scene->scheduleUpdate();
