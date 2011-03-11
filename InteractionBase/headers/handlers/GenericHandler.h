@@ -55,6 +55,7 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 		// Mouse events
 		virtual void mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event);
 		virtual void mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event);
+		virtual void mouseDoubleClickEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event);
 
 		// Focus events
 		virtual void focusInEvent(Visualization::Item *target, QFocusEvent *event);

@@ -247,6 +247,11 @@ void GenericHandler::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneM
 	else InteractionHandler::mouseMoveEvent(target, event);
 }
 
+void GenericHandler::mouseDoubleClickEvent(Visualization::Item *, QGraphicsSceneMouseEvent *event)
+{
+	event->ignore();
+}
+
 void GenericHandler::focusInEvent(Visualization::Item *target, QFocusEvent *event)
 {
 	// Here we choose which child to focus.
