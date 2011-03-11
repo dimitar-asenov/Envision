@@ -7,9 +7,9 @@
 
 #include "top_level/VMethod.h"
 #include "OOVisualizationException.h"
-#include "icons/MethodIcon.h"
 
 #include "VisualizationBase/headers/layouts/PanelBorderLayout.h"
+#include "VisualizationBase/headers/icons/SVGIcon.h"
 #include "VisualizationBase/headers/items/VText.h"
 #include "VisualizationBase/headers/items/VList.h"
 
@@ -23,7 +23,7 @@ ITEM_COMMON_DEFINITIONS(VMethod)
 VMethod::VMethod(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<PanelBorderLayout>, Method>(parent, node, style),
 	header_( new SequentialLayout(NULL, &style->header()) ),
-	icon_(new MethodIcon(NULL, &style->icon())),
+	icon_(new SVGIcon(NULL, &style->icon())),
 	name_(new VText(NULL, node->nameNode(), &style->nameDefault()) ),
 	arguments_(new VList(NULL, node->arguments(), &style->arguments()) ),
 	content_( new VList(NULL, node->items(), &style->content()) ),

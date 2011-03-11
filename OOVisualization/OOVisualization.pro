@@ -92,8 +92,6 @@ HEADERS += headers/literals/VStringLiteralStyle.h \
     headers/expressions/VVariableAccess.h \
     headers/expressions/VReferenceExpressionStyle.h \
     headers/expressions/VReferenceExpression.h \
-    headers/icons/MethodIconStyle.h \
-    headers/icons/MethodIcon.h \
     headers/icons/ClassIconStyle.h \
     headers/icons/ClassIcon.h \
     headers/OOVisualizationException.h \
@@ -158,8 +156,6 @@ SOURCES += src/literals/VStringLiteralStyle.cpp \
     src/expressions/VVariableAccess.cpp \
     src/expressions/VReferenceExpression.cpp \
     src/expressions/VReferenceExpressionStyle.cpp \
-    src/icons/MethodIcon.cpp \
-    src/icons/MethodIconStyle.cpp \
     src/icons/ClassIcon.cpp \
     src/icons/ClassIconStyle.cpp \
     test/HelloWorldTest.cpp \

@@ -82,7 +82,6 @@ bool OOVisualization::initialize(Envision::EnvisionManager&)
 	VFormalArgument::setInteractionHandler(Interaction::GenericHandler::instance());
 	VFormalResult::setInteractionHandler(Interaction::GenericHandler::instance());
 	ClassIcon::setInteractionHandler(Interaction::GenericHandler::instance());
-	MethodIcon::setInteractionHandler(Interaction::GenericHandler::instance());
 	VReferenceExpression::setInteractionHandler(Interaction::GenericHandler::instance());
 	VVariableAccess::setInteractionHandler(Interaction::GenericHandler::instance());
 	VMethodCallExpression::setInteractionHandler(Interaction::GenericHandler::instance());

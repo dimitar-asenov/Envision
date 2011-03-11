@@ -18,7 +18,6 @@
 #include "elements/VFormalResult.h"
 
 #include "icons/ClassIcon.h"
-#include "icons/MethodIcon.h"
 
 #include "expressions/VVariableAccess.h"
 #include "expressions/VMethodCallExpression.h"

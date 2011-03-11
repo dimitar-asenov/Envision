@@ -20,12 +20,11 @@
 namespace Visualization {
 	class VText;
 	class VList;
+	class SVGIcon;
 	class PanelBorderLayout;
 }
 
 namespace OOVisualization {
-
-class MethodIcon;
 
 class OOVISUALIZATION_API VMethod : public Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::Method>
 {
@@ -40,7 +39,7 @@ class OOVISUALIZATION_API VMethod : public Visualization::ItemWithNode< Visualiz
 
 	private:
 		Visualization::SequentialLayout* header_;
-		MethodIcon* icon_;
+		Visualization::SVGIcon* icon_;
 		Visualization::VText* name_;
 		Visualization::VList* arguments_;
 		Visualization::VList* content_;
