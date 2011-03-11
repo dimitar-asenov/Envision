@@ -98,6 +98,7 @@ void VListCF::updateGeometry(int, int)
 		if (cfi)
 		{
 			pos[i] = QPoint( location.x() - cfi->entrance().x(), location.y());
+			location.ry() += items_[i]->height();
 
 			if (cfi->exit().isNull()) exit_ = QPoint(0,0);
 			else
@@ -127,6 +128,7 @@ void VListCF::updateGeometry(int, int)
 		{
 			location.ry() += style()->pinLength(); // There is a pin on top.
 			pos[i] = QPoint( location.x() - items_[i]->width()/2, location.y());
+			location.ry() += items_[i]->height();
 			location.ry() += style()->pinLength(); // There is a pin on the bottom.
 			exit_ = location;
 		}
@@ -134,8 +136,6 @@ void VListCF::updateGeometry(int, int)
 		int pinSpace = cfi ? 0 : style()->pinLength();
 		if ( pos[i].x() - pinSpace < topLeft.x()) topLeft.setX( pos[i].x() - pinSpace );
 		if ( pos[i].x() + items_[i]->width() + pinSpace > bottomRight.x())  bottomRight.setX(pos[i].x() + items_[i]->width() + pinSpace);
-
-		location.ry() += items_[i]->height();
 	}
 
 	bottomRight.setY(location.y());
