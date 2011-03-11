@@ -12,18 +12,18 @@
 #include "VMethodCFStyle.h"
 #include "VListCF.h"
 
-#include "OOVisualization/headers/icons/MethodIcon.h"
-
 #include "OOModel/headers/top_level/Method.h"
 
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/LayoutProvider.h"
+
 #include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
 	class VText;
 	class VList;
 	class PanelBorderLayout;
+	class SVGIcon;
 }
 
 namespace ControlFlowVisualization {
@@ -41,7 +41,7 @@ class CONTROLFLOWVISUALIZATION_API VMethodCF : public Visualization::ItemWithNod
 
 	private:
 		Visualization::SequentialLayout* header_;
-		OOVisualization::MethodIcon* icon_;
+		Visualization::SVGIcon* icon_;
 		Visualization::VText* name_;
 		Visualization::VList* arguments_;
 		Visualization::VList* content_;
