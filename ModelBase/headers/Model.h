@@ -427,7 +427,7 @@ class MODELBASE_API Model: public QObject
 		 * Emitted at the end of a modification block.
 		 *
 		 * @param nodes
-		 * 				A list of all modification targets for this operation.
+		 * 				A list of all nodes modified within this block.
 		 */
 		void nodesModified(QList<Node*> nodes);
 
