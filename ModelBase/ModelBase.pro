@@ -25,7 +25,8 @@ pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
-HEADERS += headers/test_nodes/PositionExtension.h \
+HEADERS += src/commands/AddModifiedNode.h \
+    headers/test_nodes/PositionExtension.h \
     headers/TypedListInstantiations.h \
     headers/nodes/Character.h \
     headers/nodes/Boolean.h \
@@ -67,7 +68,8 @@ HEADERS += headers/test_nodes/PositionExtension.h \
     headers/Model.h \
     headers/modelbase_api.h \
     src/modelbase.h
-SOURCES += src/test_nodes/PositionExtension.cpp \
+SOURCES += src/commands/AddModifiedNode.cpp \
+    src/test_nodes/PositionExtension.cpp \
     src/TypedListInstantiations.cpp \
     src/nodes/Character.cpp \
     src/nodes/Boolean.cpp \

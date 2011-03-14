@@ -9,6 +9,7 @@
 #include "ModelException.h"
 #include "commands/UndoCommand.h"
 #include "commands/SetModificationTarget.h"
+#include "commands/AddModifiedNode.h"
 
 #include "Core/headers/global.h"
 
@@ -113,6 +114,7 @@ void Model::pushCommandOnUndoStack(UndoCommand* command)
 	}
 
 	commands.push(command);
+	if (command->target()) commands.push(new AddModifiedNode(modifiedTargets, command->target()));
 }
 
 void Model::undo()
