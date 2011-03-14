@@ -11,6 +11,9 @@
 #include "items/SceneHandlerItem.h"
 #include "items/SelectedItem.h"
 
+#include "ModelBase/headers/nodes/Node.h"
+#include "ModelBase/headers/Model.h"
+
 #include <QtGui/QApplication>
 #include <QtCore/QEvent>
 
@@ -59,6 +62,25 @@ void Scene::scheduleUpdate()
 		needsUpdate = true;
 		QApplication::postEvent(this, new UpdateSceneEvent());
 	}
+}
+
+void Scene::listenToModel(Model::Model* model)
+{
+	connect(model, SIGNAL(nodesModified(QList<Node*>)), this,  SLOT(nodesUpdated(QList<Node*>)), Qt::QueuedConnection);
+}
+
+void Scene::nodesUpdated(QList<Node*> nodes)
+{
+	// TODO implement this in a more efficient way.
+
+	QList<QGraphicsItem*> list = items();
+	for (int i = 0; i < list.size(); ++i)
+	{
+		Item* item = static_cast<Item*> (list[i]);
+		if (item->hasNode() && nodes.contains(item->node())) item->setUpdateNeeded();
+	}
+
+	scheduleUpdate();
 }
 
 void Scene::customEvent(QEvent *event)

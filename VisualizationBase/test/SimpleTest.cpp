@@ -51,6 +51,7 @@ TEST(VisualizationBase, ExtendableTest)
 
 	l->at<VExtendable>(0)->setExpanded();
 	scene->scheduleUpdate();
+	scene->listenToModel(model);
 
 	// Create view
 	MainView* view = new MainView(scene);

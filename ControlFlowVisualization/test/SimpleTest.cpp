@@ -19,21 +19,28 @@ using namespace Visualization;
 
 namespace ControlFlowVisualization {
 
-TEST(ControlFlowVisualization, SimpleTest)
+Class* addClass(Model::Model* model, Project* parent)
 {
-	Scene* scene = new Scene();
+	Class* cl = NULL;
 
-	////////////////////////////////////////////////// Create Model
-	Model::Model* model = new Model::Model();
-	Class* cl = dynamic_cast<Class*> (model->createRoot("Class"));
+	if (!parent) cl = dynamic_cast<Class*> (model->createRoot("Class"));
+	model->beginModification(parent ? static_cast<Model::Node*> (parent) :cl, "Adding a hello world class.");
+	if (!cl) cl = parent->classes()->append<Class>();
 
-	model->beginModification(cl, "make a few mewthods to test control flow visualization.");
-	cl->setName("ControlFlowTest");
+	cl->setName("SomeClass");
 
-	/////////////////////////////////////////////////////////////////////////////////////////////////
-	// Complicated method
-	/////////////////////////////////////////////////////////////////////////////////////////////////
-	Method* met = cl->methods()->append<Method>();
+	model->endModification();
+	return cl;
+}
+
+Method* addComplicated(Model::Model* model, Class* parent)
+{
+	Method* met = NULL;
+
+	if (!parent) met = dynamic_cast<Method*> (model->createRoot("Method"));
+	model->beginModification(parent? static_cast<Model::Node*> (parent) : met, "Adding a Complicated method.");
+	if (!met) met = parent->methods()->append<Method>();
+
 	met->setName("complicated");
 
 	VariableDeclaration* a = met->items()->append<VariableDeclaration>();
@@ -110,11 +117,20 @@ TEST(ControlFlowVisualization, SimpleTest)
 
 
 	met->items()->append<ReturnStatement>()->values()->append<IntegerLiteral>()->setValue(24);
+	met->extension<Position>()->setX(400);
 
-	/////////////////////////////////////////////////////////////////////////////////////////////////
-	// Sensible method
-	/////////////////////////////////////////////////////////////////////////////////////////////////
-	Method* divbysix = cl->methods()->append<Method>();
+	model->endModification();
+	return met;
+}
+
+Method* addDivBySix(Model::Model* model, Class* parent)
+{
+	Method* divbysix = NULL;
+
+	if (!parent) divbysix = dynamic_cast<Method*> (model->createRoot("Method"));
+	model->beginModification(parent? static_cast<Model::Node*> (parent) : divbysix, "Adding a divBySix method.");
+	if (!divbysix) divbysix = parent->methods()->append<Method>();
+
 	divbysix->setName("findDivBySix");
 	divbysix->results()->append<FormalResult>()->setType<PrimitiveType>()->setType(PrimitiveType::INT);
 	FormalArgument* arg = divbysix->arguments()->append<FormalArgument>();
@@ -179,13 +195,32 @@ TEST(ControlFlowVisualization, SimpleTest)
 
 	divbysix->items()->append<ReturnStatement>()->values()->append<VariableAccess>()->ref()->set("local:result");
 
-	met->extension<Position>()->setX(400);
 	model->endModification();
+	return divbysix;
+}
 
-	////////////////////////////////////////////////// Set Scene
+TEST(ControlFlowVisualization, SimpleTest)
+{
+	Model::Model* model = new Model::Model();
 
-	scene->addTopLevelItem( scene->defaultRenderer()->render(NULL, cl) );
+	Class* cl = NULL;
+//	cl = addClass(model, NULL);
+
+	Method* complicated = NULL;
+//	complicated = addComplicated(model, cl);
+
+	Method* divbysix = NULL;
+	divbysix = addDivBySix(model, cl);
+
+	Model::Node* top_level = NULL;
+	if (cl) top_level = cl;
+	else if(complicated) top_level = complicated;
+	else top_level = divbysix;
+
+	Scene* scene = new Scene();
+	scene->addTopLevelItem( scene->defaultRenderer()->render(NULL, top_level) );
 	scene->scheduleUpdate();
+	scene->listenToModel(model);
 
 	// Create view
 	MainView* view = new MainView(scene);

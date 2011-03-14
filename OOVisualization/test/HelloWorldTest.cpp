@@ -382,6 +382,7 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 
 	scene->addTopLevelItem( scene->defaultRenderer()->render(NULL, top_level) );
 	scene->scheduleUpdate();
+	scene->listenToModel(model);
 
 	// Create view
 	MainView* view = new MainView(scene);

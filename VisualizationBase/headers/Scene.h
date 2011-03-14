@@ -13,6 +13,11 @@
 
 #include <QtGui/QGraphicsScene>
 
+namespace Model {
+	class Model;
+	class Node;
+}
+
 namespace Visualization {
 
 class SceneHandlerItem;
@@ -20,6 +25,15 @@ class SelectedItem;
 
 class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 {
+	Q_OBJECT
+
+	private:
+
+		// This is needed in order to make the Signals and Slots mechanism work. Otherwise we are not able to connect to
+		// the signal provided from Model. This is because the signatures of the two methods, must match exactly
+		// (stringwise).
+		typedef Model::Node Node;
+
 	public:
 		Scene();
 		virtual ~Scene();
@@ -31,10 +45,14 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		void addTopLevelItem(Item* item);
 		void removeTopLevelItem(Item* item);
 		void scheduleUpdate();
+		void listenToModel(Model::Model* model);
 
 		virtual void customEvent(QEvent *event);
 
 		virtual SceneHandlerItem* sceneHandlerItem();
+
+	public slots:
+		void nodesUpdated(QList<Node*> nodes);
 
 	protected:
 		bool event(QEvent *event);
