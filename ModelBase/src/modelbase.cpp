@@ -8,6 +8,8 @@
 #include "modelbase.h"
 #include "SelfTest/headers/SelfTestSuite.h"
 
+#include "Model.h"
+
 #include "nodes/Text.h"
 #include "nodes/Integer.h"
 #include "nodes/Float.h"
@@ -32,6 +34,8 @@ Log* ModelBase::logger = NULL;
 
 bool ModelBase::initialize(Envision::EnvisionManager&)
 {
+	Model::init();
+
 	logger = Logger::Log::getLogger("modelbase");
 	Text::registerNodeType();
 	Integer::registerNodeType();

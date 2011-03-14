@@ -13,9 +13,16 @@
 
 #include "Core/headers/global.h"
 
+#include <QtCore/QMetaType>
+
 namespace Model {
 
 QList<Model*> Model::loadedModels;
+
+void Model::init()
+{
+	qRegisterMetaType< QList<Node*> >("QList<Node*>");
+}
 
 Model::Model() :
 	root_(NULL), currentModificationTarget(NULL), currentModificationLock(NULL), pushedNewCommandsOnTheStack(false), performedUndoRedo(false), modificationInProgress(false), nextId(0), store_(NULL)

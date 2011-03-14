@@ -144,6 +144,12 @@ class MODELBASE_API Model: public QObject
 		static QList<Model*> loadedModels;
 
 	public:
+
+		/**
+		 * Registers types with the meta object system of Qt to allow signals and slots to work with lists.
+		 */
+		static void init();
+
 		/**
 		 * Constructs a new Model.
 		 *
