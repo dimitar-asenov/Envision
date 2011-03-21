@@ -48,6 +48,7 @@ template class Model::TypedList<OOModel::UnaryOperation>;
 template class Model::TypedList<OOModel::BinaryOperation>;
 template class Model::TypedList<OOModel::CastExpression>;
 template class Model::TypedList<OOModel::ReferenceExpression>;
+template class Model::TypedList<OOModel::ArrayInitializer>;
 
 template class Model::TypedList<OOModel::Type>;
 template class Model::TypedList<OOModel::PrimitiveType>;

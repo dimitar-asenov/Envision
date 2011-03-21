@@ -26,7 +26,8 @@ pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
-HEADERS += headers/attributeMacros.h \
+HEADERS += headers/expressions/ArrayInitializer.h \
+    headers/attributeMacros.h \
     headers/elements/Static.h \
     headers/elements/Visibility.h \
     headers/elements/FormalArgument.h \
@@ -75,7 +76,8 @@ HEADERS += headers/attributeMacros.h \
     headers/OOModelException.h \
     headers/oomodel_api.h \
     src/oomodel.h
-SOURCES += src/elements/Static.cpp \
+SOURCES += src/expressions/ArrayInitializer.cpp \
+    src/elements/Static.cpp \
     src/elements/Visibility.cpp \
     src/elements/FormalArgument.cpp \
     src/elements/FormalResult.cpp \

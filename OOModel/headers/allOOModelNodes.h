@@ -44,6 +44,7 @@
 #include "expressions/BinaryOperation.h"
 #include "expressions/CastExpression.h"
 #include "expressions/ReferenceExpression.h"
+#include "expressions/ArrayInitializer.h"
 
 #include "types/Type.h"
 #include "types/PrimitiveType.h"

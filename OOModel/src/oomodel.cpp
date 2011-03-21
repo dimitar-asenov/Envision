@@ -60,6 +60,7 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	Model::TypedList<BinaryOperation>::registerNodeType();
 	Model::TypedList<CastExpression>::registerNodeType();
 	Model::TypedList<ReferenceExpression>::registerNodeType();
+	Model::TypedList<ArrayInitializer>::registerNodeType();
 
 	Model::TypedList<Type>::registerNodeType();
 	Model::TypedList<PrimitiveType>::registerNodeType();
@@ -106,6 +107,7 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	BinaryOperation::init();
 	CastExpression::init();
 	ReferenceExpression::init();
+	ArrayInitializer::init();
 
 	Type::init();
 	PrimitiveType::init();
