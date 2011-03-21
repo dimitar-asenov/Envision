@@ -1,0 +1,7 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="../Layout/default">
+	<horizontalAlignment>0</horizontalAlignment>
+	<verticalAlignment>0</verticalAlignment>
+	<horizontalSpace>0</horizontalSpace>
+	<verticalSpace>0</verticalSpace>
+</style>
