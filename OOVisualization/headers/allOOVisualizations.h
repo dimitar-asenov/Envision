@@ -27,6 +27,7 @@
 #include "expressions/VNewExpression.h"
 #include "expressions/VUnaryOperation.h"
 #include "expressions/VBinaryOperation.h"
+#include "expressions/VArrayInitializer.h"
 
 #include "literals/VStringLiteral.h"
 #include "literals/VIntegerLiteral.h"

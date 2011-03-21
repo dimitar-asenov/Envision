@@ -1,0 +1,24 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/Item/default">
+	<layout prototypes="layout/GridLayout/default"/>
+	<values prototypes="item/VList/default">
+		<shape prototypes="shape/Box/default">
+			Box
+			<backgroundBrush>
+				<style>1</style>
+				<color>
+					<alpha>255</alpha>
+					<red>200</red>
+					<green>255</green>
+					<blue>200</blue>
+				</color>
+			</backgroundBrush>
+			<cornerType>2</cornerType>
+			<cornerRadius>3</cornerRadius>
+		</shape>
+		<itemsStyle prototypes="layout/SequentialLayout/default">
+			<direction>0</direction>
+			<spaceBetweenElements>5</spaceBetweenElements>
+		</itemsStyle>
+	</values>
+</style>

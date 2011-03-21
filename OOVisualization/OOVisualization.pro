@@ -31,7 +31,9 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/literals/VStringLiteralStyle.h \
+HEADERS += headers/expressions/VArrayInitializerStyle.h \
+    headers/expressions/VArrayInitializer.h \
+    headers/literals/VStringLiteralStyle.h \
     headers/types/VArrayTypeStyle.h \
     headers/types/VArrayType.h \
     headers/statements/VContinueStatement.h \
@@ -97,7 +99,9 @@ HEADERS += headers/literals/VStringLiteralStyle.h \
     headers/OOVisualizationException.h \
     headers/oovisualization_api.h \
     src/oovisualization.h
-SOURCES += src/literals/VStringLiteralStyle.cpp \
+SOURCES += src/expressions/VArrayInitializer.cpp \
+    src/expressions/VArrayInitializerStyle.cpp \
+    src/literals/VStringLiteralStyle.cpp \
     src/types/VArrayTypeStyle.cpp \
     src/types/VArrayType.cpp \
     src/statements/VContinueStatement.cpp \

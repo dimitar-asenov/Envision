@@ -225,6 +225,23 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 	binOp2->setLeft<IntegerLiteral>()->setValue(41);
 	binOp2->setRight<IntegerLiteral>()->setValue(1);
 
+	VariableDeclaration* var17 = longMethod->items()->append<VariableDeclaration>();
+	var17->setName("var17");
+	var17->setType<ArrayType>()->setType<ArrayType>()->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+	ArrayInitializer* outterArrayInit = var17->setInitialValue<ArrayInitializer>();
+	ArrayInitializer* col1Init = outterArrayInit->values()->append<ArrayInitializer>();
+	ArrayInitializer* col2Init = outterArrayInit->values()->append<ArrayInitializer>();
+	ArrayInitializer* col3Init = outterArrayInit->values()->append<ArrayInitializer>();
+	col1Init->values()->append<IntegerLiteral>()->setValue(1);
+	col1Init->values()->append<IntegerLiteral>()->setValue(2);
+	col1Init->values()->append<IntegerLiteral>()->setValue(3);
+	col2Init->values()->append<IntegerLiteral>()->setValue(4);
+	col2Init->values()->append<IntegerLiteral>()->setValue(5);
+	col2Init->values()->append<IntegerLiteral>()->setValue(6);
+	col3Init->values()->append<IntegerLiteral>()->setValue(7);
+	col3Init->values()->append<IntegerLiteral>()->setValue(8);
+	col3Init->values()->append<IntegerLiteral>()->setValue(9);
+
 	IfStatement* ifs = longMethod->items()->append<IfStatement>();
 	BinaryOperation* ifCond = ifs->setCondition<BinaryOperation>();
 	ifCond->setLeft<VariableAccess>()->ref()->set("local:var14");
@@ -362,15 +379,15 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 
 	// Build a simple HelloWorld Application
 	Class* hello = NULL;
-//	hello = addHelloWorld(model, prj);
+	hello = addHelloWorld(model, prj);
 
 //	// Add a second method
 	Method* longMethod = NULL;
-//	longMethod = addLongMethod(model, hello);
+	longMethod = addLongMethod(model, hello);
 
 //	// Add a third method
 	Method* factorial = NULL;
-	factorial = addFactorial(model, hello);
+//	factorial = addFactorial(model, hello);
 
 	////////////////////////////////////////////////// Set Scene
 	Model::Node* top_level = NULL;
