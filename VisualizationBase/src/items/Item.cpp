@@ -126,17 +126,19 @@ void Item::updateGeometry(Item* content, int availableWidth, int availableHeight
 {
 	if (hasShape())
 	{
-		QSize inner = getShape()->innerSize(availableWidth, availableHeight);
-
-		if (content->sizeDependsOnParent() && (availableWidth > 0 || availableHeight > 0))
-			content->changeGeometry(inner.width(), inner.height());
-
-		if (content->width() > inner.width() ) inner.setWidth( content->width() );
-		if (content->height() > inner.height() ) inner.setHeight( content->height() );
-
 		getShape()->setOffset(0, 0);
 
-		if ( sizeDependsOnParent() ) getShape()->setInnerSize(inner.width(), inner.height());
+		if ( (sizeDependsOnParent() || content->sizeDependsOnParent()) && (availableWidth > 0 || availableHeight > 0) )
+		{
+			QSize inner = getShape()->innerSize(availableWidth, availableHeight);
+
+			if (content->sizeDependsOnParent() && (availableWidth > 0 || availableHeight > 0))
+				content->changeGeometry(inner.width(), inner.height());
+
+			if (content->width() > inner.width() ) inner.setWidth( content->width() );
+			if (content->height() > inner.height() ) inner.setHeight( content->height() );
+			getShape()->setInnerSize(inner.width(), inner.height());
+		}
 		else getShape()->setInnerSize(content->width(), content->height());
 
 		content->setPos(getShape()->contentLeft(), getShape()->contentTop());

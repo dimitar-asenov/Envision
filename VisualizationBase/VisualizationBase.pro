@@ -31,7 +31,9 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/layouts/GridLayoutStyle.h \
+HEADERS += headers/shapes/BracesStyle.h \
+    headers/shapes/Braces.h \
+    headers/layouts/GridLayoutStyle.h \
     headers/layouts/GridLayout.h \
     headers/shapes/DiamondStyle.h \
     headers/shapes/Diamond.h \
@@ -91,7 +93,9 @@ HEADERS += headers/layouts/GridLayoutStyle.h \
     src/visualizationbase.h \
     headers/VisualizationException.h \
     headers/visualizationbase_api.h
-SOURCES += src/layouts/GridLayout.cpp \
+SOURCES += src/shapes/Braces.cpp \
+    src/shapes/BracesStyle.cpp \
+    src/layouts/GridLayout.cpp \
     src/layouts/GridLayoutStyle.cpp \
     src/shapes/Diamond.cpp \
     src/shapes/DiamondStyle.cpp \
