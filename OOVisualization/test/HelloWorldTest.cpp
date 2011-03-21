@@ -369,13 +369,13 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	Project* prj = NULL;
 
 	// Create project
-//	prj = dynamic_cast<Project*> (model->createRoot("Project"));
-//	model->beginModification(prj, "build simple java library and a hello world app");
-//	prj->setName("HelloWorld");
-//	model->endModification();
+	prj = dynamic_cast<Project*> (model->createRoot("Project"));
+	model->beginModification(prj, "build simple java library and a hello world app");
+	prj->setName("HelloWorld");
+	model->endModification();
 
 	Library* java = NULL;
-//	java = addJavaLibrary(model, prj);
+	java = addJavaLibrary(model, prj);
 
 	// Build a simple HelloWorld Application
 	Class* hello = NULL;

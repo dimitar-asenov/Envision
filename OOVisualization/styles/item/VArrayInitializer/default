@@ -1,5 +1,8 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/Item/default">
+	<shape prototypes="shape/Braces/default">
+		Braces
+	</shape>
 	<layout prototypes="layout/GridLayout/default"/>
 	<values prototypes="item/VList/default">
 		<shape prototypes="shape/Box/default">
