@@ -19,10 +19,9 @@ ITEM_COMMON_DEFINITIONS(VArrayInitializer)
 
 VArrayInitializer::VArrayInitializer(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode< LayoutProvider<GridLayout>, ArrayInitializer>(parent, node, style),
-	values_( new VList(NULL, node->values()) )
+	values_( NULL ),
+	matrixForm_(true)
 {
-	layout()->setGridSize(1,1, false);
-	layout()->set(values_,0,0, true);
 }
 
 VArrayInitializer::~VArrayInitializer()
@@ -38,9 +37,61 @@ void VArrayInitializer::determineChildren()
 	//			what's the reason they are being updated.
 	// The style needs to be updated every time since if our own style changes, so will that of the children.
 	layout()->setStyle( &style()->layout());
-	values_->setStyle( &style()->values() );
 
-	layout()->synchronize(values_, node()->values(), &style()->values(), 0,0);
+	if (viewFormSwitched())
+	{
+		layout()->clear();
+
+		if (matrixForm_) values_ = NULL; // this was deleted by the clear() operation above
+		else
+		{
+			layout()->setGridSize(1,1, false);
+			values_ = new VList(NULL, node()->values(), &style()->values());
+			layout()->set(values_,0,0, true);
+		}
+	}
+
+	if (matrixForm_)
+	{
+		useShape();
+
+		QList< QList< Model::Node*> > nodes;
+		for(int y = 0; y<node()->values()->size(); ++y)
+		{
+			nodes.append( QList< Model::Node*>() );
+
+			ArrayInitializer* column = dynamic_cast< ArrayInitializer* >(node()->values()->at(y));
+			if (column)
+			{
+				for(int x = 0; x < column->values()->size(); ++x)
+					nodes.last().append(column->values()->at(x));
+			}
+			else nodes.last().append( node()->values()->at(y) );
+		}
+
+		layout()->synchronizeWithNodes(nodes, renderer());
+	}
+	else
+	{
+		removeShape();
+
+		layout()->synchronize(values_, node()->values(), &style()->values(), 0,0);
+		values_->setStyle( &style()->values() );
+	}
+}
+
+void VArrayInitializer::showInMatrixForm(bool matrixForm)
+{
+	if ( matrixForm != matrixForm_ )
+	{
+		matrixForm_ = matrixForm;
+		setUpdateNeeded();
+	}
+}
+
+bool VArrayInitializer::viewFormSwitched() const
+{
+	return matrixForm_ == (values_ != NULL) || layout()->gridSize().width() == 0;
 }
 
 }

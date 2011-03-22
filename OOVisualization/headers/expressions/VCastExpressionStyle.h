@@ -19,19 +19,16 @@ class OOVISUALIZATION_API VCastExpressionStyle : public Visualization::ItemStyle
 {
 	private:
 		Visualization::SequentialLayoutStyle layout_;
-		Visualization::SymbolStyle separator_;
 
 	public:
 		void load();
 
 		const Visualization::SequentialLayoutStyle& layout() const;
-		const Visualization::SymbolStyle& separator() const;
 
 		static VCastExpressionStyle* getDefault();
 };
 
 inline const Visualization::SequentialLayoutStyle& VCastExpressionStyle::layout() const { return layout_; }
-inline const Visualization::SymbolStyle& VCastExpressionStyle::separator() const { return separator_; }
 
 }
 

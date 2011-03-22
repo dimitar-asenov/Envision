@@ -19,21 +19,18 @@ class OOVISUALIZATION_API VNewExpressionStyle : public Visualization::ItemStyle
 {
 	private:
 		Visualization::SequentialLayoutStyle layout_;
-		Visualization::SymbolStyle amountSymbol_;
 		Visualization::SymbolStyle newSymbol_;
 
 	public:
 		void load();
 
 		const Visualization::SequentialLayoutStyle& layout() const;
-		const Visualization::SymbolStyle& amountSymbol() const;
 		const Visualization::SymbolStyle& newSymbol() const;
 
 		static VNewExpressionStyle* getDefault();
 };
 
 inline const Visualization::SequentialLayoutStyle& VNewExpressionStyle::layout() const { return layout_; }
-inline const Visualization::SymbolStyle& VNewExpressionStyle::amountSymbol() const { return amountSymbol_; }
 inline const Visualization::SymbolStyle& VNewExpressionStyle::newSymbol() const { return newSymbol_; }
 
 }

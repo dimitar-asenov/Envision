@@ -18,6 +18,7 @@
 			<cornerRadius>2</cornerRadius>
 			<cornerType>2</cornerType>
 		</shape>
+		<spaceBetweenElements>3</spaceBetweenElements>
 	</layout>
 	<newSymbol prototypes="item/Symbol/default">
 		<font>
@@ -25,7 +26,4 @@
 		</font>
 		<symbol>new</symbol>
 	</newSymbol>
-	<amountSymbol prototypes="item/Symbol/default">
-		<symbol>#</symbol>
-	</amountSymbol>
 </style>

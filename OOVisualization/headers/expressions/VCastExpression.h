@@ -35,7 +35,6 @@ class OOVISUALIZATION_API VCastExpression : public Visualization::ItemWithNode< 
 		void determineChildren();
 
 	private:
-		Visualization::Symbol* separator_;
 		Visualization::Item* type_;
 		Visualization::Item* expr_;
 };

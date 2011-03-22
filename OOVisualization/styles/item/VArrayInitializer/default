@@ -2,8 +2,13 @@
 <style prototypes="item/Item/default">
 	<shape prototypes="shape/Braces/default">
 		Braces
+		<leftBrace>(</leftBrace>
+		<rightBrace>)</rightBrace>
 	</shape>
-	<layout prototypes="layout/GridLayout/default"/>
+	<layout prototypes="layout/GridLayout/default">
+		<horizontalSpace>5</horizontalSpace>
+		<verticalSpace>2</verticalSpace>
+	</layout>
 	<values prototypes="item/VList/default">
 		<shape prototypes="shape/Box/default">
 			Box

@@ -37,7 +37,6 @@ class OOVISUALIZATION_API VNewExpression : public Visualization::ItemWithNode< V
 	private:
 		Visualization::Symbol* newSymbol_;
 		Visualization::Item* type_;
-		Visualization::Symbol* amountSymbol_;
 		Visualization::Item* amount_;
 };
 

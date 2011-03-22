@@ -190,10 +190,10 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 
 	VariableDeclaration* var12 = longMethod->items()->append<VariableDeclaration>();
 	var12->setName("var12");
-	var12->setType<PrimitiveType>()->setType(PrimitiveType::VOID);
+	var12->setType<ArrayType>()->setType<PrimitiveType>()->setType(PrimitiveType::INT);
 	NewExpression* newExpr = var12->setInitialValue<NewExpression>();
 	newExpr->setType<PrimitiveType>()->setType(PrimitiveType::INT);
-	newExpr->setAmount<VariableAccess>()->ref()->set("local:var2");
+	newExpr->setAmount<IntegerLiteral>()->setValue(5);
 
 	VariableDeclaration* var13 = longMethod->items()->append<VariableDeclaration>();
 	var13->setName("var13");

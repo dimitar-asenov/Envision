@@ -22,7 +22,6 @@ void VNewExpressionStyle::load()
 
 	Visualization::Styles::load("layout", layout_);
 	Visualization::Styles::load("newSymbol", newSymbol_);
-	Visualization::Styles::load("amountSymbol", amountSymbol_);
 }
 
 }
