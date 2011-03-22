@@ -133,18 +133,18 @@ void GridLayout::synchronizeWithNodes(const QList< QList<Model::Node*> >& nodes,
 			}
 
 	// Get the new size.
-	int newX = nodes.size();
-	int newY = 0;
-	for (int x = 0; x<newX; ++x)
-		if (newY < nodes[x].size()) newY = nodes[x].size();
+	int newY = nodes.size();
+	int newX = 0;
+	for (int y = 0; y<newY; ++y)
+		if (newX < nodes[y].size()) newX = nodes[y].size();
 	setGridSize(newX, newY, false);
 
-	for (int x = 0; x<nodes.size(); ++x)
-		for (int y = 0; y<nodes[x].size(); ++y)
+	for (int y = 0; y<nodes.size(); ++y)
+		for (int x = 0; x<nodes[y].size(); ++x)
 		{
-			int oldIndex = nodesFound.indexOf(nodes[x][y]);
+			int oldIndex = nodesFound.indexOf(nodes[y][x]);
 			if (oldIndex >=0) set(itemsFound[oldIndex], x, y, false);
-			else set(renderer->render(NULL, nodes[x][y]), x, y, false);
+			else set(renderer->render(NULL, nodes[y][x]), x, y, false);
 		}
 }
 
