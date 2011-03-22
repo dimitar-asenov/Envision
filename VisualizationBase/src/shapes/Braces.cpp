@@ -35,6 +35,14 @@ void Braces::update()
 		textSize_ = height();
 		QSize lb = getSizeOfBrace(style()->leftBrace(), style()->leftBraceFont(), textSize_, &leftBraceOffset_);
 		QSize rb = getSizeOfBrace(style()->rightBrace(), style()->rightBraceFont(), textSize_, &rightBraceOffset_);
+
+		while (lb.height() < height() && rb.height() < height())
+		{
+			textSize_++;
+			lb = getSizeOfBrace(style()->leftBrace(), style()->leftBraceFont(), textSize_, &leftBraceOffset_);
+			rb = getSizeOfBrace(style()->rightBrace(), style()->rightBraceFont(), textSize_, &rightBraceOffset_);
+		}
+
 		contentTop_ = (lb.height() - height() )/ 2;
 		contentLeft_ = lb.width();
 		rightBraceLeft_ = contentLeft_ + width();
@@ -72,7 +80,8 @@ QSize Braces::getSizeOfBrace(const QString& brace, const QFont& font, int innerH
 	f.setPixelSize(innerHeight);
 	QFontMetrics qfm(f);
 
-	QRect bound = qfm.boundingRect(brace);
+	// TODO tightBoundingRect is supposedly very slow on Windows. Test this.
+	QRect bound = qfm.tightBoundingRect(brace);
 	if (offset)
 	{
 		offset->setX(-bound.left());

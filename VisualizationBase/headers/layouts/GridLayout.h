@@ -50,6 +50,19 @@ class VISUALIZATIONBASE_API GridLayout: public Layout
 		template <class T> T* at(int x, int y);
 		template <class T> T* at(int x, int y) const;
 
+		/**
+		 * Updates the content of the grid to match 'nodes'.
+		 *
+		 * The elements of the grid are updated so that they contain visualizations of the provided nodes. The grid will
+		 * be resized if necessary.
+		 *
+		 * @param nodes
+		 * 				A list of rows. The first row in the list is the topmost one. Each row is a list of nodes starting
+		 * 				from the leftmost node.
+		 *
+		 * @param renderer
+		 * 				The renderer to use when visualizing the nodes.
+		 */
 		void synchronizeWithNodes(const QList< QList<Model::Node*> >& nodes, ModelRenderer* renderer);
 
 		void synchronize(Item*& item, Model::Node* node, int x, int y);
