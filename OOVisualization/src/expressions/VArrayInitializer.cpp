@@ -20,7 +20,7 @@ ITEM_COMMON_DEFINITIONS(VArrayInitializer)
 VArrayInitializer::VArrayInitializer(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode< LayoutProvider<GridLayout>, ArrayInitializer>(parent, node, style),
 	values_( NULL ),
-	matrixForm_(true)
+	matrixForm_(false)
 {
 }
 
@@ -32,6 +32,14 @@ VArrayInitializer::~VArrayInitializer()
 
 void VArrayInitializer::determineChildren()
 {
+	// Automatically switch to matrix form if there are nested ArrayInitializers
+	if (node()->values()->size()  > 0 && dynamic_cast<ArrayInitializer*>(node()->values()->at(0)))
+		matrixForm_ = true;
+	else
+		matrixForm_ = false;
+
+
+
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
 	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
 	//			what's the reason they are being updated.

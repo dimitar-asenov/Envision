@@ -227,11 +227,19 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 
 	VariableDeclaration* var17 = longMethod->items()->append<VariableDeclaration>();
 	var17->setName("var17");
-	var17->setType<ArrayType>()->setType<ArrayType>()->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+	var17->setType<ArrayType>()->setType<NamedType>()->type()->ref()->set("class:String");
 	ArrayInitializer* outterArrayInit = var17->setInitialValue<ArrayInitializer>();
-	ArrayInitializer* col1Init = outterArrayInit->values()->append<ArrayInitializer>();
-	ArrayInitializer* col2Init = outterArrayInit->values()->append<ArrayInitializer>();
-	ArrayInitializer* col3Init = outterArrayInit->values()->append<ArrayInitializer>();
+	outterArrayInit->values()->append<StringLiteral>()->setValue("this");
+	outterArrayInit->values()->append<StringLiteral>()->setValue("looks");
+	outterArrayInit->values()->append<StringLiteral>()->setValue("good");
+
+	VariableDeclaration* var18 = longMethod->items()->append<VariableDeclaration>();
+	var18->setName("var18");
+	var18->setType<ArrayType>()->setType<ArrayType>()->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+	ArrayInitializer* matrixArrayInit = var18->setInitialValue<ArrayInitializer>();
+	ArrayInitializer* col1Init = matrixArrayInit->values()->append<ArrayInitializer>();
+	ArrayInitializer* col2Init = matrixArrayInit->values()->append<ArrayInitializer>();
+	ArrayInitializer* col3Init = matrixArrayInit->values()->append<ArrayInitializer>();
 	col1Init->values()->append<IntegerLiteral>()->setValue(1);
 	col1Init->values()->append<IntegerLiteral>()->setValue(2);
 	col1Init->values()->append<IntegerLiteral>()->setValue(3);
