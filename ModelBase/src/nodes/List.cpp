@@ -149,4 +149,24 @@ void List::paste(ClipboardStore& clipboard, int position)
 	}
 }
 
+Node* List::findFirstSymbolDefinition(const QString& symbol)
+{
+	for(int i = 0; i<nodes_.size(); ++i)
+		if (nodes_[i]->definesSymbol() && nodes_[i]->symbolName() == symbol)
+			return nodes_[i];
+
+	return NULL;
+}
+
+QList<Node*> List::findAllSymbolDefinitions(const QString& symbol)
+{
+	QList<Node*> result;
+
+	for(int i = 0; i<nodes_.size(); ++i)
+		if (nodes_[i]->definesSymbol() && nodes_[i]->symbolName() == symbol)
+			result.append( nodes_[i] );
+
+	return result;
+}
+
 }

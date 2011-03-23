@@ -52,6 +52,9 @@ class MODELBASE_API List: public Node
 
 		const QVector<Node*>& nodes();
 
+		Node* findFirstSymbolDefinition(const QString& symbol);
+		QList<Node*> findAllSymbolDefinitions(const QString& symbol);
+
 	private:
 		QVector<Node*> nodes_;
 

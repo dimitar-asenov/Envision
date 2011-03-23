@@ -28,4 +28,23 @@ const QString& Project::symbolName() const
 	return name();
 }
 
+Model::Node* Project::navigateTo(Model::Node* source, QString path)
+{
+	QString symbol = extractFrontSymbol(path);
+	Model::Node* found = NULL;
+
+	// Is the target symbol name the module's name
+	if (isAncestorOf(source) && symbol == symbolName()) found = this;
+
+	if (!found) found = projects()->findFirstSymbolDefinition(symbol);
+	if (!found) found = libraries()->findFirstSymbolDefinition(symbol);
+	if (!found) found = modules()->findFirstSymbolDefinition(symbol);
+	if (!found) found = classes()->findFirstSymbolDefinition(symbol);
+	if (!found) return ExtendableNode::navigateTo(source, path);
+
+	QString rest = extractSecondaryPath(path);
+	if (!rest.isEmpty()) return found->navigateTo(this, rest);
+	else return found;
+}
+
 }

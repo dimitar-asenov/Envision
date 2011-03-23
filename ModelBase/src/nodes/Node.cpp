@@ -106,6 +106,8 @@ Node* Node::lowestCommonAncestor(Node* other)
 
 bool Node::isAncestorOf(const Node* other) const
 {
+	if (other == NULL) return false;
+
 	const Node* p = other->parent();
 
 	while (p && p != this) p = p->parent();

@@ -39,6 +39,8 @@ class OOMODEL_API Method : public Model::ExtendableNode
 	public:
 		virtual bool definesSymbol() const;
 		virtual const QString& symbolName() const;
+
+		virtual Model::Node* navigateTo(Model::Node* source, QString path);
 };
 
 }
