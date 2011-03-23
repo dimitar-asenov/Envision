@@ -53,11 +53,6 @@ class MODELBASE_API ExtendableNode: public Node
 		Node* get(const ExtendableIndex &attributeIndex) const;
 		Node* get(const QString &attributeName) const;
 
-		virtual Node* child(NodeIdType id);
-		virtual Node* child(const QString& name);
-
-		virtual QString childReferenceName(const Node* child) const;
-
 		template<class T>
 		T* set(const ExtendableIndex &attributeIndex, const QString& type = QString());
 

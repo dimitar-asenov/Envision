@@ -34,7 +34,8 @@ class OOMODEL_API Class : public Model::ExtendableNode
 	ATTRIBUTE_OOP_VISIBILITY
 
 	public:
-		virtual QString referenceName() const;
+		virtual bool definesSymbol() const;
+		virtual const QString& symbolName() const;
 };
 
 }

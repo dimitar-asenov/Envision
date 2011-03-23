@@ -24,6 +24,10 @@ class OOMODEL_API FormalArgument : public Model::ExtendableNode
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(FormalArgument)
 	ATTRIBUTE_OOP_NAME
 	ATTRIBUTE(Type, type, setType)
+
+	public:
+		virtual bool definesSymbol() const;
+		virtual const QString& symbolName() const;
 };
 
 }

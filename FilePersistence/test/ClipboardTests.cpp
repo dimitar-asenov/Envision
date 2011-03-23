@@ -65,7 +65,7 @@ TEST(FilePersistence, CopyPartialToClipboard)
 	sc.putNode(root);
 
 	QString clipboardText = QApplication::clipboard()->text().simplified();
-	CHECK_STR_EQUAL("<!DOCTYPE EnvisionFilePersistence> <clipboard> <PartialList name=\"0\" partial=\"0\"> <List name=\"list\" partial=\"0\"> <Text name=\"ModelBaseListRefName\" partial=\"0\">S_TheList</Text> <Text name=\"0\" partial=\"0\">S_one</Text> <Text name=\"1\" partial=\"0\">S_two</Text> <Text name=\"2\" partial=\"0\">S_three</Text> <Text name=\"3\" partial=\"0\">S_four</Text> </List> </PartialList> </clipboard>",clipboardText);
+	CHECK_STR_EQUAL("<!DOCTYPE EnvisionFilePersistence> <clipboard> <PartialList name=\"0\" partial=\"0\"> <List name=\"list\" partial=\"0\"> <Text name=\"0\" partial=\"0\">S_one</Text> <Text name=\"1\" partial=\"0\">S_two</Text> <Text name=\"2\" partial=\"0\">S_three</Text> <Text name=\"3\" partial=\"0\">S_four</Text> </List> </PartialList> </clipboard>",clipboardText);
 }
 
 TEST(FilePersistence, PasteTextFromClipboard)
@@ -135,11 +135,9 @@ TEST(FilePersistence, PasteListFromClipboard)
 	Model::List* root = dynamic_cast<Model::List*> (model.createRoot("List"));
 
 	model.beginModification(root, "elems");
-	root->setReferenceName("Hello");
 	root->append<Model::Text>()->set("first");
 	root->append<Model::Text>()->set("second");
 	Model::List* list = root->append<Model::List>();
-	list->setReferenceName("Under");
 	list->append<Model::Text>()->set("third");
 	model.endModification();
 
@@ -151,10 +149,9 @@ TEST(FilePersistence, PasteListFromClipboard)
 	root->load(sc);
 	model.endModification();
 
-	CHECK_STR_EQUAL("Under", root->referenceName());
 	CHECK_INT_EQUAL(1, root->size());
 	CHECK_INT_EQUAL(0, root->id());
-	CHECK_INT_EQUAL(8,root->at<Model::Node>(0)->id());
+	CHECK_INT_EQUAL(5,root->at<Model::Node>(0)->id());
 	CHECK_STR_EQUAL("third",root->at<Model::Text>(0)->get());
 }
 
@@ -166,11 +163,9 @@ TEST(FilePersistence, PasteInListFromClipboard)
 	Model::List* root = dynamic_cast<Model::List*> (model.createRoot("List"));
 
 	model.beginModification(root, "elems");
-	root->setReferenceName("Hello");
 	root->append<Model::Text>()->set("first");
 	root->append<Model::Text>()->set("second");
 	Model::List* list = root->append<Model::List>();
-	list->setReferenceName("Under");
 	list->append<Model::Text>()->set("third");
 	model.endModification();
 
@@ -187,8 +182,8 @@ TEST(FilePersistence, PasteInListFromClipboard)
 
 	CHECK_INT_EQUAL(5, root->size());
 	CHECK_INT_EQUAL(0, root->id());
-	CHECK_INT_EQUAL(7, root->at<Model::Node>(3)->id());
-	CHECK_INT_EQUAL(8, root->at<Model::Node>(4)->id());
+	CHECK_INT_EQUAL(5, root->at<Model::Node>(3)->id());
+	CHECK_INT_EQUAL(6, root->at<Model::Node>(4)->id());
 	CHECK_STR_EQUAL("first",root->at<Model::Text>(3)->get());
 	CHECK_INT_EQUAL(1, root->at<Model::List>(4)->size());
 	CHECK_STR_EQUAL("third",root->at<Model::List>(4)->at<Model::Text>(0)->get());

@@ -15,5 +15,14 @@ EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(FormalArgument, Model::Extendabl
 REGISTER_ATTRIBUTE(FormalArgument, name, Text, false, false, true)
 REGISTER_ATTRIBUTE(FormalArgument, type, Type, false, false, true)
 
+bool FormalArgument::definesSymbol() const
+{
+	return true;
+}
+
+const QString& FormalArgument::symbolName() const
+{
+	return name();
+}
 
 }

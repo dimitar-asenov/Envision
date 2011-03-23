@@ -17,4 +17,14 @@ REGISTER_ATTRIBUTE(Field, type, Type, false, false, true)
 REGISTER_ATTRIBUTE(Field, visibility, Visibility, false, false, true)
 REGISTER_ATTRIBUTE(Field, stat, Static, false, false, true)
 
+bool Field::definesSymbol() const
+{
+	return true;
+}
+
+const QString& Field::symbolName() const
+{
+	return name();
+}
+
 }

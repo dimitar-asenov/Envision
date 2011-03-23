@@ -27,19 +27,6 @@ class MODELBASE_API Node
 		typedef Node* (*NodeConstructor)(Node* parent, Model* model);
 		typedef Node* (*NodePersistenceConstructor)(Node *parent, NodeIdType id, PersistentStore &store, bool partialLoadHint);
 
-	private:
-		Node* parent_;
-		NodeIdType id_;
-		int revision_;
-
-		static int numRegisteredTypes_;
-		static QMap<QString, NodeConstructor> nodeConstructorRegister;
-		static QMap<QString, NodePersistenceConstructor> nodePersistenceConstructorRegister;
-
-	protected:
-		bool fullyLoaded;
-
-	public:
 		Node(Node* parent, Model* model);
 		Node(Node* parent, NodeIdType id);
 		virtual ~Node();
@@ -68,26 +55,8 @@ class MODELBASE_API Node
 		 */
 		virtual Node* navigateTo(Node* source, QString path);
 
-		/**
-		 * Returns the child node with the specified id.
-		 *
-		 * Only direct children should be considered. If there is no child node with the specified id this method returns
-		 * NULL.
-		 *
-		 * If this is a partially loaded node, this method will cause the node to fully load.
-		 */
-		virtual Node* child(NodeIdType id);
-
-		/**
-		 * Returns the child node with the specified name.
-		 *
-		 * The name specified is a reference name under which this parent knows the child. This could be the child's name but
-		 * does not have to be. The parent is free to decide how children are addressed. If this node does not have a child
-		 * with the specified name this method returns NULL.
-		 *
-		 * If this is a partially loaded node, this method will cause the node to fully load.
-		 */
-		virtual Node* child(const QString& name);
+		virtual bool definesSymbol() const;
+		virtual const QString& symbolName() const;
 
 		NodeIdType id() const;
 		int revision() const;
@@ -112,19 +81,6 @@ class MODELBASE_API Node
 		 * Executes the specified command and pushes it on the undo stack.
 		 */
 		void execute(UndoCommand *command);
-
-		/**
-		 * Returns the name by which this node can be referenced.
-		 *
-		 * This name should be unique between all siblings. If the returned value is a null string ( QString.isNull()
-		 * returns true ) this means that this node can not be referenced.
-		 */
-		virtual QString referenceName() const;
-
-		/**
-		 * Returns a name under which this node knows the specified child or QString::null if the child is unknown.
-		 */
-		virtual QString childReferenceName(const Node* child) const;
 
 		/**
 		 * Saves the current node to a persistent store.
@@ -194,6 +150,18 @@ class MODELBASE_API Node
 		static Node* createNewNode(const QString &type, Node* parent, NodeIdType id, PersistentStore &store, bool partialLoadHint);
 
 		static bool isTypeRegistered(const QString &type);
+
+	protected:
+		bool fullyLoaded;
+
+	private:
+		Node* parent_;
+		NodeIdType id_;
+		int revision_;
+
+		static int numRegisteredTypes_;
+		static QMap<QString, NodeConstructor> nodeConstructorRegister;
+		static QMap<QString, NodePersistenceConstructor> nodePersistenceConstructorRegister;
 };
 
 template<class T> Node* createNewNode(Node* parent, Model* model)

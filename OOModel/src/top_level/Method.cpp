@@ -19,7 +19,12 @@ REGISTER_ATTRIBUTE(Method, results, TypedListOfFormalResult, false, false, true)
 REGISTER_ATTRIBUTE(Method, visibility, Visibility, false, false, true)
 REGISTER_ATTRIBUTE(Method, stat, Static, false, false, true)
 
-QString Method::referenceName() const
+bool Method::definesSymbol() const
+{
+	return true;
+}
+
+const QString& Method::symbolName() const
 {
 	return name();
 }

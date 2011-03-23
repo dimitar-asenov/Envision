@@ -36,7 +36,8 @@ class OOMODEL_API Method : public Model::ExtendableNode
 	ATTRIBUTE_OOP_STATIC
 
 	public:
-		virtual QString referenceName() const;
+		virtual bool definesSymbol() const;
+		virtual const QString& symbolName() const;
 };
 
 }

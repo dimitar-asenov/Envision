@@ -16,7 +16,12 @@ REGISTER_ATTRIBUTE(Module, name, Text, false, false, true)
 REGISTER_ATTRIBUTE(Module, modules, TypedListOfModule, false, false, true)
 REGISTER_ATTRIBUTE(Module, classes, TypedListOfClass, false, false, true)
 
-QString Module::referenceName() const
+bool Module::definesSymbol() const
+{
+	return true;
+}
+
+const QString& Module::symbolName() const
 {
 	return name();
 }

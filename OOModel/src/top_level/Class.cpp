@@ -18,8 +18,12 @@ REGISTER_ATTRIBUTE(Class, fields, TypedListOfField, false, false, true)
 REGISTER_ATTRIBUTE(Class, methods, TypedListOfMethod, false, false, true)
 REGISTER_ATTRIBUTE(Class, visibility, Visibility, false, false, true)
 
+bool Class::definesSymbol() const
+{
+	return true;
+}
 
-QString Class::referenceName() const
+const QString& Class::symbolName() const
 {
 	return name();
 }

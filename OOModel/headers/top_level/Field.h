@@ -29,6 +29,10 @@ class OOMODEL_API Field : public Model::ExtendableNode
 	ATTRIBUTE(Type, type, setType)
 	ATTRIBUTE_OOP_VISIBILITY
 	ATTRIBUTE_OOP_STATIC
+
+	public:
+		virtual bool definesSymbol() const;
+		virtual const QString& symbolName() const;
 };
 
 

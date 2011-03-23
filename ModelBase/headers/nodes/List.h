@@ -27,26 +27,12 @@ class MODELBASE_API List: public Node
 {
 	NODE_DECLARE_STANDARD_METHODS(List)
 
-	private:
-		QVector<Node*> nodes_;
-		Text* referenceName_;
-
-		void loadSubNodes(QList<LoadedNode>& nodeList);
-
 	public:
 		virtual ~List();
 
 		virtual void save(PersistentStore &store) const;
 		virtual void load(PersistentStore &store);
 		virtual void loadFully(PersistentStore &store);
-
-		virtual Node* child(NodeIdType id);
-		virtual Node* child(const QString& name);
-
-		virtual QString referenceName() const;
-		virtual QString childReferenceName(const Node* child) const;
-
-		void setReferenceName(const QString &name);
 
 		int size();
 		template <class T> T* first();
@@ -65,6 +51,11 @@ class MODELBASE_API List: public Node
 		void clear();
 
 		const QVector<Node*>& nodes();
+
+	private:
+		QVector<Node*> nodes_;
+
+		void loadSubNodes(QList<LoadedNode>& nodeList);
 };
 
 template <class T> T* List::first()

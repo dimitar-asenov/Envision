@@ -25,6 +25,10 @@ class OOMODEL_API VariableDeclaration: public Statement
 	ATTRIBUTE_OOP_NAME
 	ATTRIBUTE(Type, type, setType)
 	ATTRIBUTE(Expression, initialValue, setInitialValue);
+
+	public:
+		virtual bool definesSymbol() const;
+		virtual const QString& symbolName() const;
 };
 
 }

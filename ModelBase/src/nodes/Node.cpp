@@ -29,7 +29,7 @@ QMap<QString, Node::NodePersistenceConstructor> Node::nodePersistenceConstructor
  * CONSTRUCTORS AND DESTRUCTORS
  **********************************************************************************************************************/
 Node::Node(Node* parent, Model* argModel) :
-	parent_(parent), id_(0), revision_(0), fullyLoaded(true)
+	fullyLoaded(true), parent_(parent), id_(0), revision_(0)
 {
 	Model* ownModel = model();
 
@@ -43,7 +43,7 @@ Node::Node(Node* parent, Model* argModel) :
 }
 
 Node::Node(Node* parent, NodeIdType id) :
-	parent_(parent), id_(id), revision_(0), fullyLoaded(true)
+	fullyLoaded(true), parent_(parent), id_(id), revision_(0)
 {
 }
 
@@ -129,14 +129,15 @@ Node* Node::navigateTo(Node* source, QString path)
 	else return NULL;
 }
 
-Node* Node::child(NodeIdType)
+bool Node::definesSymbol() const
 {
-	return NULL;
+	return false;
 }
 
-Node* Node::child(const QString&)
+const QString& Node::symbolName() const
 {
-	return NULL;
+	static QString nullString;
+	return nullString;
 }
 
 NodeIdType Node::id() const
@@ -192,16 +193,6 @@ void Node::addToRevision(int valueToAdd)
 bool Node::isFullyLoaded() const
 {
 	return fullyLoaded;
-}
-
-QString Node::referenceName() const
-{
-	return QString();
-}
-
-QString Node::childReferenceName(const Node*) const
-{
-	return QString();
 }
 
 NodeReadWriteLock* Node::accessLock() const

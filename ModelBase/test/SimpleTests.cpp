@@ -103,10 +103,6 @@ TEST(ModelBase, ChildNodeRetrieval)
 	CHECK_INT_EQUAL(4, left->id());
 	CHECK_INT_EQUAL(8, right->id());
 
-	CHECK_CONDITION(root->child(1) == root->name());
-	CHECK_CONDITION(root->child(4) == left);
-	CHECK_CONDITION(root->child(8) == right);
-
 	CHECK_CONDITION(root->hasAttribute("name"));
 	CHECK_CONDITION(root->hasAttribute("left"));
 	CHECK_CONDITION(root->hasAttribute("right"));

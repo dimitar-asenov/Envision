@@ -16,4 +16,14 @@ REGISTER_ATTRIBUTE(VariableDeclaration, name, Text, false, false, true)
 REGISTER_ATTRIBUTE(VariableDeclaration, type, Type, false, false, true)
 REGISTER_ATTRIBUTE(VariableDeclaration, initialValue, Expression, false, true, true)
 
+bool VariableDeclaration::definesSymbol() const
+{
+	return true;
+}
+
+const QString& VariableDeclaration::symbolName() const
+{
+	return name();
+}
+
 }

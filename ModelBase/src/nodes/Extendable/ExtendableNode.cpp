@@ -124,33 +124,6 @@ Node* ExtendableNode::get(const QString &attributeName) const
 	return NULL;
 }
 
-Node* ExtendableNode::child(NodeIdType id)
-{
-	Node* res = NULL;
-
-	for (int level = 0; level < subnodes.size(); ++level)
-		for (int i = 0; i < subnodes[level].size(); ++i)
-			if ( subnodes[level][i]->id() == id ) res = subnodes[level][i];
-
-	return res;
-}
-
-Node* ExtendableNode::child(const QString& name)
-{
-	return get(name);
-}
-
-QString ExtendableNode::childReferenceName(const Node* child) const
-{
-	for (int level = 0; level < subnodes.size(); ++level)
-	{
-		int index = subnodes[level].indexOf(const_cast<Node*> (child)); // TODO find a way to do this cleanly
-		if ( index >= 0 ) return meta.attribute(ExtendableIndex(level, index)).name();
-	}
-
-	return QString();
-}
-
 bool ExtendableNode::hasAttribute(const QString& attributeName)
 {
 	return meta.hasAttribute(attributeName);

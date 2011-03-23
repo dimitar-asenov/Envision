@@ -39,9 +39,11 @@ TEST(ModelBase, ModificationNotificationTests)
 	right->name()->set("Right text");
 	model.endModification();
 
-	CHECK_INT_EQUAL(2, nl.modifiedNodes.size());
+	CHECK_INT_EQUAL(4, nl.modifiedNodes.size());
 	CHECK_CONDITION(nl.modifiedNodes[0] == left);
-	CHECK_CONDITION(nl.modifiedNodes[1] == right);
+	CHECK_CONDITION(nl.modifiedNodes[1] == left->name());
+	CHECK_CONDITION(nl.modifiedNodes[2] == right);
+	CHECK_CONDITION(nl.modifiedNodes[3] == right->name());
 
 	nl.modifiedNodes.clear();
 	model.beginModification(NULL);
@@ -49,10 +51,12 @@ TEST(ModelBase, ModificationNotificationTests)
 	model.undo();
 	model.endModification();
 
-	CHECK_INT_EQUAL(3, nl.modifiedNodes.size());
+	CHECK_INT_EQUAL(5, nl.modifiedNodes.size());
 	CHECK_CONDITION(nl.modifiedNodes[0] == right);
-	CHECK_CONDITION(nl.modifiedNodes[1] == left);
-	CHECK_CONDITION(nl.modifiedNodes[2] == root);
+	CHECK_CONDITION(nl.modifiedNodes[1] == right->name());
+	CHECK_CONDITION(nl.modifiedNodes[2] == left);
+	CHECK_CONDITION(nl.modifiedNodes[3] == left->name());
+	CHECK_CONDITION(nl.modifiedNodes[4] == root);
 }
 
 }

@@ -9,7 +9,6 @@
 #include "ModelException.h"
 #include "nodes/Text.h"
 #include "commands/PointerFieldSet.h"
-#include "commands/NameChange.h"
 #include "commands/ListRemove.h"
 #include "commands/ListPut.h"
 #include "nodes/nodeMacros.h"
@@ -18,30 +17,17 @@
 
 namespace Model {
 
-const char* REFERENCE_NAME_NODE_ID = "ModelBaseListRefName";
-
 NODE_DEFINE_TYPE_REGISTRATION_METHODS(List)
 
 List::List(Node *parent, Model* model) :
-	Node(parent, model), referenceName_(NULL)
+	Node(parent, model)
 {
-	referenceName_ = static_cast<Text*> (Node::createNewNode("Text", this, model));
 }
 
 List::List(Node *parent, NodeIdType id, PersistentStore &store, bool partialHint) :
-	Node(parent, id), referenceName_(NULL)
+	Node(parent, id)
 {
 	fullyLoaded = !partialHint;
-
-	Node* n = store.loadSubNode(parent, REFERENCE_NAME_NODE_ID);
-	if ( n )
-	{
-		Text* text = dynamic_cast<Text*> (n);
-		if ( !text ) throw ModelException("Invalid List reference name specification in persistent store.");
-
-		referenceName_ = text;
-	}
-	else throw ModelException("Reference name missing in persistent store.");
 
 	if ( fullyLoaded )
 	{
@@ -55,30 +41,24 @@ List::~List()
 {
 	for (int i = 0; i < nodes_.size(); ++i)
 		SAFE_DELETE( nodes_[i] );
-	SAFE_DELETE(referenceName_);
 }
 
 void List::loadSubNodes(QList<LoadedNode>& nodeList)
 {
 	for (QList<LoadedNode>::iterator ln = nodeList.begin(); ln != nodeList.end(); ln++)
 	{
-		if ( ln->name != REFERENCE_NAME_NODE_ID )
-		{
-			bool ok = true;
-			int index = ln->name.toInt(&ok);
+		bool ok = true;
+		int index = ln->name.toInt(&ok);
 
-			if ( !ok ) throw ModelException("Could not read the index of a list item. Index value is: " + ln->name);
+		if ( !ok ) throw ModelException("Could not read the index of a list item. Index value is: " + ln->name);
 
-			if ( index >= nodes_.size() ) nodes_.resize(index + 1);
-			nodes_[index] = ln->node;
-		}
+		if ( index >= nodes_.size() ) nodes_.resize(index + 1);
+		nodes_[index] = ln->node;
 	}
 }
 
 void List::save(PersistentStore &store) const
 {
-	store.saveNode(referenceName_, REFERENCE_NAME_NODE_ID, false);
-
 	if ( fullyLoaded )
 		for (int i = 0; i < nodes_.size(); ++i)
 			store.saveNode(nodes_[i], QString::number(i), false);
@@ -101,22 +81,11 @@ void List::load(PersistentStore &store)
 	QList<LoadedNode> children = store.loadAllSubNodes(this);
 	for (QList<LoadedNode>::iterator ln = children.begin(); ln != children.end(); ln++)
 	{
-		if ( ln->name == REFERENCE_NAME_NODE_ID )
-		{
-			Text* text = dynamic_cast<Text*> (ln->node);
-			if ( !text ) throw ModelException("Invalid List reference name specification in persistent store.");
+		bool ok = true;
+		int index = ln->name.toInt(&ok);
+		if ( !ok ) throw ModelException("Could not read the index of a list item. Index value is: " + ln->name);
 
-			setReferenceName(text->get());
-			SAFE_DELETE(text);
-		}
-		else
-		{
-			bool ok = true;
-			int index = ln->name.toInt(&ok);
-			if ( !ok ) throw ModelException("Could not read the index of a list item. Index value is: " + ln->name);
-
-			execute(new ListPut(this, nodes_, ln->node, index));
-		}
+		execute(new ListPut(this, nodes_, ln->node, index));
 	}
 }
 
@@ -129,48 +98,6 @@ void List::loadFully(PersistentStore &store)
 		fullyLoaded = true;
 		model()->emitNodeFullyLoaded(this);
 	}
-}
-
-Node* List::child(NodeIdType id)
-{
-	if (!fullyLoaded) loadFully(* (model()->store()));
-
-	if ( referenceName_->id() == id ) return referenceName_;
-
-	for (int i = 0; i < nodes_.size(); ++i)
-		if ( nodes_[i]->id() == id ) return nodes_[i];
-
-	return NULL;
-}
-
-Node* List::child(const QString& name)
-{
-	if (!fullyLoaded) loadFully(* (model()->store()));
-
-	if ( name.isEmpty() ) return NULL;
-
-	for (int i = 0; i < nodes_.size(); ++i)
-		if ( nodes_[i]->referenceName() == name ) return nodes_[i];
-
-	return NULL;
-}
-
-QString List::referenceName() const
-{
-	return referenceName_->get();
-}
-
-QString List::childReferenceName(const Node* child) const
-{
-	for (int i = 0; i < nodes_.size(); ++i)
-		if ( nodes_[i] == child ) return nodes_[i]->referenceName();
-
-	return QString();
-}
-
-void List::setReferenceName(const QString &name)
-{
-	execute(new NameChange(this, referenceName_, name));
 }
 
 int List::size()

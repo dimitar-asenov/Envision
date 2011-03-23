@@ -31,7 +31,8 @@ class OOMODEL_API Module : public Model::ExtendableNode
 	ATTRIBUTE(Model::TypedList<Class>, classes, setClasses);
 
 	public:
-		virtual QString referenceName() const;
+		virtual bool definesSymbol() const;
+		virtual const QString& symbolName() const;
 };
 
 }

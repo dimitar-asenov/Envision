@@ -31,7 +31,6 @@ TEST(FilePersistence, LoadingTypedList)
 	CHECK_CONDITION(list != NULL);
 
 	CHECK_STR_EQUAL("TypedListOfText", list->typeName() );
-	CHECK_STR_EQUAL("TypedList", list->referenceName() );
 	CHECK_INT_EQUAL(0, list->id());
 	CHECK_INT_EQUAL(2, list->size());
 
@@ -40,11 +39,11 @@ TEST(FilePersistence, LoadingTypedList)
 
 	CHECK_CONDITION(one != NULL);
 	CHECK_STR_EQUAL("one", one->get());
-	CHECK_INT_EQUAL(2, one->id());
+	CHECK_INT_EQUAL(1, one->id());
 
 	CHECK_CONDITION(two != NULL);
 	CHECK_STR_EQUAL("two", two->get());
-	CHECK_INT_EQUAL(3, two->id())
+	CHECK_INT_EQUAL(2, two->id())
 }
 
 TEST(FilePersistence, SavingTypedList)
@@ -57,7 +56,6 @@ TEST(FilePersistence, SavingTypedList)
 	Model::TypedList<Model::Text>* list = dynamic_cast<Model::TypedList<Model::Text>*> (model.createRoot("TypedListOfText"));
 
 	model.beginModification(list, "create");
-	list->setReferenceName("TypedList");
 	list->append<Model::Text>()->set("one");
 	list->append<Model::Text>()->set("two");
 	model.endModification();
