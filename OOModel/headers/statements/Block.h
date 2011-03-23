@@ -9,8 +9,7 @@
 #define BLOCK_H_
 
 #include "Statement.h"
-
-#include "ModelBase/headers/nodes/TypedList.h"
+#include "../elements/StatementItemList.h"
 
 namespace OOModel {
 
@@ -18,7 +17,7 @@ class OOMODEL_API Block: public Statement
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Block)
 
-	ATTRIBUTE(Model::TypedList<StatementItem>, items, setItems);
+	ATTRIBUTE(StatementItemList, items, setItems);
 };
 
 }

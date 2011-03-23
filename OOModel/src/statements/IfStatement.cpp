@@ -13,7 +13,7 @@ EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(IfStatement, Statement)
 EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(IfStatement, Statement)
 
 REGISTER_ATTRIBUTE(IfStatement, condition, Expression, false, false, true)
-REGISTER_ATTRIBUTE(IfStatement, thenBranch, TypedListOfStatementItem, false, false, true)
-REGISTER_ATTRIBUTE(IfStatement, elseBranch, TypedListOfStatementItem, false, false, true)
+REGISTER_ATTRIBUTE(IfStatement, thenBranch, StatementItemList, false, false, true)
+REGISTER_ATTRIBUTE(IfStatement, elseBranch, StatementItemList, false, false, true)
 
 }

@@ -10,12 +10,11 @@
 
 #include "../oomodel_api.h"
 #include "Statement.h"
+#include "../elements/StatementItemList.h"
 #include "../expressions/Expression.h"
 
 #include "ModelBase/headers/nodes/Extendable/ExtendableNode.h"
 #include "ModelBase/headers/nodes/nodeMacros.h"
-
-#include "ModelBase/headers/nodes/TypedList.h"
 
 namespace OOModel {
 
@@ -24,7 +23,7 @@ class OOMODEL_API SwitchCase : public Model::ExtendableNode
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(SwitchCase)
 
 	ATTRIBUTE(Expression, expr, setExpr)
-	ATTRIBUTE(Model::TypedList<StatementItem>, statement, setStatement)
+	ATTRIBUTE(StatementItemList, statement, setStatement)
 };
 
 }

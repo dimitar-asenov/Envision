@@ -11,9 +11,8 @@
 #include "Statement.h"
 
 #include "../elements/FormalArgument.h"
+#include "../elements/StatementItemList.h"
 #include "../expressions/Expression.h"
-
-#include "ModelBase/headers/nodes/TypedList.h"
 
 namespace OOModel {
 
@@ -24,7 +23,7 @@ class OOMODEL_API ForEachStatement: public Statement
 	ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::Text, varName, setVarName, QString, const QString&)
 	ATTRIBUTE(Type, varType, setVarType)
 	ATTRIBUTE(Expression, collection, setCollection);
-	ATTRIBUTE(Model::TypedList<StatementItem>, body, setBody);
+	ATTRIBUTE(StatementItemList, body, setBody);
 };
 
 }

@@ -15,6 +15,6 @@ EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(ForEachStatement, Statement)
 REGISTER_ATTRIBUTE(ForEachStatement, varName, Text, false, false, true)
 REGISTER_ATTRIBUTE(ForEachStatement, varType, Type, false, true, true)
 REGISTER_ATTRIBUTE(ForEachStatement, collection, Expression, false, false, true)
-REGISTER_ATTRIBUTE(ForEachStatement, body, TypedListOfStatementItem, false, false, true)
+REGISTER_ATTRIBUTE(ForEachStatement, body, StatementItemList, false, false, true)
 
 }

@@ -16,6 +16,7 @@
 #include "../elements/StatementItem.h"
 #include "../elements/FormalArgument.h"
 #include "../elements/FormalResult.h"
+#include "../elements/StatementItemList.h"
 
 #include "ModelBase/headers/nodes/Extendable/ExtendableNode.h"
 #include "ModelBase/headers/nodes/Text.h"
@@ -29,7 +30,7 @@ class OOMODEL_API Method : public Model::ExtendableNode
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Method)
 
 	ATTRIBUTE_OOP_NAME
-	ATTRIBUTE(Model::TypedList<StatementItem>, items, setItems);
+	ATTRIBUTE(StatementItemList, items, setItems);
 	ATTRIBUTE(Model::TypedList<FormalArgument>, arguments, setArguments);
 	ATTRIBUTE(Model::TypedList<FormalResult>, results, setResults);
 	ATTRIBUTE_OOP_VISIBILITY

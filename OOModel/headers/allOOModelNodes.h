@@ -54,6 +54,7 @@
 #include "elements/Visibility.h"
 #include "elements/Static.h"
 #include "elements/StatementItem.h"
+#include "elements/StatementItemList.h"
 #include "elements/FormalArgument.h"
 #include "elements/FormalResult.h"
 

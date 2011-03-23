@@ -74,6 +74,7 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	Class::init();
 	Method::init();
 	StatementItem::init();
+	StatementItemList::registerNodeType();
 	FormalArgument::init();
 	FormalResult::init();
 	Field::init();
