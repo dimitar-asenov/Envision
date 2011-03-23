@@ -103,6 +103,26 @@ Node* Node::lowestCommonAncestor(Node* other)
 
 	return n;
 }
+
+bool Node::isAncestorOf(const Node* other) const
+{
+	const Node* p = other->parent();
+
+	while (p && p != this) p = p->parent();
+
+	return p == this;
+}
+
+Node* Node::navigateTo(Node* source, QString path)
+{
+	if (isAncestorOf(source))
+	{
+		if (parent_) return parent_->navigateTo(this, path);
+		else return NULL;
+	}
+	else return NULL;
+}
+
 /***********************************************************************************************************************
  * GETTERS AND SETTERS
  **********************************************************************************************************************/
@@ -121,12 +141,6 @@ Node* Node::root() const
 Node* Node::parent() const
 {
 	return parent_;
-}
-
-Node* Node::navigateTo(Node* source, QString path)
-{
-	if (parent_) return parent_->navigateTo(source, path);
-	else return NULL;
 }
 
 bool Node::definesSymbol() const

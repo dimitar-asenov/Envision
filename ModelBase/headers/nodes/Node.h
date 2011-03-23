@@ -12,6 +12,7 @@
 #include "../persistence/PersistentStore.h"
 
 #include <QtCore/QString>
+#include <QtCore/QStringList>
 #include <QtCore/QMutex>
 #include <QtCore/QMap>
 
@@ -55,6 +56,10 @@ class MODELBASE_API Node
 		 */
 		virtual Node* navigateTo(Node* source, QString path);
 
+		QString extractFrontSymbol(const QString& path) const;
+		QString extractFrontDescriptor(const QString& path) const;
+		QString extractSecondaryPath(const QString& path) const;
+
 		virtual bool definesSymbol() const;
 		virtual const QString& symbolName() const;
 
@@ -76,6 +81,7 @@ class MODELBASE_API Node
 		virtual NodeReadWriteLock* accessLock() const;
 
 		Node* lowestCommonAncestor(Node* other);
+		bool isAncestorOf(const Node* other) const;
 
 		/**
 		 * Executes the specified command and pushes it on the undo stack.
@@ -163,6 +169,20 @@ class MODELBASE_API Node
 		static QMap<QString, NodeConstructor> nodeConstructorRegister;
 		static QMap<QString, NodePersistenceConstructor> nodePersistenceConstructorRegister;
 };
+
+
+
+inline QString Node::extractFrontSymbol(const QString& path) const
+{ return path.split(',').first().split(':').last(); }
+
+inline QString Node::extractFrontDescriptor(const QString& path) const
+{
+	QString front = path.split(',').first();
+	return front.left( front.lastIndexOf(':') );
+}
+
+inline QString Node::extractSecondaryPath(const QString& path) const
+{ return path.mid( path.indexOf(',') + 1); }
 
 template<class T> Node* createNewNode(Node* parent, Model* model)
 {
