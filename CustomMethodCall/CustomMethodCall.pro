@@ -27,13 +27,20 @@ CONFIG += plugin \
 target.path = $$PLUGINS_DIR
 pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
+styles.path = $${BUILD_DIR}/styles
+styles.files = styles/*
 INSTALLS += target \
-    pluginmeta
-HEADERS += headers/CustomVisualization.h \
+    pluginmeta \
+    styles
+HEADERS += headers/items/FindMethodVisStyle.h \
+    headers/items/FindMethodVis.h \
+    headers/CustomVisualization.h \
     headers/CustomMethodCallException.h \
     headers/custommethodcall_api.h \
     src/custommethodcall.h
-SOURCES += src/CustomVisualization.cpp \
+SOURCES += src/items/FindMethodVis.cpp \
+    src/items/FindMethodVisStyle.cpp \
+    src/CustomVisualization.cpp \
     src/CustomMethodCallException.cpp \
     src/custommethodcall.cpp \
     test/SimpleTest.cpp

@@ -10,6 +10,8 @@
 
 #include "CustomVisualization.h"
 
+#include "items/FindMethodVis.h"
+
 #include "OOModel/headers/statements/MethodCallStatement.h"
 #include "OOModel/headers/expressions/MethodCallExpression.h"
 #include "OOModel/headers/allOOModelNodes.h"
@@ -32,6 +34,9 @@ bool CustomMethodCall::initialize(Envision::EnvisionManager&)
 	// Override existing visualization
 	Scene::defaultRenderer()->registerVisualization(MethodCallStatement::typeIdStatic(), CustomVisualization::createStatement);
 	Scene::defaultRenderer()->registerVisualization(MethodCallExpression::typeIdStatic(), CustomVisualization::createExpression);
+
+	//Register custom visualizations
+	CustomVisualization::registerVisualization(FindMethodVis::className(), createVisualization<FindMethodVis, MethodCallStatement>);
 
 	return true;
 }
