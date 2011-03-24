@@ -182,7 +182,10 @@ inline QString Node::extractFrontDescriptor(const QString& path) const
 }
 
 inline QString Node::extractSecondaryPath(const QString& path) const
-{ return path.mid( path.indexOf(',') + 1); }
+{
+	int index = path.indexOf(',') + 1;
+	return index ? ( path.mid(  index ) ) : QString();
+}
 
 template<class T> Node* createNewNode(Node* parent, Model* model)
 {
