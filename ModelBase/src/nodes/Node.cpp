@@ -117,7 +117,7 @@ bool Node::isAncestorOf(const Node* other) const
 
 Node* Node::navigateTo(Node* source, QString path)
 {
-	if (isAncestorOf(source))
+	if (source == this || isAncestorOf(source))
 	{
 		if (parent_) return parent_->navigateTo(this, path);
 		else return NULL;
