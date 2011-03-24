@@ -14,4 +14,9 @@ EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(NamedType, Type)
 
 REGISTER_ATTRIBUTE(NamedType, type, ReferenceExpression, false, false, true)
 
+Class* NamedType::classDefinition()
+{
+	return type()->classDefinition();
+}
+
 }

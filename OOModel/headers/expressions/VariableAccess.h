@@ -13,12 +13,17 @@
 
 namespace OOModel {
 
+class Class;
+
 class OOMODEL_API VariableAccess: public Expression
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(VariableAccess)
 
 	ATTRIBUTE(Expression, prefix, setPrefix)
 	ATTRIBUTE(Model::Reference, ref, setRef)
+
+	public:
+		virtual Class* classDefinition();
 };
 
 }

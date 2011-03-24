@@ -80,7 +80,10 @@ TEST(OOModel, JavaLibraryAndHelloWorldTest)
 	ref->ref()->set("lib:Java,class:System");
 
 	model.endModification();
+
 	CHECK_STR_EQUAL("Java", java->name());
+	CHECK_CONDITION(callPrintln->methodDefinition() != NULL);
+	CHECK_CONDITION(callPrintln->methodDefinition() == println);
 }
 
 }

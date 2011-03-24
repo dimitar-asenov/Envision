@@ -17,6 +17,8 @@
 
 namespace OOModel {
 
+class Method;
+
 class OOMODEL_API MethodCallStatement: public Statement
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(MethodCallStatement)
@@ -26,6 +28,7 @@ class OOMODEL_API MethodCallStatement: public Statement
 	ATTRIBUTE(Model::TypedList<Expression>, arguments, setArguments)
 
 	public:
+		Method* methodDefinition();
 
 };
 

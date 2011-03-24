@@ -19,6 +19,9 @@ class OOMODEL_API NamedType : public Type
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(NamedType)
 
 	ATTRIBUTE(ReferenceExpression, type, setType);
+
+	public:
+		virtual Class* classDefinition();
 };
 
 }
