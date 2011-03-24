@@ -28,7 +28,7 @@ Class* ReferenceExpression::classDefinition()
 		exp = dynamic_cast<ReferenceExpression*> (exp->prefix());
 	}
 
-	return dynamic_cast<Class*> (parent()->navigateTo(this, path));
+	return dynamic_cast<Class*> (navigateTo(this, path));
 }
 
 }

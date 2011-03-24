@@ -33,7 +33,7 @@ Class* VariableAccess::classDefinition()
 		exp = dynamic_cast<ReferenceExpression*> (exp->prefix());
 	}
 
-	Model::Node* var = parent()->navigateTo(this, path);
+	Model::Node* var = navigateTo(this, path);
 
 	Field* f = dynamic_cast<Field*> (var);
 	if (f) return f->type()->classDefinition();
