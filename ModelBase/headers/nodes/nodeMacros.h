@@ -318,6 +318,29 @@ private:																																					\
 /*********************************************************************************************************************/
 
 /**
+ * INTERNAL
+ *
+ * Sets the value of a value attribute that might be NULL
+ */
+#define SET_ATTR_VAL(type, name)																													\
+	type* node = static_cast<type*> (get(name##Index));																					\
+	if (!node) node = set<type>(name##Index, type::typeNameStatic());																	\
+	node->set(val);
+/*********************************************************************************************************************/
+
+/**
+ * INTERNAL
+ *
+ * Sets the value of a value attribute defines inside of an Extension that might be NULL
+ */
+#define SET_EXTENSION_ATTR_VAL(type, name)																									\
+	type* node = static_cast<type*> (self_->get(attr_[name##Index]));																	\
+	if (!node) node = self_->set<type>(attr_[name##Index], type::typeNameStatic());												\
+	node->set(val);
+/*********************************************************************************************************************/
+
+
+/**
  * Declares an attribute for a class inheriting from ExtendableNode. The attribute must have a get() and a set()
  * method.
  *
@@ -342,7 +365,7 @@ private:																																					\
 public:																																					\
 		type* name##Node() { return static_cast<type*> (get(name##Index)); }															\
 		valueType name() const { return (static_cast<type*> (get(name##Index)))->get(); }										\
-		void setMethodName(const valueType& val) { (static_cast<type*> (get(name##Index)))->set(val); }						\
+		void setMethodName(const valueType& val) { SET_ATTR_VAL(type, name) }														\
 private:																																					\
 
 /*********************************************************************************************************************/
@@ -371,7 +394,7 @@ private:																																					\
 		static ::Model::ExtendableIndex name##Index;																							\
 		type* name##Node() { return static_cast<type*> (get(name##Index)); }															\
 		valueType name() const { return (static_cast<type*> (get(name##Index)))->get(); }										\
-		void setMethodName(const valueType& val) { (static_cast<type*> (get(name##Index)))->set(val); }						\
+		void setMethodName(const valueType& val) { SET_ATTR_VAL(type, name) }														\
 private:																																					\
 
 /*********************************************************************************************************************/
@@ -403,7 +426,7 @@ private:																																					\
 public:																																					\
 		type* name##Node() { return static_cast<type*> (get(name##Index)); }															\
 		returnValueType name() const { return (static_cast<type*> (get(name##Index)))->get(); }								\
-		void setMethodName(const valueType& val) { (static_cast<type*> (get(name##Index)))->set(val); }						\
+		void setMethodName(const valueType& val) { SET_ATTR_VAL(type, name) }														\
 private:																																					\
 
 /*********************************************************************************************************************/
@@ -560,7 +583,7 @@ private:																																					\
 public:																																					\
 		type* name##Node() { return static_cast< type* > (self_->get(attr_[name##Index])); }									\
 		valueType name() const { return (static_cast<type*> (self_->get(attr_[name##Index])))->get(); }						\
-		void setMethodName(const valueType& val) { (static_cast<type*> (self_->get(attr_[name##Index])))->set(val); }	\
+		void setMethodName(const valueType& val) { SET_EXTENSION_ATTR_VAL(type, name) }											\
 private:																																					\
 
 /*********************************************************************************************************************/
@@ -590,7 +613,7 @@ private:																																					\
 																																							\
 		type* name##Node() { return static_cast< type* > (self_->get(attr_[name##Index])); }									\
 		valueType name() const { return (static_cast<type*> (self_->get(attr_[name##Index])))->get(); }						\
-		void setMethodName(const valueType& val) { (static_cast<type*> (self_->get(attr_[name##Index])))->set(val); }	\
+		void setMethodName(const valueType& val) { SET_EXTENSION_ATTR_VAL(type, name) }											\
 private:																																					\
 
 /*********************************************************************************************************************/
@@ -621,7 +644,7 @@ private:																																					\
 public:																																					\
 		type* name##Node() { return static_cast< type* > (self_->get(attr_[name##Index])); }									\
 		returnValueType name() const { return (static_cast<type*> (self_->get(attr_[name##Index])))->get(); }				\
-		void setMethodName(const valueType& val) { (static_cast<type*> (self_->get(attr_[name##Index])))->set(val); }	\
+		void setMethodName(const valueType& val) { SET_EXTENSION_ATTR_VAL(type, name) }											\
 private:																																					\
 
 /*********************************************************************************************************************/
