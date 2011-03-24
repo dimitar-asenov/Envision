@@ -12,6 +12,7 @@
 
 #include "OOModel/headers/statements/MethodCallStatement.h"
 #include "OOModel/headers/expressions/MethodCallExpression.h"
+#include "OOModel/headers/top_level/Method.h"
 
 #include "VisualizationBase/headers/items/Item.h"
 #include "ModelBase/headers/nodes/Node.h"
@@ -30,22 +31,28 @@ QMap<QString, Visualization::ModelRenderer::ItemConstructor> CustomVisualization
 
 Item* CustomVisualization::createStatement(Item* parent, Node* node)
 {
-	MethodCallStatement* met = static_cast<MethodCallStatement*> (node);
-	CustomVisualization* custVis = met->extension<CustomVisualization>();
+	Method* met = (static_cast<MethodCallStatement*> (node))->methodDefinition();
+
+	CustomVisualization* custVis = NULL;
+	if (met) custVis = met->extension<CustomVisualization>();
+
 	if (custVis && custVis->visNameNode() && visualizations.contains(custVis->visName()))
 		return visualizations.value(custVis->visName())(parent, node);
 	else
-		return new VMethodCallStatement(parent, met);
+		return new VMethodCallStatement(parent, static_cast<MethodCallStatement*> (node));
 }
 
 Item* CustomVisualization::createExpression(Item* parent, Node* node)
 {
-	MethodCallExpression* met = static_cast<MethodCallExpression*> (node);
-	CustomVisualization* custVis = met->extension<CustomVisualization>();
+	Method* met = (static_cast<MethodCallExpression*> (node))->methodDefinition();
+
+	CustomVisualization* custVis = NULL;
+	if (met) custVis = met->extension<CustomVisualization>();
+
 	if (custVis && custVis->visNameNode() && visualizations.contains(custVis->visName()))
 		return visualizations.value(custVis->visName())(parent, node);
 	else
-		return new VMethodCallExpression(parent, met);
+		return new VMethodCallExpression(parent, static_cast<MethodCallExpression*> (node));
 }
 
 void CustomVisualization::registerVisualization(const QString& name, ModelRenderer::ItemConstructor visualization)

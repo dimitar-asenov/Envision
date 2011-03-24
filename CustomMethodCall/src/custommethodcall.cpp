@@ -12,6 +12,7 @@
 
 #include "OOModel/headers/statements/MethodCallStatement.h"
 #include "OOModel/headers/expressions/MethodCallExpression.h"
+#include "OOModel/headers/allOOModelNodes.h"
 
 #include "VisualizationBase/headers/Scene.h"
 
@@ -26,8 +27,7 @@ bool CustomMethodCall::initialize(Envision::EnvisionManager&)
 {
 	// Register extensions
 	CustomVisualization::registerExtension();
-	MethodCallStatement::registerNewExtension<CustomVisualization>();
-	MethodCallExpression::registerNewExtension<CustomVisualization>();
+	Method::registerNewExtension<CustomVisualization>();
 
 	// Override existing visualization
 	Scene::defaultRenderer()->registerVisualization(MethodCallStatement::typeIdStatic(), CustomVisualization::createStatement);
