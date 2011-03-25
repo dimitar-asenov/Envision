@@ -1,0 +1,20 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/Item/default">
+	<shape />
+	<layout prototypes="layout/SequentialLayout/default"/>
+	<name prototypes="item/Symbol/default">
+		<font>
+			<family>Times</family>
+			<size>25</size>
+		</font>
+		<selectionFont>
+			<family>Times</family>
+			<size>25</size>
+		</selectionFont>
+		<symbol>∑</symbol>
+	</name>
+	<arguments prototypes="layout/SequentialLayout/default">
+		<direction>2</direction>
+		<spaceBetweenElements>-6</spaceBetweenElements>
+	</arguments>
+</style>

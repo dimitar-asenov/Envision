@@ -63,6 +63,18 @@ Class* addCollection(Model::Model* model, Project* parent)
 	existsArg->setName("x");
 	exists->results()->append<FormalResult>()->setType<PrimitiveType>()->setType(PrimitiveType::BOOLEAN);
 
+	Method* sum = col->methods()->append<Method>();
+	sum->setName("sum");
+	sum->extension<CustomVisualization>()->setVisName("SumMethodVis");
+	sum->extension<Position>()->setY(400);
+	FormalArgument* sumArgFrom = sum->arguments()->append<FormalArgument>();
+	sumArgFrom->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+	sumArgFrom->setName("from");
+	FormalArgument* sumArgTo = sum->arguments()->append<FormalArgument>();
+	sumArgTo->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+	sumArgTo->setName("to");
+	sum->results()->append<FormalResult>()->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+
 	Method* test = col->methods()->append<Method>();
 	test->setName("test");
 	test->extension<Position>()->setX(300);
@@ -81,6 +93,11 @@ Class* addCollection(Model::Model* model, Project* parent)
 	MethodCallStatement* existsCall = test->items()->append<MethodCallStatement>();
 	existsCall->ref()->set(QString("method:%1").arg(QChar(0x2203)));
 	existsCall->arguments()->append<IntegerLiteral>()->setValue(101);
+
+	MethodCallStatement* sumCall = test->items()->append<MethodCallStatement>();
+	sumCall->ref()->set("method:sum");
+	sumCall->arguments()->append<IntegerLiteral>()->setValue(2);
+	sumCall->arguments()->append<IntegerLiteral>()->setValue(10);
 
 
 	model->endModification();

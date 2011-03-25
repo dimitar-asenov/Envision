@@ -1,0 +1,47 @@
+/***********************************************************************************************************************
+ * SumMethodVis.h
+ *
+ *  Created on: Mar 25, 2011
+ *      Author: Dimitar Asenov
+ **********************************************************************************************************************/
+
+#ifndef SUMMETHODVIS_H_
+#define SUMMETHODVIS_H_
+
+#include "../custommethodcall_api.h"
+#include "SumMethodVisStyle.h"
+
+#include "OOModel/headers/statements/MethodCallStatement.h"
+
+#include "VisualizationBase/headers/items/ItemWithNode.h"
+#include "VisualizationBase/headers/items/LayoutProvider.h"
+#include "VisualizationBase/headers/Styles.h"
+
+namespace Visualization {
+	class Symbol;
+}
+
+namespace CustomMethodCall {
+
+class CUSTOMMETHODCALL_API SumMethodVis : public Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::MethodCallStatement>
+{
+	ITEM_COMMON(SumMethodVis)
+
+	public:
+		SumMethodVis(Item* parent, NodeType* node, const StyleType* style = Visualization::Styles::item<SumMethodVis>("default"));
+		virtual ~SumMethodVis();
+
+	protected:
+		void determineChildren();
+
+	private:
+		Visualization::Symbol* name_;
+		Visualization::Item* prefix_;
+		Visualization::Item* from_;
+		Visualization::Item* to_;
+		Visualization::SequentialLayout* arguments_;
+};
+
+}
+
+#endif /* SUMMETHODVIS_H_ */

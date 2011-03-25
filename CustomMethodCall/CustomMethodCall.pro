@@ -32,7 +32,9 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/items/InsertMethodVisStyle.h \
+HEADERS += headers/items/SumMethodVisStyle.h \
+    headers/items/SumMethodVis.h \
+    headers/items/InsertMethodVisStyle.h \
     headers/items/InsertMethodVis.h \
     headers/items/EmptyMethodVisStyle.h \
     headers/items/EmptyMethodVis.h \
@@ -42,7 +44,9 @@ HEADERS += headers/items/InsertMethodVisStyle.h \
     headers/CustomMethodCallException.h \
     headers/custommethodcall_api.h \
     src/custommethodcall.h
-SOURCES += src/items/InsertMethodVis.cpp \
+SOURCES += src/items/SumMethodVis.cpp \
+    src/items/SumMethodVisStyle.cpp \
+    src/items/InsertMethodVis.cpp \
     src/items/InsertMethodVisStyle.cpp \
     src/items/EmptyMethodVisStyle.cpp \
     src/items/EmptyMethodVis.cpp \
