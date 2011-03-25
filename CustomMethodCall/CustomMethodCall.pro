@@ -32,13 +32,21 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/items/FindMethodVisStyle.h \
+HEADERS += headers/items/InsertMethodVisStyle.h \
+    headers/items/InsertMethodVis.h \
+    headers/items/EmptyMethodVisStyle.h \
+    headers/items/EmptyMethodVis.h \
+    headers/items/FindMethodVisStyle.h \
     headers/items/FindMethodVis.h \
     headers/CustomVisualization.h \
     headers/CustomMethodCallException.h \
     headers/custommethodcall_api.h \
     src/custommethodcall.h
-SOURCES += src/items/FindMethodVis.cpp \
+SOURCES += src/items/InsertMethodVis.cpp \
+    src/items/InsertMethodVisStyle.cpp \
+    src/items/EmptyMethodVisStyle.cpp \
+    src/items/EmptyMethodVis.cpp \
+    src/items/FindMethodVis.cpp \
     src/items/FindMethodVisStyle.cpp \
     src/CustomVisualization.cpp \
     src/CustomMethodCallException.cpp \

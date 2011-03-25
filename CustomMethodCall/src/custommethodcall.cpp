@@ -11,6 +11,8 @@
 #include "CustomVisualization.h"
 
 #include "items/FindMethodVis.h"
+#include "items/EmptyMethodVis.h"
+#include "items/InsertMethodVis.h"
 
 #include "OOModel/headers/statements/MethodCallStatement.h"
 #include "OOModel/headers/expressions/MethodCallExpression.h"
@@ -37,6 +39,8 @@ bool CustomMethodCall::initialize(Envision::EnvisionManager&)
 
 	//Register custom visualizations
 	CustomVisualization::registerVisualization(FindMethodVis::className(), createVisualization<FindMethodVis, MethodCallStatement>);
+	CustomVisualization::registerVisualization(EmptyMethodVis::className(), createVisualization<EmptyMethodVis, MethodCallStatement>);
+	CustomVisualization::registerVisualization(InsertMethodVis::className(), createVisualization<InsertMethodVis, MethodCallStatement>);
 
 	return true;
 }

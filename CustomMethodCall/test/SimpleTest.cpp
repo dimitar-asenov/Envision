@@ -55,7 +55,7 @@ Class* addCollection(Model::Model* model, Project* parent)
 	empty->results()->append<FormalResult>()->setType<PrimitiveType>()->setType(PrimitiveType::BOOLEAN);
 
 	Method* exists = col->methods()->append<Method>();
-	exists->setName("exists");
+	exists->setName(QChar(0x2203));
 	exists->extension<CustomVisualization>()->setVisName("ExistsMethodVis");
 	exists->extension<Position>()->setY(300);
 	FormalArgument* existsArg = exists->arguments()->append<FormalArgument>();
@@ -79,7 +79,7 @@ Class* addCollection(Model::Model* model, Project* parent)
 	emptyCall->ref()->set("method:empty");
 
 	MethodCallStatement* existsCall = test->items()->append<MethodCallStatement>();
-	existsCall->ref()->set("method:exists");
+	existsCall->ref()->set(QString("method:%1").arg(QChar(0x2203)));
 	existsCall->arguments()->append<IntegerLiteral>()->setValue(101);
 
 

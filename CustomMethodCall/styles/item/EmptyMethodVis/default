@@ -1,0 +1,11 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/Item/default">
+	<shape />
+	<layout prototypes="layout/SequentialLayout/default" />
+	<icon prototypes="icon/SVGIcon/default">
+		<filename>styles/icon/Anonymous_Package.svg</filename>
+		<width>35</width>
+		<height>30</height>
+	</icon>
+	<separator prototypes="item/Symbol/default" />
+</style>
