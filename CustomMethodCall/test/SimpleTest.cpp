@@ -107,6 +107,7 @@ Class* addCollection(Model::Model* model, Project* parent)
 	sumCall->arguments()->append<IntegerLiteral>()->setValue(0);
 	sumCall->arguments()->append<VariableAccess>()->ref()->set("local:index");
 
+	test->results()->append<FormalResult>()->setType<PrimitiveType>()->setType(PrimitiveType::INT);
 
 	model->endModification();
 	return col;
