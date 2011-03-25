@@ -79,25 +79,33 @@ Class* addCollection(Model::Model* model, Project* parent)
 	test->setName("test");
 	test->extension<Position>()->setX(300);
 
-	MethodCallStatement* findCall = test->items()->append<MethodCallStatement>();
+	IfStatement* ifs = test->items()->append<IfStatement>();
+	BinaryOperation* orIf = ifs->setCondition<BinaryOperation>();
+	orIf->setOp(BinaryOperation::CONDITIONAL_OR);
+	MethodCallExpression* emptyCall = orIf->setLeft<MethodCallExpression>();
+	emptyCall->ref()->set("method:empty");
+
+	UnaryOperation* negation = orIf->setRight<UnaryOperation>();
+	negation->setOp(UnaryOperation::NOT);
+	MethodCallExpression* existsCall = negation->setOperand<MethodCallExpression>();
+	existsCall->ref()->set(QString("method:%1").arg(QChar(0x2203)));
+	existsCall->arguments()->append<IntegerLiteral>()->setValue(42);
+
+	MethodCallStatement* insertCall = ifs->thenBranch()->append<MethodCallStatement>();
+	insertCall->ref()->set("method:insert");
+	insertCall->arguments()->append<IntegerLiteral>()->setValue(42);
+
+	VariableDeclaration* indexVar = test->items()->append<VariableDeclaration>();
+	indexVar->setName("index");
+	indexVar->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+	MethodCallExpression* findCall = indexVar->setInitialValue<MethodCallExpression>();
 	findCall->ref()->set("method:find");
 	findCall->arguments()->append<IntegerLiteral>()->setValue(42);
 
-	MethodCallStatement* insertCall = test->items()->append<MethodCallStatement>();
-	insertCall->ref()->set("method:insert");
-	insertCall->arguments()->append<IntegerLiteral>()->setValue(-19);
-
-	MethodCallStatement* emptyCall = test->items()->append<MethodCallStatement>();
-	emptyCall->ref()->set("method:empty");
-
-	MethodCallStatement* existsCall = test->items()->append<MethodCallStatement>();
-	existsCall->ref()->set(QString("method:%1").arg(QChar(0x2203)));
-	existsCall->arguments()->append<IntegerLiteral>()->setValue(101);
-
-	MethodCallStatement* sumCall = test->items()->append<MethodCallStatement>();
+	MethodCallExpression* sumCall = test->items()->append<ReturnStatement>()->values()->append<MethodCallExpression>();
 	sumCall->ref()->set("method:sum");
-	sumCall->arguments()->append<IntegerLiteral>()->setValue(2);
-	sumCall->arguments()->append<IntegerLiteral>()->setValue(10);
+	sumCall->arguments()->append<IntegerLiteral>()->setValue(0);
+	sumCall->arguments()->append<VariableAccess>()->ref()->set("local:index");
 
 
 	model->endModification();

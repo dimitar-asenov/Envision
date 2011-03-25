@@ -18,7 +18,7 @@ namespace CustomMethodCall {
 ITEM_COMMON_DEFINITIONS(EmptyMethodVis)
 
 EmptyMethodVis::EmptyMethodVis(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode<LayoutProvider<>, MethodCallStatement>(parent, node, style),
+	ItemWithNode<LayoutProvider<>, MethodCallExpression>(parent, node, style),
 	icon_(new SVGIcon(NULL, &style->icon()) ),
 	separator_(NULL),
 	prefix_(NULL)

@@ -11,7 +11,7 @@
 #include "../custommethodcall_api.h"
 #include "EmptyMethodVisStyle.h"
 
-#include "OOModel/headers/statements/MethodCallStatement.h"
+#include "OOModel/headers/expressions/MethodCallExpression.h"
 
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/LayoutProvider.h"
@@ -24,7 +24,7 @@ namespace Visualization {
 
 namespace CustomMethodCall {
 
-class CUSTOMMETHODCALL_API EmptyMethodVis : public Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::MethodCallStatement>
+class CUSTOMMETHODCALL_API EmptyMethodVis : public Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::MethodCallExpression>
 {
 	ITEM_COMMON(EmptyMethodVis)
 

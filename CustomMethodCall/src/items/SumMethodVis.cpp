@@ -17,7 +17,7 @@ namespace CustomMethodCall {
 ITEM_COMMON_DEFINITIONS(SumMethodVis)
 
 SumMethodVis::SumMethodVis(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode<LayoutProvider<>, MethodCallStatement>(parent, node, style),
+	ItemWithNode<LayoutProvider<>, MethodCallExpression>(parent, node, style),
 	name_(new Symbol(NULL, &style->name()) ),
 	prefix_(NULL),
 	from_(NULL),

@@ -19,7 +19,7 @@ namespace CustomMethodCall {
 ITEM_COMMON_DEFINITIONS(FindMethodVis)
 
 FindMethodVis::FindMethodVis(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode<LayoutProvider<>, MethodCallStatement>(parent, node, style),
+	ItemWithNode<LayoutProvider<>, MethodCallExpression>(parent, node, style),
 	name_(new Text(NULL, &style->name()) ),
 	separator_(NULL),
 	prefix_(NULL),

@@ -39,10 +39,10 @@ bool CustomMethodCall::initialize(Envision::EnvisionManager&)
 	Scene::defaultRenderer()->registerVisualization(MethodCallExpression::typeIdStatic(), CustomVisualization::createExpression);
 
 	//Register custom visualizations
-	CustomVisualization::registerVisualization(FindMethodVis::className(), createVisualization<FindMethodVis, MethodCallStatement>);
-	CustomVisualization::registerVisualization(EmptyMethodVis::className(), createVisualization<EmptyMethodVis, MethodCallStatement>);
+	CustomVisualization::registerVisualization(FindMethodVis::className(), createVisualization<FindMethodVis, MethodCallExpression>);
+	CustomVisualization::registerVisualization(EmptyMethodVis::className(), createVisualization<EmptyMethodVis, MethodCallExpression>);
 	CustomVisualization::registerVisualization(InsertMethodVis::className(), createVisualization<InsertMethodVis, MethodCallStatement>);
-	CustomVisualization::registerVisualization(SumMethodVis::className(), createVisualization<SumMethodVis, MethodCallStatement>);
+	CustomVisualization::registerVisualization(SumMethodVis::className(), createVisualization<SumMethodVis, MethodCallExpression>);
 
 	return true;
 }
