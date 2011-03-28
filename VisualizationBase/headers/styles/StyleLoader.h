@@ -9,7 +9,7 @@
 #define STYLELOADER_H_
 
 #include "../visualizationbase_api.h"
-#include "styles/StyleNode.h"
+#include "StyleNode.h"
 
 #include "Core/headers/global.h"
 

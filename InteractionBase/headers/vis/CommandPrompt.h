@@ -13,10 +13,9 @@
 #include "../commands/CommandSuggestion.h"
 #include "../commands/CommandResult.h"
 
-#include "VisualizationBase/headers/Styles.h"
 #include "VisualizationBase/headers/items/Item.h"
 #include "VisualizationBase/headers/items/Text.h"
-#include "VisualizationBase/headers/layouts/SequentialLayout.h"\
+#include "VisualizationBase/headers/layouts/SequentialLayout.h"
 
 #include <QtCore/QList>
 
@@ -27,7 +26,7 @@ class INTERACTIONBASE_API CommandPrompt : public Visualization::Item
 	ITEM_COMMON(CommandPrompt)
 
 	public:
-		CommandPrompt(Visualization::Item* commandReceiver, const StyleType* style = Visualization::Styles::item<CommandPrompt>("default"));
+		CommandPrompt(Visualization::Item* commandReceiver, const StyleType* style = itemStyles().get());
 		virtual ~CommandPrompt();
 
 		void setResult(CommandResult* result);

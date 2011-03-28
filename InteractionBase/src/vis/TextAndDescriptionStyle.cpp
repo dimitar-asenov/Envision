@@ -7,22 +7,14 @@
 
 #include "vis/TextAndDescriptionStyle.h"
 
-#include "VisualizationBase/headers/Styles.h"
-
 namespace Interaction {
 
-TextAndDescriptionStyle* TextAndDescriptionStyle::getDefault()
+void TextAndDescriptionStyle::load(Visualization::StyleLoader& sl)
 {
-	static TextAndDescriptionStyle defaultStyle;
-	return &defaultStyle;
-}
-
-void TextAndDescriptionStyle::load()
-{
-	ItemStyle::load();
-	Visualization::Styles::load("layout", layout_);
-	Visualization::Styles::load("text", text_);
-	Visualization::Styles::load("description", description_);
+	ItemStyle::load(sl);
+	sl.load("layout", layout_);
+	sl.load("text", text_);
+	sl.load("description", description_);
 }
 
 }

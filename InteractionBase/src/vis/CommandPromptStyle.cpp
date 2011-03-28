@@ -7,25 +7,17 @@
 
 #include "vis/CommandPromptStyle.h"
 
-#include "VisualizationBase/headers/Styles.h"
-
 namespace Interaction {
 
-CommandPromptStyle* CommandPromptStyle::getDefault()
+void CommandPromptStyle::load(Visualization::StyleLoader& sl)
 {
-	static CommandPromptStyle defaultStyle;
-	return &defaultStyle;
-}
-
-void CommandPromptStyle::load()
-{
-	ItemStyle::load();
-	Visualization::Styles::load("layout", layout_);
-	Visualization::Styles::load("suggestionContainer", suggestionContainer_);
-	Visualization::Styles::load("errorContainer", errorContainer_);
-	Visualization::Styles::load("commandText", commandText_);
-	Visualization::Styles::load("defaultSuggestion", defaultSuggestion_);
-	Visualization::Styles::load("defaultError", defaultError_);
+	ItemStyle::load(sl);
+	sl.load("layout", layout_);
+	sl.load("suggestionContainer", suggestionContainer_);
+	sl.load("errorContainer", errorContainer_);
+	sl.load("commandText", commandText_);
+	sl.load("defaultSuggestion", defaultSuggestion_);
+	sl.load("defaultError", defaultError_);
 }
 
 }

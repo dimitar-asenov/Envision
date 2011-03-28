@@ -25,7 +25,7 @@ class INTERACTIONBASE_API CommandPromptStyle : public Visualization::ItemStyle
 		TextAndDescriptionStyle defaultError_;
 
 	public:
-		void load();
+		void load(Visualization::StyleLoader& sl);
 
 		const Visualization::SequentialLayoutStyle& layout() const;
 		const Visualization::SequentialLayoutStyle& suggestionContainer() const;
@@ -33,8 +33,6 @@ class INTERACTIONBASE_API CommandPromptStyle : public Visualization::ItemStyle
 		const Visualization::TextStyle&  commandText() const;
 		const TextAndDescriptionStyle&  defaultSuggestion() const;
 		const TextAndDescriptionStyle&  defaultError() const;
-
-		static CommandPromptStyle* getDefault();
 };
 
 inline const Visualization::SequentialLayoutStyle& CommandPromptStyle::layout() const {return layout_; }

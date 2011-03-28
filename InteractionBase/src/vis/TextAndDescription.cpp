@@ -9,7 +9,7 @@
 
 namespace Interaction {
 
-ITEM_COMMON_DEFINITIONS(TextAndDescription)
+ITEM_COMMON_DEFINITIONS(TextAndDescription, "item")
 
 using namespace Visualization;
 

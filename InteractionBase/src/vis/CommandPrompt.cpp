@@ -30,7 +30,7 @@ const int COMMAND_RECEIVER_ITEM_MIN_PROMPT_CENTER_HEIGHT = 50;
  */
 const int PROMPT_TO_RECEIVER_DISTANCE = 3;
 
-ITEM_COMMON_DEFINITIONS(CommandPrompt)
+ITEM_COMMON_DEFINITIONS(CommandPrompt, "item")
 
 CommandPrompt::CommandPrompt(Item* commandReceiver, const StyleType* style) :
 	Item(NULL, style),

@@ -11,7 +11,6 @@
 #include "interactionbase_api.h"
 #include "TextAndDescriptionStyle.h"
 
-#include "VisualizationBase/headers/Styles.h"
 #include "VisualizationBase/headers/items/Item.h"
 #include "VisualizationBase/headers/items/Text.h"
 #include "VisualizationBase/headers/layouts/SequentialLayout.h"
@@ -23,7 +22,7 @@ class INTERACTIONBASE_API TextAndDescription : public Visualization::Item
 	ITEM_COMMON(TextAndDescription)
 
 	public:
-		TextAndDescription(Item* parent, const StyleType* style = Visualization::Styles::item<TextAndDescription>("default"));
+		TextAndDescription(Item* parent, const StyleType* style = itemStyles().get());
 		virtual ~TextAndDescription();
 
 		virtual bool sizeDependsOnParent() const;

@@ -26,7 +26,7 @@ public:																																					\
 																																							\
 	const StyleType* style() const { return static_cast<const StyleType*> (Item::style()); }									\
 	virtual void setStyle(const Visualization::ItemStyle* style);																		\
-	static StyleSet<ItemClass>& itemStyles();																									\
+	static Visualization::StyleSet<ItemClass>& itemStyles();																				\
 																																							\
 	virtual Visualization::InteractionHandler* handler() const { return handler_; };												\
 	static void setInteractionHandler(Visualization::InteractionHandler* handler) {handler_ = handler;}					\
@@ -70,9 +70,9 @@ const QString& ItemClass::className()																											\
 	return name;																																		\
 }																																							\
 																																							\
-StyleSet<ItemClass>& ItemClass::itemStyles()																									\
+Visualization::StyleSet<ItemClass>& ItemClass::itemStyles()																				\
 {																																							\
-	static StyleSet<ItemClass> styles(QString(classType));																				\
+	static Visualization::StyleSet<ItemClass> styles(QString(classType));															\
 	return styles;																																		\
 }
 /**********************************************************************************************************************/

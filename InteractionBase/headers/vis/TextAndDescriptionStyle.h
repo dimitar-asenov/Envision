@@ -24,13 +24,11 @@ class INTERACTIONBASE_API TextAndDescriptionStyle : public Visualization::ItemSt
 		Visualization::TextStyle description_;
 
 	public:
-		void load();
+		void load(Visualization::StyleLoader& sl);
 
 		const Visualization::SequentialLayoutStyle& layout() const;
 		const Visualization::TextStyle&  text() const;
 		const Visualization::TextStyle&  description() const;
-
-		static TextAndDescriptionStyle* getDefault();
 };
 
 inline const Visualization::SequentialLayoutStyle& TextAndDescriptionStyle::layout() const {return layout_; }
