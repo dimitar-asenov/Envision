@@ -16,7 +16,7 @@ using namespace OOModel;
 
 namespace CustomMethodCall {
 
-ITEM_COMMON_DEFINITIONS(FindMethodVis)
+ITEM_COMMON_DEFINITIONS(FindMethodVis, "item")
 
 FindMethodVis::FindMethodVis(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<>, MethodCallExpression>(parent, node, style),

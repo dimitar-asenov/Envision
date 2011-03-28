@@ -6,24 +6,17 @@
  **********************************************************************************************************************/
 
 #include "items/FindMethodVisStyle.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace CustomMethodCall {
 
-FindMethodVisStyle* FindMethodVisStyle::getDefault()
+void FindMethodVisStyle::load(Visualization::StyleLoader& sl)
 {
-	static FindMethodVisStyle defaultStyle;
-	return &defaultStyle;
-}
+	ItemStyle::load(sl);
 
-void FindMethodVisStyle::load()
-{
-	ItemStyle::load();
-
-	Visualization::Styles::load("layout", layout_);
-	Visualization::Styles::load("name", name_);
-	Visualization::Styles::load("separator", separator_);
-	Visualization::Styles::load("arguments", arguments_);
+	sl.load("layout", layout_);
+	sl.load("name", name_);
+	sl.load("separator", separator_);
+	sl.load("arguments", arguments_);
 }
 
 }

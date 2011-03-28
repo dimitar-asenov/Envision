@@ -20,7 +20,7 @@ class CONTROLFLOWVISUALIZATION_API VBreakStatementCF : public Visualization::Ite
 		ITEM_COMMON_CUSTOM_STYLENAME(VBreakStatementCF, ControlFlowItemStyle)
 
 	public:
-		VBreakStatementCF(Item* parent, NodeType *node, const StyleType *style = Visualization::Styles::item<VBreakStatementCF>("default"));
+		VBreakStatementCF(Item* parent, NodeType *node, const StyleType *style = itemStyles().get());
 		virtual ~VBreakStatementCF();
 
 		virtual bool focusChild(FocusTarget location);

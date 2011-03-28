@@ -6,20 +6,13 @@
  **********************************************************************************************************************/
 
 #include "items/VListCFStyle.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace ControlFlowVisualization {
 
-VListCFStyle* VListCFStyle::getDefault()
+void VListCFStyle::load(Visualization::StyleLoader& sl)
 {
-	static VListCFStyle defaultStyle;
-	return &defaultStyle;
-}
-
-void VListCFStyle::load()
-{
-	ControlFlowItemStyle::load();
-	Visualization::Styles::load("sequence", sequence_);
+	ControlFlowItemStyle::load(sl);
+	sl.load("sequence", sequence_);
 }
 
 }

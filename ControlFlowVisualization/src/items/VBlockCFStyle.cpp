@@ -6,21 +6,15 @@
  **********************************************************************************************************************/
 
 #include "items/VBlockCFStyle.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace ControlFlowVisualization {
 
-VBlockCFStyle* VBlockCFStyle::getDefault()
-{
-	static VBlockCFStyle defaultStyle;
-	return &defaultStyle;
-}
 
-void VBlockCFStyle::load()
+void VBlockCFStyle::load(Visualization::StyleLoader& sl)
 {
-	ControlFlowItemStyle::load();
+	ControlFlowItemStyle::load(sl);
 
-	Visualization::Styles::load("statements", statements_);
+	sl.load("statements", statements_);
 }
 
 }

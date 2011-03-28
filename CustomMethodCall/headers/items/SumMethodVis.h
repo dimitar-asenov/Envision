@@ -15,7 +15,6 @@
 
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/LayoutProvider.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
 	class Symbol;
@@ -28,7 +27,7 @@ class CUSTOMMETHODCALL_API SumMethodVis : public Visualization::ItemWithNode< Vi
 	ITEM_COMMON(SumMethodVis)
 
 	public:
-		SumMethodVis(Item* parent, NodeType* node, const StyleType* style = Visualization::Styles::item<SumMethodVis>("default"));
+		SumMethodVis(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~SumMethodVis();
 
 	protected:

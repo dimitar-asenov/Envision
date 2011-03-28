@@ -22,12 +22,10 @@ class CONTROLFLOWVISUALIZATION_API VMethodCFStyle : public OOVisualization::VMet
 		VListCFStyle contentCF_;
 
 	public:
-		void load();
+		void load(Visualization::StyleLoader& sl);
 
 		bool showAsControlFlow() const;
 		const VListCFStyle& contentCF() const;
-
-		static VMethodCFStyle* getDefault();
 };
 
 inline bool VMethodCFStyle::showAsControlFlow() const { return showAsControlFlow_; }

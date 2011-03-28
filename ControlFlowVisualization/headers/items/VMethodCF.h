@@ -17,8 +17,6 @@
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/LayoutProvider.h"
 
-#include "VisualizationBase/headers/Styles.h"
-
 namespace Visualization {
 	class VText;
 	class VList;
@@ -33,7 +31,7 @@ class CONTROLFLOWVISUALIZATION_API VMethodCF : public Visualization::ItemWithNod
 	ITEM_COMMON(VMethodCF)
 
 	public:
-		VMethodCF(Item* parent, NodeType* node, const StyleType* style = Visualization::Styles::item<VMethodCF>("default"));
+		VMethodCF(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VMethodCF();
 
 	protected:

@@ -15,7 +15,7 @@ using namespace OOVisualization;
 
 namespace ControlFlowVisualization {
 
-ITEM_COMMON_DEFINITIONS(VContinueStatementCF)
+ITEM_COMMON_DEFINITIONS(VContinueStatementCF, "item")
 
 VContinueStatementCF::VContinueStatementCF(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<ControlFlowItem, ContinueStatement>(parent, node, style),

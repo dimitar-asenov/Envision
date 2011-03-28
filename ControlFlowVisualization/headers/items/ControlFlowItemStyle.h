@@ -23,12 +23,10 @@ class CONTROLFLOWVISUALIZATION_API ControlFlowItemStyle : public Visualization::
 		QPen pin_;
 
 	public:
-		void load();
+		void load(Visualization::StyleLoader& sl);
 
 		int pinLength() const;
 		const QPen& pin() const;
-
-		static ControlFlowItemStyle* getDefault();
 };
 
 inline int ControlFlowItemStyle::pinLength() const {	return pinLength_; }

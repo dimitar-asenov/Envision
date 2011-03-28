@@ -20,7 +20,7 @@ class CONTROLFLOWVISUALIZATION_API VReturnStatementCF : public Visualization::It
 		ITEM_COMMON_CUSTOM_STYLENAME(VReturnStatementCF, ControlFlowItemStyle)
 
 	public:
-		VReturnStatementCF(Item* parent, NodeType *node, const StyleType *style = Visualization::Styles::item<VReturnStatementCF>("default"));
+		VReturnStatementCF(Item* parent, NodeType *node, const StyleType *style = itemStyles().get());
 		virtual ~VReturnStatementCF();
 
 		virtual bool focusChild(FocusTarget location);

@@ -6,21 +6,14 @@
  **********************************************************************************************************************/
 
 #include "items/ControlFlowItemStyle.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace ControlFlowVisualization {
 
-ControlFlowItemStyle* ControlFlowItemStyle::getDefault()
+void ControlFlowItemStyle::load(Visualization::StyleLoader& sl)
 {
-	static ControlFlowItemStyle defaultStyle;
-	return &defaultStyle;
-}
-
-void ControlFlowItemStyle::load()
-{
-	ItemStyle::load();
-	Visualization::Styles::load("pinLength", pinLength_);
-	Visualization::Styles::load("pin", pin_);
+	ItemStyle::load(sl);
+	sl.load("pinLength", pinLength_);
+	sl.load("pin", pin_);
 }
 
 }

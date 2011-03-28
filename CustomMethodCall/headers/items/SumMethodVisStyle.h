@@ -23,13 +23,11 @@ class CUSTOMMETHODCALL_API SumMethodVisStyle : public Visualization::ItemStyle
 		Visualization::SequentialLayoutStyle arguments_;
 
 	public:
-		void load();
+		void load(Visualization::StyleLoader& sl);
 
 		const Visualization::SequentialLayoutStyle& layout() const;
 		const Visualization::SymbolStyle& name() const;
 		const Visualization::SequentialLayoutStyle& arguments() const;
-
-		static SumMethodVisStyle* getDefault();
 };
 
 inline const Visualization::SequentialLayoutStyle& SumMethodVisStyle::layout() const { return layout_; }

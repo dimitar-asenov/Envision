@@ -6,23 +6,16 @@
  **********************************************************************************************************************/
 
 #include "items/SumMethodVisStyle.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace CustomMethodCall {
 
-SumMethodVisStyle* SumMethodVisStyle::getDefault()
+void SumMethodVisStyle::load(Visualization::StyleLoader& sl)
 {
-	static SumMethodVisStyle defaultStyle;
-	return &defaultStyle;
-}
+	ItemStyle::load(sl);
 
-void SumMethodVisStyle::load()
-{
-	ItemStyle::load();
-
-	Visualization::Styles::load("layout", layout_);
-	Visualization::Styles::load("name", name_);
-	Visualization::Styles::load("arguments", arguments_);
+	sl.load("layout", layout_);
+	sl.load("name", name_);
+	sl.load("arguments", arguments_);
 }
 
 }

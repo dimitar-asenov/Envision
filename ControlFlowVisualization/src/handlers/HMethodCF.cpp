@@ -29,8 +29,8 @@ void HMethodCF::mouseDoubleClickEvent(Visualization::Item *target, QGraphicsScen
 		VMethodCF *met = dynamic_cast<VMethodCF*> (target);
 		if (met)
 		{
-			if (met->style()->showAsControlFlow()) met->setStyle(Visualization::Styles::item<VMethodCF>("default"));
-			else met->setStyle(Visualization::Styles::item<VMethodCF>("showcontrolflow"));
+			if (met->style()->showAsControlFlow()) met->setStyle(VMethodCF::itemStyles().get());
+			else met->setStyle(VMethodCF::itemStyles().get("showcontrolflow"));
 		}
 	}
 	else GenericHandler::mouseDoubleClickEvent(target, event);

@@ -24,13 +24,11 @@ class CUSTOMMETHODCALL_API EmptyMethodVisStyle : public Visualization::ItemStyle
 		Visualization::SymbolStyle separator_;
 
 	public:
-		void load();
+		void load(Visualization::StyleLoader& sl);
 
 		const Visualization::SequentialLayoutStyle& layout() const;
 		const Visualization::SVGIconStyle& icon() const;
 		const Visualization::SymbolStyle& separator() const;
-
-		static EmptyMethodVisStyle* getDefault();
 };
 
 inline const Visualization::SequentialLayoutStyle& EmptyMethodVisStyle::layout() const { return layout_; }

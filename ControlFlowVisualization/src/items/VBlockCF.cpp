@@ -14,7 +14,7 @@ using namespace Model;
 
 namespace ControlFlowVisualization {
 
-ITEM_COMMON_DEFINITIONS(VBlockCF)
+ITEM_COMMON_DEFINITIONS(VBlockCF, "item")
 
 VBlockCF::VBlockCF(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<ControlFlowItem, Block>(parent, node, style),

@@ -20,7 +20,7 @@ class CONTROLFLOWVISUALIZATION_API VContinueStatementCF : public Visualization::
 		ITEM_COMMON_CUSTOM_STYLENAME(VContinueStatementCF, ControlFlowItemStyle)
 
 	public:
-		VContinueStatementCF(Item* parent, NodeType *node, const StyleType *style = Visualization::Styles::item<VContinueStatementCF>("default"));
+		VContinueStatementCF(Item* parent, NodeType *node, const StyleType *style = itemStyles().get());
 		virtual ~VContinueStatementCF();
 
 		virtual bool focusChild(FocusTarget location);

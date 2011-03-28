@@ -26,14 +26,12 @@ class CUSTOMMETHODCALL_API InsertMethodVisStyle : public Visualization::ItemStyl
 		Visualization::VListStyle arguments_;
 
 	public:
-		void load();
+		void load(Visualization::StyleLoader& sl);
 
 		const Visualization::SequentialLayoutStyle& layout() const;
 		const Visualization::SVGIconStyle& icon() const;
 		const Visualization::SymbolStyle& separator() const;
 		const Visualization::VListStyle& arguments() const;
-
-		static InsertMethodVisStyle* getDefault();
 };
 
 inline const Visualization::SequentialLayoutStyle& InsertMethodVisStyle::layout() const { return layout_; }

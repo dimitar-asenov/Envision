@@ -26,14 +26,12 @@ class CONTROLFLOWVISUALIZATION_API VLoopStatementCFStyle : public ControlFlowIte
 		VListCFStyle body_;
 
 	public:
-		void load();
+		void load(Visualization::StyleLoader& sl);
 
 		const Visualization::SequentialLayoutStyle& initStep() const;
 		const Visualization::SequentialLayoutStyle& condition() const;
 		const Visualization::SequentialLayoutStyle& updateStep() const;
 		const VListCFStyle& body() const;
-
-		static VLoopStatementCFStyle* getDefault();
 };
 
 inline const Visualization::SequentialLayoutStyle& VLoopStatementCFStyle::initStep() const { return initStep_; }

@@ -6,23 +6,16 @@
  **********************************************************************************************************************/
 
 #include "items/VIfStatementCFStyle.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace ControlFlowVisualization {
 
-VIfStatementCFStyle* VIfStatementCFStyle::getDefault()
+void VIfStatementCFStyle::load(Visualization::StyleLoader& sl)
 {
-	static VIfStatementCFStyle defaultStyle;
-	return &defaultStyle;
-}
+	ControlFlowItemStyle::load(sl);
 
-void VIfStatementCFStyle::load()
-{
-	ControlFlowItemStyle::load();
-
-	Visualization::Styles::load("condition", condition_);
-	Visualization::Styles::load("thenBranch", thenBranch_);
-	Visualization::Styles::load("elseBranch", elseBranch_);
+	sl.load("condition", condition_);
+	sl.load("thenBranch", thenBranch_);
+	sl.load("elseBranch", elseBranch_);
 }
 
 }

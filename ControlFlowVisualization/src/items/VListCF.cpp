@@ -12,7 +12,7 @@ using namespace Model;
 
 namespace ControlFlowVisualization {
 
-ITEM_COMMON_DEFINITIONS( VListCF )
+ITEM_COMMON_DEFINITIONS( VListCF, "item" )
 
 VListCF::VListCF(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode< ControlFlowItem, List>(parent, node, style)

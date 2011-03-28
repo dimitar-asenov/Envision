@@ -24,13 +24,11 @@ class CONTROLFLOWVISUALIZATION_API VIfStatementCFStyle : public ControlFlowItemS
 		VListCFStyle elseBranch_;
 
 	public:
-		void load();
+		void load(Visualization::StyleLoader& sl);
 
 		const Visualization::SequentialLayoutStyle& condition() const;
 		const VListCFStyle& thenBranch() const;
 		const VListCFStyle& elseBranch() const;
-
-		static VIfStatementCFStyle* getDefault();
 };
 
 inline const Visualization::SequentialLayoutStyle& VIfStatementCFStyle::condition() const { return condition_; }

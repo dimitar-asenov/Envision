@@ -11,7 +11,6 @@
 #include "ControlFlowItemStyle.h"
 
 #include "VisualizationBase/headers/items/Item.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace ControlFlowVisualization {
 

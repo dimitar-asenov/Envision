@@ -6,21 +6,14 @@
  **********************************************************************************************************************/
 
 #include "items/VMethodCFStyle.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace ControlFlowVisualization {
 
-VMethodCFStyle* VMethodCFStyle::getDefault()
+void VMethodCFStyle::load(Visualization::StyleLoader& sl)
 {
-	static VMethodCFStyle defaultStyle;
-	return &defaultStyle;
-}
-
-void VMethodCFStyle::load()
-{
-	VMethodStyle::load();
-	Visualization::Styles::load("showAsControlFlow", showAsControlFlow_);
-	Visualization::Styles::load("contentCF", contentCF_);
+	VMethodStyle::load(sl);
+	sl.load("showAsControlFlow", showAsControlFlow_);
+	sl.load("contentCF", contentCF_);
 }
 
 }

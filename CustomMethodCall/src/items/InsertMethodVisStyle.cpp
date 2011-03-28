@@ -6,24 +6,17 @@
  **********************************************************************************************************************/
 
 #include "items/InsertMethodVisStyle.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace CustomMethodCall {
 
-InsertMethodVisStyle* InsertMethodVisStyle::getDefault()
+void InsertMethodVisStyle::load(Visualization::StyleLoader& sl)
 {
-	static InsertMethodVisStyle defaultStyle;
-	return &defaultStyle;
-}
+	ItemStyle::load(sl);
 
-void InsertMethodVisStyle::load()
-{
-	ItemStyle::load();
-
-	Visualization::Styles::load("layout", layout_);
-	Visualization::Styles::load("icon", icon_);
-	Visualization::Styles::load("separator", separator_);
-	Visualization::Styles::load("arguments", arguments_);
+	sl.load("layout", layout_);
+	sl.load("icon", icon_);
+	sl.load("separator", separator_);
+	sl.load("arguments", arguments_);
 }
 
 }

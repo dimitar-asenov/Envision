@@ -6,23 +6,16 @@
  **********************************************************************************************************************/
 
 #include "items/EmptyMethodVisStyle.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace CustomMethodCall {
 
-EmptyMethodVisStyle* EmptyMethodVisStyle::getDefault()
+void EmptyMethodVisStyle::load(Visualization::StyleLoader& sl)
 {
-	static EmptyMethodVisStyle defaultStyle;
-	return &defaultStyle;
-}
+	ItemStyle::load(sl);
 
-void EmptyMethodVisStyle::load()
-{
-	ItemStyle::load();
-
-	Visualization::Styles::load("layout", layout_);
-	Visualization::Styles::load("icon", icon_);
-	Visualization::Styles::load("separator", separator_);
+	sl.load("layout", layout_);
+	sl.load("icon", icon_);
+	sl.load("separator", separator_);
 }
 
 }

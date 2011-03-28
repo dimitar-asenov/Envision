@@ -19,7 +19,7 @@ using namespace OOModel;
 
 namespace ControlFlowVisualization {
 
-ITEM_COMMON_DEFINITIONS(VMethodCF)
+ITEM_COMMON_DEFINITIONS(VMethodCF, "item")
 
 VMethodCF::VMethodCF(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<PanelBorderLayout>, Method>(parent, node, style),

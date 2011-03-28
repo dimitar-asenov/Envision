@@ -21,7 +21,7 @@ class CONTROLFLOWVISUALIZATION_API VBlockCF : public Visualization::ItemWithNode
 	ITEM_COMMON(VBlockCF)
 
 	public:
-		VBlockCF(Item* parent, NodeType* node, const StyleType* style = Visualization::Styles::item<VBlockCF>("default"));
+		VBlockCF(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VBlockCF();
 
 		virtual bool focusChild(FocusTarget location);

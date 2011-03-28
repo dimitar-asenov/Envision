@@ -15,7 +15,6 @@
 
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/LayoutProvider.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
 	class SVGIcon;
@@ -30,7 +29,7 @@ class CUSTOMMETHODCALL_API InsertMethodVis : public Visualization::ItemWithNode<
 	ITEM_COMMON(InsertMethodVis)
 
 	public:
-		InsertMethodVis(Item* parent, NodeType* node, const StyleType* style = Visualization::Styles::item<InsertMethodVis>("default"));
+		InsertMethodVis(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~InsertMethodVis();
 
 	protected:

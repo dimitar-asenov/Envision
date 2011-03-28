@@ -14,7 +14,7 @@ using namespace OOModel;
 
 namespace CustomMethodCall {
 
-ITEM_COMMON_DEFINITIONS(SumMethodVis)
+ITEM_COMMON_DEFINITIONS(SumMethodVis, "item")
 
 SumMethodVis::SumMethodVis(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<>, MethodCallExpression>(parent, node, style),

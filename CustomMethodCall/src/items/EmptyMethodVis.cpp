@@ -15,7 +15,7 @@ using namespace OOModel;
 
 namespace CustomMethodCall {
 
-ITEM_COMMON_DEFINITIONS(EmptyMethodVis)
+ITEM_COMMON_DEFINITIONS(EmptyMethodVis, "item")
 
 EmptyMethodVis::EmptyMethodVis(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<>, MethodCallExpression>(parent, node, style),

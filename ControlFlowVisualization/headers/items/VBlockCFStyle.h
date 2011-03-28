@@ -22,11 +22,9 @@ class CONTROLFLOWVISUALIZATION_API VBlockCFStyle : public ControlFlowItemStyle
 		VListCFStyle statements_;
 
 	public:
-		void load();
+		void load(Visualization::StyleLoader& sl);
 
 		const VListCFStyle& statements() const;
-
-		static VBlockCFStyle* getDefault();
 };
 
 inline const VListCFStyle& VBlockCFStyle::statements() const { return statements_; }

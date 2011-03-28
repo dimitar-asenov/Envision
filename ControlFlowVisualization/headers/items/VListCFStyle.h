@@ -22,11 +22,9 @@ class CONTROLFLOWVISUALIZATION_API VListCFStyle : public ControlFlowItemStyle
 		Visualization::SequentialLayoutStyle sequence_;
 
 	public:
-		void load();
+		void load(Visualization::StyleLoader& sl);
 
 		const Visualization::SequentialLayoutStyle& sequence() const;
-
-		static VListCFStyle* getDefault();
 };
 
 inline const Visualization::SequentialLayoutStyle& VListCFStyle::sequence() const { return sequence_; }

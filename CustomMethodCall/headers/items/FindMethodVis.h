@@ -15,7 +15,6 @@
 
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/LayoutProvider.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
 	class Text;
@@ -30,7 +29,7 @@ class CUSTOMMETHODCALL_API FindMethodVis : public Visualization::ItemWithNode< V
 	ITEM_COMMON(FindMethodVis)
 
 	public:
-		FindMethodVis(Item* parent, NodeType* node, const StyleType* style = Visualization::Styles::item<FindMethodVis>("default"));
+		FindMethodVis(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~FindMethodVis();
 
 	protected:

@@ -13,7 +13,6 @@
 #include "ControlFlowItem.h"
 
 #include "VisualizationBase/headers/items/ItemWithNode.h"
-#include "VisualizationBase/headers/Styles.h"
 #include "VisualizationBase/headers/layouts/SequentialLayout.h"
 
 #include "ModelBase/headers/nodes/List.h"
@@ -25,7 +24,7 @@ class CONTROLFLOWVISUALIZATION_API VListCF : public Visualization::ItemWithNode<
 	ITEM_COMMON(VListCF)
 
 	public:
-		VListCF(Item* parent, NodeType* node, const StyleType* style = Visualization::Styles::item<VListCF>("default"));
+		VListCF(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VListCF();
 
 		virtual bool focusChild(FocusTarget location);

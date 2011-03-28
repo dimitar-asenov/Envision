@@ -21,7 +21,7 @@ class CONTROLFLOWVISUALIZATION_API VIfStatementCF : public Visualization::ItemWi
 	ITEM_COMMON(VIfStatementCF)
 
 	public:
-		VIfStatementCF(Item* parent, NodeType* node, const StyleType* style = Visualization::Styles::item<VIfStatementCF>("default"));
+		VIfStatementCF(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VIfStatementCF();
 
 		virtual bool focusChild(FocusTarget location);
