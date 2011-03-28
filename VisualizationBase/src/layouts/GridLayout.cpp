@@ -29,11 +29,12 @@ GridLayout::~GridLayout()
 
 void GridLayout::setGridSize(int sizeX, int sizeY, bool deleteExtraItems)
 {
-	if (sizeX < sizeX_ && deleteExtraItems)
+	if (sizeX < sizeX_)
 	{
 		for(int x = sizeX; x < sizeX_; x++)
 			for(int y = 0; y < sizeY_; y++)
-				SAFE_DELETE_ITEM( items_[x][y] );
+				if (deleteExtraItems) SAFE_DELETE_ITEM( items_[x][y] );
+				else if ( items_[x][y] ) items_[x][y]->setParentItem(NULL);
 	}
 
 	sizeX_ = sizeX;
@@ -41,10 +42,11 @@ void GridLayout::setGridSize(int sizeX, int sizeY, bool deleteExtraItems)
 
 	for (int x = 0; x < sizeX_; ++x)
 	{
-		if (sizeY < sizeY_ && deleteExtraItems)
+		if (sizeY < sizeY_ )
 		{
 			for(int y = sizeY; y<items_[x].size(); ++y)
-				SAFE_DELETE_ITEM( items_[x][y] );
+				if (deleteExtraItems) SAFE_DELETE_ITEM( items_[x][y] );
+				else if ( items_[x][y] ) items_[x][y]->setParentItem(NULL);
 		}
 
 		items_[x].resize(sizeY);
@@ -60,8 +62,9 @@ bool GridLayout::isEmpty(int x, int y) const
 
 void GridLayout::set(Item* item, int x, int y, bool deleteOldItem)
 {
-	item->setParentItem(this);
+	if(item) item->setParentItem(this);
 	if (deleteOldItem) SAFE_DELETE_ITEM( items_[x][y]);
+	else if (items_[x][y]) items_[x][y]->setParentItem(NULL);
 	items_[x][y] = item;
 	setUpdateNeeded();
 }
@@ -77,13 +80,15 @@ void GridLayout::swap(int x1, int y1, int x2, int y2)
 void GridLayout::remove(int x, int y, bool deleteItem_)
 {
 	if (deleteItem_) SAFE_DELETE_ITEM( items_[x][y]);
-	else items_[x][y]->setParentItem(NULL);
+	else if(items_[x][y]) items_[x][y]->setParentItem(NULL);
 	items_[x][y] = NULL;
 	setUpdateNeeded();
 }
 
 void GridLayout::remove(Item* item, bool deleteItem)
 {
+	if (item == NULL) return;
+
 	for (int x = 0; x<sizeX_; ++x)
 		for(int y = 0; y<sizeY_; ++y)
 			if (items_[x][y] == item) items_[x][y] = NULL;
@@ -99,7 +104,7 @@ void GridLayout::clear(bool deleteItems)
 		for(int y = 0; y<sizeY_; ++y)
 		{
 			if (deleteItems) SAFE_DELETE_ITEM(items_[x][y]);
-			else items_[x][y]->setParentItem(NULL);
+			else if (items_[x][y]) items_[x][y]->setParentItem(NULL);
 
 			items_[x][y] = NULL;
 		}

@@ -25,6 +25,8 @@ PanelLayout::~PanelLayout()
 void PanelLayout::setItem(Item* item, Item*& position, bool deleteOldItem)
 {
 	if (deleteOldItem) SAFE_DELETE_ITEM( position );
+	else if (position) position->setParentItem(NULL);
+
 	if ( item ) item->setParentItem(this);
 	position = item;
 	setUpdateNeeded();

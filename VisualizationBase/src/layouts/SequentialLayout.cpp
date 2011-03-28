@@ -73,7 +73,7 @@ void SequentialLayout::removeAll(Item* item, bool deleteItem)
 	for (int i = items.size() - 1; i>=0; --i)
 		if (items.at(i) == item) items.remove(i);
 	if (deleteItem) SAFE_DELETE_ITEM(item);
-	else item->setParentItem(NULL);
+	else if (item) item->setParentItem(NULL);
 	setUpdateNeeded();
 }
 
@@ -82,7 +82,7 @@ void SequentialLayout::clear(bool deleteItems)
 	for (int i = 0; i<items.size(); ++i)
 	{
 		if (deleteItems) SAFE_DELETE_ITEM(items[i]);
-		else items[i]->setParentItem(NULL);
+		else if (items[i]) items[i]->setParentItem(NULL);
 	}
 	items.clear();
 	setUpdateNeeded();

@@ -60,6 +60,8 @@ void PositionLayout::insert(Item* item)
 void PositionLayout::remove(int index, bool deleteItem)
 {
 	if (deleteItem) SAFE_DELETE_ITEM( items[index]);
+	else if(items[index]) items[index]->setParentItem(NULL);
+
 	SAFE_DELETE( positions[index] );
 	items.remove(index);
 	positions.remove(index);
@@ -77,13 +79,21 @@ void PositionLayout::removeAll(Item* item, bool deleteItem)
 			positions.remove(i);
 		}
 	}
+
 	if (deleteItem) SAFE_DELETE_ITEM(item);
+	else if (item) item->setParentItem(NULL);
+
 	setUpdateNeeded();
 }
 
 void PositionLayout::clear(bool deleteItems)
 {
-	if (deleteItems) for (int i = 0; i<items.size(); ++i) SAFE_DELETE_ITEM(items[i]);
+	for (int i = 0; i<items.size(); ++i)
+	{
+		if (deleteItems) SAFE_DELETE_ITEM(items[i]);
+		else if (items[i]) items[i]->setParentItem(NULL);
+	}
+
 	for (int i = 0; i<positions.size(); ++i) SAFE_DELETE(positions[i]);
 	items.clear();
 	positions.clear();
