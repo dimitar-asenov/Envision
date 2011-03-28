@@ -17,8 +17,7 @@ namespace Visualization {
 
 class VISUALIZATIONBASE_API Diamond: public Shape
 {
-	public:
-		typedef DiamondStyle StyleType;
+	SHAPE_COMMON(Diamond)
 
 	protected:
 		qreal widthWithoutShadow;
@@ -29,11 +28,7 @@ class VISUALIZATIONBASE_API Diamond: public Shape
 		QPainterPath getDiamondPath(qreal x, qreal y, int width, int height);
 
 	public:
-		Diamond(Item *parent, StyleType *style = StyleType::getDefault());
-		static const QString& className();
-
-		StyleType* style() const;
-		virtual void setStyle(ShapeStyle *style);
+		Diamond(Item *parent, StyleType *style = itemStyles().get());
 
 		virtual void update();
 		virtual int contentLeft();
@@ -43,8 +38,6 @@ class VISUALIZATIONBASE_API Diamond: public Shape
 
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 };
-
-inline const QString& Diamond::className() {static QString name("Diamond"); return name;}
 
 }
 

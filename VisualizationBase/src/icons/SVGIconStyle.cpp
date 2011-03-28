@@ -6,23 +6,16 @@
  **********************************************************************************************************************/
 
 #include "icons/SVGIconStyle.h"
-#include "Styles.h"
 #include "VisualizationException.h"
 
 namespace Visualization {
 
-SVGIconStyle* SVGIconStyle::getDefault()
+void SVGIconStyle::load(StyleLoader& sl)
 {
-	static SVGIconStyle defaultStyle;
-	return &defaultStyle;
-}
-
-void SVGIconStyle::load()
-{
-	IconStyle::load();
-	Styles::load("filename", filename_);
-	Styles::load("width", width_);
-	Styles::load("height", height_);
+	IconStyle::load(sl);
+	sl.load("filename", filename_);
+	sl.load("width", width_);
+	sl.load("height", height_);
 	if (!renderer_.load(filename_)) throw VisualizationException("Could not read SVG icon: " + filename_);
 }
 

@@ -26,15 +26,13 @@ class VISUALIZATIONBASE_API VExtendableStyle : public ItemStyle
 
 	public:
 		VExtendableStyle();
-		void load();
+		void load(StyleLoader& sl);
 
 		const PanelBorderLayoutStyle& borderStyle() const;
 		const SequentialLayoutStyle&  headerStyle() const;
 		const SequentialLayoutStyle&  smallHeaderStyle() const;
 		const SequentialLayoutStyle&  attributesStyle() const;
 		bool expanded() const;
-
-		static VExtendableStyle* getDefault();
 };
 
 inline const PanelBorderLayoutStyle& VExtendableStyle::borderStyle() const {return borderStyle_; }

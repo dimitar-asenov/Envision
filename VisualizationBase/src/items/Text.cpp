@@ -7,13 +7,11 @@
 
 #include "items/Text.h"
 
-#include "Styles.h"
-
 namespace Visualization {
-ITEM_COMMON_DEFINITIONS(Text)
+ITEM_COMMON_DEFINITIONS(Text, "item")
 
 Text::Text(Item* parent, const QString& text) :
-	TextRenderer(parent, Styles::item<Text>("darkGrey"), text)
+	TextRenderer(parent, itemStyles().get("darkGrey"), text)
 {
 	setEditable(false);
 }

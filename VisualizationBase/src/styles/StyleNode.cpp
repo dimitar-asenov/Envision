@@ -5,7 +5,7 @@
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "StyleNode.h"
+#include "styles/StyleNode.h"
 
 #include "VisualizationException.h"
 
@@ -18,7 +18,7 @@ namespace Visualization {
 
 const QString XML_DOM_TYPE = "EnvisionVisualizationStyle";
 
-QString StyleNode::baseFolder;
+QString StyleNode::baseFolder = "styles";
 
 void StyleNode::setBaseFolder(const QString &baseFolder_)
 {

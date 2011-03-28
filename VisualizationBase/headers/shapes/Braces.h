@@ -19,14 +19,10 @@ namespace Visualization {
 
 class VISUALIZATIONBASE_API Braces: public Shape
 {
+	SHAPE_COMMON( Braces )
+
 	public:
-		typedef BracesStyle StyleType;
-
-		Braces(Item *parent, StyleType *style = StyleType::getDefault());
-		static const QString& className();
-
-		BracesStyle* style() const;
-		virtual void setStyle(ShapeStyle *style);
+		Braces(Item *parent, StyleType *style = itemStyles().get());
 
 		virtual void update();
 		virtual int contentLeft();
@@ -48,8 +44,6 @@ class VISUALIZATIONBASE_API Braces: public Shape
 	private:
 		QSize getSizeOfBrace(const QString& brace, const QFont& font, int innerHeight, QPointF* offset) const;
 };
-
-inline const QString& Braces::className() {static QString name("Braces"); return name;}
 
 }
 

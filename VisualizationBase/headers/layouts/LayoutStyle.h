@@ -29,7 +29,7 @@ class VISUALIZATIONBASE_API LayoutStyle : public ItemStyle
 
 	public:
 		LayoutStyle(int leftMargin = 0, int rightMargin = 0, int topMargin = 0, int bottomMargin = 0);
-		virtual void load();
+		virtual void load(StyleLoader& sl);
 
 		int leftMargin() const;
 		int rightMargin() const;

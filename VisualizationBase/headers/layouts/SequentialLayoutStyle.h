@@ -23,7 +23,7 @@ class VISUALIZATIONBASE_API SequentialLayoutStyle : public LayoutStyle
 
 	public:
 		SequentialLayoutStyle();
-		virtual void load();
+		virtual void load(StyleLoader& sl);
 
 		Direction direction() const;
 		Alignment alignment() const;
@@ -32,8 +32,6 @@ class VISUALIZATIONBASE_API SequentialLayoutStyle : public LayoutStyle
 		void setDirection(Direction direction);
 		void setAlignment(Alignment alignment);
 		void setSpaceBetweenElements(int space);
-
-		static SequentialLayoutStyle* getDefault();
 };
 
 inline LayoutStyle::Direction SequentialLayoutStyle::direction() const { return direction_; }

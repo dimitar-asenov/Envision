@@ -17,9 +17,7 @@ namespace Visualization {
 class VISUALIZATIONBASE_API SelectedItemStyle : public ItemStyle
 {
 	public:
-		virtual void load();
-
-		static SelectedItemStyle* getDefault();
+		virtual void load(StyleLoader& sl);
 };
 
 }

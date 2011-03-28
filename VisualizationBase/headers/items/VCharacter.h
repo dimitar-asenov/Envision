@@ -14,7 +14,6 @@
 #include "ItemWithNode.h"
 #include "TextStyle.h"
 #include "ModelBase/headers/nodes/Character.h"
-#include "../Styles.h"
 
 namespace Visualization {
 
@@ -23,7 +22,7 @@ class VISUALIZATIONBASE_API VCharacter : public ItemWithNode< TextRenderer, Mode
 	ITEM_COMMON_CUSTOM_STYLENAME(VCharacter, TextStyle)
 
 	public:
-		VCharacter(Item* parent, NodeType *node, const StyleType *style = Styles::item<VCharacter>("default"));
+		VCharacter(Item* parent, NodeType *node, const StyleType *style = itemStyles().get());
 		virtual bool setText(const QString& newText);
 
 	protected:

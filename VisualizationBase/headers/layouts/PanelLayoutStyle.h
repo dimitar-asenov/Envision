@@ -23,7 +23,7 @@ class VISUALIZATIONBASE_API PanelLayoutStyle : public LayoutStyle
 
 	public:
 		PanelLayoutStyle();
-		virtual void load();
+		virtual void load(StyleLoader& sl);
 
 		Orientation orientation() const;
 		Alignment alignment() const;
@@ -32,8 +32,6 @@ class VISUALIZATIONBASE_API PanelLayoutStyle : public LayoutStyle
 		void setOrientation(Orientation orientation);
 		void setAlignment(Alignment alignment);
 		void setSpaceBetweenElements(int space);
-
-		static PanelLayoutStyle* getDefault();
 };
 
 inline LayoutStyle::Orientation PanelLayoutStyle::orientation() const { return orientation_; }

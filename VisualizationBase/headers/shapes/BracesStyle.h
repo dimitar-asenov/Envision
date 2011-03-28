@@ -28,7 +28,7 @@ class VISUALIZATIONBASE_API BracesStyle : public ShapeStyle
 		QString rightBrace_;
 
 	public:
-		virtual void load();
+		virtual void load(StyleLoader& sl);
 
 		const QPen& leftBracePen() const;
 		const QFont& leftBraceFont() const;
@@ -37,8 +37,6 @@ class VISUALIZATIONBASE_API BracesStyle : public ShapeStyle
 		const QPen& rightBracePen() const;
 		const QFont& rightBraceFont() const;
 		const QString& rightBrace() const;
-
-		static BracesStyle* getDefault();
 };
 
 inline const QPen& BracesStyle::leftBracePen() const { return leftBracePen_; }

@@ -6,19 +6,12 @@
  **********************************************************************************************************************/
 
 #include "layouts/PanelLayoutStyle.h"
-#include "Styles.h"
 
 namespace Visualization {
 
 PanelLayoutStyle::PanelLayoutStyle() :
 	orientation_(HorizontalOrientation), alignment_(CenterAlignment), spaceBetweenElements_(5)
 {
-}
-
-PanelLayoutStyle* PanelLayoutStyle::getDefault()
-{
-	static PanelLayoutStyle defaultStyle;
-	return &defaultStyle;
 }
 
 void PanelLayoutStyle::setOrientation(Orientation orientation)
@@ -36,11 +29,11 @@ void PanelLayoutStyle::setSpaceBetweenElements(int space)
 	if ( space >= 0 ) spaceBetweenElements_ = space;
 }
 
-void PanelLayoutStyle::load()
+void PanelLayoutStyle::load(StyleLoader& sl)
 {
-	LayoutStyle::load();
-	Styles::load("orientation", (int&) orientation_);
-	Styles::load("alignment", (int&) alignment_);
-	Styles::load("spaceBetweenElements", spaceBetweenElements_);
+	LayoutStyle::load(sl);
+	sl.load("orientation", (int&) orientation_);
+	sl.load("alignment", (int&) alignment_);
+	sl.load("spaceBetweenElements", spaceBetweenElements_);
 }
 }

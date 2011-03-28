@@ -26,7 +26,7 @@ class VISUALIZATIONBASE_API GridLayout: public Layout
 	ITEM_COMMON(GridLayout)
 
 	public:
-		GridLayout(Item* parent, const StyleType* style = Styles::layout<GridLayout>("default"));
+		GridLayout(Item* parent, const StyleType* style = itemStyles().get());
 		~GridLayout();
 
 		virtual bool isEmpty() const;

@@ -28,7 +28,7 @@ class VISUALIZATIONBASE_API PanelLayout: public Layout
 		void setItem(Item* item, Item*& position, bool deleteOldItem);
 
 	public:
-		PanelLayout(Item* parent, const StyleType* style = Styles::layout<PanelLayout>("default"));
+		PanelLayout(Item* parent, const StyleType* style = itemStyles().get());
 		~PanelLayout();
 
 		void setFirst(Item* item, bool deleteOldItem = true);

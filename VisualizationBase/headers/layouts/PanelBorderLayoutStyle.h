@@ -35,7 +35,7 @@ class VISUALIZATIONBASE_API PanelBorderLayoutStyle : public LayoutStyle
 
 	public:
 		PanelBorderLayoutStyle();
-		virtual void load();
+		virtual void load(StyleLoader& sl);
 
 		const PanelLayoutStyle& topStyle() const;
 		const PanelLayoutStyle& leftStyle() const;
@@ -53,8 +53,6 @@ class VISUALIZATIONBASE_API PanelBorderLayoutStyle : public LayoutStyle
 		int leftProtrusion() const;
 
 		bool shapeOnlyOnContent() const;
-
-		static PanelBorderLayoutStyle* getDefault();
 };
 
 inline const PanelLayoutStyle& PanelBorderLayoutStyle::topStyle() const { return topStyle_; }

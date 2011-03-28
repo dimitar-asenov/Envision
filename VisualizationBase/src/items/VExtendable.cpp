@@ -15,7 +15,7 @@
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(VExtendable)
+ITEM_COMMON_DEFINITIONS(VExtendable, "item")
 
 VExtendable::VExtendable(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<Item, Model::ExtendableNode>(parent, node, style),

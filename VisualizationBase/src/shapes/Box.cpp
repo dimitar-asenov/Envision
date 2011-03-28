@@ -14,19 +14,11 @@
 
 namespace Visualization {
 
+SHAPE_COMMON_DEFINITIONS(Box, "shape")
+
 Box::Box(Item *parent, StyleType *style) :
 	Shape(parent, style)
 {
-}
-
-void Box::setStyle(ShapeStyle *style)
-{
-	setGenericStyle<BoxStyle> (style);
-}
-
-BoxStyle* Box::style() const
-{
-	return static_cast<BoxStyle*> (Shape::style());
 }
 
 QPainterPath Box::getRectanglePath(qreal x, qreal y, int width, int height)

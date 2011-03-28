@@ -26,7 +26,7 @@ class VISUALIZATIONBASE_API PositionLayoutStyle : public LayoutStyle
 
 	public:
 		PositionLayoutStyle();
-		virtual void load();
+		virtual void load(StyleLoader& sl);
 
 		int leftInnerMargin() const;
 		int rightInnerMargin() const;
@@ -34,8 +34,6 @@ class VISUALIZATIONBASE_API PositionLayoutStyle : public LayoutStyle
 		int bottomInnerMargin() const;
 		int spaceBetweenElements() const;
 		int gridSize() const;
-
-		static PositionLayoutStyle* getDefault();
 };
 
 inline int PositionLayoutStyle::leftInnerMargin() const { return leftInnerMargin_; }

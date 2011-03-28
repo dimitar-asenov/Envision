@@ -9,6 +9,7 @@
 #define ITEMSTYLE_H_
 
 #include "../visualizationbase_api.h"
+#include "../styles/Style.h"
 
 #include <QtCore/QString>
 
@@ -18,7 +19,7 @@ class ShapeStyle;
 class Shape;
 class Item;
 
-class VISUALIZATIONBASE_API ItemStyle
+class VISUALIZATIONBASE_API ItemStyle : public Style
 {
 	private:
 		ShapeStyle* shapeStyle_;
@@ -33,7 +34,7 @@ class VISUALIZATIONBASE_API ItemStyle
 		Shape* createShape(Item* parent) const;
 		bool hasShape() const;
 
-		virtual void load();
+		virtual void load(StyleLoader& sl);
 
 		bool drawsOnlyShape() const;
 		bool drawShapeWhenEmpty() const;

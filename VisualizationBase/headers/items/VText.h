@@ -14,7 +14,6 @@
 #include "ItemWithNode.h"
 #include "TextStyle.h"
 #include "ModelBase/headers/nodes/Text.h"
-#include "../Styles.h"
 
 namespace Visualization {
 
@@ -23,7 +22,7 @@ class VISUALIZATIONBASE_API VText : public ItemWithNode<TextRenderer, Model::Tex
 	ITEM_COMMON_CUSTOM_STYLENAME(VText, TextStyle)
 
 	public:
-		VText(Item* parent, NodeType* node, const StyleType* style = Styles::item<VText>("default"));
+		VText(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual bool setText(const QString& newText);
 
 	protected:

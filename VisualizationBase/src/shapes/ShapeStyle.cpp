@@ -7,8 +7,6 @@
 
 #include "shapes/ShapeStyle.h"
 
-#include "Styles.h"
-
 namespace Visualization {
 
 ShapeStyle::ShapeStyle() :
@@ -25,9 +23,9 @@ void ShapeStyle::setOutline(const QPen& outline)
 	outline_ = outline;
 }
 
-void ShapeStyle::load()
+void ShapeStyle::load(StyleLoader& sl)
 {
-	Styles::load("outline", outline_);
+	sl.load("outline", outline_);
 }
 
 }

@@ -23,14 +23,12 @@ class VISUALIZATIONBASE_API GridLayoutStyle : public LayoutStyle
 		int verticalSpace_;
 
 	public:
-		virtual void load();
+		virtual void load(StyleLoader& sl);
 
 		Alignment horizontalAlignment() const;
 		Alignment verticalAlignment() const;
 		int horizontalSpace() const;
 		int verticalSpace() const;
-
-		static GridLayoutStyle* getDefault();
 };
 
 inline LayoutStyle::Alignment GridLayoutStyle::horizontalAlignment() const { return horizontalAlignment_; }

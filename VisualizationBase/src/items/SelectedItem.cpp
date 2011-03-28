@@ -6,10 +6,11 @@
  **********************************************************************************************************************/
 
 #include "items/SelectedItem.h"
+#include "shapes/Shape.h"
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(SelectedItem)
+ITEM_COMMON_DEFINITIONS(SelectedItem, "item")
 
 SelectedItem::SelectedItem(Item* selectedItem, const StyleType* style) :
 	Item(NULL, style), selectedItem_(selectedItem)

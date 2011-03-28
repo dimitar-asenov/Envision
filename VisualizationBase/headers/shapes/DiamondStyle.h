@@ -24,17 +24,12 @@ class VISUALIZATIONBASE_API DiamondStyle : public ShapeStyle
 		int yShadowOffset_;
 
 	public:
-		DiamondStyle();
-		virtual void load();
+		virtual void load(StyleLoader& sl);
 
 		const QBrush& background() const;
-
-
 		const QBrush& shadow() const;
 		int xShadowOffset() const;
 		int yShadowOffset() const;
-
-		static DiamondStyle* getDefault();
 };
 
 inline const QBrush& DiamondStyle::background() const { return background_; };

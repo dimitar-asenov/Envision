@@ -6,19 +6,12 @@
  **********************************************************************************************************************/
 
 #include "layouts/SequentialLayoutStyle.h"
-#include "Styles.h"
 
 namespace Visualization {
 
 SequentialLayoutStyle::SequentialLayoutStyle() :
 	direction_(LeftToRight), alignment_(CenterAlignment), spaceBetweenElements_(2)
 {
-}
-
-SequentialLayoutStyle* SequentialLayoutStyle::getDefault()
-{
-	static SequentialLayoutStyle s;
-	return &s;
 }
 
 void SequentialLayoutStyle::setDirection(Direction direction)
@@ -36,12 +29,12 @@ void SequentialLayoutStyle::setSpaceBetweenElements(int space)
 	if ( space >= 0 ) spaceBetweenElements_ = space;
 }
 
-void SequentialLayoutStyle::load()
+void SequentialLayoutStyle::load(StyleLoader& sl)
 {
-	LayoutStyle::load();
-	Styles::load("direction", (int&) direction_);
-	Styles::load("alignment", (int&) alignment_);
-	Styles::load("spaceBetweenElements", spaceBetweenElements_);
+	LayoutStyle::load(sl);
+	sl.load("direction", (int&) direction_);
+	sl.load("alignment", (int&) alignment_);
+	sl.load("spaceBetweenElements", spaceBetweenElements_);
 }
 
 }

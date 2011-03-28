@@ -6,23 +6,16 @@
  **********************************************************************************************************************/
 
 #include "layouts/GridLayoutStyle.h"
-#include "Styles.h"
 
 namespace Visualization {
 
-GridLayoutStyle* GridLayoutStyle::getDefault()
+void GridLayoutStyle::load(StyleLoader& sl)
 {
-	static GridLayoutStyle s;
-	return &s;
-}
-
-void GridLayoutStyle::load()
-{
-	LayoutStyle::load();
-	Styles::load("horizontalAlignment", (int&) horizontalAlignment_);
-	Styles::load("verticalAlignment", (int&) verticalAlignment_);
-	Styles::load("horizontalSpace", horizontalSpace_);
-	Styles::load("verticalSpace", verticalSpace_);
+	LayoutStyle::load(sl);
+	sl.load("horizontalAlignment", (int&) horizontalAlignment_);
+	sl.load("verticalAlignment", (int&) verticalAlignment_);
+	sl.load("horizontalSpace", horizontalSpace_);
+	sl.load("verticalSpace", verticalSpace_);
 }
 
 }

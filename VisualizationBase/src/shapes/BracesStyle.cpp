@@ -6,25 +6,18 @@
  **********************************************************************************************************************/
 
 #include "shapes/BracesStyle.h"
-#include "Styles.h"
 
 namespace Visualization {
 
-BracesStyle* BracesStyle::getDefault()
+void BracesStyle::load(StyleLoader& sl)
 {
-	static BracesStyle defaultStyle;
-	return &defaultStyle;
-}
-
-void BracesStyle::load()
-{
-	ShapeStyle::load();
-	Styles::load("leftBracePen", leftBracePen_);
-	Styles::load("leftBraceFont", leftBraceFont_);
-	Styles::load("leftBrace", leftBrace_);
-	Styles::load("rightBracePen", rightBracePen_);
-	Styles::load("rightBraceFont", rightBraceFont_);
-	Styles::load("rightBrace", rightBrace_);
+	ShapeStyle::load(sl);
+	sl.load("leftBracePen", leftBracePen_);
+	sl.load("leftBraceFont", leftBraceFont_);
+	sl.load("leftBrace", leftBrace_);
+	sl.load("rightBracePen", rightBracePen_);
+	sl.load("rightBraceFont", rightBraceFont_);
+	sl.load("rightBrace", rightBrace_);
 }
 
 }

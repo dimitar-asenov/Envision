@@ -9,10 +9,10 @@
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(SVGIcon)
+ITEM_COMMON_DEFINITIONS(SVGIcon, "icon")
 
 SVGIcon::SVGIcon(Item* parent, const QString& iconStyleName) :
-	Icon(parent, Styles::icon<SVGIcon>(iconStyleName))
+	Icon(parent, itemStyles().get(iconStyleName))
 {
 }
 

@@ -25,15 +25,13 @@ class VISUALIZATIONBASE_API SVGIconStyle : public IconStyle
 		int height_;
 
 	public:
-		virtual void load();
+		virtual void load(StyleLoader& sl);
 
 		const QString& filename() const;
 		int width() const;
 		int height() const;
 
 		void paint(QPainter* painter, int x, int y) const;
-
-		static SVGIconStyle* getDefault();
 };
 
 inline const QString& SVGIconStyle::filename() const { return filename_; }

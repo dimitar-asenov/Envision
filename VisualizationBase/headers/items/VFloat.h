@@ -14,7 +14,6 @@
 #include "ItemWithNode.h"
 #include "TextStyle.h"
 #include "ModelBase/headers/nodes/Float.h"
-#include "../Styles.h"
 
 namespace Visualization {
 
@@ -23,7 +22,7 @@ class VISUALIZATIONBASE_API VFloat : public ItemWithNode<TextRenderer, Model::Fl
 	ITEM_COMMON_CUSTOM_STYLENAME(VFloat, TextStyle)
 
 	public:
-		VFloat(Item* parent, NodeType *node, const StyleType *style = Styles::item<VFloat>("default"));
+		VFloat(Item* parent, NodeType *node, const StyleType *style = itemStyles().get());
 		virtual bool setText(const QString& newText);
 
 	protected:

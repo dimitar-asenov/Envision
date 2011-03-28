@@ -8,7 +8,6 @@
 #include "items/ItemStyle.h"
 #include "shapes/Shape.h"
 #include "shapes/ShapeStyle.h"
-#include "Styles.h"
 
 namespace Visualization {
 
@@ -31,18 +30,18 @@ Shape* ItemStyle::createShape(Item* parent) const
 	return shape;
 }
 
-void ItemStyle::load()
+void ItemStyle::load(StyleLoader& sl)
 {
 	QString shape;
-	Styles::load("drawsOnlyShape", drawsOnlyShape_);
-	Styles::load("drawShapeWhenEmpty", drawShapeWhenEmpty_);
-	Styles::load("shape", shapeName_);
+	sl.load("drawsOnlyShape", drawsOnlyShape_);
+	sl.load("drawShapeWhenEmpty", drawShapeWhenEmpty_);
+	sl.load("shape", shapeName_);
 	shapeName_ = shapeName_.trimmed();
 
 	if ( !shapeName_.isEmpty() )
 	{
 		shapeStyle_ = Shape::createNewShapeStyle(shapeName_);
-		Styles::load("shape", *shapeStyle_);
+		sl.load("shape", *shapeStyle_);
 	}
 	else shapeStyle_ = NULL;
 }

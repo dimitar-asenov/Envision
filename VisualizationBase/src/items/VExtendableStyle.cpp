@@ -6,7 +6,6 @@
  **********************************************************************************************************************/
 
 #include "items/VExtendableStyle.h"
-#include "Styles.h"
 
 namespace Visualization {
 
@@ -14,20 +13,14 @@ VExtendableStyle::VExtendableStyle() : expanded_(true)
 {
 }
 
-VExtendableStyle* VExtendableStyle::getDefault()
+void VExtendableStyle::load(StyleLoader& sl)
 {
-	static VExtendableStyle defaultStyle;
-	return &defaultStyle;
-}
-
-void VExtendableStyle::load()
-{
-	ItemStyle::load();
-	Styles::load("expanded", expanded_);
-	Styles::load("borderStyle", borderStyle_);
-	Styles::load("headerStyle", headerStyle_);
-	Styles::load("smallHeaderStyle", smallHeaderStyle_);
-	Styles::load("attributesStyle", attributesStyle_);
+	ItemStyle::load(sl);
+	sl.load("expanded", expanded_);
+	sl.load("borderStyle", borderStyle_);
+	sl.load("headerStyle", headerStyle_);
+	sl.load("smallHeaderStyle", smallHeaderStyle_);
+	sl.load("attributesStyle", attributesStyle_);
 }
 
 }

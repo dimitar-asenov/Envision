@@ -17,8 +17,7 @@ namespace Visualization {
 
 class VISUALIZATIONBASE_API Box: public Shape
 {
-	public:
-		typedef BoxStyle StyleType;
+	SHAPE_COMMON(Box)
 
 	protected:
 		qreal contentBoxWidth;
@@ -27,11 +26,7 @@ class VISUALIZATIONBASE_API Box: public Shape
 		QPainterPath getRectanglePath(qreal x, qreal y, int width, int height);
 
 	public:
-		Box(Item *parent, StyleType *style = StyleType::getDefault());
-		static const QString& className();
-
-		BoxStyle* style() const;
-		virtual void setStyle(ShapeStyle *style);
+		Box(Item *parent, StyleType *style = itemStyles().get());
 
 		virtual void update();
 		virtual int contentLeft();
@@ -42,8 +37,6 @@ class VISUALIZATIONBASE_API Box: public Shape
 
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 };
-
-inline const QString& Box::className() {static QString name("Box"); return name;}
 
 }
 

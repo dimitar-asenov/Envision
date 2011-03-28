@@ -6,7 +6,6 @@
  **********************************************************************************************************************/
 
 #include "layouts/PositionLayoutStyle.h"
-#include "Styles.h"
 
 namespace Visualization {
 
@@ -15,21 +14,15 @@ PositionLayoutStyle::PositionLayoutStyle() :
 {
 }
 
-PositionLayoutStyle* PositionLayoutStyle::getDefault()
+void PositionLayoutStyle::load(StyleLoader& sl)
 {
-	static PositionLayoutStyle s;
-	return &s;
-}
-
-void PositionLayoutStyle::load()
-{
-	LayoutStyle::load();
-	Styles::load("leftInnerMargin", leftInnerMargin_);
-	Styles::load("rightInnerMargin", rightInnerMargin_);
-	Styles::load("topInnerMargin", topInnerMargin_);
-	Styles::load("bottomInnerMargin", bottomInnerMargin_);
-	Styles::load("spaceBetweenElements", spaceBetweenElements_);
-	Styles::load("gridSize", gridSize_);
+	LayoutStyle::load(sl);
+	sl.load("leftInnerMargin", leftInnerMargin_);
+	sl.load("rightInnerMargin", rightInnerMargin_);
+	sl.load("topInnerMargin", topInnerMargin_);
+	sl.load("bottomInnerMargin", bottomInnerMargin_);
+	sl.load("spaceBetweenElements", spaceBetweenElements_);
+	sl.load("gridSize", gridSize_);
 }
 
 }

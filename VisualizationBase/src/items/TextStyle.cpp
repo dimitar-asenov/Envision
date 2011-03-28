@@ -7,8 +7,6 @@
 
 #include "items/TextStyle.h"
 
-#include "Styles.h"
-
 namespace Visualization {
 
 TextStyle::TextStyle()
@@ -17,23 +15,17 @@ TextStyle::TextStyle()
 	selectionFont_.setPixelSize(15);
 }
 
-TextStyle* TextStyle::getDefault()
+void TextStyle::load(StyleLoader& sl)
 {
-	static TextStyle defaultStyle;
-	return &defaultStyle;
-}
-
-void TextStyle::load()
-{
-	ItemStyle::load();
-	Styles::load("pen", pen_);
-	Styles::load("font", font_);
-	Styles::load("caretPen", caretPen_);
-	Styles::load("selectionPen", selectionPen_);
-	Styles::load("selectionFont", selectionFont_);
+	ItemStyle::load(sl);
+	sl.load("pen", pen_);
+	sl.load("font", font_);
+	sl.load("caretPen", caretPen_);
+	sl.load("selectionPen", selectionPen_);
+	sl.load("selectionFont", selectionFont_);
 
 	QColor col;
-	Styles::load("selectionBackground", col);
+	sl.load("selectionBackground", col);
 	selectionBackground_ = QBrush(col);
 }
 

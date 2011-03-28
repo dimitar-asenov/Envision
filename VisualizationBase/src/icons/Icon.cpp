@@ -6,10 +6,11 @@
  **********************************************************************************************************************/
 
 #include "icons/Icon.h"
+#include "shapes/Shape.h"
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(Icon)
+ITEM_COMMON_DEFINITIONS(Icon, "icon")
 
 Icon::Icon(Item* parent, const IconStyle* style) :
 	Item(parent, style)

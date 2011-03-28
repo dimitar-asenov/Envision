@@ -1,19 +1,24 @@
 /***********************************************************************************************************************
- * SymbolStyle.cpp
+ * Style.h
  *
- *  Created on: Feb 11, 2011
+ *  Created on: Mar 28, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "items/SymbolStyle.h"
+#ifndef STYLE_H_
+#define STYLE_H_
+
+#include "../visualizationbase_api.h"
+#include "StyleLoader.h"
 
 namespace Visualization {
 
-void SymbolStyle::load(StyleLoader& sl)
+class VISUALIZATIONBASE_API Style
 {
-	TextStyle::load(sl);
+	public:
+		virtual ~Style();
+};
 
-	sl.load("symbol", symbol_);
 }
 
-}
+#endif /* STYLE_H_ */

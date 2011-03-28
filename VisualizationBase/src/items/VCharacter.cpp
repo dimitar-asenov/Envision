@@ -11,7 +11,7 @@
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(VCharacter)
+ITEM_COMMON_DEFINITIONS(VCharacter, "item")
 
 VCharacter::VCharacter(Item* parent, NodeType *node, const StyleType *style) :
 	ItemWithNode< TextRenderer, Model::Character >(parent, node, style)

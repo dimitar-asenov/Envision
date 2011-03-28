@@ -31,7 +31,12 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/shapes/BracesStyle.h \
+HEADERS += headers/shapes/shapeMacros.h \
+    headers/styles/Style.h \
+    headers/styles/StyleLoader.h \
+    headers/styles/StyleNode.h \
+    headers/styles/StyleSet.h \
+    headers/shapes/BracesStyle.h \
     headers/shapes/Braces.h \
     headers/layouts/GridLayoutStyle.h \
     headers/layouts/GridLayout.h \
@@ -68,8 +73,6 @@ HEADERS += headers/shapes/BracesStyle.h \
     headers/items/ItemMacros.h \
     headers/items/ItemStyle.h \
     headers/items/VExtendableStyle.h \
-    headers/StyleNode.h \
-    headers/Styles.h \
     headers/layouts/LayoutStyle.h \
     headers/layouts/PanelBorderLayoutStyle.h \
     headers/layouts/PanelBorderLayout.h \
@@ -93,7 +96,10 @@ HEADERS += headers/shapes/BracesStyle.h \
     src/visualizationbase.h \
     headers/VisualizationException.h \
     headers/visualizationbase_api.h
-SOURCES += src/shapes/Braces.cpp \
+SOURCES += src/styles/Style.cpp \
+    src/styles/StyleNode.cpp \
+    src/styles/StyleLoader.cpp \
+    src/shapes/Braces.cpp \
     src/shapes/BracesStyle.cpp \
     src/layouts/GridLayout.cpp \
     src/layouts/GridLayoutStyle.cpp \
@@ -127,8 +133,6 @@ SOURCES += src/shapes/Braces.cpp \
     src/items/Item.cpp \
     src/items/ItemStyle.cpp \
     src/items/VExtendableStyle.cpp \
-    src/StyleNode.cpp \
-    src/Styles.cpp \
     src/layouts/LayoutStyle.cpp \
     src/layouts/PanelBorderLayoutStyle.cpp \
     src/layouts/PanelBorderLayout.cpp \

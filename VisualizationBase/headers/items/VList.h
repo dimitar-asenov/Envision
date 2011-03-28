@@ -13,7 +13,6 @@
 #include "ItemWithNode.h"
 #include "LayoutProvider.h"
 #include "VListStyle.h"
-#include "../Styles.h"
 #include "../layouts/SequentialLayout.h"
 #include "ModelBase/headers/nodes/List.h"
 
@@ -27,7 +26,7 @@ class VISUALIZATIONBASE_API VList: public ItemWithNode< LayoutProvider<>, Model:
 		virtual void determineChildren();
 
 	public:
-		VList(Item* parent, NodeType* node, const StyleType* style = Styles::item<VList>("default"));
+		VList(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 
 		int length() const;
 		template <class T> T* at(int index);

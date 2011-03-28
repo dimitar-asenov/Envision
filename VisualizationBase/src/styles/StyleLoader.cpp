@@ -1,11 +1,13 @@
 /***********************************************************************************************************************
- * Styles.cpp
+ * StyleLoader.cpp
  *
- *  Created on: Dec 17, 2010
+ *  Created on: Mar 28, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "Styles.h"
+#include "styles/StyleLoader.h"
+#include "VisualizationException.h"
+
 
 #include <QtGui/QLinearGradient>
 #include <QtGui/QRadialGradient>
@@ -13,25 +15,33 @@
 #include <QtGui/QFont>
 #include <QtGui/QColor>
 
-#include <QtCore/QPointF>
-
 namespace Visualization {
 
-const QString Styles::STYLES_DIRECTORY_NAME = "styles";
+StyleLoader::StyleLoader() :
+	rootStyleNode(NULL)
+{
+}
 
-QMutex Styles::accessMutex;
-QList< QString > Styles::nodePath;
-StyleNode* Styles::root;
+StyleLoader::~StyleLoader()
+{
+	SAFE_DELETE(rootStyleNode);
+}
 
-QString Styles::getProperty(const QString& name)
+bool StyleLoader::hasProperty(const QString& name)
 {
 	QStringList newPath = nodePath;
 	newPath.append(name);
-	return root->getProperty(newPath);
+	return rootStyleNode->hasProperty(newPath);
 }
 
+QString StyleLoader::getProperty(const QString& name)
+{
+	QStringList newPath = nodePath;
+	newPath.append(name);
+	return rootStyleNode->getProperty(newPath);
+}
 
-void Styles::load(const QString& propertyName, int& value)
+void StyleLoader::load(const QString& propertyName, int& value)
 {
 	bool ok = true;
 
@@ -39,17 +49,17 @@ void Styles::load(const QString& propertyName, int& value)
 	if ( !ok ) throw VisualizationException("Could read integer value property '" + propertyName + "'");
 }
 
-void Styles::load(const QString& propertyName, bool& value)
+void StyleLoader::load(const QString& propertyName, bool& value)
 {
 	value = getProperty(propertyName).compare("true", Qt::CaseInsensitive) == 0;
 }
 
-void Styles::load(const QString& propertyName, QString& value)
+void StyleLoader::load(const QString& propertyName, QString& value)
 {
 	value = getProperty(propertyName);
 }
 
-void Styles::load(const QString& propertyName, double& value)
+void StyleLoader::load(const QString& propertyName, double& value)
 {
 	bool ok = true;
 
@@ -57,41 +67,41 @@ void Styles::load(const QString& propertyName, double& value)
 	if ( !ok ) throw VisualizationException("Could read double value property '" + propertyName + "'");
 }
 
-void Styles::loadQPointF(QPointF& value)
+void StyleLoader::loadComposite(QPointF& value)
 {
 	double x, y;
-	Styles::load("x", x);
-	Styles::load("y", y);
+	load("x", x);
+	load("y", y);
 	value.setX(x);
 	value.setY(y);
 }
 
-void Styles::loadQColor(QColor& value)
+void StyleLoader::loadComposite(QColor& value)
 {
 	int a, r, g, b;
-	Styles::load("alpha", a);
-	Styles::load("red", r);
-	Styles::load("green", g);
-	Styles::load("blue", b);
+	load("alpha", a);
+	load("red", r);
+	load("green", g);
+	load("blue", b);
 
 	value = QColor(r, g, b, a);
 }
 
-void Styles::loadQPen(QPen& value)
+void StyleLoader::loadComposite(QPen& value)
 {
 	double width;
 	int style, capStyle, joinStyle;
 	QColor color;
 
-	Styles::load("width", width);
-	Styles::load("style", style);
-	Styles::load("color", color);
-	Styles::load("capStyle", capStyle);
-	Styles::load("joinStyle", joinStyle);
+	load("width", width);
+	load("style", style);
+	load("color", color);
+	load("capStyle", capStyle);
+	load("joinStyle", joinStyle);
 	value = QPen(QBrush(color), width, (Qt::PenStyle) style, (Qt::PenCapStyle) capStyle, (Qt::PenJoinStyle) joinStyle);
 }
 
-void Styles::loadQFont(QFont& value)
+void StyleLoader::loadComposite(QFont& value)
 {
 	QString family;
 	int size;
@@ -100,12 +110,12 @@ void Styles::loadQFont(QFont& value)
 	int style;
 	bool underline;
 
-	Styles::load("family", family);
-	Styles::load("size", size);
-	Styles::load("sizeIsInPixels", pixelSize);
-	Styles::load("weight", weight);
-	Styles::load("style", style);
-	Styles::load("underline", underline);
+	load("family", family);
+	load("size", size);
+	load("sizeIsInPixels", pixelSize);
+	load("weight", weight);
+	load("style", style);
+	load("underline", underline);
 
 	value = QFont();
 	if ( !family.isEmpty() ) value.setFamily(family);
@@ -116,34 +126,34 @@ void Styles::loadQFont(QFont& value)
 	value.setUnderline(underline);
 }
 
-void Styles::loadQBrush(QBrush& value)
+void StyleLoader::loadComposite(QBrush& value)
 {
 	int style;
 	QColor color;
 
-	Styles::load("style", style);
+	load("style", style);
 
 	if (style == Qt::LinearGradientPattern)
 	{
 		QLinearGradient gradient;
-		Styles::load("gradient",gradient);
+		load("gradient",gradient);
 		value = QBrush(gradient);
 	}
 	else if (style == Qt::RadialGradientPattern)
 	{
 		QRadialGradient gradient;
-		Styles::load("gradient",gradient);
+		load("gradient",gradient);
 		value = QBrush(gradient);
 	}
 	else if (style != Qt::NoBrush)
 	{
-		Styles::load("color", color);
+		load("color", color);
 		value = QBrush(color, (Qt::BrushStyle) style);
 	}
 	else value = QBrush();
 }
 
-void Styles::loadQLinearGradient(QLinearGradient& value)
+void StyleLoader::loadComposite(QLinearGradient& value)
 {
 	int coordinateMode;
 	int spread;
@@ -151,11 +161,11 @@ void Styles::loadQLinearGradient(QLinearGradient& value)
 	QPointF finish;
 	QGradientStops stopPoints;
 
-	Styles::load("start", start);
-	Styles::load("finish", finish);
-	Styles::load("coordinateMode", coordinateMode);
-	Styles::load("spread", spread);
-	Styles::load("stopPoints", stopPoints);
+	load("start", start);
+	load("finish", finish);
+	load("coordinateMode", coordinateMode);
+	load("spread", spread);
+	load("stopPoints", stopPoints);
 
 	value = QLinearGradient(start, finish);
 	value.setSpread((QGradient::Spread) spread);
@@ -163,7 +173,7 @@ void Styles::loadQLinearGradient(QLinearGradient& value)
 	value.setStops(stopPoints);
 }
 
-void Styles::loadQRadialGradient(QRadialGradient& value)
+void StyleLoader::loadComposite(QRadialGradient& value)
 {
 	int coordinateMode;
 	int spread;
@@ -172,12 +182,12 @@ void Styles::loadQRadialGradient(QRadialGradient& value)
 	double radius;
 	QGradientStops stopPoints;
 
-	Styles::load("coordinateMode", coordinateMode);
-	Styles::load("spread", spread);
-	Styles::load("centerPoint", center);
-	Styles::load("focalPoint", focal);
-	Styles::load("radius", radius);
-	Styles::load("stopPoints", stopPoints);
+	load("coordinateMode", coordinateMode);
+	load("spread", spread);
+	load("centerPoint", center);
+	load("focalPoint", focal);
+	load("radius", radius);
+	load("stopPoints", stopPoints);
 
 	value = QRadialGradient(center, radius, focal);
 	value.setSpread((QGradient::Spread) spread);

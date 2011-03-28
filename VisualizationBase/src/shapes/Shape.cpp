@@ -22,6 +22,28 @@ Shape::~Shape()
 {
 }
 
+void Shape::setStyle(const Visualization::ShapeStyle* newStyle)
+{
+	if (style_ == newStyle) return;
+	else
+	{
+		style_ = newStyle;
+		setParentNeedsUpdate();
+	}
+}
+
+const QString& Shape::className()
+{
+	static QString name("Shape");
+	return name;
+}
+
+StyleSet<Shape>& Shape::itemStyles()
+{
+	static StyleSet<Shape> styles(QString("shape"));
+	return styles;
+}
+
 void Shape::setItemSize(int width, int height)
 {
 	parent->setSize(width, height);
@@ -51,12 +73,6 @@ void Shape::setOffset(int x, int y)
 	xOffset_ = x;
 	yOffset_ = y;
 	update();
-	setParentNeedsUpdate();
-}
-
-void Shape::setStyle(ShapeStyle *style)
-{
-	style_ = style;
 	setParentNeedsUpdate();
 }
 

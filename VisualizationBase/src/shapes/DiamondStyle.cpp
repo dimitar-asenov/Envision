@@ -7,28 +7,15 @@
 
 #include "shapes/DiamondStyle.h"
 
-#include "Styles.h"
-
 namespace Visualization {
 
-DiamondStyle::DiamondStyle() :
-		background_(QColor(0xAA, 0xFF, 0xCC, 0xFF)), shadow_(Qt::NoBrush), xShadowOffset_(3), yShadowOffset_(3)
+void DiamondStyle::load(StyleLoader& sl)
 {
-}
-
-DiamondStyle* DiamondStyle::getDefault()
-{
-	static DiamondStyle defaultStyle;
-	return &defaultStyle;
-}
-
-void DiamondStyle::load()
-{
-	ShapeStyle::load();
-	Styles::load("backgroundBrush", background_);
-	Styles::load("shadowBrush", shadow_);
-	Styles::load("shadowXOffset", xShadowOffset_);
-	Styles::load("shadowYOffset", yShadowOffset_);
+	ShapeStyle::load(sl);
+	sl.load("backgroundBrush", background_);
+	sl.load("shadowBrush", shadow_);
+	sl.load("shadowXOffset", xShadowOffset_);
+	sl.load("shadowYOffset", yShadowOffset_);
 }
 
 }

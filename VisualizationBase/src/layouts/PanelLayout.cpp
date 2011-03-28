@@ -9,7 +9,7 @@
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS( PanelLayout )
+ITEM_COMMON_DEFINITIONS( PanelLayout, "layout" )
 
 PanelLayout::PanelLayout(Item* parent, const StyleType* style) :
 	Layout(parent, style), first_(NULL), middle_(NULL), last_(NULL)

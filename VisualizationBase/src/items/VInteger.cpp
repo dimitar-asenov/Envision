@@ -11,7 +11,7 @@
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(VInteger)
+ITEM_COMMON_DEFINITIONS(VInteger, "item")
 
 VInteger::VInteger(Item* parent, NodeType *node, const StyleType *style) :
 	ItemWithNode<TextRenderer, Model::Integer>(parent, node, style)

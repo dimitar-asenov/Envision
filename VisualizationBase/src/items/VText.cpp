@@ -11,7 +11,7 @@
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(VText)
+ITEM_COMMON_DEFINITIONS(VText, "item")
 
 VText::VText(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<TextRenderer, Model::Text>(parent, node, style)

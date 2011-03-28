@@ -7,10 +7,8 @@
 
 #include "items/Symbol.h"
 
-#include "Styles.h"
-
 namespace Visualization {
-ITEM_COMMON_DEFINITIONS(Symbol)
+ITEM_COMMON_DEFINITIONS(Symbol, "item")
 
 Symbol::Symbol(Item* parent, const StyleType *style) :
 	TextRenderer(parent, style, style->symbol())

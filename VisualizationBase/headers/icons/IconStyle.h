@@ -21,7 +21,7 @@ class VISUALIZATIONBASE_API IconStyle : public ItemStyle
 		QPen outline_;
 
 	public:
-		virtual void load();
+		virtual void load(StyleLoader& sl);
 
 		const QPen& outline() const;
 };

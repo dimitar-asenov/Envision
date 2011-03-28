@@ -6,7 +6,6 @@
  **********************************************************************************************************************/
 
 #include "items/VListStyle.h"
-#include "Styles.h"
 
 namespace Visualization {
 
@@ -14,16 +13,10 @@ VListStyle::VListStyle()
 {
 }
 
-VListStyle* VListStyle::getDefault()
+void VListStyle::load(StyleLoader& sl)
 {
-	static VListStyle defaultStyle;
-	return &defaultStyle;
-}
-
-void VListStyle::load()
-{
-	ItemStyle::load();
-	Styles::load("itemsStyle", itemsStyle_);
+	ItemStyle::load(sl);
+	sl.load("itemsStyle", itemsStyle_);
 }
 
 }

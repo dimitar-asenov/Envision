@@ -18,7 +18,7 @@ class VISUALIZATIONBASE_API SVGIcon : public Icon
 	ITEM_COMMON(SVGIcon)
 
 	public:
-		SVGIcon(Item* parent, const SVGIconStyle *style = Styles::icon<SVGIcon>("default"));
+		SVGIcon(Item* parent, const SVGIconStyle *style = itemStyles().get());
 		SVGIcon(Item* parent, const QString& iconStyleName);
 
 		virtual void updateGeometry(int availableWidth, int availableHeight);

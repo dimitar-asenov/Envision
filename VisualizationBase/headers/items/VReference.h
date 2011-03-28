@@ -14,7 +14,6 @@
 #include "ItemWithNode.h"
 #include "TextStyle.h"
 #include "ModelBase/headers/nodes/Reference.h"
-#include "../Styles.h"
 
 namespace Visualization {
 
@@ -23,7 +22,7 @@ class VISUALIZATIONBASE_API VReference : public ItemWithNode<TextRenderer, Model
 	ITEM_COMMON_CUSTOM_STYLENAME(VReference, TextStyle)
 
 	public:
-		VReference(Item* parent, NodeType *node, const StyleType *style = Styles::item<VReference>("default"));
+		VReference(Item* parent, NodeType *node, const StyleType *style = itemStyles().get());
 		virtual bool setText(const QString& newText);
 
 	protected:

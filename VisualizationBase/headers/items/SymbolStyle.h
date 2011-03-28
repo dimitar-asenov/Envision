@@ -20,11 +20,9 @@ class VISUALIZATIONBASE_API SymbolStyle : public TextStyle
 		QString symbol_;
 
 	public:
-		void load();
+		void load(StyleLoader& sl);
 
 		const QString& symbol() const;
-
-		static SymbolStyle* getDefault();
 };
 
 inline const QString& SymbolStyle::symbol() const { return symbol_; }

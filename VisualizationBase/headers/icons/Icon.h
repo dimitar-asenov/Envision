@@ -12,7 +12,6 @@
 
 #include "../items/Item.h"
 #include "IconStyle.h"
-#include "../Styles.h"
 
 namespace Visualization {
 

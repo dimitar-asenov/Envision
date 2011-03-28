@@ -13,7 +13,7 @@
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS( PositionLayout )
+ITEM_COMMON_DEFINITIONS( PositionLayout, "layout" )
 
 PositionLayout::PositionLayout(Item* parent, const StyleType* style) :
 	Layout(parent, style)

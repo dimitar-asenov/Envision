@@ -17,7 +17,7 @@
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(TextRenderer)
+ITEM_COMMON_DEFINITIONS(TextRenderer, "item")
 
 const int MIN_TEXT_WIDTH = 10;
 

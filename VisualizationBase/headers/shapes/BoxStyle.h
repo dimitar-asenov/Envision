@@ -30,13 +30,7 @@ class VISUALIZATIONBASE_API BoxStyle : public ShapeStyle
 		int yShadowOffset_;
 
 	public:
-		BoxStyle();
-		virtual void load();
-
-		void setBackground(const QBrush& brush);
-
-		void setCorner(CornerType type, int radius);
-		void setShadow(const QBrush& brush, int xOffset, int yOffset);
+		virtual void load(StyleLoader& sl);
 
 		const QBrush& background() const;
 
@@ -46,9 +40,6 @@ class VISUALIZATIONBASE_API BoxStyle : public ShapeStyle
 		const QBrush& shadow() const;
 		int xShadowOffset() const;
 		int yShadowOffset() const;
-
-
-		static BoxStyle* getDefault();
 };
 
 inline const QBrush& BoxStyle::background() const { return background_; };

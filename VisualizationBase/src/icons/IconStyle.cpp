@@ -6,14 +6,13 @@
  **********************************************************************************************************************/
 
 #include "icons/IconStyle.h"
-#include "Styles.h"
 
 namespace Visualization {
 
-void IconStyle::load()
+void IconStyle::load(StyleLoader& sl)
 {
-	ItemStyle::load();
-	Styles::load("outline", outline_);
+	ItemStyle::load(sl);
+	sl.load("outline", outline_);
 }
 
 }

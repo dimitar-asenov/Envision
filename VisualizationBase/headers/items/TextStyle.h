@@ -29,7 +29,7 @@ class VISUALIZATIONBASE_API TextStyle : public ItemStyle
 
 	public:
 		TextStyle();
-		void load();
+		void load(StyleLoader& sl);
 
 		const QPen& pen() const;
 		const QFont& font() const;
@@ -37,9 +37,6 @@ class VISUALIZATIONBASE_API TextStyle : public ItemStyle
 		const QPen& selectionPen() const;
 		const QFont& selectionFont() const;
 		const QBrush& selectionBackground() const;
-
-
-		static TextStyle* getDefault();
 };
 
 inline const QPen& TextStyle::pen() const { return pen_; };

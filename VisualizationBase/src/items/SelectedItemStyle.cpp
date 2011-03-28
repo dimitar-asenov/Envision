@@ -9,15 +9,9 @@
 
 namespace Visualization {
 
-SelectedItemStyle* SelectedItemStyle::getDefault()
+void SelectedItemStyle::load(StyleLoader& sl)
 {
-	static SelectedItemStyle defaultStyle;
-	return &defaultStyle;
-}
-
-void SelectedItemStyle::load()
-{
-	ItemStyle::load();
+	ItemStyle::load(sl);
 
 }
 

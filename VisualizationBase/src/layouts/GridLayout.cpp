@@ -14,7 +14,7 @@
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS( GridLayout )
+ITEM_COMMON_DEFINITIONS( GridLayout, "layout")
 
 GridLayout::GridLayout(Item* parent, const StyleType* style) :
 	Layout(parent, style), sizeX_(0), sizeY_(0)

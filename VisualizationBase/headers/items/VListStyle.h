@@ -21,11 +21,9 @@ class VISUALIZATIONBASE_API VListStyle : public ItemStyle
 
 	public:
 		VListStyle();
-		virtual void load();
+		virtual void load(StyleLoader& sl);
 
 		const SequentialLayoutStyle&  itemsStyle() const;
-
-		static VListStyle* getDefault();
 };
 
 inline const SequentialLayoutStyle& VListStyle::itemsStyle() const {return itemsStyle_; }

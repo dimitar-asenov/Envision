@@ -30,7 +30,7 @@ class VISUALIZATIONBASE_API PositionLayout : public Layout
 		void swap(int i, int j);
 
 	public:
-		PositionLayout(Item* parent, const StyleType* style = Styles::layout<PositionLayout>("default"));
+		PositionLayout(Item* parent, const StyleType* style = itemStyles().get());
 		~PositionLayout();
 
 		int length() const;

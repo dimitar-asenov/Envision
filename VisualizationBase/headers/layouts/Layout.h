@@ -12,7 +12,6 @@
 
 #include "LayoutStyle.h"
 #include "../items/Item.h"
-#include "../Styles.h"
 #include "../shapes/Shape.h"
 
 namespace Visualization {

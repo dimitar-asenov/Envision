@@ -29,7 +29,7 @@ class VISUALIZATIONBASE_API SequentialLayout: public Layout
 		QVector<Item*> items;
 
 	public:
-		SequentialLayout(Item* parent, const StyleType* style = Styles::layout<SequentialLayout>("default"));
+		SequentialLayout(Item* parent, const StyleType* style = itemStyles().get());
 		~SequentialLayout();
 
 		virtual bool isEmpty() const;

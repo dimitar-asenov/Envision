@@ -8,7 +8,7 @@
 #ifndef STYLENODE_H_
 #define STYLENODE_H_
 
-#include "visualizationbase_api.h"
+#include "../visualizationbase_api.h"
 
 #include <QtXml/QDomDocument>
 #include <QtCore/QList>
@@ -17,6 +17,15 @@ namespace Visualization {
 
 class VISUALIZATIONBASE_API StyleNode
 {
+	public:
+		StyleNode(const QString& rootStyleFileName, const QString& folderWithinStyles);
+		virtual ~StyleNode();
+
+		static void setBaseFolder( const QString &baseFolder);
+
+		QString getProperty(QStringList path);
+		bool hasProperty(QStringList path);
+
 	private:
 		static QString baseFolder;
 
@@ -36,15 +45,9 @@ class VISUALIZATIONBASE_API StyleNode
 		QDomDocument openStyleDoc(const QString& path);
 		QString getFolder();
 		QDomElement getElement(QStringList path);
-
-	public:
-		StyleNode(const QString& rootStyleFileName, const QString& folderWithinStyles);
-		virtual ~StyleNode();
-
-		static void setBaseFolder( const QString &baseFolder);
-
-		QString getProperty(QStringList path);
 };
+
+inline bool StyleNode::hasProperty(QStringList path) { return !getElement(path).isNull(); }
 
 }
 

@@ -6,19 +6,12 @@
  **********************************************************************************************************************/
 
 #include "layouts/PanelBorderLayoutStyle.h"
-#include "Styles.h"
 
 namespace Visualization {
 
 PanelBorderLayoutStyle::PanelBorderLayoutStyle() :
 	leftInnerMargin_(5), rightInnerMargin_(5), topInnerMargin_(5), bottomInnerMargin_(5)
 {
-}
-
-PanelBorderLayoutStyle* PanelBorderLayoutStyle::getDefault()
-{
-	static PanelBorderLayoutStyle defaultStyle;
-	return &defaultStyle;
 }
 
 void PanelBorderLayoutStyle::setInnerMargins(int marginSize)
@@ -40,23 +33,23 @@ void PanelBorderLayoutStyle::setInnerMargins(int left, int right, int top, int b
 	if ( bottom >= 0 ) bottomInnerMargin_ = bottom;
 }
 
-void PanelBorderLayoutStyle::load()
+void PanelBorderLayoutStyle::load(StyleLoader& sl)
 {
-	LayoutStyle::load();
-	Styles::load("topPanelStyle", topStyle_);
-	Styles::load("leftPanelStyle", leftStyle_);
-	Styles::load("bottomPanelStyle", bottomStyle_);
-	Styles::load("rightPanelStyle", rightStyle_);
+	LayoutStyle::load(sl);
+	sl.load("topPanelStyle", topStyle_);
+	sl.load("leftPanelStyle", leftStyle_);
+	sl.load("bottomPanelStyle", bottomStyle_);
+	sl.load("rightPanelStyle", rightStyle_);
 
-	Styles::load("leftInnerMargin", leftInnerMargin_);
-	Styles::load("rightInnerMargin", rightInnerMargin_);
-	Styles::load("topInnerMargin", topInnerMargin_);
-	Styles::load("bottomInnerMargin", bottomInnerMargin_);
+	sl.load("leftInnerMargin", leftInnerMargin_);
+	sl.load("rightInnerMargin", rightInnerMargin_);
+	sl.load("topInnerMargin", topInnerMargin_);
+	sl.load("bottomInnerMargin", bottomInnerMargin_);
 
-	Styles::load("isLeftProtrusionFixed", leftProtrusionFixed_);
-	if (leftProtrusionFixed_) Styles::load("leftProtrusion", leftProtrusion_);
+	sl.load("isLeftProtrusionFixed", leftProtrusionFixed_);
+	if (leftProtrusionFixed_) sl.load("leftProtrusion", leftProtrusion_);
 
-	Styles::load("shapeOnlyOnContent", shapeOnlyOnContent_);
+	sl.load("shapeOnlyOnContent", shapeOnlyOnContent_);
 }
 
 }

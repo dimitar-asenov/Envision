@@ -12,7 +12,6 @@
 
 #include "Item.h"
 #include "SelectedItemStyle.h"
-#include "../Styles.h"
 
 namespace Visualization {
 
@@ -21,7 +20,7 @@ class VISUALIZATIONBASE_API SelectedItem: public Item
 	ITEM_COMMON(SelectedItem)
 
 	public:
-		SelectedItem(Item* selectedItem, const StyleType* style = Styles::item<SelectedItem>("default"));
+		SelectedItem(Item* selectedItem, const StyleType* style = itemStyles().get());
 		virtual ~SelectedItem();
 
 		virtual bool needsUpdate();

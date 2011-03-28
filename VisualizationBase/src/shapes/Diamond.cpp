@@ -14,19 +14,11 @@
 
 namespace Visualization {
 
+SHAPE_COMMON_DEFINITIONS(Diamond, "shape")
+
 Diamond::Diamond(Item *parent, StyleType *style) :
 	Shape(parent, style)
 {
-}
-
-void Diamond::setStyle(ShapeStyle *style)
-{
-	setGenericStyle<DiamondStyle> (style);
-}
-
-Diamond::StyleType* Diamond::style() const
-{
-	return static_cast<StyleType*> (Shape::style());
 }
 
 QPainterPath Diamond::getDiamondPath(qreal x, qreal y, int width, int height)
