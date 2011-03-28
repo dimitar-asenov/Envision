@@ -13,7 +13,7 @@
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(ClassIcon)
+ITEM_COMMON_DEFINITIONS(ClassIcon, "icon")
 
 ClassIcon::ClassIcon(Item* parent, const ClassIconStyle *style) :
 	Icon(parent, style)

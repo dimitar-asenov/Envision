@@ -6,24 +6,17 @@
  **********************************************************************************************************************/
 
 #include "statements/VMethodCallStatementStyle.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace OOVisualization {
 
-VMethodCallStatementStyle* VMethodCallStatementStyle::getDefault()
+void VMethodCallStatementStyle::load(Visualization::StyleLoader& sl)
 {
-	static VMethodCallStatementStyle defaultStyle;
-	return &defaultStyle;
-}
+	ItemStyle::load(sl);
 
-void VMethodCallStatementStyle::load()
-{
-	ItemStyle::load();
-
-	Visualization::Styles::load("layout", layout_);
-	Visualization::Styles::load("name", name_);
-	Visualization::Styles::load("separator", separator_);
-	Visualization::Styles::load("arguments", arguments_);
+	sl.load("layout", layout_);
+	sl.load("name", name_);
+	sl.load("separator", separator_);
+	sl.load("arguments", arguments_);
 }
 
 }

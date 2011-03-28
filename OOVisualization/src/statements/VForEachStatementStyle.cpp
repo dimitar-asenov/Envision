@@ -6,26 +6,20 @@
  **********************************************************************************************************************/
 
 #include "statements/VForEachStatementStyle.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace OOVisualization {
 
-VForEachStatementStyle* VForEachStatementStyle::getDefault()
+void VForEachStatementStyle::load(Visualization::StyleLoader& sl)
 {
-	static VForEachStatementStyle defaultStyle;
-	return &defaultStyle;
-}
+	ItemStyle::load(sl);
 
-void VForEachStatementStyle::load()
-{
-	ItemStyle::load();
-	Visualization::Styles::load("layout", layout_);
-	Visualization::Styles::load("header", header_);
-	Visualization::Styles::load("icon", icon_);
-	Visualization::Styles::load("varContainer", varContainer_);
-	Visualization::Styles::load("varName", varName_);
-	Visualization::Styles::load("collection", collection_);
-	Visualization::Styles::load("body", body_);
+	sl.load("layout", layout_);
+	sl.load("header", header_);
+	sl.load("icon", icon_);
+	sl.load("varContainer", varContainer_);
+	sl.load("varName", varName_);
+	sl.load("collection", collection_);
+	sl.load("body", body_);
 }
 
 }

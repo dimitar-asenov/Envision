@@ -14,7 +14,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VBlock)
+ITEM_COMMON_DEFINITIONS(VBlock, "item")
 
 VBlock::VBlock(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<Item, Block>(parent, node, style),

@@ -12,7 +12,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VStatic)
+ITEM_COMMON_DEFINITIONS(VStatic, "item")
 
 VStatic::VStatic(Item* parent, NodeType* stat, const StyleType* style) :
 	ItemWithNode<TextRenderer, Static>(parent, stat, style)

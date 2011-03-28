@@ -15,7 +15,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VReturnStatement)
+ITEM_COMMON_DEFINITIONS(VReturnStatement, "item")
 
 VReturnStatement::VReturnStatement(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode< LayoutProvider<>, ReturnStatement>(parent, node, style),

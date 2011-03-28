@@ -13,7 +13,6 @@
 #include "VisualizationBase/headers/items/TextRenderer.h"
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/TextStyle.h"
-#include "VisualizationBase/headers/Styles.h"
 
 #include "OOModel/headers/elements/Visibility.h"
 
@@ -24,7 +23,7 @@ class OOVISUALIZATION_API VVisibility : public Visualization::ItemWithNode< Visu
 	ITEM_COMMON_CUSTOM_STYLENAME(VVisibility, Visualization::TextStyle)
 
 	public:
-		VVisibility(Item* parent, NodeType* vis, const StyleType* style = Visualization::Styles::item<VVisibility>("default"));
+		VVisibility(Item* parent, NodeType* vis, const StyleType* style = itemStyles().get());
 		virtual bool setText(const QString& newText);
 
 	protected:

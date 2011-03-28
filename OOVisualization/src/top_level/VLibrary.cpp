@@ -17,7 +17,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VLibrary)
+ITEM_COMMON_DEFINITIONS(VLibrary, "item")
 
 VLibrary::VLibrary(Item* parent, OOModel::Library* node, const VLibraryStyle* style) :
 	ItemWithNode<LayoutProvider<PanelBorderLayout>, Library>(parent, node, style),

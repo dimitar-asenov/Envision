@@ -24,13 +24,11 @@ class OOVISUALIZATION_API VVariableAccessStyle : public Visualization::ItemStyle
 		Visualization::SymbolStyle separator_;
 
 	public:
-		void load();
+		void load(Visualization::StyleLoader& sl);
 
 		const Visualization::SequentialLayoutStyle& layout() const;
 		const Visualization::TextStyle& name() const;
 		const Visualization::SymbolStyle& separator() const;
-
-		static VVariableAccessStyle* getDefault();
 };
 
 inline const Visualization::SequentialLayoutStyle& VVariableAccessStyle::layout() const { return layout_; }

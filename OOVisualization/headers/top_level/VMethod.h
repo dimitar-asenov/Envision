@@ -15,7 +15,6 @@
 
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/LayoutProvider.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
 	class VText;
@@ -31,7 +30,7 @@ class OOVISUALIZATION_API VMethod : public Visualization::ItemWithNode< Visualiz
 	ITEM_COMMON(VMethod)
 
 	public:
-		VMethod(Item* parent, NodeType* node, const StyleType* style = Visualization::Styles::item<VMethod>("default"));
+		VMethod(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VMethod();
 
 	protected:

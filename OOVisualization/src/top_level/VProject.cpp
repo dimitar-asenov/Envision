@@ -19,7 +19,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VProject)
+ITEM_COMMON_DEFINITIONS(VProject, "item")
 
 VProject::VProject(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<PanelBorderLayout>, Project>(parent, node, style),

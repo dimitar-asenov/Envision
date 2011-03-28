@@ -24,14 +24,12 @@ class OOVISUALIZATION_API VStringLiteralStyle : public Visualization::ItemStyle
 		Visualization::SymbolStyle postSymbol_;
 
 	public:
-		void load();
+		void load(Visualization::StyleLoader& sl);
 
 		const Visualization::SequentialLayoutStyle& layout() const;
 		const Visualization::TextStyle& string() const;
 		const Visualization::SymbolStyle& preSymbol() const;
 		const Visualization::SymbolStyle& postSymbol() const;
-
-		static VStringLiteralStyle* getDefault();
 };
 
 inline const Visualization::SequentialLayoutStyle& VStringLiteralStyle::layout() const { return layout_; }

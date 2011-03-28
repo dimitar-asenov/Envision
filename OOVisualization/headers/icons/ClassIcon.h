@@ -12,7 +12,6 @@
 #include "ClassIconStyle.h"
 
 #include "VisualizationBase/headers/icons/Icon.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace OOVisualization {
 
@@ -21,7 +20,7 @@ class OOVISUALIZATION_API ClassIcon : public Visualization::Icon
 	ITEM_COMMON(ClassIcon)
 
 	public:
-		ClassIcon(Item* parent, const ClassIconStyle *style = Visualization::Styles::icon<ClassIcon>("default"));
+		ClassIcon(Item* parent, const ClassIconStyle *style = itemStyles().get());
 
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);

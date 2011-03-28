@@ -6,33 +6,27 @@
  **********************************************************************************************************************/
 
 #include "top_level/VMethodStyle.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace OOVisualization {
 
-VMethodStyle* VMethodStyle::getDefault()
+void VMethodStyle::load(Visualization::StyleLoader& sl)
 {
-	static VMethodStyle defaultStyle;
-	return &defaultStyle;
-}
+	ItemStyle::load(sl);
 
-void VMethodStyle::load()
-{
-	ItemStyle::load();
-	Visualization::Styles::load("layout", layout_);
-	Visualization::Styles::load("nameDefault", nameDefault_);
-	Visualization::Styles::load("namePublic", namePublic_);
-	Visualization::Styles::load("namePrivate", namePrivate_);
-	Visualization::Styles::load("nameProtected", nameProtected_);
-	Visualization::Styles::load("nameStaticDefault", nameStaticDefault_);
-	Visualization::Styles::load("nameStaticPublic", nameStaticPublic_);
-	Visualization::Styles::load("nameStaticPrivate", nameStaticPrivate_);
-	Visualization::Styles::load("nameStaticProtected", nameStaticProtected_);
-	Visualization::Styles::load("icon", icon_);
-	Visualization::Styles::load("header", header_);
-	Visualization::Styles::load("content", content_);
-	Visualization::Styles::load("arguments", arguments_);
-	Visualization::Styles::load("results", results_);
+	sl.load("layout", layout_);
+	sl.load("nameDefault", nameDefault_);
+	sl.load("namePublic", namePublic_);
+	sl.load("namePrivate", namePrivate_);
+	sl.load("nameProtected", nameProtected_);
+	sl.load("nameStaticDefault", nameStaticDefault_);
+	sl.load("nameStaticPublic", nameStaticPublic_);
+	sl.load("nameStaticPrivate", nameStaticPrivate_);
+	sl.load("nameStaticProtected", nameStaticProtected_);
+	sl.load("icon", icon_);
+	sl.load("header", header_);
+	sl.load("content", content_);
+	sl.load("arguments", arguments_);
+	sl.load("results", results_);
 }
 
 }

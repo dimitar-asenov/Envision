@@ -13,8 +13,8 @@
 
 #include "OOModel/headers/statements/Block.h"
 
+#include "VisualizationBase/headers/items/Item.h"
 #include "VisualizationBase/headers/items/ItemWithNode.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
 	class VList;
@@ -27,7 +27,7 @@ class OOVISUALIZATION_API VBlock : public Visualization::ItemWithNode< Visualiza
 	ITEM_COMMON(VBlock)
 
 	public:
-		VBlock(Item* parent, NodeType* node, const StyleType* style = Visualization::Styles::item<VBlock>("default"));
+		VBlock(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VBlock();
 
 		virtual bool focusChild(FocusTarget location);

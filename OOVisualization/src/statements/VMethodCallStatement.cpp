@@ -16,7 +16,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VMethodCallStatement)
+ITEM_COMMON_DEFINITIONS(VMethodCallStatement, "item")
 
 VMethodCallStatement::VMethodCallStatement(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<>, MethodCallStatement>(parent, node, style),

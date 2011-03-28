@@ -15,7 +15,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VArrayType)
+ITEM_COMMON_DEFINITIONS(VArrayType, "item")
 
 VArrayType::VArrayType(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<>, ArrayType>(parent, node, style),

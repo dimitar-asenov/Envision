@@ -15,7 +15,6 @@
 
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/LayoutProvider.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
 	class Symbol;
@@ -29,7 +28,7 @@ class OOVISUALIZATION_API VReturnStatement : public Visualization::ItemWithNode<
 	ITEM_COMMON(VReturnStatement)
 
 	public:
-		VReturnStatement(Item* parent, NodeType* node, const StyleType* style = Visualization::Styles::item<VReturnStatement>("default"));
+		VReturnStatement(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VReturnStatement();
 
 	protected:

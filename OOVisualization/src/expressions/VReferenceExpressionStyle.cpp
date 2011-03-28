@@ -6,23 +6,16 @@
  **********************************************************************************************************************/
 
 #include "expressions/VReferenceExpressionStyle.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace OOVisualization {
 
-VReferenceExpressionStyle* VReferenceExpressionStyle::getDefault()
+void VReferenceExpressionStyle::load(Visualization::StyleLoader& sl)
 {
-	static VReferenceExpressionStyle defaultStyle;
-	return &defaultStyle;
-}
+	ItemStyle::load(sl);
 
-void VReferenceExpressionStyle::load()
-{
-	ItemStyle::load();
-
-	Visualization::Styles::load("layout", layout_);
-	Visualization::Styles::load("name", name_);
-	Visualization::Styles::load("separator", separator_);
+	sl.load("layout", layout_);
+	sl.load("name", name_);
+	sl.load("separator", separator_);
 }
 
 }

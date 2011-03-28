@@ -12,7 +12,6 @@
 
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/Symbol.h"
-#include "VisualizationBase/headers/Styles.h"
 
 #include "OOModel/headers/expressions/ThisExpression.h"
 
@@ -23,7 +22,7 @@ class OOVISUALIZATION_API VThisExpression : public Visualization::ItemWithNode< 
 	ITEM_COMMON_CUSTOM_STYLENAME(VThisExpression, Visualization::SymbolStyle)
 
 	public:
-		VThisExpression(Item* parent, NodeType *expr, const StyleType *style = Visualization::Styles::item<VThisExpression>("default"));
+		VThisExpression(Item* parent, NodeType *expr, const StyleType *style = itemStyles().get());
 		virtual ~VThisExpression();
 
 		virtual bool focusChild(FocusTarget location);

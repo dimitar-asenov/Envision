@@ -6,24 +6,17 @@
  **********************************************************************************************************************/
 
 #include "literals/VStringLiteralStyle.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace OOVisualization {
 
-VStringLiteralStyle* VStringLiteralStyle::getDefault()
+void VStringLiteralStyle::load(Visualization::StyleLoader& sl)
 {
-	static VStringLiteralStyle defaultStyle;
-	return &defaultStyle;
-}
+	ItemStyle::load(sl);
 
-void VStringLiteralStyle::load()
-{
-	ItemStyle::load();
-
-	Visualization::Styles::load("layout", layout_);
-	Visualization::Styles::load("string", string_);
-	Visualization::Styles::load("preSymbol", preSymbol_);
-	Visualization::Styles::load("postSymbol", postSymbol_);
+	sl.load("layout", layout_);
+	sl.load("string", string_);
+	sl.load("preSymbol", preSymbol_);
+	sl.load("postSymbol", postSymbol_);
 }
 
 }

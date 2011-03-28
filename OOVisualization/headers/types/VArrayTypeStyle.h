@@ -22,12 +22,10 @@ class OOVISUALIZATION_API VArrayTypeStyle : public Visualization::ItemStyle
 		Visualization::SymbolStyle symbol_;
 
 	public:
-		void load();
+		void load(Visualization::StyleLoader& sl);
 
 		const Visualization::SequentialLayoutStyle& layout() const;
 		const Visualization::SymbolStyle& symbol() const;
-
-		static VArrayTypeStyle* getDefault();
 };
 
 inline const Visualization::SequentialLayoutStyle& VArrayTypeStyle::layout() const { return layout_; }

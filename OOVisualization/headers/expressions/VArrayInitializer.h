@@ -15,7 +15,6 @@
 
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/LayoutProvider.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
 	class GridLayout;
@@ -29,7 +28,7 @@ class OOVISUALIZATION_API VArrayInitializer : public Visualization::ItemWithNode
 	ITEM_COMMON(VArrayInitializer)
 
 	public:
-		VArrayInitializer(Item* parent, NodeType* node, const StyleType* style = Visualization::Styles::item<VArrayInitializer>("default"));
+		VArrayInitializer(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VArrayInitializer();
 
 		void showInMatrixForm(bool matrixForm = true);

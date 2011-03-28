@@ -6,21 +6,14 @@
  **********************************************************************************************************************/
 
 #include "elements/VFormalResultStyle.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace OOVisualization {
 
-VFormalResultStyle* VFormalResultStyle::getDefault()
+void VFormalResultStyle::load(Visualization::StyleLoader& sl)
 {
-	static VFormalResultStyle defaultStyle;
-	return &defaultStyle;
-}
+	ItemStyle::load(sl);
 
-void VFormalResultStyle::load()
-{
-	ItemStyle::load();
-
-	Visualization::Styles::load("layout", layout_);
-	Visualization::Styles::load("name", name_);
+	sl.load("layout", layout_);
+	sl.load("name", name_);
 }
 }

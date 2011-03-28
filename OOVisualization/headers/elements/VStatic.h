@@ -13,7 +13,6 @@
 #include "VisualizationBase/headers/items/TextRenderer.h"
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/TextStyle.h"
-#include "VisualizationBase/headers/Styles.h"
 
 #include "OOModel/headers/elements/Static.h"
 
@@ -24,7 +23,7 @@ class OOVISUALIZATION_API VStatic : public Visualization::ItemWithNode< Visualiz
 	ITEM_COMMON_CUSTOM_STYLENAME(VStatic, Visualization::TextStyle)
 
 	public:
-		VStatic(Item* parent, NodeType* stat, const StyleType* style = Visualization::Styles::item<VStatic>("default"));
+		VStatic(Item* parent, NodeType* stat, const StyleType* style = itemStyles().get());
 		virtual bool setText(const QString& newText);
 
 	protected:

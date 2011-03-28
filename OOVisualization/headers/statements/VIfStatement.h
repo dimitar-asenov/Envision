@@ -15,7 +15,6 @@
 
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/LayoutProvider.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
 	class PanelBorderLayout;
@@ -31,7 +30,7 @@ class OOVISUALIZATION_API VIfStatement : public Visualization::ItemWithNode< Vis
 	ITEM_COMMON(VIfStatement)
 
 	public:
-		VIfStatement(Item* parent, NodeType* node, const StyleType* style = Visualization::Styles::item<VIfStatement>("default"));
+		VIfStatement(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VIfStatement();
 
 	protected:

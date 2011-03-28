@@ -12,7 +12,6 @@
 
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/Symbol.h"
-#include "VisualizationBase/headers/Styles.h"
 
 #include "OOModel/headers/statements/BreakStatement.h"
 
@@ -23,7 +22,7 @@ class OOVISUALIZATION_API VBreakStatement : public Visualization::ItemWithNode< 
 	ITEM_COMMON_CUSTOM_STYLENAME(VBreakStatement, Visualization::SymbolStyle)
 
 	public:
-		VBreakStatement(Item* parent, NodeType *node, const StyleType *style = Visualization::Styles::item<VBreakStatement>("default"));
+		VBreakStatement(Item* parent, NodeType *node, const StyleType *style = itemStyles().get());
 		virtual ~VBreakStatement();
 
 		virtual bool focusChild(FocusTarget location);

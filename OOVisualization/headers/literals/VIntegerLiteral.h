@@ -13,7 +13,6 @@
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/TextStyle.h"
 #include "VisualizationBase/headers/items/VInteger.h"
-#include "VisualizationBase/headers/Styles.h"
 
 #include "OOModel/headers/expressions/IntegerLiteral.h"
 
@@ -24,7 +23,7 @@ class OOVISUALIZATION_API VIntegerLiteral : public Visualization::ItemWithNode< 
 	ITEM_COMMON_CUSTOM_STYLENAME(VIntegerLiteral, Visualization::TextStyle)
 
 	public:
-		VIntegerLiteral(Item* parent, NodeType *literal, const StyleType *style = Visualization::Styles::item<VIntegerLiteral>("default"));
+		VIntegerLiteral(Item* parent, NodeType *literal, const StyleType *style = itemStyles().get());
 		virtual ~VIntegerLiteral();
 
 		virtual bool focusChild(FocusTarget location);

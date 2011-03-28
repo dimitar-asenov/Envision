@@ -14,7 +14,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VBinaryOperation)
+ITEM_COMMON_DEFINITIONS(VBinaryOperation, "item")
 
 VBinaryOperation::VBinaryOperation(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<>, BinaryOperation>(parent, node, style),

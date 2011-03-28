@@ -21,11 +21,9 @@ class OOVISUALIZATION_API VCastExpressionStyle : public Visualization::ItemStyle
 		Visualization::SequentialLayoutStyle layout_;
 
 	public:
-		void load();
+		void load(Visualization::StyleLoader& sl);
 
 		const Visualization::SequentialLayoutStyle& layout() const;
-
-		static VCastExpressionStyle* getDefault();
 };
 
 inline const Visualization::SequentialLayoutStyle& VCastExpressionStyle::layout() const { return layout_; }

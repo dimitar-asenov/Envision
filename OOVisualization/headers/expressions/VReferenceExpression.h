@@ -15,7 +15,6 @@
 
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/LayoutProvider.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
 	class Text;
@@ -29,7 +28,7 @@ class OOVISUALIZATION_API VReferenceExpression : public Visualization::ItemWithN
 	ITEM_COMMON(VReferenceExpression)
 
 	public:
-		VReferenceExpression(Item* parent, NodeType* node, const StyleType* style = Visualization::Styles::item<VReferenceExpression>("default"));
+		VReferenceExpression(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VReferenceExpression();
 
 	protected:

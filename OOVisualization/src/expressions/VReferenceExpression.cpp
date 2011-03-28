@@ -15,7 +15,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VReferenceExpression)
+ITEM_COMMON_DEFINITIONS(VReferenceExpression, "item")
 
 VReferenceExpression::VReferenceExpression(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<>, ReferenceExpression>(parent, node, style),

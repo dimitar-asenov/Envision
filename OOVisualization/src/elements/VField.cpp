@@ -15,7 +15,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VField)
+ITEM_COMMON_DEFINITIONS(VField, "item")
 
 VField::VField(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode< LayoutProvider<>, Field >(parent, node, style),

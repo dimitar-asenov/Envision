@@ -14,7 +14,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VFormalResult)
+ITEM_COMMON_DEFINITIONS(VFormalResult, "item")
 
 VFormalResult::VFormalResult(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode< LayoutProvider<>, FormalResult>(parent, node, style),

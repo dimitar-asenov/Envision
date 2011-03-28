@@ -15,7 +15,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VVariableDeclaration)
+ITEM_COMMON_DEFINITIONS(VVariableDeclaration, "item")
 
 VVariableDeclaration::VVariableDeclaration(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<>, VariableDeclaration>(parent, node, style),

@@ -28,15 +28,13 @@ class OOVISUALIZATION_API VProjectStyle : public Visualization::ItemStyle
 		Visualization::PositionLayoutStyle content_;
 
 	public:
-		void load();
+		void load(Visualization::StyleLoader& sl);
 
 		const Visualization::PanelBorderLayoutStyle& layout() const;
 		const Visualization::SequentialLayoutStyle&  header() const;
 		const Visualization::TextStyle&  name() const;
 		const Visualization::SVGIconStyle&  icon() const;
 		const Visualization::PositionLayoutStyle&  content() const;
-
-		static VProjectStyle* getDefault();
 };
 
 inline const Visualization::PanelBorderLayoutStyle& VProjectStyle::layout() const {return layout_; }

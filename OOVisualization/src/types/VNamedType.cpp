@@ -12,7 +12,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VNamedType)
+ITEM_COMMON_DEFINITIONS(VNamedType, "item")
 
 VNamedType::VNamedType(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<Item, NamedType>(parent, node, style),

@@ -22,12 +22,10 @@ class OOVISUALIZATION_API VNewExpressionStyle : public Visualization::ItemStyle
 		Visualization::SymbolStyle newSymbol_;
 
 	public:
-		void load();
+		void load(Visualization::StyleLoader& sl);
 
 		const Visualization::SequentialLayoutStyle& layout() const;
 		const Visualization::SymbolStyle& newSymbol() const;
-
-		static VNewExpressionStyle* getDefault();
 };
 
 inline const Visualization::SequentialLayoutStyle& VNewExpressionStyle::layout() const { return layout_; }

@@ -6,23 +6,16 @@
  **********************************************************************************************************************/
 
 #include "statements/VVariableDeclarationStyle.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace OOVisualization {
 
-VVariableDeclarationStyle* VVariableDeclarationStyle::getDefault()
+void VVariableDeclarationStyle::load(Visualization::StyleLoader& sl)
 {
-	static VVariableDeclarationStyle defaultStyle;
-	return &defaultStyle;
-}
+	ItemStyle::load(sl);
 
-void VVariableDeclarationStyle::load()
-{
-	ItemStyle::load();
-
-	Visualization::Styles::load("layout", layout_);
-	Visualization::Styles::load("name", name_);
-	Visualization::Styles::load("assignmentSymbol", assignmentSymbol_);
+	sl.load("layout", layout_);
+	sl.load("name", name_);
+	sl.load("assignmentSymbol", assignmentSymbol_);
 }
 
 }

@@ -22,13 +22,11 @@ class OOVISUALIZATION_API ClassIconStyle :public Visualization::IconStyle
 		int rectHeight_;
 
 	public:
-		virtual void load();
+		virtual void load(Visualization::StyleLoader& sl);
 
 		int width() const;
 		int rectWidth() const;
 		int rectHeight() const;
-
-		static ClassIconStyle* getDefault();
 };
 
 inline int ClassIconStyle::width() const { return width_; }

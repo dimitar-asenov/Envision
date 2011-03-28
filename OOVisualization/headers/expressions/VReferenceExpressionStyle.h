@@ -24,13 +24,11 @@ class OOVISUALIZATION_API VReferenceExpressionStyle : public Visualization::Item
 		Visualization::SymbolStyle separator_;
 
 	public:
-		void load();
+		void load(Visualization::StyleLoader& sl);
 
 		const Visualization::SequentialLayoutStyle& layout() const;
 		const Visualization::TextStyle& name() const;
 		const Visualization::SymbolStyle& separator() const;
-
-		static VReferenceExpressionStyle* getDefault();
 };
 
 inline const Visualization::SequentialLayoutStyle& VReferenceExpressionStyle::layout() const { return layout_; }

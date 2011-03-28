@@ -14,7 +14,7 @@ using namespace Visualization;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VCharacterLiteral)
+ITEM_COMMON_DEFINITIONS(VCharacterLiteral, "item")
 
 VCharacterLiteral::VCharacterLiteral(Item* parent, NodeType* literal, const StyleType* style) :
 	ItemWithNode<Item, CharacterLiteral>(parent, literal, style),

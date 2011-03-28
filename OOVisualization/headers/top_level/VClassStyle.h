@@ -39,8 +39,7 @@ class OOVISUALIZATION_API VClassStyle : public Visualization::ItemStyle
 		Visualization::SequentialLayoutStyle defaultFieldArea_;
 
 	public:
-		VClassStyle();
-		void load();
+		void load(Visualization::StyleLoader& sl);
 
 		const Visualization::PanelBorderLayoutStyle& layout() const;
 		const Visualization::TextStyle& nameDefault() const;
@@ -56,8 +55,6 @@ class OOVISUALIZATION_API VClassStyle : public Visualization::ItemStyle
 		const Visualization::SequentialLayoutStyle& privateFieldArea() const;
 		const Visualization::SequentialLayoutStyle& protectedFieldArea() const;
 		const Visualization::SequentialLayoutStyle& defaultFieldArea() const;
-
-		static VClassStyle* getDefault();
 };
 
 inline const Visualization::PanelBorderLayoutStyle& VClassStyle::layout() const { return layout_; }

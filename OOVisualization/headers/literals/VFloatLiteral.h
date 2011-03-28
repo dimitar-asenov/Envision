@@ -13,7 +13,6 @@
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/TextStyle.h"
 #include "VisualizationBase/headers/items/VFloat.h"
-#include "VisualizationBase/headers/Styles.h"
 
 #include "OOModel/headers/expressions/FloatLiteral.h"
 
@@ -24,7 +23,7 @@ class OOVISUALIZATION_API VFloatLiteral : public Visualization::ItemWithNode< Vi
 	ITEM_COMMON_CUSTOM_STYLENAME(VFloatLiteral, Visualization::TextStyle)
 
 	public:
-		VFloatLiteral(Item* parent, NodeType *node, const StyleType *style = Visualization::Styles::item<VFloatLiteral>("default"));
+		VFloatLiteral(Item* parent, NodeType *node, const StyleType *style = itemStyles().get());
 		virtual ~VFloatLiteral();
 
 		virtual bool focusChild(FocusTarget location);

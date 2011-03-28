@@ -15,7 +15,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VVariableAccess)
+ITEM_COMMON_DEFINITIONS(VVariableAccess, "item")
 
 VVariableAccess::VVariableAccess(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<>, VariableAccess>(parent, node, style),

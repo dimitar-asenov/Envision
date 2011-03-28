@@ -22,12 +22,10 @@ class OOVISUALIZATION_API VArrayInitializerStyle : public Visualization::ItemSty
 		Visualization::VListStyle values_;
 
 	public:
-		void load();
+		void load(Visualization::StyleLoader& sl);
 
 		const Visualization::GridLayoutStyle& layout() const;
 		const Visualization::VListStyle& values() const;
-
-		static VArrayInitializerStyle* getDefault();
 };
 
 inline const Visualization::GridLayoutStyle& VArrayInitializerStyle::layout() const { return layout_; }

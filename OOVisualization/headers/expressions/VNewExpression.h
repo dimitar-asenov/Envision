@@ -15,7 +15,6 @@
 
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/LayoutProvider.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
 	class Symbol;
@@ -28,7 +27,7 @@ class OOVISUALIZATION_API VNewExpression : public Visualization::ItemWithNode< V
 	ITEM_COMMON(VNewExpression)
 
 	public:
-		VNewExpression(Item* parent, NodeType* node, const StyleType* style = Visualization::Styles::item<VNewExpression>("default"));
+		VNewExpression(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VNewExpression();
 
 	protected:

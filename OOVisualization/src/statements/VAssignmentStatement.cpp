@@ -15,7 +15,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VAssignmentStatement)
+ITEM_COMMON_DEFINITIONS(VAssignmentStatement, "item")
 
 VAssignmentStatement::VAssignmentStatement(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<>, AssignmentStatement>(parent, node, style),

@@ -6,21 +6,14 @@
  **********************************************************************************************************************/
 
 #include "expressions/VCastExpressionStyle.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace OOVisualization {
 
-VCastExpressionStyle* VCastExpressionStyle::getDefault()
+void VCastExpressionStyle::load(Visualization::StyleLoader& sl)
 {
-	static VCastExpressionStyle defaultStyle;
-	return &defaultStyle;
-}
+	ItemStyle::load(sl);
 
-void VCastExpressionStyle::load()
-{
-	ItemStyle::load();
-
-	Visualization::Styles::load("layout", layout_);
+	sl.load("layout", layout_);
 }
 
 }

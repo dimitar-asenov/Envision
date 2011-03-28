@@ -12,9 +12,9 @@
 
 #include "OOModel/headers/types/PrimitiveType.h"
 
+#include "VisualizationBase/headers/items/Item.h"
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/TextStyle.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
 	class Text;
@@ -27,7 +27,7 @@ class OOVISUALIZATION_API VPrimitiveType : public Visualization::ItemWithNode< V
 	ITEM_COMMON_CUSTOM_STYLENAME(VPrimitiveType, Visualization::TextStyle)
 
 	public:
-		VPrimitiveType(Item* parent, NodeType* node, const StyleType* style = Visualization::Styles::item<VPrimitiveType>("default"));
+		VPrimitiveType(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VPrimitiveType();
 
 		virtual bool focusChild(FocusTarget location);

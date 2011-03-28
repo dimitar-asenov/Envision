@@ -17,7 +17,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VIfStatement)
+ITEM_COMMON_DEFINITIONS(VIfStatement, "item")
 
 VIfStatement::VIfStatement(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<PanelBorderLayout>, IfStatement>(parent, node, style),

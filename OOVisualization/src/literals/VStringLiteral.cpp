@@ -15,7 +15,7 @@ using namespace Visualization;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VStringLiteral)
+ITEM_COMMON_DEFINITIONS(VStringLiteral, "item")
 
 VStringLiteral::VStringLiteral(Item* parent, NodeType* literal, const StyleType* style) :
 	ItemWithNode< LayoutProvider<>, StringLiteral>(parent, literal, style),

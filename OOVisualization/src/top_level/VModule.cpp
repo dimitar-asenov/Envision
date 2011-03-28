@@ -18,7 +18,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VModule)
+ITEM_COMMON_DEFINITIONS(VModule, "item")
 
 VModule::VModule(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<PanelBorderLayout>, Module>(parent, node, style),

@@ -30,7 +30,7 @@ class OOVISUALIZATION_API VIfStatementStyle : public Visualization::ItemStyle
 		Visualization::VListStyle elseBranch_;
 
 	public:
-		void load();
+		void load(Visualization::StyleLoader& sl);
 
 		const Visualization::PanelBorderLayoutStyle& layout() const;
 		const Visualization::SequentialLayoutStyle& header() const;
@@ -40,8 +40,6 @@ class OOVISUALIZATION_API VIfStatementStyle : public Visualization::ItemStyle
 		const Visualization::SequentialLayoutStyle& content() const;
 		const Visualization::VListStyle& thenBranch() const;
 		const Visualization::VListStyle& elseBranch() const;
-
-		static VIfStatementStyle* getDefault();
 };
 
 inline const Visualization::PanelBorderLayoutStyle& VIfStatementStyle::layout() const { return layout_; }

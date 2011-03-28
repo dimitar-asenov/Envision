@@ -24,14 +24,12 @@ class OOVISUALIZATION_API OperatorStyle : public Visualization::ItemStyle
 		Visualization::SymbolStyle postSymbol_;
 
 	public:
-		void load();
+		void load(Visualization::StyleLoader& sl);
 
 		const Visualization::SequentialLayoutStyle& layout() const;
 		const Visualization::SymbolStyle& preSymbol() const;
 		const Visualization::SymbolStyle& inSymbol() const;
 		const Visualization::SymbolStyle& postSymbol() const;
-
-		static OperatorStyle* getDefault();
 };
 
 inline const Visualization::SequentialLayoutStyle& OperatorStyle::layout() const { return layout_; }
@@ -45,11 +43,9 @@ class OOVISUALIZATION_API OperatorSequenceStyle : public Visualization::ItemStyl
 		QVector<OperatorStyle> seq_;
 
 	public:
-		void load();
+		void load(Visualization::StyleLoader& sl);
 
 		const OperatorStyle& op(int i) const;
-
-		static OperatorSequenceStyle* getDefault();
 };
 
 inline const OperatorStyle& OperatorSequenceStyle::op(int i) const { return seq_.at(i); }

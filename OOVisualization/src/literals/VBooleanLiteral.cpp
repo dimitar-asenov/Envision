@@ -15,7 +15,7 @@ using namespace Visualization;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VBooleanLiteral)
+ITEM_COMMON_DEFINITIONS(VBooleanLiteral, "item")
 
 VBooleanLiteral::VBooleanLiteral(Item* parent, NodeType *literal, const StyleType *style) :
 	ItemWithNode< Item, BooleanLiteral>(parent, literal, style),

@@ -16,7 +16,6 @@
 #include "VisualizationBase/headers/items/LayoutProvider.h"
 #include "VisualizationBase/headers/items/TextStyle.h"
 #include "VisualizationBase/headers/items/VText.h"
-#include "VisualizationBase/headers/Styles.h"
 
 #include "OOModel/headers/expressions/StringLiteral.h"
 
@@ -31,7 +30,7 @@ class OOVISUALIZATION_API VStringLiteral : public Visualization::ItemWithNode< V
 	ITEM_COMMON(VStringLiteral)
 
 	public:
-		VStringLiteral(Item* parent, NodeType *literal, const StyleType *style = Visualization::Styles::item<VStringLiteral>("default"));
+		VStringLiteral(Item* parent, NodeType *literal, const StyleType *style = itemStyles().get());
 		virtual ~VStringLiteral();
 
 	protected:

@@ -12,7 +12,6 @@
 
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/Symbol.h"
-#include "VisualizationBase/headers/Styles.h"
 
 #include "OOModel/headers/statements/ContinueStatement.h"
 
@@ -23,7 +22,7 @@ class OOVISUALIZATION_API VContinueStatement : public Visualization::ItemWithNod
 	ITEM_COMMON_CUSTOM_STYLENAME(VContinueStatement, Visualization::SymbolStyle)
 
 	public:
-		VContinueStatement(Item* parent, NodeType* node, const StyleType* style = Visualization::Styles::item<VContinueStatement>("default"));
+		VContinueStatement(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VContinueStatement();
 
 		virtual bool focusChild(FocusTarget location);

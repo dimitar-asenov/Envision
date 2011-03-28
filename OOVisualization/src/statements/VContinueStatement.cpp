@@ -14,7 +14,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VContinueStatement)
+ITEM_COMMON_DEFINITIONS(VContinueStatement, "item")
 
 VContinueStatement::VContinueStatement(Item* parent, ContinueStatement* node, const SymbolStyle* style) :
 	ItemWithNode<Item, ContinueStatement>(parent, node, style),

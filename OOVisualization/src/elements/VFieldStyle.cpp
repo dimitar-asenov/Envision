@@ -6,7 +6,6 @@
  **********************************************************************************************************************/
 
 #include "elements/VFieldStyle.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace OOVisualization {
 
@@ -14,25 +13,19 @@ VFieldStyle::VFieldStyle()
 {
 }
 
-VFieldStyle* VFieldStyle::getDefault()
+void VFieldStyle::load(Visualization::StyleLoader& sl)
 {
-	static VFieldStyle defaultStyle;
-	return &defaultStyle;
-}
+	ItemStyle::load(sl);
 
-void VFieldStyle::load()
-{
-	ItemStyle::load();
-
-	Visualization::Styles::load("layout", layout_);
-	Visualization::Styles::load("nameDefault", nameDefault_);
-	Visualization::Styles::load("namePublic", namePublic_);
-	Visualization::Styles::load("namePrivate", namePrivate_);
-	Visualization::Styles::load("nameProtected", nameProtected_);
-	Visualization::Styles::load("nameStaticDefault", nameStaticDefault_);
-	Visualization::Styles::load("nameStaticPublic", nameStaticPublic_);
-	Visualization::Styles::load("nameStaticPrivate", nameStaticPrivate_);
-	Visualization::Styles::load("nameStaticProtected", nameStaticProtected_);
+	sl.load("layout", layout_);
+	sl.load("nameDefault", nameDefault_);
+	sl.load("namePublic", namePublic_);
+	sl.load("namePrivate", namePrivate_);
+	sl.load("nameProtected", nameProtected_);
+	sl.load("nameStaticDefault", nameStaticDefault_);
+	sl.load("nameStaticPublic", nameStaticPublic_);
+	sl.load("nameStaticPrivate", nameStaticPrivate_);
+	sl.load("nameStaticProtected", nameStaticProtected_);
 }
 
 }

@@ -6,24 +6,18 @@
  **********************************************************************************************************************/
 
 #include "top_level/VLibraryStyle.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace OOVisualization {
 
-VLibraryStyle* VLibraryStyle::getDefault()
+void VLibraryStyle::load(Visualization::StyleLoader& sl)
 {
-	static VLibraryStyle defaultStyle;
-	return &defaultStyle;
-}
+	ItemStyle::load(sl);
 
-void VLibraryStyle::load()
-{
-	ItemStyle::load();
-	Visualization::Styles::load("layout", layout_);
-	Visualization::Styles::load("header", header_);
-	Visualization::Styles::load("name", name_);
-	Visualization::Styles::load("icon", icon_);
-	Visualization::Styles::load("content", content_);
+	sl.load("layout", layout_);
+	sl.load("header", header_);
+	sl.load("name", name_);
+	sl.load("icon", icon_);
+	sl.load("content", content_);
 }
 
 }

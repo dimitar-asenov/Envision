@@ -15,7 +15,6 @@
 #include "VArrayTypeStyle.h"
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/LayoutProvider.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
 	class Symbol;
@@ -28,7 +27,7 @@ class OOVISUALIZATION_API VArrayType : public Visualization::ItemWithNode< Visua
 	ITEM_COMMON(VArrayType)
 
 	public:
-		VArrayType(Item* parent, NodeType* node, const StyleType* style = Visualization::Styles::item<VArrayType>("default"));
+		VArrayType(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VArrayType();
 
 

@@ -13,7 +13,6 @@
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/TextStyle.h"
 #include "VisualizationBase/headers/items/VCharacter.h"
-#include "VisualizationBase/headers/Styles.h"
 
 #include "OOModel/headers/expressions/CharacterLiteral.h"
 
@@ -24,7 +23,7 @@ class OOVISUALIZATION_API VCharacterLiteral : public Visualization::ItemWithNode
 	ITEM_COMMON_CUSTOM_STYLENAME(VCharacterLiteral, Visualization::TextStyle)
 
 	public:
-		VCharacterLiteral(Item* parent, NodeType* literal, const StyleType* style = Visualization::Styles::item<VCharacterLiteral>("default"));
+		VCharacterLiteral(Item* parent, NodeType* literal, const StyleType* style = itemStyles().get());
 		virtual ~VCharacterLiteral();
 
 		virtual bool focusChild(FocusTarget location);

@@ -24,13 +24,11 @@ class OOVISUALIZATION_API VReturnStatementStyle : public Visualization::ItemStyl
 		Visualization::VListStyle values_;
 
 	public:
-		void load();
+		void load(Visualization::StyleLoader& sl);
 
 		const Visualization::SequentialLayoutStyle& layout() const;
 		const Visualization::SymbolStyle& symbol() const;
 		const Visualization::VListStyle& values() const;
-
-		static VReturnStatementStyle* getDefault();
 };
 
 inline const Visualization::SequentialLayoutStyle& VReturnStatementStyle::layout() const { return layout_; }

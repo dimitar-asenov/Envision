@@ -20,11 +20,9 @@ class OOVISUALIZATION_API VBlockStyle : public Visualization::ItemStyle
 		Visualization::VListStyle items_;
 
 	public:
-		void load();
+		void load(Visualization::StyleLoader& sl);
 
 		const Visualization::VListStyle& items() const;
-
-		static VBlockStyle* getDefault();
 };
 
 inline const Visualization::VListStyle& VBlockStyle::items() const { return items_; }

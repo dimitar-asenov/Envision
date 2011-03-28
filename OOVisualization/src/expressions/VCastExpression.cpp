@@ -14,7 +14,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VCastExpression)
+ITEM_COMMON_DEFINITIONS(VCastExpression, "item")
 
 VCastExpression::VCastExpression(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<>, CastExpression>(parent, node, style),

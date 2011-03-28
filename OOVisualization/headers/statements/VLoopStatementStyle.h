@@ -29,7 +29,7 @@ class OOVISUALIZATION_API VLoopStatementStyle : public Visualization::ItemStyle
 		Visualization::VListStyle body_;
 
 	public:
-		void load();
+		void load(Visualization::StyleLoader& sl);
 
 		const Visualization::PanelBorderLayoutStyle& layout() const;
 		const Visualization::SequentialLayoutStyle& header() const;
@@ -39,8 +39,6 @@ class OOVISUALIZATION_API VLoopStatementStyle : public Visualization::ItemStyle
 		const Visualization::SequentialLayoutStyle& condition() const;
 		const Visualization::SequentialLayoutStyle& updateStep() const;
 		const Visualization::VListStyle& body() const;
-
-		static VLoopStatementStyle* getDefault();
 };
 
 inline const Visualization::PanelBorderLayoutStyle& VLoopStatementStyle::layout() const { return layout_; }

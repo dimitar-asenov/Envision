@@ -7,22 +7,14 @@
 
 #include "icons/ClassIconStyle.h"
 
-#include "VisualizationBase/headers/Styles.h"
-
 namespace OOVisualization {
 
-ClassIconStyle* ClassIconStyle::getDefault()
+void ClassIconStyle::load(Visualization::StyleLoader& sl)
 {
-	static ClassIconStyle defaultStyle;
-	return &defaultStyle;
-}
-
-void ClassIconStyle::load()
-{
-	IconStyle::load();
-	Visualization::Styles::load("width", width_);
-	Visualization::Styles::load("rectWidth", rectWidth_);
-	Visualization::Styles::load("rectHeight", rectHeight_);
+	IconStyle::load(sl);
+	sl.load("width", width_);
+	sl.load("rectWidth", rectWidth_);
+	sl.load("rectHeight", rectHeight_);
 }
 
 }

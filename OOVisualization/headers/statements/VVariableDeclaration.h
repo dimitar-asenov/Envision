@@ -15,7 +15,6 @@
 
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/LayoutProvider.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
 	class Symbol;
@@ -29,7 +28,7 @@ class OOVISUALIZATION_API VVariableDeclaration : public Visualization::ItemWithN
 	ITEM_COMMON(VVariableDeclaration)
 
 	public:
-		VVariableDeclaration(Item* parent, NodeType* node, const StyleType* style = Visualization::Styles::item<VVariableDeclaration>("default"));
+		VVariableDeclaration(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VVariableDeclaration();
 
 	protected:

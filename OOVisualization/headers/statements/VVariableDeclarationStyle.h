@@ -24,13 +24,11 @@ class OOVISUALIZATION_API VVariableDeclarationStyle : public Visualization::Item
 		Visualization::SymbolStyle assignmentSymbol_;
 
 	public:
-		void load();
+		void load(Visualization::StyleLoader& sl);
 
 		const Visualization::SequentialLayoutStyle& layout() const;
 		const Visualization::TextStyle& name() const;
 		const Visualization::SymbolStyle& assignmentSymbol() const;
-
-		static VVariableDeclarationStyle* getDefault();
 };
 
 inline const Visualization::SequentialLayoutStyle& VVariableDeclarationStyle::layout() const { return layout_; }

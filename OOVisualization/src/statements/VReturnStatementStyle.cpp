@@ -6,23 +6,16 @@
  **********************************************************************************************************************/
 
 #include "statements/VReturnStatementStyle.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace OOVisualization {
 
-VReturnStatementStyle* VReturnStatementStyle::getDefault()
+void VReturnStatementStyle::load(Visualization::StyleLoader& sl)
 {
-	static VReturnStatementStyle defaultStyle;
-	return &defaultStyle;
-}
+	ItemStyle::load(sl);
 
-void VReturnStatementStyle::load()
-{
-	ItemStyle::load();
-
-	Visualization::Styles::load("layout", layout_);
-	Visualization::Styles::load("symbol", symbol_);
-	Visualization::Styles::load("values", values_);
+	sl.load("layout", layout_);
+	sl.load("symbol", symbol_);
+	sl.load("values", values_);
 }
 
 }

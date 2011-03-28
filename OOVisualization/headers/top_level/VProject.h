@@ -15,7 +15,6 @@
 
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/LayoutProvider.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
 	class VText;
@@ -31,7 +30,7 @@ class OOVISUALIZATION_API VProject : public Visualization::ItemWithNode< Visuali
 	ITEM_COMMON(VProject)
 
 	public:
-		VProject(Item* parent, NodeType* node, const StyleType* style = Visualization::Styles::item<VProject>("default"));
+		VProject(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VProject();
 
 	protected:

@@ -6,28 +6,18 @@
  **********************************************************************************************************************/
 
 #include "top_level/VModuleStyle.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace OOVisualization {
 
-VModuleStyle::VModuleStyle()
+void VModuleStyle::load(Visualization::StyleLoader& sl)
 {
-}
+	ItemStyle::load(sl);
 
-VModuleStyle* VModuleStyle::getDefault()
-{
-	static VModuleStyle defaultStyle;
-	return &defaultStyle;
-}
-
-void VModuleStyle::load()
-{
-	ItemStyle::load();
-	Visualization::Styles::load("layout", layout_);
-	Visualization::Styles::load("header", header_);
-	Visualization::Styles::load("name", name_);
-	Visualization::Styles::load("icon", icon_);
-	Visualization::Styles::load("content", content_);
+	sl.load("layout", layout_);
+	sl.load("header", header_);
+	sl.load("name", name_);
+	sl.load("icon", icon_);
+	sl.load("content", content_);
 }
 
 }

@@ -28,16 +28,13 @@ class OOVISUALIZATION_API VModuleStyle : public Visualization::ItemStyle
 		Visualization::PositionLayoutStyle content_;
 
 	public:
-		VModuleStyle();
-		void load();
+		void load(Visualization::StyleLoader& sl);
 
 		const Visualization::PanelBorderLayoutStyle& layout() const;
 		const Visualization::SequentialLayoutStyle&  header() const;
 		const Visualization::TextStyle&  name() const;
 		const Visualization::SVGIconStyle&  icon() const;
 		const Visualization::PositionLayoutStyle&  content() const;
-
-		static VModuleStyle* getDefault();
 };
 
 inline const Visualization::PanelBorderLayoutStyle& VModuleStyle::layout() const {return layout_; }

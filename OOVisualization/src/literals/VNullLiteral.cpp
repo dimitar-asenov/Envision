@@ -16,7 +16,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VNullLiteral)
+ITEM_COMMON_DEFINITIONS(VNullLiteral, "item")
 
 VNullLiteral::VNullLiteral(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<Item, NullLiteral>(parent, node, style),

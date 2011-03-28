@@ -6,22 +6,15 @@
  **********************************************************************************************************************/
 
 #include "expressions/VNewExpressionStyle.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace OOVisualization {
 
-VNewExpressionStyle* VNewExpressionStyle::getDefault()
+void VNewExpressionStyle::load(Visualization::StyleLoader& sl)
 {
-	static VNewExpressionStyle defaultStyle;
-	return &defaultStyle;
-}
+	ItemStyle::load(sl);
 
-void VNewExpressionStyle::load()
-{
-	ItemStyle::load();
-
-	Visualization::Styles::load("layout", layout_);
-	Visualization::Styles::load("newSymbol", newSymbol_);
+	sl.load("layout", layout_);
+	sl.load("newSymbol", newSymbol_);
 }
 
 }

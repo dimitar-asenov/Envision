@@ -26,14 +26,12 @@ class OOVISUALIZATION_API VMethodCallStatementStyle : public Visualization::Item
 		Visualization::VListStyle arguments_;
 
 	public:
-		void load();
+		void load(Visualization::StyleLoader& sl);
 
 		const Visualization::SequentialLayoutStyle& layout() const;
 		const Visualization::TextStyle& name() const;
 		const Visualization::SymbolStyle& separator() const;
 		const Visualization::VListStyle& arguments() const;
-
-		static VMethodCallStatementStyle* getDefault();
 };
 
 inline const Visualization::SequentialLayoutStyle& VMethodCallStatementStyle::layout() const { return layout_; }

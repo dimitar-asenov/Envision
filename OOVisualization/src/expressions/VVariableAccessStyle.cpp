@@ -6,23 +6,16 @@
  **********************************************************************************************************************/
 
 #include "expressions/VVariableAccessStyle.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace OOVisualization {
 
-VVariableAccessStyle* VVariableAccessStyle::getDefault()
+void VVariableAccessStyle::load(Visualization::StyleLoader& sl)
 {
-	static VVariableAccessStyle defaultStyle;
-	return &defaultStyle;
-}
+	ItemStyle::load(sl);
 
-void VVariableAccessStyle::load()
-{
-	ItemStyle::load();
-
-	Visualization::Styles::load("layout", layout_);
-	Visualization::Styles::load("name", name_);
-	Visualization::Styles::load("separator", separator_);
+	sl.load("layout", layout_);
+	sl.load("name", name_);
+	sl.load("separator", separator_);
 }
 
 }

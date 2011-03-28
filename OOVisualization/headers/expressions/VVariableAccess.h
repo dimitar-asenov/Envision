@@ -15,7 +15,6 @@
 
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/LayoutProvider.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
 	class Text;
@@ -29,7 +28,7 @@ class OOVISUALIZATION_API VVariableAccess : public Visualization::ItemWithNode< 
 	ITEM_COMMON(VVariableAccess)
 
 	public:
-		VVariableAccess(Item* parent, NodeType* node, const StyleType* style = Visualization::Styles::item<VVariableAccess>("default"));
+		VVariableAccess(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VVariableAccess();
 
 	protected:

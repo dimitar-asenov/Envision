@@ -30,7 +30,7 @@ class OOVISUALIZATION_API VForEachStatementStyle : public Visualization::ItemSty
 		Visualization::VListStyle body_;
 
 	public:
-		void load();
+		void load(Visualization::StyleLoader& sl);
 
 		const Visualization::PanelBorderLayoutStyle& layout() const;
 		const Visualization::SequentialLayoutStyle& header() const;
@@ -40,8 +40,6 @@ class OOVISUALIZATION_API VForEachStatementStyle : public Visualization::ItemSty
 		const Visualization::TextStyle& varName() const;
 		const Visualization::SequentialLayoutStyle& collection() const;
 		const Visualization::VListStyle& body() const;
-
-		static VForEachStatementStyle* getDefault();
 };
 
 inline const Visualization::PanelBorderLayoutStyle& VForEachStatementStyle::layout() const { return layout_; }

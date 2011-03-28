@@ -6,22 +6,15 @@
  **********************************************************************************************************************/
 
 #include "elements/VFormalArgumentStyle.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace OOVisualization {
 
-VFormalArgumentStyle* VFormalArgumentStyle::getDefault()
+void VFormalArgumentStyle::load(Visualization::StyleLoader& sl)
 {
-	static VFormalArgumentStyle defaultStyle;
-	return &defaultStyle;
-}
+	ItemStyle::load(sl);
 
-void VFormalArgumentStyle::load()
-{
-	ItemStyle::load();
-
-	Visualization::Styles::load("layout", layout_);
-	Visualization::Styles::load("name", name_);
+	sl.load("layout", layout_);
+	sl.load("name", name_);
 }
 
 }

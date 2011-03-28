@@ -12,7 +12,6 @@
 
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/Symbol.h"
-#include "VisualizationBase/headers/Styles.h"
 
 #include "OOModel/headers/expressions/NullLiteral.h"
 
@@ -23,7 +22,7 @@ class OOVISUALIZATION_API VNullLiteral : public Visualization::ItemWithNode< Vis
 	ITEM_COMMON_CUSTOM_STYLENAME(VNullLiteral, Visualization::SymbolStyle)
 
 	public:
-		VNullLiteral(Item* parent, NodeType* literal, const StyleType* style = Visualization::Styles::item<VNullLiteral>("default"));
+		VNullLiteral(Item* parent, NodeType* literal, const StyleType* style = itemStyles().get());
 		virtual ~VNullLiteral();
 
 		virtual bool focusChild(FocusTarget location);

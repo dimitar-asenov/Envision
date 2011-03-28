@@ -6,22 +6,15 @@
  **********************************************************************************************************************/
 
 #include "types/VArrayTypeStyle.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace OOVisualization {
 
-VArrayTypeStyle* VArrayTypeStyle::getDefault()
+void VArrayTypeStyle::load(Visualization::StyleLoader& sl)
 {
-	static VArrayTypeStyle defaultStyle;
-	return &defaultStyle;
-}
+	ItemStyle::load(sl);
 
-void VArrayTypeStyle::load()
-{
-	ItemStyle::load();
-
-	Visualization::Styles::load("layout", layout_);
-	Visualization::Styles::load("symbol", symbol_);
+	sl.load("layout", layout_);
+	sl.load("symbol", symbol_);
 }
 
 }

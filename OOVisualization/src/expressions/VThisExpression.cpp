@@ -16,7 +16,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VThisExpression)
+ITEM_COMMON_DEFINITIONS(VThisExpression, "item")
 
 VThisExpression::VThisExpression(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<Item, ThisExpression>(parent, node, style),

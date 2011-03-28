@@ -38,7 +38,7 @@ class OOVISUALIZATION_API VMethodStyle : public Visualization::ItemStyle
 		Visualization::VListStyle results_;
 
 	public:
-		void load();
+		void load(Visualization::StyleLoader& sl);
 
 		const Visualization::PanelBorderLayoutStyle& layout() const;
 		const Visualization::TextStyle& nameDefault() const;
@@ -54,8 +54,6 @@ class OOVISUALIZATION_API VMethodStyle : public Visualization::ItemStyle
 		const Visualization::VListStyle& content() const;
 		const Visualization::VListStyle& arguments() const;
 		const Visualization::VListStyle& results() const;
-
-		static VMethodStyle* getDefault();
 };
 
 inline const Visualization::PanelBorderLayoutStyle& VMethodStyle::layout() const { return layout_; }

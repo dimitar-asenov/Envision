@@ -19,7 +19,7 @@ class OOVISUALIZATION_API VNamedType : public Visualization::ItemWithNode< Visua
 	ITEM_COMMON_CUSTOM_STYLENAME(VNamedType, VReferenceExpressionStyle)
 
 	public:
-		VNamedType(Item* parent, NodeType* node, const StyleType* style = Visualization::Styles::item<VReferenceExpression>("default"));
+		VNamedType(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VNamedType();
 
 		virtual bool focusChild(FocusTarget location);

@@ -22,12 +22,10 @@ class OOVISUALIZATION_API VFormalArgumentStyle : public Visualization::ItemStyle
 		Visualization::TextStyle name_;
 
 	public:
-		void load();
+		void load(Visualization::StyleLoader& sl);
 
 		const Visualization::SequentialLayoutStyle& layout() const;
 		const Visualization::TextStyle& name() const;
-
-		static VFormalArgumentStyle* getDefault();
 };
 
 inline const Visualization::SequentialLayoutStyle& VFormalArgumentStyle::layout() const { return layout_; }

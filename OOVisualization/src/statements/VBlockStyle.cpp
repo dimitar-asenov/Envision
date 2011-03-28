@@ -6,21 +6,14 @@
  **********************************************************************************************************************/
 
 #include "statements/VBlockStyle.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace OOVisualization {
 
-
-VBlockStyle* VBlockStyle::getDefault()
+void VBlockStyle::load(Visualization::StyleLoader& sl)
 {
-	static VBlockStyle defaultStyle;
-	return &defaultStyle;
-}
+	ItemStyle::load(sl);
 
-void VBlockStyle::load()
-{
-	ItemStyle::load();
-	Visualization::Styles::load("items", items_);
+	sl.load("items", items_);
 }
 
 }

@@ -17,7 +17,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VLoopStatement)
+ITEM_COMMON_DEFINITIONS(VLoopStatement, "item")
 
 VLoopStatement::VLoopStatement(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode< LayoutProvider<PanelBorderLayout>, LoopStatement>(parent, node, style),

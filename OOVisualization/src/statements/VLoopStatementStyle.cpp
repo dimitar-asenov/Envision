@@ -6,26 +6,20 @@
  **********************************************************************************************************************/
 
 #include "statements/VLoopStatementStyle.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace OOVisualization {
 
-VLoopStatementStyle* VLoopStatementStyle::getDefault()
+void VLoopStatementStyle::load(Visualization::StyleLoader& sl)
 {
-	static VLoopStatementStyle defaultStyle;
-	return &defaultStyle;
-}
+	ItemStyle::load(sl);
 
-void VLoopStatementStyle::load()
-{
-	ItemStyle::load();
-	Visualization::Styles::load("layout", layout_);
-	Visualization::Styles::load("header", header_);
-	Visualization::Styles::load("icon", icon_);
-	Visualization::Styles::load("initStep", initStep_);
-	Visualization::Styles::load("condition", condition_);
-	Visualization::Styles::load("updateStep", updateStep_);
-	Visualization::Styles::load("body", body_);
+	sl.load("layout", layout_);
+	sl.load("header", header_);
+	sl.load("icon", icon_);
+	sl.load("initStep", initStep_);
+	sl.load("condition", condition_);
+	sl.load("updateStep", updateStep_);
+	sl.load("body", body_);
 }
 
 }

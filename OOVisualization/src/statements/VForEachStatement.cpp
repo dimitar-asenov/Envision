@@ -17,7 +17,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VForEachStatement)
+ITEM_COMMON_DEFINITIONS(VForEachStatement, "item")
 
 VForEachStatement::VForEachStatement(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<PanelBorderLayout>, ForEachStatement>(parent, node, style),

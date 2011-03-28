@@ -6,26 +6,20 @@
  **********************************************************************************************************************/
 
 #include "statements/VIfStatementStyle.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace OOVisualization {
 
-VIfStatementStyle* VIfStatementStyle::getDefault()
+void VIfStatementStyle::load(Visualization::StyleLoader& sl)
 {
-	static VIfStatementStyle defaultStyle;
-	return &defaultStyle;
-}
+	ItemStyle::load(sl);
 
-void VIfStatementStyle::load()
-{
-	ItemStyle::load();
-	Visualization::Styles::load("layout", layout_);
-	Visualization::Styles::load("header", header_);
-	Visualization::Styles::load("icon", icon_);
-	Visualization::Styles::load("condition", condition_);
-	Visualization::Styles::load("content", content_);
-	Visualization::Styles::load("thenBranch", thenBranch_);
-	Visualization::Styles::load("elseBranch", elseBranch_);
+	sl.load("layout", layout_);
+	sl.load("header", header_);
+	sl.load("icon", icon_);
+	sl.load("condition", condition_);
+	sl.load("content", content_);
+	sl.load("thenBranch", thenBranch_);
+	sl.load("elseBranch", elseBranch_);
 }
 
 }

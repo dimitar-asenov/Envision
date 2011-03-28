@@ -30,7 +30,7 @@ class OOVISUALIZATION_API VFieldStyle : public Visualization::ItemStyle
 
 	public:
 		VFieldStyle();
-		void load();
+		void load(Visualization::StyleLoader& sl);
 
 		const Visualization::SequentialLayoutStyle& layout() const;
 		const Visualization::TextStyle& nameDefault() const;
@@ -41,8 +41,6 @@ class OOVISUALIZATION_API VFieldStyle : public Visualization::ItemStyle
 		const Visualization::TextStyle& nameStaticPublic() const;
 		const Visualization::TextStyle& nameStaticPrivate() const;
 		const Visualization::TextStyle& nameStaticProtected() const;
-
-		static VFieldStyle* getDefault();
 };
 
 inline const Visualization::SequentialLayoutStyle& VFieldStyle::layout() const { return layout_; }

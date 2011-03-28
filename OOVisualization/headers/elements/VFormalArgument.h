@@ -15,7 +15,6 @@
 
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/LayoutProvider.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace Visualization {
 	class VText;
@@ -28,7 +27,7 @@ class OOVISUALIZATION_API VFormalArgument : public Visualization::ItemWithNode< 
 	ITEM_COMMON(VFormalArgument)
 
 	public:
-		VFormalArgument(Item* parent, NodeType* node, const StyleType* style = Visualization::Styles::item<VFormalArgument>("default"));
+		VFormalArgument(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VFormalArgument();
 
 	protected:

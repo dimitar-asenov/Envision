@@ -15,7 +15,7 @@ using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VPrimitiveType)
+ITEM_COMMON_DEFINITIONS(VPrimitiveType, "item")
 
 VPrimitiveType::VPrimitiveType(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode< Item, PrimitiveType>(parent, node, style),

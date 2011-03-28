@@ -6,37 +6,24 @@
  **********************************************************************************************************************/
 
 #include "expressions/OperatorStyle.h"
-#include "VisualizationBase/headers/Styles.h"
 
 namespace OOVisualization {
 
-OperatorStyle* OperatorStyle::getDefault()
+void OperatorStyle::load(Visualization::StyleLoader& sl)
 {
-	static OperatorStyle defaultStyle;
-	return &defaultStyle;
+	ItemStyle::load(sl);
+
+	sl.load("layout", layout_);
+	sl.load("preSymbol", preSymbol_);
+	sl.load("inSymbol", inSymbol_);
+	sl.load("postSymbol", postSymbol_);
 }
 
-void OperatorStyle::load()
+void OperatorSequenceStyle::load(Visualization::StyleLoader& sl)
 {
-	ItemStyle::load();
+	ItemStyle::load(sl);
 
-	Visualization::Styles::load("layout", layout_);
-	Visualization::Styles::load("preSymbol", preSymbol_);
-	Visualization::Styles::load("inSymbol", inSymbol_);
-	Visualization::Styles::load("postSymbol", postSymbol_);
-}
-
-OperatorSequenceStyle* OperatorSequenceStyle::getDefault()
-{
-	static OperatorSequenceStyle defaultStyle;
-	return &defaultStyle;
-}
-
-void OperatorSequenceStyle::load()
-{
-	ItemStyle::load();
-
-	Visualization::Styles::load("operators", seq_);
+	sl.load("operators", seq_);
 }
 
 }
