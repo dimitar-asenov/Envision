@@ -15,7 +15,10 @@ DEFINES += PLUGINNAME_UPPERCASE_LIBRARY
 win32:LIBS += -L$${PLUGINS_DIR} \
     -llogger \
     -lselftest
-QT = core
+QT = core \
+	gui \
+	xml \
+	svg
 TEMPLATE = lib
 CONFIG += plugin warn_on thread
 target.path = $$PLUGINS_DIR
