@@ -14,7 +14,7 @@
 
 namespace ControlFlowVisualization {
 
-class INTERACTIONBASE_API HMethodCF : public Interaction::GenericHandler
+class CONTROLFLOWVISUALIZATION_API HMethodCF : public Interaction::GenericHandler
 {
 	protected:
 		HMethodCF();
