@@ -1,7 +1,7 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/Symbol/default">
 	<font>
-		<weight>100</weight>
+		<weight>99</weight>
 	</font>
 	<pen>t
 		<color>
