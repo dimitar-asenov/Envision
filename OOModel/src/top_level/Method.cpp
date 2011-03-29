@@ -17,7 +17,7 @@ REGISTER_ATTRIBUTE(Method, items, StatementItemList, false, false, true)
 REGISTER_ATTRIBUTE(Method, arguments, TypedListOfFormalArgument, false, false, true)
 REGISTER_ATTRIBUTE(Method, results, TypedListOfFormalResult, false, false, true)
 REGISTER_ATTRIBUTE(Method, visibility, Visibility, false, false, true)
-REGISTER_ATTRIBUTE(Method, stat, Static, false, false, true)
+REGISTER_ATTRIBUTE(Method, storageSpecifier, StorageSpecifier, false, false, true)
 
 bool Method::definesSymbol() const
 {

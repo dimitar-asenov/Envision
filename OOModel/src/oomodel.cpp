@@ -18,7 +18,7 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 {
 	// Initialize common nodes
 	Visibility::registerNodeType();
-	Static::registerNodeType();
+	StorageSpecifier::registerNodeType();
 
 	// Register TypedList instantiations
 	Model::TypedList<Project>::registerNodeType();

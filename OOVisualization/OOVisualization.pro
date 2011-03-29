@@ -33,7 +33,8 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/expressions/VArrayInitializerStyle.h \
+HEADERS += headers/elements/VStorageSpecifier.h \
+    headers/expressions/VArrayInitializerStyle.h \
     headers/expressions/VArrayInitializer.h \
     headers/literals/VStringLiteralStyle.h \
     headers/types/VArrayTypeStyle.h \
@@ -50,7 +51,6 @@ HEADERS += headers/expressions/VArrayInitializerStyle.h \
     headers/elements/VFormalArgumentStyle.h \
     headers/elements/VFormalResult.h \
     headers/elements/VFormalResultStyle.h \
-    headers/elements/VStatic.h \
     headers/elements/VVisibility.h \
     headers/top_level/VClass.h \
     headers/top_level/VClassStyle.h \
@@ -101,7 +101,8 @@ HEADERS += headers/expressions/VArrayInitializerStyle.h \
     headers/OOVisualizationException.h \
     headers/oovisualization_api.h \
     src/oovisualization.h
-SOURCES += src/expressions/VArrayInitializer.cpp \
+SOURCES += src/elements/VStorageSpecifier.cpp \
+    src/expressions/VArrayInitializer.cpp \
     src/expressions/VArrayInitializerStyle.cpp \
     src/literals/VStringLiteralStyle.cpp \
     src/types/VArrayTypeStyle.cpp \
@@ -118,7 +119,6 @@ SOURCES += src/expressions/VArrayInitializer.cpp \
     src/elements/VFormalArgumentStyle.cpp \
     src/elements/VFormalResult.cpp \
     src/elements/VFormalResultStyle.cpp \
-    src/elements/VStatic.cpp \
     src/elements/VVisibility.cpp \
     src/top_level/VClass.cpp \
     src/top_level/VClassStyle.cpp \

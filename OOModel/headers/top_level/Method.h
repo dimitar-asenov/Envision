@@ -12,7 +12,7 @@
 
 #include "../attributeMacros.h"
 #include "../elements/Visibility.h"
-#include "../elements/Static.h"
+#include "../elements/StorageSpecifier.h"
 #include "../elements/StatementItem.h"
 #include "../elements/FormalArgument.h"
 #include "../elements/FormalResult.h"
@@ -34,7 +34,7 @@ class OOMODEL_API Method : public Model::ExtendableNode
 	ATTRIBUTE(Model::TypedList<FormalArgument>, arguments, setArguments);
 	ATTRIBUTE(Model::TypedList<FormalResult>, results, setResults);
 	ATTRIBUTE_OOP_VISIBILITY
-	ATTRIBUTE_OOP_STATIC
+	ATTRIBUTE_OOP_STORAGESPECIFIER
 
 	public:
 		virtual bool definesSymbol() const;

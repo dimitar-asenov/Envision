@@ -52,7 +52,7 @@
 #include "types/ArrayType.h"
 
 #include "elements/Visibility.h"
-#include "elements/Static.h"
+#include "elements/StorageSpecifier.h"
 #include "elements/StatementItem.h"
 #include "elements/StatementItemList.h"
 #include "elements/FormalArgument.h"

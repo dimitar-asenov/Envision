@@ -56,7 +56,7 @@ VMethodCF::~VMethodCF()
 void VMethodCF::determineChildren()
 {
 	const TextStyle* nameStyle = NULL;
-	if (node()->stat() == Static::INSTANCE_VARIABLE)
+	if (node()->storageSpecifier() == StorageSpecifier::INSTANCE_VARIABLE)
 	{
 		if (node()->visibility() == Visibility::DEFAULT) nameStyle = &style()->nameDefault();
 		else if (node()->visibility() == Visibility::PRIVATE) nameStyle = &style()->namePrivate();
@@ -64,7 +64,7 @@ void VMethodCF::determineChildren()
 		else if (node()->visibility() == Visibility::PUBLIC) nameStyle = &style()->namePublic();
 		else throw ControlFlowVisualizationException("Unknown visibility type in VMethodCF::determineChildren");
 	}
-	else if (node()->stat() == Static::CLASS_VARIABLE)
+	else if (node()->storageSpecifier() == StorageSpecifier::CLASS_VARIABLE)
 	{
 		if (node()->visibility() == Visibility::DEFAULT) nameStyle = &style()->nameStaticDefault();
 		else if (node()->visibility() == Visibility::PRIVATE)nameStyle = &style()->nameStaticPrivate();

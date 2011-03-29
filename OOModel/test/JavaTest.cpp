@@ -52,7 +52,7 @@ TEST(OOModel, JavaLibraryAndHelloWorldTest)
 	Field* out = system->fields()->append<Field>();
 	out->setName("out");
 	out->setVisibility(Visibility::PUBLIC);
-	out->setStat(Static::CLASS_VARIABLE);
+	out->setStorageSpecifier(StorageSpecifier::CLASS_VARIABLE);
 	NamedType* outtype = out->setType<NamedType>();
 	outtype->type()->ref()->set("class:PrintStream");
 	outtype->type()->setPrefix<ReferenceExpression>()->ref()->set("mod:io");
@@ -65,7 +65,7 @@ TEST(OOModel, JavaLibraryAndHelloWorldTest)
 
 	main->setName("main");
 	main->setVisibility(Visibility::PUBLIC);
-	main->setStat(Static::CLASS_VARIABLE);
+	main->setStorageSpecifier(StorageSpecifier::CLASS_VARIABLE);
 	//TODO make an array argument
 
 	MethodCallStatement* callPrintln = main->items()->append<MethodCallStatement>();

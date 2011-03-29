@@ -12,7 +12,7 @@
 
 #include "../attributeMacros.h"
 #include "../elements/Visibility.h"
-#include "../elements/Static.h"
+#include "../elements/StorageSpecifier.h"
 #include "../types/Type.h"
 
 #include "ModelBase/headers/nodes/Extendable/ExtendableNode.h"
@@ -28,7 +28,7 @@ class OOMODEL_API Field : public Model::ExtendableNode
 	ATTRIBUTE_OOP_NAME
 	ATTRIBUTE(Type, type, setType)
 	ATTRIBUTE_OOP_VISIBILITY
-	ATTRIBUTE_OOP_STATIC
+	ATTRIBUTE_OOP_STORAGESPECIFIER
 
 	public:
 		virtual bool definesSymbol() const;

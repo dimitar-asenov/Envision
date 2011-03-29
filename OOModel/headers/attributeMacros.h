@@ -33,14 +33,14 @@
 /*********************************************************************************************************************/
 
 /**
- * Declares a 'static' attribute of type OOModel::Static.
+ * Declares a 'storageSpecifier' attribute of type OOModel::StorageSpecifier.
  *
- * The attribute node can be accessed via statNode()
- * The visibility type is accessible via stat()
- * A new value can be set via setStat()
+ * The attribute node can be accessed via storageSpecifierNode()
+ * The visibility type is accessible via storageSpecifier()
+ * A new value can be set via setStorageSpecifier()
  */
-#define ATTRIBUTE_OOP_STATIC																											\
-	ATTRIBUTE_VALUE(::OOModel::Static, stat, setStat, ::OOModel::Static::StaticType)
+#define ATTRIBUTE_OOP_STORAGESPECIFIER																										\
+	ATTRIBUTE_VALUE(::OOModel::StorageSpecifier, storageSpecifier, setStorageSpecifier, ::OOModel::StorageSpecifier::StorageSpecifierTypes)
 
 /*********************************************************************************************************************/
 

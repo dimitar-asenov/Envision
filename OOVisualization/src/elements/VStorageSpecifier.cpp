@@ -1,41 +1,41 @@
 /***********************************************************************************************************************
- * VStatic.cpp
+ * VStorageSpecifier.cpp
  *
  *  Created on: Feb 1, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "elements/VStatic.h"
+#include "elements/VStorageSpecifier.h"
 
 using namespace Visualization;
 using namespace OOModel;
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VStatic, "item")
+ITEM_COMMON_DEFINITIONS(VStorageSpecifier, "item")
 
-VStatic::VStatic(Item* parent, NodeType* stat, const StyleType* style) :
-	ItemWithNode<TextRenderer, Static>(parent, stat, style)
+VStorageSpecifier::VStorageSpecifier(Item* parent, NodeType* node, const StyleType* style) :
+	ItemWithNode<TextRenderer, StorageSpecifier>(parent, node, style)
 {
 }
 
-bool VStatic::setText(const QString&)
+bool VStorageSpecifier::setText(const QString&)
 {
 	return false;
 }
 
-QString VStatic::currentText()
+QString VStorageSpecifier::currentText()
 {
 	switch (node()->get())
 	{
-		case OOModel::Static::CLASS_VARIABLE:
+		case OOModel::StorageSpecifier::CLASS_VARIABLE:
 			return "static";
 			break;
-		case OOModel::Static::INSTANCE_VARIABLE:
+		case OOModel::StorageSpecifier::INSTANCE_VARIABLE:
 			return "not static";
 			break;
 		default:
-			return "unknown static";
+			return "unknown storage specifier";
 			break;
 	}
 }

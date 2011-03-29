@@ -1,12 +1,12 @@
 /***********************************************************************************************************************
- * Static.h
+ * StorageSpecifier.h
  *
  *  Created on: Feb 1, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef STATIC_H_
-#define STATIC_H_
+#ifndef STORAGESPECIFIER_H_
+#define STORAGESPECIFIER_H_
 
 #include "../oomodel_api.h"
 
@@ -16,26 +16,26 @@
 
 namespace OOModel {
 
-class OOMODEL_API Static :  public Model::Node
+class OOMODEL_API StorageSpecifier :  public Model::Node
 {
-	NODE_DECLARE_STANDARD_METHODS(Static)
+	NODE_DECLARE_STANDARD_METHODS(StorageSpecifier)
 
 	public:
-		enum StaticType {INSTANCE_VARIABLE, CLASS_VARIABLE};
+		enum StorageSpecifierTypes {INSTANCE_VARIABLE, CLASS_VARIABLE};
 
-		StaticType get() const;
-		void set(const StaticType& newval);
+		StorageSpecifierTypes get() const;
+		void set(const StorageSpecifierTypes& newval);
 
 		virtual void save(Model::PersistentStore &store) const;
 		virtual void load(Model::PersistentStore &store);
 
 	private:
-		StaticType fromInt(int val);
-		StaticType stat;
+		StorageSpecifierTypes fromInt(int val);
+		StorageSpecifierTypes specifier;
 };
 
-inline Static::StaticType Static::get() const { return stat; }
+inline StorageSpecifier::StorageSpecifierTypes StorageSpecifier::get() const { return specifier; }
 
 }
 
-#endif /* STATIC_H_ */
+#endif /* STORAGESPECIFIER_H_ */

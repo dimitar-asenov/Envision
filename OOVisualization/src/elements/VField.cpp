@@ -35,7 +35,7 @@ VField::~VField()
 void VField::determineChildren()
 {
 	const TextStyle* nameStyle = NULL;
-	if (node()->stat() == Static::INSTANCE_VARIABLE)
+	if (node()->storageSpecifier() == StorageSpecifier::INSTANCE_VARIABLE)
 	{
 		if (node()->visibility() == Visibility::DEFAULT) nameStyle = &style()->nameDefault();
 		else if (node()->visibility() == Visibility::PRIVATE) nameStyle = &style()->namePrivate();
@@ -43,7 +43,7 @@ void VField::determineChildren()
 		else if (node()->visibility() == Visibility::PUBLIC) nameStyle = &style()->namePublic();
 		else throw OOVisualizationException("Unknown visibility type in VField::determineChildren");
 	}
-	else if (node()->stat() == Static::CLASS_VARIABLE)
+	else if (node()->storageSpecifier() == StorageSpecifier::CLASS_VARIABLE)
 	{
 		if (node()->visibility() == Visibility::DEFAULT) nameStyle = &style()->nameStaticDefault();
 		else if (node()->visibility() == Visibility::PRIVATE) nameStyle = &style()->nameStaticPrivate();

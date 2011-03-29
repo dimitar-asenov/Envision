@@ -1,12 +1,12 @@
 /***********************************************************************************************************************
- * VStatic.h
+ * VStorageSpecifier.h
  *
  *  Created on: Feb 1, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef VSTATIC_H_
-#define VSTATIC_H_
+#ifndef VSTORAGESPECIFIER_H_
+#define VSTORAGESPECIFIER_H_
 
 #include "../oovisualization_api.h"
 
@@ -14,16 +14,16 @@
 #include "VisualizationBase/headers/items/ItemWithNode.h"
 #include "VisualizationBase/headers/items/TextStyle.h"
 
-#include "OOModel/headers/elements/Static.h"
+#include "OOModel/headers/elements/StorageSpecifier.h"
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VStatic : public Visualization::ItemWithNode< Visualization::TextRenderer, OOModel::Static>
+class OOVISUALIZATION_API VStorageSpecifier : public Visualization::ItemWithNode< Visualization::TextRenderer, OOModel::StorageSpecifier>
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VStatic, Visualization::TextStyle)
+	ITEM_COMMON_CUSTOM_STYLENAME(VStorageSpecifier, Visualization::TextStyle)
 
 	public:
-		VStatic(Item* parent, NodeType* stat, const StyleType* style = itemStyles().get());
+		VStorageSpecifier(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual bool setText(const QString& newText);
 
 	protected:
@@ -32,4 +32,4 @@ class OOVISUALIZATION_API VStatic : public Visualization::ItemWithNode< Visualiz
 
 }
 
-#endif /* VSTATIC_H_ */
+#endif /* VSTORAGESPECIFIER_H_ */
