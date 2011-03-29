@@ -19,7 +19,9 @@ win32:LIBS += -L$${PLUGINS_DIR} \
     -lvisualizationbase \
     -linteractionbase \
     -loovisualization
-QT = core
+QT = core \
+	gui \
+	svg
 TEMPLATE = lib
 CONFIG += plugin \
     warn_on \
