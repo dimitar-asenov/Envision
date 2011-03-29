@@ -16,9 +16,11 @@ win32:LIBS += -L$${PLUGINS_DIR} \
     -lselftest \
     -lmodelbase \
     -loomodel \
-    -lvisualizationbase
+    -lvisualizationbase \
+    -linteractionbase
 QT = core \
-    gui
+    gui \
+    svg
 TEMPLATE = lib
 CONFIG += plugin \
     warn_on \
