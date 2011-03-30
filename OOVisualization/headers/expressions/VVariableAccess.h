@@ -18,7 +18,7 @@
 
 namespace Visualization {
 	class Text;
-	class Symbol;
+	class Static;
 }
 
 namespace OOVisualization {
@@ -36,7 +36,7 @@ class OOVISUALIZATION_API VVariableAccess : public Visualization::ItemWithNode< 
 
 	private:
 		Visualization::Text* name_;
-		Visualization::Symbol* separator_;
+		Visualization::Static* separator_;
 		Visualization::Item* prefix_;
 };
 

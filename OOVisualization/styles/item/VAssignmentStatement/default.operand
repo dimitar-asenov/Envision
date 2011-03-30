@@ -3,7 +3,7 @@
 	<layout prototypes="layout/SequentialLayout/default">
 		<spaceBetweenElements>5</spaceBetweenElements>
 	</layout>
-	<preSymbol prototypes="item/Symbol/default"><symbol/></preSymbol>
-	<inSymbol prototypes="item/Symbol/default"><symbol/></inSymbol>
-	<postSymbol prototypes="item/Symbol/default"><symbol/></postSymbol>
+	<preSymbol prototypes="item/Static/default" />
+	<inSymbol prototypes="item/Static/default" />
+	<postSymbol prototypes="item/Static/default" />
 </style>

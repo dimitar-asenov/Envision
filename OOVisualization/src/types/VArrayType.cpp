@@ -8,7 +8,7 @@
 #include "types/VArrayType.h"
 
 #include "VisualizationBase/headers/layouts/SequentialLayout.h"
-#include "VisualizationBase/headers/items/Symbol.h"
+#include "VisualizationBase/headers/items/Static.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -19,7 +19,7 @@ ITEM_COMMON_DEFINITIONS(VArrayType, "item")
 
 VArrayType::VArrayType(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<>, ArrayType>(parent, node, style),
-	symbol_( new Symbol(NULL, &style->symbol())),
+	symbol_( new Static(NULL, &style->symbol())),
 	type_(NULL)
 {
 	layout()->append(symbol_);

@@ -8,7 +8,7 @@
 #include "statements/VAssignmentStatement.h"
 
 #include "VisualizationBase/headers/layouts/SequentialLayout.h"
-#include "VisualizationBase/headers/items/Symbol.h"
+#include "VisualizationBase/headers/items/Static.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -19,7 +19,7 @@ ITEM_COMMON_DEFINITIONS(VAssignmentStatement, "item")
 
 VAssignmentStatement::VAssignmentStatement(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<>, AssignmentStatement>(parent, node, style),
-	assignmentSymbol_( new Symbol(NULL, &style->op( node->op() ).inSymbol()) ),
+	assignmentSymbol_( new Static(NULL, &style->op( node->op() ).inSymbol()) ),
 	left_(NULL),
 	right_(NULL)
 {

@@ -18,7 +18,7 @@
 
 namespace Visualization {
 	class Text;
-	class Symbol;
+	class Static;
 	class VList;
 }
 
@@ -37,7 +37,7 @@ class OOVISUALIZATION_API VMethodCallExpression : public Visualization::ItemWith
 
 	private:
 		Visualization::Text* name_;
-		Visualization::Symbol* separator_;
+		Visualization::Static* separator_;
 		Visualization::Item* prefix_;
 		Visualization::VList* arguments_;
 };

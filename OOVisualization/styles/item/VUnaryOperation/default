@@ -3,22 +3,22 @@
 	<operators>
 		<length>6</length>
 		<e0 prototypes="default.operand">
-			<postSymbol><symbol>++</symbol></postSymbol>
+			<postSymbol prototypes="item/Symbol/default"><symbol>++</symbol></postSymbol>
 		</e0>
 		<e1 prototypes="default.operand">
-			<postSymbol><symbol>--</symbol></postSymbol>
+			<postSymbol prototypes="item/Symbol/default"><symbol>--</symbol></postSymbol>
 		</e1>
 		<e2 prototypes="default.operand">
-			<preSymbol><symbol>+</symbol></preSymbol>
+			<preSymbol prototypes="item/Symbol/default"><symbol>+</symbol></preSymbol>
 		</e2>
 		<e3 prototypes="default.operand">
-			<preSymbol><symbol>-</symbol></preSymbol>
+			<preSymbol prototypes="item/Symbol/default"><symbol>-</symbol></preSymbol>
 		</e3>
 		<e4 prototypes="default.operand">
-			<preSymbol><symbol>¬</symbol></preSymbol>
+			<preSymbol prototypes="item/Symbol/default"><symbol>¬</symbol></preSymbol>
 		</e4>
 		<e5 prototypes="default.operand">
-			<preSymbol><symbol>~</symbol></preSymbol>
+			<preSymbol prototypes="item/Symbol/default"><symbol>~</symbol></preSymbol>
 		</e5>
 	</operators>
 </style>

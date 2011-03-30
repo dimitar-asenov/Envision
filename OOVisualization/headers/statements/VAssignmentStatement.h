@@ -17,7 +17,7 @@
 #include "VisualizationBase/headers/items/LayoutProvider.h"
 
 namespace Visualization {
-	class Symbol;
+	class Static;
 }
 
 namespace OOVisualization {
@@ -34,7 +34,7 @@ class OOVISUALIZATION_API VAssignmentStatement : public Visualization::ItemWithN
 		void determineChildren();
 
 	private:
-		Visualization::Symbol* assignmentSymbol_;
+		Visualization::Static* assignmentSymbol_;
 		Visualization::Item* left_;
 		Visualization::Item* right_;
 };

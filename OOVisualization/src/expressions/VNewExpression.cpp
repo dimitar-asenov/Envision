@@ -7,7 +7,7 @@
 
 #include "expressions/VNewExpression.h"
 
-#include "VisualizationBase/headers/items/Symbol.h"
+#include "VisualizationBase/headers/items/Static.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -18,7 +18,7 @@ ITEM_COMMON_DEFINITIONS(VNewExpression, "item")
 
 VNewExpression::VNewExpression(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<>, NewExpression>(parent, node, style),
-	newSymbol_( new Symbol(NULL, &style->newSymbol()) ),
+	newSymbol_( new Static(NULL, &style->newSymbol()) ),
 	type_(NULL),
 	amount_(NULL)
 {

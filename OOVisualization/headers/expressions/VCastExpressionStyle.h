@@ -10,7 +10,7 @@
 
 #include "../oovisualization_api.h"
 
-#include "VisualizationBase/headers/items/SymbolStyle.h"
+#include "VisualizationBase/headers/items/StaticStyle.h"
 #include "VisualizationBase/headers/layouts/SequentialLayout.h"
 
 namespace OOVisualization {

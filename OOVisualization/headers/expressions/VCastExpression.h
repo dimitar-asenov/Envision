@@ -17,7 +17,7 @@
 #include "VisualizationBase/headers/items/LayoutProvider.h"
 
 namespace Visualization {
-	class Symbol;
+	class Static;
 }
 
 namespace OOVisualization {

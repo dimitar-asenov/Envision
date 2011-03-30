@@ -20,7 +20,7 @@ ITEM_COMMON_DEFINITIONS(VThisExpression, "item")
 
 VThisExpression::VThisExpression(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<Item, ThisExpression>(parent, node, style),
-	vis_(new Symbol(this, style))
+	vis_(new Static(this, style))
 {
 }
 

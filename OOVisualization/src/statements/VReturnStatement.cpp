@@ -7,7 +7,7 @@
 
 #include "statements/VReturnStatement.h"
 
-#include "VisualizationBase/headers/items/Symbol.h"
+#include "VisualizationBase/headers/items/Static.h"
 #include "VisualizationBase/headers/items/VList.h"
 
 using namespace Visualization;
@@ -19,7 +19,7 @@ ITEM_COMMON_DEFINITIONS(VReturnStatement, "item")
 
 VReturnStatement::VReturnStatement(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode< LayoutProvider<>, ReturnStatement>(parent, node, style),
-	symbol_( new Symbol(NULL, &style->symbol() )),
+	symbol_( new Static(NULL, &style->symbol() )),
 	values_( new VList(NULL, node->values()) )
 {
 	layout()->append(symbol_);

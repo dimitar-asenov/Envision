@@ -17,7 +17,7 @@
 #include "VisualizationBase/headers/items/LayoutProvider.h"
 
 namespace Visualization {
-	class Symbol;
+	class Static;
 	class VText;
 }
 
@@ -37,7 +37,7 @@ class OOVISUALIZATION_API VVariableDeclaration : public Visualization::ItemWithN
 	private:
 		Visualization::VText* name_;
 		Visualization::Item* type_;
-		Visualization::Symbol* assignmentSymbol_;
+		Visualization::Static* assignmentSymbol_;
 		Visualization::Item* initialValue_;
 };
 

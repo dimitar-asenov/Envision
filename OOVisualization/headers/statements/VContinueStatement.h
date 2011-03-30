@@ -11,7 +11,7 @@
 #include "../oovisualization_api.h"
 
 #include "VisualizationBase/headers/items/ItemWithNode.h"
-#include "VisualizationBase/headers/items/Symbol.h"
+#include "VisualizationBase/headers/items/Static.h"
 
 #include "OOModel/headers/statements/ContinueStatement.h"
 
@@ -19,7 +19,7 @@ namespace OOVisualization {
 
 class OOVISUALIZATION_API VContinueStatement : public Visualization::ItemWithNode< Visualization::Item, OOModel::ContinueStatement>
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VContinueStatement, Visualization::SymbolStyle)
+	ITEM_COMMON_CUSTOM_STYLENAME(VContinueStatement, Visualization::StaticStyle)
 
 	public:
 		VContinueStatement(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
@@ -32,7 +32,7 @@ class OOVISUALIZATION_API VContinueStatement : public Visualization::ItemWithNod
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		Visualization::Symbol* vis_;
+		Visualization::Static* vis_;
 };
 
 }

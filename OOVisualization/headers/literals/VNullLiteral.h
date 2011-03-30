@@ -11,7 +11,7 @@
 #include "../oovisualization_api.h"
 
 #include "VisualizationBase/headers/items/ItemWithNode.h"
-#include "VisualizationBase/headers/items/Symbol.h"
+#include "VisualizationBase/headers/items/Static.h"
 
 #include "OOModel/headers/expressions/NullLiteral.h"
 
@@ -19,7 +19,7 @@ namespace OOVisualization {
 
 class OOVISUALIZATION_API VNullLiteral : public Visualization::ItemWithNode< Visualization::Item, OOModel::NullLiteral>
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VNullLiteral, Visualization::SymbolStyle)
+	ITEM_COMMON_CUSTOM_STYLENAME(VNullLiteral, Visualization::StaticStyle)
 
 	public:
 		VNullLiteral(Item* parent, NodeType* literal, const StyleType* style = itemStyles().get());
@@ -32,7 +32,7 @@ class OOVISUALIZATION_API VNullLiteral : public Visualization::ItemWithNode< Vis
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		Visualization::Symbol* vis_;
+		Visualization::Static* vis_;
 };
 
 }

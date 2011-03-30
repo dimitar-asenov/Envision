@@ -7,7 +7,7 @@
 
 #include "expressions/VCastExpression.h"
 
-#include "VisualizationBase/headers/items/Symbol.h"
+#include "VisualizationBase/headers/items/Static.h"
 
 using namespace Visualization;
 using namespace OOModel;

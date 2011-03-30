@@ -11,7 +11,7 @@
 #include "../oovisualization_api.h"
 
 #include "VisualizationBase/headers/items/ItemWithNode.h"
-#include "VisualizationBase/headers/items/Symbol.h"
+#include "VisualizationBase/headers/items/Static.h"
 
 #include "OOModel/headers/expressions/ThisExpression.h"
 
@@ -19,7 +19,7 @@ namespace OOVisualization {
 
 class OOVISUALIZATION_API VThisExpression : public Visualization::ItemWithNode< Visualization::Item, OOModel::ThisExpression>
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VThisExpression, Visualization::SymbolStyle)
+	ITEM_COMMON_CUSTOM_STYLENAME(VThisExpression, Visualization::StaticStyle)
 
 	public:
 		VThisExpression(Item* parent, NodeType *expr, const StyleType *style = itemStyles().get());
@@ -32,7 +32,7 @@ class OOVISUALIZATION_API VThisExpression : public Visualization::ItemWithNode< 
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		Visualization::Symbol* vis_;
+		Visualization::Static* vis_;
 };
 
 }

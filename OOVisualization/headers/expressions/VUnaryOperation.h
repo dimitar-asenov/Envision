@@ -17,7 +17,7 @@
 #include "VisualizationBase/headers/items/LayoutProvider.h"
 
 namespace Visualization {
-	class Symbol;
+	class Static;
 }
 
 namespace OOVisualization {
@@ -34,8 +34,8 @@ class OOVISUALIZATION_API VUnaryOperation : public Visualization::ItemWithNode< 
 		virtual void determineChildren();
 
 	private:
-		Visualization::Symbol* pre_;
-		Visualization::Symbol* post_;
+		Visualization::Static* pre_;
+		Visualization::Static* post_;
 		Visualization::Item* expr_;
 };
 

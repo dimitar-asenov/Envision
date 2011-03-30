@@ -8,7 +8,7 @@
 #include "expressions/VVariableAccess.h"
 
 #include "VisualizationBase/headers/items/Text.h"
-#include "VisualizationBase/headers/items/Symbol.h"
+#include "VisualizationBase/headers/items/Static.h"
 
 using namespace Visualization;
 using namespace OOModel;

@@ -7,7 +7,7 @@
 
 #include "statements/VVariableDeclaration.h"
 
-#include "VisualizationBase/headers/items/Symbol.h"
+#include "VisualizationBase/headers/items/Static.h"
 #include "VisualizationBase/headers/items/VText.h"
 
 using namespace Visualization;

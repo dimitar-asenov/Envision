@@ -7,7 +7,7 @@
 
 #include "expressions/VBinaryOperation.h"
 
-#include "VisualizationBase/headers/items/Symbol.h"
+#include "VisualizationBase/headers/items/Static.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -42,19 +42,19 @@ void VBinaryOperation::determineChildren()
 
 	int index = 0;
 
-	layout()->synchronizeFirst(pre_ , !opStyle->preSymbol().symbol().isEmpty(), &opStyle->preSymbol());
+	layout()->synchronizeFirst(pre_ , !opStyle->preSymbol().isEmpty(), &opStyle->preSymbol());
 	index += pre_?1:0;
 
 	layout()->synchronizeMid(left_, node()->left(), index);
 	index += left_?1:0;
 
-	layout()->synchronizeMid(in_ , !opStyle->inSymbol().symbol().isEmpty(), &opStyle->inSymbol(), index);
+	layout()->synchronizeMid(in_ , !opStyle->inSymbol().isEmpty(), &opStyle->inSymbol(), index);
 	index += in_?1:0;
 
 	layout()->synchronizeMid(right_, node()->right(), index);
 	index += right_?1:0;
 
-	layout()->synchronizeLast(post_ , !opStyle->postSymbol().symbol().isEmpty(), &opStyle->postSymbol());
+	layout()->synchronizeLast(post_ , !opStyle->postSymbol().isEmpty(), &opStyle->postSymbol());
 
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
 	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know

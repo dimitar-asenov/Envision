@@ -17,7 +17,7 @@
 #include "VisualizationBase/headers/items/LayoutProvider.h"
 
 namespace Visualization {
-	class Symbol;
+	class Static;
 	class VList;
 }
 
@@ -35,7 +35,7 @@ class OOVISUALIZATION_API VReturnStatement : public Visualization::ItemWithNode<
 		void determineChildren();
 
 	private:
-		Visualization::Symbol* symbol_;
+		Visualization::Static* symbol_;
 		Visualization::VList* values_;
 };
 
