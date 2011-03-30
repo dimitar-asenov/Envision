@@ -17,7 +17,6 @@
 #include "VisualizationBase/headers/items/LayoutProvider.h"
 
 namespace Visualization {
-	class Symbol;
 	class Static;
 }
 
@@ -36,7 +35,7 @@ class CUSTOMMETHODCALL_API EmptyMethodVis : public Visualization::ItemWithNode< 
 
 	private:
 		Visualization::Static* icon_;
-		Visualization::Symbol* separator_;
+		Visualization::Static* separator_;
 		Visualization::Item* prefix_;
 };
 

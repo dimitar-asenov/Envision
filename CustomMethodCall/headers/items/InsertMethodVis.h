@@ -18,7 +18,6 @@
 
 namespace Visualization {
 	class Static;
-	class Symbol;
 	class VList;
 }
 
@@ -37,7 +36,7 @@ class CUSTOMMETHODCALL_API InsertMethodVis : public Visualization::ItemWithNode<
 
 	private:
 		Visualization::Static* icon_;
-		Visualization::Symbol* separator_;
+		Visualization::Static* separator_;
 		Visualization::Item* prefix_;
 		Visualization::VList* arguments_;
 };

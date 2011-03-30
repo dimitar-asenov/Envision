@@ -8,7 +8,7 @@
 #include "items/FindMethodVis.h"
 
 #include "VisualizationBase/headers/items/Text.h"
-#include "VisualizationBase/headers/items/Symbol.h"
+#include "VisualizationBase/headers/items/Static.h"
 #include "VisualizationBase/headers/items/VList.h"
 
 using namespace Visualization;

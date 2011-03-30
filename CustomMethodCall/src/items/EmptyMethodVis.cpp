@@ -8,7 +8,6 @@
 #include "items/EmptyMethodVis.h"
 
 #include "VisualizationBase/headers/items/Static.h"
-#include "VisualizationBase/headers/items/Symbol.h"
 
 using namespace Visualization;
 using namespace OOModel;

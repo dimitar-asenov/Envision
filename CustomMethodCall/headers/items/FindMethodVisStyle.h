@@ -11,7 +11,7 @@
 #include "../custommethodcall_api.h"
 
 #include "VisualizationBase/headers/items/TextStyle.h"
-#include "VisualizationBase/headers/items/SymbolStyle.h"
+#include "VisualizationBase/headers/items/StaticStyle.h"
 #include "VisualizationBase/headers/layouts/SequentialLayout.h"
 #include "VisualizationBase/headers/items/VListStyle.h"
 
@@ -22,7 +22,7 @@ class CUSTOMMETHODCALL_API FindMethodVisStyle : public Visualization::ItemStyle
 	private:
 		Visualization::SequentialLayoutStyle layout_;
 		Visualization::TextStyle name_;
-		Visualization::SymbolStyle separator_;
+		Visualization::StaticStyle separator_;
 		Visualization::VListStyle arguments_;
 
 	public:
@@ -30,13 +30,13 @@ class CUSTOMMETHODCALL_API FindMethodVisStyle : public Visualization::ItemStyle
 
 		const Visualization::SequentialLayoutStyle& layout() const;
 		const Visualization::TextStyle& name() const;
-		const Visualization::SymbolStyle& separator() const;
+		const Visualization::StaticStyle& separator() const;
 		const Visualization::VListStyle& arguments() const;
 };
 
 inline const Visualization::SequentialLayoutStyle& FindMethodVisStyle::layout() const { return layout_; }
 inline const Visualization::TextStyle& FindMethodVisStyle::name() const { return name_; }
-inline const Visualization::SymbolStyle& FindMethodVisStyle::separator() const { return separator_; }
+inline const Visualization::StaticStyle& FindMethodVisStyle::separator() const { return separator_; }
 inline const Visualization::VListStyle& FindMethodVisStyle::arguments() const { return arguments_; }
 
 }

@@ -17,7 +17,7 @@
 #include "VisualizationBase/headers/items/LayoutProvider.h"
 
 namespace Visualization {
-	class Symbol;
+	class Static;
 }
 
 namespace CustomMethodCall {
@@ -34,7 +34,7 @@ class CUSTOMMETHODCALL_API SumMethodVis : public Visualization::ItemWithNode< Vi
 		void determineChildren();
 
 	private:
-		Visualization::Symbol* name_;
+		Visualization::Static* name_;
 		Visualization::Item* prefix_;
 		Visualization::Item* from_;
 		Visualization::Item* to_;

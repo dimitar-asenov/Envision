@@ -7,7 +7,7 @@
 
 #include "items/SumMethodVis.h"
 
-#include "VisualizationBase/headers/items/Symbol.h"
+#include "VisualizationBase/headers/items/Static.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -18,7 +18,7 @@ ITEM_COMMON_DEFINITIONS(SumMethodVis, "item")
 
 SumMethodVis::SumMethodVis(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<>, MethodCallExpression>(parent, node, style),
-	name_(new Symbol(NULL, &style->name()) ),
+	name_(new Static(NULL, &style->name()) ),
 	prefix_(NULL),
 	from_(NULL),
 	to_(NULL),

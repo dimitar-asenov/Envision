@@ -8,7 +8,6 @@
 #include "items/InsertMethodVis.h"
 
 #include "VisualizationBase/headers/items/Static.h"
-#include "VisualizationBase/headers/items/Symbol.h"
 #include "VisualizationBase/headers/items/VList.h"
 
 using namespace Visualization;

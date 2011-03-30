@@ -11,7 +11,6 @@
 #include "../custommethodcall_api.h"
 
 #include "VisualizationBase/headers/items/StaticStyle.h"
-#include "VisualizationBase/headers/items/SymbolStyle.h"
 #include "VisualizationBase/headers/layouts/SequentialLayout.h"
 #include "VisualizationBase/headers/items/VListStyle.h"
 
@@ -22,7 +21,7 @@ class CUSTOMMETHODCALL_API InsertMethodVisStyle : public Visualization::ItemStyl
 	private:
 		Visualization::SequentialLayoutStyle layout_;
 		Visualization::StaticStyle icon_;
-		Visualization::SymbolStyle separator_;
+		Visualization::StaticStyle separator_;
 		Visualization::VListStyle arguments_;
 
 	public:
@@ -30,13 +29,13 @@ class CUSTOMMETHODCALL_API InsertMethodVisStyle : public Visualization::ItemStyl
 
 		const Visualization::SequentialLayoutStyle& layout() const;
 		const Visualization::StaticStyle& icon() const;
-		const Visualization::SymbolStyle& separator() const;
+		const Visualization::StaticStyle& separator() const;
 		const Visualization::VListStyle& arguments() const;
 };
 
 inline const Visualization::SequentialLayoutStyle& InsertMethodVisStyle::layout() const { return layout_; }
 inline const Visualization::StaticStyle& InsertMethodVisStyle::icon() const { return icon_; }
-inline const Visualization::SymbolStyle& InsertMethodVisStyle::separator() const { return separator_; }
+inline const Visualization::StaticStyle& InsertMethodVisStyle::separator() const { return separator_; }
 inline const Visualization::VListStyle& InsertMethodVisStyle::arguments() const { return arguments_; }
 
 }
