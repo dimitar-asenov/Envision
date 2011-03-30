@@ -22,18 +22,113 @@ class Model;
 class UndoCommand;
 class NodeReadWriteLock;
 
+/**
+ * The Node class is the foundation element in the model tree in Envision. An application in Envision is a collection of
+ * objects of type Node (and derived) that are managed by a single Model object. Nodes are combined together in a tree
+ * structure. This class defines the minimal interface of each node and implements some service functions.
+ *
+ * Each class that derives from Node must have at least two constructors which need to be registered before that class
+ * can be used. This is achieved using the static methods 'registerNodeType()', 'createNewNode()' and
+ * 'createNodeFromPersistence()'.
+ *
+ * Derived classes must implement the 'save()' and 'load()' methods that specify how the node is stored in a persistent
+ * store.
+ *
+ * A new class that derives from Node must define many standard methods and constructors. Many macros have been defined
+ * that greatly simplify this task. See 'nodeMacros.h' for more details.
+ *
+ * A node in the tree has a revision number. Each time a node is created or loaded from a persistent store this number
+ * is reset to 0. Any modification to the node causes the revision to be incremented. This can be then used by
+ * visualizations or other plug-ins to track the evolution of node and update it necessary. A node's revision number
+ * will also increase when any of its descendants is modified, added or removed.
+ *
+ * A node that supports partial loading, should reimplement the 'loadFully()' method to enable this functionality.
+ *
+ * The functionality offered by the Node class includes:
+ * - Navigation routines between parents and children.
+ * - Navigation routines between different subtrees.
+ * - Revision control.
+ * - Persistent store interaction.
+ * - Meta information.
+ */
 class MODELBASE_API Node
 {
 	public:
+		/**
+		 * This function pointer type is used to register the constructor for nodes that are created at run-time.
+		 *
+		 * @param parent
+		 * 				The parent node of the newly created node. This can be NULL to indicate that this node is the root
+		 * 				node for the model. Otherwise it should be non-NULL.
+		 * @param model
+		 * 				The model that this node belongs to. Whenever parent is specified and is already part of an
+		 * 				model, this value should be NULL. In that case the model of the parent will be associated with the
+		 * 				newly created Node. Only if parent is NULL or is not yet associated with a model, should this
+		 * 				parameter be non-NULL. The latter case occurs only when creating the root of a model.
+		 */
 		typedef Node* (*NodeConstructor)(Node* parent, Model* model);
+
+		/**
+		 * This function pointer type is used to register the constructor for nodes that are being loaded from a
+		 * persistent store.
+		 *
+		 * @param parent
+		 * 				The parent node of the newly created node. This can be NULL to indicate that this node is the root
+		 * 				node for the model. Otherwise it should be non-NULL.
+		 * @param id
+		 * 				The id of the node from the persistent store.
+		 * @param store
+		 * 				The store that is contains this node and its subtree. This will be used to load the children of
+		 * 				the node.
+		 * @param partialLoadHint
+		 * 				A flag that hints whether this node should be fully or partially loaded. The constructor of the
+		 * 				node is allowed to ignore this flag.
+		 */
 		typedef Node* (*NodePersistenceConstructor)(Node *parent, NodeIdType id, PersistentStore &store, bool partialLoadHint);
 
+		/**
+		 * Constructs a new node at run-time (not by loading from a persistent store).
+		 *
+		 * The specified model or the one associated with the parent will be used to determine the id for the new Node.
+		 *
+		 * @param parent
+		 * 				The parent node of the newly created node. This can be NULL to indicate that this node is the root
+		 * 				node for the model. Otherwise it should be non-NULL.
+		 * @param model
+		 * 				The model that this node belongs to. Whenever parent is specified and is already part of an
+		 * 				model, this value should be NULL. In that case the model of the parent will be associated with the
+		 * 				newly created Node. Only if parent is NULL or is not yet associated with a model, should this
+		 * 				parameter be non-NULL. The latter case occurs only when creating the root of a model.
+		 */
 		Node(Node* parent, Model* model);
+
+		/**
+		 * Constructs a new node by loading it from a persistent store
+		 *
+		 * @param parent
+		 * 				The parent node of the newly created node. This can be NULL to indicate that this node is the root
+		 * 				node for the model. Otherwise it should be non-NULL.
+		 * @param id
+		 * 				The id to use for the new Node. This id should be unique between all Nodes associated with a single
+		 * 				model.
+		 */
 		Node(Node* parent, NodeIdType id);
 		virtual ~Node();
 
+		/**
+		 * Returns the model managing the tree of the current Node. Note that this method does not work during the
+		 * creation of the root Node.
+		 */
 		Model* model() const;
+
+		/**
+		 * Returns the root node of tree where of this node.
+		 */
 		Node* root() const;
+
+		/**
+		 * Returns the parent of this Node or NULL if this is the root.
+		 */
 		Node* parent() const;
 
 		/**
@@ -52,21 +147,74 @@ class MODELBASE_API Node
 		 * 				might be different. For example it might make a difference whether the source is a child node of
 		 * 				the current node or not.
 		 * @param path
-		 * 				The string that identifies the path to the desired target node.
+		 * 				The string that identifies the path to the desired target node. A navigation path is a sequence of
+		 * 				symbols (possibly with descriptors) that are separated by a comma. A symbol can have an arbitrary
+		 * 				number of descriptors preceding it which are separated by a colon.
+		 *
+		 * 				e.g. "hello,world" - is a path that has the symbol 'hello' at the front and the symbol 'world'
+		 * 				next
+		 * 				e.g. "field:distance,abstract:class:route" - is a path that starts with the symbol 'distance'
+		 * 				and continues with the symbol 'route'. 'distance' has a single descriptor - 'field'. 'route'
+		 * 				has two descriptors 'abstract' and 'class'. Descriptors are not used by Node and derived
+		 * 				classes can define their own meaning for these strings.
 		 */
 		virtual Node* navigateTo(Node* source, QString path);
 
+		/**
+		 * Extracts only the symbol name of the front part of a navigation path.
+		 */
 		QString extractFrontSymbol(const QString& path) const;
+
+		/**
+		 * Extracts only the descriptors' string of the front part of a navigation path.
+		 * If there are multiple descriptors present, they will be separated as usual by a colon.
+		 */
 		QString extractFrontDescriptor(const QString& path) const;
+
+		/**
+		 * Extracts the remainder of a navigation string after cutting the front symbol and any accompanying
+		 * descriptors.
+		 */
 		QString extractSecondaryPath(const QString& path) const;
 
+		/*
+		 * Returns true if this node defines a symbol and false otherwise. The default implementaion returns false.
+		 * Reimplement this method and symbolName() in derived classes that define symbols.
+		 */
 		virtual bool definesSymbol() const;
+
+		/*
+		 * Returns the name of the symbol defined by this node. The default implementaion returns a null QString value.
+		 * Reimplement this method and definesSymbol() in derived classes that define symbols.
+		 */
 		virtual const QString& symbolName() const;
 
+		/*
+		 * Returns the id of the node. This is a unique identifier within the model associated with this node.
+		 */
 		NodeIdType id() const;
+
+		/*
+		 * Returns the revision of this node.
+		 */
 		int revision() const;
+
+		/*
+		 * Increments the revision of this node by 1.
+		 */
 		void incrementRevision();
+
+		/*
+		 * Increments the revision of this node by the specified amount.
+		 */
 		void addToRevision(int valueToAdd);
+
+		/*
+		 * Returns true if this node is fully loaded and false if it is only partially loaded. The default implementation
+		 * always returns true.
+		 *
+		 * Reimplement this method and loadFully() in derived classes that support partial loading.
+		 */
 		bool isFullyLoaded() const;
 
 		/**
@@ -80,16 +228,30 @@ class MODELBASE_API Node
 		 */
 		virtual NodeReadWriteLock* accessLock() const;
 
+		/*
+		 * Returns the lowest common ancestor of this node and other.
+		 */
 		Node* lowestCommonAncestor(Node* other);
+
+		/*
+		 * Returns true of this node is an Ancestor of other and false otherwise.
+		 */
 		bool isAncestorOf(const Node* other) const;
 
 		/**
 		 * Executes the specified command and pushes it on the undo stack.
+		 *
+		 * This method will fail with an exception if the current thread does not hold the lock for this node's access
+		 * unit.
+		 *
+		 * This method also increments the revision of the node by 1.
 		 */
 		void execute(UndoCommand *command);
 
 		/**
 		 * Saves the current node to a persistent store.
+		 *
+		 * This method should contain calls to the store object that persist the subtree of this node.
 		 *
 		 *
 		 * @param store
@@ -97,7 +259,22 @@ class MODELBASE_API Node
 		 *
 		 */
 		virtual void save(PersistentStore &store) const = 0;
+
+		/*
+		 * Reloads this node from a persistent store.
+		 *
+		 * This method is called at any point after this node has been created in order to reinitialize its contents from
+		 * the persistent store. Any existing subtree should be gracefully detached. This means that subtrees should not
+		 * be deleted, but simply detached from the current node in a reversible way using commands that can be undone.
+		 */
 		virtual void load(PersistentStore &store) = 0;
+
+		/*
+		 * Fully loads a partially loaded node from the specified persistent store.
+		 *
+		 * The default implementation does nothing. Reimplement this method and isFullyLoaded() in derived classes to
+		 * enable support for partial loading.
+		 */
 		virtual void loadFully(PersistentStore &store);
 
 		//TODO In the comment below the part that explains things about the revision is incorrect. The persistence store
@@ -121,20 +298,42 @@ class MODELBASE_API Node
 		virtual bool isNewPersistenceUnit() const;
 
 		/**
-		 * Returns the id of the persistent unit to which this node belongs. If this is the root persistent unit, returns
+		 * Returns the id of the persistence unit to which this node belongs. If this is the root persistent unit, returns
 		 * 0.
 		 */
 		NodeIdType persistentUnitId() const;
 
 		/**
-		 * Returns the node that defines the persistent unit for this node.
+		 * Returns the node that defines the persistence unit for this node.
 		 */
 		Node* persistentUnitNode();
 
 
+		/**
+		 * Returns the name of the type of this Node. This is typically a string identical to the class name.
+		 *
+		 * This value is used when persisting the node.
+		 */
 		virtual const QString& typeName() const = 0;
+
+		/**
+		 * Returns an integer id of the type of this Node. When a new node class is registered it receives a unique id.
+		 * This id can be used later to quickly recognize objects of a specific type.
+		 */
 		virtual int typeId() const = 0;
 
+		/**
+		 * Registers the constructors of a class derived from Node.
+		 *
+		 * Each class derived from Node must be registered before it can be used.
+		 *
+		 * @param type
+		 * 				The string name of the class.
+		 * @param constructor
+		 * 				A function that can construct a new instance of the class at run-time.
+		 * @param persistenceconstructor
+		 * 				A function that can construct a new instance of the class from a persistent store.
+		 */
 		static int registerNodeType(const QString &type, const NodeConstructor constructor, const NodePersistenceConstructor persistenceconstructor);
 
 		/**
@@ -153,11 +352,40 @@ class MODELBASE_API Node
 		 * 			parent node does not yet belong to a model. This arises only when the root node is constructed.
 		 */
 		static Node* createNewNode(const QString &type, Node* parent, Model* model = NULL);
+
+		/**
+		 * Creates a new node of the specified type by loading it from a persistent store.
+		 *
+		 * @param type
+		 * 			The type of the node to create. This must be a type that has been registered before by calling
+		 * 			registerNodeType.
+		 *
+		 * @param parent
+		 * 			The parent of the node. This can be NULL if this is the root node.
+		 *
+		 * @param id
+		 * 			The id of the new instance. This should be unique between all node id associated with the same model.
+		 *
+		 * @param store
+		 * 			The persistent store to use to load the subtree of this node.
+		 *
+		 * @param partialLoadHint
+		 * 			Whether this node should only be partially loaded. This is only a hint and a node implementation can
+		 * 			ignore this flag.
+		 */
 		static Node* createNewNode(const QString &type, Node* parent, NodeIdType id, PersistentStore &store, bool partialLoadHint);
 
+		/**
+		 * Returns true if there are already registered constructs for a type with the specified name and false otherwise.
+		 */
 		static bool isTypeRegistered(const QString &type);
 
 	protected:
+
+		/*
+		 * This flag indicates if the current node is fullyLoaded. Derived classes which support this functionality
+		 * should take care to properly initialize and modify this value whener the state of the object changes.
+		 */
 		bool fullyLoaded;
 
 	private:
@@ -187,11 +415,19 @@ inline QString Node::extractSecondaryPath(const QString& path) const
 	return index ? ( path.mid(  index ) ) : QString();
 }
 
+/**
+ * This is a convenience function that can be used to when registering classes derived from Node using
+ * registerNodeType().
+ */
 template<class T> Node* createNewNode(Node* parent, Model* model)
 {
 	return new T(parent, model);
 }
 
+/**
+ * This is a convenience function that can be used to when registering classes derived from Node using
+ * registerNodeType().
+ */
 template<class T> Node* createNodeFromPersistence(Node *parent, NodeIdType id, PersistentStore &store, bool partialLoadHint)
 {
 	return new T(parent, id, store, partialLoadHint);
