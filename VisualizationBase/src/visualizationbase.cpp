@@ -21,6 +21,10 @@
 #include "items/VExtendable.h"
 #include "items/VList.h"
 
+#include "items/Static.h"
+#include "items/Symbol.h"
+#include "icons/SVGIcon.h"
+
 #include "node_extensions/Position.h"
 
 #include "ModelBase/headers/test_nodes/BinaryNode.h"
@@ -53,6 +57,10 @@ namespace Visualization
 		Scene::defaultRenderer()->registerVisualization(Model::Reference::typeIdStatic(), createVisualization<VReference, Model::Reference>);
 		Scene::defaultRenderer()->registerVisualization(Model::ExtendableNode::typeIdStatic(), createVisualization<VExtendable, Model::ExtendableNode>);
 		Scene::defaultRenderer()->registerVisualization(Model::List::typeIdStatic(), createVisualization<VList, Model::List>);
+
+		// Register static visualizations
+		Static::registerStaticItem<Symbol>();
+		Static::registerStaticItem<SVGIcon>();
 
 		// Enlarge and Center Main Window
 		VisualizationManager::instance().getMainWindow()->resize(1200,700);

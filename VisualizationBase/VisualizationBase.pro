@@ -31,7 +31,9 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/shapes/shapeMacros.h \
+HEADERS += headers/items/StaticStyle.h \
+    headers/items/Static.h \
+    headers/shapes/shapeMacros.h \
     headers/styles/Style.h \
     headers/styles/StyleLoader.h \
     headers/styles/StyleNode.h \
@@ -96,7 +98,9 @@ HEADERS += headers/shapes/shapeMacros.h \
     src/visualizationbase.h \
     headers/VisualizationException.h \
     headers/visualizationbase_api.h
-SOURCES += src/styles/Style.cpp \
+SOURCES += src/items/Static.cpp \
+    src/items/StaticStyle.cpp \
+    src/styles/Style.cpp \
     src/styles/StyleNode.cpp \
     src/styles/StyleLoader.cpp \
     src/shapes/Braces.cpp \
