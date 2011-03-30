@@ -20,12 +20,11 @@ namespace Visualization {
 	class VText;
 	class VList;
 	class PanelBorderLayout;
+	class Static;
 	class PositionLayout;
 }
 
 namespace OOVisualization {
-
-class ClassIcon;
 
 class OOVISUALIZATION_API VClass : public Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::Class>
 {
@@ -40,7 +39,7 @@ class OOVISUALIZATION_API VClass : public Visualization::ItemWithNode< Visualiza
 
 	private:
 		Visualization::SequentialLayout* header_;
-		ClassIcon* icon_;
+		Visualization::Static* icon_;
 		Visualization::VText* name_;
 		Visualization::VList* baseClasses_;
 		Visualization::PositionLayout* content_;

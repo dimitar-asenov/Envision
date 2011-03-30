@@ -17,8 +17,6 @@
 #include "elements/VFormalArgument.h"
 #include "elements/VFormalResult.h"
 
-#include "icons/ClassIcon.h"
-
 #include "expressions/VVariableAccess.h"
 #include "expressions/VMethodCallExpression.h"
 #include "expressions/VReferenceExpression.h"

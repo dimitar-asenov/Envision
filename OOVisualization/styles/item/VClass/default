@@ -29,7 +29,11 @@
 			<direction>0</direction>
 		</itemsStyle>
 	</baseClasses>
-	<icon prototypes="icon/ClassIcon/default" />
+	<icon prototypes="icon/SVGIcon/default">
+		<filename>styles/icon/class.svg</filename>
+		<width>30</width>
+		<height>30</height>
+	</icon>
 	<visibility prototypes="item/Text/default" />
 	<content prototypes="layout/PositionLayout/default" />
 	<fieldContainer prototypes="layout/SequentialLayout/default">

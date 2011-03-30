@@ -10,9 +10,8 @@
 
 #include "../oovisualization_api.h"
 
-#include "icons/ClassIconStyle.h"
-
 #include "VisualizationBase/headers/items/TextStyle.h"
+#include "VisualizationBase/headers/items/StaticStyle.h"
 #include "VisualizationBase/headers/items/VListStyle.h"
 #include "VisualizationBase/headers/layouts/PanelBorderLayoutStyle.h"
 #include "VisualizationBase/headers/layouts/SequentialLayoutStyle.h"
@@ -28,7 +27,7 @@ class OOVISUALIZATION_API VClassStyle : public Visualization::ItemStyle
 		Visualization::TextStyle namePublic_;
 		Visualization::TextStyle namePrivate_;
 		Visualization::TextStyle nameProtected_;
-		ClassIconStyle icon_;
+		Visualization::StaticStyle icon_;
 		Visualization::SequentialLayoutStyle header_;
 		Visualization::VListStyle baseClasses_;
 		Visualization::PositionLayoutStyle content_;
@@ -46,7 +45,7 @@ class OOVISUALIZATION_API VClassStyle : public Visualization::ItemStyle
 		const Visualization::TextStyle& namePublic() const;
 		const Visualization::TextStyle& namePrivate() const;
 		const Visualization::TextStyle& nameProtected() const;
-		const ClassIconStyle& icon() const;
+		const Visualization::StaticStyle& icon() const;
 		const Visualization::SequentialLayoutStyle& header() const;
 		const Visualization::VListStyle& baseClasses() const;
 		const Visualization::PositionLayoutStyle& content() const;
@@ -62,7 +61,7 @@ inline const Visualization::TextStyle& VClassStyle::nameDefault() const { return
 inline const Visualization::TextStyle& VClassStyle::namePublic() const { return namePublic_; }
 inline const Visualization::TextStyle& VClassStyle::namePrivate() const { return namePrivate_; }
 inline const Visualization::TextStyle& VClassStyle::nameProtected() const { return nameProtected_; }
-inline const ClassIconStyle& VClassStyle::icon() const { return icon_; }
+inline const Visualization::StaticStyle& VClassStyle::icon() const { return icon_; }
 inline const Visualization::SequentialLayoutStyle& VClassStyle::header() const { return header_; }
 inline const Visualization::VListStyle& VClassStyle::baseClasses() const { return baseClasses_; }
 inline const Visualization::PositionLayoutStyle& VClassStyle::content() const { return content_; }

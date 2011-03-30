@@ -7,12 +7,12 @@
 
 #include "top_level/VClass.h"
 #include "OOVisualizationException.h"
-#include "icons/ClassIcon.h"
 
 #include "VisualizationBase/headers/layouts/PanelBorderLayout.h"
 #include "VisualizationBase/headers/layouts/PositionLayout.h"
 #include "VisualizationBase/headers/items/VText.h"
 #include "VisualizationBase/headers/items/VList.h"
+#include "VisualizationBase/headers/items/Static.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -24,7 +24,7 @@ ITEM_COMMON_DEFINITIONS(VClass, "item")
 VClass::VClass(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<PanelBorderLayout>, Class>(parent, node, style),
 	header_( new SequentialLayout(NULL, &style->header()) ),
-	icon_( new ClassIcon(NULL, &style->icon()) ),
+	icon_( new Static(NULL, &style->icon()) ),
 	name_(new VText(NULL, node->nameNode(), &style->nameDefault()) ),
 	baseClasses_( new VList(NULL, node->baseClasses(), &style->baseClasses()) ),
 	content_( new PositionLayout(NULL, &style->content()) ),

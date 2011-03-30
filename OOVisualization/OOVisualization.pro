@@ -95,8 +95,6 @@ HEADERS += headers/elements/VStorageSpecifier.h \
     headers/expressions/VVariableAccess.h \
     headers/expressions/VReferenceExpressionStyle.h \
     headers/expressions/VReferenceExpression.h \
-    headers/icons/ClassIconStyle.h \
-    headers/icons/ClassIcon.h \
     headers/OOVisualizationException.h \
     headers/oovisualization_api.h \
     src/oovisualization.h
@@ -161,8 +159,6 @@ SOURCES += src/elements/VStorageSpecifier.cpp \
     src/expressions/VVariableAccess.cpp \
     src/expressions/VReferenceExpression.cpp \
     src/expressions/VReferenceExpressionStyle.cpp \
-    src/icons/ClassIcon.cpp \
-    src/icons/ClassIconStyle.cpp \
     test/HelloWorldTest.cpp \
     src/OOVisualizationException.cpp \
     src/oovisualization.cpp
