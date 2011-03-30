@@ -13,7 +13,7 @@
 #include "VisualizationBase/headers/layouts/PanelBorderLayoutStyle.h"
 #include "VisualizationBase/headers/layouts/SequentialLayoutStyle.h"
 #include "VisualizationBase/headers/items/VListStyle.h"
-#include "VisualizationBase/headers/icons/SVGIconStyle.h"
+#include "VisualizationBase/headers/items/StaticStyle.h"
 
 namespace OOVisualization {
 
@@ -22,7 +22,7 @@ class OOVISUALIZATION_API VIfStatementStyle : public Visualization::ItemStyle
 	private:
 		Visualization::PanelBorderLayoutStyle layout_;
 		Visualization::SequentialLayoutStyle header_;
-		Visualization::SVGIconStyle icon_;
+		Visualization::StaticStyle icon_;
 		Visualization::SequentialLayoutStyle condition_;
 
 		Visualization::SequentialLayoutStyle content_;
@@ -34,7 +34,7 @@ class OOVISUALIZATION_API VIfStatementStyle : public Visualization::ItemStyle
 
 		const Visualization::PanelBorderLayoutStyle& layout() const;
 		const Visualization::SequentialLayoutStyle& header() const;
-		const Visualization::SVGIconStyle& icon() const;
+		const Visualization::StaticStyle& icon() const;
 		const Visualization::SequentialLayoutStyle& condition() const;
 
 		const Visualization::SequentialLayoutStyle& content() const;
@@ -44,7 +44,7 @@ class OOVISUALIZATION_API VIfStatementStyle : public Visualization::ItemStyle
 
 inline const Visualization::PanelBorderLayoutStyle& VIfStatementStyle::layout() const { return layout_; }
 inline const Visualization::SequentialLayoutStyle& VIfStatementStyle::header() const { return header_; }
-inline const Visualization::SVGIconStyle& VIfStatementStyle::icon() const { return icon_; }
+inline const Visualization::StaticStyle& VIfStatementStyle::icon() const { return icon_; }
 inline const Visualization::SequentialLayoutStyle& VIfStatementStyle::condition() const { return condition_; }
 
 inline const Visualization::SequentialLayoutStyle& VIfStatementStyle::content() const { return content_; }

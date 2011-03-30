@@ -10,7 +10,7 @@
 #include "VisualizationBase/headers/layouts/PanelBorderLayout.h"
 #include "VisualizationBase/headers/layouts/SequentialLayout.h"
 #include "VisualizationBase/headers/items/VList.h"
-#include "VisualizationBase/headers/icons/SVGIcon.h"
+#include "VisualizationBase/headers/items/Static.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -32,7 +32,7 @@ VLoopStatement::VLoopStatement(Item* parent, NodeType* node, const StyleType* st
 {
 	layout()->setTop(true);
 	layout()->top()->setFirst(header);
-	header->append(new SVGIcon(NULL, &style->icon()));
+	header->append(new Static(NULL, &style->icon()));
 }
 
 VLoopStatement::~VLoopStatement()
@@ -108,7 +108,7 @@ void VLoopStatement::determineChildren()
 	// The style needs to be updated every time since if our own style changes, so will that of the children.
 	layout()->setStyle(&style()->layout());
 	header->setStyle(&style()->header());
-	header->at<SVGIcon>(0)->setStyle(&style()->icon());
+	header->at<Static>(0)->setStyle(&style()->icon());
 	if (conditionBackground) conditionBackground->setStyle( &style()->condition() );
 	if (initStepBackground) initStepBackground->setStyle( &style()->initStep() );
 	if (updateStepBackground) updateStepBackground->setStyle( &style()->updateStep() );

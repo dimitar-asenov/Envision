@@ -19,7 +19,7 @@
 namespace Visualization {
 	class VText;
 	class VList;
-	class SVGIcon;
+	class Static;
 	class PanelBorderLayout;
 }
 
@@ -38,7 +38,7 @@ class OOVISUALIZATION_API VMethod : public Visualization::ItemWithNode< Visualiz
 
 	private:
 		Visualization::SequentialLayout* header_;
-		Visualization::SVGIcon* icon_;
+		Visualization::Static* icon_;
 		Visualization::VText* name_;
 		Visualization::VList* arguments_;
 		Visualization::VList* content_;

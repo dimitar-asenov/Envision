@@ -21,7 +21,7 @@ namespace Visualization {
 	class VText;
 	class VList;
 	class PanelBorderLayout;
-	class SVGIcon;
+	class Static;
 }
 
 namespace ControlFlowVisualization {
@@ -39,7 +39,7 @@ class CONTROLFLOWVISUALIZATION_API VMethodCF : public Visualization::ItemWithNod
 
 	private:
 		Visualization::SequentialLayout* header_;
-		Visualization::SVGIcon* icon_;
+		Visualization::Static* icon_;
 		Visualization::VText* name_;
 		Visualization::VList* arguments_;
 		Visualization::VList* content_;

@@ -12,7 +12,7 @@
 #include "VisualizationBase/headers/layouts/PanelBorderLayout.h"
 #include "VisualizationBase/headers/layouts/PositionLayout.h"
 #include "VisualizationBase/headers/items/VText.h"
-#include "VisualizationBase/headers/icons/SVGIcon.h"
+#include "VisualizationBase/headers/items/Static.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -29,7 +29,7 @@ VProject::VProject(Item* parent, NodeType* node, const StyleType* style) :
 {
 	layout()->setTop(true);
 	layout()->top()->setMiddle(header);
-	header->append(new SVGIcon(NULL, &style->icon()));
+	header->append(new Static(NULL, &style->icon()));
 	header->append(name);
 	layout()->setContent(content);
 }
@@ -52,7 +52,7 @@ void VProject::determineChildren()
 	name->setStyle(&style()->name());
 	content->setStyle(&style()->content());
 	layout()->setStyle(&style()->layout());
-	header->at<SVGIcon>(0)->setStyle(&style()->icon());
+	header->at<Static>(0)->setStyle(&style()->icon());
 
 	header->synchronizeMid(name, node()->nameNode(), &style()->name(), 1);
 

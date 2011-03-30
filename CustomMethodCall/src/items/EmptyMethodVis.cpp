@@ -7,7 +7,7 @@
 
 #include "items/EmptyMethodVis.h"
 
-#include "VisualizationBase/headers/icons/SVGIcon.h"
+#include "VisualizationBase/headers/items/Static.h"
 #include "VisualizationBase/headers/items/Symbol.h"
 
 using namespace Visualization;
@@ -19,7 +19,7 @@ ITEM_COMMON_DEFINITIONS(EmptyMethodVis, "item")
 
 EmptyMethodVis::EmptyMethodVis(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<>, MethodCallExpression>(parent, node, style),
-	icon_(new SVGIcon(NULL, &style->icon()) ),
+	icon_(new Static(NULL, &style->icon()) ),
 	separator_(NULL),
 	prefix_(NULL)
 {

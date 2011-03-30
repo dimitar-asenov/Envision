@@ -17,7 +17,7 @@
 #include "VisualizationBase/headers/items/LayoutProvider.h"
 
 namespace Visualization {
-	class SVGIcon;
+	class Static;
 	class Symbol;
 	class VList;
 }
@@ -36,7 +36,7 @@ class CUSTOMMETHODCALL_API InsertMethodVis : public Visualization::ItemWithNode<
 		void determineChildren();
 
 	private:
-		Visualization::SVGIcon* icon_;
+		Visualization::Static* icon_;
 		Visualization::Symbol* separator_;
 		Visualization::Item* prefix_;
 		Visualization::VList* arguments_;

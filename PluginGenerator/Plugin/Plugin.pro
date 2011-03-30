@@ -16,9 +16,7 @@ win32:LIBS += -L$${PLUGINS_DIR} \
     -llogger \
     -lselftest
 QT = core \
-	gui \
-	xml \
-	svg
+	gui
 TEMPLATE = lib
 CONFIG += plugin warn_on thread
 target.path = $$PLUGINS_DIR

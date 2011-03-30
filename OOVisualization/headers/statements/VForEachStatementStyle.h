@@ -14,7 +14,7 @@
 #include "VisualizationBase/headers/layouts/SequentialLayoutStyle.h"
 #include "VisualizationBase/headers/items/TextStyle.h"
 #include "VisualizationBase/headers/items/VListStyle.h"
-#include "VisualizationBase/headers/icons/SVGIconStyle.h"
+#include "VisualizationBase/headers/items/StaticStyle.h"
 
 namespace OOVisualization {
 
@@ -23,7 +23,7 @@ class OOVISUALIZATION_API VForEachStatementStyle : public Visualization::ItemSty
 	private:
 		Visualization::PanelBorderLayoutStyle layout_;
 		Visualization::SequentialLayoutStyle header_;
-		Visualization::SVGIconStyle icon_;
+		Visualization::StaticStyle icon_;
 		Visualization::SequentialLayoutStyle varContainer_;
 		Visualization::TextStyle varName_;
 		Visualization::SequentialLayoutStyle collection_;
@@ -34,7 +34,7 @@ class OOVISUALIZATION_API VForEachStatementStyle : public Visualization::ItemSty
 
 		const Visualization::PanelBorderLayoutStyle& layout() const;
 		const Visualization::SequentialLayoutStyle& header() const;
-		const Visualization::SVGIconStyle& icon() const;
+		const Visualization::StaticStyle& icon() const;
 
 		const Visualization::SequentialLayoutStyle& varContainer() const;
 		const Visualization::TextStyle& varName() const;
@@ -44,7 +44,7 @@ class OOVISUALIZATION_API VForEachStatementStyle : public Visualization::ItemSty
 
 inline const Visualization::PanelBorderLayoutStyle& VForEachStatementStyle::layout() const { return layout_; }
 inline const Visualization::SequentialLayoutStyle& VForEachStatementStyle::header() const { return header_; }
-inline const Visualization::SVGIconStyle& VForEachStatementStyle::icon() const { return icon_; }
+inline const Visualization::StaticStyle& VForEachStatementStyle::icon() const { return icon_; }
 
 inline const Visualization::SequentialLayoutStyle& VForEachStatementStyle::varContainer() const { return varContainer_; }
 inline const Visualization::TextStyle& VForEachStatementStyle::varName() const { return varName_; }

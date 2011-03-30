@@ -10,7 +10,7 @@
 #include "VisualizationBase/headers/layouts/PanelBorderLayout.h"
 #include "VisualizationBase/headers/items/VText.h"
 #include "VisualizationBase/headers/items/VList.h"
-#include "VisualizationBase/headers/icons/SVGIcon.h"
+#include "VisualizationBase/headers/items/Static.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -31,7 +31,7 @@ VForEachStatement::VForEachStatement(Item* parent, NodeType* node, const StyleTy
 {
 	layout()->setTop(true);
 	layout()->top()->setFirst(header);
-	header->append(new SVGIcon(NULL, &style->icon()));
+	header->append(new Static(NULL, &style->icon()));
 	header->append(varContainer);
 	varContainer->append(varName);
 	header->append(collectionBackground);
@@ -63,7 +63,7 @@ void VForEachStatement::determineChildren()
 	// The style needs to be updated every time since if our own style changes, so will that of the children.
 	layout()->setStyle(&style()->layout());
 	header->setStyle(&style()->header());
-	header->at<SVGIcon>(0)->setStyle(&style()->icon());
+	header->at<Static>(0)->setStyle(&style()->icon());
 	varContainer->setStyle( &style()->varContainer() );
 	collectionBackground->setStyle( &style()->collection() );
 	varName->setStyle( &style()->varName() );

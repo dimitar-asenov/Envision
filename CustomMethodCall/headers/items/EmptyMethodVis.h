@@ -18,7 +18,7 @@
 
 namespace Visualization {
 	class Symbol;
-	class SVGIcon;
+	class Static;
 }
 
 namespace CustomMethodCall {
@@ -35,7 +35,7 @@ class CUSTOMMETHODCALL_API EmptyMethodVis : public Visualization::ItemWithNode< 
 		void determineChildren();
 
 	private:
-		Visualization::SVGIcon* icon_;
+		Visualization::Static* icon_;
 		Visualization::Symbol* separator_;
 		Visualization::Item* prefix_;
 };

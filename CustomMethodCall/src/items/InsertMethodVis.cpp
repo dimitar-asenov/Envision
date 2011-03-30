@@ -7,7 +7,7 @@
 
 #include "items/InsertMethodVis.h"
 
-#include "VisualizationBase/headers/icons/SVGIcon.h"
+#include "VisualizationBase/headers/items/Static.h"
 #include "VisualizationBase/headers/items/Symbol.h"
 #include "VisualizationBase/headers/items/VList.h"
 
@@ -20,7 +20,7 @@ ITEM_COMMON_DEFINITIONS(InsertMethodVis, "item")
 
 InsertMethodVis::InsertMethodVis(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<>, MethodCallStatement>(parent, node, style),
-	icon_(new SVGIcon(NULL, &style->icon()) ),
+	icon_(new Static(NULL, &style->icon()) ),
 	separator_(NULL),
 	prefix_(NULL),
 	arguments_(new VList(NULL, node->arguments(), &style->arguments()))
