@@ -1,5 +1,6 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="icon/Icon/default">
+	<itemClass>SVGIcon</itemClass> <!-- This is only used by 'Static' when an SVGIcon is displayed through a static element. -->
 	<filename></filename>
 	<width>30</width>
 	<height>30</height>
