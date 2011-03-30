@@ -18,7 +18,6 @@ StaticStyle::StaticStyle() :
 
 StaticStyle::~StaticStyle()
 {
-	SAFE_DELETE(itemStyle_);
 }
 
 void StaticStyle::load(StyleLoader& sl)
@@ -29,7 +28,7 @@ void StaticStyle::load(StyleLoader& sl)
 
 	if (! itemClass_.isEmpty())
 	{
-		itemStyle_ = Static::constructStyle(itemClass_);
+		itemStyle_ = QSharedPointer<ItemStyle>(Static::constructStyle(itemClass_));
 		if (itemStyle_) itemStyle_->load(sl);
 	}
 }

@@ -12,13 +12,15 @@
 
 #include "ItemStyle.h"
 
+#include <QtCore/QSharedPointer>
+
 namespace Visualization {
 
 class VISUALIZATIONBASE_API StaticStyle : public ItemStyle
 {
 	private:
 		QString itemClass_;
-		ItemStyle* itemStyle_;
+		QSharedPointer<ItemStyle> itemStyle_;
 
 	public:
 		StaticStyle();
@@ -33,7 +35,7 @@ class VISUALIZATIONBASE_API StaticStyle : public ItemStyle
 };
 
 inline const QString& StaticStyle::itemClass() const { return itemClass_; }
-inline const ItemStyle& StaticStyle::itemStyle() const { return *itemStyle_; }
+inline const ItemStyle& StaticStyle::itemStyle() const { return *itemStyle_.data(); }
 
 inline bool StaticStyle::isEmpty() const { return itemClass_.isEmpty(); }
 
