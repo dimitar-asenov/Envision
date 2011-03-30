@@ -26,4 +26,9 @@ QString Symbol::currentText()
 	return style()->symbol();
 }
 
+bool Symbol::isEmpty() const
+{
+	return style()->symbol().isEmpty();
+}
+
 }

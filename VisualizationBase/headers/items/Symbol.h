@@ -22,6 +22,7 @@ class VISUALIZATIONBASE_API Symbol : public TextRenderer
 	public:
 		Symbol(Item* parent, const StyleType *style = itemStyles().get());
 		virtual bool setText(const QString& newText);
+		virtual bool isEmpty() const;
 
 	protected:
 		virtual QString currentText();

@@ -28,10 +28,14 @@ class VISUALIZATIONBASE_API StaticStyle : public ItemStyle
 
 		const QString& itemClass() const;
 		const ItemStyle& itemStyle() const;
+
+		bool isEmpty() const;
 };
 
 inline const QString& StaticStyle::itemClass() const { return itemClass_; }
 inline const ItemStyle& StaticStyle::itemStyle() const { return *itemStyle_; }
+
+inline bool StaticStyle::isEmpty() const { return itemClass_.isEmpty(); }
 
 }
 

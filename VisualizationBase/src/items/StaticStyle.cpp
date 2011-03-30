@@ -27,8 +27,11 @@ void StaticStyle::load(StyleLoader& sl)
 
 	sl.load("itemClass", itemClass_);
 
-	itemStyle_ = Static::constructStyle(itemClass_);
-	if (itemStyle_) itemStyle_->load(sl);
+	if (! itemClass_.isEmpty())
+	{
+		itemStyle_ = Static::constructStyle(itemClass_);
+		if (itemStyle_) itemStyle_->load(sl);
+	}
 }
 
 }
