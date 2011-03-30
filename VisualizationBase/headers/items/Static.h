@@ -27,6 +27,7 @@ class VISUALIZATIONBASE_API Static : public Item
 
 		virtual bool focusChild(FocusTarget location);
 		virtual bool isEmpty() const;
+		virtual bool sizeDependsOnParent() const;
 
 		template<class T> static void registerStaticItem();
 

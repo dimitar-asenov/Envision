@@ -31,6 +31,12 @@ bool Static::isEmpty() const
 	return style()->isEmpty();
 }
 
+bool Static::sizeDependsOnParent() const
+{
+	if (item_) return item_->sizeDependsOnParent();
+	else return false;
+}
+
 void Static::updateGeometry(int availableWidth, int availableHeight)
 {
 	if (item_) Item::updateGeometry(item_, availableWidth, availableHeight);
