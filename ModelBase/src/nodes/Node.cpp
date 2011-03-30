@@ -49,7 +49,6 @@ Node::Node(Node* parent, NodeIdType id) :
 
 Node::~Node()
 {
-	// TODO Node destructor: Does something need to go here?
 }
 
 /***********************************************************************************************************************
