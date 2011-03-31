@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.linuxtools.oprofile.launch.oprofile">
+<intAttribute key="org.eclipse.cdt.launch.ATTR_BUILD_BEFORE_LAUNCH_ATTR" value="2"/>
+<stringAttribute key="org.eclipse.cdt.launch.COREFILE_PATH" value=""/>
+<stringAttribute key="org.eclipse.cdt.launch.PROGRAM_ARGUMENTS" value="-graphicssystem raster --test oovisualization"/>
+<stringAttribute key="org.eclipse.cdt.launch.PROGRAM_NAME" value="../DebugBuild/Envision"/>
+<stringAttribute key="org.eclipse.cdt.launch.PROJECT_ATTR" value="OOVisualization"/>
+<stringAttribute key="org.eclipse.cdt.launch.PROJECT_BUILD_CONFIG_ID_ATTR" value="org.eclipse.cdt.core.default.config.1879673241"/>
+<stringAttribute key="org.eclipse.cdt.launch.WORKING_DIRECTORY" value="${workspace_loc:DebugBuild}"/>
+<booleanAttribute key="org.eclipse.cdt.launch.use_terminal" value="true"/>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+<listEntry value="/OOVisualization"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+<listEntry value="4"/>
+</listAttribute>
+<mapAttribute key="org.eclipse.debug.core.environmentVariables">
+<mapEntry key="LD_LIBRARY_PATH" value="plugins"/>
+<mapEntry key="PATH" value="/usr/bin/:${env_var:PATH}:${env_var:PATH}"/>
+</mapAttribute>
+<intAttribute key="org.eclipse.linuxtools.oprofile.launch.oprofile.COUNTER_0.COUNT" value="39960"/>
+<booleanAttribute key="org.eclipse.linuxtools.oprofile.launch.oprofile.COUNTER_0.ENABLED" value="false"/>
+<stringAttribute key="org.eclipse.linuxtools.oprofile.launch.oprofile.COUNTER_0.EVENT" value="BACLEARS"/>
+<booleanAttribute key="org.eclipse.linuxtools.oprofile.launch.oprofile.COUNTER_0.PROFILE_KERNEL" value="true"/>
+<booleanAttribute key="org.eclipse.linuxtools.oprofile.launch.oprofile.COUNTER_0.PROFILE_USER" value="true"/>
+<intAttribute key="org.eclipse.linuxtools.oprofile.launch.oprofile.COUNTER_0.UNIT_MASK" value="0"/>
+<intAttribute key="org.eclipse.linuxtools.oprofile.launch.oprofile.COUNTER_1.COUNT" value="39960"/>
+<booleanAttribute key="org.eclipse.linuxtools.oprofile.launch.oprofile.COUNTER_1.ENABLED" value="false"/>
+<stringAttribute key="org.eclipse.linuxtools.oprofile.launch.oprofile.COUNTER_1.EVENT" value="BACLEARS"/>
+<booleanAttribute key="org.eclipse.linuxtools.oprofile.launch.oprofile.COUNTER_1.PROFILE_KERNEL" value="true"/>
+<booleanAttribute key="org.eclipse.linuxtools.oprofile.launch.oprofile.COUNTER_1.PROFILE_USER" value="true"/>
+<intAttribute key="org.eclipse.linuxtools.oprofile.launch.oprofile.COUNTER_1.UNIT_MASK" value="0"/>
+<stringAttribute key="org.eclipse.linuxtools.oprofile.launch.oprofile.KERNEL_IMAGE" value=""/>
+<intAttribute key="org.eclipse.linuxtools.oprofile.launch.oprofile.SEPARATE_SAMPLES" value="0"/>
+<booleanAttribute key="org.eclipse.linuxtools.oprofile.launch.oprofile.USE_DEFAULT_EVENT" value="true"/>
+</launchConfiguration>
