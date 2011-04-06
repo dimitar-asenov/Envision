@@ -57,7 +57,9 @@
 			<cornerType>2</cornerType>
 		</shape>
 	</condition>
-	<content prototypes="layout/SequentialLayout/default" />
+	<content prototypes="layout/SequentialLayout/default">
+		<alignment>3</alignment>
+	</content>
 	<thenBranch prototypes="item/VList/default">
 		<shape prototypes="shape/Box/default">
 			Box
