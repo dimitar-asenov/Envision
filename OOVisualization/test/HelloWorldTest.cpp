@@ -111,7 +111,7 @@ Library* addJavaLibrary(Model::Model* model, Project* parent)
 	outtype->type()->setPrefix<ReferenceExpression>()->ref()->set("mod:io");
 
 	// Set positions
-	java->extension<Position>()->setX(340);
+	java->extension<Position>()->setX(400);
 	string->extension<Position>()->setY(100);
 	io->extension<Position>()->setX(240);
 
@@ -127,10 +127,14 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 	model->beginModification(parent? static_cast<Model::Node*> (parent) : longMethod, "Adding a long method.");
 	if (!longMethod) longMethod = parent->methods()->append<Method>();
 
-	longMethod->setName("aMethod");
+	longMethod->setName("aLongTestMethod");
 	longMethod->results()->append<FormalResult>()->setType<PrimitiveType>()->setType(PrimitiveType::INT);
 	longMethod->arguments()->append<FormalArgument>()->setType<PrimitiveType>()->setType(PrimitiveType::INT);
 	longMethod->arguments()->at(0)->setName("x");
+	longMethod->arguments()->append<FormalArgument>()->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+	longMethod->arguments()->at(1)->setName("y");
+	longMethod->arguments()->append<FormalArgument>()->setType<PrimitiveType>()->setType(PrimitiveType::FLOAT);
+	longMethod->arguments()->at(2)->setName("epsilon");
 
 	VariableDeclaration* var1 = longMethod->items()->append<VariableDeclaration>();
 	var1->setName("var1");
@@ -303,7 +307,10 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 
 	longMethod->items()->append<ReturnStatement>()->values()->append<IntegerLiteral>()->setValue(24);
 
-	longMethod->extension<Position>()->setY(100);
+	if (parent && parent->parent())
+		longMethod->extension<Position>()->setY(100);
+	else
+		longMethod->extension<Position>()->setX(400);
 
 	model->endModification();
 	return longMethod;
@@ -377,13 +384,13 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	Project* prj = NULL;
 
 	// Create project
-	prj = dynamic_cast<Project*> (model->createRoot("Project"));
-	model->beginModification(prj, "build simple java library and a hello world app");
-	prj->setName("HelloWorld");
-	model->endModification();
+//	prj = dynamic_cast<Project*> (model->createRoot("Project"));
+//	model->beginModification(prj, "build simple java library and a hello world app");
+//	prj->setName("HelloWorld");
+//	model->endModification();
 
 	Library* java = NULL;
-	java = addJavaLibrary(model, prj);
+//	java = addJavaLibrary(model, prj);
 
 	// Build a simple HelloWorld Application
 	Class* hello = NULL;
