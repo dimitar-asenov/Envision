@@ -102,10 +102,17 @@ Class* addCollection(Model::Model* model, Project* parent)
 	findCall->ref()->set("method:find");
 	findCall->arguments()->append<IntegerLiteral>()->setValue(42);
 
-	MethodCallExpression* sumCall = test->items()->append<ReturnStatement>()->values()->append<MethodCallExpression>();
+	VariableDeclaration* resultVar = test->items()->append<VariableDeclaration>();
+	resultVar->setName("result");
+	resultVar->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+	MethodCallExpression* sumCall = resultVar->setInitialValue<MethodCallExpression>();
 	sumCall->ref()->set("method:sum");
 	sumCall->arguments()->append<IntegerLiteral>()->setValue(0);
 	sumCall->arguments()->append<VariableAccess>()->ref()->set("local:index");
+	sumCall->setPrefix<ThisExpression>();
+
+	test->items()->append<ReturnStatement>()->values()->append<VariableAccess>()->ref()->set("local:result");
+
 
 	test->results()->append<FormalResult>()->setType<PrimitiveType>()->setType(PrimitiveType::INT);
 
