@@ -185,7 +185,7 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 	var10->setType<PrimitiveType>()->setType(PrimitiveType::INT);
 	CastExpression* cast = var10->setInitialValue<CastExpression>();
 	cast->setType<PrimitiveType>()->setType(PrimitiveType::INT);
-	cast->setExpr<StringLiteral>()->setValue("five");
+	cast->setExpr<VariableAccess>()->ref()->set("local:epsilon");
 
 	VariableDeclaration* var11 = longMethod->items()->append<VariableDeclaration>();
 	var11->setName("var11");
