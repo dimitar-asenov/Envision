@@ -204,10 +204,10 @@ TEST(ControlFlowVisualization, SimpleTest)
 	Model::Model* model = new Model::Model();
 
 	Class* cl = NULL;
-//	cl = addClass(model, NULL);
+	cl = addClass(model, NULL);
 
 	Method* complicated = NULL;
-//	complicated = addComplicated(model, cl);
+	complicated = addComplicated(model, cl);
 
 	Method* divbysix = NULL;
 	divbysix = addDivBySix(model, cl);
