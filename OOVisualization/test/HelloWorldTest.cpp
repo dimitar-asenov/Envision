@@ -369,7 +369,7 @@ Method* addFactorial(Model::Model* model, Class* parent)
 	// Return
 	factorial->items()->append<ReturnStatement>()->values()->append<VariableAccess>()->ref()->set("local:result");
 
-	factorial->extension<Position>()->setY(100);
+	factorial->extension<Position>()->setY(860);
 
 	model->endModification();
 	return factorial;
@@ -384,13 +384,13 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	Project* prj = NULL;
 
 	// Create project
-//	prj = dynamic_cast<Project*> (model->createRoot("Project"));
-//	model->beginModification(prj, "build simple java library and a hello world app");
-//	prj->setName("HelloWorld");
-//	model->endModification();
+	prj = dynamic_cast<Project*> (model->createRoot("Project"));
+	model->beginModification(prj, "build simple java library and a hello world app");
+	prj->setName("HelloWorld");
+	model->endModification();
 
 	Library* java = NULL;
-//	java = addJavaLibrary(model, prj);
+	java = addJavaLibrary(model, prj);
 
 	// Build a simple HelloWorld Application
 	Class* hello = NULL;
@@ -402,7 +402,7 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 
 //	// Add a third method
 	Method* factorial = NULL;
-//	factorial = addFactorial(model, hello);
+	factorial = addFactorial(model, hello);
 
 	////////////////////////////////////////////////// Set Scene
 	Model::Node* top_level = NULL;

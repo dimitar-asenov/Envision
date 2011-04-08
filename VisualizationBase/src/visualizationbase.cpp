@@ -63,11 +63,14 @@ namespace Visualization
 		Static::registerStaticItem<SVGIcon>();
 
 		// Enlarge and Center Main Window
-		VisualizationManager::instance().getMainWindow()->resize(1200,700);
+
+		VisualizationManager::instance().getMainWindow()->resize(1180,700);
 		QRect descktop( QApplication::desktop()->screenGeometry() );
 		int leftPos = descktop.width()/2-VisualizationManager::instance().getMainWindow()->width()/2;
 		int topPos = descktop.height()/2-VisualizationManager::instance().getMainWindow()->height()/2;
 		VisualizationManager::instance().getMainWindow()->move(leftPos,topPos);
+
+		//VisualizationManager::instance().getMainWindow()->showFullScreen();
 
 		return true;
 	}
