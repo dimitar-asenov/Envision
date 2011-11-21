@@ -10,14 +10,17 @@ target.path = $$BUILD_DIR
 INSTALLS += target
 CONFIG += qt \
     thread \
-    warn_on
+    warn_on \
+    precompile_header
 QT += core \
     gui \
     xml
 INCLUDEPATH += ./headers \
     ./src \
     ./test
-HEADERS += headers/global.h \
+PRECOMPILED_HEADER = headers/precompiled.h
+HEADERS += headers/precompiled.h \
+    headers/global.h \
     headers/EnvisionException.h \
     src/TestEvent.h \
     src/TestRunner.h \
