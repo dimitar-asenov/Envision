@@ -1,0 +1,7 @@
+/debug
+/Makefile.Release
+/Makefile
+/Makefile.Debug
+/release
+/*.so
+/Envision
