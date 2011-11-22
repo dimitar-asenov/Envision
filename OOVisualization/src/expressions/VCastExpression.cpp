@@ -44,16 +44,16 @@ ITEM_COMMON_DEFINITIONS(VCastExpression, "item")
 
 VCastExpression::VCastExpression(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<>, CastExpression>(parent, node, style),
-	type_(NULL),
-	expr_(NULL)
+	type_(nullptr),
+	expr_(nullptr)
 {
 }
 
 VCastExpression::~VCastExpression()
 {
 	// These were automatically deleted by LayoutProvider's destructor
-	type_ = NULL;
-	expr_ = NULL;
+	type_ = nullptr;
+	expr_ = nullptr;
 }
 
 void VCastExpression::determineChildren()

@@ -48,13 +48,13 @@ ITEM_COMMON_DEFINITIONS(VModule, "item")
 
 VModule::VModule(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<PanelBorderLayout>, Module>(parent, node, style),
-	header( new SequentialLayout(NULL, &style->header())),
-	name( new VText(NULL, node->nameNode(), &style->name())),
-	content(new PositionLayout(NULL, &style->content()))
+	header( new SequentialLayout(nullptr, &style->header())),
+	name( new VText(nullptr, node->nameNode(), &style->name())),
+	content(new PositionLayout(nullptr, &style->content()))
 {
 	layout()->setTop(true);
 	layout()->top()->setMiddle(header);
-	header->append(new Static(NULL, &style->icon()));
+	header->append(new Static(nullptr, &style->icon()));
 	header->append(name);
 	layout()->setContent(content);
 }
@@ -62,9 +62,9 @@ VModule::VModule(Item* parent, NodeType* node, const StyleType* style) :
 VModule::~VModule()
 {
 	// These were automatically deleted by LayoutProvider's destructor
-	header = NULL ;
-	name = NULL;
-	content = NULL;
+	header = nullptr;
+	name = nullptr;
+	content = nullptr;
 }
 
 void VModule::determineChildren()

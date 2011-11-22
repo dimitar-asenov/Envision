@@ -85,7 +85,7 @@ TEST(FilePersistence, CopyPartialToClipboard)
 
 	model.load(&store, "partial");
 	TestNodes::PartialList* root = dynamic_cast<TestNodes::PartialList*> (model.root());
-	CHECK_CONDITION(root != NULL);
+	CHECK_CONDITION(root != nullptr);
 
 	SystemClipboard sc;
 	sc.putNode(root);

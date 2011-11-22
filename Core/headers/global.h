@@ -39,7 +39,7 @@ template <class T> inline void SAFE_DELETE( T* & object)
 	if (object)
 	{
 		delete object;
-		object = NULL;
+		object = nullptr;
 	}
 }
 

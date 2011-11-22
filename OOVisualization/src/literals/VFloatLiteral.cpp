@@ -44,7 +44,7 @@ ITEM_COMMON_DEFINITIONS(VFloatLiteral, "item")
 
 VFloatLiteral::VFloatLiteral(Item* parent, NodeType *node, const StyleType *style) :
 	ItemWithNode<Item, FloatLiteral>(parent, node, style),
-	vis_(NULL)
+	vis_(nullptr)
 {
 }
 

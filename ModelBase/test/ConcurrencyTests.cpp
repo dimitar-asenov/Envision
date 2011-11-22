@@ -77,7 +77,7 @@ TEST(ModelBase, SingleWriteUnitCheck)
 
 	model.endModification();
 
-	model.beginModification(NULL);
+	model.beginModification(nullptr);
 	model.undo();
 	model.endModification();
 
@@ -87,7 +87,7 @@ TEST(ModelBase, SingleWriteUnitCheck)
 	CHECK_STR_EQUAL(QString(), one->name()->get());
 	CHECK_STR_EQUAL(QString(), two->name()->get());
 
-	model.beginModification(NULL);
+	model.beginModification(nullptr);
 	model.redo();
 	model.endModification();
 

@@ -73,7 +73,7 @@ void PersistentStoreMock::saveNode(const Node *node, const QString &name, bool p
 
 Node* PersistentStoreMock::loadModel(Model*, const QString &)
 {
-	return NULL;
+	return nullptr;
 }
 
 QList<LoadedNode> PersistentStoreMock::loadAllSubNodes(Node* )
@@ -83,7 +83,7 @@ QList<LoadedNode> PersistentStoreMock::loadAllSubNodes(Node* )
 
 Node* PersistentStoreMock::loadSubNode(Node*, const QString&)
 {
-	return NULL;
+	return nullptr;
 }
 
 QList<LoadedNode> PersistentStoreMock::loadPartialNode(Node*)
@@ -98,7 +98,7 @@ QString PersistentStoreMock::currentNodeType() const
 
 PersistedNode* PersistentStoreMock::loadCompleteNodeSubtree(const QString&, NodeIdType, NodeIdType)
 {
-	return NULL;
+	return nullptr;
 }
 
 int PersistentStoreMock::loadIntValue()

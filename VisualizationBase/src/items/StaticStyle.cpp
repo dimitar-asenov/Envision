@@ -37,7 +37,7 @@
 namespace Visualization {
 
 StaticStyle::StaticStyle() :
-	itemStyle_(NULL)
+	itemStyle_(nullptr)
 {
 
 }

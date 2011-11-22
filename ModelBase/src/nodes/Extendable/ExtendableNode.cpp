@@ -84,7 +84,7 @@ ExtendableNode::ExtendableNode(Node *parent, Model* model, AttributeChain& metaD
 	for (int level = 0; level < meta.numLevels(); ++level)
 	{
 		AttributeChain* currentLevel = meta.level(level);
-		subnodes[level] = QVector<Node*> (currentLevel->size(), NULL);
+		subnodes[level] = QVector<Node*> (currentLevel->size(), nullptr);
 
 		for (int i = 0; i < currentLevel->size(); ++i)
 			if ( !(*currentLevel)[i].optional() ) subnodes[level][i] = Node::createNewNode((*currentLevel)[i].type(), this, model);
@@ -95,7 +95,7 @@ ExtendableNode::ExtendableNode(Node *parent, NodeIdType id, PersistentStore &sto
 	Node(parent, id), meta(metaData), subnodes(meta.numLevels())
 {
 	for (int level = 0; level < meta.numLevels(); ++level)
-		subnodes[level] = QVector<Node*> (meta.level(level)->size(), NULL);
+		subnodes[level] = QVector<Node*> (meta.level(level)->size(), nullptr);
 
 	QList<LoadedNode> children = store.loadAllSubNodes(this);
 
@@ -147,7 +147,7 @@ Node* ExtendableNode::get(const QString &attributeName) const
 {
 	ExtendableIndex index = meta.indexForAttribute(attributeName);
 	if ( index.isValid() ) return subnodes[index.level()][index.index()];
-	return NULL;
+	return nullptr;
 }
 
 bool ExtendableNode::hasAttribute(const QString& attributeName)
@@ -174,7 +174,7 @@ void ExtendableNode::removeOptional(const ExtendableIndex &attributeIndex)
 {
 	if ( meta.attribute(attributeIndex).optional() )
 	{
-		execute(new ExtendedNodeChild(this, NULL, attributeIndex, &subnodes));
+		execute(new ExtendedNodeChild(this, nullptr, attributeIndex, &subnodes));
 	}
 	else
 		throw ModelException("Trying to remove a non-optional attribute");
@@ -186,7 +186,7 @@ void ExtendableNode::save(PersistentStore &store) const
 	{
 		AttributeChain* currentLevel = meta.level(level);
 		for (int i = 0; i < currentLevel->size(); ++i)
-			if ( subnodes[level][i] != NULL && currentLevel->at(i).persistent() ) store.saveNode(subnodes[level][i], currentLevel->at(i).name(), currentLevel->at(i).partialHint());
+			if ( subnodes[level][i] != nullptr && currentLevel->at(i).persistent() ) store.saveNode(subnodes[level][i], currentLevel->at(i).name(), currentLevel->at(i).partialHint());
 	}
 }
 
@@ -214,7 +214,7 @@ void ExtendableNode::removeAllNodes()
 {
 	for (int level = 0; level < subnodes.size(); ++level)
 		for (int i = 0; i < subnodes[level].size(); ++i)
-			if ( subnodes[level][i] ) execute(new ExtendedNodeChild(this, NULL, ExtendableIndex(level,i), &subnodes));
+			if ( subnodes[level][i] ) execute(new ExtendedNodeChild(this, nullptr, ExtendableIndex(level,i), &subnodes));
 }
 
 void ExtendableNode::verifyHasAllMandatoryAttributes()
@@ -224,7 +224,7 @@ void ExtendableNode::verifyHasAllMandatoryAttributes()
 		AttributeChain* currentLevel = meta.level(level);
 
 		for (int i = 0; i < currentLevel->size(); ++i)
-			if ( subnodes[level][i] == NULL && (*currentLevel)[i].optional() == false )
+			if ( subnodes[level][i] == nullptr && (*currentLevel)[i].optional() == false )
 				throw ModelException("An ExtendableNode has an uninitialized mandatory attribute " + (*currentLevel)[i].name());
 	}
 }

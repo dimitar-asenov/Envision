@@ -73,7 +73,7 @@ StyleNode::StyleNode(StyleNode* parent_, const QString& prototypeName, const QSt
 }
 
 StyleNode::StyleNode(const QString& rootStyleFileName, const QString& folderWithinStyles) :
-	parent(NULL)
+	parent(nullptr)
 {
 	folder = QDir::current().absoluteFilePath(baseFolder + "/" + folderWithinStyles);
 	doc = openStyleDoc(folder + "/" + rootStyleFileName);

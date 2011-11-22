@@ -37,7 +37,7 @@
 namespace Model {
 
 AttributeChain::AttributeChain() :
-	parent_(NULL), numLevels_(1)
+	parent_(nullptr), numLevels_(1)
 {
 }
 

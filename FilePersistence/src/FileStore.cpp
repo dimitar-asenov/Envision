@@ -45,7 +45,7 @@ namespace FilePersistence {
 const char* XML_NEWUNIT_NODE_TAG = "persistencenewunit";
 
 FileStore::FileStore() : // TODO the Envision folder should be taken from the environment not hardcoded.
-	baseFolder(QDir::home().path() + QDir::toNativeSeparators("/Envision/projects")), working(false), xml(NULL)
+	baseFolder(QDir::home().path() + QDir::toNativeSeparators("/Envision/projects")), working(false), xml(nullptr)
 {
 }
 
@@ -138,7 +138,7 @@ void FileStore::saveNewPersistenceUnit(const Model::Node *node, const QString &n
 
 	xml = new XMLModel();
 
-	if (oldXML == NULL)
+	if (oldXML == nullptr)
 	{
 		// If this is the root node save the model information
 		xml->beginSaveChildNode("model");
@@ -151,7 +151,7 @@ void FileStore::saveNewPersistenceUnit(const Model::Node *node, const QString &n
 	else saveNodeDirectly(node, name, partialLoadHint);
 
 	QString filename;
-	if ( oldXML == NULL ) filename = name; // This is the root of the model, save the file name
+	if ( oldXML == nullptr ) filename = name; // This is the root of the model, save the file name
 	else
 		filename = QString::number(node->id()); // This is not the root, so save by id
 
@@ -233,7 +233,7 @@ Model::Node* FileStore::loadModel(Model::Model* model, const QString &name)
 		xml->goToFirstChild();
 		model->setNextId(xml->getNextId());
 		xml->goToFirstChild();
-		ln =  loadNode(NULL);
+		ln =  loadNode(nullptr);
 
 		SAFE_DELETE(xml);
 	}
@@ -304,7 +304,7 @@ Model::Node* FileStore::loadSubNode(Model::Node* parent, const QString& name)
 {
 	checkIsWorking();
 
-	if (!xml->hasChild(name)) return NULL;
+	if (!xml->hasChild(name)) return nullptr;
 	xml->beginLoadChildNode(name);
 
 	Model::LoadedNode ln;
@@ -366,7 +366,7 @@ Model::PersistedNode* FileStore::loadCompleteNodeSubtree(const QString& modelNam
 	storeAccess.lock();
 	working = true;
 
-	Model::PersistedNode* result = NULL;
+	Model::PersistedNode* result = nullptr;
 
 	try
 	{
@@ -407,7 +407,7 @@ Model::PersistedNode* FileStore::loadNodeData()
 
 	if (xml->getType() == XML_NEWUNIT_NODE_TAG) return loadPersistentUnitData();
 
-	Model::PersistedNode* result = NULL;
+	Model::PersistedNode* result = nullptr;
 
 	// Determine the type of the node
 	if ( xml->isString() )

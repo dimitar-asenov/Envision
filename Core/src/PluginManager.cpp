@@ -127,7 +127,7 @@ EnvisionPlugin* PluginManager::getLoadedPluginInterface(QString pluginId)
 		return qobject_cast<EnvisionPlugin*> (idToPluginLoaderMap.value(pluginId)->instance());
 	}
 	else
-		return NULL;
+		return nullptr;
 }
 
 QString PluginManager::getLibraryFileName(const QString pluginId)

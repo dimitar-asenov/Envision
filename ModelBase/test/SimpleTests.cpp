@@ -82,7 +82,7 @@ TEST(ModelBase, ExtendableMetaData)
 TEST(ModelBase, SimpleModelCreation)
 {
 	Model model;
-	CHECK_CONDITION( model.root() == NULL );
+	CHECK_CONDITION( model.root() == nullptr );
 
 	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.createRoot("BinaryNode"));
 	CHECK_CONDITION( model.root() == root );
@@ -101,18 +101,18 @@ TEST(ModelBase, RemoveOptional)
 	TestNodes::BinaryNode* left = root->setLeft<TestNodes::BinaryNode>();
 	model.endModification();
 	CHECK_CONDITION( root->left() == left );
-	CHECK_CONDITION( root->left() != NULL );
+	CHECK_CONDITION( root->left() != nullptr );
 
 	model.beginModification(root, "Removing left node");
 	root->removeLeftNode();
 	model.endModification();
-	CHECK_CONDITION( root->left() == NULL);
+	CHECK_CONDITION( root->left() == nullptr);
 
 	model.beginModification(root, "Making left node");
 	root->setLeft<TestNodes::BinaryNode>();
 	model.endModification();
 	CHECK_CONDITION( root->left() != left );
-	CHECK_CONDITION( root->left() != NULL );
+	CHECK_CONDITION( root->left() != nullptr );
 }
 
 TEST(ModelBase, ChildNodeRetrieval)

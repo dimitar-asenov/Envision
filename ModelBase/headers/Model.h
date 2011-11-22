@@ -391,7 +391,7 @@ class MODELBASE_API Model: public QObject
 		 * 				used. The current store is the one from which the model was loaded. If this is not NULL it will
 		 * 				be used instead of the current store.
 		 */
-		void save(PersistentStore* store = NULL);
+		void save(PersistentStore* store = nullptr);
 
 		/**
 		 * Loads the current model tree from the specified persistent store. The provided store will become the current

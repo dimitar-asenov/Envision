@@ -69,7 +69,7 @@ Q_EXPORT_PLUGIN2( interactionbase, Interaction::InteractionBase )
 
 namespace Interaction {
 
-Log* InteractionBase::logger = NULL;
+Log* InteractionBase::logger = nullptr;
 
 bool InteractionBase::initialize(Envision::EnvisionManager&)
 {

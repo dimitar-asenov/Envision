@@ -122,14 +122,14 @@ int Braces::contentTop()
 QSize Braces::innerSize(QSize outterSize) const
 {
 	int size = outterSize.height();
-	QSize lb = getSizeOfBrace(style()->leftBrace(), style()->leftBraceFont(), size, NULL);
-	QSize rb = getSizeOfBrace(style()->rightBrace(), style()->rightBraceFont(), size, NULL);
+	QSize lb = getSizeOfBrace(style()->leftBrace(), style()->leftBraceFont(), size, nullptr);
+	QSize rb = getSizeOfBrace(style()->rightBrace(), style()->rightBraceFont(), size, nullptr);
 
 	while(size >= 0 && (lb.width() + rb.width() > outterSize.width() || lb.height() + rb.height() > outterSize.height()))
 	{
 		size--;
-		lb = getSizeOfBrace(style()->leftBrace(), style()->leftBraceFont(), size, NULL);
-		rb = getSizeOfBrace(style()->rightBrace(), style()->rightBraceFont(), size, NULL);
+		lb = getSizeOfBrace(style()->leftBrace(), style()->leftBraceFont(), size, nullptr);
+		rb = getSizeOfBrace(style()->rightBrace(), style()->rightBraceFont(), size, nullptr);
 	}
 
 	return QSize( outterSize.width() - lb.width() - rb.width(), outterSize.height());
@@ -138,8 +138,8 @@ QSize Braces::innerSize(QSize outterSize) const
 QSize Braces::outterSize(QSize innerSize) const
 {
 	int size = innerSize.height();
-	QSize lb = getSizeOfBrace(style()->leftBrace(), style()->leftBraceFont(), size, NULL);
-	QSize rb = getSizeOfBrace(style()->rightBrace(), style()->rightBraceFont(), size, NULL);
+	QSize lb = getSizeOfBrace(style()->leftBrace(), style()->leftBraceFont(), size, nullptr);
+	QSize rb = getSizeOfBrace(style()->rightBrace(), style()->rightBraceFont(), size, nullptr);
 
 	return QSize( lb.width() + innerSize.width() + rb.width(), lb.height());
 }

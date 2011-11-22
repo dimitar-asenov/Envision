@@ -44,7 +44,7 @@ TEST(ModelBase, ModificationNotificationTests)
 	Model model;
 	NotificationListener nl(model);
 
-	CHECK_CONDITION(nl.root == NULL);
+	CHECK_CONDITION(nl.root == nullptr);
 	CHECK_INT_EQUAL(0, nl.modifiedNodes.size());
 
 	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.createRoot("BinaryNode"));
@@ -72,7 +72,7 @@ TEST(ModelBase, ModificationNotificationTests)
 	CHECK_CONDITION(nl.modifiedNodes[3] == right->name());
 
 	nl.modifiedNodes.clear();
-	model.beginModification(NULL);
+	model.beginModification(nullptr);
 	model.undo();
 	model.undo();
 	model.endModification();

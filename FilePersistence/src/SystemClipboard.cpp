@@ -50,7 +50,7 @@ namespace FilePersistence {
 static const QString CLIPBOARD_TAG = "clipboard";
 
 SystemClipboard::SystemClipboard() :
-	xml(NULL), numNodes_(0)
+	xml(nullptr), numNodes_(0)
 {
 	readClipboard();
 }
@@ -185,7 +185,7 @@ QList<LoadedNode> SystemClipboard::loadAllSubNodes(Node* parent)
 
 Node* SystemClipboard::loadSubNode(Node* parent, const QString& name)
 {
-	if (!xml->hasChild(name)) return NULL;
+	if (!xml->hasChild(name)) return nullptr;
 
 	xml->beginLoadChildNode(name);
 	LoadedNode ln = loadNode(parent);

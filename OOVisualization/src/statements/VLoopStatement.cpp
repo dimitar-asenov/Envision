@@ -47,31 +47,31 @@ ITEM_COMMON_DEFINITIONS(VLoopStatement, "item")
 
 VLoopStatement::VLoopStatement(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode< LayoutProvider<PanelBorderLayout>, LoopStatement>(parent, node, style),
-	header(new SequentialLayout(NULL, &style->header())),
-	conditionBackground(NULL),
-	initStepBackground(NULL),
-	updateStepBackground(NULL),
-	condition(NULL),
-	initStep(NULL),
-	updateStep(NULL),
-	body( NULL )
+	header(new SequentialLayout(nullptr, &style->header())),
+	conditionBackground(nullptr),
+	initStepBackground(nullptr),
+	updateStepBackground(nullptr),
+	condition(nullptr),
+	initStep(nullptr),
+	updateStep(nullptr),
+	body(nullptr)
 {
 	layout()->setTop(true);
 	layout()->top()->setFirst(header);
-	header->append(new Static(NULL, &style->icon()));
+	header->append(new Static(nullptr, &style->icon()));
 }
 
 VLoopStatement::~VLoopStatement()
 {
 	// These were automatically deleted by LayoutProvider's destructor
-	header = NULL;
-	conditionBackground = NULL;
-	initStepBackground = NULL;
-	updateStepBackground = NULL;
-	condition = NULL;
-	initStep = NULL;
-	updateStep = NULL;
-	body = NULL;
+	header = nullptr;
+	conditionBackground = nullptr;
+	initStepBackground = nullptr;
+	updateStepBackground = nullptr;
+	condition = nullptr;
+	initStep = nullptr;
+	updateStep = nullptr;
+	body = nullptr;
 }
 
 void VLoopStatement::determineChildren()
@@ -85,45 +85,45 @@ void VLoopStatement::determineChildren()
 	if (initStep && initStep->node() != node()->initStep())
 	{
 		header->removeAll(initStepBackground);
-		initStep = NULL;
-		initStepBackground = NULL;
+		initStep = nullptr;
+		initStepBackground = nullptr;
 	}
 
 	if (condition && condition->node() != node()->condition())
 	{
 		header->removeAll(conditionBackground);
-		condition = NULL;
-		conditionBackground = NULL;
+		condition = nullptr;
+		conditionBackground = nullptr;
 	}
 
 	if (updateStep && updateStep->node() != node()->updateStep())
 	{
 		header->removeAll(updateStepBackground);
-		updateStep = NULL;
-		updateStepBackground = NULL;
+		updateStep = nullptr;
+		updateStepBackground = nullptr;
 	}
 
 	// Create nodes which are present in the model
 	if (!initStep && node()->initStep())
 	{
-		initStepBackground = new SequentialLayout(NULL, &style()->initStep());
-		initStep = renderer()->render(NULL, node()->initStep());
+		initStepBackground = new SequentialLayout(nullptr, &style()->initStep());
+		initStep = renderer()->render(nullptr, node()->initStep());
 		initStepBackground->append(initStep);
 		header->insert(initStepBackground, 1);
 	}
 
 	if (!updateStep && node()->updateStep())
 	{
-		updateStepBackground = new SequentialLayout(NULL, &style()->updateStep());
-		updateStep = renderer()->render(NULL, node()->updateStep());
+		updateStepBackground = new SequentialLayout(nullptr, &style()->updateStep());
+		updateStep = renderer()->render(nullptr, node()->updateStep());
 		updateStepBackground->append(updateStep);
 		header->append(updateStepBackground);
 	}
 
 	if (!condition && node()->condition())
 	{
-		conditionBackground = new SequentialLayout(NULL, &style()->condition());
-		condition = renderer()->render(NULL, node()->condition());
+		conditionBackground = new SequentialLayout(nullptr, &style()->condition());
+		condition = renderer()->render(nullptr, node()->condition());
 		conditionBackground->append(condition);
 		header->insert(conditionBackground, (initStep?2:1));
 	}

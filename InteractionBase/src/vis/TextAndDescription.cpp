@@ -40,8 +40,8 @@ ITEM_COMMON_DEFINITIONS(TextAndDescription, "item")
 using namespace Visualization;
 
 TextAndDescription::TextAndDescription(Item* parent, const StyleType* style) :
-	Item(parent, style), layout(new SequentialLayout(this, &style->layout())), text( new Text(NULL, &style->text())),
-	description( new Text(NULL, &style->description()))
+	Item(parent, style), layout(new SequentialLayout(this, &style->layout())), text( new Text(nullptr, &style->text())),
+	description( new Text(nullptr, &style->description()))
 {
 	layout->append(text);
 	layout->append(description);
@@ -51,8 +51,8 @@ TextAndDescription::~TextAndDescription()
 	SAFE_DELETE_ITEM(layout);
 
 	// These will automatically be deleted by layout's destructor
-	text = NULL;
-	description = NULL;
+	text = nullptr;
+	description = nullptr;
 }
 
 bool TextAndDescription::sizeDependsOnParent() const

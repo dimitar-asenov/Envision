@@ -377,7 +377,7 @@ class MODELBASE_API Node
 		 * 			default value is NULL. Note that this should only be set to a value different than NULL in case the
 		 * 			parent node does not yet belong to a model. This arises only when the root node is constructed.
 		 */
-		static Node* createNewNode(const QString &type, Node* parent, Model* model = NULL);
+		static Node* createNewNode(const QString &type, Node* parent, Model* model = nullptr);
 
 		/**
 		 * Creates a new node of the specified type by loading it from a persistent store.

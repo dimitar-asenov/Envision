@@ -44,11 +44,11 @@ ITEM_COMMON_DEFINITIONS(VIfStatementCF, "item")
 
 VIfStatementCF::VIfStatementCF(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<ControlFlowItem, IfStatement>(parent, node, style),
-	conditionBackground(NULL),
-	condition(NULL),
-	thenBranch( NULL ),
-	elseBranch(NULL),
-	vis_(NULL)
+	conditionBackground(nullptr),
+	condition(nullptr),
+	thenBranch(nullptr),
+	elseBranch(nullptr),
+	vis_(nullptr)
 {
 }
 
@@ -60,7 +60,7 @@ VIfStatementCF::~VIfStatementCF()
 	SAFE_DELETE_ITEM(vis_);
 
 	// These were deleted by the destructors of their backgrounds above.
-	condition = NULL;
+	condition = nullptr;
 }
 
 bool VIfStatementCF::sizeDependsOnParent() const
@@ -98,15 +98,15 @@ void VIfStatementCF::determineChildren()
 		if (condition && condition->node() != node()->condition())
 		{
 			SAFE_DELETE_ITEM(conditionBackground);
-			condition = NULL;
-			conditionBackground = NULL;
+			condition = nullptr;
+			conditionBackground = nullptr;
 		}
 
 		// Create nodes which are present in the model
 		if (!condition && node()->condition())
 		{
-			conditionBackground = new SequentialLayout(NULL, &style()->condition());
-			condition = renderer()->render(NULL, node()->condition());
+			conditionBackground = new SequentialLayout(nullptr, &style()->condition());
+			condition = renderer()->render(nullptr, node()->condition());
 			conditionBackground->append(condition);
 			conditionBackground->setParentItem(this);
 		}
@@ -126,9 +126,9 @@ void VIfStatementCF::determineChildren()
 		SAFE_DELETE_ITEM(thenBranch);
 
 		// These were deleted by the destructors of their backgrounds above.
-		condition = NULL;
+		condition = nullptr;
 
-		synchronizeItem<VIfStatement>(vis_, node(), NULL);
+		synchronizeItem<VIfStatement>(vis_, node(), nullptr);
 	}
 }
 

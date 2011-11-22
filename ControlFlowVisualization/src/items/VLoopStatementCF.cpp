@@ -44,14 +44,14 @@ ITEM_COMMON_DEFINITIONS(VLoopStatementCF, "item")
 
 VLoopStatementCF::VLoopStatementCF(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<ControlFlowItem, LoopStatement>(parent, node, style),
-	conditionBackground(NULL),
-	initStepBackground(NULL),
-	updateStepBackground(NULL),
-	condition(NULL),
-	initStep(NULL),
-	updateStep(NULL),
-	body( NULL ),
-	vis_(NULL)
+	conditionBackground(nullptr),
+	initStepBackground(nullptr),
+	updateStepBackground(nullptr),
+	condition(nullptr),
+	initStep(nullptr),
+	updateStep(nullptr),
+	body(nullptr),
+	vis_(nullptr)
 {
 }
 
@@ -64,9 +64,9 @@ VLoopStatementCF::~VLoopStatementCF()
 	SAFE_DELETE_ITEM(vis_);
 
 	// These were deleted by the destructors of their backgrounds above.
-	condition = NULL;
-	initStep = NULL;
-	updateStep = NULL;
+	condition = nullptr;
+	initStep = nullptr;
+	updateStep = nullptr;
 }
 
 bool VLoopStatementCF::sizeDependsOnParent() const
@@ -103,45 +103,45 @@ void VLoopStatementCF::determineChildren()
 		if (initStep && initStep->node() != node()->initStep())
 		{
 			SAFE_DELETE_ITEM(initStepBackground);
-			initStep = NULL;
-			initStepBackground = NULL;
+			initStep = nullptr;
+			initStepBackground = nullptr;
 		}
 
 		if (condition && condition->node() != node()->condition())
 		{
 			SAFE_DELETE_ITEM(conditionBackground);
-			condition = NULL;
-			conditionBackground = NULL;
+			condition = nullptr;
+			conditionBackground = nullptr;
 		}
 
 		if (updateStep && updateStep->node() != node()->updateStep())
 		{
 			SAFE_DELETE_ITEM(updateStepBackground);
-			updateStep = NULL;
-			updateStepBackground = NULL;
+			updateStep = nullptr;
+			updateStepBackground = nullptr;
 		}
 
 		// Create nodes which are present in the model
 		if (!initStep && node()->initStep())
 		{
-			initStepBackground = new SequentialLayout(NULL, &style()->initStep());
-			initStep = renderer()->render(NULL, node()->initStep());
+			initStepBackground = new SequentialLayout(nullptr, &style()->initStep());
+			initStep = renderer()->render(nullptr, node()->initStep());
 			initStepBackground->append(initStep);
 			initStepBackground->setParentItem(this);
 		}
 
 		if (!updateStep && node()->updateStep())
 		{
-			updateStepBackground = new SequentialLayout(NULL, &style()->updateStep());
-			updateStep = renderer()->render(NULL, node()->updateStep());
+			updateStepBackground = new SequentialLayout(nullptr, &style()->updateStep());
+			updateStep = renderer()->render(nullptr, node()->updateStep());
 			updateStepBackground->append(updateStep);
 			updateStepBackground->setParentItem(this);
 		}
 
 		if (!condition && node()->condition())
 		{
-			conditionBackground = new SequentialLayout(NULL, &style()->condition());
-			condition = renderer()->render(NULL, node()->condition());
+			conditionBackground = new SequentialLayout(nullptr, &style()->condition());
+			condition = renderer()->render(nullptr, node()->condition());
 			conditionBackground->append(condition);
 			conditionBackground->setParentItem(this);
 		}
@@ -161,11 +161,11 @@ void VLoopStatementCF::determineChildren()
 		SAFE_DELETE_ITEM(body);
 
 		// These were deleted by the destructors of their backgrounds above.
-		condition = NULL;
-		initStep = NULL;
-		updateStep = NULL;
+		condition = nullptr;
+		initStep = nullptr;
+		updateStep = nullptr;
 
-		synchronizeItem<VLoopStatement>(vis_, node(), NULL);
+		synchronizeItem<VLoopStatement>(vis_, node(), nullptr);
 	}
 }
 

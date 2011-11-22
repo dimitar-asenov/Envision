@@ -37,7 +37,7 @@
 namespace Model {
 
 AddModifiedNode::AddModifiedNode(QList<Node*>& modifiedTargets_, Node* target_) :
-	UndoCommand(NULL, "Add a modification target"), modifiedTargets(modifiedTargets_), target(target_)
+	UndoCommand(nullptr, "Add a modification target"), modifiedTargets(modifiedTargets_), target(target_)
 {
 }
 

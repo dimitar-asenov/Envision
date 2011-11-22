@@ -133,7 +133,7 @@ T* List::insert(int position)
 {
 	if (!fullyLoaded) loadFully(* (model()->store()));
 
-	T* newNode = new T(this, NULL);
+	T* newNode = new T(this, nullptr);
 	if (! Node::isTypeRegistered(newNode->typeName())) throw ModelException("Trying to create a list entry of an unregistered type.");
 
 	execute(new ListInsert(this, nodes_, newNode, position));

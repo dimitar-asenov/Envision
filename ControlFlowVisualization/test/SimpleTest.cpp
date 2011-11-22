@@ -47,7 +47,7 @@ namespace ControlFlowVisualization {
 
 Class* addClass(Model::Model* model, Project* parent)
 {
-	Class* cl = NULL;
+	Class* cl = nullptr;
 
 	if (!parent) cl = dynamic_cast<Class*> (model->createRoot("Class"));
 	model->beginModification(parent ? static_cast<Model::Node*> (parent) :cl, "Adding a hello world class.");
@@ -61,7 +61,7 @@ Class* addClass(Model::Model* model, Project* parent)
 
 Method* addComplicated(Model::Model* model, Class* parent)
 {
-	Method* met = NULL;
+	Method* met = nullptr;
 
 	if (!parent) met = dynamic_cast<Method*> (model->createRoot("Method"));
 	model->beginModification(parent? static_cast<Model::Node*> (parent) : met, "Adding a Complicated method.");
@@ -151,7 +151,7 @@ Method* addComplicated(Model::Model* model, Class* parent)
 
 Method* addDivBySix(Model::Model* model, Class* parent)
 {
-	Method* divbysix = NULL;
+	Method* divbysix = nullptr;
 
 	if (!parent) divbysix = dynamic_cast<Method*> (model->createRoot("Method"));
 	model->beginModification(parent? static_cast<Model::Node*> (parent) : divbysix, "Adding a divBySix method.");
@@ -229,29 +229,29 @@ TEST(ControlFlowVisualization, SimpleTest)
 {
 	Model::Model* model = new Model::Model();
 
-	Class* cl = NULL;
-	cl = addClass(model, NULL);
+	Class* cl = nullptr;
+	cl = addClass(model, nullptr);
 
-	Method* complicated = NULL;
+	Method* complicated = nullptr;
 	complicated = addComplicated(model, cl);
 
-	Method* divbysix = NULL;
+	Method* divbysix = nullptr;
 	divbysix = addDivBySix(model, cl);
 
-	Model::Node* top_level = NULL;
+	Model::Node* top_level = nullptr;
 	if (cl) top_level = cl;
 	else if(complicated) top_level = complicated;
 	else top_level = divbysix;
 
 	Scene* scene = new Scene();
-	scene->addTopLevelItem( scene->defaultRenderer()->render(NULL, top_level) );
+	scene->addTopLevelItem( scene->defaultRenderer()->render(nullptr, top_level) );
 	scene->scheduleUpdate();
 	scene->listenToModel(model);
 
 	// Create view
 	MainView* view = new MainView(scene);
 
-	CHECK_CONDITION(view != NULL);
+	CHECK_CONDITION(view != nullptr);
 }
 
 }

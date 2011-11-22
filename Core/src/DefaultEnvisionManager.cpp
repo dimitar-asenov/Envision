@@ -37,7 +37,7 @@
 namespace Envision {
 
 DefaultEnvisionManager::DefaultEnvisionManager() :
-	pm(NULL), exitSet(false)
+	pm(nullptr), exitSet(false)
 {
 }
 

@@ -39,7 +39,7 @@ namespace Visualization {
 InteractionHandler* SceneHandlerItem::handler_ = InteractionHandler::instance();
 
 SceneHandlerItem::SceneHandlerItem(Scene* scene) :
-	Item(NULL)
+	Item(nullptr)
 {
 	scene->addItem(this);
 }

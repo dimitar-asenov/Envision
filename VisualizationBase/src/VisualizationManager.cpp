@@ -39,7 +39,7 @@ namespace Visualization {
 VisualizationManager VisualizationManager::theInstance = VisualizationManager();
 
 VisualizationManager::VisualizationManager() :
-	envisionManager(NULL)
+	envisionManager(nullptr)
 {
 }
 

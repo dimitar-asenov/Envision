@@ -64,7 +64,7 @@ void VListCF::determineChildren()
 	// Inserts elements that are not yet visualized and adjusts the order to match that in 'nodes'.
 	for (int i = 0; i < node()->size(); ++i)
 	{
-		if (i >= items.size() ) items.append( renderer()->render(NULL, node()->at<Node>(i)));	// This node is new
+		if (i >= items.size() ) items.append( renderer()->render(nullptr, node()->at<Node>(i)));	// This node is new
 		else if ( items[i]->node() == node()->at<Node>(i) )	continue;	// This node is already there
 		else
 		{
@@ -82,7 +82,7 @@ void VListCF::determineChildren()
 			}
 
 			// The node was not found, insert a visualization here
-			if (!found ) items.insert(i, renderer()->render(NULL, node()->at<Node>(i)));
+			if (!found ) items.insert(i, renderer()->render(nullptr, node()->at<Node>(i)));
 		}
 	}
 
@@ -237,14 +237,14 @@ QList< Item* > VListCF::extractSingleItems()
 
 void VListCF::buildCompositeItems( QList< Item* >& singleItems )
 {
-	SequentialLayout* seq = NULL;
+	SequentialLayout* seq = nullptr;
 
 	for(int i = 0; i<singleItems.size(); ++i)
 	{
 		ControlFlowItem* cfi = dynamic_cast<ControlFlowItem*> (singleItems[i]);
 		if (cfi)
 		{
-			if (seq) seq = NULL;
+			if (seq) seq = nullptr;
 
 			cfi->setParentItem(this);
 			items_.append(cfi);

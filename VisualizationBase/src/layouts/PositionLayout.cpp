@@ -86,7 +86,7 @@ void PositionLayout::insert(Item* item)
 void PositionLayout::remove(int index, bool deleteItem)
 {
 	if (deleteItem) SAFE_DELETE_ITEM( items[index]);
-	else if(items[index]) items[index]->setParentItem(NULL);
+	else if(items[index]) items[index]->setParentItem(nullptr);
 
 	SAFE_DELETE( positions[index] );
 	items.remove(index);
@@ -107,7 +107,7 @@ void PositionLayout::removeAll(Item* item, bool deleteItem)
 	}
 
 	if (deleteItem) SAFE_DELETE_ITEM(item);
-	else if (item) item->setParentItem(NULL);
+	else if (item) item->setParentItem(nullptr);
 
 	setUpdateNeeded();
 }
@@ -117,7 +117,7 @@ void PositionLayout::clear(bool deleteItems)
 	for (int i = 0; i<items.size(); ++i)
 	{
 		if (deleteItems) SAFE_DELETE_ITEM(items[i]);
-		else if (items[i]) items[i]->setParentItem(NULL);
+		else if (items[i]) items[i]->setParentItem(nullptr);
 	}
 
 	for (int i = 0; i<positions.size(); ++i) SAFE_DELETE(positions[i]);
@@ -141,7 +141,7 @@ void PositionLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes, Mode
 	// Inserts elements that are not yet visualized and adjusts the order to match that in 'nodes'.
 	for (int i = 0; i < nodes.size(); ++i)
 	{
-		if (i >= items.size() ) insert( renderer->render(NULL, nodes[i]));	// This node is new
+		if (i >= items.size() ) insert( renderer->render(nullptr, nodes[i]));	// This node is new
 		else if ( items[i]->node() == nodes[i] ) continue;	// This node is already there
 		else
 		{
@@ -161,7 +161,7 @@ void PositionLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes, Mode
 			// The node was not found, insert a visualization here
 			if (!found )
 			{
-				insert( renderer->render(NULL, nodes[i]) );
+				insert( renderer->render(nullptr, nodes[i]) );
 				swap(i, items.size()-1);
 			}
 		}

@@ -53,7 +53,7 @@ Class* ThisExpression::classDefinition()
 		p = p->parent();
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 }

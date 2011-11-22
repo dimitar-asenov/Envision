@@ -117,7 +117,7 @@ Node* Node::lowestCommonAncestor(Node* other)
 	}
 
 	// Find the lowest common ancestor
-	n = NULL;
+	n = nullptr;
 	while ( thisParents.size() > 0 && otherParents.size() > 0 && thisParents.first() == otherParents.first() )
 	{
 		n = thisParents.first();
@@ -131,7 +131,7 @@ Node* Node::lowestCommonAncestor(Node* other)
 
 bool Node::isAncestorOf(const Node* other) const
 {
-	if (other == NULL) return false;
+	if (other == nullptr) return false;
 
 	const Node* p = other->parent();
 
@@ -145,9 +145,9 @@ Node* Node::navigateTo(Node* source, QString path)
 	if (source == this || isAncestorOf(source))
 	{
 		if (parent_) return parent_->navigateTo(this, path);
-		else return NULL;
+		else return nullptr;
 	}
-	else return NULL;
+	else return nullptr;
 }
 
 /***********************************************************************************************************************
@@ -197,7 +197,7 @@ NodeIdType Node::persistentUnitId() const
 	while ( persistentUnitNode && persistentUnitNode->isNewPersistenceUnit() == false )
 		persistentUnitNode = persistentUnitNode->parent();
 
-	if (persistentUnitNode == NULL || persistentUnitNode->parent() == NULL) return 0;
+	if (persistentUnitNode == nullptr || persistentUnitNode->parent() == nullptr) return 0;
 	else return persistentUnitNode->id();
 }
 
@@ -267,7 +267,7 @@ Node* Node::createNewNode(const QString &type, Node* parent, Model* model)
 	else
 	{
 		ModelBase::log()->add(Log::LOGERROR, "Could not create new node. Requested node type has not been registered.");
-		return NULL;
+		return nullptr;
 	}
 }
 
@@ -280,7 +280,7 @@ Node* Node::createNewNode(const QString &type, Node* parent, NodeIdType id, Pers
 	else
 	{
 		ModelBase::log()->add(Log::LOGERROR, "Could not create new node from persistence. Requested node type has not been registered.");
-		return NULL;
+		return nullptr;
 	}
 }
 

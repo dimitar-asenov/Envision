@@ -53,7 +53,7 @@ inline LayoutType* LayoutProvider<LayoutType>::layout() const { return static_ca
 
 template <class LayoutType>
 LayoutProvider<LayoutType>::LayoutProvider(Item* parent, const StyleType *style) :
-LayoutProviderBase(parent, style, new LayoutType(NULL))
+LayoutProviderBase(parent, style, new LayoutType(nullptr))
 {
 	layout()->setParentItem(this);
 }

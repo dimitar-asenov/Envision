@@ -89,7 +89,7 @@ void SequentialLayout::swap(int i, int j)
 void SequentialLayout::remove(int index, bool deleteItem_)
 {
 	if (deleteItem_) SAFE_DELETE_ITEM( items[index]);
-	else items[index]->setParentItem(NULL);
+	else items[index]->setParentItem(nullptr);
 	items.remove(index);
 	setUpdateNeeded();
 }
@@ -99,7 +99,7 @@ void SequentialLayout::removeAll(Item* item, bool deleteItem)
 	for (int i = items.size() - 1; i>=0; --i)
 		if (items.at(i) == item) items.remove(i);
 	if (deleteItem) SAFE_DELETE_ITEM(item);
-	else if (item) item->setParentItem(NULL);
+	else if (item) item->setParentItem(nullptr);
 	setUpdateNeeded();
 }
 
@@ -108,7 +108,7 @@ void SequentialLayout::clear(bool deleteItems)
 	for (int i = 0; i<items.size(); ++i)
 	{
 		if (deleteItems) SAFE_DELETE_ITEM(items[i]);
-		else if (items[i]) items[i]->setParentItem(NULL);
+		else if (items[i]) items[i]->setParentItem(nullptr);
 	}
 	items.clear();
 	setUpdateNeeded();
@@ -119,7 +119,7 @@ void SequentialLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes, Mo
 	// Inserts elements that are not yet visualized and adjusts the order to match that in 'nodes'.
 	for (int i = 0; i < nodes.size(); ++i)
 	{
-		if (i >= items.size() ) append( renderer->render(NULL, nodes[i]));	// This node is new
+		if (i >= items.size() ) append( renderer->render(nullptr, nodes[i]));	// This node is new
 		else if ( items[i]->node() == nodes[i] )	continue;	// This node is already there
 		else
 		{
@@ -137,7 +137,7 @@ void SequentialLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes, Mo
 			}
 
 			// The node was not found, insert a visualization here
-			if (!found ) insert( renderer->render(NULL, nodes[i]), i);
+			if (!found ) insert( renderer->render(nullptr, nodes[i]), i);
 		}
 	}
 
@@ -160,12 +160,12 @@ void SequentialLayout::synchronizeMid(Item*& item, Model::Node* node, int positi
 	if (item && item->node() != node )
 	{
 		removeAll(item);
-		item = NULL;
+		item = nullptr;
 	}
 
 	if (!item && node)
 	{
-		item = renderer()->render(NULL, node);
+		item = renderer()->render(nullptr, node);
 		insert(item, ((position > length()) ? length() : position) );
 	}
 
@@ -279,7 +279,7 @@ bool SequentialLayout::focusChild(FocusTarget location)
 	int current = focusedElementIndex();
 	int max = items.size() - 1;
 
-	Item* toFocus = NULL;
+	Item* toFocus = nullptr;
 
 	switch (location)
 	{
