@@ -34,7 +34,7 @@
 #ifndef SELFTEST_H
 #define SELFTEST_H
 
-#include "EnvisionPlugin.h"
+#include "Core/headers/EnvisionPlugin.h"
 
 namespace SelfTest {
 

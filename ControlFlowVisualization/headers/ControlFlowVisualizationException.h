@@ -35,7 +35,7 @@
 #define CONTROLFLOWVISUALIZATIONEXCEPTION_H_
 
 #include "controlflowvisualization_api.h"
-#include "EnvisionException.h"
+#include "Core/headers/EnvisionException.h"
 
 #include <QtCore/QString>
 

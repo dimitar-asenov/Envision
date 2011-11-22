@@ -7,7 +7,6 @@ QMAKE_CXXFLAGS += -Werror
 INCLUDEPATH += ./headers \
     ./src \
     ./test \
-    $${ENVISION_ROOT_DIR}/Core/headers \
     $${ENVISION_ROOT_DIR}
 TARGET = filepersistence
 DEFINES += FILEPERSISTENCE_LIBRARY
@@ -19,13 +18,16 @@ QT = core gui xml
 TEMPLATE = lib
 CONFIG += plugin \
     warn_on \
-    thread
+    thread \
+    precompile_header
 target.path = $$PLUGINS_DIR
 pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
-HEADERS += headers/XMLModel.h \
+PRECOMPILED_HEADER = headers/precompiled.h
+HEADERS += headers/precompiled.h \
+    headers/XMLModel.h \
     headers/SystemClipboard.h \
     headers/FilePersistenceException.h \
     headers/FileStore.h \

@@ -33,7 +33,7 @@
 
 #include "Test.h"
 #include "TestManager.h"
-#include "EnvisionException.h"
+#include "Core/headers/EnvisionException.h"
 
 namespace SelfTest {
 

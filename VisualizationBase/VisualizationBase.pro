@@ -7,7 +7,6 @@ QMAKE_CXXFLAGS += -Werror
 INCLUDEPATH += ./headers \
     ./src \
     ./test \
-    $${ENVISION_ROOT_DIR}/Core/headers \
     $${ENVISION_ROOT_DIR}
 TARGET = visualizationbase
 DEFINES += VISUALIZATIONBASE_LIBRARY

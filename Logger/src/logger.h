@@ -35,7 +35,7 @@
 #ifndef LOGGER_H
 #define LOGGER_H
 
-#include "EnvisionPlugin.h"
+#include "Core/headers/EnvisionPlugin.h"
 
 namespace Logger {
 

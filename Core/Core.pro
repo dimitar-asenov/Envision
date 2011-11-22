@@ -8,6 +8,7 @@ TEMPLATE = app
 TARGET = Envision
 target.path = $$BUILD_DIR
 INSTALLS += target
+DEFINES += CORE_LIBRARY
 CONFIG += qt \
     thread \
     warn_on \

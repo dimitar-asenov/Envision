@@ -7,7 +7,6 @@ QMAKE_CXXFLAGS += -Werror
 INCLUDEPATH += ./headers \
     ./src \
     ./test \
-    $${ENVISION_ROOT_DIR}/Core/headers \
     $${ENVISION_ROOT_DIR}
 TARGET = interactionbase
 DEFINES += INTERACTIONBASE_LIBRARY
@@ -22,7 +21,8 @@ QT = core \
 TEMPLATE = lib
 CONFIG += plugin \
     warn_on \
-    thread
+    thread \
+    precompile_header
 target.path = $$PLUGINS_DIR
 pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
@@ -31,7 +31,9 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/handlers/HPositionLayout.h \
+PRECOMPILED_HEADER = headers/precompiled.h
+HEADERS += headers/precompiled.h \
+    headers/handlers/HPositionLayout.h \
     headers/handlers/HList.h \
     headers/commands/CSceneHandlerItemExit.h \
     headers/handlers/HSceneHandlerItem.h \

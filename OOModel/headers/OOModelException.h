@@ -35,7 +35,7 @@
 #define OOMODELEXCEPTION_H_
 
 #include "oomodel_api.h"
-#include "EnvisionException.h"
+#include "Core/headers/EnvisionException.h"
 
 #include <QtCore/QString>
 

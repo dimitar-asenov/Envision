@@ -34,7 +34,7 @@
 #ifndef INTERACTIONBASE_H
 #define INTERACTIONBASE_H
 
-#include "EnvisionPlugin.h"
+#include "Core/headers/EnvisionPlugin.h"
 
 #include "Logger/headers/Log.h"
 

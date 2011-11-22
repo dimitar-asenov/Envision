@@ -27,36 +27,47 @@
 /***********************************************************************************************************************
  * precompiled.h
  *
- *  Created on: May 24, 2011
+ *  Created on: November 21, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef PRECOMPILED_H_
-#define PRECOMPILED_H_
-
- // Add C includes here
+#ifndef PRECOMPILED_CORE_H_
+#define PRECOMPILED_CORE_H_
 
 #if defined __cplusplus
+// Add C++ includes here
 
- // Add C++ includes here
-#include <QtXml/QDomDocument>
-#include <QtXml/QDomElement>
-
+// Put here includes which appear in header files. This will also be visible to other plug-in which depend on this one
+// and will be included in their precompiled headers
 #include <QtGui/QMainWindow>
 #include <QtGui/QApplication>
 
-#include <QtCore/QPluginLoader>
+#include <QtCore/QCoreApplication>
+#include <QtCore/QtGlobal>
 #include <QtCore/QtPlugin>
-#include <QtCore/QDir>
-#include <QtCore/QEvent>
 #include <QtCore/QObject>
+
 #include <QtCore/QTextStream>
 #include <QtCore/QStringList>
-#include <QtCore/QString>
-#include <QtCore/QList>
+#include <QtCore/QPair>
 #include <QtCore/QMap>
+#include <QtCore/QString>
+#include <QtCore/QVector>
+#include <QtCore/QList>
 
+#if defined(CORE_LIBRARY)
+// Put here includes which only appear in compilation units and do not appear in headers. Precompiled headers of
+// plug-ins which depend on this one will not include these headers.
+
+#include <QtXml/QDomDocument>
+#include <QtXml/QDomElement>
+
+#include <QtCore/QPluginLoader>
+
+#include <QtCore/QDir>
+#include <QtCore/QEvent>
 
 #endif
+#endif
 
-#endif /* PRECOMPILED_H_ */
+#endif /* PRECOMPILED_CORE_H_ */

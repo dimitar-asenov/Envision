@@ -25,44 +25,38 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
- * VisualizationManager.h
+ * precompiled.h
  *
- *  Created on: Dec 6, 2010
+ *  Created on: November 22, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef VISUALIZATIONMANAGER_H_
-#define VISUALIZATIONMANAGER_H_
+#ifndef PRECOMPILED_CUSTOMMETHODCALL_H_
+#define PRECOMPILED_CUSTOMMETHODCALL_H_
 
-#include "visualizationbase_api.h"
+// Include here the precompiled headers of other plug-ins that use this plug-in uses. Only the "public" part of
+// those headers will be included here
+#include "InteractionBase/headers/precompiled.h"
+#include "OOVisualization/headers/precompiled.h"
+#include "VisualizationBase/headers/precompiled.h"
+#include "OOModel/headers/precompiled.h"
+#include "ModelBase/headers/precompiled.h"
+#include "Logger/headers/precompiled.h"
+#include "SelfTest/headers/precompiled.h"
+#include "Core/headers/precompiled.h"
 
-#include "Core/headers/EnvisionManager.h"
+#if defined __cplusplus
+// Add C++ includes here
 
-namespace Visualization {
+// Put here includes which appear in header files. This will also be visible to other plug-in which depend on this one
+// and will be included in their precompiled headers
 
-class View;
 
-class VISUALIZATIONBASE_API VisualizationManager
-{
-	private:
-		static VisualizationManager theInstance;
+#if defined(CUSTOMMETHODCALL_LIBRARY)
+// Put here includes which only appear in compilation units and do not appear in headers. Precompiled headers of
+// plug-ins which depend on this one will not include these headers.
+#endif
 
-		Envision::EnvisionManager *envisionManager;
-		QVector<View*> views;
+#endif
 
-		VisualizationManager();
-		VisualizationManager(const VisualizationManager& other);
-		VisualizationManager&  operator = (const VisualizationManager& other);
-
-	public:
-		QWidget* getMainWindow();
-
-		void addTopLevelView(View* view);
-
-		static VisualizationManager& instance();
-		static void init(Envision::EnvisionManager *manager);
-};
-
-}
-
-#endif /* VISUALIZATIONMANAGER_H_ */
+#endif /* PRECOMPILED_CUSTOMMETHODCALL_H_ */

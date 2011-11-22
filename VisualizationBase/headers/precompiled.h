@@ -31,58 +31,67 @@
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef PRECOMPILED_H_
-#define PRECOMPILED_H_
+#ifndef PRECOMPILED_VISUALIZATIONBASE_H_
+#define PRECOMPILED_VISUALIZATIONBASE_H_
 
- // Add C includes here
+// Include here the precompiled headers of other plug-ins that use this plug-in uses. Only the "public" part of
+// those headers will be included here
+#include "ModelBase/headers/precompiled.h"
+#include "Logger/headers/precompiled.h"
+#include "SelfTest/headers/precompiled.h"
+#include "Core/headers/precompiled.h"
 
 #if defined __cplusplus
- // Add C++ includes here
-#include <QtXml/QDomDocument>
+// Add C++ includes here
 
-#include <QtSvg/QSvgGenerator>
+// Put here includes which appear in header files. This will also be visible to other plug-in which depend on this one
+// and will be included in their precompiled headers
 #include <QtSvg/QSvgRenderer>
 
-#include <QtGui/QApplication>
-#include <QtGui/QColor>
-#include <QtGui/QDesktopWidget>
-#include <QtGui/QFocusEvent>
+#include <QtXml/QDomDocument>
+
 #include <QtGui/QFont>
-#include <QtGui/QFontMetrics>
-#include <QtGui/QGraphicsItem>
-#include <QtGui/QGraphicsScene>
+#include <QtGui/QPen>
+
 #include <QtGui/QGraphicsSceneDragDropEvent>
 #include <QtGui/QGraphicsSceneContextMenuEvent>
 #include <QtGui/QGraphicsSceneHoverEvent>
 #include <QtGui/QGraphicsSceneMouseEvent>
 #include <QtGui/QGraphicsSceneWheelEvent>
+#include <QtGui/QGraphicsItem>
 #include <QtGui/QGraphicsView>
-#include <QtGui/QKeyEvent>
-#include <QtGui/QLinearGradient>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QPainter>
-#include <QtGui/QPen>
-#include <QtGui/QPrinter>
-#include <QtGui/QPushButton>
-#include <QtGui/QRadialGradient>
-#include <QtGui/QScrollBar>
+#include <QtGui/QGraphicsScene>
 #include <QtGui/QWheelEvent>
+#include <QtGui/QFocusEvent>
+#include <QtGui/QKeyEvent>
+#include <QtGui/QMouseEvent>
+
+#include <QtCore/QEvent>
+#include <QtCore/QSharedPointer>
+#include <QtCore/QPointF>
+
+
+#if defined(VISUALIZATIONBASE_LIBRARY)
+// Put here includes which only appear in compilation units and do not appear in headers. Precompiled headers of
+// plug-ins which depend on this one will not include these headers.
+#include <QtSvg/QSvgGenerator>
+
+#include <QtGui/QPrinter>
+#include <QtGui/QDesktopWidget>
+#include <QtGui/QLinearGradient>
+#include <QtGui/QRadialGradient>
+#include <QtGui/QFontMetrics>
+#include <QtGui/QPushButton>
+#include <QtGui/QScrollBar>
+#include <QtGui/QPainter>
+#include <QtGui/QColor>
 
 #include <QtCore/QDir>
-#include <QtCore/QEvent>
 #include <QtCore/QFileInfo>
-#include <QtCore/QList>
-#include <QtCore/QMap>
-#include <QtCore/QPair>
-#include <QtCore/QPointF>
-#include <QtCore/QSharedPointer>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-#include <QtCore/QtGlobal>
-#include <QtCore/QVector>
 
 #include <cmath>
 
 #endif
+#endif
 
-#endif /* PRECOMPILED_H_ */
+#endif /* PRECOMPILED_VISUALIZATIONBASE_H_ */

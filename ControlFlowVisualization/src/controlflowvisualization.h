@@ -34,7 +34,7 @@
 #ifndef CONTROLFLOWVISUALIZATION_H
 #define CONTROLFLOWVISUALIZATION_H
 
-#include "EnvisionPlugin.h"
+#include "Core/headers/EnvisionPlugin.h"
 
 namespace ControlFlowVisualization {
 

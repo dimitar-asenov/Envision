@@ -34,7 +34,7 @@
 #ifndef OOVISUALIZATION_H
 #define OOVISUALIZATION_H
 
-#include "EnvisionPlugin.h"
+#include "Core/headers/EnvisionPlugin.h"
 
 namespace OOVisualization {
 
