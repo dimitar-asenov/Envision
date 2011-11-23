@@ -47,7 +47,7 @@ class ItemWithNode : public Super
 {
 	public:
 		typedef ContainedNode NodeType;
-		ItemWithNode(Item* parent, ContainedNode* node, const typename Super::StyleType* style = NULL);
+		ItemWithNode(Item* parent, ContainedNode* node, const typename Super::StyleType* style = nullptr);
 
 		virtual bool hasNode() const;
 		virtual ContainedNode* node() const;

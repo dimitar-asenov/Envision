@@ -35,7 +35,7 @@
 #define OOVISUALIZATIONEXCEPTION_H_
 
 #include "oovisualization_api.h"
-#include "EnvisionException.h"
+#include "Core/headers/EnvisionException.h"
 
 #include <QtCore/QString>
 

@@ -115,13 +115,13 @@ template <class T> void GridLayout::synchronize(T*& item, bool present, const ty
 	if (item && !present)
 	{
 		remove(item);
-		item = NULL;
+		item = nullptr;
 	}
 
 	if (!item && present)
 	{
-		if (style) item = new T(NULL, style);
-		else item = new T(NULL);
+		if (style) item = new T(nullptr, style);
+		else item = new T(nullptr);
 
 		set(item, x, y, true);
 	}
@@ -132,13 +132,13 @@ template <class T> void GridLayout::synchronize(T*& item, typename T::NodeType* 
 	if (item && item->node() != node)
 	{
 		remove(item);
-		item = NULL;
+		item = nullptr;
 	}
 
 	if (!item && node)
 	{
-		if (style) item = new T(NULL, node, style);
-		else item = new T(NULL, node);
+		if (style) item = new T(nullptr, node, style);
+		else item = new T(nullptr, node);
 
 		set(item, x, y, true);
 	}

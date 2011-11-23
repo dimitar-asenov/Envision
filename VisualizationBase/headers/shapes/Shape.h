@@ -57,7 +57,7 @@ class VISUALIZATIONBASE_API Shape
 		virtual void setStyle(const Visualization::ShapeStyle* style);
 		static StyleSet<Shape>& itemStyles();
 
-		Shape(Item* parent, ShapeStyle *style = NULL);
+		Shape(Item* parent, ShapeStyle *style = nullptr);
 		virtual ~Shape();
 
 		void setInnerSize(int width, int height);

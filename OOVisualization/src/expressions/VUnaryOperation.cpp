@@ -45,18 +45,18 @@ ITEM_COMMON_DEFINITIONS(VUnaryOperation, "item")
 
 VUnaryOperation::VUnaryOperation(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<>, UnaryOperation>(parent, node, style),
-	pre_( NULL ),
-	post_( NULL ),
-	expr_(NULL)
+	pre_(nullptr),
+	post_(nullptr),
+	expr_(nullptr)
 {
 }
 
 VUnaryOperation::~VUnaryOperation()
 {
 	// These were automatically deleted by LayoutProvider's destructor
-	pre_ = NULL;
-	post_ = NULL;
-	expr_ = NULL;
+	pre_ = nullptr;
+	post_ = nullptr;
+	expr_ = nullptr;
 }
 
 void VUnaryOperation::determineChildren()

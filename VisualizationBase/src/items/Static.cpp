@@ -43,7 +43,7 @@ QMap<QString, Static::staticItemConstructorType> Static::itemClasses_;
 QMap<QString, Static::staticItemStyleConstructorType> Static::itemStyles_;
 
 Static::Static(Item* parent, const StyleType *style) :
-	Item(parent, style), item_(NULL)
+	Item(parent, style), item_(nullptr)
 {
 }
 
@@ -108,7 +108,7 @@ ItemStyle* Static::constructStyle(const QString& itemClass)
 {
 	if (itemStyles_.contains(itemClass))
 		return itemStyles_.value(itemClass)();
-	else return NULL;
+	else return nullptr;
 }
 
 }

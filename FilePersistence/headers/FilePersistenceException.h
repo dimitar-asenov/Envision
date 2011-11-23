@@ -35,7 +35,7 @@
 #define FILEPERSISTENCEEXCEPTION_H_
 
 #include "filepersistence_api.h"
-#include "EnvisionException.h"
+#include "Core/headers/EnvisionException.h"
 
 namespace FilePersistence {
 

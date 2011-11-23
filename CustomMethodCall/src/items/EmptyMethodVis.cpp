@@ -44,9 +44,9 @@ ITEM_COMMON_DEFINITIONS(EmptyMethodVis, "item")
 
 EmptyMethodVis::EmptyMethodVis(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<>, MethodCallExpression>(parent, node, style),
-	icon_(new Static(NULL, &style->icon()) ),
-	separator_(NULL),
-	prefix_(NULL)
+	icon_(new Static(nullptr, &style->icon()) ),
+	separator_(nullptr),
+	prefix_(nullptr)
 {
 	layout()->append(icon_);
 }
@@ -54,15 +54,15 @@ EmptyMethodVis::EmptyMethodVis(Item* parent, NodeType* node, const StyleType* st
 EmptyMethodVis::~EmptyMethodVis()
 {
 	// These were automatically deleted by LayoutProvider's destructor
-	icon_ = NULL;
-	separator_ = NULL;
-	prefix_ = NULL;
+	icon_ = nullptr;
+	separator_ = nullptr;
+	prefix_ = nullptr;
 }
 
 void EmptyMethodVis::determineChildren()
 {
 	layout()->synchronizeFirst(prefix_, node()->prefix());
-	layout()->synchronizeMid(separator_, node()->prefix() != NULL, &style()->separator(), 1);
+	layout()->synchronizeMid(separator_, node()->prefix() != nullptr, &style()->separator(), 1);
 
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
 	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know

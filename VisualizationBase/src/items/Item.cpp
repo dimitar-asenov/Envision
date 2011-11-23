@@ -42,7 +42,7 @@
 namespace Visualization {
 
 Item::Item(Item* parent, const StyleType* style) :
-	QGraphicsItem(parent), style_(NULL), shape_(NULL), needsUpdate_(true)
+	QGraphicsItem(parent), style_(nullptr), shape_(nullptr), needsUpdate_(true)
 {
 	if ( !style || style->drawsOnlyShape() ) setFlag(QGraphicsItem::ItemHasNoContents);
 	setFlag(QGraphicsItem::ItemIsFocusable);
@@ -229,7 +229,7 @@ bool Item::hasNode() const
 
 Model::Node* Item::node() const
 {
-	return NULL;
+	return nullptr;
 }
 
 int Item::revision() const
@@ -249,7 +249,7 @@ bool Item::childHasFocus() const
 void Item::removeFromScene()
 {
 	if ( scene() ) scene()->removeItem(this);
-	setParentItem(NULL);
+	setParentItem(nullptr);
 }
 
 void Item::synchronizeItem(Item*& item, Model::Node* node)
@@ -262,7 +262,7 @@ void Item::synchronizeItem(Item*& item, Model::Node* node)
 
 	if (!item && node)
 	{
-		item = renderer()->render(NULL, node);
+		item = renderer()->render(nullptr, node);
 		item->setParentItem(this);
 		setUpdateNeeded();
 	}

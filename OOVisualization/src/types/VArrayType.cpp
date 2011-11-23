@@ -45,8 +45,8 @@ ITEM_COMMON_DEFINITIONS(VArrayType, "item")
 
 VArrayType::VArrayType(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<>, ArrayType>(parent, node, style),
-	symbol_( new Static(NULL, &style->symbol())),
-	type_(NULL)
+	symbol_( new Static(nullptr, &style->symbol())),
+	type_(nullptr)
 {
 	layout()->append(symbol_);
 }
@@ -54,8 +54,8 @@ VArrayType::VArrayType(Item* parent, NodeType* node, const StyleType* style) :
 VArrayType::~VArrayType()
 {
 	// These were automatically deleted by LayoutProvider's destructor
-	symbol_ = NULL;
-	type_ = NULL;
+	symbol_ = nullptr;
+	type_ = nullptr;
 }
 
 void VArrayType::determineChildren()

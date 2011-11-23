@@ -114,7 +114,7 @@ T* ExtendableNode::set(const ExtendableIndex &attributeIndex, const QString& typ
 	Node* nodeGeneric = Node::createNewNode(creationType, this);
 	T* nodeSpecific = dynamic_cast<T*> (nodeGeneric);
 
-	if ( nodeSpecific == NULL )
+	if ( nodeSpecific == nullptr )
 	{
 		if (nodeGeneric) SAFE_DELETE(nodeGeneric);
 		throw ModelException("Could not create a node with the type " + creationType
@@ -133,7 +133,7 @@ template <class T> T* ExtendableNode::extension()
 {
 	AttributeChain& topMeta = topLevelMeta();
 	if (topMeta.hasExtensionInHierarchy(T::extensionId())) return new T(this, topMeta.extension(T::extensionId()));
-	else return NULL;
+	else return nullptr;
 }
 
 }

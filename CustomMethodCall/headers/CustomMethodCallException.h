@@ -35,7 +35,7 @@
 #define CUSTOMMETHODCALLEXCEPTION_H_
 
 #include "custommethodcall_api.h"
-#include "EnvisionException.h"
+#include "Core/headers/EnvisionException.h"
 
 #include <QtCore/QString>
 

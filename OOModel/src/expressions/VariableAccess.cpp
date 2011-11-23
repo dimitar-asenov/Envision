@@ -67,7 +67,7 @@ Class* VariableAccess::classDefinition()
 	VariableDeclaration* vd = dynamic_cast<VariableDeclaration*> (var);
 	if (vd) return vd->type()->classDefinition();
 
-	return NULL;
+	return nullptr;
 }
 
 }

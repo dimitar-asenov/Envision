@@ -45,18 +45,18 @@ ITEM_COMMON_DEFINITIONS(VStringLiteral, "item")
 
 VStringLiteral::VStringLiteral(Item* parent, NodeType* literal, const StyleType* style) :
 	ItemWithNode< LayoutProvider<>, StringLiteral>(parent, literal, style),
-	pre_( NULL ),
-	post_( NULL ),
-	vis_(NULL)
+	pre_(nullptr),
+	post_(nullptr),
+	vis_(nullptr)
 {
 }
 
 VStringLiteral::~VStringLiteral()
 {
 	// These were automatically deleted by LayoutProvider's destructor
-	pre_ = NULL;
-	post_ = NULL;
-	vis_ = NULL;
+	pre_ = nullptr;
+	post_ = nullptr;
+	vis_ = nullptr;
 }
 
 void VStringLiteral::determineChildren()

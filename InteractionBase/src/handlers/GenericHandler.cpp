@@ -44,7 +44,7 @@
 namespace Interaction {
 
 CommandExecutionEngine* GenericHandler::executionEngine_ = CommandExecutionEngine::instance();
-CommandPrompt* GenericHandler::prompt_ = NULL;
+CommandPrompt* GenericHandler::prompt_ = nullptr;
 GenericHandler::FocusDirection GenericHandler::focusDirection_ = NOT_SPECIFIED;
 
 GenericHandler::GenericHandler()
@@ -183,7 +183,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 				{
 					if (target->hasNode())
 					{
-						target->node()->model()->beginModification(NULL, "undo");
+						target->node()->model()->beginModification(nullptr, "undo");
 						target->node()->model()->undo();
 						target->node()->model()->endModification();
 						target->setUpdateNeeded();
@@ -195,7 +195,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 				{
 					if (target->hasNode())
 					{
-						target->node()->model()->beginModification(NULL, "redo");
+						target->node()->model()->beginModification(nullptr, "redo");
 						target->node()->model()->redo();
 						target->node()->model()->endModification();
 						target->setUpdateNeeded();
@@ -347,7 +347,7 @@ void GenericHandler::arrangeNodesForClipboard(QList<const Model::Node*>& list)
 			{
 				if (list[i]->parent() != parent)
 				{
-					parent = NULL;
+					parent = nullptr;
 					break;
 				}
 			}

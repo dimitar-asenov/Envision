@@ -61,7 +61,7 @@ Item* CustomVisualization::createStatement(Item* parent, Model::Node* node)
 {
 	Method* met = (static_cast<MethodCallStatement*> (node))->methodDefinition();
 
-	CustomVisualization* custVis = NULL;
+	CustomVisualization* custVis = nullptr;
 	if (met) custVis = met->extension<CustomVisualization>();
 
 	if (custVis && custVis->visNameNode() && visualizations.contains(custVis->visName()))
@@ -74,7 +74,7 @@ Item* CustomVisualization::createExpression(Item* parent, Model::Node* node)
 {
 	Method* met = (static_cast<MethodCallExpression*> (node))->methodDefinition();
 
-	CustomVisualization* custVis = NULL;
+	CustomVisualization* custVis = nullptr;
 	if (met) custVis = met->extension<CustomVisualization>();
 
 	if (custVis && custVis->visNameNode() && visualizations.contains(custVis->visName()))

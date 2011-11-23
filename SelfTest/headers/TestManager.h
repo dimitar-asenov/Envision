@@ -125,7 +125,7 @@ class TestManager
 			return testRes;
 		}
 };
-template<class T> QMap<QString, Test::TestConstructor>* TestManager<T>::testConstructors = NULL;
+template<class T> QMap<QString, Test::TestConstructor>* TestManager<T>::testConstructors = nullptr;
 
 }
 

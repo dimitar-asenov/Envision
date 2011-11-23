@@ -56,7 +56,7 @@ Q_EXPORT_PLUGIN2( modelbase, Model::ModelBase )
 
 namespace Model {
 
-Log* ModelBase::logger = NULL;
+Log* ModelBase::logger = nullptr;
 
 bool ModelBase::initialize(Envision::EnvisionManager&)
 {

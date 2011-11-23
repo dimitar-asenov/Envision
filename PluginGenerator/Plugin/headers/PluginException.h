@@ -35,7 +35,7 @@
 #define PLUGINNAME_UPPERCASEEXCEPTION_H_
 
 #include "PLUGINNAME_LOWERCASE_api.h"
-#include "EnvisionException.h"
+#include "Core/headers/EnvisionException.h"
 
 #include <QtCore/QString>
 

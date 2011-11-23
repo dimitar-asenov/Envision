@@ -35,7 +35,7 @@
 #define MODELEXCEPTION_H_
 
 #include "modelbase_api.h"
-#include "EnvisionException.h"
+#include "Core/headers/EnvisionException.h"
 
 #include <QtCore/QString>
 

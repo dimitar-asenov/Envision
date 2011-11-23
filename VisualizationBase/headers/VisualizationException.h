@@ -35,7 +35,7 @@
 #define VISUALIZATIONEXCEPTION_H_
 
 #include "visualizationbase_api.h"
-#include "EnvisionException.h"
+#include "Core/headers/EnvisionException.h"
 
 namespace Visualization {
 

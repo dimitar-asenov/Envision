@@ -39,7 +39,7 @@
 
 namespace Interaction {
 
-HPositionLayout::HPositionLayout() : originalX(0), originalY(0), currentItem(NULL), currentItemPosition(NULL)
+HPositionLayout::HPositionLayout() : originalX(0), originalY(0), currentItem(nullptr), currentItemPosition(nullptr)
 {
 }
 
@@ -57,14 +57,14 @@ void HPositionLayout::mousePressEvent(Visualization::Item *target, QGraphicsScen
 
 		// Find out which of the children has the cursor.
 		// If there is only child or there is no child selected do not allow movement and ignore this event.
-		Visualization::Item* itemToMove = NULL;
+		Visualization::Item* itemToMove = nullptr;
 		if (layout->length() >=2)
 		{
 			for(int i = 0; i<layout->length(); ++i)
 			{
 				itemToMove = layout->at<Visualization::Item>(i);
 				if (itemToMove->contains(itemToMove->mapFromParent(event->pos()))) break;
-				else itemToMove = NULL;
+				else itemToMove = nullptr;
 			}
 		}
 
@@ -116,8 +116,8 @@ void HPositionLayout::mouseReleaseEvent(Visualization::Item *target, QGraphicsSc
 {
 	if (event->modifiers() == Qt::ControlModifier && !event->button() == Qt::LeftButton)
 	{
-		currentItem = NULL;
-		currentItemPosition = NULL;
+		currentItem = nullptr;
+		currentItemPosition = nullptr;
 	}
 	else GenericHandler::mouseReleaseEvent(target, event);
 }

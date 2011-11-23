@@ -66,7 +66,7 @@ template<class T> typename T::StyleType* StyleSet<T>::get(const QString& styleNa
 	QString name(styleName);
 	if (name.isEmpty()) name = "default";
 
-	typename T::StyleType* style = styles_.value(name, NULL);
+	typename T::StyleType* style = styles_.value(name, nullptr);
 	if (style) return style;
 
 	style = StyleLoader().loadStyle<typename T::StyleType>(classType_ + "/" + T::className(), name);

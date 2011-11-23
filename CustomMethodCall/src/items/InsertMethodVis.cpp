@@ -45,10 +45,10 @@ ITEM_COMMON_DEFINITIONS(InsertMethodVis, "item")
 
 InsertMethodVis::InsertMethodVis(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<>, MethodCallStatement>(parent, node, style),
-	icon_(new Static(NULL, &style->icon()) ),
-	separator_(NULL),
-	prefix_(NULL),
-	arguments_(new VList(NULL, node->arguments(), &style->arguments()))
+	icon_(new Static(nullptr, &style->icon()) ),
+	separator_(nullptr),
+	prefix_(nullptr),
+	arguments_(new VList(nullptr, node->arguments(), &style->arguments()))
 {
 	layout()->append(icon_);
 	layout()->append(arguments_);
@@ -57,16 +57,16 @@ InsertMethodVis::InsertMethodVis(Item* parent, NodeType* node, const StyleType* 
 InsertMethodVis::~InsertMethodVis()
 {
 	// These were automatically deleted by LayoutProvider's destructor
-	icon_ = NULL;
-	separator_ = NULL;
-	prefix_ = NULL;
-	arguments_ = NULL;
+	icon_ = nullptr;
+	separator_ = nullptr;
+	prefix_ = nullptr;
+	arguments_ = nullptr;
 }
 
 void InsertMethodVis::determineChildren()
 {
 	layout()->synchronizeFirst(prefix_, node()->prefix());
-	layout()->synchronizeMid(separator_, node()->prefix() != NULL, &style()->separator(), 1);
+	layout()->synchronizeMid(separator_, node()->prefix() != nullptr, &style()->separator(), 1);
 	layout()->synchronizeLast(arguments_, node()->arguments(), &style()->arguments());
 
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?

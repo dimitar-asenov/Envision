@@ -43,7 +43,7 @@ Model::Node* StatementItemList::navigateTo(Model::Node* source, QString path)
 	if (isAncestorOf(source))
 	{
 		QString symbol = extractFrontSymbol(path);
-		Node* found = NULL;
+		Node* found = nullptr;
 
 		// We should look for a statement above the source that declares a symbol.
 		for(int i = indexOf(source); i >= 0; --i)
@@ -61,7 +61,7 @@ Model::Node* StatementItemList::navigateTo(Model::Node* source, QString path)
 		if (!rest.isEmpty()) return found->navigateTo(this, rest);
 		else return found;
 	}
-	else return NULL;
+	else return nullptr;
 
 }
 

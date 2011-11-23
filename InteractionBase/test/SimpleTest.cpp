@@ -73,7 +73,7 @@ TEST(InteractionBase, TextSelect)
 	third->set("Some independent text");
 	model->endModification();
 
-	VList* l = dynamic_cast<VList*> (scene->renderer()->render(NULL, list));
+	VList* l = dynamic_cast<VList*> (scene->renderer()->render(nullptr, list));
 	scene->addTopLevelItem(l);
 	scene->scheduleUpdate();
 	QApplication::processEvents();
@@ -84,7 +84,7 @@ TEST(InteractionBase, TextSelect)
 
 	// Create view
 	MainView* view = new MainView(scene);
-	CHECK_CONDITION(view != NULL);
+	CHECK_CONDITION(view != nullptr);
 }
 
 }

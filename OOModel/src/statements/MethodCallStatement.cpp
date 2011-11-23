@@ -46,7 +46,7 @@ REGISTER_ATTRIBUTE(MethodCallStatement, arguments, TypedListOfExpression, false,
 
 Method* MethodCallStatement::methodDefinition()
 {
-	Method* met = NULL;
+	Method* met = nullptr;
 
 	if (prefix())
 	{

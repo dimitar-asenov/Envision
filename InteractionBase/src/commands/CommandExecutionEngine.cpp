@@ -49,7 +49,7 @@ const char* QUOTE_SYMBOLS = "\"'`";
 const char* ESCAPE_SYMBOLS = "\\";
 
 CommandExecutionEngine::CommandExecutionEngine() :
-	lastCommandResult(NULL), resultIsExternallyAcquired(false)
+	lastCommandResult(nullptr), resultIsExternallyAcquired(false)
 {
 }
 
@@ -66,7 +66,7 @@ CommandResult* CommandExecutionEngine::acquireResult()
 
 void CommandExecutionEngine::deleteLastCommandResult()
 {
-	if (resultIsExternallyAcquired ) lastCommandResult = NULL;
+	if (resultIsExternallyAcquired ) lastCommandResult = nullptr;
 	else SAFE_DELETE(lastCommandResult);
 	resultIsExternallyAcquired = false;
 }
@@ -104,7 +104,7 @@ void CommandExecutionEngine::execute(Visualization::Item *originator, const QStr
 
 	bool processed = false;
 
-	while(target != NULL && !processed)
+	while(target != nullptr && !processed)
 	{
 		GenericHandler* handler = dynamic_cast<GenericHandler*> (target->handler());
 
@@ -138,9 +138,9 @@ void CommandExecutionEngine::execute(Visualization::Item *originator, const QStr
 		{
 			for (int i = 0; i < handler->commands().size(); ++i)
 			{
-				if ( handler->commands().at(i)->canInterpret(source, NULL, tokens) )
+				if ( handler->commands().at(i)->canInterpret(source, nullptr, tokens) )
 				{
-					lastCommandResult = handler->commands().at(i)->execute(source, NULL, tokens);
+					lastCommandResult = handler->commands().at(i)->execute(source, nullptr, tokens);
 
 					if ( lastCommandResult->code() != CommandResult::CanNotInterpret )
 					{
@@ -178,7 +178,7 @@ QList<CommandSuggestion*> CommandExecutionEngine::autoComplete(Visualization::It
 		Visualization::Item* target = source;
 
 		// Get suggestion from item and parents
-		while(target != NULL)
+		while(target != nullptr)
 		{
 			GenericHandler* handler = dynamic_cast<GenericHandler*> (target->handler());
 			if (handler)

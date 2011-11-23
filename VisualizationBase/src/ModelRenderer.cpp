@@ -56,13 +56,13 @@ Item* ModelRenderer::render(Item* parent, Model::Node* node)
 	{
 		if (useDefaultVisualizations_ )
 		{
-			if (Model::List::typeIdStatic() < visualizations.size() && visualizations[Model::List::typeIdStatic()] != NULL)
+			if (Model::List::typeIdStatic() < visualizations.size() && visualizations[Model::List::typeIdStatic()] != nullptr)
 			{
 				Model::List* ext = dynamic_cast<Model::List*> (node);
 				if (ext) return visualizations[Model::List::typeIdStatic()](parent, node);
 			}
 
-			if (Model::ExtendableNode::typeIdStatic() < visualizations.size() && visualizations[Model::ExtendableNode::typeIdStatic()] != NULL)
+			if (Model::ExtendableNode::typeIdStatic() < visualizations.size() && visualizations[Model::ExtendableNode::typeIdStatic()] != nullptr)
 			{
 				Model::ExtendableNode* ext = dynamic_cast<Model::ExtendableNode*> (node);
 				if (ext) return visualizations[Model::ExtendableNode::typeIdStatic()](parent, node);

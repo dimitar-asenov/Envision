@@ -3,21 +3,25 @@ CONFIG(release, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/ReleaseBuild
 CONFIG(debug, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/DebugBuild
 PLUGINS_DIR = $${BUILD_DIR}/plugins
 CONFIG(debug, debug|release):DEFINES += DEBUG
-QMAKE_CXXFLAGS += -Werror
+QMAKE_CXXFLAGS += -Werror -std=c++0x
 TEMPLATE = app
 TARGET = Envision
 target.path = $$BUILD_DIR
 INSTALLS += target
+DEFINES += CORE_LIBRARY
 CONFIG += qt \
     thread \
-    warn_on
+    warn_on \
+    precompile_header
 QT += core \
     gui \
     xml
 INCLUDEPATH += ./headers \
     ./src \
     ./test
-HEADERS += headers/global.h \
+PRECOMPILED_HEADER = headers/precompiled.h
+HEADERS += headers/precompiled.h \
+    headers/global.h \
     headers/EnvisionException.h \
     src/TestEvent.h \
     src/TestRunner.h \

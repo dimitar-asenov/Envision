@@ -40,7 +40,7 @@
 namespace Envision {
 
 TestRunner::TestRunner() :
-	pm(NULL)
+	pm(nullptr)
 {
 }
 

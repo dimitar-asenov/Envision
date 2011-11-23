@@ -37,7 +37,7 @@
 #ifndef APIDEPTEST_H
 #define APIDEPTEST_H
 
-#include "EnvisionPlugin.h"
+#include "Core/headers/EnvisionPlugin.h"
 
 namespace APIDepTest {
 

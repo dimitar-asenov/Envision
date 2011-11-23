@@ -60,7 +60,7 @@ Model::Node* Method::navigateTo(Model::Node* source, QString path)
 	if (isAncestorOf(source))
 	{
 		QString symbol = extractFrontSymbol(path);
-		Model::Node* found = NULL;
+		Model::Node* found = nullptr;
 
 		// Is the target symbol name the method's name
 		if (symbol == symbolName()) found = this;
@@ -77,7 +77,7 @@ Model::Node* Method::navigateTo(Model::Node* source, QString path)
 		if (!rest.isEmpty()) return found->navigateTo(this, rest);
 		else return found;
 	}
-	else return NULL;
+	else return nullptr;
 }
 
 }

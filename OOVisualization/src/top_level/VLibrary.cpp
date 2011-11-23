@@ -47,13 +47,13 @@ ITEM_COMMON_DEFINITIONS(VLibrary, "item")
 
 VLibrary::VLibrary(Item* parent, OOModel::Library* node, const VLibraryStyle* style) :
 	ItemWithNode<LayoutProvider<PanelBorderLayout>, Library>(parent, node, style),
-	header(new SequentialLayout(NULL, &style->header())),
-	name( new VText(NULL, node->nameNode(), &style->name())),
-	content(new PositionLayout(NULL, &style->content()))
+	header(new SequentialLayout(nullptr, &style->header())),
+	name( new VText(nullptr, node->nameNode(), &style->name())),
+	content(new PositionLayout(nullptr, &style->content()))
 {
 	layout()->setTop(true);
 	layout()->top()->setMiddle(header);
-	header->append(new Static(NULL, &style->icon()));
+	header->append(new Static(nullptr, &style->icon()));
 	header->append(name);
 	layout()->setContent(content);
 }
@@ -61,9 +61,9 @@ VLibrary::VLibrary(Item* parent, OOModel::Library* node, const VLibraryStyle* st
 VLibrary::~VLibrary()
 {
 	// These were automatically deleted by LayoutProvider's destructor
-	header = NULL ;
-	name = NULL;
-	content = NULL;
+	header = nullptr;
+	name = nullptr;
+	content = nullptr;
 }
 
 void VLibrary::determineChildren()

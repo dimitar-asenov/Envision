@@ -39,7 +39,7 @@ namespace Visualization {
 ITEM_COMMON_DEFINITIONS(SelectedItem, "item")
 
 SelectedItem::SelectedItem(Item* selectedItem, const StyleType* style) :
-	Item(NULL, style), selectedItem_(selectedItem)
+	Item(nullptr, style), selectedItem_(selectedItem)
 {
 	setFlags(0);
 	setAcceptedMouseButtons(0);
@@ -48,7 +48,7 @@ SelectedItem::SelectedItem(Item* selectedItem, const StyleType* style) :
 
 SelectedItem::~SelectedItem()
 {
-	selectedItem_ = NULL;
+	selectedItem_ = nullptr;
 }
 
 bool SelectedItem::needsUpdate()

@@ -60,7 +60,7 @@ void GridLayout::setGridSize(int sizeX, int sizeY, bool deleteExtraItems)
 		for(int x = sizeX; x < sizeX_; x++)
 			for(int y = 0; y < sizeY_; y++)
 				if (deleteExtraItems) SAFE_DELETE_ITEM( items_[x][y] );
-				else if ( items_[x][y] ) items_[x][y]->setParentItem(NULL);
+				else if ( items_[x][y] ) items_[x][y]->setParentItem(nullptr);
 	}
 
 	sizeX_ = sizeX;
@@ -72,7 +72,7 @@ void GridLayout::setGridSize(int sizeX, int sizeY, bool deleteExtraItems)
 		{
 			for(int y = sizeY; y<items_[x].size(); ++y)
 				if (deleteExtraItems) SAFE_DELETE_ITEM( items_[x][y] );
-				else if ( items_[x][y] ) items_[x][y]->setParentItem(NULL);
+				else if ( items_[x][y] ) items_[x][y]->setParentItem(nullptr);
 		}
 
 		items_[x].resize(sizeY);
@@ -83,14 +83,14 @@ void GridLayout::setGridSize(int sizeX, int sizeY, bool deleteExtraItems)
 
 bool GridLayout::isEmpty(int x, int y) const
 {
-	return x>= sizeX_ || y >= sizeY_ || items_[x][y] == NULL;
+	return x>= sizeX_ || y >= sizeY_ || items_[x][y] == nullptr;
 }
 
 void GridLayout::set(Item* item, int x, int y, bool deleteOldItem)
 {
 	if(item) item->setParentItem(this);
 	if (deleteOldItem) SAFE_DELETE_ITEM( items_[x][y]);
-	else if (items_[x][y]) items_[x][y]->setParentItem(NULL);
+	else if (items_[x][y]) items_[x][y]->setParentItem(nullptr);
 	items_[x][y] = item;
 	setUpdateNeeded();
 }
@@ -106,21 +106,21 @@ void GridLayout::swap(int x1, int y1, int x2, int y2)
 void GridLayout::remove(int x, int y, bool deleteItem_)
 {
 	if (deleteItem_) SAFE_DELETE_ITEM( items_[x][y]);
-	else if(items_[x][y]) items_[x][y]->setParentItem(NULL);
-	items_[x][y] = NULL;
+	else if(items_[x][y]) items_[x][y]->setParentItem(nullptr);
+	items_[x][y] = nullptr;
 	setUpdateNeeded();
 }
 
 void GridLayout::remove(Item* item, bool deleteItem)
 {
-	if (item == NULL) return;
+	if (item == nullptr) return;
 
 	for (int x = 0; x<sizeX_; ++x)
 		for(int y = 0; y<sizeY_; ++y)
-			if (items_[x][y] == item) items_[x][y] = NULL;
+			if (items_[x][y] == item) items_[x][y] = nullptr;
 
 	if (deleteItem) SAFE_DELETE_ITEM(item);
-	else item->setParentItem(NULL);
+	else item->setParentItem(nullptr);
 	setUpdateNeeded();
 }
 
@@ -130,9 +130,9 @@ void GridLayout::clear(bool deleteItems)
 		for(int y = 0; y<sizeY_; ++y)
 		{
 			if (deleteItems) SAFE_DELETE_ITEM(items_[x][y]);
-			else if (items_[x][y]) items_[x][y]->setParentItem(NULL);
+			else if (items_[x][y]) items_[x][y]->setParentItem(nullptr);
 
-			items_[x][y] = NULL;
+			items_[x][y] = nullptr;
 		}
 	setUpdateNeeded();
 }
@@ -146,7 +146,7 @@ void GridLayout::synchronizeWithNodes(const QList< QList<Model::Node*> >& nodes,
 
 	for (int x = 0; x < sizeX_; ++x)
 		for (int y = 0; y < sizeY_; ++y)
-			if (items_[x][y] != NULL)
+			if (items_[x][y] != nullptr)
 			{
 				bool found = false;
 
@@ -160,7 +160,7 @@ void GridLayout::synchronizeWithNodes(const QList< QList<Model::Node*> >& nodes,
 					}
 
 				if (!found) SAFE_DELETE_ITEM(items_[x][y]);
-				items_[x][y] = NULL;
+				items_[x][y] = nullptr;
 			}
 
 	// Get the new size.
@@ -175,7 +175,7 @@ void GridLayout::synchronizeWithNodes(const QList< QList<Model::Node*> >& nodes,
 		{
 			int oldIndex = nodesFound.indexOf(nodes[y][x]);
 			if (oldIndex >=0) set(itemsFound[oldIndex], x, y, false);
-			else set(renderer->render(NULL, nodes[y][x]), x, y, false);
+			else set(renderer->render(nullptr, nodes[y][x]), x, y, false);
 		}
 }
 
@@ -185,12 +185,12 @@ void GridLayout::synchronize(Item*& item, Model::Node* node, int x, int y)
 	if (item && item->node() != node )
 	{
 		remove(item);
-		item = NULL;
+		item = nullptr;
 	}
 
 	if (!item && node)
 	{
-		item = renderer()->render(NULL, node);
+		item = renderer()->render(nullptr, node);
 		set(item, x, y, true);
 	}
 
@@ -213,7 +213,7 @@ void GridLayout::updateGeometry(int, int)
 	for(int x=0; x<sizeX_; ++x)
 	{
 		for(int y=0; y<sizeY_; ++y)
-			if (items_[x][y] != NULL)
+			if (items_[x][y] != nullptr)
 			{
 				if (items_[x][y]->width() > widestInColumn[x]) widestInColumn[x] = items_[x][y]->width();
 				if (items_[x][y]->height() > tallestInRow[y]) tallestInRow[y] = items_[x][y]->height();
@@ -239,7 +239,7 @@ void GridLayout::updateGeometry(int, int)
 		int top = yOffset();
 		for(int y=0; y<sizeY_; ++y)
 		{
-			if (items_[x][y] != NULL)
+			if (items_[x][y] != nullptr)
 			{
 				int xPos = left;
 				if (style()->horizontalAlignment() == LayoutStyle::CenterAlignment) xPos += (widestInColumn[x] - items_[x][y]->width())/2;
@@ -274,7 +274,7 @@ bool GridLayout::focusChild(FocusTarget location)
 {
 	if (sizeX_ == 0 || sizeY_ == 0) return false;
 
-	Item* toFocus = NULL;
+	Item* toFocus = nullptr;
 	switch (location)
 	{
 		case FOCUS_DEFAULT:
@@ -315,10 +315,10 @@ Item* GridLayout::findFirstVertical(bool startFromTop)
 		for(int x = 0; x<sizeX_; ++x)
 		{
 			int yIndex = startFromTop ? y : (sizeY_-y-1);
-			if (items_[x][yIndex] != NULL) return items_[x][yIndex];
+			if (items_[x][yIndex] != nullptr) return items_[x][yIndex];
 		}
 
-	return NULL;
+	return nullptr;
 }
 
 Item* GridLayout::findFirstHorizontal(bool startFromLeft)
@@ -327,29 +327,29 @@ Item* GridLayout::findFirstHorizontal(bool startFromLeft)
 		for(int y = 0; y<sizeY_; ++y)
 		{
 			int xIndex = startFromLeft ? x : (sizeX_-x-1);
-			if (items_[xIndex][y] != NULL) return items_[xIndex][y];
+			if (items_[xIndex][y] != nullptr) return items_[xIndex][y];
 		}
 
-	return NULL;
+	return nullptr;
 }
 
 Item* GridLayout::findNext(int dx, int dy)
 {
 	QPoint current = focusedElementIndex();
-	if (current.x() < 0 || current.y() < 0) return NULL;
+	if (current.x() < 0 || current.y() < 0) return nullptr;
 
 	int x = current.x() + dx;
 	int y = current.y() + dy;
 
 	while (x>= 0 && x < sizeX_ && y>=0 && y < sizeY_)
 	{
-		if (items_[x][y] != NULL) return items_[x][y];
+		if (items_[x][y] != nullptr) return items_[x][y];
 
 		x+= dx;
 		y+= dy;
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 }

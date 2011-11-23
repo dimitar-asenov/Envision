@@ -110,8 +110,8 @@ TEST(ModelBase, ListRemoval)
 	root->remove(b);
 	model.endModification();
 
-	CHECK_CONDITION(d != NULL);
-	CHECK_CONDITION(g != NULL);
+	CHECK_CONDITION(d != nullptr);
+	CHECK_CONDITION(g != nullptr);
 
 	CHECK_INT_EQUAL(3, root->size());
 	CHECK_CONDITION(root->first<Node>() == c);
@@ -143,13 +143,13 @@ TEST(ModelBase, ListUndo)
 	CHECK_CONDITION(root->at<Node>(5) == f);
 	CHECK_CONDITION(root->at<Node>(6) == g);
 
-	model.beginModification(NULL);
+	model.beginModification(nullptr);
 	model.undo();
 	model.endModification();
 
 	CHECK_INT_EQUAL(0, root->size());
 
-	model.beginModification(NULL);
+	model.beginModification(nullptr);
 	model.redo();
 	model.endModification();
 
@@ -174,7 +174,7 @@ TEST(ModelBase, ListUndo)
 	CHECK_CONDITION(root->at<Node>(3) == f);
 	CHECK_CONDITION(root->at<Node>(4) == g);
 
-	model.beginModification(NULL);
+	model.beginModification(nullptr);
 	model.undo();
 	model.endModification();
 
@@ -187,7 +187,7 @@ TEST(ModelBase, ListUndo)
 	CHECK_CONDITION(root->at<Node>(5) == f);
 	CHECK_CONDITION(root->at<Node>(6) == g);
 
-	model.beginModification(NULL);
+	model.beginModification(nullptr);
 	model.redo();
 	model.endModification();
 
