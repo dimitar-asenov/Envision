@@ -43,7 +43,7 @@ namespace Interaction {
 class INTERACTIONBASE_API CommandSuggestion
 {
 	public:
-		CommandSuggestion(const QString& suggestion = QString(), const QString& description = QString(), Visualization::Item* visualization = NULL);
+		CommandSuggestion(const QString& suggestion = QString(), const QString& description = QString(), Visualization::Item* visualization = nullptr);
 		virtual ~CommandSuggestion();
 
 		const QString& suggestion();

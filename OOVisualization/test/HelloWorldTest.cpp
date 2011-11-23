@@ -60,7 +60,7 @@ namespace OOVisualization {
 
 Class* addHelloWorld(Model::Model* model, Project* parent)
 {
-	Class* hello = NULL;
+	Class* hello = nullptr;
 
 	if (!parent) hello = dynamic_cast<Class*> (model->createRoot("Class"));
 	model->beginModification(parent ? static_cast<Model::Node*> (parent) :hello, "Adding a hello world class.");
@@ -96,7 +96,7 @@ Class* addHelloWorld(Model::Model* model, Project* parent)
 
 Library* addJavaLibrary(Model::Model* model, Project* parent)
 {
-	Library* java = NULL;
+	Library* java = nullptr;
 
 	if (!parent) java = dynamic_cast<Library*> (model->createRoot("Library"));
 	model->beginModification(parent? static_cast<Model::Node*> (parent) :java, "Adding a java library.");
@@ -147,7 +147,7 @@ Library* addJavaLibrary(Model::Model* model, Project* parent)
 
 Method* addLongMethod(Model::Model* model, Class* parent)
 {
-	Method* longMethod = NULL;
+	Method* longMethod = nullptr;
 
 	if (!parent) longMethod = dynamic_cast<Method*> (model->createRoot("Method"));
 	model->beginModification(parent? static_cast<Model::Node*> (parent) : longMethod, "Adding a long method.");
@@ -344,7 +344,7 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 
 Method* addFactorial(Model::Model* model, Class* parent)
 {
-	Method* factorial = NULL;
+	Method* factorial = nullptr;
 
 	if (!parent) factorial = dynamic_cast<Method*> (model->createRoot("Method"));
 	model->beginModification(parent? static_cast<Model::Node*> (parent) : factorial, "Adding a factorial method.");
@@ -407,7 +407,7 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 
 	////////////////////////////////////////////////// Create Model
 	Model::Model* model = new Model::Model();
-	Project* prj = NULL;
+	Project* prj = nullptr;
 
 	// Create project
 	prj = dynamic_cast<Project*> (model->createRoot("Project"));
@@ -415,37 +415,37 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	prj->setName("HelloWorld");
 	model->endModification();
 
-	Library* java = NULL;
+	Library* java = nullptr;
 	java = addJavaLibrary(model, prj);
 
 	// Build a simple HelloWorld Application
-	Class* hello = NULL;
+	Class* hello = nullptr;
 	hello = addHelloWorld(model, prj);
 
 //	// Add a second method
-	Method* longMethod = NULL;
+	Method* longMethod = nullptr;
 	longMethod = addLongMethod(model, hello);
 
 //	// Add a third method
-	Method* factorial = NULL;
+	Method* factorial = nullptr;
 	factorial = addFactorial(model, hello);
 
 	////////////////////////////////////////////////// Set Scene
-	Model::Node* top_level = NULL;
+	Model::Node* top_level = nullptr;
 	if (prj) top_level = prj;
 	else if(hello) top_level = hello;
 	else if(java) top_level = java;
 	else if (longMethod) top_level = longMethod;
 	else top_level = factorial;
 
-	scene->addTopLevelItem( scene->defaultRenderer()->render(NULL, top_level) );
+	scene->addTopLevelItem( scene->defaultRenderer()->render(nullptr, top_level) );
 	scene->scheduleUpdate();
 	scene->listenToModel(model);
 
 	// Create view
 	MainView* view = new MainView(scene);
 
-	CHECK_CONDITION(view != NULL);
+	CHECK_CONDITION(view != nullptr);
 }
 
 }

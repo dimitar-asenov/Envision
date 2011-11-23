@@ -57,7 +57,7 @@ const QString& Project::symbolName() const
 Model::Node* Project::navigateTo(Model::Node* source, QString path)
 {
 	QString symbol = extractFrontSymbol(path);
-	Model::Node* found = NULL;
+	Model::Node* found = nullptr;
 
 	// Is the target symbol name the module's name
 	if (isAncestorOf(source) && symbol == symbolName()) found = this;

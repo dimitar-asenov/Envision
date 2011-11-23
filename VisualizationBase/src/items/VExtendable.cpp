@@ -46,8 +46,8 @@ ITEM_COMMON_DEFINITIONS(VExtendable, "item")
 VExtendable::VExtendable(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<Item, Model::ExtendableNode>(parent, node, style),
 	header( new SequentialLayout(this, &style->smallHeaderStyle())),
-	layout(NULL),
-	attributes(NULL),
+	layout(nullptr),
+	attributes(nullptr),
 	expanded_(style->expanded())
 {
 	header->append(new Text(header, node->typeName()));
@@ -61,8 +61,8 @@ VExtendable::~VExtendable()
 		SAFE_DELETE_ITEM(layout);
 
 		// These were automatically deleted by layout's destructor
-		header = NULL ;
-		attributes = NULL;
+		header = nullptr;
+		attributes = nullptr;
 	}
 	else SAFE_DELETE_ITEM(header);
 }
@@ -92,7 +92,7 @@ void VExtendable::determineChildren()
 		{
 			useShape();
 			layout = new PanelBorderLayout(this, &style()->borderStyle());
-			attributes = new SequentialLayout(NULL, &style()->attributesStyle());
+			attributes = new SequentialLayout(nullptr, &style()->attributesStyle());
 
 			layout->setTop(true);
 			layout->top()->setMiddle(header);
@@ -102,12 +102,12 @@ void VExtendable::determineChildren()
 		{
 			removeShape();
 			// This is the header. We do not want this to be removed by layout's destructor
-			layout->top()->setMiddle(NULL, false);
+			layout->top()->setMiddle(nullptr, false);
 			header->setParentItem(this);
 
 			SAFE_DELETE_ITEM(layout);
 
-			attributes = NULL; // This was automatically deleted by layout's destructor
+			attributes = nullptr; // This was automatically deleted by layout's destructor
 		}
 	}
 

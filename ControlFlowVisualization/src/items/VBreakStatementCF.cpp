@@ -45,7 +45,7 @@ ITEM_COMMON_DEFINITIONS(VBreakStatementCF, "item")
 
 VBreakStatementCF::VBreakStatementCF(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<ControlFlowItem, BreakStatement>(parent, node, style),
-	vis_(NULL)
+	vis_(nullptr)
 {
 }
 
@@ -56,7 +56,7 @@ VBreakStatementCF::~VBreakStatementCF()
 
 void VBreakStatementCF::determineChildren()
 {
-	synchronizeItem<VBreakStatement>(vis_, node(), NULL);
+	synchronizeItem<VBreakStatement>(vis_, node(), nullptr);
 }
 
 void VBreakStatementCF::updateGeometry(int availableWidth, int availableHeight)

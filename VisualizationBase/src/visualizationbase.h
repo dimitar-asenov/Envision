@@ -35,7 +35,7 @@
 #ifndef VISUALIZATIONBASE_H
 #define VISUALIZATIONBASE_H
 
-#include "EnvisionPlugin.h"
+#include "Core/headers/EnvisionPlugin.h"
 
 namespace Visualization {
 

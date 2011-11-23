@@ -44,8 +44,8 @@ ITEM_COMMON_DEFINITIONS(VFormalResult, "item")
 
 VFormalResult::VFormalResult(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode< LayoutProvider<>, FormalResult>(parent, node, style),
-	name_(new VText(NULL, node->nameNode(), &style->name()) ),
-	type_(NULL)
+	name_(new VText(nullptr, node->nameNode(), &style->name()) ),
+	type_(nullptr)
 {
 	layout()->append(name_);
 }
@@ -53,8 +53,8 @@ VFormalResult::VFormalResult(Item* parent, NodeType* node, const StyleType* styl
 VFormalResult::~VFormalResult()
 {
 	// These were automatically deleted by LayoutProvider's destructor
-	name_ = NULL;
-	type_ = NULL;
+	name_ = nullptr;
+	type_ = nullptr;
 }
 
 void VFormalResult::determineChildren()

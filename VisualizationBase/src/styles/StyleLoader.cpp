@@ -44,7 +44,7 @@
 namespace Visualization {
 
 StyleLoader::StyleLoader() :
-	rootStyleNode(NULL)
+	rootStyleNode(nullptr)
 {
 }
 

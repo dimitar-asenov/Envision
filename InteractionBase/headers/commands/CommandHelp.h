@@ -43,7 +43,7 @@ namespace Interaction {
 class INTERACTIONBASE_API CommandHelp
 {
 	public:
-		CommandHelp(Visualization::Item* visualization = NULL);
+		CommandHelp(Visualization::Item* visualization = nullptr);
 		virtual ~CommandHelp();
 
 		Visualization::Item* visualization();

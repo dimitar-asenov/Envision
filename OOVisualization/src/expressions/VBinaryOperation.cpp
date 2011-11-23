@@ -44,22 +44,22 @@ ITEM_COMMON_DEFINITIONS(VBinaryOperation, "item")
 
 VBinaryOperation::VBinaryOperation(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<>, BinaryOperation>(parent, node, style),
-	pre_( NULL ),
-	in_( NULL ),
-	post_( NULL ),
-	left_(NULL),
-	right_(NULL)
+	pre_(nullptr),
+	in_(nullptr),
+	post_(nullptr),
+	left_(nullptr),
+	right_(nullptr)
 {
 }
 
 VBinaryOperation::~VBinaryOperation()
 {
 	// These were automatically deleted by LayoutProvider's destructor
-	pre_ = NULL;
-	in_ = NULL;
-	post_ = NULL;
-	left_ = NULL;
-	right_ = NULL;
+	pre_ = nullptr;
+	in_ = nullptr;
+	post_ = nullptr;
+	left_ = nullptr;
+	right_ = nullptr;
 }
 
 void VBinaryOperation::determineChildren()

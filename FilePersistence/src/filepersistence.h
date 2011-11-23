@@ -36,7 +36,7 @@
 #ifndef FILEPERSISTENCE_H
 #define FILEPERSISTENCE_H
 
-#include "EnvisionPlugin.h"
+#include "Core/headers/EnvisionPlugin.h"
 
 namespace FilePersistence {
 

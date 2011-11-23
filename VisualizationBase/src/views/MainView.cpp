@@ -43,7 +43,7 @@
 namespace Visualization {
 
 MainView::MainView(Scene *scene) :
-	View(scene, NULL), miniMap(new MiniMap(scene, this)), scaleLevel(SCALING_FACTOR)
+	View(scene, nullptr), miniMap(new MiniMap(scene, this)), scaleLevel(SCALING_FACTOR)
 {
 	setRenderHint(QPainter::Antialiasing);
 	setRenderHint(QPainter::TextAntialiasing);

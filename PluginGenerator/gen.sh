@@ -40,7 +40,7 @@ AUTHOR=$4
 DATE=`date +"$DATE_FORMAT"`
 
 PLUGIN_DIR=$WORKSPACE_DIR/$PLUGIN_NAME
-FILE_LIST="$PLUGIN_DIR/.project $PLUGIN_DIR/.cproject $PLUGIN_DIR/*.* $PLUGIN_DIR/headers/*.* $PLUGIN_DIR/src/*.* $PLUGIN_DIR/test/*.*"
+FILE_LIST="$PLUGIN_DIR/.project $PLUGIN_DIR/.cproject $PLUGIN_DIR/.gitignore $PLUGIN_DIR/*.* $PLUGIN_DIR/headers/*.* $PLUGIN_DIR/src/*.* $PLUGIN_DIR/test/*.*"
 
 if [ -d $PLUGIN_DIR ]
 then
@@ -74,7 +74,8 @@ mv $PLUGIN_DIR/pluginmeta.plugin $PLUGIN_DIR/${PLUGIN_NAME_LOWER}.plugin
 echo "DONE."
 echo
 echo "Note: Remember to configure the project dependencies:"
-echo "  - Include additional dependencies on other plugins in the .plugin file"
+echo "  - Include additional dependencies on other plug-ins in the .plugin file"
 echo "  - Include the corresponding library dependencies in the .pro file"
 echo "  - If using Eclipse, make the project dependent on the other projects it uses (Project Properties > Referenced Projects)"
+echo "  - Configure the precomliped header 'headers/precompiled.h' to include the precompiled headers of libraries it uses"
 

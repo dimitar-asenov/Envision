@@ -45,9 +45,9 @@ ITEM_COMMON_DEFINITIONS(VAssignmentStatement, "item")
 
 VAssignmentStatement::VAssignmentStatement(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<>, AssignmentStatement>(parent, node, style),
-	assignmentSymbol_( new Static(NULL, &style->op( node->op() ).inSymbol()) ),
-	left_(NULL),
-	right_(NULL)
+	assignmentSymbol_( new Static(nullptr, &style->op( node->op() ).inSymbol()) ),
+	left_(nullptr),
+	right_(nullptr)
 {
 	layout()->append(assignmentSymbol_);
 }
@@ -55,9 +55,9 @@ VAssignmentStatement::VAssignmentStatement(Item* parent, NodeType* node, const S
 VAssignmentStatement::~VAssignmentStatement()
 {
 	// These were automatically deleted by LayoutProvider's destructor
-	assignmentSymbol_ = NULL;
-	left_ = NULL;
-	right_ = NULL;
+	assignmentSymbol_ = nullptr;
+	left_ = nullptr;
+	right_ = nullptr;
 }
 
 void VAssignmentStatement::determineChildren()

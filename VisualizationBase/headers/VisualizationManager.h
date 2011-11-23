@@ -36,7 +36,7 @@
 
 #include "visualizationbase_api.h"
 
-#include "EnvisionManager.h"
+#include "Core/headers/EnvisionManager.h"
 
 namespace Visualization {
 

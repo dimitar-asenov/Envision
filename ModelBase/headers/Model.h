@@ -60,9 +60,9 @@ class UndoCommand;
  * of a Model:
  * 	- Root node creation
  * 	- Saving/loading a model to/from a persistent store
- *    - Access control to nodes in a concurrent setting
- *    - Undo/redo functionality
- *    - Notifications of model change
+ *  - Access control to nodes in a concurrent setting
+ *  - Undo/redo functionality
+ *  - Notifications of model change
  */
 class MODELBASE_API Model: public QObject
 {
@@ -77,7 +77,7 @@ class MODELBASE_API Model: public QObject
 		/** The root node for this model */
 		Node* root_;
 
-		/** The command stack that hold the undo history */
+		/** The command stack that holds the undo history */
 		QUndoStack commands;
 
 		/**
@@ -391,7 +391,7 @@ class MODELBASE_API Model: public QObject
 		 * 				used. The current store is the one from which the model was loaded. If this is not NULL it will
 		 * 				be used instead of the current store.
 		 */
-		void save(PersistentStore* store = NULL);
+		void save(PersistentStore* store = nullptr);
 
 		/**
 		 * Loads the current model tree from the specified persistent store. The provided store will become the current

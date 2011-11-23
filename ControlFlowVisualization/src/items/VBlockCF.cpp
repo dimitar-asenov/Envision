@@ -44,8 +44,8 @@ ITEM_COMMON_DEFINITIONS(VBlockCF, "item")
 
 VBlockCF::VBlockCF(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<ControlFlowItem, Block>(parent, node, style),
-	statements( NULL ),
-	vis_(NULL)
+	statements(nullptr),
+	vis_(nullptr)
 {
 }
 
@@ -89,7 +89,7 @@ void VBlockCF::determineChildren()
 	{
 		SAFE_DELETE_ITEM(statements);
 
-		synchronizeItem<VBlock>(vis_, node(), NULL);
+		synchronizeItem<VBlock>(vis_, node(), nullptr);
 	}
 }
 

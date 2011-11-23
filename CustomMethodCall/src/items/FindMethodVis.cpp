@@ -46,10 +46,10 @@ ITEM_COMMON_DEFINITIONS(FindMethodVis, "item")
 
 FindMethodVis::FindMethodVis(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<>, MethodCallExpression>(parent, node, style),
-	name_(new Text(NULL, &style->name()) ),
-	separator_(NULL),
-	prefix_(NULL),
-	arguments_(new VList(NULL, node->arguments(), &style->arguments()))
+	name_(new Text(nullptr, &style->name()) ),
+	separator_(nullptr),
+	prefix_(nullptr),
+	arguments_(new VList(nullptr, node->arguments(), &style->arguments()))
 {
 	layout()->append(name_);
 	layout()->append(arguments_);
@@ -58,16 +58,16 @@ FindMethodVis::FindMethodVis(Item* parent, NodeType* node, const StyleType* styl
 FindMethodVis::~FindMethodVis()
 {
 	// These were automatically deleted by LayoutProvider's destructor
-	name_ = NULL;
-	separator_ = NULL;
-	prefix_ = NULL;
-	arguments_ = NULL;
+	name_ = nullptr;
+	separator_ = nullptr;
+	prefix_ = nullptr;
+	arguments_ = nullptr;
 }
 
 void FindMethodVis::determineChildren()
 {
 	layout()->synchronizeFirst(prefix_, node()->prefix());
-	layout()->synchronizeMid(separator_, node()->prefix() != NULL, &style()->separator(), 1);
+	layout()->synchronizeMid(separator_, node()->prefix() != nullptr, &style()->separator(), 1);
 	layout()->synchronizeLast(arguments_, node()->arguments(), &style()->arguments());
 
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?

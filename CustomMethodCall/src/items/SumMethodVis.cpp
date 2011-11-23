@@ -44,11 +44,11 @@ ITEM_COMMON_DEFINITIONS(SumMethodVis, "item")
 
 SumMethodVis::SumMethodVis(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<>, MethodCallExpression>(parent, node, style),
-	name_(new Static(NULL, &style->name()) ),
-	prefix_(NULL),
-	from_(NULL),
-	to_(NULL),
-	arguments_(new SequentialLayout(NULL, &style->arguments()))
+	name_(new Static(nullptr, &style->name()) ),
+	prefix_(nullptr),
+	from_(nullptr),
+	to_(nullptr),
+	arguments_(new SequentialLayout(nullptr, &style->arguments()))
 {
 	arguments_->append(name_);
 	layout()->append(arguments_);
@@ -57,19 +57,19 @@ SumMethodVis::SumMethodVis(Item* parent, NodeType* node, const StyleType* style)
 SumMethodVis::~SumMethodVis()
 {
 	// These were automatically deleted by LayoutProvider's destructor
-	name_ = NULL;
-	prefix_ = NULL;
-	arguments_ = NULL;
+	name_ = nullptr;
+	prefix_ = nullptr;
+	arguments_ = nullptr;
 }
 
 void SumMethodVis::determineChildren()
 {
-	Model::Node* fromNode = NULL;
+	Model::Node* fromNode = nullptr;
 	if ( node()->arguments()->size() > 0 ) fromNode = node()->arguments()->at(0);
 
 	arguments_->synchronizeLast(from_, fromNode);
 
-	Model::Node* toNode = NULL;
+	Model::Node* toNode = nullptr;
 	if ( node()->arguments()->size() > 1 ) toNode = node()->arguments()->at(1);
 	arguments_->synchronizeFirst(to_, toNode);
 

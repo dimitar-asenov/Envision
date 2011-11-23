@@ -38,7 +38,7 @@ namespace Visualization {
 ITEM_COMMON_DEFINITIONS( PanelLayout, "layout" )
 
 PanelLayout::PanelLayout(Item* parent, const StyleType* style) :
-	Layout(parent, style), first_(NULL), middle_(NULL), last_(NULL)
+	Layout(parent, style), first_(nullptr), middle_(nullptr), last_(nullptr)
 {
 }
 
@@ -51,7 +51,7 @@ PanelLayout::~PanelLayout()
 void PanelLayout::setItem(Item* item, Item*& position, bool deleteOldItem)
 {
 	if (deleteOldItem) SAFE_DELETE_ITEM( position );
-	else if (position) position->setParentItem(NULL);
+	else if (position) position->setParentItem(nullptr);
 
 	if ( item ) item->setParentItem(this);
 	position = item;
@@ -65,9 +65,9 @@ bool PanelLayout::sizeDependsOnParent() const
 
 bool PanelLayout::isEmpty() const
 {
-	return ( first_ == NULL || first_->isEmpty() )
-			&& ( middle_ == NULL || middle_->isEmpty() )
-			&& (last_ == NULL || last_->isEmpty() );
+	return ( first_ == nullptr || first_->isEmpty() )
+			&& ( middle_ == nullptr || middle_->isEmpty() )
+			&& (last_ == nullptr || last_->isEmpty() );
 }
 
 void PanelLayout::updateGeometry(int availableWidth, int availableHeight)
@@ -162,15 +162,15 @@ void PanelLayout::updateGeometry(int availableWidth, int availableHeight)
 
 bool PanelLayout::focusChild(FocusTarget location)
 {
-	Item* toFocus = NULL;
+	Item* toFocus = nullptr;
 	Item* f = first_ ? first_ : (middle_ ? middle_ : last_);
 	Item* l = last_ ? last_ : (middle_ ? middle_ : first_);
 
-	if (f == NULL) return false;
+	if (f == nullptr) return false;
 
 	// Find out which is the current item and get the previous and next if any
-	Item* prev = NULL;
-	Item* next = NULL;
+	Item* prev = nullptr;
+	Item* next = nullptr;
 	if (first_ && first_->childHasFocus())
 	{
 		next = middle_ ? middle_ : last_;

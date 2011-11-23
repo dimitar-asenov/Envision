@@ -53,7 +53,7 @@ class VISUALIZATIONBASE_API MiniMap : public View
 
 		void setMargin(qreal margin);
 
-		static const qreal DEFAULT_MARGIN = 2.0;
+		constexpr static qreal DEFAULT_MARGIN = 2.0;
 
 	public slots:
 		void sceneRectChanged(const QRectF & rect);

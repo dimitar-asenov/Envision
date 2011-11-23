@@ -59,7 +59,7 @@ void ListPut::redo()
 
 void ListPut::undo()
 {
-	nodes[putPosition] = NULL;
+	nodes[putPosition] = nullptr;
 	if (nodes.size() != oldSize) nodes.resize(oldSize);
 	UndoCommand::undo();
 }

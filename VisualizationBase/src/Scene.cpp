@@ -54,7 +54,7 @@ class UpdateSceneEvent : public QEvent
 		UpdateSceneEvent() : QEvent(EventType){};
 };
 
-Scene::Scene() : QGraphicsScene(VisualizationManager::instance().getMainWindow()), needsUpdate(false), renderer_(NULL), sceneHandlerItem_(new SceneHandlerItem(this))
+Scene::Scene() : QGraphicsScene(VisualizationManager::instance().getMainWindow()), needsUpdate(false), renderer_(nullptr), sceneHandlerItem_(new SceneHandlerItem(this))
 {
 	// TODO Auto-generated constructor stub
 }

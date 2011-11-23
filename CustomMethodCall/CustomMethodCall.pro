@@ -3,11 +3,10 @@ CONFIG(release, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/ReleaseBuild
 CONFIG(debug, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/DebugBuild
 PLUGINS_DIR = $${BUILD_DIR}/plugins
 CONFIG(debug, debug|release):DEFINES += DEBUG
-QMAKE_CXXFLAGS += -Werror
+QMAKE_CXXFLAGS += -Werror -std=c++0x
 INCLUDEPATH += ./headers \
     ./src \
     ./test \
-    $${ENVISION_ROOT_DIR}/Core/headers \
     $${ENVISION_ROOT_DIR}
 TARGET = custommethodcall
 DEFINES += CUSTOMMETHODCALL_LIBRARY
@@ -24,7 +23,8 @@ QT = core \
 TEMPLATE = lib
 CONFIG += plugin \
     warn_on \
-    thread
+    thread \
+    precompile_header
 target.path = $$PLUGINS_DIR
 pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
@@ -33,7 +33,9 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-HEADERS += headers/items/SumMethodVisStyle.h \
+PRECOMPILED_HEADER = headers/precompiled.h
+HEADERS += headers/precompiled.h \
+    headers/items/SumMethodVisStyle.h \
     headers/items/SumMethodVis.h \
     headers/items/InsertMethodVisStyle.h \
     headers/items/InsertMethodVis.h \

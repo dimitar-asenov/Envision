@@ -51,7 +51,7 @@ void Model::init()
 }
 
 Model::Model() :
-	root_(NULL), currentModificationTarget(NULL), currentModificationLock(NULL), pushedNewCommandsOnTheStack(false), performedUndoRedo(false), modificationInProgress(false), nextId(0), store_(NULL)
+	root_(nullptr), currentModificationTarget(nullptr), currentModificationLock(nullptr), pushedNewCommandsOnTheStack(false), performedUndoRedo(false), modificationInProgress(false), nextId(0), store_(nullptr)
 {
 	commands.setUndoLimit(100);
 	loadedModels.append(this);
@@ -87,7 +87,7 @@ void Model::endModification()
 {
 	if ( pushedNewCommandsOnTheStack )
 	{
-		pushCommandOnUndoStack(new SetModificationTarget(currentModificationTarget, currentModificationLock, modifiedTargets, NULL));
+		pushCommandOnUndoStack(new SetModificationTarget(currentModificationTarget, currentModificationLock, modifiedTargets, nullptr));
 		pushedNewCommandsOnTheStack = false;
 		commands.endMacro();
 	}
@@ -120,9 +120,9 @@ bool Model::canBeModified(const Node* node) const
 
 	// Check that this node has as a parent the current modification target.
 	const Node* n = node;
-	while ( n != NULL && n != currentModificationTarget )
+	while ( n != nullptr && n != currentModificationTarget )
 		n = n->parent();
-	if ( n == NULL ) return false;
+	if ( n == nullptr ) return false;
 
 	// Check that the access lock for this node is the current modification lock.
 	return node->accessLock() == currentModificationLock;
@@ -130,7 +130,7 @@ bool Model::canBeModified(const Node* node) const
 
 NodeIdType Model::generateNextId()
 {
-	if ( root_ != NULL && !modificationInProgress ) throw ModelException("Creating a new node without calling Model.beginModification() first");
+	if ( root_ != nullptr && !modificationInProgress ) throw ModelException("Creating a new node without calling Model.beginModification() first");
 
 	return nextId++;
 }
@@ -188,7 +188,7 @@ void Model::load(PersistentStore* store, const QString& name)
 	if (!store) throw ModelException("Loading model '" + name + "' without specifying a persistent store");
 
 	name_ = name;
-	if ( root_ == NULL )
+	if ( root_ == nullptr )
 	{
 		store_ = store;
 		commands.clear();
@@ -204,15 +204,15 @@ Model* Model::findModel(Node* root)
 		if ( (*model)->root() == root ) return *model;
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 Node* Model::createRoot(const QString &typeName)
 {
-	if ( root_ == NULL )
+	if ( root_ == nullptr )
 	{
 		commands.clear();
-		root_ = Node::createNewNode(typeName, NULL, this);
+		root_ = Node::createNewNode(typeName, nullptr, this);
 		emit rootCreated(root_);
 	}
 

@@ -38,7 +38,7 @@ namespace Visualization {
 ITEM_COMMON_DEFINITIONS( PanelBorderLayout, "layout" )
 
 PanelBorderLayout::PanelBorderLayout(Item* parent, const StyleType* style) :
-	Layout(parent, style), top_(new PanelLayout(this, &style->topStyle())), left_(NULL), bottom_(NULL), right_(NULL), content_(NULL)
+	Layout(parent, style), top_(new PanelLayout(this, &style->topStyle())), left_(nullptr), bottom_(nullptr), right_(nullptr), content_(nullptr)
 {
 }
 
@@ -63,7 +63,7 @@ void PanelBorderLayout::setContent(Item* content, bool deleteOldContent)
 	if (content_ == content) return;
 
 	if ( deleteOldContent ) SAFE_DELETE_ITEM(content_);
-	else if (content_) content_->setParentItem(NULL);
+	else if (content_) content_->setParentItem(nullptr);
 
 	if ( content ) content->setParentItem(this);
 	content_ = content;
@@ -72,11 +72,11 @@ void PanelBorderLayout::setContent(Item* content, bool deleteOldContent)
 
 bool PanelBorderLayout::isEmpty() const
 {
-	return ( top_ == NULL || top_->isEmpty())
-			&& ( left_ == NULL || left_->isEmpty())
-			&& ( content_ == NULL || content_->isEmpty())
-			&& ( right_ == NULL || right_->isEmpty())
-			&& ( bottom_ == NULL || bottom_->isEmpty());
+	return ( top_ == nullptr || top_->isEmpty())
+			&& ( left_ == nullptr || left_->isEmpty())
+			&& ( content_ == nullptr || content_->isEmpty())
+			&& ( right_ == nullptr || right_->isEmpty())
+			&& ( bottom_ == nullptr || bottom_->isEmpty());
 }
 
 void PanelBorderLayout::updateGeometry(int, int)
@@ -207,8 +207,8 @@ bool PanelBorderLayout::focusChild(FocusTarget location)
 {
 	if (!content_ && !top_ && !left_ & !bottom_ && !right_) return false;
 
-	Item* toFocus = NULL;
-	Item* current = NULL;
+	Item* toFocus = nullptr;
+	Item* current = nullptr;
 	if (content_ && content_->childHasFocus()) current = content_;
 	else if (top_ && top_->childHasFocus()) current = top_;
 	else if (left_ && left_->childHasFocus()) current = left_;

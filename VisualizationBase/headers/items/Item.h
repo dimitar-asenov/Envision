@@ -140,7 +140,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		const static int LAYER_DEFAULT_Z = 0;
 		const static int LAYER_SELECTION_Z = 100;
 
-		Item(Item* parent, const StyleType* style = NULL);
+		Item(Item* parent, const StyleType* style = nullptr);
 		virtual ~Item();
 
 		Scene* scene() const;
@@ -226,8 +226,8 @@ template <class T> void Item::synchronizeItem(T*& item, typename T::NodeType* no
 
 	if (!item && node)
 	{
-		if (style) item = new T(NULL, node, style);
-		else item = new T(NULL, node);
+		if (style) item = new T(nullptr, node, style);
+		else item = new T(nullptr, node);
 
 		item->setParentItem(this);
 		setUpdateNeeded();

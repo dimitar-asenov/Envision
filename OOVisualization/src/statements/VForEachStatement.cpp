@@ -47,17 +47,17 @@ ITEM_COMMON_DEFINITIONS(VForEachStatement, "item")
 
 VForEachStatement::VForEachStatement(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<PanelBorderLayout>, ForEachStatement>(parent, node, style),
-	header(new SequentialLayout(NULL, &style->header())),
-	varContainer(new SequentialLayout(NULL, &style->varContainer())),
-	collectionBackground(new SequentialLayout(NULL, &style->collection())),
-	varName( new VText(NULL, node->varNameNode(), &style->varName())),
-	collection(NULL),
-	varType(NULL),
-	body( NULL )
+	header(new SequentialLayout(nullptr, &style->header())),
+	varContainer(new SequentialLayout(nullptr, &style->varContainer())),
+	collectionBackground(new SequentialLayout(nullptr, &style->collection())),
+	varName( new VText(nullptr, node->varNameNode(), &style->varName())),
+	collection(nullptr),
+	varType(nullptr),
+	body(nullptr)
 {
 	layout()->setTop(true);
 	layout()->top()->setFirst(header);
-	header->append(new Static(NULL, &style->icon()));
+	header->append(new Static(nullptr, &style->icon()));
 	header->append(varContainer);
 	varContainer->append(varName);
 	header->append(collectionBackground);
@@ -66,13 +66,13 @@ VForEachStatement::VForEachStatement(Item* parent, NodeType* node, const StyleTy
 VForEachStatement::~VForEachStatement()
 {
 	// These were automatically deleted by LayoutProvider's destructor
-	header = NULL;
-	varContainer = NULL;
-	collectionBackground = NULL;
-	varName = NULL;
-	collection = NULL;
-	varType = NULL;
-	body = NULL;
+	header = nullptr;
+	varContainer = nullptr;
+	collectionBackground = nullptr;
+	varName = nullptr;
+	collection = nullptr;
+	varType = nullptr;
+	body = nullptr;
 }
 
 void VForEachStatement::determineChildren()

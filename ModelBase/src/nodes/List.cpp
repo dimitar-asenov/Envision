@@ -181,7 +181,7 @@ Node* List::findFirstSymbolDefinition(const QString& symbol)
 		if (nodes_[i]->definesSymbol() && nodes_[i]->symbolName() == symbol)
 			return nodes_[i];
 
-	return NULL;
+	return nullptr;
 }
 
 QList<Node*> List::findAllSymbolDefinitions(const QString& symbol)

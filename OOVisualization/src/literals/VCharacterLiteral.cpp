@@ -44,7 +44,7 @@ ITEM_COMMON_DEFINITIONS(VCharacterLiteral, "item")
 
 VCharacterLiteral::VCharacterLiteral(Item* parent, NodeType* literal, const StyleType* style) :
 	ItemWithNode<Item, CharacterLiteral>(parent, literal, style),
-	vis_(NULL)
+	vis_(nullptr)
 {
 }
 

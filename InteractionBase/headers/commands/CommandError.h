@@ -43,7 +43,7 @@ namespace Interaction {
 class INTERACTIONBASE_API CommandError
 {
 	public:
-		CommandError(const QString& message = QString(), Visualization::Item* visualization = NULL);
+		CommandError(const QString& message = QString(), Visualization::Item* visualization = nullptr);
 		virtual ~CommandError();
 
 		const QString& message();

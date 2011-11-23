@@ -45,7 +45,7 @@ ITEM_COMMON_DEFINITIONS(VContinueStatementCF, "item")
 
 VContinueStatementCF::VContinueStatementCF(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<ControlFlowItem, ContinueStatement>(parent, node, style),
-	vis_(NULL)
+	vis_(nullptr)
 {
 }
 
@@ -56,7 +56,7 @@ VContinueStatementCF::~VContinueStatementCF()
 
 void VContinueStatementCF::determineChildren()
 {
-	synchronizeItem<VContinueStatement>(vis_, node(), NULL);
+	synchronizeItem<VContinueStatement>(vis_, node(), nullptr);
 }
 
 void VContinueStatementCF::updateGeometry(int availableWidth, int availableHeight)

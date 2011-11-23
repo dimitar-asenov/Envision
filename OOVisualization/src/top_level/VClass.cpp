@@ -49,16 +49,16 @@ ITEM_COMMON_DEFINITIONS(VClass, "item")
 
 VClass::VClass(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<PanelBorderLayout>, Class>(parent, node, style),
-	header_( new SequentialLayout(NULL, &style->header()) ),
-	icon_( new Static(NULL, &style->icon()) ),
-	name_(new VText(NULL, node->nameNode(), &style->nameDefault()) ),
-	baseClasses_( new VList(NULL, node->baseClasses(), &style->baseClasses()) ),
-	content_( new PositionLayout(NULL, &style->content()) ),
-	fieldContainer_(new SequentialLayout(NULL, &style->fieldContainer()) ),
-	publicFieldArea_(new SequentialLayout(NULL, &style->publicFieldArea()) ),
-	privateFieldArea_(new SequentialLayout(NULL, &style->privateFieldArea()) ),
-	protectedFieldArea_(new SequentialLayout(NULL, &style->protectedFieldArea()) ),
-	defaultFieldArea_(new SequentialLayout(NULL, &style->defaultFieldArea()) )
+	header_( new SequentialLayout(nullptr, &style->header()) ),
+	icon_( new Static(nullptr, &style->icon()) ),
+	name_(new VText(nullptr, node->nameNode(), &style->nameDefault()) ),
+	baseClasses_( new VList(nullptr, node->baseClasses(), &style->baseClasses()) ),
+	content_( new PositionLayout(nullptr, &style->content()) ),
+	fieldContainer_(new SequentialLayout(nullptr, &style->fieldContainer()) ),
+	publicFieldArea_(new SequentialLayout(nullptr, &style->publicFieldArea()) ),
+	privateFieldArea_(new SequentialLayout(nullptr, &style->privateFieldArea()) ),
+	protectedFieldArea_(new SequentialLayout(nullptr, &style->protectedFieldArea()) ),
+	defaultFieldArea_(new SequentialLayout(nullptr, &style->defaultFieldArea()) )
 {
 	layout()->setTop(true);
 	layout()->top()->setFirst(header_);
@@ -79,21 +79,21 @@ VClass::VClass(Item* parent, NodeType* node, const StyleType* style) :
 VClass::~VClass()
 {
 	// These were automatically deleted by LayoutProvider's destructor
-	header_ = NULL;
-	icon_ = NULL;
-	name_ = NULL;
-	baseClasses_ = NULL;
-	content_ = NULL;
-	fieldContainer_ = NULL;
-	publicFieldArea_ = NULL;
-	privateFieldArea_ = NULL;
-	protectedFieldArea_ = NULL;
-	defaultFieldArea_ = NULL;
+	header_ = nullptr;
+	icon_ = nullptr;
+	name_ = nullptr;
+	baseClasses_ = nullptr;
+	content_ = nullptr;
+	fieldContainer_ = nullptr;
+	publicFieldArea_ = nullptr;
+	privateFieldArea_ = nullptr;
+	protectedFieldArea_ = nullptr;
+	defaultFieldArea_ = nullptr;
 }
 
 void VClass::determineChildren()
 {
-	const TextStyle* nameStyle = NULL;
+	const TextStyle* nameStyle = nullptr;
 
 	if (node()->visibility() == Visibility::DEFAULT) nameStyle = &style()->nameDefault();
 	else if (node()->visibility() == Visibility::PUBLIC) nameStyle = &style()->namePublic();

@@ -38,7 +38,7 @@
 namespace Visualization {
 
 ItemStyle::ItemStyle() :
-	shapeStyle_(NULL)
+	shapeStyle_(nullptr)
 {
 }
 
@@ -49,7 +49,7 @@ ItemStyle::~ItemStyle()
 
 Shape* ItemStyle::createShape(Item* parent) const
 {
-	if (shapeName_.isEmpty()) return NULL;
+	if (shapeName_.isEmpty()) return nullptr;
 
 	Shape* shape = Shape::createNewShape(shapeName_, parent);
 	shape->setStyle(shapeStyle_);
@@ -69,7 +69,7 @@ void ItemStyle::load(StyleLoader& sl)
 		shapeStyle_ = Shape::createNewShapeStyle(shapeName_);
 		sl.load("shape", *shapeStyle_);
 	}
-	else shapeStyle_ = NULL;
+	else shapeStyle_ = nullptr;
 }
 
 }

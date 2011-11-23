@@ -45,7 +45,7 @@ ITEM_COMMON_DEFINITIONS(VArrayInitializer, "item")
 
 VArrayInitializer::VArrayInitializer(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode< LayoutProvider<GridLayout>, ArrayInitializer>(parent, node, style),
-	values_( NULL ),
+	values_(nullptr),
 	matrixForm_(false)
 {
 }
@@ -53,7 +53,7 @@ VArrayInitializer::VArrayInitializer(Item* parent, NodeType* node, const StyleTy
 VArrayInitializer::~VArrayInitializer()
 {
 	// These were automatically deleted by LayoutProvider's destructor
-	values_ = NULL;
+	values_ = nullptr;
 }
 
 void VArrayInitializer::determineChildren()
@@ -76,11 +76,11 @@ void VArrayInitializer::determineChildren()
 	{
 		layout()->clear();
 
-		if (matrixForm_) values_ = NULL; // this was deleted by the clear() operation above
+		if (matrixForm_) values_ = nullptr; // this was deleted by the clear() operation above
 		else
 		{
 			layout()->setGridSize(1,1, false);
-			values_ = new VList(NULL, node()->values(), &style()->values());
+			values_ = new VList(nullptr, node()->values(), &style()->values());
 			layout()->set(values_,0,0, true);
 		}
 	}
@@ -125,7 +125,7 @@ void VArrayInitializer::showInMatrixForm(bool matrixForm)
 
 bool VArrayInitializer::viewFormSwitched() const
 {
-	return matrixForm_ == (values_ != NULL) || layout()->gridSize().width() == 0;
+	return matrixForm_ == (values_ != nullptr) || layout()->gridSize().width() == 0;
 }
 
 }

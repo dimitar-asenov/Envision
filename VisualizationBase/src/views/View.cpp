@@ -42,7 +42,7 @@ namespace Visualization {
 View::View(Scene* scene, View *parent) :
 	QGraphicsView(scene, parent)
 {
-	if ( parent == NULL )
+	if ( parent == nullptr )
 	{
 		setParent(VisualizationManager::instance().getMainWindow());
 		VisualizationManager::instance().addTopLevelView(this);

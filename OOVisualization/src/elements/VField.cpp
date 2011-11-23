@@ -45,8 +45,8 @@ ITEM_COMMON_DEFINITIONS(VField, "item")
 
 VField::VField(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode< LayoutProvider<>, Field >(parent, node, style),
-	name_(new VText(NULL, node->nameNode(), &style->nameDefault()) ),
-	type_(NULL)
+	name_(new VText(nullptr, node->nameNode(), &style->nameDefault()) ),
+	type_(nullptr)
 {
 	layout()->append(name_);
 }
@@ -54,13 +54,13 @@ VField::VField(Item* parent, NodeType* node, const StyleType* style) :
 VField::~VField()
 {
 	// These were automatically deleted by LayoutProvider's destructor
-	name_ = NULL;
-	type_ = NULL;
+	name_ = nullptr;
+	type_ = nullptr;
 }
 
 void VField::determineChildren()
 {
-	const TextStyle* nameStyle = NULL;
+	const TextStyle* nameStyle = nullptr;
 	if (node()->storageSpecifier() == StorageSpecifier::INSTANCE_VARIABLE)
 	{
 		if (node()->visibility() == Visibility::DEFAULT) nameStyle = &style()->nameDefault();

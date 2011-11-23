@@ -40,7 +40,7 @@ EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(Type, Model::ExtendableNode)
 
 Class* Type::classDefinition()
 {
-	return NULL;
+	return nullptr;
 }
 
 }

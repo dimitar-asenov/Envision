@@ -45,10 +45,10 @@ ITEM_COMMON_DEFINITIONS(VVariableDeclaration, "item")
 
 VVariableDeclaration::VVariableDeclaration(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<>, VariableDeclaration>(parent, node, style),
-	name_(new VText(NULL, node->nameNode(), &style->name()) ),
-	type_(NULL),
-	assignmentSymbol_(NULL),
-	initialValue_(NULL)
+	name_(new VText(nullptr, node->nameNode(), &style->name()) ),
+	type_(nullptr),
+	assignmentSymbol_(nullptr),
+	initialValue_(nullptr)
 {
 	layout()->append(name_);
 }
@@ -56,10 +56,10 @@ VVariableDeclaration::VVariableDeclaration(Item* parent, NodeType* node, const S
 VVariableDeclaration::~VVariableDeclaration()
 {
 	// These were automatically deleted by LayoutProvider's destructor
-	name_ = NULL;
-	type_ = NULL;
-	assignmentSymbol_ = NULL;
-	initialValue_ = NULL;
+	name_ = nullptr;
+	type_ = nullptr;
+	assignmentSymbol_ = nullptr;
+	initialValue_ = nullptr;
 }
 
 void VVariableDeclaration::determineChildren()
@@ -73,7 +73,7 @@ void VVariableDeclaration::determineChildren()
 
 	layout()->synchronizeFirst(type_, node()->type());
 	layout()->synchronizeMid(name_, node()->nameNode(), &style()->name(), 1);
-	layout()->synchronizeMid(assignmentSymbol_, node()->initialValue() != NULL, &style()->assignmentSymbol(), 2);
+	layout()->synchronizeMid(assignmentSymbol_, node()->initialValue() != nullptr, &style()->assignmentSymbol(), 2);
 	layout()->synchronizeLast(initialValue_, node()->initialValue());
 }
 

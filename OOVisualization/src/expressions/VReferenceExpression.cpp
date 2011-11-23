@@ -45,9 +45,9 @@ ITEM_COMMON_DEFINITIONS(VReferenceExpression, "item")
 
 VReferenceExpression::VReferenceExpression(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<>, ReferenceExpression>(parent, node, style),
-	name_(new Text(NULL, &style->name()) ),
-	separator_(NULL),
-	prefix_(NULL)
+	name_(new Text(nullptr, &style->name()) ),
+	separator_(nullptr),
+	prefix_(nullptr)
 {
 	layout()->append(name_);
 }
@@ -55,15 +55,15 @@ VReferenceExpression::VReferenceExpression(Item* parent, NodeType* node, const S
 VReferenceExpression::~VReferenceExpression()
 {
 	// These were automatically deleted by LayoutProvider's destructor
-	name_ = NULL;
-	separator_ = NULL;
-	prefix_ = NULL;
+	name_ = nullptr;
+	separator_ = nullptr;
+	prefix_ = nullptr;
 }
 
 void VReferenceExpression::determineChildren()
 {
 	layout()->synchronizeFirst(prefix_, node()->prefix());
-	layout()->synchronizeMid(separator_, node()->prefix() != NULL, &style()->separator(), 1);
+	layout()->synchronizeMid(separator_, node()->prefix() != nullptr, &style()->separator(), 1);
 
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
 	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know

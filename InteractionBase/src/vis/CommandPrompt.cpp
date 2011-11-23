@@ -59,13 +59,13 @@ const int PROMPT_TO_RECEIVER_DISTANCE = 3;
 ITEM_COMMON_DEFINITIONS(CommandPrompt, "item")
 
 CommandPrompt::CommandPrompt(Item* commandReceiver, const StyleType* style) :
-	Item(NULL, style),
+	Item(nullptr, style),
 	commandReceiver_(commandReceiver),
 	layout(new SequentialLayout(this, &style->layout())),
-	suggestionContainer(new SequentialLayout(NULL, &style->suggestionContainer())),
-	errorContainer(new SequentialLayout(NULL, &style->errorContainer())),
-	command( new Text(NULL, &style->commandText())),
-	result_(NULL),
+	suggestionContainer(new SequentialLayout(nullptr, &style->suggestionContainer())),
+	errorContainer(new SequentialLayout(nullptr, &style->errorContainer())),
+	command( new Text(nullptr, &style->commandText())),
+	result_(nullptr),
 	justCreated(true)
 {
 	setFlag(QGraphicsItem::ItemIsMovable);
@@ -78,7 +78,7 @@ CommandPrompt::CommandPrompt(Item* commandReceiver, const StyleType* style) :
 
 CommandPrompt::~CommandPrompt()
 {
-	commandReceiver_ = NULL; // This item is completely out of our control, we just know about it.
+	commandReceiver_ = nullptr; // This item is completely out of our control, we just know about it.
 
 	removeResult();
 	removeSuggestions();
@@ -86,9 +86,9 @@ CommandPrompt::~CommandPrompt()
 	SAFE_DELETE_ITEM(layout);
 
 	// These are deleted by layout's destructor
-	command = NULL;
-	suggestionContainer = NULL;
-	errorContainer = NULL;
+	command = nullptr;
+	suggestionContainer = nullptr;
+	errorContainer = nullptr;
 }
 
 void CommandPrompt::initializeCommand()
@@ -165,9 +165,9 @@ void CommandPrompt::setResult(CommandResult* result)
 	for (int i = 0; i<result->errors().size(); ++i)
 	{
 		// Create visualization if one is missing.
-		if (result->errors()[i]->visualization() == NULL)
+		if (result->errors()[i]->visualization() == nullptr)
 		{
-			TextAndDescription* vis = new TextAndDescription(NULL, &style()->defaultError());
+			TextAndDescription* vis = new TextAndDescription(nullptr, &style()->defaultError());
 			vis->setContents(result->errors()[i]->message(), result->errors()[i]->resolutionTips().join(" OR "));
 			result->errors()[i]->setVisualization(vis);
 		}
@@ -180,9 +180,9 @@ void CommandPrompt::setResult(CommandResult* result)
 	for (int i = 0; i<result->suggestions().size(); ++i)
 	{
 		// Create visualization if one is missing.
-		if (result->suggestions()[i]->visualization() == NULL)
+		if (result->suggestions()[i]->visualization() == nullptr)
 		{
-			TextAndDescription* vis = new TextAndDescription(NULL, &style()->defaultSuggestion());
+			TextAndDescription* vis = new TextAndDescription(nullptr, &style()->defaultSuggestion());
 			vis->setContents(result->suggestions()[i]->suggestion(), result->suggestions()[i]->description());
 			result->suggestions()[i]->setVisualization(vis);
 		}
@@ -214,9 +214,9 @@ void CommandPrompt::addSuggestion(CommandSuggestion* suggestion)
 	suggestions_.append(suggestion);
 
 	// Create visualization if one is missing.
-	if (suggestion->visualization() == NULL)
+	if (suggestion->visualization() == nullptr)
 	{
-		TextAndDescription* vis = new TextAndDescription(NULL, &style()->defaultSuggestion());
+		TextAndDescription* vis = new TextAndDescription(nullptr, &style()->defaultSuggestion());
 		vis->setContents(suggestion->suggestion(), suggestion->description());
 		suggestion->setVisualization(vis);
 	}
@@ -234,9 +234,9 @@ void CommandPrompt::addSuggestions(const QList<CommandSuggestion*>& suggestions)
 		suggestions_.append(suggestions[i]);
 
 		// Create visualization if one is missing.
-		if (suggestions_.last()->visualization() == NULL)
+		if (suggestions_.last()->visualization() == nullptr)
 		{
-			TextAndDescription* vis = new TextAndDescription(NULL, &style()->defaultSuggestion());
+			TextAndDescription* vis = new TextAndDescription(nullptr, &style()->defaultSuggestion());
 			vis->setContents(suggestions_.last()->suggestion(), suggestions_.last()->description());
 			suggestions_.last()->setVisualization(vis);
 		}

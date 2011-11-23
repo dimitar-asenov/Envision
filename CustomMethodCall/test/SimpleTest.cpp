@@ -49,7 +49,7 @@ namespace CustomMethodCall {
 
 Class* addCollection(Model::Model* model, Project* parent)
 {
-	Class* col = NULL;
+	Class* col = nullptr;
 
 	if (!parent) col = dynamic_cast<Class*> (model->createRoot("Class"));
 	model->beginModification(parent ? static_cast<Model::Node*> (parent) :col, "Adding a collection class.");
@@ -153,21 +153,21 @@ TEST(CustomMethodCall, CustomVisTest)
 	////////////////////////////////////////////////// Create Model
 	Model::Model* model = new Model::Model();
 
-	Class* collection = NULL;
-	collection = addCollection(model, NULL);
+	Class* collection = nullptr;
+	collection = addCollection(model, nullptr);
 
 	////////////////////////////////////////////////// Set Scene
-	Model::Node* top_level = NULL;
+	Model::Node* top_level = nullptr;
 	if(collection) top_level = collection;
 
-	scene->addTopLevelItem( scene->defaultRenderer()->render(NULL, top_level) );
+	scene->addTopLevelItem( scene->defaultRenderer()->render(nullptr, top_level) );
 	scene->scheduleUpdate();
 	scene->listenToModel(model);
 
 	// Create view
 	MainView* view = new MainView(scene);
 
-	CHECK_CONDITION(view != NULL);
+	CHECK_CONDITION(view != nullptr);
 }
 
 }

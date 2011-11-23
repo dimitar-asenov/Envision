@@ -47,16 +47,16 @@ ITEM_COMMON_DEFINITIONS(VIfStatement, "item")
 
 VIfStatement::VIfStatement(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<PanelBorderLayout>, IfStatement>(parent, node, style),
-	header(new SequentialLayout(NULL, &style->header())),
-	conditionBackground(new SequentialLayout(NULL, &style->condition())),
-	condition(NULL),
-	content(new SequentialLayout(NULL, &style->content())),
-	thenBranch(NULL),
-	elseBranch(NULL)
+	header(new SequentialLayout(nullptr, &style->header())),
+	conditionBackground(new SequentialLayout(nullptr, &style->condition())),
+	condition(nullptr),
+	content(new SequentialLayout(nullptr, &style->content())),
+	thenBranch(nullptr),
+	elseBranch(nullptr)
 {
 	layout()->setTop(true);
 	layout()->top()->setFirst(header);
-	header->append(new Static(NULL, &style->icon()));
+	header->append(new Static(nullptr, &style->icon()));
 	header->append(conditionBackground);
 	layout()->setContent(content);
 }
@@ -64,12 +64,12 @@ VIfStatement::VIfStatement(Item* parent, NodeType* node, const StyleType* style)
 VIfStatement::~VIfStatement()
 {
 	// These were automatically deleted by LayoutProvider's destructor
-	header = NULL;
-	conditionBackground = NULL;
-	condition = NULL;
-	content = NULL;
-	thenBranch = NULL;
-	elseBranch = NULL;
+	header = nullptr;
+	conditionBackground = nullptr;
+	condition = nullptr;
+	content = nullptr;
+	thenBranch = nullptr;
+	elseBranch = nullptr;
 }
 
 void VIfStatement::determineChildren()

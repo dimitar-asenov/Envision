@@ -45,7 +45,7 @@ ITEM_COMMON_DEFINITIONS(VReturnStatementCF, "item")
 
 VReturnStatementCF::VReturnStatementCF(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<ControlFlowItem, ReturnStatement>(parent, node, style),
-	vis_(NULL)
+	vis_(nullptr)
 {
 }
 
@@ -56,7 +56,7 @@ VReturnStatementCF::~VReturnStatementCF()
 
 void VReturnStatementCF::determineChildren()
 {
-	synchronizeItem<VReturnStatement>(vis_, node(), NULL);
+	synchronizeItem<VReturnStatement>(vis_, node(), nullptr);
 }
 
 void VReturnStatementCF::updateGeometry(int availableWidth, int availableHeight)

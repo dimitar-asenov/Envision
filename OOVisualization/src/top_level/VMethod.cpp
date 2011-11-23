@@ -48,12 +48,12 @@ ITEM_COMMON_DEFINITIONS(VMethod, "item")
 
 VMethod::VMethod(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<PanelBorderLayout>, Method>(parent, node, style),
-	header_( new SequentialLayout(NULL, &style->header()) ),
-	icon_(new Static(NULL, &style->icon())),
-	name_(new VText(NULL, node->nameNode(), &style->nameDefault()) ),
-	arguments_(new VList(NULL, node->arguments(), &style->arguments()) ),
-	content_( new VList(NULL, node->items(), &style->content()) ),
-	results_(new VList(NULL, node->results(), &style->results()) )
+	header_( new SequentialLayout(nullptr, &style->header()) ),
+	icon_(new Static(nullptr, &style->icon())),
+	name_(new VText(nullptr, node->nameNode(), &style->nameDefault()) ),
+	arguments_(new VList(nullptr, node->arguments(), &style->arguments()) ),
+	content_( new VList(nullptr, node->items(), &style->content()) ),
+	results_(new VList(nullptr, node->results(), &style->results()) )
 {
 	layout()->setTop(true);
 	layout()->top()->setFirst(header_);
@@ -70,17 +70,17 @@ VMethod::VMethod(Item* parent, NodeType* node, const StyleType* style) :
 VMethod::~VMethod()
 {
 	// These were automatically deleted by LayoutProvider's destructor
-	header_ = NULL;
-	icon_ = NULL;
-	name_ = NULL;
-	content_ = NULL;
-	arguments_ = NULL;
-	results_ = NULL;
+	header_ = nullptr;
+	icon_ = nullptr;
+	name_ = nullptr;
+	content_ = nullptr;
+	arguments_ = nullptr;
+	results_ = nullptr;
 }
 
 void VMethod::determineChildren()
 {
-	const TextStyle* nameStyle = NULL;
+	const TextStyle* nameStyle = nullptr;
 	if (node()->storageSpecifier() == StorageSpecifier::INSTANCE_VARIABLE)
 	{
 		if (node()->visibility() == Visibility::DEFAULT) nameStyle = &style()->nameDefault();

@@ -53,11 +53,11 @@ TEST(FilePersistence, LoadingList)
 
 	model.load(&store, "partial");
 	TestNodes::PartialList* root = dynamic_cast<TestNodes::PartialList*> (model.root());
-	CHECK_CONDITION(root != NULL);
+	CHECK_CONDITION(root != nullptr);
 
 	Model::List* list = root->list();
 
-	CHECK_CONDITION(list != NULL);
+	CHECK_CONDITION(list != nullptr);
 	CHECK_STR_EQUAL("List", list->typeName() );
 	CHECK_CONDITION(list->isFullyLoaded() == false);
 	CHECK_INT_EQUAL(1, list->id());
@@ -72,19 +72,19 @@ TEST(FilePersistence, LoadingList)
 	Model::Text* three = list->at<Model::Text>(2);
 	Model::Text* four = list->at<Model::Text>(3);
 
-	CHECK_CONDITION(one != NULL);
+	CHECK_CONDITION(one != nullptr);
 	CHECK_STR_EQUAL("one", one->get());
 	CHECK_INT_EQUAL(2, one->id());
 
-	CHECK_CONDITION(two != NULL);
+	CHECK_CONDITION(two != nullptr);
 	CHECK_STR_EQUAL("two", two->get());
 	CHECK_INT_EQUAL(3, two->id())
 
-	CHECK_CONDITION(three != NULL);
+	CHECK_CONDITION(three != nullptr);
 	CHECK_STR_EQUAL("three", three->get());
 	CHECK_INT_EQUAL(4, three->id())
 
-	CHECK_CONDITION(four != NULL);
+	CHECK_CONDITION(four != nullptr);
 	CHECK_STR_EQUAL("four", four->get());
 	CHECK_INT_EQUAL(5, four->id());
 

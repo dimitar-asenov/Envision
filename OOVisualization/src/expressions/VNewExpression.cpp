@@ -44,9 +44,9 @@ ITEM_COMMON_DEFINITIONS(VNewExpression, "item")
 
 VNewExpression::VNewExpression(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<>, NewExpression>(parent, node, style),
-	newSymbol_( new Static(NULL, &style->newSymbol()) ),
-	type_(NULL),
-	amount_(NULL)
+	newSymbol_( new Static(nullptr, &style->newSymbol()) ),
+	type_(nullptr),
+	amount_(nullptr)
 {
 	layout()->append(newSymbol_);
 }
@@ -54,9 +54,9 @@ VNewExpression::VNewExpression(Item* parent, NodeType* node, const StyleType* st
 VNewExpression::~VNewExpression()
 {
 	// These were automatically deleted by LayoutProvider's destructor
-	newSymbol_ = NULL;
-	type_ = NULL;
-	amount_ = NULL;
+	newSymbol_ = nullptr;
+	type_ = nullptr;
+	amount_ = nullptr;
 }
 
 void VNewExpression::determineChildren()

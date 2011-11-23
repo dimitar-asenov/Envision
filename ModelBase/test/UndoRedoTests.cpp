@@ -62,7 +62,7 @@ TEST(ModelBase, UndoRedoTextSet)
 	CHECK_INT_EQUAL(2, root->name()->revision());
 	CHECK_INT_EQUAL(2, root->revision());
 
-	model.beginModification(NULL);
+	model.beginModification(nullptr);
 	model.undo();
 	CHECK_CONDITION(root->name()->get() == "t1");
 	CHECK_INT_EQUAL(1, root->name()->revision());
@@ -92,8 +92,8 @@ TEST(ModelBase, UndoRedoOptionalNodes)
 
 	CHECK_INT_EQUAL(0, root->name()->revision());
 	CHECK_INT_EQUAL(0, root->revision());
-	CHECK_CONDITION(root->left() == NULL);
-	CHECK_CONDITION(root->right() == NULL);
+	CHECK_CONDITION(root->left() == nullptr);
+	CHECK_CONDITION(root->right() == nullptr);
 
 	model.beginModification(root, "testing");
 	TestNodes::BinaryNode* left = root->setLeft<TestNodes::BinaryNode>();
@@ -101,7 +101,7 @@ TEST(ModelBase, UndoRedoOptionalNodes)
 	CHECK_INT_EQUAL(0, root->name()->revision());
 	CHECK_INT_EQUAL(1, root->revision());
 	CHECK_CONDITION(root->left() == left);
-	CHECK_CONDITION(root->right() == NULL);
+	CHECK_CONDITION(root->right() == nullptr);
 
 	CHECK_INT_EQUAL(0, left->name()->revision());
 	CHECK_INT_EQUAL(0, left->revision());
@@ -122,12 +122,12 @@ TEST(ModelBase, UndoRedoOptionalNodes)
 
 	CHECK_CONDITION(left != right);
 
-	model.beginModification(NULL);
+	model.beginModification(nullptr);
 	model.undo();
 	CHECK_INT_EQUAL(0, root->name()->revision());
 	CHECK_INT_EQUAL(1, root->revision());
 	CHECK_CONDITION(root->left() == left);
-	CHECK_CONDITION(root->right() == NULL);
+	CHECK_CONDITION(root->right() == nullptr);
 
 	CHECK_INT_EQUAL(0, left->name()->revision());
 	CHECK_INT_EQUAL(0, left->revision());
@@ -135,14 +135,14 @@ TEST(ModelBase, UndoRedoOptionalNodes)
 	model.undo();
 	CHECK_INT_EQUAL(0, root->name()->revision());
 	CHECK_INT_EQUAL(0, root->revision());
-	CHECK_CONDITION(root->left() == NULL);
-	CHECK_CONDITION(root->right() == NULL);
+	CHECK_CONDITION(root->left() == nullptr);
+	CHECK_CONDITION(root->right() == nullptr);
 
 	model.redo();
 	CHECK_INT_EQUAL(0, root->name()->revision());
 	CHECK_INT_EQUAL(1, root->revision());
 	CHECK_CONDITION(root->left() == left);
-	CHECK_CONDITION(root->right() == NULL);
+	CHECK_CONDITION(root->right() == nullptr);
 
 	CHECK_INT_EQUAL(0, left->name()->revision());
 	CHECK_INT_EQUAL(0, left->revision());
@@ -179,7 +179,7 @@ TEST(ModelBase, UndoRedoGroupTextSet)
 	CHECK_INT_EQUAL(2, root->revision());
 	CHECK_CONDITION( root->get() == "change2");
 
-	model.beginModification(NULL);
+	model.beginModification(nullptr);
 	model.undo();
 	CHECK_INT_EQUAL(0, root->revision());
 	CHECK_CONDITION( root->get().isNull());
