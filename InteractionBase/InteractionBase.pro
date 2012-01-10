@@ -3,7 +3,8 @@ CONFIG(release, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/ReleaseBuild
 CONFIG(debug, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/DebugBuild
 PLUGINS_DIR = $${BUILD_DIR}/plugins
 CONFIG(debug, debug|release):DEFINES += DEBUG
-QMAKE_CXXFLAGS += -Werror -std=c++0x
+QMAKE_CXXFLAGS += -Werror \
+    -std=c++0x
 INCLUDEPATH += ./headers \
     ./src \
     ./test \
@@ -32,7 +33,8 @@ INSTALLS += target \
     pluginmeta \
     styles
 PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/precompiled.h \
+HEADERS += headers/expression_editor/OperatorDescriptor.h \
+    headers/precompiled.h \
     headers/handlers/HPositionLayout.h \
     headers/handlers/HList.h \
     headers/commands/CSceneHandlerItemExit.h \
@@ -53,7 +55,8 @@ HEADERS += headers/precompiled.h \
     headers/commands/Command.h \
     headers/interactionbase_api.h \
     src/interactionbase.h
-SOURCES += src/handlers/HPositionLayout.cpp \
+SOURCES += src/expression_editor/OperatorDescriptor.cpp \
+    src/handlers/HPositionLayout.cpp \
     src/handlers/HList.cpp \
     src/commands/CSceneHandlerItemExit.cpp \
     src/handlers/HSceneHandlerItem.cpp \
