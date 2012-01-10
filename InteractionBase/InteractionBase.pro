@@ -33,7 +33,16 @@ INSTALLS += target \
     pluginmeta \
     styles
 PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/expression_editor/OperatorDescriptor.h \
+HEADERS += headers/expression_editor/UnfinishedOperator.h \
+    headers/expression_editor/ErrorDescriptor.h \
+    headers/expression_editor/Empty.h \
+    headers/expression_editor/ExpressionContext.h \
+    headers/expression_editor/Value.h \
+    headers/InteractionBaseException.h \
+    headers/expression_editor/Operator.h \
+    headers/expression_editor/Expression.h \
+    headers/expression_editor/OperatorDescriptorList.h \
+    headers/expression_editor/OperatorDescriptor.h \
     headers/precompiled.h \
     headers/handlers/HPositionLayout.h \
     headers/handlers/HList.h \
@@ -55,7 +64,16 @@ HEADERS += headers/expression_editor/OperatorDescriptor.h \
     headers/commands/Command.h \
     headers/interactionbase_api.h \
     src/interactionbase.h
-SOURCES += src/expression_editor/OperatorDescriptor.cpp \
+SOURCES += src/expression_editor/UnfinishedOperator.cpp \
+    src/expression_editor/ErrorDescriptor.cpp \
+    src/expression_editor/Empty.cpp \
+    src/expression_editor/ExpressionContext.cpp \
+    src/expression_editor/Value.cpp \
+    src/InteractionBaseException.cpp \
+    src/expression_editor/Operator.cpp \
+    src/expression_editor/Expression.cpp \
+    src/expression_editor/OperatorDescriptorList.cpp \
+    src/expression_editor/OperatorDescriptor.cpp \
     src/handlers/HPositionLayout.cpp \
     src/handlers/HList.cpp \
     src/commands/CSceneHandlerItemExit.cpp \
