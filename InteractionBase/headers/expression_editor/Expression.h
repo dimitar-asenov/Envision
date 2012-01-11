@@ -41,6 +41,7 @@
 namespace InteractionBase {
 
 class Operator;
+class ExpressionVisitor;
 
 class INTERACTIONBASE_API Expression {
 	public:
@@ -48,6 +49,7 @@ class INTERACTIONBASE_API Expression {
 		virtual ~Expression();
 
 		virtual QString renderText() = 0;
+		virtual void accept(ExpressionVisitor* visitor) = 0;
 
 		int length() {return renderText().size();}
 		virtual ExpressionContext findContext(int cursor_pos) = 0;

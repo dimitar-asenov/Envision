@@ -35,6 +35,7 @@
 
 #include "expression_editor/OperatorDescriptor.h"
 #include "expression_editor/Empty.h"
+#include "expression_editor/ExpressionVisitor.h"
 
 namespace InteractionBase {
 
@@ -50,6 +51,10 @@ bool UnfinishedOperator::isComplete()
 	return num_complete_ == descriptor()->signature().size();
 }
 
+void UnfinishedOperator::accept(ExpressionVisitor* visitor)
+{
+	visitor->visit(this);
+}
 
 QString UnfinishedOperator::next()
 {

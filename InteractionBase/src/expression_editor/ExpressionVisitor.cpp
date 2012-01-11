@@ -6,8 +6,8 @@
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
  ** following conditions are met:
  **
- **    * Redistributions of source code must retain the above copyright notice, this list of conditions and the following
- **      disclaimer.
+ **    * Redistributions of source code must retain the above copyright notice, this list of conditions and the
+ **      following disclaimer.
  **    * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the
  **      following disclaimer in the documentation and/or other materials provided with the distribution.
  **    * Neither the name of the ETH Zurich nor the names of its contributors may be used to endorse or promote products
@@ -22,48 +22,40 @@
  ** WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
- ***********************************************************************************************************************/
+ **********************************************************************************************************************/
 
 /*
- * Value.h
+ * ExpressionVisitor.cpp
  *
- *  Created on: Jan 10, 2012
+ *  Created on: Jan 11, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef VALUE_H_
-#define VALUE_H_
+#include "expression_editor/ExpressionVisitor.h"
 
-#include "interactionbase_api.h"
-
-#include "Expression.h"
+#include "expression_editor/Operator.h"
+#include "expression_editor/UnfinishedOperator.h"
 
 namespace InteractionBase {
 
-class ExpressionVisitor;
+ExpressionVisitor::~ExpressionVisitor()
+{
+}
 
-class INTERACTIONBASE_API Value : public Expression {
-	public:
-		Value(const QString& text, Operator* parent = nullptr);
+void ExpressionVisitor::visit(Operator* op)
+{
+	visitChildren(op);
+}
 
-		void setText(const QString& new_text);
-		QString text();
+void ExpressionVisitor::visit(UnfinishedOperator* unfinished)
+{
+	visitChildren(unfinished);
+}
 
-		virtual QString renderText();
-		virtual void accept(ExpressionVisitor* visitor);
-
-		virtual ExpressionContext findContext(int cursor_pos);
-
-		static int type();
-
-	private:
-		QString text_;
-};
-
-inline void Value::setText(const QString& new_text) {text_ = new_text;}
-inline QString Value::text() {return text_;}
-inline int Value::type() { return 1; }
-
+void ExpressionVisitor::visitChildren(Operator* op)
+{
+	for (Expression* e : op->operands())
+		e->accept(this);
+}
 
 } /* namespace InteractionBase */
-#endif /* VALUE_H_ */

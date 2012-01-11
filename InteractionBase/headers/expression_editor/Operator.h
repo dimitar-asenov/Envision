@@ -41,6 +41,7 @@
 namespace InteractionBase {
 
 class OperatorDescriptor;
+class ExpressionVisitor;
 
 class INTERACTIONBASE_API Operator : public Expression {
 	public:
@@ -48,13 +49,14 @@ class INTERACTIONBASE_API Operator : public Expression {
 		virtual ~Operator();
 
 		virtual QString renderText();
+		virtual void accept(ExpressionVisitor* visitor);
 
 		virtual ExpressionContext findContext(int cursor_pos);
 
 		static int type();
 
 		int size();
-		const QList<Expression*> allOperands();
+		const QList<Expression*> operands();
 
 		Expression* first(bool remove_from_list = false);
 		Expression* last(bool remove_from_list = false);
@@ -87,7 +89,7 @@ class INTERACTIONBASE_API Operator : public Expression {
 
 inline int Operator::type() { return 2; }
 inline int Operator::size() { return operands_.size(); }
-inline const QList<Expression*> Operator::allOperands() {return operands_;}
+inline const QList<Expression*> Operator::operands() {return operands_;}
 inline bool Operator::contains(Expression* e) {return operands_.contains(e);}
 inline void Operator::append(Expression* e) { insert(e, operands_.size()); }
 inline void Operator::prepend(Expression* e) { insert(e, 0); }

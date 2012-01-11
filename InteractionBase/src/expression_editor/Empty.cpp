@@ -33,6 +33,8 @@
 
 #include "expression_editor/Empty.h"
 
+#include "expression_editor/ExpressionVisitor.h"
+
 namespace InteractionBase {
 
 Empty::Empty(Operator* parent) : Expression(type(), parent)
@@ -42,6 +44,11 @@ Empty::Empty(Operator* parent) : Expression(type(), parent)
 QString Empty::renderText()
 {
 	return QString("");
+}
+
+void Empty::accept(ExpressionVisitor* visitor)
+{
+	visitor->visit(this);
 }
 
 ExpressionContext Empty::findContext(int cursor_pos)

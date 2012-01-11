@@ -40,6 +40,8 @@
 
 namespace InteractionBase {
 
+class ExpressionVisitor;
+
 class INTERACTIONBASE_API UnfinishedOperator : public Operator {
 	public:
 		UnfinishedOperator(OperatorDescriptor* descriptor, Operator* parent = nullptr);
@@ -49,6 +51,7 @@ class INTERACTIONBASE_API UnfinishedOperator : public Operator {
 		void addNext(Expression* e = nullptr);
 
 		virtual QString renderText();
+		virtual void accept(ExpressionVisitor* visitor);
 
 		Operator* createFinished();
 

@@ -32,6 +32,7 @@
  */
 
 #include "expression_editor/Value.h"
+#include "expression_editor/ExpressionVisitor.h"
 
 namespace InteractionBase {
 
@@ -42,6 +43,11 @@ Value::Value(const QString& text, Operator* parent) : Expression(type(), parent)
 QString Value::renderText()
 {
 	return text_;
+}
+
+void Value::accept(ExpressionVisitor* visitor)
+{
+	visitor->visit(this);
 }
 
 ExpressionContext Value::findContext(int cursor_pos)

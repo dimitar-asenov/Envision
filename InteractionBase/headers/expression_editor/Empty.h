@@ -40,11 +40,14 @@
 
 namespace InteractionBase {
 
+class ExpressionVisitor;
+
 class INTERACTIONBASE_API Empty : public Expression {
 	public:
 		Empty(Operator* parent = nullptr);
 
 		virtual QString renderText();
+		virtual void accept(ExpressionVisitor* visitor);
 
 		virtual ExpressionContext findContext(int cursor_pos);
 

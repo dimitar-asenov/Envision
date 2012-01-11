@@ -35,11 +35,17 @@
 #include "InteractionBaseException.h"
 
 #include "expression_editor/OperatorDescriptor.h"
+#include "expression_editor/ExpressionVisitor.h"
 
 namespace InteractionBase {
 
 Operator::Operator(OperatorDescriptor* descriptor, Operator* parent) : Expression(type(), parent), descriptor_(descriptor)
 {
+}
+
+void Operator::accept(ExpressionVisitor* visitor)
+{
+	visitor->visit(this);
 }
 
 Operator::~Operator()

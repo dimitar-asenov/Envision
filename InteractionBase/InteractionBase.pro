@@ -33,7 +33,8 @@ INSTALLS += target \
     pluginmeta \
     styles
 PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/expression_editor/ExpressionEditor.h \
+HEADERS += headers/expression_editor/ExpressionVisitor.h \
+    headers/expression_editor/ExpressionEditor.h \
     headers/expression_editor/ExpressionTreeUtils.h \
     headers/expression_editor/parser/Parser.h \
     headers/expression_editor/parser/ParseResult.h \
@@ -77,7 +78,8 @@ HEADERS += headers/expression_editor/ExpressionEditor.h \
     headers/commands/Command.h \
     headers/interactionbase_api.h \
     src/interactionbase.h
-SOURCES += src/expression_editor/ExpressionEditor.cpp \
+SOURCES += src/expression_editor/ExpressionVisitor.cpp \
+    src/expression_editor/ExpressionEditor.cpp \
     src/expression_editor/ExpressionTreeUtils.cpp \
     src/expression_editor/parser/Parser.cpp \
     src/expression_editor/parser/ParseResult.cpp \
