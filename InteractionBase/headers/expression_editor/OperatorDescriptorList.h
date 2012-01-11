@@ -42,18 +42,24 @@ class OperatorDescriptor;
 
 class INTERACTIONBASE_API OperatorDescriptorList {
 	public:
+		~OperatorDescriptorList();
+
 		void addDescriptor(OperatorDescriptor* descriptor);
 
-		OperatorDescriptor* findByName(QString name);
-		QList<OperatorDescriptor*> findByPrefix(const QString& prefix);
-		QList<OperatorDescriptor*> findByInfixWithoutPrefix(const QString&  infix);
-		QList<OperatorDescriptor*> findByPostfixWithoutPreInfix(const QString&  postfix);
+		OperatorDescriptor* findByName(QString name) const;
+		QList<OperatorDescriptor*> findByPrefix(const QString& prefix) const;
+		QList<OperatorDescriptor*> findByInfixWithoutPrefix(const QString&  infix) const;
+		QList<OperatorDescriptor*> findByPostfixWithoutPreInfix(const QString&  postfix) const;
+		int size() const;
+		OperatorDescriptor* at(int i) const;
 
 	private:
 		QList<OperatorDescriptor*> ops_;
 };
 
 inline void OperatorDescriptorList::addDescriptor(OperatorDescriptor* descriptor) { ops_.append(descriptor); }
+inline int OperatorDescriptorList::size() const { return ops_.size(); }
+inline OperatorDescriptor* OperatorDescriptorList::at(int i) const { return ops_.at(i); }
 
 } /* namespace InteractionBase */
 #endif /* OPERATORDESCRIPTORLIST_H_ */

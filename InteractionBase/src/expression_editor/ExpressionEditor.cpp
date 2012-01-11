@@ -25,45 +25,25 @@
  **********************************************************************************************************************/
 
 /*
- * AddOperator.cpp
+ * ExpressionEditor.cpp
  *
  *  Created on: Jan 11, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "expression_editor/tree_builder/AddOperator.h"
+#include "expression_editor/ExpressionEditor.h"
 
+#include "expression_editor/parser/Token.h"
+#include "expression_editor/parser/Parser.h"
 #include "expression_editor/tree_builder/ExpressionTreeBuilder.h"
-#include "expression_editor/UnfinishedOperator.h"
-#include "expression_editor/ExpressionTreeUtils.h"
 
 namespace InteractionBase {
 
-AddOperator::AddOperator(OperatorDescriptor* descriptor) : descriptor_(descriptor)
+Expression* ExpressionEditor::parse(const QString& expression_text)
 {
+	if (!expression_text.isNull()) setText(expression_text);
+
+	return ExpressionTreeBuilder().build( Parser(ops_).parse( Token::tokenize(text_, ops_)) );
 }
-
-void AddOperator::perform(ExpressionTreeBuilder& tb)
-{
-	UnfinishedOperator* unf = new UnfinishedOperator(descriptor_);
-
-	if (tb.left())
-	{
-		ExpressionTreeUtils::replace(tb.top(), tb.left(), unf);
-		unf->addNext(tb.left());
-		unf->addNext(); // This is the infix/postfix delimiter
-	}
-	else
-	{
-		unf->addNext(); // This is the prefix delimiter
-
-		if ( tb.top() ) tb.unfinished().last()->addNext(unf);
-		else tb.top() = unf;
-	}
-
-	tb.unfinished().append(unf);
-	tb.left() = nullptr;
-}
-
 
 } /* namespace InteractionBase */

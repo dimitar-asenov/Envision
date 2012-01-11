@@ -25,45 +25,45 @@
  **********************************************************************************************************************/
 
 /*
- * AddOperator.cpp
+ * Parser.h
  *
  *  Created on: Jan 11, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "expression_editor/tree_builder/AddOperator.h"
+#ifndef PARSER_H_
+#define PARSER_H_
 
-#include "expression_editor/tree_builder/ExpressionTreeBuilder.h"
-#include "expression_editor/UnfinishedOperator.h"
-#include "expression_editor/ExpressionTreeUtils.h"
+#include "interactionbase_api.h"
+
+#include "Token.h"
+#include "ParseResult.h"
 
 namespace InteractionBase {
 
-AddOperator::AddOperator(OperatorDescriptor* descriptor) : descriptor_(descriptor)
-{
-}
+class OperatorDescriptorList;
+class ExpressionTreeBuildInstruction;
 
-void AddOperator::perform(ExpressionTreeBuilder& tb)
-{
-	UnfinishedOperator* unf = new UnfinishedOperator(descriptor_);
+class INTERACTIONBASE_API Parser {
+	public:
+		Parser(const OperatorDescriptorList* ops);
+		QVector<ExpressionTreeBuildInstruction*> parse(QVector<Token> tokens);
 
-	if (tb.left())
-	{
-		ExpressionTreeUtils::replace(tb.top(), tb.left(), unf);
-		unf->addNext(tb.left());
-		unf->addNext(); // This is the infix/postfix delimiter
-	}
-	else
-	{
-		unf->addNext(); // This is the prefix delimiter
+	private:
+		ParseResult parse(QVector<Token>::const_iterator token, ParseResult result, QStringList& expected, bool hasLeft, QVector<ExpressionTreeBuildInstruction*>& instructions);
 
-		if ( tb.top() ) tb.unfinished().last()->addNext(unf);
-		else tb.top() = unf;
-	}
+		// Returns the finished expression
+		QString getNextExpectedDelimiter(const QStringList& expected, int& index);
 
-	tb.unfinished().append(unf);
-	tb.left() = nullptr;
-}
+		// This method will advance the current operator if the next expected delimtier is seen. This is not always correct for example in this case: "template < a>b > ...".
+		// TODO: Fix the problem described above.
+		void processNextExpectedDelimiter(bool& processed, QStringList& expected, QVector<Token>::const_iterator& token, bool& hasLeft, ParseResult& result, QVector<ExpressionTreeBuildInstruction*>& instructions);
+		void processIdentifiersAndLiterals(bool& processed, bool& error, QStringList& expected, QVector<Token>::const_iterator& token, bool& hasLeft, QVector<ExpressionTreeBuildInstruction*>& instructions);
+		void processOperatorDelimiters(bool& processed, bool& error, QStringList& expected, QVector<Token>::const_iterator& token, bool& hasLeft, ParseResult& result, QVector<ExpressionTreeBuildInstruction*>& instructions);
 
+		QVector<Token>::const_iterator end_tokens_;
+		const OperatorDescriptorList* ops_;
+};
 
 } /* namespace InteractionBase */
+#endif /* PARSER_H_ */

@@ -25,45 +25,34 @@
  **********************************************************************************************************************/
 
 /*
- * AddOperator.cpp
+ * ExpressionEditor.h
  *
  *  Created on: Jan 11, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "expression_editor/tree_builder/AddOperator.h"
-
-#include "expression_editor/tree_builder/ExpressionTreeBuilder.h"
-#include "expression_editor/UnfinishedOperator.h"
-#include "expression_editor/ExpressionTreeUtils.h"
+#ifndef EXPRESSIONEDITOR_H_
+#define EXPRESSIONEDITOR_H_
 
 namespace InteractionBase {
 
-AddOperator::AddOperator(OperatorDescriptor* descriptor) : descriptor_(descriptor)
-{
-}
+class OperatorDescriptorList;
+class Expression;
 
-void AddOperator::perform(ExpressionTreeBuilder& tb)
-{
-	UnfinishedOperator* unf = new UnfinishedOperator(descriptor_);
+class ExpressionEditor {
+	public:
+		void setText(const QString& expression_text);
+		void setOperatorDescriptors(const OperatorDescriptorList* ops);
 
-	if (tb.left())
-	{
-		ExpressionTreeUtils::replace(tb.top(), tb.left(), unf);
-		unf->addNext(tb.left());
-		unf->addNext(); // This is the infix/postfix delimiter
-	}
-	else
-	{
-		unf->addNext(); // This is the prefix delimiter
+		Expression* parse(const QString& expression_text = QString());
 
-		if ( tb.top() ) tb.unfinished().last()->addNext(unf);
-		else tb.top() = unf;
-	}
+	private:
+		QString text_;
+		const OperatorDescriptorList* ops_;
+};
 
-	tb.unfinished().append(unf);
-	tb.left() = nullptr;
-}
-
+inline void ExpressionEditor::setText(const QString& expression_text) { text_ = expression_text; }
+inline void ExpressionEditor::setOperatorDescriptors(const OperatorDescriptorList* ops) { ops_ = ops; }
 
 } /* namespace InteractionBase */
+#endif /* EXPRESSIONEDITOR_H_ */

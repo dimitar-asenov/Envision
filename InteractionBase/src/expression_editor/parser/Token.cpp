@@ -25,45 +25,76 @@
  **********************************************************************************************************************/
 
 /*
- * AddOperator.cpp
+ * Token.cpp
  *
  *  Created on: Jan 11, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "expression_editor/tree_builder/AddOperator.h"
+#include "expression_editor/parser/Token.h"
 
-#include "expression_editor/tree_builder/ExpressionTreeBuilder.h"
-#include "expression_editor/UnfinishedOperator.h"
-#include "expression_editor/ExpressionTreeUtils.h"
+#include "expression_editor/OperatorDescriptor.h"
+#include "expression_editor/OperatorDescriptorList.h"
 
 namespace InteractionBase {
 
-AddOperator::AddOperator(OperatorDescriptor* descriptor) : descriptor_(descriptor)
+Token::Token()
 {
 }
 
-void AddOperator::perform(ExpressionTreeBuilder& tb)
+Token::Token(QString text, Type type)
+	: text_(text), type_(type)
+{}
+
+
+QVector<Token> Token::tokenize(QString input, const OperatorDescriptorList* ops)
 {
-	UnfinishedOperator* unf = new UnfinishedOperator(descriptor_);
+	QVector<Token> result;
+	input = input.simplified();
+	if (input.isEmpty()) return result;
+	input.append(' ');
 
-	if (tb.left())
+	QChar first;
+	QString token;
+
+	for(int i = 0; i<input.size(); ++i )
 	{
-		ExpressionTreeUtils::replace(tb.top(), tb.left(), unf);
-		unf->addNext(tb.left());
-		unf->addNext(); // This is the infix/postfix delimiter
-	}
-	else
-	{
-		unf->addNext(); // This is the prefix delimiter
+		QChar ch = input[i];
 
-		if ( tb.top() ) tb.unfinished().last()->addNext(unf);
-		else tb.top() = unf;
+		if (token.isEmpty())
+		{
+			token = ch;
+			first = ch;
+			continue;
+		}
+
+		// Finalize token
+		if (ch == ' ' || first.isLetterOrNumber() != ch.isLetterOrNumber() || (!ch.isLetterOrNumber() && !tokenExistsInOperators(token + ch, ops)) )
+		{
+			Type t;
+			if ( tokenExistsInOperators(token, ops) || (token.size() == 1 && !first.isLetterOrNumber()))
+				t = OperatorDelimiter;
+			else
+				t = first.isDigit() ? Literal : Identifier;
+
+			result.append(Token(token,t));
+			token = "";
+			first = ch;
+		}
+
+		// Add current symbol to token
+		if (ch != ' ') token += ch;
 	}
 
-	tb.unfinished().append(unf);
-	tb.left() = nullptr;
+	return result;
 }
 
+bool Token::tokenExistsInOperators(QString token, const OperatorDescriptorList* ops)
+{
+	for (int i = 0; i < ops->size(); ++i)
+		if (ops->at(i)->signature().contains(token) ) return true;
+
+	return false;
+}
 
 } /* namespace InteractionBase */

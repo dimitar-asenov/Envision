@@ -35,9 +35,17 @@
 
 #include "expression_editor/OperatorDescriptor.h"
 
+#include "Core/headers/global.h"
+
 namespace InteractionBase {
 
-OperatorDescriptor* OperatorDescriptorList::findByName(QString name)
+OperatorDescriptorList::~OperatorDescriptorList()
+{
+	for (OperatorDescriptor* d : ops_)
+			SAFE_DELETE(d);
+}
+
+OperatorDescriptor* OperatorDescriptorList::findByName(QString name) const
 {
 	for (OperatorDescriptor* d : ops_)
 		if (d->name() == name) return d;
@@ -45,7 +53,7 @@ OperatorDescriptor* OperatorDescriptorList::findByName(QString name)
 	return nullptr;
 }
 
-QList<OperatorDescriptor*> OperatorDescriptorList::findByPrefix(const QString&  prefix)
+QList<OperatorDescriptor*> OperatorDescriptorList::findByPrefix(const QString&  prefix) const
 {
 	QList<OperatorDescriptor*> list;
 	for (OperatorDescriptor* d : ops_)
@@ -55,7 +63,7 @@ QList<OperatorDescriptor*> OperatorDescriptorList::findByPrefix(const QString&  
 	return list;
 }
 
-QList<OperatorDescriptor*> OperatorDescriptorList::findByInfixWithoutPrefix(const QString&  infix)
+QList<OperatorDescriptor*> OperatorDescriptorList::findByInfixWithoutPrefix(const QString&  infix) const
 {
 	QList<OperatorDescriptor*> list;
 	for (OperatorDescriptor* d : ops_)
@@ -65,7 +73,7 @@ QList<OperatorDescriptor*> OperatorDescriptorList::findByInfixWithoutPrefix(cons
 	return list;
 }
 
-QList<OperatorDescriptor*> OperatorDescriptorList::findByPostfixWithoutPreInfix(const QString&  postfix)
+QList<OperatorDescriptor*> OperatorDescriptorList::findByPostfixWithoutPreInfix(const QString&  postfix) const
 {
 	QList<OperatorDescriptor*> list;
 	for (OperatorDescriptor* d : ops_)

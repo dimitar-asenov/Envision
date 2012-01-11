@@ -25,45 +25,40 @@
  **********************************************************************************************************************/
 
 /*
- * AddOperator.cpp
+ * ExpressionTreeUtils.h
  *
  *  Created on: Jan 11, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "expression_editor/tree_builder/AddOperator.h"
+#ifndef EXPRESSIONTREEUTILS_H_
+#define EXPRESSIONTREEUTILS_H_
 
-#include "expression_editor/tree_builder/ExpressionTreeBuilder.h"
-#include "expression_editor/UnfinishedOperator.h"
-#include "expression_editor/ExpressionTreeUtils.h"
+#include "interactionbase_api.h"
 
 namespace InteractionBase {
 
-AddOperator::AddOperator(OperatorDescriptor* descriptor) : descriptor_(descriptor)
-{
-}
+class Expression;
+class Operator;
 
-void AddOperator::perform(ExpressionTreeBuilder& tb)
-{
-	UnfinishedOperator* unf = new UnfinishedOperator(descriptor_);
+class INTERACTIONBASE_API ExpressionTreeUtils {
+	public:
 
-	if (tb.left())
-	{
-		ExpressionTreeUtils::replace(tb.top(), tb.left(), unf);
-		unf->addNext(tb.left());
-		unf->addNext(); // This is the infix/postfix delimiter
-	}
-	else
-	{
-		unf->addNext(); // This is the prefix delimiter
+		static void fixTop(Expression*& top);
 
-		if ( tb.top() ) tb.unfinished().last()->addNext(unf);
-		else tb.top() = unf;
-	}
+		// Used to grow operators. E.g.: f(a+b)+c --> f(a+b+c)
+		static void grow(Expression*& top, Operator* op, bool leftside);
 
-	tb.unfinished().append(unf);
-	tb.left() = nullptr;
-}
+		// Used to shrink operators. E.g.: f(a+b)+c --> f(a)+b+c
+		static void shrink(Expression*& top, Operator* op, bool leftside);
 
+		static Expression* replace(Expression*& top, Expression* oldExpr, Expression* newExpr);
+
+	private:
+		static bool fixExpr(Expression*& top, Expression* e); //returns true if more iterations are needed
+		static void rotateRight(Expression*& top, Operator* child, Operator* parent);
+		static void rotateLeft(Expression*& top, Operator* child, Operator* parent);
+};
 
 } /* namespace InteractionBase */
+#endif /* EXPRESSIONTREEUTILS_H_ */

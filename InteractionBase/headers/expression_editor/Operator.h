@@ -66,7 +66,7 @@ class INTERACTIONBASE_API Operator : public Expression {
 		void append(Expression* e);
 		void prepend(Expression* e);
 		void insert(Expression* e, int pos);
-		Expression* replace(Expression* oldExpr, Expression* newExpr);
+		Expression* replaceOperand(Expression* oldExpr, Expression* newExpr);
 
 		OperatorDescriptor* descriptor();
 

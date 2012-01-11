@@ -37,6 +37,7 @@
 #include "expression_editor/Operator.h"
 #include "expression_editor/UnfinishedOperator.h"
 #include "expression_editor/ErrorDescriptor.h"
+#include "expression_editor/ExpressionTreeUtils.h"
 
 namespace InteractionBase {
 
@@ -49,7 +50,7 @@ void AddErrorOperator::perform(ExpressionTreeBuilder& tb)
 	if (tb.left())
 	{
 		Operator* err = new Operator(new ErrorDescriptor("", text_));
-		Expression::replace(tb.top(), tb.left(), err);
+		ExpressionTreeUtils::replace(tb.top(), tb.left(), err);
 		err->append(tb.left());
 		tb.left() = err;
 	}

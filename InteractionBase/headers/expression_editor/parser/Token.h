@@ -25,45 +25,42 @@
  **********************************************************************************************************************/
 
 /*
- * AddOperator.cpp
+ * Token.h
  *
  *  Created on: Jan 11, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "expression_editor/tree_builder/AddOperator.h"
+#ifndef TOKEN_H_
+#define TOKEN_H_
 
-#include "expression_editor/tree_builder/ExpressionTreeBuilder.h"
-#include "expression_editor/UnfinishedOperator.h"
-#include "expression_editor/ExpressionTreeUtils.h"
+#include "interactionbase_api.h"
 
 namespace InteractionBase {
 
-AddOperator::AddOperator(OperatorDescriptor* descriptor) : descriptor_(descriptor)
-{
-}
+class OperatorDescriptorList;
 
-void AddOperator::perform(ExpressionTreeBuilder& tb)
-{
-	UnfinishedOperator* unf = new UnfinishedOperator(descriptor_);
+class INTERACTIONBASE_API Token {
+	public:
+		enum Type {Identifier, Literal, OperatorDelimiter};
 
-	if (tb.left())
-	{
-		ExpressionTreeUtils::replace(tb.top(), tb.left(), unf);
-		unf->addNext(tb.left());
-		unf->addNext(); // This is the infix/postfix delimiter
-	}
-	else
-	{
-		unf->addNext(); // This is the prefix delimiter
+		Token();
+		Token(QString text, Type type);
 
-		if ( tb.top() ) tb.unfinished().last()->addNext(unf);
-		else tb.top() = unf;
-	}
+		const QString& text() const;
+		Type type() const;
 
-	tb.unfinished().append(unf);
-	tb.left() = nullptr;
-}
+		static QVector<Token> tokenize(QString input, const OperatorDescriptorList* ops);
 
+	private:
+		QString text_;
+		Type type_;
+
+		static bool tokenExistsInOperators(QString token, const OperatorDescriptorList* ops);
+};
+
+inline const QString& Token::text() const { return text_; }
+inline Token::Type Token::type() const { return type_; }
 
 } /* namespace InteractionBase */
+#endif /* TOKEN_H_ */

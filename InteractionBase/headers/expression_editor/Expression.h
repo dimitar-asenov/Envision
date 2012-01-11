@@ -66,9 +66,6 @@ class INTERACTIONBASE_API Expression {
 		virtual Expression* findCutExpression(bool leftside, QString cut_string);
 
 		void removeFromParent();
-
-		static Expression* replace(Expression*& top, Expression* oldExpr, Expression* newExpr);
-
 	private:
 		const int type_;
 		Operator* parent_;

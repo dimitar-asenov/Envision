@@ -33,7 +33,12 @@ INSTALLS += target \
     pluginmeta \
     styles
 PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/expression_editor/tree_builder/FinishOperator.h \
+HEADERS += headers/expression_editor/ExpressionEditor.h \
+    headers/expression_editor/ExpressionTreeUtils.h \
+    headers/expression_editor/parser/Parser.h \
+    headers/expression_editor/parser/ParseResult.h \
+    headers/expression_editor/parser/Token.h \
+    headers/expression_editor/tree_builder/FinishOperator.h \
     headers/expression_editor/tree_builder/SkipOperatorDelimiter.h \
     headers/expression_editor/tree_builder/AddValue.h \
     headers/expression_editor/tree_builder/AddEmptyValue.h \
@@ -72,7 +77,12 @@ HEADERS += headers/expression_editor/tree_builder/FinishOperator.h \
     headers/commands/Command.h \
     headers/interactionbase_api.h \
     src/interactionbase.h
-SOURCES += src/expression_editor/tree_builder/FinishOperator.cpp \
+SOURCES += src/expression_editor/ExpressionEditor.cpp \
+    src/expression_editor/ExpressionTreeUtils.cpp \
+    src/expression_editor/parser/Parser.cpp \
+    src/expression_editor/parser/ParseResult.cpp \
+    src/expression_editor/parser/Token.cpp \
+    src/expression_editor/tree_builder/FinishOperator.cpp \
     src/expression_editor/tree_builder/SkipOperatorDelimiter.cpp \
     src/expression_editor/tree_builder/AddValue.cpp \
     src/expression_editor/tree_builder/AddEmptyValue.cpp \

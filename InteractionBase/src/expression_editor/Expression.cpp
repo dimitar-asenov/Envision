@@ -69,16 +69,4 @@ void Expression::removeFromParent()
 	if (parent_) parent_->remove(this);
 }
 
-Expression* Expression::replace(Expression*& top, Expression* oldExpr, Expression* newExpr)
-{
-	if (oldExpr == top)
-	{
-		top = newExpr;
-		newExpr->setParent(nullptr);
-		return oldExpr;
-	}
-	else
-		return oldExpr->parent()->replace(oldExpr, newExpr);
-}
-
 } /* namespace InteractionBase */

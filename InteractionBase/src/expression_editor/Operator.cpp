@@ -99,10 +99,10 @@ void Operator::insert(Expression* e, int pos)
 	}
 }
 
-Expression* Operator::replace(Expression* oldExpr, Expression* newExpr)
+Expression* Operator::replaceOperand(Expression* oldExpr, Expression* newExpr)
 {
 	int i = operands_.indexOf(oldExpr);
-	if (i <0) throw new InteractionBaseException("Invalid replacement operation. Could not expression to replace.");
+	if (i <0) throw new InteractionBaseException("Invalid replacement operation. Could not find expression to replace.");
 
 	newExpr->setParent(this);
 	operands_.replace(i, newExpr);

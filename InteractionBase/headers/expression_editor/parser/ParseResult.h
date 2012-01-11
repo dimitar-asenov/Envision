@@ -25,45 +25,33 @@
  **********************************************************************************************************************/
 
 /*
- * AddOperator.cpp
+ * ParseResult.h
  *
  *  Created on: Jan 11, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "expression_editor/tree_builder/AddOperator.h"
+#ifndef PARSERESULT_H_
+#define PARSERESULT_H_
 
-#include "expression_editor/tree_builder/ExpressionTreeBuilder.h"
-#include "expression_editor/UnfinishedOperator.h"
-#include "expression_editor/ExpressionTreeUtils.h"
+#include "interactionbase_api.h"
 
 namespace InteractionBase {
 
-AddOperator::AddOperator(OperatorDescriptor* descriptor) : descriptor_(descriptor)
-{
-}
+class ExpressionTreeBuildInstruction;
 
-void AddOperator::perform(ExpressionTreeBuilder& tb)
-{
-	UnfinishedOperator* unf = new UnfinishedOperator(descriptor_);
+class INTERACTIONBASE_API ParseResult {
+	public:
+		ParseResult();
+		ParseResult(int errors, int missing_inner_tokens, int missing_trailing_tokens);
 
-	if (tb.left())
-	{
-		ExpressionTreeUtils::replace(tb.top(), tb.left(), unf);
-		unf->addNext(tb.left());
-		unf->addNext(); // This is the infix/postfix delimiter
-	}
-	else
-	{
-		unf->addNext(); // This is the prefix delimiter
+		int errors;
+		int missing_inner_tokens;
+		int missing_trailing_tokens;
+		QVector<ExpressionTreeBuildInstruction*> instructions;
+};
 
-		if ( tb.top() ) tb.unfinished().last()->addNext(unf);
-		else tb.top() = unf;
-	}
-
-	tb.unfinished().append(unf);
-	tb.left() = nullptr;
-}
-
+bool operator< (const ParseResult& left, const ParseResult& right);
 
 } /* namespace InteractionBase */
+#endif /* PARSERESULT_H_ */

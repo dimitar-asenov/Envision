@@ -25,45 +25,33 @@
  **********************************************************************************************************************/
 
 /*
- * AddOperator.cpp
+ * ParseResult.cpp
  *
  *  Created on: Jan 11, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "expression_editor/tree_builder/AddOperator.h"
-
-#include "expression_editor/tree_builder/ExpressionTreeBuilder.h"
-#include "expression_editor/UnfinishedOperator.h"
-#include "expression_editor/ExpressionTreeUtils.h"
+#include "expression_editor/parser/ParseResult.h"
 
 namespace InteractionBase {
 
-AddOperator::AddOperator(OperatorDescriptor* descriptor) : descriptor_(descriptor)
+ParseResult::ParseResult()
+	:errors(0), missing_inner_tokens(0), missing_trailing_tokens(0)
 {
 }
 
-void AddOperator::perform(ExpressionTreeBuilder& tb)
+ParseResult::ParseResult(int errors, int missing_inner_tokens, int missing_trailing_tokens)
+	: errors(errors), missing_inner_tokens(missing_inner_tokens), missing_trailing_tokens(missing_trailing_tokens)
 {
-	UnfinishedOperator* unf = new UnfinishedOperator(descriptor_);
-
-	if (tb.left())
-	{
-		ExpressionTreeUtils::replace(tb.top(), tb.left(), unf);
-		unf->addNext(tb.left());
-		unf->addNext(); // This is the infix/postfix delimiter
-	}
-	else
-	{
-		unf->addNext(); // This is the prefix delimiter
-
-		if ( tb.top() ) tb.unfinished().last()->addNext(unf);
-		else tb.top() = unf;
-	}
-
-	tb.unfinished().append(unf);
-	tb.left() = nullptr;
 }
 
+bool operator< (const ParseResult& left, const ParseResult& right)
+{
+	if ( left.errors != right.errors ) return  left.errors < right.errors;
+	if ( left.missing_inner_tokens != right.missing_inner_tokens ) return  left.missing_inner_tokens < right.missing_inner_tokens;
+	if ( left.missing_trailing_tokens != right.missing_trailing_tokens ) return  left.missing_trailing_tokens < right.missing_trailing_tokens;
+
+	return false;
+}
 
 } /* namespace InteractionBase */

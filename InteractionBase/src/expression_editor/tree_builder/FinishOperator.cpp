@@ -35,6 +35,7 @@
 
 #include "expression_editor/tree_builder/ExpressionTreeBuilder.h"
 #include "expression_editor/UnfinishedOperator.h"
+#include "expression_editor/ExpressionTreeUtils.h"
 
 #include "InteractionBaseException.h"
 
@@ -48,7 +49,7 @@ void FinishOperator::perform(ExpressionTreeBuilder& tb)
 	if (!unf->isComplete()) throw InteractionBaseException("Invalid try to finish an incomplete operator.");
 
 	Operator* finished = unf->createFinished();
-	delete Expression::replace(tb.top(), unf, finished );
+	delete ExpressionTreeUtils::replace(tb.top(), unf, finished );
 	tb.left() = finished;
 }
 
