@@ -31,8 +31,8 @@
  *      Author: Dimitar Asenov
  */
 
-#ifndef EXPRESSIONCONTEXT_H_
-#define EXPRESSIONCONTEXT_H_
+#ifndef INTERACTIONBASE_EXPRESSIONCONTEXT_H_
+#define INTERACTIONBASE_EXPRESSIONCONTEXT_H_
 
 #include "interactionbase_api.h"
 
@@ -129,4 +129,4 @@ inline QString ExpressionContext::leftText() { return left_text_; }
 inline QString ExpressionContext::rightText() { return right_text_; }
 
 } /* namespace InteractionBase */
-#endif /* EXPRESSIONCONTEXT_H_ */
+#endif /* INTERACTIONBASE_EXPRESSIONCONTEXT_H_ */

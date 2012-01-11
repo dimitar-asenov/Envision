@@ -31,8 +31,8 @@
  *      Author: Dimitar Asenov
  */
 
-#ifndef ADDERROROPERATOR_H_
-#define ADDERROROPERATOR_H_
+#ifndef INTERACTIONBASE_ADDERROROPERATOR_H_
+#define INTERACTIONBASE_ADDERROROPERATOR_H_
 
 #include "interactionbase_api.h"
 
@@ -57,4 +57,4 @@ inline void AddErrorOperator::setText(QString new_text) { text_ = new_text; }
 
 
 } /* namespace InteractionBase */
-#endif /* ADDERROROPERATOR_H_ */
+#endif /* INTERACTIONBASE_ADDERROROPERATOR_H_ */

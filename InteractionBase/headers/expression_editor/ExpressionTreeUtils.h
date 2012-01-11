@@ -31,8 +31,8 @@
  *      Author: Dimitar Asenov
  */
 
-#ifndef EXPRESSIONTREEUTILS_H_
-#define EXPRESSIONTREEUTILS_H_
+#ifndef INTERACTIONBASE_EXPRESSIONTREEUTILS_H_
+#define INTERACTIONBASE_EXPRESSIONTREEUTILS_H_
 
 #include "interactionbase_api.h"
 
@@ -61,4 +61,4 @@ class INTERACTIONBASE_API ExpressionTreeUtils {
 };
 
 } /* namespace InteractionBase */
-#endif /* EXPRESSIONTREEUTILS_H_ */
+#endif /* INTERACTIONBASE_EXPRESSIONTREEUTILS_H_ */

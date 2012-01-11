@@ -31,8 +31,8 @@
  *      Author: Dimitar Asenov
  */
 
-#ifndef OPERATOR_H_
-#define OPERATOR_H_
+#ifndef INTERACTIONBASE_OPERATOR_H_
+#define INTERACTIONBASE_OPERATOR_H_
 
 #include "interactionbase_api.h"
 
@@ -97,4 +97,4 @@ inline OperatorDescriptor* Operator::descriptor() { return descriptor_; }
 
 
 } /* namespace InteractionBase */
-#endif /* OPERATOR_H_ */
+#endif /* INTERACTIONBASE_OPERATOR_H_ */

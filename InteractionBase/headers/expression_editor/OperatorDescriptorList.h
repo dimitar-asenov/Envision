@@ -31,8 +31,8 @@
  *      Author: Dimitar Asenov
  */
 
-#ifndef OPERATORDESCRIPTORLIST_H_
-#define OPERATORDESCRIPTORLIST_H_
+#ifndef INTERACTIONBASE_OPERATORDESCRIPTORLIST_H_
+#define INTERACTIONBASE_OPERATORDESCRIPTORLIST_H_
 
 #include "interactionbase_api.h"
 
@@ -62,4 +62,4 @@ inline int OperatorDescriptorList::size() const { return ops_.size(); }
 inline OperatorDescriptor* OperatorDescriptorList::at(int i) const { return ops_.at(i); }
 
 } /* namespace InteractionBase */
-#endif /* OPERATORDESCRIPTORLIST_H_ */
+#endif /* INTERACTIONBASE_OPERATORDESCRIPTORLIST_H_ */

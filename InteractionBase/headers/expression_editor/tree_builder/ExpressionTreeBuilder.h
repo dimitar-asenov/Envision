@@ -31,8 +31,8 @@
  *      Author: Dimitar Asenov
  */
 
-#ifndef EXPRESSIONTREEBUILDER_H_
-#define EXPRESSIONTREEBUILDER_H_
+#ifndef INTERACTIONBASE_EXPRESSIONTREEBUILDER_H_
+#define INTERACTIONBASE_EXPRESSIONTREEBUILDER_H_
 
 #include "interactionbase_api.h"
 
@@ -63,4 +63,4 @@ inline QList<UnfinishedOperator*>& ExpressionTreeBuilder::unfinished() { return 
 inline Expression*& ExpressionTreeBuilder::left() { return left_; }
 
 } /* namespace InteractionBase */
-#endif /* EXPRESSIONTREEBUILDER_H_ */
+#endif /* INTERACTIONBASE_EXPRESSIONTREEBUILDER_H_ */

@@ -31,8 +31,8 @@
  *      Author: Dimitar Asenov
  */
 
-#ifndef EXPRESSIONVISITOR_H_
-#define EXPRESSIONVISITOR_H_
+#ifndef INTERACTIONBASE_EXPRESSIONVISITOR_H_
+#define INTERACTIONBASE_EXPRESSIONVISITOR_H_
 
 #include "interactionbase_api.h"
 
@@ -56,4 +56,4 @@ class INTERACTIONBASE_API ExpressionVisitor {
 };
 
 } /* namespace InteractionBase */
-#endif /* EXPRESSIONVISITOR_H_ */
+#endif /* INTERACTIONBASE_EXPRESSIONVISITOR_H_ */

@@ -31,8 +31,8 @@
  *      Author: Dimitar Asenov
  */
 
-#ifndef VALUE_H_
-#define VALUE_H_
+#ifndef INTERACTIONBASE_VALUE_H_
+#define INTERACTIONBASE_VALUE_H_
 
 #include "interactionbase_api.h"
 
@@ -66,4 +66,4 @@ inline int Value::type() { return 1; }
 
 
 } /* namespace InteractionBase */
-#endif /* VALUE_H_ */
+#endif /* INTERACTIONBASE_VALUE_H_ */

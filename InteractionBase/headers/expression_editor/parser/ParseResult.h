@@ -31,8 +31,8 @@
  *      Author: Dimitar Asenov
  */
 
-#ifndef PARSERESULT_H_
-#define PARSERESULT_H_
+#ifndef INTERACTIONBASE_PARSERESULT_H_
+#define INTERACTIONBASE_PARSERESULT_H_
 
 #include "interactionbase_api.h"
 
@@ -54,4 +54,4 @@ class INTERACTIONBASE_API ParseResult {
 bool operator< (const ParseResult& left, const ParseResult& right);
 
 } /* namespace InteractionBase */
-#endif /* PARSERESULT_H_ */
+#endif /* INTERACTIONBASE_PARSERESULT_H_ */

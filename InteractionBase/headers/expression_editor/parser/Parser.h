@@ -31,8 +31,8 @@
  *      Author: Dimitar Asenov
  */
 
-#ifndef PARSER_H_
-#define PARSER_H_
+#ifndef INTERACTIONBASE_PARSER_H_
+#define INTERACTIONBASE_PARSER_H_
 
 #include "interactionbase_api.h"
 
@@ -66,4 +66,4 @@ class INTERACTIONBASE_API Parser {
 };
 
 } /* namespace InteractionBase */
-#endif /* PARSER_H_ */
+#endif /* INTERACTIONBASE_PARSER_H_ */

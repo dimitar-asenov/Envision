@@ -31,8 +31,8 @@
  *      Author: Dimitar Asenov
  */
 
-#ifndef EXPRESSIONEDITOR_H_
-#define EXPRESSIONEDITOR_H_
+#ifndef INTERACTIONBASE_EXPRESSIONEDITOR_H_
+#define INTERACTIONBASE_EXPRESSIONEDITOR_H_
 
 namespace InteractionBase {
 
@@ -55,4 +55,4 @@ inline void ExpressionEditor::setText(const QString& expression_text) { text_ = 
 inline void ExpressionEditor::setOperatorDescriptors(const OperatorDescriptorList* ops) { ops_ = ops; }
 
 } /* namespace InteractionBase */
-#endif /* EXPRESSIONEDITOR_H_ */
+#endif /* INTERACTIONBASE_EXPRESSIONEDITOR_H_ */

@@ -31,8 +31,8 @@
  *      Author: Dimitar Asenov
  */
 
-#ifndef ADDEMPTYVALUE_H_
-#define ADDEMPTYVALUE_H_
+#ifndef INTERACTIONBASE_ADDEMPTYVALUE_H_
+#define INTERACTIONBASE_ADDEMPTYVALUE_H_
 
 #include "interactionbase_api.h"
 
@@ -46,4 +46,4 @@ class INTERACTIONBASE_API AddEmptyValue : public ExpressionTreeBuildInstruction 
 };
 
 } /* namespace InteractionBase */
-#endif /* ADDEMPTYVALUE_H_ */
+#endif /* INTERACTIONBASE_ADDEMPTYVALUE_H_ */

@@ -31,8 +31,8 @@
  *      Author: Dimitar Asenov
  */
 
-#ifndef EMPTY_H_
-#define EMPTY_H_
+#ifndef INTERACTIONBASE_EMPTY_H_
+#define INTERACTIONBASE_EMPTY_H_
 
 #include "interactionbase_api.h"
 
@@ -57,4 +57,4 @@ class INTERACTIONBASE_API Empty : public Expression {
 inline int Empty::type() { return 0; }
 
 } /* namespace InteractionBase */
-#endif /* EMPTY_H_ */
+#endif /* INTERACTIONBASE_EMPTY_H_ */

@@ -31,8 +31,8 @@
  *      Author: Dimitar Asenov
  */
 
-#ifndef ERRORDESCRIPTOR_H_
-#define ERRORDESCRIPTOR_H_
+#ifndef INTERACTIONBASE_ERRORDESCRIPTOR_H_
+#define INTERACTIONBASE_ERRORDESCRIPTOR_H_
 
 #include "interactionbase_api.h"
 
@@ -47,4 +47,4 @@ class INTERACTIONBASE_API ErrorDescriptor : public OperatorDescriptor
 };
 
 } /* namespace InteractionBase */
-#endif /* ERRORDESCRIPTOR_H_ */
+#endif /* INTERACTIONBASE_ERRORDESCRIPTOR_H_ */

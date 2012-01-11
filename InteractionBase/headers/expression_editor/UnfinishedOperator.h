@@ -31,8 +31,8 @@
  *      Author: Dimitar Asenov
  */
 
-#ifndef UNFINISHEDOPERATOR_H_
-#define UNFINISHEDOPERATOR_H_
+#ifndef INTERACTIONBASE_UNFINISHEDOPERATOR_H_
+#define INTERACTIONBASE_UNFINISHEDOPERATOR_H_
 
 #include "interactionbase_api.h"
 
@@ -60,4 +60,4 @@ class INTERACTIONBASE_API UnfinishedOperator : public Operator {
 };
 
 } /* namespace InteractionBase */
-#endif /* UNFINISHEDOPERATOR_H_ */
+#endif /* INTERACTIONBASE_UNFINISHEDOPERATOR_H_ */

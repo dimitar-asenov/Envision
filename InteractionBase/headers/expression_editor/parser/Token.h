@@ -31,8 +31,8 @@
  *      Author: Dimitar Asenov
  */
 
-#ifndef TOKEN_H_
-#define TOKEN_H_
+#ifndef INTERACTIONBASE_TOKEN_H_
+#define INTERACTIONBASE_TOKEN_H_
 
 #include "interactionbase_api.h"
 
@@ -63,4 +63,4 @@ inline const QString& Token::text() const { return text_; }
 inline Token::Type Token::type() const { return type_; }
 
 } /* namespace InteractionBase */
-#endif /* TOKEN_H_ */
+#endif /* INTERACTIONBASE_TOKEN_H_ */

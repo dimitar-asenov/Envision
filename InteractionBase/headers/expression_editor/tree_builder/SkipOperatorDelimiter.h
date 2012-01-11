@@ -31,8 +31,8 @@
  *      Author: Dimitar Asenov
  */
 
-#ifndef SKIPOPERATORDELIMITER_H_
-#define SKIPOPERATORDELIMITER_H_
+#ifndef INTERACTIONBASE_SKIPOPERATORDELIMITER_H_
+#define INTERACTIONBASE_SKIPOPERATORDELIMITER_H_
 
 #include "interactionbase_api.h"
 
@@ -46,4 +46,4 @@ class INTERACTIONBASE_API SkipOperatorDelimiter : public ExpressionTreeBuildInst
 };
 
 } /* namespace InteractionBase */
-#endif /* SKIPOPERATORDELIMITER_H_ */
+#endif /* INTERACTIONBASE_SKIPOPERATORDELIMITER_H_ */

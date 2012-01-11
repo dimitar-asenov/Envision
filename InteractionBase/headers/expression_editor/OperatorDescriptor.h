@@ -31,8 +31,8 @@
  *      Author: Dimitar Asenov
  */
 
-#ifndef OPERATORDESCRIPTOR_H_
-#define OPERATORDESCRIPTOR_H_
+#ifndef INTERACTIONBASE_OPERATORDESCRIPTOR_H_
+#define INTERACTIONBASE_OPERATORDESCRIPTOR_H_
 
 #include "interactionbase_api.h"
 
@@ -93,4 +93,4 @@ inline const QString& OperatorDescriptor::postfix() { return postfix_; }
 
 }
 
-#endif /* OPERATORDESCRIPTOR_H_ */
+#endif /* INTERACTIONBASE_OPERATORDESCRIPTOR_H_ */

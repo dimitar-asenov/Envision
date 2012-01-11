@@ -31,8 +31,8 @@
  *      Author: Dimitar Asenov
  */
 
-#ifndef ADDVALUE_H_
-#define ADDVALUE_H_
+#ifndef INTERACTIONBASE_ADDVALUE_H_
+#define INTERACTIONBASE_ADDVALUE_H_
 
 #include "interactionbase_api.h"
 
@@ -51,4 +51,4 @@ class INTERACTIONBASE_API AddValue : public ExpressionTreeBuildInstruction
 };
 
 } /* namespace InteractionBase */
-#endif /* ADDVALUE_H_ */
+#endif /* INTERACTIONBASE_ADDVALUE_H_ */
