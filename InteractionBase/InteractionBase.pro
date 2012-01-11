@@ -33,7 +33,15 @@ INSTALLS += target \
     pluginmeta \
     styles
 PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/expression_editor/UnfinishedOperator.h \
+HEADERS += headers/expression_editor/tree_builder/FinishOperator.h \
+    headers/expression_editor/tree_builder/SkipOperatorDelimiter.h \
+    headers/expression_editor/tree_builder/AddValue.h \
+    headers/expression_editor/tree_builder/AddEmptyValue.h \
+    headers/expression_editor/tree_builder/AddErrorOperator.h \
+    headers/expression_editor/tree_builder/AddOperator.h \
+    headers/expression_editor/tree_builder/ExpressionTreeBuildInstruction.h \
+    headers/expression_editor/tree_builder/ExpressionTreeBuilder.h \
+    headers/expression_editor/UnfinishedOperator.h \
     headers/expression_editor/ErrorDescriptor.h \
     headers/expression_editor/Empty.h \
     headers/expression_editor/ExpressionContext.h \
@@ -64,7 +72,15 @@ HEADERS += headers/expression_editor/UnfinishedOperator.h \
     headers/commands/Command.h \
     headers/interactionbase_api.h \
     src/interactionbase.h
-SOURCES += src/expression_editor/UnfinishedOperator.cpp \
+SOURCES += src/expression_editor/tree_builder/FinishOperator.cpp \
+    src/expression_editor/tree_builder/SkipOperatorDelimiter.cpp \
+    src/expression_editor/tree_builder/AddValue.cpp \
+    src/expression_editor/tree_builder/AddEmptyValue.cpp \
+    src/expression_editor/tree_builder/AddErrorOperator.cpp \
+    src/expression_editor/tree_builder/AddOperator.cpp \
+    src/expression_editor/tree_builder/ExpressionTreeBuildInstruction.cpp \
+    src/expression_editor/tree_builder/ExpressionTreeBuilder.cpp \
+    src/expression_editor/UnfinishedOperator.cpp \
     src/expression_editor/ErrorDescriptor.cpp \
     src/expression_editor/Empty.cpp \
     src/expression_editor/ExpressionContext.cpp \
