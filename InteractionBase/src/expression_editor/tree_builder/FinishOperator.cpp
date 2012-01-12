@@ -39,7 +39,7 @@
 
 #include "InteractionBaseException.h"
 
-namespace InteractionBase {
+namespace Interaction {
 
 void FinishOperator::perform(ExpressionTreeBuilder& tb)
 {

@@ -36,7 +36,7 @@
 
 #include "interactionbase_api.h"
 
-namespace InteractionBase {
+namespace Interaction {
 
 class INTERACTIONBASE_API OperatorDescriptor {
 	public:

@@ -33,7 +33,7 @@
 
 #include "InteractionBaseException.h"
 
-namespace InteractionBase {
+namespace Interaction {
 
 InteractionBaseException::InteractionBaseException(const QString& message) :
 	Envision::EnvisionException(message)

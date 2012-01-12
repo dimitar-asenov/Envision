@@ -39,7 +39,7 @@
 #include "expression_editor/ErrorDescriptor.h"
 #include "expression_editor/ExpressionTreeUtils.h"
 
-namespace InteractionBase {
+namespace Interaction {
 
 AddErrorOperator::AddErrorOperator(const QString& text) : text_(text)
 {

@@ -34,7 +34,7 @@
 #ifndef INTERACTIONBASE_EXPRESSIONEDITOR_H_
 #define INTERACTIONBASE_EXPRESSIONEDITOR_H_
 
-namespace InteractionBase {
+namespace Interaction {
 
 class OperatorDescriptorList;
 class Expression;

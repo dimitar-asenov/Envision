@@ -43,7 +43,7 @@
 #include "expression_editor/OperatorDescriptorList.h"
 #include "expression_editor/OperatorDescriptor.h"
 
-namespace InteractionBase {
+namespace Interaction {
 
 Parser::Parser(const OperatorDescriptorList* ops) : ops_(ops)
 {

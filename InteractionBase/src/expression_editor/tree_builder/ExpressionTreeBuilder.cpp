@@ -36,7 +36,7 @@
 #include "expression_editor/tree_builder/ExpressionTreeBuildInstruction.h"
 #include "expression_editor/tree_builder/AddErrorOperator.h"
 
-namespace InteractionBase {
+namespace Interaction {
 
 ExpressionTreeBuilder::ExpressionTreeBuilder() : top_(nullptr), left_(nullptr)
 {

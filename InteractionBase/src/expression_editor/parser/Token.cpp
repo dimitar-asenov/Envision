@@ -36,7 +36,7 @@
 #include "expression_editor/OperatorDescriptor.h"
 #include "expression_editor/OperatorDescriptorList.h"
 
-namespace InteractionBase {
+namespace Interaction {
 
 Token::Token()
 {

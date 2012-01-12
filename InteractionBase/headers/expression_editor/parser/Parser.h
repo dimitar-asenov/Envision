@@ -39,7 +39,7 @@
 #include "Token.h"
 #include "ParseResult.h"
 
-namespace InteractionBase {
+namespace Interaction {
 
 class OperatorDescriptorList;
 class ExpressionTreeBuildInstruction;

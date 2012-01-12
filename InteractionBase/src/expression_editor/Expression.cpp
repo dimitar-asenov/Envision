@@ -34,7 +34,7 @@
 #include "expression_editor/Expression.h"
 #include "expression_editor/Operator.h"
 
-namespace InteractionBase {
+namespace Interaction {
 
 Expression::Expression(const int type, Operator* parent) : type_(type), parent_(parent)
 {

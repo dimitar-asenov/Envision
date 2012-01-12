@@ -33,7 +33,7 @@
 
 #include "expression_editor/parser/ParseResult.h"
 
-namespace InteractionBase {
+namespace Interaction {
 
 ParseResult::ParseResult()
 	:errors(0), missing_inner_tokens(0), missing_trailing_tokens(0)

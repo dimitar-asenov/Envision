@@ -36,7 +36,7 @@
 #include "expression_editor/Empty.h"
 #include "expression_editor/UnfinishedOperator.h"
 
-namespace InteractionBase {
+namespace Interaction {
 
 void AddEmptyValue::perform(ExpressionTreeBuilder& tb)
 {

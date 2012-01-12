@@ -37,7 +37,7 @@
 #include "expression_editor/Operator.h"
 #include "expression_editor/Value.h"
 
-namespace InteractionBase {
+namespace Interaction {
 
 ExpressionContext::ExpressionContext()
 	:	left_type_(None), right_type_(None), left_(nullptr), right_(nullptr), left_text_(QString::Null()), right_text_(QString::Null()), left_delim_(-1), right_delim_(-1)
@@ -56,11 +56,11 @@ Operator* ExpressionContext::rightOp()
 
 Value* ExpressionContext::leftValue()
 {
-	return dynamic_cast<InteractionBase::Value*> (left_);
+	return dynamic_cast<Interaction::Value*> (left_);
 }
 Value* ExpressionContext::rightValue()
 {
-	return dynamic_cast<InteractionBase::Value*> (right_);
+	return dynamic_cast<Interaction::Value*> (right_);
 }
 
 Expression* ExpressionContext::leftExp()

@@ -34,7 +34,7 @@
 #include "expression_editor/Value.h"
 #include "expression_editor/ExpressionVisitor.h"
 
-namespace InteractionBase {
+namespace Interaction {
 
 Value::Value(const QString& text, Operator* parent) : Expression(type(), parent), text_(text)
 {

@@ -38,7 +38,7 @@
 
 #include "Operator.h"
 
-namespace InteractionBase {
+namespace Interaction {
 
 class ExpressionVisitor;
 

@@ -37,7 +37,7 @@
 #include "expression_editor/OperatorDescriptor.h"
 #include "expression_editor/ExpressionVisitor.h"
 
-namespace InteractionBase {
+namespace Interaction {
 
 Operator::Operator(OperatorDescriptor* descriptor, Operator* parent) : Expression(type(), parent), descriptor_(descriptor)
 {

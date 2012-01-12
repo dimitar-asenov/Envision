@@ -36,7 +36,7 @@
 #include "expression_editor/Operator.h"
 #include "expression_editor/UnfinishedOperator.h"
 
-namespace InteractionBase {
+namespace Interaction {
 
 ExpressionVisitor::~ExpressionVisitor()
 {

@@ -37,7 +37,7 @@
 #include "interactionbase_api.h"
 #include "Core/headers/EnvisionException.h"
 
-namespace InteractionBase {
+namespace Interaction {
 
 class INTERACTIONBASE_API InteractionBaseException : public Envision::EnvisionException
 {

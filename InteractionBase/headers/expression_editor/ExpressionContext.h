@@ -36,7 +36,7 @@
 
 #include "interactionbase_api.h"
 
-namespace InteractionBase {
+namespace Interaction {
 
 class Expression;
 class Operator;
@@ -66,8 +66,8 @@ class INTERACTIONBASE_API ExpressionContext {
 		Operator* leftOp();
 		Operator* rightOp();
 
-		InteractionBase::Value* leftValue();
-		InteractionBase::Value* rightValue();
+		Interaction::Value* leftValue();
+		Interaction::Value* rightValue();
 
 		Expression* leftExp();
 		Expression* rightExp();

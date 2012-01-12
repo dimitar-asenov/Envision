@@ -37,7 +37,7 @@
 #include "expression_editor/UnfinishedOperator.h"
 #include "expression_editor/Value.h"
 
-namespace InteractionBase {
+namespace Interaction {
 
 AddValue::AddValue(const QString& text) : text_(text)
 {

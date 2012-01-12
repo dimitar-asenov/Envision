@@ -37,7 +37,7 @@
 #include "expression_editor/UnfinishedOperator.h"
 #include "expression_editor/ExpressionTreeUtils.h"
 
-namespace InteractionBase {
+namespace Interaction {
 
 AddOperator::AddOperator(OperatorDescriptor* descriptor) : descriptor_(descriptor)
 {

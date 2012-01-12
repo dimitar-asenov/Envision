@@ -37,7 +37,7 @@
 #include "expression_editor/parser/Parser.h"
 #include "expression_editor/tree_builder/ExpressionTreeBuilder.h"
 
-namespace InteractionBase {
+namespace Interaction {
 
 Expression* ExpressionEditor::parse(const QString& expression_text)
 {

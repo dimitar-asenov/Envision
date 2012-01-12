@@ -35,7 +35,7 @@
 
 #include "expression_editor/ExpressionVisitor.h"
 
-namespace InteractionBase {
+namespace Interaction {
 
 Empty::Empty(Operator* parent) : Expression(type(), parent)
 {

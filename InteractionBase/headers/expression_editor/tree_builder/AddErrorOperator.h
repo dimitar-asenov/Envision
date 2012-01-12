@@ -38,7 +38,7 @@
 
 #include "ExpressionTreeBuildInstruction.h"
 
-namespace InteractionBase {
+namespace Interaction {
 
 class INTERACTIONBASE_API AddErrorOperator : public ExpressionTreeBuildInstruction
 {

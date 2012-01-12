@@ -33,7 +33,7 @@
 
 #include "expression_editor/OperatorDescriptor.h"
 
-namespace InteractionBase {
+namespace Interaction {
 
 OperatorDescriptor::OperatorDescriptor() {
 }

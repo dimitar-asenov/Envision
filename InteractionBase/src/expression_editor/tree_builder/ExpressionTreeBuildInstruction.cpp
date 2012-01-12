@@ -33,7 +33,7 @@
 
 #include "expression_editor/tree_builder/ExpressionTreeBuildInstruction.h"
 
-namespace InteractionBase {
+namespace Interaction {
 
 ExpressionTreeBuildInstruction::~ExpressionTreeBuildInstruction()
 {

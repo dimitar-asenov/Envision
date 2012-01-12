@@ -38,7 +38,7 @@
 
 #include "OperatorDescriptor.h"
 
-namespace InteractionBase {
+namespace Interaction {
 
 class INTERACTIONBASE_API ErrorDescriptor : public OperatorDescriptor
 {

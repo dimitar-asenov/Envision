@@ -33,7 +33,7 @@
 
 #include "expression_editor/ErrorDescriptor.h"
 
-namespace InteractionBase {
+namespace Interaction {
 
 ErrorDescriptor::ErrorDescriptor(const QString& prefix_text, const QString& postfix_text)
 	:OperatorDescriptor("Error: " + prefix_text + postfix_text, prefix_text + " expr " + postfix_text, 1, 0,

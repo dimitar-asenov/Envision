@@ -37,7 +37,7 @@
 
 #include "Core/headers/global.h"
 
-namespace InteractionBase {
+namespace Interaction {
 
 OperatorDescriptorList::~OperatorDescriptorList()
 {

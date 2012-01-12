@@ -38,7 +38,7 @@
 #include "expression_editor/Operator.h"
 #include "expression_editor/OperatorDescriptor.h"
 
-namespace InteractionBase {
+namespace Interaction {
 
 Expression* ExpressionTreeUtils::replace(Expression*& top, Expression* oldExpr, Expression* newExpr)
 {

@@ -36,7 +36,7 @@
 #include "expression_editor/tree_builder/ExpressionTreeBuilder.h"
 #include "expression_editor/UnfinishedOperator.h"
 
-namespace InteractionBase {
+namespace Interaction {
 
 void SkipOperatorDelimiter::perform(ExpressionTreeBuilder& tb)
 {

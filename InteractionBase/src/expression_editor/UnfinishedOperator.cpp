@@ -37,7 +37,7 @@
 #include "expression_editor/Empty.h"
 #include "expression_editor/ExpressionVisitor.h"
 
-namespace InteractionBase {
+namespace Interaction {
 
 UnfinishedOperator::UnfinishedOperator(OperatorDescriptor* descriptor, Operator* parent)
 	: Operator(descriptor, parent), num_complete_(0)
