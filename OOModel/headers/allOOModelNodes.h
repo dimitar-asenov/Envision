@@ -71,6 +71,9 @@
 #include "expressions/CastExpression.h"
 #include "expressions/ReferenceExpression.h"
 #include "expressions/ArrayInitializer.h"
+#include "expressions/EmptyExpression.h"
+#include "expressions/ErrorExpression.h"
+#include "expressions/UnfinishedOperator.h"
 
 #include "types/Type.h"
 #include "types/PrimitiveType.h"

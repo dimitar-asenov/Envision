@@ -75,6 +75,9 @@ template class Model::TypedList<OOModel::BinaryOperation>;
 template class Model::TypedList<OOModel::CastExpression>;
 template class Model::TypedList<OOModel::ReferenceExpression>;
 template class Model::TypedList<OOModel::ArrayInitializer>;
+template class Model::TypedList<OOModel::EmptyExpression>;
+template class Model::TypedList<OOModel::ErrorExpression>;
+template class Model::TypedList<OOModel::UnfinishedOperator>;
 
 template class Model::TypedList<OOModel::Type>;
 template class Model::TypedList<OOModel::PrimitiveType>;

@@ -87,6 +87,9 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	Model::TypedList<CastExpression>::registerNodeType();
 	Model::TypedList<ReferenceExpression>::registerNodeType();
 	Model::TypedList<ArrayInitializer>::registerNodeType();
+	Model::TypedList<ErrorExpression>::registerNodeType();
+	Model::TypedList<UnfinishedOperator>::registerNodeType();
+	Model::TypedList<EmptyExpression>::registerNodeType();
 
 	Model::TypedList<Type>::registerNodeType();
 	Model::TypedList<PrimitiveType>::registerNodeType();
@@ -135,6 +138,9 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	CastExpression::init();
 	ReferenceExpression::init();
 	ArrayInitializer::init();
+	EmptyExpression::init();
+	ErrorExpression::init();
+	UnfinishedOperator::init();
 
 	Type::init();
 	PrimitiveType::init();

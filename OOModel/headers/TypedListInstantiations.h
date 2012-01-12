@@ -78,6 +78,9 @@ class BinaryOperation;
 class CastExpression;
 class ReferenceExpression;
 class ArrayInitializer;
+class EmptyExpression;
+class ErrorExpression;
+class UnfinishedOperator;
 
 class Type;
 class PrimitiveType;
@@ -126,6 +129,9 @@ template class Q_DECL_IMPORT Model::TypedList<OOModel::BinaryOperation>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::CastExpression>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::ReferenceExpression>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::ArrayInitializer>;
+template class Q_DECL_IMPORT Model::TypedList<OOModel::EmptyExpression>;
+template class Q_DECL_IMPORT Model::TypedList<OOModel::ErrorExpression>;
+template class Q_DECL_IMPORT Model::TypedList<OOModel::UnfinishedOperator>;
 
 template class Q_DECL_IMPORT Model::TypedList<OOModel::Type>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::PrimitiveType>;

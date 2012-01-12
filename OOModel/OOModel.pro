@@ -3,7 +3,8 @@ CONFIG(release, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/ReleaseBuild
 CONFIG(debug, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/DebugBuild
 PLUGINS_DIR = $${BUILD_DIR}/plugins
 CONFIG(debug, debug|release):DEFINES += DEBUG
-QMAKE_CXXFLAGS += -Werror -std=c++0x
+QMAKE_CXXFLAGS += -Werror \
+    -std=c++0x
 INCLUDEPATH += ./headers \
     ./src \
     ./test \
@@ -27,7 +28,10 @@ pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
 PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/precompiled.h \
+HEADERS += headers/expressions/UnfinishedOperator.h \
+    headers/expressions/ErrorExpression.h \
+    headers/expressions/EmptyExpression.h \
+    headers/precompiled.h \
     headers/elements/StorageSpecifier.h \
     headers/elements/StatementItemList.h \
     headers/expressions/ArrayInitializer.h \
@@ -79,7 +83,10 @@ HEADERS += headers/precompiled.h \
     headers/OOModelException.h \
     headers/oomodel_api.h \
     src/oomodel.h
-SOURCES += src/elements/StorageSpecifier.cpp \
+SOURCES += src/expressions/UnfinishedOperator.cpp \
+    src/expressions/ErrorExpression.cpp \
+    src/expressions/EmptyExpression.cpp \
+    src/elements/StorageSpecifier.cpp \
     src/elements/StatementItemList.cpp \
     src/expressions/ArrayInitializer.cpp \
     src/elements/Visibility.cpp \
