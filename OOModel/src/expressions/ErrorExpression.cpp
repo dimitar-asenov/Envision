@@ -38,7 +38,8 @@ namespace OOModel {
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(ErrorExpression, Expression)
 EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(ErrorExpression, Expression)
 
-REGISTER_ATTRIBUTE(ErrorExpression, text, Text, false, false, true)
+REGISTER_ATTRIBUTE(ErrorExpression, prefix, Text, false, false, true)
 REGISTER_ATTRIBUTE(ErrorExpression, arg, Expression, false, false, true)
+REGISTER_ATTRIBUTE(ErrorExpression, postfix, Text, false, false, true)
 
 } /* namespace OOModel */
