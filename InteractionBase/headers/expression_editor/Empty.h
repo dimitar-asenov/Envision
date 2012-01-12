@@ -34,7 +34,7 @@
 #ifndef INTERACTIONBASE_EMPTY_H_
 #define INTERACTIONBASE_EMPTY_H_
 
-#include "interactionbase_api.h"
+#include "../interactionbase_api.h"
 
 #include "Expression.h"
 

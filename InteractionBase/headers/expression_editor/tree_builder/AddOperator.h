@@ -34,7 +34,7 @@
 #ifndef INTERACTIONBASE_ADDOPERATOR_H_
 #define INTERACTIONBASE_ADDOPERATOR_H_
 
-#include "interactionbase_api.h"
+#include "../../interactionbase_api.h"
 
 #include "ExpressionTreeBuildInstruction.h"
 

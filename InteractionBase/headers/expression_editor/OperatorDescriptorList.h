@@ -34,7 +34,7 @@
 #ifndef INTERACTIONBASE_OPERATORDESCRIPTORLIST_H_
 #define INTERACTIONBASE_OPERATORDESCRIPTORLIST_H_
 
-#include "interactionbase_api.h"
+#include "../interactionbase_api.h"
 
 namespace Interaction {
 

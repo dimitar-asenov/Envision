@@ -34,12 +34,14 @@
 #ifndef INTERACTIONBASE_EXPRESSIONEDITOR_H_
 #define INTERACTIONBASE_EXPRESSIONEDITOR_H_
 
+#include "../interactionbase_api.h"
+
 namespace Interaction {
 
 class OperatorDescriptorList;
 class Expression;
 
-class ExpressionEditor {
+class INTERACTIONBASE_API ExpressionEditor {
 	public:
 		void setText(const QString& expression_text);
 		void setOperatorDescriptors(const OperatorDescriptorList* ops);

@@ -34,7 +34,7 @@
 #ifndef INTERACTIONBASE_UNFINISHEDOPERATOR_H_
 #define INTERACTIONBASE_UNFINISHEDOPERATOR_H_
 
-#include "interactionbase_api.h"
+#include "../interactionbase_api.h"
 
 #include "Operator.h"
 

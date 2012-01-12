@@ -34,7 +34,7 @@
 #ifndef INTERACTIONBASE_PARSER_H_
 #define INTERACTIONBASE_PARSER_H_
 
-#include "interactionbase_api.h"
+#include "../../interactionbase_api.h"
 
 #include "Token.h"
 #include "ParseResult.h"

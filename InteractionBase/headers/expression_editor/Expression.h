@@ -34,7 +34,7 @@
 #ifndef INTERACTIONBASE_EXPRESSION_H_
 #define INTERACTIONBASE_EXPRESSION_H_
 
-#include "interactionbase_api.h"
+#include "../interactionbase_api.h"
 
 #include "ExpressionContext.h"
 

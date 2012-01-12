@@ -34,7 +34,7 @@
 #ifndef INTERACTIONBASE_ADDEMPTYVALUE_H_
 #define INTERACTIONBASE_ADDEMPTYVALUE_H_
 
-#include "interactionbase_api.h"
+#include "../../interactionbase_api.h"
 
 #include "ExpressionTreeBuildInstruction.h"
 
