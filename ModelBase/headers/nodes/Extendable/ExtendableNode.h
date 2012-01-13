@@ -103,6 +103,8 @@ class MODELBASE_API ExtendableNode: public Node
 		template <class T> T* extension();
 };
 
+inline Node* ExtendableNode::get(const ExtendableIndex &attributeIndex) const { return subnodes[attributeIndex.level()][attributeIndex.index()]; }
+
 template<class T>
 T* ExtendableNode::set(const ExtendableIndex &attributeIndex, const QString& type)
 {

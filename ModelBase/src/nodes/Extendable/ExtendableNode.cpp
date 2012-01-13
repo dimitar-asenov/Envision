@@ -137,12 +137,6 @@ ExtendableIndex ExtendableNode::registerNewAttribute(AttributeChain& metaData, c
 	return ExtendableIndex(metaData.numLevels() - 1, metaData.size() - 1);
 }
 
-
-Node* ExtendableNode::get(const ExtendableIndex &attributeIndex) const
-{
-	return subnodes[attributeIndex.level()][attributeIndex.index()];
-}
-
 Node* ExtendableNode::get(const QString &attributeName) const
 {
 	ExtendableIndex index = meta.indexForAttribute(attributeName);
