@@ -36,6 +36,7 @@
 #include "expression_editor/parser/Token.h"
 #include "expression_editor/parser/Parser.h"
 #include "expression_editor/tree_builder/ExpressionTreeBuilder.h"
+#include "expression_editor/ExpressionTreeUtils.h"
 
 namespace Interaction {
 
@@ -43,7 +44,9 @@ Expression* ExpressionEditor::parse(const QString& expression_text)
 {
 	if (!expression_text.isNull()) setText(expression_text);
 
-	return ExpressionTreeBuilder().build( Parser(ops_).parse( Token::tokenize(text_, ops_)) );
+	Expression* top = ExpressionTreeBuilder().build( Parser(ops_).parse( Token::tokenize(text_, ops_)) );
+	ExpressionTreeUtils::fixTop(top);
+	return top;
 }
 
 } /* namespace InteractionBase */
