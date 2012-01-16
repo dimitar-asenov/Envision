@@ -51,7 +51,7 @@ void Model::init()
 }
 
 Model::Model() :
-	root_(nullptr), currentModificationTarget(nullptr), currentModificationLock(nullptr), pushedNewCommandsOnTheStack(false), performedUndoRedo(false), modificationInProgress(false), nextId(0), store_(nullptr)
+	root_(nullptr), currentModificationTarget(nullptr), currentModificationLock(nullptr), pushedNewCommandsOnTheStack(false), performedUndoRedo(false), modificationInProgress(false), store_(nullptr)
 {
 	commands.setUndoLimit(100);
 	loadedModels.append(this);
@@ -126,13 +126,6 @@ bool Model::canBeModified(const Node* node) const
 
 	// Check that the access lock for this node is the current modification lock.
 	return node->accessLock() == currentModificationLock;
-}
-
-NodeIdType Model::generateNextId()
-{
-	if ( root_ != nullptr && !modificationInProgress ) throw ModelException("Creating a new node without calling Model.beginModification() first");
-
-	return nextId++;
 }
 
 void Model::pushCommandOnUndoStack(UndoCommand* command)
@@ -212,7 +205,7 @@ Node* Model::createRoot(const QString &typeName)
 	if ( root_ == nullptr )
 	{
 		commands.clear();
-		root_ = Node::createNewNode(typeName, nullptr, this);
+		root_ = Node::createNewNode(typeName, nullptr);
 		emit rootCreated(root_);
 	}
 

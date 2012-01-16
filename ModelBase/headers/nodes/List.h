@@ -67,9 +67,9 @@ class MODELBASE_API List: public Node
 
 		int indexOf(const Node* item) const;
 
-		template <class T> T* append();
-		template <class T> T* prepend();
-		template <class T> T* insert(int position);
+		void append(Node* node);
+		void prepend(Node* node);
+		void insert(int position, Node* node);
 		void paste(ClipboardStore& clipboard, int position);
 
 		void remove(int index);
@@ -111,34 +111,8 @@ template <class T> T* List::at(int i)
 }
 
 inline const QVector<Node*>& List::nodes() { return nodes_; }
-
-template <class T>
-T* List::append()
-{
-	if (!fullyLoaded) loadFully(* (model()->store()));
-
-	return insert<T>(nodes_.size());
-}
-
-template <class T>
-T* List::prepend()
-{
-	if (!fullyLoaded) loadFully(* (model()->store()));
-
-	return insert<T>(0);
-}
-
-template <class T>
-T* List::insert(int position)
-{
-	if (!fullyLoaded) loadFully(* (model()->store()));
-
-	T* newNode = new T(this, nullptr);
-	if (! Node::isTypeRegistered(newNode->typeName())) throw ModelException("Trying to create a list entry of an unregistered type.");
-
-	execute(new ListInsert(this, nodes_, newNode, position));
-	return newNode;
-}
+inline void List::append(Node* node) { insert(nodes_.size(), node); }
+inline void List::prepend(Node* node) { insert(0, node); }
 
 }
 

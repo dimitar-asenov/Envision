@@ -66,20 +66,20 @@ AttributeChain& ExtendableNode::topLevelMeta()
 	return meta;
 }
 
-ExtendableNode::ExtendableNode(Node *parent, Model* model) :
-	Node(parent, model), meta(ExtendableNode::getMetaData())
+ExtendableNode::ExtendableNode(Node *parent) :
+	Node(parent), meta(ExtendableNode::getMetaData())
 {
 	throw ModelException("Constructing an ExtendableNode class directly, without specifying meta data");
 }
 
-ExtendableNode::ExtendableNode(Node *parent, NodeIdType id, PersistentStore &, bool) :
-	Node(parent, id), meta(ExtendableNode::getMetaData())
+ExtendableNode::ExtendableNode(Node *parent, PersistentStore &, bool) :
+	Node(parent), meta(ExtendableNode::getMetaData())
 {
 	throw ModelException("Constructing an ExtendableNode class directly, without specifying meta data");
 }
 
-ExtendableNode::ExtendableNode(Node *parent, Model* model, AttributeChain& metaData) :
-	Node(parent, model), meta(metaData), subnodes(meta.numLevels())
+ExtendableNode::ExtendableNode(Node *parent, AttributeChain& metaData) :
+	Node(parent), meta(metaData), subnodes(meta.numLevels())
 {
 	for (int level = 0; level < meta.numLevels(); ++level)
 	{
@@ -87,12 +87,12 @@ ExtendableNode::ExtendableNode(Node *parent, Model* model, AttributeChain& metaD
 		subnodes[level] = QVector<Node*> (currentLevel->size(), nullptr);
 
 		for (int i = 0; i < currentLevel->size(); ++i)
-			if ( !(*currentLevel)[i].optional() ) subnodes[level][i] = Node::createNewNode((*currentLevel)[i].type(), this, model);
+			if ( !(*currentLevel)[i].optional() ) subnodes[level][i] = Node::createNewNode((*currentLevel)[i].type(), this);
 	}
 }
 
-ExtendableNode::ExtendableNode(Node *parent, NodeIdType id, PersistentStore &store, bool, AttributeChain& metaData) :
-	Node(parent, id), meta(metaData), subnodes(meta.numLevels())
+ExtendableNode::ExtendableNode(Node *parent, PersistentStore &store, bool, AttributeChain& metaData) :
+	Node(parent), meta(metaData), subnodes(meta.numLevels())
 {
 	for (int level = 0; level < meta.numLevels(); ++level)
 		subnodes[level] = QVector<Node*> (meta.level(level)->size(), nullptr);
@@ -135,6 +135,12 @@ ExtendableIndex ExtendableNode::registerNewAttribute(AttributeChain& metaData, c
 	metaData.append(attribute);
 
 	return ExtendableIndex(metaData.numLevels() - 1, metaData.size() - 1);
+}
+
+void ExtendableNode::set(const ExtendableIndex &attributeIndex, Node* node)
+{
+	if ( !attributeIndex.isValid() ) throw ModelException("Trying to set an attribute with an invalid Index");
+	execute(new ExtendedNodeChild(this, node, attributeIndex, &subnodes));
 }
 
 Node* ExtendableNode::get(const QString &attributeName) const

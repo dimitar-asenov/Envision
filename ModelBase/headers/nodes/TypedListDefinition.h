@@ -54,14 +54,14 @@ class Q_DECL_EXPORT TypedList: public List
 };
 
 template<class T>
-TypedList<T>::TypedList(::Model::Node* parent, ::Model::Model* model) :
-	List(parent, model)
+TypedList<T>::TypedList(::Model::Node* parent) :
+	List(parent)
 {
 }
 
 template<class T>
-TypedList<T>::TypedList(::Model::Node *parent, ::Model::NodeIdType id, ::Model::PersistentStore &store, bool partialLoadHint) :
-	List(parent, id, store, partialLoadHint)
+TypedList<T>::TypedList(::Model::Node *parent, ::Model::PersistentStore &store, bool partialLoadHint) :
+	List(parent, store, partialLoadHint)
 {
 }
 

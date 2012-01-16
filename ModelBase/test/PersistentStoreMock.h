@@ -57,7 +57,7 @@ class PersistentStoreMock: public PersistentStore
 		virtual QList<LoadedNode> loadAllSubNodes(Node* parent);
 		virtual Node* loadSubNode(Node* parent, const QString& name);
 		virtual QList<LoadedNode> loadPartialNode(Node* partialNode);
-		virtual PersistedNode* loadCompleteNodeSubtree(const QString& modelName, NodeIdType persistenceUnitId, NodeIdType nodeId);
+		virtual PersistedNode* loadCompleteNodeSubtree(const QString& modelName, const Node* node);
 		virtual QString currentNodeType() const;
 
 		virtual int loadIntValue();

@@ -59,11 +59,6 @@ TEST(FilePersistence, LoadRootOnly)
 	CHECK_STR_EQUAL("Title", root->name()->get() );
 	CHECK_CONDITION(root->left() == nullptr);
 	CHECK_CONDITION(root->right() == nullptr);
-
-	model.beginModification(root,"testNextId");
-	Model::NodeIdType nextId = model.generateNextId();
-	model.endModification();
-	CHECK_INT_EQUAL(2, nextId);
 }
 
 TEST(FilePersistence, LoadModeNodesSingleUnitOnly)

@@ -57,7 +57,6 @@ TEST(FilePersistence, LoadingTypedList)
 	CHECK_CONDITION(list != nullptr);
 
 	CHECK_STR_EQUAL("TypedListOfText", list->typeName() );
-	CHECK_INT_EQUAL(0, list->id());
 	CHECK_INT_EQUAL(2, list->size());
 
 	Model::Text* one = list->at(0);
@@ -65,11 +64,9 @@ TEST(FilePersistence, LoadingTypedList)
 
 	CHECK_CONDITION(one != nullptr);
 	CHECK_STR_EQUAL("one", one->get());
-	CHECK_INT_EQUAL(1, one->id());
 
 	CHECK_CONDITION(two != nullptr);
 	CHECK_STR_EQUAL("two", two->get());
-	CHECK_INT_EQUAL(2, two->id())
 }
 
 TEST(FilePersistence, SavingTypedList)
@@ -82,8 +79,12 @@ TEST(FilePersistence, SavingTypedList)
 	Model::TypedList<Model::Text>* list = dynamic_cast<Model::TypedList<Model::Text>*> (model.createRoot("TypedListOfText"));
 
 	model.beginModification(list, "create");
-	list->append<Model::Text>()->set("one");
-	list->append<Model::Text>()->set("two");
+	Model::Text* one = new Model::Text();
+	one->set("one");
+	list->append(one);
+	Model::Text* two = new Model::Text();
+	two->set("two");
+	list->append(two);
 	model.endModification();
 
 	model.setName("typedList");

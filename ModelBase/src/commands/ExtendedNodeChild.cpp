@@ -34,6 +34,8 @@
 #include "commands/ExtendedNodeChild.h"
 #include "nodes/Node.h"
 
+#include "ModelException.h"
+
 #include "Core/headers/global.h"
 
 namespace Model {
@@ -42,6 +44,7 @@ ExtendedNodeChild::ExtendedNodeChild(Node* target, Node* newValue_, const Extend
 	UndoCommand(target, "set node"), newVal(newValue_), oldVal((*subnodes_)[attributeIndex_.level()][attributeIndex_.index()]),
 	attributeIndex(attributeIndex_), subnodes(subnodes_)
 {
+	if (newValue_ && newValue_->parent()) throw new ModelException("Set as a child of ExtenableNode a node that already has a parent.");
 }
 
 ExtendedNodeChild::~ExtendedNodeChild()
@@ -53,14 +56,16 @@ ExtendedNodeChild::~ExtendedNodeChild()
 void ExtendedNodeChild::redo()
 {
 	(*subnodes)[attributeIndex.level()][attributeIndex.index()] = newVal;
-
+	if (newVal) newVal->setParent(target());
+	if (oldVal) oldVal->setParent(nullptr);
 	UndoCommand::redo();
 }
 
 void ExtendedNodeChild::undo()
 {
 	(*subnodes)[attributeIndex.level()][attributeIndex.index()] = oldVal;
-
+	if (newVal) newVal->setParent(nullptr);
+	if (oldVal) oldVal->setParent(target());
 	UndoCommand::undo();
 }
 

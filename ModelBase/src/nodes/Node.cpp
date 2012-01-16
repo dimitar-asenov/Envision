@@ -37,6 +37,8 @@
 #include "commands/UndoCommand.h"
 #include "ModelException.h"
 
+#include "Core/headers/global.h"
+
 #include <QtCore/QMutexLocker>
 #include <QtCore/QList>
 
@@ -54,24 +56,13 @@ QMap<QString, Node::NodePersistenceConstructor> Node::nodePersistenceConstructor
 /***********************************************************************************************************************
  * CONSTRUCTORS AND DESTRUCTORS
  **********************************************************************************************************************/
-Node::Node(Node* parent, Model* argModel) :
-	fullyLoaded(true), parent_(parent), id_(0), revision_(0)
+Node::Node(Node* parent) :
+	fullyLoaded(true), parent_(parent), revision_(0)
 {
-	Model* ownModel = model();
-
-	if (ownModel && argModel)
-		throw ModelException("Constructing a new Node with an explicitly specified model and existing parent model");
-
-	if (!ownModel && !argModel) throw ModelException("Constructing a node without a valid model");
-
-	if (ownModel) id_ = ownModel->generateNextId();
-	else id_ = argModel->generateNextId();
+	if (parent && !parent->isModifyable())
+		throw ModelException("Trying to create a node with an non-modifiable parent.");
 }
 
-Node::Node(Node* parent, NodeIdType id) :
-	fullyLoaded(true), parent_(parent), id_(id), revision_(0)
-{
-}
 
 Node::~Node()
 {
@@ -90,9 +81,16 @@ void Node::execute(UndoCommand *command)
 
 	Model* m = model();
 
-	if ( !m->canBeModified(this) ) throw ModelException("Can not modify the current node.");
-
-	m->pushCommandOnUndoStack(command);
+	if (m)
+	{
+		if ( !m->canBeModified(this) ) throw ModelException("Can not modify the current node.");
+		m->pushCommandOnUndoStack(command);
+	}
+	else
+	{
+		command->redo();
+		SAFE_DELETE(command);
+	}
 }
 
 Node* Node::lowestCommonAncestor(Node* other)
@@ -150,6 +148,13 @@ Node* Node::navigateTo(Node* source, QString path)
 	else return nullptr;
 }
 
+bool Node::isModifyable() const
+{
+	Model* m = model();
+
+	return !m || m->canBeModified(this);
+}
+
 /***********************************************************************************************************************
  * GETTERS AND SETTERS
  **********************************************************************************************************************/
@@ -181,30 +186,15 @@ const QString& Node::symbolName() const
 	return nullString;
 }
 
-NodeIdType Node::id() const
-{
-	return id_;
-}
-
 bool Node::isNewPersistenceUnit() const
 {
 	return false;
 }
 
-NodeIdType Node::persistentUnitId() const
+Node* Node::persistentUnitNode() const
 {
 	const Node* persistentUnitNode = this;
-	while ( persistentUnitNode && persistentUnitNode->isNewPersistenceUnit() == false )
-		persistentUnitNode = persistentUnitNode->parent();
-
-	if (persistentUnitNode == nullptr || persistentUnitNode->parent() == nullptr) return 0;
-	else return persistentUnitNode->id();
-}
-
-Node* Node::persistentUnitNode()
-{
-	Node* persistentUnitNode = this;
-	Node* prev = this;
+	const Node* prev = this;
 
 	while ( persistentUnitNode && persistentUnitNode->isNewPersistenceUnit() == false )
 	{
@@ -212,8 +202,8 @@ Node* Node::persistentUnitNode()
 		persistentUnitNode = persistentUnitNode->parent();
 	}
 
-	if (persistentUnitNode) return persistentUnitNode;
-	else return prev;
+	if (persistentUnitNode) return const_cast<Node*> (persistentUnitNode);
+	else return const_cast<Node*> (prev);
 }
 
 int Node::revision() const
@@ -258,11 +248,11 @@ int Node::registerNodeType(const QString &type, const NodeConstructor constructo
 	return numRegisteredTypes_ - 1;
 }
 
-Node* Node::createNewNode(const QString &type, Node* parent, Model* model)
+Node* Node::createNewNode(const QString &type, Node* parent)
 {
 	if ( isTypeRegistered(type) )
 	{
-		return nodeConstructorRegister.value(type)(parent, model);
+		return nodeConstructorRegister.value(type)(parent);
 	}
 	else
 	{
@@ -271,11 +261,11 @@ Node* Node::createNewNode(const QString &type, Node* parent, Model* model)
 	}
 }
 
-Node* Node::createNewNode(const QString &type, Node* parent, NodeIdType id, PersistentStore &store, bool partialLoadHint)
+Node* Node::createNewNode(const QString &type, Node* parent, PersistentStore &store, bool partialLoadHint)
 {
 	if ( isTypeRegistered(type) )
 	{
-		return nodePersistenceConstructorRegister.value(type)(parent, id, store, partialLoadHint);
+		return nodePersistenceConstructorRegister.value(type)(parent, store, partialLoadHint);
 	}
 	else
 	{
