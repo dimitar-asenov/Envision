@@ -40,4 +40,10 @@ EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(IntegerLiteral, Expression)
 
 REGISTER_ATTRIBUTE(IntegerLiteral, value, Integer, false, false, true)
 
+IntegerLiteral::IntegerLiteral(int value)
+: Expression(nullptr, IntegerLiteral::getMetaData())
+{
+	setValue(value);
+}
+
 }

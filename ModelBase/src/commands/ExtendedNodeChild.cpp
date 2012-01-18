@@ -44,7 +44,7 @@ ExtendedNodeChild::ExtendedNodeChild(Node* target, Node* newValue_, const Extend
 	UndoCommand(target, "set node"), newVal(newValue_), oldVal((*subnodes_)[attributeIndex_.level()][attributeIndex_.index()]),
 	attributeIndex(attributeIndex_), subnodes(subnodes_)
 {
-	if (newValue_ && newValue_->parent()) throw new ModelException("Set as a child of ExtenableNode a node that already has a parent.");
+	if (newValue_ && newValue_->parent()) throw ModelException("Set as a child of ExtenableNode a node that already has a parent.");
 }
 
 ExtendedNodeChild::~ExtendedNodeChild()

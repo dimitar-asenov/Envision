@@ -58,13 +58,18 @@ TEST(InteractionBase, TextSelect)
 	Model::List* list = static_cast<Model::List*> (model->createRoot("List"));
 
 	model->beginModification(list, "set");
-	TestNodes::BinaryNode* first = list->append<TestNodes::BinaryNode>();
-	TestNodes::BinaryNode* second = list->append<TestNodes::BinaryNode>();
-	Model::Text* third = list->append<Model::Text>();
+	TestNodes::BinaryNode* first = new TestNodes::BinaryNode();
+	list->append(first);
+	TestNodes::BinaryNode* second = new TestNodes::BinaryNode();
+	list->append(second);
+	Model::Text* third = new Model::Text();
+	list->append(third);
 
 	first->name()->set("First node");
-	TestNodes::BinaryNode* left = first->setLeft<TestNodes::BinaryNode>();
-	TestNodes::BinaryNode* right = first->setRight<TestNodes::BinaryNode>();
+	TestNodes::BinaryNode* left = new TestNodes::BinaryNode();
+	first->setLeft(left);
+	TestNodes::BinaryNode* right = new TestNodes::BinaryNode();
+	first->setRight(right);
 	left->name()->set("left node");
 	right->name()->set("right node");
 

@@ -51,7 +51,11 @@ Class* addClass(Model::Model* model, Project* parent)
 
 	if (!parent) cl = dynamic_cast<Class*> (model->createRoot("Class"));
 	model->beginModification(parent ? static_cast<Model::Node*> (parent) :cl, "Adding a hello world class.");
-	if (!cl) cl = parent->classes()->append<Class>();
+	if (!cl)
+	{
+		cl = new Class();
+		parent->classes()->append(cl);
+	}
 
 	cl->setName("SomeClass");
 
@@ -65,84 +69,104 @@ Method* addComplicated(Model::Model* model, Class* parent)
 
 	if (!parent) met = dynamic_cast<Method*> (model->createRoot("Method"));
 	model->beginModification(parent? static_cast<Model::Node*> (parent) : met, "Adding a Complicated method.");
-	if (!met) met = parent->methods()->append<Method>();
+	if (!met)
+	{
+		met = new Method();
+		parent->methods()->append(met);
+	}
 
 	met->setName("complicated");
 
-	VariableDeclaration* a = met->items()->append<VariableDeclaration>();
+	VariableDeclaration* a = new VariableDeclaration();
+	met->items()->append(a);
 	a->setName("a");
-	a->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+	a->setType(new PrimitiveType(PrimitiveType::INT));
 
-	VariableDeclaration* b = met->items()->append<VariableDeclaration>();
+	VariableDeclaration* b = new VariableDeclaration();
+	met->items()->append(b);
 	b->setName("b");
-	b->setType<PrimitiveType>()->setType(PrimitiveType::UNSIGNED_INT);
-	b->setInitialValue<IntegerLiteral>()->setValue(1000);
+	b->setType(new PrimitiveType(PrimitiveType::UNSIGNED_INT));
+	b->setInitialValue(new IntegerLiteral(1000));
 
-	LoopStatement* loop = met->items()->append<LoopStatement>();
-	VariableDeclaration* initStep = loop->setInitStep<VariableDeclaration>();
-	initStep->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+	LoopStatement* loop = new LoopStatement();
+	met->items()->append(loop);
+	VariableDeclaration* initStep = new VariableDeclaration();
+	loop->setInitStep(initStep);
+	initStep->setType(new PrimitiveType(PrimitiveType::INT));
 	initStep->setName("i");
-	initStep->setInitialValue<IntegerLiteral>()->setValue(0);
-	BinaryOperation* loopCondition = loop->setCondition<BinaryOperation>();
-	loopCondition->setLeft<VariableAccess>()->ref()->set("local:i");
+	initStep->setInitialValue(new IntegerLiteral(0));
+	BinaryOperation* loopCondition = new BinaryOperation();
+	loop->setCondition(loopCondition);
+	loopCondition->setLeft(new VariableAccess("local:i"));
 	loopCondition->setOp(BinaryOperation::LESS);
-	loopCondition->setRight<VariableAccess>()->ref()->set("local:a");
-	AssignmentStatement* updateStep = loop->setUpdateStep<AssignmentStatement>();
-	updateStep->setLeft<VariableAccess>()->ref()->set("local:i");
+	loopCondition->setRight(new VariableAccess("local:a"));
+	AssignmentStatement* updateStep = new AssignmentStatement();
+	loop->setUpdateStep(updateStep);
+	updateStep->setLeft(new VariableAccess("local:i"));
 	updateStep->setOp(AssignmentStatement::PLUS_ASSIGN);
-	updateStep->setRight<IntegerLiteral>()->setValue(1);
+	updateStep->setRight(new IntegerLiteral(1));
 
-	AssignmentStatement* loopBodyAssignment = loop->body()->append<AssignmentStatement>();
-	loopBodyAssignment->setLeft<VariableAccess>()->ref()->set("local:b");
+	AssignmentStatement* loopBodyAssignment = new AssignmentStatement();
+	loop->body()->append(loopBodyAssignment);
+	loopBodyAssignment->setLeft(new VariableAccess("local:b"));
 	loopBodyAssignment->setOp(AssignmentStatement::TIMES_ASSIGN);
-	loopBodyAssignment->setRight<IntegerLiteral>()->setValue(2);
+	loopBodyAssignment->setRight(new IntegerLiteral(2));
 
-	IfStatement* loopIf = loop->body()->append<IfStatement>();
-	BinaryOperation* ifCond = loopIf->setCondition<BinaryOperation>();
-	ifCond->setLeft<VariableAccess>()->ref()->set("local:i");
+	IfStatement* loopIf = new IfStatement();
+	loop->body()->append(loopIf);
+	BinaryOperation* ifCond = new BinaryOperation();
+	loopIf->setCondition(ifCond);
+	ifCond->setLeft(new VariableAccess("local:i"));
 	ifCond->setOp(BinaryOperation::NOT_EQUALS);
-	ifCond->setRight<IntegerLiteral>()->setValue(10);
-	IfStatement* loopIfLeft = loopIf->thenBranch()->append<IfStatement>();
-	IfStatement* loopIfRight = loopIf->elseBranch()->append<IfStatement>();
+	ifCond->setRight(new IntegerLiteral(10));
+	IfStatement* loopIfLeft = new IfStatement();
+	loopIf->thenBranch()->append(loopIfLeft);
+	IfStatement* loopIfRight = new IfStatement();
+	loopIf->elseBranch()->append(loopIfRight);
 
-	BinaryOperation* ifLeftCondition = loopIfLeft->setCondition<BinaryOperation>();
-	ifLeftCondition->setLeft<VariableAccess>()->ref()->set("local:a");
+	BinaryOperation* ifLeftCondition = new BinaryOperation();
+	loopIfLeft->setCondition(ifLeftCondition);
+	ifLeftCondition->setLeft(new VariableAccess("local:a"));
 	ifLeftCondition->setOp(BinaryOperation::GREATER_EQUALS);
-	ifLeftCondition->setRight<IntegerLiteral>()->setValue(3);
-	loopIfLeft->thenBranch()->append<ContinueStatement>();
-	loopIfLeft->thenBranch()->append<BreakStatement>();
-	loopIfLeft->thenBranch()->append<ContinueStatement>();
-	loopIfLeft->thenBranch()->append<BreakStatement>();
+	ifLeftCondition->setRight(new IntegerLiteral(3));
+	loopIfLeft->thenBranch()->append(new ContinueStatement());
+	loopIfLeft->thenBranch()->append(new BreakStatement());
+	loopIfLeft->thenBranch()->append(new ContinueStatement());
+	loopIfLeft->thenBranch()->append(new BreakStatement());
 
-
-	BinaryOperation* ifRightCondition = loopIfRight->setCondition<BinaryOperation>();
-	ifRightCondition->setLeft<VariableAccess>()->ref()->set("local:b");
+	BinaryOperation* ifRightCondition = new BinaryOperation();
+	loopIfRight->setCondition(ifRightCondition);
+	ifRightCondition->setLeft(new VariableAccess("local:b"));
 	ifRightCondition->setOp(BinaryOperation::EQUALS);
-	ifRightCondition->setRight<IntegerLiteral>()->setValue(-20);
-	loopIfRight->thenBranch()->append<ContinueStatement>();
-	loopIfRight->thenBranch()->append<BreakStatement>();
-	loopIfRight->thenBranch()->append<ContinueStatement>();
-	loopIfRight->thenBranch()->append<BreakStatement>();
-	loopIfRight->elseBranch()->append<ContinueStatement>();
-	loopIfRight->elseBranch()->append<BreakStatement>();
-	loopIfRight->elseBranch()->append<ContinueStatement>();
-	loopIfRight->elseBranch()->append<BreakStatement>();
+	ifRightCondition->setRight(new IntegerLiteral(-20));
+	loopIfRight->thenBranch()->append(new ContinueStatement());
+	loopIfRight->thenBranch()->append(new BreakStatement());
+	loopIfRight->thenBranch()->append(new ContinueStatement());
+	loopIfRight->thenBranch()->append(new BreakStatement());
+	loopIfRight->elseBranch()->append(new ContinueStatement());
+	loopIfRight->elseBranch()->append(new BreakStatement());
+	loopIfRight->elseBranch()->append(new ContinueStatement());
+	loopIfRight->elseBranch()->append(new BreakStatement());
 
 
-	loop->body()->append<ContinueStatement>();
-	loop->body()->append<BreakStatement>();
+	loop->body()->append(new ContinueStatement());
+	loop->body()->append(new BreakStatement());
 
-	ForEachStatement* forEach = met->items()->append<ForEachStatement>();
+	ForEachStatement* forEach = new ForEachStatement();
+	met->items()->append(forEach);
 	forEach->setVarName("elem");
-	forEach->setVarType<PrimitiveType>()->setType(PrimitiveType::UNSIGNED_INT);
-	forEach->setCollection<VariableAccess>()->ref()->set("global:SomeCollection");
-	AssignmentStatement* assignEach = forEach->body()->append<AssignmentStatement>();
-	assignEach->setLeft<VariableAccess>()->ref()->set("local:a");
+	forEach->setVarType( new PrimitiveType(PrimitiveType::UNSIGNED_INT) );
+	forEach->setCollection(new VariableAccess("global:SomeCollection"));
+	AssignmentStatement* assignEach = new AssignmentStatement();
+	forEach->body()->append(assignEach);
+	assignEach->setLeft(new VariableAccess("local:a"));
 	assignEach->setOp(AssignmentStatement::DIVIDE_ASSIGN);
-	assignEach->setRight<VariableAccess>()->ref()->set("loop:elem");
+	assignEach->setRight(new VariableAccess("local:elem"));
 
 
-	met->items()->append<ReturnStatement>()->values()->append<IntegerLiteral>()->setValue(24);
+	ReturnStatement* metReturn = new ReturnStatement();
+	metReturn->values()->append(new IntegerLiteral(42));
+	met->items()->append(metReturn);
 	met->extension<Position>()->setX(400);
 
 	model->endModification();
@@ -155,71 +179,97 @@ Method* addDivBySix(Model::Model* model, Class* parent)
 
 	if (!parent) divbysix = dynamic_cast<Method*> (model->createRoot("Method"));
 	model->beginModification(parent? static_cast<Model::Node*> (parent) : divbysix, "Adding a divBySix method.");
-	if (!divbysix) divbysix = parent->methods()->append<Method>();
+	if (!divbysix)
+	{
+		divbysix = new Method();
+		parent->methods()->append(divbysix);
+	}
 
 	divbysix->setName("findDivBySix");
-	divbysix->results()->append<FormalResult>()->setType<PrimitiveType>()->setType(PrimitiveType::INT);
-	FormalArgument* arg = divbysix->arguments()->append<FormalArgument>();
+	FormalResult* divbysixResult = new FormalResult();
+	divbysixResult->setType(new PrimitiveType(PrimitiveType::INT));
+	divbysix->results()->append(divbysixResult);
+	FormalArgument* arg = new FormalArgument();
+	divbysix->arguments()->append(arg);
 	arg->setName("numbers");
-	arg->setType<ArrayType>()->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+	ArrayType* argType = new ArrayType();
+	argType->setType(new PrimitiveType(PrimitiveType::INT));
+	arg->setType(argType);
 
-	VariableDeclaration* result = divbysix->items()->append<VariableDeclaration>();
+	VariableDeclaration* result = new VariableDeclaration();
+	divbysix->items()->append(result);
 	result->setName("result");
-	result->setType<PrimitiveType>()->setType(PrimitiveType::INT);
-	result->setInitialValue<IntegerLiteral>()->setValue(-1);
+	result->setType(new PrimitiveType(PrimitiveType::INT));
+	result->setInitialValue(new IntegerLiteral(-1));
 
-	LoopStatement* sixloop = divbysix->items()->append<LoopStatement>();
-	VariableDeclaration* sixLoopInit = sixloop->setInitStep<VariableDeclaration>();
+	LoopStatement* sixloop = new LoopStatement();
+	divbysix->items()->append(sixloop);
+	VariableDeclaration* sixLoopInit = new VariableDeclaration();
+	sixloop->setInitStep(sixLoopInit);
 	sixLoopInit->setName("i");
-	sixLoopInit->setType<PrimitiveType>()->setType(PrimitiveType::INT);
-	sixLoopInit->setInitialValue<IntegerLiteral>()->setValue(0);
-	BinaryOperation* sixLoopCond = sixloop->setCondition<BinaryOperation>();
-	sixLoopCond->setLeft<VariableAccess>()->ref()->set("local:i");
+	sixLoopInit->setType(new PrimitiveType(PrimitiveType::INT));
+	sixLoopInit->setInitialValue(new IntegerLiteral(0));
+	BinaryOperation* sixLoopCond = new BinaryOperation();
+	sixloop->setCondition(sixLoopCond);
+	sixLoopCond->setLeft(new VariableAccess("local:i"));
 	sixLoopCond->setOp(BinaryOperation::LESS);
-	MethodCallExpression* sizeCall = sixLoopCond->setRight<MethodCallExpression>();
+	MethodCallExpression* sizeCall = new MethodCallExpression();
+	sixLoopCond->setRight(sizeCall);
 	sizeCall->ref()->set("size");
-	sizeCall->setPrefix<VariableAccess>()->ref()->set("local:numbers");
+	sizeCall->setPrefix(new VariableAccess("local:numbers"));
 
 	//TODO test the visualization without the remaining parts of this method
-	AssignmentStatement* sixLoopUpdate = sixloop->setUpdateStep<AssignmentStatement>();
-	sixLoopUpdate->setLeft<VariableAccess>()->ref()->set("local:i");
+	AssignmentStatement* sixLoopUpdate = new AssignmentStatement();
+	sixloop->setUpdateStep(sixLoopUpdate);
+	sixLoopUpdate->setLeft(new VariableAccess("local:i"));
 	sixLoopUpdate->setOp(AssignmentStatement::PLUS_ASSIGN);
-	sixLoopUpdate->setRight<IntegerLiteral>()->setValue(1);
+	sixLoopUpdate->setRight(new IntegerLiteral(1));
 
-	VariableDeclaration* n = sixloop->body()->append<VariableDeclaration>();
+	VariableDeclaration* n = new VariableDeclaration();
+	sixloop->body()->append(n);
 	n->setName("n");
-	n->setType<PrimitiveType>()->setType(PrimitiveType::INT);
-	BinaryOperation* item = n->setInitialValue<BinaryOperation>();
-	item->setLeft<VariableAccess>()->ref()->set("local:numbers");
+	n->setType(new PrimitiveType(PrimitiveType::INT));
+	BinaryOperation* item = new BinaryOperation();
+	n->setInitialValue(item);
+	item->setLeft(new VariableAccess("local:numbers"));
 	item->setOp(BinaryOperation::ARRAY_INDEX);
-	item->setRight<VariableAccess>()->ref()->set("local:i");
+	item->setRight(new VariableAccess("local:i"));
 
-	IfStatement* ifdiv2 = sixloop->body()->append<IfStatement>();
-	BinaryOperation* eq0 = ifdiv2->setCondition<BinaryOperation>();
+	IfStatement* ifdiv2 = new IfStatement();
+	sixloop->body()->append(ifdiv2);
+	BinaryOperation* eq0 = new BinaryOperation();
+	ifdiv2->setCondition(eq0);
 	eq0->setOp(BinaryOperation::EQUALS);
-	eq0->setRight<IntegerLiteral>()->setValue(0);
-	BinaryOperation* div2 = eq0->setLeft<BinaryOperation>();
-	div2->setLeft<VariableAccess>()->ref()->set("local:n");
+	eq0->setRight(new IntegerLiteral(0));
+	BinaryOperation* div2 = new BinaryOperation();
+	eq0->setLeft(div2);
+	div2->setLeft(new VariableAccess("local:n"));
 	div2->setOp(BinaryOperation::REMAINDER);
-	div2->setRight<IntegerLiteral>()->setValue(2);
-	ifdiv2->elseBranch()->append<ContinueStatement>();
+	div2->setRight(new IntegerLiteral(2));
+	ifdiv2->elseBranch()->append(new  ContinueStatement());
 
-	IfStatement* ifdiv3 = ifdiv2->thenBranch()->append<IfStatement>();
-	eq0 = ifdiv3->setCondition<BinaryOperation>();
+	IfStatement* ifdiv3 = new IfStatement();
+	ifdiv2->thenBranch()->append(ifdiv3);
+	eq0 = new BinaryOperation();
+	ifdiv3->setCondition(eq0);
 	eq0->setOp(BinaryOperation::EQUALS);
-	eq0->setRight<IntegerLiteral>()->setValue(0);
-	BinaryOperation* div3 = eq0->setLeft<BinaryOperation>();
-	div3->setLeft<VariableAccess>()->ref()->set("local:n");
+	eq0->setRight(new IntegerLiteral(0));
+	BinaryOperation* div3 = new BinaryOperation();
+	eq0->setLeft(div3);
+	div3->setLeft(new VariableAccess("local:n"));
 	div3->setOp(BinaryOperation::REMAINDER);
-	div3->setRight<IntegerLiteral>()->setValue(3);
+	div3->setRight(new IntegerLiteral(3));
 
-	AssignmentStatement* resultFound = ifdiv3->thenBranch()->append<AssignmentStatement>();
-	resultFound->setLeft<VariableAccess>()->ref()->set("local:result");
+	AssignmentStatement* resultFound = new AssignmentStatement();
+	ifdiv3->thenBranch()->append(resultFound);
+	resultFound->setLeft(new VariableAccess("local:result"));
 	resultFound->setOp(AssignmentStatement::ASSIGN);
-	resultFound->setRight<VariableAccess>()->ref()->set("local:i");
-	ifdiv3->thenBranch()->append<BreakStatement>();
+	resultFound->setRight(new VariableAccess("local:i"));
+	ifdiv3->thenBranch()->append( new BreakStatement());
 
-	divbysix->items()->append<ReturnStatement>()->values()->append<VariableAccess>()->ref()->set("local:result");
+	ReturnStatement* divbysixFinalReturn = new ReturnStatement();
+	divbysixFinalReturn->values()->append(new VariableAccess("local:result"));
+	divbysix->items()->append(divbysixFinalReturn);
 
 	model->endModification();
 	return divbysix;

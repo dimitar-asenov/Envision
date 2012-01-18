@@ -64,31 +64,44 @@ Class* addHelloWorld(Model::Model* model, Project* parent)
 
 	if (!parent) hello = dynamic_cast<Class*> (model->createRoot("Class"));
 	model->beginModification(parent ? static_cast<Model::Node*> (parent) :hello, "Adding a hello world class.");
-	if (!hello) hello = parent->classes()->append<Class>();
+	if (!hello)
+	{
+		hello = new Class();
+		parent->classes()->append(hello);
+	}
 
 	hello->setName("HelloWorld");
 	hello->setVisibility(Visibility::PUBLIC);
-	Method* main = hello->methods()->append<Method>();
-
+	Method* main = new Method();
+	hello->methods()->append(main);
 	main->setName("main");
 	main->setVisibility(Visibility::PUBLIC);
 	main->setStorageSpecifier(StorageSpecifier::CLASS_VARIABLE);
 
-	FormalArgument* mainArgs = main->arguments()->append<FormalArgument>();
+	FormalArgument* mainArgs = new FormalArgument();
+	main->arguments()->append(mainArgs);
 	mainArgs->setName("args");
-	mainArgs->setType<ArrayType>()->setType<NamedType>()->type()->ref()->set("class:String");
+	ArrayType* mainArgType = new ArrayType();
+	mainArgs->setType(mainArgType);
+	NamedType* mainArgElementType = new NamedType();
+	mainArgType->setType(mainArgElementType);
+	mainArgElementType->type()->ref()->set("class:String");
 
-	MethodCallStatement* callPrintln = main->items()->append<MethodCallStatement>();
-	StringLiteral* helloStr = callPrintln->arguments()->append<StringLiteral>();
-	helloStr->setValue("Hello World");
+	MethodCallStatement* callPrintln = new MethodCallStatement();
+	main->items()->append(callPrintln);
+	callPrintln->arguments()->append(new StringLiteral("Hello World"));
 	callPrintln->ref()->set("met:println");
 
-	VariableAccess* va = callPrintln->setPrefix<VariableAccess>();
+	VariableAccess* va = new VariableAccess();
+	callPrintln->setPrefix(va);
 	va->ref()->set("field:out");
 
-	ReferenceExpression* ref = va->setPrefix<ReferenceExpression>();
+	ReferenceExpression* ref = new ReferenceExpression();
+	va->setPrefix(ref);
 	ref->ref()->set("class:System");
-	ref->setPrefix<ReferenceExpression>()->ref()->set("lib:Java");
+	ReferenceExpression* prefix = new ReferenceExpression();
+	ref->setPrefix(prefix);
+	prefix->ref()->set("lib:Java");
 
 	model->endModification();
 	return hello;
@@ -100,41 +113,58 @@ Library* addJavaLibrary(Model::Model* model, Project* parent)
 
 	if (!parent) java = dynamic_cast<Library*> (model->createRoot("Library"));
 	model->beginModification(parent? static_cast<Model::Node*> (parent) :java, "Adding a java library.");
-	if (!java) java = parent->libraries()->append<Library>();
+	if (!java)
+	{
+		java = new Library();
+		parent->libraries()->append( java );
+	}
 
 	java->setName("Java");
 
-	Class* string = java->classes()->append<Class>();
+	Class* string = new Class();
+	java->classes()->append(string);
 	string->setName("String");
 	string->setVisibility(Visibility::PUBLIC);
-	string->baseClasses()->append<NamedType>()->type()->ref()->set("class:Object");
+	NamedType* type = new NamedType();
+	string->baseClasses()->append(type);
+	type->type()->ref()->set("class:Object");
 
-	Module* io = java->modules()->append<Module>();
+	Module* io = new Module();
+	java->modules()->append(io);
 	io->setName("io");
 
-	Class* printstream = io->classes()->append<Class>();
+	Class* printstream = new Class();
+	io->classes()->append(printstream);
 	printstream->setName("PrintStream");
 	printstream->setVisibility(Visibility::PUBLIC);
 
-	Method* println = printstream->methods()->append<Method>();
+	Method* println = new Method();
+	printstream->methods()->append(println);
 	println->setName("println");
 	println->setVisibility(Visibility::PUBLIC);
 
-	FormalArgument* arg = println->arguments()->append<FormalArgument>();
+	FormalArgument* arg = new FormalArgument();
+	println->arguments()->append(arg);
 	arg->setName("x");
-	NamedType* argType = arg->setType<NamedType>();
+	NamedType* argType = new NamedType();
+	arg->setType(argType);
 	argType->type()->ref()->set("class:String");
 
-	Class* system = java->classes()->append<Class>();
+	Class* system = new Class();
+	java->classes()->append(system);
 	system->setName("System");
 	system->setVisibility(Visibility::PUBLIC);
-	Field* out = system->fields()->append<Field>();
+	Field* out = new Field();
+	system->fields()->append(out);
 	out->setName("out");
 	out->setVisibility(Visibility::PUBLIC);
 	out->setStorageSpecifier(StorageSpecifier::CLASS_VARIABLE);
-	NamedType* outtype = out->setType<NamedType>();
+	NamedType* outtype = new NamedType();
+	out->setType(outtype);
 	outtype->type()->ref()->set("class:PrintStream");
-	outtype->type()->setPrefix<ReferenceExpression>()->ref()->set("mod:io");
+	ReferenceExpression* prefix = new ReferenceExpression();
+	outtype->type()->setPrefix(prefix);
+	prefix->ref()->set("mod:io");
 
 	// Set positions
 	java->extension<Position>()->setX(400);
@@ -151,187 +181,262 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 
 	if (!parent) longMethod = dynamic_cast<Method*> (model->createRoot("Method"));
 	model->beginModification(parent? static_cast<Model::Node*> (parent) : longMethod, "Adding a long method.");
-	if (!longMethod) longMethod = parent->methods()->append<Method>();
+	if (!longMethod)
+	{
+		longMethod = new Method();
+		parent->methods()->append(longMethod);
+	}
 
 	longMethod->setName("aLongTestMethod");
-	longMethod->results()->append<FormalResult>()->setType<PrimitiveType>()->setType(PrimitiveType::INT);
-	longMethod->arguments()->append<FormalArgument>()->setType<PrimitiveType>()->setType(PrimitiveType::INT);
-	longMethod->arguments()->at(0)->setName("x");
-	longMethod->arguments()->append<FormalArgument>()->setType<PrimitiveType>()->setType(PrimitiveType::INT);
-	longMethod->arguments()->at(1)->setName("y");
-	longMethod->arguments()->append<FormalArgument>()->setType<PrimitiveType>()->setType(PrimitiveType::FLOAT);
-	longMethod->arguments()->at(2)->setName("epsilon");
+	FormalResult* result  = new FormalResult();
+	result->setType(new PrimitiveType(PrimitiveType::INT));
+	longMethod->results()->append(result);
+	FormalArgument* arg1 = new FormalArgument();
+	arg1->setType(new PrimitiveType(PrimitiveType::INT));
+	arg1->setName("x");
+	longMethod->arguments()->append(arg1);
+	FormalArgument* arg2 = new FormalArgument();
+	arg2->setType(new PrimitiveType(PrimitiveType::INT));
+	arg2->setName("y");
+	longMethod->arguments()->append(arg2);
+	FormalArgument* arg3 = new FormalArgument();
+	arg3->setType(new PrimitiveType(PrimitiveType::FLOAT));
+	arg3->setName("epsilon");
+	longMethod->arguments()->append(arg3);
 
-	VariableDeclaration* var1 = longMethod->items()->append<VariableDeclaration>();
+	VariableDeclaration* var1 = new VariableDeclaration();
+	longMethod->items()->append(var1);
 	var1->setName("var1");
-	var1->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+	var1->setType(new PrimitiveType(PrimitiveType::INT));
 
-	VariableDeclaration* var2 = longMethod->items()->append<VariableDeclaration>();
+	VariableDeclaration* var2 = new VariableDeclaration();
+	longMethod->items()->append(var2);
 	var2->setName("var2");
-	var2->setType<PrimitiveType>()->setType(PrimitiveType::LONG);
-	var2->setInitialValue<IntegerLiteral>()->setValue(42);
+	var2->setType(new PrimitiveType(PrimitiveType::LONG));
+	var2->setInitialValue(new IntegerLiteral(42));
 
-	VariableDeclaration* var3 = longMethod->items()->append<VariableDeclaration>();
+	VariableDeclaration* var3 = new VariableDeclaration();
+	longMethod->items()->append(var3);
 	var3->setName("var3");
-	var3->setType<PrimitiveType>()->setType(PrimitiveType::BOOLEAN);
-	var3->setInitialValue<BooleanLiteral>()->setValue(true);
+	var3->setType(new PrimitiveType(PrimitiveType::BOOLEAN));
+	var3->setInitialValue(new BooleanLiteral(true));
 
-	VariableDeclaration* var4 = longMethod->items()->append<VariableDeclaration>();
+	VariableDeclaration* var4 = new VariableDeclaration();
+	longMethod->items()->append(var4);
 	var4->setName("var4");
-	var4->setType<PrimitiveType>()->setType(PrimitiveType::CHAR);
-	var4->setInitialValue<CharacterLiteral>()->setValue('r');
+	var4->setType(new PrimitiveType(PrimitiveType::CHAR));
+	var4->setInitialValue(new CharacterLiteral('r'));
 
-	VariableDeclaration* var5 = longMethod->items()->append<VariableDeclaration>();
+	VariableDeclaration* var5 = new VariableDeclaration();
+	longMethod->items()->append(var5);
 	var5->setName("var5");
-	var5->setType<PrimitiveType>()->setType(PrimitiveType::DOUBLE);
-	var5->setInitialValue<FloatLiteral>()->setValue(123.112311096123);
+	var5->setType(new PrimitiveType(PrimitiveType::DOUBLE));
+	var5->setInitialValue(new FloatLiteral(112311096123));
 
-	VariableDeclaration* var6 = longMethod->items()->append<VariableDeclaration>();
+	VariableDeclaration* var6 = new VariableDeclaration();
+	longMethod->items()->append(var6);
 	var6->setName("var6");
-	var6->setType<PrimitiveType>()->setType(PrimitiveType::UNSIGNED_LONG);
-	var6->setInitialValue<IntegerLiteral>()->setValue(1000);
+	var6->setType(new PrimitiveType(PrimitiveType::UNSIGNED_LONG));
+	var6->setInitialValue(new IntegerLiteral(1000));
 
-	VariableDeclaration* var7 = longMethod->items()->append<VariableDeclaration>();
+	VariableDeclaration* var7 = new VariableDeclaration();
+	longMethod->items()->append(var7);
 	var7->setName("var7");
-	var7->setType<PrimitiveType>()->setType(PrimitiveType::VOID);
-	var7->setInitialValue<NullLiteral>();
+	var7->setType(new PrimitiveType(PrimitiveType::VOID));
+	var7->setInitialValue(new NullLiteral());
 
-	VariableDeclaration* var8 = longMethod->items()->append<VariableDeclaration>();
+	VariableDeclaration* var8 = new VariableDeclaration();
+	longMethod->items()->append(var8);
 	var8->setName("var8");
-	var8->setType<PrimitiveType>()->setType(PrimitiveType::INT);
-	var8->setInitialValue<MethodCallExpression>()->ref()->set("met:getId");
+	var8->setType(new PrimitiveType(PrimitiveType::INT));
+	MethodCallExpression* var8Value = new MethodCallExpression();
+	var8Value->ref()->set("met:getId");
+	var8->setInitialValue(var8Value);
 
-	VariableDeclaration* var9 = longMethod->items()->append<VariableDeclaration>();
+	VariableDeclaration* var9 = new VariableDeclaration();
+	longMethod->items()->append(var9);
 	var9->setName("var9");
-	var9->setType<PrimitiveType>()->setType(PrimitiveType::VOID);
-	var9->setInitialValue<ThisExpression>();
+	var9->setType(new PrimitiveType(PrimitiveType::VOID));
+	var9->setInitialValue(new ThisExpression());
 
-	VariableDeclaration* var10 = longMethod->items()->append<VariableDeclaration>();
+	VariableDeclaration* var10 = new VariableDeclaration();
+	longMethod->items()->append(var10);
 	var10->setName("var10");
-	var10->setType<PrimitiveType>()->setType(PrimitiveType::INT);
-	CastExpression* cast = var10->setInitialValue<CastExpression>();
-	cast->setType<PrimitiveType>()->setType(PrimitiveType::INT);
-	cast->setExpr<VariableAccess>()->ref()->set("local:epsilon");
+	var10->setType(new PrimitiveType(PrimitiveType::INT));
+	CastExpression* cast = new CastExpression();
+	var10->setInitialValue(cast);
+	cast->setType(new PrimitiveType(PrimitiveType::INT));
+	cast->setExpr(new VariableAccess("local:epsilon"));
 
-	VariableDeclaration* var11 = longMethod->items()->append<VariableDeclaration>();
+	VariableDeclaration* var11 = new VariableDeclaration();
+	longMethod->items()->append(var11);
 	var11->setName("var11");
-	var11->setType<PrimitiveType>()->setType(PrimitiveType::VOID);
-	var11->setInitialValue<NewExpression>()->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+	var11->setType(new PrimitiveType(PrimitiveType::VOID));
+	NewExpression* var11Value = new NewExpression();
+	var11Value->setType(new PrimitiveType(PrimitiveType::INT));
+	var11->setInitialValue(var11Value);
 
-	VariableDeclaration* var12 = longMethod->items()->append<VariableDeclaration>();
+	VariableDeclaration* var12 = new VariableDeclaration();
+	longMethod->items()->append(var12);
 	var12->setName("var12");
-	var12->setType<ArrayType>()->setType<PrimitiveType>()->setType(PrimitiveType::INT);
-	NewExpression* newExpr = var12->setInitialValue<NewExpression>();
-	newExpr->setType<PrimitiveType>()->setType(PrimitiveType::INT);
-	newExpr->setAmount<IntegerLiteral>()->setValue(5);
+	ArrayType* var12Type = new ArrayType();
+	var12Type->setType(new PrimitiveType(PrimitiveType::INT));
+	var12->setType(var12Type);
+	NewExpression* var12Value = new NewExpression();
+	var12Value->setType(new PrimitiveType(PrimitiveType::INT));
+	var12Value->setAmount(new IntegerLiteral(5));
+	var12->setInitialValue(var12Value);
 
-	VariableDeclaration* var13 = longMethod->items()->append<VariableDeclaration>();
+	VariableDeclaration* var13 = new VariableDeclaration();
+	longMethod->items()->append(var13);
 	var13->setName("var13");
-	var13->setType<PrimitiveType>()->setType(PrimitiveType::BOOLEAN);
-	UnaryOperation* uOp1 = var13->setInitialValue<UnaryOperation>();
+	var13->setType(new PrimitiveType(PrimitiveType::BOOLEAN));
+	UnaryOperation* uOp1 = new UnaryOperation();
+	var13->setInitialValue(uOp1);
 	uOp1->setOp(UnaryOperation::NOT);
-	uOp1->setOperand<BooleanLiteral>()->setValue(false);
+	BooleanLiteral* var13val = new BooleanLiteral();
+	var13val->setValue(false);
+	uOp1->setOperand(var13val);
 
-	VariableDeclaration* var14 = longMethod->items()->append<VariableDeclaration>();
+	VariableDeclaration* var14 = new VariableDeclaration();
+	longMethod->items()->append(var14);
 	var14->setName("var14");
-	var14->setType<PrimitiveType>()->setType(PrimitiveType::INT);
-	UnaryOperation* uOp2 = var14->setInitialValue<UnaryOperation>();
+	var14->setType(new PrimitiveType(PrimitiveType::INT));
+	UnaryOperation* uOp2 = new UnaryOperation();
+	var14->setInitialValue(uOp2);
 	uOp2->setOp(UnaryOperation::INCREMENT);
-	uOp2->setOperand<IntegerLiteral>()->setValue(10);
+	uOp2->setOperand(new IntegerLiteral(10));
 
-	VariableDeclaration* var15 = longMethod->items()->append<VariableDeclaration>();
+	VariableDeclaration* var15 = new VariableDeclaration();
+	longMethod->items()->append(var15);
 	var15->setName("var15");
-	var15->setType<PrimitiveType>()->setType(PrimitiveType::INT);
-	BinaryOperation* binOp1 = var15->setInitialValue<BinaryOperation>();
+	var15->setType(new PrimitiveType(PrimitiveType::INT));
+	BinaryOperation* binOp1 = new BinaryOperation();
+	var15->setInitialValue(binOp1);
 	binOp1->setOp(BinaryOperation::PLUS);
-	binOp1->setLeft<IntegerLiteral>()->setValue(41);
-	binOp1->setRight<IntegerLiteral>()->setValue(1);
+	binOp1->setLeft(new IntegerLiteral(41));
+	binOp1->setRight(new IntegerLiteral(1));
 
-	VariableDeclaration* var16 = longMethod->items()->append<VariableDeclaration>();
+	VariableDeclaration* var16 = new VariableDeclaration();
+	longMethod->items()->append(var16);
 	var16->setName("var16");
-	var16->setType<PrimitiveType>()->setType(PrimitiveType::BOOLEAN);
-	BinaryOperation* binOp2 = var16->setInitialValue<BinaryOperation>();
+	var16->setType(new PrimitiveType(PrimitiveType::BOOLEAN));
+	BinaryOperation* binOp2 = new BinaryOperation();
+	var16->setInitialValue(binOp2);
 	binOp2->setOp(BinaryOperation::LESS_EQUALS);
-	binOp2->setLeft<IntegerLiteral>()->setValue(41);
-	binOp2->setRight<IntegerLiteral>()->setValue(1);
+	binOp2->setLeft(new IntegerLiteral(41));
+	binOp2->setRight(new IntegerLiteral(1));
 
-	VariableDeclaration* var17 = longMethod->items()->append<VariableDeclaration>();
+	VariableDeclaration* var17 = new VariableDeclaration();
+	longMethod->items()->append(var17);
 	var17->setName("var17");
-	var17->setType<ArrayType>()->setType<NamedType>()->type()->ref()->set("class:String");
-	ArrayInitializer* outterArrayInit = var17->setInitialValue<ArrayInitializer>();
-	outterArrayInit->values()->append<StringLiteral>()->setValue("this");
-	outterArrayInit->values()->append<StringLiteral>()->setValue("looks");
-	outterArrayInit->values()->append<StringLiteral>()->setValue("good");
+	ArrayType* var17Type = new ArrayType();
+	var17->setType(var17Type);
+	NamedType* var17ElementType = new NamedType();
+	var17Type->setType(var17ElementType);
+	var17ElementType->type()->ref()->set("class:String");
+	ArrayInitializer* outterArrayInit = new ArrayInitializer();
+	var17->setInitialValue(outterArrayInit);
+	outterArrayInit->values()->append(new StringLiteral("this"));
+	outterArrayInit->values()->append(new StringLiteral("looks"));
+	outterArrayInit->values()->append(new StringLiteral("good"));
 
-	VariableDeclaration* var18 = longMethod->items()->append<VariableDeclaration>();
+	VariableDeclaration* var18 = new VariableDeclaration();
+	longMethod->items()->append(var18);
 	var18->setName("var18");
-	var18->setType<ArrayType>()->setType<ArrayType>()->setType<PrimitiveType>()->setType(PrimitiveType::INT);
-	ArrayInitializer* matrixArrayInit = var18->setInitialValue<ArrayInitializer>();
-	ArrayInitializer* col1Init = matrixArrayInit->values()->append<ArrayInitializer>();
-	ArrayInitializer* col2Init = matrixArrayInit->values()->append<ArrayInitializer>();
-	ArrayInitializer* col3Init = matrixArrayInit->values()->append<ArrayInitializer>();
-	col1Init->values()->append<IntegerLiteral>()->setValue(1);
-	col1Init->values()->append<IntegerLiteral>()->setValue(2);
-	col1Init->values()->append<IntegerLiteral>()->setValue(3);
-	col2Init->values()->append<IntegerLiteral>()->setValue(4);
-	col2Init->values()->append<IntegerLiteral>()->setValue(5);
-	col2Init->values()->append<IntegerLiteral>()->setValue(6);
-	col3Init->values()->append<IntegerLiteral>()->setValue(7);
-	col3Init->values()->append<IntegerLiteral>()->setValue(8);
-	col3Init->values()->append<IntegerLiteral>()->setValue(9);
+	ArrayType* var18Type = new ArrayType();
+	var18->setType(var18Type);
+	ArrayType* var18TypeType = new ArrayType();
+	var18Type->setType(var18TypeType);
+	var18TypeType->setType(new PrimitiveType(PrimitiveType::INT));
+	ArrayInitializer* matrixArrayInit = new ArrayInitializer();
+	var18->setInitialValue(matrixArrayInit);
+	ArrayInitializer* col1Init = new ArrayInitializer();
+	matrixArrayInit->values()->append(col1Init);
+	ArrayInitializer* col2Init = new ArrayInitializer();
+	matrixArrayInit->values()->append(col2Init);
+	ArrayInitializer* col3Init = new ArrayInitializer();
+	matrixArrayInit->values()->append(col3Init);
+	col1Init->values()->append(new IntegerLiteral(1));
+	col1Init->values()->append(new IntegerLiteral(2));
+	col1Init->values()->append(new IntegerLiteral(3));
+	col2Init->values()->append(new IntegerLiteral(4));
+	col2Init->values()->append(new IntegerLiteral(5));
+	col2Init->values()->append(new IntegerLiteral(6));
+	col3Init->values()->append(new IntegerLiteral(7));
+	col3Init->values()->append(new IntegerLiteral(8));
+	col3Init->values()->append(new IntegerLiteral(9));
 
-	IfStatement* ifs = longMethod->items()->append<IfStatement>();
-	BinaryOperation* ifCond = ifs->setCondition<BinaryOperation>();
-	ifCond->setLeft<VariableAccess>()->ref()->set("local:var14");
+	IfStatement* ifs = new IfStatement();
+	longMethod->items()->append(ifs);
+	BinaryOperation* ifCond = new BinaryOperation();
+	ifs->setCondition(ifCond);
+	ifCond->setLeft(new VariableAccess("local:var14"));
 	ifCond->setOp(BinaryOperation::NOT_EQUALS);
-	ifCond->setRight<IntegerLiteral>()->setValue(10);
-	UnaryOperation* thenBranch = ifs->thenBranch()->append<UnaryOperation>();
+	ifCond->setRight(new IntegerLiteral(10));
+	UnaryOperation* thenBranch = new UnaryOperation();
+	ifs->thenBranch()->append(thenBranch);
 	thenBranch->setOp(UnaryOperation::INCREMENT);
-	thenBranch->setOperand<VariableAccess>()->ref()->set("local:var14");
-	UnaryOperation* elseBranch = ifs->elseBranch()->append<UnaryOperation>();
+	thenBranch->setOperand(new VariableAccess("local:var14"));
+	UnaryOperation* elseBranch = new UnaryOperation();
+	ifs->elseBranch()->append(elseBranch);
 	elseBranch->setOp(UnaryOperation::DECREMENT);
-	elseBranch->setOperand<VariableAccess>()->ref()->set("local:var14");
+	elseBranch->setOperand(new VariableAccess("local:var14"));
 
-	Block* block = longMethod->items()->append<Block>();
-	AssignmentStatement* assign = block->items()->append<AssignmentStatement>();
-	assign->setLeft<VariableAccess>()->ref()->set("local:var1");
+	Block* block = new Block();
+	longMethod->items()->append(block);
+	AssignmentStatement* assign = new AssignmentStatement();
+	block->items()->append(assign);
+	assign->setLeft(new VariableAccess("local:var1"));
 	assign->setOp(AssignmentStatement::ASSIGN);
-	BinaryOperation* arrayAccess = assign->setRight<BinaryOperation>();
-	arrayAccess->setLeft<VariableAccess>()->ref()->set("global:someArray");
+	BinaryOperation* arrayAccess = new BinaryOperation();
+	assign->setRight(arrayAccess);
+	arrayAccess->setLeft(new VariableAccess("global:someArray"));
 	arrayAccess->setOp(BinaryOperation::ARRAY_INDEX);
-	arrayAccess->setRight<IntegerLiteral>()->setValue(4);
+	arrayAccess->setRight(new IntegerLiteral(4));
 
-	LoopStatement* loop = longMethod->items()->append<LoopStatement>();
-	VariableDeclaration* initStep = loop->setInitStep<VariableDeclaration>();
-	initStep->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+	LoopStatement* loop = new LoopStatement();
+	longMethod->items()->append(loop);
+	VariableDeclaration* initStep = new VariableDeclaration();
+	loop->setInitStep(initStep);
+	initStep->setType(new PrimitiveType(PrimitiveType::INT));
 	initStep->setName("i");
-	initStep->setInitialValue<IntegerLiteral>()->setValue(0);
-	BinaryOperation* loopCondition = loop->setCondition<BinaryOperation>();
-	loopCondition->setLeft<VariableAccess>()->ref()->set("local:i");
+	initStep->setInitialValue(new IntegerLiteral(0));
+	BinaryOperation* loopCondition = new BinaryOperation();
+	loop->setCondition(loopCondition);
+	loopCondition->setLeft(new VariableAccess("local:i"));
 	loopCondition->setOp(BinaryOperation::LESS);
-	loopCondition->setRight<VariableAccess>()->ref()->set("local:x");
-	AssignmentStatement* updateStep = loop->setUpdateStep<AssignmentStatement>();
-	updateStep->setLeft<VariableAccess>()->ref()->set("local:i");
+	loopCondition->setRight(new VariableAccess("local:x"));
+	AssignmentStatement* updateStep = new AssignmentStatement();
+	loop->setUpdateStep(updateStep);
+	updateStep->setLeft(new VariableAccess("local:i"));
 	updateStep->setOp(AssignmentStatement::PLUS_ASSIGN);
-	updateStep->setRight<IntegerLiteral>()->setValue(1);
-	AssignmentStatement* loopBodyAssignment = loop->body()->append<AssignmentStatement>();
-	loopBodyAssignment->setLeft<VariableAccess>()->ref()->set("local:var14");
+	updateStep->setRight(new IntegerLiteral(1));
+	AssignmentStatement* loopBodyAssignment = new AssignmentStatement();
+	loop->body()->append(loopBodyAssignment);
+	loopBodyAssignment->setLeft(new VariableAccess("local:var14"));
 	loopBodyAssignment->setOp(AssignmentStatement::TIMES_ASSIGN);
-	loopBodyAssignment->setRight<IntegerLiteral>()->setValue(2);
-	loop->body()->append<ContinueStatement>();
-	loop->body()->append<BreakStatement>();
+	loopBodyAssignment->setRight(new IntegerLiteral(2));
+	loop->body()->append(new ContinueStatement());
+	loop->body()->append(new BreakStatement());
 
 
-	ForEachStatement* forEach = longMethod->items()->append<ForEachStatement>();
+	ForEachStatement* forEach = new ForEachStatement();
+	longMethod->items()->append(forEach);
 	forEach->setVarName("elem");
-	forEach->setVarType<PrimitiveType>()->setType(PrimitiveType::UNSIGNED_INT);
-	forEach->setCollection<VariableAccess>()->ref()->set("global:SomeCollection");
-	AssignmentStatement* assignEach = forEach->body()->append<AssignmentStatement>();
-	assignEach->setLeft<VariableAccess>()->ref()->set("local:var1");
+	forEach->setVarType(new PrimitiveType(PrimitiveType::UNSIGNED_INT));
+	VariableAccess* forEachCollection = new VariableAccess();
+	forEachCollection->ref()->set("global:SomeCollection");
+	forEach->setCollection(forEachCollection);
+	AssignmentStatement* assignEach = new AssignmentStatement();
+	forEach->body()->append(assignEach);
+	assignEach->setLeft(new VariableAccess("local:var1"));
 	assignEach->setOp(AssignmentStatement::DIVIDE_ASSIGN);
-	assignEach->setRight<VariableAccess>()->ref()->set("loop:elem");
+	assignEach->setRight(new VariableAccess("loop:elem"));
 
-	longMethod->items()->append<ReturnStatement>()->values()->append<IntegerLiteral>()->setValue(24);
+	ReturnStatement* longMethodReturn = new ReturnStatement();
+	longMethod->items()->append(longMethodReturn);
+	longMethodReturn->values()->append(new IntegerLiteral(42));
 
 	if (parent && parent->parent())
 		longMethod->extension<Position>()->setY(100);
@@ -348,52 +453,72 @@ Method* addFactorial(Model::Model* model, Class* parent)
 
 	if (!parent) factorial = dynamic_cast<Method*> (model->createRoot("Method"));
 	model->beginModification(parent? static_cast<Model::Node*> (parent) : factorial, "Adding a factorial method.");
-	if (!factorial) factorial = parent->methods()->append<Method>();
+	if (!factorial)
+	{
+		factorial = new Method();
+		parent->methods()->append(factorial);
+	}
 
 	factorial->setName("factorial");
-	factorial->results()->append<FormalResult>()->setType<PrimitiveType>()->setType(PrimitiveType::INT);
-	factorial->arguments()->append<FormalArgument>()->setType<PrimitiveType>()->setType(PrimitiveType::INT);
-	factorial->arguments()->at(0)->setName("x");
+	FormalResult* factorialResult = new FormalResult();
+	factorial->results()->append(factorialResult);
+	factorialResult->setType(new PrimitiveType(PrimitiveType::INT));
+	FormalArgument* factorialArgument = new FormalArgument();
+	factorial->arguments()->append(factorialArgument);
+	factorialArgument->setType(new PrimitiveType(PrimitiveType::INT));
+	factorialArgument->setName("x");
 
-	VariableDeclaration* res = factorial->items()->append<VariableDeclaration>();
+	VariableDeclaration* res = new VariableDeclaration();
+	factorial->items()->append(res);
 	res->setName("result");
-	res->setType<PrimitiveType>()->setType(PrimitiveType::INT);
-	res->setInitialValue<IntegerLiteral>()->setValue(1);
+	res->setType(new PrimitiveType(PrimitiveType::INT));
+	res->setInitialValue(new IntegerLiteral(1));
 
 	// Condition
-	IfStatement* ifs = factorial->items()->append<IfStatement>();
-	BinaryOperation* ifCond = ifs->setCondition<BinaryOperation>();
-	ifCond->setLeft<VariableAccess>()->ref()->set("local:x");
+	IfStatement* ifs = new IfStatement();
+	factorial->items()->append(ifs);
+	BinaryOperation* ifCond = new BinaryOperation();
+	ifs->setCondition(ifCond);
+	ifCond->setLeft(new VariableAccess("local:x"));
 	ifCond->setOp(BinaryOperation::GREATER_EQUALS);
-	ifCond->setRight<IntegerLiteral>()->setValue(0);
+	ifCond->setRight(new IntegerLiteral(0));
 
 	// Then
-	LoopStatement* loop = ifs->thenBranch()->append<LoopStatement>();
-	VariableDeclaration* initStep = loop->setInitStep<VariableDeclaration>();
-	initStep->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+	LoopStatement* loop = new LoopStatement();
+	ifs->thenBranch()->append(loop);
+	VariableDeclaration* initStep = new VariableDeclaration();
+	loop->setInitStep(initStep);
+	initStep->setType(new PrimitiveType(PrimitiveType::INT));
 	initStep->setName("i");
-	initStep->setInitialValue<IntegerLiteral>()->setValue(1);
-	BinaryOperation* loopCondition = loop->setCondition<BinaryOperation>();
-	loopCondition->setLeft<VariableAccess>()->ref()->set("local:i");
+	initStep->setInitialValue(new IntegerLiteral(1));
+	BinaryOperation* loopCondition = new BinaryOperation();
+	loop->setCondition(loopCondition);
+	loopCondition->setLeft(new VariableAccess("local:i"));
 	loopCondition->setOp(BinaryOperation::LESS_EQUALS);
-	loopCondition->setRight<VariableAccess>()->ref()->set("local:x");
-	AssignmentStatement* updateStep = loop->setUpdateStep<AssignmentStatement>();
-	updateStep->setLeft<VariableAccess>()->ref()->set("local:i");
+	loopCondition->setRight(new VariableAccess("local:x"));
+	AssignmentStatement* updateStep = new AssignmentStatement();
+	loop->setUpdateStep(updateStep);
+	updateStep->setLeft(new VariableAccess("local:i"));
 	updateStep->setOp(AssignmentStatement::PLUS_ASSIGN);
-	updateStep->setRight<IntegerLiteral>()->setValue(1);
-	AssignmentStatement* loopBodyAssignment = loop->body()->append<AssignmentStatement>();
-	loopBodyAssignment->setLeft<VariableAccess>()->ref()->set("local:result");
+	updateStep->setRight(new IntegerLiteral(1));
+	AssignmentStatement* loopBodyAssignment = new AssignmentStatement();
+	loop->body()->append(loopBodyAssignment);
+	loopBodyAssignment->setLeft(new VariableAccess("local:result"));
 	loopBodyAssignment->setOp(AssignmentStatement::TIMES_ASSIGN);
-	loopBodyAssignment->setRight<VariableAccess>()->ref()->set("local:i");
+	loopBodyAssignment->setRight(new VariableAccess("local:i"));
 
 	// Else
-	AssignmentStatement* elseBranch = ifs->elseBranch()->append<AssignmentStatement>();
-	elseBranch->setLeft<VariableAccess>()->ref()->set("local:result");
+	AssignmentStatement* elseBranch = new AssignmentStatement();
+	ifs->elseBranch()->append(elseBranch);
+
+	elseBranch->setLeft(new VariableAccess("local:result"));
 	elseBranch->setOp(AssignmentStatement::ASSIGN);
-	elseBranch->setRight<IntegerLiteral>()->setValue(-1);
+	elseBranch->setRight(new IntegerLiteral(-1));
 
 	// Return
-	factorial->items()->append<ReturnStatement>()->values()->append<VariableAccess>()->ref()->set("local:result");
+	ReturnStatement* factorialReturn = new ReturnStatement();
+	factorial->items()->append(factorialReturn);
+	factorialReturn->values()->append(new VariableAccess("local:result"));
 
 	factorial->extension<Position>()->setY(860);
 

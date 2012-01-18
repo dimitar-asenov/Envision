@@ -57,7 +57,7 @@ void NodeIdMap::setId(const Model::Node* node, NodeIdType id)
 	if (iter != map.end())
 	{
 		if (*iter == id) return;
-		else throw new FilePersistenceException("Setting an inconsistent node id in NodeIdMap");
+		else throw FilePersistenceException("Setting an inconsistent node id in NodeIdMap");
 	}
 
 	map.insert(node, id);

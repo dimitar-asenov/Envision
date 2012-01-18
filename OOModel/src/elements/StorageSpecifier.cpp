@@ -39,13 +39,13 @@ namespace OOModel {
 
 NODE_DEFINE_TYPE_REGISTRATION_METHODS(StorageSpecifier)
 
-StorageSpecifier::StorageSpecifier(Model::Node *parent, Model::Model* model) :
-	Node(parent, model), specifier(INSTANCE_VARIABLE)
+StorageSpecifier::StorageSpecifier(Model::Node *parent) :
+	Node(parent), specifier(INSTANCE_VARIABLE)
 {
 }
 
-StorageSpecifier::StorageSpecifier(Model::Node *parent, Model::NodeIdType id, Model::PersistentStore &store, bool) :
-	Node(parent, id)
+StorageSpecifier::StorageSpecifier(Model::Node *parent, Model::PersistentStore &store, bool) :
+	Node(parent)
 {
 	specifier = fromInt( store.loadIntValue() );
 }

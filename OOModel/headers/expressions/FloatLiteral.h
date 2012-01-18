@@ -45,6 +45,9 @@ class OOMODEL_API FloatLiteral: public Expression
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(FloatLiteral)
 
 	ATTRIBUTE_VALUE(::Model::Float, value, setValue, double)
+
+	public:
+		FloatLiteral(double value);
 };
 
 }

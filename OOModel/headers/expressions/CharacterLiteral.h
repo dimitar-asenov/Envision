@@ -45,6 +45,9 @@ class OOMODEL_API CharacterLiteral: public Expression
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(CharacterLiteral)
 
 	ATTRIBUTE_VALUE(::Model::Character, value, setValue, QChar)
+
+	public:
+		CharacterLiteral(const QChar& value);
 };
 
 

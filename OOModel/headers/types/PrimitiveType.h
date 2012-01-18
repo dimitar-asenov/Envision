@@ -48,6 +48,8 @@ class OOMODEL_API PrimitiveType : public Type
 	public:
 		enum PrimitiveTypes {INT, LONG, UNSIGNED_INT, UNSIGNED_LONG, FLOAT, DOUBLE, BOOLEAN, CHAR, VOID};
 
+		PrimitiveType(const PrimitiveTypes& type);
+
 		PrimitiveTypes type() const;
 		void setType(const PrimitiveTypes& type);
 };
