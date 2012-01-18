@@ -42,7 +42,7 @@ OperatorDescriptor::~OperatorDescriptor() {
 }
 
 OperatorDescriptor::OperatorDescriptor(const QString& name, const QString& signature, int num_operands, int precedence, Associativity associativity)
-	: name_(name), num_operands_(num_operands), precedence_(precedence), associativity_(associativity)
+	: name_(name), num_operands_(num_operands), precedence_(precedence), associativity_(associativity), transient_(false)
 {
 	signature_ = signature.split(" ", QString::SkipEmptyParts);
 

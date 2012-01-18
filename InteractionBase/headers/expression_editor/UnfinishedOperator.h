@@ -47,6 +47,7 @@ class INTERACTIONBASE_API UnfinishedOperator : public Operator {
 		UnfinishedOperator(OperatorDescriptor* descriptor, Operator* parent = nullptr);
 
 		bool isComplete();
+		int numComplete();
 		QString next();
 		void addNext(Expression* e = nullptr);
 
@@ -58,6 +59,8 @@ class INTERACTIONBASE_API UnfinishedOperator : public Operator {
 	private:
 		int num_complete_; // How many of the items of this operator's signature have been filled in
 };
+
+inline int UnfinishedOperator::numComplete() { return num_complete_; }
 
 } /* namespace InteractionBase */
 #endif /* INTERACTIONBASE_UNFINISHEDOPERATOR_H_ */

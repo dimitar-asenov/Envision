@@ -54,6 +54,7 @@ class MODELBASE_API Text: public Node
 		FieldSet<QString>* getSetCommand(const QString& newText);
 	public:
 
+		Text(const QString& text);
 		const  QString&  get() const;
 		operator const QString&() const;
 

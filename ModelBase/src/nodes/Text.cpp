@@ -50,6 +50,12 @@ Text::Text(Node *parent, PersistentStore &store, bool) :
 	text = store.loadStringValue();
 }
 
+Text::Text(const QString& text) :
+	Node(nullptr)
+{
+	set(text);
+}
+
 void Text::set(const QString &newText)
 {
 	execute(getSetCommand(newText));
