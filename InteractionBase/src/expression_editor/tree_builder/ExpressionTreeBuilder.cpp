@@ -56,23 +56,23 @@ Expression* ExpressionTreeBuilder::build(QVector<ExpressionTreeBuildInstruction*
 		{
 			prev->setText(prev->text() + instr->text() );
 			instructions.remove(i);
-		}
 
-		// The corresponding FinishOperator also needs to be removed
-		int num_intermediate_ops = 0;
-		for (int x = i; x < instructions.size(); ++x)
-		{
-			if (dynamic_cast<FinishOperator*> (instructions[x]))
+			// The corresponding FinishOperator also needs to be removed
+			int num_intermediate_ops = 0;
+			for (int x = i; x < instructions.size(); ++x)
 			{
-				if (num_intermediate_ops == 0)
+				if (dynamic_cast<FinishOperator*> (instructions[x]))
 				{
-					instructions.remove(x);
-					break;
+					if (num_intermediate_ops == 0)
+					{
+						instructions.remove(x);
+						break;
+					}
+					else --num_intermediate_ops;
+				} else if( dynamic_cast<AddOperator*> (instructions[x]) || dynamic_cast<AddErrorOperator*> (instructions[x]))
+				{
+					++num_intermediate_ops;
 				}
-				else --num_intermediate_ops;
-			} else if( dynamic_cast<AddOperator*> (instructions[x]) || dynamic_cast<AddErrorOperator*> (instructions[x]))
-			{
-				++num_intermediate_ops;
 			}
 		}
 	}

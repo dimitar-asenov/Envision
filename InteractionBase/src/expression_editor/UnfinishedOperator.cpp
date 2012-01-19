@@ -96,8 +96,9 @@ QString UnfinishedOperator::renderText()
 
 Operator* UnfinishedOperator::createFinished()
 {
-	OperatorDescriptor* desc = descriptor()->isTransient() ? new OperatorDescriptor(*descriptor()) : descriptor();
-	Operator* op = new Operator(desc, nullptr);
+	if (descriptor()->isTransient()) setDoNotDeleteTransientDescriptor(true);
+
+	Operator* op = new Operator(descriptor(), nullptr);
 	for(int i = 0; i<size(); ++i)
 	{
 		op->append(first(true));

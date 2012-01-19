@@ -39,7 +39,7 @@
 
 namespace Interaction {
 
-Operator::Operator(OperatorDescriptor* descriptor, Operator* parent) : Expression(type(), parent), descriptor_(descriptor)
+Operator::Operator(OperatorDescriptor* descriptor, Operator* parent) : Expression(type(), parent), descriptor_(descriptor), do_not_delete_transient_descriptor_(false)
 {
 }
 
@@ -51,7 +51,7 @@ void Operator::accept(ExpressionVisitor* visitor)
 Operator::~Operator()
 {
 	clear();
-	if (descriptor()->isTransient()) delete descriptor();
+	if (descriptor()->isTransient() && !do_not_delete_transient_descriptor_) delete descriptor();
 }
 
 Expression* Operator::possiblyRemove(Expression* e, bool remove)

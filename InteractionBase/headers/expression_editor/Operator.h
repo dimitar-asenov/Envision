@@ -80,9 +80,12 @@ class INTERACTIONBASE_API Operator : public Expression {
 
 		virtual Expression* findCutExpression(bool leftside, QString cut_string);
 
+		void setDoNotDeleteTransientDescriptor(bool doNotDelete);
+
 	private:
 		OperatorDescriptor* descriptor_;
 		QList<Expression*> operands_;
+		bool do_not_delete_transient_descriptor_;
 
 		Expression* possiblyRemove(Expression* e, bool remove);
 };
@@ -94,7 +97,7 @@ inline bool Operator::contains(Expression* e) {return operands_.contains(e);}
 inline void Operator::append(Expression* e) { insert(e, operands_.size()); }
 inline void Operator::prepend(Expression* e) { insert(e, 0); }
 inline OperatorDescriptor* Operator::descriptor() { return descriptor_; }
-
+inline void Operator::setDoNotDeleteTransientDescriptor(bool doNotDelete) { do_not_delete_transient_descriptor_ = doNotDelete; }
 
 } /* namespace InteractionBase */
 #endif /* INTERACTIONBASE_OPERATOR_H_ */
