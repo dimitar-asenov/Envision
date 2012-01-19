@@ -3,7 +3,8 @@ CONFIG(release, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/ReleaseBuild
 CONFIG(debug, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/DebugBuild
 PLUGINS_DIR = $${BUILD_DIR}/plugins
 CONFIG(debug, debug|release):DEFINES += DEBUG
-QMAKE_CXXFLAGS += -Werror -std=c++0x
+QMAKE_CXXFLAGS += -Werror \
+    -std=c++0x
 INCLUDEPATH += ./headers \
     ./src \
     ./test \
@@ -33,7 +34,9 @@ INSTALLS += target \
     pluginmeta \
     styles
 PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/precompiled.h \
+HEADERS += headers/expressions/VErrorExpressionStyle.h \
+    headers/expressions/VErrorExpression.h \
+    headers/precompiled.h \
     headers/elements/VStorageSpecifier.h \
     headers/expressions/VArrayInitializerStyle.h \
     headers/expressions/VArrayInitializer.h \
@@ -100,7 +103,9 @@ HEADERS += headers/precompiled.h \
     headers/OOVisualizationException.h \
     headers/oovisualization_api.h \
     src/oovisualization.h
-SOURCES += src/elements/VStorageSpecifier.cpp \
+SOURCES += src/expressions/VErrorExpressionStyle.cpp \
+    src/expressions/VErrorExpression.cpp \
+    src/elements/VStorageSpecifier.cpp \
     src/expressions/VArrayInitializer.cpp \
     src/expressions/VArrayInitializerStyle.cpp \
     src/literals/VStringLiteralStyle.cpp \

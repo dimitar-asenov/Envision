@@ -53,6 +53,8 @@
 #include "expressions/VBinaryOperation.h"
 #include "expressions/VArrayInitializer.h"
 
+#include "expressions/VErrorExpression.h"
+
 #include "literals/VStringLiteral.h"
 #include "literals/VIntegerLiteral.h"
 #include "literals/VFloatLiteral.h"

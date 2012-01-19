@@ -1,0 +1,55 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/Item/default">
+	<shape />
+	<layout prototypes="layout/SequentialLayout/default" />
+	<prefix prototypes="item/Text/default">
+		<shape prototypes="shape/Box/default">
+			Box
+			<outline>
+				<width>1</width>
+				<style>2</style>
+				<color>
+					<alpha>255</alpha>
+					<red>255</red>
+					<green>0</green>
+					<blue>0</blue>
+				</color>
+			</outline>
+			<cornerType>0</cornerType>
+			<backgroundBrush>
+				<style>1</style>
+				<color>
+					<alpha>128</alpha>
+					<red>255</red>
+					<green>0</green>
+					<blue>0</blue>
+				</color>
+			</backgroundBrush>
+		</shape>
+	</prefix>
+	<postfix prototypes="item/Text/default">
+		<shape prototypes="shape/Box/default">
+			Box
+			<outline>
+				<width>1</width>
+				<style>2</style>
+				<color>
+					<alpha>255</alpha>
+					<red>255</red>
+					<green>0</green>
+					<blue>0</blue>
+				</color>
+			</outline>
+			<cornerType>0</cornerType>
+			<backgroundBrush>
+				<style>1</style>
+				<color>
+					<alpha>128</alpha>
+					<red>255</red>
+					<green>0</green>
+					<blue>0</blue>
+				</color>
+			</backgroundBrush>
+		</shape>
+	</postfix>
+</style>
