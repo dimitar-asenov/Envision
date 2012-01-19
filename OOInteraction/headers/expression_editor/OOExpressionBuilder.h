@@ -24,32 +24,47 @@
  **
  **********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * oointeraction.cpp
+/*
+ * OOExpressionBuilder.h
  *
  *  Created on: Jan 12, 2012
  *      Author: Dimitar Asenov
- **********************************************************************************************************************/
+ */
 
-#include "oointeraction.h"
-#include "SelfTest/headers/SelfTestSuite.h"
+#ifndef OOInteraction_OOEXPRESSIONBUILDER_H_
+#define OOInteraction_OOEXPRESSIONBUILDER_H_
 
-#include "expression_editor/OOOperatorDescriptorList.h"
+#include "../oointeraction_api.h"
 
-Q_EXPORT_PLUGIN2( oointeraction, OOInteraction::OOInteraction )
+#include "InteractionBase/headers/expression_editor/ExpressionVisitor.h"
+#include "InteractionBase/headers/expression_editor/Expression.h"
+
+namespace Model {
+	class Node;
+}
+
+namespace OOModel {
+	class Expression;
+}
 
 namespace OOInteraction {
 
-bool OOInteraction::initialize(Envision::EnvisionManager&)
-{
-	OOOperatorDescriptorList::initializeWithDefaultOperators();
-	return true;
-}
+class OOINTERACTION_API OOExpressionBuilder : public Interaction::ExpressionVisitor {
+	public:
 
-void OOInteraction::selfTest(QString testid)
-{
-	if (testid.isEmpty()) SelfTest::TestManager<OOInteraction>::runAllTests().printResultStatistics();
-	else SelfTest::TestManager<OOInteraction>::runTest(testid).printResultStatistics();
-}
+		static OOModel::Expression* getOOExpression(const QString& exprText);
+		OOModel::Expression* getOOExpression(Interaction::Expression* expression);
 
-}
+		virtual void visit(Interaction::Empty* empty);
+		virtual void visit(Interaction::Value* val);
+		virtual void visit(Interaction::Operator* op);
+		virtual void visit(Interaction::UnfinishedOperator* unfinished);
+
+	protected:
+		OOModel::Expression* expression;
+
+		void createErrorExpression(Interaction::Operator* op);
+};
+
+} /* namespace InteractionBase */
+#endif /* OOInteraction_OOEXPRESSIONBUILDER_H_ */

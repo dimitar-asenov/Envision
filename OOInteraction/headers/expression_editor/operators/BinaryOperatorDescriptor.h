@@ -24,32 +24,32 @@
  **
  **********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * oointeraction.cpp
+/*
+ * BinaryOperatorDescriptor.h
  *
- *  Created on: Jan 12, 2012
+ *  Created on: Jan 18, 2012
  *      Author: Dimitar Asenov
- **********************************************************************************************************************/
+ */
 
-#include "oointeraction.h"
-#include "SelfTest/headers/SelfTestSuite.h"
+#ifndef OOInteraction_BINARYOPERATORDESCRIPTOR_H_
+#define OOInteraction_BINARYOPERATORDESCRIPTOR_H_
 
-#include "expression_editor/OOOperatorDescriptorList.h"
+#include "../../oointeraction_api.h"
+#include "../OOOperatorDescriptor.h"
 
-Q_EXPORT_PLUGIN2( oointeraction, OOInteraction::OOInteraction )
+#include "OOModel/headers/expressions/BinaryOperation.h"
 
 namespace OOInteraction {
 
-bool OOInteraction::initialize(Envision::EnvisionManager&)
-{
-	OOOperatorDescriptorList::initializeWithDefaultOperators();
-	return true;
-}
+class OOINTERACTION_API BinaryOperatorDescriptor : public OOOperatorDescriptor {
+	public:
+		BinaryOperatorDescriptor(OOModel::BinaryOperation::OperatorTypes op, const QString& name, const QString& signature, int num_operands, int precedence, Associativity associativity);
 
-void OOInteraction::selfTest(QString testid)
-{
-	if (testid.isEmpty()) SelfTest::TestManager<OOInteraction>::runAllTests().printResultStatistics();
-	else SelfTest::TestManager<OOInteraction>::runTest(testid).printResultStatistics();
-}
+		virtual OOModel::Expression* create(const QList<OOModel::Expression*>& operands);
 
-}
+	private:
+		OOModel::BinaryOperation::OperatorTypes op_;
+};
+
+} /* namespace OOInteraction */
+#endif /* OOInteraction_BINARYOPERATORDESCRIPTOR_H_ */

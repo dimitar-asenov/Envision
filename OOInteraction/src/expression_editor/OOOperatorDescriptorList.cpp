@@ -24,32 +24,31 @@
  **
  **********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * oointeraction.cpp
+/*
+ * OOOperatorDescriptorList.cpp
  *
- *  Created on: Jan 12, 2012
+ *  Created on: Jan 18, 2012
  *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#include "oointeraction.h"
-#include "SelfTest/headers/SelfTestSuite.h"
+ */
 
 #include "expression_editor/OOOperatorDescriptorList.h"
 
-Q_EXPORT_PLUGIN2( oointeraction, OOInteraction::OOInteraction )
+#include "expression_editor/operators/BinaryOperatorDescriptor.h"
 
 namespace OOInteraction {
 
-bool OOInteraction::initialize(Envision::EnvisionManager&)
+OOOperatorDescriptorList* OOOperatorDescriptorList::instance()
 {
-	OOOperatorDescriptorList::initializeWithDefaultOperators();
-	return true;
+	static OOOperatorDescriptorList theInstance;
+	return &theInstance;
 }
 
-void OOInteraction::selfTest(QString testid)
+void OOOperatorDescriptorList::initializeWithDefaultOperators()
 {
-	if (testid.isEmpty()) SelfTest::TestManager<OOInteraction>::runAllTests().printResultStatistics();
-	else SelfTest::TestManager<OOInteraction>::runTest(testid).printResultStatistics();
+	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::TIMES, "*", "expr * expr", 2, 10, Interaction::OperatorDescriptor::LeftAssociative));
+	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::DIVIDE, "/", "expr / expr", 2, 10, Interaction::OperatorDescriptor::LeftAssociative));
+	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::PLUS, "+", "expr + expr", 2, 11, Interaction::OperatorDescriptor::LeftAssociative));
+	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::MINUS, "-", "expr - expr", 2, 11, Interaction::OperatorDescriptor::LeftAssociative));
 }
 
-}
+} /* namespace OOInteraction */

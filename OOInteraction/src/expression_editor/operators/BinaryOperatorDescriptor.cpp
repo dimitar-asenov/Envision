@@ -24,32 +24,28 @@
  **
  **********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * oointeraction.cpp
+/*
+ * BinaryOperatorDescriptor.cpp
  *
- *  Created on: Jan 12, 2012
+ *  Created on: Jan 18, 2012
  *      Author: Dimitar Asenov
- **********************************************************************************************************************/
+ */
 
-#include "oointeraction.h"
-#include "SelfTest/headers/SelfTestSuite.h"
-
-#include "expression_editor/OOOperatorDescriptorList.h"
-
-Q_EXPORT_PLUGIN2( oointeraction, OOInteraction::OOInteraction )
+#include "expression_editor/operators/BinaryOperatorDescriptor.h"
 
 namespace OOInteraction {
 
-bool OOInteraction::initialize(Envision::EnvisionManager&)
+BinaryOperatorDescriptor::BinaryOperatorDescriptor(OOModel::BinaryOperation::OperatorTypes op, const QString& name, const QString& signature, int num_operands, int precedence, Associativity associativity)
+		: OOOperatorDescriptor(name, signature, num_operands, precedence, associativity), op_(op)
+{}
+
+OOModel::Expression* BinaryOperatorDescriptor::create(const QList<OOModel::Expression*>& operands)
 {
-	OOOperatorDescriptorList::initializeWithDefaultOperators();
-	return true;
+	OOModel::BinaryOperation* opr = new OOModel::BinaryOperation();
+	opr->setOp(op_);
+	opr->setLeft(operands.first());
+	opr->setRight(operands.last());
+	return opr;
 }
 
-void OOInteraction::selfTest(QString testid)
-{
-	if (testid.isEmpty()) SelfTest::TestManager<OOInteraction>::runAllTests().printResultStatistics();
-	else SelfTest::TestManager<OOInteraction>::runTest(testid).printResultStatistics();
-}
-
-}
+} /* namespace OOInteraction */

@@ -24,32 +24,21 @@
  **
  **********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * oointeraction.cpp
+/*
+ * OOOperatorDescriptor.cpp
  *
- *  Created on: Jan 12, 2012
+ *  Created on: Jan 18, 2012
  *      Author: Dimitar Asenov
- **********************************************************************************************************************/
+ */
 
-#include "oointeraction.h"
-#include "SelfTest/headers/SelfTestSuite.h"
-
-#include "expression_editor/OOOperatorDescriptorList.h"
-
-Q_EXPORT_PLUGIN2( oointeraction, OOInteraction::OOInteraction )
+#include "expression_editor/OOOperatorDescriptor.h"
 
 namespace OOInteraction {
 
-bool OOInteraction::initialize(Envision::EnvisionManager&)
+OOOperatorDescriptor::OOOperatorDescriptor(const QString& name, const QString& signature, int num_operands, int precedence, Associativity associativity)
+	: Interaction::OperatorDescriptor(name, signature, num_operands, precedence, associativity)
 {
-	OOOperatorDescriptorList::initializeWithDefaultOperators();
-	return true;
 }
 
-void OOInteraction::selfTest(QString testid)
-{
-	if (testid.isEmpty()) SelfTest::TestManager<OOInteraction>::runAllTests().printResultStatistics();
-	else SelfTest::TestManager<OOInteraction>::runTest(testid).printResultStatistics();
-}
 
-}
+} /* namespace OOInteraction */

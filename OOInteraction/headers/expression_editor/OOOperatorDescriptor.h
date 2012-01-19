@@ -24,32 +24,29 @@
  **
  **********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * oointeraction.cpp
+/*
+ * OOOperatorDescriptor.h
  *
- *  Created on: Jan 12, 2012
+ *  Created on: Jan 18, 2012
  *      Author: Dimitar Asenov
- **********************************************************************************************************************/
+ */
 
-#include "oointeraction.h"
-#include "SelfTest/headers/SelfTestSuite.h"
+#ifndef OOInteraction_OOOPERATORDESCRIPTOR_H_
+#define OOInteraction_OOOPERATORDESCRIPTOR_H_
 
-#include "expression_editor/OOOperatorDescriptorList.h"
+#include "../oointeraction_api.h"
 
-Q_EXPORT_PLUGIN2( oointeraction, OOInteraction::OOInteraction )
+#include "OOModel/headers/expressions/Expression.h"
+#include "InteractionBase/headers/expression_editor/OperatorDescriptor.h"
 
 namespace OOInteraction {
 
-bool OOInteraction::initialize(Envision::EnvisionManager&)
-{
-	OOOperatorDescriptorList::initializeWithDefaultOperators();
-	return true;
-}
+class OOINTERACTION_API OOOperatorDescriptor : public Interaction::OperatorDescriptor {
+	public:
+		OOOperatorDescriptor(const QString& name, const QString& signature, int num_operands, int precedence, Associativity associativity);
 
-void OOInteraction::selfTest(QString testid)
-{
-	if (testid.isEmpty()) SelfTest::TestManager<OOInteraction>::runAllTests().printResultStatistics();
-	else SelfTest::TestManager<OOInteraction>::runTest(testid).printResultStatistics();
-}
+		virtual OOModel::Expression* create(const QList<OOModel::Expression*>& operands) = 0;
+};
 
-}
+} /* namespace OOInteraction */
+#endif /* OOInteraction_OOOPERATORDESCRIPTOR_H_ */
