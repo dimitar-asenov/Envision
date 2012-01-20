@@ -16,6 +16,7 @@
 				</color>
 			</outline>
 			<cornerType>0</cornerType>
+			<cornerRadius>1</cornerRadius>
 			<backgroundBrush>
 				<style>1</style>
 				<color>

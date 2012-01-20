@@ -53,7 +53,9 @@
 #include "expressions/VBinaryOperation.h"
 #include "expressions/VArrayInitializer.h"
 
+#include "expressions/VEmptyExpression.h"
 #include "expressions/VErrorExpression.h"
+#include "expressions/VUnfinishedOperator.h"
 
 #include "literals/VStringLiteral.h"
 #include "literals/VIntegerLiteral.h"

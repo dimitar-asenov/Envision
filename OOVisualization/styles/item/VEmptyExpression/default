@@ -1,0 +1,12 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/Symbol/default">
+	<pen>
+		<color>
+			<alpha>255</alpha>
+			<red>128</red>
+			<green>128</green>
+			<blue>128</blue>
+		</color>
+	</pen>
+	<symbol>ε</symbol>
+</style>

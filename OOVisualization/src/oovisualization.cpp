@@ -76,7 +76,9 @@ bool OOVisualization::initialize(Envision::EnvisionManager&)
 	Scene::defaultRenderer()->registerVisualization(UnaryOperation::typeIdStatic(), createVisualization<VUnaryOperation, UnaryOperation>);
 	Scene::defaultRenderer()->registerVisualization(BinaryOperation::typeIdStatic(), createVisualization<VBinaryOperation, BinaryOperation>);
 	Scene::defaultRenderer()->registerVisualization(ArrayInitializer::typeIdStatic(), createVisualization<VArrayInitializer, ArrayInitializer>);
+	Scene::defaultRenderer()->registerVisualization(EmptyExpression::typeIdStatic(), createVisualization<VEmptyExpression, EmptyExpression>);
 	Scene::defaultRenderer()->registerVisualization(ErrorExpression::typeIdStatic(), createVisualization<VErrorExpression, ErrorExpression>);
+	Scene::defaultRenderer()->registerVisualization(UnfinishedOperator::typeIdStatic(), createVisualization<VUnfinishedOperator, UnfinishedOperator>);
 	Scene::defaultRenderer()->registerVisualization(ThisExpression::typeIdStatic(), createVisualization<VThisExpression, ThisExpression>);
 	Scene::defaultRenderer()->registerVisualization(StringLiteral::typeIdStatic(), createVisualization<VStringLiteral, StringLiteral>);
 	Scene::defaultRenderer()->registerVisualization(IntegerLiteral::typeIdStatic(), createVisualization<VIntegerLiteral, IntegerLiteral>);
@@ -118,7 +120,9 @@ bool OOVisualization::initialize(Envision::EnvisionManager&)
 	VUnaryOperation::setInteractionHandler(Interaction::GenericHandler::instance());
 	VBinaryOperation::setInteractionHandler(Interaction::GenericHandler::instance());
 	VArrayInitializer::setInteractionHandler(Interaction::GenericHandler::instance());
+	VEmptyExpression::setInteractionHandler(Interaction::GenericHandler::instance());
 	VErrorExpression::setInteractionHandler(Interaction::GenericHandler::instance());
+	VUnfinishedOperator::setInteractionHandler(Interaction::GenericHandler::instance());
 	VStringLiteral::setInteractionHandler(Interaction::GenericHandler::instance());
 	VIntegerLiteral::setInteractionHandler(Interaction::GenericHandler::instance());
 	VFloatLiteral::setInteractionHandler(Interaction::GenericHandler::instance());
