@@ -92,7 +92,7 @@ Method* addDivBySix(Model::Model* model, Class* parent)
 	divbysix->items()->append(exprtest);
 	exprtest->setName("exprtest");
 	exprtest->setType(new PrimitiveType(PrimitiveType::INT));
-	exprtest->setInitialValue( OOExpressionBuilder::getOOExpression("$$aa++&b*e/d-#") );
+	exprtest->setInitialValue( OOExpressionBuilder::getOOExpression("+aa++&b*e/d-#") );
 
 	VariableDeclaration* result = new VariableDeclaration();
 	divbysix->items()->append(result);
