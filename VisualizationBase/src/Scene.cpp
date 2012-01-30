@@ -36,6 +36,7 @@
 #include "items/Item.h"
 #include "items/SceneHandlerItem.h"
 #include "items/SelectedItem.h"
+#include "cursor/Cursor.h"
 
 #include "ModelBase/headers/nodes/Node.h"
 #include "ModelBase/headers/Model.h"
@@ -54,38 +55,41 @@ class UpdateSceneEvent : public QEvent
 		UpdateSceneEvent() : QEvent(EventType){};
 };
 
-Scene::Scene() : QGraphicsScene(VisualizationManager::instance().getMainWindow()), needsUpdate(false), renderer_(nullptr), sceneHandlerItem_(new SceneHandlerItem(this))
+Scene::Scene() : QGraphicsScene(VisualizationManager::instance().getMainWindow()), needsUpdate_(false), renderer_(&defaultRenderer_), sceneHandlerItem_(new SceneHandlerItem(this))
 {
-	// TODO Auto-generated constructor stub
 }
 
 Scene::~Scene()
 {
-	for (int i = 0; i<topLevelItems.size(); ++i) SAFE_DELETE_ITEM(topLevelItems[i]);
-	topLevelItems.clear();
-	for (int i = 0; i<selections.size(); ++i) SAFE_DELETE_ITEM(selections[i]);
-	selections.clear();
+	for (Item* i : topLevelItems_) SAFE_DELETE_ITEM(i);
+	topLevelItems_.clear();
+	for (SelectedItem* si : selections_) SAFE_DELETE_ITEM(si);
+	selections_.clear();
+	for (Cursor* c : cursors_) SAFE_DELETE(c);
+	cursors_.clear();
 	SAFE_DELETE_ITEM(sceneHandlerItem_);
-	SAFE_DELETE(renderer_);
+
+	if (renderer_ != &defaultRenderer_) SAFE_DELETE(renderer_);
+	else renderer_ = nullptr;
 }
 
 void Scene::addTopLevelItem(Item* item)
 {
-	topLevelItems.append(item);
+	topLevelItems_.append(item);
 	addItem(item);
 }
 
 void Scene::removeTopLevelItem(Item* item)
 {
-	topLevelItems.removeAll(item);
+	topLevelItems_.removeAll(item);
 	removeItem(item);
 }
 
 void Scene::scheduleUpdate()
 {
-	if (!needsUpdate)
+	if (!needsUpdate_)
 	{
-		needsUpdate = true;
+		needsUpdate_ = true;
 		QApplication::postEvent(this, new UpdateSceneEvent());
 	}
 }
@@ -99,10 +103,9 @@ void Scene::nodesUpdated(QList<Node*> nodes)
 {
 	// TODO implement this in a more efficient way.
 
-	QList<QGraphicsItem*> list = items();
-	for (int i = 0; i < list.size(); ++i)
+	for (QGraphicsItem* graphics_item :  items())
 	{
-		Item* item = static_cast<Item*> (list[i]);
+		Item* item = static_cast<Item*> ( graphics_item );
 		if (item->hasNode() && nodes.contains(item->node())) item->setUpdateNeeded();
 	}
 
@@ -114,20 +117,31 @@ void Scene::customEvent(QEvent *event)
 	if ( event->type() == UpdateSceneEvent::EventType )
 	{
 		// Update Top level items
-		for (int i = 0; i<topLevelItems.size(); ++i) topLevelItems.at(i)->updateSubtree();
+		for (int i = 0; i<topLevelItems_.size(); ++i) topLevelItems_.at(i)->updateSubtree();
 
 		// Update Selections
 		// TODO do not recreate all items all the time.
-		for (int i = 0; i<selections.size(); i++) SAFE_DELETE_ITEM(selections[i]);
+		for (int i = 0; i<selections_.size(); i++) SAFE_DELETE_ITEM(selections_[i]);
 		QList<QGraphicsItem *> selected = selectedItems();
 		for (int i = 0; i<selected.size(); ++i)
 		{
 			Item* s = static_cast<Item*> (selected[i]);
-			selections.append(new SelectedItem(s));
-			addItem(selections.last());
-			selections.last()->updateSubtree();
+			selections_.append(new SelectedItem(s));
+			addItem(selections_.last());
+			selections_.last()->updateSubtree();
 		}
-		needsUpdate = false;
+
+		// Update Cursors
+		for (Cursor* c : cursors_)
+		{
+			if (c->visualization())
+			{
+				if (c->visualization()->scene() != this) addItem(c->visualization());
+				c->visualization()->updateSubtree();
+			}
+		}
+
+		needsUpdate_ = false;
 	}
 	else
 		QGraphicsScene::customEvent(event);
@@ -143,6 +157,18 @@ bool Scene::event(QEvent *event)
 		scheduleUpdate();
 
 	return QGraphicsScene::event(event);
+}
+
+void Scene::setMainCursor(Cursor* cursor)
+{
+	if (!cursors_.isEmpty())
+	{
+		Cursor* main = cursors_.first();
+		SAFE_DELETE(main);
+		cursors_.removeFirst();
+	}
+
+	cursors_.prepend(cursor);
 }
 
 

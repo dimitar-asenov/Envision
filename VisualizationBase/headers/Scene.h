@@ -48,6 +48,7 @@ namespace Visualization {
 
 class SceneHandlerItem;
 class SelectedItem;
+class Cursor;
 
 class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 {
@@ -73,6 +74,9 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		void scheduleUpdate();
 		void listenToModel(Model::Model* model);
 
+		Cursor* mainCursor();
+		void setMainCursor(Cursor* cursor);
+
 		virtual void customEvent(QEvent *event);
 
 		virtual SceneHandlerItem* sceneHandlerItem();
@@ -84,20 +88,22 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		bool event(QEvent *event);
 
 	private:
-		bool needsUpdate;
+		bool needsUpdate_;
 
 		ModelRenderer* renderer_;
 		SceneHandlerItem* sceneHandlerItem_;
-		QList<Item*> topLevelItems;
-		QList<SelectedItem*> selections;
+		QList<Item*> topLevelItems_;
+		QList<SelectedItem*> selections_;
+		QList<Cursor*> cursors_;
 
 		static ModelRenderer defaultRenderer_;
 };
 
-inline void Scene::setRenderer(ModelRenderer* renderer) { renderer_ = renderer; }
-inline ModelRenderer* Scene::renderer() { return renderer_? renderer_ : (&defaultRenderer_); }
+inline void Scene::setRenderer(ModelRenderer* renderer) { renderer_ = renderer? renderer : (&defaultRenderer_); }
+inline ModelRenderer* Scene::renderer() { return renderer_; }
 inline ModelRenderer* Scene::defaultRenderer() { return &defaultRenderer_; }
 inline SceneHandlerItem* Scene::sceneHandlerItem() {return sceneHandlerItem_; }
+inline Cursor* Scene::mainCursor() { return cursors_.isEmpty() ? nullptr : cursors_.first(); }
 
 
 }

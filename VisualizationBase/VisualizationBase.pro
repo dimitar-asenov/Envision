@@ -3,7 +3,8 @@ CONFIG(release, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/ReleaseBuild
 CONFIG(debug, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/DebugBuild
 PLUGINS_DIR = $${BUILD_DIR}/plugins
 CONFIG(debug, debug|release):DEFINES += DEBUG
-QMAKE_CXXFLAGS += -Werror -std=c++0x
+QMAKE_CXXFLAGS += -Werror \
+    -std=c++0x
 INCLUDEPATH += ./headers \
     ./src \
     ./test \
@@ -32,7 +33,10 @@ INSTALLS += target \
     pluginmeta \
     styles
 PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/precompiled.h \
+HEADERS += headers/cursor/TextCursor.h \
+    headers/cursor/CursorShapeItem.h \
+    headers/cursor/Cursor.h \
+    headers/precompiled.h \
     headers/items/StaticStyle.h \
     headers/items/Static.h \
     headers/shapes/shapeMacros.h \
@@ -63,7 +67,6 @@ HEADERS += headers/precompiled.h \
     headers/layouts/PositionLayoutStyle.h \
     headers/layouts/PositionLayout.h \
     headers/node_extensions/Position.h \
-    headers/items/SelectedItemStyle.h \
     headers/items/SelectedItem.h \
     headers/items/SceneHandlerItem.h \
     headers/items/TextRenderer.h \
@@ -100,7 +103,10 @@ HEADERS += headers/precompiled.h \
     src/visualizationbase.h \
     headers/VisualizationException.h \
     headers/visualizationbase_api.h
-SOURCES += src/items/Static.cpp \
+SOURCES += src/cursor/TextCursor.cpp \
+    src/cursor/CursorShapeItem.cpp \
+    src/cursor/Cursor.cpp \
+    src/items/Static.cpp \
     src/items/StaticStyle.cpp \
     src/styles/Style.cpp \
     src/styles/StyleNode.cpp \
@@ -126,7 +132,6 @@ SOURCES += src/items/Static.cpp \
     src/layouts/PositionLayoutStyle.cpp \
     src/layouts/PositionLayout.cpp \
     src/node_extensions/Position.cpp \
-    src/items/SelectedItemStyle.cpp \
     src/items/SelectedItem.cpp \
     src/items/SceneHandlerItem.cpp \
     src/items/TextRenderer.cpp \

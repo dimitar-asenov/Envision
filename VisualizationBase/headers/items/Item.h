@@ -37,6 +37,7 @@
 #include "../visualizationbase_api.h"
 #include "ItemMacros.h"
 #include "../InteractionHandler.h"
+#include "../Scene.h"
 
 #include "ModelBase/headers/nodes/Node.h"
 
@@ -49,7 +50,6 @@ namespace Visualization {
 class Shape;
 class ShapeStyle;
 class ItemStyle;
-class Scene;
 class ModelRenderer;
 
 class VISUALIZATIONBASE_API Item : public QGraphicsItem
@@ -139,6 +139,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		typedef ItemStyle StyleType;
 		const static int LAYER_DEFAULT_Z = 0;
 		const static int LAYER_SELECTION_Z = 100;
+		const static int LAYER_CURSOR_Z = 200;
 
 		Item(Item* parent, const StyleType* style = nullptr);
 		virtual ~Item();
@@ -185,6 +186,9 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		void removeFromScene();
 
 		ModelRenderer* renderer();
+
+		template <class T>
+		T* correspondingSceneCursor();
 };
 
 inline int Item::width() const { return boundingRect_.width(); }
@@ -242,6 +246,16 @@ template <class T> inline void SAFE_DELETE_ITEM( T* & item)
 		SAFE_DELETE(item);
 	}
 }
+
+template <class T> T* Item::correspondingSceneCursor()
+{
+	//Currently ony the main cursor is supported.
+	T* cursor = dynamic_cast<T*> (scene()->mainCursor());
+	Q_ASSERT(cursor != nullptr);
+	Q_ASSERT(cursor->owner() == this);
+	return cursor;
+}
+
 }
 
 #endif /* ITEM_H_ */

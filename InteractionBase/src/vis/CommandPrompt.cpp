@@ -37,6 +37,7 @@
 #include "commands/CommandExecutionEngine.h"
 
 #include "VisualizationBase/headers/Scene.h"
+#include "VisualizationBase/headers/cursor/TextCursor.h"
 
 using namespace Visualization;
 
@@ -95,27 +96,28 @@ void CommandPrompt::initializeCommand()
 {
 	command->setText("Type a command");
 	command->setFocus();
-	command->selectAll();
+	command->correspondingSceneCursor<Visualization::TextCursor>()->selectAll();
 }
 
 void CommandPrompt::takeSuggestion(CommandSuggestion* suggestion)
 {
 	command->setText(suggestion->suggestion());
 	command->setFocus();
-	command->setCaretPosition(suggestion->suggestion().size());
+	command->correspondingSceneCursor<Visualization::TextCursor>()->setCaretPosition(suggestion->suggestion().size());
 }
 
 void CommandPrompt::showPrompt()
 {
 	show();
 	command->setFocus();
-	command->setSelectedCharacters(commandSelectedFirst, commandSelectedLast);
+	command->correspondingSceneCursor<Visualization::TextCursor>()
+			->setSelectedCharacters(commandSelectedFirst, commandSelectedLast);
 }
 
 void CommandPrompt::hidePrompt()
 {
-	commandSelectedFirst = command->selectionFirstInxed();
-	commandSelectedLast = command->selectionLastIndex();
+	commandSelectedFirst = command->correspondingSceneCursor<Visualization::TextCursor>()->selectionFirstIndex();
+	commandSelectedLast = command->correspondingSceneCursor<Visualization::TextCursor>()->selectionLastIndex();
 	hide();
 	commandReceiver_->setFocus();
 }

@@ -1,0 +1,22 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/Symbol/default">
+	<shape prototypes="shape/Box/default">
+		Box
+		<outline>
+			<style>0</style>
+		</outline>
+		<backgroundBrush>
+			<style>1</style>
+			<color>
+				<alpha>255</alpha>
+				<red>0</red>
+				<green>0</green>
+				<blue>0</blue>
+			</color>
+		</backgroundBrush>
+		<cornerType>0</cornerType>
+		<cornerRadius>0</cornerRadius>
+	</shape>
+	<drawsOnlyShape>true</drawsOnlyShape>
+	<drawShapeWhenEmpty>true</drawShapeWhenEmpty>
+</style>

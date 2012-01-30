@@ -48,16 +48,4 @@
 		<style>0</style>
 		<underline>false</underline>
 	</selectionFont>
-	<caretPen>
-		<width>2.0</width>
-		<style>1</style>
-		<color>
-			<alpha>255</alpha>
-			<red>128</red>
-			<green>64</green>
-			<blue>0</blue>
-		</color>
-		<capStyle>0</capStyle>
-		<joinStyle>0</joinStyle>
-	</caretPen>
 </style>
