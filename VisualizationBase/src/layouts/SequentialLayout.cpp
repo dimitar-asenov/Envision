@@ -32,6 +32,8 @@
  **********************************************************************************************************************/
 
 #include "layouts/SequentialLayout.h"
+#include "layouts/LayoutRegion.h"
+#include "cursor/LayoutCursor.h"
 #include "shapes/Shape.h"
 #include "items/ItemWithNode.h"
 #include "ModelRenderer.h"
@@ -265,7 +267,7 @@ void SequentialLayout::updateGeometry(int, int)
 int SequentialLayout::focusedElementIndex() const
 {
 	for (int i = 0; i<items.size(); ++i)
-		if ( items[i]->childHasFocus()) return i;
+		if ( items[i]->itemOrChildHasFocus()) return i;
 
 	return -1;
 }
@@ -352,6 +354,70 @@ bool SequentialLayout::focusChild(FocusTarget location)
 	}
 
 	return Item::focusChild(toFocus);
+}
+
+QList<LayoutRegion> SequentialLayout::regions()
+{
+	bool horizontal = style()->direction() == SequentialLayoutStyle::LeftToRight
+							|| style()->direction() == SequentialLayoutStyle::RightToLeft;
+	bool forward = style()->direction() == SequentialLayoutStyle::LeftToRight
+						|| style()->direction() == SequentialLayoutStyle::TopToBottom;
+
+	QList<LayoutRegion> regs;
+	int last = forward ? 0 : horizontal ? width() : height();
+	for(int i = 0; i<items.size(); ++i)
+	{
+		LayoutRegion cursorRegion;
+		LayoutRegion itemRegion;
+		if (horizontal && forward)
+		{
+			cursorRegion.setRegion(QRect(last, 0, items[i]->x() - last, height()));
+			itemRegion.setRegion(QRect(items[i]->x(), 0, items[i]->width(), height()));
+			last = items[i]->xEnd();
+		}
+		else if (horizontal && !forward)
+		{
+			cursorRegion.setRegion(QRect(items[i]->xEnd(), 0, last, height()));
+			itemRegion.setRegion(QRect(items[i]->x(), 0, items[i]->width(), height()));
+			last = items[i]->x();
+		}
+		else if (!horizontal && forward)
+		{
+			cursorRegion.setRegion(QRect(0, last,  width(), items[i]->y() - last));
+			itemRegion.setRegion(QRect(0, items[i]->y(), width(), items[i]->height()));
+			last = items[i]->yEnd();
+		}
+		else
+		{
+			cursorRegion.setRegion(QRect(0, items[i]->yEnd(),  width(), last));
+			itemRegion.setRegion(QRect(0, items[i]->y(), width(), items[i]->height()));
+			last = items[i]->y();
+		}
+
+		itemRegion.setChild(items[i]);
+		cursorRegion.setCursor(new LayoutCursor(this));
+		cursorRegion.cursor()->setIndex(i);
+		cursorRegion.cursor()->setVisualizationPosition(cursorRegion.region().topLeft());
+		cursorRegion.cursor()->setVisualizationSize(horizontal ? QSize(2, height()) : QSize(width(), 2));
+
+		regs.append(cursorRegion);
+		regs.append(itemRegion);
+	}
+
+	// Add trailing cursor region
+	QRect trailing;
+	if (horizontal && forward) trailing.setRect(last, 0, width() - last, height());
+	else if (horizontal && !forward) trailing.setRect(0, 0, last, height());
+	else if (!horizontal && forward) trailing.setRect(0, last,  width(), height() - last);
+	else trailing.setRect(0, 0,  width(), last);
+
+	regs.append(LayoutRegion(trailing));
+	regs.last().setCursor(new LayoutCursor(this));
+	regs.last().cursor()->setIndex(items.size());
+	regs.last().cursor()->setVisualizationPosition(regs.last().region().topLeft());
+	regs.last().cursor()->setVisualizationSize(horizontal ? QSize(2, height()) : QSize(width(), 2));
+
+	return regs;
 }
 
 }

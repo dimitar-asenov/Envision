@@ -44,7 +44,6 @@ ITEM_COMMON_DEFINITIONS( PositionLayout, "layout" )
 PositionLayout::PositionLayout(Item* parent, const StyleType* style) :
 	Layout(parent, style)
 {
-	setAcceptedMouseButtons(Qt::LeftButton);
 }
 
 PositionLayout::~PositionLayout()
@@ -211,7 +210,7 @@ void PositionLayout::updateGeometry(int, int)
 int PositionLayout::focusedElementIndex() const
 {
 	for (int i = 0; i<items.size(); ++i)
-		if ( items[i]->childHasFocus()) return i;
+		if ( items[i]->itemOrChildHasFocus()) return i;
 
 	return -1;
 }

@@ -171,16 +171,16 @@ bool PanelLayout::focusChild(FocusTarget location)
 	// Find out which is the current item and get the previous and next if any
 	Item* prev = nullptr;
 	Item* next = nullptr;
-	if (first_ && first_->childHasFocus())
+	if (first_ && first_->itemOrChildHasFocus())
 	{
 		next = middle_ ? middle_ : last_;
 	}
-	else if (middle_ && middle_->childHasFocus())
+	else if (middle_ && middle_->itemOrChildHasFocus())
 	{
 		prev = first_;
 		next = last_;
 	}
-	else if (last_ && last_-childHasFocus())
+	else if (last_ && last_->itemOrChildHasFocus())
 	{
 		prev = middle_ ? middle_ : first_;
 	}

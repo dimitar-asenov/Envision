@@ -39,12 +39,17 @@
 #include "Scene.h"
 #include "ModelRenderer.h"
 
+#include "cursor/Cursor.h"
+
+#include <cmath>
+
 namespace Visualization {
 
 Item::Item(Item* parent, const StyleType* style) :
 	QGraphicsItem(parent), style_(nullptr), shape_(nullptr), needsUpdate_(true)
 {
 	if ( !style || style->drawsOnlyShape() ) setFlag(QGraphicsItem::ItemHasNoContents);
+
 	setFlag(QGraphicsItem::ItemIsFocusable);
 	setFlag(QGraphicsItem::ItemIsSelectable);
 	setStyle(style);
@@ -241,9 +246,20 @@ void Item::setRevision(int)
 {
 }
 
-bool Item::childHasFocus() const
+bool Item::itemOrChildHasFocus() const
 {
 	return QGraphicsItem::scene()->focusItem() == this || QGraphicsItem::isAncestorOf( QGraphicsItem::scene()->focusItem() );
+}
+
+Item* Item::focusedChild() const
+{
+	for(auto item : childItems())
+	{
+		Item* child = static_cast<Item*> (item);
+		if (child->itemOrChildHasFocus()) return child;
+	}
+
+	return nullptr;
 }
 
 void Item::removeFromScene()
@@ -273,6 +289,100 @@ ModelRenderer* Item::renderer()
 	if ( (static_cast<Scene*>(scene()))->renderer() ) return (static_cast<Scene*>(scene()))->renderer();
 	throw VisualizationException("The scene of an Item has no renderer.");
 };
+
+int Item::distanceTo(const QPoint& p) const
+{
+	if (p.y() < 0)
+	{
+		// Above
+		if (p.x() < 0) return std::sqrt(p.y()*p.y() + p.x()*p.x()); // To the left
+		else if (p.x() > width()) return  std::sqrt(p.y()*p.y() + (p.x()-width())*(p.x()-width())); // To the right
+		else return -p.y(); // Directly above
+	}
+	else if (p.y() > height())
+	{
+		// Below
+		if (p.x() < 0) return std::sqrt((p.y()-height())*(p.y()-height()) + p.x()*p.x()); // To the left
+		else if (p.x() > width())
+			return std::sqrt((p.y()-height())*(p.y()-height()) + (p.x()-width())*(p.x()-width())); // To the right
+		else return p.y()-height(); // Directly below
+	}
+	else
+	{
+		// Within the same height
+		if (p.x() < 0) return -p.x(); // To the left
+		else if (p.x() > width()) return  p.x()-width(); // To the right
+		else return 0; // Inside
+	}
+}
+
+Item* Item::childClosestTo(const QPoint& point, PositionConstraints childConstraint) const
+{
+	Item* closest = nullptr;
+	int closest_distance = 0;
+
+	for(auto item : childItems())
+	{
+		Item* child = static_cast<Item*> (item);
+		QPoint childCoordinates = mapToItem(child, point).toPoint();
+
+		if ( (child->satisfiedPositionConstraints(childCoordinates) & childConstraint) == childConstraint)
+		{
+			int distance = child->distanceTo(childCoordinates);
+			if (closest == nullptr || closest_distance > distance)
+			{
+				closest = child;
+				closest_distance = distance;
+			}
+		}
+	}
+
+	return closest;
+}
+
+Item::PositionConstraints Item::satisfiedPositionConstraints(const QPoint& p) const
+{
+	PositionConstraints constraints = NoConstraints;
+
+	if ( p.y() < 0) constraints |= Below;
+	if ( p.y() > height() ) constraints |= Above;
+
+	if ( p.x() < 0) constraints |= RightOf;
+	if ( p.x() > width() ) constraints |= LeftOf;
+
+	if (constraints == NoConstraints) constraints |= Overlap;
+
+	return constraints;
+}
+
+void Item::createDefaultCursor()
+{
+	Cursor* cur = new Cursor(this);
+	cur->setPosition(scenePos().toPoint());
+	scene()->setMainCursor(cur);
+}
+
+bool Item::moveCursor(CursorMoveDirection dir, const QPoint& reference)
+{
+	bool containsReference = boundingRect_.contains(reference);
+
+	bool acceptMove = (dir == MoveOnPosition) && containsReference;
+	acceptMove = acceptMove || ((dir == MoveUpOf) && (reference.y() > 0));
+	acceptMove = acceptMove || ((dir == MoveDownOf) && (reference.y() < height()));
+	acceptMove = acceptMove || ((dir == MoveLeftOf) && (reference.x() > 0));
+	acceptMove = acceptMove || ((dir == MoveRightOf) && (reference.x() < width()));
+
+	if (acceptMove)
+	{
+		if (!scene()->mainCursor() || scene()->mainCursor()->owner() != this)
+			createDefaultCursor();
+
+		correspondingSceneCursor<Cursor>()->setPosition(scenePos().toPoint());
+		return true;
+	}
+	else return false;
+}
+
 /***********************************************************************************************************************
  * Reimplemented Event handling methods. These simply dispatch the method call to the interaction handler of this
  * object.

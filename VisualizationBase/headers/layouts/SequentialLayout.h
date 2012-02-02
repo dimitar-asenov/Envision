@@ -65,6 +65,8 @@ class VISUALIZATIONBASE_API SequentialLayout: public Layout
 		int focusedElementIndex() const;
 		virtual bool focusChild(FocusTarget location);
 
+		virtual QList<LayoutRegion> regions();
+
 		int length() const;
 
 		void append(Item* item);

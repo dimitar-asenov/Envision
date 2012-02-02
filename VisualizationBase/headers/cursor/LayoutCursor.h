@@ -25,46 +25,48 @@
  **********************************************************************************************************************/
 
 /*
- * Cursor.h
+ * LayoutCursor.h
  *
- *  Created on: Jan 26, 2012
+ *  Created on: Jan 30, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef VisualizationBase_CURSOR_H_
-#define VisualizationBase_CURSOR_H_
+#ifndef VisualizationBase_LAYOUTCURSOR_H_
+#define VisualizationBase_LAYOUTCURSOR_H_
 
 #include "../visualizationbase_api.h"
+#include "../layouts/Layout.h"
+#include "Cursor.h"
 
 namespace Visualization {
 
-class CursorData;
-class Item;
-
-class VISUALIZATIONBASE_API Cursor {
+class VISUALIZATIONBASE_API LayoutCursor : public Cursor {
 	public:
-		Cursor(Item* owner, Item* visualization = nullptr);
-		virtual ~Cursor();
+		LayoutCursor(Layout* owner);
+		Layout* owner();
 
-		virtual Item* owner();
+		void setVisualizationSize(const QSize& size);
 
-		const QPoint& position();
-		Item* visualization();
+		void set2DIndex(int x, int y);
+		void setIndex(int index);
+		void setVisualizationPosition(const QPoint& pos);
 
-		void setPosition(const QPoint& pos);
-
-	protected:
-		void setVisualization(Item* visualization);
+		int x();
+		int y();
+		int index();
 
 	private:
-		QPoint position_;
-		Item* owner_;
-		Item* visualization_;
+		int x_;
+		int y_;
+		int index_;
 };
 
-inline void Cursor::setPosition(const QPoint& pos) { position_ = pos; }
-inline const QPoint& Cursor::position() { return position_; }
-inline Item* Cursor::visualization() { return visualization_; }
+inline void LayoutCursor::set2DIndex(int x, int y) { x_ = x; y_ = y; }
+inline void LayoutCursor::setIndex(int index) { index_ = index; }
+
+inline int LayoutCursor::x() { return x_; }
+inline int LayoutCursor::y() { return y_; }
+inline int LayoutCursor::index() { return index_; }
 
 } /* namespace Visualization */
-#endif /* VisualizationBase_CURSOR_H_ */
+#endif /* VisualizationBase_LAYOUTCURSOR_H_ */

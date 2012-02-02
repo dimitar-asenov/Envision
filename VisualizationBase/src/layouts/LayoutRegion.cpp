@@ -25,46 +25,76 @@
  **********************************************************************************************************************/
 
 /*
- * Cursor.h
+ * LayoutRegion.cpp
  *
- *  Created on: Jan 26, 2012
+ *  Created on: Feb 2, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef VisualizationBase_CURSOR_H_
-#define VisualizationBase_CURSOR_H_
+#include "layouts/LayoutRegion.h"
 
-#include "../visualizationbase_api.h"
+#include <cmath>
 
 namespace Visualization {
 
-class CursorData;
-class Item;
+LayoutRegion::LayoutRegion(const QRect& region)
+	: region_(region), child_(nullptr), cursor_(nullptr)
+{
+}
 
-class VISUALIZATIONBASE_API Cursor {
-	public:
-		Cursor(Item* owner, Item* visualization = nullptr);
-		virtual ~Cursor();
+LayoutRegion::~LayoutRegion()
+{
+	child_ = nullptr;
+	cursor_ = nullptr;
+}
 
-		virtual Item* owner();
+qreal LayoutRegion::distanceTo(const QPointF& point)
+{
+	// Translate the region so that its upper left corner is at 0,0
+	QPointF p = point - region_.topLeft();
+	qreal width = region_.width();
+	qreal height = region_.height();
 
-		const QPoint& position();
-		Item* visualization();
+	if (p.y() < 0)
+	{
+		// Above
+		if (p.x() < 0) return std::sqrt(p.y()*p.y() + p.x()*p.x()); // To the left
+		else if (p.x() > width) return  std::sqrt(p.y()*p.y() + (p.x()-width)*(p.x()-width)); // To the right
+		else return -p.y(); // Directly above
+	}
+	else if (p.y() > height)
+	{
+		// Below
+		if (p.x() < 0) return std::sqrt((p.y()-height)*(p.y()-height) + p.x()*p.x()); // To the left
+		else if (p.x() > width)
+			return std::sqrt((p.y()-height)*(p.y()-height) + (p.x()-width)*(p.x()-width)); // To the right
+		else return p.y()-height; // Directly below
+	}
+	else
+	{
+		// Within the same height
+		if (p.x() < 0) return -p.x(); // To the left
+		else if (p.x() > width) return  p.x()-width; // To the right
+		else return 0; // Inside
+	}
+}
 
-		void setPosition(const QPoint& pos);
+LayoutRegion::PositionConstraints LayoutRegion::satisfiedPositionConstraints(const QPoint& point) const
+{
+	// Translate the region so that its upper left corner is at 0,0
+	QPointF p = point - region_.topLeft();
 
-	protected:
-		void setVisualization(Item* visualization);
+	PositionConstraints constraints = NoConstraints;
 
-	private:
-		QPoint position_;
-		Item* owner_;
-		Item* visualization_;
-};
+	if ( p.y() < 0) constraints |= Below;
+	if ( p.y() > region_.height() ) constraints |= Above;
 
-inline void Cursor::setPosition(const QPoint& pos) { position_ = pos; }
-inline const QPoint& Cursor::position() { return position_; }
-inline Item* Cursor::visualization() { return visualization_; }
+	if ( p.x() < 0) constraints |= RightOf;
+	if ( p.x() > region_.width() ) constraints |= LeftOf;
+
+	if (constraints == NoConstraints) constraints |= Overlap;
+
+	return constraints;
+}
 
 } /* namespace Visualization */
-#endif /* VisualizationBase_CURSOR_H_ */

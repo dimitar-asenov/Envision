@@ -37,6 +37,7 @@
 #include "../visualizationbase_api.h"
 
 #include "LayoutStyle.h"
+#include "LayoutRegion.h"
 #include "../items/Item.h"
 #include "../shapes/Shape.h"
 
@@ -52,6 +53,12 @@ class VISUALIZATIONBASE_API Layout: public Item
 		void setInnerSize(int width, int height);
 
 		virtual void determineChildren();
+
+		virtual void createDefaultCursor();
+
+		virtual QList<LayoutRegion> regions();
+
+		virtual bool moveCursor(CursorMoveDirection dir, const QPoint& reference = QPoint());
 
 	protected:
 		int xOffset() const;

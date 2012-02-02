@@ -209,11 +209,11 @@ bool PanelBorderLayout::focusChild(FocusTarget location)
 
 	Item* toFocus = nullptr;
 	Item* current = nullptr;
-	if (content_ && content_->childHasFocus()) current = content_;
-	else if (top_ && top_->childHasFocus()) current = top_;
-	else if (left_ && left_->childHasFocus()) current = left_;
-	else if (right_ && right_->childHasFocus()) current = right_;
-	else if (bottom_ && bottom_->childHasFocus()) current = bottom_;
+	if (content_ && content_->itemOrChildHasFocus()) current = content_;
+	else if (top_ && top_->itemOrChildHasFocus()) current = top_;
+	else if (left_ && left_->itemOrChildHasFocus()) current = left_;
+	else if (right_ && right_->itemOrChildHasFocus()) current = right_;
+	else if (bottom_ && bottom_->itemOrChildHasFocus()) current = bottom_;
 
 	switch (location)
 	{

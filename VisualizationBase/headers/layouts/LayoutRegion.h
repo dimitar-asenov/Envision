@@ -25,46 +25,68 @@
  **********************************************************************************************************************/
 
 /*
- * Cursor.h
+ * LayoutRegion.h
  *
- *  Created on: Jan 26, 2012
+ *  Created on: Feb 2, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef VisualizationBase_CURSOR_H_
-#define VisualizationBase_CURSOR_H_
+#ifndef VisualizationBase_LAYOUTREGION_H_
+#define VisualizationBase_LAYOUTREGION_H_
 
 #include "../visualizationbase_api.h"
 
 namespace Visualization {
 
-class CursorData;
 class Item;
+class LayoutCursor;
 
-class VISUALIZATIONBASE_API Cursor {
+class VISUALIZATIONBASE_API LayoutRegion {
 	public:
-		Cursor(Item* owner, Item* visualization = nullptr);
-		virtual ~Cursor();
+		LayoutRegion(const QRect& region = QRect());
+		virtual ~LayoutRegion();
 
-		virtual Item* owner();
+		void setRegion(const QRect& region);
+		void setChild(Item* child);
+		void setCursor(LayoutCursor* cursor);
 
-		const QPoint& position();
-		Item* visualization();
+		QRect& region();
+		Item* child() const;
+		LayoutCursor* cursor() const;
 
-		void setPosition(const QPoint& pos);
+		qreal distanceTo(const QPointF& point);
 
-	protected:
-		void setVisualization(Item* visualization);
+		enum PositionConstraint {
+			NoConstraints = 0x0,
+			Below = 0x1,
+			Above = 0x2,
+			LeftOf = 0x4,
+			RightOf = 0x8,
+			Overlap = 0x16
+		};
+		Q_DECLARE_FLAGS(PositionConstraints, PositionConstraint)
+
+		/**
+		 * \brief Returns all position constraints with respect to the point \a point satisfied by this region.
+		 *
+		 * The returned constraints are from the region's point of view, e.g. a constraint \a LeftOf means that the region
+		 * is left of the specified point.
+		 */
+		PositionConstraints satisfiedPositionConstraints(const QPoint& point) const;
 
 	private:
-		QPoint position_;
-		Item* owner_;
-		Item* visualization_;
+		QRect region_;
+		Item* child_;
+		LayoutCursor* cursor_;
 };
+Q_DECLARE_OPERATORS_FOR_FLAGS(LayoutRegion::PositionConstraints)
 
-inline void Cursor::setPosition(const QPoint& pos) { position_ = pos; }
-inline const QPoint& Cursor::position() { return position_; }
-inline Item* Cursor::visualization() { return visualization_; }
+inline void LayoutRegion::setRegion(const QRect& region) { region_ = region; }
+inline void LayoutRegion::setChild(Item* child) { child_ = child; }
+inline void LayoutRegion::setCursor(LayoutCursor* cursor) { cursor_ = cursor; }
+inline QRect& LayoutRegion::region() { return region_; }
+inline Item* LayoutRegion::child() const { return child_; }
+inline LayoutCursor* LayoutRegion::cursor() const { return cursor_; }
 
 } /* namespace Visualization */
-#endif /* VisualizationBase_CURSOR_H_ */
+#endif /* VisualizationBase_LAYOUTREGION_H_ */

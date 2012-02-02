@@ -32,7 +32,10 @@
  **********************************************************************************************************************/
 
 #include "layouts/Layout.h"
+#include "VisualizationException.h"
 #include "ModelRenderer.h"
+
+#include "cursor/LayoutCursor.h"
 
 namespace Visualization {
 
@@ -42,8 +45,7 @@ Layout::Layout(Item* parent, const StyleType* style) :
 	Item(parent, style)
 {
 	setFlag(QGraphicsItem::ItemIsSelectable, false);
-	//setFlag(QGraphicsItem::ItemIsFocusable, false);
-	setAcceptedMouseButtons(0);
+	setAcceptedMouseButtons(Qt::LeftButton);
 }
 
 void Layout::setInnerSize(int width_, int height_)
@@ -106,6 +108,128 @@ void Layout::synchronizeItem(Item*& layoutItem, Item*& externalItem, Model::Node
 		externalItem->setParentItem(this);
 		layoutItem = externalItem;
 		setUpdateNeeded();
+	}
+}
+
+void Layout::createDefaultCursor()
+{
+	LayoutCursor* cur = new LayoutCursor(this);
+	cur->setVisualizationSize(QSize(5,5));
+	cur->setVisualizationPosition(QPoint());
+	scene()->setMainCursor(cur);
+}
+
+QList<LayoutRegion> Layout::regions()
+{
+	QList<LayoutRegion> regs;
+
+	for(auto item : childItems())
+	{
+		Item* child = static_cast<Item*> (item);
+		QRect rect = child->boundingRect().toRect();
+		rect.translate(child->pos().toPoint());
+		regs.append(LayoutRegion(rect));
+		regs.last().setChild(child);
+	}
+
+	return regs;
+}
+
+bool Layout::moveCursor(CursorMoveDirection dir, const QPoint& reference)
+{
+	QList<LayoutRegion> regs = regions();
+
+	if (regs.isEmpty()) return false;
+
+	QPoint source = reference;
+
+	// Handle cursor movement in a specific direction
+	if (dir == MoveUp || dir == MoveDown || dir == MoveLeft || dir == MoveRight)
+	{
+		int index = correspondingSceneCursor<LayoutCursor>()->index();
+		int x = correspondingSceneCursor<LayoutCursor>()->x();
+		int y = correspondingSceneCursor<LayoutCursor>()->y();
+
+		// Find which region corresponds to the current cursor and set the source point accordingly
+		for (LayoutRegion& r : regs)
+		{
+			if (r.cursor() && r.cursor()->x() == x && r.cursor()->y() == y && r.cursor()->index() == index)
+			{
+				QPoint center = r.region().center();
+				switch(dir)
+				{
+					case MoveUp: source = QPoint(center.x(), r.region().y()); break;
+					case MoveDown: source = QPoint(center.x(), r.region().y() + r.region().height()); break;
+					case MoveLeft: source = QPoint(r.region().x(), center.y()); break;
+					case MoveRight: source = QPoint(r.region().x() + r.region().width(), center.y()); break;
+					default: /* Will never be the case because of the top-level if statement */ break;
+				}
+				break;
+			}
+
+		}
+	}
+
+	// Find the closest region that matches the constraints
+	LayoutRegion::PositionConstraint constraints = LayoutRegion::NoConstraints;
+	switch(dir)
+	{
+		case MoveUp: constraints = LayoutRegion::Above; break;
+		case MoveDown: constraints = LayoutRegion::Below; break;
+		case MoveLeft: constraints = LayoutRegion::LeftOf; break;
+		case MoveRight: constraints = LayoutRegion::RightOf; break;
+		case MoveOnPosition: constraints = LayoutRegion::NoConstraints; break;
+		case MoveUpOf: constraints = LayoutRegion::Above; break;
+		case MoveDownOf: constraints = LayoutRegion::Below; break;
+		case MoveLeftOf: constraints = LayoutRegion::LeftOf; break;
+		case MoveRightOf: constraints = LayoutRegion::RightOf; break;
+	}
+
+	LayoutRegion* best = nullptr;
+	int best_distance;
+	for (LayoutRegion& r : regs)
+	{
+		if (!best
+			|| (	((r.satisfiedPositionConstraints(source) & constraints) == constraints)
+					&& r.distanceTo(source) < best_distance)
+			)
+		{
+			best_distance = r.distanceTo(source);
+			best = &r;
+		}
+	}
+
+	if (best == nullptr) return false;
+
+	// A region was found, focus it
+	if (best->cursor())
+	{
+		// This is a cursor region
+		scene()->setMainCursor(best->cursor());
+		setFocus();
+		return true;
+	}
+	else if (best->child())
+	{
+		// This is a child item region
+		CursorMoveDirection childDirection;
+		switch(dir)
+		{
+			case MoveUp: childDirection = MoveUpOf; break;
+			case MoveDown: childDirection = MoveDownOf; break;
+			case MoveLeft: childDirection = MoveLeftOf; break;
+			case MoveRight: childDirection = MoveRightOf; break;
+			case MoveOnPosition: childDirection = MoveOnPosition; break;
+			case MoveUpOf: childDirection = MoveUpOf; break;
+			case MoveDownOf: childDirection = MoveDownOf; break;
+			case MoveLeftOf: childDirection = MoveLeftOf; break;
+			case MoveRightOf: childDirection = MoveRightOf; break;
+		}
+		return best->child()->moveCursor(childDirection, mapToItem(best->child(), source).toPoint());
+	}
+	else
+	{
+		throw VisualizationException("Encountered a layout region with no cursor or child item.");
 	}
 }
 

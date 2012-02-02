@@ -280,6 +280,9 @@ void GenericHandler::mouseDoubleClickEvent(Visualization::Item *, QGraphicsScene
 
 void GenericHandler::focusInEvent(Visualization::Item *target, QFocusEvent *event)
 {
+	if (event->reason() == Qt::FocusReason::MouseFocusReason)
+		target->createDefaultCursor();
+
 	// Here we choose which child to focus.
 	if (focusDirection_ == GenericHandler::NOT_SPECIFIED) target->focusChild(Visualization::Item::FOCUS_DEFAULT);
 	else if (focusDirection_ == GenericHandler::FROM_LEFT ) target->focusChild(Visualization::Item::FOCUS_LEFTMOST);

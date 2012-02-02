@@ -25,46 +25,34 @@
  **********************************************************************************************************************/
 
 /*
- * Cursor.h
+ * HLayoutProvider.h
  *
- *  Created on: Jan 26, 2012
+ *  Created on: Jan 30, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef VisualizationBase_CURSOR_H_
-#define VisualizationBase_CURSOR_H_
+#ifndef InteractionBase_HLAYOUTPROVIDER_H_
+#define InteractionBase_HLAYOUTPROVIDER_H_
 
-#include "../visualizationbase_api.h"
+#include "../interactionbase_api.h"
 
-namespace Visualization {
+#include "GenericHandler.h"
 
-class CursorData;
-class Item;
+namespace Interaction {
 
-class VISUALIZATIONBASE_API Cursor {
+class INTERACTIONBASE_API HLayoutProvider : public GenericHandler {
 	public:
-		Cursor(Item* owner, Item* visualization = nullptr);
-		virtual ~Cursor();
+		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event);
 
-		virtual Item* owner();
-
-		const QPoint& position();
-		Item* visualization();
-
-		void setPosition(const QPoint& pos);
+		virtual void mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event);
+		virtual void focusInEvent(Visualization::Item *target, QFocusEvent *event);
+		static HLayoutProvider* instance();
 
 	protected:
-		void setVisualization(Item* visualization);
+		HLayoutProvider();
 
-	private:
-		QPoint position_;
-		Item* owner_;
-		Item* visualization_;
+		void moveCursor(Visualization::Item *target, QKeyEvent *event);
 };
 
-inline void Cursor::setPosition(const QPoint& pos) { position_ = pos; }
-inline const QPoint& Cursor::position() { return position_; }
-inline Item* Cursor::visualization() { return visualization_; }
-
-} /* namespace Visualization */
-#endif /* VisualizationBase_CURSOR_H_ */
+} /* namespace Interaction */
+#endif /* InteractionBase_HLAYOUTPROVIDER_H_ */

@@ -265,7 +265,7 @@ QPoint GridLayout::focusedElementIndex() const
 {
 	for(int x=0; x<sizeX_; ++x)
 		for(int y=0; y<sizeY_; ++y)
-			if ( items_[x][y]->childHasFocus()) return QPoint(x,y);
+			if ( items_[x][y]->itemOrChildHasFocus()) return QPoint(x,y);
 
 	return QPoint(-1,-1);
 }

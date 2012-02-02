@@ -25,46 +25,39 @@
  **********************************************************************************************************************/
 
 /*
- * Cursor.h
+ * LayoutCursor.cpp
  *
- *  Created on: Jan 26, 2012
+ *  Created on: Jan 30, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef VisualizationBase_CURSOR_H_
-#define VisualizationBase_CURSOR_H_
-
-#include "../visualizationbase_api.h"
+#include "cursor/LayoutCursor.h"
+#include "cursor/CursorShapeItem.h"
+#include "layouts/Layout.h"
 
 namespace Visualization {
 
-class CursorData;
-class Item;
+LayoutCursor::LayoutCursor(Layout* owner)
+	: Cursor(owner, new CursorShapeItem()), x_(0), y_(0), index_(0)
+{
+}
 
-class VISUALIZATIONBASE_API Cursor {
-	public:
-		Cursor(Item* owner, Item* visualization = nullptr);
-		virtual ~Cursor();
+Layout* LayoutCursor::owner()
+{
+	return static_cast<Layout*> (Cursor::owner());
+}
 
-		virtual Item* owner();
+void LayoutCursor::setVisualizationSize(const QSize& size)
+{
+	CursorShapeItem* ci = static_cast<CursorShapeItem*> (visualization());
+	ci->setCursorSize(size);
+}
 
-		const QPoint& position();
-		Item* visualization();
-
-		void setPosition(const QPoint& pos);
-
-	protected:
-		void setVisualization(Item* visualization);
-
-	private:
-		QPoint position_;
-		Item* owner_;
-		Item* visualization_;
-};
-
-inline void Cursor::setPosition(const QPoint& pos) { position_ = pos; }
-inline const QPoint& Cursor::position() { return position_; }
-inline Item* Cursor::visualization() { return visualization_; }
+void LayoutCursor::setVisualizationPosition(const QPoint& pos)
+{
+	setPosition(owner()->scenePos().toPoint() + pos);
+	CursorShapeItem* ci = static_cast<CursorShapeItem*> (visualization());
+	ci->setPos(position());
+}
 
 } /* namespace Visualization */
-#endif /* VisualizationBase_CURSOR_H_ */

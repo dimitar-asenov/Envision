@@ -151,7 +151,13 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		virtual int revision() const;
 		virtual void setRevision(int newRevision);
 
-		bool childHasFocus() const;
+		bool itemOrChildHasFocus() const;
+
+		/**
+		 * \brief Returns the child item which is focused or which contains a child that is focused or nullptr if no child
+		 *        has focus.
+		 */
+		virtual Item* focusedChild() const;
 
 		virtual QRectF boundingRect() const;
 		int width() const;
@@ -178,6 +184,46 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		virtual bool focusChild(FocusTarget location);
 		bool focusChild(Item* child);
 
+		/**
+		 * \brief Reimplement this method in derived classes to create a new cursor and set it as the main scene cursor.
+		 *
+		 * The default implementation creates a cursor with no visualization whose position is the item's scene position.
+		 *
+		 * This call is typically followed by a call to \a moveCursor() to set a specific position for the cursor within
+		 * the item.
+		 */
+		virtual void createDefaultCursor();
+
+		enum CursorMoveDirection {
+			MoveUp, /**< Move the cursor up from its current position within the item. */
+			MoveDown, /**< Move the cursor down from its current position within the item. */
+			MoveLeft, /**< Move the cursor left from its current position within the item. */
+			MoveRight, /**< Move the cursor right from its current position within the item. */
+			MoveOnPosition, /**< Move the cursor as close as possible to the specified reference point within the item. */
+			MoveUpOf, /**< Move the cursor as close as possible above the specified reference point. */
+			MoveDownOf, /**< Move the cursor as close as possible below the specified reference point. */
+			MoveLeftOf, /**< Move the cursor as close as possible to left of the specified reference point. */
+			MoveRightOf /**< Move the cursor as close as possible to right of the specified reference point. */
+		};
+
+		/**
+		 * \brief Moves the position of the current main scene cursor within the item and returns true on success.
+		 *
+		 * The \a dir parameter determines how the cursor will be moved. Some modes of movement require a reference point
+		 * provided in \a reference in item local coordinates.
+		 *
+		 * The method returns false if it is not possible to move the cursor within the borders of the current item given
+		 * the provided movement parameters.
+		 *
+		 * The default implementation returns false when \a dir is any of MoveUp, MoveDown, MoveLeft, MoveRight or when
+		 * the combination of \a dir and \a reference is not satisfiable. The item is assumed to have no children.
+		 *
+		 * If the main scene cursor is not currently owned by this item, the default implementation will call
+		 * createDefaultCursor() to create a suitable cursor. Classes which reimplement this method should also call
+		 * createDefaultCursor() in case the current main cursor does not correspond to this item.
+		 */
+		virtual bool moveCursor(CursorMoveDirection dir, const QPoint& reference = QPoint());
+
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
 		virtual InteractionHandler* handler() const;
@@ -189,7 +235,55 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 
 		template <class T>
 		T* correspondingSceneCursor();
+
+		/**
+		 * \brief Returns the distance between the item and \a point.
+		 *
+		 * The point \a point must be in local item coordinates.
+		 */
+		int distanceTo(const QPoint& point) const;
+
+		enum PositionConstraint {
+				NoConstraints = 0x0,
+				Below = 0x1,
+				Above = 0x2,
+				LeftOf = 0x4,
+				RightOf = 0x8,
+				Overlap = 0x16
+		};
+		Q_DECLARE_FLAGS(PositionConstraints, PositionConstraint)
+
+		/**
+		 * \brief Returns the child item (if any) that has the least distance to the point \a point.
+		 *
+		 * The point \a point must be in the current item's local coordinates.
+		 *
+		 * The \a childConstraint argument can be used to limit which children are considered. Only children that match
+		 * all specified constraints may be returned by this method. The \a childConstraint argument specifies the
+		 * constraints from a child item's point of view, e.g. a constraint \a LeftOf will be satisfied if a child is left
+		 * of the specified point.
+		 *
+		 * \sa satisfiedPositionConstraints
+		 */
+		virtual Item* childClosestTo(const QPoint& point, PositionConstraints childConstraint = NoConstraints) const;
+
+		/**
+		 * \brief Returns all position constraints with respect to the point \a point satisfied by this item.
+		 *
+		 * The point \a point must be in the item's local coordinates.
+		 *
+		 * The returned constraints are from the item's point of view, e.g. a constraint \a LeftOf means that the item is
+		 * left of the specified point.
+		 *
+		 * \sa childClosestTo
+		 */
+		PositionConstraints satisfiedPositionConstraints(const QPoint& point) const;
+
+		inline qreal xEnd() const;
+		inline qreal yEnd() const;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Item::PositionConstraints)
 
 inline int Item::width() const { return boundingRect_.width(); }
 inline int Item::height() const { return boundingRect_.height(); }
@@ -201,6 +295,8 @@ inline void Item::setSize(const QSizeF& size) { boundingRect_.setSize(size); };
 inline const ItemStyle* Item::style() const { return style_; }
 inline bool Item::hasShape() const { return shape_; }
 inline Shape* Item::getShape() const {	return shape_; }
+inline qreal Item::xEnd() const { return x() + width(); }
+inline qreal Item::yEnd() const { return y() + height(); }
 
 template <class T> void Item::synchronizeItem(T*& item, bool present, const typename T::StyleType* style)
 {

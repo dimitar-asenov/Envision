@@ -209,7 +209,8 @@ void HText::focusInEvent(Visualization::Item *target, QFocusEvent *event)
 			tr->correspondingSceneCursor<Visualization::TextCursor>()->setCaretPosition(size);
 	}
 
-	GenericHandler::focusInEvent(target, event);
+	//GenericHandler::focusInEvent(target, event);
+	InteractionHandler::focusInEvent(target, event);
 }
 
 // TextRenderer interface routines.
