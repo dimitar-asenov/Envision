@@ -186,10 +186,10 @@ inline bool VExtendable::expandedSwtiched() const
 	return (layout && attributes) != expanded_;
 }
 
-bool VExtendable::focusChild(FocusTarget location)
+bool VExtendable::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 {
-	if (expanded_) return layout->focusChild(location);
-	else return header->focusChild(location);
+	if (expanded_) return layout->moveCursor(dir, reference);
+	else return header->moveCursor(dir, reference);
 }
 
 }

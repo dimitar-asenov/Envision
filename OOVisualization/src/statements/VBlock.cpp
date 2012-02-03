@@ -68,9 +68,9 @@ void VBlock::updateGeometry(int availableWidth, int availableHeight)
 	Item::updateGeometry(items_, availableWidth, availableHeight );
 }
 
-bool VBlock::focusChild(FocusTarget location)
+bool VBlock::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 {
-	return items_->focusChild(location);
+	return items_->moveCursor(dir, reference);
 }
 
 }

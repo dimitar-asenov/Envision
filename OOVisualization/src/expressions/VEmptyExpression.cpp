@@ -63,9 +63,9 @@ void VEmptyExpression::updateGeometry(int availableWidth, int availableHeight)
 	Item::updateGeometry(vis_, availableWidth, availableHeight);
 }
 
-bool VEmptyExpression::focusChild(FocusTarget location)
+bool VEmptyExpression::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 {
-	return vis_->focusChild(location);
+	return vis_->moveCursor(dir, reference);
 }
 
 } /* namespace OOVisualization */

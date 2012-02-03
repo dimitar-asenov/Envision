@@ -60,7 +60,6 @@ class VISUALIZATIONBASE_API GridLayout: public Layout
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 		QPoint focusedElementIndex() const;
-		virtual bool focusChild(FocusTarget location);
 
 		void setGridSize(int sizeX, int sizeY, bool deleteExtraItems);
 		QSize gridSize() const;

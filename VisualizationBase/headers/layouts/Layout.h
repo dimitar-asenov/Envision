@@ -54,8 +54,6 @@ class VISUALIZATIONBASE_API Layout: public Item
 
 		virtual void determineChildren();
 
-		virtual void createDefaultCursor();
-
 		virtual QList<LayoutRegion> regions();
 
 		virtual bool moveCursor(CursorMoveDirection dir, const QPoint& reference = QPoint());

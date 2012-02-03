@@ -77,9 +77,9 @@ void Static::updateGeometry(int availableWidth, int availableHeight)
 	}
 }
 
-bool Static::focusChild(FocusTarget location)
+bool Static::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 {
-	if (item_) return item_->focusChild(location);
+	if (item_) return item_->moveCursor(dir, reference);
 	else return false;
 }
 

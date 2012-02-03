@@ -270,44 +270,44 @@ QPoint GridLayout::focusedElementIndex() const
 	return QPoint(-1,-1);
 }
 
-bool GridLayout::focusChild(FocusTarget location)
-{
-	if (sizeX_ == 0 || sizeY_ == 0) return false;
-
-	Item* toFocus = nullptr;
-	switch (location)
-	{
-		case FOCUS_DEFAULT:
-			toFocus = findFirstVertical(true);
-			break;
-		case FOCUS_TOPMOST:
-			toFocus = findFirstVertical(true);
-			break;
-		case FOCUS_BOTTOMMOST:
-			toFocus = findFirstVertical(false);
-			break;
-		case FOCUS_LEFTMOST:
-			toFocus = findFirstHorizontal(true);
-			break;
-		case FOCUS_RIGHTMOST:
-			toFocus = findFirstHorizontal(false);
-			break;
-		case FOCUS_UP:
-			toFocus = findNext(0,-1);
-			break;
-		case FOCUS_DOWN:
-			toFocus = findNext(0, 1);
-			break;
-		case FOCUS_LEFT:
-			toFocus = findNext(-1,0);
-			break;
-		case FOCUS_RIGHT:
-			toFocus = findNext(1, 0);
-			break;
-	}
-
-	return Item::focusChild(toFocus);
-}
+//bool GridLayout::focusChild(FocusTarget location)
+//{
+//	if (sizeX_ == 0 || sizeY_ == 0) return false;
+//
+//	Item* toFocus = nullptr;
+//	switch (location)
+//	{
+//		case FOCUS_DEFAULT:
+//			toFocus = findFirstVertical(true);
+//			break;
+//		case FOCUS_TOPMOST:
+//			toFocus = findFirstVertical(true);
+//			break;
+//		case FOCUS_BOTTOMMOST:
+//			toFocus = findFirstVertical(false);
+//			break;
+//		case FOCUS_LEFTMOST:
+//			toFocus = findFirstHorizontal(true);
+//			break;
+//		case FOCUS_RIGHTMOST:
+//			toFocus = findFirstHorizontal(false);
+//			break;
+//		case FOCUS_UP:
+//			toFocus = findNext(0,-1);
+//			break;
+//		case FOCUS_DOWN:
+//			toFocus = findNext(0, 1);
+//			break;
+//		case FOCUS_LEFT:
+//			toFocus = findNext(-1,0);
+//			break;
+//		case FOCUS_RIGHT:
+//			toFocus = findNext(1, 0);
+//			break;
+//	}
+//
+//	return Item::focusChild(toFocus);
+//}
 
 Item* GridLayout::findFirstVertical(bool startFromTop)
 {

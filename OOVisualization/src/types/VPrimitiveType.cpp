@@ -97,9 +97,9 @@ void VPrimitiveType::updateGeometry(int availableWidth, int availableHeight)
 	Item::updateGeometry(vis_, availableWidth, availableHeight);
 }
 
-bool VPrimitiveType::focusChild(FocusTarget location)
+bool VPrimitiveType::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 {
-	return vis_->focusChild(location);
+	return vis_->moveCursor(dir, reference);
 }
 
 }

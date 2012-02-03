@@ -272,90 +272,6 @@ int SequentialLayout::focusedElementIndex() const
 	return -1;
 }
 
-bool SequentialLayout::focusChild(FocusTarget location)
-{
-	if (items.isEmpty()) return false;
-
-	bool horizontal = style()->direction() == SequentialLayoutStyle::LeftToRight || style()->direction() == SequentialLayoutStyle::RightToLeft;
-	bool forward = style()->direction() == SequentialLayoutStyle::LeftToRight || style()->direction() == SequentialLayoutStyle::TopToBottom;
-	int current = focusedElementIndex();
-	int max = items.size() - 1;
-
-	Item* toFocus = nullptr;
-
-	switch (location)
-	{
-		case FOCUS_DEFAULT:
-			{
-				if (forward) toFocus = items.first();
-				else toFocus = items.last();
-			}
-			break;
-		case FOCUS_TOPMOST:
-			{
-				if (forward) toFocus = items.first();
-				else toFocus = items.last();
-			}
-			break;
-		case FOCUS_BOTTOMMOST:
-			{
-				if ( forward == horizontal) toFocus = items.first();
-				else toFocus = items.last();
-			}
-			break;
-		case FOCUS_LEFTMOST:
-			{
-				if ( forward ) toFocus = items.first();
-				else toFocus = items.last();
-			}
-			break;
-		case FOCUS_RIGHTMOST:
-			{
-				if ( (forward || horizontal) && !(forward && horizontal) ) toFocus = items.first();
-				else toFocus = items.last();
-			}
-			break;
-		case FOCUS_UP:
-			{
-				if (current >= 0 && !horizontal)
-				{
-					if (forward && current > 0) toFocus = items[current-1];
-					else if (!forward && current < max) toFocus = items[current+1];
-				}
-			}
-			break;
-		case FOCUS_DOWN:
-			{
-				if (current >= 0 && !horizontal)
-				{
-					if (forward && current < max) toFocus = items[current+1];
-					else if (!forward && current > 0) toFocus = items[current-1];
-				}
-			}
-			break;
-		case FOCUS_LEFT:
-			{
-				if (current >= 0 && horizontal)
-				{
-					if (forward && current > 0) toFocus = items[current-1];
-					else if (!forward && current < max) toFocus = items[current+1];
-				}
-			}
-			break;
-		case FOCUS_RIGHT:
-			{
-				if (current >= 0 && horizontal)
-				{
-					if (forward && current < max) toFocus = items[current+1];
-					else if (!forward && current > 0) toFocus = items[current-1];
-				}
-			}
-			break;
-	}
-
-	return Item::focusChild(toFocus);
-}
-
 QList<LayoutRegion> SequentialLayout::regions()
 {
 	bool horizontal = style()->direction() == SequentialLayoutStyle::LeftToRight
@@ -373,25 +289,25 @@ QList<LayoutRegion> SequentialLayout::regions()
 		{
 			cursorRegion.setRegion(QRect(last, 0, items[i]->x() - last, height()));
 			itemRegion.setRegion(QRect(items[i]->x(), 0, items[i]->width(), height()));
-			last = items[i]->xEnd();
+			last = items[i]->xEnd() + 1;
 		}
 		else if (horizontal && !forward)
 		{
-			cursorRegion.setRegion(QRect(items[i]->xEnd(), 0, last, height()));
+			cursorRegion.setRegion(QRect(items[i]->xEnd()+1, 0, last, height()));
 			itemRegion.setRegion(QRect(items[i]->x(), 0, items[i]->width(), height()));
-			last = items[i]->x();
+			last = items[i]->x() - 1;
 		}
 		else if (!horizontal && forward)
 		{
 			cursorRegion.setRegion(QRect(0, last,  width(), items[i]->y() - last));
 			itemRegion.setRegion(QRect(0, items[i]->y(), width(), items[i]->height()));
-			last = items[i]->yEnd();
+			last = items[i]->yEnd() + 1;
 		}
 		else
 		{
-			cursorRegion.setRegion(QRect(0, items[i]->yEnd(),  width(), last));
+			cursorRegion.setRegion(QRect(0, items[i]->yEnd()+1,  width(), last));
 			itemRegion.setRegion(QRect(0, items[i]->y(), width(), items[i]->height()));
-			last = items[i]->y();
+			last = items[i]->y() - 1;
 		}
 
 		itemRegion.setChild(items[i]);
@@ -399,6 +315,10 @@ QList<LayoutRegion> SequentialLayout::regions()
 		cursorRegion.cursor()->setIndex(i);
 		cursorRegion.cursor()->setVisualizationPosition(cursorRegion.region().topLeft());
 		cursorRegion.cursor()->setVisualizationSize(horizontal ? QSize(2, height()) : QSize(width(), 2));
+
+		// Make sure there is at least some space for the cursor Region.
+		if (horizontal && cursorRegion.region().width() == 0) cursorRegion.region().adjust(-1,0,1,0);
+		if (!horizontal && cursorRegion.region().height() == 0) cursorRegion.region().adjust(0,-1,0,1);
 
 		regs.append(cursorRegion);
 		regs.append(itemRegion);
@@ -410,6 +330,10 @@ QList<LayoutRegion> SequentialLayout::regions()
 	else if (horizontal && !forward) trailing.setRect(0, 0, last, height());
 	else if (!horizontal && forward) trailing.setRect(0, last,  width(), height() - last);
 	else trailing.setRect(0, 0,  width(), last);
+
+	// Make sure there is at least some space for the cursor Region.
+	if (horizontal && trailing.width() == 0) trailing.adjust(-1,0,1,0);
+	if (!horizontal && trailing.height() == 0) trailing.adjust(0,-1,0,1);
 
 	regs.append(LayoutRegion(trailing));
 	regs.last().setCursor(new LayoutCursor(this));

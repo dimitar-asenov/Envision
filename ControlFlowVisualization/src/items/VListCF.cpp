@@ -264,7 +264,7 @@ void VListCF::buildCompositeItems( QList< Item* >& singleItems )
 	}
 }
 
-bool VListCF::focusChild(FocusTarget /*location*/)
+bool VListCF::moveCursor(CursorMoveDirection /*dir*/, const QPoint& /*reference*/)
 {
 	//TODO implement this
 	return false;

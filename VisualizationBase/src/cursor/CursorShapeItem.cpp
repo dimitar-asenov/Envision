@@ -40,7 +40,7 @@ namespace Visualization {
 ITEM_COMMON_DEFINITIONS(CursorShapeItem, "item")
 
 CursorShapeItem::CursorShapeItem(const StyleType* style) :
-	Item(nullptr, style)
+	Item(nullptr, style), useCenter_(false)
 {
 	setFlags(0);
 	setAcceptedMouseButtons(0);
@@ -66,9 +66,14 @@ void CursorShapeItem::updateGeometry(int, int)
 	if (hasShape())
 	{
 		getShape()->setInnerSize(size_.width(), size_.height());
-		QPointF pos = QPointF( getShape()->contentLeft(), getShape()->contentTop() );
 
-		setPos(center_ - pos);
+
+		if (useCenter_)
+		{
+			QPointF pos = QPointF( getShape()->contentLeft(), getShape()->contentTop() );
+			setPos(center_ - pos);
+		}
+		else setPos(topLeft_);
 	}
 }
 

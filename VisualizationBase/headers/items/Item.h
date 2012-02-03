@@ -180,20 +180,6 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		void useShape();
 		void removeShape();
 
-		enum FocusTarget {FOCUS_DEFAULT, FOCUS_TOPMOST, FOCUS_BOTTOMMOST, FOCUS_LEFTMOST, FOCUS_RIGHTMOST, FOCUS_UP, FOCUS_DOWN, FOCUS_LEFT, FOCUS_RIGHT};
-		virtual bool focusChild(FocusTarget location);
-		bool focusChild(Item* child);
-
-		/**
-		 * \brief Reimplement this method in derived classes to create a new cursor and set it as the main scene cursor.
-		 *
-		 * The default implementation creates a cursor with no visualization whose position is the item's scene position.
-		 *
-		 * This call is typically followed by a call to \a moveCursor() to set a specific position for the cursor within
-		 * the item.
-		 */
-		virtual void createDefaultCursor();
-
 		enum CursorMoveDirection {
 			MoveUp, /**< Move the cursor up from its current position within the item. */
 			MoveDown, /**< Move the cursor down from its current position within the item. */
@@ -216,11 +202,11 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		 * the provided movement parameters.
 		 *
 		 * The default implementation returns false when \a dir is any of MoveUp, MoveDown, MoveLeft, MoveRight or when
-		 * the combination of \a dir and \a reference is not satisfiable. The item is assumed to have no children.
+		 * the combination of \a dir and \a reference is not satisfiable. The item is assumed to have no children. If the
+		 * item is focused a default cursor with no visualization will be created whose position is the item's scene
+		 * position.
 		 *
-		 * If the main scene cursor is not currently owned by this item, the default implementation will call
-		 * createDefaultCursor() to create a suitable cursor. Classes which reimplement this method should also call
-		 * createDefaultCursor() in case the current main cursor does not correspond to this item.
+		 * This method is responsible for creating a corresponding Cursor item and setting it as the main scene cursor.
 		 */
 		virtual bool moveCursor(CursorMoveDirection dir, const QPoint& reference = QPoint());
 
@@ -295,8 +281,8 @@ inline void Item::setSize(const QSizeF& size) { boundingRect_.setSize(size); };
 inline const ItemStyle* Item::style() const { return style_; }
 inline bool Item::hasShape() const { return shape_; }
 inline Shape* Item::getShape() const {	return shape_; }
-inline qreal Item::xEnd() const { return x() + width(); }
-inline qreal Item::yEnd() const { return y() + height(); }
+inline qreal Item::xEnd() const { return x() + width() - 1; }
+inline qreal Item::yEnd() const { return y() + height() - 1; }
 
 template <class T> void Item::synchronizeItem(T*& item, bool present, const typename T::StyleType* style)
 {

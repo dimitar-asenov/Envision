@@ -75,14 +75,14 @@ bool VIfStatementCF::isEmpty() const
 	else return vis_->isEmpty();
 }
 
-bool VIfStatementCF::focusChild(FocusTarget location)
+bool VIfStatementCF::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 {
 	if (showAsControlFlow())
 	{
 		//TODO implement this
 		return false;
 	}
-	else return vis_->focusChild(location);
+	else return vis_->moveCursor(dir, reference);
 }
 
 void VIfStatementCF::determineChildren()

@@ -215,13 +215,13 @@ int PositionLayout::focusedElementIndex() const
 	return -1;
 }
 
-bool PositionLayout::focusChild(FocusTarget)
-{
-	if (items.isEmpty()) return false;
-
-	// TODO Implement this properly
-
-	return Item::focusChild(items[0]);
-}
+//bool PositionLayout::focusChild(FocusTarget)
+//{
+//	if (items.isEmpty()) return false;
+//
+//	// TODO Implement this properly
+//
+//	return Item::focusChild(items[0]);
+//}
 
 }

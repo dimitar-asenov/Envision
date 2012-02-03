@@ -49,7 +49,7 @@ class CONTROLFLOWVISUALIZATION_API VContinueStatementCF : public Visualization::
 		VContinueStatementCF(Item* parent, NodeType *node, const StyleType *style = itemStyles().get());
 		virtual ~VContinueStatementCF();
 
-		virtual bool focusChild(FocusTarget location);
+		virtual bool moveCursor(CursorMoveDirection dir, const QPoint& reference = QPoint());
 
 	protected:
 		virtual void determineChildren();

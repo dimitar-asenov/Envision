@@ -51,7 +51,7 @@ class OOVISUALIZATION_API VEmptyExpression : public Visualization::ItemWithNode<
 		VEmptyExpression(Item* parent, NodeType *expr, const StyleType *style = itemStyles().get());
 		virtual ~VEmptyExpression();
 
-		virtual bool focusChild(FocusTarget location);
+		virtual bool moveCursor(CursorMoveDirection dir, const QPoint& reference = QPoint());
 
 	protected:
 		virtual void determineChildren();

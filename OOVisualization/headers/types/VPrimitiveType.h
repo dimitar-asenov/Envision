@@ -56,7 +56,7 @@ class OOVISUALIZATION_API VPrimitiveType : public Visualization::ItemWithNode< V
 		VPrimitiveType(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VPrimitiveType();
 
-		virtual bool focusChild(FocusTarget location);
+		virtual bool moveCursor(CursorMoveDirection dir, const QPoint& reference = QPoint());
 
 	protected:
 		void determineChildren();

@@ -37,6 +37,10 @@
 
 #include "cursor/LayoutCursor.h"
 
+#include "Core/headers/global.h"
+
+#include <QtCore/QDebug>
+
 namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS( Layout, "layout" )
@@ -111,14 +115,6 @@ void Layout::synchronizeItem(Item*& layoutItem, Item*& externalItem, Model::Node
 	}
 }
 
-void Layout::createDefaultCursor()
-{
-	LayoutCursor* cur = new LayoutCursor(this);
-	cur->setVisualizationSize(QSize(5,5));
-	cur->setVisualizationPosition(QPoint());
-	scene()->setMainCursor(cur);
-}
-
 QList<LayoutRegion> Layout::regions()
 {
 	QList<LayoutRegion> regs;
@@ -143,6 +139,7 @@ bool Layout::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 
 	QPoint source = reference;
 
+	LayoutRegion* current = nullptr;
 	// Handle cursor movement in a specific direction
 	if (dir == MoveUp || dir == MoveDown || dir == MoveLeft || dir == MoveRight)
 	{
@@ -155,6 +152,7 @@ bool Layout::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 		{
 			if (r.cursor() && r.cursor()->x() == x && r.cursor()->y() == y && r.cursor()->index() == index)
 			{
+				current = &r;
 				QPoint center = r.region().center();
 				switch(dir)
 				{
@@ -189,15 +187,21 @@ bool Layout::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 	int best_distance;
 	for (LayoutRegion& r : regs)
 	{
-		if (!best
-			|| (	((r.satisfiedPositionConstraints(source) & constraints) == constraints)
-					&& r.distanceTo(source) < best_distance)
+		if (	(&r != current)
+				&& ((r.satisfiedPositionConstraints(source) & constraints) == constraints)
+				&& (!best
+						|| r.distanceTo(source) < best_distance
+						|| (r.cursor() && r.distanceTo(source) <= best_distance)) // Allows for overlapping cursors.
 			)
 		{
 			best_distance = r.distanceTo(source);
 			best = &r;
 		}
 	}
+
+	// Delete the cursors of all regions but the best
+	for (LayoutRegion& r : regs)
+		if (&r != best) delete r.cursor();
 
 	if (best == nullptr) return false;
 
@@ -212,6 +216,10 @@ bool Layout::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 	else if (best->child())
 	{
 		// This is a child item region
+
+		// Only accept this as a correct focus event if this child is not already focused.
+		if (best->child()->itemOrChildHasFocus()) return false;
+
 		CursorMoveDirection childDirection;
 		switch(dir)
 		{

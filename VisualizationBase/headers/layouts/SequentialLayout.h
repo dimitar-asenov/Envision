@@ -63,7 +63,6 @@ class VISUALIZATIONBASE_API SequentialLayout: public Layout
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 		int focusedElementIndex() const;
-		virtual bool focusChild(FocusTarget location);
 
 		virtual QList<LayoutRegion> regions();
 

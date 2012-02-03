@@ -74,9 +74,9 @@ void VReturnStatementCF::updateGeometry(int availableWidth, int availableHeight)
 	addConnector(entrance_, entrance_ + QPoint(0, style()->pinLength()), true);
 }
 
-bool VReturnStatementCF::focusChild(FocusTarget location)
+bool VReturnStatementCF::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 {
-	return vis_->focusChild(location);
+	return vis_->moveCursor(dir, reference);
 }
 
 }

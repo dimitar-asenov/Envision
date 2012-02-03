@@ -41,9 +41,6 @@
 #include "ModelBase/headers/nodes/Node.h"
 #include "ModelBase/headers/Model.h"
 
-#include <QtGui/QApplication>
-#include <QtCore/QEvent>
-
 namespace Visualization {
 
 ModelRenderer Scene::defaultRenderer_;

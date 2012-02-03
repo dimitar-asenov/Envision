@@ -39,9 +39,6 @@
 #include "shapes/Shape.h"
 #include "cursor/TextCursor.h"
 
-#include <QtGui/QPainter>
-#include <QtGui/QFontMetrics>
-
 namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(TextRenderer, "item")
@@ -158,6 +155,34 @@ void TextRenderer::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 			painter->drawText(QPointF(xOffset, yOffset), text_);
 		}
 	}
+}
+
+bool TextRenderer::moveCursor(CursorMoveDirection dir, const QPoint& reference)
+{
+	if (dir == MoveOnPosition || dir == MoveUpOf || dir == MoveDownOf || dir == MoveLeftOf || dir == MoveRightOf)
+	{
+		setFocus();
+		TextCursor* tc = new TextCursor(this);
+		tc->setSelectedByDrag(reference.x(), reference.x());
+		scene()->setMainCursor(tc);
+		return true;
+	}
+	else if (dir == MoveLeft)
+	{
+		int position = correspondingSceneCursor<Visualization::TextCursor>()->caretPosition();
+		if ( text_.isEmpty() || position <= 0) return false;
+		else correspondingSceneCursor<Visualization::TextCursor>()->setCaretPosition(position - 1);
+		return true;
+	}
+	else if (dir == MoveRight)
+	{
+		int position = correspondingSceneCursor<Visualization::TextCursor>()->caretPosition();
+		if ( text_.isEmpty() || position >= text_.size()) return false;
+		else correspondingSceneCursor<Visualization::TextCursor>()->setCaretPosition(position + 1);
+		return true;
+	}
+
+	return false;
 }
 
 }

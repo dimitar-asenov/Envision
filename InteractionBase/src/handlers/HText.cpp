@@ -39,9 +39,6 @@
 
 #include "ModelBase/headers/Model.h"
 
-#include <QtGui/QClipboard>
-#include <QtGui/QApplication>
-
 namespace Interaction {
 
 HText::HText() : doubleClick(false)
@@ -91,41 +88,29 @@ void HText::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	}
 	else if ( ! (event->modifiers() & Qt::ControlModifier))
 	{
-		switch (event->key())
+		if ( tr->isEditable())
 		{
-			case Qt::Key_Left:
-				moveCaret(target, event);
-				break;
-			case Qt::Key_Right:
-				moveCaret(target, event);
-				break;
-			default:
-				if ( tr->isEditable())
+			switch (event->key())
+			{
+				case Qt::Key_Backspace:
+					erase(target, false, false);
+					break;
+				case Qt::Key_Delete:
+					erase(target, true, false);
+					break;
+				case Qt::Key_Tab:
+					GenericHandler::keyPressEvent(target, event);
+					break;
+
+				default:
 				{
-					switch (event->key())
-					{
-						case Qt::Key_Backspace:
-							erase(target, false, false);
-							break;
-						case Qt::Key_Delete:
-							erase(target, true, false);
-							break;
-						case Qt::Key_Tab:
-							GenericHandler::keyPressEvent(target, event);
-							break;
-
-						default:
-						{
-							if (!event->text().isEmpty() && event->text().at(0).isPrint() ) insertText(target, event->text());
-							else GenericHandler::keyPressEvent(target, event);
-						}
-						break;
-					}
+					if (!event->text().isEmpty() && event->text().at(0).isPrint() ) insertText(target, event->text());
+					else GenericHandler::keyPressEvent(target, event);
 				}
-				else GenericHandler::keyPressEvent(target, event);
 				break;
+			}
 		}
-
+		else GenericHandler::keyPressEvent(target, event);
 	}
 	else GenericHandler::keyPressEvent(target, event);
 
@@ -133,14 +118,7 @@ void HText::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 
 void HText::mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
-	Visualization::TextRenderer* tr = static_cast<Visualization::TextRenderer*> (target);
-
 	doubleClick = false;
-	if ( event->modifiers() == 0 && event->button() == Qt::LeftButton )
-	{
-		tr->correspondingSceneCursor<Visualization::TextCursor>()->setSelectedByDrag(event->pos().x(), event->pos().x());
-	}
-
 	GenericHandler::mousePressEvent(target, event);
 }
 
@@ -193,50 +171,26 @@ void HText::focusOutEvent(Visualization::Item *target, QFocusEvent *)
 
 void HText::focusInEvent(Visualization::Item *target, QFocusEvent *event)
 {
-	Visualization::TextRenderer* tr = static_cast<Visualization::TextRenderer*> (target);
-	tr->scene()->setMainCursor(new Visualization::TextCursor(tr));
+//	Visualization::TextRenderer* tr = static_cast<Visualization::TextRenderer*> (target);
+//	//tr->scene()->setMainCursor(new Visualization::TextCursor(tr));
+//
+//	GenericHandler::FocusDirection dir = GenericHandler::focusDirection();
+//
+//	int size = tr->text().length();
+//
+//	if (size > 0)
+//	{
+//		// Here we choose which child to focus.
+//		if (dir == GenericHandler::FROM_LEFT)
+//			tr->correspondingSceneCursor<Visualization::TextCursor>()->setCaretPosition(0);
+//		else if (dir == GenericHandler::FROM_RIGHT)
+//			tr->correspondingSceneCursor<Visualization::TextCursor>()->setCaretPosition(size);
+//	}
 
-	GenericHandler::FocusDirection dir = GenericHandler::focusDirection();
-
-	int size = tr->text().length();
-
-	if (size > 0)
-	{
-		// Here we choose which child to focus.
-		if (dir == GenericHandler::FROM_LEFT)
-			tr->correspondingSceneCursor<Visualization::TextCursor>()->setCaretPosition(0);
-		else if (dir == GenericHandler::FROM_RIGHT)
-			tr->correspondingSceneCursor<Visualization::TextCursor>()->setCaretPosition(size);
-	}
-
-	//GenericHandler::focusInEvent(target, event);
-	InteractionHandler::focusInEvent(target, event);
+	GenericHandler::focusInEvent(target, event);
 }
 
 // TextRenderer interface routines.
-void HText::moveCaret(Visualization::Item *target, QKeyEvent *event)
-{
-	Visualization::TextRenderer* tr = static_cast<Visualization::TextRenderer*> (target);
-
-	switch (event->key())
-	{
-		case Qt::Key_Left:
-			{
-				int position = tr->correspondingSceneCursor<Visualization::TextCursor>()->caretPosition();
-				if ( tr->text().isEmpty() || position <= 0) event->ignore();
-				else tr->correspondingSceneCursor<Visualization::TextCursor>()->setCaretPosition(position - 1);
-			}
-			break;
-		case Qt::Key_Right:
-			{
-				int position = tr->correspondingSceneCursor<Visualization::TextCursor>()->caretPosition();
-				int size = tr->text().size();
-				if ( tr->text().isEmpty() || position >= size) event->ignore();
-				else tr->correspondingSceneCursor<Visualization::TextCursor>()->setCaretPosition(position + 1);
-			}
-			break;
-	}
-}
 void HText::erase(Visualization::Item *target, bool forwards, bool onlyDeleteIfSelected)
 {
 	Visualization::TextRenderer* tr = static_cast<Visualization::TextRenderer*> (target);

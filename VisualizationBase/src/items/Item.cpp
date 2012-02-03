@@ -188,24 +188,6 @@ bool Item::isEmpty() const
 	return false;
 }
 
-bool Item::focusChild(FocusTarget)
-{
-	return false;
-}
-
-bool Item::focusChild(Item* child)
-{
-	if (child)
-	{
-		child->scene()->clearSelection();
-		if (child->flags() & QGraphicsItem::ItemIsSelectable) child->setSelected(true);
-		child->setFocus();
-		child->setUpdateNeeded();
-		return true;
-	}
-	else return false;
-}
-
 void Item::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
 	if ( hasShape() && (style()->drawShapeWhenEmpty() || !isEmpty()) ) shape_->paint(painter, option, widget);
@@ -344,22 +326,16 @@ Item::PositionConstraints Item::satisfiedPositionConstraints(const QPoint& p) co
 {
 	PositionConstraints constraints = NoConstraints;
 
-	if ( p.y() < 0) constraints |= Below;
-	if ( p.y() > height() ) constraints |= Above;
+	if ( p.y() < height() - 1) constraints |= Below;
+	if ( p.y() > 0) constraints |= Above;
 
-	if ( p.x() < 0) constraints |= RightOf;
-	if ( p.x() > width() ) constraints |= LeftOf;
+	if ( p.x() < width() - 1) constraints |= RightOf;
+	if ( p.x() > 0) constraints |= LeftOf;
 
-	if (constraints == NoConstraints) constraints |= Overlap;
+	if ( p.y() >= 0 && p.y() < height() &&  p.x() >= 0 && p.x() < width())
+		constraints |= Overlap;
 
 	return constraints;
-}
-
-void Item::createDefaultCursor()
-{
-	Cursor* cur = new Cursor(this);
-	cur->setPosition(scenePos().toPoint());
-	scene()->setMainCursor(cur);
 }
 
 bool Item::moveCursor(CursorMoveDirection dir, const QPoint& reference)
@@ -374,10 +350,10 @@ bool Item::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 
 	if (acceptMove)
 	{
-		if (!scene()->mainCursor() || scene()->mainCursor()->owner() != this)
-			createDefaultCursor();
-
-		correspondingSceneCursor<Cursor>()->setPosition(scenePos().toPoint());
+		setFocus();
+		Cursor* cur = new Cursor(this);
+		cur->setPosition(scenePos().toPoint());
+		scene()->setMainCursor(cur);
 		return true;
 	}
 	else return false;

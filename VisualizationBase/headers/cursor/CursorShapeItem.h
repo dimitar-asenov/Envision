@@ -51,18 +51,22 @@ class VISUALIZATIONBASE_API CursorShapeItem: public Item
 		virtual bool needsUpdate();
 		void setCursorSize(const QSize& size);
 		void setCursorCenter(const QPoint& center);
+		void setCursorTopLeft(const QPoint& topLeft);
 
 	protected:
 		virtual void determineChildren();
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
+		bool useCenter_;
 		QSize size_;
 		QPoint center_;
+		QPoint topLeft_;
 };
 
 inline void CursorShapeItem::setCursorSize(const QSize& size) { size_ = size; }
-inline void CursorShapeItem::setCursorCenter(const QPoint& center) { center_ = center; }
+inline void CursorShapeItem::setCursorCenter(const QPoint& center) { center_ = center; useCenter_=true;}
+inline void CursorShapeItem::setCursorTopLeft(const QPoint& topLeft) { topLeft_ = topLeft; useCenter_=false;}
 
 } /* namespace Visualization */
 #endif /* VisualizationBase_CURSORSHAPEITEM_H_ */

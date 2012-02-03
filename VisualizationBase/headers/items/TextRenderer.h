@@ -73,6 +73,8 @@ class VISUALIZATIONBASE_API TextRenderer : public Item
 
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
+		virtual bool moveCursor(CursorMoveDirection dir, const QPoint& reference = QPoint());
+
 	protected:
 		virtual void determineChildren();
 		virtual void updateGeometry(int availableWidth, int availableHeight);

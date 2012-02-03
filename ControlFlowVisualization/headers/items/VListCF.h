@@ -53,7 +53,7 @@ class CONTROLFLOWVISUALIZATION_API VListCF : public Visualization::ItemWithNode<
 		VListCF(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VListCF();
 
-		virtual bool focusChild(FocusTarget location);
+		virtual bool moveCursor(CursorMoveDirection dir, const QPoint& reference = QPoint());
 		virtual bool isEmpty() const;
 
 	protected:

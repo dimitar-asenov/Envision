@@ -51,7 +51,7 @@ class OOVISUALIZATION_API VBreakStatement : public Visualization::ItemWithNode< 
 		VBreakStatement(Item* parent, NodeType *node, const StyleType *style = itemStyles().get());
 		virtual ~VBreakStatement();
 
-		virtual bool focusChild(FocusTarget location);
+		virtual bool moveCursor(CursorMoveDirection dir, const QPoint& reference = QPoint());
 
 	protected:
 		virtual void determineChildren();
