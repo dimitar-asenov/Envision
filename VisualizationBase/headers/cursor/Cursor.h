@@ -49,21 +49,26 @@ class VISUALIZATIONBASE_API Cursor {
 		virtual Item* owner();
 
 		const QPoint& position();
+		const QRect& region();
 		Item* visualization();
 
 		void setPosition(const QPoint& pos);
+		void setRegion(const QRect& region);
 
 	protected:
 		void setVisualization(Item* visualization);
 
 	private:
 		QPoint position_;
+		QRect region_;
 		Item* owner_;
 		Item* visualization_;
 };
 
 inline void Cursor::setPosition(const QPoint& pos) { position_ = pos; }
+inline void Cursor::setRegion(const QRect& region) { region_ = region; }
 inline const QPoint& Cursor::position() { return position_; }
+inline const QRect& Cursor::region() { return region_; }
 inline Item* Cursor::visualization() { return visualization_; }
 
 } /* namespace Visualization */

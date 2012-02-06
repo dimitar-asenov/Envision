@@ -42,6 +42,8 @@
 #include "ModelBase/headers/nodes/List.h"
 #include "ModelBase/headers/nodes/Extendable/ExtendableNode.h"
 
+#include <QtCore/QDebug>
+
 namespace Interaction {
 
 CommandExecutionEngine* GenericHandler::executionEngine_ = CommandExecutionEngine::instance();
@@ -223,8 +225,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 				if (!processed && target->parentItem())
 				{
 					Visualization::Cursor* c = target->scene()->mainCursor();
-					midpoint = c->visualization() ?
-							c->visualization()->x() + c->visualization()->width()/2 : c->position().x();
+					midpoint = c->region().x() + c->region().width()/2;
 					dir = Visualization::Item::MoveUpOf;
 				}
 			}
@@ -235,8 +236,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 				if (!processed && target->parentItem())
 				{
 					Visualization::Cursor* c = target->scene()->mainCursor();
-					midpoint = c->visualization() ?
-							c->visualization()->x() + c->visualization()->width()/2 : c->position().x();
+					midpoint = c->region().x() + c->region().width()/2;
 					dir = Visualization::Item::MoveDownOf;
 				}
 			}
@@ -247,8 +247,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 				if (!processed && target->parentItem())
 				{
 					Visualization::Cursor* c = target->scene()->mainCursor();
-					midpoint = c->visualization() ?
-							c->visualization()->y() + c->visualization()->height()/2 : c->position().y();
+					midpoint = c->region().y() + c->region().height()/2;
 					dir = Visualization::Item::MoveLeftOf;
 				}
 			}
@@ -259,8 +258,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 				if (!processed && target->parentItem())
 				{
 					Visualization::Cursor* c = target->scene()->mainCursor();
-					midpoint = c->visualization() ?
-							c->visualization()->y() + c->visualization()->height()/2 : c->position().y();
+					midpoint = c->region().y() + c->region().height()/2;
 					dir = Visualization::Item::MoveRightOf;
 				}
 			}
@@ -271,10 +269,15 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 		{
 			Visualization::Item* current = target;
 
+			qDebug() << "Item can not process key event";
+			int i = 0;
+
 			while (current && !processed)
 			{
 				Visualization::Item* parent = static_cast<Visualization::Item*> (current->parentItem());
 				if (!parent) break;
+
+				qDebug() << "Trying parent " << i++;
 
 				QPoint reference;
 				switch( event->key() )
@@ -305,6 +308,8 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 
 				processed = parent->moveCursor(dir, reference);
 				current = parent;
+
+				if (processed) qDebug() << "Keyboard event processed by parent " << i-1;
 			}
 		}
 

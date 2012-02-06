@@ -39,8 +39,6 @@
 
 #include "Core/headers/global.h"
 
-#include <QtCore/QDebug>
-
 namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS( Layout, "layout" )
@@ -191,7 +189,8 @@ bool Layout::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 				&& ((r.satisfiedPositionConstraints(source) & constraints) == constraints)
 				&& (!best
 						|| r.distanceTo(source) < best_distance
-						|| (r.cursor() && r.distanceTo(source) <= best_distance)) // Allows for overlapping cursors.
+						// Prioritize cursor regions on top of item regions.
+						|| (r.cursor() && r.distanceTo(source) <= best_distance))
 			)
 		{
 			best_distance = r.distanceTo(source);

@@ -235,7 +235,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 				Above = 0x2,
 				LeftOf = 0x4,
 				RightOf = 0x8,
-				Overlap = 0x16
+				Overlap = 0x10
 		};
 		Q_DECLARE_FLAGS(PositionConstraints, PositionConstraint)
 

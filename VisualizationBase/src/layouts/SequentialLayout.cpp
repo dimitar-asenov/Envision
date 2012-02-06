@@ -317,8 +317,18 @@ QList<LayoutRegion> SequentialLayout::regions()
 		cursorRegion.cursor()->setVisualizationSize(horizontal ? QSize(2, height()) : QSize(width(), 2));
 
 		// Make sure there is at least some space for the cursor Region.
-		if (horizontal && cursorRegion.region().width() == 0) cursorRegion.region().adjust(-1,0,1,0);
-		if (!horizontal && cursorRegion.region().height() == 0) cursorRegion.region().adjust(0,-1,0,1);
+		if (horizontal && cursorRegion.region().width() == 0)
+		{
+			if (forward) cursorRegion.region().adjust((i>0?-1:0), 0, 1, 0);
+			else cursorRegion.region().adjust(-1, 0, (i>0?1:0), 0);
+		}
+		if (!horizontal && cursorRegion.region().height() == 0 )
+		{
+			if (forward) cursorRegion.region().adjust(0, (i>0?-1:0), 0, 1);
+			else  cursorRegion.region().adjust(0, -1, 0, (i>0?1:0));
+		}
+
+		cursorRegion.cursor()->setRegion(mapToScene(cursorRegion.region()).boundingRect().toRect());
 
 		regs.append(cursorRegion);
 		regs.append(itemRegion);
@@ -332,14 +342,23 @@ QList<LayoutRegion> SequentialLayout::regions()
 	else trailing.setRect(0, 0,  width(), last);
 
 	// Make sure there is at least some space for the cursor Region.
-	if (horizontal && trailing.width() == 0) trailing.adjust(-1,0,1,0);
-	if (!horizontal && trailing.height() == 0) trailing.adjust(0,-1,0,1);
+	if (horizontal && trailing.width() == 0)
+	{
+		if (forward) trailing.adjust(-1, 0, 0, 0);
+		else trailing.adjust(0, 0, 1, 0);
+	}
+	if (!horizontal && trailing.height() == 0 )
+	{
+		if (forward) trailing.adjust(0, -1, 0, 0);
+		else  trailing.adjust(0, 0, 0, 1);
+	}
 
 	regs.append(LayoutRegion(trailing));
 	regs.last().setCursor(new LayoutCursor(this));
 	regs.last().cursor()->setIndex(items.size());
 	regs.last().cursor()->setVisualizationPosition(regs.last().region().topLeft());
 	regs.last().cursor()->setVisualizationSize(horizontal ? QSize(2, height()) : QSize(width(), 2));
+	regs.last().cursor()->setRegion(mapToScene(trailing).boundingRect().toRect());
 
 	return regs;
 }

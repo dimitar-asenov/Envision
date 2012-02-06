@@ -159,7 +159,24 @@ void TextRenderer::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 
 bool TextRenderer::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 {
-	if (dir == MoveOnPosition || dir == MoveUpOf || dir == MoveDownOf || dir == MoveLeftOf || dir == MoveRightOf)
+	if ( dir == MoveUpOf || dir == MoveDownOf || dir == MoveLeftOf || dir == MoveRightOf )
+	{
+		PositionConstraints pc = satisfiedPositionConstraints(reference);
+		if ( (dir == MoveUpOf && (pc & Above))
+				|| (dir == MoveDownOf && (pc & Below))
+				|| (dir == MoveLeftOf && (pc & LeftOf))
+				|| (dir == MoveRightOf && (pc & RightOf))
+				)
+		{
+			setFocus();
+			TextCursor* tc = new TextCursor(this);
+			tc->setSelectedByDrag(reference.x(), reference.x());
+			scene()->setMainCursor(tc);
+			return true;
+		}
+		else return false;
+	}
+	else if (dir == MoveOnPosition)
 	{
 		setFocus();
 		TextCursor* tc = new TextCursor(this);
