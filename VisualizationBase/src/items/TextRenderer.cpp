@@ -89,21 +89,21 @@ void TextRenderer::updateGeometry(int, int)
 	if (this->hasShape())
 	{
 		this->getShape()->setInnerSize(bound.width(), bound.height());
-		xOffset = -bound.left() + this->getShape()->contentLeft();
-		yOffset = -bound.top() + this->getShape()->contentTop();
+		textXOffset_ = -bound.left() + this->getShape()->contentLeft();
+		textYOffset_ = -bound.top() + this->getShape()->contentTop();
 	}
 	else
 	{
-		xOffset = -bound.left();
-		yOffset = -bound.top();
+		textXOffset_ = -bound.left();
+		textYOffset_ = -bound.top();
 		this->setSize(bound.size());
 	}
 
 	// Correct underline, otherwise it is drawn in the middle of two pixels and appears fat and transparent.
 	if (style()->font().underline() && qfm.lineWidth() % 2)
 	{
-		xOffset += 0.5;
-		yOffset += 0.5;
+		textXOffset_ += 0.5;
+		textYOffset_ += 0.5;
 	}
 
 	if ( this->hasFocus() )	correspondingSceneCursor<TextCursor>()->update(qfm);
@@ -119,7 +119,7 @@ void TextRenderer::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 	{
 		painter->setPen(style()->pen());
 		painter->setFont(style()->font());
-		painter->drawText(QPointF(xOffset, yOffset), text_);
+		painter->drawText(QPointF(textXOffset_, textYOffset_), text_);
 	}
 	else
 	{
@@ -133,26 +133,26 @@ void TextRenderer::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 			// Draw selection background
 			painter->setPen(Qt::NoPen);
 			painter->setBrush(style()->selectionBackground());
-			painter->drawRect(xOffset + cur->xBegin(), 0, cur->xEnd() - cur->xBegin(), this->height());
+			painter->drawRect(textXOffset_ + cur->xBegin(), 0, cur->xEnd() - cur->xBegin(), this->height());
 			painter->setBrush(Qt::NoBrush);
 
 			// Draw selected text
 			painter->setPen(style()->selectionPen());
 			painter->setFont(style()->selectionFont());
-			painter->drawText(QPointF(xOffset + cur->xBegin(), yOffset), text_.mid(start, end - start));
+			painter->drawText(QPointF(textXOffset_ + cur->xBegin(), textYOffset_), text_.mid(start, end - start));
 
 			// Draw non-selected text
 			painter->setPen(style()->pen());
 			painter->setFont(style()->font());
-			painter->drawText(xOffset, yOffset, text_.left(start));
-			painter->drawText(QPointF(xOffset + cur->xEnd(), yOffset), text_.mid(end));
+			painter->drawText(textXOffset_, textYOffset_, text_.left(start));
+			painter->drawText(QPointF(textXOffset_ + cur->xEnd(), textYOffset_), text_.mid(end));
 		}
 		else
 		{
 			// No text is selected, draw all text at once using normal style
 			painter->setPen(style()->pen());
 			painter->setFont(style()->font());
-			painter->drawText(QPointF(xOffset, yOffset), text_);
+			painter->drawText(QPointF(textXOffset_, textYOffset_), text_);
 		}
 	}
 }

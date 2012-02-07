@@ -57,7 +57,10 @@ void TextCursor::update(const QFontMetrics& qfm)
 	int xstart = qfm.width(owner()->text(), selectionFirstIndex());
 	int xend = qfm.width(owner()->text(), selectionLastIndex());
 	setX(xstart, xend);
-	setVisualizationSize(QSize(2, qfm.height()));
+
+	QSize cursorSize = QSize(2, owner()->height() - 2);
+	setVisualizationSize(cursorSize);
+	setRegion(QRect(position(), cursorSize));
 }
 
 void TextCursor::selectAll()
@@ -79,7 +82,7 @@ void TextCursor::setX(int xBegin, int xEnd)
 	xEnd_ = xEnd;
 
 	int caretX = isCursorBeforeSelection() ? xBegin : xEnd;
-	setPosition(QPointF(owner()->scenePos() + QPoint(caretX, 0)).toPoint());
+	setPosition(QPointF(owner()->scenePos() + QPoint(caretX + owner()->textXOffset(), 2)).toPoint());
 
 	CursorShapeItem* ci = static_cast<CursorShapeItem*> (visualization());
 	ci->setCursorCenter(position());

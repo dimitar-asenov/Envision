@@ -75,6 +75,9 @@ class VISUALIZATIONBASE_API TextRenderer : public Item
 
 		virtual bool moveCursor(CursorMoveDirection dir, const QPoint& reference = QPoint());
 
+		qreal textXOffset();
+		qreal textYOffset();
+
 	protected:
 		virtual void determineChildren();
 		virtual void updateGeometry(int availableWidth, int availableHeight);
@@ -94,8 +97,8 @@ class VISUALIZATIONBASE_API TextRenderer : public Item
 	private:
 		QString text_;
 
-		qreal xOffset;
-		qreal yOffset;
+		qreal textXOffset_; //Base line
+		qreal textYOffset_;
 
 		bool editable;
 
@@ -105,6 +108,9 @@ class VISUALIZATIONBASE_API TextRenderer : public Item
 inline QString TextRenderer::text() { return text_; }
 inline bool TextRenderer::isEditable() { return editable; }
 inline void TextRenderer::setEditable(bool editable_) { editable = editable_; }
+
+inline qreal TextRenderer::textXOffset() { return textXOffset_; }
+inline qreal TextRenderer::textYOffset() { return textYOffset_; }
 
 }
 

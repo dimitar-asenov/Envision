@@ -131,6 +131,12 @@ QList<LayoutRegion> Layout::regions()
 
 bool Layout::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 {
+	// The condition below is only true if this method is called from a parent item, after it was already called for the
+	// item itself. In that case simply return false as the original call returned false too.
+	if (scene()->mainCursor() && scene()->mainCursor()->owner() == this &&
+			(dir == MoveUpOf || dir == MoveDownOf || dir == MoveLeftOf || dir == MoveRightOf) )
+	return false;
+
 	QList<LayoutRegion> regs = regions();
 
 	if (regs.isEmpty()) return false;
@@ -151,13 +157,12 @@ bool Layout::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 			if (r.cursor() && r.cursor()->x() == x && r.cursor()->y() == y && r.cursor()->index() == index)
 			{
 				current = &r;
-				QPoint center = r.region().center();
 				switch(dir)
 				{
-					case MoveUp: source = QPoint(center.x(), r.region().y()); break;
-					case MoveDown: source = QPoint(center.x(), r.region().y() + r.region().height()); break;
-					case MoveLeft: source = QPoint(r.region().x(), center.y()); break;
-					case MoveRight: source = QPoint(r.region().x() + r.region().width(), center.y()); break;
+					case MoveUp: source = QPoint(reference.x(), r.region().y()); break;
+					case MoveDown: source = QPoint(reference.x(), r.region().y() + r.region().height()); break;
+					case MoveLeft: source = QPoint(r.region().x(), reference.y()); break;
+					case MoveRight: source = QPoint(r.region().x() + r.region().width(), reference.y()); break;
 					default: /* Will never be the case because of the top-level if statement */ break;
 				}
 				break;
@@ -185,8 +190,14 @@ bool Layout::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 	int best_distance;
 	for (LayoutRegion& r : regs)
 	{
+		LayoutRegion::PositionConstraints satisfied = r.satisfiedPositionConstraints(source);
 		if (	(&r != current)
-				&& ((r.satisfiedPositionConstraints(source) & constraints) == constraints)
+				&& ( (( satisfied & constraints) == constraints)
+						// An overlapping cursor region is preferred, even if it does not satisfy the constraints.
+						// This happens in 'tight' layouts that do not leave any spacing between the elements and so the
+						// Cursors are overlapping the normal items. At the borders of such containers the alternative below
+						// is needed.
+						|| (r.cursor() && (satisfied & LayoutRegion::Overlap)) )
 				&& (!best
 						|| r.distanceTo(source) < best_distance
 						// Prioritize cursor regions on top of item regions.
