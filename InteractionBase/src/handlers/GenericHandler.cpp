@@ -206,7 +206,11 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 				break;
 		}
 	}
-	else if (event->modifiers() == 0)
+	else if (event->modifiers() == 0
+			&& (	event->key() == Qt::Key_Up
+					|| event->key() == Qt::Key_Down
+					|| event->key() == Qt::Key_Left
+					|| event->key() == Qt::Key_Right))
 	{
 		bool processed = false;
 		Visualization::Item::CursorMoveDirection dir;
