@@ -35,6 +35,12 @@
 #include "SelfTest/headers/SelfTestSuite.h"
 
 #include "expression_editor/OOOperatorDescriptorList.h"
+#include "handlers/HOOExpression.h"
+
+#include "OOVisualization/headers/allOOVisualizations.h"
+
+#include "InteractionBase/headers/handlers/GenericHandler.h"
+#include "InteractionBase/headers/handlers/HText.h"
 
 Q_EXPORT_PLUGIN2( oointeraction, OOInteraction::OOInteraction )
 
@@ -43,6 +49,47 @@ namespace OOInteraction {
 bool OOInteraction::initialize(Envision::EnvisionManager&)
 {
 	OOOperatorDescriptorList::initializeWithDefaultOperators();
+
+	OOVisualization::VProject::setInteractionHandler(Interaction::GenericHandler::instance());
+	OOVisualization::VLibrary::setInteractionHandler(Interaction::GenericHandler::instance());
+	OOVisualization::VModule::setInteractionHandler(Interaction::GenericHandler::instance());
+	OOVisualization::VClass::setInteractionHandler(Interaction::GenericHandler::instance());
+	OOVisualization::VMethod::setInteractionHandler(Interaction::GenericHandler::instance());
+	OOVisualization::VField::setInteractionHandler(Interaction::GenericHandler::instance());
+	OOVisualization::VFormalArgument::setInteractionHandler(Interaction::GenericHandler::instance());
+	OOVisualization::VFormalResult::setInteractionHandler(Interaction::GenericHandler::instance());
+	OOVisualization::VReferenceExpression::setInteractionHandler(HOOExpression::instance());
+	OOVisualization::VVariableAccess::setInteractionHandler(HOOExpression::instance());
+	OOVisualization::VMethodCallExpression::setInteractionHandler(HOOExpression::instance());
+	OOVisualization::VThisExpression::setInteractionHandler(HOOExpression::instance());
+	OOVisualization::VCastExpression::setInteractionHandler(HOOExpression::instance());
+	OOVisualization::VNewExpression::setInteractionHandler(HOOExpression::instance());
+	OOVisualization::VUnaryOperation::setInteractionHandler(HOOExpression::instance());
+	OOVisualization::VBinaryOperation::setInteractionHandler(HOOExpression::instance());
+	OOVisualization::VArrayInitializer::setInteractionHandler(HOOExpression::instance());
+	OOVisualization::VEmptyExpression::setInteractionHandler(HOOExpression::instance());
+	OOVisualization::VErrorExpression::setInteractionHandler(HOOExpression::instance());
+	OOVisualization::VUnfinishedOperator::setInteractionHandler(HOOExpression::instance());
+	OOVisualization::VStringLiteral::setInteractionHandler(HOOExpression::instance());
+	OOVisualization::VIntegerLiteral::setInteractionHandler(HOOExpression::instance());
+	OOVisualization::VFloatLiteral::setInteractionHandler(HOOExpression::instance());
+	OOVisualization::VCharacterLiteral::setInteractionHandler(HOOExpression::instance());
+	OOVisualization::VBooleanLiteral::setInteractionHandler(HOOExpression::instance());
+	OOVisualization::VNullLiteral::setInteractionHandler(HOOExpression::instance());
+	OOVisualization::VMethodCallStatement::setInteractionHandler(Interaction::GenericHandler::instance());
+	OOVisualization::VVariableDeclaration::setInteractionHandler(Interaction::GenericHandler::instance());
+	OOVisualization::VAssignmentStatement::setInteractionHandler(Interaction::GenericHandler::instance());
+	OOVisualization::VIfStatement::setInteractionHandler(Interaction::GenericHandler::instance());
+	OOVisualization::VLoopStatement::setInteractionHandler(Interaction::GenericHandler::instance());
+	OOVisualization::VForEachStatement::setInteractionHandler(Interaction::GenericHandler::instance());
+	OOVisualization::VBreakStatement::setInteractionHandler(Interaction::GenericHandler::instance());
+	OOVisualization::VContinueStatement::setInteractionHandler(Interaction::GenericHandler::instance());
+	OOVisualization::VBlock::setInteractionHandler(Interaction::GenericHandler::instance());
+	OOVisualization::VReturnStatement::setInteractionHandler(Interaction::GenericHandler::instance());
+	OOVisualization::VPrimitiveType::setInteractionHandler(Interaction::GenericHandler::instance());
+	OOVisualization::VNamedType::setInteractionHandler(Interaction::GenericHandler::instance());
+	OOVisualization::VArrayType::setInteractionHandler(Interaction::GenericHandler::instance());
+
 	return true;
 }
 

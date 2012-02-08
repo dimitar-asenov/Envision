@@ -78,6 +78,9 @@ class MODELBASE_API ExtendableNode: public Node
 
 		Node* get(const ExtendableIndex &attributeIndex) const;
 		Node* get(const QString &attributeName) const;
+		ExtendableIndex indexOf(Node* node) const;
+
+		virtual bool replaceChild(Node* child, Node* replacement);
 
 		void set(const ExtendableIndex &attributeIndex, Node* node);
 

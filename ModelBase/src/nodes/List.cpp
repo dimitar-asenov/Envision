@@ -169,6 +169,18 @@ void List::clear()
 	while (!nodes_.isEmpty()) remove(0);
 }
 
+bool List::replaceChild(Node* child, Node* replacement)
+{
+	if (!child || !replacement) return false;
+
+	int index = indexOf(child);
+	if (index < 0) return false;
+
+	remove(index);
+	insert(index, replacement);
+	return true;
+}
+
 void List::paste(ClipboardStore& clipboard, int position)
 {
 	if (!fullyLoaded) loadFully(* (model()->store()));

@@ -16,8 +16,7 @@ win32:LIBS += -L$${PLUGINS_DIR} \
     -lselftest \
     -lmodelbase \
     -loomodel \
-    -lvisualizationbase \
-    -linteractionbase
+    -lvisualizationbase
 QT = core \
     gui
 TEMPLATE = lib

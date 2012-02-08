@@ -384,6 +384,14 @@ class MODELBASE_API Node
 		 */
 		bool isModifyable() const;
 
+		/**
+		 * \brief Replaces the child item \a child with the item \a replacement and returns true on success.
+		 *
+		 * The default implementation always returns false and is suitable for nodes without children. Reimplement this
+		 * method if you are implementing a composite node that has replaceable child nodes.
+		 */
+		virtual bool replaceChild(Node* child, Node* replacement);
+
 	protected:
 
 		/*

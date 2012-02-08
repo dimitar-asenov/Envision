@@ -35,7 +35,8 @@ INSTALLS += target \
     pluginmeta \
     styles
 PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/expression_editor/OOOperatorDescriptorList.h \
+HEADERS += headers/handlers/HOOExpression.h \
+    headers/expression_editor/OOOperatorDescriptorList.h \
     headers/expression_editor/operators/BinaryOperatorDescriptor.h \
     headers/expression_editor/OOOperatorDescriptor.h \
     headers/expression_editor/OOExpressionBuilder.h \
@@ -43,7 +44,8 @@ HEADERS += headers/expression_editor/OOOperatorDescriptorList.h \
     headers/OOInteractionException.h \
     headers/oointeraction_api.h \
     src/oointeraction.h
-SOURCES += src/expression_editor/OOOperatorDescriptorList.cpp \
+SOURCES += src/handlers/HOOExpression.cpp \
+    src/expression_editor/OOOperatorDescriptorList.cpp \
     src/expression_editor/operators/BinaryOperatorDescriptor.cpp \
     src/expression_editor/OOOperatorDescriptor.cpp \
     src/expression_editor/OOExpressionBuilder.cpp \

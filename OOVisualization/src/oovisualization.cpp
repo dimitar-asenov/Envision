@@ -41,9 +41,6 @@
 #include "VisualizationBase/headers/Scene.h"
 #include "VisualizationBase/headers/node_extensions/Position.h"
 
-#include "InteractionBase/headers/handlers/GenericHandler.h"
-#include "InteractionBase/headers/handlers/HText.h"
-
 Q_EXPORT_PLUGIN2( oovisualization, OOVisualization::OOVisualization )
 
 using namespace OOModel;
@@ -99,49 +96,6 @@ bool OOVisualization::initialize(Envision::EnvisionManager&)
 	Scene::defaultRenderer()->registerVisualization(NamedType::typeIdStatic(), createVisualization<VNamedType, NamedType>);
 	Scene::defaultRenderer()->registerVisualization(PrimitiveType::typeIdStatic(), createVisualization<VPrimitiveType, PrimitiveType>);
 	Scene::defaultRenderer()->registerVisualization(ArrayType::typeIdStatic(), createVisualization<VArrayType, ArrayType>);
-
-	// Register handlers
-	// TODO: move this to a better place i.e. OOInteraction Plugin
-	// TODO: when you do that remove the dependency in the .plugin meta file
-	VProject::setInteractionHandler(Interaction::GenericHandler::instance());
-	VLibrary::setInteractionHandler(Interaction::GenericHandler::instance());
-	VModule::setInteractionHandler(Interaction::GenericHandler::instance());
-	VClass::setInteractionHandler(Interaction::GenericHandler::instance());
-	VMethod::setInteractionHandler(Interaction::GenericHandler::instance());
-	VField::setInteractionHandler(Interaction::GenericHandler::instance());
-	VFormalArgument::setInteractionHandler(Interaction::GenericHandler::instance());
-	VFormalResult::setInteractionHandler(Interaction::GenericHandler::instance());
-	VReferenceExpression::setInteractionHandler(Interaction::GenericHandler::instance());
-	VVariableAccess::setInteractionHandler(Interaction::GenericHandler::instance());
-	VMethodCallExpression::setInteractionHandler(Interaction::GenericHandler::instance());
-	VThisExpression::setInteractionHandler(Interaction::GenericHandler::instance());
-	VCastExpression::setInteractionHandler(Interaction::GenericHandler::instance());
-	VNewExpression::setInteractionHandler(Interaction::GenericHandler::instance());
-	VUnaryOperation::setInteractionHandler(Interaction::GenericHandler::instance());
-	VBinaryOperation::setInteractionHandler(Interaction::GenericHandler::instance());
-	VArrayInitializer::setInteractionHandler(Interaction::GenericHandler::instance());
-	VEmptyExpression::setInteractionHandler(Interaction::GenericHandler::instance());
-	VErrorExpression::setInteractionHandler(Interaction::GenericHandler::instance());
-	VUnfinishedOperator::setInteractionHandler(Interaction::GenericHandler::instance());
-	VStringLiteral::setInteractionHandler(Interaction::GenericHandler::instance());
-	VIntegerLiteral::setInteractionHandler(Interaction::GenericHandler::instance());
-	VFloatLiteral::setInteractionHandler(Interaction::GenericHandler::instance());
-	VCharacterLiteral::setInteractionHandler(Interaction::GenericHandler::instance());
-	VBooleanLiteral::setInteractionHandler(Interaction::GenericHandler::instance());
-	VNullLiteral::setInteractionHandler(Interaction::GenericHandler::instance());
-	VMethodCallStatement::setInteractionHandler(Interaction::GenericHandler::instance());
-	VVariableDeclaration::setInteractionHandler(Interaction::GenericHandler::instance());
-	VAssignmentStatement::setInteractionHandler(Interaction::GenericHandler::instance());
-	VIfStatement::setInteractionHandler(Interaction::GenericHandler::instance());
-	VLoopStatement::setInteractionHandler(Interaction::GenericHandler::instance());
-	VForEachStatement::setInteractionHandler(Interaction::GenericHandler::instance());
-	VBreakStatement::setInteractionHandler(Interaction::GenericHandler::instance());
-	VContinueStatement::setInteractionHandler(Interaction::GenericHandler::instance());
-	VBlock::setInteractionHandler(Interaction::GenericHandler::instance());
-	VReturnStatement::setInteractionHandler(Interaction::GenericHandler::instance());
-	VPrimitiveType::setInteractionHandler(Interaction::GenericHandler::instance());
-	VNamedType::setInteractionHandler(Interaction::GenericHandler::instance());
-	VArrayType::setInteractionHandler(Interaction::GenericHandler::instance());
 
 	return true;
 }

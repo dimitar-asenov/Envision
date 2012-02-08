@@ -150,6 +150,31 @@ Node* ExtendableNode::get(const QString &attributeName) const
 	return nullptr;
 }
 
+ExtendableIndex ExtendableNode::indexOf(Node* node) const
+{
+	if (node)
+	{
+		for (int level = 0; level < subnodes.size(); ++level)
+			for (int i = 0; i < subnodes[level].size(); ++i)
+				if (subnodes[level][i] == node)
+					return ExtendableIndex(level, i);
+	}
+
+	return ExtendableIndex();
+}
+
+
+bool ExtendableNode::replaceChild(Node* child, Node* replacement)
+{
+	if (!child || !replacement) return false;
+
+	ExtendableIndex index = indexOf(child);
+	if (!index.isValid()) return false;
+
+	set(index, replacement);
+	return true;
+}
+
 bool ExtendableNode::hasAttribute(const QString& attributeName)
 {
 	return meta.hasAttribute(attributeName);
