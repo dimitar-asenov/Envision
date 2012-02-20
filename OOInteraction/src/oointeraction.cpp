@@ -44,12 +44,9 @@
 #include "string_components/UnfinishedOperatorStringComponents.h"
 #include "string_components/VariableAccessStringComponents.h"
 
-#include "string_providers/BinaryOperatorStringProvider.h"
+#include "string_providers/SequentialVisualizationStringProvider.h"
 #include "string_providers/EmptyExpressionStringProvider.h"
-#include "string_providers/ErrorExpressionStringProvider.h"
 #include "string_providers/IntegerLiteralStringProvider.h"
-#include "string_providers/UnfinishedOperatorStringProvider.h"
-#include "string_providers/VariableAccessStringProvider.h"
 #include "string_providers/TextRendererStringProvider.h"
 #include "string_providers/StaticStringProvider.h"
 
@@ -131,15 +128,15 @@ bool OOInteraction::initialize(Envision::EnvisionManager&)
 
 	// Register string providers
 	Model::AdapterManager::registerAdapterViaConstructor
-		<StringProvider, BinaryOperatorStringProvider, OOVisualization::VBinaryOperation>();
+		<StringProvider, SequentialVisualizationStringProvider, OOVisualization::VBinaryOperation>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringProvider, IntegerLiteralStringProvider, OOVisualization::VIntegerLiteral>();
 	Model::AdapterManager::registerAdapterViaConstructor
-		<StringProvider, VariableAccessStringProvider, OOVisualization::VVariableAccess>();
+		<StringProvider, SequentialVisualizationStringProvider, OOVisualization::VVariableAccess>();
 	Model::AdapterManager::registerAdapterViaConstructor
-		<StringProvider, UnfinishedOperatorStringProvider, OOVisualization::VUnfinishedOperator>();
+		<StringProvider, SequentialVisualizationStringProvider, OOVisualization::VUnfinishedOperator>();
 	Model::AdapterManager::registerAdapterViaConstructor
-		<StringProvider, ErrorExpressionStringProvider, OOVisualization::VErrorExpression>();
+		<StringProvider, SequentialVisualizationStringProvider, OOVisualization::VErrorExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringProvider, EmptyExpressionStringProvider, OOVisualization::VEmptyExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor

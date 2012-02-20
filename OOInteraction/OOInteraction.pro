@@ -47,11 +47,7 @@ HEADERS += headers/handlers/SetCursorEvent.h \
     headers/string_components/EmptyExpressionStringComponents.h \
     headers/string_components/StringComponents.h \
     headers/string_providers/EmptyExpressionStringProvider.h \
-    headers/string_providers/ErrorExpressionStringProvider.h \
-    headers/string_providers/UnfinishedOperatorStringProvider.h \
     headers/string_providers/IntegerLiteralStringProvider.h \
-    headers/string_providers/VariableAccessStringProvider.h \
-    headers/string_providers/BinaryOperatorStringProvider.h \
     headers/string_providers/StringProvider.h \
     headers/handlers/HOOExpression.h \
     headers/expression_editor/OOOperatorDescriptorList.h \
@@ -74,11 +70,7 @@ SOURCES += src/handlers/SetCursorEvent.cpp \
     src/string_components/VariableAccessStringComponents.cpp \
     src/string_components/StringComponents.cpp \
     src/string_providers/EmptyExpressionStringProvider.cpp \
-    src/string_providers/ErrorExpressionStringProvider.cpp \
     src/string_providers/IntegerLiteralStringProvider.cpp \
-    src/string_providers/UnfinishedOperatorStringProvider.cpp \
-    src/string_providers/VariableAccessStringProvider.cpp \
-    src/string_providers/BinaryOperatorStringProvider.cpp \
     src/string_providers/StringProvider.cpp \
     src/handlers/HOOExpression.cpp \
     src/expression_editor/OOOperatorDescriptorList.cpp \
