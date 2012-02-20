@@ -25,57 +25,40 @@
  **********************************************************************************************************************/
 
 /*
- * VErrorExpression.cpp
+ * VariableAccessStringComponents.cpp
  *
- *  Created on: Jan 19, 2012
+ *  Created on: Feb 17, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "expressions/VErrorExpression.h"
+#include "string_components/VariableAccessStringComponents.h"
 
-#include "VisualizationBase/headers/items/VText.h"
+#include "OOModel/headers/expressions/VariableAccess.h"
+#include "ModelBase/headers/adapter/AdapterManager.h"
 
-using namespace Visualization;
-using namespace OOModel;
+namespace OOInteraction {
 
-namespace OOVisualization {
-
-ITEM_COMMON_DEFINITIONS(VErrorExpression, "item")
-
-VErrorExpression::VErrorExpression(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode<LayoutProvider<>, ErrorExpression>(parent, node, style),
-	prefix_(nullptr),
-	arg_(nullptr),
-	postfix_(nullptr )
+VariableAccessStringComponents::VariableAccessStringComponents(OOModel::VariableAccess* e)
+	: exp_(e)
 {
 }
 
-VErrorExpression::~VErrorExpression()
+QStringList VariableAccessStringComponents::components()
 {
-	// These were automatically deleted by LayoutProvider's destructor
-	postfix_ = nullptr;
-	arg_ = nullptr;
-	prefix_ = nullptr;
+	QStringList result;
+	if (!exp_) return result;
+
+	StringComponents* prefix = Model::AdapterManager::adapt<StringComponents>(exp_->prefix());
+	if (prefix)
+	{
+		result.append( prefix->components().join("") );
+		result.append(".");
+		SAFE_DELETE(prefix);
+	}
+
+	result.append( exp_->ref()->path().split(':').last() );
+
+	return result;
 }
 
-void VErrorExpression::determineChildren()
-{
-	layout()->synchronizeFirst(
-			prefix_, node()->prefix().isEmpty() ? nullptr : node()->prefixNode(), &style()->prefix());
-	layout()->synchronizeMid(arg_, node()->arg(), 1);
-	layout()->synchronizeLast(
-			postfix_, node()->postfix().isEmpty() ? nullptr : node()->postfixNode(), &style()->postfix());
-
-	// We set these to read-only since that will make keyboard events pass though and allow these events to be handled
-	// by the expression handler.
-	if (prefix_) prefix_->setEditable(false);
-	if (postfix_) postfix_->setEditable(false);
-
-	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
-	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
-	//			what's the reason they are being updated.
-	// The style needs to be updated every time since if our own style changes, so will that of the children.
-	layout()->setStyle( &style()->layout());
-}
-
-} /* namespace OOVisualization */
+} /* namespace OOInteraction */

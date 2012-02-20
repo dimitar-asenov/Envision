@@ -33,7 +33,8 @@ INSTALLS += target \
     pluginmeta \
     styles
 PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/layouts/LayoutRegion.h \
+HEADERS += headers/CustomSceneEvent.h \
+    headers/layouts/LayoutRegion.h \
     headers/cursor/LayoutCursor.h \
     headers/cursor/TextCursor.h \
     headers/cursor/CursorShapeItem.h \
@@ -105,7 +106,8 @@ HEADERS += headers/layouts/LayoutRegion.h \
     src/visualizationbase.h \
     headers/VisualizationException.h \
     headers/visualizationbase_api.h
-SOURCES += src/layouts/LayoutRegion.cpp \
+SOURCES += src/CustomSceneEvent.cpp \
+    src/layouts/LayoutRegion.cpp \
     src/cursor/LayoutCursor.cpp \
     src/cursor/TextCursor.cpp \
     src/cursor/CursorShapeItem.cpp \

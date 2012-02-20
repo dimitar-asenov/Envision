@@ -25,57 +25,21 @@
  **********************************************************************************************************************/
 
 /*
- * VErrorExpression.cpp
+ * ErrorExpressionStringProvider.cpp
  *
- *  Created on: Jan 19, 2012
+ *  Created on: Feb 15, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "expressions/VErrorExpression.h"
+#include "string_providers/ErrorExpressionStringProvider.h"
 
-#include "VisualizationBase/headers/items/VText.h"
+#include "OOVisualization/headers/expressions/VErrorExpression.h"
 
-using namespace Visualization;
-using namespace OOModel;
+namespace OOInteraction {
 
-namespace OOVisualization {
-
-ITEM_COMMON_DEFINITIONS(VErrorExpression, "item")
-
-VErrorExpression::VErrorExpression(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode<LayoutProvider<>, ErrorExpression>(parent, node, style),
-	prefix_(nullptr),
-	arg_(nullptr),
-	postfix_(nullptr )
+ErrorExpressionStringProvider::ErrorExpressionStringProvider(OOVisualization::VErrorExpression* v)
+: SequentialVisualizationStringProvider(v)
 {
 }
 
-VErrorExpression::~VErrorExpression()
-{
-	// These were automatically deleted by LayoutProvider's destructor
-	postfix_ = nullptr;
-	arg_ = nullptr;
-	prefix_ = nullptr;
-}
-
-void VErrorExpression::determineChildren()
-{
-	layout()->synchronizeFirst(
-			prefix_, node()->prefix().isEmpty() ? nullptr : node()->prefixNode(), &style()->prefix());
-	layout()->synchronizeMid(arg_, node()->arg(), 1);
-	layout()->synchronizeLast(
-			postfix_, node()->postfix().isEmpty() ? nullptr : node()->postfixNode(), &style()->postfix());
-
-	// We set these to read-only since that will make keyboard events pass though and allow these events to be handled
-	// by the expression handler.
-	if (prefix_) prefix_->setEditable(false);
-	if (postfix_) postfix_->setEditable(false);
-
-	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
-	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
-	//			what's the reason they are being updated.
-	// The style needs to be updated every time since if our own style changes, so will that of the children.
-	layout()->setStyle( &style()->layout());
-}
-
-} /* namespace OOVisualization */
+} /* namespace OOInteraction */

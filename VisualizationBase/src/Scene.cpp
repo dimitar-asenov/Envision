@@ -37,6 +37,7 @@
 #include "items/SceneHandlerItem.h"
 #include "items/SelectedItem.h"
 #include "cursor/Cursor.h"
+#include "CustomSceneEvent.h"
 
 #include "ModelBase/headers/nodes/Node.h"
 #include "ModelBase/headers/Model.h"
@@ -48,11 +49,15 @@ ModelRenderer Scene::defaultRenderer_;
 class UpdateSceneEvent : public QEvent
 {
 	public:
-		static const QEvent::Type EventType = (QEvent::Type) (User + 1);
+		static const QEvent::Type EventType;
 		UpdateSceneEvent() : QEvent(EventType){};
 };
 
-Scene::Scene() : QGraphicsScene(VisualizationManager::instance().getMainWindow()), needsUpdate_(false), renderer_(&defaultRenderer_), sceneHandlerItem_(new SceneHandlerItem(this))
+const QEvent::Type UpdateSceneEvent::EventType = static_cast<QEvent::Type> (QEvent::registerEventType());
+
+Scene::Scene()
+	: QGraphicsScene(VisualizationManager::instance().getMainWindow()), needsUpdate_(false),
+	  renderer_(&defaultRenderer_), sceneHandlerItem_(new SceneHandlerItem(this))
 {
 }
 
@@ -99,7 +104,6 @@ void Scene::listenToModel(Model::Model* model)
 void Scene::nodesUpdated(QList<Node*> nodes)
 {
 	// TODO implement this in a more efficient way.
-
 	for (QGraphicsItem* graphics_item :  items())
 	{
 		Item* item = static_cast<Item*> ( graphics_item );
@@ -114,7 +118,8 @@ void Scene::customEvent(QEvent *event)
 	if ( event->type() == UpdateSceneEvent::EventType )
 	{
 		// Update Top level items
-		for (int i = 0; i<topLevelItems_.size(); ++i) topLevelItems_.at(i)->updateSubtree();
+		for (int i = 0; i<topLevelItems_.size(); ++i)
+			topLevelItems_.at(i)->updateSubtree();
 
 		// Update Selections
 		// TODO do not recreate all items all the time.
@@ -139,6 +144,10 @@ void Scene::customEvent(QEvent *event)
 		}
 
 		needsUpdate_ = false;
+	}
+	else if (auto e = dynamic_cast<CustomSceneEvent*>(event))
+	{
+		e->execute();
 	}
 	else
 		QGraphicsScene::customEvent(event);

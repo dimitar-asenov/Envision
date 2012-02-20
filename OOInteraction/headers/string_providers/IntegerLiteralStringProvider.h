@@ -25,57 +25,35 @@
  **********************************************************************************************************************/
 
 /*
- * VErrorExpression.cpp
+ * IntegerLiteralStringProvider.h
  *
- *  Created on: Jan 19, 2012
+ *  Created on: Feb 15, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "expressions/VErrorExpression.h"
+#ifndef OOInteraction_INTEGERLITERALSTRINGPROVIDER_H_
+#define OOInteraction_INTEGERLITERALSTRINGPROVIDER_H_
 
-#include "VisualizationBase/headers/items/VText.h"
+#include "../oointeraction_api.h"
 
-using namespace Visualization;
-using namespace OOModel;
+#include "StringProvider.h"
 
 namespace OOVisualization {
-
-ITEM_COMMON_DEFINITIONS(VErrorExpression, "item")
-
-VErrorExpression::VErrorExpression(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode<LayoutProvider<>, ErrorExpression>(parent, node, style),
-	prefix_(nullptr),
-	arg_(nullptr),
-	postfix_(nullptr )
-{
+	class VIntegerLiteral;
 }
 
-VErrorExpression::~VErrorExpression()
-{
-	// These were automatically deleted by LayoutProvider's destructor
-	postfix_ = nullptr;
-	arg_ = nullptr;
-	prefix_ = nullptr;
-}
+namespace OOInteraction {
 
-void VErrorExpression::determineChildren()
-{
-	layout()->synchronizeFirst(
-			prefix_, node()->prefix().isEmpty() ? nullptr : node()->prefixNode(), &style()->prefix());
-	layout()->synchronizeMid(arg_, node()->arg(), 1);
-	layout()->synchronizeLast(
-			postfix_, node()->postfix().isEmpty() ? nullptr : node()->postfixNode(), &style()->postfix());
+class OOINTERACTION_API IntegerLiteralStringProvider : public StringProvider {
+	public:
+		IntegerLiteralStringProvider(OOVisualization::VIntegerLiteral* v);
+		virtual QString string();
+		virtual int offset();
+		virtual void setOffset(int newOffset);
 
-	// We set these to read-only since that will make keyboard events pass though and allow these events to be handled
-	// by the expression handler.
-	if (prefix_) prefix_->setEditable(false);
-	if (postfix_) postfix_->setEditable(false);
+	private:
+		OOVisualization::VIntegerLiteral* vis_;
+};
 
-	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
-	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
-	//			what's the reason they are being updated.
-	// The style needs to be updated every time since if our own style changes, so will that of the children.
-	layout()->setStyle( &style()->layout());
-}
-
-} /* namespace OOVisualization */
+} /* namespace OOInteraction */
+#endif /* OOInteraction_INTEGERLITERALSTRINGPROVIDER_H_ */

@@ -57,6 +57,8 @@ class VISUALIZATIONBASE_API Static : public Item
 
 		template<class T> static void registerStaticItem();
 
+		Item* item();
+
 	protected:
 		virtual void determineChildren();
 		virtual void updateGeometry(int availableWidth, int availableHeight);
@@ -75,6 +77,8 @@ class VISUALIZATIONBASE_API Static : public Item
 
 		static ItemStyle* constructStyle(const QString& itemClass);
 };
+
+inline Item* Static::item() { return item_; }
 
 template<class T> void Static::registerStaticItem()
 {

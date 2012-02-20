@@ -25,57 +25,37 @@
  **********************************************************************************************************************/
 
 /*
- * VErrorExpression.cpp
+ * SequentialVisualizationStringProvider.h
  *
- *  Created on: Jan 19, 2012
+ *  Created on: Feb 17, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "expressions/VErrorExpression.h"
+#ifndef OOInteraction_SEQUENTIALVISUALIZATIONSTRINGPROVIDER_H_
+#define OOInteraction_SEQUENTIALVISUALIZATIONSTRINGPROVIDER_H_
 
-#include "VisualizationBase/headers/items/VText.h"
+#include "../oointeraction_api.h"
+#include "StringProvider.h"
 
-using namespace Visualization;
-using namespace OOModel;
+#include "VisualizationBase/headers/items/LayoutProvider.h"
+#include "VisualizationBase/headers/layouts/SequentialLayout.h"
 
-namespace OOVisualization {
+namespace OOInteraction {
 
-ITEM_COMMON_DEFINITIONS(VErrorExpression, "item")
+class OOINTERACTION_API SequentialVisualizationStringProvider : public StringProvider {
+	public:
+		SequentialVisualizationStringProvider(Visualization::LayoutProvider<Visualization::SequentialLayout>* vis);
 
-VErrorExpression::VErrorExpression(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode<LayoutProvider<>, ErrorExpression>(parent, node, style),
-	prefix_(nullptr),
-	arg_(nullptr),
-	postfix_(nullptr )
-{
-}
+		virtual QString string();
+		virtual int offset();
+		virtual void setOffset(int newOffset);
 
-VErrorExpression::~VErrorExpression()
-{
-	// These were automatically deleted by LayoutProvider's destructor
-	postfix_ = nullptr;
-	arg_ = nullptr;
-	prefix_ = nullptr;
-}
+	protected:
+		virtual QStringList components();
 
-void VErrorExpression::determineChildren()
-{
-	layout()->synchronizeFirst(
-			prefix_, node()->prefix().isEmpty() ? nullptr : node()->prefixNode(), &style()->prefix());
-	layout()->synchronizeMid(arg_, node()->arg(), 1);
-	layout()->synchronizeLast(
-			postfix_, node()->postfix().isEmpty() ? nullptr : node()->postfixNode(), &style()->postfix());
+	private:
+		Visualization::LayoutProvider<Visualization::SequentialLayout>* vis_;
+};
 
-	// We set these to read-only since that will make keyboard events pass though and allow these events to be handled
-	// by the expression handler.
-	if (prefix_) prefix_->setEditable(false);
-	if (postfix_) postfix_->setEditable(false);
-
-	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
-	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
-	//			what's the reason they are being updated.
-	// The style needs to be updated every time since if our own style changes, so will that of the children.
-	layout()->setStyle( &style()->layout());
-}
-
-} /* namespace OOVisualization */
+} /* namespace OOInteraction */
+#endif /* OOInteraction_SEQUENTIALVISUALIZATIONSTRINGPROVIDER_H_ */

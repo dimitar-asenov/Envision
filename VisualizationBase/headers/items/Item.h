@@ -265,8 +265,15 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		 */
 		PositionConstraints satisfiedPositionConstraints(const QPoint& point) const;
 
-		inline qreal xEnd() const;
-		inline qreal yEnd() const;
+		qreal xEnd() const;
+		qreal yEnd() const;
+
+		/**
+		 * \brief Returns the child item that is visualizing \a node or nullptr if no such child exists.
+		 *
+		 * Depth-first search is used.
+		 */
+		virtual Item* findVisualizationOf(Model::Node* node);
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Item::PositionConstraints)

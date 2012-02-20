@@ -51,6 +51,7 @@
 #include <QtCore/QStringList>
 #include <QtCore/QPair>
 #include <QtCore/QMap>
+#include <QtCore/QHash>
 #include <QtCore/QString>
 #include <QtCore/QVector>
 #include <QtCore/QList>

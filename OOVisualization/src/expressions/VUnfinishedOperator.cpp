@@ -84,7 +84,12 @@ void VUnfinishedOperator::determineChildren()
 	}
 	layout()->synchronizeWithNodes(nodes, renderer());
 	for (int i = prefixEmpty ? 1 : 0; i < layout()->length(); i+=2 )
+	{
 		layout()->at<VText>(i)->setStyle(&style()->delimiters());
+		// We set these to read-only since that will make keyboard events pass though and allow these events to be handled
+		// by the expression handler.
+		layout()->at<VText>(i)->setEditable(false);
+	}
 }
 
 } /* namespace OOVisualization */

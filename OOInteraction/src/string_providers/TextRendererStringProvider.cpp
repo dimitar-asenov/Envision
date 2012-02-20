@@ -25,57 +25,47 @@
  **********************************************************************************************************************/
 
 /*
- * VErrorExpression.cpp
+ * TextRendererStringProvider.cpp
  *
- *  Created on: Jan 19, 2012
+ *  Created on: Feb 17, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "expressions/VErrorExpression.h"
+#include "string_providers/TextRendererStringProvider.h"
 
-#include "VisualizationBase/headers/items/VText.h"
+#include "VisualizationBase/headers/items/TextRenderer.h"
+#include "VisualizationBase/headers/cursor/TextCursor.h"
 
-using namespace Visualization;
-using namespace OOModel;
+namespace OOInteraction {
 
-namespace OOVisualization {
-
-ITEM_COMMON_DEFINITIONS(VErrorExpression, "item")
-
-VErrorExpression::VErrorExpression(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode<LayoutProvider<>, ErrorExpression>(parent, node, style),
-	prefix_(nullptr),
-	arg_(nullptr),
-	postfix_(nullptr )
+TextRendererStringProvider::TextRendererStringProvider(Visualization::TextRenderer* v)
+: vis_(v)
 {
 }
 
-VErrorExpression::~VErrorExpression()
+int TextRendererStringProvider::offset()
 {
-	// These were automatically deleted by LayoutProvider's destructor
-	postfix_ = nullptr;
-	arg_ = nullptr;
-	prefix_ = nullptr;
+	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
+
+	auto tc = dynamic_cast<Visualization::TextCursor*> (vis_->scene()->mainCursor());
+
+	return tc ? tc->caretPosition() : -1;
 }
 
-void VErrorExpression::determineChildren()
+QString TextRendererStringProvider::string()
 {
-	layout()->synchronizeFirst(
-			prefix_, node()->prefix().isEmpty() ? nullptr : node()->prefixNode(), &style()->prefix());
-	layout()->synchronizeMid(arg_, node()->arg(), 1);
-	layout()->synchronizeLast(
-			postfix_, node()->postfix().isEmpty() ? nullptr : node()->postfixNode(), &style()->postfix());
-
-	// We set these to read-only since that will make keyboard events pass though and allow these events to be handled
-	// by the expression handler.
-	if (prefix_) prefix_->setEditable(false);
-	if (postfix_) postfix_->setEditable(false);
-
-	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
-	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
-	//			what's the reason they are being updated.
-	// The style needs to be updated every time since if our own style changes, so will that of the children.
-	layout()->setStyle( &style()->layout());
+	if (!vis_) return QString();
+	return vis_->text();
 }
 
-} /* namespace OOVisualization */
+void TextRendererStringProvider::setOffset(int offset)
+{
+	if (!vis_) return;
+	vis_->moveCursor( Visualization::Item::MoveRightOf, QPoint(-2,0)); // Just set the caret to the first position.
+
+	// And then use the current cursor to set it to the correct position.
+	auto tc = dynamic_cast<Visualization::TextCursor*> (vis_->scene()->mainCursor());
+	tc->setCaretPosition(offset);
+}
+
+} /* namespace OOInteraction */

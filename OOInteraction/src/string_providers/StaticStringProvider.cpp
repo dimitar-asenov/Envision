@@ -25,57 +25,68 @@
  **********************************************************************************************************************/
 
 /*
- * VErrorExpression.cpp
+ * StaticStringProvider.cpp
  *
- *  Created on: Jan 19, 2012
+ *  Created on: Feb 17, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "expressions/VErrorExpression.h"
+#include "string_providers/StaticStringProvider.h"
 
-#include "VisualizationBase/headers/items/VText.h"
+#include "VisualizationBase/headers/items/Static.h"
+#include "ModelBase/headers/adapter/AdapterManager.h"
 
-using namespace Visualization;
-using namespace OOModel;
+namespace OOInteraction {
 
-namespace OOVisualization {
-
-ITEM_COMMON_DEFINITIONS(VErrorExpression, "item")
-
-VErrorExpression::VErrorExpression(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode<LayoutProvider<>, ErrorExpression>(parent, node, style),
-	prefix_(nullptr),
-	arg_(nullptr),
-	postfix_(nullptr )
+StaticStringProvider::StaticStringProvider(Visualization::Static* v)
+: vis_(v)
 {
 }
 
-VErrorExpression::~VErrorExpression()
+int StaticStringProvider::offset()
 {
-	// These were automatically deleted by LayoutProvider's destructor
-	postfix_ = nullptr;
-	arg_ = nullptr;
-	prefix_ = nullptr;
+	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
+
+
+	int result = 0;
+	StringProvider* child =
+			Model::AdapterManager::adapt<StringProvider>(vis_->item());
+	if (child)
+	{
+		result = child->offset();
+		SAFE_DELETE(child);
+	}
+
+	return result;
 }
 
-void VErrorExpression::determineChildren()
+QString StaticStringProvider::string()
 {
-	layout()->synchronizeFirst(
-			prefix_, node()->prefix().isEmpty() ? nullptr : node()->prefixNode(), &style()->prefix());
-	layout()->synchronizeMid(arg_, node()->arg(), 1);
-	layout()->synchronizeLast(
-			postfix_, node()->postfix().isEmpty() ? nullptr : node()->postfixNode(), &style()->postfix());
+	if (!vis_) return QString();
 
-	// We set these to read-only since that will make keyboard events pass though and allow these events to be handled
-	// by the expression handler.
-	if (prefix_) prefix_->setEditable(false);
-	if (postfix_) postfix_->setEditable(false);
+	QString result = 0;
+	StringProvider* child =
+			Model::AdapterManager::adapt<StringProvider>(vis_->item());
+	if (child)
+	{
+		result = child->string();
+		SAFE_DELETE(child);
+	}
 
-	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
-	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
-	//			what's the reason they are being updated.
-	// The style needs to be updated every time since if our own style changes, so will that of the children.
-	layout()->setStyle( &style()->layout());
+	return result;
 }
 
-} /* namespace OOVisualization */
+void StaticStringProvider::setOffset(int offset)
+{
+	if (!vis_) return;
+
+	StringProvider* child =
+			Model::AdapterManager::adapt<StringProvider>(vis_->item());
+	if (child)
+	{
+		child->setOffset(offset);
+		SAFE_DELETE(child);
+	}
+}
+
+} /* namespace OOInteraction */

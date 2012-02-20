@@ -35,7 +35,25 @@ INSTALLS += target \
     pluginmeta \
     styles
 PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/handlers/HOOExpression.h \
+HEADERS += headers/handlers/SetCursorEvent.h \
+    headers/string_providers/StaticStringProvider.h \
+    headers/string_providers/TextRendererStringProvider.h \
+    headers/string_providers/SequentialVisualizationStringProvider.h \
+    headers/string_components/VariableAccessStringComponents.h \
+    headers/string_components/UnfinishedOperatorStringComponents.h \
+    headers/string_components/ErrorExpressionStringComponents.h \
+    headers/string_components/BinaryOperatorStringComponents.h \
+    headers/string_components/IntegerLiteralStringComponents.h \
+    headers/string_components/EmptyExpressionStringComponents.h \
+    headers/string_components/StringComponents.h \
+    headers/string_providers/EmptyExpressionStringProvider.h \
+    headers/string_providers/ErrorExpressionStringProvider.h \
+    headers/string_providers/UnfinishedOperatorStringProvider.h \
+    headers/string_providers/IntegerLiteralStringProvider.h \
+    headers/string_providers/VariableAccessStringProvider.h \
+    headers/string_providers/BinaryOperatorStringProvider.h \
+    headers/string_providers/StringProvider.h \
+    headers/handlers/HOOExpression.h \
     headers/expression_editor/OOOperatorDescriptorList.h \
     headers/expression_editor/operators/BinaryOperatorDescriptor.h \
     headers/expression_editor/OOOperatorDescriptor.h \
@@ -44,7 +62,25 @@ HEADERS += headers/handlers/HOOExpression.h \
     headers/OOInteractionException.h \
     headers/oointeraction_api.h \
     src/oointeraction.h
-SOURCES += src/handlers/HOOExpression.cpp \
+SOURCES += src/handlers/SetCursorEvent.cpp \
+    src/string_providers/StaticStringProvider.cpp \
+    src/string_providers/TextRendererStringProvider.cpp \
+    src/string_providers/SequentialVisualizationStringProvider.cpp \
+    src/string_components/BinaryOperatorStringComponents.cpp \
+    src/string_components/EmptyExpressionStringComponents.cpp \
+    src/string_components/ErrorExpressionStringComponents.cpp \
+    src/string_components/IntegerLiteralStringComponents.cpp \
+    src/string_components/UnfinishedOperatorStringComponents.cpp \
+    src/string_components/VariableAccessStringComponents.cpp \
+    src/string_components/StringComponents.cpp \
+    src/string_providers/EmptyExpressionStringProvider.cpp \
+    src/string_providers/ErrorExpressionStringProvider.cpp \
+    src/string_providers/IntegerLiteralStringProvider.cpp \
+    src/string_providers/UnfinishedOperatorStringProvider.cpp \
+    src/string_providers/VariableAccessStringProvider.cpp \
+    src/string_providers/BinaryOperatorStringProvider.cpp \
+    src/string_providers/StringProvider.cpp \
+    src/handlers/HOOExpression.cpp \
     src/expression_editor/OOOperatorDescriptorList.cpp \
     src/expression_editor/operators/BinaryOperatorDescriptor.cpp \
     src/expression_editor/OOOperatorDescriptor.cpp \

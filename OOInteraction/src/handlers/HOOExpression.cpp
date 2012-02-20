@@ -33,9 +33,13 @@
 
 #include "handlers/HOOExpression.h"
 
+#include "string_providers/StringProvider.h"
+#include "expression_editor/OOExpressionBuilder.h"
+#include "handlers/SetCursorEvent.h"
+
 #include "OOModel/headers/allOOModelNodes.h"
 
-#include <QtCore/QDebug>
+#include "ModelBase/headers/adapter/AdapterManager.h"
 
 namespace OOInteraction {
 
@@ -52,85 +56,67 @@ HOOExpression* HOOExpression::instance()
 
 void HOOExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
-	auto e = dynamic_cast<OOModel::Expression*>(target->node());
-	qDebug() << toString(e);
+	// Find the top most parent that is adaptable to StringProvider
+
+	Visualization::Item* topMostItem = target;
+	StringProvider* topMostSP = Model::AdapterManager::adapt<StringProvider>(topMostItem);
+
+	auto p = topMostItem->parentItem();
+	while(p)
+	{
+		StringProvider* adapted = Model::AdapterManager::adapt<StringProvider>(p);
+		if (adapted)
+		{
+			SAFE_DELETE(topMostSP);
+			topMostSP = adapted;
+			topMostItem = static_cast<Visualization::Item*> (p);
+		}
+		p = p->parentItem();
+	}
+
+	QString str = topMostSP->string();
+	int index = topMostSP->offset();
+	SAFE_DELETE(topMostSP);
+
+	QString newText = str;
+	int newIndex = index;
+	switch (event->key())
+	{
+		case Qt::Key_Delete:
+		{
+			if (index < str.size() ) newText.remove(index, 1);
+		} break;
+		case Qt::Key_Backspace:
+		{
+			if (index > 0 ) newText.remove(index-1, 1);
+			--newIndex;
+		} break;
+		default:
+		{
+			if (!event->text().isEmpty())
+			{
+				newText.insert(index, event->text());
+				newIndex += event->text().size();
+			}
+		} break;
+	}
+
+	auto parent = static_cast<Visualization::Item*> (topMostItem->parentItem());
+
+	Model::Node* containerNode = topMostItem->node()->parent();
+	containerNode->model()->beginModification(containerNode, "edit expression");
+	OOModel::Expression* newExpression = OOExpressionBuilder::getOOExpression( newText );
+	containerNode->replaceChild(topMostItem->node(), newExpression);
+	containerNode->model()->endModification();
+
+	// We need to trigger an update of all the visualizations leading up to the target, even though the target
+	// visualization will probably be deleted and replaced with a new one.
+	target->setUpdateNeeded();
+
+	QApplication::postEvent(target->scene(), new SetCursorEvent(parent, newExpression, newIndex));
+
 	GenericHandler::keyPressEvent(target, event);
-}
-
-
-QString HOOExpression::toString(OOModel::Expression* expression)
-{
-	if (!expression)
-	{
-		return QString();
-	}
-	else if (auto e = dynamic_cast<OOModel::BinaryOperation*>(expression) )
-	{
-		QString result = toString(e->left());
-		switch(e->op())
-		{
-			case OOModel::BinaryOperation::TIMES: result +="*"; break;
-			case OOModel::BinaryOperation::DIVIDE: result +="/"; break;
-			case OOModel::BinaryOperation::REMAINDER: result +="%"; break;
-			case OOModel::BinaryOperation::PLUS: result +="+"; break;
-			case OOModel::BinaryOperation::MINUS: result +="-"; break;
-			case OOModel::BinaryOperation::LEFT_SHIFT: result +="<<"; break;
-			case OOModel::BinaryOperation::RIGHT_SHIFT_SIGNED: result +=">>"; break;
-			case OOModel::BinaryOperation::RIGHT_SHIFT_UNSIGNED: result +=">>>"; break;
-			case OOModel::BinaryOperation::LESS: result +="<"; break;
-			case OOModel::BinaryOperation::GREATER: result +=">"; break;
-			case OOModel::BinaryOperation::LESS_EQUALS: result +="<="; break;
-			case OOModel::BinaryOperation::GREATER_EQUALS: result +=">="; break;
-			case OOModel::BinaryOperation::EQUALS: result +="="; break;
-			case OOModel::BinaryOperation::NOT_EQUALS: result +="!="; break;
-			case OOModel::BinaryOperation::XOR: result +="^"; break;
-			case OOModel::BinaryOperation::AND: result +="&"; break;
-			case OOModel::BinaryOperation::OR: result +="|"; break;
-			case OOModel::BinaryOperation::CONDITIONAL_AND: result +="&&"; break;
-			case OOModel::BinaryOperation::CONDITIONAL_OR: result +="||"; break;
-			case OOModel::BinaryOperation::ARRAY_INDEX: result +="["; break;
-			default: return QString();
-		}
-		result += toString(e->right());
-
-		if (e->op() == OOModel::BinaryOperation::ARRAY_INDEX) result += "]";
-		return result;
-	}
-	else if ( auto e = dynamic_cast<OOModel::VariableAccess*>(expression) )
-	{
-		QString prefix = toString(e->prefix());
-		if (!prefix.isEmpty()) prefix += ".";
-		return prefix + e->ref()->path().split(':').last();
-	}
-	else if ( auto e = dynamic_cast<OOModel::IntegerLiteral*>(expression) )
-	{
-		return QString::number( e->value() );
-	}
-	else if ( auto e = dynamic_cast<OOModel::UnfinishedOperator*>(expression) )
-	{
-		QString result;
-		for (int i=0; i< e->operands()->size(); ++i)
-		{
-			result += e->delimiters()->at(i)->get();
-			result += toString(e->operands()->at(i));
-		}
-		if (e->delimiters()->size() > e->operands()->size())
-			result += e->delimiters()->last()->get();
-		return result;
-	}
-	else if ( auto e = dynamic_cast<OOModel::ErrorExpression*>(expression) )
-	{
-		return e->prefix() + toString(e->arg()) + e->postfix();
-	}
-	else if ( auto e = dynamic_cast<OOModel::IntegerLiteral*>(expression) )
-	{
-		return QString::number( e->value() );
-	}
-	else if ( dynamic_cast<OOModel::EmptyExpression*>(expression) )
-	{
-		return "";
-	}
-	else return "NOT Implemented";
+	event->accept();
 }
 
 } /* namespace OOInteraction */

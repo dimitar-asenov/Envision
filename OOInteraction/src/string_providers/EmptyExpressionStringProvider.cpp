@@ -25,57 +25,48 @@
  **********************************************************************************************************************/
 
 /*
- * VErrorExpression.cpp
+ * EmptyExpressionStringProvider.cpp
  *
- *  Created on: Jan 19, 2012
+ *  Created on: Feb 15, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "expressions/VErrorExpression.h"
+#include "string_providers/EmptyExpressionStringProvider.h"
+#include "string_components/StringComponents.h"
 
-#include "VisualizationBase/headers/items/VText.h"
+#include "OOVisualization/headers/expressions/VEmptyExpression.h"
+#include "ModelBase/headers/adapter/AdapterManager.h"
 
-using namespace Visualization;
-using namespace OOModel;
+namespace OOInteraction {
 
-namespace OOVisualization {
-
-ITEM_COMMON_DEFINITIONS(VErrorExpression, "item")
-
-VErrorExpression::VErrorExpression(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode<LayoutProvider<>, ErrorExpression>(parent, node, style),
-	prefix_(nullptr),
-	arg_(nullptr),
-	postfix_(nullptr )
+EmptyExpressionStringProvider::EmptyExpressionStringProvider(OOVisualization::VEmptyExpression* v)
+: vis_(v)
 {
 }
 
-VErrorExpression::~VErrorExpression()
+int EmptyExpressionStringProvider::offset()
 {
-	// These were automatically deleted by LayoutProvider's destructor
-	postfix_ = nullptr;
-	arg_ = nullptr;
-	prefix_ = nullptr;
+	return (vis_ && vis_->itemOrChildHasFocus()) ? 0 : -1;
 }
 
-void VErrorExpression::determineChildren()
+QString EmptyExpressionStringProvider::string()
 {
-	layout()->synchronizeFirst(
-			prefix_, node()->prefix().isEmpty() ? nullptr : node()->prefixNode(), &style()->prefix());
-	layout()->synchronizeMid(arg_, node()->arg(), 1);
-	layout()->synchronizeLast(
-			postfix_, node()->postfix().isEmpty() ? nullptr : node()->postfixNode(), &style()->postfix());
+	if (!vis_) return QString();
 
-	// We set these to read-only since that will make keyboard events pass though and allow these events to be handled
-	// by the expression handler.
-	if (prefix_) prefix_->setEditable(false);
-	if (postfix_) postfix_->setEditable(false);
+	QString result;
+	StringComponents* node = Model::AdapterManager::adapt<StringComponents>(vis_->node());
+	if (node)
+	{
+		result = node->components().join("");
+		SAFE_DELETE(node);
+	}
 
-	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
-	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
-	//			what's the reason they are being updated.
-	// The style needs to be updated every time since if our own style changes, so will that of the children.
-	layout()->setStyle( &style()->layout());
+	return result;
 }
 
-} /* namespace OOVisualization */
+void EmptyExpressionStringProvider::setOffset(int)
+{
+	vis_->moveCursor(Visualization::Item::MoveOnPosition, QPoint(0,0));
+}
+
+} /* namespace OOInteraction */

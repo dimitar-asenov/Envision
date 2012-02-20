@@ -50,10 +50,6 @@ class OOINTERACTION_API HOOExpression : public Interaction::GenericHandler {
 		static HOOExpression* instance();
 
 		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event);
-
-	private:
-
-		static QString toString(OOModel::Expression* expression);
 };
 
 } /* namespace OOInteraction */

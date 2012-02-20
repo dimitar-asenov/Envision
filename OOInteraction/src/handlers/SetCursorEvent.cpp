@@ -25,57 +25,37 @@
  **********************************************************************************************************************/
 
 /*
- * VErrorExpression.cpp
+ * SetCursorEvent.cpp
  *
- *  Created on: Jan 19, 2012
+ *  Created on: Feb 17, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "expressions/VErrorExpression.h"
+#include "handlers/SetCursorEvent.h"
 
-#include "VisualizationBase/headers/items/VText.h"
+#include "string_providers/StringProvider.h"
 
-using namespace Visualization;
-using namespace OOModel;
+#include "VisualizationBase/headers/items/Item.h"
+#include "ModelBase/headers/adapter/AdapterManager.h"
 
-namespace OOVisualization {
+namespace OOInteraction {
 
-ITEM_COMMON_DEFINITIONS(VErrorExpression, "item")
+const QEvent::Type SetCursorEvent::EventType = static_cast<QEvent::Type> (QEvent::registerEventType());
 
-VErrorExpression::VErrorExpression(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode<LayoutProvider<>, ErrorExpression>(parent, node, style),
-	prefix_(nullptr),
-	arg_(nullptr),
-	postfix_(nullptr )
+SetCursorEvent::SetCursorEvent(Visualization::Item* parentContainer, Model::Node* node, int offset)
+	: CustomSceneEvent(EventType), parentContainer_(parentContainer), node_(node), offset_(offset)
 {
 }
 
-VErrorExpression::~VErrorExpression()
+void SetCursorEvent::execute()
 {
-	// These were automatically deleted by LayoutProvider's destructor
-	postfix_ = nullptr;
-	arg_ = nullptr;
-	prefix_ = nullptr;
+	Q_ASSERT(parentContainer_->findVisualizationOf(node_) != nullptr);
+	StringProvider* sp = Model::AdapterManager::adapt<StringProvider>( parentContainer_->findVisualizationOf(node_) );
+	if (sp)
+	{
+		sp->setOffset(offset_);
+		SAFE_DELETE(sp);
+	}
 }
 
-void VErrorExpression::determineChildren()
-{
-	layout()->synchronizeFirst(
-			prefix_, node()->prefix().isEmpty() ? nullptr : node()->prefixNode(), &style()->prefix());
-	layout()->synchronizeMid(arg_, node()->arg(), 1);
-	layout()->synchronizeLast(
-			postfix_, node()->postfix().isEmpty() ? nullptr : node()->postfixNode(), &style()->postfix());
-
-	// We set these to read-only since that will make keyboard events pass though and allow these events to be handled
-	// by the expression handler.
-	if (prefix_) prefix_->setEditable(false);
-	if (postfix_) postfix_->setEditable(false);
-
-	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
-	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
-	//			what's the reason they are being updated.
-	// The style needs to be updated every time since if our own style changes, so will that of the children.
-	layout()->setStyle( &style()->layout());
-}
-
-} /* namespace OOVisualization */
+} /* namespace OOInteraction */

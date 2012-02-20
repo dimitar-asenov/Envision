@@ -37,10 +37,35 @@
 #include "expression_editor/OOOperatorDescriptorList.h"
 #include "handlers/HOOExpression.h"
 
+#include "string_components/BinaryOperatorStringComponents.h"
+#include "string_components/EmptyExpressionStringComponents.h"
+#include "string_components/ErrorExpressionStringComponents.h"
+#include "string_components/IntegerLiteralStringComponents.h"
+#include "string_components/UnfinishedOperatorStringComponents.h"
+#include "string_components/VariableAccessStringComponents.h"
+
+#include "string_providers/BinaryOperatorStringProvider.h"
+#include "string_providers/EmptyExpressionStringProvider.h"
+#include "string_providers/ErrorExpressionStringProvider.h"
+#include "string_providers/IntegerLiteralStringProvider.h"
+#include "string_providers/UnfinishedOperatorStringProvider.h"
+#include "string_providers/VariableAccessStringProvider.h"
+#include "string_providers/TextRendererStringProvider.h"
+#include "string_providers/StaticStringProvider.h"
+
 #include "OOVisualization/headers/allOOVisualizations.h"
+
+#include "OOModel/headers/allOOModelNodes.h"
 
 #include "InteractionBase/headers/handlers/GenericHandler.h"
 #include "InteractionBase/headers/handlers/HText.h"
+
+#include "VisualizationBase/headers/items/Static.h"
+#include "VisualizationBase/headers/items/Symbol.h"
+#include "VisualizationBase/headers/items/Text.h"
+#include "VisualizationBase/headers/items/VText.h"
+
+#include "ModelBase/headers/adapter/AdapterManager.h"
 
 Q_EXPORT_PLUGIN2( oointeraction, OOInteraction::OOInteraction )
 
@@ -89,6 +114,42 @@ bool OOInteraction::initialize(Envision::EnvisionManager&)
 	OOVisualization::VPrimitiveType::setInteractionHandler(Interaction::GenericHandler::instance());
 	OOVisualization::VNamedType::setInteractionHandler(Interaction::GenericHandler::instance());
 	OOVisualization::VArrayType::setInteractionHandler(Interaction::GenericHandler::instance());
+
+	// Register string components that convert an expression to a string list representing its components
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringComponents, BinaryOperatorStringComponents, OOModel::BinaryOperation>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringComponents, IntegerLiteralStringComponents, OOModel::IntegerLiteral>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringComponents, VariableAccessStringComponents, OOModel::VariableAccess>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringComponents, UnfinishedOperatorStringComponents, OOModel::UnfinishedOperator>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringComponents, ErrorExpressionStringComponents, OOModel::ErrorExpression>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringComponents, EmptyExpressionStringComponents, OOModel::EmptyExpression>();
+
+	// Register string providers
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringProvider, BinaryOperatorStringProvider, OOVisualization::VBinaryOperation>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringProvider, IntegerLiteralStringProvider, OOVisualization::VIntegerLiteral>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringProvider, VariableAccessStringProvider, OOVisualization::VVariableAccess>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringProvider, UnfinishedOperatorStringProvider, OOVisualization::VUnfinishedOperator>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringProvider, ErrorExpressionStringProvider, OOVisualization::VErrorExpression>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringProvider, EmptyExpressionStringProvider, OOVisualization::VEmptyExpression>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringProvider, TextRendererStringProvider, Visualization::Text>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringProvider, TextRendererStringProvider, Visualization::VText>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringProvider, TextRendererStringProvider, Visualization::Symbol>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringProvider, StaticStringProvider, Visualization::Static>();
 
 	return true;
 }

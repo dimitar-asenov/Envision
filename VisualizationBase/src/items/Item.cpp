@@ -359,6 +359,20 @@ bool Item::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 	else return false;
 }
 
+Item* Item::findVisualizationOf(Model::Node* node)
+{
+	if (this->node() == node) return this;
+
+	for(auto child : childItems())
+	{
+		Item* item = static_cast<Item*>(child);
+		item = item->findVisualizationOf(node);
+		if (item) return item;
+	}
+
+	return nullptr;
+}
+
 /***********************************************************************************************************************
  * Reimplemented Event handling methods. These simply dispatch the method call to the interaction handler of this
  * object.
