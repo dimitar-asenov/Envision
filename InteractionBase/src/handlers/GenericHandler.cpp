@@ -119,92 +119,81 @@ void GenericHandler::beforeEvent(Visualization::Item *, QEvent* event)
 
 void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
-	if (event->modifiers() == Qt::ControlModifier)
+	if (event->matches(QKeySequence::Copy))
 	{
-		switch (event->key())
+		QList<const Model::Node*> nodesToCopy;
+		QList<QGraphicsItem*> selected = target->scene()->selectedItems();
+
+		// Get all items from the current selection that are model items.
+		for (int i = 0; i<selected.size(); ++i)
 		{
-/* Copy */	case Qt::Key_C:
-				{
-					QList<const Model::Node*> nodesToCopy;
-					QList<QGraphicsItem*> selected = target->scene()->selectedItems();
-
-					// Get all items from the current selection that are model items.
-					for (int i = 0; i<selected.size(); ++i)
-					{
-						Visualization::Item* item = static_cast<Visualization::Item*> (selected.at(i));
-						if (item->hasNode()) nodesToCopy.append(item->node());
-					}
-
-					// In case there is exactly one selected item that is not a model item try to find the first parent that it has which is a model item.
-					if (nodesToCopy.size() == 0 && selected.size() == 1)
-					{
-						Visualization::Item* item = static_cast<Visualization::Item*> (selected.at(0));
-						while (item)
-						{
-							if (item->hasNode())
-							{
-								nodesToCopy.append(item->node());
-								break;
-							}
-
-							item = static_cast<Visualization::Item*> ( item->parentItem() );
-						}
-					}
-
-					if (nodesToCopy.size() > 0)
-					{
-
-						FilePersistence::SystemClipboard clipboard;
-						arrangeNodesForClipboard(nodesToCopy);
-						clipboard.putNodes(nodesToCopy);
-					}
-				}
-				break;
-/* Paste */	case Qt::Key_V:
-				{
-					FilePersistence::SystemClipboard clipboard;
-					if (clipboard.numNodes() == 1 && target->scene()->selectedItems().size() == 1 && target->isSelected())
-					{
-						if (target->hasNode() && target->node()->typeName() == clipboard.currentNodeType())
-						{
-							target->node()->model()->beginModification(target->node(), "paste");
-							target->node()->load(clipboard);
-							target->node()->model()->endModification();
-							target->setUpdateNeeded();
-						}
-						else InteractionHandler::keyPressEvent(target, event);
-					}
-					else InteractionHandler::keyPressEvent(target, event);
-				}
-				break;
-/* Undo */	case Qt::Key_Z:
-				{
-					if (target->hasNode())
-					{
-						target->node()->model()->beginModification(nullptr, "undo");
-						target->node()->model()->undo();
-						target->node()->model()->endModification();
-						target->setUpdateNeeded();
-					}
-					else InteractionHandler::keyPressEvent(target, event);
-				}
-				break;
-/* Redo */	case Qt::Key_Y:
-				{
-					if (target->hasNode())
-					{
-						target->node()->model()->beginModification(nullptr, "redo");
-						target->node()->model()->redo();
-						target->node()->model()->endModification();
-						target->setUpdateNeeded();
-					}
-					else InteractionHandler::keyPressEvent(target, event);
-				}
-				break;
-			default:
-				InteractionHandler::keyPressEvent(target, event);
-				break;
+			Visualization::Item* item = static_cast<Visualization::Item*> (selected.at(i));
+			if (item->hasNode()) nodesToCopy.append(item->node());
 		}
+
+		// In case there is exactly one selected item that is not a model item try to find the first parent that it has which is a model item.
+		if (nodesToCopy.size() == 0 && selected.size() == 1)
+		{
+			Visualization::Item* item = static_cast<Visualization::Item*> (selected.at(0));
+			while (item)
+			{
+				if (item->hasNode())
+				{
+					nodesToCopy.append(item->node());
+					break;
+				}
+
+				item = static_cast<Visualization::Item*> ( item->parentItem() );
+			}
+		}
+
+		if (nodesToCopy.size() > 0)
+		{
+
+			FilePersistence::SystemClipboard clipboard;
+			arrangeNodesForClipboard(nodesToCopy);
+			clipboard.putNodes(nodesToCopy);
+		}
+	}
+	else if (event->matches(QKeySequence::Paste))
+	{
+		FilePersistence::SystemClipboard clipboard;
+		if (clipboard.numNodes() == 1 && target->scene()->selectedItems().size() == 1 && target->isSelected())
+		{
+			if (target->hasNode() && target->node()->typeName() == clipboard.currentNodeType())
+			{
+				target->node()->model()->beginModification(target->node(), "paste");
+				target->node()->load(clipboard);
+				target->node()->model()->endModification();
+				target->setUpdateNeeded();
+			}
+			else InteractionHandler::keyPressEvent(target, event);
+		}
+		else InteractionHandler::keyPressEvent(target, event);
+	}
+	else if (event->matches(QKeySequence::Undo))
+	{
+		if (target->hasNode())
+		{
+			Model::Model* m = target->node()->model();
+			m->beginModification(nullptr, "undo");
+			m->undo();
+			m->endModification();
+			target->setUpdateNeeded();
+		}
+		else InteractionHandler::keyPressEvent(target, event);
+	}
+	else if (event->matches(QKeySequence::Redo))
+	{
+		if (target->hasNode())
+		{
+			Model::Model* m = target->node()->model();
+			m->beginModification(nullptr, "redo");
+			m->redo();
+			m->endModification();
+			target->setUpdateNeeded();
+		}
+		else InteractionHandler::keyPressEvent(target, event);
 	}
 	else if (event->modifiers() == 0
 			&& (	event->key() == Qt::Key_Up

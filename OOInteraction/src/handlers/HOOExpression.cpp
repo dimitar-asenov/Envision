@@ -41,6 +41,8 @@
 
 #include "ModelBase/headers/adapter/AdapterManager.h"
 
+#include <QtCore/QDebug>
+
 namespace OOInteraction {
 
 HOOExpression::HOOExpression()
@@ -56,8 +58,17 @@ HOOExpression* HOOExpression::instance()
 
 void HOOExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
-	// Find the top most parent that is adaptable to StringProvider
+	// TODO implement this better. It is supposed to only let typed characters through and igonre modifier keys.
+	// However it does not work with e.g. ALTGR characters.
+	if (event->text().isEmpty() || (event->modifiers() != Qt::NoModifier && event->modifiers() != Qt::ShiftModifier))
+	{
+		qDebug() << "generic";
+		GenericHandler::keyPressEvent(target, event);
+		return;
+	}
 
+	qDebug() << "processing";
+	// Find the top most parent that is adaptable to StringProvider
 	Visualization::Item* topMostItem = target;
 	StringProvider* topMostSP = Model::AdapterManager::adapt<StringProvider>(topMostItem);
 
