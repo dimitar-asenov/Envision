@@ -62,12 +62,10 @@ void HOOExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	// However it does not work with e.g. ALTGR characters.
 	if (event->text().isEmpty() || (event->modifiers() != Qt::NoModifier && event->modifiers() != Qt::ShiftModifier))
 	{
-		qDebug() << "generic";
 		GenericHandler::keyPressEvent(target, event);
 		return;
 	}
 
-	qDebug() << "processing";
 	// Find the top most parent that is adaptable to StringProvider
 	Visualization::Item* topMostItem = target;
 	StringProvider* topMostSP = Model::AdapterManager::adapt<StringProvider>(topMostItem);
