@@ -125,13 +125,30 @@ void Scene::customEvent(QEvent *event)
 		// TODO do not recreate all items all the time.
 		for (int i = 0; i<selections_.size(); i++) SAFE_DELETE_ITEM(selections_[i]);
 		QList<QGraphicsItem *> selected = selectedItems();
-		for (int i = 0; i<selected.size(); ++i)
+
+		// Only display a selection when there are multiple selected items or no cursor
+		bool draw_selections = selected.size() !=1 || cursors_.isEmpty() || cursors_.first()->visualization() == nullptr;
+
+		if (!draw_selections)
 		{
-			Item* s = static_cast<Item*> (selected[i]);
-			selections_.append(new SelectedItem(s));
-			addItem(selections_.last());
-			selections_.last()->updateSubtree();
+			QGraphicsItem* selectable = cursors_.first()->owner();
+			while (selectable && ! (selectable->flags() &  QGraphicsItem::ItemIsSelectable))
+				selectable = selectable->parentItem();
+
+			draw_selections = !selectable || selectable != selected.first();
 		}
+
+		if (draw_selections)
+		{
+			for (int i = 0; i<selected.size(); ++i)
+			{
+				Item* s = static_cast<Item*> (selected[i]);
+				selections_.append(new SelectedItem(s));
+				addItem(selections_.last());
+				selections_.last()->updateSubtree();
+			}
+		}
+
 
 		// Update Cursors
 		for (Cursor* c : cursors_)
