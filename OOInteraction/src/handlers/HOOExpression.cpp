@@ -41,8 +41,6 @@
 
 #include "ModelBase/headers/adapter/AdapterManager.h"
 
-#include <QtCore/QDebug>
-
 namespace OOInteraction {
 
 HOOExpression::HOOExpression()
@@ -60,7 +58,10 @@ void HOOExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
 	// TODO implement this better. It is supposed to only let typed characters through and igonre modifier keys.
 	// However it does not work with e.g. ALTGR characters.
-	if (event->text().isEmpty() || (event->modifiers() != Qt::NoModifier && event->modifiers() != Qt::ShiftModifier))
+	if (event->text().isEmpty()
+			|| event->key() == Qt::Key_Escape
+			|| (event->modifiers() != Qt::NoModifier && event->modifiers() != Qt::ShiftModifier)
+			)
 	{
 		GenericHandler::keyPressEvent(target, event);
 		return;
