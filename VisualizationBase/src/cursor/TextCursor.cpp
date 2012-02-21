@@ -54,8 +54,8 @@ void TextCursor::setVisualizationSize(const QSize& size)
 
 void TextCursor::update(const QFontMetrics& qfm)
 {
-	int xstart = qfm.width(owner()->text(), selectionFirstIndex());
-	int xend = qfm.width(owner()->text(), selectionLastIndex());
+	int xstart = qfm.width(owner()->text().left(selectionFirstIndex()));
+	int xend = qfm.width(owner()->text().left(selectionLastIndex()));
 	setX(xstart, xend);
 
 	QSize cursorSize = QSize(2, owner()->height() - 2);
