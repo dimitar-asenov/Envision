@@ -338,25 +338,151 @@ Item::PositionConstraints Item::satisfiedPositionConstraints(const QPoint& p) co
 	return constraints;
 }
 
+QList<ItemRegion> Item::regions()
+{
+	QList<ItemRegion> regs;
+
+	bool hasChildren = false;
+	for(auto item : childItems())
+	{
+		hasChildren = true;
+		Item* child = static_cast<Item*> (item);
+		QRect rect = child->boundingRect().toRect();
+		rect.translate(child->pos().toPoint());
+		regs.append(ItemRegion(rect));
+		regs.last().setItem(child);
+	}
+
+	if (!hasChildren)
+	{
+		regs.append(ItemRegion(boundingRect_.toRect()));
+
+		Cursor* cur = new Cursor(this);
+		cur->setRegion( boundingRect_.translated( (-1)*scenePos() ).toRect() );
+		cur->setPosition( cur->region().center() );
+		regs.last().setCursor(cur);
+	}
+
+	return regs;
+}
+
 bool Item::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 {
-	bool containsReference = boundingRect_.contains(reference);
+	// The condition below is only true if this method is called from a parent item, after it was already called for the
+	// item itself. In that case simply return false as the original call returned false too.
+	if (scene()->mainCursor() && scene()->mainCursor()->owner() == this &&
+			(dir == MoveUpOf || dir == MoveDownOf || dir == MoveLeftOf || dir == MoveRightOf) )
+	return false;
 
-	bool acceptMove = (dir == MoveOnPosition) && containsReference;
-	acceptMove = acceptMove || ((dir == MoveUpOf) && (reference.y() > 0));
-	acceptMove = acceptMove || ((dir == MoveDownOf) && (reference.y() < height()));
-	acceptMove = acceptMove || ((dir == MoveLeftOf) && (reference.x() > 0));
-	acceptMove = acceptMove || ((dir == MoveRightOf) && (reference.x() < width()));
+	QList<ItemRegion> regs = regions();
 
-	if (acceptMove)
+	if (regs.isEmpty()) return false;
+
+	QPoint source = reference;
+
+	ItemRegion* current = nullptr;
+	// Handle cursor movement in a specific direction
+	if (hasFocus() && (dir == MoveUp || dir == MoveDown || dir == MoveLeft || dir == MoveRight) )
 	{
+		auto c = correspondingSceneCursor<Cursor>();
+		// Find which region corresponds to the current cursor and set the source point accordingly
+		for (ItemRegion& r : regs)
+		{
+			if (c->isSame(r.cursor()))
+			{
+				current = &r;
+				switch(dir)
+				{
+					case MoveUp: source = QPoint(reference.x(), r.region().y()); break;
+					case MoveDown: source = QPoint(reference.x(), r.region().y() + r.region().height()); break;
+					case MoveLeft: source = QPoint(r.region().x(), reference.y()); break;
+					case MoveRight: source = QPoint(r.region().x() + r.region().width(), reference.y()); break;
+					default: /* Will never be the case because of the top-level if statement */ break;
+				}
+				break;
+			}
+		}
+	}
+
+	// Find the closest region that matches the constraints
+	ItemRegion::PositionConstraint constraints = ItemRegion::NoConstraints;
+	switch(dir)
+	{
+		case MoveUp: constraints = ItemRegion::Above; break;
+		case MoveDown: constraints = ItemRegion::Below; break;
+		case MoveLeft: constraints = ItemRegion::LeftOf; break;
+		case MoveRight: constraints = ItemRegion::RightOf; break;
+		case MoveOnPosition: constraints = ItemRegion::NoConstraints; break;
+		case MoveUpOf: constraints = ItemRegion::Above; break;
+		case MoveDownOf: constraints = ItemRegion::Below; break;
+		case MoveLeftOf: constraints = ItemRegion::LeftOf; break;
+		case MoveRightOf: constraints = ItemRegion::RightOf; break;
+	}
+
+	ItemRegion* best = nullptr;
+	int best_distance;
+	for (ItemRegion& r : regs)
+	{
+		ItemRegion::PositionConstraints satisfied = r.satisfiedPositionConstraints(source);
+		if (	(&r != current)
+				&& ( (( satisfied & constraints) == constraints)
+						// An overlapping cursor region is preferred, even if it does not satisfy the constraints.
+						// This happens in 'tight' layouts that do not leave any spacing between the elements and so the
+						// Cursors are overlapping the normal items. At the borders of such containers the alternative below
+						// is needed.
+						|| (r.cursor() && (satisfied & ItemRegion::Overlap)) )
+				&& (!best
+						|| r.distanceTo(source) < best_distance
+						// Prioritize cursor regions on top of item regions.
+						|| (r.cursor() && r.distanceTo(source) <= best_distance))
+			)
+		{
+			best_distance = r.distanceTo(source);
+			best = &r;
+		}
+	}
+
+	// Delete the cursors of all regions which have one except for the best matching region.
+	for (ItemRegion& r : regs)
+		if (&r != best)
+			if (r.cursor()) delete r.cursor();
+
+	if (best == nullptr) return false;
+
+	// A region was found, focus it
+	if (best->cursor())
+	{
+		// This is a cursor region for a cursor belonging to the current item.
+		scene()->setMainCursor(best->cursor());
 		setFocus();
-		Cursor* cur = new Cursor(this);
-		cur->setPosition(scenePos().toPoint());
-		scene()->setMainCursor(cur);
 		return true;
 	}
-	else return false;
+	else if (best->item())
+	{
+		// This is a child item region
+
+		// Only accept this as a correct focus event if this child is not already focused.
+		if (best->item()->itemOrChildHasFocus()) return false;
+
+		CursorMoveDirection childDirection;
+		switch(dir)
+		{
+			case MoveUp: childDirection = MoveUpOf; break;
+			case MoveDown: childDirection = MoveDownOf; break;
+			case MoveLeft: childDirection = MoveLeftOf; break;
+			case MoveRight: childDirection = MoveRightOf; break;
+			case MoveOnPosition: childDirection = MoveOnPosition; break;
+			case MoveUpOf: childDirection = MoveUpOf; break;
+			case MoveDownOf: childDirection = MoveDownOf; break;
+			case MoveLeftOf: childDirection = MoveLeftOf; break;
+			case MoveRightOf: childDirection = MoveRightOf; break;
+		}
+		return best->item()->moveCursor(childDirection, mapToItem(best->item(), source).toPoint());
+	}
+	else
+	{
+		throw VisualizationException("Encountered an item region with no cursor or child item.");
+	}
 }
 
 Item* Item::findVisualizationOf(Model::Node* node)

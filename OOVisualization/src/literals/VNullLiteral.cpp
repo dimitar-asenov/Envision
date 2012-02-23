@@ -65,9 +65,4 @@ void VNullLiteral::updateGeometry(int availableWidth, int availableHeight)
 	Item::updateGeometry(vis_, availableWidth, availableHeight);
 }
 
-bool VNullLiteral::moveCursor(CursorMoveDirection dir, const QPoint& reference)
-{
-	return vis_->moveCursor(dir, reference);
-}
-
 }

@@ -52,8 +52,6 @@ class OOVISUALIZATION_API VFloatLiteral : public Visualization::ItemWithNode< Vi
 		VFloatLiteral(Item* parent, NodeType *node, const StyleType *style = itemStyles().get());
 		virtual ~VFloatLiteral();
 
-		virtual bool moveCursor(CursorMoveDirection dir, const QPoint& reference = QPoint());
-
 	protected:
 		virtual void determineChildren();
 		virtual void updateGeometry(int availableWidth, int availableHeight);

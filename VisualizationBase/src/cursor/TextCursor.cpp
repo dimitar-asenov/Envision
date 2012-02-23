@@ -107,4 +107,15 @@ void TextCursor::setSelectedByDrag(int xBegin, int xEnd)
 	owner()->setUpdateNeeded();
 }
 
+bool TextCursor::isSame(Cursor* c)
+{
+	auto tc = dynamic_cast<TextCursor*>(c);
+	if (tc)
+		return tc->owner() == owner()
+				&& tc->selectionBegin() == selectionBegin()
+				&& tc->selectionEnd() == selectionEnd();
+
+	return false;
+}
+
 } /* namespace Visualization */

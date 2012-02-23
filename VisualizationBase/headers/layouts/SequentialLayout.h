@@ -64,7 +64,7 @@ class VISUALIZATIONBASE_API SequentialLayout: public Layout
 
 		int focusedElementIndex() const;
 
-		virtual QList<LayoutRegion> regions();
+		virtual QList<ItemRegion> regions();
 
 		int length() const;
 

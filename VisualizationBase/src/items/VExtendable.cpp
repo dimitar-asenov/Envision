@@ -186,10 +186,4 @@ inline bool VExtendable::expandedSwtiched() const
 	return (layout && attributes) != expanded_;
 }
 
-bool VExtendable::moveCursor(CursorMoveDirection dir, const QPoint& reference)
-{
-	if (expanded_) return layout->moveCursor(dir, reference);
-	else return header->moveCursor(dir, reference);
-}
-
 }

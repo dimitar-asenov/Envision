@@ -51,8 +51,6 @@ class OOVISUALIZATION_API VThisExpression : public Visualization::ItemWithNode< 
 		VThisExpression(Item* parent, NodeType *expr, const StyleType *style = itemStyles().get());
 		virtual ~VThisExpression();
 
-		virtual bool moveCursor(CursorMoveDirection dir, const QPoint& reference = QPoint());
-
 	protected:
 		virtual void determineChildren();
 		virtual void updateGeometry(int availableWidth, int availableHeight);

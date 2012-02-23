@@ -77,12 +77,6 @@ void Static::updateGeometry(int availableWidth, int availableHeight)
 	}
 }
 
-bool Static::moveCursor(CursorMoveDirection dir, const QPoint& reference)
-{
-	if (item_) return item_->moveCursor(dir, reference);
-	else return false;
-}
-
 void Static::determineChildren()
 {
 	if (style()->isEmpty()) SAFE_DELETE_ITEM(item_);

@@ -51,7 +51,6 @@ class VISUALIZATIONBASE_API Static : public Item
 		Static(Item* parent, const StyleType *style = itemStyles().get());
 		virtual ~Static();
 
-		virtual bool moveCursor(CursorMoveDirection dir, const QPoint& reference = QPoint());
 		virtual bool isEmpty() const;
 		virtual bool sizeDependsOnParent() const;
 

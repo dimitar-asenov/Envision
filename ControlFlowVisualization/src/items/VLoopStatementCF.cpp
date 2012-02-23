@@ -81,16 +81,6 @@ bool VLoopStatementCF::isEmpty() const
 	else return vis_->isEmpty();
 }
 
-bool VLoopStatementCF::moveCursor(CursorMoveDirection dir, const QPoint& reference)
-{
-	if (showAsControlFlow())
-	{
-		//TODO implement this
-		return false;
-	}
-	else return vis_->moveCursor(dir, reference);
-}
-
 void VLoopStatementCF::determineChildren()
 {
 	if (showAsControlFlow())

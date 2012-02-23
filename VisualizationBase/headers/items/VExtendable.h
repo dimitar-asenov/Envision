@@ -66,8 +66,6 @@ class VISUALIZATIONBASE_API VExtendable : public ItemWithNode<Item, Model::Exten
 
 		void setExpanded(bool expanded = true);
 		bool expanded() const;
-
-		virtual bool moveCursor(CursorMoveDirection dir, const QPoint& reference = QPoint());
 };
 
 inline bool VExtendable::expanded() const { return expanded_; }

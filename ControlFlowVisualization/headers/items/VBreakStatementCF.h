@@ -49,8 +49,6 @@ class CONTROLFLOWVISUALIZATION_API VBreakStatementCF : public Visualization::Ite
 		VBreakStatementCF(Item* parent, NodeType *node, const StyleType *style = itemStyles().get());
 		virtual ~VBreakStatementCF();
 
-		virtual bool moveCursor(CursorMoveDirection dir, const QPoint& reference = QPoint());
-
 	protected:
 		virtual void determineChildren();
 		virtual void updateGeometry(int availableWidth, int availableHeight);

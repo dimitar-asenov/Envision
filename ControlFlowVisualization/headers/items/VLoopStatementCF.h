@@ -50,7 +50,6 @@ class CONTROLFLOWVISUALIZATION_API VLoopStatementCF : public Visualization::Item
 		VLoopStatementCF(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VLoopStatementCF();
 
-		virtual bool moveCursor(CursorMoveDirection dir, const QPoint& reference = QPoint());
 		virtual bool sizeDependsOnParent() const;
 		virtual bool isEmpty() const;
 

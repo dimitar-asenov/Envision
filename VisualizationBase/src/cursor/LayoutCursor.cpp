@@ -60,4 +60,13 @@ void LayoutCursor::setVisualizationPosition(const QPoint& pos)
 	ci->setCursorTopLeft(position());
 }
 
+bool LayoutCursor::isSame(Cursor* c)
+{
+	auto lc = dynamic_cast<LayoutCursor*>(c);
+	if (lc)
+		return lc->owner() == owner() && lc->x() == x() && lc->y() == y() && lc->index() == index();
+
+	return false;
+}
+
 } /* namespace Visualization */

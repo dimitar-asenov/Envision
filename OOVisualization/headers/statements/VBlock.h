@@ -56,8 +56,6 @@ class OOVISUALIZATION_API VBlock : public Visualization::ItemWithNode< Visualiza
 		VBlock(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VBlock();
 
-		virtual bool moveCursor(CursorMoveDirection dir, const QPoint& reference = QPoint());
-
 	protected:
 		void determineChildren();
 		void updateGeometry(int availableWidth, int availableHeight);

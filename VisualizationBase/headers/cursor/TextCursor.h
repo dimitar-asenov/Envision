@@ -70,6 +70,8 @@ class VISUALIZATIONBASE_API TextCursor : public Cursor {
 
 		void update(const QFontMetrics& qfm);
 
+		virtual bool isSame(Cursor* c);
+
 	private:
 		/**
 		 * \brief selectionBegin_ and selectionEnd_ indicate the currently selected characters in a text.

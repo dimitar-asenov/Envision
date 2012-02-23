@@ -25,77 +25,68 @@
  **********************************************************************************************************************/
 
 /*
- * LayoutRegion.cpp
+ * ItemRegion.h
  *
  *  Created on: Feb 2, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "layouts/LayoutRegion.h"
+#ifndef VisualizationBase_ITEMREGION_H_
+#define VisualizationBase_ITEMREGION_H_
 
-#include <cmath>
+#include "../visualizationbase_api.h"
 
 namespace Visualization {
 
-LayoutRegion::LayoutRegion(const QRect& region)
-	: region_(region), child_(nullptr), cursor_(nullptr)
-{
-}
+class Item;
+class Cursor;
 
-LayoutRegion::~LayoutRegion()
-{
-	child_ = nullptr;
-	cursor_ = nullptr;
-}
+class VISUALIZATIONBASE_API ItemRegion {
+	public:
+		ItemRegion(const QRect& region = QRect());
+		virtual ~ItemRegion();
 
-qreal LayoutRegion::distanceTo(const QPointF& point)
-{
-	// Translate the region so that its upper left corner is at 0,0
-	QPointF p = point - region_.topLeft();
-	qreal width = region_.width();
-	qreal height = region_.height();
+		void setRegion(const QRect& region);
+		void setItem(Item* item);
+		void setCursor(Cursor* cursor);
 
-	if (p.y() < 0)
-	{
-		// Above
-		if (p.x() < 0) return std::sqrt(p.y()*p.y() + p.x()*p.x()); // To the left
-		else if (p.x() > width) return  std::sqrt(p.y()*p.y() + (p.x()-width)*(p.x()-width)); // To the right
-		else return -p.y(); // Directly above
-	}
-	else if (p.y() > height)
-	{
-		// Below
-		if (p.x() < 0) return std::sqrt((p.y()-height)*(p.y()-height) + p.x()*p.x()); // To the left
-		else if (p.x() > width)
-			return std::sqrt((p.y()-height)*(p.y()-height) + (p.x()-width)*(p.x()-width)); // To the right
-		else return p.y()-height; // Directly below
-	}
-	else
-	{
-		// Within the same height
-		if (p.x() < 0) return -p.x(); // To the left
-		else if (p.x() > width) return  p.x()-width; // To the right
-		else return 0; // Inside
-	}
-}
+		QRect& region();
+		Item* item() const;
+		Cursor* cursor() const;
 
-LayoutRegion::PositionConstraints LayoutRegion::satisfiedPositionConstraints(const QPoint& point) const
-{
-	// Translate the region so that its upper left corner is at 0,0
-	QPointF p = point - region_.topLeft();
+		qreal distanceTo(const QPointF& point);
 
-	PositionConstraints constraints = NoConstraints;
+		enum PositionConstraint {
+			NoConstraints = 0x0,
+			Below = 0x1,
+			Above = 0x2,
+			LeftOf = 0x4,
+			RightOf = 0x8,
+			Overlap = 0x10
+		};
+		Q_DECLARE_FLAGS(PositionConstraints, PositionConstraint)
 
-	if ( p.y() < region_.height() - 1) constraints |= Below;
-	if ( p.y() > 0) constraints |= Above;
+		/**
+		 * \brief Returns all position constraints with respect to the point \a point satisfied by this region.
+		 *
+		 * The returned constraints are from the region's point of view, e.g. a constraint \a LeftOf means that the region
+		 * is left of the specified point.
+		 */
+		PositionConstraints satisfiedPositionConstraints(const QPoint& point) const;
 
-	if ( p.x() < region_.width() - 1) constraints |= RightOf;
-	if ( p.x() > 0) constraints |= LeftOf;
+	private:
+		QRect region_;
+		Item* item_;
+		Cursor* cursor_;
+};
+Q_DECLARE_OPERATORS_FOR_FLAGS(ItemRegion::PositionConstraints)
 
-	if ( p.y() >= 0 && p.y() < region_.height() &&  p.x() >= 0 && p.x() < region_.width())
-		constraints |= Overlap;
-
-	return constraints;
-}
+inline void ItemRegion::setRegion(const QRect& region) { region_ = region; }
+inline void ItemRegion::setItem(Item* item) { item_ = item; }
+inline void ItemRegion::setCursor(Cursor* cursor) { cursor_ = cursor; }
+inline QRect& ItemRegion::region() { return region_; }
+inline Item* ItemRegion::item() const { return item_; }
+inline Cursor* ItemRegion::cursor() const { return cursor_; }
 
 } /* namespace Visualization */
+#endif /* VisualizationBase_ITEMREGION_H_ */

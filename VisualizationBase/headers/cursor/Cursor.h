@@ -55,6 +55,8 @@ class VISUALIZATIONBASE_API Cursor {
 		void setPosition(const QPoint& pos);
 		void setRegion(const QRect& region);
 
+		virtual bool isSame(Cursor* c);
+
 	protected:
 		void setVisualization(Item* visualization);
 

@@ -36,6 +36,7 @@
 
 #include "../visualizationbase_api.h"
 #include "ItemMacros.h"
+#include "ItemRegion.h"
 #include "../InteractionHandler.h"
 #include "../Scene.h"
 
@@ -209,6 +210,8 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		 * This method is responsible for creating a corresponding Cursor item and setting it as the main scene cursor.
 		 */
 		virtual bool moveCursor(CursorMoveDirection dir, const QPoint& reference = QPoint());
+
+		virtual QList<ItemRegion> regions();
 
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 

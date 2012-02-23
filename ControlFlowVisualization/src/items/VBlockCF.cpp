@@ -67,12 +67,6 @@ bool VBlockCF::isEmpty() const
 	else return vis_->isEmpty();
 }
 
-bool VBlockCF::moveCursor(CursorMoveDirection dir, const QPoint& reference)
-{
-	if (showAsControlFlow()) return statements->moveCursor(dir, reference);
-	else return vis_->moveCursor(dir, reference);
-}
-
 void VBlockCF::determineChildren()
 {
 	if (showAsControlFlow())

@@ -55,6 +55,8 @@ class VISUALIZATIONBASE_API LayoutCursor : public Cursor {
 		int y();
 		int index();
 
+		virtual bool isSame(Cursor* c);
+
 	private:
 		int x_;
 		int y_;

@@ -75,16 +75,6 @@ bool VIfStatementCF::isEmpty() const
 	else return vis_->isEmpty();
 }
 
-bool VIfStatementCF::moveCursor(CursorMoveDirection dir, const QPoint& reference)
-{
-	if (showAsControlFlow())
-	{
-		//TODO implement this
-		return false;
-	}
-	else return vis_->moveCursor(dir, reference);
-}
-
 void VIfStatementCF::determineChildren()
 {
 	if (showAsControlFlow())

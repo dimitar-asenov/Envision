@@ -58,4 +58,9 @@ void Cursor::setVisualization(Item* visualization)
 	visualization_ = visualization;
 }
 
+bool Cursor::isSame(Cursor* other)
+{
+	return owner() == other->owner() && position() == other->position();
+}
+
 } /* namespace Visualization */

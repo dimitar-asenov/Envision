@@ -50,7 +50,6 @@ class VISUALIZATIONBASE_API LayoutProviderBase : public Item
 		LayoutProviderBase(Item* parent, const StyleType *style, Layout* layout);
 		virtual ~LayoutProviderBase();
 
-		virtual bool moveCursor(CursorMoveDirection dir, const QPoint& reference = QPoint());
 		virtual bool sizeDependsOnParent() const;
 		virtual bool isEmpty() const;
 

@@ -52,11 +52,6 @@ void LayoutProviderBase::updateGeometry(int availableWidth, int availableHeight)
 	Item::updateGeometry(layout_, availableWidth, availableHeight);
 }
 
-bool LayoutProviderBase::moveCursor(CursorMoveDirection dir, const QPoint& reference)
-{
-	return layout_->moveCursor(dir, reference);
-}
-
 bool LayoutProviderBase::sizeDependsOnParent() const
 {
 	return layout_->sizeDependsOnParent();

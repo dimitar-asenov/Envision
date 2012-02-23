@@ -52,8 +52,6 @@ class OOVISUALIZATION_API VCharacterLiteral : public Visualization::ItemWithNode
 		VCharacterLiteral(Item* parent, NodeType* literal, const StyleType* style = itemStyles().get());
 		virtual ~VCharacterLiteral();
 
-		virtual bool moveCursor(CursorMoveDirection dir, const QPoint& reference = QPoint());
-
 	protected:
 		virtual void determineChildren();
 		virtual void updateGeometry(int availableWidth, int availableHeight);

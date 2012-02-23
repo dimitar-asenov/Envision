@@ -91,9 +91,4 @@ void VContinueStatementCF::updateGeometry(int availableWidth, int availableHeigh
 	addConnector(entrance_, entrance_ + QPoint(0, style()->pinLength()), true);
 }
 
-bool VContinueStatementCF::moveCursor(CursorMoveDirection dir, const QPoint& reference)
-{
-	return vis_->moveCursor(dir, reference);
-}
-
 }

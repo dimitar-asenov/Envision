@@ -264,11 +264,5 @@ void VListCF::buildCompositeItems( QList< Item* >& singleItems )
 	}
 }
 
-bool VListCF::moveCursor(CursorMoveDirection /*dir*/, const QPoint& /*reference*/)
-{
-	//TODO implement this
-	return false;
-}
-
 
 }

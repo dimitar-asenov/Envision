@@ -51,8 +51,6 @@ class OOVISUALIZATION_API VNullLiteral : public Visualization::ItemWithNode< Vis
 		VNullLiteral(Item* parent, NodeType* literal, const StyleType* style = itemStyles().get());
 		virtual ~VNullLiteral();
 
-		virtual bool moveCursor(CursorMoveDirection dir, const QPoint& reference = QPoint());
-
 	protected:
 		virtual void determineChildren();
 		virtual void updateGeometry(int availableWidth, int availableHeight);

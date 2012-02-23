@@ -64,9 +64,4 @@ void VFloatLiteral::updateGeometry(int availableWidth, int availableHeight)
 	Item::updateGeometry(vis_, availableWidth, availableHeight);
 }
 
-bool VFloatLiteral::moveCursor(CursorMoveDirection dir, const QPoint& reference)
-{
-	return vis_->moveCursor(dir, reference);
-}
-
 }

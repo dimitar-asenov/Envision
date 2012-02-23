@@ -52,8 +52,6 @@ class OOVISUALIZATION_API VBooleanLiteral : public Visualization::ItemWithNode< 
 		VBooleanLiteral(Item* parent, NodeType *literal, const StyleType *style = itemStyles().get());
 		virtual ~VBooleanLiteral();
 
-		virtual bool moveCursor(CursorMoveDirection dir, const QPoint& reference = QPoint());
-
 	protected:
 		virtual void determineChildren();
 		virtual void updateGeometry(int availableWidth, int availableHeight);

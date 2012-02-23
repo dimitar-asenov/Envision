@@ -65,9 +65,4 @@ void VBooleanLiteral::updateGeometry(int availableWidth, int availableHeight)
 	Item::updateGeometry(vis_, availableWidth, availableHeight);
 }
 
-bool VBooleanLiteral::moveCursor(CursorMoveDirection dir, const QPoint& reference)
-{
-	return vis_->moveCursor(dir, reference);
-}
-
 }

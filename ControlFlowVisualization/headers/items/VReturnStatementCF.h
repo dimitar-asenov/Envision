@@ -49,8 +49,6 @@ class CONTROLFLOWVISUALIZATION_API VReturnStatementCF : public Visualization::It
 		VReturnStatementCF(Item* parent, NodeType *node, const StyleType *style = itemStyles().get());
 		virtual ~VReturnStatementCF();
 
-		virtual bool moveCursor(CursorMoveDirection dir, const QPoint& reference = QPoint());
-
 	protected:
 		virtual void determineChildren();
 		virtual void updateGeometry(int availableWidth, int availableHeight);
