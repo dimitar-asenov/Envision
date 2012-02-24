@@ -25,65 +25,28 @@
  **********************************************************************************************************************/
 
 /*
- * SimpleLiteralStringProvider.cpp
+ * ThisExpressionStringComponents.cpp
  *
- *  Created on: Feb 15, 2012
+ *  Created on: Feb 24, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "string_providers/SimpleLiteralStringProvider.h"
-#include "string_components/StringComponents.h"
-
-#include "VisualizationBase/headers/cursor/TextCursor.h"
-#include "VisualizationBase/headers/items/Item.h"
+#include "string_components/ThisExpressionStringComponents.h"
 
 namespace OOInteraction {
 
-SimpleLiteralStringProvider::SimpleLiteralStringProvider(Visualization::Item* v)
-: vis_(v)
+ThisExpressionStringComponents::ThisExpressionStringComponents(OOModel::ThisExpression* e)
+	: exp_(e)
 {
 }
 
-int SimpleLiteralStringProvider::offset()
+QStringList ThisExpressionStringComponents::components()
 {
-	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
+	QStringList result;
+	if (!exp_) return result;
 
-	auto tc = dynamic_cast<Visualization::TextCursor*> (vis_->scene()->mainCursor());
-
-	return tc ? tc->caretPosition() : -1;
-}
-
-QString SimpleLiteralStringProvider::string()
-{
-	return stringFromComponenets(vis_);
-}
-
-void SimpleLiteralStringProvider::setOffset(int offset)
-{
-	if (!vis_) return;
-	vis_->moveCursor( Visualization::Item::MoveRightOf, QPoint(-2,0)); // Just set the caret to the first position.
-
-	// And then use the current cursor to set it to the correct position.
-	auto tc = dynamic_cast<Visualization::TextCursor*> (vis_->scene()->mainCursor());
-	tc->setCaretPosition(offset);
-}
-
-bool SimpleLiteralStringProvider::isIndivisible()
-{
-	auto v = dynamic_cast<Visualization::TextRenderer*> (vis_);
-	if (!v && vis_)
-	{
-		auto ci = vis_->childItems();
-		while (ci.length() == 1)
-		{
-			v =  dynamic_cast<Visualization::TextRenderer*> (ci.first());
-			if (v) break;
-
-			ci = ci.first()->childItems();
-		}
-	}
-
-	return !v || v->text().length() != stringFromComponenets(vis_).length();
+	result.append( "this" );
+	return result;
 }
 
 } /* namespace OOInteraction */

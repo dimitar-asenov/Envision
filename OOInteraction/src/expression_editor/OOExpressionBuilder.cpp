@@ -75,10 +75,15 @@ void OOExpressionBuilder::visit(Interaction::Value* val)
 	bool isInt = false;
 	int value = val->text().toInt(&isInt);
 
+	// TODO: this should be done in a more extensible way
 	if (isInt)
 		expression = new OOModel::IntegerLiteral(value);
 	else if (val->text() == "true" || val->text() == "false")
 		expression = new OOModel::BooleanLiteral( val->text() == "true" );
+	else if (val->text() == "null")
+		expression = new OOModel::NullLiteral();
+	else if (val->text() == "this")
+		expression = new OOModel::ThisExpression();
 	else
 		expression = new OOModel::VariableAccess("local:" + val->text());
 }

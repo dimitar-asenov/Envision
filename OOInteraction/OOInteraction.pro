@@ -35,7 +35,9 @@ INSTALLS += target \
     pluginmeta \
     styles
 PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/string_providers/SimpleLiteralStringProvider.h \
+HEADERS += headers/string_components/ThisExpressionStringComponents.h \
+    headers/string_components/NullLiteralStringComponents.h \
+    headers/string_providers/SimpleLiteralStringProvider.h \
     headers/string_components/BooleanLiteralStringComponents.h \
     headers/string_components/UnaryOperatorStringComponents.h \
     headers/expression_editor/operators/UnaryOperatorDescriptor.h \
@@ -61,7 +63,9 @@ HEADERS += headers/string_providers/SimpleLiteralStringProvider.h \
     headers/OOInteractionException.h \
     headers/oointeraction_api.h \
     src/oointeraction.h
-SOURCES += src/string_providers/SimpleLiteralStringProvider.cpp \
+SOURCES += src/string_components/ThisExpressionStringComponents.cpp \
+    src/string_components/NullLiteralStringComponents.cpp \
+    src/string_providers/SimpleLiteralStringProvider.cpp \
     src/string_components/BooleanLiteralStringComponents.cpp \
     src/string_components/UnaryOperatorStringComponents.cpp \
     src/expression_editor/operators/UnaryOperatorDescriptor.cpp \

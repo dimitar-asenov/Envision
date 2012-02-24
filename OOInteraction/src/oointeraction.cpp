@@ -43,6 +43,8 @@
 #include "string_components/ErrorExpressionStringComponents.h"
 #include "string_components/BooleanLiteralStringComponents.h"
 #include "string_components/IntegerLiteralStringComponents.h"
+#include "string_components/NullLiteralStringComponents.h"
+#include "string_components/ThisExpressionStringComponents.h"
 #include "string_components/UnfinishedOperatorStringComponents.h"
 #include "string_components/VariableAccessStringComponents.h"
 
@@ -124,6 +126,10 @@ bool OOInteraction::initialize(Envision::EnvisionManager&)
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringComponents, IntegerLiteralStringComponents, OOModel::IntegerLiteral>();
 	Model::AdapterManager::registerAdapterViaConstructor
+		<StringComponents, NullLiteralStringComponents, OOModel::NullLiteral>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringComponents, ThisExpressionStringComponents, OOModel::ThisExpression>();
+	Model::AdapterManager::registerAdapterViaConstructor
 		<StringComponents, VariableAccessStringComponents, OOModel::VariableAccess>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringComponents, UnfinishedOperatorStringComponents, OOModel::UnfinishedOperator>();
@@ -141,6 +147,10 @@ bool OOInteraction::initialize(Envision::EnvisionManager&)
 		<StringProvider, SimpleLiteralStringProvider, OOVisualization::VBooleanLiteral>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringProvider, SimpleLiteralStringProvider, OOVisualization::VIntegerLiteral>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringProvider, SimpleLiteralStringProvider, OOVisualization::VNullLiteral>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringProvider, SimpleLiteralStringProvider, OOVisualization::VThisExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringProvider, SequentialVisualizationStringProvider, OOVisualization::VVariableAccess>();
 	Model::AdapterManager::registerAdapterViaConstructor

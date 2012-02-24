@@ -25,65 +25,33 @@
  **********************************************************************************************************************/
 
 /*
- * SimpleLiteralStringProvider.cpp
+ * ThisExpressionStringComponents.h
  *
- *  Created on: Feb 15, 2012
+ *  Created on: Feb 24, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "string_providers/SimpleLiteralStringProvider.h"
-#include "string_components/StringComponents.h"
+#ifndef OOInteraction_THISEXPRESSIONSTRINGCOMPONENTS_H_
+#define OOInteraction_THISEXPRESSIONSTRINGCOMPONENTS_H_
 
-#include "VisualizationBase/headers/cursor/TextCursor.h"
-#include "VisualizationBase/headers/items/Item.h"
+#include "../oointeraction_api.h"
+#include "StringComponents.h"
+
+namespace OOModel
+{
+	class ThisExpression;
+}
 
 namespace OOInteraction {
 
-SimpleLiteralStringProvider::SimpleLiteralStringProvider(Visualization::Item* v)
-: vis_(v)
-{
-}
+class OOINTERACTION_API ThisExpressionStringComponents : public StringComponents {
+	public:
+	ThisExpressionStringComponents( OOModel::ThisExpression* e );
+		virtual QStringList components();
 
-int SimpleLiteralStringProvider::offset()
-{
-	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
-
-	auto tc = dynamic_cast<Visualization::TextCursor*> (vis_->scene()->mainCursor());
-
-	return tc ? tc->caretPosition() : -1;
-}
-
-QString SimpleLiteralStringProvider::string()
-{
-	return stringFromComponenets(vis_);
-}
-
-void SimpleLiteralStringProvider::setOffset(int offset)
-{
-	if (!vis_) return;
-	vis_->moveCursor( Visualization::Item::MoveRightOf, QPoint(-2,0)); // Just set the caret to the first position.
-
-	// And then use the current cursor to set it to the correct position.
-	auto tc = dynamic_cast<Visualization::TextCursor*> (vis_->scene()->mainCursor());
-	tc->setCaretPosition(offset);
-}
-
-bool SimpleLiteralStringProvider::isIndivisible()
-{
-	auto v = dynamic_cast<Visualization::TextRenderer*> (vis_);
-	if (!v && vis_)
-	{
-		auto ci = vis_->childItems();
-		while (ci.length() == 1)
-		{
-			v =  dynamic_cast<Visualization::TextRenderer*> (ci.first());
-			if (v) break;
-
-			ci = ci.first()->childItems();
-		}
-	}
-
-	return !v || v->text().length() != stringFromComponenets(vis_).length();
-}
+	private:
+		OOModel::ThisExpression* exp_;
+};
 
 } /* namespace OOInteraction */
+#endif /* OOInteraction_THISEXPRESSIONSTRINGCOMPONENTS_H_ */

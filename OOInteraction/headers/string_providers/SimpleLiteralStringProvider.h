@@ -46,10 +46,12 @@ namespace OOInteraction {
 
 class OOINTERACTION_API SimpleLiteralStringProvider : public StringProvider {
 	public:
-	SimpleLiteralStringProvider(Visualization::Item* v);
+		SimpleLiteralStringProvider(Visualization::Item* v);
 		virtual QString string();
 		virtual int offset();
 		virtual void setOffset(int newOffset);
+
+		virtual bool isIndivisible();
 
 	private:
 		Visualization::Item* vis_;
