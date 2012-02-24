@@ -25,61 +25,58 @@
  **********************************************************************************************************************/
 
 /*
- * StaticStringProvider.cpp
+ * UnaryOperatorStringComponents.cpp
  *
- *  Created on: Feb 17, 2012
+ *  Created on: Feb 24, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "string_providers/StaticStringProvider.h"
+#include "string_components/UnaryOperatorStringComponents.h"
 
-#include "VisualizationBase/headers/items/Static.h"
+#include "OOModel/headers/expressions/UnaryOperation.h"
 #include "ModelBase/headers/adapter/AdapterManager.h"
 
 namespace OOInteraction {
 
-StaticStringProvider::StaticStringProvider(Visualization::Static* v)
-: vis_(v)
+UnaryOperatorStringComponents::UnaryOperatorStringComponents(OOModel::UnaryOperation* e )
+	: exp_(e)
 {
 }
 
-int StaticStringProvider::offset()
+QStringList UnaryOperatorStringComponents::components()
 {
-	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
+	QStringList result;
+	if (!exp_) return result;
 
-	int result = 0;
-	StringProvider* child =
-			Model::AdapterManager::adapt<StringProvider>(vis_->item());
-	if (child)
+	StringComponents* arg = Model::AdapterManager::adapt<StringComponents>(exp_->operand());
+	QString argString;
+	if(arg)
 	{
-		result = child->offset();
-		SAFE_DELETE(child);
+		argString = arg->components().join("");
+		SAFE_DELETE(arg);
 	}
+
+	QString pre = "";
+	QString post = "";
+
+	switch(exp_->op())
+	{
+		case OOModel::UnaryOperation::PREINCREMENT: pre = "++"; break;
+		case OOModel::UnaryOperation::PREDECREMENT: pre = "--"; break;
+		case OOModel::UnaryOperation::POSTINCREMENT: post = "++"; break;
+		case OOModel::UnaryOperation::POSTDECREMENT: post = "--"; break;
+		case OOModel::UnaryOperation::PLUS: pre = "+"; break;
+		case OOModel::UnaryOperation::MINUS: pre = "-"; break;
+		case OOModel::UnaryOperation::NOT: pre = "!"; break;
+		case OOModel::UnaryOperation::COMPLEMENT: pre = "~"; break;
+		default: break;
+	}
+
+	result.append(pre);
+	result.append(argString);
+	result.append(post);
 
 	return result;
-}
-
-QString StaticStringProvider::string()
-{
-	return stringFromStringProvider(vis_? vis_->item() : nullptr);
-}
-
-void StaticStringProvider::setOffset(int offset)
-{
-	if (!vis_) return;
-
-	StringProvider* child =
-			Model::AdapterManager::adapt<StringProvider>(vis_->item());
-	if (child)
-	{
-		child->setOffset(offset);
-		SAFE_DELETE(child);
-	}
-}
-
-bool StaticStringProvider::isIndivisible()
-{
-	return true;
 }
 
 } /* namespace OOInteraction */

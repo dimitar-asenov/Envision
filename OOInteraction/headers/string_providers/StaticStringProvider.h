@@ -51,6 +51,8 @@ class StaticStringProvider : public StringProvider {
 		virtual int offset();
 		virtual void setOffset(int newOffset);
 
+		virtual bool isIndivisible();
+
 	private:
 		Visualization::Static* vis_;
 };

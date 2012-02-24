@@ -48,7 +48,8 @@ namespace Visualization {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VUnaryOperation : public Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::UnaryOperation>
+class OOVISUALIZATION_API VUnaryOperation
+	: public Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::UnaryOperation>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VUnaryOperation, OperatorSequenceStyle)
 

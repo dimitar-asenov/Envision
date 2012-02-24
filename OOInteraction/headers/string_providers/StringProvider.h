@@ -36,6 +36,10 @@
 
 #include "../oointeraction_api.h"
 
+namespace Visualization {
+	class Item;
+}
+
 namespace OOInteraction {
 
 class OOINTERACTION_API StringProvider {
@@ -44,6 +48,18 @@ class OOINTERACTION_API StringProvider {
 		virtual int offset() = 0;
 		virtual void setOffset(int newOffset) = 0;
 		virtual ~StringProvider();
+
+		/**
+		 * \brief Returns true when the visualization corresponding to this StringProvider is an indivisible entity.
+		 *
+		 * An indivisible entity's offset should be ignored and the cursor should be placed either before or after it.
+		 * This is important for example for Static text symbols which are rendered as text but actually are represented
+		 * in the expression editor as different text. The same is true of icons which have a text representation.
+		 */
+		virtual bool isIndivisible();
+
+		static QString stringFromComponenets(Visualization::Item* item);
+		static QString stringFromStringProvider(Visualization::Item* item);
 };
 
 } /* namespace OOInteraction */

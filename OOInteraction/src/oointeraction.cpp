@@ -37,6 +37,7 @@
 #include "expression_editor/OOOperatorDescriptorList.h"
 #include "handlers/HOOExpression.h"
 
+#include "string_components/UnaryOperatorStringComponents.h"
 #include "string_components/BinaryOperatorStringComponents.h"
 #include "string_components/EmptyExpressionStringComponents.h"
 #include "string_components/ErrorExpressionStringComponents.h"
@@ -114,6 +115,8 @@ bool OOInteraction::initialize(Envision::EnvisionManager&)
 
 	// Register string components that convert an expression to a string list representing its components
 	Model::AdapterManager::registerAdapterViaConstructor
+		<StringComponents, UnaryOperatorStringComponents, OOModel::UnaryOperation>();
+	Model::AdapterManager::registerAdapterViaConstructor
 		<StringComponents, BinaryOperatorStringComponents, OOModel::BinaryOperation>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringComponents, IntegerLiteralStringComponents, OOModel::IntegerLiteral>();
@@ -127,6 +130,8 @@ bool OOInteraction::initialize(Envision::EnvisionManager&)
 		<StringComponents, EmptyExpressionStringComponents, OOModel::EmptyExpression>();
 
 	// Register string providers
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringProvider, SequentialVisualizationStringProvider, OOVisualization::VUnaryOperation>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringProvider, SequentialVisualizationStringProvider, OOVisualization::VBinaryOperation>();
 	Model::AdapterManager::registerAdapterViaConstructor

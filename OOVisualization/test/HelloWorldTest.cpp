@@ -304,7 +304,7 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 	var14->setType(new PrimitiveType(PrimitiveType::INT));
 	UnaryOperation* uOp2 = new UnaryOperation();
 	var14->setInitialValue(uOp2);
-	uOp2->setOp(UnaryOperation::INCREMENT);
+	uOp2->setOp(UnaryOperation::POSTINCREMENT);
 	uOp2->setOperand(new IntegerLiteral(10));
 
 	VariableDeclaration* var15 = new VariableDeclaration();
@@ -376,11 +376,11 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 	ifCond->setRight(new IntegerLiteral(10));
 	UnaryOperation* thenBranch = new UnaryOperation();
 	ifs->thenBranch()->append(thenBranch);
-	thenBranch->setOp(UnaryOperation::INCREMENT);
+	thenBranch->setOp(UnaryOperation::POSTINCREMENT);
 	thenBranch->setOperand(new VariableAccess("local:var14"));
 	UnaryOperation* elseBranch = new UnaryOperation();
 	ifs->elseBranch()->append(elseBranch);
-	elseBranch->setOp(UnaryOperation::DECREMENT);
+	elseBranch->setOp(UnaryOperation::POSTDECREMENT);
 	elseBranch->setOperand(new VariableAccess("local:var14"));
 
 	Block* block = new Block();

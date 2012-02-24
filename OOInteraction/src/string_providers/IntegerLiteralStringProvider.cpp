@@ -36,7 +36,6 @@
 
 #include "OOVisualization/headers/literals/VIntegerLiteral.h"
 #include "VisualizationBase/headers/cursor/TextCursor.h"
-#include "ModelBase/headers/adapter/AdapterManager.h"
 
 namespace OOInteraction {
 
@@ -56,17 +55,7 @@ int IntegerLiteralStringProvider::offset()
 
 QString IntegerLiteralStringProvider::string()
 {
-	if (!vis_) return QString();
-
-	QStringList components;
-	StringComponents* node = Model::AdapterManager::adapt<StringComponents>(vis_->node());
-	if (node)
-	{
-		components = node->components();
-		SAFE_DELETE(node);
-	}
-
-	return components.join("");
+	return stringFromComponenets(vis_);
 }
 
 void IntegerLiteralStringProvider::setOffset(int offset)

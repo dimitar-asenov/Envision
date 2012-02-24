@@ -35,7 +35,8 @@
 
 namespace OOInteraction {
 
-OOOperatorDescriptor::OOOperatorDescriptor(const QString& name, const QString& signature, int num_operands, int precedence, Associativity associativity)
+OOOperatorDescriptor::OOOperatorDescriptor(const QString& name, const QString& signature, int num_operands,
+		int precedence, Associativity associativity)
 	: Interaction::OperatorDescriptor(name, signature, num_operands, precedence, associativity)
 {
 }

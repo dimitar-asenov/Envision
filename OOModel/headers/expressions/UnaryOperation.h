@@ -48,7 +48,7 @@ class OOMODEL_API UnaryOperation: public Expression
 	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, opr, setOpr, int);
 
 	public:
-		enum OperatorTypes {INCREMENT, DECREMENT, PLUS, MINUS, NOT, COMPLEMENT};
+		enum OperatorTypes {PREINCREMENT, PREDECREMENT, POSTINCREMENT, POSTDECREMENT, PLUS, MINUS, NOT, COMPLEMENT};
 
 		OperatorTypes op() const;
 		void setOp(const OperatorTypes& oper);

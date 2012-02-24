@@ -25,61 +25,33 @@
  **********************************************************************************************************************/
 
 /*
- * StaticStringProvider.cpp
+ * UnaryOperatorStringComponents.h
  *
- *  Created on: Feb 17, 2012
+ *  Created on: Feb 24, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "string_providers/StaticStringProvider.h"
+#ifndef OOInteraction_UNARYOPERATORSTRINGCOMPONENTS_H_
+#define OOInteraction_UNARYOPERATORSTRINGCOMPONENTS_H_
 
-#include "VisualizationBase/headers/items/Static.h"
-#include "ModelBase/headers/adapter/AdapterManager.h"
+#include "../oointeraction_api.h"
+#include "StringComponents.h"
+
+namespace OOModel
+{
+	class UnaryOperation;
+}
 
 namespace OOInteraction {
 
-StaticStringProvider::StaticStringProvider(Visualization::Static* v)
-: vis_(v)
-{
-}
+class OOINTERACTION_API UnaryOperatorStringComponents : public StringComponents {
+	public:
+		UnaryOperatorStringComponents( OOModel::UnaryOperation* e );
+		virtual QStringList components();
 
-int StaticStringProvider::offset()
-{
-	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
-
-	int result = 0;
-	StringProvider* child =
-			Model::AdapterManager::adapt<StringProvider>(vis_->item());
-	if (child)
-	{
-		result = child->offset();
-		SAFE_DELETE(child);
-	}
-
-	return result;
-}
-
-QString StaticStringProvider::string()
-{
-	return stringFromStringProvider(vis_? vis_->item() : nullptr);
-}
-
-void StaticStringProvider::setOffset(int offset)
-{
-	if (!vis_) return;
-
-	StringProvider* child =
-			Model::AdapterManager::adapt<StringProvider>(vis_->item());
-	if (child)
-	{
-		child->setOffset(offset);
-		SAFE_DELETE(child);
-	}
-}
-
-bool StaticStringProvider::isIndivisible()
-{
-	return true;
-}
+	private:
+		OOModel::UnaryOperation* exp_;
+};
 
 } /* namespace OOInteraction */
+#endif /* OOInteraction_UNARYOPERATORSTRINGCOMPONENTS_H_ */

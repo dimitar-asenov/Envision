@@ -43,7 +43,8 @@ namespace OOInteraction {
 
 class OOINTERACTION_API BinaryOperatorDescriptor : public OOOperatorDescriptor {
 	public:
-		BinaryOperatorDescriptor(OOModel::BinaryOperation::OperatorTypes op, const QString& name, const QString& signature, int num_operands, int precedence, Associativity associativity);
+		BinaryOperatorDescriptor(OOModel::BinaryOperation::OperatorTypes op, const QString& name,
+				const QString& signature, int num_operands, int precedence, Associativity associativity);
 
 		virtual OOModel::Expression* create(const QList<OOModel::Expression*>& operands);
 

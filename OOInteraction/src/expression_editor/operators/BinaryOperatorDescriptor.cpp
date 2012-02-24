@@ -35,7 +35,8 @@
 
 namespace OOInteraction {
 
-BinaryOperatorDescriptor::BinaryOperatorDescriptor(OOModel::BinaryOperation::OperatorTypes op, const QString& name, const QString& signature, int num_operands, int precedence, Associativity associativity)
+BinaryOperatorDescriptor::BinaryOperatorDescriptor(OOModel::BinaryOperation::OperatorTypes op, const QString& name,
+		const QString& signature, int num_operands, int precedence, Associativity associativity)
 		: OOOperatorDescriptor(name, signature, num_operands, precedence, associativity), op_(op)
 {}
 

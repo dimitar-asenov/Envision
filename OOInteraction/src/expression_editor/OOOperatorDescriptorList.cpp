@@ -33,6 +33,7 @@
 
 #include "expression_editor/OOOperatorDescriptorList.h"
 
+#include "expression_editor/operators/UnaryOperatorDescriptor.h"
 #include "expression_editor/operators/BinaryOperatorDescriptor.h"
 
 namespace OOInteraction {
@@ -45,10 +46,65 @@ OOOperatorDescriptorList* OOOperatorDescriptorList::instance()
 
 void OOOperatorDescriptorList::initializeWithDefaultOperators()
 {
-	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::TIMES, "*", "expr * expr", 2, 10, Interaction::OperatorDescriptor::LeftAssociative));
-	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::DIVIDE, "/", "expr / expr", 2, 10, Interaction::OperatorDescriptor::LeftAssociative));
-	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::PLUS, "+", "expr + expr", 2, 11, Interaction::OperatorDescriptor::LeftAssociative));
-	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::MINUS, "-", "expr - expr", 2, 11, Interaction::OperatorDescriptor::LeftAssociative));
+	// Unary operators
+	instance()->addDescriptor(new UnaryOperatorDescriptor(OOModel::UnaryOperation::PREINCREMENT,
+			"preincrement", "++ expr", 1, 2, Interaction::OperatorDescriptor::RightAssociative));
+	instance()->addDescriptor(new UnaryOperatorDescriptor(OOModel::UnaryOperation::PREDECREMENT,
+			"predecrement", "-- expr", 1, 2, Interaction::OperatorDescriptor::RightAssociative));
+	instance()->addDescriptor(new UnaryOperatorDescriptor(OOModel::UnaryOperation::POSTINCREMENT,
+			"postincrement", "expr ++", 1, 2, Interaction::OperatorDescriptor::LeftAssociative));
+	instance()->addDescriptor(new UnaryOperatorDescriptor(OOModel::UnaryOperation::POSTDECREMENT,
+			"postdecrement", "expr --", 1, 2, Interaction::OperatorDescriptor::LeftAssociative));
+	instance()->addDescriptor(new UnaryOperatorDescriptor(OOModel::UnaryOperation::PLUS,
+			"unary plus", "+ expr", 1, 2, Interaction::OperatorDescriptor::RightAssociative));
+	instance()->addDescriptor(new UnaryOperatorDescriptor(OOModel::UnaryOperation::MINUS,
+			"unary minus", "- expr", 1, 2, Interaction::OperatorDescriptor::RightAssociative));
+	instance()->addDescriptor(new UnaryOperatorDescriptor(OOModel::UnaryOperation::NOT,
+			"not", "! expr", 1, 2, Interaction::OperatorDescriptor::RightAssociative));
+	instance()->addDescriptor(new UnaryOperatorDescriptor(OOModel::UnaryOperation::COMPLEMENT,
+			"complement", "~ expr", 1, 2, Interaction::OperatorDescriptor::RightAssociative));
+
+	// Binary operators
+	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::TIMES,
+			"times", "expr * expr", 2, 3, Interaction::OperatorDescriptor::LeftAssociative));
+	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::DIVIDE,
+			"divide", "expr / expr", 2, 3, Interaction::OperatorDescriptor::LeftAssociative));
+	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::REMAINDER,
+			"remainder", "expr % expr", 2, 3, Interaction::OperatorDescriptor::LeftAssociative));
+	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::PLUS,
+			"plus", "expr + expr", 2, 4, Interaction::OperatorDescriptor::LeftAssociative));
+	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::MINUS,
+			"minus", "expr - expr", 2, 4, Interaction::OperatorDescriptor::LeftAssociative));
+	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::LEFT_SHIFT,
+			"left shift", "expr << expr", 2, 5, Interaction::OperatorDescriptor::LeftAssociative));
+	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::RIGHT_SHIFT_SIGNED,
+			"right shift signed", "expr >> expr", 2, 5, Interaction::OperatorDescriptor::LeftAssociative));
+	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::RIGHT_SHIFT_UNSIGNED,
+			"righ shift unsigned", "expr >>> expr", 2, 5, Interaction::OperatorDescriptor::LeftAssociative));
+	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::LESS,
+			"less", "expr < expr", 2, 6, Interaction::OperatorDescriptor::LeftAssociative));
+	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::GREATER,
+			"greater", "expr > expr", 2, 6, Interaction::OperatorDescriptor::LeftAssociative));
+	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::LESS_EQUALS,
+			"less equals", "expr <= expr", 2, 6, Interaction::OperatorDescriptor::LeftAssociative));
+	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::GREATER_EQUALS,
+			"greater equals", "expr >= expr", 2, 6, Interaction::OperatorDescriptor::LeftAssociative));
+	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::EQUALS,
+			"equals", "expr == expr", 2, 7, Interaction::OperatorDescriptor::LeftAssociative));
+	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::NOT_EQUALS,
+			"not equals", "expr != expr", 2, 7, Interaction::OperatorDescriptor::LeftAssociative));
+	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::XOR,
+			"bitwise xor", "expr ^ expr", 2, 9, Interaction::OperatorDescriptor::LeftAssociative));
+	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::AND,
+			"bitwise and", "expr & expr", 2, 8, Interaction::OperatorDescriptor::LeftAssociative));
+	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::OR,
+			"bitwise or", "expr | expr", 2, 10, Interaction::OperatorDescriptor::LeftAssociative));
+	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::CONDITIONAL_AND,
+			"conditional and", "expr && expr", 2, 11, Interaction::OperatorDescriptor::LeftAssociative));
+	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::CONDITIONAL_OR,
+			"conditional or", "expr || expr", 2, 12, Interaction::OperatorDescriptor::LeftAssociative));
+	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::ARRAY_INDEX,
+			"array index", "expr [ expr ]", 2, 1, Interaction::OperatorDescriptor::LeftAssociative));
 }
 
 } /* namespace OOInteraction */

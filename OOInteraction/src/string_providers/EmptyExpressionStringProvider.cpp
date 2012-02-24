@@ -51,17 +51,7 @@ int EmptyExpressionStringProvider::offset()
 
 QString EmptyExpressionStringProvider::string()
 {
-	if (!vis_) return QString();
-
-	QString result;
-	StringComponents* node = Model::AdapterManager::adapt<StringComponents>(vis_->node());
-	if (node)
-	{
-		result = node->components().join("");
-		SAFE_DELETE(node);
-	}
-
-	return result;
+	return stringFromComponenets(vis_);
 }
 
 void EmptyExpressionStringProvider::setOffset(int)

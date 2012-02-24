@@ -32,11 +32,51 @@
  */
 
 #include "string_providers/StringProvider.h"
+#include "string_components/StringComponents.h"
+
+#include "VisualizationBase/headers/items/Item.h"
+#include "ModelBase/headers/adapter/AdapterManager.h"
+#include "Core/headers/global.h"
 
 namespace OOInteraction {
 
 StringProvider::~StringProvider()
 {
+}
+
+QString StringProvider::stringFromComponenets(Visualization::Item* item)
+{
+	if (!item) return QString();
+
+	QString result;
+	StringComponents* node = Model::AdapterManager::adapt<StringComponents>(item->node());
+	if (node)
+	{
+		result = node->components().join("");
+		SAFE_DELETE(node);
+	}
+
+	return result;
+}
+
+QString StringProvider::stringFromStringProvider(Visualization::Item* item)
+{
+	if (!item) return QString();
+
+	QString result;
+	StringProvider* sp = Model::AdapterManager::adapt<StringProvider>(item);
+	if (sp)
+	{
+		result = sp->string();
+		SAFE_DELETE(sp);
+	}
+
+	return result;
+}
+
+bool StringProvider::isIndivisible()
+{
+	return false;
 }
 
 } /* namespace OOInteraction */

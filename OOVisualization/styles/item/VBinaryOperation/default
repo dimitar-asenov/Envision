@@ -48,16 +48,16 @@
 			<inSymbol prototypes="item/Symbol/default"><symbol>⊻</symbol></inSymbol>
 		</e14>
 		<e15 prototypes="default.operand">
-			<inSymbol prototypes="item/Symbol/default"><symbol>bit⋀</symbol></inSymbol>
+			<inSymbol prototypes="item/Symbol/default"><symbol>&amp;</symbol></inSymbol>
 		</e15>
 		<e16 prototypes="default.operand">
-			<inSymbol prototypes="item/Symbol/default"><symbol>bit⋁</symbol></inSymbol>
+			<inSymbol prototypes="item/Symbol/default"><symbol>|</symbol></inSymbol>
 		</e16>
 		<e17 prototypes="default.operand">
-			<inSymbol prototypes="item/Symbol/default"><symbol>⋀</symbol></inSymbol>
+			<inSymbol prototypes="item/Symbol/default"><symbol>∧</symbol></inSymbol>
 		</e17>
 		<e18 prototypes="default.operand">
-			<inSymbol prototypes="item/Symbol/default"><symbol>⋁</symbol></inSymbol>
+			<inSymbol prototypes="item/Symbol/default"><symbol>∨</symbol></inSymbol>
 		</e18>
 		<e19 prototypes="default.operand">
 			<inSymbol prototypes="item/Symbol/default"><symbol>[</symbol></inSymbol>

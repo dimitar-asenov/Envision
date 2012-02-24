@@ -35,7 +35,9 @@ INSTALLS += target \
     pluginmeta \
     styles
 PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/handlers/SetCursorEvent.h \
+HEADERS += headers/string_components/UnaryOperatorStringComponents.h \
+    headers/expression_editor/operators/UnaryOperatorDescriptor.h \
+    headers/handlers/SetCursorEvent.h \
     headers/string_providers/StaticStringProvider.h \
     headers/string_providers/TextRendererStringProvider.h \
     headers/string_providers/SequentialVisualizationStringProvider.h \
@@ -58,7 +60,9 @@ HEADERS += headers/handlers/SetCursorEvent.h \
     headers/OOInteractionException.h \
     headers/oointeraction_api.h \
     src/oointeraction.h
-SOURCES += src/handlers/SetCursorEvent.cpp \
+SOURCES += src/string_components/UnaryOperatorStringComponents.cpp \
+    src/expression_editor/operators/UnaryOperatorDescriptor.cpp \
+    src/handlers/SetCursorEvent.cpp \
     src/string_providers/StaticStringProvider.cpp \
     src/string_providers/TextRendererStringProvider.cpp \
     src/string_providers/SequentialVisualizationStringProvider.cpp \

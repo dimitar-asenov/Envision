@@ -72,7 +72,7 @@ QStringList BinaryOperatorStringComponents::components()
 		case OOModel::BinaryOperation::GREATER: result.append(">"); break;
 		case OOModel::BinaryOperation::LESS_EQUALS: result.append("<="); break;
 		case OOModel::BinaryOperation::GREATER_EQUALS: result.append(">="); break;
-		case OOModel::BinaryOperation::EQUALS: result.append("="); break;
+		case OOModel::BinaryOperation::EQUALS: result.append("=="); break;
 		case OOModel::BinaryOperation::NOT_EQUALS: result.append("!="); break;
 		case OOModel::BinaryOperation::XOR: result.append("^"); break;
 		case OOModel::BinaryOperation::AND: result.append("&"); break;

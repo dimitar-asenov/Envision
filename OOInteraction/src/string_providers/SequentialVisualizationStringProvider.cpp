@@ -88,7 +88,9 @@ int SequentialVisualizationStringProvider::offset()
 				Model::AdapterManager::adapt<StringProvider>(vis_->layout()->at<Visualization::Item>(focused));
 		if (child)
 		{
-			result += child->offset();
+			int childOffset = child->offset();
+			if (childOffset > 0 && child->isIndivisible()) childOffset = components[focused].length();
+			result += childOffset;
 			SAFE_DELETE(child);
 		}
 	}
@@ -120,7 +122,8 @@ void SequentialVisualizationStringProvider::setOffset(int offset)
 				Model::AdapterManager::adapt<StringProvider>(vis_->layout()->at<Visualization::Item>(i));
 			if (child)
 			{
-				child->setOffset(offset);
+				if (offset > 0 && child->isIndivisible()) child->setOffset(child->string().length());
+				else child->setOffset(offset);
 				SAFE_DELETE(child);
 				return;
 			}
