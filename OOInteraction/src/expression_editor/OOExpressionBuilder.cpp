@@ -72,8 +72,13 @@ void OOExpressionBuilder::visit(Interaction::Value* val)
 {
 	if (val->text().isEmpty()) throw OOInteractionException("Trying to create an expression from an empty Value");
 
-	if (val->text().at(0).isDigit())
-		expression = new OOModel::IntegerLiteral(val->text().toInt());
+	bool isInt = false;
+	int value = val->text().toInt(&isInt);
+
+	if (isInt)
+		expression = new OOModel::IntegerLiteral(value);
+	else if (val->text() == "true" || val->text() == "false")
+		expression = new OOModel::BooleanLiteral( val->text() == "true" );
 	else
 		expression = new OOModel::VariableAccess("local:" + val->text());
 }

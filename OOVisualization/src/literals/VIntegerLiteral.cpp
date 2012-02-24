@@ -56,6 +56,7 @@ VIntegerLiteral::~VIntegerLiteral()
 void VIntegerLiteral::determineChildren()
 {
 	synchronizeItem(vis_, node()->valueNode(), style());
+	vis_->setEditable(false);
 	vis_->setStyle( style() );
 }
 

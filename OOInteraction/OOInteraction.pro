@@ -35,7 +35,9 @@ INSTALLS += target \
     pluginmeta \
     styles
 PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/string_components/UnaryOperatorStringComponents.h \
+HEADERS += headers/string_providers/SimpleLiteralStringProvider.h \
+    headers/string_components/BooleanLiteralStringComponents.h \
+    headers/string_components/UnaryOperatorStringComponents.h \
     headers/expression_editor/operators/UnaryOperatorDescriptor.h \
     headers/handlers/SetCursorEvent.h \
     headers/string_providers/StaticStringProvider.h \
@@ -49,7 +51,6 @@ HEADERS += headers/string_components/UnaryOperatorStringComponents.h \
     headers/string_components/EmptyExpressionStringComponents.h \
     headers/string_components/StringComponents.h \
     headers/string_providers/EmptyExpressionStringProvider.h \
-    headers/string_providers/IntegerLiteralStringProvider.h \
     headers/string_providers/StringProvider.h \
     headers/handlers/HOOExpression.h \
     headers/expression_editor/OOOperatorDescriptorList.h \
@@ -60,7 +61,9 @@ HEADERS += headers/string_components/UnaryOperatorStringComponents.h \
     headers/OOInteractionException.h \
     headers/oointeraction_api.h \
     src/oointeraction.h
-SOURCES += src/string_components/UnaryOperatorStringComponents.cpp \
+SOURCES += src/string_providers/SimpleLiteralStringProvider.cpp \
+    src/string_components/BooleanLiteralStringComponents.cpp \
+    src/string_components/UnaryOperatorStringComponents.cpp \
     src/expression_editor/operators/UnaryOperatorDescriptor.cpp \
     src/handlers/SetCursorEvent.cpp \
     src/string_providers/StaticStringProvider.cpp \
@@ -74,7 +77,6 @@ SOURCES += src/string_components/UnaryOperatorStringComponents.cpp \
     src/string_components/VariableAccessStringComponents.cpp \
     src/string_components/StringComponents.cpp \
     src/string_providers/EmptyExpressionStringProvider.cpp \
-    src/string_providers/IntegerLiteralStringProvider.cpp \
     src/string_providers/StringProvider.cpp \
     src/handlers/HOOExpression.cpp \
     src/expression_editor/OOOperatorDescriptorList.cpp \

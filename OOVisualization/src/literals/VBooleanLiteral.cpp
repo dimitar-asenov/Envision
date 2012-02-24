@@ -57,6 +57,7 @@ VBooleanLiteral::~VBooleanLiteral()
 void VBooleanLiteral::determineChildren()
 {
 	synchronizeItem(vis_, node()->valueNode(), style());
+	vis_->setEditable(false);
 	vis_->setStyle( style() );
 }
 

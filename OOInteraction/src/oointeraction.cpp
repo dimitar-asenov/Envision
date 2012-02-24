@@ -41,13 +41,14 @@
 #include "string_components/BinaryOperatorStringComponents.h"
 #include "string_components/EmptyExpressionStringComponents.h"
 #include "string_components/ErrorExpressionStringComponents.h"
+#include "string_components/BooleanLiteralStringComponents.h"
 #include "string_components/IntegerLiteralStringComponents.h"
 #include "string_components/UnfinishedOperatorStringComponents.h"
 #include "string_components/VariableAccessStringComponents.h"
 
 #include "string_providers/SequentialVisualizationStringProvider.h"
 #include "string_providers/EmptyExpressionStringProvider.h"
-#include "string_providers/IntegerLiteralStringProvider.h"
+#include "string_providers/SimpleLiteralStringProvider.h"
 #include "string_providers/TextRendererStringProvider.h"
 #include "string_providers/StaticStringProvider.h"
 
@@ -119,6 +120,8 @@ bool OOInteraction::initialize(Envision::EnvisionManager&)
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringComponents, BinaryOperatorStringComponents, OOModel::BinaryOperation>();
 	Model::AdapterManager::registerAdapterViaConstructor
+		<StringComponents, BooleanLiteralStringComponents, OOModel::BooleanLiteral>();
+	Model::AdapterManager::registerAdapterViaConstructor
 		<StringComponents, IntegerLiteralStringComponents, OOModel::IntegerLiteral>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringComponents, VariableAccessStringComponents, OOModel::VariableAccess>();
@@ -135,7 +138,9 @@ bool OOInteraction::initialize(Envision::EnvisionManager&)
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringProvider, SequentialVisualizationStringProvider, OOVisualization::VBinaryOperation>();
 	Model::AdapterManager::registerAdapterViaConstructor
-		<StringProvider, IntegerLiteralStringProvider, OOVisualization::VIntegerLiteral>();
+		<StringProvider, SimpleLiteralStringProvider, OOVisualization::VBooleanLiteral>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringProvider, SimpleLiteralStringProvider, OOVisualization::VIntegerLiteral>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringProvider, SequentialVisualizationStringProvider, OOVisualization::VVariableAccess>();
 	Model::AdapterManager::registerAdapterViaConstructor

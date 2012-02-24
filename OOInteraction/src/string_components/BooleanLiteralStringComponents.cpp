@@ -25,47 +25,31 @@
  **********************************************************************************************************************/
 
 /*
- * IntegerLiteralStringProvider.cpp
+ * BooleanLiteralStringComponents.cpp
  *
- *  Created on: Feb 15, 2012
+ *  Created on: Feb 24, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "string_providers/IntegerLiteralStringProvider.h"
-#include "string_components/StringComponents.h"
+#include "string_components/BooleanLiteralStringComponents.h"
 
-#include "OOVisualization/headers/literals/VIntegerLiteral.h"
-#include "VisualizationBase/headers/cursor/TextCursor.h"
+#include "OOModel/headers/expressions/BooleanLiteral.h"
 
 namespace OOInteraction {
 
-IntegerLiteralStringProvider::IntegerLiteralStringProvider(OOVisualization::VIntegerLiteral* v)
-: vis_(v)
+BooleanLiteralStringComponents::BooleanLiteralStringComponents(OOModel::BooleanLiteral* e)
+	: exp_(e)
 {
 }
 
-int IntegerLiteralStringProvider::offset()
+QStringList BooleanLiteralStringComponents::components()
 {
-	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
+	QStringList result;
+	if (!exp_) return result;
 
-	auto tc = dynamic_cast<Visualization::TextCursor*> (vis_->scene()->mainCursor());
+	result.append( exp_->value() ? "true" : "false" );
 
-	return tc ? tc->caretPosition() : -1;
-}
-
-QString IntegerLiteralStringProvider::string()
-{
-	return stringFromComponenets(vis_);
-}
-
-void IntegerLiteralStringProvider::setOffset(int offset)
-{
-	if (!vis_) return;
-	vis_->moveCursor( Visualization::Item::MoveRightOf, QPoint(-2,0)); // Just set the caret to the first position.
-
-	// And then use the current cursor to set it to the correct position.
-	auto tc = dynamic_cast<Visualization::TextCursor*> (vis_->scene()->mainCursor());
-	tc->setCaretPosition(offset);
+	return result;
 }
 
 } /* namespace OOInteraction */
