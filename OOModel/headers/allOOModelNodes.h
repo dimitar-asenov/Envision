@@ -74,6 +74,7 @@
 #include "expressions/EmptyExpression.h"
 #include "expressions/ErrorExpression.h"
 #include "expressions/UnfinishedOperator.h"
+#include "expressions/CommaExpression.h"
 
 #include "types/Type.h"
 #include "types/PrimitiveType.h"

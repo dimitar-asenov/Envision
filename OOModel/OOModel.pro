@@ -28,7 +28,8 @@ pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
 PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/expressions/UnfinishedOperator.h \
+HEADERS += headers/expressions/CommaExpression.h \
+    headers/expressions/UnfinishedOperator.h \
     headers/expressions/ErrorExpression.h \
     headers/expressions/EmptyExpression.h \
     headers/precompiled.h \
@@ -83,7 +84,8 @@ HEADERS += headers/expressions/UnfinishedOperator.h \
     headers/OOModelException.h \
     headers/oomodel_api.h \
     src/oomodel.h
-SOURCES += src/expressions/UnfinishedOperator.cpp \
+SOURCES += src/expressions/CommaExpression.cpp \
+    src/expressions/UnfinishedOperator.cpp \
     src/expressions/ErrorExpression.cpp \
     src/expressions/EmptyExpression.cpp \
     src/elements/StorageSpecifier.cpp \

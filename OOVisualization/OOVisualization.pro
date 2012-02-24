@@ -33,7 +33,8 @@ INSTALLS += target \
     pluginmeta \
     styles
 PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/expressions/VEmptyExpression.h \
+HEADERS += headers/expressions/VCommaExpression.h \
+    headers/expressions/VEmptyExpression.h \
     headers/expressions/VUnfinishedOperatorStyle.h \
     headers/expressions/VUnfinishedOperator.h \
     headers/expressions/VErrorExpressionStyle.h \
@@ -105,7 +106,8 @@ HEADERS += headers/expressions/VEmptyExpression.h \
     headers/OOVisualizationException.h \
     headers/oovisualization_api.h \
     src/oovisualization.h
-SOURCES += src/expressions/VEmptyExpression.cpp \
+SOURCES += src/expressions/VCommaExpression.cpp \
+    src/expressions/VEmptyExpression.cpp \
     src/expressions/VUnfinishedOperatorStyle.cpp \
     src/expressions/VUnfinishedOperator.cpp \
     src/expressions/VErrorExpressionStyle.cpp \

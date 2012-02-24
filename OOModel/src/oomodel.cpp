@@ -90,6 +90,7 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	Model::TypedList<ErrorExpression>::registerNodeType();
 	Model::TypedList<UnfinishedOperator>::registerNodeType();
 	Model::TypedList<EmptyExpression>::registerNodeType();
+	Model::TypedList<CommaExpression>::registerNodeType();
 
 	Model::TypedList<Type>::registerNodeType();
 	Model::TypedList<PrimitiveType>::registerNodeType();
@@ -141,6 +142,7 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	EmptyExpression::init();
 	ErrorExpression::init();
 	UnfinishedOperator::init();
+	CommaExpression::init();
 
 	Type::init();
 	PrimitiveType::init();

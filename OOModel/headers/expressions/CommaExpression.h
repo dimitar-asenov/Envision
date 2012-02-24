@@ -25,46 +25,36 @@
  **********************************************************************************************************************/
 
 /*
- * OOExpressionBuilder.h
+ * CommaExpression.h
  *
- *  Created on: Jan 12, 2012
+ *  Created on: Feb 24, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef OOInteraction_OOEXPRESSIONBUILDER_H_
-#define OOInteraction_OOEXPRESSIONBUILDER_H_
+#ifndef OOModel_COMMAEXPRESSION_H_
+#define OOModel_COMMAEXPRESSION_H_
 
-#include "../oointeraction_api.h"
-
-#include "InteractionBase/headers/expression_editor/ExpressionVisitor.h"
-#include "InteractionBase/headers/expression_editor/Expression.h"
-
-namespace Model {
-	class Node;
-}
+#include "Expression.h"
 
 namespace OOModel {
-	class Expression;
-}
 
-namespace OOInteraction {
+class OOMODEL_API CommaExpression: public Expression
+{
+	EXTENDABLENODE_DECLARE_STANDARD_METHODS(CommaExpression)
 
-class OOINTERACTION_API OOExpressionBuilder : public Interaction::ExpressionVisitor {
+	ATTRIBUTE(Expression, left, setLeft)
+	ATTRIBUTE(Expression, right, setRight)
+
 	public:
+		/**
+		 * \brief Returns in a single list all expressions of this and nested CommaExpression operators.
+		 *
+		 * If \a detachOperands is set all returned expressions will have no parents and the CommaExpression can be
+		 * deleted.
+		 */
+		QList<Expression*> allSubOperands(bool detachOperands);
 
-		static OOModel::Expression* getOOExpression(const QString& exprText);
-		OOModel::Expression* getOOExpression(Interaction::Expression* expression);
-
-		virtual void visit(Interaction::Empty* empty);
-		virtual void visit(Interaction::Value* val);
-		virtual void visit(Interaction::Operator* op);
-		virtual void visit(Interaction::UnfinishedOperator* unfinished);
-
-	protected:
-		OOModel::Expression* expression;
-
-		void createErrorExpression(Interaction::Operator* op);
 };
 
-} /* namespace InteractionBase */
-#endif /* OOInteraction_OOEXPRESSIONBUILDER_H_ */
+} /* namespace OOModel */
+#endif /* OOModel_COMMAEXPRESSION_H_ */

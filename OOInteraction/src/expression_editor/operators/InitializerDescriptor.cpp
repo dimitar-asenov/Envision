@@ -34,6 +34,7 @@
 #include "expression_editor/operators/InitializerDescriptor.h"
 
 #include "OOModel/headers/expressions/ArrayInitializer.h"
+#include "OOModel/headers/expressions/CommaExpression.h"
 
 namespace OOInteraction {
 
@@ -47,7 +48,17 @@ OOModel::Expression* InitializerDescriptor::create(const QList<OOModel::Expressi
 	OOModel::ArrayInitializer* opr = new OOModel::ArrayInitializer();
 
 	for(auto e: operands)
-		opr->values()->append(e);
+	{
+		if (auto comma = dynamic_cast<OOModel::CommaExpression*>(e))
+		{
+			for(auto ee : comma->allSubOperands(true))
+				opr->values()->append(ee);
+
+			SAFE_DELETE(comma);
+		}
+		else
+			opr->values()->append(e);
+	}
 
 	return opr;
 }

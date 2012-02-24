@@ -25,46 +25,44 @@
  **********************************************************************************************************************/
 
 /*
- * OOExpressionBuilder.h
+ * CommaExpression.cpp
  *
- *  Created on: Jan 12, 2012
+ *  Created on: Feb 24, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef OOInteraction_OOEXPRESSIONBUILDER_H_
-#define OOInteraction_OOEXPRESSIONBUILDER_H_
+#include "expressions/CommaExpression.h"
 
-#include "../oointeraction_api.h"
-
-#include "InteractionBase/headers/expression_editor/ExpressionVisitor.h"
-#include "InteractionBase/headers/expression_editor/Expression.h"
-
-namespace Model {
-	class Node;
-}
+#include "expressions/EmptyExpression.h"
 
 namespace OOModel {
-	class Expression;
+
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(CommaExpression, Expression)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommaExpression, Expression)
+
+REGISTER_ATTRIBUTE(CommaExpression, left, Expression, false, false, true)
+REGISTER_ATTRIBUTE(CommaExpression, right, Expression, false, false, true)
+
+QList<Expression*> CommaExpression::allSubOperands(bool detachOperands)
+{
+	QList<Expression*> operands;
+
+	if (auto left_comma = dynamic_cast<CommaExpression*>(left()))
+		operands.append(left_comma->allSubOperands(detachOperands));
+	else
+	{
+		operands.append(left());
+		if (detachOperands) replaceChild(left(), new EmptyExpression());
+	}
+
+	if (auto right_comma = dynamic_cast<CommaExpression*>(right()))
+		operands.append(right_comma->allSubOperands(detachOperands));
+	else
+	{
+		operands.append(right());
+		if (detachOperands) replaceChild(right(), new EmptyExpression());
+	}
+	return operands;
 }
 
-namespace OOInteraction {
-
-class OOINTERACTION_API OOExpressionBuilder : public Interaction::ExpressionVisitor {
-	public:
-
-		static OOModel::Expression* getOOExpression(const QString& exprText);
-		OOModel::Expression* getOOExpression(Interaction::Expression* expression);
-
-		virtual void visit(Interaction::Empty* empty);
-		virtual void visit(Interaction::Value* val);
-		virtual void visit(Interaction::Operator* op);
-		virtual void visit(Interaction::UnfinishedOperator* unfinished);
-
-	protected:
-		OOModel::Expression* expression;
-
-		void createErrorExpression(Interaction::Operator* op);
-};
-
-} /* namespace InteractionBase */
-#endif /* OOInteraction_OOEXPRESSIONBUILDER_H_ */
+}

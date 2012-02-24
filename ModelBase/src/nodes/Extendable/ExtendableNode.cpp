@@ -58,7 +58,8 @@ const QString& ExtendableNode::typeNameStatic()
 
 void ExtendableNode::registerNodeType()
 {
-	typeId_ = Node::registerNodeType("ExtendableNode", ::Model::createNewNode< ExtendableNode >, ::Model::createNodeFromPersistence< ExtendableNode >);
+	typeId_ = Node::registerNodeType("ExtendableNode", ::Model::createNewNode< ExtendableNode >,
+			::Model::createNodeFromPersistence< ExtendableNode >);
 }
 
 AttributeChain& ExtendableNode::topLevelMeta()
@@ -87,7 +88,8 @@ ExtendableNode::ExtendableNode(Node *parent, AttributeChain& metaData) :
 		subnodes[level] = QVector<Node*> (currentLevel->size(), nullptr);
 
 		for (int i = 0; i < currentLevel->size(); ++i)
-			if ( !(*currentLevel)[i].optional() ) subnodes[level][i] = Node::createNewNode((*currentLevel)[i].type(), this);
+			if ( !(*currentLevel)[i].optional() )
+				subnodes[level][i] = Node::createNewNode((*currentLevel)[i].type(), this);
 	}
 }
 
@@ -102,7 +104,8 @@ ExtendableNode::ExtendableNode(Node *parent, PersistentStore &store, bool, Attri
 	for (QList<LoadedNode>::iterator ln = children.begin(); ln != children.end(); ln++)
 	{
 		ExtendableIndex index = meta.indexForAttribute(ln->name);
-		if ( !index.isValid() ) throw ModelException("Node has attribute " + ln->name + " in persistent store, but this attribute is not registered");
+		if ( !index.isValid() ) throw ModelException("Node has attribute "
+				+ ln->name + " in persistent store, but this attribute is not registered");
 
 		subnodes[index.level()][index.index()] = ln->node;
 	}
@@ -123,14 +126,17 @@ AttributeChain& ExtendableNode::getMetaData()
 	return descriptions;
 }
 
-ExtendableIndex ExtendableNode::registerNewAttribute(AttributeChain& metaData, const QString &attributeName, const QString &attributeType, bool canBePartiallyLoaded, bool isOptional, bool isPersistent)
+ExtendableIndex ExtendableNode::registerNewAttribute(AttributeChain& metaData, const QString &attributeName,
+		const QString &attributeType, bool canBePartiallyLoaded, bool isOptional, bool isPersistent)
 {
-	return registerNewAttribute(metaData, Attribute(attributeName, attributeType, isOptional, canBePartiallyLoaded, isPersistent));
+	return registerNewAttribute(metaData, Attribute(attributeName, attributeType,
+												isOptional, canBePartiallyLoaded, isPersistent));
 }
 
 ExtendableIndex ExtendableNode::registerNewAttribute(AttributeChain& metaData, const Attribute& attribute)
 {
-	if ( metaData.hasAttribute(attribute.name()) ) throw ModelException("Trying to register new attribute " + attribute.name() + " but this name already exists");
+	if ( metaData.hasAttribute(attribute.name()) )
+		throw ModelException("Trying to register new attribute " + attribute.name() + " but this name already exists");
 
 	metaData.append(attribute);
 
@@ -140,7 +146,7 @@ ExtendableIndex ExtendableNode::registerNewAttribute(AttributeChain& metaData, c
 void ExtendableNode::set(const ExtendableIndex &attributeIndex, Node* node)
 {
 	if ( !attributeIndex.isValid() ) throw ModelException("Trying to set an attribute with an invalid Index");
-	execute(new ExtendedNodeChild(this, node, attributeIndex, &subnodes));
+	execute(new ExtendedNodeChild(this, node, false, attributeIndex, &subnodes));
 }
 
 Node* ExtendableNode::get(const QString &attributeName) const
@@ -171,7 +177,8 @@ bool ExtendableNode::replaceChild(Node* child, Node* replacement)
 	ExtendableIndex index = indexOf(child);
 	if (!index.isValid()) return false;
 
-	set(index, replacement);
+	if ( !index.isValid() ) throw ModelException("Trying to set an attribute with an invalid Index");
+	execute(new ExtendedNodeChild(this, replacement, true, index, &subnodes));
 	return true;
 }
 
@@ -189,7 +196,8 @@ QList< QPair<QString, Node*> > ExtendableNode::getAllAttributes(bool includeNull
 		AttributeChain* currentLevel = meta.level(level);
 
 		for (int i = 0; i < currentLevel->size(); ++i)
-			if ( subnodes[level][i] || includeNullValues ) result.append(QPair<QString,Node*>((*currentLevel)[i].name(),subnodes[level][i]));
+			if ( subnodes[level][i] || includeNullValues )
+				result.append(QPair<QString,Node*>((*currentLevel)[i].name(),subnodes[level][i]));
 	}
 
 	return result;
@@ -199,7 +207,7 @@ void ExtendableNode::removeOptional(const ExtendableIndex &attributeIndex)
 {
 	if ( meta.attribute(attributeIndex).optional() )
 	{
-		execute(new ExtendedNodeChild(this, nullptr, attributeIndex, &subnodes));
+		execute(new ExtendedNodeChild(this, nullptr, false, attributeIndex, &subnodes));
 	}
 	else
 		throw ModelException("Trying to remove a non-optional attribute");
@@ -211,14 +219,16 @@ void ExtendableNode::save(PersistentStore &store) const
 	{
 		AttributeChain* currentLevel = meta.level(level);
 		for (int i = 0; i < currentLevel->size(); ++i)
-			if ( subnodes[level][i] != nullptr && currentLevel->at(i).persistent() ) store.saveNode(subnodes[level][i], currentLevel->at(i).name(), currentLevel->at(i).partialHint());
+			if ( subnodes[level][i] != nullptr && currentLevel->at(i).persistent() )
+				store.saveNode(subnodes[level][i], currentLevel->at(i).name(), currentLevel->at(i).partialHint());
 	}
 }
 
 void ExtendableNode::load(PersistentStore &store)
 {
 	if (store.currentNodeType() != typeName())
-		throw ModelException("Trying to load an Extendable node from an incompatible node type " + store.currentNodeType());
+		throw ModelException("Trying to load an Extendable node from an incompatible node type "
+				+ store.currentNodeType());
 
 	removeAllNodes();
 
@@ -227,9 +237,11 @@ void ExtendableNode::load(PersistentStore &store)
 	for (QList<LoadedNode>::iterator ln = children.begin(); ln != children.end(); ln++)
 	{
 		ExtendableIndex index = meta.indexForAttribute(ln->name);
-		if ( !index.isValid() ) throw ModelException("Node has attribute " + ln->name + " in persistent store, but this attribute is not registered");
+		if ( !index.isValid() )
+			throw ModelException("Node has attribute "
+					+ ln->name + " in persistent store, but this attribute is not registered");
 
-		execute(new ExtendedNodeChild(this, ln->node, ExtendableIndex(index.level(),index.index()), &subnodes));
+		execute(new ExtendedNodeChild(this, ln->node, false, ExtendableIndex(index.level(),index.index()), &subnodes));
 	}
 
 	verifyHasAllMandatoryAttributes();
@@ -239,7 +251,8 @@ void ExtendableNode::removeAllNodes()
 {
 	for (int level = 0; level < subnodes.size(); ++level)
 		for (int i = 0; i < subnodes[level].size(); ++i)
-			if ( subnodes[level][i] ) execute(new ExtendedNodeChild(this, nullptr, ExtendableIndex(level,i), &subnodes));
+			if ( subnodes[level][i] )
+				execute(new ExtendedNodeChild(this, nullptr, false, ExtendableIndex(level,i), &subnodes));
 }
 
 void ExtendableNode::verifyHasAllMandatoryAttributes()
@@ -250,7 +263,8 @@ void ExtendableNode::verifyHasAllMandatoryAttributes()
 
 		for (int i = 0; i < currentLevel->size(); ++i)
 			if ( subnodes[level][i] == nullptr && (*currentLevel)[i].optional() == false )
-				throw ModelException("An ExtendableNode has an uninitialized mandatory attribute " + (*currentLevel)[i].name());
+				throw ModelException("An ExtendableNode has an uninitialized mandatory attribute "
+						+ (*currentLevel)[i].name());
 	}
 }
 

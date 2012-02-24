@@ -33,7 +33,7 @@
 
 #include "expression_editor/operators/CommaDescriptor.h"
 
-#include "OOInteractionException.h"
+#include "OOModel/headers/expressions/CommaExpression.h"
 
 namespace OOInteraction {
 
@@ -42,9 +42,12 @@ CommaDescriptor::CommaDescriptor(const QString& name, const QString& signature, 
 		: OOOperatorDescriptor(name, signature, num_operands, precedence, associativity)
 {}
 
-OOModel::Expression* CommaDescriptor::create(const QList<OOModel::Expression*>& /*operands*/)
+OOModel::Expression* CommaDescriptor::create(const QList<OOModel::Expression*>& operands)
 {
-	throw OOInteractionException("Invoking CommaDescriptor::create is not allowed.");
+	OOModel::CommaExpression* opr = new OOModel::CommaExpression();
+	opr->setLeft(operands.first());
+	opr->setRight(operands.last());
+	return opr;
 }
 
 } /* namespace OOInteraction */

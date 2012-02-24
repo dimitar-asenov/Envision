@@ -49,9 +49,11 @@ class MODELBASE_API ExtendedNodeChild: public UndoCommand
 		Node* oldVal;
 		ExtendableIndex attributeIndex;
 		QVector< QVector<Node*> >* subnodes;
+		bool detached_;
 
 	public:
-		ExtendedNodeChild(Node* target, Node* newValue, const ExtendableIndex &attributeIndex, QVector< QVector<Node*> >* subnodes);
+		ExtendedNodeChild(Node* target, Node* newValue,  bool detached, const ExtendableIndex &attributeIndex,
+				QVector< QVector<Node*> >* subnodes);
 		virtual ~ExtendedNodeChild();
 
 		virtual void redo();

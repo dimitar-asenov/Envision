@@ -25,46 +25,48 @@
  **********************************************************************************************************************/
 
 /*
- * OOExpressionBuilder.h
+ * VCommaExpression.h
  *
- *  Created on: Jan 12, 2012
+ *  Created on: Feb 24, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef OOInteraction_OOEXPRESSIONBUILDER_H_
-#define OOInteraction_OOEXPRESSIONBUILDER_H_
+#ifndef OOVisualization_VCOMMAEXPRESSION_H_
+#define OOVisualization_VCOMMAEXPRESSION_H_
 
-#include "../oointeraction_api.h"
+#include "../oovisualization_api.h"
+#include "OperatorStyle.h"
 
-#include "InteractionBase/headers/expression_editor/ExpressionVisitor.h"
-#include "InteractionBase/headers/expression_editor/Expression.h"
+#include "OOModel/headers/expressions/CommaExpression.h"
 
-namespace Model {
-	class Node;
+#include "VisualizationBase/headers/items/ItemWithNode.h"
+#include "VisualizationBase/headers/items/LayoutProvider.h"
+
+namespace Visualization {
+	class Static;
 }
 
-namespace OOModel {
-	class Expression;
-}
+namespace OOVisualization {
 
-namespace OOInteraction {
+class OOVISUALIZATION_API VCommaExpression : public Visualization::ItemWithNode<Visualization::LayoutProvider<>,
+	OOModel::CommaExpression>
+{
+	ITEM_COMMON_CUSTOM_STYLENAME(VCommaExpression, OperatorSequenceStyle)
 
-class OOINTERACTION_API OOExpressionBuilder : public Interaction::ExpressionVisitor {
 	public:
-
-		static OOModel::Expression* getOOExpression(const QString& exprText);
-		OOModel::Expression* getOOExpression(Interaction::Expression* expression);
-
-		virtual void visit(Interaction::Empty* empty);
-		virtual void visit(Interaction::Value* val);
-		virtual void visit(Interaction::Operator* op);
-		virtual void visit(Interaction::UnfinishedOperator* unfinished);
+		VCommaExpression(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+		virtual ~VCommaExpression();
 
 	protected:
-		OOModel::Expression* expression;
+		void determineChildren();
 
-		void createErrorExpression(Interaction::Operator* op);
+	private:
+		Visualization::Static* pre_;
+		Visualization::Static* in_;
+		Visualization::Static* post_;
+		Visualization::Item* left_;
+		Visualization::Item* right_;
 };
 
-} /* namespace InteractionBase */
-#endif /* OOInteraction_OOEXPRESSIONBUILDER_H_ */
+} /* namespace OOVisualization */
+#endif /* OOVisualization_VCOMMAEXPRESSION_H_ */

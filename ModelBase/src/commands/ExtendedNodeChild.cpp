@@ -40,17 +40,23 @@
 
 namespace Model {
 
-ExtendedNodeChild::ExtendedNodeChild(Node* target, Node* newValue_, const ExtendableIndex &attributeIndex_, QVector< QVector<Node*> >* subnodes_) :
-	UndoCommand(target, "set node"), newVal(newValue_), oldVal((*subnodes_)[attributeIndex_.level()][attributeIndex_.index()]),
-	attributeIndex(attributeIndex_), subnodes(subnodes_)
+ExtendedNodeChild::ExtendedNodeChild(Node* target, Node* newValue_, bool detached,
+		const ExtendableIndex &attributeIndex_, QVector< QVector<Node*> >* subnodes_) :
+	UndoCommand(target, "set node"), newVal(newValue_),
+	oldVal((*subnodes_)[attributeIndex_.level()][attributeIndex_.index()]),
+	attributeIndex(attributeIndex_), subnodes(subnodes_), detached_(detached)
 {
-	if (newValue_ && newValue_->parent()) throw ModelException("Set as a child of ExtenableNode a node that already has a parent.");
+	if (newValue_ && newValue_->parent())
+		throw ModelException("Set as a child of ExtenableNode a node that already has a parent.");
 }
 
 ExtendedNodeChild::~ExtendedNodeChild()
 {
-	if ( isUndone() ) SAFE_DELETE(newVal);
-	else SAFE_DELETE(oldVal);
+	if (!detached_)
+	{
+		if ( isUndone() ) SAFE_DELETE(newVal);
+		else SAFE_DELETE(oldVal);
+	}
 }
 
 void ExtendedNodeChild::redo()

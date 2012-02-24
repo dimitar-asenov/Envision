@@ -81,6 +81,7 @@ class ArrayInitializer;
 class EmptyExpression;
 class ErrorExpression;
 class UnfinishedOperator;
+class CommaExpression;
 
 class Type;
 class PrimitiveType;
@@ -132,6 +133,7 @@ template class Q_DECL_IMPORT Model::TypedList<OOModel::ArrayInitializer>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::EmptyExpression>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::ErrorExpression>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::UnfinishedOperator>;
+template class Q_DECL_IMPORT Model::TypedList<OOModel::CommaExpression>;
 
 template class Q_DECL_IMPORT Model::TypedList<OOModel::Type>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::PrimitiveType>;

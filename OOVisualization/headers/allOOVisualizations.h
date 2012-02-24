@@ -52,6 +52,7 @@
 #include "expressions/VUnaryOperation.h"
 #include "expressions/VBinaryOperation.h"
 #include "expressions/VArrayInitializer.h"
+#include "expressions/VCommaExpression.h"
 
 #include "expressions/VEmptyExpression.h"
 #include "expressions/VErrorExpression.h"
