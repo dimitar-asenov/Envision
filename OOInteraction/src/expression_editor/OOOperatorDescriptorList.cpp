@@ -35,6 +35,10 @@
 
 #include "expression_editor/operators/UnaryOperatorDescriptor.h"
 #include "expression_editor/operators/BinaryOperatorDescriptor.h"
+#include "expression_editor/operators/CastDescriptor.h"
+#include "expression_editor/operators/CommaDescriptor.h"
+#include "expression_editor/operators/NewArrayDescriptor.h"
+#include "expression_editor/operators/InitializerDescriptor.h"
 
 namespace OOInteraction {
 
@@ -105,6 +109,16 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 			"conditional or", "expr || expr", 2, 12, Interaction::OperatorDescriptor::LeftAssociative));
 	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::ARRAY_INDEX,
 			"array index", "expr [ expr ]", 2, 1, Interaction::OperatorDescriptor::LeftAssociative));
+
+	// Others
+	instance()->addDescriptor(new CastDescriptor( "cast", "( expr ) expr", 2, 2,
+			Interaction::OperatorDescriptor::RightAssociative));
+	instance()->addDescriptor(new CommaDescriptor( "comma", "expr , expr", 2, 50,
+			Interaction::OperatorDescriptor::LeftAssociative));
+	instance()->addDescriptor(new InitializerDescriptor( "initializer", "{ expr }", 1, 0,
+			Interaction::OperatorDescriptor::NotAssociative));
+	instance()->addDescriptor(new NewArrayDescriptor( "new array", "new expr [ expr ]", 2, 2,
+			Interaction::OperatorDescriptor::RightAssociative));
 }
 
 } /* namespace OOInteraction */

@@ -25,47 +25,31 @@
  **********************************************************************************************************************/
 
 /*
- * OOExpressionBuilder.h
+ * InitializerDescriptor.cpp
  *
- *  Created on: Jan 12, 2012
+ *  Created on: Feb 24, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef OOInteraction_OOEXPRESSIONBUILDER_H_
-#define OOInteraction_OOEXPRESSIONBUILDER_H_
+#include "expression_editor/operators/InitializerDescriptor.h"
 
-#include "../oointeraction_api.h"
-
-#include "InteractionBase/headers/expression_editor/ExpressionVisitor.h"
-#include "InteractionBase/headers/expression_editor/Expression.h"
-
-namespace Model {
-	class Node;
-}
-
-namespace OOModel {
-	class Expression;
-}
+#include "OOModel/headers/expressions/ArrayInitializer.h"
 
 namespace OOInteraction {
 
-class OOINTERACTION_API OOExpressionBuilder : public Interaction::ExpressionVisitor {
-	public:
+InitializerDescriptor::InitializerDescriptor(const QString& name, const QString& signature, int num_operands,
+		int precedence, Associativity associativity)
+		: OOOperatorDescriptor(name, signature, num_operands, precedence, associativity)
+{}
 
-		static OOModel::Expression* getOOExpression(const QString& exprText);
-		OOModel::Expression* getOOExpression(Interaction::Expression* expression);
+OOModel::Expression* InitializerDescriptor::create(const QList<OOModel::Expression*>& operands)
+{
+	OOModel::ArrayInitializer* opr = new OOModel::ArrayInitializer();
 
-		virtual void visit(Interaction::Empty* empty);
-		virtual void visit(Interaction::Value* val);
-		virtual void visit(Interaction::Operator* op);
-		virtual void visit(Interaction::UnfinishedOperator* unfinished);
+	for(auto e: operands)
+		opr->values()->append(e);
 
-	protected:
-		OOModel::Expression* expression;
+	return opr;
+}
 
-		void createErrorExpression(Interaction::Operator* op);
-		QList<OOModel::Expression*> getOperands(Interaction::Operator* op);
-};
-
-} /* namespace InteractionBase */
-#endif /* OOInteraction_OOEXPRESSIONBUILDER_H_ */
+} /* namespace OOInteraction */

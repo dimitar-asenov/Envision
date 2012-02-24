@@ -35,6 +35,7 @@
 
 #include "expression_editor/OOOperatorDescriptorList.h"
 #include "expression_editor/OOOperatorDescriptor.h"
+#include "expression_editor/operators/CommaDescriptor.h"
 #include "OOInteractionException.h"
 
 #include "OOModel/headers/allOOModelNodes.h"
@@ -94,14 +95,8 @@ void OOExpressionBuilder::visit(Interaction::Operator* op)
 		createErrorExpression(op);
 	else
 	{
-		QList<OOModel::Expression*> operands;
-		for(auto e : op->operands())
-		{
-			e->accept(this);
-			operands.append(expression);
-		}
 		OOOperatorDescriptor* desc = static_cast<OOOperatorDescriptor*>(op->descriptor());
-		expression = desc->create(operands);
+		expression = desc->create( getOperands(op) );
 	}
 }
 
@@ -145,6 +140,32 @@ void OOExpressionBuilder::createErrorExpression(Interaction::Operator* op)
 	error->setArg(expression);
 
 	expression = error;
+}
+
+QList<OOModel::Expression*> OOExpressionBuilder::getOperands(Interaction::Operator* op)
+{
+	QList<OOModel::Expression*> operands;
+
+	for(auto e : op->operands())
+	{
+		bool comma = false;
+		if (auto child_op = dynamic_cast<Interaction::Operator*>(e))
+		{
+			if (dynamic_cast<CommaDescriptor*> (child_op->descriptor()))
+			{
+				operands.append(getOperands(child_op));
+				comma = true;
+			}
+		}
+
+		if (!comma)
+		{
+			e->accept(this);
+			operands.append(expression);
+		}
+	}
+
+	return operands;
 }
 
 } /* namespace InteractionBase */

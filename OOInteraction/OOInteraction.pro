@@ -35,7 +35,11 @@ INSTALLS += target \
     pluginmeta \
     styles
 PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/string_components/ThisExpressionStringComponents.h \
+HEADERS += headers/expression_editor/operators/CommaDescriptor.h \
+    headers/expression_editor/operators/InitializerDescriptor.h \
+    headers/expression_editor/operators/CastDescriptor.h \
+    headers/expression_editor/operators/NewArrayDescriptor.h \
+    headers/string_components/ThisExpressionStringComponents.h \
     headers/string_components/NullLiteralStringComponents.h \
     headers/string_providers/SimpleLiteralStringProvider.h \
     headers/string_components/BooleanLiteralStringComponents.h \
@@ -63,7 +67,11 @@ HEADERS += headers/string_components/ThisExpressionStringComponents.h \
     headers/OOInteractionException.h \
     headers/oointeraction_api.h \
     src/oointeraction.h
-SOURCES += src/string_components/ThisExpressionStringComponents.cpp \
+SOURCES += src/expression_editor/operators/CommaDescriptor.cpp \
+    src/expression_editor/operators/CastDescriptor.cpp \
+    src/expression_editor/operators/InitializerDescriptor.cpp \
+    src/expression_editor/operators/NewArrayDescriptor.cpp \
+    src/string_components/ThisExpressionStringComponents.cpp \
     src/string_components/NullLiteralStringComponents.cpp \
     src/string_providers/SimpleLiteralStringProvider.cpp \
     src/string_components/BooleanLiteralStringComponents.cpp \

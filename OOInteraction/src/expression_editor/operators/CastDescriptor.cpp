@@ -25,47 +25,29 @@
  **********************************************************************************************************************/
 
 /*
- * OOExpressionBuilder.h
+ * CastDescriptor.cpp
  *
- *  Created on: Jan 12, 2012
+ *  Created on: Feb 24, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef OOInteraction_OOEXPRESSIONBUILDER_H_
-#define OOInteraction_OOEXPRESSIONBUILDER_H_
+#include "expression_editor/operators/CastDescriptor.h"
 
-#include "../oointeraction_api.h"
-
-#include "InteractionBase/headers/expression_editor/ExpressionVisitor.h"
-#include "InteractionBase/headers/expression_editor/Expression.h"
-
-namespace Model {
-	class Node;
-}
-
-namespace OOModel {
-	class Expression;
-}
+#include "OOModel/headers/expressions/CastExpression.h"
 
 namespace OOInteraction {
 
-class OOINTERACTION_API OOExpressionBuilder : public Interaction::ExpressionVisitor {
-	public:
+CastDescriptor::CastDescriptor(const QString& name, const QString& signature, int num_operands,
+		int precedence, Associativity associativity)
+		: OOOperatorDescriptor(name, signature, num_operands, precedence, associativity)
+{}
 
-		static OOModel::Expression* getOOExpression(const QString& exprText);
-		OOModel::Expression* getOOExpression(Interaction::Expression* expression);
+OOModel::Expression* CastDescriptor::create(const QList<OOModel::Expression*>& operands)
+{
+	OOModel::CastExpression* opr = new OOModel::CastExpression();
+	opr->setType( operands.first());
+	opr->setExpr(operands.last());
+	return opr;
+}
 
-		virtual void visit(Interaction::Empty* empty);
-		virtual void visit(Interaction::Value* val);
-		virtual void visit(Interaction::Operator* op);
-		virtual void visit(Interaction::UnfinishedOperator* unfinished);
-
-	protected:
-		OOModel::Expression* expression;
-
-		void createErrorExpression(Interaction::Operator* op);
-		QList<OOModel::Expression*> getOperands(Interaction::Operator* op);
-};
-
-} /* namespace InteractionBase */
-#endif /* OOInteraction_OOEXPRESSIONBUILDER_H_ */
+} /* namespace OOInteraction */
