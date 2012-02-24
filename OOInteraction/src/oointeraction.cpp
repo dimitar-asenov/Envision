@@ -41,6 +41,10 @@
 #include "string_components/BinaryOperatorStringComponents.h"
 #include "string_components/EmptyExpressionStringComponents.h"
 #include "string_components/ErrorExpressionStringComponents.h"
+#include "string_components/CastExpressionStringComponents.h"
+#include "string_components/CommaExpressionStringComponents.h"
+#include "string_components/NewArrayStringComponents.h"
+#include "string_components/InitializerStringComponents.h"
 #include "string_components/BooleanLiteralStringComponents.h"
 #include "string_components/IntegerLiteralStringComponents.h"
 #include "string_components/NullLiteralStringComponents.h"
@@ -123,6 +127,14 @@ bool OOInteraction::initialize(Envision::EnvisionManager&)
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringComponents, BinaryOperatorStringComponents, OOModel::BinaryOperation>();
 	Model::AdapterManager::registerAdapterViaConstructor
+		<StringComponents, CastExpressionStringComponents, OOModel::CastExpression>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringComponents, CommaExpressionStringComponents, OOModel::CommaExpression>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringComponents, InitializerStringComponents, OOModel::ArrayInitializer>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringComponents, NewArrayStringComponents, OOModel::NewExpression>();
+	Model::AdapterManager::registerAdapterViaConstructor
 		<StringComponents, BooleanLiteralStringComponents, OOModel::BooleanLiteral>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringComponents, IntegerLiteralStringComponents, OOModel::IntegerLiteral>();
@@ -144,6 +156,10 @@ bool OOInteraction::initialize(Envision::EnvisionManager&)
 		<StringProvider, SequentialVisualizationStringProvider, OOVisualization::VUnaryOperation>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringProvider, SequentialVisualizationStringProvider, OOVisualization::VBinaryOperation>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringProvider, SequentialVisualizationStringProvider, OOVisualization::VCastExpression>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringProvider, SequentialVisualizationStringProvider, OOVisualization::VCommaExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringProvider, SimpleLiteralStringProvider, OOVisualization::VBooleanLiteral>();
 	Model::AdapterManager::registerAdapterViaConstructor
