@@ -54,7 +54,11 @@ QStringList SequentialVisualizationStringProvider::components()
 	{
 		components = node->components();
 		if (components.size() != vis_->layout()->length())
-			components.removeAll(QString());
+		{
+			for (int i = components.size() - 1; i>=0; --i)
+				if (components[i].isNull())
+					components.removeAt(i);
+		}
 		if (components.size() != vis_->layout()->length())
 			components.removeAll(QString(""));
 		SAFE_DELETE(node);
