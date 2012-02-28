@@ -404,7 +404,7 @@ bool Item::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 		}
 	}
 
-	// Find the closest region that matches the constraints
+	// Find all regions that match the constraints
 	ItemRegion::PositionConstraint constraints = ItemRegion::NoConstraints;
 	switch(dir)
 	{
@@ -419,8 +419,10 @@ bool Item::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 		case MoveRightOf: constraints = ItemRegion::RightOf; break;
 	}
 
-	ItemRegion* best = nullptr;
-	int best_distance;
+	// We use a map since the elements are kept ordered according to the key. As key we use the distance multiplied by 10
+	// so that we can implement minor corrections in order.
+	QMap<int, ItemRegion*> matching;
+
 	for (ItemRegion& r : regs)
 	{
 		ItemRegion::PositionConstraints satisfied = r.satisfiedPositionConstraints(source);
@@ -431,58 +433,66 @@ bool Item::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 						// Cursors are overlapping the normal items. At the borders of such containers the alternative below
 						// is needed.
 						|| (r.cursor() && (satisfied & ItemRegion::Overlap)) )
-				&& (!best
-						|| r.distanceTo(source) < best_distance
-						// Prioritize cursor regions on top of item regions.
-						|| (r.cursor() && r.distanceTo(source) <= best_distance))
 			)
 		{
-			best_distance = r.distanceTo(source);
-			best = &r;
+			int distanceKey = r.distanceTo(source)*10;
+			if (r.cursor() && distanceKey > 0) distanceKey -= 5;
+			matching.insert(distanceKey, &r);
 		}
 	}
 
-	// Delete the cursors of all regions which have one except for the best matching region.
-	for (ItemRegion& r : regs)
-		if (&r != best)
-			if (r.cursor()) delete r.cursor();
+	bool canFocus = false;
+	Cursor* focusedCursor = nullptr;
 
-	if (best == nullptr) return false;
-
-	// A region was found, focus it
-	if (best->cursor())
+	for(auto r : matching.values())
 	{
-		// This is a cursor region for a cursor belonging to the current item.
-		scene()->setMainCursor(best->cursor());
-		setFocus();
-		return true;
-	}
-	else if (best->item())
-	{
-		// This is a child item region
-
-		// Only accept this as a correct focus event if this child is not already focused.
-		if (best->item()->itemOrChildHasFocus()) return false;
-
-		CursorMoveDirection childDirection;
-		switch(dir)
+		// Try to focus
+		if (r->cursor())
 		{
-			case MoveUp: childDirection = MoveUpOf; break;
-			case MoveDown: childDirection = MoveDownOf; break;
-			case MoveLeft: childDirection = MoveLeftOf; break;
-			case MoveRight: childDirection = MoveRightOf; break;
-			case MoveOnPosition: childDirection = MoveOnPosition; break;
-			case MoveUpOf: childDirection = MoveUpOf; break;
-			case MoveDownOf: childDirection = MoveDownOf; break;
-			case MoveLeftOf: childDirection = MoveLeftOf; break;
-			case MoveRightOf: childDirection = MoveRightOf; break;
+			// This is a cursor region for a cursor belonging to the current item.
+			scene()->setMainCursor(r->cursor());
+			setFocus();
+			canFocus = true;
+			focusedCursor = r->cursor();
+			break;
 		}
-		return best->item()->moveCursor(childDirection, mapToItem(best->item(), source).toPoint());
+		else if (r->item())
+		{
+			// This is a child item region
+
+			// Only accept this as a correct focus event if this child is not already focused.
+			if (r->item()->itemOrChildHasFocus()) continue;
+
+			CursorMoveDirection childDirection;
+			switch(dir)
+			{
+				case MoveUp: childDirection = MoveUpOf; break;
+				case MoveDown: childDirection = MoveDownOf; break;
+				case MoveLeft: childDirection = MoveLeftOf; break;
+				case MoveRight: childDirection = MoveRightOf; break;
+				case MoveOnPosition: childDirection = MoveOnPosition; break;
+				case MoveUpOf: childDirection = MoveUpOf; break;
+				case MoveDownOf: childDirection = MoveDownOf; break;
+				case MoveLeftOf: childDirection = MoveLeftOf; break;
+				case MoveRightOf: childDirection = MoveRightOf; break;
+			}
+			if( r->item()->moveCursor(childDirection, mapToItem(r->item(), source).toPoint()))
+			{
+				canFocus = true;
+				break;
+			}
+		}
+		else
+		{
+			throw VisualizationException("Encountered an item region with no cursor or child item.");
+		}
 	}
-	else
-	{
-		throw VisualizationException("Encountered an item region with no cursor or child item.");
-	}
+
+	// Delete the cursors of all regions which have one except for the focused one.
+	for (ItemRegion& r : regs)
+		if (r.cursor() && r.cursor() != focusedCursor) delete r.cursor();
+
+	return canFocus;
 }
 
 Item* Item::findVisualizationOf(Model::Node* node)
