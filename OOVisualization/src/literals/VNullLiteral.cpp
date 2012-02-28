@@ -34,6 +34,7 @@
 #include "literals/VNullLiteral.h"
 
 #include "OOModel/headers/expressions/NullLiteral.h"
+#include "Helpers.h"
 
 #include "VisualizationBase/headers/items/Text.h"
 
@@ -58,6 +59,7 @@ VNullLiteral::~VNullLiteral()
 void VNullLiteral::determineChildren()
 {
 	vis_->setStyle( style());
+	Helpers::omitBoundingCursorsInExpressions(this, vis_, true);
 }
 
 void VNullLiteral::updateGeometry(int availableWidth, int availableHeight)

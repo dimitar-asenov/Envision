@@ -64,7 +64,9 @@ class VISUALIZATIONBASE_API TextCursor : public Cursor {
 		void setSelectedByDrag(int xBegin, int xEnd);
 		void setCaretPosition(int beforeCharacter);
 
-		TextRenderer* owner();
+		int cursorAtX(int x) const;
+
+		TextRenderer* owner() const;
 
 		bool isCursorBeforeSelection();
 

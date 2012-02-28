@@ -42,7 +42,7 @@ LayoutCursor::LayoutCursor(Layout* owner)
 {
 }
 
-Layout* LayoutCursor::owner()
+Layout* LayoutCursor::owner() const
 {
 	return static_cast<Layout*> (Cursor::owner());
 }

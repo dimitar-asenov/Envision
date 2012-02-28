@@ -32,6 +32,7 @@
  */
 
 #include "expressions/VUnfinishedOperator.h"
+#include "Helpers.h"
 
 #include "VisualizationBase/headers/items/VText.h"
 
@@ -90,6 +91,10 @@ void VUnfinishedOperator::determineChildren()
 		// by the expression handler.
 		layout()->at<VText>(i)->setEditable(false);
 	}
+
+	bool horizontal = style()->layout().direction() == LayoutType::StyleType::LeftToRight
+		|| style()->layout().direction() == LayoutType::StyleType::RightToLeft;
+	Helpers::omitBoundingCursorsInExpressions(this, layout(), horizontal);
 }
 
 } /* namespace OOVisualization */

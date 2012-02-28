@@ -25,42 +25,31 @@
  **********************************************************************************************************************/
 
 /*
- * Cursor.cpp
+ * Helpers.h
  *
- *  Created on: Jan 26, 2012
+ *  Created on: Feb 28, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "cursor/Cursor.h"
-#include "items/Item.h"
+#ifndef OOVisualization_HELPERS_H_
+#define OOVisualization_HELPERS_H_
 
-#include "Core/headers/global.h"
-
-namespace Visualization {
-
-Cursor::Cursor(Item* owner, Item* visualization)
-	: owner_(owner), visualization_(visualization)
-{}
-
-Cursor::~Cursor()
-{
-	setVisualization(nullptr);
+namespace Visualization{
+	class Item;
 }
 
-Item* Cursor::owner() const
-{
-	return owner_;
-}
+namespace OOVisualization {
 
-void Cursor::setVisualization(Item* visualization)
-{
-	SAFE_DELETE_ITEM(visualization_);
-	visualization_ = visualization;
-}
+class Helpers {
+	public:
 
-bool Cursor::isSame(Cursor* other)
-{
-	return owner() == other->owner() && position() == other->position();
-}
+		/**
+		 * \brief Sets the the \a horizontal or vertical (\a !horizontal) omit cursors flags for \a regionItem if there is
+		 * a parent item of \a logicalItem that represents an expression node.
+		 */
+		static void omitBoundingCursorsInExpressions(Visualization::Item* logicalItem, Visualization::Item* regionItem,
+				bool horizontal, bool alsoOmitInRegionItemChildren = true);
+};
 
-} /* namespace Visualization */
+} /* namespace OOVisualization */
+#endif /* OOVisualization_HELPERS_H_ */

@@ -46,7 +46,7 @@ class VISUALIZATIONBASE_API Cursor {
 		Cursor(Item* owner, Item* visualization = nullptr);
 		virtual ~Cursor();
 
-		virtual Item* owner();
+		virtual Item* owner() const;
 
 		const QPoint& position();
 		const QRect& region();

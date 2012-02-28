@@ -32,6 +32,7 @@
  **********************************************************************************************************************/
 
 #include "expressions/VUnaryOperation.h"
+#include "Helpers.h"
 
 #include "VisualizationBase/headers/layouts/SequentialLayout.h"
 #include "VisualizationBase/headers/items/Static.h"
@@ -76,9 +77,13 @@ void VUnaryOperation::determineChildren()
 	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
 	//			what's the reason they are being updated.
 	// The style needs to be updated every time since if our own style changes, so will that of the children.
-	layout()->setStyle( &style()->op(node()->op()).layout());
-	if (pre_) pre_->setStyle( &style()->op(node()->op()).preSymbol());
-	if (post_) post_->setStyle( &style()->op(node()->op()).postSymbol());
+	layout()->setStyle( &opStyle->layout());
+	if (pre_) pre_->setStyle( &opStyle->preSymbol());
+	if (post_) post_->setStyle( &opStyle->postSymbol());
+
+	bool horizontal = opStyle->layout().direction() == LayoutType::StyleType::LeftToRight
+		|| opStyle->layout().direction() == LayoutType::StyleType::RightToLeft;
+	Helpers::omitBoundingCursorsInExpressions(this, layout(), horizontal);
 }
 
 }

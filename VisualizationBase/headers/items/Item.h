@@ -55,87 +55,6 @@ class ModelRenderer;
 
 class VISUALIZATIONBASE_API Item : public QGraphicsItem
 {
-	private:
-		friend class Shape;
-		friend class InteractionHandler;
-		QRectF boundingRect_;
-		const ItemStyle* style_;
-		Shape* shape_;
-		bool needsUpdate_;
-
-		void updateChildren();
-
-		// Default event handlers
-		//Keyboard events
-		void defaultKeyPressEvent(QKeyEvent *event);
-		void defaultKeyReleaseEvent(QKeyEvent *event);
-
-		// Mouse events
-		void defaultMouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
-		void defaultMouseMoveEvent(QGraphicsSceneMouseEvent *event);
-		void defaultMousePressEvent(QGraphicsSceneMouseEvent *event);
-		void defaultMouseReleaseEvent(QGraphicsSceneMouseEvent *event);
-		void defaultWheelEvent(QGraphicsSceneWheelEvent *event);
-
-		void defaultHoverEnterEvent(QGraphicsSceneHoverEvent *event);
-		void defaultHoverLeaveEvent(QGraphicsSceneHoverEvent *event);
-		void defaultHoverMoveEvent(QGraphicsSceneHoverEvent *event);
-
-		void defaultDragEnterEvent(QGraphicsSceneDragDropEvent *event);
-		void defaultDragLeaveEvent(QGraphicsSceneDragDropEvent *event);
-		void defaultDragMoveEvent(QGraphicsSceneDragDropEvent *event);
-		void defaultDropEvent(QGraphicsSceneDragDropEvent *event);
-
-		// Menu events
-		void defaultContextMenuEvent(QGraphicsSceneContextMenuEvent *event);
-
-		// Focus events
-		void defaultFocusInEvent(QFocusEvent *event);
-		void defaultFocusOutEvent(QFocusEvent *event);
-
-	protected:
-
-		void setWidth(int width);
-		void setHeight(int height);
-		void setSize(int widht, int height);
-		void setSize(const QSizeF& size);
-
-		virtual void determineChildren() = 0;
-		virtual void updateGeometry(int availableWidth, int availableHeight) = 0;
-		void updateGeometry(Item* content, int availableWidth, int availableHeight);
-
-		void synchronizeItem(Item*& item, Model::Node* node);
-		template <class T> void synchronizeItem(T*& item, bool present, const typename T::StyleType* style);
-		template <class T> void synchronizeItem(T*& item, typename T::NodeType* node, const typename T::StyleType* style);
-
-		//Event handlers
-		// Keyboard events
-		virtual void keyPressEvent(QKeyEvent *event);
-		virtual void keyReleaseEvent(QKeyEvent *event);
-
-		// Mouse events
-		virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
-		virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
-		virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
-		virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
-		virtual void wheelEvent(QGraphicsSceneWheelEvent *event);
-
-		virtual void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
-		virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
-		virtual void hoverMoveEvent(QGraphicsSceneHoverEvent *event);
-
-		virtual void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
-		virtual void dragLeaveEvent(QGraphicsSceneDragDropEvent *event);
-		virtual void dragMoveEvent(QGraphicsSceneDragDropEvent *event);
-		virtual void dropEvent(QGraphicsSceneDragDropEvent *event);
-
-		// Menu events
-		virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
-
-		// Focus events
-		virtual void focusInEvent(QFocusEvent *event);
-		virtual void focusOutEvent(QFocusEvent *event);
-
 	public:
 		typedef ItemStyle StyleType;
 		const static int LAYER_DEFAULT_Z = 0;
@@ -211,6 +130,18 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		 */
 		virtual bool moveCursor(CursorMoveDirection dir, const QPoint& reference = QPoint());
 
+		enum RegionOption {
+				NoOptions = 0x0,
+				OmitTopCursor = 0x1,
+				OmitBottomCursor = 0x2,
+				OmitLeftCursor = 0x4,
+				OmitRightCursor = 0x8
+		};
+		Q_DECLARE_FLAGS(RegionOptions, RegionOption)
+
+		void setRegionOptions(RegionOptions options);
+		RegionOptions regionOptions();
+
 		virtual QList<ItemRegion> regions();
 
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
@@ -277,9 +208,93 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		 * Depth-first search is used.
 		 */
 		virtual Item* findVisualizationOf(Model::Node* node);
+
+	protected:
+
+		void setWidth(int width);
+		void setHeight(int height);
+		void setSize(int widht, int height);
+		void setSize(const QSizeF& size);
+
+		virtual void determineChildren() = 0;
+		virtual void updateGeometry(int availableWidth, int availableHeight) = 0;
+		void updateGeometry(Item* content, int availableWidth, int availableHeight);
+
+		void synchronizeItem(Item*& item, Model::Node* node);
+		template <class T> void synchronizeItem(T*& item, bool present, const typename T::StyleType* style);
+		template <class T> void synchronizeItem(T*& item, typename T::NodeType* node, const typename T::StyleType* style);
+
+		//Event handlers
+		// Keyboard events
+		virtual void keyPressEvent(QKeyEvent *event);
+		virtual void keyReleaseEvent(QKeyEvent *event);
+
+		// Mouse events
+		virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
+		virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+		virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
+		virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+		virtual void wheelEvent(QGraphicsSceneWheelEvent *event);
+
+		virtual void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
+		virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+		virtual void hoverMoveEvent(QGraphicsSceneHoverEvent *event);
+
+		virtual void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
+		virtual void dragLeaveEvent(QGraphicsSceneDragDropEvent *event);
+		virtual void dragMoveEvent(QGraphicsSceneDragDropEvent *event);
+		virtual void dropEvent(QGraphicsSceneDragDropEvent *event);
+
+		// Menu events
+		virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
+
+		// Focus events
+		virtual void focusInEvent(QFocusEvent *event);
+		virtual void focusOutEvent(QFocusEvent *event);
+
+	private:
+		friend class Shape;
+		friend class InteractionHandler;
+		QRectF boundingRect_;
+		const ItemStyle* style_;
+		Shape* shape_;
+		bool needsUpdate_;
+
+		RegionOptions regionOptions_;
+
+		void updateChildren();
+
+		// Default event handlers
+		//Keyboard events
+		void defaultKeyPressEvent(QKeyEvent *event);
+		void defaultKeyReleaseEvent(QKeyEvent *event);
+
+		// Mouse events
+		void defaultMouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
+		void defaultMouseMoveEvent(QGraphicsSceneMouseEvent *event);
+		void defaultMousePressEvent(QGraphicsSceneMouseEvent *event);
+		void defaultMouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+		void defaultWheelEvent(QGraphicsSceneWheelEvent *event);
+
+		void defaultHoverEnterEvent(QGraphicsSceneHoverEvent *event);
+		void defaultHoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+		void defaultHoverMoveEvent(QGraphicsSceneHoverEvent *event);
+
+		void defaultDragEnterEvent(QGraphicsSceneDragDropEvent *event);
+		void defaultDragLeaveEvent(QGraphicsSceneDragDropEvent *event);
+		void defaultDragMoveEvent(QGraphicsSceneDragDropEvent *event);
+		void defaultDropEvent(QGraphicsSceneDragDropEvent *event);
+
+		// Menu events
+		void defaultContextMenuEvent(QGraphicsSceneContextMenuEvent *event);
+
+		// Focus events
+		void defaultFocusInEvent(QFocusEvent *event);
+		void defaultFocusOutEvent(QFocusEvent *event);
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Item::PositionConstraints)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Item::RegionOptions)
 
 inline int Item::width() const { return boundingRect_.width(); }
 inline int Item::height() const { return boundingRect_.height(); }
@@ -293,6 +308,8 @@ inline bool Item::hasShape() const { return shape_; }
 inline Shape* Item::getShape() const {	return shape_; }
 inline qreal Item::xEnd() const { return x() + width() - 1; }
 inline qreal Item::yEnd() const { return y() + height() - 1; }
+inline void Item::setRegionOptions(RegionOptions options) { regionOptions_ = options; }
+inline Item::RegionOptions Item::regionOptions() { return regionOptions_; }
 
 template <class T> void Item::synchronizeItem(T*& item, bool present, const typename T::StyleType* style)
 {

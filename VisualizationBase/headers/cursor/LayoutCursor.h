@@ -43,7 +43,7 @@ namespace Visualization {
 class VISUALIZATIONBASE_API LayoutCursor : public Cursor {
 	public:
 		LayoutCursor(Layout* owner);
-		Layout* owner();
+		Layout* owner() const;
 
 		void setVisualizationSize(const QSize& size);
 

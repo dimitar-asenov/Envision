@@ -39,21 +39,23 @@
 
 namespace Visualization {
 
-template <class LayoutType = SequentialLayout>
+template <class LayoutTypeName = SequentialLayout>
 class LayoutProvider : public LayoutProviderBase
 {
 	public:
+		typedef LayoutTypeName LayoutType;
 		LayoutProvider(Item* parent, const StyleType *style);
 
-		LayoutType* layout() const;
+		LayoutTypeName* layout() const;
 };
 
-template <class LayoutType>
-inline LayoutType* LayoutProvider<LayoutType>::layout() const { return static_cast<LayoutType*> (LayoutProviderBase::layout()); }
+template <class LayoutTypeName>
+inline LayoutTypeName* LayoutProvider<LayoutTypeName>::layout()
+	const { return static_cast<LayoutTypeName*> (LayoutProviderBase::layout()); }
 
-template <class LayoutType>
-LayoutProvider<LayoutType>::LayoutProvider(Item* parent, const StyleType *style) :
-LayoutProviderBase(parent, style, new LayoutType(nullptr))
+template <class LayoutTypeName>
+LayoutProvider<LayoutTypeName>::LayoutProvider(Item* parent, const StyleType *style) :
+LayoutProviderBase(parent, style, new LayoutTypeName(nullptr))
 {
 	layout()->setParentItem(this);
 }

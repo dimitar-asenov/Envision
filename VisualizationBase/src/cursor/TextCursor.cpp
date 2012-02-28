@@ -41,7 +41,7 @@ TextCursor::TextCursor(TextRenderer* owner)
 {
 }
 
-TextRenderer* TextCursor::owner()
+TextRenderer* TextCursor::owner() const
 {
 	return static_cast<TextRenderer*> (Cursor::owner());
 }
@@ -97,7 +97,7 @@ void TextCursor::setSelectedByDrag(int xBegin, int xEnd)
 	int width = 0;
 	for (int i = 1; i <= owner()->text().length(); ++i)
 	{
-		int new_width = qfm.width(owner()->text(), i);
+		int new_width = qfm.width(owner()->text().left(i));
 		if ( xBegin > (new_width + width + 1) / 2 ) selectionBegin_++;
 		if ( xEnd > (new_width + width + 1) / 2 ) selectionEnd_++;
 		width = new_width;
@@ -116,6 +116,22 @@ bool TextCursor::isSame(Cursor* c)
 				&& tc->selectionEnd() == selectionEnd();
 
 	return false;
+}
+
+int TextCursor::cursorAtX(int x) const
+{
+	int pos = 0;
+
+	QFontMetrics qfm(owner()->style()->font());
+	int width = 0;
+	for (int i = 1; i <= owner()->text().length(); ++i)
+	{
+		int new_width = qfm.width(owner()->text().left(i));
+		if ( x > (new_width + width + 1) / 2 ) pos++;
+		width = new_width;
+	}
+
+	return pos;
 }
 
 } /* namespace Visualization */

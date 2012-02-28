@@ -25,42 +25,39 @@
  **********************************************************************************************************************/
 
 /*
- * Cursor.cpp
+ * Helpers.cpp
  *
- *  Created on: Jan 26, 2012
+ *  Created on: Feb 28, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "cursor/Cursor.h"
-#include "items/Item.h"
+#include "Helpers.h"
 
-#include "Core/headers/global.h"
+#include "OOModel/headers/expressions/Expression.h"
+#include "VisualizationBase/headers/items/Item.h"
 
-namespace Visualization {
+namespace OOVisualization {
 
-Cursor::Cursor(Item* owner, Item* visualization)
-	: owner_(owner), visualization_(visualization)
-{}
-
-Cursor::~Cursor()
+void Helpers::omitBoundingCursorsInExpressions(Visualization::Item* logicalItem, Visualization::Item* regionItem,
+		bool horizontal, bool alsoOmitInRegionItemChildren)
 {
-	setVisualization(nullptr);
+	regionItem->setRegionOptions(logicalItem->regionOptions());
+
+	Visualization::Item::RegionOptions omitHorizontal =
+		Visualization::Item::OmitLeftCursor | Visualization::Item::OmitRightCursor;
+	Visualization::Item::RegionOptions omitVerical =
+		Visualization::Item::OmitTopCursor | Visualization::Item::OmitBottomCursor;
+	if (alsoOmitInRegionItemChildren)
+	{
+		//Regardless of whether there is a parent item or not, always omit in children items
+		for (auto c: regionItem->childItems())
+		{
+			auto item = static_cast<Visualization::Item*>(c);
+			Visualization::Item::RegionOptions options = item->regionOptions();
+			options |= horizontal ? omitHorizontal : omitVerical;
+			item->setRegionOptions(options);
+		}
+	}
 }
 
-Item* Cursor::owner() const
-{
-	return owner_;
-}
-
-void Cursor::setVisualization(Item* visualization)
-{
-	SAFE_DELETE_ITEM(visualization_);
-	visualization_ = visualization;
-}
-
-bool Cursor::isSame(Cursor* other)
-{
-	return owner() == other->owner() && position() == other->position();
-}
-
-} /* namespace Visualization */
+} /* namespace OOVisualization */

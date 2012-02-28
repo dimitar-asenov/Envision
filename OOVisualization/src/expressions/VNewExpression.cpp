@@ -32,6 +32,7 @@
  **********************************************************************************************************************/
 
 #include "expressions/VNewExpression.h"
+#include "Helpers.h"
 
 #include "VisualizationBase/headers/items/Static.h"
 
@@ -70,6 +71,10 @@ void VNewExpression::determineChildren()
 	// The style needs to be updated every time since if our own style changes, so will that of the children.
 	layout()->setStyle( &style()->layout());
 	newSymbol_->setStyle( &style()->newSymbol());
+
+	bool horizontal = style()->layout().direction() == LayoutType::StyleType::LeftToRight
+		|| style()->layout().direction() == LayoutType::StyleType::RightToLeft;
+	Helpers::omitBoundingCursorsInExpressions(this, layout(), horizontal);
 }
 
 }

@@ -168,9 +168,37 @@ bool TextRenderer::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 				|| (dir == MoveRightOf && (pc & RightOf))
 				)
 		{
-			setFocus();
 			TextCursor* tc = new TextCursor(this);
-			tc->setSelectedByDrag(reference.x(), reference.x());
+			bool posSet = false;
+			if ((regionOptions() & OmitLeftCursor) && tc->cursorAtX(reference.x()) == 0)
+			{
+				if (text_.length() > 1)
+				{
+					tc->setCaretPosition(1);
+					posSet = true;
+				}
+				else
+				{
+					SAFE_DELETE(tc);
+					return false;
+				}
+			}
+
+			if ((regionOptions() & OmitRightCursor) && tc->cursorAtX(reference.x()) == text_.length())
+			{
+				if (text_.length() > 1)
+				{
+					tc->setCaretPosition(text_.length()-1);
+					posSet = true;
+				}
+				else
+				{
+					SAFE_DELETE(tc);
+					return false;
+				}
+			}
+
+			if (!posSet) tc->setSelectedByDrag(reference.x(), reference.x());
 			scene()->setMainCursor(tc);
 			return true;
 		}
@@ -188,6 +216,7 @@ bool TextRenderer::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 	{
 		int position = correspondingSceneCursor<Visualization::TextCursor>()->caretPosition();
 		if ( text_.isEmpty() || position <= 0) return false;
+		else if (position == 1 && (regionOptions() & OmitLeftCursor)) return false;
 		else correspondingSceneCursor<Visualization::TextCursor>()->setCaretPosition(position - 1);
 		return true;
 	}
@@ -195,6 +224,7 @@ bool TextRenderer::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 	{
 		int position = correspondingSceneCursor<Visualization::TextCursor>()->caretPosition();
 		if ( text_.isEmpty() || position >= text_.size()) return false;
+		else if (position == text_.size()-1 && (regionOptions() & OmitRightCursor)) return false;
 		else correspondingSceneCursor<Visualization::TextCursor>()->setCaretPosition(position + 1);
 		return true;
 	}
