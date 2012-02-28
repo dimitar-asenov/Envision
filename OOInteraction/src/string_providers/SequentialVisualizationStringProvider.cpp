@@ -135,6 +135,7 @@ void SequentialVisualizationStringProvider::setOffset(int offset)
 			{
 				QPoint reference(vis_->layout()->at<Visualization::Item>(i)->xEnd()+1, 0);
 				if (reference.x() > vis_->layout()->width()-1 ) reference.setX(vis_->layout()->width() - 1);
+				reference += vis_->layout()->pos().toPoint();
 				vis_->moveCursor( Visualization::Item::MoveOnPosition, reference);
 				return;
 			}
