@@ -107,7 +107,7 @@ bool OOInteraction::initialize(Envision::EnvisionManager&)
 	OOVisualization::VCharacterLiteral::setInteractionHandler(HOOExpression::instance());
 	OOVisualization::VBooleanLiteral::setInteractionHandler(HOOExpression::instance());
 	OOVisualization::VNullLiteral::setInteractionHandler(HOOExpression::instance());
-	OOVisualization::VMethodCallStatement::setInteractionHandler(Interaction::GenericHandler::instance());
+	OOVisualization::VExpressionStatement::setInteractionHandler(Interaction::GenericHandler::instance());
 	OOVisualization::VVariableDeclaration::setInteractionHandler(Interaction::GenericHandler::instance());
 	OOVisualization::VAssignmentStatement::setInteractionHandler(Interaction::GenericHandler::instance());
 	OOVisualization::VIfStatement::setInteractionHandler(Interaction::GenericHandler::instance());

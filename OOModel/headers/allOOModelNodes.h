@@ -52,8 +52,8 @@
 #include "statements/SwitchCase.h"
 #include "statements/SwitchStatement.h"
 #include "statements/VariableDeclaration.h"
-#include "statements/MethodCallStatement.h"
 #include "statements/AssignmentStatement.h"
+#include "statements/ExpressionStatement.h"
 
 #include "expressions/Expression.h"
 #include "expressions/IntegerLiteral.h"

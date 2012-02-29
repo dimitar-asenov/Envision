@@ -68,8 +68,8 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	Model::TypedList<SwitchCase>::registerNodeType();
 	Model::TypedList<SwitchStatement>::registerNodeType();
 	Model::TypedList<VariableDeclaration>::registerNodeType();
-	Model::TypedList<MethodCallStatement>::registerNodeType();
 	Model::TypedList<AssignmentStatement>::registerNodeType();
+	Model::TypedList<ExpressionStatement>::registerNodeType();
 
 	Model::TypedList<Expression>::registerNodeType();
 	Model::TypedList<IntegerLiteral>::registerNodeType();
@@ -120,8 +120,8 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	SwitchCase::init();
 	SwitchStatement::init();
 	VariableDeclaration::init();
-	MethodCallStatement::init();
 	AssignmentStatement::init();
+	ExpressionStatement::init();
 
 	Expression::init();
 	IntegerLiteral::init();

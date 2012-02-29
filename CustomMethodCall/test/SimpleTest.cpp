@@ -145,10 +145,12 @@ Class* addCollection(Model::Model* model, Project* parent)
 	existsCall->ref()->set(QString("method:%1").arg(QChar(0x2203)));
 	existsCall->arguments()->append( new IntegerLiteral(42));
 
-	MethodCallStatement* insertCall = new MethodCallStatement();
-	ifs->thenBranch()->append(insertCall);
+	ExpressionStatement* insertCallSt = new ExpressionStatement();
+	MethodCallExpression* insertCall = new MethodCallExpression();
 	insertCall->ref()->set("method:insert");
 	insertCall->arguments()->append( new IntegerLiteral(42));
+	insertCallSt->setExpression(insertCall);
+	ifs->thenBranch()->append(insertCallSt);
 
 	VariableDeclaration* indexVar = new VariableDeclaration();
 	test->items()->append(indexVar);

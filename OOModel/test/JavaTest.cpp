@@ -108,12 +108,14 @@ TEST(OOModel, JavaLibraryAndHelloWorldTest)
 	main->setStorageSpecifier(StorageSpecifier::CLASS_VARIABLE);
 	//TODO make an array argument
 
-	MethodCallStatement* callPrintln = new MethodCallStatement();
-	main->items()->append(callPrintln);
+	ExpressionStatement* callPrintlnSt = new ExpressionStatement();
+	MethodCallExpression* callPrintln = new MethodCallExpression();
 	StringLiteral* helloStr = new StringLiteral();
 	callPrintln->arguments()->append(helloStr);
 	helloStr->setValue("Hello World");
 	callPrintln->ref()->set("met:println");
+	callPrintlnSt->setExpression(callPrintln);
+	main->items()->append(callPrintlnSt);
 
 	VariableAccess* va = new VariableAccess();
 	callPrintln->setPrefix(va);

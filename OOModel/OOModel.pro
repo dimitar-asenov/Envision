@@ -28,7 +28,8 @@ pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
 PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/expressions/CommaExpression.h \
+HEADERS += headers/statements/ExpressionStatement.h \
+    headers/expressions/CommaExpression.h \
     headers/expressions/UnfinishedOperator.h \
     headers/expressions/ErrorExpression.h \
     headers/expressions/EmptyExpression.h \
@@ -53,7 +54,6 @@ HEADERS += headers/expressions/CommaExpression.h \
     headers/statements/AssignmentStatement.h \
     headers/expressions/ReferenceExpression.h \
     headers/expressions/MethodCallExpression.h \
-    headers/statements/MethodCallStatement.h \
     headers/statements/ForEachStatement.h \
     headers/statements/SwitchCase.h \
     headers/statements/SwitchStatement.h \
@@ -84,7 +84,8 @@ HEADERS += headers/expressions/CommaExpression.h \
     headers/OOModelException.h \
     headers/oomodel_api.h \
     src/oomodel.h
-SOURCES += src/expressions/CommaExpression.cpp \
+SOURCES += src/statements/ExpressionStatement.cpp \
+    src/expressions/CommaExpression.cpp \
     src/expressions/UnfinishedOperator.cpp \
     src/expressions/ErrorExpression.cpp \
     src/expressions/EmptyExpression.cpp \
@@ -107,7 +108,6 @@ SOURCES += src/expressions/CommaExpression.cpp \
     src/statements/AssignmentStatement.cpp \
     src/expressions/ReferenceExpression.cpp \
     src/expressions/MethodCallExpression.cpp \
-    src/statements/MethodCallStatement.cpp \
     test/JavaTest.cpp \
     src/statements/ReturnStatement.cpp \
     src/statements/SwitchCase.cpp \

@@ -87,10 +87,12 @@ Class* addHelloWorld(Model::Model* model, Project* parent)
 	mainArgType->setType(mainArgElementType);
 	mainArgElementType->type()->ref()->set("class:String");
 
-	MethodCallStatement* callPrintln = new MethodCallStatement();
-	main->items()->append(callPrintln);
+	ExpressionStatement* callPrintlnSt = new ExpressionStatement();
+	MethodCallExpression* callPrintln = new MethodCallExpression();
 	callPrintln->arguments()->append(new StringLiteral("Hello World"));
 	callPrintln->ref()->set("met:println");
+	callPrintlnSt->setExpression(callPrintln);
+	main->items()->append(callPrintlnSt);
 
 	VariableAccess* va = new VariableAccess();
 	callPrintln->setPrefix(va);

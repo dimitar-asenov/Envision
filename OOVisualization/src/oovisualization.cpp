@@ -105,8 +105,6 @@ bool OOVisualization::initialize(Envision::EnvisionManager&)
 			createVisualization<VBooleanLiteral, BooleanLiteral>);
 	Scene::defaultRenderer()->registerVisualization(NullLiteral::typeIdStatic(),
 			createVisualization<VNullLiteral, NullLiteral>);
-	Scene::defaultRenderer()->registerVisualization(MethodCallStatement::typeIdStatic(),
-			createVisualization<VMethodCallStatement, MethodCallStatement>);
 	Scene::defaultRenderer()->registerVisualization(VariableDeclaration::typeIdStatic(),
 			createVisualization<VVariableDeclaration, VariableDeclaration>);
 	Scene::defaultRenderer()->registerVisualization(AssignmentStatement::typeIdStatic(),
@@ -125,6 +123,8 @@ bool OOVisualization::initialize(Envision::EnvisionManager&)
 			createVisualization<VBreakStatement, BreakStatement>);
 	Scene::defaultRenderer()->registerVisualization(ContinueStatement::typeIdStatic(),
 			createVisualization<VContinueStatement, ContinueStatement>);
+	Scene::defaultRenderer()->registerVisualization(ExpressionStatement::typeIdStatic(),
+			createVisualization<VExpressionStatement, ExpressionStatement>);
 	Scene::defaultRenderer()->registerVisualization(NamedType::typeIdStatic(),
 			createVisualization<VNamedType, NamedType>);
 	Scene::defaultRenderer()->registerVisualization(PrimitiveType::typeIdStatic(),

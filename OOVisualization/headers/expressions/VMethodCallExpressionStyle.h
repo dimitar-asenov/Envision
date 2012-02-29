@@ -34,11 +34,36 @@
 #ifndef VMETHODCALLEXPRESSIONSTYLE_H_
 #define VMETHODCALLEXPRESSIONSTYLE_H_
 
-#include "../statements/VMethodCallStatementStyle.h"
+#include "../oovisualization_api.h"
+
+#include "VisualizationBase/headers/items/TextStyle.h"
+#include "VisualizationBase/headers/items/StaticStyle.h"
+#include "VisualizationBase/headers/layouts/SequentialLayout.h"
+#include "VisualizationBase/headers/items/VListStyle.h"
 
 namespace OOVisualization {
 
-	typedef VMethodCallStatementStyle VMethodCallExpressionStyle;
+class OOVISUALIZATION_API VMethodCallExpressionStyle : public Visualization::ItemStyle
+{
+	private:
+		Visualization::SequentialLayoutStyle layout_;
+		Visualization::TextStyle name_;
+		Visualization::StaticStyle separator_;
+		Visualization::VListStyle arguments_;
+
+	public:
+		void load(Visualization::StyleLoader& sl);
+
+		const Visualization::SequentialLayoutStyle& layout() const;
+		const Visualization::TextStyle& name() const;
+		const Visualization::StaticStyle& separator() const;
+		const Visualization::VListStyle& arguments() const;
+};
+
+inline const Visualization::SequentialLayoutStyle& VMethodCallExpressionStyle::layout() const { return layout_; }
+inline const Visualization::TextStyle& VMethodCallExpressionStyle::name() const { return name_; }
+inline const Visualization::StaticStyle& VMethodCallExpressionStyle::separator() const { return separator_; }
+inline const Visualization::VListStyle& VMethodCallExpressionStyle::arguments() const { return arguments_; }
 
 }
 

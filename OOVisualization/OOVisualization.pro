@@ -33,7 +33,8 @@ INSTALLS += target \
     pluginmeta \
     styles
 PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/Helpers.h \
+HEADERS += headers/statements/VExpressionStatement.h \
+    headers/Helpers.h \
     headers/expressions/VCommaExpression.h \
     headers/expressions/VEmptyExpression.h \
     headers/expressions/VUnfinishedOperatorStyle.h \
@@ -98,8 +99,6 @@ HEADERS += headers/Helpers.h \
     headers/types/VPrimitiveType.h \
     headers/types/VNamedType.h \
     headers/literals/VStringLiteral.h \
-    headers/statements/VMethodCallStatementStyle.h \
-    headers/statements/VMethodCallStatement.h \
     headers/expressions/VVariableAccessStyle.h \
     headers/expressions/VVariableAccess.h \
     headers/expressions/VReferenceExpressionStyle.h \
@@ -107,7 +106,9 @@ HEADERS += headers/Helpers.h \
     headers/OOVisualizationException.h \
     headers/oovisualization_api.h \
     src/oovisualization.h
-SOURCES += src/Helpers.cpp \
+SOURCES += src/expressions/VMethodCallExpressionStyle.cpp \
+    src/statements/VExpressionStatement.cpp \
+    src/Helpers.cpp \
     src/expressions/VCommaExpression.cpp \
     src/expressions/VEmptyExpression.cpp \
     src/expressions/VUnfinishedOperatorStyle.cpp \
@@ -169,8 +170,6 @@ SOURCES += src/Helpers.cpp \
     src/types/VPrimitiveType.cpp \
     src/types/VNamedType.cpp \
     src/literals/VStringLiteral.cpp \
-    src/statements/VMethodCallStatement.cpp \
-    src/statements/VMethodCallStatementStyle.cpp \
     src/expressions/VVariableAccessStyle.cpp \
     src/expressions/VVariableAccess.cpp \
     src/expressions/VReferenceExpression.cpp \

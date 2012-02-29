@@ -59,8 +59,8 @@ class ReturnStatement;
 class SwitchCase;
 class SwitchStatement;
 class VariableDeclaration;
-class MethodCallStatement;
 class AssignmentStatement;
+class ExpressionStatement;
 
 class Expression;
 class IntegerLiteral;
@@ -111,8 +111,8 @@ template class Q_DECL_IMPORT Model::TypedList<OOModel::ReturnStatement>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::SwitchCase>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::SwitchStatement>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::VariableDeclaration>;
-template class Q_DECL_IMPORT Model::TypedList<OOModel::MethodCallStatement>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::AssignmentStatement>;
+template class Q_DECL_IMPORT Model::TypedList<OOModel::ExpressionStatement>;
 
 template class Q_DECL_IMPORT Model::TypedList<OOModel::Expression>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::IntegerLiteral>;

@@ -65,7 +65,6 @@
 #include "literals/VBooleanLiteral.h"
 #include "literals/VNullLiteral.h"
 
-#include "statements/VMethodCallStatement.h"
 #include "statements/VVariableDeclaration.h"
 #include "statements/VAssignmentStatement.h"
 #include "statements/VBlock.h"
@@ -75,6 +74,7 @@
 #include "statements/VForEachStatement.h"
 #include "statements/VBreakStatement.h"
 #include "statements/VContinueStatement.h"
+#include "statements/VExpressionStatement.h"
 
 #include "types/VNamedType.h"
 #include "types/VPrimitiveType.h"
