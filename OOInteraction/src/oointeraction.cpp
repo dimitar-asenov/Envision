@@ -57,6 +57,7 @@
 #include "string_providers/SimpleLiteralStringProvider.h"
 #include "string_providers/TextRendererStringProvider.h"
 #include "string_providers/StaticStringProvider.h"
+#include "string_providers/InitializerStringProvider.h"
 
 #include "OOVisualization/headers/allOOVisualizations.h"
 
@@ -162,6 +163,8 @@ bool OOInteraction::initialize(Envision::EnvisionManager&)
 		<StringProvider, SequentialVisualizationStringProvider, OOVisualization::VCommaExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringProvider, SimpleLiteralStringProvider, OOVisualization::VBooleanLiteral>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringProvider, InitializerStringProvider, OOVisualization::VArrayInitializer>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringProvider, SimpleLiteralStringProvider, OOVisualization::VIntegerLiteral>();
 	Model::AdapterManager::registerAdapterViaConstructor

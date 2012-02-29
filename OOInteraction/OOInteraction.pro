@@ -35,7 +35,8 @@ INSTALLS += target \
     pluginmeta \
     styles
 PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/string_components/CastExpressionStringComponents.h \
+HEADERS += headers/string_providers/InitializerStringProvider.h \
+    headers/string_components/CastExpressionStringComponents.h \
     headers/string_components/CommaExpressionStringComponents.h \
     headers/string_components/InitializerStringComponents.h \
     headers/string_components/NewArrayStringComponents.h \
@@ -71,7 +72,8 @@ HEADERS += headers/string_components/CastExpressionStringComponents.h \
     headers/OOInteractionException.h \
     headers/oointeraction_api.h \
     src/oointeraction.h
-SOURCES += src/string_components/NewArrayStringComponents.cpp \
+SOURCES += src/string_providers/InitializerStringProvider.cpp \
+    src/string_components/NewArrayStringComponents.cpp \
     src/string_components/InitializerStringComponents.cpp \
     src/string_components/CommaExpressionStringComponents.cpp \
     src/string_components/CastExpressionStringComponents.cpp \
