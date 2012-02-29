@@ -35,7 +35,8 @@ INSTALLS += target \
     pluginmeta \
     styles
 PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/expression_editor/operators/MemberOperatorDescriptor.h \
+HEADERS += headers/expression_editor/operators/CallDescriptor.h \
+    headers/expression_editor/operators/MemberOperatorDescriptor.h \
     headers/string_providers/InitializerStringProvider.h \
     headers/string_components/CastExpressionStringComponents.h \
     headers/string_components/CommaExpressionStringComponents.h \
@@ -73,7 +74,8 @@ HEADERS += headers/expression_editor/operators/MemberOperatorDescriptor.h \
     headers/OOInteractionException.h \
     headers/oointeraction_api.h \
     src/oointeraction.h
-SOURCES += src/expression_editor/operators/MemberOperatorDescriptor.cpp \
+SOURCES += src/expression_editor/operators/CallDescriptor.cpp \
+    src/expression_editor/operators/MemberOperatorDescriptor.cpp \
     src/string_providers/InitializerStringProvider.cpp \
     src/string_components/NewArrayStringComponents.cpp \
     src/string_components/InitializerStringComponents.cpp \
