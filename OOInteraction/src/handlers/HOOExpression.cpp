@@ -35,7 +35,7 @@
 
 #include "string_providers/StringProvider.h"
 #include "expression_editor/OOExpressionBuilder.h"
-#include "handlers/SetCursorEvent.h"
+#include "handlers/SetExpressionCursorEvent.h"
 
 #include "OOModel/headers/allOOModelNodes.h"
 
@@ -123,7 +123,7 @@ void HOOExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	// visualization will probably be deleted and replaced with a new one.
 	target->setUpdateNeeded();
 
-	QApplication::postEvent(target->scene(), new SetCursorEvent(parent, newExpression, newIndex));
+	QApplication::postEvent(target->scene(), new SetExpressionCursorEvent(parent, newExpression, newIndex));
 
 	GenericHandler::keyPressEvent(target, event);
 	event->accept();

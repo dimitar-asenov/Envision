@@ -27,35 +27,45 @@
 /*
  * SetCursorEvent.cpp
  *
- *  Created on: Feb 17, 2012
+ *  Created on: Mar 1, 2012
  *      Author: Dimitar Asenov
  */
 
 #include "handlers/SetCursorEvent.h"
 
-#include "string_providers/StringProvider.h"
-
 #include "VisualizationBase/headers/items/Item.h"
 #include "ModelBase/headers/adapter/AdapterManager.h"
 
-namespace OOInteraction {
+namespace Interaction {
 
 const QEvent::Type SetCursorEvent::EventType = static_cast<QEvent::Type> (QEvent::registerEventType());
 
-SetCursorEvent::SetCursorEvent(Visualization::Item* parentContainer, Model::Node* node, int offset)
-	: CustomSceneEvent(EventType), parentContainer_(parentContainer), node_(node), offset_(offset)
+SetCursorEvent::SetCursorEvent(Visualization::Item* parentContainer, Model::Node* node, CursorPlacement placement)
+	: CustomSceneEvent(EventType), parentContainer_(parentContainer), node_(node), placement_(placement)
 {
 }
 
 void SetCursorEvent::execute()
 {
-	Q_ASSERT(parentContainer_->findVisualizationOf(node_) != nullptr);
-	StringProvider* sp = Model::AdapterManager::adapt<StringProvider>( parentContainer_->findVisualizationOf(node_) );
-	if (sp)
+	auto item = parentContainer_->findVisualizationOf(node_);
+
+	if (!item) item = parentContainer_;
+
+	switch(placement_)
 	{
-		sp->setOffset(offset_);
-		SAFE_DELETE(sp);
+		case CursorOnTop: item->moveCursor(Visualization::Item::CursorMoveDirection::MoveOnPosition,
+				QPoint(item->width() / 2, 0)); break;
+		case CursorOnBottom: item->moveCursor(Visualization::Item::CursorMoveDirection::MoveOnPosition,
+				QPoint(item->width() / 2, item->yEnd())); break;
+		case CursorOnLeft: item->moveCursor(Visualization::Item::CursorMoveDirection::MoveOnPosition,
+				QPoint(0, item->height() / 2)); break;
+		case CursorOnRight: item->moveCursor(Visualization::Item::CursorMoveDirection::MoveOnPosition,
+				QPoint(item->xEnd(), item->height() / 2)); break;
+		case CursorOnCenter: item->moveCursor(Visualization::Item::CursorMoveDirection::MoveOnPosition,
+				QPoint(item->width() / 2,item->height() / 2)); break;
+		default: item->moveCursor(Visualization::Item::CursorMoveDirection::MoveOnPosition,
+				QPoint(0, 0)); break;
 	}
 }
 
-} /* namespace OOInteraction */
+} /* namespace Interaction */

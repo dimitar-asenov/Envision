@@ -36,6 +36,8 @@
 #include "OOModel/headers/top_level/Class.h"
 #include "OOModel/headers/top_level/Method.h"
 
+#include "InteractionBase/headers/handlers/SetCursorEvent.h"
+
 namespace OOInteraction {
 
 bool CClassCreateMethod::canInterpret(Visualization::Item* /*source*/, Visualization::Item* /*target*/,
@@ -78,6 +80,12 @@ Interaction::CommandResult* CClassCreateMethod::execute(Visualization::Item* /*s
 	cl->model()->beginModification(cl, "create method");
 	cl->methods()->append(m);
 	cl->model()->endModification();
+
+	if (name.isNull()) QApplication::postEvent(target->scene(),
+		new Interaction::SetCursorEvent(target, m->nameNode(), Interaction::SetCursorEvent::CursorOnLeft));
+	else
+		QApplication::postEvent(target->scene(),
+			new Interaction::SetCursorEvent(target, m->nameNode(), Interaction::SetCursorEvent::CursorOnRight));
 
 	return new Interaction::CommandResult();
 }

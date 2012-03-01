@@ -35,7 +35,8 @@ INSTALLS += target \
     pluginmeta \
     styles
 PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/handlers/HOOClass.h \
+HEADERS += headers/handlers/SetExpressionCursorEvent.h \
+    headers/handlers/HOOClass.h \
     headers/commands/CClassCreateMethod.h \
     headers/string_providers/CallStringProvider.h \
     headers/string_components/CallStringComponents.h \
@@ -56,7 +57,6 @@ HEADERS += headers/handlers/HOOClass.h \
     headers/string_components/BooleanLiteralStringComponents.h \
     headers/string_components/UnaryOperatorStringComponents.h \
     headers/expression_editor/operators/UnaryOperatorDescriptor.h \
-    headers/handlers/SetCursorEvent.h \
     headers/string_providers/StaticStringProvider.h \
     headers/string_providers/TextRendererStringProvider.h \
     headers/string_providers/SequentialVisualizationStringProvider.h \
@@ -78,7 +78,8 @@ HEADERS += headers/handlers/HOOClass.h \
     headers/OOInteractionException.h \
     headers/oointeraction_api.h \
     src/oointeraction.h
-SOURCES += src/handlers/HOOClass.cpp \
+SOURCES += src/handlers/SetExpressionCursorEvent.cpp \
+    src/handlers/HOOClass.cpp \
     src/commands/CClassCreateMethod.cpp \
     src/string_providers/CallStringProvider.cpp \
     src/string_components/CallStringComponents.cpp \
@@ -99,7 +100,6 @@ SOURCES += src/handlers/HOOClass.cpp \
     src/string_components/BooleanLiteralStringComponents.cpp \
     src/string_components/UnaryOperatorStringComponents.cpp \
     src/expression_editor/operators/UnaryOperatorDescriptor.cpp \
-    src/handlers/SetCursorEvent.cpp \
     src/string_providers/StaticStringProvider.cpp \
     src/string_providers/TextRendererStringProvider.cpp \
     src/string_providers/SequentialVisualizationStringProvider.cpp \

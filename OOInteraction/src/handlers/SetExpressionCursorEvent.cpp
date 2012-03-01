@@ -25,40 +25,37 @@
  **********************************************************************************************************************/
 
 /*
- * SetCursorEvent.h
+ * SetExpressionCursorEvent.cpp
  *
  *  Created on: Feb 17, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef OOInteraction_SETCURSOREVENT_H_
-#define OOInteraction_SETCURSOREVENT_H_
+#include "handlers/SetExpressionCursorEvent.h"
 
-#include "../oointeraction_api.h"
+#include "string_providers/StringProvider.h"
 
-#include "VisualizationBase/headers/CustomSceneEvent.h"
-
-namespace Visualization {
-	class Item;
-}
-
-namespace Model {
-	class Node;
-}
+#include "VisualizationBase/headers/items/Item.h"
+#include "ModelBase/headers/adapter/AdapterManager.h"
 
 namespace OOInteraction {
 
-class OOINTERACTION_API SetCursorEvent : public Visualization::CustomSceneEvent{
-	public:
-		static const QEvent::Type EventType;
-		SetCursorEvent(Visualization::Item* parentContainer, Model::Node* node, int offset);
-		virtual void execute();
+const QEvent::Type SetExpressionCursorEvent::EventType = static_cast<QEvent::Type> (QEvent::registerEventType());
 
-	private:
-		Visualization::Item* parentContainer_;
-		Model::Node* node_;
-		int offset_;
-};
+SetExpressionCursorEvent::SetExpressionCursorEvent(Visualization::Item* parentContainer, Model::Node* node, int offset)
+	: CustomSceneEvent(EventType), parentContainer_(parentContainer), node_(node), offset_(offset)
+{
+}
+
+void SetExpressionCursorEvent::execute()
+{
+	Q_ASSERT(parentContainer_->findVisualizationOf(node_) != nullptr);
+	StringProvider* sp = Model::AdapterManager::adapt<StringProvider>( parentContainer_->findVisualizationOf(node_) );
+	if (sp)
+	{
+		sp->setOffset(offset_);
+		SAFE_DELETE(sp);
+	}
+}
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_SETCURSOREVENT_H_ */
