@@ -36,6 +36,7 @@
 
 #include "expression_editor/OOOperatorDescriptorList.h"
 #include "handlers/HOOExpression.h"
+#include "handlers/HOOClass.h"
 
 #include "string_components/UnaryOperatorStringComponents.h"
 #include "string_components/BinaryOperatorStringComponents.h"
@@ -86,7 +87,7 @@ bool OOInteraction::initialize(Envision::EnvisionManager&)
 	OOVisualization::VProject::setInteractionHandler(Interaction::GenericHandler::instance());
 	OOVisualization::VLibrary::setInteractionHandler(Interaction::GenericHandler::instance());
 	OOVisualization::VModule::setInteractionHandler(Interaction::GenericHandler::instance());
-	OOVisualization::VClass::setInteractionHandler(Interaction::GenericHandler::instance());
+	OOVisualization::VClass::setInteractionHandler(HOOClass::instance());
 	OOVisualization::VMethod::setInteractionHandler(Interaction::GenericHandler::instance());
 	OOVisualization::VField::setInteractionHandler(Interaction::GenericHandler::instance());
 	OOVisualization::VFormalArgument::setInteractionHandler(Interaction::GenericHandler::instance());
