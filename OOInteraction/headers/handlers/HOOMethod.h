@@ -25,14 +25,14 @@
  **********************************************************************************************************************/
 
 /*
- * HOOClass.h
+ * HOOMethod.h
  *
  *  Created on: Mar 1, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef OOInteraction_HOOCLASS_H_
-#define OOInteraction_HOOCLASS_H_
+#ifndef OOInteraction_HOOMETHOD_H_
+#define OOInteraction_HOOMETHOD_H_
 
 #include "../oointeraction_api.h"
 
@@ -40,13 +40,15 @@
 
 namespace OOInteraction {
 
-class OOINTERACTION_API HOOClass : public Interaction::GenericHandler {
-	protected:
-		HOOClass();
-
+class OOINTERACTION_API HOOMethod : public Interaction::GenericHandler {
 	public:
-		static HOOClass* instance();
+		static HOOMethod* instance();
+
+		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event);
+
+	protected:
+		HOOMethod();
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_HOOCLASS_H_ */
+#endif /* OOInteraction_HOOMETHOD_H_ */

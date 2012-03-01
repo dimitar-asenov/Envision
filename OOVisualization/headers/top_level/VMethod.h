@@ -59,6 +59,9 @@ class OOVISUALIZATION_API VMethod : public Visualization::ItemWithNode< Visualiz
 		VMethod(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VMethod();
 
+		Visualization::VText* name() const;
+		Visualization::VList* content() const;
+
 	protected:
 		void determineChildren();
 
@@ -70,6 +73,9 @@ class OOVISUALIZATION_API VMethod : public Visualization::ItemWithNode< Visualiz
 		Visualization::VList* content_;
 		Visualization::VList* results_;
 };
+
+inline Visualization::VText* VMethod::name() const { return name_; }
+inline Visualization::VList* VMethod::content() const { return content_; }
 
 }
 

@@ -25,28 +25,72 @@
  **********************************************************************************************************************/
 
 /*
- * HOOClass.h
+ * HOOMethod.cpp
  *
  *  Created on: Mar 1, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef OOInteraction_HOOCLASS_H_
-#define OOInteraction_HOOCLASS_H_
+#include "handlers/HOOMethod.h"
 
-#include "../oointeraction_api.h"
+#include "OOVisualization/headers/top_level/VMethod.h"
+#include "OOModel/headers/expressions/EmptyExpression.h"
+#include "OOModel/headers/statements/ExpressionStatement.h"
 
-#include "InteractionBase/headers/handlers/GenericHandler.h"
+#include "InteractionBase/headers/handlers/SetCursorEvent.h"
+#include "VisualizationBase/headers/items/VList.h"
+#include "VisualizationBase/headers/items/VText.h"
 
 namespace OOInteraction {
 
-class OOINTERACTION_API HOOClass : public Interaction::GenericHandler {
-	protected:
-		HOOClass();
+HOOMethod::HOOMethod()
+{}
 
-	public:
-		static HOOClass* instance();
-};
+HOOMethod* HOOMethod::instance()
+{
+	static HOOMethod h;
+	return &h;
+}
+
+void HOOMethod::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
+{
+	auto m = dynamic_cast<OOVisualization::VMethod*> ( target );
+	bool processed = false;
+	if (m && event->modifiers() == Qt::NoModifier && m->name()->itemOrChildHasFocus())
+	{
+		if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)
+		{
+			processed = true;
+			event->accept();
+			if (m->node()->items()->size() > 0)
+			{
+				QApplication::postEvent(target->scene(), new Interaction::SetCursorEvent(target, m->node()->items()->at(0),
+						Interaction::SetCursorEvent::CursorOnLeft));
+			}
+			else
+			{
+				auto empty = new OOModel::EmptyExpression();
+				auto es = new OOModel::ExpressionStatement();
+				es->setExpression(empty);
+				m->node()->model()->beginModification(m->node(), "add empty expression");
+				m->node()->items()->append(es);
+				m->node()->model()->endModification();
+
+				m->content()->setUpdateNeeded();
+				QApplication::postEvent(target->scene(), new Interaction::SetCursorEvent(target, empty,
+						Interaction::SetCursorEvent::CursorOnLeft));
+			}
+		}
+		else if (event->key() == Qt::Key_Space)
+		{
+			processed = true;
+			event->accept();
+
+		}
+
+	}
+
+	if (!processed) GenericHandler::keyPressEvent(target, event);
+}
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_HOOCLASS_H_ */

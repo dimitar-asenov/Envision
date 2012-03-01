@@ -35,7 +35,8 @@ INSTALLS += target \
     pluginmeta \
     styles
 PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/handlers/SetExpressionCursorEvent.h \
+HEADERS += headers/handlers/HOOMethod.h \
+    headers/handlers/SetExpressionCursorEvent.h \
     headers/handlers/HOOClass.h \
     headers/commands/CClassCreateMethod.h \
     headers/string_providers/CallStringProvider.h \
@@ -78,7 +79,8 @@ HEADERS += headers/handlers/SetExpressionCursorEvent.h \
     headers/OOInteractionException.h \
     headers/oointeraction_api.h \
     src/oointeraction.h
-SOURCES += src/handlers/SetExpressionCursorEvent.cpp \
+SOURCES += src/handlers/HOOMethod.cpp \
+    src/handlers/SetExpressionCursorEvent.cpp \
     src/handlers/HOOClass.cpp \
     src/commands/CClassCreateMethod.cpp \
     src/string_providers/CallStringProvider.cpp \
