@@ -25,41 +25,45 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
- * HMethodCF.cpp
+ * HControlFlowMethodSwitch.cpp
  *
  *  Created on: Mar 3, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "handlers/HMethodCF.h"
+#include "handlers/HControlFlowMethodSwitch.h"
 
-#include "items/VMethodCF.h"
+#include "items/VControlFlowMethodSwitch.h"
+#include "InteractionBase/headers/handlers/SetCursorEvent.h"
 #include "VisualizationBase/headers/Scene.h"
 
 namespace ControlFlowVisualization {
 
-HMethodCF::HMethodCF()
+HControlFlowMethodSwitch::HControlFlowMethodSwitch()
 {
 }
 
-HMethodCF* HMethodCF::instance()
+HControlFlowMethodSwitch* HControlFlowMethodSwitch::instance()
 {
-	static HMethodCF h;
+	static HControlFlowMethodSwitch h;
 	return &h;
 }
 
-void HMethodCF::mouseDoubleClickEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
+void HControlFlowMethodSwitch::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
-	if (event->modifiers() == 0 && event->button() == Qt::LeftButton)
+	if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_F2)
 	{
-		VMethodCF *met = dynamic_cast<VMethodCF*> (target);
+		event->accept();
+		auto met = dynamic_cast<VControlFlowMethodSwitch*> (target);
 		if (met)
 		{
-			if (met->style()->showAsControlFlow()) met->setStyle(VMethodCF::itemStyles().get());
-			else met->setStyle(VMethodCF::itemStyles().get("showcontrolflow"));
+			met->setShowAsControlFlow(!met->isShownAsControlFlow());
+			QApplication::postEvent(target->scene(),
+						new Interaction::SetCursorEvent(target, met->node()->nameNode(),
+							Interaction::SetCursorEvent::CursorOnLeft));
 		}
 	}
-	else GenericHandler::mouseDoubleClickEvent(target, event);
+	else GenericHandler::keyPressEvent(target, event);
 }
 
 }

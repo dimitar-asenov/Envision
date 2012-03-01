@@ -25,14 +25,14 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
- * HMethodCF.h
+ * HControlFlowMethodSwitch.h
  *
  *  Created on: Mar 3, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef HMETHODCF_H_
-#define HMETHODCF_H_
+#ifndef HCONTROLFLOWMETHODSWITCH_H_
+#define HCONTROLFLOWMETHODSWITCH_H_
 
 #include "../controlflowvisualization_api.h"
 
@@ -40,17 +40,17 @@
 
 namespace ControlFlowVisualization {
 
-class CONTROLFLOWVISUALIZATION_API HMethodCF : public Interaction::GenericHandler
+class CONTROLFLOWVISUALIZATION_API HControlFlowMethodSwitch : public Interaction::GenericHandler
 {
 	protected:
-		HMethodCF();
+		HControlFlowMethodSwitch();
 
 	public:
-		static HMethodCF* instance();
+		static HControlFlowMethodSwitch* instance();
 
-		virtual void mouseDoubleClickEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event);
+		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event);
 };
 
 }
 
-#endif /* HMETHODCF_H_ */
+#endif /* HCONTROLFLOWMETHODSWITCH_H_ */
