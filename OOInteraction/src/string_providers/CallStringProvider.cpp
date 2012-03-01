@@ -25,30 +25,44 @@
  **********************************************************************************************************************/
 
 /*
- * InitializerStringProvider.cpp
+ * CallStringProvider.cpp
  *
  *  Created on: Feb 29, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "string_providers/InitializerStringProvider.h"
+#include "string_providers/CallStringProvider.h"
 #include "string_components/StringComponents.h"
 
-#include "OOVisualization/headers/expressions/VArrayInitializer.h"
+#include "OOVisualization/headers/expressions/VMethodCallExpression.h"
 #include "VisualizationBase/headers/items/VList.h"
-#include "VisualizationBase/headers/layouts/GridLayout.h"
 #include "VisualizationBase/headers/cursor/LayoutCursor.h"
 #include "VisualizationBase/headers/cursor/Cursor.h"
 #include "ModelBase/headers/adapter/AdapterManager.h"
 
 namespace OOInteraction {
 
-InitializerStringProvider::InitializerStringProvider(OOVisualization::VArrayInitializer* vis)
-	: vis_(vis)
+CallStringProvider::CallStringProvider(OOVisualization::VMethodCallExpression* vis)
+	: SequentialVisualizationStringProvider(vis), vis_(vis)
 {
 }
 
-QStringList InitializerStringProvider::components()
+QStringList CallStringProvider::components()
+{
+	QStringList components = detailedComponents();
+
+	int start = components.indexOf("(");
+	int end = components.lastIndexOf(")");
+	for(int i = start; i<end; ++i)
+	{
+		components[start] += components[start+1];
+		components.removeAt(start+1);
+	}
+
+	return components;
+}
+
+QStringList CallStringProvider::detailedComponents()
 {
 	QStringList components;
 	StringComponents* node = Model::AdapterManager::adapt<StringComponents>(vis_->node());
@@ -61,64 +75,63 @@ QStringList InitializerStringProvider::components()
 	return components;
 }
 
-int InitializerStringProvider::offset()
+int CallStringProvider::offset()
 {
 	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
 
-	QStringList components = this->components();
+	if (!vis_->arguments()->itemOrChildHasFocus())
+		return SequentialVisualizationStringProvider::offset();
+
+	QStringList components = detailedComponents();
 	int result = 0;
 
-	if (vis_->isShownInMatrixForm())
+	int index = 0;
+	while(index == 0 || components[index-1] != "(")
+		result += components[index++].size();
+
+
+	if (vis_->scene()->mainCursor() && vis_->scene()->mainCursor()->owner() == vis_->arguments()->layout())
 	{
-		// TODO: implement matrix form
+		int argIndex = vis_->arguments()->layout()->correspondingSceneCursor<Visualization::LayoutCursor>()->index();
+		for (int i = 0; i<argIndex; ++i)
+		{
+			if (i>0) result += components[index++].size(); // Add previous comma
+			result += components[index++].size();
+		}
+
 	}
 	else
 	{
-		Q_ASSERT( (components.size() - 1) / 2 == vis_->values()->length() );
+		int focused = vis_->arguments()->focusedElementIndex();
+		Q_ASSERT(focused >= 0);
 
-		// Always include the leading '{' in the returned offset
-		result += components[0].size();
-
-		if (vis_->scene()->mainCursor() && vis_->scene()->mainCursor()->owner() == vis_->values()->layout())
+		for(int i = 0; i<focused; ++i)
 		{
-			int index = vis_->values()->layout()->correspondingSceneCursor<Visualization::LayoutCursor>()->index();
-			for (int i = 0; i<index; ++i)
-			{
-				if (i>0) result += components[i*2].size(); //include previous comma
-				result += components[i*2 + 1].size();
-			}
-		}
-		else
-		{
-			int focused = vis_->values()->focusedElementIndex();
-			Q_ASSERT(focused >= 0);
-
-			for(int i = 0; i<focused; ++i)
-				result += components[(i+1)*2].size() + components[i*2 + 1].size();
-
-			StringProvider* child =
-					Model::AdapterManager::adapt<StringProvider>(vis_->values()->at<Visualization::Item>(focused));
-			if (child)
-			{
-				int childOffset = child->offset();
-				if (childOffset > 0 && child->isIndivisible()) childOffset = components[focused].length();
-				result += childOffset;
-				SAFE_DELETE(child);
-			}
+			result += components[index].size() + components[index+1].size();
+			index += 2;
 		}
 
+		StringProvider* child =
+				Model::AdapterManager::adapt<StringProvider>(vis_->arguments()->at<Visualization::Item>(focused));
+		if (child)
+		{
+			int childOffset = child->offset();
+			if (childOffset > 0 && child->isIndivisible()) childOffset = components[focused].length();
+			result += childOffset;
+			SAFE_DELETE(child);
+		}
 	}
 
 	return result;
 }
 
-QString InitializerStringProvider::string()
+QString CallStringProvider::string()
 {
 	if (!vis_) return QString();
 	return components().join("");
 }
 
-void InitializerStringProvider::setOffset(int offset)
+void CallStringProvider::setOffset(int offset)
 {
 	if (offset == 0)
 	{
@@ -126,35 +139,44 @@ void InitializerStringProvider::setOffset(int offset)
 		return;
 	}
 
-	QStringList components = this->components();
+	QStringList components = detailedComponents();
 
-	if (vis_->isShownInMatrixForm())
+	if (offset == components.join("").size())
 	{
-		// TODO: implement matrix form
+		vis_->moveCursor( Visualization::Item::MoveOnPosition, QPoint(vis_->xEnd(),0));
+		return;
 	}
-	else
-	{
-		Q_ASSERT( (components.size() - 1) / 2 == vis_->values()->length() );
-		for (int i = 0; i<vis_->values()->length(); ++i)
-		{
-			offset -= components[i*2].size();  // This is to cover for the inital '{' and subsequent ','
 
-			if (offset <= components[i*2 + 1].size()) // We only care about the components which represent children
+	int index = 0;
+	int argsStart = 0;
+	while(index == 0 || components[index-1] != "(")
+		argsStart += components[index++].size();
+
+	if (offset < argsStart)
+	{
+		SequentialVisualizationStringProvider::setOffset(offset);
+		return;
+	}
+	else offset -= argsStart;
+
+	for (int i = 0; i<vis_->arguments()->length(); ++i)
+	{
+		if (offset <= components[index].size())
+		{
+			StringProvider* child =
+					Model::AdapterManager::adapt<StringProvider>(vis_->arguments()->at<Visualization::Item>(i));
+			if (child)
 			{
-				StringProvider* child =
-					Model::AdapterManager::adapt<StringProvider>(vis_->values()->at<Visualization::Item>(i));
-				if (child)
-				{
-					if (offset > 0 && child->isIndivisible()) child->setOffset(child->string().length());
-					else child->setOffset(offset);
-					SAFE_DELETE(child);
-					return;
-				}
+				if (offset > 0 && child->isIndivisible()) child->setOffset(child->string().length());
+				else child->setOffset(offset);
+				SAFE_DELETE(child);
+				return;
 			}
-			else
-			{
-				offset -= components[i*2 + 1].size();
-			}
+		}
+		else
+		{
+			offset -= components[index++].size();
+			offset -= components[index++].size(); // This is the ',' after the argument
 		}
 	}
 
