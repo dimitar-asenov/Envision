@@ -94,6 +94,7 @@ ParseResult Parser::parse(QVector<Token>::const_iterator token, ParseResult resu
 
 	// If the current token is the same as the next expected delimiter
 	// put empty expressions where required and finish the intermediate operators
+	// TODO: This does not work for cases like 'template c< int a > 2 >'
 	processNextExpectedDelimiter(processed, expected, token, hasLeft, result, instructions);
 
 	if (!processed && (token->type() == Token::Identifier || token->type() == Token::Literal) )
