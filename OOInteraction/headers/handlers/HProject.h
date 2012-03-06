@@ -25,28 +25,28 @@
  **********************************************************************************************************************/
 
 /*
- * HOOClass.cpp
+ * HProject.h
  *
- *  Created on: Mar 1, 2012
+ *  Created on: Mar 6, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "handlers/HOOClass.h"
+#ifndef OOInteraction_HPROJECT_H_
+#define OOInteraction_HPROJECT_H_
 
-#include "commands/CClassCreateMethod.h"
+#include "../oointeraction_api.h"
+
+#include "InteractionBase/headers/handlers/GenericHandler.h"
 
 namespace OOInteraction {
 
-HOOClass::HOOClass()
-{
-	// TODO: is it appropriate to add commands in the constructor or should they be registered somewhere else?
-	addCommand(new CClassCreateMethod());
-}
+class OOINTERACTION_API HProject : public Interaction::GenericHandler {
+	protected:
+		HProject();
 
-HOOClass* HOOClass::instance()
-{
-	static HOOClass h;
-	return &h;
-}
+	public:
+		static HProject* instance();
+};
 
 } /* namespace OOInteraction */
+#endif /* OOInteraction_HPROJECT_H_ */

@@ -47,6 +47,15 @@ using namespace Visualization;
 
 namespace OOInteraction {
 
+Project* addProject(Model::Model* model)
+{
+	Project* pr = dynamic_cast<Project*> (model->createRoot("Project"));
+	model->beginModification(pr, "Adding a project");
+		pr->setName("NewProject");
+	model->endModification();
+	return pr;
+}
+
 Class* addClass(Model::Model* model, Project* parent)
 {
 	Class* cl = nullptr;
@@ -235,14 +244,18 @@ TEST(OOInteraction, SimpleTest)
 {
 	Model::Model* model = new Model::Model();
 
+	Project* pr = nullptr;
+	pr = addProject(model);
+
 	Class* cl = nullptr;
-	cl = addClass(model, nullptr);
+	cl = addClass(model, pr);
 
 	Method* divbysix = nullptr;
 	divbysix = addDivBySix(model, cl);
 
 	Model::Node* top_level = nullptr;
-	if (cl) top_level = cl;
+	if (pr) top_level = pr;
+	else if (cl) top_level = cl;
 	else top_level = divbysix;
 
 	Scene* scene = new Scene();

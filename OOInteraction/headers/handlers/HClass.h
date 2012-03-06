@@ -25,32 +25,28 @@
  **********************************************************************************************************************/
 
 /*
- * HOOExpression.h
+ * HClass.h
  *
- *  Created on: Feb 8, 2012
+ *  Created on: Mar 1, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef OOInteraction_HOOEXPRESSION_H_
-#define OOInteraction_HOOEXPRESSION_H_
+#ifndef OOInteraction_HCLASS_H_
+#define OOInteraction_HCLASS_H_
 
 #include "../oointeraction_api.h"
 
 #include "InteractionBase/headers/handlers/GenericHandler.h"
 
-namespace OOModel { class Expression; }
-
 namespace OOInteraction {
 
-class OOINTERACTION_API HOOExpression : public Interaction::GenericHandler {
+class OOINTERACTION_API HClass : public Interaction::GenericHandler {
 	protected:
-		HOOExpression();
+		HClass();
 
 	public:
-		static HOOExpression* instance();
-
-		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event);
+		static HClass* instance();
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_HOOEXPRESSION_H_ */
+#endif /* OOInteraction_HCLASS_H_ */

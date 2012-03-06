@@ -25,13 +25,13 @@
  **********************************************************************************************************************/
 
 /*
- * HOOExpression.cpp
+ * HExpression.cpp
  *
  *  Created on: Feb 8, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "handlers/HOOExpression.h"
+#include "handlers/HExpression.h"
 
 #include "string_providers/StringProvider.h"
 #include "expression_editor/OOExpressionBuilder.h"
@@ -43,18 +43,18 @@
 
 namespace OOInteraction {
 
-HOOExpression::HOOExpression()
+HExpression::HExpression()
 {
 
 }
 
-HOOExpression* HOOExpression::instance()
+HExpression* HExpression::instance()
 {
-	static HOOExpression h;
+	static HExpression h;
 	return &h;
 }
 
-void HOOExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
+void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
 	// TODO implement this better. It is supposed to only let typed characters through and igonre modifier keys.
 	// However it does not work with e.g. ALTGR characters.

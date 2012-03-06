@@ -35,9 +35,12 @@ INSTALLS += target \
     pluginmeta \
     styles
 PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/handlers/HOOMethod.h \
+HEADERS += headers/commands/CProjectCreateClass.h \
+    headers/handlers/HMethod.h \
+    headers/handlers/HExpression.h \
+    headers/handlers/HClass.h \
+    headers/handlers/HProject.h \
     headers/handlers/SetExpressionCursorEvent.h \
-    headers/handlers/HOOClass.h \
     headers/commands/CClassCreateMethod.h \
     headers/string_providers/CallStringProvider.h \
     headers/string_components/CallStringComponents.h \
@@ -70,7 +73,6 @@ HEADERS += headers/handlers/HOOMethod.h \
     headers/string_components/StringComponents.h \
     headers/string_providers/EmptyExpressionStringProvider.h \
     headers/string_providers/StringProvider.h \
-    headers/handlers/HOOExpression.h \
     headers/expression_editor/OOOperatorDescriptorList.h \
     headers/expression_editor/operators/BinaryOperatorDescriptor.h \
     headers/expression_editor/OOOperatorDescriptor.h \
@@ -79,9 +81,12 @@ HEADERS += headers/handlers/HOOMethod.h \
     headers/OOInteractionException.h \
     headers/oointeraction_api.h \
     src/oointeraction.h
-SOURCES += src/handlers/HOOMethod.cpp \
+SOURCES += src/commands/CProjectCreateClass.cpp \
+    src/handlers/HMethod.cpp \
+    src/handlers/HExpression.cpp \
+    src/handlers/HClass.cpp \
+    src/handlers/HProject.cpp \
     src/handlers/SetExpressionCursorEvent.cpp \
-    src/handlers/HOOClass.cpp \
     src/commands/CClassCreateMethod.cpp \
     src/string_providers/CallStringProvider.cpp \
     src/string_components/CallStringComponents.cpp \
@@ -114,7 +119,6 @@ SOURCES += src/handlers/HOOMethod.cpp \
     src/string_components/StringComponents.cpp \
     src/string_providers/EmptyExpressionStringProvider.cpp \
     src/string_providers/StringProvider.cpp \
-    src/handlers/HOOExpression.cpp \
     src/expression_editor/OOOperatorDescriptorList.cpp \
     src/expression_editor/operators/BinaryOperatorDescriptor.cpp \
     src/expression_editor/OOOperatorDescriptor.cpp \
