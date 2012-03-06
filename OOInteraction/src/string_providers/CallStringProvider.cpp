@@ -159,6 +159,12 @@ void CallStringProvider::setOffset(int offset)
 	}
 	else offset -= argsStart;
 
+	if (offset == 0 && vis_->arguments()->length() == 0)
+	{
+		vis_->arguments()->moveCursor( Visualization::Item::MoveOnPosition, QPoint(0,0));
+		return;
+	}
+
 	for (int i = 0; i<vis_->arguments()->length(); ++i)
 	{
 		if (offset <= components[index].size())

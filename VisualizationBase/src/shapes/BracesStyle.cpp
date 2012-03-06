@@ -38,6 +38,7 @@ namespace Visualization {
 void BracesStyle::load(StyleLoader& sl)
 {
 	ShapeStyle::load(sl);
+	sl.load("minHeight", minHeight_);
 	sl.load("leftBracePen", leftBracePen_);
 	sl.load("leftBraceFont", leftBraceFont_);
 	sl.load("leftBrace", leftBrace_);

@@ -2,33 +2,33 @@
 <style prototypes="item/Item/default">
 	<shape />
 	<layout prototypes="layout/SequentialLayout/default" />
-	<name prototypes="item/Text/default" />
+	<name prototypes="item/Text/default">
+		<pen>
+			<color>
+				<alpha>255</alpha>
+				<red>185</red>
+				<green>120</green>
+				<blue>0</blue>
+			</color>
+		</pen>
+		<font>
+			<family></family>
+			<size>15</size>
+			<sizeIsInPixels>true</sizeIsInPixels>
+			<weight>100</weight>
+		</font>
+	</name>
 	<separator prototypes="item/Symbol/default" />
 	<arguments prototypes="item/VList/default">
 		<drawShapeWhenEmpty>true</drawShapeWhenEmpty>
-		<shape prototypes="shape/Box/default">
-			Box
-			<backgroundBrush>
-				<gradient>
-					<stopPoints>
-						<e1>
-							<first>1.0</first>
-							<second>
-								<alpha>255</alpha>
-								<red>255</red>
-								<green>209</green>
-								<blue>139</blue>
-							</second>
-						</e1>	
-					</stopPoints>
-				</gradient>
-			</backgroundBrush>
-			<cornerType>2</cornerType>
-			<cornerRadius>2</cornerRadius>
+		<shape prototypes="shape/Braces/default">
+			Braces
+			<leftBrace>(</leftBrace>
+			<rightBrace>)</rightBrace>	
 		</shape>
 		<itemsStyle prototypes="layout/SequentialLayout/default">
 			<direction>0</direction>
-			<spaceBetweenElements>3</spaceBetweenElements>
+			<spaceBetweenElements>15</spaceBetweenElements>
 		</itemsStyle>
 	</arguments>
 </style>

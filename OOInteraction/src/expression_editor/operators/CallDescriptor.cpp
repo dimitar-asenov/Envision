@@ -66,7 +66,8 @@ OOModel::Expression* CallDescriptor::create(const QList<OOModel::Expression*>& o
 		SAFE_DELETE(comma);
 	}
 	else
-		opr->arguments()->append(operands.last());
+		if (!dynamic_cast<OOModel::EmptyExpression*>(operands.last()) )
+				opr->arguments()->append(operands.last());
 
 	return opr;
 }
