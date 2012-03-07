@@ -58,11 +58,19 @@ class VISUALIZATIONBASE_API SequentialLayoutStyle : public LayoutStyle
 		void setDirection(Direction direction);
 		void setAlignment(Alignment alignment);
 		void setSpaceBetweenElements(int space);
+
+		bool isHorizontal() const;
+		bool isForward() const;
 };
 
 inline LayoutStyle::Direction SequentialLayoutStyle::direction() const { return direction_; }
 inline LayoutStyle::Alignment SequentialLayoutStyle::alignment() const {	return alignment_; }
 inline int SequentialLayoutStyle::spaceBetweenElements() const {	return spaceBetweenElements_; }
+
+inline bool SequentialLayoutStyle::isHorizontal() const
+	{ return direction_ == LeftToRight || direction_ == RightToLeft;}
+inline bool SequentialLayoutStyle::isForward() const
+	{ return direction_ == LeftToRight || direction_ == TopToBottom;}
 
 }
 

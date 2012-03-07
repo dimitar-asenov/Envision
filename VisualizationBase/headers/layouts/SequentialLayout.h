@@ -66,6 +66,9 @@ class VISUALIZATIONBASE_API SequentialLayout: public Layout
 
 		virtual QList<ItemRegion> regions();
 
+		bool isHorizontal() const;
+		bool isForward() const;
+
 		int length() const;
 
 		void append(Item* item);
@@ -88,10 +91,16 @@ class VISUALIZATIONBASE_API SequentialLayout: public Layout
 		template <class T> void synchronizeFirst(T*& item, bool present, const typename T::StyleType* style);
 		template <class T> void synchronizeLast(T*& item, bool present, const typename T::StyleType* style);
 		template <class T> void synchronizeMid(T*& item, bool present, const typename T::StyleType* style, int position);
-		template <class T> void synchronizeFirst(T*& item, typename T::NodeType* node, const typename T::StyleType* style);
-		template <class T> void synchronizeLast(T*& item, typename T::NodeType* node, const typename T::StyleType* style);
-		template <class T> void synchronizeMid(T*& item, typename T::NodeType* node, const typename T::StyleType* style, int position);
+		template <class T> void synchronizeFirst(T*& item, typename T::NodeType* node,
+				const typename T::StyleType* style);
+		template <class T> void synchronizeLast(T*& item, typename T::NodeType* node,
+				const typename T::StyleType* style);
+		template <class T> void synchronizeMid(T*& item, typename T::NodeType* node,
+				const typename T::StyleType* style, int position);
 };
+
+inline bool SequentialLayout::isHorizontal() const { return style()->isHorizontal(); }
+inline bool SequentialLayout::isForward() const { return style()->isForward(); }
 
 template <class T> inline T* SequentialLayout::at(int index) { return static_cast<T*> (items[index]); }
 template <class T> inline T* SequentialLayout::at(int index) const { return static_cast<T*> (items[index]); }

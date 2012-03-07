@@ -32,9 +32,11 @@
  **********************************************************************************************************************/
 
 #include "handlers/HList.h"
+#include "handlers/SetCursorEvent.h"
 
 #include "VisualizationBase/headers/items/VList.h"
 #include "VisualizationBase/headers/Scene.h"
+#include "VisualizationBase/headers/cursor/LayoutCursor.h"
 #include "FilePersistence/headers/SystemClipboard.h"
 #include "ModelBase/headers/nodes/List.h"
 
@@ -53,9 +55,11 @@ HList* HList::instance()
 
 void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
+	Visualization::VList* list = static_cast<Visualization::VList*> (target);
+
 	if (event->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier)  && event->key() == Qt::Key_V)
 	{
-		Visualization::VList* list = static_cast<Visualization::VList*> (target);
+
 		FilePersistence::SystemClipboard clipboard;
 		int selIndex = list->focusedElementIndex();
 
@@ -68,6 +72,38 @@ void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			l->model()->endModification();
 			target->setUpdateNeeded();
 		}
+	}
+	else if (event->modifiers() == Qt::NoModifier
+			&& (event->key() == Qt::Key_Delete || event->key() == Qt::Key_Backspace))
+	{
+		int index = list->layout()->focusedElementIndex();
+		if (index == -1 && list->scene()->mainCursor() && list->scene()->mainCursor()->owner() == list->layout())
+			index = list->layout()->correspondingSceneCursor<Visualization::LayoutCursor>()->index();
+
+		if ((index > 0 && event->key() == Qt::Key_Backspace)
+				|| (index < list->layout()->length() && event->key() == Qt::Key_Delete))
+		{
+			if (event->key() == Qt::Key_Backspace) --index;
+
+			list->node()->model()->beginModification(list->node(), "remove element");
+			list->node()->remove(index);
+			list->node()->model()->endModification();
+
+			if (event->key() == Qt::Key_Backspace) --index;
+			list->setUpdateNeeded();
+
+			Model::Node* focusTarget = list->node();
+			if (index >=0 && index < list->node()->size())
+				focusTarget = list->node()->at<Model::Node>(index);
+
+			QApplication::postEvent(target->scene(),
+				new Interaction::SetCursorEvent(target, focusTarget, (event->key() == Qt::Key_Backspace ?
+						(list->layout()->isHorizontal() ?
+								Interaction::SetCursorEvent::CursorOnRight : Interaction::SetCursorEvent::CursorOnBottom)
+						: (list->layout()->isHorizontal() ?
+								Interaction::SetCursorEvent::CursorOnLeft : Interaction::SetCursorEvent::CursorOnTop))));
+		}
+
 	}
 	else GenericHandler::keyPressEvent(target, event);
 }

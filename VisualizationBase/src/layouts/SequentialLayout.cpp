@@ -198,8 +198,8 @@ void SequentialLayout::updateGeometry(int, int)
 	}
 
 	// Determine what sort of sequence we're building
-	bool horizontal = style()->direction() == SequentialLayoutStyle::LeftToRight || style()->direction() == SequentialLayoutStyle::RightToLeft;
-	bool forward = style()->direction() == SequentialLayoutStyle::LeftToRight || style()->direction() == SequentialLayoutStyle::TopToBottom;
+	bool horizontal = isHorizontal();
+	bool forward = isForward();
 
 	// Update the geometry of children whose size varies
 	for (int i = 0; i != items.size(); ++i)
@@ -273,10 +273,8 @@ int SequentialLayout::focusedElementIndex() const
 
 QList<ItemRegion> SequentialLayout::regions()
 {
-	bool horizontal = style()->direction() == SequentialLayoutStyle::LeftToRight
-							|| style()->direction() == SequentialLayoutStyle::RightToLeft;
-	bool forward = style()->direction() == SequentialLayoutStyle::LeftToRight
-						|| style()->direction() == SequentialLayoutStyle::TopToBottom;
+	bool horizontal = isHorizontal();
+	bool forward = isForward();
 
 	QList<ItemRegion> regs;
 	int last = forward ? 0 : horizontal ? width() : height();
