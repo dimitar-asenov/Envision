@@ -36,6 +36,10 @@
 
 #include "../oointeraction_api.h"
 
+namespace Model {
+	class Node;
+}
+
 namespace Visualization {
 	class Item;
 }
@@ -58,6 +62,8 @@ class OOINTERACTION_API StringProvider {
 		 */
 		virtual bool isIndivisible();
 
+		static QStringList components(Model::Node* node);
+		static QString stringFromComponenets(Model::Node* node);
 		static QString stringFromComponenets(Visualization::Item* item);
 		static QString stringFromStringProvider(Visualization::Item* item);
 };

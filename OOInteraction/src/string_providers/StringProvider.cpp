@@ -44,19 +44,40 @@ StringProvider::~StringProvider()
 {
 }
 
-QString StringProvider::stringFromComponenets(Visualization::Item* item)
+QStringList StringProvider::components(Model::Node* node)
 {
-	if (!item) return QString();
+	if (!node) return QStringList();
 
-	QString result;
-	StringComponents* node = Model::AdapterManager::adapt<StringComponents>(item->node());
-	if (node)
+	QStringList result;
+	StringComponents* sc = Model::AdapterManager::adapt<StringComponents>(node);
+	if (sc)
 	{
-		result = node->components().join("");
-		SAFE_DELETE(node);
+		result = sc->components();
+		SAFE_DELETE(sc);
 	}
 
 	return result;
+}
+
+QString StringProvider::stringFromComponenets(Model::Node* node)
+{
+	if (!node) return QString();
+
+	QString result;
+	StringComponents* sc = Model::AdapterManager::adapt<StringComponents>(node);
+	if (sc)
+	{
+		result = sc->components().join("");
+		SAFE_DELETE(sc);
+	}
+
+	return result;
+}
+
+QString StringProvider::stringFromComponenets(Visualization::Item* item)
+{
+	if (!item) return QString();
+	return stringFromComponenets(item->node());
 }
 
 QString StringProvider::stringFromStringProvider(Visualization::Item* item)

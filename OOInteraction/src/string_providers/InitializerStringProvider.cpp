@@ -68,16 +68,43 @@ int InitializerStringProvider::offset()
 	QStringList components = this->components();
 	int result = 0;
 
+	// Always include the leading '{' in the returned offset
+	result += components[0].size();
+
 	if (vis_->isShownInMatrixForm())
 	{
-		// TODO: implement matrix form
+		auto focusedIndex = vis_->layout()->focusedElementIndex();
+
+		int index = 1;
+		for(int y = 0; y < focusedIndex.y(); ++y)
+		{
+			result += components[index++].size();
+			result += components[index++].size(); // This is for the comma after the element
+		}
+
+		QStringList subComponents = StringProvider::components(vis_->node()->values()->at(focusedIndex.y()));
+		result += subComponents[0].size();
+
+		int subIndex = 1;
+		for(int x = 0; x<focusedIndex.x(); ++x)
+		{
+			result += subComponents[subIndex++].size();
+			result += subComponents[subIndex++].size();
+		}
+
+		StringProvider* child =
+				Model::AdapterManager::adapt<StringProvider>(vis_->layout()->focusedChild());
+		if (child)
+		{
+			int childOffset = child->offset();
+			if (childOffset > 0 && child->isIndivisible()) childOffset = subComponents[subIndex].size();
+			result += childOffset;
+			SAFE_DELETE(child);
+		}
 	}
 	else
 	{
 		Q_ASSERT( (components.size() - 1) / 2 == vis_->values()->length() );
-
-		// Always include the leading '{' in the returned offset
-		result += components[0].size();
 
 		if (vis_->scene()->mainCursor() && vis_->scene()->mainCursor()->owner() == vis_->values()->layout())
 		{
@@ -131,6 +158,41 @@ void InitializerStringProvider::setOffset(int offset)
 	if (vis_->isShownInMatrixForm())
 	{
 		// TODO: implement matrix form
+		int index = 0;
+		offset -= components[index++].size();
+
+		while (index < components.size() && offset > components[index].size())
+		{
+			offset -= components[index++].size();
+			offset -= components[index++].size();
+		}
+
+		if (offset < 0) offset = 0;
+		if (index == components.size()) index -= 2;
+
+		QStringList subComponents = StringProvider::components(vis_->node()->values()->at((index-1)/2));
+
+		int subIndex = 0;
+		offset -= subComponents[subIndex++].size();
+		if (offset < 0) offset = 0;
+		while(subIndex < subComponents.size() && offset > subComponents[subIndex].size())
+		{
+			offset -= subComponents[subIndex++].size();
+			offset -= subComponents[subIndex++].size();
+		}
+
+		if (offset < 0) offset = 0;
+		if (subIndex == subComponents.size()) subIndex -= 2;
+
+		auto childItem = vis_->layout()->at<Visualization::Item>((subIndex-1)/2,(index-1)/2);
+		StringProvider* child = Model::AdapterManager::adapt<StringProvider>(childItem);
+		if (child)
+		{
+			if (offset > 0 && child->isIndivisible()) child->setOffset(child->string().length());
+			else child->setOffset(offset);
+			SAFE_DELETE(child);
+			return;
+		}
 	}
 	else
 	{
