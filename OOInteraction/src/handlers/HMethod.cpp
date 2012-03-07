@@ -36,10 +36,12 @@
 #include "OOVisualization/headers/top_level/VMethod.h"
 #include "OOModel/headers/expressions/EmptyExpression.h"
 #include "OOModel/headers/statements/ExpressionStatement.h"
+#include "OOModel/headers/elements/FormalArgument.h"
 
 #include "InteractionBase/headers/handlers/SetCursorEvent.h"
 #include "VisualizationBase/headers/items/VList.h"
 #include "VisualizationBase/headers/items/VText.h"
+#include "VisualizationBase/headers/cursor/LayoutCursor.h"
 
 namespace OOInteraction {
 
@@ -56,9 +58,9 @@ void HMethod::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
 	auto m = dynamic_cast<OOVisualization::VMethod*> ( target );
 	bool processed = false;
-	if (m && event->modifiers() == Qt::NoModifier && m->name()->itemOrChildHasFocus())
+	if (m && event->modifiers() == Qt::NoModifier)
 	{
-		if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)
+		if (m->name()->itemOrChildHasFocus() && (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return))
 		{
 			processed = true;
 			event->accept();
@@ -81,16 +83,50 @@ void HMethod::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 						Interaction::SetCursorEvent::CursorOnLeft));
 			}
 		}
-		else if (event->key() == Qt::Key_Space)
+		else if (m->name()->itemOrChildHasFocus() && event->key() == Qt::Key_Tab)
 		{
 			processed = true;
 			event->accept();
 
+			if (m->node()->arguments()->size() > 0)
+			{
+				QApplication::postEvent(target->scene(), new Interaction::SetCursorEvent(target,
+						m->node()->arguments()->at(0), Interaction::SetCursorEvent::CursorOnLeft));
+			}
+			else
+				createNewArgument(m, 0);
 		}
+		else if (m->arguments()->itemOrChildHasFocus()
+				&& (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return))
+		{
+			processed = true;
+			event->accept();
 
+			int index = m->arguments()->layout()->focusedElementIndex();
+			if (index == -1 && m->scene()->mainCursor() && m->scene()->mainCursor()->owner() == m->arguments()->layout())
+				index = m->arguments()->layout()->correspondingSceneCursor<Visualization::LayoutCursor>()->index();
+			else index++;
+
+			if (index >= 0) createNewArgument(m, index);
+
+		}
 	}
 
 	if (!processed) GenericHandler::keyPressEvent(target, event);
+}
+
+void HMethod::createNewArgument(OOVisualization::VMethod* method, int position)
+{
+	auto arg = new OOModel::FormalArgument();
+	auto empty = new OOModel::EmptyExpression();
+	arg->setType(empty);
+	method->node()->model()->beginModification(method->node(), "add new argument");
+	method->node()->arguments()->insert(position, arg);
+	method->node()->model()->endModification();
+
+	method->arguments()->setUpdateNeeded();
+	QApplication::postEvent(method->scene(), new Interaction::SetCursorEvent(method, arg->nameNode(),
+			Interaction::SetCursorEvent::CursorOnLeft));
 }
 
 } /* namespace OOInteraction */

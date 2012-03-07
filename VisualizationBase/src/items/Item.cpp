@@ -509,6 +509,16 @@ Item* Item::findVisualizationOf(Model::Node* node)
 	return nullptr;
 }
 
+bool Item::sceneEvent(QEvent *event)
+{
+	if (event->type() == QEvent::KeyPress)
+	{
+		keyPressEvent(static_cast<QKeyEvent *>(event));
+		return true;
+	}
+	return QGraphicsItem::sceneEvent(event);
+}
+
 /***********************************************************************************************************************
  * Reimplemented Event handling methods. These simply dispatch the method call to the interaction handler of this
  * object.

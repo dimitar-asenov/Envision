@@ -60,6 +60,8 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	// However it does not work with e.g. ALTGR characters.
 	if (event->text().isEmpty()
 			|| event->key() == Qt::Key_Escape
+			|| event->key() == Qt::Key_Tab
+			|| event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return
 			|| (event->modifiers() != Qt::NoModifier && event->modifiers() != Qt::ShiftModifier)
 			)
 	{

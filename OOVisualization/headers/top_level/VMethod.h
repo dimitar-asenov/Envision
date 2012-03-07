@@ -61,6 +61,7 @@ class OOVISUALIZATION_API VMethod : public Visualization::ItemWithNode< Visualiz
 
 		Visualization::VText* name() const;
 		Visualization::VList* content() const;
+		Visualization::VList* arguments() const;
 
 	protected:
 		void determineChildren();
@@ -76,6 +77,7 @@ class OOVISUALIZATION_API VMethod : public Visualization::ItemWithNode< Visualiz
 
 inline Visualization::VText* VMethod::name() const { return name_; }
 inline Visualization::VList* VMethod::content() const { return content_; }
+inline Visualization::VList* VMethod::arguments() const { return arguments_; }
 
 }
 

@@ -38,6 +38,10 @@
 
 #include "InteractionBase/headers/handlers/GenericHandler.h"
 
+namespace OOVisualization {
+	class VMethod;
+}
+
 namespace OOInteraction {
 
 class OOINTERACTION_API HMethod : public Interaction::GenericHandler {
@@ -48,6 +52,9 @@ class OOINTERACTION_API HMethod : public Interaction::GenericHandler {
 
 	protected:
 		HMethod();
+
+	private:
+		void createNewArgument(OOVisualization::VMethod* method, int position);
 };
 
 } /* namespace OOInteraction */

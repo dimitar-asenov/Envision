@@ -225,6 +225,8 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		template <class T> void synchronizeItem(T*& item, typename T::NodeType* node, const typename T::StyleType* style);
 
 		//Event handlers
+		virtual bool sceneEvent(QEvent *event);
+
 		// Keyboard events
 		virtual void keyPressEvent(QKeyEvent *event);
 		virtual void keyReleaseEvent(QKeyEvent *event);

@@ -175,11 +175,17 @@ bool Scene::event(QEvent *event)
 	if (event->type() != UpdateSceneEvent::EventType &&
 		 event->type() != QEvent::MetaCall  &&
 		 event->type() != QEvent::GraphicsSceneMouseMove &&
-		 event->type() !=QEvent::GraphicsSceneHoverMove
+		 event->type() != QEvent::GraphicsSceneHoverMove
 		)
 		scheduleUpdate();
 
-	return QGraphicsScene::event(event);
+	if (event->type() == QEvent::KeyPress)
+	{
+		//Circumvent the standard TAB handling of the scene.
+		keyPressEvent(static_cast<QKeyEvent *>(event));
+		return true;
+	}
+	else return QGraphicsScene::event(event);
 }
 
 void Scene::setMainCursor(Cursor* cursor)
