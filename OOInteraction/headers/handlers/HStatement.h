@@ -25,47 +25,30 @@
  **********************************************************************************************************************/
 
 /*
- * HFormalArgument.cpp
+ * HStatement.h
  *
  *  Created on: Mar 8, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "handlers/HFormalArgument.h"
+#ifndef OOInteraction_HSTATEMENT_H_
+#define OOInteraction_HSTATEMENT_H_
 
-#include "OOVisualization/headers/elements/VFormalArgument.h"
+#include "../oointeraction_api.h"
+
+#include "InteractionBase/headers/handlers/GenericHandler.h"
 
 namespace OOInteraction {
 
-HFormalArgument::HFormalArgument()
-{}
+class OOINTERACTION_API HStatement : public Interaction::GenericHandler {
+	public:
+		static HStatement* instance();
 
-HFormalArgument* HFormalArgument::instance()
-{
-	static HFormalArgument h;
-	return &h;
-}
+		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event);
 
-void HFormalArgument::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
-{
-	auto vis = dynamic_cast<OOVisualization::VFormalArgument*> ( target );
-	bool processed = false;
-
-	if (vis && event->modifiers() == Qt::NoModifier)
-	{
-		if (event->key() == Qt::Key_Tab)
-		{
-			processed = true;
-			event->accept();
-
-			if (vis->layout()->at<Visualization::Item>(0)->itemOrChildHasFocus())
-				vis->layout()->at<Visualization::Item>(1)->moveCursor(Visualization::Item::MoveOnPosition, QPoint(0,0));
-			else
-				vis->layout()->at<Visualization::Item>(0)->moveCursor(Visualization::Item::MoveOnPosition, QPoint(0,0));
-		}
-	}
-
-	if (!processed) GenericHandler::keyPressEvent(target, event);
-}
+	protected:
+		HStatement();
+};
 
 } /* namespace OOInteraction */
+#endif /* OOInteraction_HSTATEMENT_H_ */

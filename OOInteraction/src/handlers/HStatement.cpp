@@ -25,44 +25,57 @@
  **********************************************************************************************************************/
 
 /*
- * HFormalArgument.cpp
+ * HStatement.cpp
  *
  *  Created on: Mar 8, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "handlers/HFormalArgument.h"
+#include "handlers/HStatement.h"
+#include "OOModel/headers/expressions/EmptyExpression.h"
+#include "OOModel/headers/statements/ExpressionStatement.h"
 
-#include "OOVisualization/headers/elements/VFormalArgument.h"
+#include "InteractionBase/headers/handlers/SetCursorEvent.h"
+#include "VisualizationBase/headers/items/VList.h"
+#include "VisualizationBase/headers/cursor/LayoutCursor.h"
 
 namespace OOInteraction {
 
-HFormalArgument::HFormalArgument()
+HStatement::HStatement()
 {}
 
-HFormalArgument* HFormalArgument::instance()
+HStatement* HStatement::instance()
 {
-	static HFormalArgument h;
+	static HStatement h;
 	return &h;
 }
 
-void HFormalArgument::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
+void HStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
-	auto vis = dynamic_cast<OOVisualization::VFormalArgument*> ( target );
+	Visualization::VList* lst = nullptr;
+	auto p = target->parentItem();
+	while (p && !(lst = dynamic_cast<Visualization::VList*>(p))) p = p->parentItem();
+
 	bool processed = false;
 
-	if (vis && event->modifiers() == Qt::NoModifier)
+	if (lst && event->modifiers() == Qt::NoModifier
+			&& (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return))
 	{
-		if (event->key() == Qt::Key_Tab)
-		{
 			processed = true;
 			event->accept();
 
-			if (vis->layout()->at<Visualization::Item>(0)->itemOrChildHasFocus())
-				vis->layout()->at<Visualization::Item>(1)->moveCursor(Visualization::Item::MoveOnPosition, QPoint(0,0));
-			else
-				vis->layout()->at<Visualization::Item>(0)->moveCursor(Visualization::Item::MoveOnPosition, QPoint(0,0));
-		}
+			int index = lst->focusedElementIndex() + 1;
+
+			auto empty = new OOModel::EmptyExpression();
+			auto es = new OOModel::ExpressionStatement();
+			es->setExpression(empty);
+			lst->node()->model()->beginModification(lst->node(), "add empty statement");
+			lst->node()->insert(index, es);
+			lst->node()->model()->endModification();
+
+			lst->setUpdateNeeded();
+			QApplication::postEvent(target->scene(), new Interaction::SetCursorEvent(lst, empty,
+					Interaction::SetCursorEvent::CursorOnLeft));
 	}
 
 	if (!processed) GenericHandler::keyPressEvent(target, event);

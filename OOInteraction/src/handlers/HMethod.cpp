@@ -74,7 +74,7 @@ void HMethod::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 				auto empty = new OOModel::EmptyExpression();
 				auto es = new OOModel::ExpressionStatement();
 				es->setExpression(empty);
-				m->node()->model()->beginModification(m->node(), "add empty expression");
+				m->node()->model()->beginModification(m->node(), "add empty statement");
 				m->node()->items()->append(es);
 				m->node()->model()->endModification();
 
