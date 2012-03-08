@@ -25,34 +25,33 @@
  **********************************************************************************************************************/
 
 /*
- * ParseResult.h
+ * ArrayTypeStringComponents.h
  *
- *  Created on: Jan 11, 2012
+ *  Created on: Mar 8, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef INTERACTIONBASE_PARSERESULT_H_
-#define INTERACTIONBASE_PARSERESULT_H_
+#ifndef OOInteraction_ARRAYTYPESTRINGCOMPONENTS_H_
+#define OOInteraction_ARRAYTYPESTRINGCOMPONENTS_H_
 
-#include "../../interactionbase_api.h"
+#include "../oointeraction_api.h"
+#include "StringComponents.h"
 
-namespace Interaction {
+namespace OOModel
+{
+	class ArrayType;
+}
 
-class ExpressionTreeBuildInstruction;
+namespace OOInteraction {
 
-class INTERACTIONBASE_API ParseResult {
+class OOINTERACTION_API ArrayTypeStringComponents : public StringComponents {
 	public:
-		ParseResult();
-		ParseResult(int errors, int missing_inner_tokens, int missing_trailing_tokens);
+	ArrayTypeStringComponents( OOModel::ArrayType* e );
+		virtual QStringList components();
 
-		int errors;
-		int emptyExpressions;
-		int missing_inner_tokens;
-		int missing_trailing_tokens;
-		QVector<ExpressionTreeBuildInstruction*> instructions;
+	private:
+		OOModel::ArrayType* exp_;
 };
 
-bool operator< (const ParseResult& left, const ParseResult& right);
-
-} /* namespace InteractionBase */
-#endif /* INTERACTIONBASE_PARSERESULT_H_ */
+} /* namespace OOInteraction */
+#endif /* OOInteraction_ARRAYTYPESTRINGCOMPONENTS_H_ */

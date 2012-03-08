@@ -25,34 +25,28 @@
  **********************************************************************************************************************/
 
 /*
- * ParseResult.h
+ * ArrayTypeDescriptor.cpp
  *
- *  Created on: Jan 11, 2012
+ *  Created on: Mar 8, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef INTERACTIONBASE_PARSERESULT_H_
-#define INTERACTIONBASE_PARSERESULT_H_
+#include "expression_editor/operators/ArrayTypeDescriptor.h"
 
-#include "../../interactionbase_api.h"
+#include "OOModel/headers/types/ArrayType.h"
 
-namespace Interaction {
+namespace OOInteraction {
 
-class ExpressionTreeBuildInstruction;
+ArrayTypeDescriptor::ArrayTypeDescriptor(const QString& name, const QString& signature, int num_operands,
+		int precedence, Associativity associativity)
+		: OOOperatorDescriptor(name, signature, num_operands, precedence, associativity)
+{}
 
-class INTERACTIONBASE_API ParseResult {
-	public:
-		ParseResult();
-		ParseResult(int errors, int missing_inner_tokens, int missing_trailing_tokens);
+OOModel::Expression* ArrayTypeDescriptor::create(const QList<OOModel::Expression*>& operands)
+{
+	OOModel::ArrayType* at = new OOModel::ArrayType();
+	at->setType(operands.first());
+	return at;
+}
 
-		int errors;
-		int emptyExpressions;
-		int missing_inner_tokens;
-		int missing_trailing_tokens;
-		QVector<ExpressionTreeBuildInstruction*> instructions;
-};
-
-bool operator< (const ParseResult& left, const ParseResult& right);
-
-} /* namespace InteractionBase */
-#endif /* INTERACTIONBASE_PARSERESULT_H_ */
+} /* namespace OOInteraction */

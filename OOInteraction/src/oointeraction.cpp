@@ -57,6 +57,7 @@
 #include "string_components/VariableAccessStringComponents.h"
 #include "string_components/CallStringComponents.h"
 #include "string_components/PrimitiveTypeStringComponents.h"
+#include "string_components/ArrayTypeStringComponents.h"
 
 #include "string_providers/SequentialVisualizationStringProvider.h"
 #include "string_providers/EmptyExpressionStringProvider.h"
@@ -164,6 +165,8 @@ bool OOInteraction::initialize(Envision::EnvisionManager&)
 		<StringComponents, EmptyExpressionStringComponents, OOModel::EmptyExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringComponents, PrimitiveTypeStringComponents, OOModel::PrimitiveType>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringComponents, ArrayTypeStringComponents, OOModel::ArrayType>();
 
 	// Register string providers
 	Model::AdapterManager::registerAdapterViaConstructor
@@ -206,6 +209,8 @@ bool OOInteraction::initialize(Envision::EnvisionManager&)
 		<StringProvider, StaticStringProvider, Visualization::Static>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringProvider, SimpleLiteralStringProvider, OOVisualization::VPrimitiveType>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringProvider, SequentialVisualizationStringProvider, OOVisualization::VArrayType>();
 
 	return true;
 }

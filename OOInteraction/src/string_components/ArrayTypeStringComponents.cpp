@@ -25,34 +25,38 @@
  **********************************************************************************************************************/
 
 /*
- * ParseResult.h
+ * ArrayTypeStringComponents.cpp
  *
- *  Created on: Jan 11, 2012
+ *  Created on: Mar 8, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef INTERACTIONBASE_PARSERESULT_H_
-#define INTERACTIONBASE_PARSERESULT_H_
+#include "string_components/ArrayTypeStringComponents.h"
 
-#include "../../interactionbase_api.h"
+#include "OOModel/headers/types/ArrayType.h"
+#include "ModelBase/headers/adapter/AdapterManager.h"
 
-namespace Interaction {
+namespace OOInteraction {
 
-class ExpressionTreeBuildInstruction;
+ArrayTypeStringComponents::ArrayTypeStringComponents(OOModel::ArrayType* e )
+	: exp_(e)
+{
+}
 
-class INTERACTIONBASE_API ParseResult {
-	public:
-		ParseResult();
-		ParseResult(int errors, int missing_inner_tokens, int missing_trailing_tokens);
+QStringList ArrayTypeStringComponents::components()
+{
+	QStringList result;
+	if (!exp_) return result;
 
-		int errors;
-		int emptyExpressions;
-		int missing_inner_tokens;
-		int missing_trailing_tokens;
-		QVector<ExpressionTreeBuildInstruction*> instructions;
-};
+	StringComponents* prefix = Model::AdapterManager::adapt<StringComponents>(exp_->type());
+	if (prefix)
+	{
+		result.append( prefix->components().join("") );
+		SAFE_DELETE(prefix);
+	}
 
-bool operator< (const ParseResult& left, const ParseResult& right);
+	result.append("[]");
+	return result;
+}
 
-} /* namespace InteractionBase */
-#endif /* INTERACTIONBASE_PARSERESULT_H_ */
+} /* namespace OOInteraction */

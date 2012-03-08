@@ -36,7 +36,7 @@
 namespace Interaction {
 
 ParseResult::ParseResult()
-	:errors(0), missing_inner_tokens(0), missing_trailing_tokens(0)
+	:errors(0), emptyExpressions(0), missing_inner_tokens(0), missing_trailing_tokens(0)
 {
 }
 
@@ -50,6 +50,7 @@ bool operator< (const ParseResult& left, const ParseResult& right)
 	if ( left.errors != right.errors ) return  left.errors < right.errors;
 	if ( left.missing_inner_tokens != right.missing_inner_tokens ) return  left.missing_inner_tokens < right.missing_inner_tokens;
 	if ( left.missing_trailing_tokens != right.missing_trailing_tokens ) return  left.missing_trailing_tokens < right.missing_trailing_tokens;
+	if ( left.emptyExpressions != right.emptyExpressions ) return  left.emptyExpressions < right.emptyExpressions;
 
 	return false;
 }

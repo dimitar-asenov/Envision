@@ -143,6 +143,7 @@ void Parser::processNextExpectedDelimiter(bool& processed, QStringList& expected
 		{
 			expected.removeFirst();
 			instructions.append( new AddEmptyValue() );
+			++result.emptyExpressions;
 		}
 		else
 		{

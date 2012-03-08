@@ -41,6 +41,7 @@
 #include "expression_editor/operators/InitializerDescriptor.h"
 #include "expression_editor/operators/MemberOperatorDescriptor.h"
 #include "expression_editor/operators/CallDescriptor.h"
+#include "expression_editor/operators/ArrayTypeDescriptor.h"
 
 namespace OOInteraction {
 
@@ -124,6 +125,8 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 	instance()->addDescriptor(new MemberOperatorDescriptor( "member", "expr . id", 2, 1,
 			Interaction::OperatorDescriptor::LeftAssociative));
 	instance()->addDescriptor(new CallDescriptor( "call", "expr ( expr )", 2, 1,
+			Interaction::OperatorDescriptor::LeftAssociative));
+	instance()->addDescriptor(new ArrayTypeDescriptor( "array type", "expr []", 1, 1,
 			Interaction::OperatorDescriptor::LeftAssociative));
 }
 

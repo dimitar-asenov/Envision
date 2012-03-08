@@ -167,6 +167,12 @@ Method* addDivBySix(Model::Model* model, Class* parent)
 	exprtest11->setType(new PrimitiveType(PrimitiveType::VOID));
 	exprtest11->setInitialValue( OOExpressionBuilder::getOOExpression("a+\"hello world\"") );
 
+	VariableDeclaration* exprtest12 = new VariableDeclaration();
+	divbysix->items()->append(exprtest12);
+	exprtest12->setName("exprtest12");
+	exprtest12->setType(new PrimitiveType(PrimitiveType::VOID));
+	exprtest12->setInitialValue( OOExpressionBuilder::getOOExpression("int[]") );
+
 	VariableDeclaration* result = new VariableDeclaration();
 	divbysix->items()->append(result);
 	result->setName("result");
