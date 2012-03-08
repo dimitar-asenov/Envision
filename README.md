@@ -46,10 +46,10 @@ Envision is written in C++ and uses some features of the new C++11 standard. Mak
 4. Run `make debug debug-install` in all directories
 5. Enter the `DebugBuild` directory and start Envision with one of:
    
-     Envision -graphicssystem raster --test oointeraction
-     Envision -graphicssystem raster --test oovisualization
-     Envision -graphicssystem raster --test controlflowvisualization
-     Envision -graphicssystem raster --test custommethodcall
+        Envision -graphicssystem raster --test oointeraction
+        Envision -graphicssystem raster --test oovisualization
+        Envision -graphicssystem raster --test controlflowvisualization
+        Envision -graphicssystem raster --test custommethodcall
 
 
 ### What to explore
