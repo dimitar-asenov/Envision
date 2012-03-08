@@ -35,7 +35,8 @@ INSTALLS += target \
     pluginmeta \
     styles
 PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/string_components/ArrayTypeStringComponents.h \
+HEADERS += headers/handlers/HFormalArgument.h \
+    headers/string_components/ArrayTypeStringComponents.h \
     headers/expression_editor/operators/ArrayTypeDescriptor.h \
     headers/string_components/PrimitiveTypeStringComponents.h \
     headers/string_components/StringLiteralStringComponents.h \
@@ -85,7 +86,8 @@ HEADERS += headers/string_components/ArrayTypeStringComponents.h \
     headers/OOInteractionException.h \
     headers/oointeraction_api.h \
     src/oointeraction.h
-SOURCES += src/string_components/ArrayTypeStringComponents.cpp \
+SOURCES += src/handlers/HFormalArgument.cpp \
+    src/string_components/ArrayTypeStringComponents.cpp \
     src/expression_editor/operators/ArrayTypeDescriptor.cpp \
     src/string_components/PrimitiveTypeStringComponents.cpp \
     src/string_components/StringLiteralStringComponents.cpp \
