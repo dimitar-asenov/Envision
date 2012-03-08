@@ -84,6 +84,8 @@ void OOExpressionBuilder::visit(Interaction::Value* val)
 		expression = new OOModel::NullLiteral();
 	else if (val->text() == "this")
 		expression = new OOModel::ThisExpression();
+	else if (val->text().startsWith('"'))
+		expression = new OOModel::StringLiteral(val->text().mid(1, val->text().size()-2));
 	else
 		expression = new OOModel::VariableAccess("local:" + val->text());
 }

@@ -50,40 +50,99 @@ Token::Token(QString text, Type type)
 QVector<Token> Token::tokenize(QString input, const OperatorDescriptorList* ops)
 {
 	QVector<Token> result;
-	input = input.simplified();
+	input = input.trimmed();
 	if (input.isEmpty()) return result;
 	input.append(' ');
 
 	QChar first;
 	QString token;
+	bool escaped = false;
+	bool inString = false;
+	int openingStringQuoteIndex = -1;
 
 	for(int i = 0; i<input.size(); ++i )
 	{
+		if (token.isEmpty() && input[i] == ' ') continue;
+
+		// If we have an unfinished string
+		if (i == input.size() -1 && inString && (escaped || input[i] != '"'))
+		{
+			// If the string was just opened, close it automatically
+			if (openingStringQuoteIndex == i-1)
+			{
+				input.insert(i,'"');
+			}
+			else
+			{
+				// Do not treat it as string.
+				// Roll back and interpret the rest as normal characters
+				result.append(Token("\"", OperatorDelimiter));
+				token = "";
+				i = openingStringQuoteIndex;
+				escaped = false;
+				inString = false;
+				continue;
+			}
+		}
+
 		QChar ch = input[i];
 
 		if (token.isEmpty())
 		{
 			token = ch;
 			first = ch;
+			if (ch == '"')
+			{
+				inString = true;
+				openingStringQuoteIndex = i;
+			}
 			continue;
 		}
 
 		// Finalize token
-		if (ch == ' ' || first.isLetterOrNumber() != ch.isLetterOrNumber() || (!ch.isLetterOrNumber() && !tokenExistsInOperators(token + ch, ops)) )
+		if ((!inString
+				&& (ch == ' '
+					|| first.isLetterOrNumber() != ch.isLetterOrNumber()
+					|| (!ch.isLetterOrNumber() && !tokenExistsInOperators(token + ch, ops))))
+			|| (inString && ch == '"' && !escaped))
 		{
 			Type t;
-			if ( tokenExistsInOperators(token, ops) || (token.size() == 1 && !first.isLetterOrNumber()))
+			if (inString)
+			{
+				token.append(ch);
+				t = Literal;
+			}
+			else if (tokenExistsInOperators(token, ops) || (token.size() == 1 && !first.isLetterOrNumber()))
 				t = OperatorDelimiter;
 			else
 				t = first.isDigit() ? Literal : Identifier;
 
 			result.append(Token(token,t));
 			token = "";
-			first = ch;
+
+
+			if (inString)
+			{
+				inString = false;
+				escaped = false;
+				continue;
+			}
+			else
+			{
+				first = ch;
+				if (ch == '"')
+				{
+					inString = true;
+					openingStringQuoteIndex = i;
+				}
+			}
 		}
 
 		// Add current symbol to token
-		if (ch != ' ') token += ch;
+		if (inString || ch != ' ') token += ch;
+
+		if (inString && ch == '\\' && !escaped) escaped = true;
+		else if (inString && escaped) escaped = false;
 	}
 
 	return result;
