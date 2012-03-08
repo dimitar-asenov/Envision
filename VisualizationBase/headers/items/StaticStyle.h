@@ -60,6 +60,19 @@ class VISUALIZATIONBASE_API StaticStyle : public ItemStyle
 		bool isEmpty() const;
 };
 
+class VISUALIZATIONBASE_API StaticSequenceStyle : public Visualization::ItemStyle
+{
+	private:
+		QVector<StaticStyle> seq_;
+
+	public:
+		void load(Visualization::StyleLoader& sl);
+
+		const StaticStyle& stat(int i) const;
+};
+
+inline const StaticStyle& StaticSequenceStyle::stat(int i) const { return seq_.at(i); }
+
 inline const QString& StaticStyle::itemClass() const { return itemClass_; }
 inline const ItemStyle& StaticStyle::itemStyle() const { return *itemStyle_.data(); }
 

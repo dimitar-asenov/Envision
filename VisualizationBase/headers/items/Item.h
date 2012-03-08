@@ -326,7 +326,7 @@ template <class T> void Item::synchronizeItem(T*& item, bool present, const type
 		if (style) item = new T(this, style);
 		else item = new T(this);
 
-		item->setParent(this);
+		item->setParentItem(this);
 		setUpdateNeeded();
 	}
 }

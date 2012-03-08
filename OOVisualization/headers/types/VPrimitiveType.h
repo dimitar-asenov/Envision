@@ -40,17 +40,17 @@
 
 #include "VisualizationBase/headers/items/Item.h"
 #include "VisualizationBase/headers/items/ItemWithNode.h"
-#include "VisualizationBase/headers/items/TextStyle.h"
+#include "VisualizationBase/headers/items/StaticStyle.h"
 
 namespace Visualization {
-	class Text;
+	class Static;
 }
 
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VPrimitiveType : public Visualization::ItemWithNode< Visualization::Item, OOModel::PrimitiveType>
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VPrimitiveType, Visualization::TextStyle)
+	ITEM_COMMON_CUSTOM_STYLENAME(VPrimitiveType, Visualization::StaticSequenceStyle)
 
 	public:
 		VPrimitiveType(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
@@ -61,7 +61,7 @@ class OOVISUALIZATION_API VPrimitiveType : public Visualization::ItemWithNode< V
 		void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		Visualization::Text* vis_;
+		Visualization::Static* vis_;
 };
 
 }

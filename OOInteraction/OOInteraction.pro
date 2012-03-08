@@ -35,7 +35,8 @@ INSTALLS += target \
     pluginmeta \
     styles
 PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/string_components/StringLiteralStringComponents.h \
+HEADERS += headers/string_components/PrimitiveTypeStringComponents.h \
+    headers/string_components/StringLiteralStringComponents.h \
     headers/commands/CProjectCreateClass.h \
     headers/handlers/HMethod.h \
     headers/handlers/HExpression.h \
@@ -82,7 +83,8 @@ HEADERS += headers/string_components/StringLiteralStringComponents.h \
     headers/OOInteractionException.h \
     headers/oointeraction_api.h \
     src/oointeraction.h
-SOURCES += src/string_components/StringLiteralStringComponents.cpp \
+SOURCES += src/string_components/PrimitiveTypeStringComponents.cpp \
+    src/string_components/StringLiteralStringComponents.cpp \
     src/commands/CProjectCreateClass.cpp \
     src/handlers/HMethod.cpp \
     src/handlers/HExpression.cpp \

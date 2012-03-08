@@ -84,6 +84,24 @@ void OOExpressionBuilder::visit(Interaction::Value* val)
 		expression = new OOModel::NullLiteral();
 	else if (val->text() == "this")
 		expression = new OOModel::ThisExpression();
+	else if (val->text() == "int")
+		expression = new OOModel::PrimitiveType(OOModel::PrimitiveType::PrimitiveTypes::INT);
+	else if (val->text() == "long")
+		expression = new OOModel::PrimitiveType(OOModel::PrimitiveType::PrimitiveTypes::LONG);
+	else if (val->text() == "uint")
+		expression = new OOModel::PrimitiveType(OOModel::PrimitiveType::PrimitiveTypes::UNSIGNED_INT);
+	else if (val->text() == "ulong")
+		expression = new OOModel::PrimitiveType(OOModel::PrimitiveType::PrimitiveTypes::UNSIGNED_LONG);
+	else if (val->text() == "float")
+		expression = new OOModel::PrimitiveType(OOModel::PrimitiveType::PrimitiveTypes::FLOAT);
+	else if (val->text() == "double")
+		expression = new OOModel::PrimitiveType(OOModel::PrimitiveType::PrimitiveTypes::DOUBLE);
+	else if (val->text() == "bool")
+		expression = new OOModel::PrimitiveType(OOModel::PrimitiveType::PrimitiveTypes::BOOLEAN);
+	else if (val->text() == "char")
+		expression = new OOModel::PrimitiveType(OOModel::PrimitiveType::PrimitiveTypes::CHAR);
+	else if (val->text() == "void")
+		expression = new OOModel::PrimitiveType(OOModel::PrimitiveType::PrimitiveTypes::VOID);
 	else if (val->text().startsWith('"'))
 		expression = new OOModel::StringLiteral(val->text().mid(1, val->text().size()-2));
 	else

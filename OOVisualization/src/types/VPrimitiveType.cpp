@@ -32,9 +32,10 @@
  **********************************************************************************************************************/
 
 #include "types/VPrimitiveType.h"
+#include "Helpers.h"
 #include "OOVisualizationException.h"
 
-#include "VisualizationBase/headers/items/Text.h"
+#include "VisualizationBase/headers/items/Static.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -45,7 +46,7 @@ ITEM_COMMON_DEFINITIONS(VPrimitiveType, "item")
 
 VPrimitiveType::VPrimitiveType(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode< Item, PrimitiveType>(parent, node, style),
-	vis_( new Text(this, style))
+	vis_(nullptr)
 {
 }
 
@@ -56,40 +57,10 @@ VPrimitiveType::~VPrimitiveType()
 
 void VPrimitiveType::determineChildren()
 {
-	vis_->setStyle(style());
+	const StaticStyle* stStyle = &style()->stat( node()->type() );
 
-	switch( node()->type() )
-	{
-		case PrimitiveType::INT:
-			vis_->setText("int");
-			break;
-		case PrimitiveType::LONG:
-			vis_->setText("long");
-			break;
-		case PrimitiveType::UNSIGNED_INT:
-			vis_->setText("int+");
-			break;
-		case PrimitiveType::UNSIGNED_LONG:
-			vis_->setText("long+");
-			break;
-		case PrimitiveType::FLOAT:
-			vis_->setText("float");
-			break;
-		case PrimitiveType::DOUBLE:
-			vis_->setText("double");
-			break;
-		case PrimitiveType::BOOLEAN:
-			vis_->setText("bool");
-			break;
-		case PrimitiveType::CHAR:
-			vis_->setText("char");
-			break;
-		case PrimitiveType::VOID:
-			vis_->setText("void");
-			break;
-		default:
-			throw OOVisualizationException("Unknown primitive type in VPrimitiveType::determineChildren()");
-	}
+	synchronizeItem(vis_, !stStyle->isEmpty(), stStyle);
+	Helpers::omitBoundingCursorsInExpressions(this, vis_, true);
 }
 
 void VPrimitiveType::updateGeometry(int availableWidth, int availableHeight)

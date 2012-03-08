@@ -56,6 +56,7 @@
 #include "string_components/UnfinishedOperatorStringComponents.h"
 #include "string_components/VariableAccessStringComponents.h"
 #include "string_components/CallStringComponents.h"
+#include "string_components/PrimitiveTypeStringComponents.h"
 
 #include "string_providers/SequentialVisualizationStringProvider.h"
 #include "string_providers/EmptyExpressionStringProvider.h"
@@ -124,9 +125,9 @@ bool OOInteraction::initialize(Envision::EnvisionManager&)
 	OOVisualization::VContinueStatement::setInteractionHandler(Interaction::GenericHandler::instance());
 	OOVisualization::VBlock::setInteractionHandler(Interaction::GenericHandler::instance());
 	OOVisualization::VReturnStatement::setInteractionHandler(Interaction::GenericHandler::instance());
-	OOVisualization::VPrimitiveType::setInteractionHandler(Interaction::GenericHandler::instance());
-	OOVisualization::VNamedType::setInteractionHandler(Interaction::GenericHandler::instance());
-	OOVisualization::VArrayType::setInteractionHandler(Interaction::GenericHandler::instance());
+	OOVisualization::VPrimitiveType::setInteractionHandler(HExpression::instance());
+	OOVisualization::VNamedType::setInteractionHandler(HExpression::instance());
+	OOVisualization::VArrayType::setInteractionHandler(HExpression::instance());
 
 	// Register string components that convert an expression to a string list representing its components
 	Model::AdapterManager::registerAdapterViaConstructor
@@ -161,6 +162,8 @@ bool OOInteraction::initialize(Envision::EnvisionManager&)
 		<StringComponents, ErrorExpressionStringComponents, OOModel::ErrorExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringComponents, EmptyExpressionStringComponents, OOModel::EmptyExpression>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringComponents, PrimitiveTypeStringComponents, OOModel::PrimitiveType>();
 
 	// Register string providers
 	Model::AdapterManager::registerAdapterViaConstructor
@@ -201,6 +204,8 @@ bool OOInteraction::initialize(Envision::EnvisionManager&)
 		<StringProvider, TextRendererStringProvider, Visualization::Symbol>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringProvider, StaticStringProvider, Visualization::Static>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringProvider, SimpleLiteralStringProvider, OOVisualization::VPrimitiveType>();
 
 	return true;
 }
