@@ -25,56 +25,47 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
- * VVariableDeclaration.cpp
+ * VAssignmentExpression.h
  *
- *  Created on: Feb 11, 2011
+ *  Created on: Feb 15, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "statements/VVariableDeclaration.h"
+#ifndef VASSIGNMENTEXPRESSION_H_
+#define VASSIGNMENTEXPRESSION_H_
 
-#include "VisualizationBase/headers/items/Static.h"
-#include "VisualizationBase/headers/items/VText.h"
+#include "../oovisualization_api.h"
+#include "../expressions/OperatorStyle.h"
 
-using namespace Visualization;
-using namespace OOModel;
+#include "OOModel/headers/expressions/AssignmentExpression.h"
+
+#include "VisualizationBase/headers/items/ItemWithNode.h"
+#include "VisualizationBase/headers/items/LayoutProvider.h"
+
+namespace Visualization {
+	class Static;
+}
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VVariableDeclaration, "item")
-
-VVariableDeclaration::VVariableDeclaration(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode<LayoutProvider<>, VariableDeclaration>(parent, node, style),
-	name_(new VText(nullptr, node->nameNode(), &style->name()) ),
-	type_(nullptr),
-	assignmentSymbol_(nullptr),
-	initialValue_(nullptr)
+class OOVISUALIZATION_API VAssignmentExpression : public Visualization::ItemWithNode< Visualization::LayoutProvider<>,
+	OOModel::AssignmentExpression>
 {
-	layout()->append(name_);
-}
+	ITEM_COMMON_CUSTOM_STYLENAME(VAssignmentExpression, OperatorSequenceStyle)
 
-VVariableDeclaration::~VVariableDeclaration()
-{
-	// These were automatically deleted by LayoutProvider's destructor
-	name_ = nullptr;
-	type_ = nullptr;
-	assignmentSymbol_ = nullptr;
-	initialValue_ = nullptr;
-}
+	public:
+		VAssignmentExpression(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+		virtual ~VAssignmentExpression();
 
-void VVariableDeclaration::determineChildren()
-{
-	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
-	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
-	//			what's the reason they are being updated.
-	// The style needs to be updated every time since if our own style changes, so will that of the children.
-	layout()->setStyle( &style()->layout());
-	name_->setStyle( &style()->name());
+	protected:
+		void determineChildren();
 
-	layout()->synchronizeFirst(type_, node()->type());
-	layout()->synchronizeMid(name_, node()->nameNode(), &style()->name(), 1);
-	layout()->synchronizeMid(assignmentSymbol_, node()->initialValue() != nullptr, &style()->assignmentSymbol(), 2);
-	layout()->synchronizeLast(initialValue_, node()->initialValue());
-}
+	private:
+		Visualization::Static* assignmentSymbol_;
+		Visualization::Item* left_;
+		Visualization::Item* right_;
+};
 
 }
+
+#endif /* VASSIGNMENTEXPRESSION_H_ */

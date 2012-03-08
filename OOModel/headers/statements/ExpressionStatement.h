@@ -43,6 +43,9 @@ class OOMODEL_API ExpressionStatement : public Statement {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(ExpressionStatement)
 
 	ATTRIBUTE(Expression, expression, setExpression)
+
+	public:
+		ExpressionStatement(Expression* e);
 };
 
 } /* namespace OOModel */

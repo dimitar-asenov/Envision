@@ -78,12 +78,12 @@ Method* addComplicated(Model::Model* model, Class* parent)
 	met->setName("complicated");
 
 	VariableDeclaration* a = new VariableDeclaration();
-	met->items()->append(a);
+	met->items()->append(new ExpressionStatement(a));
 	a->setName("a");
 	a->setType(new PrimitiveType(PrimitiveType::INT));
 
 	VariableDeclaration* b = new VariableDeclaration();
-	met->items()->append(b);
+	met->items()->append(new ExpressionStatement(b));
 	b->setName("b");
 	b->setType(new PrimitiveType(PrimitiveType::UNSIGNED_INT));
 	b->setInitialValue(new IntegerLiteral(1000));
@@ -100,16 +100,16 @@ Method* addComplicated(Model::Model* model, Class* parent)
 	loopCondition->setLeft(new VariableAccess("local:i"));
 	loopCondition->setOp(BinaryOperation::LESS);
 	loopCondition->setRight(new VariableAccess("local:a"));
-	AssignmentStatement* updateStep = new AssignmentStatement();
+	AssignmentExpression* updateStep = new AssignmentExpression();
 	loop->setUpdateStep(updateStep);
 	updateStep->setLeft(new VariableAccess("local:i"));
-	updateStep->setOp(AssignmentStatement::PLUS_ASSIGN);
+	updateStep->setOp(AssignmentExpression::PLUS_ASSIGN);
 	updateStep->setRight(new IntegerLiteral(1));
 
-	AssignmentStatement* loopBodyAssignment = new AssignmentStatement();
+	AssignmentExpression* loopBodyAssignment = new AssignmentExpression();
 	loop->body()->append(loopBodyAssignment);
 	loopBodyAssignment->setLeft(new VariableAccess("local:b"));
-	loopBodyAssignment->setOp(AssignmentStatement::TIMES_ASSIGN);
+	loopBodyAssignment->setOp(AssignmentExpression::TIMES_ASSIGN);
 	loopBodyAssignment->setRight(new IntegerLiteral(2));
 
 	IfStatement* loopIf = new IfStatement();
@@ -157,10 +157,10 @@ Method* addComplicated(Model::Model* model, Class* parent)
 	forEach->setVarName("elem");
 	forEach->setVarType( new PrimitiveType(PrimitiveType::UNSIGNED_INT) );
 	forEach->setCollection(new VariableAccess("global:SomeCollection"));
-	AssignmentStatement* assignEach = new AssignmentStatement();
+	AssignmentExpression* assignEach = new AssignmentExpression();
 	forEach->body()->append(assignEach);
 	assignEach->setLeft(new VariableAccess("local:a"));
-	assignEach->setOp(AssignmentStatement::DIVIDE_ASSIGN);
+	assignEach->setOp(AssignmentExpression::DIVIDE_ASSIGN);
 	assignEach->setRight(new VariableAccess("local:elem"));
 
 
@@ -197,7 +197,7 @@ Method* addDivBySix(Model::Model* model, Class* parent)
 	arg->setType(argType);
 
 	VariableDeclaration* result = new VariableDeclaration();
-	divbysix->items()->append(result);
+	divbysix->items()->append(new ExpressionStatement(result));
 	result->setName("result");
 	result->setType(new PrimitiveType(PrimitiveType::INT));
 	result->setInitialValue(new IntegerLiteral(-1));
@@ -219,14 +219,14 @@ Method* addDivBySix(Model::Model* model, Class* parent)
 	sizeCall->setPrefix(new VariableAccess("local:numbers"));
 
 	//TODO test the visualization without the remaining parts of this method
-	AssignmentStatement* sixLoopUpdate = new AssignmentStatement();
+	AssignmentExpression* sixLoopUpdate = new AssignmentExpression();
 	sixloop->setUpdateStep(sixLoopUpdate);
 	sixLoopUpdate->setLeft(new VariableAccess("local:i"));
-	sixLoopUpdate->setOp(AssignmentStatement::PLUS_ASSIGN);
+	sixLoopUpdate->setOp(AssignmentExpression::PLUS_ASSIGN);
 	sixLoopUpdate->setRight(new IntegerLiteral(1));
 
 	VariableDeclaration* n = new VariableDeclaration();
-	sixloop->body()->append(n);
+	sixloop->body()->append(new ExpressionStatement(n));
 	n->setName("n");
 	n->setType(new PrimitiveType(PrimitiveType::INT));
 	BinaryOperation* item = new BinaryOperation();
@@ -260,10 +260,10 @@ Method* addDivBySix(Model::Model* model, Class* parent)
 	div3->setOp(BinaryOperation::REMAINDER);
 	div3->setRight(new IntegerLiteral(3));
 
-	AssignmentStatement* resultFound = new AssignmentStatement();
+	AssignmentExpression* resultFound = new AssignmentExpression();
 	ifdiv3->thenBranch()->append(resultFound);
 	resultFound->setLeft(new VariableAccess("local:result"));
-	resultFound->setOp(AssignmentStatement::ASSIGN);
+	resultFound->setOp(AssignmentExpression::ASSIGN);
 	resultFound->setRight(new VariableAccess("local:i"));
 	ifdiv3->thenBranch()->append( new BreakStatement());
 

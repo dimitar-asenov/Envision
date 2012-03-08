@@ -25,21 +25,56 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
- * AssignmentStatement.cpp
+ * VVariableDeclaration.cpp
  *
- *  Created on: Feb 1, 2011
+ *  Created on: Feb 11, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "statements/AssignmentStatement.h"
+#include "expressions/VVariableDeclaration.h"
 
-namespace OOModel {
+#include "VisualizationBase/headers/items/Static.h"
+#include "VisualizationBase/headers/items/VText.h"
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(AssignmentStatement, Statement)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(AssignmentStatement, Statement)
+using namespace Visualization;
+using namespace OOModel;
 
-REGISTER_ATTRIBUTE(AssignmentStatement, left, Expression, false, false, true)
-REGISTER_ATTRIBUTE(AssignmentStatement, right, Expression, false, false, true)
-REGISTER_ATTRIBUTE(AssignmentStatement, opr, Integer, false, false, true)
+namespace OOVisualization {
+
+ITEM_COMMON_DEFINITIONS(VVariableDeclaration, "item")
+
+VVariableDeclaration::VVariableDeclaration(Item* parent, NodeType* node, const StyleType* style) :
+	ItemWithNode<LayoutProvider<>, VariableDeclaration>(parent, node, style),
+	name_(new VText(nullptr, node->nameNode(), &style->name()) ),
+	type_(nullptr),
+	assignmentSymbol_(nullptr),
+	initialValue_(nullptr)
+{
+	layout()->append(name_);
+}
+
+VVariableDeclaration::~VVariableDeclaration()
+{
+	// These were automatically deleted by LayoutProvider's destructor
+	name_ = nullptr;
+	type_ = nullptr;
+	assignmentSymbol_ = nullptr;
+	initialValue_ = nullptr;
+}
+
+void VVariableDeclaration::determineChildren()
+{
+	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
+	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
+	//			what's the reason they are being updated.
+	// The style needs to be updated every time since if our own style changes, so will that of the children.
+	layout()->setStyle( &style()->layout());
+	name_->setStyle( &style()->name());
+
+	layout()->synchronizeFirst(type_, node()->type());
+	layout()->synchronizeMid(name_, node()->nameNode(), &style()->name(), 1);
+	layout()->synchronizeMid(assignmentSymbol_, node()->initialValue() != nullptr, &style()->assignmentSymbol(), 2);
+	layout()->synchronizeLast(initialValue_, node()->initialValue());
+}
 
 }

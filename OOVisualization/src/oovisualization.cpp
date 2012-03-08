@@ -107,8 +107,8 @@ bool OOVisualization::initialize(Envision::EnvisionManager&)
 			createVisualization<VNullLiteral, NullLiteral>);
 	Scene::defaultRenderer()->registerVisualization(VariableDeclaration::typeIdStatic(),
 			createVisualization<VVariableDeclaration, VariableDeclaration>);
-	Scene::defaultRenderer()->registerVisualization(AssignmentStatement::typeIdStatic(),
-			createVisualization<VAssignmentStatement, AssignmentStatement>);
+	Scene::defaultRenderer()->registerVisualization(AssignmentExpression::typeIdStatic(),
+			createVisualization<VAssignmentExpression, AssignmentExpression>);
 	Scene::defaultRenderer()->registerVisualization(Block::typeIdStatic(),
 			createVisualization<VBlock, Block>);
 	Scene::defaultRenderer()->registerVisualization(ReturnStatement::typeIdStatic(),

@@ -25,48 +25,37 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
- * VVariableDeclaration.h
+ * VariableDeclaration.h
  *
- *  Created on: Feb 11, 2011
+ *  Created on: Jan 31, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef VVARIABLEDECLARATION_H_
-#define VVARIABLEDECLARATION_H_
+#ifndef VARIABLEDECLARATION_H_
+#define VARIABLEDECLARATION_H_
 
-#include "../oovisualization_api.h"
-#include "VVariableDeclarationStyle.h"
+#include "Expression.h"
 
-#include "OOModel/headers/statements/VariableDeclaration.h"
+#include "../attributeMacros.h"
+#include "../types/Type.h"
 
-#include "VisualizationBase/headers/items/ItemWithNode.h"
-#include "VisualizationBase/headers/items/LayoutProvider.h"
+#include "ModelBase/headers/nodes/Text.h"
 
-namespace Visualization {
-	class Static;
-	class VText;
-}
+namespace OOModel {
 
-namespace OOVisualization {
-
-class OOVISUALIZATION_API VVariableDeclaration : public Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::VariableDeclaration>
+class OOMODEL_API VariableDeclaration: public Expression
 {
-	ITEM_COMMON(VVariableDeclaration)
+	EXTENDABLENODE_DECLARE_STANDARD_METHODS(VariableDeclaration)
+
+	ATTRIBUTE_OOP_NAME
+	ATTRIBUTE(Type, type, setType)
+	ATTRIBUTE(Expression, initialValue, setInitialValue);
 
 	public:
-		VVariableDeclaration(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		virtual ~VVariableDeclaration();
-
-	protected:
-		void determineChildren();
-
-	private:
-		Visualization::VText* name_;
-		Visualization::Item* type_;
-		Visualization::Static* assignmentSymbol_;
-		Visualization::Item* initialValue_;
+		virtual bool definesSymbol() const;
+		virtual const QString& symbolName() const;
 };
 
 }
 
-#endif /* VVARIABLEDECLARATION_H_ */
+#endif /* VARIABLEDECLARATION_H_ */

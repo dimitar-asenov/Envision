@@ -40,4 +40,10 @@ EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(ExpressionStatement, Statement)
 
 REGISTER_ATTRIBUTE(ExpressionStatement, expression, Expression, false, false, true)
 
+ExpressionStatement::ExpressionStatement(Expression* e)
+: Statement(nullptr, ExpressionStatement::getMetaData())
+{
+	setExpression(e);
+}
+
 } /* namespace OOModel */

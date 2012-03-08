@@ -25,23 +25,53 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
- * VVariableDeclarationStyle.cpp
+ * VAssignmentExpression.cpp
  *
- *  Created on: Feb 11, 2011
+ *  Created on: Feb 15, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "statements/VVariableDeclarationStyle.h"
+#include "expressions/VAssignmentExpression.h"
+
+#include "VisualizationBase/headers/layouts/SequentialLayout.h"
+#include "VisualizationBase/headers/items/Static.h"
+
+using namespace Visualization;
+using namespace OOModel;
 
 namespace OOVisualization {
 
-void VVariableDeclarationStyle::load(Visualization::StyleLoader& sl)
-{
-	ItemStyle::load(sl);
+ITEM_COMMON_DEFINITIONS(VAssignmentExpression, "item")
 
-	sl.load("layout", layout_);
-	sl.load("name", name_);
-	sl.load("assignmentSymbol", assignmentSymbol_);
+		VAssignmentExpression::VAssignmentExpression(Item* parent, NodeType* node, const StyleType* style) :
+	ItemWithNode<LayoutProvider<>, AssignmentExpression>(parent, node, style),
+	assignmentSymbol_( new Static(nullptr, &style->op( node->op() ).inSymbol()) ),
+	left_(nullptr),
+	right_(nullptr)
+{
+	layout()->append(assignmentSymbol_);
+}
+
+VAssignmentExpression::~VAssignmentExpression()
+{
+	// These were automatically deleted by LayoutProvider's destructor
+	assignmentSymbol_ = nullptr;
+	left_ = nullptr;
+	right_ = nullptr;
+}
+
+void VAssignmentExpression::determineChildren()
+{
+	layout()->synchronizeFirst(left_, node()->left());
+	layout()->synchronizeMid(assignmentSymbol_, true, &style()->op( node()->op() ).inSymbol(), 1);
+	layout()->synchronizeLast(right_, node()->right());
+
+	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
+	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
+	//			what's the reason they are being updated.
+	// The style needs to be updated every time since if our own style changes, so will that of the children.
+	layout()->setStyle( &style()->op(node()->op()).layout());
+	assignmentSymbol_->setStyle( &style()->op(node()->op()).inSymbol());
 }
 
 }

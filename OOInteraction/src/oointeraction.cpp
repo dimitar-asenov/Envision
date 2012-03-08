@@ -118,9 +118,9 @@ bool OOInteraction::initialize(Envision::EnvisionManager&)
 	OOVisualization::VCharacterLiteral::setInteractionHandler(HExpression::instance());
 	OOVisualization::VBooleanLiteral::setInteractionHandler(HExpression::instance());
 	OOVisualization::VNullLiteral::setInteractionHandler(HExpression::instance());
+	OOVisualization::VVariableDeclaration::setInteractionHandler(HExpression::instance());
+	OOVisualization::VAssignmentExpression::setInteractionHandler(HExpression::instance());
 	OOVisualization::VExpressionStatement::setInteractionHandler(HStatement::instance());
-	OOVisualization::VVariableDeclaration::setInteractionHandler(HStatement::instance());
-	OOVisualization::VAssignmentStatement::setInteractionHandler(HStatement::instance());
 	OOVisualization::VIfStatement::setInteractionHandler(HStatement::instance());
 	OOVisualization::VLoopStatement::setInteractionHandler(HStatement::instance());
 	OOVisualization::VForEachStatement::setInteractionHandler(HStatement::instance());

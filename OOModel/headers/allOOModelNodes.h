@@ -51,8 +51,6 @@
 #include "statements/ReturnStatement.h"
 #include "statements/SwitchCase.h"
 #include "statements/SwitchStatement.h"
-#include "statements/VariableDeclaration.h"
-#include "statements/AssignmentStatement.h"
 #include "statements/ExpressionStatement.h"
 
 #include "expressions/Expression.h"
@@ -75,6 +73,8 @@
 #include "expressions/ErrorExpression.h"
 #include "expressions/UnfinishedOperator.h"
 #include "expressions/CommaExpression.h"
+#include "expressions/AssignmentExpression.h"
+#include "expressions/VariableDeclaration.h"
 
 #include "types/Type.h"
 #include "types/PrimitiveType.h"

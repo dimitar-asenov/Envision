@@ -59,7 +59,6 @@ class ReturnStatement;
 class SwitchCase;
 class SwitchStatement;
 class VariableDeclaration;
-class AssignmentStatement;
 class ExpressionStatement;
 
 class Expression;
@@ -82,6 +81,7 @@ class EmptyExpression;
 class ErrorExpression;
 class UnfinishedOperator;
 class CommaExpression;
+class AssignmentExpression;
 
 class Type;
 class PrimitiveType;
@@ -111,7 +111,6 @@ template class Q_DECL_IMPORT Model::TypedList<OOModel::ReturnStatement>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::SwitchCase>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::SwitchStatement>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::VariableDeclaration>;
-template class Q_DECL_IMPORT Model::TypedList<OOModel::AssignmentStatement>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::ExpressionStatement>;
 
 template class Q_DECL_IMPORT Model::TypedList<OOModel::Expression>;
@@ -134,6 +133,7 @@ template class Q_DECL_IMPORT Model::TypedList<OOModel::EmptyExpression>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::ErrorExpression>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::UnfinishedOperator>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::CommaExpression>;
+template class Q_DECL_IMPORT Model::TypedList<OOModel::AssignmentExpression>;
 
 template class Q_DECL_IMPORT Model::TypedList<OOModel::Type>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::PrimitiveType>;

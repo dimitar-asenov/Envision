@@ -25,46 +25,23 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
- * VAssignmentStatement.h
+ * VVariableDeclarationStyle.cpp
  *
- *  Created on: Feb 15, 2011
+ *  Created on: Feb 11, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef VASSIGNMENTSTATEMENT_H_
-#define VASSIGNMENTSTATEMENT_H_
-
-#include "../oovisualization_api.h"
-#include "../expressions/OperatorStyle.h"
-
-#include "OOModel/headers/statements/AssignmentStatement.h"
-
-#include "VisualizationBase/headers/items/ItemWithNode.h"
-#include "VisualizationBase/headers/items/LayoutProvider.h"
-
-namespace Visualization {
-	class Static;
-}
+#include "expressions/VVariableDeclarationStyle.h"
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VAssignmentStatement : public Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::AssignmentStatement>
+void VVariableDeclarationStyle::load(Visualization::StyleLoader& sl)
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VAssignmentStatement, OperatorSequenceStyle)
+	ItemStyle::load(sl);
 
-	public:
-		VAssignmentStatement(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		virtual ~VAssignmentStatement();
-
-	protected:
-		void determineChildren();
-
-	private:
-		Visualization::Static* assignmentSymbol_;
-		Visualization::Item* left_;
-		Visualization::Item* right_;
-};
-
+	sl.load("layout", layout_);
+	sl.load("name", name_);
+	sl.load("assignmentSymbol", assignmentSymbol_);
 }
 
-#endif /* VASSIGNMENTSTATEMENT_H_ */
+}

@@ -25,38 +25,31 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
- * VariableDeclaration.h
+ * VariableDeclaration.cpp
  *
  *  Created on: Jan 31, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef VARIABLEDECLARATION_H_
-#define VARIABLEDECLARATION_H_
-
-#include "Statement.h"
-
-#include "../attributeMacros.h"
-#include "../types/Type.h"
-#include "../expressions/Expression.h"
-
-#include "ModelBase/headers/nodes/Text.h"
+#include "expressions/VariableDeclaration.h"
 
 namespace OOModel {
 
-class OOMODEL_API VariableDeclaration: public Statement
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(VariableDeclaration, Expression)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(VariableDeclaration, Expression)
+
+REGISTER_ATTRIBUTE(VariableDeclaration, name, Text, false, false, true)
+REGISTER_ATTRIBUTE(VariableDeclaration, type, Type, false, false, true)
+REGISTER_ATTRIBUTE(VariableDeclaration, initialValue, Expression, false, true, true)
+
+bool VariableDeclaration::definesSymbol() const
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(VariableDeclaration)
-
-	ATTRIBUTE_OOP_NAME
-	ATTRIBUTE(Type, type, setType)
-	ATTRIBUTE(Expression, initialValue, setInitialValue);
-
-	public:
-		virtual bool definesSymbol() const;
-		virtual const QString& symbolName() const;
-};
-
+	return true;
 }
 
-#endif /* VARIABLEDECLARATION_H_ */
+const QString& VariableDeclaration::symbolName() const
+{
+	return name();
+}
+
+}

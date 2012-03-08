@@ -25,53 +25,41 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
- * VAssignmentStatement.cpp
+ * AssignmentExpression.h
  *
- *  Created on: Feb 15, 2011
+ *  Created on: Feb 1, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "statements/VAssignmentStatement.h"
+#ifndef ASSIGNMENTEXPRESSION_H_
+#define ASSIGNMENTEXPRESSION_H_
 
-#include "VisualizationBase/headers/layouts/SequentialLayout.h"
-#include "VisualizationBase/headers/items/Static.h"
+#include "Expression.h"
 
-using namespace Visualization;
-using namespace OOModel;
+#include "ModelBase/headers/nodes/Integer.h"
 
-namespace OOVisualization {
+namespace OOModel {
 
-ITEM_COMMON_DEFINITIONS(VAssignmentStatement, "item")
-
-VAssignmentStatement::VAssignmentStatement(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode<LayoutProvider<>, AssignmentStatement>(parent, node, style),
-	assignmentSymbol_( new Static(nullptr, &style->op( node->op() ).inSymbol()) ),
-	left_(nullptr),
-	right_(nullptr)
+class OOMODEL_API AssignmentExpression: public Expression
 {
-	layout()->append(assignmentSymbol_);
-}
+	EXTENDABLENODE_DECLARE_STANDARD_METHODS(AssignmentExpression)
 
-VAssignmentStatement::~VAssignmentStatement()
-{
-	// These were automatically deleted by LayoutProvider's destructor
-	assignmentSymbol_ = nullptr;
-	left_ = nullptr;
-	right_ = nullptr;
-}
+	ATTRIBUTE(Expression, left, setLeft)
+	ATTRIBUTE(Expression, right, setRight)
+	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, opr, setOpr, int);
 
-void VAssignmentStatement::determineChildren()
-{
-	layout()->synchronizeFirst(left_, node()->left());
-	layout()->synchronizeMid(assignmentSymbol_, true, &style()->op( node()->op() ).inSymbol(), 1);
-	layout()->synchronizeLast(right_, node()->right());
+	public:
+		enum AssignmentTypes { ASSIGN, PLUS_ASSIGN, MINUS_ASSIGN, TIMES_ASSIGN, DIVIDE_ASSIGN, BIT_AND_ASSIGN,
+			BIT_OR_ASSIGN, BIT_XOR_ASSIGN, REMAINDER_ASSIGN, LEFT_SHIFT_ASSIGN, RIGHT_SHIFT_SIGNED_ASSIGN,
+			RIGHT_SHIFT_UNSIGNED_ASSIGN};
 
-	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
-	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
-	//			what's the reason they are being updated.
-	// The style needs to be updated every time since if our own style changes, so will that of the children.
-	layout()->setStyle( &style()->op(node()->op()).layout());
-	assignmentSymbol_->setStyle( &style()->op(node()->op()).inSymbol());
-}
+		AssignmentTypes op() const;
+		void setOp(const AssignmentTypes& oper);
+};
+
+inline AssignmentExpression::AssignmentTypes AssignmentExpression::op() const { return static_cast<AssignmentTypes> (opr()); }
+inline void AssignmentExpression::setOp(const AssignmentTypes& oper) { setOpr(oper); }
 
 }
+
+#endif /* ASSIGNMENTEXPRESSION_H_ */

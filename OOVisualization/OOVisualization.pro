@@ -33,7 +33,10 @@ INSTALLS += target \
     pluginmeta \
     styles
 PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/statements/VExpressionStatement.h \
+HEADERS += headers/expressions/VVariableDeclarationStyle.h \
+    headers/expressions/VVariableDeclaration.h \
+    headers/expressions/VAssignmentExpression.h \
+    headers/statements/VExpressionStatement.h \
     headers/Helpers.h \
     headers/expressions/VCommaExpression.h \
     headers/expressions/VEmptyExpression.h \
@@ -77,7 +80,6 @@ HEADERS += headers/statements/VExpressionStatement.h \
     headers/statements/VReturnStatement.h \
     headers/statements/VBlockStyle.h \
     headers/statements/VBlock.h \
-    headers/statements/VAssignmentStatement.h \
     headers/expressions/VBinaryOperation.h \
     headers/expressions/VUnaryOperation.h \
     headers/expressions/OperatorStyle.h \
@@ -89,8 +91,6 @@ HEADERS += headers/statements/VExpressionStatement.h \
     headers/expressions/VMethodCallExpressionStyle.h \
     headers/expressions/VMethodCallExpression.h \
     headers/literals/VNullLiteral.h \
-    headers/statements/VVariableDeclarationStyle.h \
-    headers/statements/VVariableDeclaration.h \
     headers/literals/VBooleanLiteral.h \
     headers/literals/VCharacterLiteral.h \
     headers/literals/VFloatLiteral.h \
@@ -106,7 +106,10 @@ HEADERS += headers/statements/VExpressionStatement.h \
     headers/OOVisualizationException.h \
     headers/oovisualization_api.h \
     src/oovisualization.h
-SOURCES += src/expressions/VMethodCallExpressionStyle.cpp \
+SOURCES += src/expressions/VVariableDeclarationStyle.cpp \
+    src/expressions/VVariableDeclaration.cpp \
+    src/expressions/VAssignmentExpression.cpp \
+    src/expressions/VMethodCallExpressionStyle.cpp \
     src/statements/VExpressionStatement.cpp \
     src/Helpers.cpp \
     src/expressions/VCommaExpression.cpp \
@@ -150,7 +153,6 @@ SOURCES += src/expressions/VMethodCallExpressionStyle.cpp \
     src/statements/VReturnStatementStyle.cpp \
     src/statements/VBlock.cpp \
     src/statements/VBlockStyle.cpp \
-    src/statements/VAssignmentStatement.cpp \
     src/expressions/VBinaryOperation.cpp \
     src/expressions/VUnaryOperation.cpp \
     src/expressions/OperatorStyle.cpp \
@@ -161,8 +163,6 @@ SOURCES += src/expressions/VMethodCallExpressionStyle.cpp \
     src/expressions/VThisExpression.cpp \
     src/expressions/VMethodCallExpression.cpp \
     src/literals/VNullLiteral.cpp \
-    src/statements/VVariableDeclaration.cpp \
-    src/statements/VVariableDeclarationStyle.cpp \
     src/literals/VBooleanLiteral.cpp \
     src/literals/VCharacterLiteral.cpp \
     src/literals/VFloatLiteral.cpp \

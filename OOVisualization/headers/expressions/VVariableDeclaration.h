@@ -25,31 +25,48 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
- * VariableDeclaration.cpp
+ * VVariableDeclaration.h
  *
- *  Created on: Jan 31, 2011
+ *  Created on: Feb 11, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "statements/VariableDeclaration.h"
+#ifndef VVARIABLEDECLARATION_H_
+#define VVARIABLEDECLARATION_H_
 
-namespace OOModel {
+#include "../oovisualization_api.h"
+#include "VVariableDeclarationStyle.h"
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(VariableDeclaration, Statement)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(VariableDeclaration, Statement)
+#include "OOModel/headers/expressions/VariableDeclaration.h"
 
-REGISTER_ATTRIBUTE(VariableDeclaration, name, Text, false, false, true)
-REGISTER_ATTRIBUTE(VariableDeclaration, type, Type, false, false, true)
-REGISTER_ATTRIBUTE(VariableDeclaration, initialValue, Expression, false, true, true)
+#include "VisualizationBase/headers/items/ItemWithNode.h"
+#include "VisualizationBase/headers/items/LayoutProvider.h"
 
-bool VariableDeclaration::definesSymbol() const
+namespace Visualization {
+	class Static;
+	class VText;
+}
+
+namespace OOVisualization {
+
+class OOVISUALIZATION_API VVariableDeclaration : public Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::VariableDeclaration>
 {
-	return true;
+	ITEM_COMMON(VVariableDeclaration)
+
+	public:
+		VVariableDeclaration(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+		virtual ~VVariableDeclaration();
+
+	protected:
+		void determineChildren();
+
+	private:
+		Visualization::VText* name_;
+		Visualization::Item* type_;
+		Visualization::Static* assignmentSymbol_;
+		Visualization::Item* initialValue_;
+};
+
 }
 
-const QString& VariableDeclaration::symbolName() const
-{
-	return name();
-}
-
-}
+#endif /* VVARIABLEDECLARATION_H_ */

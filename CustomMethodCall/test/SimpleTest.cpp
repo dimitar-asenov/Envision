@@ -153,7 +153,7 @@ Class* addCollection(Model::Model* model, Project* parent)
 	ifs->thenBranch()->append(insertCallSt);
 
 	VariableDeclaration* indexVar = new VariableDeclaration();
-	test->items()->append(indexVar);
+	test->items()->append(new ExpressionStatement(indexVar));
 	indexVar->setName("index");
 	indexVar->setType(new PrimitiveType(PrimitiveType::INT));
 	MethodCallExpression* findCall = new MethodCallExpression();
@@ -162,7 +162,7 @@ Class* addCollection(Model::Model* model, Project* parent)
 	findCall->arguments()->append( new IntegerLiteral(42));
 
 	VariableDeclaration* resultVar = new VariableDeclaration();
-	test->items()->append(resultVar);
+	test->items()->append(new ExpressionStatement(resultVar));
 	resultVar->setName("result");
 	resultVar->setType(new PrimitiveType(PrimitiveType::INT));
 	MethodCallExpression* sumCall = new MethodCallExpression();
