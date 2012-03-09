@@ -42,6 +42,7 @@
 #include "expression_editor/operators/MemberOperatorDescriptor.h"
 #include "expression_editor/operators/CallDescriptor.h"
 #include "expression_editor/operators/ArrayTypeDescriptor.h"
+#include "expression_editor/operators/AssignmentDescriptor.h"
 
 namespace OOInteraction {
 
@@ -112,6 +113,32 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 			"conditional or", "expr || expr", 2, 12, Interaction::OperatorDescriptor::LeftAssociative));
 	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::ARRAY_INDEX,
 			"array index", "expr [ expr ]", 2, 1, Interaction::OperatorDescriptor::LeftAssociative));
+
+	// Assignment
+	instance()->addDescriptor(new AssignmentDescriptor(OOModel::AssignmentExpression::ASSIGN,
+				"assign", "expr = expr", 2, 14, Interaction::OperatorDescriptor::RightAssociative));
+	instance()->addDescriptor(new AssignmentDescriptor(OOModel::AssignmentExpression::PLUS_ASSIGN,
+				"assign", "expr += expr", 2, 14, Interaction::OperatorDescriptor::RightAssociative));
+	instance()->addDescriptor(new AssignmentDescriptor(OOModel::AssignmentExpression::MINUS_ASSIGN,
+				"assign", "expr -= expr", 2, 14, Interaction::OperatorDescriptor::RightAssociative));
+	instance()->addDescriptor(new AssignmentDescriptor(OOModel::AssignmentExpression::TIMES_ASSIGN,
+				"assign", "expr *= expr", 2, 14, Interaction::OperatorDescriptor::RightAssociative));
+	instance()->addDescriptor(new AssignmentDescriptor(OOModel::AssignmentExpression::DIVIDE_ASSIGN,
+				"assign", "expr /= expr", 2, 14, Interaction::OperatorDescriptor::RightAssociative));
+	instance()->addDescriptor(new AssignmentDescriptor(OOModel::AssignmentExpression::BIT_AND_ASSIGN,
+				"assign", "expr &= expr", 2, 14, Interaction::OperatorDescriptor::RightAssociative));
+	instance()->addDescriptor(new AssignmentDescriptor(OOModel::AssignmentExpression::BIT_OR_ASSIGN,
+				"assign", "expr |= expr", 2, 14, Interaction::OperatorDescriptor::RightAssociative));
+	instance()->addDescriptor(new AssignmentDescriptor(OOModel::AssignmentExpression::BIT_XOR_ASSIGN,
+				"assign", "expr ^= expr", 2, 14, Interaction::OperatorDescriptor::RightAssociative));
+	instance()->addDescriptor(new AssignmentDescriptor(OOModel::AssignmentExpression::REMAINDER_ASSIGN,
+				"assign", "expr %= expr", 2, 14, Interaction::OperatorDescriptor::RightAssociative));
+	instance()->addDescriptor(new AssignmentDescriptor(OOModel::AssignmentExpression::LEFT_SHIFT_ASSIGN,
+				"assign", "expr <<= expr", 2, 14, Interaction::OperatorDescriptor::RightAssociative));
+	instance()->addDescriptor(new AssignmentDescriptor(OOModel::AssignmentExpression::RIGHT_SHIFT_SIGNED_ASSIGN,
+				"assign", "expr >>= expr", 2, 14, Interaction::OperatorDescriptor::RightAssociative));
+	instance()->addDescriptor(new AssignmentDescriptor(OOModel::AssignmentExpression::RIGHT_SHIFT_UNSIGNED_ASSIGN,
+				"assign", "expr >>>= expr", 2, 14, Interaction::OperatorDescriptor::RightAssociative));
 
 	// Others
 	instance()->addDescriptor(new CastDescriptor( "cast", "( expr ) expr", 2, 2,

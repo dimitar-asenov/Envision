@@ -35,7 +35,9 @@ INSTALLS += target \
     pluginmeta \
     styles
 PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/handlers/HStatement.h \
+HEADERS += headers/string_components/AssignmentStringComponents.h \
+    headers/expression_editor/operators/AssignmentDescriptor.h \
+    headers/handlers/HStatement.h \
     headers/handlers/HFormalArgument.h \
     headers/string_components/ArrayTypeStringComponents.h \
     headers/expression_editor/operators/ArrayTypeDescriptor.h \
@@ -87,7 +89,9 @@ HEADERS += headers/handlers/HStatement.h \
     headers/OOInteractionException.h \
     headers/oointeraction_api.h \
     src/oointeraction.h
-SOURCES += src/handlers/HStatement.cpp \
+SOURCES += src/string_components/AssignmentStringComponents.cpp \
+    src/expression_editor/operators/AssignmentDescriptor.cpp \
+    src/handlers/HStatement.cpp \
     src/handlers/HFormalArgument.cpp \
     src/string_components/ArrayTypeStringComponents.cpp \
     src/expression_editor/operators/ArrayTypeDescriptor.cpp \

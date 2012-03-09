@@ -173,6 +173,9 @@ Method* addDivBySix(Model::Model* model, Class* parent)
 	exprtest12->setType(new PrimitiveType(PrimitiveType::VOID));
 	exprtest12->setInitialValue( OOExpressionBuilder::getOOExpression("int[]") );
 
+	auto exprtest13 = dynamic_cast<AssignmentExpression*>( OOExpressionBuilder::getOOExpression("a = b %= c >>>= d+C"));
+	divbysix->items()->append(new ExpressionStatement(exprtest13));
+
 	VariableDeclaration* result = new VariableDeclaration();
 	divbysix->items()->append(result);
 	result->setName("result");
