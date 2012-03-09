@@ -39,6 +39,7 @@
 
 #include "OOModel/headers/allOOModelNodes.h"
 
+#include "InteractionBase/headers/handlers/SetCursorEvent.h"
 #include "ModelBase/headers/adapter/AdapterManager.h"
 
 namespace OOInteraction {
@@ -68,6 +69,10 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		GenericHandler::keyPressEvent(target, event);
 		return;
 	}
+
+	// We need to trigger an update of all the visualizations leading up to the target, even though the target
+	// visualization will probably be deleted and replaced with a new one.
+	target->setUpdateNeeded();
 
 	// Find the top most parent that is adaptable to StringProvider
 	Visualization::Item* topMostItem = target;
@@ -113,19 +118,66 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		} break;
 	}
 
-	auto parent = static_cast<Visualization::Item*> (topMostItem->parentItem());
+	OOModel::ExpressionStatement* replaceStatement = nullptr;
+	if (newText == "for " || newText == "foreach "|| newText == "if ")
+	{
+		// Is this expression part of an expression statement
+		auto e = dynamic_cast<OOModel::Expression*>(target->node());
+		auto ep = e->parent();
+		while (ep && !dynamic_cast<OOModel::Statement*>(ep)) ep = ep->parent();
 
-	Model::Node* containerNode = topMostItem->node()->parent();
-	containerNode->model()->beginModification(containerNode, "edit expression");
-	OOModel::Expression* newExpression = OOExpressionBuilder::getOOExpression( newText );
-	containerNode->replaceChild(topMostItem->node(), newExpression, false);
-	containerNode->model()->endModification();
+		replaceStatement = dynamic_cast<OOModel::ExpressionStatement*>(ep);
+	}
 
-	// We need to trigger an update of all the visualizations leading up to the target, even though the target
-	// visualization will probably be deleted and replaced with a new one.
-	target->setUpdateNeeded();
+	if (replaceStatement)
+	{
+		OOModel::Statement* st = nullptr;
+		Model::Node* toFocus = nullptr;
+		if(newText == "for ")
+		{
+			auto loop =  new OOModel::LoopStatement();
+			loop->setInitStep(new OOModel::EmptyExpression());
 
-	QApplication::postEvent(target->scene(), new SetExpressionCursorEvent(parent, newExpression, newIndex));
+			toFocus = loop->initStep();
+			st = loop;
+		}
+		else if (newText == "foreach ")
+		{
+			auto loop =  new OOModel::ForEachStatement();
+			loop->setCollection(new OOModel::EmptyExpression());
+
+			toFocus = loop->varNameNode();
+			st = loop;
+		}
+		else
+		{
+			auto ifs =  new OOModel::IfStatement();
+			ifs->setCondition(new OOModel::EmptyExpression());
+
+			toFocus = ifs->condition();
+			st = ifs;
+		}
+
+		Model::Node* containerNode = replaceStatement->parent();
+		containerNode->model()->beginModification(containerNode, "replace expression statement");
+		containerNode->replaceChild(replaceStatement, st, false);
+		containerNode->model()->endModification();
+
+		auto parent = static_cast<Visualization::Item*> (topMostItem->parentItem());
+		QApplication::postEvent(target->scene(),
+				new Interaction::SetCursorEvent(parent, toFocus, Interaction::SetCursorEvent::CursorOnLeft));
+	}
+	else
+	{
+		Model::Node* containerNode = topMostItem->node()->parent();
+		containerNode->model()->beginModification(containerNode, "edit expression");
+		OOModel::Expression* newExpression = OOExpressionBuilder::getOOExpression( newText );
+		containerNode->replaceChild(topMostItem->node(), newExpression, false);
+		containerNode->model()->endModification();
+
+		auto parent = static_cast<Visualization::Item*> (topMostItem->parentItem());
+		QApplication::postEvent(target->scene(), new SetExpressionCursorEvent(parent, newExpression, newIndex));
+	}
 
 	GenericHandler::keyPressEvent(target, event);
 	event->accept();
