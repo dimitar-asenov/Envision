@@ -389,8 +389,11 @@ class MODELBASE_API Node
 		 *
 		 * The default implementation always returns false and is suitable for nodes without children. Reimplement this
 		 * method if you are implementing a composite node that has replaceable child nodes.
+		 *
+		 * If \a releaseOldChild is true, the old child will be released from this node and can be used in other nodes.
+		 * Otherwise the old child will be managed by the current node's Undo Queue and can not be used for other nodes.
 		 */
-		virtual bool replaceChild(Node* child, Node* replacement);
+		virtual bool replaceChild(Node* child, Node* replacement, bool releaseOldChild = true);
 
 	protected:
 

@@ -118,7 +118,7 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	Model::Node* containerNode = topMostItem->node()->parent();
 	containerNode->model()->beginModification(containerNode, "edit expression");
 	OOModel::Expression* newExpression = OOExpressionBuilder::getOOExpression( newText );
-	containerNode->replaceChild(topMostItem->node(), newExpression);
+	containerNode->replaceChild(topMostItem->node(), newExpression, false);
 	containerNode->model()->endModification();
 
 	// We need to trigger an update of all the visualizations leading up to the target, even though the target

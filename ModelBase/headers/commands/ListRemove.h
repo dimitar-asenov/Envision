@@ -44,9 +44,10 @@ class MODELBASE_API ListRemove: public UndoCommand
 		QVector<Node*>& nodes;
 		Node* removedNode;
 		int removePosition;
+		bool release;
 
 	public:
-		ListRemove(Node *target, QVector<Node*>& nodes, int position);
+		ListRemove(Node *target, QVector<Node*>& nodes, int position, bool release);
 		virtual ~ListRemove();
 
 		virtual void redo();

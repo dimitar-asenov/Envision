@@ -86,7 +86,7 @@ void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			if (event->key() == Qt::Key_Backspace) --index;
 
 			list->node()->model()->beginModification(list->node(), "remove element");
-			list->node()->remove(index);
+			list->node()->remove(index, false);
 			list->node()->model()->endModification();
 
 			if (event->key() == Qt::Key_Backspace) --index;

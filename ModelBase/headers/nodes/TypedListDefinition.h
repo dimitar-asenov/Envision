@@ -52,7 +52,7 @@ class Q_DECL_EXPORT TypedList: public List
 		T* last();
 		T* at(int i);
 
-		virtual bool replaceChild(Node* child, Node* replacement);
+		virtual bool replaceChild(Node* child, Node* replacement, bool releaseOldChild = true);
 };
 
 template<class T>
@@ -113,10 +113,10 @@ template<class T> T* TypedList<T>::at(int i)
 	return List::at<T>(i);
 }
 
-template<class T> bool TypedList<T>::replaceChild(Node* child, Node* replacement)
+template<class T> bool TypedList<T>::replaceChild(Node* child, Node* replacement, bool releaseOldChild)
 {
 	if (!dynamic_cast<T*>(replacement)) return false;
-	else return List::replaceChild(child, replacement);
+	else return List::replaceChild(child, replacement, releaseOldChild);
 }
 
 }

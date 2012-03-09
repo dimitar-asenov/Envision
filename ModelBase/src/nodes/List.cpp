@@ -147,36 +147,36 @@ void List::insert(int position, Node* node)
 	execute(new ListInsert(this, nodes_, node, position));
 }
 
-void List::remove(int index)
+void List::remove(int index, bool release )
 {
 	if (!fullyLoaded) loadFully(* (model()->store()));
 
-	execute(new ListRemove(this, nodes_, index));
+	execute(new ListRemove(this, nodes_, index, release));
 }
 
-void List::remove(Node* instance)
+void List::remove(Node* instance, bool release )
 {
 	if (!fullyLoaded) loadFully(* (model()->store()));
 
 	int index = nodes_.indexOf(instance);
-	if ( index >= 0 ) remove(index);
+	if ( index >= 0 ) remove(index, release);
 }
 
 void List::clear()
 {
 	if (!fullyLoaded) loadFully(* (model()->store()));
 
-	while (!nodes_.isEmpty()) remove(0);
+	while (!nodes_.isEmpty()) remove(0, false);
 }
 
-bool List::replaceChild(Node* child, Node* replacement)
+bool List::replaceChild(Node* child, Node* replacement, bool releaseOldChild)
 {
 	if (!child || !replacement) return false;
 
 	int index = indexOf(child);
 	if (index < 0) return false;
 
-	remove(index);
+	remove(index, releaseOldChild);
 	insert(index, replacement);
 	return true;
 }

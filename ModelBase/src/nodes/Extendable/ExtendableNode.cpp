@@ -170,7 +170,7 @@ ExtendableIndex ExtendableNode::indexOf(Node* node) const
 }
 
 
-bool ExtendableNode::replaceChild(Node* child, Node* replacement)
+bool ExtendableNode::replaceChild(Node* child, Node* replacement, bool releaseOldChild)
 {
 	if (!child || !replacement) return false;
 
@@ -178,7 +178,7 @@ bool ExtendableNode::replaceChild(Node* child, Node* replacement)
 	if (!index.isValid()) return false;
 
 	if ( !index.isValid() ) throw ModelException("Trying to set an attribute with an invalid Index");
-	execute(new ExtendedNodeChild(this, replacement, true, index, &subnodes));
+	execute(new ExtendedNodeChild(this, replacement, releaseOldChild, index, &subnodes));
 	return true;
 }
 

@@ -126,10 +126,10 @@ TEST(ModelBase, ListRemoval)
 	model.endModification();
 
 	model.beginModification(root, "remove elements from list");
-	root->remove(3);
-	root->remove(a);
-	root->remove(4);
-	root->remove(b);
+	root->remove(3, false);
+	root->remove(a, false);
+	root->remove(4, false);
+	root->remove(b, false);
 	model.endModification();
 
 	CHECK_CONDITION(d != nullptr);
@@ -193,8 +193,8 @@ TEST(ModelBase, ListUndo)
 	CHECK_CONDITION(root->at<Node>(6) == g);
 
 	model.beginModification(root, "add elements to list");
-	root->remove(a);
-	root->remove(e);
+	root->remove(a, false);
+	root->remove(e, false);
 	model.endModification();
 
 	CHECK_INT_EQUAL(5, root->size());

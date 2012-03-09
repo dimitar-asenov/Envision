@@ -72,8 +72,21 @@ class MODELBASE_API List: public Node
 		void insert(int position, Node* node);
 		void paste(ClipboardStore& clipboard, int position);
 
-		void remove(int index);
-		void remove(Node* instance);
+		/**
+		 * \brief Removes the child node at position \a index.
+		 *
+		 * If \a release is true then the removed node will no longer be owned by this list and can be used elsewhere.
+		 * Otherwise the node will still be managed by this list's Undo queue.
+		 */
+		void remove(int index, bool release);
+
+		/**
+		 * \brief Removes the child \a instance.
+		 *
+		 * If \a release is true then the removed node will no longer be owned by this list and can be used elsewhere.
+		 * Otherwise the node will still be managed by this list's Undo queue.
+		 */
+		void remove(Node* instance, bool release);
 		void clear();
 
 		const QVector<Node*>& nodes();
@@ -81,7 +94,7 @@ class MODELBASE_API List: public Node
 		Node* findFirstSymbolDefinition(const QString& symbol);
 		QList<Node*> findAllSymbolDefinitions(const QString& symbol);
 
-		virtual bool replaceChild(Node* child, Node* replacement);
+		virtual bool replaceChild(Node* child, Node* replacement, bool releaseOldChild = true);
 
 	private:
 		QVector<Node*> nodes_;
