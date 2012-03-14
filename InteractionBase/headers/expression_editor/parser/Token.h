@@ -42,7 +42,7 @@ class OperatorDescriptorList;
 
 class INTERACTIONBASE_API Token {
 	public:
-		enum Type {Identifier, Literal, OperatorDelimiter};
+		enum Type {Identifier, Literal, OperatorDelimiter, PartialLiteral};
 
 		Token();
 		Token(QString text, Type type);

@@ -44,7 +44,16 @@ class INTERACTIONBASE_API ErrorDescriptor : public OperatorDescriptor
 {
 	public:
 		ErrorDescriptor(const QString& prefix_text, const QString& postfix_text);
+
+		const QString& errorPrefix() const;
+		const QString& errorPostfix() const;
+	private:
+		QString errorPrefix_;
+		QString errorPostfix_;
 };
+
+inline const QString& ErrorDescriptor::errorPrefix() const { return errorPrefix_; };
+inline const QString& ErrorDescriptor::errorPostfix() const { return errorPostfix_; };
 
 } /* namespace InteractionBase */
 #endif /* INTERACTIONBASE_ERRORDESCRIPTOR_H_ */

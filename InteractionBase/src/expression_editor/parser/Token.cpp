@@ -50,99 +50,61 @@ Token::Token(QString text, Type type)
 QVector<Token> Token::tokenize(QString input, const OperatorDescriptorList* ops)
 {
 	QVector<Token> result;
-	input = input.trimmed();
-	if (input.isEmpty()) return result;
-	input.append(' ');
 
 	QChar first;
 	QString token;
 	bool escaped = false;
 	bool inString = false;
-	int openingStringQuoteIndex = -1;
 
 	for(int i = 0; i<input.size(); ++i )
 	{
-		if (token.isEmpty() && input[i] == ' ') continue;
-
-		// If we have an unfinished string
-		if (i == input.size() -1 && inString && (escaped || input[i] != '"'))
-		{
-			// If the string was just opened, close it automatically
-			if (openingStringQuoteIndex == i-1)
-			{
-				input.insert(i,'"');
-			}
-			else
-			{
-				// Do not treat it as string.
-				// Roll back and interpret the rest as normal characters
-				result.append(Token("\"", OperatorDelimiter));
-				token = "";
-				i = openingStringQuoteIndex;
-				escaped = false;
-				inString = false;
-				continue;
-			}
-		}
-
 		QChar ch = input[i];
+		if (token.isEmpty() && ch == ' ') continue;
 
-		if (token.isEmpty())
+		// Add character to current token
+		token.append(ch);
+
+		// Set flags when first character is added
+		if (token.size() == 1)
 		{
-			token = ch;
 			first = ch;
-			if (ch == '"')
-			{
-				inString = true;
-				openingStringQuoteIndex = i;
-			}
-			continue;
+			if (first == '"') inString = true;
 		}
 
-		// Finalize token
-		if ((!inString
-				&& (ch == ' '
-					|| first.isLetterOrNumber() != ch.isLetterOrNumber()
-					|| (!ch.isLetterOrNumber() && !tokenExistsInOperators(token + ch, ops))))
-			|| (inString && ch == '"' && !escaped))
+		// Determine whether to finalize the current token
+		QChar next = (i == input.size()-1) ? QChar() : input[i+1];
+		bool finalizeToken = false;
+		bool stringFinished = false;
+		if (inString)
+		{
+			stringFinished = token.size()>1 && !escaped && ch == '"';
+			finalizeToken = stringFinished || next.isNull();
+			escaped = !escaped && ch == '\\';
+		}
+		else
+		{
+			finalizeToken = next.isNull();
+			finalizeToken = finalizeToken || next == ' ';
+			finalizeToken = finalizeToken || first.isLetterOrNumber() != next.isLetterOrNumber();
+			finalizeToken = finalizeToken || (!next.isLetterOrNumber() && !tokenExistsInOperators(token + next, ops));
+		}
+
+		// Finalize the token if it's ready
+		if(finalizeToken)
 		{
 			Type t;
 			if (inString)
-			{
-				token.append(ch);
-				t = Literal;
-			}
+				t = stringFinished ? Literal : PartialLiteral;
 			else if (tokenExistsInOperators(token, ops) || (token.size() == 1 && !first.isLetterOrNumber()))
 				t = OperatorDelimiter;
 			else
 				t = first.isDigit() ? Literal : Identifier;
 
 			result.append(Token(token,t));
+
 			token = "";
-
-
-			if (inString)
-			{
-				inString = false;
-				escaped = false;
-				continue;
-			}
-			else
-			{
-				first = ch;
-				if (ch == '"')
-				{
-					inString = true;
-					openingStringQuoteIndex = i;
-				}
-			}
+			inString = false;
 		}
-
-		// Add current symbol to token
-		if (inString || ch != ' ') token += ch;
-
-		if (inString && ch == '\\' && !escaped) escaped = true;
-		else if (inString && escaped) escaped = false;
 	}
 
 	return result;
