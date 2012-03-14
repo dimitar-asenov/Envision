@@ -52,8 +52,6 @@ class OOVISUALIZATION_API VBooleanLiteral : public Visualization::ItemWithNode< 
 		VBooleanLiteral(Item* parent, NodeType *literal, const StyleType *style = itemStyles().get());
 		virtual ~VBooleanLiteral();
 
-		virtual bool focusChild(FocusTarget location);
-
 	protected:
 		virtual void determineChildren();
 		virtual void updateGeometry(int availableWidth, int availableHeight);

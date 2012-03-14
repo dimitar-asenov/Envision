@@ -75,8 +75,10 @@ TEST(FilePersistence, SaveModeNodesSingleUnitOnly)
 
 	model.beginModification(root, "set title");
 	root->name()->set("Root");
-	TestNodes::BinaryNode* left = root->setLeft<TestNodes::BinaryNode>();
-	TestNodes::BinaryNode* right = root->setRight<TestNodes::BinaryNode>();
+	TestNodes::BinaryNode* left = new TestNodes::BinaryNode();
+	root->setLeft(left);
+	TestNodes::BinaryNode* right = new TestNodes::BinaryNode();
+	root->setRight(right);
 
 	left->name()->set("Left child");
 	right->name()->set("Right child");
@@ -98,11 +100,14 @@ TEST(FilePersistence, SaveMultipleUnits)
 
 	model.beginModification(root, "set title");
 	root->name()->set("Root");
-	TestNodes::BinaryNode* left = root->setLeft<TestNodes::BinaryNodePersistenceUnit>();
-	TestNodes::BinaryNode* right = root->setRight<TestNodes::BinaryNode>();
+	TestNodes::BinaryNode* left = new TestNodes::BinaryNodePersistenceUnit();
+	root->setLeft(left);
+	TestNodes::BinaryNode* right = new TestNodes::BinaryNode();
+	root->setRight(right);
 
 	left->name()->set("Left child");
-	TestNodes::BinaryNode* leftleft = left->setLeft<TestNodes::BinaryNode>();
+	TestNodes::BinaryNode* leftleft = new TestNodes::BinaryNode();
+	left->setLeft(leftleft);
 	leftleft->name()->set("in a new unit");
 	right->name()->set("Right child");
 	model.endModification();

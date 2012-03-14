@@ -93,6 +93,9 @@ class INTERACTIONBASE_API CommandPrompt : public Visualization::Item
 
 		// This is true when the item is created and is set to false after the first update.
 		bool justCreated;
+
+		void acquireCursor();
+		QPoint receiverCursorPosition;
 };
 
 inline Visualization::Item* CommandPrompt::commandReceiver() { return commandReceiver_; }

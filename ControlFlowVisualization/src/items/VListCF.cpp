@@ -264,11 +264,5 @@ void VListCF::buildCompositeItems( QList< Item* >& singleItems )
 	}
 }
 
-bool VListCF::focusChild(FocusTarget /*location*/)
-{
-	//TODO implement this
-	return false;
-}
-
 
 }

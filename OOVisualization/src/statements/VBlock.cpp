@@ -68,9 +68,4 @@ void VBlock::updateGeometry(int availableWidth, int availableHeight)
 	Item::updateGeometry(items_, availableWidth, availableHeight );
 }
 
-bool VBlock::focusChild(FocusTarget location)
-{
-	return items_->focusChild(location);
-}
-
 }

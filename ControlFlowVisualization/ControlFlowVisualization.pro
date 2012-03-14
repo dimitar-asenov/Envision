@@ -3,7 +3,8 @@ CONFIG(release, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/ReleaseBuild
 CONFIG(debug, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/DebugBuild
 PLUGINS_DIR = $${BUILD_DIR}/plugins
 CONFIG(debug, debug|release):DEFINES += DEBUG
-QMAKE_CXXFLAGS += -Werror -std=c++0x
+QMAKE_CXXFLAGS += -Werror \
+    -std=c++0x
 INCLUDEPATH += ./headers \
     ./src \
     ./test \
@@ -19,7 +20,7 @@ win32:LIBS += -L$${PLUGINS_DIR} \
     -linteractionbase \
     -loovisualization
 QT = core \
-	gui
+    gui
 TEMPLATE = lib
 CONFIG += plugin \
     warn_on \
@@ -34,8 +35,9 @@ INSTALLS += target \
     pluginmeta \
     styles
 PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/precompiled.h \
-    headers/handlers/HMethodCF.h \
+HEADERS += headers/handlers/HControlFlowMethodSwitch.h \
+    headers/items/VControlFlowMethodSwitch.h \
+    headers/precompiled.h \
     headers/items/VBlockCFStyle.h \
     headers/items/VBlockCF.h \
     headers/items/VReturnStatementCF.h \
@@ -55,7 +57,8 @@ HEADERS += headers/precompiled.h \
     headers/ControlFlowVisualizationException.h \
     headers/controlflowvisualization_api.h \
     src/controlflowvisualization.h
-SOURCES += src/handlers/HMethodCF.cpp \
+SOURCES += src/handlers/HControlFlowMethodSwitch.cpp \
+    src/items/VControlFlowMethodSwitch.cpp \
     src/items/VBlockCF.cpp \
     src/items/VBlockCFStyle.cpp \
     src/items/VReturnStatementCF.cpp \

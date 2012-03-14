@@ -32,6 +32,7 @@
  **********************************************************************************************************************/
 
 #include "literals/VCharacterLiteral.h"
+#include "Helpers.h"
 
 #include "ModelBase/headers/Model.h"
 
@@ -57,16 +58,12 @@ void VCharacterLiteral::determineChildren()
 {
 	synchronizeItem(vis_, node()->valueNode(), style());
 	vis_->setStyle( style() );
+	Helpers::omitBoundingCursorsInExpressions(this, vis_, true);
 }
 
 void VCharacterLiteral::updateGeometry(int availableWidth, int availableHeight)
 {
 	Item::updateGeometry(vis_, availableWidth, availableHeight);
-}
-
-bool VCharacterLiteral::focusChild(FocusTarget location)
-{
-	return vis_->focusChild(location);
 }
 
 }

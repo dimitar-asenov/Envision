@@ -3,7 +3,8 @@ CONFIG(release, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/ReleaseBuild
 CONFIG(debug, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/DebugBuild
 PLUGINS_DIR = $${BUILD_DIR}/plugins
 CONFIG(debug, debug|release):DEFINES += DEBUG
-QMAKE_CXXFLAGS += -Werror -std=c++0x
+QMAKE_CXXFLAGS += -Werror \
+    -std=c++0x
 INCLUDEPATH += ./headers \
     ./src \
     ./test \
@@ -27,7 +28,14 @@ pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
 PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/precompiled.h \
+HEADERS += headers/expressions/VariableDeclaration.h \
+    headers/expressions/AssignmentExpression.h \
+    headers/statements/ExpressionStatement.h \
+    headers/expressions/CommaExpression.h \
+    headers/expressions/UnfinishedOperator.h \
+    headers/expressions/ErrorExpression.h \
+    headers/expressions/EmptyExpression.h \
+    headers/precompiled.h \
     headers/elements/StorageSpecifier.h \
     headers/elements/StatementItemList.h \
     headers/expressions/ArrayInitializer.h \
@@ -45,14 +53,11 @@ HEADERS += headers/precompiled.h \
     headers/types/ArrayType.h \
     headers/allOOModelNodes.h \
     headers/TypedListInstantiations.h \
-    headers/statements/AssignmentStatement.h \
     headers/expressions/ReferenceExpression.h \
     headers/expressions/MethodCallExpression.h \
-    headers/statements/MethodCallStatement.h \
     headers/statements/ForEachStatement.h \
     headers/statements/SwitchCase.h \
     headers/statements/SwitchStatement.h \
-    headers/statements/VariableDeclaration.h \
     headers/statements/ReturnStatement.h \
     headers/statements/ContinueStatement.h \
     headers/statements/BreakStatement.h \
@@ -79,7 +84,14 @@ HEADERS += headers/precompiled.h \
     headers/OOModelException.h \
     headers/oomodel_api.h \
     src/oomodel.h
-SOURCES += src/elements/StorageSpecifier.cpp \
+SOURCES += src/expressions/VariableDeclaration.cpp \
+    src/expressions/AssignmentExpression.cpp \
+    src/statements/ExpressionStatement.cpp \
+    src/expressions/CommaExpression.cpp \
+    src/expressions/UnfinishedOperator.cpp \
+    src/expressions/ErrorExpression.cpp \
+    src/expressions/EmptyExpression.cpp \
+    src/elements/StorageSpecifier.cpp \
     src/elements/StatementItemList.cpp \
     src/expressions/ArrayInitializer.cpp \
     src/elements/Visibility.cpp \
@@ -95,15 +107,12 @@ SOURCES += src/elements/StorageSpecifier.cpp \
     src/types/ArrayType.cpp \
     src/statements/ForEachStatement.cpp \
     src/expressions/UnaryOperation.cpp \
-    src/statements/AssignmentStatement.cpp \
     src/expressions/ReferenceExpression.cpp \
     src/expressions/MethodCallExpression.cpp \
-    src/statements/MethodCallStatement.cpp \
     test/JavaTest.cpp \
     src/statements/ReturnStatement.cpp \
     src/statements/SwitchCase.cpp \
     src/statements/SwitchStatement.cpp \
-    src/statements/VariableDeclaration.cpp \
     src/statements/ContinueStatement.cpp \
     src/statements/BreakStatement.cpp \
     src/statements/LoopStatement.cpp \

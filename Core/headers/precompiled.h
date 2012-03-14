@@ -51,9 +51,12 @@
 #include <QtCore/QStringList>
 #include <QtCore/QPair>
 #include <QtCore/QMap>
+#include <QtCore/QHash>
 #include <QtCore/QString>
 #include <QtCore/QVector>
 #include <QtCore/QList>
+
+#include <QtCore/QDebug>
 
 #if defined(CORE_LIBRARY)
 // Put here includes which only appear in compilation units and do not appear in headers. Precompiled headers of

@@ -110,7 +110,7 @@ void SystemClipboard::saveNode(const Node *node, const QString &name, bool)
 		// Get a list of sub nodes which have already been persisted.
 		QStringList persistedChildren = xml->getChildrenNames();
 
-		PersistedNode* persisted = node->model()->store()->loadCompleteNodeSubtree(node->model()->name(), node->persistentUnitId(), node->id());
+		PersistedNode* persisted = node->model()->store()->loadCompleteNodeSubtree(node->model()->name(), node);
 
 		if (!persisted) throw FilePersistenceException("Could not load node subtree from old persistent store.");
 		PersistedValue< QList<PersistedNode*> >* composite = dynamic_cast<PersistedValue< QList<PersistedNode*> >* > (persisted);
@@ -163,7 +163,7 @@ Node* SystemClipboard::loadModel(::Model::Model*, const QString &)
 	throw FilePersistenceException("The clipboard does not support the loadModel() method.");
 }
 
-QList<LoadedNode> SystemClipboard::loadAllSubNodes(Node* parent)
+QList<LoadedNode> SystemClipboard::loadAllSubNodes(Node*)
 {
 	QList<LoadedNode> result;
 
@@ -172,7 +172,7 @@ QList<LoadedNode> SystemClipboard::loadAllSubNodes(Node* parent)
 		xml->goToFirstChild();
 		while ( true )
 		{
-			LoadedNode ln = loadNode(parent);
+			LoadedNode ln = loadNode(nullptr);
 			result.append(ln);
 			if ( xml->hasNext() ) xml->loadNext();
 			else break;
@@ -196,11 +196,9 @@ Node* SystemClipboard::loadSubNode(Node* parent, const QString& name)
 
 LoadedNode SystemClipboard::loadNode(Node* parent)
 {
-	if (!parent) throw FilePersistenceException("Can not load a not from clipboard without a parent.");
-
 	LoadedNode node;
 	node.name = xml->getName();
-	node.node = Node::createNewNode(xml->getType(), parent, parent->model()->generateNextId(), *this, false);
+	node.node = Node::createNewNode(xml->getType(), parent, *this, false);
 
 	return node;
 }
@@ -215,7 +213,7 @@ QList<LoadedNode> SystemClipboard::loadPartialNode(Node*)
 	throw FilePersistenceException("The loadPartialNode(...) method is not supported in the SystemClipboard store. This might indicate that an object only partially loaded itself, ignoring the provided partial hint.");
 }
 
-PersistedNode* SystemClipboard::loadCompleteNodeSubtree(const QString&, NodeIdType, NodeIdType)
+PersistedNode* SystemClipboard::loadCompleteNodeSubtree(const QString&, const Model::Node*)
 {
 	throw FilePersistenceException("The loadCompleteNodeSubtree(...) method is not supported in the SystemClipboard store. This might indicate that an object only partially loaded itself, ignoring the provided partial hint.");
 }
@@ -313,9 +311,9 @@ void SystemClipboard::next()
 	else throw FilePersistenceException("Could not find next clipboard element.");
 }
 
-Node* SystemClipboard::create(::Model::Model* model, Node* parent)
+Node* SystemClipboard::create(::Model::Model*, Node* parent)
 {
-	Node* node = Node::createNewNode(xml->getType(), parent, model->generateNextId(), *this, false);
+	Node* node = Node::createNewNode(xml->getType(), parent, *this, false);
 	return node;
 }
 

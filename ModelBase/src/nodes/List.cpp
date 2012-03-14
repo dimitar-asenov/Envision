@@ -45,13 +45,13 @@ namespace Model {
 
 NODE_DEFINE_TYPE_REGISTRATION_METHODS(List)
 
-List::List(Node *parent, Model* model) :
-	Node(parent, model)
+List::List(Node *parent) :
+	Node(parent)
 {
 }
 
-List::List(Node *parent, NodeIdType id, PersistentStore &store, bool partialHint) :
-	Node(parent, id)
+List::List(Node *parent, PersistentStore &store, bool partialHint) :
+	Node(parent)
 {
 	fullyLoaded = !partialHint;
 
@@ -80,6 +80,7 @@ void List::loadSubNodes(QList<LoadedNode>& nodeList)
 
 		if ( index >= nodes_.size() ) nodes_.resize(index + 1);
 		nodes_[index] = ln->node;
+		ln->node->setParent(this);
 	}
 }
 
@@ -140,26 +141,44 @@ int List::indexOf(const Node* item) const
 	return nodes_.indexOf(i);
 }
 
-void List::remove(int index)
+void List::insert(int position, Node* node)
+{
+	if (!fullyLoaded) loadFully(* (model()->store()));
+	execute(new ListInsert(this, nodes_, node, position));
+}
+
+void List::remove(int index, bool release )
 {
 	if (!fullyLoaded) loadFully(* (model()->store()));
 
-	execute(new ListRemove(this, nodes_, index));
+	execute(new ListRemove(this, nodes_, index, release));
 }
 
-void List::remove(Node* instance)
+void List::remove(Node* instance, bool release )
 {
 	if (!fullyLoaded) loadFully(* (model()->store()));
 
 	int index = nodes_.indexOf(instance);
-	if ( index >= 0 ) remove(index);
+	if ( index >= 0 ) remove(index, release);
 }
 
 void List::clear()
 {
 	if (!fullyLoaded) loadFully(* (model()->store()));
 
-	while (!nodes_.isEmpty()) remove(0);
+	while (!nodes_.isEmpty()) remove(0, false);
+}
+
+bool List::replaceChild(Node* child, Node* replacement, bool releaseOldChild)
+{
+	if (!child || !replacement) return false;
+
+	int index = indexOf(child);
+	if (index < 0) return false;
+
+	remove(index, releaseOldChild);
+	insert(index, replacement);
+	return true;
 }
 
 void List::paste(ClipboardStore& clipboard, int position)
@@ -168,7 +187,7 @@ void List::paste(ClipboardStore& clipboard, int position)
 
 	for (int i = 0; i<clipboard.numNodes(); ++i)
 	{
-		Node* newNode = clipboard.create(model(), this);
+		Node* newNode = clipboard.create(model(), nullptr); // We provide a null parent as this will be set in the instruction below.
 		execute(new ListInsert(this, nodes_, newNode, position+i));
 
 		if (clipboard.hasNext() ) clipboard.next();

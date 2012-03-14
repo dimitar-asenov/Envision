@@ -150,12 +150,6 @@ class MODELBASE_API Model: public QObject
 		bool modificationInProgress;
 
 		/**
-		 * The id of the next node that will be created. Each node in the tree must have a unique id. When a new node is
-		 * constructed its id takes this value and nextId is incremented.
-		 */
-		NodeIdType nextId;
-
-		/**
 		 * The persistent store where the model is currently stored.
 		 *
 		 * This is used in calls to Node::loadFully when a partially loaded node needs to load its entire contents.
@@ -307,31 +301,6 @@ class MODELBASE_API Model: public QObject
 		 * Sets the name of the model. This is the name under which this model will be save in the persistent store.
 		 */
 		void setName(const QString& name);
-
-		/**
-		 * Generates a new unique Node id.
-		 *
-		 * This is used by the Node class to initialize newly created nodes.
-		 *
-		 * @exception ModelException
-		 * 				if called after the root node has been constructed without calling Model::beginModification() first
-		 */
-		NodeIdType generateNextId();
-
-		/**
-		 * Returns an id which is larger by 1 than all other node ids in this model.
-		 */
-		NodeIdType maxId() const;
-
-		/**
-		 * Sets the next id for this model.
-		 *
-		 * The next id is used whenever a new object is created. Each time an object is created its id is obtained by the
-		 * generateNextId() method.
-		 *
-		 * This method should only be used by a persistent store when loading the complete model.
-		 */
-		void setNextId(NodeIdType id);
 
 		/**
 		 * Creates a new root node with the specified type.
@@ -499,9 +468,6 @@ inline NodeReadWriteLock* Model::rootLock() { return &rootLock_; }
 inline Node* Model::root(){ return root_; }
 inline QString Model::name() { return name_; }
 inline void Model::setName(const QString& name) { name_ = name; }
-
-inline NodeIdType Model::maxId() const { return nextId; }
-inline void Model::setNextId(NodeIdType id) { nextId = id; }
 
 inline PersistentStore* Model::store() { return store_; }
 inline void Model::emitNameModified(Node* node, const QString &oldName) { emit nameModified(node, oldName); }

@@ -56,8 +56,7 @@ template class Model::TypedList<OOModel::ReturnStatement>;
 template class Model::TypedList<OOModel::SwitchCase>;
 template class Model::TypedList<OOModel::SwitchStatement>;
 template class Model::TypedList<OOModel::VariableDeclaration>;
-template class Model::TypedList<OOModel::MethodCallStatement>;
-template class Model::TypedList<OOModel::AssignmentStatement>;
+template class Model::TypedList<OOModel::ExpressionStatement>;
 
 template class Model::TypedList<OOModel::Expression>;
 template class Model::TypedList<OOModel::IntegerLiteral>;
@@ -75,6 +74,11 @@ template class Model::TypedList<OOModel::BinaryOperation>;
 template class Model::TypedList<OOModel::CastExpression>;
 template class Model::TypedList<OOModel::ReferenceExpression>;
 template class Model::TypedList<OOModel::ArrayInitializer>;
+template class Model::TypedList<OOModel::EmptyExpression>;
+template class Model::TypedList<OOModel::ErrorExpression>;
+template class Model::TypedList<OOModel::UnfinishedOperator>;
+template class Model::TypedList<OOModel::CommaExpression>;
+template class Model::TypedList<OOModel::AssignmentExpression>;
 
 template class Model::TypedList<OOModel::Type>;
 template class Model::TypedList<OOModel::PrimitiveType>;

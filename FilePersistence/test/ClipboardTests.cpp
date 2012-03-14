@@ -144,11 +144,6 @@ TEST(FilePersistence, PasteBinaryFromClipboard)
 	CHECK_STR_EQUAL("Root", left->name()->get());
 	CHECK_CONDITION(left->left());
 	CHECK_CONDITION(left->right());
-	CHECK_INT_EQUAL(6, left->name()->id());
-	CHECK_INT_EQUAL(7, left->left()->id());
-	CHECK_INT_EQUAL(8, left->left()->name()->id());
-	CHECK_INT_EQUAL(9, left->right()->id());
-	CHECK_INT_EQUAL(10, left->right()->name()->id());
 	CHECK_STR_EQUAL("Left child", left->left()->name()->get());
 	CHECK_STR_EQUAL("Right child", left->right()->name()->get());
 }
@@ -161,10 +156,17 @@ TEST(FilePersistence, PasteListFromClipboard)
 	Model::List* root = dynamic_cast<Model::List*> (model.createRoot("List"));
 
 	model.beginModification(root, "elems");
-	root->append<Model::Text>()->set("first");
-	root->append<Model::Text>()->set("second");
-	Model::List* list = root->append<Model::List>();
-	list->append<Model::Text>()->set("third");
+	Model::Text* first = new Model::Text();
+	first->set("first");
+	root->append(first);
+	Model::Text* second = new Model::Text();
+	second->set("second");
+	root->append(second);
+	Model::List* list = new Model::List();
+	root->append(list);
+	Model::Text* third = new Model::Text();
+	third->set("third");
+	list->append(third);
 	model.endModification();
 
 	SystemClipboard sc;
@@ -176,8 +178,6 @@ TEST(FilePersistence, PasteListFromClipboard)
 	model.endModification();
 
 	CHECK_INT_EQUAL(1, root->size());
-	CHECK_INT_EQUAL(0, root->id());
-	CHECK_INT_EQUAL(5,root->at<Model::Node>(0)->id());
 	CHECK_STR_EQUAL("third",root->at<Model::Text>(0)->get());
 }
 
@@ -189,10 +189,17 @@ TEST(FilePersistence, PasteInListFromClipboard)
 	Model::List* root = dynamic_cast<Model::List*> (model.createRoot("List"));
 
 	model.beginModification(root, "elems");
-	root->append<Model::Text>()->set("first");
-	root->append<Model::Text>()->set("second");
-	Model::List* list = root->append<Model::List>();
-	list->append<Model::Text>()->set("third");
+	Model::Text* first = new Model::Text();
+	first->set("first");
+	root->append(first);
+	Model::Text* second = new Model::Text();
+	second->set("second");
+	root->append(second);
+	Model::List* list = new Model::List();
+	root->append(list);
+	Model::Text* third = new Model::Text();
+	third->set("third");
+	list->append(third);
 	model.endModification();
 
 	SystemClipboard sc;
@@ -207,9 +214,6 @@ TEST(FilePersistence, PasteInListFromClipboard)
 	model.endModification();
 
 	CHECK_INT_EQUAL(5, root->size());
-	CHECK_INT_EQUAL(0, root->id());
-	CHECK_INT_EQUAL(5, root->at<Model::Node>(3)->id());
-	CHECK_INT_EQUAL(6, root->at<Model::Node>(4)->id());
 	CHECK_STR_EQUAL("first",root->at<Model::Text>(3)->get());
 	CHECK_INT_EQUAL(1, root->at<Model::List>(4)->size());
 	CHECK_STR_EQUAL("third",root->at<Model::List>(4)->at<Model::Text>(0)->get());

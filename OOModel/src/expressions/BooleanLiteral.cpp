@@ -40,4 +40,10 @@ EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(BooleanLiteral, Expression)
 
 REGISTER_ATTRIBUTE(BooleanLiteral, value, Boolean, false, false, true)
 
+BooleanLiteral::BooleanLiteral(bool value)
+: Expression(nullptr, BooleanLiteral::getMetaData())
+{
+	setValue(value);
+}
+
 }

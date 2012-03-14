@@ -50,11 +50,12 @@ class VISUALIZATIONBASE_API LayoutProviderBase : public Item
 		LayoutProviderBase(Item* parent, const StyleType *style, Layout* layout);
 		virtual ~LayoutProviderBase();
 
-		virtual bool focusChild(FocusTarget location);
 		virtual bool sizeDependsOnParent() const;
 		virtual bool isEmpty() const;
 
 		Layout* layout() const;
+
+		virtual Item* childClosestTo(const QPoint& point, PositionConstraints childConstraint = NoConstraints);
 
 	protected:
 		virtual void updateGeometry(int availableWidth, int availableHeight);

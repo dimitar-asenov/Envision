@@ -2,6 +2,7 @@
 <style prototypes="../Shape/default">
 	<leftBrace>{</leftBrace>
 	<rightBrace>}</rightBrace>
+	<minHeight>15</minHeight>
 	<leftBraceFont>
 		<family>Ariel</family>
 		<size>15</size>

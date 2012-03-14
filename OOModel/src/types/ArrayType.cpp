@@ -38,6 +38,6 @@ namespace OOModel {
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(ArrayType, Type)
 EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(ArrayType, Type)
 
-REGISTER_ATTRIBUTE(ArrayType, type, Type, false, false, true)
+REGISTER_ATTRIBUTE(ArrayType, type, Expression, false, false, true)
 
 }

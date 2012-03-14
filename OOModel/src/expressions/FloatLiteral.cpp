@@ -40,5 +40,10 @@ EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(FloatLiteral, Expression)
 
 REGISTER_ATTRIBUTE(FloatLiteral, value, Float, false, false, true)
 
+FloatLiteral::FloatLiteral(double value)
+: Expression(nullptr, FloatLiteral::getMetaData())
+{
+	setValue(value);
+}
 
 }

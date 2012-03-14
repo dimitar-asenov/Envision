@@ -63,9 +63,4 @@ void VBreakStatement::updateGeometry(int availableWidth, int availableHeight)
 	Item::updateGeometry(vis_, availableWidth, availableHeight);
 }
 
-bool VBreakStatement::focusChild(FocusTarget location)
-{
-	return vis_->focusChild(location);
-}
-
 }

@@ -44,6 +44,7 @@
 #include "elements/VFormalResult.h"
 
 #include "expressions/VVariableAccess.h"
+#include "expressions/VAssignmentExpression.h"
 #include "expressions/VMethodCallExpression.h"
 #include "expressions/VReferenceExpression.h"
 #include "expressions/VThisExpression.h"
@@ -52,6 +53,12 @@
 #include "expressions/VUnaryOperation.h"
 #include "expressions/VBinaryOperation.h"
 #include "expressions/VArrayInitializer.h"
+#include "expressions/VCommaExpression.h"
+#include "expressions/VVariableDeclaration.h"
+
+#include "expressions/VEmptyExpression.h"
+#include "expressions/VErrorExpression.h"
+#include "expressions/VUnfinishedOperator.h"
 
 #include "literals/VStringLiteral.h"
 #include "literals/VIntegerLiteral.h"
@@ -60,9 +67,6 @@
 #include "literals/VBooleanLiteral.h"
 #include "literals/VNullLiteral.h"
 
-#include "statements/VMethodCallStatement.h"
-#include "statements/VVariableDeclaration.h"
-#include "statements/VAssignmentStatement.h"
 #include "statements/VBlock.h"
 #include "statements/VReturnStatement.h"
 #include "statements/VIfStatement.h"
@@ -70,6 +74,7 @@
 #include "statements/VForEachStatement.h"
 #include "statements/VBreakStatement.h"
 #include "statements/VContinueStatement.h"
+#include "statements/VExpressionStatement.h"
 
 #include "types/VNamedType.h"
 #include "types/VPrimitiveType.h"

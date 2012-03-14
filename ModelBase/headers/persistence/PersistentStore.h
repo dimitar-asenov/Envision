@@ -71,7 +71,7 @@ class MODELBASE_API PersistentStore
 		virtual Node* loadSubNode(Node* parent, const QString& name) = 0;
 		virtual QString currentNodeType() const = 0;
 		virtual QList<LoadedNode> loadPartialNode(Node* partialNode) = 0;
-		virtual PersistedNode* loadCompleteNodeSubtree(const QString& modelName, NodeIdType persistenceUnitId, NodeIdType nodeId) = 0;
+		virtual PersistedNode* loadCompleteNodeSubtree(const QString& modelName, const Node* node) = 0;
 
 		virtual int loadIntValue() = 0;
 		virtual QString loadStringValue() = 0;

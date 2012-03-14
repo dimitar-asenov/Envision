@@ -42,13 +42,13 @@ namespace Model {
 
 NODE_DEFINE_TYPE_REGISTRATION_METHODS(Reference)
 
-Reference::Reference(Node *parent, Model* model) :
-	Node(parent, model)
+Reference::Reference(Node *parent) :
+	Node(parent)
 {
 }
 
-Reference::Reference(Node *parent, NodeIdType id, PersistentStore &store, bool) :
-	Node(parent, id)
+Reference::Reference(Node *parent, PersistentStore &store, bool) :
+	Node(parent)
 {
 	path_ = store.loadStringValue();
 }

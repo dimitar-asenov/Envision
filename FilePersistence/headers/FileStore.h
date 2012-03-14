@@ -36,6 +36,7 @@
 
 #include "filepersistence_api.h"
 #include "XMLModel.h"
+#include "NodeIdMap.h"
 
 #include "ModelBase/headers/persistence/PersistentStore.h"
 
@@ -75,7 +76,7 @@ class FILEPERSISTENCE_API FileStore: public Model::PersistentStore
 		/**
 		 * Returns the name of the persistent unit that corresponds to the specified node.
 		 */
-		QString getPersistenceUnitName(const Model::Node *node) const;
+		QString getPersistenceUnitName(const Model::Node *node);
 
 		/**
 		 * When started with -1 it searches through the entire tree. Otherwise expects to find before or at the specified
@@ -86,6 +87,7 @@ class FILEPERSISTENCE_API FileStore: public Model::PersistentStore
 		void checkIsWorking() const;
 
 		XMLModel* xml;
+		NodeIdMap ids;
 
 	public:
 		FileStore();
@@ -103,7 +105,7 @@ class FILEPERSISTENCE_API FileStore: public Model::PersistentStore
 		virtual Model::Node* loadSubNode(Model::Node* parent, const QString& name);
 		virtual QString currentNodeType() const;
 		virtual QList<Model::LoadedNode> loadPartialNode(Model::Node* partialNode);
-		virtual Model::PersistedNode* loadCompleteNodeSubtree(const QString& modelName, Model::NodeIdType persistenceUnitId, Model::NodeIdType nodeId);
+		virtual Model::PersistedNode* loadCompleteNodeSubtree(const QString& modelName, const Model::Node* node);
 
 		virtual int loadIntValue();
 		virtual QString loadStringValue();

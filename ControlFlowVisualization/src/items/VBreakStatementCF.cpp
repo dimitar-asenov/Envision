@@ -91,9 +91,4 @@ void VBreakStatementCF::updateGeometry(int availableWidth, int availableHeight)
 	addConnector(entrance_, entrance_ + QPoint(0, style()->pinLength()), true);
 }
 
-bool VBreakStatementCF::focusChild(FocusTarget location)
-{
-	return vis_->focusChild(location);
-}
-
 }

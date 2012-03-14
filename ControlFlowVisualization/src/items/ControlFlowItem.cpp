@@ -55,7 +55,7 @@ bool ControlFlowItem::showAsControlFlow() const
 	while (item)
 	{
 		VMethodCF* met = dynamic_cast<VMethodCF*> (item);
-		if (met) return met->style()->showAsControlFlow();
+		if (met) return true;
 
 		item = item->parentItem();
 	}

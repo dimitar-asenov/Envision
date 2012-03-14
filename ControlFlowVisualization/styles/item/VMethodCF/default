@@ -1,5 +1,4 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/VMethod/default">
-	<showAsControlFlow>false</showAsControlFlow>
 	<contentCF prototypes="item/VListCF/default" />
 </style>

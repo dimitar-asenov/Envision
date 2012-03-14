@@ -39,13 +39,13 @@ namespace Model {
 
 NODE_DEFINE_TYPE_REGISTRATION_METHODS(Boolean)
 
-Boolean::Boolean(Node *parent, Model* model) :
-	Node(parent, model), value(false)
+Boolean::Boolean(Node *parent) :
+	Node(parent), value(false)
 {
 }
 
-Boolean::Boolean(Node *parent, NodeIdType id, PersistentStore &store, bool) :
-	Node(parent, id)
+Boolean::Boolean(Node *parent, PersistentStore &store, bool) :
+	Node(parent)
 {
 	value = store.loadIntValue() != 0;
 }

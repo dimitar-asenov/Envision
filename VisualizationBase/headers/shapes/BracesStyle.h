@@ -45,6 +45,7 @@ namespace Visualization {
 class VISUALIZATIONBASE_API BracesStyle : public ShapeStyle
 {
 	protected:
+		int minHeight_;
 		QPen leftBracePen_;
 		QFont leftBraceFont_;
 		QString leftBrace_;
@@ -56,6 +57,7 @@ class VISUALIZATIONBASE_API BracesStyle : public ShapeStyle
 	public:
 		virtual void load(StyleLoader& sl);
 
+		int minHeight() const;
 		const QPen& leftBracePen() const;
 		const QFont& leftBraceFont() const;
 		const QString& leftBrace() const;
@@ -65,6 +67,7 @@ class VISUALIZATIONBASE_API BracesStyle : public ShapeStyle
 		const QString& rightBrace() const;
 };
 
+inline int BracesStyle::minHeight() const { return minHeight_; }
 inline const QPen& BracesStyle::leftBracePen() const { return leftBracePen_; }
 inline const QFont& BracesStyle::leftBraceFont() const { return leftBraceFont_; }
 inline const QString& BracesStyle::leftBrace() const { return leftBrace_; }

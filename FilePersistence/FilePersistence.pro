@@ -3,7 +3,8 @@ CONFIG(release, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/ReleaseBuild
 CONFIG(debug, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/DebugBuild
 PLUGINS_DIR = $${BUILD_DIR}/plugins
 CONFIG(debug, debug|release):DEFINES += DEBUG
-QMAKE_CXXFLAGS += -Werror -std=c++0x
+QMAKE_CXXFLAGS += -Werror \
+    -std=c++0x
 INCLUDEPATH += ./headers \
     ./src \
     ./test \
@@ -14,7 +15,9 @@ win32:LIBS += -L$${PLUGINS_DIR} \
     -llogger \
     -lselftest \
     -lmodelbase
-QT = core gui xml
+QT = core \
+    gui \
+    xml
 TEMPLATE = lib
 CONFIG += plugin \
     warn_on \
@@ -26,14 +29,16 @@ pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
 PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/precompiled.h \
+HEADERS += headers/NodeIdMap.h \
+    headers/precompiled.h \
     headers/XMLModel.h \
     headers/SystemClipboard.h \
     headers/FilePersistenceException.h \
     headers/FileStore.h \
     headers/filepersistence_api.h \
     src/filepersistence.h
-SOURCES += test/TypedListTests.cpp \
+SOURCES += src/NodeIdMap.cpp \
+    test/TypedListTests.cpp \
     test/ClipboardTests.cpp \
     src/XMLModel.cpp \
     src/SystemClipboard.cpp \

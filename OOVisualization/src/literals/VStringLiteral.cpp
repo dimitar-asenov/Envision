@@ -32,6 +32,7 @@
  **********************************************************************************************************************/
 
 #include "literals/VStringLiteral.h"
+#include "Helpers.h"
 
 #include "VisualizationBase/headers/items/Static.h"
 #include "ModelBase/headers/Model.h"
@@ -76,8 +77,11 @@ void VStringLiteral::determineChildren()
 	// The style needs to be updated every time since if our own style changes, so will that of the children.
 	layout()->setStyle( &style()->layout());
 	vis_->setStyle( &style()->string() );
+	vis_->setEditable(false);
 	if (pre_) pre_->setStyle( &style()->preSymbol());
 	if (post_) post_->setStyle( &style()->postSymbol());
+
+	Helpers::omitBoundingCursorsInExpressions(this, layout(), true);
 }
 
 }

@@ -60,7 +60,6 @@ TEST(FilePersistence, LoadingList)
 	CHECK_CONDITION(list != nullptr);
 	CHECK_STR_EQUAL("List", list->typeName() );
 	CHECK_CONDITION(list->isFullyLoaded() == false);
-	CHECK_INT_EQUAL(1, list->id());
 
 	list->loadFully(store);
 
@@ -74,20 +73,15 @@ TEST(FilePersistence, LoadingList)
 
 	CHECK_CONDITION(one != nullptr);
 	CHECK_STR_EQUAL("one", one->get());
-	CHECK_INT_EQUAL(2, one->id());
 
 	CHECK_CONDITION(two != nullptr);
 	CHECK_STR_EQUAL("two", two->get());
-	CHECK_INT_EQUAL(3, two->id())
 
 	CHECK_CONDITION(three != nullptr);
 	CHECK_STR_EQUAL("three", three->get());
-	CHECK_INT_EQUAL(4, three->id())
 
 	CHECK_CONDITION(four != nullptr);
 	CHECK_STR_EQUAL("four", four->get());
-	CHECK_INT_EQUAL(5, four->id());
-
 }
 
 TEST(FilePersistence, SaveList)
@@ -100,10 +94,18 @@ TEST(FilePersistence, SaveList)
 	TestNodes::PartialList* root = dynamic_cast<TestNodes::PartialList*> (model.createRoot("PartialList"));
 
 	model.beginModification(root, "create ");
-	root->list()->append<Model::Text>()->set("one");
-	root->list()->append<Model::Text>()->set("two");
-	root->list()->append<Model::Text>()->set("three");
-	root->list()->append<Model::Text>()->set("four");
+	Model::Text* one = new Model::Text();
+	one->set("one");
+	root->list()->append(one);
+	Model::Text* two = new Model::Text();
+	two->set("two");
+	root->list()->append(two);
+	Model::Text* three = new Model::Text();
+	three->set("three");
+	root->list()->append(three);
+	Model::Text* four = new Model::Text();
+	four->set("four");
+	root->list()->append(four);
 	model.endModification();
 
 	model.setName("partial");

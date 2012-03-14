@@ -49,60 +49,80 @@ TEST(OOModel, JavaLibraryAndHelloWorldTest)
 	prj->setName("HelloWorld");
 
 	// Build a simple Java Library
-	Library* java = prj->libraries()->append<Library>();
+	Library* java = new Library();
+	prj->libraries()->append(java);
 	java->setName("Java");
 
-	Class* string = java->classes()->append<Class>();
+	Class* string = new Class();
+	java->classes()->append(string);
 	string->setName("String");
 	string->setVisibility(Visibility::PUBLIC);
 
-	Module* io = java->modules()->append<Module>();
+	Module* io = new Module();
+	java->modules()->append(io);
 	io->setName("io");
 
-	Class* printstream = io->classes()->append<Class>();
+	Class* printstream = new Class();
+	io->classes()->append(printstream);
 	printstream->setName("PrintStream");
 	printstream->setVisibility(Visibility::PUBLIC);
 
-	Method* println = printstream->methods()->append<Method>();
+	Method* println = new Method();
+	printstream->methods()->append(println);
 	println->setName("println");
 	println->setVisibility(Visibility::PUBLIC);
 
-	FormalArgument* arg = println->arguments()->append<FormalArgument>();
+	FormalArgument* arg = new FormalArgument();
+	println->arguments()->append(arg);
 	arg->setName("x");
-	NamedType* argType = arg->setType<NamedType>();
+	NamedType* argType = new NamedType();
+	arg->setType(argType);
 	argType->type()->ref()->set("class:String");
 
-	Class* system = java->classes()->append<Class>();
+	Class* system = new Class();
+	java->classes()->append(system);
 	system->setName("System");
 	system->setVisibility(Visibility::PUBLIC);
-	Field* out = system->fields()->append<Field>();
+	Field* out = new Field();
+	system->fields()->append(out);
 	out->setName("out");
 	out->setVisibility(Visibility::PUBLIC);
 	out->setStorageSpecifier(StorageSpecifier::CLASS_VARIABLE);
-	NamedType* outtype = out->setType<NamedType>();
+	NamedType* outtype = new NamedType();
+	out->setType(outtype);
 	outtype->type()->ref()->set("class:PrintStream");
-	outtype->type()->setPrefix<ReferenceExpression>()->ref()->set("mod:io");
+	ReferenceExpression* prefix = new ReferenceExpression();
+	outtype->type()->setPrefix(prefix);
+	prefix->ref()->set("mod:io");
 
 	// Build a simple HelloWorld Application
-	Class* hello = prj->classes()->append<Class>();
+	Class* hello = new Class();
+	prj->classes()->append(hello);
 	hello->setName("HelloWorld");
 	hello->setVisibility(Visibility::PUBLIC);
-	Method* main = hello->methods()->append<Method>();
+	Method* main = new Method();
+	hello->methods()->append(main);
 
 	main->setName("main");
 	main->setVisibility(Visibility::PUBLIC);
 	main->setStorageSpecifier(StorageSpecifier::CLASS_VARIABLE);
 	//TODO make an array argument
 
-	MethodCallStatement* callPrintln = main->items()->append<MethodCallStatement>();
-	StringLiteral* helloStr = callPrintln->arguments()->append<StringLiteral>();
+	ExpressionStatement* callPrintlnSt = new ExpressionStatement();
+	MethodCallExpression* callPrintln = new MethodCallExpression();
+	StringLiteral* helloStr = new StringLiteral();
+	callPrintln->arguments()->append(helloStr);
 	helloStr->setValue("Hello World");
 	callPrintln->ref()->set("met:println");
+	callPrintlnSt->setExpression(callPrintln);
+	main->items()->append(callPrintlnSt);
 
-	VariableAccess* va = callPrintln->setPrefix<VariableAccess>();
+	VariableAccess* va = new VariableAccess();
+	callPrintln->setPrefix(va);
 	va->ref()->set("field:out");
 
-	ReferenceExpression* ref = va->setPrefix<ReferenceExpression>();
+	ReferenceExpression* ref = new ReferenceExpression();
+	va->setPrefix(ref);
 	ref->ref()->set("lib:Java,class:System");
 
 	model.endModification();

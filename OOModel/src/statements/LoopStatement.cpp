@@ -39,8 +39,8 @@ EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(LoopStatement, Statement)
 EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(LoopStatement, Statement)
 
 REGISTER_ATTRIBUTE(LoopStatement, condition, Expression, false, true, true)
-REGISTER_ATTRIBUTE(LoopStatement, initStep, Statement, false, true, true)
-REGISTER_ATTRIBUTE(LoopStatement, updateStep, Statement, false, true, true)
+REGISTER_ATTRIBUTE(LoopStatement, initStep, Expression, false, true, true)
+REGISTER_ATTRIBUTE(LoopStatement, updateStep, Expression, false, true, true)
 REGISTER_ATTRIBUTE(LoopStatement, body, StatementItemList, false, false, true)
 
 }

@@ -52,7 +52,8 @@ namespace Visualization {
 
 namespace ControlFlowVisualization {
 
-class CONTROLFLOWVISUALIZATION_API VMethodCF : public Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::Method>
+class CONTROLFLOWVISUALIZATION_API VMethodCF : public Visualization::ItemWithNode
+	< Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::Method>
 {
 	ITEM_COMMON(VMethodCF)
 
@@ -68,7 +69,6 @@ class CONTROLFLOWVISUALIZATION_API VMethodCF : public Visualization::ItemWithNod
 		Visualization::Static* icon_;
 		Visualization::VText* name_;
 		Visualization::VList* arguments_;
-		Visualization::VList* content_;
 		VListCF* contentCF_;
 		Visualization::VList* results_;
 };

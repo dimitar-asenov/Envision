@@ -53,7 +53,6 @@ VMethodCF::VMethodCF(Item* parent, NodeType* node, const StyleType* style) :
 	icon_(new Static(nullptr, &style->icon())),
 	name_(new VText(nullptr, node->nameNode(), &style->nameDefault()) ),
 	arguments_(new VList(nullptr, node->arguments(), &style->arguments()) ),
-	content_(nullptr),
 	contentCF_(nullptr),
 	results_(new VList(nullptr, node->results(), &style->results()) )
 {
@@ -73,7 +72,6 @@ VMethodCF::~VMethodCF()
 	header_ = nullptr;
 	icon_ = nullptr;
 	name_ = nullptr;
-	content_ = nullptr;
 	contentCF_ = nullptr;
 	arguments_ = nullptr;
 	results_ = nullptr;
@@ -104,16 +102,8 @@ void VMethodCF::determineChildren()
 	header_->synchronizeLast(arguments_, node()->arguments(), &style()->arguments());
 	layout()->left()->synchronizeFirst(results_, node()->results(), &style()->results());
 
-	if (style()->showAsControlFlow())
-	{
-		layout()->synchronizeContent(contentCF_, node()->items(), &style()->contentCF());
-		content_ = nullptr;
-	}
-	else
-	{
-		layout()->synchronizeContent(content_, node()->items(), &style()->content());
-		contentCF_ = nullptr;
-	}
+	layout()->synchronizeContent(contentCF_, node()->items(), &style()->contentCF());
+
 
 
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
@@ -124,8 +114,7 @@ void VMethodCF::determineChildren()
 	icon_->setStyle( &style()->icon());
 	header_->setStyle( &style()->header() );
 	name_->setStyle(nameStyle);
-	if (content_) content_->setStyle( &style()->content() );
-	if (contentCF_) contentCF_->setStyle( &style()->contentCF() );
+	contentCF_->setStyle( &style()->contentCF() );
 	arguments_->setStyle( &style()->arguments() );
 	results_->setStyle( &style()->results() );
 }

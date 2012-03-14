@@ -77,12 +77,6 @@ void Static::updateGeometry(int availableWidth, int availableHeight)
 	}
 }
 
-bool Static::focusChild(FocusTarget location)
-{
-	if (item_) return item_->focusChild(location);
-	else return false;
-}
-
 void Static::determineChildren()
 {
 	if (style()->isEmpty()) SAFE_DELETE_ITEM(item_);
@@ -101,6 +95,7 @@ void Static::determineChildren()
 		}
 
 		item_->setStyle( &style()->itemStyle());
+		item_->setRegionOptions(regionOptions());
 	}
 }
 

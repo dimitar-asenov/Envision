@@ -52,11 +52,6 @@ void LayoutProviderBase::updateGeometry(int availableWidth, int availableHeight)
 	Item::updateGeometry(layout_, availableWidth, availableHeight);
 }
 
-bool LayoutProviderBase::focusChild(FocusTarget location)
-{
-	return layout_->focusChild(location);
-}
-
 bool LayoutProviderBase::sizeDependsOnParent() const
 {
 	return layout_->sizeDependsOnParent();
@@ -65,6 +60,11 @@ bool LayoutProviderBase::sizeDependsOnParent() const
 bool LayoutProviderBase::isEmpty() const
 {
 	return layout_->isEmpty();
+}
+
+Item* LayoutProviderBase::childClosestTo(const QPoint& point, PositionConstraints childConstraint)
+{
+	return layout_->childClosestTo(mapToItem(layout_,point).toPoint(), childConstraint);
 }
 
 }

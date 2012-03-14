@@ -58,9 +58,9 @@ void FileStore::setBaseFolder(const QString& path)
 	baseFolder = path;
 }
 
-QString FileStore::getPersistenceUnitName(const Model::Node *node) const
+QString FileStore::getPersistenceUnitName(const Model::Node *node)
 {
-	Model::NodeIdType persistenceUnitId = node->persistentUnitId();
+	NodeIdMap::NodeIdType persistenceUnitId = ids.getId( node->persistentUnitNode() );
 
 	QString name;
 	if (persistenceUnitId == 0) name = node->model()->name();
@@ -132,7 +132,7 @@ void FileStore::saveNewPersistenceUnit(const Model::Node *node, const QString &n
 	{
 		xml->beginSaveChildNode(XML_NEWUNIT_NODE_TAG);
 		xml->setName(name);
-		xml->saveStringValue(QString::number(node->id()));
+		xml->saveStringValue(QString::number(ids.getId(node)));
 		xml->endSaveChildNode();
 	}
 
@@ -142,10 +142,8 @@ void FileStore::saveNewPersistenceUnit(const Model::Node *node, const QString &n
 	{
 		// If this is the root node save the model information
 		xml->beginSaveChildNode("model");
-		xml->setNextId(node->model()->maxId());
-
 		saveNodeDirectly(node, name, partialLoadHint);
-
+		xml->setNextId(ids.getNextId());
 		xml->endSaveChildNode();
 	}
 	else saveNodeDirectly(node, name, partialLoadHint);
@@ -153,7 +151,7 @@ void FileStore::saveNewPersistenceUnit(const Model::Node *node, const QString &n
 	QString filename;
 	if ( oldXML == nullptr ) filename = name; // This is the root of the model, save the file name
 	else
-		filename = QString::number(node->id()); // This is not the root, so save by id
+		filename = QString::number( ids.getId(node)); // This is not the root, so save by id
 
 	QFile file(modelDir.absoluteFilePath(filename));
 	if ( !file.open(QIODevice::WriteOnly | QIODevice::Truncate) ) throw FilePersistenceException("Could not open file " + file.fileName() + ". " +file.errorString());
@@ -179,7 +177,7 @@ void FileStore::saveNodeDirectly(const Model::Node *node, const QString &name, b
 {
 	xml->beginSaveChildNode(node->typeName());
 	xml->setName(name);
-	xml->setId(node->id());
+	xml->setId(ids.getId(node));
 	xml->setPartialHint(partialLoadHint);
 
 	node->save(*this);
@@ -200,8 +198,8 @@ void FileStore::saveNodeDirectly(const Model::Node *node, const QString &name, b
 		// location.
 		XMLModel* persisted = new XMLModel(modelDir.absoluteFilePath(filename));
 
-		if ( persisted->goToElement(node->id()) == false )
-			throw FilePersistenceException("Could not find the persistent unit for partial node with id " + QString::number(node->id()));
+		if ( persisted->goToElement(ids.getId(node)) == false )
+			throw FilePersistenceException("Could not find the persistent unit for partial node with id " + QString::number( ids.getId(node)));
 		persisted->goToFirstChild();
 
 		while (true)
@@ -218,7 +216,7 @@ void FileStore::saveNodeDirectly(const Model::Node *node, const QString &name, b
 	xml->endSaveChildNode();
 }
 
-Model::Node* FileStore::loadModel(Model::Model* model, const QString &name)
+Model::Node* FileStore::loadModel(Model::Model*, const QString &name)
 {
 	storeAccess.lock();
 	working = true;
@@ -231,7 +229,7 @@ Model::Node* FileStore::loadModel(Model::Model* model, const QString &name)
 
 		xml = new XMLModel(modelDir.absoluteFilePath(name));
 		xml->goToFirstChild();
-		model->setNextId(xml->getNextId());
+		ids.setNextId(xml->getNextId());
 		xml->goToFirstChild();
 		ln =  loadNode(nullptr);
 
@@ -295,8 +293,8 @@ Model::LoadedNode FileStore::loadNode(Model::Node* parent)
 {
 	Model::LoadedNode node;
 	node.name = xml->getName();
-	node.node = Model::Node::createNewNode(xml->getType(), parent, xml->getId(), *this, xml->getPartialHint());
-
+	node.node = Model::Node::createNewNode(xml->getType(), parent, *this, xml->getPartialHint());
+	ids.setId( node.node, xml->getId() ); // Record id
 	return node;
 }
 
@@ -333,11 +331,11 @@ QList<Model::LoadedNode> FileStore::loadPartialNode(Model::Node* partialNode)
 		xml = new XMLModel(modelDir.absoluteFilePath(filename));
 
 		// Search through the content in order to find the requested node id.
-		if (!xml->goToElement(partialNode->id()) )
-			throw FilePersistenceException("Could not find the persisted data for partial node with id " + QString::number(partialNode->id()));
+		if (!xml->goToElement(ids.getId(partialNode)) )
+			throw FilePersistenceException("Could not find the persisted data for partial node with id " + QString::number( ids.getId(partialNode)));
 
 		// Load all subnodes and return them
-		result = loadAllSubNodes(partialNode);
+		result = loadAllSubNodes(nullptr); // Pass a null parent as we do not want these nodes to be immediately assigned as children to the parent node.
 
 		SAFE_DELETE(xml);
 	}
@@ -361,12 +359,20 @@ QString FileStore::currentNodeType() const
 	return xml->getType();
 }
 
-Model::PersistedNode* FileStore::loadCompleteNodeSubtree(const QString& modelName, Model::NodeIdType persistenceUnitId, Model::NodeIdType nodeId)
+Model::PersistedNode* FileStore::loadCompleteNodeSubtree(const QString& modelName, const Model::Node* node)
 {
 	storeAccess.lock();
 	working = true;
 
 	Model::PersistedNode* result = nullptr;
+
+	NodeIdMap::NodeIdType nodeId = 0;
+	NodeIdMap::NodeIdType persistenceUnitId = 0;
+	if (node)
+	{
+		nodeId = ids.getId(node);
+		persistenceUnitId = ids.getId( node->persistentUnitNode() );
+	}
 
 	try
 	{

@@ -80,19 +80,14 @@ class NodeReadWriteLock;
 class MODELBASE_API Node
 {
 	public:
+
 		/**
-		 * This function pointer type is used to register the constructor for nodes that are created at run-time.
+		 * This function pointer type is used to register a constructor for nodes.
 		 *
 		 * @param parent
-		 * 				The parent node of the newly created node. This can be NULL to indicate that this node is the root
-		 * 				node for the model. Otherwise it should be non-NULL.
-		 * @param model
-		 * 				The model that this node belongs to. Whenever parent is specified and is already part of an
-		 * 				model, this value should be NULL. In that case the model of the parent will be associated with the
-		 * 				newly created Node. Only if parent is NULL or is not yet associated with a model, should this
-		 * 				parameter be non-NULL. The latter case occurs only when creating the root of a model.
+		 * 				The parent node of the newly created node. This may be 'nullptr'.
 		 */
-		typedef Node* (*NodeConstructor)(Node* parent, Model* model);
+		typedef Node* (*NodeConstructor)(Node* parent);
 
 		/**
 		 * This function pointer type is used to register the constructor for nodes that are being loaded from a
@@ -110,35 +105,21 @@ class MODELBASE_API Node
 		 * 				A flag that hints whether this node should be fully or partially loaded. The constructor of the
 		 * 				node is allowed to ignore this flag.
 		 */
-		typedef Node* (*NodePersistenceConstructor)(Node *parent, NodeIdType id, PersistentStore &store, bool partialLoadHint);
+		typedef Node* (*NodePersistenceConstructor)(Node *parent, PersistentStore &store, bool partialLoadHint);
+
 
 		/**
-		 * Constructs a new node at run-time (not by loading from a persistent store).
-		 *
-		 * The specified model or the one associated with the parent will be used to determine the id for the new Node.
+		 * Constructs a new node with the specified parent.
 		 *
 		 * @param parent
-		 * 				The parent node of the newly created node. This can be NULL to indicate that this node is the root
-		 * 				node for the model. Otherwise it should be non-NULL.
-		 * @param model
-		 * 				The model that this node belongs to. Whenever parent is specified and is already part of an
-		 * 				model, this value should be NULL. In that case the model of the parent will be associated with the
-		 * 				newly created Node. Only if parent is NULL or is not yet associated with a model, should this
-		 * 				parameter be non-NULL. The latter case occurs only when creating the root of a model.
+		 * 				The parent of this node. This may be 'nullptr'.
+		 *
+		 * 				If the parent is not null, then the model associated with the parent will also be the model for this node.
+		 * 				If the parent is nullptr, then this node will not be associated with a model initially. It can later be
+		 * 				added to an existing model.
 		 */
-		Node(Node* parent, Model* model);
+		Node(Node* parent = nullptr);
 
-		/**
-		 * Constructs a new node by loading it from a persistent store
-		 *
-		 * @param parent
-		 * 				The parent node of the newly created node. This can be NULL to indicate that this node is the root
-		 * 				node for the model. Otherwise it should be non-NULL.
-		 * @param id
-		 * 				The id to use for the new Node. This id should be unique between all Nodes associated with a single
-		 * 				model.
-		 */
-		Node(Node* parent, NodeIdType id);
 		virtual ~Node();
 
 		/**
@@ -156,6 +137,11 @@ class MODELBASE_API Node
 		 * Returns the parent of this Node or NULL if this is the root.
 		 */
 		Node* parent() const;
+
+		/**
+		 * Sets the parent of this Node.
+		 */
+		void setParent(Node* parent);
 
 		/**
 		 * Returns the node which can be reached from the current node using the specified path.
@@ -214,11 +200,6 @@ class MODELBASE_API Node
 		 * Reimplement this method and definesSymbol() in derived classes that define symbols.
 		 */
 		virtual const QString& symbolName() const;
-
-		/*
-		 * Returns the id of the node. This is a unique identifier within the model associated with this node.
-		 */
-		NodeIdType id() const;
 
 		/*
 		 * Returns the revision of this node.
@@ -324,16 +305,9 @@ class MODELBASE_API Node
 		virtual bool isNewPersistenceUnit() const;
 
 		/**
-		 * Returns the id of the persistence unit to which this node belongs. If this is the root persistent unit, returns
-		 * 0.
-		 */
-		NodeIdType persistentUnitId() const;
-
-		/**
 		 * Returns the node that defines the persistence unit for this node.
 		 */
-		Node* persistentUnitNode();
-
+		Node* persistentUnitNode() const;
 
 		/**
 		 * Returns the name of the type of this Node. This is typically a string identical to the class name.
@@ -370,14 +344,10 @@ class MODELBASE_API Node
 		 * 			registerNodeType.
 		 *
 		 * @param parent
-		 * 			The parent of the node. This can be NULL if this is the root node.
+		 * 			The parent of the node. This may be 'nullptr'.
 		 *
-		 * @param model
-		 * 			The model that this node belongs to. If this value is NULL the model of the parent will be used. The
-		 * 			default value is NULL. Note that this should only be set to a value different than NULL in case the
-		 * 			parent node does not yet belong to a model. This arises only when the root node is constructed.
 		 */
-		static Node* createNewNode(const QString &type, Node* parent, Model* model = nullptr);
+		static Node* createNewNode(const QString &type, Node* parent = nullptr);
 
 		/**
 		 * Creates a new node of the specified type by loading it from a persistent store.
@@ -389,9 +359,6 @@ class MODELBASE_API Node
 		 * @param parent
 		 * 			The parent of the node. This can be NULL if this is the root node.
 		 *
-		 * @param id
-		 * 			The id of the new instance. This should be unique between all node id associated with the same model.
-		 *
 		 * @param store
 		 * 			The persistent store to use to load the subtree of this node.
 		 *
@@ -399,12 +366,34 @@ class MODELBASE_API Node
 		 * 			Whether this node should only be partially loaded. This is only a hint and a node implementation can
 		 * 			ignore this flag.
 		 */
-		static Node* createNewNode(const QString &type, Node* parent, NodeIdType id, PersistentStore &store, bool partialLoadHint);
+		static Node* createNewNode(const QString &type, Node* parent, PersistentStore &store, bool partialLoadHint);
 
 		/**
 		 * Returns true if there are already registered constructs for a type with the specified name and false otherwise.
 		 */
 		static bool isTypeRegistered(const QString &type);
+
+
+		/**
+		 * Returns true is the this node can be modified or false otherwise.
+		 *
+		 * A node is modifiable if it is part of an access unit which is currently acquired by a writer thread. This is
+		 * managed by the 'Model' associated with the node.
+		 *
+		 * If a node does not have an associated model it is always modifiable.
+		 */
+		bool isModifyable() const;
+
+		/**
+		 * \brief Replaces the child item \a child with the item \a replacement and returns true on success.
+		 *
+		 * The default implementation always returns false and is suitable for nodes without children. Reimplement this
+		 * method if you are implementing a composite node that has replaceable child nodes.
+		 *
+		 * If \a releaseOldChild is true, the old child will be released from this node and can be used in other nodes.
+		 * Otherwise the old child will be managed by the current node's Undo Queue and can not be used for other nodes.
+		 */
+		virtual bool replaceChild(Node* child, Node* replacement, bool releaseOldChild = true);
 
 	protected:
 
@@ -416,7 +405,6 @@ class MODELBASE_API Node
 
 	private:
 		Node* parent_;
-		NodeIdType id_;
 		int revision_;
 
 		static int numRegisteredTypes_;
@@ -426,6 +414,7 @@ class MODELBASE_API Node
 
 
 
+inline void Node::setParent(Node* parent) { parent_ = parent; }
 inline QString Node::extractFrontSymbol(const QString& path) const
 { return path.split(',').first().split(':').last(); }
 
@@ -445,18 +434,18 @@ inline QString Node::extractSecondaryPath(const QString& path) const
  * This is a convenience function that can be used to when registering classes derived from Node using
  * registerNodeType().
  */
-template<class T> Node* createNewNode(Node* parent, Model* model)
+template<class T> Node* createNewNode(Node* parent)
 {
-	return new T(parent, model);
+	return new T(parent);
 }
 
 /**
  * This is a convenience function that can be used to when registering classes derived from Node using
  * registerNodeType().
  */
-template<class T> Node* createNodeFromPersistence(Node *parent, NodeIdType id, PersistentStore &store, bool partialLoadHint)
+template<class T> Node* createNodeFromPersistence(Node *parent, PersistentStore &store, bool partialLoadHint)
 {
-	return new T(parent, id, store, partialLoadHint);
+	return new T(parent, store, partialLoadHint);
 }
 
 }

@@ -68,8 +68,7 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	Model::TypedList<SwitchCase>::registerNodeType();
 	Model::TypedList<SwitchStatement>::registerNodeType();
 	Model::TypedList<VariableDeclaration>::registerNodeType();
-	Model::TypedList<MethodCallStatement>::registerNodeType();
-	Model::TypedList<AssignmentStatement>::registerNodeType();
+	Model::TypedList<ExpressionStatement>::registerNodeType();
 
 	Model::TypedList<Expression>::registerNodeType();
 	Model::TypedList<IntegerLiteral>::registerNodeType();
@@ -87,6 +86,11 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	Model::TypedList<CastExpression>::registerNodeType();
 	Model::TypedList<ReferenceExpression>::registerNodeType();
 	Model::TypedList<ArrayInitializer>::registerNodeType();
+	Model::TypedList<ErrorExpression>::registerNodeType();
+	Model::TypedList<UnfinishedOperator>::registerNodeType();
+	Model::TypedList<EmptyExpression>::registerNodeType();
+	Model::TypedList<CommaExpression>::registerNodeType();
+	Model::TypedList<AssignmentExpression>::registerNodeType();
 
 	Model::TypedList<Type>::registerNodeType();
 	Model::TypedList<PrimitiveType>::registerNodeType();
@@ -116,8 +120,7 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	SwitchCase::init();
 	SwitchStatement::init();
 	VariableDeclaration::init();
-	MethodCallStatement::init();
-	AssignmentStatement::init();
+	ExpressionStatement::init();
 
 	Expression::init();
 	IntegerLiteral::init();
@@ -135,6 +138,11 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	CastExpression::init();
 	ReferenceExpression::init();
 	ArrayInitializer::init();
+	EmptyExpression::init();
+	ErrorExpression::init();
+	UnfinishedOperator::init();
+	CommaExpression::init();
+	AssignmentExpression::init();
 
 	Type::init();
 	PrimitiveType::init();

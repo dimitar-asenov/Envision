@@ -186,10 +186,4 @@ inline bool VExtendable::expandedSwtiched() const
 	return (layout && attributes) != expanded_;
 }
 
-bool VExtendable::focusChild(FocusTarget location)
-{
-	if (expanded_) return layout->focusChild(location);
-	else return header->focusChild(location);
-}
-
 }

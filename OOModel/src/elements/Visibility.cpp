@@ -39,13 +39,13 @@ namespace OOModel {
 
 NODE_DEFINE_TYPE_REGISTRATION_METHODS(Visibility)
 
-Visibility::Visibility(Model::Node *parent, Model::Model* model) :
-	Node(parent, model), vis(DEFAULT)
+Visibility::Visibility(Model::Node *parent) :
+	Node(parent), vis(DEFAULT)
 {
 }
 
-Visibility::Visibility(Model::Node *parent, Model::NodeIdType id, Model::PersistentStore &store, bool) :
-	Node(parent, id)
+Visibility::Visibility(Model::Node *parent, Model::PersistentStore &store, bool) :
+	Node(parent)
 {
 	vis = fromInt( store.loadIntValue() );
 }

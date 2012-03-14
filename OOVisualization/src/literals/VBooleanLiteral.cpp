@@ -32,6 +32,7 @@
  **********************************************************************************************************************/
 
 #include "literals/VBooleanLiteral.h"
+#include "Helpers.h"
 
 #include "ModelBase/headers/Model.h"
 
@@ -57,17 +58,14 @@ VBooleanLiteral::~VBooleanLiteral()
 void VBooleanLiteral::determineChildren()
 {
 	synchronizeItem(vis_, node()->valueNode(), style());
+	vis_->setEditable(false);
 	vis_->setStyle( style() );
+	Helpers::omitBoundingCursorsInExpressions(this, vis_, true);
 }
 
 void VBooleanLiteral::updateGeometry(int availableWidth, int availableHeight)
 {
 	Item::updateGeometry(vis_, availableWidth, availableHeight);
-}
-
-bool VBooleanLiteral::focusChild(FocusTarget location)
-{
-	return vis_->focusChild(location);
 }
 
 }

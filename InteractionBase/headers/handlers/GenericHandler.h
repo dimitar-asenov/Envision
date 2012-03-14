@@ -52,15 +52,12 @@ class CommandPrompt;
 class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHandler
 {
 	public:
-		enum FocusDirection {NOT_SPECIFIED, FROM_TOP, FROM_BOTTOM, FROM_LEFT, FROM_RIGHT};
+		enum CursorMoveOrientation {NoOrientation, VerticalOrientation, HorizontalOrientation};
 
 		static GenericHandler* instance();
 
 		static CommandExecutionEngine* executionEngine();
 		static void setCommandExecutionEngine(CommandExecutionEngine *engine);
-
-		static void setFocusDirection(FocusDirection direction);
-		static FocusDirection focusDirection();
 
 		/**
 		 * TODO: Commands are not inherited when the handler is inherited. Is this right?
@@ -100,9 +97,11 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 
 		static CommandExecutionEngine* executionEngine_;
 		static CommandPrompt* prompt_;
-		static FocusDirection focusDirection_;
 
+		static QPoint cursorOriginMidPoint_;
+		static CursorMoveOrientation cursorMoveOrientation_;
 
+		static void resetCursorOrigin();
 };
 
 inline const QList<Command*>& GenericHandler::commands() { return supportedCommands; }

@@ -46,7 +46,6 @@ void TextStyle::load(StyleLoader& sl)
 	ItemStyle::load(sl);
 	sl.load("pen", pen_);
 	sl.load("font", font_);
-	sl.load("caretPen", caretPen_);
 	sl.load("selectionPen", selectionPen_);
 	sl.load("selectionFont", selectionFont_);
 

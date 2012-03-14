@@ -67,19 +67,34 @@ class MODELBASE_API List: public Node
 
 		int indexOf(const Node* item) const;
 
-		template <class T> T* append();
-		template <class T> T* prepend();
-		template <class T> T* insert(int position);
+		void append(Node* node);
+		void prepend(Node* node);
+		void insert(int position, Node* node);
 		void paste(ClipboardStore& clipboard, int position);
 
-		void remove(int index);
-		void remove(Node* instance);
+		/**
+		 * \brief Removes the child node at position \a index.
+		 *
+		 * If \a release is true then the removed node will no longer be owned by this list and can be used elsewhere.
+		 * Otherwise the node will still be managed by this list's Undo queue.
+		 */
+		void remove(int index, bool release);
+
+		/**
+		 * \brief Removes the child \a instance.
+		 *
+		 * If \a release is true then the removed node will no longer be owned by this list and can be used elsewhere.
+		 * Otherwise the node will still be managed by this list's Undo queue.
+		 */
+		void remove(Node* instance, bool release);
 		void clear();
 
 		const QVector<Node*>& nodes();
 
 		Node* findFirstSymbolDefinition(const QString& symbol);
 		QList<Node*> findAllSymbolDefinitions(const QString& symbol);
+
+		virtual bool replaceChild(Node* child, Node* replacement, bool releaseOldChild = true);
 
 	private:
 		QVector<Node*> nodes_;
@@ -111,34 +126,8 @@ template <class T> T* List::at(int i)
 }
 
 inline const QVector<Node*>& List::nodes() { return nodes_; }
-
-template <class T>
-T* List::append()
-{
-	if (!fullyLoaded) loadFully(* (model()->store()));
-
-	return insert<T>(nodes_.size());
-}
-
-template <class T>
-T* List::prepend()
-{
-	if (!fullyLoaded) loadFully(* (model()->store()));
-
-	return insert<T>(0);
-}
-
-template <class T>
-T* List::insert(int position)
-{
-	if (!fullyLoaded) loadFully(* (model()->store()));
-
-	T* newNode = new T(this, nullptr);
-	if (! Node::isTypeRegistered(newNode->typeName())) throw ModelException("Trying to create a list entry of an unregistered type.");
-
-	execute(new ListInsert(this, nodes_, newNode, position));
-	return newNode;
-}
+inline void List::append(Node* node) { insert(nodes_.size(), node); }
+inline void List::prepend(Node* node) { insert(0, node); }
 
 }
 

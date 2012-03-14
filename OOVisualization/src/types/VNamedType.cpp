@@ -62,9 +62,4 @@ void VNamedType::updateGeometry(int availableWidth, int availableHeight)
 	Item::updateGeometry(vis_, availableWidth, availableHeight);
 }
 
-bool VNamedType::focusChild(FocusTarget location)
-{
-	return vis_->focusChild(location);
-}
-
 }

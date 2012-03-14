@@ -47,6 +47,8 @@ class TypedList: public List
 		T* first();
 		T* last();
 		T* at(int i);
+
+		virtual bool replaceChild(Node* child, Node* replacement, bool releaseOldChild = true);
 };
 
 }

@@ -44,17 +44,14 @@ namespace ControlFlowVisualization {
 class CONTROLFLOWVISUALIZATION_API VMethodCFStyle : public OOVisualization::VMethodStyle
 {
 	private:
-		bool showAsControlFlow_;
 		VListCFStyle contentCF_;
 
 	public:
 		void load(Visualization::StyleLoader& sl);
 
-		bool showAsControlFlow() const;
 		const VListCFStyle& contentCF() const;
 };
 
-inline bool VMethodCFStyle::showAsControlFlow() const { return showAsControlFlow_; }
 inline const VListCFStyle& VMethodCFStyle::contentCF() const { return contentCF_; }
 
 }

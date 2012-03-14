@@ -32,7 +32,12 @@
  **********************************************************************************************************************/
 
 #include "layouts/Layout.h"
+#include "VisualizationException.h"
 #include "ModelRenderer.h"
+
+#include "cursor/LayoutCursor.h"
+
+#include "Core/headers/global.h"
 
 namespace Visualization {
 
@@ -42,8 +47,7 @@ Layout::Layout(Item* parent, const StyleType* style) :
 	Item(parent, style)
 {
 	setFlag(QGraphicsItem::ItemIsSelectable, false);
-	//setFlag(QGraphicsItem::ItemIsFocusable, false);
-	setAcceptedMouseButtons(0);
+	setAcceptedMouseButtons(Qt::LeftButton);
 }
 
 void Layout::setInnerSize(int width_, int height_)

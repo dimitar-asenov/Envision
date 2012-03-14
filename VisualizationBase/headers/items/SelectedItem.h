@@ -35,15 +35,15 @@
 #define SELECTEDITEM_H_
 
 #include "../visualizationbase_api.h"
+#include "items/ItemStyle.h"
 
 #include "Item.h"
-#include "SelectedItemStyle.h"
 
 namespace Visualization {
 
 class VISUALIZATIONBASE_API SelectedItem: public Item
 {
-	ITEM_COMMON(SelectedItem)
+	ITEM_COMMON_CUSTOM_STYLENAME(SelectedItem, ItemStyle)
 
 	public:
 		SelectedItem(Item* selectedItem, const StyleType* style = itemStyles().get());

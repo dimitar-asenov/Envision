@@ -51,8 +51,6 @@ class OOVISUALIZATION_API VThisExpression : public Visualization::ItemWithNode< 
 		VThisExpression(Item* parent, NodeType *expr, const StyleType *style = itemStyles().get());
 		virtual ~VThisExpression();
 
-		virtual bool focusChild(FocusTarget location);
-
 	protected:
 		virtual void determineChildren();
 		virtual void updateGeometry(int availableWidth, int availableHeight);

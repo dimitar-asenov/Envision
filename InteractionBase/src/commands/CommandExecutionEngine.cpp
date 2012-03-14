@@ -251,7 +251,7 @@ QStringList CommandExecutionEngine::tokenize(const QString& string, const QStrin
 		}
 	}
 
-	if ( !str.isNull() ) result.append(str.simplified());
+	if ( !str.isNull() ) result.append(tokenizeNonQuoted(str.simplified()));
 	return result;
 }
 
