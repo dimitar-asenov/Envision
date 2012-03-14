@@ -45,6 +45,9 @@ class OOMODEL_API IntegerLiteral: public Expression
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(IntegerLiteral)
 
 	ATTRIBUTE_VALUE(::Model::Integer, value, setValue, int)
+
+	public:
+		IntegerLiteral(int value);
 };
 
 }

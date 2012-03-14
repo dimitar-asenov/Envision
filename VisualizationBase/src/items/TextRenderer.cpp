@@ -37,21 +37,11 @@
 #include "Scene.h"
 #include "VisualizationException.h"
 #include "shapes/Shape.h"
-
-#include <QtGui/QPainter>
-#include <QtGui/QFontMetrics>
+#include "cursor/TextCursor.h"
 
 namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(TextRenderer, "item")
-
-const int MIN_TEXT_WIDTH = 10;
-
-int TextRenderer::selectionBegin = 0;
-int TextRenderer::selectionEnd = 0;
-int TextRenderer::selectionXBegin = 0;
-int TextRenderer::selectionXEnd = 0;
-int TextRenderer::caretX = 0;
 
 TextRenderer::TextRenderer(Item* parent, const StyleType *style, const QString& text) :
 	Item(parent, style), text_(text), editable(true)
@@ -69,13 +59,9 @@ QString TextRenderer::selectedText()
 {
 	if (this->hasFocus())
 	{
-		int xstart = selectionBegin;
-		int xend = selectionEnd;
-		if ( xstart > xend )
-		{
-			xstart = selectionEnd;
-			xend = selectionBegin;
-		}
+		TextCursor* cur = correspondingSceneCursor<TextCursor>();
+		int xstart = cur->selectionFirstIndex();
+		int xend = cur->selectionLastIndex();
 
 		return text_.mid(xstart, xend - xstart);
 	}
@@ -103,37 +89,24 @@ void TextRenderer::updateGeometry(int, int)
 	if (this->hasShape())
 	{
 		this->getShape()->setInnerSize(bound.width(), bound.height());
-		xOffset = -bound.left() + this->getShape()->contentLeft();
-		yOffset = -bound.top() + this->getShape()->contentTop();
+		textXOffset_ = -bound.left() + this->getShape()->contentLeft();
+		textYOffset_ = -bound.top() + this->getShape()->contentTop();
 	}
 	else
 	{
-		xOffset = -bound.left();
-		yOffset = -bound.top();
+		textXOffset_ = -bound.left();
+		textYOffset_ = -bound.top();
 		this->setSize(bound.size());
 	}
 
 	// Correct underline, otherwise it is drawn in the middle of two pixels and appears fat and transparent.
 	if (style()->font().underline() && qfm.lineWidth() % 2)
 	{
-		xOffset += 0.5;
-		yOffset += 0.5;
+		textXOffset_ += 0.5;
+		textYOffset_ += 0.5;
 	}
 
-	if ( this->hasFocus() )
-	{
-		int xstart = selectionBegin;
-		int xend = selectionEnd;
-		if ( selectionBegin > selectionEnd )
-		{
-			xstart = selectionEnd;
-			xend = selectionBegin;
-		}
-
-		selectionXBegin = qfm.width(text_, xstart);
-		selectionXEnd = qfm.width(text_, xend);
-		caretX = (selectionBegin > selectionEnd) ? selectionXBegin : selectionXEnd;
-	}
+	if ( this->hasFocus() )	correspondingSceneCursor<TextCursor>()->update(qfm);
 }
 
 void TextRenderer::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -146,88 +119,117 @@ void TextRenderer::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 	{
 		painter->setPen(style()->pen());
 		painter->setFont(style()->font());
-		painter->drawText(QPointF(xOffset, yOffset), text_);
+		painter->drawText(QPointF(textXOffset_, textYOffset_), text_);
 	}
 	else
 	{
-		if ( selectionXBegin == selectionXEnd /*|| numSelected == 1*/ )
-		{
-			// No text is selected, draw all text at once using normal style
-			painter->setPen(style()->pen());
-			painter->setFont(style()->font());
-			painter->drawText(QPointF(xOffset, yOffset), text_);
-		}
-		else
+		TextCursor* cur = correspondingSceneCursor<TextCursor>();
+		if ( cur->hasSelection() )
 		{
 			// Some text is selected, draw it differently than non-selected text.
-			int xstart = selectionBegin;
-			int xend = selectionEnd;
-			if ( xstart > xend )
-			{
-				xstart = selectionEnd;
-				xend = selectionBegin;
-			}
+			int start = cur->selectionFirstIndex();
+			int end = cur->selectionLastIndex();
 
 			// Draw selection background
 			painter->setPen(Qt::NoPen);
 			painter->setBrush(style()->selectionBackground());
-			painter->drawRect(xOffset + selectionXBegin, 0, selectionXEnd - selectionXBegin, this->height());
+			painter->drawRect(textXOffset_ + cur->xBegin(), 0, cur->xEnd() - cur->xBegin(), this->height());
 			painter->setBrush(Qt::NoBrush);
 
 			// Draw selected text
 			painter->setPen(style()->selectionPen());
 			painter->setFont(style()->selectionFont());
-			painter->drawText(QPointF(xOffset + selectionXBegin, yOffset), text_.mid(xstart, xend - xstart));
+			painter->drawText(QPointF(textXOffset_ + cur->xBegin(), textYOffset_), text_.mid(start, end - start));
 
 			// Draw non-selected text
 			painter->setPen(style()->pen());
 			painter->setFont(style()->font());
-			painter->drawText(xOffset, yOffset, text_.left(xstart));
-			painter->drawText(QPointF(xOffset + selectionXEnd, yOffset), text_.mid(xend));
+			painter->drawText(textXOffset_, textYOffset_, text_.left(start));
+			painter->drawText(QPointF(textXOffset_ + cur->xEnd(), textYOffset_), text_.mid(end));
 		}
-
-		// Draw caret
-		if ( (/*selectionXBegin == selectionXEnd &&*/ editable) /*|| numSelected == 0*/)
+		else
 		{
-			painter->setPen(style()->caretPen());
-			painter->drawLine(xOffset + caretX, 1, xOffset + caretX, this->height() - 1);
+			// No text is selected, draw all text at once using normal style
+			painter->setPen(style()->pen());
+			painter->setFont(style()->font());
+			painter->drawText(QPointF(textXOffset_, textYOffset_), text_);
 		}
 	}
 }
 
-void TextRenderer::selectAll()
+bool TextRenderer::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 {
-	selectionBegin = 0;
-	selectionEnd = text_.length();
-	if (!this->hasFocus()) this->setFocus();
-	this->setUpdateNeeded();
-}
-
-void TextRenderer::setSelectedCharacters(int first, int last)
-{
-	selectionBegin = first;
-	selectionEnd = last;
-	if (!this->hasFocus()) this->setFocus();
-	this->setUpdateNeeded();
-}
-
-void TextRenderer::setSelectedByDrag(int xBegin, int xEnd)
-{
-	selectionBegin = 0;
-	selectionEnd = 0;
-
-	QFontMetrics qfm(style()->font());
-	int width = 0;
-	for (int i = 1; i <= text_.length(); ++i)
+	if ( dir == MoveUpOf || dir == MoveDownOf || dir == MoveLeftOf || dir == MoveRightOf )
 	{
-		int new_width = qfm.width(text_, i);
-		if ( xBegin > (new_width + width + 1) / 2 ) selectionBegin++;
-		if ( xEnd > (new_width + width + 1) / 2 ) selectionEnd++;
-		width = new_width;
+		PositionConstraints pc = satisfiedPositionConstraints(reference);
+		if ( (dir == MoveUpOf && (pc & Above))
+				|| (dir == MoveDownOf && (pc & Below))
+				|| (dir == MoveLeftOf && (pc & LeftOf))
+				|| (dir == MoveRightOf && (pc & RightOf))
+				)
+		{
+			TextCursor* tc = new TextCursor(this);
+			bool posSet = false;
+			if ((regionOptions() & OmitLeftCursor) && tc->cursorAtX(reference.x()) == 0)
+			{
+				if (text_.length() > 1)
+				{
+					tc->setCaretPosition(1);
+					posSet = true;
+				}
+				else
+				{
+					SAFE_DELETE(tc);
+					return false;
+				}
+			}
+
+			if ((regionOptions() & OmitRightCursor) && tc->cursorAtX(reference.x()) == text_.length())
+			{
+				if (text_.length() > 1)
+				{
+					tc->setCaretPosition(text_.length()-1);
+					posSet = true;
+				}
+				else
+				{
+					SAFE_DELETE(tc);
+					return false;
+				}
+			}
+
+			if (!posSet) tc->setSelectedByDrag(reference.x(), reference.x());
+			scene()->setMainCursor(tc);
+			return true;
+		}
+		else return false;
+	}
+	else if (dir == MoveOnPosition)
+	{
+		setFocus();
+		TextCursor* tc = new TextCursor(this);
+		tc->setSelectedByDrag(reference.x(), reference.x());
+		scene()->setMainCursor(tc);
+		return true;
+	}
+	else if (dir == MoveLeft)
+	{
+		int position = correspondingSceneCursor<Visualization::TextCursor>()->caretPosition();
+		if ( text_.isEmpty() || position <= 0) return false;
+		else if (position == 1 && (regionOptions() & OmitLeftCursor)) return false;
+		else correspondingSceneCursor<Visualization::TextCursor>()->setCaretPosition(position - 1);
+		return true;
+	}
+	else if (dir == MoveRight)
+	{
+		int position = correspondingSceneCursor<Visualization::TextCursor>()->caretPosition();
+		if ( text_.isEmpty() || position >= text_.size()) return false;
+		else if (position == text_.size()-1 && (regionOptions() & OmitRightCursor)) return false;
+		else correspondingSceneCursor<Visualization::TextCursor>()->setCaretPosition(position + 1);
+		return true;
 	}
 
-	this->setFocus();
-	this->setUpdateNeeded();
+	return false;
 }
 
 }

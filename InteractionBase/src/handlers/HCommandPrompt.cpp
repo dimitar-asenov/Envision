@@ -67,7 +67,7 @@ void HCommandPrompt::keyReleaseEvent(Visualization::Item *target, QKeyEvent *eve
 
 		if ( result->code() == CommandResult::OK)
 		{
-
+			prompt->hidePrompt();
 		}
 		else
 		{

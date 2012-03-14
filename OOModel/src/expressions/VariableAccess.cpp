@@ -33,10 +33,9 @@
 
 #include "expressions/VariableAccess.h"
 #include "expressions/ReferenceExpression.h"
+#include "expressions/VariableDeclaration.h"
 #include "top_level/Class.h"
 #include "top_level/Field.h"
-
-#include "statements/VariableDeclaration.h"
 
 namespace OOModel {
 
@@ -45,6 +44,12 @@ EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(VariableAccess, Expression)
 
 REGISTER_ATTRIBUTE(VariableAccess, prefix, Expression, false, true, true)
 REGISTER_ATTRIBUTE(VariableAccess, ref, Reference, false, false, true)
+
+VariableAccess::VariableAccess(const QString& referenceString)
+: Expression(nullptr, VariableAccess::getMetaData())
+{
+	ref()->set(referenceString);
+}
 
 Class* VariableAccess::classDefinition()
 {

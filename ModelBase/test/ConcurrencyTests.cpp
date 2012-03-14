@@ -48,10 +48,14 @@ TEST(ModelBase, SingleWriteUnitCheck)
 	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.createRoot("BinaryNode"));
 
 	model.beginModification(root, "make tree");
-	TestNodes::BinaryNode* left = root->setLeft<TestNodes::BinaryNode>();
-	TestNodes::BinaryNode* right = root->setRight<TestNodes::BinaryNodeAccessUnit>();
-	TestNodes::BinaryNode* one = root->left()->setLeft<TestNodes::BinaryNodeAccessUnit>();
-	TestNodes::BinaryNode* two = root->left()->setRight<TestNodes::BinaryNodeAccessUnit>();
+	TestNodes::BinaryNode* left = new TestNodes::BinaryNode();
+	TestNodes::BinaryNode* right = new TestNodes::BinaryNodeAccessUnit();
+	TestNodes::BinaryNode* one = new TestNodes::BinaryNodeAccessUnit();
+	TestNodes::BinaryNode* two = new TestNodes::BinaryNodeAccessUnit();
+	root->setLeft(left);
+	root->setRight(right);
+	root->left()->setLeft(one);
+	root->left()->setRight(two);
 	model.endModification();
 
 	CHECK_STR_EQUAL(QString(), root->name()->get());

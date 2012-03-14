@@ -45,6 +45,9 @@ class OOMODEL_API StringLiteral: public Expression
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(StringLiteral)
 
 	ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::Text, value, setValue, QString, const QString&)
+
+	public:
+		StringLiteral(const QString& value);
 };
 
 }

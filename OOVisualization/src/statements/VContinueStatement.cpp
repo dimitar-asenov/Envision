@@ -63,9 +63,4 @@ void VContinueStatement::updateGeometry(int availableWidth, int availableHeight)
 	Item::updateGeometry(vis_, availableWidth, availableHeight);
 }
 
-bool VContinueStatement::focusChild(FocusTarget location)
-{
-	return vis_->focusChild(location);
-}
-
 }

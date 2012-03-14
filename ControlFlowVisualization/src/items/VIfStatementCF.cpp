@@ -75,16 +75,6 @@ bool VIfStatementCF::isEmpty() const
 	else return vis_->isEmpty();
 }
 
-bool VIfStatementCF::focusChild(FocusTarget location)
-{
-	if (showAsControlFlow())
-	{
-		//TODO implement this
-		return false;
-	}
-	else return vis_->focusChild(location);
-}
-
 void VIfStatementCF::determineChildren()
 {
 	if (showAsControlFlow())

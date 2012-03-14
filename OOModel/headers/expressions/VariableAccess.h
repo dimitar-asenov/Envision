@@ -49,6 +49,7 @@ class OOMODEL_API VariableAccess: public Expression
 	ATTRIBUTE(Model::Reference, ref, setRef)
 
 	public:
+		VariableAccess(const QString& referenceString);
 		virtual Class* classDefinition();
 };
 

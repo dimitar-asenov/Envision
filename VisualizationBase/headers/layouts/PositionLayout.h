@@ -87,7 +87,6 @@ class VISUALIZATIONBASE_API PositionLayout : public Layout
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 		int focusedElementIndex() const;
-		virtual bool focusChild(FocusTarget location);
 
 
 };

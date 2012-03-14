@@ -96,7 +96,7 @@ QString PersistentStoreMock::currentNodeType() const
 	return QString();
 }
 
-PersistedNode* PersistentStoreMock::loadCompleteNodeSubtree(const QString&, NodeIdType, NodeIdType)
+PersistedNode* PersistentStoreMock::loadCompleteNodeSubtree(const QString&, const Node*)
 {
 	return nullptr;
 }

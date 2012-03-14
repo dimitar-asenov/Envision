@@ -1,0 +1,69 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/Item/default">
+	<shape prototypes="shape/Box/default">
+		Box
+		<outline>
+			<width>2</width>
+			<style>2</style>
+			<color>
+				<alpha>128</alpha>
+				<red>255</red>
+				<green>165</green>
+				<blue>0</blue>
+			</color>
+		</outline>
+		<cornerType>0</cornerType>
+		<cornerRadius>2</cornerRadius>
+		<backgroundBrush>
+			<style>15</style>
+			<gradient>
+				<spread>0</spread>
+				<coordinateMode>0</coordinateMode>
+				<start><x>0</x><y>0</y></start>
+				<finish><x>0</x><y>20</y></finish>
+				<stopPoints>
+					<length>2</length>
+					<e0>
+						<first>0.0</first>
+						<second>
+							<alpha>128</alpha>
+							<red>255</red>
+							<green>165</green>
+							<blue>0</blue>
+						</second>
+					</e0>
+					<e1>
+						<first>1.0</first>
+						<second>
+							<alpha>0</alpha>
+							<red>0</red>
+							<green>0</green>
+							<blue>0</blue>
+						</second>
+					</e1>	
+				</stopPoints>
+			</gradient>
+		</backgroundBrush>
+	</shape>
+	
+	<layout prototypes="layout/SequentialLayout/default"/>
+	<delimiters prototypes="item/Text/default">
+		<shape prototypes="shape/Box/default">
+			Box
+			<outline>
+				<style>0</style>
+			</outline>
+			<cornerType>1</cornerType>
+			<cornerRadius>3</cornerRadius>
+			<backgroundBrush>
+				<style>1</style>
+				<color>
+					<alpha>255</alpha>
+					<red>255</red>
+					<green>165</green>
+					<blue>0</blue>
+				</color>
+			</backgroundBrush>
+		</shape>
+	</delimiters>
+</style>

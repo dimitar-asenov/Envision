@@ -3,8 +3,8 @@
  <BinaryNode id="0" name="units" partial="0">
   <Text id="1" name="name" partial="0">S_Root</Text>
   <persistencenewunit name="left">S_2</persistencenewunit>
-  <BinaryNode id="4" name="right" partial="0">
-   <Text id="5" name="name" partial="0">S_Right child</Text>
+  <BinaryNode id="6" name="right" partial="0">
+   <Text id="7" name="name" partial="0">S_Right child</Text>
   </BinaryNode>
  </BinaryNode>
 </model>

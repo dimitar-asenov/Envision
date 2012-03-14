@@ -32,6 +32,7 @@
  **********************************************************************************************************************/
 
 #include "expressions/VMethodCallExpression.h"
+#include "Helpers.h"
 
 #include "VisualizationBase/headers/items/Text.h"
 #include "VisualizationBase/headers/items/Static.h"
@@ -80,6 +81,10 @@ void VMethodCallExpression::determineChildren()
 	if (prefix_) separator_->setStyle( &style()->separator());
 
 	name_->setText(node()->ref()->path().split(',').last().split(':').last());
+
+	bool horizontal = style()->layout().direction() == LayoutType::StyleType::LeftToRight
+		|| style()->layout().direction() == LayoutType::StyleType::RightToLeft;
+	Helpers::omitBoundingCursorsInExpressions(this, layout(), horizontal);
 }
 
 }

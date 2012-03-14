@@ -34,7 +34,7 @@
 #ifndef COMMANDERROR_H_
 #define COMMANDERROR_H_
 
-#include "interactionbase_api.h"
+#include "../interactionbase_api.h"
 
 #include "VisualizationBase/headers/items/Item.h"
 

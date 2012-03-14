@@ -39,13 +39,13 @@ namespace Model {
 
 NODE_DEFINE_TYPE_REGISTRATION_METHODS(Character)
 
-Character::Character(Node *parent, Model* model) :
-	Node(parent, model), value('\0')
+Character::Character(Node *parent) :
+	Node(parent), value('\0')
 {
 }
 
-Character::Character(Node *parent, NodeIdType id, PersistentStore &store, bool) :
-	Node(parent, id)
+Character::Character(Node *parent, PersistentStore &store, bool) :
+	Node(parent)
 {
 	QString t = store.loadStringValue();
 	if (t.size() != 1) throw ModelException("Creating character node failed. Invalid persistent store data: " + t);

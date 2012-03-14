@@ -34,33 +34,44 @@
 #include "commands/ExtendedNodeChild.h"
 #include "nodes/Node.h"
 
+#include "ModelException.h"
+
 #include "Core/headers/global.h"
 
 namespace Model {
 
-ExtendedNodeChild::ExtendedNodeChild(Node* target, Node* newValue_, const ExtendableIndex &attributeIndex_, QVector< QVector<Node*> >* subnodes_) :
-	UndoCommand(target, "set node"), newVal(newValue_), oldVal((*subnodes_)[attributeIndex_.level()][attributeIndex_.index()]),
-	attributeIndex(attributeIndex_), subnodes(subnodes_)
+ExtendedNodeChild::ExtendedNodeChild(Node* target, Node* newValue_, bool detached,
+		const ExtendableIndex &attributeIndex_, QVector< QVector<Node*> >* subnodes_) :
+	UndoCommand(target, "set node"), newVal(newValue_),
+	oldVal((*subnodes_)[attributeIndex_.level()][attributeIndex_.index()]),
+	attributeIndex(attributeIndex_), subnodes(subnodes_), detached_(detached)
 {
+	if (newValue_ && newValue_->parent())
+		throw ModelException("Set as a child of ExtenableNode a node that already has a parent.");
 }
 
 ExtendedNodeChild::~ExtendedNodeChild()
 {
-	if ( isUndone() ) SAFE_DELETE(newVal);
-	else SAFE_DELETE(oldVal);
+	if (!detached_)
+	{
+		if ( isUndone() ) SAFE_DELETE(newVal);
+		else SAFE_DELETE(oldVal);
+	}
 }
 
 void ExtendedNodeChild::redo()
 {
 	(*subnodes)[attributeIndex.level()][attributeIndex.index()] = newVal;
-
+	if (newVal) newVal->setParent(target());
+	if (oldVal) oldVal->setParent(nullptr);
 	UndoCommand::redo();
 }
 
 void ExtendedNodeChild::undo()
 {
 	(*subnodes)[attributeIndex.level()][attributeIndex.index()] = oldVal;
-
+	if (newVal) newVal->setParent(nullptr);
+	if (oldVal) oldVal->setParent(target());
 	UndoCommand::undo();
 }
 

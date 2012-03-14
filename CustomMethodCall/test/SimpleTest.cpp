@@ -53,94 +53,132 @@ Class* addCollection(Model::Model* model, Project* parent)
 
 	if (!parent) col = dynamic_cast<Class*> (model->createRoot("Class"));
 	model->beginModification(parent ? static_cast<Model::Node*> (parent) :col, "Adding a collection class.");
-	if (!col) col = parent->classes()->append<Class>();
+	if (!col)
+	{
+		col = new Class();
+		parent->classes()->append(col);
+	}
 
 	col->setName("Collection");
 	col->setVisibility(Visibility::PUBLIC);
 
-	Method* find = col->methods()->append<Method>();
+	Method* find = new Method();
+	col->methods()->append(find);
 	find->setName("find");
 	find->extension<CustomVisualization>()->setVisName("FindMethodVis");
-	FormalArgument* findArg = find->arguments()->append<FormalArgument>();
-	findArg->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+	FormalArgument* findArg = new FormalArgument();
+	find->arguments()->append(findArg);
+	findArg->setType(new PrimitiveType(PrimitiveType::INT));
 	findArg->setName("x");
-	find->results()->append<FormalResult>()->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+	FormalResult* findResult = new FormalResult();
+	findResult->setType(new PrimitiveType(PrimitiveType::INT));
+	find->results()->append(findResult);
 
-	Method* insert = col->methods()->append<Method>();
+	Method* insert = new Method();
+	col->methods()->append(insert);
 	insert->setName("insert");
 	insert->extension<CustomVisualization>()->setVisName("InsertMethodVis");
 	insert->extension<Position>()->setY(100);
-	FormalArgument* insertArg = insert->arguments()->append<FormalArgument>();
-	insertArg->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+	FormalArgument* insertArg = new FormalArgument();
+	insert->arguments()->append(insertArg);
+	insertArg->setType(new PrimitiveType(PrimitiveType::INT));
 	insertArg->setName("x");
 
-	Method* empty = col->methods()->append<Method>();
+	Method* empty = new Method();
+	col->methods()->append(empty);
 	empty->setName("empty");
 	empty->extension<CustomVisualization>()->setVisName("EmptyMethodVis");
 	empty->extension<Position>()->setY(200);
-	empty->results()->append<FormalResult>()->setType<PrimitiveType>()->setType(PrimitiveType::BOOLEAN);
+	FormalResult* emptyResult = new FormalResult();
+	emptyResult->setType(new PrimitiveType(PrimitiveType::BOOLEAN));
+	empty->results()->append(emptyResult);
 
-	Method* exists = col->methods()->append<Method>();
+	Method* exists = new Method();
+	col->methods()->append(exists);
 	exists->setName(QChar(0x2203));
 	exists->extension<CustomVisualization>()->setVisName("ExistsMethodVis");
 	exists->extension<Position>()->setY(300);
-	FormalArgument* existsArg = exists->arguments()->append<FormalArgument>();
-	existsArg->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+	FormalArgument* existsArg = new FormalArgument();
+	exists->arguments()->append(existsArg);
+	existsArg->setType(new PrimitiveType(PrimitiveType::INT));
 	existsArg->setName("x");
-	exists->results()->append<FormalResult>()->setType<PrimitiveType>()->setType(PrimitiveType::BOOLEAN);
+	FormalResult* existsResult = new FormalResult();
+	existsResult->setType(new PrimitiveType(PrimitiveType::BOOLEAN));
+	exists->results()->append(existsResult);
 
-	Method* sum = col->methods()->append<Method>();
+	Method* sum = new Method();
+	col->methods()->append(sum);
 	sum->setName("sum");
 	sum->extension<CustomVisualization>()->setVisName("SumMethodVis");
 	sum->extension<Position>()->setY(400);
-	FormalArgument* sumArgFrom = sum->arguments()->append<FormalArgument>();
-	sumArgFrom->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+	FormalArgument* sumArgFrom = new FormalArgument();
+	sum->arguments()->append(sumArgFrom);
+	sumArgFrom->setType(new PrimitiveType(PrimitiveType::INT));
 	sumArgFrom->setName("from");
-	FormalArgument* sumArgTo = sum->arguments()->append<FormalArgument>();
-	sumArgTo->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+	FormalArgument* sumArgTo = new FormalArgument();
+	sum->arguments()->append(sumArgTo);
+	sumArgTo->setType(new PrimitiveType(PrimitiveType::INT));
 	sumArgTo->setName("to");
-	sum->results()->append<FormalResult>()->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+	FormalResult* sumResult = new FormalResult();
+	sumResult->setType(new PrimitiveType(PrimitiveType::INT));
+	sum->results()->append(sumResult);
 
-	Method* test = col->methods()->append<Method>();
+	Method* test = new Method();
+	col->methods()->append(test);
 	test->setName("test");
 	test->extension<Position>()->setX(300);
 
-	IfStatement* ifs = test->items()->append<IfStatement>();
-	BinaryOperation* orIf = ifs->setCondition<BinaryOperation>();
+	IfStatement* ifs = new IfStatement();
+	test->items()->append(ifs);
+	BinaryOperation* orIf = new BinaryOperation();
+	ifs->setCondition(orIf);
 	orIf->setOp(BinaryOperation::CONDITIONAL_OR);
-	MethodCallExpression* emptyCall = orIf->setLeft<MethodCallExpression>();
+	MethodCallExpression* emptyCall = new MethodCallExpression();
+	orIf->setLeft(emptyCall);
 	emptyCall->ref()->set("method:empty");
 
-	UnaryOperation* negation = orIf->setRight<UnaryOperation>();
+	UnaryOperation* negation = new UnaryOperation();
+	orIf->setRight(negation);
 	negation->setOp(UnaryOperation::NOT);
-	MethodCallExpression* existsCall = negation->setOperand<MethodCallExpression>();
+	MethodCallExpression* existsCall = new MethodCallExpression();
+	negation->setOperand(existsCall);
 	existsCall->ref()->set(QString("method:%1").arg(QChar(0x2203)));
-	existsCall->arguments()->append<IntegerLiteral>()->setValue(42);
+	existsCall->arguments()->append( new IntegerLiteral(42));
 
-	MethodCallStatement* insertCall = ifs->thenBranch()->append<MethodCallStatement>();
+	ExpressionStatement* insertCallSt = new ExpressionStatement();
+	MethodCallExpression* insertCall = new MethodCallExpression();
 	insertCall->ref()->set("method:insert");
-	insertCall->arguments()->append<IntegerLiteral>()->setValue(42);
+	insertCall->arguments()->append( new IntegerLiteral(42));
+	insertCallSt->setExpression(insertCall);
+	ifs->thenBranch()->append(insertCallSt);
 
-	VariableDeclaration* indexVar = test->items()->append<VariableDeclaration>();
+	VariableDeclaration* indexVar = new VariableDeclaration();
+	test->items()->append(new ExpressionStatement(indexVar));
 	indexVar->setName("index");
-	indexVar->setType<PrimitiveType>()->setType(PrimitiveType::INT);
-	MethodCallExpression* findCall = indexVar->setInitialValue<MethodCallExpression>();
+	indexVar->setType(new PrimitiveType(PrimitiveType::INT));
+	MethodCallExpression* findCall = new MethodCallExpression();
+	indexVar->setInitialValue(findCall);
 	findCall->ref()->set("method:find");
-	findCall->arguments()->append<IntegerLiteral>()->setValue(42);
+	findCall->arguments()->append( new IntegerLiteral(42));
 
-	VariableDeclaration* resultVar = test->items()->append<VariableDeclaration>();
+	VariableDeclaration* resultVar = new VariableDeclaration();
+	test->items()->append(new ExpressionStatement(resultVar));
 	resultVar->setName("result");
-	resultVar->setType<PrimitiveType>()->setType(PrimitiveType::INT);
-	MethodCallExpression* sumCall = resultVar->setInitialValue<MethodCallExpression>();
+	resultVar->setType(new PrimitiveType(PrimitiveType::INT));
+	MethodCallExpression* sumCall = new MethodCallExpression();
+	resultVar->setInitialValue(sumCall);
 	sumCall->ref()->set("method:sum");
-	sumCall->arguments()->append<IntegerLiteral>()->setValue(0);
-	sumCall->arguments()->append<VariableAccess>()->ref()->set("local:index");
-	sumCall->setPrefix<ThisExpression>();
+	sumCall->arguments()->append( new IntegerLiteral(0));
+	sumCall->arguments()->append( new VariableAccess("local:index"));
+	sumCall->setPrefix(new ThisExpression());
 
-	test->items()->append<ReturnStatement>()->values()->append<VariableAccess>()->ref()->set("local:result");
+	ReturnStatement* testReturn = new ReturnStatement();
+	testReturn->values()->append(new VariableAccess("local:result"));
+	test->items()->append(testReturn);
 
-
-	test->results()->append<FormalResult>()->setType<PrimitiveType>()->setType(PrimitiveType::INT);
+	FormalResult* testFormalResult = new FormalResult();
+	testFormalResult->setType(new PrimitiveType(PrimitiveType::INT));
+	test->results()->append(testFormalResult);
 
 	model->endModification();
 	return col;

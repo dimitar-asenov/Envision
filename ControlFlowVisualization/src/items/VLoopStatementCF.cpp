@@ -81,16 +81,6 @@ bool VLoopStatementCF::isEmpty() const
 	else return vis_->isEmpty();
 }
 
-bool VLoopStatementCF::focusChild(FocusTarget location)
-{
-	if (showAsControlFlow())
-	{
-		//TODO implement this
-		return false;
-	}
-	else return vis_->focusChild(location);
-}
-
 void VLoopStatementCF::determineChildren()
 {
 	if (showAsControlFlow())

@@ -51,6 +51,7 @@ void Braces::update()
 	if ( sizeSpecified() == InnerSize )
 	{
 		textSize_ = height();
+		if (textSize_ < style()->minHeight()) textSize_ = style()->minHeight();
 		QSize lb = getSizeOfBrace(style()->leftBrace(), style()->leftBraceFont(), textSize_, &leftBraceOffset_);
 		QSize rb = getSizeOfBrace(style()->rightBrace(), style()->rightBraceFont(), textSize_, &rightBraceOffset_);
 
@@ -70,6 +71,7 @@ void Braces::update()
 	else
 	{
 		textSize_ = height();
+		if (textSize_ < style()->minHeight()) textSize_ = style()->minHeight();
 		QSize lb = getSizeOfBrace(style()->leftBrace(), style()->leftBraceFont(), textSize_, &leftBraceOffset_);
 		QSize rb = getSizeOfBrace(style()->rightBrace(), style()->rightBraceFont(), textSize_, &rightBraceOffset_);
 

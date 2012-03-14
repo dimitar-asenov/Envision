@@ -40,18 +40,20 @@
 
 namespace Model {
 
-ListRemove::ListRemove(Node *target, QVector<Node*>& nodes_, int position) :
-	UndoCommand(target, "remove node"), nodes(nodes_), removedNode(nodes_[position]), removePosition(position)
+ListRemove::ListRemove(Node *target, QVector<Node*>& nodes_, int position, bool release) :
+	UndoCommand(target, "remove node"), nodes(nodes_), removedNode(nodes_[position]), removePosition(position),
+	release(release)
 {
 }
 
 ListRemove::~ListRemove()
 {
-	if ( !isUndone() && removedNode ) SAFE_DELETE(removedNode);
+	if ( !isUndone() && removedNode && !release) SAFE_DELETE(removedNode);
 }
 
 void ListRemove::redo()
 {
+	if (removedNode) removedNode->setParent(nullptr);
 	nodes.remove(removePosition);
 	UndoCommand::redo();
 }
@@ -59,6 +61,7 @@ void ListRemove::redo()
 void ListRemove::undo()
 {
 	nodes.insert(removePosition, removedNode);
+	if (removedNode) removedNode->setParent(target());
 	UndoCommand::undo();
 }
 

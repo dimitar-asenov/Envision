@@ -91,9 +91,4 @@ void VContinueStatementCF::updateGeometry(int availableWidth, int availableHeigh
 	addConnector(entrance_, entrance_ + QPoint(0, style()->pinLength()), true);
 }
 
-bool VContinueStatementCF::focusChild(FocusTarget location)
-{
-	return vis_->focusChild(location);
-}
-
 }

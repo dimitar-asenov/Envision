@@ -51,11 +51,12 @@ class VISUALIZATIONBASE_API Static : public Item
 		Static(Item* parent, const StyleType *style = itemStyles().get());
 		virtual ~Static();
 
-		virtual bool focusChild(FocusTarget location);
 		virtual bool isEmpty() const;
 		virtual bool sizeDependsOnParent() const;
 
 		template<class T> static void registerStaticItem();
+
+		Item* item();
 
 	protected:
 		virtual void determineChildren();
@@ -75,6 +76,8 @@ class VISUALIZATIONBASE_API Static : public Item
 
 		static ItemStyle* constructStyle(const QString& itemClass);
 };
+
+inline Item* Static::item() { return item_; }
 
 template<class T> void Static::registerStaticItem()
 {

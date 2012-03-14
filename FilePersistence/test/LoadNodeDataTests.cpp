@@ -57,7 +57,7 @@ TEST(FilePersistence, LoadDataMultipleUnits)
 	typedef PersistedValue< QList<PersistedNode*> >* Composite;
 
 	// Root Node
-	Composite root = dynamic_cast<Composite> (store.loadCompleteNodeSubtree("units",0,0));
+	Composite root = dynamic_cast<Composite> (store.loadCompleteNodeSubtree("units", nullptr));
 	CHECK_CONDITION(root);
 	CHECK_STR_EQUAL("BinaryNode", root->type() );
 	CHECK_STR_EQUAL("units", root->name());
@@ -89,7 +89,7 @@ TEST(FilePersistence, LoadDataMultipleUnits)
 	CHECK_CONDITION(right);
 	CHECK_STR_EQUAL("BinaryNode", right->type() );
 	CHECK_STR_EQUAL("right", right->name());
-	CHECK_INT_EQUAL(4, right->id());
+	CHECK_INT_EQUAL(6, right->id());
 	CHECK_CONDITION(!right->partialHint());
 	CHECK_CONDITION(!right->isNewPersistenceUnit());
 	CHECK_INT_EQUAL(1, right->value().size());
@@ -108,7 +108,7 @@ TEST(FilePersistence, LoadDataMultipleUnits)
 	CHECK_CONDITION(leftleft);
 	CHECK_STR_EQUAL("BinaryNode", leftleft->type() );
 	CHECK_STR_EQUAL("left", leftleft->name());
-	CHECK_INT_EQUAL(6, leftleft->id());
+	CHECK_INT_EQUAL(4, leftleft->id());
 	CHECK_CONDITION(!leftleft->partialHint());
 	CHECK_CONDITION(!leftleft->isNewPersistenceUnit());
 	CHECK_INT_EQUAL(1, leftleft->value().size());
@@ -117,7 +117,7 @@ TEST(FilePersistence, LoadDataMultipleUnits)
 	CHECK_CONDITION(leftleftName);
 	CHECK_STR_EQUAL("Text", leftleftName->type() );
 	CHECK_STR_EQUAL("name", leftleftName->name());
-	CHECK_INT_EQUAL(7, leftleftName->id());
+	CHECK_INT_EQUAL(5, leftleftName->id());
 	CHECK_CONDITION(!leftleftName->partialHint());
 	CHECK_CONDITION(!leftleftName->isNewPersistenceUnit());
 	CHECK_STR_EQUAL("in a new unit", leftleftName->value());
@@ -127,7 +127,7 @@ TEST(FilePersistence, LoadDataMultipleUnits)
 	CHECK_CONDITION(rightName);
 	CHECK_STR_EQUAL("Text", rightName->type() );
 	CHECK_STR_EQUAL("name", rightName->name());
-	CHECK_INT_EQUAL(5, rightName->id());
+	CHECK_INT_EQUAL(7, rightName->id());
 	CHECK_CONDITION(!rightName->partialHint());
 	CHECK_CONDITION(!rightName->isNewPersistenceUnit());
 	CHECK_STR_EQUAL("Right child", rightName->value());

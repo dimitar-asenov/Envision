@@ -33,10 +33,8 @@
 
 #include "CustomVisualization.h"
 
-#include "OOVisualization/headers/statements/VMethodCallStatement.h"
 #include "OOVisualization/headers/expressions/VMethodCallExpression.h"
 
-#include "OOModel/headers/statements/MethodCallStatement.h"
 #include "OOModel/headers/expressions/MethodCallExpression.h"
 #include "OOModel/headers/top_level/Method.h"
 
@@ -56,19 +54,6 @@ QMap<QString, Visualization::ModelRenderer::ItemConstructor> CustomVisualization
 
 //TODO Currently it is not possible to define a MethodVisualization extension for the Method such that it does
 //Different things depending on what is the actual type of node (expression call or statement call)
-
-Item* CustomVisualization::createStatement(Item* parent, Model::Node* node)
-{
-	Method* met = (static_cast<MethodCallStatement*> (node))->methodDefinition();
-
-	CustomVisualization* custVis = nullptr;
-	if (met) custVis = met->extension<CustomVisualization>();
-
-	if (custVis && custVis->visNameNode() && visualizations.contains(custVis->visName()))
-		return visualizations.value(custVis->visName())(parent, node);
-	else
-		return new VMethodCallStatement(parent, static_cast<MethodCallStatement*> (node));
-}
 
 Item* CustomVisualization::createExpression(Item* parent, Model::Node* node)
 {

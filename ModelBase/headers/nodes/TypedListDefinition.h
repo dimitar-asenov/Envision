@@ -51,17 +51,19 @@ class Q_DECL_EXPORT TypedList: public List
 		T* first();
 		T* last();
 		T* at(int i);
+
+		virtual bool replaceChild(Node* child, Node* replacement, bool releaseOldChild = true);
 };
 
 template<class T>
-TypedList<T>::TypedList(::Model::Node* parent, ::Model::Model* model) :
-	List(parent, model)
+TypedList<T>::TypedList(::Model::Node* parent) :
+	List(parent)
 {
 }
 
 template<class T>
-TypedList<T>::TypedList(::Model::Node *parent, ::Model::NodeIdType id, ::Model::PersistentStore &store, bool partialLoadHint) :
-	List(parent, id, store, partialLoadHint)
+TypedList<T>::TypedList(::Model::Node *parent, ::Model::PersistentStore &store, bool partialLoadHint) :
+	List(parent, store, partialLoadHint)
 {
 }
 
@@ -109,6 +111,12 @@ template<class T> T* TypedList<T>::last()
 template<class T> T* TypedList<T>::at(int i)
 {
 	return List::at<T>(i);
+}
+
+template<class T> bool TypedList<T>::replaceChild(Node* child, Node* replacement, bool releaseOldChild)
+{
+	if (!dynamic_cast<T*>(replacement)) return false;
+	else return List::replaceChild(child, replacement, releaseOldChild);
 }
 
 }

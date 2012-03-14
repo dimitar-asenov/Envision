@@ -35,7 +35,7 @@
 #include "SelfTest/headers/SelfTestSuite.h"
 
 #include "allCFVisualizations.h"
-#include "handlers/HMethodCF.h"
+#include "handlers/HControlFlowMethodSwitch.h"
 
 #include "OOModel/headers/allOOModelNodes.h"
 
@@ -54,7 +54,7 @@ namespace ControlFlowVisualization {
 bool ControlFlowVisualization::initialize(Envision::EnvisionManager&)
 {
 	// Register visualizations
-	Scene::defaultRenderer()->registerVisualization(Method::typeIdStatic(), createVisualization<VMethodCF, Method>);
+	Scene::defaultRenderer()->registerVisualization(Method::typeIdStatic(), createVisualization<VControlFlowMethodSwitch, Method>);
 	Scene::defaultRenderer()->registerVisualization(Block::typeIdStatic(), createVisualization<VBlockCF, Block>);
 	Scene::defaultRenderer()->registerVisualization(ReturnStatement::typeIdStatic(), createVisualization<VReturnStatementCF, ReturnStatement>);
 	Scene::defaultRenderer()->registerVisualization(IfStatement::typeIdStatic(), createVisualization<VIfStatementCF, IfStatement>);
@@ -67,7 +67,8 @@ bool ControlFlowVisualization::initialize(Envision::EnvisionManager&)
 	// TODO: replace this with custom handlers, possibly from OOInteraction Plugin
 	// TODO: when you do that fix dependencies in the .plugin meta file
 	VListCF::setInteractionHandler(Interaction::GenericHandler::instance());
-	VMethodCF::setInteractionHandler(HMethodCF::instance());
+	VMethodCF::setInteractionHandler(Interaction::GenericHandler::instance());
+	VControlFlowMethodSwitch::setInteractionHandler(HControlFlowMethodSwitch::instance());
 	VIfStatementCF::setInteractionHandler(Interaction::GenericHandler::instance());
 	VLoopStatementCF::setInteractionHandler(Interaction::GenericHandler::instance());
 //	VForEachStatementCF::setInteractionHandler(Interaction::GenericHandler::instance());

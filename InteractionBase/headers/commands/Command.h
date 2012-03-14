@@ -34,7 +34,7 @@
 #ifndef COMMAND_H_
 #define COMMAND_H_
 
-#include "interactionbase_api.h"
+#include "../interactionbase_api.h"
 
 #include "CommandResult.h"
 #include "CommandSuggestion.h"

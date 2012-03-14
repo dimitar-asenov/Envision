@@ -34,7 +34,7 @@
 #ifndef COMMANDHELP_H_
 #define COMMANDHELP_H_
 
-#include "interactionbase_api.h"
+#include "../interactionbase_api.h"
 
 #include "VisualizationBase/headers/items/Item.h"
 

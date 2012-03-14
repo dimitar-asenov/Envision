@@ -37,6 +37,7 @@
 #include "vis/CommandPrompt.h"
 
 #include "VisualizationBase/headers/Scene.h"
+#include "VisualizationBase/headers/cursor/Cursor.h"
 #include "FilePersistence/headers/SystemClipboard.h"
 #include "ModelBase/headers/nodes/List.h"
 #include "ModelBase/headers/nodes/Extendable/ExtendableNode.h"
@@ -45,7 +46,9 @@ namespace Interaction {
 
 CommandExecutionEngine* GenericHandler::executionEngine_ = CommandExecutionEngine::instance();
 CommandPrompt* GenericHandler::prompt_ = nullptr;
-GenericHandler::FocusDirection GenericHandler::focusDirection_ = NOT_SPECIFIED;
+
+QPoint GenericHandler::cursorOriginMidPoint_;
+GenericHandler::CursorMoveOrientation GenericHandler::cursorMoveOrientation_ = NoOrientation;
 
 GenericHandler::GenericHandler()
 {
@@ -67,14 +70,10 @@ void GenericHandler::setCommandExecutionEngine(CommandExecutionEngine *engine)
 	executionEngine_ = engine;
 }
 
-void GenericHandler::setFocusDirection(FocusDirection direction)
+void GenericHandler::resetCursorOrigin()
 {
-	focusDirection_ = direction;
-}
-
-GenericHandler::FocusDirection GenericHandler::focusDirection()
-{
-	return focusDirection_;
+	cursorOriginMidPoint_ = QPoint();
+	cursorMoveOrientation_ = NoOrientation;
 }
 
 CommandPrompt* GenericHandler::prompt()
@@ -110,136 +109,193 @@ void GenericHandler::command(Visualization::Item *target, const QString& command
 
 void GenericHandler::beforeEvent(Visualization::Item *, QEvent* event)
 {
-	if (event->type() == QEvent::GraphicsSceneMouseMove ||
-		 event->type() == QEvent::GraphicsSceneMousePress ||
-		 event->type() == QEvent::GraphicsSceneMouseDoubleClick ||
-		 event->type() == QEvent::KeyPress)
+	if (	event->type() == QEvent::GraphicsSceneMouseMove
+			|| event->type() == QEvent::GraphicsSceneMousePress
+			|| event->type() == QEvent::GraphicsSceneMouseDoubleClick)
 	{
-		focusDirection_ = NOT_SPECIFIED;
+		resetCursorOrigin();
 	}
 }
 
 void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
-	if (event->modifiers() == Qt::ControlModifier)
+	if (event->matches(QKeySequence::Copy))
 	{
-		switch (event->key())
+		QList<const Model::Node*> nodesToCopy;
+		QList<QGraphicsItem*> selected = target->scene()->selectedItems();
+
+		// Get all items from the current selection that are model items.
+		for (int i = 0; i<selected.size(); ++i)
 		{
-/* Copy */	case Qt::Key_C:
+			Visualization::Item* item = static_cast<Visualization::Item*> (selected.at(i));
+			if (item->hasNode()) nodesToCopy.append(item->node());
+		}
+
+		// In case there is exactly one selected item that is not a model item try to find the first parent that it has which is a model item.
+		if (nodesToCopy.size() == 0 && selected.size() == 1)
+		{
+			Visualization::Item* item = static_cast<Visualization::Item*> (selected.at(0));
+			while (item)
+			{
+				if (item->hasNode())
 				{
-					QList<const Model::Node*> nodesToCopy;
-					QList<QGraphicsItem*> selected = target->scene()->selectedItems();
-
-					// Get all items from the current selection that are model items.
-					for (int i = 0; i<selected.size(); ++i)
-					{
-						Visualization::Item* item = static_cast<Visualization::Item*> (selected.at(i));
-						if (item->hasNode()) nodesToCopy.append(item->node());
-					}
-
-					// In case there is exactly one selected item that is not a model item try to find the first parent that it has which is a model item.
-					if (nodesToCopy.size() == 0 && selected.size() == 1)
-					{
-						Visualization::Item* item = static_cast<Visualization::Item*> (selected.at(0));
-						while (item)
-						{
-							if (item->hasNode())
-							{
-								nodesToCopy.append(item->node());
-								break;
-							}
-
-							item = static_cast<Visualization::Item*> ( item->parentItem() );
-						}
-					}
-
-					if (nodesToCopy.size() > 0)
-					{
-
-						FilePersistence::SystemClipboard clipboard;
-						arrangeNodesForClipboard(nodesToCopy);
-						clipboard.putNodes(nodesToCopy);
-					}
+					nodesToCopy.append(item->node());
+					break;
 				}
-				break;
-/* Paste */	case Qt::Key_V:
-				{
-					FilePersistence::SystemClipboard clipboard;
-					if (clipboard.numNodes() == 1 && target->scene()->selectedItems().size() == 1 && target->isSelected())
-					{
-						if (target->hasNode() && target->node()->typeName() == clipboard.currentNodeType())
-						{
-							target->node()->model()->beginModification(target->node(), "paste");
-							target->node()->load(clipboard);
-							target->node()->model()->endModification();
-							target->setUpdateNeeded();
-						}
-						else InteractionHandler::keyPressEvent(target, event);
-					}
-					else InteractionHandler::keyPressEvent(target, event);
-				}
-				break;
-/* Undo */	case Qt::Key_Z:
-				{
-					if (target->hasNode())
-					{
-						target->node()->model()->beginModification(nullptr, "undo");
-						target->node()->model()->undo();
-						target->node()->model()->endModification();
-						target->setUpdateNeeded();
-					}
-					else InteractionHandler::keyPressEvent(target, event);
-				}
-				break;
-/* Redo */	case Qt::Key_Y:
-				{
-					if (target->hasNode())
-					{
-						target->node()->model()->beginModification(nullptr, "redo");
-						target->node()->model()->redo();
-						target->node()->model()->endModification();
-						target->setUpdateNeeded();
-					}
-					else InteractionHandler::keyPressEvent(target, event);
-				}
-				break;
-			default:
-				InteractionHandler::keyPressEvent(target, event);
-				break;
+
+				item = static_cast<Visualization::Item*> ( item->parentItem() );
+			}
+		}
+
+		if (nodesToCopy.size() > 0)
+		{
+
+			FilePersistence::SystemClipboard clipboard;
+			arrangeNodesForClipboard(nodesToCopy);
+			clipboard.putNodes(nodesToCopy);
 		}
 	}
-	else if (event->modifiers() == 0)
+	else if (event->matches(QKeySequence::Paste))
+	{
+		FilePersistence::SystemClipboard clipboard;
+		if (clipboard.numNodes() == 1 && target->scene()->selectedItems().size() == 1 && target->isSelected())
+		{
+			if (target->hasNode() && target->node()->typeName() == clipboard.currentNodeType())
+			{
+				target->node()->model()->beginModification(target->node(), "paste");
+				target->node()->load(clipboard);
+				target->node()->model()->endModification();
+				target->setUpdateNeeded();
+			}
+			else InteractionHandler::keyPressEvent(target, event);
+		}
+		else InteractionHandler::keyPressEvent(target, event);
+	}
+	else if (event->matches(QKeySequence::Undo))
+	{
+		if (target->hasNode())
+		{
+			Model::Model* m = target->node()->model();
+			m->beginModification(nullptr, "undo");
+			m->undo();
+			m->endModification();
+			target->setUpdateNeeded();
+		}
+		else InteractionHandler::keyPressEvent(target, event);
+	}
+	else if (event->matches(QKeySequence::Redo))
+	{
+		if (target->hasNode())
+		{
+			Model::Model* m = target->node()->model();
+			m->beginModification(nullptr, "redo");
+			m->redo();
+			m->endModification();
+			target->setUpdateNeeded();
+		}
+		else InteractionHandler::keyPressEvent(target, event);
+	}
+	else if (event->modifiers() == 0
+			&& (	event->key() == Qt::Key_Up
+					|| event->key() == Qt::Key_Down
+					|| event->key() == Qt::Key_Left
+					|| event->key() == Qt::Key_Right))
 	{
 		bool processed = false;
+		Visualization::Item::CursorMoveDirection dir;
+
+		// Set the source navigation point when beginning to navigate in a new direction
+		if (	(event->key() == Qt::Key_Up || event->key() == Qt::Key_Down)
+				&& cursorMoveOrientation_ != VerticalOrientation)
+		{
+			cursorMoveOrientation_ = VerticalOrientation;
+			Visualization::Cursor* c = target->scene()->mainCursor();
+			if (c) cursorOriginMidPoint_ = c->region().center();
+		}
+		if (	(event->key() == Qt::Key_Left || event->key() == Qt::Key_Right)
+				&& cursorMoveOrientation_ != HorizontalOrientation)
+		{
+			cursorMoveOrientation_ = HorizontalOrientation;
+			Visualization::Cursor* c = target->scene()->mainCursor();
+			if (c) cursorOriginMidPoint_ = c->region().center();
+		}
+
+		QPoint midpoint = target->mapFromScene(cursorOriginMidPoint_).toPoint();
 		switch( event->key() )
 		{
 			case Qt::Key_Up:
 			{
-				setFocusDirection(FROM_BOTTOM);
-				processed = target->focusChild(Visualization::Item::FOCUS_UP);
+				processed = target->moveCursor(Visualization::Item::MoveUp, midpoint);
+				if (!processed) dir = Visualization::Item::MoveUpOf;
 			}
 			break;
 			case Qt::Key_Down:
 			{
-				setFocusDirection(FROM_TOP);
-				processed = target->focusChild(Visualization::Item::FOCUS_DOWN);
+				processed = target->moveCursor(Visualization::Item::MoveDown, midpoint);
+				if (!processed) dir = Visualization::Item::MoveDownOf;
 			}
 			break;
 			case Qt::Key_Left:
 			{
-				setFocusDirection(FROM_RIGHT);
-				processed = target->focusChild(Visualization::Item::FOCUS_LEFT);
+				processed = target->moveCursor(Visualization::Item::MoveLeft, midpoint);
+				if (!processed) dir = Visualization::Item::MoveLeftOf;
 			}
 			break;
 			case Qt::Key_Right:
 			{
-				setFocusDirection(FROM_LEFT);
-				processed = target->focusChild(Visualization::Item::FOCUS_RIGHT);
+				processed = target->moveCursor(Visualization::Item::MoveRight, midpoint);
+				if (!processed) dir = Visualization::Item::MoveRightOf;
+			}
+			break;
+			default:
+			{
+				resetCursorOrigin();
 			}
 			break;
 		}
 
-		if (!processed) InteractionHandler::keyPressEvent(target, event);
+		if (!processed)
+		{
+			Visualization::Item* current = target;
+
+			while (current && !processed)
+			{
+				Visualization::Item* parent = static_cast<Visualization::Item*> (current->parentItem());
+				if (!parent) break;
+
+				QPoint reference;
+				switch( event->key() )
+				{
+					case Qt::Key_Up:
+					{
+						int border = current->scenePos().y();
+						reference = QPoint(cursorOriginMidPoint_.x(), border);
+					} break;
+					case Qt::Key_Down:
+					{
+						int border = current->scenePos().y() + current->height()-1;
+						reference = QPoint(cursorOriginMidPoint_.x(), border);
+					} break;
+					case Qt::Key_Left:
+					{
+						int border = current->scenePos().x();
+						reference = QPoint(border, cursorOriginMidPoint_.y());
+					} break;
+					case Qt::Key_Right:
+					{
+						int border = current->scenePos().x() + current->width()-1;
+						reference = QPoint(border, cursorOriginMidPoint_.y());
+					} break;
+				}
+
+				reference = parent->mapFromScene(reference).toPoint();
+
+				processed = parent->moveCursor(dir, reference);
+				current = parent;
+			}
+		}
+
+		event->accept();
 	}
 	else InteractionHandler::keyPressEvent(target, event);
 }
@@ -256,8 +312,18 @@ void GenericHandler::keyReleaseEvent(Visualization::Item *target, QKeyEvent *eve
 
 void GenericHandler::mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
-	if (event->button() == Qt::LeftButton && event->modifiers() == Qt::ControlModifier) event->ignore();
-	else InteractionHandler::mousePressEvent(target, event);
+	if (event->button() == Qt::LeftButton && event->modifiers() == Qt::ControlModifier)
+	{
+		// Ignore the event and do not send it to the Interaction handler. This prevents the default event handlers from
+		// processing the event.
+		event->ignore();
+		return;
+	}
+
+	if (event->button() == Qt::LeftButton && event->modifiers() == Qt::NoModifier)
+		target->moveCursor(Visualization::Item::MoveOnPosition, event->pos().toPoint());
+
+	InteractionHandler::mousePressEvent(target, event);
 }
 
 void GenericHandler::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
@@ -280,12 +346,17 @@ void GenericHandler::mouseDoubleClickEvent(Visualization::Item *, QGraphicsScene
 
 void GenericHandler::focusInEvent(Visualization::Item *target, QFocusEvent *event)
 {
-	// Here we choose which child to focus.
-	if (focusDirection_ == GenericHandler::NOT_SPECIFIED) target->focusChild(Visualization::Item::FOCUS_DEFAULT);
-	else if (focusDirection_ == GenericHandler::FROM_LEFT ) target->focusChild(Visualization::Item::FOCUS_LEFTMOST);
-	else if (focusDirection_ == GenericHandler::FROM_RIGHT ) target->focusChild(Visualization::Item::FOCUS_RIGHTMOST);
-	else if (focusDirection_ == GenericHandler::FROM_TOP ) target->focusChild(Visualization::Item::FOCUS_TOPMOST);
-	else if (focusDirection_ == GenericHandler::FROM_BOTTOM ) target->focusChild(Visualization::Item::FOCUS_BOTTOMMOST);
+	QGraphicsItem* i = target;
+	while (i)
+	{
+		if (i->flags() & QGraphicsItem::ItemIsSelectable)
+		{
+			target->scene()->clearSelection();
+			i->setSelected(true);
+			break;
+		}
+		else i = i->parentItem();
+	}
 
 	InteractionHandler::focusInEvent(target, event);
 }

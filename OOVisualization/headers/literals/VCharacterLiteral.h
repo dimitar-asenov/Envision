@@ -52,8 +52,6 @@ class OOVISUALIZATION_API VCharacterLiteral : public Visualization::ItemWithNode
 		VCharacterLiteral(Item* parent, NodeType* literal, const StyleType* style = itemStyles().get());
 		virtual ~VCharacterLiteral();
 
-		virtual bool focusChild(FocusTarget location);
-
 	protected:
 		virtual void determineChildren();
 		virtual void updateGeometry(int availableWidth, int availableHeight);

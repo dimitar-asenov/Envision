@@ -36,8 +36,6 @@
 
 #include <QtGui/QMouseEvent>
 
-#include <QtCore/QDebug>
-
 #include <cmath>
 
 namespace Visualization {

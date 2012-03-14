@@ -33,6 +33,7 @@
 
 #include "commands/ListInsert.h"
 #include "nodes/Node.h"
+#include "ModelException.h"
 
 #include "Core/headers/global.h"
 
@@ -43,6 +44,7 @@ namespace Model {
 ListInsert::ListInsert(Node *target, QVector<Node*>& nodes_, Node* newNode_, int position) :
 	UndoCommand(target, "insert node"), nodes(nodes_), newNode(newNode_), insertPosition(position)
 {
+	if (newNode && newNode->parent()) throw ModelException("Inserting a node that already has a parent into a List.");
 }
 
 ListInsert::~ListInsert()
@@ -53,12 +55,14 @@ ListInsert::~ListInsert()
 void ListInsert::redo()
 {
 	nodes.insert(insertPosition, newNode);
+	if (newNode) newNode->setParent(target());
 	UndoCommand::redo();
 }
 
 void ListInsert::undo()
 {
 	nodes.remove(insertPosition);
+	if (newNode) newNode->setParent(nullptr);
 	UndoCommand::undo();
 }
 

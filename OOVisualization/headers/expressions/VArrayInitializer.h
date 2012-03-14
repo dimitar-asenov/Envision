@@ -60,6 +60,8 @@ class OOVISUALIZATION_API VArrayInitializer : public Visualization::ItemWithNode
 		void showInMatrixForm(bool matrixForm = true);
 		bool isShownInMatrixForm() const;
 
+		Visualization::VList* values() const;
+
 	protected:
 		void determineChildren();
 
@@ -71,6 +73,7 @@ class OOVISUALIZATION_API VArrayInitializer : public Visualization::ItemWithNode
 };
 
 inline bool VArrayInitializer::isShownInMatrixForm() const { return matrixForm_; }
+inline Visualization::VList* VArrayInitializer::values() const { return values_; }
 
 }
 

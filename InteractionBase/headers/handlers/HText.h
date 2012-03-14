@@ -56,7 +56,6 @@ class INTERACTIONBASE_API HText : public GenericHandler
 	protected:
 		HText();
 
-		void moveCaret(Visualization::Item *target, QKeyEvent *event);
 		void erase(Visualization::Item *target, bool forwards, bool onlyDeleteIfSelected);
 		void insertText(Visualization::Item *target, const QString& textToInsert);
 

@@ -47,7 +47,7 @@ class OOMODEL_API ForEachStatement: public Statement
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(ForEachStatement)
 
 	ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::Text, varName, setVarName, QString, const QString&)
-	ATTRIBUTE(Type, varType, setVarType)
+	ATTRIBUTE(Expression, varType, setVarType)
 	ATTRIBUTE(Expression, collection, setCollection);
 	ATTRIBUTE(StatementItemList, body, setBody);
 };

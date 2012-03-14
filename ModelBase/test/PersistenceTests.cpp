@@ -54,8 +54,8 @@ TEST(ModelBase, PersistenceSave)
 	CHECK_STR_EQUAL("BinaryNode,root,full,Text,name,full,,Integer,_ext_PositionExtension_x,full,0,Integer,_ext_PositionExtension_y,full,0,", store.getSaved());
 
 	model.beginModification(root, "make tree");
-	root->setLeft<TestNodes::BinaryNode>();
-	root->setRight<TestNodes::BinaryNode>();
+	root->setLeft(new TestNodes::BinaryNode());
+	root->setRight( new TestNodes::BinaryNode());
 	root->name()->set("Troot");
 	root->left()->name()->set("Tleft");
 	root->right()->name()->set("Tright");

@@ -38,7 +38,7 @@ namespace OOModel {
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(CastExpression, Expression)
 EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(CastExpression, Expression)
 
-REGISTER_ATTRIBUTE(CastExpression, type, Type, false, false, true)
-REGISTER_ATTRIBUTE(CastExpression, expr, Expression, false, true, true)
+REGISTER_ATTRIBUTE(CastExpression, type, Expression, false, false, true)
+REGISTER_ATTRIBUTE(CastExpression, expr, Expression, false, false, true)
 
 }

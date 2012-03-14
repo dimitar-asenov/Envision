@@ -55,7 +55,6 @@ class CUSTOMMETHODCALL_API CustomVisualization
 	EXTENSION_ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::Text, visName, setVisName, QString, const QString&)
 
 	public:
-		static Visualization::Item* createStatement(Visualization::Item* parent, Model::Node* node);
 		static Visualization::Item* createExpression(Visualization::Item* parent, Model::Node* node);
 		static void registerVisualization(const QString& name, Visualization::ModelRenderer::ItemConstructor visualization);
 

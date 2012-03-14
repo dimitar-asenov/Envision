@@ -58,6 +58,8 @@ class OOVISUALIZATION_API VMethodCallExpression : public Visualization::ItemWith
 		VMethodCallExpression(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VMethodCallExpression();
 
+		Visualization::VList* arguments() const;
+
 	protected:
 		void determineChildren();
 
@@ -68,6 +70,7 @@ class OOVISUALIZATION_API VMethodCallExpression : public Visualization::ItemWith
 		Visualization::VList* arguments_;
 };
 
+inline Visualization::VList* VMethodCallExpression::arguments() const { return arguments_; }
 }
 
 #endif /* VMETHODCALLEXPRESSION_H_ */

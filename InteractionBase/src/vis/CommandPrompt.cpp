@@ -37,6 +37,7 @@
 #include "commands/CommandExecutionEngine.h"
 
 #include "VisualizationBase/headers/Scene.h"
+#include "VisualizationBase/headers/cursor/TextCursor.h"
 
 using namespace Visualization;
 
@@ -74,6 +75,8 @@ CommandPrompt::CommandPrompt(Item* commandReceiver, const StyleType* style) :
 	layout->append(command);
 	layout->append(errorContainer);
 	layout->append(suggestionContainer);
+
+	updateGeometry(0,0);
 }
 
 CommandPrompt::~CommandPrompt()
@@ -94,30 +97,32 @@ CommandPrompt::~CommandPrompt()
 void CommandPrompt::initializeCommand()
 {
 	command->setText("Type a command");
-	command->setFocus();
-	command->selectAll();
+	acquireCursor();
+	command->correspondingSceneCursor<Visualization::TextCursor>()->selectAll();
 }
 
 void CommandPrompt::takeSuggestion(CommandSuggestion* suggestion)
 {
 	command->setText(suggestion->suggestion());
-	command->setFocus();
-	command->setCaretPosition(suggestion->suggestion().size());
+	acquireCursor();
+	command->correspondingSceneCursor<Visualization::TextCursor>()->setCaretPosition(suggestion->suggestion().size());
 }
 
 void CommandPrompt::showPrompt()
 {
 	show();
-	command->setFocus();
-	command->setSelectedCharacters(commandSelectedFirst, commandSelectedLast);
+	acquireCursor();
+	command->correspondingSceneCursor<Visualization::TextCursor>()
+			->setSelectedCharacters(commandSelectedFirst, commandSelectedLast);
 }
 
 void CommandPrompt::hidePrompt()
 {
-	commandSelectedFirst = command->selectionFirstInxed();
-	commandSelectedLast = command->selectionLastIndex();
+	commandSelectedFirst = command->correspondingSceneCursor<Visualization::TextCursor>()->selectionFirstIndex();
+	commandSelectedLast = command->correspondingSceneCursor<Visualization::TextCursor>()->selectionLastIndex();
 	hide();
-	commandReceiver_->setFocus();
+	commandReceiver()->moveCursor(Visualization::Item::MoveOnPosition,
+			commandReceiver()->mapFromScene(receiverCursorPosition).toPoint());
 }
 
 void CommandPrompt::determineChildren()
@@ -256,6 +261,21 @@ void CommandPrompt::removeSuggestions()
 	}
 	suggestions_.clear();
 	setUpdateNeeded();
+}
+
+void CommandPrompt::acquireCursor()
+{
+	// Save the current cursor
+	if (commandReceiver_->scene()->mainCursor()->owner() == commandReceiver_)
+	{
+		receiverCursorPosition = commandReceiver_->scene()->mainCursor()->position();
+	}
+	else
+	{
+		receiverCursorPosition = commandReceiver_->scenePos().toPoint();
+	}
+
+	command->moveCursor(Visualization::Item::MoveOnPosition, QPoint(0,0));
 }
 
 }

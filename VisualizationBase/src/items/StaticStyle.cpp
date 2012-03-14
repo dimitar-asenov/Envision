@@ -59,4 +59,11 @@ void StaticStyle::load(StyleLoader& sl)
 	}
 }
 
+void StaticSequenceStyle::load(Visualization::StyleLoader& sl)
+{
+	ItemStyle::load(sl);
+
+	sl.load("statics", seq_);
+}
+
 }

@@ -45,6 +45,9 @@ class OOMODEL_API BooleanLiteral: public Expression
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(BooleanLiteral)
 
 	ATTRIBUTE_VALUE(::Model::Boolean, value, setValue, bool)
+
+	public:
+		BooleanLiteral(bool value);
 };
 
 

@@ -40,4 +40,10 @@ EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(CharacterLiteral, Expression)
 
 REGISTER_ATTRIBUTE(CharacterLiteral, value, Character, false, false, true)
 
+CharacterLiteral::CharacterLiteral(const QChar& value)
+: Expression(nullptr, CharacterLiteral::getMetaData())
+{
+	setValue(value);
+}
+
 }

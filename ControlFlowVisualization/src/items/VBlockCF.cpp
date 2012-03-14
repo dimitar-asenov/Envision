@@ -67,12 +67,6 @@ bool VBlockCF::isEmpty() const
 	else return vis_->isEmpty();
 }
 
-bool VBlockCF::focusChild(FocusTarget location)
-{
-	if (showAsControlFlow()) return statements->focusChild(location);
-	else return vis_->focusChild(location);
-}
-
 void VBlockCF::determineChildren()
 {
 	if (showAsControlFlow())

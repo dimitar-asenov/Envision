@@ -65,8 +65,8 @@
  */
 #define NODE_DECLARE_STANDARD_METHODS(className)																							\
 	public:																																				\
-		className(::Model::Node* parent, ::Model::Model* model);																			\
-		className(::Model::Node *parent, ::Model::NodeIdType id, ::Model::PersistentStore &store, bool partialLoadHint);\
+		className(::Model::Node* parent = nullptr);																							\
+		className(::Model::Node *parent, ::Model::PersistentStore &store, bool partialLoadHint);								\
 																																							\
 		virtual const QString& typeName() const;																								\
 		virtual int typeId() const;																												\
@@ -98,10 +98,10 @@
  */
 #define EXTENDABLENODE_DECLARE_STANDARD_METHODS(className)																				\
 	public:																																				\
-		className(::Model::Node* parent, ::Model::Model* model);																			\
-		className(::Model::Node *parent, ::Model::NodeIdType id, ::Model::PersistentStore &store, bool partialLoadHint);\
-		className(::Model::Node* parent, ::Model::Model* model, ::Model::AttributeChain& metaData);							\
-		className(::Model::Node *parent, ::Model::NodeIdType id, ::Model::PersistentStore &store, bool partialLoadHint, ::Model::AttributeChain& metaData); \
+		className(::Model::Node* parent = nullptr);																							\
+		className(::Model::Node *parent, ::Model::PersistentStore &store, bool partialLoadHint);								\
+		className(::Model::Node* parent, ::Model::AttributeChain& metaData);															\
+		className(::Model::Node *parent, ::Model::PersistentStore &store, bool partialLoadHint, ::Model::AttributeChain& metaData); \
 																																							\
 		static void init();																															\
 																																							\
@@ -148,10 +148,10 @@
  * Use this macro in the .cpp file that defines the new Node type.
  */
 #define NODE_DEFINE_EMPTY_CONSTRUCTORS(className, parentName)																			\
-	className::className(::Model::Node* parent, ::Model::Model* model) : parentName (parent, model) {}						\
+	className::className(::Model::Node* parent) : parentName (parent) {}																\
 																																							\
-	className::className(::Model::Node *parent, ::Model::NodeIdType id, ::Model::PersistentStore &store, bool partialLoadHint)\
-		: parentName (parent, id, store, partialLoadHint) {}
+	className::className(::Model::Node *parent, ::Model::PersistentStore &store, bool partialLoadHint)						\
+		: parentName (parent, store, partialLoadHint) {}
 /*********************************************************************************************************************/
 
 /**
@@ -167,17 +167,17 @@
  * Use this macro in the .cpp file that defines the new Node type.
  */
 #define EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(className, parentName)																\
-	className::className(::Model::Node* parent, ::Model::Model* model)																\
-		: parentName (parent, model, className::getMetaData()) {}																		\
+	className::className(::Model::Node* parent)																								\
+		: parentName (parent, className::getMetaData()) {}																					\
 		  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	\
-	className::className(::Model::Node *parent, ::Model::NodeIdType id, ::Model::PersistentStore &store, bool partialLoadHint)\
-		: parentName (parent, id, store, partialLoadHint, className::getMetaData()) {}											\
+	className::className(::Model::Node *parent, ::Model::PersistentStore &store, bool partialLoadHint)						\
+		: parentName (parent, store, partialLoadHint, className::getMetaData()) {}													\
 		  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	   \
-	className::className(::Model::Node* parent, ::Model::Model* model, ::Model::AttributeChain& metaData)					\
-		: parentName (parent, model, metaData) {}																								\
+	className::className(::Model::Node* parent, ::Model::AttributeChain& metaData)												\
+		: parentName (parent, metaData) {}																										\
 																																							\
-	className::className(::Model::Node *parent, ::Model::NodeIdType id, ::Model::PersistentStore &store, bool partialLoadHint, ::Model::AttributeChain& metaData)\
-		: parentName (parent, id, store, partialLoadHint, metaData) {}
+	className::className(::Model::Node *parent, ::Model::PersistentStore &store, bool partialLoadHint, ::Model::AttributeChain& metaData)\
+		: parentName (parent, store, partialLoadHint, metaData) {}
 /*********************************************************************************************************************/
 
 /**
@@ -318,7 +318,7 @@ private:																																					\
 		static ::Model::ExtendableIndex name##Index;																							\
 public:																																					\
 		type* name() { return static_cast< type* > (get(name##Index)); }																\
-		template <class T> T* setMethodName() { return set<T>(name##Index,T::typeNameStatic()); }								\
+		void setMethodName(type* node) { set(name##Index, node); }																		\
 private:																																					\
 
 /*********************************************************************************************************************/
@@ -338,7 +338,7 @@ private:																																					\
 private:																																					\
 		static ::Model::ExtendableIndex name##Index;																							\
 		type* name() { return static_cast< type* > (get(name##Index)); }																\
-		template <class T> T* setMethodName() { return set<T>(name##Index,T::typeNameStatic()); }								\
+		void setMethodName(type* node) { set(name##Index, node); }																		\
 private:																																					\
 
 /*********************************************************************************************************************/
@@ -350,7 +350,11 @@ private:																																					\
  */
 #define SET_ATTR_VAL(type, name)																													\
 	type* node = static_cast<type*> (get(name##Index));																					\
-	if (!node) node = set<type>(name##Index, type::typeNameStatic());																	\
+	if (!node)																																			\
+	{																																						\
+		node = new type();																															\
+		set(name##Index, node);																														\
+	}																																						\
 	node->set(val);
 /*********************************************************************************************************************/
 
@@ -361,7 +365,11 @@ private:																																					\
  */
 #define SET_EXTENSION_ATTR_VAL(type, name)																									\
 	type* node = static_cast<type*> (self_->get(attr_[name##Index]));																	\
-	if (!node) node = self_->set<type>(attr_[name##Index], type::typeNameStatic());												\
+	if (!node)																																			\
+	{																																						\
+		node = new type();																															\
+		self_->set(attr_[name##Index], node);																									\
+	}																																						\
 	node->set(val);
 /*********************************************************************************************************************/
 
@@ -558,7 +566,7 @@ private:																																					\
 		static int name##Index;																														\
 public:																																					\
 		type* name() { return static_cast< type* > (self_->get(attr_[name##Index])); }											\
-		template <class T> T* setMethodName() { return self_->set<T>(attr_[name##Index],T::typeNameStatic()); }			\
+		void setMethodName(type* node) { self_->set(attr_[name##Index], node); }													\
 private:																																					\
 
 /*********************************************************************************************************************/
@@ -579,7 +587,7 @@ private:																																					\
 		static int name##Index;																														\
 																																							\
 		type* name() { return static_cast< type* > (self_->get(attr_[name##Index])); }											\
-		template <class T> T* setMethodName() { return self_->set<T>(attr_[name##Index],T::typeNameStatic()); }			\
+		void setMethodName(type* node) { self_->set(attr_[name##Index], node); }													\
 private:																																					\
 
 /*********************************************************************************************************************/

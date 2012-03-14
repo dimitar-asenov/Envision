@@ -41,7 +41,6 @@
 #include "items/InsertMethodVis.h"
 #include "items/SumMethodVis.h"
 
-#include "OOModel/headers/statements/MethodCallStatement.h"
 #include "OOModel/headers/expressions/MethodCallExpression.h"
 #include "OOModel/headers/allOOModelNodes.h"
 
@@ -61,13 +60,12 @@ bool CustomMethodCall::initialize(Envision::EnvisionManager&)
 	Method::registerNewExtension<CustomVisualization>();
 
 	// Override existing visualization
-	Scene::defaultRenderer()->registerVisualization(MethodCallStatement::typeIdStatic(), CustomVisualization::createStatement);
 	Scene::defaultRenderer()->registerVisualization(MethodCallExpression::typeIdStatic(), CustomVisualization::createExpression);
 
 	//Register custom visualizations
 	CustomVisualization::registerVisualization(FindMethodVis::className(), createVisualization<FindMethodVis, MethodCallExpression>);
 	CustomVisualization::registerVisualization(EmptyMethodVis::className(), createVisualization<EmptyMethodVis, MethodCallExpression>);
-	CustomVisualization::registerVisualization(InsertMethodVis::className(), createVisualization<InsertMethodVis, MethodCallStatement>);
+	CustomVisualization::registerVisualization(InsertMethodVis::className(), createVisualization<InsertMethodVis, MethodCallExpression>);
 	CustomVisualization::registerVisualization(SumMethodVis::className(), createVisualization<SumMethodVis, MethodCallExpression>);
 
 	return true;

@@ -42,7 +42,7 @@ class OOMODEL_API ArrayType : public Type
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(ArrayType)
 
-	ATTRIBUTE(Type, type, setType);
+	ATTRIBUTE(Expression, type, setType);
 };
 
 }

@@ -39,15 +39,21 @@ namespace Model {
 
 NODE_DEFINE_TYPE_REGISTRATION_METHODS(Text)
 
-Text::Text(Node *parent, Model* model) :
-	Node(parent, model)
+Text::Text(Node *parent) :
+	Node(parent)
 {
 }
 
-Text::Text(Node *parent, NodeIdType id, PersistentStore &store, bool) :
-	Node(parent, id)
+Text::Text(Node *parent, PersistentStore &store, bool) :
+	Node(parent)
 {
 	text = store.loadStringValue();
+}
+
+Text::Text(const QString& text) :
+	Node(nullptr)
+{
+	set(text);
 }
 
 void Text::set(const QString &newText)

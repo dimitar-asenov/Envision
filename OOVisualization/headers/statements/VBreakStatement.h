@@ -51,8 +51,6 @@ class OOVISUALIZATION_API VBreakStatement : public Visualization::ItemWithNode< 
 		VBreakStatement(Item* parent, NodeType *node, const StyleType *style = itemStyles().get());
 		virtual ~VBreakStatement();
 
-		virtual bool focusChild(FocusTarget location);
-
 	protected:
 		virtual void determineChildren();
 		virtual void updateGeometry(int availableWidth, int availableHeight);

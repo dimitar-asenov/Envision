@@ -48,8 +48,6 @@ class OOVISUALIZATION_API VNamedType : public Visualization::ItemWithNode< Visua
 		VNamedType(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VNamedType();
 
-		virtual bool focusChild(FocusTarget location);
-
 	protected:
 		void determineChildren();
 		void updateGeometry(int availableWidth, int availableHeight);

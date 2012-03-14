@@ -51,8 +51,6 @@ class OOVISUALIZATION_API VContinueStatement : public Visualization::ItemWithNod
 		VContinueStatement(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VContinueStatement();
 
-		virtual bool focusChild(FocusTarget location);
-
 	protected:
 		virtual void determineChildren();
 		virtual void updateGeometry(int availableWidth, int availableHeight);

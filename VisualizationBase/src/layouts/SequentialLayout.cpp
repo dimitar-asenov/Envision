@@ -32,6 +32,7 @@
  **********************************************************************************************************************/
 
 #include "layouts/SequentialLayout.h"
+#include "cursor/LayoutCursor.h"
 #include "shapes/Shape.h"
 #include "items/ItemWithNode.h"
 #include "ModelRenderer.h"
@@ -197,8 +198,8 @@ void SequentialLayout::updateGeometry(int, int)
 	}
 
 	// Determine what sort of sequence we're building
-	bool horizontal = style()->direction() == SequentialLayoutStyle::LeftToRight || style()->direction() == SequentialLayoutStyle::RightToLeft;
-	bool forward = style()->direction() == SequentialLayoutStyle::LeftToRight || style()->direction() == SequentialLayoutStyle::TopToBottom;
+	bool horizontal = isHorizontal();
+	bool forward = isForward();
 
 	// Update the geometry of children whose size varies
 	for (int i = 0; i != items.size(); ++i)
@@ -265,93 +266,125 @@ void SequentialLayout::updateGeometry(int, int)
 int SequentialLayout::focusedElementIndex() const
 {
 	for (int i = 0; i<items.size(); ++i)
-		if ( items[i]->childHasFocus()) return i;
+		if ( items[i]->itemOrChildHasFocus()) return i;
 
 	return -1;
 }
 
-bool SequentialLayout::focusChild(FocusTarget location)
+QList<ItemRegion> SequentialLayout::regions()
 {
-	if (items.isEmpty()) return false;
+	bool horizontal = isHorizontal();
+	bool forward = isForward();
 
-	bool horizontal = style()->direction() == SequentialLayoutStyle::LeftToRight || style()->direction() == SequentialLayoutStyle::RightToLeft;
-	bool forward = style()->direction() == SequentialLayoutStyle::LeftToRight || style()->direction() == SequentialLayoutStyle::TopToBottom;
-	int current = focusedElementIndex();
-	int max = items.size() - 1;
-
-	Item* toFocus = nullptr;
-
-	switch (location)
+	QList<ItemRegion> regs;
+	int last = forward ? 0 : horizontal ? width() : height();
+	for(int i = 0; i<items.size(); ++i)
 	{
-		case FOCUS_DEFAULT:
-			{
-				if (forward) toFocus = items.first();
-				else toFocus = items.last();
-			}
-			break;
-		case FOCUS_TOPMOST:
-			{
-				if (forward) toFocus = items.first();
-				else toFocus = items.last();
-			}
-			break;
-		case FOCUS_BOTTOMMOST:
-			{
-				if ( forward == horizontal) toFocus = items.first();
-				else toFocus = items.last();
-			}
-			break;
-		case FOCUS_LEFTMOST:
-			{
-				if ( forward ) toFocus = items.first();
-				else toFocus = items.last();
-			}
-			break;
-		case FOCUS_RIGHTMOST:
-			{
-				if ( (forward || horizontal) && !(forward && horizontal) ) toFocus = items.first();
-				else toFocus = items.last();
-			}
-			break;
-		case FOCUS_UP:
-			{
-				if (current >= 0 && !horizontal)
-				{
-					if (forward && current > 0) toFocus = items[current-1];
-					else if (!forward && current < max) toFocus = items[current+1];
-				}
-			}
-			break;
-		case FOCUS_DOWN:
-			{
-				if (current >= 0 && !horizontal)
-				{
-					if (forward && current < max) toFocus = items[current+1];
-					else if (!forward && current > 0) toFocus = items[current-1];
-				}
-			}
-			break;
-		case FOCUS_LEFT:
-			{
-				if (current >= 0 && horizontal)
-				{
-					if (forward && current > 0) toFocus = items[current-1];
-					else if (!forward && current < max) toFocus = items[current+1];
-				}
-			}
-			break;
-		case FOCUS_RIGHT:
-			{
-				if (current >= 0 && horizontal)
-				{
-					if (forward && current < max) toFocus = items[current+1];
-					else if (!forward && current > 0) toFocus = items[current-1];
-				}
-			}
-			break;
+		ItemRegion cursorRegion;
+		ItemRegion itemRegion;
+		bool skipCursor = i == 0;
+		if (horizontal && forward)
+		{
+			cursorRegion.setRegion(QRect(last, 0, items[i]->x() - last, height()));
+			itemRegion.setRegion(QRect(items[i]->x(), 0, items[i]->width(), height()));
+			last = items[i]->xEnd() + 1;
+			skipCursor = skipCursor && (regionOptions() & OmitLeftCursor);
+		}
+		else if (horizontal && !forward)
+		{
+			cursorRegion.setRegion(QRect(items[i]->xEnd()+1, 0, last, height()));
+			itemRegion.setRegion(QRect(items[i]->x(), 0, items[i]->width(), height()));
+			last = items[i]->x() - 1;
+			skipCursor = skipCursor && (regionOptions() & OmitRightCursor);
+		}
+		else if (!horizontal && forward)
+		{
+			cursorRegion.setRegion(QRect(0, last,  width(), items[i]->y() - last));
+			itemRegion.setRegion(QRect(0, items[i]->y(), width(), items[i]->height()));
+			last = items[i]->yEnd() + 1;
+			skipCursor = skipCursor && (regionOptions() & OmitTopCursor);
+		}
+		else
+		{
+			cursorRegion.setRegion(QRect(0, items[i]->yEnd()+1,  width(), last));
+			itemRegion.setRegion(QRect(0, items[i]->y(), width(), items[i]->height()));
+			last = items[i]->y() - 1;
+			skipCursor = skipCursor && (regionOptions() & OmitBottomCursor);
+		}
+
+		itemRegion.setItem(items[i]);
+		auto lc = new LayoutCursor(this);
+		cursorRegion.setCursor(lc);
+		lc->setIndex(i);
+		lc->setVisualizationPosition(cursorRegion.region().topLeft());
+		lc->setVisualizationSize(horizontal ? QSize(2, height()) : QSize(width(), 2));
+
+		// Make sure there is at least some space for the cursor Region.
+		if (horizontal && cursorRegion.region().width() == 0)
+		{
+			if (forward) cursorRegion.region().adjust((i>0?-1:0), 0, 1, 0);
+			else cursorRegion.region().adjust(-1, 0, (i>0?1:0), 0);
+		}
+		if (!horizontal && cursorRegion.region().height() == 0 )
+		{
+			if (forward) cursorRegion.region().adjust(0, (i>0?-1:0), 0, 1);
+			else  cursorRegion.region().adjust(0, -1, 0, (i>0?1:0));
+		}
+
+		cursorRegion.cursor()->setRegion(mapToScene(cursorRegion.region()).boundingRect().toRect());
+
+		if (!skipCursor) regs.append(cursorRegion);
+		regs.append(itemRegion);
 	}
 
-	return Item::focusChild(toFocus);
+	// Add trailing cursor region if not omited
+	QRect trailing;
+	bool skipCursor;
+	if (horizontal && forward)
+	{
+		trailing.setRect(last, 0, width() - last, height());
+		skipCursor = regionOptions() & OmitRightCursor;
+	}
+	else if (horizontal && !forward)
+	{
+		trailing.setRect(0, 0, last, height());
+		skipCursor = regionOptions() & OmitLeftCursor;
+	}
+	else if (!horizontal && forward)
+	{
+		trailing.setRect(0, last,  width(), height() - last);
+		skipCursor = regionOptions() & OmitBottomCursor;
+	}
+	else
+	{
+		trailing.setRect(0, 0,  width(), last);
+		skipCursor = regionOptions() & OmitTopCursor;
+	}
+
+	if (!skipCursor)
+	{
+		// Make sure there is at least some space for the cursor Region.
+		if (horizontal && trailing.width() == 0)
+		{
+			if (forward) trailing.adjust(-1, 0, 0, 0);
+			else trailing.adjust(0, 0, 1, 0);
+		}
+		if (!horizontal && trailing.height() == 0 )
+		{
+			if (forward) trailing.adjust(0, -1, 0, 0);
+			else  trailing.adjust(0, 0, 0, 1);
+		}
+
+		regs.append(ItemRegion(trailing));
+		auto lc = new LayoutCursor(this);
+		regs.last().setCursor(lc);
+		lc->setIndex(items.size());
+		lc->setVisualizationPosition(regs.last().region().topLeft());
+		lc->setVisualizationSize(horizontal ? QSize(2, height()) : QSize(width(), 2));
+		lc->setRegion(mapToScene(trailing).boundingRect().toRect());
+	}
+
+	return regs;
 }
 
 }

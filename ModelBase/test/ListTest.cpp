@@ -49,12 +49,18 @@ TEST(ModelBase, ListCreation)
 	CHECK_INT_EQUAL(0, root->size());
 
 	model.beginModification(root, "add elements to list");
-	Text* a = root->append<Text>();
-	Text* b = root->append<Text>();
-	Integer* c = root->append<Integer>();
+
+	Text* a = new Text();
+	Text* b = new Text();
+	Integer* c = new Integer();
+
 	a->set("first");
 	b->set("second");
 	c->set(3);
+
+	root->append(a);
+	root->append(b);
+	root->append(c);
 	model.endModification();
 
 	CHECK_INT_EQUAL(3, root->size());
@@ -69,13 +75,21 @@ TEST(ModelBase, ListInsertion)
 	List* root = dynamic_cast<List*> (model.createRoot("List"));
 
 	model.beginModification(root, "add elements to list");
-	Text* a = root->append<Text>();
-	Text* b = root->prepend<Text>();
-	Text* c = root->append<Text>();
-	Text* d = root->prepend<Text>();
-	Text* e = root->insert<Text>(2);
-	Text* f = root->insert<Text>(3);
-	Text* g = root->insert<Text>(1);
+	Text* a = new Text();
+	Text* b = new Text();
+	Text* c = new Text();
+	Text* d = new Text();
+	Text* e = new Text();
+	Text* f = new Text();
+	Text* g = new Text();
+
+	root->append(a);
+	root->prepend(b);
+	root->append(c);
+	root->prepend(d);
+	root->insert(2, e);
+	root->insert(3, f);
+	root->insert(1, g);
 	model.endModification();
 
 	CHECK_INT_EQUAL(7, root->size());
@@ -94,20 +108,28 @@ TEST(ModelBase, ListRemoval)
 	List* root = dynamic_cast<List*> (model.createRoot("List"));
 
 	model.beginModification(root, "add elements to list");
-	Text* a = root->append<Text>();
-	Text* b = root->append<Text>();
-	Text* c = root->append<Text>();
-	Text* d = root->append<Text>();
-	Text* e = root->append<Text>();
-	Text* f = root->append<Text>();
-	Text* g = root->append<Text>();
+	Text* a = new Text();
+	Text* b = new Text();
+	Text* c = new Text();
+	Text* d = new Text();
+	Text* e = new Text();
+	Text* f = new Text();
+	Text* g = new Text();
+
+	root->append(a);
+	root->append(b);
+	root->append(c);
+	root->append(d);
+	root->append(e);
+	root->append(f);
+	root->append(g);
 	model.endModification();
 
 	model.beginModification(root, "remove elements from list");
-	root->remove(3);
-	root->remove(a);
-	root->remove(4);
-	root->remove(b);
+	root->remove(3, false);
+	root->remove(a, false);
+	root->remove(4, false);
+	root->remove(b, false);
 	model.endModification();
 
 	CHECK_CONDITION(d != nullptr);
@@ -125,13 +147,21 @@ TEST(ModelBase, ListUndo)
 	List* root = dynamic_cast<List*> (model.createRoot("List"));
 
 	model.beginModification(root, "add elements to list");
-	Text* a = root->append<Text>();
-	Text* b = root->append<Text>();
-	Text* c = root->append<Text>();
-	Text* d = root->append<Text>();
-	Text* e = root->append<Text>();
-	Text* f = root->append<Text>();
-	Text* g = root->append<Text>();
+	Text* a = new Text();
+	Text* b = new Text();
+	Text* c = new Text();
+	Text* d = new Text();
+	Text* e = new Text();
+	Text* f = new Text();
+	Text* g = new Text();
+
+	root->append(a);
+	root->append(b);
+	root->append(c);
+	root->append(d);
+	root->append(e);
+	root->append(f);
+	root->append(g);
 	model.endModification();
 
 	CHECK_INT_EQUAL(7, root->size());
@@ -163,8 +193,8 @@ TEST(ModelBase, ListUndo)
 	CHECK_CONDITION(root->at<Node>(6) == g);
 
 	model.beginModification(root, "add elements to list");
-	root->remove(a);
-	root->remove(e);
+	root->remove(a, false);
+	root->remove(e, false);
 	model.endModification();
 
 	CHECK_INT_EQUAL(5, root->size());

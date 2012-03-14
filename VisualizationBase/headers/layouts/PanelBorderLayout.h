@@ -78,7 +78,6 @@ class VISUALIZATIONBASE_API PanelBorderLayout: public Layout
 		virtual bool isEmpty() const;
 
 		virtual void updateGeometry(int availableWidth, int availableHeight);
-		virtual bool focusChild(FocusTarget location);
 };
 
 inline void PanelBorderLayout::setTop(bool enable) { setPanel(enable, top_, style()->topStyle()); };

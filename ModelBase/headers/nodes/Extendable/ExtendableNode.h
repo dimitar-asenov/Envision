@@ -68,19 +68,21 @@ class MODELBASE_API ExtendableNode: public Node
 		virtual AttributeChain& topLevelMeta();
 	public:
 
-		ExtendableNode(Node *parent, Model* model, AttributeChain& metaData);
-		ExtendableNode(Node *parent, NodeIdType id, PersistentStore &store, bool partialHint, AttributeChain& metaData);
+		ExtendableNode(Node *parent, AttributeChain& metaData);
+		ExtendableNode(Node *parent, PersistentStore &store, bool partialHint, AttributeChain& metaData);
 
-		ExtendableNode(Node *parent, Model* model);
-		ExtendableNode(Node *parent, NodeIdType id, PersistentStore &store, bool partialHint);
+		ExtendableNode(Node *parent = nullptr);
+		ExtendableNode(Node *parent, PersistentStore &store, bool partialHint);
 
 		virtual ~ExtendableNode();
 
 		Node* get(const ExtendableIndex &attributeIndex) const;
 		Node* get(const QString &attributeName) const;
+		ExtendableIndex indexOf(Node* node) const;
 
-		template<class T>
-		T* set(const ExtendableIndex &attributeIndex, const QString& type = QString());
+		virtual bool replaceChild(Node* child, Node* replacement, bool releaseOldChild = true);
+
+		void set(const ExtendableIndex &attributeIndex, Node* node);
 
 		void removeOptional(const ExtendableIndex &attributeIndex);
 
@@ -103,29 +105,7 @@ class MODELBASE_API ExtendableNode: public Node
 		template <class T> T* extension();
 };
 
-template<class T>
-T* ExtendableNode::set(const ExtendableIndex &attributeIndex, const QString& type)
-{
-	if ( !attributeIndex.isValid() ) throw ModelException("Trying to set an attribute with an invalid Index");
-
-	QString creationType = meta.attribute(attributeIndex).type();
-	if ( !type.isEmpty() ) creationType = type;
-
-	Node* nodeGeneric = Node::createNewNode(creationType, this);
-	T* nodeSpecific = dynamic_cast<T*> (nodeGeneric);
-
-	if ( nodeSpecific == nullptr )
-	{
-		if (nodeGeneric) SAFE_DELETE(nodeGeneric);
-		throw ModelException("Could not create a node with the type " + creationType
-				+ ". This type is not compatible with the expected node type of this attribute.");
-	}
-
-	execute(new ExtendedNodeChild(this, nodeSpecific, attributeIndex, &subnodes));
-
-	return nodeSpecific;
-}
-
+inline Node* ExtendableNode::get(const ExtendableIndex &attributeIndex) const { return subnodes[attributeIndex.level()][attributeIndex.index()]; }
 inline int ExtendableNode::typeIdStatic() { return typeId_;}
 inline int ExtendableNode::registerExtensionId() { return nextExtensionId_++; }
 

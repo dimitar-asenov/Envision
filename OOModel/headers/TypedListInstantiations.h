@@ -59,8 +59,7 @@ class ReturnStatement;
 class SwitchCase;
 class SwitchStatement;
 class VariableDeclaration;
-class MethodCallStatement;
-class AssignmentStatement;
+class ExpressionStatement;
 
 class Expression;
 class IntegerLiteral;
@@ -78,6 +77,11 @@ class BinaryOperation;
 class CastExpression;
 class ReferenceExpression;
 class ArrayInitializer;
+class EmptyExpression;
+class ErrorExpression;
+class UnfinishedOperator;
+class CommaExpression;
+class AssignmentExpression;
 
 class Type;
 class PrimitiveType;
@@ -107,8 +111,7 @@ template class Q_DECL_IMPORT Model::TypedList<OOModel::ReturnStatement>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::SwitchCase>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::SwitchStatement>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::VariableDeclaration>;
-template class Q_DECL_IMPORT Model::TypedList<OOModel::MethodCallStatement>;
-template class Q_DECL_IMPORT Model::TypedList<OOModel::AssignmentStatement>;
+template class Q_DECL_IMPORT Model::TypedList<OOModel::ExpressionStatement>;
 
 template class Q_DECL_IMPORT Model::TypedList<OOModel::Expression>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::IntegerLiteral>;
@@ -126,6 +129,11 @@ template class Q_DECL_IMPORT Model::TypedList<OOModel::BinaryOperation>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::CastExpression>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::ReferenceExpression>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::ArrayInitializer>;
+template class Q_DECL_IMPORT Model::TypedList<OOModel::EmptyExpression>;
+template class Q_DECL_IMPORT Model::TypedList<OOModel::ErrorExpression>;
+template class Q_DECL_IMPORT Model::TypedList<OOModel::UnfinishedOperator>;
+template class Q_DECL_IMPORT Model::TypedList<OOModel::CommaExpression>;
+template class Q_DECL_IMPORT Model::TypedList<OOModel::AssignmentExpression>;
 
 template class Q_DECL_IMPORT Model::TypedList<OOModel::Type>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::PrimitiveType>;

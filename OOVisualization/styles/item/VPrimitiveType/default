@@ -1,11 +1,41 @@
 <!DOCTYPE EnvisionVisualizationStyle>
-<style prototypes="item/Text/default">
-	<pen>
-		<color>
-			<alpha>255</alpha>
-			<red>0</red>
-			<green>100</green>
-			<blue>0</blue>
-		</color>
-	</pen>
+<style prototypes="item/Item/default">
+	<statics>
+		<length>9</length>
+		<e0 prototypes="default.type">
+			<symbol>int</symbol>
+		</e0>
+		<e1 prototypes="default.type">
+			<symbol>long</symbol>
+		</e1>
+		<e2 prototypes="default.type">
+			<symbol>+int</symbol>
+		</e2>
+		<e3 prototypes="default.type">
+			<symbol>+long</symbol>
+		</e3>
+		<e4 prototypes="default.type">
+			<symbol>float</symbol>
+		</e4>
+		<e5 prototypes="default.type">
+			<symbol>double</symbol>
+		</e5>
+		<e6 prototypes="default.type">
+			<symbol>bool</symbol>
+		</e6>
+		<e7 prototypes="default.type">
+			<symbol>char</symbol>
+		</e7>
+		<e8 prototypes="default.type">
+			<symbol>void</symbol>
+			<pen>
+				<color>
+					<alpha>255</alpha>
+					<red>164</red>
+					<green>228</green>
+					<blue>164</blue>
+				</color>
+			</pen>
+		</e8>
+	</statics>
 </style>

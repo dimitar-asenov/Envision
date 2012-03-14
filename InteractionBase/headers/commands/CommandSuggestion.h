@@ -34,7 +34,7 @@
 #ifndef COMMANDSUGGESTION_H_
 #define COMMANDSUGGESTION_H_
 
-#include "interactionbase_api.h"
+#include "../interactionbase_api.h"
 
 #include "VisualizationBase/headers/items/Item.h"
 

@@ -39,13 +39,13 @@ namespace Model {
 
 NODE_DEFINE_TYPE_REGISTRATION_METHODS(Integer)
 
-Integer::Integer(Node *parent, Model* model) :
-	Node(parent, model), integer(0)
+Integer::Integer(Node *parent) :
+	Node(parent), integer(0)
 {
 }
 
-Integer::Integer(Node *parent, NodeIdType id, PersistentStore &store, bool) :
-	Node(parent, id)
+Integer::Integer(Node *parent, PersistentStore &store, bool) :
+	Node(parent)
 {
 	integer = store.loadIntValue();
 }

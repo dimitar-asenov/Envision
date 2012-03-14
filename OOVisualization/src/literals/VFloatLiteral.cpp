@@ -32,6 +32,7 @@
  **********************************************************************************************************************/
 
 #include "literals/VFloatLiteral.h"
+#include "Helpers.h"
 
 #include "ModelBase/headers/Model.h"
 
@@ -57,16 +58,12 @@ void VFloatLiteral::determineChildren()
 {
 	synchronizeItem(vis_, node()->valueNode(), style());
 	vis_->setStyle( style() );
+	Helpers::omitBoundingCursorsInExpressions(this, vis_, true);
 }
 
 void VFloatLiteral::updateGeometry(int availableWidth, int availableHeight)
 {
 	Item::updateGeometry(vis_, availableWidth, availableHeight);
-}
-
-bool VFloatLiteral::focusChild(FocusTarget location)
-{
-	return vis_->focusChild(location);
 }
 
 }

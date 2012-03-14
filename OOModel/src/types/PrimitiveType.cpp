@@ -40,4 +40,10 @@ EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(PrimitiveType, Type)
 
 REGISTER_ATTRIBUTE(PrimitiveType, val, Integer, false, false, true)
 
+PrimitiveType::PrimitiveType(const PrimitiveTypes& type)
+	: Type (nullptr, PrimitiveType::getMetaData())
+{
+	setType(type);
+}
+
 }

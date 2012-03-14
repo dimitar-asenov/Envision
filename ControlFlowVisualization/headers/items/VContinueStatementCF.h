@@ -49,8 +49,6 @@ class CONTROLFLOWVISUALIZATION_API VContinueStatementCF : public Visualization::
 		VContinueStatementCF(Item* parent, NodeType *node, const StyleType *style = itemStyles().get());
 		virtual ~VContinueStatementCF();
 
-		virtual bool focusChild(FocusTarget location);
-
 	protected:
 		virtual void determineChildren();
 		virtual void updateGeometry(int availableWidth, int availableHeight);

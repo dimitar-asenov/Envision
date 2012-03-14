@@ -3,7 +3,8 @@ CONFIG(release, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/ReleaseBuild
 CONFIG(debug, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/DebugBuild
 PLUGINS_DIR = $${BUILD_DIR}/plugins
 CONFIG(debug, debug|release):DEFINES += DEBUG
-QMAKE_CXXFLAGS += -Werror -std=c++0x
+QMAKE_CXXFLAGS += -Werror \
+    -std=c++0x
 INCLUDEPATH += ./headers \
     ./src \
     ./test \
@@ -15,8 +16,7 @@ win32:LIBS += -L$${PLUGINS_DIR} \
     -lselftest \
     -lmodelbase \
     -loomodel \
-    -lvisualizationbase \
-    -linteractionbase
+    -lvisualizationbase
 QT = core \
     gui
 TEMPLATE = lib
@@ -33,7 +33,18 @@ INSTALLS += target \
     pluginmeta \
     styles
 PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/precompiled.h \
+HEADERS += headers/expressions/VVariableDeclarationStyle.h \
+    headers/expressions/VVariableDeclaration.h \
+    headers/expressions/VAssignmentExpression.h \
+    headers/statements/VExpressionStatement.h \
+    headers/Helpers.h \
+    headers/expressions/VCommaExpression.h \
+    headers/expressions/VEmptyExpression.h \
+    headers/expressions/VUnfinishedOperatorStyle.h \
+    headers/expressions/VUnfinishedOperator.h \
+    headers/expressions/VErrorExpressionStyle.h \
+    headers/expressions/VErrorExpression.h \
+    headers/precompiled.h \
     headers/elements/VStorageSpecifier.h \
     headers/expressions/VArrayInitializerStyle.h \
     headers/expressions/VArrayInitializer.h \
@@ -69,7 +80,6 @@ HEADERS += headers/precompiled.h \
     headers/statements/VReturnStatement.h \
     headers/statements/VBlockStyle.h \
     headers/statements/VBlock.h \
-    headers/statements/VAssignmentStatement.h \
     headers/expressions/VBinaryOperation.h \
     headers/expressions/VUnaryOperation.h \
     headers/expressions/OperatorStyle.h \
@@ -81,8 +91,6 @@ HEADERS += headers/precompiled.h \
     headers/expressions/VMethodCallExpressionStyle.h \
     headers/expressions/VMethodCallExpression.h \
     headers/literals/VNullLiteral.h \
-    headers/statements/VVariableDeclarationStyle.h \
-    headers/statements/VVariableDeclaration.h \
     headers/literals/VBooleanLiteral.h \
     headers/literals/VCharacterLiteral.h \
     headers/literals/VFloatLiteral.h \
@@ -91,8 +99,6 @@ HEADERS += headers/precompiled.h \
     headers/types/VPrimitiveType.h \
     headers/types/VNamedType.h \
     headers/literals/VStringLiteral.h \
-    headers/statements/VMethodCallStatementStyle.h \
-    headers/statements/VMethodCallStatement.h \
     headers/expressions/VVariableAccessStyle.h \
     headers/expressions/VVariableAccess.h \
     headers/expressions/VReferenceExpressionStyle.h \
@@ -100,7 +106,19 @@ HEADERS += headers/precompiled.h \
     headers/OOVisualizationException.h \
     headers/oovisualization_api.h \
     src/oovisualization.h
-SOURCES += src/elements/VStorageSpecifier.cpp \
+SOURCES += src/expressions/VVariableDeclarationStyle.cpp \
+    src/expressions/VVariableDeclaration.cpp \
+    src/expressions/VAssignmentExpression.cpp \
+    src/expressions/VMethodCallExpressionStyle.cpp \
+    src/statements/VExpressionStatement.cpp \
+    src/Helpers.cpp \
+    src/expressions/VCommaExpression.cpp \
+    src/expressions/VEmptyExpression.cpp \
+    src/expressions/VUnfinishedOperatorStyle.cpp \
+    src/expressions/VUnfinishedOperator.cpp \
+    src/expressions/VErrorExpressionStyle.cpp \
+    src/expressions/VErrorExpression.cpp \
+    src/elements/VStorageSpecifier.cpp \
     src/expressions/VArrayInitializer.cpp \
     src/expressions/VArrayInitializerStyle.cpp \
     src/literals/VStringLiteralStyle.cpp \
@@ -135,7 +153,6 @@ SOURCES += src/elements/VStorageSpecifier.cpp \
     src/statements/VReturnStatementStyle.cpp \
     src/statements/VBlock.cpp \
     src/statements/VBlockStyle.cpp \
-    src/statements/VAssignmentStatement.cpp \
     src/expressions/VBinaryOperation.cpp \
     src/expressions/VUnaryOperation.cpp \
     src/expressions/OperatorStyle.cpp \
@@ -146,8 +163,6 @@ SOURCES += src/elements/VStorageSpecifier.cpp \
     src/expressions/VThisExpression.cpp \
     src/expressions/VMethodCallExpression.cpp \
     src/literals/VNullLiteral.cpp \
-    src/statements/VVariableDeclaration.cpp \
-    src/statements/VVariableDeclarationStyle.cpp \
     src/literals/VBooleanLiteral.cpp \
     src/literals/VCharacterLiteral.cpp \
     src/literals/VFloatLiteral.cpp \
@@ -155,8 +170,6 @@ SOURCES += src/elements/VStorageSpecifier.cpp \
     src/types/VPrimitiveType.cpp \
     src/types/VNamedType.cpp \
     src/literals/VStringLiteral.cpp \
-    src/statements/VMethodCallStatement.cpp \
-    src/statements/VMethodCallStatementStyle.cpp \
     src/expressions/VVariableAccessStyle.cpp \
     src/expressions/VVariableAccess.cpp \
     src/expressions/VReferenceExpression.cpp \
