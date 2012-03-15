@@ -86,33 +86,9 @@ int CallStringOffsetProvider::offset()
 	int result = 0;
 
 	int index = 0;
-	while(index == 0 || components[index-1] != "(")
-		result += components[index++].size();
+	while(components[index] != "(") result += components[index++].size();
 
-
-	if (vis_->scene()->mainCursor() && vis_->scene()->mainCursor()->owner() == vis_->arguments()->layout())
-	{
-		int argIndex = vis_->arguments()->layout()->correspondingSceneCursor<Visualization::LayoutCursor>()->index();
-		for (int i = 0; i<argIndex; ++i)
-		{
-			if (i>0) result += components[index++].size(); // Add previous comma
-			result += components[index++].size();
-		}
-
-	}
-	else
-	{
-		int focused = vis_->arguments()->focusedElementIndex();
-		Q_ASSERT(focused >= 0);
-
-		for(int i = 0; i<focused; ++i)
-		{
-			result += components[index].size() + components[index+1].size();
-			index += 2;
-		}
-
-		result += itemOffset(vis_->arguments()->at<Visualization::Item>(focused), components[focused].length());
-	}
+	result += listItemOffset(vis_->arguments(),"(", ",", ")");
 
 	return result;
 }
@@ -141,35 +117,17 @@ void CallStringOffsetProvider::setOffset(int offset)
 
 	int index = 0;
 	int argsStart = 0;
-	while(index == 0 || components[index-1] != "(")
-		argsStart += components[index++].size();
+	while(components[index] != "(") argsStart += components[index++].size();
 
-	if (offset < argsStart)
+	if (offset <= argsStart)
 	{
 		SequentialVisualizationStringOffsetProvider::setOffset(offset);
 		return;
 	}
 	else offset -= argsStart;
 
-	if (offset == 0 && vis_->arguments()->length() == 0)
-	{
-		vis_->arguments()->moveCursor( Visualization::Item::MoveOnPosition, QPoint(0,0));
+	if ( setOffsetInListItem(offset, vis_->arguments(), "(", ",", ")"))
 		return;
-	}
-
-	for (int i = 0; i<vis_->arguments()->length(); ++i)
-	{
-		if (offset <= components[index].size())
-		{
-			if ( setOffsetInItem(offset, vis_->arguments()->at<Visualization::Item>(i)))
-				return;
-		}
-		else
-		{
-			offset -= components[index++].size();
-			offset -= components[index++].size(); // This is the ',' after the argument
-		}
-	}
 
 	if (offset == components.last().size())
 	{

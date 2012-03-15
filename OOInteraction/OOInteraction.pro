@@ -35,7 +35,8 @@ INSTALLS += target \
     pluginmeta \
     styles
 PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/string_offset_providers/TextRendererStringOffsetProvider.h \
+HEADERS += headers/string_components/ListStringComponents.h \
+    headers/string_offset_providers/TextRendererStringOffsetProvider.h \
     headers/string_offset_providers/StringOffsetProvider.h \
     headers/string_offset_providers/StaticStringOffsetProvider.h \
     headers/string_offset_providers/SimpleLiteralStringOffsetProvider.h \
@@ -90,7 +91,8 @@ HEADERS += headers/string_offset_providers/TextRendererStringOffsetProvider.h \
     headers/OOInteractionException.h \
     headers/oointeraction_api.h \
     src/oointeraction.h
-SOURCES += src/string_offset_providers/TextRendererStringOffsetProvider.cpp \
+SOURCES += src/string_components/ListStringComponents.cpp \
+    src/string_offset_providers/TextRendererStringOffsetProvider.cpp \
     src/string_offset_providers/StringOffsetProvider.cpp \
     src/string_offset_providers/StaticStringOffsetProvider.cpp \
     src/string_offset_providers/SimpleLiteralStringOffsetProvider.cpp \

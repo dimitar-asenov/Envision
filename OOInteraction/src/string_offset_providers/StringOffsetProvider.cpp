@@ -34,6 +34,9 @@
 #include "string_offset_providers/StringOffsetProvider.h"
 #include "string_components/StringComponents.h"
 
+#include "VisualizationBase/headers/cursor/LayoutCursor.h"
+#include "VisualizationBase/headers/cursor/Cursor.h"
+#include "VisualizationBase/headers/items/VList.h"
 #include "VisualizationBase/headers/items/Item.h"
 #include "ModelBase/headers/adapter/AdapterManager.h"
 #include "Core/headers/global.h"
@@ -116,6 +119,57 @@ int StringOffsetProvider::itemOffset(Visualization::Item* item, int stringCompon
 		SAFE_DELETE(child);
 	}
 	return offset;
+}
+
+bool StringOffsetProvider::setOffsetInListItem(int& offset, Visualization::VList* list,
+		const QString& prefix, const QString& separator, const QString& /*postfix*/)
+{
+	QStringList components = StringOffsetProvider::components(list->node());
+
+	offset -= prefix.size();
+	for (int i = 0; i<list->length(); ++i)
+	{
+		if (i>0) offset -= separator.size();
+
+		if (offset <= components[i].size())
+		{
+			if ( setOffsetInItem(offset, list->at<Visualization::Item>(i)) )
+				return true;
+		}
+		else
+			offset -= components[i].size();
+	}
+
+	return false;
+}
+
+int StringOffsetProvider::listItemOffset(Visualization::VList* list,
+		const QString& prefix, const QString& separator, const QString& /*postfix*/)
+{
+	QStringList components = StringOffsetProvider::components(list->node());
+
+	int result = prefix.size();
+	if (list->scene()->mainCursor() && list->scene()->mainCursor()->owner() == list->layout())
+	{
+		int index = list->layout()->correspondingSceneCursor<Visualization::LayoutCursor>()->index();
+		for (int i = 0; i<index; ++i)
+		{
+			if (i>0) result += separator.size();
+			result += components[i].size();
+		}
+	}
+	else
+	{
+		int focused = list->focusedElementIndex();
+		Q_ASSERT(focused >= 0);
+
+		for(int i = 0; i<focused; ++i)
+			result += components[i].size() + separator.size();
+
+		result += itemOffset(list->at<Visualization::Item>(focused), components[focused].length());
+	}
+
+	return result;
 }
 
 } /* namespace OOInteraction */

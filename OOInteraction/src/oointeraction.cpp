@@ -61,6 +61,7 @@
 #include "string_components/PrimitiveTypeStringComponents.h"
 #include "string_components/ArrayTypeStringComponents.h"
 #include "string_components/AssignmentStringComponents.h"
+#include "string_components/ListStringComponents.h"
 
 #include "string_offset_providers/SequentialVisualizationStringOffsetProvider.h"
 #include "string_offset_providers/EmptyExpressionStringOffsetProvider.h"
@@ -173,6 +174,10 @@ bool OOInteraction::initialize(Envision::EnvisionManager&)
 		<StringComponents, ArrayTypeStringComponents, OOModel::ArrayType>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringComponents, AssignmentStringComponents, OOModel::AssignmentExpression>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringComponents, ListStringComponents, Model::TypedList<OOModel::Expression> >();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringComponents, ListStringComponents, Model::TypedList<OOModel::Statement> >();
 
 	// Register string providers
 	Model::AdapterManager::registerAdapterViaConstructor

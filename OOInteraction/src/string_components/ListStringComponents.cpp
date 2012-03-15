@@ -25,56 +25,43 @@
  **********************************************************************************************************************/
 
 /*
- * StringOffsetProvider.h
+ * ListStringComponents.cpp
  *
- *  Created on: Feb 14, 2012
+ *  Created on: Mar 15, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef OOInteraction_STRINGOFFSETPROVIDER_H_
-#define OOInteraction_STRINGOFFSETPROVIDER_H_
+#include "string_components/ListStringComponents.h"
 
-#include "../oointeraction_api.h"
+#include "ModelBase/headers/nodes/List.h"
+#include "ModelBase/headers/adapter/AdapterManager.h"
 
-namespace Model {
-	class Node;
-}
-
-namespace Visualization {
-	class Item;
-	class VList;
-}
+#include "Core/headers/global.h"
 
 namespace OOInteraction {
 
-class OOINTERACTION_API StringOffsetProvider {
-	public:
-		virtual QString string() = 0;
-		virtual int offset() = 0;
-		virtual void setOffset(int newOffset) = 0;
-		virtual ~StringOffsetProvider();
+ListStringComponents::ListStringComponents(Model::List* l )
+	: list_(l)
+{
+}
 
-		/**
-		 * \brief Returns true when the visualization corresponding to this StringProvider is an indivisible entity.
-		 *
-		 * An indivisible entity's offset should be ignored and the cursor should be placed either before or after it.
-		 * This is important for example for Static text symbols which are rendered as text but actually are represented
-		 * in the expression editor as different text. The same is true of icons which have a text representation.
-		 */
-		virtual bool isIndivisible();
+QStringList ListStringComponents::components()
+{
+	QStringList result;
+	if (!list_) return result;
 
-		// Helper methods
-		static QStringList components(Model::Node* node);
-		static QString stringFromComponenets(Model::Node* node);
-		static QString stringFromComponenets(Visualization::Item* item);
-		static QString stringFromStringOffsetProvider(Visualization::Item* item);
-		static bool setOffsetInItem(int offset, Visualization::Item* item);
-		static int itemOffset(Visualization::Item* item, int stringComponentLenght);
-		static bool setOffsetInListItem(int& offset, Visualization::VList* list,
-				const QString& prefix, const QString& separator, const QString& postfix);
-		static int listItemOffset(Visualization::VList* list,
-				const QString& prefix, const QString& separator, const QString& postfix);
-};
+	for (int i=0; i< list_->size(); ++i)
+	{
+		StringComponents* operand = Model::AdapterManager::adapt<StringComponents>(list_->at<Model::Node>(i));
+		if (operand)
+		{
+			result.append( operand->components().join("") );
+			SAFE_DELETE(operand);
+		}
+		else result.append( QString() );
+	}
+
+	return result;
+}
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_STRINGOFFSETPROVIDER_H_ */

@@ -68,11 +68,13 @@ int InitializerStringOffsetProvider::offset()
 	QStringList components = this->components();
 	int result = 0;
 
-	// Always include the leading '{' in the returned offset
-	result += components[0].size();
+
 
 	if (vis_->isShownInMatrixForm())
 	{
+		// Always include the leading '{' in the returned offset
+		result += components[0].size();
+
 		auto focusedIndex = vis_->layout()->focusedElementIndex();
 
 		int index = 1;
@@ -94,31 +96,7 @@ int InitializerStringOffsetProvider::offset()
 
 		result += itemOffset(vis_->layout()->focusedChild(), subComponents[subIndex].size());
 	}
-	else
-	{
-		Q_ASSERT( (components.size() - 1) / 2 == vis_->values()->length() );
-
-		if (vis_->scene()->mainCursor() && vis_->scene()->mainCursor()->owner() == vis_->values()->layout())
-		{
-			int index = vis_->values()->layout()->correspondingSceneCursor<Visualization::LayoutCursor>()->index();
-			for (int i = 0; i<index; ++i)
-			{
-				if (i>0) result += components[i*2].size(); //include previous comma
-				result += components[i*2 + 1].size();
-			}
-		}
-		else
-		{
-			int focused = vis_->values()->focusedElementIndex();
-			Q_ASSERT(focused >= 0);
-
-			for(int i = 0; i<focused; ++i)
-				result += components[(i+1)*2].size() + components[i*2 + 1].size();
-
-			result += itemOffset(vis_->values()->at<Visualization::Item>(focused), components[focused].length());
-		}
-
-	}
+	else result += listItemOffset(vis_->values(), "{", ",", "}");
 
 	return result;
 }
@@ -174,21 +152,8 @@ void InitializerStringOffsetProvider::setOffset(int offset)
 	}
 	else
 	{
-		Q_ASSERT( (components.size() - 1) / 2 == vis_->values()->length() );
-		for (int i = 0; i<vis_->values()->length(); ++i)
-		{
-			offset -= components[i*2].size();  // This is to cover for the inital '{' and subsequent ','
-
-			if (offset <= components[i*2 + 1].size()) // We only care about the components which represent children
-			{
-				if ( setOffsetInItem(offset, vis_->values()->at<Visualization::Item>(i)) )
-					return;
-			}
-			else
-			{
-				offset -= components[i*2 + 1].size();
-			}
-		}
+		if (setOffsetInListItem(offset, vis_->values(), "{", ",", "}") )
+			return;
 	}
 
 	if (offset == components.last().size())
