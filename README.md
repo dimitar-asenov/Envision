@@ -10,7 +10,10 @@ Development status
 
 Envision is in its early development stage and can not be used for programming yet. The current version illustrates some of the key visualization and interaction concepts for the IDE.
 
-Envision currently runs on Linux and Windows. Development is done in Linux.
+Envision currently runs on Linux and Windows. Development is done in Linux. There are two branches on GitHub:
+###
+* **master** - contains an older, more stable version of the IDE
+* **development** - contains the latest changes and features. This branch is typically updated on a daily basis and might contain severe bugs. When the development branch is "in a good state" it is merged into *master*.
 
 ### Implemented features
 * A core component that finds and loads plug-ins at run time
