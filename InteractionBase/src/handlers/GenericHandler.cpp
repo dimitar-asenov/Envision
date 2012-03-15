@@ -201,103 +201,122 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 					|| event->key() == Qt::Key_Left
 					|| event->key() == Qt::Key_Right))
 	{
-		bool processed = false;
-		Visualization::Item::CursorMoveDirection dir;
-
-		// Set the source navigation point when beginning to navigate in a new direction
-		if (	(event->key() == Qt::Key_Up || event->key() == Qt::Key_Down)
-				&& cursorMoveOrientation_ != VerticalOrientation)
+		bool oldNotLocationEquivalent;
+		Visualization::Cursor::CursorType oldType;
+		bool oldBoundary;
+		Visualization::Item* oldOwner;
+		Visualization::Item* t = target;
+		do
 		{
-			cursorMoveOrientation_ = VerticalOrientation;
-			Visualization::Cursor* c = target->scene()->mainCursor();
-			if (c) cursorOriginMidPoint_ = c->region().center();
-		}
-		if (	(event->key() == Qt::Key_Left || event->key() == Qt::Key_Right)
-				&& cursorMoveOrientation_ != HorizontalOrientation)
-		{
-			cursorMoveOrientation_ = HorizontalOrientation;
-			Visualization::Cursor* c = target->scene()->mainCursor();
-			if (c) cursorOriginMidPoint_ = c->region().center();
-		}
-
-		QPoint midpoint = target->mapFromScene(cursorOriginMidPoint_).toPoint();
-		switch( event->key() )
-		{
-			case Qt::Key_Up:
-			{
-				processed = target->moveCursor(Visualization::Item::MoveUp, midpoint);
-				if (!processed) dir = Visualization::Item::MoveUpOf;
-			}
-			break;
-			case Qt::Key_Down:
-			{
-				processed = target->moveCursor(Visualization::Item::MoveDown, midpoint);
-				if (!processed) dir = Visualization::Item::MoveDownOf;
-			}
-			break;
-			case Qt::Key_Left:
-			{
-				processed = target->moveCursor(Visualization::Item::MoveLeft, midpoint);
-				if (!processed) dir = Visualization::Item::MoveLeftOf;
-			}
-			break;
-			case Qt::Key_Right:
-			{
-				processed = target->moveCursor(Visualization::Item::MoveRight, midpoint);
-				if (!processed) dir = Visualization::Item::MoveRightOf;
-			}
-			break;
-			default:
-			{
-				resetCursorOrigin();
-			}
-			break;
-		}
-
-		if (!processed)
-		{
-			Visualization::Item* current = target;
-
-			while (current && !processed)
-			{
-				Visualization::Item* parent = static_cast<Visualization::Item*> (current->parentItem());
-				if (!parent) break;
-
-				QPoint reference;
-				switch( event->key() )
-				{
-					case Qt::Key_Up:
-					{
-						int border = current->scenePos().y();
-						reference = QPoint(cursorOriginMidPoint_.x(), border);
-					} break;
-					case Qt::Key_Down:
-					{
-						int border = current->scenePos().y() + current->height()-1;
-						reference = QPoint(cursorOriginMidPoint_.x(), border);
-					} break;
-					case Qt::Key_Left:
-					{
-						int border = current->scenePos().x();
-						reference = QPoint(border, cursorOriginMidPoint_.y());
-					} break;
-					case Qt::Key_Right:
-					{
-						int border = current->scenePos().x() + current->width()-1;
-						reference = QPoint(border, cursorOriginMidPoint_.y());
-					} break;
-				}
-
-				reference = parent->mapFromScene(reference).toPoint();
-
-				processed = parent->moveCursor(dir, reference);
-				current = parent;
-			}
-		}
+			oldNotLocationEquivalent = t->scene()->mainCursor()->notLocationEquivalent();
+			oldType = t->scene()->mainCursor()->type();
+			oldBoundary = t->scene()->mainCursor()->isAtBoundary();
+			oldOwner = t->scene()->mainCursor()->owner();
+			moveCursor(t, event->key());
+			t = t->scene()->mainCursor()->owner();
+		} while
+			(t->scene()->mainCursor()->isLocationEquivalent(oldNotLocationEquivalent, oldType, oldBoundary, oldOwner));
 
 		event->accept();
 	}
 	else InteractionHandler::keyPressEvent(target, event);
+}
+
+void GenericHandler::moveCursor(Visualization::Item *target, int key)
+{
+	bool processed = false;
+	Visualization::Item::CursorMoveDirection dir;
+
+	// Set the source navigation point when beginning to navigate in a new direction
+	if (	(key == Qt::Key_Up || key == Qt::Key_Down)
+			&& cursorMoveOrientation_ != VerticalOrientation)
+	{
+		cursorMoveOrientation_ = VerticalOrientation;
+		Visualization::Cursor* c = target->scene()->mainCursor();
+		if (c) cursorOriginMidPoint_ = c->region().center();
+	}
+	if (	(key == Qt::Key_Left || key == Qt::Key_Right)
+			&& cursorMoveOrientation_ != HorizontalOrientation)
+	{
+		cursorMoveOrientation_ = HorizontalOrientation;
+		Visualization::Cursor* c = target->scene()->mainCursor();
+		if (c) cursorOriginMidPoint_ = c->region().center();
+	}
+
+	QPoint midpoint = target->mapFromScene(cursorOriginMidPoint_).toPoint();
+	switch(key)
+	{
+		case Qt::Key_Up:
+		{
+			processed = target->moveCursor(Visualization::Item::MoveUp, midpoint);
+			if (!processed) dir = Visualization::Item::MoveUpOf;
+		}
+		break;
+		case Qt::Key_Down:
+		{
+			processed = target->moveCursor(Visualization::Item::MoveDown, midpoint);
+			if (!processed) dir = Visualization::Item::MoveDownOf;
+		}
+		break;
+		case Qt::Key_Left:
+		{
+			processed = target->moveCursor(Visualization::Item::MoveLeft, midpoint);
+			if (!processed) dir = Visualization::Item::MoveLeftOf;
+		}
+		break;
+		case Qt::Key_Right:
+		{
+			processed = target->moveCursor(Visualization::Item::MoveRight, midpoint);
+			if (!processed) dir = Visualization::Item::MoveRightOf;
+		}
+		break;
+		default:
+		{
+			resetCursorOrigin();
+		}
+		break;
+	}
+
+	if (!processed)
+	{
+		Visualization::Item* current = target;
+
+		while (current && !processed)
+		{
+			Visualization::Item* parent = static_cast<Visualization::Item*> (current->parentItem());
+			if (!parent) break;
+
+			QPoint reference;
+			switch( key )
+			{
+				case Qt::Key_Up:
+				{
+					int border = current->scenePos().y();
+					reference = QPoint(cursorOriginMidPoint_.x(), border);
+				} break;
+				case Qt::Key_Down:
+				{
+					int border = current->scenePos().y() + current->height()-1;
+					reference = QPoint(cursorOriginMidPoint_.x(), border);
+				} break;
+				case Qt::Key_Left:
+				{
+					int border = current->scenePos().x();
+					reference = QPoint(border, cursorOriginMidPoint_.y());
+				} break;
+				case Qt::Key_Right:
+				{
+					int border = current->scenePos().x() + current->width()-1;
+					reference = QPoint(border, cursorOriginMidPoint_.y());
+				} break;
+			}
+
+			reference = parent->mapFromScene(reference).toPoint();
+
+			processed = parent->moveCursor(dir, reference);
+			current = parent;
+		}
+	}
 }
 
 void GenericHandler::keyReleaseEvent(Visualization::Item *target, QKeyEvent *event)

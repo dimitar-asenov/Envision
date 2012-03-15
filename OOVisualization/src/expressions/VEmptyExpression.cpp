@@ -32,7 +32,6 @@
  */
 
 #include "expressions/VEmptyExpression.h"
-#include "Helpers.h"
 
 #include "OOModel/headers/expressions/EmptyExpression.h"
 
@@ -57,7 +56,6 @@ VEmptyExpression::~VEmptyExpression()
 void VEmptyExpression::determineChildren()
 {
 	vis_->setStyle(style());
-	Helpers::omitBoundingCursorsInExpressions(this, vis_, true);
 }
 
 void VEmptyExpression::updateGeometry(int availableWidth, int availableHeight)

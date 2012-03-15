@@ -42,7 +42,7 @@ namespace Visualization {
 
 class VISUALIZATIONBASE_API LayoutCursor : public Cursor {
 	public:
-		LayoutCursor(Layout* owner);
+		LayoutCursor(Layout* owner, CursorType type);
 		Layout* owner() const;
 
 		void setVisualizationSize(const QSize& size);
@@ -55,12 +55,16 @@ class VISUALIZATIONBASE_API LayoutCursor : public Cursor {
 		int y();
 		int index();
 
+		void setIsAtBoundary(bool isAtBoundary);
+
 		virtual bool isSame(Cursor* c);
+		virtual bool isAtBoundary() const;
 
 	private:
 		int x_;
 		int y_;
 		int index_;
+		bool isAtBoundary_;
 };
 
 inline void LayoutCursor::set2DIndex(int x, int y) { x_ = x; y_ = y; }
@@ -69,6 +73,8 @@ inline void LayoutCursor::setIndex(int index) { index_ = index; }
 inline int LayoutCursor::x() { return x_; }
 inline int LayoutCursor::y() { return y_; }
 inline int LayoutCursor::index() { return index_; }
+
+inline void LayoutCursor::setIsAtBoundary(bool isAtBoundary) { isAtBoundary_ = isAtBoundary; }
 
 } /* namespace Visualization */
 #endif /* VisualizationBase_LAYOUTCURSOR_H_ */

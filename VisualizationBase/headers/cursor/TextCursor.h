@@ -73,6 +73,7 @@ class VISUALIZATIONBASE_API TextCursor : public Cursor {
 		void update(const QFontMetrics& qfm);
 
 		virtual bool isSame(Cursor* c);
+		virtual bool isAtBoundary() const;
 
 	private:
 		/**

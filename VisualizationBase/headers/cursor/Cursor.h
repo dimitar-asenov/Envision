@@ -43,7 +43,10 @@ class Item;
 
 class VISUALIZATIONBASE_API Cursor {
 	public:
-		Cursor(Item* owner, Item* visualization = nullptr);
+
+		enum CursorType {VerticalCursor, HorizontalCursor, BoxCursor};
+
+		Cursor(Item* owner, CursorType type, Item* visualization = nullptr);
 		virtual ~Cursor();
 
 		virtual Item* owner() const;
@@ -55,7 +58,33 @@ class VISUALIZATIONBASE_API Cursor {
 		void setPosition(const QPoint& pos);
 		void setRegion(const QRect& region);
 
+		/**
+		 * \brief Returns true if this cursor is the same as the cursor \a c.
+		 *
+		 * Two cursors are the same if they have the same owner and if they represent the same location within that owner.
+		 */
 		virtual bool isSame(Cursor* c);
+
+		/**
+		 * \brief Returns true if this cursor is equivalent with respect to its location to the cursor \a c.
+		 *
+		 * Here are the conditions for two cursors to be location equivalent:
+		 *	- None of the cursors is set to be not location equivalent.
+		 *	- The type of both cursors is the same. Furthermore the type can not be BoxCursor.
+		 *	- The owners of the two cursors are in a child-parent relationship. Two cursors from peer entities are not
+		 *	  location equivalent. Two cursors from the same owner can not be location equivalent
+		 *	- At least one of the cursors is a boundary cursor.
+		 *	- There are no items with a visible shape in the hierarchy between the two owners of the cursors.
+		 */
+		virtual bool isLocationEquivalent(Cursor* c);
+		virtual bool isLocationEquivalent(bool notLocationEquivalent, CursorType type, bool isAtBoundary, Item* owner);
+
+		bool notLocationEquivalent() const;
+		void setNotLocationEquivalent(bool notEquivalent);
+
+		virtual bool isAtBoundary() const;
+
+		CursorType type() const;
 
 	protected:
 		void setVisualization(Item* visualization);
@@ -65,6 +94,8 @@ class VISUALIZATIONBASE_API Cursor {
 		QRect region_;
 		Item* owner_;
 		Item* visualization_;
+		CursorType type_;
+		bool notLocationEquivalent_;
 };
 
 inline void Cursor::setPosition(const QPoint& pos) { position_ = pos; }
@@ -72,6 +103,10 @@ inline void Cursor::setRegion(const QRect& region) { region_ = region; }
 inline const QPoint& Cursor::position() { return position_; }
 inline const QRect& Cursor::region() { return region_; }
 inline Item* Cursor::visualization() { return visualization_; }
+inline Cursor::CursorType Cursor::type() const {return type_;}
+
+inline bool Cursor::notLocationEquivalent() const { return notLocationEquivalent_;}
+inline void Cursor::setNotLocationEquivalent(bool notEquivalent) { notLocationEquivalent_ = notEquivalent; }
 
 } /* namespace Visualization */
 #endif /* VisualizationBase_CURSOR_H_ */

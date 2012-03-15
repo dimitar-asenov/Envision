@@ -46,6 +46,9 @@ class VISUALIZATIONBASE_API SequentialLayoutStyle : public LayoutStyle
 		Direction direction_;
 		Alignment alignment_;
 		int spaceBetweenElements_;
+		bool notLocationEquivalentCursors_;
+		bool noInnerCursors_;
+		bool noBoundaryCursors_;
 
 	public:
 		SequentialLayoutStyle();
@@ -54,6 +57,9 @@ class VISUALIZATIONBASE_API SequentialLayoutStyle : public LayoutStyle
 		Direction direction() const;
 		Alignment alignment() const;
 		int spaceBetweenElements() const;
+		bool notLocationEquivalentCursors() const;
+		bool noInnerCursors() const;
+		bool noBoundaryCursors() const;
 
 		void setDirection(Direction direction);
 		void setAlignment(Alignment alignment);
@@ -66,6 +72,9 @@ class VISUALIZATIONBASE_API SequentialLayoutStyle : public LayoutStyle
 inline LayoutStyle::Direction SequentialLayoutStyle::direction() const { return direction_; }
 inline LayoutStyle::Alignment SequentialLayoutStyle::alignment() const {	return alignment_; }
 inline int SequentialLayoutStyle::spaceBetweenElements() const {	return spaceBetweenElements_; }
+inline bool SequentialLayoutStyle::notLocationEquivalentCursors() const {return notLocationEquivalentCursors_;}
+inline bool SequentialLayoutStyle::noInnerCursors() const {return noInnerCursors_;}
+inline bool SequentialLayoutStyle::noBoundaryCursors() const {return noBoundaryCursors_;}
 
 inline bool SequentialLayoutStyle::isHorizontal() const
 	{ return direction_ == LeftToRight || direction_ == RightToLeft;}

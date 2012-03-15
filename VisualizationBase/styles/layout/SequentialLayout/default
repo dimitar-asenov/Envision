@@ -3,4 +3,7 @@
 	<direction>0</direction>
 	<alignment>0</alignment>
 	<spaceBetweenElements>0</spaceBetweenElements>
+	<notLocationEquivalentCursors>false</notLocationEquivalentCursors>
+	<noInnerCursors>false</noInnerCursors>
+	<noBoundaryCursors>false</noBoundaryCursors>
 </style>

@@ -32,7 +32,6 @@
  **********************************************************************************************************************/
 
 #include "types/VPrimitiveType.h"
-#include "Helpers.h"
 #include "OOVisualizationException.h"
 
 #include "VisualizationBase/headers/items/Static.h"
@@ -60,7 +59,6 @@ void VPrimitiveType::determineChildren()
 	const StaticStyle* stStyle = &style()->stat( node()->type() );
 
 	synchronizeItem(vis_, !stStyle->isEmpty(), stStyle);
-	Helpers::omitBoundingCursorsInExpressions(this, vis_, true);
 }
 
 void VPrimitiveType::updateGeometry(int availableWidth, int availableHeight)

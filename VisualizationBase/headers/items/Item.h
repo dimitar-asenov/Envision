@@ -130,21 +130,6 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		 */
 		virtual bool moveCursor(CursorMoveDirection dir, const QPoint& reference = QPoint());
 
-		enum RegionOption {
-				NoOptions = 0x0,
-				OmitTopCursor = 0x1,
-				OmitBottomCursor = 0x2,
-				OmitLeftCursor = 0x4,
-				OmitRightCursor = 0x8,
-				OmitInnerCursors = 0x10,
-				OmitOutterCursors = 0x20,
-				OmitAllCursors = 0x40
-		};
-		Q_DECLARE_FLAGS(RegionOptions, RegionOption)
-
-		void setRegionOptions(RegionOptions options);
-		RegionOptions regionOptions();
-
 		virtual QList<ItemRegion> regions();
 
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
@@ -265,8 +250,6 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		Shape* shape_;
 		bool needsUpdate_;
 
-		RegionOptions regionOptions_;
-
 		void updateChildren();
 
 		// Default event handlers
@@ -299,7 +282,6 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Item::PositionConstraints)
-Q_DECLARE_OPERATORS_FOR_FLAGS(Item::RegionOptions)
 
 inline int Item::width() const { return boundingRect_.width(); }
 inline int Item::height() const { return boundingRect_.height(); }
@@ -313,8 +295,6 @@ inline bool Item::hasShape() const { return shape_; }
 inline Shape* Item::getShape() const {	return shape_; }
 inline qreal Item::xEnd() const { return x() + width() - 1; }
 inline qreal Item::yEnd() const { return y() + height() - 1; }
-inline void Item::setRegionOptions(RegionOptions options) { regionOptions_ = options; }
-inline Item::RegionOptions Item::regionOptions() { return regionOptions_; }
 
 template <class T> void Item::synchronizeItem(T*& item, bool present, const typename T::StyleType* style)
 {

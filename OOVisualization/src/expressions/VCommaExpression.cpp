@@ -32,7 +32,6 @@
  */
 
 #include "expressions/VCommaExpression.h"
-#include "Helpers.h"
 
 #include "VisualizationBase/headers/items/Static.h"
 
@@ -91,10 +90,6 @@ void VCommaExpression::determineChildren()
 	if (pre_) pre_->setStyle( &opStyle->preSymbol());
 	if (in_) in_->setStyle( &opStyle->inSymbol());
 	if (post_) post_->setStyle( &opStyle->postSymbol());
-	
-	bool horizontal = opStyle->layout().direction() == LayoutType::StyleType::LeftToRight
-		|| opStyle->layout().direction() == LayoutType::StyleType::RightToLeft;
-	Helpers::omitBoundingCursorsInExpressions(this, layout(), horizontal);
 }
 
 } /* namespace OOVisualization */

@@ -37,7 +37,6 @@ HEADERS += headers/expressions/VVariableDeclarationStyle.h \
     headers/expressions/VVariableDeclaration.h \
     headers/expressions/VAssignmentExpression.h \
     headers/statements/VExpressionStatement.h \
-    headers/Helpers.h \
     headers/expressions/VCommaExpression.h \
     headers/expressions/VEmptyExpression.h \
     headers/expressions/VUnfinishedOperatorStyle.h \
@@ -111,7 +110,6 @@ SOURCES += src/expressions/VVariableDeclarationStyle.cpp \
     src/expressions/VAssignmentExpression.cpp \
     src/expressions/VMethodCallExpressionStyle.cpp \
     src/statements/VExpressionStatement.cpp \
-    src/Helpers.cpp \
     src/expressions/VCommaExpression.cpp \
     src/expressions/VEmptyExpression.cpp \
     src/expressions/VUnfinishedOperatorStyle.cpp \

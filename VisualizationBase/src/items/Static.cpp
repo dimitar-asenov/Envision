@@ -95,7 +95,6 @@ void Static::determineChildren()
 		}
 
 		item_->setStyle( &style()->itemStyle());
-		item_->setRegionOptions(regionOptions());
 	}
 }
 

@@ -32,7 +32,6 @@
  **********************************************************************************************************************/
 
 #include "expressions/VThisExpression.h"
-#include "Helpers.h"
 
 #include "OOModel/headers/expressions/ThisExpression.h"
 
@@ -59,7 +58,6 @@ VThisExpression::~VThisExpression()
 void VThisExpression::determineChildren()
 {
 	vis_->setStyle(style());
-	Helpers::omitBoundingCursorsInExpressions(this, vis_, true);
 }
 
 void VThisExpression::updateGeometry(int availableWidth, int availableHeight)

@@ -27,6 +27,7 @@
 		<itemsStyle prototypes="layout/SequentialLayout/default">
 			<direction>0</direction>
 			<spaceBetweenElements>5</spaceBetweenElements>
+			<noInnerCursors>true</noInnerCursors>
 		</itemsStyle>
 	</values>
 </style>

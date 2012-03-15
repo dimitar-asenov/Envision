@@ -32,7 +32,6 @@
  **********************************************************************************************************************/
 
 #include "literals/VIntegerLiteral.h"
-#include "Helpers.h"
 
 #include "ModelBase/headers/Model.h"
 
@@ -59,7 +58,6 @@ void VIntegerLiteral::determineChildren()
 	synchronizeItem(vis_, node()->valueNode(), style());
 	vis_->setEditable(false);
 	vis_->setStyle( style() );
-	Helpers::omitBoundingCursorsInExpressions(this, vis_, true);
 }
 
 void VIntegerLiteral::updateGeometry(int availableWidth, int availableHeight)

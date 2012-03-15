@@ -46,7 +46,7 @@
 namespace Visualization {
 
 Item::Item(Item* parent, const StyleType* style) :
-	QGraphicsItem(parent), style_(nullptr), shape_(nullptr), needsUpdate_(true), regionOptions_(NoOptions)
+	QGraphicsItem(parent), style_(nullptr), shape_(nullptr), needsUpdate_(true)
 {
 	if ( !style || style->drawsOnlyShape() ) setFlag(QGraphicsItem::ItemHasNoContents);
 
@@ -357,7 +357,7 @@ QList<ItemRegion> Item::regions()
 	{
 		regs.append(ItemRegion(boundingRect_.toRect()));
 
-		Cursor* cur = new Cursor(this);
+		Cursor* cur = new Cursor(this, Cursor::BoxCursor);
 		cur->setRegion( boundingRect_.translated( (-1)*scenePos() ).toRect() );
 		cur->setPosition( cur->region().center() );
 		regs.last().setCursor(cur);
