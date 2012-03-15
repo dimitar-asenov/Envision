@@ -25,13 +25,13 @@
  **********************************************************************************************************************/
 
 /*
- * InitializerStringProvider.cpp
+ * InitializerStringOffsetProvider.cpp
  *
  *  Created on: Feb 29, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "string_providers/InitializerStringProvider.h"
+#include "string_offset_providers/InitializerStringOffsetProvider.h"
 #include "string_components/StringComponents.h"
 
 #include "OOVisualization/headers/expressions/VArrayInitializer.h"
@@ -43,12 +43,12 @@
 
 namespace OOInteraction {
 
-InitializerStringProvider::InitializerStringProvider(OOVisualization::VArrayInitializer* vis)
+InitializerStringOffsetProvider::InitializerStringOffsetProvider(OOVisualization::VArrayInitializer* vis)
 	: vis_(vis)
 {
 }
 
-QStringList InitializerStringProvider::components()
+QStringList InitializerStringOffsetProvider::components()
 {
 	QStringList components;
 	StringComponents* node = Model::AdapterManager::adapt<StringComponents>(vis_->node());
@@ -61,7 +61,7 @@ QStringList InitializerStringProvider::components()
 	return components;
 }
 
-int InitializerStringProvider::offset()
+int InitializerStringOffsetProvider::offset()
 {
 	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
 
@@ -82,7 +82,7 @@ int InitializerStringProvider::offset()
 			result += components[index++].size(); // This is for the comma after the element
 		}
 
-		QStringList subComponents = StringProvider::components(vis_->node()->values()->at(focusedIndex.y()));
+		QStringList subComponents = StringOffsetProvider::components(vis_->node()->values()->at(focusedIndex.y()));
 		result += subComponents[0].size();
 
 		int subIndex = 1;
@@ -92,15 +92,7 @@ int InitializerStringProvider::offset()
 			result += subComponents[subIndex++].size();
 		}
 
-		StringProvider* child =
-				Model::AdapterManager::adapt<StringProvider>(vis_->layout()->focusedChild());
-		if (child)
-		{
-			int childOffset = child->offset();
-			if (childOffset > 0 && child->isIndivisible()) childOffset = subComponents[subIndex].size();
-			result += childOffset;
-			SAFE_DELETE(child);
-		}
+		result += itemOffset(vis_->layout()->focusedChild(), subComponents[subIndex].size());
 	}
 	else
 	{
@@ -123,15 +115,7 @@ int InitializerStringProvider::offset()
 			for(int i = 0; i<focused; ++i)
 				result += components[(i+1)*2].size() + components[i*2 + 1].size();
 
-			StringProvider* child =
-					Model::AdapterManager::adapt<StringProvider>(vis_->values()->at<Visualization::Item>(focused));
-			if (child)
-			{
-				int childOffset = child->offset();
-				if (childOffset > 0 && child->isIndivisible()) childOffset = components[focused].length();
-				result += childOffset;
-				SAFE_DELETE(child);
-			}
+			result += itemOffset(vis_->values()->at<Visualization::Item>(focused), components[focused].length());
 		}
 
 	}
@@ -139,13 +123,13 @@ int InitializerStringProvider::offset()
 	return result;
 }
 
-QString InitializerStringProvider::string()
+QString InitializerStringOffsetProvider::string()
 {
 	if (!vis_) return QString();
 	return components().join("");
 }
 
-void InitializerStringProvider::setOffset(int offset)
+void InitializerStringOffsetProvider::setOffset(int offset)
 {
 	if (offset == 0)
 	{
@@ -170,7 +154,7 @@ void InitializerStringProvider::setOffset(int offset)
 		if (offset < 0) offset = 0;
 		if (index == components.size()) index -= 2;
 
-		QStringList subComponents = StringProvider::components(vis_->node()->values()->at((index-1)/2));
+		QStringList subComponents = StringOffsetProvider::components(vis_->node()->values()->at((index-1)/2));
 
 		int subIndex = 0;
 		offset -= subComponents[subIndex++].size();
@@ -185,14 +169,8 @@ void InitializerStringProvider::setOffset(int offset)
 		if (subIndex == subComponents.size()) subIndex -= 2;
 
 		auto childItem = vis_->layout()->at<Visualization::Item>((subIndex-1)/2,(index-1)/2);
-		StringProvider* child = Model::AdapterManager::adapt<StringProvider>(childItem);
-		if (child)
-		{
-			if (offset > 0 && child->isIndivisible()) child->setOffset(child->string().length());
-			else child->setOffset(offset);
-			SAFE_DELETE(child);
+		if ( setOffsetInItem(offset, childItem) )
 			return;
-		}
 	}
 	else
 	{
@@ -203,15 +181,8 @@ void InitializerStringProvider::setOffset(int offset)
 
 			if (offset <= components[i*2 + 1].size()) // We only care about the components which represent children
 			{
-				StringProvider* child =
-					Model::AdapterManager::adapt<StringProvider>(vis_->values()->at<Visualization::Item>(i));
-				if (child)
-				{
-					if (offset > 0 && child->isIndivisible()) child->setOffset(child->string().length());
-					else child->setOffset(offset);
-					SAFE_DELETE(child);
+				if ( setOffsetInItem(offset, vis_->values()->at<Visualization::Item>(i)) )
 					return;
-				}
 			}
 			else
 			{

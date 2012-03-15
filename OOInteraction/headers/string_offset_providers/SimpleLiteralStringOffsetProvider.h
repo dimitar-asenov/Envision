@@ -25,18 +25,18 @@
  **********************************************************************************************************************/
 
 /*
- * SimpleLiteralStringProvider.h
+ * SimpleLiteralStringOffsetProvider.h
  *
  *  Created on: Feb 15, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef OOInteraction_SIMPLELITERALSTRINGPROVIDER_H_
-#define OOInteraction_SIMPLELITERALSTRINGPROVIDER_H_
+#ifndef OOInteraction_SIMPLELITERALSTRINGOFFSETPROVIDER_H_
+#define OOInteraction_SIMPLELITERALSTRINGOFFSETPROVIDER_H_
 
 #include "../oointeraction_api.h"
 
-#include "StringProvider.h"
+#include "StringOffsetProvider.h"
 
 namespace OOVisualization {
 	class Item;
@@ -44,9 +44,9 @@ namespace OOVisualization {
 
 namespace OOInteraction {
 
-class OOINTERACTION_API SimpleLiteralStringProvider : public StringProvider {
+class OOINTERACTION_API SimpleLiteralStringOffsetProvider : public StringOffsetProvider {
 	public:
-		SimpleLiteralStringProvider(Visualization::Item* v);
+		SimpleLiteralStringOffsetProvider(Visualization::Item* v);
 		virtual QString string();
 		virtual int offset();
 		virtual void setOffset(int newOffset);
@@ -58,4 +58,4 @@ class OOINTERACTION_API SimpleLiteralStringProvider : public StringProvider {
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_SIMPLELITERALSTRINGPROVIDER_H_ */
+#endif /* OOInteraction_SIMPLELITERALSTRINGOFFSETPROVIDER_H_ */

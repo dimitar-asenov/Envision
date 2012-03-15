@@ -25,37 +25,47 @@
  **********************************************************************************************************************/
 
 /*
- * StaticStringProvider.h
+ * TextRendererStringOffsetProvider.cpp
  *
  *  Created on: Feb 17, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef OOInteraction_STATICSTRINGPROVIDER_H_
-#define OOInteraction_STATICSTRINGPROVIDER_H_
+#include "string_offset_providers/TextRendererStringOffsetProvider.h"
 
-#include "../oointeraction_api.h"
-
-#include "StringProvider.h"
-
-namespace Visualization {
-	class Static;
-}
+#include "VisualizationBase/headers/items/TextRenderer.h"
+#include "VisualizationBase/headers/cursor/TextCursor.h"
 
 namespace OOInteraction {
 
-class StaticStringProvider : public StringProvider {
-	public:
-		StaticStringProvider(Visualization::Static* v);
-		virtual QString string();
-		virtual int offset();
-		virtual void setOffset(int newOffset);
+TextRendererStringOffsetProvider::TextRendererStringOffsetProvider(Visualization::TextRenderer* v)
+: vis_(v)
+{
+}
 
-		virtual bool isIndivisible();
+int TextRendererStringOffsetProvider::offset()
+{
+	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
 
-	private:
-		Visualization::Static* vis_;
-};
+	auto tc = dynamic_cast<Visualization::TextCursor*> (vis_->scene()->mainCursor());
+
+	return tc ? tc->caretPosition() : -1;
+}
+
+QString TextRendererStringOffsetProvider::string()
+{
+	if (!vis_) return QString();
+	return vis_->text();
+}
+
+void TextRendererStringOffsetProvider::setOffset(int offset)
+{
+	if (!vis_) return;
+	vis_->moveCursor( Visualization::Item::MoveRightOf, QPoint(0,0)); // Just set the caret to the first position.
+
+	// And then use the current cursor to set it to the correct position.
+	auto tc = dynamic_cast<Visualization::TextCursor*> (vis_->scene()->mainCursor());
+	tc->setCaretPosition(offset);
+}
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_STATICSTRINGPROVIDER_H_ */

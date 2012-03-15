@@ -25,38 +25,38 @@
  **********************************************************************************************************************/
 
 /*
- * EmptyExpressionStringProvider.cpp
+ * NewArrayStringOffsetProvider.h
  *
- *  Created on: Feb 15, 2012
+ *  Created on: Mar 14, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "string_providers/EmptyExpressionStringProvider.h"
-#include "string_components/StringComponents.h"
+#ifndef OOInteraction_NEWARRAYSTRINGOFFSETPROVIDER_H_
+#define OOInteraction_NEWARRAYSTRINGOFFSETPROVIDER_H_
 
-#include "OOVisualization/headers/expressions/VEmptyExpression.h"
-#include "ModelBase/headers/adapter/AdapterManager.h"
+#include "../oointeraction_api.h"
+#include "StringOffsetProvider.h"
+
+namespace OOVisualization {
+	class VNewExpression;
+}
 
 namespace OOInteraction {
 
-EmptyExpressionStringProvider::EmptyExpressionStringProvider(OOVisualization::VEmptyExpression* v)
-: vis_(v)
-{
-}
+class OOINTERACTION_API NewArrayStringOffsetProvider : public StringOffsetProvider {
+	public:
+		NewArrayStringOffsetProvider(OOVisualization::VNewExpression* vis);
 
-int EmptyExpressionStringProvider::offset()
-{
-	return (vis_ && vis_->itemOrChildHasFocus()) ? 0 : -1;
-}
+		virtual QString string();
+		virtual int offset();
+		virtual void setOffset(int newOffset);
 
-QString EmptyExpressionStringProvider::string()
-{
-	return stringFromComponenets(vis_);
-}
+	protected:
+		virtual QStringList components();
 
-void EmptyExpressionStringProvider::setOffset(int)
-{
-	vis_->moveCursor(Visualization::Item::MoveOnPosition, QPoint(0,0));
-}
+	private:
+		OOVisualization::VNewExpression* vis_;
+};
 
 } /* namespace OOInteraction */
+#endif /* OOInteraction_NEWARRAYSTRINGOFFSETPROVIDER_H_ */

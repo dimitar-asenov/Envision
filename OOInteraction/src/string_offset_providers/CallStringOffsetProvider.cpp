@@ -25,13 +25,13 @@
  **********************************************************************************************************************/
 
 /*
- * CallStringProvider.cpp
+ * CallStringOffsetProvider.cpp
  *
  *  Created on: Feb 29, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "string_providers/CallStringProvider.h"
+#include "string_offset_providers/CallStringOffsetProvider.h"
 #include "string_components/StringComponents.h"
 
 #include "OOVisualization/headers/expressions/VMethodCallExpression.h"
@@ -42,12 +42,12 @@
 
 namespace OOInteraction {
 
-CallStringProvider::CallStringProvider(OOVisualization::VMethodCallExpression* vis)
-	: SequentialVisualizationStringProvider(vis), vis_(vis)
+CallStringOffsetProvider::CallStringOffsetProvider(OOVisualization::VMethodCallExpression* vis)
+	: SequentialVisualizationStringOffsetProvider(vis), vis_(vis)
 {
 }
 
-QStringList CallStringProvider::components()
+QStringList CallStringOffsetProvider::components()
 {
 	QStringList components = detailedComponents();
 
@@ -62,7 +62,7 @@ QStringList CallStringProvider::components()
 	return components;
 }
 
-QStringList CallStringProvider::detailedComponents()
+QStringList CallStringOffsetProvider::detailedComponents()
 {
 	QStringList components;
 	StringComponents* node = Model::AdapterManager::adapt<StringComponents>(vis_->node());
@@ -75,12 +75,12 @@ QStringList CallStringProvider::detailedComponents()
 	return components;
 }
 
-int CallStringProvider::offset()
+int CallStringOffsetProvider::offset()
 {
 	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
 
 	if (!vis_->arguments()->itemOrChildHasFocus())
-		return SequentialVisualizationStringProvider::offset();
+		return SequentialVisualizationStringOffsetProvider::offset();
 
 	QStringList components = detailedComponents();
 	int result = 0;
@@ -111,27 +111,19 @@ int CallStringProvider::offset()
 			index += 2;
 		}
 
-		StringProvider* child =
-				Model::AdapterManager::adapt<StringProvider>(vis_->arguments()->at<Visualization::Item>(focused));
-		if (child)
-		{
-			int childOffset = child->offset();
-			if (childOffset > 0 && child->isIndivisible()) childOffset = components[focused].length();
-			result += childOffset;
-			SAFE_DELETE(child);
-		}
+		result += itemOffset(vis_->arguments()->at<Visualization::Item>(focused), components[focused].length());
 	}
 
 	return result;
 }
 
-QString CallStringProvider::string()
+QString CallStringOffsetProvider::string()
 {
 	if (!vis_) return QString();
 	return components().join("");
 }
 
-void CallStringProvider::setOffset(int offset)
+void CallStringOffsetProvider::setOffset(int offset)
 {
 	if (offset == 0)
 	{
@@ -154,7 +146,7 @@ void CallStringProvider::setOffset(int offset)
 
 	if (offset < argsStart)
 	{
-		SequentialVisualizationStringProvider::setOffset(offset);
+		SequentialVisualizationStringOffsetProvider::setOffset(offset);
 		return;
 	}
 	else offset -= argsStart;
@@ -169,15 +161,8 @@ void CallStringProvider::setOffset(int offset)
 	{
 		if (offset <= components[index].size())
 		{
-			StringProvider* child =
-					Model::AdapterManager::adapt<StringProvider>(vis_->arguments()->at<Visualization::Item>(i));
-			if (child)
-			{
-				if (offset > 0 && child->isIndivisible()) child->setOffset(child->string().length());
-				else child->setOffset(offset);
-				SAFE_DELETE(child);
+			if ( setOffsetInItem(offset, vis_->arguments()->at<Visualization::Item>(i)))
 				return;
-			}
 		}
 		else
 		{

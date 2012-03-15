@@ -25,37 +25,35 @@
  **********************************************************************************************************************/
 
 /*
- * SequentialVisualizationStringProvider.h
+ * TextRendererStringOffsetProvider.h
  *
  *  Created on: Feb 17, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef OOInteraction_SEQUENTIALVISUALIZATIONSTRINGPROVIDER_H_
-#define OOInteraction_SEQUENTIALVISUALIZATIONSTRINGPROVIDER_H_
+#ifndef OOInteraction_TEXTRENDERERSTRINGOFFSETPROVIDER_H_
+#define OOInteraction_TEXTRENDERERSTRINGOFFSETPROVIDER_H_
 
 #include "../oointeraction_api.h"
-#include "StringProvider.h"
 
-#include "VisualizationBase/headers/items/LayoutProvider.h"
-#include "VisualizationBase/headers/layouts/SequentialLayout.h"
+#include "StringOffsetProvider.h"
+
+namespace Visualization {
+	class TextRenderer;
+}
 
 namespace OOInteraction {
 
-class OOINTERACTION_API SequentialVisualizationStringProvider : public StringProvider {
+class TextRendererStringOffsetProvider : public StringOffsetProvider {
 	public:
-		SequentialVisualizationStringProvider(Visualization::LayoutProvider<Visualization::SequentialLayout>* vis);
-
+		TextRendererStringOffsetProvider(Visualization::TextRenderer* v);
 		virtual QString string();
 		virtual int offset();
 		virtual void setOffset(int newOffset);
 
-	protected:
-		virtual QStringList components();
-
 	private:
-		Visualization::LayoutProvider<Visualization::SequentialLayout>* vis_;
+		Visualization::TextRenderer* vis_;
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_SEQUENTIALVISUALIZATIONSTRINGPROVIDER_H_ */
+#endif /* OOInteraction_TEXTRENDERERSTRINGOFFSETPROVIDER_H_ */

@@ -50,7 +50,9 @@ QStringList UnfinishedOperatorStringComponents::components()
 
 	for (int i=0; i< exp_->operands()->size(); ++i)
 	{
-		result.append( exp_->delimiters()->at(i)->get() );
+		QString delim = exp_->delimiters()->at(i)->get();
+		result.append( delim );
+		if (!delim.isEmpty() && delim[delim.size()-1].isLetter()) result.last().append(' ');
 
 		StringComponents* operand = Model::AdapterManager::adapt<StringComponents>(exp_->operands()->at(i));
 		if (operand)
@@ -61,8 +63,13 @@ QStringList UnfinishedOperatorStringComponents::components()
 		else result.append( QString() );
 
 	}
+
 	if (exp_->delimiters()->size() > exp_->operands()->size())
-		result.append( exp_->delimiters()->last()->get() );
+	{
+		QString delim = exp_->delimiters()->last()->get();
+		result.append( delim );
+		if (!delim.isEmpty() && delim[delim.size()-1].isLetter()) result.last().append(' ');
+	}
 
 	return result;
 }

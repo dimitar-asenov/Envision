@@ -25,35 +25,38 @@
  **********************************************************************************************************************/
 
 /*
- * TextRendererStringProvider.h
+ * InitializerStringOffsetProvider.h
  *
- *  Created on: Feb 17, 2012
+ *  Created on: Feb 29, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef OOInteraction_TEXTRENDERERSTRINGPROVIDER_H_
-#define OOInteraction_TEXTRENDERERSTRINGPROVIDER_H_
+#ifndef OOInteraction_INITIALIZERSTRINGOFFSETPROVIDER_H_
+#define OOInteraction_INITIALIZERSTRINGOFFSETPROVIDER_H_
 
 #include "../oointeraction_api.h"
+#include "StringOffsetProvider.h"
 
-#include "StringProvider.h"
-
-namespace Visualization {
-	class TextRenderer;
+namespace OOVisualization {
+	class VArrayInitializer;
 }
 
 namespace OOInteraction {
 
-class TextRendererStringProvider : public StringProvider {
+class OOINTERACTION_API InitializerStringOffsetProvider : public StringOffsetProvider {
 	public:
-		TextRendererStringProvider(Visualization::TextRenderer* v);
+		InitializerStringOffsetProvider(OOVisualization::VArrayInitializer* vis);
+
 		virtual QString string();
 		virtual int offset();
 		virtual void setOffset(int newOffset);
 
+	protected:
+		virtual QStringList components();
+
 	private:
-		Visualization::TextRenderer* vis_;
+		OOVisualization::VArrayInitializer* vis_;
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_TEXTRENDERERSTRINGPROVIDER_H_ */
+#endif /* OOInteraction_INITIALIZERSTRINGOFFSETPROVIDER_H_ */

@@ -25,48 +25,37 @@
  **********************************************************************************************************************/
 
 /*
- * StringProvider.h
+ * StaticStringOffsetProvider.h
  *
- *  Created on: Feb 14, 2012
+ *  Created on: Feb 17, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef OOInteraction_STRINGPROVIDER_H_
-#define OOInteraction_STRINGPROVIDER_H_
+#ifndef OOInteraction_STATICSTRINGOFFSETPROVIDER_H_
+#define OOInteraction_STATICSTRINGOFFSETPROVIDER_H_
 
 #include "../oointeraction_api.h"
 
-namespace Model {
-	class Node;
-}
+#include "StringOffsetProvider.h"
 
 namespace Visualization {
-	class Item;
+	class Static;
 }
 
 namespace OOInteraction {
 
-class OOINTERACTION_API StringProvider {
+class StaticStringOffsetProvider : public StringOffsetProvider {
 	public:
-		virtual QString string() = 0;
-		virtual int offset() = 0;
-		virtual void setOffset(int newOffset) = 0;
-		virtual ~StringProvider();
+		StaticStringOffsetProvider(Visualization::Static* v);
+		virtual QString string();
+		virtual int offset();
+		virtual void setOffset(int newOffset);
 
-		/**
-		 * \brief Returns true when the visualization corresponding to this StringProvider is an indivisible entity.
-		 *
-		 * An indivisible entity's offset should be ignored and the cursor should be placed either before or after it.
-		 * This is important for example for Static text symbols which are rendered as text but actually are represented
-		 * in the expression editor as different text. The same is true of icons which have a text representation.
-		 */
 		virtual bool isIndivisible();
 
-		static QStringList components(Model::Node* node);
-		static QString stringFromComponenets(Model::Node* node);
-		static QString stringFromComponenets(Visualization::Item* item);
-		static QString stringFromStringProvider(Visualization::Item* item);
+	private:
+		Visualization::Static* vis_;
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_STRINGPROVIDER_H_ */
+#endif /* OOInteraction_STATICSTRINGOFFSETPROVIDER_H_ */

@@ -33,7 +33,7 @@
 
 #include "handlers/HExpression.h"
 
-#include "string_providers/StringProvider.h"
+#include "string_offset_providers/StringOffsetProvider.h"
 #include "expression_editor/OOExpressionBuilder.h"
 #include "handlers/SetExpressionCursorEvent.h"
 
@@ -76,12 +76,12 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 
 	// Find the top most parent that is adaptable to StringProvider
 	Visualization::Item* topMostItem = target;
-	StringProvider* topMostSP = Model::AdapterManager::adapt<StringProvider>(topMostItem);
+	auto* topMostSP = Model::AdapterManager::adapt<StringOffsetProvider>(topMostItem);
 
 	auto p = topMostItem->parentItem();
 	while(p)
 	{
-		StringProvider* adapted = Model::AdapterManager::adapt<StringProvider>(p);
+		auto* adapted = Model::AdapterManager::adapt<StringOffsetProvider>(p);
 		if (adapted)
 		{
 			SAFE_DELETE(topMostSP);

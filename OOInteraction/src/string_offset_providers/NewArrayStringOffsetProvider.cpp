@@ -25,28 +25,28 @@
  **********************************************************************************************************************/
 
 /*
- * SequentialVisualizationStringProvider.cpp
+ * NewArrayStringOffsetProvider.cpp
  *
- *  Created on: Feb 17, 2012
+ *  Created on: Mar 14, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "string_providers/SequentialVisualizationStringProvider.h"
+#include "string_offset_providers/NewArrayStringOffsetProvider.h"
 #include "string_components/StringComponents.h"
 
+#include "OOVisualization/headers/expressions/VNewExpression.h"
 #include "VisualizationBase/headers/cursor/LayoutCursor.h"
 #include "VisualizationBase/headers/cursor/Cursor.h"
 #include "ModelBase/headers/adapter/AdapterManager.h"
 
 namespace OOInteraction {
 
-SequentialVisualizationStringProvider::SequentialVisualizationStringProvider
-	(Visualization::LayoutProvider<Visualization::SequentialLayout>* vis)
+NewArrayStringOffsetProvider::NewArrayStringOffsetProvider(OOVisualization::VNewExpression* vis)
 	: vis_(vis)
 {
 }
 
-QStringList SequentialVisualizationStringProvider::components()
+QStringList NewArrayStringOffsetProvider::components()
 {
 	QStringList components;
 	StringComponents* node = Model::AdapterManager::adapt<StringComponents>(vis_->node());
@@ -67,7 +67,7 @@ QStringList SequentialVisualizationStringProvider::components()
 	return components;
 }
 
-int SequentialVisualizationStringProvider::offset()
+int NewArrayStringOffsetProvider::offset()
 {
 	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
 
@@ -76,77 +76,45 @@ int SequentialVisualizationStringProvider::offset()
 
 	int result = 0;
 
-	if (vis_->scene()->mainCursor() && vis_->scene()->mainCursor()->owner() == vis_->layout())
-	{
-		int index = vis_->layout()->correspondingSceneCursor<Visualization::LayoutCursor>()->index();
-		for (int i = 0; i<index; ++i)
-			result += components[i].size();
-	}
-	else
-	{
-		int focused = vis_->layout()->focusedElementIndex();
-		for(int i = 0; i<focused; ++i)
-			result += components[i].size();
+	int focused = vis_->layout()->focusedElementIndex();
+	result += itemOffset(vis_->layout()->at<Visualization::Item>(focused), components[focused].length());
 
-		StringProvider* child =
-				Model::AdapterManager::adapt<StringProvider>(vis_->layout()->at<Visualization::Item>(focused));
-		if (child)
-		{
-			int childOffset = child->offset();
-			if (childOffset > 0 && child->isIndivisible()) childOffset = components[focused].length();
-			result += childOffset;
-			SAFE_DELETE(child);
-		}
-	}
+	if (focused == 0) for (int i = 0; i< 4; ++i ) result += components[i].size();
+	else if (focused == 2) for (int i = 0; i< 2; ++i ) result += components[i].size();
 
 	return result;
 }
 
-QString SequentialVisualizationStringProvider::string()
+QString NewArrayStringOffsetProvider::string()
 {
 	if (!vis_) return QString();
 	return components().join("");
 }
 
-void SequentialVisualizationStringProvider::setOffset(int offset)
+void NewArrayStringOffsetProvider::setOffset(int offset)
 {
-	if (offset == 0)
-	{
-		vis_->moveCursor( Visualization::Item::MoveOnPosition, QPoint(0,0));
-		return;
-	}
-
 	QStringList components = this->components();
-	Q_ASSERT(components.size() == vis_->layout()->length());
-	for (int i = 0; i<vis_->layout()->length(); ++i)
+
+	int childIndex = 1; // Corresponds to the second child - 'new' symbol
+	if (offset > components[0].size())
 	{
-		if (offset < components[i].size())
+		offset -= components[0].size() + components[1].size(); // components[1] for the '_' between new and the type name
+		childIndex = 2;
+		if (offset > components[2].size())
 		{
-			StringProvider* child =
-				Model::AdapterManager::adapt<StringProvider>(vis_->layout()->at<Visualization::Item>(i));
-			if (child)
+			// components[3] for the '[' between new and the type name
+			offset -= components[2].size() + components[3].size();
+			childIndex = 0;
+			if (offset > components[4].size())
 			{
-				if (offset > 0 && child->isIndivisible()) child->setOffset(child->string().length());
-				else child->setOffset(offset);
-				SAFE_DELETE(child);
-				return;
-			}
-		}
-		else
-		{
-			offset -= components[i].size();
-			if (offset == 0)
-			{
-				QPoint reference(vis_->layout()->at<Visualization::Item>(i)->xEnd()+1, 0);
-				if (reference.x() > vis_->layout()->width()-1 ) reference.setX(vis_->layout()->width() - 1);
-				reference += vis_->layout()->pos().toPoint();
-				vis_->moveCursor( Visualization::Item::MoveOnPosition, reference);
-				return;
+				// This happened when we just finished typing
+				childIndex = 2;
+				offset = components[2].size();
 			}
 		}
 	}
 
-	Q_ASSERT(false);
+	setOffsetInItem(offset, vis_->layout()->at<Visualization::Item>(childIndex));
 }
 
 } /* namespace OOInteraction */

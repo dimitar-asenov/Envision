@@ -158,8 +158,9 @@ void OOExpressionBuilder::visit(Interaction::UnfinishedOperator* unfinished)
 void OOExpressionBuilder::createErrorExpression(Interaction::Operator* op)
 {
 	OOModel::ErrorExpression* error = new OOModel::ErrorExpression();
-	error->setPrefix(op->descriptor()->prefix());
-	error->setPostfix(op->descriptor()->postfix());
+	auto desc = dynamic_cast<Interaction::ErrorDescriptor*>(op->descriptor());
+	error->setPrefix(desc->errorPrefix());
+	error->setPostfix(desc->errorPostfix());
 
 	op->at(0)->accept(this);
 	error->setArg(expression);

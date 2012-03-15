@@ -35,7 +35,16 @@ INSTALLS += target \
     pluginmeta \
     styles
 PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/string_components/AssignmentStringComponents.h \
+HEADERS += headers/string_offset_providers/TextRendererStringOffsetProvider.h \
+    headers/string_offset_providers/StringOffsetProvider.h \
+    headers/string_offset_providers/StaticStringOffsetProvider.h \
+    headers/string_offset_providers/SimpleLiteralStringOffsetProvider.h \
+    headers/string_offset_providers/SequentialVisualizationStringOffsetProvider.h \
+    headers/string_offset_providers/NewArrayStringOffsetProvider.h \
+    headers/string_offset_providers/InitializerStringOffsetProvider.h \
+    headers/string_offset_providers/EmptyExpressionStringOffsetProvider.h \
+    headers/string_offset_providers/CallStringOffsetProvider.h \
+    headers/string_components/AssignmentStringComponents.h \
     headers/expression_editor/operators/AssignmentDescriptor.h \
     headers/handlers/HStatement.h \
     headers/handlers/HFormalArgument.h \
@@ -50,11 +59,9 @@ HEADERS += headers/string_components/AssignmentStringComponents.h \
     headers/handlers/HProject.h \
     headers/handlers/SetExpressionCursorEvent.h \
     headers/commands/CClassCreateMethod.h \
-    headers/string_providers/CallStringProvider.h \
     headers/string_components/CallStringComponents.h \
     headers/expression_editor/operators/CallDescriptor.h \
     headers/expression_editor/operators/MemberOperatorDescriptor.h \
-    headers/string_providers/InitializerStringProvider.h \
     headers/string_components/CastExpressionStringComponents.h \
     headers/string_components/CommaExpressionStringComponents.h \
     headers/string_components/InitializerStringComponents.h \
@@ -65,13 +72,9 @@ HEADERS += headers/string_components/AssignmentStringComponents.h \
     headers/expression_editor/operators/NewArrayDescriptor.h \
     headers/string_components/ThisExpressionStringComponents.h \
     headers/string_components/NullLiteralStringComponents.h \
-    headers/string_providers/SimpleLiteralStringProvider.h \
     headers/string_components/BooleanLiteralStringComponents.h \
     headers/string_components/UnaryOperatorStringComponents.h \
     headers/expression_editor/operators/UnaryOperatorDescriptor.h \
-    headers/string_providers/StaticStringProvider.h \
-    headers/string_providers/TextRendererStringProvider.h \
-    headers/string_providers/SequentialVisualizationStringProvider.h \
     headers/string_components/VariableAccessStringComponents.h \
     headers/string_components/UnfinishedOperatorStringComponents.h \
     headers/string_components/ErrorExpressionStringComponents.h \
@@ -79,8 +82,6 @@ HEADERS += headers/string_components/AssignmentStringComponents.h \
     headers/string_components/IntegerLiteralStringComponents.h \
     headers/string_components/EmptyExpressionStringComponents.h \
     headers/string_components/StringComponents.h \
-    headers/string_providers/EmptyExpressionStringProvider.h \
-    headers/string_providers/StringProvider.h \
     headers/expression_editor/OOOperatorDescriptorList.h \
     headers/expression_editor/operators/BinaryOperatorDescriptor.h \
     headers/expression_editor/OOOperatorDescriptor.h \
@@ -89,7 +90,16 @@ HEADERS += headers/string_components/AssignmentStringComponents.h \
     headers/OOInteractionException.h \
     headers/oointeraction_api.h \
     src/oointeraction.h
-SOURCES += src/string_components/AssignmentStringComponents.cpp \
+SOURCES += src/string_offset_providers/TextRendererStringOffsetProvider.cpp \
+    src/string_offset_providers/StringOffsetProvider.cpp \
+    src/string_offset_providers/StaticStringOffsetProvider.cpp \
+    src/string_offset_providers/SimpleLiteralStringOffsetProvider.cpp \
+    src/string_offset_providers/SequentialVisualizationStringOffsetProvider.cpp \
+    src/string_offset_providers/NewArrayStringOffsetProvider.cpp \
+    src/string_offset_providers/InitializerStringOffsetProvider.cpp \
+    src/string_offset_providers/EmptyExpressionStringOffsetProvider.cpp \
+    src/string_offset_providers/CallStringOffsetProvider.cpp \
+    src/string_components/AssignmentStringComponents.cpp \
     src/expression_editor/operators/AssignmentDescriptor.cpp \
     src/handlers/HStatement.cpp \
     src/handlers/HFormalArgument.cpp \
@@ -104,11 +114,9 @@ SOURCES += src/string_components/AssignmentStringComponents.cpp \
     src/handlers/HProject.cpp \
     src/handlers/SetExpressionCursorEvent.cpp \
     src/commands/CClassCreateMethod.cpp \
-    src/string_providers/CallStringProvider.cpp \
     src/string_components/CallStringComponents.cpp \
     src/expression_editor/operators/CallDescriptor.cpp \
     src/expression_editor/operators/MemberOperatorDescriptor.cpp \
-    src/string_providers/InitializerStringProvider.cpp \
     src/string_components/NewArrayStringComponents.cpp \
     src/string_components/InitializerStringComponents.cpp \
     src/string_components/CommaExpressionStringComponents.cpp \
@@ -119,13 +127,9 @@ SOURCES += src/string_components/AssignmentStringComponents.cpp \
     src/expression_editor/operators/NewArrayDescriptor.cpp \
     src/string_components/ThisExpressionStringComponents.cpp \
     src/string_components/NullLiteralStringComponents.cpp \
-    src/string_providers/SimpleLiteralStringProvider.cpp \
     src/string_components/BooleanLiteralStringComponents.cpp \
     src/string_components/UnaryOperatorStringComponents.cpp \
     src/expression_editor/operators/UnaryOperatorDescriptor.cpp \
-    src/string_providers/StaticStringProvider.cpp \
-    src/string_providers/TextRendererStringProvider.cpp \
-    src/string_providers/SequentialVisualizationStringProvider.cpp \
     src/string_components/BinaryOperatorStringComponents.cpp \
     src/string_components/EmptyExpressionStringComponents.cpp \
     src/string_components/ErrorExpressionStringComponents.cpp \
@@ -133,8 +137,6 @@ SOURCES += src/string_components/AssignmentStringComponents.cpp \
     src/string_components/UnfinishedOperatorStringComponents.cpp \
     src/string_components/VariableAccessStringComponents.cpp \
     src/string_components/StringComponents.cpp \
-    src/string_providers/EmptyExpressionStringProvider.cpp \
-    src/string_providers/StringProvider.cpp \
     src/expression_editor/OOOperatorDescriptorList.cpp \
     src/expression_editor/operators/BinaryOperatorDescriptor.cpp \
     src/expression_editor/OOOperatorDescriptor.cpp \

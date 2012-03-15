@@ -25,65 +25,97 @@
  **********************************************************************************************************************/
 
 /*
- * SimpleLiteralStringProvider.cpp
+ * StringOffsetProvider.cpp
  *
- *  Created on: Feb 15, 2012
+ *  Created on: Feb 14, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "string_providers/SimpleLiteralStringProvider.h"
+#include "string_offset_providers/StringOffsetProvider.h"
 #include "string_components/StringComponents.h"
 
-#include "VisualizationBase/headers/cursor/TextCursor.h"
 #include "VisualizationBase/headers/items/Item.h"
+#include "ModelBase/headers/adapter/AdapterManager.h"
+#include "Core/headers/global.h"
 
 namespace OOInteraction {
 
-SimpleLiteralStringProvider::SimpleLiteralStringProvider(Visualization::Item* v)
-: vis_(v)
+StringOffsetProvider::~StringOffsetProvider()
 {
 }
 
-int SimpleLiteralStringProvider::offset()
+QStringList StringOffsetProvider::components(Model::Node* node)
 {
-	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
+	if (!node) return QStringList();
 
-	auto tc = dynamic_cast<Visualization::TextCursor*> (vis_->scene()->mainCursor());
-
-	return tc ? tc->caretPosition() : -1;
-}
-
-QString SimpleLiteralStringProvider::string()
-{
-	return stringFromComponenets(vis_);
-}
-
-void SimpleLiteralStringProvider::setOffset(int offset)
-{
-	if (!vis_) return;
-	vis_->moveCursor( Visualization::Item::MoveOnPosition, QPoint(0,0)); // Just set the caret to the first position.
-
-	// And then use the current cursor to set it to the correct position.
-	auto tc = dynamic_cast<Visualization::TextCursor*> (vis_->scene()->mainCursor());
-	tc->setCaretPosition(offset);
-}
-
-bool SimpleLiteralStringProvider::isIndivisible()
-{
-	auto v = dynamic_cast<Visualization::TextRenderer*> (vis_);
-	if (!v && vis_)
+	QStringList result;
+	StringComponents* sc = Model::AdapterManager::adapt<StringComponents>(node);
+	if (sc)
 	{
-		auto ci = vis_->childItems();
-		while (ci.length() == 1)
-		{
-			v =  dynamic_cast<Visualization::TextRenderer*> (ci.first());
-			if (v) break;
-
-			ci = ci.first()->childItems();
-		}
+		result = sc->components();
+		SAFE_DELETE(sc);
 	}
 
-	return !v || v->text().length() != stringFromComponenets(vis_).length();
+	return result;
+}
+
+QString StringOffsetProvider::stringFromComponenets(Model::Node* node)
+{
+	auto c = components(node);
+	return c.isEmpty() ? QString() : c.join("");
+}
+
+QString StringOffsetProvider::stringFromComponenets(Visualization::Item* item)
+{
+	if (!item) return QString();
+	return stringFromComponenets(item->node());
+}
+
+QString StringOffsetProvider::stringFromStringOffsetProvider(Visualization::Item* item)
+{
+	if (!item) return QString();
+
+	QString result;
+	StringOffsetProvider* sp = Model::AdapterManager::adapt<StringOffsetProvider>(item);
+	if (sp)
+	{
+		result = sp->string();
+		SAFE_DELETE(sp);
+	}
+
+	return result;
+}
+
+bool StringOffsetProvider::isIndivisible()
+{
+	return false;
+}
+
+bool StringOffsetProvider::setOffsetInItem(int offset, Visualization::Item* item)
+{
+	if (!item) return false;
+	auto child = Model::AdapterManager::adapt<StringOffsetProvider>(item);
+	if (child)
+	{
+		if (offset > 0 && child->isIndivisible()) child->setOffset(child->string().length());
+		else child->setOffset(offset);
+		SAFE_DELETE(child);
+		return true;
+	}
+	return false;
+}
+
+int StringOffsetProvider::itemOffset(Visualization::Item* item, int stringComponentLenght)
+{
+	StringOffsetProvider* child = Model::AdapterManager::adapt<StringOffsetProvider>(item);
+	int offset = 0;
+	if (child)
+	{
+		offset = child->offset();
+		if (offset > 0 && child->isIndivisible()) offset = stringComponentLenght;
+		SAFE_DELETE(child);
+	}
+	return offset;
 }
 
 } /* namespace OOInteraction */

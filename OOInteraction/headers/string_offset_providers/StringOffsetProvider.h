@@ -25,39 +25,51 @@
  **********************************************************************************************************************/
 
 /*
- * CallStringProvider.h
+ * StringOffsetProvider.h
  *
- *  Created on: Feb 29, 2012
+ *  Created on: Feb 14, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef OOInteraction_CALLSTRINGPROVIDER_H_
-#define OOInteraction_CALLSTRINGPROVIDER_H_
+#ifndef OOInteraction_STRINGOFFSETPROVIDER_H_
+#define OOInteraction_STRINGOFFSETPROVIDER_H_
 
 #include "../oointeraction_api.h"
-#include "SequentialVisualizationStringProvider.h"
 
-namespace OOVisualization {
-	class VMethodCallExpression;
+namespace Model {
+	class Node;
+}
+
+namespace Visualization {
+	class Item;
 }
 
 namespace OOInteraction {
 
-class OOINTERACTION_API CallStringProvider : public SequentialVisualizationStringProvider {
+class OOINTERACTION_API StringOffsetProvider {
 	public:
-	CallStringProvider(OOVisualization::VMethodCallExpression* vis);
+		virtual QString string() = 0;
+		virtual int offset() = 0;
+		virtual void setOffset(int newOffset) = 0;
+		virtual ~StringOffsetProvider();
 
-		virtual QString string();
-		virtual int offset();
-		virtual void setOffset(int newOffset);
+		/**
+		 * \brief Returns true when the visualization corresponding to this StringProvider is an indivisible entity.
+		 *
+		 * An indivisible entity's offset should be ignored and the cursor should be placed either before or after it.
+		 * This is important for example for Static text symbols which are rendered as text but actually are represented
+		 * in the expression editor as different text. The same is true of icons which have a text representation.
+		 */
+		virtual bool isIndivisible();
 
-	protected:
-		virtual QStringList components();
-
-	private:
-		QStringList detailedComponents();
-		OOVisualization::VMethodCallExpression* vis_;
+		// Helper methods
+		static QStringList components(Model::Node* node);
+		static QString stringFromComponenets(Model::Node* node);
+		static QString stringFromComponenets(Visualization::Item* item);
+		static QString stringFromStringOffsetProvider(Visualization::Item* item);
+		static bool setOffsetInItem(int offset, Visualization::Item* item);
+		static int itemOffset(Visualization::Item* item, int stringComponentLenght);
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_CALLSTRINGPROVIDER_H_ */
+#endif /* OOInteraction_STRINGOFFSETPROVIDER_H_ */

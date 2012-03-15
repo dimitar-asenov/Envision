@@ -48,7 +48,8 @@ QStringList NewArrayStringComponents::components()
 	QStringList result;
 	if (!exp_) return result;
 
-	result.append("new ");
+	result.append("new");
+	result.append(" ");
 
 	StringComponents* left = Model::AdapterManager::adapt<StringComponents>(exp_->type());
 	if(left)

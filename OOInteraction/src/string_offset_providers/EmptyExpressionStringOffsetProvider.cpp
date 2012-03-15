@@ -25,47 +25,38 @@
  **********************************************************************************************************************/
 
 /*
- * TextRendererStringProvider.cpp
+ * EmptyExpressionStringOffsetProvider.cpp
  *
- *  Created on: Feb 17, 2012
+ *  Created on: Feb 15, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "string_providers/TextRendererStringProvider.h"
+#include "string_offset_providers/EmptyExpressionStringOffsetProvider.h"
+#include "string_components/StringComponents.h"
 
-#include "VisualizationBase/headers/items/TextRenderer.h"
-#include "VisualizationBase/headers/cursor/TextCursor.h"
+#include "OOVisualization/headers/expressions/VEmptyExpression.h"
+#include "ModelBase/headers/adapter/AdapterManager.h"
 
 namespace OOInteraction {
 
-TextRendererStringProvider::TextRendererStringProvider(Visualization::TextRenderer* v)
+EmptyExpressionStringOffsetProvider::EmptyExpressionStringOffsetProvider(OOVisualization::VEmptyExpression* v)
 : vis_(v)
 {
 }
 
-int TextRendererStringProvider::offset()
+int EmptyExpressionStringOffsetProvider::offset()
 {
-	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
-
-	auto tc = dynamic_cast<Visualization::TextCursor*> (vis_->scene()->mainCursor());
-
-	return tc ? tc->caretPosition() : -1;
+	return (vis_ && vis_->itemOrChildHasFocus()) ? 0 : -1;
 }
 
-QString TextRendererStringProvider::string()
+QString EmptyExpressionStringOffsetProvider::string()
 {
-	if (!vis_) return QString();
-	return vis_->text();
+	return stringFromComponenets(vis_);
 }
 
-void TextRendererStringProvider::setOffset(int offset)
+void EmptyExpressionStringOffsetProvider::setOffset(int)
 {
-	if (!vis_) return;
-	vis_->moveCursor( Visualization::Item::MoveRightOf, QPoint(-2,0)); // Just set the caret to the first position.
-
-	// And then use the current cursor to set it to the correct position.
-	auto tc = dynamic_cast<Visualization::TextCursor*> (vis_->scene()->mainCursor());
-	tc->setCaretPosition(offset);
+	vis_->moveCursor(Visualization::Item::MoveOnPosition, QPoint(0,0));
 }
 
 } /* namespace OOInteraction */

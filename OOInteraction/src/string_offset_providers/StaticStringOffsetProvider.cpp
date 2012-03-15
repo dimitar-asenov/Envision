@@ -25,35 +25,43 @@
  **********************************************************************************************************************/
 
 /*
- * EmptyExpressionStringProvider.h
+ * StaticStringOffsetProvider.cpp
  *
- *  Created on: Feb 15, 2012
+ *  Created on: Feb 17, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef OOInteraction_EMPTYEXPRESSIONSTRINGPROVIDER_H_
-#define OOInteraction_EMPTYEXPRESSIONSTRINGPROVIDER_H_
+#include "string_offset_providers/StaticStringOffsetProvider.h"
 
-#include "../oointeraction_api.h"
-
-#include "StringProvider.h"
-
-namespace OOVisualization {
-	class VEmptyExpression;
-}
+#include "VisualizationBase/headers/items/Static.h"
+#include "ModelBase/headers/adapter/AdapterManager.h"
 
 namespace OOInteraction {
 
-class OOINTERACTION_API EmptyExpressionStringProvider : public StringProvider {
-	public:
-		EmptyExpressionStringProvider(OOVisualization::VEmptyExpression* v);
-		virtual QString string();
-		virtual int offset();
-		virtual void setOffset(int newOffset);
+StaticStringOffsetProvider::StaticStringOffsetProvider(Visualization::Static* v)
+: vis_(v)
+{
+}
 
-	private:
-		OOVisualization::VEmptyExpression* vis_;
-};
+int StaticStringOffsetProvider::offset()
+{
+	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
+	return itemOffset(vis_->item(), string().size());
+}
+
+QString StaticStringOffsetProvider::string()
+{
+	return stringFromStringOffsetProvider(vis_? vis_->item() : nullptr);
+}
+
+void StaticStringOffsetProvider::setOffset(int offset)
+{
+	setOffsetInItem(offset, vis_->item());
+}
+
+bool StaticStringOffsetProvider::isIndivisible()
+{
+	return true;
+}
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_EMPTYEXPRESSIONSTRINGPROVIDER_H_ */

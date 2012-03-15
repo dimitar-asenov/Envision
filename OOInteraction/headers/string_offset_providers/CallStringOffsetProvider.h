@@ -25,27 +25,27 @@
  **********************************************************************************************************************/
 
 /*
- * InitializerStringProvider.h
+ * CallStringOffsetProvider.h
  *
  *  Created on: Feb 29, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef OOInteraction_INITIALIZERSTRINGPROVIDER_H_
-#define OOInteraction_INITIALIZERSTRINGPROVIDER_H_
+#ifndef OOInteraction_CALLSTRINGOFFSETPROVIDER_H_
+#define OOInteraction_CALLSTRINGOFFSETPROVIDER_H_
 
 #include "../oointeraction_api.h"
-#include "StringProvider.h"
+#include "SequentialVisualizationStringOffsetProvider.h"
 
 namespace OOVisualization {
-	class VArrayInitializer;
+	class VMethodCallExpression;
 }
 
 namespace OOInteraction {
 
-class OOINTERACTION_API InitializerStringProvider : public StringProvider {
+class OOINTERACTION_API CallStringOffsetProvider : public SequentialVisualizationStringOffsetProvider {
 	public:
-		InitializerStringProvider(OOVisualization::VArrayInitializer* vis);
+	CallStringOffsetProvider(OOVisualization::VMethodCallExpression* vis);
 
 		virtual QString string();
 		virtual int offset();
@@ -55,8 +55,9 @@ class OOINTERACTION_API InitializerStringProvider : public StringProvider {
 		virtual QStringList components();
 
 	private:
-		OOVisualization::VArrayInitializer* vis_;
+		QStringList detailedComponents();
+		OOVisualization::VMethodCallExpression* vis_;
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_INITIALIZERSTRINGPROVIDER_H_ */
+#endif /* OOInteraction_CALLSTRINGOFFSETPROVIDER_H_ */

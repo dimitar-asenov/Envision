@@ -25,37 +25,35 @@
  **********************************************************************************************************************/
 
 /*
- * SetExpressionCursorEvent.cpp
+ * EmptyExpressionStringOffsetProvider.h
  *
- *  Created on: Feb 17, 2012
+ *  Created on: Feb 15, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "handlers/SetExpressionCursorEvent.h"
+#ifndef OOInteraction_EMPTYEXPRESSIONSTRINGOFFSETPROVIDER_H_
+#define OOInteraction_EMPTYEXPRESSIONSTRINGOFFSETPROVIDER_H_
 
-#include "string_offset_providers/StringOffsetProvider.h"
+#include "../oointeraction_api.h"
 
-#include "VisualizationBase/headers/items/Item.h"
-#include "ModelBase/headers/adapter/AdapterManager.h"
+#include "StringOffsetProvider.h"
+
+namespace OOVisualization {
+	class VEmptyExpression;
+}
 
 namespace OOInteraction {
 
-const QEvent::Type SetExpressionCursorEvent::EventType = static_cast<QEvent::Type> (QEvent::registerEventType());
+class OOINTERACTION_API EmptyExpressionStringOffsetProvider : public StringOffsetProvider {
+	public:
+		EmptyExpressionStringOffsetProvider(OOVisualization::VEmptyExpression* v);
+		virtual QString string();
+		virtual int offset();
+		virtual void setOffset(int newOffset);
 
-SetExpressionCursorEvent::SetExpressionCursorEvent(Visualization::Item* parentContainer, Model::Node* node, int offset)
-	: CustomSceneEvent(EventType), parentContainer_(parentContainer), node_(node), offset_(offset)
-{
-}
-
-void SetExpressionCursorEvent::execute()
-{
-	Q_ASSERT(parentContainer_->findVisualizationOf(node_) != nullptr);
-	auto* sp = Model::AdapterManager::adapt<StringOffsetProvider>( parentContainer_->findVisualizationOf(node_) );
-	if (sp)
-	{
-		sp->setOffset(offset_);
-		SAFE_DELETE(sp);
-	}
-}
+	private:
+		OOVisualization::VEmptyExpression* vis_;
+};
 
 } /* namespace OOInteraction */
+#endif /* OOInteraction_EMPTYEXPRESSIONSTRINGOFFSETPROVIDER_H_ */

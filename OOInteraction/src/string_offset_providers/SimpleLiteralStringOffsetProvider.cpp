@@ -25,79 +25,65 @@
  **********************************************************************************************************************/
 
 /*
- * StringProvider.cpp
+ * SimpleLiteralStringOffsetProvider.cpp
  *
- *  Created on: Feb 14, 2012
+ *  Created on: Feb 15, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "string_providers/StringProvider.h"
+#include "string_offset_providers/SimpleLiteralStringOffsetProvider.h"
 #include "string_components/StringComponents.h"
 
+#include "VisualizationBase/headers/cursor/TextCursor.h"
 #include "VisualizationBase/headers/items/Item.h"
-#include "ModelBase/headers/adapter/AdapterManager.h"
-#include "Core/headers/global.h"
 
 namespace OOInteraction {
 
-StringProvider::~StringProvider()
+SimpleLiteralStringOffsetProvider::SimpleLiteralStringOffsetProvider(Visualization::Item* v)
+: vis_(v)
 {
 }
 
-QStringList StringProvider::components(Model::Node* node)
+int SimpleLiteralStringOffsetProvider::offset()
 {
-	if (!node) return QStringList();
+	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
 
-	QStringList result;
-	StringComponents* sc = Model::AdapterManager::adapt<StringComponents>(node);
-	if (sc)
+	auto tc = dynamic_cast<Visualization::TextCursor*> (vis_->scene()->mainCursor());
+
+	return tc ? tc->caretPosition() : -1;
+}
+
+QString SimpleLiteralStringOffsetProvider::string()
+{
+	return stringFromComponenets(vis_);
+}
+
+void SimpleLiteralStringOffsetProvider::setOffset(int offset)
+{
+	if (!vis_) return;
+	vis_->moveCursor( Visualization::Item::MoveOnPosition, QPoint(0,0)); // Just set the caret to the first position.
+
+	// And then use the current cursor to set it to the correct position.
+	auto tc = dynamic_cast<Visualization::TextCursor*> (vis_->scene()->mainCursor());
+	tc->setCaretPosition(offset);
+}
+
+bool SimpleLiteralStringOffsetProvider::isIndivisible()
+{
+	auto v = dynamic_cast<Visualization::TextRenderer*> (vis_);
+	if (!v && vis_)
 	{
-		result = sc->components();
-		SAFE_DELETE(sc);
+		auto ci = vis_->childItems();
+		while (ci.length() == 1)
+		{
+			v =  dynamic_cast<Visualization::TextRenderer*> (ci.first());
+			if (v) break;
+
+			ci = ci.first()->childItems();
+		}
 	}
 
-	return result;
-}
-
-QString StringProvider::stringFromComponenets(Model::Node* node)
-{
-	if (!node) return QString();
-
-	QString result;
-	StringComponents* sc = Model::AdapterManager::adapt<StringComponents>(node);
-	if (sc)
-	{
-		result = sc->components().join("");
-		SAFE_DELETE(sc);
-	}
-
-	return result;
-}
-
-QString StringProvider::stringFromComponenets(Visualization::Item* item)
-{
-	if (!item) return QString();
-	return stringFromComponenets(item->node());
-}
-
-QString StringProvider::stringFromStringProvider(Visualization::Item* item)
-{
-	if (!item) return QString();
-
-	QString result;
-	StringProvider* sp = Model::AdapterManager::adapt<StringProvider>(item);
-	if (sp)
-	{
-		result = sp->string();
-		SAFE_DELETE(sp);
-	}
-
-	return result;
-}
-
-bool StringProvider::isIndivisible()
-{
-	return false;
+	return !v || v->text().length() != stringFromComponenets(vis_).length();
 }
 
 } /* namespace OOInteraction */
