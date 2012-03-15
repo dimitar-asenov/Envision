@@ -280,36 +280,39 @@ QList<ItemRegion> SequentialLayout::regions()
 	int last = forward ? 0 : horizontal ? width() : height();
 	for(int i = 0; i<items.size(); ++i)
 	{
+		bool skipCursor = regionOptions() & OmitAllCursors;
+		skipCursor = skipCursor || ((i == 0) && (regionOptions() & OmitOutterCursors));
+		skipCursor = skipCursor || ((i > 0) && (regionOptions() & OmitInnerCursors));
+
 		ItemRegion cursorRegion;
 		ItemRegion itemRegion;
-		bool skipCursor = i == 0;
 		if (horizontal && forward)
 		{
 			cursorRegion.setRegion(QRect(last, 0, items[i]->x() - last, height()));
 			itemRegion.setRegion(QRect(items[i]->x(), 0, items[i]->width(), height()));
 			last = items[i]->xEnd() + 1;
-			skipCursor = skipCursor && (regionOptions() & OmitLeftCursor);
+			skipCursor = skipCursor || ((i == 0) && (regionOptions() & OmitLeftCursor));
 		}
 		else if (horizontal && !forward)
 		{
 			cursorRegion.setRegion(QRect(items[i]->xEnd()+1, 0, last, height()));
 			itemRegion.setRegion(QRect(items[i]->x(), 0, items[i]->width(), height()));
 			last = items[i]->x() - 1;
-			skipCursor = skipCursor && (regionOptions() & OmitRightCursor);
+			skipCursor = skipCursor || ((i == 0) && (regionOptions() & OmitRightCursor));
 		}
 		else if (!horizontal && forward)
 		{
 			cursorRegion.setRegion(QRect(0, last,  width(), items[i]->y() - last));
 			itemRegion.setRegion(QRect(0, items[i]->y(), width(), items[i]->height()));
 			last = items[i]->yEnd() + 1;
-			skipCursor = skipCursor && (regionOptions() & OmitTopCursor);
+			skipCursor = skipCursor || ((i == 0) && (regionOptions() & OmitTopCursor));
 		}
 		else
 		{
 			cursorRegion.setRegion(QRect(0, items[i]->yEnd()+1,  width(), last));
 			itemRegion.setRegion(QRect(0, items[i]->y(), width(), items[i]->height()));
 			last = items[i]->y() - 1;
-			skipCursor = skipCursor && (regionOptions() & OmitBottomCursor);
+			skipCursor = skipCursor || ((i == 0) && (regionOptions() & OmitBottomCursor));
 		}
 
 		itemRegion.setItem(items[i]);
@@ -339,26 +342,27 @@ QList<ItemRegion> SequentialLayout::regions()
 
 	// Add trailing cursor region if not omited
 	QRect trailing;
-	bool skipCursor;
+	bool skipCursor = regionOptions() & OmitAllCursors;
+	skipCursor = skipCursor || (regionOptions() & OmitOutterCursors);
 	if (horizontal && forward)
 	{
 		trailing.setRect(last, 0, width() - last, height());
-		skipCursor = regionOptions() & OmitRightCursor;
+		skipCursor = skipCursor || (regionOptions() & OmitRightCursor);
 	}
 	else if (horizontal && !forward)
 	{
 		trailing.setRect(0, 0, last, height());
-		skipCursor = regionOptions() & OmitLeftCursor;
+		skipCursor = skipCursor || (regionOptions() & OmitLeftCursor);
 	}
 	else if (!horizontal && forward)
 	{
 		trailing.setRect(0, last,  width(), height() - last);
-		skipCursor = regionOptions() & OmitBottomCursor;
+		skipCursor = skipCursor || (regionOptions() & OmitBottomCursor);
 	}
 	else
 	{
 		trailing.setRect(0, 0,  width(), last);
-		skipCursor = regionOptions() & OmitTopCursor;
+		skipCursor = skipCursor || (regionOptions() & OmitTopCursor);
 	}
 
 	if (!skipCursor)

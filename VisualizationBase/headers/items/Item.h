@@ -135,7 +135,10 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 				OmitTopCursor = 0x1,
 				OmitBottomCursor = 0x2,
 				OmitLeftCursor = 0x4,
-				OmitRightCursor = 0x8
+				OmitRightCursor = 0x8,
+				OmitInnerCursors = 0x10,
+				OmitOutterCursors = 0x20,
+				OmitAllCursors = 0x40
 		};
 		Q_DECLARE_FLAGS(RegionOptions, RegionOption)
 

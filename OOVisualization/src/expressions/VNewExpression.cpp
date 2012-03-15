@@ -50,6 +50,7 @@ VNewExpression::VNewExpression(Item* parent, NodeType* node, const StyleType* st
 	amount_(nullptr)
 {
 	layout()->append(newSymbol_);
+	layout()->setRegionOptions(Visualization::Item::RegionOption::OmitAllCursors);
 }
 
 VNewExpression::~VNewExpression()
