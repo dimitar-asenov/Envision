@@ -34,12 +34,11 @@
 #include "string_offset_providers/StaticStringOffsetProvider.h"
 
 #include "VisualizationBase/headers/items/Static.h"
-#include "ModelBase/headers/adapter/AdapterManager.h"
 
 namespace OOInteraction {
 
 StaticStringOffsetProvider::StaticStringOffsetProvider(Visualization::Static* v)
-: vis_(v)
+: StringOffsetProvider(v), vis_(v)
 {
 }
 

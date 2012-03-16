@@ -47,12 +47,8 @@ class OOINTERACTION_API InitializerStringOffsetProvider : public StringOffsetPro
 	public:
 		InitializerStringOffsetProvider(OOVisualization::VArrayInitializer* vis);
 
-		virtual QString string();
 		virtual int offset();
 		virtual void setOffset(int newOffset);
-
-	protected:
-		virtual QStringList components();
 
 	private:
 		OOVisualization::VArrayInitializer* vis_;

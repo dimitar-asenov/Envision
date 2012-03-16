@@ -32,39 +32,13 @@
  */
 
 #include "string_offset_providers/NewArrayStringOffsetProvider.h"
-#include "string_components/StringComponents.h"
-
 #include "OOVisualization/headers/expressions/VNewExpression.h"
-#include "VisualizationBase/headers/cursor/LayoutCursor.h"
-#include "VisualizationBase/headers/cursor/Cursor.h"
-#include "ModelBase/headers/adapter/AdapterManager.h"
 
 namespace OOInteraction {
 
 NewArrayStringOffsetProvider::NewArrayStringOffsetProvider(OOVisualization::VNewExpression* vis)
-	: vis_(vis)
+	: StringOffsetProvider(vis), vis_(vis)
 {
-}
-
-QStringList NewArrayStringOffsetProvider::components()
-{
-	QStringList components;
-	StringComponents* node = Model::AdapterManager::adapt<StringComponents>(vis_->node());
-	if (node)
-	{
-		components = node->components();
-		if (components.size() != vis_->layout()->length())
-		{
-			for (int i = components.size() - 1; i>=0; --i)
-				if (components[i].isNull())
-					components.removeAt(i);
-		}
-		if (components.size() != vis_->layout()->length())
-			components.removeAll(QString(""));
-		SAFE_DELETE(node);
-	}
-
-	return components;
 }
 
 int NewArrayStringOffsetProvider::offset()
@@ -72,7 +46,6 @@ int NewArrayStringOffsetProvider::offset()
 	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
 
 	QStringList components = this->components();
-	Q_ASSERT(components.size() == vis_->layout()->length());
 
 	int result = 0;
 
@@ -83,12 +56,6 @@ int NewArrayStringOffsetProvider::offset()
 	else if (focused == 2) for (int i = 0; i< 2; ++i ) result += components[i].size();
 
 	return result;
-}
-
-QString NewArrayStringOffsetProvider::string()
-{
-	if (!vis_) return QString();
-	return components().join("");
 }
 
 void NewArrayStringOffsetProvider::setOffset(int offset)

@@ -32,26 +32,19 @@
  */
 
 #include "string_offset_providers/EmptyExpressionStringOffsetProvider.h"
-#include "string_components/StringComponents.h"
 
 #include "OOVisualization/headers/expressions/VEmptyExpression.h"
-#include "ModelBase/headers/adapter/AdapterManager.h"
 
 namespace OOInteraction {
 
 EmptyExpressionStringOffsetProvider::EmptyExpressionStringOffsetProvider(OOVisualization::VEmptyExpression* v)
-: vis_(v)
+: StringOffsetProvider(v), vis_(v)
 {
 }
 
 int EmptyExpressionStringOffsetProvider::offset()
 {
 	return (vis_ && vis_->itemOrChildHasFocus()) ? 0 : -1;
-}
-
-QString EmptyExpressionStringOffsetProvider::string()
-{
-	return stringFromComponenets(vis_);
 }
 
 void EmptyExpressionStringOffsetProvider::setOffset(int)

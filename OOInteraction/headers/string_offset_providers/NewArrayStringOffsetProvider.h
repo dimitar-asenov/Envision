@@ -47,12 +47,8 @@ class OOINTERACTION_API NewArrayStringOffsetProvider : public StringOffsetProvid
 	public:
 		NewArrayStringOffsetProvider(OOVisualization::VNewExpression* vis);
 
-		virtual QString string();
 		virtual int offset();
 		virtual void setOffset(int newOffset);
-
-	protected:
-		virtual QStringList components();
 
 	private:
 		OOVisualization::VNewExpression* vis_;

@@ -35,7 +35,6 @@
 #include "string_components/StringComponents.h"
 
 #include "VisualizationBase/headers/cursor/LayoutCursor.h"
-#include "VisualizationBase/headers/cursor/Cursor.h"
 #include "VisualizationBase/headers/items/VList.h"
 #include "VisualizationBase/headers/items/Item.h"
 #include "ModelBase/headers/adapter/AdapterManager.h"
@@ -43,8 +42,23 @@
 
 namespace OOInteraction {
 
+StringOffsetProvider::StringOffsetProvider(Visualization::Item* item) : vis_(item)
+{
+}
+
 StringOffsetProvider::~StringOffsetProvider()
 {
+}
+
+QString StringOffsetProvider::string()
+{
+	return components().join("");
+}
+
+QStringList StringOffsetProvider::components()
+{
+	if (!vis_) return QStringList();
+	return components(vis_->node());
 }
 
 QStringList StringOffsetProvider::components(Model::Node* node)

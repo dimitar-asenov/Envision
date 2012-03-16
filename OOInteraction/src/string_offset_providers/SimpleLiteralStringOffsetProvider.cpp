@@ -32,15 +32,13 @@
  */
 
 #include "string_offset_providers/SimpleLiteralStringOffsetProvider.h"
-#include "string_components/StringComponents.h"
 
 #include "VisualizationBase/headers/cursor/TextCursor.h"
-#include "VisualizationBase/headers/items/Item.h"
 
 namespace OOInteraction {
 
 SimpleLiteralStringOffsetProvider::SimpleLiteralStringOffsetProvider(Visualization::Item* v)
-: vis_(v)
+: StringOffsetProvider(v), vis_(v)
 {
 }
 
@@ -51,11 +49,6 @@ int SimpleLiteralStringOffsetProvider::offset()
 	auto tc = dynamic_cast<Visualization::TextCursor*> (vis_->scene()->mainCursor());
 
 	return tc ? tc->caretPosition() : -1;
-}
-
-QString SimpleLiteralStringOffsetProvider::string()
-{
-	return stringFromComponenets(vis_);
 }
 
 void SimpleLiteralStringOffsetProvider::setOffset(int offset)

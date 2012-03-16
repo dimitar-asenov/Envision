@@ -32,37 +32,29 @@
  */
 
 #include "string_offset_providers/SequentialVisualizationStringOffsetProvider.h"
-#include "string_components/StringComponents.h"
 
 #include "VisualizationBase/headers/cursor/LayoutCursor.h"
-#include "VisualizationBase/headers/cursor/Cursor.h"
-#include "ModelBase/headers/adapter/AdapterManager.h"
 
 namespace OOInteraction {
 
 SequentialVisualizationStringOffsetProvider::SequentialVisualizationStringOffsetProvider
 	(Visualization::LayoutProvider<Visualization::SequentialLayout>* vis)
-	: vis_(vis)
+	: StringOffsetProvider(vis), vis_(vis)
 {
 }
 
 QStringList SequentialVisualizationStringOffsetProvider::components()
 {
-	QStringList components;
-	StringComponents* node = Model::AdapterManager::adapt<StringComponents>(vis_->node());
-	if (node)
+	QStringList components = StringOffsetProvider::components();
+
+	if (components.size() != vis_->layout()->length())
 	{
-		components = node->components();
-		if (components.size() != vis_->layout()->length())
-		{
-			for (int i = components.size() - 1; i>=0; --i)
-				if (components[i].isNull())
-					components.removeAt(i);
-		}
-		if (components.size() != vis_->layout()->length())
-			components.removeAll(QString(""));
-		SAFE_DELETE(node);
+		for (int i = components.size() - 1; i>=0; --i)
+			if (components[i].isNull())
+				components.removeAt(i);
 	}
+	if (components.size() != vis_->layout()->length())
+		components.removeAll(QString(""));
 
 	return components;
 }
@@ -92,12 +84,6 @@ int SequentialVisualizationStringOffsetProvider::offset()
 	}
 
 	return result;
-}
-
-QString SequentialVisualizationStringOffsetProvider::string()
-{
-	if (!vis_) return QString();
-	return components().join("");
 }
 
 void SequentialVisualizationStringOffsetProvider::setOffset(int offset)

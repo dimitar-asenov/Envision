@@ -32,43 +32,24 @@
  */
 
 #include "string_offset_providers/InitializerStringOffsetProvider.h"
-#include "string_components/StringComponents.h"
 
 #include "OOVisualization/headers/expressions/VArrayInitializer.h"
 #include "VisualizationBase/headers/items/VList.h"
 #include "VisualizationBase/headers/layouts/GridLayout.h"
-#include "VisualizationBase/headers/cursor/LayoutCursor.h"
-#include "VisualizationBase/headers/cursor/Cursor.h"
-#include "ModelBase/headers/adapter/AdapterManager.h"
 
 namespace OOInteraction {
 
 InitializerStringOffsetProvider::InitializerStringOffsetProvider(OOVisualization::VArrayInitializer* vis)
-	: vis_(vis)
+	: StringOffsetProvider(vis), vis_(vis)
 {
-}
-
-QStringList InitializerStringOffsetProvider::components()
-{
-	QStringList components;
-	StringComponents* node = Model::AdapterManager::adapt<StringComponents>(vis_->node());
-	if (node)
-	{
-		components = node->components();
-		SAFE_DELETE(node);
-	}
-
-	return components;
 }
 
 int InitializerStringOffsetProvider::offset()
 {
 	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
 
-	QStringList components = this->components();
+	QStringList components = StringOffsetProvider::components(vis_->node());
 	int result = 0;
-
-
 
 	if (vis_->isShownInMatrixForm())
 	{
@@ -101,12 +82,6 @@ int InitializerStringOffsetProvider::offset()
 	return result;
 }
 
-QString InitializerStringOffsetProvider::string()
-{
-	if (!vis_) return QString();
-	return components().join("");
-}
-
 void InitializerStringOffsetProvider::setOffset(int offset)
 {
 	if (offset == 0)
@@ -115,7 +90,7 @@ void InitializerStringOffsetProvider::setOffset(int offset)
 		return;
 	}
 
-	QStringList components = this->components();
+	QStringList components = StringOffsetProvider::components(vis_->node());
 
 	if (vis_->isShownInMatrixForm())
 	{

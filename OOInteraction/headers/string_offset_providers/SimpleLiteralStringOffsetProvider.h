@@ -47,7 +47,6 @@ namespace OOInteraction {
 class OOINTERACTION_API SimpleLiteralStringOffsetProvider : public StringOffsetProvider {
 	public:
 		SimpleLiteralStringOffsetProvider(Visualization::Item* v);
-		virtual QString string();
 		virtual int offset();
 		virtual void setOffset(int newOffset);
 

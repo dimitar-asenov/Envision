@@ -19,6 +19,8 @@
 			<cornerType>2</cornerType>
 		</shape>
 		<spaceBetweenElements>3</spaceBetweenElements>
+		<noInnerCursors>true</noInnerCursors>
+		<noBoundaryCursors>true</noBoundaryCursors>
 	</layout>
 	<newSymbol prototypes="item/Symbol/default">
 		<font>

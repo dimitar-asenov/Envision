@@ -49,7 +49,9 @@ namespace OOInteraction {
 
 class OOINTERACTION_API StringOffsetProvider {
 	public:
-		virtual QString string() = 0;
+		StringOffsetProvider(Visualization::Item* item);
+
+		virtual QString string();
 		virtual int offset() = 0;
 		virtual void setOffset(int newOffset) = 0;
 		virtual ~StringOffsetProvider();
@@ -63,7 +65,9 @@ class OOINTERACTION_API StringOffsetProvider {
 		 */
 		virtual bool isIndivisible();
 
+	protected:
 		// Helper methods
+		QStringList components();
 		static QStringList components(Model::Node* node);
 		static QString stringFromComponenets(Model::Node* node);
 		static QString stringFromComponenets(Visualization::Item* item);
@@ -74,6 +78,9 @@ class OOINTERACTION_API StringOffsetProvider {
 				const QString& prefix, const QString& separator, const QString& postfix);
 		static int listItemOffset(Visualization::VList* list,
 				const QString& prefix, const QString& separator, const QString& postfix);
+
+	private:
+		Visualization::Item* vis_;
 };
 
 } /* namespace OOInteraction */

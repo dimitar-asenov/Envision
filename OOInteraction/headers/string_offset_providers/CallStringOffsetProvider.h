@@ -45,17 +45,12 @@ namespace OOInteraction {
 
 class OOINTERACTION_API CallStringOffsetProvider : public SequentialVisualizationStringOffsetProvider {
 	public:
-	CallStringOffsetProvider(OOVisualization::VMethodCallExpression* vis);
+		CallStringOffsetProvider(OOVisualization::VMethodCallExpression* vis);
 
-		virtual QString string();
 		virtual int offset();
 		virtual void setOffset(int newOffset);
 
-	protected:
-		virtual QStringList components();
-
 	private:
-		QStringList detailedComponents();
 		OOVisualization::VMethodCallExpression* vis_;
 };
 

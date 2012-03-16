@@ -58,22 +58,23 @@ QStringList CallStringComponents::components()
 
 	result.append( exp_->ref()->path().split(':').last() );
 
-	result.append("(");
+	QString list = "(";
 	for (int i=0; i< exp_->arguments()->size(); ++i)
 	{
 		StringComponents* operand = Model::AdapterManager::adapt<StringComponents>(exp_->arguments()->at(i));
 		if (operand)
 		{
-			result.append( operand->components().join("") );
+			list.append( operand->components().join("") );
 			SAFE_DELETE(operand);
 		}
-		else result.append( QString() );
+		else list.append( QString() );
 
 		if (i< exp_->arguments()->size() - 1)
-			result.append(",");
+			list.append(",");
 	}
+	list.append(")");
 
-	result.append(")");
+	result.append(list);
 	return result;
 }
 

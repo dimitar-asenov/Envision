@@ -32,47 +32,15 @@
  */
 
 #include "string_offset_providers/CallStringOffsetProvider.h"
-#include "string_components/StringComponents.h"
 
 #include "OOVisualization/headers/expressions/VMethodCallExpression.h"
 #include "VisualizationBase/headers/items/VList.h"
-#include "VisualizationBase/headers/cursor/LayoutCursor.h"
-#include "VisualizationBase/headers/cursor/Cursor.h"
-#include "ModelBase/headers/adapter/AdapterManager.h"
 
 namespace OOInteraction {
 
 CallStringOffsetProvider::CallStringOffsetProvider(OOVisualization::VMethodCallExpression* vis)
 	: SequentialVisualizationStringOffsetProvider(vis), vis_(vis)
 {
-}
-
-QStringList CallStringOffsetProvider::components()
-{
-	QStringList components = detailedComponents();
-
-	int start = components.indexOf("(");
-	int end = components.lastIndexOf(")");
-	for(int i = start; i<end; ++i)
-	{
-		components[start] += components[start+1];
-		components.removeAt(start+1);
-	}
-
-	return components;
-}
-
-QStringList CallStringOffsetProvider::detailedComponents()
-{
-	QStringList components;
-	StringComponents* node = Model::AdapterManager::adapt<StringComponents>(vis_->node());
-	if (node)
-	{
-		components = node->components();
-		SAFE_DELETE(node);
-	}
-
-	return components;
 }
 
 int CallStringOffsetProvider::offset()
@@ -82,21 +50,16 @@ int CallStringOffsetProvider::offset()
 	if (!vis_->arguments()->itemOrChildHasFocus())
 		return SequentialVisualizationStringOffsetProvider::offset();
 
-	QStringList components = detailedComponents();
+	QStringList components = this->components();
 	int result = 0;
 
-	int index = 0;
-	while(components[index] != "(") result += components[index++].size();
+	int listIndex = components[1] == "." ? 3 : 1;
+	for(int i = 0; i< listIndex; ++i)
+		result += components[i].size();
 
 	result += listItemOffset(vis_->arguments(),"(", ",", ")");
 
 	return result;
-}
-
-QString CallStringOffsetProvider::string()
-{
-	if (!vis_) return QString();
-	return components().join("");
 }
 
 void CallStringOffsetProvider::setOffset(int offset)
@@ -107,7 +70,7 @@ void CallStringOffsetProvider::setOffset(int offset)
 		return;
 	}
 
-	QStringList components = detailedComponents();
+	QStringList components = this->components();
 
 	if (offset == components.join("").size())
 	{
@@ -115,16 +78,17 @@ void CallStringOffsetProvider::setOffset(int offset)
 		return;
 	}
 
-	int index = 0;
-	int argsStart = 0;
-	while(components[index] != "(") argsStart += components[index++].size();
+	int listOffest = 0;
+	int listIndex = components[1] == "." ? 3 : 1;
+	for(int i = 0; i< listIndex; ++i)
+		listOffest += components[i].size();
 
-	if (offset <= argsStart)
+	if (offset <= listOffest)
 	{
 		SequentialVisualizationStringOffsetProvider::setOffset(offset);
 		return;
 	}
-	else offset -= argsStart;
+	else offset -= listOffest;
 
 	if ( setOffsetInListItem(offset, vis_->arguments(), "(", ",", ")"))
 		return;

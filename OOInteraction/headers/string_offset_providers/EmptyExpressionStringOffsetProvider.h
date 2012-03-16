@@ -47,7 +47,6 @@ namespace OOInteraction {
 class OOINTERACTION_API EmptyExpressionStringOffsetProvider : public StringOffsetProvider {
 	public:
 		EmptyExpressionStringOffsetProvider(OOVisualization::VEmptyExpression* v);
-		virtual QString string();
 		virtual int offset();
 		virtual void setOffset(int newOffset);
 
