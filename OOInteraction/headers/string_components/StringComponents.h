@@ -36,12 +36,21 @@
 
 #include "../oointeraction_api.h"
 
+namespace Model {
+	class Node;
+}
+
 namespace OOInteraction {
 
 class OOINTERACTION_API StringComponents {
 	public:
 		virtual ~StringComponents();
 		virtual QStringList components() = 0;
+
+	protected:
+		//Helper functions
+		static QString stringForNode(Model::Node* node);
+		static QStringList componentsForNode(Model::Node* node);
 
 };
 

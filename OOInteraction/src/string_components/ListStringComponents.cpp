@@ -34,7 +34,6 @@
 #include "string_components/ListStringComponents.h"
 
 #include "ModelBase/headers/nodes/List.h"
-#include "ModelBase/headers/adapter/AdapterManager.h"
 
 #include "Core/headers/global.h"
 
@@ -51,15 +50,7 @@ QStringList ListStringComponents::components()
 	if (!list_) return result;
 
 	for (int i=0; i< list_->size(); ++i)
-	{
-		StringComponents* operand = Model::AdapterManager::adapt<StringComponents>(list_->at<Model::Node>(i));
-		if (operand)
-		{
-			result.append( operand->components().join("") );
-			SAFE_DELETE(operand);
-		}
-		else result.append( QString() );
-	}
+		result << stringForNode(list_->at<Model::Node>(i));
 
 	return result;
 }

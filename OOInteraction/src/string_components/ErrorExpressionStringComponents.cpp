@@ -34,7 +34,6 @@
 #include "string_components/ErrorExpressionStringComponents.h"
 
 #include "OOModel/headers/expressions/ErrorExpression.h"
-#include "ModelBase/headers/adapter/AdapterManager.h"
 
 namespace OOInteraction {
 
@@ -48,17 +47,9 @@ QStringList ErrorExpressionStringComponents::components()
 	QStringList result;
 	if (!exp_) return result;
 
-	if (!exp_->prefix().isEmpty()) result.append( exp_->prefix() );
-
-	StringComponents* arg = Model::AdapterManager::adapt<StringComponents>(exp_->arg());
-	if (arg)
-	{
-		result.append( arg->components().join(""));
-		SAFE_DELETE(arg);
-	}
-	else result.append( QString() );
-
-	if (!exp_->postfix().isEmpty())  result.append( exp_->postfix() );
+	if (!exp_->prefix().isEmpty()) result << exp_->prefix() ;
+	result << stringForNode(exp_->arg());
+	if (!exp_->postfix().isEmpty())  result << exp_->postfix() ;
 
 	return result;
 }

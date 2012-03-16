@@ -34,7 +34,6 @@
 #include "string_components/NewArrayStringComponents.h"
 
 #include "OOModel/headers/expressions/NewExpression.h"
-#include "ModelBase/headers/adapter/AdapterManager.h"
 
 namespace OOInteraction {
 
@@ -48,28 +47,7 @@ QStringList NewArrayStringComponents::components()
 	QStringList result;
 	if (!exp_) return result;
 
-	result.append("new");
-	result.append(" ");
-
-	StringComponents* left = Model::AdapterManager::adapt<StringComponents>(exp_->type());
-	if(left)
-	{
-		result.append( left->components().join("") );
-		SAFE_DELETE(left);
-	}
-	else result.append(QString());
-
-	result.append("[");
-
-	StringComponents* right = Model::AdapterManager::adapt<StringComponents>(exp_->amount());
-	if(right)
-	{
-		result.append( right->components().join("") );
-		SAFE_DELETE(right);
-	}
-	else result.append(QString());
-
-	result.append("]");
+	result<< "new" << " " << stringForNode(exp_->type()) << "[" << stringForNode(exp_->amount()) << "]";
 
 	return result;
 }

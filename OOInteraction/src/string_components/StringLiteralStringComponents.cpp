@@ -34,7 +34,6 @@
 #include "string_components/StringLiteralStringComponents.h"
 
 #include "OOModel/headers/expressions/StringLiteral.h"
-#include "ModelBase/headers/adapter/AdapterManager.h"
 
 namespace OOInteraction {
 
@@ -48,9 +47,7 @@ QStringList StringLiteralStringComponents::components()
 	QStringList result;
 	if (!exp_) return result;
 
-	result.append("\"");
-	result.append(exp_->value());
-	result.append("\"");
+	result<< "\"" << exp_->value() << "\"";
 
 	return result;
 }

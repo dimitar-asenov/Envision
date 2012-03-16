@@ -34,7 +34,6 @@
 #include "string_components/BinaryOperatorStringComponents.h"
 
 #include "OOModel/headers/expressions/BinaryOperation.h"
-#include "ModelBase/headers/adapter/AdapterManager.h"
 
 namespace OOInteraction {
 
@@ -48,51 +47,36 @@ QStringList BinaryOperatorStringComponents::components()
 	QStringList result;
 	if (!exp_) return result;
 
-	result.append(""); // This is the prefix. Currently there is no binary operator that has a prefix.
-
-	StringComponents* left = Model::AdapterManager::adapt<StringComponents>(exp_->left());
-	if(left)
-	{
-		result.append( left->components().join("") );
-		SAFE_DELETE(left);
-	}
-	else result.append(QString());
+	// First comes the prefix. Currently there is no binary operator that has a prefix.
+	result << "" << stringForNode(exp_->left());
 
 	switch(exp_->op())
 	{
-		case OOModel::BinaryOperation::TIMES: result.append("*"); break;
-		case OOModel::BinaryOperation::DIVIDE: result.append("/"); break;
-		case OOModel::BinaryOperation::REMAINDER: result.append("%"); break;
-		case OOModel::BinaryOperation::PLUS: result.append("+"); break;
-		case OOModel::BinaryOperation::MINUS: result.append("-"); break;
-		case OOModel::BinaryOperation::LEFT_SHIFT: result.append("<<"); break;
-		case OOModel::BinaryOperation::RIGHT_SHIFT_SIGNED: result.append(">>"); break;
-		case OOModel::BinaryOperation::RIGHT_SHIFT_UNSIGNED: result.append(">>>"); break;
-		case OOModel::BinaryOperation::LESS: result.append("<"); break;
-		case OOModel::BinaryOperation::GREATER: result.append(">"); break;
-		case OOModel::BinaryOperation::LESS_EQUALS: result.append("<="); break;
-		case OOModel::BinaryOperation::GREATER_EQUALS: result.append(">="); break;
-		case OOModel::BinaryOperation::EQUALS: result.append("=="); break;
-		case OOModel::BinaryOperation::NOT_EQUALS: result.append("!="); break;
-		case OOModel::BinaryOperation::XOR: result.append("^"); break;
-		case OOModel::BinaryOperation::AND: result.append("&"); break;
-		case OOModel::BinaryOperation::OR: result.append("|"); break;
-		case OOModel::BinaryOperation::CONDITIONAL_AND: result.append("&&"); break;
-		case OOModel::BinaryOperation::CONDITIONAL_OR: result.append("||"); break;
-		case OOModel::BinaryOperation::ARRAY_INDEX: result.append("["); break;
-		default: result.append( QString() ); break;
+		case OOModel::BinaryOperation::TIMES: result << "*"; break;
+		case OOModel::BinaryOperation::DIVIDE: result << "/"; break;
+		case OOModel::BinaryOperation::REMAINDER: result << "%"; break;
+		case OOModel::BinaryOperation::PLUS: result << "+"; break;
+		case OOModel::BinaryOperation::MINUS: result << "-"; break;
+		case OOModel::BinaryOperation::LEFT_SHIFT: result << "<<"; break;
+		case OOModel::BinaryOperation::RIGHT_SHIFT_SIGNED: result << ">>"; break;
+		case OOModel::BinaryOperation::RIGHT_SHIFT_UNSIGNED: result << ">>>"; break;
+		case OOModel::BinaryOperation::LESS: result << "<"; break;
+		case OOModel::BinaryOperation::GREATER: result << ">"; break;
+		case OOModel::BinaryOperation::LESS_EQUALS: result << "<="; break;
+		case OOModel::BinaryOperation::GREATER_EQUALS: result << ">="; break;
+		case OOModel::BinaryOperation::EQUALS: result << "=="; break;
+		case OOModel::BinaryOperation::NOT_EQUALS: result << "!="; break;
+		case OOModel::BinaryOperation::XOR: result << "^"; break;
+		case OOModel::BinaryOperation::AND: result << "&"; break;
+		case OOModel::BinaryOperation::OR: result << "|"; break;
+		case OOModel::BinaryOperation::CONDITIONAL_AND: result << "&&"; break;
+		case OOModel::BinaryOperation::CONDITIONAL_OR: result << "||"; break;
+		case OOModel::BinaryOperation::ARRAY_INDEX: result << "["; break;
+		default: result << QString(); break;
 	}
 
-	StringComponents* right = Model::AdapterManager::adapt<StringComponents>(exp_->right());
-	if(right)
-	{
-		result.append( right->components().join("") );
-		SAFE_DELETE(right);
-	}
-	else result.append(QString());
-
-	if (exp_->op() == OOModel::BinaryOperation::ARRAY_INDEX) result.append("]");
-	else result.append(QString());
+	result << stringForNode(exp_->right());
+	result << (exp_->op() == OOModel::BinaryOperation::ARRAY_INDEX ? "]" : QString()); // Postfix
 
 	return result;
 }

@@ -34,7 +34,6 @@
 #include "string_components/VariableAccessStringComponents.h"
 
 #include "OOModel/headers/expressions/VariableAccess.h"
-#include "ModelBase/headers/adapter/AdapterManager.h"
 
 namespace OOInteraction {
 
@@ -48,15 +47,10 @@ QStringList VariableAccessStringComponents::components()
 	QStringList result;
 	if (!exp_) return result;
 
-	StringComponents* prefix = Model::AdapterManager::adapt<StringComponents>(exp_->prefix());
-	if (prefix)
-	{
-		result.append( prefix->components().join("") );
-		result.append(".");
-		SAFE_DELETE(prefix);
-	}
+	QString prefix = stringForNode(exp_->prefix());
+	if (!prefix.isEmpty()) result << prefix << ".";
 
-	result.append( exp_->ref()->path().split(':').last() );
+	result << exp_->ref()->path().split(':').last();
 
 	return result;
 }

@@ -34,7 +34,6 @@
 #include "string_components/UnfinishedOperatorStringComponents.h"
 
 #include "OOModel/headers/expressions/UnfinishedOperator.h"
-#include "ModelBase/headers/adapter/AdapterManager.h"
 
 namespace OOInteraction {
 
@@ -51,24 +50,16 @@ QStringList UnfinishedOperatorStringComponents::components()
 	for (int i=0; i< exp_->operands()->size(); ++i)
 	{
 		QString delim = exp_->delimiters()->at(i)->get();
-		result.append( delim );
-		if (!delim.isEmpty() && delim[delim.size()-1].isLetter()) result.last().append(' ');
+		if (!delim.isEmpty() && delim[delim.size()-1].isLetter()) delim.append(' ');
 
-		StringComponents* operand = Model::AdapterManager::adapt<StringComponents>(exp_->operands()->at(i));
-		if (operand)
-		{
-			result.append( operand->components().join("") );
-			SAFE_DELETE(operand);
-		}
-		else result.append( QString() );
-
+		result << delim << stringForNode(exp_->operands()->at(i));
 	}
 
 	if (exp_->delimiters()->size() > exp_->operands()->size())
 	{
 		QString delim = exp_->delimiters()->last()->get();
-		result.append( delim );
-		if (!delim.isEmpty() && delim[delim.size()-1].isLetter()) result.last().append(' ');
+		if (!delim.isEmpty() && delim[delim.size()-1].isLetter()) delim.append(' ');
+		result << delim;
 	}
 
 	return result;

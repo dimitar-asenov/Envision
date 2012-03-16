@@ -34,7 +34,6 @@
 #include "string_components/InitializerStringComponents.h"
 
 #include "OOModel/headers/expressions/ArrayInitializer.h"
-#include "ModelBase/headers/adapter/AdapterManager.h"
 
 namespace OOInteraction {
 
@@ -48,22 +47,14 @@ QStringList InitializerStringComponents::components()
 	QStringList result;
 	if (!exp_) return result;
 
-	result.append("{");
+	result << "{";
 	for (int i=0; i< exp_->values()->size(); ++i)
 	{
-		StringComponents* operand = Model::AdapterManager::adapt<StringComponents>(exp_->values()->at(i));
-		if (operand)
-		{
-			result.append( operand->components().join("") );
-			SAFE_DELETE(operand);
-		}
-		else result.append( QString() );
-
-		if (i< exp_->values()->size() - 1)
-			result.append(",");
+		if (i>0) result << ",";
+		result << stringForNode(exp_->values()->at(i));
 	}
 
-	result.append("}");
+	result << "}";
 	return result;
 }
 

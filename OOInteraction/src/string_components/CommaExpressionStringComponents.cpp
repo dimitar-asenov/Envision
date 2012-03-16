@@ -34,7 +34,6 @@
 #include "string_components/CommaExpressionStringComponents.h"
 
 #include "OOModel/headers/expressions/CommaExpression.h"
-#include "ModelBase/headers/adapter/AdapterManager.h"
 
 namespace OOInteraction {
 
@@ -48,27 +47,7 @@ QStringList CommaExpressionStringComponents::components()
 	QStringList result;
 	if (!exp_) return result;
 
-	result.append("");
-
-	StringComponents* left = Model::AdapterManager::adapt<StringComponents>(exp_->left());
-	if(left)
-	{
-		result.append( left->components().join("") );
-		SAFE_DELETE(left);
-	}
-	else result.append(QString());
-
-	result.append(",");
-
-	StringComponents* right = Model::AdapterManager::adapt<StringComponents>(exp_->right());
-	if(right)
-	{
-		result.append( right->components().join("") );
-		SAFE_DELETE(right);
-	}
-	else result.append(QString());
-
-	result.append("");
+	result << "" << stringForNode(exp_->left()) << "," << stringForNode(exp_->right()) << "";
 
 	return result;
 }

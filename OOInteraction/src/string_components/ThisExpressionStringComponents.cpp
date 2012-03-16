@@ -45,7 +45,7 @@ QStringList ThisExpressionStringComponents::components()
 	QStringList result;
 	if (!exp_) return result;
 
-	result.append( "this" );
+	result << "this";
 	return result;
 }
 

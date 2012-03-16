@@ -34,7 +34,6 @@
 #include "string_components/CallStringComponents.h"
 
 #include "OOModel/headers/expressions/MethodCallExpression.h"
-#include "ModelBase/headers/adapter/AdapterManager.h"
 
 namespace OOInteraction {
 
@@ -48,33 +47,20 @@ QStringList CallStringComponents::components()
 	QStringList result;
 	if (!exp_) return result;
 
-	StringComponents* prefix = Model::AdapterManager::adapt<StringComponents>(exp_->prefix());
-	if (prefix)
-	{
-		result.append( prefix->components().join("") );
-		result.append(".");
-		SAFE_DELETE(prefix);
-	}
+	QString prefix = stringForNode(exp_->prefix());
+	if (!prefix.isEmpty()) result << prefix << ".";
 
-	result.append( exp_->ref()->path().split(':').last() );
+	result << exp_->ref()->path().split(':').last();
 
 	QString list = "(";
 	for (int i=0; i< exp_->arguments()->size(); ++i)
 	{
-		StringComponents* operand = Model::AdapterManager::adapt<StringComponents>(exp_->arguments()->at(i));
-		if (operand)
-		{
-			list.append( operand->components().join("") );
-			SAFE_DELETE(operand);
-		}
-		else list.append( QString() );
-
-		if (i< exp_->arguments()->size() - 1)
-			list.append(",");
+		if (i>0) list.append(",");
+		list.append( stringForNode(exp_->arguments()->at(i)) );
 	}
 	list.append(")");
 
-	result.append(list);
+	result << list;
 	return result;
 }
 

@@ -34,7 +34,6 @@
 #include "string_components/UnaryOperatorStringComponents.h"
 
 #include "OOModel/headers/expressions/UnaryOperation.h"
-#include "ModelBase/headers/adapter/AdapterManager.h"
 
 namespace OOInteraction {
 
@@ -47,14 +46,6 @@ QStringList UnaryOperatorStringComponents::components()
 {
 	QStringList result;
 	if (!exp_) return result;
-
-	StringComponents* arg = Model::AdapterManager::adapt<StringComponents>(exp_->operand());
-	QString argString;
-	if(arg)
-	{
-		argString = arg->components().join("");
-		SAFE_DELETE(arg);
-	}
 
 	QString pre = "";
 	QString post = "";
@@ -72,9 +63,7 @@ QStringList UnaryOperatorStringComponents::components()
 		default: break;
 	}
 
-	result.append(pre);
-	result.append(argString);
-	result.append(post);
+	result << pre << stringForNode(exp_->operand()) << post;
 
 	return result;
 }

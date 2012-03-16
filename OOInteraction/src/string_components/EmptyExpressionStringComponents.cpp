@@ -47,7 +47,7 @@ QStringList EmptyExpressionStringComponents::components()
 	QStringList result;
 	if (!exp_) return result;
 
-	result.append("");
+	result << "";
 	return result;
 }
 

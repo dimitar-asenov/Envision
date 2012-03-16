@@ -47,7 +47,7 @@ QStringList BooleanLiteralStringComponents::components()
 	QStringList result;
 	if (!exp_) return result;
 
-	result.append( exp_->value() ? "true" : "false" );
+	result << (exp_->value() ? "true" : "false");
 
 	return result;
 }

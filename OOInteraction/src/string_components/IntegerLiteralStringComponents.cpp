@@ -47,7 +47,7 @@ QStringList IntegerLiteralStringComponents::components()
 	QStringList result;
 	if (!exp_) return result;
 
-	result.append( QString::number( exp_->value() ) );
+	result << QString::number( exp_->value() );
 
 	return result;
 }

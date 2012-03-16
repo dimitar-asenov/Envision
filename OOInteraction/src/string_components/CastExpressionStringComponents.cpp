@@ -34,7 +34,6 @@
 #include "string_components/CastExpressionStringComponents.h"
 
 #include "OOModel/headers/expressions/CastExpression.h"
-#include "ModelBase/headers/adapter/AdapterManager.h"
 
 namespace OOInteraction {
 
@@ -48,25 +47,7 @@ QStringList CastExpressionStringComponents::components()
 	QStringList result;
 	if (!exp_) return result;
 
-	result.append("(");
-
-	StringComponents* left = Model::AdapterManager::adapt<StringComponents>(exp_->type());
-	if(left)
-	{
-		result.append( left->components().join("") );
-		SAFE_DELETE(left);
-	}
-	else result.append(QString());
-
-	result.append(")");
-
-	StringComponents* right = Model::AdapterManager::adapt<StringComponents>(exp_->expr());
-	if(right)
-	{
-		result.append( right->components().join("") );
-		SAFE_DELETE(right);
-	}
-	else result.append(QString());
+	result << "(" << stringForNode(exp_->type()) << ")" << stringForNode(exp_->expr());
 
 	return result;
 }
