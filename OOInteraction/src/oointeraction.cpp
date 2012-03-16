@@ -71,6 +71,7 @@
 #include "string_offset_providers/InitializerStringOffsetProvider.h"
 #include "string_offset_providers/CallStringOffsetProvider.h"
 #include "string_offset_providers/NewArrayStringOffsetProvider.h"
+#include "string_offset_providers/CastStringOffsetProvider.h"
 
 #include "OOVisualization/headers/allOOVisualizations.h"
 
@@ -185,7 +186,7 @@ bool OOInteraction::initialize(Envision::EnvisionManager&)
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, SequentialVisualizationStringOffsetProvider, OOVisualization::VBinaryOperation>();
 	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, SequentialVisualizationStringOffsetProvider, OOVisualization::VCastExpression>();
+		<StringOffsetProvider, CastStringOffsetProvider, OOVisualization::VCastExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, SequentialVisualizationStringOffsetProvider, OOVisualization::VCommaExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor

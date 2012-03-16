@@ -25,67 +25,35 @@
  **********************************************************************************************************************/
 
 /*
- * NewArrayStringOffsetProvider.cpp
+ * CastStringOffsetProvider.h
  *
- *  Created on: Mar 14, 2012
+ *  Created on: Mar 16, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "string_offset_providers/NewArrayStringOffsetProvider.h"
-#include "OOVisualization/headers/expressions/VNewExpression.h"
+#ifndef OOInteraction_CASTSTRINGOFFSETPROVIDER_H_
+#define OOInteraction_CASTSTRINGOFFSETPROVIDER_H_
+
+#include "../oointeraction_api.h"
+#include "StringOffsetProvider.h"
+
+namespace OOVisualization {
+	class VCastExpression;
+}
 
 namespace OOInteraction {
 
-NewArrayStringOffsetProvider::NewArrayStringOffsetProvider(OOVisualization::VNewExpression* vis)
-	: StringOffsetProvider(vis), vis_(vis)
-{
-}
+class OOINTERACTION_API CastStringOffsetProvider : public StringOffsetProvider {
+	public:
+		CastStringOffsetProvider(OOVisualization::VCastExpression* vis);
 
-int NewArrayStringOffsetProvider::offset()
-{
-	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
+		virtual int offset();
+		virtual void setOffset(int newOffset);
 
-	QStringList components = this->components();
+	private:
+		OOVisualization::VCastExpression* vis_;
+};
 
-	int result = 0;
-
-	int focused = vis_->layout()->focusedElementIndex();
-	int componentIndex = 0;
-	if (focused == 0) componentIndex = 4;
-	else if (focused == 1) componentIndex = 0;
-	else componentIndex = 2;
-	result += itemOffset(vis_->layout()->at<Visualization::Item>(focused), components[componentIndex].length());
-
-	if (focused == 0) for (int i = 0; i< 4; ++i ) result += components[i].size();
-	else if (focused == 2) for (int i = 0; i< 2; ++i ) result += components[i].size();
-
-	return result;
-}
-
-void NewArrayStringOffsetProvider::setOffset(int offset)
-{
-	QStringList components = this->components();
-
-	int childIndex = 1; // Corresponds to the second child - 'new' symbol
-	if (offset > components[0].size())
-	{
-		offset -= components[0].size() + components[1].size(); // components[1] for the '_' between new and the type name
-		childIndex = 2;
-		if (offset > components[2].size())
-		{
-			// components[3] for the '[' between new and the type name
-			offset -= components[2].size() + components[3].size();
-			childIndex = 0;
-			if (offset > components[4].size())
-			{
-				// This happened when we just finished typing
-				childIndex = 2;
-				offset = components[2].size();
-			}
-		}
-	}
-
-	setOffsetInItem(offset, vis_->layout()->at<Visualization::Item>(childIndex));
-}
 
 } /* namespace OOInteraction */
+#endif /* OOInteraction_CASTSTRINGOFFSETPROVIDER_H_ */

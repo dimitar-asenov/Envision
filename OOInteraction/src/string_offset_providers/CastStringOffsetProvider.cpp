@@ -25,23 +25,24 @@
  **********************************************************************************************************************/
 
 /*
- * NewArrayStringOffsetProvider.cpp
+ * CastStringOffsetProvider.cpp
  *
- *  Created on: Mar 14, 2012
+ *  Created on: Mar 16, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "string_offset_providers/NewArrayStringOffsetProvider.h"
-#include "OOVisualization/headers/expressions/VNewExpression.h"
+#include "string_offset_providers/CastStringOffsetProvider.h"
+
+#include "OOVisualization/headers/expressions/VCastExpression.h"
 
 namespace OOInteraction {
 
-NewArrayStringOffsetProvider::NewArrayStringOffsetProvider(OOVisualization::VNewExpression* vis)
+CastStringOffsetProvider::CastStringOffsetProvider(OOVisualization::VCastExpression* vis)
 	: StringOffsetProvider(vis), vis_(vis)
 {
 }
 
-int NewArrayStringOffsetProvider::offset()
+int CastStringOffsetProvider::offset()
 {
 	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
 
@@ -50,39 +51,26 @@ int NewArrayStringOffsetProvider::offset()
 	int result = 0;
 
 	int focused = vis_->layout()->focusedElementIndex();
-	int componentIndex = 0;
-	if (focused == 0) componentIndex = 4;
-	else if (focused == 1) componentIndex = 0;
-	else componentIndex = 2;
-	result += itemOffset(vis_->layout()->at<Visualization::Item>(focused), components[componentIndex].length());
+	result += itemOffset(vis_->layout()->at<Visualization::Item>(focused), components[focused ? 0 : 1].length());
 
-	if (focused == 0) for (int i = 0; i< 4; ++i ) result += components[i].size();
-	else if (focused == 2) for (int i = 0; i< 2; ++i ) result += components[i].size();
+	if (focused == 0) for (int i = 0; i< 3; ++i ) result += components[i].size();
+	else if (focused == 1) result += components[0].size();
 
 	return result;
 }
 
-void NewArrayStringOffsetProvider::setOffset(int offset)
+void CastStringOffsetProvider::setOffset(int offset)
 {
 	QStringList components = this->components();
 
-	int childIndex = 1; // Corresponds to the second child - 'new' symbol
-	if (offset > components[0].size())
+	if (offset >0) offset -= components[0].size(); // Skip past the initial '('
+
+	int childIndex = 1; // Corresponds to the second child - the type name
+	if (offset > components[1].size())
 	{
-		offset -= components[0].size() + components[1].size(); // components[1] for the '_' between new and the type name
-		childIndex = 2;
-		if (offset > components[2].size())
-		{
-			// components[3] for the '[' between new and the type name
-			offset -= components[2].size() + components[3].size();
-			childIndex = 0;
-			if (offset > components[4].size())
-			{
-				// This happened when we just finished typing
-				childIndex = 2;
-				offset = components[2].size();
-			}
-		}
+		offset -= components[1].size() + components[2].size();
+		childIndex = 0;
+		if (offset < 0) offset = 0;
 	}
 
 	setOffsetInItem(offset, vis_->layout()->at<Visualization::Item>(childIndex));
