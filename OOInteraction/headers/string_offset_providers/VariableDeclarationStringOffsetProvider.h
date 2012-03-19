@@ -25,36 +25,36 @@
  **********************************************************************************************************************/
 
 /*
- * ParseResult.h
+ * VariableDeclarationStringOffsetProvider.h
  *
- *  Created on: Jan 11, 2012
+ *  Created on: Mar 19, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef INTERACTIONBASE_PARSERESULT_H_
-#define INTERACTIONBASE_PARSERESULT_H_
+#ifndef OOInteraction_VARIABLEDECLARATIONSTRINGOFFSETPROVIDER_H_
+#define OOInteraction_VARIABLEDECLARATIONSTRINGOFFSETPROVIDER_H_
 
-#include "../../interactionbase_api.h"
+#include "../oointeraction_api.h"
+#include "StringOffsetProvider.h"
 
-namespace Interaction {
+#include "VisualizationBase/headers/items/LayoutProvider.h"
+#include "VisualizationBase/headers/layouts/SequentialLayout.h"
 
-class ExpressionTreeBuildInstruction;
+namespace OOInteraction {
 
-class INTERACTIONBASE_API ParseResult {
+class OOINTERACTION_API VariableDeclarationStringOffsetProvider : public StringOffsetProvider {
 	public:
-		ParseResult();
-		ParseResult(int errors, int emptyExpressions, int missing_inner_tokens, int missing_trailing_tokens,
-				int numOperators);
+		VariableDeclarationStringOffsetProvider(Visualization::LayoutProvider<Visualization::SequentialLayout>* vis);
 
-		int errors;
-		int emptyExpressions;
-		int missingInnerTokens;
-		int missingTrailingTokens;
-		int numOperators;
-		QVector<ExpressionTreeBuildInstruction*> instructions;
+		virtual int offset();
+		virtual void setOffset(int newOffset);
+
+	protected:
+		virtual QStringList components();
+
+	private:
+		Visualization::LayoutProvider<Visualization::SequentialLayout>* vis_;
 };
 
-bool operator< (const ParseResult& left, const ParseResult& right);
-
-} /* namespace InteractionBase */
-#endif /* INTERACTIONBASE_PARSERESULT_H_ */
+} /* namespace OOInteraction */
+#endif /* OOInteraction_VARIABLEDECLARATIONSTRINGOFFSETPROVIDER_H_ */

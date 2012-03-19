@@ -61,6 +61,7 @@
 #include "string_components/PrimitiveTypeStringComponents.h"
 #include "string_components/ArrayTypeStringComponents.h"
 #include "string_components/AssignmentStringComponents.h"
+#include "string_components/VariableDeclarationStringComponents.h"
 #include "string_components/ListStringComponents.h"
 
 #include "string_offset_providers/SequentialVisualizationStringOffsetProvider.h"
@@ -72,6 +73,7 @@
 #include "string_offset_providers/CallStringOffsetProvider.h"
 #include "string_offset_providers/NewArrayStringOffsetProvider.h"
 #include "string_offset_providers/CastStringOffsetProvider.h"
+#include "string_offset_providers/VariableDeclarationStringOffsetProvider.h"
 
 #include "OOVisualization/headers/allOOVisualizations.h"
 
@@ -176,6 +178,8 @@ bool OOInteraction::initialize(Envision::EnvisionManager&)
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringComponents, AssignmentStringComponents, OOModel::AssignmentExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor
+		<StringComponents, VariableDeclarationStringComponents, OOModel::VariableDeclaration>();
+	Model::AdapterManager::registerAdapterViaConstructor
 		<StringComponents, ListStringComponents, Model::TypedList<OOModel::Expression> >();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringComponents, ListStringComponents, Model::TypedList<OOModel::Statement> >();
@@ -227,6 +231,8 @@ bool OOInteraction::initialize(Envision::EnvisionManager&)
 		<StringOffsetProvider, SequentialVisualizationStringOffsetProvider, OOVisualization::VArrayType>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, SequentialVisualizationStringOffsetProvider, OOVisualization::VAssignmentExpression>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringOffsetProvider, VariableDeclarationStringOffsetProvider, OOVisualization::VVariableDeclaration>();
 
 	return true;
 }

@@ -25,36 +25,27 @@
  **********************************************************************************************************************/
 
 /*
- * ParseResult.h
+ * DeclarationDescriptor.h
  *
- *  Created on: Jan 11, 2012
+ *  Created on: Mar 16, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef INTERACTIONBASE_PARSERESULT_H_
-#define INTERACTIONBASE_PARSERESULT_H_
+#ifndef OOInteraction_DECLARATIONDESCRIPTOR_H_
+#define OOInteraction_DECLARATIONDESCRIPTOR_H_
 
-#include "../../interactionbase_api.h"
+#include "../../oointeraction_api.h"
+#include "../OOOperatorDescriptor.h"
 
-namespace Interaction {
+namespace OOInteraction {
 
-class ExpressionTreeBuildInstruction;
-
-class INTERACTIONBASE_API ParseResult {
+class OOINTERACTION_API DeclarationDescriptor : public OOOperatorDescriptor {
 	public:
-		ParseResult();
-		ParseResult(int errors, int emptyExpressions, int missing_inner_tokens, int missing_trailing_tokens,
-				int numOperators);
+	DeclarationDescriptor(const QString& name, const QString& signature, int num_operands, int precedence,
+			Associativity associativity);
 
-		int errors;
-		int emptyExpressions;
-		int missingInnerTokens;
-		int missingTrailingTokens;
-		int numOperators;
-		QVector<ExpressionTreeBuildInstruction*> instructions;
+		virtual OOModel::Expression* create(const QList<OOModel::Expression*>& operands);
 };
 
-bool operator< (const ParseResult& left, const ParseResult& right);
-
-} /* namespace InteractionBase */
-#endif /* INTERACTIONBASE_PARSERESULT_H_ */
+} /* namespace OOInteraction */
+#endif /* OOInteraction_DECLARATIONDESCRIPTOR_H_ */

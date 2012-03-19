@@ -79,12 +79,13 @@ ParseResult Parser::parse(QVector<Token>::const_iterator token, ParseResult resu
 	{
 		expected.removeFirst();
 		instructions.append(new FinishOperator());
+		result.numOperators++;
 		hasLeft = true;
 	}
 
 	if (token == end_tokens_)
 	{
-		result.missing_trailing_tokens = expected.size();
+		result.missingTrailingTokens = expected.size();
 		result.instructions = instructions;
 		return result;
 	}
@@ -134,7 +135,7 @@ void Parser::processNextExpectedDelimiter(bool& processed, QStringList& expected
 	if (next_delim.isEmpty() || next_delim != token->text()) return;
 
 	processed = true;
-	result.missing_inner_tokens += index;
+	result.missingInnerTokens += index;
 
 	// Finish all intermediate positions
 	for (int i = 0; i<index; ++i)
@@ -150,6 +151,7 @@ void Parser::processNextExpectedDelimiter(bool& processed, QStringList& expected
 			// If the expectation is not an expression or an identifier then it must be an end
 			expected.removeFirst();
 			instructions.append(new FinishOperator());
+			result.numOperators++;
 		}
 	}
 

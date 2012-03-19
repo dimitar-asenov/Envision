@@ -25,36 +25,32 @@
  **********************************************************************************************************************/
 
 /*
- * ParseResult.h
+ * VariableDeclarationStringComponents.cpp
  *
- *  Created on: Jan 11, 2012
+ *  Created on: Mar 19, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef INTERACTIONBASE_PARSERESULT_H_
-#define INTERACTIONBASE_PARSERESULT_H_
+#include "string_components/VariableDeclarationStringComponents.h"
 
-#include "../../interactionbase_api.h"
+#include "OOModel/headers/expressions/VariableDeclaration.h"
 
-namespace Interaction {
+namespace OOInteraction {
 
-class ExpressionTreeBuildInstruction;
+VariableDeclarationStringComponents::VariableDeclarationStringComponents(OOModel::VariableDeclaration* e )
+	: exp_(e)
+{
+}
 
-class INTERACTIONBASE_API ParseResult {
-	public:
-		ParseResult();
-		ParseResult(int errors, int emptyExpressions, int missing_inner_tokens, int missing_trailing_tokens,
-				int numOperators);
+QStringList VariableDeclarationStringComponents::components()
+{
+	QStringList result;
+	if (!exp_) return result;
 
-		int errors;
-		int emptyExpressions;
-		int missingInnerTokens;
-		int missingTrailingTokens;
-		int numOperators;
-		QVector<ExpressionTreeBuildInstruction*> instructions;
-};
+	result << stringForNode(exp_->type()) << " " << exp_->name();
+	if (exp_->initialValue()) result << "=" << stringForNode(exp_->initialValue());
 
-bool operator< (const ParseResult& left, const ParseResult& right);
+	return result;
+}
 
-} /* namespace InteractionBase */
-#endif /* INTERACTIONBASE_PARSERESULT_H_ */
+} /* namespace OOInteraction */

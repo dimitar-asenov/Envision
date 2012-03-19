@@ -50,7 +50,6 @@ QStringList UnfinishedOperatorStringComponents::components()
 	for (int i=0; i< exp_->operands()->size(); ++i)
 	{
 		QString delim = exp_->delimiters()->at(i)->get();
-		if (!delim.isEmpty() && delim[delim.size()-1].isLetter()) delim.append(' ');
 
 		result << delim << stringForNode(exp_->operands()->at(i));
 	}
@@ -58,7 +57,6 @@ QStringList UnfinishedOperatorStringComponents::components()
 	if (exp_->delimiters()->size() > exp_->operands()->size())
 	{
 		QString delim = exp_->delimiters()->last()->get();
-		if (!delim.isEmpty() && delim[delim.size()-1].isLetter()) delim.append(' ');
 		result << delim;
 	}
 

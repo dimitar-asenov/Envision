@@ -37,7 +37,6 @@
 #include "Expression.h"
 
 #include "../attributeMacros.h"
-#include "../types/Type.h"
 
 #include "ModelBase/headers/nodes/Text.h"
 
@@ -48,7 +47,7 @@ class OOMODEL_API VariableDeclaration: public Expression
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(VariableDeclaration)
 
 	ATTRIBUTE_OOP_NAME
-	ATTRIBUTE(Type, type, setType)
+	ATTRIBUTE(Expression, type, setType)
 	ATTRIBUTE(Expression, initialValue, setInitialValue);
 
 	public:

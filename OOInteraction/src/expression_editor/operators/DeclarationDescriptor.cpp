@@ -25,36 +25,36 @@
  **********************************************************************************************************************/
 
 /*
- * ParseResult.h
+ * DeclarationDescriptor.cpp
  *
- *  Created on: Jan 11, 2012
+ *  Created on: Mar 16, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef INTERACTIONBASE_PARSERESULT_H_
-#define INTERACTIONBASE_PARSERESULT_H_
+#include "expression_editor/operators/DeclarationDescriptor.h"
 
-#include "../../interactionbase_api.h"
+#include "OOModel/headers/expressions/VariableDeclaration.h"
+#include "OOModel/headers/expressions/VariableAccess.h"
+#include "Core/headers/global.h"
 
-namespace Interaction {
+namespace OOInteraction {
 
-class ExpressionTreeBuildInstruction;
+DeclarationDescriptor::DeclarationDescriptor(const QString& name, const QString& signature, int num_operands,
+		int precedence, Associativity associativity)
+		: OOOperatorDescriptor(name, signature, num_operands, precedence, associativity)
+{}
 
-class INTERACTIONBASE_API ParseResult {
-	public:
-		ParseResult();
-		ParseResult(int errors, int emptyExpressions, int missing_inner_tokens, int missing_trailing_tokens,
-				int numOperators);
+OOModel::Expression* DeclarationDescriptor::create(const QList<OOModel::Expression*>& operands)
+{
+	OOModel::VariableDeclaration* vd = new OOModel::VariableDeclaration();
 
-		int errors;
-		int emptyExpressions;
-		int missingInnerTokens;
-		int missingTrailingTokens;
-		int numOperators;
-		QVector<ExpressionTreeBuildInstruction*> instructions;
-};
+	vd->setType( operands.first() );
+	auto var = dynamic_cast<OOModel::VariableAccess*>(operands[1]);
+	vd->setName( var->ref()->path().split(":").last());
+	SAFE_DELETE(var);
 
-bool operator< (const ParseResult& left, const ParseResult& right);
+	if (operands.size() > 2) vd->setInitialValue(operands[2]);
+	return vd;
+}
 
-} /* namespace InteractionBase */
-#endif /* INTERACTIONBASE_PARSERESULT_H_ */
+} /* namespace OOInteraction */

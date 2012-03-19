@@ -117,31 +117,31 @@ Method* addDivBySix(Model::Model* model, Class* parent)
 	divbysix->items()->append(new ExpressionStatement(exprtest3));
 	exprtest3->setName("exprtest3");
 	exprtest3->setType(new PrimitiveType(PrimitiveType::VOID));
-	exprtest3->setInitialValue( OOExpressionBuilder::getOOExpression("a < b || c > d && e <= f | g & h ^ ~i") );
+	exprtest3->setInitialValue( OOExpressionBuilder::getOOExpression("a<b||c>d&&e<=f|g&h^~i") );
 
 	VariableDeclaration* exprtest4 = new VariableDeclaration();
 	divbysix->items()->append(new ExpressionStatement(exprtest4));
 	exprtest4->setName("exprtest4");
 	exprtest4->setType(new PrimitiveType(PrimitiveType::VOID));
-	exprtest4->setInitialValue( OOExpressionBuilder::getOOExpression("new value [5]") );
+	exprtest4->setInitialValue( OOExpressionBuilder::getOOExpression("new value[5]") );
 
 	VariableDeclaration* exprtest5 = new VariableDeclaration();
 	divbysix->items()->append(new ExpressionStatement(exprtest5));
 	exprtest5->setName("exprtest5");
 	exprtest5->setType(new PrimitiveType(PrimitiveType::VOID));
-	exprtest5->setInitialValue( OOExpressionBuilder::getOOExpression("(castto) object") );
+	exprtest5->setInitialValue( OOExpressionBuilder::getOOExpression("(castto)object") );
 
 	VariableDeclaration* exprtest6 = new VariableDeclaration();
 	divbysix->items()->append(new ExpressionStatement(exprtest6));
 	exprtest6->setName("exprtest6");
 	exprtest6->setType(new PrimitiveType(PrimitiveType::VOID));
-	exprtest6->setInitialValue( OOExpressionBuilder::getOOExpression("{a, bb, ccc}") );
+	exprtest6->setInitialValue( OOExpressionBuilder::getOOExpression("{a,bb,ccc}") );
 
 	VariableDeclaration* exprtest7 = new VariableDeclaration();
 	divbysix->items()->append(new ExpressionStatement(exprtest7));
 	exprtest7->setName("exprtest7");
 	exprtest7->setType(new PrimitiveType(PrimitiveType::VOID));
-	exprtest7->setInitialValue( OOExpressionBuilder::getOOExpression("{{123, hello}, {2, b}}") );
+	exprtest7->setInitialValue( OOExpressionBuilder::getOOExpression("{{123,hello},{2,b}}") );
 
 	VariableDeclaration* exprtest8 = new VariableDeclaration();
 	divbysix->items()->append(new ExpressionStatement(exprtest8));
@@ -173,11 +173,15 @@ Method* addDivBySix(Model::Model* model, Class* parent)
 	exprtest12->setType(new PrimitiveType(PrimitiveType::VOID));
 	exprtest12->setInitialValue( OOExpressionBuilder::getOOExpression("int[]") );
 
-	auto exprtest13 = dynamic_cast<AssignmentExpression*>( OOExpressionBuilder::getOOExpression("a = b %= c >>>= d+C"));
+	auto exprtest13 = dynamic_cast<AssignmentExpression*>( OOExpressionBuilder::getOOExpression("a=b%=c>>>=d+C"));
 	divbysix->items()->append(new ExpressionStatement(exprtest13));
 
+	divbysix->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("int abc")));
+
+	divbysix->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("int abc=5+3")));
+
 	VariableDeclaration* result = new VariableDeclaration();
-	divbysix->items()->append(result);
+	divbysix->items()->append( new ExpressionStatement(result) );
 	result->setName("result");
 	result->setType(new PrimitiveType(PrimitiveType::INT));
 	result->setInitialValue(new IntegerLiteral(-1));

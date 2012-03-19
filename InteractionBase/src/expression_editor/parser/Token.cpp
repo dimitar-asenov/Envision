@@ -59,7 +59,6 @@ QVector<Token> Token::tokenize(QString input, const OperatorDescriptorList* ops)
 	for(int i = 0; i<input.size(); ++i )
 	{
 		QChar ch = input[i];
-		if (token.isEmpty() && ch == ' ') continue;
 
 		// Add character to current token
 		token.append(ch);
@@ -84,7 +83,6 @@ QVector<Token> Token::tokenize(QString input, const OperatorDescriptorList* ops)
 		else
 		{
 			finalizeToken = next.isNull();
-			finalizeToken = finalizeToken || next == ' ';
 			finalizeToken = finalizeToken || first.isLetterOrNumber() != next.isLetterOrNumber();
 			finalizeToken = finalizeToken || (!next.isLetterOrNumber() && !tokenExistsInOperators(token + next, ops));
 		}

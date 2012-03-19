@@ -25,36 +25,33 @@
  **********************************************************************************************************************/
 
 /*
- * ParseResult.h
+ * VariableDeclarationStringComponents.h
  *
- *  Created on: Jan 11, 2012
+ *  Created on: Mar 19, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef INTERACTIONBASE_PARSERESULT_H_
-#define INTERACTIONBASE_PARSERESULT_H_
+#ifndef OOInteraction_VARIABLEDECLARATIONSTRINGCOMPONENTS_H_
+#define OOInteraction_VARIABLEDECLARATIONSTRINGCOMPONENTS_H_
 
-#include "../../interactionbase_api.h"
+#include "../oointeraction_api.h"
+#include "StringComponents.h"
 
-namespace Interaction {
+namespace OOModel
+{
+	class VariableDeclaration;
+}
 
-class ExpressionTreeBuildInstruction;
+namespace OOInteraction {
 
-class INTERACTIONBASE_API ParseResult {
+class OOINTERACTION_API VariableDeclarationStringComponents : public StringComponents {
 	public:
-		ParseResult();
-		ParseResult(int errors, int emptyExpressions, int missing_inner_tokens, int missing_trailing_tokens,
-				int numOperators);
+	VariableDeclarationStringComponents( OOModel::VariableDeclaration* e );
+		virtual QStringList components();
 
-		int errors;
-		int emptyExpressions;
-		int missingInnerTokens;
-		int missingTrailingTokens;
-		int numOperators;
-		QVector<ExpressionTreeBuildInstruction*> instructions;
+	private:
+		OOModel::VariableDeclaration* exp_;
 };
 
-bool operator< (const ParseResult& left, const ParseResult& right);
-
-} /* namespace InteractionBase */
-#endif /* INTERACTIONBASE_PARSERESULT_H_ */
+} /* namespace OOInteraction */
+#endif /* OOInteraction_VARIABLEDECLARATIONSTRINGCOMPONENTS_H_ */
