@@ -55,7 +55,14 @@ class INTERACTIONBASE_API ExpressionTreeUtils {
 		static Expression* replace(Expression*& top, Expression* oldExpr, Expression* newExpr);
 
 	private:
-		static bool fixExpr(Expression*& top, Expression* e); //returns true if more iterations are needed
+		static void fixPrecedence(Expression*& top);
+
+		/**
+		 * \brief Replaces all operators descending from \a top with an unfinished operator in case an id operand is
+		 *        expected but was not provided.
+		 */
+		static void fixWrongIds(Expression*& top);
+		static bool fixExprPrecedence(Expression*& top, Expression* e); //returns true if more iterations are needed
 		static void rotateRight(Expression*& top, Operator* child, Operator* parent);
 		static void rotateLeft(Expression*& top, Operator* child, Operator* parent);
 };

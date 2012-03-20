@@ -56,6 +56,8 @@ class INTERACTIONBASE_API UnfinishedOperator : public Operator {
 
 		Operator* createFinished();
 
+		static UnfinishedOperator* replaceFinishedWithUnfinished(Expression*& top, Operator* op);
+
 	private:
 		int num_complete_; // How many of the items of this operator's signature have been filled in
 };

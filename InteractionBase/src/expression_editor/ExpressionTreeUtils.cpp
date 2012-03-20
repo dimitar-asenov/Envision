@@ -36,9 +36,16 @@
 #include "expression_editor/Value.h"
 #include "expression_editor/Empty.h"
 #include "expression_editor/Operator.h"
+#include "expression_editor/UnfinishedOperator.h"
 #include "expression_editor/OperatorDescriptor.h"
 
 namespace Interaction {
+
+void ExpressionTreeUtils::fixTop(Expression*& top)
+{
+	fixPrecedence(top);
+	fixWrongIds(top);
+}
 
 Expression* ExpressionTreeUtils::replace(Expression*& top, Expression* oldExpr, Expression* newExpr)
 {
@@ -71,13 +78,13 @@ void ExpressionTreeUtils::rotateLeft(Expression*& top, Operator* child, Operator
 	parent->append(branch);
 }
 
-void ExpressionTreeUtils::fixTop(Expression*& top)
+void ExpressionTreeUtils::fixPrecedence(Expression*& top)
 {
 	bool more_iterations_needed = true;
-	while (more_iterations_needed ) more_iterations_needed = fixExpr(top, top);
+	while (more_iterations_needed ) more_iterations_needed = fixExprPrecedence(top, top);
 }
 
-bool ExpressionTreeUtils::fixExpr(Expression*& top, Expression* e)
+bool ExpressionTreeUtils::fixExprPrecedence(Expression*& top, Expression* e)
 {
 	if ( dynamic_cast<Value*> (e)) return false;
 	if ( dynamic_cast<Empty*> (e)) return false;
@@ -91,7 +98,7 @@ bool ExpressionTreeUtils::fixExpr(Expression*& top, Expression* e)
 
 		// Fix all children
 		for (int operand = 0; operand < op->size(); ++operand)
-			more_iterations_needed = fixExpr(top, op->at(operand)) || more_iterations_needed;
+			more_iterations_needed = fixExprPrecedence(top, op->at(operand)) || more_iterations_needed;
 	}
 
 	//Look left
@@ -295,6 +302,44 @@ void ExpressionTreeUtils::shrink(Expression*& top, Operator* op, bool leftside)
 	delete replace(top, op_placeholder, cut_op);
 
 	fixTop(top);
+}
+
+void ExpressionTreeUtils::fixWrongIds(Expression*& top)
+{
+	QList<Expression*> toFix;
+	toFix << top;
+
+	while(!toFix.isEmpty())
+	{
+		auto e = toFix.first();
+		toFix.removeFirst();
+
+		if (auto op = dynamic_cast<Operator*>(e))
+		{
+			bool unfinished = dynamic_cast<UnfinishedOperator*>(op);
+			if (!unfinished)
+			{
+				bool badId = false;
+				int operandIndex = 0;
+				for (auto s : op->descriptor()->signature())
+				{
+					if (s == "id")
+					{
+						auto v = dynamic_cast<Value*> (op->operands().at(operandIndex));
+						badId = badId || !v || v->text().isEmpty() || !v->text()[0].isLetter();
+						if (badId) break;
+					}
+
+					if (s == "id" || s == "expr") ++operandIndex;
+				}
+
+				if (badId) op = UnfinishedOperator::replaceFinishedWithUnfinished(top, op);
+			}
+
+			for (auto operand : op->operands())
+				toFix.append(operand);
+		}
+	}
 }
 
 } /* namespace InteractionBase */
