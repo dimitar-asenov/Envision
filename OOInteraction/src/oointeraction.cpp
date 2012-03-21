@@ -41,6 +41,8 @@
 #include "handlers/HExpression.h"
 #include "handlers/HFormalArgument.h"
 #include "handlers/HStatement.h"
+#include "handlers/HLoop.h"
+#include "handlers/HIfStatement.h"
 
 #include "string_components/UnaryOperatorStringComponents.h"
 #include "string_components/BinaryOperatorStringComponents.h"
@@ -127,8 +129,8 @@ bool OOInteraction::initialize(Envision::EnvisionManager&)
 	OOVisualization::VVariableDeclaration::setInteractionHandler(HExpression::instance());
 	OOVisualization::VAssignmentExpression::setInteractionHandler(HExpression::instance());
 	OOVisualization::VExpressionStatement::setInteractionHandler(HStatement::instance());
-	OOVisualization::VIfStatement::setInteractionHandler(HStatement::instance());
-	OOVisualization::VLoopStatement::setInteractionHandler(HStatement::instance());
+	OOVisualization::VIfStatement::setInteractionHandler(HIfStatement::instance());
+	OOVisualization::VLoopStatement::setInteractionHandler(HLoop::instance());
 	OOVisualization::VForEachStatement::setInteractionHandler(HStatement::instance());
 	OOVisualization::VBreakStatement::setInteractionHandler(HStatement::instance());
 	OOVisualization::VContinueStatement::setInteractionHandler(HStatement::instance());

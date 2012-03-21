@@ -59,17 +59,31 @@ class OOVISUALIZATION_API VIfStatement : public Visualization::ItemWithNode< Vis
 		VIfStatement(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VIfStatement();
 
+		Visualization::SequentialLayout* header() const;
+		Visualization::SequentialLayout* conditionBackground() const;
+		Visualization::Item* condition() const;
+		Visualization::SequentialLayout* content() const;
+		Visualization::VList* thenBranch() const;
+		Visualization::VList* elseBranch() const;
+
 	protected:
 		void determineChildren();
 
 	private:
-		Visualization::SequentialLayout* header;
-		Visualization::SequentialLayout* conditionBackground;
-		Visualization::Item* condition;
-		Visualization::SequentialLayout* content;
-		Visualization::VList* thenBranch;
-		Visualization::VList* elseBranch;
+		Visualization::SequentialLayout* header_;
+		Visualization::SequentialLayout* conditionBackground_;
+		Visualization::Item* condition_;
+		Visualization::SequentialLayout* content_;
+		Visualization::VList* thenBranch_;
+		Visualization::VList* elseBranch_;
 };
+
+inline Visualization::SequentialLayout* VIfStatement::header() const { return header_; }
+inline Visualization::SequentialLayout* VIfStatement::conditionBackground() const { return conditionBackground_; }
+inline Visualization::Item* VIfStatement::condition() const { return condition_; }
+inline Visualization::SequentialLayout* VIfStatement::content() const { return content_; }
+inline Visualization::VList* VIfStatement::thenBranch() const { return thenBranch_; }
+inline Visualization::VList* VIfStatement::elseBranch() const { return elseBranch_; }
 
 }
 

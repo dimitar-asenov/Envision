@@ -58,21 +58,43 @@ class OOVISUALIZATION_API VLoopStatement : public Visualization::ItemWithNode< V
 		VLoopStatement(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VLoopStatement();
 
+		Visualization::SequentialLayout* header() const;
+
+		Visualization::SequentialLayout* conditionBackground() const;
+		Visualization::SequentialLayout* initStepBackground() const;
+		Visualization::SequentialLayout* updateStepBackground() const;
+
+		Visualization::Item* condition() const;
+		Visualization::Item* initStep() const;
+		Visualization::Item* updateStep() const;
+		Visualization::VList* body() const;
+
 	protected:
 		virtual void determineChildren();
 
 	private:
-		Visualization::SequentialLayout* header;
+		Visualization::SequentialLayout* header_;
 
-		Visualization::SequentialLayout* conditionBackground;
-		Visualization::SequentialLayout* initStepBackground;
-		Visualization::SequentialLayout* updateStepBackground;
+		Visualization::SequentialLayout* conditionBackground_;
+		Visualization::SequentialLayout* initStepBackground_;
+		Visualization::SequentialLayout* updateStepBackground_;
 
-		Visualization::Item* condition;
-		Visualization::Item* initStep;
-		Visualization::Item* updateStep;
-		Visualization::VList* body;
+		Visualization::Item* condition_;
+		Visualization::Item* initStep_;
+		Visualization::Item* updateStep_;
+		Visualization::VList* body_;
 };
+
+inline Visualization::SequentialLayout* VLoopStatement::header() const { return header_; }
+
+inline Visualization::SequentialLayout* VLoopStatement::conditionBackground() const { return conditionBackground_; }
+inline Visualization::SequentialLayout* VLoopStatement::initStepBackground() const { return initStepBackground_; }
+inline Visualization::SequentialLayout* VLoopStatement::updateStepBackground() const { return updateStepBackground_; }
+
+inline Visualization::Item* VLoopStatement::condition() const { return condition_; }
+inline Visualization::Item* VLoopStatement::initStep() const { return initStep_; }
+inline Visualization::Item* VLoopStatement::updateStep() const { return updateStep_; }
+inline Visualization::VList* VLoopStatement::body() const { return body_; }
 
 }
 

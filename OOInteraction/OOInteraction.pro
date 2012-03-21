@@ -35,7 +35,9 @@ INSTALLS += target \
     pluginmeta \
     styles
 PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/string_offset_providers/VariableDeclarationStringOffsetProvider.h \
+HEADERS += headers/handlers/HIfStatement.h \
+    headers/handlers/HLoop.h \
+    headers/string_offset_providers/VariableDeclarationStringOffsetProvider.h \
     headers/string_components/VariableDeclarationStringComponents.h \
     headers/expression_editor/operators/DeclarationDescriptor.h \
     headers/string_offset_providers/CastStringOffsetProvider.h \
@@ -95,7 +97,9 @@ HEADERS += headers/string_offset_providers/VariableDeclarationStringOffsetProvid
     headers/OOInteractionException.h \
     headers/oointeraction_api.h \
     src/oointeraction.h
-SOURCES += src/string_offset_providers/VariableDeclarationStringOffsetProvider.cpp \
+SOURCES += src/handlers/HLoop.cpp \
+    src/handlers/HIfStatement.cpp \
+    src/string_offset_providers/VariableDeclarationStringOffsetProvider.cpp \
     src/string_components/VariableDeclarationStringComponents.cpp \
     src/expression_editor/operators/DeclarationDescriptor.cpp \
     src/string_offset_providers/CastStringOffsetProvider.cpp \
