@@ -35,8 +35,6 @@
 #include "Scene.h"
 #include "VisualizationManager.h"
 
-#include <QtGui/QScrollBar>
-
 namespace Visualization {
 
 View::View(Scene* scene, View *parent) :

@@ -33,7 +33,7 @@
 
 #include "string_offset_providers/SequentialVisualizationStringOffsetProvider.h"
 
-#include "VisualizationBase/headers/cursor/LayoutCursor.h"
+#include "VisualizationBase/src/cursor/LayoutCursor.h"
 
 namespace OOInteraction {
 

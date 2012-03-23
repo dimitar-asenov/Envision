@@ -33,7 +33,7 @@
 
 #include "string_components/VariableAccessStringComponents.h"
 
-#include "OOModel/headers/expressions/VariableAccess.h"
+#include "OOModel/src/expressions/VariableAccess.h"
 
 namespace OOInteraction {
 

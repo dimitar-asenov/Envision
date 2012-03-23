@@ -32,7 +32,7 @@
  */
 
 #include "statements/VExpressionStatement.h"
-#include "VisualizationBase/headers/items/ItemStyle.h"
+#include "VisualizationBase/src/items/ItemStyle.h"
 
 using namespace Visualization;
 using namespace OOModel;

@@ -33,7 +33,7 @@
 
 #include "string_components/InitializerStringComponents.h"
 
-#include "OOModel/headers/expressions/ArrayInitializer.h"
+#include "OOModel/src/expressions/ArrayInitializer.h"
 
 namespace OOInteraction {
 

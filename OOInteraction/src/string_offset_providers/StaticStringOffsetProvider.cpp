@@ -33,7 +33,7 @@
 
 #include "string_offset_providers/StaticStringOffsetProvider.h"
 
-#include "VisualizationBase/headers/items/Static.h"
+#include "VisualizationBase/src/items/Static.h"
 
 namespace OOInteraction {
 

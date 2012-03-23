@@ -34,7 +34,7 @@
 #include "string_components/PrimitiveTypeStringComponents.h"
 #include "OOInteractionException.h"
 
-#include "OOModel/headers/types/PrimitiveType.h"
+#include "OOModel/src/types/PrimitiveType.h"
 
 namespace OOInteraction {
 

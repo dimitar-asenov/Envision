@@ -35,10 +35,6 @@
 #include "items/Text.h"
 #include "ModelRenderer.h"
 
-#include <QtCore/QString>
-#include <QtCore/QPair>
-#include <QtCore/QList>
-
 namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(VExtendable, "item")

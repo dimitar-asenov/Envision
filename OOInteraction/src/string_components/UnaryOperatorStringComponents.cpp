@@ -33,7 +33,7 @@
 
 #include "string_components/UnaryOperatorStringComponents.h"
 
-#include "OOModel/headers/expressions/UnaryOperation.h"
+#include "OOModel/src/expressions/UnaryOperation.h"
 
 namespace OOInteraction {
 

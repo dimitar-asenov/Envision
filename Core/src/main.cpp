@@ -36,9 +36,6 @@
 #include "DefaultEnvisionManager.h"
 #include "TestRunner.h"
 
-#include <QtGui/QApplication>
-#include <QtCore/QTextStream>
-
 using namespace Envision;
 
 /**

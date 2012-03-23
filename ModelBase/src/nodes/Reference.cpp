@@ -36,8 +36,6 @@
 #include "Model.h"
 #include "ModelException.h"
 
-#include <QtCore/QStringList>
-
 namespace Model {
 
 NODE_DEFINE_TYPE_REGISTRATION_METHODS(Reference)

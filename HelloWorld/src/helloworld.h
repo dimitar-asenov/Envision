@@ -36,7 +36,8 @@
 #ifndef HELLOWORLD_H
 #define HELLOWORLD_H
 
-#include "Core/headers/EnvisionPlugin.h"
+#include "Core/src/EnvisionPlugin.h"
+#include "precompiled.h"
 
 namespace Hello {
 

@@ -34,11 +34,11 @@
 #include "handlers/HList.h"
 #include "handlers/SetCursorEvent.h"
 
-#include "VisualizationBase/headers/items/VList.h"
-#include "VisualizationBase/headers/Scene.h"
-#include "VisualizationBase/headers/cursor/LayoutCursor.h"
-#include "FilePersistence/headers/SystemClipboard.h"
-#include "ModelBase/headers/nodes/List.h"
+#include "VisualizationBase/src/items/VList.h"
+#include "VisualizationBase/src/Scene.h"
+#include "VisualizationBase/src/cursor/LayoutCursor.h"
+#include "FilePersistence/src/SystemClipboard.h"
+#include "ModelBase/src/nodes/List.h"
 
 namespace Interaction {
 

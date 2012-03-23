@@ -33,11 +33,11 @@
 
 #include "commands/CProjectCreateClass.h"
 
-#include "OOModel/headers/top_level/Project.h"
-#include "OOModel/headers/top_level/Class.h"
+#include "OOModel/src/top_level/Project.h"
+#include "OOModel/src/top_level/Class.h"
 
 
-#include "InteractionBase/headers/handlers/SetCursorEvent.h"
+#include "InteractionBase/src/handlers/SetCursorEvent.h"
 
 namespace OOInteraction {
 

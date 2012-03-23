@@ -35,11 +35,6 @@
 
 #include "VisualizationException.h"
 
-#include "Core/headers/global.h"
-
-#include <QtCore/QFileInfo>
-#include <QtCore/QDir>
-
 namespace Visualization {
 
 const QString XML_DOM_TYPE = "EnvisionVisualizationStyle";

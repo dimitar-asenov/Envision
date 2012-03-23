@@ -34,8 +34,6 @@
 #include "cursor/Cursor.h"
 #include "items/Item.h"
 
-#include "Core/headers/global.h"
-
 namespace Visualization {
 
 Cursor::Cursor(Item* owner, CursorType type, Item* visualization)

@@ -33,7 +33,7 @@
 
 #include "string_components/StringLiteralStringComponents.h"
 
-#include "OOModel/headers/expressions/StringLiteral.h"
+#include "OOModel/src/expressions/StringLiteral.h"
 
 namespace OOInteraction {
 

@@ -33,8 +33,8 @@
 
 #include "expressions/VUnaryOperation.h"
 
-#include "VisualizationBase/headers/layouts/SequentialLayout.h"
-#include "VisualizationBase/headers/items/Static.h"
+#include "VisualizationBase/src/layouts/SequentialLayout.h"
+#include "VisualizationBase/src/items/Static.h"
 
 using namespace Visualization;
 using namespace OOModel;

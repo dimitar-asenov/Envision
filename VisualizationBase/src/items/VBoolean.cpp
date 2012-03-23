@@ -33,7 +33,7 @@
 
 #include "items/VBoolean.h"
 
-#include "ModelBase/headers/Model.h"
+#include "ModelBase/src/Model.h"
 
 namespace Visualization {
 

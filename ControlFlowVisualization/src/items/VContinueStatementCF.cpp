@@ -33,7 +33,7 @@
 
 #include "items/VContinueStatementCF.h"
 
-#include "OOModel/headers/statements/ContinueStatement.h"
+#include "OOModel/src/statements/ContinueStatement.h"
 
 using namespace Visualization;
 using namespace OOModel;

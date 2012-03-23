@@ -32,14 +32,14 @@
  **********************************************************************************************************************/
 
 #include "oovisualization.h"
-#include "SelfTest/headers/SelfTestSuite.h"
+#include "SelfTest/src/SelfTestSuite.h"
 
 #include "allOOVisualizations.h"
 
-#include "OOModel/headers/allOOModelNodes.h"
+#include "OOModel/src/allOOModelNodes.h"
 
-#include "VisualizationBase/headers/Scene.h"
-#include "VisualizationBase/headers/node_extensions/Position.h"
+#include "VisualizationBase/src/Scene.h"
+#include "VisualizationBase/src/node_extensions/Position.h"
 
 Q_EXPORT_PLUGIN2( oovisualization, OOVisualization::OOVisualization )
 

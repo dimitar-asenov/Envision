@@ -33,8 +33,8 @@
 
 #include "expressions/VVariableDeclaration.h"
 
-#include "VisualizationBase/headers/items/Static.h"
-#include "VisualizationBase/headers/items/VText.h"
+#include "VisualizationBase/src/items/Static.h"
+#include "VisualizationBase/src/items/VText.h"
 
 using namespace Visualization;
 using namespace OOModel;

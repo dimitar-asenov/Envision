@@ -33,9 +33,9 @@
 
 #include "string_offset_providers/InitializerStringOffsetProvider.h"
 
-#include "OOVisualization/headers/expressions/VArrayInitializer.h"
-#include "VisualizationBase/headers/items/VList.h"
-#include "VisualizationBase/headers/layouts/GridLayout.h"
+#include "OOVisualization/src/expressions/VArrayInitializer.h"
+#include "VisualizationBase/src/items/VList.h"
+#include "VisualizationBase/src/layouts/GridLayout.h"
 
 namespace OOInteraction {
 

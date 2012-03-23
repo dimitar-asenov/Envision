@@ -31,7 +31,7 @@
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "ModelBase/headers/nodes/TypedListDefinition.h"
+#include "ModelBase/src/nodes/TypedListDefinition.h"
 
 #include "allOOModelNodes.h"
 

@@ -33,7 +33,7 @@
 
 #include "string_components/UnfinishedOperatorStringComponents.h"
 
-#include "OOModel/headers/expressions/UnfinishedOperator.h"
+#include "OOModel/src/expressions/UnfinishedOperator.h"
 
 namespace OOInteraction {
 

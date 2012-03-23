@@ -34,11 +34,10 @@
 #include "string_offset_providers/StringOffsetProvider.h"
 #include "string_components/StringComponents.h"
 
-#include "VisualizationBase/headers/cursor/LayoutCursor.h"
-#include "VisualizationBase/headers/items/VList.h"
-#include "VisualizationBase/headers/items/Item.h"
-#include "ModelBase/headers/adapter/AdapterManager.h"
-#include "Core/headers/global.h"
+#include "VisualizationBase/src/cursor/LayoutCursor.h"
+#include "VisualizationBase/src/items/VList.h"
+#include "VisualizationBase/src/items/Item.h"
+#include "ModelBase/src/adapter/AdapterManager.h"
 
 namespace OOInteraction {
 

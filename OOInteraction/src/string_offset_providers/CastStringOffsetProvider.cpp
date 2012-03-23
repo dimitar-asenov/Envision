@@ -33,7 +33,7 @@
 
 #include "string_offset_providers/CastStringOffsetProvider.h"
 
-#include "OOVisualization/headers/expressions/VCastExpression.h"
+#include "OOVisualization/src/expressions/VCastExpression.h"
 
 namespace OOInteraction {
 

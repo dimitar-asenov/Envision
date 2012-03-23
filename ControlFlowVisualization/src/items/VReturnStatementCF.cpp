@@ -33,7 +33,7 @@
 
 #include "items/VReturnStatementCF.h"
 
-#include "OOModel/headers/statements/ReturnStatement.h"
+#include "OOModel/src/statements/ReturnStatement.h"
 
 using namespace Visualization;
 using namespace OOModel;

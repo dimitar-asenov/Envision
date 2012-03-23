@@ -33,8 +33,6 @@
 
 #include "nodes/Extendable/ExtendableNode.h"
 
-#include "Core/headers/global.h"
-
 namespace Model {
 
 int ExtendableNode::typeId_ = -1; /* This must be set to the result of Node::registerNodeType */

@@ -36,8 +36,6 @@
 
 #include "ModelException.h"
 
-#include "Core/headers/global.h"
-
 namespace Model {
 
 ExtendedNodeChild::ExtendedNodeChild(Node* target, Node* newValue_, bool detached,

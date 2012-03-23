@@ -37,7 +37,7 @@
 #include "items/ItemWithNode.h"
 #include "ModelRenderer.h"
 
-#include "ModelBase/headers/nodes/Node.h"
+#include "ModelBase/src/nodes/Node.h"
 
 namespace Visualization {
 

@@ -33,7 +33,7 @@
 
 #include "string_components/BooleanLiteralStringComponents.h"
 
-#include "OOModel/headers/expressions/BooleanLiteral.h"
+#include "OOModel/src/expressions/BooleanLiteral.h"
 
 namespace OOInteraction {
 

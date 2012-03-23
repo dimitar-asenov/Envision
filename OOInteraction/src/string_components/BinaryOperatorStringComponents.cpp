@@ -33,7 +33,7 @@
 
 #include "string_components/BinaryOperatorStringComponents.h"
 
-#include "OOModel/headers/expressions/BinaryOperation.h"
+#include "OOModel/src/expressions/BinaryOperation.h"
 
 namespace OOInteraction {
 

@@ -33,8 +33,8 @@
 
 #include "string_offset_providers/CallStringOffsetProvider.h"
 
-#include "OOVisualization/headers/expressions/VMethodCallExpression.h"
-#include "VisualizationBase/headers/items/VList.h"
+#include "OOVisualization/src/expressions/VMethodCallExpression.h"
+#include "VisualizationBase/src/items/VList.h"
 
 namespace OOInteraction {
 

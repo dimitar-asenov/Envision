@@ -5,8 +5,7 @@ PLUGINS_DIR = $${BUILD_DIR}/plugins
 CONFIG(debug, debug|release):DEFINES += DEBUG
 QMAKE_CXXFLAGS += -Werror \
     -std=c++0x
-INCLUDEPATH += ./headers \
-    ./src \
+INCLUDEPATH += ./src \
     ./test \
     $${ENVISION_ROOT_DIR}
 TARGET = oovisualization
@@ -32,78 +31,78 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/expressions/VVariableDeclarationStyle.h \
-    headers/expressions/VVariableDeclaration.h \
-    headers/expressions/VAssignmentExpression.h \
-    headers/statements/VExpressionStatement.h \
-    headers/expressions/VCommaExpression.h \
-    headers/expressions/VEmptyExpression.h \
-    headers/expressions/VUnfinishedOperatorStyle.h \
-    headers/expressions/VUnfinishedOperator.h \
-    headers/expressions/VErrorExpressionStyle.h \
-    headers/expressions/VErrorExpression.h \
-    headers/precompiled.h \
-    headers/elements/VStorageSpecifier.h \
-    headers/expressions/VArrayInitializerStyle.h \
-    headers/expressions/VArrayInitializer.h \
-    headers/literals/VStringLiteralStyle.h \
-    headers/types/VArrayTypeStyle.h \
-    headers/types/VArrayType.h \
-    headers/statements/VContinueStatement.h \
-    headers/statements/VBreakStatement.h \
-    headers/statements/VForEachStatementStyle.h \
-    headers/statements/VForEachStatement.h \
-    headers/statements/VLoopStatementStyle.h \
-    headers/statements/VLoopStatement.h \
-    headers/elements/VField.h \
-    headers/elements/VFieldStyle.h \
-    headers/elements/VFormalArgument.h \
-    headers/elements/VFormalArgumentStyle.h \
-    headers/elements/VFormalResult.h \
-    headers/elements/VFormalResultStyle.h \
-    headers/elements/VVisibility.h \
-    headers/top_level/VClass.h \
-    headers/top_level/VClassStyle.h \
-    headers/top_level/VLibrary.h \
-    headers/top_level/VLibraryStyle.h \
-    headers/top_level/VMethod.h \
-    headers/top_level/VMethodStyle.h \
-    headers/top_level/VModule.h \
-    headers/top_level/VModuleStyle.h \
-    headers/top_level/VProject.h \
-    headers/top_level/VProjectStyle.h \
-    headers/statements/VIfStatementStyle.h \
-    headers/statements/VIfStatement.h \
-    headers/statements/VReturnStatementStyle.h \
-    headers/statements/VReturnStatement.h \
-    headers/statements/VBlockStyle.h \
-    headers/statements/VBlock.h \
-    headers/expressions/VBinaryOperation.h \
-    headers/expressions/VUnaryOperation.h \
-    headers/expressions/OperatorStyle.h \
-    headers/expressions/VNewExpressionStyle.h \
-    headers/expressions/VNewExpression.h \
-    headers/expressions/VCastExpressionStyle.h \
-    headers/expressions/VCastExpression.h \
-    headers/expressions/VThisExpression.h \
-    headers/expressions/VMethodCallExpressionStyle.h \
-    headers/expressions/VMethodCallExpression.h \
-    headers/literals/VNullLiteral.h \
-    headers/literals/VBooleanLiteral.h \
-    headers/literals/VCharacterLiteral.h \
-    headers/literals/VFloatLiteral.h \
-    headers/literals/VIntegerLiteral.h \
-    headers/allOOVisualizations.h \
-    headers/types/VPrimitiveType.h \
-    headers/types/VNamedType.h \
-    headers/literals/VStringLiteral.h \
-    headers/expressions/VVariableAccessStyle.h \
-    headers/expressions/VVariableAccess.h \
-    headers/expressions/VReferenceExpressionStyle.h \
-    headers/expressions/VReferenceExpression.h \
-    headers/OOVisualizationException.h \
-    headers/oovisualization_api.h \
+PRECOMPILED_HEADER = src/precompiled.h
+HEADERS += src/OOVisualizationException.h \
+    src/allOOVisualizations.h \
+    src/elements/VField.h \
+    src/elements/VFieldStyle.h \
+    src/elements/VFormalArgument.h \
+    src/elements/VFormalArgumentStyle.h \
+    src/elements/VFormalResult.h \
+    src/elements/VFormalResultStyle.h \
+    src/elements/VStorageSpecifier.h \
+    src/elements/VVisibility.h \
+    src/expressions/OperatorStyle.h \
+    src/expressions/VArrayInitializer.h \
+    src/expressions/VArrayInitializerStyle.h \
+    src/expressions/VAssignmentExpression.h \
+    src/expressions/VBinaryOperation.h \
+    src/expressions/VCastExpression.h \
+    src/expressions/VCastExpressionStyle.h \
+    src/expressions/VCommaExpression.h \
+    src/expressions/VEmptyExpression.h \
+    src/expressions/VErrorExpression.h \
+    src/expressions/VErrorExpressionStyle.h \
+    src/expressions/VMethodCallExpression.h \
+    src/expressions/VMethodCallExpressionStyle.h \
+    src/expressions/VNewExpression.h \
+    src/expressions/VNewExpressionStyle.h \
+    src/expressions/VReferenceExpression.h \
+    src/expressions/VReferenceExpressionStyle.h \
+    src/expressions/VThisExpression.h \
+    src/expressions/VUnaryOperation.h \
+    src/expressions/VUnfinishedOperator.h \
+    src/expressions/VUnfinishedOperatorStyle.h \
+    src/expressions/VVariableAccess.h \
+    src/expressions/VVariableAccessStyle.h \
+    src/expressions/VVariableDeclaration.h \
+    src/expressions/VVariableDeclarationStyle.h \
+    src/literals/VBooleanLiteral.h \
+    src/literals/VCharacterLiteral.h \
+    src/literals/VFloatLiteral.h \
+    src/literals/VIntegerLiteral.h \
+    src/literals/VNullLiteral.h \
+    src/literals/VStringLiteral.h \
+    src/literals/VStringLiteralStyle.h \
+    src/oovisualization_api.h \
+    src/precompiled.h \
+    src/statements/VBlock.h \
+    src/statements/VBlockStyle.h \
+    src/statements/VBreakStatement.h \
+    src/statements/VContinueStatement.h \
+    src/statements/VExpressionStatement.h \
+    src/statements/VForEachStatement.h \
+    src/statements/VForEachStatementStyle.h \
+    src/statements/VIfStatement.h \
+    src/statements/VIfStatementStyle.h \
+    src/statements/VLoopStatement.h \
+    src/statements/VLoopStatementStyle.h \
+    src/statements/VReturnStatement.h \
+    src/statements/VReturnStatementStyle.h \
+    src/top_level/VClass.h \
+    src/top_level/VClassStyle.h \
+    src/top_level/VLibrary.h \
+    src/top_level/VLibraryStyle.h \
+    src/top_level/VMethod.h \
+    src/top_level/VMethodStyle.h \
+    src/top_level/VModule.h \
+    src/top_level/VModuleStyle.h \
+    src/top_level/VProject.h \
+    src/top_level/VProjectStyle.h \
+    src/types/VArrayType.h \
+    src/types/VArrayTypeStyle.h \
+    src/types/VNamedType.h \
+    src/types/VPrimitiveType.h \
     src/oovisualization.h
 SOURCES += src/expressions/VVariableDeclarationStyle.cpp \
     src/expressions/VVariableDeclaration.cpp \

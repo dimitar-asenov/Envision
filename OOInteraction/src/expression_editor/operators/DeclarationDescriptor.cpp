@@ -33,9 +33,8 @@
 
 #include "expression_editor/operators/DeclarationDescriptor.h"
 
-#include "OOModel/headers/expressions/VariableDeclaration.h"
-#include "OOModel/headers/expressions/VariableAccess.h"
-#include "Core/headers/global.h"
+#include "OOModel/src/expressions/VariableDeclaration.h"
+#include "OOModel/src/expressions/VariableAccess.h"
 
 namespace OOInteraction {
 

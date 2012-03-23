@@ -41,8 +41,6 @@
 
 #include "cursor/Cursor.h"
 
-#include <cmath>
-
 namespace Visualization {
 
 Item::Item(Item* parent, const StyleType* style) :

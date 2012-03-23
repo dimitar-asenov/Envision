@@ -32,7 +32,7 @@
  **********************************************************************************************************************/
 
 #include "apideptest.h"
-#include "HelloWorld/headers/HelloWorldPrinter.h"
+#include "HelloWorld/src/HelloWorldPrinter.h"
 
 Q_EXPORT_PLUGIN2( apideptest, APIDepTest::APIDep )
 

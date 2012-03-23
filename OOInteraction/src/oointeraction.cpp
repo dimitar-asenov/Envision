@@ -32,7 +32,7 @@
  **********************************************************************************************************************/
 
 #include "oointeraction.h"
-#include "SelfTest/headers/SelfTestSuite.h"
+#include "SelfTest/src/SelfTestSuite.h"
 
 #include "expression_editor/OOOperatorDescriptorList.h"
 #include "handlers/HProject.h"
@@ -77,19 +77,19 @@
 #include "string_offset_providers/CastStringOffsetProvider.h"
 #include "string_offset_providers/VariableDeclarationStringOffsetProvider.h"
 
-#include "OOVisualization/headers/allOOVisualizations.h"
+#include "OOVisualization/src/allOOVisualizations.h"
 
-#include "OOModel/headers/allOOModelNodes.h"
+#include "OOModel/src/allOOModelNodes.h"
 
-#include "InteractionBase/headers/handlers/GenericHandler.h"
-#include "InteractionBase/headers/handlers/HText.h"
+#include "InteractionBase/src/handlers/GenericHandler.h"
+#include "InteractionBase/src/handlers/HText.h"
 
-#include "VisualizationBase/headers/items/Static.h"
-#include "VisualizationBase/headers/items/Symbol.h"
-#include "VisualizationBase/headers/items/Text.h"
-#include "VisualizationBase/headers/items/VText.h"
+#include "VisualizationBase/src/items/Static.h"
+#include "VisualizationBase/src/items/Symbol.h"
+#include "VisualizationBase/src/items/Text.h"
+#include "VisualizationBase/src/items/VText.h"
 
-#include "ModelBase/headers/adapter/AdapterManager.h"
+#include "ModelBase/src/adapter/AdapterManager.h"
 
 Q_EXPORT_PLUGIN2( oointeraction, OOInteraction::OOInteraction )
 

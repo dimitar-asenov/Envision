@@ -34,7 +34,8 @@
 #ifndef OOMODEL_H
 #define OOMODEL_H
 
-#include "Core/headers/EnvisionPlugin.h"
+#include "Core/src/EnvisionPlugin.h"
+#include "precompiled.h"
 
 namespace OOModel {
 

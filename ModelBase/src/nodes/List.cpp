@@ -39,8 +39,6 @@
 #include "commands/ListPut.h"
 #include "nodes/nodeMacros.h"
 
-#include "Core/headers/global.h"
-
 namespace Model {
 
 NODE_DEFINE_TYPE_REGISTRATION_METHODS(List)

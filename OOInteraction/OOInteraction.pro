@@ -5,8 +5,7 @@ PLUGINS_DIR = $${BUILD_DIR}/plugins
 CONFIG(debug, debug|release):DEFINES += DEBUG
 QMAKE_CXXFLAGS += -Werror \
     -std=c++0x
-INCLUDEPATH += ./headers \
-    ./src \
+INCLUDEPATH += ./src \
     ./test \
     $${ENVISION_ROOT_DIR}
 TARGET = oointeraction
@@ -34,68 +33,68 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/handlers/HIfStatement.h \
-    headers/handlers/HLoop.h \
-    headers/string_offset_providers/VariableDeclarationStringOffsetProvider.h \
-    headers/string_components/VariableDeclarationStringComponents.h \
-    headers/expression_editor/operators/DeclarationDescriptor.h \
-    headers/string_offset_providers/CastStringOffsetProvider.h \
-    headers/string_components/ListStringComponents.h \
-    headers/string_offset_providers/TextRendererStringOffsetProvider.h \
-    headers/string_offset_providers/StringOffsetProvider.h \
-    headers/string_offset_providers/StaticStringOffsetProvider.h \
-    headers/string_offset_providers/SimpleLiteralStringOffsetProvider.h \
-    headers/string_offset_providers/SequentialVisualizationStringOffsetProvider.h \
-    headers/string_offset_providers/NewArrayStringOffsetProvider.h \
-    headers/string_offset_providers/InitializerStringOffsetProvider.h \
-    headers/string_offset_providers/EmptyExpressionStringOffsetProvider.h \
-    headers/string_offset_providers/CallStringOffsetProvider.h \
-    headers/string_components/AssignmentStringComponents.h \
-    headers/expression_editor/operators/AssignmentDescriptor.h \
-    headers/handlers/HStatement.h \
-    headers/handlers/HFormalArgument.h \
-    headers/string_components/ArrayTypeStringComponents.h \
-    headers/expression_editor/operators/ArrayTypeDescriptor.h \
-    headers/string_components/PrimitiveTypeStringComponents.h \
-    headers/string_components/StringLiteralStringComponents.h \
-    headers/commands/CProjectCreateClass.h \
-    headers/handlers/HMethod.h \
-    headers/handlers/HExpression.h \
-    headers/handlers/HClass.h \
-    headers/handlers/HProject.h \
-    headers/handlers/SetExpressionCursorEvent.h \
-    headers/commands/CClassCreateMethod.h \
-    headers/string_components/CallStringComponents.h \
-    headers/expression_editor/operators/CallDescriptor.h \
-    headers/expression_editor/operators/MemberOperatorDescriptor.h \
-    headers/string_components/CastExpressionStringComponents.h \
-    headers/string_components/CommaExpressionStringComponents.h \
-    headers/string_components/InitializerStringComponents.h \
-    headers/string_components/NewArrayStringComponents.h \
-    headers/expression_editor/operators/CommaDescriptor.h \
-    headers/expression_editor/operators/InitializerDescriptor.h \
-    headers/expression_editor/operators/CastDescriptor.h \
-    headers/expression_editor/operators/NewArrayDescriptor.h \
-    headers/string_components/ThisExpressionStringComponents.h \
-    headers/string_components/NullLiteralStringComponents.h \
-    headers/string_components/BooleanLiteralStringComponents.h \
-    headers/string_components/UnaryOperatorStringComponents.h \
-    headers/expression_editor/operators/UnaryOperatorDescriptor.h \
-    headers/string_components/VariableAccessStringComponents.h \
-    headers/string_components/UnfinishedOperatorStringComponents.h \
-    headers/string_components/ErrorExpressionStringComponents.h \
-    headers/string_components/BinaryOperatorStringComponents.h \
-    headers/string_components/IntegerLiteralStringComponents.h \
-    headers/string_components/EmptyExpressionStringComponents.h \
-    headers/string_components/StringComponents.h \
-    headers/expression_editor/OOOperatorDescriptorList.h \
-    headers/expression_editor/operators/BinaryOperatorDescriptor.h \
-    headers/expression_editor/OOOperatorDescriptor.h \
-    headers/expression_editor/OOExpressionBuilder.h \
-    headers/precompiled.h \
-    headers/OOInteractionException.h \
-    headers/oointeraction_api.h \
+PRECOMPILED_HEADER = src/precompiled.h
+HEADERS += src/OOInteractionException.h \
+    src/commands/CClassCreateMethod.h \
+    src/commands/CProjectCreateClass.h \
+    src/expression_editor/OOExpressionBuilder.h \
+    src/expression_editor/OOOperatorDescriptor.h \
+    src/expression_editor/OOOperatorDescriptorList.h \
+    src/expression_editor/operators/ArrayTypeDescriptor.h \
+    src/expression_editor/operators/AssignmentDescriptor.h \
+    src/expression_editor/operators/BinaryOperatorDescriptor.h \
+    src/expression_editor/operators/CallDescriptor.h \
+    src/expression_editor/operators/CastDescriptor.h \
+    src/expression_editor/operators/CommaDescriptor.h \
+    src/expression_editor/operators/DeclarationDescriptor.h \
+    src/expression_editor/operators/InitializerDescriptor.h \
+    src/expression_editor/operators/MemberOperatorDescriptor.h \
+    src/expression_editor/operators/NewArrayDescriptor.h \
+    src/expression_editor/operators/UnaryOperatorDescriptor.h \
+    src/handlers/HClass.h \
+    src/handlers/HExpression.h \
+    src/handlers/HFormalArgument.h \
+    src/handlers/HIfStatement.h \
+    src/handlers/HLoop.h \
+    src/handlers/HMethod.h \
+    src/handlers/HProject.h \
+    src/handlers/HStatement.h \
+    src/handlers/SetExpressionCursorEvent.h \
+    src/oointeraction_api.h \
+    src/precompiled.h \
+    src/string_components/ArrayTypeStringComponents.h \
+    src/string_components/AssignmentStringComponents.h \
+    src/string_components/BinaryOperatorStringComponents.h \
+    src/string_components/BooleanLiteralStringComponents.h \
+    src/string_components/CallStringComponents.h \
+    src/string_components/CastExpressionStringComponents.h \
+    src/string_components/CommaExpressionStringComponents.h \
+    src/string_components/EmptyExpressionStringComponents.h \
+    src/string_components/ErrorExpressionStringComponents.h \
+    src/string_components/InitializerStringComponents.h \
+    src/string_components/IntegerLiteralStringComponents.h \
+    src/string_components/ListStringComponents.h \
+    src/string_components/NewArrayStringComponents.h \
+    src/string_components/NullLiteralStringComponents.h \
+    src/string_components/PrimitiveTypeStringComponents.h \
+    src/string_components/StringComponents.h \
+    src/string_components/StringLiteralStringComponents.h \
+    src/string_components/ThisExpressionStringComponents.h \
+    src/string_components/UnaryOperatorStringComponents.h \
+    src/string_components/UnfinishedOperatorStringComponents.h \
+    src/string_components/VariableAccessStringComponents.h \
+    src/string_components/VariableDeclarationStringComponents.h \
+    src/string_offset_providers/CallStringOffsetProvider.h \
+    src/string_offset_providers/CastStringOffsetProvider.h \
+    src/string_offset_providers/EmptyExpressionStringOffsetProvider.h \
+    src/string_offset_providers/InitializerStringOffsetProvider.h \
+    src/string_offset_providers/NewArrayStringOffsetProvider.h \
+    src/string_offset_providers/SequentialVisualizationStringOffsetProvider.h \
+    src/string_offset_providers/SimpleLiteralStringOffsetProvider.h \
+    src/string_offset_providers/StaticStringOffsetProvider.h \
+    src/string_offset_providers/StringOffsetProvider.h \
+    src/string_offset_providers/TextRendererStringOffsetProvider.h \
+    src/string_offset_providers/VariableDeclarationStringOffsetProvider.h \
     src/oointeraction.h
 SOURCES += src/handlers/HLoop.cpp \
     src/handlers/HIfStatement.cpp \

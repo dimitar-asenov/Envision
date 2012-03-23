@@ -34,10 +34,6 @@
 #include "items/ControlFlowItem.h"
 #include "items/VMethodCF.h"
 
-#include <QtGui/QPainter>
-
-#include <cmath>
-
 namespace ControlFlowVisualization {
 
 ITEM_COMMON_DEFINITIONS(ControlFlowItem, "item")

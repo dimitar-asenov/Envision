@@ -33,7 +33,7 @@
 
 #include "string_components/CastExpressionStringComponents.h"
 
-#include "OOModel/headers/expressions/CastExpression.h"
+#include "OOModel/src/expressions/CastExpression.h"
 
 namespace OOInteraction {
 

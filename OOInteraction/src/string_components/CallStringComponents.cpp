@@ -33,7 +33,7 @@
 
 #include "string_components/CallStringComponents.h"
 
-#include "OOModel/headers/expressions/MethodCallExpression.h"
+#include "OOModel/src/expressions/MethodCallExpression.h"
 
 namespace OOInteraction {
 

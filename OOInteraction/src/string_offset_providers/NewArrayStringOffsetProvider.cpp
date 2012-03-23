@@ -32,7 +32,7 @@
  */
 
 #include "string_offset_providers/NewArrayStringOffsetProvider.h"
-#include "OOVisualization/headers/expressions/VNewExpression.h"
+#include "OOVisualization/src/expressions/VNewExpression.h"
 
 namespace OOInteraction {
 

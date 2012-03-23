@@ -33,7 +33,7 @@
 
 #include "string_components/VariableDeclarationStringComponents.h"
 
-#include "OOModel/headers/expressions/VariableDeclaration.h"
+#include "OOModel/src/expressions/VariableDeclaration.h"
 
 namespace OOInteraction {
 

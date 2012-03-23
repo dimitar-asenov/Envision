@@ -33,8 +33,8 @@
 
 #include "string_offset_providers/TextRendererStringOffsetProvider.h"
 
-#include "VisualizationBase/headers/items/TextRenderer.h"
-#include "VisualizationBase/headers/cursor/TextCursor.h"
+#include "VisualizationBase/src/items/TextRenderer.h"
+#include "VisualizationBase/src/cursor/TextCursor.h"
 
 namespace OOInteraction {
 

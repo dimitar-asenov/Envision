@@ -33,7 +33,7 @@
 
 #include "string_components/ErrorExpressionStringComponents.h"
 
-#include "OOModel/headers/expressions/ErrorExpression.h"
+#include "OOModel/src/expressions/ErrorExpression.h"
 
 namespace OOInteraction {
 

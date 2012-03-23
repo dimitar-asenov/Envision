@@ -34,8 +34,8 @@
 #include "handlers/HControlFlowMethodSwitch.h"
 
 #include "items/VControlFlowMethodSwitch.h"
-#include "InteractionBase/headers/handlers/SetCursorEvent.h"
-#include "VisualizationBase/headers/Scene.h"
+#include "InteractionBase/src/handlers/SetCursorEvent.h"
+#include "VisualizationBase/src/Scene.h"
 
 namespace ControlFlowVisualization {
 

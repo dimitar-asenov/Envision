@@ -37,10 +37,10 @@
 #include "expression_editor/OOExpressionBuilder.h"
 #include "handlers/SetExpressionCursorEvent.h"
 
-#include "OOModel/headers/allOOModelNodes.h"
+#include "OOModel/src/allOOModelNodes.h"
 
-#include "InteractionBase/headers/handlers/SetCursorEvent.h"
-#include "ModelBase/headers/adapter/AdapterManager.h"
+#include "InteractionBase/src/handlers/SetCursorEvent.h"
+#include "ModelBase/src/adapter/AdapterManager.h"
 
 namespace OOInteraction {
 

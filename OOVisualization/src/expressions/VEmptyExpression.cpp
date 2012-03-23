@@ -33,7 +33,7 @@
 
 #include "expressions/VEmptyExpression.h"
 
-#include "OOModel/headers/expressions/EmptyExpression.h"
+#include "OOModel/src/expressions/EmptyExpression.h"
 
 using namespace Visualization;
 using namespace OOModel;

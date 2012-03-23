@@ -34,8 +34,6 @@
 #include "TestRunner.h"
 #include "TestEvent.h"
 #include "EnvisionException.h"
-#include <QtCore/QTextStream>
-#include <QtGui/QApplication>
 
 namespace Envision {
 

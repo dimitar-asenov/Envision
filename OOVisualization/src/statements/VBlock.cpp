@@ -33,7 +33,7 @@
 
 #include "statements/VBlock.h"
 
-#include "VisualizationBase/headers/items/VList.h"
+#include "VisualizationBase/src/items/VList.h"
 
 using namespace Visualization;
 using namespace OOModel;

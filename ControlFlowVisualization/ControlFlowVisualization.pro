@@ -5,8 +5,7 @@ PLUGINS_DIR = $${BUILD_DIR}/plugins
 CONFIG(debug, debug|release):DEFINES += DEBUG
 QMAKE_CXXFLAGS += -Werror \
     -std=c++0x
-INCLUDEPATH += ./headers \
-    ./src \
+INCLUDEPATH += ./src \
     ./test \
     $${ENVISION_ROOT_DIR}
 TARGET = controlflowvisualization
@@ -34,28 +33,28 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/handlers/HControlFlowMethodSwitch.h \
-    headers/items/VControlFlowMethodSwitch.h \
-    headers/precompiled.h \
-    headers/items/VBlockCFStyle.h \
-    headers/items/VBlockCF.h \
-    headers/items/VReturnStatementCF.h \
-    headers/items/VIfStatementCFStyle.h \
-    headers/items/VIfStatementCF.h \
-    headers/items/VLoopStatementCFStyle.h \
-    headers/items/VLoopStatementCF.h \
-    headers/items/VBreakStatementCF.h \
-    headers/items/VContinueStatementCF.h \
-    headers/items/VListCFStyle.h \
-    headers/items/VListCF.h \
-    headers/allCFVisualizations.h \
-    headers/items/VMethodCFStyle.h \
-    headers/items/VMethodCF.h \
-    headers/items/ControlFlowItemStyle.h \
-    headers/items/ControlFlowItem.h \
-    headers/ControlFlowVisualizationException.h \
-    headers/controlflowvisualization_api.h \
+PRECOMPILED_HEADER = src/precompiled.h
+HEADERS += src/ControlFlowVisualizationException.h \
+    src/allCFVisualizations.h \
+    src/controlflowvisualization_api.h \
+    src/handlers/HControlFlowMethodSwitch.h \
+    src/items/ControlFlowItem.h \
+    src/items/ControlFlowItemStyle.h \
+    src/items/VBlockCF.h \
+    src/items/VBlockCFStyle.h \
+    src/items/VBreakStatementCF.h \
+    src/items/VContinueStatementCF.h \
+    src/items/VControlFlowMethodSwitch.h \
+    src/items/VIfStatementCF.h \
+    src/items/VIfStatementCFStyle.h \
+    src/items/VListCF.h \
+    src/items/VListCFStyle.h \
+    src/items/VLoopStatementCF.h \
+    src/items/VLoopStatementCFStyle.h \
+    src/items/VMethodCF.h \
+    src/items/VMethodCFStyle.h \
+    src/items/VReturnStatementCF.h \
+    src/precompiled.h \
     src/controlflowvisualization.h
 SOURCES += src/handlers/HControlFlowMethodSwitch.cpp \
     src/items/VControlFlowMethodSwitch.cpp \

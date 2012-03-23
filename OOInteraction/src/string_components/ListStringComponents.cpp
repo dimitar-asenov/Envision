@@ -33,9 +33,7 @@
 
 #include "string_components/ListStringComponents.h"
 
-#include "ModelBase/headers/nodes/List.h"
-
-#include "Core/headers/global.h"
+#include "ModelBase/src/nodes/List.h"
 
 namespace OOInteraction {
 

@@ -33,7 +33,7 @@
 
 #include "literals/VBooleanLiteral.h"
 
-#include "ModelBase/headers/Model.h"
+#include "ModelBase/src/Model.h"
 
 
 using namespace OOModel;

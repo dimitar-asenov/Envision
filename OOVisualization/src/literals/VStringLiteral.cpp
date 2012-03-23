@@ -33,8 +33,8 @@
 
 #include "literals/VStringLiteral.h"
 
-#include "VisualizationBase/headers/items/Static.h"
-#include "ModelBase/headers/Model.h"
+#include "VisualizationBase/src/items/Static.h"
+#include "ModelBase/src/Model.h"
 
 using namespace OOModel;
 using namespace Visualization;

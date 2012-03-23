@@ -33,7 +33,7 @@
 
 #include "expression_editor/operators/NewArrayDescriptor.h"
 
-#include "OOModel/headers/expressions/NewExpression.h"
+#include "OOModel/src/expressions/NewExpression.h"
 
 namespace OOInteraction {
 

@@ -3,10 +3,10 @@ CONFIG(release, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/ReleaseBuild
 CONFIG(debug, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/DebugBuild
 PLUGINS_DIR = $${BUILD_DIR}/plugins
 CONFIG(debug, debug|release):DEFINES += DEBUG
-QMAKE_CXXFLAGS += -Werror -std=c++0x
-INCLUDEPATH += ./headers \
-	./src \
-	./test \
+QMAKE_CXXFLAGS += -Werror \
+    -std=c++0x
+INCLUDEPATH += ./src \
+    ./test \
     $${ENVISION_ROOT_DIR}
 TARGET = helloworld
 DEFINES += HELLOWORLD_LIBRARY
@@ -19,11 +19,12 @@ CONFIG += plugin \
 target.path = $$PLUGINS_DIR
 pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
-INSTALLS += target pluginmeta
-PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/precompiled.h \
-    headers/HelloWorldPrinter.h \
-    headers/helloworld_api.h \
+INSTALLS += target \
+    pluginmeta
+PRECOMPILED_HEADER = src/precompiled.h
+HEADERS += src/HelloWorldPrinter.h \
+    src/helloworld_api.h \
+    src/precompiled.h \
     src/helloworld.h
 SOURCES += src/HelloWorldPrinter.cpp \
     src/helloworld.cpp

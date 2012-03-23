@@ -33,13 +33,13 @@
 
 #include "handlers/HIfStatement.h"
 
-#include "OOVisualization/headers/statements/VIfStatement.h"
-#include "OOModel/headers/expressions/EmptyExpression.h"
-#include "OOModel/headers/statements/ExpressionStatement.h"
+#include "OOVisualization/src/statements/VIfStatement.h"
+#include "OOModel/src/expressions/EmptyExpression.h"
+#include "OOModel/src/statements/ExpressionStatement.h"
 
-#include "InteractionBase/headers/handlers/SetCursorEvent.h"
-#include "VisualizationBase/headers/items/VList.h"
-#include "VisualizationBase/headers/cursor/LayoutCursor.h"
+#include "InteractionBase/src/handlers/SetCursorEvent.h"
+#include "VisualizationBase/src/items/VList.h"
+#include "VisualizationBase/src/cursor/LayoutCursor.h"
 
 namespace OOInteraction {
 

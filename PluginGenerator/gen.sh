@@ -40,7 +40,7 @@ AUTHOR=$4
 DATE=`date +"$DATE_FORMAT"`
 
 PLUGIN_DIR=$WORKSPACE_DIR/$PLUGIN_NAME
-FILE_LIST="$PLUGIN_DIR/.project $PLUGIN_DIR/.cproject $PLUGIN_DIR/.gitignore $PLUGIN_DIR/*.* $PLUGIN_DIR/headers/*.* $PLUGIN_DIR/src/*.* $PLUGIN_DIR/test/*.*"
+FILE_LIST="$PLUGIN_DIR/.project $PLUGIN_DIR/.cproject $PLUGIN_DIR/.gitignore $PLUGIN_DIR/*.* $PLUGIN_DIR/src/*.* $PLUGIN_DIR/test/*.*"
 
 if [ -d $PLUGIN_DIR ]
 then
@@ -63,8 +63,8 @@ sed -i -e "s/AUTHOR/$AUTHOR/g" $FILE_LIST
 sed -i -e "s/DATE/$DATE/g" $FILE_LIST
 
 echo "Renaming files..."
-mv $PLUGIN_DIR/headers/plugin_api.h $PLUGIN_DIR/headers/${PLUGIN_NAME_LOWER}_api.h
-mv $PLUGIN_DIR/headers/PluginException.h $PLUGIN_DIR/headers/${PLUGIN_NAME}Exception.h
+mv $PLUGIN_DIR/src/plugin_api.h $PLUGIN_DIR/src/${PLUGIN_NAME_LOWER}_api.h
+mv $PLUGIN_DIR/src/PluginException.h $PLUGIN_DIR/src/${PLUGIN_NAME}Exception.h
 mv $PLUGIN_DIR/src/plugin.h $PLUGIN_DIR/src/${PLUGIN_NAME_LOWER}.h
 mv $PLUGIN_DIR/src/plugin.cpp $PLUGIN_DIR/src/${PLUGIN_NAME_LOWER}.cpp
 mv $PLUGIN_DIR/src/PluginException.cpp $PLUGIN_DIR/src/${PLUGIN_NAME}Exception.cpp
@@ -77,5 +77,5 @@ echo "Note: Remember to configure the project dependencies:"
 echo "  - Include additional dependencies on other plug-ins in the .plugin file"
 echo "  - Include the corresponding library dependencies in the .pro file"
 echo "  - If using Eclipse, make the project dependent on the other projects it uses (Project Properties > Referenced Projects)"
-echo "  - Configure the precomliped header 'headers/precompiled.h' to include the precompiled headers of libraries it uses"
+echo "  - Configure the precomliped header 'src/precompiled.h' to include the precompiled headers of libraries it uses"
 

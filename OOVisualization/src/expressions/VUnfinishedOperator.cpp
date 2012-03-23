@@ -33,7 +33,7 @@
 
 #include "expressions/VUnfinishedOperator.h"
 
-#include "VisualizationBase/headers/items/VText.h"
+#include "VisualizationBase/src/items/VText.h"
 
 using namespace Visualization;
 using namespace OOModel;

@@ -34,10 +34,10 @@
 #include "top_level/VMethod.h"
 #include "OOVisualizationException.h"
 
-#include "VisualizationBase/headers/layouts/PanelBorderLayout.h"
-#include "VisualizationBase/headers/items/Static.h"
-#include "VisualizationBase/headers/items/VText.h"
-#include "VisualizationBase/headers/items/VList.h"
+#include "VisualizationBase/src/layouts/PanelBorderLayout.h"
+#include "VisualizationBase/src/items/Static.h"
+#include "VisualizationBase/src/items/VText.h"
+#include "VisualizationBase/src/items/VList.h"
 
 using namespace Visualization;
 using namespace OOModel;

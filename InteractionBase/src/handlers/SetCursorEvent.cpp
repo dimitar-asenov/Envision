@@ -33,8 +33,8 @@
 
 #include "handlers/SetCursorEvent.h"
 
-#include "VisualizationBase/headers/items/Item.h"
-#include "ModelBase/headers/adapter/AdapterManager.h"
+#include "VisualizationBase/src/items/Item.h"
+#include "ModelBase/src/adapter/AdapterManager.h"
 
 namespace Interaction {
 

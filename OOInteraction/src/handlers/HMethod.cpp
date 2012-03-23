@@ -33,15 +33,15 @@
 
 #include "handlers/HMethod.h"
 
-#include "OOVisualization/headers/top_level/VMethod.h"
-#include "OOModel/headers/expressions/EmptyExpression.h"
-#include "OOModel/headers/statements/ExpressionStatement.h"
-#include "OOModel/headers/elements/FormalArgument.h"
+#include "OOVisualization/src/top_level/VMethod.h"
+#include "OOModel/src/expressions/EmptyExpression.h"
+#include "OOModel/src/statements/ExpressionStatement.h"
+#include "OOModel/src/elements/FormalArgument.h"
 
-#include "InteractionBase/headers/handlers/SetCursorEvent.h"
-#include "VisualizationBase/headers/items/VList.h"
-#include "VisualizationBase/headers/items/VText.h"
-#include "VisualizationBase/headers/cursor/LayoutCursor.h"
+#include "InteractionBase/src/handlers/SetCursorEvent.h"
+#include "VisualizationBase/src/items/VList.h"
+#include "VisualizationBase/src/items/VText.h"
+#include "VisualizationBase/src/cursor/LayoutCursor.h"
 
 namespace OOInteraction {
 

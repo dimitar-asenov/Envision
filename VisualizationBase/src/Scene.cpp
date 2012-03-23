@@ -39,8 +39,8 @@
 #include "cursor/Cursor.h"
 #include "CustomSceneEvent.h"
 
-#include "ModelBase/headers/nodes/Node.h"
-#include "ModelBase/headers/Model.h"
+#include "ModelBase/src/nodes/Node.h"
+#include "ModelBase/src/Model.h"
 
 namespace Visualization {
 

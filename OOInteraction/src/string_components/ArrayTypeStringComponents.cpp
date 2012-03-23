@@ -33,7 +33,7 @@
 
 #include "string_components/ArrayTypeStringComponents.h"
 
-#include "OOModel/headers/types/ArrayType.h"
+#include "OOModel/src/types/ArrayType.h"
 
 namespace OOInteraction {
 

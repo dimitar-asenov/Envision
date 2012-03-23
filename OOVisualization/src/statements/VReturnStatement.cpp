@@ -33,8 +33,8 @@
 
 #include "statements/VReturnStatement.h"
 
-#include "VisualizationBase/headers/items/Static.h"
-#include "VisualizationBase/headers/items/VList.h"
+#include "VisualizationBase/src/items/Static.h"
+#include "VisualizationBase/src/items/VList.h"
 
 using namespace Visualization;
 using namespace OOModel;

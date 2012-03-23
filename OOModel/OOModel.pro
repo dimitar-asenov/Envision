@@ -5,8 +5,7 @@ PLUGINS_DIR = $${BUILD_DIR}/plugins
 CONFIG(debug, debug|release):DEFINES += DEBUG
 QMAKE_CXXFLAGS += -Werror \
     -std=c++0x
-INCLUDEPATH += ./headers \
-    ./src \
+INCLUDEPATH += ./src \
     ./test \
     $${ENVISION_ROOT_DIR}
 TARGET = oomodel
@@ -27,62 +26,62 @@ pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
-PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/expressions/VariableDeclaration.h \
-    headers/expressions/AssignmentExpression.h \
-    headers/statements/ExpressionStatement.h \
-    headers/expressions/CommaExpression.h \
-    headers/expressions/UnfinishedOperator.h \
-    headers/expressions/ErrorExpression.h \
-    headers/expressions/EmptyExpression.h \
-    headers/precompiled.h \
-    headers/elements/StorageSpecifier.h \
-    headers/elements/StatementItemList.h \
-    headers/expressions/ArrayInitializer.h \
-    headers/attributeMacros.h \
-    headers/elements/Visibility.h \
-    headers/elements/FormalArgument.h \
-    headers/elements/FormalResult.h \
-    headers/elements/StatementItem.h \
-    headers/top_level/Class.h \
-    headers/top_level/Field.h \
-    headers/top_level/Library.h \
-    headers/top_level/Method.h \
-    headers/top_level/Module.h \
-    headers/top_level/Project.h \
-    headers/types/ArrayType.h \
-    headers/allOOModelNodes.h \
-    headers/TypedListInstantiations.h \
-    headers/expressions/ReferenceExpression.h \
-    headers/expressions/MethodCallExpression.h \
-    headers/statements/ForEachStatement.h \
-    headers/statements/SwitchCase.h \
-    headers/statements/SwitchStatement.h \
-    headers/statements/ReturnStatement.h \
-    headers/statements/ContinueStatement.h \
-    headers/statements/BreakStatement.h \
-    headers/statements/LoopStatement.h \
-    headers/statements/IfStatement.h \
-    headers/statements/Block.h \
-    headers/expressions/CastExpression.h \
-    headers/expressions/BinaryOperation.h \
-    headers/expressions/UnaryOperation.h \
-    headers/types/NamedType.h \
-    headers/types/PrimitiveType.h \
-    headers/types/Type.h \
-    headers/expressions/NewExpression.h \
-    headers/expressions/VariableAccess.h \
-    headers/expressions/ThisExpression.h \
-    headers/expressions/NullLiteral.h \
-    headers/expressions/CharacterLiteral.h \
-    headers/expressions/BooleanLiteral.h \
-    headers/expressions/StringLiteral.h \
-    headers/expressions/FloatLiteral.h \
-    headers/expressions/IntegerLiteral.h \
-    headers/statements/Statement.h \
-    headers/expressions/Expression.h \
-    headers/OOModelException.h \
-    headers/oomodel_api.h \
+PRECOMPILED_HEADER = src/precompiled.h
+HEADERS += src/OOModelException.h \
+    src/TypedListInstantiations.h \
+    src/allOOModelNodes.h \
+    src/attributeMacros.h \
+    src/elements/FormalArgument.h \
+    src/elements/FormalResult.h \
+    src/elements/StatementItem.h \
+    src/elements/StatementItemList.h \
+    src/elements/StorageSpecifier.h \
+    src/elements/Visibility.h \
+    src/expressions/ArrayInitializer.h \
+    src/expressions/AssignmentExpression.h \
+    src/expressions/BinaryOperation.h \
+    src/expressions/BooleanLiteral.h \
+    src/expressions/CastExpression.h \
+    src/expressions/CharacterLiteral.h \
+    src/expressions/CommaExpression.h \
+    src/expressions/EmptyExpression.h \
+    src/expressions/ErrorExpression.h \
+    src/expressions/Expression.h \
+    src/expressions/FloatLiteral.h \
+    src/expressions/IntegerLiteral.h \
+    src/expressions/MethodCallExpression.h \
+    src/expressions/NewExpression.h \
+    src/expressions/NullLiteral.h \
+    src/expressions/ReferenceExpression.h \
+    src/expressions/StringLiteral.h \
+    src/expressions/ThisExpression.h \
+    src/expressions/UnaryOperation.h \
+    src/expressions/UnfinishedOperator.h \
+    src/expressions/VariableAccess.h \
+    src/expressions/VariableDeclaration.h \
+    src/oomodel_api.h \
+    src/precompiled.h \
+    src/statements/Block.h \
+    src/statements/BreakStatement.h \
+    src/statements/ContinueStatement.h \
+    src/statements/ExpressionStatement.h \
+    src/statements/ForEachStatement.h \
+    src/statements/IfStatement.h \
+    src/statements/LoopStatement.h \
+    src/statements/ReturnStatement.h \
+    src/statements/Statement.h \
+    src/statements/SwitchCase.h \
+    src/statements/SwitchStatement.h \
+    src/top_level/Class.h \
+    src/top_level/Field.h \
+    src/top_level/Library.h \
+    src/top_level/Method.h \
+    src/top_level/Module.h \
+    src/top_level/Project.h \
+    src/types/ArrayType.h \
+    src/types/NamedType.h \
+    src/types/PrimitiveType.h \
+    src/types/Type.h \
     src/oomodel.h
 SOURCES += src/expressions/VariableDeclaration.cpp \
     src/expressions/AssignmentExpression.cpp \

@@ -33,9 +33,9 @@
 
 #include "expressions/VThisExpression.h"
 
-#include "OOModel/headers/expressions/ThisExpression.h"
+#include "OOModel/src/expressions/ThisExpression.h"
 
-#include "VisualizationBase/headers/items/Text.h"
+#include "VisualizationBase/src/items/Text.h"
 
 using namespace Visualization;
 using namespace OOModel;

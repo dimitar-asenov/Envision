@@ -33,8 +33,8 @@
 
 #include "expression_editor/operators/InitializerDescriptor.h"
 
-#include "OOModel/headers/expressions/ArrayInitializer.h"
-#include "OOModel/headers/expressions/CommaExpression.h"
+#include "OOModel/src/expressions/ArrayInitializer.h"
+#include "OOModel/src/expressions/CommaExpression.h"
 
 namespace OOInteraction {
 

@@ -35,8 +35,6 @@
 #define TESTRUNNER_H_
 
 #include "PluginManager.h"
-#include <QtCore/QEvent>
-#include <QtCore/QObject>
 
 namespace Envision {
 

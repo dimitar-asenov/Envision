@@ -33,7 +33,7 @@
 
 #include "string_components/AssignmentStringComponents.h"
 
-#include "OOModel/headers/expressions/AssignmentExpression.h"
+#include "OOModel/src/expressions/AssignmentExpression.h"
 
 namespace OOInteraction {
 

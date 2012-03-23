@@ -34,7 +34,7 @@
 #include "oomodel.h"
 #include "allOOModelNodes.h"
 
-#include "SelfTest/headers/SelfTestSuite.h"
+#include "SelfTest/src/SelfTestSuite.h"
 
 Q_EXPORT_PLUGIN2( oomodel, OOModel::OOModel )
 

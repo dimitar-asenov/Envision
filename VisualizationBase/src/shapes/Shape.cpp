@@ -33,7 +33,6 @@
 
 #include "shapes/Shape.h"
 
-#include <cmath>
 namespace Visualization {
 
 QMap<QString, Shape::ShapeConstructor> Shape::shapeConstructors;

@@ -33,8 +33,6 @@
 
 #include "commands/CommandResult.h"
 
-#include "Core/headers/global.h"
-
 namespace Interaction {
 
 CommandResult::CommandResult(Code resultCode) :

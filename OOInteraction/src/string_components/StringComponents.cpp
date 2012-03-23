@@ -33,9 +33,8 @@
 
 #include "string_components/StringComponents.h"
 
-#include "ModelBase/headers/nodes/Node.h"
-#include "ModelBase/headers/adapter/AdapterManager.h"
-#include "Core/headers/global.h"
+#include "ModelBase/src/nodes/Node.h"
+#include "ModelBase/src/adapter/AdapterManager.h"
 
 namespace OOInteraction {
 

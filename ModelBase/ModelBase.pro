@@ -5,8 +5,7 @@ PLUGINS_DIR = $${BUILD_DIR}/plugins
 CONFIG(debug, debug|release):DEFINES += DEBUG
 QMAKE_CXXFLAGS += -Werror \
     -std=c++0x
-INCLUDEPATH += ./headers \
-    ./src \
+INCLUDEPATH += ./src \
     ./test \
     $${ENVISION_ROOT_DIR}
 TARGET = modelbase
@@ -26,51 +25,51 @@ pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
-PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/adapter/AdapterManager.h \
-    headers/precompiled.h \
+PRECOMPILED_HEADER = src/precompiled.h
+HEADERS += src/InterruptibleThread.h \
+    src/Model.h \
+    src/ModelException.h \
+    src/NodeReadWriteLock.h \
+    src/TypedListInstantiations.h \
+    src/adapter/AdapterManager.h \
+    src/commands/ExtendedNodeChild.h \
+    src/commands/FieldSet.h \
+    src/commands/ListInsert.h \
+    src/commands/ListPut.h \
+    src/commands/ListRemove.h \
+    src/commands/NameChange.h \
+    src/commands/PointerFieldSet.h \
+    src/commands/UndoCommand.h \
+    src/modelbase_api.h \
+    src/nodes/Boolean.h \
+    src/nodes/Character.h \
+    src/nodes/Extendable/Attribute.h \
+    src/nodes/Extendable/AttributeChain.h \
+    src/nodes/Extendable/ExtendableIndex.h \
+    src/nodes/Extendable/ExtendableNode.h \
+    src/nodes/Float.h \
+    src/nodes/Integer.h \
+    src/nodes/List.h \
+    src/nodes/Node.h \
+    src/nodes/Reference.h \
+    src/nodes/Text.h \
+    src/nodes/TypedList.h \
+    src/nodes/TypedListDefinition.h \
+    src/nodes/nodeMacros.h \
+    src/persistence/ClipboardStore.h \
+    src/persistence/PersistedNode.h \
+    src/persistence/PersistedValue.h \
+    src/persistence/PersistentStore.h \
+    src/precompiled.h \
+    src/test_nodes/BinaryNode.h \
+    src/test_nodes/BinaryNodeAccessUnit.h \
+    src/test_nodes/BinaryNodePersistenceUnit.h \
+    src/test_nodes/PartialList.h \
+    src/test_nodes/PositionExtension.h \
     src/commands/AddModifiedNode.h \
-    headers/test_nodes/PositionExtension.h \
-    headers/TypedListInstantiations.h \
-    headers/nodes/Character.h \
-    headers/nodes/Boolean.h \
-    headers/nodes/Float.h \
-    headers/nodes/TypedListDefinition.h \
-    headers/nodes/TypedList.h \
-    headers/commands/ListPut.h \
-    headers/commands/ExtendedNodeChild.h \
-    headers/persistence/ClipboardStore.h \
-    headers/persistence/PersistentStore.h \
-    headers/persistence/PersistedValue.h \
-    headers/persistence/PersistedNode.h \
-    headers/test_nodes/BinaryNodePersistenceUnit.h \
-    headers/test_nodes/PartialList.h \
-    headers/test_nodes/BinaryNodeAccessUnit.h \
-    headers/test_nodes/BinaryNode.h \
-    headers/commands/ListRemove.h \
-    headers/commands/ListInsert.h \
-    headers/commands/NameChange.h \
-    headers/commands/PointerFieldSet.h \
-    headers/nodes/List.h \
     test/NotificationListener.h \
-    headers/commands/UndoCommand.h \
-    headers/nodes/nodeMacros.h \
-    headers/nodes/Node.h \
-    headers/nodes/Extendable/Attribute.h \
-    headers/nodes/Extendable/AttributeChain.h \
-    headers/nodes/Extendable/ExtendableIndex.h \
-    headers/nodes/Extendable/ExtendableNode.h \
     src/commands/SetModificationTarget.h \
-    headers/InterruptibleThread.h \
-    headers/NodeReadWriteLock.h \
-    headers/commands/FieldSet.h \
-    headers/nodes/Reference.h \
     test/PersistentStoreMock.h \
-    headers/ModelException.h \
-    headers/nodes/Integer.h \
-    headers/nodes/Text.h \
-    headers/Model.h \
-    headers/modelbase_api.h \
     src/modelbase.h
 SOURCES += src/adapter/AdapterManager.cpp \
     src/commands/AddModifiedNode.cpp \

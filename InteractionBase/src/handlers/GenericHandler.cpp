@@ -36,11 +36,11 @@
 #include "commands/CommandExecutionEngine.h"
 #include "vis/CommandPrompt.h"
 
-#include "VisualizationBase/headers/Scene.h"
-#include "VisualizationBase/headers/cursor/Cursor.h"
-#include "FilePersistence/headers/SystemClipboard.h"
-#include "ModelBase/headers/nodes/List.h"
-#include "ModelBase/headers/nodes/Extendable/ExtendableNode.h"
+#include "VisualizationBase/src/Scene.h"
+#include "VisualizationBase/src/cursor/Cursor.h"
+#include "FilePersistence/src/SystemClipboard.h"
+#include "ModelBase/src/nodes/List.h"
+#include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
 
 namespace Interaction {
 

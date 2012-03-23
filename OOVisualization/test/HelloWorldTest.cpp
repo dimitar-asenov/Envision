@@ -32,24 +32,20 @@
  **********************************************************************************************************************/
 
 #include "oovisualization.h"
-#include "SelfTest/headers/SelfTestSuite.h"
+#include "SelfTest/src/SelfTestSuite.h"
 
-#include "OOModel/headers/allOOModelNodes.h"
+#include "OOModel/src/allOOModelNodes.h"
 
-#include "VisualizationBase/headers/VisualizationManager.h"
-#include "VisualizationBase/headers/Scene.h"
-#include "VisualizationBase/headers/views/MainView.h"
-#include "VisualizationBase/headers/ModelRenderer.h"
-#include "VisualizationBase/headers/items/VExtendable.h"
-#include "VisualizationBase/headers/items/VText.h"
-#include "VisualizationBase/headers/items/VList.h"
-#include "VisualizationBase/headers/node_extensions/Position.h"
+#include "VisualizationBase/src/VisualizationManager.h"
+#include "VisualizationBase/src/Scene.h"
+#include "VisualizationBase/src/views/MainView.h"
+#include "VisualizationBase/src/ModelRenderer.h"
+#include "VisualizationBase/src/items/VExtendable.h"
+#include "VisualizationBase/src/items/VText.h"
+#include "VisualizationBase/src/items/VList.h"
+#include "VisualizationBase/src/node_extensions/Position.h"
 
-#include "ModelBase/headers/Model.h"
-
-#include <QtGui/QDesktopWidget>
-#include <QtGui/QApplication>
-#include <QtCore/QCoreApplication>
+#include "ModelBase/src/Model.h"
 
 using namespace OOModel;
 using namespace Visualization;

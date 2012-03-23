@@ -33,8 +33,6 @@
 
 #include "items/ItemRegion.h"
 
-#include <cmath>
-
 namespace Visualization {
 
 ItemRegion::ItemRegion(const QRect& region)

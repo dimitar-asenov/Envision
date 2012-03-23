@@ -33,7 +33,7 @@
 
 #include "string_offset_providers/EmptyExpressionStringOffsetProvider.h"
 
-#include "OOVisualization/headers/expressions/VEmptyExpression.h"
+#include "OOVisualization/src/expressions/VEmptyExpression.h"
 
 namespace OOInteraction {
 

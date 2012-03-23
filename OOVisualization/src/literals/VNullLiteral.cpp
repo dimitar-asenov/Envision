@@ -33,9 +33,9 @@
 
 #include "literals/VNullLiteral.h"
 
-#include "OOModel/headers/expressions/NullLiteral.h"
+#include "OOModel/src/expressions/NullLiteral.h"
 
-#include "VisualizationBase/headers/items/Text.h"
+#include "VisualizationBase/src/items/Text.h"
 
 using namespace Visualization;
 using namespace OOModel;
