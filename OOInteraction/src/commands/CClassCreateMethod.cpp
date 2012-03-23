@@ -81,10 +81,10 @@ Interaction::CommandResult* CClassCreateMethod::execute(Visualization::Item* /*s
 	cl->methods()->append(m);
 	cl->model()->endModification();
 
-	if (name.isNull()) QApplication::postEvent(target->scene(),
+	if (name.isNull()) target->scene()->addPostEventAction(
 		new Interaction::SetCursorEvent(target, m->nameNode(), Interaction::SetCursorEvent::CursorOnLeft));
 	else
-		QApplication::postEvent(target->scene(),
+		target->scene()->addPostEventAction(
 			new Interaction::SetCursorEvent(target, m->nameNode(), Interaction::SetCursorEvent::CursorOnRight));
 
 	return new Interaction::CommandResult();

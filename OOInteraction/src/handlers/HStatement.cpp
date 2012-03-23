@@ -74,7 +74,7 @@ void HStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			lst->node()->model()->endModification();
 
 			lst->setUpdateNeeded();
-			QApplication::postEvent(target->scene(), new Interaction::SetCursorEvent(lst, empty,
+			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(lst, empty,
 					Interaction::SetCursorEvent::CursorOnLeft));
 	}
 

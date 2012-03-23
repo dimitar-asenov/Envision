@@ -67,7 +67,7 @@ void HIfStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			event->accept();
 			if (vif->node()->thenBranch()->size() > 0)
 			{
-				QApplication::postEvent(target->scene(),
+				target->scene()->addPostEventAction(
 						new Interaction::SetCursorEvent(target, vif->node()->thenBranch()->at(0),
 						Interaction::SetCursorEvent::CursorOnLeft));
 			}
@@ -81,7 +81,7 @@ void HIfStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 				vif->node()->model()->endModification();
 
 				vif->thenBranch()->setUpdateNeeded();
-				QApplication::postEvent(target->scene(), new Interaction::SetCursorEvent(target, empty,
+				target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty,
 						Interaction::SetCursorEvent::CursorOnLeft));
 			}
 		}
@@ -92,7 +92,7 @@ void HIfStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 
 			if (vif->node()->elseBranch()->size() > 0)
 			{
-				QApplication::postEvent(target->scene(), new Interaction::SetCursorEvent(target,
+				target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target,
 						vif->node()->elseBranch()->at(0), Interaction::SetCursorEvent::CursorOnLeft));
 			}
 			else
@@ -105,7 +105,7 @@ void HIfStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 				vif->node()->model()->endModification();
 
 				vif->elseBranch()->setUpdateNeeded();
-				QApplication::postEvent(target->scene(), new Interaction::SetCursorEvent(target, empty,
+				target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty,
 						Interaction::SetCursorEvent::CursorOnLeft));
 			}
 		}

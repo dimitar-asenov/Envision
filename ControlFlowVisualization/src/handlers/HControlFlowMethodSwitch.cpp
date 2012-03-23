@@ -58,7 +58,7 @@ void HControlFlowMethodSwitch::keyPressEvent(Visualization::Item *target, QKeyEv
 		if (met)
 		{
 			met->setShowAsControlFlow(!met->isShownAsControlFlow());
-			QApplication::postEvent(target->scene(),
+			target->scene()->addPostEventAction(
 						new Interaction::SetCursorEvent(target, met->node()->nameNode(),
 							Interaction::SetCursorEvent::CursorOnLeft));
 		}

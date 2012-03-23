@@ -63,7 +63,7 @@ void HLoop::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			processed = true;
 			event->accept();
 			if (vloop->node()->condition())
-				QApplication::postEvent(target->scene(), new Interaction::SetCursorEvent(target,
+				target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target,
 										vloop->node()->condition(), Interaction::SetCursorEvent::CursorOnLeft));
 			else
 			{
@@ -73,7 +73,7 @@ void HLoop::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 				vloop->node()->model()->endModification();
 
 				vloop->header()->setUpdateNeeded();
-				QApplication::postEvent(target->scene(), new Interaction::SetCursorEvent(target, empty,
+				target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty,
 						Interaction::SetCursorEvent::CursorOnLeft));
 			}
 		}
@@ -87,7 +87,7 @@ void HLoop::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			vloop->node()->model()->endModification();
 
 			vloop->header()->setUpdateNeeded();
-			QApplication::postEvent(target->scene(), new Interaction::SetCursorEvent(target, empty,
+			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty,
 					Interaction::SetCursorEvent::CursorOnLeft));
 		}
 		else if (vloop->updateStep() && vloop->updateStep()->itemOrChildHasFocus() && event->key() == Qt::Key_Tab)
@@ -95,7 +95,7 @@ void HLoop::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			processed = true;
 			event->accept();
 			if (vloop->node()->initStep())
-				QApplication::postEvent(target->scene(), new Interaction::SetCursorEvent(target,
+				target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target,
 						vloop->node()->initStep(), Interaction::SetCursorEvent::CursorOnLeft));
 			else
 			{
@@ -105,7 +105,7 @@ void HLoop::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 				vloop->node()->model()->endModification();
 
 				vloop->header()->setUpdateNeeded();
-				QApplication::postEvent(target->scene(), new Interaction::SetCursorEvent(target, empty,
+				target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty,
 						Interaction::SetCursorEvent::CursorOnLeft));
 			}
 
@@ -117,7 +117,7 @@ void HLoop::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			event->accept();
 			if (vloop->node()->body()->size() > 0)
 			{
-				QApplication::postEvent(target->scene(),
+				target->scene()->addPostEventAction(
 						new Interaction::SetCursorEvent(target, vloop->node()->body()->at(0),
 								Interaction::SetCursorEvent::CursorOnLeft));
 			}
@@ -129,7 +129,7 @@ void HLoop::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 				vloop->node()->model()->endModification();
 
 				vloop->body()->setUpdateNeeded();
-				QApplication::postEvent(target->scene(), new Interaction::SetCursorEvent(target, empty,
+				target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty,
 						Interaction::SetCursorEvent::CursorOnLeft));
 			}
 

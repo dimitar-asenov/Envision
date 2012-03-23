@@ -164,7 +164,7 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		containerNode->model()->endModification();
 
 		auto parent = static_cast<Visualization::Item*> (topMostItem->parentItem());
-		QApplication::postEvent(target->scene(),
+		target->scene()->addPostEventAction(
 				new Interaction::SetCursorEvent(parent, toFocus, Interaction::SetCursorEvent::CursorOnLeft));
 	}
 	else
@@ -176,7 +176,7 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		containerNode->model()->endModification();
 
 		auto parent = static_cast<Visualization::Item*> (topMostItem->parentItem());
-		QApplication::postEvent(target->scene(), new SetExpressionCursorEvent(parent, newExpression, newIndex));
+		target->scene()->addPostEventAction( new SetExpressionCursorEvent(parent, newExpression, newIndex));
 	}
 
 	GenericHandler::keyPressEvent(target, event);

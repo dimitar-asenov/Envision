@@ -96,7 +96,7 @@ void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			if (index >=0 && index < list->node()->size())
 				focusTarget = list->node()->at<Model::Node>(index);
 
-			QApplication::postEvent(target->scene(),
+			target->scene()->addPostEventAction(
 				new Interaction::SetCursorEvent(target, focusTarget, (event->key() == Qt::Key_Backspace ?
 						(list->layout()->isHorizontal() ?
 								Interaction::SetCursorEvent::CursorOnRight : Interaction::SetCursorEvent::CursorOnBottom)

@@ -79,6 +79,8 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 
 		virtual SceneHandlerItem* sceneHandlerItem();
 
+		void addPostEventAction(QEvent* action);
+
 	public slots:
 		void nodesUpdated(QList<Node*> nodes);
 
@@ -93,8 +95,13 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		QList<Item*> topLevelItems_;
 		QList<SelectedItem*> selections_;
 		QList<Cursor*> cursors_;
+		QList<QEvent*> postEventActions_;
 
 		static ModelRenderer defaultRenderer_;
+
+		bool inEventHandler_;
+
+		void updateItems();
 };
 
 inline void Scene::setRenderer(ModelRenderer* renderer) { renderer_ = renderer? renderer : (&defaultRenderer_); }
