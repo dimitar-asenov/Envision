@@ -52,7 +52,8 @@ class INTERACTIONBASE_API SetCursorEvent : public Visualization::CustomSceneEven
 	public:
 		static const QEvent::Type EventType;
 
-		enum CursorPlacement { CursorOnTop, CursorOnBottom, CursorOnLeft, CursorOnRight, CursorOnCenter };
+		enum CursorPlacement { CursorOnTop, CursorOnBottom, CursorOnLeft, CursorOnRight, CursorOnCenter,
+										CursorAboveOf, CursorBelowOf, CursorLeftOf, CursorRightOf};
 
 		SetCursorEvent(Visualization::Item* parentContainer, Model::Node* node, CursorPlacement placement);
 		virtual void execute();
