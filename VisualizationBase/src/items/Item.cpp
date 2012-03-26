@@ -434,7 +434,7 @@ bool Item::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 			)
 		{
 			int distanceKey = r.distanceTo(source)*10;
-			if (r.cursor() && distanceKey > 0) distanceKey -= 5;
+			if (r.cursor()) distanceKey -= 5;
 			matching.insert(distanceKey, &r);
 		}
 	}
