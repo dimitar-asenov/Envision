@@ -137,9 +137,11 @@ int StringOffsetProvider::itemOffset(Visualization::Item* item, int stringCompon
 bool StringOffsetProvider::setOffsetInListItem(int& offset, Visualization::VList* list,
 		const QString& prefix, const QString& separator, const QString& /*postfix*/)
 {
-	QStringList components = StringOffsetProvider::components(list->node());
+	if (offset == 0) return list->moveCursor( Visualization::Item::MoveOnPosition, QPoint(0,0));
 
 	offset -= prefix.size();
+	QStringList components = StringOffsetProvider::components(list->node());
+
 	for (int i = 0; i<list->length(); ++i)
 	{
 		if (i>0) offset -= separator.size();
@@ -153,7 +155,10 @@ bool StringOffsetProvider::setOffsetInListItem(int& offset, Visualization::VList
 			offset -= components[i].size();
 	}
 
-	return false;
+	if (offset == 0) // This most likely means that the components are empty
+		return list->moveCursor( Visualization::Item::MoveOnPosition, QPoint(list->width()/2, list->height()/2));
+	else // This means we've reached the end
+		return list->moveCursor( Visualization::Item::MoveOnPosition, QPoint(list->width()-1, list->height()-1));
 }
 
 int StringOffsetProvider::listItemOffset(Visualization::VList* list,
