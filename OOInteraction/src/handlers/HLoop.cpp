@@ -137,7 +137,7 @@ void HLoop::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	}
 
 
-	if (!processed) GenericHandler::keyPressEvent(target, event);
+	if (!processed) HStatement::keyPressEvent(target, event);
 }
 
 } /* namespace OOInteraction */

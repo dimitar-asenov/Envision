@@ -55,7 +55,7 @@ HIfStatement* HIfStatement::instance()
 void HIfStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
 	auto vif = dynamic_cast<OOVisualization::VIfStatement*> ( target );
-	bool processed = false;
+	event->ignore();
 
 	if (event->modifiers() == Qt::NoModifier)
 	{
@@ -63,7 +63,6 @@ void HIfStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 				&& (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) )
 			|| (vif->elseBranch()->itemOrChildHasFocus() && event->key() == Qt::Key_Tab))
 		{
-			processed = true;
 			event->accept();
 			if (vif->node()->thenBranch()->size() > 0)
 			{
@@ -87,7 +86,6 @@ void HIfStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		}
 		else if (vif->thenBranch()->itemOrChildHasFocus() && event->key() == Qt::Key_Tab)
 		{
-			processed = true;
 			event->accept();
 
 			if (vif->node()->elseBranch()->size() > 0)
@@ -112,7 +110,7 @@ void HIfStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	}
 
 
-	if (!processed) GenericHandler::keyPressEvent(target, event);
+	if (!event->isAccepted()) HStatement::keyPressEvent(target, event);
 }
 
 } /* namespace OOInteraction */

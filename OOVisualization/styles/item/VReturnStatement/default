@@ -1,22 +1,12 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/Item/default">
-	<shape prototypes="shape/Box/default">
-		Box
-		<backgroundBrush>
-			<style>1</style>
-			<color>
-				<alpha>255</alpha>
-				<red>255</red>
-				<green>128</green>
-				<blue>128</blue>
-			</color>
-		</backgroundBrush>
-	</shape>
 	<layout prototypes="layout/SequentialLayout/default">
 		<spaceBetweenElements>5</spaceBetweenElements>
 	</layout>
-	<symbol prototypes="item/Symbol/default">
-		<symbol>⏎</symbol>
+	<symbol prototypes="icon/SVGIcon/default">
+		<filename>styles/icon/icon-exit.svg</filename>
+		<width>30</width>
+		<height>25</height>
 	</symbol>
 	<values prototypes="item/VList/default">
 		<shape/>
