@@ -50,6 +50,7 @@
 #include "string_components/ErrorExpressionStringComponents.h"
 #include "string_components/CastExpressionStringComponents.h"
 #include "string_components/CommaExpressionStringComponents.h"
+#include "string_components/ConditionalExpressionStringComponents.h"
 #include "string_components/NewArrayStringComponents.h"
 #include "string_components/InitializerStringComponents.h"
 #include "string_components/BooleanLiteralStringComponents.h"
@@ -116,6 +117,7 @@ bool OOInteraction::initialize(Envision::EnvisionManager&)
 	OOVisualization::VUnaryOperation::setInteractionHandler(HExpression::instance());
 	OOVisualization::VBinaryOperation::setInteractionHandler(HExpression::instance());
 	OOVisualization::VCommaExpression::setInteractionHandler(HExpression::instance());
+	OOVisualization::VConditionalExpression::setInteractionHandler(HExpression::instance());
 	OOVisualization::VArrayInitializer::setInteractionHandler(HExpression::instance());
 	OOVisualization::VEmptyExpression::setInteractionHandler(HExpression::instance());
 	OOVisualization::VErrorExpression::setInteractionHandler(HExpression::instance());
@@ -149,6 +151,8 @@ bool OOInteraction::initialize(Envision::EnvisionManager&)
 		<StringComponents, CastExpressionStringComponents, OOModel::CastExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringComponents, CommaExpressionStringComponents, OOModel::CommaExpression>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringComponents, ConditionalExpressionStringComponents, OOModel::ConditionalExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringComponents, InitializerStringComponents, OOModel::ArrayInitializer>();
 	Model::AdapterManager::registerAdapterViaConstructor
@@ -195,6 +199,8 @@ bool OOInteraction::initialize(Envision::EnvisionManager&)
 		<StringOffsetProvider, CastStringOffsetProvider, OOVisualization::VCastExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, SequentialVisualizationStringOffsetProvider, OOVisualization::VCommaExpression>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringOffsetProvider, SequentialVisualizationStringOffsetProvider, OOVisualization::VConditionalExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, NewArrayStringOffsetProvider, OOVisualization::VNewExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor

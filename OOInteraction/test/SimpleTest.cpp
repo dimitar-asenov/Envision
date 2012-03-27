@@ -180,6 +180,8 @@ Method* addDivBySix(Model::Model* model, Class* parent)
 
 	divbysix->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("int abc=5+3")));
 
+	divbysix->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("int cond=abc<50?42:b+c")));
+
 	VariableDeclaration* result = new VariableDeclaration();
 	divbysix->items()->append( new ExpressionStatement(result) );
 	result->setName("result");

@@ -34,7 +34,9 @@ INSTALLS += target \
     pluginmeta \
     styles
 PRECOMPILED_HEADER = src/precompiled.h
-HEADERS += src/OOInteractionException.h \
+HEADERS += src/string_components/ConditionalExpressionStringComponents.h \
+    src/expression_editor/operators/ConditionalExpressionDescriptor.h \
+    src/OOInteractionException.h \
     src/commands/CClassCreateMethod.h \
     src/commands/CProjectCreateClass.h \
     src/expression_editor/OOExpressionBuilder.h \
@@ -96,7 +98,9 @@ HEADERS += src/OOInteractionException.h \
     src/string_offset_providers/TextRendererStringOffsetProvider.h \
     src/string_offset_providers/VariableDeclarationStringOffsetProvider.h \
     src/oointeraction.h
-SOURCES += src/handlers/HLoop.cpp \
+SOURCES += src/string_components/ConditionalExpressionStringComponents.cpp \
+    src/expression_editor/operators/ConditionalExpressionDescriptor.cpp \
+    src/handlers/HLoop.cpp \
     src/handlers/HIfStatement.cpp \
     src/string_offset_providers/VariableDeclarationStringOffsetProvider.cpp \
     src/string_components/VariableDeclarationStringComponents.cpp \

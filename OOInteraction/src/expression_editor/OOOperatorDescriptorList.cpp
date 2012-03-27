@@ -44,6 +44,7 @@
 #include "expression_editor/operators/ArrayTypeDescriptor.h"
 #include "expression_editor/operators/AssignmentDescriptor.h"
 #include "expression_editor/operators/DeclarationDescriptor.h"
+#include "expression_editor/operators/ConditionalExpressionDescriptor.h"
 
 namespace OOInteraction {
 
@@ -114,6 +115,10 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 			"conditional or", "expr || expr", 2, 12, Interaction::OperatorDescriptor::LeftAssociative));
 	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::ARRAY_INDEX,
 			"array index", "expr [ expr ]", 2, 1, Interaction::OperatorDescriptor::LeftAssociative));
+
+	// Ternary operators
+	instance()->addDescriptor(new ConditionalExpressionDescriptor("conditional expression", "expr ? expr : expr", 3, 13,
+			Interaction::OperatorDescriptor::RightAssociative));
 
 	// Assignment
 	instance()->addDescriptor(new AssignmentDescriptor(OOModel::AssignmentExpression::ASSIGN,
