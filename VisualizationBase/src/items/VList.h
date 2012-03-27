@@ -48,20 +48,29 @@ class VISUALIZATIONBASE_API VList: public ItemWithNode< LayoutProvider<>, Model:
 {
 	ITEM_COMMON(VList)
 
-	protected:
-		virtual void determineChildren();
-
 	public:
 		VList(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 
 		int length() const;
 		template <class T> T* at(int index);
 		int focusedElementIndex() const;
+
+		bool suppressHandler() const;
+		void setSuppressHandler(bool suppress);
+
+	protected:
+		virtual void determineChildren();
+
+	private:
+		bool suppressHandler_;
 };
 
 inline int VList::length() const { return layout()->length(); }
 inline int VList::focusedElementIndex() const { return layout()->focusedElementIndex(); }
-template <class T> T* VList::at(int index) { return layout()->at<T>(index); }
+template <class T> inline T* VList::at(int index) { return layout()->at<T>(index); }
+
+inline bool VList::suppressHandler() const { return suppressHandler_; }
+inline void VList::setSuppressHandler(bool suppress) { suppressHandler_ = suppress; }
 
 }
 

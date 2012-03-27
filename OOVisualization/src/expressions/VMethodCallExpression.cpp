@@ -77,6 +77,7 @@ void VMethodCallExpression::determineChildren()
 	layout()->setStyle( &style()->layout());
 	name_->setStyle( &style()->name());
 	arguments_->setStyle( &style()->arguments() );
+	arguments_->setSuppressHandler(true);
 	if (prefix_) separator_->setStyle( &style()->separator());
 
 	name_->setText(node()->ref()->path().split(',').last().split(':').last());

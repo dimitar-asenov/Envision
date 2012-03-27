@@ -57,6 +57,9 @@ void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
 	Visualization::VList* list = static_cast<Visualization::VList*> (target);
 
+	if (list->suppressHandler())
+		return  GenericHandler::keyPressEvent(target, event);
+
 	if (event->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier)  && event->key() == Qt::Key_V)
 	{
 
