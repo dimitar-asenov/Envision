@@ -168,12 +168,15 @@ void ControlFlowItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 		yOffset = getShape()->contentTop();
 	}
 
-	painter->setPen( style()->pin());
-	painter->translate( xOffset + style()->pin().width()/2.0, yOffset + style()->pin().width()/2.0);
-
-	for(int i = 0; i < connectors_.size(); ++i)
+	if (showAsControlFlow())
 	{
-		painter->drawPath( connector(connectors_.at(i), arrowEndings_.at(i)) );
+		painter->setPen( style()->pin());
+		painter->translate( xOffset + style()->pin().width()/2.0, yOffset + style()->pin().width()/2.0);
+
+		for(int i = 0; i < connectors_.size(); ++i)
+		{
+			painter->drawPath( connector(connectors_.at(i), arrowEndings_.at(i)) );
+		}
 	}
 }
 
