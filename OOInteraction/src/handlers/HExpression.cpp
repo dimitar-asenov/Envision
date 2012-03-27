@@ -57,7 +57,7 @@ HExpression* HExpression::instance()
 
 void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
-	// TODO implement this better. It is supposed to only let typed characters through and igonre modifier keys.
+	// TODO implement this better. It is supposed to only let typed characters through and ignore modifier keys.
 	// However it does not work with e.g. ALTGR characters.
 	if (event->text().isEmpty()
 			|| event->key() == Qt::Key_Escape
