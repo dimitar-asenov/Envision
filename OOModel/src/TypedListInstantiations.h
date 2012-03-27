@@ -82,6 +82,7 @@ class ErrorExpression;
 class UnfinishedOperator;
 class CommaExpression;
 class AssignmentExpression;
+class ConditionalExpression;
 
 class Type;
 class PrimitiveType;
@@ -134,6 +135,7 @@ template class Q_DECL_IMPORT Model::TypedList<OOModel::ErrorExpression>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::UnfinishedOperator>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::CommaExpression>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::AssignmentExpression>;
+template class Q_DECL_IMPORT Model::TypedList<OOModel::ConditionalExpression>;
 
 template class Q_DECL_IMPORT Model::TypedList<OOModel::Type>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::PrimitiveType>;

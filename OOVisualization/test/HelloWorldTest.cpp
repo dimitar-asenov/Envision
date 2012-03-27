@@ -365,6 +365,20 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 	col3Init->values()->append(new IntegerLiteral(8));
 	col3Init->values()->append(new IntegerLiteral(9));
 
+	VariableDeclaration* var19 = new VariableDeclaration();
+	longMethod->items()->append(new ExpressionStatement(var19));
+	var19->setName("var19");
+	var19->setType(new PrimitiveType(PrimitiveType::INT));
+	ConditionalExpression* ce = new ConditionalExpression();
+	var19->setInitialValue(ce);
+	BinaryOperation* binOp3 = new BinaryOperation();
+	ce->setCondition(binOp3);
+	binOp3->setOp(BinaryOperation::LESS_EQUALS);
+	binOp3->setLeft(new IntegerLiteral(6));
+	binOp3->setRight(new IntegerLiteral(10));
+	ce->setTrueExpression(new IntegerLiteral(42));
+	ce->setFalseExpression(new IntegerLiteral(0));
+
 	IfStatement* ifs = new IfStatement();
 	longMethod->items()->append(ifs);
 	BinaryOperation* ifCond = new BinaryOperation();

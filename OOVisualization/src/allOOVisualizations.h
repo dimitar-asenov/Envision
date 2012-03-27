@@ -55,6 +55,7 @@
 #include "expressions/VArrayInitializer.h"
 #include "expressions/VCommaExpression.h"
 #include "expressions/VVariableDeclaration.h"
+#include "expressions/VConditionalExpression.h"
 
 #include "expressions/VEmptyExpression.h"
 #include "expressions/VErrorExpression.h"

@@ -47,6 +47,7 @@ class OOVISUALIZATION_API OperatorStyle : public Visualization::ItemStyle
 		Visualization::SequentialLayoutStyle layout_;
 		Visualization::StaticStyle preSymbol_;
 		Visualization::StaticStyle inSymbol_;
+		Visualization::StaticStyle in2Symbol_;
 		Visualization::StaticStyle postSymbol_;
 
 	public:
@@ -55,12 +56,14 @@ class OOVISUALIZATION_API OperatorStyle : public Visualization::ItemStyle
 		const Visualization::SequentialLayoutStyle& layout() const;
 		const Visualization::StaticStyle& preSymbol() const;
 		const Visualization::StaticStyle& inSymbol() const;
+		const Visualization::StaticStyle& in2Symbol() const;
 		const Visualization::StaticStyle& postSymbol() const;
 };
 
 inline const Visualization::SequentialLayoutStyle& OperatorStyle::layout() const { return layout_; }
 inline const Visualization::StaticStyle& OperatorStyle::preSymbol() const { return preSymbol_; }
 inline const Visualization::StaticStyle& OperatorStyle::inSymbol() const { return inSymbol_; }
+inline const Visualization::StaticStyle& OperatorStyle::in2Symbol() const { return in2Symbol_; }
 inline const Visualization::StaticStyle& OperatorStyle::postSymbol() const { return postSymbol_; }
 
 class OOVISUALIZATION_API OperatorSequenceStyle : public Visualization::ItemStyle
