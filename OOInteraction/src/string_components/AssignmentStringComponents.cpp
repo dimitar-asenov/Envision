@@ -48,7 +48,7 @@ QStringList AssignmentStringComponents::components()
 	if (!exp_) return result;
 
 	// First comes the prefix. Currently there is no assignment operator that has a prefix.
-	result << "" << stringForNode(exp_->left());
+	result << QString() << stringForNode(exp_->left());
 
 	switch(exp_->op())
 	{

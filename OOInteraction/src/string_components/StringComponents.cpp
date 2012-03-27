@@ -43,7 +43,9 @@ StringComponents::~StringComponents()
 
 QString StringComponents::stringForNode(Model::Node* node)
 {
-	return componentsForNode(node).join("");
+	QString res = componentsForNode(node).join("");
+	if (res.isNull()) res = "";
+	return res;
 }
 
 QStringList StringComponents::componentsForNode(Model::Node* node)

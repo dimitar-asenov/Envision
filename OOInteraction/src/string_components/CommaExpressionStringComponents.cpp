@@ -47,7 +47,7 @@ QStringList CommaExpressionStringComponents::components()
 	QStringList result;
 	if (!exp_) return result;
 
-	result << "" << stringForNode(exp_->left()) << "," << stringForNode(exp_->right()) << "";
+	result << QString() << stringForNode(exp_->left()) << "," << stringForNode(exp_->right()) << QString();
 
 	return result;
 }

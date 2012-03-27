@@ -47,8 +47,8 @@ QStringList ConditionalExpressionStringComponents::components()
 	QStringList result;
 	if (!exp_) return result;
 
-	result << "" << stringForNode(exp_->condition()) << "?" << stringForNode(exp_->trueExpression()) << ":"
-			<< stringForNode(exp_->falseExpression()) << "";
+	result << QString() << stringForNode(exp_->condition()) << "?" << stringForNode(exp_->trueExpression()) << ":"
+			<< stringForNode(exp_->falseExpression()) << QString();
 
 	return result;
 }

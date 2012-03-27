@@ -51,7 +51,8 @@ StringOffsetProvider::~StringOffsetProvider()
 
 QString StringOffsetProvider::string()
 {
-	return components().join("");
+	QString res = components().join("");
+	return res.isNull() ? QString("") : res;
 }
 
 QStringList StringOffsetProvider::components()
@@ -77,8 +78,10 @@ QStringList StringOffsetProvider::components(Model::Node* node)
 
 QString StringOffsetProvider::stringFromComponenets(Model::Node* node)
 {
-	auto c = components(node);
-	return c.isEmpty() ? QString() : c.join("");
+	if (!node) return QString();
+
+	QString res = components(node).join("");
+	return res.isNull() ? QString("") : res;
 }
 
 QString StringOffsetProvider::stringFromComponenets(Visualization::Item* item)

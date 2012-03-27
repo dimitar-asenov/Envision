@@ -47,8 +47,8 @@ QStringList UnaryOperatorStringComponents::components()
 	QStringList result;
 	if (!exp_) return result;
 
-	QString pre = "";
-	QString post = "";
+	QString pre;
+	QString post;
 
 	switch(exp_->op())
 	{
