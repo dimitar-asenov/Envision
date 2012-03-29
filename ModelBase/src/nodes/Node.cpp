@@ -37,11 +37,6 @@
 #include "commands/UndoCommand.h"
 #include "ModelException.h"
 
-#include "Core/headers/global.h"
-
-#include <QtCore/QMutexLocker>
-#include <QtCore/QList>
-
 using namespace Logger;
 
 namespace Model {

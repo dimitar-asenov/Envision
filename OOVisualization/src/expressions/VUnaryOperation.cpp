@@ -32,10 +32,9 @@
  **********************************************************************************************************************/
 
 #include "expressions/VUnaryOperation.h"
-#include "Helpers.h"
 
-#include "VisualizationBase/headers/layouts/SequentialLayout.h"
-#include "VisualizationBase/headers/items/Static.h"
+#include "VisualizationBase/src/layouts/SequentialLayout.h"
+#include "VisualizationBase/src/items/Static.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -80,10 +79,6 @@ void VUnaryOperation::determineChildren()
 	layout()->setStyle( &opStyle->layout());
 	if (pre_) pre_->setStyle( &opStyle->preSymbol());
 	if (post_) post_->setStyle( &opStyle->postSymbol());
-
-	bool horizontal = opStyle->layout().direction() == LayoutType::StyleType::LeftToRight
-		|| opStyle->layout().direction() == LayoutType::StyleType::RightToLeft;
-	Helpers::omitBoundingCursorsInExpressions(this, layout(), horizontal);
 }
 
 }

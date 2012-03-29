@@ -34,7 +34,8 @@
 #ifndef CUSTOMMETHODCALL_H
 #define CUSTOMMETHODCALL_H
 
-#include "Core/headers/EnvisionPlugin.h"
+#include "Core/src/EnvisionPlugin.h"
+#include "precompiled.h"
 
 namespace CustomMethodCall {
 

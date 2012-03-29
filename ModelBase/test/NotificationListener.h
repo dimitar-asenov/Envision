@@ -37,9 +37,6 @@
 #include "Model.h"
 #include "nodes/Node.h"
 
-#include <QtCore/QList>
-#include <QtCore/QObject>
-
 namespace Model {
 
 class NotificationListener : public QObject

@@ -39,8 +39,8 @@
 #include "cursor/Cursor.h"
 #include "CustomSceneEvent.h"
 
-#include "ModelBase/headers/nodes/Node.h"
-#include "ModelBase/headers/Model.h"
+#include "ModelBase/src/nodes/Node.h"
+#include "ModelBase/src/Model.h"
 
 namespace Visualization {
 
@@ -57,7 +57,7 @@ const QEvent::Type UpdateSceneEvent::EventType = static_cast<QEvent::Type> (QEve
 
 Scene::Scene()
 	: QGraphicsScene(VisualizationManager::instance().getMainWindow()), needsUpdate_(false),
-	  renderer_(&defaultRenderer_), sceneHandlerItem_(new SceneHandlerItem(this))
+	  renderer_(&defaultRenderer_), sceneHandlerItem_(new SceneHandlerItem(this)), inEventHandler_(false)
 {
 }
 
@@ -92,8 +92,56 @@ void Scene::scheduleUpdate()
 	if (!needsUpdate_)
 	{
 		needsUpdate_ = true;
-		QApplication::postEvent(this, new UpdateSceneEvent());
+		if (!inEventHandler_) QApplication::postEvent(this, new UpdateSceneEvent());
 	}
+}
+
+void Scene::updateItems()
+{
+	// Update Top level items
+	for (int i = 0; i<topLevelItems_.size(); ++i)
+		topLevelItems_.at(i)->updateSubtree();
+
+	// Update Selections
+	// TODO do not recreate all items all the time.
+	for (int i = 0; i<selections_.size(); i++) SAFE_DELETE_ITEM(selections_[i]);
+	QList<QGraphicsItem *> selected = selectedItems();
+
+	// Only display a selection when there are multiple selected items or no cursor
+	bool draw_selections = selected.size() !=1 || cursors_.isEmpty() || cursors_.first()->visualization() == nullptr;
+
+	if (!draw_selections)
+	{
+		QGraphicsItem* selectable = cursors_.first()->owner();
+		while (selectable && ! (selectable->flags() &  QGraphicsItem::ItemIsSelectable))
+			selectable = selectable->parentItem();
+
+		draw_selections = !selectable || selectable != selected.first();
+	}
+
+	if (draw_selections)
+	{
+		for (int i = 0; i<selected.size(); ++i)
+		{
+			Item* s = static_cast<Item*> (selected[i]);
+			selections_.append(new SelectedItem(s));
+			addItem(selections_.last());
+			selections_.last()->updateSubtree();
+		}
+	}
+
+
+	// Update Cursors
+	for (Cursor* c : cursors_)
+	{
+		if (c->visualization())
+		{
+			if (c->visualization()->scene() != this) addItem(c->visualization());
+			c->visualization()->updateSubtree();
+		}
+	}
+
+	needsUpdate_ = false;
 }
 
 void Scene::listenToModel(Model::Model* model)
@@ -115,53 +163,7 @@ void Scene::nodesUpdated(QList<Node*> nodes)
 
 void Scene::customEvent(QEvent *event)
 {
-	if ( event->type() == UpdateSceneEvent::EventType )
-	{
-		// Update Top level items
-		for (int i = 0; i<topLevelItems_.size(); ++i)
-			topLevelItems_.at(i)->updateSubtree();
-
-		// Update Selections
-		// TODO do not recreate all items all the time.
-		for (int i = 0; i<selections_.size(); i++) SAFE_DELETE_ITEM(selections_[i]);
-		QList<QGraphicsItem *> selected = selectedItems();
-
-		// Only display a selection when there are multiple selected items or no cursor
-		bool draw_selections = selected.size() !=1 || cursors_.isEmpty() || cursors_.first()->visualization() == nullptr;
-
-		if (!draw_selections)
-		{
-			QGraphicsItem* selectable = cursors_.first()->owner();
-			while (selectable && ! (selectable->flags() &  QGraphicsItem::ItemIsSelectable))
-				selectable = selectable->parentItem();
-
-			draw_selections = !selectable || selectable != selected.first();
-		}
-
-		if (draw_selections)
-		{
-			for (int i = 0; i<selected.size(); ++i)
-			{
-				Item* s = static_cast<Item*> (selected[i]);
-				selections_.append(new SelectedItem(s));
-				addItem(selections_.last());
-				selections_.last()->updateSubtree();
-			}
-		}
-
-
-		// Update Cursors
-		for (Cursor* c : cursors_)
-		{
-			if (c->visualization())
-			{
-				if (c->visualization()->scene() != this) addItem(c->visualization());
-				c->visualization()->updateSubtree();
-			}
-		}
-
-		needsUpdate_ = false;
-	}
+	if ( event->type() == UpdateSceneEvent::EventType ) updateItems();
 	else if (auto e = dynamic_cast<CustomSceneEvent*>(event))
 	{
 		e->execute();
@@ -172,6 +174,9 @@ void Scene::customEvent(QEvent *event)
 
 bool Scene::event(QEvent *event)
 {
+	inEventHandler_ = true;
+
+	bool result = false;
 	if (event->type() != UpdateSceneEvent::EventType &&
 		 event->type() != QEvent::MetaCall  &&
 		 event->type() != QEvent::GraphicsSceneMouseMove &&
@@ -183,9 +188,28 @@ bool Scene::event(QEvent *event)
 	{
 		//Circumvent the standard TAB handling of the scene.
 		keyPressEvent(static_cast<QKeyEvent *>(event));
-		return true;
+		result = true;
 	}
-	else return QGraphicsScene::event(event);
+	else result = QGraphicsScene::event(event);
+
+	inEventHandler_ = false;
+
+	if (needsUpdate_) updateItems();
+	for(auto e : postEventActions_)
+	{
+		customEvent(e);
+		SAFE_DELETE(e);
+	}
+	postEventActions_.clear();
+
+	return result;
+}
+
+void Scene::addPostEventAction(QEvent* action)
+{
+	if (inEventHandler_)
+		postEventActions_.append(action);
+	else throw VisualizationException("Can not add post event actions when not in event!");
 }
 
 void Scene::setMainCursor(Cursor* cursor)
@@ -199,6 +223,5 @@ void Scene::setMainCursor(Cursor* cursor)
 
 	cursors_.prepend(cursor);
 }
-
 
 }

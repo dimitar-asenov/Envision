@@ -33,8 +33,8 @@
 
 #include "expressions/VVariableDeclaration.h"
 
-#include "VisualizationBase/headers/items/Static.h"
-#include "VisualizationBase/headers/items/VText.h"
+#include "VisualizationBase/src/items/Static.h"
+#include "VisualizationBase/src/items/VText.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -73,6 +73,7 @@ void VVariableDeclaration::determineChildren()
 
 	layout()->synchronizeFirst(type_, node()->type());
 	layout()->synchronizeMid(name_, node()->nameNode(), &style()->name(), 1);
+	name_->setEditable(false);
 	layout()->synchronizeMid(assignmentSymbol_, node()->initialValue() != nullptr, &style()->assignmentSymbol(), 2);
 	layout()->synchronizeLast(initialValue_, node()->initialValue());
 }

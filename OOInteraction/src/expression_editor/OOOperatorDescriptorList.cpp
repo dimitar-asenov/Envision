@@ -43,6 +43,8 @@
 #include "expression_editor/operators/CallDescriptor.h"
 #include "expression_editor/operators/ArrayTypeDescriptor.h"
 #include "expression_editor/operators/AssignmentDescriptor.h"
+#include "expression_editor/operators/DeclarationDescriptor.h"
+#include "expression_editor/operators/ConditionalExpressionDescriptor.h"
 
 namespace OOInteraction {
 
@@ -114,6 +116,10 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::ARRAY_INDEX,
 			"array index", "expr [ expr ]", 2, 1, Interaction::OperatorDescriptor::LeftAssociative));
 
+	// Ternary operators
+	instance()->addDescriptor(new ConditionalExpressionDescriptor("conditional expression", "expr ? expr : expr", 3, 13,
+			Interaction::OperatorDescriptor::RightAssociative));
+
 	// Assignment
 	instance()->addDescriptor(new AssignmentDescriptor(OOModel::AssignmentExpression::ASSIGN,
 				"assign", "expr = expr", 2, 14, Interaction::OperatorDescriptor::RightAssociative));
@@ -147,7 +153,7 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 			Interaction::OperatorDescriptor::LeftAssociative));
 	instance()->addDescriptor(new InitializerDescriptor( "initializer", "{ expr }", 1, 0,
 			Interaction::OperatorDescriptor::NotAssociative));
-	instance()->addDescriptor(new NewArrayDescriptor( "new array", "new expr [ expr ]", 2, 2,
+	instance()->addDescriptor(new NewArrayDescriptor( "new array", "new space expr [ expr ]", 2, 2,
 			Interaction::OperatorDescriptor::RightAssociative));
 	instance()->addDescriptor(new MemberOperatorDescriptor( "member", "expr . id", 2, 1,
 			Interaction::OperatorDescriptor::LeftAssociative));
@@ -155,6 +161,10 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 			Interaction::OperatorDescriptor::LeftAssociative));
 	instance()->addDescriptor(new ArrayTypeDescriptor( "array type", "expr []", 1, 1,
 			Interaction::OperatorDescriptor::LeftAssociative));
+	instance()->addDescriptor(new DeclarationDescriptor( "variable declaration", "expr space id", 2, 40,
+			Interaction::OperatorDescriptor::RightAssociative));
+	instance()->addDescriptor(new DeclarationDescriptor( "variable declaration and initialization",
+			"expr space id = expr", 3, 40, Interaction::OperatorDescriptor::RightAssociative));
 }
 
 } /* namespace OOInteraction */

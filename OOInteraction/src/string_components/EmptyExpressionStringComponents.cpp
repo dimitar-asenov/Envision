@@ -33,7 +33,7 @@
 
 #include "string_components/EmptyExpressionStringComponents.h"
 
-#include "OOModel/headers/expressions/EmptyExpression.h"
+#include "OOModel/src/expressions/EmptyExpression.h"
 
 namespace OOInteraction {
 
@@ -47,7 +47,7 @@ QStringList EmptyExpressionStringComponents::components()
 	QStringList result;
 	if (!exp_) return result;
 
-	result.append("");
+	result << "";
 	return result;
 }
 

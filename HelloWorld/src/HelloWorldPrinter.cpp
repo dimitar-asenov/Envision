@@ -32,7 +32,6 @@
  **********************************************************************************************************************/
 
 #include "HelloWorldPrinter.h"
-#include <QtCore/QTextStream>
 
 namespace Hello {
 

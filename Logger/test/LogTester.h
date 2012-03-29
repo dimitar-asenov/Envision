@@ -36,8 +36,6 @@
 
 #include "Log.h"
 
-#include <QtCore/QObject>
-
 namespace Logger {
 
 class LogTester: public QObject

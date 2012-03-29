@@ -34,16 +34,14 @@
 #include "visualizationbase.h"
 #include "Scene.h"
 #include "views/MainView.h"
-#include "SelfTest/headers/SelfTestSuite.h"
+#include "SelfTest/src/SelfTestSuite.h"
 #include "items/VExtendable.h"
 #include "items/VList.h"
 
-#include "ModelBase/headers/test_nodes/BinaryNode.h"
-#include "ModelBase/headers/nodes/Text.h"
-#include "ModelBase/headers/nodes/List.h"
-#include "ModelBase/headers/Model.h"
-
-#include <QtGui/QApplication>
+#include "ModelBase/src/test_nodes/BinaryNode.h"
+#include "ModelBase/src/nodes/Text.h"
+#include "ModelBase/src/nodes/List.h"
+#include "ModelBase/src/Model.h"
 
 namespace Visualization {
 

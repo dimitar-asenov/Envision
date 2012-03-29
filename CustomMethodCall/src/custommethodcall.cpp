@@ -32,7 +32,7 @@
  **********************************************************************************************************************/
 
 #include "custommethodcall.h"
-#include "SelfTest/headers/SelfTestSuite.h"
+#include "SelfTest/src/SelfTestSuite.h"
 
 #include "CustomVisualization.h"
 
@@ -41,10 +41,10 @@
 #include "items/InsertMethodVis.h"
 #include "items/SumMethodVis.h"
 
-#include "OOModel/headers/expressions/MethodCallExpression.h"
-#include "OOModel/headers/allOOModelNodes.h"
+#include "OOModel/src/expressions/MethodCallExpression.h"
+#include "OOModel/src/allOOModelNodes.h"
 
-#include "VisualizationBase/headers/Scene.h"
+#include "VisualizationBase/src/Scene.h"
 
 Q_EXPORT_PLUGIN2( custommethodcall, CustomMethodCall::CustomMethodCall )
 

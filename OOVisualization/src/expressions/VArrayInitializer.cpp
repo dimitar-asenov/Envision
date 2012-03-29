@@ -33,8 +33,8 @@
 
 #include "expressions/VArrayInitializer.h"
 
-#include "VisualizationBase/headers/layouts/GridLayout.h"
-#include "VisualizationBase/headers/items/VList.h"
+#include "VisualizationBase/src/layouts/GridLayout.h"
+#include "VisualizationBase/src/items/VList.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -111,6 +111,7 @@ void VArrayInitializer::determineChildren()
 
 		layout()->synchronize(values_, node()->values(), &style()->values(), 0,0);
 		values_->setStyle( &style()->values() );
+		values_->setSuppressHandler(true);
 	}
 }
 

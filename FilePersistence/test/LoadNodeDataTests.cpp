@@ -33,13 +33,10 @@
 
 #include "filepersistence.h"
 #include "FileStore.h"
-#include "SelfTest/headers/SelfTestSuite.h"
+#include "SelfTest/src/SelfTestSuite.h"
 
-#include "ModelBase/headers/persistence/PersistedNode.h"
-#include "ModelBase/headers/persistence/PersistedValue.h"
-
-#include <QtCore/QTextStream>
-#include <QtCore/QFile>
+#include "ModelBase/src/persistence/PersistedNode.h"
+#include "ModelBase/src/persistence/PersistedValue.h"
 
 using namespace Model;
 

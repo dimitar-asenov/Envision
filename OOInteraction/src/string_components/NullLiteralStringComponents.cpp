@@ -45,7 +45,7 @@ QStringList NullLiteralStringComponents::components()
 	QStringList result;
 	if (!exp_) return result;
 
-	result.append( "null" );
+	result << "null";
 	return result;
 }
 

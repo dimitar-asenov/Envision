@@ -33,11 +33,11 @@
 
 #include "handlers/HText.h"
 
-#include "VisualizationBase/headers/items/TextRenderer.h"
-#include "VisualizationBase/headers/Scene.h"
-#include "VisualizationBase/headers/cursor/TextCursor.h"
+#include "VisualizationBase/src/items/TextRenderer.h"
+#include "VisualizationBase/src/Scene.h"
+#include "VisualizationBase/src/cursor/TextCursor.h"
 
-#include "ModelBase/headers/Model.h"
+#include "ModelBase/src/Model.h"
 
 namespace Interaction {
 

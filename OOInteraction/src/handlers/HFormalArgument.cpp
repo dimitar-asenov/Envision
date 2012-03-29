@@ -33,7 +33,7 @@
 
 #include "handlers/HFormalArgument.h"
 
-#include "OOVisualization/headers/elements/VFormalArgument.h"
+#include "OOVisualization/src/elements/VFormalArgument.h"
 
 namespace OOInteraction {
 

@@ -37,13 +37,13 @@
 #include "expression_editor/OOOperatorDescriptor.h"
 #include "OOInteractionException.h"
 
-#include "OOModel/headers/allOOModelNodes.h"
-#include "InteractionBase/headers/expression_editor/Value.h"
-#include "InteractionBase/headers/expression_editor/Operator.h"
-#include "InteractionBase/headers/expression_editor/UnfinishedOperator.h"
-#include "InteractionBase/headers/expression_editor/OperatorDescriptor.h"
-#include "InteractionBase/headers/expression_editor/ErrorDescriptor.h"
-#include "InteractionBase/headers/expression_editor/ExpressionEditor.h"
+#include "OOModel/src/allOOModelNodes.h"
+#include "InteractionBase/src/expression_editor/Value.h"
+#include "InteractionBase/src/expression_editor/Operator.h"
+#include "InteractionBase/src/expression_editor/UnfinishedOperator.h"
+#include "InteractionBase/src/expression_editor/OperatorDescriptor.h"
+#include "InteractionBase/src/expression_editor/ErrorDescriptor.h"
+#include "InteractionBase/src/expression_editor/ExpressionEditor.h"
 
 namespace OOInteraction {
 
@@ -158,8 +158,9 @@ void OOExpressionBuilder::visit(Interaction::UnfinishedOperator* unfinished)
 void OOExpressionBuilder::createErrorExpression(Interaction::Operator* op)
 {
 	OOModel::ErrorExpression* error = new OOModel::ErrorExpression();
-	error->setPrefix(op->descriptor()->prefix());
-	error->setPostfix(op->descriptor()->postfix());
+	auto desc = dynamic_cast<Interaction::ErrorDescriptor*>(op->descriptor());
+	error->setPrefix(desc->errorPrefix());
+	error->setPostfix(desc->errorPostfix());
 
 	op->at(0)->accept(this);
 	error->setArg(expression);

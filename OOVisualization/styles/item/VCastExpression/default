@@ -19,5 +19,7 @@
 			<cornerType>2</cornerType>
 		</shape>
 		<direction>2</direction>
+		<noInnerCursors>true</noInnerCursors>
+		<noBoundaryCursors>true</noBoundaryCursors>
 	</layout>
 </style>

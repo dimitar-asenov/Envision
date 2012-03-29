@@ -32,9 +32,8 @@
  */
 
 #include "expressions/VErrorExpression.h"
-#include "Helpers.h"
 
-#include "VisualizationBase/headers/items/VText.h"
+#include "VisualizationBase/src/items/VText.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -77,10 +76,6 @@ void VErrorExpression::determineChildren()
 	//			what's the reason they are being updated.
 	// The style needs to be updated every time since if our own style changes, so will that of the children.
 	layout()->setStyle( &style()->layout());
-
-	bool horizontal = style()->layout().direction() == LayoutType::StyleType::LeftToRight
-		|| style()->layout().direction() == LayoutType::StyleType::RightToLeft;
-	Helpers::omitBoundingCursorsInExpressions(this, layout(), horizontal);
 }
 
 } /* namespace OOVisualization */

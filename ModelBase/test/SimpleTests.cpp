@@ -32,7 +32,7 @@
  **********************************************************************************************************************/
 
 #include "modelbase.h"
-#include "SelfTest/headers/SelfTestSuite.h"
+#include "SelfTest/src/SelfTestSuite.h"
 #include "test_nodes/BinaryNode.h"
 #include "test_nodes/BinaryNodeAccessUnit.h"
 #include "Model.h"

@@ -5,8 +5,7 @@ PLUGINS_DIR = $${BUILD_DIR}/plugins
 CONFIG(debug, debug|release):DEFINES += DEBUG
 QMAKE_CXXFLAGS += -Werror \
     -std=c++0x
-INCLUDEPATH += ./headers \
-    ./src \
+INCLUDEPATH += ./src \
     ./test \
     $${ENVISION_ROOT_DIR}
 TARGET = filepersistence
@@ -28,14 +27,14 @@ pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
-PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/NodeIdMap.h \
-    headers/precompiled.h \
-    headers/XMLModel.h \
-    headers/SystemClipboard.h \
-    headers/FilePersistenceException.h \
-    headers/FileStore.h \
-    headers/filepersistence_api.h \
+PRECOMPILED_HEADER = src/precompiled.h
+HEADERS += src/FilePersistenceException.h \
+    src/FileStore.h \
+    src/NodeIdMap.h \
+    src/SystemClipboard.h \
+    src/XMLModel.h \
+    src/filepersistence_api.h \
+    src/precompiled.h \
     src/filepersistence.h
 SOURCES += src/NodeIdMap.cpp \
     test/TypedListTests.cpp \

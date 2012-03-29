@@ -34,8 +34,8 @@
 #include "handlers/HControlFlowMethodSwitch.h"
 
 #include "items/VControlFlowMethodSwitch.h"
-#include "InteractionBase/headers/handlers/SetCursorEvent.h"
-#include "VisualizationBase/headers/Scene.h"
+#include "InteractionBase/src/handlers/SetCursorEvent.h"
+#include "VisualizationBase/src/Scene.h"
 
 namespace ControlFlowVisualization {
 
@@ -58,7 +58,7 @@ void HControlFlowMethodSwitch::keyPressEvent(Visualization::Item *target, QKeyEv
 		if (met)
 		{
 			met->setShowAsControlFlow(!met->isShownAsControlFlow());
-			QApplication::postEvent(target->scene(),
+			target->scene()->addPostEventAction(
 						new Interaction::SetCursorEvent(target, met->node()->nameNode(),
 							Interaction::SetCursorEvent::CursorOnLeft));
 		}

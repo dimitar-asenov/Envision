@@ -32,10 +32,9 @@
  **********************************************************************************************************************/
 
 #include "literals/VStringLiteral.h"
-#include "Helpers.h"
 
-#include "VisualizationBase/headers/items/Static.h"
-#include "ModelBase/headers/Model.h"
+#include "VisualizationBase/src/items/Static.h"
+#include "ModelBase/src/Model.h"
 
 using namespace OOModel;
 using namespace Visualization;
@@ -80,8 +79,6 @@ void VStringLiteral::determineChildren()
 	vis_->setEditable(false);
 	if (pre_) pre_->setStyle( &style()->preSymbol());
 	if (post_) post_->setStyle( &style()->postSymbol());
-
-	Helpers::omitBoundingCursorsInExpressions(this, layout(), true);
 }
 
 }

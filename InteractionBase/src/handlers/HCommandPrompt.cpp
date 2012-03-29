@@ -37,7 +37,7 @@
 #include "commands/CommandExecutionEngine.h"
 #include "commands/CommandResult.h"
 
-#include "VisualizationBase/headers/Scene.h"
+#include "VisualizationBase/src/Scene.h"
 
 namespace Interaction {
 

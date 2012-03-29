@@ -33,9 +33,34 @@
 
 #include "string_components/StringComponents.h"
 
+#include "ModelBase/src/nodes/Node.h"
+#include "ModelBase/src/adapter/AdapterManager.h"
+
 namespace OOInteraction {
 
 StringComponents::~StringComponents()
 {}
+
+QString StringComponents::stringForNode(Model::Node* node)
+{
+	QString res = componentsForNode(node).join("");
+	if (res.isNull()) res = "";
+	return res;
+}
+
+QStringList StringComponents::componentsForNode(Model::Node* node)
+{
+	QStringList result;
+	if (!node) return result;
+
+	StringComponents* sc = Model::AdapterManager::adapt<StringComponents>(node);
+	if (sc)
+	{
+		result = sc->components();
+		SAFE_DELETE(sc);
+	}
+
+	return result;
+}
 
 } /* namespace OOInteraction */

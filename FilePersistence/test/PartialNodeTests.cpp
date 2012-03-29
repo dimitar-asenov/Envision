@@ -33,14 +33,11 @@
 
 #include "filepersistence.h"
 #include "FileStore.h"
-#include "ModelBase/headers/test_nodes/PartialList.h"
-#include "SelfTest/headers/SelfTestSuite.h"
-#include "ModelBase/headers/Model.h"
-#include "ModelBase/headers/nodes/Text.h"
-#include "ModelBase/headers/nodes/List.h"
-
-#include <QtCore/QTextStream>
-#include <QtCore/QFile>
+#include "ModelBase/src/test_nodes/PartialList.h"
+#include "SelfTest/src/SelfTestSuite.h"
+#include "ModelBase/src/Model.h"
+#include "ModelBase/src/nodes/Text.h"
+#include "ModelBase/src/nodes/List.h"
 
 namespace FilePersistence {
 

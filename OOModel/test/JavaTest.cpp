@@ -32,11 +32,11 @@
  **********************************************************************************************************************/
 
 #include "oomodel.h"
-#include "SelfTest/headers/SelfTestSuite.h"
+#include "SelfTest/src/SelfTestSuite.h"
 
 #include "allOOModelNodes.h"
 
-#include "ModelBase/headers/Model.h"
+#include "ModelBase/src/Model.h"
 
 namespace OOModel {
 

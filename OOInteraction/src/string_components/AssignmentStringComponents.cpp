@@ -33,8 +33,7 @@
 
 #include "string_components/AssignmentStringComponents.h"
 
-#include "OOModel/headers/expressions/AssignmentExpression.h"
-#include "ModelBase/headers/adapter/AdapterManager.h"
+#include "OOModel/src/expressions/AssignmentExpression.h"
 
 namespace OOInteraction {
 
@@ -48,42 +47,27 @@ QStringList AssignmentStringComponents::components()
 	QStringList result;
 	if (!exp_) return result;
 
-	result.append(""); // This is the prefix. Currently there is no assignment operator that has a prefix.
-
-	StringComponents* left = Model::AdapterManager::adapt<StringComponents>(exp_->left());
-	if(left)
-	{
-		result.append( left->components().join("") );
-		SAFE_DELETE(left);
-	}
-	else result.append(QString());
+	// First comes the prefix. Currently there is no assignment operator that has a prefix.
+	result << QString() << stringForNode(exp_->left());
 
 	switch(exp_->op())
 	{
-		case OOModel::AssignmentExpression::ASSIGN: result.append("="); break;
-		case OOModel::AssignmentExpression::PLUS_ASSIGN: result.append("+="); break;
-		case OOModel::AssignmentExpression::MINUS_ASSIGN: result.append("-="); break;
-		case OOModel::AssignmentExpression::TIMES_ASSIGN: result.append("*="); break;
-		case OOModel::AssignmentExpression::DIVIDE_ASSIGN: result.append("/="); break;
-		case OOModel::AssignmentExpression::BIT_AND_ASSIGN: result.append("&="); break;
-		case OOModel::AssignmentExpression::BIT_OR_ASSIGN: result.append("|="); break;
-		case OOModel::AssignmentExpression::BIT_XOR_ASSIGN: result.append("^="); break;
-		case OOModel::AssignmentExpression::REMAINDER_ASSIGN: result.append("%="); break;
-		case OOModel::AssignmentExpression::LEFT_SHIFT_ASSIGN: result.append("<<="); break;
-		case OOModel::AssignmentExpression::RIGHT_SHIFT_SIGNED_ASSIGN: result.append(">>="); break;
-		case OOModel::AssignmentExpression::RIGHT_SHIFT_UNSIGNED_ASSIGN: result.append(">>>="); break;
+		case OOModel::AssignmentExpression::ASSIGN: result << "="; break;
+		case OOModel::AssignmentExpression::PLUS_ASSIGN: result << "+="; break;
+		case OOModel::AssignmentExpression::MINUS_ASSIGN: result << "-="; break;
+		case OOModel::AssignmentExpression::TIMES_ASSIGN: result << "*="; break;
+		case OOModel::AssignmentExpression::DIVIDE_ASSIGN: result << "/="; break;
+		case OOModel::AssignmentExpression::BIT_AND_ASSIGN: result << "&="; break;
+		case OOModel::AssignmentExpression::BIT_OR_ASSIGN: result << "|="; break;
+		case OOModel::AssignmentExpression::BIT_XOR_ASSIGN: result << "^="; break;
+		case OOModel::AssignmentExpression::REMAINDER_ASSIGN: result << "%="; break;
+		case OOModel::AssignmentExpression::LEFT_SHIFT_ASSIGN: result << "<<="; break;
+		case OOModel::AssignmentExpression::RIGHT_SHIFT_SIGNED_ASSIGN: result << ">>="; break;
+		case OOModel::AssignmentExpression::RIGHT_SHIFT_UNSIGNED_ASSIGN: result << ">>>="; break;
 		default: result.append( QString() ); break;
 	}
 
-	StringComponents* right = Model::AdapterManager::adapt<StringComponents>(exp_->right());
-	if(right)
-	{
-		result.append( right->components().join("") );
-		SAFE_DELETE(right);
-	}
-	else result.append(QString());
-
-	result.append(QString()); // Postfix
+	result << stringForNode(exp_->right()) << QString(); // Postfix
 
 	return result;
 }

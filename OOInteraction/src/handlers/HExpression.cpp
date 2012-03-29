@@ -33,14 +33,14 @@
 
 #include "handlers/HExpression.h"
 
-#include "string_providers/StringProvider.h"
+#include "string_offset_providers/StringOffsetProvider.h"
 #include "expression_editor/OOExpressionBuilder.h"
 #include "handlers/SetExpressionCursorEvent.h"
 
-#include "OOModel/headers/allOOModelNodes.h"
+#include "OOModel/src/allOOModelNodes.h"
 
-#include "InteractionBase/headers/handlers/SetCursorEvent.h"
-#include "ModelBase/headers/adapter/AdapterManager.h"
+#include "InteractionBase/src/handlers/SetCursorEvent.h"
+#include "ModelBase/src/adapter/AdapterManager.h"
 
 namespace OOInteraction {
 
@@ -57,12 +57,11 @@ HExpression* HExpression::instance()
 
 void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
-	// TODO implement this better. It is supposed to only let typed characters through and igonre modifier keys.
+	// TODO implement this better. It is supposed to only let typed characters through and ignore modifier keys.
 	// However it does not work with e.g. ALTGR characters.
 	if (event->text().isEmpty()
 			|| event->key() == Qt::Key_Escape
 			|| event->key() == Qt::Key_Tab
-			|| event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return
 			|| (event->modifiers() != Qt::NoModifier && event->modifiers() != Qt::ShiftModifier)
 			)
 	{
@@ -70,18 +69,21 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		return;
 	}
 
+	bool enterPressed = event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return;
+	bool spacePressed = event->key() == Qt::Key_Space;
+
 	// We need to trigger an update of all the visualizations leading up to the target, even though the target
 	// visualization will probably be deleted and replaced with a new one.
 	target->setUpdateNeeded();
 
 	// Find the top most parent that is adaptable to StringProvider
 	Visualization::Item* topMostItem = target;
-	StringProvider* topMostSP = Model::AdapterManager::adapt<StringProvider>(topMostItem);
+	auto* topMostSP = Model::AdapterManager::adapt<StringOffsetProvider>(topMostItem);
 
 	auto p = topMostItem->parentItem();
 	while(p)
 	{
-		StringProvider* adapted = Model::AdapterManager::adapt<StringProvider>(p);
+		auto* adapted = Model::AdapterManager::adapt<StringOffsetProvider>(p);
 		if (adapted)
 		{
 			SAFE_DELETE(topMostSP);
@@ -119,7 +121,9 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	}
 
 	OOModel::ExpressionStatement* replaceStatement = nullptr;
-	if (newText == "for " || newText == "foreach "|| newText == "if ")
+	if ( (enterPressed || spacePressed)
+			&& (newText.startsWith("for") || newText.startsWith("foreach")|| newText.startsWith("if")
+					|| newText.startsWith("continue") || newText.startsWith("break") || newText.startsWith("return")))
 	{
 		// Is this expression part of an expression statement
 		auto e = dynamic_cast<OOModel::Expression*>(target->node());
@@ -133,7 +137,7 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	{
 		OOModel::Statement* st = nullptr;
 		Model::Node* toFocus = nullptr;
-		if(newText == "for ")
+		if(newText.startsWith("for"))
 		{
 			auto loop =  new OOModel::LoopStatement();
 			loop->setInitStep(new OOModel::EmptyExpression());
@@ -141,7 +145,7 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			toFocus = loop->initStep();
 			st = loop;
 		}
-		else if (newText == "foreach ")
+		else if (newText.startsWith("foreach"))
 		{
 			auto loop =  new OOModel::ForEachStatement();
 			loop->setCollection(new OOModel::EmptyExpression());
@@ -149,13 +153,31 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			toFocus = loop->varNameNode();
 			st = loop;
 		}
-		else
+		else if (newText.startsWith("if"))
 		{
 			auto ifs =  new OOModel::IfStatement();
 			ifs->setCondition(new OOModel::EmptyExpression());
 
 			toFocus = ifs->condition();
 			st = ifs;
+		}
+		else if (newText.startsWith("continue"))
+		{
+			st = new OOModel::ContinueStatement();
+			toFocus = st;
+		}
+		else if (newText.startsWith("break"))
+		{
+			st = new OOModel::BreakStatement();
+			toFocus = st;
+		}
+		else if (newText.startsWith("return"))
+		{
+			auto ret =  new OOModel::ReturnStatement();
+			ret->values()->append(new OOModel::EmptyExpression());
+
+			toFocus = ret->values()->at(0);
+			st = ret;
 		}
 
 		Model::Node* containerNode = replaceStatement->parent();
@@ -164,10 +186,12 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		containerNode->model()->endModification();
 
 		auto parent = static_cast<Visualization::Item*> (topMostItem->parentItem());
-		QApplication::postEvent(target->scene(),
+		target->scene()->addPostEventAction(
 				new Interaction::SetCursorEvent(parent, toFocus, Interaction::SetCursorEvent::CursorOnLeft));
+
+		return;
 	}
-	else
+	else if (!enterPressed)
 	{
 		Model::Node* containerNode = topMostItem->node()->parent();
 		containerNode->model()->beginModification(containerNode, "edit expression");
@@ -176,11 +200,11 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		containerNode->model()->endModification();
 
 		auto parent = static_cast<Visualization::Item*> (topMostItem->parentItem());
-		QApplication::postEvent(target->scene(), new SetExpressionCursorEvent(parent, newExpression, newIndex));
+		target->scene()->addPostEventAction( new SetExpressionCursorEvent(parent, newExpression, newIndex));
+		return;
 	}
 
 	GenericHandler::keyPressEvent(target, event);
-	event->accept();
 }
 
 } /* namespace OOInteraction */

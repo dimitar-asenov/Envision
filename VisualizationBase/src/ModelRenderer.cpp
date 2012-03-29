@@ -35,8 +35,8 @@
 #include "VisualizationException.h"
 #include "items/VExtendable.h"
 
-#include "ModelBase/headers/nodes/Extendable/ExtendableNode.h"
-#include "ModelBase/headers/nodes/List.h"
+#include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
+#include "ModelBase/src/nodes/List.h"
 
 namespace Visualization {
 

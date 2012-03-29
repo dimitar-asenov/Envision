@@ -34,9 +34,6 @@
 #ifndef TESTEVENT_H_
 #define TESTEVENT_H_
 
-#include <QtCore/QEvent>
-#include <QtCore/QString>
-
 namespace Envision {
 
 class TestEvent: public QEvent

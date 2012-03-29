@@ -34,7 +34,7 @@
 #include "items/VControlFlowMethodSwitch.h"
 #include "items/VMethodCF.h"
 
-#include "OOVisualization/headers/top_level/VMethod.h"
+#include "OOVisualization/src/top_level/VMethod.h"
 
 
 namespace ControlFlowVisualization {

@@ -37,10 +37,6 @@
 #include "commands/SetModificationTarget.h"
 #include "commands/AddModifiedNode.h"
 
-#include "Core/headers/global.h"
-
-#include <QtCore/QMetaType>
-
 namespace Model {
 
 QList<Model*> Model::loadedModels;

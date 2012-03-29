@@ -33,8 +33,7 @@
 
 #include "string_components/UnfinishedOperatorStringComponents.h"
 
-#include "OOModel/headers/expressions/UnfinishedOperator.h"
-#include "ModelBase/headers/adapter/AdapterManager.h"
+#include "OOModel/src/expressions/UnfinishedOperator.h"
 
 namespace OOInteraction {
 
@@ -50,19 +49,16 @@ QStringList UnfinishedOperatorStringComponents::components()
 
 	for (int i=0; i< exp_->operands()->size(); ++i)
 	{
-		result.append( exp_->delimiters()->at(i)->get() );
+		QString delim = exp_->delimiters()->at(i)->get();
 
-		StringComponents* operand = Model::AdapterManager::adapt<StringComponents>(exp_->operands()->at(i));
-		if (operand)
-		{
-			result.append( operand->components().join("") );
-			SAFE_DELETE(operand);
-		}
-		else result.append( QString() );
-
+		result << delim << stringForNode(exp_->operands()->at(i));
 	}
+
 	if (exp_->delimiters()->size() > exp_->operands()->size())
-		result.append( exp_->delimiters()->last()->get() );
+	{
+		QString delim = exp_->delimiters()->last()->get();
+		result << delim;
+	}
 
 	return result;
 }

@@ -33,10 +33,10 @@
 
 #include "commands/CClassCreateMethod.h"
 
-#include "OOModel/headers/top_level/Class.h"
-#include "OOModel/headers/top_level/Method.h"
+#include "OOModel/src/top_level/Class.h"
+#include "OOModel/src/top_level/Method.h"
 
-#include "InteractionBase/headers/handlers/SetCursorEvent.h"
+#include "InteractionBase/src/handlers/SetCursorEvent.h"
 
 namespace OOInteraction {
 
@@ -81,10 +81,10 @@ Interaction::CommandResult* CClassCreateMethod::execute(Visualization::Item* /*s
 	cl->methods()->append(m);
 	cl->model()->endModification();
 
-	if (name.isNull()) QApplication::postEvent(target->scene(),
+	if (name.isNull()) target->scene()->addPostEventAction(
 		new Interaction::SetCursorEvent(target, m->nameNode(), Interaction::SetCursorEvent::CursorOnLeft));
 	else
-		QApplication::postEvent(target->scene(),
+		target->scene()->addPostEventAction(
 			new Interaction::SetCursorEvent(target, m->nameNode(), Interaction::SetCursorEvent::CursorOnRight));
 
 	return new Interaction::CommandResult();

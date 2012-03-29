@@ -33,8 +33,7 @@
 
 #include "string_components/ArrayTypeStringComponents.h"
 
-#include "OOModel/headers/types/ArrayType.h"
-#include "ModelBase/headers/adapter/AdapterManager.h"
+#include "OOModel/src/types/ArrayType.h"
 
 namespace OOInteraction {
 
@@ -48,14 +47,10 @@ QStringList ArrayTypeStringComponents::components()
 	QStringList result;
 	if (!exp_) return result;
 
-	StringComponents* prefix = Model::AdapterManager::adapt<StringComponents>(exp_->type());
-	if (prefix)
-	{
-		result.append( prefix->components().join("") );
-		SAFE_DELETE(prefix);
-	}
+	QString prefix = stringForNode(exp_->type());
+	if (!prefix.isEmpty()) result << prefix;
 
-	result.append("[]");
+	result << "[]";
 	return result;
 }
 

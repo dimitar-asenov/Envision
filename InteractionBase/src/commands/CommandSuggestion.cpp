@@ -33,7 +33,7 @@
 
 #include "commands/CommandSuggestion.h"
 
-#include "VisualizationBase/headers/items/Item.h"
+#include "VisualizationBase/src/items/Item.h"
 
 namespace Interaction {
 

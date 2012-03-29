@@ -58,7 +58,8 @@
 		</shape>
 		<itemsStyle prototypes="layout/SequentialLayout/default">
 			<direction>0</direction>
-			<spaceBetweenElements>5</spaceBetweenElements>
+			<spaceBetweenElements>10</spaceBetweenElements>
+			<notLocationEquivalentCursors>true</notLocationEquivalentCursors>
 		</itemsStyle>
 	</arguments>
 	<results prototypes="item/VList/default">

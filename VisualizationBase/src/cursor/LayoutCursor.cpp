@@ -37,8 +37,8 @@
 
 namespace Visualization {
 
-LayoutCursor::LayoutCursor(Layout* owner)
-	: Cursor(owner, new CursorShapeItem()), x_(0), y_(0), index_(0)
+LayoutCursor::LayoutCursor(Layout* owner, CursorType type)
+	: Cursor(owner, type, new CursorShapeItem()), x_(0), y_(0), index_(0), isAtBoundary_(false)
 {
 }
 
@@ -67,6 +67,11 @@ bool LayoutCursor::isSame(Cursor* c)
 		return lc->owner() == owner() && lc->x() == x() && lc->y() == y() && lc->index() == index();
 
 	return false;
+}
+
+bool LayoutCursor::isAtBoundary() const
+{
+	return isAtBoundary_;
 }
 
 } /* namespace Visualization */

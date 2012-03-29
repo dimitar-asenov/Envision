@@ -34,7 +34,8 @@
 #ifndef PLUGINNAME_UPPERCASE_H
 #define PLUGINNAME_UPPERCASE_H
 
-#include "Core/headers/EnvisionPlugin.h"
+#include "Core/src/EnvisionPlugin.h"
+#include "precompiled.h"
 
 namespace NAMESPACE {
 

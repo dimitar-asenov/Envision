@@ -32,11 +32,11 @@
  **********************************************************************************************************************/
 
 #include "filepersistence.h"
-#include "ModelBase/headers/test_nodes/BinaryNode.h"
-#include "ModelBase/headers/test_nodes/BinaryNodePersistenceUnit.h"
-#include "ModelBase/headers/test_nodes/PartialList.h"
+#include "ModelBase/src/test_nodes/BinaryNode.h"
+#include "ModelBase/src/test_nodes/BinaryNodePersistenceUnit.h"
+#include "ModelBase/src/test_nodes/PartialList.h"
 
-#include "SelfTest/headers/SelfTestSuite.h"
+#include "SelfTest/src/SelfTestSuite.h"
 
 Q_EXPORT_PLUGIN2( filepersistence, FilePersistence::FilePersistence )
 

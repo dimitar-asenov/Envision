@@ -33,10 +33,10 @@
 
 #include "handlers/SetExpressionCursorEvent.h"
 
-#include "string_providers/StringProvider.h"
+#include "string_offset_providers/StringOffsetProvider.h"
 
-#include "VisualizationBase/headers/items/Item.h"
-#include "ModelBase/headers/adapter/AdapterManager.h"
+#include "VisualizationBase/src/items/Item.h"
+#include "ModelBase/src/adapter/AdapterManager.h"
 
 namespace OOInteraction {
 
@@ -50,7 +50,7 @@ SetExpressionCursorEvent::SetExpressionCursorEvent(Visualization::Item* parentCo
 void SetExpressionCursorEvent::execute()
 {
 	Q_ASSERT(parentContainer_->findVisualizationOf(node_) != nullptr);
-	StringProvider* sp = Model::AdapterManager::adapt<StringProvider>( parentContainer_->findVisualizationOf(node_) );
+	auto* sp = Model::AdapterManager::adapt<StringOffsetProvider>( parentContainer_->findVisualizationOf(node_) );
 	if (sp)
 	{
 		sp->setOffset(offset_);

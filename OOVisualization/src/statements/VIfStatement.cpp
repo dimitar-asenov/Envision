@@ -33,10 +33,10 @@
 
 #include "statements/VIfStatement.h"
 
-#include "VisualizationBase/headers/layouts/PanelBorderLayout.h"
-#include "VisualizationBase/headers/layouts/SequentialLayout.h"
-#include "VisualizationBase/headers/items/VList.h"
-#include "VisualizationBase/headers/items/Static.h"
+#include "VisualizationBase/src/layouts/PanelBorderLayout.h"
+#include "VisualizationBase/src/layouts/SequentialLayout.h"
+#include "VisualizationBase/src/items/VList.h"
+#include "VisualizationBase/src/items/Static.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -47,36 +47,36 @@ ITEM_COMMON_DEFINITIONS(VIfStatement, "item")
 
 VIfStatement::VIfStatement(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<PanelBorderLayout>, IfStatement>(parent, node, style),
-	header(new SequentialLayout(nullptr, &style->header())),
-	conditionBackground(new SequentialLayout(nullptr, &style->condition())),
-	condition(nullptr),
-	content(new SequentialLayout(nullptr, &style->content())),
-	thenBranch(nullptr),
-	elseBranch(nullptr)
+	header_(new SequentialLayout(nullptr, &style->header())),
+	conditionBackground_(new SequentialLayout(nullptr, &style->condition())),
+	condition_(nullptr),
+	content_(new SequentialLayout(nullptr, &style->content())),
+	thenBranch_(nullptr),
+	elseBranch_(nullptr)
 {
 	layout()->setTop(true);
-	layout()->top()->setFirst(header);
-	header->append(new Static(nullptr, &style->icon()));
-	header->append(conditionBackground);
-	layout()->setContent(content);
+	layout()->top()->setFirst(header_);
+	header_->append(new Static(nullptr, &style->icon()));
+	header_->append(conditionBackground_);
+	layout()->setContent(content_);
 }
 
 VIfStatement::~VIfStatement()
 {
 	// These were automatically deleted by LayoutProvider's destructor
-	header = nullptr;
-	conditionBackground = nullptr;
-	condition = nullptr;
-	content = nullptr;
-	thenBranch = nullptr;
-	elseBranch = nullptr;
+	header_ = nullptr;
+	conditionBackground_ = nullptr;
+	condition_ = nullptr;
+	content_ = nullptr;
+	thenBranch_ = nullptr;
+	elseBranch_ = nullptr;
 }
 
 void VIfStatement::determineChildren()
 {
-	conditionBackground->synchronizeFirst(condition, node()->condition());
-	content->synchronizeFirst( thenBranch, node()->thenBranch(), &style()->thenBranch());
-	content->synchronizeLast( elseBranch, node()->elseBranch(), &style()->elseBranch());
+	conditionBackground_->synchronizeFirst(condition_, node()->condition());
+	content_->synchronizeFirst( thenBranch_, node()->thenBranch(), &style()->thenBranch());
+	content_->synchronizeLast( elseBranch_, node()->elseBranch(), &style()->elseBranch());
 
 
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
@@ -84,12 +84,12 @@ void VIfStatement::determineChildren()
 	//			what's the reason they are being updated.
 	// The style needs to be updated every time since if our own style changes, so will that of the children.
 	layout()->setStyle(&style()->layout());
-	header->setStyle(&style()->header());
-	header->at<Static>(0)->setStyle(&style()->icon());
-	conditionBackground->setStyle( &style()->condition() );
-	content->setStyle(&style()->content());
-	if (thenBranch) thenBranch->setStyle( &style()->thenBranch() );
-	if (elseBranch) elseBranch->setStyle( &style()->elseBranch() );
+	header_->setStyle(&style()->header());
+	header_->at<Static>(0)->setStyle(&style()->icon());
+	conditionBackground_->setStyle( &style()->condition() );
+	content_->setStyle(&style()->content());
+	if (thenBranch_) thenBranch_->setStyle( &style()->thenBranch() );
+	if (elseBranch_) elseBranch_->setStyle( &style()->elseBranch() );
 }
 
 }

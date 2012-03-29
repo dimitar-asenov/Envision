@@ -34,8 +34,10 @@
 #ifndef MODELBASE_H
 #define MODELBASE_H
 
-#include "Core/headers/EnvisionPlugin.h"
-#include "Logger/headers/Log.h"
+#include "Core/src/EnvisionPlugin.h"
+#include "precompiled.h"
+
+#include "Logger/src/Log.h"
 
 namespace Model {
 

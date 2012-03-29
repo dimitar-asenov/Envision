@@ -32,17 +32,17 @@
  **********************************************************************************************************************/
 
 #include "controlflowvisualization.h"
-#include "SelfTest/headers/SelfTestSuite.h"
+#include "SelfTest/src/SelfTestSuite.h"
 
 #include "allCFVisualizations.h"
 #include "handlers/HControlFlowMethodSwitch.h"
 
-#include "OOModel/headers/allOOModelNodes.h"
+#include "OOModel/src/allOOModelNodes.h"
 
-#include "VisualizationBase/headers/Scene.h"
+#include "VisualizationBase/src/Scene.h"
 
-#include "InteractionBase/headers/handlers/GenericHandler.h"
-#include "InteractionBase/headers/handlers/HText.h"
+#include "InteractionBase/src/handlers/GenericHandler.h"
+#include "InteractionBase/src/handlers/HText.h"
 
 Q_EXPORT_PLUGIN2( controlflowvisualization, ControlFlowVisualization::ControlFlowVisualization )
 

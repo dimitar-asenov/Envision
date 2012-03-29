@@ -37,7 +37,7 @@
 namespace Visualization {
 
 TextCursor::TextCursor(TextRenderer* owner)
-	: Cursor(owner, new CursorShapeItem()), selectionBegin_(0),  selectionEnd_(0), xBegin_(0), xEnd_(0)
+	: Cursor(owner, VerticalCursor, new CursorShapeItem()), selectionBegin_(0),  selectionEnd_(0), xBegin_(0), xEnd_(0)
 {
 }
 
@@ -132,6 +132,11 @@ int TextCursor::cursorAtX(int x) const
 	}
 
 	return pos;
+}
+
+bool TextCursor::isAtBoundary() const
+{
+	return selectionEnd_ == 0 || selectionEnd_ == owner()->text().length();
 }
 
 } /* namespace Visualization */

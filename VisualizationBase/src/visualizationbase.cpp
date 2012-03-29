@@ -53,11 +53,8 @@
 
 #include "node_extensions/Position.h"
 
-#include "ModelBase/headers/test_nodes/BinaryNode.h"
-#include "SelfTest/headers/SelfTestSuite.h"
-
-#include <QtGui/QDesktopWidget>
-#include <QtGui/QApplication>
+#include "ModelBase/src/test_nodes/BinaryNode.h"
+#include "SelfTest/src/SelfTestSuite.h"
 
 Q_EXPORT_PLUGIN2( visualizationbase, Visualization::VisualizationBase )
 

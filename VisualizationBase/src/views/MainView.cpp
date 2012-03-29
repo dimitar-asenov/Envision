@@ -34,12 +34,6 @@
 #include "views/MainView.h"
 #include "Scene.h"
 
-#include "Core/headers/global.h"
-
-#include <QtGui/QWheelEvent>
-#include <QtGui/QPrinter>
-#include <QtSvg/QSvgGenerator>
-
 namespace Visualization {
 
 MainView::MainView(Scene *scene) :

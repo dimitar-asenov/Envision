@@ -41,12 +41,10 @@
 
 #include "cursor/Cursor.h"
 
-#include <cmath>
-
 namespace Visualization {
 
 Item::Item(Item* parent, const StyleType* style) :
-	QGraphicsItem(parent), style_(nullptr), shape_(nullptr), needsUpdate_(true), regionOptions_(NoOptions)
+	QGraphicsItem(parent), style_(nullptr), shape_(nullptr), needsUpdate_(true)
 {
 	if ( !style || style->drawsOnlyShape() ) setFlag(QGraphicsItem::ItemHasNoContents);
 
@@ -357,7 +355,7 @@ QList<ItemRegion> Item::regions()
 	{
 		regs.append(ItemRegion(boundingRect_.toRect()));
 
-		Cursor* cur = new Cursor(this);
+		Cursor* cur = new Cursor(this, Cursor::BoxCursor);
 		cur->setRegion( boundingRect_.translated( (-1)*scenePos() ).toRect() );
 		cur->setPosition( cur->region().center() );
 		regs.last().setCursor(cur);
@@ -436,7 +434,7 @@ bool Item::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 			)
 		{
 			int distanceKey = r.distanceTo(source)*10;
-			if (r.cursor() && distanceKey > 0) distanceKey -= 5;
+			if (r.cursor()) distanceKey -= 5;
 			matching.insert(distanceKey, &r);
 		}
 	}

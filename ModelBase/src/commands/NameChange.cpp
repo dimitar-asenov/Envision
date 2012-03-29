@@ -37,8 +37,6 @@
 #include "nodes/Node.h"
 #include "Model.h"
 
-#include "Core/headers/global.h"
-
 namespace Model {
 
 NameChange::NameChange(Node *target, const QString& oldName_, const QString& newName_, UndoCommand* command_) :

@@ -34,8 +34,6 @@
 #include "NodeReadWriteLock.h"
 #include "ModelException.h"
 
-#include <QtCore/QMutexLocker>
-
 namespace Model {
 
 NodeReadWriteLock::NodeReadWriteLock() :

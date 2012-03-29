@@ -4,8 +4,7 @@ CONFIG(debug, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/DebugBuild
 PLUGINS_DIR = $${BUILD_DIR}/plugins
 CONFIG(debug, debug|release):DEFINES += DEBUG
 QMAKE_CXXFLAGS += -Werror -std=c++0x
-INCLUDEPATH += ./headers \
-	./src \
+INCLUDEPATH += ./src \
 	./test \
     $${ENVISION_ROOT_DIR}
 TARGET = PLUGINNAME_LOWERCASE
@@ -24,10 +23,10 @@ target.path = $$PLUGINS_DIR
 pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target pluginmeta
-PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/precompiled.h \
-    headers/PLUGINNAMEException.h \
-	headers/PLUGINNAME_LOWERCASE_api.h \
+PRECOMPILED_HEADER = src/precompiled.h
+HEADERS += src/precompiled.h \
+    src/PLUGINNAMEException.h \
+	src/PLUGINNAME_LOWERCASE_api.h \
     src/PLUGINNAME_LOWERCASE.h
 SOURCES += src/PLUGINNAMEException.cpp \
 	src/PLUGINNAME_LOWERCASE.cpp \

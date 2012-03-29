@@ -33,7 +33,7 @@
 
 #include "expression_editor/operators/MemberOperatorDescriptor.h"
 
-#include "OOModel/headers/expressions/VariableAccess.h"
+#include "OOModel/src/expressions/VariableAccess.h"
 
 namespace OOInteraction {
 
