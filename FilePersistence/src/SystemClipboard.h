@@ -39,7 +39,10 @@
 
 #include "ModelBase/src/persistence/ClipboardStore.h"
 
-namespace Model { class PersistedNode; }
+namespace Model {
+	class PersistedNode;
+	class Reference;
+}
 
 namespace FilePersistence {
 
@@ -53,6 +56,7 @@ class FILEPERSISTENCE_API SystemClipboard : public Model::ClipboardStore
 		virtual void saveStringValue(const QString &value);
 		virtual void saveIntValue(int value);
 		virtual void saveDoubleValue(double value);
+		virtual void saveReferenceValue(const QString &name, const Model::Node* target);
 		virtual void saveNode(const Model::Node *node, const QString &name, bool partialLoadHint);
 
 		virtual QList<Model::LoadedNode> loadAllSubNodes(Model::Node* parent);
@@ -64,6 +68,7 @@ class FILEPERSISTENCE_API SystemClipboard : public Model::ClipboardStore
 		virtual int loadIntValue();
 		virtual QString loadStringValue();
 		virtual double loadDoubleValue();
+		virtual QString loadReferenceValue(Model::Reference* r);
 
 		// Methods from ClipboardStore
 		virtual void putNode(const Model::Node* node);
@@ -85,6 +90,8 @@ class FILEPERSISTENCE_API SystemClipboard : public Model::ClipboardStore
 
 		void saveNodeFromOldStore(Model::PersistedNode* node);
 		Model::LoadedNode loadNode(Model::Node* parent);
+
+		static const QString NULL_STRING;
 };
 
 }

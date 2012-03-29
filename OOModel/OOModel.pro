@@ -27,7 +27,8 @@ pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
 PRECOMPILED_HEADER = src/precompiled.h
-HEADERS += src/expressions/ConditionalExpression.h \
+HEADERS += src/elements/OOReference.h \
+    src/expressions/ConditionalExpression.h \
     src/OOModelException.h \
     src/TypedListInstantiations.h \
     src/allOOModelNodes.h \
@@ -84,7 +85,8 @@ HEADERS += src/expressions/ConditionalExpression.h \
     src/types/PrimitiveType.h \
     src/types/Type.h \
     src/oomodel.h
-SOURCES += src/expressions/ConditionalExpression.cpp \
+SOURCES += src/elements/OOReference.cpp \
+    src/expressions/ConditionalExpression.cpp \
     src/expressions/VariableDeclaration.cpp \
     src/expressions/AssignmentExpression.cpp \
     src/statements/ExpressionStatement.cpp \

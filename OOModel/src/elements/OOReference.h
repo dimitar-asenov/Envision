@@ -25,43 +25,28 @@
  **********************************************************************************************************************/
 
 /*
- * CallStringComponents.cpp
+ * OOReference.h
  *
- *  Created on: Feb 29, 2012
+ *  Created on: Mar 29, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "string_components/CallStringComponents.h"
+#ifndef OOModel_OOREFERENCE_H_
+#define OOModel_OOREFERENCE_H_
 
-#include "OOModel/src/expressions/MethodCallExpression.h"
+#include "../oomodel_api.h"
 
-namespace OOInteraction {
+#include "ModelBase/src/nodes/Reference.h"
 
-CallStringComponents::CallStringComponents(OOModel::MethodCallExpression* e )
-	: exp_(e)
-{
-}
+namespace OOModel {
 
-QStringList CallStringComponents::components()
-{
-	QStringList result;
-	if (!exp_) return result;
+class OOMODEL_API OOReference : public Model::Reference {
 
-	QString prefix = stringForNode(exp_->prefix());
-	if (!prefix.isEmpty()) result << prefix << ".";
+	NODE_DECLARE_STANDARD_METHODS( OOReference )
 
-	result << exp_->ref()->name();
+	public:
+		virtual bool resolve();
+};
 
-	QString list = "(";
-	for (int i=0; i< exp_->arguments()->size(); ++i)
-	{
-		if (i>0) list.append(",");
-		list.append( stringForNode(exp_->arguments()->at(i)) );
-	}
-	list.append(")");
-
-	result << list;
-	return result;
-}
-
-} /* namespace OOInteraction */
+} /* namespace OOModel */
+#endif /* OOModel_OOREFERENCE_H_ */

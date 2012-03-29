@@ -41,23 +41,12 @@ EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(MethodCallExpression, Expression)
 EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(MethodCallExpression, Expression)
 
 REGISTER_ATTRIBUTE(MethodCallExpression, prefix, Expression, false, true, true)
-REGISTER_ATTRIBUTE(MethodCallExpression, ref, Reference, false, false, true)
+REGISTER_ATTRIBUTE(MethodCallExpression, ref, OOReference, false, false, true)
 REGISTER_ATTRIBUTE(MethodCallExpression, arguments, TypedListOfExpression, false, false, true)
 
 Method* MethodCallExpression::methodDefinition()
 {
-	Method* met = nullptr;
-
-	if (prefix())
-	{
-		Class* classNode = prefix()->classDefinition();
-
-		if (classNode)	met = dynamic_cast<Method*> (classNode->navigateTo(classNode, ref()->path()));
-	}
-	else
-		met = dynamic_cast<Method*> (ref()->get());
-
-	return met;
+	return dynamic_cast<Method*> (ref()->target());
 }
 
 }

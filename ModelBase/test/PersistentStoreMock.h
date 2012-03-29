@@ -67,6 +67,9 @@ class PersistentStoreMock: public PersistentStore
 		const QString& getSaved() const;
 		void clear();
 
+		virtual QString loadReferenceValue(Reference* r);
+		virtual void saveReferenceValue(const QString &name, const Node* target);
+
 	protected:
 		virtual void saveModel(Model* model, const QString &name);
 		virtual Node* loadModel(Model* model, const QString &name);

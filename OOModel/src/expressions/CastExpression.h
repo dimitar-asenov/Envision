@@ -42,7 +42,7 @@ class OOMODEL_API CastExpression: public Expression
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(CastExpression)
 
-	ATTRIBUTE(Expression, type, setType);
+	ATTRIBUTE(Expression, castType, setType);
 	ATTRIBUTE(Expression, expr, setExpr);
 };
 

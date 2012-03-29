@@ -45,7 +45,7 @@ NewArrayDescriptor::NewArrayDescriptor(const QString& name, const QString& signa
 OOModel::Expression* NewArrayDescriptor::create(const QList<OOModel::Expression*>& operands)
 {
 	OOModel::NewExpression* opr = new OOModel::NewExpression();
-	opr->setType( operands.first());
+	opr->setNewType( operands.first());
 	opr->setAmount(operands.last());
 	return opr;
 }

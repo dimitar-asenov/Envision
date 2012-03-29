@@ -52,7 +52,7 @@ OOModel::Expression* CallDescriptor::create(const QList<OOModel::Expression*>& o
 	Q_ASSERT(varName);
 
 	OOModel::MethodCallExpression* opr = new OOModel::MethodCallExpression();
-	opr->ref()->set(varName->ref()->path());
+	opr->ref()->setName(varName->ref()->name());
 	OOModel::Expression* prefix = varName->prefix();
 	varName->replaceChild(prefix, new OOModel::EmptyExpression());
 	SAFE_DELETE(varName);

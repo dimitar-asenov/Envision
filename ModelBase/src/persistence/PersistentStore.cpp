@@ -25,43 +25,20 @@
  **********************************************************************************************************************/
 
 /*
- * CallStringComponents.cpp
+ * PersistentStore.cpp
  *
- *  Created on: Feb 29, 2012
+ *  Created on: Mar 29, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "string_components/CallStringComponents.h"
+#include "PersistentStore.h"
+#include "src/nodes/Reference.h"
 
-#include "OOModel/src/expressions/MethodCallExpression.h"
+namespace Model {
 
-namespace OOInteraction {
-
-CallStringComponents::CallStringComponents(OOModel::MethodCallExpression* e )
-	: exp_(e)
+void PersistentStore::setReferenceTargetr(Reference* r, Node* target)
 {
+	r->target_ = target;
 }
 
-QStringList CallStringComponents::components()
-{
-	QStringList result;
-	if (!exp_) return result;
-
-	QString prefix = stringForNode(exp_->prefix());
-	if (!prefix.isEmpty()) result << prefix << ".";
-
-	result << exp_->ref()->name();
-
-	QString list = "(";
-	for (int i=0; i< exp_->arguments()->size(); ++i)
-	{
-		if (i>0) list.append(",");
-		list.append( stringForNode(exp_->arguments()->at(i)) );
-	}
-	list.append(")");
-
-	result << list;
-	return result;
 }
-
-} /* namespace OOInteraction */

@@ -43,7 +43,7 @@ class OOMODEL_API NewExpression: public Expression
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(NewExpression)
 
-	ATTRIBUTE(Expression, type, setType);
+	ATTRIBUTE(Expression, newType, setNewType);
 	ATTRIBUTE(Expression, amount, setAmount);
 };
 

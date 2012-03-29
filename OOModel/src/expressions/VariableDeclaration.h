@@ -47,7 +47,7 @@ class OOMODEL_API VariableDeclaration: public Expression
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(VariableDeclaration)
 
 	ATTRIBUTE_OOP_NAME
-	ATTRIBUTE(Expression, type, setType)
+	ATTRIBUTE(Expression, varType, setVarType)
 	ATTRIBUTE(Expression, initialValue, setInitialValue);
 
 	public:

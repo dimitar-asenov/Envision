@@ -105,7 +105,7 @@ void OOExpressionBuilder::visit(Interaction::Value* val)
 	else if (val->text().startsWith('"'))
 		expression = new OOModel::StringLiteral(val->text().mid(1, val->text().size()-2));
 	else
-		expression = new OOModel::VariableAccess("local:" + val->text());
+		expression = new OOModel::VariableAccess(val->text());
 }
 
 void OOExpressionBuilder::visit(Interaction::Operator* op)

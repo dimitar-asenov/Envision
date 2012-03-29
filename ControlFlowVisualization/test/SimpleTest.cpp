@@ -80,35 +80,35 @@ Method* addComplicated(Model::Model* model, Class* parent)
 	VariableDeclaration* a = new VariableDeclaration();
 	met->items()->append(new ExpressionStatement(a));
 	a->setName("a");
-	a->setType(new PrimitiveType(PrimitiveType::INT));
+	a->setVarType(new PrimitiveType(PrimitiveType::INT));
 
 	VariableDeclaration* b = new VariableDeclaration();
 	met->items()->append(new ExpressionStatement(b));
 	b->setName("b");
-	b->setType(new PrimitiveType(PrimitiveType::UNSIGNED_INT));
+	b->setVarType(new PrimitiveType(PrimitiveType::UNSIGNED_INT));
 	b->setInitialValue(new IntegerLiteral(1000));
 
 	LoopStatement* loop = new LoopStatement();
 	met->items()->append(loop);
 	VariableDeclaration* initStep = new VariableDeclaration();
 	loop->setInitStep(initStep);
-	initStep->setType(new PrimitiveType(PrimitiveType::INT));
+	initStep->setVarType(new PrimitiveType(PrimitiveType::INT));
 	initStep->setName("i");
 	initStep->setInitialValue(new IntegerLiteral(0));
 	BinaryOperation* loopCondition = new BinaryOperation();
 	loop->setCondition(loopCondition);
-	loopCondition->setLeft(new VariableAccess("local:i"));
+	loopCondition->setLeft(new VariableAccess("i"));
 	loopCondition->setOp(BinaryOperation::LESS);
-	loopCondition->setRight(new VariableAccess("local:a"));
+	loopCondition->setRight(new VariableAccess("a"));
 	AssignmentExpression* updateStep = new AssignmentExpression();
 	loop->setUpdateStep(updateStep);
-	updateStep->setLeft(new VariableAccess("local:i"));
+	updateStep->setLeft(new VariableAccess("i"));
 	updateStep->setOp(AssignmentExpression::PLUS_ASSIGN);
 	updateStep->setRight(new IntegerLiteral(1));
 
 	AssignmentExpression* loopBodyAssignment = new AssignmentExpression();
 	loop->body()->append(loopBodyAssignment);
-	loopBodyAssignment->setLeft(new VariableAccess("local:b"));
+	loopBodyAssignment->setLeft(new VariableAccess("b"));
 	loopBodyAssignment->setOp(AssignmentExpression::TIMES_ASSIGN);
 	loopBodyAssignment->setRight(new IntegerLiteral(2));
 
@@ -116,7 +116,7 @@ Method* addComplicated(Model::Model* model, Class* parent)
 	loop->body()->append(loopIf);
 	BinaryOperation* ifCond = new BinaryOperation();
 	loopIf->setCondition(ifCond);
-	ifCond->setLeft(new VariableAccess("local:i"));
+	ifCond->setLeft(new VariableAccess("i"));
 	ifCond->setOp(BinaryOperation::NOT_EQUALS);
 	ifCond->setRight(new IntegerLiteral(10));
 	IfStatement* loopIfLeft = new IfStatement();
@@ -126,7 +126,7 @@ Method* addComplicated(Model::Model* model, Class* parent)
 
 	BinaryOperation* ifLeftCondition = new BinaryOperation();
 	loopIfLeft->setCondition(ifLeftCondition);
-	ifLeftCondition->setLeft(new VariableAccess("local:a"));
+	ifLeftCondition->setLeft(new VariableAccess("a"));
 	ifLeftCondition->setOp(BinaryOperation::GREATER_EQUALS);
 	ifLeftCondition->setRight(new IntegerLiteral(3));
 	loopIfLeft->thenBranch()->append(new ContinueStatement());
@@ -136,7 +136,7 @@ Method* addComplicated(Model::Model* model, Class* parent)
 
 	BinaryOperation* ifRightCondition = new BinaryOperation();
 	loopIfRight->setCondition(ifRightCondition);
-	ifRightCondition->setLeft(new VariableAccess("local:b"));
+	ifRightCondition->setLeft(new VariableAccess("b"));
 	ifRightCondition->setOp(BinaryOperation::EQUALS);
 	ifRightCondition->setRight(new IntegerLiteral(-20));
 	loopIfRight->thenBranch()->append(new ContinueStatement());
@@ -156,12 +156,12 @@ Method* addComplicated(Model::Model* model, Class* parent)
 	met->items()->append(forEach);
 	forEach->setVarName("elem");
 	forEach->setVarType( new PrimitiveType(PrimitiveType::UNSIGNED_INT) );
-	forEach->setCollection(new VariableAccess("global:SomeCollection"));
+	forEach->setCollection(new VariableAccess("SomeCollection"));
 	AssignmentExpression* assignEach = new AssignmentExpression();
 	forEach->body()->append(assignEach);
-	assignEach->setLeft(new VariableAccess("local:a"));
+	assignEach->setLeft(new VariableAccess("a"));
 	assignEach->setOp(AssignmentExpression::DIVIDE_ASSIGN);
-	assignEach->setRight(new VariableAccess("local:elem"));
+	assignEach->setRight(new VariableAccess("elem"));
 
 
 	ReturnStatement* metReturn = new ReturnStatement();
@@ -199,7 +199,7 @@ Method* addDivBySix(Model::Model* model, Class* parent)
 	VariableDeclaration* result = new VariableDeclaration();
 	divbysix->items()->append(new ExpressionStatement(result));
 	result->setName("result");
-	result->setType(new PrimitiveType(PrimitiveType::INT));
+	result->setVarType(new PrimitiveType(PrimitiveType::INT));
 	result->setInitialValue(new IntegerLiteral(-1));
 
 	LoopStatement* sixloop = new LoopStatement();
@@ -207,33 +207,33 @@ Method* addDivBySix(Model::Model* model, Class* parent)
 	VariableDeclaration* sixLoopInit = new VariableDeclaration();
 	sixloop->setInitStep(sixLoopInit);
 	sixLoopInit->setName("i");
-	sixLoopInit->setType(new PrimitiveType(PrimitiveType::INT));
+	sixLoopInit->setVarType(new PrimitiveType(PrimitiveType::INT));
 	sixLoopInit->setInitialValue(new IntegerLiteral(0));
 	BinaryOperation* sixLoopCond = new BinaryOperation();
 	sixloop->setCondition(sixLoopCond);
-	sixLoopCond->setLeft(new VariableAccess("local:i"));
+	sixLoopCond->setLeft(new VariableAccess("i"));
 	sixLoopCond->setOp(BinaryOperation::LESS);
 	MethodCallExpression* sizeCall = new MethodCallExpression();
 	sixLoopCond->setRight(sizeCall);
-	sizeCall->ref()->set("size");
-	sizeCall->setPrefix(new VariableAccess("local:numbers"));
+	sizeCall->ref()->setName("size");
+	sizeCall->setPrefix(new VariableAccess("numbers"));
 
 	//TODO test the visualization without the remaining parts of this method
 	AssignmentExpression* sixLoopUpdate = new AssignmentExpression();
 	sixloop->setUpdateStep(sixLoopUpdate);
-	sixLoopUpdate->setLeft(new VariableAccess("local:i"));
+	sixLoopUpdate->setLeft(new VariableAccess("i"));
 	sixLoopUpdate->setOp(AssignmentExpression::PLUS_ASSIGN);
 	sixLoopUpdate->setRight(new IntegerLiteral(1));
 
 	VariableDeclaration* n = new VariableDeclaration();
 	sixloop->body()->append(new ExpressionStatement(n));
 	n->setName("n");
-	n->setType(new PrimitiveType(PrimitiveType::INT));
+	n->setVarType(new PrimitiveType(PrimitiveType::INT));
 	BinaryOperation* item = new BinaryOperation();
 	n->setInitialValue(item);
-	item->setLeft(new VariableAccess("local:numbers"));
+	item->setLeft(new VariableAccess("numbers"));
 	item->setOp(BinaryOperation::ARRAY_INDEX);
-	item->setRight(new VariableAccess("local:i"));
+	item->setRight(new VariableAccess("i"));
 
 	IfStatement* ifdiv2 = new IfStatement();
 	sixloop->body()->append(ifdiv2);
@@ -243,7 +243,7 @@ Method* addDivBySix(Model::Model* model, Class* parent)
 	eq0->setRight(new IntegerLiteral(0));
 	BinaryOperation* div2 = new BinaryOperation();
 	eq0->setLeft(div2);
-	div2->setLeft(new VariableAccess("local:n"));
+	div2->setLeft(new VariableAccess("n"));
 	div2->setOp(BinaryOperation::REMAINDER);
 	div2->setRight(new IntegerLiteral(2));
 	ifdiv2->elseBranch()->append(new  ContinueStatement());
@@ -256,19 +256,19 @@ Method* addDivBySix(Model::Model* model, Class* parent)
 	eq0->setRight(new IntegerLiteral(0));
 	BinaryOperation* div3 = new BinaryOperation();
 	eq0->setLeft(div3);
-	div3->setLeft(new VariableAccess("local:n"));
+	div3->setLeft(new VariableAccess("n"));
 	div3->setOp(BinaryOperation::REMAINDER);
 	div3->setRight(new IntegerLiteral(3));
 
 	AssignmentExpression* resultFound = new AssignmentExpression();
 	ifdiv3->thenBranch()->append(resultFound);
-	resultFound->setLeft(new VariableAccess("local:result"));
+	resultFound->setLeft(new VariableAccess("result"));
 	resultFound->setOp(AssignmentExpression::ASSIGN);
-	resultFound->setRight(new VariableAccess("local:i"));
+	resultFound->setRight(new VariableAccess("i"));
 	ifdiv3->thenBranch()->append( new BreakStatement());
 
 	ReturnStatement* divbysixFinalReturn = new ReturnStatement();
-	divbysixFinalReturn->values()->append(new VariableAccess("local:result"));
+	divbysixFinalReturn->values()->append(new VariableAccess("result"));
 	divbysix->items()->append(divbysixFinalReturn);
 
 	model->endModification();

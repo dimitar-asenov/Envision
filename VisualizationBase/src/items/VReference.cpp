@@ -46,16 +46,15 @@ VReference::VReference(Item* parent, NodeType *node, const StyleType *style) :
 
 bool VReference::setText(const QString& newText)
 {
-	// TODO: Check if this is a valid path?
 	node()->model()->beginModification(node(), "Set boolean");
-	node()->set(newText);
+	node()->setName(newText);
 	node()->model()->endModification();
 	return true;
 }
 
 QString VReference::currentText()
 {
-	return node()->path();
+	return node()->name();
 }
 
 }

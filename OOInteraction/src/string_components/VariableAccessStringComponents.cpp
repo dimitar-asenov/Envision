@@ -50,7 +50,7 @@ QStringList VariableAccessStringComponents::components()
 	QString prefix = stringForNode(exp_->prefix());
 	if (!prefix.isEmpty()) result << prefix << ".";
 
-	result << exp_->ref()->path().split(':').last();
+	result << exp_->ref()->name();
 
 	return result;
 }

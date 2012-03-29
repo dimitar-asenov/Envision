@@ -76,7 +76,7 @@ void VVariableAccess::determineChildren()
 		separator_->setStyle( &style()->separator());
 	}
 
-	name_->setText(node()->ref()->path().split(',').last().split(':').last());
+	name_->setText(node()->ref()->name());
 }
 
 }

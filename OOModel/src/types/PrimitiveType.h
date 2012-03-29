@@ -52,6 +52,17 @@ class OOMODEL_API PrimitiveType : public Type
 
 		PrimitiveTypes type() const;
 		void setType(const PrimitiveTypes& type);
+
+		// Static instances for all primitive types
+		static const PrimitiveType* PrimitiveTypeINT();
+		static const PrimitiveType* PrimitiveTypeLONG();
+		static const PrimitiveType* PrimitiveTypeUNSIGNED_INT();
+		static const PrimitiveType* PrimitiveTypeUNSIGNED_LONG();
+		static const PrimitiveType* PrimitiveTypeFLOAT();
+		static const PrimitiveType* PrimitiveTypeDOUBLE();
+		static const PrimitiveType* PrimitiveTypeBOOLEAN();
+		static const PrimitiveType* PrimitiveTypeCHAR();
+		static const PrimitiveType* PrimitiveTypeVOID();
 };
 
 inline PrimitiveType::PrimitiveTypes PrimitiveType::type() const { return static_cast<PrimitiveTypes> (val()); }

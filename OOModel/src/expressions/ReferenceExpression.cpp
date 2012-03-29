@@ -40,21 +40,11 @@ EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(ReferenceExpression, Expression)
 EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(ReferenceExpression, Expression)
 
 REGISTER_ATTRIBUTE(ReferenceExpression, prefix, Expression, false, true, true)
-REGISTER_ATTRIBUTE(ReferenceExpression, ref, Reference, false, false, true)
+REGISTER_ATTRIBUTE(ReferenceExpression, ref, OOReference, false, false, true)
 
 Class* ReferenceExpression::classDefinition()
 {
-	ReferenceExpression* exp = this;
-	QString path;
-	while (exp)
-	{
-		if (!path.isEmpty()) path.prepend(',');
-		path.prepend(exp->ref()->path());
-
-		exp = dynamic_cast<ReferenceExpression*> (exp->prefix());
-	}
-
-	return dynamic_cast<Class*> (navigateTo(this, path));
+	return dynamic_cast<Class*> (ref()->target());
 }
 
 }

@@ -77,7 +77,7 @@ TEST(OOModel, JavaLibraryAndHelloWorldTest)
 	arg->setName("x");
 	NamedType* argType = new NamedType();
 	arg->setType(argType);
-	argType->type()->ref()->set("class:String");
+	argType->type()->ref()->setName("String");
 
 	Class* system = new Class();
 	java->classes()->append(system);
@@ -90,10 +90,10 @@ TEST(OOModel, JavaLibraryAndHelloWorldTest)
 	out->setStorageSpecifier(StorageSpecifier::CLASS_VARIABLE);
 	NamedType* outtype = new NamedType();
 	out->setType(outtype);
-	outtype->type()->ref()->set("class:PrintStream");
+	outtype->type()->ref()->setName("PrintStream");
 	ReferenceExpression* prefix = new ReferenceExpression();
 	outtype->type()->setPrefix(prefix);
-	prefix->ref()->set("mod:io");
+	prefix->ref()->setName("io");
 
 	// Build a simple HelloWorld Application
 	Class* hello = new Class();
@@ -113,17 +113,21 @@ TEST(OOModel, JavaLibraryAndHelloWorldTest)
 	StringLiteral* helloStr = new StringLiteral();
 	callPrintln->arguments()->append(helloStr);
 	helloStr->setValue("Hello World");
-	callPrintln->ref()->set("met:println");
+	callPrintln->ref()->setName("println");
 	callPrintlnSt->setExpression(callPrintln);
 	main->items()->append(callPrintlnSt);
 
 	VariableAccess* va = new VariableAccess();
 	callPrintln->setPrefix(va);
-	va->ref()->set("field:out");
+	va->ref()->setName("out");
 
 	ReferenceExpression* ref = new ReferenceExpression();
 	va->setPrefix(ref);
-	ref->ref()->set("lib:Java,class:System");
+	ref->ref()->setName("System");
+
+	ReferenceExpression* ref2 = new ReferenceExpression();
+	ref->setPrefix(ref2);
+	ref2->ref()->setName("Java");
 
 	model.endModification();
 

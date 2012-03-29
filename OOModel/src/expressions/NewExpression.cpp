@@ -38,6 +38,6 @@ namespace OOModel {
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(NewExpression, Expression)
 EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(NewExpression, Expression)
 
-REGISTER_ATTRIBUTE(NewExpression, type, Expression, false, false, true)
+REGISTER_ATTRIBUTE(NewExpression, newType, Expression, false, false, true)
 REGISTER_ATTRIBUTE(NewExpression, amount, Expression, false, false, true)
 }

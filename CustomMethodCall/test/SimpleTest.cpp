@@ -135,19 +135,19 @@ Class* addCollection(Model::Model* model, Project* parent)
 	orIf->setOp(BinaryOperation::CONDITIONAL_OR);
 	MethodCallExpression* emptyCall = new MethodCallExpression();
 	orIf->setLeft(emptyCall);
-	emptyCall->ref()->set("method:empty");
+	emptyCall->ref()->setName("empty");
 
 	UnaryOperation* negation = new UnaryOperation();
 	orIf->setRight(negation);
 	negation->setOp(UnaryOperation::NOT);
 	MethodCallExpression* existsCall = new MethodCallExpression();
 	negation->setOperand(existsCall);
-	existsCall->ref()->set(QString("method:%1").arg(QChar(0x2203)));
+	existsCall->ref()->setName(QChar(0x2203));
 	existsCall->arguments()->append( new IntegerLiteral(42));
 
 	ExpressionStatement* insertCallSt = new ExpressionStatement();
 	MethodCallExpression* insertCall = new MethodCallExpression();
-	insertCall->ref()->set("method:insert");
+	insertCall->ref()->setName("insert");
 	insertCall->arguments()->append( new IntegerLiteral(42));
 	insertCallSt->setExpression(insertCall);
 	ifs->thenBranch()->append(insertCallSt);
@@ -155,25 +155,25 @@ Class* addCollection(Model::Model* model, Project* parent)
 	VariableDeclaration* indexVar = new VariableDeclaration();
 	test->items()->append(new ExpressionStatement(indexVar));
 	indexVar->setName("index");
-	indexVar->setType(new PrimitiveType(PrimitiveType::INT));
+	indexVar->setVarType(new PrimitiveType(PrimitiveType::INT));
 	MethodCallExpression* findCall = new MethodCallExpression();
 	indexVar->setInitialValue(findCall);
-	findCall->ref()->set("method:find");
+	findCall->ref()->setName("find");
 	findCall->arguments()->append( new IntegerLiteral(42));
 
 	VariableDeclaration* resultVar = new VariableDeclaration();
 	test->items()->append(new ExpressionStatement(resultVar));
 	resultVar->setName("result");
-	resultVar->setType(new PrimitiveType(PrimitiveType::INT));
+	resultVar->setVarType(new PrimitiveType(PrimitiveType::INT));
 	MethodCallExpression* sumCall = new MethodCallExpression();
 	resultVar->setInitialValue(sumCall);
-	sumCall->ref()->set("method:sum");
+	sumCall->ref()->setName("sum");
 	sumCall->arguments()->append( new IntegerLiteral(0));
-	sumCall->arguments()->append( new VariableAccess("local:index"));
+	sumCall->arguments()->append( new VariableAccess("index"));
 	sumCall->setPrefix(new ThisExpression());
 
 	ReturnStatement* testReturn = new ReturnStatement();
-	testReturn->values()->append(new VariableAccess("local:result"));
+	testReturn->values()->append(new VariableAccess("result"));
 	test->items()->append(testReturn);
 
 	FormalResult* testFormalResult = new FormalResult();

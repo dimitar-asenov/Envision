@@ -25,43 +25,82 @@
  **********************************************************************************************************************/
 
 /*
- * CallStringComponents.cpp
+ * OOReference.cpp
  *
- *  Created on: Feb 29, 2012
+ *  Created on: Mar 29, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "string_components/CallStringComponents.h"
+#include "OOReference.h"
 
-#include "OOModel/src/expressions/MethodCallExpression.h"
+#include "src/expressions/ReferenceExpression.h"
+#include "src/expressions/VariableAccess.h"
+#include "src/expressions/MethodCallExpression.h"
 
-namespace OOInteraction {
+namespace OOModel {
 
-CallStringComponents::CallStringComponents(OOModel::MethodCallExpression* e )
-	: exp_(e)
+NODE_DEFINE_EMPTY_CONSTRUCTORS(OOReference, Model::Reference)
+NODE_DEFINE_TYPE_REGISTRATION_METHODS(OOReference)
+
+bool OOReference::resolve()
 {
+	// TODO Implement resolution routines
+	return false;
+
+//	Method* MethodCallExpression::methodDefinition()
+//	{
+//		Method* met = nullptr;
+//
+//		if (prefix())
+//		{
+//			Class* classNode = prefix()->classDefinition();
+//
+//			if (classNode)	met = dynamic_cast<Method*> (classNode->navigateTo(classNode, ref()->path()));
+//		}
+//		else
+//			met = dynamic_cast<Method*> (ref()->get());
+//
+//		return met;
+//	}
+
+//	Class* ReferenceExpression::classDefinition()
+//	{
+//		ReferenceExpression* exp = this;
+//		QString path;
+//		while (exp)
+//		{
+//			if (!path.isEmpty()) path.prepend(',');
+//			path.prepend(exp->ref()->path());
+//
+//			exp = dynamic_cast<ReferenceExpression*> (exp->prefix());
+//		}
+//
+//		return dynamic_cast<Class*> (navigateTo(this, path));
+//	}
+
+//	Class* VariableAccess::classDefinition()
+//	{
+//		QString path = ref()->path();
+//
+//		ReferenceExpression* exp = dynamic_cast<ReferenceExpression*> (prefix());
+//		while (exp)
+//		{
+//			if (!path.isEmpty()) path.prepend(',');
+//			path.prepend(exp->ref()->path());
+//
+//			exp = dynamic_cast<ReferenceExpression*> (exp->prefix());
+//		}
+//
+//		Model::Node* var = navigateTo(this, path);
+//
+//		Field* f = dynamic_cast<Field*> (var);
+//		if (f) return f->type()->classDefinition();
+//
+//		VariableDeclaration* vd = dynamic_cast<VariableDeclaration*> (var);
+//		if (vd) return vd->type()->classDefinition();
+//
+//		return nullptr;
+//	}
 }
 
-QStringList CallStringComponents::components()
-{
-	QStringList result;
-	if (!exp_) return result;
-
-	QString prefix = stringForNode(exp_->prefix());
-	if (!prefix.isEmpty()) result << prefix << ".";
-
-	result << exp_->ref()->name();
-
-	QString list = "(";
-	for (int i=0; i< exp_->arguments()->size(); ++i)
-	{
-		if (i>0) list.append(",");
-		list.append( stringForNode(exp_->arguments()->at(i)) );
-	}
-	list.append(")");
-
-	result << list;
-	return result;
-}
-
-} /* namespace OOInteraction */
+} /* namespace OOModel */

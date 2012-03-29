@@ -43,34 +43,23 @@ EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(VariableAccess, Expression)
 EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(VariableAccess, Expression)
 
 REGISTER_ATTRIBUTE(VariableAccess, prefix, Expression, false, true, true)
-REGISTER_ATTRIBUTE(VariableAccess, ref, Reference, false, false, true)
+REGISTER_ATTRIBUTE(VariableAccess, ref, OOReference, false, false, true)
 
 VariableAccess::VariableAccess(const QString& referenceString)
 : Expression(nullptr, VariableAccess::getMetaData())
 {
-	ref()->set(referenceString);
+	ref()->setName(referenceString);
 }
 
 Class* VariableAccess::classDefinition()
 {
-	QString path = ref()->path();
-
-	ReferenceExpression* exp = dynamic_cast<ReferenceExpression*> (prefix());
-	while (exp)
-	{
-		if (!path.isEmpty()) path.prepend(',');
-		path.prepend(exp->ref()->path());
-
-		exp = dynamic_cast<ReferenceExpression*> (exp->prefix());
-	}
-
-	Model::Node* var = navigateTo(this, path);
+	Model::Node* var = ref()->target();
 
 	Field* f = dynamic_cast<Field*> (var);
 	if (f) return f->type()->classDefinition();
 
 	VariableDeclaration* vd = dynamic_cast<VariableDeclaration*> (var);
-	if (vd) return vd->type()->classDefinition();
+	if (vd) return vd->varType()->classDefinition();
 
 	return nullptr;
 }

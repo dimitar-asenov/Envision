@@ -71,7 +71,7 @@ void VVariableDeclaration::determineChildren()
 	layout()->setStyle( &style()->layout());
 	name_->setStyle( &style()->name());
 
-	layout()->synchronizeFirst(type_, node()->type());
+	layout()->synchronizeFirst(type_, node()->varType());
 	layout()->synchronizeMid(name_, node()->nameNode(), &style()->name(), 1);
 	name_->setEditable(false);
 	layout()->synchronizeMid(assignmentSymbol_, node()->initialValue() != nullptr, &style()->assignmentSymbol(), 2);

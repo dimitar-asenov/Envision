@@ -40,10 +40,42 @@
 
 #include "ModelBase/src/persistence/PersistentStore.h"
 
+namespace Model {
+	class Reference;
+}
+
 namespace FilePersistence {
 
 class FILEPERSISTENCE_API FileStore: public Model::PersistentStore
 {
+	public:
+		FileStore();
+		virtual ~FileStore();
+
+		void setBaseFolder(const QString& baseFolder);
+
+		// Methods from Persistent Store
+		virtual void saveStringValue(const QString &value);
+		virtual void saveIntValue(int value);
+		virtual void saveDoubleValue(double value);
+		virtual void saveReferenceValue(const QString &name, const Model::Node* target);
+		virtual void saveNode(const Model::Node *node, const QString &name, bool partialLoadHint);
+
+		virtual QList<Model::LoadedNode> loadAllSubNodes(Model::Node* parent);
+		virtual Model::Node* loadSubNode(Model::Node* parent, const QString& name);
+		virtual QString currentNodeType() const;
+		virtual QList<Model::LoadedNode> loadPartialNode(Model::Node* partialNode);
+		virtual Model::PersistedNode* loadCompleteNodeSubtree(const QString& modelName, const Model::Node* node);
+
+		virtual int loadIntValue();
+		virtual QString loadStringValue();
+		virtual double loadDoubleValue();
+		virtual QString loadReferenceValue(Model::Reference* r);
+
+	protected:
+		virtual void saveModel(Model::Model* model, const QString &name);
+		virtual Model::Node* loadModel(Model::Model* model, const QString &name);
+
 	private:
 
 		/** The folder where all models are stored. Each model is a separate sub folder in the base folder. */
@@ -85,31 +117,13 @@ class FILEPERSISTENCE_API FileStore: public Model::PersistentStore
 		XMLModel* xml;
 		NodeIdMap ids;
 
-	public:
-		FileStore();
-		virtual ~FileStore();
+		/**
+		 * \brief This is a list of all references which have been constructed and which have a target that is not yet
+		 *        set. The second part of the pair is the target id.
+		 */
+		QList<QPair<Model::Reference*, QString>> uninitializedReferences;
 
-		void setBaseFolder(const QString& baseFolder);
-
-		// Methods from Persistent Store
-		virtual void saveStringValue(const QString &value);
-		virtual void saveIntValue(int value);
-		virtual void saveDoubleValue(double value);
-		virtual void saveNode(const Model::Node *node, const QString &name, bool partialLoadHint);
-
-		virtual QList<Model::LoadedNode> loadAllSubNodes(Model::Node* parent);
-		virtual Model::Node* loadSubNode(Model::Node* parent, const QString& name);
-		virtual QString currentNodeType() const;
-		virtual QList<Model::LoadedNode> loadPartialNode(Model::Node* partialNode);
-		virtual Model::PersistedNode* loadCompleteNodeSubtree(const QString& modelName, const Model::Node* node);
-
-		virtual int loadIntValue();
-		virtual QString loadStringValue();
-		virtual double loadDoubleValue();
-
-	protected:
-		virtual void saveModel(Model::Model* model, const QString &name);
-		virtual Model::Node* loadModel(Model::Model* model, const QString &name);
+		static const QString NULL_STRING;
 };
 
 }

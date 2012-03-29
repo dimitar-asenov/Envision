@@ -47,7 +47,7 @@ QStringList VariableDeclarationStringComponents::components()
 	QStringList result;
 	if (!exp_) return result;
 
-	result << stringForNode(exp_->type()) << " " << exp_->name();
+	result << stringForNode(exp_->varType()) << " " << exp_->name();
 	if (exp_->initialValue()) result << "=" << stringForNode(exp_->initialValue());
 
 	return result;

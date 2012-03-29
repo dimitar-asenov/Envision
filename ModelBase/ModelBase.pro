@@ -71,7 +71,8 @@ HEADERS += src/InterruptibleThread.h \
     src/commands/SetModificationTarget.h \
     test/PersistentStoreMock.h \
     src/modelbase.h
-SOURCES += src/adapter/AdapterManager.cpp \
+SOURCES += src/persistence/PersistentStore.cpp \
+    src/adapter/AdapterManager.cpp \
     src/commands/AddModifiedNode.cpp \
     src/test_nodes/PositionExtension.cpp \
     src/TypedListInstantiations.cpp \

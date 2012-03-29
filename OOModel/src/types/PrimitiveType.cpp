@@ -40,6 +40,52 @@ EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(PrimitiveType, Type)
 
 REGISTER_ATTRIBUTE(PrimitiveType, val, Integer, false, false, true)
 
+const PrimitiveType* PrimitiveType::PrimitiveTypeINT()
+{
+	static PrimitiveType st(INT);
+	return &st;
+}
+const PrimitiveType* PrimitiveType::PrimitiveTypeLONG()
+{
+	static PrimitiveType st(LONG);
+	return &st;
+}
+const PrimitiveType* PrimitiveType::PrimitiveTypeUNSIGNED_INT()
+{
+	static PrimitiveType st(UNSIGNED_INT);
+	return &st;
+}
+const PrimitiveType* PrimitiveType::PrimitiveTypeUNSIGNED_LONG()
+{
+	static PrimitiveType st(UNSIGNED_LONG);
+	return &st;
+}
+const PrimitiveType* PrimitiveType::PrimitiveTypeFLOAT()
+{
+	static PrimitiveType st(FLOAT);
+	return &st;
+}
+const PrimitiveType* PrimitiveType::PrimitiveTypeDOUBLE()
+{
+	static PrimitiveType st(FLOAT);
+	return &st;
+}
+const PrimitiveType* PrimitiveType::PrimitiveTypeBOOLEAN()
+{
+	static PrimitiveType st(BOOLEAN);
+	return &st;
+}
+const PrimitiveType* PrimitiveType::PrimitiveTypeCHAR()
+{
+	static PrimitiveType st(BOOLEAN);
+	return &st;
+}
+const PrimitiveType* PrimitiveType::PrimitiveTypeVOID()
+{
+	static PrimitiveType st(VOID);
+	return &st;
+}
+
 PrimitiveType::PrimitiveType(const PrimitiveTypes& type)
 	: Type (nullptr, PrimitiveType::getMetaData())
 {

@@ -49,6 +49,7 @@ class NodeIdMap {
 
 		NodeIdType getNextId();
 		void setNextId(NodeIdType nextId);
+		const Model::Node* getNodeForId(NodeIdType id) const;
 
 		void clear();
 
