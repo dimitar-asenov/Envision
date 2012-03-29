@@ -43,6 +43,7 @@ namespace Interaction {
 Expression* ExpressionEditor::parse(const QString& expression_text)
 {
 	if (!expression_text.isNull()) setText(expression_text);
+	else setText("");
 
 	Expression* top = ExpressionTreeBuilder().build( Parser(ops_).parse( Token::tokenize(text_, ops_)) );
 	ExpressionTreeUtils::fixTop(top);

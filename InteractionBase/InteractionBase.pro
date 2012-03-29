@@ -5,8 +5,7 @@ PLUGINS_DIR = $${BUILD_DIR}/plugins
 CONFIG(debug, debug|release):DEFINES += DEBUG
 QMAKE_CXXFLAGS += -Werror \
     -std=c++0x
-INCLUDEPATH += ./headers \
-    ./src \
+INCLUDEPATH += ./src \
     ./test \
     $${ENVISION_ROOT_DIR}
 TARGET = interactionbase
@@ -32,52 +31,52 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/handlers/SetCursorEvent.h \
-    headers/expression_editor/ExpressionVisitor.h \
-    headers/expression_editor/ExpressionEditor.h \
-    headers/expression_editor/ExpressionTreeUtils.h \
-    headers/expression_editor/parser/Parser.h \
-    headers/expression_editor/parser/ParseResult.h \
-    headers/expression_editor/parser/Token.h \
-    headers/expression_editor/tree_builder/FinishOperator.h \
-    headers/expression_editor/tree_builder/SkipOperatorDelimiter.h \
-    headers/expression_editor/tree_builder/AddValue.h \
-    headers/expression_editor/tree_builder/AddEmptyValue.h \
-    headers/expression_editor/tree_builder/AddErrorOperator.h \
-    headers/expression_editor/tree_builder/AddOperator.h \
-    headers/expression_editor/tree_builder/ExpressionTreeBuildInstruction.h \
-    headers/expression_editor/tree_builder/ExpressionTreeBuilder.h \
-    headers/expression_editor/UnfinishedOperator.h \
-    headers/expression_editor/ErrorDescriptor.h \
-    headers/expression_editor/Empty.h \
-    headers/expression_editor/ExpressionContext.h \
-    headers/expression_editor/Value.h \
-    headers/InteractionBaseException.h \
-    headers/expression_editor/Operator.h \
-    headers/expression_editor/Expression.h \
-    headers/expression_editor/OperatorDescriptorList.h \
-    headers/expression_editor/OperatorDescriptor.h \
-    headers/precompiled.h \
-    headers/handlers/HPositionLayout.h \
-    headers/handlers/HList.h \
-    headers/commands/CSceneHandlerItemExit.h \
-    headers/handlers/HSceneHandlerItem.h \
-    headers/handlers/GenericHandler.h \
-    headers/handlers/HCommandPrompt.h \
-    headers/handlers/HExtendable.h \
-    headers/handlers/HText.h \
-    headers/vis/CommandPromptStyle.h \
-    headers/vis/CommandPrompt.h \
-    headers/vis/TextAndDescriptionStyle.h \
-    headers/vis/TextAndDescription.h \
-    headers/commands/CommandExecutionEngine.h \
-    headers/commands/CommandHelp.h \
-    headers/commands/CommandError.h \
-    headers/commands/CommandSuggestion.h \
-    headers/commands/CommandResult.h \
-    headers/commands/Command.h \
-    headers/interactionbase_api.h \
+PRECOMPILED_HEADER = src/precompiled.h
+HEADERS += src/InteractionBaseException.h \
+    src/commands/CSceneHandlerItemExit.h \
+    src/commands/Command.h \
+    src/commands/CommandError.h \
+    src/commands/CommandExecutionEngine.h \
+    src/commands/CommandHelp.h \
+    src/commands/CommandResult.h \
+    src/commands/CommandSuggestion.h \
+    src/expression_editor/Empty.h \
+    src/expression_editor/ErrorDescriptor.h \
+    src/expression_editor/Expression.h \
+    src/expression_editor/ExpressionContext.h \
+    src/expression_editor/ExpressionEditor.h \
+    src/expression_editor/ExpressionTreeUtils.h \
+    src/expression_editor/ExpressionVisitor.h \
+    src/expression_editor/Operator.h \
+    src/expression_editor/OperatorDescriptor.h \
+    src/expression_editor/OperatorDescriptorList.h \
+    src/expression_editor/UnfinishedOperator.h \
+    src/expression_editor/Value.h \
+    src/expression_editor/parser/ParseResult.h \
+    src/expression_editor/parser/Parser.h \
+    src/expression_editor/parser/Token.h \
+    src/expression_editor/tree_builder/AddEmptyValue.h \
+    src/expression_editor/tree_builder/AddErrorOperator.h \
+    src/expression_editor/tree_builder/AddOperator.h \
+    src/expression_editor/tree_builder/AddValue.h \
+    src/expression_editor/tree_builder/ExpressionTreeBuildInstruction.h \
+    src/expression_editor/tree_builder/ExpressionTreeBuilder.h \
+    src/expression_editor/tree_builder/FinishOperator.h \
+    src/expression_editor/tree_builder/SkipOperatorDelimiter.h \
+    src/handlers/GenericHandler.h \
+    src/handlers/HCommandPrompt.h \
+    src/handlers/HExtendable.h \
+    src/handlers/HList.h \
+    src/handlers/HPositionLayout.h \
+    src/handlers/HSceneHandlerItem.h \
+    src/handlers/HText.h \
+    src/handlers/SetCursorEvent.h \
+    src/interactionbase_api.h \
+    src/precompiled.h \
+    src/vis/CommandPrompt.h \
+    src/vis/CommandPromptStyle.h \
+    src/vis/TextAndDescription.h \
+    src/vis/TextAndDescriptionStyle.h \
     src/interactionbase.h
 SOURCES += src/handlers/SetCursorEvent.cpp \
     src/expression_editor/ExpressionVisitor.cpp \

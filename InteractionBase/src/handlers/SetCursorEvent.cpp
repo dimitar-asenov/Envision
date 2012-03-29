@@ -33,8 +33,8 @@
 
 #include "handlers/SetCursorEvent.h"
 
-#include "VisualizationBase/headers/items/Item.h"
-#include "ModelBase/headers/adapter/AdapterManager.h"
+#include "VisualizationBase/src/items/Item.h"
+#include "ModelBase/src/adapter/AdapterManager.h"
 
 namespace Interaction {
 
@@ -51,6 +51,8 @@ void SetCursorEvent::execute()
 
 	if (!item) item = parentContainer_;
 
+	auto parent = static_cast<Visualization::Item*>(item->parentItem());
+
 	switch(placement_)
 	{
 		case CursorOnTop: item->moveCursor(Visualization::Item::CursorMoveDirection::MoveOnPosition,
@@ -63,6 +65,16 @@ void SetCursorEvent::execute()
 				QPoint(item->xEnd(), item->height() / 2)); break;
 		case CursorOnCenter: item->moveCursor(Visualization::Item::CursorMoveDirection::MoveOnPosition,
 				QPoint(item->width() / 2,item->height() / 2)); break;
+
+		case CursorAboveOf: parent->moveCursor(Visualization::Item::CursorMoveDirection::MoveOnPosition,
+				item->pos().toPoint() + QPoint(item->width() / 2, 0)); break;
+		case CursorBelowOf: parent->moveCursor(Visualization::Item::CursorMoveDirection::MoveOnPosition,
+				item->pos().toPoint() + QPoint(item->width() / 2, item->height()-1)); break;
+		case CursorLeftOf: parent->moveCursor(Visualization::Item::CursorMoveDirection::MoveOnPosition,
+				item->pos().toPoint() + QPoint(0, item->height() / 2)); break;
+		case CursorRightOf: parent->moveCursor(Visualization::Item::CursorMoveDirection::MoveOnPosition,
+				item->pos().toPoint() + QPoint(item->width() - 1, item->height() / 2)); break;
+
 		default: item->moveCursor(Visualization::Item::CursorMoveDirection::MoveOnPosition,
 				QPoint(0, 0)); break;
 	}

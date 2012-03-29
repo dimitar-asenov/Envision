@@ -33,7 +33,7 @@
 
 #include "statements/VBreakStatement.h"
 
-#include "OOModel/headers/statements/BreakStatement.h"
+#include "OOModel/src/statements/BreakStatement.h"
 
 using namespace Visualization;
 using namespace OOModel;

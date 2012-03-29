@@ -34,10 +34,6 @@
 #include "commands/ListPut.h"
 #include "nodes/Node.h"
 
-#include "Core/headers/global.h"
-
-#include <QtCore/QVector>
-
 namespace Model {
 
 ListPut::ListPut(Node *target, QVector<Node*>& nodes_, Node* newNode_, int position) :

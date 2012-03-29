@@ -34,10 +34,6 @@
 #include "shapes/Diamond.h"
 #include "VisualizationException.h"
 
-#include <QtGui/QPainter>
-
-#include <cmath>
-
 namespace Visualization {
 
 SHAPE_COMMON_DEFINITIONS(Diamond, "shape")

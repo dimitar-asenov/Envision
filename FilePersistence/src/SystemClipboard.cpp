@@ -34,14 +34,9 @@
 #include "SystemClipboard.h"
 #include "FilePersistenceException.h"
 
-#include "ModelBase/headers/Model.h"
-#include "ModelBase/headers/persistence/PersistedNode.h"
-#include "ModelBase/headers/persistence/PersistedValue.h"
-
-#include "Core/headers/global.h"
-
-#include <QtGui/QClipboard>
-#include <QtGui/QApplication>
+#include "ModelBase/src/Model.h"
+#include "ModelBase/src/persistence/PersistedNode.h"
+#include "ModelBase/src/persistence/PersistedValue.h"
 
 using namespace Model;
 

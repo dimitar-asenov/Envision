@@ -32,7 +32,7 @@
  **********************************************************************************************************************/
 
 #include "modelbase.h"
-#include "SelfTest/headers/SelfTestSuite.h"
+#include "SelfTest/src/SelfTestSuite.h"
 #include "Model.h"
 #include "nodes/Text.h"
 #include "nodes/Integer.h"

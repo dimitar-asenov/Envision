@@ -42,6 +42,7 @@ void OperatorStyle::load(Visualization::StyleLoader& sl)
 	sl.load("layout", layout_);
 	sl.load("preSymbol", preSymbol_);
 	sl.load("inSymbol", inSymbol_);
+	sl.load("in2Symbol", in2Symbol_);
 	sl.load("postSymbol", postSymbol_);
 }
 

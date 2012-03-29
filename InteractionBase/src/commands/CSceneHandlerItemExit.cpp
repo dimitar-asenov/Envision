@@ -33,7 +33,7 @@
 
 #include "commands/CSceneHandlerItemExit.h"
 
-#include "VisualizationBase/headers/VisualizationManager.h"
+#include "VisualizationBase/src/VisualizationManager.h"
 
 namespace Interaction {
 

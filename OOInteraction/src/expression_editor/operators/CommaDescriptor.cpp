@@ -33,7 +33,7 @@
 
 #include "expression_editor/operators/CommaDescriptor.h"
 
-#include "OOModel/headers/expressions/CommaExpression.h"
+#include "OOModel/src/expressions/CommaExpression.h"
 
 namespace OOInteraction {
 

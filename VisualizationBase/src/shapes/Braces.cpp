@@ -34,9 +34,6 @@
 #include "shapes/Braces.h"
 #include "VisualizationException.h"
 
-#include <QtGui/QPainter>
-#include <QtGui/QFontMetrics>
-
 namespace Visualization {
 
 SHAPE_COMMON_DEFINITIONS(Braces, "shape")

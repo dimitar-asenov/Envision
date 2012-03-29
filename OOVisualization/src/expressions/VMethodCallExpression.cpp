@@ -32,11 +32,10 @@
  **********************************************************************************************************************/
 
 #include "expressions/VMethodCallExpression.h"
-#include "Helpers.h"
 
-#include "VisualizationBase/headers/items/Text.h"
-#include "VisualizationBase/headers/items/Static.h"
-#include "VisualizationBase/headers/items/VList.h"
+#include "VisualizationBase/src/items/Text.h"
+#include "VisualizationBase/src/items/Static.h"
+#include "VisualizationBase/src/items/VList.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -78,13 +77,10 @@ void VMethodCallExpression::determineChildren()
 	layout()->setStyle( &style()->layout());
 	name_->setStyle( &style()->name());
 	arguments_->setStyle( &style()->arguments() );
+	arguments_->setSuppressHandler(true);
 	if (prefix_) separator_->setStyle( &style()->separator());
 
 	name_->setText(node()->ref()->path().split(',').last().split(':').last());
-
-	bool horizontal = style()->layout().direction() == LayoutType::StyleType::LeftToRight
-		|| style()->layout().direction() == LayoutType::StyleType::RightToLeft;
-	Helpers::omitBoundingCursorsInExpressions(this, layout(), horizontal);
 }
 
 }

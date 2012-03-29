@@ -3,11 +3,10 @@ CONFIG(release, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/ReleaseBuild
 CONFIG(debug, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/DebugBuild
 PLUGINS_DIR = $${BUILD_DIR}/plugins
 CONFIG(debug, debug|release):DEFINES += DEBUG
-QMAKE_CXXFLAGS += -Werror
-
-INCLUDEPATH += ./headers \
-	./src \
-	./test \
+QMAKE_CXXFLAGS += -Werror \
+    -std=c++0x
+INCLUDEPATH += ./src \
+    ./test \
     $${ENVISION_ROOT_DIR}
 TARGET = logger
 DEFINES += LOGGER_LIBRARY
@@ -22,13 +21,13 @@ pluginmeta.path = $$PLUGINS_DIR
 pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
-PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/precompiled.h \
+PRECOMPILED_HEADER = src/precompiled.h
+HEADERS += src/Log.h \
+    src/logger_api.h \
+    src/precompiled.h \
     test/LogTester.h \
     src/DefaultLog.h \
-    headers/Log.h \
-    src/logger.h \
-    headers/logger_api.h
+    src/logger.h
 SOURCES += test/LogTester.cpp \
     src/DefaultLog.cpp \
     src/Log.cpp \

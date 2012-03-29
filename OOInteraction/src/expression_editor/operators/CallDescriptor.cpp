@@ -33,10 +33,10 @@
 
 #include "expression_editor/operators/CallDescriptor.h"
 
-#include "OOModel/headers/expressions/VariableAccess.h"
-#include "OOModel/headers/expressions/EmptyExpression.h"
-#include "OOModel/headers/expressions/CommaExpression.h"
-#include "OOModel/headers/expressions/MethodCallExpression.h"
+#include "OOModel/src/expressions/VariableAccess.h"
+#include "OOModel/src/expressions/EmptyExpression.h"
+#include "OOModel/src/expressions/CommaExpression.h"
+#include "OOModel/src/expressions/MethodCallExpression.h"
 
 namespace OOInteraction {
 

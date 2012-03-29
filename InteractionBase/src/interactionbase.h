@@ -34,9 +34,10 @@
 #ifndef INTERACTIONBASE_H
 #define INTERACTIONBASE_H
 
-#include "Core/headers/EnvisionPlugin.h"
+#include "Core/src/EnvisionPlugin.h"
+#include "precompiled.h"
 
-#include "Logger/headers/Log.h"
+#include "Logger/src/Log.h"
 
 namespace Interaction {
 

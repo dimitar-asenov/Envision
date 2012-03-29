@@ -33,8 +33,8 @@
 
 #include "handlers/HExtendable.h"
 
-#include "VisualizationBase/headers/items/VExtendable.h"
-#include "VisualizationBase/headers/Scene.h"
+#include "VisualizationBase/src/items/VExtendable.h"
+#include "VisualizationBase/src/Scene.h"
 
 namespace Interaction {
 

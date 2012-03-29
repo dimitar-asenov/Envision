@@ -36,21 +36,28 @@
 namespace Interaction {
 
 ParseResult::ParseResult()
-	:errors(0), emptyExpressions(0), missing_inner_tokens(0), missing_trailing_tokens(0)
+	: errors(0), emptyExpressions(0), missingInnerTokens(0), missingTrailingTokens(0), numOperators(0)
 {
 }
 
-ParseResult::ParseResult(int errors, int missing_inner_tokens, int missing_trailing_tokens)
-	: errors(errors), missing_inner_tokens(missing_inner_tokens), missing_trailing_tokens(missing_trailing_tokens)
+ParseResult::ParseResult(int errors, int emptyExpressions, int missing_inner_tokens, int missing_trailing_tokens,
+		int numOperators)
+	: errors(errors), emptyExpressions(emptyExpressions), missingInnerTokens(missing_inner_tokens),
+	  missingTrailingTokens(missing_trailing_tokens), numOperators(numOperators)
 {
 }
 
 bool operator< (const ParseResult& left, const ParseResult& right)
 {
 	if ( left.errors != right.errors ) return  left.errors < right.errors;
-	if ( left.missing_inner_tokens != right.missing_inner_tokens ) return  left.missing_inner_tokens < right.missing_inner_tokens;
-	if ( left.missing_trailing_tokens != right.missing_trailing_tokens ) return  left.missing_trailing_tokens < right.missing_trailing_tokens;
-	if ( left.emptyExpressions != right.emptyExpressions ) return  left.emptyExpressions < right.emptyExpressions;
+	if ( left.missingInnerTokens != right.missingInnerTokens )
+		return  left.missingInnerTokens < right.missingInnerTokens;
+	if ( left.missingTrailingTokens != right.missingTrailingTokens )
+		return  left.missingTrailingTokens < right.missingTrailingTokens;
+	if ( left.emptyExpressions != right.emptyExpressions )
+		return  left.emptyExpressions < right.emptyExpressions;
+	if ( left.numOperators != right.numOperators )
+		return  left.numOperators < right.numOperators;
 
 	return false;
 }

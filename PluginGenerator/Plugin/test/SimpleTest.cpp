@@ -32,7 +32,7 @@
  **********************************************************************************************************************/
 
 #include "PLUGINNAME_LOWERCASE.h"
-#include "SelfTest/headers/SelfTestSuite.h"
+#include "SelfTest/src/SelfTestSuite.h"
 
 namespace NAMESPACE {
 

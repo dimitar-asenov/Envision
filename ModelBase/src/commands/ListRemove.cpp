@@ -34,10 +34,6 @@
 #include "commands/ListRemove.h"
 #include "nodes/Node.h"
 
-#include "Core/headers/global.h"
-
-#include <QtCore/QVector>
-
 namespace Model {
 
 ListRemove::ListRemove(Node *target, QVector<Node*>& nodes_, int position, bool release) :

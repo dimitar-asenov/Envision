@@ -34,11 +34,11 @@
 #include "FileStore.h"
 #include "FilePersistenceException.h"
 
-#include "ModelBase/headers/Model.h"
-#include "ModelBase/headers/nodes/Node.h"
-#include "ModelBase/headers/ModelException.h"
-#include "ModelBase/headers/persistence/PersistedNode.h"
-#include "ModelBase/headers/persistence/PersistedValue.h"
+#include "ModelBase/src/Model.h"
+#include "ModelBase/src/nodes/Node.h"
+#include "ModelBase/src/ModelException.h"
+#include "ModelBase/src/persistence/PersistedNode.h"
+#include "ModelBase/src/persistence/PersistedValue.h"
 
 namespace FilePersistence {
 

@@ -34,7 +34,7 @@
 #include "string_components/PrimitiveTypeStringComponents.h"
 #include "OOInteractionException.h"
 
-#include "OOModel/headers/types/PrimitiveType.h"
+#include "OOModel/src/types/PrimitiveType.h"
 
 namespace OOInteraction {
 
@@ -50,15 +50,15 @@ QStringList PrimitiveTypeStringComponents::components()
 
 	switch(exp_->type())
 	{
-		case OOModel::PrimitiveType::PrimitiveTypes::INT : result.append("int"); break;
-		case OOModel::PrimitiveType::PrimitiveTypes::LONG : result.append("long"); break;
-		case OOModel::PrimitiveType::PrimitiveTypes::UNSIGNED_INT : result.append("uint"); break;
-		case OOModel::PrimitiveType::PrimitiveTypes::UNSIGNED_LONG : result.append("ulong"); break;
-		case OOModel::PrimitiveType::PrimitiveTypes::FLOAT : result.append("float"); break;
-		case OOModel::PrimitiveType::PrimitiveTypes::DOUBLE : result.append("double"); break;
-		case OOModel::PrimitiveType::PrimitiveTypes::BOOLEAN : result.append("boolean"); break;
-		case OOModel::PrimitiveType::PrimitiveTypes::CHAR : result.append("char"); break;
-		case OOModel::PrimitiveType::PrimitiveTypes::VOID : result.append("void"); break;
+		case OOModel::PrimitiveType::PrimitiveTypes::INT : result << "int"; break;
+		case OOModel::PrimitiveType::PrimitiveTypes::LONG : result << "long"; break;
+		case OOModel::PrimitiveType::PrimitiveTypes::UNSIGNED_INT : result << "uint"; break;
+		case OOModel::PrimitiveType::PrimitiveTypes::UNSIGNED_LONG : result << "ulong"; break;
+		case OOModel::PrimitiveType::PrimitiveTypes::FLOAT : result << "float"; break;
+		case OOModel::PrimitiveType::PrimitiveTypes::DOUBLE : result << "double"; break;
+		case OOModel::PrimitiveType::PrimitiveTypes::BOOLEAN : result << "boolean"; break;
+		case OOModel::PrimitiveType::PrimitiveTypes::CHAR : result << "char"; break;
+		case OOModel::PrimitiveType::PrimitiveTypes::VOID : result << "void"; break;
 		default: throw OOInteractionException("Unknown primitive type");
 	}
 	return result;

@@ -39,7 +39,7 @@ EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(VariableDeclaration, Expression)
 EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(VariableDeclaration, Expression)
 
 REGISTER_ATTRIBUTE(VariableDeclaration, name, Text, false, false, true)
-REGISTER_ATTRIBUTE(VariableDeclaration, type, Type, false, false, true)
+REGISTER_ATTRIBUTE(VariableDeclaration, type, Expression, false, false, true)
 REGISTER_ATTRIBUTE(VariableDeclaration, initialValue, Expression, false, true, true)
 
 bool VariableDeclaration::definesSymbol() const

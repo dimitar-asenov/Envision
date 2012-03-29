@@ -33,9 +33,9 @@
 
 #include "handlers/HPositionLayout.h"
 
-#include "VisualizationBase/headers/layouts/PositionLayout.h"
-#include "VisualizationBase/headers/Scene.h"
-#include "ModelBase/headers/Model.h"
+#include "VisualizationBase/src/layouts/PositionLayout.h"
+#include "VisualizationBase/src/Scene.h"
+#include "ModelBase/src/Model.h"
 
 namespace Interaction {
 

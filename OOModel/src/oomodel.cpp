@@ -34,7 +34,7 @@
 #include "oomodel.h"
 #include "allOOModelNodes.h"
 
-#include "SelfTest/headers/SelfTestSuite.h"
+#include "SelfTest/src/SelfTestSuite.h"
 
 Q_EXPORT_PLUGIN2( oomodel, OOModel::OOModel )
 
@@ -91,6 +91,7 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	Model::TypedList<EmptyExpression>::registerNodeType();
 	Model::TypedList<CommaExpression>::registerNodeType();
 	Model::TypedList<AssignmentExpression>::registerNodeType();
+	Model::TypedList<ConditionalExpression>::registerNodeType();
 
 	Model::TypedList<Type>::registerNodeType();
 	Model::TypedList<PrimitiveType>::registerNodeType();
@@ -143,6 +144,7 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	UnfinishedOperator::init();
 	CommaExpression::init();
 	AssignmentExpression::init();
+	ConditionalExpression::init();
 
 	Type::init();
 	PrimitiveType::init();

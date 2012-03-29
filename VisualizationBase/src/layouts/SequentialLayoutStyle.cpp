@@ -61,6 +61,9 @@ void SequentialLayoutStyle::load(StyleLoader& sl)
 	sl.load("direction", (int&) direction_);
 	sl.load("alignment", (int&) alignment_);
 	sl.load("spaceBetweenElements", spaceBetweenElements_);
+	sl.load("notLocationEquivalentCursors", notLocationEquivalentCursors_);
+	sl.load("noInnerCursors", noInnerCursors_);
+	sl.load("noBoundaryCursors", noBoundaryCursors_);
 }
 
 }

@@ -33,7 +33,7 @@
 
 #include "expression_editor/operators/ArrayTypeDescriptor.h"
 
-#include "OOModel/headers/types/ArrayType.h"
+#include "OOModel/src/types/ArrayType.h"
 
 namespace OOInteraction {
 

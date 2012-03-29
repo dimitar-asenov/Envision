@@ -33,7 +33,7 @@
 
 #include "string_components/IntegerLiteralStringComponents.h"
 
-#include "OOModel/headers/expressions/IntegerLiteral.h"
+#include "OOModel/src/expressions/IntegerLiteral.h"
 
 namespace OOInteraction {
 
@@ -47,7 +47,7 @@ QStringList IntegerLiteralStringComponents::components()
 	QStringList result;
 	if (!exp_) return result;
 
-	result.append( QString::number( exp_->value() ) );
+	result << QString::number( exp_->value() );
 
 	return result;
 }

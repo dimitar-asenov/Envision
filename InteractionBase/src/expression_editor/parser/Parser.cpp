@@ -72,19 +72,21 @@ QVector<ExpressionTreeBuildInstruction*> Parser::parse(QVector<Token> tokens)
 	}
 }
 
-ParseResult Parser::parse(QVector<Token>::const_iterator token, ParseResult result, QStringList& expected, bool hasLeft, QVector<ExpressionTreeBuildInstruction*>& instructions)
+ParseResult Parser::parse(QVector<Token>::const_iterator token, ParseResult result, QStringList& expected,
+		bool hasLeft, QVector<ExpressionTreeBuildInstruction*>& instructions)
 {
 	// Finish any completed operators
 	while (!expected.isEmpty() && expected.first() == "end")
 	{
 		expected.removeFirst();
 		instructions.append(new FinishOperator());
+		result.numOperators++;
 		hasLeft = true;
 	}
 
 	if (token == end_tokens_)
 	{
-		result.missing_trailing_tokens = expected.size();
+		result.missingTrailingTokens = expected.size();
 		result.instructions = instructions;
 		return result;
 	}
@@ -126,7 +128,8 @@ QString Parser::getNextExpectedDelimiter(const QStringList& expected, int& index
 	return QString();
 }
 
-void Parser::processNextExpectedDelimiter(bool& processed, QStringList& expected, QVector<Token>::const_iterator& token, bool& hasLeft, ParseResult& result, QVector<ExpressionTreeBuildInstruction*>& instructions)
+void Parser::processNextExpectedDelimiter(bool& processed, QStringList& expected, QVector<Token>::const_iterator& token,
+		bool& hasLeft, ParseResult& result, QVector<ExpressionTreeBuildInstruction*>& instructions)
 {
 	int index;
 	QString next_delim = getNextExpectedDelimiter(expected, index);
@@ -134,7 +137,7 @@ void Parser::processNextExpectedDelimiter(bool& processed, QStringList& expected
 	if (next_delim.isEmpty() || next_delim != token->text()) return;
 
 	processed = true;
-	result.missing_inner_tokens += index;
+	result.missingInnerTokens += index;
 
 	// Finish all intermediate positions
 	for (int i = 0; i<index; ++i)
@@ -150,6 +153,7 @@ void Parser::processNextExpectedDelimiter(bool& processed, QStringList& expected
 			// If the expectation is not an expression or an identifier then it must be an end
 			expected.removeFirst();
 			instructions.append(new FinishOperator());
+			result.numOperators++;
 		}
 	}
 
@@ -163,7 +167,8 @@ void Parser::processNextExpectedDelimiter(bool& processed, QStringList& expected
 	hasLeft = false;
 }
 
-void Parser::processIdentifiersAndLiterals(bool& processed, bool& error, QStringList& expected, QVector<Token>::const_iterator& token, bool& hasLeft, QVector<ExpressionTreeBuildInstruction*>& instructions)
+void Parser::processIdentifiersAndLiterals(bool& processed, bool& error, QStringList& expected,
+		QVector<Token>::const_iterator& token, bool& hasLeft, QVector<ExpressionTreeBuildInstruction*>& instructions)
 {
 	QString e = expected.isEmpty() ? "" : expected.first();
 	if ( e == "expr" || (e == "id" && token->type() == Token::Identifier) )
@@ -176,7 +181,9 @@ void Parser::processIdentifiersAndLiterals(bool& processed, bool& error, QString
 	else if (e == "id") error = true;
 }
 
-void Parser::processOperatorDelimiters(bool& processed, bool& error, QStringList& expected, QVector<Token>::const_iterator& token, bool& hasLeft, ParseResult& result, QVector<ExpressionTreeBuildInstruction*>& instructions)
+void Parser::processOperatorDelimiters(bool& processed, bool& error, QStringList& expected,
+		QVector<Token>::const_iterator& token, bool& hasLeft, ParseResult& result,
+		QVector<ExpressionTreeBuildInstruction*>& instructions)
 {
 	QString e = expected.isEmpty() ? "" : expected.first();
 
@@ -195,7 +202,8 @@ void Parser::processOperatorDelimiters(bool& processed, bool& error, QStringList
 		else {
 			if (!hasLeft)
 			{
-				// This situation arises for example in the 'delete []' operator where two different operator tokens follow each other.
+				// This situation arises for example in the 'delete []' operator where two different operator tokens follow
+				// each other.
 				processNextExpectedDelimiter(processed, expected, token, hasLeft, result, instructions);
 				return;
 			}

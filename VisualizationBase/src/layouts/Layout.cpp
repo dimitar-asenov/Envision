@@ -37,8 +37,6 @@
 
 #include "cursor/LayoutCursor.h"
 
-#include "Core/headers/global.h"
-
 namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS( Layout, "layout" )

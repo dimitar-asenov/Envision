@@ -5,8 +5,7 @@ PLUGINS_DIR = $${BUILD_DIR}/plugins
 CONFIG(debug, debug|release):DEFINES += DEBUG
 QMAKE_CXXFLAGS += -Werror \
     -std=c++0x
-INCLUDEPATH += ./headers \
-    ./src \
+INCLUDEPATH += ./src \
     ./test \
     $${ENVISION_ROOT_DIR}
 TARGET = visualizationbase
@@ -32,80 +31,80 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/items/ItemRegion.h \
-    headers/CustomSceneEvent.h \
-    headers/cursor/LayoutCursor.h \
-    headers/cursor/TextCursor.h \
-    headers/cursor/CursorShapeItem.h \
-    headers/cursor/Cursor.h \
-    headers/precompiled.h \
-    headers/items/StaticStyle.h \
-    headers/items/Static.h \
-    headers/shapes/shapeMacros.h \
-    headers/styles/Style.h \
-    headers/styles/StyleLoader.h \
-    headers/styles/StyleNode.h \
-    headers/styles/StyleSet.h \
-    headers/shapes/BracesStyle.h \
-    headers/shapes/Braces.h \
-    headers/layouts/GridLayoutStyle.h \
-    headers/layouts/GridLayout.h \
-    headers/shapes/DiamondStyle.h \
-    headers/shapes/Diamond.h \
-    headers/items/LayoutProvider.h \
-    headers/items/LayoutProviderBase.h \
-    headers/items/ItemWithNode.h \
-    headers/items/SymbolStyle.h \
-    headers/items/Symbol.h \
-    headers/items/VCharacter.h \
-    headers/items/VBoolean.h \
-    headers/items/VFloat.h \
-    headers/icons/SVGIcon.h \
-    headers/icons/SVGIconStyle.h \
-    headers/items/VReference.h \
-    headers/icons/IconStyle.h \
-    headers/icons/Icon.h \
-    headers/items/VInteger.h \
-    headers/layouts/PositionLayoutStyle.h \
-    headers/layouts/PositionLayout.h \
-    headers/node_extensions/Position.h \
-    headers/items/SelectedItem.h \
-    headers/items/SceneHandlerItem.h \
-    headers/items/TextRenderer.h \
-    headers/InteractionHandler.h \
-    headers/views/MiniMap.h \
-    headers/views/View.h \
-    headers/views/MainView.h \
-    headers/items/VListStyle.h \
-    headers/items/VList.h \
-    headers/items/Item.h \
-    headers/items/ItemMacros.h \
-    headers/items/ItemStyle.h \
-    headers/items/VExtendableStyle.h \
-    headers/layouts/LayoutStyle.h \
-    headers/layouts/PanelBorderLayoutStyle.h \
-    headers/layouts/PanelBorderLayout.h \
-    headers/layouts/PanelLayoutStyle.h \
-    headers/layouts/PanelLayout.h \
-    headers/items/VExtendable.h \
-    headers/items/VText.h \
-    headers/items/TextStyle.h \
-    headers/items/Text.h \
-    headers/shapes/BoxStyle.h \
-    headers/shapes/ShapeStyle.h \
+PRECOMPILED_HEADER = src/precompiled.h
+HEADERS += src/CustomSceneEvent.h \
+    src/InteractionHandler.h \
+    src/ModelRenderer.h \
+    src/Scene.h \
+    src/VisualizationException.h \
+    src/VisualizationManager.h \
+    src/cursor/Cursor.h \
+    src/cursor/CursorShapeItem.h \
+    src/cursor/LayoutCursor.h \
+    src/cursor/TextCursor.h \
+    src/icons/Icon.h \
+    src/icons/IconStyle.h \
+    src/icons/SVGIcon.h \
+    src/icons/SVGIconStyle.h \
+    src/items/Item.h \
+    src/items/ItemMacros.h \
+    src/items/ItemRegion.h \
+    src/items/ItemStyle.h \
+    src/items/ItemWithNode.h \
+    src/items/LayoutProvider.h \
+    src/items/LayoutProviderBase.h \
+    src/items/SceneHandlerItem.h \
+    src/items/SelectedItem.h \
+    src/items/Static.h \
+    src/items/StaticStyle.h \
+    src/items/Symbol.h \
+    src/items/SymbolStyle.h \
+    src/items/Text.h \
+    src/items/TextRenderer.h \
+    src/items/TextStyle.h \
+    src/items/VBoolean.h \
+    src/items/VCharacter.h \
+    src/items/VExtendable.h \
+    src/items/VExtendableStyle.h \
+    src/items/VFloat.h \
+    src/items/VInteger.h \
+    src/items/VList.h \
+    src/items/VListStyle.h \
+    src/items/VReference.h \
+    src/items/VText.h \
+    src/layouts/GridLayout.h \
+    src/layouts/GridLayoutStyle.h \
+    src/layouts/Layout.h \
+    src/layouts/LayoutStyle.h \
+    src/layouts/PanelBorderLayout.h \
+    src/layouts/PanelBorderLayoutStyle.h \
+    src/layouts/PanelLayout.h \
+    src/layouts/PanelLayoutStyle.h \
+    src/layouts/PositionLayout.h \
+    src/layouts/PositionLayoutStyle.h \
+    src/layouts/SequentialLayout.h \
+    src/layouts/SequentialLayoutStyle.h \
+    src/node_extensions/Position.h \
+    src/precompiled.h \
+    src/shapes/Box.h \
+    src/shapes/BoxStyle.h \
+    src/shapes/Braces.h \
+    src/shapes/BracesStyle.h \
+    src/shapes/Diamond.h \
+    src/shapes/DiamondStyle.h \
+    src/shapes/Shape.h \
+    src/shapes/ShapeStyle.h \
+    src/shapes/shapeMacros.h \
+    src/styles/Style.h \
+    src/styles/StyleLoader.h \
+    src/styles/StyleNode.h \
+    src/styles/StyleSet.h \
+    src/views/MainView.h \
+    src/views/MiniMap.h \
+    src/views/View.h \
+    src/visualizationbase_api.h \
     test/BoxTest.h \
-    headers/shapes/Box.h \
-    headers/shapes/Shape.h \
-    headers/layouts/Layout.h \
-    headers/layouts/SequentialLayoutStyle.h \
-    headers/layouts/SequentialLayout.h \
-    headers/ModelRenderer.h \
-    headers/VisualizationManager.h \
-    headers/Scene.h \
-    src/visualizationbase.h \
-    headers/VisualizationException.h \
-    headers/visualizationbase_api.h
+    src/visualizationbase.h
 SOURCES += src/items/ItemRegion.cpp \
     src/CustomSceneEvent.cpp \
     src/cursor/LayoutCursor.cpp \

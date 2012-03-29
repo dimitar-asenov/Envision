@@ -36,8 +36,8 @@
 #include "handlers/GenericHandler.h"
 #include "commands/CommandExecutionEngine.h"
 
-#include "VisualizationBase/headers/Scene.h"
-#include "VisualizationBase/headers/cursor/TextCursor.h"
+#include "VisualizationBase/src/Scene.h"
+#include "VisualizationBase/src/cursor/TextCursor.h"
 
 using namespace Visualization;
 

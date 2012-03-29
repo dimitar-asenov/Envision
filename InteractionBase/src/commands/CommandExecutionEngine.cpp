@@ -39,9 +39,9 @@
 
 #include "interactionbase.h"
 
-#include "VisualizationBase/headers/items/Item.h"
-#include "VisualizationBase/headers/items/SceneHandlerItem.h"
-#include "VisualizationBase/headers/Scene.h"
+#include "VisualizationBase/src/items/Item.h"
+#include "VisualizationBase/src/items/SceneHandlerItem.h"
+#include "VisualizationBase/src/Scene.h"
 
 namespace Interaction {
 

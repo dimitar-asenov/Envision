@@ -3,9 +3,9 @@ CONFIG(release, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/ReleaseBuild
 CONFIG(debug, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/DebugBuild
 PLUGINS_DIR = $${BUILD_DIR}/plugins
 CONFIG(debug, debug|release):DEFINES += DEBUG
-QMAKE_CXXFLAGS += -Werror -std=c++0x
-INCLUDEPATH += ./headers \
-    ./src \
+QMAKE_CXXFLAGS += -Werror \
+    -std=c++0x
+INCLUDEPATH += ./src \
     ./test \
     $${ENVISION_ROOT_DIR}
 TARGET = custommethodcall
@@ -19,7 +19,7 @@ win32:LIBS += -L$${PLUGINS_DIR} \
     -linteractionbase \
     -loovisualization
 QT = core \
-	gui
+    gui
 TEMPLATE = lib
 CONFIG += plugin \
     warn_on \
@@ -33,19 +33,19 @@ styles.files = styles/*
 INSTALLS += target \
     pluginmeta \
     styles
-PRECOMPILED_HEADER = headers/precompiled.h
-HEADERS += headers/precompiled.h \
-    headers/items/SumMethodVisStyle.h \
-    headers/items/SumMethodVis.h \
-    headers/items/InsertMethodVisStyle.h \
-    headers/items/InsertMethodVis.h \
-    headers/items/EmptyMethodVisStyle.h \
-    headers/items/EmptyMethodVis.h \
-    headers/items/FindMethodVisStyle.h \
-    headers/items/FindMethodVis.h \
-    headers/CustomVisualization.h \
-    headers/CustomMethodCallException.h \
-    headers/custommethodcall_api.h \
+PRECOMPILED_HEADER = src/precompiled.h
+HEADERS += src/CustomMethodCallException.h \
+    src/CustomVisualization.h \
+    src/custommethodcall_api.h \
+    src/items/EmptyMethodVis.h \
+    src/items/EmptyMethodVisStyle.h \
+    src/items/FindMethodVis.h \
+    src/items/FindMethodVisStyle.h \
+    src/items/InsertMethodVis.h \
+    src/items/InsertMethodVisStyle.h \
+    src/items/SumMethodVis.h \
+    src/items/SumMethodVisStyle.h \
+    src/precompiled.h \
     src/custommethodcall.h
 SOURCES += src/items/SumMethodVis.cpp \
     src/items/SumMethodVisStyle.cpp \

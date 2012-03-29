@@ -35,10 +35,6 @@
 #include "nodes/Node.h"
 #include "ModelException.h"
 
-#include "Core/headers/global.h"
-
-#include <QtCore/QVector>
-
 namespace Model {
 
 ListInsert::ListInsert(Node *target, QVector<Node*>& nodes_, Node* newNode_, int position) :

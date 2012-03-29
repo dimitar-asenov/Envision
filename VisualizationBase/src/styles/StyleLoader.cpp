@@ -34,13 +34,6 @@
 #include "styles/StyleLoader.h"
 #include "VisualizationException.h"
 
-
-#include <QtGui/QLinearGradient>
-#include <QtGui/QRadialGradient>
-#include <QtGui/QPen>
-#include <QtGui/QFont>
-#include <QtGui/QColor>
-
 namespace Visualization {
 
 StyleLoader::StyleLoader() :

@@ -33,15 +33,15 @@
 
 #include "handlers/HMethod.h"
 
-#include "OOVisualization/headers/top_level/VMethod.h"
-#include "OOModel/headers/expressions/EmptyExpression.h"
-#include "OOModel/headers/statements/ExpressionStatement.h"
-#include "OOModel/headers/elements/FormalArgument.h"
+#include "OOVisualization/src/top_level/VMethod.h"
+#include "OOModel/src/expressions/EmptyExpression.h"
+#include "OOModel/src/statements/ExpressionStatement.h"
+#include "OOModel/src/elements/FormalArgument.h"
 
-#include "InteractionBase/headers/handlers/SetCursorEvent.h"
-#include "VisualizationBase/headers/items/VList.h"
-#include "VisualizationBase/headers/items/VText.h"
-#include "VisualizationBase/headers/cursor/LayoutCursor.h"
+#include "InteractionBase/src/handlers/SetCursorEvent.h"
+#include "VisualizationBase/src/items/VList.h"
+#include "VisualizationBase/src/items/VText.h"
+#include "VisualizationBase/src/cursor/LayoutCursor.h"
 
 namespace OOInteraction {
 
@@ -66,7 +66,7 @@ void HMethod::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			event->accept();
 			if (m->node()->items()->size() > 0)
 			{
-				QApplication::postEvent(target->scene(), new Interaction::SetCursorEvent(target, m->node()->items()->at(0),
+				target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, m->node()->items()->at(0),
 						Interaction::SetCursorEvent::CursorOnLeft));
 			}
 			else
@@ -79,7 +79,7 @@ void HMethod::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 				m->node()->model()->endModification();
 
 				m->content()->setUpdateNeeded();
-				QApplication::postEvent(target->scene(), new Interaction::SetCursorEvent(target, empty,
+				target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty,
 						Interaction::SetCursorEvent::CursorOnLeft));
 			}
 		}
@@ -90,7 +90,7 @@ void HMethod::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 
 			if (m->node()->arguments()->size() > 0)
 			{
-				QApplication::postEvent(target->scene(), new Interaction::SetCursorEvent(target,
+				target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target,
 						m->node()->arguments()->at(0), Interaction::SetCursorEvent::CursorOnLeft));
 			}
 			else
@@ -125,7 +125,7 @@ void HMethod::createNewArgument(OOVisualization::VMethod* method, int position)
 	method->node()->model()->endModification();
 
 	method->arguments()->setUpdateNeeded();
-	QApplication::postEvent(method->scene(), new Interaction::SetCursorEvent(method, arg->nameNode(),
+	method->scene()->addPostEventAction( new Interaction::SetCursorEvent(method, arg->nameNode(),
 			Interaction::SetCursorEvent::CursorOnLeft));
 }
 

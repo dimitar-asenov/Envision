@@ -31,7 +31,7 @@
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "ModelBase/headers/nodes/TypedListDefinition.h"
+#include "ModelBase/src/nodes/TypedListDefinition.h"
 
 #include "allOOModelNodes.h"
 
@@ -79,6 +79,7 @@ template class Model::TypedList<OOModel::ErrorExpression>;
 template class Model::TypedList<OOModel::UnfinishedOperator>;
 template class Model::TypedList<OOModel::CommaExpression>;
 template class Model::TypedList<OOModel::AssignmentExpression>;
+template class Model::TypedList<OOModel::ConditionalExpression>;
 
 template class Model::TypedList<OOModel::Type>;
 template class Model::TypedList<OOModel::PrimitiveType>;

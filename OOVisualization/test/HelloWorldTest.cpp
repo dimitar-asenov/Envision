@@ -32,24 +32,20 @@
  **********************************************************************************************************************/
 
 #include "oovisualization.h"
-#include "SelfTest/headers/SelfTestSuite.h"
+#include "SelfTest/src/SelfTestSuite.h"
 
-#include "OOModel/headers/allOOModelNodes.h"
+#include "OOModel/src/allOOModelNodes.h"
 
-#include "VisualizationBase/headers/VisualizationManager.h"
-#include "VisualizationBase/headers/Scene.h"
-#include "VisualizationBase/headers/views/MainView.h"
-#include "VisualizationBase/headers/ModelRenderer.h"
-#include "VisualizationBase/headers/items/VExtendable.h"
-#include "VisualizationBase/headers/items/VText.h"
-#include "VisualizationBase/headers/items/VList.h"
-#include "VisualizationBase/headers/node_extensions/Position.h"
+#include "VisualizationBase/src/VisualizationManager.h"
+#include "VisualizationBase/src/Scene.h"
+#include "VisualizationBase/src/views/MainView.h"
+#include "VisualizationBase/src/ModelRenderer.h"
+#include "VisualizationBase/src/items/VExtendable.h"
+#include "VisualizationBase/src/items/VText.h"
+#include "VisualizationBase/src/items/VList.h"
+#include "VisualizationBase/src/node_extensions/Position.h"
 
-#include "ModelBase/headers/Model.h"
-
-#include <QtGui/QDesktopWidget>
-#include <QtGui/QApplication>
-#include <QtCore/QCoreApplication>
+#include "ModelBase/src/Model.h"
 
 using namespace OOModel;
 using namespace Visualization;
@@ -368,6 +364,20 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 	col3Init->values()->append(new IntegerLiteral(7));
 	col3Init->values()->append(new IntegerLiteral(8));
 	col3Init->values()->append(new IntegerLiteral(9));
+
+	VariableDeclaration* var19 = new VariableDeclaration();
+	longMethod->items()->append(new ExpressionStatement(var19));
+	var19->setName("var19");
+	var19->setType(new PrimitiveType(PrimitiveType::INT));
+	ConditionalExpression* ce = new ConditionalExpression();
+	var19->setInitialValue(ce);
+	BinaryOperation* binOp3 = new BinaryOperation();
+	ce->setCondition(binOp3);
+	binOp3->setOp(BinaryOperation::LESS_EQUALS);
+	binOp3->setLeft(new IntegerLiteral(6));
+	binOp3->setRight(new IntegerLiteral(10));
+	ce->setTrueExpression(new IntegerLiteral(42));
+	ce->setFalseExpression(new IntegerLiteral(0));
 
 	IfStatement* ifs = new IfStatement();
 	longMethod->items()->append(ifs);

@@ -35,8 +35,6 @@
 #define DEFAULTLOG_H_
 
 #include "Log.h"
-#include <QtCore/QMutex>
-#include <QtCore/QVector>
 
 namespace Logger {
 

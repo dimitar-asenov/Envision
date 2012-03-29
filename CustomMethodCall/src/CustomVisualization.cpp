@@ -33,13 +33,13 @@
 
 #include "CustomVisualization.h"
 
-#include "OOVisualization/headers/expressions/VMethodCallExpression.h"
+#include "OOVisualization/src/expressions/VMethodCallExpression.h"
 
-#include "OOModel/headers/expressions/MethodCallExpression.h"
-#include "OOModel/headers/top_level/Method.h"
+#include "OOModel/src/expressions/MethodCallExpression.h"
+#include "OOModel/src/top_level/Method.h"
 
-#include "VisualizationBase/headers/items/Item.h"
-#include "ModelBase/headers/nodes/Node.h"
+#include "VisualizationBase/src/items/Item.h"
+#include "ModelBase/src/nodes/Node.h"
 
 using namespace OOVisualization;
 using namespace Visualization;

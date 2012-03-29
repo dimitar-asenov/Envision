@@ -32,7 +32,7 @@
  **********************************************************************************************************************/
 
 #include "elements/StorageSpecifier.h"
-#include "ModelBase/headers/commands/FieldSet.h"
+#include "ModelBase/src/commands/FieldSet.h"
 #include "OOModelException.h"
 
 namespace OOModel {

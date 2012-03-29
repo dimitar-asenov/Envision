@@ -36,6 +36,7 @@
 #include "expression_editor/OperatorDescriptor.h"
 #include "expression_editor/Empty.h"
 #include "expression_editor/ExpressionVisitor.h"
+#include "expression_editor/ExpressionTreeUtils.h"
 
 namespace Interaction {
 
@@ -108,6 +109,26 @@ Operator* UnfinishedOperator::createFinished()
 	num_complete_ = 0;
 
 	return op;
+}
+
+UnfinishedOperator* UnfinishedOperator::replaceFinishedWithUnfinished(Expression*& top, Operator* op)
+{
+	auto unf = new UnfinishedOperator(op->descriptor());
+
+	int operandIndex = 0;
+	for(auto s : op->descriptor()->signature())
+	{
+		if (s == "expr" || s == "id")
+		{
+			auto e = op->replaceOperand(op->operands().at(operandIndex), new Empty());
+			unf->addNext(e);
+			++operandIndex;
+		}
+		else unf->addNext();
+	}
+
+	delete ExpressionTreeUtils::replace(top, op, unf );
+	return unf;
 }
 
 } /* namespace InteractionBase */

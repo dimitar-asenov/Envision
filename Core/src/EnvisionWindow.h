@@ -27,8 +27,6 @@
 #ifndef ENVISIONWINDOW_H
 #define ENVISIONWINDOW_H
 
-#include <QtGui/QMainWindow>
-
 class EnvisionWindow: public QMainWindow
 {
 	Q_OBJECT

@@ -1,0 +1,12 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/Item/default">
+	<layout prototypes="layout/SequentialLayout/default" />
+	<preSymbol prototypes="item/Static/default" />
+	<inSymbol prototypes="icon/SVGIcon/default">
+		<filename>styles/icon/if.svg</filename>
+		<width>15</width>
+		<height>15</height>
+	</inSymbol>
+	<in2Symbol prototypes="item/Symbol/default"><symbol>:</symbol></in2Symbol>
+	<postSymbol prototypes="item/Static/default" />
+</style>

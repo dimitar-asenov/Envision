@@ -32,8 +32,6 @@
  **********************************************************************************************************************/
 
 #include "DefaultLog.h"
-#include <QtCore/QMutexLocker>
-#include <QtCore/QTextStream>
 
 namespace Logger {
 

@@ -35,8 +35,6 @@
 
 #include "expression_editor/OperatorDescriptor.h"
 
-#include "Core/headers/global.h"
-
 namespace Interaction {
 
 OperatorDescriptorList::~OperatorDescriptorList()

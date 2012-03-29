@@ -35,9 +35,6 @@
 #include "Log.h"
 #include "LogTester.h"
 
-#include <QtCore/QTextStream>
-#include <QtCore/QCoreApplication>
-
 Q_EXPORT_PLUGIN2( logger, Logger::LoggerPlugin )
 
 namespace Logger {

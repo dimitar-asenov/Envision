@@ -35,11 +35,6 @@
 #include "PluginManager.h"
 #include "EnvisionException.h"
 
-#include <QtXml/QDomDocument>
-#include <QtXml/QDomElement>
-#include <QtCore/QTextStream>
-#include <QtCore/QStringList>
-
 namespace Envision {
 
 PluginManager::PluginManager(QString path) :

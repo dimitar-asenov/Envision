@@ -33,7 +33,7 @@
 
 #include "items/EmptyMethodVis.h"
 
-#include "VisualizationBase/headers/items/Static.h"
+#include "VisualizationBase/src/items/Static.h"
 
 using namespace Visualization;
 using namespace OOModel;

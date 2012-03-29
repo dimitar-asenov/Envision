@@ -32,11 +32,10 @@
  **********************************************************************************************************************/
 
 #include "expressions/VThisExpression.h"
-#include "Helpers.h"
 
-#include "OOModel/headers/expressions/ThisExpression.h"
+#include "OOModel/src/expressions/ThisExpression.h"
 
-#include "VisualizationBase/headers/items/Text.h"
+#include "VisualizationBase/src/items/Text.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -59,7 +58,6 @@ VThisExpression::~VThisExpression()
 void VThisExpression::determineChildren()
 {
 	vis_->setStyle(style());
-	Helpers::omitBoundingCursorsInExpressions(this, vis_, true);
 }
 
 void VThisExpression::updateGeometry(int availableWidth, int availableHeight)

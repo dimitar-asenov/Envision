@@ -34,12 +34,10 @@
 #include "cursor/Cursor.h"
 #include "items/Item.h"
 
-#include "Core/headers/global.h"
-
 namespace Visualization {
 
-Cursor::Cursor(Item* owner, Item* visualization)
-	: owner_(owner), visualization_(visualization)
+Cursor::Cursor(Item* owner, CursorType type, Item* visualization)
+	: owner_(owner), visualization_(visualization), type_(type), notLocationEquivalent_(false)
 {}
 
 Cursor::~Cursor()
@@ -61,6 +59,43 @@ void Cursor::setVisualization(Item* visualization)
 bool Cursor::isSame(Cursor* other)
 {
 	return owner() == other->owner() && position() == other->position();
+}
+
+bool Cursor::isAtBoundary() const
+{
+	return false;
+}
+
+bool Cursor::isLocationEquivalent(Cursor* c)
+{
+	return isLocationEquivalent(c->notLocationEquivalent(), c->type(), c->isAtBoundary(), c->owner());
+}
+
+bool Cursor::isLocationEquivalent(bool otherNotLocationEquivalent, CursorType otherType, bool otherIsAtBoundary,
+		Item* otherOwner)
+{
+	if (otherNotLocationEquivalent || notLocationEquivalent() ) return false;
+	if (otherType != type() || otherType == BoxCursor) return false;
+	if (!otherIsAtBoundary && ! isAtBoundary()) return false;
+	if (owner() == otherOwner) return false;
+
+	Item* parent = nullptr;
+	Item* child = nullptr;
+	if ( owner()->isAncestorOf(otherOwner))
+	{
+		parent = static_cast<Item*>(owner());
+		child = static_cast<Item*>(otherOwner);
+	}
+	else if (otherOwner->isAncestorOf(owner()))
+	{
+		parent = static_cast<Item*>(otherOwner);
+		child = static_cast<Item*>(owner());
+	}
+	else return false;
+
+	auto item = child;
+	while (item != parent && !item->hasShape()) item = static_cast<Item*>(item->parentItem());
+	return item == parent;
 }
 
 } /* namespace Visualization */
