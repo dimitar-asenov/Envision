@@ -33,11 +33,11 @@
 
 #include "string_components/ArrayTypeStringComponents.h"
 
-#include "OOModel/src/types/ArrayType.h"
+#include "OOModel/src/expressions/types/ArrayTypeExpression.h"
 
 namespace OOInteraction {
 
-ArrayTypeStringComponents::ArrayTypeStringComponents(OOModel::ArrayType* e )
+ArrayTypeStringComponents::ArrayTypeStringComponents(OOModel::ArrayTypeExpression* e )
 	: exp_(e)
 {
 }
@@ -47,7 +47,7 @@ QStringList ArrayTypeStringComponents::components()
 	QStringList result;
 	if (!exp_) return result;
 
-	QString prefix = stringForNode(exp_->type());
+	QString prefix = stringForNode(exp_->typeExpression());
 	if (!prefix.isEmpty()) result << prefix;
 
 	result << "[]";

@@ -44,7 +44,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VPrimitiveType, "item")
 
 VPrimitiveType::VPrimitiveType(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode< Item, PrimitiveType>(parent, node, style),
+	ItemWithNode< Item, PrimitiveTypeExpression>(parent, node, style),
 	vis_(nullptr)
 {
 }
@@ -56,7 +56,7 @@ VPrimitiveType::~VPrimitiveType()
 
 void VPrimitiveType::determineChildren()
 {
-	const StaticStyle* stStyle = &style()->stat( node()->type() );
+	const StaticStyle* stStyle = &style()->stat( node()->typeValue() );
 
 	synchronizeItem(vis_, !stStyle->isEmpty(), stStyle);
 }

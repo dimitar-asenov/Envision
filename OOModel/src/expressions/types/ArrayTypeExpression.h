@@ -25,49 +25,26 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
- * PrimitiveType.h
+ * ArrayTypeExpression.h
  *
- *  Created on: Jan 31, 2011
+ *  Created on: Feb 17, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef PRIMITIVETYPE_H_
-#define PRIMITIVETYPE_H_
+#ifndef ARRAYTYPEEXPRESSION_H_
+#define ARRAYTYPEEXPRESSION_H_
 
-#include "Type.h"
-
-#include "ModelBase/src/nodes/Integer.h"
+#include "TypeExpression.h"
 
 namespace OOModel {
 
-class OOMODEL_API PrimitiveType : public Type
+class OOMODEL_API ArrayTypeExpression : public TypeExpression
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(PrimitiveType)
-	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, val, setVal, int);
+	EXTENDABLENODE_DECLARE_STANDARD_METHODS(ArrayTypeExpression)
 
-	public:
-		enum PrimitiveTypes {INT, LONG, UNSIGNED_INT, UNSIGNED_LONG, FLOAT, DOUBLE, BOOLEAN, CHAR, VOID};
-
-		PrimitiveType(const PrimitiveTypes& type);
-
-		PrimitiveTypes type() const;
-		void setType(const PrimitiveTypes& type);
-
-		// Static instances for all primitive types
-		static const PrimitiveType* PrimitiveTypeINT();
-		static const PrimitiveType* PrimitiveTypeLONG();
-		static const PrimitiveType* PrimitiveTypeUNSIGNED_INT();
-		static const PrimitiveType* PrimitiveTypeUNSIGNED_LONG();
-		static const PrimitiveType* PrimitiveTypeFLOAT();
-		static const PrimitiveType* PrimitiveTypeDOUBLE();
-		static const PrimitiveType* PrimitiveTypeBOOLEAN();
-		static const PrimitiveType* PrimitiveTypeCHAR();
-		static const PrimitiveType* PrimitiveTypeVOID();
+	ATTRIBUTE(Expression, typeExpression, setTypeExpression);
 };
-
-inline PrimitiveType::PrimitiveTypes PrimitiveType::type() const { return static_cast<PrimitiveTypes> (val()); }
-inline void PrimitiveType::setType(const PrimitiveTypes& type) { setVal(type); }
 
 }
 
-#endif /* PRIMITIVETYPE_H_ */
+#endif /* ARRAYTYPEEXPRESSION_H_ */

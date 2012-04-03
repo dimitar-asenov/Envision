@@ -95,10 +95,10 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	Model::TypedList<AssignmentExpression>::registerNodeType();
 	Model::TypedList<ConditionalExpression>::registerNodeType();
 
-	Model::TypedList<Type>::registerNodeType();
-	Model::TypedList<PrimitiveType>::registerNodeType();
-	Model::TypedList<NamedType>::registerNodeType();
-	Model::TypedList<ArrayType>::registerNodeType();
+	Model::TypedList<TypeExpression>::registerNodeType();
+	Model::TypedList<PrimitiveTypeExpression>::registerNodeType();
+	Model::TypedList<ClassTypeExpression>::registerNodeType();
+	Model::TypedList<ArrayTypeExpression>::registerNodeType();
 
 	// Initialize OO Node types
 	Project::init();
@@ -148,10 +148,10 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	AssignmentExpression::init();
 	ConditionalExpression::init();
 
-	Type::init();
-	PrimitiveType::init();
-	NamedType::init();
-	ArrayType::init();
+	TypeExpression::init();
+	PrimitiveTypeExpression::init();
+	ClassTypeExpression::init();
+	ArrayTypeExpression::init();
 
 	return true;
 }

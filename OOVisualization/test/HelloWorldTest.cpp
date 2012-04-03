@@ -77,11 +77,11 @@ Class* addHelloWorld(Model::Model* model, Project* parent)
 	FormalArgument* mainArgs = new FormalArgument();
 	main->arguments()->append(mainArgs);
 	mainArgs->setName("args");
-	ArrayType* mainArgType = new ArrayType();
-	mainArgs->setType(mainArgType);
-	NamedType* mainArgElementType = new NamedType();
-	mainArgType->setType(mainArgElementType);
-	mainArgElementType->type()->ref()->setName("String");
+	ArrayTypeExpression* mainArgType = new ArrayTypeExpression();
+	mainArgs->setTypeExpression(mainArgType);
+	ClassTypeExpression* mainArgElementType = new ClassTypeExpression();
+	mainArgType->setTypeExpression(mainArgElementType);
+	mainArgElementType->typeExpression()->ref()->setName("String");
 
 	ExpressionStatement* callPrintlnSt = new ExpressionStatement();
 	MethodCallExpression* callPrintln = new MethodCallExpression();
@@ -123,9 +123,9 @@ Library* addJavaLibrary(Model::Model* model, Project* parent)
 	java->classes()->append(string);
 	string->setName("String");
 	string->setVisibility(Visibility::PUBLIC);
-	NamedType* type = new NamedType();
+	ClassTypeExpression* type = new ClassTypeExpression();
 	string->baseClasses()->append(type);
-	type->type()->ref()->setName("Object");
+	type->typeExpression()->ref()->setName("Object");
 
 	Module* io = new Module();
 	java->modules()->append(io);
@@ -144,9 +144,9 @@ Library* addJavaLibrary(Model::Model* model, Project* parent)
 	FormalArgument* arg = new FormalArgument();
 	println->arguments()->append(arg);
 	arg->setName("x");
-	NamedType* argType = new NamedType();
-	arg->setType(argType);
-	argType->type()->ref()->setName("String");
+	ClassTypeExpression* argType = new ClassTypeExpression();
+	arg->setTypeExpression(argType);
+	argType->typeExpression()->ref()->setName("String");
 
 	Class* system = new Class();
 	java->classes()->append(system);
@@ -157,11 +157,11 @@ Library* addJavaLibrary(Model::Model* model, Project* parent)
 	out->setName("out");
 	out->setVisibility(Visibility::PUBLIC);
 	out->setStorageSpecifier(StorageSpecifier::CLASS_VARIABLE);
-	NamedType* outtype = new NamedType();
-	out->setType(outtype);
-	outtype->type()->ref()->setName("PrintStream");
+	ClassTypeExpression* outtype = new ClassTypeExpression();
+	out->setTypeExpression(outtype);
+	outtype->typeExpression()->ref()->setName("PrintStream");
 	ReferenceExpression* prefix = new ReferenceExpression();
-	outtype->type()->setPrefix(prefix);
+	outtype->typeExpression()->setPrefix(prefix);
 	prefix->ref()->setName("io");
 
 	// Set positions
@@ -187,66 +187,66 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 
 	longMethod->setName("aLongTestMethod");
 	FormalResult* result  = new FormalResult();
-	result->setType(new PrimitiveType(PrimitiveType::INT));
+	result->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::INT));
 	longMethod->results()->append(result);
 	FormalArgument* arg1 = new FormalArgument();
-	arg1->setType(new PrimitiveType(PrimitiveType::INT));
+	arg1->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::INT));
 	arg1->setName("x");
 	longMethod->arguments()->append(arg1);
 	FormalArgument* arg2 = new FormalArgument();
-	arg2->setType(new PrimitiveType(PrimitiveType::INT));
+	arg2->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::INT));
 	arg2->setName("y");
 	longMethod->arguments()->append(arg2);
 	FormalArgument* arg3 = new FormalArgument();
-	arg3->setType(new PrimitiveType(PrimitiveType::FLOAT));
+	arg3->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::FLOAT));
 	arg3->setName("epsilon");
 	longMethod->arguments()->append(arg3);
 
 	VariableDeclaration* var1 = new VariableDeclaration();
 	longMethod->items()->append(new ExpressionStatement(var1));
 	var1->setName("var1");
-	var1->setVarType(new PrimitiveType(PrimitiveType::INT));
+	var1->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::INT));
 
 	VariableDeclaration* var2 = new VariableDeclaration();
 	longMethod->items()->append(new ExpressionStatement(var2));
 	var2->setName("var2");
-	var2->setVarType(new PrimitiveType(PrimitiveType::LONG));
+	var2->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::LONG));
 	var2->setInitialValue(new IntegerLiteral(42));
 
 	VariableDeclaration* var3 = new VariableDeclaration();
 	longMethod->items()->append(new ExpressionStatement(var3));
 	var3->setName("var3");
-	var3->setVarType(new PrimitiveType(PrimitiveType::BOOLEAN));
+	var3->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::BOOLEAN));
 	var3->setInitialValue(new BooleanLiteral(true));
 
 	VariableDeclaration* var4 = new VariableDeclaration();
 	longMethod->items()->append(new ExpressionStatement(var4));
 	var4->setName("var4");
-	var4->setVarType(new PrimitiveType(PrimitiveType::CHAR));
+	var4->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::CHAR));
 	var4->setInitialValue(new CharacterLiteral('r'));
 
 	VariableDeclaration* var5 = new VariableDeclaration();
 	longMethod->items()->append(new ExpressionStatement(var5));
 	var5->setName("var5");
-	var5->setVarType(new PrimitiveType(PrimitiveType::DOUBLE));
+	var5->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::DOUBLE));
 	var5->setInitialValue(new FloatLiteral(112311096123));
 
 	VariableDeclaration* var6 = new VariableDeclaration();
 	longMethod->items()->append(new ExpressionStatement(var6));
 	var6->setName("var6");
-	var6->setVarType(new PrimitiveType(PrimitiveType::UNSIGNED_LONG));
+	var6->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::UNSIGNED_LONG));
 	var6->setInitialValue(new IntegerLiteral(1000));
 
 	VariableDeclaration* var7 = new VariableDeclaration();
 	longMethod->items()->append(new ExpressionStatement(var7));
 	var7->setName("var7");
-	var7->setVarType(new PrimitiveType(PrimitiveType::VOID));
+	var7->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::VOID));
 	var7->setInitialValue(new NullLiteral());
 
 	VariableDeclaration* var8 = new VariableDeclaration();
 	longMethod->items()->append(new ExpressionStatement(var8));
 	var8->setName("var8");
-	var8->setVarType(new PrimitiveType(PrimitiveType::INT));
+	var8->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::INT));
 	MethodCallExpression* var8Value = new MethodCallExpression();
 	var8Value->ref()->setName("getId");
 	var8->setInitialValue(var8Value);
@@ -254,41 +254,41 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 	VariableDeclaration* var9 = new VariableDeclaration();
 	longMethod->items()->append(new ExpressionStatement(var9));
 	var9->setName("var9");
-	var9->setVarType(new PrimitiveType(PrimitiveType::VOID));
+	var9->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::VOID));
 	var9->setInitialValue(new ThisExpression());
 
 	VariableDeclaration* var10 = new VariableDeclaration();
 	longMethod->items()->append(new ExpressionStatement(var10));
 	var10->setName("var10");
-	var10->setVarType(new PrimitiveType(PrimitiveType::INT));
+	var10->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::INT));
 	CastExpression* cast = new CastExpression();
 	var10->setInitialValue(cast);
-	cast->setType(new PrimitiveType(PrimitiveType::INT));
+	cast->setType(new PrimitiveTypeExpression(PrimitiveTypeExpression::INT));
 	cast->setExpr(new VariableAccess("epsilon"));
 
 	VariableDeclaration* var11 = new VariableDeclaration();
 	longMethod->items()->append(new ExpressionStatement(var11));
 	var11->setName("var11");
-	var11->setVarType(new PrimitiveType(PrimitiveType::VOID));
+	var11->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::VOID));
 	NewExpression* var11Value = new NewExpression();
-	var11Value->setNewType(new PrimitiveType(PrimitiveType::INT));
+	var11Value->setNewType(new PrimitiveTypeExpression(PrimitiveTypeExpression::INT));
 	var11->setInitialValue(var11Value);
 
 	VariableDeclaration* var12 = new VariableDeclaration();
 	longMethod->items()->append(new ExpressionStatement(var12));
 	var12->setName("var12");
-	ArrayType* var12Type = new ArrayType();
-	var12Type->setType(new PrimitiveType(PrimitiveType::INT));
+	ArrayTypeExpression* var12Type = new ArrayTypeExpression();
+	var12Type->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::INT));
 	var12->setVarType(var12Type);
 	NewExpression* var12Value = new NewExpression();
-	var12Value->setNewType(new PrimitiveType(PrimitiveType::INT));
+	var12Value->setNewType(new PrimitiveTypeExpression(PrimitiveTypeExpression::INT));
 	var12Value->setAmount(new IntegerLiteral(5));
 	var12->setInitialValue(var12Value);
 
 	VariableDeclaration* var13 = new VariableDeclaration();
 	longMethod->items()->append(new ExpressionStatement(var13));
 	var13->setName("var13");
-	var13->setVarType(new PrimitiveType(PrimitiveType::BOOLEAN));
+	var13->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::BOOLEAN));
 	UnaryOperation* uOp1 = new UnaryOperation();
 	var13->setInitialValue(uOp1);
 	uOp1->setOp(UnaryOperation::NOT);
@@ -299,7 +299,7 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 	VariableDeclaration* var14 = new VariableDeclaration();
 	longMethod->items()->append(new ExpressionStatement(var14));
 	var14->setName("var14");
-	var14->setVarType(new PrimitiveType(PrimitiveType::INT));
+	var14->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::INT));
 	UnaryOperation* uOp2 = new UnaryOperation();
 	var14->setInitialValue(uOp2);
 	uOp2->setOp(UnaryOperation::POSTINCREMENT);
@@ -308,7 +308,7 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 	VariableDeclaration* var15 = new VariableDeclaration();
 	longMethod->items()->append(new ExpressionStatement(var15));
 	var15->setName("var15");
-	var15->setVarType(new PrimitiveType(PrimitiveType::INT));
+	var15->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::INT));
 	BinaryOperation* binOp1 = new BinaryOperation();
 	var15->setInitialValue(binOp1);
 	binOp1->setOp(BinaryOperation::PLUS);
@@ -318,7 +318,7 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 	VariableDeclaration* var16 = new VariableDeclaration();
 	longMethod->items()->append(new ExpressionStatement(var16));
 	var16->setName("var16");
-	var16->setVarType(new PrimitiveType(PrimitiveType::BOOLEAN));
+	var16->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::BOOLEAN));
 	BinaryOperation* binOp2 = new BinaryOperation();
 	var16->setInitialValue(binOp2);
 	binOp2->setOp(BinaryOperation::LESS_EQUALS);
@@ -328,11 +328,11 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 	VariableDeclaration* var17 = new VariableDeclaration();
 	longMethod->items()->append(new ExpressionStatement(var17));
 	var17->setName("var17");
-	ArrayType* var17Type = new ArrayType();
+	ArrayTypeExpression* var17Type = new ArrayTypeExpression();
 	var17->setVarType(var17Type);
-	NamedType* var17ElementType = new NamedType();
-	var17Type->setType(var17ElementType);
-	var17ElementType->type()->ref()->setName("String");
+	ClassTypeExpression* var17ElementType = new ClassTypeExpression();
+	var17Type->setTypeExpression(var17ElementType);
+	var17ElementType->typeExpression()->ref()->setName("String");
 	ArrayInitializer* outterArrayInit = new ArrayInitializer();
 	var17->setInitialValue(outterArrayInit);
 	outterArrayInit->values()->append(new StringLiteral("this"));
@@ -342,11 +342,11 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 	VariableDeclaration* var18 = new VariableDeclaration();
 	longMethod->items()->append(new ExpressionStatement(var18));
 	var18->setName("var18");
-	ArrayType* var18Type = new ArrayType();
+	ArrayTypeExpression* var18Type = new ArrayTypeExpression();
 	var18->setVarType(var18Type);
-	ArrayType* var18TypeType = new ArrayType();
-	var18Type->setType(var18TypeType);
-	var18TypeType->setType(new PrimitiveType(PrimitiveType::INT));
+	ArrayTypeExpression* var18TypeType = new ArrayTypeExpression();
+	var18Type->setTypeExpression(var18TypeType);
+	var18TypeType->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::INT));
 	ArrayInitializer* matrixArrayInit = new ArrayInitializer();
 	var18->setInitialValue(matrixArrayInit);
 	ArrayInitializer* col1Init = new ArrayInitializer();
@@ -368,7 +368,7 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 	VariableDeclaration* var19 = new VariableDeclaration();
 	longMethod->items()->append(new ExpressionStatement(var19));
 	var19->setName("var19");
-	var19->setVarType(new PrimitiveType(PrimitiveType::INT));
+	var19->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::INT));
 	ConditionalExpression* ce = new ConditionalExpression();
 	var19->setInitialValue(ce);
 	BinaryOperation* binOp3 = new BinaryOperation();
@@ -411,7 +411,7 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 	longMethod->items()->append(loop);
 	VariableDeclaration* initStep = new VariableDeclaration();
 	loop->setInitStep(initStep);
-	initStep->setVarType(new PrimitiveType(PrimitiveType::INT));
+	initStep->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::INT));
 	initStep->setName("i");
 	initStep->setInitialValue(new IntegerLiteral(0));
 	BinaryOperation* loopCondition = new BinaryOperation();
@@ -436,7 +436,7 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 	ForEachStatement* forEach = new ForEachStatement();
 	longMethod->items()->append(forEach);
 	forEach->setVarName("elem");
-	forEach->setVarType(new PrimitiveType(PrimitiveType::UNSIGNED_INT));
+	forEach->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::UNSIGNED_INT));
 	VariableAccess* forEachCollection = new VariableAccess();
 	forEachCollection->ref()->setName("SomeCollection");
 	forEach->setCollection(forEachCollection);
@@ -474,16 +474,16 @@ Method* addFactorial(Model::Model* model, Class* parent)
 	factorial->setName("factorial");
 	FormalResult* factorialResult = new FormalResult();
 	factorial->results()->append(factorialResult);
-	factorialResult->setType(new PrimitiveType(PrimitiveType::INT));
+	factorialResult->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::INT));
 	FormalArgument* factorialArgument = new FormalArgument();
 	factorial->arguments()->append(factorialArgument);
-	factorialArgument->setType(new PrimitiveType(PrimitiveType::INT));
+	factorialArgument->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::INT));
 	factorialArgument->setName("x");
 
 	VariableDeclaration* res = new VariableDeclaration();
 	factorial->items()->append(new ExpressionStatement(res));
 	res->setName("result");
-	res->setVarType(new PrimitiveType(PrimitiveType::INT));
+	res->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::INT));
 	res->setInitialValue(new IntegerLiteral(1));
 
 	// Condition
@@ -500,7 +500,7 @@ Method* addFactorial(Model::Model* model, Class* parent)
 	ifs->thenBranch()->append(loop);
 	VariableDeclaration* initStep = new VariableDeclaration();
 	loop->setInitStep(initStep);
-	initStep->setVarType(new PrimitiveType(PrimitiveType::INT));
+	initStep->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::INT));
 	initStep->setName("i");
 	initStep->setInitialValue(new IntegerLiteral(1));
 	BinaryOperation* loopCondition = new BinaryOperation();

@@ -139,7 +139,7 @@ bool OOInteraction::initialize(Envision::EnvisionManager&)
 	OOVisualization::VBlock::setInteractionHandler(HStatement::instance());
 	OOVisualization::VReturnStatement::setInteractionHandler(HStatement::instance());
 	OOVisualization::VPrimitiveType::setInteractionHandler(HExpression::instance());
-	OOVisualization::VNamedType::setInteractionHandler(HExpression::instance());
+	OOVisualization::VClassType::setInteractionHandler(HExpression::instance());
 	OOVisualization::VArrayType::setInteractionHandler(HExpression::instance());
 
 	// Register string components that convert an expression to a string list representing its components
@@ -178,9 +178,9 @@ bool OOInteraction::initialize(Envision::EnvisionManager&)
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringComponents, EmptyExpressionStringComponents, OOModel::EmptyExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor
-		<StringComponents, PrimitiveTypeStringComponents, OOModel::PrimitiveType>();
+		<StringComponents, PrimitiveTypeStringComponents, OOModel::PrimitiveTypeExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor
-		<StringComponents, ArrayTypeStringComponents, OOModel::ArrayType>();
+		<StringComponents, ArrayTypeStringComponents, OOModel::ArrayTypeExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringComponents, AssignmentStringComponents, OOModel::AssignmentExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor

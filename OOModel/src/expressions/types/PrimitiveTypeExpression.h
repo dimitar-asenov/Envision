@@ -25,29 +25,39 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
- * Type.h
+ * PrimitiveTypeExpression.h
  *
  *  Created on: Jan 31, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef TYPE_H_
-#define TYPE_H_
+#ifndef PRIMITIVETYPEEXPRESSION_H_
+#define PRIMITIVETYPEEXPRESSION_H_
 
-#include "../oomodel_api.h"
+#include "TypeExpression.h"
 
-#include "../expressions/Expression.h"
-#include "ModelBase/src/nodes/nodeMacros.h"
+#include "ModelBase/src/nodes/Integer.h"
 
 namespace OOModel {
 
-class Class;
-
-class OOMODEL_API Type : public Expression
+class OOMODEL_API PrimitiveTypeExpression : public TypeExpression
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Type)
+	EXTENDABLENODE_DECLARE_STANDARD_METHODS(PrimitiveTypeExpression)
+	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, val, setVal, int);
+
+	public:
+		enum PrimitiveTypes {INT, LONG, UNSIGNED_INT, UNSIGNED_LONG, FLOAT, DOUBLE, BOOLEAN, CHAR, VOID};
+
+		PrimitiveTypeExpression(const PrimitiveTypes& type);
+
+		PrimitiveTypes typeValue() const;
+		void setTypeValue(const PrimitiveTypes& type);
 };
+
+inline PrimitiveTypeExpression::PrimitiveTypes PrimitiveTypeExpression::typeValue()
+	const { return static_cast<PrimitiveTypes> (val()); }
+inline void PrimitiveTypeExpression::setTypeValue(const PrimitiveTypes& type) { setVal(type); }
 
 }
 
-#endif /* TYPE_H_ */
+#endif /* PRIMITIVETYPEEXPRESSION_H_ */

@@ -25,31 +25,24 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
- * NamedType.h
+ * ClassTypeExpression.cpp
  *
  *  Created on: Jan 31, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef NAMEDTYPE_H_
-#define NAMEDTYPE_H_
-
-#include "Type.h"
-
-#include "../expressions/ReferenceExpression.h"
+#include "ClassTypeExpression.h"
 
 namespace OOModel {
 
-class OOMODEL_API NamedType : public Type
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(ClassTypeExpression, TypeExpression)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(ClassTypeExpression, TypeExpression)
+
+REGISTER_ATTRIBUTE(ClassTypeExpression, typeExpression, ReferenceExpression, false, false, true)
+
+Class* ClassTypeExpression::classDefinition()
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(NamedType)
-
-	ATTRIBUTE(ReferenceExpression, type, setType);
-
-	public:
-		virtual Class* classDefinition();
-};
-
+	return typeExpression()->classDefinition();
 }
 
-#endif /* NAMEDTYPE_H_ */
+}

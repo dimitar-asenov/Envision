@@ -36,7 +36,7 @@
 
 #include "../oovisualization_api.h"
 
-#include "OOModel/src/types/PrimitiveType.h"
+#include "OOModel/src/expressions/types/PrimitiveTypeExpression.h"
 
 #include "VisualizationBase/src/items/Item.h"
 #include "VisualizationBase/src/items/ItemWithNode.h"
@@ -48,7 +48,7 @@ namespace Visualization {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VPrimitiveType : public Visualization::ItemWithNode< Visualization::Item, OOModel::PrimitiveType>
+class OOVISUALIZATION_API VPrimitiveType : public Visualization::ItemWithNode< Visualization::Item, OOModel::PrimitiveTypeExpression>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VPrimitiveType, Visualization::StaticSequenceStyle)
 

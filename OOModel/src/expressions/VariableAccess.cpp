@@ -56,7 +56,7 @@ Class* VariableAccess::classDefinition()
 	Model::Node* var = ref()->target();
 
 	Field* f = dynamic_cast<Field*> (var);
-	if (f) return f->type()->classDefinition();
+	if (f) return f->typeExpression()->classDefinition();
 
 	VariableDeclaration* vd = dynamic_cast<VariableDeclaration*> (var);
 	if (vd) return vd->varType()->classDefinition();

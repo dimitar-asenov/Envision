@@ -25,26 +25,41 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
- * ArrayType.h
+ * VClassType.cpp
  *
- *  Created on: Feb 17, 2011
+ *  Created on: Feb 9, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef ARRAYTYPE_H_
-#define ARRAYTYPE_H_
+#include "types/VClassType.h"
 
-#include "Type.h"
+using namespace Visualization;
+using namespace OOModel;
 
-namespace OOModel {
+namespace OOVisualization {
 
-class OOMODEL_API ArrayType : public Type
+ITEM_COMMON_DEFINITIONS(VClassType, "item")
+
+VClassType::VClassType(Item* parent, NodeType* node, const StyleType* style) :
+	ItemWithNode<Item, ClassTypeExpression>(parent, node, style),
+	vis_( new VReferenceExpression(this, node->typeExpression(), style))
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(ArrayType)
-
-	ATTRIBUTE(Expression, type, setType);
-};
-
 }
 
-#endif /* ARRAYTYPE_H_ */
+VClassType::~VClassType()
+{
+	SAFE_DELETE_ITEM(vis_);
+}
+
+void VClassType::determineChildren()
+{
+	synchronizeItem(vis_, node()->typeExpression(), style());
+	vis_->setStyle(style());
+}
+
+void VClassType::updateGeometry(int availableWidth, int availableHeight)
+{
+	Item::updateGeometry(vis_, availableWidth, availableHeight);
+}
+
+}

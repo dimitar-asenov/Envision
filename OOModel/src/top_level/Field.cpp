@@ -39,7 +39,7 @@ EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(Field, Model::ExtendableNode)
 EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(Field, Model::ExtendableNode)
 
 REGISTER_ATTRIBUTE(Field, name, Text, false, false, true)
-REGISTER_ATTRIBUTE(Field, type, Type, false, false, true)
+REGISTER_ATTRIBUTE(Field, typeExpression, Expression, false, false, true)
 REGISTER_ATTRIBUTE(Field, visibility, Visibility, false, false, true)
 REGISTER_ATTRIBUTE(Field, storageSpecifier, StorageSpecifier, false, false, true)
 

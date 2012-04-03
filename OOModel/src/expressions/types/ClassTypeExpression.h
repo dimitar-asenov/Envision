@@ -25,17 +25,31 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
- * Type.cpp
+ * ClassTypeExpression.h
  *
  *  Created on: Jan 31, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "types/Type.h"
+#ifndef CLASSTYPEEXPRESSION_H_
+#define CLASSTYPEEXPRESSION_H_
+
+#include "TypeExpression.h"
+
+#include "../ReferenceExpression.h"
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(Type, Expression)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(Type, Expression)
+class OOMODEL_API ClassTypeExpression : public TypeExpression
+{
+	EXTENDABLENODE_DECLARE_STANDARD_METHODS(ClassTypeExpression)
+
+	ATTRIBUTE(ReferenceExpression, typeExpression, setTypeExpression);
+
+	public:
+		virtual Class* classDefinition();
+};
 
 }
+
+#endif /* CLASSTYPEEXPRESSION_H_ */

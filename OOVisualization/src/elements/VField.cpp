@@ -80,7 +80,7 @@ void VField::determineChildren()
 	else throw OOVisualizationException("Unknown static type in VField::determineChildren");
 
 	layout()->synchronizeFirst(name_, node()->nameNode(), nameStyle);
-	layout()->synchronizeLast(type_, node()->type());
+	layout()->synchronizeLast(type_, node()->typeExpression());
 
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
 	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know

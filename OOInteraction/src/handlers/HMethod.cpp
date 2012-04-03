@@ -119,7 +119,7 @@ void HMethod::createNewArgument(OOVisualization::VMethod* method, int position)
 {
 	auto arg = new OOModel::FormalArgument();
 	auto empty = new OOModel::EmptyExpression();
-	arg->setType(empty);
+	arg->setTypeExpression(empty);
 	method->node()->model()->beginModification(method->node(), "add new argument");
 	method->node()->arguments()->insert(position, arg);
 	method->node()->model()->endModification();

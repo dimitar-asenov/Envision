@@ -25,24 +25,19 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
- * NamedType.cpp
+ * ArrayTypeExpression.cpp
  *
- *  Created on: Jan 31, 2011
+ *  Created on: Feb 17, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "types/NamedType.h"
+#include "ArrayTypeExpression.h"
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(NamedType, Type)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(NamedType, Type)
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(ArrayTypeExpression, TypeExpression)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(ArrayTypeExpression, TypeExpression)
 
-REGISTER_ATTRIBUTE(NamedType, type, ReferenceExpression, false, false, true)
-
-Class* NamedType::classDefinition()
-{
-	return type()->classDefinition();
-}
+REGISTER_ATTRIBUTE(ArrayTypeExpression, typeExpression, Expression, false, false, true)
 
 }

@@ -27,7 +27,11 @@ pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
 PRECOMPILED_HEADER = src/precompiled.h
-HEADERS += src/elements/OOReference.h \
+HEADERS += src/expressions/types/ArrayTypeExpression.h \
+    src/expressions/types/ClassTypeExpression.h \
+    src/expressions/types/PrimitiveTypeExpression.h \
+    src/expressions/types/TypeExpression.h \
+    src/elements/OOReference.h \
     src/expressions/ConditionalExpression.h \
     src/OOModelException.h \
     src/TypedListInstantiations.h \
@@ -80,12 +84,12 @@ HEADERS += src/elements/OOReference.h \
     src/top_level/Method.h \
     src/top_level/Module.h \
     src/top_level/Project.h \
-    src/types/ArrayType.h \
-    src/types/NamedType.h \
-    src/types/PrimitiveType.h \
-    src/types/Type.h \
     src/oomodel.h
-SOURCES += src/elements/OOReference.cpp \
+SOURCES += src/expressions/types/ArrayTypeExpression.cpp \
+    src/expressions/types/ClassTypeExpression.cpp \
+    src/expressions/types/PrimitiveTypeExpression.cpp \
+    src/expressions/types/TypeExpression.cpp \
+    src/elements/OOReference.cpp \
     src/expressions/ConditionalExpression.cpp \
     src/expressions/VariableDeclaration.cpp \
     src/expressions/AssignmentExpression.cpp \
@@ -107,7 +111,6 @@ SOURCES += src/elements/OOReference.cpp \
     src/top_level/Method.cpp \
     src/top_level/Module.cpp \
     src/top_level/Project.cpp \
-    src/types/ArrayType.cpp \
     src/statements/ForEachStatement.cpp \
     src/expressions/UnaryOperation.cpp \
     src/expressions/ReferenceExpression.cpp \
@@ -123,9 +126,6 @@ SOURCES += src/elements/OOReference.cpp \
     src/statements/Block.cpp \
     src/expressions/CastExpression.cpp \
     src/expressions/BinaryOperation.cpp \
-    src/types/NamedType.cpp \
-    src/types/PrimitiveType.cpp \
-    src/types/Type.cpp \
     src/expressions/NewExpression.cpp \
     src/expressions/VariableAccess.cpp \
     src/expressions/ThisExpression.cpp \

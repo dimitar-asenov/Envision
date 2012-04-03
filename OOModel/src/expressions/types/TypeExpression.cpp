@@ -25,41 +25,17 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
- * VNamedType.cpp
+ * TypeExpression.cpp
  *
- *  Created on: Feb 9, 2011
+ *  Created on: Jan 31, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "types/VNamedType.h"
+#include "TypeExpression.h"
 
-using namespace Visualization;
-using namespace OOModel;
+namespace OOModel {
 
-namespace OOVisualization {
-
-ITEM_COMMON_DEFINITIONS(VNamedType, "item")
-
-VNamedType::VNamedType(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode<Item, NamedType>(parent, node, style),
-	vis_( new VReferenceExpression(this, node->type(), style))
-{
-}
-
-VNamedType::~VNamedType()
-{
-	SAFE_DELETE_ITEM(vis_);
-}
-
-void VNamedType::determineChildren()
-{
-	synchronizeItem(vis_, node()->type(), style());
-	vis_->setStyle(style());
-}
-
-void VNamedType::updateGeometry(int availableWidth, int availableHeight)
-{
-	Item::updateGeometry(vis_, availableWidth, availableHeight);
-}
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(TypeExpression, Expression)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(TypeExpression, Expression)
 
 }

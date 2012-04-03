@@ -256,7 +256,8 @@ Node* Node::createNewNode(const QString &type, Node* parent)
 	}
 	else
 	{
-		ModelBase::log()->add(Log::LOGERROR, "Could not create new node. Requested node type has not been registered.");
+		ModelBase::log()->add(Log::LOGERROR, "Could not create new node. Requested node type '"
+				+ type +"' has not been registered.");
 		return nullptr;
 	}
 }
@@ -269,7 +270,8 @@ Node* Node::createNewNode(const QString &type, Node* parent, PersistentStore &st
 	}
 	else
 	{
-		ModelBase::log()->add(Log::LOGERROR, "Could not create new node from persistence. Requested node type has not been registered.");
+		ModelBase::log()->add(Log::LOGERROR, "Could not create new node from persistence. Requested node type '"
+				+ type + "' has not been registered.");
 		return nullptr;
 	}
 }

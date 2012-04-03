@@ -80,19 +80,19 @@ Method* addComplicated(Model::Model* model, Class* parent)
 	VariableDeclaration* a = new VariableDeclaration();
 	met->items()->append(new ExpressionStatement(a));
 	a->setName("a");
-	a->setVarType(new PrimitiveType(PrimitiveType::INT));
+	a->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::INT));
 
 	VariableDeclaration* b = new VariableDeclaration();
 	met->items()->append(new ExpressionStatement(b));
 	b->setName("b");
-	b->setVarType(new PrimitiveType(PrimitiveType::UNSIGNED_INT));
+	b->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::UNSIGNED_INT));
 	b->setInitialValue(new IntegerLiteral(1000));
 
 	LoopStatement* loop = new LoopStatement();
 	met->items()->append(loop);
 	VariableDeclaration* initStep = new VariableDeclaration();
 	loop->setInitStep(initStep);
-	initStep->setVarType(new PrimitiveType(PrimitiveType::INT));
+	initStep->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::INT));
 	initStep->setName("i");
 	initStep->setInitialValue(new IntegerLiteral(0));
 	BinaryOperation* loopCondition = new BinaryOperation();
@@ -155,7 +155,7 @@ Method* addComplicated(Model::Model* model, Class* parent)
 	ForEachStatement* forEach = new ForEachStatement();
 	met->items()->append(forEach);
 	forEach->setVarName("elem");
-	forEach->setVarType( new PrimitiveType(PrimitiveType::UNSIGNED_INT) );
+	forEach->setVarType( new PrimitiveTypeExpression(PrimitiveTypeExpression::UNSIGNED_INT) );
 	forEach->setCollection(new VariableAccess("SomeCollection"));
 	AssignmentExpression* assignEach = new AssignmentExpression();
 	forEach->body()->append(assignEach);
@@ -187,19 +187,19 @@ Method* addDivBySix(Model::Model* model, Class* parent)
 
 	divbysix->setName("findDivBySix");
 	FormalResult* divbysixResult = new FormalResult();
-	divbysixResult->setType(new PrimitiveType(PrimitiveType::INT));
+	divbysixResult->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::INT));
 	divbysix->results()->append(divbysixResult);
 	FormalArgument* arg = new FormalArgument();
 	divbysix->arguments()->append(arg);
 	arg->setName("numbers");
-	ArrayType* argType = new ArrayType();
-	argType->setType(new PrimitiveType(PrimitiveType::INT));
-	arg->setType(argType);
+	ArrayTypeExpression* argType = new ArrayTypeExpression();
+	argType->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::INT));
+	arg->setTypeExpression(argType);
 
 	VariableDeclaration* result = new VariableDeclaration();
 	divbysix->items()->append(new ExpressionStatement(result));
 	result->setName("result");
-	result->setVarType(new PrimitiveType(PrimitiveType::INT));
+	result->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::INT));
 	result->setInitialValue(new IntegerLiteral(-1));
 
 	LoopStatement* sixloop = new LoopStatement();
@@ -207,7 +207,7 @@ Method* addDivBySix(Model::Model* model, Class* parent)
 	VariableDeclaration* sixLoopInit = new VariableDeclaration();
 	sixloop->setInitStep(sixLoopInit);
 	sixLoopInit->setName("i");
-	sixLoopInit->setVarType(new PrimitiveType(PrimitiveType::INT));
+	sixLoopInit->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::INT));
 	sixLoopInit->setInitialValue(new IntegerLiteral(0));
 	BinaryOperation* sixLoopCond = new BinaryOperation();
 	sixloop->setCondition(sixLoopCond);
@@ -228,7 +228,7 @@ Method* addDivBySix(Model::Model* model, Class* parent)
 	VariableDeclaration* n = new VariableDeclaration();
 	sixloop->body()->append(new ExpressionStatement(n));
 	n->setName("n");
-	n->setVarType(new PrimitiveType(PrimitiveType::INT));
+	n->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::INT));
 	BinaryOperation* item = new BinaryOperation();
 	n->setInitialValue(item);
 	item->setLeft(new VariableAccess("numbers"));

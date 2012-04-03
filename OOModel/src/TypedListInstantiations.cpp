@@ -82,7 +82,7 @@ template class Model::TypedList<OOModel::CommaExpression>;
 template class Model::TypedList<OOModel::AssignmentExpression>;
 template class Model::TypedList<OOModel::ConditionalExpression>;
 
-template class Model::TypedList<OOModel::Type>;
-template class Model::TypedList<OOModel::PrimitiveType>;
-template class Model::TypedList<OOModel::NamedType>;
-template class Model::TypedList<OOModel::ArrayType>;
+template class Model::TypedList<OOModel::TypeExpression>;
+template class Model::TypedList<OOModel::PrimitiveTypeExpression>;
+template class Model::TypedList<OOModel::ClassTypeExpression>;
+template class Model::TypedList<OOModel::ArrayTypeExpression>;

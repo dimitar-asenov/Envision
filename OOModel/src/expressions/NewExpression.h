@@ -35,7 +35,6 @@
 #define NEWEXPRESSION_H_
 
 #include "Expression.h"
-#include "../types/Type.h"
 
 namespace OOModel {
 

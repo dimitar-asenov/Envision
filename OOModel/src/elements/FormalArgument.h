@@ -49,7 +49,7 @@ class OOMODEL_API FormalArgument : public Model::ExtendableNode
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(FormalArgument)
 	ATTRIBUTE_OOP_NAME
-	ATTRIBUTE(Expression, type, setType)
+	ATTRIBUTE(Expression, typeExpression, setTypeExpression)
 
 	public:
 		virtual bool definesSymbol() const;

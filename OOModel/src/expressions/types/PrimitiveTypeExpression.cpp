@@ -25,37 +25,25 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
- * VNamedType.h
+ * PrimitiveTypeExpression.cpp
  *
- *  Created on: Feb 9, 2011
+ *  Created on: Jan 31, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef VNAMEDTYPE_H_
-#define VNAMEDTYPE_H_
+#include "PrimitiveTypeExpression.h"
 
-#include "../expressions/VReferenceExpression.h"
+namespace OOModel {
 
-#include "OOModel/src/types/NamedType.h"
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(PrimitiveTypeExpression, TypeExpression)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(PrimitiveTypeExpression, TypeExpression)
 
-namespace OOVisualization {
+REGISTER_ATTRIBUTE(PrimitiveTypeExpression, val, Integer, false, false, true)
 
-class OOVISUALIZATION_API VNamedType : public Visualization::ItemWithNode< Visualization::Item, OOModel::NamedType>
+PrimitiveTypeExpression::PrimitiveTypeExpression(const PrimitiveTypes& type)
+	: TypeExpression (nullptr, PrimitiveTypeExpression::getMetaData())
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VNamedType, VReferenceExpressionStyle)
-
-	public:
-		VNamedType(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		virtual ~VNamedType();
-
-	protected:
-		void determineChildren();
-		void updateGeometry(int availableWidth, int availableHeight);
-
-	private:
-		VReferenceExpression* vis_;
-};
-
+	setTypeValue(type);
 }
 
-#endif /* VNAMEDTYPE_H_ */
+}

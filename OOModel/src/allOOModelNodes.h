@@ -77,10 +77,10 @@
 #include "expressions/VariableDeclaration.h"
 #include "expressions/ConditionalExpression.h"
 
-#include "types/Type.h"
-#include "types/PrimitiveType.h"
-#include "types/NamedType.h"
-#include "types/ArrayType.h"
+#include "expressions/types/TypeExpression.h"
+#include "expressions/types/PrimitiveTypeExpression.h"
+#include "expressions/types/ClassTypeExpression.h"
+#include "expressions/types/ArrayTypeExpression.h"
 
 #include "elements/Visibility.h"
 #include "elements/StorageSpecifier.h"

@@ -32,7 +32,8 @@ INSTALLS += target \
     pluginmeta \
     styles
 PRECOMPILED_HEADER = src/precompiled.h
-HEADERS += src/expressions/VConditionalExpression.h \
+HEADERS += src/types/VClassType.h \
+    src/expressions/VConditionalExpression.h \
     src/OOVisualizationException.h \
     src/allOOVisualizations.h \
     src/elements/VField.h \
@@ -102,10 +103,10 @@ HEADERS += src/expressions/VConditionalExpression.h \
     src/top_level/VProjectStyle.h \
     src/types/VArrayType.h \
     src/types/VArrayTypeStyle.h \
-    src/types/VNamedType.h \
     src/types/VPrimitiveType.h \
     src/oovisualization.h
-SOURCES += src/expressions/VConditionalExpression.cpp \
+SOURCES += src/types/VClassType.cpp \
+    src/expressions/VConditionalExpression.cpp \
     src/expressions/VVariableDeclarationStyle.cpp \
     src/expressions/VVariableDeclaration.cpp \
     src/expressions/VAssignmentExpression.cpp \
@@ -167,7 +168,6 @@ SOURCES += src/expressions/VConditionalExpression.cpp \
     src/literals/VFloatLiteral.cpp \
     src/literals/VIntegerLiteral.cpp \
     src/types/VPrimitiveType.cpp \
-    src/types/VNamedType.cpp \
     src/literals/VStringLiteral.cpp \
     src/expressions/VVariableAccessStyle.cpp \
     src/expressions/VVariableAccess.cpp \

@@ -25,19 +25,37 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
- * ArrayType.cpp
+ * VClassType.h
  *
- *  Created on: Feb 17, 2011
+ *  Created on: Feb 9, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "types/ArrayType.h"
+#ifndef VCLASSTYPE_H_
+#define VCLASSTYPE_H_
 
-namespace OOModel {
+#include "../expressions/VReferenceExpression.h"
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(ArrayType, Type)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(ArrayType, Type)
+#include "OOModel/src/expressions/types/ClassTypeExpression.h"
 
-REGISTER_ATTRIBUTE(ArrayType, type, Expression, false, false, true)
+namespace OOVisualization {
+
+class OOVISUALIZATION_API VClassType : public Visualization::ItemWithNode< Visualization::Item, OOModel::ClassTypeExpression>
+{
+	ITEM_COMMON_CUSTOM_STYLENAME(VClassType, VReferenceExpressionStyle)
+
+	public:
+		VClassType(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+		virtual ~VClassType();
+
+	protected:
+		void determineChildren();
+		void updateGeometry(int availableWidth, int availableHeight);
+
+	private:
+		VReferenceExpression* vis_;
+};
 
 }
+
+#endif /* VCLASSTYPE_H_ */

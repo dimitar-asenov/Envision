@@ -75,9 +75,9 @@ TEST(OOModel, JavaLibraryAndHelloWorldTest)
 	FormalArgument* arg = new FormalArgument();
 	println->arguments()->append(arg);
 	arg->setName("x");
-	NamedType* argType = new NamedType();
-	arg->setType(argType);
-	argType->type()->ref()->setName("String");
+	ClassTypeExpression* argType = new ClassTypeExpression();
+	arg->setTypeExpression(argType);
+	argType->typeExpression()->ref()->setName("String");
 
 	Class* system = new Class();
 	java->classes()->append(system);
@@ -88,11 +88,11 @@ TEST(OOModel, JavaLibraryAndHelloWorldTest)
 	out->setName("out");
 	out->setVisibility(Visibility::PUBLIC);
 	out->setStorageSpecifier(StorageSpecifier::CLASS_VARIABLE);
-	NamedType* outtype = new NamedType();
-	out->setType(outtype);
-	outtype->type()->ref()->setName("PrintStream");
+	ClassTypeExpression* outtype = new ClassTypeExpression();
+	out->setTypeExpression(outtype);
+	outtype->typeExpression()->ref()->setName("PrintStream");
 	ReferenceExpression* prefix = new ReferenceExpression();
-	outtype->type()->setPrefix(prefix);
+	outtype->typeExpression()->setPrefix(prefix);
 	prefix->ref()->setName("io");
 
 	// Build a simple HelloWorld Application

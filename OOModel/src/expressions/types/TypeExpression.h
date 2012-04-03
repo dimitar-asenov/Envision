@@ -25,71 +25,27 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
- * PrimitiveType.cpp
+ * TypeExpression.h
  *
  *  Created on: Jan 31, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "types/PrimitiveType.h"
+#ifndef TYPEEXPRESSION_H_
+#define TYPEEXPRESSION_H_
+
+#include "../Expression.h"
+#include "ModelBase/src/nodes/nodeMacros.h"
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(PrimitiveType, Type)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(PrimitiveType, Type)
+class Class;
 
-REGISTER_ATTRIBUTE(PrimitiveType, val, Integer, false, false, true)
-
-const PrimitiveType* PrimitiveType::PrimitiveTypeINT()
+class OOMODEL_API TypeExpression : public Expression
 {
-	static PrimitiveType st(INT);
-	return &st;
-}
-const PrimitiveType* PrimitiveType::PrimitiveTypeLONG()
-{
-	static PrimitiveType st(LONG);
-	return &st;
-}
-const PrimitiveType* PrimitiveType::PrimitiveTypeUNSIGNED_INT()
-{
-	static PrimitiveType st(UNSIGNED_INT);
-	return &st;
-}
-const PrimitiveType* PrimitiveType::PrimitiveTypeUNSIGNED_LONG()
-{
-	static PrimitiveType st(UNSIGNED_LONG);
-	return &st;
-}
-const PrimitiveType* PrimitiveType::PrimitiveTypeFLOAT()
-{
-	static PrimitiveType st(FLOAT);
-	return &st;
-}
-const PrimitiveType* PrimitiveType::PrimitiveTypeDOUBLE()
-{
-	static PrimitiveType st(FLOAT);
-	return &st;
-}
-const PrimitiveType* PrimitiveType::PrimitiveTypeBOOLEAN()
-{
-	static PrimitiveType st(BOOLEAN);
-	return &st;
-}
-const PrimitiveType* PrimitiveType::PrimitiveTypeCHAR()
-{
-	static PrimitiveType st(BOOLEAN);
-	return &st;
-}
-const PrimitiveType* PrimitiveType::PrimitiveTypeVOID()
-{
-	static PrimitiveType st(VOID);
-	return &st;
-}
-
-PrimitiveType::PrimitiveType(const PrimitiveTypes& type)
-	: Type (nullptr, PrimitiveType::getMetaData())
-{
-	setType(type);
-}
+	EXTENDABLENODE_DECLARE_STANDARD_METHODS(TypeExpression)
+};
 
 }
+
+#endif /* TYPEEXPRESSION_H_ */
