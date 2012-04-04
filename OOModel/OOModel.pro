@@ -27,7 +27,12 @@ pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
 PRECOMPILED_HEADER = src/precompiled.h
-HEADERS += src/expressions/types/ArrayTypeExpression.h \
+HEADERS += src/types/ClassType.h \
+    src/types/ErrorType.h \
+    src/types/ArrayType.h \
+    src/types/PrimitiveType.h \
+    src/types/Type.h \
+    src/expressions/types/ArrayTypeExpression.h \
     src/expressions/types/ClassTypeExpression.h \
     src/expressions/types/PrimitiveTypeExpression.h \
     src/expressions/types/TypeExpression.h \
@@ -85,7 +90,12 @@ HEADERS += src/expressions/types/ArrayTypeExpression.h \
     src/top_level/Module.h \
     src/top_level/Project.h \
     src/oomodel.h
-SOURCES += src/expressions/types/ArrayTypeExpression.cpp \
+SOURCES += src/types/ClassType.cpp \
+    src/types/ErrorType.cpp \
+    src/types/ArrayType.cpp \
+    src/types/PrimitiveType.cpp \
+    src/types/Type.cpp \
+    src/expressions/types/ArrayTypeExpression.cpp \
     src/expressions/types/ClassTypeExpression.cpp \
     src/expressions/types/PrimitiveTypeExpression.cpp \
     src/expressions/types/TypeExpression.cpp \

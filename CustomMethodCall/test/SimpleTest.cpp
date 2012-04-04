@@ -68,10 +68,10 @@ Class* addCollection(Model::Model* model, Project* parent)
 	find->extension<CustomVisualization>()->setVisName("FindMethodVis");
 	FormalArgument* findArg = new FormalArgument();
 	find->arguments()->append(findArg);
-	findArg->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::INT));
+	findArg->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
 	findArg->setName("x");
 	FormalResult* findResult = new FormalResult();
-	findResult->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::INT));
+	findResult->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
 	find->results()->append(findResult);
 
 	Method* insert = new Method();
@@ -81,7 +81,7 @@ Class* addCollection(Model::Model* model, Project* parent)
 	insert->extension<Position>()->setY(100);
 	FormalArgument* insertArg = new FormalArgument();
 	insert->arguments()->append(insertArg);
-	insertArg->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::INT));
+	insertArg->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
 	insertArg->setName("x");
 
 	Method* empty = new Method();
@@ -90,7 +90,7 @@ Class* addCollection(Model::Model* model, Project* parent)
 	empty->extension<CustomVisualization>()->setVisName("EmptyMethodVis");
 	empty->extension<Position>()->setY(200);
 	FormalResult* emptyResult = new FormalResult();
-	emptyResult->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::BOOLEAN));
+	emptyResult->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::BOOLEAN));
 	empty->results()->append(emptyResult);
 
 	Method* exists = new Method();
@@ -100,10 +100,10 @@ Class* addCollection(Model::Model* model, Project* parent)
 	exists->extension<Position>()->setY(300);
 	FormalArgument* existsArg = new FormalArgument();
 	exists->arguments()->append(existsArg);
-	existsArg->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::INT));
+	existsArg->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
 	existsArg->setName("x");
 	FormalResult* existsResult = new FormalResult();
-	existsResult->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::BOOLEAN));
+	existsResult->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::BOOLEAN));
 	exists->results()->append(existsResult);
 
 	Method* sum = new Method();
@@ -113,14 +113,14 @@ Class* addCollection(Model::Model* model, Project* parent)
 	sum->extension<Position>()->setY(400);
 	FormalArgument* sumArgFrom = new FormalArgument();
 	sum->arguments()->append(sumArgFrom);
-	sumArgFrom->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::INT));
+	sumArgFrom->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
 	sumArgFrom->setName("from");
 	FormalArgument* sumArgTo = new FormalArgument();
 	sum->arguments()->append(sumArgTo);
-	sumArgTo->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::INT));
+	sumArgTo->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
 	sumArgTo->setName("to");
 	FormalResult* sumResult = new FormalResult();
-	sumResult->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::INT));
+	sumResult->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
 	sum->results()->append(sumResult);
 
 	Method* test = new Method();
@@ -155,7 +155,7 @@ Class* addCollection(Model::Model* model, Project* parent)
 	VariableDeclaration* indexVar = new VariableDeclaration();
 	test->items()->append(new ExpressionStatement(indexVar));
 	indexVar->setName("index");
-	indexVar->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::INT));
+	indexVar->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
 	MethodCallExpression* findCall = new MethodCallExpression();
 	indexVar->setInitialValue(findCall);
 	findCall->ref()->setName("find");
@@ -164,7 +164,7 @@ Class* addCollection(Model::Model* model, Project* parent)
 	VariableDeclaration* resultVar = new VariableDeclaration();
 	test->items()->append(new ExpressionStatement(resultVar));
 	resultVar->setName("result");
-	resultVar->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::INT));
+	resultVar->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
 	MethodCallExpression* sumCall = new MethodCallExpression();
 	resultVar->setInitialValue(sumCall);
 	sumCall->ref()->setName("sum");
@@ -177,7 +177,7 @@ Class* addCollection(Model::Model* model, Project* parent)
 	test->items()->append(testReturn);
 
 	FormalResult* testFormalResult = new FormalResult();
-	testFormalResult->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::INT));
+	testFormalResult->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
 	test->results()->append(testFormalResult);
 
 	model->endModification();

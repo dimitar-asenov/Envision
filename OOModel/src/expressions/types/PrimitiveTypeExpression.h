@@ -35,7 +35,7 @@
 #define PRIMITIVETYPEEXPRESSION_H_
 
 #include "TypeExpression.h"
-
+#include "../../types/PrimitiveType.h"
 #include "ModelBase/src/nodes/Integer.h"
 
 namespace OOModel {
@@ -46,7 +46,7 @@ class OOMODEL_API PrimitiveTypeExpression : public TypeExpression
 	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, val, setVal, int);
 
 	public:
-		enum PrimitiveTypes {INT, LONG, UNSIGNED_INT, UNSIGNED_LONG, FLOAT, DOUBLE, BOOLEAN, CHAR, VOID};
+		typedef PrimitiveType::PrimitiveTypes PrimitiveTypes;
 
 		PrimitiveTypeExpression(const PrimitiveTypes& type);
 
