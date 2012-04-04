@@ -155,6 +155,18 @@ bool Node::replaceChild(Node*, Node*, bool)
 	return false;
 }
 
+QList<Node*> Node::findSymbol(const QString& symbol, Node* source, FindSymbolMode mode)
+{
+	if (definesSymbol() && symbolName() == symbol)
+	{
+		QList<Node*> res;
+		res << this;
+		return res;
+	}
+	else if (mode == SEARCH_UP && parent_) return parent_->findSymbol(symbol, source, mode);
+	else return QList<Node*>();
+}
+
 /***********************************************************************************************************************
  * GETTERS AND SETTERS
  **********************************************************************************************************************/

@@ -55,6 +55,8 @@ class OOMODEL_API AssignmentExpression: public Expression
 
 		AssignmentTypes op() const;
 		void setOp(const AssignmentTypes& oper);
+
+		virtual Type* type();
 };
 
 inline AssignmentExpression::AssignmentTypes AssignmentExpression::op() const { return static_cast<AssignmentTypes> (opr()); }

@@ -50,6 +50,10 @@ class OOMODEL_API ForEachStatement: public Statement
 	ATTRIBUTE(Expression, varType, setVarType)
 	ATTRIBUTE(Expression, collection, setCollection);
 	ATTRIBUTE(StatementItemList, body, setBody);
+
+	public:
+		virtual bool definesSymbol() const;
+		virtual const QString& symbolName() const;
 };
 
 }

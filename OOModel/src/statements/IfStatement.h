@@ -48,6 +48,9 @@ class OOMODEL_API IfStatement: public Statement
 	ATTRIBUTE(Expression, condition, setCondition);
 	ATTRIBUTE(StatementItemList, thenBranch, setThenBranch);
 	ATTRIBUTE(StatementItemList, elseBranch, setElseBranch);
+
+	public:
+		virtual QList<Model::Node*> findSymbol(const QString& symbol, Node* source, FindSymbolMode mode);
 };
 
 }

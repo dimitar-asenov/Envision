@@ -44,6 +44,7 @@ class OOMODEL_API ThisExpression: public Expression
 
 	public:
 		virtual Class* classDefinition();
+		virtual Type* type();
 };
 
 }

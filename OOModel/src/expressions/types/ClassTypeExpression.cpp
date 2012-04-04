@@ -32,6 +32,8 @@
  **********************************************************************************************************************/
 
 #include "ClassTypeExpression.h"
+#include "../../types/ClassType.h"
+#include "../../top_level/Class.h"
 
 namespace OOModel {
 
@@ -43,6 +45,11 @@ REGISTER_ATTRIBUTE(ClassTypeExpression, typeExpression, ReferenceExpression, fal
 Class* ClassTypeExpression::classDefinition()
 {
 	return typeExpression()->classDefinition();
+}
+
+Type* ClassTypeExpression::type()
+{
+	return new ClassType( dynamic_cast<Class*> (typeExpression()->target()), false);
 }
 
 }

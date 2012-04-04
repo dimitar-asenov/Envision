@@ -64,6 +64,7 @@ class OOMODEL_API Class : public Model::ExtendableNode
 		virtual const QString& symbolName() const;
 
 		virtual Model::Node* navigateTo(Model::Node* source, QString path);
+		virtual QList<Node*> findSymbol(const QString& symbol, Node* source, FindSymbolMode mode);
 };
 
 }

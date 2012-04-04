@@ -48,6 +48,8 @@ class OOMODEL_API IntegerLiteral: public Expression
 
 	public:
 		IntegerLiteral(int value);
+
+		virtual Type* type();
 };
 
 }

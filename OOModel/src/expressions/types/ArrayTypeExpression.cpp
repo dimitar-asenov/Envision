@@ -32,6 +32,7 @@
  **********************************************************************************************************************/
 
 #include "ArrayTypeExpression.h"
+#include "../../types/ArrayType.h"
 
 namespace OOModel {
 
@@ -39,5 +40,10 @@ EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(ArrayTypeExpression, TypeExpression)
 EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(ArrayTypeExpression, TypeExpression)
 
 REGISTER_ATTRIBUTE(ArrayTypeExpression, typeExpression, Expression, false, false, true)
+
+Type* ArrayTypeExpression::type()
+{
+	return new ArrayType(typeExpression()->type(), false);
+}
 
 }

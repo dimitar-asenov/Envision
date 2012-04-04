@@ -44,6 +44,9 @@ class OOMODEL_API CastExpression: public Expression
 
 	ATTRIBUTE(Expression, castType, setType);
 	ATTRIBUTE(Expression, expr, setExpr);
+
+	public:
+		virtual Type* type();
 };
 
 }

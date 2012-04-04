@@ -71,4 +71,14 @@ Model::Node* Class::navigateTo(Model::Node* source, QString path)
 	else return found;
 }
 
+QList<Model::Node*> Class::findSymbol(const QString& symbol,Model::Node* source, FindSymbolMode mode)
+{
+	QList<Model::Node*> symbols;
+
+	symbols << methods()->findAllSymbolDefinitions(symbol);
+	symbols << fields()->findAllSymbolDefinitions(symbol);
+
+	return symbols.isEmpty() ? Node::findSymbol(symbol, source, mode) : symbols;
+}
+
 }

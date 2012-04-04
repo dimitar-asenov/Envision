@@ -65,4 +65,11 @@ Model::Node* StatementItemList::navigateTo(Model::Node* source, QString path)
 
 }
 
+QList<Model::Node*> StatementItemList::findSymbol(const QString& symbol, Model::Node* source, FindSymbolMode mode)
+{
+	QList<Model::Node*> symbols = findAllSymbolDefinitions(symbol, indexOfSubitem(source));
+
+	return symbols.isEmpty() ? Node::findSymbol(symbol, source, mode) : symbols;
+}
+
 }

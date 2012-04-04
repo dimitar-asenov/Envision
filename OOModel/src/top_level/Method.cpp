@@ -80,4 +80,19 @@ Model::Node* Method::navigateTo(Model::Node* source, QString path)
 	else return nullptr;
 }
 
+QList<Model::Node*> Method::findSymbol(const QString& symbol, Model::Node* source, FindSymbolMode mode)
+{
+	if (mode == SEARCH_UP && isAncestorOf(source))
+	{
+		QList<Model::Node*> symbols;
+
+		symbols << arguments()->findAllSymbolDefinitions(symbol);
+		symbols << results()->findAllSymbolDefinitions(symbol);
+		// Note that a StatementList also implements findSymbol and locally declared variables will be found there.
+
+		return symbols.isEmpty() ? Node::findSymbol(symbol, source, mode) : symbols;
+	}
+	else return QList<Model::Node*> ();
+}
+
 }

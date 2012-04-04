@@ -52,6 +52,8 @@ class OOMODEL_API PrimitiveTypeExpression : public TypeExpression
 
 		PrimitiveTypes typeValue() const;
 		void setTypeValue(const PrimitiveTypes& type);
+
+		virtual Type* type();
 };
 
 inline PrimitiveTypeExpression::PrimitiveTypes PrimitiveTypeExpression::typeValue()

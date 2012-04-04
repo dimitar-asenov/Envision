@@ -53,6 +53,8 @@ class OOMODEL_API VariableDeclaration: public Expression
 	public:
 		virtual bool definesSymbol() const;
 		virtual const QString& symbolName() const;
+
+		virtual Type* type();
 };
 
 }

@@ -52,6 +52,8 @@ class OOMODEL_API UnaryOperation: public Expression
 
 		OperatorTypes op() const;
 		void setOp(const OperatorTypes& oper);
+
+		virtual Type* type();
 };
 
 inline UnaryOperation::OperatorTypes UnaryOperation::op() const { return static_cast<OperatorTypes> (opr()); }

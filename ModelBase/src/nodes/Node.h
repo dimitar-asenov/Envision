@@ -196,6 +196,31 @@ class MODELBASE_API Node
 		 */
 		virtual const QString& symbolName() const;
 
+		enum FindSymbolMode {
+			SEARCH_UP,	/**< Looks for a symbol within the specified scope and enclosing scopes. Depending on the source,
+									symbols in the current scope which come after the source will not be considered. This is the
+			 	 	 	 	 	 	case e.g. with searches for local variable declarations in a method: only variables before
+			 	 	 	 	 	 	the source node should be considered. */
+			SEARCH_DOWN /**< Looks for a symbol inside the specified scope or subscopes. This is used for symbols that are
+			 	 	 	 	 	 	requested in a specific context (typically after a '.') e.g. "list.sort()"*/
+		};
+
+		/**
+		 * \brief Returns a list of all nodes which define a symbol with the name \a symbol in the scope of this node.
+		 *
+		 * The \a source Node specifies what node should be used as a reference when determining what symbols are visible.
+		 *
+		 * The \a mode specifies what search to perform.
+		 *
+		 * The default implementation returns a list with only the current node in it, in case the node defines the
+		 * requested symbol. Otherwise if \a mode is FindSymbolMode::SEARCH_UP, the implementation of the parent node is
+		 * called.
+		 *
+		 * Reimplement this method in derived classes to specify fine grained behavior and operation for search modes
+		 * other than FindSymbolMode::SEARCH_UP
+		 */
+		virtual QList<Node*> findSymbol(const QString& symbol, Node* source, FindSymbolMode mode);
+
 		/*
 		 * Returns the revision of this node.
 		 */

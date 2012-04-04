@@ -45,6 +45,9 @@ class OOMODEL_API ArrayInitializer: public Expression
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(ArrayInitializer)
 
 	ATTRIBUTE(Model::TypedList<Expression>, values, setValues);
+
+	public:
+		virtual Type* type();
 };
 
 }

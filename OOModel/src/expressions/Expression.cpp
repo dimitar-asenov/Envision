@@ -43,4 +43,9 @@ Class* Expression::classDefinition()
 	return nullptr;
 }
 
+Type* Expression::type()
+{
+	return nullptr;
+}
+
 }

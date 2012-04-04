@@ -50,7 +50,11 @@ class OOMODEL_API ReferenceExpression: public Expression
 
 	public:
 		virtual Class* classDefinition();
+		Model::Node* target();
+		virtual Type* type();
 };
+
+inline Model::Node* ReferenceExpression::target() { return ref()->target(); }
 
 }
 

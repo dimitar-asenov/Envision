@@ -49,6 +49,9 @@ class OOMODEL_API LoopStatement: public Statement
 	ATTRIBUTE(Expression, initStep, setInitStep);
 	ATTRIBUTE(Expression, updateStep, setUpdateStep);
 	ATTRIBUTE(StatementItemList, body, setBody);
+
+	public:
+		virtual QList<Model::Node*> findSymbol(const QString& symbol, Node* source, FindSymbolMode mode);
 };
 
 }

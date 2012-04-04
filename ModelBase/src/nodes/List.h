@@ -64,6 +64,7 @@ class MODELBASE_API List: public Node
 		template <class T> T* at(int i);
 
 		int indexOf(const Node* item) const;
+		int indexOfSubitem(const Node* item) const;
 
 		void append(Node* node);
 		void prepend(Node* node);
@@ -89,8 +90,8 @@ class MODELBASE_API List: public Node
 
 		const QVector<Node*>& nodes();
 
-		Node* findFirstSymbolDefinition(const QString& symbol);
-		QList<Node*> findAllSymbolDefinitions(const QString& symbol);
+		Node* findFirstSymbolDefinition(const QString& symbol, int beforeIndex = -1);
+		QList<Node*> findAllSymbolDefinitions(const QString& symbol, int beforeIndex = -1);
 
 		virtual bool replaceChild(Node* child, Node* replacement, bool releaseOldChild = true);
 

@@ -53,6 +53,8 @@ class OOMODEL_API MethodCallExpression: public Expression
 
 	public:
 		Method* methodDefinition();
+
+		virtual Type* type();
 };
 
 }

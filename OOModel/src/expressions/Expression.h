@@ -42,6 +42,7 @@
 namespace OOModel {
 
 class Class;
+class Type;
 
 class OOMODEL_API Expression : public Model::ExtendableNode
 {
@@ -56,6 +57,8 @@ class OOMODEL_API Expression : public Model::ExtendableNode
 		 * the class. Otherwise returns NULL.
 		 */
 		virtual Class* classDefinition();
+
+		virtual Type* type();
 };
 
 }

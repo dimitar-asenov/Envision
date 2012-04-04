@@ -55,6 +55,8 @@ class OOMODEL_API BinaryOperation: public Expression
 
 		OperatorTypes op() const;
 		void setOp(const OperatorTypes& oper);
+
+		virtual Type* type();
 };
 
 inline BinaryOperation::OperatorTypes BinaryOperation::op() const { return static_cast<OperatorTypes> (opr()); }
