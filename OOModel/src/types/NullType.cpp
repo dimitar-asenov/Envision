@@ -25,26 +25,22 @@
  **********************************************************************************************************************/
 
 /*
- * UnfinishedOperator.cpp
+ * NullType.cpp
  *
- *  Created on: Jan 12, 2012
+ *  Created on: Apr 5, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "expressions/UnfinishedOperator.h"
-#include "../types/ErrorType.h"
+#include "NullType.h"
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(UnfinishedOperator, Expression)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(UnfinishedOperator, Expression)
+NullType::NullType() : Type(true)
+{}
 
-REGISTER_ATTRIBUTE(UnfinishedOperator, delimiters, TypedListOfText, false, false, true)
-REGISTER_ATTRIBUTE(UnfinishedOperator, operands, TypedListOfExpression, false, false, true)
-
-Type* UnfinishedOperator::type()
+bool NullType::equals(const Type* other) const
 {
-	return new ErrorType("Unfinished Operator");
+	return dynamic_cast<const NullType*>(other);
 }
 
 } /* namespace OOModel */

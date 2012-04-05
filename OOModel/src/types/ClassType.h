@@ -34,25 +34,18 @@
 #ifndef OOModel_CLASSTYPE_H_
 #define OOModel_CLASSTYPE_H_
 
-#include "Type.h"
+#include "SymbolProviderType.h"
 
 namespace OOModel {
 
 class Class;
 
-class OOMODEL_API ClassType : public Type {
+class OOMODEL_API ClassType : public SymbolProviderType {
 	public:
 		ClassType(Class* classDefinition, bool isValueType);
 
-		virtual bool equals(const Type* other) const;
-
 		Class* classDefinition() const;
-
-	private:
-		Class* classDefinition_;
 };
-
-inline Class* ClassType::classDefinition() const { return classDefinition_;}
 
 } /* namespace OOModel */
 #endif /* OOModel_CLASSTYPE_H_ */

@@ -32,6 +32,7 @@
  **********************************************************************************************************************/
 
 #include "expressions/IntegerLiteral.h"
+#include "../types/PrimitiveType.h"
 
 namespace OOModel {
 
@@ -44,6 +45,11 @@ IntegerLiteral::IntegerLiteral(int value)
 : Expression(nullptr, IntegerLiteral::getMetaData())
 {
 	setValue(value);
+}
+
+Type* IntegerLiteral::type()
+{
+	return new PrimitiveType(PrimitiveType::INT, true);
 }
 
 }

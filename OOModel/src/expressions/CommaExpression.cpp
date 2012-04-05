@@ -78,4 +78,9 @@ QList<Model::Node*> CommaExpression::findSymbol(const QString& symbol, Node* sou
 	else return Expression::findSymbol(symbol, source, mode);
 }
 
+Type* CommaExpression::type()
+{
+	return right()->type();
+}
+
 }

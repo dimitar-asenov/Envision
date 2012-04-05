@@ -32,18 +32,16 @@
  */
 
 #include "ClassType.h"
+#include "../top_level/Class.h"
 
 namespace OOModel {
 
-ClassType::ClassType(Class* classDefinition, bool isValueType) : Type(isValueType), classDefinition_(classDefinition)
+ClassType::ClassType(Class* classDefinition, bool isValueType) : SymbolProviderType(classDefinition ,isValueType)
 {}
 
-bool ClassType::equals(const Type* other) const
+Class* ClassType::classDefinition() const
 {
-	if (auto ct = dynamic_cast<const ClassType*>(other))
-		return classDefinition_ != nullptr && classDefinition_ == ct->classDefinition_;
-
-	return false;
+	return static_cast<Class*>(symbolProvider());
 }
 
 } /* namespace OOModel */

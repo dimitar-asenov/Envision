@@ -35,6 +35,7 @@
 #include "expressions/VariableDeclaration.h"
 #include "top_level/Class.h"
 #include "top_level/Field.h"
+#include "../types/ErrorType.h"
 
 namespace OOModel {
 
@@ -61,6 +62,35 @@ Class* VariableAccess::classDefinition()
 	if (vd) return vd->varType()->classDefinition();
 
 	return nullptr;
+}
+
+Type* VariableAccess::type()
+{
+	if ( auto vdecl = dynamic_cast<VariableDeclaration*>( ref()->target() ) )
+	{
+		auto t = vdecl->type();
+		t->setValueType(true);
+		return t;
+	}
+	else if ( auto field = dynamic_cast<Field*>( ref()->target() ) )
+	{
+		auto t = field->typeExpression()->type();
+		t->setValueType(true);
+		return t;
+	}
+	else if ( auto arg = dynamic_cast<FormalArgument*>( ref()->target() ) )
+	{
+		auto t = arg->typeExpression()->type();
+		t->setValueType(true);
+		return t;
+	}
+	else if ( auto res = dynamic_cast<FormalResult*>( ref()->target() ) )
+	{
+		auto t = res->typeExpression()->type();
+		t->setValueType(true);
+		return t;
+	}
+	else return new ErrorType("Invalid variable access type");
 }
 
 }

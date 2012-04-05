@@ -32,6 +32,7 @@
  **********************************************************************************************************************/
 
 #include "expressions/VariableDeclaration.h"
+#include "../types/Type.h"
 
 namespace OOModel {
 
@@ -51,5 +52,13 @@ const QString& VariableDeclaration::symbolName() const
 {
 	return name();
 }
+
+Type* VariableDeclaration::type()
+{
+	auto t = varType()->type();
+	t->setValueType(true);
+	return t;
+}
+
 
 }

@@ -32,6 +32,7 @@
  **********************************************************************************************************************/
 
 #include "expressions/FloatLiteral.h"
+#include "../types/PrimitiveType.h"
 
 namespace OOModel {
 
@@ -44,6 +45,11 @@ FloatLiteral::FloatLiteral(double value)
 : Expression(nullptr, FloatLiteral::getMetaData())
 {
 	setValue(value);
+}
+
+Type* FloatLiteral::type()
+{
+	return new PrimitiveType(PrimitiveType::DOUBLE, true);
 }
 
 }

@@ -32,8 +32,9 @@
  **********************************************************************************************************************/
 
 #include "expressions/ThisExpression.h"
-
 #include "top_level/Class.h"
+#include "../types/ClassType.h"
+#include "../types/ErrorType.h"
 
 namespace OOModel {
 
@@ -54,6 +55,19 @@ Class* ThisExpression::classDefinition()
 	}
 
 	return nullptr;
+}
+
+Type* ThisExpression::type()
+{
+	auto p = parent();
+
+	while (p)
+	{
+		auto cl = dynamic_cast<Class*> (p);
+		if (cl) return new ClassType(cl, true);
+	}
+
+	return new ErrorType("Invalid position for 'this' expression. Not within a class.");
 }
 
 }

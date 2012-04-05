@@ -25,26 +25,36 @@
  **********************************************************************************************************************/
 
 /*
- * UnfinishedOperator.cpp
+ * SymbolProviderType.h
  *
- *  Created on: Jan 12, 2012
+ *  Created on: Apr 5, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "expressions/UnfinishedOperator.h"
-#include "../types/ErrorType.h"
+#ifndef OOModel_SYMBOLPROVIDERTYPE_H_
+#define OOModel_SYMBOLPROVIDERTYPE_H_
+
+#include "Type.h"
+
+namespace Model {
+	class Node;
+}
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(UnfinishedOperator, Expression)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(UnfinishedOperator, Expression)
+class OOMODEL_API SymbolProviderType : public Type {
+	public:
+		SymbolProviderType(Model::Node* symbolProviderNode, bool isValueType);
 
-REGISTER_ATTRIBUTE(UnfinishedOperator, delimiters, TypedListOfText, false, false, true)
-REGISTER_ATTRIBUTE(UnfinishedOperator, operands, TypedListOfExpression, false, false, true)
+		virtual bool equals(const Type* other) const;
 
-Type* UnfinishedOperator::type()
-{
-	return new ErrorType("Unfinished Operator");
-}
+		Model::Node* symbolProvider() const;
+
+	private:
+		Model::Node* symbolProvider_;
+};
+
+inline Model::Node* SymbolProviderType::symbolProvider() const {return symbolProvider_;}
 
 } /* namespace OOModel */
+#endif /* OOModel_SYMBOLPROVIDERTYPE_H_ */

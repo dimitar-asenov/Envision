@@ -25,26 +25,22 @@
  **********************************************************************************************************************/
 
 /*
- * UnfinishedOperator.cpp
+ * StringType.cpp
  *
- *  Created on: Jan 12, 2012
+ *  Created on: Apr 5, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "expressions/UnfinishedOperator.h"
-#include "../types/ErrorType.h"
+#include "StringType.h"
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(UnfinishedOperator, Expression)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(UnfinishedOperator, Expression)
+StringType::StringType() : Type(true)
+{}
 
-REGISTER_ATTRIBUTE(UnfinishedOperator, delimiters, TypedListOfText, false, false, true)
-REGISTER_ATTRIBUTE(UnfinishedOperator, operands, TypedListOfExpression, false, false, true)
-
-Type* UnfinishedOperator::type()
+bool StringType::equals(const Type* other) const
 {
-	return new ErrorType("Unfinished Operator");
+	return dynamic_cast<const StringType*>(other);
 }
 
 } /* namespace OOModel */

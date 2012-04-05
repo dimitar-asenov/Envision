@@ -34,6 +34,7 @@
 #include "expressions/MethodCallExpression.h"
 #include "top_level/Class.h"
 #include "top_level/Method.h"
+#include "../types/PrimitiveType.h"
 
 namespace OOModel {
 
@@ -53,6 +54,20 @@ MethodCallExpression::MethodCallExpression(const QString& name, Expression* pref
 Method* MethodCallExpression::methodDefinition()
 {
 	return dynamic_cast<Method*> (ref()->target());
+}
+
+Type* MethodCallExpression::type()
+{
+	auto mdef = dynamic_cast<Method*>( ref()->target() );
+	if (mdef->results()->size() == 0)
+		return new PrimitiveType(PrimitiveType::VOID, true);
+	else
+	{
+		// TODO: handle multiple return values
+		auto t = mdef->results()->first()->typeExpression()->type();
+		t->setValueType(true);
+		return t;
+	}
 }
 
 }

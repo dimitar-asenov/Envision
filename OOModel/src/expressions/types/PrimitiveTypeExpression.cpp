@@ -46,4 +46,9 @@ PrimitiveTypeExpression::PrimitiveTypeExpression(const PrimitiveTypes& type)
 	setTypeValue(type);
 }
 
+Type* PrimitiveTypeExpression::type()
+{
+	return new PrimitiveType(typeValue(), false);
+}
+
 }

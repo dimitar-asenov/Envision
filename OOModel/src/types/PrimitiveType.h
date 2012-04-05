@@ -49,6 +49,8 @@ class OOMODEL_API PrimitiveType : public Type {
 
 		PrimitiveTypes type() const;
 
+		static PrimitiveTypes resultFromBinaryOperation(PrimitiveTypes left, PrimitiveTypes right);
+
 	private:
 		PrimitiveTypes type_;
 };

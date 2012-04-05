@@ -27,7 +27,10 @@ pluginmeta.files = $${TARGET}.plugin
 INSTALLS += target \
     pluginmeta
 PRECOMPILED_HEADER = src/precompiled.h
-HEADERS += src/types/ClassType.h \
+HEADERS += src/types/StringType.h \
+    src/types/NullType.h \
+    src/types/SymbolProviderType.h \
+    src/types/ClassType.h \
     src/types/ErrorType.h \
     src/types/ArrayType.h \
     src/types/PrimitiveType.h \
@@ -90,7 +93,10 @@ HEADERS += src/types/ClassType.h \
     src/top_level/Module.h \
     src/top_level/Project.h \
     src/oomodel.h
-SOURCES += src/types/ClassType.cpp \
+SOURCES += src/types/StringType.cpp \
+    src/types/NullType.cpp \
+    src/types/SymbolProviderType.cpp \
+    src/types/ClassType.cpp \
     src/types/ErrorType.cpp \
     src/types/ArrayType.cpp \
     src/types/PrimitiveType.cpp \

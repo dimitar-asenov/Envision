@@ -32,10 +32,16 @@
  **********************************************************************************************************************/
 
 #include "expressions/NullLiteral.h"
+#include "../types/NullType.h"
 
 namespace OOModel {
 
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(NullLiteral, Expression)
 EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(NullLiteral, Expression)
+
+Type* NullLiteral::type()
+{
+	return new NullType();
+}
 
 }

@@ -32,6 +32,8 @@
  **********************************************************************************************************************/
 
 #include "expressions/BinaryOperation.h"
+#include "../types/PrimitiveType.h"
+#include "../types/ErrorType.h"
 
 namespace OOModel {
 
@@ -41,5 +43,29 @@ EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(BinaryOperation, Expression)
 REGISTER_ATTRIBUTE(BinaryOperation, left, Expression, false, false, true)
 REGISTER_ATTRIBUTE(BinaryOperation, right, Expression, false, false, true)
 REGISTER_ATTRIBUTE(BinaryOperation, opr, Integer, false, false, true)
+
+Type* BinaryOperation::type()
+{
+	auto lt = left()->type();
+	auto rt = right()->type();
+
+	auto ltp = dynamic_cast<PrimitiveType*>(lt);
+	auto rtp = dynamic_cast<PrimitiveType*>(rt);
+
+	Type* res = nullptr;
+	if (ltp && rtp)
+	{
+		PrimitiveType::PrimitiveTypes primitive = PrimitiveType::resultFromBinaryOperation(ltp->type(), rtp->type());
+		if (primitive != PrimitiveType::VOID)
+		res = new PrimitiveType(primitive, ltp->isValueType());
+	}
+
+	if (!res) res = new ErrorType("Incompatible types for binary operation");
+
+	SAFE_DELETE(lt);
+	SAFE_DELETE(rt);
+
+	return res;
+}
 
 }

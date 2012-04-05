@@ -32,7 +32,14 @@
  **********************************************************************************************************************/
 
 #include "expressions/ReferenceExpression.h"
+#include "top_level/Project.h"
+#include "top_level/Library.h"
+#include "top_level/Module.h"
 #include "top_level/Class.h"
+#include "../types/SymbolProviderType.h"
+#include "../types/ClassType.h"
+#include "../types/ErrorType.h"
+
 
 namespace OOModel {
 
@@ -52,6 +59,19 @@ ReferenceExpression::ReferenceExpression(const QString& name, Expression* prefix
 Class* ReferenceExpression::classDefinition()
 {
 	return dynamic_cast<Class*> (ref()->target());
+}
+
+Type* ReferenceExpression::type()
+{
+	if ( auto project = dynamic_cast<Project*>( ref()->target() ) )
+		return new SymbolProviderType(project, false);
+	else if ( auto library = dynamic_cast<Library*>( ref()->target() ) )
+		return new SymbolProviderType(library, false);
+	else if ( auto module = dynamic_cast<Module*>( ref()->target() ) )
+		return new SymbolProviderType(module, false);
+	else if ( auto cl = dynamic_cast<Class*>( ref()->target() ) )
+		return new ClassType(cl, false);
+	else return new ErrorType("Invalid reference expression type");
 }
 
 }

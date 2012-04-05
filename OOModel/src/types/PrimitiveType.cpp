@@ -47,4 +47,19 @@ bool PrimitiveType::equals(const Type* other) const
 	return false;
 }
 
+PrimitiveType::PrimitiveTypes PrimitiveType::resultFromBinaryOperation(PrimitiveTypes left, PrimitiveTypes right)
+{
+	if (left == right) return left;
+	if (left == DOUBLE || right == DOUBLE) return DOUBLE;
+	if (left == FLOAT || right == FLOAT) return FLOAT;
+	if ( (left == LONG || right == LONG)
+			&& !left == UNSIGNED_LONG && !left == UNSIGNED_INT && !right == UNSIGNED_LONG && !right == UNSIGNED_INT)
+		return LONG;
+	if ( (left == UNSIGNED_LONG || right == UNSIGNED_LONG)
+			&& !left == LONG && !left == INT && !right == LONG && !right == INT)
+		return UNSIGNED_LONG;
+
+	return VOID;
+}
+
 } /* namespace OOModel */

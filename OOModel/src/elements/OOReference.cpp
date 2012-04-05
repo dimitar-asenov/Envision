@@ -32,10 +32,10 @@
  */
 
 #include "OOReference.h"
+#include "../expressions/ReferenceExpression.h"
+#include "../top_level/Class.h"
 
-#include "src/expressions/ReferenceExpression.h"
-#include "src/expressions/VariableAccess.h"
-#include "src/expressions/MethodCallExpression.h"
+#include "../types/SymbolProviderType.h"
 
 namespace OOModel {
 
@@ -44,8 +44,32 @@ NODE_DEFINE_TYPE_REGISTRATION_METHODS(OOReference)
 
 bool OOReference::resolve()
 {
-	// TODO Implement resolution routines
-	return false;
+	// TODO Handle the case where the symbol is defined multiple times in a better way
+
+	auto parent = static_cast<ReferenceExpression*>(this->parent());
+
+	Model::Node* symbol = nullptr;
+
+	if (parent->prefix())
+	{
+		// Perform a downward search starting from the target of the prefix
+		auto t = parent->prefix()->type();
+		if (auto sp = dynamic_cast<SymbolProviderType*>(t))
+		{
+			auto symbolList = sp->symbolProvider()->findSymbol(name(), this, SEARCH_DOWN);
+			if (symbolList.size() == 1) symbol = symbolList.first();
+		}
+		SAFE_DELETE(t);
+	}
+	else
+	{
+		// Perform an upward search starting from the current node
+		auto symbolList = findSymbol(name(), this, SEARCH_UP);
+		if (symbolList.size() == 1) symbol = symbolList.first();
+	}
+
+	if (target() != symbol) setTarget(symbol);
+	return isResolved();
 
 //	Method* MethodCallExpression::methodDefinition()
 //	{

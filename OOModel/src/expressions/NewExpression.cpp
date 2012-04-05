@@ -32,6 +32,7 @@
  **********************************************************************************************************************/
 
 #include "expressions/NewExpression.h"
+#include "../types/Type.h"
 
 namespace OOModel {
 
@@ -40,4 +41,12 @@ EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(NewExpression, Expression)
 
 REGISTER_ATTRIBUTE(NewExpression, newType, Expression, false, false, true)
 REGISTER_ATTRIBUTE(NewExpression, amount, Expression, false, false, true)
+
+Type* NewExpression::type()
+{
+	auto t = newType()->type();
+	t->setValueType(true);
+	return t;
+}
+
 }
