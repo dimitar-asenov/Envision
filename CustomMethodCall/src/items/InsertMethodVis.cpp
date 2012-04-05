@@ -65,8 +65,8 @@ InsertMethodVis::~InsertMethodVis()
 
 void InsertMethodVis::determineChildren()
 {
-	layout()->synchronizeFirst(prefix_, node()->prefix());
-	layout()->synchronizeMid(separator_, node()->prefix() != nullptr, &style()->separator(), 1);
+	layout()->synchronizeFirst(prefix_, node()->ref()->prefix());
+	layout()->synchronizeMid(separator_, node()->ref()->prefix() != nullptr, &style()->separator(), 1);
 	layout()->synchronizeLast(arguments_, node()->arguments(), &style()->arguments());
 
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?

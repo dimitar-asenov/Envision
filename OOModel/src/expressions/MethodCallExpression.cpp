@@ -40,9 +40,15 @@ namespace OOModel {
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(MethodCallExpression, Expression)
 EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(MethodCallExpression, Expression)
 
-REGISTER_ATTRIBUTE(MethodCallExpression, prefix, Expression, false, true, true)
-REGISTER_ATTRIBUTE(MethodCallExpression, ref, OOReference, false, false, true)
+REGISTER_ATTRIBUTE(MethodCallExpression, ref, ReferenceExpression, false, false, true)
 REGISTER_ATTRIBUTE(MethodCallExpression, arguments, TypedListOfExpression, false, false, true)
+
+MethodCallExpression::MethodCallExpression(const QString& name, Expression* prefix)
+: Expression(nullptr, MethodCallExpression::getMetaData())
+{
+	ref()->ref()->setName(name);
+	if (prefix != nullptr) ref()->setPrefix(prefix);
+}
 
 Method* MethodCallExpression::methodDefinition()
 {

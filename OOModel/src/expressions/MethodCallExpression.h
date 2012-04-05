@@ -34,8 +34,7 @@
 #ifndef METHODCALLEXPRESSION_H_
 #define METHODCALLEXPRESSION_H_
 
-#include "Expression.h"
-#include "../elements/OOReference.h"
+#include "ReferenceExpression.h"
 
 #include "ModelBase/src/nodes/TypedList.h"
 
@@ -47,11 +46,11 @@ class OOMODEL_API MethodCallExpression: public Expression
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(MethodCallExpression)
 
-	ATTRIBUTE(Expression, prefix, setPrefix)
-	ATTRIBUTE(OOReference, ref, setRef)
+	ATTRIBUTE(ReferenceExpression, ref, setRef)
 	ATTRIBUTE(Model::TypedList<Expression>, arguments, setArguments)
 
 	public:
+		MethodCallExpression(const QString& name, Expression* prefix = nullptr);
 		Method* methodDefinition();
 
 		virtual Type* type();

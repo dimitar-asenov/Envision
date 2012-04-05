@@ -213,10 +213,8 @@ Method* addDivBySix(Model::Model* model, Class* parent)
 	sixloop->setCondition(sixLoopCond);
 	sixLoopCond->setLeft(new VariableAccess("i"));
 	sixLoopCond->setOp(BinaryOperation::LESS);
-	MethodCallExpression* sizeCall = new MethodCallExpression();
+	MethodCallExpression* sizeCall = new MethodCallExpression("size", new VariableAccess("numbers"));
 	sixLoopCond->setRight(sizeCall);
-	sizeCall->ref()->setName("size");
-	sizeCall->setPrefix(new VariableAccess("numbers"));
 
 	//TODO test the visualization without the remaining parts of this method
 	AssignmentExpression* sixLoopUpdate = new AssignmentExpression();

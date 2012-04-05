@@ -156,21 +156,18 @@ Class* addCollection(Model::Model* model, Project* parent)
 	test->items()->append(new ExpressionStatement(indexVar));
 	indexVar->setName("index");
 	indexVar->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
-	MethodCallExpression* findCall = new MethodCallExpression();
+	MethodCallExpression* findCall = new MethodCallExpression("find");
 	indexVar->setInitialValue(findCall);
-	findCall->ref()->setName("find");
 	findCall->arguments()->append( new IntegerLiteral(42));
 
 	VariableDeclaration* resultVar = new VariableDeclaration();
 	test->items()->append(new ExpressionStatement(resultVar));
 	resultVar->setName("result");
 	resultVar->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
-	MethodCallExpression* sumCall = new MethodCallExpression();
+	MethodCallExpression* sumCall = new MethodCallExpression("sum", new ThisExpression());
 	resultVar->setInitialValue(sumCall);
-	sumCall->ref()->setName("sum");
 	sumCall->arguments()->append( new IntegerLiteral(0));
 	sumCall->arguments()->append( new VariableAccess("index"));
-	sumCall->setPrefix(new ThisExpression());
 
 	ReturnStatement* testReturn = new ReturnStatement();
 	testReturn->values()->append(new VariableAccess("result"));

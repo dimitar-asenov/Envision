@@ -109,25 +109,13 @@ TEST(OOModel, JavaLibraryAndHelloWorldTest)
 	//TODO make an array argument
 
 	ExpressionStatement* callPrintlnSt = new ExpressionStatement();
-	MethodCallExpression* callPrintln = new MethodCallExpression();
+	MethodCallExpression* callPrintln = new MethodCallExpression("println",
+			new VariableAccess("out", new ReferenceExpression("System", new ReferenceExpression("Java"))));
 	StringLiteral* helloStr = new StringLiteral();
 	callPrintln->arguments()->append(helloStr);
 	helloStr->setValue("Hello World");
-	callPrintln->ref()->setName("println");
 	callPrintlnSt->setExpression(callPrintln);
 	main->items()->append(callPrintlnSt);
-
-	VariableAccess* va = new VariableAccess();
-	callPrintln->setPrefix(va);
-	va->ref()->setName("out");
-
-	ReferenceExpression* ref = new ReferenceExpression();
-	va->setPrefix(ref);
-	ref->ref()->setName("System");
-
-	ReferenceExpression* ref2 = new ReferenceExpression();
-	ref->setPrefix(ref2);
-	ref2->ref()->setName("Java");
 
 	model.endModification();
 

@@ -84,22 +84,11 @@ Class* addHelloWorld(Model::Model* model, Project* parent)
 	mainArgElementType->typeExpression()->ref()->setName("String");
 
 	ExpressionStatement* callPrintlnSt = new ExpressionStatement();
-	MethodCallExpression* callPrintln = new MethodCallExpression();
+	MethodCallExpression* callPrintln = new MethodCallExpression("println",
+			new VariableAccess("out", new ReferenceExpression("System", new ReferenceExpression("Java"))));
 	callPrintln->arguments()->append(new StringLiteral("Hello World"));
-	callPrintln->ref()->setName("println");
 	callPrintlnSt->setExpression(callPrintln);
 	main->items()->append(callPrintlnSt);
-
-	VariableAccess* va = new VariableAccess();
-	callPrintln->setPrefix(va);
-	va->ref()->setName("out");
-
-	ReferenceExpression* ref = new ReferenceExpression();
-	va->setPrefix(ref);
-	ref->ref()->setName("System");
-	ReferenceExpression* prefix = new ReferenceExpression();
-	ref->setPrefix(prefix);
-	prefix->ref()->setName("Java");
 
 	model->endModification();
 	return hello;

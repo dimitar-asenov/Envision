@@ -48,9 +48,8 @@ OOModel::Expression* MemberOperatorDescriptor::create(const QList<OOModel::Expre
 	auto varName = dynamic_cast<OOModel::VariableAccess*>( operands.last());
 	Q_ASSERT(varName);
 
-	OOModel::VariableAccess* va = new OOModel::VariableAccess( varName->ref()->name() );
+	OOModel::VariableAccess* va = new OOModel::VariableAccess( varName->ref()->name(), operands.first() );
 	SAFE_DELETE(varName);
-	va->setPrefix(operands.first());
 	return va;
 }
 
