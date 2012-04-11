@@ -35,6 +35,7 @@
 #include "top_level/Class.h"
 #include "top_level/Method.h"
 #include "../types/PrimitiveType.h"
+#include "../types/ErrorType.h"
 
 namespace OOModel {
 
@@ -58,7 +59,10 @@ Method* MethodCallExpression::methodDefinition()
 
 Type* MethodCallExpression::type()
 {
-	auto mdef = dynamic_cast<Method*>( ref()->target() );
+	auto mdef = methodDefinition();
+	if (!mdef)
+		return new ErrorType("Unresolved reference to a method");
+
 	if (mdef->results()->size() == 0)
 		return new PrimitiveType(PrimitiveType::VOID, true);
 	else

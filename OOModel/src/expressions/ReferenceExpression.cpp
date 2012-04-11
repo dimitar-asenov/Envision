@@ -56,11 +56,6 @@ ReferenceExpression::ReferenceExpression(const QString& name, Expression* prefix
 	if (prefix != nullptr) setPrefix(prefix);
 }
 
-Class* ReferenceExpression::classDefinition()
-{
-	return dynamic_cast<Class*> (ref()->target());
-}
-
 Type* ReferenceExpression::type()
 {
 	if ( auto project = dynamic_cast<Project*>( ref()->target() ) )

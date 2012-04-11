@@ -49,15 +49,6 @@ class OOMODEL_API Expression : public Model::ExtendableNode
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Expression)
 
 	public:
-
-		/**
-		 * Returns the class definition node that represents the type of this expression.
-		 *
-		 * In case the type of this expression is a user defined class, this method will return the node that defines
-		 * the class. Otherwise returns NULL.
-		 */
-		virtual Class* classDefinition();
-
 		virtual Type* type();
 };
 

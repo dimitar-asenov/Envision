@@ -51,7 +51,6 @@ class OOMODEL_API ReferenceExpression: public Expression
 	public:
 		ReferenceExpression(const QString& name, Expression* prefix = nullptr);
 
-		virtual Class* classDefinition();
 		Model::Node* target();
 		virtual Type* type();
 

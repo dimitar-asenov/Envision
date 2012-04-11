@@ -48,7 +48,6 @@ class OOMODEL_API VariableAccess: public Expression
 
 	public:
 		VariableAccess(const QString& referenceString, Expression* prefix = nullptr);
-		virtual Class* classDefinition();
 
 		virtual Type* type();
 };

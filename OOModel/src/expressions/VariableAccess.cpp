@@ -51,19 +51,6 @@ VariableAccess::VariableAccess(const QString& referenceString, Expression* prefi
 	if (prefix != nullptr) ref()->setPrefix(prefix);
 }
 
-Class* VariableAccess::classDefinition()
-{
-	Model::Node* var = ref()->target();
-
-	Field* f = dynamic_cast<Field*> (var);
-	if (f) return f->typeExpression()->classDefinition();
-
-	VariableDeclaration* vd = dynamic_cast<VariableDeclaration*> (var);
-	if (vd) return vd->varType()->classDefinition();
-
-	return nullptr;
-}
-
 Type* VariableAccess::type()
 {
 	if ( auto vdecl = dynamic_cast<VariableDeclaration*>( ref()->target() ) )

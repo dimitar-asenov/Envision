@@ -70,61 +70,6 @@ bool OOReference::resolve()
 
 	if (target() != symbol) setTarget(symbol);
 	return isResolved();
-
-//	Method* MethodCallExpression::methodDefinition()
-//	{
-//		Method* met = nullptr;
-//
-//		if (prefix())
-//		{
-//			Class* classNode = prefix()->classDefinition();
-//
-//			if (classNode)	met = dynamic_cast<Method*> (classNode->navigateTo(classNode, ref()->path()));
-//		}
-//		else
-//			met = dynamic_cast<Method*> (ref()->get());
-//
-//		return met;
-//	}
-
-//	Class* ReferenceExpression::classDefinition()
-//	{
-//		ReferenceExpression* exp = this;
-//		QString path;
-//		while (exp)
-//		{
-//			if (!path.isEmpty()) path.prepend(',');
-//			path.prepend(exp->ref()->path());
-//
-//			exp = dynamic_cast<ReferenceExpression*> (exp->prefix());
-//		}
-//
-//		return dynamic_cast<Class*> (navigateTo(this, path));
-//	}
-
-//	Class* VariableAccess::classDefinition()
-//	{
-//		QString path = ref()->path();
-//
-//		ReferenceExpression* exp = dynamic_cast<ReferenceExpression*> (prefix());
-//		while (exp)
-//		{
-//			if (!path.isEmpty()) path.prepend(',');
-//			path.prepend(exp->ref()->path());
-//
-//			exp = dynamic_cast<ReferenceExpression*> (exp->prefix());
-//		}
-//
-//		Model::Node* var = navigateTo(this, path);
-//
-//		Field* f = dynamic_cast<Field*> (var);
-//		if (f) return f->type()->classDefinition();
-//
-//		VariableDeclaration* vd = dynamic_cast<VariableDeclaration*> (var);
-//		if (vd) return vd->type()->classDefinition();
-//
-//		return nullptr;
-//	}
 }
 
 } /* namespace OOModel */
