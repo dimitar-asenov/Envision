@@ -134,16 +134,6 @@ bool Node::isAncestorOf(const Node* other) const
 	return p == this;
 }
 
-Node* Node::navigateTo(Node* source, QString path)
-{
-	if (source == this || isAncestorOf(source))
-	{
-		if (parent_) return parent_->navigateTo(this, path);
-		else return nullptr;
-	}
-	else return nullptr;
-}
-
 bool Node::isModifyable() const
 {
 	Model* m = model();

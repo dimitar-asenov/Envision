@@ -109,17 +109,18 @@ class MODELBASE_API Node
 		 * @param parent
 		 * 				The parent of this node. This may be 'nullptr'.
 		 *
-		 * 				If the parent is not null, then the model associated with the parent will also be the model for this node.
-		 * 				If the parent is nullptr, then this node will not be associated with a model initially. It can later be
-		 * 				added to an existing model.
+		 * 				If the parent is not null, then the model associated with the parent will also be the model for
+		 * 				this node. If the parent is nullptr, then this node will not be associated with a model initially.
+		 * 				It can later be added to an existing model.
 		 */
 		Node(Node* parent = nullptr);
 
 		virtual ~Node();
 
 		/**
-		 * Returns the model managing the tree of the current Node. Note that this method does not work during the
-		 * creation of the root Node.
+		 * Returns the model managing the tree of the current Node.
+		 *
+		 * Calling this method during the creation of the root Node will return a nullptr.
 		 */
 		Model* model() const;
 
@@ -147,60 +148,18 @@ class MODELBASE_API Node
 		virtual QList<Node*> children();
 
 		/**
-		 * Returns the node which can be reached from the current node using the specified path.
+		 * Returns true if this node defines a symbol and false otherwise.
 		 *
-		 * If the node can not be found, this method returns NULL.
-		 *
-		 * The default implementation invokes this method on its parent, or returns NULL if there is no parent.
-		 * Reimplement this method to provide custom lookup mechanisms.
-		 *
-		 * NOTE: If the current node is not fully loaded, calling this method might load it fully in case the target node
-		 * is a child node.
-		 *
-		 * @param source
-		 * 				The node with respect to which the search should be performed. Depending on the source the results
-		 * 				might be different. For example it might make a difference whether the source is a child node of
-		 * 				the current node or not.
-		 * @param path
-		 * 				The string that identifies the path to the desired target node. A navigation path is a sequence of
-		 * 				symbols (possibly with descriptors) that are separated by a comma. A symbol can have an arbitrary
-		 * 				number of descriptors preceding it which are separated by a colon.
-		 *
-		 * 				e.g. "hello,world" - is a path that has the symbol 'hello' at the front and the symbol 'world'
-		 * 				next
-		 * 				e.g. "field:distance,abstract:class:route" - is a path that starts with the symbol 'distance'
-		 * 				and continues with the symbol 'route'. 'distance' has a single descriptor - 'field'. 'route'
-		 * 				has two descriptors 'abstract' and 'class'. Descriptors are not used by Node and derived
-		 * 				classes can define their own meaning for these strings.
-		 */
-		virtual Node* navigateTo(Node* source, QString path);
-
-		/**
-		 * Extracts only the symbol name of the front part of a navigation path.
-		 */
-		QString extractFrontSymbol(const QString& path) const;
-
-		/**
-		 * Extracts only the descriptors' string of the front part of a navigation path.
-		 * If there are multiple descriptors present, they will be separated as usual by a colon.
-		 */
-		QString extractFrontDescriptor(const QString& path) const;
-
-		/**
-		 * Extracts the remainder of a navigation string after cutting the front symbol and any accompanying
-		 * descriptors.
-		 */
-		QString extractSecondaryPath(const QString& path) const;
-
-		/*
-		 * Returns true if this node defines a symbol and false otherwise. The default implementaion returns false.
-		 * Reimplement this method and symbolName() in derived classes that define symbols.
+		 * The default implementaion returns false. Reimplement this method and symbolName() in derived classes that
+		 * define symbols.
 		 */
 		virtual bool definesSymbol() const;
 
-		/*
-		 * Returns the name of the symbol defined by this node. The default implementaion returns a null QString value.
-		 * Reimplement this method and definesSymbol() in derived classes that define symbols.
+		/**
+		 * Returns the name of the symbol defined by this node.
+		 *
+		 * The default implementaion returns a null QString value. Reimplement this method and definesSymbol() in derived
+		 * classes that define symbols.
 		 */
 		virtual const QString& symbolName() const;
 
@@ -229,22 +188,22 @@ class MODELBASE_API Node
 		 */
 		virtual QList<Node*> findSymbol(const QString& symbol, Node* source, FindSymbolMode mode);
 
-		/*
+		/**
 		 * Returns the revision of this node.
 		 */
 		int revision() const;
 
-		/*
+		/**
 		 * Increments the revision of this node by 1.
 		 */
 		void incrementRevision();
 
-		/*
+		/**
 		 * Increments the revision of this node by the specified amount.
 		 */
 		void addToRevision(int valueToAdd);
 
-		/*
+		/**
 		 * Returns true if this node is fully loaded and false if it is only partially loaded. The default implementation
 		 * always returns true.
 		 *
@@ -263,12 +222,12 @@ class MODELBASE_API Node
 		 */
 		virtual NodeReadWriteLock* accessLock() const;
 
-		/*
+		/**
 		 * Returns the lowest common ancestor of this node and other.
 		 */
 		Node* lowestCommonAncestor(Node* other);
 
-		/*
+		/**
 		 * Returns true of this node is an Ancestor of other and false otherwise.
 		 */
 		bool isAncestorOf(const Node* other) const;
@@ -295,7 +254,7 @@ class MODELBASE_API Node
 		 */
 		virtual void save(PersistentStore &store) const = 0;
 
-		/*
+		/**
 		 * Reloads this node from a persistent store.
 		 *
 		 * This method is called at any point after this node has been created in order to reinitialize its contents from
@@ -304,7 +263,7 @@ class MODELBASE_API Node
 		 */
 		virtual void load(PersistentStore &store) = 0;
 
-		/*
+		/**
 		 * Fully loads a partially loaded node from the specified persistent store.
 		 *
 		 * The default implementation does nothing. Reimplement this method and isFullyLoaded() in derived classes to
@@ -362,7 +321,8 @@ class MODELBASE_API Node
 		 * @param persistenceconstructor
 		 * 				A function that can construct a new instance of the class from a persistent store.
 		 */
-		static int registerNodeType(const QString &type, const NodeConstructor constructor, const NodePersistenceConstructor persistenceconstructor);
+		static int registerNodeType(const QString &type, const NodeConstructor constructor,
+				const NodePersistenceConstructor persistenceconstructor);
 
 		/**
 		 * Creates a new node of the specified type.
@@ -425,9 +385,11 @@ class MODELBASE_API Node
 
 	protected:
 
-		/*
-		 * This flag indicates if the current node is fullyLoaded. Derived classes which support this functionality
-		 * should take care to properly initialize and modify this value whener the state of the object changes.
+		/**
+		 * This flag indicates if the current node is fullyLoaded.
+		 *
+		 * Derived classes which support this functionality should take care to properly initialize and modify this value
+		 * whener the state of the object changes.
 		 */
 		bool fullyLoaded;
 
@@ -440,24 +402,8 @@ class MODELBASE_API Node
 		static QMap<QString, NodePersistenceConstructor> nodePersistenceConstructorRegister;
 };
 
-inline QString Node::extractFrontSymbol(const QString& path) const
-{ return path.split(',').first().split(':').last(); }
-
-inline QString Node::extractFrontDescriptor(const QString& path) const
-{
-	QString front = path.split(',').first();
-	return front.left( front.lastIndexOf(':') );
-}
-
-inline QString Node::extractSecondaryPath(const QString& path) const
-{
-	int index = path.indexOf(',') + 1;
-	return index ? ( path.mid(  index ) ) : QString();
-}
-
 /**
- * This is a convenience function that can be used to when registering classes derived from Node using
- * registerNodeType().
+ * This is a convenience function that can be used when registering classes derived from Node using registerNodeType().
  */
 template<class T> Node* createNewNode(Node* parent)
 {
@@ -465,8 +411,7 @@ template<class T> Node* createNewNode(Node* parent)
 }
 
 /**
- * This is a convenience function that can be used to when registering classes derived from Node using
- * registerNodeType().
+ * This is a convenience function that can be used when registering classes derived from Node using registerNodeType().
  */
 template<class T> Node* createNodeFromPersistence(Node *parent, PersistentStore &store, bool partialLoadHint)
 {

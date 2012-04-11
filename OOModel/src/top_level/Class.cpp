@@ -54,23 +54,6 @@ const QString& Class::symbolName() const
 	return name();
 }
 
-Model::Node* Class::navigateTo(Model::Node* source, QString path)
-{
-	QString symbol = extractFrontSymbol(path);
-	Model::Node* found = nullptr;
-
-	// Is the target symbol name the class' name
-	if (isAncestorOf(source) && symbol == symbolName()) found = this;
-
-	if (!found) found = methods()->findFirstSymbolDefinition(symbol);
-	if (!found) found = fields()->findFirstSymbolDefinition(symbol);
-	if (!found) return ExtendableNode::navigateTo(source, path);
-
-	QString rest = extractSecondaryPath(path);
-	if (!rest.isEmpty()) return found->navigateTo(this, rest);
-	else return found;
-}
-
 QList<Model::Node*> Class::findSymbol(const QString& symbol,Model::Node* source, FindSymbolMode mode)
 {
 	QList<Model::Node*> symbols;
