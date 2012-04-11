@@ -117,6 +117,8 @@ TEST(OOModel, JavaLibraryAndHelloWorldTest)
 	callPrintlnSt->setExpression(callPrintln);
 	main->items()->append(callPrintlnSt);
 
+	model.tryResolvingReferences();
+
 	model.endModification();
 
 	CHECK_STR_EQUAL("Java", java->name());

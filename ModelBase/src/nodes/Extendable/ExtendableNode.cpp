@@ -167,6 +167,14 @@ ExtendableIndex ExtendableNode::indexOf(Node* node) const
 	return ExtendableIndex();
 }
 
+QList<Node*> ExtendableNode::children()
+{
+	QList<Node*> result;
+	for( auto p : getAllAttributes(false) )
+		if (p.second != nullptr) result.append(p.second);
+
+	return result;
+}
 
 bool ExtendableNode::replaceChild(Node* child, Node* replacement, bool releaseOldChild)
 {

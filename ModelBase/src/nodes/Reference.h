@@ -64,6 +64,14 @@ class MODELBASE_API Reference: public Node
 	private:
 		Node* target_;
 		QString name_;
+
+		/**
+		 * \brief Inserts this reference in the unresolved references lists of the corresponding model if the reference is
+		 * unresolved or removes it from that list otherwise.
+		 *
+		 * Calling this method might only have an effect if this reference is associated to a model.
+		 */
+		void manageUnresolvedReferencesListInModel();
 };
 
 inline QString Reference::name() const { return target() ? target()->symbolName() : name_; }

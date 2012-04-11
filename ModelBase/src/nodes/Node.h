@@ -139,6 +139,14 @@ class MODELBASE_API Node
 		void setParent(Node* parent);
 
 		/**
+		 * Returns a list of all child nodes.
+		 *
+		 * Reimplement this method in derived classes that have children. The default implementation returns an empty
+		 * list.
+		 */
+		virtual QList<Node*> children();
+
+		/**
 		 * Returns the node which can be reached from the current node using the specified path.
 		 *
 		 * If the node can not be found, this method returns NULL.
@@ -432,9 +440,6 @@ class MODELBASE_API Node
 		static QMap<QString, NodePersistenceConstructor> nodePersistenceConstructorRegister;
 };
 
-
-
-inline void Node::setParent(Node* parent) { parent_ = parent; }
 inline QString Node::extractFrontSymbol(const QString& path) const
 { return path.split(',').first().split(':').last(); }
 

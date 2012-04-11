@@ -41,14 +41,16 @@ namespace Model {
 NODE_DEFINE_TYPE_REGISTRATION_METHODS(Reference)
 
 Reference::Reference(Node *parent) :
-	Node(parent)
+	Node(parent), target_(nullptr)
 {
+	manageUnresolvedReferencesListInModel();
 }
 
 Reference::Reference(Node *parent, PersistentStore &store, bool) :
 	Node(parent)
 {
 	name_ = store.loadReferenceValue(this);
+	manageUnresolvedReferencesListInModel();
 }
 
 void Reference::setName(const QString &name, bool tryResolvingImmediately)
@@ -57,6 +59,7 @@ void Reference::setName(const QString &name, bool tryResolvingImmediately)
 	execute(new FieldSet<Node*> (this, target_, nullptr));
 
 	if (tryResolvingImmediately) resolve();
+	manageUnresolvedReferencesListInModel();
 }
 
 void Reference::setTarget(Node* target)
@@ -65,6 +68,7 @@ void Reference::setTarget(Node* target)
 	else execute(new FieldSet<QString> (this, name_, name()));
 
 	execute(new FieldSet<Node*> (this, target_, target));
+	manageUnresolvedReferencesListInModel();
 }
 
 bool Reference::resolve()
@@ -86,6 +90,15 @@ void Reference::load(PersistentStore &store)
 		throw ModelException("Trying to load a Reference node from an incompatible node type " + store.currentNodeType());
 
 	setName( store.loadReferenceValue(this) );
+}
+
+void Reference::manageUnresolvedReferencesListInModel()
+{
+	if (model())
+	{
+		if (isResolved()) model()->removeUnresolvedReference(this);
+		else model()->addUnresolvedReference(this);
+	}
 }
 
 }

@@ -58,6 +58,8 @@ class MODELBASE_API List: public Node
 		virtual void load(PersistentStore &store);
 		virtual void loadFully(PersistentStore &store);
 
+		virtual QList<Node*> children();
+
 		int size();
 		template <class T> T* first();
 		template <class T> T* last();

@@ -125,6 +125,11 @@ void List::loadFully(PersistentStore &store)
 	}
 }
 
+QList<Node*> List::children()
+{
+	return nodes_.toList();
+}
+
 int List::size()
 {
 	if (!fullyLoaded) loadFully(* (model()->store()));
