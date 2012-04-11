@@ -195,10 +195,6 @@ TEST(CustomMethodCall, CustomVisTest)
 	Model::Node* top_level = nullptr;
 	if(collection) top_level = collection;
 
-	model->beginModification(model->root(), "Resolve references");
-	model->tryResolvingReferences();
-	model->endModification();
-
 	scene->addTopLevelItem( scene->defaultRenderer()->render(nullptr, top_level) );
 	scene->scheduleUpdate();
 	scene->listenToModel(model);

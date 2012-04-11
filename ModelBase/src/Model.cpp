@@ -84,6 +84,8 @@ void Model::endModification()
 {
 	if ( pushedNewCommandsOnTheStack )
 	{
+		if (!unresolvedReferences_.isEmpty()) tryResolvingReferences();
+
 		pushCommandOnUndoStack(new SetModificationTarget(currentModificationTarget, currentModificationLock, modifiedTargets, nullptr));
 		pushedNewCommandsOnTheStack = false;
 		commands.endMacro();
