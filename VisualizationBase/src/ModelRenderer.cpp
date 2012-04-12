@@ -56,20 +56,22 @@ Item* ModelRenderer::render(Item* parent, Model::Node* node)
 	{
 		if (useDefaultVisualizations_ )
 		{
-			if (Model::List::typeIdStatic() < visualizations.size() && visualizations[Model::List::typeIdStatic()] != nullptr)
+			if (Model::List::typeIdStatic() < visualizations.size() && visualizations[Model::List::typeIdStatic()])
 			{
 				Model::List* ext = dynamic_cast<Model::List*> (node);
 				if (ext) return visualizations[Model::List::typeIdStatic()](parent, node);
 			}
 
-			if (Model::ExtendableNode::typeIdStatic() < visualizations.size() && visualizations[Model::ExtendableNode::typeIdStatic()] != nullptr)
+			if (Model::ExtendableNode::typeIdStatic() < visualizations.size()
+					&& visualizations[Model::ExtendableNode::typeIdStatic()])
 			{
 				Model::ExtendableNode* ext = dynamic_cast<Model::ExtendableNode*> (node);
 				if (ext) return visualizations[Model::ExtendableNode::typeIdStatic()](parent, node);
 			}
 		}
 
-		throw VisualizationException("Trying to render a node type that has no registered visualization. Node type is: " + node->typeName());
+		throw VisualizationException("Trying to render a node type that has no registered visualization. Node type is: "
+				+ node->typeName());
 	}
 	else return visualizations[nodeTypeId](parent, node);
 }

@@ -97,16 +97,13 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		QList<Cursor*> cursors_;
 		QList<QEvent*> postEventActions_;
 
-		static ModelRenderer defaultRenderer_;
-
 		bool inEventHandler_;
 
 		void updateItems();
 };
 
-inline void Scene::setRenderer(ModelRenderer* renderer) { renderer_ = renderer? renderer : (&defaultRenderer_); }
+inline void Scene::setRenderer(ModelRenderer* renderer) { renderer_ = renderer? renderer : defaultRenderer(); }
 inline ModelRenderer* Scene::renderer() { return renderer_; }
-inline ModelRenderer* Scene::defaultRenderer() { return &defaultRenderer_; }
 inline SceneHandlerItem* Scene::sceneHandlerItem() {return sceneHandlerItem_; }
 inline Cursor* Scene::mainCursor() { return cursors_.isEmpty() ? nullptr : cursors_.first(); }
 

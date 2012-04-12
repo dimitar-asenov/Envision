@@ -44,8 +44,6 @@
 
 namespace Visualization {
 
-ModelRenderer Scene::defaultRenderer_;
-
 class UpdateSceneEvent : public QEvent
 {
 	public:
@@ -57,7 +55,7 @@ const QEvent::Type UpdateSceneEvent::EventType = static_cast<QEvent::Type> (QEve
 
 Scene::Scene()
 	: QGraphicsScene(VisualizationManager::instance().getMainWindow()), needsUpdate_(false),
-	  renderer_(&defaultRenderer_), sceneHandlerItem_(new SceneHandlerItem(this)), inEventHandler_(false)
+	  renderer_(defaultRenderer()), sceneHandlerItem_(new SceneHandlerItem(this)), inEventHandler_(false)
 {
 }
 
@@ -71,8 +69,14 @@ Scene::~Scene()
 	cursors_.clear();
 	SAFE_DELETE_ITEM(sceneHandlerItem_);
 
-	if (renderer_ != &defaultRenderer_) SAFE_DELETE(renderer_);
+	if (renderer_ != defaultRenderer()) SAFE_DELETE(renderer_);
 	else renderer_ = nullptr;
+}
+
+ModelRenderer* Scene::defaultRenderer()
+{
+	static ModelRenderer defaultRenderer_;
+	return &defaultRenderer_;
 }
 
 void Scene::addTopLevelItem(Item* item)

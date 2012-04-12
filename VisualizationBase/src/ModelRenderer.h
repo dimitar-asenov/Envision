@@ -52,6 +52,16 @@ class VISUALIZATIONBASE_API ModelRenderer
 		virtual Item* render(Item* parent, Model::Node* node);
 
 		void registerVisualization(int typeId, ItemConstructor visualization);
+
+		/**
+		 * Set whether default visualizations should be used.
+		 *
+		 * If a custom visualization is provided for a node type it will always be used. This flag only controls if a
+		 * default visualization should be used in case there is no custom visualization defined.
+		 *
+		 * By default nodes which do not have a corresponding custom visualization will be represented with a default
+		 * visualization.
+		 */
 		void setUseDefaultVisualizations(bool useDefault);
 
 	private:
