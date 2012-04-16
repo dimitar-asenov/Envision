@@ -75,6 +75,7 @@ class MODELBASE_API ExtendableNode: public Node
 
 		virtual const QString& typeName() const;
 		virtual int typeId() const;
+		virtual QList<int> hierarchyTypeIds() const;
 		static const QString& typeNameStatic();
 		static int typeIdStatic();
 		static void registerNodeType();

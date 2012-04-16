@@ -35,7 +35,7 @@
 #include "cursor/LayoutCursor.h"
 #include "shapes/Shape.h"
 #include "items/ItemWithNode.h"
-#include "ModelRenderer.h"
+#include "../renderer/ModelRenderer.h"
 
 #include "ModelBase/src/nodes/Node.h"
 

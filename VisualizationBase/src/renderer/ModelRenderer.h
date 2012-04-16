@@ -34,8 +34,8 @@
 #ifndef MODELRENDERER_H_
 #define MODELRENDERER_H_
 
-#include "visualizationbase_api.h"
-#include "ModelBase/src/nodes/Node.h"
+#include "../visualizationbase_api.h"
+#include "VisualizationGroup.h"
 
 namespace Visualization {
 
@@ -44,35 +44,37 @@ class Item;
 class VISUALIZATIONBASE_API ModelRenderer
 {
 	public:
-		typedef Item* (*ItemConstructor)(Item* parent, Model::Node* node);
-
 		ModelRenderer();
 		virtual ~ModelRenderer();
 
-		virtual Item* render(Item* parent, Model::Node* node);
-
-		void registerVisualization(int typeId, ItemConstructor visualization);
-
 		/**
-		 * Set whether default visualizations should be used.
+		 * Returns an Item which has a parent \a parent and is a rendering of \a node.
 		 *
-		 * If a custom visualization is provided for a node type it will always be used. This flag only controls if a
-		 * default visualization should be used in case there is no custom visualization defined.
-		 *
-		 * By default nodes which do not have a corresponding custom visualization will be represented with a default
-		 * visualization.
+		 * If \a purpose is specified (\a purpose >= 0) it is used as the target purpose when determining an appropriate
+		 * visualization. Otherwise the purpose of \a parent is used. If \a parent is nullptr the default purpose is used.
 		 */
-		void setUseDefaultVisualizations(bool useDefault);
+		virtual Item* render(Item* parent, Model::Node* node, int purpose = -1);
+
+		void registerVisualization(int nodeTypeId, int purpose, VisualizationGroup::ItemConstructor visualization);
+		void registerVisualization(int nodeTypeId, VisualizationGroup::ItemConstructor visualization);
+		void registerGroup(int nodeTypeId, int purpose, VisualizationGroup* group);
+		void registerGroup(int nodeTypeId, VisualizationGroup* group);
+
+		int registerVisualizationPurpose(const QString& name);
 
 	private:
-		QVector<ItemConstructor> visualizations;
-
-		bool useDefaultVisualizations_;
+		QVector<QVector<VisualizationGroup*>> groups_;
+		QVector<QString > purposes_;
 };
 
-inline void ModelRenderer::setUseDefaultVisualizations(bool useDefault)
+inline void ModelRenderer::registerVisualization(int nodeTypeId, VisualizationGroup::ItemConstructor visualization)
 {
-	useDefaultVisualizations_ = useDefault;
+	registerVisualization(nodeTypeId, 0, visualization);
+}
+
+inline void ModelRenderer::registerGroup(int nodeTypeId, VisualizationGroup* group)
+{
+	registerGroup(nodeTypeId, 0, group);
 }
 
 template<class VIS, class NODE>

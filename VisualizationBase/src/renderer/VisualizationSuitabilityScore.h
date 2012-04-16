@@ -25,51 +25,27 @@
  **********************************************************************************************************************/
 
 /*
- * OOReference.cpp
+ * VisualizationSuitabilityScore.h
  *
- *  Created on: Mar 29, 2012
+ *  Created on: Apr 13, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "OOReference.h"
-#include "../expressions/ReferenceExpression.h"
-#include "../top_level/Class.h"
+#ifndef VisualizationBase_VISUALIZATIONSUITABILITYSCORE_H_
+#define VisualizationBase_VISUALIZATIONSUITABILITYSCORE_H_
 
-#include "../types/SymbolProviderType.h"
+#include "../visualizationbase_api.h"
 
-namespace OOModel {
+namespace Visualization {
 
-NODE_DEFINE_EMPTY_CONSTRUCTORS(OOReference, Model::Reference)
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(OOReference, Model::Reference)
+class VISUALIZATIONBASE_API VisualizationSuitabilityScore {
+	public:
+		VisualizationSuitabilityScore(int score = 0);
 
-bool OOReference::resolve()
-{
-	// TODO Handle the case where the symbol is defined multiple times in a better way
+		int score;
+};
 
-	auto parent = static_cast<ReferenceExpression*>(this->parent());
+bool operator< (const VisualizationSuitabilityScore& left, const VisualizationSuitabilityScore& right);
 
-	Model::Node* symbol = nullptr;
-
-	if (parent->prefix())
-	{
-		// Perform a downward search starting from the target of the prefix
-		auto t = parent->prefix()->type();
-		if (auto sp = dynamic_cast<SymbolProviderType*>(t))
-		{
-			auto symbolList = sp->symbolProvider()->findSymbol(name(), this, SEARCH_DOWN);
-			if (symbolList.size() == 1) symbol = symbolList.first();
-		}
-		SAFE_DELETE(t);
-	}
-	else
-	{
-		// Perform an upward search starting from the current node
-		auto symbolList = findSymbol(name(), this, SEARCH_UP);
-		if (symbolList.size() == 1) symbol = symbolList.first();
-	}
-
-	if (target() != symbol) setTarget(symbol);
-	return isResolved();
-}
-
-} /* namespace OOModel */
+} /* namespace Visualization */
+#endif /* VisualizationBase_VISUALIZATIONSUITABILITYSCORE_H_ */

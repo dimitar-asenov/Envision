@@ -33,7 +33,7 @@
 
 #include "items/VExtendable.h"
 #include "items/Text.h"
-#include "ModelRenderer.h"
+#include "../renderer/ModelRenderer.h"
 
 namespace Visualization {
 

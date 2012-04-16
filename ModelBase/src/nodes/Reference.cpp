@@ -38,7 +38,7 @@
 
 namespace Model {
 
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(Reference)
+NODE_DEFINE_TYPE_REGISTRATION_METHODS(Reference, Node)
 
 Reference::Reference(Node *parent) :
 	Node(parent), target_(nullptr)

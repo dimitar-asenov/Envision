@@ -35,7 +35,7 @@
 #define SCENE_H_
 
 #include "visualizationbase_api.h"
-#include "ModelRenderer.h"
+#include "renderer/ModelRenderer.h"
 
 namespace Model {
 	class Model;

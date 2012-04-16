@@ -33,7 +33,7 @@
 
 #include "layouts/PositionLayout.h"
 #include "shapes/Shape.h"
-#include "ModelRenderer.h"
+#include "../renderer/ModelRenderer.h"
 
 #include "ModelBase/src/Model.h"
 

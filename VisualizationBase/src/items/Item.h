@@ -60,6 +60,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		Item(Item* parent, const StyleType* style = nullptr);
 		virtual ~Item();
 
+		Item* parent() const;
 		Scene* scene() const;
 
 		virtual bool hasNode() const;
@@ -193,6 +194,16 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		 */
 		virtual Item* findVisualizationOf(Model::Node* node);
 
+		/**
+		 * Returns what purpose should the children of this item be chosen for when deciding what visualizations to use.
+		 *
+		 * If the item's own purpose has been set, it's value will be returned. Otherwise the value of the item's parent
+		 * will be returned. If the item has no parent the return value is an unspecified purpose (-1).
+		 */
+		int purpose();
+
+		void setPurpose(int purpose);
+
 	protected:
 
 		void setWidth(int width);
@@ -245,6 +256,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		const ItemStyle* style_;
 		Shape* shape_;
 		bool needsUpdate_;
+		int purpose_;
 
 		void updateChildren();
 
@@ -279,6 +291,8 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Item::PositionConstraints)
 
+inline Item* Item::parent() const {return static_cast<Item*>(parentItem()); }
+inline void Item::setPurpose(int purpose) { purpose_ = purpose; }
 inline int Item::width() const { return boundingRect_.width(); }
 inline int Item::height() const { return boundingRect_.height(); }
 inline QSizeF Item::size() const { return boundingRect_.size();}

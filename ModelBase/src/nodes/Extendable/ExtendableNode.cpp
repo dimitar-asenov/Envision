@@ -48,6 +48,11 @@ int ExtendableNode::typeId()	const
 	return typeId_;
 }
 
+QList<int> ExtendableNode::hierarchyTypeIds() const
+{
+	return QList<int>() << typeId_;
+}
+
 const QString& ExtendableNode::typeNameStatic()
 {
 	static QString typeName_("ExtendableNode");

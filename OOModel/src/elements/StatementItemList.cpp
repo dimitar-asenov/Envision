@@ -36,7 +36,7 @@
 namespace OOModel {
 
 NODE_DEFINE_EMPTY_CONSTRUCTORS(StatementItemList, Model::TypedList<StatementItem> )
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(StatementItemList)
+NODE_DEFINE_TYPE_REGISTRATION_METHODS(StatementItemList, Model::TypedList<StatementItem>)
 
 QList<Model::Node*> StatementItemList::findSymbol(const QString& symbol, Model::Node* source, FindSymbolMode mode)
 {

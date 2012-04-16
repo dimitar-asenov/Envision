@@ -224,6 +224,11 @@ const QString& Node::symbolName() const
 	return nullString;
 }
 
+QList<int> Node::hierarchyTypeIds() const
+{
+	return QList<int>();
+}
+
 bool Node::isNewPersistenceUnit() const
 {
 	return false;

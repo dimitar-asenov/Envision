@@ -37,7 +37,7 @@
 
 namespace Model {
 
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(Boolean)
+NODE_DEFINE_TYPE_REGISTRATION_METHODS(Boolean, Node)
 
 Boolean::Boolean(Node *parent) :
 	Node(parent), value(false)

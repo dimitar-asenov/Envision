@@ -25,51 +25,55 @@
  **********************************************************************************************************************/
 
 /*
- * OOReference.cpp
+ * VisualizationGroup.h
  *
- *  Created on: Mar 29, 2012
+ *  Created on: Apr 13, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "OOReference.h"
-#include "../expressions/ReferenceExpression.h"
-#include "../top_level/Class.h"
+#ifndef VisualizationBase_VISUALIZATIONGROUP_H_
+#define VisualizationBase_VISUALIZATIONGROUP_H_
 
-#include "../types/SymbolProviderType.h"
+#include "../visualizationbase_api.h"
+#include "VisualizationSuitabilityScore.h"
 
-namespace OOModel {
-
-NODE_DEFINE_EMPTY_CONSTRUCTORS(OOReference, Model::Reference)
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(OOReference, Model::Reference)
-
-bool OOReference::resolve()
-{
-	// TODO Handle the case where the symbol is defined multiple times in a better way
-
-	auto parent = static_cast<ReferenceExpression*>(this->parent());
-
-	Model::Node* symbol = nullptr;
-
-	if (parent->prefix())
-	{
-		// Perform a downward search starting from the target of the prefix
-		auto t = parent->prefix()->type();
-		if (auto sp = dynamic_cast<SymbolProviderType*>(t))
-		{
-			auto symbolList = sp->symbolProvider()->findSymbol(name(), this, SEARCH_DOWN);
-			if (symbolList.size() == 1) symbol = symbolList.first();
-		}
-		SAFE_DELETE(t);
-	}
-	else
-	{
-		// Perform an upward search starting from the current node
-		auto symbolList = findSymbol(name(), this, SEARCH_UP);
-		if (symbolList.size() == 1) symbol = symbolList.first();
-	}
-
-	if (target() != symbol) setTarget(symbol);
-	return isResolved();
+namespace Model {
+	class Node;
 }
 
-} /* namespace OOModel */
+namespace Visualization {
+
+class Item;
+
+class VISUALIZATIONBASE_API VisualizationGroup {
+
+	public:
+
+		typedef Item* (*ItemConstructor)(Item* parent, Model::Node* node);
+
+		VisualizationGroup();
+		virtual ~VisualizationGroup();
+
+		void addVisualization(VisualizationGroup::ItemConstructor visualization);
+		void addSubGroup(VisualizationGroup* group);
+
+		virtual bool matchesContext(Item* parent, Model::Node* node);
+
+		virtual QList<QPair<VisualizationSuitabilityScore, ItemConstructor> > visualizationsForContext(Item* parent,
+				Model::Node* node);
+
+	private:
+		QVector<VisualizationGroup*> subGroups_;
+		QVector<ItemConstructor> visualizations_;
+
+};
+
+inline void VisualizationGroup::addVisualization(VisualizationGroup::ItemConstructor visualization)
+{ visualizations_ << visualization; }
+inline void VisualizationGroup::addSubGroup(VisualizationGroup* group) { subGroups_ << group; }
+
+bool operator< (const QPair<VisualizationSuitabilityScore, VisualizationGroup::ItemConstructor>& left,
+		const QPair<VisualizationSuitabilityScore, VisualizationGroup::ItemConstructor>& right);
+
+} /* namespace Visualization */
+#endif /* VisualizationBase_VISUALIZATIONGROUP_H_ */

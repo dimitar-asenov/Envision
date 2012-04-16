@@ -33,7 +33,7 @@
 
 #include "layouts/Layout.h"
 #include "VisualizationException.h"
-#include "ModelRenderer.h"
+#include "../renderer/ModelRenderer.h"
 
 #include "cursor/LayoutCursor.h"
 

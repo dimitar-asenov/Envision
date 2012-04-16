@@ -41,7 +41,7 @@
 
 namespace Model {
 
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(List)
+NODE_DEFINE_TYPE_REGISTRATION_METHODS(List, Node)
 
 List::List(Node *parent) :
 	Node(parent)

@@ -37,14 +37,14 @@
 #include "shapes/ShapeStyle.h"
 #include "VisualizationException.h"
 #include "Scene.h"
-#include "ModelRenderer.h"
+#include "../renderer/ModelRenderer.h"
 
 #include "cursor/Cursor.h"
 
 namespace Visualization {
 
 Item::Item(Item* parent, const StyleType* style) :
-	QGraphicsItem(parent), style_(nullptr), shape_(nullptr), needsUpdate_(true)
+	QGraphicsItem(parent), style_(nullptr), shape_(nullptr), needsUpdate_(true), purpose_(-1)
 {
 	if ( !style || style->drawsOnlyShape() ) setFlag(QGraphicsItem::ItemHasNoContents);
 
@@ -515,6 +515,13 @@ bool Item::sceneEvent(QEvent *event)
 		return true;
 	}
 	return QGraphicsItem::sceneEvent(event);
+}
+
+int Item::purpose()
+{
+	if (purpose_ >= 0) return purpose_;
+	if (!parent()) return -1;
+	return parent()->purpose();
 }
 
 /***********************************************************************************************************************

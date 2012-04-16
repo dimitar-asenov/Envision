@@ -36,7 +36,7 @@
 
 #include "custommethodcall_api.h"
 
-#include "VisualizationBase/src/ModelRenderer.h"
+#include "VisualizationBase/src/renderer/ModelRenderer.h"
 
 #include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
 #include "ModelBase/src/nodes/Text.h"
@@ -56,10 +56,11 @@ class CUSTOMMETHODCALL_API CustomVisualization
 
 	public:
 		static Visualization::Item* createExpression(Visualization::Item* parent, Model::Node* node);
-		static void registerVisualization(const QString& name, Visualization::ModelRenderer::ItemConstructor visualization);
+		static void registerVisualization(const QString& name,
+				Visualization::VisualizationGroup::ItemConstructor visualization);
 
 	private:
-		static QMap<QString, Visualization::ModelRenderer::ItemConstructor> visualizations;
+		static QMap<QString, Visualization::VisualizationGroup::ItemConstructor> visualizations;
 };
 
 }

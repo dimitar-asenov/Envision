@@ -310,6 +310,16 @@ class MODELBASE_API Node
 		virtual int typeId() const = 0;
 
 		/**
+		 * Returns a list of all ids in the type hierarchy of this node (excluding abstract base classes).
+		 * \see typeId().
+		 *
+		 * The most derived id appears at the front of the list.
+		 *
+		 * The default implementation returns an empty list.
+		 */
+		virtual QList<int> hierarchyTypeIds() const;
+
+		/**
 		 * Registers the constructors of a class derived from Node.
 		 *
 		 * Each class derived from Node must be registered before it can be used.
