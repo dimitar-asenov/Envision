@@ -34,7 +34,10 @@
 #include "custommethodcall.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
-#include "CustomVisualization.h"
+#include "items/FindMethodVis.h"
+#include "items/EmptyMethodVis.h"
+#include "items/InsertMethodVis.h"
+#include "items/SumMethodVis.h"
 
 #include "OOModel/src/allOOModelNodes.h"
 
@@ -65,7 +68,6 @@ Class* addCollection(Model::Model* model, Project* parent)
 	Method* find = new Method();
 	col->methods()->append(find);
 	find->setName("find");
-	find->extension<CustomVisualization>()->setVisName("FindMethodVis");
 	FormalArgument* findArg = new FormalArgument();
 	find->arguments()->append(findArg);
 	findArg->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
@@ -77,7 +79,6 @@ Class* addCollection(Model::Model* model, Project* parent)
 	Method* insert = new Method();
 	col->methods()->append(insert);
 	insert->setName("insert");
-	insert->extension<CustomVisualization>()->setVisName("InsertMethodVis");
 	insert->extension<Position>()->setY(100);
 	FormalArgument* insertArg = new FormalArgument();
 	insert->arguments()->append(insertArg);
@@ -87,7 +88,6 @@ Class* addCollection(Model::Model* model, Project* parent)
 	Method* empty = new Method();
 	col->methods()->append(empty);
 	empty->setName("empty");
-	empty->extension<CustomVisualization>()->setVisName("EmptyMethodVis");
 	empty->extension<Position>()->setY(200);
 	FormalResult* emptyResult = new FormalResult();
 	emptyResult->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::BOOLEAN));
@@ -96,7 +96,6 @@ Class* addCollection(Model::Model* model, Project* parent)
 	Method* exists = new Method();
 	col->methods()->append(exists);
 	exists->setName(QChar(0x2203));
-	exists->extension<CustomVisualization>()->setVisName("ExistsMethodVis");
 	exists->extension<Position>()->setY(300);
 	FormalArgument* existsArg = new FormalArgument();
 	exists->arguments()->append(existsArg);
@@ -109,7 +108,6 @@ Class* addCollection(Model::Model* model, Project* parent)
 	Method* sum = new Method();
 	col->methods()->append(sum);
 	sum->setName("sum");
-	sum->extension<CustomVisualization>()->setVisName("SumMethodVis");
 	sum->extension<Position>()->setY(400);
 	FormalArgument* sumArgFrom = new FormalArgument();
 	sum->arguments()->append(sumArgFrom);
@@ -178,6 +176,53 @@ Class* addCollection(Model::Model* model, Project* parent)
 	test->results()->append(testFormalResult);
 
 	model->endModification();
+
+	// Register a group that holds the guard condition: are we visualizing a method belonging to the Collection class?
+	auto g = new VisualizationGroup();
+	g->setConditionFunction([=](Visualization::Item*, Model::Node* node) -> bool
+	{
+		auto call = static_cast<OOModel::MethodCallExpression*>(node);
+		if (auto def = call->methodDefinition())
+		{
+			auto* p = def->parent();
+			while (p)
+			{
+				if (p == col) return true;
+				p = p->parent();
+			}
+		}
+
+		return false;
+	});
+
+	// Register Visualizations in the group
+	g->addVisualization(createVisualization<FindMethodVis, MethodCallExpression>,
+			[=](Visualization::Item*, Model::Node* node) -> bool
+			{
+				auto call = static_cast<OOModel::MethodCallExpression*>(node);
+				return call->methodDefinition() == find;
+			});
+	g->addVisualization(createVisualization<EmptyMethodVis, MethodCallExpression>,
+			[=](Visualization::Item*, Model::Node* node) -> bool
+			{
+				auto call = static_cast<OOModel::MethodCallExpression*>(node);
+				return call->methodDefinition() == empty;
+			});
+	g->addVisualization(createVisualization<InsertMethodVis, MethodCallExpression>,
+			[=](Visualization::Item*, Model::Node* node) -> bool
+			{
+				auto call = static_cast<OOModel::MethodCallExpression*>(node);
+				return call->methodDefinition() == insert;
+			});
+	g->addVisualization(createVisualization<SumMethodVis, MethodCallExpression>,
+			[=](Visualization::Item*, Model::Node* node) -> bool
+			{
+				auto call = static_cast<OOModel::MethodCallExpression*>(node);
+				return call->methodDefinition() == sum;
+			});
+
+	Scene::defaultRenderer()->registerGroup(MethodCallExpression::typeIdStatic(), g);
+
 	return col;
 }
 

@@ -35,7 +35,6 @@ INSTALLS += target \
     styles
 PRECOMPILED_HEADER = src/precompiled.h
 HEADERS += src/CustomMethodCallException.h \
-    src/CustomVisualization.h \
     src/custommethodcall_api.h \
     src/items/EmptyMethodVis.h \
     src/items/EmptyMethodVisStyle.h \
@@ -55,7 +54,6 @@ SOURCES += src/items/SumMethodVis.cpp \
     src/items/EmptyMethodVis.cpp \
     src/items/FindMethodVis.cpp \
     src/items/FindMethodVisStyle.cpp \
-    src/CustomVisualization.cpp \
     src/CustomMethodCallException.cpp \
     src/custommethodcall.cpp \
     test/SimpleTest.cpp

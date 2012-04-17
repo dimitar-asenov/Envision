@@ -34,40 +34,12 @@
 #include "custommethodcall.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
-#include "CustomVisualization.h"
-
-#include "items/FindMethodVis.h"
-#include "items/EmptyMethodVis.h"
-#include "items/InsertMethodVis.h"
-#include "items/SumMethodVis.h"
-
-#include "OOModel/src/expressions/MethodCallExpression.h"
-#include "OOModel/src/allOOModelNodes.h"
-
-#include "VisualizationBase/src/Scene.h"
-
 Q_EXPORT_PLUGIN2( custommethodcall, CustomMethodCall::CustomMethodCall )
-
-using namespace Visualization;
-using namespace OOModel;
 
 namespace CustomMethodCall {
 
 bool CustomMethodCall::initialize(Envision::EnvisionManager&)
 {
-	// Register extensions
-	CustomVisualization::registerExtension();
-	Method::registerNewExtension<CustomVisualization>();
-
-	// Override existing visualization
-	Scene::defaultRenderer()->registerVisualization(MethodCallExpression::typeIdStatic(), CustomVisualization::createExpression);
-
-	//Register custom visualizations
-	CustomVisualization::registerVisualization(FindMethodVis::className(), createVisualization<FindMethodVis, MethodCallExpression>);
-	CustomVisualization::registerVisualization(EmptyMethodVis::className(), createVisualization<EmptyMethodVis, MethodCallExpression>);
-	CustomVisualization::registerVisualization(InsertMethodVis::className(), createVisualization<InsertMethodVis, MethodCallExpression>);
-	CustomVisualization::registerVisualization(SumMethodVis::className(), createVisualization<SumMethodVis, MethodCallExpression>);
-
 	return true;
 }
 
