@@ -50,12 +50,17 @@ class VISUALIZATIONBASE_API VisualizationGroup {
 	public:
 
 		typedef Item* (*ItemConstructor)(Item* parent, Model::Node* node);
+		typedef std::function<bool (Item* parent, Model::Node* node)> ConditionFunction;
 
 		VisualizationGroup();
+		VisualizationGroup(ConditionFunction condition, int scorePoints = 1);
 		virtual ~VisualizationGroup();
 
 		void addVisualization(VisualizationGroup::ItemConstructor visualization);
+		void addVisualization(VisualizationGroup::ItemConstructor visualization, ConditionFunction condition);
 		void addSubGroup(VisualizationGroup* group);
+
+		void setConditionFunction(ConditionFunction condition, int scorePoints = 1);
 
 		virtual bool matchesContext(Item* parent, Model::Node* node);
 
@@ -66,11 +71,15 @@ class VISUALIZATIONBASE_API VisualizationGroup {
 		QVector<VisualizationGroup*> subGroups_;
 		QVector<ItemConstructor> visualizations_;
 
+		ConditionFunction contextCondition_;
+		int scorePoints_;
 };
 
 inline void VisualizationGroup::addVisualization(VisualizationGroup::ItemConstructor visualization)
 { visualizations_ << visualization; }
 inline void VisualizationGroup::addSubGroup(VisualizationGroup* group) { subGroups_ << group; }
+inline void VisualizationGroup::setConditionFunction(ConditionFunction condition, int scorePoints)
+{ contextCondition_ = condition; scorePoints_ = scorePoints;}
 
 bool operator< (const QPair<VisualizationSuitabilityScore, VisualizationGroup::ItemConstructor>& left,
 		const QPair<VisualizationSuitabilityScore, VisualizationGroup::ItemConstructor>& right);

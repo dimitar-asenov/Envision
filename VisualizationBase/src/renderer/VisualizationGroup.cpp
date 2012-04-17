@@ -35,10 +35,13 @@
 
 namespace Visualization {
 
-VisualizationGroup::VisualizationGroup()
+VisualizationGroup::VisualizationGroup() : scorePoints_(0)
 {
-	// TODO Auto-generated constructor stub
+}
 
+VisualizationGroup::VisualizationGroup(ConditionFunction condition, int scorePoints)
+	: contextCondition_(condition), scorePoints_(scorePoints)
+{
 }
 
 VisualizationGroup::~VisualizationGroup()
@@ -50,9 +53,10 @@ VisualizationGroup::~VisualizationGroup()
 	visualizations_.clear();
 }
 
-bool VisualizationGroup::matchesContext(Item*, Model::Node*)
+bool VisualizationGroup::matchesContext(Item* item, Model::Node* node)
 {
-	return true;
+	if (contextCondition_) return contextCondition_(item, node);
+	else return true;
 }
 
 QList<QPair<VisualizationSuitabilityScore, VisualizationGroup::ItemConstructor> >
@@ -62,10 +66,16 @@ VisualizationGroup::visualizationsForContext(Item* parent, Model::Node* node)
 	if (matchesContext(parent, node))
 	{
 		for(auto v : visualizations_)
-			result << qMakePair(VisualizationSuitabilityScore(), v);
+			result << qMakePair(VisualizationSuitabilityScore(scorePoints_), v);
 
 		for(auto sg : subGroups_)
-			result << sg->visualizationsForContext(parent, node);
+		{
+			for(auto v : sg->visualizationsForContext(parent, node) )
+			{
+				v.first.score += scorePoints_;
+				result << v;
+			}
+		}
 	}
 
 	return result;
@@ -75,6 +85,14 @@ bool operator< (const QPair<VisualizationSuitabilityScore, VisualizationGroup::I
 		const QPair<VisualizationSuitabilityScore, VisualizationGroup::ItemConstructor>& right)
 {
 	return left.first < right.first;
+}
+
+void VisualizationGroup::addVisualization(VisualizationGroup::ItemConstructor visualization,
+		ConditionFunction condition)
+{
+	auto g = new VisualizationGroup(condition);
+	g->addVisualization(visualization);
+	addSubGroup(g);
 }
 
 } /* namespace Visualization */
