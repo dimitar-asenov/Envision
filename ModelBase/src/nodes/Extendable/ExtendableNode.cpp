@@ -111,6 +111,7 @@ ExtendableNode::ExtendableNode(Node *parent, PersistentStore &store, bool, Attri
 				+ ln->name + " in persistent store, but this attribute is not registered");
 
 		subnodes[index.level()][index.index()] = ln->node;
+		ln->node->setParent(this);
 	}
 
 	verifyHasAllMandatoryAttributes();
