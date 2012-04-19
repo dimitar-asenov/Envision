@@ -83,8 +83,10 @@ QVector<Token> Token::tokenize(QString input, const OperatorDescriptorList* ops)
 		else
 		{
 			finalizeToken = next.isNull();
-			finalizeToken = finalizeToken || first.isLetterOrNumber() != next.isLetterOrNumber();
-			finalizeToken = finalizeToken || (!next.isLetterOrNumber() && !tokenExistsInOperators(token + next, ops));
+			finalizeToken = finalizeToken
+					|| (first.isLetterOrNumber() || first == '_') != (next.isLetterOrNumber() || next == '_');
+			finalizeToken = finalizeToken
+					|| (!next.isLetterOrNumber() && !(next == '_') && !tokenExistsInOperators(token + next, ops));
 		}
 
 		// Finalize the token if it's ready
@@ -93,7 +95,8 @@ QVector<Token> Token::tokenize(QString input, const OperatorDescriptorList* ops)
 			Type t;
 			if (inString)
 				t = stringFinished ? Literal : PartialLiteral;
-			else if (tokenExistsInOperators(token, ops) || (token.size() == 1 && !first.isLetterOrNumber()))
+			else if (tokenExistsInOperators(token, ops)
+					|| (token.size() == 1 && !first.isLetterOrNumber() && !(first == '_')))
 				t = OperatorDelimiter;
 			else
 				t = first.isDigit() ? Literal : Identifier;
