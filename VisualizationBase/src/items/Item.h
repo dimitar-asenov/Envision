@@ -292,7 +292,6 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 Q_DECLARE_OPERATORS_FOR_FLAGS(Item::PositionConstraints)
 
 inline Item* Item::parent() const {return static_cast<Item*>(parentItem()); }
-inline void Item::setPurpose(int purpose) { purpose_ = purpose; }
 inline int Item::width() const { return boundingRect_.width(); }
 inline int Item::height() const { return boundingRect_.height(); }
 inline QSizeF Item::size() const { return boundingRect_.size();}

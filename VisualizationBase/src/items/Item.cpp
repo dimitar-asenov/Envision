@@ -80,6 +80,12 @@ bool Item::needsUpdate()
 	return needsUpdate_;
 }
 
+void Item::setPurpose(int purpose)
+{
+	purpose_ = purpose;
+	setUpdateNeeded();
+}
+
 void Item::setStyle(const ItemStyle* style)
 {
 	if (style == style_) return;
@@ -228,7 +234,8 @@ void Item::setRevision(int)
 
 bool Item::itemOrChildHasFocus() const
 {
-	return QGraphicsItem::scene()->focusItem() == this || QGraphicsItem::isAncestorOf( QGraphicsItem::scene()->focusItem() );
+	return QGraphicsItem::scene()->focusItem() == this
+			|| QGraphicsItem::isAncestorOf( QGraphicsItem::scene()->focusItem() );
 }
 
 Item* Item::focusedChild() const
@@ -649,7 +656,7 @@ void Item::defaultKeyPressEvent(QKeyEvent *event) { QGraphicsItem::keyPressEvent
 void Item::defaultKeyReleaseEvent(QKeyEvent *event) { QGraphicsItem::keyReleaseEvent(event); }
 
 // Mouse events
-void Item::defaultMouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) { QGraphicsItem::mouseDoubleClickEvent(event); }
+void Item::defaultMouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) { QGraphicsItem::mouseDoubleClickEvent(event);}
 void Item::defaultMouseMoveEvent(QGraphicsSceneMouseEvent *event) { QGraphicsItem::mouseMoveEvent(event); }
 void Item::defaultMousePressEvent(QGraphicsSceneMouseEvent *event) { QGraphicsItem::mousePressEvent(event); }
 void Item::defaultMouseReleaseEvent(QGraphicsSceneMouseEvent *event) { QGraphicsItem::mouseReleaseEvent(event); }
