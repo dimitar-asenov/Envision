@@ -41,13 +41,13 @@ namespace Model {
 NODE_DEFINE_TYPE_REGISTRATION_METHODS(Reference, Node)
 
 Reference::Reference(Node *parent) :
-	Node(parent), target_(nullptr)
+	Node(parent), target_()
 {
 	manageUnresolvedReferencesListInModel();
 }
 
 Reference::Reference(Node *parent, PersistentStore &store, bool) :
-	Node(parent)
+	Node(parent), target_()
 {
 	name_ = store.loadReferenceValue(this);
 	manageUnresolvedReferencesListInModel();
