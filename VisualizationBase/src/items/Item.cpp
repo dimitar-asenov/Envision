@@ -265,8 +265,7 @@ void Item::synchronizeItem(Item*& item, Model::Node* node)
 
 	if (!item && node)
 	{
-		item = renderer()->render(nullptr, node);
-		item->setParentItem(this);
+		item = renderer()->render(this, node);
 		setUpdateNeeded();
 	}
 }

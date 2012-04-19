@@ -47,14 +47,17 @@ ITEM_COMMON_DEFINITIONS(VLibrary, "item")
 
 VLibrary::VLibrary(Item* parent, OOModel::Library* node, const VLibraryStyle* style) :
 	ItemWithNode<LayoutProvider<PanelBorderLayout>, Library>(parent, node, style),
-	header(new SequentialLayout(nullptr, &style->header())),
-	name( new VText(nullptr, node->nameNode(), &style->name())),
-	content(new PositionLayout(nullptr, &style->content()))
+	header(), name(), content()
 {
 	layout()->setTop(true);
+	header = new SequentialLayout(layout()->top(), &style->header());
 	layout()->top()->setMiddle(header);
-	header->append(new Static(nullptr, &style->icon()));
+
+	header->append(new Static(header, &style->icon()));
+	name = new VText(header, node->nameNode(), &style->name());
 	header->append(name);
+
+	content = new PositionLayout(layout(), &style->content());
 	layout()->setContent(content);
 }
 

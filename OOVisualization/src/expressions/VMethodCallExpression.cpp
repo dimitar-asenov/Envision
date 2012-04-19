@@ -46,10 +46,10 @@ ITEM_COMMON_DEFINITIONS(VMethodCallExpression, "item")
 
 VMethodCallExpression::VMethodCallExpression(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<>, MethodCallExpression>(parent, node, style),
-	name_(new Text(nullptr, &style->name()) ),
+	name_(new Text(layout(), &style->name()) ),
 	separator_(nullptr),
 	prefix_(nullptr),
-	arguments_(new VList(nullptr, node->arguments(), &style->arguments()))
+	arguments_(new VList(layout(), node->arguments(), &style->arguments()))
 {
 	layout()->append(name_);
 	layout()->append(arguments_);

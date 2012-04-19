@@ -44,14 +44,14 @@ ITEM_COMMON_DEFINITIONS(VLoopStatementCF, "item")
 
 VLoopStatementCF::VLoopStatementCF(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<ControlFlowItem, LoopStatement>(parent, node, style),
-	conditionBackground(nullptr),
-	initStepBackground(nullptr),
-	updateStepBackground(nullptr),
-	condition(nullptr),
-	initStep(nullptr),
-	updateStep(nullptr),
-	body(nullptr),
-	vis_(nullptr)
+	conditionBackground(),
+	initStepBackground(),
+	updateStepBackground(),
+	condition(),
+	initStep(),
+	updateStep(),
+	body(),
+	vis_()
 {
 }
 
@@ -114,26 +114,23 @@ void VLoopStatementCF::determineChildren()
 		// Create nodes which are present in the model
 		if (!initStep && node()->initStep())
 		{
-			initStepBackground = new SequentialLayout(nullptr, &style()->initStep());
-			initStep = renderer()->render(nullptr, node()->initStep());
+			initStepBackground = new SequentialLayout(this, &style()->initStep());
+			initStep = renderer()->render(initStepBackground, node()->initStep());
 			initStepBackground->append(initStep);
-			initStepBackground->setParentItem(this);
 		}
 
 		if (!updateStep && node()->updateStep())
 		{
-			updateStepBackground = new SequentialLayout(nullptr, &style()->updateStep());
-			updateStep = renderer()->render(nullptr, node()->updateStep());
+			updateStepBackground = new SequentialLayout(this, &style()->updateStep());
+			updateStep = renderer()->render(updateStepBackground, node()->updateStep());
 			updateStepBackground->append(updateStep);
-			updateStepBackground->setParentItem(this);
 		}
 
 		if (!condition && node()->condition())
 		{
-			conditionBackground = new SequentialLayout(nullptr, &style()->condition());
-			condition = renderer()->render(nullptr, node()->condition());
+			conditionBackground = new SequentialLayout(this, &style()->condition());
+			condition = renderer()->render(conditionBackground, node()->condition());
 			conditionBackground->append(condition);
-			conditionBackground->setParentItem(this);
 		}
 
 		if (conditionBackground) conditionBackground->setStyle( &style()->condition() );
@@ -253,7 +250,8 @@ void VLoopStatementCF::updateGeometry(int availableWidth, int availableHeight)
 	if (updateStep)
 	{
 		updateConnect.ry() += updateStepBackground->height()/2;
-		addConnector(updateConnect + QPoint(style()->pinLength(), 0), updateConnect - QPoint(style()->pinLength(), 0), true);
+		addConnector(updateConnect + QPoint(style()->pinLength(), 0),
+				updateConnect - QPoint(style()->pinLength(), 0), true);
 
 		updateConnect.rx() += updateStepBackground->width() + 2*style()->pinLength();
 

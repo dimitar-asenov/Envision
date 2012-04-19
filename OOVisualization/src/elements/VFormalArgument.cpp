@@ -44,7 +44,7 @@ ITEM_COMMON_DEFINITIONS(VFormalArgument, "item")
 
 VFormalArgument::VFormalArgument(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode< LayoutProvider<>, FormalArgument>(parent, node, style),
-	name_(new VText(nullptr, node->nameNode(), &style->name()) ),
+	name_(new VText(layout(), node->nameNode(), &style->name()) ),
 	type_(nullptr)
 {
 	layout()->append(name_);

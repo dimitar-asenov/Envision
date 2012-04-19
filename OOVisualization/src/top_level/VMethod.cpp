@@ -48,22 +48,27 @@ ITEM_COMMON_DEFINITIONS(VMethod, "item")
 
 VMethod::VMethod(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<PanelBorderLayout>, Method>(parent, node, style),
-	header_( new SequentialLayout(nullptr, &style->header()) ),
-	icon_(new Static(nullptr, &style->icon())),
-	name_(new VText(nullptr, node->nameNode(), &style->nameDefault()) ),
-	arguments_(new VList(nullptr, node->arguments(), &style->arguments()) ),
-	content_( new VList(nullptr, node->items(), &style->content()) ),
-	results_(new VList(nullptr, node->results(), &style->results()) )
+	header_(), icon_(), name_(), arguments_(), content_(), results_()
 {
 	layout()->setTop(true);
+
+	header_ = new SequentialLayout(layout()->top(), &style->header());
 	layout()->top()->setFirst(header_);
+
+	icon_ = new Static(header_, &style->icon());
 	header_->append(icon_);
+
+	name_ =new VText(header_, node->nameNode(), &style->nameDefault());
 	header_->append(name_);
+
+	arguments_ =new VList(header_, node->arguments(), &style->arguments());
 	header_->append(arguments_);
 
 	layout()->setLeft(true);
+	results_ =new VList(layout()->left(), node->results(), &style->results());
 	layout()->left()->setFirst(results_);
 
+	content_ = new VList(layout(), node->items(), &style->content());
 	layout()->setContent(content_);
 }
 

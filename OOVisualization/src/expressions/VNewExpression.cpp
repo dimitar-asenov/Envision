@@ -44,7 +44,7 @@ ITEM_COMMON_DEFINITIONS(VNewExpression, "item")
 
 VNewExpression::VNewExpression(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<>, NewExpression>(parent, node, style),
-	newSymbol_( new Static(nullptr, &style->newSymbol()) ),
+	newSymbol_( new Static(layout(), &style->newSymbol()) ),
 	type_(nullptr),
 	amount_(nullptr)
 {

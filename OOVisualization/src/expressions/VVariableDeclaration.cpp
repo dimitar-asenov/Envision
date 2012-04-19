@@ -45,7 +45,7 @@ ITEM_COMMON_DEFINITIONS(VVariableDeclaration, "item")
 
 VVariableDeclaration::VVariableDeclaration(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<>, VariableDeclaration>(parent, node, style),
-	name_(new VText(nullptr, node->nameNode(), &style->name()) ),
+	name_(new VText(layout(), node->nameNode(), &style->name()) ),
 	type_(nullptr),
 	assignmentSymbol_(nullptr),
 	initialValue_(nullptr)

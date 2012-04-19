@@ -47,18 +47,13 @@ ITEM_COMMON_DEFINITIONS(VLoopStatement, "item")
 
 VLoopStatement::VLoopStatement(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode< LayoutProvider<PanelBorderLayout>, LoopStatement>(parent, node, style),
-	header_(new SequentialLayout(nullptr, &style->header())),
-	conditionBackground_(nullptr),
-	initStepBackground_(nullptr),
-	updateStepBackground_(nullptr),
-	condition_(nullptr),
-	initStep_(nullptr),
-	updateStep_(nullptr),
-	body_(nullptr)
+	header_(), conditionBackground_(), initStepBackground_(), updateStepBackground_(), condition_(), initStep_(),
+	updateStep_(),	body_()
 {
 	layout()->setTop(true);
+	header_ = new SequentialLayout(layout()->top(), &style->header());
 	layout()->top()->setFirst(header_);
-	header_->append(new Static(nullptr, &style->icon()));
+	header_->append(new Static(header_, &style->icon()));
 }
 
 VLoopStatement::~VLoopStatement()
@@ -106,24 +101,24 @@ void VLoopStatement::determineChildren()
 	// Create nodes which are present in the model
 	if (!initStep_ && node()->initStep())
 	{
-		initStepBackground_ = new SequentialLayout(nullptr, &style()->initStep());
-		initStep_ = renderer()->render(nullptr, node()->initStep());
+		initStepBackground_ = new SequentialLayout(header_, &style()->initStep());
+		initStep_ = renderer()->render(initStepBackground_, node()->initStep());
 		initStepBackground_->append(initStep_);
 		header_->insert(initStepBackground_, 1);
 	}
 
 	if (!updateStep_ && node()->updateStep())
 	{
-		updateStepBackground_ = new SequentialLayout(nullptr, &style()->updateStep());
-		updateStep_ = renderer()->render(nullptr, node()->updateStep());
+		updateStepBackground_ = new SequentialLayout(header_, &style()->updateStep());
+		updateStep_ = renderer()->render(updateStepBackground_, node()->updateStep());
 		updateStepBackground_->append(updateStep_);
 		header_->append(updateStepBackground_);
 	}
 
 	if (!condition_ && node()->condition())
 	{
-		conditionBackground_ = new SequentialLayout(nullptr, &style()->condition());
-		condition_ = renderer()->render(nullptr, node()->condition());
+		conditionBackground_ = new SequentialLayout(header_, &style()->condition());
+		condition_ = renderer()->render(conditionBackground_, node()->condition());
 		conditionBackground_->append(condition_);
 		header_->insert(conditionBackground_, (initStep_?2:1));
 	}

@@ -80,7 +80,7 @@ void VArrayInitializer::determineChildren()
 		else
 		{
 			layout()->setGridSize(1,1, false);
-			values_ = new VList(nullptr, node()->values(), &style()->values());
+			values_ = new VList(layout(), node()->values(), &style()->values());
 			layout()->set(values_,0,0, true);
 		}
 	}

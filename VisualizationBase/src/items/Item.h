@@ -318,7 +318,6 @@ template <class T> void Item::synchronizeItem(T*& item, bool present, const type
 		if (style) item = new T(this, style);
 		else item = new T(this);
 
-		item->setParentItem(this);
 		setUpdateNeeded();
 	}
 }
@@ -333,10 +332,9 @@ template <class T> void Item::synchronizeItem(T*& item, typename T::NodeType* no
 
 	if (!item && node)
 	{
-		if (style) item = new T(nullptr, node, style);
-		else item = new T(nullptr, node);
+		if (style) item = new T(this, node, style);
+		else item = new T(this, node);
 
-		item->setParentItem(this);
 		setUpdateNeeded();
 	}
 }

@@ -45,7 +45,7 @@ ITEM_COMMON_DEFINITIONS(VField, "item")
 
 VField::VField(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode< LayoutProvider<>, Field >(parent, node, style),
-	name_(new VText(nullptr, node->nameNode(), &style->nameDefault()) ),
+	name_(new VText(layout(), node->nameNode(), &style->nameDefault()) ),
 	type_(nullptr)
 {
 	layout()->append(name_);

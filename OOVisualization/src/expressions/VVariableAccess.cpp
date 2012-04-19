@@ -45,7 +45,7 @@ ITEM_COMMON_DEFINITIONS(VVariableAccess, "item")
 
 VVariableAccess::VVariableAccess(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<>, VariableAccess>(parent, node, style),
-	name_(new Text(nullptr, &style->name()) ),
+	name_(new Text(layout(), &style->name()) ),
 	separator_(nullptr),
 	prefix_(nullptr)
 {

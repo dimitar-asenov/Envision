@@ -44,11 +44,7 @@ ITEM_COMMON_DEFINITIONS(VIfStatementCF, "item")
 
 VIfStatementCF::VIfStatementCF(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<ControlFlowItem, IfStatement>(parent, node, style),
-	conditionBackground(nullptr),
-	condition(nullptr),
-	thenBranch(nullptr),
-	elseBranch(nullptr),
-	vis_(nullptr)
+	conditionBackground(), condition(), thenBranch(), elseBranch(), vis_()
 {
 }
 
@@ -95,10 +91,9 @@ void VIfStatementCF::determineChildren()
 		// Create nodes which are present in the model
 		if (!condition && node()->condition())
 		{
-			conditionBackground = new SequentialLayout(nullptr, &style()->condition());
-			condition = renderer()->render(nullptr, node()->condition());
+			conditionBackground = new SequentialLayout(this, &style()->condition());
+			condition = renderer()->render(conditionBackground, node()->condition());
 			conditionBackground->append(condition);
-			conditionBackground->setParentItem(this);
 		}
 
 		if (conditionBackground) conditionBackground->setStyle( &style()->condition() );
@@ -177,8 +172,10 @@ void VIfStatementCF::updateGeometry(int availableWidth, int availableHeight)
 	addToLastConnector(thenBranch->pos().toPoint() + thenBranch->entrance());
 
 	// Else
-	addConnector(conditionBackground->pos().x() + conditionBackground->width(), style()->pinLength() + conditionBackground->height()/2,
-			elseBranch->pos().toPoint().x() + elseBranch->entrance().x(), style()->pinLength() + conditionBackground->height()/2, false);
+	addConnector(conditionBackground->pos().x() + conditionBackground->width(),
+			style()->pinLength() + conditionBackground->height()/2,
+			elseBranch->pos().toPoint().x() + elseBranch->entrance().x(),
+			style()->pinLength() + conditionBackground->height()/2, false);
 	addToLastConnector(elseBranch->pos().toPoint() + elseBranch->entrance());
 
 	// Process Connectors on the then branch
@@ -218,7 +215,8 @@ void VIfStatementCF::updateGeometry(int availableWidth, int availableHeight)
 	// If there are any break or continue statements on the inside put the corresponding connectors
 	if (thenBranchInnerBegin < height)
 	{
-		addConnector(thenBranch->width(), thenBranchInnerBegin, thenBranch->width() , height - 3*style()->pinLength(), false);
+		addConnector(thenBranch->width(), thenBranchInnerBegin, thenBranch->width() ,
+				height - 3*style()->pinLength(), false);
 		addToLastConnector(width(), height - 3*style()->pinLength());
 
 		QPoint c = QPoint(1, height - 3*style()->pinLength());
@@ -228,7 +226,8 @@ void VIfStatementCF::updateGeometry(int availableWidth, int availableHeight)
 
 	if (elseBranchInnerBegin < height)
 	{
-		addConnector(elseBranch->pos().x(), elseBranchInnerBegin, elseBranch->pos().x() , height - 2*style()->pinLength(), false);
+		addConnector(elseBranch->pos().x(), elseBranchInnerBegin, elseBranch->pos().x() ,
+				height - 2*style()->pinLength(), false);
 		addToLastConnector(0, height - 2*style()->pinLength());
 
 		QPoint c = QPoint(0, height - 2*style()->pinLength());
@@ -253,7 +252,8 @@ void VIfStatementCF::updateGeometry(int availableWidth, int availableHeight)
 		exit_ = QPoint(entrance_.x(), height);
 		int lineHeight = height - style()->pinLength();
 		addConnector(exit_ - QPoint(0,style()->pinLength()), exit_, false);
-		addConnector(thenBranch->pos().toPoint() + thenBranch->exit(), QPoint(thenBranch->pos().x() + thenBranch->exit().x(), lineHeight), false);
+		addConnector(thenBranch->pos().toPoint() + thenBranch->exit(),
+				QPoint(thenBranch->pos().x() + thenBranch->exit().x(), lineHeight), false);
 		addToLastConnector(elseBranch->pos().x() + elseBranch->exit().x(), lineHeight);
 		addToLastConnector(elseBranch->pos().toPoint() + elseBranch->exit());
 	}

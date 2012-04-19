@@ -63,9 +63,9 @@ CommandPrompt::CommandPrompt(Item* commandReceiver, const StyleType* style) :
 	Item(nullptr, style),
 	commandReceiver_(commandReceiver),
 	layout(new SequentialLayout(this, &style->layout())),
-	suggestionContainer(new SequentialLayout(nullptr, &style->suggestionContainer())),
-	errorContainer(new SequentialLayout(nullptr, &style->errorContainer())),
-	command( new Text(nullptr, &style->commandText())),
+	suggestionContainer(new SequentialLayout(layout, &style->suggestionContainer())),
+	errorContainer(new SequentialLayout(layout, &style->errorContainer())),
+	command( new Text(layout, &style->commandText())),
 	result_(nullptr),
 	justCreated(true)
 {
@@ -172,7 +172,7 @@ void CommandPrompt::setResult(CommandResult* result)
 		// Create visualization if one is missing.
 		if (result->errors()[i]->visualization() == nullptr)
 		{
-			TextAndDescription* vis = new TextAndDescription(nullptr, &style()->defaultError());
+			TextAndDescription* vis = new TextAndDescription(errorContainer, &style()->defaultError());
 			vis->setContents(result->errors()[i]->message(), result->errors()[i]->resolutionTips().join(" OR "));
 			result->errors()[i]->setVisualization(vis);
 		}
@@ -187,7 +187,7 @@ void CommandPrompt::setResult(CommandResult* result)
 		// Create visualization if one is missing.
 		if (result->suggestions()[i]->visualization() == nullptr)
 		{
-			TextAndDescription* vis = new TextAndDescription(nullptr, &style()->defaultSuggestion());
+			TextAndDescription* vis = new TextAndDescription(suggestionContainer, &style()->defaultSuggestion());
 			vis->setContents(result->suggestions()[i]->suggestion(), result->suggestions()[i]->description());
 			result->suggestions()[i]->setVisualization(vis);
 		}
@@ -221,7 +221,7 @@ void CommandPrompt::addSuggestion(CommandSuggestion* suggestion)
 	// Create visualization if one is missing.
 	if (suggestion->visualization() == nullptr)
 	{
-		TextAndDescription* vis = new TextAndDescription(nullptr, &style()->defaultSuggestion());
+		TextAndDescription* vis = new TextAndDescription(suggestionContainer, &style()->defaultSuggestion());
 		vis->setContents(suggestion->suggestion(), suggestion->description());
 		suggestion->setVisualization(vis);
 	}
@@ -241,7 +241,7 @@ void CommandPrompt::addSuggestions(const QList<CommandSuggestion*>& suggestions)
 		// Create visualization if one is missing.
 		if (suggestions_.last()->visualization() == nullptr)
 		{
-			TextAndDescription* vis = new TextAndDescription(nullptr, &style()->defaultSuggestion());
+			TextAndDescription* vis = new TextAndDescription(suggestionContainer, &style()->defaultSuggestion());
 			vis->setContents(suggestions_.last()->suggestion(), suggestions_.last()->description());
 			suggestions_.last()->setVisualization(vis);
 		}
