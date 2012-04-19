@@ -104,8 +104,7 @@ void Layout::synchronizeItem(Item*& layoutItem, Item*& externalItem, Model::Node
 
 	if (!externalItem && node)
 	{
-		externalItem = renderer()->render(nullptr, node);
-		externalItem->setParentItem(this);
+		externalItem = renderer()->render(this, node);
 		layoutItem = externalItem;
 		setUpdateNeeded();
 	}

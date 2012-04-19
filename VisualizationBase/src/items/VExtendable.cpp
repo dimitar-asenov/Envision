@@ -42,8 +42,8 @@ ITEM_COMMON_DEFINITIONS(VExtendable, "item")
 VExtendable::VExtendable(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<Item, Model::ExtendableNode>(parent, node, style),
 	header( new SequentialLayout(this, &style->smallHeaderStyle())),
-	layout(nullptr),
-	attributes(nullptr),
+	layout(),
+	attributes(),
 	expanded_(style->expanded())
 {
 	header->append(new Text(header, node->typeName()));
@@ -88,10 +88,11 @@ void VExtendable::determineChildren()
 		{
 			useShape();
 			layout = new PanelBorderLayout(this, &style()->borderStyle());
-			attributes = new SequentialLayout(nullptr, &style()->attributesStyle());
 
 			layout->setTop(true);
 			layout->top()->setMiddle(header);
+
+			attributes = new SequentialLayout(layout, &style()->attributesStyle());
 			layout->setContent(attributes);
 		}
 		else

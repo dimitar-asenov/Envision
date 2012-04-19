@@ -82,10 +82,9 @@ template <class T> void Layout::synchronizeItem(Item*& layoutItem, T*& externalI
 
 	if (!externalItem && present)
 	{
-		if (style) externalItem = new T(nullptr, style);
-		else externalItem = new T(nullptr);
+		if (style) externalItem = new T(this, style);
+		else externalItem = new T(this);
 
-		externalItem->setParentItem(this);
 		layoutItem = externalItem;
 		setUpdateNeeded();
 	}
@@ -111,10 +110,9 @@ template <class T> void Layout::synchronizeItem(Item*& layoutItem, T*& externalI
 
 	if (!externalItem && node)
 	{
-		if (style) externalItem = new T(nullptr, node, style);
-		else externalItem = new T(nullptr, node);
+		if (style) externalItem = new T(this, node, style);
+		else externalItem = new T(this, node);
 
-		externalItem->setParentItem(this);
 		layoutItem = externalItem;
 		setUpdateNeeded();
 	}

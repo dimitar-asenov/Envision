@@ -120,7 +120,7 @@ void SequentialLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes, Mo
 	// Inserts elements that are not yet visualized and adjusts the order to match that in 'nodes'.
 	for (int i = 0; i < nodes.size(); ++i)
 	{
-		if (i >= items.size() ) append( renderer->render(nullptr, nodes[i]));	// This node is new
+		if (i >= items.size() ) append( renderer->render(this, nodes[i]));	// This node is new
 		else if ( items[i]->node() == nodes[i] )	continue;	// This node is already there
 		else
 		{
@@ -138,7 +138,7 @@ void SequentialLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes, Mo
 			}
 
 			// The node was not found, insert a visualization here
-			if (!found ) insert( renderer->render(nullptr, nodes[i]), i);
+			if (!found ) insert( renderer->render(this, nodes[i]), i);
 		}
 	}
 
@@ -166,7 +166,7 @@ void SequentialLayout::synchronizeMid(Item*& item, Model::Node* node, int positi
 
 	if (!item && node)
 	{
-		item = renderer()->render(nullptr, node);
+		item = renderer()->render(this, node);
 		insert(item, ((position > length()) ? length() : position) );
 	}
 
@@ -243,8 +243,10 @@ void SequentialLayout::updateGeometry(int, int)
 		if ( horizontal )
 		{
 			int y = h;
-			if ( style()->alignment() == SequentialLayoutStyle::BottomAlignment ) y += maxChildHeight - items[i]->height();
-			if ( style()->alignment() == SequentialLayoutStyle::CenterAlignment ) y += (maxChildHeight - items[i]->height()) / 2;
+			if ( style()->alignment() == SequentialLayoutStyle::BottomAlignment )
+				y += maxChildHeight - items[i]->height();
+			if ( style()->alignment() == SequentialLayoutStyle::CenterAlignment )
+				y += (maxChildHeight - items[i]->height()) / 2;
 
 			if ( i != begin ) w += style()->spaceBetweenElements();
 			items[i]->setPos(w + xOffset(), y + yOffset());
@@ -253,8 +255,10 @@ void SequentialLayout::updateGeometry(int, int)
 		else
 		{
 			int x = w;
-			if ( style()->alignment() == SequentialLayoutStyle::RightAlignment ) x += maxChildWidth - items[i]->width();
-			if ( style()->alignment() == SequentialLayoutStyle::CenterAlignment ) x += (maxChildWidth - items[i]->width()) / 2;
+			if ( style()->alignment() == SequentialLayoutStyle::RightAlignment )
+				x += maxChildWidth - items[i]->width();
+			if ( style()->alignment() == SequentialLayoutStyle::CenterAlignment )
+				x += (maxChildWidth - items[i]->width()) / 2;
 
 			if ( i != begin ) h += style()->spaceBetweenElements();
 			items[i]->setPos(x + xOffset(), h + yOffset());

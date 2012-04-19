@@ -175,7 +175,7 @@ void GridLayout::synchronizeWithNodes(const QList< QList<Model::Node*> >& nodes,
 		{
 			int oldIndex = nodesFound.indexOf(nodes[y][x]);
 			if (oldIndex >=0) set(itemsFound[oldIndex], x, y, false);
-			else set(renderer->render(nullptr, nodes[y][x]), x, y, false);
+			else set(renderer->render(this, nodes[y][x]), x, y, false);
 		}
 }
 
@@ -190,7 +190,7 @@ void GridLayout::synchronize(Item*& item, Model::Node* node, int x, int y)
 
 	if (!item && node)
 	{
-		item = renderer()->render(nullptr, node);
+		item = renderer()->render(this, node);
 		set(item, x, y, true);
 	}
 
