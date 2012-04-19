@@ -44,6 +44,7 @@
 #include "VisualizationBase/src/items/VText.h"
 #include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/node_extensions/Position.h"
+#include "VisualizationBase/src/items/RootItem.h"
 
 #include "ModelBase/src/Model.h"
 
@@ -564,7 +565,7 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	else if (longMethod) top_level = longMethod;
 	else top_level = factorial;
 
-	scene->addTopLevelItem( scene->defaultRenderer()->render(nullptr, top_level) );
+	scene->addTopLevelItem( new RootItem(top_level));
 	scene->scheduleUpdate();
 	scene->listenToModel(model);
 

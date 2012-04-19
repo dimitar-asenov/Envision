@@ -48,6 +48,7 @@ RootItem::RootItem(Item* item, int purpose) : ItemWithNode<Item>(nullptr, nullpt
 {
 	setFlag(QGraphicsItem::ItemHasNoContents);
 	setPurpose(purpose);
+	if (item_) item_->setParentItem(this);
 }
 
 RootItem::~RootItem()
@@ -58,6 +59,7 @@ RootItem::~RootItem()
 void RootItem::setItem(Item* item)
 {
 	item_ = item;
+	if (item_) item_->setParentItem(this);
 	setUpdateNeeded();
 }
 

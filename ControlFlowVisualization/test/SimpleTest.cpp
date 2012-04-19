@@ -39,6 +39,7 @@
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/views/MainView.h"
 #include "VisualizationBase/src/node_extensions/Position.h"
+#include "VisualizationBase/src/items/RootItem.h"
 
 using namespace OOModel;
 using namespace Visualization;
@@ -292,7 +293,7 @@ TEST(ControlFlowVisualization, SimpleTest)
 	else top_level = divbysix;
 
 	Scene* scene = new Scene();
-	scene->addTopLevelItem( scene->defaultRenderer()->render(nullptr, top_level) );
+	scene->addTopLevelItem( new RootItem(top_level));
 	scene->scheduleUpdate();
 	scene->listenToModel(model);
 

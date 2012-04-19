@@ -44,6 +44,7 @@
 #include "VisualizationBase/src/node_extensions/Position.h"
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/views/MainView.h"
+#include "VisualizationBase/src/items/RootItem.h"
 
 using namespace OOModel;
 using namespace Visualization;
@@ -240,7 +241,7 @@ TEST(CustomMethodCall, CustomVisTest)
 	Model::Node* top_level = nullptr;
 	if(collection) top_level = collection;
 
-	scene->addTopLevelItem( scene->defaultRenderer()->render(nullptr, top_level) );
+	scene->addTopLevelItem( new RootItem(top_level));
 	scene->scheduleUpdate();
 	scene->listenToModel(model);
 
