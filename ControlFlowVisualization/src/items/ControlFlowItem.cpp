@@ -47,13 +47,13 @@ ControlFlowItem::ControlFlowItem(Item* parent,  const StyleType* style) :
 
 bool ControlFlowItem::showAsControlFlow() const
 {
-	QGraphicsItem* item = parentItem();
+	auto item = parent();
 	while (item)
 	{
 		VMethodCF* met = dynamic_cast<VMethodCF*> (item);
 		if (met) return true;
 
-		item = item->parentItem();
+		item = item->parent();
 	}
 
 	return false;

@@ -143,7 +143,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 					break;
 				}
 
-				item = static_cast<Visualization::Item*> ( item->parentItem() );
+				item = item->parent();
 			}
 		}
 
@@ -283,7 +283,7 @@ void GenericHandler::moveCursor(Visualization::Item *target, int key)
 
 		while (current && !processed)
 		{
-			Visualization::Item* parent = static_cast<Visualization::Item*> (current->parentItem());
+			Visualization::Item* parent = current->parent();
 			if (!parent) break;
 
 			QPoint reference;
@@ -365,7 +365,7 @@ void GenericHandler::mouseDoubleClickEvent(Visualization::Item *, QGraphicsScene
 
 void GenericHandler::focusInEvent(Visualization::Item *target, QFocusEvent *event)
 {
-	QGraphicsItem* i = target;
+	auto i = target;
 	while (i)
 	{
 		if (i->flags() & QGraphicsItem::ItemIsSelectable)
@@ -374,7 +374,7 @@ void GenericHandler::focusInEvent(Visualization::Item *target, QFocusEvent *even
 			i->setSelected(true);
 			break;
 		}
-		else i = i->parentItem();
+		else i = i->parent();
 	}
 
 	InteractionHandler::focusInEvent(target, event);

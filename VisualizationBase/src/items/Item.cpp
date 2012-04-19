@@ -67,11 +67,11 @@ QRectF Item::boundingRect() const
 void Item::setUpdateNeeded()
 {
 	needsUpdate_ = true;
-	Item* parent = static_cast<Item*> (parentItem());
-	while (parent)
+	Item* p = parent();
+	while (p)
 	{
-		parent->needsUpdate_ = true;
-		parent = static_cast<Item*> (parent->parentItem());
+		p->needsUpdate_ = true;
+		p = p->parent();
 	}
 }
 

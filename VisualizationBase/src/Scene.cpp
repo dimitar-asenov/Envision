@@ -116,9 +116,9 @@ void Scene::updateItems()
 
 	if (!draw_selections)
 	{
-		QGraphicsItem* selectable = cursors_.first()->owner();
+		auto selectable = cursors_.first()->owner();
 		while (selectable && ! (selectable->flags() &  QGraphicsItem::ItemIsSelectable))
-			selectable = selectable->parentItem();
+			selectable = selectable->parent();
 
 		draw_selections = !selectable || selectable != selected.first();
 	}

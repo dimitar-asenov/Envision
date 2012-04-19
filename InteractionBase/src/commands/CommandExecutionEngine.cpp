@@ -126,7 +126,7 @@ void CommandExecutionEngine::execute(Visualization::Item *originator, const QStr
 			}
 		}
 
-		if (!processed) target = static_cast<Visualization::Item*> (target->parentItem());
+		if (!processed) target = target->parent();
 	}
 
 	// If no item can process this command dispatch it to the SceneItem
@@ -185,7 +185,7 @@ QList<CommandSuggestion*> CommandExecutionEngine::autoComplete(Visualization::It
 				for(int i = 0; i< handler->commands().size(); ++i)
 					result.append( handler->commands().at(i)->suggest(source, target, trimmed) );
 
-			target = static_cast<Visualization::Item*> (target->parentItem());
+			target = target->parent();
 		}
 
 		// Get suggestions from the scene handler item
