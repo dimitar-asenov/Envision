@@ -32,7 +32,8 @@ INSTALLS += target \
     pluginmeta \
     styles
 PRECOMPILED_HEADER = src/precompiled.h
-HEADERS += src/renderer/ModelRenderer.h \
+HEADERS += src/items/RootItem.h \
+    src/renderer/ModelRenderer.h \
     src/renderer/VisualizationGroup.h \
     src/renderer/VisualizationSuitabilityScore.h \
     src/CustomSceneEvent.h \
@@ -107,7 +108,8 @@ HEADERS += src/renderer/ModelRenderer.h \
     src/visualizationbase_api.h \
     test/BoxTest.h \
     src/visualizationbase.h
-SOURCES += src/renderer/ModelRenderer.cpp \
+SOURCES += src/items/RootItem.cpp \
+    src/renderer/ModelRenderer.cpp \
     src/renderer/VisualizationGroup.cpp \
     src/renderer/VisualizationSuitabilityScore.cpp \
     src/items/ItemRegion.cpp \
