@@ -53,8 +53,8 @@ class OOMODEL_API Module : public Model::ExtendableNode
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Module)
 
 	ATTRIBUTE_OOP_NAME
-	ATTRIBUTE(Model::TypedList<Module>, modules, setModules);
-	ATTRIBUTE(Model::TypedList<Class>, classes, setClasses);
+	ATTRIBUTE(Model::TypedList<Module>, modules, setModules)
+	ATTRIBUTE(Model::TypedList<Class>, classes, setClasses)
 
 	public:
 		virtual bool definesSymbol() const;

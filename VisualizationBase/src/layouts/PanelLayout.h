@@ -87,9 +87,9 @@ inline void PanelLayout::setFirst(Item* item, bool deleteOldItem) { setItem(item
 inline void PanelLayout::setMiddle(Item* item, bool deleteOldItem) { setItem(item, middle_, deleteOldItem); }
 inline void PanelLayout::setLast(Item* item, bool deleteOldItem) { setItem(item, last_, deleteOldItem); }
 
-template <class T> inline T* PanelLayout::first() { return static_cast<T*> (first_); };
-template <class T> inline T* PanelLayout::middle() { return static_cast<T*> (middle_); };
-template <class T> inline T* PanelLayout::last() { return static_cast<T*> (last_); };
+template <class T> inline T* PanelLayout::first() { return static_cast<T*> (first_); }
+template <class T> inline T* PanelLayout::middle() { return static_cast<T*> (middle_); }
+template <class T> inline T* PanelLayout::last() { return static_cast<T*> (last_); }
 
 inline void PanelLayout::synchronizeFirst(Item*& item, Model::Node* node)
 {

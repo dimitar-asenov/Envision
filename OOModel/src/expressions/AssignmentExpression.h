@@ -46,7 +46,7 @@ class OOMODEL_API AssignmentExpression: public Expression
 
 	ATTRIBUTE(Expression, left, setLeft)
 	ATTRIBUTE(Expression, right, setRight)
-	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, opr, setOpr, int);
+	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, opr, setOpr, int)
 
 	public:
 		enum AssignmentTypes { ASSIGN, PLUS_ASSIGN, MINUS_ASSIGN, TIMES_ASSIGN, DIVIDE_ASSIGN, BIT_AND_ASSIGN,

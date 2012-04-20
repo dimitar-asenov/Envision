@@ -48,8 +48,8 @@ class OOMODEL_API ForEachStatement: public Statement
 
 	ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::Text, varName, setVarName, QString, const QString&)
 	ATTRIBUTE(Expression, varType, setVarType)
-	ATTRIBUTE(Expression, collection, setCollection);
-	ATTRIBUTE(StatementItemList, body, setBody);
+	ATTRIBUTE(Expression, collection, setCollection)
+	ATTRIBUTE(StatementItemList, body, setBody)
 
 	public:
 		virtual bool definesSymbol() const;

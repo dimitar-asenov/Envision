@@ -274,7 +274,7 @@ ModelRenderer* Item::renderer()
 {
 	if ( (static_cast<Scene*>(scene()))->renderer() ) return (static_cast<Scene*>(scene()))->renderer();
 	throw VisualizationException("The scene of an Item has no renderer.");
-};
+}
 
 int Item::distanceTo(const QPoint& p) const
 {

@@ -44,7 +44,7 @@ class OOMODEL_API ClassTypeExpression : public TypeExpression
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(ClassTypeExpression)
 
-	ATTRIBUTE(ReferenceExpression, typeExpression, setTypeExpression);
+	ATTRIBUTE(ReferenceExpression, typeExpression, setTypeExpression)
 
 	public:
 		virtual Type* type();

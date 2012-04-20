@@ -65,7 +65,7 @@ inline const PanelBorderLayoutStyle& VExtendableStyle::borderStyle() const {retu
 inline const SequentialLayoutStyle& VExtendableStyle::headerStyle() const {return headerStyle_; }
 inline const SequentialLayoutStyle& VExtendableStyle::smallHeaderStyle() const {return smallHeaderStyle_; }
 inline const SequentialLayoutStyle& VExtendableStyle::attributesStyle() const {return attributesStyle_; }
-inline bool VExtendableStyle::expanded() const { return expanded_; };
+inline bool VExtendableStyle::expanded() const { return expanded_; }
 
 }
 

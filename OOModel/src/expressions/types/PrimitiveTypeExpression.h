@@ -43,7 +43,7 @@ namespace OOModel {
 class OOMODEL_API PrimitiveTypeExpression : public TypeExpression
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(PrimitiveTypeExpression)
-	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, val, setVal, int);
+	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, val, setVal, int)
 
 	public:
 		typedef PrimitiveType::PrimitiveTypes PrimitiveTypes;

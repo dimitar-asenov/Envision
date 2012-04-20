@@ -45,7 +45,7 @@ class OOMODEL_API UnaryOperation: public Expression
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(UnaryOperation)
 
 	ATTRIBUTE(Expression, operand, setOperand)
-	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, opr, setOpr, int);
+	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, opr, setOpr, int)
 
 	public:
 		enum OperatorTypes {PREINCREMENT, PREDECREMENT, POSTINCREMENT, POSTDECREMENT, PLUS, MINUS, NOT, COMPLEMENT};

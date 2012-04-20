@@ -295,10 +295,10 @@ inline Item* Item::parent() const {return static_cast<Item*>(parentItem()); }
 inline int Item::width() const { return boundingRect_.width(); }
 inline int Item::height() const { return boundingRect_.height(); }
 inline QSizeF Item::size() const { return boundingRect_.size();}
-inline void Item::setWidth(int width)  { boundingRect_.setWidth(width); };
-inline void Item::setHeight(int height) { boundingRect_.setHeight(height);};
-inline void Item::setSize(int width, int height) { boundingRect_.setSize(QSizeF(width, height)); };
-inline void Item::setSize(const QSizeF& size) { boundingRect_.setSize(size); };
+inline void Item::setWidth(int width)  { boundingRect_.setWidth(width); }
+inline void Item::setHeight(int height) { boundingRect_.setHeight(height);}
+inline void Item::setSize(int width, int height) { boundingRect_.setSize(QSizeF(width, height)); }
+inline void Item::setSize(const QSizeF& size) { boundingRect_.setSize(size); }
 inline const ItemStyle* Item::style() const { return style_; }
 inline bool Item::hasShape() const { return shape_; }
 inline Shape* Item::getShape() const {	return shape_; }

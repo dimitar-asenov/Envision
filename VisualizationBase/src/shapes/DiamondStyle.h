@@ -58,10 +58,10 @@ class VISUALIZATIONBASE_API DiamondStyle : public ShapeStyle
 		int yShadowOffset() const;
 };
 
-inline const QBrush& DiamondStyle::background() const { return background_; };
-inline const QBrush& DiamondStyle::shadow() const { return shadow_; };
-inline int DiamondStyle::xShadowOffset() const { return xShadowOffset_; };
-inline int DiamondStyle::yShadowOffset() const { return yShadowOffset_; };
+inline const QBrush& DiamondStyle::background() const { return background_; }
+inline const QBrush& DiamondStyle::shadow() const { return shadow_; }
+inline int DiamondStyle::xShadowOffset() const { return xShadowOffset_; }
+inline int DiamondStyle::yShadowOffset() const { return yShadowOffset_; }
 
 }
 

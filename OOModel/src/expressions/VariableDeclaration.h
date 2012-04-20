@@ -48,7 +48,7 @@ class OOMODEL_API VariableDeclaration: public Expression
 
 	ATTRIBUTE_OOP_NAME
 	ATTRIBUTE(Expression, varType, setVarType)
-	ATTRIBUTE(Expression, initialValue, setInitialValue);
+	ATTRIBUTE(Expression, initialValue, setInitialValue)
 
 	public:
 		virtual bool definesSymbol() const;
