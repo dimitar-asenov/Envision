@@ -61,6 +61,8 @@ class VISUALIZATIONBASE_API ModelRenderer
 		void registerGroup(int nodeTypeId, VisualizationGroup* group);
 
 		int registerVisualizationPurpose(const QString& name);
+		int numRegisteredPurposes() const;
+		QString purposeName(int purpose);
 
 	private:
 		QVector<QVector<VisualizationGroup*>> groups_;
@@ -83,6 +85,8 @@ Item* createVisualization(Item* parent, Model::Node* node)
 	return new VIS(parent, static_cast<NODE*> (node));
 }
 
+inline int ModelRenderer::numRegisteredPurposes() const { return purposes_.size(); }
+inline QString ModelRenderer::purposeName(int purpose) { return purposes_[purpose]; }
 
 
 }
