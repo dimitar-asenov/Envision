@@ -58,7 +58,7 @@ Item* ModelRenderer::render(Item* parent, Model::Node* node, int purpose)
 {
 	QList<int> typeIds = node->hierarchyTypeIds();
 
-	int finalPurpose = purpose < 0 ? (parent ? parent->purpose() : 0) : purpose;
+	int finalPurpose = purpose >= 0 ? purpose : (parent ? parent->childNodePurpose(node) : 0);
 
 	if (finalPurpose >= purposes_.size())
 		throw VisualizationException("Trying to render a node with an unregistered purpose id: " + finalPurpose);

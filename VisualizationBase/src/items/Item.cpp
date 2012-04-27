@@ -86,6 +86,12 @@ void Item::setPurpose(int purpose)
 	setUpdateNeeded(FullUpdate);
 }
 
+void Item::clearPurpose()
+{
+	purpose_ = -1;
+	setUpdateNeeded(FullUpdate);
+}
+
 void Item::setStyle(const ItemStyle* style)
 {
 	if (style == style_) return;
@@ -532,11 +538,39 @@ bool Item::sceneEvent(QEvent *event)
 	return QGraphicsItem::sceneEvent(event);
 }
 
-int Item::purpose()
+int Item::purpose() const
 {
 	if (purpose_ >= 0) return purpose_;
 	if (!parent()) return -1;
-	return parent()->purpose();
+
+	if ( node() ) return parent()->childNodePurpose( node() );
+	else return parent()->purpose();
+}
+
+
+int Item::childNodePurpose(const Model::Node* node) const
+{
+	auto c = childNodePurpose_.find(node);
+	if (c != childNodePurpose_.end()) return *c;
+
+	return purpose();
+}
+
+void Item::setChildNodePurpose(const Model::Node* node, int purpose)
+{
+	childNodePurpose_.insert(node, purpose);
+	setUpdateNeeded(FullUpdate);
+}
+
+void Item::clearChildNodePurpose(const Model::Node* node)
+{
+	childNodePurpose_.remove(node);
+	setUpdateNeeded(FullUpdate);
+}
+
+bool Item::definesChildNodePurpose(const Model::Node* node) const
+{
+	return childNodePurpose_.find(node) != childNodePurpose_.end();
 }
 
 /***********************************************************************************************************************

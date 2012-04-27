@@ -209,9 +209,15 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		 * If the item's own purpose has been set, it's value will be returned. Otherwise the value of the item's parent
 		 * will be returned. If the item has no parent the return value is an unspecified purpose (-1).
 		 */
-		int purpose();
+		int purpose() const;
 
 		void setPurpose(int purpose);
+		void clearPurpose();
+
+		int childNodePurpose(const Model::Node* node) const;
+		void setChildNodePurpose(const Model::Node* node, int purpose);
+		void clearChildNodePurpose(const Model::Node* node);
+		bool definesChildNodePurpose(const Model::Node* node) const;
 
 	protected:
 
@@ -266,6 +272,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		Shape* shape_;
 		UpdateType needsUpdate_;
 		int purpose_;
+		QMap<const Model::Node*, int> childNodePurpose_;
 
 		void updateChildren();
 
