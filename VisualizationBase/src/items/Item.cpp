@@ -252,7 +252,15 @@ Item* Item::focusedChild() const
 
 void Item::removeFromScene()
 {
-	if ( scene() ) scene()->removeItem(this);
+	if ( scene() )
+	{
+		// Remove cursor if it is in the hierarchy
+		auto mc = scene()->mainCursor();
+		if (mc && isAncestorOf(mc->owner()))
+			scene()->setMainCursor(nullptr);
+
+		scene()->removeItem(this);
+	}
 	setParentItem(nullptr);
 }
 

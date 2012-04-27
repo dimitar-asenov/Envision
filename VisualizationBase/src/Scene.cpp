@@ -112,7 +112,8 @@ void Scene::updateItems()
 	QList<QGraphicsItem *> selected = selectedItems();
 
 	// Only display a selection when there are multiple selected items or no cursor
-	bool draw_selections = selected.size() !=1 || cursors_.isEmpty() || cursors_.first()->visualization() == nullptr;
+	bool draw_selections = selected.size() !=1 || cursors_.isEmpty() || cursors_.first() == nullptr
+			|| cursors_.first()->visualization() == nullptr;
 
 	if (!draw_selections)
 	{
@@ -225,7 +226,7 @@ void Scene::setMainCursor(Cursor* cursor)
 		cursors_.removeFirst();
 	}
 
-	cursors_.prepend(cursor);
+	if (cursor) cursors_.prepend(cursor);
 }
 
 }
