@@ -40,6 +40,7 @@
 #include "handlers/HCommandPrompt.h"
 #include "handlers/HSceneHandlerItem.h"
 #include "handlers/HPositionLayout.h"
+#include "handlers/HRootItem.h"
 
 #include "vis/CommandPrompt.h"
 
@@ -54,6 +55,7 @@
 #include "VisualizationBase/src/items/VCharacter.h"
 #include "VisualizationBase/src/items/VBoolean.h"
 #include "VisualizationBase/src/items/VReference.h"
+#include "VisualizationBase/src/items/RootItem.h"
 #include "VisualizationBase/src/icons/SVGIcon.h"
 #include "VisualizationBase/src/layouts/SequentialLayout.h"
 #include "VisualizationBase/src/layouts/PanelLayout.h"
@@ -85,6 +87,7 @@ bool InteractionBase::initialize(Envision::EnvisionManager&)
 	Visualization::VCharacter::setInteractionHandler(HText::instance());
 	Visualization::VBoolean::setInteractionHandler(HText::instance());
 	Visualization::VReference::setInteractionHandler(HText::instance());
+	Visualization::RootItem::setInteractionHandler(HRootItem::instance());
 	Visualization::SVGIcon::setInteractionHandler(GenericHandler::instance());
 	Visualization::SequentialLayout::setInteractionHandler(GenericHandler::instance());
 	Visualization::PanelLayout::setInteractionHandler(GenericHandler::instance());

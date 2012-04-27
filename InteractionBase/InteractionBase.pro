@@ -1,14 +1,13 @@
 TARGET = interactionbase
 include(../Core/common_plugin.pri)
-
 DEFINES += INTERACTIONBASE_LIBRARY
 win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase \
     -lfilepersistence \
     -lvisualizationbase
-
-HEADERS += src/InteractionBaseException.h \
+HEADERS += src/handlers/HRootItem.h \
+    src/InteractionBaseException.h \
     src/commands/CSceneHandlerItemExit.h \
     src/commands/Command.h \
     src/commands/CommandError.h \
@@ -54,7 +53,8 @@ HEADERS += src/InteractionBaseException.h \
     src/vis/TextAndDescription.h \
     src/vis/TextAndDescriptionStyle.h \
     src/interactionbase.h
-SOURCES += src/handlers/SetCursorEvent.cpp \
+SOURCES += src/handlers/HRootItem.cpp \
+    src/handlers/SetCursorEvent.cpp \
     src/expression_editor/ExpressionVisitor.cpp \
     src/expression_editor/ExpressionEditor.cpp \
     src/expression_editor/ExpressionTreeUtils.cpp \
