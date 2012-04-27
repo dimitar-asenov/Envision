@@ -38,7 +38,7 @@
 #include "VBlockCFStyle.h"
 #include "VListCF.h"
 
-#include "OOVisualization/src/statements/VBlock.h"
+#include "OOModel/src/statements/Block.h"
 
 namespace ControlFlowVisualization {
 
@@ -59,7 +59,6 @@ class CONTROLFLOWVISUALIZATION_API VBlockCF : public Visualization::ItemWithNode
 
 	private:
 		VListCF* statements;
-		OOVisualization::VBlock* vis_;
 };
 
 }

@@ -59,21 +59,13 @@ void VBreakStatementCF::determineChildren()
 	synchronizeItem<VBreakStatement>(vis_, node(), nullptr);
 }
 
-void VBreakStatementCF::updateGeometry(int availableWidth, int availableHeight)
+void VBreakStatementCF::updateGeometry(int, int)
 {
 	clearConnectors();
 	breaks_.clear();
 
-	if (! showAsControlFlow() )
-	{
-		Item::updateGeometry(vis_, availableWidth, availableHeight);
-		return;
-	}
-	else
-	{
-		vis_->setPos(style()->pinLength(), style()->pinLength());
-		setSize(vis_->width() + 2*style()->pinLength(), vis_->height() + 2*style()->pinLength());
-	}
+	vis_->setPos(style()->pinLength(), style()->pinLength());
+	setSize(vis_->width() + 2*style()->pinLength(), vis_->height() + 2*style()->pinLength());
 
 	if (preferredBreakExit_ == ControlFlowItem::EXIT_LEFT)
 	{
