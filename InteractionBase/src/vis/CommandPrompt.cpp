@@ -195,7 +195,7 @@ void CommandPrompt::setResult(CommandResult* result)
 		// Add the visualization to the container layout
 		suggestionContainer->append(result->suggestions()[i]->visualization());
 	}
-	setUpdateNeeded();
+	setUpdateNeeded(Visualization::Item::StandardUpdate);
 }
 
 void CommandPrompt::removeResult()
@@ -211,7 +211,7 @@ void CommandPrompt::removeResult()
 			errorContainer->removeAll(result_->errors().at(i)->visualization(), false);
 	}
 	SAFE_DELETE(result_);
-	setUpdateNeeded();
+	setUpdateNeeded(Visualization::Item::StandardUpdate);
 }
 
 void CommandPrompt::addSuggestion(CommandSuggestion* suggestion)
@@ -229,7 +229,7 @@ void CommandPrompt::addSuggestion(CommandSuggestion* suggestion)
 	// Add the visualization to the container layout
 	suggestionContainer->append(suggestion->visualization());
 
-	setUpdateNeeded();
+	setUpdateNeeded(Visualization::Item::StandardUpdate);
 }
 
 void CommandPrompt::addSuggestions(const QList<CommandSuggestion*>& suggestions)
@@ -249,7 +249,7 @@ void CommandPrompt::addSuggestions(const QList<CommandSuggestion*>& suggestions)
 		// Add the visualization to the container layout
 		suggestionContainer->append(suggestions_.last()->visualization());
 	}
-	setUpdateNeeded();
+	setUpdateNeeded(Visualization::Item::StandardUpdate);
 }
 
 void CommandPrompt::removeSuggestions()
@@ -260,7 +260,7 @@ void CommandPrompt::removeSuggestions()
 		SAFE_DELETE(suggestions_[i]);
 	}
 	suggestions_.clear();
-	setUpdateNeeded();
+	setUpdateNeeded(Visualization::Item::StandardUpdate);
 }
 
 void CommandPrompt::acquireCursor()

@@ -62,21 +62,21 @@ void SequentialLayout::append(Item* item)
 {
 	item->setParentItem(this);
 	items.append(item);
-	setUpdateNeeded();
+	setUpdateNeeded(StandardUpdate);
 }
 
 void SequentialLayout::prepend(Item* item)
 {
 	item->setParentItem(this);
 	items.prepend(item);
-	setUpdateNeeded();
+	setUpdateNeeded(StandardUpdate);
 }
 
 void SequentialLayout::insert(Item* item, int position)
 {
 	item->setParentItem(this);
 	items.insert(position, item);
-	setUpdateNeeded();
+	setUpdateNeeded(StandardUpdate);
 }
 
 void SequentialLayout::swap(int i, int j)
@@ -84,7 +84,7 @@ void SequentialLayout::swap(int i, int j)
 	Item* t = items[i];
 	items[i] = items[j];
 	items[j] = t;
-	setUpdateNeeded();
+	setUpdateNeeded(StandardUpdate);
 }
 
 void SequentialLayout::remove(int index, bool deleteItem_)
@@ -92,7 +92,7 @@ void SequentialLayout::remove(int index, bool deleteItem_)
 	if (deleteItem_) SAFE_DELETE_ITEM( items[index]);
 	else items[index]->setParentItem(nullptr);
 	items.remove(index);
-	setUpdateNeeded();
+	setUpdateNeeded(StandardUpdate);
 }
 
 void SequentialLayout::removeAll(Item* item, bool deleteItem)
@@ -101,7 +101,7 @@ void SequentialLayout::removeAll(Item* item, bool deleteItem)
 		if (items.at(i) == item) items.remove(i);
 	if (deleteItem) SAFE_DELETE_ITEM(item);
 	else if (item) item->setParentItem(nullptr);
-	setUpdateNeeded();
+	setUpdateNeeded(StandardUpdate);
 }
 
 void SequentialLayout::clear(bool deleteItems)
@@ -112,7 +112,7 @@ void SequentialLayout::clear(bool deleteItems)
 		else if (items[i]) items[i]->setParentItem(nullptr);
 	}
 	items.clear();
-	setUpdateNeeded();
+	setUpdateNeeded(StandardUpdate);
 }
 
 void SequentialLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes, ModelRenderer* renderer)

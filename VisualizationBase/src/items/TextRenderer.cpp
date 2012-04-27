@@ -51,7 +51,7 @@ TextRenderer::TextRenderer(Item* parent, const StyleType *style, const QString& 
 bool TextRenderer::setText(const QString& newText)
 {
 	text_ = newText;
-	this->setUpdateNeeded();
+	this->setUpdateNeeded(StandardUpdate);
 	return true;
 }
 

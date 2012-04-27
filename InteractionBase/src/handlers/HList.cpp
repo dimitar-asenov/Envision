@@ -73,7 +73,7 @@ void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			l->model()->beginModification(l,"paste");
 			if (l) l->paste(clipboard, selIndex+1);
 			l->model()->endModification();
-			target->setUpdateNeeded();
+			target->setUpdateNeeded(Visualization::Item::StandardUpdate);
 		}
 	}
 	else if (event->modifiers() == Qt::NoModifier
@@ -90,7 +90,7 @@ void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			list->node()->remove(index, false);
 			list->node()->model()->endModification();
 
-			list->setUpdateNeeded();
+			list->setUpdateNeeded(Visualization::Item::StandardUpdate);
 
 			--index; // Index of the previous node. Might be -1
 

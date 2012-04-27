@@ -82,9 +82,18 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		QSizeF size() const;
 		virtual bool sizeDependsOnParent() const;
 
-		void setUpdateNeeded();
+		enum UpdateType {
+			NoUpdate, /**< The item should not be updated. */
+			StandardUpdate, /**< Update the geometry of the item and properties depending on child items. This update
+									should be used when a child item has changed and the parent just needs to account for this
+									change.*/
+			FullUpdate /**< The item should completely update itself and recreate all child items. This should be used when
+								the item has been directly edited, or when it's style, purpose or similar defining properties
+								have changed. */
+		};
+		void setUpdateNeeded(UpdateType updateType);
 
-		virtual bool needsUpdate();
+		virtual UpdateType needsUpdate();
 		virtual void updateSubtree();
 		virtual void changeGeometry(int availableWidth = 0, int availableHeight = 0);
 
@@ -255,7 +264,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		QRectF boundingRect_;
 		const ItemStyle* style_;
 		Shape* shape_;
-		bool needsUpdate_;
+		UpdateType needsUpdate_;
 		int purpose_;
 
 		void updateChildren();
@@ -310,7 +319,7 @@ template <class T> void Item::synchronizeItem(T*& item, bool present, const type
 	if (item && !present )
 	{
 		SAFE_DELETE_ITEM(item);
-		setUpdateNeeded();
+		setUpdateNeeded(StandardUpdate);
 	}
 
 	if (!item && present)
@@ -318,7 +327,7 @@ template <class T> void Item::synchronizeItem(T*& item, bool present, const type
 		if (style) item = new T(this, style);
 		else item = new T(this);
 
-		setUpdateNeeded();
+		setUpdateNeeded(StandardUpdate);
 	}
 }
 
@@ -327,7 +336,7 @@ template <class T> void Item::synchronizeItem(T*& item, typename T::NodeType* no
 	if (item && item->node() != node )
 	{
 		SAFE_DELETE_ITEM(item);
-		setUpdateNeeded();
+		setUpdateNeeded(StandardUpdate);
 	}
 
 	if (!item && node)
@@ -335,7 +344,7 @@ template <class T> void Item::synchronizeItem(T*& item, typename T::NodeType* no
 		if (style) item = new T(this, node, style);
 		else item = new T(this, node);
 
-		setUpdateNeeded();
+		setUpdateNeeded(StandardUpdate);
 	}
 }
 

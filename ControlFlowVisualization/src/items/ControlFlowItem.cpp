@@ -123,7 +123,7 @@ void ControlFlowItem::addConnector(QList< QPoint >& points, bool arrowEnding)
 {
 	connectors_.append(points);
 	arrowEndings_.append(arrowEnding);
-	setUpdateNeeded();
+	setUpdateNeeded(StandardUpdate);
 }
 
 void ControlFlowItem::addConnector(int xBegin, int yBegin, int xEnd, int yEnd, bool arrowEnding)
@@ -153,7 +153,7 @@ void ControlFlowItem::clearConnectors()
 {
 	connectors_.clear();
 	arrowEndings_.clear();
-	setUpdateNeeded();
+	setUpdateNeeded(StandardUpdate);
 }
 
 void ControlFlowItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)

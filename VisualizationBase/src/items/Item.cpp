@@ -44,7 +44,7 @@
 namespace Visualization {
 
 Item::Item(Item* parent, const StyleType* style) :
-	QGraphicsItem(parent), style_(nullptr), shape_(nullptr), needsUpdate_(true), purpose_(-1)
+	QGraphicsItem(parent), style_(nullptr), shape_(nullptr), needsUpdate_(FullUpdate), purpose_(-1)
 {
 	if ( !style || style->drawsOnlyShape() ) setFlag(QGraphicsItem::ItemHasNoContents);
 
@@ -64,18 +64,18 @@ QRectF Item::boundingRect() const
 	return boundingRect_;
 }
 
-void Item::setUpdateNeeded()
+void Item::setUpdateNeeded(UpdateType updateType)
 {
-	needsUpdate_ = true;
+	needsUpdate_ = updateType;
 	Item* p = parent();
-	while (p)
+	while (p && p->needsUpdate() == NoUpdate)
 	{
-		p->needsUpdate_ = true;
+		p->needsUpdate_ = StandardUpdate;
 		p = p->parent();
 	}
 }
 
-bool Item::needsUpdate()
+Item::UpdateType Item::needsUpdate()
 {
 	return needsUpdate_;
 }
@@ -83,7 +83,7 @@ bool Item::needsUpdate()
 void Item::setPurpose(int purpose)
 {
 	purpose_ = purpose;
-	setUpdateNeeded();
+	setUpdateNeeded(FullUpdate);
 }
 
 void Item::setStyle(const ItemStyle* style)
@@ -92,7 +92,7 @@ void Item::setStyle(const ItemStyle* style)
 	SAFE_DELETE(shape_);
 	style_ = style;
 	useShape();
-	setUpdateNeeded();
+	setUpdateNeeded(FullUpdate);
 }
 
 void Item::useShape()
@@ -108,7 +108,7 @@ void Item::useShape()
 		{
 			if (!style_ || style_->drawsOnlyShape() ) setFlag(QGraphicsItem::ItemHasNoContents);
 		}
-		setUpdateNeeded();
+		setUpdateNeeded(StandardUpdate);
 	}
 }
 
@@ -116,7 +116,7 @@ void Item::removeShape()
 {
 	SAFE_DELETE(shape_);
 	if (!style_ || style_->drawsOnlyShape()) setFlag(QGraphicsItem::ItemHasNoContents);
-	setUpdateNeeded();
+	setUpdateNeeded(StandardUpdate);
 }
 
 bool Item::sizeDependsOnParent() const
@@ -130,12 +130,13 @@ void Item::updateSubtree()
 	// It is safe to assume that an item is updated before its parent item is updated. When an item's size depends on the
 	// parent's size, we must first update the item without providing any size constraints, so that the item can report a
 	// minimum size during the parent's update procedure.
-	if ( needsUpdate_ || needsUpdate() || sizeDependsOnParent() || (hasNode() && revision() != node()->revision()))
+	if ( (needsUpdate_ != NoUpdate) || needsUpdate() || sizeDependsOnParent()
+			|| (hasNode() && revision() != node()->revision()))
 	{
 		determineChildren();
 		updateChildren();
 		changeGeometry();
-		needsUpdate_ = false;
+		needsUpdate_ = NoUpdate;
 		if (hasNode()) setRevision( node()->revision() );
 	}
 }
@@ -260,13 +261,13 @@ void Item::synchronizeItem(Item*& item, Model::Node* node)
 	if (item && item->node() != node )
 	{
 		SAFE_DELETE_ITEM(item);
-		setUpdateNeeded();
+		setUpdateNeeded(StandardUpdate);
 	}
 
 	if (!item && node)
 	{
 		item = renderer()->render(this, node);
-		setUpdateNeeded();
+		setUpdateNeeded(StandardUpdate);
 	}
 }
 

@@ -77,7 +77,7 @@ class CONTROLFLOWVISUALIZATION_API VControlFlowMethodSwitch
 
 inline bool VControlFlowMethodSwitch::isShownAsControlFlow() const { return showAsControlFlow_; }
 inline void VControlFlowMethodSwitch::setShowAsControlFlow(bool showAsControlFlow)
-	{ showAsControlFlow_ = showAsControlFlow; setUpdateNeeded(); }
+	{ showAsControlFlow_ = showAsControlFlow; setUpdateNeeded(FullUpdate); }
 
 } /* namespace ControlFlowVisualization */
 #endif /* ControlFlowVisualization_VCONTROLFLOWMETHODSWITCH_H_ */

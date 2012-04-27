@@ -73,7 +73,7 @@ void HStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			lst->node()->insert(index, es);
 			lst->node()->model()->endModification();
 
-			lst->setUpdateNeeded();
+			lst->setUpdateNeeded(Visualization::Item::StandardUpdate);
 			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(lst, empty,
 					Interaction::SetCursorEvent::CursorOnLeft));
 	}

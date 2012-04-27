@@ -165,7 +165,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 				target->node()->model()->beginModification(target->node(), "paste");
 				target->node()->load(clipboard);
 				target->node()->model()->endModification();
-				target->setUpdateNeeded();
+				target->setUpdateNeeded(Visualization::Item::StandardUpdate);
 			}
 			else InteractionHandler::keyPressEvent(target, event);
 		}
@@ -179,7 +179,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 			m->beginModification(nullptr, "undo");
 			m->undo();
 			m->endModification();
-			target->setUpdateNeeded();
+			target->setUpdateNeeded(Visualization::Item::StandardUpdate);
 		}
 		else InteractionHandler::keyPressEvent(target, event);
 	}
@@ -191,7 +191,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 			m->beginModification(nullptr, "redo");
 			m->redo();
 			m->endModification();
-			target->setUpdateNeeded();
+			target->setUpdateNeeded(Visualization::Item::StandardUpdate);
 		}
 		else InteractionHandler::keyPressEvent(target, event);
 	}

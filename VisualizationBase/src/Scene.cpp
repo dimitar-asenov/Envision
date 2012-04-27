@@ -159,7 +159,7 @@ void Scene::nodesUpdated(QList<Node*> nodes)
 	for (QGraphicsItem* graphics_item :  items())
 	{
 		Item* item = static_cast<Item*> ( graphics_item );
-		if (item->hasNode() && nodes.contains(item->node())) item->setUpdateNeeded();
+		if (item->hasNode() && nodes.contains(item->node())) item->setUpdateNeeded(Item::StandardUpdate);
 	}
 
 	scheduleUpdate();

@@ -155,7 +155,7 @@ void HText::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent
 		}
 		else
 		{
-			target->setUpdateNeeded();
+			target->setUpdateNeeded(Visualization::Item::StandardUpdate);
 			GenericHandler::mouseMoveEvent(target, event);
 		}
 
@@ -166,7 +166,7 @@ void HText::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent
 
 void HText::focusOutEvent(Visualization::Item *target, QFocusEvent *)
 {
-	target->setUpdateNeeded();
+	target->setUpdateNeeded(Visualization::Item::StandardUpdate);
 }
 
 void HText::focusInEvent(Visualization::Item *target, QFocusEvent *event)

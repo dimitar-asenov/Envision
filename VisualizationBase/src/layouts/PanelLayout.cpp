@@ -55,7 +55,7 @@ void PanelLayout::setItem(Item* item, Item*& position, bool deleteOldItem)
 
 	if ( item ) item->setParentItem(this);
 	position = item;
-	setUpdateNeeded();
+	setUpdateNeeded(StandardUpdate);
 }
 
 bool PanelLayout::sizeDependsOnParent() const

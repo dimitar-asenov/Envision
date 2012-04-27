@@ -74,7 +74,7 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 
 	// We need to trigger an update of all the visualizations leading up to the target, even though the target
 	// visualization will probably be deleted and replaced with a new one.
-	target->setUpdateNeeded();
+	target->setUpdateNeeded(Visualization::Item::StandardUpdate);
 
 	// Find the top most parent that is adaptable to StringProvider
 	Visualization::Item* topMostItem = target;

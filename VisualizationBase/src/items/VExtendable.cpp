@@ -174,7 +174,7 @@ void VExtendable::setExpanded(bool expanded)
 	if ( expanded != expanded_ )
 	{
 		expanded_ = expanded;
-		setUpdateNeeded();
+		setUpdateNeeded(FullUpdate);
 	}
 }
 

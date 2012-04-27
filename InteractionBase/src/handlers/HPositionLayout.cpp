@@ -104,7 +104,7 @@ void HPositionLayout::mouseMoveEvent(Visualization::Item *target, QGraphicsScene
 				currentItemPosition->setX( newX );
 				currentItemPosition->setY( newY );
 				currentItem->node()->model()->endModification();
-				currentItem->setUpdateNeeded();
+				currentItem->setUpdateNeeded(Visualization::Item::StandardUpdate);
 				target->scene()->scheduleUpdate();
 			}
 		}

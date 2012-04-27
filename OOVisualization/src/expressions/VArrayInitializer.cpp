@@ -120,7 +120,7 @@ void VArrayInitializer::showInMatrixForm(bool matrixForm)
 	if ( matrixForm != matrixForm_ )
 	{
 		matrixForm_ = matrixForm;
-		setUpdateNeeded();
+		setUpdateNeeded(FullUpdate);
 	}
 }
 

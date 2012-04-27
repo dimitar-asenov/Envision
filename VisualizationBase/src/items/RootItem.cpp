@@ -60,7 +60,7 @@ void RootItem::setItem(Item* item)
 {
 	item_ = item;
 	if (item_) item_->setParentItem(this);
-	setUpdateNeeded();
+	setUpdateNeeded(StandardUpdate);
 }
 
 void RootItem::updateGeometry(int availableWidth, int availableHeight)

@@ -78,7 +78,7 @@ void HMethod::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 				m->node()->items()->append(es);
 				m->node()->model()->endModification();
 
-				m->content()->setUpdateNeeded();
+				m->content()->setUpdateNeeded(Visualization::Item::StandardUpdate);
 				target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty,
 						Interaction::SetCursorEvent::CursorOnLeft));
 			}
@@ -124,7 +124,7 @@ void HMethod::createNewArgument(OOVisualization::VMethod* method, int position)
 	method->node()->arguments()->insert(position, arg);
 	method->node()->model()->endModification();
 
-	method->arguments()->setUpdateNeeded();
+	method->arguments()->setUpdateNeeded(Visualization::Item::StandardUpdate);
 	method->scene()->addPostEventAction( new Interaction::SetCursorEvent(method, arg->nameNode(),
 			Interaction::SetCursorEvent::CursorOnLeft));
 }

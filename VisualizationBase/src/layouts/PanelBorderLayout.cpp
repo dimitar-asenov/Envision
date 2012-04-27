@@ -56,7 +56,7 @@ void PanelBorderLayout::setPanel(bool enable, PanelLayout*& panel, const PanelLa
 {
 	if ( enable && !panel ) panel = new PanelLayout(this, &style);
 	if ( !enable && panel ) SAFE_DELETE_ITEM(panel);
-	setUpdateNeeded();
+	setUpdateNeeded(StandardUpdate);
 }
 
 void PanelBorderLayout::setContent(Item* content, bool deleteOldContent)
@@ -68,7 +68,7 @@ void PanelBorderLayout::setContent(Item* content, bool deleteOldContent)
 
 	if ( content ) content->setParentItem(this);
 	content_ = content;
-	setUpdateNeeded();
+	setUpdateNeeded(StandardUpdate);
 }
 
 bool PanelBorderLayout::isEmpty() const
