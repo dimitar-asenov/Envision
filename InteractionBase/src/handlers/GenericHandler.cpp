@@ -212,7 +212,6 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 
 			}
 
-			qDebug() << "here " << purpose;
 			if (purpose >= 0) p->setChildNodePurpose(n->node(), purpose);
 			else p->clearChildNodePurpose(n->node());
 		}
