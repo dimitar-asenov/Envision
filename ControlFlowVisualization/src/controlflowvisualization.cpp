@@ -35,7 +35,6 @@
 #include "SelfTest/src/SelfTestSuite.h"
 
 #include "allCFVisualizations.h"
-#include "handlers/HControlFlowMethodSwitch.h"
 
 #include "OOModel/src/allOOModelNodes.h"
 
@@ -51,24 +50,40 @@ using namespace Visualization;
 
 namespace ControlFlowVisualization {
 
+int ControlFlowVisualization::visualizationPurpose()
+{
+	static int purpose = Scene::defaultRenderer()->registerVisualizationPurpose("control_flow");
+	return purpose;
+}
+
 bool ControlFlowVisualization::initialize(Envision::EnvisionManager&)
 {
+	// Register controlflow purpose
+	visualizationPurpose();
+
 	// Register visualizations
-	Scene::defaultRenderer()->registerVisualization(Method::typeIdStatic(), createVisualization<VControlFlowMethodSwitch, Method>);
-	Scene::defaultRenderer()->registerVisualization(Block::typeIdStatic(), createVisualization<VBlockCF, Block>);
-	Scene::defaultRenderer()->registerVisualization(ReturnStatement::typeIdStatic(), createVisualization<VReturnStatementCF, ReturnStatement>);
-	Scene::defaultRenderer()->registerVisualization(IfStatement::typeIdStatic(), createVisualization<VIfStatementCF, IfStatement>);
-	Scene::defaultRenderer()->registerVisualization(LoopStatement::typeIdStatic(), createVisualization<VLoopStatementCF, LoopStatement>);
-//	Scene::defaultRenderer()->registerVisualization(ForEachStatement::typeIdStatic(), createVisualization<VForEachStatementCF, ForEachStatement>);
-	Scene::defaultRenderer()->registerVisualization(BreakStatement::typeIdStatic(), createVisualization<VBreakStatementCF, BreakStatement>);
-	Scene::defaultRenderer()->registerVisualization(ContinueStatement::typeIdStatic(), createVisualization<VContinueStatementCF, ContinueStatement>);
+	Scene::defaultRenderer()->registerVisualization(Method::typeIdStatic(), visualizationPurpose(),
+			createVisualization<VMethodCF, Method>);
+	Scene::defaultRenderer()->registerVisualization(Block::typeIdStatic(), visualizationPurpose(),
+			createVisualization<VBlockCF, Block>);
+	Scene::defaultRenderer()->registerVisualization(ReturnStatement::typeIdStatic(), visualizationPurpose(),
+			createVisualization<VReturnStatementCF, ReturnStatement>);
+	Scene::defaultRenderer()->registerVisualization(IfStatement::typeIdStatic(), visualizationPurpose(),
+			createVisualization<VIfStatementCF, IfStatement>);
+	Scene::defaultRenderer()->registerVisualization(LoopStatement::typeIdStatic(), visualizationPurpose(),
+			createVisualization<VLoopStatementCF, LoopStatement>);
+//	Scene::defaultRenderer()->registerVisualization(ForEachStatement::typeIdStatic(), visualizationPurpose(),
+//			createVisualization<VForEachStatementCF, ForEachStatement>);
+	Scene::defaultRenderer()->registerVisualization(BreakStatement::typeIdStatic(), visualizationPurpose(),
+			createVisualization<VBreakStatementCF, BreakStatement>);
+	Scene::defaultRenderer()->registerVisualization(ContinueStatement::typeIdStatic(), visualizationPurpose(),
+			createVisualization<VContinueStatementCF, ContinueStatement>);
 
 	// Register handlers
 	// TODO: replace this with custom handlers, possibly from OOInteraction Plugin
 	// TODO: when you do that fix dependencies in the .plugin meta file
 	VListCF::setInteractionHandler(Interaction::GenericHandler::instance());
 	VMethodCF::setInteractionHandler(Interaction::GenericHandler::instance());
-	VControlFlowMethodSwitch::setInteractionHandler(HControlFlowMethodSwitch::instance());
 	VIfStatementCF::setInteractionHandler(Interaction::GenericHandler::instance());
 	VLoopStatementCF::setInteractionHandler(Interaction::GenericHandler::instance());
 //	VForEachStatementCF::setInteractionHandler(Interaction::GenericHandler::instance());

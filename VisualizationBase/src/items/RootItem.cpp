@@ -71,6 +71,8 @@ void RootItem::updateGeometry(int availableWidth, int availableHeight)
 
 void RootItem::determineChildren()
 {
+	if (node() && needsUpdate() == FullUpdate) SAFE_DELETE_ITEM(item_);
+
 	if (item_ && node() && item_->node() != node() ) SAFE_DELETE_ITEM(item_);
 
 	if (!item_ && node()) item_ = renderer()->render(this, node());

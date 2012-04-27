@@ -61,7 +61,6 @@ void HRootItem::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		auto ri = static_cast<Visualization::RootItem*> (target);
 
 		ri->setPurpose( (ri->purpose() + 1) % target->scene()->renderer()->numRegisteredPurposes() );
-		qDebug() << "changed root purpose to " << target->scene()->renderer()->purposeName( ri->purpose() );
 
 		target->scene()->addPostEventAction(
 			new SetCursorEvent(target, ri->node(), Interaction::SetCursorEvent::CursorOnLeft));

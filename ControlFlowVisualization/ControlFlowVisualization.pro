@@ -1,6 +1,5 @@
 TARGET = controlflowvisualization
 include(../Core/common_plugin.pri)
-
 DEFINES += CONTROLFLOWVISUALIZATION_LIBRARY
 win32:LIBS += -llogger \
     -lselftest \
@@ -9,18 +8,15 @@ win32:LIBS += -llogger \
     -lvisualizationbase \
     -linteractionbase \
     -loovisualization
-
 HEADERS += src/ControlFlowVisualizationException.h \
     src/allCFVisualizations.h \
     src/controlflowvisualization_api.h \
-    src/handlers/HControlFlowMethodSwitch.h \
     src/items/ControlFlowItem.h \
     src/items/ControlFlowItemStyle.h \
     src/items/VBlockCF.h \
     src/items/VBlockCFStyle.h \
     src/items/VBreakStatementCF.h \
     src/items/VContinueStatementCF.h \
-    src/items/VControlFlowMethodSwitch.h \
     src/items/VIfStatementCF.h \
     src/items/VIfStatementCFStyle.h \
     src/items/VListCF.h \
@@ -32,9 +28,7 @@ HEADERS += src/ControlFlowVisualizationException.h \
     src/items/VReturnStatementCF.h \
     src/precompiled.h \
     src/controlflowvisualization.h
-SOURCES += src/handlers/HControlFlowMethodSwitch.cpp \
-    src/items/VControlFlowMethodSwitch.cpp \
-    src/items/VBlockCF.cpp \
+SOURCES += src/items/VBlockCF.cpp \
     src/items/VBlockCFStyle.cpp \
     src/items/VReturnStatementCF.cpp \
     src/items/VIfStatementCF.cpp \

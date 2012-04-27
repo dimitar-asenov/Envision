@@ -168,7 +168,7 @@ Method* addComplicated(Model::Model* model, Class* parent)
 	ReturnStatement* metReturn = new ReturnStatement();
 	metReturn->values()->append(new IntegerLiteral(42));
 	met->items()->append(metReturn);
-	met->extension<Position>()->setX(400);
+	met->extension<Position>()->setX(500);
 
 	model->endModification();
 	return met;
