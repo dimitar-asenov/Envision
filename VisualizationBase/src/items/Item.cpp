@@ -68,9 +68,9 @@ void Item::setUpdateNeeded(UpdateType updateType)
 {
 	needsUpdate_ = updateType;
 	Item* p = parent();
-	while (p && p->needsUpdate() == NoUpdate)
+	while (p)
 	{
-		p->needsUpdate_ = StandardUpdate;
+		if (p->needsUpdate() == NoUpdate) p->needsUpdate_ = StandardUpdate;
 		p = p->parent();
 	}
 }
