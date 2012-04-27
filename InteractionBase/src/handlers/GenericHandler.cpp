@@ -195,6 +195,28 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 		}
 		else InteractionHandler::keyPressEvent(target, event);
 	}
+	else if (event->modifiers() == 0 && event->key() == Qt::Key_F3)
+	{
+		auto n = target;
+		while (n && ! n->node()) n = n->parent();
+
+		auto p = n->parent();
+		if ( p )
+		{
+			int purpose = 0;
+			if (p->definesChildNodePurpose(n->node()))
+			{
+				purpose = n->purpose() + 1;
+				if ( purpose == target->scene()->renderer()->numRegisteredPurposes())
+					purpose = -1; // Undefine
+
+			}
+
+			qDebug() << "here " << purpose;
+			if (purpose >= 0) p->setChildNodePurpose(n->node(), purpose);
+			else p->clearChildNodePurpose(n->node());
+		}
+	}
 	else if (event->modifiers() == 0
 			&& (	event->key() == Qt::Key_Up
 					|| event->key() == Qt::Key_Down
