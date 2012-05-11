@@ -33,7 +33,7 @@
 
 #include "layouts/Layout.h"
 #include "VisualizationException.h"
-#include "ModelRenderer.h"
+#include "../renderer/ModelRenderer.h"
 
 #include "cursor/LayoutCursor.h"
 
@@ -92,22 +92,21 @@ void Layout::synchronizeItem(Item*& layoutItem, Item*& externalItem, Model::Node
 	if (externalItem != layoutItem)
 	{
 		SAFE_DELETE_ITEM(layoutItem);
-		setUpdateNeeded();
+		setUpdateNeeded(StandardUpdate);
 	}
 
 	if (externalItem && externalItem->node() != node )
 	{
 		SAFE_DELETE_ITEM(externalItem);
 		layoutItem = nullptr; // One of the safe deletes above deleted this item
-		setUpdateNeeded();
+		setUpdateNeeded(StandardUpdate);
 	}
 
 	if (!externalItem && node)
 	{
-		externalItem = renderer()->render(nullptr, node);
-		externalItem->setParentItem(this);
+		externalItem = renderer()->render(this, node);
 		layoutItem = externalItem;
-		setUpdateNeeded();
+		setUpdateNeeded(StandardUpdate);
 	}
 }
 

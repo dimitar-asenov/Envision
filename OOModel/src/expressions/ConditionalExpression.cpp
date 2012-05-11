@@ -42,4 +42,9 @@ REGISTER_ATTRIBUTE(ConditionalExpression, condition, Expression, false, false, t
 REGISTER_ATTRIBUTE(ConditionalExpression, trueExpression, Expression, false, false, true)
 REGISTER_ATTRIBUTE(ConditionalExpression, falseExpression, Expression, false, false, true)
 
+Type* ConditionalExpression::type()
+{
+	return trueExpression()->type();
+}
+
 } /* namespace OOModel */

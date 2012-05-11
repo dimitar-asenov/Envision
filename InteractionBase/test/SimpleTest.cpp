@@ -38,6 +38,7 @@
 #include "VisualizationBase/src/views/MainView.h"
 #include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/items/VExtendable.h"
+#include "VisualizationBase/src/items/RootItem.h"
 
 #include "ModelBase/src/test_nodes/BinaryNode.h"
 #include "ModelBase/src/nodes/Text.h"
@@ -76,11 +77,12 @@ TEST(InteractionBase, TextSelect)
 	third->set("Some independent text");
 	model->endModification();
 
-	VList* l = dynamic_cast<VList*> (scene->renderer()->render(nullptr, list));
-	scene->addTopLevelItem(l);
+	auto top = new RootItem(list);
+	scene->addTopLevelItem( top );
 	scene->scheduleUpdate();
 	QApplication::processEvents();
 
+	VList* l = dynamic_cast<VList*> (top->item());
 	l->at<VExtendable>(0)->setExpanded();
 	scene->scheduleUpdate();
 	scene->listenToModel(model);

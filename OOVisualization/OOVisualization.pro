@@ -1,38 +1,15 @@
-ENVISION_ROOT_DIR = $$PWD/..
-CONFIG(release, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/ReleaseBuild
-CONFIG(debug, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/DebugBuild
-PLUGINS_DIR = $${BUILD_DIR}/plugins
-CONFIG(debug, debug|release):DEFINES += DEBUG
-QMAKE_CXXFLAGS += -Werror \
-    -std=c++0x
-INCLUDEPATH += ./src \
-    ./test \
-    $${ENVISION_ROOT_DIR}
 TARGET = oovisualization
+include(../Core/common_plugin.pri)
+
 DEFINES += OOVISUALIZATION_LIBRARY
-win32:LIBS += -L$${PLUGINS_DIR} \
-    -llogger \
+win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase \
     -loomodel \
     -lvisualizationbase
-QT = core \
-    gui
-TEMPLATE = lib
-CONFIG += plugin \
-    warn_on \
-    thread \
-    precompile_header
-target.path = $$PLUGINS_DIR
-pluginmeta.path = $$PLUGINS_DIR
-pluginmeta.files = $${TARGET}.plugin
-styles.path = $${BUILD_DIR}/styles
-styles.files = styles/*
-INSTALLS += target \
-    pluginmeta \
-    styles
-PRECOMPILED_HEADER = src/precompiled.h
-HEADERS += src/expressions/VConditionalExpression.h \
+
+HEADERS += src/types/VClassType.h \
+    src/expressions/VConditionalExpression.h \
     src/OOVisualizationException.h \
     src/allOOVisualizations.h \
     src/elements/VField.h \
@@ -102,10 +79,10 @@ HEADERS += src/expressions/VConditionalExpression.h \
     src/top_level/VProjectStyle.h \
     src/types/VArrayType.h \
     src/types/VArrayTypeStyle.h \
-    src/types/VNamedType.h \
     src/types/VPrimitiveType.h \
     src/oovisualization.h
-SOURCES += src/expressions/VConditionalExpression.cpp \
+SOURCES += src/types/VClassType.cpp \
+    src/expressions/VConditionalExpression.cpp \
     src/expressions/VVariableDeclarationStyle.cpp \
     src/expressions/VVariableDeclaration.cpp \
     src/expressions/VAssignmentExpression.cpp \
@@ -167,7 +144,6 @@ SOURCES += src/expressions/VConditionalExpression.cpp \
     src/literals/VFloatLiteral.cpp \
     src/literals/VIntegerLiteral.cpp \
     src/types/VPrimitiveType.cpp \
-    src/types/VNamedType.cpp \
     src/literals/VStringLiteral.cpp \
     src/expressions/VVariableAccessStyle.cpp \
     src/expressions/VVariableAccess.cpp \

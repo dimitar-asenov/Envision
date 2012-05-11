@@ -71,6 +71,7 @@
 #include <QtCore/QSharedPointer>
 #include <QtCore/QPointF>
 
+#include <functional>
 #include <cmath>
 
 #if defined(VISUALIZATIONBASE_LIBRARY)

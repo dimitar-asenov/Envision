@@ -55,29 +55,19 @@ const QString& Method::symbolName() const
 	return name();
 }
 
-Model::Node* Method::navigateTo(Model::Node* source, QString path)
+QList<Model::Node*> Method::findSymbol(const QString& symbol, Model::Node* source, FindSymbolMode mode)
 {
-	if (isAncestorOf(source))
+	if (mode == SEARCH_UP && isAncestorOf(source))
 	{
-		QString symbol = extractFrontSymbol(path);
-		Model::Node* found = nullptr;
+		QList<Model::Node*> symbols;
 
-		// Is the target symbol name the method's name
-		if (symbol == symbolName()) found = this;
+		symbols << arguments()->findAllSymbolDefinitions(symbol);
+		symbols << results()->findAllSymbolDefinitions(symbol);
+		// Note that a StatementList also implements findSymbol and locally declared variables will be found there.
 
-		if ( !found && source == items() )
-		{
-			if (!found) found = arguments()->findFirstSymbolDefinition(symbol);
-			if (!found) found = results()->findFirstSymbolDefinition(symbol);
-		}
-
-		if (!found) return ExtendableNode::navigateTo(source, path);
-
-		QString rest = extractSecondaryPath(path);
-		if (!rest.isEmpty()) return found->navigateTo(this, rest);
-		else return found;
+		return symbols.isEmpty() ? Node::findSymbol(symbol, source, mode) : symbols;
 	}
-	else return nullptr;
+	else return QList<Model::Node*> ();
 }
 
 }

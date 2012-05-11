@@ -42,4 +42,13 @@ REGISTER_ATTRIBUTE(IfStatement, condition, Expression, false, false, true)
 REGISTER_ATTRIBUTE(IfStatement, thenBranch, StatementItemList, false, false, true)
 REGISTER_ATTRIBUTE(IfStatement, elseBranch, StatementItemList, false, false, true)
 
+QList<Model::Node*> IfStatement::findSymbol(const QString& symbol,Model::Node* source, FindSymbolMode mode)
+{
+	QList<Model::Node*> symbols;
+
+	symbols << condition()->findSymbol(symbol, source, SEARCH_DOWN);
+
+	return symbols.isEmpty() ? Node::findSymbol(symbol, source, mode) : symbols;
+}
+
 }

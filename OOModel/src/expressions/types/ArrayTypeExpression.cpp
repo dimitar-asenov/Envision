@@ -25,45 +25,25 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
- * HControlFlowMethodSwitch.cpp
+ * ArrayTypeExpression.cpp
  *
- *  Created on: Mar 3, 2011
+ *  Created on: Feb 17, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "handlers/HControlFlowMethodSwitch.h"
+#include "ArrayTypeExpression.h"
+#include "../../types/ArrayType.h"
 
-#include "items/VControlFlowMethodSwitch.h"
-#include "InteractionBase/src/handlers/SetCursorEvent.h"
-#include "VisualizationBase/src/Scene.h"
+namespace OOModel {
 
-namespace ControlFlowVisualization {
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(ArrayTypeExpression, TypeExpression)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(ArrayTypeExpression, TypeExpression)
 
-HControlFlowMethodSwitch::HControlFlowMethodSwitch()
+REGISTER_ATTRIBUTE(ArrayTypeExpression, typeExpression, Expression, false, false, true)
+
+Type* ArrayTypeExpression::type()
 {
-}
-
-HControlFlowMethodSwitch* HControlFlowMethodSwitch::instance()
-{
-	static HControlFlowMethodSwitch h;
-	return &h;
-}
-
-void HControlFlowMethodSwitch::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
-{
-	if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_F2)
-	{
-		event->accept();
-		auto met = dynamic_cast<VControlFlowMethodSwitch*> (target);
-		if (met)
-		{
-			met->setShowAsControlFlow(!met->isShownAsControlFlow());
-			target->scene()->addPostEventAction(
-						new Interaction::SetCursorEvent(target, met->node()->nameNode(),
-							Interaction::SetCursorEvent::CursorOnLeft));
-		}
-	}
-	else GenericHandler::keyPressEvent(target, event);
+	return new ArrayType(typeExpression()->type(), false);
 }
 
 }

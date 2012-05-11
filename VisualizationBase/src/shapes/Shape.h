@@ -115,13 +115,11 @@ inline int Shape::xOffset() const { return xOffset_; }
 inline int Shape::yOffset() const { return yOffset_; }
 inline Shape::SizeType Shape::sizeSpecified() const { return sizeToUse; }
 
-inline void Shape::setParentNeedsUpdate() { parent->setUpdateNeeded(); }
-
 inline QSize Shape::innerSize(int outterWidth, int outterHeight) const { return innerSize(QSize(outterWidth, outterHeight)); }
 inline QSize Shape::outterSize(int innerWidth, int innerHeight) const { return outterSize(QSize(innerWidth, innerHeight)); }
 
 template <class Base, class Actual> inline Base* Shape::makeDefaultStyle() { return new Actual(); }
-template <class Base, class Actual> inline Base* Shape::makeDefaultShape(Item* parent) {return new Actual(parent); };
+template <class Base, class Actual> inline Base* Shape::makeDefaultShape(Item* parent) {return new Actual(parent); }
 
 template <class ShapeClass> inline void Shape::registerShape()
 {

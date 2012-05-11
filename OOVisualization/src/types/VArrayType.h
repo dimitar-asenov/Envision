@@ -36,7 +36,7 @@
 
 #include "../oovisualization_api.h"
 
-#include "OOModel/src/types/ArrayType.h"
+#include "OOModel/src/expressions/types/ArrayTypeExpression.h"
 
 #include "VArrayTypeStyle.h"
 #include "VisualizationBase/src/items/ItemWithNode.h"
@@ -48,7 +48,7 @@ namespace Visualization {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VArrayType : public Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::ArrayType>
+class OOVISUALIZATION_API VArrayType : public Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::ArrayTypeExpression>
 {
 	ITEM_COMMON(VArrayType)
 

@@ -34,30 +34,44 @@
 #include "expressions/MethodCallExpression.h"
 #include "top_level/Class.h"
 #include "top_level/Method.h"
+#include "../types/PrimitiveType.h"
+#include "../types/ErrorType.h"
 
 namespace OOModel {
 
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(MethodCallExpression, Expression)
 EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(MethodCallExpression, Expression)
 
-REGISTER_ATTRIBUTE(MethodCallExpression, prefix, Expression, false, true, true)
-REGISTER_ATTRIBUTE(MethodCallExpression, ref, Reference, false, false, true)
+REGISTER_ATTRIBUTE(MethodCallExpression, ref, ReferenceExpression, false, false, true)
 REGISTER_ATTRIBUTE(MethodCallExpression, arguments, TypedListOfExpression, false, false, true)
+
+MethodCallExpression::MethodCallExpression(const QString& name, Expression* prefix)
+: Expression(nullptr, MethodCallExpression::getMetaData())
+{
+	ref()->ref()->setName(name);
+	if (prefix != nullptr) ref()->setPrefix(prefix);
+}
 
 Method* MethodCallExpression::methodDefinition()
 {
-	Method* met = nullptr;
+	return dynamic_cast<Method*> (ref()->target());
+}
 
-	if (prefix())
-	{
-		Class* classNode = prefix()->classDefinition();
+Type* MethodCallExpression::type()
+{
+	auto mdef = methodDefinition();
+	if (!mdef)
+		return new ErrorType("Unresolved reference to a method");
 
-		if (classNode)	met = dynamic_cast<Method*> (classNode->navigateTo(classNode, ref()->path()));
-	}
+	if (mdef->results()->size() == 0)
+		return new PrimitiveType(PrimitiveType::VOID, true);
 	else
-		met = dynamic_cast<Method*> (ref()->get());
-
-	return met;
+	{
+		// TODO: handle multiple return values
+		auto t = mdef->results()->first()->typeExpression()->type();
+		t->setValueType(true);
+		return t;
+	}
 }
 
 }

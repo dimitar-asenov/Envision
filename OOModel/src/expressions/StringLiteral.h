@@ -48,6 +48,7 @@ class OOMODEL_API StringLiteral: public Expression
 
 	public:
 		StringLiteral(const QString& value);
+		virtual Type* type();
 };
 
 }

@@ -48,6 +48,11 @@ int ExtendableNode::typeId()	const
 	return typeId_;
 }
 
+QList<int> ExtendableNode::hierarchyTypeIds() const
+{
+	return QList<int>() << typeId_;
+}
+
 const QString& ExtendableNode::typeNameStatic()
 {
 	static QString typeName_("ExtendableNode");
@@ -106,6 +111,7 @@ ExtendableNode::ExtendableNode(Node *parent, PersistentStore &store, bool, Attri
 				+ ln->name + " in persistent store, but this attribute is not registered");
 
 		subnodes[index.level()][index.index()] = ln->node;
+		ln->node->setParent(this);
 	}
 
 	verifyHasAllMandatoryAttributes();
@@ -167,6 +173,14 @@ ExtendableIndex ExtendableNode::indexOf(Node* node) const
 	return ExtendableIndex();
 }
 
+QList<Node*> ExtendableNode::children()
+{
+	QList<Node*> result;
+	for( auto p : getAllAttributes(false) )
+		if (p.second != nullptr) result.append(p.second);
+
+	return result;
+}
 
 bool ExtendableNode::replaceChild(Node* child, Node* replacement, bool releaseOldChild)
 {

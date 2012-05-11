@@ -38,7 +38,7 @@ namespace OOModel {
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(Expression, Model::ExtendableNode)
 EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(Expression, Model::ExtendableNode)
 
-Class* Expression::classDefinition()
+Type* Expression::type()
 {
 	return nullptr;
 }

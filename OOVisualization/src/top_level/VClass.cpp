@@ -49,30 +49,41 @@ ITEM_COMMON_DEFINITIONS(VClass, "item")
 
 VClass::VClass(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<PanelBorderLayout>, Class>(parent, node, style),
-	header_( new SequentialLayout(nullptr, &style->header()) ),
-	icon_( new Static(nullptr, &style->icon()) ),
-	name_(new VText(nullptr, node->nameNode(), &style->nameDefault()) ),
-	baseClasses_( new VList(nullptr, node->baseClasses(), &style->baseClasses()) ),
-	content_( new PositionLayout(nullptr, &style->content()) ),
-	fieldContainer_(new SequentialLayout(nullptr, &style->fieldContainer()) ),
-	publicFieldArea_(new SequentialLayout(nullptr, &style->publicFieldArea()) ),
-	privateFieldArea_(new SequentialLayout(nullptr, &style->privateFieldArea()) ),
-	protectedFieldArea_(new SequentialLayout(nullptr, &style->protectedFieldArea()) ),
-	defaultFieldArea_(new SequentialLayout(nullptr, &style->defaultFieldArea()) )
+	header_(),
+	icon_(),
+	name_(),
+	baseClasses_(),
+	content_(),
+	fieldContainer_(),
+	publicFieldArea_(),
+	privateFieldArea_(),
+	protectedFieldArea_(),
+	defaultFieldArea_()
 {
 	layout()->setTop(true);
+	header_ = new SequentialLayout(layout()->top(), &style->header());
 	layout()->top()->setFirst(header_);
+	icon_ = new Static(header_, &style->icon());
 	header_->append(icon_);
+	name_ = new VText(header_, node->nameNode(), &style->nameDefault());
 	header_->append(name_);
+	baseClasses_ = new VList(header_, node->baseClasses(), &style->baseClasses());
 	header_->append(baseClasses_);
 
 	layout()->setLeft(true);
+	fieldContainer_ = new SequentialLayout(layout()->left(), &style->fieldContainer());
 	layout()->left()->setFirst(fieldContainer_);
+
+	publicFieldArea_ = new SequentialLayout(fieldContainer_, &style->publicFieldArea());
 	fieldContainer_->append(publicFieldArea_);
+	protectedFieldArea_ = new SequentialLayout(fieldContainer_, &style->protectedFieldArea());
 	fieldContainer_->append(protectedFieldArea_);
+	defaultFieldArea_ = new SequentialLayout(fieldContainer_, &style->defaultFieldArea());
 	fieldContainer_->append(defaultFieldArea_);
+	privateFieldArea_ = new SequentialLayout(fieldContainer_, &style->privateFieldArea());
 	fieldContainer_->append(privateFieldArea_);
 
+	content_ = new PositionLayout(layout(), &style->content());
 	layout()->setContent(content_);
 }
 
@@ -131,10 +142,14 @@ void VClass::determineChildren()
 	QList<Model::Node*> defaultFields;
 	for (int i = 0; i< node()->fields()->size(); ++i)
 	{
-		if (node()->fields()->at(i)->visibility() == Visibility::PUBLIC) publicFields.append(node()->fields()->at(i));
-		else if (node()->fields()->at(i)->visibility() == Visibility::PRIVATE) privateFields.append(node()->fields()->at(i));
-		else if (node()->fields()->at(i)->visibility() == Visibility::PROTECTED) protectedFields.append(node()->fields()->at(i));
-		else if (node()->fields()->at(i)->visibility() == Visibility::DEFAULT) defaultFields.append(node()->fields()->at(i));
+		if (node()->fields()->at(i)->visibility() == Visibility::PUBLIC)
+			publicFields.append(node()->fields()->at(i));
+		else if (node()->fields()->at(i)->visibility() == Visibility::PRIVATE)
+			privateFields.append(node()->fields()->at(i));
+		else if (node()->fields()->at(i)->visibility() == Visibility::PROTECTED)
+			protectedFields.append(node()->fields()->at(i));
+		else if (node()->fields()->at(i)->visibility() == Visibility::DEFAULT)
+			defaultFields.append(node()->fields()->at(i));
 		else throw OOVisualizationException("Unknown visibility value when updating VClass instance.");
 	}
 

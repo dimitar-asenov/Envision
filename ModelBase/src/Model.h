@@ -40,6 +40,7 @@
 
 namespace Model {
 
+class Reference;
 class UndoCommand;
 
 /**
@@ -63,100 +64,6 @@ class MODELBASE_API Model: public QObject
 {
 	Q_OBJECT
 	// The moc compiler is used only to support signals and slots.
-
-	private:
-
-		/** The name of this model. This name will be used to save the model in the persistent store. */
-		QString name_;
-
-		/** The root node for this model */
-		Node* root_;
-
-		/** The command stack that holds the undo history */
-		QUndoStack commands;
-
-		/**
-		 * A ReadWrite lock used for exclusive writer or reader access. Writers always acquire this lock first and then
-		 * proceed to acquire exactly one other lock corresponding to the access unit they want to write to.
-		 *
-		 * A reader that requires exclusive access (other readers can still read, but writers can not) can also acquire
-		 * this lock. Typically however readers do not acquire this lock.
-		 */
-		QReadWriteLock exclusiveAccess;
-
-		/**
-		 * The lock corresponding to the root access unit. This is used by synchronized readers and by writers to control
-		 * access to the root unit.
-		 */
-		NodeReadWriteLock rootLock_;
-
-		/**
-		 * The test message associated with the current modification operation. This text is only used to describe the
-		 * undo operation that is currently performed.
-		 */
-		QString modificationText;
-
-		/**
-		 * The node that is the top-most ancestor of all other nodes that are currently being modification. Only nodes in
-		 * the same access unit and below this node (including the node itself) may be modified.
-		 */
-		Node* currentModificationTarget;
-
-		/**
-		 * The lock of the access unit that is responsible for the current modification target node. Each node has exactly
-		 * one access unit corresponding to it. A writer must acquire this lock before any modification can occur. The
-		 * currently acquired lock is stored here so that each write operation can be checked to assure that no write
-		 * occurs outside of the access unit.
-		 */
-		NodeReadWriteLock* currentModificationLock;
-
-		/**
-		 * A list of all top-level nodes which were modified as part of the last modification operation. This is only used
-		 * to signal to anyone who is interested in monitoring changes.
-		 */
-		QList<Node*> modifiedTargets;
-
-		/**
-		 * Indicates if the last modification operation pushed commands on stack.
-		 *
-		 * A modification operation can do two things:
-		 * 	- Add new commands on the stack
-		 * 	- Call undo/redo
-		 *
-		 * The two can not be mixed in the same operation and this flag is used to control this.
-		 */
-		bool pushedNewCommandsOnTheStack;
-
-		/**
-		 * Indicates if undo() or redo() were called during the last modification operation.
-		 *
-		 * A modification operation can do two things:
-		 * 	- Add new commands on the stack
-		 * 	- Call undo/redo
-		 *
-		 * The two can not be mixed in the same operation and this flag is used to control this.
-		 */
-		bool performedUndoRedo;
-
-		/**
-		 * This flag indicates if a modification is currently in progress. Commands can be pushed on the undo stack and
-		 * executed only if this is true.
-		 */
-		bool modificationInProgress;
-
-		/**
-		 * The persistent store where the model is currently stored.
-		 *
-		 * This is used in calls to Node::loadFully when a partially loaded node needs to load its entire contents.
-		 * It can also be used by other stores when the model needs to be saved to a different location.
-		 */
-		PersistentStore* store_;
-
-		/**
-		 * A list of all Model objects that are currently instantiated. This is used to find the Model corresponding to a
-		 * particular root object.
-		 */
-		static QList<Model*> loadedModels;
 
 	public:
 
@@ -410,6 +317,32 @@ class MODELBASE_API Model: public QObject
 		 */
 		void emitNodePartiallyLoaded(Node* node);
 
+		/**
+		 * \brief Returns a list of all loaded unresolved references in the model.
+		 *
+		 * Unresolved references which are persisted but not loaded are will not be in the returned list.
+		 */
+		const QList<Reference*>& unresolvedReferences() const;
+
+		/**
+		 * \brief Adds the specified reference to the unresolved references list.
+		 */
+		void addUnresolvedReference(Reference* ref);
+
+		/**
+		 * \brief Removes the specified reference to the unresolved references list.
+		 *
+		 * Call this method when a reference has been resolved.
+		 */
+		void removeUnresolvedReference(Reference* ref);
+
+		/**
+		 * \brief Attempt to resolve all unresolved references.
+		 *
+		 * This method must be called within a modification session.
+		 */
+		void tryResolvingReferences();
+
 	signals:
 		/**
 		 * Emitted when a new rootNode was created or loaded
@@ -456,6 +389,104 @@ class MODELBASE_API Model: public QObject
 		 */
 		void nodePartiallyLoaded(Node* node);
 
+	private:
+
+		/** The name of this model. This name will be used to save the model in the persistent store. */
+		QString name_;
+
+		/** The root node for this model */
+		Node* root_;
+
+		/** The command stack that holds the undo history */
+		QUndoStack commands;
+
+		/**
+		 * A ReadWrite lock used for exclusive writer or reader access. Writers always acquire this lock first and then
+		 * proceed to acquire exactly one other lock corresponding to the access unit they want to write to.
+		 *
+		 * A reader that requires exclusive access (other readers can still read, but writers can not) can also acquire
+		 * this lock. Typically however readers do not acquire this lock.
+		 */
+		QReadWriteLock exclusiveAccess;
+
+		/**
+		 * The lock corresponding to the root access unit. This is used by synchronized readers and by writers to control
+		 * access to the root unit.
+		 */
+		NodeReadWriteLock rootLock_;
+
+		/**
+		 * The test message associated with the current modification operation. This text is only used to describe the
+		 * undo operation that is currently performed.
+		 */
+		QString modificationText;
+
+		/**
+		 * The node that is the top-most ancestor of all other nodes that are currently being modification. Only nodes in
+		 * the same access unit and below this node (including the node itself) may be modified.
+		 */
+		Node* currentModificationTarget;
+
+		/**
+		 * The lock of the access unit that is responsible for the current modification target node. Each node has exactly
+		 * one access unit corresponding to it. A writer must acquire this lock before any modification can occur. The
+		 * currently acquired lock is stored here so that each write operation can be checked to assure that no write
+		 * occurs outside of the access unit.
+		 */
+		NodeReadWriteLock* currentModificationLock;
+
+		/**
+		 * A list of all top-level nodes which were modified as part of the last modification operation. This is only used
+		 * to signal to anyone who is interested in monitoring changes.
+		 */
+		QList<Node*> modifiedTargets;
+
+		/**
+		 * Indicates if the last modification operation pushed commands on stack.
+		 *
+		 * A modification operation can do two things:
+		 * 	- Add new commands on the stack
+		 * 	- Call undo/redo
+		 *
+		 * The two can not be mixed in the same operation and this flag is used to control this.
+		 */
+		bool pushedNewCommandsOnTheStack;
+
+		/**
+		 * Indicates if undo() or redo() were called during the last modification operation.
+		 *
+		 * A modification operation can do two things:
+		 * 	- Add new commands on the stack
+		 * 	- Call undo/redo
+		 *
+		 * The two can not be mixed in the same operation and this flag is used to control this.
+		 */
+		bool performedUndoRedo;
+
+		/**
+		 * This flag indicates if a modification is currently in progress. Commands can be pushed on the undo stack and
+		 * executed only if this is true.
+		 */
+		bool modificationInProgress;
+
+		/**
+		 * The persistent store where the model is currently stored.
+		 *
+		 * This is used in calls to Node::loadFully when a partially loaded node needs to load its entire contents.
+		 * It can also be used by other stores when the model needs to be saved to a different location.
+		 */
+		PersistentStore* store_;
+
+		/**
+		 * A list of all Model objects that are currently instantiated. This is used to find the Model corresponding to a
+		 * particular root object.
+		 */
+		static QList<Model*> loadedModels;
+
+		/**
+		 * A list of all unresolved references which are currently loaded nodes.
+		 */
+		QList<Reference*> unresolvedReferences_;
 };
 
 inline NodeReadWriteLock* Model::rootLock() { return &rootLock_; }
@@ -468,6 +499,8 @@ inline PersistentStore* Model::store() { return store_; }
 inline void Model::emitNameModified(Node* node, const QString &oldName) { emit nameModified(node, oldName); }
 inline void Model::emitNodeFullyLoaded(Node* node) { emit nodeFullyLoaded(node); }
 inline void Model::emitNodePartiallyLoaded(Node* node) { emit nodePartiallyLoaded(node); }
+
+inline const QList<Reference*>& Model::unresolvedReferences() const { return unresolvedReferences_; }
 
 }
 

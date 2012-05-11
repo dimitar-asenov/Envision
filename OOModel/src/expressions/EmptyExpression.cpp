@@ -32,10 +32,16 @@
  */
 
 #include "expressions/EmptyExpression.h"
+#include "../types/ErrorType.h"
 
 namespace OOModel {
 
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(EmptyExpression, Expression)
 EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(EmptyExpression, Expression)
+
+Type* EmptyExpression::type()
+{
+	return new ErrorType("Empty expression");
+}
 
 } /* namespace InteractionBase */

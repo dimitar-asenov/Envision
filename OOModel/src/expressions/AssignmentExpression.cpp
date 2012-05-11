@@ -42,4 +42,9 @@ REGISTER_ATTRIBUTE(AssignmentExpression, left, Expression, false, false, true)
 REGISTER_ATTRIBUTE(AssignmentExpression, right, Expression, false, false, true)
 REGISTER_ATTRIBUTE(AssignmentExpression, opr, Integer, false, false, true)
 
+Type* AssignmentExpression::type()
+{
+	return left()->type();
+}
+
 }

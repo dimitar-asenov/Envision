@@ -43,23 +43,6 @@ namespace Model {
 
 class MODELBASE_API ExtendableNode: public Node
 {
-	private:
-		AttributeChain& meta;
-		QVector<QVector<Node*> > subnodes;
-
-		void removeAllNodes();
-		void verifyHasAllMandatoryAttributes();
-
-		static int typeId_;
-		static int nextExtensionId_;
-
-	protected:
-		static ExtendableIndex registerNewAttribute(AttributeChain& metaData, const QString &attributeName,
-				const QString &attributeType, bool canBePartiallyLoaded, bool isOptional, bool isPersistent);
-
-		static ExtendableIndex registerNewAttribute(AttributeChain& metaData, const Attribute& attribute);
-
-		virtual AttributeChain& topLevelMeta();
 	public:
 
 		ExtendableNode(Node *parent, AttributeChain& metaData);
@@ -74,6 +57,7 @@ class MODELBASE_API ExtendableNode: public Node
 		Node* get(const QString &attributeName) const;
 		ExtendableIndex indexOf(Node* node) const;
 
+		virtual QList<Node*> children();
 		virtual bool replaceChild(Node* child, Node* replacement, bool releaseOldChild = true);
 
 		void set(const ExtendableIndex &attributeIndex, Node* node);
@@ -91,12 +75,31 @@ class MODELBASE_API ExtendableNode: public Node
 
 		virtual const QString& typeName() const;
 		virtual int typeId() const;
+		virtual QList<int> hierarchyTypeIds() const;
 		static const QString& typeNameStatic();
 		static int typeIdStatic();
 		static void registerNodeType();
 		static int registerExtensionId();
 
 		template <class T> T* extension();
+
+	protected:
+		static ExtendableIndex registerNewAttribute(AttributeChain& metaData, const QString &attributeName,
+				const QString &attributeType, bool canBePartiallyLoaded, bool isOptional, bool isPersistent);
+
+		static ExtendableIndex registerNewAttribute(AttributeChain& metaData, const Attribute& attribute);
+
+		virtual AttributeChain& topLevelMeta();
+
+	private:
+		AttributeChain& meta;
+		QVector<QVector<Node*> > subnodes;
+
+		void removeAllNodes();
+		void verifyHasAllMandatoryAttributes();
+
+		static int typeId_;
+		static int nextExtensionId_;
 };
 
 inline Node* ExtendableNode::get(const ExtendableIndex &attributeIndex) const { return subnodes[attributeIndex.level()][attributeIndex.index()]; }

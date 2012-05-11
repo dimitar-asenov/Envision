@@ -39,18 +39,18 @@
 
 namespace OOModel
 {
-	class ArrayType;
+	class ArrayTypeExpression;
 }
 
 namespace OOInteraction {
 
 class OOINTERACTION_API ArrayTypeStringComponents : public StringComponents {
 	public:
-	ArrayTypeStringComponents( OOModel::ArrayType* e );
+	ArrayTypeStringComponents( OOModel::ArrayTypeExpression* e );
 		virtual QStringList components();
 
 	private:
-		OOModel::ArrayType* exp_;
+		OOModel::ArrayTypeExpression* exp_;
 };
 
 } /* namespace OOInteraction */

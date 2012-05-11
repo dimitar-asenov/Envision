@@ -25,24 +25,17 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
- * NamedType.cpp
+ * TypeExpression.cpp
  *
  *  Created on: Jan 31, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "types/NamedType.h"
+#include "TypeExpression.h"
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(NamedType, Type)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(NamedType, Type)
-
-REGISTER_ATTRIBUTE(NamedType, type, ReferenceExpression, false, false, true)
-
-Class* NamedType::classDefinition()
-{
-	return type()->classDefinition();
-}
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(TypeExpression, Expression)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(TypeExpression, Expression)
 
 }

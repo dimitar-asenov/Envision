@@ -32,6 +32,7 @@
  **********************************************************************************************************************/
 
 #include "expressions/StringLiteral.h"
+#include "../types/StringType.h"
 
 namespace OOModel {
 
@@ -44,6 +45,11 @@ StringLiteral::StringLiteral(const QString& value)
 : Expression(nullptr, StringLiteral::getMetaData())
 {
 	setValue(value);
+}
+
+Type* StringLiteral::type()
+{
+	return new StringType();
 }
 
 }

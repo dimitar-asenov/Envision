@@ -32,6 +32,7 @@
  */
 
 #include "expressions/ErrorExpression.h"
+#include "../types/ErrorType.h"
 
 namespace OOModel {
 
@@ -41,5 +42,10 @@ EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(ErrorExpression, Expression)
 REGISTER_ATTRIBUTE(ErrorExpression, prefix, Text, false, false, true)
 REGISTER_ATTRIBUTE(ErrorExpression, arg, Expression, false, false, true)
 REGISTER_ATTRIBUTE(ErrorExpression, postfix, Text, false, false, true)
+
+Type* ErrorExpression::type()
+{
+	return new ErrorType("Syntax error in expression");
+}
 
 } /* namespace OOModel */

@@ -48,6 +48,8 @@ class OOMODEL_API FloatLiteral: public Expression
 
 	public:
 		FloatLiteral(double value);
+
+		virtual Type* type();
 };
 
 }

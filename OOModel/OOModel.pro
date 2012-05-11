@@ -1,33 +1,25 @@
-ENVISION_ROOT_DIR = $$PWD/..
-CONFIG(release, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/ReleaseBuild
-CONFIG(debug, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/DebugBuild
-PLUGINS_DIR = $${BUILD_DIR}/plugins
-CONFIG(debug, debug|release):DEFINES += DEBUG
-QMAKE_CXXFLAGS += -Werror \
-    -std=c++0x
-INCLUDEPATH += ./src \
-    ./test \
-    $${ENVISION_ROOT_DIR}
 TARGET = oomodel
+include(../Core/common_plugin.pri)
+
 DEFINES += OOMODEL_LIBRARY
-win32:LIBS += -L$${PLUGINS_DIR} \
-    -llogger \
+win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase
-QT = core \
-    gui
-TEMPLATE = lib
-CONFIG += plugin \
-    warn_on \
-    thread \
-    precompile_header
-target.path = $$PLUGINS_DIR
-pluginmeta.path = $$PLUGINS_DIR
-pluginmeta.files = $${TARGET}.plugin
-INSTALLS += target \
-    pluginmeta
-PRECOMPILED_HEADER = src/precompiled.h
-HEADERS += src/expressions/ConditionalExpression.h \
+
+HEADERS += src/types/StringType.h \
+    src/types/NullType.h \
+    src/types/SymbolProviderType.h \
+    src/types/ClassType.h \
+    src/types/ErrorType.h \
+    src/types/ArrayType.h \
+    src/types/PrimitiveType.h \
+    src/types/Type.h \
+    src/expressions/types/ArrayTypeExpression.h \
+    src/expressions/types/ClassTypeExpression.h \
+    src/expressions/types/PrimitiveTypeExpression.h \
+    src/expressions/types/TypeExpression.h \
+    src/elements/OOReference.h \
+    src/expressions/ConditionalExpression.h \
     src/OOModelException.h \
     src/TypedListInstantiations.h \
     src/allOOModelNodes.h \
@@ -79,12 +71,21 @@ HEADERS += src/expressions/ConditionalExpression.h \
     src/top_level/Method.h \
     src/top_level/Module.h \
     src/top_level/Project.h \
-    src/types/ArrayType.h \
-    src/types/NamedType.h \
-    src/types/PrimitiveType.h \
-    src/types/Type.h \
     src/oomodel.h
-SOURCES += src/expressions/ConditionalExpression.cpp \
+SOURCES += src/types/StringType.cpp \
+    src/types/NullType.cpp \
+    src/types/SymbolProviderType.cpp \
+    src/types/ClassType.cpp \
+    src/types/ErrorType.cpp \
+    src/types/ArrayType.cpp \
+    src/types/PrimitiveType.cpp \
+    src/types/Type.cpp \
+    src/expressions/types/ArrayTypeExpression.cpp \
+    src/expressions/types/ClassTypeExpression.cpp \
+    src/expressions/types/PrimitiveTypeExpression.cpp \
+    src/expressions/types/TypeExpression.cpp \
+    src/elements/OOReference.cpp \
+    src/expressions/ConditionalExpression.cpp \
     src/expressions/VariableDeclaration.cpp \
     src/expressions/AssignmentExpression.cpp \
     src/statements/ExpressionStatement.cpp \
@@ -105,7 +106,6 @@ SOURCES += src/expressions/ConditionalExpression.cpp \
     src/top_level/Method.cpp \
     src/top_level/Module.cpp \
     src/top_level/Project.cpp \
-    src/types/ArrayType.cpp \
     src/statements/ForEachStatement.cpp \
     src/expressions/UnaryOperation.cpp \
     src/expressions/ReferenceExpression.cpp \
@@ -121,9 +121,6 @@ SOURCES += src/expressions/ConditionalExpression.cpp \
     src/statements/Block.cpp \
     src/expressions/CastExpression.cpp \
     src/expressions/BinaryOperation.cpp \
-    src/types/NamedType.cpp \
-    src/types/PrimitiveType.cpp \
-    src/types/Type.cpp \
     src/expressions/NewExpression.cpp \
     src/expressions/VariableAccess.cpp \
     src/expressions/ThisExpression.cpp \

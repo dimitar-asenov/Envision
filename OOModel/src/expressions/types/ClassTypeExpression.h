@@ -25,41 +25,31 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
- * VNamedType.cpp
+ * ClassTypeExpression.h
  *
- *  Created on: Feb 9, 2011
+ *  Created on: Jan 31, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "types/VNamedType.h"
+#ifndef CLASSTYPEEXPRESSION_H_
+#define CLASSTYPEEXPRESSION_H_
 
-using namespace Visualization;
-using namespace OOModel;
+#include "TypeExpression.h"
 
-namespace OOVisualization {
+#include "../ReferenceExpression.h"
 
-ITEM_COMMON_DEFINITIONS(VNamedType, "item")
+namespace OOModel {
 
-VNamedType::VNamedType(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode<Item, NamedType>(parent, node, style),
-	vis_( new VReferenceExpression(this, node->type(), style))
+class OOMODEL_API ClassTypeExpression : public TypeExpression
 {
-}
+	EXTENDABLENODE_DECLARE_STANDARD_METHODS(ClassTypeExpression)
 
-VNamedType::~VNamedType()
-{
-	SAFE_DELETE_ITEM(vis_);
-}
+	ATTRIBUTE(ReferenceExpression, typeExpression, setTypeExpression)
 
-void VNamedType::determineChildren()
-{
-	synchronizeItem(vis_, node()->type(), style());
-	vis_->setStyle(style());
-}
-
-void VNamedType::updateGeometry(int availableWidth, int availableHeight)
-{
-	Item::updateGeometry(vis_, availableWidth, availableHeight);
-}
+	public:
+		virtual Type* type();
+};
 
 }
+
+#endif /* CLASSTYPEEXPRESSION_H_ */

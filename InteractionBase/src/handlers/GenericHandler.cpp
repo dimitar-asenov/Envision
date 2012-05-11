@@ -143,7 +143,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 					break;
 				}
 
-				item = static_cast<Visualization::Item*> ( item->parentItem() );
+				item = item->parent();
 			}
 		}
 
@@ -165,7 +165,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 				target->node()->model()->beginModification(target->node(), "paste");
 				target->node()->load(clipboard);
 				target->node()->model()->endModification();
-				target->setUpdateNeeded();
+				target->setUpdateNeeded(Visualization::Item::StandardUpdate);
 			}
 			else InteractionHandler::keyPressEvent(target, event);
 		}
@@ -179,7 +179,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 			m->beginModification(nullptr, "undo");
 			m->undo();
 			m->endModification();
-			target->setUpdateNeeded();
+			target->setUpdateNeeded(Visualization::Item::StandardUpdate);
 		}
 		else InteractionHandler::keyPressEvent(target, event);
 	}
@@ -191,9 +191,30 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 			m->beginModification(nullptr, "redo");
 			m->redo();
 			m->endModification();
-			target->setUpdateNeeded();
+			target->setUpdateNeeded(Visualization::Item::StandardUpdate);
 		}
 		else InteractionHandler::keyPressEvent(target, event);
+	}
+	else if (event->modifiers() == 0 && event->key() == Qt::Key_F3)
+	{
+		auto n = target;
+		while (n && ! n->node()) n = n->parent();
+
+		auto p = n->parent();
+		if ( p )
+		{
+			int purpose = 0;
+			if (p->definesChildNodePurpose(n->node()))
+			{
+				purpose = n->purpose() + 1;
+				if ( purpose == target->scene()->renderer()->numRegisteredPurposes())
+					purpose = -1; // Undefine
+
+			}
+
+			if (purpose >= 0) p->setChildNodePurpose(n->node(), purpose);
+			else p->clearChildNodePurpose(n->node());
+		}
 	}
 	else if (event->modifiers() == 0
 			&& (	event->key() == Qt::Key_Up
@@ -283,7 +304,7 @@ void GenericHandler::moveCursor(Visualization::Item *target, int key)
 
 		while (current && !processed)
 		{
-			Visualization::Item* parent = static_cast<Visualization::Item*> (current->parentItem());
+			Visualization::Item* parent = current->parent();
 			if (!parent) break;
 
 			QPoint reference;
@@ -365,7 +386,7 @@ void GenericHandler::mouseDoubleClickEvent(Visualization::Item *, QGraphicsScene
 
 void GenericHandler::focusInEvent(Visualization::Item *target, QFocusEvent *event)
 {
-	QGraphicsItem* i = target;
+	auto i = target;
 	while (i)
 	{
 		if (i->flags() & QGraphicsItem::ItemIsSelectable)
@@ -374,7 +395,7 @@ void GenericHandler::focusInEvent(Visualization::Item *target, QFocusEvent *even
 			i->setSelected(true);
 			break;
 		}
-		else i = i->parentItem();
+		else i = i->parent();
 	}
 
 	InteractionHandler::focusInEvent(target, event);

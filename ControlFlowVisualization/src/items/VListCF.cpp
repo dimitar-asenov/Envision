@@ -64,7 +64,7 @@ void VListCF::determineChildren()
 	// Inserts elements that are not yet visualized and adjusts the order to match that in 'nodes'.
 	for (int i = 0; i < node()->size(); ++i)
 	{
-		if (i >= items.size() ) items.append( renderer()->render(nullptr, node()->at<Node>(i)));	// This node is new
+		if (i >= items.size() ) items.append( renderer()->render(this, node()->at<Node>(i)));	// This node is new
 		else if ( items[i]->node() == node()->at<Node>(i) )	continue;	// This node is already there
 		else
 		{
@@ -82,7 +82,7 @@ void VListCF::determineChildren()
 			}
 
 			// The node was not found, insert a visualization here
-			if (!found ) items.insert(i, renderer()->render(nullptr, node()->at<Node>(i)));
+			if (!found ) items.insert(i, renderer()->render(this, node()->at<Node>(i)));
 		}
 	}
 
@@ -161,7 +161,8 @@ void VListCF::updateGeometry(int, int)
 
 		int pinSpace = cfi ? 0 : style()->pinLength();
 		if ( pos[i].x() - pinSpace < topLeft.x()) topLeft.setX( pos[i].x() - pinSpace );
-		if ( pos[i].x() + items_[i]->width() + pinSpace > bottomRight.x())  bottomRight.setX(pos[i].x() + items_[i]->width() + pinSpace);
+		if ( pos[i].x() + items_[i]->width() + pinSpace > bottomRight.x())
+			bottomRight.setX(pos[i].x() + items_[i]->width() + pinSpace);
 	}
 
 	bottomRight.setY(location.y());
@@ -210,7 +211,8 @@ void VListCF::updateGeometry(int, int)
 		{
 			int midPoint = pos[i].x() + items_[i]->width()/2;
 			addConnector(midPoint, pos[i].y() - style()->pinLength(), midPoint, pos[i].y(), true);
-			addConnector(midPoint, pos[i].y() + items_[i]->height(), midPoint, pos[i].y() + items_[i]->height() + style()->pinLength(), false);
+			addConnector(midPoint, pos[i].y() + items_[i]->height(), midPoint,
+					pos[i].y() + items_[i]->height() + style()->pinLength(), false);
 		}
 	}
 }

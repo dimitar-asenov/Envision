@@ -40,7 +40,7 @@
 #include "../elements/Visibility.h"
 #include "Method.h"
 #include "Field.h"
-#include "../types/Type.h"
+#include "../expressions/Expression.h"
 
 #include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
 #include "ModelBase/src/nodes/Text.h"
@@ -54,7 +54,7 @@ class OOMODEL_API Class : public Model::ExtendableNode
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Class)
 
 	ATTRIBUTE_OOP_NAME
-	ATTRIBUTE(Model::TypedList<Type>, baseClasses, setBaseClasses)
+	ATTRIBUTE(Model::TypedList<Expression>, baseClasses, setBaseClasses)
 	ATTRIBUTE(Model::TypedList<Field>, fields, setFields)
 	ATTRIBUTE(Model::TypedList<Method>, methods, setMethods)
 	ATTRIBUTE_OOP_VISIBILITY
@@ -63,7 +63,7 @@ class OOMODEL_API Class : public Model::ExtendableNode
 		virtual bool definesSymbol() const;
 		virtual const QString& symbolName() const;
 
-		virtual Model::Node* navigateTo(Model::Node* source, QString path);
+		virtual QList<Node*> findSymbol(const QString& symbol, Node* source, FindSymbolMode mode);
 };
 
 }

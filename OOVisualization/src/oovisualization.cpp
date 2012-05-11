@@ -127,12 +127,12 @@ bool OOVisualization::initialize(Envision::EnvisionManager&)
 			createVisualization<VContinueStatement, ContinueStatement>);
 	Scene::defaultRenderer()->registerVisualization(ExpressionStatement::typeIdStatic(),
 			createVisualization<VExpressionStatement, ExpressionStatement>);
-	Scene::defaultRenderer()->registerVisualization(NamedType::typeIdStatic(),
-			createVisualization<VNamedType, NamedType>);
-	Scene::defaultRenderer()->registerVisualization(PrimitiveType::typeIdStatic(),
-			createVisualization<VPrimitiveType, PrimitiveType>);
-	Scene::defaultRenderer()->registerVisualization(ArrayType::typeIdStatic(),
-			createVisualization<VArrayType, ArrayType>);
+	Scene::defaultRenderer()->registerVisualization(ClassTypeExpression::typeIdStatic(),
+			createVisualization<VClassType, ClassTypeExpression>);
+	Scene::defaultRenderer()->registerVisualization(PrimitiveTypeExpression::typeIdStatic(),
+			createVisualization<VPrimitiveType, PrimitiveTypeExpression>);
+	Scene::defaultRenderer()->registerVisualization(ArrayTypeExpression::typeIdStatic(),
+			createVisualization<VArrayType, ArrayTypeExpression>);
 
 	return true;
 }

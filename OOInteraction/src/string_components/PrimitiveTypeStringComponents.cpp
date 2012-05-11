@@ -34,11 +34,11 @@
 #include "string_components/PrimitiveTypeStringComponents.h"
 #include "OOInteractionException.h"
 
-#include "OOModel/src/types/PrimitiveType.h"
+#include "OOModel/src/expressions/types/PrimitiveTypeExpression.h"
 
 namespace OOInteraction {
 
-PrimitiveTypeStringComponents::PrimitiveTypeStringComponents(OOModel::PrimitiveType* e)
+PrimitiveTypeStringComponents::PrimitiveTypeStringComponents(OOModel::PrimitiveTypeExpression* e)
 	: exp_(e)
 {
 }
@@ -48,17 +48,17 @@ QStringList PrimitiveTypeStringComponents::components()
 	QStringList result;
 	if (!exp_) return result;
 
-	switch(exp_->type())
+	switch(exp_->typeValue())
 	{
-		case OOModel::PrimitiveType::PrimitiveTypes::INT : result << "int"; break;
-		case OOModel::PrimitiveType::PrimitiveTypes::LONG : result << "long"; break;
-		case OOModel::PrimitiveType::PrimitiveTypes::UNSIGNED_INT : result << "uint"; break;
-		case OOModel::PrimitiveType::PrimitiveTypes::UNSIGNED_LONG : result << "ulong"; break;
-		case OOModel::PrimitiveType::PrimitiveTypes::FLOAT : result << "float"; break;
-		case OOModel::PrimitiveType::PrimitiveTypes::DOUBLE : result << "double"; break;
-		case OOModel::PrimitiveType::PrimitiveTypes::BOOLEAN : result << "boolean"; break;
-		case OOModel::PrimitiveType::PrimitiveTypes::CHAR : result << "char"; break;
-		case OOModel::PrimitiveType::PrimitiveTypes::VOID : result << "void"; break;
+		case OOModel::PrimitiveTypeExpression::PrimitiveTypes::INT : result << "int"; break;
+		case OOModel::PrimitiveTypeExpression::PrimitiveTypes::LONG : result << "long"; break;
+		case OOModel::PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_INT : result << "uint"; break;
+		case OOModel::PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_LONG : result << "ulong"; break;
+		case OOModel::PrimitiveTypeExpression::PrimitiveTypes::FLOAT : result << "float"; break;
+		case OOModel::PrimitiveTypeExpression::PrimitiveTypes::DOUBLE : result << "double"; break;
+		case OOModel::PrimitiveTypeExpression::PrimitiveTypes::BOOLEAN : result << "boolean"; break;
+		case OOModel::PrimitiveTypeExpression::PrimitiveTypes::CHAR : result << "char"; break;
+		case OOModel::PrimitiveTypeExpression::PrimitiveTypes::VOID : result << "void"; break;
 		default: throw OOInteractionException("Unknown primitive type");
 	}
 	return result;

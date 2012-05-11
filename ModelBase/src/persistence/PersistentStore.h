@@ -43,6 +43,7 @@ typedef long long NodeIdType;
 class Node;
 class Model;
 class PersistedNode;
+class Reference;
 
 struct MODELBASE_API LoadedNode
 {
@@ -58,10 +59,13 @@ class MODELBASE_API PersistentStore
 		virtual void saveModel(Model* model, const QString &name) = 0;
 		virtual Node* loadModel(Model* model, const QString &name) = 0;
 
+		void setReferenceTargetr(Reference* r, Node* target);
+
 	public:
 		virtual void saveStringValue(const QString &value) = 0;
 		virtual void saveIntValue(int value) = 0;
 		virtual void saveDoubleValue(double value) = 0;
+		virtual void saveReferenceValue(const QString &name, const Node* target) = 0;
 		virtual void saveNode(const Node *node, const QString &name, bool partialLoadHint) = 0;
 
 		virtual QList<LoadedNode> loadAllSubNodes(Node* parent) = 0;
@@ -73,6 +77,14 @@ class MODELBASE_API PersistentStore
 		virtual int loadIntValue() = 0;
 		virtual QString loadStringValue() = 0;
 		virtual double loadDoubleValue() = 0;
+
+		/**
+		 * \brief Returns a null string if the reference is resolved and a symbolic name if the reference is unresolved.
+		 *
+		 * After the target of the reference exists in memory, the reference will be updated to point to the correct
+		 * target.
+		 */
+		virtual QString loadReferenceValue(Reference* r) = 0;
 
 		virtual ~PersistentStore() {};
 };

@@ -52,8 +52,8 @@ class PersistedValue: public PersistedNode
 		T value_;
 };
 
-template <class T> PersistedValue<T>::PersistedValue(){};
-template <class T> PersistedValue<T>::~PersistedValue(){};
+template <class T> PersistedValue<T>::PersistedValue(){}
+template <class T> PersistedValue<T>::~PersistedValue(){}
 template <class T> inline void PersistedValue<T>::set(const T& value) { value_ = value; }
 template <class T> inline T& PersistedValue<T>::value() { return value_; }
 

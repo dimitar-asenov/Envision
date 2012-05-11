@@ -31,7 +31,7 @@ The implemented features should be considered a proof of concept only and are no
 Try it out
 ----------
 
-Envision is written in C++ and uses some features of the new C++11 standard. Make sure your C++ compiler is up-to-date. Gcc versions 4.6 and newer should be sufficient.
+Envision is written in C++ and uses some features of the new C++11 standard. Make sure your C++ compiler is up-to-date. Gcc versions 4.7 and newer should be sufficient.
 
 ### Using Eclipse (recommended)
 1. If you do not have the Qt development version installed, download and install it.

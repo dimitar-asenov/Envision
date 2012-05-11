@@ -38,10 +38,6 @@
 
 #include "StringOffsetProvider.h"
 
-namespace OOVisualization {
-	class Item;
-}
-
 namespace OOInteraction {
 
 class OOINTERACTION_API SimpleLiteralStringOffsetProvider : public StringOffsetProvider {

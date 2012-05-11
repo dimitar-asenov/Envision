@@ -37,7 +37,7 @@
 
 namespace OOModel {
 
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(Visibility)
+NODE_DEFINE_TYPE_REGISTRATION_METHODS(Visibility, Model::Node)
 
 Visibility::Visibility(Model::Node *parent) :
 	Node(parent), vis(DEFAULT)
@@ -63,7 +63,8 @@ void Visibility::save(Model::PersistentStore &store) const
 void Visibility::load(Model::PersistentStore &store)
 {
 	if (store.currentNodeType() != typeName())
-		throw OOModelException("Trying to load a Visibility node from an incompatible node type " + store.currentNodeType());
+		throw OOModelException("Trying to load a Visibility node from an incompatible node type "
+				+ store.currentNodeType());
 
 	set(fromInt(store.loadIntValue()));
 }

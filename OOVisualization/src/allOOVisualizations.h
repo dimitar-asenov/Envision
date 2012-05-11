@@ -77,7 +77,7 @@
 #include "statements/VContinueStatement.h"
 #include "statements/VExpressionStatement.h"
 
-#include "types/VNamedType.h"
+#include "types/VClassType.h"
 #include "types/VPrimitiveType.h"
 #include "types/VArrayType.h"
 

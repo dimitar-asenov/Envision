@@ -57,8 +57,6 @@ class ControlFlowItem : public Visualization::Item
 		void setPreferredContinueExit(PreferedExitDirection preference);
 		void setPreferredBreakExit(PreferedExitDirection preference);
 
-		bool showAsControlFlow() const;
-
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
 	protected:

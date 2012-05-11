@@ -39,18 +39,18 @@
 
 namespace OOModel
 {
-	class PrimitiveType;
+	class PrimitiveTypeExpression;
 }
 
 namespace OOInteraction {
 
 class OOINTERACTION_API PrimitiveTypeStringComponents : public StringComponents {
 	public:
-	PrimitiveTypeStringComponents( OOModel::PrimitiveType* e );
+	PrimitiveTypeStringComponents( OOModel::PrimitiveTypeExpression* e );
 		virtual QStringList components();
 
 	private:
-		OOModel::PrimitiveType* exp_;
+		OOModel::PrimitiveTypeExpression* exp_;
 };
 
 } /* namespace OOInteraction */

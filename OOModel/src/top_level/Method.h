@@ -56,9 +56,9 @@ class OOMODEL_API Method : public Model::ExtendableNode
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Method)
 
 	ATTRIBUTE_OOP_NAME
-	ATTRIBUTE(StatementItemList, items, setItems);
-	ATTRIBUTE(Model::TypedList<FormalArgument>, arguments, setArguments);
-	ATTRIBUTE(Model::TypedList<FormalResult>, results, setResults);
+	ATTRIBUTE(StatementItemList, items, setItems)
+	ATTRIBUTE(Model::TypedList<FormalArgument>, arguments, setArguments)
+	ATTRIBUTE(Model::TypedList<FormalResult>, results, setResults)
 	ATTRIBUTE_OOP_VISIBILITY
 	ATTRIBUTE_OOP_STORAGESPECIFIER
 
@@ -66,7 +66,7 @@ class OOMODEL_API Method : public Model::ExtendableNode
 		virtual bool definesSymbol() const;
 		virtual const QString& symbolName() const;
 
-		virtual Model::Node* navigateTo(Model::Node* source, QString path);
+		virtual QList<Node*> findSymbol(const QString& symbol, Node* source, FindSymbolMode mode);
 };
 
 }

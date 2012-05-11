@@ -45,6 +45,9 @@ class OOMODEL_API ConditionalExpression: public Expression
 	ATTRIBUTE(Expression, condition, setCondition)
 	ATTRIBUTE(Expression, trueExpression, setTrueExpression)
 	ATTRIBUTE(Expression, falseExpression, setFalseExpression)
+
+	public:
+		virtual Type* type();
 };
 
 } /* namespace OOModel */

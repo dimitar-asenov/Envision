@@ -84,6 +84,7 @@ class VISUALIZATIONBASE_API PositionLayout : public Layout
 
 		virtual bool isEmpty() const;
 
+		virtual void determineChildren();
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 		int focusedElementIndex() const;

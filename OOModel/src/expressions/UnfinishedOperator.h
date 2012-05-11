@@ -47,6 +47,9 @@ class OOMODEL_API UnfinishedOperator : public Expression {
 	ATTRIBUTE(Model::TypedList<Model::Text>, delimiters, setDelimiters)
 	ATTRIBUTE(Model::TypedList<Expression>, operands, setOperands)
 
+	public:
+		virtual Type* type();
+
 };
 
 } /* namespace OOModel */

@@ -45,20 +45,6 @@ ControlFlowItem::ControlFlowItem(Item* parent,  const StyleType* style) :
 {
 }
 
-bool ControlFlowItem::showAsControlFlow() const
-{
-	QGraphicsItem* item = parentItem();
-	while (item)
-	{
-		VMethodCF* met = dynamic_cast<VMethodCF*> (item);
-		if (met) return true;
-
-		item = item->parentItem();
-	}
-
-	return false;
-}
-
 QPainterPath ControlFlowItem::connector(const QList< QPoint >& points, bool arrowEnding)
 {
 	QPainterPath path;
@@ -123,7 +109,7 @@ void ControlFlowItem::addConnector(QList< QPoint >& points, bool arrowEnding)
 {
 	connectors_.append(points);
 	arrowEndings_.append(arrowEnding);
-	setUpdateNeeded();
+	setUpdateNeeded(StandardUpdate);
 }
 
 void ControlFlowItem::addConnector(int xBegin, int yBegin, int xEnd, int yEnd, bool arrowEnding)
@@ -153,7 +139,7 @@ void ControlFlowItem::clearConnectors()
 {
 	connectors_.clear();
 	arrowEndings_.clear();
-	setUpdateNeeded();
+	setUpdateNeeded(StandardUpdate);
 }
 
 void ControlFlowItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -168,15 +154,12 @@ void ControlFlowItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 		yOffset = getShape()->contentTop();
 	}
 
-	if (showAsControlFlow())
-	{
-		painter->setPen( style()->pin());
-		painter->translate( xOffset + style()->pin().width()/2.0, yOffset + style()->pin().width()/2.0);
+	painter->setPen( style()->pin());
+	painter->translate( xOffset + style()->pin().width()/2.0, yOffset + style()->pin().width()/2.0);
 
-		for(int i = 0; i < connectors_.size(); ++i)
-		{
-			painter->drawPath( connector(connectors_.at(i), arrowEndings_.at(i)) );
-		}
+	for(int i = 0; i < connectors_.size(); ++i)
+	{
+		painter->drawPath( connector(connectors_.at(i), arrowEndings_.at(i)) );
 	}
 }
 

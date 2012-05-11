@@ -34,6 +34,7 @@
 #include "PersistentStoreMock.h"
 #include "nodes/Node.h"
 #include "Model.h"
+#include "ModelException.h"
 
 namespace Model {
 
@@ -69,6 +70,16 @@ void PersistentStoreMock::saveNode(const Node *node, const QString &name, bool p
 {
 	savedData.append(node->typeName() + "," + name + "," + (partialLoadHint ? "partial," : "full,"));
 	node->save(*this);
+}
+
+QString PersistentStoreMock::loadReferenceValue(Reference*)
+{
+	throw ModelException("The Persistent store mock does not support references");
+}
+
+void PersistentStoreMock::saveReferenceValue(const QString &, const Node*)
+{
+	throw ModelException("The Persistent store mock does not support references");
 }
 
 Node* PersistentStoreMock::loadModel(Model*, const QString &)

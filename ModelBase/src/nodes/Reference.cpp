@@ -38,35 +38,67 @@
 
 namespace Model {
 
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(Reference)
+NODE_DEFINE_TYPE_REGISTRATION_METHODS(Reference, Node)
 
 Reference::Reference(Node *parent) :
-	Node(parent)
+	Node(parent), target_()
 {
+	manageUnresolvedReferencesListInModel();
 }
 
 Reference::Reference(Node *parent, PersistentStore &store, bool) :
-	Node(parent)
+	Node(parent), target_()
 {
-	path_ = store.loadStringValue();
+	name_ = store.loadReferenceValue(this);
+	manageUnresolvedReferencesListInModel();
 }
 
-void Reference::set(const QString &new_path)
+void Reference::setName(const QString &name, bool tryResolvingImmediately)
 {
-	execute(new FieldSet<QString> (this, path_, new_path));
+	execute(new FieldSet<QString> (this, name_, name));
+	execute(new FieldSet<Node*> (this, target_, nullptr));
+
+	if (tryResolvingImmediately) resolve();
+	manageUnresolvedReferencesListInModel();
+}
+
+void Reference::setTarget(Node* target)
+{
+	if (target) execute(new FieldSet<QString> (this, name_, QString()));
+	else execute(new FieldSet<QString> (this, name_, name()));
+
+	execute(new FieldSet<Node*> (this, target_, target));
+	manageUnresolvedReferencesListInModel();
+}
+
+bool Reference::resolve()
+{
+	return false;
 }
 
 void Reference::save(PersistentStore &store) const
 {
-	store.saveStringValue(path_);
+	store.saveReferenceValue(name_, target_);
 }
 
 void Reference::load(PersistentStore &store)
 {
+	// TODO: Implement reference loading properly.
+	throw ModelException("Loading references outside a Reference constructor is not properly implemented yet");
+
 	if (store.currentNodeType() != typeName())
 		throw ModelException("Trying to load a Reference node from an incompatible node type " + store.currentNodeType());
 
-	set(store.loadStringValue());
+	setName( store.loadReferenceValue(this) );
+}
+
+void Reference::manageUnresolvedReferencesListInModel()
+{
+	if (model())
+	{
+		if (isResolved()) model()->removeUnresolvedReference(this);
+		else model()->addUnresolvedReference(this);
+	}
 }
 
 }

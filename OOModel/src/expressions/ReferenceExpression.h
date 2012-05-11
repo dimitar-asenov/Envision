@@ -35,8 +35,7 @@
 #define REFERENCEEXPRESSION_H_
 
 #include "Expression.h"
-
-#include "ModelBase/src/nodes/Reference.h"
+#include "../elements/OOReference.h"
 
 namespace OOModel {
 
@@ -47,11 +46,21 @@ class OOMODEL_API ReferenceExpression: public Expression
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(ReferenceExpression)
 
 	ATTRIBUTE(Expression, prefix, setPrefix)
-	ATTRIBUTE(Model::Reference, ref, setRef)
+	ATTRIBUTE(OOReference, ref, setRef)
 
 	public:
-		virtual Class* classDefinition();
+		ReferenceExpression(const QString& name, Expression* prefix = nullptr);
+
+		Model::Node* target();
+		virtual Type* type();
+
+		void setName(const QString& name);
+		QString name();
 };
+
+inline Model::Node* ReferenceExpression::target() { return ref()->target(); }
+inline void ReferenceExpression::setName(const QString& name) {ref()->setName(name);}
+inline QString ReferenceExpression::name() {return ref()->name();}
 
 }
 

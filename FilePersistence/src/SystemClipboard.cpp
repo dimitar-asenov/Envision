@@ -35,6 +35,7 @@
 #include "FilePersistenceException.h"
 
 #include "ModelBase/src/Model.h"
+#include "ModelBase/src/nodes/Reference.h"
 #include "ModelBase/src/persistence/PersistedNode.h"
 #include "ModelBase/src/persistence/PersistedValue.h"
 
@@ -43,6 +44,7 @@ using namespace Model;
 namespace FilePersistence {
 
 static const QString CLIPBOARD_TAG = "clipboard";
+const QString SystemClipboard::NULL_STRING = "____NULL____";
 
 SystemClipboard::SystemClipboard() :
 	xml(nullptr), numNodes_(0)
@@ -87,6 +89,12 @@ void SystemClipboard::saveIntValue(int value)
 void SystemClipboard::saveDoubleValue(double value)
 {
 	xml->saveDoubleValue(value);
+}
+
+void SystemClipboard::saveReferenceValue(const QString &name, const Node*)
+{
+	QString nameString = name.isNull() ? NULL_STRING : name;
+	xml->saveStringValue(nameString);
 }
 
 void SystemClipboard::saveNode(const Node *node, const QString &name, bool)
@@ -208,7 +216,7 @@ QList<LoadedNode> SystemClipboard::loadPartialNode(Node*)
 	throw FilePersistenceException("The loadPartialNode(...) method is not supported in the SystemClipboard store. This might indicate that an object only partially loaded itself, ignoring the provided partial hint.");
 }
 
-PersistedNode* SystemClipboard::loadCompleteNodeSubtree(const QString&, const Model::Node*)
+PersistedNode* SystemClipboard::loadCompleteNodeSubtree(const QString&, const Node*)
 {
 	throw FilePersistenceException("The loadCompleteNodeSubtree(...) method is not supported in the SystemClipboard store. This might indicate that an object only partially loaded itself, ignoring the provided partial hint.");
 }
@@ -226,6 +234,14 @@ QString SystemClipboard::loadStringValue()
 double SystemClipboard::loadDoubleValue()
 {
 	return xml->loadDoubleValue();
+}
+
+QString SystemClipboard::loadReferenceValue(Reference*)
+{
+	QString name = xml->loadStringValue();
+	if (name == NULL_STRING) name = QString();
+
+	return name;
 }
 
 // Methods from ClipboardStore

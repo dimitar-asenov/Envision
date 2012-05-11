@@ -40,6 +40,9 @@ namespace OOModel {
 
 class OOMODEL_API EmptyExpression : public Expression {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(EmptyExpression)
+
+	public:
+		virtual Type* type();
 };
 
 } /* namespace InteractionBase */

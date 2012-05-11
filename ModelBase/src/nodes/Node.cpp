@@ -36,6 +36,7 @@
 #include "Model.h"
 #include "commands/UndoCommand.h"
 #include "ModelException.h"
+#include "Reference.h"
 
 using namespace Logger;
 
@@ -133,16 +134,6 @@ bool Node::isAncestorOf(const Node* other) const
 	return p == this;
 }
 
-Node* Node::navigateTo(Node* source, QString path)
-{
-	if (source == this || isAncestorOf(source))
-	{
-		if (parent_) return parent_->navigateTo(this, path);
-		else return nullptr;
-	}
-	else return nullptr;
-}
-
 bool Node::isModifyable() const
 {
 	Model* m = model();
@@ -153,6 +144,18 @@ bool Node::isModifyable() const
 bool Node::replaceChild(Node*, Node*, bool)
 {
 	return false;
+}
+
+QList<Node*> Node::findSymbol(const QString& symbol, Node* source, FindSymbolMode mode)
+{
+	if (definesSymbol() && symbolName() == symbol)
+	{
+		QList<Node*> res;
+		res << this;
+		return res;
+	}
+	else if (mode == SEARCH_UP && parent_) return parent_->findSymbol(symbol, source, mode);
+	else return QList<Node*>();
 }
 
 /***********************************************************************************************************************
@@ -175,6 +178,41 @@ Node* Node::parent() const
 	return parent_;
 }
 
+void Node::setParent(Node* parent)
+{
+	//TODO: is this operation efficient and even possible when performed on top level objects such as namespaces and
+	// packages?
+
+	auto mOld = model();
+	auto mNew = parent ? parent->model() : nullptr;
+
+	QList<Node*> queue;
+	queue.append(this);
+
+	// Transfer unresolved references from the old model to the new one
+	while (!queue.isEmpty())
+	{
+		if (auto r = dynamic_cast<Reference*>(queue.first()))
+		{
+			if (!r->isResolved() )
+			{
+				if (mOld) mOld->removeUnresolvedReference(r);
+				if (mNew) mNew->addUnresolvedReference(r);
+			}
+		}
+
+		queue.append(queue.first()->children());
+		queue.removeFirst();
+	}
+
+	parent_ = parent;
+}
+
+QList<Node*> Node::children()
+{
+	return QList<Node*>();
+}
+
 bool Node::definesSymbol() const
 {
 	return false;
@@ -184,6 +222,11 @@ const QString& Node::symbolName() const
 {
 	static QString nullString;
 	return nullString;
+}
+
+QList<int> Node::hierarchyTypeIds() const
+{
+	return QList<int>();
 }
 
 bool Node::isNewPersistenceUnit() const
@@ -256,7 +299,8 @@ Node* Node::createNewNode(const QString &type, Node* parent)
 	}
 	else
 	{
-		ModelBase::log()->add(Log::LOGERROR, "Could not create new node. Requested node type has not been registered.");
+		ModelBase::log()->add(Log::LOGERROR, "Could not create new node. Requested node type '"
+				+ type +"' has not been registered.");
 		return nullptr;
 	}
 }
@@ -269,7 +313,8 @@ Node* Node::createNewNode(const QString &type, Node* parent, PersistentStore &st
 	}
 	else
 	{
-		ModelBase::log()->add(Log::LOGERROR, "Could not create new node from persistence. Requested node type has not been registered.");
+		ModelBase::log()->add(Log::LOGERROR, "Could not create new node from persistence. Requested node type '"
+				+ type + "' has not been registered.");
 		return nullptr;
 	}
 }

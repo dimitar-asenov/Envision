@@ -47,12 +47,14 @@ class OOMODEL_API VariableDeclaration: public Expression
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(VariableDeclaration)
 
 	ATTRIBUTE_OOP_NAME
-	ATTRIBUTE(Expression, type, setType)
-	ATTRIBUTE(Expression, initialValue, setInitialValue);
+	ATTRIBUTE(Expression, varType, setVarType)
+	ATTRIBUTE(Expression, initialValue, setInitialValue)
 
 	public:
 		virtual bool definesSymbol() const;
 		virtual const QString& symbolName() const;
+
+		virtual Type* type();
 };
 
 }

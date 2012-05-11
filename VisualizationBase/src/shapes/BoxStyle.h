@@ -68,12 +68,12 @@ class VISUALIZATIONBASE_API BoxStyle : public ShapeStyle
 		int yShadowOffset() const;
 };
 
-inline const QBrush& BoxStyle::background() const { return background_; };
-inline BoxStyle::CornerType BoxStyle::corner() const { return corner_; };
-inline int BoxStyle::cornerRadius() const { return cornerRadius_; };
-inline const QBrush& BoxStyle::shadow() const { return shadow_; };
-inline int BoxStyle::xShadowOffset() const { return xShadowOffset_; };
-inline int BoxStyle::yShadowOffset() const { return yShadowOffset_; };
+inline const QBrush& BoxStyle::background() const { return background_; }
+inline BoxStyle::CornerType BoxStyle::corner() const { return corner_; }
+inline int BoxStyle::cornerRadius() const { return cornerRadius_; }
+inline const QBrush& BoxStyle::shadow() const { return shadow_; }
+inline int BoxStyle::xShadowOffset() const { return xShadowOffset_; }
+inline int BoxStyle::yShadowOffset() const { return yShadowOffset_; }
 
 }
 

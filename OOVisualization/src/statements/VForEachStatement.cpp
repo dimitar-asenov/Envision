@@ -47,19 +47,20 @@ ITEM_COMMON_DEFINITIONS(VForEachStatement, "item")
 
 VForEachStatement::VForEachStatement(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<PanelBorderLayout>, ForEachStatement>(parent, node, style),
-	header(new SequentialLayout(nullptr, &style->header())),
-	varContainer(new SequentialLayout(nullptr, &style->varContainer())),
-	collectionBackground(new SequentialLayout(nullptr, &style->collection())),
-	varName( new VText(nullptr, node->varNameNode(), &style->varName())),
-	collection(nullptr),
-	varType(nullptr),
-	body(nullptr)
+	header(), varContainer(), collectionBackground(), varName(), collection(),	varType(), body()
 {
 	layout()->setTop(true);
+	header = new SequentialLayout(layout()->top(), &style->header());
 	layout()->top()->setFirst(header);
-	header->append(new Static(nullptr, &style->icon()));
+
+	header->append(new Static(header, &style->icon()));
+	varContainer = new SequentialLayout(header, &style->varContainer());
 	header->append(varContainer);
+
+	varName = new VText(varContainer, node->varNameNode(), &style->varName());
 	varContainer->append(varName);
+
+	collectionBackground = new SequentialLayout(header, &style->collection());
 	header->append(collectionBackground);
 }
 

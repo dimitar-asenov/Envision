@@ -8,6 +8,7 @@
 				<externalSettings>
 					<externalSetting>
 						<entry flags="RESOLVED" kind="includePath" name="/usr/include/qt4"/>
+						<entry flags="RESOLVED" kind="includePath" name="/usr/include/c++/4.6"/>
 					</externalSetting>
 				</externalSettings>
 				<extensions>
@@ -121,11 +122,13 @@
 					</target>
 				</buildTargets>
 			</storageModule>
-			<storageModule moduleId="org.eclipse.cdt.core.pathentry">
-				<pathentry base-path="/usr/include/qt4" exported="true" include="" kind="inc" path="" system="true"/>
-				<pathentry kind="src" path=""/>
-				<pathentry kind="out" path=""/>
-			</storageModule>
 		</cconfiguration>
+	</storageModule>
+	<storageModule moduleId="refreshScope"/>
+	<storageModule moduleId="org.eclipse.cdt.core.pathentry">
+		<pathentry base-path="/usr/include/qt4" exported="true" include="" kind="inc" path="" system="true"/>
+		<pathentry exported="true" include="/usr/include/c++/4.6" kind="inc" path="" system="true"/>
+		<pathentry kind="src" path=""/>
+		<pathentry kind="out" path=""/>
 	</storageModule>
 </cproject>

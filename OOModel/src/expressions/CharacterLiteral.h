@@ -48,6 +48,8 @@ class OOMODEL_API CharacterLiteral: public Expression
 
 	public:
 		CharacterLiteral(const QChar& value);
+
+		virtual Type* type();
 };
 
 

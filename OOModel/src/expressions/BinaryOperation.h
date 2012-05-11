@@ -46,7 +46,7 @@ class OOMODEL_API BinaryOperation: public Expression
 
 	ATTRIBUTE(Expression, left, setLeft)
 	ATTRIBUTE(Expression, right, setRight)
-	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, opr, setOpr, int);
+	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, opr, setOpr, int)
 
 	public:
 		enum OperatorTypes { TIMES, DIVIDE, REMAINDER, PLUS, MINUS, LEFT_SHIFT, RIGHT_SHIFT_SIGNED, RIGHT_SHIFT_UNSIGNED,
@@ -55,6 +55,8 @@ class OOMODEL_API BinaryOperation: public Expression
 
 		OperatorTypes op() const;
 		void setOp(const OperatorTypes& oper);
+
+		virtual Type* type();
 };
 
 inline BinaryOperation::OperatorTypes BinaryOperation::op() const { return static_cast<OperatorTypes> (opr()); }

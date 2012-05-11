@@ -43,4 +43,14 @@ REGISTER_ATTRIBUTE(ForEachStatement, varType, Expression, false, true, true)
 REGISTER_ATTRIBUTE(ForEachStatement, collection, Expression, false, false, true)
 REGISTER_ATTRIBUTE(ForEachStatement, body, StatementItemList, false, false, true)
 
+bool ForEachStatement::definesSymbol() const
+{
+	return true;
+}
+
+const QString& ForEachStatement::symbolName() const
+{
+	return varName();
+}
+
 }

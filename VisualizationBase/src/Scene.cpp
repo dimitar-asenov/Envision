@@ -44,8 +44,6 @@
 
 namespace Visualization {
 
-ModelRenderer Scene::defaultRenderer_;
-
 class UpdateSceneEvent : public QEvent
 {
 	public:
@@ -57,7 +55,7 @@ const QEvent::Type UpdateSceneEvent::EventType = static_cast<QEvent::Type> (QEve
 
 Scene::Scene()
 	: QGraphicsScene(VisualizationManager::instance().getMainWindow()), needsUpdate_(false),
-	  renderer_(&defaultRenderer_), sceneHandlerItem_(new SceneHandlerItem(this)), inEventHandler_(false)
+	  renderer_(defaultRenderer()), sceneHandlerItem_(new SceneHandlerItem(this)), inEventHandler_(false)
 {
 }
 
@@ -71,8 +69,14 @@ Scene::~Scene()
 	cursors_.clear();
 	SAFE_DELETE_ITEM(sceneHandlerItem_);
 
-	if (renderer_ != &defaultRenderer_) SAFE_DELETE(renderer_);
+	if (renderer_ != defaultRenderer()) SAFE_DELETE(renderer_);
 	else renderer_ = nullptr;
+}
+
+ModelRenderer* Scene::defaultRenderer()
+{
+	static ModelRenderer defaultRenderer_;
+	return &defaultRenderer_;
 }
 
 void Scene::addTopLevelItem(Item* item)
@@ -108,13 +112,14 @@ void Scene::updateItems()
 	QList<QGraphicsItem *> selected = selectedItems();
 
 	// Only display a selection when there are multiple selected items or no cursor
-	bool draw_selections = selected.size() !=1 || cursors_.isEmpty() || cursors_.first()->visualization() == nullptr;
+	bool draw_selections = selected.size() !=1 || cursors_.isEmpty() || cursors_.first() == nullptr
+			|| cursors_.first()->visualization() == nullptr;
 
 	if (!draw_selections)
 	{
-		QGraphicsItem* selectable = cursors_.first()->owner();
+		auto selectable = cursors_.first()->owner();
 		while (selectable && ! (selectable->flags() &  QGraphicsItem::ItemIsSelectable))
-			selectable = selectable->parentItem();
+			selectable = selectable->parent();
 
 		draw_selections = !selectable || selectable != selected.first();
 	}
@@ -155,7 +160,7 @@ void Scene::nodesUpdated(QList<Node*> nodes)
 	for (QGraphicsItem* graphics_item :  items())
 	{
 		Item* item = static_cast<Item*> ( graphics_item );
-		if (item->hasNode() && nodes.contains(item->node())) item->setUpdateNeeded();
+		if (item->hasNode() && nodes.contains(item->node())) item->setUpdateNeeded(Item::StandardUpdate);
 	}
 
 	scheduleUpdate();
@@ -221,7 +226,7 @@ void Scene::setMainCursor(Cursor* cursor)
 		cursors_.removeFirst();
 	}
 
-	cursors_.prepend(cursor);
+	if (cursor) cursors_.prepend(cursor);
 }
 
 }

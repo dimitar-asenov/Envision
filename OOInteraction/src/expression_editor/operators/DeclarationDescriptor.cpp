@@ -47,9 +47,9 @@ OOModel::Expression* DeclarationDescriptor::create(const QList<OOModel::Expressi
 {
 	OOModel::VariableDeclaration* vd = new OOModel::VariableDeclaration();
 
-	vd->setType( operands.first() );
+	vd->setVarType( operands.first() );
 	auto var = dynamic_cast<OOModel::VariableAccess*>(operands[1]);
-	vd->setName( var->ref()->path().split(":").last());
+	vd->setName( var->ref()->name());
 	SAFE_DELETE(var);
 
 	if (operands.size() > 2) vd->setInitialValue(operands[2]);

@@ -25,59 +25,41 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
- * ModelRenderer.cpp
+ * VClassType.cpp
  *
- *  Created on: Dec 9, 2010
+ *  Created on: Feb 9, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "ModelRenderer.h"
-#include "VisualizationException.h"
-#include "items/VExtendable.h"
+#include "types/VClassType.h"
 
-#include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
-#include "ModelBase/src/nodes/List.h"
+using namespace Visualization;
+using namespace OOModel;
 
-namespace Visualization {
+namespace OOVisualization {
 
-ModelRenderer::ModelRenderer() :
-		useDefaultVisualizations_(true)
+ITEM_COMMON_DEFINITIONS(VClassType, "item")
+
+VClassType::VClassType(Item* parent, NodeType* node, const StyleType* style) :
+	ItemWithNode<Item, ClassTypeExpression>(parent, node, style),
+	vis_( new VReferenceExpression(this, node->typeExpression(), style))
 {
 }
 
-ModelRenderer::~ModelRenderer()
+VClassType::~VClassType()
 {
+	SAFE_DELETE_ITEM(vis_);
 }
 
-Item* ModelRenderer::render(Item* parent, Model::Node* node)
+void VClassType::determineChildren()
 {
-	int nodeTypeId = node->typeId();
-	if (nodeTypeId >= visualizations.size() || !visualizations[nodeTypeId])
-	{
-		if (useDefaultVisualizations_ )
-		{
-			if (Model::List::typeIdStatic() < visualizations.size() && visualizations[Model::List::typeIdStatic()] != nullptr)
-			{
-				Model::List* ext = dynamic_cast<Model::List*> (node);
-				if (ext) return visualizations[Model::List::typeIdStatic()](parent, node);
-			}
-
-			if (Model::ExtendableNode::typeIdStatic() < visualizations.size() && visualizations[Model::ExtendableNode::typeIdStatic()] != nullptr)
-			{
-				Model::ExtendableNode* ext = dynamic_cast<Model::ExtendableNode*> (node);
-				if (ext) return visualizations[Model::ExtendableNode::typeIdStatic()](parent, node);
-			}
-		}
-
-		throw VisualizationException("Trying to render a node type that has no registered visualization. Node type is: " + node->typeName());
-	}
-	else return visualizations[nodeTypeId](parent, node);
+	synchronizeItem(vis_, node()->typeExpression(), style());
+	vis_->setStyle(style());
 }
 
-void ModelRenderer::registerVisualization(int typeId, ItemConstructor visualization)
+void VClassType::updateGeometry(int availableWidth, int availableHeight)
 {
-	if (typeId >= visualizations.size()) visualizations.resize(typeId + 1);
-	visualizations[typeId] = visualization;
+	Item::updateGeometry(vis_, availableWidth, availableHeight);
 }
 
 }

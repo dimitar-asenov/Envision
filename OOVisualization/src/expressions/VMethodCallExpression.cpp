@@ -46,10 +46,10 @@ ITEM_COMMON_DEFINITIONS(VMethodCallExpression, "item")
 
 VMethodCallExpression::VMethodCallExpression(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<>, MethodCallExpression>(parent, node, style),
-	name_(new Text(nullptr, &style->name()) ),
+	name_(new Text(layout(), &style->name()) ),
 	separator_(nullptr),
 	prefix_(nullptr),
-	arguments_(new VList(nullptr, node->arguments(), &style->arguments()))
+	arguments_(new VList(layout(), node->arguments(), &style->arguments()))
 {
 	layout()->append(name_);
 	layout()->append(arguments_);
@@ -66,8 +66,8 @@ VMethodCallExpression::~VMethodCallExpression()
 
 void VMethodCallExpression::determineChildren()
 {
-	layout()->synchronizeFirst(prefix_, node()->prefix());
-	layout()->synchronizeMid(separator_, node()->prefix() != nullptr, &style()->separator(), 1);
+	layout()->synchronizeFirst(prefix_, node()->ref()->prefix());
+	layout()->synchronizeMid(separator_, node()->ref()->prefix() != nullptr, &style()->separator(), 1);
 	layout()->synchronizeLast(arguments_, node()->arguments(), &style()->arguments());
 
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
@@ -80,7 +80,7 @@ void VMethodCallExpression::determineChildren()
 	arguments_->setSuppressHandler(true);
 	if (prefix_) separator_->setStyle( &style()->separator());
 
-	name_->setText(node()->ref()->path().split(',').last().split(':').last());
+	name_->setText(node()->ref()->name());
 }
 
 }

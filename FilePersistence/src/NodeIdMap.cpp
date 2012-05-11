@@ -63,4 +63,12 @@ void NodeIdMap::setId(const Model::Node* node, NodeIdType id)
 	map.insert(node, id);
 }
 
+const Model::Node* NodeIdMap::getNodeForId(NodeIdType id) const
+{
+	for (auto i = map.begin(); i != map.end(); ++i)
+		if (i.value() == id) return i.key();
+
+	return nullptr;
+}
+
 } /* namespace FilePersistence */

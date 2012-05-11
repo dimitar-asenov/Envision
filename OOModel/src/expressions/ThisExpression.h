@@ -43,7 +43,7 @@ class OOMODEL_API ThisExpression: public Expression
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(ThisExpression)
 
 	public:
-		virtual Class* classDefinition();
+		virtual Type* type();
 };
 
 }

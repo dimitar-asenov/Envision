@@ -79,7 +79,7 @@ void HIfStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 				vif->node()->thenBranch()->append(es);
 				vif->node()->model()->endModification();
 
-				vif->thenBranch()->setUpdateNeeded();
+				vif->thenBranch()->setUpdateNeeded(Visualization::Item::StandardUpdate);
 				target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty,
 						Interaction::SetCursorEvent::CursorOnLeft));
 			}
@@ -102,7 +102,7 @@ void HIfStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 				vif->node()->elseBranch()->append(es);
 				vif->node()->model()->endModification();
 
-				vif->elseBranch()->setUpdateNeeded();
+				vif->elseBranch()->setUpdateNeeded(Visualization::Item::StandardUpdate);
 				target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty,
 						Interaction::SetCursorEvent::CursorOnLeft));
 			}

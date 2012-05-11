@@ -1,40 +1,19 @@
-ENVISION_ROOT_DIR = $$PWD/..
-CONFIG(release, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/ReleaseBuild
-CONFIG(debug, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/DebugBuild
-PLUGINS_DIR = $${BUILD_DIR}/plugins
-CONFIG(debug, debug|release):DEFINES += DEBUG
-QMAKE_CXXFLAGS += -Werror \
-    -std=c++0x
-INCLUDEPATH += ./src \
-    ./test \
-    $${ENVISION_ROOT_DIR}
 TARGET = visualizationbase
+include(../Core/common_plugin.pri)
+
 DEFINES += VISUALIZATIONBASE_LIBRARY
-win32:LIBS += -L$${PLUGINS_DIR} \
-    -llogger \
+win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase
-QT = core \
-    gui \
-    xml \
+QT += xml \
     svg
-TEMPLATE = lib
-CONFIG += plugin \
-    warn_on \
-    thread \
-    precompile_header
-target.path = $$PLUGINS_DIR
-pluginmeta.path = $$PLUGINS_DIR
-pluginmeta.files = $${TARGET}.plugin
-styles.path = $${BUILD_DIR}/styles
-styles.files = styles/*
-INSTALLS += target \
-    pluginmeta \
-    styles
-PRECOMPILED_HEADER = src/precompiled.h
-HEADERS += src/CustomSceneEvent.h \
+    
+HEADERS += src/items/RootItem.h \
+    src/renderer/ModelRenderer.h \
+    src/renderer/VisualizationGroup.h \
+    src/renderer/VisualizationSuitabilityScore.h \
+    src/CustomSceneEvent.h \
     src/InteractionHandler.h \
-    src/ModelRenderer.h \
     src/Scene.h \
     src/VisualizationException.h \
     src/VisualizationManager.h \
@@ -105,7 +84,11 @@ HEADERS += src/CustomSceneEvent.h \
     src/visualizationbase_api.h \
     test/BoxTest.h \
     src/visualizationbase.h
-SOURCES += src/items/ItemRegion.cpp \
+SOURCES += src/items/RootItem.cpp \
+    src/renderer/ModelRenderer.cpp \
+    src/renderer/VisualizationGroup.cpp \
+    src/renderer/VisualizationSuitabilityScore.cpp \
+    src/items/ItemRegion.cpp \
     src/CustomSceneEvent.cpp \
     src/cursor/LayoutCursor.cpp \
     src/cursor/TextCursor.cpp \
@@ -166,7 +149,6 @@ SOURCES += src/items/ItemRegion.cpp \
     src/layouts/Layout.cpp \
     src/layouts/SequentialLayoutStyle.cpp \
     src/layouts/SequentialLayout.cpp \
-    src/ModelRenderer.cpp \
     test/SimpleTest.cpp \
     src/VisualizationManager.cpp \
     src/visualizationbase.cpp \

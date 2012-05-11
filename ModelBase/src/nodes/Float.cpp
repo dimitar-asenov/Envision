@@ -37,7 +37,7 @@
 
 namespace Model {
 
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(Float)
+NODE_DEFINE_TYPE_REGISTRATION_METHODS(Float, Node)
 
 Float::Float(Node *parent) :
 	Node(parent), value(0.0)

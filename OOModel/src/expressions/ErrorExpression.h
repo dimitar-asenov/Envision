@@ -47,6 +47,9 @@ class OOMODEL_API ErrorExpression : public Expression {
 	ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::Text, prefix, setPrefix, QString, const QString&)
 	ATTRIBUTE(Expression, arg, setArg)
 	ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::Text, postfix, setPostfix, QString, const QString&)
+
+	public:
+		virtual Type* type();
 };
 
 } /* namespace OOModel */

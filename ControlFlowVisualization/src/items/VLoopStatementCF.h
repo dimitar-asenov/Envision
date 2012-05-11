@@ -38,7 +38,7 @@
 #include "VLoopStatementCFStyle.h"
 #include "VListCF.h"
 
-#include "OOVisualization/src/statements/VLoopStatement.h"
+#include "OOModel/src/statements/LoopStatement.h"
 
 namespace ControlFlowVisualization {
 
@@ -66,8 +66,6 @@ class CONTROLFLOWVISUALIZATION_API VLoopStatementCF : public Visualization::Item
 		Visualization::Item* initStep;
 		Visualization::Item* updateStep;
 		VListCF* body;
-
-		OOVisualization::VLoopStatement* vis_;
 };
 
 }

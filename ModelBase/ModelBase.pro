@@ -1,31 +1,10 @@
-ENVISION_ROOT_DIR = $$PWD/..
-CONFIG(release, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/ReleaseBuild
-CONFIG(debug, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/DebugBuild
-PLUGINS_DIR = $${BUILD_DIR}/plugins
-CONFIG(debug, debug|release):DEFINES += DEBUG
-QMAKE_CXXFLAGS += -Werror \
-    -std=c++0x
-INCLUDEPATH += ./src \
-    ./test \
-    $${ENVISION_ROOT_DIR}
 TARGET = modelbase
+include(../Core/common_plugin.pri)
+
 DEFINES += MODELBASE_LIBRARY
-win32:LIBS += -L$${PLUGINS_DIR} \
-    -llogger \
+win32:LIBS += -llogger \
     -lselftest
-QT = core \
-    gui
-TEMPLATE = lib
-CONFIG += plugin \
-    warn_on \
-    thread \
-    precompile_header
-target.path = $$PLUGINS_DIR
-pluginmeta.path = $$PLUGINS_DIR
-pluginmeta.files = $${TARGET}.plugin
-INSTALLS += target \
-    pluginmeta
-PRECOMPILED_HEADER = src/precompiled.h
+
 HEADERS += src/InterruptibleThread.h \
     src/Model.h \
     src/ModelException.h \
@@ -71,7 +50,8 @@ HEADERS += src/InterruptibleThread.h \
     src/commands/SetModificationTarget.h \
     test/PersistentStoreMock.h \
     src/modelbase.h
-SOURCES += src/adapter/AdapterManager.cpp \
+SOURCES += src/persistence/PersistentStore.cpp \
+    src/adapter/AdapterManager.cpp \
     src/commands/AddModifiedNode.cpp \
     src/test_nodes/PositionExtension.cpp \
     src/TypedListInstantiations.cpp \

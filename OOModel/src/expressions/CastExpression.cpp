@@ -32,13 +32,21 @@
  **********************************************************************************************************************/
 
 #include "expressions/CastExpression.h"
+#include "../types/Type.h"
 
 namespace OOModel {
 
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(CastExpression, Expression)
 EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(CastExpression, Expression)
 
-REGISTER_ATTRIBUTE(CastExpression, type, Expression, false, false, true)
+REGISTER_ATTRIBUTE(CastExpression, castType, Expression, false, false, true)
 REGISTER_ATTRIBUTE(CastExpression, expr, Expression, false, false, true)
+
+Type* CastExpression::type()
+{
+	auto t = castType()->type();
+	t->setValueType(true);
+	return t;
+}
 
 }

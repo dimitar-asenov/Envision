@@ -25,31 +25,29 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
- * NamedType.h
+ * ArrayTypeExpression.h
  *
- *  Created on: Jan 31, 2011
+ *  Created on: Feb 17, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef NAMEDTYPE_H_
-#define NAMEDTYPE_H_
+#ifndef ARRAYTYPEEXPRESSION_H_
+#define ARRAYTYPEEXPRESSION_H_
 
-#include "Type.h"
-
-#include "../expressions/ReferenceExpression.h"
+#include "TypeExpression.h"
 
 namespace OOModel {
 
-class OOMODEL_API NamedType : public Type
+class OOMODEL_API ArrayTypeExpression : public TypeExpression
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(NamedType)
+	EXTENDABLENODE_DECLARE_STANDARD_METHODS(ArrayTypeExpression)
 
-	ATTRIBUTE(ReferenceExpression, type, setType);
+	ATTRIBUTE(Expression, typeExpression, setTypeExpression)
 
 	public:
-		virtual Class* classDefinition();
+		virtual Type* type();
 };
 
 }
 
-#endif /* NAMEDTYPE_H_ */
+#endif /* ARRAYTYPEEXPRESSION_H_ */

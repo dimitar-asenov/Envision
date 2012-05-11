@@ -32,7 +32,14 @@
  **********************************************************************************************************************/
 
 #include "expressions/ReferenceExpression.h"
+#include "top_level/Project.h"
+#include "top_level/Library.h"
+#include "top_level/Module.h"
 #include "top_level/Class.h"
+#include "../types/SymbolProviderType.h"
+#include "../types/ClassType.h"
+#include "../types/ErrorType.h"
+
 
 namespace OOModel {
 
@@ -40,21 +47,26 @@ EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(ReferenceExpression, Expression)
 EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(ReferenceExpression, Expression)
 
 REGISTER_ATTRIBUTE(ReferenceExpression, prefix, Expression, false, true, true)
-REGISTER_ATTRIBUTE(ReferenceExpression, ref, Reference, false, false, true)
+REGISTER_ATTRIBUTE(ReferenceExpression, ref, OOReference, false, false, true)
 
-Class* ReferenceExpression::classDefinition()
+ReferenceExpression::ReferenceExpression(const QString& name, Expression* prefix)
+: Expression(nullptr, ReferenceExpression::getMetaData())
 {
-	ReferenceExpression* exp = this;
-	QString path;
-	while (exp)
-	{
-		if (!path.isEmpty()) path.prepend(',');
-		path.prepend(exp->ref()->path());
+	ref()->setName(name);
+	if (prefix != nullptr) setPrefix(prefix);
+}
 
-		exp = dynamic_cast<ReferenceExpression*> (exp->prefix());
-	}
-
-	return dynamic_cast<Class*> (navigateTo(this, path));
+Type* ReferenceExpression::type()
+{
+	if ( auto project = dynamic_cast<Project*>( ref()->target() ) )
+		return new SymbolProviderType(project, false);
+	else if ( auto library = dynamic_cast<Library*>( ref()->target() ) )
+		return new SymbolProviderType(library, false);
+	else if ( auto module = dynamic_cast<Module*>( ref()->target() ) )
+		return new SymbolProviderType(module, false);
+	else if ( auto cl = dynamic_cast<Class*>( ref()->target() ) )
+		return new ClassType(cl, false);
+	else return new ErrorType("Invalid reference expression type");
 }
 
 }

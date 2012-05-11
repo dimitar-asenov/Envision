@@ -35,7 +35,7 @@
 #include "cursor/LayoutCursor.h"
 #include "shapes/Shape.h"
 #include "items/ItemWithNode.h"
-#include "ModelRenderer.h"
+#include "../renderer/ModelRenderer.h"
 
 #include "ModelBase/src/nodes/Node.h"
 
@@ -62,21 +62,21 @@ void SequentialLayout::append(Item* item)
 {
 	item->setParentItem(this);
 	items.append(item);
-	setUpdateNeeded();
+	setUpdateNeeded(StandardUpdate);
 }
 
 void SequentialLayout::prepend(Item* item)
 {
 	item->setParentItem(this);
 	items.prepend(item);
-	setUpdateNeeded();
+	setUpdateNeeded(StandardUpdate);
 }
 
 void SequentialLayout::insert(Item* item, int position)
 {
 	item->setParentItem(this);
 	items.insert(position, item);
-	setUpdateNeeded();
+	setUpdateNeeded(StandardUpdate);
 }
 
 void SequentialLayout::swap(int i, int j)
@@ -84,7 +84,7 @@ void SequentialLayout::swap(int i, int j)
 	Item* t = items[i];
 	items[i] = items[j];
 	items[j] = t;
-	setUpdateNeeded();
+	setUpdateNeeded(StandardUpdate);
 }
 
 void SequentialLayout::remove(int index, bool deleteItem_)
@@ -92,7 +92,7 @@ void SequentialLayout::remove(int index, bool deleteItem_)
 	if (deleteItem_) SAFE_DELETE_ITEM( items[index]);
 	else items[index]->setParentItem(nullptr);
 	items.remove(index);
-	setUpdateNeeded();
+	setUpdateNeeded(StandardUpdate);
 }
 
 void SequentialLayout::removeAll(Item* item, bool deleteItem)
@@ -101,7 +101,7 @@ void SequentialLayout::removeAll(Item* item, bool deleteItem)
 		if (items.at(i) == item) items.remove(i);
 	if (deleteItem) SAFE_DELETE_ITEM(item);
 	else if (item) item->setParentItem(nullptr);
-	setUpdateNeeded();
+	setUpdateNeeded(StandardUpdate);
 }
 
 void SequentialLayout::clear(bool deleteItems)
@@ -112,7 +112,7 @@ void SequentialLayout::clear(bool deleteItems)
 		else if (items[i]) items[i]->setParentItem(nullptr);
 	}
 	items.clear();
-	setUpdateNeeded();
+	setUpdateNeeded(StandardUpdate);
 }
 
 void SequentialLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes, ModelRenderer* renderer)
@@ -120,7 +120,7 @@ void SequentialLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes, Mo
 	// Inserts elements that are not yet visualized and adjusts the order to match that in 'nodes'.
 	for (int i = 0; i < nodes.size(); ++i)
 	{
-		if (i >= items.size() ) append( renderer->render(nullptr, nodes[i]));	// This node is new
+		if (i >= items.size() ) append( renderer->render(this, nodes[i]));	// This node is new
 		else if ( items[i]->node() == nodes[i] )	continue;	// This node is already there
 		else
 		{
@@ -138,7 +138,7 @@ void SequentialLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes, Mo
 			}
 
 			// The node was not found, insert a visualization here
-			if (!found ) insert( renderer->render(nullptr, nodes[i]), i);
+			if (!found ) insert( renderer->render(this, nodes[i]), i);
 		}
 	}
 
@@ -166,7 +166,7 @@ void SequentialLayout::synchronizeMid(Item*& item, Model::Node* node, int positi
 
 	if (!item && node)
 	{
-		item = renderer()->render(nullptr, node);
+		item = renderer()->render(this, node);
 		insert(item, ((position > length()) ? length() : position) );
 	}
 
@@ -178,6 +178,22 @@ bool SequentialLayout::isEmpty() const
 		if (!items[i]->isEmpty()) return false;
 
 	return true;
+}
+
+void SequentialLayout::determineChildren()
+{
+	// All this is just needed in order to support changing the purpose of a child node.
+
+	if (!scene() || needsUpdate() != FullUpdate) return Layout::determineChildren();
+
+	QList<Model::Node*> nodes;
+	for (auto i : items)
+		if (i->node()) nodes.append(i->node());
+
+	if (nodes.size() != items.size()) return Layout::determineChildren();
+
+	clear(true);
+	synchronizeWithNodes(nodes, scene()->renderer());
 }
 
 void SequentialLayout::updateGeometry(int, int)
@@ -243,8 +259,10 @@ void SequentialLayout::updateGeometry(int, int)
 		if ( horizontal )
 		{
 			int y = h;
-			if ( style()->alignment() == SequentialLayoutStyle::BottomAlignment ) y += maxChildHeight - items[i]->height();
-			if ( style()->alignment() == SequentialLayoutStyle::CenterAlignment ) y += (maxChildHeight - items[i]->height()) / 2;
+			if ( style()->alignment() == SequentialLayoutStyle::BottomAlignment )
+				y += maxChildHeight - items[i]->height();
+			if ( style()->alignment() == SequentialLayoutStyle::CenterAlignment )
+				y += (maxChildHeight - items[i]->height()) / 2;
 
 			if ( i != begin ) w += style()->spaceBetweenElements();
 			items[i]->setPos(w + xOffset(), y + yOffset());
@@ -253,8 +271,10 @@ void SequentialLayout::updateGeometry(int, int)
 		else
 		{
 			int x = w;
-			if ( style()->alignment() == SequentialLayoutStyle::RightAlignment ) x += maxChildWidth - items[i]->width();
-			if ( style()->alignment() == SequentialLayoutStyle::CenterAlignment ) x += (maxChildWidth - items[i]->width()) / 2;
+			if ( style()->alignment() == SequentialLayoutStyle::RightAlignment )
+				x += maxChildWidth - items[i]->width();
+			if ( style()->alignment() == SequentialLayoutStyle::CenterAlignment )
+				x += (maxChildWidth - items[i]->width()) / 2;
 
 			if ( i != begin ) h += style()->spaceBetweenElements();
 			items[i]->setPos(x + xOffset(), h + yOffset());

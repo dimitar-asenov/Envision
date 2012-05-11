@@ -34,8 +34,7 @@
 #ifndef VARIABLEACCESS_H_
 #define VARIABLEACCESS_H_
 
-#include "Expression.h"
-#include "ModelBase/src/nodes/Reference.h"
+#include "ReferenceExpression.h"
 
 namespace OOModel {
 
@@ -45,12 +44,12 @@ class OOMODEL_API VariableAccess: public Expression
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(VariableAccess)
 
-	ATTRIBUTE(Expression, prefix, setPrefix)
-	ATTRIBUTE(Model::Reference, ref, setRef)
+	ATTRIBUTE(ReferenceExpression, ref, setRef)
 
 	public:
-		VariableAccess(const QString& referenceString);
-		virtual Class* classDefinition();
+		VariableAccess(const QString& referenceString, Expression* prefix = nullptr);
+
+		virtual Type* type();
 };
 
 }

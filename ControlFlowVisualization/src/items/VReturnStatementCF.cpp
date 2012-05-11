@@ -59,16 +59,12 @@ void VReturnStatementCF::determineChildren()
 	synchronizeItem<VReturnStatement>(vis_, node(), nullptr);
 }
 
-void VReturnStatementCF::updateGeometry(int availableWidth, int availableHeight)
+void VReturnStatementCF::updateGeometry(int, int)
 {
 	clearConnectors();
 
-	if (! showAsControlFlow() ) Item::updateGeometry(vis_, availableWidth, availableHeight);
-	else
-	{
-		vis_->setPos(style()->pinLength(), style()->pinLength());
-		setSize(vis_->width() + 2*style()->pinLength(), vis_->height() + 2*style()->pinLength());
-	}
+	vis_->setPos(style()->pinLength(), style()->pinLength());
+	setSize(vis_->width() + 2*style()->pinLength(), vis_->height() + 2*style()->pinLength());
 
 	entrance_ = QPoint(width()/2, 0);
 	addConnector(entrance_, entrance_ + QPoint(0, style()->pinLength()), true);
