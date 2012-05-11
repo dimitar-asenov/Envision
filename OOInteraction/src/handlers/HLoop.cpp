@@ -72,7 +72,7 @@ void HLoop::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 				vloop->node()->setCondition(empty);
 				vloop->node()->model()->endModification();
 
-				vloop->header()->setUpdateNeeded();
+				vloop->header()->setUpdateNeeded(Visualization::Item::StandardUpdate);
 				target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty,
 						Interaction::SetCursorEvent::CursorOnLeft));
 			}
@@ -86,7 +86,7 @@ void HLoop::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			vloop->node()->setUpdateStep(empty);
 			vloop->node()->model()->endModification();
 
-			vloop->header()->setUpdateNeeded();
+			vloop->header()->setUpdateNeeded(Visualization::Item::StandardUpdate);
 			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty,
 					Interaction::SetCursorEvent::CursorOnLeft));
 		}
@@ -104,7 +104,7 @@ void HLoop::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 				vloop->node()->setInitStep(empty);
 				vloop->node()->model()->endModification();
 
-				vloop->header()->setUpdateNeeded();
+				vloop->header()->setUpdateNeeded(Visualization::Item::StandardUpdate);
 				target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty,
 						Interaction::SetCursorEvent::CursorOnLeft));
 			}
@@ -128,7 +128,7 @@ void HLoop::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 				vloop->node()->body()->append( new OOModel::ExpressionStatement(empty) );
 				vloop->node()->model()->endModification();
 
-				vloop->body()->setUpdateNeeded();
+				vloop->body()->setUpdateNeeded(Visualization::Item::StandardUpdate);
 				target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty,
 						Interaction::SetCursorEvent::CursorOnLeft));
 			}

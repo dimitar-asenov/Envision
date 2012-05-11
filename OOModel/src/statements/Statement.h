@@ -41,7 +41,7 @@ namespace OOModel {
 
 class OOMODEL_API Statement: public StatementItem
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Statement);
+	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Statement)
 };
 
 }

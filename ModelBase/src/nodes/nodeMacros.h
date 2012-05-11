@@ -65,6 +65,7 @@
 																																							\
 		virtual const QString& typeName() const;																								\
 		virtual int typeId() const;																												\
+		virtual QList<int> hierarchyTypeIds() const;																							\
 		static const QString& typeNameStatic();																								\
 		static int typeIdStatic();																													\
 		static void registerNodeType();																											\
@@ -96,7 +97,8 @@
 		className(::Model::Node* parent = nullptr);																							\
 		className(::Model::Node *parent, ::Model::PersistentStore &store, bool partialLoadHint);								\
 		className(::Model::Node* parent, ::Model::AttributeChain& metaData);															\
-		className(::Model::Node *parent, ::Model::PersistentStore &store, bool partialLoadHint, ::Model::AttributeChain& metaData); \
+		className(::Model::Node *parent, ::Model::PersistentStore &store, bool partialLoadHint,								\
+			::Model::AttributeChain& metaData); 																								\
 																																							\
 		static void init();																															\
 																																							\
@@ -114,6 +116,7 @@
 																																							\
 		virtual const QString& typeName() const;																								\
 		virtual int typeId() const;																												\
+		virtual QList<int> hierarchyTypeIds() const;																							\
 		static const QString& typeNameStatic();																								\
 		static int typeIdStatic();																													\
 		static void registerNodeType();																											\
@@ -135,44 +138,45 @@
  * Defines standard empty constructors for a new Node type which just call their parent constructors.
  *
  * @param className
- * 			The name of the class being defined. This class must inherit from parentName.
+ * 			The name of the class being defined. This class must inherit from superClassName.
  *
- * @param parentName
+ * @param superClassName
  * 			The name of the direct parent class. This class must be or inherit from from Node, directly or indirectly.
  *
  * Use this macro in the .cpp file that defines the new Node type.
  */
-#define NODE_DEFINE_EMPTY_CONSTRUCTORS(className, parentName)																			\
-	className::className(::Model::Node* parent) : parentName (parent) {}																\
+#define NODE_DEFINE_EMPTY_CONSTRUCTORS(className, superClassName)																		\
+	className::className(::Model::Node* parent) : superClassName (parent) {}														\
 																																							\
 	className::className(::Model::Node *parent, ::Model::PersistentStore &store, bool partialLoadHint)						\
-		: parentName (parent, store, partialLoadHint) {}
+		: superClassName (parent, store, partialLoadHint) {}
 /*********************************************************************************************************************/
 
 /**
  * Defines standard empty constructors for a new Node type which just call their parent constructors.
  *
  * @param className
- * 			The name of the class being defined. This class must inherit from parentName.
+ * 			The name of the class being defined. This class must inherit from superClassName.
  *
- * @param parentName
+ * @param superClassName
  * 			The name of the direct parent class. This class must be or inherit from from ExtendableNode, directly or
  * 			indirectly.
  *
  * Use this macro in the .cpp file that defines the new Node type.
  */
-#define EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(className, parentName)																\
+#define EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(className, superClassName)														\
 	className::className(::Model::Node* parent)																								\
-		: parentName (parent, className::getMetaData()) {}																					\
+		: superClassName (parent, className::getMetaData()) {}																			\
 		  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	\
 	className::className(::Model::Node *parent, ::Model::PersistentStore &store, bool partialLoadHint)						\
-		: parentName (parent, store, partialLoadHint, className::getMetaData()) {}													\
+		: superClassName (parent, store, partialLoadHint, className::getMetaData()) {}											\
 		  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	   \
 	className::className(::Model::Node* parent, ::Model::AttributeChain& metaData)												\
-		: parentName (parent, metaData) {}																										\
+		: superClassName (parent, metaData) {}																									\
 																																							\
-	className::className(::Model::Node *parent, ::Model::PersistentStore &store, bool partialLoadHint, ::Model::AttributeChain& metaData)\
-		: parentName (parent, store, partialLoadHint, metaData) {}
+	className::className(::Model::Node *parent, ::Model::PersistentStore &store, bool partialLoadHint,						\
+			::Model::AttributeChain& metaData)																									\
+		: superClassName (parent, store, partialLoadHint, metaData) {}
 /*********************************************************************************************************************/
 
 /**
@@ -180,11 +184,14 @@
  * that returns the name of this class.
  *
  * @param className
- * 			The name of the class being defined. This class must inherit from from Node, directly or indirectly.
+ * 			The name of the class being defined. This class must inherit directly from superClassName.
+ * @param superClassName
+ * 			The super class that the defined node type derives from. This class must inherit from from Node, directly or
+ * 			indirectly.
  *
  * Use this macro in the .cpp file that defines the new Node type.
  */
-#define NODE_DEFINE_TYPE_REGISTRATION_METHODS(className)																					\
+#define NODE_DEFINE_TYPE_REGISTRATION_METHODS(className, superClassName)															\
 int className::typeId_ = -1; /* This must be set to the result of Node::registerNodeType */									\
 																																							\
 const QString& className::typeName() const																									\
@@ -195,6 +202,12 @@ const QString& className::typeName() const																									\
 int className::typeId()	const																														\
 {																																							\
 	return typeId_;																																	\
+}																																							\
+QList<int> className::hierarchyTypeIds() const																								\
+{																																							\
+	auto l = superClassName::hierarchyTypeIds();																								\
+	l.prepend( typeIdStatic() );																													\
+	return l;																																			\
 }																																							\
 int className::typeIdStatic()																														\
 {																																							\
@@ -208,7 +221,8 @@ const QString& className::typeNameStatic()																									\
 																																							\
 void className::registerNodeType()																												\
 {																																							\
-	typeId_ = Node::registerNodeType(#className, ::Model::createNewNode< className >, ::Model::createNodeFromPersistence< className >);\
+	typeId_ = Node::registerNodeType(#className, ::Model::createNewNode< className >,											\
+			::Model::createNodeFromPersistence< className >);																				\
 }
 /*********************************************************************************************************************/
 
@@ -217,12 +231,14 @@ void className::registerNodeType()																												\
  * that returns the name of this class.
  *
  * @param className
- * 			The name of the class being defined. This class must inherit from from ExtendableNode, directly or
- * 			indirectly.
+ * 			The name of the class being defined. This class must inherit directly from superClassName.
+ * @param superClassName
+ * 			The super class that the defined node type derives from. This class must inherit from ExtendableNode,
+ * 			directly or indirectly.
  *
  * Use this macro in the .cpp file that defines the new Node type.
  */
-#define EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(className, parentName)													\
+#define EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(className, superClassName)												\
 int className::typeId_ = -1; /* This must be set to the result of Node::registerNodeType */									\
 																																							\
 const QString& className::typeName() const																									\
@@ -233,6 +249,12 @@ const QString& className::typeName() const																									\
 int className::typeId()	const																														\
 {																																							\
 	return typeId_;																																	\
+}																																							\
+QList<int> className::hierarchyTypeIds() const																								\
+{																																							\
+	auto l = superClassName::hierarchyTypeIds();																								\
+	l.prepend( typeIdStatic() );																													\
+	return l;																																			\
 }																																							\
 int className::typeIdStatic()																														\
 {																																							\
@@ -246,8 +268,9 @@ const QString& className::typeNameStatic()																									\
 																																							\
 void className::registerNodeType()																												\
 {																																							\
-	className::getMetaData().setParent(&parentName::getMetaData());																	\
-	typeId_ = Node::registerNodeType(#className, ::Model::createNewNode< className >, ::Model::createNodeFromPersistence< className >);\
+	className::getMetaData().setParent(&superClassName::getMetaData());																\
+	typeId_ = Node::registerNodeType(#className, ::Model::createNewNode< className >,											\
+			::Model::createNodeFromPersistence< className >);																				\
 }																																							\
 																																							\
 ::Model::AttributeChain& className::getMetaData()																							\

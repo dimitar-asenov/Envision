@@ -51,9 +51,9 @@ SelectedItem::~SelectedItem()
 	selectedItem_ = nullptr;
 }
 
-bool SelectedItem::needsUpdate()
+Item::UpdateType SelectedItem::needsUpdate()
 {
-	return true;
+	return FullUpdate;
 }
 
 void SelectedItem::determineChildren()

@@ -25,59 +25,32 @@
  **********************************************************************************************************************/
 
 /*
- * VControlFlowMethodSwitch.h
+ * HRootItem.h
  *
- *  Created on: Mar 1, 2012
+ *  Created on: Apr 26, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef ControlFlowVisualization_VCONTROLFLOWMETHODSWITCH_H_
-#define ControlFlowVisualization_VCONTROLFLOWMETHODSWITCH_H_
+#ifndef InteractionBase_HROOTITEM_H_
+#define InteractionBase_HROOTITEM_H_
 
-#include "../controlflowvisualization_api.h"
+#include "../interactionbase_api.h"
 
-#include "OOModel/src/top_level/Method.h"
+#include "GenericHandler.h"
 
-#include "VisualizationBase/src/items/ItemWithNode.h"
-#include "VisualizationBase/src/items/ItemStyle.h"
-#include "VisualizationBase/src/items/Item.h"
+namespace Interaction {
 
-namespace OOVisualization {
-	class VMethod;
-}
-
-namespace ControlFlowVisualization {
-
-class VMethodCF;
-
-class CONTROLFLOWVISUALIZATION_API VControlFlowMethodSwitch
-	: public Visualization::ItemWithNode<Visualization::Item, OOModel::Method>
+class INTERACTIONBASE_API HRootItem : public GenericHandler
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VControlFlowMethodSwitch, Visualization::ItemStyle)
-
 	public:
-		VControlFlowMethodSwitch(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event);
 
-		virtual bool sizeDependsOnParent() const;
-
-		bool isShownAsControlFlow() const;
-		void setShowAsControlFlow(bool showAsControlFlow);
+		static HRootItem* instance();
 
 	protected:
-		virtual void determineChildren();
-		virtual void updateGeometry(int availableWidth, int availableHeight);
-
-	private:
-		bool showAsControlFlow_;
-		VMethodCF* metCF_;
-		OOVisualization::VMethod* met_;
-
-		bool isRenderingChanged() const;
+		HRootItem();
 };
 
-inline bool VControlFlowMethodSwitch::isShownAsControlFlow() const { return showAsControlFlow_; }
-inline void VControlFlowMethodSwitch::setShowAsControlFlow(bool showAsControlFlow)
-	{ showAsControlFlow_ = showAsControlFlow; setUpdateNeeded(); }
+} /* namespace Interaction */
 
-} /* namespace ControlFlowVisualization */
-#endif /* ControlFlowVisualization_VCONTROLFLOWMETHODSWITCH_H_ */
+#endif /* InteractionBase_HROOTITEM_H_ */

@@ -60,11 +60,11 @@ class VISUALIZATIONBASE_API TextStyle : public ItemStyle
 		const QBrush& selectionBackground() const;
 };
 
-inline const QPen& TextStyle::pen() const { return pen_; };
-inline const QFont& TextStyle::font() const { return font_; };
-inline const QPen& TextStyle::selectionPen() const { return selectionPen_; };
-inline const QFont& TextStyle::selectionFont() const { return selectionFont_; };
-inline const QBrush& TextStyle::selectionBackground() const { return selectionBackground_; };
+inline const QPen& TextStyle::pen() const { return pen_; }
+inline const QFont& TextStyle::font() const { return font_; }
+inline const QPen& TextStyle::selectionPen() const { return selectionPen_; }
+inline const QFont& TextStyle::selectionFont() const { return selectionFont_; }
+inline const QBrush& TextStyle::selectionBackground() const { return selectionBackground_; }
 
 }
 

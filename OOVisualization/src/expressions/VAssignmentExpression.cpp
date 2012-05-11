@@ -45,9 +45,9 @@ ITEM_COMMON_DEFINITIONS(VAssignmentExpression, "item")
 
 		VAssignmentExpression::VAssignmentExpression(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<>, AssignmentExpression>(parent, node, style),
-	assignmentSymbol_( new Static(nullptr, &style->op( node->op() ).inSymbol()) ),
-	left_(nullptr),
-	right_(nullptr)
+	assignmentSymbol_( new Static(layout(), &style->op( node->op() ).inSymbol()) ),
+	left_(),
+	right_()
 {
 	layout()->append(assignmentSymbol_);
 }

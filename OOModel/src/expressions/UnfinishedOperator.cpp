@@ -32,6 +32,7 @@
  */
 
 #include "expressions/UnfinishedOperator.h"
+#include "../types/ErrorType.h"
 
 namespace OOModel {
 
@@ -40,5 +41,10 @@ EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(UnfinishedOperator, Expression)
 
 REGISTER_ATTRIBUTE(UnfinishedOperator, delimiters, TypedListOfText, false, false, true)
 REGISTER_ATTRIBUTE(UnfinishedOperator, operands, TypedListOfExpression, false, false, true)
+
+Type* UnfinishedOperator::type()
+{
+	return new ErrorType("Unfinished Operator");
+}
 
 } /* namespace OOModel */

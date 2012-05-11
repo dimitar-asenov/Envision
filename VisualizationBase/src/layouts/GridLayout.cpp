@@ -34,7 +34,7 @@
 #include "layouts/GridLayout.h"
 #include "shapes/Shape.h"
 #include "items/ItemWithNode.h"
-#include "ModelRenderer.h"
+#include "../renderer/ModelRenderer.h"
 
 #include "ModelBase/src/nodes/Node.h"
 
@@ -92,7 +92,7 @@ void GridLayout::set(Item* item, int x, int y, bool deleteOldItem)
 	if (deleteOldItem) SAFE_DELETE_ITEM( items_[x][y]);
 	else if (items_[x][y]) items_[x][y]->setParentItem(nullptr);
 	items_[x][y] = item;
-	setUpdateNeeded();
+	setUpdateNeeded(StandardUpdate);
 }
 
 void GridLayout::swap(int x1, int y1, int x2, int y2)
@@ -100,7 +100,7 @@ void GridLayout::swap(int x1, int y1, int x2, int y2)
 	Item* t = items_[x1][y1];
 	items_[x1][y1] = items_[x2][y2];
 	items_[x2][y2] = t;
-	setUpdateNeeded();
+	setUpdateNeeded(StandardUpdate);
 }
 
 void GridLayout::remove(int x, int y, bool deleteItem_)
@@ -108,7 +108,7 @@ void GridLayout::remove(int x, int y, bool deleteItem_)
 	if (deleteItem_) SAFE_DELETE_ITEM( items_[x][y]);
 	else if(items_[x][y]) items_[x][y]->setParentItem(nullptr);
 	items_[x][y] = nullptr;
-	setUpdateNeeded();
+	setUpdateNeeded(StandardUpdate);
 }
 
 void GridLayout::remove(Item* item, bool deleteItem)
@@ -121,7 +121,7 @@ void GridLayout::remove(Item* item, bool deleteItem)
 
 	if (deleteItem) SAFE_DELETE_ITEM(item);
 	else item->setParentItem(nullptr);
-	setUpdateNeeded();
+	setUpdateNeeded(StandardUpdate);
 }
 
 void GridLayout::clear(bool deleteItems)
@@ -134,7 +134,7 @@ void GridLayout::clear(bool deleteItems)
 
 			items_[x][y] = nullptr;
 		}
-	setUpdateNeeded();
+	setUpdateNeeded(StandardUpdate);
 }
 
 void GridLayout::synchronizeWithNodes(const QList< QList<Model::Node*> >& nodes, ModelRenderer* renderer)
@@ -175,7 +175,7 @@ void GridLayout::synchronizeWithNodes(const QList< QList<Model::Node*> >& nodes,
 		{
 			int oldIndex = nodesFound.indexOf(nodes[y][x]);
 			if (oldIndex >=0) set(itemsFound[oldIndex], x, y, false);
-			else set(renderer->render(nullptr, nodes[y][x]), x, y, false);
+			else set(renderer->render(this, nodes[y][x]), x, y, false);
 		}
 }
 
@@ -190,7 +190,7 @@ void GridLayout::synchronize(Item*& item, Model::Node* node, int x, int y)
 
 	if (!item && node)
 	{
-		item = renderer()->render(nullptr, node);
+		item = renderer()->render(this, node);
 		set(item, x, y, true);
 	}
 

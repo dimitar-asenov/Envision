@@ -39,7 +39,7 @@
 #include "../attributeMacros.h"
 #include "../elements/Visibility.h"
 #include "../elements/StorageSpecifier.h"
-#include "../types/Type.h"
+#include "../expressions/Expression.h"
 
 #include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
 #include "ModelBase/src/nodes/Text.h"
@@ -52,7 +52,7 @@ class OOMODEL_API Field : public Model::ExtendableNode
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Field)
 
 	ATTRIBUTE_OOP_NAME
-	ATTRIBUTE(Type, type, setType)
+	ATTRIBUTE(Expression, typeExpression, setTypeExpression)
 	ATTRIBUTE_OOP_VISIBILITY
 	ATTRIBUTE_OOP_STORAGESPECIFIER
 

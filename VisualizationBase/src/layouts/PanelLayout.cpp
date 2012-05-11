@@ -38,7 +38,7 @@ namespace Visualization {
 ITEM_COMMON_DEFINITIONS( PanelLayout, "layout" )
 
 PanelLayout::PanelLayout(Item* parent, const StyleType* style) :
-	Layout(parent, style), first_(nullptr), middle_(nullptr), last_(nullptr)
+	Layout(parent, style), first_(), middle_(), last_()
 {
 }
 
@@ -55,7 +55,7 @@ void PanelLayout::setItem(Item* item, Item*& position, bool deleteOldItem)
 
 	if ( item ) item->setParentItem(this);
 	position = item;
-	setUpdateNeeded();
+	setUpdateNeeded(StandardUpdate);
 }
 
 bool PanelLayout::sizeDependsOnParent() const
@@ -101,20 +101,26 @@ void PanelLayout::updateGeometry(int availableWidth, int availableHeight)
 
 		// Begin
 		int x = xOffset();
-		if ( style()->alignment() == PanelLayoutStyle::BottomAlignment ) first.moveTo(x, y + maxChildHeight - first.height());
-		if ( style()->alignment() == PanelLayoutStyle::CenterAlignment ) first.moveTo(x, y + (maxChildHeight - first.height()) / 2);
+		if ( style()->alignment() == PanelLayoutStyle::BottomAlignment )
+			first.moveTo(x, y + maxChildHeight - first.height());
+		if ( style()->alignment() == PanelLayoutStyle::CenterAlignment )
+			first.moveTo(x, y + (maxChildHeight - first.height()) / 2);
 
 		// End
 		x = xOffset() + width - last.width();
-		if ( style()->alignment() == PanelLayoutStyle::BottomAlignment ) last.moveTo(x, y + maxChildHeight - last.height());
-		if ( style()->alignment() == PanelLayoutStyle::CenterAlignment ) last.moveTo(x, y + (maxChildHeight - last.height()) / 2);
+		if ( style()->alignment() == PanelLayoutStyle::BottomAlignment )
+			last.moveTo(x, y + maxChildHeight - last.height());
+		if ( style()->alignment() == PanelLayoutStyle::CenterAlignment )
+			last.moveTo(x, y + (maxChildHeight - last.height()) / 2);
 
 		// Center
 		x = xOffset() + (width - middle.width()) / 2;
 		int minX = first.x() + first.width() + style()->spaceBetweenElements();
 		if ( x < minX ) x = minX;
-		if ( style()->alignment() == PanelLayoutStyle::BottomAlignment ) middle.moveTo(x, y + maxChildHeight - middle.height());
-		if ( style()->alignment() == PanelLayoutStyle::CenterAlignment ) middle.moveTo(x, y + (maxChildHeight - middle.height()) / 2);
+		if ( style()->alignment() == PanelLayoutStyle::BottomAlignment )
+			middle.moveTo(x, y + maxChildHeight - middle.height());
+		if ( style()->alignment() == PanelLayoutStyle::CenterAlignment )
+			middle.moveTo(x, y + (maxChildHeight - middle.height()) / 2);
 	}
 	else
 	{
@@ -139,86 +145,31 @@ void PanelLayout::updateGeometry(int availableWidth, int availableHeight)
 
 		// Begin
 		int y = yOffset();
-		if ( style()->alignment() == PanelLayoutStyle::RightAlignment ) first.moveTo(x + maxChildWidth - first.width(), y);
-		if ( style()->alignment() == PanelLayoutStyle::CenterAlignment ) first.moveTo(x + (maxChildWidth - first.width()) / 2, y);
+		if ( style()->alignment() == PanelLayoutStyle::RightAlignment )
+			first.moveTo(x + maxChildWidth - first.width(), y);
+		if ( style()->alignment() == PanelLayoutStyle::CenterAlignment )
+			first.moveTo(x + (maxChildWidth - first.width()) / 2, y);
 
 		// End
 		y = yOffset() + height - last.height();
-		if ( style()->alignment() == PanelLayoutStyle::RightAlignment ) last.moveTo(x + maxChildWidth - last.width(), y);
-		if ( style()->alignment() == PanelLayoutStyle::CenterAlignment ) last.moveTo(x + (maxChildWidth - last.width()) / 2, y);
+		if ( style()->alignment() == PanelLayoutStyle::RightAlignment )
+			last.moveTo(x + maxChildWidth - last.width(), y);
+		if ( style()->alignment() == PanelLayoutStyle::CenterAlignment )
+			last.moveTo(x + (maxChildWidth - last.width()) / 2, y);
 
 		// Center
 		y = yOffset() + (height - middle.height()) / 2;
 		int minY = first.y() + first.height() + style()->spaceBetweenElements();
 		if ( y < minY ) y = minY;
-		if ( style()->alignment() == PanelLayoutStyle::RightAlignment ) middle.moveTo(x + maxChildWidth - middle.width(), y);
-		if ( style()->alignment() == PanelLayoutStyle::CenterAlignment ) middle.moveTo(x + (maxChildWidth - middle.width()) / 2, y);
+		if ( style()->alignment() == PanelLayoutStyle::RightAlignment )
+			middle.moveTo(x + maxChildWidth - middle.width(), y);
+		if ( style()->alignment() == PanelLayoutStyle::CenterAlignment )
+			middle.moveTo(x + (maxChildWidth - middle.width()) / 2, y);
 	}
 
 	if (first_) first_->setPos(first.topLeft());
 	if (middle_) middle_->setPos(middle.topLeft());
 	if (last_) last_->setPos(last.topLeft());
 }
-
-//bool PanelLayout::focusChild(FocusTarget location)
-//{
-//	Item* toFocus = nullptr;
-//	Item* f = first_ ? first_ : (middle_ ? middle_ : last_);
-//	Item* l = last_ ? last_ : (middle_ ? middle_ : first_);
-//
-//	if (f == nullptr) return false;
-//
-//	// Find out which is the current item and get the previous and next if any
-//	Item* prev = nullptr;
-//	Item* next = nullptr;
-//	if (first_ && first_->itemOrChildHasFocus())
-//	{
-//		next = middle_ ? middle_ : last_;
-//	}
-//	else if (middle_ && middle_->itemOrChildHasFocus())
-//	{
-//		prev = first_;
-//		next = last_;
-//	}
-//	else if (last_ && last_->itemOrChildHasFocus())
-//	{
-//		prev = middle_ ? middle_ : first_;
-//	}
-//
-//	bool horizontal = style()->orientation() == PanelLayoutStyle::HorizontalOrientation;
-//
-//	switch (location)
-//	{
-//		case FOCUS_DEFAULT:
-//			toFocus = f;
-//			break;
-//		case FOCUS_TOPMOST:
-//			toFocus = f;
-//			break;
-//		case FOCUS_BOTTOMMOST:
-//			toFocus = horizontal ? f : l;
-//			break;
-//		case FOCUS_LEFTMOST:
-//			toFocus = f;
-//			break;
-//		case FOCUS_RIGHTMOST:
-//			toFocus =  horizontal ? l : f;
-//			break;
-//		case FOCUS_UP:
-//			if (!horizontal) toFocus = prev;
-//			break;
-//		case FOCUS_DOWN:
-//			if (!horizontal) toFocus = next;
-//			break;
-//		case FOCUS_LEFT:
-//			if (horizontal) toFocus = prev;
-//			break;
-//		case FOCUS_RIGHT:
-//			if (horizontal) toFocus = next;
-//			break;
-//	}
-//
-//	return Item::focusChild(toFocus);
-//}
 
 }

@@ -49,7 +49,7 @@ class VISUALIZATIONBASE_API SelectedItem: public Item
 		SelectedItem(Item* selectedItem, const StyleType* style = itemStyles().get());
 		virtual ~SelectedItem();
 
-		virtual bool needsUpdate();
+		virtual UpdateType needsUpdate() override;
 		Item* selectedItem();
 
 	protected:

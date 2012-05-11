@@ -45,7 +45,7 @@ ITEM_COMMON_DEFINITIONS(VVariableDeclaration, "item")
 
 VVariableDeclaration::VVariableDeclaration(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<>, VariableDeclaration>(parent, node, style),
-	name_(new VText(nullptr, node->nameNode(), &style->name()) ),
+	name_(new VText(layout(), node->nameNode(), &style->name()) ),
 	type_(nullptr),
 	assignmentSymbol_(nullptr),
 	initialValue_(nullptr)
@@ -71,7 +71,7 @@ void VVariableDeclaration::determineChildren()
 	layout()->setStyle( &style()->layout());
 	name_->setStyle( &style()->name());
 
-	layout()->synchronizeFirst(type_, node()->type());
+	layout()->synchronizeFirst(type_, node()->varType());
 	layout()->synchronizeMid(name_, node()->nameNode(), &style()->name(), 1);
 	name_->setEditable(false);
 	layout()->synchronizeMid(assignmentSymbol_, node()->initialValue() != nullptr, &style()->assignmentSymbol(), 2);

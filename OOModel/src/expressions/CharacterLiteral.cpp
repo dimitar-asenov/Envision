@@ -32,6 +32,7 @@
  **********************************************************************************************************************/
 
 #include "expressions/CharacterLiteral.h"
+#include "../types/PrimitiveType.h"
 
 namespace OOModel {
 
@@ -44,6 +45,11 @@ CharacterLiteral::CharacterLiteral(const QChar& value)
 : Expression(nullptr, CharacterLiteral::getMetaData())
 {
 	setValue(value);
+}
+
+Type* CharacterLiteral::type()
+{
+	return new PrimitiveType(PrimitiveType::CHAR, true);
 }
 
 }

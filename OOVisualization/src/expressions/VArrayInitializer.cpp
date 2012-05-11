@@ -80,7 +80,7 @@ void VArrayInitializer::determineChildren()
 		else
 		{
 			layout()->setGridSize(1,1, false);
-			values_ = new VList(nullptr, node()->values(), &style()->values());
+			values_ = new VList(layout(), node()->values(), &style()->values());
 			layout()->set(values_,0,0, true);
 		}
 	}
@@ -120,7 +120,7 @@ void VArrayInitializer::showInMatrixForm(bool matrixForm)
 	if ( matrixForm != matrixForm_ )
 	{
 		matrixForm_ = matrixForm;
-		setUpdateNeeded();
+		setUpdateNeeded(FullUpdate);
 	}
 }
 

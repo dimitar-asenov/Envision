@@ -38,7 +38,7 @@
 #include "VIfStatementCFStyle.h"
 #include "VListCF.h"
 
-#include "OOVisualization/src/statements/VIfStatement.h"
+#include "OOModel/src/statements/IfStatement.h"
 
 namespace ControlFlowVisualization {
 
@@ -63,8 +63,6 @@ class CONTROLFLOWVISUALIZATION_API VIfStatementCF : public Visualization::ItemWi
 		Visualization::Item* condition;
 		VListCF* thenBranch;
 		VListCF* elseBranch;
-
-		OOVisualization::VIfStatement* vis_;
 };
 
 }

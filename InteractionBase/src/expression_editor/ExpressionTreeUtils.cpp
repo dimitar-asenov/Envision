@@ -326,7 +326,7 @@ void ExpressionTreeUtils::fixWrongIds(Expression*& top)
 					if (s == "id")
 					{
 						auto v = dynamic_cast<Value*> (op->operands().at(operandIndex));
-						badId = badId || !v || v->text().isEmpty() || !v->text()[0].isLetter();
+						badId = badId || !v || v->text().isEmpty() || !(v->text()[0].isLetter() || v->text()[0] == '_') ;
 						if (badId) break;
 					}
 

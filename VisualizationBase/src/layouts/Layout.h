@@ -70,24 +70,23 @@ template <class T> void Layout::synchronizeItem(Item*& layoutItem, T*& externalI
 	if (externalItem != layoutItem)
 	{
 		SAFE_DELETE_ITEM(layoutItem);
-		setUpdateNeeded();
+		setUpdateNeeded(StandardUpdate);
 	}
 
 	if (externalItem && !present )
 	{
 		SAFE_DELETE_ITEM(externalItem);
 		layoutItem = nullptr; // One of the safe deletes above deleted this item
-		setUpdateNeeded();
+		setUpdateNeeded(StandardUpdate);
 	}
 
 	if (!externalItem && present)
 	{
-		if (style) externalItem = new T(nullptr, style);
-		else externalItem = new T(nullptr);
+		if (style) externalItem = new T(this, style);
+		else externalItem = new T(this);
 
-		externalItem->setParentItem(this);
 		layoutItem = externalItem;
-		setUpdateNeeded();
+		setUpdateNeeded(StandardUpdate);
 	}
 }
 
@@ -99,24 +98,23 @@ template <class T> void Layout::synchronizeItem(Item*& layoutItem, T*& externalI
 	if (externalItem != layoutItem)
 	{
 		SAFE_DELETE_ITEM(layoutItem);
-		setUpdateNeeded();
+		setUpdateNeeded(StandardUpdate);
 	}
 
 	if (externalItem && externalItem->node() != node )
 	{
 		SAFE_DELETE_ITEM(externalItem);
 		layoutItem = nullptr; // One of the safe deletes above deleted this item
-		setUpdateNeeded();
+		setUpdateNeeded(StandardUpdate);
 	}
 
 	if (!externalItem && node)
 	{
-		if (style) externalItem = new T(nullptr, node, style);
-		else externalItem = new T(nullptr, node);
+		if (style) externalItem = new T(this, node, style);
+		else externalItem = new T(this, node);
 
-		externalItem->setParentItem(this);
 		layoutItem = externalItem;
-		setUpdateNeeded();
+		setUpdateNeeded(StandardUpdate);
 	}
 }
 

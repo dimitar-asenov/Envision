@@ -37,14 +37,14 @@
 #include "shapes/ShapeStyle.h"
 #include "VisualizationException.h"
 #include "Scene.h"
-#include "ModelRenderer.h"
+#include "../renderer/ModelRenderer.h"
 
 #include "cursor/Cursor.h"
 
 namespace Visualization {
 
 Item::Item(Item* parent, const StyleType* style) :
-	QGraphicsItem(parent), style_(nullptr), shape_(nullptr), needsUpdate_(true)
+	QGraphicsItem(parent), style_(nullptr), shape_(nullptr), needsUpdate_(FullUpdate), purpose_(-1)
 {
 	if ( !style || style->drawsOnlyShape() ) setFlag(QGraphicsItem::ItemHasNoContents);
 
@@ -64,20 +64,32 @@ QRectF Item::boundingRect() const
 	return boundingRect_;
 }
 
-void Item::setUpdateNeeded()
+void Item::setUpdateNeeded(UpdateType updateType)
 {
-	needsUpdate_ = true;
-	Item* parent = static_cast<Item*> (parentItem());
-	while (parent)
+	needsUpdate_ = updateType;
+	Item* p = parent();
+	while (p)
 	{
-		parent->needsUpdate_ = true;
-		parent = static_cast<Item*> (parent->parentItem());
+		if (p->needsUpdate() == NoUpdate) p->needsUpdate_ = StandardUpdate;
+		p = p->parent();
 	}
 }
 
-bool Item::needsUpdate()
+Item::UpdateType Item::needsUpdate()
 {
 	return needsUpdate_;
+}
+
+void Item::setPurpose(int purpose)
+{
+	purpose_ = purpose;
+	setUpdateNeeded(FullUpdate);
+}
+
+void Item::clearPurpose()
+{
+	purpose_ = -1;
+	setUpdateNeeded(FullUpdate);
 }
 
 void Item::setStyle(const ItemStyle* style)
@@ -86,7 +98,7 @@ void Item::setStyle(const ItemStyle* style)
 	SAFE_DELETE(shape_);
 	style_ = style;
 	useShape();
-	setUpdateNeeded();
+	setUpdateNeeded(FullUpdate);
 }
 
 void Item::useShape()
@@ -102,7 +114,7 @@ void Item::useShape()
 		{
 			if (!style_ || style_->drawsOnlyShape() ) setFlag(QGraphicsItem::ItemHasNoContents);
 		}
-		setUpdateNeeded();
+		setUpdateNeeded(StandardUpdate);
 	}
 }
 
@@ -110,7 +122,7 @@ void Item::removeShape()
 {
 	SAFE_DELETE(shape_);
 	if (!style_ || style_->drawsOnlyShape()) setFlag(QGraphicsItem::ItemHasNoContents);
-	setUpdateNeeded();
+	setUpdateNeeded(StandardUpdate);
 }
 
 bool Item::sizeDependsOnParent() const
@@ -124,12 +136,13 @@ void Item::updateSubtree()
 	// It is safe to assume that an item is updated before its parent item is updated. When an item's size depends on the
 	// parent's size, we must first update the item without providing any size constraints, so that the item can report a
 	// minimum size during the parent's update procedure.
-	if ( needsUpdate_ || needsUpdate() || sizeDependsOnParent() || (hasNode() && revision() != node()->revision()))
+	if ( (needsUpdate_ != NoUpdate) || needsUpdate() || sizeDependsOnParent()
+			|| (hasNode() && revision() != node()->revision()))
 	{
 		determineChildren();
 		updateChildren();
 		changeGeometry();
-		needsUpdate_ = false;
+		needsUpdate_ = NoUpdate;
 		if (hasNode()) setRevision( node()->revision() );
 	}
 }
@@ -228,7 +241,8 @@ void Item::setRevision(int)
 
 bool Item::itemOrChildHasFocus() const
 {
-	return QGraphicsItem::scene()->focusItem() == this || QGraphicsItem::isAncestorOf( QGraphicsItem::scene()->focusItem() );
+	return QGraphicsItem::scene()->focusItem() == this
+			|| QGraphicsItem::isAncestorOf( QGraphicsItem::scene()->focusItem() );
 }
 
 Item* Item::focusedChild() const
@@ -244,7 +258,15 @@ Item* Item::focusedChild() const
 
 void Item::removeFromScene()
 {
-	if ( scene() ) scene()->removeItem(this);
+	if ( scene() )
+	{
+		// Remove cursor if it is in the hierarchy
+		auto mc = scene()->mainCursor();
+		if (mc && isAncestorOf(mc->owner()))
+			scene()->setMainCursor(nullptr);
+
+		scene()->removeItem(this);
+	}
 	setParentItem(nullptr);
 }
 
@@ -253,14 +275,13 @@ void Item::synchronizeItem(Item*& item, Model::Node* node)
 	if (item && item->node() != node )
 	{
 		SAFE_DELETE_ITEM(item);
-		setUpdateNeeded();
+		setUpdateNeeded(StandardUpdate);
 	}
 
 	if (!item && node)
 	{
-		item = renderer()->render(nullptr, node);
-		item->setParentItem(this);
-		setUpdateNeeded();
+		item = renderer()->render(this, node);
+		setUpdateNeeded(StandardUpdate);
 	}
 }
 
@@ -268,7 +289,7 @@ ModelRenderer* Item::renderer()
 {
 	if ( (static_cast<Scene*>(scene()))->renderer() ) return (static_cast<Scene*>(scene()))->renderer();
 	throw VisualizationException("The scene of an Item has no renderer.");
-};
+}
 
 int Item::distanceTo(const QPoint& p) const
 {
@@ -517,6 +538,41 @@ bool Item::sceneEvent(QEvent *event)
 	return QGraphicsItem::sceneEvent(event);
 }
 
+int Item::purpose() const
+{
+	if (purpose_ >= 0) return purpose_;
+	if (!parent()) return -1;
+
+	if ( node() ) return parent()->childNodePurpose( node() );
+	else return parent()->purpose();
+}
+
+
+int Item::childNodePurpose(const Model::Node* node) const
+{
+	auto c = childNodePurpose_.find(node);
+	if (c != childNodePurpose_.end()) return *c;
+
+	return purpose();
+}
+
+void Item::setChildNodePurpose(const Model::Node* node, int purpose)
+{
+	childNodePurpose_.insert(node, purpose);
+	setUpdateNeeded(FullUpdate);
+}
+
+void Item::clearChildNodePurpose(const Model::Node* node)
+{
+	childNodePurpose_.remove(node);
+	setUpdateNeeded(FullUpdate);
+}
+
+bool Item::definesChildNodePurpose(const Model::Node* node) const
+{
+	return childNodePurpose_.find(node) != childNodePurpose_.end();
+}
+
 /***********************************************************************************************************************
  * Reimplemented Event handling methods. These simply dispatch the method call to the interaction handler of this
  * object.
@@ -642,7 +698,7 @@ void Item::defaultKeyPressEvent(QKeyEvent *event) { QGraphicsItem::keyPressEvent
 void Item::defaultKeyReleaseEvent(QKeyEvent *event) { QGraphicsItem::keyReleaseEvent(event); }
 
 // Mouse events
-void Item::defaultMouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) { QGraphicsItem::mouseDoubleClickEvent(event); }
+void Item::defaultMouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) { QGraphicsItem::mouseDoubleClickEvent(event);}
 void Item::defaultMouseMoveEvent(QGraphicsSceneMouseEvent *event) { QGraphicsItem::mouseMoveEvent(event); }
 void Item::defaultMousePressEvent(QGraphicsSceneMouseEvent *event) { QGraphicsItem::mousePressEvent(event); }
 void Item::defaultMouseReleaseEvent(QGraphicsSceneMouseEvent *event) { QGraphicsItem::mouseReleaseEvent(event); }

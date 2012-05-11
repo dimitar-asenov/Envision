@@ -36,6 +36,7 @@
 #include "commands/UndoCommand.h"
 #include "commands/SetModificationTarget.h"
 #include "commands/AddModifiedNode.h"
+#include "nodes/Reference.h"
 
 namespace Model {
 
@@ -83,6 +84,8 @@ void Model::endModification()
 {
 	if ( pushedNewCommandsOnTheStack )
 	{
+		if (!unresolvedReferences_.isEmpty()) tryResolvingReferences();
+
 		pushCommandOnUndoStack(new SetModificationTarget(currentModificationTarget, currentModificationLock, modifiedTargets, nullptr));
 		pushedNewCommandsOnTheStack = false;
 		commands.endMacro();
@@ -206,6 +209,41 @@ Node* Model::createRoot(const QString &typeName)
 	}
 
 	return root_;
+}
+
+void Model::addUnresolvedReference(Reference* ref)
+{
+	if ( !unresolvedReferences_.contains(ref) )
+		unresolvedReferences_.append(ref);
+}
+
+void Model::removeUnresolvedReference(Reference* ref)
+{
+	unresolvedReferences_.removeOne(ref);
+}
+
+void Model::tryResolvingReferences()
+{
+	auto modificationTarget = currentModificationTarget;
+	bool changed = true;
+	while (changed)
+	{
+		// We iterate until we find a fixpoint. This is needed since the resolution of some references might enable the
+		// resolution of others.
+		changed = false;
+
+		auto unresolved = unresolvedReferences_;
+		for (auto r : unresolved)
+		{
+			if (!r->isResolved())
+			{
+				changeModificationTarget(r);
+				changed = r->resolve() || changed;
+			}
+		}
+	}
+
+	changeModificationTarget(modificationTarget);
 }
 
 }

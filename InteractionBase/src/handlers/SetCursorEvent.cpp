@@ -51,7 +51,7 @@ void SetCursorEvent::execute()
 
 	if (!item) item = parentContainer_;
 
-	auto parent = static_cast<Visualization::Item*>(item->parentItem());
+	auto parent = item->parent();
 
 	switch(placement_)
 	{

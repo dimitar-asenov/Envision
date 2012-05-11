@@ -41,24 +41,42 @@ namespace Model {
 
 class MODELBASE_API Reference: public Node
 {
-	NODE_DECLARE_STANDARD_METHODS( Reference )
+	friend class PersistentStore;
 
-	private:
-		QString path_;
+	NODE_DECLARE_STANDARD_METHODS( Reference )
 
 	public:
 
-		Node* get();
-		void set(const QString &path);
+		QString name() const;
+		void setName(const QString &name, bool tryResolvingImmediately = true);
 
-		const QString& path() const;
+		Node* target() const;
 
 		virtual void save(PersistentStore &store) const;
 		virtual void load(PersistentStore &store);
+
+		virtual bool resolve();
+		bool isResolved() const;
+
+	protected:
+		void setTarget(Node* target);
+
+	private:
+		Node* target_;
+		QString name_;
+
+		/**
+		 * \brief Inserts this reference in the unresolved references lists of the corresponding model if the reference is
+		 * unresolved or removes it from that list otherwise.
+		 *
+		 * Calling this method might only have an effect if this reference is associated to a model.
+		 */
+		void manageUnresolvedReferencesListInModel();
 };
 
-inline Node* Reference::get() { return navigateTo(this, path_); }
-inline const QString& Reference::path() const { return path_; }
+inline QString Reference::name() const { return target() ? target()->symbolName() : name_; }
+inline Node* Reference::target() const { return target_; }
+inline bool Reference::isResolved() const { return target_; }
 
 }
 

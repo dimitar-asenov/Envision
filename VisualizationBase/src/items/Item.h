@@ -60,6 +60,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		Item(Item* parent, const StyleType* style = nullptr);
 		virtual ~Item();
 
+		Item* parent() const;
 		Scene* scene() const;
 
 		virtual bool hasNode() const;
@@ -81,9 +82,18 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		QSizeF size() const;
 		virtual bool sizeDependsOnParent() const;
 
-		void setUpdateNeeded();
+		enum UpdateType {
+			NoUpdate, /**< The item should not be updated. */
+			StandardUpdate, /**< Update the geometry of the item and properties depending on child items. This update
+									should be used when a child item has changed and the parent just needs to account for this
+									change.*/
+			FullUpdate /**< The item should completely update itself and recreate all child items. This should be used when
+								the item has been directly edited, or when it's style, purpose or similar defining properties
+								have changed. */
+		};
+		void setUpdateNeeded(UpdateType updateType);
 
-		virtual bool needsUpdate();
+		virtual UpdateType needsUpdate();
 		virtual void updateSubtree();
 		virtual void changeGeometry(int availableWidth = 0, int availableHeight = 0);
 
@@ -193,6 +203,22 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		 */
 		virtual Item* findVisualizationOf(Model::Node* node);
 
+		/**
+		 * Returns what purpose should the children of this item be chosen for when deciding what visualizations to use.
+		 *
+		 * If the item's own purpose has been set, it's value will be returned. Otherwise the value of the item's parent
+		 * will be returned. If the item has no parent the return value is an unspecified purpose (-1).
+		 */
+		int purpose() const;
+
+		void setPurpose(int purpose);
+		void clearPurpose();
+
+		int childNodePurpose(const Model::Node* node) const;
+		void setChildNodePurpose(const Model::Node* node, int purpose);
+		void clearChildNodePurpose(const Model::Node* node);
+		bool definesChildNodePurpose(const Model::Node* node) const;
+
 	protected:
 
 		void setWidth(int width);
@@ -244,7 +270,9 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		QRectF boundingRect_;
 		const ItemStyle* style_;
 		Shape* shape_;
-		bool needsUpdate_;
+		UpdateType needsUpdate_;
+		int purpose_;
+		QMap<const Model::Node*, int> childNodePurpose_;
 
 		void updateChildren();
 
@@ -279,13 +307,14 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Item::PositionConstraints)
 
+inline Item* Item::parent() const {return static_cast<Item*>(parentItem()); }
 inline int Item::width() const { return boundingRect_.width(); }
 inline int Item::height() const { return boundingRect_.height(); }
 inline QSizeF Item::size() const { return boundingRect_.size();}
-inline void Item::setWidth(int width)  { boundingRect_.setWidth(width); };
-inline void Item::setHeight(int height) { boundingRect_.setHeight(height);};
-inline void Item::setSize(int width, int height) { boundingRect_.setSize(QSizeF(width, height)); };
-inline void Item::setSize(const QSizeF& size) { boundingRect_.setSize(size); };
+inline void Item::setWidth(int width)  { boundingRect_.setWidth(width); }
+inline void Item::setHeight(int height) { boundingRect_.setHeight(height);}
+inline void Item::setSize(int width, int height) { boundingRect_.setSize(QSizeF(width, height)); }
+inline void Item::setSize(const QSizeF& size) { boundingRect_.setSize(size); }
 inline const ItemStyle* Item::style() const { return style_; }
 inline bool Item::hasShape() const { return shape_; }
 inline Shape* Item::getShape() const {	return shape_; }
@@ -297,7 +326,7 @@ template <class T> void Item::synchronizeItem(T*& item, bool present, const type
 	if (item && !present )
 	{
 		SAFE_DELETE_ITEM(item);
-		setUpdateNeeded();
+		setUpdateNeeded(StandardUpdate);
 	}
 
 	if (!item && present)
@@ -305,8 +334,7 @@ template <class T> void Item::synchronizeItem(T*& item, bool present, const type
 		if (style) item = new T(this, style);
 		else item = new T(this);
 
-		item->setParentItem(this);
-		setUpdateNeeded();
+		setUpdateNeeded(StandardUpdate);
 	}
 }
 
@@ -315,16 +343,15 @@ template <class T> void Item::synchronizeItem(T*& item, typename T::NodeType* no
 	if (item && item->node() != node )
 	{
 		SAFE_DELETE_ITEM(item);
-		setUpdateNeeded();
+		setUpdateNeeded(StandardUpdate);
 	}
 
 	if (!item && node)
 	{
-		if (style) item = new T(nullptr, node, style);
-		else item = new T(nullptr, node);
+		if (style) item = new T(this, node, style);
+		else item = new T(this, node);
 
-		item->setParentItem(this);
-		setUpdateNeeded();
+		setUpdateNeeded(StandardUpdate);
 	}
 }
 

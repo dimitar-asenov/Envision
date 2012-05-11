@@ -25,43 +25,41 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
- * CustomVisualization.h
+ * PrimitiveTypeExpression.h
  *
- *  Created on: Mar 24, 2011
+ *  Created on: Jan 31, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef CUSTOMVISUALIZATION_H_
-#define CUSTOMVISUALIZATION_H_
+#ifndef PRIMITIVETYPEEXPRESSION_H_
+#define PRIMITIVETYPEEXPRESSION_H_
 
-#include "custommethodcall_api.h"
+#include "TypeExpression.h"
+#include "../../types/PrimitiveType.h"
+#include "ModelBase/src/nodes/Integer.h"
 
-#include "VisualizationBase/src/ModelRenderer.h"
+namespace OOModel {
 
-#include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
-#include "ModelBase/src/nodes/Text.h"
-#include "ModelBase/src/nodes/nodeMacros.h"
-
-namespace Visualization {
-	class Item;
-}
-
-namespace CustomMethodCall {
-
-class CUSTOMMETHODCALL_API CustomVisualization
+class OOMODEL_API PrimitiveTypeExpression : public TypeExpression
 {
-	DECLARE_EXTENSION(CustomVisualization)
-
-	EXTENSION_ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::Text, visName, setVisName, QString, const QString&)
+	EXTENDABLENODE_DECLARE_STANDARD_METHODS(PrimitiveTypeExpression)
+	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, val, setVal, int)
 
 	public:
-		static Visualization::Item* createExpression(Visualization::Item* parent, Model::Node* node);
-		static void registerVisualization(const QString& name, Visualization::ModelRenderer::ItemConstructor visualization);
+		typedef PrimitiveType::PrimitiveTypes PrimitiveTypes;
 
-	private:
-		static QMap<QString, Visualization::ModelRenderer::ItemConstructor> visualizations;
+		PrimitiveTypeExpression(const PrimitiveTypes& type);
+
+		PrimitiveTypes typeValue() const;
+		void setTypeValue(const PrimitiveTypes& type);
+
+		virtual Type* type();
 };
+
+inline PrimitiveTypeExpression::PrimitiveTypes PrimitiveTypeExpression::typeValue()
+	const { return static_cast<PrimitiveTypes> (val()); }
+inline void PrimitiveTypeExpression::setTypeValue(const PrimitiveTypes& type) { setVal(type); }
 
 }
 
-#endif /* CUSTOMVISUALIZATION_H_ */
+#endif /* PRIMITIVETYPEEXPRESSION_H_ */

@@ -45,10 +45,13 @@ class OOMODEL_API LoopStatement: public Statement
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(LoopStatement)
 
-	ATTRIBUTE(Expression, condition, setCondition);
-	ATTRIBUTE(Expression, initStep, setInitStep);
-	ATTRIBUTE(Expression, updateStep, setUpdateStep);
-	ATTRIBUTE(StatementItemList, body, setBody);
+	ATTRIBUTE(Expression, condition, setCondition)
+	ATTRIBUTE(Expression, initStep, setInitStep)
+	ATTRIBUTE(Expression, updateStep, setUpdateStep)
+	ATTRIBUTE(StatementItemList, body, setBody)
+
+	public:
+		virtual QList<Model::Node*> findSymbol(const QString& symbol, Node* source, FindSymbolMode mode);
 };
 
 }

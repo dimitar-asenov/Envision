@@ -34,7 +34,6 @@
 #ifndef ALLCFVISUALIZATIONS_H_
 #define ALLCFVISUALIZATIONS_H_
 
-#include "items/VControlFlowMethodSwitch.h"
 #include "items/ControlFlowItem.h"
 #include "items/VMethodCF.h"
 #include "items/VListCF.h"

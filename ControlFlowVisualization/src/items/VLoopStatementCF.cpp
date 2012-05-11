@@ -33,7 +33,6 @@
 
 #include "items/VLoopStatementCF.h"
 
-using namespace OOVisualization;
 using namespace Visualization;
 using namespace OOModel;
 using namespace Model;
@@ -44,14 +43,13 @@ ITEM_COMMON_DEFINITIONS(VLoopStatementCF, "item")
 
 VLoopStatementCF::VLoopStatementCF(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<ControlFlowItem, LoopStatement>(parent, node, style),
-	conditionBackground(nullptr),
-	initStepBackground(nullptr),
-	updateStepBackground(nullptr),
-	condition(nullptr),
-	initStep(nullptr),
-	updateStep(nullptr),
-	body(nullptr),
-	vis_(nullptr)
+	conditionBackground(),
+	initStepBackground(),
+	updateStepBackground(),
+	condition(),
+	initStep(),
+	updateStep(),
+	body()
 {
 }
 
@@ -61,7 +59,6 @@ VLoopStatementCF::~VLoopStatementCF()
 	SAFE_DELETE_ITEM(initStepBackground);
 	SAFE_DELETE_ITEM(updateStepBackground);
 	SAFE_DELETE_ITEM(body);
-	SAFE_DELETE_ITEM(vis_);
 
 	// These were deleted by the destructors of their backgrounds above.
 	condition = nullptr;
@@ -71,103 +68,73 @@ VLoopStatementCF::~VLoopStatementCF()
 
 bool VLoopStatementCF::sizeDependsOnParent() const
 {
-	if (showAsControlFlow()) return false;
-	else return vis_->sizeDependsOnParent();
+	return false;
 }
 
 bool VLoopStatementCF::isEmpty() const
 {
-	if (showAsControlFlow()) return false;
-	else return vis_->isEmpty();
+	return false;
 }
 
 void VLoopStatementCF::determineChildren()
 {
-	if (showAsControlFlow())
+	synchronizeItem(body, node()->body(), &style()->body());
+
+	// Remove nodes which have changed
+	if (initStep && initStep->node() != node()->initStep())
 	{
-		SAFE_DELETE_ITEM(vis_);
-
-		synchronizeItem(body, node()->body(), &style()->body());
-
-		// Remove nodes which have changed
-		if (initStep && initStep->node() != node()->initStep())
-		{
-			SAFE_DELETE_ITEM(initStepBackground);
-			initStep = nullptr;
-			initStepBackground = nullptr;
-		}
-
-		if (condition && condition->node() != node()->condition())
-		{
-			SAFE_DELETE_ITEM(conditionBackground);
-			condition = nullptr;
-			conditionBackground = nullptr;
-		}
-
-		if (updateStep && updateStep->node() != node()->updateStep())
-		{
-			SAFE_DELETE_ITEM(updateStepBackground);
-			updateStep = nullptr;
-			updateStepBackground = nullptr;
-		}
-
-		// Create nodes which are present in the model
-		if (!initStep && node()->initStep())
-		{
-			initStepBackground = new SequentialLayout(nullptr, &style()->initStep());
-			initStep = renderer()->render(nullptr, node()->initStep());
-			initStepBackground->append(initStep);
-			initStepBackground->setParentItem(this);
-		}
-
-		if (!updateStep && node()->updateStep())
-		{
-			updateStepBackground = new SequentialLayout(nullptr, &style()->updateStep());
-			updateStep = renderer()->render(nullptr, node()->updateStep());
-			updateStepBackground->append(updateStep);
-			updateStepBackground->setParentItem(this);
-		}
-
-		if (!condition && node()->condition())
-		{
-			conditionBackground = new SequentialLayout(nullptr, &style()->condition());
-			condition = renderer()->render(nullptr, node()->condition());
-			conditionBackground->append(condition);
-			conditionBackground->setParentItem(this);
-		}
-
-		if (conditionBackground) conditionBackground->setStyle( &style()->condition() );
-		if (initStepBackground) initStepBackground->setStyle( &style()->initStep() );
-		if (updateStepBackground) updateStepBackground->setStyle( &style()->updateStep() );
-		body->setStyle(&style()->body());
-		body->setPreferredBreakExit(ControlFlowItem::EXIT_LEFT);
-		body->setPreferredContinueExit(ControlFlowItem::EXIT_RIGHT);
+		SAFE_DELETE_ITEM(initStepBackground);
+		initStep = nullptr;
+		initStepBackground = nullptr;
 	}
-	else
+
+	if (condition && condition->node() != node()->condition())
 	{
 		SAFE_DELETE_ITEM(conditionBackground);
-		SAFE_DELETE_ITEM(initStepBackground);
-		SAFE_DELETE_ITEM(updateStepBackground);
-		SAFE_DELETE_ITEM(body);
-
-		// These were deleted by the destructors of their backgrounds above.
 		condition = nullptr;
-		initStep = nullptr;
-		updateStep = nullptr;
-
-		synchronizeItem<VLoopStatement>(vis_, node(), nullptr);
+		conditionBackground = nullptr;
 	}
+
+	if (updateStep && updateStep->node() != node()->updateStep())
+	{
+		SAFE_DELETE_ITEM(updateStepBackground);
+		updateStep = nullptr;
+		updateStepBackground = nullptr;
+	}
+
+	// Create nodes which are present in the model
+	if (!initStep && node()->initStep())
+	{
+		initStepBackground = new SequentialLayout(this, &style()->initStep());
+		initStep = renderer()->render(initStepBackground, node()->initStep());
+		initStepBackground->append(initStep);
+	}
+
+	if (!updateStep && node()->updateStep())
+	{
+		updateStepBackground = new SequentialLayout(this, &style()->updateStep());
+		updateStep = renderer()->render(updateStepBackground, node()->updateStep());
+		updateStepBackground->append(updateStep);
+	}
+
+	if (!condition && node()->condition())
+	{
+		conditionBackground = new SequentialLayout(this, &style()->condition());
+		condition = renderer()->render(conditionBackground, node()->condition());
+		conditionBackground->append(condition);
+	}
+
+	if (conditionBackground) conditionBackground->setStyle( &style()->condition() );
+	if (initStepBackground) initStepBackground->setStyle( &style()->initStep() );
+	if (updateStepBackground) updateStepBackground->setStyle( &style()->updateStep() );
+	body->setStyle(&style()->body());
+	body->setPreferredBreakExit(ControlFlowItem::EXIT_LEFT);
+	body->setPreferredContinueExit(ControlFlowItem::EXIT_RIGHT);
 }
 
-void VLoopStatementCF::updateGeometry(int availableWidth, int availableHeight)
+void VLoopStatementCF::updateGeometry(int, int)
 {
 	clearConnectors();
-
-	if (!showAsControlFlow())
-	{
-		Item::updateGeometry(vis_, availableWidth, availableHeight);
-		return;
-	}
 
 	QPoint initPos;
 	QPoint condPos;
@@ -253,7 +220,8 @@ void VLoopStatementCF::updateGeometry(int availableWidth, int availableHeight)
 	if (updateStep)
 	{
 		updateConnect.ry() += updateStepBackground->height()/2;
-		addConnector(updateConnect + QPoint(style()->pinLength(), 0), updateConnect - QPoint(style()->pinLength(), 0), true);
+		addConnector(updateConnect + QPoint(style()->pinLength(), 0),
+				updateConnect - QPoint(style()->pinLength(), 0), true);
 
 		updateConnect.rx() += updateStepBackground->width() + 2*style()->pinLength();
 

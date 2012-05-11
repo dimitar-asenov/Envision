@@ -55,6 +55,8 @@ class ControlFlowVisualization : public QObject, public Envision::EnvisionPlugin
 	public:
 		bool initialize(Envision::EnvisionManager&);
 		void selfTest(QString testid);
+
+		static int visualizationPurpose();
 };
 
 }

@@ -82,6 +82,14 @@ int TypedList<T>::typeId() const
 }
 
 template<class T>
+QList<int> TypedList<T>::hierarchyTypeIds() const
+{
+	auto l = List::hierarchyTypeIds();
+	l.prepend(typeIdStatic());
+	return l;
+}
+
+template<class T>
 int TypedList<T>::typeIdStatic()
 {
 	return typeId_;

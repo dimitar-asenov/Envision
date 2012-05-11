@@ -25,32 +25,37 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
- * HControlFlowMethodSwitch.h
+ * VClassType.h
  *
- *  Created on: Mar 3, 2011
+ *  Created on: Feb 9, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef HCONTROLFLOWMETHODSWITCH_H_
-#define HCONTROLFLOWMETHODSWITCH_H_
+#ifndef VCLASSTYPE_H_
+#define VCLASSTYPE_H_
 
-#include "../controlflowvisualization_api.h"
+#include "../expressions/VReferenceExpression.h"
 
-#include "InteractionBase/src/handlers/GenericHandler.h"
+#include "OOModel/src/expressions/types/ClassTypeExpression.h"
 
-namespace ControlFlowVisualization {
+namespace OOVisualization {
 
-class CONTROLFLOWVISUALIZATION_API HControlFlowMethodSwitch : public Interaction::GenericHandler
+class OOVISUALIZATION_API VClassType : public Visualization::ItemWithNode< Visualization::Item, OOModel::ClassTypeExpression>
 {
-	protected:
-		HControlFlowMethodSwitch();
+	ITEM_COMMON_CUSTOM_STYLENAME(VClassType, VReferenceExpressionStyle)
 
 	public:
-		static HControlFlowMethodSwitch* instance();
+		VClassType(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+		virtual ~VClassType();
 
-		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event);
+	protected:
+		void determineChildren();
+		void updateGeometry(int availableWidth, int availableHeight);
+
+	private:
+		VReferenceExpression* vis_;
 };
 
 }
 
-#endif /* HCONTROLFLOWMETHODSWITCH_H_ */
+#endif /* VCLASSTYPE_H_ */

@@ -41,4 +41,9 @@ EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(UnaryOperation, Expression)
 REGISTER_ATTRIBUTE(UnaryOperation, operand, Expression, false, false, true)
 REGISTER_ATTRIBUTE(UnaryOperation, opr, Integer, false, false, true)
 
+Type* UnaryOperation::type()
+{
+	return operand()->type();
+}
+
 }

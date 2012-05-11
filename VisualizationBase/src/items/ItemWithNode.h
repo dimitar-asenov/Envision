@@ -36,7 +36,7 @@
 
 // This is included for convenience. There is a very big chance that whoever uses ItemWithNode will want to use the
 // ModelRenderer too.
-#include "../ModelRenderer.h"
+#include "../renderer/ModelRenderer.h"
 
 namespace Visualization {
 

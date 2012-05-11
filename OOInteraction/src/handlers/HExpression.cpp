@@ -74,13 +74,13 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 
 	// We need to trigger an update of all the visualizations leading up to the target, even though the target
 	// visualization will probably be deleted and replaced with a new one.
-	target->setUpdateNeeded();
+	target->setUpdateNeeded(Visualization::Item::StandardUpdate);
 
 	// Find the top most parent that is adaptable to StringProvider
 	Visualization::Item* topMostItem = target;
 	auto* topMostSP = Model::AdapterManager::adapt<StringOffsetProvider>(topMostItem);
 
-	auto p = topMostItem->parentItem();
+	auto p = topMostItem->parent();
 	while(p)
 	{
 		auto* adapted = Model::AdapterManager::adapt<StringOffsetProvider>(p);
@@ -88,9 +88,9 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		{
 			SAFE_DELETE(topMostSP);
 			topMostSP = adapted;
-			topMostItem = static_cast<Visualization::Item*> (p);
+			topMostItem = p;
 		}
-		p = p->parentItem();
+		p = p->parent();
 	}
 
 	QString str = topMostSP->string();
@@ -185,7 +185,7 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		containerNode->replaceChild(replaceStatement, st, false);
 		containerNode->model()->endModification();
 
-		auto parent = static_cast<Visualization::Item*> (topMostItem->parentItem());
+		auto parent = topMostItem->parent();
 		target->scene()->addPostEventAction(
 				new Interaction::SetCursorEvent(parent, toFocus, Interaction::SetCursorEvent::CursorOnLeft));
 
@@ -199,7 +199,7 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		containerNode->replaceChild(topMostItem->node(), newExpression, false);
 		containerNode->model()->endModification();
 
-		auto parent = static_cast<Visualization::Item*> (topMostItem->parentItem());
+		auto parent = topMostItem->parent();
 		target->scene()->addPostEventAction( new SetExpressionCursorEvent(parent, newExpression, newIndex));
 		return;
 	}

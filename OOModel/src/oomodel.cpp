@@ -45,6 +45,7 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	// Initialize common nodes
 	Visibility::registerNodeType();
 	StorageSpecifier::registerNodeType();
+	OOReference::registerNodeType();
 
 	// Register TypedList instantiations
 	Model::TypedList<Project>::registerNodeType();
@@ -56,6 +57,7 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	Model::TypedList<FormalArgument>::registerNodeType();
 	Model::TypedList<FormalResult>::registerNodeType();
 	Model::TypedList<Field>::registerNodeType();
+	Model::TypedList<OOReference>::registerNodeType();
 
 	Model::TypedList<Statement>::registerNodeType();
 	Model::TypedList<Block>::registerNodeType();
@@ -93,10 +95,10 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	Model::TypedList<AssignmentExpression>::registerNodeType();
 	Model::TypedList<ConditionalExpression>::registerNodeType();
 
-	Model::TypedList<Type>::registerNodeType();
-	Model::TypedList<PrimitiveType>::registerNodeType();
-	Model::TypedList<NamedType>::registerNodeType();
-	Model::TypedList<ArrayType>::registerNodeType();
+	Model::TypedList<TypeExpression>::registerNodeType();
+	Model::TypedList<PrimitiveTypeExpression>::registerNodeType();
+	Model::TypedList<ClassTypeExpression>::registerNodeType();
+	Model::TypedList<ArrayTypeExpression>::registerNodeType();
 
 	// Initialize OO Node types
 	Project::init();
@@ -146,10 +148,10 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	AssignmentExpression::init();
 	ConditionalExpression::init();
 
-	Type::init();
-	PrimitiveType::init();
-	NamedType::init();
-	ArrayType::init();
+	TypeExpression::init();
+	PrimitiveTypeExpression::init();
+	ClassTypeExpression::init();
+	ArrayTypeExpression::init();
 
 	return true;
 }

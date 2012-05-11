@@ -48,6 +48,8 @@ class OOMODEL_API BooleanLiteral: public Expression
 
 	public:
 		BooleanLiteral(bool value);
+
+		virtual Type* type();
 };
 
 

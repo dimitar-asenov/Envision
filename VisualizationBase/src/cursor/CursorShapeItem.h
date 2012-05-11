@@ -48,7 +48,7 @@ class VISUALIZATIONBASE_API CursorShapeItem: public Item
 		CursorShapeItem(const StyleType* style = itemStyles().get());
 		virtual ~CursorShapeItem();
 
-		virtual bool needsUpdate();
+		virtual UpdateType needsUpdate() override;
 		void setCursorSize(const QSize& size);
 		void setCursorCenter(const QPoint& center);
 		void setCursorTopLeft(const QPoint& topLeft);

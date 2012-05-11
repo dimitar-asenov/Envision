@@ -53,8 +53,8 @@ HStatement* HStatement::instance()
 void HStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
 	Visualization::VList* lst = nullptr;
-	auto p = target->parentItem();
-	while (p && !(lst = dynamic_cast<Visualization::VList*>(p))) p = p->parentItem();
+	auto p = target->parent();
+	while (p && !(lst = dynamic_cast<Visualization::VList*>(p))) p = p->parent();
 
 	bool processed = false;
 
@@ -73,7 +73,7 @@ void HStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			lst->node()->insert(index, es);
 			lst->node()->model()->endModification();
 
-			lst->setUpdateNeeded();
+			lst->setUpdateNeeded(Visualization::Item::StandardUpdate);
 			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(lst, empty,
 					Interaction::SetCursorEvent::CursorOnLeft));
 	}

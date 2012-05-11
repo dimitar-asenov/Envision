@@ -25,52 +25,26 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
- * CustomVisualization.cpp
+ * ClassTypeExpression.cpp
  *
- *  Created on: Mar 24, 2011
+ *  Created on: Jan 31, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "CustomVisualization.h"
+#include "ClassTypeExpression.h"
+#include "../../types/ClassType.h"
+#include "../../top_level/Class.h"
 
-#include "OOVisualization/src/expressions/VMethodCallExpression.h"
+namespace OOModel {
 
-#include "OOModel/src/expressions/MethodCallExpression.h"
-#include "OOModel/src/top_level/Method.h"
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(ClassTypeExpression, TypeExpression)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(ClassTypeExpression, TypeExpression)
 
-#include "VisualizationBase/src/items/Item.h"
-#include "ModelBase/src/nodes/Node.h"
+REGISTER_ATTRIBUTE(ClassTypeExpression, typeExpression, ReferenceExpression, false, false, true)
 
-using namespace OOVisualization;
-using namespace Visualization;
-using namespace OOModel;
-
-namespace CustomMethodCall {
-
-DEFINE_EXTENSION(CustomVisualization)
-REGISTER_EXTENSION_ATTRIBUTE(CustomVisualization, visName, Text, false, true, true)
-
-QMap<QString, Visualization::ModelRenderer::ItemConstructor> CustomVisualization::visualizations;
-
-//TODO Currently it is not possible to define a MethodVisualization extension for the Method such that it does
-//Different things depending on what is the actual type of node (expression call or statement call)
-
-Item* CustomVisualization::createExpression(Item* parent, Model::Node* node)
+Type* ClassTypeExpression::type()
 {
-	Method* met = (static_cast<MethodCallExpression*> (node))->methodDefinition();
-
-	CustomVisualization* custVis = nullptr;
-	if (met) custVis = met->extension<CustomVisualization>();
-
-	if (custVis && custVis->visNameNode() && visualizations.contains(custVis->visName()))
-		return visualizations.value(custVis->visName())(parent, node);
-	else
-		return new VMethodCallExpression(parent, static_cast<MethodCallExpression*> (node));
-}
-
-void CustomVisualization::registerVisualization(const QString& name, ModelRenderer::ItemConstructor visualization)
-{
-	visualizations.insert(name, visualization);
+	return new ClassType( dynamic_cast<Class*> (typeExpression()->target()), false);
 }
 
 }

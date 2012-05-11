@@ -32,47 +32,52 @@
  **********************************************************************************************************************/
 
 #include "expressions/VariableAccess.h"
-#include "expressions/ReferenceExpression.h"
 #include "expressions/VariableDeclaration.h"
 #include "top_level/Class.h"
 #include "top_level/Field.h"
+#include "../types/ErrorType.h"
 
 namespace OOModel {
 
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(VariableAccess, Expression)
 EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(VariableAccess, Expression)
 
-REGISTER_ATTRIBUTE(VariableAccess, prefix, Expression, false, true, true)
-REGISTER_ATTRIBUTE(VariableAccess, ref, Reference, false, false, true)
+REGISTER_ATTRIBUTE(VariableAccess, ref, ReferenceExpression, false, false, true)
 
-VariableAccess::VariableAccess(const QString& referenceString)
+VariableAccess::VariableAccess(const QString& referenceString, Expression* prefix)
 : Expression(nullptr, VariableAccess::getMetaData())
 {
-	ref()->set(referenceString);
+	ref()->ref()->setName(referenceString);
+	if (prefix != nullptr) ref()->setPrefix(prefix);
 }
 
-Class* VariableAccess::classDefinition()
+Type* VariableAccess::type()
 {
-	QString path = ref()->path();
-
-	ReferenceExpression* exp = dynamic_cast<ReferenceExpression*> (prefix());
-	while (exp)
+	if ( auto vdecl = dynamic_cast<VariableDeclaration*>( ref()->target() ) )
 	{
-		if (!path.isEmpty()) path.prepend(',');
-		path.prepend(exp->ref()->path());
-
-		exp = dynamic_cast<ReferenceExpression*> (exp->prefix());
+		auto t = vdecl->type();
+		t->setValueType(true);
+		return t;
 	}
-
-	Model::Node* var = navigateTo(this, path);
-
-	Field* f = dynamic_cast<Field*> (var);
-	if (f) return f->type()->classDefinition();
-
-	VariableDeclaration* vd = dynamic_cast<VariableDeclaration*> (var);
-	if (vd) return vd->type()->classDefinition();
-
-	return nullptr;
+	else if ( auto field = dynamic_cast<Field*>( ref()->target() ) )
+	{
+		auto t = field->typeExpression()->type();
+		t->setValueType(true);
+		return t;
+	}
+	else if ( auto arg = dynamic_cast<FormalArgument*>( ref()->target() ) )
+	{
+		auto t = arg->typeExpression()->type();
+		t->setValueType(true);
+		return t;
+	}
+	else if ( auto res = dynamic_cast<FormalResult*>( ref()->target() ) )
+	{
+		auto t = res->typeExpression()->type();
+		t->setValueType(true);
+		return t;
+	}
+	else return new ErrorType("Invalid variable access type");
 }
 
 }

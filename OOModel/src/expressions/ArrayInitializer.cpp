@@ -32,6 +32,7 @@
  **********************************************************************************************************************/
 
 #include "expressions/ArrayInitializer.h"
+#include "../types/ArrayType.h"
 
 namespace OOModel {
 
@@ -39,5 +40,10 @@ EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(ArrayInitializer, Expression)
 EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(ArrayInitializer, Expression)
 
 REGISTER_ATTRIBUTE(ArrayInitializer, values, TypedListOfExpression, false, false, true)
+
+Type* ArrayInitializer::type()
+{
+	return new ArrayType(values()->size() > 0 ? values()->first()->type(): nullptr, true);
+}
 
 }

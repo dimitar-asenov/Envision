@@ -41,7 +41,7 @@ using namespace Visualization;
 
 TextAndDescription::TextAndDescription(Item* parent, const StyleType* style) :
 	Item(parent, style), layout(new SequentialLayout(this, &style->layout())), text( new Text(nullptr, &style->text())),
-	description( new Text(nullptr, &style->description()))
+	description( new Text(layout, &style->description()))
 {
 	layout->append(text);
 	layout->append(description);

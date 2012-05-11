@@ -43,6 +43,7 @@
 namespace FilePersistence {
 
 const char* XML_NEWUNIT_NODE_TAG = "persistencenewunit";
+const QString FileStore::NULL_STRING = "____NULL____";
 
 FileStore::FileStore() : // TODO the Envision folder should be taken from the environment not hardcoded.
 	baseFolder(QDir::home().path() + QDir::toNativeSeparators("/Envision/projects")), working(false), xml(nullptr)
@@ -120,6 +121,14 @@ void FileStore::saveDoubleValue(double value)
 {
 	checkIsWorking();
 	xml->saveDoubleValue(value);
+}
+
+void FileStore::saveReferenceValue(const QString &name, const Model::Node* target)
+{
+	checkIsWorking();
+	QString targetString = target ? QString::number(ids.getId(target)) : NULL_STRING;
+	QString nameString = name.isNull() ? NULL_STRING : name;
+	xml->saveStringValue(targetString + ":" + nameString);
 }
 
 void FileStore::saveNewPersistenceUnit(const Model::Node *node, const QString &name, bool partialLoadHint)
@@ -232,6 +241,20 @@ Model::Node* FileStore::loadModel(Model::Model*, const QString &name)
 		ids.setNextId(xml->getNextId());
 		xml->goToFirstChild();
 		ln =  loadNode(nullptr);
+
+		// Initialize all references
+		for (auto p : uninitializedReferences)
+		{
+			bool ok = false;
+			NodeIdMap::NodeIdType id = p.second.toInt(&ok);
+			if (!ok) throw FilePersistenceException("Incorrect id format for reference target " + p.second);
+
+
+			Model::Node* target = const_cast<Model::Node*> (ids.getNodeForId(id));
+			if (!target) throw FilePersistenceException("A reference is pointing to an unloaded node " + p.second);
+
+			setReferenceTargetr(p.first, target);
+		}
 
 		SAFE_DELETE(xml);
 	}
@@ -499,6 +522,18 @@ double FileStore::loadDoubleValue()
 {
 	checkIsWorking();
 	return xml->loadDoubleValue();
+}
+
+QString FileStore::loadReferenceValue(Model::Reference* r)
+{
+	checkIsWorking();
+	QStringList ref = xml->loadStringValue().split(":");
+	QString target = ref.first() == NULL_STRING ? QString() : ref.first();
+	QString name = ref.last() == NULL_STRING ? QString() : ref.last();
+
+	if (!target.isNull()) uninitializedReferences.append(qMakePair(r, target));
+
+	return name;
 }
 
 void FileStore::checkIsWorking() const

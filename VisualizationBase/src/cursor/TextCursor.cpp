@@ -73,7 +73,7 @@ void TextCursor::setSelectedCharacters(int first, int last)
 	selectionBegin_ = first;
 	selectionEnd_ = last;
 	if (!owner()->hasFocus()) owner()->setFocus();
-	owner()->setUpdateNeeded();
+	owner()->setUpdateNeeded(Item::StandardUpdate);
 }
 
 void TextCursor::setX(int xBegin, int xEnd)
@@ -104,7 +104,7 @@ void TextCursor::setSelectedByDrag(int xBegin, int xEnd)
 	}
 
 	owner()->setFocus();
-	owner()->setUpdateNeeded();
+	owner()->setUpdateNeeded(Item::StandardUpdate);
 }
 
 bool TextCursor::isSame(Cursor* c)

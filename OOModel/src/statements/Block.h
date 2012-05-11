@@ -43,7 +43,7 @@ class OOMODEL_API Block: public Statement
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Block)
 
-	ATTRIBUTE(StatementItemList, items, setItems);
+	ATTRIBUTE(StatementItemList, items, setItems)
 };
 
 }

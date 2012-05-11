@@ -94,7 +94,7 @@ bool Cursor::isLocationEquivalent(bool otherNotLocationEquivalent, CursorType ot
 	else return false;
 
 	auto item = child;
-	while (item != parent && !item->hasShape()) item = static_cast<Item*>(item->parentItem());
+	while (item != parent && !item->hasShape()) item = item->parent();
 	return item == parent;
 }
 

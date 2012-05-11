@@ -33,7 +33,7 @@
 
 #include "layouts/PositionLayout.h"
 #include "shapes/Shape.h"
-#include "ModelRenderer.h"
+#include "../renderer/ModelRenderer.h"
 
 #include "ModelBase/src/Model.h"
 
@@ -70,16 +70,18 @@ void PositionLayout::insert(Item* item)
 	if ( !item->hasNode() ) throw VisualizationException("Adding an Item that has no node to a PositionLayout");
 
 	Model::ExtendableNode* extNode = dynamic_cast<Model::ExtendableNode*> (item->node());
-	if (!extNode) throw VisualizationException("Adding an Item that does not implement ExtendableNode to a PositionLayout");
+	if (!extNode)
+		throw VisualizationException("Adding an Item that does not implement ExtendableNode to a PositionLayout");
 
 	Position* pos = extNode->extension<Position>();
 
-	if (!pos) throw VisualizationException("Adding a Item whose node does not have a Position extension to a PositionLayout");
+	if (!pos)
+		throw VisualizationException("Adding a Item whose node does not have a Position extension to a PositionLayout");
 
 	item->setParentItem(this);
 	items.append(item);
 	positions.append(pos);
-	setUpdateNeeded();
+	setUpdateNeeded(StandardUpdate);
 }
 
 void PositionLayout::remove(int index, bool deleteItem)
@@ -90,7 +92,7 @@ void PositionLayout::remove(int index, bool deleteItem)
 	SAFE_DELETE( positions[index] );
 	items.remove(index);
 	positions.remove(index);
-	setUpdateNeeded();
+	setUpdateNeeded(StandardUpdate);
 }
 
 void PositionLayout::removeAll(Item* item, bool deleteItem)
@@ -108,7 +110,7 @@ void PositionLayout::removeAll(Item* item, bool deleteItem)
 	if (deleteItem) SAFE_DELETE_ITEM(item);
 	else if (item) item->setParentItem(nullptr);
 
-	setUpdateNeeded();
+	setUpdateNeeded(StandardUpdate);
 }
 
 void PositionLayout::clear(bool deleteItems)
@@ -140,7 +142,7 @@ void PositionLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes, Mode
 	// Inserts elements that are not yet visualized and adjusts the order to match that in 'nodes'.
 	for (int i = 0; i < nodes.size(); ++i)
 	{
-		if (i >= items.size() ) insert( renderer->render(nullptr, nodes[i]));	// This node is new
+		if (i >= items.size() ) insert( renderer->render(this, nodes[i]));	// This node is new
 		else if ( items[i]->node() == nodes[i] ) continue;	// This node is already there
 		else
 		{
@@ -160,7 +162,7 @@ void PositionLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes, Mode
 			// The node was not found, insert a visualization here
 			if (!found )
 			{
-				insert( renderer->render(nullptr, nodes[i]) );
+				insert( renderer->render(this, nodes[i]) );
 				swap(i, items.size()-1);
 			}
 		}
@@ -185,6 +187,22 @@ bool PositionLayout::isEmpty() const
 	return true;
 }
 
+void PositionLayout::determineChildren()
+{
+	// All this is just needed in order to support changing the purpose of a child node.
+
+	if (!scene() || needsUpdate() != FullUpdate) return Layout::determineChildren();
+
+	QList<Model::Node*> nodes;
+	for (auto i : items)
+		if (i->node()) nodes.append(i->node());
+
+	if (nodes.size() != items.size()) return Layout::determineChildren();
+
+	clear(true);
+	synchronizeWithNodes(nodes, scene()->renderer());
+}
+
 void PositionLayout::updateGeometry(int, int)
 {
 	QPoint topLeft;
@@ -192,10 +210,14 @@ void PositionLayout::updateGeometry(int, int)
 
 	for(int i = 0; i<items.size(); ++i)
 	{
-		if (i==0 || topLeft.x() > toGrid(positions[i]->x()) ) topLeft.setX( toGrid(positions[i]->x()) );
-		if (i==0 || topLeft.y() > toGrid(positions[i]->y()) ) topLeft.setY( toGrid(positions[i]->y()) );
-		if (i==0 || bottomRight.x() < toGrid(positions[i]->x()) + items[i]->width()  ) bottomRight.setX( toGrid(positions[i]->x()) + items[i]->width() );
-		if (i==0 || bottomRight.y() < toGrid(positions[i]->y()) + items[i]->height() ) bottomRight.setY( toGrid(positions[i]->y()) + items[i]->height() );
+		if (i==0 || topLeft.x() > toGrid(positions[i]->x()) )
+			topLeft.setX( toGrid(positions[i]->x()) );
+		if (i==0 || topLeft.y() > toGrid(positions[i]->y()) )
+			topLeft.setY( toGrid(positions[i]->y()) );
+		if (i==0 || bottomRight.x() < toGrid(positions[i]->x()) + items[i]->width()  )
+			bottomRight.setX( toGrid(positions[i]->x()) + items[i]->width() );
+		if (i==0 || bottomRight.y() < toGrid(positions[i]->y()) + items[i]->height() )
+			bottomRight.setY( toGrid(positions[i]->y()) + items[i]->height() );
 	}
 
 	int sizeWidth = bottomRight.x() - topLeft.x() + style()->leftInnerMargin() + style()->rightInnerMargin();
@@ -214,14 +236,5 @@ int PositionLayout::focusedElementIndex() const
 
 	return -1;
 }
-
-//bool PositionLayout::focusChild(FocusTarget)
-//{
-//	if (items.isEmpty()) return false;
-//
-//	// TODO Implement this properly
-//
-//	return Item::focusChild(items[0]);
-//}
 
 }

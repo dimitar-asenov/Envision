@@ -47,7 +47,7 @@ QStringList CastExpressionStringComponents::components()
 	QStringList result;
 	if (!exp_) return result;
 
-	result << "(" << stringForNode(exp_->type()) << ")" << stringForNode(exp_->expr());
+	result << "(" << stringForNode(exp_->castType()) << ")" << stringForNode(exp_->expr());
 
 	return result;
 }

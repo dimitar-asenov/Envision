@@ -25,54 +25,27 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
- * ModelRenderer.h
+ * TypeExpression.h
  *
- *  Created on: Dec 9, 2010
+ *  Created on: Jan 31, 2011
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#ifndef MODELRENDERER_H_
-#define MODELRENDERER_H_
+#ifndef TYPEEXPRESSION_H_
+#define TYPEEXPRESSION_H_
 
-#include "visualizationbase_api.h"
-#include "ModelBase/src/nodes/Node.h"
+#include "../Expression.h"
+#include "ModelBase/src/nodes/nodeMacros.h"
 
-namespace Visualization {
+namespace OOModel {
 
-class Item;
+class Class;
 
-class VISUALIZATIONBASE_API ModelRenderer
+class OOMODEL_API TypeExpression : public Expression
 {
-	public:
-		typedef Item* (*ItemConstructor)(Item* parent, Model::Node* node);
-
-		ModelRenderer();
-		virtual ~ModelRenderer();
-
-		virtual Item* render(Item* parent, Model::Node* node);
-
-		void registerVisualization(int typeId, ItemConstructor visualization);
-		void setUseDefaultVisualizations(bool useDefault);
-
-	private:
-		QVector<ItemConstructor> visualizations;
-
-		bool useDefaultVisualizations_;
+	EXTENDABLENODE_DECLARE_STANDARD_METHODS(TypeExpression)
 };
 
-inline void ModelRenderer::setUseDefaultVisualizations(bool useDefault)
-{
-	useDefaultVisualizations_ = useDefault;
 }
 
-template<class VIS, class NODE>
-Item* createVisualization(Item* parent, Model::Node* node)
-{
-	return new VIS(parent, static_cast<NODE*> (node));
-}
-
-
-
-}
-
-#endif /* MODELRENDERER_H_ */
+#endif /* TYPEEXPRESSION_H_ */

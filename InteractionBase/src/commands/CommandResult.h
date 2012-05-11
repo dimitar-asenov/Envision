@@ -65,9 +65,9 @@ class INTERACTIONBASE_API CommandResult
 		QList<CommandSuggestion*> suggestions_;
 };
 
-inline CommandResult::Code CommandResult::code() const { return outcomeCode; };
-inline const QList<CommandError*>& CommandResult::errors() const { return errors_; };
-inline const QList<CommandSuggestion*>& CommandResult::suggestions() const {return suggestions_; };
+inline CommandResult::Code CommandResult::code() const { return outcomeCode; }
+inline const QList<CommandError*>& CommandResult::errors() const { return errors_; }
+inline const QList<CommandSuggestion*>& CommandResult::suggestions() const {return suggestions_; }
 
 }
 

@@ -37,7 +37,7 @@
 
 namespace Model {
 
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(Integer)
+NODE_DEFINE_TYPE_REGISTRATION_METHODS(Integer, Node)
 
 Integer::Integer(Node *parent) :
 	Node(parent), integer(0)

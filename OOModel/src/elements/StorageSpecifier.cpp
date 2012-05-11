@@ -37,7 +37,7 @@
 
 namespace OOModel {
 
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(StorageSpecifier)
+NODE_DEFINE_TYPE_REGISTRATION_METHODS(StorageSpecifier, Model::Node)
 
 StorageSpecifier::StorageSpecifier(Model::Node *parent) :
 	Node(parent), specifier(INSTANCE_VARIABLE)

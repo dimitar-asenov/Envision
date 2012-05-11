@@ -47,6 +47,7 @@ class StatementItem;
 class FormalArgument;
 class FormalResult;
 class Field;
+class OOReference;
 
 class Statement;
 class Block;
@@ -84,10 +85,10 @@ class CommaExpression;
 class AssignmentExpression;
 class ConditionalExpression;
 
-class Type;
-class PrimitiveType;
-class NamedType;
-class ArrayType;
+class TypeExpression;
+class PrimitiveTypeExpression;
+class ClassTypeExpression;
+class ArrayTypeExpression;
 
 }
 
@@ -100,6 +101,7 @@ template class Q_DECL_IMPORT Model::TypedList<OOModel::StatementItem>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::FormalArgument>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::FormalResult>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::Field>;
+template class Q_DECL_IMPORT Model::TypedList<OOModel::OOReference>;
 
 template class Q_DECL_IMPORT Model::TypedList<OOModel::Statement>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::Block>;
@@ -137,10 +139,10 @@ template class Q_DECL_IMPORT Model::TypedList<OOModel::CommaExpression>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::AssignmentExpression>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::ConditionalExpression>;
 
-template class Q_DECL_IMPORT Model::TypedList<OOModel::Type>;
-template class Q_DECL_IMPORT Model::TypedList<OOModel::PrimitiveType>;
-template class Q_DECL_IMPORT Model::TypedList<OOModel::NamedType>;
-template class Q_DECL_IMPORT Model::TypedList<OOModel::ArrayType>;
+template class Q_DECL_IMPORT Model::TypedList<OOModel::TypeExpression>;
+template class Q_DECL_IMPORT Model::TypedList<OOModel::PrimitiveTypeExpression>;
+template class Q_DECL_IMPORT Model::TypedList<OOModel::ClassTypeExpression>;
+template class Q_DECL_IMPORT Model::TypedList<OOModel::ArrayTypeExpression>;
 
 
 #endif /* TYPEDLISTINSTANTIATIONS_H_ */

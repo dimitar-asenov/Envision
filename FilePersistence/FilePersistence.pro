@@ -1,33 +1,12 @@
-ENVISION_ROOT_DIR = $$PWD/..
-CONFIG(release, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/ReleaseBuild
-CONFIG(debug, debug|release):BUILD_DIR = $${ENVISION_ROOT_DIR}/DebugBuild
-PLUGINS_DIR = $${BUILD_DIR}/plugins
-CONFIG(debug, debug|release):DEFINES += DEBUG
-QMAKE_CXXFLAGS += -Werror \
-    -std=c++0x
-INCLUDEPATH += ./src \
-    ./test \
-    $${ENVISION_ROOT_DIR}
 TARGET = filepersistence
+include(../Core/common_plugin.pri)
+
 DEFINES += FILEPERSISTENCE_LIBRARY
-win32:LIBS += -L$${PLUGINS_DIR} \
-    -llogger \
+win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase
-QT = core \
-    gui \
-    xml
-TEMPLATE = lib
-CONFIG += plugin \
-    warn_on \
-    thread \
-    precompile_header
-target.path = $$PLUGINS_DIR
-pluginmeta.path = $$PLUGINS_DIR
-pluginmeta.files = $${TARGET}.plugin
-INSTALLS += target \
-    pluginmeta
-PRECOMPILED_HEADER = src/precompiled.h
+QT += xml
+
 HEADERS += src/FilePersistenceException.h \
     src/FileStore.h \
     src/NodeIdMap.h \

@@ -32,6 +32,7 @@
  **********************************************************************************************************************/
 
 #include "expressions/BooleanLiteral.h"
+#include "../types/PrimitiveType.h"
 
 namespace OOModel {
 
@@ -44,6 +45,11 @@ BooleanLiteral::BooleanLiteral(bool value)
 : Expression(nullptr, BooleanLiteral::getMetaData())
 {
 	setValue(value);
+}
+
+Type* BooleanLiteral::type()
+{
+	return new PrimitiveType(PrimitiveType::BOOLEAN, true);
 }
 
 }

@@ -37,7 +37,7 @@
 
 namespace Model {
 
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(Character)
+NODE_DEFINE_TYPE_REGISTRATION_METHODS(Character, Node)
 
 Character::Character(Node *parent) :
 	Node(parent), value('\0')

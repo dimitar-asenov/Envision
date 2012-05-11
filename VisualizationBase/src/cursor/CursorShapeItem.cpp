@@ -51,9 +51,9 @@ CursorShapeItem::~CursorShapeItem()
 {
 }
 
-bool CursorShapeItem::needsUpdate()
+Item::UpdateType CursorShapeItem::needsUpdate()
 {
-	return true;
+	return FullUpdate;
 }
 
 void CursorShapeItem::determineChildren()

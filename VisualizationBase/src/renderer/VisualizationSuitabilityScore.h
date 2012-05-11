@@ -25,55 +25,27 @@
  **********************************************************************************************************************/
 
 /*
- * VControlFlowMethodSwitch.cpp
+ * VisualizationSuitabilityScore.h
  *
- *  Created on: Mar 1, 2012
+ *  Created on: Apr 13, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "items/VControlFlowMethodSwitch.h"
-#include "items/VMethodCF.h"
+#ifndef VisualizationBase_VISUALIZATIONSUITABILITYSCORE_H_
+#define VisualizationBase_VISUALIZATIONSUITABILITYSCORE_H_
 
-#include "OOVisualization/src/top_level/VMethod.h"
+#include "../visualizationbase_api.h"
 
+namespace Visualization {
 
-namespace ControlFlowVisualization {
+class VISUALIZATIONBASE_API VisualizationSuitabilityScore {
+	public:
+		VisualizationSuitabilityScore(int score = 0);
 
-ITEM_COMMON_DEFINITIONS(VControlFlowMethodSwitch, "item")
+		int score;
+};
 
-VControlFlowMethodSwitch::VControlFlowMethodSwitch(Item* parent, NodeType* node, const StyleType* style)
-	:ItemWithNode<Visualization::Item, OOModel::Method>(parent, node, style), showAsControlFlow_(false),
-	 metCF_(nullptr), met_(nullptr)
-{
-}
+bool operator< (const VisualizationSuitabilityScore& left, const VisualizationSuitabilityScore& right);
 
-bool VControlFlowMethodSwitch::sizeDependsOnParent() const
-{
-	if (metCF_) return metCF_->sizeDependsOnParent();
-	else  return met_->sizeDependsOnParent();
-}
-
-void VControlFlowMethodSwitch::determineChildren()
-{
-	if (isRenderingChanged())
-	{
-		SAFE_DELETE(met_);
-		SAFE_DELETE(metCF_);
-	}
-
-	if (isShownAsControlFlow()) synchronizeItem<VMethodCF>(metCF_, node(), nullptr);
-	else synchronizeItem<OOVisualization::VMethod>(met_, node(), nullptr);
-}
-
-void VControlFlowMethodSwitch::updateGeometry(int availableWidth, int availableHeight)
-{
-	if (metCF_) Item::updateGeometry(metCF_, availableWidth, availableHeight);
-	else Item::updateGeometry(met_, availableWidth, availableHeight);
-}
-
-bool VControlFlowMethodSwitch::isRenderingChanged() const
-{
-	return (met_ && isShownAsControlFlow()) || (metCF_ && !isShownAsControlFlow());
-}
-
-} /* namespace ControlFlowVisualization */
+} /* namespace Visualization */
+#endif /* VisualizationBase_VISUALIZATIONSUITABILITYSCORE_H_ */

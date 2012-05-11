@@ -43,7 +43,8 @@ class StatementItemList : public Model::TypedList<StatementItem>
 {
 	NODE_DECLARE_STANDARD_METHODS(StatementItemList)
 
-	virtual Model::Node* navigateTo(Model::Node* source, QString path);
+	public:
+		virtual QList<Model::Node*> findSymbol(const QString& symbol, Node* source, FindSymbolMode mode);
 };
 
 }

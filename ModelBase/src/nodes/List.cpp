@@ -41,7 +41,7 @@
 
 namespace Model {
 
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(List)
+NODE_DEFINE_TYPE_REGISTRATION_METHODS(List, Node)
 
 List::List(Node *parent) :
 	Node(parent)
@@ -125,6 +125,11 @@ void List::loadFully(PersistentStore &store)
 	}
 }
 
+QList<Node*> List::children()
+{
+	return nodes_.toList();
+}
+
 int List::size()
 {
 	if (!fullyLoaded) loadFully(* (model()->store()));
@@ -137,6 +142,15 @@ int List::indexOf(const Node* item) const
 	// TODO: is this a QT bug, this is fishy
 	Node *i = const_cast<Node *> (item); // <--- Workaround, since the call below can't be made with item.
 	return nodes_.indexOf(i);
+}
+
+int List::indexOfSubitem(const Node* item) const
+{
+	for(int i = 0; i< nodes_.size(); ++i)
+		if (nodes_.at(i) == item || nodes_.at(i)->isAncestorOf(item))
+			return i;
+
+	return -1;
 }
 
 void List::insert(int position, Node* node)
@@ -192,20 +206,26 @@ void List::paste(ClipboardStore& clipboard, int position)
 	}
 }
 
-Node* List::findFirstSymbolDefinition(const QString& symbol)
+Node* List::findFirstSymbolDefinition(const QString& symbol, int beforeIndex)
 {
-	for(int i = 0; i<nodes_.size(); ++i)
+	if (beforeIndex < 0) beforeIndex = nodes_.size();
+	else if (beforeIndex > nodes_.size()) beforeIndex = nodes_.size();
+
+	for(int i = 0; i<beforeIndex; ++i)
 		if (nodes_[i]->definesSymbol() && nodes_[i]->symbolName() == symbol)
 			return nodes_[i];
 
 	return nullptr;
 }
 
-QList<Node*> List::findAllSymbolDefinitions(const QString& symbol)
+QList<Node*> List::findAllSymbolDefinitions(const QString& symbol, int beforeIndex)
 {
 	QList<Node*> result;
 
-	for(int i = 0; i<nodes_.size(); ++i)
+	if (beforeIndex < 0) beforeIndex = nodes_.size();
+	else if (beforeIndex > nodes_.size()) beforeIndex = nodes_.size();
+
+	for(int i = 0; i<beforeIndex; ++i)
 		if (nodes_[i]->definesSymbol() && nodes_[i]->symbolName() == symbol)
 			result.append( nodes_[i] );
 

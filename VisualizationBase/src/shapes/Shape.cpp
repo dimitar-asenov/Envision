@@ -135,4 +135,10 @@ ShapeStyle* Shape::createNewShapeStyle(const QString& shapeName)
 	else throw VisualizationException("Trying to create a new shape style for an unregistered shape type " + shapeName);
 }
 
+void Shape::setParentNeedsUpdate()
+{
+	if (parent->needsUpdate() == Item::NoUpdate)
+		parent->setUpdateNeeded(Item::StandardUpdate);
+}
+
 }

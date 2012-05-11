@@ -33,7 +33,7 @@
 
 #include "expression_editor/operators/ArrayTypeDescriptor.h"
 
-#include "OOModel/src/types/ArrayType.h"
+#include "OOModel/src/expressions/types/ArrayTypeExpression.h"
 
 namespace OOInteraction {
 
@@ -44,8 +44,8 @@ ArrayTypeDescriptor::ArrayTypeDescriptor(const QString& name, const QString& sig
 
 OOModel::Expression* ArrayTypeDescriptor::create(const QList<OOModel::Expression*>& operands)
 {
-	OOModel::ArrayType* at = new OOModel::ArrayType();
-	at->setType(operands.first());
+	OOModel::ArrayTypeExpression* at = new OOModel::ArrayTypeExpression();
+	at->setTypeExpression(operands.first());
 	return at;
 }
 

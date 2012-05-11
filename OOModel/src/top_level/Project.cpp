@@ -54,23 +54,16 @@ const QString& Project::symbolName() const
 	return name();
 }
 
-Model::Node* Project::navigateTo(Model::Node* source, QString path)
+QList<Model::Node*> Project::findSymbol(const QString& symbol,Model::Node* source, FindSymbolMode mode)
 {
-	QString symbol = extractFrontSymbol(path);
-	Model::Node* found = nullptr;
+	QList<Model::Node*> symbols;
 
-	// Is the target symbol name the module's name
-	if (isAncestorOf(source) && symbol == symbolName()) found = this;
+	symbols << projects()->findAllSymbolDefinitions(symbol);
+	symbols << libraries()->findAllSymbolDefinitions(symbol);
+	symbols << modules()->findAllSymbolDefinitions(symbol);
+	symbols << classes()->findAllSymbolDefinitions(symbol);
 
-	if (!found) found = projects()->findFirstSymbolDefinition(symbol);
-	if (!found) found = libraries()->findFirstSymbolDefinition(symbol);
-	if (!found) found = modules()->findFirstSymbolDefinition(symbol);
-	if (!found) found = classes()->findFirstSymbolDefinition(symbol);
-	if (!found) return ExtendableNode::navigateTo(source, path);
-
-	QString rest = extractSecondaryPath(path);
-	if (!rest.isEmpty()) return found->navigateTo(this, rest);
-	else return found;
+	return symbols.isEmpty() ? Node::findSymbol(symbol, source, mode) : symbols;
 }
 
 }

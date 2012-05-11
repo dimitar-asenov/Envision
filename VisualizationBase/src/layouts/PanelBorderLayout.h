@@ -67,7 +67,8 @@ class VISUALIZATIONBASE_API PanelBorderLayout: public Layout
 
 		void synchronizeContent(Item*& item, Model::Node* node);
 		template <class T> void synchronizeContent(T*& item, bool present, const typename T::StyleType* style);
-		template <class T> void synchronizeContent(T*& item, typename T::NodeType* node, const typename T::StyleType* style);
+		template <class T> void synchronizeContent(T*& item, typename T::NodeType* node,
+				const typename T::StyleType* style);
 
 		PanelLayout* top();
 		PanelLayout* left();
@@ -80,10 +81,10 @@ class VISUALIZATIONBASE_API PanelBorderLayout: public Layout
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 };
 
-inline void PanelBorderLayout::setTop(bool enable) { setPanel(enable, top_, style()->topStyle()); };
-inline void PanelBorderLayout::setLeft(bool enable) { setPanel(enable, left_, style()->leftStyle()); };
-inline void PanelBorderLayout::setBottom(bool enable) { setPanel(enable, bottom_, style()->bottomStyle()); };
-inline void PanelBorderLayout::setRight(bool enable) { setPanel(enable, right_, style()->rightStyle()); };
+inline void PanelBorderLayout::setTop(bool enable) { setPanel(enable, top_, style()->topStyle()); }
+inline void PanelBorderLayout::setLeft(bool enable) { setPanel(enable, left_, style()->leftStyle()); }
+inline void PanelBorderLayout::setBottom(bool enable) { setPanel(enable, bottom_, style()->bottomStyle()); }
+inline void PanelBorderLayout::setRight(bool enable) { setPanel(enable, right_, style()->rightStyle()); }
 
 inline PanelLayout* PanelBorderLayout::top() { return top_; }
 inline PanelLayout* PanelBorderLayout::left() { return left_; }
@@ -95,11 +96,14 @@ inline void PanelBorderLayout::synchronizeContent(Item*& item, Model::Node* node
 {
 	Layout::synchronizeItem(content_, item, node);
 }
-template <class T> inline void PanelBorderLayout::synchronizeContent(T*& item, bool present, const typename T::StyleType* style)
+template <class T>
+inline void PanelBorderLayout::synchronizeContent(T*& item, bool present, const typename T::StyleType* style)
 {
 	Layout::synchronizeItem(content_, item, present, style);
 }
-template <class T> inline void PanelBorderLayout::synchronizeContent(T*& item, typename T::NodeType* node, const typename T::StyleType* style)
+template <class T>
+inline void PanelBorderLayout::synchronizeContent(T*& item, typename T::NodeType* node,
+		const typename T::StyleType* style)
 {
 	Layout::synchronizeItem(content_, item, node, style);
 }

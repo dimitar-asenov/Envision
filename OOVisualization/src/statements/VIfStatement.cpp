@@ -47,17 +47,17 @@ ITEM_COMMON_DEFINITIONS(VIfStatement, "item")
 
 VIfStatement::VIfStatement(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<PanelBorderLayout>, IfStatement>(parent, node, style),
-	header_(new SequentialLayout(nullptr, &style->header())),
-	conditionBackground_(new SequentialLayout(nullptr, &style->condition())),
-	condition_(nullptr),
-	content_(new SequentialLayout(nullptr, &style->content())),
-	thenBranch_(nullptr),
-	elseBranch_(nullptr)
+	header_(), conditionBackground_(), condition_(), content_(), thenBranch_(), elseBranch_()
 {
 	layout()->setTop(true);
+	header_ = new SequentialLayout(layout()->top(), &style->header());
 	layout()->top()->setFirst(header_);
-	header_->append(new Static(nullptr, &style->icon()));
+	header_->append(new Static(header_, &style->icon()));
+
+	conditionBackground_ =new SequentialLayout(header_, &style->condition());
 	header_->append(conditionBackground_);
+
+	content_ = new SequentialLayout(layout(), &style->content());
 	layout()->setContent(content_);
 }
 

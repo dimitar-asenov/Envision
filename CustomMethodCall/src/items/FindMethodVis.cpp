@@ -66,8 +66,8 @@ FindMethodVis::~FindMethodVis()
 
 void FindMethodVis::determineChildren()
 {
-	layout()->synchronizeFirst(prefix_, node()->prefix());
-	layout()->synchronizeMid(separator_, node()->prefix() != nullptr, &style()->separator(), 1);
+	layout()->synchronizeFirst(prefix_, node()->ref()->prefix());
+	layout()->synchronizeMid(separator_, node()->ref()->prefix() != nullptr, &style()->separator(), 1);
 	layout()->synchronizeLast(arguments_, node()->arguments(), &style()->arguments());
 
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
@@ -79,7 +79,7 @@ void FindMethodVis::determineChildren()
 	arguments_->setStyle( &style()->arguments() );
 	if (prefix_) separator_->setStyle( &style()->separator());
 
-	name_->setText(node()->ref()->path().split(',').last().split(':').last());
+	name_->setText(node()->ref()->name());
 }
 
 }
