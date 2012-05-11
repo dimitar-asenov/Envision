@@ -8,7 +8,8 @@ win32:LIBS += -llogger \
     -loomodel \
     -lvisualizationbase \
     -linteractionbase \
-    -loovisualization
+    -loovisualization \
+    -loointeraction
 
 HEADERS += src/precompiled.h \
     src/ContractsLibraryException.h \

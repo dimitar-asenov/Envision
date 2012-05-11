@@ -36,6 +36,7 @@
 
 // TODO: Include here the precompiled headers of other plug-ins that use this plug-in uses. Only the "public" part of
 // hose headers will be included here
+#include "OOInteraction/src/precompiled.h"
 #include "InteractionBase/src/precompiled.h"
 #include "OOVisualization/src/precompiled.h"
 #include "VisualizationBase/src/precompiled.h"
