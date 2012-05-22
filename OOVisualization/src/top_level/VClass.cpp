@@ -133,6 +133,7 @@ void VClass::determineChildren()
 	header_->synchronizeLast(baseClasses_, node()->baseClasses(), &style()->baseClasses());
 
 	// Synchronize methods
+	if (content_->needsUpdate() == FullUpdate) content_->clear(true);
 	content_->synchronizeWithNodes(node()->methods()->nodes().toList(), renderer());
 
 	// Synchronize fields
