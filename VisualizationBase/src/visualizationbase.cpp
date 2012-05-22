@@ -37,6 +37,7 @@
 #include "shapes/Box.h"
 #include "shapes/Diamond.h"
 #include "shapes/Braces.h"
+#include "shapes/SvgShape.h"
 #include "Scene.h"
 #include "items/VText.h"
 #include "items/VInteger.h"
@@ -67,6 +68,7 @@ namespace Visualization
 		Shape::registerShape<Box>();
 		Shape::registerShape<Diamond>();
 		Shape::registerShape<Braces>();
+		Shape::registerShape<SvgShape>();
 
 		// Register extensions
 		Position::registerExtension();
