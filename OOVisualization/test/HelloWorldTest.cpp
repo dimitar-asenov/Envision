@@ -86,7 +86,7 @@ Class* addHelloWorld(Model::Model* model, Project* parent)
 
 	ExpressionStatement* callPrintlnSt = new ExpressionStatement();
 	MethodCallExpression* callPrintln = new MethodCallExpression("println",
-			new VariableAccess("out", new ReferenceExpression("System", new ReferenceExpression("Java"))));
+			new ReferenceExpression("out", new ReferenceExpression("System", new ReferenceExpression("Java"))));
 	callPrintln->arguments()->append(new StringLiteral("Hello World"));
 	callPrintlnSt->setExpression(callPrintln);
 	main->items()->append(callPrintlnSt);
@@ -254,7 +254,7 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 	CastExpression* cast = new CastExpression();
 	var10->setInitialValue(cast);
 	cast->setType(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
-	cast->setExpr(new VariableAccess("epsilon"));
+	cast->setExpr(new ReferenceExpression("epsilon"));
 
 	VariableDeclaration* var11 = new VariableDeclaration();
 	longMethod->items()->append(new ExpressionStatement(var11));
@@ -373,27 +373,27 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 	longMethod->items()->append(ifs);
 	BinaryOperation* ifCond = new BinaryOperation();
 	ifs->setCondition(ifCond);
-	ifCond->setLeft(new VariableAccess("var14"));
+	ifCond->setLeft(new ReferenceExpression("var14"));
 	ifCond->setOp(BinaryOperation::NOT_EQUALS);
 	ifCond->setRight(new IntegerLiteral(10));
 	UnaryOperation* thenBranch = new UnaryOperation();
 	ifs->thenBranch()->append(thenBranch);
 	thenBranch->setOp(UnaryOperation::POSTINCREMENT);
-	thenBranch->setOperand(new VariableAccess("var14"));
+	thenBranch->setOperand(new ReferenceExpression("var14"));
 	UnaryOperation* elseBranch = new UnaryOperation();
 	ifs->elseBranch()->append(elseBranch);
 	elseBranch->setOp(UnaryOperation::POSTDECREMENT);
-	elseBranch->setOperand(new VariableAccess("var14"));
+	elseBranch->setOperand(new ReferenceExpression("var14"));
 
 	Block* block = new Block();
 	longMethod->items()->append(block);
 	AssignmentExpression* assign = new AssignmentExpression();
 	block->items()->append(new ExpressionStatement(assign));
-	assign->setLeft(new VariableAccess("var1"));
+	assign->setLeft(new ReferenceExpression("var1"));
 	assign->setOp(AssignmentExpression::ASSIGN);
 	BinaryOperation* arrayAccess = new BinaryOperation();
 	assign->setRight(arrayAccess);
-	arrayAccess->setLeft(new VariableAccess("someArray"));
+	arrayAccess->setLeft(new ReferenceExpression("someArray"));
 	arrayAccess->setOp(BinaryOperation::ARRAY_INDEX);
 	arrayAccess->setRight(new IntegerLiteral(4));
 
@@ -406,17 +406,17 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 	initStep->setInitialValue(new IntegerLiteral(0));
 	BinaryOperation* loopCondition = new BinaryOperation();
 	loop->setCondition(loopCondition);
-	loopCondition->setLeft(new VariableAccess("i"));
+	loopCondition->setLeft(new ReferenceExpression("i"));
 	loopCondition->setOp(BinaryOperation::LESS);
-	loopCondition->setRight(new VariableAccess("x"));
+	loopCondition->setRight(new ReferenceExpression("x"));
 	AssignmentExpression* updateStep = new AssignmentExpression();
 	loop->setUpdateStep(updateStep);
-	updateStep->setLeft(new VariableAccess("i"));
+	updateStep->setLeft(new ReferenceExpression("i"));
 	updateStep->setOp(AssignmentExpression::PLUS_ASSIGN);
 	updateStep->setRight(new IntegerLiteral(1));
 	AssignmentExpression* loopBodyAssignment = new AssignmentExpression();
 	loop->body()->append(new ExpressionStatement(loopBodyAssignment));
-	loopBodyAssignment->setLeft(new VariableAccess("var14"));
+	loopBodyAssignment->setLeft(new ReferenceExpression("var14"));
 	loopBodyAssignment->setOp(AssignmentExpression::TIMES_ASSIGN);
 	loopBodyAssignment->setRight(new IntegerLiteral(2));
 	loop->body()->append(new ContinueStatement());
@@ -427,14 +427,12 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 	longMethod->items()->append(forEach);
 	forEach->setVarName("elem");
 	forEach->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_INT));
-	VariableAccess* forEachCollection = new VariableAccess();
-	forEachCollection->ref()->setName("SomeCollection");
-	forEach->setCollection(forEachCollection);
+	forEach->setCollection(new ReferenceExpression("SomeCollection"));
 	AssignmentExpression* assignEach = new AssignmentExpression();
 	forEach->body()->append(new ExpressionStatement(assignEach));
-	assignEach->setLeft(new VariableAccess("var1"));
+	assignEach->setLeft(new ReferenceExpression("var1"));
 	assignEach->setOp(AssignmentExpression::DIVIDE_ASSIGN);
-	assignEach->setRight(new VariableAccess("elem"));
+	assignEach->setRight(new ReferenceExpression("elem"));
 
 	ReturnStatement* longMethodReturn = new ReturnStatement();
 	longMethod->items()->append(longMethodReturn);
@@ -481,7 +479,7 @@ Method* addFactorial(Model::Model* model, Class* parent)
 	factorial->items()->append(ifs);
 	BinaryOperation* ifCond = new BinaryOperation();
 	ifs->setCondition(ifCond);
-	ifCond->setLeft(new VariableAccess("x"));
+	ifCond->setLeft(new ReferenceExpression("x"));
 	ifCond->setOp(BinaryOperation::GREATER_EQUALS);
 	ifCond->setRight(new IntegerLiteral(0));
 
@@ -495,32 +493,32 @@ Method* addFactorial(Model::Model* model, Class* parent)
 	initStep->setInitialValue(new IntegerLiteral(1));
 	BinaryOperation* loopCondition = new BinaryOperation();
 	loop->setCondition(loopCondition);
-	loopCondition->setLeft(new VariableAccess("i"));
+	loopCondition->setLeft(new ReferenceExpression("i"));
 	loopCondition->setOp(BinaryOperation::LESS_EQUALS);
-	loopCondition->setRight(new VariableAccess("x"));
+	loopCondition->setRight(new ReferenceExpression("x"));
 	AssignmentExpression* updateStep = new AssignmentExpression();
 	loop->setUpdateStep(updateStep);
-	updateStep->setLeft(new VariableAccess("i"));
+	updateStep->setLeft(new ReferenceExpression("i"));
 	updateStep->setOp(AssignmentExpression::PLUS_ASSIGN);
 	updateStep->setRight(new IntegerLiteral(1));
 	AssignmentExpression* loopBodyAssignment = new AssignmentExpression();
 	loop->body()->append(new ExpressionStatement(loopBodyAssignment));
-	loopBodyAssignment->setLeft(new VariableAccess("result"));
+	loopBodyAssignment->setLeft(new ReferenceExpression("result"));
 	loopBodyAssignment->setOp(AssignmentExpression::TIMES_ASSIGN);
-	loopBodyAssignment->setRight(new VariableAccess("i"));
+	loopBodyAssignment->setRight(new ReferenceExpression("i"));
 
 	// Else
 	AssignmentExpression* elseBranch = new AssignmentExpression();
 	ifs->elseBranch()->append(new ExpressionStatement(elseBranch));
 
-	elseBranch->setLeft(new VariableAccess("result"));
+	elseBranch->setLeft(new ReferenceExpression("result"));
 	elseBranch->setOp(AssignmentExpression::ASSIGN);
 	elseBranch->setRight(new IntegerLiteral(-1));
 
 	// Return
 	ReturnStatement* factorialReturn = new ReturnStatement();
 	factorial->items()->append(factorialReturn);
-	factorialReturn->values()->append(new VariableAccess("result"));
+	factorialReturn->values()->append(new ReferenceExpression("result"));
 
 	factorial->extension<Position>()->setY(860);
 

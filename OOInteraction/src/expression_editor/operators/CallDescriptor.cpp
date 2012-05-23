@@ -33,7 +33,7 @@
 
 #include "expression_editor/operators/CallDescriptor.h"
 
-#include "OOModel/src/expressions/VariableAccess.h"
+#include "OOModel/src/expressions/ReferenceExpression.h"
 #include "OOModel/src/expressions/EmptyExpression.h"
 #include "OOModel/src/expressions/CommaExpression.h"
 #include "OOModel/src/expressions/MethodCallExpression.h"
@@ -48,13 +48,13 @@ CallDescriptor::CallDescriptor(const QString& name, const QString& signature, in
 OOModel::Expression* CallDescriptor::create(const QList<OOModel::Expression*>& operands)
 {
 	Q_ASSERT(operands.size() == 2);
-	auto varName = dynamic_cast<OOModel::VariableAccess*>( operands.first());
-	Q_ASSERT(varName);
+	auto ref = dynamic_cast<OOModel::ReferenceExpression*>( operands.first());
+	Q_ASSERT(ref);
 
-	OOModel::MethodCallExpression* opr = new OOModel::MethodCallExpression(varName->ref()->name());
-	OOModel::Expression* prefix = varName->ref()->prefix();
-	varName->ref()->replaceChild(prefix, new OOModel::EmptyExpression());
-	SAFE_DELETE(varName);
+	OOModel::MethodCallExpression* opr = new OOModel::MethodCallExpression(ref->name());
+	OOModel::Expression* prefix = ref->prefix();
+	ref->replaceChild(prefix, new OOModel::EmptyExpression());
+	SAFE_DELETE(ref);
 	opr->ref()->setPrefix(prefix);
 
 	if (auto comma = dynamic_cast<OOModel::CommaExpression*>(operands.last()))

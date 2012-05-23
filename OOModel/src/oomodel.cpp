@@ -80,7 +80,6 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	Model::TypedList<CharacterLiteral>::registerNodeType();
 	Model::TypedList<NullLiteral>::registerNodeType();
 	Model::TypedList<ThisExpression>::registerNodeType();
-	Model::TypedList<VariableAccess>::registerNodeType();
 	Model::TypedList<NewExpression>::registerNodeType();
 	Model::TypedList<MethodCallExpression>::registerNodeType();
 	Model::TypedList<UnaryOperation>::registerNodeType();
@@ -133,7 +132,6 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	CharacterLiteral::init();
 	NullLiteral::init();
 	ThisExpression::init();
-	VariableAccess::init();
 	NewExpression::init();
 	MethodCallExpression::init();
 	UnaryOperation::init();

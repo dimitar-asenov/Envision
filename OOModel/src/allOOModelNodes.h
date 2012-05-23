@@ -61,7 +61,6 @@
 #include "expressions/CharacterLiteral.h"
 #include "expressions/NullLiteral.h"
 #include "expressions/ThisExpression.h"
-#include "expressions/VariableAccess.h"
 #include "expressions/NewExpression.h"
 #include "expressions/MethodCallExpression.h"
 #include "expressions/UnaryOperation.h"

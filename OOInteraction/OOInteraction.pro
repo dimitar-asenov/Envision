@@ -1,6 +1,5 @@
 TARGET = oointeraction
 include(../Core/common_plugin.pri)
-
 DEFINES += OOINTERACTION_LIBRARY
 win32:LIBS += -llogger \
     -lselftest \
@@ -9,8 +8,8 @@ win32:LIBS += -llogger \
     -lvisualizationbase \
     -linteractionbase \
     -loovisualization
-    
-HEADERS += src/string_components/ConditionalExpressionStringComponents.h \
+HEADERS += src/string_components/ReferenceExpressionStringComponents.h \
+    src/string_components/ConditionalExpressionStringComponents.h \
     src/expression_editor/operators/ConditionalExpressionDescriptor.h \
     src/OOInteractionException.h \
     src/commands/CClassCreateMethod.h \
@@ -60,7 +59,6 @@ HEADERS += src/string_components/ConditionalExpressionStringComponents.h \
     src/string_components/ThisExpressionStringComponents.h \
     src/string_components/UnaryOperatorStringComponents.h \
     src/string_components/UnfinishedOperatorStringComponents.h \
-    src/string_components/VariableAccessStringComponents.h \
     src/string_components/VariableDeclarationStringComponents.h \
     src/string_offset_providers/CallStringOffsetProvider.h \
     src/string_offset_providers/CastStringOffsetProvider.h \
@@ -74,7 +72,8 @@ HEADERS += src/string_components/ConditionalExpressionStringComponents.h \
     src/string_offset_providers/TextRendererStringOffsetProvider.h \
     src/string_offset_providers/VariableDeclarationStringOffsetProvider.h \
     src/oointeraction.h
-SOURCES += src/string_components/ConditionalExpressionStringComponents.cpp \
+SOURCES += src/string_components/ReferenceExpressionStringComponents.cpp \
+    src/string_components/ConditionalExpressionStringComponents.cpp \
     src/expression_editor/operators/ConditionalExpressionDescriptor.cpp \
     src/handlers/HLoop.cpp \
     src/handlers/HIfStatement.cpp \
@@ -128,7 +127,6 @@ SOURCES += src/string_components/ConditionalExpressionStringComponents.cpp \
     src/string_components/ErrorExpressionStringComponents.cpp \
     src/string_components/IntegerLiteralStringComponents.cpp \
     src/string_components/UnfinishedOperatorStringComponents.cpp \
-    src/string_components/VariableAccessStringComponents.cpp \
     src/string_components/StringComponents.cpp \
     src/expression_editor/OOOperatorDescriptorList.cpp \
     src/expression_editor/operators/BinaryOperatorDescriptor.cpp \

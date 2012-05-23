@@ -67,7 +67,6 @@ template class Model::TypedList<OOModel::BooleanLiteral>;
 template class Model::TypedList<OOModel::CharacterLiteral>;
 template class Model::TypedList<OOModel::NullLiteral>;
 template class Model::TypedList<OOModel::ThisExpression>;
-template class Model::TypedList<OOModel::VariableAccess>;
 template class Model::TypedList<OOModel::NewExpression>;
 template class Model::TypedList<OOModel::MethodCallExpression>;
 template class Model::TypedList<OOModel::UnaryOperation>;

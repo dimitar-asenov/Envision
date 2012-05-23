@@ -33,7 +33,7 @@
 
 #include "expression_editor/operators/MemberOperatorDescriptor.h"
 
-#include "OOModel/src/expressions/VariableAccess.h"
+#include "OOModel/src/expressions/ReferenceExpression.h"
 
 namespace OOInteraction {
 
@@ -45,12 +45,12 @@ MemberOperatorDescriptor::MemberOperatorDescriptor(const QString& name, const QS
 OOModel::Expression* MemberOperatorDescriptor::create(const QList<OOModel::Expression*>& operands)
 {
 	Q_ASSERT(operands.size() == 2);
-	auto varName = dynamic_cast<OOModel::VariableAccess*>( operands.last());
-	Q_ASSERT(varName);
+	auto ref = dynamic_cast<OOModel::ReferenceExpression*>( operands.last());
+	Q_ASSERT(ref);
 
-	OOModel::VariableAccess* va = new OOModel::VariableAccess( varName->ref()->name(), operands.first() );
-	SAFE_DELETE(varName);
-	return va;
+	OOModel::ReferenceExpression* r = new OOModel::ReferenceExpression( ref->name(), operands.first() );
+	SAFE_DELETE(ref);
+	return r;
 }
 
 } /* namespace OOInteraction */

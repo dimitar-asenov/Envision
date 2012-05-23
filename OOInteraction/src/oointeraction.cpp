@@ -59,7 +59,7 @@
 #include "string_components/NullLiteralStringComponents.h"
 #include "string_components/ThisExpressionStringComponents.h"
 #include "string_components/UnfinishedOperatorStringComponents.h"
-#include "string_components/VariableAccessStringComponents.h"
+#include "string_components/ReferenceExpressionStringComponents.h"
 #include "string_components/CallStringComponents.h"
 #include "string_components/PrimitiveTypeStringComponents.h"
 #include "string_components/ArrayTypeStringComponents.h"
@@ -109,7 +109,6 @@ bool OOInteraction::initialize(Envision::EnvisionManager&)
 	OOVisualization::VFormalArgument::setInteractionHandler(HFormalArgument::instance());
 	OOVisualization::VFormalResult::setInteractionHandler(Interaction::GenericHandler::instance());
 	OOVisualization::VReferenceExpression::setInteractionHandler(HExpression::instance());
-	OOVisualization::VVariableAccess::setInteractionHandler(HExpression::instance());
 	OOVisualization::VMethodCallExpression::setInteractionHandler(HExpression::instance());
 	OOVisualization::VThisExpression::setInteractionHandler(HExpression::instance());
 	OOVisualization::VCastExpression::setInteractionHandler(HExpression::instance());
@@ -170,7 +169,7 @@ bool OOInteraction::initialize(Envision::EnvisionManager&)
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringComponents, ThisExpressionStringComponents, OOModel::ThisExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor
-		<StringComponents, VariableAccessStringComponents, OOModel::VariableAccess>();
+		<StringComponents, ReferenceExpressionStringComponents, OOModel::ReferenceExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringComponents, UnfinishedOperatorStringComponents, OOModel::UnfinishedOperator>();
 	Model::AdapterManager::registerAdapterViaConstructor
@@ -218,7 +217,7 @@ bool OOInteraction::initialize(Envision::EnvisionManager&)
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, SimpleLiteralStringOffsetProvider, OOVisualization::VThisExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, SequentialVisualizationStringOffsetProvider, OOVisualization::VVariableAccess>();
+		<StringOffsetProvider, SequentialVisualizationStringOffsetProvider, OOVisualization::VReferenceExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, SequentialVisualizationStringOffsetProvider, OOVisualization::VUnfinishedOperator>();
 	Model::AdapterManager::registerAdapterViaConstructor

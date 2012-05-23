@@ -198,15 +198,15 @@ Method* addDivBySix(Model::Model* model, Class* parent)
 	sixLoopInit->setInitialValue(new IntegerLiteral(0));
 	BinaryOperation* sixLoopCond = new BinaryOperation();
 	sixloop->setCondition(sixLoopCond);
-	sixLoopCond->setLeft(new VariableAccess("i"));
+	sixLoopCond->setLeft(new ReferenceExpression("i"));
 	sixLoopCond->setOp(BinaryOperation::LESS);
-	MethodCallExpression* sizeCall = new MethodCallExpression("size", new VariableAccess("numbers"));
+	MethodCallExpression* sizeCall = new MethodCallExpression("size", new ReferenceExpression("numbers"));
 	sixLoopCond->setRight(sizeCall);
 
 	//TODO test the visualization without the remaining parts of this method
 	AssignmentExpression* sixLoopUpdate = new AssignmentExpression();
 	sixloop->setUpdateStep(sixLoopUpdate);
-	sixLoopUpdate->setLeft(new VariableAccess("i"));
+	sixLoopUpdate->setLeft(new ReferenceExpression("i"));
 	sixLoopUpdate->setOp(AssignmentExpression::PLUS_ASSIGN);
 	sixLoopUpdate->setRight(new IntegerLiteral(1));
 
@@ -216,9 +216,9 @@ Method* addDivBySix(Model::Model* model, Class* parent)
 	n->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
 	BinaryOperation* item = new BinaryOperation();
 	n->setInitialValue(item);
-	item->setLeft(new VariableAccess("numbers"));
+	item->setLeft(new ReferenceExpression("numbers"));
 	item->setOp(BinaryOperation::ARRAY_INDEX);
-	item->setRight(new VariableAccess("i"));
+	item->setRight(new ReferenceExpression("i"));
 
 	IfStatement* ifdiv2 = new IfStatement();
 	sixloop->body()->append(ifdiv2);
@@ -228,7 +228,7 @@ Method* addDivBySix(Model::Model* model, Class* parent)
 	eq0->setRight(new IntegerLiteral(0));
 	BinaryOperation* div2 = new BinaryOperation();
 	eq0->setLeft(div2);
-	div2->setLeft(new VariableAccess("n"));
+	div2->setLeft(new ReferenceExpression("n"));
 	div2->setOp(BinaryOperation::REMAINDER);
 	div2->setRight(new IntegerLiteral(2));
 	ifdiv2->elseBranch()->append(new ContinueStatement());
@@ -241,19 +241,19 @@ Method* addDivBySix(Model::Model* model, Class* parent)
 	eq0->setRight(new IntegerLiteral(0));
 	BinaryOperation* div3 = new BinaryOperation();
 	eq0->setLeft(div3);
-	div3->setLeft(new VariableAccess("n"));
+	div3->setLeft(new ReferenceExpression("n"));
 	div3->setOp(BinaryOperation::REMAINDER);
 	div3->setRight(new IntegerLiteral(3));
 
 	AssignmentExpression* resultFound = new AssignmentExpression();
 	ifdiv3->thenBranch()->append(resultFound);
-	resultFound->setLeft(new VariableAccess("result"));
+	resultFound->setLeft(new ReferenceExpression("result"));
 	resultFound->setOp(AssignmentExpression::ASSIGN);
-	resultFound->setRight(new VariableAccess("i"));
+	resultFound->setRight(new ReferenceExpression("i"));
 	ifdiv3->thenBranch()->append(new BreakStatement());
 
 	ReturnStatement* divbysixReturn = new ReturnStatement();
-	divbysixReturn->values()->append(new VariableAccess("result"));
+	divbysixReturn->values()->append(new ReferenceExpression("result"));
 	divbysix->items()->append(divbysixReturn);
 
 	model->endModification();

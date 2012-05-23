@@ -25,34 +25,33 @@
  **********************************************************************************************************************/
 
 /*
- * VariableAccessStringComponents.cpp
+ * ReferenceExpressionStringComponents.h
  *
  *  Created on: Feb 17, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "string_components/VariableAccessStringComponents.h"
+#ifndef OOInteraction_REFERENCEEXPRESSIONSTRINGCOMPONENTS_H_
+#define OOInteraction_REFERENCEEXPRESSIONSTRINGCOMPONENTS_H_
 
-#include "OOModel/src/expressions/VariableAccess.h"
+#include "../oointeraction_api.h"
+#include "StringComponents.h"
+
+namespace OOModel
+{
+	class ReferenceExpression;
+}
 
 namespace OOInteraction {
 
-VariableAccessStringComponents::VariableAccessStringComponents(OOModel::VariableAccess* e)
-	: exp_(e)
-{
-}
+class OOINTERACTION_API ReferenceExpressionStringComponents : public StringComponents {
+	public:
+	ReferenceExpressionStringComponents( OOModel::ReferenceExpression* e );
+		virtual QStringList components();
 
-QStringList VariableAccessStringComponents::components()
-{
-	QStringList result;
-	if (!exp_) return result;
-
-	QString prefix = stringForNode(exp_->ref()->prefix());
-	if (!prefix.isEmpty()) result << prefix << ".";
-
-	result << exp_->ref()->name();
-
-	return result;
-}
+	private:
+		OOModel::ReferenceExpression* exp_;
+};
 
 } /* namespace OOInteraction */
+#endif /* OOInteraction_REFERENCEEXPRESSIONSTRINGCOMPONENTS_H_ */

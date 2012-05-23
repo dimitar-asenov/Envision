@@ -34,7 +34,7 @@
 #include "expression_editor/operators/DeclarationDescriptor.h"
 
 #include "OOModel/src/expressions/VariableDeclaration.h"
-#include "OOModel/src/expressions/VariableAccess.h"
+#include "OOModel/src/expressions/ReferenceExpression.h"
 
 namespace OOInteraction {
 
@@ -48,9 +48,9 @@ OOModel::Expression* DeclarationDescriptor::create(const QList<OOModel::Expressi
 	OOModel::VariableDeclaration* vd = new OOModel::VariableDeclaration();
 
 	vd->setVarType( operands.first() );
-	auto var = dynamic_cast<OOModel::VariableAccess*>(operands[1]);
-	vd->setName( var->ref()->name());
-	SAFE_DELETE(var);
+	auto ref = dynamic_cast<OOModel::ReferenceExpression*>(operands[1]);
+	vd->setName( ref->name());
+	SAFE_DELETE(ref);
 
 	if (operands.size() > 2) vd->setInitialValue(operands[2]);
 	return vd;

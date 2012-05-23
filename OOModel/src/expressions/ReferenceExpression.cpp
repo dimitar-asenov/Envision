@@ -32,10 +32,12 @@
  **********************************************************************************************************************/
 
 #include "expressions/ReferenceExpression.h"
+#include "expressions/VariableDeclaration.h"
 #include "top_level/Project.h"
 #include "top_level/Library.h"
 #include "top_level/Module.h"
 #include "top_level/Class.h"
+#include "top_level/Field.h"
 #include "../types/SymbolProviderType.h"
 #include "../types/ClassType.h"
 #include "../types/ErrorType.h"
@@ -58,6 +60,9 @@ ReferenceExpression::ReferenceExpression(const QString& name, Expression* prefix
 
 Type* ReferenceExpression::type()
 {
+	if (!ref()->target())
+		return new ErrorType("Unresolved Reference");
+
 	if ( auto project = dynamic_cast<Project*>( ref()->target() ) )
 		return new SymbolProviderType(project, false);
 	else if ( auto library = dynamic_cast<Library*>( ref()->target() ) )
@@ -66,7 +71,31 @@ Type* ReferenceExpression::type()
 		return new SymbolProviderType(module, false);
 	else if ( auto cl = dynamic_cast<Class*>( ref()->target() ) )
 		return new ClassType(cl, false);
-	else return new ErrorType("Invalid reference expression type");
+	else if ( auto vdecl = dynamic_cast<VariableDeclaration*>( ref()->target() ) )
+	{
+		auto t = vdecl->type();
+		t->setValueType(true);
+		return t;
+	}
+	else if ( auto field = dynamic_cast<Field*>( ref()->target() ) )
+	{
+		auto t = field->typeExpression()->type();
+		t->setValueType(true);
+		return t;
+	}
+	else if ( auto arg = dynamic_cast<FormalArgument*>( ref()->target() ) )
+	{
+		auto t = arg->typeExpression()->type();
+		t->setValueType(true);
+		return t;
+	}
+	else if ( auto res = dynamic_cast<FormalResult*>( ref()->target() ) )
+	{
+		auto t = res->typeExpression()->type();
+		t->setValueType(true);
+		return t;
+	}
+	else return new ErrorType("Unknown type for target of reference");
 }
 
 }

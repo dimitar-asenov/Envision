@@ -43,7 +43,6 @@
 #include "elements/VFormalArgument.h"
 #include "elements/VFormalResult.h"
 
-#include "expressions/VVariableAccess.h"
 #include "expressions/VAssignmentExpression.h"
 #include "expressions/VMethodCallExpression.h"
 #include "expressions/VReferenceExpression.h"

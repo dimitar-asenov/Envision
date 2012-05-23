@@ -1,11 +1,9 @@
 TARGET = oomodel
 include(../Core/common_plugin.pri)
-
 DEFINES += OOMODEL_LIBRARY
 win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase
-
 HEADERS += src/types/StringType.h \
     src/types/NullType.h \
     src/types/SymbolProviderType.h \
@@ -50,7 +48,6 @@ HEADERS += src/types/StringType.h \
     src/expressions/ThisExpression.h \
     src/expressions/UnaryOperation.h \
     src/expressions/UnfinishedOperator.h \
-    src/expressions/VariableAccess.h \
     src/expressions/VariableDeclaration.h \
     src/oomodel_api.h \
     src/precompiled.h \
@@ -122,7 +119,6 @@ SOURCES += src/types/StringType.cpp \
     src/expressions/CastExpression.cpp \
     src/expressions/BinaryOperation.cpp \
     src/expressions/NewExpression.cpp \
-    src/expressions/VariableAccess.cpp \
     src/expressions/ThisExpression.cpp \
     src/expressions/NullLiteral.cpp \
     src/expressions/CharacterLiteral.cpp \
