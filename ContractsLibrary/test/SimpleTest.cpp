@@ -34,7 +34,7 @@
 #include "contractslibrary.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
-#include "items/VRequiresCall.h"
+#include "items/VContractCall.h"
 
 #include "OOModel/src/allOOModelNodes.h"
 #include "ModelBase/src/Model.h"
@@ -110,13 +110,21 @@ Library* createContractsLibrary()
 	});
 
 	// Register Visualizations in the group
-	g->addVisualization(createVisualization<VRequiresCall, MethodCallExpression>,
+	g->addVisualization([](Visualization::Item* parent, Model::Node* node) -> Item*
+			{
+				return new VContractCall(parent, static_cast<MethodCallExpression*> (node),
+						VContractCall::itemStyles().get("requires"));
+			},
 			[=](Visualization::Item*, Model::Node* node) -> bool
 			{
 				auto call = static_cast<OOModel::MethodCallExpression*>(node);
 				return call->methodDefinition() == req;
 			});
-	g->addVisualization(createVisualization<VRequiresCall, MethodCallExpression>,
+	g->addVisualization([](Visualization::Item* parent, Model::Node* node) -> Item*
+			{
+				return new VContractCall(parent, static_cast<MethodCallExpression*> (node),
+						VContractCall::itemStyles().get("ensures"));
+			},
 			[=](Visualization::Item*, Model::Node* node) -> bool
 			{
 				auto call = static_cast<OOModel::MethodCallExpression*>(node);

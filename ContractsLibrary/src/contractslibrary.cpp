@@ -34,12 +34,18 @@
 #include "contractslibrary.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
+#include "InteractionBase/src/handlers/GenericHandler.h"
+
+#include "items/VContractCall.h"
+
 Q_EXPORT_PLUGIN2( contractslibrary, ContractsLibrary::ContractsLibrary )
 
 namespace ContractsLibrary {
 
 bool ContractsLibrary::initialize(Envision::EnvisionManager&)
 {
+	VContractCall::setInteractionHandler(Interaction::GenericHandler::instance());
+
 	return true;
 }
 

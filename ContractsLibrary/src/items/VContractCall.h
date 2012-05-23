@@ -25,51 +25,50 @@
  **********************************************************************************************************************/
 
 /*
- * VRequiresCall.cpp
+ * VContractCall.h
  *
  *  Created on: May 23, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "VRequiresCall.h"
+#ifndef ContractsLibrary_VCONTRACTCALL_H_
+#define ContractsLibrary_VCONTRACTCALL_H_
 
-#include "VisualizationBase/src/items/Static.h"
-#include "VisualizationBase/src/items/VList.h"
+#include "../contractslibrary_api.h"
+#include "SimpleKeywordCallStyle.h"
 
-using namespace Visualization;
-using namespace OOModel;
+#include "OOModel/src/expressions/MethodCallExpression.h"
+
+#include "VisualizationBase/src/items/ItemWithNode.h"
+#include "VisualizationBase/src/items/LayoutProvider.h"
+
+namespace Visualization {
+	class Static;
+	class VList;
+}
 
 namespace ContractsLibrary {
 
-ITEM_COMMON_DEFINITIONS(VRequiresCall, "item")
-
-VRequiresCall::VRequiresCall(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode<LayoutProvider<>, MethodCallExpression>(parent, node, style),
-	keyword_(),
-	arguments_()
+class CONTRACTSLIBRARY_API VContractCall
+	: public Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::MethodCallExpression>
 {
-}
+		ITEM_COMMON_CUSTOM_STYLENAME(VContractCall, SimpleKeywordCallStyle)
 
-VRequiresCall::~VRequiresCall()
-{
-	// These were automatically deleted by LayoutProvider's destructor
-	keyword_ = nullptr;
-	arguments_ = nullptr;
-}
+	public:
+		VContractCall(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+		virtual ~VContractCall();
 
-void VRequiresCall::determineChildren()
-{
-	layout()->synchronizeFirst(keyword_, true, &style()->keyword());
-	layout()->synchronizeLast(arguments_, node()->arguments(), &style()->arguments());
+		Visualization::VList* arguments() const;
 
-	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
-	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
-	//			what's the reason they are being updated.
-	// The style needs to be updated every time since if our own style changes, so will that of the children.
-	layout()->setStyle( &style()->layout());
-	arguments_->setStyle( &style()->arguments() );
-	arguments_->setSuppressHandler(true);
-	keyword_->setStyle( &style()->keyword());
-}
+	protected:
+		void determineChildren();
+
+	private:
+		Visualization::Static* keyword_;
+		Visualization::VList* arguments_;
+};
+
+inline Visualization::VList* VContractCall::arguments() const { return arguments_; }
 
 } /* namespace ContractsLibrary */
+#endif /* ContractsLibrary_VCONTRACTCALL_H_ */
