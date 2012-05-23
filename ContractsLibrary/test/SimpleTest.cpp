@@ -34,6 +34,8 @@
 #include "contractslibrary.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
+#include "items/VRequiresCall.h"
+
 #include "OOModel/src/allOOModelNodes.h"
 #include "ModelBase/src/Model.h"
 
@@ -88,6 +90,40 @@ Library* createContractsLibrary()
 	contract->extension<Position>()->setY(0);
 	req->extension<Position>()->setY(0);
 	ens->extension<Position>()->setY(60);
+
+	// Register a group that holds the guard condition: are we visualizing a method belonging to the Contract class?
+	auto g = new VisualizationGroup();
+	g->setConditionFunction([=](Visualization::Item*, Model::Node* node) -> bool
+	{
+		auto call = static_cast<OOModel::MethodCallExpression*>(node);
+		if (auto def = call->methodDefinition())
+		{
+			auto* p = def->parent();
+			while (p)
+			{
+				if (p == contract) return true;
+				p = p->parent();
+			}
+		}
+
+		return false;
+	});
+
+	// Register Visualizations in the group
+	g->addVisualization(createVisualization<VRequiresCall, MethodCallExpression>,
+			[=](Visualization::Item*, Model::Node* node) -> bool
+			{
+				auto call = static_cast<OOModel::MethodCallExpression*>(node);
+				return call->methodDefinition() == req;
+			});
+	g->addVisualization(createVisualization<VRequiresCall, MethodCallExpression>,
+			[=](Visualization::Item*, Model::Node* node) -> bool
+			{
+				auto call = static_cast<OOModel::MethodCallExpression*>(node);
+				return call->methodDefinition() == ens;
+			});
+
+	Scene::defaultRenderer()->registerGroup(MethodCallExpression::typeIdStatic(), g);
 
 	return lib;
 }
