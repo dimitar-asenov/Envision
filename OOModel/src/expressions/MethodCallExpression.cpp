@@ -48,7 +48,7 @@ REGISTER_ATTRIBUTE(MethodCallExpression, arguments, TypedListOfExpression, false
 MethodCallExpression::MethodCallExpression(const QString& name, Expression* prefix)
 : Expression(nullptr, MethodCallExpression::getMetaData())
 {
-	ref()->ref()->setName(name);
+	ref()->setName(name);
 	if (prefix != nullptr) ref()->setPrefix(prefix);
 }
 
