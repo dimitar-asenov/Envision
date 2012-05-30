@@ -87,6 +87,7 @@
 #include "elements/StatementItemList.h"
 #include "elements/FormalArgument.h"
 #include "elements/FormalResult.h"
+#include "elements/FormalTypeArgument.h"
 #include "elements/OOReference.h"
 
 #endif /* ALLOOMODELNODES_H_ */

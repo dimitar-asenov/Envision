@@ -42,6 +42,7 @@
 #include "../elements/StatementItem.h"
 #include "../elements/FormalArgument.h"
 #include "../elements/FormalResult.h"
+#include "../elements/FormalTypeArgument.h"
 #include "../elements/StatementItemList.h"
 
 #include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
@@ -57,6 +58,7 @@ class OOMODEL_API Method : public Model::ExtendableNode
 
 	ATTRIBUTE_OOP_NAME
 	ATTRIBUTE(StatementItemList, items, setItems)
+	ATTRIBUTE(Model::TypedList<FormalTypeArgument>, typeArguments, setTypeArguments)
 	ATTRIBUTE(Model::TypedList<FormalArgument>, arguments, setArguments)
 	ATTRIBUTE(Model::TypedList<FormalResult>, results, setResults)
 	ATTRIBUTE_OOP_VISIBILITY
@@ -65,6 +67,7 @@ class OOMODEL_API Method : public Model::ExtendableNode
 	public:
 		virtual bool definesSymbol() const;
 		virtual const QString& symbolName() const;
+		bool isGeneric();
 
 		virtual QList<Node*> findSymbol(const QString& symbol, Node* source, FindSymbolMode mode);
 };

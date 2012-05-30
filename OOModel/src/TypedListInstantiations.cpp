@@ -43,6 +43,7 @@ template class Model::TypedList<OOModel::Method>;
 template class Model::TypedList<OOModel::StatementItem>;
 template class Model::TypedList<OOModel::FormalArgument>;
 template class Model::TypedList<OOModel::FormalResult>;
+template class Model::TypedList<OOModel::FormalTypeArgument>;
 template class Model::TypedList<OOModel::Field>;
 template class Model::TypedList<OOModel::OOReference>;
 

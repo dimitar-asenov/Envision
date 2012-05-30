@@ -50,6 +50,7 @@ EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(ReferenceExpression, Expression)
 
 REGISTER_ATTRIBUTE(ReferenceExpression, prefix, Expression, false, true, true)
 REGISTER_ATTRIBUTE(ReferenceExpression, ref, OOReference, false, false, true)
+REGISTER_ATTRIBUTE(ReferenceExpression, typeArguments, TypedListOfExpression, false, false, true)
 
 ReferenceExpression::ReferenceExpression(const QString& name, Expression* prefix)
 : Expression(nullptr, ReferenceExpression::getMetaData())

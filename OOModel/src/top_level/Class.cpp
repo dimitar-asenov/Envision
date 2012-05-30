@@ -40,6 +40,7 @@ EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(Class, Model::ExtendableNode)
 
 REGISTER_ATTRIBUTE(Class, name, Text, false, false, true)
 REGISTER_ATTRIBUTE(Class, baseClasses, TypedListOfExpression, false, false, true)
+REGISTER_ATTRIBUTE(Class, typeArguments, TypedListOfFormalTypeArgument, false, false, true)
 REGISTER_ATTRIBUTE(Class, fields, TypedListOfField, false, false, true)
 REGISTER_ATTRIBUTE(Class, methods, TypedListOfMethod, false, false, true)
 REGISTER_ATTRIBUTE(Class, visibility, Visibility, false, false, true)
@@ -62,6 +63,11 @@ QList<Model::Node*> Class::findSymbol(const QString& symbol,Model::Node* source,
 	symbols << fields()->findAllSymbolDefinitions(symbol);
 
 	return symbols.isEmpty() ? Node::findSymbol(symbol, source, mode) : symbols;
+}
+
+bool Class::isGeneric()
+{
+	return typeArguments()->size() > 0;
 }
 
 }

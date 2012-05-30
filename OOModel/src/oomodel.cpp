@@ -56,6 +56,7 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	Model::TypedList<StatementItem>::registerNodeType();
 	Model::TypedList<FormalArgument>::registerNodeType();
 	Model::TypedList<FormalResult>::registerNodeType();
+	Model::TypedList<FormalTypeArgument>::registerNodeType();
 	Model::TypedList<Field>::registerNodeType();
 	Model::TypedList<OOReference>::registerNodeType();
 
@@ -109,6 +110,7 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	StatementItemList::registerNodeType();
 	FormalArgument::init();
 	FormalResult::init();
+	FormalTypeArgument::init();
 	Field::init();
 
 	Statement::init();

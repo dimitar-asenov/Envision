@@ -46,6 +46,7 @@ class Method;
 class StatementItem;
 class FormalArgument;
 class FormalResult;
+class FormalTypeArgument;
 class Field;
 class OOReference;
 
@@ -99,6 +100,7 @@ template class Q_DECL_IMPORT Model::TypedList<OOModel::Method>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::StatementItem>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::FormalArgument>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::FormalResult>;
+template class Q_DECL_IMPORT Model::TypedList<OOModel::FormalTypeArgument>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::Field>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::OOReference>;
 

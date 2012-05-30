@@ -38,6 +38,7 @@
 
 #include "../attributeMacros.h"
 #include "../elements/Visibility.h"
+#include "../elements/FormalTypeArgument.h"
 #include "Method.h"
 #include "Field.h"
 #include "../expressions/Expression.h"
@@ -55,6 +56,7 @@ class OOMODEL_API Class : public Model::ExtendableNode
 
 	ATTRIBUTE_OOP_NAME
 	ATTRIBUTE(Model::TypedList<Expression>, baseClasses, setBaseClasses)
+	ATTRIBUTE(Model::TypedList<FormalTypeArgument>, typeArguments, setTypeArguments)
 	ATTRIBUTE(Model::TypedList<Field>, fields, setFields)
 	ATTRIBUTE(Model::TypedList<Method>, methods, setMethods)
 	ATTRIBUTE_OOP_VISIBILITY
@@ -62,6 +64,7 @@ class OOMODEL_API Class : public Model::ExtendableNode
 	public:
 		virtual bool definesSymbol() const;
 		virtual const QString& symbolName() const;
+		bool isGeneric();
 
 		virtual QList<Node*> findSymbol(const QString& symbol, Node* source, FindSymbolMode mode);
 };

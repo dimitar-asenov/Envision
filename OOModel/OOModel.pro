@@ -4,7 +4,8 @@ DEFINES += OOMODEL_LIBRARY
 win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase
-HEADERS += src/types/StringType.h \
+HEADERS += src/elements/FormalTypeArgument.h \
+    src/types/StringType.h \
     src/types/NullType.h \
     src/types/SymbolProviderType.h \
     src/types/ClassType.h \
@@ -69,7 +70,8 @@ HEADERS += src/types/StringType.h \
     src/top_level/Module.h \
     src/top_level/Project.h \
     src/oomodel.h
-SOURCES += src/types/StringType.cpp \
+SOURCES += src/elements/FormalTypeArgument.cpp \
+    src/types/StringType.cpp \
     src/types/NullType.cpp \
     src/types/SymbolProviderType.cpp \
     src/types/ClassType.cpp \
