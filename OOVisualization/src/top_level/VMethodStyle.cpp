@@ -51,6 +51,7 @@ void VMethodStyle::load(Visualization::StyleLoader& sl)
 	sl.load("icon", icon_);
 	sl.load("header", header_);
 	sl.load("content", content_);
+	sl.load("typeArguments", typeArguments_);
 	sl.load("arguments", arguments_);
 	sl.load("results", results_);
 }

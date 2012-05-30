@@ -25,75 +25,34 @@
  **********************************************************************************************************************/
 
 /*
- * CallStringOffsetProvider.cpp
+ * ReferenceExpressionStringOffsetProvider.h
  *
- *  Created on: Feb 29, 2012
+ *  Created on: May 30, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "string_offset_providers/CallStringOffsetProvider.h"
+#ifndef OOInteraction_REFERENCEEXPRESSIONSTRINGOFFSETPROVIDER_H_
+#define OOInteraction_REFERENCEEXPRESSIONSTRINGOFFSETPROVIDER_H_
 
-#include "OOVisualization/src/expressions/VMethodCallExpression.h"
-#include "VisualizationBase/src/items/VList.h"
+#include "../oointeraction_api.h"
+#include "SequentialVisualizationStringOffsetProvider.h"
+
+namespace OOVisualization {
+	class VReferenceExpression;
+}
 
 namespace OOInteraction {
 
-CallStringOffsetProvider::CallStringOffsetProvider(OOVisualization::VMethodCallExpression* vis)
-	: SequentialVisualizationStringOffsetProvider(vis), vis_(vis)
-{
-}
+class OOINTERACTION_API ReferenceExpressionStringOffsetProvider : public SequentialVisualizationStringOffsetProvider {
+	public:
+		ReferenceExpressionStringOffsetProvider(OOVisualization::VReferenceExpression* vis);
 
-int CallStringOffsetProvider::offset()
-{
-	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
+		virtual int offset();
+		virtual void setOffset(int newOffset);
 
-	if (!vis_->arguments()->itemOrChildHasFocus())
-		return SequentialVisualizationStringOffsetProvider::offset();
-
-	QStringList components = this->components();
-	int result = 0;
-
-	result += components[0].size();
-
-	result += listItemOffset(vis_->arguments(),"(", ",", ")");
-
-	return result;
-}
-
-void CallStringOffsetProvider::setOffset(int offset)
-{
-	if (offset == 0)
-	{
-		vis_->moveCursor( Visualization::Item::MoveOnPosition, QPoint(0,0));
-		return;
-	}
-
-	QStringList components = this->components();
-
-	if (offset == components.join("").size())
-	{
-		vis_->moveCursor( Visualization::Item::MoveOnPosition, QPoint(vis_->xEnd(),0));
-		return;
-	}
-
-	int listOffest = components[0].size();
-
-	if (offset <= listOffest)
-	{
-		SequentialVisualizationStringOffsetProvider::setOffset(offset);
-		return;
-	}
-	else offset -= listOffest;
-
-	if ( setOffsetInListItem(offset, vis_->arguments(), "(", ",", ")"))
-		return;
-
-	if (offset == components.last().size())
-	{
-		vis_->moveCursor( Visualization::Item::MoveOnPosition, QPoint(vis_->xEnd(),0));
-	}
-	else
-		Q_ASSERT(false);
-}
+	private:
+		OOVisualization::VReferenceExpression* vis_;
+};
 
 } /* namespace OOInteraction */
+#endif /* OOInteraction_REFERENCEEXPRESSIONSTRINGOFFSETPROVIDER_H_ */

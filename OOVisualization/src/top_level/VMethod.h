@@ -61,6 +61,7 @@ class OOVISUALIZATION_API VMethod : public Visualization::ItemWithNode< Visualiz
 
 		Visualization::VText* name() const;
 		Visualization::VList* content() const;
+		Visualization::VList* typeArguments() const;
 		Visualization::VList* arguments() const;
 
 	protected:
@@ -70,6 +71,7 @@ class OOVISUALIZATION_API VMethod : public Visualization::ItemWithNode< Visualiz
 		Visualization::SequentialLayout* header_;
 		Visualization::Static* icon_;
 		Visualization::VText* name_;
+		Visualization::VList* typeArguments_;
 		Visualization::VList* arguments_;
 		Visualization::VList* content_;
 		Visualization::VList* results_;
@@ -77,6 +79,7 @@ class OOVISUALIZATION_API VMethod : public Visualization::ItemWithNode< Visualiz
 
 inline Visualization::VText* VMethod::name() const { return name_; }
 inline Visualization::VList* VMethod::content() const { return content_; }
+inline Visualization::VList* VMethod::typeArguments() const { return typeArguments_; }
 inline Visualization::VList* VMethod::arguments() const { return arguments_; }
 
 }

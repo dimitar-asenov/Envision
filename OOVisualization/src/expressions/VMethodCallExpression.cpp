@@ -31,10 +31,9 @@
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "expressions/VMethodCallExpression.h"
+#include "VMethodCallExpression.h"
+#include "VReferenceExpression.h"
 
-#include "VisualizationBase/src/items/Text.h"
-#include "VisualizationBase/src/items/Static.h"
 #include "VisualizationBase/src/items/VList.h"
 
 using namespace Visualization;
@@ -46,28 +45,21 @@ ITEM_COMMON_DEFINITIONS(VMethodCallExpression, "item")
 
 VMethodCallExpression::VMethodCallExpression(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<>, MethodCallExpression>(parent, node, style),
-	name_(new Text(layout(), &style->name()) ),
-	separator_(nullptr),
-	prefix_(nullptr),
-	arguments_(new VList(layout(), node->arguments(), &style->arguments()))
+	name_(),
+	arguments_()
 {
-	layout()->append(name_);
-	layout()->append(arguments_);
 }
 
 VMethodCallExpression::~VMethodCallExpression()
 {
 	// These were automatically deleted by LayoutProvider's destructor
 	name_ = nullptr;
-	separator_ = nullptr;
-	prefix_ = nullptr;
 	arguments_ = nullptr;
 }
 
 void VMethodCallExpression::determineChildren()
 {
-	layout()->synchronizeFirst(prefix_, node()->ref()->prefix());
-	layout()->synchronizeMid(separator_, node()->ref()->prefix() != nullptr, &style()->separator(), 1);
+	layout()->synchronizeFirst(name_, node()->ref(), &style()->name());
 	layout()->synchronizeLast(arguments_, node()->arguments(), &style()->arguments());
 
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
@@ -78,9 +70,6 @@ void VMethodCallExpression::determineChildren()
 	name_->setStyle( &style()->name());
 	arguments_->setStyle( &style()->arguments() );
 	arguments_->setSuppressHandler(true);
-	if (prefix_) separator_->setStyle( &style()->separator());
-
-	name_->setText(node()->ref()->name());
 }
 
 }

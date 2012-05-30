@@ -82,7 +82,6 @@ int SequentialVisualizationStringOffsetProvider::offset()
 
 		result += itemOffset(vis_->layout()->at<Visualization::Item>(focused), components[focused].length());
 	}
-
 	return result;
 }
 

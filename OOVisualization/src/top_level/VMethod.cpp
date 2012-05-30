@@ -48,7 +48,7 @@ ITEM_COMMON_DEFINITIONS(VMethod, "item")
 
 VMethod::VMethod(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<PanelBorderLayout>, Method>(parent, node, style),
-	header_(), icon_(), name_(), arguments_(), content_(), results_()
+	header_(), icon_(), name_(), typeArguments_(), arguments_(), content_(), results_()
 {
 	layout()->setTop(true);
 
@@ -60,6 +60,9 @@ VMethod::VMethod(Item* parent, NodeType* node, const StyleType* style) :
 
 	name_ =new VText(header_, node->nameNode(), &style->nameDefault());
 	header_->append(name_);
+
+	typeArguments_ =new VList(header_, node->typeArguments(), &style->arguments());
+	header_->append(typeArguments_);
 
 	arguments_ =new VList(header_, node->arguments(), &style->arguments());
 	header_->append(arguments_);
@@ -79,6 +82,7 @@ VMethod::~VMethod()
 	icon_ = nullptr;
 	name_ = nullptr;
 	content_ = nullptr;
+	typeArguments_ = nullptr;
 	arguments_ = nullptr;
 	results_ = nullptr;
 }
@@ -105,6 +109,7 @@ void VMethod::determineChildren()
 	else throw OOVisualizationException("Unknown static type in VMethod::determineChildren");
 
 	header_->synchronizeMid(name_, node()->nameNode(), nameStyle, 1);
+	header_->synchronizeMid(typeArguments_, node()->typeArguments(), &style()->typeArguments(),2);
 	header_->synchronizeLast(arguments_, node()->arguments(), &style()->arguments());
 	layout()->left()->synchronizeFirst(results_, node()->results(), &style()->results());
 	layout()->synchronizeContent(content_, node()->items(), &style()->content());
@@ -118,6 +123,7 @@ void VMethod::determineChildren()
 	header_->setStyle( &style()->header() );
 	name_->setStyle(nameStyle);
 	content_->setStyle( &style()->content() );
+	typeArguments_->setStyle( &style()->typeArguments() );
 	arguments_->setStyle( &style()->arguments() );
 	results_->setStyle( &style()->results() );
 }

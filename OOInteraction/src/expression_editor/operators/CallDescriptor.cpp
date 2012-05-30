@@ -51,11 +51,8 @@ OOModel::Expression* CallDescriptor::create(const QList<OOModel::Expression*>& o
 	auto ref = dynamic_cast<OOModel::ReferenceExpression*>( operands.first());
 	Q_ASSERT(ref);
 
-	OOModel::MethodCallExpression* opr = new OOModel::MethodCallExpression(ref->name());
-	OOModel::Expression* prefix = ref->prefix();
-	ref->replaceChild(prefix, new OOModel::EmptyExpression());
-	SAFE_DELETE(ref);
-	opr->ref()->setPrefix(prefix);
+	OOModel::MethodCallExpression* opr = new OOModel::MethodCallExpression();
+	opr->setRef(ref);
 
 	if (auto comma = dynamic_cast<OOModel::CommaExpression*>(operands.last()))
 	{

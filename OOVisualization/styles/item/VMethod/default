@@ -41,6 +41,27 @@
 			<spaceBetweenElements>0</spaceBetweenElements>
 		</itemsStyle>
 	</content>
+	<typeArguments prototypes="item/VList/default">
+		<shape prototypes="shape/Box/default">
+			Box
+			<cornerRadius>1</cornerRadius>
+			<cornerType>0</cornerType>
+			<backgroundBrush>
+				<style>1</style>
+				<color>
+					<alpha>255</alpha>
+					<red>240</red>
+					<green>240</green>
+					<blue>240</blue>
+				</color>
+			</backgroundBrush>
+		</shape>
+		<itemsStyle prototypes="layout/SequentialLayout/default">
+			<direction>0</direction>
+			<spaceBetweenElements>10</spaceBetweenElements>
+			<notLocationEquivalentCursors>true</notLocationEquivalentCursors>
+		</itemsStyle>
+	</typeArguments>
 	<arguments prototypes="item/VList/default">
 		<shape prototypes="shape/Box/default">
 			Box

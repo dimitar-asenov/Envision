@@ -183,6 +183,10 @@ Method* addDivBySix(Model::Model* model, Class* parent)
 
 	divbysix->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("int cond=abc<50?42:b+c")));
 
+	divbysix->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("Generic<T,U> instance")));
+
+	divbysix->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("int a=method<T,S>(x)")));
+
 	VariableDeclaration* result = new VariableDeclaration();
 	divbysix->items()->append( new ExpressionStatement(result) );
 	result->setName("result");

@@ -52,6 +52,19 @@ QStringList ReferenceExpressionStringComponents::components()
 
 	result << exp_->name();
 
+	if (exp_->typeArguments()->size() > 0)
+	{
+		QString list = "<";
+		for (int i=0; i< exp_->typeArguments()->size(); ++i)
+		{
+			if (i>0) list.append(",");
+			list.append(stringForNode(exp_->typeArguments()->at(i)));
+		}
+		list.append(">");
+
+		result << list;
+	}
+
 	return result;
 }
 

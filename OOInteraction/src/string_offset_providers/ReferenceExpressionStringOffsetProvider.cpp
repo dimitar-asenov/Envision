@@ -25,42 +25,44 @@
  **********************************************************************************************************************/
 
 /*
- * CallStringOffsetProvider.cpp
+ * ReferenceExpressionStringOffsetProvider.cpp
  *
- *  Created on: Feb 29, 2012
+ *  Created on: May 30, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "string_offset_providers/CallStringOffsetProvider.h"
+#include "ReferenceExpressionStringOffsetProvider.h"
 
-#include "OOVisualization/src/expressions/VMethodCallExpression.h"
+#include "OOVisualization/src/expressions/VReferenceExpression.h"
 #include "VisualizationBase/src/items/VList.h"
 
 namespace OOInteraction {
 
-CallStringOffsetProvider::CallStringOffsetProvider(OOVisualization::VMethodCallExpression* vis)
+ReferenceExpressionStringOffsetProvider
+	::ReferenceExpressionStringOffsetProvider(OOVisualization::VReferenceExpression* vis)
 	: SequentialVisualizationStringOffsetProvider(vis), vis_(vis)
 {
 }
 
-int CallStringOffsetProvider::offset()
+int ReferenceExpressionStringOffsetProvider::offset()
 {
 	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
 
-	if (!vis_->arguments()->itemOrChildHasFocus())
+	if (vis_->typeArguments() == nullptr || !vis_->typeArguments()->itemOrChildHasFocus())
 		return SequentialVisualizationStringOffsetProvider::offset();
 
 	QStringList components = this->components();
 	int result = 0;
 
-	result += components[0].size();
+	int listIndex = (components.size() > 1 && components[1] == ".") ? 3 : 1;
+	for(int i = 0; i< listIndex; ++i)
+		result += components[i].size();
 
-	result += listItemOffset(vis_->arguments(),"(", ",", ")");
-
+	result += listItemOffset(vis_->typeArguments(),"<", ",", ">");
 	return result;
 }
 
-void CallStringOffsetProvider::setOffset(int offset)
+void ReferenceExpressionStringOffsetProvider::setOffset(int offset)
 {
 	if (offset == 0)
 	{
@@ -76,22 +78,23 @@ void CallStringOffsetProvider::setOffset(int offset)
 		return;
 	}
 
-	int listOffest = components[0].size();
+	int listOffest = 0;
+	int listIndex = (components.size() > 1 && components[1] == ".") ? 3 : 1;
+	for(int i = 0; i< listIndex; ++i)
+		listOffest += components[i].size();
 
-	if (offset <= listOffest)
+	if (components.size() == listIndex || offset <= listOffest)
 	{
 		SequentialVisualizationStringOffsetProvider::setOffset(offset);
 		return;
 	}
 	else offset -= listOffest;
 
-	if ( setOffsetInListItem(offset, vis_->arguments(), "(", ",", ")"))
+	if ( setOffsetInListItem(offset, vis_->typeArguments(), "<", ",", ">"))
 		return;
 
 	if (offset == components.last().size())
-	{
 		vis_->moveCursor( Visualization::Item::MoveOnPosition, QPoint(vis_->xEnd(),0));
-	}
 	else
 		Q_ASSERT(false);
 }

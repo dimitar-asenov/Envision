@@ -8,7 +8,9 @@ win32:LIBS += -llogger \
     -lvisualizationbase \
     -linteractionbase \
     -loovisualization
-HEADERS += src/string_components/ReferenceExpressionStringComponents.h \
+HEADERS += src/expression_editor/operators/TypeArgumentsDescriptor.h \
+    src/string_offset_providers/ReferenceExpressionStringOffsetProvider.h \
+    src/string_components/ReferenceExpressionStringComponents.h \
     src/string_components/ConditionalExpressionStringComponents.h \
     src/expression_editor/operators/ConditionalExpressionDescriptor.h \
     src/OOInteractionException.h \
@@ -72,7 +74,9 @@ HEADERS += src/string_components/ReferenceExpressionStringComponents.h \
     src/string_offset_providers/TextRendererStringOffsetProvider.h \
     src/string_offset_providers/VariableDeclarationStringOffsetProvider.h \
     src/oointeraction.h
-SOURCES += src/string_components/ReferenceExpressionStringComponents.cpp \
+SOURCES += src/expression_editor/operators/TypeArgumentsDescriptor.cpp \
+    src/string_offset_providers/ReferenceExpressionStringOffsetProvider.cpp \
+    src/string_components/ReferenceExpressionStringComponents.cpp \
     src/string_components/ConditionalExpressionStringComponents.cpp \
     src/expression_editor/operators/ConditionalExpressionDescriptor.cpp \
     src/handlers/HLoop.cpp \

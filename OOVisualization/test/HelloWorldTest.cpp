@@ -95,6 +95,80 @@ Class* addHelloWorld(Model::Model* model, Project* parent)
 	return hello;
 }
 
+Class* addGeneric(Model::Model* model, Project* parent)
+{
+	Class* gen = nullptr;
+
+	if (!parent) gen = dynamic_cast<Class*> (model->createRoot("Class"));
+	model->beginModification(parent ? static_cast<Model::Node*> (parent) :gen, "Adding a generic class.");
+	if (!gen)
+	{
+		gen = new Class();
+		parent->classes()->append(gen);
+	}
+
+	gen->setName("Generic");
+	gen->setVisibility(Visibility::PUBLIC);
+	gen->typeArguments()->append(new FormalTypeArgument("P"));
+	gen->typeArguments()->append(new FormalTypeArgument("Q", new ReferenceExpression("P")));
+	gen->typeArguments()->append(new FormalTypeArgument("R", nullptr, new ReferenceExpression("P")));
+
+	Method* foo = new Method();
+	gen->methods()->append(foo);
+	foo->setName("foo");
+	foo->setVisibility(Visibility::PUBLIC);
+	foo->setStorageSpecifier(StorageSpecifier::INSTANCE_VARIABLE);
+	foo->typeArguments()->append(new FormalTypeArgument("T"));
+
+	Method* bar = new Method();
+	gen->methods()->append(bar);
+	bar->setName("bar");
+	bar->setVisibility(Visibility::PUBLIC);
+	bar->setStorageSpecifier(StorageSpecifier::CLASS_VARIABLE);
+	bar->typeArguments()->append(new FormalTypeArgument("S"));
+	bar->typeArguments()->append(new FormalTypeArgument("U", new ReferenceExpression("S")));
+	bar->typeArguments()->append(new FormalTypeArgument("V", nullptr, new ReferenceExpression("S")));
+
+	Method* foobar = new Method();
+	gen->methods()->append(foobar);
+	foobar->setName("foobar");
+	foobar->setVisibility(Visibility::PUBLIC);
+	foobar->setStorageSpecifier(StorageSpecifier::INSTANCE_VARIABLE);
+
+	VariableDeclaration* var = new VariableDeclaration();
+	var->setName("var");
+	foobar->items()->append(new ExpressionStatement(var));
+	ClassTypeExpression* varType = new ClassTypeExpression();
+	var->setVarType(varType);
+	varType->setTypeExpression(new ReferenceExpression("Generic"));
+	varType->typeExpression()->typeArguments()->append(new ReferenceExpression("A"));
+	varType->typeExpression()->typeArguments()->append(new ReferenceExpression("B"));
+	varType->typeExpression()->typeArguments()->append(new ReferenceExpression("C"));
+
+	ExpressionStatement* callFooSt = new ExpressionStatement();
+	MethodCallExpression* callFoo = new MethodCallExpression("foo");
+	callFoo->ref()->typeArguments()->append(new ReferenceExpression("A"));
+	callFooSt->setExpression(callFoo);
+	foobar->items()->append(callFooSt);
+
+	ExpressionStatement* callBarSt = new ExpressionStatement();
+	MethodCallExpression* callBar = new MethodCallExpression("bar");
+	callBar->ref()->typeArguments()->append(new ReferenceExpression("A"));
+	callBar->ref()->typeArguments()->append(new ReferenceExpression("B"));
+	callBar->ref()->typeArguments()->append(new ReferenceExpression("C"));
+	callBarSt->setExpression(callBar);
+	foobar->items()->append(callBarSt);
+
+	// Set positions
+	gen->extension<Position>()->setX(400);
+	gen->extension<Position>()->setY(300);
+	bar->extension<Position>()->setY(60);
+	foobar->extension<Position>()->setY(120);
+
+	model->endModification();
+	return gen;
+}
+
 Library* addJavaLibrary(Model::Model* model, Project* parent)
 {
 	Library* java = nullptr;
@@ -547,6 +621,10 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	Class* hello = nullptr;
 	hello = addHelloWorld(model, prj);
 
+	// Build a simple Generic Class
+	Class* gen = nullptr;
+	gen = addGeneric(model, prj);
+
 //	// Add a second method
 	Method* longMethod = nullptr;
 	longMethod = addLongMethod(model, hello);
@@ -559,6 +637,7 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	Model::Node* top_level = nullptr;
 	if (prj) top_level = prj;
 	else if(hello) top_level = hello;
+	else if(gen) top_level = gen;
 	else if(java) top_level = java;
 	else if (longMethod) top_level = longMethod;
 	else top_level = factorial;

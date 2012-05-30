@@ -55,6 +55,7 @@ class OOVISUALIZATION_API VClassStyle : public Visualization::ItemStyle
 		Visualization::TextStyle nameProtected_;
 		Visualization::StaticStyle icon_;
 		Visualization::SequentialLayoutStyle header_;
+		Visualization::VListStyle typeArguments_;
 		Visualization::VListStyle baseClasses_;
 		Visualization::PositionLayoutStyle content_;
 		Visualization::SequentialLayoutStyle fieldContainer_;
@@ -73,6 +74,7 @@ class OOVISUALIZATION_API VClassStyle : public Visualization::ItemStyle
 		const Visualization::TextStyle& nameProtected() const;
 		const Visualization::StaticStyle& icon() const;
 		const Visualization::SequentialLayoutStyle& header() const;
+		const Visualization::VListStyle& typeArguments() const;
 		const Visualization::VListStyle& baseClasses() const;
 		const Visualization::PositionLayoutStyle& content() const;
 		const Visualization::SequentialLayoutStyle& fieldContainer() const;
@@ -89,6 +91,7 @@ inline const Visualization::TextStyle& VClassStyle::namePrivate() const { return
 inline const Visualization::TextStyle& VClassStyle::nameProtected() const { return nameProtected_; }
 inline const Visualization::StaticStyle& VClassStyle::icon() const { return icon_; }
 inline const Visualization::SequentialLayoutStyle& VClassStyle::header() const { return header_; }
+inline const Visualization::VListStyle& VClassStyle::typeArguments() const { return typeArguments_; }
 inline const Visualization::VListStyle& VClassStyle::baseClasses() const { return baseClasses_; }
 inline const Visualization::PositionLayoutStyle& VClassStyle::content() const { return content_; }
 inline const Visualization::SequentialLayoutStyle& VClassStyle::fieldContainer() const { return fieldContainer_; }

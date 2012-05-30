@@ -25,75 +25,27 @@
  **********************************************************************************************************************/
 
 /*
- * CallStringOffsetProvider.cpp
+ * TypeArgumentsDescriptor.h
  *
- *  Created on: Feb 29, 2012
+ *  Created on: May 30, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "string_offset_providers/CallStringOffsetProvider.h"
+#ifndef OOInteraction_TYPEARGUMENTSDESCRIPTOR_H_
+#define OOInteraction_TYPEARGUMENTSDESCRIPTOR_H_
 
-#include "OOVisualization/src/expressions/VMethodCallExpression.h"
-#include "VisualizationBase/src/items/VList.h"
+#include "../../oointeraction_api.h"
+#include "../OOOperatorDescriptor.h"
 
 namespace OOInteraction {
 
-CallStringOffsetProvider::CallStringOffsetProvider(OOVisualization::VMethodCallExpression* vis)
-	: SequentialVisualizationStringOffsetProvider(vis), vis_(vis)
-{
-}
+class OOINTERACTION_API TypeArgumentsDescriptor : public OOOperatorDescriptor {
+	public:
+		TypeArgumentsDescriptor(const QString& name, const QString& signature, int num_operands, int precedence,
+			Associativity associativity);
 
-int CallStringOffsetProvider::offset()
-{
-	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
-
-	if (!vis_->arguments()->itemOrChildHasFocus())
-		return SequentialVisualizationStringOffsetProvider::offset();
-
-	QStringList components = this->components();
-	int result = 0;
-
-	result += components[0].size();
-
-	result += listItemOffset(vis_->arguments(),"(", ",", ")");
-
-	return result;
-}
-
-void CallStringOffsetProvider::setOffset(int offset)
-{
-	if (offset == 0)
-	{
-		vis_->moveCursor( Visualization::Item::MoveOnPosition, QPoint(0,0));
-		return;
-	}
-
-	QStringList components = this->components();
-
-	if (offset == components.join("").size())
-	{
-		vis_->moveCursor( Visualization::Item::MoveOnPosition, QPoint(vis_->xEnd(),0));
-		return;
-	}
-
-	int listOffest = components[0].size();
-
-	if (offset <= listOffest)
-	{
-		SequentialVisualizationStringOffsetProvider::setOffset(offset);
-		return;
-	}
-	else offset -= listOffest;
-
-	if ( setOffsetInListItem(offset, vis_->arguments(), "(", ",", ")"))
-		return;
-
-	if (offset == components.last().size())
-	{
-		vis_->moveCursor( Visualization::Item::MoveOnPosition, QPoint(vis_->xEnd(),0));
-	}
-	else
-		Q_ASSERT(false);
-}
+		virtual OOModel::Expression* create(const QList<OOModel::Expression*>& operands);
+};
 
 } /* namespace OOInteraction */
+#endif /* OOInteraction_TYPEARGUMENTSDESCRIPTOR_H_ */

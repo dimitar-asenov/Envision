@@ -47,10 +47,7 @@ QStringList CallStringComponents::components()
 	QStringList result;
 	if (!exp_) return result;
 
-	QString prefix = stringForNode(exp_->ref()->prefix());
-	if (!prefix.isEmpty()) result << prefix << ".";
-
-	result << exp_->ref()->name();
+	result << stringForNode(exp_->ref());
 
 	QString list = "(";
 	for (int i=0; i< exp_->arguments()->size(); ++i)

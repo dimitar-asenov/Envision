@@ -25,75 +25,43 @@
  **********************************************************************************************************************/
 
 /*
- * CallStringOffsetProvider.cpp
+ * TypeArgumentsDescriptor.cpp
  *
- *  Created on: Feb 29, 2012
+ *  Created on: May 30, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "string_offset_providers/CallStringOffsetProvider.h"
+#include "TypeArgumentsDescriptor.h"
 
-#include "OOVisualization/src/expressions/VMethodCallExpression.h"
-#include "VisualizationBase/src/items/VList.h"
+#include "OOModel/src/expressions/ReferenceExpression.h"
+#include "OOModel/src/expressions/EmptyExpression.h"
+#include "OOModel/src/expressions/CommaExpression.h"
 
 namespace OOInteraction {
 
-CallStringOffsetProvider::CallStringOffsetProvider(OOVisualization::VMethodCallExpression* vis)
-	: SequentialVisualizationStringOffsetProvider(vis), vis_(vis)
+TypeArgumentsDescriptor::TypeArgumentsDescriptor(const QString& name, const QString& signature, int num_operands,
+		int precedence, Associativity associativity)
+		: OOOperatorDescriptor(name, signature, num_operands, precedence, associativity)
+{}
+
+OOModel::Expression* TypeArgumentsDescriptor::create(const QList<OOModel::Expression*>& operands)
 {
-}
+	Q_ASSERT(operands.size() == 2);
+	auto ref = dynamic_cast<OOModel::ReferenceExpression*>( operands.first());
+	Q_ASSERT(ref);
 
-int CallStringOffsetProvider::offset()
-{
-	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
-
-	if (!vis_->arguments()->itemOrChildHasFocus())
-		return SequentialVisualizationStringOffsetProvider::offset();
-
-	QStringList components = this->components();
-	int result = 0;
-
-	result += components[0].size();
-
-	result += listItemOffset(vis_->arguments(),"(", ",", ")");
-
-	return result;
-}
-
-void CallStringOffsetProvider::setOffset(int offset)
-{
-	if (offset == 0)
+	if (auto comma = dynamic_cast<OOModel::CommaExpression*>(operands.last()))
 	{
-		vis_->moveCursor( Visualization::Item::MoveOnPosition, QPoint(0,0));
-		return;
-	}
+		for(auto arg : comma->allSubOperands(true))
+			ref->typeArguments()->append(arg);
 
-	QStringList components = this->components();
-
-	if (offset == components.join("").size())
-	{
-		vis_->moveCursor( Visualization::Item::MoveOnPosition, QPoint(vis_->xEnd(),0));
-		return;
-	}
-
-	int listOffest = components[0].size();
-
-	if (offset <= listOffest)
-	{
-		SequentialVisualizationStringOffsetProvider::setOffset(offset);
-		return;
-	}
-	else offset -= listOffest;
-
-	if ( setOffsetInListItem(offset, vis_->arguments(), "(", ",", ")"))
-		return;
-
-	if (offset == components.last().size())
-	{
-		vis_->moveCursor( Visualization::Item::MoveOnPosition, QPoint(vis_->xEnd(),0));
+		SAFE_DELETE(comma);
 	}
 	else
-		Q_ASSERT(false);
+		if (!dynamic_cast<OOModel::EmptyExpression*>(operands.last()) )
+				ref->typeArguments()->append(operands.last());
+
+	return ref;
 }
 
 } /* namespace OOInteraction */

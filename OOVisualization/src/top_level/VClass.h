@@ -67,6 +67,7 @@ class OOVISUALIZATION_API VClass : public Visualization::ItemWithNode< Visualiza
 		Visualization::SequentialLayout* header_;
 		Visualization::Static* icon_;
 		Visualization::VText* name_;
+		Visualization::VList* typeArguments_;
 		Visualization::VList* baseClasses_;
 		Visualization::PositionLayout* content_;
 		Visualization::SequentialLayout* fieldContainer_;

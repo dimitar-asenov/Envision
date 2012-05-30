@@ -53,6 +53,7 @@ class OOMODEL_API FormalTypeArgument : public Model::ExtendableNode
 	ATTRIBUTE(Expression, superTypeOfExpression, setSuperTypeOfExpression)
 
 	public:
+		FormalTypeArgument(const QString& name, Expression* subtype = nullptr, Expression* supertype = nullptr);
 		virtual bool definesSymbol() const;
 		virtual const QString& symbolName() const;
 };

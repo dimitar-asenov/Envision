@@ -46,6 +46,7 @@ void VClassStyle::load(Visualization::StyleLoader& sl)
 	sl.load("nameProtected", nameProtected_);
 	sl.load("icon", icon_);
 	sl.load("header", header_);
+	sl.load("typeArguments", typeArguments_);
 	sl.load("baseClasses", baseClasses_);
 	sl.load("content", content_);
 	sl.load("fieldContainer", fieldContainer_);

@@ -42,6 +42,14 @@ REGISTER_ATTRIBUTE(FormalTypeArgument, name, Text, false, false, true)
 REGISTER_ATTRIBUTE(FormalTypeArgument, subTypeOfExpression, Expression, false, true, true)
 REGISTER_ATTRIBUTE(FormalTypeArgument, superTypeOfExpression, Expression, false, true, true)
 
+FormalTypeArgument::FormalTypeArgument(const QString& name, Expression* subtype, Expression* supertype)
+: Model::ExtendableNode (nullptr, FormalTypeArgument::getMetaData())
+{
+	setName(name);
+	if (subtype) setSubTypeOfExpression(subtype);
+	if (supertype) setSuperTypeOfExpression(supertype);
+}
+
 bool FormalTypeArgument::definesSymbol() const
 {
 	return true;

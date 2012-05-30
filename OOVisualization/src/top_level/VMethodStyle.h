@@ -60,6 +60,7 @@ class OOVISUALIZATION_API VMethodStyle : public Visualization::ItemStyle
 		Visualization::StaticStyle icon_;
 		Visualization::SequentialLayoutStyle header_;
 		Visualization::VListStyle content_;
+		Visualization::VListStyle typeArguments_;
 		Visualization::VListStyle arguments_;
 		Visualization::VListStyle results_;
 
@@ -78,6 +79,7 @@ class OOVISUALIZATION_API VMethodStyle : public Visualization::ItemStyle
 		const Visualization::StaticStyle& icon() const;
 		const Visualization::SequentialLayoutStyle& header() const;
 		const Visualization::VListStyle& content() const;
+		const Visualization::VListStyle& typeArguments() const;
 		const Visualization::VListStyle& arguments() const;
 		const Visualization::VListStyle& results() const;
 };
@@ -95,6 +97,7 @@ inline const Visualization::StaticStyle& VMethodStyle::icon() const { return ico
 inline const Visualization::SequentialLayoutStyle& VMethodStyle::header() const { return header_; }
 inline const Visualization::VListStyle& VMethodStyle::content() const { return content_; }
 inline const Visualization::VListStyle& VMethodStyle::arguments() const { return arguments_; }
+inline const Visualization::VListStyle& VMethodStyle::typeArguments() const { return typeArguments_; }
 inline const Visualization::VListStyle& VMethodStyle::results() const { return results_; }
 
 }

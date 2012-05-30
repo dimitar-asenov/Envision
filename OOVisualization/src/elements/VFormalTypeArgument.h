@@ -25,75 +25,51 @@
  **********************************************************************************************************************/
 
 /*
- * CallStringOffsetProvider.cpp
+ * VFormalTypeArgument.h
  *
- *  Created on: Feb 29, 2012
+ *  Created on: May 30, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "string_offset_providers/CallStringOffsetProvider.h"
+#ifndef OOVisualization_VFORMALTYPEARGUMENT_H_
+#define OOVisualization_VFORMALTYPEARGUMENT_H_
 
-#include "OOVisualization/src/expressions/VMethodCallExpression.h"
-#include "VisualizationBase/src/items/VList.h"
+#include "../oovisualization_api.h"
+#include "VFormalTypeArgumentStyle.h"
 
-namespace OOInteraction {
+#include "OOModel/src/elements/FormalTypeArgument.h"
 
-CallStringOffsetProvider::CallStringOffsetProvider(OOVisualization::VMethodCallExpression* vis)
-	: SequentialVisualizationStringOffsetProvider(vis), vis_(vis)
-{
+#include "VisualizationBase/src/items/ItemWithNode.h"
+#include "VisualizationBase/src/items/LayoutProvider.h"
+
+namespace Visualization {
+	class VText;
+	class Static;
 }
 
-int CallStringOffsetProvider::offset()
+namespace OOVisualization {
+
+class OOVISUALIZATION_API VFormalTypeArgument
+	: public Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::FormalTypeArgument>
 {
-	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
+	ITEM_COMMON(VFormalTypeArgument)
 
-	if (!vis_->arguments()->itemOrChildHasFocus())
-		return SequentialVisualizationStringOffsetProvider::offset();
+	public:
+		VFormalTypeArgument(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+		virtual ~VFormalTypeArgument();
 
-	QStringList components = this->components();
-	int result = 0;
+	protected:
+		void determineChildren();
 
-	result += components[0].size();
+	private:
+		Visualization::VText* name_;
+		Visualization::Item* subType_;
+		Visualization::Item* superType_;
+		Visualization::Static* subSymbol_;
+		Visualization::Static* superSymbol_;
+		Visualization::SequentialLayout* subBackground_;
+		Visualization::SequentialLayout* superBackground_;
+};
 
-	result += listItemOffset(vis_->arguments(),"(", ",", ")");
-
-	return result;
-}
-
-void CallStringOffsetProvider::setOffset(int offset)
-{
-	if (offset == 0)
-	{
-		vis_->moveCursor( Visualization::Item::MoveOnPosition, QPoint(0,0));
-		return;
-	}
-
-	QStringList components = this->components();
-
-	if (offset == components.join("").size())
-	{
-		vis_->moveCursor( Visualization::Item::MoveOnPosition, QPoint(vis_->xEnd(),0));
-		return;
-	}
-
-	int listOffest = components[0].size();
-
-	if (offset <= listOffest)
-	{
-		SequentialVisualizationStringOffsetProvider::setOffset(offset);
-		return;
-	}
-	else offset -= listOffest;
-
-	if ( setOffsetInListItem(offset, vis_->arguments(), "(", ",", ")"))
-		return;
-
-	if (offset == components.last().size())
-	{
-		vis_->moveCursor( Visualization::Item::MoveOnPosition, QPoint(vis_->xEnd(),0));
-	}
-	else
-		Q_ASSERT(false);
-}
-
-} /* namespace OOInteraction */
+} /* namespace OOVisualization */
+#endif /* OOVisualization_VFORMALTYPEARGUMENT_H_ */

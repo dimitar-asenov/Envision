@@ -65,6 +65,8 @@ bool OOVisualization::initialize(Envision::EnvisionManager&)
 	Scene::defaultRenderer()->registerVisualization(Field::typeIdStatic(), createVisualization<VField, Field>);
 	Scene::defaultRenderer()->registerVisualization(FormalArgument::typeIdStatic(),
 			createVisualization<VFormalArgument, FormalArgument>);
+	Scene::defaultRenderer()->registerVisualization(FormalTypeArgument::typeIdStatic(),
+			createVisualization<VFormalTypeArgument, FormalTypeArgument>);
 	Scene::defaultRenderer()->registerVisualization(FormalResult::typeIdStatic(),
 			createVisualization<VFormalResult, FormalResult>);
 	Scene::defaultRenderer()->registerVisualization(ReferenceExpression::typeIdStatic(),

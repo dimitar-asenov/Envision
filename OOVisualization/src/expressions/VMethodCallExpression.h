@@ -43,12 +43,12 @@
 #include "VisualizationBase/src/items/LayoutProvider.h"
 
 namespace Visualization {
-	class Text;
-	class Static;
 	class VList;
 }
 
 namespace OOVisualization {
+
+class VReferenceExpression;
 
 class OOVISUALIZATION_API VMethodCallExpression : public Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::MethodCallExpression>
 {
@@ -64,9 +64,7 @@ class OOVISUALIZATION_API VMethodCallExpression : public Visualization::ItemWith
 		void determineChildren();
 
 	private:
-		Visualization::Text* name_;
-		Visualization::Static* separator_;
-		Visualization::Item* prefix_;
+		VReferenceExpression* name_;
 		Visualization::VList* arguments_;
 };
 

@@ -39,6 +39,7 @@
 #include "VisualizationBase/src/items/TextStyle.h"
 #include "VisualizationBase/src/items/StaticStyle.h"
 #include "VisualizationBase/src/layouts/SequentialLayout.h"
+#include "VisualizationBase/src/items/VListStyle.h"
 
 namespace OOVisualization {
 
@@ -48,6 +49,7 @@ class OOVISUALIZATION_API VReferenceExpressionStyle : public Visualization::Item
 		Visualization::SequentialLayoutStyle layout_;
 		Visualization::TextStyle name_;
 		Visualization::StaticStyle separator_;
+		Visualization::VListStyle typeArguments_;
 
 	public:
 		void load(Visualization::StyleLoader& sl);
@@ -55,11 +57,13 @@ class OOVISUALIZATION_API VReferenceExpressionStyle : public Visualization::Item
 		const Visualization::SequentialLayoutStyle& layout() const;
 		const Visualization::TextStyle& name() const;
 		const Visualization::StaticStyle& separator() const;
+		const Visualization::VListStyle& typeArguments() const;
 };
 
 inline const Visualization::SequentialLayoutStyle& VReferenceExpressionStyle::layout() const { return layout_; }
 inline const Visualization::TextStyle& VReferenceExpressionStyle::name() const { return name_; }
 inline const Visualization::StaticStyle& VReferenceExpressionStyle::separator() const { return separator_; }
+inline const Visualization::VListStyle& VReferenceExpressionStyle::typeArguments() const { return typeArguments_; }
 
 }
 

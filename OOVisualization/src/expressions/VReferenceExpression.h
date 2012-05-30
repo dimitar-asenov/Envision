@@ -45,6 +45,7 @@
 namespace Visualization {
 	class Text;
 	class Static;
+	class VList;
 }
 
 namespace OOVisualization {
@@ -57,6 +58,8 @@ class OOVISUALIZATION_API VReferenceExpression : public Visualization::ItemWithN
 		VReferenceExpression(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VReferenceExpression();
 
+		Visualization::VList* typeArguments() const;
+
 	protected:
 		void determineChildren();
 
@@ -64,7 +67,10 @@ class OOVISUALIZATION_API VReferenceExpression : public Visualization::ItemWithN
 		Visualization::Text* name_;
 		Visualization::Static* separator_;
 		Visualization::Item* prefix_;
+		Visualization::VList* typeArguments_;
 };
+
+inline Visualization::VList* VReferenceExpression::typeArguments() const { return typeArguments_; }
 
 }
 
