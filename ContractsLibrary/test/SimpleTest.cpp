@@ -35,6 +35,7 @@
 #include "SelfTest/src/SelfTestSuite.h"
 
 #include "items/VContractCall.h"
+#include "interaction/CreateContractMethod.h"
 
 #include "OOModel/src/allOOModelNodes.h"
 #include "ModelBase/src/Model.h"
@@ -50,6 +51,7 @@
 #include "VisualizationBase/src/items/RootItem.h"
 
 #include "OOInteraction/src/expression_editor/OOExpressionBuilder.h"
+#include "OOInteraction/src/expression_editor/operators/CommandDescriptor.h"
 
 using namespace OOModel;
 using namespace Visualization;
@@ -132,6 +134,10 @@ Library* createContractsLibrary()
 			});
 
 	Scene::defaultRenderer()->registerGroup(MethodCallExpression::typeIdStatic(), g);
+
+	// Register custom input
+	CommandDescriptor::registerCommand(new CreateContractMethod("requires", "Requires"));
+	CommandDescriptor::registerCommand(new CreateContractMethod("ensures", "Ensures"));
 
 	return lib;
 }

@@ -9,13 +9,15 @@ win32:LIBS += -llogger \
     -linteractionbase \
     -loovisualization \
     -loointeraction
-HEADERS += src/items/VContractCall.h \
+HEADERS += src/interaction/CreateContractMethod.h \
+    src/items/VContractCall.h \
     src/items/SimpleKeywordCallStyle.h \
     src/precompiled.h \
     src/ContractsLibraryException.h \
     src/contractslibrary_api.h \
     src/contractslibrary.h
-SOURCES += src/items/VContractCall.cpp \
+SOURCES += src/interaction/CreateContractMethod.cpp \
+    src/items/VContractCall.cpp \
     src/items/SimpleKeywordCallStyle.cpp \
     src/ContractsLibraryException.cpp \
     src/contractslibrary.cpp \
