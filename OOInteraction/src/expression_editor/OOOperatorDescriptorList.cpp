@@ -46,6 +46,7 @@
 #include "expression_editor/operators/DeclarationDescriptor.h"
 #include "expression_editor/operators/ConditionalExpressionDescriptor.h"
 #include "expression_editor/operators/TypeArgumentsDescriptor.h"
+#include "expression_editor/operators/CommandDescriptor.h"
 
 namespace OOInteraction {
 
@@ -168,6 +169,12 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 			Interaction::OperatorDescriptor::RightAssociative));
 	instance()->addDescriptor(new DeclarationDescriptor( "variable declaration and initialization",
 			"expr space id = expr", 3, 40, Interaction::OperatorDescriptor::RightAssociative));
+
+	// Command descriptors
+	instance()->addDescriptor(new CommandDescriptor( "command without params", "\\ id", 1, 0,
+			Interaction::OperatorDescriptor::RightAssociative));
+	instance()->addDescriptor(new CommandDescriptor( "command with params", "\\ id ( expr )", 2, 0,
+			Interaction::OperatorDescriptor::NotAssociative));
 }
 
 } /* namespace OOInteraction */
