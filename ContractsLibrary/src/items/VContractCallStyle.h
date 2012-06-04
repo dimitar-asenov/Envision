@@ -25,52 +25,41 @@
  **********************************************************************************************************************/
 
 /*
- * VContractCall.h
+ * VContractCallStyle.h
  *
  *  Created on: May 23, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef ContractsLibrary_VCONTRACTCALL_H_
-#define ContractsLibrary_VCONTRACTCALL_H_
+#ifndef ContractsLibrary_VCONTRACTCALLSTYLE_H_
+#define ContractsLibrary_VCONTRACTCALLSTYLE_H_
 
 #include "../contractslibrary_api.h"
-#include "VContractCallStyle.h"
 
-#include "OOModel/src/expressions/MethodCallExpression.h"
-
-#include "VisualizationBase/src/items/ItemWithNode.h"
-#include "VisualizationBase/src/items/LayoutProvider.h"
-
-namespace Visualization {
-	class Static;
-	class VList;
-}
+#include "VisualizationBase/src/items/StaticStyle.h"
+#include "VisualizationBase/src/layouts/SequentialLayout.h"
+#include "VisualizationBase/src/items/VListStyle.h"
 
 namespace ContractsLibrary {
 
-class CONTRACTSLIBRARY_API VContractCall
-	: public Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::MethodCallExpression>
+class CONTRACTSLIBRARY_API VContractCallStyle : public Visualization::ItemStyle
 {
-		ITEM_COMMON(VContractCall)
-
 	public:
-		VContractCall(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		virtual ~VContractCall();
+		void load(Visualization::StyleLoader& sl);
 
-		Visualization::Static* keyword() const;
-		Visualization::VList* arguments() const;
-
-	protected:
-		void determineChildren();
+		const Visualization::SequentialLayoutStyle& layout() const;
+		const Visualization::StaticStyle& keyword() const;
+		const Visualization::VListStyle& arguments() const;
 
 	private:
-		Visualization::Static* keyword_;
-		Visualization::VList* arguments_;
+		Visualization::SequentialLayoutStyle layout_;
+		Visualization::StaticStyle keyword_;
+		Visualization::VListStyle arguments_;
 };
 
-inline Visualization::Static* VContractCall::keyword() const { return keyword_; }
-inline Visualization::VList* VContractCall::arguments() const { return arguments_; }
+inline const Visualization::SequentialLayoutStyle& VContractCallStyle::layout() const { return layout_; }
+inline const Visualization::StaticStyle& VContractCallStyle::keyword() const { return keyword_; }
+inline const Visualization::VListStyle& VContractCallStyle::arguments() const { return arguments_; }
 
 } /* namespace ContractsLibrary */
-#endif /* ContractsLibrary_VCONTRACTCALL_H_ */
+#endif /* ContractsLibrary_VCONTRACTCALLSTYLE_H_ */

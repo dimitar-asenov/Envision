@@ -34,9 +34,12 @@
 #include "contractslibrary.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
-#include "InteractionBase/src/handlers/GenericHandler.h"
-
 #include "items/VContractCall.h"
+#include "interaction/ContractCallOffsetProvider.h"
+
+#include "OOInteraction/src/handlers/HExpression.h"
+
+#include "ModelBase/src/adapter/AdapterManager.h"
 
 Q_EXPORT_PLUGIN2( contractslibrary, ContractsLibrary::ContractsLibrary )
 
@@ -44,7 +47,10 @@ namespace ContractsLibrary {
 
 bool ContractsLibrary::initialize(Envision::EnvisionManager&)
 {
-	VContractCall::setInteractionHandler(Interaction::GenericHandler::instance());
+	VContractCall::setInteractionHandler(OOInteraction::HExpression::instance());
+
+	Model::AdapterManager::registerAdapterViaConstructor
+		<OOInteraction::StringOffsetProvider, ContractCallOffsetProvider, VContractCall>();
 
 	return true;
 }

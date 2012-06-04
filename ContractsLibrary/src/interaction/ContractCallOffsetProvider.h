@@ -25,41 +25,33 @@
  **********************************************************************************************************************/
 
 /*
- * SimpleKeywordCallStyle.h
+ * ContractCallOffsetProvider.h
  *
- *  Created on: May 23, 2012
+ *  Created on: Jun 4, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef ContractsLibrary_SIMPLEKEYWORDCALLSTYLE_H_
-#define ContractsLibrary_SIMPLEKEYWORDCALLSTYLE_H_
+#ifndef ContractsLibrary_CONTRACTCALLOFFSETPROVIDER_H_
+#define ContractsLibrary_CONTRACTCALLOFFSETPROVIDER_H_
 
 #include "../contractslibrary_api.h"
-
-#include "VisualizationBase/src/items/StaticStyle.h"
-#include "VisualizationBase/src/layouts/SequentialLayout.h"
-#include "VisualizationBase/src/items/VListStyle.h"
+#include "OOInteraction/src/string_offset_providers/StringOffsetProvider.h"
 
 namespace ContractsLibrary {
 
-class CONTRACTSLIBRARY_API SimpleKeywordCallStyle : public Visualization::ItemStyle
+class VContractCall;
+
+class CONTRACTSLIBRARY_API ContractCallOffsetProvider : public OOInteraction::StringOffsetProvider
 {
 	public:
-		void load(Visualization::StyleLoader& sl);
+		ContractCallOffsetProvider(VContractCall* vis);
 
-		const Visualization::SequentialLayoutStyle& layout() const;
-		const Visualization::StaticStyle& keyword() const;
-		const Visualization::VListStyle& arguments() const;
+		virtual int offset();
+		virtual void setOffset(int newOffset);
 
 	private:
-		Visualization::SequentialLayoutStyle layout_;
-		Visualization::StaticStyle keyword_;
-		Visualization::VListStyle arguments_;
+		VContractCall* vis_;
 };
 
-inline const Visualization::SequentialLayoutStyle& SimpleKeywordCallStyle::layout() const { return layout_; }
-inline const Visualization::StaticStyle& SimpleKeywordCallStyle::keyword() const { return keyword_; }
-inline const Visualization::VListStyle& SimpleKeywordCallStyle::arguments() const { return arguments_; }
-
 } /* namespace ContractsLibrary */
-#endif /* ContractsLibrary_SIMPLEKEYWORDCALLSTYLE_H_ */
+#endif /* ContractsLibrary_CONTRACTCALLOFFSETPROVIDER_H_ */

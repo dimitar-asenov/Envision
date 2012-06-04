@@ -34,6 +34,8 @@
 #include "CreateContractMethod.h"
 #include "OOInteraction/src/expression_editor/OOExpressionBuilder.h"
 
+#include "OOModel/src/expressions/MethodCallExpression.h"
+
 namespace ContractsLibrary {
 
 CreateContractMethod::CreateContractMethod(const QString& name, const QString& methodToCreate)
@@ -45,9 +47,14 @@ const QString& CreateContractMethod::name() const
 	return name_;
 }
 
-OOModel::Expression* CreateContractMethod::create(const QList<OOModel::Expression*>& /*arguments*/)
+OOModel::Expression* CreateContractMethod::create(const QList<OOModel::Expression*>& arguments)
 {
-	return OOInteraction::OOExpressionBuilder::getOOExpression("CodeContracts.Contract." + methodToCreate_);
+	auto method = static_cast<OOModel::MethodCallExpression*>(
+			OOInteraction::OOExpressionBuilder::getOOExpression("CodeContracts.Contract." + methodToCreate_ + "()"));
+
+	for(auto a: arguments) method->arguments()->append(a);
+
+	return method;
 }
 
 } /* namespace ContractsLibrary */

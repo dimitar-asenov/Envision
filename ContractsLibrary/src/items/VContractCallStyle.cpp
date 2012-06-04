@@ -25,52 +25,23 @@
  **********************************************************************************************************************/
 
 /*
- * VContractCall.h
+ * VContractCallStyle.cpp
  *
  *  Created on: May 23, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef ContractsLibrary_VCONTRACTCALL_H_
-#define ContractsLibrary_VCONTRACTCALL_H_
-
-#include "../contractslibrary_api.h"
 #include "VContractCallStyle.h"
-
-#include "OOModel/src/expressions/MethodCallExpression.h"
-
-#include "VisualizationBase/src/items/ItemWithNode.h"
-#include "VisualizationBase/src/items/LayoutProvider.h"
-
-namespace Visualization {
-	class Static;
-	class VList;
-}
 
 namespace ContractsLibrary {
 
-class CONTRACTSLIBRARY_API VContractCall
-	: public Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::MethodCallExpression>
+void VContractCallStyle::load(Visualization::StyleLoader& sl)
 {
-		ITEM_COMMON(VContractCall)
+	ItemStyle::load(sl);
 
-	public:
-		VContractCall(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		virtual ~VContractCall();
-
-		Visualization::Static* keyword() const;
-		Visualization::VList* arguments() const;
-
-	protected:
-		void determineChildren();
-
-	private:
-		Visualization::Static* keyword_;
-		Visualization::VList* arguments_;
-};
-
-inline Visualization::Static* VContractCall::keyword() const { return keyword_; }
-inline Visualization::VList* VContractCall::arguments() const { return arguments_; }
+	sl.load("layout", layout_);
+	sl.load("keyword", keyword_);
+	sl.load("arguments", arguments_);
+}
 
 } /* namespace ContractsLibrary */
-#endif /* ContractsLibrary_VCONTRACTCALL_H_ */
