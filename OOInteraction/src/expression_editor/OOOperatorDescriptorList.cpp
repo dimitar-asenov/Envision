@@ -161,7 +161,7 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 			Interaction::OperatorDescriptor::LeftAssociative));
 	instance()->addDescriptor(new CallDescriptor( "call", "expr ( expr )", 2, 1,
 			Interaction::OperatorDescriptor::LeftAssociative));
-	instance()->addDescriptor(new TypeArgumentsDescriptor( "type arguments", "id < expr >", 2, 1,
+	instance()->addDescriptor(new TypeArgumentsDescriptor( "type arguments", "id < expr >", 2, 0,
 			Interaction::OperatorDescriptor::LeftAssociative));
 	instance()->addDescriptor(new ArrayTypeDescriptor( "array type", "expr []", 1, 1,
 			Interaction::OperatorDescriptor::LeftAssociative));
