@@ -34,6 +34,8 @@
 #include "expression_editor/operators/MemberOperatorDescriptor.h"
 
 #include "OOModel/src/expressions/ReferenceExpression.h"
+#include "OOModel/src/expressions/EmptyExpression.h"
+#include "OOModel/src/expressions/CommaExpression.h"
 
 namespace OOInteraction {
 
@@ -44,12 +46,27 @@ MemberOperatorDescriptor::MemberOperatorDescriptor(const QString& name, const QS
 
 OOModel::Expression* MemberOperatorDescriptor::create(const QList<OOModel::Expression*>& operands)
 {
-	Q_ASSERT(operands.size() == 2);
-	auto ref = dynamic_cast<OOModel::ReferenceExpression*>( operands.last());
+	Q_ASSERT(operands.size() == 2 || operands.size() == 3 );
+	auto ref = dynamic_cast<OOModel::ReferenceExpression*>( operands[1]);
 	Q_ASSERT(ref);
 
 	OOModel::ReferenceExpression* r = new OOModel::ReferenceExpression( ref->name(), operands.first() );
 	SAFE_DELETE(ref);
+
+	if (operands.size() == 3)
+	{
+		if (auto comma = dynamic_cast<OOModel::CommaExpression*>(operands.last()))
+		{
+			for(auto arg : comma->allSubOperands(true))
+				r->typeArguments()->append(arg);
+
+			SAFE_DELETE(comma);
+		}
+		else
+			if (!dynamic_cast<OOModel::EmptyExpression*>(operands.last()) )
+				r->typeArguments()->append(operands.last());
+	}
+
 	return r;
 }
 

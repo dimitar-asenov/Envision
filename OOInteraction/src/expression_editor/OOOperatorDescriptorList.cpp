@@ -159,6 +159,8 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 			Interaction::OperatorDescriptor::RightAssociative));
 	instance()->addDescriptor(new MemberOperatorDescriptor( "member", "expr . id", 2, 1,
 			Interaction::OperatorDescriptor::LeftAssociative));
+	instance()->addDescriptor(new MemberOperatorDescriptor( "member", "expr . id < expr >", 3, 1,
+			Interaction::OperatorDescriptor::LeftAssociative));
 	instance()->addDescriptor(new CallDescriptor( "call", "expr ( expr )", 2, 1,
 			Interaction::OperatorDescriptor::LeftAssociative));
 	instance()->addDescriptor(new TypeArgumentsDescriptor( "type arguments", "id < expr >", 2, 0,
