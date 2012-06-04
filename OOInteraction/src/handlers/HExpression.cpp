@@ -33,6 +33,7 @@
 
 #include "handlers/HExpression.h"
 
+#include "string_components/StringComponents.h"
 #include "string_offset_providers/StringOffsetProvider.h"
 #include "expression_editor/OOExpressionBuilder.h"
 #include "handlers/SetExpressionCursorEvent.h"
@@ -204,6 +205,10 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		OOModel::Expression* newExpression = OOExpressionBuilder::getOOExpression( newText );
 		containerNode->replaceChild(topMostItem->node(), newExpression, false);
 		containerNode->model()->endModification();
+
+		// Compute the new offset. This can change in case the string of the new expression is different.
+		QString expString = StringComponents::stringForNode(newExpression);
+		newIndex += expString.length() - newText.length();
 
 		auto parent = topMostItem->parent();
 		target->scene()->addPostEventAction( new SetExpressionCursorEvent(parent, newExpression, newIndex));

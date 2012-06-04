@@ -47,7 +47,7 @@ class OOINTERACTION_API StringComponents {
 		virtual ~StringComponents();
 		virtual QStringList components() = 0;
 
-	protected:
+	public:
 		//Helper functions
 		static QString stringForNode(Model::Node* node);
 		static QStringList componentsForNode(Model::Node* node);

@@ -171,8 +171,8 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 			"expr space id = expr", 3, 40, Interaction::OperatorDescriptor::RightAssociative));
 
 	// Command descriptors
-	instance()->addDescriptor(new CommandDescriptor( "command without params", "\\ id", 1, 0,
-			Interaction::OperatorDescriptor::RightAssociative));
+	instance()->addDescriptor(new CommandDescriptor( "command without params", "\\ id space", 1, 0,
+			Interaction::OperatorDescriptor::NotAssociative));
 	instance()->addDescriptor(new CommandDescriptor( "command with params", "\\ id ( expr )", 2, 0,
 			Interaction::OperatorDescriptor::NotAssociative));
 }
