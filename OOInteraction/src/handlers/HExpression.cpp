@@ -37,6 +37,7 @@
 #include "expression_editor/OOExpressionBuilder.h"
 #include "handlers/SetExpressionCursorEvent.h"
 
+#include "VisualizationBase/src/items/VList.h"
 #include "OOModel/src/allOOModelNodes.h"
 
 #include "InteractionBase/src/handlers/SetCursorEvent.h"
@@ -97,6 +98,7 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	int index = topMostSP->offset();
 	SAFE_DELETE(topMostSP);
 
+	// Modify the string, inserting the pressed key's text (or deleting text)
 	QString newText = str;
 	int newIndex = index;
 	switch (event->key())
@@ -120,6 +122,7 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		} break;
 	}
 
+	// Process keywords for statements
 	OOModel::ExpressionStatement* replaceStatement = nullptr;
 	if ( (enterPressed || spacePressed)
 			&& (newText.startsWith("for") || newText.startsWith("foreach")|| newText.startsWith("if")
@@ -185,7 +188,10 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		containerNode->replaceChild(replaceStatement, st, false);
 		containerNode->model()->endModification();
 
+		// Get a parent which represents a list (of statements or statement items)
 		auto parent = topMostItem->parent();
+		while (! dynamic_cast<Visualization::VList*>(parent) && parent->parent()) parent = parent->parent();
+
 		target->scene()->addPostEventAction(
 				new Interaction::SetCursorEvent(parent, toFocus, Interaction::SetCursorEvent::CursorOnLeft));
 
