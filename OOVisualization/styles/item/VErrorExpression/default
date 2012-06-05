@@ -7,7 +7,7 @@
 			Box
 			<outline>
 				<width>1</width>
-				<style>2</style>
+				<style>1</style>
 				<color>
 					<alpha>255</alpha>
 					<red>255</red>
@@ -16,7 +16,7 @@
 				</color>
 			</outline>
 			<cornerType>0</cornerType>
-			<cornerRadius>1</cornerRadius>
+			<cornerRadius>0</cornerRadius>
 			<backgroundBrush>
 				<style>1</style>
 				<color>
@@ -33,7 +33,7 @@
 			Box
 			<outline>
 				<width>1</width>
-				<style>2</style>
+				<style>1</style>
 				<color>
 					<alpha>255</alpha>
 					<red>255</red>
@@ -42,6 +42,7 @@
 				</color>
 			</outline>
 			<cornerType>0</cornerType>
+			<cornerRadius>0</cornerRadius>
 			<backgroundBrush>
 				<style>1</style>
 				<color>
