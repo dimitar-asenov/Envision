@@ -49,9 +49,6 @@ class VISUALIZATIONBASE_API SequentialLayout: public Layout
 {
 	ITEM_COMMON(SequentialLayout)
 
-	private:
-		QVector<Item*> items;
-
 	public:
 		SequentialLayout(Item* parent, const StyleType* style = itemStyles().get());
 		~SequentialLayout();
@@ -81,6 +78,9 @@ class VISUALIZATIONBASE_API SequentialLayout: public Layout
 		template <class T> T* at(int index);
 		template <class T> T* at(int index) const;
 
+		int spaceBetweenElements() const;
+		void setSpaceBetweenElements(bool use, int space = 0);
+
 		void synchronizeWithNodes(const QList<Model::Node*>& nodes, ModelRenderer* renderer);
 
 		void synchronizeFirst(Item*& item, Model::Node* node);
@@ -95,6 +95,10 @@ class VISUALIZATIONBASE_API SequentialLayout: public Layout
 				const typename T::StyleType* style);
 		template <class T> void synchronizeMid(T*& item, typename T::NodeType* node,
 				const typename T::StyleType* style, int position);
+
+	private:
+		QVector<Item*> items;
+		int spaceBetweenElements_;
 };
 
 inline bool SequentialLayout::isHorizontal() const { return style()->isHorizontal(); }

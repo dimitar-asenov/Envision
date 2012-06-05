@@ -44,7 +44,7 @@ namespace Visualization {
 ITEM_COMMON_DEFINITIONS( SequentialLayout, "layout" )
 
 SequentialLayout::SequentialLayout(Item* parent, const StyleType* style) :
-	Layout(parent, style)
+	Layout(parent, style), spaceBetweenElements_(-1)
 {
 }
 
@@ -180,6 +180,17 @@ bool SequentialLayout::isEmpty() const
 	return true;
 }
 
+int SequentialLayout::spaceBetweenElements() const
+{
+	if (spaceBetweenElements_ >=0) return spaceBetweenElements_;
+	else return style()->spaceBetweenElements();
+}
+
+void SequentialLayout::setSpaceBetweenElements(bool use, int space)
+{
+	spaceBetweenElements_ = use ? space : -1;
+}
+
 void SequentialLayout::updateGeometry(int, int)
 {
 	// Get the maximum width and height of any element.
@@ -193,8 +204,8 @@ void SequentialLayout::updateGeometry(int, int)
 		if ( maxChildWidth < items[i]->width() ) maxChildWidth = items[i]->width();
 		if ( maxChildHeight < items[i]->height() ) maxChildHeight = items[i]->height();
 
-		sizeWidth += items[i]->width() + (i > 0 ? style()->spaceBetweenElements() : 0);
-		sizeHeight += items[i]->height() + (i > 0 ? style()->spaceBetweenElements() : 0);
+		sizeWidth += items[i]->width() + (i > 0 ? spaceBetweenElements() : 0);
+		sizeHeight += items[i]->height() + (i > 0 ? spaceBetweenElements() : 0);
 	}
 
 	// Determine what sort of sequence we're building
@@ -248,7 +259,7 @@ void SequentialLayout::updateGeometry(int, int)
 			if ( style()->alignment() == SequentialLayoutStyle::CenterAlignment )
 				y += (maxChildHeight - items[i]->height()) / 2;
 
-			if ( i != begin ) w += style()->spaceBetweenElements();
+			if ( i != begin ) w += spaceBetweenElements();
 			items[i]->setPos(w + xOffset(), y + yOffset());
 			w += items[i]->width();
 		}
@@ -260,7 +271,7 @@ void SequentialLayout::updateGeometry(int, int)
 			if ( style()->alignment() == SequentialLayoutStyle::CenterAlignment )
 				x += (maxChildWidth - items[i]->width()) / 2;
 
-			if ( i != begin ) h += style()->spaceBetweenElements();
+			if ( i != begin ) h += spaceBetweenElements();
 			items[i]->setPos(x + xOffset(), h + yOffset());
 			h += items[i]->height();
 		}

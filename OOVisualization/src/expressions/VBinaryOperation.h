@@ -65,6 +65,8 @@ class OOVISUALIZATION_API VBinaryOperation : public Visualization::ItemWithNode<
 		Visualization::Static* post_;
 		Visualization::Item* left_;
 		Visualization::Item* right_;
+
+		int getExpressionDepth(OOModel::Expression* e, int* op = nullptr) const;
 };
 
 }
