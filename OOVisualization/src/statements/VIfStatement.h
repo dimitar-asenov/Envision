@@ -46,10 +46,11 @@ namespace Visualization {
 	class PanelBorderLayout;
 	class PositionLayout;
 	class SequentialLayout;
-	class VList;
 }
 
 namespace OOVisualization {
+
+class VStatementItemList;
 
 class OOVISUALIZATION_API VIfStatement : public Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::IfStatement>
 {
@@ -63,8 +64,8 @@ class OOVISUALIZATION_API VIfStatement : public Visualization::ItemWithNode< Vis
 		Visualization::SequentialLayout* conditionBackground() const;
 		Visualization::Item* condition() const;
 		Visualization::SequentialLayout* content() const;
-		Visualization::VList* thenBranch() const;
-		Visualization::VList* elseBranch() const;
+		VStatementItemList* thenBranch() const;
+		VStatementItemList* elseBranch() const;
 
 	protected:
 		void determineChildren();
@@ -74,16 +75,16 @@ class OOVISUALIZATION_API VIfStatement : public Visualization::ItemWithNode< Vis
 		Visualization::SequentialLayout* conditionBackground_;
 		Visualization::Item* condition_;
 		Visualization::SequentialLayout* content_;
-		Visualization::VList* thenBranch_;
-		Visualization::VList* elseBranch_;
+		VStatementItemList* thenBranch_;
+		VStatementItemList* elseBranch_;
 };
 
 inline Visualization::SequentialLayout* VIfStatement::header() const { return header_; }
 inline Visualization::SequentialLayout* VIfStatement::conditionBackground() const { return conditionBackground_; }
 inline Visualization::Item* VIfStatement::condition() const { return condition_; }
 inline Visualization::SequentialLayout* VIfStatement::content() const { return content_; }
-inline Visualization::VList* VIfStatement::thenBranch() const { return thenBranch_; }
-inline Visualization::VList* VIfStatement::elseBranch() const { return elseBranch_; }
+inline VStatementItemList* VIfStatement::thenBranch() const { return thenBranch_; }
+inline VStatementItemList* VIfStatement::elseBranch() const { return elseBranch_; }
 
 }
 

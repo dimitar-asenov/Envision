@@ -69,6 +69,8 @@ bool OOVisualization::initialize(Envision::EnvisionManager&)
 			createVisualization<VFormalTypeArgument, FormalTypeArgument>);
 	Scene::defaultRenderer()->registerVisualization(FormalResult::typeIdStatic(),
 			createVisualization<VFormalResult, FormalResult>);
+	Scene::defaultRenderer()->registerVisualization(StatementItemList::typeIdStatic(),
+			createVisualization<VStatementItemList, StatementItemList>);
 	Scene::defaultRenderer()->registerVisualization(ReferenceExpression::typeIdStatic(),
 			createVisualization<VReferenceExpression, ReferenceExpression>);
 	Scene::defaultRenderer()->registerVisualization(MethodCallExpression::typeIdStatic(),

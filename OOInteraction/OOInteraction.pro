@@ -8,7 +8,8 @@ win32:LIBS += -llogger \
     -lvisualizationbase \
     -linteractionbase \
     -loovisualization
-HEADERS += src/expression_editor/operators/CommandExpression.h \
+HEADERS += src/handlers/HStatementItemList.h \
+    src/expression_editor/operators/CommandExpression.h \
     src/expression_editor/operators/CommandDescriptor.h \
     src/expression_editor/operators/TypeArgumentsDescriptor.h \
     src/string_offset_providers/ReferenceExpressionStringOffsetProvider.h \
@@ -76,7 +77,8 @@ HEADERS += src/expression_editor/operators/CommandExpression.h \
     src/string_offset_providers/TextRendererStringOffsetProvider.h \
     src/string_offset_providers/VariableDeclarationStringOffsetProvider.h \
     src/oointeraction.h
-SOURCES += src/expression_editor/operators/CommandDescriptor.cpp \
+SOURCES += src/handlers/HStatementItemList.cpp \
+    src/expression_editor/operators/CommandDescriptor.cpp \
     src/expression_editor/operators/TypeArgumentsDescriptor.cpp \
     src/string_offset_providers/ReferenceExpressionStringOffsetProvider.cpp \
     src/string_components/ReferenceExpressionStringComponents.cpp \

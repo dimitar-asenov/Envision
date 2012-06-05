@@ -46,10 +46,11 @@ namespace Visualization {
 	class VText;
 	class SequentialLayout;
 	class PanelBorderLayout;
-	class VList;
 }
 
 namespace OOVisualization {
+
+class VStatementItemList;
 
 class OOVISUALIZATION_API VForEachStatement : public Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::ForEachStatement>
 {
@@ -71,7 +72,7 @@ class OOVISUALIZATION_API VForEachStatement : public Visualization::ItemWithNode
 		Visualization::VText* varName;
 		Visualization::Item* collection;
 		Visualization::Item* varType;
-		Visualization::VList* body;
+		VStatementItemList* body;
 };
 
 }

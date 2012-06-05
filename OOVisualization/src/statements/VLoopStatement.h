@@ -45,10 +45,11 @@
 namespace Visualization {
 	class PanelBorderLayout;
 	class SequentialLayout;
-	class VList;
 }
 
 namespace OOVisualization {
+
+class VStatementItemList;
 
 class OOVISUALIZATION_API VLoopStatement : public Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::LoopStatement>
 {
@@ -67,7 +68,7 @@ class OOVISUALIZATION_API VLoopStatement : public Visualization::ItemWithNode< V
 		Visualization::Item* condition() const;
 		Visualization::Item* initStep() const;
 		Visualization::Item* updateStep() const;
-		Visualization::VList* body() const;
+		VStatementItemList* body() const;
 
 	protected:
 		virtual void determineChildren();
@@ -82,7 +83,7 @@ class OOVISUALIZATION_API VLoopStatement : public Visualization::ItemWithNode< V
 		Visualization::Item* condition_;
 		Visualization::Item* initStep_;
 		Visualization::Item* updateStep_;
-		Visualization::VList* body_;
+		VStatementItemList* body_;
 };
 
 inline Visualization::SequentialLayout* VLoopStatement::header() const { return header_; }
@@ -94,7 +95,7 @@ inline Visualization::SequentialLayout* VLoopStatement::updateStepBackground() c
 inline Visualization::Item* VLoopStatement::condition() const { return condition_; }
 inline Visualization::Item* VLoopStatement::initStep() const { return initStep_; }
 inline Visualization::Item* VLoopStatement::updateStep() const { return updateStep_; }
-inline Visualization::VList* VLoopStatement::body() const { return body_; }
+inline VStatementItemList* VLoopStatement::body() const { return body_; }
 
 }
 

@@ -33,11 +33,11 @@
 
 #include "handlers/HLoop.h"
 #include "OOVisualization/src/statements/VLoopStatement.h"
+#include "OOVisualization/src/elements/VStatementItemList.h"
 #include "OOModel/src/expressions/EmptyExpression.h"
 #include "OOModel/src/statements/ExpressionStatement.h"
 
 #include "InteractionBase/src/handlers/SetCursorEvent.h"
-#include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/cursor/LayoutCursor.h"
 
 namespace OOInteraction {

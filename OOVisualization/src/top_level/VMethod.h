@@ -51,6 +51,8 @@ namespace Visualization {
 
 namespace OOVisualization {
 
+class VStatementItemList;
+
 class OOVISUALIZATION_API VMethod : public Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::Method>
 {
 	ITEM_COMMON(VMethod)
@@ -60,7 +62,7 @@ class OOVISUALIZATION_API VMethod : public Visualization::ItemWithNode< Visualiz
 		virtual ~VMethod();
 
 		Visualization::VText* name() const;
-		Visualization::VList* content() const;
+		VStatementItemList* content() const;
 		Visualization::VList* typeArguments() const;
 		Visualization::VList* arguments() const;
 
@@ -73,12 +75,12 @@ class OOVISUALIZATION_API VMethod : public Visualization::ItemWithNode< Visualiz
 		Visualization::VText* name_;
 		Visualization::VList* typeArguments_;
 		Visualization::VList* arguments_;
-		Visualization::VList* content_;
+		VStatementItemList* content_;
 		Visualization::VList* results_;
 };
 
 inline Visualization::VText* VMethod::name() const { return name_; }
-inline Visualization::VList* VMethod::content() const { return content_; }
+inline VStatementItemList* VMethod::content() const { return content_; }
 inline Visualization::VList* VMethod::typeArguments() const { return typeArguments_; }
 inline Visualization::VList* VMethod::arguments() const { return arguments_; }
 

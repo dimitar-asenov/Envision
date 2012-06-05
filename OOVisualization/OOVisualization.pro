@@ -6,7 +6,8 @@ win32:LIBS += -llogger \
     -lmodelbase \
     -loomodel \
     -lvisualizationbase
-HEADERS += src/elements/VFormalTypeArgumentStyle.h \
+HEADERS += src/elements/VStatementItemList.h \
+    src/elements/VFormalTypeArgumentStyle.h \
     src/elements/VFormalTypeArgument.h \
     src/types/VClassType.h \
     src/expressions/VConditionalExpression.h \
@@ -79,7 +80,8 @@ HEADERS += src/elements/VFormalTypeArgumentStyle.h \
     src/types/VArrayTypeStyle.h \
     src/types/VPrimitiveType.h \
     src/oovisualization.h
-SOURCES += src/elements/VFormalTypeArgumentStyle.cpp \
+SOURCES += src/elements/VStatementItemList.cpp \
+    src/elements/VFormalTypeArgumentStyle.cpp \
     src/elements/VFormalTypeArgument.cpp \
     src/types/VClassType.cpp \
     src/expressions/VConditionalExpression.cpp \

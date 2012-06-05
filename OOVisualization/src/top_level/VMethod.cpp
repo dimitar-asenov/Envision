@@ -31,7 +31,8 @@
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "top_level/VMethod.h"
+#include "VMethod.h"
+#include "../elements/VStatementItemList.h"
 #include "OOVisualizationException.h"
 
 #include "VisualizationBase/src/layouts/PanelBorderLayout.h"
@@ -71,7 +72,7 @@ VMethod::VMethod(Item* parent, NodeType* node, const StyleType* style) :
 	results_ =new VList(layout()->left(), node->results(), &style->results());
 	layout()->left()->setFirst(results_);
 
-	content_ = new VList(layout(), node->items(), &style->content());
+	content_ = new VStatementItemList(layout(), node->items(), &style->content());
 	layout()->setContent(content_);
 }
 

@@ -43,6 +43,7 @@
 #include "elements/VFormalArgument.h"
 #include "elements/VFormalResult.h"
 #include "elements/VFormalTypeArgument.h"
+#include "elements/VStatementItemList.h"
 
 #include "expressions/VAssignmentExpression.h"
 #include "expressions/VMethodCallExpression.h"
