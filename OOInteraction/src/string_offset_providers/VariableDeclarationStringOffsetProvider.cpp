@@ -63,7 +63,7 @@ QStringList VariableDeclarationStringOffsetProvider::components()
 	return components;
 }
 
-int VariableDeclarationStringOffsetProvider::offset()
+int VariableDeclarationStringOffsetProvider::offset(Qt::Key key)
 {
 	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
 
@@ -88,7 +88,7 @@ int VariableDeclarationStringOffsetProvider::offset()
 
 		if (focused > 0) result += 1; // This is for the ' ' character between the type and name.
 
-		result += itemOffset(vis_->layout()->at<Visualization::Item>(focused), components[focused].length());
+		result += itemOffset(vis_->layout()->at<Visualization::Item>(focused), components[focused].length(), key);
 	}
 
 	return result;

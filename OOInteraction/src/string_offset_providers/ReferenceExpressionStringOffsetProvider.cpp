@@ -44,12 +44,12 @@ ReferenceExpressionStringOffsetProvider
 {
 }
 
-int ReferenceExpressionStringOffsetProvider::offset()
+int ReferenceExpressionStringOffsetProvider::offset(Qt::Key key)
 {
 	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
 
 	if (vis_->typeArguments() == nullptr || !vis_->typeArguments()->itemOrChildHasFocus())
-		return SequentialVisualizationStringOffsetProvider::offset();
+		return SequentialVisualizationStringOffsetProvider::offset(key);
 
 	QStringList components = this->components();
 	int result = 0;
@@ -58,7 +58,7 @@ int ReferenceExpressionStringOffsetProvider::offset()
 	for(int i = 0; i< listIndex; ++i)
 		result += components[i].size();
 
-	result += listItemOffset(vis_->typeArguments(),"<", ",", ">");
+	result += listItemOffset(vis_->typeArguments(),"<", ",", ">", key);
 	return result;
 }
 

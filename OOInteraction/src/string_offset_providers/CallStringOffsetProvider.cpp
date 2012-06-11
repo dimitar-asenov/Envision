@@ -43,19 +43,19 @@ CallStringOffsetProvider::CallStringOffsetProvider(OOVisualization::VMethodCallE
 {
 }
 
-int CallStringOffsetProvider::offset()
+int CallStringOffsetProvider::offset(Qt::Key key)
 {
 	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
 
 	if (!vis_->arguments()->itemOrChildHasFocus())
-		return SequentialVisualizationStringOffsetProvider::offset();
+		return SequentialVisualizationStringOffsetProvider::offset(key);
 
 	QStringList components = this->components();
 	int result = 0;
 
 	result += components[0].size();
 
-	result += listItemOffset(vis_->arguments(),"(", ",", ")");
+	result += listItemOffset(vis_->arguments(),"(", ",", ")", key);
 
 	return result;
 }

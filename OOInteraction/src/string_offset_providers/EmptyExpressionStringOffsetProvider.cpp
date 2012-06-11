@@ -42,7 +42,7 @@ EmptyExpressionStringOffsetProvider::EmptyExpressionStringOffsetProvider(OOVisua
 {
 }
 
-int EmptyExpressionStringOffsetProvider::offset()
+int EmptyExpressionStringOffsetProvider::offset(Qt::Key /*key*/)
 {
 	return (vis_ && vis_->itemOrChildHasFocus()) ? 0 : -1;
 }

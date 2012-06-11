@@ -47,7 +47,7 @@ class OOINTERACTION_API CastStringOffsetProvider : public StringOffsetProvider {
 	public:
 		CastStringOffsetProvider(OOVisualization::VCastExpression* vis);
 
-		virtual int offset();
+		virtual int offset(Qt::Key key);
 		virtual void setOffset(int newOffset);
 
 	private:

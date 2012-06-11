@@ -44,12 +44,12 @@ ContractCallOffsetProvider::ContractCallOffsetProvider(VContractCall* vis)
 {
 }
 
-int ContractCallOffsetProvider::offset()
+int ContractCallOffsetProvider::offset(Qt::Key key)
 {
 	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
 
 	QStringList components = this->components();
-	int offset = itemOffset(vis_->keyword(), components[0].size());
+	int offset = itemOffset(vis_->keyword(), components[0].size(), key);
 
 	if (offset >=0)
 	{
@@ -62,7 +62,7 @@ int ContractCallOffsetProvider::offset()
 	}
 	offset = components[0].size();
 
-	offset += listItemOffset(vis_->arguments(),"(", ",", ")");
+	offset += listItemOffset(vis_->arguments(),"(", ",", ")", key);
 
 	return offset;
 }

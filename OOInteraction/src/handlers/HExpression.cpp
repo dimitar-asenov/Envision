@@ -96,7 +96,7 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	}
 
 	QString str = topMostSP->string();
-	int index = topMostSP->offset();
+	int index = topMostSP->offset( (Qt::Key) event->key() );
 	SAFE_DELETE(topMostSP);
 
 	// Modify the string, inserting the pressed key's text (or deleting text)

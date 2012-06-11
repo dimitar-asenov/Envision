@@ -47,7 +47,7 @@ class OOINTERACTION_API CallStringOffsetProvider : public SequentialVisualizatio
 	public:
 		CallStringOffsetProvider(OOVisualization::VMethodCallExpression* vis);
 
-		virtual int offset();
+		virtual int offset(Qt::Key key);
 		virtual void setOffset(int newOffset);
 
 	private:

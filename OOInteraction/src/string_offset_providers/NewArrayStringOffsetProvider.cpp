@@ -41,7 +41,7 @@ NewArrayStringOffsetProvider::NewArrayStringOffsetProvider(OOVisualization::VNew
 {
 }
 
-int NewArrayStringOffsetProvider::offset()
+int NewArrayStringOffsetProvider::offset(Qt::Key key)
 {
 	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
 
@@ -54,7 +54,7 @@ int NewArrayStringOffsetProvider::offset()
 	if (focused == 0) componentIndex = 4;
 	else if (focused == 1) componentIndex = 0;
 	else componentIndex = 2;
-	result += itemOffset(vis_->layout()->at<Visualization::Item>(focused), components[componentIndex].length());
+	result += itemOffset(vis_->layout()->at<Visualization::Item>(focused), components[componentIndex].length(), key);
 
 	if (focused == 0) for (int i = 0; i< 4; ++i ) result += components[i].size();
 	else if (focused == 2) for (int i = 0; i< 2; ++i ) result += components[i].size();

@@ -42,7 +42,7 @@ CastStringOffsetProvider::CastStringOffsetProvider(OOVisualization::VCastExpress
 {
 }
 
-int CastStringOffsetProvider::offset()
+int CastStringOffsetProvider::offset(Qt::Key key)
 {
 	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
 
@@ -51,7 +51,7 @@ int CastStringOffsetProvider::offset()
 	int result = 0;
 
 	int focused = vis_->layout()->focusedElementIndex();
-	result += itemOffset(vis_->layout()->at<Visualization::Item>(focused), components[focused ? 0 : 1].length());
+	result += itemOffset(vis_->layout()->at<Visualization::Item>(focused), components[focused ? 0 : 1].length(), key);
 
 	if (focused == 0) for (int i = 0; i< 3; ++i ) result += components[i].size();
 	else if (focused == 1) result += components[0].size();

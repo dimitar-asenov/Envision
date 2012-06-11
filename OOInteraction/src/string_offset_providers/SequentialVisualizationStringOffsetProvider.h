@@ -46,7 +46,7 @@ class OOINTERACTION_API SequentialVisualizationStringOffsetProvider : public Str
 	public:
 		SequentialVisualizationStringOffsetProvider(Visualization::LayoutProvider<Visualization::SequentialLayout>* vis);
 
-		virtual int offset();
+		virtual int offset(Qt::Key key);
 		virtual void setOffset(int newOffset);
 
 	protected:

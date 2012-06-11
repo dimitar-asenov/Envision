@@ -59,7 +59,7 @@ QStringList SequentialVisualizationStringOffsetProvider::components()
 	return components;
 }
 
-int SequentialVisualizationStringOffsetProvider::offset()
+int SequentialVisualizationStringOffsetProvider::offset(Qt::Key key)
 {
 	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
 
@@ -80,7 +80,7 @@ int SequentialVisualizationStringOffsetProvider::offset()
 		for(int i = 0; i<focused; ++i)
 			result += components[i].size();
 
-		result += itemOffset(vis_->layout()->at<Visualization::Item>(focused), components[focused].length());
+		result += itemOffset(vis_->layout()->at<Visualization::Item>(focused), components[focused].length(), key);
 	}
 	return result;
 }

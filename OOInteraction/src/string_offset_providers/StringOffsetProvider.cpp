@@ -124,13 +124,13 @@ bool StringOffsetProvider::setOffsetInItem(int offset, Visualization::Item* item
 	return false;
 }
 
-int StringOffsetProvider::itemOffset(Visualization::Item* item, int stringComponentLenght)
+int StringOffsetProvider::itemOffset(Visualization::Item* item, int stringComponentLenght, Qt::Key key)
 {
 	StringOffsetProvider* child = Model::AdapterManager::adapt<StringOffsetProvider>(item);
 	int offset = 0;
 	if (child)
 	{
-		offset = child->offset();
+		offset = child->offset(key);
 		if (offset > 0 && child->isIndivisible()) offset = stringComponentLenght;
 		SAFE_DELETE(child);
 	}
@@ -165,7 +165,7 @@ bool StringOffsetProvider::setOffsetInListItem(int& offset, Visualization::VList
 }
 
 int StringOffsetProvider::listItemOffset(Visualization::VList* list,
-		const QString& prefix, const QString& separator, const QString& /*postfix*/)
+		const QString& prefix, const QString& separator, const QString& /*postfix*/, Qt::Key key)
 {
 	QStringList components = StringOffsetProvider::components(list->node());
 
@@ -187,7 +187,7 @@ int StringOffsetProvider::listItemOffset(Visualization::VList* list,
 		for(int i = 0; i<focused; ++i)
 			result += components[i].size() + separator.size();
 
-		result += itemOffset(list->at<Visualization::Item>(focused), components[focused].length());
+		result += itemOffset(list->at<Visualization::Item>(focused), components[focused].length(), key);
 	}
 
 	return result;

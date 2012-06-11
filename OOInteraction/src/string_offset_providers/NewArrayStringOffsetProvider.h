@@ -47,7 +47,7 @@ class OOINTERACTION_API NewArrayStringOffsetProvider : public StringOffsetProvid
 	public:
 		NewArrayStringOffsetProvider(OOVisualization::VNewExpression* vis);
 
-		virtual int offset();
+		virtual int offset(Qt::Key key);
 		virtual void setOffset(int newOffset);
 
 	private:

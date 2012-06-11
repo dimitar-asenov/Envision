@@ -46,7 +46,7 @@ class CONTRACTSLIBRARY_API ContractCallOffsetProvider : public OOInteraction::St
 	public:
 		ContractCallOffsetProvider(VContractCall* vis);
 
-		virtual int offset();
+		virtual int offset(Qt::Key key);
 		virtual void setOffset(int newOffset);
 
 	private:
