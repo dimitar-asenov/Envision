@@ -25,67 +25,48 @@
  **********************************************************************************************************************/
 
 /*
- * StringOffsetProvider.h
+ * GridCell.h
  *
- *  Created on: Feb 14, 2012
+ *  Created on: Jun 11, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef OOInteraction_STRINGOFFSETPROVIDER_H_
-#define OOInteraction_STRINGOFFSETPROVIDER_H_
+#ifndef OOInteraction_GRIDCELL_H_
+#define OOInteraction_GRIDCELL_H_
 
 #include "../oointeraction_api.h"
-
-namespace Model {
-	class Node;
-}
-
-namespace Visualization {
-	class Item;
-	class VList;
-}
+#include "StringOffsetProvider.h"
 
 namespace OOInteraction {
 
-class OOINTERACTION_API StringOffsetProvider {
+class OOINTERACTION_API GridCell
+{
 	public:
-		StringOffsetProvider(Visualization::Item* item);
+		GridCell(int x, Visualization::Item* item, int stringComponentsStart, int stringComponentsEnd = -1);
+		GridCell(int x, int y, Visualization::Item* item, int stringComponentsStart, int stringComponentsEnd = -1);
+		GridCell(int x, int y, int width, int height, Visualization::Item* item, int stringComponentsStart,
+				int stringComponentsEnd = -1);
 
-		virtual QString string();
-		virtual int offset(Qt::Key key) = 0;
-		virtual void setOffset(int newOffset) = 0;
-		virtual ~StringOffsetProvider();
-
-		/**
-		 * \brief Returns true when the visualization corresponding to this StringProvider is an indivisible entity.
-		 *
-		 * An indivisible entity's offset should be ignored and the cursor should be placed either before or after it.
-		 * This is important for example for Static text symbols which are rendered as text but actually are represented
-		 * in the expression editor as different text. The same is true of icons which have a text representation.
-		 */
-		virtual bool isIndivisible();
-
+		const QRect& region() const;
+		int x() const;
+		int y() const;
 		Visualization::Item* item() const;
-
-	protected:
-		// Helper methods
-		QStringList components();
-		static QStringList components(Model::Node* node);
-		static QString stringFromComponenets(Model::Node* node);
-		static QString stringFromComponenets(Visualization::Item* item);
-		static QString stringFromStringOffsetProvider(Visualization::Item* item);
-		static bool setOffsetInItem(int offset, Visualization::Item* item);
-		static int itemOffset(Visualization::Item* item, int stringComponentLenght, Qt::Key key);
-		static bool setOffsetInListItem(int& offset, Visualization::VList* list,
-				const QString& prefix, const QString& separator, const QString& postfix);
-		static int listItemOffset(Visualization::VList* list,
-				const QString& prefix, const QString& separator, const QString& postfix, Qt::Key key);
+		int stringComponentsStart() const;
+		int stringComponentsEnd() const;
 
 	private:
-		Visualization::Item* vis_;
+		QRect region_;
+		Visualization::Item* item_;
+		int stringComponentsStart_;
+		int stringComponentsEnd_;
 };
 
-inline Visualization::Item* StringOffsetProvider::item() const { return vis_; }
+inline const QRect& GridCell::region() const { return region_; }
+inline int GridCell::x() const { return region_.x(); }
+inline int GridCell::y() const { return region_.y(); }
+inline Visualization::Item* GridCell::item() const { return item_; }
+inline int GridCell::stringComponentsStart() const { return stringComponentsStart_; }
+inline int GridCell::stringComponentsEnd() const { return stringComponentsEnd_; }
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_STRINGOFFSETPROVIDER_H_ */
+#endif /* OOInteraction_GRIDCELL_H_ */
