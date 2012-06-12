@@ -64,6 +64,7 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	if (event->text().isEmpty()
 			|| event->key() == Qt::Key_Escape
 			|| event->key() == Qt::Key_Tab
+			|| event->key() == Qt::Key_Semicolon
 			|| (event->modifiers() != Qt::NoModifier && event->modifiers() != Qt::ShiftModifier)
 			)
 	{
