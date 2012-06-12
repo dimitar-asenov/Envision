@@ -112,8 +112,12 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		} break;
 		case Qt::Key_Backspace:
 		{
-			if (index > 0 ) newText.remove(index-1, 1);
-			--newIndex;
+			if (index > 0 )
+			{
+				newText.remove(index-1, 1);
+				--newIndex;
+			}
+
 		} break;
 		default:
 		{
