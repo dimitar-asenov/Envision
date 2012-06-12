@@ -35,7 +35,7 @@
 #define OOInteraction_NEWARRAYSTRINGOFFSETPROVIDER_H_
 
 #include "../oointeraction_api.h"
-#include "StringOffsetProvider.h"
+#include "GridBasedOffsetProvider.h"
 
 namespace OOVisualization {
 	class VNewExpression;
@@ -43,15 +43,9 @@ namespace OOVisualization {
 
 namespace OOInteraction {
 
-class OOINTERACTION_API NewArrayStringOffsetProvider : public StringOffsetProvider {
+class OOINTERACTION_API NewArrayStringOffsetProvider : public GridBasedOffsetProvider {
 	public:
 		NewArrayStringOffsetProvider(OOVisualization::VNewExpression* vis);
-
-		virtual int offset(Qt::Key key);
-		virtual void setOffset(int newOffset);
-
-	private:
-		OOVisualization::VNewExpression* vis_;
 };
 
 } /* namespace OOInteraction */

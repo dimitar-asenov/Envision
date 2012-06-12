@@ -32,48 +32,15 @@
  */
 
 #include "string_offset_providers/CastStringOffsetProvider.h"
-
 #include "OOVisualization/src/expressions/VCastExpression.h"
 
 namespace OOInteraction {
 
 CastStringOffsetProvider::CastStringOffsetProvider(OOVisualization::VCastExpression* vis)
-	: StringOffsetProvider(vis), vis_(vis)
+	: GridBasedOffsetProvider(vis)
 {
-}
-
-int CastStringOffsetProvider::offset(Qt::Key key)
-{
-	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
-
-	QStringList components = this->components();
-
-	int result = 0;
-
-	int focused = vis_->layout()->focusedElementIndex();
-	result += itemOffset(vis_->layout()->at<Visualization::Item>(focused), components[focused ? 0 : 1].length(), key);
-
-	if (focused == 0) for (int i = 0; i< 3; ++i ) result += components[i].size();
-	else if (focused == 1) result += components[0].size();
-
-	return result;
-}
-
-void CastStringOffsetProvider::setOffset(int offset)
-{
-	QStringList components = this->components();
-
-	if (offset >0) offset -= components[0].size(); // Skip past the initial '('
-
-	int childIndex = 1; // Corresponds to the second child - the type name
-	if (offset > components[1].size())
-	{
-		offset -= components[1].size() + components[2].size();
-		childIndex = 0;
-		if (offset < 0) offset = 0;
-	}
-
-	setOffsetInItem(offset, vis_->layout()->at<Visualization::Item>(childIndex));
+	add(new GridCell(0, 0, vis->layout()->at<Visualization::Item>(0), 3));
+	add(new GridCell(0, 1, vis->layout()->at<Visualization::Item>(1), 1));
 }
 
 } /* namespace OOInteraction */

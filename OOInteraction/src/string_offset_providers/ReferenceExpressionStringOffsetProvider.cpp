@@ -74,7 +74,7 @@ void ReferenceExpressionStringOffsetProvider::setOffset(int offset)
 
 	if (offset == components.join("").size())
 	{
-		vis_->moveCursor( Visualization::Item::MoveOnPosition, QPoint(vis_->xEnd(),0));
+		vis_->moveCursor( Visualization::Item::MoveOnPosition, QPoint(vis_->width()-1,0));
 		return;
 	}
 
@@ -94,7 +94,7 @@ void ReferenceExpressionStringOffsetProvider::setOffset(int offset)
 		return;
 
 	if (offset == components.last().size())
-		vis_->moveCursor( Visualization::Item::MoveOnPosition, QPoint(vis_->xEnd(),0));
+		vis_->moveCursor( Visualization::Item::MoveOnPosition, QPoint(vis_->width()-1,0));
 	else
 		Q_ASSERT(false);
 }

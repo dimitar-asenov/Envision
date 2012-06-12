@@ -37,55 +37,11 @@
 namespace OOInteraction {
 
 NewArrayStringOffsetProvider::NewArrayStringOffsetProvider(OOVisualization::VNewExpression* vis)
-	: StringOffsetProvider(vis), vis_(vis)
+	: GridBasedOffsetProvider(vis)
 {
-}
-
-int NewArrayStringOffsetProvider::offset(Qt::Key key)
-{
-	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
-
-	QStringList components = this->components();
-
-	int result = 0;
-
-	int focused = vis_->layout()->focusedElementIndex();
-	int componentIndex = 0;
-	if (focused == 0) componentIndex = 4;
-	else if (focused == 1) componentIndex = 0;
-	else componentIndex = 2;
-	result += itemOffset(vis_->layout()->at<Visualization::Item>(focused), components[componentIndex].length(), key);
-
-	if (focused == 0) for (int i = 0; i< 4; ++i ) result += components[i].size();
-	else if (focused == 2) for (int i = 0; i< 2; ++i ) result += components[i].size();
-
-	return result;
-}
-
-void NewArrayStringOffsetProvider::setOffset(int offset)
-{
-	QStringList components = this->components();
-
-	int childIndex = 1; // Corresponds to the second child - 'new' symbol
-	if (offset > components[0].size())
-	{
-		offset -= components[0].size() + components[1].size(); // components[1] for the '_' between new and the type name
-		childIndex = 2;
-		if (offset > components[2].size())
-		{
-			// components[3] for the '[' between new and the type name
-			offset -= components[2].size() + components[3].size();
-			childIndex = 0;
-			if (offset > components[4].size())
-			{
-				// This happened when we just finished typing
-				childIndex = 2;
-				offset = components[2].size();
-			}
-		}
-	}
-
-	setOffsetInItem(offset, vis_->layout()->at<Visualization::Item>(childIndex));
+	add(new GridCell(0, vis->layout()->at<Visualization::Item>(0), 4));
+	add(new GridCell(1, vis->layout()->at<Visualization::Item>(1), 0));
+	add(new GridCell(2, vis->layout()->at<Visualization::Item>(2), 2));
 }
 
 } /* namespace OOInteraction */
