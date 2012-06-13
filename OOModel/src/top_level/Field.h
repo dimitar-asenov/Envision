@@ -57,6 +57,13 @@ class OOMODEL_API Field : public Model::ExtendableNode
 	ATTRIBUTE_OOP_STORAGESPECIFIER
 
 	public:
+
+		Field(const QString& name, Expression* type = nullptr);
+		Field(const QString& name, Expression* type, Visibility::VisibilityType vis);
+		Field(const QString& name, Expression* type, StorageSpecifier::StorageSpecifierTypes storage);
+		Field(const QString& name, Expression* type,  Visibility::VisibilityType vis,
+				StorageSpecifier::StorageSpecifierTypes storage);
+
 		virtual bool definesSymbol() const;
 		virtual const QString& symbolName() const;
 };

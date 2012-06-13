@@ -41,6 +41,13 @@ EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(FormalArgument, Model::Extendabl
 REGISTER_ATTRIBUTE(FormalArgument, name, Text, false, false, true)
 REGISTER_ATTRIBUTE(FormalArgument, typeExpression, Expression, false, false, true)
 
+FormalArgument::FormalArgument(const QString& name, Expression* type)
+: Model::ExtendableNode (nullptr, FormalArgument::getMetaData())
+{
+	setName(name);
+	if (type) setTypeExpression(type);
+}
+
 bool FormalArgument::definesSymbol() const
 {
 	return true;

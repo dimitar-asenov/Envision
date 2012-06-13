@@ -38,4 +38,10 @@ namespace OOModel {
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(Library, Project)
 EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(Library, Project)
 
+Library::Library(const QString& name)
+: Project(nullptr, Library::getMetaData())
+{
+	setName(name);
+}
+
 }

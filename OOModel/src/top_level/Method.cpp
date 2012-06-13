@@ -46,6 +46,34 @@ REGISTER_ATTRIBUTE(Method, results, TypedListOfFormalResult, false, false, true)
 REGISTER_ATTRIBUTE(Method, visibility, Visibility, false, false, true)
 REGISTER_ATTRIBUTE(Method, storageSpecifier, StorageSpecifier, false, false, true)
 
+Method::Method(const QString& name)
+: Model::ExtendableNode (nullptr, Method::getMetaData())
+{
+	setName(name);
+}
+
+Method::Method(const QString& name, Visibility::VisibilityType vis)
+: Model::ExtendableNode (nullptr, Method::getMetaData())
+{
+	setName(name);
+	setVisibility(vis);
+}
+
+Method::Method(const QString& name, StorageSpecifier::StorageSpecifierTypes storage)
+: Model::ExtendableNode (nullptr, Method::getMetaData())
+{
+	setName(name);
+	setStorageSpecifier(storage);
+}
+
+Method::Method(const QString& name, Visibility::VisibilityType vis, StorageSpecifier::StorageSpecifierTypes storage)
+: Model::ExtendableNode (nullptr, Method::getMetaData())
+{
+	setName(name);
+	setVisibility(vis);
+	setStorageSpecifier(storage);
+}
+
 bool Method::definesSymbol() const
 {
 	return true;

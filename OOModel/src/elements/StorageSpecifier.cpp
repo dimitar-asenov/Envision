@@ -50,6 +50,12 @@ StorageSpecifier::StorageSpecifier(Model::Node *parent, Model::PersistentStore &
 	specifier = fromInt( store.loadIntValue() );
 }
 
+StorageSpecifier::StorageSpecifier(const StorageSpecifierTypes val)
+	:Node(nullptr), specifier(val)
+{
+
+}
+
 void StorageSpecifier::set(const StorageSpecifierTypes& value)
 {
 	execute(new Model::FieldSet<StorageSpecifierTypes> (this, specifier, value));

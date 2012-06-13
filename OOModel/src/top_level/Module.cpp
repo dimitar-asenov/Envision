@@ -42,6 +42,12 @@ REGISTER_ATTRIBUTE(Module, name, Text, false, false, true)
 REGISTER_ATTRIBUTE(Module, modules, TypedListOfModule, false, false, true)
 REGISTER_ATTRIBUTE(Module, classes, TypedListOfClass, false, false, true)
 
+Module::Module(const QString& name)
+: Model::ExtendableNode (nullptr, Module::getMetaData())
+{
+	setName(name);
+}
+
 bool Module::definesSymbol() const
 {
 	return true;

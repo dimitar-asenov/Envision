@@ -62,6 +62,9 @@ class OOMODEL_API Class : public Model::ExtendableNode
 	ATTRIBUTE_OOP_VISIBILITY
 
 	public:
+		Class(const QString& name);
+		Class(const QString& name, Visibility::VisibilityType vis);
+
 		virtual bool definesSymbol() const;
 		virtual const QString& symbolName() const;
 		bool isGeneric();

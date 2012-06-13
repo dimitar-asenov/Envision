@@ -49,6 +49,8 @@ class OOMODEL_API Visibility :  public Model::Node
 	public:
 		enum VisibilityType {DEFAULT, PUBLIC, PRIVATE, PROTECTED};
 
+		Visibility(const VisibilityType val);
+
 		VisibilityType get() const;
 		void set(const VisibilityType& newval);
 

@@ -45,6 +45,19 @@ REGISTER_ATTRIBUTE(Class, fields, TypedListOfField, false, false, true)
 REGISTER_ATTRIBUTE(Class, methods, TypedListOfMethod, false, false, true)
 REGISTER_ATTRIBUTE(Class, visibility, Visibility, false, false, true)
 
+Class::Class(const QString& name)
+: Model::ExtendableNode (nullptr, Class::getMetaData())
+{
+	setName(name);
+}
+
+Class::Class(const QString& name, Visibility::VisibilityType vis)
+: Model::ExtendableNode (nullptr, Class::getMetaData())
+{
+	setName(name);
+	setVisibility(vis);
+}
+
 bool Class::definesSymbol() const
 {
 	return true;

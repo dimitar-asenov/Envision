@@ -65,6 +65,11 @@ class OOMODEL_API Method : public Model::ExtendableNode
 	ATTRIBUTE_OOP_STORAGESPECIFIER
 
 	public:
+		Method(const QString& name);
+		Method(const QString& name, Visibility::VisibilityType vis);
+		Method(const QString& name, StorageSpecifier::StorageSpecifierTypes storage);
+		Method(const QString& name, Visibility::VisibilityType vis, StorageSpecifier::StorageSpecifierTypes storage);
+
 		virtual bool definesSymbol() const;
 		virtual const QString& symbolName() const;
 		bool isGeneric();
