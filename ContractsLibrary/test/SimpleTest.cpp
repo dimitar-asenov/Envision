@@ -61,37 +61,33 @@ namespace ContractsLibrary {
 
 Library* createContractsLibrary()
 {
-	Library* lib = new Library();
-	lib->setName("CodeContracts");
-	Class* contract = new Class();
-	lib->classes()->append(contract);
-	contract->setName("Contract");
-
-	Method* req = new Method();
-	req->setName("Requires");
-	contract->methods()->append(req);
-	req->setVisibility(Visibility::PUBLIC);
-	req->setStorageSpecifier(StorageSpecifier::CLASS_VARIABLE);
-	auto *fa = new FormalArgument();
-	fa->setTypeExpression(new PrimitiveTypeExpression(PrimitiveType::BOOLEAN));
-	fa->setName("precondition");
-	req->arguments()->append(fa);
-
-	Method* ens = new Method();
-	ens->setName("Ensures");
-	contract->methods()->append(ens);
-	ens->setVisibility(Visibility::PUBLIC);
-	ens->setStorageSpecifier(StorageSpecifier::CLASS_VARIABLE);
-	fa = new FormalArgument();
-	fa->setTypeExpression(new PrimitiveTypeExpression(PrimitiveType::BOOLEAN));
-	fa->setName("postcondition");
-	ens->arguments()->append(fa);
-
-	// Set positions
+	Library* lib = new Library("CodeContracts");
 	lib->extension<Position>()->setX(540);
+
+	Class* contract = new Class("Contract");
+	lib->classes()->append(contract);
 	contract->extension<Position>()->setY(0);
+
+	Method* req = new Method("Requires", Visibility::PUBLIC, StorageSpecifier::CLASS_VARIABLE);
+	contract->methods()->append(req);
+	req->arguments()->append( new FormalArgument("precondition", new PrimitiveTypeExpression(PrimitiveType::BOOLEAN)) );
 	req->extension<Position>()->setY(0);
+
+	Method* ens = new Method("Ensures", Visibility::PUBLIC, StorageSpecifier::CLASS_VARIABLE);
+	contract->methods()->append(ens);
+	ens->arguments()->append( new FormalArgument("postcondition", new PrimitiveTypeExpression(PrimitiveType::BOOLEAN)) );
 	ens->extension<Position>()->setY(60);
+
+	Method* res = new Method("Result", Visibility::PUBLIC, StorageSpecifier::CLASS_VARIABLE);
+	contract->methods()->append(res);
+	res->typeArguments()->append( new FormalTypeArgument("T") );
+	res->extension<Position>()->setY(120);
+
+	Method* old = new Method("OldValue", Visibility::PUBLIC, StorageSpecifier::CLASS_VARIABLE);
+	contract->methods()->append(old);
+	old->typeArguments()->append(new FormalTypeArgument("T"));
+	old->arguments()->append( new FormalArgument("variable", new ReferenceExpression("T")) );
+	old->extension<Position>()->setY(180);
 
 	// Register a group that holds the guard condition: are we visualizing a method belonging to the Contract class?
 	auto g = new VisualizationGroup();
@@ -132,36 +128,49 @@ Library* createContractsLibrary()
 				auto call = static_cast<OOModel::MethodCallExpression*>(node);
 				return call->methodDefinition() == ens;
 			});
+	g->addVisualization([](Visualization::Item* parent, Model::Node* node) -> Item*
+			{
+				return new VContractCall(parent, static_cast<MethodCallExpression*> (node),
+						VContractCall::itemStyles().get("old"));
+			},
+			[=](Visualization::Item*, Model::Node* node) -> bool
+			{
+				auto call = static_cast<OOModel::MethodCallExpression*>(node);
+				return call->methodDefinition() == old;
+			});
+	g->addVisualization([](Visualization::Item* parent, Model::Node* node) -> Item*
+			{
+				return new VContractCall(parent, static_cast<MethodCallExpression*> (node),
+						VContractCall::itemStyles().get("result"));
+			},
+			[=](Visualization::Item*, Model::Node* node) -> bool
+			{
+				auto call = static_cast<OOModel::MethodCallExpression*>(node);
+				return call->methodDefinition() == res;
+			});
 
 	Scene::defaultRenderer()->registerGroup(MethodCallExpression::typeIdStatic(), g);
 
 	// Register custom input
 	CommandDescriptor::registerCommand(new CreateContractMethod("requires", "Requires"));
 	CommandDescriptor::registerCommand(new CreateContractMethod("ensures", "Ensures"));
+	CommandDescriptor::registerCommand(new CreateContractMethod("old", "OldValue"));
+	CommandDescriptor::registerCommand(new CreateContractMethod("result", "Result",1));
 
 	return lib;
 }
 
 Class* createBaseClass()
 {
-	Class* car = new Class();
-	car->setName("Car");
-	car->setVisibility(Visibility::PUBLIC);
+	Class* car = new Class("Car", Visibility::PUBLIC);
 
-	auto *fuel = new Field();
-	fuel->setName("fuel");
-	fuel->setTypeExpression(new PrimitiveTypeExpression(PrimitiveType::INT));
-	fuel->setVisibility(Visibility::PUBLIC);
+	auto *fuel = new Field( "fuel", new PrimitiveTypeExpression(PrimitiveType::INT), Visibility::PUBLIC);
 	car->fields()->append(fuel);
 
-	auto *travel = new Method();
-	travel->setName("travel");
-	travel->setVisibility(Visibility::PUBLIC);
+	auto *travel = new Method("travel", Visibility::PUBLIC);
 	car->methods()->append(travel);
-	auto *fa = new FormalArgument();
-	fa->setTypeExpression(new PrimitiveTypeExpression(PrimitiveType::INT));
-	fa->setName("numPassengers");
-	travel->arguments()->append(fa);
+	travel->arguments()->append( new FormalArgument("numPassengers", new PrimitiveTypeExpression(PrimitiveType::INT)) );
+	travel->results()->append( new FormalResult(QString(), new PrimitiveTypeExpression(PrimitiveType::INT)) );
 
 	travel->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
 			"CodeContracts.Contract.Requires(fuel>0)")));
@@ -169,29 +178,29 @@ Class* createBaseClass()
 	travel->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
 			"CodeContracts.Contract.Requires(numPassengers>0)")));
 
+	travel->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
+			"CodeContracts.Contract.Ensures(fuel<CodeContracts.Contract.OldValue(fuel))")));
+
+	travel->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
+			"CodeContracts.Contract.Ensures(CodeContracts.Contract.Result<int>()>0)")));
+
 	return car;
 }
 
 Class* createDerivedClass()
 {
-	Class* car = new Class();
-	car->setName("SelfDrivingCar");
-	car->setVisibility(Visibility::PUBLIC);
+	Class* car = new Class("SelfDrivingCar", Visibility::PUBLIC);
 	car->baseClasses()->append(new ReferenceExpression("Car"));
 
-	auto *travel = new Method();
-	travel->setName("travel");
-	travel->setVisibility(Visibility::PUBLIC);
+	auto *travel = new Method("travel", Visibility::PUBLIC);
 	car->methods()->append(travel);
-	auto *fa = new FormalArgument();
-	fa->setTypeExpression(new PrimitiveTypeExpression(PrimitiveType::INT));
-	fa->setName("numPassengers");
-	travel->arguments()->append(fa);
+	travel->arguments()->append( new FormalArgument("numPassengers", new PrimitiveTypeExpression(PrimitiveType::INT)) );
+	travel->results()->append( new FormalResult(QString(), new PrimitiveTypeExpression(PrimitiveType::INT)) );
 
 	travel->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
 			"CodeContracts.Contract.Requires(numPassengers>=0)")));
 
-	car->extension<Position>()->setY(160);
+	car->extension<Position>()->setY(180);
 
 	return car;
 }

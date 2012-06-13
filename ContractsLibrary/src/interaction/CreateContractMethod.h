@@ -42,7 +42,7 @@ namespace ContractsLibrary {
 
 class CONTRACTSLIBRARY_API CreateContractMethod : public OOInteraction::CommandExpression {
 	public:
-		CreateContractMethod(const QString& name, const QString& methodToCreate);
+		CreateContractMethod(const QString& name, const QString& methodToCreate, int expectedTypeArguments = 0);
 
 		virtual const QString& name() const;
 		virtual OOModel::Expression* create(const QList<OOModel::Expression*>& arguments);
@@ -50,6 +50,7 @@ class CONTRACTSLIBRARY_API CreateContractMethod : public OOInteraction::CommandE
 	private:
 		QString name_;
 		QString methodToCreate_;
+		int expectedTypeArguments_;
 
 };
 
