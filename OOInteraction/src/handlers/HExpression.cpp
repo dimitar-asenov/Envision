@@ -31,7 +31,8 @@
  *      Author: Dimitar Asenov
  */
 
-#include "handlers/HExpression.h"
+#include "HExpression.h"
+#include "../OOInteractionException.h"
 
 #include "string_components/StringComponents.h"
 #include "string_offset_providers/StringOffsetProvider.h"
@@ -78,157 +79,192 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	bool enterPressed = event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return;
 	bool spacePressed = event->key() == Qt::Key_Space;
 
-	// We need to trigger an update of all the visualizations leading up to the target, even though the target
-	// visualization will probably be deleted and replaced with a new one.
-	target->setUpdateNeeded(Visualization::Item::StandardUpdate);
-
-	// Find the top most parent that is adaptable to StringProvider
-	Visualization::Item* topMostItem = target;
-	auto* topMostSP = Model::AdapterManager::adapt<StringOffsetProvider>(topMostItem);
-
-	auto p = topMostItem->parent();
-	while(p)
+	try
 	{
-		auto* adapted = Model::AdapterManager::adapt<StringOffsetProvider>(p);
-		if (adapted)
-		{
-			SAFE_DELETE(topMostSP);
-			topMostSP = adapted;
-			topMostItem = p;
-		}
-		p = p->parent();
-	}
+		// We need to trigger an update of all the visualizations leading up to the target, even though the target
+		// visualization will probably be deleted and replaced with a new one.
+		target->setUpdateNeeded(Visualization::Item::StandardUpdate);
 
-	QString str = topMostSP->string();
-	int index = topMostSP->offset( (Qt::Key) event->key() );
-	SAFE_DELETE(topMostSP);
+		// Find the top most parent that is adaptable to StringProvider
+		Visualization::Item* topMostItem = target;
+		auto* topMostSP = Model::AdapterManager::adapt<StringOffsetProvider>(topMostItem);
 
-	if (index < 0) return;
-
-	// Modify the string, inserting the pressed key's text (or deleting text)
-	QString newText = str;
-	int newIndex = index;
-	switch (event->key())
-	{
-		case Qt::Key_Delete:
+		auto p = topMostItem->parent();
+		while(p)
 		{
-			if (index < str.size() ) newText.remove(index, 1);
-		} break;
-		case Qt::Key_Backspace:
-		{
-			if (index > 0 )
+			auto* adapted = Model::AdapterManager::adapt<StringOffsetProvider>(p);
+			if (adapted)
 			{
-				newText.remove(index-1, 1);
-				--newIndex;
+				SAFE_DELETE(topMostSP);
+				topMostSP = adapted;
+				topMostItem = p;
+			}
+			p = p->parent();
+		}
+
+		QString str = topMostSP->string();
+		int index = topMostSP->offset( (Qt::Key) event->key() );
+		SAFE_DELETE(topMostSP);
+
+		if (index < 0) return;
+
+		// Modify the string, inserting the pressed key's text (or deleting text)
+		QString newText = str;
+		int newIndex = index;
+		switch (event->key())
+		{
+			case Qt::Key_Delete:
+			{
+				if (index < str.size() ) newText.remove(index, 1);
+			} break;
+			case Qt::Key_Backspace:
+			{
+				if (index > 0 )
+				{
+					newText.remove(index-1, 1);
+					--newIndex;
+				}
+
+			} break;
+			default:
+			{
+				if (!enterPressed && !event->text().isEmpty())
+				{
+					newText.insert(index, event->text());
+					newIndex += event->text().size();
+				}
+			} break;
+		}
+
+		// Insert a new line if enter is pressed at the boundary
+		if (enterPressed && (index == 0 || index == newText.size()))
+		{
+			auto expSt = parentExpressionStatement(dynamic_cast<OOModel::Expression*>(target->node()));
+			if (expSt)
+			{
+				auto stList = dynamic_cast<OOModel::StatementItemList*>(expSt->parent());
+				if (stList)
+				{
+					auto es = new OOModel::ExpressionStatement(new OOModel::EmptyExpression());
+					stList->model()->beginModification(stList, "add empty statement");
+					stList->insert(stList->indexOf(expSt) + (index==0?0:1), es);
+					stList->model()->endModification();
+
+					// Issue a cursor update starting from the top-most parent
+					auto p = target;
+					while (p->parent()) p = p->parent();
+					target->scene()->addPostEventAction( new Interaction::SetCursorEvent(p, es->expression(),
+						Interaction::SetCursorEvent::CursorOnLeft));
+					return;
+				}
+			}
+		}
+
+		// Process keywords for statements
+		OOModel::ExpressionStatement* replaceStatement = nullptr;
+		if ( (enterPressed || spacePressed)
+				&& (newText.startsWith("for") || newText.startsWith("foreach")|| newText.startsWith("if")
+						|| newText.startsWith("continue") || newText.startsWith("break") || newText.startsWith("return")))
+			replaceStatement = parentExpressionStatement(dynamic_cast<OOModel::Expression*>(target->node()));
+
+		if (replaceStatement)
+		{
+			OOModel::Statement* st = nullptr;
+			Model::Node* toFocus = nullptr;
+			if(newText.startsWith("for"))
+			{
+				auto loop =  new OOModel::LoopStatement();
+				loop->setInitStep(new OOModel::EmptyExpression());
+
+				toFocus = loop->initStep();
+				st = loop;
+			}
+			else if (newText.startsWith("foreach"))
+			{
+				auto loop =  new OOModel::ForEachStatement();
+				loop->setCollection(new OOModel::EmptyExpression());
+
+				toFocus = loop->varNameNode();
+				st = loop;
+			}
+			else if (newText.startsWith("if"))
+			{
+				auto ifs =  new OOModel::IfStatement();
+				ifs->setCondition(new OOModel::EmptyExpression());
+
+				toFocus = ifs->condition();
+				st = ifs;
+			}
+			else if (newText.startsWith("continue"))
+			{
+				st = new OOModel::ContinueStatement();
+				toFocus = st;
+			}
+			else if (newText.startsWith("break"))
+			{
+				st = new OOModel::BreakStatement();
+				toFocus = st;
+			}
+			else if (newText.startsWith("return"))
+			{
+				auto ret =  new OOModel::ReturnStatement();
+				ret->values()->append(new OOModel::EmptyExpression());
+
+				toFocus = ret->values()->at(0);
+				st = ret;
 			}
 
-		} break;
-		default:
+			Model::Node* containerNode = replaceStatement->parent();
+			containerNode->model()->beginModification(containerNode, "replace expression statement");
+			containerNode->replaceChild(replaceStatement, st, false);
+			containerNode->model()->endModification();
+
+			// Get a parent which represents a list (of statements or statement items)
+			auto parent = topMostItem->parent();
+			while (! dynamic_cast<Visualization::VList*>(parent) && parent->parent()) parent = parent->parent();
+
+			target->scene()->addPostEventAction(
+					new Interaction::SetCursorEvent(parent, toFocus, Interaction::SetCursorEvent::CursorOnLeft));
+
+			qDebug() << "Creating statement took" << timer.elapsed() << "milliseconds";
+			return;
+		}
+		else if (!enterPressed)
 		{
-			if (!event->text().isEmpty())
-			{
-				newText.insert(index, event->text());
-				newIndex += event->text().size();
-			}
-		} break;
+			OOModel::Expression* newExpression = OOExpressionBuilder::getOOExpression( newText );
+			Model::Node* containerNode = topMostItem->node()->parent();
+			containerNode->model()->beginModification(containerNode, "edit expression");
+			containerNode->replaceChild(topMostItem->node(), newExpression, false);
+			containerNode->model()->endModification();
+
+			// Compute the new offset. This can change in case the string of the new expression is different.
+			QString expString = StringComponents::stringForNode(newExpression);
+			newIndex += expString.length() - newText.length();
+
+			auto parent = topMostItem->parent();
+			target->scene()->addPostEventAction( new SetExpressionCursorEvent(parent, newExpression, newIndex));
+
+			qDebug() << "Expression edit took" << timer.elapsed() << "milliseconds";
+			return;
+		}
 	}
+	catch(Envision::EnvisionException &e)
+   {
+		qDebug() << "pressing" << event->key() << "(" + event->text() + ")" << "here results in an exception";
+		e.printError();
+   }
 
-	// Process keywords for statements
-	OOModel::ExpressionStatement* replaceStatement = nullptr;
-	if ( (enterPressed || spacePressed)
-			&& (newText.startsWith("for") || newText.startsWith("foreach")|| newText.startsWith("if")
-					|| newText.startsWith("continue") || newText.startsWith("break") || newText.startsWith("return")))
-	{
-		// Is this expression part of an expression statement
-		auto e = dynamic_cast<OOModel::Expression*>(target->node());
-		auto ep = e->parent();
-		while (ep && !dynamic_cast<OOModel::Statement*>(ep)) ep = ep->parent();
-
-		replaceStatement = dynamic_cast<OOModel::ExpressionStatement*>(ep);
-	}
-
-	if (replaceStatement)
-	{
-		OOModel::Statement* st = nullptr;
-		Model::Node* toFocus = nullptr;
-		if(newText.startsWith("for"))
-		{
-			auto loop =  new OOModel::LoopStatement();
-			loop->setInitStep(new OOModel::EmptyExpression());
-
-			toFocus = loop->initStep();
-			st = loop;
-		}
-		else if (newText.startsWith("foreach"))
-		{
-			auto loop =  new OOModel::ForEachStatement();
-			loop->setCollection(new OOModel::EmptyExpression());
-
-			toFocus = loop->varNameNode();
-			st = loop;
-		}
-		else if (newText.startsWith("if"))
-		{
-			auto ifs =  new OOModel::IfStatement();
-			ifs->setCondition(new OOModel::EmptyExpression());
-
-			toFocus = ifs->condition();
-			st = ifs;
-		}
-		else if (newText.startsWith("continue"))
-		{
-			st = new OOModel::ContinueStatement();
-			toFocus = st;
-		}
-		else if (newText.startsWith("break"))
-		{
-			st = new OOModel::BreakStatement();
-			toFocus = st;
-		}
-		else if (newText.startsWith("return"))
-		{
-			auto ret =  new OOModel::ReturnStatement();
-			ret->values()->append(new OOModel::EmptyExpression());
-
-			toFocus = ret->values()->at(0);
-			st = ret;
-		}
-
-		Model::Node* containerNode = replaceStatement->parent();
-		containerNode->model()->beginModification(containerNode, "replace expression statement");
-		containerNode->replaceChild(replaceStatement, st, false);
-		containerNode->model()->endModification();
-
-		// Get a parent which represents a list (of statements or statement items)
-		auto parent = topMostItem->parent();
-		while (! dynamic_cast<Visualization::VList*>(parent) && parent->parent()) parent = parent->parent();
-
-		target->scene()->addPostEventAction(
-				new Interaction::SetCursorEvent(parent, toFocus, Interaction::SetCursorEvent::CursorOnLeft));
-
-		qDebug() << "Creating statement took" << timer.elapsed() << "milliseconds";
-		return;
-	}
-	else if (!enterPressed)
-	{
-		Model::Node* containerNode = topMostItem->node()->parent();
-		containerNode->model()->beginModification(containerNode, "edit expression");
-		OOModel::Expression* newExpression = OOExpressionBuilder::getOOExpression( newText );
-		containerNode->replaceChild(topMostItem->node(), newExpression, false);
-		containerNode->model()->endModification();
-
-		// Compute the new offset. This can change in case the string of the new expression is different.
-		QString expString = StringComponents::stringForNode(newExpression);
-		newIndex += expString.length() - newText.length();
-
-		auto parent = topMostItem->parent();
-		target->scene()->addPostEventAction( new SetExpressionCursorEvent(parent, newExpression, newIndex));
-
-		qDebug() << "Expression edit took" << timer.elapsed() << "milliseconds";
-		return;
-	}
-
+	if (enterPressed) return;
 	GenericHandler::keyPressEvent(target, event);
+}
+
+OOModel::ExpressionStatement* HExpression::parentExpressionStatement(OOModel::Expression* e)
+{
+	// Is this expression part of an expression statement
+	auto ep = e->parent();
+	while (ep && !dynamic_cast<OOModel::Statement*>(ep)) ep = ep->parent();
+
+	return dynamic_cast<OOModel::ExpressionStatement*>(ep);
 }
 
 } /* namespace OOInteraction */
