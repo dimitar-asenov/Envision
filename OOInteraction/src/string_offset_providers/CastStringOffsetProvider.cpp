@@ -31,7 +31,8 @@
  *      Author: Dimitar Asenov
  */
 
-#include "string_offset_providers/CastStringOffsetProvider.h"
+#include "CastStringOffsetProvider.h"
+#include "GridCell.h"
 #include "OOVisualization/src/expressions/VCastExpression.h"
 
 namespace OOInteraction {

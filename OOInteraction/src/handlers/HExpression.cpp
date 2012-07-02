@@ -73,9 +73,6 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		return;
 	}
 
-	QElapsedTimer timer;
-	timer.start();
-
 	bool enterPressed = event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return;
 	bool spacePressed = event->key() == Qt::Key_Space;
 
@@ -225,8 +222,6 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 
 			target->scene()->addPostEventAction(
 					new Interaction::SetCursorEvent(parent, toFocus, Interaction::SetCursorEvent::CursorOnLeft));
-
-			qDebug() << "Creating statement took" << timer.elapsed() << "milliseconds";
 			return;
 		}
 		else if (!enterPressed)
@@ -244,13 +239,11 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			auto parent = topMostItem->parent();
 			target->scene()->addPostEventAction( new SetExpressionCursorEvent(parent, newExpression, newIndex));
 
-			qDebug() << "Expression edit took" << timer.elapsed() << "milliseconds";
 			return;
 		}
 	}
 	catch(Envision::EnvisionException &e)
    {
-		qDebug() << "pressing" << event->key() << "(" + event->text() + ")" << "here results in an exception";
 		e.printError();
    }
 

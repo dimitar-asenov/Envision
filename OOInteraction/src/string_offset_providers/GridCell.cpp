@@ -50,4 +50,23 @@ GridCell::GridCell(int x, int y, int width, int height, Visualization::Item* ite
 {
 }
 
+GridCell::~GridCell()
+{
+}
+
+int GridCell::offset(const QStringList& allComponents, Qt::Key key, int* length)
+{
+	int l = 0;
+	for (int i = stringComponentsStart(); i <= stringComponentsEnd(); ++i)
+		l += allComponents[i].length();
+
+	if (length) *length = l;
+	return StringOffsetProvider::itemOffset(item(), l, key);
+}
+
+void GridCell::setOffset(int newOffset)
+{
+	StringOffsetProvider::setOffsetInItem(newOffset, item());
+}
+
 } /* namespace OOInteraction */

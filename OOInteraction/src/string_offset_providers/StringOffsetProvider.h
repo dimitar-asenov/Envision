@@ -67,9 +67,7 @@ class OOINTERACTION_API StringOffsetProvider {
 
 		Visualization::Item* item() const;
 
-	protected:
 		// Helper methods
-		QStringList components();
 		static QStringList components(Model::Node* node);
 		static QString stringFromComponenets(Model::Node* node);
 		static QString stringFromComponenets(Visualization::Item* item);
@@ -80,6 +78,10 @@ class OOINTERACTION_API StringOffsetProvider {
 				const QString& prefix, const QString& separator, const QString& postfix);
 		static int listItemOffset(Visualization::VList* list,
 				const QString& prefix, const QString& separator, const QString& postfix, Qt::Key key);
+
+	protected:
+		// Helper methods
+		QStringList components();
 
 	private:
 		Visualization::Item* vis_;

@@ -32,6 +32,7 @@
  */
 
 #include "GridBasedOffsetProvider.h"
+#include "GridCell.h"
 #include "../OOInteractionException.h"
 
 #include "VisualizationBase/src/items/LayoutProvider.h"
@@ -145,9 +146,7 @@ int GridBasedOffsetProvider::offset(Qt::Key key)
 		if (c->item()->itemOrChildHasFocus())
 		{
 			int length = 0;
-			for (int i = c->stringComponentsStart(); i <= c->stringComponentsEnd(); ++i)
-				length = components[i].length();
-			result = itemOffset(c->item(), length, key);
+			result = c->offset(components, key, &length);
 
 			if (key == Qt::Key_Backspace && result == 0)
 			{
@@ -184,9 +183,6 @@ int GridBasedOffsetProvider::offset(Qt::Key key)
 			auto rightItem = index < layout_provider->layout()->length() ?
 					layout_provider->layout()->at<Visualization::Item>(index) : nullptr;
 
-			if (key == Qt::Key_Backspace) rightItem = nullptr;
-			if (key == Qt::Key_Delete) leftItem = nullptr;
-
 			GridCell* leftCell = nullptr;
 			GridCell* rightCell = nullptr;
 
@@ -195,6 +191,9 @@ int GridBasedOffsetProvider::offset(Qt::Key key)
 				if (c->item() == leftItem) leftCell = c;
 				if (c->item() == rightItem) rightCell = c;
 			}
+
+			if (key == Qt::Key_Backspace && leftCell) rightCell = nullptr;
+			if (key == Qt::Key_Delete && rightCell) leftCell = nullptr;
 
 			if (leftCell && !rightCell)
 			{
@@ -267,8 +266,8 @@ void GridBasedOffsetProvider::setOffset(int newOffset)
 	}
 
 	// TODO choose a cell in possibly a smarter way
-	if (indexCell) setOffsetInItem(offset, indexCell->item());
-	else setOffsetInItem(0, nextCell->item());
+	if (indexCell) indexCell->setOffset(offset);
+	else nextCell->setOffset(0);
 }
 
 } /* namespace OOInteraction */

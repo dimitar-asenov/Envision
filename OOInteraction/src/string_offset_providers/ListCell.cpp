@@ -25,24 +25,42 @@
  **********************************************************************************************************************/
 
 /*
- * NewArrayStringOffsetProvider.cpp
+ * ListCell.cpp
  *
- *  Created on: Mar 14, 2012
+ *  Created on: Jul 2, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "NewArrayStringOffsetProvider.h"
-#include "GridCell.h"
-#include "OOVisualization/src/expressions/VNewExpression.h"
+#include "ListCell.h"
+
+#include "VisualizationBase/src/items/VList.h"
 
 namespace OOInteraction {
 
-NewArrayStringOffsetProvider::NewArrayStringOffsetProvider(OOVisualization::VNewExpression* vis)
-	: GridBasedOffsetProvider(vis)
+ListCell::ListCell(int x, Visualization::VList* list, int stringComponentsStart,
+				const QString& prefix, const QString& separator, const QString& postfix)
+	: GridCell(x, list, stringComponentsStart), prefix_(prefix), separator_(separator), postfix_(postfix)
 {
-	add(new GridCell(0, vis->layout()->at<Visualization::Item>(0), 4));
-	add(new GridCell(1, vis->layout()->at<Visualization::Item>(1), 0));
-	add(new GridCell(2, vis->layout()->at<Visualization::Item>(2), 2));
+
+}
+
+ListCell::~ListCell()
+{
+}
+
+int ListCell::offset(const QStringList& allComponents, Qt::Key key, int* length)
+{
+	if (length)
+		*length = allComponents[stringComponentsStart()].length();
+
+	return StringOffsetProvider::listItemOffset(static_cast<Visualization::VList*>(item()),
+			prefix_, separator_, postfix_, key);
+}
+
+void ListCell::setOffset(int newOffset)
+{
+	StringOffsetProvider::setOffsetInListItem(newOffset, static_cast<Visualization::VList*>(item()),
+			prefix_, separator_, postfix_);
 }
 
 } /* namespace OOInteraction */

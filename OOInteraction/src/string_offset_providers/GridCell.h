@@ -47,12 +47,17 @@ class OOINTERACTION_API GridCell
 		GridCell(int x, int y, int width, int height, Visualization::Item* item, int stringComponentsStart,
 				int stringComponentsEnd = -1);
 
+		virtual ~GridCell();
+
 		const QRect& region() const;
 		int x() const;
 		int y() const;
 		Visualization::Item* item() const;
 		int stringComponentsStart() const;
 		int stringComponentsEnd() const;
+
+		virtual int offset(const QStringList& allComponents, Qt::Key key, int* length = nullptr);
+		virtual void setOffset(int newOffset);
 
 	private:
 		QRect region_;

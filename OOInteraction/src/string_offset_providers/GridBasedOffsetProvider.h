@@ -37,9 +37,9 @@
 #include "../oointeraction_api.h"
 #include "StringOffsetProvider.h"
 
-#include "GridCell.h"
-
 namespace OOInteraction {
+
+class GridCell;
 
 class OOINTERACTION_API GridBasedOffsetProvider : public StringOffsetProvider {
 	public:

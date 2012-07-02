@@ -31,7 +31,9 @@
  *      Author: Dimitar Asenov
  */
 
-#include "string_offset_providers/CallStringOffsetProvider.h"
+#include "CallStringOffsetProvider.h"
+#include "GridCell.h"
+#include "ListCell.h"
 
 #include "OOVisualization/src/expressions/VMethodCallExpression.h"
 #include "VisualizationBase/src/items/VList.h"
@@ -39,61 +41,10 @@
 namespace OOInteraction {
 
 CallStringOffsetProvider::CallStringOffsetProvider(OOVisualization::VMethodCallExpression* vis)
-	: SequentialVisualizationStringOffsetProvider(vis), vis_(vis)
+	: GridBasedOffsetProvider(vis)
 {
-}
-
-int CallStringOffsetProvider::offset(Qt::Key key)
-{
-	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
-
-	if (!vis_->arguments()->itemOrChildHasFocus())
-		return SequentialVisualizationStringOffsetProvider::offset(key);
-
-	QStringList components = this->components();
-	int result = 0;
-
-	result += components[0].size();
-
-	result += listItemOffset(vis_->arguments(),"(", ",", ")", key);
-
-	return result;
-}
-
-void CallStringOffsetProvider::setOffset(int offset)
-{
-	if (offset == 0)
-	{
-		vis_->moveCursor( Visualization::Item::MoveOnPosition, QPoint(0,0));
-		return;
-	}
-
-	QStringList components = this->components();
-
-	if (offset == components.join("").size())
-	{
-		vis_->moveCursor( Visualization::Item::MoveOnPosition, QPoint(vis_->xEnd(),0));
-		return;
-	}
-
-	int listOffest = components[0].size();
-
-	if (offset <= listOffest)
-	{
-		SequentialVisualizationStringOffsetProvider::setOffset(offset);
-		return;
-	}
-	else offset -= listOffest;
-
-	if ( setOffsetInListItem(offset, vis_->arguments(), "(", ",", ")"))
-		return;
-
-	if (offset == components.last().size())
-	{
-		vis_->moveCursor( Visualization::Item::MoveOnPosition, QPoint(vis_->xEnd(),0));
-	}
-	else
-		Q_ASSERT(false);
+	add(new GridCell(0, vis->layout()->at<Visualization::Item>(0), 0));
+	add(new ListCell(1, vis->arguments(), 1, "(", ",", ")"));
 }
 
 } /* namespace OOInteraction */

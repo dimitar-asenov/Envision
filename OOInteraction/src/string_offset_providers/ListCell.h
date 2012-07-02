@@ -25,24 +25,39 @@
  **********************************************************************************************************************/
 
 /*
- * NewArrayStringOffsetProvider.cpp
+ * ListCell.h
  *
- *  Created on: Mar 14, 2012
+ *  Created on: Jul 2, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "NewArrayStringOffsetProvider.h"
+#ifndef OOInteraction_LISTCELL_H_
+#define OOInteraction_LISTCELL_H_
+
+#include "../oointeraction_api.h"
 #include "GridCell.h"
-#include "OOVisualization/src/expressions/VNewExpression.h"
+
+namespace Visualization {
+	class VList;
+}
 
 namespace OOInteraction {
 
-NewArrayStringOffsetProvider::NewArrayStringOffsetProvider(OOVisualization::VNewExpression* vis)
-	: GridBasedOffsetProvider(vis)
+class OOINTERACTION_API ListCell : public GridCell
 {
-	add(new GridCell(0, vis->layout()->at<Visualization::Item>(0), 4));
-	add(new GridCell(1, vis->layout()->at<Visualization::Item>(1), 0));
-	add(new GridCell(2, vis->layout()->at<Visualization::Item>(2), 2));
-}
+	public:
+		ListCell(int x, Visualization::VList* list, int stringComponentsStart,
+				const QString& prefix, const QString& separator, const QString& postfix);
+		virtual ~ListCell();
+
+		virtual int offset(const QStringList& allComponents, Qt::Key key, int* length = nullptr);
+		virtual void setOffset(int newOffset);
+
+	private:
+		QString prefix_;
+		QString separator_;
+		QString postfix_;
+};
 
 } /* namespace OOInteraction */
+#endif /* OOInteraction_LISTCELL_H_ */
