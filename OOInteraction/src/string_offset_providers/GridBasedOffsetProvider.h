@@ -39,7 +39,7 @@
 
 namespace OOInteraction {
 
-class GridCell;
+class Cell;
 
 class OOINTERACTION_API GridBasedOffsetProvider : public StringOffsetProvider {
 	public:
@@ -49,19 +49,19 @@ class OOINTERACTION_API GridBasedOffsetProvider : public StringOffsetProvider {
 		virtual int offset(Qt::Key key);
 		virtual void setOffset(int newOffset);
 
-		void add(GridCell* cell);
+		void add(Cell* cell);
 
 	private:
-		QList<GridCell*> cells_;
+		QList<Cell*> cells_;
 		QSize size_;
 
 		enum Direction {Left, Up, Right, Down};
-		GridCell* findCell(const QRect& start, Direction dir) const;
+		Cell* findCell(const QRect& start, Direction dir) const;
 
-		bool isOnTop(GridCell* cell) const;
-		bool isOnLeft(GridCell* cell) const;
-		bool isOnBottom(GridCell* cell) const;
-		bool isOnRight(GridCell* cell) const;
+		bool isOnTop(Cell* cell) const;
+		bool isOnLeft(Cell* cell) const;
+		bool isOnBottom(Cell* cell) const;
+		bool isOnRight(Cell* cell) const;
 };
 
 } /* namespace OOInteraction */

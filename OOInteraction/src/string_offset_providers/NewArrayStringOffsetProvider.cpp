@@ -32,7 +32,7 @@
  */
 
 #include "NewArrayStringOffsetProvider.h"
-#include "GridCell.h"
+#include "Cell.h"
 #include "OOVisualization/src/expressions/VNewExpression.h"
 
 namespace OOInteraction {
@@ -40,9 +40,9 @@ namespace OOInteraction {
 NewArrayStringOffsetProvider::NewArrayStringOffsetProvider(OOVisualization::VNewExpression* vis)
 	: GridBasedOffsetProvider(vis)
 {
-	add(new GridCell(0, vis->layout()->at<Visualization::Item>(0), 4));
-	add(new GridCell(1, vis->layout()->at<Visualization::Item>(1), 0));
-	add(new GridCell(2, vis->layout()->at<Visualization::Item>(2), 2));
+	add(new Cell(0, vis->layout()->at<Visualization::Item>(0), 4));
+	add(new Cell(1, vis->layout()->at<Visualization::Item>(1), 0));
+	add(new Cell(2, vis->layout()->at<Visualization::Item>(2), 2));
 }
 
 } /* namespace OOInteraction */

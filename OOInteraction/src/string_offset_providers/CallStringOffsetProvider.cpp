@@ -32,7 +32,7 @@
  */
 
 #include "CallStringOffsetProvider.h"
-#include "GridCell.h"
+#include "Cell.h"
 #include "ListCell.h"
 
 #include "OOVisualization/src/expressions/VMethodCallExpression.h"
@@ -43,7 +43,7 @@ namespace OOInteraction {
 CallStringOffsetProvider::CallStringOffsetProvider(OOVisualization::VMethodCallExpression* vis)
 	: GridBasedOffsetProvider(vis)
 {
-	add(new GridCell(0, vis->layout()->at<Visualization::Item>(0), 0));
+	add(new Cell(0, vis->layout()->at<Visualization::Item>(0), 0));
 	add(new ListCell(1, vis->arguments(), 1, "(", ",", ")"));
 }
 

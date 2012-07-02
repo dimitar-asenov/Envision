@@ -35,7 +35,7 @@
 #define OOInteraction_LISTCELL_H_
 
 #include "../oointeraction_api.h"
-#include "GridCell.h"
+#include "Cell.h"
 
 namespace Visualization {
 	class VList;
@@ -43,7 +43,7 @@ namespace Visualization {
 
 namespace OOInteraction {
 
-class OOINTERACTION_API ListCell : public GridCell
+class OOINTERACTION_API ListCell : public Cell
 {
 	public:
 		ListCell(int x, Visualization::VList* list, int stringComponentsStart,

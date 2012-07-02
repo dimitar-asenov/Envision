@@ -8,8 +8,8 @@ win32:LIBS += -llogger \
     -lvisualizationbase \
     -linteractionbase \
     -loovisualization
-HEADERS += src/string_offset_providers/ListCell.h \
-    src/string_offset_providers/GridCell.h \
+HEADERS += src/string_offset_providers/Cell.h \
+    src/string_offset_providers/ListCell.h \
     src/string_offset_providers/GridBasedOffsetProvider.h \
     src/handlers/HStatementItemList.h \
     src/expression_editor/operators/CommandExpression.h \
@@ -80,8 +80,8 @@ HEADERS += src/string_offset_providers/ListCell.h \
     src/string_offset_providers/TextRendererStringOffsetProvider.h \
     src/string_offset_providers/VariableDeclarationStringOffsetProvider.h \
     src/oointeraction.h
-SOURCES += src/string_offset_providers/ListCell.cpp \
-    src/string_offset_providers/GridCell.cpp \
+SOURCES += src/string_offset_providers/Cell.cpp \
+    src/string_offset_providers/ListCell.cpp \
     src/string_offset_providers/GridBasedOffsetProvider.cpp \
     src/handlers/HStatementItemList.cpp \
     src/expression_editor/operators/CommandDescriptor.cpp \

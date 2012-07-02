@@ -32,7 +32,7 @@
  */
 
 #include "GridBasedOffsetProvider.h"
-#include "GridCell.h"
+#include "Cell.h"
 #include "../OOInteractionException.h"
 
 #include "VisualizationBase/src/items/LayoutProvider.h"
@@ -52,7 +52,7 @@ GridBasedOffsetProvider::~GridBasedOffsetProvider()
 	cells_.clear();
 }
 
-void GridBasedOffsetProvider::add(GridCell* cell)
+void GridBasedOffsetProvider::add(Cell* cell)
 {
 	for(auto c: cells_)
 		if (c->region().contains(cell->region()) || cell->region().contains(c->region()))
@@ -63,9 +63,9 @@ void GridBasedOffsetProvider::add(GridCell* cell)
 	if (cell->region().bottom()+1 > size_.height()) size_.setHeight(cell->region().bottom()+1);
 }
 
-GridCell* GridBasedOffsetProvider::findCell(const QRect& start, Direction dir) const
+Cell* GridBasedOffsetProvider::findCell(const QRect& start, Direction dir) const
 {
-	GridCell* result = nullptr;
+	Cell* result = nullptr;
 	int min_distance;
 
 	for(auto c : cells_)
@@ -109,22 +109,22 @@ GridCell* GridBasedOffsetProvider::findCell(const QRect& start, Direction dir) c
 	return result;
 }
 
-inline bool GridBasedOffsetProvider::isOnTop(GridCell* cell) const
+inline bool GridBasedOffsetProvider::isOnTop(Cell* cell) const
 {
 	return cell->region().top() == 0;
 }
 
-inline bool GridBasedOffsetProvider::isOnLeft(GridCell* cell) const
+inline bool GridBasedOffsetProvider::isOnLeft(Cell* cell) const
 {
 	return cell->region().left() == 0;
 }
 
-inline bool GridBasedOffsetProvider::isOnBottom(GridCell* cell) const
+inline bool GridBasedOffsetProvider::isOnBottom(Cell* cell) const
 {
 	return cell->region().bottom()+1 == size_.height();
 }
 
-inline bool GridBasedOffsetProvider::isOnRight(GridCell* cell) const
+inline bool GridBasedOffsetProvider::isOnRight(Cell* cell) const
 {
 	return cell->region().right()+1 == size_.width();
 }
@@ -136,7 +136,7 @@ int GridBasedOffsetProvider::offset(Qt::Key key)
 	int result = 0;
 	QStringList components = this->components();
 
-	GridCell* target = nullptr;
+	Cell* target = nullptr;
 	bool left = false;
 	bool right = false;
 
@@ -183,8 +183,8 @@ int GridBasedOffsetProvider::offset(Qt::Key key)
 			auto rightItem = index < layout_provider->layout()->length() ?
 					layout_provider->layout()->at<Visualization::Item>(index) : nullptr;
 
-			GridCell* leftCell = nullptr;
-			GridCell* rightCell = nullptr;
+			Cell* leftCell = nullptr;
+			Cell* rightCell = nullptr;
 
 			for (auto c : cells_)
 			{
@@ -242,8 +242,8 @@ void GridBasedOffsetProvider::setOffset(int newOffset)
 	}
 
 	// Find the cells corresponding to the this index and the next (if any)
-	GridCell* indexCell = nullptr;
-	GridCell* nextCell = nullptr;
+	Cell* indexCell = nullptr;
+	Cell* nextCell = nullptr;
 	for(auto c : cells_)
 	{
 		if (c->stringComponentsStart() <= index && c->stringComponentsEnd() >= index) indexCell = c;

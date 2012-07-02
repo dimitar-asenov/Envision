@@ -32,7 +32,7 @@
  */
 
 #include "CastStringOffsetProvider.h"
-#include "GridCell.h"
+#include "Cell.h"
 #include "OOVisualization/src/expressions/VCastExpression.h"
 
 namespace OOInteraction {
@@ -40,8 +40,8 @@ namespace OOInteraction {
 CastStringOffsetProvider::CastStringOffsetProvider(OOVisualization::VCastExpression* vis)
 	: GridBasedOffsetProvider(vis)
 {
-	add(new GridCell(0, 0, vis->layout()->at<Visualization::Item>(0), 3));
-	add(new GridCell(0, 1, vis->layout()->at<Visualization::Item>(1), 1));
+	add(new Cell(0, 0, vis->layout()->at<Visualization::Item>(0), 3));
+	add(new Cell(0, 1, vis->layout()->at<Visualization::Item>(1), 1));
 }
 
 } /* namespace OOInteraction */

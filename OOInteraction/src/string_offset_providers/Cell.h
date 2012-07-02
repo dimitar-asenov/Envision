@@ -25,48 +25,53 @@
  **********************************************************************************************************************/
 
 /*
- * GridCell.cpp
+ * Cell.h
  *
  *  Created on: Jun 11, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "GridCell.h"
+#ifndef OOInteraction_CELL_H_
+#define OOInteraction_CELL_H_
+
+#include "../oointeraction_api.h"
+#include "StringOffsetProvider.h"
 
 namespace OOInteraction {
 
-GridCell::GridCell(int x, Visualization::Item* item, int stringComponentsStart, int stringComponentsEnd)
-	: GridCell(x, 0, 1, 1, item, stringComponentsStart, stringComponentsEnd)
-{}
-
-GridCell::GridCell(int x, int y, Visualization::Item* item, int stringComponentsStart, int stringComponentsEnd)
-	: GridCell(x, y, 1, 1, item, stringComponentsStart, stringComponentsEnd)
-{}
-
-GridCell::GridCell(int x, int y, int width, int height, Visualization::Item* item, int stringComponentsStart,
-				int stringComponentsEnd)
-: region_(x, y, width, height), item_(item), stringComponentsStart_(stringComponentsStart),
-  stringComponentsEnd_(stringComponentsEnd < 0 ? stringComponentsStart : stringComponentsEnd)
+class OOINTERACTION_API Cell
 {
-}
+	public:
+		Cell(int x, Visualization::Item* item, int stringComponentsStart, int stringComponentsEnd = -1);
+		Cell(int x, int y, Visualization::Item* item, int stringComponentsStart, int stringComponentsEnd = -1);
+		Cell(int x, int y, int width, int height, Visualization::Item* item, int stringComponentsStart,
+				int stringComponentsEnd = -1);
 
-GridCell::~GridCell()
-{
-}
+		virtual ~Cell();
 
-int GridCell::offset(const QStringList& allComponents, Qt::Key key, int* length)
-{
-	int l = 0;
-	for (int i = stringComponentsStart(); i <= stringComponentsEnd(); ++i)
-		l += allComponents[i].length();
+		const QRect& region() const;
+		int x() const;
+		int y() const;
+		Visualization::Item* item() const;
+		int stringComponentsStart() const;
+		int stringComponentsEnd() const;
 
-	if (length) *length = l;
-	return StringOffsetProvider::itemOffset(item(), l, key);
-}
+		virtual int offset(const QStringList& allComponents, Qt::Key key, int* length = nullptr);
+		virtual void setOffset(int newOffset);
 
-void GridCell::setOffset(int newOffset)
-{
-	StringOffsetProvider::setOffsetInItem(newOffset, item());
-}
+	private:
+		QRect region_;
+		Visualization::Item* item_;
+		int stringComponentsStart_;
+		int stringComponentsEnd_;
+};
+
+inline const QRect& Cell::region() const { return region_; }
+inline int Cell::x() const { return region_.x(); }
+inline int Cell::y() const { return region_.y(); }
+inline Visualization::Item* Cell::item() const { return item_; }
+inline int Cell::stringComponentsStart() const { return stringComponentsStart_; }
+inline int Cell::stringComponentsEnd() const { return stringComponentsEnd_; }
 
 } /* namespace OOInteraction */
+#endif /* OOInteraction_CELL_H_ */
