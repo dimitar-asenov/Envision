@@ -32,71 +32,31 @@
  */
 
 #include "ReferenceExpressionStringOffsetProvider.h"
+#include "Cell.h"
+#include "ListCell.h"
 
 #include "OOVisualization/src/expressions/VReferenceExpression.h"
 #include "VisualizationBase/src/items/VList.h"
+#include "VisualizationBase/src/items/Static.h"
+#include "VisualizationBase/src/items/Text.h"
 
 namespace OOInteraction {
 
 ReferenceExpressionStringOffsetProvider
 	::ReferenceExpressionStringOffsetProvider(OOVisualization::VReferenceExpression* vis)
-	: SequentialVisualizationStringOffsetProvider(vis), vis_(vis)
+	: GridBasedOffsetProvider(vis)
 {
-}
-
-int ReferenceExpressionStringOffsetProvider::offset(Qt::Key key)
-{
-	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
-
-	if (vis_->typeArguments() == nullptr || !vis_->typeArguments()->itemOrChildHasFocus())
-		return SequentialVisualizationStringOffsetProvider::offset(key);
-
-	QStringList components = this->components();
-	int result = 0;
-
-	int listIndex = (components.size() > 1 && components[1] == ".") ? 3 : 1;
-	for(int i = 0; i< listIndex; ++i)
-		result += components[i].size();
-
-	result += listItemOffset(vis_->typeArguments(),"<", ",", ">", key);
-	return result;
-}
-
-void ReferenceExpressionStringOffsetProvider::setOffset(int offset)
-{
-	if (offset == 0)
+	int index = 0;
+	if (vis->prefix())
 	{
-		vis_->moveCursor( Visualization::Item::MoveOnPosition, QPoint(0,0));
-		return;
+		add(new Cell(0, vis->prefix(), 0));
+		add(new Cell(1, vis->separator(), 1));
+
+		index = 2;
 	}
 
-	QStringList components = this->components();
-
-	if (offset == components.join("").size())
-	{
-		vis_->moveCursor( Visualization::Item::MoveOnPosition, QPoint(vis_->width()-1,0));
-		return;
-	}
-
-	int listOffest = 0;
-	int listIndex = (components.size() > 1 && components[1] == ".") ? 3 : 1;
-	for(int i = 0; i< listIndex; ++i)
-		listOffest += components[i].size();
-
-	if (components.size() == listIndex || offset <= listOffest)
-	{
-		SequentialVisualizationStringOffsetProvider::setOffset(offset);
-		return;
-	}
-	else offset -= listOffest;
-
-	if ( setOffsetInListItem(offset, vis_->typeArguments(), "<", ",", ">"))
-		return;
-
-	if (offset == components.last().size())
-		vis_->moveCursor( Visualization::Item::MoveOnPosition, QPoint(vis_->width()-1,0));
-	else
-		Q_ASSERT(false);
+	add(new Cell(index, vis->name(), index));
+	if (vis->typeArguments()) add(new ListCell(index+1, vis->typeArguments(), index+1, "<", ",", ">"));
 }
 
 } /* namespace OOInteraction */

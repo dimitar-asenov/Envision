@@ -35,7 +35,7 @@
 #define OOInteraction_REFERENCEEXPRESSIONSTRINGOFFSETPROVIDER_H_
 
 #include "../oointeraction_api.h"
-#include "SequentialVisualizationStringOffsetProvider.h"
+#include "GridBasedOffsetProvider.h"
 
 namespace OOVisualization {
 	class VReferenceExpression;
@@ -43,15 +43,9 @@ namespace OOVisualization {
 
 namespace OOInteraction {
 
-class OOINTERACTION_API ReferenceExpressionStringOffsetProvider : public SequentialVisualizationStringOffsetProvider {
+class OOINTERACTION_API ReferenceExpressionStringOffsetProvider : public GridBasedOffsetProvider {
 	public:
 		ReferenceExpressionStringOffsetProvider(OOVisualization::VReferenceExpression* vis);
-
-		virtual int offset(Qt::Key key);
-		virtual void setOffset(int newOffset);
-
-	private:
-		OOVisualization::VReferenceExpression* vis_;
 };
 
 } /* namespace OOInteraction */

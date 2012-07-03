@@ -58,6 +58,9 @@ class OOVISUALIZATION_API VReferenceExpression : public Visualization::ItemWithN
 		VReferenceExpression(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VReferenceExpression();
 
+		Visualization::Text* name() const;
+		Visualization::Static* separator() const;
+		Visualization::Item* prefix() const;
 		Visualization::VList* typeArguments() const;
 
 	protected:
@@ -70,6 +73,9 @@ class OOVISUALIZATION_API VReferenceExpression : public Visualization::ItemWithN
 		Visualization::VList* typeArguments_;
 };
 
+inline Visualization::Text* VReferenceExpression::name() const { return name_; }
+inline Visualization::Static* VReferenceExpression::separator() const { return separator_; }
+inline Visualization::Item* VReferenceExpression::prefix() const { return prefix_; }
 inline Visualization::VList* VReferenceExpression::typeArguments() const { return typeArguments_; }
 
 }
