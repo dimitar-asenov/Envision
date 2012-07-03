@@ -65,48 +65,35 @@ void GridBasedOffsetProvider::add(Cell* cell)
 
 Cell* GridBasedOffsetProvider::findCell(const QRect& start, Direction dir) const
 {
-	Cell* result = nullptr;
-	int min_distance;
-
 	for(auto c : cells_)
 	{
 		if (start== c->region()) continue;
 
-		int distance = 0;
 		switch (dir)
 		{
 			// Note that in the code below +1 is to correct for weird definition of QRect's right and bottom methods.
-			case Left: if (c->region().right()+1 > start.left()
+			case Left: if (c->region().right()+1 != start.left()
 								|| c->region().bottom()+1 <= start.top()
 								|| c->region().top() >= start.bottom()+1) continue;
-							else distance = start.left() - c->region().right()-1;
 			break;
-			case Up: if (c->region().bottom()+1 > start.top()
+			case Up: if (c->region().bottom()+1 != start.top()
 								|| c->region().right()+1 <= start.left()
 								|| c->region().left() >= start.right()+1) continue;
-							else distance = start.top() - c->region().bottom()-1;
 			break;
-			case Right: if (c->region().left() < start.right()+1
+			case Right: if (c->region().left() != start.right()+1
 								|| c->region().bottom()+1 <= start.top()
 								|| c->region().top() >= start.bottom()+1) continue;
-							else distance = start.right()+1 - c->region().left();
 			break;
-			case Down: if (c->region().top() < start.bottom()+1
+			case Down: if (c->region().top() != start.bottom()+1
 								|| c->region().right()+1 <= start.left()
 								|| c->region().left() >= start.right()+1) continue;
-							else distance = start.bottom()+1 - c->region().top();
 			break;
 		}
 
-		if (!result || distance < min_distance)
-		{
-			result = c;
-			min_distance = distance;
-			if (distance == 0) break;
-		}
+		return c;
 	}
 
-	return result;
+	return nullptr;
 }
 
 inline bool GridBasedOffsetProvider::isOnTop(Cell* cell) const
@@ -153,14 +140,24 @@ int GridBasedOffsetProvider::offset(Qt::Key key)
 				if (isOnLeft(c)) return 0;
 
 				target = findCell(c->region(), Left);
-				right = true;
+				if (target) right = true;
+				else
+				{
+					target = c;
+					left = true;
+				}
 			}
 			else if (key == Qt::Key_Delete && result == length)
 			{
 				if (isOnRight(c)) return components.join("").length();
 
 				target = findCell(c->region(), Right);
-				left = true;
+				if (target) left = true;
+				else
+				{
+					target = c;
+					right = true;
+				}
 			}
 			else target = c;
 
