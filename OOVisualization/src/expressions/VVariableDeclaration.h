@@ -57,6 +57,11 @@ class OOVISUALIZATION_API VVariableDeclaration : public Visualization::ItemWithN
 		VVariableDeclaration(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VVariableDeclaration();
 
+		Visualization::VText* name() const;
+		Visualization::Item* declarationType() const;
+		Visualization::Static* assignmentSymbol() const;
+		Visualization::Item* initialValue() const;
+
 	protected:
 		void determineChildren();
 
@@ -66,6 +71,11 @@ class OOVISUALIZATION_API VVariableDeclaration : public Visualization::ItemWithN
 		Visualization::Static* assignmentSymbol_;
 		Visualization::Item* initialValue_;
 };
+
+inline Visualization::VText* VVariableDeclaration::name() const {return name_;}
+inline Visualization::Item* VVariableDeclaration::declarationType() const {return type_;}
+inline Visualization::Static* VVariableDeclaration::assignmentSymbol() const {return assignmentSymbol_;}
+inline Visualization::Item* VVariableDeclaration::initialValue() const {return initialValue_;}
 
 }
 
