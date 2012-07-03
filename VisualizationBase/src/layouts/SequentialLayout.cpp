@@ -212,6 +212,16 @@ void SequentialLayout::updateGeometry(int, int)
 	bool horizontal = isHorizontal();
 	bool forward = isForward();
 
+	// NOTE: Specifying minWidth and minHeight only applies to the dimension opposite of the direction.
+	if (horizontal)
+	{
+		if (maxChildHeight < style()->minHeight()) maxChildHeight = style()->minHeight();
+	}
+	else
+	{
+		if (maxChildWidth < style()->minWidth()) maxChildWidth = style()->minWidth();
+	}
+
 	// Update the geometry of children whose size varies
 	for (int i = 0; i != items.size(); ++i)
 	{

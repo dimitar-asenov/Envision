@@ -31,6 +31,8 @@
 			<direction>0</direction>
 			<spaceBetweenElements>15</spaceBetweenElements>
 			<noInnerCursors>true</noInnerCursors>
+			<minHeight>15</minHeight>
+			<drawShapeWhenEmpty>true</drawShapeWhenEmpty>
 		</itemsStyle>
 	</arguments>
 </style>

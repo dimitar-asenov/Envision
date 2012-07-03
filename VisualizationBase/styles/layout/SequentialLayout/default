@@ -6,4 +6,8 @@
 	<notLocationEquivalentCursors>false</notLocationEquivalentCursors>
 	<noInnerCursors>false</noInnerCursors>
 	<noBoundaryCursors>false</noBoundaryCursors>
+	
+	<!-- Specifying minWidth and minHeight only applies to the dimension opposite of the direction. -->
+	<minWidth>0</minWidth>
+	<minHeight>0</minHeight>
 </style>
