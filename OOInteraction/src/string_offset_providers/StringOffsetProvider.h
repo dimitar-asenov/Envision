@@ -81,7 +81,7 @@ class OOINTERACTION_API StringOffsetProvider {
 
 	protected:
 		// Helper methods
-		QStringList components();
+		virtual QStringList components();
 
 	private:
 		Visualization::Item* vis_;

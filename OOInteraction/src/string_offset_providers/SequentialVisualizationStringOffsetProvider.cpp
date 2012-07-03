@@ -32,6 +32,7 @@
  */
 
 #include "string_offset_providers/SequentialVisualizationStringOffsetProvider.h"
+#include "Cell.h"
 
 #include "VisualizationBase/src/cursor/LayoutCursor.h"
 
@@ -39,8 +40,10 @@ namespace OOInteraction {
 
 SequentialVisualizationStringOffsetProvider::SequentialVisualizationStringOffsetProvider
 	(Visualization::LayoutProvider<Visualization::SequentialLayout>* vis)
-	: StringOffsetProvider(vis), vis_(vis)
+	: GridBasedOffsetProvider(vis), vis_(vis)
 {
+	for(int i = 0; i<vis->layout()->length(); ++i)
+		add(new Cell(i, vis->layout()->at<Visualization::Item>(i), i));
 }
 
 QStringList SequentialVisualizationStringOffsetProvider::components()
@@ -57,66 +60,6 @@ QStringList SequentialVisualizationStringOffsetProvider::components()
 		components.removeAll(QString(""));
 
 	return components;
-}
-
-int SequentialVisualizationStringOffsetProvider::offset(Qt::Key key)
-{
-	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
-
-	QStringList components = this->components();
-	Q_ASSERT(components.size() == vis_->layout()->length());
-
-	int result = 0;
-
-	if (vis_->scene()->mainCursor() && vis_->scene()->mainCursor()->owner() == vis_->layout())
-	{
-		int index = vis_->layout()->correspondingSceneCursor<Visualization::LayoutCursor>()->index();
-		for (int i = 0; i<index; ++i)
-			result += components[i].size();
-	}
-	else
-	{
-		int focused = vis_->layout()->focusedElementIndex();
-		for(int i = 0; i<focused; ++i)
-			result += components[i].size();
-
-		result += itemOffset(vis_->layout()->at<Visualization::Item>(focused), components[focused].length(), key);
-	}
-	return result;
-}
-
-void SequentialVisualizationStringOffsetProvider::setOffset(int offset)
-{
-	if (offset == 0)
-	{
-		vis_->moveCursor( Visualization::Item::MoveOnPosition, QPoint(0,0));
-		return;
-	}
-
-	QStringList components = this->components();
-	Q_ASSERT(components.size() == vis_->layout()->length());
-	for (int i = 0; i<vis_->layout()->length(); ++i)
-	{
-		if (offset < components[i].size())
-		{
-			if ( setOffsetInItem(offset, vis_->layout()->at<Visualization::Item>(i)) )
-				return;
-		}
-		else
-		{
-			offset -= components[i].size();
-			if (offset == 0)
-			{
-				QPoint reference(vis_->layout()->at<Visualization::Item>(i)->xEnd()+1, 0);
-				if (reference.x() > vis_->layout()->width()-1 ) reference.setX(vis_->layout()->width() - 1);
-				reference += vis_->layout()->pos().toPoint();
-				vis_->moveCursor( Visualization::Item::MoveOnPosition, reference);
-				return;
-			}
-		}
-	}
-
-	Q_ASSERT(false);
 }
 
 } /* namespace OOInteraction */
