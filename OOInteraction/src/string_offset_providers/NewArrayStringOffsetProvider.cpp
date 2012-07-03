@@ -41,8 +41,8 @@ NewArrayStringOffsetProvider::NewArrayStringOffsetProvider(OOVisualization::VNew
 	: GridBasedOffsetProvider(vis)
 {
 	add(new Cell(0, vis->layout()->at<Visualization::Item>(0), 4));
-	add(new Cell(1, vis->layout()->at<Visualization::Item>(1), 0));
-	add(new Cell(2, vis->layout()->at<Visualization::Item>(2), 2));
+	add(new Cell(2, vis->layout()->at<Visualization::Item>(1), 0));
+	add(new Cell(4, vis->layout()->at<Visualization::Item>(2), 2));
 }
 
 } /* namespace OOInteraction */
