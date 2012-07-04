@@ -77,7 +77,11 @@ void VReferenceExpression::determineChildren()
 	layout()->setStyle( &style()->layout());
 	name_->setStyle( &style()->name());
 	if (prefix_) separator_->setStyle( &style()->separator());
-	if (typeArguments_) typeArguments_->setStyle(&style()->typeArguments());
+	if (typeArguments_)
+	{
+		typeArguments_->setStyle(&style()->typeArguments());
+		typeArguments_->setSuppressDefaultRemovalHandler(true);
+	}
 
 	name_->setText(node()->ref()->name());
 }

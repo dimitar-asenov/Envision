@@ -39,7 +39,7 @@ namespace Visualization {
 ITEM_COMMON_DEFINITIONS(VList, "item")
 
 VList::VList(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode< LayoutProvider<>, Model::List>(parent, node, style), suppressHandler_(false)
+	ItemWithNode< LayoutProvider<>, Model::List>(parent, node, style), suppressDefaultRemovalHandler_(false)
 {
 }
 

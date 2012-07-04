@@ -69,7 +69,7 @@ void VMethodCallExpression::determineChildren()
 	layout()->setStyle( &style()->layout());
 	name_->setStyle( &style()->name());
 	arguments_->setStyle( &style()->arguments() );
-	arguments_->setSuppressHandler(true);
+	arguments_->setSuppressDefaultRemovalHandler(true);
 }
 
 }

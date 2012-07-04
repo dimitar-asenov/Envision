@@ -68,7 +68,7 @@ void VContractCall::determineChildren()
 	// The style needs to be updated every time since if our own style changes, so will that of the children.
 	layout()->setStyle( &style()->layout());
 	arguments_->setStyle( &style()->arguments() );
-	arguments_->setSuppressHandler(true);
+	arguments_->setSuppressDefaultRemovalHandler(true);
 	keyword_->setStyle( &style()->keyword());
 }
 
