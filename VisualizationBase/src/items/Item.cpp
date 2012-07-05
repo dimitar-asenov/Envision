@@ -479,9 +479,6 @@ bool Item::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 		{
 			// This is a child item region
 
-			// Only accept this as a correct focus event if this child is not already focused.
-			if (r->item()->itemOrChildHasFocus()) continue;
-
 			CursorMoveDirection childDirection;
 			switch(dir)
 			{
