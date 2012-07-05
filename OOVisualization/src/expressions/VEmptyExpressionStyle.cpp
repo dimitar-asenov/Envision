@@ -25,40 +25,22 @@
  **********************************************************************************************************************/
 
 /*
- * VEmptyExpression.h
+ * VEmptyExpressionStyle.cpp
  *
- *  Created on: Jan 20, 2012
+ *  Created on: Jul 5, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef OOVisualization_VEMPTYEXPRESSION_H_
-#define OOVisualization_VEMPTYEXPRESSION_H_
-
-#include "../oovisualization_api.h"
 #include "VEmptyExpressionStyle.h"
-
-#include "VisualizationBase/src/items/ItemWithNode.h"
-#include "VisualizationBase/src/items/Static.h"
-
-#include "OOModel/src/expressions/EmptyExpression.h"
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VEmptyExpression : public Visualization::ItemWithNode< Visualization::Item, OOModel::EmptyExpression>
+void VEmptyExpressionStyle::load(Visualization::StyleLoader& sl)
 {
-	ITEM_COMMON(VEmptyExpression)
+	ItemStyle::load(sl);
 
-	public:
-		VEmptyExpression(Item* parent, NodeType *expr, const StyleType *style = itemStyles().get());
-		virtual ~VEmptyExpression();
-
-	protected:
-		virtual void determineChildren();
-		virtual void updateGeometry(int availableWidth, int availableHeight);
-
-	private:
-		Visualization::Static* vis_;
-};
+	sl.load("normal", normal_);
+	sl.load("emptyLine", emptyLine_);
+}
 
 } /* namespace OOVisualization */
-#endif /* OOVisualization_VEMPTYEXPRESSION_H_ */

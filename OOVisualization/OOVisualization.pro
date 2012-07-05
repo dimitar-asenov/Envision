@@ -6,7 +6,8 @@ win32:LIBS += -llogger \
     -lmodelbase \
     -loomodel \
     -lvisualizationbase
-HEADERS += src/elements/VStatementItemList.h \
+HEADERS += src/expressions/VEmptyExpressionStyle.h \
+    src/elements/VStatementItemList.h \
     src/elements/VFormalTypeArgumentStyle.h \
     src/elements/VFormalTypeArgument.h \
     src/types/VClassType.h \
@@ -80,7 +81,8 @@ HEADERS += src/elements/VStatementItemList.h \
     src/types/VArrayTypeStyle.h \
     src/types/VPrimitiveType.h \
     src/oovisualization.h
-SOURCES += src/elements/VStatementItemList.cpp \
+SOURCES += src/expressions/VEmptyExpressionStyle.cpp \
+    src/elements/VStatementItemList.cpp \
     src/elements/VFormalTypeArgumentStyle.cpp \
     src/elements/VFormalTypeArgument.cpp \
     src/types/VClassType.cpp \

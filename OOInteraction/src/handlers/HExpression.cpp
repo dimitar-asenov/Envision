@@ -62,11 +62,12 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
 	// TODO implement this better. It is supposed to only let typed characters through and ignore modifier keys.
 	// However it does not work with e.g. ALTGR characters.
-	if (event->text().isEmpty()
+	if ( event->key() != Qt::Key_Home && event->key() != Qt::Key_End && (
+			   event->text().isEmpty()
 			|| event->key() == Qt::Key_Escape
 			|| event->key() == Qt::Key_Tab
 			|| event->key() == Qt::Key_Semicolon
-			|| (event->modifiers() != Qt::NoModifier && event->modifiers() != Qt::ShiftModifier)
+			|| (event->modifiers() != Qt::NoModifier && event->modifiers() != Qt::ShiftModifier))
 			)
 	{
 		GenericHandler::keyPressEvent(target, event);
@@ -104,6 +105,14 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		SAFE_DELETE(topMostSP);
 
 		if (index < 0) return;
+
+		if (event->key() == Qt::Key_Home || event->key() == Qt::Key_End)
+		{
+			auto parent = topMostItem->parent();
+			index = (event->key() == Qt::Key_Home ) ? 0 : str.length();
+			target->scene()->addPostEventAction( new SetExpressionCursorEvent(parent, topMostItem->node(), index));
+			return;
+		}
 
 		// Modify the string, inserting the pressed key's text (or deleting text)
 		QString newText = str;
@@ -144,7 +153,7 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 				{
 					auto es = new OOModel::ExpressionStatement(new OOModel::EmptyExpression());
 					stList->model()->beginModification(stList, "add empty statement");
-					stList->insert(stList->indexOf(expSt) + (index==0?0:1), es);
+					stList->insert(stList->indexOf(expSt) + (index==0 && !str.isEmpty()?0:1), es);
 					stList->model()->endModification();
 
 					// Issue a cursor update starting from the top-most parent
