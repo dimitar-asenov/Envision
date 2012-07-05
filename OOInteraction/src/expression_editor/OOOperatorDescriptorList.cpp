@@ -155,7 +155,7 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 			Interaction::OperatorDescriptor::LeftAssociative));
 	instance()->addDescriptor(new InitializerDescriptor( "initializer", "{ expr }", 1, 0,
 			Interaction::OperatorDescriptor::NotAssociative));
-	instance()->addDescriptor(new NewArrayDescriptor( "new array", "new space expr [ expr ]", 2, 2,
+	instance()->addDescriptor(new NewArrayDescriptor( "new array", "new SPACE expr [ expr ]", 2, 2,
 			Interaction::OperatorDescriptor::RightAssociative));
 	instance()->addDescriptor(new MemberOperatorDescriptor( "member", "expr . id", 2, 1,
 			Interaction::OperatorDescriptor::LeftAssociative));
@@ -167,13 +167,13 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 			Interaction::OperatorDescriptor::LeftAssociative));
 	instance()->addDescriptor(new ArrayTypeDescriptor( "array type", "expr []", 1, 1,
 			Interaction::OperatorDescriptor::LeftAssociative));
-	instance()->addDescriptor(new DeclarationDescriptor( "variable declaration", "expr space id", 2, 40,
+	instance()->addDescriptor(new DeclarationDescriptor( "variable declaration", "expr SPACE id", 2, 40,
 			Interaction::OperatorDescriptor::RightAssociative));
 	instance()->addDescriptor(new DeclarationDescriptor( "variable declaration and initialization",
-			"expr space id = expr", 3, 40, Interaction::OperatorDescriptor::RightAssociative));
+			"expr SPACE id = expr", 3, 40, Interaction::OperatorDescriptor::RightAssociative));
 
 	// Command descriptors
-	instance()->addDescriptor(new CommandDescriptor( "command without params", "\\ id space", 1, 0,
+	instance()->addDescriptor(new CommandDescriptor( "command without params", "\\ id SPACE", 1, 0,
 			Interaction::OperatorDescriptor::NotAssociative));
 	instance()->addDescriptor(new CommandDescriptor( "command with params", "\\ id ( expr )", 2, 0,
 			Interaction::OperatorDescriptor::NotAssociative));
