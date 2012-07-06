@@ -106,6 +106,7 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 
 		if (index < 0) return;
 
+		// Handle the HOME and END keys
 		if (event->key() == Qt::Key_Home || event->key() == Qt::Key_End)
 		{
 			auto parent = topMostItem->parent();
@@ -113,6 +114,66 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			target->scene()->addPostEventAction( new SetExpressionCursorEvent(parent, topMostItem->node(), index));
 			return;
 		}
+
+		// Handle the removing of an empty line and moving up/down on BACKSPACE/DELETE
+		if (topMostItem->node()->parent()
+		      && ((event->key() == Qt::Key_Backspace && index == 0)
+		            || (event->key() == Qt::Key_Delete && index == str.length())))
+		{
+			auto list = dynamic_cast<OOModel::StatementItemList*>(topMostItem->node()->parent()->parent());
+			if (list)
+			{
+				int thisItemListIndex = list->indexOf(topMostItem->node()->parent());
+				int itemToDeletelistIndex = thisItemListIndex + (event->key() == Qt::Key_Backspace ? -1 : +1);
+
+				if (itemToDeletelistIndex >= 0 && itemToDeletelistIndex < list->size())
+				{
+					auto st = dynamic_cast<OOModel::ExpressionStatement*>(list->at(itemToDeletelistIndex));
+					if (st && dynamic_cast<OOModel::EmptyExpression*>(st->expression()))
+					{
+						list->model()->beginModification(list, "remove empty line");
+						list->remove(itemToDeletelistIndex, false);
+						list->model()->endModification();
+
+						target->scene()->addPostEventAction(
+							new Interaction::SetCursorEvent(topMostItem->parent(), target->node(),
+									(event->key() == Qt::Key_Backspace ?
+											Interaction::SetCursorEvent::CursorOnLeft
+											: Interaction::SetCursorEvent::CursorOnRight)));
+						return;
+					} else
+					{
+						// Get a parent which represents a list (of statements or statement items)
+						auto parent = topMostItem->parent();
+						Visualization::VList* vlist = nullptr;
+						while (!(vlist = dynamic_cast<Visualization::VList*>(parent)) && parent->parent())
+							parent = parent->parent();
+
+						auto vis = vlist->findVisualizationOf(topMostItem->node()->parent());
+						if (event->key() == Qt::Key_Backspace)
+						{
+							vlist->layout()->moveCursor(Visualization::Item::CursorMoveDirection::MoveUpOf,
+								vis->pos().toPoint() + QPoint(vis->width() / 2, 0));
+
+							if (dynamic_cast<OOModel::EmptyExpression*>(topMostItem->node()))
+							{
+								list->model()->beginModification(list, "remove empty line");
+								list->remove(thisItemListIndex, false);
+								list->model()->endModification();
+							}
+						}
+						else
+						{
+							vlist->layout()->moveCursor(Visualization::Item::CursorMoveDirection::MoveDownOf,
+								vis->pos().toPoint() + QPoint(vis->width() / 2, vis->height()-1));
+						}
+
+						return;
+					}
+				}
+			}
+		}
+
 
 		// Modify the string, inserting the pressed key's text (or deleting text)
 		QString newText = str;
@@ -156,11 +217,22 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 					stList->insert(stList->indexOf(expSt) + (index==0 && !str.isEmpty()?0:1), es);
 					stList->model()->endModification();
 
-					// Issue a cursor update starting from the top-most parent
-					auto p = target;
-					while (p->parent()) p = p->parent();
-					target->scene()->addPostEventAction( new Interaction::SetCursorEvent(p, es->expression(),
-						Interaction::SetCursorEvent::CursorOnLeft));
+					// Issue a cursor update
+					if ( index == 0 && !str.isEmpty())
+					{
+						// For the current item
+						target->scene()->addPostEventAction(
+							new Interaction::SetCursorEvent(topMostItem->parent(), target->node(),
+								Interaction::SetCursorEvent::CursorOnLeft));
+					}
+					else
+					{
+						// For the newly created line
+						auto p = target;
+						while (p->parent()) p = p->parent(); // Using topMostItem->parent() does not work.
+						target->scene()->addPostEventAction(
+							new Interaction::SetCursorEvent(p, es->expression(), Interaction::SetCursorEvent::CursorOnLeft));
+					}
 					return;
 				}
 			}
