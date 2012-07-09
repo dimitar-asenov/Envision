@@ -169,6 +169,41 @@ Class* addGeneric(Model::Model* model, Project* parent)
 	return gen;
 }
 
+Class* addAnnotated(Model::Model* model, Project* parent)
+{
+	Class* ann = nullptr;
+
+	if (!parent) ann = dynamic_cast<Class*> (model->createRoot("Class"));
+	model->beginModification(parent ? static_cast<Model::Node*> (parent) :ann, "Adding an annotated class.");
+	if (!ann)
+	{
+		ann = new Class();
+		parent->classes()->append(ann);
+	}
+
+	ann->setName("Annotated");
+	ann->setVisibility(Visibility::PUBLIC);
+	ann->annotations()->append( new ExpressionStatement(new ReferenceExpression("SomeAnnotation")));
+
+	Method* foo = new Method("foo", Visibility::PUBLIC, StorageSpecifier::INSTANCE_VARIABLE);
+	ann->methods()->append(foo);
+	foo->annotations()->append(new ExpressionStatement(new ReferenceExpression("SomeAnnotation2")));
+	foo->annotations()->append(new ExpressionStatement(new ReferenceExpression("SomeAnnotation3")));
+
+	VariableDeclaration* var = new VariableDeclaration();
+	foo->items()->append(new ExpressionStatement(var));
+	var->setName("bodyVar");
+	var->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
+	var->setInitialValue(new IntegerLiteral(42));
+
+	// Set positions
+	ann->extension<Position>()->setX(400);
+	ann->extension<Position>()->setY(600);
+
+	model->endModification();
+	return ann;
+}
+
 Library* addJavaLibrary(Model::Model* model, Project* parent)
 {
 	Library* java = nullptr;
@@ -625,6 +660,10 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	Class* gen = nullptr;
 	gen = addGeneric(model, prj);
 
+	// Build a simple Class that has annotations
+	Class* ann = nullptr;
+	ann = addAnnotated(model, prj);
+
 //	// Add a second method
 	Method* longMethod = nullptr;
 	longMethod = addLongMethod(model, hello);
@@ -638,6 +677,7 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	if (prj) top_level = prj;
 	else if(hello) top_level = hello;
 	else if(gen) top_level = gen;
+	else if(ann) top_level = ann;
 	else if(java) top_level = java;
 	else if (longMethod) top_level = longMethod;
 	else top_level = factorial;

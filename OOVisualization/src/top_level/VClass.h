@@ -69,7 +69,9 @@ class OOVISUALIZATION_API VClass : public Visualization::ItemWithNode< Visualiza
 		Visualization::VText* name_;
 		Visualization::VList* typeArguments_;
 		Visualization::VList* baseClasses_;
-		Visualization::PositionLayout* content_;
+		Visualization::VList* annotations_;
+		Visualization::PositionLayout* body_;
+		Visualization::SequentialLayout* content_;
 		Visualization::SequentialLayout* fieldContainer_;
 		Visualization::SequentialLayout* publicFieldArea_;
 		Visualization::SequentialLayout* privateFieldArea_;

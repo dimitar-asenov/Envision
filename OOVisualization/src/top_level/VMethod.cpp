@@ -49,7 +49,7 @@ ITEM_COMMON_DEFINITIONS(VMethod, "item")
 
 VMethod::VMethod(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<PanelBorderLayout>, Method>(parent, node, style),
-	header_(), icon_(), name_(), typeArguments_(), arguments_(), content_(), results_()
+	header_(), icon_(), name_(), typeArguments_(), arguments_(), body_(), annotations_(), content_(), results_()
 {
 	layout()->setTop(true);
 
@@ -72,8 +72,11 @@ VMethod::VMethod(Item* parent, NodeType* node, const StyleType* style) :
 	results_ =new VList(layout()->left(), node->results(), &style->results());
 	layout()->left()->setFirst(results_);
 
-	content_ = new VStatementItemList(layout(), node->items(), &style->content());
+	content_ = new SequentialLayout(layout(), &style->content());
 	layout()->setContent(content_);
+
+	body_ = new VStatementItemList(content_, node->items(), &style->body());
+	content_->append(body_);
 }
 
 VMethod::~VMethod()
@@ -82,6 +85,8 @@ VMethod::~VMethod()
 	header_ = nullptr;
 	icon_ = nullptr;
 	name_ = nullptr;
+	body_ = nullptr;
+	annotations_ = nullptr;
 	content_ = nullptr;
 	typeArguments_ = nullptr;
 	arguments_ = nullptr;
@@ -113,7 +118,11 @@ void VMethod::determineChildren()
 	header_->synchronizeMid(typeArguments_, node()->typeArguments(), &style()->typeArguments(),2);
 	header_->synchronizeLast(arguments_, node()->arguments(), &style()->arguments());
 	layout()->left()->synchronizeFirst(results_, node()->results(), &style()->results());
-	layout()->synchronizeContent(content_, node()->items(), &style()->content());
+
+	content_->synchronizeLast(body_, node()->items(), &style()->body());
+	content_->synchronizeFirst(annotations_,
+				node()->annotations()->size() > 0 ? node()->annotations() : nullptr,
+						&style()->annotations());
 
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
 	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
@@ -123,6 +132,8 @@ void VMethod::determineChildren()
 	icon_->setStyle( &style()->icon());
 	header_->setStyle( &style()->header() );
 	name_->setStyle(nameStyle);
+	body_->setStyle( &style()->body() );
+	if (annotations_) annotations_->setStyle( &style()->annotations() );
 	content_->setStyle( &style()->content() );
 	typeArguments_->setStyle( &style()->typeArguments() );
 	arguments_->setStyle( &style()->arguments() );

@@ -57,7 +57,9 @@ class OOVISUALIZATION_API VClassStyle : public Visualization::ItemStyle
 		Visualization::SequentialLayoutStyle header_;
 		Visualization::VListStyle typeArguments_;
 		Visualization::VListStyle baseClasses_;
-		Visualization::PositionLayoutStyle content_;
+		Visualization::VListStyle annotations_;
+		Visualization::PositionLayoutStyle body_;
+		Visualization::SequentialLayoutStyle content_;
 		Visualization::SequentialLayoutStyle fieldContainer_;
 		Visualization::SequentialLayoutStyle publicFieldArea_;
 		Visualization::SequentialLayoutStyle privateFieldArea_;
@@ -76,7 +78,9 @@ class OOVISUALIZATION_API VClassStyle : public Visualization::ItemStyle
 		const Visualization::SequentialLayoutStyle& header() const;
 		const Visualization::VListStyle& typeArguments() const;
 		const Visualization::VListStyle& baseClasses() const;
-		const Visualization::PositionLayoutStyle& content() const;
+		const Visualization::VListStyle& annotations() const;
+		const Visualization::PositionLayoutStyle& body() const;
+		const Visualization::SequentialLayoutStyle& content() const;
 		const Visualization::SequentialLayoutStyle& fieldContainer() const;
 		const Visualization::SequentialLayoutStyle& publicFieldArea() const;
 		const Visualization::SequentialLayoutStyle& privateFieldArea() const;
@@ -93,7 +97,9 @@ inline const Visualization::StaticStyle& VClassStyle::icon() const { return icon
 inline const Visualization::SequentialLayoutStyle& VClassStyle::header() const { return header_; }
 inline const Visualization::VListStyle& VClassStyle::typeArguments() const { return typeArguments_; }
 inline const Visualization::VListStyle& VClassStyle::baseClasses() const { return baseClasses_; }
-inline const Visualization::PositionLayoutStyle& VClassStyle::content() const { return content_; }
+inline const Visualization::VListStyle& VClassStyle::annotations() const { return annotations_; }
+inline const Visualization::PositionLayoutStyle& VClassStyle::body() const { return body_; }
+inline const Visualization::SequentialLayoutStyle& VClassStyle::content() const { return content_; }
 inline const Visualization::SequentialLayoutStyle& VClassStyle::fieldContainer() const { return fieldContainer_; }
 inline const Visualization::SequentialLayoutStyle& VClassStyle::publicFieldArea() const { return publicFieldArea_; }
 inline const Visualization::SequentialLayoutStyle& VClassStyle::privateFieldArea() const { return privateFieldArea_; }

@@ -62,7 +62,9 @@ class OOVISUALIZATION_API VMethod : public Visualization::ItemWithNode< Visualiz
 		virtual ~VMethod();
 
 		Visualization::VText* name() const;
-		VStatementItemList* content() const;
+		VStatementItemList* body() const;
+		VStatementItemList* annotations() const;
+		Visualization::SequentialLayout* content() const;
 		Visualization::VList* typeArguments() const;
 		Visualization::VList* arguments() const;
 
@@ -75,12 +77,16 @@ class OOVISUALIZATION_API VMethod : public Visualization::ItemWithNode< Visualiz
 		Visualization::VText* name_;
 		Visualization::VList* typeArguments_;
 		Visualization::VList* arguments_;
-		VStatementItemList* content_;
+		VStatementItemList* body_;
+		VStatementItemList* annotations_;
+		Visualization::SequentialLayout* content_;
 		Visualization::VList* results_;
 };
 
 inline Visualization::VText* VMethod::name() const { return name_; }
-inline VStatementItemList* VMethod::content() const { return content_; }
+inline VStatementItemList* VMethod::body() const { return body_; }
+inline VStatementItemList* VMethod::annotations() const { return annotations_; }
+inline Visualization::SequentialLayout* VMethod::content() const { return content_; }
 inline Visualization::VList* VMethod::typeArguments() const { return typeArguments_; }
 inline Visualization::VList* VMethod::arguments() const { return arguments_; }
 
