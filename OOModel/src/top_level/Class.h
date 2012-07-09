@@ -36,11 +36,12 @@
 
 #include "../oomodel_api.h"
 
+#include "Method.h"
+#include "Field.h"
 #include "../attributeMacros.h"
 #include "../elements/Visibility.h"
 #include "../elements/FormalTypeArgument.h"
-#include "Method.h"
-#include "Field.h"
+#include "../elements/StatementItemList.h"
 #include "../expressions/Expression.h"
 
 #include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
@@ -60,6 +61,7 @@ class OOMODEL_API Class : public Model::ExtendableNode
 	ATTRIBUTE(Model::TypedList<Field>, fields, setFields)
 	ATTRIBUTE(Model::TypedList<Method>, methods, setMethods)
 	ATTRIBUTE_OOP_VISIBILITY
+	ATTRIBUTE_OOP_ANNOTATIONS
 
 	public:
 		Class(const QString& name);

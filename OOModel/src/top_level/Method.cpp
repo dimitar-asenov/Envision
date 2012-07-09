@@ -45,6 +45,7 @@ REGISTER_ATTRIBUTE(Method, arguments, TypedListOfFormalArgument, false, false, t
 REGISTER_ATTRIBUTE(Method, results, TypedListOfFormalResult, false, false, true)
 REGISTER_ATTRIBUTE(Method, visibility, Visibility, false, false, true)
 REGISTER_ATTRIBUTE(Method, storageSpecifier, StorageSpecifier, false, false, true)
+REGISTER_ATTRIBUTE(Method, annotations, StatementItemList, false, false, true)
 
 Method::Method(const QString& name)
 : Model::ExtendableNode (nullptr, Method::getMetaData())

@@ -63,6 +63,7 @@ class OOMODEL_API Method : public Model::ExtendableNode
 	ATTRIBUTE(Model::TypedList<FormalResult>, results, setResults)
 	ATTRIBUTE_OOP_VISIBILITY
 	ATTRIBUTE_OOP_STORAGESPECIFIER
+	ATTRIBUTE_OOP_ANNOTATIONS
 
 	public:
 		Method(const QString& name);
