@@ -9,21 +9,26 @@ body, table, div, p, dl {
 /* @group Heading Levels */
 
 h1 {
-	font-size: 150%;
+	font-size: 160%;
 }
 
 .title {
-	font-size: 150%;
+	font-size: 160%;
 	font-weight: bold;
 	margin: 10px 2px;
 }
 
 h2 {
-	font-size: 120%;
+	font-size: 140%;
+	margin-top: 40px;
+	margin-bottom: 5px;
+	border-bottom: 1px solid #5373B4;
 }
 
 h3 {
-	font-size: 100%;
+	font-size: 110%;
+	margin-top: 30px;
+	margin-bottom: 5px;
 }
 
 dt {
