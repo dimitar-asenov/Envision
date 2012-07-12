@@ -58,7 +58,7 @@ namespace Model {
 
 Log* ModelBase::logger = nullptr;
 
-bool ModelBase::initialize(Envision::EnvisionManager&)
+bool ModelBase::initialize(Core::EnvisionManager&)
 {
 	Model::init();
 

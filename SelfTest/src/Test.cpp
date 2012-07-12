@@ -59,7 +59,7 @@ void Test::run(TestResults& testResults)
 	{
 		runCustom(testResults, passed);
 	}
-	catch (const Envision::EnvisionException& e)
+	catch (const Core::EnvisionException& e)
 	{
 		passed = false;
 		testResults.addFailedCheck(getName() +": " + e.name() + " " + e.message());

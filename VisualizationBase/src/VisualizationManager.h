@@ -47,7 +47,7 @@ class VISUALIZATIONBASE_API VisualizationManager
 	private:
 		static VisualizationManager theInstance;
 
-		Envision::EnvisionManager *envisionManager;
+		Core::EnvisionManager *envisionManager;
 		QVector<View*> views;
 
 		VisualizationManager();
@@ -60,7 +60,7 @@ class VISUALIZATIONBASE_API VisualizationManager
 		void addTopLevelView(View* view);
 
 		static VisualizationManager& instance();
-		static void init(Envision::EnvisionManager *manager);
+		static void init(Core::EnvisionManager *manager);
 };
 
 }

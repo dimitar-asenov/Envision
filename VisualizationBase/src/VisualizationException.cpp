@@ -36,7 +36,7 @@
 namespace Visualization {
 
 VisualizationException::VisualizationException(const QString& message) :
-	Envision::EnvisionException(message)
+	Core::EnvisionException(message)
 {
 }
 

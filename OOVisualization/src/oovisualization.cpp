@@ -48,7 +48,7 @@ using namespace Visualization;
 
 namespace OOVisualization {
 
-bool OOVisualization::initialize(Envision::EnvisionManager&)
+bool OOVisualization::initialize(Core::EnvisionManager&)
 {
 	// Register extensions
 	Project::registerNewExtension<Position>();

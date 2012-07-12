@@ -40,7 +40,7 @@ Q_EXPORT_PLUGIN2( oomodel, OOModel::OOModel )
 
 namespace OOModel {
 
-bool OOModel::initialize(Envision::EnvisionManager&)
+bool OOModel::initialize(Core::EnvisionManager&)
 {
 	// Initialize common nodes
 	Visibility::registerNodeType();

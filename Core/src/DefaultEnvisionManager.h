@@ -37,7 +37,7 @@
 #include "EnvisionManager.h"
 #include "PluginManager.h"
 
-namespace Envision {
+namespace Core {
 
 class DefaultEnvisionManager: public EnvisionManager
 {

@@ -98,7 +98,7 @@ Q_EXPORT_PLUGIN2( oointeraction, OOInteraction::OOInteraction )
 
 namespace OOInteraction {
 
-bool OOInteraction::initialize(Envision::EnvisionManager&)
+bool OOInteraction::initialize(Core::EnvisionManager&)
 {
 	OOOperatorDescriptorList::initializeWithDefaultOperators();
 

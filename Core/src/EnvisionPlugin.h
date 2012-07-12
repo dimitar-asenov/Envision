@@ -36,7 +36,7 @@
 
 #include "EnvisionManager.h"
 
-namespace Envision {
+namespace Core {
 
 /**
  * This EnvisionPlugin interface is the one that each plug-in must implement.
@@ -87,6 +87,6 @@ class EnvisionPlugin
 
 }
 
-Q_DECLARE_INTERFACE(Envision::EnvisionPlugin, "EnvisionPlugin/1.0")
+Q_DECLARE_INTERFACE(Core::EnvisionPlugin, "EnvisionPlugin/1.0")
 
 #endif /* ENVISIONPLUGIN_H_ */

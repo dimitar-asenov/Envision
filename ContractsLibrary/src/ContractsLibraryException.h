@@ -39,7 +39,7 @@
 
 namespace ContractsLibrary {
 
-class CONTRACTSLIBRARY_API ContractsLibraryException : public Envision::EnvisionException
+class CONTRACTSLIBRARY_API ContractsLibraryException : public Core::EnvisionException
 {
 		public:
 			ContractsLibraryException(const QString& message);

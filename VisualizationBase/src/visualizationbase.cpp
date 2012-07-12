@@ -62,7 +62,7 @@ Q_EXPORT_PLUGIN2( visualizationbase, Visualization::VisualizationBase )
 namespace Visualization
 {
 
-	bool VisualizationBase::initialize(Envision::EnvisionManager& manager)
+	bool VisualizationBase::initialize(Core::EnvisionManager& manager)
 	{
 		VisualizationManager::init(&manager);
 		Shape::registerShape<Box>();

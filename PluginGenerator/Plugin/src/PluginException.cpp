@@ -36,7 +36,7 @@
 namespace NAMESPACE {
 
 PLUGINNAMEException::PLUGINNAMEException(const QString& message) :
-	Envision::EnvisionException(message)
+	Core::EnvisionException(message)
 {
 }
 

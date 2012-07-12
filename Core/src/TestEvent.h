@@ -34,7 +34,7 @@
 #ifndef TESTEVENT_H_
 #define TESTEVENT_H_
 
-namespace Envision {
+namespace Core {
 
 class TestEvent: public QEvent
 {

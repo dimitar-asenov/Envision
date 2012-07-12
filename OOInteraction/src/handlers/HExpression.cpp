@@ -323,7 +323,7 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			return;
 		}
 	}
-	catch(Envision::EnvisionException &e)
+	catch(Core::EnvisionException &e)
    {
 		e.printError();
    }

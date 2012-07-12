@@ -36,7 +36,7 @@
 namespace OOInteraction {
 
 OOInteractionException::OOInteractionException(const QString& message) :
-	Envision::EnvisionException(message)
+	Core::EnvisionException(message)
 {
 }
 

@@ -45,7 +45,7 @@ Q_EXPORT_PLUGIN2( contractslibrary, ContractsLibrary::ContractsLibrary )
 
 namespace ContractsLibrary {
 
-bool ContractsLibrary::initialize(Envision::EnvisionManager&)
+bool ContractsLibrary::initialize(Core::EnvisionManager&)
 {
 	VContractCall::setInteractionHandler(OOInteraction::HExpression::instance());
 

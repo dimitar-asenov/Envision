@@ -36,7 +36,7 @@
 namespace Model {
 
 ModelException::ModelException(const QString& message) :
-	Envision::EnvisionException(message)
+	Core::EnvisionException(message)
 {
 }
 

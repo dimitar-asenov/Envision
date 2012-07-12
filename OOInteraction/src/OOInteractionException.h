@@ -39,7 +39,7 @@
 
 namespace OOInteraction {
 
-class OOINTERACTION_API OOInteractionException : public Envision::EnvisionException
+class OOINTERACTION_API OOInteractionException : public Core::EnvisionException
 {
 		public:
 			OOInteractionException(const QString& message);

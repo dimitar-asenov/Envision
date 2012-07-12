@@ -47,13 +47,13 @@ namespace CustomMethodCall {
  *
  * The plug-in can use the supplied EnvisionManager object to find out more about the running environment.
  */
-class CustomMethodCall : public QObject, public Envision::EnvisionPlugin
+class CustomMethodCall : public QObject, public Core::EnvisionPlugin
 {
 	Q_OBJECT
-	Q_INTERFACES(Envision::EnvisionPlugin)
+	Q_INTERFACES(Core::EnvisionPlugin)
 
 	public:
-		bool initialize(Envision::EnvisionManager&);
+		bool initialize(Core::EnvisionManager&);
 		void selfTest(QString testid);
 };
 

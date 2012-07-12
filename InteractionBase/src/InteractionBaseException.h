@@ -39,7 +39,7 @@
 
 namespace Interaction {
 
-class INTERACTIONBASE_API InteractionBaseException : public Envision::EnvisionException
+class INTERACTIONBASE_API InteractionBaseException : public Core::EnvisionException
 {
 	public:
 		InteractionBaseException(const QString& message);
