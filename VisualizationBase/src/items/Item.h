@@ -219,6 +219,24 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		void clearChildNodePurpose(const Model::Node* node);
 		bool definesChildNodePurpose(const Model::Node* node) const;
 
+		/**
+		 * Registers a class derived from Item and returns the typeId for that class.
+		 *
+		 * Each class that is an Item should register itself to receive a unique id. This method is thread-safe so it can
+		 * be called at any time.
+		 *
+		 * Classes that use the standard item macros, ITEM_COMMON / ITEM_COMMON_CUSTOM_STYLENAME and
+		 * ITEM_COMMON_DEFINITIONS already include all required functionality.
+		 */
+		static int registerVisualization();
+
+		/**
+		 * Returns the type id of this visualization class.
+		 *
+		 * Each class that inherits from Item has a unique type id that can be queried during runtime.
+		 */
+		virtual int typeId() const = 0;
+
 	protected:
 
 		void setWidth(int width);

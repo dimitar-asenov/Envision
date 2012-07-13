@@ -43,6 +43,15 @@
 
 namespace Visualization {
 
+int Item::registerVisualization()
+{
+	static QMutex mutex;
+	static int i = 0;
+
+	QMutexLocker locker(&mutex);
+	return ++i;
+}
+
 Item::Item(Item* parent, const StyleType* style) :
 	QGraphicsItem(parent), style_(nullptr), shape_(nullptr), needsUpdate_(FullUpdate), purpose_(-1)
 {

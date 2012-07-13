@@ -44,22 +44,17 @@ class Scene;
 
 class VISUALIZATIONBASE_API SceneHandlerItem : public Item
 {
+	ITEM_COMMON_CUSTOM_STYLENAME(SceneHandlerItem, ItemStyle)
+
 	public:
 		SceneHandlerItem(Scene* scene);
-
-		virtual InteractionHandler* handler() const;
-		static void setInteractionHandler(InteractionHandler* handler);
 
 	protected:
 		virtual void determineChildren();
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
-	private:
-		static InteractionHandler* handler_;
 };
 
-inline InteractionHandler* SceneHandlerItem::handler() const { return handler_; }
-inline void SceneHandlerItem::setInteractionHandler(InteractionHandler* handler) { handler_ = handler; }
 }
 
 #endif /* SCENEHANDLERITEM_H_ */

@@ -49,6 +49,8 @@
 public:																																					\
 	typedef StyleTypeName StyleType;																												\
 	static const QString& className();																											\
+	virtual int typeId() const override;																										\
+	static int staticTypeId();																														\
 																																							\
 	const StyleType* style() const { return static_cast<const StyleType*> (Item::style()); }									\
 	virtual void setStyle(const Visualization::ItemStyle* style);																		\
@@ -94,6 +96,17 @@ const QString& ItemClass::className()																											\
 {																																							\
 	static QString name(#ItemClass);																												\
 	return name;																																		\
+}																																							\
+																																							\
+int ItemClass::typeId() const																														\
+{																																							\
+	return staticTypeId();																															\
+}																																							\
+																																							\
+int ItemClass::staticTypeId()																														\
+{																																							\
+	static int id = ::Visualization::Item::registerVisualization();																	\
+	return id;																																			\
 }																																							\
 																																							\
 Visualization::StyleSet<ItemClass>& ItemClass::itemStyles()																				\
