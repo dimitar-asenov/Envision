@@ -6,7 +6,8 @@ win32:LIBS += -llogger \
     -lmodelbase \
     -loomodel \
     -lvisualizationbase
-HEADERS += src/expressions/VEmptyExpressionStyle.h \
+HEADERS += test/MethodAddOn.h \
+    src/expressions/VEmptyExpressionStyle.h \
     src/elements/VStatementItemList.h \
     src/elements/VFormalTypeArgumentStyle.h \
     src/elements/VFormalTypeArgument.h \
@@ -81,7 +82,8 @@ HEADERS += src/expressions/VEmptyExpressionStyle.h \
     src/types/VArrayTypeStyle.h \
     src/types/VPrimitiveType.h \
     src/oovisualization.h
-SOURCES += src/expressions/VEmptyExpressionStyle.cpp \
+SOURCES += test/MethodAddOn.cpp \
+    src/expressions/VEmptyExpressionStyle.cpp \
     src/elements/VStatementItemList.cpp \
     src/elements/VFormalTypeArgumentStyle.cpp \
     src/elements/VFormalTypeArgument.cpp \

@@ -34,6 +34,9 @@
 #include "oovisualization.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
+#include "MethodAddOn.h"
+#include "../src/top_level/VMethod.h"
+
 #include "OOModel/src/allOOModelNodes.h"
 
 #include "VisualizationBase/src/VisualizationManager.h"
@@ -671,6 +674,9 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 //	// Add a third method
 	Method* factorial = nullptr;
 	factorial = addFactorial(model, hello);
+
+// Add a method Add-on
+	VMethod::addAddOn(new MethodAddOn("foo"));
 
 	////////////////////////////////////////////////// Set Scene
 	Model::Node* top_level = nullptr;
