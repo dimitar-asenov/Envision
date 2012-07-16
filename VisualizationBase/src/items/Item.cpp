@@ -196,15 +196,36 @@ void Item::updateChildren()
 
 void Item::updateAddOnItems()
 {
+	auto addons = addOns();
+
 	for (auto key : addOnItems_.keys())
 	{
-		auto values = addOnItems_.values(key);
-		auto new_values = key->determineItems(this, values);
-		values.clear();
-		addOnItems_.remove(key);
+		bool deleted = false;
+		if (addons.contains(key)) addons.removeAll(key);
+		else deleted = true;
 
-		for (auto v : values) addOnItems_.insert(key, v);
+		auto values = addOnItems_.values(key);
+		decltype(values) new_values;
+		if (!deleted) new_values = key->determineItems(this, values);
+
+		for(auto item : values)
+		{
+			if (!deleted && new_values.contains( item )) new_values.removeAll(item);
+			else
+			{
+				addOnItems_.remove(key, item);
+				if (!item->parent()) SAFE_DELETE_ITEM(item);
+			}
+		}
+
+		if (!deleted)
+			for (auto v : new_values) addOnItems_.insert(key, v);
 	}
+
+	// Whatever is left in addons now is a new addon and must be processed
+	for (auto a : addons)
+		for (auto i : a->determineItems(this, QList<Item*>()))
+			addOnItems_.insert(a,i);
 }
 
 void Item::updateGeometry(Item* content, int availableWidth, int availableHeight)
