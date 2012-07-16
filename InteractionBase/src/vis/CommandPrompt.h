@@ -77,6 +77,8 @@ class INTERACTIONBASE_API CommandPrompt : public Visualization::Item
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
+		typedef Item BaseItemType;
+
 		Visualization::Item* commandReceiver_;
 		Visualization::SequentialLayout* layout;
 		Visualization::SequentialLayout* suggestionContainer;

@@ -65,6 +65,8 @@ class CONTRACTSLIBRARY_API VContractCall
 		void determineChildren();
 
 	private:
+		typedef Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::MethodCallExpression> BaseItemType;
+
 		Visualization::Static* keyword_;
 		Visualization::VList* arguments_;
 };

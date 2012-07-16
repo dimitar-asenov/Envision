@@ -52,6 +52,8 @@ class BoxTest : public Item
 		void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
+		typedef Item BaseItemType;
+
 		SequentialLayout items;
 };
 

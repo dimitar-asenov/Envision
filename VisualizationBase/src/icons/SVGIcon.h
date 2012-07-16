@@ -49,6 +49,9 @@ class VISUALIZATIONBASE_API SVGIcon : public Icon
 
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+
+	private:
+		typedef Icon BaseItemType;
 };
 
 }

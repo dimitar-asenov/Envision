@@ -62,6 +62,8 @@ class OOVISUALIZATION_API VFormalTypeArgument
 		void determineChildren();
 
 	private:
+		typedef Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::FormalTypeArgument> BaseItemType;
+
 		Visualization::VText* name_;
 		Visualization::Item* subType_;
 		Visualization::Item* superType_;

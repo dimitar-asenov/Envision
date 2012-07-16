@@ -48,7 +48,8 @@ namespace Visualization {
 
 namespace CustomMethodCall {
 
-class CUSTOMMETHODCALL_API SumMethodVis : public Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::MethodCallExpression>
+class CUSTOMMETHODCALL_API SumMethodVis
+: public Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::MethodCallExpression>
 {
 	ITEM_COMMON(SumMethodVis)
 
@@ -60,6 +61,8 @@ class CUSTOMMETHODCALL_API SumMethodVis : public Visualization::ItemWithNode< Vi
 		void determineChildren();
 
 	private:
+		typedef Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::MethodCallExpression> BaseItemType;
+
 		Visualization::Static* name_;
 		Visualization::Item* prefix_;
 		Visualization::Item* from_;

@@ -59,8 +59,13 @@ public:																																					\
 	virtual Visualization::InteractionHandler* handler() const { return handler_; };												\
 	static void setInteractionHandler(Visualization::InteractionHandler* handler) {handler_ = handler;}					\
 																																							\
+	virtual QList<Visualization::VisualizationAddOn*> addOns();																			\
+	static void addAddOn(Visualization::VisualizationAddOn* addOn);																	\
+	static bool removeAddOn(Visualization::VisualizationAddOn* addOn);																\
+																																							\
 private:																																					\
-	static Visualization::InteractionHandler* handler_;
+	static Visualization::InteractionHandler* handler_;																					\
+	static QList<Visualization::VisualizationAddOn*>& staticAddOns();
 /**********************************************************************************************************************/
 
 /**
@@ -113,7 +118,32 @@ Visualization::StyleSet<ItemClass>& ItemClass::itemStyles()																				\
 {																																							\
 	static Visualization::StyleSet<ItemClass> styles(QString(classType));															\
 	return styles;																																		\
-}
+}																																							\
+																																							\
+void ItemClass::addAddOn(Visualization::VisualizationAddOn* addOn)																	\
+{																																							\
+	if (!staticAddOns().contains(addOn))																										\
+		staticAddOns().append(addOn);																												\
+}																																							\
+																																							\
+bool ItemClass::removeAddOn(Visualization::VisualizationAddOn* addOn)																\
+{																																							\
+	return staticAddOns().removeAll(addOn) != 0;																								\
+}																																							\
+																																							\
+QList<Visualization::VisualizationAddOn*>& ItemClass::staticAddOns()																	\
+{																																							\
+	static QList<Visualization::VisualizationAddOn*> addons;																				\
+	return addons;																																		\
+}																																							\
+																																							\
+QList<Visualization::VisualizationAddOn*> ItemClass::addOns()																			\
+{																																							\
+	QList<Visualization::VisualizationAddOn*> list(BaseItemType::addOns());															\
+	list.append(staticAddOns());																													\
+	return list;																																		\
+}																																							\
+
 /**********************************************************************************************************************/
 
 #endif /* ITEMMACROS_H_ */

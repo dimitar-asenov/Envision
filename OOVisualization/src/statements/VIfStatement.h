@@ -52,7 +52,9 @@ namespace OOVisualization {
 
 class VStatementItemList;
 
-class OOVISUALIZATION_API VIfStatement : public Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::IfStatement>
+class OOVISUALIZATION_API VIfStatement
+	: public Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
+	  OOModel::IfStatement>
 {
 	ITEM_COMMON(VIfStatement)
 
@@ -71,6 +73,9 @@ class OOVISUALIZATION_API VIfStatement : public Visualization::ItemWithNode< Vis
 		void determineChildren();
 
 	private:
+		typedef Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
+				  OOModel::IfStatement> BaseItemType;
+
 		Visualization::SequentialLayout* header_;
 		Visualization::SequentialLayout* conditionBackground_;
 		Visualization::Item* condition_;

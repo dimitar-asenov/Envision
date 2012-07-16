@@ -65,6 +65,9 @@ class CONTROLFLOWVISUALIZATION_API VMethodCF : public Visualization::ItemWithNod
 		void determineChildren();
 
 	private:
+		typedef Visualization::ItemWithNode
+				< Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::Method> BaseItemType;
+
 		Visualization::SequentialLayout* header_;
 		Visualization::Static* icon_;
 		Visualization::VText* name_;

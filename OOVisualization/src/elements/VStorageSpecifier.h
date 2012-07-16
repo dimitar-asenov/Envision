@@ -44,7 +44,8 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VStorageSpecifier : public Visualization::ItemWithNode< Visualization::TextRenderer, OOModel::StorageSpecifier>
+class OOVISUALIZATION_API VStorageSpecifier
+	: public Visualization::ItemWithNode< Visualization::TextRenderer, OOModel::StorageSpecifier>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VStorageSpecifier, Visualization::TextStyle)
 
@@ -54,6 +55,9 @@ class OOVISUALIZATION_API VStorageSpecifier : public Visualization::ItemWithNode
 
 	protected:
 		virtual QString currentText();
+
+	private:
+		typedef Visualization::ItemWithNode< Visualization::TextRenderer, OOModel::StorageSpecifier> BaseItemType;
 };
 
 }

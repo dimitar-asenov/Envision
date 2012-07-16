@@ -6,7 +6,8 @@ win32:LIBS += -llogger \
     -lmodelbase
 QT += xml \
     svg
-HEADERS += src/shapes/SvgShapeStyle.h \
+HEADERS += src/items/VisualizationAddOn.h \
+    src/shapes/SvgShapeStyle.h \
     src/shapes/SvgShape.h \
     src/items/RootItem.h \
     src/renderer/ModelRenderer.h \
@@ -84,7 +85,8 @@ HEADERS += src/shapes/SvgShapeStyle.h \
     src/visualizationbase_api.h \
     test/BoxTest.h \
     src/visualizationbase.h
-SOURCES += src/shapes/SvgShapeStyle.cpp \
+SOURCES += src/items/VisualizationAddOn.cpp \
+    src/shapes/SvgShapeStyle.cpp \
     src/shapes/SvgShape.cpp \
     src/items/RootItem.cpp \
     src/renderer/ModelRenderer.cpp \

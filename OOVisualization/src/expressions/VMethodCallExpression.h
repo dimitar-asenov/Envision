@@ -50,7 +50,8 @@ namespace OOVisualization {
 
 class VReferenceExpression;
 
-class OOVISUALIZATION_API VMethodCallExpression : public Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::MethodCallExpression>
+class OOVISUALIZATION_API VMethodCallExpression : public Visualization::ItemWithNode< Visualization::LayoutProvider<>,
+OOModel::MethodCallExpression>
 {
 	ITEM_COMMON(VMethodCallExpression)
 
@@ -64,6 +65,8 @@ class OOVISUALIZATION_API VMethodCallExpression : public Visualization::ItemWith
 		void determineChildren();
 
 	private:
+		typedef Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::MethodCallExpression> BaseItemType;
+
 		VReferenceExpression* name_;
 		Visualization::VList* arguments_;
 };

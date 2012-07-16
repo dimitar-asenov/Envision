@@ -97,6 +97,8 @@ class VISUALIZATIONBASE_API SequentialLayout: public Layout
 				const typename T::StyleType* style, int position);
 
 	private:
+		typedef Layout BaseItemType;
+
 		QVector<Item*> items;
 		int spaceBetweenElements_;
 };

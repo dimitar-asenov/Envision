@@ -48,7 +48,20 @@ class VISUALIZATIONBASE_API VExtendable : public ItemWithNode<Item, Model::Exten
 {
 	ITEM_COMMON(VExtendable)
 
+	public:
+		VExtendable(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+		virtual ~VExtendable();
+
+		void setExpanded(bool expanded = true);
+		bool expanded() const;
+
+	protected:
+		void determineChildren();
+		void updateGeometry(int availableWidth, int availableHeight);
+
 	private:
+		typedef ItemWithNode<Item, Model::ExtendableNode> BaseItemType;
+
 		SequentialLayout* header;
 		PanelBorderLayout* layout; //only used when expanded
 		SequentialLayout* attributes; //only used when expanded
@@ -56,16 +69,6 @@ class VISUALIZATIONBASE_API VExtendable : public ItemWithNode<Item, Model::Exten
 		bool expanded_;
 		bool expandedSwtiched() const;
 
-	protected:
-		void determineChildren();
-		void updateGeometry(int availableWidth, int availableHeight);
-
-	public:
-		VExtendable(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		virtual ~VExtendable();
-
-		void setExpanded(bool expanded = true);
-		bool expanded() const;
 };
 
 inline bool VExtendable::expanded() const { return expanded_; }

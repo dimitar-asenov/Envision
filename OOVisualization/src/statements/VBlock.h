@@ -59,6 +59,8 @@ class OOVISUALIZATION_API VBlock : public Visualization::ItemWithNode< Visualiza
 		void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
+		typedef Visualization::ItemWithNode< Visualization::Item, OOModel::Block> BaseItemType;
+
 		VStatementItemList* items_;
 };
 

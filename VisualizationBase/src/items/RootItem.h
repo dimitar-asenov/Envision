@@ -57,6 +57,8 @@ class VISUALIZATIONBASE_API RootItem : public ItemWithNode<Item> {
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
+		typedef ItemWithNode<Item> BaseItemType;
+
 		Item* item_;
 };
 

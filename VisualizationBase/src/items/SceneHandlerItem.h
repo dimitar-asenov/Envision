@@ -53,6 +53,9 @@ class VISUALIZATIONBASE_API SceneHandlerItem : public Item
 		virtual void determineChildren();
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
+	private:
+		typedef Item BaseItemType;
+
 };
 
 }

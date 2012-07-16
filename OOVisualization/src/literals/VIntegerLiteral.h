@@ -44,7 +44,8 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VIntegerLiteral : public Visualization::ItemWithNode< Visualization::Item, OOModel::IntegerLiteral>
+class OOVISUALIZATION_API VIntegerLiteral
+	: public Visualization::ItemWithNode< Visualization::Item, OOModel::IntegerLiteral>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VIntegerLiteral, Visualization::TextStyle)
 
@@ -57,6 +58,8 @@ class OOVISUALIZATION_API VIntegerLiteral : public Visualization::ItemWithNode< 
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
+		typedef Visualization::ItemWithNode< Visualization::Item, OOModel::IntegerLiteral> BaseItemType;
+
 		Visualization::VInteger* vis_;
 };
 

@@ -52,6 +52,24 @@ int Item::registerVisualization()
 	return ++i;
 }
 
+QList<VisualizationAddOn*>& Item::staticAddOns()
+{
+	static QList<VisualizationAddOn*> addons;
+	return addons;
+}
+
+
+void Item::addAddOn(VisualizationAddOn* addOn)
+{
+	if (!staticAddOns().contains(addOn))
+		staticAddOns().append(addOn);
+}
+
+bool Item::removeAddOn(VisualizationAddOn* addOn)
+{
+	return staticAddOns().removeAll(addOn) != 0;
+}
+
 Item::Item(Item* parent, const StyleType* style) :
 	QGraphicsItem(parent), style_(nullptr), shape_(nullptr), needsUpdate_(FullUpdate), purpose_(-1)
 {
@@ -579,6 +597,10 @@ bool Item::definesChildNodePurpose(const Model::Node* node) const
 	return childNodePurpose_.find(node) != childNodePurpose_.end();
 }
 
+QList<VisualizationAddOn*> Item::addOns()
+{
+	return staticAddOns();
+}
 /***********************************************************************************************************************
  * Reimplemented Event handling methods. These simply dispatch the method call to the interaction handler of this
  * object.

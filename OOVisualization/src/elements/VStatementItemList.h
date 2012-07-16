@@ -46,6 +46,9 @@ class OOVISUALIZATION_API VStatementItemList : public Visualization::VList
 
 	public:
 		VStatementItemList(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+
+	private:
+		typedef Visualization::VList BaseItemType;
 };
 
 } /* namespace OOVisualization */

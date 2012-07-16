@@ -43,7 +43,8 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VNullLiteral : public Visualization::ItemWithNode< Visualization::Item, OOModel::NullLiteral>
+class OOVISUALIZATION_API VNullLiteral
+	: public Visualization::ItemWithNode< Visualization::Item, OOModel::NullLiteral>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VNullLiteral, Visualization::StaticStyle)
 
@@ -56,6 +57,8 @@ class OOVISUALIZATION_API VNullLiteral : public Visualization::ItemWithNode< Vis
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
+		typedef Visualization::ItemWithNode< Visualization::Item, OOModel::NullLiteral> BaseItemType;
+
 		Visualization::Static* vis_;
 };
 

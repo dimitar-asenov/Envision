@@ -48,6 +48,7 @@ class Shape;
 class ShapeStyle;
 class ItemStyle;
 class ModelRenderer;
+class VisualizationAddOn;
 
 class VISUALIZATIONBASE_API Item : public QGraphicsItem
 {
@@ -237,6 +238,22 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		 */
 		virtual int typeId() const = 0;
 
+		/**
+		 * Returns all visualization add-ons of this and inherited classes.
+		 */
+		virtual QList<VisualizationAddOn*> addOns();
+		/**
+		 * Adds the add-on \a addOn for the class.
+		 */
+		static void addAddOn(VisualizationAddOn* addOn);
+		/**
+		 * Removes the add-on \a addOn from the class. The add-on can only be removed if it was added directly to this
+		 * class. Add-on from inherited classes can not be removed by calling removeAddOn on derived classes.
+		 *
+		 * Returns true if the add-on was removed and false otherwise.
+		 */
+		static bool removeAddOn(VisualizationAddOn* addOn);
+
 	protected:
 
 		void setWidth(int width);
@@ -293,6 +310,13 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		QMap<const Model::Node*, int> childNodePurpose_;
 
 		void updateChildren();
+
+		/**
+		 * Returns a list of all add-on that have been added to this class.
+		 *
+		 * Use addAddOn() and removeAddOn() to change the contents of the list.
+		 */
+		static QList<VisualizationAddOn*>& staticAddOns();
 
 		// Default event handlers
 		//Keyboard events

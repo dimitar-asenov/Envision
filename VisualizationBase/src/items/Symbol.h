@@ -52,6 +52,9 @@ class VISUALIZATIONBASE_API Symbol : public TextRenderer
 
 	protected:
 		virtual QString currentText();
+
+	private:
+		typedef TextRenderer BaseItemType;
 };
 
 }

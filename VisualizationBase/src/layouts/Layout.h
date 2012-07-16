@@ -58,8 +58,13 @@ class VISUALIZATIONBASE_API Layout: public Item
 		int yOffset() const;
 
 		void synchronizeItem(Item*& layoutItem, Item*& externalItem, Model::Node* node);
-		template <class T> void synchronizeItem(Item*& layoutItem, T*& externalItem, bool present, const typename T::StyleType* style);
-		template <class T> void synchronizeItem(Item*& layoutItem, T*& externalItem, typename T::NodeType* node, const typename T::StyleType* style);
+		template <class T> void synchronizeItem(Item*& layoutItem, T*& externalItem, bool present,
+				const typename T::StyleType* style);
+		template <class T> void synchronizeItem(Item*& layoutItem, T*& externalItem, typename T::NodeType* node,
+				const typename T::StyleType* style);
+
+	private:
+		typedef Item BaseItemType;
 };
 
 template <class T> void Layout::synchronizeItem(Item*& layoutItem, T*& externalItem, bool present, const typename T::StyleType* style)

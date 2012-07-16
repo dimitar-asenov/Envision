@@ -25,52 +25,24 @@
  **********************************************************************************************************************/
 
 /*
- * VConditionalExpression.h
+ * VisualizationAddOn.h
  *
- *  Created on: Mar 27, 2012
+ *  Created on: Jul 13, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef OOVisualization_VCONDITIONALEXPRESSION_H_
-#define OOVisualization_VCONDITIONALEXPRESSION_H_
+#ifndef VisualizationBase_VISUALIZATIONADDON_H_
+#define VisualizationBase_VISUALIZATIONADDON_H_
 
-#include "../oovisualization_api.h"
-#include "OperatorStyle.h"
-
-#include "OOModel/src/expressions/ConditionalExpression.h"
-
-#include "VisualizationBase/src/items/ItemWithNode.h"
-#include "VisualizationBase/src/items/LayoutProvider.h"
+#include "../visualizationbase_api.h"
 
 namespace Visualization {
-	class Static;
-}
 
-namespace OOVisualization {
-
-class OOVISUALIZATION_API VConditionalExpression : public Visualization::ItemWithNode<Visualization::LayoutProvider<>,
-	OOModel::ConditionalExpression>
-{
-	ITEM_COMMON_CUSTOM_STYLENAME(VConditionalExpression, OperatorStyle)
-
+class VISUALIZATIONBASE_API VisualizationAddOn {
 	public:
-		VConditionalExpression(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		virtual ~VConditionalExpression();
-
-	protected:
-		void determineChildren();
-
-	private:
-		typedef Visualization::ItemWithNode<Visualization::LayoutProvider<>, OOModel::ConditionalExpression> BaseItemType;
-
-		Visualization::Static* pre_;
-		Visualization::Static* in_;
-		Visualization::Static* in2_;
-		Visualization::Static* post_;
-		Visualization::Item* condition_;
-		Visualization::Item* true_;
-		Visualization::Item* false_;
+		VisualizationAddOn();
+		virtual ~VisualizationAddOn();
 };
 
-} /* namespace OOVisualization */
-#endif /* OOVisualization_VCONDITIONALEXPRESSION_H_ */
+} /* namespace Visualization */
+#endif /* VisualizationBase_VISUALIZATIONADDON_H_ */

@@ -48,7 +48,8 @@ namespace Visualization {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VBinaryOperation : public Visualization::ItemWithNode<Visualization::LayoutProvider<>, OOModel::BinaryOperation>
+class OOVISUALIZATION_API VBinaryOperation
+: public Visualization::ItemWithNode<Visualization::LayoutProvider<>, OOModel::BinaryOperation>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VBinaryOperation, OperatorSequenceStyle)
 
@@ -60,6 +61,8 @@ class OOVISUALIZATION_API VBinaryOperation : public Visualization::ItemWithNode<
 		void determineChildren();
 
 	private:
+		typedef Visualization::ItemWithNode<Visualization::LayoutProvider<>, OOModel::BinaryOperation> BaseItemType;
+
 		Visualization::Static* pre_;
 		Visualization::Static* in_;
 		Visualization::Static* post_;

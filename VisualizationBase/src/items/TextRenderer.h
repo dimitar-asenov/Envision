@@ -95,6 +95,8 @@ class VISUALIZATIONBASE_API TextRenderer : public Item
 		virtual QString currentText() = 0;
 
 	private:
+		typedef Item BaseItemType;
+
 		QString text_;
 
 		qreal textXOffset_; //Base line

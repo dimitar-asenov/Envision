@@ -41,7 +41,8 @@
 
 namespace ControlFlowVisualization {
 
-class CONTROLFLOWVISUALIZATION_API VContinueStatementCF : public Visualization::ItemWithNode< ControlFlowItem, OOModel::ContinueStatement >
+class CONTROLFLOWVISUALIZATION_API VContinueStatementCF
+	: public Visualization::ItemWithNode< ControlFlowItem, OOModel::ContinueStatement >
 {
 		ITEM_COMMON_CUSTOM_STYLENAME(VContinueStatementCF, ControlFlowItemStyle)
 
@@ -54,6 +55,8 @@ class CONTROLFLOWVISUALIZATION_API VContinueStatementCF : public Visualization::
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
+		typedef Visualization::ItemWithNode< ControlFlowItem, OOModel::ContinueStatement > BaseItemType;
+
 		OOVisualization::VContinueStatement* vis_;
 };
 

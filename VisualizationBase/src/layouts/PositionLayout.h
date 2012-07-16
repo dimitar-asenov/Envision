@@ -49,12 +49,6 @@ class VISUALIZATIONBASE_API PositionLayout : public Layout
 {
 	ITEM_COMMON(PositionLayout)
 
-	private:
-		QVector<Item*> items;
-		QVector<Position*> positions;
-
-		void swap(int i, int j);
-
 	public:
 		PositionLayout(Item* parent, const StyleType* style = itemStyles().get());
 		~PositionLayout();
@@ -88,7 +82,13 @@ class VISUALIZATIONBASE_API PositionLayout : public Layout
 
 		int focusedElementIndex() const;
 
+	private:
+		typedef Layout BaseItemType;
 
+		QVector<Item*> items;
+		QVector<Position*> positions;
+
+		void swap(int i, int j);
 };
 
 template <class T> T* PositionLayout::at(int index) { return static_cast<T*> (items[index]); }

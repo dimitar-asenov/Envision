@@ -49,7 +49,8 @@ namespace Visualization {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VVariableDeclaration : public Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::VariableDeclaration>
+class OOVISUALIZATION_API VVariableDeclaration : public Visualization::ItemWithNode< Visualization::LayoutProvider<>,
+OOModel::VariableDeclaration>
 {
 	ITEM_COMMON(VVariableDeclaration)
 
@@ -66,6 +67,8 @@ class OOVISUALIZATION_API VVariableDeclaration : public Visualization::ItemWithN
 		void determineChildren();
 
 	private:
+		typedef Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::VariableDeclaration> BaseItemType;
+
 		Visualization::VText* name_;
 		Visualization::Item* type_;
 		Visualization::Static* assignmentSymbol_;

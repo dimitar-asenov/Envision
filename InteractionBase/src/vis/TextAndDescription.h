@@ -60,6 +60,8 @@ class INTERACTIONBASE_API TextAndDescription : public Visualization::Item
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
+		typedef Item BaseItemType;
+
 		Visualization::SequentialLayout* layout;
 		Visualization::Text* text;
 		Visualization::Text* description;

@@ -61,6 +61,8 @@ class OOVISUALIZATION_API VCommaExpression : public Visualization::ItemWithNode<
 		void determineChildren();
 
 	private:
+		typedef Visualization::ItemWithNode<Visualization::LayoutProvider<>, OOModel::CommaExpression> BaseItemType;
+
 		Visualization::Static* pre_;
 		Visualization::Static* in_;
 		Visualization::Static* post_;

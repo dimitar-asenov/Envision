@@ -62,6 +62,8 @@ class VISUALIZATIONBASE_API VList: public ItemWithNode< LayoutProvider<>, Model:
 		virtual void determineChildren();
 
 	private:
+		typedef ItemWithNode< LayoutProvider<>, Model::List> BaseItemType;
+
 		bool suppressDefaultRemovalHandler_;
 };
 
