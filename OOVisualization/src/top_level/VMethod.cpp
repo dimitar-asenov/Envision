@@ -49,7 +49,8 @@ ITEM_COMMON_DEFINITIONS(VMethod, "item")
 
 VMethod::VMethod(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<PanelBorderLayout>, Method>(parent, node, style),
-	header_(), icon_(), name_(), typeArguments_(), arguments_(), body_(), annotations_(), content_(), results_()
+	header_(), icon_(), name_(), typeArguments_(), arguments_(), body_(), annotations_(), addons_(), content_(),
+	results_()
 {
 	layout()->setTop(true);
 
@@ -87,6 +88,7 @@ VMethod::~VMethod()
 	name_ = nullptr;
 	body_ = nullptr;
 	annotations_ = nullptr;
+	addons_ = nullptr;
 	content_ = nullptr;
 	typeArguments_ = nullptr;
 	arguments_ = nullptr;
@@ -120,9 +122,12 @@ void VMethod::determineChildren()
 	layout()->left()->synchronizeFirst(results_, node()->results(), &style()->results());
 
 	content_->synchronizeLast(body_, node()->items(), &style()->body());
-	content_->synchronizeFirst(annotations_,
+	content_->synchronizeFirst(addons_, !addOnItems().isEmpty(), &style()->addons());
+	if (addons_) putAddOnItemsInSequence(addons_);
+
+	content_->synchronizeMid(annotations_,
 				node()->annotations()->size() > 0 ? node()->annotations() : nullptr,
-						&style()->annotations());
+						&style()->annotations(), addons_ ? 1 : 0);
 
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
 	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know

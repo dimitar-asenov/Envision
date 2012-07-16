@@ -38,6 +38,11 @@
 		<alignment>1</alignment>
 		<spaceBetweenElements>5</spaceBetweenElements>
 	</content>
+	<addons prototypes="layout/SequentialLayout/default">
+		<direction>2</direction>
+		<alignment>1</alignment>
+		<spaceBetweenElements>5</spaceBetweenElements>
+	</addons>
 	<body prototypes="item/VList/default">
 		<shape />
 		<itemsStyle prototypes="layout/SequentialLayout/default">

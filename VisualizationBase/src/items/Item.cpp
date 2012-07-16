@@ -33,11 +33,13 @@
 
 #include "items/Item.h"
 #include "items/ItemStyle.h"
+#include "layouts/SequentialLayout.h"
 #include "shapes/Shape.h"
 #include "shapes/ShapeStyle.h"
 #include "VisualizationException.h"
 #include "Scene.h"
 #include "../renderer/ModelRenderer.h"
+#include "VisualizationAddOn.h"
 
 #include "cursor/Cursor.h"
 
@@ -166,6 +168,7 @@ void Item::updateSubtree()
 	if ( (needsUpdate_ != NoUpdate) || needsUpdate() || sizeDependsOnParent()
 			|| (hasNode() && revision() != node()->revision()))
 	{
+		updateAddOnItems();
 		determineChildren();
 		updateChildren();
 		changeGeometry();
@@ -188,6 +191,19 @@ void Item::updateChildren()
 	{
 		Item* item = static_cast<Item*> (*child);
 		item->updateSubtree();
+	}
+}
+
+void Item::updateAddOnItems()
+{
+	for (auto key : addOnItems_.keys())
+	{
+		auto values = addOnItems_.values(key);
+		auto new_values = key->determineItems(this, values);
+		values.clear();
+		addOnItems_.remove(key);
+
+		for (auto v : values) addOnItems_.insert(key, v);
 	}
 }
 
@@ -601,6 +617,21 @@ QList<VisualizationAddOn*> Item::addOns()
 {
 	return staticAddOns();
 }
+
+void Item::putAddOnItemsInSequence(SequentialLayout* layout)
+{
+	auto values = addOnItems_.values();
+	for (int i = layout->length() - 1; i>=0; --i)
+	{
+		auto item = layout->at<Item>(i);
+		if (values.contains(item)) values.removeAll(item);
+		else layout->removeAll(item,true);
+	}
+
+	for (auto item : values)
+		layout->append(item);
+}
+
 /***********************************************************************************************************************
  * Reimplemented Event handling methods. These simply dispatch the method call to the interaction handler of this
  * object.

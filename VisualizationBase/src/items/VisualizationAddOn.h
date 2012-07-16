@@ -38,10 +38,14 @@
 
 namespace Visualization {
 
+class Item;
+
 class VISUALIZATIONBASE_API VisualizationAddOn {
 	public:
 		VisualizationAddOn();
 		virtual ~VisualizationAddOn();
+
+		virtual QList<Item*> determineItems(Item* vis, const QList<Item*>& currentItems) = 0;
 };
 
 } /* namespace Visualization */

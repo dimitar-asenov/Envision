@@ -83,6 +83,7 @@ class OOVISUALIZATION_API VMethod
 		Visualization::VList* arguments_;
 		VStatementItemList* body_;
 		VStatementItemList* annotations_;
+		Visualization::SequentialLayout* addons_;
 		Visualization::SequentialLayout* content_;
 		Visualization::VList* results_;
 };
