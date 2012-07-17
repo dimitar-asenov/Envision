@@ -62,7 +62,7 @@ namespace ContractsLibrary {
 Library* createContractsLibrary()
 {
 	Library* lib = new Library("CodeContracts");
-	lib->extension<Position>()->setX(540);
+	lib->extension<Position>()->setX(820);
 
 	Class* contract = new Class("Contract");
 	lib->classes()->append(contract);
@@ -88,6 +88,16 @@ Library* createContractsLibrary()
 	old->typeArguments()->append(new FormalTypeArgument("T"));
 	old->arguments()->append( new FormalArgument("variable", new ReferenceExpression("T")) );
 	old->extension<Position>()->setY(180);
+
+	Method* contractClass = new Method("ContractClass", Visibility::PUBLIC, StorageSpecifier::CLASS_VARIABLE);
+	contract->methods()->append(contractClass);
+	contractClass->arguments()->append( new FormalArgument("class", new ReferenceExpression("Class")) );
+	contractClass->extension<Position>()->setY(240);
+
+	Method* contractClassFor = new Method("ContractClassFor", Visibility::PUBLIC, StorageSpecifier::CLASS_VARIABLE);
+	contract->methods()->append(contractClassFor);
+	contractClassFor->arguments()->append( new FormalArgument("class", new ReferenceExpression("Class")) );
+	contractClassFor->extension<Position>()->setY(300);
 
 	// Register a group that holds the guard condition: are we visualizing a method belonging to the Contract class?
 	auto g = new VisualizationGroup();
@@ -205,6 +215,58 @@ Class* createDerivedClass()
 	return car;
 }
 
+Class* createInterface()
+{
+	Class* interface = new Class("ICalc", Visibility::PUBLIC);
+	interface->annotations()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
+			"CodeContracts.Contract.ContractClass(ICalcContracts)")));
+
+	auto *fact = new Method("factorial", Visibility::PUBLIC);
+	interface->methods()->append(fact);
+	fact->arguments()->append( new FormalArgument("a", new PrimitiveTypeExpression(PrimitiveType::INT)) );
+	fact->results()->append( new FormalResult(QString(), new PrimitiveTypeExpression(PrimitiveType::INT)) );
+
+	auto *div = new Method("divide", Visibility::PUBLIC);
+	interface->methods()->append(div);
+	div->arguments()->append( new FormalArgument("x", new PrimitiveTypeExpression(PrimitiveType::DOUBLE)) );
+	div->arguments()->append( new FormalArgument("divisor", new PrimitiveTypeExpression(PrimitiveType::DOUBLE)) );
+	div->results()->append( new FormalResult(QString(), new PrimitiveTypeExpression(PrimitiveType::DOUBLE)) );
+	div->extension<Position>()->setY(100);
+
+	interface->extension<Position>()->setX(380);
+
+	return interface;
+}
+
+Class* createInterfaceContracts()
+{
+	Class* calcContracts = new Class("ICalcContracts", Visibility::PUBLIC);
+	calcContracts->annotations()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
+				"CodeContracts.Contract.ContractClassFor(ICalc)")));
+
+	auto *fact = new Method("factorial", Visibility::PUBLIC);
+	calcContracts->methods()->append(fact);
+	fact->arguments()->append( new FormalArgument("a", new PrimitiveTypeExpression(PrimitiveType::INT)) );
+	fact->results()->append( new FormalResult(QString(), new PrimitiveTypeExpression(PrimitiveType::INT)) );
+	fact->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
+				"CodeContracts.Contract.Requires(a>=0)")));
+	fact->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
+			"CodeContracts.Contract.Ensures(CodeContracts.Contract.Result<int>()>0)")));
+
+	auto *div = new Method("divide", Visibility::PUBLIC);
+	calcContracts->methods()->append(div);
+	div->arguments()->append( new FormalArgument("x", new PrimitiveTypeExpression(PrimitiveType::DOUBLE)) );
+	div->arguments()->append( new FormalArgument("divisor", new PrimitiveTypeExpression(PrimitiveType::DOUBLE)) );
+	div->results()->append( new FormalResult(QString(), new PrimitiveTypeExpression(PrimitiveType::DOUBLE)) );
+	div->extension<Position>()->setY(100);
+	div->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
+				"CodeContracts.Contract.Requires(divisor!=0)")));
+
+	calcContracts->extension<Position>()->setX(380);
+	calcContracts->extension<Position>()->setY(400);
+
+	return calcContracts;
+}
 TEST(ContractsLibrary, ContractsLibraryTest)
 {
 	CHECK_INT_EQUAL(1,1);
@@ -222,6 +284,8 @@ TEST(ContractsLibrary, ContractsLibraryTest)
 	prj->libraries()->append(createContractsLibrary());
 	prj->classes()->append( createBaseClass());
 	prj->classes()->append( createDerivedClass() );
+	prj->classes()->append( createInterface() );
+	prj->classes()->append( createInterfaceContracts() );
 	model->endModification();
 
 	scene->addTopLevelItem( new RootItem(prj));
