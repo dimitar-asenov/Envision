@@ -9,7 +9,8 @@ win32:LIBS += -llogger \
     -linteractionbase \
     -loovisualization \
     -loointeraction
-HEADERS += src/interaction/ContractCallOffsetProvider.h \
+HEADERS += src/items/ContractsVMethodAddOn.h \
+    src/interaction/ContractCallOffsetProvider.h \
     src/items/VContractCallStyle.h \
     src/interaction/CreateContractMethod.h \
     src/items/VContractCall.h \
@@ -17,7 +18,8 @@ HEADERS += src/interaction/ContractCallOffsetProvider.h \
     src/ContractsLibraryException.h \
     src/contractslibrary_api.h \
     src/contractslibrary.h
-SOURCES += src/interaction/ContractCallOffsetProvider.cpp \
+SOURCES += src/items/ContractsVMethodAddOn.cpp \
+    src/interaction/ContractCallOffsetProvider.cpp \
     src/items/VContractCallStyle.cpp \
     src/interaction/CreateContractMethod.cpp \
     src/items/VContractCall.cpp \

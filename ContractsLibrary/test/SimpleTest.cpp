@@ -34,6 +34,7 @@
 #include "contractslibrary.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
+#include "items/ContractsVMethodAddOn.h"
 #include "items/VContractCall.h"
 #include "interaction/CreateContractMethod.h"
 
@@ -49,6 +50,8 @@
 #include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/node_extensions/Position.h"
 #include "VisualizationBase/src/items/RootItem.h"
+
+#include "OOVisualization/src/top_level/VMethod.h"
 
 #include "OOInteraction/src/expression_editor/OOExpressionBuilder.h"
 #include "OOInteraction/src/expression_editor/operators/CommandDescriptor.h"
@@ -167,6 +170,9 @@ Library* createContractsLibrary()
 	CommandDescriptor::registerCommand(new CreateContractMethod("old", "OldValue"));
 	CommandDescriptor::registerCommand(new CreateContractMethod("result", "Result",1));
 
+	// Register method add on
+	OOVisualization::VMethod::addAddOn( new ContractsVMethodAddOn(contractClass) );
+
 	return lib;
 }
 
@@ -231,7 +237,7 @@ Class* createInterface()
 	div->arguments()->append( new FormalArgument("x", new PrimitiveTypeExpression(PrimitiveType::DOUBLE)) );
 	div->arguments()->append( new FormalArgument("divisor", new PrimitiveTypeExpression(PrimitiveType::DOUBLE)) );
 	div->results()->append( new FormalResult(QString(), new PrimitiveTypeExpression(PrimitiveType::DOUBLE)) );
-	div->extension<Position>()->setY(100);
+	div->extension<Position>()->setY(120);
 
 	interface->extension<Position>()->setX(380);
 
@@ -243,6 +249,7 @@ Class* createInterfaceContracts()
 	Class* calcContracts = new Class("ICalcContracts", Visibility::PUBLIC);
 	calcContracts->annotations()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
 				"CodeContracts.Contract.ContractClassFor(ICalc)")));
+	calcContracts->baseClasses()->append(OOExpressionBuilder::getOOExpression("ICalc"));
 
 	auto *fact = new Method("factorial", Visibility::PUBLIC);
 	calcContracts->methods()->append(fact);
@@ -263,7 +270,7 @@ Class* createInterfaceContracts()
 				"CodeContracts.Contract.Requires(divisor!=0)")));
 
 	calcContracts->extension<Position>()->setX(380);
-	calcContracts->extension<Position>()->setY(400);
+	calcContracts->extension<Position>()->setY(340);
 
 	return calcContracts;
 }
