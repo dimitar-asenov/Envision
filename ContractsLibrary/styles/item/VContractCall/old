@@ -2,6 +2,7 @@
 <style prototypes="item/Item/default">
 	<shape />
 	<layout prototypes="layout/SequentialLayout/default">
+		<notLocationEquivalentCursors>true</notLocationEquivalentCursors>
 		<spaceBetweenElements>1</spaceBetweenElements>
 		<direction>1</direction>
 		<alignment>3</alignment>

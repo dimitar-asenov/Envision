@@ -2,6 +2,7 @@
 <style prototypes="item/Item/default">
 	<shape />
 	<layout prototypes="layout/SequentialLayout/default">
+		<notLocationEquivalentCursors>true</notLocationEquivalentCursors>
 		<spaceBetweenElements>15</spaceBetweenElements>
 	</layout>
 	<keyword prototypes="item/Symbol/default">
