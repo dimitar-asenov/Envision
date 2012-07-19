@@ -34,7 +34,7 @@
 #include "DefaultEnvisionManager.h"
 #include "EnvisionException.h"
 
-namespace Envision {
+namespace Core {
 
 DefaultEnvisionManager::DefaultEnvisionManager() :
 	pm(nullptr), exitSet(false)

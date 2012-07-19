@@ -46,12 +46,15 @@ namespace Visualization {
 	class VText;
 	class SequentialLayout;
 	class PanelBorderLayout;
-	class VList;
 }
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VForEachStatement : public Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::ForEachStatement>
+class VStatementItemList;
+
+class OOVISUALIZATION_API VForEachStatement
+	: public Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
+	  OOModel::ForEachStatement>
 {
 	ITEM_COMMON(VForEachStatement)
 
@@ -63,6 +66,9 @@ class OOVISUALIZATION_API VForEachStatement : public Visualization::ItemWithNode
 		void determineChildren();
 
 	private:
+		typedef Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
+				  OOModel::ForEachStatement> BaseItemType;
+
 		Visualization::SequentialLayout* header;
 
 		Visualization::SequentialLayout* varContainer;
@@ -71,7 +77,7 @@ class OOVISUALIZATION_API VForEachStatement : public Visualization::ItemWithNode
 		Visualization::VText* varName;
 		Visualization::Item* collection;
 		Visualization::Item* varType;
-		Visualization::VList* body;
+		VStatementItemList* body;
 };
 
 }

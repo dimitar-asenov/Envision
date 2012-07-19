@@ -53,6 +53,9 @@ class VISUALIZATIONBASE_API VCharacter : public ItemWithNode< TextRenderer, Mode
 
 	protected:
 		virtual QString currentText();
+
+	private:
+		typedef ItemWithNode<TextRenderer, Model::Character> BaseItemType;
 };
 
 }

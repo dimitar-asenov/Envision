@@ -34,7 +34,7 @@
 #ifndef PLUGININFO_H_
 #define PLUGININFO_H_
 
-namespace Envision {
+namespace Core {
 
 /**
  * Specifies a plug-in dependency.

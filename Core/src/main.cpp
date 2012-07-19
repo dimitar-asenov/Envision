@@ -36,7 +36,7 @@
 #include "DefaultEnvisionManager.h"
 #include "TestRunner.h"
 
-using namespace Envision;
+using namespace Core;
 
 /**
  * This is the main executed when Envision is started. It shows the main window, loads all plug-ins and starts the event

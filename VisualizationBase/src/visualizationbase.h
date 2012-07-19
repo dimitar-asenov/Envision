@@ -40,13 +40,13 @@
 
 namespace Visualization {
 
-class VisualizationBase : public QObject, public Envision::EnvisionPlugin
+class VisualizationBase : public QObject, public Core::EnvisionPlugin
 {
 	Q_OBJECT
-	Q_INTERFACES(Envision::EnvisionPlugin)
+	Q_INTERFACES(Core::EnvisionPlugin)
 
 	public:
-		bool initialize(Envision::EnvisionManager&);
+		bool initialize(Core::EnvisionManager&);
 		void selfTest(QString testid);
 };
 

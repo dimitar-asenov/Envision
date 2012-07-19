@@ -48,7 +48,8 @@ namespace Visualization {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VFormalArgument : public Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::FormalArgument>
+class OOVISUALIZATION_API VFormalArgument
+	: public Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::FormalArgument>
 {
 	ITEM_COMMON(VFormalArgument)
 
@@ -60,6 +61,8 @@ class OOVISUALIZATION_API VFormalArgument : public Visualization::ItemWithNode< 
 		void determineChildren();
 
 	private:
+		typedef Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::FormalArgument> BaseItemType;
+
 		Visualization::VText* name_;
 		Visualization::Item* type_;
 };

@@ -37,7 +37,7 @@ Q_EXPORT_PLUGIN2( selftest, SelfTest::SelfTest )
 
 namespace SelfTest {
 
-bool SelfTest::initialize(Envision::EnvisionManager&)
+bool SelfTest::initialize(Core::EnvisionManager&)
 {
 	return true;
 }

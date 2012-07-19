@@ -36,8 +36,8 @@
 
 #include "../oovisualization_api.h"
 
-#include "VisualizationBase/src/items/TextStyle.h"
-#include "VisualizationBase/src/items/StaticStyle.h"
+#include "VReferenceExpressionStyle.h"
+
 #include "VisualizationBase/src/layouts/SequentialLayout.h"
 #include "VisualizationBase/src/items/VListStyle.h"
 
@@ -47,22 +47,19 @@ class OOVISUALIZATION_API VMethodCallExpressionStyle : public Visualization::Ite
 {
 	private:
 		Visualization::SequentialLayoutStyle layout_;
-		Visualization::TextStyle name_;
-		Visualization::StaticStyle separator_;
+		VReferenceExpressionStyle name_;
 		Visualization::VListStyle arguments_;
 
 	public:
 		void load(Visualization::StyleLoader& sl);
 
 		const Visualization::SequentialLayoutStyle& layout() const;
-		const Visualization::TextStyle& name() const;
-		const Visualization::StaticStyle& separator() const;
+		const VReferenceExpressionStyle& name() const;
 		const Visualization::VListStyle& arguments() const;
 };
 
 inline const Visualization::SequentialLayoutStyle& VMethodCallExpressionStyle::layout() const { return layout_; }
-inline const Visualization::TextStyle& VMethodCallExpressionStyle::name() const { return name_; }
-inline const Visualization::StaticStyle& VMethodCallExpressionStyle::separator() const { return separator_; }
+inline const VReferenceExpressionStyle& VMethodCallExpressionStyle::name() const { return name_; }
 inline const Visualization::VListStyle& VMethodCallExpressionStyle::arguments() const { return arguments_; }
 
 }

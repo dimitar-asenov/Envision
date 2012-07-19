@@ -61,6 +61,8 @@ class OOVISUALIZATION_API VConditionalExpression : public Visualization::ItemWit
 		void determineChildren();
 
 	private:
+		typedef Visualization::ItemWithNode<Visualization::LayoutProvider<>, OOModel::ConditionalExpression> BaseItemType;
+
 		Visualization::Static* pre_;
 		Visualization::Static* in_;
 		Visualization::Static* in2_;

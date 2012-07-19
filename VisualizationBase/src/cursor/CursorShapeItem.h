@@ -58,6 +58,8 @@ class VISUALIZATIONBASE_API CursorShapeItem: public Item
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
+		typedef Item BaseItemType;
+
 		bool useCenter_;
 		QSize size_;
 		QPoint center_;

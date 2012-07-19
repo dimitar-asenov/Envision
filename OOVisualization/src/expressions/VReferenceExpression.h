@@ -45,11 +45,13 @@
 namespace Visualization {
 	class Text;
 	class Static;
+	class VList;
 }
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VReferenceExpression : public Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::ReferenceExpression>
+class OOVISUALIZATION_API VReferenceExpression : public Visualization::ItemWithNode< Visualization::LayoutProvider<>,
+OOModel::ReferenceExpression>
 {
 	ITEM_COMMON(VReferenceExpression)
 
@@ -57,14 +59,27 @@ class OOVISUALIZATION_API VReferenceExpression : public Visualization::ItemWithN
 		VReferenceExpression(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VReferenceExpression();
 
+		Visualization::Text* name() const;
+		Visualization::Static* separator() const;
+		Visualization::Item* prefix() const;
+		Visualization::VList* typeArguments() const;
+
 	protected:
 		void determineChildren();
 
 	private:
+		typedef Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::ReferenceExpression> BaseItemType;
+
 		Visualization::Text* name_;
 		Visualization::Static* separator_;
 		Visualization::Item* prefix_;
+		Visualization::VList* typeArguments_;
 };
+
+inline Visualization::Text* VReferenceExpression::name() const { return name_; }
+inline Visualization::Static* VReferenceExpression::separator() const { return separator_; }
+inline Visualization::Item* VReferenceExpression::prefix() const { return prefix_; }
+inline Visualization::VList* VReferenceExpression::typeArguments() const { return typeArguments_; }
 
 }
 

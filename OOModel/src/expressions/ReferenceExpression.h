@@ -37,6 +37,8 @@
 #include "Expression.h"
 #include "../elements/OOReference.h"
 
+#include "ModelBase/src/nodes/TypedList.h"
+
 namespace OOModel {
 
 class Class;
@@ -47,6 +49,7 @@ class OOMODEL_API ReferenceExpression: public Expression
 
 	ATTRIBUTE(Expression, prefix, setPrefix)
 	ATTRIBUTE(OOReference, ref, setRef)
+	ATTRIBUTE(Model::TypedList<Expression>, typeArguments, setTypeArguments)
 
 	public:
 		ReferenceExpression(const QString& name, Expression* prefix = nullptr);

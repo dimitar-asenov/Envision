@@ -38,7 +38,10 @@
 
 #include "InteractionBase/src/handlers/GenericHandler.h"
 
-namespace OOModel { class Expression; }
+namespace OOModel {
+	class Expression;
+	class ExpressionStatement;
+}
 
 namespace OOInteraction {
 
@@ -50,6 +53,9 @@ class OOINTERACTION_API HExpression : public Interaction::GenericHandler {
 		static HExpression* instance();
 
 		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event);
+
+	private:
+		OOModel::ExpressionStatement* parentExpressionStatement(OOModel::Expression* e);
 };
 
 } /* namespace OOInteraction */

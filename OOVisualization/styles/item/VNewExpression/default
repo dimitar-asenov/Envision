@@ -7,9 +7,9 @@
 				<style>1</style>
 				<color>
 					<alpha>255</alpha>
-					<red>200</red>
+					<red>224</red>
 					<green>255</green>
-					<blue>200</blue>
+					<blue>224</blue>
 				</color>
 			</backgroundBrush>
 			<outline>
@@ -27,5 +27,15 @@
 			<weight>75</weight>
 		</font>
 		<symbol>new</symbol>
+		<pen>
+			<width>1.0</width>
+			<style>1</style>
+			<color>
+				<alpha>255</alpha>
+				<red>0</red>
+				<green>0</green>
+				<blue>255</blue>
+			</color>
+		</pen>
 	</newSymbol>
 </style>

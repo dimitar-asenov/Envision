@@ -43,6 +43,7 @@ template class Model::TypedList<OOModel::Method>;
 template class Model::TypedList<OOModel::StatementItem>;
 template class Model::TypedList<OOModel::FormalArgument>;
 template class Model::TypedList<OOModel::FormalResult>;
+template class Model::TypedList<OOModel::FormalTypeArgument>;
 template class Model::TypedList<OOModel::Field>;
 template class Model::TypedList<OOModel::OOReference>;
 
@@ -67,7 +68,6 @@ template class Model::TypedList<OOModel::BooleanLiteral>;
 template class Model::TypedList<OOModel::CharacterLiteral>;
 template class Model::TypedList<OOModel::NullLiteral>;
 template class Model::TypedList<OOModel::ThisExpression>;
-template class Model::TypedList<OOModel::VariableAccess>;
 template class Model::TypedList<OOModel::NewExpression>;
 template class Model::TypedList<OOModel::MethodCallExpression>;
 template class Model::TypedList<OOModel::UnaryOperation>;

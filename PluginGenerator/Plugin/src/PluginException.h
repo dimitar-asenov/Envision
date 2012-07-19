@@ -39,7 +39,7 @@
 
 namespace NAMESPACE {
 
-class PLUGINNAME_UPPERCASE_API PLUGINNAMEException : public Envision::EnvisionException
+class PLUGINNAME_UPPERCASE_API PLUGINNAMEException : public Core::EnvisionException
 {
 		public:
 			PLUGINNAMEException(const QString& message);

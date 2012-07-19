@@ -39,7 +39,7 @@
 
 namespace Model {
 
-class MODELBASE_API ModelException : public Envision::EnvisionException
+class MODELBASE_API ModelException : public Core::EnvisionException
 {
 		public:
 			ModelException(const QString& message);

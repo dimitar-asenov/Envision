@@ -2,23 +2,24 @@
 <style prototypes="item/Item/default">
 	<shape />
 	<layout prototypes="layout/SequentialLayout/default" />
-	<name prototypes="item/Text/default">
-		<pen>
-			<color>
-				<alpha>255</alpha>
-				<red>185</red>
-				<green>120</green>
-				<blue>0</blue>
-			</color>
-		</pen>
-		<font>
-			<family></family>
-			<size>15</size>
-			<sizeIsInPixels>true</sizeIsInPixels>
-			<weight>100</weight>
-		</font>
+	<name prototypes="item/VReferenceExpression/default">
+		<name prototypes="item/Text/default">
+			<pen>
+				<color>
+					<alpha>255</alpha>
+					<red>185</red>
+					<green>120</green>
+					<blue>0</blue>
+				</color>
+			</pen>
+			<font>
+				<family></family>
+				<size>15</size>
+				<sizeIsInPixels>true</sizeIsInPixels>
+				<weight>100</weight>
+			</font>
+		</name>
 	</name>
-	<separator prototypes="item/Symbol/default" />
 	<arguments prototypes="item/VList/default">
 		<drawShapeWhenEmpty>true</drawShapeWhenEmpty>
 		<shape prototypes="shape/Braces/default">
@@ -30,6 +31,8 @@
 			<direction>0</direction>
 			<spaceBetweenElements>15</spaceBetweenElements>
 			<noInnerCursors>true</noInnerCursors>
+			<minHeight>15</minHeight>
+			<drawShapeWhenEmpty>true</drawShapeWhenEmpty>
 		</itemsStyle>
 	</arguments>
 </style>

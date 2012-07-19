@@ -56,7 +56,7 @@ int ControlFlowVisualization::visualizationPurpose()
 	return purpose;
 }
 
-bool ControlFlowVisualization::initialize(Envision::EnvisionManager&)
+bool ControlFlowVisualization::initialize(Core::EnvisionManager&)
 {
 	// Register controlflow purpose
 	visualizationPurpose();

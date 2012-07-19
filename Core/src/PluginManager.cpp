@@ -35,7 +35,7 @@
 #include "PluginManager.h"
 #include "EnvisionException.h"
 
-namespace Envision {
+namespace Core {
 
 PluginManager::PluginManager(QString path) :
 	pluginsDir(path)

@@ -111,7 +111,7 @@ void VArrayInitializer::determineChildren()
 
 		layout()->synchronize(values_, node()->values(), &style()->values(), 0,0);
 		values_->setStyle( &style()->values() );
-		values_->setSuppressHandler(true);
+		values_->setSuppressDefaultRemovalHandler(true);
 	}
 }
 

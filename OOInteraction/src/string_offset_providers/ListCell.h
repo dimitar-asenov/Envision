@@ -25,34 +25,39 @@
  **********************************************************************************************************************/
 
 /*
- * VariableAccessStringComponents.cpp
+ * ListCell.h
  *
- *  Created on: Feb 17, 2012
+ *  Created on: Jul 2, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "string_components/VariableAccessStringComponents.h"
+#ifndef OOInteraction_LISTCELL_H_
+#define OOInteraction_LISTCELL_H_
 
-#include "OOModel/src/expressions/VariableAccess.h"
+#include "../oointeraction_api.h"
+#include "Cell.h"
+
+namespace Visualization {
+	class VList;
+}
 
 namespace OOInteraction {
 
-VariableAccessStringComponents::VariableAccessStringComponents(OOModel::VariableAccess* e)
-	: exp_(e)
+class OOINTERACTION_API ListCell : public Cell
 {
-}
+	public:
+		ListCell(int x, Visualization::VList* list, int stringComponentsStart,
+				const QString& prefix, const QString& separator, const QString& postfix);
+		virtual ~ListCell();
 
-QStringList VariableAccessStringComponents::components()
-{
-	QStringList result;
-	if (!exp_) return result;
+		virtual int offset(const QStringList& allComponents, Qt::Key key, int* length = nullptr);
+		virtual void setOffset(int newOffset);
 
-	QString prefix = stringForNode(exp_->ref()->prefix());
-	if (!prefix.isEmpty()) result << prefix << ".";
-
-	result << exp_->ref()->name();
-
-	return result;
-}
+	private:
+		QString prefix_;
+		QString separator_;
+		QString postfix_;
+};
 
 } /* namespace OOInteraction */
+#endif /* OOInteraction_LISTCELL_H_ */

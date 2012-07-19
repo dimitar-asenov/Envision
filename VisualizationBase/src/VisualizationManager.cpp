@@ -57,7 +57,7 @@ VisualizationManager& VisualizationManager::instance()
 	return theInstance;
 }
 
-void VisualizationManager::init(Envision::EnvisionManager *manager)
+void VisualizationManager::init(Core::EnvisionManager *manager)
 {
 	theInstance.envisionManager = manager;
 }

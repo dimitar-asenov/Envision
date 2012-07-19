@@ -43,7 +43,7 @@ namespace OOInteraction {
 class OOINTERACTION_API SimpleLiteralStringOffsetProvider : public StringOffsetProvider {
 	public:
 		SimpleLiteralStringOffsetProvider(Visualization::Item* v);
-		virtual int offset();
+		virtual int offset(Qt::Key key);
 		virtual void setOffset(int newOffset);
 
 		virtual bool isIndivisible();

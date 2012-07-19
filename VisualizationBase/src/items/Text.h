@@ -50,6 +50,9 @@ class VISUALIZATIONBASE_API Text : public TextRenderer
 
 	protected:
 		virtual QString currentText();
+
+	private:
+		typedef TextRenderer BaseItemType;
 };
 
 }

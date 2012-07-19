@@ -187,22 +187,6 @@ bool PositionLayout::isEmpty() const
 	return true;
 }
 
-void PositionLayout::determineChildren()
-{
-	// All this is just needed in order to support changing the purpose of a child node.
-
-	if (!scene() || needsUpdate() != FullUpdate) return Layout::determineChildren();
-
-	QList<Model::Node*> nodes;
-	for (auto i : items)
-		if (i->node()) nodes.append(i->node());
-
-	if (nodes.size() != items.size()) return Layout::determineChildren();
-
-	clear(true);
-	synchronizeWithNodes(nodes, scene()->renderer());
-}
-
 void PositionLayout::updateGeometry(int, int)
 {
 	QPoint topLeft;

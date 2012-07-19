@@ -53,6 +53,9 @@ class VISUALIZATIONBASE_API VReference : public ItemWithNode<TextRenderer, Model
 
 	protected:
 		virtual QString currentText();
+
+	private:
+		typedef ItemWithNode<TextRenderer, Model::Reference> BaseItemType;
 };
 
 }

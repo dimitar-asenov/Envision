@@ -61,7 +61,6 @@
 #include "expressions/CharacterLiteral.h"
 #include "expressions/NullLiteral.h"
 #include "expressions/ThisExpression.h"
-#include "expressions/VariableAccess.h"
 #include "expressions/NewExpression.h"
 #include "expressions/MethodCallExpression.h"
 #include "expressions/UnaryOperation.h"
@@ -88,6 +87,7 @@
 #include "elements/StatementItemList.h"
 #include "elements/FormalArgument.h"
 #include "elements/FormalResult.h"
+#include "elements/FormalTypeArgument.h"
 #include "elements/OOReference.h"
 
 #endif /* ALLOOMODELNODES_H_ */

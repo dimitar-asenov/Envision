@@ -33,7 +33,7 @@
 
 #include "TestEvent.h"
 
-namespace Envision {
+namespace Core {
 
 TestEvent::TestEvent(QString testTarget_, QString testId_) : QEvent(QEvent::User), testTarget(testTarget_), testId(testId_)
 {

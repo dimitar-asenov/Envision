@@ -24,34 +24,39 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VariableAccessStringComponents.h
+/***********************************************************************************************************************
+ * contractslibrary.h
  *
- *  Created on: Feb 17, 2012
+ *  Created on: May 11, 2012
  *      Author: Dimitar Asenov
+ **********************************************************************************************************************/
+
+#ifndef CONTRACTSLIBRARY_H
+#define CONTRACTSLIBRARY_H
+
+#include "Core/src/EnvisionPlugin.h"
+#include "precompiled.h"
+
+namespace ContractsLibrary {
+
+/**
+ * Implements the interface between the ContractsLibrary plug-in and Envision.
+ *
+ * The Envision core will use this interface to communicate with the plug-in. The plug-in will be initialized before
+ * any other operations are performed.
+ *
+ * The plug-in can use the supplied EnvisionManager object to find out more about the running environment.
  */
-
-#ifndef OOInteraction_VARIABLEACCESSSTRINGCOMPONENTS_H_
-#define OOInteraction_VARIABLEACCESSSTRINGCOMPONENTS_H_
-
-#include "../oointeraction_api.h"
-#include "StringComponents.h"
-
-namespace OOModel
+class ContractsLibrary : public QObject, public Core::EnvisionPlugin
 {
-	class VariableAccess;
-}
+	Q_OBJECT
+	Q_INTERFACES(Core::EnvisionPlugin)
 
-namespace OOInteraction {
-
-class OOINTERACTION_API VariableAccessStringComponents : public StringComponents {
 	public:
-		VariableAccessStringComponents( OOModel::VariableAccess* e );
-		virtual QStringList components();
-
-	private:
-		OOModel::VariableAccess* exp_;
+		bool initialize(Core::EnvisionManager&);
+		void selfTest(QString testid);
 };
 
-} /* namespace OOInteraction */
-#endif /* OOInteraction_VARIABLEACCESSSTRINGCOMPONENTS_H_ */
+}
+
+#endif // CONTRACTSLIBRARY_H

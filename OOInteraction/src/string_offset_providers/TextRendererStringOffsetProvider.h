@@ -48,7 +48,7 @@ class TextRendererStringOffsetProvider : public StringOffsetProvider {
 	public:
 		TextRendererStringOffsetProvider(Visualization::TextRenderer* v);
 		virtual QString string();
-		virtual int offset();
+		virtual int offset(Qt::Key key);
 		virtual void setOffset(int newOffset);
 
 	private:

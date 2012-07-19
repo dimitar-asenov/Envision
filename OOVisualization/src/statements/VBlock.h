@@ -42,11 +42,9 @@
 #include "VisualizationBase/src/items/Item.h"
 #include "VisualizationBase/src/items/ItemWithNode.h"
 
-namespace Visualization {
-	class VList;
-}
-
 namespace OOVisualization {
+
+class VStatementItemList;
 
 class OOVISUALIZATION_API VBlock : public Visualization::ItemWithNode< Visualization::Item, OOModel::Block>
 {
@@ -61,7 +59,9 @@ class OOVISUALIZATION_API VBlock : public Visualization::ItemWithNode< Visualiza
 		void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		Visualization::VList* items_;
+		typedef Visualization::ItemWithNode< Visualization::Item, OOModel::Block> BaseItemType;
+
+		VStatementItemList* items_;
 };
 
 }

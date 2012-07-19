@@ -57,9 +57,6 @@ void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
 	Visualization::VList* list = static_cast<Visualization::VList*> (target);
 
-	if (list->suppressHandler())
-		return  GenericHandler::keyPressEvent(target, event);
-
 	if (event->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier)  && event->key() == Qt::Key_V)
 	{
 
@@ -76,7 +73,7 @@ void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			target->setUpdateNeeded(Visualization::Item::StandardUpdate);
 		}
 	}
-	else if (event->modifiers() == Qt::NoModifier
+	else if (!list->suppressDefaultRemovalHandler() && event->modifiers() == Qt::NoModifier
 			&& (event->key() == Qt::Key_Delete || event->key() == Qt::Key_Backspace)
 			&& list->scene()->mainCursor() && list->scene()->mainCursor()->owner() == list->layout())
 	{

@@ -50,6 +50,11 @@ Visibility::Visibility(Model::Node *parent, Model::PersistentStore &store, bool)
 	vis = fromInt( store.loadIntValue() );
 }
 
+Visibility::Visibility(const VisibilityType val)
+	: Node(nullptr), vis(val)
+{
+}
+
 void Visibility::set(const VisibilityType& value)
 {
 	execute(new Model::FieldSet<VisibilityType> (this, vis, value));

@@ -42,7 +42,7 @@ SimpleLiteralStringOffsetProvider::SimpleLiteralStringOffsetProvider(Visualizati
 {
 }
 
-int SimpleLiteralStringOffsetProvider::offset()
+int SimpleLiteralStringOffsetProvider::offset(Qt::Key /*key*/)
 {
 	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
 

@@ -56,7 +56,7 @@ QStringList PrimitiveTypeStringComponents::components()
 		case OOModel::PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_LONG : result << "ulong"; break;
 		case OOModel::PrimitiveTypeExpression::PrimitiveTypes::FLOAT : result << "float"; break;
 		case OOModel::PrimitiveTypeExpression::PrimitiveTypes::DOUBLE : result << "double"; break;
-		case OOModel::PrimitiveTypeExpression::PrimitiveTypes::BOOLEAN : result << "boolean"; break;
+		case OOModel::PrimitiveTypeExpression::PrimitiveTypes::BOOLEAN : result << "bool"; break;
 		case OOModel::PrimitiveTypeExpression::PrimitiveTypes::CHAR : result << "char"; break;
 		case OOModel::PrimitiveTypeExpression::PrimitiveTypes::VOID : result << "void"; break;
 		default: throw OOInteractionException("Unknown primitive type");

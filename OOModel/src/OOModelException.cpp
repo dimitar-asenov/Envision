@@ -36,7 +36,7 @@
 namespace OOModel {
 
 OOModelException::OOModelException(const QString& message) :
-	Envision::EnvisionException(message)
+	Core::EnvisionException(message)
 {
 }
 

@@ -39,7 +39,7 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API OOVisualizationException : public Envision::EnvisionException
+class OOVISUALIZATION_API OOVisualizationException : public Core::EnvisionException
 {
 		public:
 			OOVisualizationException(const QString& message);

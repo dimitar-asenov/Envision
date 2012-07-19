@@ -60,6 +60,8 @@ class OOMODEL_API Project : public Model::ExtendableNode
 	ATTRIBUTE(Model::TypedList<Class>, classes, setClasses)
 
 	public:
+		Project(const QString& name);
+
 		virtual bool definesSymbol() const;
 		virtual const QString& symbolName() const;
 

@@ -39,7 +39,7 @@
 
 namespace ControlFlowVisualization {
 
-class CONTROLFLOWVISUALIZATION_API ControlFlowVisualizationException : public Envision::EnvisionException
+class CONTROLFLOWVISUALIZATION_API ControlFlowVisualizationException : public Core::EnvisionException
 {
 		public:
 			ControlFlowVisualizationException(const QString& message);

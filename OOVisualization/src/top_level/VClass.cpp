@@ -52,7 +52,10 @@ VClass::VClass(Item* parent, NodeType* node, const StyleType* style) :
 	header_(),
 	icon_(),
 	name_(),
+	typeArguments_(),
 	baseClasses_(),
+	annotations_(),
+	body_(),
 	content_(),
 	fieldContainer_(),
 	publicFieldArea_(),
@@ -67,6 +70,8 @@ VClass::VClass(Item* parent, NodeType* node, const StyleType* style) :
 	header_->append(icon_);
 	name_ = new VText(header_, node->nameNode(), &style->nameDefault());
 	header_->append(name_);
+	typeArguments_ = new VList(header_, node->typeArguments(), &style->typeArguments());
+	header_->append(typeArguments_);
 	baseClasses_ = new VList(header_, node->baseClasses(), &style->baseClasses());
 	header_->append(baseClasses_);
 
@@ -83,8 +88,11 @@ VClass::VClass(Item* parent, NodeType* node, const StyleType* style) :
 	privateFieldArea_ = new SequentialLayout(fieldContainer_, &style->privateFieldArea());
 	fieldContainer_->append(privateFieldArea_);
 
-	content_ = new PositionLayout(layout(), &style->content());
+	content_ = new SequentialLayout(layout(), &style->content());
 	layout()->setContent(content_);
+
+	body_ = new PositionLayout(content_, &style->body());
+	content_->append(body_);
 }
 
 VClass::~VClass()
@@ -93,7 +101,10 @@ VClass::~VClass()
 	header_ = nullptr;
 	icon_ = nullptr;
 	name_ = nullptr;
+	typeArguments_ = nullptr;
 	baseClasses_ = nullptr;
+	annotations_ = nullptr;
+	body_ = nullptr;
 	content_ = nullptr;
 	fieldContainer_ = nullptr;
 	publicFieldArea_ = nullptr;
@@ -120,7 +131,10 @@ void VClass::determineChildren()
 	icon_->setStyle(&style()->icon());
 	header_->setStyle( &style()->header() );
 	name_->setStyle( nameStyle );
+	body_->setStyle( &style()->body() );
+	if (annotations_) annotations_->setStyle( &style()->annotations() );
 	content_->setStyle( &style()->content() );
+	typeArguments_->setStyle( &style()->typeArguments() );
 	baseClasses_->setStyle( &style()->baseClasses() );
 	fieldContainer_->setStyle( &style()->fieldContainer() );
 	publicFieldArea_->setStyle( &style()->publicFieldArea() );
@@ -130,10 +144,15 @@ void VClass::determineChildren()
 
 	// Synchronize header
 	header_->synchronizeMid(name_, node()->nameNode(), nameStyle, 1);
+	header_->synchronizeMid(typeArguments_, node()->typeArguments(), &style()->typeArguments(), 2);
 	header_->synchronizeLast(baseClasses_, node()->baseClasses(), &style()->baseClasses());
 
 	// Synchronize methods
-	content_->synchronizeWithNodes(node()->methods()->nodes().toList(), renderer());
+	if (body_->needsUpdate() == FullUpdate) body_->clear(true);
+	body_->synchronizeWithNodes(node()->methods()->nodes().toList(), renderer());
+	content_->synchronizeFirst(annotations_,
+			node()->annotations()->size() > 0 ? node()->annotations() : nullptr,
+					&style()->annotations());
 
 	// Synchronize fields
 	QList<Model::Node*> publicFields;

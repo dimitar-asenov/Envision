@@ -34,7 +34,7 @@
 #ifndef ENVISIONEXCEPTION_H_
 #define ENVISIONEXCEPTION_H_
 
-namespace Envision {
+namespace Core {
 
 /**
  * The EnvisionException class is the base class of all exception classes in Envision.

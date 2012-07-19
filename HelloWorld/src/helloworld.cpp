@@ -40,7 +40,7 @@ namespace Hello {
 
 
 
-bool HelloWorld::initialize(Envision::EnvisionManager&)
+bool HelloWorld::initialize(Core::EnvisionManager&)
 {
 	HelloWorldPrinter::sayHello("the initialization of the hello test Envision plugin");
 	return true;

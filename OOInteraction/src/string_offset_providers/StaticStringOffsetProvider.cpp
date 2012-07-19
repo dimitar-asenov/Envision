@@ -42,10 +42,10 @@ StaticStringOffsetProvider::StaticStringOffsetProvider(Visualization::Static* v)
 {
 }
 
-int StaticStringOffsetProvider::offset()
+int StaticStringOffsetProvider::offset(Qt::Key key)
 {
 	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
-	return itemOffset(vis_->item(), string().size());
+	return itemOffset(vis_->item(), string().size(), key);
 }
 
 QString StaticStringOffsetProvider::string()

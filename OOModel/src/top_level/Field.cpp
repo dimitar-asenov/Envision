@@ -43,6 +43,39 @@ REGISTER_ATTRIBUTE(Field, typeExpression, Expression, false, false, true)
 REGISTER_ATTRIBUTE(Field, visibility, Visibility, false, false, true)
 REGISTER_ATTRIBUTE(Field, storageSpecifier, StorageSpecifier, false, false, true)
 
+Field::Field(const QString& name, Expression* type)
+: Model::ExtendableNode (nullptr, Field::getMetaData())
+{
+	setName(name);
+	if (type) setTypeExpression(type);
+}
+
+Field::Field(const QString& name, Expression* type, Visibility::VisibilityType vis)
+: Model::ExtendableNode (nullptr, Field::getMetaData())
+{
+	setName(name);
+	if (type) setTypeExpression(type);
+	setVisibility(vis);
+}
+
+Field::Field(const QString& name, Expression* type, StorageSpecifier::StorageSpecifierTypes storage)
+: Model::ExtendableNode (nullptr, Field::getMetaData())
+{
+	setName(name);
+	if (type) setTypeExpression(type);
+	setStorageSpecifier(storage);
+}
+
+Field::Field(const QString& name, Expression* type, Visibility::VisibilityType vis,
+		StorageSpecifier::StorageSpecifierTypes storage)
+: Model::ExtendableNode (nullptr, Field::getMetaData())
+{
+	setName(name);
+	if (type) setTypeExpression(type);
+	setVisibility(vis);
+	setStorageSpecifier(storage);
+}
+
 bool Field::definesSymbol() const
 {
 	return true;

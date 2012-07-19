@@ -44,7 +44,8 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VFloatLiteral : public Visualization::ItemWithNode< Visualization::Item, OOModel::FloatLiteral>
+class OOVISUALIZATION_API VFloatLiteral
+	: public Visualization::ItemWithNode< Visualization::Item, OOModel::FloatLiteral>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VFloatLiteral, Visualization::TextStyle)
 
@@ -57,6 +58,8 @@ class OOVISUALIZATION_API VFloatLiteral : public Visualization::ItemWithNode< Vi
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
+		typedef Visualization::ItemWithNode< Visualization::Item, OOModel::FloatLiteral> BaseItemType;
+
 		Visualization::VFloat* vis_;
 };
 

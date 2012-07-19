@@ -35,19 +35,16 @@
 #define OOInteraction_SEQUENTIALVISUALIZATIONSTRINGOFFSETPROVIDER_H_
 
 #include "../oointeraction_api.h"
-#include "StringOffsetProvider.h"
+#include "GridBasedOffsetProvider.h"
 
 #include "VisualizationBase/src/items/LayoutProvider.h"
 #include "VisualizationBase/src/layouts/SequentialLayout.h"
 
 namespace OOInteraction {
 
-class OOINTERACTION_API SequentialVisualizationStringOffsetProvider : public StringOffsetProvider {
+class OOINTERACTION_API SequentialVisualizationStringOffsetProvider : public GridBasedOffsetProvider {
 	public:
 		SequentialVisualizationStringOffsetProvider(Visualization::LayoutProvider<Visualization::SequentialLayout>* vis);
-
-		virtual int offset();
-		virtual void setOffset(int newOffset);
 
 	protected:
 		virtual QStringList components();

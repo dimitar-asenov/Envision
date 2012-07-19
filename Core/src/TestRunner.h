@@ -36,7 +36,7 @@
 
 #include "PluginManager.h"
 
-namespace Envision {
+namespace Core {
 
 class TestRunner: public QObject
 {

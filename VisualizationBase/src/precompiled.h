@@ -71,6 +71,8 @@
 #include <QtCore/QSharedPointer>
 #include <QtCore/QPointF>
 
+#include <QtCore/QMultiMap>
+
 #include <functional>
 #include <cmath>
 

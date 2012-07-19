@@ -48,7 +48,7 @@ class StaticStringOffsetProvider : public StringOffsetProvider {
 	public:
 		StaticStringOffsetProvider(Visualization::Static* v);
 		virtual QString string();
-		virtual int offset();
+		virtual int offset(Qt::Key key);
 		virtual void setOffset(int newOffset);
 
 		virtual bool isIndivisible();

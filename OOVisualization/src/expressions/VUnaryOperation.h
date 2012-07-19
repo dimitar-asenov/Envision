@@ -61,6 +61,8 @@ class OOVISUALIZATION_API VUnaryOperation
 		virtual void determineChildren();
 
 	private:
+		typedef Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::UnaryOperation> BaseItemType;
+
 		Visualization::Static* pre_;
 		Visualization::Static* post_;
 		Visualization::Item* expr_;

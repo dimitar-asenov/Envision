@@ -48,7 +48,7 @@ using namespace Visualization;
 
 namespace OOVisualization {
 
-bool OOVisualization::initialize(Envision::EnvisionManager&)
+bool OOVisualization::initialize(Core::EnvisionManager&)
 {
 	// Register extensions
 	Project::registerNewExtension<Position>();
@@ -65,12 +65,14 @@ bool OOVisualization::initialize(Envision::EnvisionManager&)
 	Scene::defaultRenderer()->registerVisualization(Field::typeIdStatic(), createVisualization<VField, Field>);
 	Scene::defaultRenderer()->registerVisualization(FormalArgument::typeIdStatic(),
 			createVisualization<VFormalArgument, FormalArgument>);
+	Scene::defaultRenderer()->registerVisualization(FormalTypeArgument::typeIdStatic(),
+			createVisualization<VFormalTypeArgument, FormalTypeArgument>);
 	Scene::defaultRenderer()->registerVisualization(FormalResult::typeIdStatic(),
 			createVisualization<VFormalResult, FormalResult>);
+	Scene::defaultRenderer()->registerVisualization(StatementItemList::typeIdStatic(),
+			createVisualization<VStatementItemList, StatementItemList>);
 	Scene::defaultRenderer()->registerVisualization(ReferenceExpression::typeIdStatic(),
 			createVisualization<VReferenceExpression, ReferenceExpression>);
-	Scene::defaultRenderer()->registerVisualization(VariableAccess::typeIdStatic(),
-			createVisualization<VVariableAccess, VariableAccess>);
 	Scene::defaultRenderer()->registerVisualization(MethodCallExpression::typeIdStatic(),
 			createVisualization<VMethodCallExpression, MethodCallExpression>);
 	Scene::defaultRenderer()->registerVisualization(CastExpression::typeIdStatic(),

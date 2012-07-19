@@ -36,7 +36,7 @@
 namespace ControlFlowVisualization {
 
 ControlFlowVisualizationException::ControlFlowVisualizationException(const QString& message) :
-	Envision::EnvisionException(message)
+	Core::EnvisionException(message)
 {
 }
 

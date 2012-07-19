@@ -51,7 +51,8 @@ namespace Visualization {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VProject : public Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::Project>
+class OOVISUALIZATION_API VProject
+: public Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::Project>
 {
 	ITEM_COMMON(VProject)
 
@@ -63,6 +64,9 @@ class OOVISUALIZATION_API VProject : public Visualization::ItemWithNode< Visuali
 		void determineChildren();
 
 	private:
+		typedef Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
+				OOModel::Project> BaseItemType;
+
 		Visualization::SequentialLayout* header;
 		Visualization::VText* name;
 		Visualization::PositionLayout* content;

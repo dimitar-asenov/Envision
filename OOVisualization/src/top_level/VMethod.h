@@ -51,7 +51,10 @@ namespace Visualization {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VMethod : public Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::Method>
+class VStatementItemList;
+
+class OOVISUALIZATION_API VMethod
+: public Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::Method>
 {
 	ITEM_COMMON(VMethod)
 
@@ -60,23 +63,36 @@ class OOVISUALIZATION_API VMethod : public Visualization::ItemWithNode< Visualiz
 		virtual ~VMethod();
 
 		Visualization::VText* name() const;
-		Visualization::VList* content() const;
+		VStatementItemList* body() const;
+		VStatementItemList* annotations() const;
+		Visualization::SequentialLayout* content() const;
+		Visualization::VList* typeArguments() const;
 		Visualization::VList* arguments() const;
 
 	protected:
 		void determineChildren();
 
 	private:
+		typedef Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
+				OOModel::Method> BaseItemType;
+
 		Visualization::SequentialLayout* header_;
 		Visualization::Static* icon_;
 		Visualization::VText* name_;
+		Visualization::VList* typeArguments_;
 		Visualization::VList* arguments_;
-		Visualization::VList* content_;
+		VStatementItemList* body_;
+		VStatementItemList* annotations_;
+		Visualization::SequentialLayout* addons_;
+		Visualization::SequentialLayout* content_;
 		Visualization::VList* results_;
 };
 
 inline Visualization::VText* VMethod::name() const { return name_; }
-inline Visualization::VList* VMethod::content() const { return content_; }
+inline VStatementItemList* VMethod::body() const { return body_; }
+inline VStatementItemList* VMethod::annotations() const { return annotations_; }
+inline Visualization::SequentialLayout* VMethod::content() const { return content_; }
+inline Visualization::VList* VMethod::typeArguments() const { return typeArguments_; }
 inline Visualization::VList* VMethod::arguments() const { return arguments_; }
 
 }

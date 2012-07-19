@@ -59,7 +59,11 @@ class OOVISUALIZATION_API VMethodStyle : public Visualization::ItemStyle
 		Visualization::TextStyle nameStaticProtected_;
 		Visualization::StaticStyle icon_;
 		Visualization::SequentialLayoutStyle header_;
-		Visualization::VListStyle content_;
+		Visualization::VListStyle body_;
+		Visualization::VListStyle annotations_;
+		Visualization::SequentialLayoutStyle addons_;
+		Visualization::SequentialLayoutStyle content_;
+		Visualization::VListStyle typeArguments_;
 		Visualization::VListStyle arguments_;
 		Visualization::VListStyle results_;
 
@@ -77,7 +81,11 @@ class OOVISUALIZATION_API VMethodStyle : public Visualization::ItemStyle
 		const Visualization::TextStyle& nameStaticProtected() const;
 		const Visualization::StaticStyle& icon() const;
 		const Visualization::SequentialLayoutStyle& header() const;
-		const Visualization::VListStyle& content() const;
+		const Visualization::VListStyle& body() const;
+		const Visualization::VListStyle& annotations() const;
+		const Visualization::SequentialLayoutStyle& addons() const;
+		const Visualization::SequentialLayoutStyle& content() const;
+		const Visualization::VListStyle& typeArguments() const;
 		const Visualization::VListStyle& arguments() const;
 		const Visualization::VListStyle& results() const;
 };
@@ -93,8 +101,12 @@ inline const Visualization::TextStyle& VMethodStyle::nameStaticPrivate() const {
 inline const Visualization::TextStyle& VMethodStyle::nameStaticProtected() const { return nameStaticProtected_; }
 inline const Visualization::StaticStyle& VMethodStyle::icon() const { return icon_; }
 inline const Visualization::SequentialLayoutStyle& VMethodStyle::header() const { return header_; }
-inline const Visualization::VListStyle& VMethodStyle::content() const { return content_; }
+inline const Visualization::VListStyle& VMethodStyle::body() const { return body_; }
+inline const Visualization::VListStyle& VMethodStyle::annotations() const { return annotations_; }
+inline const Visualization::SequentialLayoutStyle& VMethodStyle::addons() const { return addons_; }
+inline const Visualization::SequentialLayoutStyle& VMethodStyle::content() const { return content_; }
 inline const Visualization::VListStyle& VMethodStyle::arguments() const { return arguments_; }
+inline const Visualization::VListStyle& VMethodStyle::typeArguments() const { return typeArguments_; }
 inline const Visualization::VListStyle& VMethodStyle::results() const { return results_; }
 
 }

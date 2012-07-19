@@ -4,4 +4,16 @@
 	<layout prototypes="layout/SequentialLayout/default" />
 	<name prototypes="item/Text/default" />
 	<separator prototypes="item/Symbol/default" />
+	<typeArguments prototypes="item/VList/default">
+		<shape prototypes="shape/Braces/default">
+			Braces
+			<leftBrace>＜</leftBrace>
+			<rightBrace>＞</rightBrace>	
+		</shape>
+		<itemsStyle prototypes="layout/SequentialLayout/default">
+			<direction>0</direction>
+			<spaceBetweenElements>10</spaceBetweenElements>
+			<noInnerCursors>true</noInnerCursors>
+		</itemsStyle>
+	</typeArguments>
 </style>

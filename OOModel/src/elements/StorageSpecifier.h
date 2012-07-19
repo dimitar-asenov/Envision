@@ -49,6 +49,8 @@ class OOMODEL_API StorageSpecifier :  public Model::Node
 	public:
 		enum StorageSpecifierTypes {INSTANCE_VARIABLE, CLASS_VARIABLE};
 
+		StorageSpecifier(const StorageSpecifierTypes val);
+
 		StorageSpecifierTypes get() const;
 		void set(const StorageSpecifierTypes& newval);
 

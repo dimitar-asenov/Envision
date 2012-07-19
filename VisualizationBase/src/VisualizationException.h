@@ -39,7 +39,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API VisualizationException : public Envision::EnvisionException
+class VISUALIZATIONBASE_API VisualizationException : public Core::EnvisionException
 {
 	public:
 		VisualizationException(const QString& message);

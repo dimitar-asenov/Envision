@@ -35,7 +35,7 @@
 #include "TestEvent.h"
 #include "EnvisionException.h"
 
-namespace Envision {
+namespace Core {
 
 TestRunner::TestRunner() :
 	pm(nullptr)
