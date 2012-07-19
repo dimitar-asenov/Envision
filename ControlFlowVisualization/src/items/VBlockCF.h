@@ -58,6 +58,8 @@ class CONTROLFLOWVISUALIZATION_API VBlockCF : public Visualization::ItemWithNode
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
+		typedef Visualization::ItemWithNode<ControlFlowItem, OOModel::Block> BaseItemType;
+
 		VListCF* statements;
 };
 

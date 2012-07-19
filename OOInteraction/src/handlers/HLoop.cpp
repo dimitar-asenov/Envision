@@ -33,11 +33,11 @@
 
 #include "handlers/HLoop.h"
 #include "OOVisualization/src/statements/VLoopStatement.h"
+#include "OOVisualization/src/elements/VStatementItemList.h"
 #include "OOModel/src/expressions/EmptyExpression.h"
 #include "OOModel/src/statements/ExpressionStatement.h"
 
 #include "InteractionBase/src/handlers/SetCursorEvent.h"
-#include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/cursor/LayoutCursor.h"
 
 namespace OOInteraction {
@@ -58,7 +58,8 @@ void HLoop::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 
 	if (event->modifiers() == Qt::NoModifier)
 	{
-		if (vloop->initStep() && vloop->initStep()->itemOrChildHasFocus() && event->key() == Qt::Key_Tab)
+		if (vloop->initStep() && vloop->initStep()->itemOrChildHasFocus()
+				&& (event->key() == Qt::Key_Tab || event->key() == Qt::Key_Semicolon))
 		{
 			processed = true;
 			event->accept();
@@ -77,7 +78,8 @@ void HLoop::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 						Interaction::SetCursorEvent::CursorOnLeft));
 			}
 		}
-		else if (vloop->condition() && vloop->condition()->itemOrChildHasFocus() && event->key() == Qt::Key_Tab)
+		else if (vloop->condition() && vloop->condition()->itemOrChildHasFocus()
+				&& (event->key() == Qt::Key_Tab || event->key() == Qt::Key_Semicolon))
 		{
 			processed = true;
 			event->accept();
@@ -90,7 +92,8 @@ void HLoop::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty,
 					Interaction::SetCursorEvent::CursorOnLeft));
 		}
-		else if (vloop->updateStep() && vloop->updateStep()->itemOrChildHasFocus() && event->key() == Qt::Key_Tab)
+		else if (vloop->updateStep() && vloop->updateStep()->itemOrChildHasFocus()
+				&& (event->key() == Qt::Key_Tab || event->key() == Qt::Key_Semicolon))
 		{
 			processed = true;
 			event->accept();

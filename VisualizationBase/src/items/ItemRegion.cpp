@@ -84,11 +84,11 @@ ItemRegion::PositionConstraints ItemRegion::satisfiedPositionConstraints(const Q
 
 	PositionConstraints constraints = NoConstraints;
 
-	if ( p.y() < region_.height() - 1) constraints |= Below;
-	if ( p.y() > 0) constraints |= Above;
+	if ( p.y() < region_.height()/2) constraints |= Below;
+	if ( p.y() > region_.height()/2) constraints |= Above;
 
-	if ( p.x() < region_.width() - 1) constraints |= RightOf;
-	if ( p.x() > 0) constraints |= LeftOf;
+	if ( p.x() < region_.width()/2) constraints |= RightOf;
+	if ( p.x() > region_.width()/2) constraints |= LeftOf;
 
 	if ( p.y() >= 0 && p.y() < region_.height() &&  p.x() >= 0 && p.x() < region_.width())
 		constraints |= Overlap;

@@ -35,7 +35,7 @@
 #define OOInteraction_CASTSTRINGOFFSETPROVIDER_H_
 
 #include "../oointeraction_api.h"
-#include "StringOffsetProvider.h"
+#include "GridBasedOffsetProvider.h"
 
 namespace OOVisualization {
 	class VCastExpression;
@@ -43,15 +43,9 @@ namespace OOVisualization {
 
 namespace OOInteraction {
 
-class OOINTERACTION_API CastStringOffsetProvider : public StringOffsetProvider {
+class OOINTERACTION_API CastStringOffsetProvider : public GridBasedOffsetProvider {
 	public:
 		CastStringOffsetProvider(OOVisualization::VCastExpression* vis);
-
-		virtual int offset();
-		virtual void setOffset(int newOffset);
-
-	private:
-		OOVisualization::VCastExpression* vis_;
 };
 
 

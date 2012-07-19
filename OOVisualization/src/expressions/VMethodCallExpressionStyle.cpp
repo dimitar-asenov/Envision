@@ -41,7 +41,6 @@ void VMethodCallExpressionStyle::load(Visualization::StyleLoader& sl)
 
 	sl.load("layout", layout_);
 	sl.load("name", name_);
-	sl.load("separator", separator_);
 	sl.load("arguments", arguments_);
 }
 

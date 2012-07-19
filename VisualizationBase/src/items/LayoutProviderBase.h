@@ -61,6 +61,8 @@ class VISUALIZATIONBASE_API LayoutProviderBase : public Item
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
+		typedef Item BaseItemType;
+
 		Layout* layout_;
 };
 

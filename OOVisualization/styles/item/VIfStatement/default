@@ -76,6 +76,9 @@
 			<cornerRadius>4</cornerRadius>
 			<cornerType>1</cornerType>
 		</shape>
+		<itemsStyle>
+			<alignment>1</alignment>
+		</itemsStyle>
 	</thenBranch>
 	<elseBranch prototypes="item/VList/default">
 		<shape prototypes="shape/Box/default">
@@ -93,5 +96,8 @@
 			<cornerRadius>4</cornerRadius>
 			<cornerType>1</cornerType>
 		</shape>
+		<itemsStyle>
+			<alignment>1</alignment>
+		</itemsStyle>
 	</elseBranch>
 </style>

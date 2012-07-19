@@ -50,7 +50,11 @@ void VMethodStyle::load(Visualization::StyleLoader& sl)
 	sl.load("nameStaticProtected", nameStaticProtected_);
 	sl.load("icon", icon_);
 	sl.load("header", header_);
+	sl.load("body", body_);
+	sl.load("annotations", annotations_);
+	sl.load("addons", addons_);
 	sl.load("content", content_);
+	sl.load("typeArguments", typeArguments_);
 	sl.load("arguments", arguments_);
 	sl.load("results", results_);
 }

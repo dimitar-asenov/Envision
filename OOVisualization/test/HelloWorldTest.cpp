@@ -34,6 +34,9 @@
 #include "oovisualization.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
+#include "MethodAddOn.h"
+#include "../src/top_level/VMethod.h"
+
 #include "OOModel/src/allOOModelNodes.h"
 
 #include "VisualizationBase/src/VisualizationManager.h"
@@ -86,13 +89,122 @@ Class* addHelloWorld(Model::Model* model, Project* parent)
 
 	ExpressionStatement* callPrintlnSt = new ExpressionStatement();
 	MethodCallExpression* callPrintln = new MethodCallExpression("println",
-			new VariableAccess("out", new ReferenceExpression("System", new ReferenceExpression("Java"))));
+			new ReferenceExpression("out", new ReferenceExpression("System", new ReferenceExpression("Java"))));
 	callPrintln->arguments()->append(new StringLiteral("Hello World"));
 	callPrintlnSt->setExpression(callPrintln);
 	main->items()->append(callPrintlnSt);
 
 	model->endModification();
 	return hello;
+}
+
+Class* addGeneric(Model::Model* model, Project* parent)
+{
+	Class* gen = nullptr;
+
+	if (!parent) gen = dynamic_cast<Class*> (model->createRoot("Class"));
+	model->beginModification(parent ? static_cast<Model::Node*> (parent) :gen, "Adding a generic class.");
+	if (!gen)
+	{
+		gen = new Class();
+		parent->classes()->append(gen);
+	}
+
+	gen->setName("Generic");
+	gen->setVisibility(Visibility::PUBLIC);
+	gen->typeArguments()->append(new FormalTypeArgument("P"));
+	gen->typeArguments()->append(new FormalTypeArgument("Q", new ReferenceExpression("P")));
+	gen->typeArguments()->append(new FormalTypeArgument("R", nullptr, new ReferenceExpression("P")));
+
+	Method* foo = new Method();
+	gen->methods()->append(foo);
+	foo->setName("foo");
+	foo->setVisibility(Visibility::PUBLIC);
+	foo->setStorageSpecifier(StorageSpecifier::INSTANCE_VARIABLE);
+	foo->typeArguments()->append(new FormalTypeArgument("T"));
+
+	Method* bar = new Method();
+	gen->methods()->append(bar);
+	bar->setName("bar");
+	bar->setVisibility(Visibility::PUBLIC);
+	bar->setStorageSpecifier(StorageSpecifier::CLASS_VARIABLE);
+	bar->typeArguments()->append(new FormalTypeArgument("S"));
+	bar->typeArguments()->append(new FormalTypeArgument("U", new ReferenceExpression("S")));
+	bar->typeArguments()->append(new FormalTypeArgument("V", nullptr, new ReferenceExpression("S")));
+
+	Method* foobar = new Method();
+	gen->methods()->append(foobar);
+	foobar->setName("foobar");
+	foobar->setVisibility(Visibility::PUBLIC);
+	foobar->setStorageSpecifier(StorageSpecifier::INSTANCE_VARIABLE);
+
+	VariableDeclaration* var = new VariableDeclaration();
+	var->setName("var");
+	foobar->items()->append(new ExpressionStatement(var));
+	ClassTypeExpression* varType = new ClassTypeExpression();
+	var->setVarType(varType);
+	varType->setTypeExpression(new ReferenceExpression("Generic"));
+	varType->typeExpression()->typeArguments()->append(new ReferenceExpression("A"));
+	varType->typeExpression()->typeArguments()->append(new ReferenceExpression("B"));
+	varType->typeExpression()->typeArguments()->append(new ReferenceExpression("C"));
+
+	ExpressionStatement* callFooSt = new ExpressionStatement();
+	MethodCallExpression* callFoo = new MethodCallExpression("foo");
+	callFoo->ref()->typeArguments()->append(new ReferenceExpression("A"));
+	callFooSt->setExpression(callFoo);
+	foobar->items()->append(callFooSt);
+
+	ExpressionStatement* callBarSt = new ExpressionStatement();
+	MethodCallExpression* callBar = new MethodCallExpression("bar");
+	callBar->ref()->typeArguments()->append(new ReferenceExpression("A"));
+	callBar->ref()->typeArguments()->append(new ReferenceExpression("B"));
+	callBar->ref()->typeArguments()->append(new ReferenceExpression("C"));
+	callBarSt->setExpression(callBar);
+	foobar->items()->append(callBarSt);
+
+	// Set positions
+	gen->extension<Position>()->setX(400);
+	gen->extension<Position>()->setY(300);
+	bar->extension<Position>()->setY(60);
+	foobar->extension<Position>()->setY(120);
+
+	model->endModification();
+	return gen;
+}
+
+Class* addAnnotated(Model::Model* model, Project* parent)
+{
+	Class* ann = nullptr;
+
+	if (!parent) ann = dynamic_cast<Class*> (model->createRoot("Class"));
+	model->beginModification(parent ? static_cast<Model::Node*> (parent) :ann, "Adding an annotated class.");
+	if (!ann)
+	{
+		ann = new Class();
+		parent->classes()->append(ann);
+	}
+
+	ann->setName("Annotated");
+	ann->setVisibility(Visibility::PUBLIC);
+	ann->annotations()->append( new ExpressionStatement(new ReferenceExpression("SomeAnnotation")));
+
+	Method* foo = new Method("foo", Visibility::PUBLIC, StorageSpecifier::INSTANCE_VARIABLE);
+	ann->methods()->append(foo);
+	foo->annotations()->append(new ExpressionStatement(new ReferenceExpression("SomeAnnotation2")));
+	foo->annotations()->append(new ExpressionStatement(new ReferenceExpression("SomeAnnotation3")));
+
+	VariableDeclaration* var = new VariableDeclaration();
+	foo->items()->append(new ExpressionStatement(var));
+	var->setName("bodyVar");
+	var->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
+	var->setInitialValue(new IntegerLiteral(42));
+
+	// Set positions
+	ann->extension<Position>()->setX(400);
+	ann->extension<Position>()->setY(600);
+
+	model->endModification();
+	return ann;
 }
 
 Library* addJavaLibrary(Model::Model* model, Project* parent)
@@ -254,7 +366,7 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 	CastExpression* cast = new CastExpression();
 	var10->setInitialValue(cast);
 	cast->setType(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
-	cast->setExpr(new VariableAccess("epsilon"));
+	cast->setExpr(new ReferenceExpression("epsilon"));
 
 	VariableDeclaration* var11 = new VariableDeclaration();
 	longMethod->items()->append(new ExpressionStatement(var11));
@@ -373,27 +485,27 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 	longMethod->items()->append(ifs);
 	BinaryOperation* ifCond = new BinaryOperation();
 	ifs->setCondition(ifCond);
-	ifCond->setLeft(new VariableAccess("var14"));
+	ifCond->setLeft(new ReferenceExpression("var14"));
 	ifCond->setOp(BinaryOperation::NOT_EQUALS);
 	ifCond->setRight(new IntegerLiteral(10));
 	UnaryOperation* thenBranch = new UnaryOperation();
 	ifs->thenBranch()->append(thenBranch);
 	thenBranch->setOp(UnaryOperation::POSTINCREMENT);
-	thenBranch->setOperand(new VariableAccess("var14"));
+	thenBranch->setOperand(new ReferenceExpression("var14"));
 	UnaryOperation* elseBranch = new UnaryOperation();
 	ifs->elseBranch()->append(elseBranch);
 	elseBranch->setOp(UnaryOperation::POSTDECREMENT);
-	elseBranch->setOperand(new VariableAccess("var14"));
+	elseBranch->setOperand(new ReferenceExpression("var14"));
 
 	Block* block = new Block();
 	longMethod->items()->append(block);
 	AssignmentExpression* assign = new AssignmentExpression();
 	block->items()->append(new ExpressionStatement(assign));
-	assign->setLeft(new VariableAccess("var1"));
+	assign->setLeft(new ReferenceExpression("var1"));
 	assign->setOp(AssignmentExpression::ASSIGN);
 	BinaryOperation* arrayAccess = new BinaryOperation();
 	assign->setRight(arrayAccess);
-	arrayAccess->setLeft(new VariableAccess("someArray"));
+	arrayAccess->setLeft(new ReferenceExpression("someArray"));
 	arrayAccess->setOp(BinaryOperation::ARRAY_INDEX);
 	arrayAccess->setRight(new IntegerLiteral(4));
 
@@ -406,17 +518,17 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 	initStep->setInitialValue(new IntegerLiteral(0));
 	BinaryOperation* loopCondition = new BinaryOperation();
 	loop->setCondition(loopCondition);
-	loopCondition->setLeft(new VariableAccess("i"));
+	loopCondition->setLeft(new ReferenceExpression("i"));
 	loopCondition->setOp(BinaryOperation::LESS);
-	loopCondition->setRight(new VariableAccess("x"));
+	loopCondition->setRight(new ReferenceExpression("x"));
 	AssignmentExpression* updateStep = new AssignmentExpression();
 	loop->setUpdateStep(updateStep);
-	updateStep->setLeft(new VariableAccess("i"));
+	updateStep->setLeft(new ReferenceExpression("i"));
 	updateStep->setOp(AssignmentExpression::PLUS_ASSIGN);
 	updateStep->setRight(new IntegerLiteral(1));
 	AssignmentExpression* loopBodyAssignment = new AssignmentExpression();
 	loop->body()->append(new ExpressionStatement(loopBodyAssignment));
-	loopBodyAssignment->setLeft(new VariableAccess("var14"));
+	loopBodyAssignment->setLeft(new ReferenceExpression("var14"));
 	loopBodyAssignment->setOp(AssignmentExpression::TIMES_ASSIGN);
 	loopBodyAssignment->setRight(new IntegerLiteral(2));
 	loop->body()->append(new ContinueStatement());
@@ -427,14 +539,12 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 	longMethod->items()->append(forEach);
 	forEach->setVarName("elem");
 	forEach->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_INT));
-	VariableAccess* forEachCollection = new VariableAccess();
-	forEachCollection->ref()->setName("SomeCollection");
-	forEach->setCollection(forEachCollection);
+	forEach->setCollection(new ReferenceExpression("SomeCollection"));
 	AssignmentExpression* assignEach = new AssignmentExpression();
 	forEach->body()->append(new ExpressionStatement(assignEach));
-	assignEach->setLeft(new VariableAccess("var1"));
+	assignEach->setLeft(new ReferenceExpression("var1"));
 	assignEach->setOp(AssignmentExpression::DIVIDE_ASSIGN);
-	assignEach->setRight(new VariableAccess("elem"));
+	assignEach->setRight(new ReferenceExpression("elem"));
 
 	ReturnStatement* longMethodReturn = new ReturnStatement();
 	longMethod->items()->append(longMethodReturn);
@@ -481,7 +591,7 @@ Method* addFactorial(Model::Model* model, Class* parent)
 	factorial->items()->append(ifs);
 	BinaryOperation* ifCond = new BinaryOperation();
 	ifs->setCondition(ifCond);
-	ifCond->setLeft(new VariableAccess("x"));
+	ifCond->setLeft(new ReferenceExpression("x"));
 	ifCond->setOp(BinaryOperation::GREATER_EQUALS);
 	ifCond->setRight(new IntegerLiteral(0));
 
@@ -495,32 +605,32 @@ Method* addFactorial(Model::Model* model, Class* parent)
 	initStep->setInitialValue(new IntegerLiteral(1));
 	BinaryOperation* loopCondition = new BinaryOperation();
 	loop->setCondition(loopCondition);
-	loopCondition->setLeft(new VariableAccess("i"));
+	loopCondition->setLeft(new ReferenceExpression("i"));
 	loopCondition->setOp(BinaryOperation::LESS_EQUALS);
-	loopCondition->setRight(new VariableAccess("x"));
+	loopCondition->setRight(new ReferenceExpression("x"));
 	AssignmentExpression* updateStep = new AssignmentExpression();
 	loop->setUpdateStep(updateStep);
-	updateStep->setLeft(new VariableAccess("i"));
+	updateStep->setLeft(new ReferenceExpression("i"));
 	updateStep->setOp(AssignmentExpression::PLUS_ASSIGN);
 	updateStep->setRight(new IntegerLiteral(1));
 	AssignmentExpression* loopBodyAssignment = new AssignmentExpression();
 	loop->body()->append(new ExpressionStatement(loopBodyAssignment));
-	loopBodyAssignment->setLeft(new VariableAccess("result"));
+	loopBodyAssignment->setLeft(new ReferenceExpression("result"));
 	loopBodyAssignment->setOp(AssignmentExpression::TIMES_ASSIGN);
-	loopBodyAssignment->setRight(new VariableAccess("i"));
+	loopBodyAssignment->setRight(new ReferenceExpression("i"));
 
 	// Else
 	AssignmentExpression* elseBranch = new AssignmentExpression();
 	ifs->elseBranch()->append(new ExpressionStatement(elseBranch));
 
-	elseBranch->setLeft(new VariableAccess("result"));
+	elseBranch->setLeft(new ReferenceExpression("result"));
 	elseBranch->setOp(AssignmentExpression::ASSIGN);
 	elseBranch->setRight(new IntegerLiteral(-1));
 
 	// Return
 	ReturnStatement* factorialReturn = new ReturnStatement();
 	factorial->items()->append(factorialReturn);
-	factorialReturn->values()->append(new VariableAccess("result"));
+	factorialReturn->values()->append(new ReferenceExpression("result"));
 
 	factorial->extension<Position>()->setY(860);
 
@@ -549,6 +659,14 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	Class* hello = nullptr;
 	hello = addHelloWorld(model, prj);
 
+	// Build a simple Generic Class
+	Class* gen = nullptr;
+	gen = addGeneric(model, prj);
+
+	// Build a simple Class that has annotations
+	Class* ann = nullptr;
+	ann = addAnnotated(model, prj);
+
 //	// Add a second method
 	Method* longMethod = nullptr;
 	longMethod = addLongMethod(model, hello);
@@ -557,10 +675,15 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	Method* factorial = nullptr;
 	factorial = addFactorial(model, hello);
 
+// Add a method Add-on
+	VMethod::addAddOn(new MethodAddOn("foo"));
+
 	////////////////////////////////////////////////// Set Scene
 	Model::Node* top_level = nullptr;
 	if (prj) top_level = prj;
 	else if(hello) top_level = hello;
+	else if(gen) top_level = gen;
+	else if(ann) top_level = ann;
 	else if(java) top_level = java;
 	else if (longMethod) top_level = longMethod;
 	else top_level = factorial;

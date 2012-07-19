@@ -166,10 +166,10 @@ Class* addCollection(Model::Model* model, Project* parent)
 	MethodCallExpression* sumCall = new MethodCallExpression("sum", new ThisExpression());
 	resultVar->setInitialValue(sumCall);
 	sumCall->arguments()->append( new IntegerLiteral(0));
-	sumCall->arguments()->append( new VariableAccess("index"));
+	sumCall->arguments()->append( new ReferenceExpression("index"));
 
 	ReturnStatement* testReturn = new ReturnStatement();
-	testReturn->values()->append(new VariableAccess("result"));
+	testReturn->values()->append(new ReferenceExpression("result"));
 	test->items()->append(testReturn);
 
 	FormalResult* testFormalResult = new FormalResult();

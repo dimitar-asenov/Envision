@@ -38,7 +38,7 @@ Q_EXPORT_PLUGIN2( PLUGINNAME_LOWERCASE, NAMESPACE::PLUGINNAME )
 
 namespace NAMESPACE {
 
-bool PLUGINNAME::initialize(Envision::EnvisionManager&)
+bool PLUGINNAME::initialize(Core::EnvisionManager&)
 {
 	return true;
 }

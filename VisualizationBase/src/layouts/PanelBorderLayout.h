@@ -46,15 +46,6 @@ class VISUALIZATIONBASE_API PanelBorderLayout: public Layout
 {
 	ITEM_COMMON(PanelBorderLayout)
 
-	private:
-		PanelLayout* top_;
-		PanelLayout* left_;
-		PanelLayout* bottom_;
-		PanelLayout* right_;
-		Item* content_;
-
-		void setPanel(bool enable, PanelLayout*& panel, const PanelLayoutStyle& style);
-
 	public:
 		PanelBorderLayout(Item* parent, const StyleType* style = itemStyles().get());
 		~PanelBorderLayout();
@@ -78,7 +69,18 @@ class VISUALIZATIONBASE_API PanelBorderLayout: public Layout
 
 		virtual bool isEmpty() const;
 
-		virtual void updateGeometry(int availableWidth, int availableHeight);
+		virtual void updateGeometry(int availableWidth, int availableHeight);\
+
+	private:
+		typedef Layout BaseItemType;
+
+		PanelLayout* top_;
+		PanelLayout* left_;
+		PanelLayout* bottom_;
+		PanelLayout* right_;
+		Item* content_;
+
+		void setPanel(bool enable, PanelLayout*& panel, const PanelLayoutStyle& style);
 };
 
 inline void PanelBorderLayout::setTop(bool enable) { setPanel(enable, top_, style()->topStyle()); }

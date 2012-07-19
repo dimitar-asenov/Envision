@@ -48,7 +48,8 @@ namespace Visualization {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VUnfinishedOperator : public Visualization::ItemWithNode<Visualization::LayoutProvider<>, OOModel::UnfinishedOperator>
+class OOVISUALIZATION_API VUnfinishedOperator : public Visualization::ItemWithNode<Visualization::LayoutProvider<>,
+OOModel::UnfinishedOperator>
 {
 	ITEM_COMMON(VUnfinishedOperator)
 
@@ -60,6 +61,8 @@ class OOVISUALIZATION_API VUnfinishedOperator : public Visualization::ItemWithNo
 		void determineChildren();
 
 	private:
+		typedef Visualization::ItemWithNode<Visualization::LayoutProvider<>, OOModel::UnfinishedOperator> BaseItemType;
+
 		QVector<Visualization::VText*> delimiters_;
 		QVector<Visualization::Item*> operands_;
 };

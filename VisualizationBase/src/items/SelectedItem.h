@@ -57,6 +57,8 @@ class VISUALIZATIONBASE_API SelectedItem: public Item
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
+		typedef Item BaseItemType;
+
 		Item* selectedItem_;
 };
 

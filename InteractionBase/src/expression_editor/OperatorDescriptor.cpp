@@ -45,7 +45,7 @@ OperatorDescriptor::OperatorDescriptor(const QString& name, const QString& signa
 	: name_(name), num_operands_(num_operands), precedence_(precedence), associativity_(associativity), transient_(false)
 {
 	signature_ = signature.split(" ", QString::SkipEmptyParts);
-	signature_.replaceInStrings("space", " ");
+	signature_.replaceInStrings("SPACE", " ");
 
 	// Compute prefix
 	for(int i = 0; i < signature_.size() && signature_.at(i) != "expr" && signature_.at(i) != "id"; ++i)

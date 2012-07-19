@@ -44,7 +44,7 @@ inline void initFilePersistenceResources() { Q_INIT_RESOURCE(FilePersistence); }
 
 namespace FilePersistence {
 
-bool FilePersistence::initialize(Envision::EnvisionManager&)
+bool FilePersistence::initialize(Core::EnvisionManager&)
 {
 	initFilePersistenceResources();
 	return true;

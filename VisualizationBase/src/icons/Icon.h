@@ -45,6 +45,9 @@ class VISUALIZATIONBASE_API Icon: public Item
 {
 	ITEM_COMMON(Icon)
 
+	public:
+		Icon(Item* parent, const IconStyle* style);
+
 	protected:
 		virtual void determineChildren();
 
@@ -53,8 +56,8 @@ class VISUALIZATIONBASE_API Icon: public Item
 
 		void setInnerSize(int width, int height);
 
-	public:
-		Icon(Item* parent, const IconStyle* style);
+	private:
+		typedef Item BaseItemType;
 };
 
 }

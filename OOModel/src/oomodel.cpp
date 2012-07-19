@@ -40,7 +40,7 @@ Q_EXPORT_PLUGIN2( oomodel, OOModel::OOModel )
 
 namespace OOModel {
 
-bool OOModel::initialize(Envision::EnvisionManager&)
+bool OOModel::initialize(Core::EnvisionManager&)
 {
 	// Initialize common nodes
 	Visibility::registerNodeType();
@@ -56,6 +56,7 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	Model::TypedList<StatementItem>::registerNodeType();
 	Model::TypedList<FormalArgument>::registerNodeType();
 	Model::TypedList<FormalResult>::registerNodeType();
+	Model::TypedList<FormalTypeArgument>::registerNodeType();
 	Model::TypedList<Field>::registerNodeType();
 	Model::TypedList<OOReference>::registerNodeType();
 
@@ -80,7 +81,6 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	Model::TypedList<CharacterLiteral>::registerNodeType();
 	Model::TypedList<NullLiteral>::registerNodeType();
 	Model::TypedList<ThisExpression>::registerNodeType();
-	Model::TypedList<VariableAccess>::registerNodeType();
 	Model::TypedList<NewExpression>::registerNodeType();
 	Model::TypedList<MethodCallExpression>::registerNodeType();
 	Model::TypedList<UnaryOperation>::registerNodeType();
@@ -110,6 +110,7 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	StatementItemList::registerNodeType();
 	FormalArgument::init();
 	FormalResult::init();
+	FormalTypeArgument::init();
 	Field::init();
 
 	Statement::init();
@@ -133,7 +134,6 @@ bool OOModel::initialize(Envision::EnvisionManager&)
 	CharacterLiteral::init();
 	NullLiteral::init();
 	ThisExpression::init();
-	VariableAccess::init();
 	NewExpression::init();
 	MethodCallExpression::init();
 	UnaryOperation::init();

@@ -35,6 +35,7 @@
 #define OOVisualization_VEMPTYEXPRESSION_H_
 
 #include "../oovisualization_api.h"
+#include "VEmptyExpressionStyle.h"
 
 #include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/items/Static.h"
@@ -43,9 +44,10 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VEmptyExpression : public Visualization::ItemWithNode< Visualization::Item, OOModel::EmptyExpression>
+class OOVISUALIZATION_API VEmptyExpression : public Visualization::ItemWithNode< Visualization::Item,
+OOModel::EmptyExpression>
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VEmptyExpression, Visualization::StaticStyle)
+	ITEM_COMMON(VEmptyExpression)
 
 	public:
 		VEmptyExpression(Item* parent, NodeType *expr, const StyleType *style = itemStyles().get());
@@ -56,6 +58,8 @@ class OOVISUALIZATION_API VEmptyExpression : public Visualization::ItemWithNode<
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
+		typedef Visualization::ItemWithNode< Visualization::Item, OOModel::EmptyExpression> BaseItemType;
+
 		Visualization::Static* vis_;
 };
 

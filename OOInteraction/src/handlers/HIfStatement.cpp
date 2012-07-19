@@ -34,11 +34,11 @@
 #include "handlers/HIfStatement.h"
 
 #include "OOVisualization/src/statements/VIfStatement.h"
+#include "OOVisualization/src/elements/VStatementItemList.h"
 #include "OOModel/src/expressions/EmptyExpression.h"
 #include "OOModel/src/statements/ExpressionStatement.h"
 
 #include "InteractionBase/src/handlers/SetCursorEvent.h"
-#include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/cursor/LayoutCursor.h"
 
 namespace OOInteraction {

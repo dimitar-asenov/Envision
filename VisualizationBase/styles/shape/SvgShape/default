@@ -1,0 +1,12 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="../Shape/default">
+	<outline>
+		<width>0.0</width>
+		<style>0</style>
+	</outline>
+	<filename></filename>
+	<topContentMarginFraction>0.1</topContentMarginFraction>
+	<bottomContentMarginFraction>0.1</bottomContentMarginFraction>
+	<leftContentMarginFraction>0.1</leftContentMarginFraction>
+	<rightContentMarginFraction>0.1</rightContentMarginFraction>
+</style>

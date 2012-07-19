@@ -46,13 +46,6 @@ class VISUALIZATIONBASE_API PanelLayout: public Layout
 {
 	ITEM_COMMON(PanelLayout)
 
-	private:
-		Item* first_;
-		Item* middle_;
-		Item* last_;
-
-		void setItem(Item* item, Item*& position, bool deleteOldItem);
-
 	public:
 		PanelLayout(Item* parent, const StyleType* style = itemStyles().get());
 		~PanelLayout();
@@ -81,6 +74,15 @@ class VISUALIZATIONBASE_API PanelLayout: public Layout
 
 		virtual bool sizeDependsOnParent() const;
 		virtual void updateGeometry(int availableWidth, int availableHeight);
+
+	private:
+		typedef Layout BaseItemType;
+
+		Item* first_;
+		Item* middle_;
+		Item* last_;
+
+		void setItem(Item* item, Item*& position, bool deleteOldItem);
 };
 
 inline void PanelLayout::setFirst(Item* item, bool deleteOldItem) { setItem(item, first_, deleteOldItem); }

@@ -38,7 +38,7 @@ Q_EXPORT_PLUGIN2( custommethodcall, CustomMethodCall::CustomMethodCall )
 
 namespace CustomMethodCall {
 
-bool CustomMethodCall::initialize(Envision::EnvisionManager&)
+bool CustomMethodCall::initialize(Core::EnvisionManager&)
 {
 	return true;
 }

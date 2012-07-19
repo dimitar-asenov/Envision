@@ -73,7 +73,7 @@ namespace Interaction {
 
 Log* InteractionBase::logger = nullptr;
 
-bool InteractionBase::initialize(Envision::EnvisionManager&)
+bool InteractionBase::initialize(Core::EnvisionManager&)
 {
 	logger = Logger::Log::getLogger("interactionbase");
 	Visualization::SceneHandlerItem::setInteractionHandler(HSceneHandlerItem::instance());

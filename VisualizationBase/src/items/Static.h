@@ -63,6 +63,8 @@ class VISUALIZATIONBASE_API Static : public Item
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
+		typedef Item BaseItemType;
+
 		Item* item_;
 
 		typedef Item* (*staticItemConstructorType)(Item* parent, const ItemStyle* style);

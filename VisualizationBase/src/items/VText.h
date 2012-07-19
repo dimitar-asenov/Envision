@@ -53,6 +53,9 @@ class VISUALIZATIONBASE_API VText : public ItemWithNode<TextRenderer, Model::Tex
 
 	protected:
 		virtual QString currentText();
+
+	private:
+		typedef ItemWithNode<TextRenderer, Model::Text> BaseItemType;
 };
 
 }

@@ -35,7 +35,7 @@
 #define OOInteraction_CALLSTRINGOFFSETPROVIDER_H_
 
 #include "../oointeraction_api.h"
-#include "SequentialVisualizationStringOffsetProvider.h"
+#include "GridBasedOffsetProvider.h"
 
 namespace OOVisualization {
 	class VMethodCallExpression;
@@ -43,15 +43,9 @@ namespace OOVisualization {
 
 namespace OOInteraction {
 
-class OOINTERACTION_API CallStringOffsetProvider : public SequentialVisualizationStringOffsetProvider {
+class OOINTERACTION_API CallStringOffsetProvider : public GridBasedOffsetProvider {
 	public:
 		CallStringOffsetProvider(OOVisualization::VMethodCallExpression* vis);
-
-		virtual int offset();
-		virtual void setOffset(int newOffset);
-
-	private:
-		OOVisualization::VMethodCallExpression* vis_;
 };
 
 } /* namespace OOInteraction */

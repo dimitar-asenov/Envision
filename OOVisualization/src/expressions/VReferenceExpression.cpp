@@ -35,6 +35,7 @@
 
 #include "VisualizationBase/src/items/Text.h"
 #include "VisualizationBase/src/items/Static.h"
+#include "VisualizationBase/src/items/VList.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -46,8 +47,9 @@ ITEM_COMMON_DEFINITIONS(VReferenceExpression, "item")
 VReferenceExpression::VReferenceExpression(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<>, ReferenceExpression>(parent, node, style),
 	name_(new Text(layout(), &style->name()) ),
-	separator_(nullptr),
-	prefix_(nullptr)
+	separator_(),
+	prefix_(),
+	typeArguments_()
 {
 	layout()->append(name_);
 }
@@ -58,12 +60,15 @@ VReferenceExpression::~VReferenceExpression()
 	name_ = nullptr;
 	separator_ = nullptr;
 	prefix_ = nullptr;
+	typeArguments_ = nullptr;
 }
 
 void VReferenceExpression::determineChildren()
 {
 	layout()->synchronizeFirst(prefix_, node()->prefix());
 	layout()->synchronizeMid(separator_, node()->prefix() != nullptr, &style()->separator(), 1);
+	layout()->synchronizeLast(typeArguments_, node()->typeArguments()->size() > 0 ? node()->typeArguments() : nullptr,
+			&style()->typeArguments());
 
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
 	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
@@ -72,6 +77,11 @@ void VReferenceExpression::determineChildren()
 	layout()->setStyle( &style()->layout());
 	name_->setStyle( &style()->name());
 	if (prefix_) separator_->setStyle( &style()->separator());
+	if (typeArguments_)
+	{
+		typeArguments_->setStyle(&style()->typeArguments());
+		typeArguments_->setSuppressDefaultRemovalHandler(true);
+	}
 
 	name_->setText(node()->ref()->name());
 }

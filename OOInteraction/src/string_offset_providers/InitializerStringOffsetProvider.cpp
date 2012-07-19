@@ -44,7 +44,7 @@ InitializerStringOffsetProvider::InitializerStringOffsetProvider(OOVisualization
 {
 }
 
-int InitializerStringOffsetProvider::offset()
+int InitializerStringOffsetProvider::offset(Qt::Key key)
 {
 	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
 
@@ -75,9 +75,9 @@ int InitializerStringOffsetProvider::offset()
 			result += subComponents[subIndex++].size();
 		}
 
-		result += itemOffset(vis_->layout()->focusedChild(), subComponents[subIndex].size());
+		result += itemOffset(vis_->layout()->focusedChild(), subComponents[subIndex].size(), key);
 	}
-	else result += listItemOffset(vis_->values(), "{", ",", "}");
+	else result += listItemOffset(vis_->values(), "{", ",", "}", key);
 
 	return result;
 }

@@ -52,7 +52,7 @@ class OOINTERACTION_API StringOffsetProvider {
 		StringOffsetProvider(Visualization::Item* item);
 
 		virtual QString string();
-		virtual int offset() = 0;
+		virtual int offset(Qt::Key key) = 0;
 		virtual void setOffset(int newOffset) = 0;
 		virtual ~StringOffsetProvider();
 
@@ -65,23 +65,29 @@ class OOINTERACTION_API StringOffsetProvider {
 		 */
 		virtual bool isIndivisible();
 
-	protected:
+		Visualization::Item* item() const;
+
 		// Helper methods
-		QStringList components();
 		static QStringList components(Model::Node* node);
 		static QString stringFromComponenets(Model::Node* node);
 		static QString stringFromComponenets(Visualization::Item* item);
 		static QString stringFromStringOffsetProvider(Visualization::Item* item);
 		static bool setOffsetInItem(int offset, Visualization::Item* item);
-		static int itemOffset(Visualization::Item* item, int stringComponentLenght);
+		static int itemOffset(Visualization::Item* item, int stringComponentLenght, Qt::Key key);
 		static bool setOffsetInListItem(int& offset, Visualization::VList* list,
 				const QString& prefix, const QString& separator, const QString& postfix);
 		static int listItemOffset(Visualization::VList* list,
-				const QString& prefix, const QString& separator, const QString& postfix);
+				const QString& prefix, const QString& separator, const QString& postfix, Qt::Key key);
+
+	protected:
+		// Helper methods
+		virtual QStringList components();
 
 	private:
 		Visualization::Item* vis_;
 };
+
+inline Visualization::Item* StringOffsetProvider::item() const { return vis_; }
 
 } /* namespace OOInteraction */
 #endif /* OOInteraction_STRINGOFFSETPROVIDER_H_ */

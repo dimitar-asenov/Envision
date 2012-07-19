@@ -39,7 +39,7 @@
 
 namespace OOModel {
 
-class OOMODEL_API OOModelException : public Envision::EnvisionException
+class OOMODEL_API OOModelException : public Core::EnvisionException
 {
 		public:
 			OOModelException(const QString& message);

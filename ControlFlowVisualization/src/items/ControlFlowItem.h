@@ -77,6 +77,8 @@ class ControlFlowItem : public Visualization::Item
 		void clearConnectors();
 
 	private:
+		typedef Visualization::Item BaseItemType;
+
 		QPainterPath connector(const QList< QPoint >& points, bool arrowEnding);
 
 		QList< QList< QPoint > > connectors_;

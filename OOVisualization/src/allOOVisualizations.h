@@ -42,8 +42,9 @@
 #include "elements/VField.h"
 #include "elements/VFormalArgument.h"
 #include "elements/VFormalResult.h"
+#include "elements/VFormalTypeArgument.h"
+#include "elements/VStatementItemList.h"
 
-#include "expressions/VVariableAccess.h"
 #include "expressions/VAssignmentExpression.h"
 #include "expressions/VMethodCallExpression.h"
 #include "expressions/VReferenceExpression.h"

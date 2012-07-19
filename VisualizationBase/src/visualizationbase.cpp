@@ -37,6 +37,7 @@
 #include "shapes/Box.h"
 #include "shapes/Diamond.h"
 #include "shapes/Braces.h"
+#include "shapes/SvgShape.h"
 #include "Scene.h"
 #include "items/VText.h"
 #include "items/VInteger.h"
@@ -61,12 +62,13 @@ Q_EXPORT_PLUGIN2( visualizationbase, Visualization::VisualizationBase )
 namespace Visualization
 {
 
-	bool VisualizationBase::initialize(Envision::EnvisionManager& manager)
+	bool VisualizationBase::initialize(Core::EnvisionManager& manager)
 	{
 		VisualizationManager::init(&manager);
 		Shape::registerShape<Box>();
 		Shape::registerShape<Diamond>();
 		Shape::registerShape<Braces>();
+		Shape::registerShape<SvgShape>();
 
 		// Register extensions
 		Position::registerExtension();

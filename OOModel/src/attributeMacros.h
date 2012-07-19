@@ -70,4 +70,13 @@
 
 /*********************************************************************************************************************/
 
+/**
+ * Declares an 'annotations' attribute of type OOModel::StatementItemList.
+ *
+ * The annotations list can be accessed via annotations()
+ * A new value can be set via setAnnotations()
+ */
+#define ATTRIBUTE_OOP_ANNOTATIONS																															\
+	ATTRIBUTE(::OOModel::StatementItemList, annotations, setAnnotations)
+
 #endif /* ATTRIBUTEMACROS_H_ */

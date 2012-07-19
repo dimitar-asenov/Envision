@@ -33,15 +33,44 @@
 
 #include "items/Item.h"
 #include "items/ItemStyle.h"
+#include "layouts/SequentialLayout.h"
 #include "shapes/Shape.h"
 #include "shapes/ShapeStyle.h"
 #include "VisualizationException.h"
 #include "Scene.h"
 #include "../renderer/ModelRenderer.h"
+#include "VisualizationAddOn.h"
 
 #include "cursor/Cursor.h"
 
 namespace Visualization {
+
+int Item::registerVisualization()
+{
+	static QMutex mutex;
+	static int i = 0;
+
+	QMutexLocker locker(&mutex);
+	return ++i;
+}
+
+QList<VisualizationAddOn*>& Item::staticAddOns()
+{
+	static QList<VisualizationAddOn*> addons;
+	return addons;
+}
+
+
+void Item::addAddOn(VisualizationAddOn* addOn)
+{
+	if (!staticAddOns().contains(addOn))
+		staticAddOns().append(addOn);
+}
+
+bool Item::removeAddOn(VisualizationAddOn* addOn)
+{
+	return staticAddOns().removeAll(addOn) != 0;
+}
 
 Item::Item(Item* parent, const StyleType* style) :
 	QGraphicsItem(parent), style_(nullptr), shape_(nullptr), needsUpdate_(FullUpdate), purpose_(-1)
@@ -139,6 +168,7 @@ void Item::updateSubtree()
 	if ( (needsUpdate_ != NoUpdate) || needsUpdate() || sizeDependsOnParent()
 			|| (hasNode() && revision() != node()->revision()))
 	{
+		updateAddOnItems();
 		determineChildren();
 		updateChildren();
 		changeGeometry();
@@ -162,6 +192,40 @@ void Item::updateChildren()
 		Item* item = static_cast<Item*> (*child);
 		item->updateSubtree();
 	}
+}
+
+void Item::updateAddOnItems()
+{
+	auto addons = addOns();
+
+	for (auto key : addOnItems_.keys())
+	{
+		bool deleted = false;
+		if (addons.contains(key)) addons.removeAll(key);
+		else deleted = true;
+
+		auto values = addOnItems_.values(key);
+		decltype(values) new_values;
+		if (!deleted) new_values = key->determineItems(this, values);
+
+		for(auto item : values)
+		{
+			if (!deleted && new_values.contains( item )) new_values.removeAll(item);
+			else
+			{
+				addOnItems_.remove(key, item);
+				if (!item->parent()) SAFE_DELETE_ITEM(item);
+			}
+		}
+
+		if (!deleted)
+			for (auto v : new_values) addOnItems_.insert(key, v);
+	}
+
+	// Whatever is left in addons now is a new addon and must be processed
+	for (auto a : addons)
+		for (auto i : a->determineItems(this, QList<Item*>()))
+			addOnItems_.insert(a,i);
 }
 
 void Item::updateGeometry(Item* content, int availableWidth, int availableHeight)
@@ -479,9 +543,6 @@ bool Item::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 		{
 			// This is a child item region
 
-			// Only accept this as a correct focus event if this child is not already focused.
-			if (r->item()->itemOrChildHasFocus()) continue;
-
 			CursorMoveDirection childDirection;
 			switch(dir)
 			{
@@ -571,6 +632,25 @@ void Item::clearChildNodePurpose(const Model::Node* node)
 bool Item::definesChildNodePurpose(const Model::Node* node) const
 {
 	return childNodePurpose_.find(node) != childNodePurpose_.end();
+}
+
+QList<VisualizationAddOn*> Item::addOns()
+{
+	return staticAddOns();
+}
+
+void Item::putAddOnItemsInSequence(SequentialLayout* layout)
+{
+	auto values = addOnItems_.values();
+	for (int i = layout->length() - 1; i>=0; --i)
+	{
+		auto item = layout->at<Item>(i);
+		if (values.contains(item)) values.removeAll(item);
+		else layout->removeAll(item,true);
+	}
+
+	for (auto item : values)
+		layout->append(item);
 }
 
 /***********************************************************************************************************************

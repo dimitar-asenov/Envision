@@ -49,6 +49,8 @@ class VISUALIZATIONBASE_API SequentialLayoutStyle : public LayoutStyle
 		bool notLocationEquivalentCursors_;
 		bool noInnerCursors_;
 		bool noBoundaryCursors_;
+		int minWidth_;
+		int minHeight_;
 
 	public:
 		SequentialLayoutStyle();
@@ -60,6 +62,8 @@ class VISUALIZATIONBASE_API SequentialLayoutStyle : public LayoutStyle
 		bool notLocationEquivalentCursors() const;
 		bool noInnerCursors() const;
 		bool noBoundaryCursors() const;
+		int minWidth() const;
+		int minHeight() const;
 
 		void setDirection(Direction direction);
 		void setAlignment(Alignment alignment);
@@ -75,6 +79,8 @@ inline int SequentialLayoutStyle::spaceBetweenElements() const {	return spaceBet
 inline bool SequentialLayoutStyle::notLocationEquivalentCursors() const {return notLocationEquivalentCursors_;}
 inline bool SequentialLayoutStyle::noInnerCursors() const {return noInnerCursors_;}
 inline bool SequentialLayoutStyle::noBoundaryCursors() const {return noBoundaryCursors_;}
+inline int SequentialLayoutStyle::minWidth() const {return minWidth_;}
+inline int SequentialLayoutStyle::minHeight() const {return minHeight_;}
 
 inline bool SequentialLayoutStyle::isHorizontal() const
 	{ return direction_ == LeftToRight || direction_ == RightToLeft;}

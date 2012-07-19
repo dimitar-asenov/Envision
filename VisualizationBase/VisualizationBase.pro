@@ -1,14 +1,15 @@
 TARGET = visualizationbase
 include(../Core/common_plugin.pri)
-
 DEFINES += VISUALIZATIONBASE_LIBRARY
 win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase
 QT += xml \
     svg
-    
-HEADERS += src/items/RootItem.h \
+HEADERS += src/items/VisualizationAddOn.h \
+    src/shapes/SvgShapeStyle.h \
+    src/shapes/SvgShape.h \
+    src/items/RootItem.h \
     src/renderer/ModelRenderer.h \
     src/renderer/VisualizationGroup.h \
     src/renderer/VisualizationSuitabilityScore.h \
@@ -84,7 +85,10 @@ HEADERS += src/items/RootItem.h \
     src/visualizationbase_api.h \
     test/BoxTest.h \
     src/visualizationbase.h
-SOURCES += src/items/RootItem.cpp \
+SOURCES += src/items/VisualizationAddOn.cpp \
+    src/shapes/SvgShapeStyle.cpp \
+    src/shapes/SvgShape.cpp \
+    src/items/RootItem.cpp \
     src/renderer/ModelRenderer.cpp \
     src/renderer/VisualizationGroup.cpp \
     src/renderer/VisualizationSuitabilityScore.cpp \

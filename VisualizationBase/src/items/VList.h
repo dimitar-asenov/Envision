@@ -55,22 +55,24 @@ class VISUALIZATIONBASE_API VList: public ItemWithNode< LayoutProvider<>, Model:
 		template <class T> T* at(int index);
 		int focusedElementIndex() const;
 
-		bool suppressHandler() const;
-		void setSuppressHandler(bool suppress);
+		bool suppressDefaultRemovalHandler() const;
+		void setSuppressDefaultRemovalHandler(bool suppress);
 
 	protected:
 		virtual void determineChildren();
 
 	private:
-		bool suppressHandler_;
+		typedef ItemWithNode< LayoutProvider<>, Model::List> BaseItemType;
+
+		bool suppressDefaultRemovalHandler_;
 };
 
 inline int VList::length() const { return layout()->length(); }
 inline int VList::focusedElementIndex() const { return layout()->focusedElementIndex(); }
 template <class T> inline T* VList::at(int index) { return layout()->at<T>(index); }
 
-inline bool VList::suppressHandler() const { return suppressHandler_; }
-inline void VList::setSuppressHandler(bool suppress) { suppressHandler_ = suppress; }
+inline bool VList::suppressDefaultRemovalHandler() const { return suppressDefaultRemovalHandler_; }
+inline void VList::setSuppressDefaultRemovalHandler(bool suppress) { suppressDefaultRemovalHandler_ = suppress; }
 
 }
 

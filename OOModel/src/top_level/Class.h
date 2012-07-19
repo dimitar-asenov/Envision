@@ -36,10 +36,12 @@
 
 #include "../oomodel_api.h"
 
-#include "../attributeMacros.h"
-#include "../elements/Visibility.h"
 #include "Method.h"
 #include "Field.h"
+#include "../attributeMacros.h"
+#include "../elements/Visibility.h"
+#include "../elements/FormalTypeArgument.h"
+#include "../elements/StatementItemList.h"
 #include "../expressions/Expression.h"
 
 #include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
@@ -55,13 +57,19 @@ class OOMODEL_API Class : public Model::ExtendableNode
 
 	ATTRIBUTE_OOP_NAME
 	ATTRIBUTE(Model::TypedList<Expression>, baseClasses, setBaseClasses)
+	ATTRIBUTE(Model::TypedList<FormalTypeArgument>, typeArguments, setTypeArguments)
 	ATTRIBUTE(Model::TypedList<Field>, fields, setFields)
 	ATTRIBUTE(Model::TypedList<Method>, methods, setMethods)
 	ATTRIBUTE_OOP_VISIBILITY
+	ATTRIBUTE_OOP_ANNOTATIONS
 
 	public:
+		Class(const QString& name);
+		Class(const QString& name, Visibility::VisibilityType vis);
+
 		virtual bool definesSymbol() const;
 		virtual const QString& symbolName() const;
+		bool isGeneric();
 
 		virtual QList<Node*> findSymbol(const QString& symbol, Node* source, FindSymbolMode mode);
 };

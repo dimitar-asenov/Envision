@@ -48,7 +48,8 @@ namespace Visualization {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VCastExpression : public Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::CastExpression>
+class OOVISUALIZATION_API VCastExpression
+	: public Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::CastExpression>
 {
 	ITEM_COMMON(VCastExpression)
 
@@ -60,6 +61,8 @@ class OOVISUALIZATION_API VCastExpression : public Visualization::ItemWithNode< 
 		void determineChildren();
 
 	private:
+		typedef Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::CastExpression> BaseItemType;
+
 		Visualization::Item* type_;
 		Visualization::Item* expr_;
 };

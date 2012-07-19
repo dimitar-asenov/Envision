@@ -36,7 +36,7 @@
 
 #include "PluginInfo.h"
 
-namespace Envision {
+namespace Core {
 
 /**
  * The EnvisionManager interface provides various information about the Envision system.

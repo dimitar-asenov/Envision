@@ -34,6 +34,7 @@
 #include "expressions/VEmptyExpression.h"
 
 #include "OOModel/src/expressions/EmptyExpression.h"
+#include "OOModel/src/statements/ExpressionStatement.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -44,7 +45,8 @@ ITEM_COMMON_DEFINITIONS(VEmptyExpression, "item")
 
 VEmptyExpression::VEmptyExpression(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<Item, EmptyExpression>(parent, node, style),
-	vis_(new Static(this, style))
+	vis_(new Static(this,
+			dynamic_cast<OOModel::ExpressionStatement*>(node->parent()) ? &style->emptyLine() :  &style->emptyLine()))
 {
 }
 
@@ -55,7 +57,10 @@ VEmptyExpression::~VEmptyExpression()
 
 void VEmptyExpression::determineChildren()
 {
-	vis_->setStyle(style());
+	if(dynamic_cast<OOModel::ExpressionStatement*>(node()->parent()))
+		vis_->setStyle(&style()->emptyLine());
+	else
+		vis_->setStyle(&style()->normal());
 }
 
 void VEmptyExpression::updateGeometry(int availableWidth, int availableHeight)

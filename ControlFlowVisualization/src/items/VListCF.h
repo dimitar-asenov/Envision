@@ -60,6 +60,8 @@ class CONTROLFLOWVISUALIZATION_API VListCF : public Visualization::ItemWithNode<
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
+		typedef Visualization::ItemWithNode< ControlFlowItem, Model::List> BaseItemType;
+
 		QVector< Visualization::Item* > items_;
 
 		QList< Visualization::Item* > extractSingleItems();

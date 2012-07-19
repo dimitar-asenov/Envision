@@ -56,6 +56,8 @@ class VExpressionStatement : public Visualization::ItemWithNode< Visualization::
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
+		typedef Visualization::ItemWithNode< Visualization::Item, OOModel::ExpressionStatement> BaseItemType;
+
 		Visualization::Item* expr_;
 };
 

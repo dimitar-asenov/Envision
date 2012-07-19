@@ -40,7 +40,8 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VClassType : public Visualization::ItemWithNode< Visualization::Item, OOModel::ClassTypeExpression>
+class OOVISUALIZATION_API VClassType
+	: public Visualization::ItemWithNode< Visualization::Item, OOModel::ClassTypeExpression>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VClassType, VReferenceExpressionStyle)
 
@@ -53,6 +54,8 @@ class OOVISUALIZATION_API VClassType : public Visualization::ItemWithNode< Visua
 		void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
+		typedef Visualization::ItemWithNode< Visualization::Item, OOModel::ClassTypeExpression> BaseItemType;
+
 		VReferenceExpression* vis_;
 };
 

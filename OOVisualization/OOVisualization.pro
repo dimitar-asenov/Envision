@@ -1,14 +1,17 @@
 TARGET = oovisualization
 include(../Core/common_plugin.pri)
-
 DEFINES += OOVISUALIZATION_LIBRARY
 win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase \
     -loomodel \
     -lvisualizationbase
-
-HEADERS += src/types/VClassType.h \
+HEADERS += test/MethodAddOn.h \
+    src/expressions/VEmptyExpressionStyle.h \
+    src/elements/VStatementItemList.h \
+    src/elements/VFormalTypeArgumentStyle.h \
+    src/elements/VFormalTypeArgument.h \
+    src/types/VClassType.h \
     src/expressions/VConditionalExpression.h \
     src/OOVisualizationException.h \
     src/allOOVisualizations.h \
@@ -41,8 +44,6 @@ HEADERS += src/types/VClassType.h \
     src/expressions/VUnaryOperation.h \
     src/expressions/VUnfinishedOperator.h \
     src/expressions/VUnfinishedOperatorStyle.h \
-    src/expressions/VVariableAccess.h \
-    src/expressions/VVariableAccessStyle.h \
     src/expressions/VVariableDeclaration.h \
     src/expressions/VVariableDeclarationStyle.h \
     src/literals/VBooleanLiteral.h \
@@ -81,7 +82,12 @@ HEADERS += src/types/VClassType.h \
     src/types/VArrayTypeStyle.h \
     src/types/VPrimitiveType.h \
     src/oovisualization.h
-SOURCES += src/types/VClassType.cpp \
+SOURCES += test/MethodAddOn.cpp \
+    src/expressions/VEmptyExpressionStyle.cpp \
+    src/elements/VStatementItemList.cpp \
+    src/elements/VFormalTypeArgumentStyle.cpp \
+    src/elements/VFormalTypeArgument.cpp \
+    src/types/VClassType.cpp \
     src/expressions/VConditionalExpression.cpp \
     src/expressions/VVariableDeclarationStyle.cpp \
     src/expressions/VVariableDeclaration.cpp \
@@ -145,8 +151,6 @@ SOURCES += src/types/VClassType.cpp \
     src/literals/VIntegerLiteral.cpp \
     src/types/VPrimitiveType.cpp \
     src/literals/VStringLiteral.cpp \
-    src/expressions/VVariableAccessStyle.cpp \
-    src/expressions/VVariableAccess.cpp \
     src/expressions/VReferenceExpression.cpp \
     src/expressions/VReferenceExpressionStyle.cpp \
     test/HelloWorldTest.cpp \

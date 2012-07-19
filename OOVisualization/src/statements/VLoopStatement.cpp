@@ -33,9 +33,10 @@
 
 #include "statements/VLoopStatement.h"
 
+#include "../elements/VStatementItemList.h"
+
 #include "VisualizationBase/src/layouts/PanelBorderLayout.h"
 #include "VisualizationBase/src/layouts/SequentialLayout.h"
-#include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/items/Static.h"
 
 using namespace Visualization;

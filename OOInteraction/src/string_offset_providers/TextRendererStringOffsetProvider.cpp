@@ -43,7 +43,7 @@ TextRendererStringOffsetProvider::TextRendererStringOffsetProvider(Visualization
 {
 }
 
-int TextRendererStringOffsetProvider::offset()
+int TextRendererStringOffsetProvider::offset(Qt::Key /*key*/)
 {
 	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
 

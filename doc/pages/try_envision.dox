@@ -1,0 +1,30 @@
+/*! \page try_envision Try Envision
+
+Once you have successfully compiled Envision and are able to run it you can try launching one of the projects and
+experience Envision for yourself.
+
+If you are using Eclipse simply choose a project you would like to test and launch it. The default launch configuration
+will run Envision and will initiate the built-in tests for the selected project. If you are not using Eclipse you can
+do the same on the command line in the following way:
+
+\verbatim Envision -graphicssystem raster --test project_name \endverbatim
+
+where <em>project_name</em> is the lowercase name of one of the projects (e.g.
+\c controlflowvisualization). Make sure to run Envision from within the \c DebugBuild directory.
+
+
+Projects such as <em>OOVisualization</em>, <em>OOInteraction</em>, <em>ControlFlowVisualization</em>, and
+<em>CustomMethodCall</em> visualize some existing code and are interesting to explore.
+
+Running the tests for the <em>OOVisualization</em> and <em>OOInteraction</em> projects will display some code in a few
+methods. You might want to explore the visualizations and try interacting with the various elements.
+
+Launching the <em>ControlFlowVisualization</em> project displays two methods with some non-trivial control flow graph.
+Selecting a method and pressing F2 (several times) will switch the visualizations between the standard one and the
+control flow alternative.
+
+Launching the <em>CustomMethodCall</em> project shows a very simple class that defines a few methods. On the right the
+methods are called and one can see that each method call is visualized in a non-standard way that is dependent on the
+called method.
+
+*/

@@ -60,6 +60,8 @@ class OOVISUALIZATION_API VField : public Visualization::ItemWithNode< Visualiza
 		void determineChildren();
 
 	private:
+		typedef Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::Field > BaseItemType;
+
 		Visualization::VText* name_;
 		Visualization::Item* type_;
 };

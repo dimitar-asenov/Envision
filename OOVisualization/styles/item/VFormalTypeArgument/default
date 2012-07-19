@@ -1,0 +1,26 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/Item/default">
+	<shape />
+	<layout prototypes="layout/SequentialLayout/default">
+		<direction>2</direction>
+	</layout>
+	<name prototypes="item/Text/default" />
+	<subTypeSymbol prototypes="item/Symbol/default">
+		<font>
+			<weight>75</weight>
+		</font>
+		<symbol>sub</symbol>
+	</subTypeSymbol>
+	<superTypeSymbol prototypes="item/Symbol/default">
+		<font>
+			<weight>75</weight>
+		</font>
+		<symbol>super</symbol>
+	</superTypeSymbol>
+	<subLayout prototypes="layout/SequentialLayout/default">
+		<spaceBetweenElements>2</spaceBetweenElements>
+	</subLayout>
+	<superLayout prototypes="layout/SequentialLayout/default">
+		<spaceBetweenElements>2</spaceBetweenElements>
+	</superLayout>
+</style>

@@ -33,10 +33,11 @@
 
 #include "items/SceneHandlerItem.h"
 #include "Scene.h"
+#include "items/ItemStyle.h"
 
 namespace Visualization {
 
-InteractionHandler* SceneHandlerItem::handler_ = InteractionHandler::instance();
+ITEM_COMMON_DEFINITIONS(SceneHandlerItem, "item")
 
 SceneHandlerItem::SceneHandlerItem(Scene* scene) :
 	Item(nullptr)

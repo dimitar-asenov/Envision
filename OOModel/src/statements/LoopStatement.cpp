@@ -47,9 +47,9 @@ QList<Model::Node*> LoopStatement::findSymbol(const QString& symbol,Model::Node*
 {
 	QList<Model::Node*> symbols;
 
-	symbols << condition()->findSymbol(symbol, source, SEARCH_DOWN);
-	symbols << initStep()->findSymbol(symbol, source, SEARCH_DOWN);
-	symbols << updateStep()->findSymbol(symbol, source, SEARCH_DOWN);
+	if (condition()) symbols << condition()->findSymbol(symbol, source, SEARCH_DOWN);
+	if (initStep()) symbols << initStep()->findSymbol(symbol, source, SEARCH_DOWN);
+	if (updateStep()) symbols << updateStep()->findSymbol(symbol, source, SEARCH_DOWN);
 
 	return symbols.isEmpty() ? Node::findSymbol(symbol, source, mode) : symbols;
 }

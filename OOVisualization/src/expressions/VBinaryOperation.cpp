@@ -90,6 +90,36 @@ void VBinaryOperation::determineChildren()
 	if (pre_) pre_->setStyle( &opStyle->preSymbol());
 	if (in_) in_->setStyle( &opStyle->inSymbol());
 	if (post_) post_->setStyle( &opStyle->postSymbol());
+
+	// Set the spacing of this layout
+	int depth = getExpressionDepth(node());
+	if (depth <= 1) layout()->setSpaceBetweenElements(false, 0);
+	else
+	{
+		int space = 1;
+		for (int i = 0; i<depth; ++i) space *= 2;
+		layout()->setSpaceBetweenElements(true, space + opStyle->layout().spaceBetweenElements());
+	}
+}
+
+
+int VBinaryOperation::getExpressionDepth(OOModel::Expression* e, int* op) const
+{
+	auto binary = dynamic_cast<OOModel::BinaryOperation*>(e);
+	if (!binary) return 0;
+	auto op_id = binary->op();
+	if (op) *op = op_id;
+
+	int op_ida = -1;
+	int op_idb = -1;
+	int a = getExpressionDepth(binary->left(), &op_ida);
+	int b = getExpressionDepth(binary->right(), &op_idb);
+
+	if (op_ida == op_idb && op_ida == op_id) return a;
+	if (op_idb < 0 && op_ida == op_id) return a;
+	if (op_ida < 0 && op_idb == op_id) return b;
+
+	return a>b ? a+1 : b+1;
 }
 
 }

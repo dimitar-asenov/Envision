@@ -52,7 +52,8 @@ namespace Visualization {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VClass : public Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::Class>
+class OOVISUALIZATION_API VClass
+: public Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::Class>
 {
 	ITEM_COMMON(VClass)
 
@@ -64,11 +65,17 @@ class OOVISUALIZATION_API VClass : public Visualization::ItemWithNode< Visualiza
 		void determineChildren();
 
 	private:
+		typedef Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
+				OOModel::Class> BaseItemType;
+
 		Visualization::SequentialLayout* header_;
 		Visualization::Static* icon_;
 		Visualization::VText* name_;
+		Visualization::VList* typeArguments_;
 		Visualization::VList* baseClasses_;
-		Visualization::PositionLayout* content_;
+		Visualization::VList* annotations_;
+		Visualization::PositionLayout* body_;
+		Visualization::SequentialLayout* content_;
 		Visualization::SequentialLayout* fieldContainer_;
 		Visualization::SequentialLayout* publicFieldArea_;
 		Visualization::SequentialLayout* privateFieldArea_;

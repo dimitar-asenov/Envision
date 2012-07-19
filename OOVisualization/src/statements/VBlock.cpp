@@ -31,9 +31,9 @@
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "statements/VBlock.h"
+#include "VBlock.h"
 
-#include "VisualizationBase/src/items/VList.h"
+#include "../elements/VStatementItemList.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -44,7 +44,7 @@ ITEM_COMMON_DEFINITIONS(VBlock, "item")
 
 VBlock::VBlock(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<Item, Block>(parent, node, style),
-	items_( new VList(this, node->items()) )
+	items_( new VStatementItemList(this, node->items()) )
 {
 }
 

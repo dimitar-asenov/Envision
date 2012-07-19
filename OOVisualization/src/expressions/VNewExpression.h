@@ -48,7 +48,8 @@ namespace Visualization {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VNewExpression : public Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::NewExpression>
+class OOVISUALIZATION_API VNewExpression : public Visualization::ItemWithNode< Visualization::LayoutProvider<>,
+OOModel::NewExpression>
 {
 	ITEM_COMMON(VNewExpression)
 
@@ -60,6 +61,8 @@ class OOVISUALIZATION_API VNewExpression : public Visualization::ItemWithNode< V
 		void determineChildren();
 
 	private:
+		typedef Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::NewExpression> BaseItemType;
+
 		Visualization::Static* newSymbol_;
 		Visualization::Item* type_;
 		Visualization::Item* amount_;

@@ -110,7 +110,7 @@ TEST(OOModel, JavaLibraryAndHelloWorldTest)
 
 	ExpressionStatement* callPrintlnSt = new ExpressionStatement();
 	MethodCallExpression* callPrintln = new MethodCallExpression("println",
-			new VariableAccess("out", new ReferenceExpression("System", new ReferenceExpression("Java"))));
+			new ReferenceExpression("out", new ReferenceExpression("System", new ReferenceExpression("Java"))));
 	StringLiteral* helloStr = new StringLiteral();
 	callPrintln->arguments()->append(helloStr);
 	helloStr->setValue("Hello World");

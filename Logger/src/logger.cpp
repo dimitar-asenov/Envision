@@ -39,7 +39,7 @@ Q_EXPORT_PLUGIN2( logger, Logger::LoggerPlugin )
 
 namespace Logger {
 
-bool LoggerPlugin::initialize(Envision::EnvisionManager&)
+bool LoggerPlugin::initialize(Core::EnvisionManager&)
 {
 	return true;
 }

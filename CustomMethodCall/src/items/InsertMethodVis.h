@@ -49,7 +49,8 @@ namespace Visualization {
 
 namespace CustomMethodCall {
 
-class CUSTOMMETHODCALL_API InsertMethodVis : public Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::MethodCallExpression>
+class CUSTOMMETHODCALL_API InsertMethodVis
+: public Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::MethodCallExpression>
 {
 	ITEM_COMMON(InsertMethodVis)
 
@@ -61,6 +62,8 @@ class CUSTOMMETHODCALL_API InsertMethodVis : public Visualization::ItemWithNode<
 		void determineChildren();
 
 	private:
+		typedef Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::MethodCallExpression> BaseItemType;
+
 		Visualization::Static* icon_;
 		Visualization::Static* separator_;
 		Visualization::Item* prefix_;

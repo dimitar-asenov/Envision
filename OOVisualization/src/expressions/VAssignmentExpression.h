@@ -61,6 +61,9 @@ class OOVISUALIZATION_API VAssignmentExpression : public Visualization::ItemWith
 		void determineChildren();
 
 	private:
+		typedef Visualization::ItemWithNode< Visualization::LayoutProvider<>,
+				OOModel::AssignmentExpression> BaseItemType;
+
 		Visualization::Static* assignmentSymbol_;
 		Visualization::Item* left_;
 		Visualization::Item* right_;

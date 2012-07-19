@@ -43,14 +43,18 @@ namespace Visualization {
 
 class BoxTest : public Item
 {
-	private:
-		SequentialLayout items;
+	ITEM_COMMON_CUSTOM_STYLENAME(BoxTest, ItemStyle)
 
 	public:
 		BoxTest(Item* parent, int sub);
 
 		void determineChildren();
 		void updateGeometry(int availableWidth, int availableHeight);
+
+	private:
+		typedef Item BaseItemType;
+
+		SequentialLayout items;
 };
 
 }

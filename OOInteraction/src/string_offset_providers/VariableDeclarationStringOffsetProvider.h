@@ -35,25 +35,17 @@
 #define OOInteraction_VARIABLEDECLARATIONSTRINGOFFSETPROVIDER_H_
 
 #include "../oointeraction_api.h"
-#include "StringOffsetProvider.h"
+#include "GridBasedOffsetProvider.h"
 
-#include "VisualizationBase/src/items/LayoutProvider.h"
-#include "VisualizationBase/src/layouts/SequentialLayout.h"
+namespace OOVisualization {
+	class VVariableDeclaration;
+}
 
 namespace OOInteraction {
 
-class OOINTERACTION_API VariableDeclarationStringOffsetProvider : public StringOffsetProvider {
+class OOINTERACTION_API VariableDeclarationStringOffsetProvider : public GridBasedOffsetProvider {
 	public:
-		VariableDeclarationStringOffsetProvider(Visualization::LayoutProvider<Visualization::SequentialLayout>* vis);
-
-		virtual int offset();
-		virtual void setOffset(int newOffset);
-
-	protected:
-		virtual QStringList components();
-
-	private:
-		Visualization::LayoutProvider<Visualization::SequentialLayout>* vis_;
+		VariableDeclarationStringOffsetProvider(OOVisualization::VVariableDeclaration* vis);
 };
 
 } /* namespace OOInteraction */

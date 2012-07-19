@@ -41,6 +41,9 @@ namespace OOModel {
 class OOMODEL_API Library : public Project
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Library)
+
+	public:
+		Library(const QString& name);
 };
 
 }

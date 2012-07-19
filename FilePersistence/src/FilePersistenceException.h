@@ -39,7 +39,7 @@
 
 namespace FilePersistence {
 
-class FILEPERSISTENCE_API FilePersistenceException : public Envision::EnvisionException
+class FILEPERSISTENCE_API FilePersistenceException : public Core::EnvisionException
 {
 		public:
 	FilePersistenceException(const QString& message);

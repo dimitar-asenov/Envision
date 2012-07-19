@@ -40,13 +40,13 @@
 
 namespace Logger {
 
-class LoggerPlugin : public QObject, public Envision::EnvisionPlugin
+class LoggerPlugin : public QObject, public Core::EnvisionPlugin
 {
 	Q_OBJECT
-	Q_INTERFACES(Envision::EnvisionPlugin)
+	Q_INTERFACES(Core::EnvisionPlugin)
 
 	public:
-		bool initialize(Envision::EnvisionManager&);
+		bool initialize(Core::EnvisionManager&);
 		void selfTest(QString testid);
 };
 

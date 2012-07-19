@@ -44,6 +44,12 @@ REGISTER_ATTRIBUTE(Project, libraries, TypedListOfLibrary, false, false, true)
 REGISTER_ATTRIBUTE(Project, modules, TypedListOfModule, false, false, true)
 REGISTER_ATTRIBUTE(Project, classes, TypedListOfClass, false, false, true)
 
+Project::Project(const QString& name)
+: Model::ExtendableNode (nullptr, Project::getMetaData())
+{
+	setName(name);
+}
+
 bool Project::definesSymbol() const
 {
 	return true;

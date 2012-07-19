@@ -49,7 +49,8 @@ namespace Visualization {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VVariableDeclaration : public Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::VariableDeclaration>
+class OOVISUALIZATION_API VVariableDeclaration : public Visualization::ItemWithNode< Visualization::LayoutProvider<>,
+OOModel::VariableDeclaration>
 {
 	ITEM_COMMON(VVariableDeclaration)
 
@@ -57,15 +58,27 @@ class OOVISUALIZATION_API VVariableDeclaration : public Visualization::ItemWithN
 		VVariableDeclaration(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VVariableDeclaration();
 
+		Visualization::VText* name() const;
+		Visualization::Item* declarationType() const;
+		Visualization::Static* assignmentSymbol() const;
+		Visualization::Item* initialValue() const;
+
 	protected:
 		void determineChildren();
 
 	private:
+		typedef Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::VariableDeclaration> BaseItemType;
+
 		Visualization::VText* name_;
 		Visualization::Item* type_;
 		Visualization::Static* assignmentSymbol_;
 		Visualization::Item* initialValue_;
 };
+
+inline Visualization::VText* VVariableDeclaration::name() const {return name_;}
+inline Visualization::Item* VVariableDeclaration::declarationType() const {return type_;}
+inline Visualization::Static* VVariableDeclaration::assignmentSymbol() const {return assignmentSymbol_;}
+inline Visualization::Item* VVariableDeclaration::initialValue() const {return initialValue_;}
 
 }
 
