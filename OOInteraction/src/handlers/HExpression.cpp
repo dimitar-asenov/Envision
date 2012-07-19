@@ -203,41 +203,6 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			} break;
 		}
 
-		// Insert a new line if enter is pressed at the boundary
-		if (enterPressed && (index == 0 || index == newText.size()))
-		{
-			auto expSt = parentExpressionStatement(dynamic_cast<OOModel::Expression*>(target->node()));
-			if (expSt)
-			{
-				auto stList = dynamic_cast<OOModel::StatementItemList*>(expSt->parent());
-				if (stList)
-				{
-					auto es = new OOModel::ExpressionStatement(new OOModel::EmptyExpression());
-					stList->model()->beginModification(stList, "add empty statement");
-					stList->insert(stList->indexOf(expSt) + (index==0 && !str.isEmpty()?0:1), es);
-					stList->model()->endModification();
-
-					// Issue a cursor update
-					if ( index == 0 && !str.isEmpty())
-					{
-						// For the current item
-						target->scene()->addPostEventAction(
-							new Interaction::SetCursorEvent(topMostItem->parent(), target->node(),
-								Interaction::SetCursorEvent::CursorOnLeft));
-					}
-					else
-					{
-						// For the newly created line
-						auto p = target;
-						while (p->parent()) p = p->parent(); // Using topMostItem->parent() does not work.
-						target->scene()->addPostEventAction(
-							new Interaction::SetCursorEvent(p, es->expression(), Interaction::SetCursorEvent::CursorOnLeft));
-					}
-					return;
-				}
-			}
-		}
-
 		// Process keywords for statements
 		OOModel::ExpressionStatement* replaceStatement = nullptr;
 		if ( (enterPressed || spacePressed)
@@ -305,7 +270,43 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 					new Interaction::SetCursorEvent(parent, toFocus, Interaction::SetCursorEvent::CursorOnLeft));
 			return;
 		}
-		else if (!enterPressed)
+
+		// Insert a new line if enter is pressed at the boundary
+		if (enterPressed && (index == 0 || index == newText.size()))
+		{
+			auto expSt = parentExpressionStatement(dynamic_cast<OOModel::Expression*>(target->node()));
+			if (expSt)
+			{
+				auto stList = dynamic_cast<OOModel::StatementItemList*>(expSt->parent());
+				if (stList)
+				{
+					auto es = new OOModel::ExpressionStatement(new OOModel::EmptyExpression());
+					stList->model()->beginModification(stList, "add empty statement");
+					stList->insert(stList->indexOf(expSt) + (index==0 && !str.isEmpty()?0:1), es);
+					stList->model()->endModification();
+
+					// Issue a cursor update
+					if ( index == 0 && !str.isEmpty())
+					{
+						// For the current item
+						target->scene()->addPostEventAction(
+							new Interaction::SetCursorEvent(topMostItem->parent(), target->node(),
+								Interaction::SetCursorEvent::CursorOnLeft));
+					}
+					else
+					{
+						// For the newly created line
+						auto p = target;
+						while (p->parent()) p = p->parent(); // Using topMostItem->parent() does not work.
+						target->scene()->addPostEventAction(
+							new Interaction::SetCursorEvent(p, es->expression(), Interaction::SetCursorEvent::CursorOnLeft));
+					}
+					return;
+				}
+			}
+		}
+
+		if (!enterPressed)
 		{
 			OOModel::Expression* newExpression = OOExpressionBuilder::getOOExpression( newText );
 			Model::Node* containerNode = topMostItem->node()->parent();
