@@ -35,22 +35,16 @@
 #define ContractsLibrary_CONTRACTCALLOFFSETPROVIDER_H_
 
 #include "../contractslibrary_api.h"
-#include "OOInteraction/src/string_offset_providers/StringOffsetProvider.h"
+#include "OOInteraction/src/string_offset_providers/GridBasedOffsetProvider.h"
 
 namespace ContractsLibrary {
 
 class VContractCall;
 
-class CONTRACTSLIBRARY_API ContractCallOffsetProvider : public OOInteraction::StringOffsetProvider
+class CONTRACTSLIBRARY_API ContractCallOffsetProvider : public OOInteraction::GridBasedOffsetProvider
 {
 	public:
 		ContractCallOffsetProvider(VContractCall* vis);
-
-		virtual int offset(Qt::Key key);
-		virtual void setOffset(int newOffset);
-
-	private:
-		VContractCall* vis_;
 };
 
 } /* namespace ContractsLibrary */

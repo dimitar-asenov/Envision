@@ -34,80 +34,18 @@
 #include "ContractCallOffsetProvider.h"
 #include "../items/VContractCall.h"
 
+#include "OOInteraction/src/string_offset_providers/Cell.h"
+#include "OOInteraction/src/string_offset_providers/ListCell.h"
 #include "VisualizationBase/src/items/Static.h"
 #include "VisualizationBase/src/items/VList.h"
 
 namespace ContractsLibrary {
 
 ContractCallOffsetProvider::ContractCallOffsetProvider(VContractCall* vis)
-	: StringOffsetProvider(vis), vis_(vis)
+	: GridBasedOffsetProvider(vis)
 {
-}
-
-int ContractCallOffsetProvider::offset(Qt::Key key)
-{
-	if (!vis_ || !vis_->itemOrChildHasFocus()) return -1;
-
-	QStringList components = this->components();
-	int offset = itemOffset(vis_->keyword(), components[0].size(), key);
-
-	if (offset >=0)
-	{
-		if (offset < components[0].size())
-		{
-			int index = components[0].lastIndexOf('.');
-			if (index >= 0) offset += index + 1;
-		}
-		return offset;
-	}
-	offset = components[0].size();
-
-	offset += listItemOffset(vis_->arguments(),"(", ",", ")", key);
-
-	return offset;
-}
-
-void ContractCallOffsetProvider::setOffset(int offset)
-{
-	if (offset == 0)
-	{
-		vis_->moveCursor( Visualization::Item::MoveOnPosition, QPoint(0,0));
-		return;
-	}
-
-	QStringList components = this->components();
-
-	if (offset == components.join("").size())
-	{
-		vis_->moveCursor( Visualization::Item::MoveOnPosition, QPoint(vis_->xEnd(),0));
-		return;
-	}
-
-	int listOffest = components[0].size();
-
-	if (offset <= listOffest)
-	{
-		int dot_index = components[0].lastIndexOf('.');
-		int header_size = 0;
-		if (dot_index >=0 ) header_size = dot_index + 1;
-
-		offset -= header_size;
-		if (offset <0) offset = 0;
-
-		setOffsetInItem(offset, vis_->keyword());
-		return;
-	}
-	else offset -= listOffest;
-
-	if ( setOffsetInListItem(offset, vis_->arguments(), "(", ",", ")"))
-		return;
-
-	if (offset == components.last().size())
-	{
-		vis_->moveCursor( Visualization::Item::MoveOnPosition, QPoint(vis_->xEnd(),0));
-	}
-	else
-		Q_ASSERT(false);
+	add(new OOInteraction::Cell(0, vis->keyword(), 0));
+	add(new OOInteraction::ListCell(1, vis->arguments(), 1, "(", ",", ")"));
 }
 
 } /* namespace ContractsLibrary */
