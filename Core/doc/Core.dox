@@ -1,5 +1,40 @@
 /*! \namespace Core
 
+This is the main executable that simply loads all available plug-ins and initializes Qt's graphical subsystem.
+
+The application executable is responsible for initializing the application and starting all plug-ins. Once the
+application is loaded this module is mostly passive unless a plug-in requests its services. Here are all the tasks
+performed on startup in order of execution:
+
+	-# The QApplication object of Qt is initialized.
+	-# All plug-ins are loaded. Plug-ins which have dependencies are only loaded after the plug-ins they depend on
+		have been loaded. If a plug-in cannot be started due to dependency problems, Envision is halted with an exception.
+	-# After all plug-ins are loaded, any tests which were specified on the command line are enqueued.
+	-# The Qt event loop is started. At this point plug-ins will receive a request for self-testing if the user specified
+		this.
+
+As soon as a plug-in is loaded, its initialization routine is called. If any events are enqueued by the plug-ins during
+their initialization, these will precede the requests for self-testing. Running tests after all other plug-ins have been
+loaded and initialization is finished can be helpful in discovering integration problems.
+
+As Qt requires, the main application window and the corresponding Qt event queue are part of the executable. This module
+itself however does not use the window in any way. Plug-ins are responsible for defining the interface of Envision.
+
+<h3>Plug-in interface</h3>
+Each Envision plug-in consists of at least two files:
+	\li Shared library - a binary file in the format of the operating system (e.g. ’so’ on Linux or ’dll’ on Windows)
+	that implements the functionality of the plug-in.
+	\li Meta information - a text file in XML format that contains the plug-in’s identifier, description, version number
+	and dependency information. 
+
+Plug-ins are discovered by searching for meta information files. The name of this file should match the name of the
+shared library.
+
+The shared library interface that each plug-in must implement is specified by the executable module. This interface is
+defined according to Qt’s QPlugin design principles. It includes methods for initialization and testing. When a plug-in
+is initialized it is given a reference to an EnvisionManager interface. Using this interface a plug-in can draw on the
+main window or query the system about the state of Envision. In particular it is possible to get information about what
+plug-ins are installed and running.
 
 
 */
