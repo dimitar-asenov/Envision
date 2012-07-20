@@ -88,7 +88,7 @@ QList<Visualization::Item*> ContractsVMethodAddOn::determineItems(Visualization:
 													return currentItems;
 												else
 													result.append(new OOVisualization::VStatementItemList(nullptr, contracts,
-															&OOVisualization::VMethod::itemStyles().get()->body()));
+															Visualization::VList::itemStyles().get("contracts")));
 												break;
 											}
 										}
