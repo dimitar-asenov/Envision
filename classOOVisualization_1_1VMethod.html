@@ -100,6 +100,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pri-types">Private Types</a> &#124;
 <a href="#pri-attribs">Private Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">OOVisualization::VMethod Class Reference</div>  </div>
@@ -133,8 +134,16 @@ Public Member Functions</h2></td></tr>
 <tr><td colspan="2"><h2><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOVisualization_1_1VMethod.html#a309ab5b433a94b49ed3fa24994ac0d26">determineChildren</a> ()</td></tr>
+<tr><td colspan="2"><h2><a name="pri-types"></a>
+Private Types</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">typedef <br class="typebreak"/>
+<a class="el" href="classVisualization_1_1ItemWithNode.html">Visualization::ItemWithNode</a><br class="typebreak"/>
+&lt; <a class="el" href="classVisualization_1_1LayoutProvider.html">Visualization::LayoutProvider</a><br class="typebreak"/>
+&lt; <a class="el" href="classVisualization_1_1PanelBorderLayout.html">Visualization::PanelBorderLayout</a> &gt;<br class="typebreak"/>
+, <a class="el" href="classOOModel_1_1Method.html">OOModel::Method</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOVisualization_1_1VMethod.html#a02451a914b7d2b1319249edc096aba7f">BaseItemType</a></td></tr>
 <tr><td colspan="2"><h2><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1SequentialLayout.html">Visualization::SequentialLayout</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOVisualization_1_1VMethod.html#a7c0104ce3554b7c77354efeb343ed1d2">addons_</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOVisualization_1_1VStatementItemList.html">VStatementItemList</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOVisualization_1_1VMethod.html#affd4dc3dcf57f53899c516a05668338e">annotations_</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1VList.html">Visualization::VList</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOVisualization_1_1VMethod.html#a7fba973e00f050a8697d1f73af363a4a">arguments_</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classOOVisualization_1_1VStatementItemList.html">VStatementItemList</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOVisualization_1_1VMethod.html#a3eb61bcb134b0715795180ec4d1ebecf">body_</a></td></tr>
@@ -145,6 +154,22 @@ Private Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1VList.html">Visualization::VList</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOVisualization_1_1VMethod.html#a0f1ddbea26430db59470d95914c7bdfe">results_</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1VList.html">Visualization::VList</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOVisualization_1_1VMethod.html#aa7d1b477f099e7bd0e3530c207925edb">typeArguments_</a></td></tr>
 </table>
+<hr/><h2>Member Typedef Documentation</h2>
+<a class="anchor" id="a02451a914b7d2b1319249edc096aba7f"></a><!-- doxytag: member="OOVisualization::VMethod::BaseItemType" ref="a02451a914b7d2b1319249edc096aba7f" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="classVisualization_1_1ItemWithNode.html">Visualization::ItemWithNode</a>&lt; <a class="el" href="classVisualization_1_1LayoutProvider.html">Visualization::LayoutProvider</a>&lt;<a class="el" href="classVisualization_1_1PanelBorderLayout.html">Visualization::PanelBorderLayout</a>&gt;, <a class="el" href="classOOModel_1_1Method.html">OOModel::Method</a>&gt; <a class="el" href="classOOVisualization_1_1VMethod.html#a02451a914b7d2b1319249edc096aba7f">OOVisualization::VMethod::BaseItemType</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="classVisualization_1_1LayoutProviderBase.html#a804ae4683d80c7ce4bbdf03acce7ec98">Visualization::LayoutProviderBase</a>.</p>
+
+</div>
+</div>
 <hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a2ba6940229a76214043130e3ce1f946a"></a><!-- doxytag: member="OOVisualization::VMethod::VMethod" ref="a2ba6940229a76214043130e3ce1f946a" args="(Item *parent, NodeType *node, const StyleType *style=itemStyles().get())" -->
 <div class="memitem">
@@ -311,6 +336,19 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <hr/><h2>Member Data Documentation</h2>
+<a class="anchor" id="a7c0104ce3554b7c77354efeb343ed1d2"></a><!-- doxytag: member="OOVisualization::VMethod::addons_" ref="a7c0104ce3554b7c77354efeb343ed1d2" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classVisualization_1_1SequentialLayout.html">Visualization::SequentialLayout</a>* <a class="el" href="classOOVisualization_1_1VMethod.html#a7c0104ce3554b7c77354efeb343ed1d2">OOVisualization::VMethod::addons_</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="affd4dc3dcf57f53899c516a05668338e"></a><!-- doxytag: member="OOVisualization::VMethod::annotations_" ref="affd4dc3dcf57f53899c516a05668338e" args="" -->
 <div class="memitem">
 <div class="memproto">

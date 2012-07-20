@@ -81,6 +81,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">Core Namespace Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>This is the main executable that simply loads all available plug-ins and initializes Qt's graphical subsystem.  
+<a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="nested-classes"></a>
 Classes</h2></td></tr>
@@ -99,7 +102,26 @@ Classes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1TestEvent.html">TestEvent</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1TestRunner.html">TestRunner</a></td></tr>
 </table>
-</div><!-- contents -->
+<hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
+<div class="textblock"><p>This is the main executable that simply loads all available plug-ins and initializes Qt's graphical subsystem. </p>
+<p>The application executable is responsible for initializing the application and starting all plug-ins. Once the application is loaded this module is mostly passive unless a plug-in requests its services. Here are all the tasks performed on startup in order of execution:</p>
+<ol type="1">
+<li>The QApplication object of Qt is initialized.</li>
+<li>All plug-ins are loaded. Plug-ins which have dependencies are only loaded after the plug-ins they depend on have been loaded. If a plug-in cannot be started due to dependency problems, Envision is halted with an exception.</li>
+<li>After all plug-ins are loaded, any tests which were specified on the command line are enqueued.</li>
+<li>The Qt event loop is started. At this point plug-ins will receive a request for self-testing if the user specified this.</li>
+</ol>
+<p>As soon as a plug-in is loaded, its initialization routine is called. If any events are enqueued by the plug-ins during their initialization, these will precede the requests for self-testing. Running tests after all other plug-ins have been loaded and initialization is finished can be helpful in discovering integration problems.</p>
+<p>As Qt requires, the main application window and the corresponding Qt event queue are part of the executable. This module itself however does not use the window in any way. Plug-ins are responsible for defining the interface of Envision.</p>
+<h3>Plug-in interface</h3>
+<p>Each Envision plug-in consists of at least two files: </p>
+<ul>
+<li>Shared library - a binary file in the format of the operating system (e.g. ’so’ on Linux or ’dll’ on Windows) that implements the functionality of the plug-in. </li>
+<li>Meta information - a text file in XML format that contains the plug-in’s identifier, description, version number and dependency information.</li>
+</ul>
+<p>Plug-ins are discovered by searching for meta information files. The name of this file should match the name of the shared library.</p>
+<p>The shared library interface that each plug-in must implement is specified by the executable module. This interface is defined according to Qt’s QPlugin design principles. It includes methods for initialization and testing. When a plug-in is initialized it is given a reference to an <a class="el" href="classCore_1_1EnvisionManager.html" title="The EnvisionManager interface provides various information about the Envision system.">EnvisionManager</a> interface. Using this interface a plug-in can draw on the main window or query the system about the state of Envision. In particular it is possible to get information about what plug-ins are installed and running. </p>
+</div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"

@@ -1,6 +1,8 @@
 var searchData=
 [
   ['accesslock_5f',['accessLock_',['../classTestNodes_1_1BinaryNodeAccessUnit.html#ab0138286d461683d75f9ef032e5a0d8f',1,'TestNodes::BinaryNodeAccessUnit']]],
+  ['addonitems_5f',['addOnItems_',['../classVisualization_1_1Item.html#a9beeaf1dfeb9d2d4251a635963a31ef5',1,'Visualization::Item']]],
+  ['addons_5f',['addons_',['../classOOVisualization_1_1VMethod.html#a7c0104ce3554b7c77354efeb343ed1d2',1,'OOVisualization::VMethod::addons_()'],['../classOOVisualization_1_1VMethodStyle.html#ac4df905f625c9e540b289d722292fb1c',1,'OOVisualization::VMethodStyle::addons_()']]],
   ['alignment_5f',['alignment_',['../classVisualization_1_1PanelLayoutStyle.html#a7688af468e273863caf3cf03e806cb62',1,'Visualization::PanelLayoutStyle::alignment_()'],['../classVisualization_1_1SequentialLayoutStyle.html#a41e4ba5ac22abd2b8b4e219336fff49a',1,'Visualization::SequentialLayoutStyle::alignment_()']]],
   ['amount_5f',['amount_',['../classOOVisualization_1_1VNewExpression.html#a8ddc8de08bfbceeb9d6389b1f2369c01',1,'OOVisualization::VNewExpression']]],
   ['annotations_5f',['annotations_',['../classOOVisualization_1_1VClass.html#a38386b9f93ebcf99231adbcb43b507ec',1,'OOVisualization::VClass::annotations_()'],['../classOOVisualization_1_1VClassStyle.html#a0f28c7dd407992746c96629760e99919',1,'OOVisualization::VClassStyle::annotations_()'],['../classOOVisualization_1_1VMethod.html#affd4dc3dcf57f53899c516a05668338e',1,'OOVisualization::VMethod::annotations_()'],['../classOOVisualization_1_1VMethodStyle.html#af7339473e6a264def868016ca97445f4',1,'OOVisualization::VMethodStyle::annotations_()']]],

@@ -3,6 +3,7 @@ var searchData=
   ['mainview',['MainView',['../classVisualization_1_1MainView.html',1,'Visualization']]],
   ['memberoperatordescriptor',['MemberOperatorDescriptor',['../classOOInteraction_1_1MemberOperatorDescriptor.html',1,'OOInteraction']]],
   ['method',['Method',['../classOOModel_1_1Method.html',1,'OOModel']]],
+  ['methodaddon',['MethodAddOn',['../classOOVisualization_1_1MethodAddOn.html',1,'OOVisualization']]],
   ['methodcallexpression',['MethodCallExpression',['../classOOModel_1_1MethodCallExpression.html',1,'OOModel']]],
   ['minimap',['MiniMap',['../classVisualization_1_1MiniMap.html',1,'Visualization']]],
   ['model',['Model',['../classModel_1_1Model.html',1,'Model']]],

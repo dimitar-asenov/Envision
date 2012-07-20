@@ -102,6 +102,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pri-types">Private Types</a> &#124;
+<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="#pri-static-attribs">Static Private Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">Visualization::VInteger Class Reference</div>  </div>
@@ -127,28 +129,62 @@ Public Types</h2></td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VInteger.html#a643e98c2cb188f90d4387603c3bdd15f">VInteger</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *<a class="el" href="classVisualization_1_1Item.html#a5c1f61676f0f48e983eb3fa74005eb6b">parent</a>, <a class="el" href="classVisualization_1_1ItemWithNode.html#a28867c63c29ec84639340c4d2e83a312">NodeType</a> *<a class="el" href="classVisualization_1_1ItemWithNode.html#a7b9428debd2d5ef4eab6bfcc6807fa97">node</a>, const <a class="el" href="classVisualization_1_1Item.html#a2b08d7c411aac65805ef268b89317272">StyleType</a> *<a class="el" href="classVisualization_1_1VInteger.html#a98e2c6cb6aa969e2a2efac2e61155078">style</a>=<a class="el" href="classVisualization_1_1VInteger.html#a8dfcc0877cefa0ed72082623ae10dcb0">itemStyles</a>().get())</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual QList<br class="typebreak"/>
+&lt; <a class="el" href="classVisualization_1_1VisualizationAddOn.html">Visualization::VisualizationAddOn</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VInteger.html#a8a7c9c86af1f983c387c92cac885b23f">addOns</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns all visualization add-ons of this and inherited classes.  <a href="#a8a7c9c86af1f983c387c92cac885b23f"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual <br class="typebreak"/>
 <a class="el" href="classVisualization_1_1InteractionHandler.html">Visualization::InteractionHandler</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VInteger.html#a15503ae0f8a914e14f781addefab45f3">handler</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VInteger.html#ad04180b777ece5d8a62b2e9d3befd598">setStyle</a> (const <a class="el" href="classVisualization_1_1ItemStyle.html">Visualization::ItemStyle</a> *<a class="el" href="classVisualization_1_1VInteger.html#a98e2c6cb6aa969e2a2efac2e61155078">style</a>)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VInteger.html#a23fd2f1ef8c2cf0270784b492c4abe68">setText</a> (const QString &amp;newText)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the text of this item to <em>newText</em>.  <a href="#a23fd2f1ef8c2cf0270784b492c4abe68"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classVisualization_1_1Item.html#a2b08d7c411aac65805ef268b89317272">StyleType</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VInteger.html#a98e2c6cb6aa969e2a2efac2e61155078">style</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VInteger.html#ac15663d9309494c0e24cee2e448ac40d">typeId</a> () const override</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the type id of this visualization class.  <a href="#ac15663d9309494c0e24cee2e448ac40d"></a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VInteger.html#a14168b90c1385f28812d56a90f47892d">addAddOn</a> (<a class="el" href="classVisualization_1_1VisualizationAddOn.html">Visualization::VisualizationAddOn</a> *addOn)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds the add-on <em>addOn</em> for the class.  <a href="#a14168b90c1385f28812d56a90f47892d"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static const QString &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VInteger.html#a22fedba35ce7db9b44b9fb1a59cf516b">className</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classVisualization_1_1StyleSet.html">Visualization::StyleSet</a><br class="typebreak"/>
 &lt; <a class="el" href="classVisualization_1_1VInteger.html">VInteger</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VInteger.html#a8dfcc0877cefa0ed72082623ae10dcb0">itemStyles</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VInteger.html#a3dacc549f7f503ccb26bc0742e2bc48a">removeAddOn</a> (<a class="el" href="classVisualization_1_1VisualizationAddOn.html">Visualization::VisualizationAddOn</a> *addOn)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the add-on <em>addOn</em> from the class.  <a href="#a3dacc549f7f503ccb26bc0742e2bc48a"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VInteger.html#a899470e63596bbfb08b288be513a7fc6">setInteractionHandler</a> (<a class="el" href="classVisualization_1_1InteractionHandler.html">Visualization::InteractionHandler</a> *<a class="el" href="classVisualization_1_1VInteger.html#a15503ae0f8a914e14f781addefab45f3">handler</a>)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VInteger.html#a8ac37e790b01e3e96775e8cbbc9db77c">staticTypeId</a> ()</td></tr>
 <tr><td colspan="2"><h2><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VInteger.html#ad6d2683640227f32edc27529648c59cf">currentText</a> ()</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the text of that is represented by the current item.  <a href="#ad6d2683640227f32edc27529648c59cf"></a><br/></td></tr>
+<tr><td colspan="2"><h2><a name="pri-types"></a>
+Private Types</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classVisualization_1_1ItemWithNode.html">ItemWithNode</a><br class="typebreak"/>
+&lt; <a class="el" href="classVisualization_1_1TextRenderer.html">TextRenderer</a>, <a class="el" href="classModel_1_1Integer.html">Model::Integer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VInteger.html#afab70ee52f716dd2071468fab4bf6dc3">BaseItemType</a></td></tr>
+<tr><td colspan="2"><h2><a name="pri-static-methods"></a>
+Static Private Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static QList<br class="typebreak"/>
+&lt; <a class="el" href="classVisualization_1_1VisualizationAddOn.html">Visualization::VisualizationAddOn</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VInteger.html#afe86c418471079b270105e9908a848a1">staticAddOns</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a list of all add-on that have been added to this class.  <a href="#afe86c418471079b270105e9908a848a1"></a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <br class="typebreak"/>
 <a class="el" href="classVisualization_1_1InteractionHandler.html">Visualization::InteractionHandler</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VInteger.html#accc0678136ba2c407b11046ad7879740">handler_</a></td></tr>
 </table>
 <hr/><h2>Member Typedef Documentation</h2>
+<a class="anchor" id="afab70ee52f716dd2071468fab4bf6dc3"></a><!-- doxytag: member="Visualization::VInteger::BaseItemType" ref="afab70ee52f716dd2071468fab4bf6dc3" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="classVisualization_1_1ItemWithNode.html">ItemWithNode</a>&lt;<a class="el" href="classVisualization_1_1TextRenderer.html">TextRenderer</a>, <a class="el" href="classModel_1_1Integer.html">Model::Integer</a>&gt; <a class="el" href="classVisualization_1_1VInteger.html#afab70ee52f716dd2071468fab4bf6dc3">Visualization::VInteger::BaseItemType</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="classVisualization_1_1TextRenderer.html#a941f1ab17cc57b96e5765dc904e8a383">Visualization::TextRenderer</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a0b3b2764a6a7a06e05f0a443b04ae413"></a><!-- doxytag: member="Visualization::VInteger::StyleType" ref="a0b3b2764a6a7a06e05f0a443b04ae413" args="" -->
 <div class="memitem">
 <div class="memproto">
@@ -199,6 +235,47 @@ Static Private Attributes</h2></td></tr>
 </div>
 </div>
 <hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="a14168b90c1385f28812d56a90f47892d"></a><!-- doxytag: member="Visualization::VInteger::addAddOn" ref="a14168b90c1385f28812d56a90f47892d" args="(Visualization::VisualizationAddOn *addOn)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void <a class="el" href="classVisualization_1_1VInteger.html#a14168b90c1385f28812d56a90f47892d">Visualization::VInteger::addAddOn</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classVisualization_1_1VisualizationAddOn.html">Visualization::VisualizationAddOn</a> *&#160;</td>
+          <td class="paramname"><em>addOn</em></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Adds the add-on <em>addOn</em> for the class. </p>
+
+<p>Reimplemented from <a class="el" href="classVisualization_1_1TextRenderer.html#a8bf8c156b3f45a0a829c1fac722b5b70">Visualization::TextRenderer</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8a7c9c86af1f983c387c92cac885b23f"></a><!-- doxytag: member="Visualization::VInteger::addOns" ref="a8a7c9c86af1f983c387c92cac885b23f" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual QList&lt;<a class="el" href="classVisualization_1_1VisualizationAddOn.html">Visualization::VisualizationAddOn</a>*&gt; <a class="el" href="classVisualization_1_1VInteger.html#a8a7c9c86af1f983c387c92cac885b23f">Visualization::VInteger::addOns</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Returns all visualization add-ons of this and inherited classes. </p>
+
+<p>Reimplemented from <a class="el" href="classVisualization_1_1TextRenderer.html#a6730ab2363c8dc6108e96ae9d1e8f93c">Visualization::TextRenderer</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a22fedba35ce7db9b44b9fb1a59cf516b"></a><!-- doxytag: member="Visualization::VInteger::className" ref="a22fedba35ce7db9b44b9fb1a59cf516b" args="()" -->
 <div class="memitem">
 <div class="memproto">
@@ -275,6 +352,29 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a3dacc549f7f503ccb26bc0742e2bc48a"></a><!-- doxytag: member="Visualization::VInteger::removeAddOn" ref="a3dacc549f7f503ccb26bc0742e2bc48a" args="(Visualization::VisualizationAddOn *addOn)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool <a class="el" href="classVisualization_1_1VInteger.html#a3dacc549f7f503ccb26bc0742e2bc48a">Visualization::VInteger::removeAddOn</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classVisualization_1_1VisualizationAddOn.html">Visualization::VisualizationAddOn</a> *&#160;</td>
+          <td class="paramname"><em>addOn</em></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Removes the add-on <em>addOn</em> from the class. </p>
+<p>The add-on can only be removed if it was added directly to this class. Add-on from inherited classes can not be removed by calling removeAddOn on derived classes.</p>
+<p>Returns true if the add-on was removed and false otherwise. </p>
+
+<p>Reimplemented from <a class="el" href="classVisualization_1_1TextRenderer.html#af017d44a6aa25ada7681c288bb5ec8ed">Visualization::TextRenderer</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a899470e63596bbfb08b288be513a7fc6"></a><!-- doxytag: member="Visualization::VInteger::setInteractionHandler" ref="a899470e63596bbfb08b288be513a7fc6" args="(Visualization::InteractionHandler *handler)" -->
 <div class="memitem">
 <div class="memproto">
@@ -335,6 +435,45 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="afe86c418471079b270105e9908a848a1"></a><!-- doxytag: member="Visualization::VInteger::staticAddOns" ref="afe86c418471079b270105e9908a848a1" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static QList&lt;<a class="el" href="classVisualization_1_1VisualizationAddOn.html">Visualization::VisualizationAddOn</a>*&gt;&amp; <a class="el" href="classVisualization_1_1VInteger.html#afe86c418471079b270105e9908a848a1">Visualization::VInteger::staticAddOns</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [static, private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Returns a list of all add-on that have been added to this class. </p>
+<p>Use <a class="el" href="classVisualization_1_1VInteger.html#a14168b90c1385f28812d56a90f47892d" title="Adds the add-on addOn for the class.">addAddOn()</a> and <a class="el" href="classVisualization_1_1VInteger.html#a3dacc549f7f503ccb26bc0742e2bc48a" title="Removes the add-on addOn from the class.">removeAddOn()</a> to change the contents of the list. </p>
+
+<p>Reimplemented from <a class="el" href="classVisualization_1_1TextRenderer.html#a5c04b95e31411272dbf07581cfa5d8a6">Visualization::TextRenderer</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8ac37e790b01e3e96775e8cbbc9db77c"></a><!-- doxytag: member="Visualization::VInteger::staticTypeId" ref="a8ac37e790b01e3e96775e8cbbc9db77c" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int <a class="el" href="classVisualization_1_1VInteger.html#a8ac37e790b01e3e96775e8cbbc9db77c">Visualization::VInteger::staticTypeId</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="classVisualization_1_1TextRenderer.html#a87f67f06ce50e8b4db55e871c2b27fb7">Visualization::TextRenderer</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a98e2c6cb6aa969e2a2efac2e61155078"></a><!-- doxytag: member="Visualization::VInteger::style" ref="a98e2c6cb6aa969e2a2efac2e61155078" args="() const " -->
 <div class="memitem">
 <div class="memproto">
@@ -350,6 +489,27 @@ Static Private Attributes</h2></td></tr>
 <div class="memdoc">
 
 <p>Reimplemented from <a class="el" href="classVisualization_1_1TextRenderer.html#a24c33984696413a1d8119d752ac59bbd">Visualization::TextRenderer</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac15663d9309494c0e24cee2e448ac40d"></a><!-- doxytag: member="Visualization::VInteger::typeId" ref="ac15663d9309494c0e24cee2e448ac40d" args="() const override" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual int <a class="el" href="classVisualization_1_1VInteger.html#ac15663d9309494c0e24cee2e448ac40d">Visualization::VInteger::typeId</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const<code> [override, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Returns the type id of this visualization class. </p>
+<p>Each class that inherits from <a class="el" href="classVisualization_1_1Item.html">Item</a> has a unique type id that can be queried during runtime. </p>
+
+<p>Reimplemented from <a class="el" href="classVisualization_1_1TextRenderer.html#af84b3625a17e9becdc740c5b53ab4616">Visualization::TextRenderer</a>.</p>
 
 </div>
 </div>

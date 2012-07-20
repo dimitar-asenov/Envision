@@ -113,6 +113,7 @@ var searchData=
   ['_7evifstatement',['~VIfStatement',['../classOOVisualization_1_1VIfStatement.html#a2de3688b8771a72cf32df25effe5571d',1,'OOVisualization::VIfStatement']]],
   ['_7evifstatementcf',['~VIfStatementCF',['../classControlFlowVisualization_1_1VIfStatementCF.html#a681f30e3773055622a0137ec4d0acea9',1,'ControlFlowVisualization::VIfStatementCF']]],
   ['_7evintegerliteral',['~VIntegerLiteral',['../classOOVisualization_1_1VIntegerLiteral.html#a5f6b185772e8120a527286e3476e6968',1,'OOVisualization::VIntegerLiteral']]],
+  ['_7evisualizationaddon',['~VisualizationAddOn',['../classVisualization_1_1VisualizationAddOn.html#a32b476308b0952c4a87f96d4f1a6271e',1,'Visualization::VisualizationAddOn']]],
   ['_7evisualizationgroup',['~VisualizationGroup',['../classVisualization_1_1VisualizationGroup.html#aa5717036e2e410a7fbb84d569e679444',1,'Visualization::VisualizationGroup']]],
   ['_7evlibrary',['~VLibrary',['../classOOVisualization_1_1VLibrary.html#af8881a4f911980f6c7125e113a44946e',1,'OOVisualization::VLibrary']]],
   ['_7evlistcf',['~VListCF',['../classControlFlowVisualization_1_1VListCF.html#a557e5c47cdeb47b3f56e4aa83993f70d',1,'ControlFlowVisualization::VListCF']]],

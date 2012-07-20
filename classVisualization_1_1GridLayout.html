@@ -101,7 +101,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pri-types">Private Types</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="#pri-static-attribs">Static Private Attributes</a>  </div>
   <div class="headertitle">
@@ -128,6 +130,9 @@ Public Types</h2></td></tr>
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayout.html#a8cd2bb2a80581202aa45368aa7087cb2">GridLayout</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *<a class="el" href="classVisualization_1_1Item.html#a5c1f61676f0f48e983eb3fa74005eb6b">parent</a>, const <a class="el" href="classVisualization_1_1Item.html#a2b08d7c411aac65805ef268b89317272">StyleType</a> *<a class="el" href="classVisualization_1_1GridLayout.html#aef4e8d9528f6bb5930f4fbbcd3099d12">style</a>=<a class="el" href="classVisualization_1_1GridLayout.html#a3634f51e36ac9df0c9030ec7a8623844">itemStyles</a>().get())</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayout.html#a6ffd9cd0092aefde61d9826d2242866a">~GridLayout</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual QList<br class="typebreak"/>
+&lt; <a class="el" href="classVisualization_1_1VisualizationAddOn.html">Visualization::VisualizationAddOn</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayout.html#af3af6c8c2f5c30db76fcec0a65adb2d0">addOns</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns all visualization add-ons of this and inherited classes.  <a href="#af3af6c8c2f5c30db76fcec0a65adb2d0"></a><br/></td></tr>
 <tr><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
 <tr><td class="memTemplItemLeft" align="right" valign="top">T *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayout.html#a5046800d23dd25e55a5c5307f7f872d9">at</a> (int x, int y)</td></tr>
 <tr><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
@@ -153,18 +158,33 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayout.html#a4298716ee1e377458e603d4b50880d75">synchronize</a> (T *&amp;item, typename T::NodeType *<a class="el" href="classVisualization_1_1Item.html#aad3f7ad185d3a8d1d76eef1942faafdf">node</a>, const typename T::StyleType *<a class="el" href="classVisualization_1_1GridLayout.html#aef4e8d9528f6bb5930f4fbbcd3099d12">style</a>, int x, int y)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayout.html#a2e547564400cc6c57d5e63dd75e674fb">synchronizeWithNodes</a> (const QList&lt; QList&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a> * &gt; &gt; &amp;nodes, <a class="el" href="classVisualization_1_1ModelRenderer.html">ModelRenderer</a> *<a class="el" href="classVisualization_1_1Item.html#a895105ea229f5d02bd3684e8a80bb789">renderer</a>)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the content of the grid to match 'nodes'.  <a href="#a2e547564400cc6c57d5e63dd75e674fb"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayout.html#ad0c0d1f17a8401ae5db26bb2c0db5bf3">typeId</a> () const override</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the type id of this visualization class.  <a href="#ad0c0d1f17a8401ae5db26bb2c0db5bf3"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayout.html#aeb141a302a4bcd43dd77934a78f2dc39">updateGeometry</a> (int availableWidth, int availableHeight)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayout.html#a9639a85f46c3e3b620442a7d245a7ab2">addAddOn</a> (<a class="el" href="classVisualization_1_1VisualizationAddOn.html">Visualization::VisualizationAddOn</a> *addOn)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds the add-on <em>addOn</em> for the class.  <a href="#a9639a85f46c3e3b620442a7d245a7ab2"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static const QString &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayout.html#a17ea2b576d27ea6d1be0a27abd7155ec">className</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classVisualization_1_1StyleSet.html">Visualization::StyleSet</a><br class="typebreak"/>
 &lt; <a class="el" href="classVisualization_1_1GridLayout.html">GridLayout</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayout.html#a3634f51e36ac9df0c9030ec7a8623844">itemStyles</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayout.html#af8bba2d2334f76ce9734a62171e81b92">removeAddOn</a> (<a class="el" href="classVisualization_1_1VisualizationAddOn.html">Visualization::VisualizationAddOn</a> *addOn)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the add-on <em>addOn</em> from the class.  <a href="#af8bba2d2334f76ce9734a62171e81b92"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayout.html#ae2e71084f56c2a4d664a8ed684e60f92">setInteractionHandler</a> (<a class="el" href="classVisualization_1_1InteractionHandler.html">Visualization::InteractionHandler</a> *<a class="el" href="classVisualization_1_1GridLayout.html#adc664fd31e58d3ccb8d7cee0c04313f7">handler</a>)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayout.html#ab19a9728a161ea0d8448b1e437f9d9bb">staticTypeId</a> ()</td></tr>
+<tr><td colspan="2"><h2><a name="pri-types"></a>
+Private Types</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classVisualization_1_1Layout.html">Layout</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayout.html#aea547648ddaad05c7be369ffd0d9a760">BaseItemType</a></td></tr>
 <tr><td colspan="2"><h2><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1Item.html">Item</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayout.html#aaac71f6abf93eafee4e4c6bf88231d9b">findFirstHorizontal</a> (bool startFromLeft)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1Item.html">Item</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayout.html#a16180bbb2069c17a8cb4df9cc81c79fe">findFirstVertical</a> (bool startFromTop)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1Item.html">Item</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayout.html#a598cecbbcf138dc05b805a8fea97201b">findNext</a> (int dx, int dy)</td></tr>
+<tr><td colspan="2"><h2><a name="pri-static-methods"></a>
+Static Private Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static QList<br class="typebreak"/>
+&lt; <a class="el" href="classVisualization_1_1VisualizationAddOn.html">Visualization::VisualizationAddOn</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayout.html#ad1038cbd1b86320fb48444570587bbef">staticAddOns</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a list of all add-on that have been added to this class.  <a href="#ad1038cbd1b86320fb48444570587bbef"></a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">QVector&lt; QVector&lt; <a class="el" href="classVisualization_1_1Item.html">Item</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayout.html#a4bb13221388140287765ebd624b9b4cb">items_</a></td></tr>
@@ -176,6 +196,21 @@ Static Private Attributes</h2></td></tr>
 <a class="el" href="classVisualization_1_1InteractionHandler.html">Visualization::InteractionHandler</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1GridLayout.html#a03ac562ca4998b5388f067cc468493a1">handler_</a></td></tr>
 </table>
 <hr/><h2>Member Typedef Documentation</h2>
+<a class="anchor" id="aea547648ddaad05c7be369ffd0d9a760"></a><!-- doxytag: member="Visualization::GridLayout::BaseItemType" ref="aea547648ddaad05c7be369ffd0d9a760" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="classVisualization_1_1Layout.html">Layout</a> <a class="el" href="classVisualization_1_1GridLayout.html#aea547648ddaad05c7be369ffd0d9a760">Visualization::GridLayout::BaseItemType</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="classVisualization_1_1Layout.html#a63b89e76cd877602f7e4e87459614494">Visualization::Layout</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="af14b9eabb813b9539b84d53c7b90fc76"></a><!-- doxytag: member="Visualization::GridLayout::StyleType" ref="af14b9eabb813b9539b84d53c7b90fc76" args="" -->
 <div class="memitem">
 <div class="memproto">
@@ -236,6 +271,47 @@ Static Private Attributes</h2></td></tr>
 </div>
 </div>
 <hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="a9639a85f46c3e3b620442a7d245a7ab2"></a><!-- doxytag: member="Visualization::GridLayout::addAddOn" ref="a9639a85f46c3e3b620442a7d245a7ab2" args="(Visualization::VisualizationAddOn *addOn)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void <a class="el" href="classVisualization_1_1GridLayout.html#a9639a85f46c3e3b620442a7d245a7ab2">Visualization::GridLayout::addAddOn</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classVisualization_1_1VisualizationAddOn.html">Visualization::VisualizationAddOn</a> *&#160;</td>
+          <td class="paramname"><em>addOn</em></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Adds the add-on <em>addOn</em> for the class. </p>
+
+<p>Reimplemented from <a class="el" href="classVisualization_1_1Layout.html#a4b84ffe1827a6592d598960fdf959b30">Visualization::Layout</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af3af6c8c2f5c30db76fcec0a65adb2d0"></a><!-- doxytag: member="Visualization::GridLayout::addOns" ref="af3af6c8c2f5c30db76fcec0a65adb2d0" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual QList&lt;<a class="el" href="classVisualization_1_1VisualizationAddOn.html">Visualization::VisualizationAddOn</a>*&gt; <a class="el" href="classVisualization_1_1GridLayout.html#af3af6c8c2f5c30db76fcec0a65adb2d0">Visualization::GridLayout::addOns</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Returns all visualization add-ons of this and inherited classes. </p>
+
+<p>Reimplemented from <a class="el" href="classVisualization_1_1Layout.html#adccd01280b484db2fe0641e2f7ff50da">Visualization::Layout</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a5046800d23dd25e55a5c5307f7f872d9"></a><!-- doxytag: member="Visualization::GridLayout::at" ref="a5046800d23dd25e55a5c5307f7f872d9" args="(int x, int y)" -->
 <div class="memitem">
 <div class="memproto">
@@ -563,6 +639,29 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="af8bba2d2334f76ce9734a62171e81b92"></a><!-- doxytag: member="Visualization::GridLayout::removeAddOn" ref="af8bba2d2334f76ce9734a62171e81b92" args="(Visualization::VisualizationAddOn *addOn)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool <a class="el" href="classVisualization_1_1GridLayout.html#af8bba2d2334f76ce9734a62171e81b92">Visualization::GridLayout::removeAddOn</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classVisualization_1_1VisualizationAddOn.html">Visualization::VisualizationAddOn</a> *&#160;</td>
+          <td class="paramname"><em>addOn</em></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Removes the add-on <em>addOn</em> from the class. </p>
+<p>The add-on can only be removed if it was added directly to this class. Add-on from inherited classes can not be removed by calling removeAddOn on derived classes.</p>
+<p>Returns true if the add-on was removed and false otherwise. </p>
+
+<p>Reimplemented from <a class="el" href="classVisualization_1_1Layout.html#aac7246d4fa8f2314e62cff0e0b48f1dd">Visualization::Layout</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="abf02a234ac36b252834bb50cce0a496e"></a><!-- doxytag: member="Visualization::GridLayout::set" ref="abf02a234ac36b252834bb50cce0a496e" args="(Item *item, int x, int y, bool deleteOldItem)" -->
 <div class="memitem">
 <div class="memproto">
@@ -670,6 +769,45 @@ template&lt;class T &gt; </div>
 <div class="memdoc">
 
 <p>Reimplemented from <a class="el" href="classVisualization_1_1Layout.html#a61afa8c9d4f10651ad1dde37e102dc36">Visualization::Layout</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad1038cbd1b86320fb48444570587bbef"></a><!-- doxytag: member="Visualization::GridLayout::staticAddOns" ref="ad1038cbd1b86320fb48444570587bbef" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static QList&lt;<a class="el" href="classVisualization_1_1VisualizationAddOn.html">Visualization::VisualizationAddOn</a>*&gt;&amp; <a class="el" href="classVisualization_1_1GridLayout.html#ad1038cbd1b86320fb48444570587bbef">Visualization::GridLayout::staticAddOns</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [static, private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Returns a list of all add-on that have been added to this class. </p>
+<p>Use <a class="el" href="classVisualization_1_1GridLayout.html#a9639a85f46c3e3b620442a7d245a7ab2" title="Adds the add-on addOn for the class.">addAddOn()</a> and <a class="el" href="classVisualization_1_1GridLayout.html#af8bba2d2334f76ce9734a62171e81b92" title="Removes the add-on addOn from the class.">removeAddOn()</a> to change the contents of the list. </p>
+
+<p>Reimplemented from <a class="el" href="classVisualization_1_1Layout.html#aad9a9e4385c6668fabf3f957c0322b04">Visualization::Layout</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab19a9728a161ea0d8448b1e437f9d9bb"></a><!-- doxytag: member="Visualization::GridLayout::staticTypeId" ref="ab19a9728a161ea0d8448b1e437f9d9bb" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int <a class="el" href="classVisualization_1_1GridLayout.html#ab19a9728a161ea0d8448b1e437f9d9bb">Visualization::GridLayout::staticTypeId</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="classVisualization_1_1Layout.html#a8052450dd4135626901e964bf70c86ae">Visualization::Layout</a>.</p>
 
 </div>
 </div>
@@ -897,6 +1035,27 @@ template&lt;class T &gt; </div>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a class="anchor" id="ad0c0d1f17a8401ae5db26bb2c0db5bf3"></a><!-- doxytag: member="Visualization::GridLayout::typeId" ref="ad0c0d1f17a8401ae5db26bb2c0db5bf3" args="() const override" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual int <a class="el" href="classVisualization_1_1GridLayout.html#ad0c0d1f17a8401ae5db26bb2c0db5bf3">Visualization::GridLayout::typeId</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const<code> [override, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Returns the type id of this visualization class. </p>
+<p>Each class that inherits from <a class="el" href="classVisualization_1_1Item.html">Item</a> has a unique type id that can be queried during runtime. </p>
+
+<p>Reimplemented from <a class="el" href="classVisualization_1_1Layout.html#a9cebe220b56a384ebc116d9e48f387c8">Visualization::Layout</a>.</p>
 
 </div>
 </div>

@@ -98,9 +98,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pri-types">Private Types</a> &#124;
+<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="#pri-static-attribs">Static Private Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">Visualization::SceneHandlerItem Class Reference</div>  </div>
@@ -118,21 +121,78 @@ Inheritance diagram for Visualization::SceneHandlerItem:</div>
 
 <p><a href="classVisualization_1_1SceneHandlerItem-members.html">List of all members.</a></p>
 <table class="memberdecls">
+<tr><td colspan="2"><h2><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classVisualization_1_1ItemStyle.html">ItemStyle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SceneHandlerItem.html#a9e400f110d54c333b9f9520451b44d91">StyleType</a></td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SceneHandlerItem.html#aecd74bb2b661347f681f7f48a59efb52">SceneHandlerItem</a> (<a class="el" href="classVisualization_1_1Scene.html">Scene</a> *<a class="el" href="classVisualization_1_1Item.html#aeca275c93e5a1a8b49d9cb36d782f112">scene</a>)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classVisualization_1_1InteractionHandler.html">InteractionHandler</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SceneHandlerItem.html#a3f96038b5e4b563347dc433f3950e01b">handler</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual QList<br class="typebreak"/>
+&lt; <a class="el" href="classVisualization_1_1VisualizationAddOn.html">Visualization::VisualizationAddOn</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SceneHandlerItem.html#a161b240412f77700228fef9b5e239df9">addOns</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns all visualization add-ons of this and inherited classes.  <a href="#a161b240412f77700228fef9b5e239df9"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual <br class="typebreak"/>
+<a class="el" href="classVisualization_1_1InteractionHandler.html">Visualization::InteractionHandler</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SceneHandlerItem.html#a2cb00b8df93be5e51e13006c4ff540e0">handler</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SceneHandlerItem.html#a229088e3c1f18c1a68fe03c9c8e8755d">setStyle</a> (const <a class="el" href="classVisualization_1_1ItemStyle.html">Visualization::ItemStyle</a> *<a class="el" href="classVisualization_1_1SceneHandlerItem.html#afd410e9f42cbd5f666c9b247ad5e7741">style</a>)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classVisualization_1_1Item.html#a2b08d7c411aac65805ef268b89317272">StyleType</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SceneHandlerItem.html#afd410e9f42cbd5f666c9b247ad5e7741">style</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SceneHandlerItem.html#a61eeb95946213a5cf3e5b65258e35b30">typeId</a> () const override</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the type id of this visualization class.  <a href="#a61eeb95946213a5cf3e5b65258e35b30"></a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SceneHandlerItem.html#aaaf17043582b1463566010295c45a6b6">setInteractionHandler</a> (<a class="el" href="classVisualization_1_1InteractionHandler.html">InteractionHandler</a> *<a class="el" href="classVisualization_1_1SceneHandlerItem.html#a3f96038b5e4b563347dc433f3950e01b">handler</a>)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SceneHandlerItem.html#a1a279191cee9d1f648edba5fac6b122c">addAddOn</a> (<a class="el" href="classVisualization_1_1VisualizationAddOn.html">Visualization::VisualizationAddOn</a> *addOn)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds the add-on <em>addOn</em> for the class.  <a href="#a1a279191cee9d1f648edba5fac6b122c"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static const QString &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SceneHandlerItem.html#a3b9f18c90511ba04ee48735613ad0fd1">className</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classVisualization_1_1StyleSet.html">Visualization::StyleSet</a><br class="typebreak"/>
+&lt; <a class="el" href="classVisualization_1_1SceneHandlerItem.html">SceneHandlerItem</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SceneHandlerItem.html#a16655d7d6de3f32da7e7aa77ed784a7f">itemStyles</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SceneHandlerItem.html#ada3b189c841e7ba9e26f5ced042ccacd">removeAddOn</a> (<a class="el" href="classVisualization_1_1VisualizationAddOn.html">Visualization::VisualizationAddOn</a> *addOn)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the add-on <em>addOn</em> from the class.  <a href="#ada3b189c841e7ba9e26f5ced042ccacd"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SceneHandlerItem.html#a1a02d10e6f9947411471626b3d70134b">setInteractionHandler</a> (<a class="el" href="classVisualization_1_1InteractionHandler.html">Visualization::InteractionHandler</a> *<a class="el" href="classVisualization_1_1SceneHandlerItem.html#a2cb00b8df93be5e51e13006c4ff540e0">handler</a>)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SceneHandlerItem.html#aa7c92929e68abd5aafc18cbcd76ed030">staticTypeId</a> ()</td></tr>
 <tr><td colspan="2"><h2><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SceneHandlerItem.html#a8b2e19ed4c1cadf7f907559c22f586c1">determineChildren</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SceneHandlerItem.html#a8584f418bf909ebd336fd78c836a87b9">updateGeometry</a> (int availableWidth, int availableHeight)</td></tr>
+<tr><td colspan="2"><h2><a name="pri-types"></a>
+Private Types</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classVisualization_1_1Item.html">Item</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SceneHandlerItem.html#adf89463b41d26d55508434b1a2d66a33">BaseItemType</a></td></tr>
+<tr><td colspan="2"><h2><a name="pri-static-methods"></a>
+Static Private Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static QList<br class="typebreak"/>
+&lt; <a class="el" href="classVisualization_1_1VisualizationAddOn.html">Visualization::VisualizationAddOn</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SceneHandlerItem.html#ac92d911e656c161ae5dcb6bd8ecf94e5">staticAddOns</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a list of all add-on that have been added to this class.  <a href="#ac92d911e656c161ae5dcb6bd8ecf94e5"></a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classVisualization_1_1InteractionHandler.html">InteractionHandler</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SceneHandlerItem.html#a30b11b35dad090f86a9beb314b18e17d">handler_</a> = <a class="el" href="classVisualization_1_1InteractionHandler.html#a914cc7ab75e77469aa681d829b1bed67">InteractionHandler::instance</a>()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static <br class="typebreak"/>
+<a class="el" href="classVisualization_1_1InteractionHandler.html">Visualization::InteractionHandler</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1SceneHandlerItem.html#a89052ecf5b6403d5b858b81ddc305614">handler_</a></td></tr>
 </table>
+<hr/><h2>Member Typedef Documentation</h2>
+<a class="anchor" id="adf89463b41d26d55508434b1a2d66a33"></a><!-- doxytag: member="Visualization::SceneHandlerItem::BaseItemType" ref="adf89463b41d26d55508434b1a2d66a33" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="classVisualization_1_1Item.html">Item</a> <a class="el" href="classVisualization_1_1SceneHandlerItem.html#adf89463b41d26d55508434b1a2d66a33">Visualization::SceneHandlerItem::BaseItemType</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a9e400f110d54c333b9f9520451b44d91"></a><!-- doxytag: member="Visualization::SceneHandlerItem::StyleType" ref="a9e400f110d54c333b9f9520451b44d91" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="classVisualization_1_1ItemStyle.html">ItemStyle</a> <a class="el" href="classVisualization_1_1SceneHandlerItem.html#a9e400f110d54c333b9f9520451b44d91">Visualization::SceneHandlerItem::StyleType</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="classVisualization_1_1Item.html#a2b08d7c411aac65805ef268b89317272">Visualization::Item</a>.</p>
+
+</div>
+</div>
 <hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="aecd74bb2b661347f681f7f48a59efb52"></a><!-- doxytag: member="Visualization::SceneHandlerItem::SceneHandlerItem" ref="aecd74bb2b661347f681f7f48a59efb52" args="(Scene *scene)" -->
 <div class="memitem">
@@ -152,6 +212,63 @@ Static Private Attributes</h2></td></tr>
 </div>
 </div>
 <hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="a1a279191cee9d1f648edba5fac6b122c"></a><!-- doxytag: member="Visualization::SceneHandlerItem::addAddOn" ref="a1a279191cee9d1f648edba5fac6b122c" args="(Visualization::VisualizationAddOn *addOn)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void <a class="el" href="classVisualization_1_1SceneHandlerItem.html#a1a279191cee9d1f648edba5fac6b122c">Visualization::SceneHandlerItem::addAddOn</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classVisualization_1_1VisualizationAddOn.html">Visualization::VisualizationAddOn</a> *&#160;</td>
+          <td class="paramname"><em>addOn</em></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Adds the add-on <em>addOn</em> for the class. </p>
+
+<p>Reimplemented from <a class="el" href="classVisualization_1_1Item.html#a8d7a4f3d5f9aa9a81f4f251e5599e0c5">Visualization::Item</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a161b240412f77700228fef9b5e239df9"></a><!-- doxytag: member="Visualization::SceneHandlerItem::addOns" ref="a161b240412f77700228fef9b5e239df9" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual QList&lt;<a class="el" href="classVisualization_1_1VisualizationAddOn.html">Visualization::VisualizationAddOn</a>*&gt; <a class="el" href="classVisualization_1_1SceneHandlerItem.html#a161b240412f77700228fef9b5e239df9">Visualization::SceneHandlerItem::addOns</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Returns all visualization add-ons of this and inherited classes. </p>
+
+<p>Reimplemented from <a class="el" href="classVisualization_1_1Item.html#ad63576242bb744e58ccb21e068dc7a5d">Visualization::Item</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3b9f18c90511ba04ee48735613ad0fd1"></a><!-- doxytag: member="Visualization::SceneHandlerItem::className" ref="a3b9f18c90511ba04ee48735613ad0fd1" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static const QString&amp; <a class="el" href="classVisualization_1_1SceneHandlerItem.html#a3b9f18c90511ba04ee48735613ad0fd1">Visualization::SceneHandlerItem::className</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a8b2e19ed4c1cadf7f907559c22f586c1"></a><!-- doxytag: member="Visualization::SceneHandlerItem::determineChildren" ref="a8b2e19ed4c1cadf7f907559c22f586c1" args="()" -->
 <div class="memitem">
 <div class="memproto">
@@ -170,12 +287,12 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a3f96038b5e4b563347dc433f3950e01b"></a><!-- doxytag: member="Visualization::SceneHandlerItem::handler" ref="a3f96038b5e4b563347dc433f3950e01b" args="() const " -->
+<a class="anchor" id="a2cb00b8df93be5e51e13006c4ff540e0"></a><!-- doxytag: member="Visualization::SceneHandlerItem::handler" ref="a2cb00b8df93be5e51e13006c4ff540e0" args="() const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classVisualization_1_1InteractionHandler.html">InteractionHandler</a> * <a class="el" href="classVisualization_1_1SceneHandlerItem.html#a3f96038b5e4b563347dc433f3950e01b">Visualization::SceneHandlerItem::handler</a> </td>
+          <td class="memname">virtual <a class="el" href="classVisualization_1_1InteractionHandler.html">Visualization::InteractionHandler</a>* <a class="el" href="classVisualization_1_1SceneHandlerItem.html#a2cb00b8df93be5e51e13006c4ff540e0">Visualization::SceneHandlerItem::handler</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const<code> [inline, virtual]</code></td>
@@ -188,20 +305,154 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aaaf17043582b1463566010295c45a6b6"></a><!-- doxytag: member="Visualization::SceneHandlerItem::setInteractionHandler" ref="aaaf17043582b1463566010295c45a6b6" args="(InteractionHandler *handler)" -->
+<a class="anchor" id="a16655d7d6de3f32da7e7aa77ed784a7f"></a><!-- doxytag: member="Visualization::SceneHandlerItem::itemStyles" ref="a16655d7d6de3f32da7e7aa77ed784a7f" args="()" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classVisualization_1_1SceneHandlerItem.html#aaaf17043582b1463566010295c45a6b6">Visualization::SceneHandlerItem::setInteractionHandler</a> </td>
+          <td class="memname">static <a class="el" href="classVisualization_1_1StyleSet.html">Visualization::StyleSet</a>&lt; <a class="el" href="classVisualization_1_1SceneHandlerItem.html">SceneHandlerItem</a> &gt;&amp; <a class="el" href="classVisualization_1_1SceneHandlerItem.html#a16655d7d6de3f32da7e7aa77ed784a7f">Visualization::SceneHandlerItem::itemStyles</a> </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classVisualization_1_1InteractionHandler.html">InteractionHandler</a> *&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ada3b189c841e7ba9e26f5ced042ccacd"></a><!-- doxytag: member="Visualization::SceneHandlerItem::removeAddOn" ref="ada3b189c841e7ba9e26f5ced042ccacd" args="(Visualization::VisualizationAddOn *addOn)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool <a class="el" href="classVisualization_1_1SceneHandlerItem.html#ada3b189c841e7ba9e26f5ced042ccacd">Visualization::SceneHandlerItem::removeAddOn</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classVisualization_1_1VisualizationAddOn.html">Visualization::VisualizationAddOn</a> *&#160;</td>
+          <td class="paramname"><em>addOn</em></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Removes the add-on <em>addOn</em> from the class. </p>
+<p>The add-on can only be removed if it was added directly to this class. Add-on from inherited classes can not be removed by calling removeAddOn on derived classes.</p>
+<p>Returns true if the add-on was removed and false otherwise. </p>
+
+<p>Reimplemented from <a class="el" href="classVisualization_1_1Item.html#ac7142d65940817b229c37f6643f80ff5">Visualization::Item</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1a02d10e6f9947411471626b3d70134b"></a><!-- doxytag: member="Visualization::SceneHandlerItem::setInteractionHandler" ref="a1a02d10e6f9947411471626b3d70134b" args="(Visualization::InteractionHandler *handler)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void <a class="el" href="classVisualization_1_1SceneHandlerItem.html#a1a02d10e6f9947411471626b3d70134b">Visualization::SceneHandlerItem::setInteractionHandler</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classVisualization_1_1InteractionHandler.html">Visualization::InteractionHandler</a> *&#160;</td>
           <td class="paramname"><em>handler</em></td><td>)</td>
           <td><code> [inline, static]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a229088e3c1f18c1a68fe03c9c8e8755d"></a><!-- doxytag: member="Visualization::SceneHandlerItem::setStyle" ref="a229088e3c1f18c1a68fe03c9c8e8755d" args="(const Visualization::ItemStyle *style)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void <a class="el" href="classVisualization_1_1SceneHandlerItem.html#a229088e3c1f18c1a68fe03c9c8e8755d">Visualization::SceneHandlerItem::setStyle</a> </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classVisualization_1_1ItemStyle.html">Visualization::ItemStyle</a> *&#160;</td>
+          <td class="paramname"><em>style</em></td><td>)</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="classVisualization_1_1Item.html#a0193d4a6e69ff078832b0b74bb544251">Visualization::Item</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac92d911e656c161ae5dcb6bd8ecf94e5"></a><!-- doxytag: member="Visualization::SceneHandlerItem::staticAddOns" ref="ac92d911e656c161ae5dcb6bd8ecf94e5" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static QList&lt;<a class="el" href="classVisualization_1_1VisualizationAddOn.html">Visualization::VisualizationAddOn</a>*&gt;&amp; <a class="el" href="classVisualization_1_1SceneHandlerItem.html#ac92d911e656c161ae5dcb6bd8ecf94e5">Visualization::SceneHandlerItem::staticAddOns</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [static, private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Returns a list of all add-on that have been added to this class. </p>
+<p>Use <a class="el" href="classVisualization_1_1SceneHandlerItem.html#a1a279191cee9d1f648edba5fac6b122c" title="Adds the add-on addOn for the class.">addAddOn()</a> and <a class="el" href="classVisualization_1_1SceneHandlerItem.html#ada3b189c841e7ba9e26f5ced042ccacd" title="Removes the add-on addOn from the class.">removeAddOn()</a> to change the contents of the list. </p>
+
+<p>Reimplemented from <a class="el" href="classVisualization_1_1Item.html#ab81c26e79bbedb546f4ae8e33e7cbee0">Visualization::Item</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa7c92929e68abd5aafc18cbcd76ed030"></a><!-- doxytag: member="Visualization::SceneHandlerItem::staticTypeId" ref="aa7c92929e68abd5aafc18cbcd76ed030" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int <a class="el" href="classVisualization_1_1SceneHandlerItem.html#aa7c92929e68abd5aafc18cbcd76ed030">Visualization::SceneHandlerItem::staticTypeId</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="afd410e9f42cbd5f666c9b247ad5e7741"></a><!-- doxytag: member="Visualization::SceneHandlerItem::style" ref="afd410e9f42cbd5f666c9b247ad5e7741" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="classVisualization_1_1Item.html#a2b08d7c411aac65805ef268b89317272">StyleType</a>* <a class="el" href="classVisualization_1_1SceneHandlerItem.html#afd410e9f42cbd5f666c9b247ad5e7741">Visualization::SceneHandlerItem::style</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const<code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="classVisualization_1_1Item.html#a7abeb14552c32e25c2ebb027971e565e">Visualization::Item</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a61eeb95946213a5cf3e5b65258e35b30"></a><!-- doxytag: member="Visualization::SceneHandlerItem::typeId" ref="a61eeb95946213a5cf3e5b65258e35b30" args="() const override" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual int <a class="el" href="classVisualization_1_1SceneHandlerItem.html#a61eeb95946213a5cf3e5b65258e35b30">Visualization::SceneHandlerItem::typeId</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const<code> [override, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Returns the type id of this visualization class. </p>
+<p>Each class that inherits from <a class="el" href="classVisualization_1_1Item.html">Item</a> has a unique type id that can be queried during runtime. </p>
+
+<p>Implements <a class="el" href="classVisualization_1_1Item.html#a1b66645240de313bff3942bb4f2d85fd">Visualization::Item</a>.</p>
 
 </div>
 </div>
@@ -235,12 +486,12 @@ Static Private Attributes</h2></td></tr>
 </div>
 </div>
 <hr/><h2>Member Data Documentation</h2>
-<a class="anchor" id="a30b11b35dad090f86a9beb314b18e17d"></a><!-- doxytag: member="Visualization::SceneHandlerItem::handler_" ref="a30b11b35dad090f86a9beb314b18e17d" args="" -->
+<a class="anchor" id="a89052ecf5b6403d5b858b81ddc305614"></a><!-- doxytag: member="Visualization::SceneHandlerItem::handler_" ref="a89052ecf5b6403d5b858b81ddc305614" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classVisualization_1_1InteractionHandler.html">InteractionHandler</a> * <a class="el" href="classVisualization_1_1SceneHandlerItem.html#a30b11b35dad090f86a9beb314b18e17d">Visualization::SceneHandlerItem::handler_</a> = <a class="el" href="classVisualization_1_1InteractionHandler.html#a914cc7ab75e77469aa681d829b1bed67">InteractionHandler::instance</a>()<code> [static, private]</code></td>
+          <td class="memname"><a class="el" href="classVisualization_1_1InteractionHandler.html">Visualization::InteractionHandler</a>* <a class="el" href="classVisualization_1_1SceneHandlerItem.html#a89052ecf5b6403d5b858b81ddc305614">Visualization::SceneHandlerItem::handler_</a><code> [static, private]</code></td>
         </tr>
       </table>
 </div>

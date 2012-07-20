@@ -93,8 +93,8 @@ var searchData=
   ['prepend',['prepend',['../classInteraction_1_1Operator.html#a6101c76943bfb409ded1837b30d520bb',1,'Interaction::Operator::prepend()'],['../classModel_1_1List.html#a08ace982d10cbb5d736b2e193dc4dfd8',1,'Model::List::prepend()'],['../classVisualization_1_1SequentialLayout.html#a4e08ea70003c348c4bbd1840d6575b43',1,'Visualization::SequentialLayout::prepend()']]],
   ['presymbol',['preSymbol',['../classOOVisualization_1_1OperatorStyle.html#a828eafb9eab9586f4f3257cb9cc8f302',1,'OOVisualization::OperatorStyle::preSymbol()'],['../classOOVisualization_1_1VStringLiteralStyle.html#ad478b63ccbf3c1d2cea97b285ae29d6d',1,'OOVisualization::VStringLiteralStyle::preSymbol()']]],
   ['presymbol_5f',['preSymbol_',['../classOOVisualization_1_1OperatorStyle.html#a2a7339f09d655127992ccd55287a5390',1,'OOVisualization::OperatorStyle::preSymbol_()'],['../classOOVisualization_1_1VStringLiteralStyle.html#a632d6cfeff8415727b02d1e4526f3cb6',1,'OOVisualization::VStringLiteralStyle::preSymbol_()']]],
-  ['primitivetype',['PrimitiveType',['../classOOModel_1_1PrimitiveType.html',1,'OOModel']]],
   ['primitivetype',['PrimitiveType',['../classOOModel_1_1PrimitiveType.html#a7bb420fac34d377887b110c3c240e720',1,'OOModel::PrimitiveType']]],
+  ['primitivetype',['PrimitiveType',['../classOOModel_1_1PrimitiveType.html',1,'OOModel']]],
   ['primitivetypeexpression',['PrimitiveTypeExpression',['../classOOModel_1_1PrimitiveTypeExpression.html#a169b3e8ba914b1aca6a952bc3130c73c',1,'OOModel::PrimitiveTypeExpression']]],
   ['primitivetypeexpression',['PrimitiveTypeExpression',['../classOOModel_1_1PrimitiveTypeExpression.html',1,'OOModel']]],
   ['primitivetypes',['PrimitiveTypes',['../classOOModel_1_1PrimitiveType.html#ac8006ae2bb33cdf51aa806c3c2d6bc05',1,'OOModel::PrimitiveType::PrimitiveTypes()'],['../classOOModel_1_1PrimitiveTypeExpression.html#af0ccd9354a24c8eca7263c6689033b92',1,'OOModel::PrimitiveTypeExpression::PrimitiveTypes()']]],
@@ -125,6 +125,7 @@ var searchData=
   ['purposes_5f',['purposes_',['../classVisualization_1_1ModelRenderer.html#a445d0a84a6eb2d1007d4dc18316b4d29',1,'Visualization::ModelRenderer']]],
   ['pushcommandonundostack',['pushCommandOnUndoStack',['../classModel_1_1Model.html#a417d70c35fc6faaaf197076822e144ce',1,'Model::Model']]],
   ['pushednewcommandsonthestack',['pushedNewCommandsOnTheStack',['../classModel_1_1Model.html#aed826416bf2969f75a37feef878ed0e7',1,'Model::Model']]],
+  ['putaddonitemsinsequence',['putAddOnItemsInSequence',['../classVisualization_1_1Item.html#ad36be4f5a38dea4b866f2d8f17a0784c',1,'Visualization::Item']]],
   ['putnode',['putNode',['../classFilePersistence_1_1SystemClipboard.html#ac8109db3c5cebb8f5b64bb9273741acc',1,'FilePersistence::SystemClipboard::putNode()'],['../classModel_1_1ClipboardStore.html#aa76b424a5886d9a4ce95cdfa89307dad',1,'Model::ClipboardStore::putNode()']]],
   ['putnodes',['putNodes',['../classFilePersistence_1_1SystemClipboard.html#ab2a9970b12186fca4e650d67aca542f1',1,'FilePersistence::SystemClipboard::putNodes()'],['../classModel_1_1ClipboardStore.html#a6d54c73f0816847d5f59b51637f73931',1,'Model::ClipboardStore::putNodes()']]],
   ['putposition',['putPosition',['../classModel_1_1ListPut.html#a9393b0bc82b51da78c03073703232209',1,'Model::ListPut']]]

@@ -50,6 +50,7 @@ var searchData=
   ['purpose',['purpose',['../classVisualization_1_1Item.html#ab03b374ef71de788d85aafd5fd01010b',1,'Visualization::Item']]],
   ['purposename',['purposeName',['../classVisualization_1_1ModelRenderer.html#a293974edf29ee4e0777178ed76ee1c05',1,'Visualization::ModelRenderer']]],
   ['pushcommandonundostack',['pushCommandOnUndoStack',['../classModel_1_1Model.html#a417d70c35fc6faaaf197076822e144ce',1,'Model::Model']]],
+  ['putaddonitemsinsequence',['putAddOnItemsInSequence',['../classVisualization_1_1Item.html#ad36be4f5a38dea4b866f2d8f17a0784c',1,'Visualization::Item']]],
   ['putnode',['putNode',['../classFilePersistence_1_1SystemClipboard.html#ac8109db3c5cebb8f5b64bb9273741acc',1,'FilePersistence::SystemClipboard::putNode()'],['../classModel_1_1ClipboardStore.html#aa76b424a5886d9a4ce95cdfa89307dad',1,'Model::ClipboardStore::putNode()']]],
   ['putnodes',['putNodes',['../classFilePersistence_1_1SystemClipboard.html#ab2a9970b12186fca4e650d67aca542f1',1,'FilePersistence::SystemClipboard::putNodes()'],['../classModel_1_1ClipboardStore.html#a6d54c73f0816847d5f59b51637f73931',1,'Model::ClipboardStore::putNodes()']]]
 ];

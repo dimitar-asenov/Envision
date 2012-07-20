@@ -58,6 +58,7 @@ var searchData=
   ['vinteger',['VInteger',['../classVisualization_1_1VInteger.html',1,'Visualization']]],
   ['vintegerliteral',['VIntegerLiteral',['../classOOVisualization_1_1VIntegerLiteral.html',1,'OOVisualization']]],
   ['visibility',['Visibility',['../classOOModel_1_1Visibility.html',1,'OOModel']]],
+  ['visualizationaddon',['VisualizationAddOn',['../classVisualization_1_1VisualizationAddOn.html',1,'Visualization']]],
   ['visualizationbase',['VisualizationBase',['../classVisualization_1_1VisualizationBase.html',1,'Visualization']]],
   ['visualizationexception',['VisualizationException',['../classVisualization_1_1VisualizationException.html',1,'Visualization']]],
   ['visualizationgroup',['VisualizationGroup',['../classVisualization_1_1VisualizationGroup.html',1,'Visualization']]],
