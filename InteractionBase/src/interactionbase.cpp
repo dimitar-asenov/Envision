@@ -43,6 +43,7 @@
 #include "handlers/HRootItem.h"
 
 #include "vis/CommandPrompt.h"
+#include "vis/TextAndDescription.h"
 
 #include "VisualizationBase/src/items/SceneHandlerItem.h"
 #include "VisualizationBase/src/items/VExtendable.h"
@@ -94,6 +95,7 @@ bool InteractionBase::initialize(Core::EnvisionManager&)
 	Visualization::PanelBorderLayout::setInteractionHandler(GenericHandler::instance());
 	Visualization::PositionLayout::setInteractionHandler(HPositionLayout::instance());
 	CommandPrompt::setInteractionHandler(HCommandPrompt::instance());
+	TextAndDescription::setInteractionHandler(GenericHandler::instance());
 	return true;
 }
 
