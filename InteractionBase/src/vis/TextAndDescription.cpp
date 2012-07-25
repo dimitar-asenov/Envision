@@ -46,6 +46,13 @@ TextAndDescription::TextAndDescription(Item* parent, const StyleType* style) :
 	layout->append(text);
 	layout->append(description);
 }
+
+TextAndDescription::TextAndDescription(const QString& text, const QString& description, const StyleType* style)
+	: TextAndDescription(nullptr, style)
+{
+	setContents(text, description);
+}
+
 TextAndDescription::~TextAndDescription()
 {
 	SAFE_DELETE_ITEM(layout);

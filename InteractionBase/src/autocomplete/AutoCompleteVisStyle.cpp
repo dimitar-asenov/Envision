@@ -25,38 +25,22 @@
  **********************************************************************************************************************/
 
 /*
- * CustomSceneEvent.h
+ * AutoCompleteVisStyle.cpp
  *
- *  Created on: Feb 17, 2012
+ *  Created on: Jul 24, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef VisualizationBase_CUSTOMSCENEEVENT_H_
-#define VisualizationBase_CUSTOMSCENEEVENT_H_
+#include "AutoCompleteVisStyle.h"
 
-#include "visualizationbase_api.h"
+namespace Interaction {
 
-namespace Visualization {
+void AutoCompleteVisStyle::load(Visualization::StyleLoader& sl)
+{
+	ItemStyle::load(sl);
+	sl.load("layout", layout_);
+	sl.load("heightLimit", heightLimit_);
+	sl.load("distanceToCursor", distanceToCursor_);
+}
 
-class VISUALIZATIONBASE_API CustomSceneEvent : public QEvent{
-	public:
-		typedef std::function<void ()> EventFunction;
-
-		static const QEvent::Type EventType;
-
-		CustomSceneEvent(QEvent::Type type);
-		CustomSceneEvent(EventFunction f);
-
-		virtual ~CustomSceneEvent();
-		virtual void execute();
-
-		void setEventFunction(EventFunction f);
-
-	private:
-		EventFunction f_;
-};
-
-inline void CustomSceneEvent::setEventFunction(EventFunction f) { f_ = f; }
-
-} /* namespace Visualization */
-#endif /* VisualizationBase_CUSTOMSCENEEVENT_H_ */
+} /* namespace Interaction */

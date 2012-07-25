@@ -6,7 +6,12 @@ win32:LIBS += -llogger \
     -lmodelbase \
     -lfilepersistence \
     -lvisualizationbase
-HEADERS += src/handlers/HRootItem.h \
+HEADERS += test/HBinaryNode.h \
+    src/autocomplete/AutoComplete.h \
+    src/autocomplete/AutoCompleteVisStyle.h \
+    src/autocomplete/AutoCompleteVis.h \
+    src/autocomplete/AutoCompleteEntry.h \
+    src/handlers/HRootItem.h \
     src/InteractionBaseException.h \
     src/commands/CSceneHandlerItemExit.h \
     src/commands/Command.h \
@@ -53,7 +58,12 @@ HEADERS += src/handlers/HRootItem.h \
     src/vis/TextAndDescription.h \
     src/vis/TextAndDescriptionStyle.h \
     src/interactionbase.h
-SOURCES += src/handlers/HRootItem.cpp \
+SOURCES += test/HBinaryNode.cpp \
+    src/autocomplete/AutoComplete.cpp \
+    src/autocomplete/AutoCompleteVisStyle.cpp \
+    src/autocomplete/AutoCompleteVis.cpp \
+    src/autocomplete/AutoCompleteEntry.cpp \
+    src/handlers/HRootItem.cpp \
     src/handlers/SetCursorEvent.cpp \
     src/expression_editor/ExpressionVisitor.cpp \
     src/expression_editor/ExpressionEditor.cpp \

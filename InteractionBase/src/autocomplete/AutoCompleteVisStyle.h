@@ -25,38 +25,38 @@
  **********************************************************************************************************************/
 
 /*
- * CustomSceneEvent.h
+ * AutoCompleteVisStyle.h
  *
- *  Created on: Feb 17, 2012
+ *  Created on: Jul 24, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef VisualizationBase_CUSTOMSCENEEVENT_H_
-#define VisualizationBase_CUSTOMSCENEEVENT_H_
+#ifndef InteractionBase_AUTOCOMPLETEVISSTYLE_H_
+#define InteractionBase_AUTOCOMPLETEVISSTYLE_H_
 
-#include "visualizationbase_api.h"
+#include "interactionbase_api.h"
+#include "VisualizationBase/src/layouts/SequentialLayoutStyle.h"
 
-namespace Visualization {
+namespace Interaction {
 
-class VISUALIZATIONBASE_API CustomSceneEvent : public QEvent{
-	public:
-		typedef std::function<void ()> EventFunction;
-
-		static const QEvent::Type EventType;
-
-		CustomSceneEvent(QEvent::Type type);
-		CustomSceneEvent(EventFunction f);
-
-		virtual ~CustomSceneEvent();
-		virtual void execute();
-
-		void setEventFunction(EventFunction f);
-
+class INTERACTIONBASE_API AutoCompleteVisStyle : public Visualization::ItemStyle
+{
 	private:
-		EventFunction f_;
+		Visualization::SequentialLayoutStyle layout_;
+		int heightLimit_;
+		int distanceToCursor_;
+
+	public:
+		void load(Visualization::StyleLoader& sl);
+
+		const Visualization::SequentialLayoutStyle& layout() const;
+		int heightLimit() const;
+		int distanceToCursor() const;
 };
 
-inline void CustomSceneEvent::setEventFunction(EventFunction f) { f_ = f; }
+inline const Visualization::SequentialLayoutStyle& AutoCompleteVisStyle::layout() const {return layout_; }
+inline int AutoCompleteVisStyle::heightLimit() const {return heightLimit_; }
+inline int AutoCompleteVisStyle::distanceToCursor() const {return distanceToCursor_; }
 
-} /* namespace Visualization */
-#endif /* VisualizationBase_CUSTOMSCENEEVENT_H_ */
+} /* namespace Interaction */
+#endif /* InteractionBase_AUTOCOMPLETEVISSTYLE_H_ */

@@ -25,38 +25,41 @@
  **********************************************************************************************************************/
 
 /*
- * CustomSceneEvent.h
+ * AutoComplete.h
  *
- *  Created on: Feb 17, 2012
+ *  Created on: Jul 24, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef VisualizationBase_CUSTOMSCENEEVENT_H_
-#define VisualizationBase_CUSTOMSCENEEVENT_H_
+#ifndef InteractionBase_AUTOCOMPLETE_H_
+#define InteractionBase_AUTOCOMPLETE_H_
 
-#include "visualizationbase_api.h"
+#include "../interactionbase_api.h"
 
 namespace Visualization {
+	class Scene;
+}
 
-class VISUALIZATIONBASE_API CustomSceneEvent : public QEvent{
+namespace Interaction {
+
+class AutoCompleteVis;
+class AutoCompleteEntry;
+
+class INTERACTIONBASE_API AutoComplete {
 	public:
-		typedef std::function<void ()> EventFunction;
 
-		static const QEvent::Type EventType;
+		static void setDefaultScene(Visualization::Scene* scene);
+		static void show(const QList<AutoCompleteEntry*>& entries);
+		static void hide();
 
-		CustomSceneEvent(QEvent::Type type);
-		CustomSceneEvent(EventFunction f);
+		static bool isVisible();
 
-		virtual ~CustomSceneEvent();
-		virtual void execute();
-
-		void setEventFunction(EventFunction f);
+		static AutoCompleteVis* visualization();
 
 	private:
-		EventFunction f_;
+		static Visualization::Scene* defaultScene_;
+		static AutoCompleteVis* vis_;
 };
 
-inline void CustomSceneEvent::setEventFunction(EventFunction f) { f_ = f; }
-
-} /* namespace Visualization */
-#endif /* VisualizationBase_CUSTOMSCENEEVENT_H_ */
+} /* namespace Interaction */
+#endif /* InteractionBase_AUTOCOMPLETE_H_ */

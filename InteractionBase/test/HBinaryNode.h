@@ -25,38 +25,29 @@
  **********************************************************************************************************************/
 
 /*
- * CustomSceneEvent.h
+ * HBinaryNode.h
  *
- *  Created on: Feb 17, 2012
+ *  Created on: Jul 24, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef VisualizationBase_CUSTOMSCENEEVENT_H_
-#define VisualizationBase_CUSTOMSCENEEVENT_H_
+#ifndef InteractionBase_HBINARYNODE_H_
+#define InteractionBase_HBINARYNODE_H_
 
-#include "visualizationbase_api.h"
+#include "../src/handlers/HExtendable.h"
 
-namespace Visualization {
+namespace Interaction {
 
-class VISUALIZATIONBASE_API CustomSceneEvent : public QEvent{
+class HBinaryNode : public HExtendable
+{
 	public:
-		typedef std::function<void ()> EventFunction;
+		static HBinaryNode* instance();
 
-		static const QEvent::Type EventType;
+		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event);
 
-		CustomSceneEvent(QEvent::Type type);
-		CustomSceneEvent(EventFunction f);
-
-		virtual ~CustomSceneEvent();
-		virtual void execute();
-
-		void setEventFunction(EventFunction f);
-
-	private:
-		EventFunction f_;
+	protected:
+		HBinaryNode();
 };
 
-inline void CustomSceneEvent::setEventFunction(EventFunction f) { f_ = f; }
-
-} /* namespace Visualization */
-#endif /* VisualizationBase_CUSTOMSCENEEVENT_H_ */
+} /* namespace Interaction */
+#endif /* InteractionBase_HBINARYNODE_H_ */

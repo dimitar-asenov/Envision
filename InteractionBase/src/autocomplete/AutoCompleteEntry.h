@@ -25,38 +25,56 @@
  **********************************************************************************************************************/
 
 /*
- * CustomSceneEvent.h
+ * AutoCompleteEntry.h
  *
- *  Created on: Feb 17, 2012
+ *  Created on: Jul 23, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef VisualizationBase_CUSTOMSCENEEVENT_H_
-#define VisualizationBase_CUSTOMSCENEEVENT_H_
+#ifndef InteractionBase_AUTOCOMPLETEENTRY_H_
+#define InteractionBase_AUTOCOMPLETEENTRY_H_
 
-#include "visualizationbase_api.h"
+#include "../interactionbase_api.h"
 
 namespace Visualization {
+	class Item;
+}
 
-class VISUALIZATIONBASE_API CustomSceneEvent : public QEvent{
+namespace Interaction {
+
+class INTERACTIONBASE_API AutoCompleteEntry
+{
 	public:
-		typedef std::function<void ()> EventFunction;
+		typedef std::function<void (AutoCompleteEntry* entry)> ExecuteFunction;
 
-		static const QEvent::Type EventType;
+		AutoCompleteEntry(const QString& text = QString(), const QString& description = QString(),
+				Visualization::Item* visualization = nullptr, ExecuteFunction execFunction = nullptr);
+		virtual ~AutoCompleteEntry();
 
-		CustomSceneEvent(QEvent::Type type);
-		CustomSceneEvent(EventFunction f);
-
-		virtual ~CustomSceneEvent();
 		virtual void execute();
 
-		void setEventFunction(EventFunction f);
+		const QString& text();
+		const QString& description();
+		Visualization::Item* visualization();
+
+		void setText(const QString& suggestion);
+		void setDescription(const QString& description);
+		void setVisualization(Visualization::Item* item);
+		void setExecutionFunction(ExecuteFunction execFunction);
 
 	private:
-		EventFunction f_;
+		QString text_;
+		QString description_;
+		Visualization::Item* vis_;
+		ExecuteFunction execFunction_;
+
 };
 
-inline void CustomSceneEvent::setEventFunction(EventFunction f) { f_ = f; }
+inline const QString& AutoCompleteEntry::text() { return text_; }
+inline const QString& AutoCompleteEntry::description() { return description_; }
+inline Visualization::Item* AutoCompleteEntry::visualization() { return vis_; }
+inline void AutoCompleteEntry::setText(const QString& text) { text_ = text; }
+inline void AutoCompleteEntry::setDescription(const QString& description) { description_ = description; }
 
-} /* namespace Visualization */
-#endif /* VisualizationBase_CUSTOMSCENEEVENT_H_ */
+} /* namespace Interaction */
+#endif /* InteractionBase_AUTOCOMPLETEENTRY_H_ */

@@ -25,38 +25,44 @@
  **********************************************************************************************************************/
 
 /*
- * CustomSceneEvent.h
+ * AutoCompleteEntry.cpp
  *
- *  Created on: Feb 17, 2012
+ *  Created on: Jul 23, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef VisualizationBase_CUSTOMSCENEEVENT_H_
-#define VisualizationBase_CUSTOMSCENEEVENT_H_
+#include "AutoCompleteEntry.h"
 
-#include "visualizationbase_api.h"
+#include "VisualizationBase/src/items/Item.h"
 
-namespace Visualization {
+namespace Interaction {
 
-class VISUALIZATIONBASE_API CustomSceneEvent : public QEvent{
-	public:
-		typedef std::function<void ()> EventFunction;
+AutoCompleteEntry::AutoCompleteEntry(const QString& text, const QString& description,
+		Visualization::Item* visualization, ExecuteFunction execFunction) :
+	text_(text), description_(description), vis_(visualization), execFunction_(execFunction)
+{
+}
 
-		static const QEvent::Type EventType;
+AutoCompleteEntry::~AutoCompleteEntry()
+{
+	SAFE_DELETE_ITEM(vis_);
+}
 
-		CustomSceneEvent(QEvent::Type type);
-		CustomSceneEvent(EventFunction f);
 
-		virtual ~CustomSceneEvent();
-		virtual void execute();
+void AutoCompleteEntry::setVisualization(Visualization::Item* item)
+{
+	SAFE_DELETE_ITEM(vis_);
+	vis_ = item;
+}
 
-		void setEventFunction(EventFunction f);
+void AutoCompleteEntry::setExecutionFunction(ExecuteFunction execFunction)
+{
+	execFunction_ = execFunction;
+}
 
-	private:
-		EventFunction f_;
-};
+void AutoCompleteEntry::execute()
+{
+	if (execFunction_) execFunction_(this);
+}
 
-inline void CustomSceneEvent::setEventFunction(EventFunction f) { f_ = f; }
-
-} /* namespace Visualization */
-#endif /* VisualizationBase_CUSTOMSCENEEVENT_H_ */
+} /* namespace Interaction */

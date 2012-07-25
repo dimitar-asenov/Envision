@@ -49,6 +49,7 @@ class INTERACTIONBASE_API TextAndDescription : public Visualization::Item
 
 	public:
 		TextAndDescription(Item* parent, const StyleType* style = itemStyles().get());
+		TextAndDescription(const QString& text, const QString& description, const StyleType* style = itemStyles().get());
 		virtual ~TextAndDescription();
 
 		virtual bool sizeDependsOnParent() const;

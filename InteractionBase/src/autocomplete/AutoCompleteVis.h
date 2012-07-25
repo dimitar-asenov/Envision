@@ -25,38 +25,48 @@
  **********************************************************************************************************************/
 
 /*
- * CustomSceneEvent.h
+ * AutoCompleteVis.h
  *
- *  Created on: Feb 17, 2012
+ *  Created on: Jul 24, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef VisualizationBase_CUSTOMSCENEEVENT_H_
-#define VisualizationBase_CUSTOMSCENEEVENT_H_
+#ifndef InteractionBase_AUTOCOMPLETEVIS_H_
+#define InteractionBase_AUTOCOMPLETEVIS_H_
 
-#include "visualizationbase_api.h"
+#include "interactionbase_api.h"
+#include "AutoCompleteVisStyle.h"
 
-namespace Visualization {
+#include "VisualizationBase/src/items/LayoutProvider.h"
+#include "VisualizationBase/src/layouts/SequentialLayout.h"
 
-class VISUALIZATIONBASE_API CustomSceneEvent : public QEvent{
+namespace Interaction {
+
+class AutoCompleteEntry;
+
+class INTERACTIONBASE_API AutoCompleteVis : public Visualization::LayoutProvider<>
+{
+	ITEM_COMMON(AutoCompleteVis)
+
 	public:
-		typedef std::function<void ()> EventFunction;
+		AutoCompleteVis(const QList<AutoCompleteEntry*>& entries, const StyleType* style = itemStyles().get());
+		virtual ~AutoCompleteVis();
 
-		static const QEvent::Type EventType;
+		virtual UpdateType needsUpdate() override;
 
-		CustomSceneEvent(QEvent::Type type);
-		CustomSceneEvent(EventFunction f);
-
-		virtual ~CustomSceneEvent();
-		virtual void execute();
-
-		void setEventFunction(EventFunction f);
+	protected:
+		virtual void determineChildren() override;
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
+		virtual bool sceneEventFilter (QGraphicsItem* watched, QEvent* event) override;
 
 	private:
-		EventFunction f_;
+		typedef LayoutProvider<> BaseItemType;
+
+		QList<AutoCompleteEntry*> entries_;
+		Item* watched_;
+		QGraphicsEffect* selectionEffect_;
+		int selectionIndex_;
 };
 
-inline void CustomSceneEvent::setEventFunction(EventFunction f) { f_ = f; }
-
-} /* namespace Visualization */
-#endif /* VisualizationBase_CUSTOMSCENEEVENT_H_ */
+} /* namespace Interaction */
+#endif /* InteractionBase_AUTOCOMPLETEVIS_H_ */

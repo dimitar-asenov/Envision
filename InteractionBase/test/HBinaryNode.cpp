@@ -25,38 +25,45 @@
  **********************************************************************************************************************/
 
 /*
- * CustomSceneEvent.h
+ * HBinaryNode.cpp
  *
- *  Created on: Feb 17, 2012
+ *  Created on: Jul 24, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef VisualizationBase_CUSTOMSCENEEVENT_H_
-#define VisualizationBase_CUSTOMSCENEEVENT_H_
+#include "HBinaryNode.h"
+#include "../src/autocomplete/AutoComplete.h"
+#include "../src/autocomplete/AutoCompleteEntry.h"
+#include "../src/autocomplete/AutoCompleteVis.h"
 
-#include "visualizationbase_api.h"
 
-namespace Visualization {
+namespace Interaction {
 
-class VISUALIZATIONBASE_API CustomSceneEvent : public QEvent{
-	public:
-		typedef std::function<void ()> EventFunction;
+HBinaryNode::HBinaryNode()
+{
+}
 
-		static const QEvent::Type EventType;
+HBinaryNode* HBinaryNode::instance()
+{
+	static HBinaryNode h;
+	return &h;
+}
 
-		CustomSceneEvent(QEvent::Type type);
-		CustomSceneEvent(EventFunction f);
+void HBinaryNode::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
+{
+	if (event->modifiers() == 0 && event->key() == Qt::Key_F1)
+	{
+		if (AutoComplete::isVisible())
+			AutoComplete::hide();
+		else
+		{
+			QList<AutoCompleteEntry*> entr;
+			entr.append( new AutoCompleteEntry("foo", "will foo") );
+			entr.append( new AutoCompleteEntry("bar", "will bar") );
+			AutoComplete::show(entr);
+		}
+	}
+	else InteractionHandler::keyPressEvent(target, event);
+}
 
-		virtual ~CustomSceneEvent();
-		virtual void execute();
-
-		void setEventFunction(EventFunction f);
-
-	private:
-		EventFunction f_;
-};
-
-inline void CustomSceneEvent::setEventFunction(EventFunction f) { f_ = f; }
-
-} /* namespace Visualization */
-#endif /* VisualizationBase_CUSTOMSCENEEVENT_H_ */
+} /* namespace Interaction */

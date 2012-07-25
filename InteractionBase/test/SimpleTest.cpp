@@ -32,6 +32,9 @@
  **********************************************************************************************************************/
 
 #include "interactionbase.h"
+#include "HBinaryNode.h"
+#include "../src/autocomplete/AutoComplete.h"
+
 #include "SelfTest/src/SelfTestSuite.h"
 
 #include "VisualizationBase/src/Scene.h"
@@ -51,7 +54,10 @@ using namespace Visualization;
 
 TEST(InteractionBase, TextSelect)
 {
+	Visualization::VExtendable::setInteractionHandler(HBinaryNode::instance());
+
 	Scene* scene = new Scene();
+	AutoComplete::setDefaultScene(scene);
 
 	Model::Model* model = new Model::Model();
 	Model::List* list = static_cast<Model::List*> (model->createRoot("List"));

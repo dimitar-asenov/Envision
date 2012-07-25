@@ -25,38 +25,53 @@
  **********************************************************************************************************************/
 
 /*
- * CustomSceneEvent.h
+ * AutoComplete.cpp
  *
- *  Created on: Feb 17, 2012
+ *  Created on: Jul 24, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef VisualizationBase_CUSTOMSCENEEVENT_H_
-#define VisualizationBase_CUSTOMSCENEEVENT_H_
+#include "AutoComplete.h"
+#include "AutoCompleteVis.h"
 
-#include "visualizationbase_api.h"
+namespace Interaction {
 
-namespace Visualization {
+Visualization::Scene* AutoComplete::defaultScene_ = nullptr;
+AutoCompleteVis* AutoComplete::vis_ = nullptr;
 
-class VISUALIZATIONBASE_API CustomSceneEvent : public QEvent{
-	public:
-		typedef std::function<void ()> EventFunction;
+void AutoComplete::setDefaultScene(Visualization::Scene* scene)
+{
+	if (defaultScene_) hide();
+	defaultScene_ = scene;
+}
 
-		static const QEvent::Type EventType;
+void AutoComplete::show(const QList<AutoCompleteEntry*>& entries)
+{
+	if (defaultScene_)
+	{
+		if (vis_) hide();
+		vis_ = new AutoCompleteVis(entries);
+		defaultScene_->addTopLevelItem(vis_);
+	}
+}
 
-		CustomSceneEvent(QEvent::Type type);
-		CustomSceneEvent(EventFunction f);
+void AutoComplete::hide()
+{
+	if (defaultScene_)
+	{
+		defaultScene_->removeTopLevelItem(vis_);
+		SAFE_DELETE_ITEM(vis_);
+	}
+}
 
-		virtual ~CustomSceneEvent();
-		virtual void execute();
+bool AutoComplete::isVisible()
+{
+	return vis_ && vis_->scene();
+}
 
-		void setEventFunction(EventFunction f);
+AutoCompleteVis* AutoComplete::visualization()
+{
+	return vis_;
+}
 
-	private:
-		EventFunction f_;
-};
-
-inline void CustomSceneEvent::setEventFunction(EventFunction f) { f_ = f; }
-
-} /* namespace Visualization */
-#endif /* VisualizationBase_CUSTOMSCENEEVENT_H_ */
+} /* namespace Interaction */
