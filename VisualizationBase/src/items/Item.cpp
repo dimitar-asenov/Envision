@@ -426,14 +426,18 @@ QList<ItemRegion> Item::regions()
 	QList<ItemRegion> regs;
 
 	bool hasChildren = false;
-	for(auto item : childItems())
+
+	if (!style()->wholeItemCursor())
 	{
-		hasChildren = true;
-		Item* child = static_cast<Item*> (item);
-		QRect rect = child->boundingRect().toRect();
-		rect.translate(child->pos().toPoint());
-		regs.append(ItemRegion(rect));
-		regs.last().setItem(child);
+		for(auto item : childItems())
+		{
+			hasChildren = true;
+			Item* child = static_cast<Item*> (item);
+			QRect rect = child->boundingRect().toRect();
+			rect.translate(child->pos().toPoint());
+			regs.append(ItemRegion(rect));
+			regs.last().setItem(child);
+		}
 	}
 
 	if (!hasChildren)

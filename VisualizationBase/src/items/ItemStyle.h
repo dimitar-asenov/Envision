@@ -50,6 +50,7 @@ class VISUALIZATIONBASE_API ItemStyle : public Style
 		QString shapeName_;
 		bool drawsOnlyShape_;
 		bool drawShapeWhenEmpty_;
+		bool wholeItemCursor_;
 
 	public:
 		ItemStyle();
@@ -62,11 +63,13 @@ class VISUALIZATIONBASE_API ItemStyle : public Style
 
 		bool drawsOnlyShape() const;
 		bool drawShapeWhenEmpty() const;
+		bool wholeItemCursor() const;
 };
 
 inline bool ItemStyle::hasShape() const { return !shapeName_.isEmpty(); }
 inline bool ItemStyle::drawsOnlyShape() const { return drawsOnlyShape_; }
 inline bool ItemStyle::drawShapeWhenEmpty() const {return drawShapeWhenEmpty_; }
+inline bool ItemStyle::wholeItemCursor() const {return wholeItemCursor_; }
 
 }
 

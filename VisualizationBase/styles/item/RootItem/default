@@ -1,6 +1,2 @@
 <!DOCTYPE EnvisionVisualizationStyle>
-<style>
-	<shape />
-	<drawsOnlyShape>true</drawsOnlyShape>
-	<drawShapeWhenEmpty>false</drawShapeWhenEmpty>
-</style>
+<style prototypes="item/Item/default" />
