@@ -150,10 +150,12 @@ QList<Node*> Node::findSymbols(const QRegExp& symbolExp, Node* source, FindSymbo
 {
 	QList<Node*> res;
 
-	if (definesSymbol() && symbolExp.exactMatch(symbolName()))
+	// If exhaustAllScopes is true and there is a parent item, we should let the parent find this symbol definition
+	// and add it to the result
+	if (definesSymbol() && symbolExp.exactMatch(symbolName()) && !(exhaustAllScopes && parent()))
 	{
 		res << this;
-		if (!exhaustAllScopes) return res;
+		return res;
 	}
 
 	if (mode == SEARCH_UP && parent_) res << parent_->findSymbols(symbolExp, source, mode, exhaustAllScopes);

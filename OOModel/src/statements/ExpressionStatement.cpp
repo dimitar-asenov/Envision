@@ -46,4 +46,20 @@ ExpressionStatement::ExpressionStatement(Expression* e)
 	setExpression(e);
 }
 
+bool ExpressionStatement::definesSymbol() const
+{
+	//TODO What should the const usage be here?
+	auto e = (const_cast<ExpressionStatement*>(this))->expression();
+	return e ?e->definesSymbol() : false;
+}
+
+const QString& ExpressionStatement::symbolName() const
+{
+	static QString nullString;
+
+	//TODO What should the const usage be here?
+	auto e = (const_cast<ExpressionStatement*>(this))->expression();
+	return e ? e->symbolName() : nullString;
+}
+
 } /* namespace OOModel */
