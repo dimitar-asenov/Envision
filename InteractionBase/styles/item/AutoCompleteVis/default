@@ -26,6 +26,6 @@
 		<noInnerCursors>true</noInnerCursors>
 		<noBoundaryCursors>true</noBoundaryCursors>
 	</layout>
-	<heightLimit>200</heightLimit>
+	<heightLimit>2000</heightLimit>
 	<distanceToCursor>5</distanceToCursor>
 </style>
