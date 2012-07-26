@@ -56,6 +56,13 @@ class OOINTERACTION_API HExpression : public Interaction::GenericHandler {
 
 	private:
 		OOModel::ExpressionStatement* parentExpressionStatement(OOModel::Expression* e);
+		void switchAutoComplete(Visualization::Item* target);
+
+		Visualization::Item* stringInfo(Visualization::Item* target, Qt::Key key, QString& str, int& index);
+
+		void doAutoComplete(Visualization::Item* target, const QString& autoCompleteStr);
+		void setNewExpression(Visualization::Item* target, Visualization::Item* topMostItem, const QString& text,
+				int index);
 };
 
 } /* namespace OOInteraction */

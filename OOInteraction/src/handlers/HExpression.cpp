@@ -41,8 +41,11 @@
 
 #include "VisualizationBase/src/items/VList.h"
 #include "OOModel/src/allOOModelNodes.h"
+#include "OOModel/src/types/SymbolProviderType.h"
 
 #include "InteractionBase/src/handlers/SetCursorEvent.h"
+#include "InteractionBase/src/autocomplete/AutoComplete.h"
+#include "InteractionBase/src/autocomplete/AutoCompleteEntry.h"
 #include "ModelBase/src/adapter/AdapterManager.h"
 
 namespace OOInteraction {
@@ -60,6 +63,12 @@ HExpression* HExpression::instance()
 
 void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
+	if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_Space)
+	{
+		switchAutoComplete(target);
+		return;
+	}
+
 	// TODO implement this better. It is supposed to only let typed characters through and ignore modifier keys.
 	// However it does not work with e.g. ALTGR characters.
 	if ( event->key() != Qt::Key_Home && event->key() != Qt::Key_End && (
@@ -84,25 +93,9 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		target->setUpdateNeeded(Visualization::Item::StandardUpdate);
 
 		// Find the top most parent that is adaptable to StringProvider
-		Visualization::Item* topMostItem = target;
-		auto* topMostSP = Model::AdapterManager::adapt<StringOffsetProvider>(topMostItem);
-
-		auto p = topMostItem->parent();
-		while(p)
-		{
-			auto* adapted = Model::AdapterManager::adapt<StringOffsetProvider>(p);
-			if (adapted)
-			{
-				SAFE_DELETE(topMostSP);
-				topMostSP = adapted;
-				topMostItem = p;
-			}
-			p = p->parent();
-		}
-
-		QString str = topMostSP->string();
-		int index = topMostSP->offset( (Qt::Key) event->key() );
-		SAFE_DELETE(topMostSP);
+		QString str;
+		int index;
+		Visualization::Item* topMostItem = stringInfo(target, (Qt::Key) event->key(), str, index);
 
 		if (index < 0) return;
 
@@ -308,19 +301,7 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 
 		if (!enterPressed)
 		{
-			OOModel::Expression* newExpression = OOExpressionBuilder::getOOExpression( newText );
-			Model::Node* containerNode = topMostItem->node()->parent();
-			containerNode->model()->beginModification(containerNode, "edit expression");
-			containerNode->replaceChild(topMostItem->node(), newExpression, false);
-			containerNode->model()->endModification();
-
-			// Compute the new offset. This can change in case the string of the new expression is different.
-			QString expString = StringComponents::stringForNode(newExpression);
-			newIndex += expString.length() - newText.length();
-
-			auto parent = topMostItem->parent();
-			target->scene()->addPostEventAction( new SetExpressionCursorEvent(parent, newExpression, newIndex));
-
+			setNewExpression(target, topMostItem, newText, newIndex);
 			return;
 		}
 	}
@@ -333,6 +314,31 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	GenericHandler::keyPressEvent(target, event);
 }
 
+Visualization::Item* HExpression::stringInfo(Visualization::Item* target, Qt::Key key, QString& str, int& index)
+{
+	Visualization::Item* topMostItem = target;
+	auto* topMostSP = Model::AdapterManager::adapt<StringOffsetProvider>(topMostItem);
+
+	auto p = topMostItem->parent();
+	while(p)
+	{
+		auto* adapted = Model::AdapterManager::adapt<StringOffsetProvider>(p);
+		if (adapted)
+		{
+			SAFE_DELETE(topMostSP);
+			topMostSP = adapted;
+			topMostItem = p;
+		}
+		p = p->parent();
+	}
+
+	str = topMostSP->string();
+	index = topMostSP->offset( key );
+	SAFE_DELETE(topMostSP);
+
+	return topMostItem;
+}
+
 OOModel::ExpressionStatement* HExpression::parentExpressionStatement(OOModel::Expression* e)
 {
 	// Is this expression part of an expression statement
@@ -340,6 +346,126 @@ OOModel::ExpressionStatement* HExpression::parentExpressionStatement(OOModel::Ex
 	while (ep && !dynamic_cast<OOModel::Statement*>(ep)) ep = ep->parent();
 
 	return dynamic_cast<OOModel::ExpressionStatement*>(ep);
+}
+
+void HExpression::setNewExpression(Visualization::Item* target, Visualization::Item* topMostItem, const QString& text,
+				int index)
+{
+	OOModel::Expression* newExpression = OOExpressionBuilder::getOOExpression( text );
+	Model::Node* containerNode = topMostItem->node()->parent();
+	containerNode->model()->beginModification(containerNode, "edit expression");
+	containerNode->replaceChild(topMostItem->node(), newExpression, false);
+	containerNode->model()->endModification();
+
+	// Compute the new offset. This can change in case the string of the new expression is different.
+	QString expString = StringComponents::stringForNode(newExpression);
+	index += expString.length() - text.length();
+
+	auto parent = topMostItem->parent();
+	target->scene()->addPostEventAction( new SetExpressionCursorEvent(parent, newExpression, index));
+}
+
+void HExpression::switchAutoComplete(Visualization::Item* target)
+{
+	if (Interaction::AutoComplete::isVisible())
+	{
+		Interaction::AutoComplete::hide();
+		return;
+	}
+
+	// Make a string pattern to look for. Given an input like:
+	// someclass.met|hod
+	// The pattern will look this this:
+	// *m*e*t*
+	// Everything after the cursor is discarded. The identifier characters before the cursor are used and each character
+	// is surrounded with *
+	QString str;
+	int index;
+	stringInfo(target, Qt::Key_A, str, index); //Any non special key
+
+	str = str.left(index);
+	index = str.size() - 1;
+	while (index >= 0)
+	{
+		if (str.at(index).isLetterOrNumber() || str.at(index) == '_') --index;
+		else break;
+	}
+	++index;
+
+	str = str.right(str.size() - index);
+	for(int i = str.size(); i>=0; --i) str.insert(i, "*");
+
+
+	QList<Interaction::AutoCompleteEntry*> entries;
+	bool processed = false;
+
+	// If the auto complete is invoked somewhere after a '.' only look for members that match.
+	if (auto ref = dynamic_cast<OOModel::ReferenceExpression*>(target->node()))
+	{
+		if (ref->prefix())
+		{
+			if (auto st = dynamic_cast<OOModel::SymbolProviderType*>(ref->prefix()->type()))
+			{
+				processed = true;
+				for(auto n : st->symbolProvider()->findSymbols(QRegExp(str, Qt::CaseInsensitive, QRegExp::Wildcard),
+					target->node(), Model::Node::SEARCH_DOWN, false))
+						entries.append(new Interaction::AutoCompleteEntry(n->symbolName(), QString(), nullptr,
+								[=](Interaction::AutoCompleteEntry* entry) { doAutoComplete(target, entry->text()); }));
+			}
+		}
+	}
+
+	// If the auto complete is invoked not on a member, lookup all names in all scopes above the current one.
+	if (!processed)
+	{
+		processed = true;
+		for(auto n : target->node()->findSymbols(QRegExp(str, Qt::CaseInsensitive, QRegExp::Wildcard), target->node(),
+			Model::Node::SEARCH_UP, true))
+				entries.append(new Interaction::AutoCompleteEntry(n->symbolName(), QString(), nullptr,
+						[=](Interaction::AutoCompleteEntry* entry) { doAutoComplete(target, entry->text()); }));
+	}
+
+	// Show the entries.
+	if (!entries.isEmpty()) Interaction::AutoComplete::show(entries);
+}
+
+void HExpression::doAutoComplete(Visualization::Item* target, const QString& autoCompleteStr)
+{
+	// We need to trigger an update of all the visualizations leading up to the target, even though the target
+	// visualization will probably be deleted and replaced with a new one.
+	target->setUpdateNeeded(Visualization::Item::StandardUpdate);
+
+	QString str;
+	int index;
+	Visualization::Item* topMostItem = stringInfo(target, Qt::Key_A, str, index); //Any non special key
+
+	int startIndex = index - 1;
+	while (startIndex >= 0)
+	{
+		if (str.at(startIndex).isLetterOrNumber() || str.at(startIndex) == '_') --startIndex;
+		else break;
+	}
+	++startIndex;
+
+	int endIndex = index - 1;
+	while (endIndex < str.size())
+	{
+		if (str.at(endIndex).isLetterOrNumber() || str.at(endIndex) == '_') ++endIndex;
+		else break;
+	}
+	--endIndex;
+
+	// The part between endIndex and startIndex will be replaced by autoCompleteStr
+
+	int oldIdentifierSize = endIndex - startIndex + 1;
+	if (oldIdentifierSize < 0) oldIdentifierSize = 0;
+
+	// Modify the string, inserting the pressed key's text (or deleting text)
+	QString newText = str;
+	newText.replace(startIndex, oldIdentifierSize, autoCompleteStr);
+	int newIndex = index + autoCompleteStr.size() - oldIdentifierSize;
+
+	setNewExpression(target, topMostItem, newText, newIndex);
 }
 
 } /* namespace OOInteraction */
