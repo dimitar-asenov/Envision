@@ -191,6 +191,9 @@ Method* addDivBySix(Model::Model* model, Class* parent)
 	divbysix->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("a||b||c||d-a+b+c+d")));
 	divbysix->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("a+b+c+d-d||a||b||c||d")));
 
+	divbysix->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("SomeClass var")));
+	divbysix->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("var.a")));
+
 	VariableDeclaration* result = new VariableDeclaration();
 	divbysix->items()->append( new ExpressionStatement(result) );
 	result->setName("result");
