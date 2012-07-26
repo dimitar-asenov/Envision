@@ -33,6 +33,7 @@
 
 #include "expressions/ReferenceExpression.h"
 #include "expressions/VariableDeclaration.h"
+#include "statements/ExpressionStatement.h"
 #include "top_level/Project.h"
 #include "top_level/Library.h"
 #include "top_level/Module.h"
@@ -77,6 +78,16 @@ Type* ReferenceExpression::type()
 		auto t = vdecl->type();
 		t->setValueType(true);
 		return t;
+	}
+	else if ( auto expSt = dynamic_cast<ExpressionStatement*>( ref()->target() ))
+	{
+		if ( auto vdecl = dynamic_cast<VariableDeclaration*>( expSt->expression() ) )
+		{
+			auto t = vdecl->type();
+			t->setValueType(true);
+			return t;
+		}
+		else return new ErrorType("Unknown type for target of reference");
 	}
 	else if ( auto field = dynamic_cast<Field*>( ref()->target() ) )
 	{
