@@ -66,6 +66,8 @@ class INTERACTIONBASE_API AutoCompleteVis : public Visualization::LayoutProvider
 		Item* watched_;
 		QGraphicsEffect* selectionEffect_;
 		int selectionIndex_;
+
+		void select();
 };
 
 } /* namespace Interaction */

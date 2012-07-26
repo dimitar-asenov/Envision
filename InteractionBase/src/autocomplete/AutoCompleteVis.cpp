@@ -48,11 +48,17 @@ AutoCompleteVis::AutoCompleteVis(const QList<AutoCompleteEntry*>& entries, const
 	entries_(entries),
 	watched_(),
 	selectionEffect_(),
-	selectionIndex_(-1)
+	selectionIndex_(entries_.isEmpty() ? -1 : 0)
 {
 	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(QGraphicsItem::ItemClipsChildrenToShape);
 	setZValue(LAYER_AUTOCOMPLETE_Z);
+
+	for (auto e : entries_)
+		if (!e->visualization())
+			e->setVisualization( new TextAndDescription(e->text(), e->description()));
+
+	if (selectionIndex_ == 0) select();
 }
 
 AutoCompleteVis::~AutoCompleteVis()
@@ -60,18 +66,15 @@ AutoCompleteVis::~AutoCompleteVis()
 	layout()->clear(false);
 	for(auto e : entries_) SAFE_DELETE(e);
 	entries_.clear();
+
+	selectionEffect_ = nullptr; // This is deleted when it's corresponding item is deleted
 }
 
 void AutoCompleteVis::determineChildren()
 {
 	if (layout()->length() == 0)
 		for (auto e : entries_)
-		{
-			if (!e->visualization())
-				e->setVisualization( new TextAndDescription(e->text(), e->description()));
-
 			layout()->append( e->visualization());
-		}
 
 	layout()->setStyle(&style()->layout());
 }
@@ -129,8 +132,7 @@ bool AutoCompleteVis::sceneEventFilter(QGraphicsItem* /*watched*/, QEvent* event
 					if (selectionIndex_ < entries_.size() - 1)
 					{
 						++selectionIndex_;
-						if (!selectionEffect_) selectionEffect_ = new QGraphicsColorizeEffect();
-						entries_.at(selectionIndex_)->visualization()->setGraphicsEffect(selectionEffect_);
+						select();
 					}
 					return true;
 				}
@@ -140,8 +142,7 @@ bool AutoCompleteVis::sceneEventFilter(QGraphicsItem* /*watched*/, QEvent* event
 					if (selectionIndex_ > 0)
 					{
 						--selectionIndex_;
-						if (!selectionEffect_) selectionEffect_ = new QGraphicsColorizeEffect();
-						entries_.at(selectionIndex_)->visualization()->setGraphicsEffect(selectionEffect_);
+						select();
 					}
 					return true;
 				}
@@ -159,6 +160,12 @@ bool AutoCompleteVis::sceneEventFilter(QGraphicsItem* /*watched*/, QEvent* event
 	}
 
 	return false;
+}
+
+void AutoCompleteVis::select()
+{
+	if (!selectionEffect_) selectionEffect_ = new QGraphicsColorizeEffect();
+	entries_.at(selectionIndex_)->visualization()->setGraphicsEffect(selectionEffect_);
 }
 
 } /* namespace Interaction */
