@@ -69,14 +69,17 @@ const QString& Class::symbolName() const
 	return name();
 }
 
-QList<Model::Node*> Class::findSymbol(const QString& symbol,Model::Node* source, FindSymbolMode mode)
+QList<Model::Node*> Class::findSymbols(const QRegExp& symbolExp,Model::Node* source, FindSymbolMode mode,
+		bool exhaustAllScopes)
 {
 	QList<Model::Node*> symbols;
 
-	symbols << methods()->findAllSymbolDefinitions(symbol);
-	symbols << fields()->findAllSymbolDefinitions(symbol);
+	symbols << methods()->findAllSymbolDefinitions(symbolExp);
+	symbols << fields()->findAllSymbolDefinitions(symbolExp);
 
-	return symbols.isEmpty() ? Node::findSymbol(symbol, source, mode) : symbols;
+	if (exhaustAllScopes || symbols.isEmpty())
+		symbols << Node::findSymbols(symbolExp, source, mode, exhaustAllScopes);
+	return symbols;
 }
 
 bool Class::isGeneric()

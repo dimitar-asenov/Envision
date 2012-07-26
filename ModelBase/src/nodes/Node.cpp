@@ -146,16 +146,19 @@ bool Node::replaceChild(Node*, Node*, bool)
 	return false;
 }
 
-QList<Node*> Node::findSymbol(const QString& symbol, Node* source, FindSymbolMode mode)
+QList<Node*> Node::findSymbols(const QRegExp& symbolExp, Node* source, FindSymbolMode mode, bool exhaustAllScopes)
 {
-	if (definesSymbol() && symbolName() == symbol)
+	QList<Node*> res;
+
+	if (definesSymbol() && symbolExp.exactMatch(symbolName()))
 	{
-		QList<Node*> res;
 		res << this;
-		return res;
+		if (!exhaustAllScopes) return res;
 	}
-	else if (mode == SEARCH_UP && parent_) return parent_->findSymbol(symbol, source, mode);
-	else return QList<Node*>();
+
+	if (mode == SEARCH_UP && parent_) res << parent_->findSymbols(symbolExp, source, mode, exhaustAllScopes);
+
+	return res;
 }
 
 /***********************************************************************************************************************

@@ -52,6 +52,8 @@
 #include <QtCore/QThread>
 #include <QtCore/QMutex>
 
+#include <QtCore/QRegExp>
+
 #include <typeinfo>
 
 #if defined(MODELBASE_LIBRARY)

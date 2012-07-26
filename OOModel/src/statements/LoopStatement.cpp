@@ -43,15 +43,19 @@ REGISTER_ATTRIBUTE(LoopStatement, initStep, Expression, false, true, true)
 REGISTER_ATTRIBUTE(LoopStatement, updateStep, Expression, false, true, true)
 REGISTER_ATTRIBUTE(LoopStatement, body, StatementItemList, false, false, true)
 
-QList<Model::Node*> LoopStatement::findSymbol(const QString& symbol,Model::Node* source, FindSymbolMode mode)
+QList<Model::Node*> LoopStatement::findSymbols(const QRegExp& symbolExp,Model::Node* source, FindSymbolMode mode,
+		bool exhaustAllScopes)
 {
 	QList<Model::Node*> symbols;
 
-	if (condition()) symbols << condition()->findSymbol(symbol, source, SEARCH_DOWN);
-	if (initStep()) symbols << initStep()->findSymbol(symbol, source, SEARCH_DOWN);
-	if (updateStep()) symbols << updateStep()->findSymbol(symbol, source, SEARCH_DOWN);
+	if (condition()) symbols << condition()->findSymbols(symbolExp, source, SEARCH_DOWN, false);
+	if (initStep()) symbols << initStep()->findSymbols(symbolExp, source, SEARCH_DOWN, false);
+	if (updateStep()) symbols << updateStep()->findSymbols(symbolExp, source, SEARCH_DOWN, false);
 
-	return symbols.isEmpty() ? Node::findSymbol(symbol, source, mode) : symbols;
+	if (exhaustAllScopes || symbols.isEmpty())
+		symbols << Node::findSymbols(symbolExp, source, mode, exhaustAllScopes);
+
+	return symbols;
 }
 
 }

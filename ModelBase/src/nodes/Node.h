@@ -164,20 +164,26 @@ class MODELBASE_API Node
 		virtual const QString& symbolName() const;
 
 		enum FindSymbolMode {
-			SEARCH_UP,	/**< Looks for a symbol within the specified scope and enclosing scopes. Depending on the source,
+			SEARCH_UP,	/**< Looks for symbols within the specified scope and enclosing scopes. Depending on the source,
 									symbols in the current scope which come after the source will not be considered. This is the
 			 	 	 	 	 	 	case e.g. with searches for local variable declarations in a method: only variables before
 			 	 	 	 	 	 	the source node should be considered. */
-			SEARCH_DOWN /**< Looks for a symbol inside the specified scope or subscopes. This is used for symbols that are
+			SEARCH_DOWN /**< Looks for symbols inside the specified scope or subscopes. This is used for symbols that are
 			 	 	 	 	 	 	requested in a specific context (typically after a '.') e.g. "list.sort()"*/
 		};
 
 		/**
-		 * \brief Returns a list of all nodes which define a symbol with the name \a symbol in the scope of this node.
+		 * Returns a list of all nodes which define a symbol with a name matching \a symbolExp in the scope of this node.
 		 *
 		 * The \a source Node specifies what node should be used as a reference when determining what symbols are visible.
 		 *
 		 * The \a mode specifies what search to perform.
+		 *
+		 * If \a exhaustAllScopes is false, the search will halt as soon as symbols are found within a scope. This is
+		 * useful when resolving links and it is important to find the "nearest" symbols that match with respect to scope.
+		 * If \a exhaustAllScopes is true, the search will explore all scopes in corresponding to the provided mode. This
+		 * is useful when \a symbolExp can match multiple symbols with different names (for example during auto completion
+		 * list build up).
 		 *
 		 * The default implementation returns a list with only the current node in it, in case the node defines the
 		 * requested symbol. Otherwise if \a mode is FindSymbolMode::SEARCH_UP, the implementation of the parent node is
@@ -186,7 +192,19 @@ class MODELBASE_API Node
 		 * Reimplement this method in derived classes to specify fine grained behavior and operation for search modes
 		 * other than FindSymbolMode::SEARCH_UP
 		 */
-		virtual QList<Node*> findSymbol(const QString& symbol, Node* source, FindSymbolMode mode);
+		virtual QList<Node*> findSymbols(const QRegExp& symbolExp, Node* source, FindSymbolMode mode,
+				bool exhaustAllScopes);
+
+		/**
+		 * \overload
+		 *
+		 * This is equivalent to:
+		 * \code
+		 * findSymbols(QRegExp(symbol, Qt::CaseSensitive, QRegExp::FixedString), source, mode)
+		 * \endcode
+		 */
+		QList<Node*> findSymbols(const QString& symbol, Node* source, FindSymbolMode mode,
+				bool exhaustAllScopes);
 
 		/**
 		 * Returns the revision of this node.
@@ -426,6 +444,11 @@ template<class T> Node* createNewNode(Node* parent)
 template<class T> Node* createNodeFromPersistence(Node *parent, PersistentStore &store, bool partialLoadHint)
 {
 	return new T(parent, store, partialLoadHint);
+}
+
+inline QList<Node*> Node::findSymbols(const QString& symbol, Node* source, FindSymbolMode mode, bool exhaustAllScopes)
+{
+	return findSymbols(QRegExp(symbol, Qt::CaseSensitive, QRegExp::FixedString), source, mode, exhaustAllScopes);
 }
 
 }
