@@ -36,6 +36,8 @@
 
 #include "OOModel/src/allOOModelNodes.h"
 
+#include "InteractionBase/src/autocomplete/AutoComplete.h"
+
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/views/MainView.h"
 #include "VisualizationBase/src/node_extensions/Position.h"
@@ -293,6 +295,7 @@ TEST(ControlFlowVisualization, SimpleTest)
 	else top_level = divbysix;
 
 	Scene* scene = new Scene();
+	Interaction::AutoComplete::setDefaultScene(scene);
 	scene->addTopLevelItem( new RootItem(top_level));
 	scene->scheduleUpdate();
 	scene->listenToModel(model);

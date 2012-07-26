@@ -39,6 +39,8 @@
 
 #include "OOModel/src/allOOModelNodes.h"
 
+#include "InteractionBase/src/autocomplete/AutoComplete.h"
+
 #include "VisualizationBase/src/VisualizationManager.h"
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/views/MainView.h"
@@ -641,6 +643,7 @@ Method* addFactorial(Model::Model* model, Class* parent)
 TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 {
 	Scene* scene = new Scene();
+	Interaction::AutoComplete::setDefaultScene(scene);
 
 	////////////////////////////////////////////////// Create Model
 	Model::Model* model = new Model::Model();

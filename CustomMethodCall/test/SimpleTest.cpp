@@ -46,6 +46,8 @@
 #include "VisualizationBase/src/views/MainView.h"
 #include "VisualizationBase/src/items/RootItem.h"
 
+#include "InteractionBase/src/autocomplete/AutoComplete.h"
+
 using namespace OOModel;
 using namespace Visualization;
 
@@ -230,6 +232,7 @@ Class* addCollection(Model::Model* model, Project* parent)
 TEST(CustomMethodCall, CustomVisTest)
 {
 	Scene* scene = new Scene();
+	Interaction::AutoComplete::setDefaultScene(scene);
 
 	////////////////////////////////////////////////// Create Model
 	Model::Model* model = new Model::Model();

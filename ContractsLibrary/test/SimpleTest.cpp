@@ -41,6 +41,8 @@
 #include "OOModel/src/allOOModelNodes.h"
 #include "ModelBase/src/Model.h"
 
+#include "InteractionBase/src/autocomplete/AutoComplete.h"
+
 #include "VisualizationBase/src/VisualizationManager.h"
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/views/MainView.h"
@@ -279,6 +281,7 @@ TEST(ContractsLibrary, ContractsLibraryTest)
 	CHECK_INT_EQUAL(1,1);
 
 	Scene* scene = new Scene();
+	Interaction::AutoComplete::setDefaultScene(scene);
 
 	////////////////////////////////////////////////// Create Model
 	Model::Model* model = new Model::Model();
