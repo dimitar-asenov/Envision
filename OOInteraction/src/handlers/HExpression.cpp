@@ -448,7 +448,7 @@ void HExpression::doAutoComplete(Visualization::Item* target, const QString& aut
 	++startIndex;
 
 	int endIndex = index - 1;
-	while (endIndex < str.size())
+	while (endIndex >= 0 && endIndex < str.size())
 	{
 		if (str.at(endIndex).isLetterOrNumber() || str.at(endIndex) == '_') ++endIndex;
 		else break;
