@@ -66,7 +66,6 @@ QVector<ExpressionTreeBuildInstruction*> Parser::parse(QVector<Token> tokens)
 	}
 	else
 	{
-		// First run a simulation to obtain the best result
 		ParseResult best = parse(tokens.constBegin(), ParseResult(), expected, false, instructions);
 		return best.instructions;
 	}
