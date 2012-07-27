@@ -38,6 +38,8 @@
 
 namespace Interaction {
 
+QStringList Token::specialSignatureWords_ = {"expr", "id", "SPACE", "EXPR", "ID"};
+
 Token::Token()
 {
 }
@@ -114,7 +116,8 @@ QVector<Token> Token::tokenize(QString input, const OperatorDescriptorList* ops)
 bool Token::tokenExistsInOperators(QString token, const OperatorDescriptorList* ops)
 {
 	for (int i = 0; i < ops->size(); ++i)
-		if (ops->at(i)->signature().contains(token) ) return true;
+		if (ops->at(i)->signature().contains(token) )
+			return !specialSignatureWords_.contains(token);
 
 	return false;
 }
