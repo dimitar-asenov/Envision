@@ -39,6 +39,7 @@
 #include "expression_editor/OOExpressionBuilder.h"
 #include "handlers/SetExpressionCursorEvent.h"
 
+#include "VisualizationBase/src/cursor/Cursor.h"
 #include "VisualizationBase/src/items/VList.h"
 #include "OOModel/src/allOOModelNodes.h"
 #include "OOModel/src/types/SymbolProviderType.h"
@@ -302,6 +303,19 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		if (!enterPressed)
 		{
 			setNewExpression(target, topMostItem, newText, newIndex);
+
+			// Trigger auto complete on '.'
+			if (newText.endsWith('.') && event->key() != Qt::Key_Backspace)
+			{
+				auto s = target->scene();
+				s->addPostEventAction(new Visualization::CustomSceneEvent(
+						[s, this]() {
+							auto o = s->mainCursor()->owner();
+							while (o && o->handler() != this) o = o->parent();
+							if (o) switchAutoComplete(o);
+						}));
+			}
+
 			return;
 		}
 	}
@@ -394,7 +408,6 @@ void HExpression::switchAutoComplete(Visualization::Item* target)
 
 	str = str.right(str.size() - index);
 	for(int i = str.size(); i>=0; --i) str.insert(i, "*");
-
 
 	QList<Interaction::AutoCompleteEntry*> entries;
 
