@@ -95,11 +95,12 @@ void AutoCompleteVis::updateGeometry(int /*availableWidth*/, int /*availableHeig
 	// Set position
 	if (pos().isNull() && scene() && scene()->mainCursor() && !this->isAncestorOf(scene()->mainCursor()->owner()))
 	{
-		setPos(scene()->mainCursor()->region().bottomLeft() + QPoint(0, style()->distanceToCursor()));
-		if (watched_ != scene()->mainCursor()->owner())
+		auto owner = scene()->mainCursor()->owner();
+		setPos(owner->scenePos().toPoint() + QPoint(0, owner->height() + style()->distanceToCursor()));
+		if (watched_ != owner)
 		{
 			if (watched_) watched_->removeSceneEventFilter(this);
-			watched_ = scene()->mainCursor()->owner();
+			watched_ = owner;
 			watched_->installSceneEventFilter(this);
 		}
 	}

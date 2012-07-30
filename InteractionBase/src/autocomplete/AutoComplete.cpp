@@ -59,7 +59,7 @@ void AutoComplete::hide()
 {
 	if (defaultScene_)
 	{
-		defaultScene_->removeTopLevelItem(vis_);
+		if (vis_) defaultScene_->removeTopLevelItem(vis_);
 		SAFE_DELETE_ITEM(vis_);
 	}
 }
