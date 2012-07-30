@@ -40,6 +40,10 @@
 #include "VisualizationBase/src/items/LayoutProvider.h"
 #include "VisualizationBase/src/layouts/SequentialLayout.h"
 
+namespace Visualization {
+	class Static;
+}
+
 namespace Interaction {
 
 class AutoCompleteEntry;
@@ -63,6 +67,7 @@ class INTERACTIONBASE_API AutoCompleteVis : public Visualization::LayoutProvider
 		typedef LayoutProvider<> BaseItemType;
 
 		QList<AutoCompleteEntry*> entries_;
+		Visualization::Static* noProposals_;
 		Item* watched_;
 		QGraphicsEffect* selectionEffect_;
 		int selectionIndex_;

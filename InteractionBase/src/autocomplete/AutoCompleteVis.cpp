@@ -37,6 +37,7 @@
 #include "../vis/TextAndDescription.h"
 
 #include "VisualizationBase/src/cursor/Cursor.h"
+#include "VisualizationBase/src/items/Static.h"
 #include "VisualizationBase/src/CustomSceneEvent.h"
 
 namespace Interaction {
@@ -46,6 +47,7 @@ ITEM_COMMON_DEFINITIONS(AutoCompleteVis, "item")
 AutoCompleteVis::AutoCompleteVis(const QList<AutoCompleteEntry*>& entries, const StyleType* style) :
 	LayoutProvider<>(nullptr, style),
 	entries_(entries),
+	noProposals_(),
 	watched_(),
 	selectionEffect_(),
 	selectionIndex_(entries_.isEmpty() ? -1 : 0)
@@ -68,15 +70,24 @@ AutoCompleteVis::~AutoCompleteVis()
 	entries_.clear();
 
 	selectionEffect_ = nullptr; // This is deleted when it's corresponding item is deleted
+
+	// Deleted by layout's destructor
+	noProposals_ = nullptr;
 }
 
 void AutoCompleteVis::determineChildren()
 {
 	if (layout()->length() == 0)
-		for (auto e : entries_)
-			layout()->append( e->visualization());
+	{
+		if (entries_.isEmpty())
+			layout()->synchronizeFirst(noProposals_, true, &style()->noProposals());
+		else
+			for (auto e : entries_)
+				layout()->append( e->visualization());
+	}
 
 	layout()->setStyle(&style()->layout());
+	if (noProposals_) noProposals_->setStyle(&style()->noProposals());
 }
 
 void AutoCompleteVis::updateGeometry(int /*availableWidth*/, int /*availableHeight*/)

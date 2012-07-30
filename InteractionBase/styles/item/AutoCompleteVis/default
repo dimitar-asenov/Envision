@@ -26,6 +26,17 @@
 		<noInnerCursors>true</noInnerCursors>
 		<noBoundaryCursors>true</noBoundaryCursors>
 	</layout>
+	<noProposals prototypes="item/Symbol/default">
+		<pen>t
+			<color>
+				<alpha>255</alpha>
+				<red>128</red>
+				<green>128</green>
+				<blue>128</blue>
+			</color>
+		</pen>
+		<symbol>No proposals</symbol>
+	</noProposals>
 	<heightLimit>2000</heightLimit>
 	<distanceToCursor>5</distanceToCursor>
 </style>

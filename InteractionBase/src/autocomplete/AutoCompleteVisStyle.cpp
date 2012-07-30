@@ -39,6 +39,7 @@ void AutoCompleteVisStyle::load(Visualization::StyleLoader& sl)
 {
 	ItemStyle::load(sl);
 	sl.load("layout", layout_);
+	sl.load("noProposals", noProposals_);
 	sl.load("heightLimit", heightLimit_);
 	sl.load("distanceToCursor", distanceToCursor_);
 }

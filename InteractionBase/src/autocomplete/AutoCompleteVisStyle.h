@@ -36,6 +36,7 @@
 
 #include "interactionbase_api.h"
 #include "VisualizationBase/src/layouts/SequentialLayoutStyle.h"
+#include "VisualizationBase/src/items/StaticStyle.h"
 
 namespace Interaction {
 
@@ -43,6 +44,7 @@ class INTERACTIONBASE_API AutoCompleteVisStyle : public Visualization::ItemStyle
 {
 	private:
 		Visualization::SequentialLayoutStyle layout_;
+		Visualization::StaticStyle noProposals_;
 		int heightLimit_;
 		int distanceToCursor_;
 
@@ -50,11 +52,13 @@ class INTERACTIONBASE_API AutoCompleteVisStyle : public Visualization::ItemStyle
 		void load(Visualization::StyleLoader& sl);
 
 		const Visualization::SequentialLayoutStyle& layout() const;
+		const Visualization::StaticStyle&  noProposals() const;
 		int heightLimit() const;
 		int distanceToCursor() const;
 };
 
 inline const Visualization::SequentialLayoutStyle& AutoCompleteVisStyle::layout() const {return layout_; }
+inline const Visualization::StaticStyle& AutoCompleteVisStyle::noProposals() const {return noProposals_; }
 inline int AutoCompleteVisStyle::heightLimit() const {return heightLimit_; }
 inline int AutoCompleteVisStyle::distanceToCursor() const {return distanceToCursor_; }
 
