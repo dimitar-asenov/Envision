@@ -304,16 +304,22 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		{
 			setNewExpression(target, topMostItem, newText, newIndex);
 
-			// Trigger auto complete on '.'
-			if (newText.endsWith('.') && event->key() != Qt::Key_Backspace)
+			// Trigger auto complete
+			if (newText.endsWith('.')
+					|| (newText.size() > 0 && newText.at(newText.size()-1).isLetterOrNumber())
+				)
 			{
 				auto s = target->scene();
 				s->addPostEventAction(new Visualization::CustomSceneEvent(
 						[s, this]() {
 							auto o = s->mainCursor()->owner();
 							while (o && o->handler() != this) o = o->parent();
-							if (o) toggleAutoComplete(o);
+							if (o) showAutoComplete(o);
 						}));
+			}
+			else
+			{
+				target->scene()->addPostEventAction(new Visualization::CustomSceneEvent(Interaction::AutoComplete::hide));
 			}
 
 			return;
@@ -379,14 +385,8 @@ void HExpression::setNewExpression(Visualization::Item* target, Visualization::I
 	target->scene()->addPostEventAction( new SetExpressionCursorEvent(parent, newExpression, index));
 }
 
-void HExpression::toggleAutoComplete(Visualization::Item* target)
+void HExpression::showAutoComplete(Visualization::Item* target)
 {
-	if (Interaction::AutoComplete::isVisible())
-	{
-		Interaction::AutoComplete::hide();
-		return;
-	}
-
 	// Make a string pattern to look for. Given an input like:
 	// someclass.met|hod
 	// The pattern will look this this:
@@ -449,6 +449,13 @@ void HExpression::toggleAutoComplete(Visualization::Item* target)
 	SAFE_DELETE(scopePrefix);
 
 	Interaction::AutoComplete::show(entries);
+}
+
+void HExpression::toggleAutoComplete(Visualization::Item* target)
+{
+	if (Interaction::AutoComplete::isVisible())
+		Interaction::AutoComplete::hide();
+	else showAutoComplete(target);
 }
 
 void HExpression::doAutoComplete(Visualization::Item* target, const QString& autoCompleteStr)
