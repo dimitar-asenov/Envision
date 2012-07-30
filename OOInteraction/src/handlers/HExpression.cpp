@@ -418,14 +418,22 @@ void HExpression::switchAutoComplete(Visualization::Item* target)
 		// If the auto complete is invoked somewhere in a reference expression after a '.' only look for members that
 		// match.
 		if (ref->prefix())
-			scopePrefix = dynamic_cast<OOModel::SymbolProviderType*>(ref->prefix()->type());
+		{
+			auto t = ref->prefix()->type();
+			scopePrefix = dynamic_cast<OOModel::SymbolProviderType*>(t);
+			if (!scopePrefix) SAFE_DELETE(t);
+		}
 	}
 	else if (auto unf = dynamic_cast<OOModel::UnfinishedOperator*>(target->node()))
 	{
 		// If the auto complete is invoked just after a '.' only look for members that match within the scope of the
 		// prefix.
 		if (unf->delimiters()->size() == 2 && unf->delimiters()->at(1)->get() == ".")
-			scopePrefix = dynamic_cast<OOModel::SymbolProviderType*>(unf->operands()->first()->type());
+		{
+			auto t = unf->operands()->first()->type();
+			scopePrefix = dynamic_cast<OOModel::SymbolProviderType*>(t);
+			if (!scopePrefix) SAFE_DELETE(t);
+		}
 	}
 
 	auto searchNode = scopePrefix ? scopePrefix->symbolProvider() : target->node();
@@ -434,6 +442,8 @@ void HExpression::switchAutoComplete(Visualization::Item* target)
 		target->node(), (scopePrefix ? Model::Node::SEARCH_DOWN : Model::Node::SEARCH_UP), scopePrefix == false))
 			entries.append(new Interaction::AutoCompleteEntry(n->symbolName(), QString(), nullptr,
 				[=](Interaction::AutoCompleteEntry* entry) { doAutoComplete(target, entry->text()); }));
+
+	SAFE_DELETE(scopePrefix);
 
 	// Show the entries.
 	if (!entries.isEmpty()) Interaction::AutoComplete::show(entries);
