@@ -66,7 +66,7 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
 	if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_Space)
 	{
-		switchAutoComplete(target);
+		toggleAutoComplete(target);
 		return;
 	}
 
@@ -312,7 +312,7 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 						[s, this]() {
 							auto o = s->mainCursor()->owner();
 							while (o && o->handler() != this) o = o->parent();
-							if (o) switchAutoComplete(o);
+							if (o) toggleAutoComplete(o);
 						}));
 			}
 
@@ -379,7 +379,7 @@ void HExpression::setNewExpression(Visualization::Item* target, Visualization::I
 	target->scene()->addPostEventAction( new SetExpressionCursorEvent(parent, newExpression, index));
 }
 
-void HExpression::switchAutoComplete(Visualization::Item* target)
+void HExpression::toggleAutoComplete(Visualization::Item* target)
 {
 	if (Interaction::AutoComplete::isVisible())
 	{
@@ -412,6 +412,7 @@ void HExpression::switchAutoComplete(Visualization::Item* target)
 	QList<Interaction::AutoCompleteEntry*> entries;
 
 	OOModel::SymbolProviderType* scopePrefix = nullptr;
+	bool afterDot = false;
 
 	if (auto ref = dynamic_cast<OOModel::ReferenceExpression*>(target->node()))
 	{
@@ -419,6 +420,7 @@ void HExpression::switchAutoComplete(Visualization::Item* target)
 		// match.
 		if (ref->prefix())
 		{
+			afterDot = true;
 			auto t = ref->prefix()->type();
 			scopePrefix = dynamic_cast<OOModel::SymbolProviderType*>(t);
 			if (!scopePrefix) SAFE_DELETE(t);
@@ -430,6 +432,7 @@ void HExpression::switchAutoComplete(Visualization::Item* target)
 		// prefix.
 		if (unf->delimiters()->size() == 2 && unf->delimiters()->at(1)->get() == ".")
 		{
+			afterDot = true;
 			auto t = unf->operands()->first()->type();
 			scopePrefix = dynamic_cast<OOModel::SymbolProviderType*>(t);
 			if (!scopePrefix) SAFE_DELETE(t);
@@ -439,14 +442,13 @@ void HExpression::switchAutoComplete(Visualization::Item* target)
 	auto searchNode = scopePrefix ? scopePrefix->symbolProvider() : target->node();
 
 	for(auto n : searchNode->findSymbols(QRegExp(str, Qt::CaseInsensitive, QRegExp::Wildcard),
-		target->node(), (scopePrefix ? Model::Node::SEARCH_DOWN : Model::Node::SEARCH_UP), scopePrefix == false))
+		target->node(), (afterDot ? Model::Node::SEARCH_DOWN : Model::Node::SEARCH_UP), afterDot == false))
 			entries.append(new Interaction::AutoCompleteEntry(n->symbolName(), QString(), nullptr,
 				[=](Interaction::AutoCompleteEntry* entry) { doAutoComplete(target, entry->text()); }));
 
 	SAFE_DELETE(scopePrefix);
 
-	// Show the entries.
-	if (!entries.isEmpty()) Interaction::AutoComplete::show(entries);
+	Interaction::AutoComplete::show(entries);
 }
 
 void HExpression::doAutoComplete(Visualization::Item* target, const QString& autoCompleteStr)
