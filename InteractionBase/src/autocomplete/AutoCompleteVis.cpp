@@ -46,26 +46,22 @@ ITEM_COMMON_DEFINITIONS(AutoCompleteVis, "item")
 
 AutoCompleteVis::AutoCompleteVis(const QList<AutoCompleteEntry*>& entries, const StyleType* style) :
 	LayoutProvider<>(nullptr, style),
-	entries_(entries),
+	entries_(),
+	newEntries_(entries),
+	newEntriesSet_(true),
 	noProposals_(),
-	watched_(),
 	selectionEffect_(),
-	selectionIndex_(entries_.isEmpty() ? -1 : 0)
+	selectionIndex_()
 {
 	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(QGraphicsItem::ItemClipsChildrenToShape);
 	setZValue(LAYER_AUTOCOMPLETE_Z);
-
-	for (auto e : entries_)
-		if (!e->visualization())
-			e->setVisualization( new TextAndDescription(e->text(), e->description()));
-
-	if (selectionIndex_ == 0) select();
 }
 
 AutoCompleteVis::~AutoCompleteVis()
 {
 	layout()->clear(false);
+	SAFE_DELETE_ITEM(noProposals_);
 	for(auto e : entries_) SAFE_DELETE(e);
 	entries_.clear();
 
@@ -75,16 +71,48 @@ AutoCompleteVis::~AutoCompleteVis()
 	noProposals_ = nullptr;
 }
 
+void AutoCompleteVis::setEntries(const QList<AutoCompleteEntry*>& entries)
+{
+	newEntries_ = entries;
+	newEntriesSet_ = true;
+}
+
+void AutoCompleteVis::updateEntries()
+{
+	newEntriesSet_ = false;
+	layout()->clear(false);
+	SAFE_DELETE_ITEM(noProposals_);
+	for(auto e : entries_) SAFE_DELETE(e);
+	entries_ = newEntries_;
+
+
+	for (auto e : entries_)
+			if (!e->visualization())
+				e->setVisualization( new TextAndDescription(e->text(), e->description()));
+
+	if (entries_.isEmpty())
+	{
+		layout()->synchronizeFirst(noProposals_, true, &style()->noProposals());
+		selectionIndex_ = -1;
+	}
+	else
+	{
+		selectionIndex_ = 0;
+		selectionEffect_ = new QGraphicsColorizeEffect();	// Note we must renew this every time since it will be
+																			// automatically deleted by the item that owns it.
+		entries_.at(selectionIndex_)->visualization()->setGraphicsEffect(selectionEffect_);
+
+		for (auto e : entries_) layout()->append(e->visualization());
+	}
+
+	// Install event handler
+	if (scene() && scene()->mainCursor() && !this->isAncestorOf(scene()->mainCursor()->owner()))
+		scene()->mainCursor()->owner()->installSceneEventFilter(this);
+}
+
 void AutoCompleteVis::determineChildren()
 {
-	if (layout()->length() == 0)
-	{
-		if (entries_.isEmpty())
-			layout()->synchronizeFirst(noProposals_, true, &style()->noProposals());
-		else
-			for (auto e : entries_)
-				layout()->append( e->visualization());
-	}
+	if (newEntriesSet_) updateEntries();
 
 	layout()->setStyle(&style()->layout());
 	if (noProposals_) noProposals_->setStyle(&style()->noProposals());
@@ -93,16 +121,10 @@ void AutoCompleteVis::determineChildren()
 void AutoCompleteVis::updateGeometry(int /*availableWidth*/, int /*availableHeight*/)
 {
 	// Set position
-	if (pos().isNull() && scene() && scene()->mainCursor() && !this->isAncestorOf(scene()->mainCursor()->owner()))
+	if (scene() && scene()->mainCursor() && !this->isAncestorOf(scene()->mainCursor()->owner()))
 	{
 		auto owner = scene()->mainCursor()->owner();
 		setPos(owner->scenePos().toPoint() + QPoint(0, owner->height() + style()->distanceToCursor()));
-		if (watched_ != owner)
-		{
-			if (watched_) watched_->removeSceneEventFilter(this);
-			watched_ = owner;
-			watched_->installSceneEventFilter(this);
-		}
 	}
 
 	// Set size
@@ -132,8 +154,19 @@ Visualization::Item::UpdateType AutoCompleteVis::needsUpdate()
 	else return upd;
 }
 
-bool AutoCompleteVis::sceneEventFilter(QGraphicsItem* /*watched*/, QEvent* event)
+bool AutoCompleteVis::sceneEventFilter(QGraphicsItem* watched, QEvent* event)
 {
+	Visualization::Item* cursorOwner = nullptr;
+
+	if (scene()->mainCursor() && !this->isAncestorOf(scene()->mainCursor()->owner()))
+		cursorOwner = scene()->mainCursor()->owner();
+
+	if (cursorOwner != watched)
+	{
+		watched->removeSceneEventFilter(this);
+		return false;
+	}
+
 	if (event->type() == QEvent::KeyPress)
 	{
 		auto e = dynamic_cast<QKeyEvent*>(event);
@@ -144,7 +177,7 @@ bool AutoCompleteVis::sceneEventFilter(QGraphicsItem* /*watched*/, QEvent* event
 					if (selectionIndex_ < entries_.size() - 1)
 					{
 						++selectionIndex_;
-						select();
+						entries_.at(selectionIndex_)->visualization()->setGraphicsEffect(selectionEffect_);
 					}
 					return true;
 				}
@@ -154,7 +187,7 @@ bool AutoCompleteVis::sceneEventFilter(QGraphicsItem* /*watched*/, QEvent* event
 					if (selectionIndex_ > 0)
 					{
 						--selectionIndex_;
-						select();
+						entries_.at(selectionIndex_)->visualization()->setGraphicsEffect(selectionEffect_);
 					}
 					return true;
 				}
@@ -174,10 +207,5 @@ bool AutoCompleteVis::sceneEventFilter(QGraphicsItem* /*watched*/, QEvent* event
 	return false;
 }
 
-void AutoCompleteVis::select()
-{
-	if (!selectionEffect_) selectionEffect_ = new QGraphicsColorizeEffect();
-	entries_.at(selectionIndex_)->visualization()->setGraphicsEffect(selectionEffect_);
-}
 
 } /* namespace Interaction */

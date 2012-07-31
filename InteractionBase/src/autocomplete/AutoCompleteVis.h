@@ -57,6 +57,7 @@ class INTERACTIONBASE_API AutoCompleteVis : public Visualization::LayoutProvider
 		virtual ~AutoCompleteVis();
 
 		virtual UpdateType needsUpdate() override;
+		void setEntries(const QList<AutoCompleteEntry*>& entries);
 
 	protected:
 		virtual void determineChildren() override;
@@ -67,12 +68,14 @@ class INTERACTIONBASE_API AutoCompleteVis : public Visualization::LayoutProvider
 		typedef LayoutProvider<> BaseItemType;
 
 		QList<AutoCompleteEntry*> entries_;
+		QList<AutoCompleteEntry*> newEntries_;
+		bool newEntriesSet_;
+
 		Visualization::Static* noProposals_;
-		Item* watched_;
 		QGraphicsEffect* selectionEffect_;
 		int selectionIndex_;
 
-		void select();
+		void updateEntries();
 };
 
 } /* namespace Interaction */

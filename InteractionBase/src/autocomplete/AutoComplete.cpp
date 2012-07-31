@@ -49,9 +49,13 @@ void AutoComplete::show(const QList<AutoCompleteEntry*>& entries)
 {
 	if (defaultScene_)
 	{
-		if (vis_) hide();
-		vis_ = new AutoCompleteVis(entries);
-		defaultScene_->addTopLevelItem(vis_);
+		if (vis_ && vis_->scene() == defaultScene_) vis_->setEntries(entries);
+		else
+		{
+			if (vis_) hide();
+			vis_ = new AutoCompleteVis(entries);
+			defaultScene_->addTopLevelItem(vis_);
+		}
 	}
 }
 
