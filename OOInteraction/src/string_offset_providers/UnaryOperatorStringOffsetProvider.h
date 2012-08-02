@@ -25,48 +25,37 @@
  **********************************************************************************************************************/
 
 /*
- * UnaryOperatorStringComponents.cpp
+ * UnaryOperatorStringOffsetProvider.h
  *
- *  Created on: Feb 24, 2012
+ *  Created on: Aug 2, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "string_components/UnaryOperatorStringComponents.h"
+#ifndef OOInteraction_UNARYOPERATORSTRINGOFFSETPROVIDER_H_
+#define OOInteraction_UNARYOPERATORSTRINGOFFSETPROVIDER_H_
 
-#include "OOModel/src/expressions/UnaryOperation.h"
+#include "../oointeraction_api.h"
+#include "GridBasedOffsetProvider.h"
+
+#include "VisualizationBase/src/items/LayoutProvider.h"
+#include "VisualizationBase/src/layouts/SequentialLayout.h"
+
+namespace OOVisualization {
+	class VUnaryOperation;
+}
 
 namespace OOInteraction {
 
-UnaryOperatorStringComponents::UnaryOperatorStringComponents(OOModel::UnaryOperation* e )
-	: exp_(e)
-{
-}
+class OOINTERACTION_API UnaryOperatorStringOffsetProvider  : public GridBasedOffsetProvider {
+	public:
+	UnaryOperatorStringOffsetProvider(OOVisualization::VUnaryOperation* vis);
 
-QStringList UnaryOperatorStringComponents::components()
-{
-	QStringList result;
-	if (!exp_) return result;
+	protected:
+		virtual QStringList components();
 
-	QString pre;
-	QString post;
-
-	switch(exp_->op())
-	{
-		case OOModel::UnaryOperation::PREINCREMENT: pre = "++"; break;
-		case OOModel::UnaryOperation::PREDECREMENT: pre = "--"; break;
-		case OOModel::UnaryOperation::POSTINCREMENT: post = "++"; break;
-		case OOModel::UnaryOperation::POSTDECREMENT: post = "--"; break;
-		case OOModel::UnaryOperation::PLUS: pre = "+"; break;
-		case OOModel::UnaryOperation::MINUS: pre = "-"; break;
-		case OOModel::UnaryOperation::NOT: pre = "!"; break;
-		case OOModel::UnaryOperation::COMPLEMENT: pre = "~"; break;
-		case OOModel::UnaryOperation::PARENTHESIS: {pre = "("; post = ")";} break;
-		default: break;
-	}
-
-	result << pre << stringForNode(exp_->operand()) << post;
-
-	return result;
-}
+	private:
+		OOVisualization::VUnaryOperation* vis_;
+};
 
 } /* namespace OOInteraction */
+#endif /* OOInteraction_UNARYOPERATORSTRINGOFFSETPROVIDER_H_ */

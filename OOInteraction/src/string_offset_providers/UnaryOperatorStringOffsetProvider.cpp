@@ -25,48 +25,45 @@
  **********************************************************************************************************************/
 
 /*
- * UnaryOperatorStringComponents.cpp
+ * UnaryOperatorStringOffsetProvider.cpp
  *
- *  Created on: Feb 24, 2012
+ *  Created on: Aug 2, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "string_components/UnaryOperatorStringComponents.h"
+#include "UnaryOperatorStringOffsetProvider.h"
+#include "Cell.h"
 
-#include "OOModel/src/expressions/UnaryOperation.h"
+#include "OOVisualization/src/expressions/VUnaryOperation.h"
 
 namespace OOInteraction {
 
-UnaryOperatorStringComponents::UnaryOperatorStringComponents(OOModel::UnaryOperation* e )
-	: exp_(e)
+UnaryOperatorStringOffsetProvider::UnaryOperatorStringOffsetProvider(OOVisualization::VUnaryOperation* vis)
+	: GridBasedOffsetProvider(vis), vis_(vis)
 {
+	if (vis->node()->op() == OOModel::UnaryOperation::PARENTHESIS)
+	{
+		add(new Cell(0, vis->expression(), 1));
+	}
+	else
+		for(int i = 0; i<vis->layout()->length(); ++i)
+			add(new Cell(i, vis->layout()->at<Visualization::Item>(i), i));
 }
 
-QStringList UnaryOperatorStringComponents::components()
+QStringList UnaryOperatorStringOffsetProvider::components()
 {
-	QStringList result;
-	if (!exp_) return result;
+	QStringList components = StringOffsetProvider::components();
 
-	QString pre;
-	QString post;
-
-	switch(exp_->op())
+	if (components.size() != vis_->layout()->length())
 	{
-		case OOModel::UnaryOperation::PREINCREMENT: pre = "++"; break;
-		case OOModel::UnaryOperation::PREDECREMENT: pre = "--"; break;
-		case OOModel::UnaryOperation::POSTINCREMENT: post = "++"; break;
-		case OOModel::UnaryOperation::POSTDECREMENT: post = "--"; break;
-		case OOModel::UnaryOperation::PLUS: pre = "+"; break;
-		case OOModel::UnaryOperation::MINUS: pre = "-"; break;
-		case OOModel::UnaryOperation::NOT: pre = "!"; break;
-		case OOModel::UnaryOperation::COMPLEMENT: pre = "~"; break;
-		case OOModel::UnaryOperation::PARENTHESIS: {pre = "("; post = ")";} break;
-		default: break;
+		for (int i = components.size() - 1; i>=0; --i)
+			if (components[i].isNull())
+				components.removeAt(i);
 	}
+	if (components.size() != vis_->layout()->length())
+		components.removeAll(QString(""));
 
-	result << pre << stringForNode(exp_->operand()) << post;
-
-	return result;
+	return components;
 }
 
 } /* namespace OOInteraction */

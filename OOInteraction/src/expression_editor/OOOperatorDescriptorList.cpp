@@ -75,6 +75,8 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 			"not", "! expr", 1, 2, Interaction::OperatorDescriptor::RightAssociative));
 	instance()->addDescriptor(new UnaryOperatorDescriptor(OOModel::UnaryOperation::COMPLEMENT,
 			"complement", "~ expr", 1, 2, Interaction::OperatorDescriptor::RightAssociative));
+	instance()->addDescriptor(new UnaryOperatorDescriptor(OOModel::UnaryOperation::PARENTHESIS,
+			"parenthesis", "( expr )", 1, 1, Interaction::OperatorDescriptor::NotAssociative));
 
 	// Binary operators
 	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::TIMES,
