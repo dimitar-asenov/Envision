@@ -36,22 +36,16 @@
 
 #include "../visualizationbase_api.h"
 #include "../styles/Style.h"
+#include "../shapes/ShapeStyle.h"
 
 namespace Visualization {
 
-class ShapeStyle;
 class Shape;
 class Item;
 
+// TODO: Document somewhere that Styles should be copiable
 class VISUALIZATIONBASE_API ItemStyle : public Style
 {
-	private:
-		ShapeStyle* shapeStyle_;
-		QString shapeName_;
-		bool drawsOnlyShape_;
-		bool drawShapeWhenEmpty_;
-		bool wholeItemCursor_;
-
 	public:
 		ItemStyle();
 		virtual ~ItemStyle();
@@ -64,6 +58,13 @@ class VISUALIZATIONBASE_API ItemStyle : public Style
 		bool drawsOnlyShape() const;
 		bool drawShapeWhenEmpty() const;
 		bool wholeItemCursor() const;
+
+	private:
+		QSharedPointer<ShapeStyle> shapeStyle_;
+		QString shapeName_;
+		bool drawsOnlyShape_;
+		bool drawShapeWhenEmpty_;
+		bool wholeItemCursor_;
 };
 
 inline bool ItemStyle::hasShape() const { return !shapeName_.isEmpty(); }
