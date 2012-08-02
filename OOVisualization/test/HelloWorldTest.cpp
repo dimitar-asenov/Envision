@@ -413,8 +413,15 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 	longMethod->items()->append(new ExpressionStatement(var15));
 	var15->setName("var15");
 	var15->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
+	BinaryOperation* binOp0 = new BinaryOperation();
+	var15->setInitialValue(binOp0);
+	binOp0->setOp(BinaryOperation::DIVIDE);
+	UnaryOperation* uOp3 = new UnaryOperation();
+	binOp0->setLeft(uOp3);
+	binOp0->setRight(new IntegerLiteral(3));
+	uOp3->setOp(UnaryOperation::PARENTHESIS);
 	BinaryOperation* binOp1 = new BinaryOperation();
-	var15->setInitialValue(binOp1);
+	uOp3->setOperand(binOp1);
 	binOp1->setOp(BinaryOperation::PLUS);
 	binOp1->setLeft(new IntegerLiteral(41));
 	binOp1->setRight(new IntegerLiteral(1));
