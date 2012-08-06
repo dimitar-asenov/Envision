@@ -22,7 +22,6 @@
 		<direction>2</direction>
 		<alignment>1</alignment>
 		<spaceBetweenElements>1</spaceBetweenElements>
-		<notLocationEquivalentCursors>true</notLocationEquivalentCursors>
 		<noInnerCursors>true</noInnerCursors>
 		<noBoundaryCursors>true</noBoundaryCursors>
 	</layout>

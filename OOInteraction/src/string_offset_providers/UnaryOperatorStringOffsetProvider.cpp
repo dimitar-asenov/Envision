@@ -43,7 +43,8 @@ UnaryOperatorStringOffsetProvider::UnaryOperatorStringOffsetProvider(OOVisualiza
 {
 	if (vis->node()->op() == OOModel::UnaryOperation::PARENTHESIS)
 	{
-		add(new Cell(0, vis->expression(), 1));
+		add(new Cell(1, vis->expression(), 1));
+		setSize(3, 1);
 	}
 	else
 		for(int i = 0; i<vis->layout()->length(); ++i)

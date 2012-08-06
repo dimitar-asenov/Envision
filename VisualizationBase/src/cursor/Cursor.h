@@ -74,7 +74,6 @@ class VISUALIZATIONBASE_API Cursor {
 		 *	- The owners of the two cursors are in a child-parent relationship. Two cursors from peer entities are not
 		 *	  location equivalent. Two cursors from the same owner can not be location equivalent
 		 *	- At least one of the cursors is a boundary cursor.
-		 *	- There are no items with a visible shape in the hierarchy between the two owners of the cursors.
 		 */
 		virtual bool isLocationEquivalent(Cursor* c);
 		virtual bool isLocationEquivalent(bool notLocationEquivalent, CursorType type, bool isAtBoundary, Item* owner);

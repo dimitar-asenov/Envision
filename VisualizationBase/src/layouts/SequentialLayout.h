@@ -101,6 +101,8 @@ class VISUALIZATIONBASE_API SequentialLayout: public Layout
 
 		QVector<Item*> items;
 		int spaceBetweenElements_;
+
+		void adjustCursorRegionToAvoidZeroSize(QRect& region, bool horizontal, bool forward, bool first, bool last);
 };
 
 inline bool SequentialLayout::isHorizontal() const { return style()->isHorizontal(); }

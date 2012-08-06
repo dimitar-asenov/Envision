@@ -78,24 +78,9 @@ bool Cursor::isLocationEquivalent(bool otherNotLocationEquivalent, CursorType ot
 	if (otherType != type() || otherType == BoxCursor) return false;
 	if (!otherIsAtBoundary && ! isAtBoundary()) return false;
 	if (owner() == otherOwner) return false;
+	if (!owner()->isAncestorOf(otherOwner) && !otherOwner->isAncestorOf(owner()) ) return false;
 
-	Item* parent = nullptr;
-	Item* child = nullptr;
-	if ( owner()->isAncestorOf(otherOwner))
-	{
-		parent = static_cast<Item*>(owner());
-		child = static_cast<Item*>(otherOwner);
-	}
-	else if (otherOwner->isAncestorOf(owner()))
-	{
-		parent = static_cast<Item*>(otherOwner);
-		child = static_cast<Item*>(owner());
-	}
-	else return false;
-
-	auto item = child;
-	while (item != parent && !item->hasShape()) item = item->parent();
-	return item == parent;
+	return true;
 }
 
 } /* namespace Visualization */

@@ -5,7 +5,8 @@
 	<spaceBetweenElements>0</spaceBetweenElements>
 	<notLocationEquivalentCursors>false</notLocationEquivalentCursors>
 	<noInnerCursors>false</noInnerCursors>
-	<noBoundaryCursors>false</noBoundaryCursors>
+	<noBoundaryCursorsInsideShape>false</noBoundaryCursorsInsideShape>
+	<extraCursorsOutsideShape>false</extraCursorsOutsideShape>
 	
 	<!-- Specifying minWidth and minHeight only applies to the dimension opposite of the direction. -->
 	<minWidth>0</minWidth>

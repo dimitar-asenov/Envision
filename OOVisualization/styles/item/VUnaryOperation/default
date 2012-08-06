@@ -28,7 +28,7 @@
 		</e7>
 		<e8 prototypes="default.operand">
 			<layout>
-				<notLocationEquivalentCursors>false</notLocationEquivalentCursors>
+				<extraCursorsOutsideShape>true</extraCursorsOutsideShape>
 				<shape prototypes="shape/Braces/default">
 					Braces
 					<leftBrace>(</leftBrace>

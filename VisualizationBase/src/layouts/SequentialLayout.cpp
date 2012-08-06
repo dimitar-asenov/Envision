@@ -302,7 +302,28 @@ QList<ItemRegion> SequentialLayout::regions()
 	bool forward = isForward();
 
 	QList<ItemRegion> regs;
-	int last = forward ? 0 : horizontal ? width() : height();
+
+	bool extraCursors = hasShape() && style()->extraCursorsOutsideShape();
+	QRect itemsArea;	// This is the bounding box of all items. If the layout has no shape, this would be the same as the
+							// layout's bounding box. Otherwise this is the same as the inner part of the shape.
+	if (extraCursors)
+	{
+		itemsArea = QRect(QPoint(getShape()->contentLeft(), getShape()->contentTop()),
+				getShape()->innerSize(size().toSize()));
+		itemsArea.adjust(style()->leftMargin(), style()->topMargin(), -style()->rightMargin(), -style()->bottomMargin());
+	}
+	else
+		itemsArea = QRect( QPoint(0,0), size().toSize());
+
+	// This is the rectangle half-way between the bounding box of the layout and itemsArea.
+	// When extraCursors is true, this indicates the boundary between the extra cursors and the inner cursors
+	QRect midArea = QRect(QPoint(itemsArea.left()/2, itemsArea.top()/2),
+			QPoint((itemsArea.right() + width()) / 2, (itemsArea.bottom() + height())/2));
+
+	int last = forward ?
+			( horizontal ? midArea.left() : midArea.top()) :
+			( horizontal ? midArea.right() + 1 : midArea.bottom() + 1) ;
+
 	for(int i = 0; i<items.size(); ++i)
 	{
 		ItemRegion cursorRegion;
@@ -333,71 +354,109 @@ QList<ItemRegion> SequentialLayout::regions()
 		}
 
 		itemRegion.setItem(items[i]);
-		// Note below that a horizontal layout, means a vertical cursor
+		// Note below, that a horizontal layout, means a vertical cursor
 		auto lc = new LayoutCursor(this, horizontal ? Cursor::VerticalCursor : Cursor::HorizontalCursor);
 		cursorRegion.setCursor(lc);
 		lc->setIndex(i);
 		lc->setVisualizationPosition(cursorRegion.region().topLeft());
 		lc->setVisualizationSize(horizontal ? QSize(2, height()) : QSize(width(), 2));
-		if (i==0) lc->setIsAtBoundary(true);
+		if (i==0 && !extraCursors) lc->setIsAtBoundary(true);
 
-		// Make sure there is at least some space for the cursor Region.
-		if (horizontal && cursorRegion.region().width() == 0)
-		{
-			if (forward) cursorRegion.region().adjust((i>0?-1:0), 0, 1, 0);
-			else cursorRegion.region().adjust(-1, 0, (i>0?1:0), 0);
-		}
-		if (!horizontal && cursorRegion.region().height() == 0 )
-		{
-			if (forward) cursorRegion.region().adjust(0, (i>0?-1:0), 0, 1);
-			else  cursorRegion.region().adjust(0, -1, 0, (i>0?1:0));
-		}
+		adjustCursorRegionToAvoidZeroSize(cursorRegion.region(), horizontal, forward, !extraCursors && i==0, false);
 
 		cursorRegion.cursor()->setRegion(mapToScene(cursorRegion.region()).boundingRect().toRect());
 		if (style()->notLocationEquivalentCursors()) lc->setNotLocationEquivalent(true);
 
 		// Skip cursor?
-		if (!((i == 0) && style()->noBoundaryCursors()) && !((i > 0) && style()->noInnerCursors()))
+		if (!((i == 0) && style()->noBoundaryCursorsInsideShape()) && !((i > 0) && style()->noInnerCursors()))
 			regs.append(cursorRegion);
 		regs.append(itemRegion);
 	}
 
-	// Add trailing cursor region if not omited
-
-
-	if (!style()->noBoundaryCursors())
+	// Add trailing cursor region if not omitted
+	if (!style()->noBoundaryCursorsInsideShape())
 	{
 		QRect trailing;
-		if (horizontal && forward) trailing.setRect(last, 0, width() - last, height());
-		else if (horizontal && !forward) trailing.setRect(0, 0, last, height());
-		else if (!horizontal && forward) trailing.setRect(0, last,  width(), height() - last);
-		else trailing.setRect(0, 0,  width(), last);
+		if (horizontal && forward) trailing.setRect(last, 0, midArea.right() + 1 - last, height());
+		else if (horizontal && !forward) trailing.setRect(midArea.left(), 0, last - midArea.left(), height());
+		else if (!horizontal && forward) trailing.setRect(0, last,  width(), midArea.bottom() + 1 - last);
+		else trailing.setRect(0, midArea.top(),  width(), last - midArea.top());
 
-		// Make sure there is at least some space for the cursor Region.
-		if (horizontal && trailing.width() == 0)
-		{
-			if (forward) trailing.adjust(-1, 0, 0, 0);
-			else trailing.adjust(0, 0, 1, 0);
-		}
-		if (!horizontal && trailing.height() == 0 )
-		{
-			if (forward) trailing.adjust(0, -1, 0, 0);
-			else  trailing.adjust(0, 0, 0, 1);
-		}
+		adjustCursorRegionToAvoidZeroSize(trailing, horizontal, forward, false, !extraCursors);
 
 		regs.append(ItemRegion(trailing));
-		// Note below that a horizontal layout, means a vertical cursor
+		// Note below, that a horizontal layout, means a vertical cursor
 		auto lc = new LayoutCursor(this, horizontal ? Cursor::VerticalCursor : Cursor::HorizontalCursor);
 		regs.last().setCursor(lc);
 		lc->setIndex(items.size());
 		lc->setVisualizationPosition(regs.last().region().topLeft());
 		lc->setVisualizationSize(horizontal ? QSize(2, height()) : QSize(width(), 2));
 		lc->setRegion(mapToScene(trailing).boundingRect().toRect());
+		if (!extraCursors) lc->setIsAtBoundary(true);
+		if (style()->notLocationEquivalentCursors()) lc->setNotLocationEquivalent(true);
+	}
+
+	// Finally add the two extra cursors if requested
+	if (extraCursors)
+	{
+		QRect extra;
+
+		// Front
+		if (horizontal && forward) extra.setRect(0, 0, midArea.left(), height());
+		else if (horizontal && !forward) extra.setRect(midArea.right() + 1, 0, width() - midArea.right() - 1, height());
+		else if (!horizontal && forward) extra.setRect(0, 0,  width(), midArea.top());
+		else extra.setRect(0, midArea.bottom() + 1, width(), height() - midArea.bottom() - 1);
+
+		adjustCursorRegionToAvoidZeroSize(extra, horizontal, forward, true, false);
+
+		regs.append(ItemRegion(extra));
+		// Note below, that a horizontal layout, means a vertical cursor
+		auto lc = new LayoutCursor(this, horizontal ? Cursor::VerticalCursor : Cursor::HorizontalCursor);
+		regs.last().setCursor(lc);
+		lc->setIndex(-1);
+		lc->setVisualizationPosition(regs.last().region().topLeft());
+		lc->setVisualizationSize(horizontal ? QSize(2, height()) : QSize(width(), 2));
+		lc->setRegion(mapToScene(extra).boundingRect().toRect());
+		lc->setIsAtBoundary(true);
+		if (style()->notLocationEquivalentCursors()) lc->setNotLocationEquivalent(true);
+
+		// Back
+		if (horizontal && forward) extra.setRect(midArea.right() + 1, 0, width() - midArea.right() - 1, height());
+		else if (horizontal && !forward) extra.setRect(0, 0, midArea.left(), height());
+		else if (!horizontal && forward) extra.setRect(0, midArea.bottom() + 1, width(), height() - midArea.bottom() - 1);
+		else extra.setRect(0, 0,  width(), midArea.top());
+
+		adjustCursorRegionToAvoidZeroSize(extra, horizontal, forward, false, true);
+
+		regs.append(ItemRegion(extra));
+		// Note below, that a horizontal layout, means a vertical cursor
+		lc = new LayoutCursor(this, horizontal ? Cursor::VerticalCursor : Cursor::HorizontalCursor);
+		regs.last().setCursor(lc);
+		lc->setIndex(items.size()+1);
+		lc->setVisualizationPosition(regs.last().region().topLeft());
+		lc->setVisualizationSize(horizontal ? QSize(2, height()) : QSize(width(), 2));
+		lc->setRegion(mapToScene(extra).boundingRect().toRect());
 		lc->setIsAtBoundary(true);
 		if (style()->notLocationEquivalentCursors()) lc->setNotLocationEquivalent(true);
 	}
 
 	return regs;
+}
+
+inline void SequentialLayout::adjustCursorRegionToAvoidZeroSize(QRect& region, bool horizontal, bool forward,
+		bool first, bool last)
+{
+	// Make sure there is at least some space for the cursor Region.
+	if (horizontal && region.width() == 0)
+	{
+		if (forward) region.adjust((first?0:-1), 0, (last?0:1), 0);
+		else region.adjust((last?0:-1), 0, (first?0:1), 0);
+	}
+	if (!horizontal && region.height() == 0 )
+	{
+		if (forward) region.adjust(0, (first?0:-1), 0, (last?0:1));
+		else  region.adjust(0, (last?0:-1), 0, (first?0:1));
+	}
 }
 
 }
