@@ -21,6 +21,6 @@
 	</keyword>
 	<arguments prototypes="item/VList/default">
 		<drawShapeWhenEmpty>false</drawShapeWhenEmpty>
-		<shape prototypes="shape/Shape/default"/>
+		<shape />
 	</arguments>
 </style>
