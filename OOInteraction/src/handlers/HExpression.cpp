@@ -330,7 +330,6 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		e.printError();
    }
 
-	if (enterPressed) return;
 	GenericHandler::keyPressEvent(target, event);
 }
 
