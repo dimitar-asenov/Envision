@@ -33,11 +33,13 @@
 
 #include "AutoComplete.h"
 #include "AutoCompleteVis.h"
+#include "VisualizationBase/src/CustomSceneEvent.h"
 
 namespace Interaction {
 
 Visualization::Scene* AutoComplete::defaultScene_ = nullptr;
 AutoCompleteVis* AutoComplete::vis_ = nullptr;
+bool AutoComplete::hideRequested_ = false;
 
 void AutoComplete::setDefaultScene(Visualization::Scene* scene)
 {
@@ -49,6 +51,7 @@ void AutoComplete::show(const QList<AutoCompleteEntry*>& entries)
 {
 	if (defaultScene_)
 	{
+		hideRequested_ = false;
 		if (vis_ && vis_->scene() == defaultScene_) vis_->setEntries(entries);
 		else
 		{
@@ -63,6 +66,7 @@ void AutoComplete::hide()
 {
 	if (defaultScene_)
 	{
+		hideRequested_ = false;
 		if (vis_) defaultScene_->removeTopLevelItem(vis_);
 		SAFE_DELETE_ITEM(vis_);
 	}
@@ -76,6 +80,17 @@ bool AutoComplete::isVisible()
 AutoCompleteVis* AutoComplete::visualization()
 {
 	return vis_;
+}
+
+void AutoComplete::delayedHide()
+{
+	if (defaultScene_)
+	{
+		hideRequested_ = true;
+		QApplication::postEvent(defaultScene_,  new Visualization::CustomSceneEvent( [&](){
+			if (hideRequested_) hide();
+		} ) );
+	}
 }
 
 } /* namespace Interaction */

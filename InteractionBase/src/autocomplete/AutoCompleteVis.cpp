@@ -161,6 +161,9 @@ bool AutoCompleteVis::sceneEventFilter(QGraphicsItem* watched, QEvent* event)
 	if (scene()->mainCursor() && !this->isAncestorOf(scene()->mainCursor()->owner()))
 		cursorOwner = scene()->mainCursor()->owner();
 
+	if (event->type() == QEvent::FocusOut)
+		AutoComplete::delayedHide();
+
 	if (cursorOwner != watched)
 	{
 		watched->removeSceneEventFilter(this);

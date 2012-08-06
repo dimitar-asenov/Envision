@@ -50,7 +50,23 @@ class INTERACTIONBASE_API AutoComplete {
 
 		static void setDefaultScene(Visualization::Scene* scene);
 		static void show(const QList<AutoCompleteEntry*>& entries);
+
+		/**
+		 * Hides the auto completion menu immediately.
+		 *
+		 * This method removes the menu from the scene and deletes the visualization.
+		 *
+		 * \sa delayedHide();
+		 */
 		static void hide();
+
+		/**
+		 * Schedules an event that will hide the auto completion menu on the next scene update.
+		 *
+		 * Use this method when you do not want to immediately hide the visualization but wait until the next update. If
+		 * show() is called before the next update, the visualization is never hidden. This way flickering can be avoided.
+		 */
+		static void delayedHide();
 
 		static bool isVisible();
 
@@ -59,6 +75,7 @@ class INTERACTIONBASE_API AutoComplete {
 	private:
 		static Visualization::Scene* defaultScene_;
 		static AutoCompleteVis* vis_;
+		static bool hideRequested_;
 };
 
 } /* namespace Interaction */
