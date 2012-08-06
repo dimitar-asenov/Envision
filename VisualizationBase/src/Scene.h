@@ -79,6 +79,11 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 
 		virtual SceneHandlerItem* sceneHandlerItem();
 
+		/**
+		 * Adds an action to be executed after the current event.
+		 *
+		 * This method can only be called while handling an event.
+		 */
 		void addPostEventAction(QEvent* action);
 
 	public slots:
