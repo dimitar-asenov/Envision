@@ -57,14 +57,20 @@ HMethod* HMethod::instance()
 
 void HMethod::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
-	auto m = dynamic_cast<OOVisualization::VMethod*> ( target );
+	bool createDown = event->modifiers() == Qt::NoModifier &&
+			(event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return);
+	bool createRight = event->modifiers() == Qt::ShiftModifier &&
+			(event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return);
+	//bool switchVertical = event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Tab;
+	bool switchHorizontal = event->modifiers() == Qt::ShiftModifier && event->key() == Qt::Key_Tab;
+
 	bool processed = false;
-	if (m && event->modifiers() == Qt::NoModifier)
+	auto m = dynamic_cast<OOVisualization::VMethod*> ( target );
+	if (m)
 	{
-		if (m->name()->itemOrChildHasFocus() && (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return))
+		if ( (m->name()->itemOrChildHasFocus() || m->arguments()->itemOrChildHasFocus()) && createDown)
 		{
 			processed = true;
-			event->accept();
 			if (m->node()->items()->size() > 0)
 			{
 				target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, m->node()->items()->at(0),
@@ -84,24 +90,19 @@ void HMethod::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 						Interaction::SetCursorEvent::CursorOnLeft));
 			}
 		}
-		else if (m->name()->itemOrChildHasFocus() && event->key() == Qt::Key_Tab)
+		else if (m->name()->itemOrChildHasFocus() && switchHorizontal)
 		{
 			processed = true;
-			event->accept();
 
 			if (m->node()->arguments()->size() > 0)
 			{
 				target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target,
 						m->node()->arguments()->at(0), Interaction::SetCursorEvent::CursorOnLeft));
 			}
-			else
-				createNewArgument(m, 0);
 		}
-		else if (m->arguments()->itemOrChildHasFocus()
-				&& (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return))
+		else if ( (m->name()->itemOrChildHasFocus() || m->arguments()->itemOrChildHasFocus()) && createRight)
 		{
 			processed = true;
-			event->accept();
 
 			int index = m->arguments()->layout()->focusedElementIndex();
 			if (index == -1 && m->scene()->mainCursor() && m->scene()->mainCursor()->owner() == m->arguments()->layout())

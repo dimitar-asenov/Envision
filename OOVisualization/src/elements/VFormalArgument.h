@@ -57,6 +57,9 @@ class OOVISUALIZATION_API VFormalArgument
 		VFormalArgument(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VFormalArgument();
 
+		Visualization::VText* name();
+		Visualization::Item* typeExpr();
+
 	protected:
 		void determineChildren();
 
@@ -67,6 +70,8 @@ class OOVISUALIZATION_API VFormalArgument
 		Visualization::Item* type_;
 };
 
+inline Visualization::VText* VFormalArgument::name() { return name_; }
+inline Visualization::Item* VFormalArgument::typeExpr() { return type_; }
 }
 
 #endif /* VFORMALARGUMENT_H_ */
