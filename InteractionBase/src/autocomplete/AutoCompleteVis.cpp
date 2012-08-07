@@ -170,7 +170,7 @@ bool AutoCompleteVis::sceneEventFilter(QGraphicsItem* watched, QEvent* event)
 		return false;
 	}
 
-	if (event->type() == QEvent::KeyPress)
+	if (event->type() == QEvent::KeyPress && !entries_.isEmpty())
 	{
 		auto e = dynamic_cast<QKeyEvent*>(event);
 		switch (e->key())
@@ -199,7 +199,7 @@ bool AutoCompleteVis::sceneEventFilter(QGraphicsItem* watched, QEvent* event)
 			case Qt::Key_Enter:
 				{
 					if (selectionIndex_ < 0 && entries_.size() == 1) selectionIndex_ = 0;
-					if (entries_.size() > 0) entries_.at(selectionIndex_)->execute();
+					entries_.at(selectionIndex_)->execute();
 					scene()->addPostEventAction(new Visualization::CustomSceneEvent( AutoComplete::hide ));
 					return true;
 				}
