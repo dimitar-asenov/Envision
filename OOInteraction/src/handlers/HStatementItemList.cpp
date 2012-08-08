@@ -78,7 +78,7 @@ void HStatementItemList::keyPressEvent(Visualization::Item *target, QKeyEvent *e
 			vis->node()->model()->endModification();
 
 			vis->setUpdateNeeded(Visualization::Item::StandardUpdate);
-				target->scene()->addPostEventAction( new Interaction::SetCursorEvent(vis, es->expression(),
+				target->scene()->addPostEventAction( new Interaction::SetCursorEvent(vis, es,
 				Interaction::SetCursorEvent::CursorOnLeft));
 		}
 

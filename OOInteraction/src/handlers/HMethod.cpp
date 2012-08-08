@@ -120,15 +120,14 @@ void HMethod::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 void HMethod::createNewArgument(OOVisualization::VMethod* method, int position)
 {
 	auto arg = new OOModel::FormalArgument();
-	auto empty = new OOModel::EmptyExpression();
-	arg->setTypeExpression(empty);
+	arg->setTypeExpression(new OOModel::EmptyExpression());
 	method->node()->model()->beginModification(method->node(), "add new argument");
 	method->node()->arguments()->insert(position, arg);
 	method->node()->model()->endModification();
 
 	method->arguments()->setUpdateNeeded(Visualization::Item::StandardUpdate);
-	method->scene()->addPostEventAction( new Interaction::SetCursorEvent(method, arg->nameNode(),
-			Interaction::SetCursorEvent::CursorOnLeft));
+	method->scene()->addPostEventAction( new Interaction::SetCursorEvent(method, arg,
+			Interaction::SetCursorEvent::CursorOnTop));
 }
 
 } /* namespace OOInteraction */
