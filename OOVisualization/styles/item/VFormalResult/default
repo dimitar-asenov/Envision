@@ -1,6 +1,10 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/Item/default">
 	<shape />
-	<layout prototypes="layout/SequentialLayout/default" />
+	<layout prototypes="layout/SequentialLayout/default">
+		<noInnerCursors>true</noInnerCursors>
+		<noBoundaryCursorsInsideShape>true</noBoundaryCursorsInsideShape>
+		<spaceBetweenElements>5</spaceBetweenElements>
+	</layout>
 	<name prototypes="item/Text/default" />
 </style>
