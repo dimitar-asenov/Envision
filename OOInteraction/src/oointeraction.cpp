@@ -43,7 +43,6 @@
 #include "handlers/HStatement.h"
 #include "handlers/HLoop.h"
 #include "handlers/HIfStatement.h"
-#include "handlers/HStatementItemList.h"
 
 #include "string_components/UnaryOperatorStringComponents.h"
 #include "string_components/BinaryOperatorStringComponents.h"
@@ -86,6 +85,7 @@
 #include "OOModel/src/allOOModelNodes.h"
 
 #include "InteractionBase/src/handlers/GenericHandler.h"
+#include "InteractionBase/src/handlers/HList.h"
 #include "InteractionBase/src/handlers/HText.h"
 
 #include "VisualizationBase/src/items/Static.h"
@@ -111,7 +111,7 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 	OOVisualization::VField::setInteractionHandler(Interaction::GenericHandler::instance());
 	OOVisualization::VFormalArgument::setInteractionHandler(HFormalArgument::instance());
 	OOVisualization::VFormalResult::setInteractionHandler(Interaction::GenericHandler::instance());
-	OOVisualization::VStatementItemList::setInteractionHandler(HStatementItemList::instance());
+	OOVisualization::VStatementItemList::setInteractionHandler(Interaction::HList::instance());
 	OOVisualization::VReferenceExpression::setInteractionHandler(HExpression::instance());
 	OOVisualization::VMethodCallExpression::setInteractionHandler(HExpression::instance());
 	OOVisualization::VThisExpression::setInteractionHandler(HExpression::instance());

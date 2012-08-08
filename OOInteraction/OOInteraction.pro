@@ -12,7 +12,6 @@ HEADERS += src/string_offset_providers/UnaryOperatorStringOffsetProvider.h \
     src/string_offset_providers/Cell.h \
     src/string_offset_providers/ListCell.h \
     src/string_offset_providers/GridBasedOffsetProvider.h \
-    src/handlers/HStatementItemList.h \
     src/expression_editor/operators/CommandExpression.h \
     src/expression_editor/operators/CommandDescriptor.h \
     src/expression_editor/operators/TypeArgumentsDescriptor.h \
@@ -85,7 +84,6 @@ SOURCES += src/string_offset_providers/UnaryOperatorStringOffsetProvider.cpp \
     src/string_offset_providers/Cell.cpp \
     src/string_offset_providers/ListCell.cpp \
     src/string_offset_providers/GridBasedOffsetProvider.cpp \
-    src/handlers/HStatementItemList.cpp \
     src/expression_editor/operators/CommandDescriptor.cpp \
     src/expression_editor/operators/TypeArgumentsDescriptor.cpp \
     src/string_offset_providers/ReferenceExpressionStringOffsetProvider.cpp \

@@ -56,10 +56,11 @@ HList* HList::instance()
 void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
 	Visualization::VList* list = static_cast<Visualization::VList*> (target);
+	bool processed = false;
 
 	if (event->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier)  && event->key() == Qt::Key_V)
 	{
-
+		processed = true;
 		FilePersistence::SystemClipboard clipboard;
 		int selIndex = list->focusedElementIndex();
 
@@ -73,10 +74,13 @@ void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			target->setUpdateNeeded(Visualization::Item::StandardUpdate);
 		}
 	}
-	else if (!list->suppressDefaultRemovalHandler() && event->modifiers() == Qt::NoModifier
+
+	if (!list->suppressDefaultRemovalHandler() && event->modifiers() == Qt::NoModifier
 			&& (event->key() == Qt::Key_Delete || event->key() == Qt::Key_Backspace)
 			&& list->scene()->mainCursor() && list->scene()->mainCursor()->owner() == list->layout())
 	{
+		processed = true;
+
 		int index = list->layout()->correspondingSceneCursor<Visualization::LayoutCursor>()->index();
 		if (event->key() == Qt::Key_Backspace) --index;
 		// Delete the element corresponding to index
@@ -104,7 +108,45 @@ void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		}
 
 	}
-	else GenericHandler::keyPressEvent(target, event);
+
+	if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)
+	{
+		bool createDown = event->modifiers() == Qt::NoModifier;
+		bool createRight = event->modifiers() == Qt::ShiftModifier;
+
+		if ((createDown && !list->layout()->style()->isHorizontal())
+				|| ( createRight && list->layout()->style()->isHorizontal()) )
+		{
+			auto newElem = list->node()->createDefaultElement();
+			if (newElem)
+			{
+				processed = true;
+
+				int index = -1;
+				if (list->scene()->mainCursor() && list->scene()->mainCursor()->owner() == list->layout())
+					index = list->layout()->correspondingSceneCursor<Visualization::LayoutCursor>()->index();
+				else
+				{
+					index = list->focusedElementIndex();
+					if (index >= 0) ++index;
+				}
+
+				if (index >= 0)
+				{
+					list->node()->model()->beginModification(list->node(), "add new list element");
+					list->node()->insert(index, newElem);
+					list->node()->model()->endModification();
+
+					list->setUpdateNeeded(Visualization::Item::StandardUpdate);
+						target->scene()->addPostEventAction( new SetCursorEvent(list, newElem,
+							createDown ? SetCursorEvent::CursorOnLeft : SetCursorEvent::CursorOnTop));
+				}
+			}
+		}
+	}
+
+
+	if (!processed) GenericHandler::keyPressEvent(target, event);
 }
 
 }

@@ -54,6 +54,7 @@
 
 #include <QtCore/QRegExp>
 
+#include <functional>
 #include <typeinfo>
 
 #if defined(MODELBASE_LIBRARY)

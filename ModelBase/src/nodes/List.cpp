@@ -232,4 +232,9 @@ QList<Node*> List::findAllSymbolDefinitions(const QRegExp& symbolExp, int before
 	return result;
 }
 
+Node* List::createDefaultElement()
+{
+	return nullptr;
+}
+
 }

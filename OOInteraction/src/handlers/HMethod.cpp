@@ -100,17 +100,10 @@ void HMethod::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 						m->node()->arguments()->at(0), Interaction::SetCursorEvent::CursorOnLeft));
 			}
 		}
-		else if ( (m->name()->itemOrChildHasFocus() || m->arguments()->itemOrChildHasFocus()) && createRight)
+		else if ( (m->name()->itemOrChildHasFocus()) && createRight)
 		{
 			processed = true;
-
-			int index = m->arguments()->layout()->focusedElementIndex();
-			if (index == -1 && m->scene()->mainCursor() && m->scene()->mainCursor()->owner() == m->arguments()->layout())
-				index = m->arguments()->layout()->correspondingSceneCursor<Visualization::LayoutCursor>()->index();
-			else index++;
-
-			if (index >= 0) createNewArgument(m, index);
-
+			createNewArgument(m, 0);
 		}
 	}
 
