@@ -39,7 +39,7 @@
 
 namespace OOModel {
 
-class StatementItemList : public Model::TypedList<StatementItem>
+class OOMODEL_API StatementItemList : public Model::TypedList<StatementItem>
 {
 	NODE_DECLARE_STANDARD_METHODS(StatementItemList)
 
