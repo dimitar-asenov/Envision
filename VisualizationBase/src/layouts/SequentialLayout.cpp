@@ -298,10 +298,11 @@ int SequentialLayout::focusedElementIndex() const
 
 QList<ItemRegion> SequentialLayout::regions()
 {
-	bool horizontal = isHorizontal();
-	bool forward = isForward();
-
 	QList<ItemRegion> regs;
+
+	// If this layout is not visible return no regions
+	if (isEmpty() && (!hasShape() || !style()->drawShapeWhenEmpty()))
+		return regs;
 
 	bool extraCursors = hasShape() && style()->extraCursorsOutsideShape();
 	QRect itemsArea;	// This is the bounding box of all items. If the layout has no shape, this would be the same as the
@@ -314,6 +315,9 @@ QList<ItemRegion> SequentialLayout::regions()
 	}
 	else
 		itemsArea = QRect( QPoint(0,0), size().toSize());
+
+	bool horizontal = isHorizontal();
+	bool forward = isForward();
 
 	// This is the rectangle half-way between the bounding box of the layout and itemsArea.
 	// When extraCursors is true, this indicates the boundary between the extra cursors and the inner cursors
