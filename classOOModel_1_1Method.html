@@ -123,7 +123,7 @@ Private Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Method.html#ad27eceac1a3f5551c78931f071945da5">Method</a> (const QString &amp;name, <a class="el" href="classOOModel_1_1Visibility.html#a11eecdca48450bd3751d79f981074c82">Visibility::VisibilityType</a> vis, <a class="el" href="classOOModel_1_1StorageSpecifier.html#aa4c64ecb64dd812016be98015bac877a">StorageSpecifier::StorageSpecifierTypes</a> storage)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Method.html#ab8cac3e4ac449ec288b0f172f0072e47">definesSymbol</a> () const </td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if this node defines a symbol and false otherwise.  <a href="#ab8cac3e4ac449ec288b0f172f0072e47"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual QList&lt; <a class="el" href="classModel_1_1Node.html#a6026745a457fb0edde390e06c8168391">Node</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Method.html#a4c5ca7eb25f6b17b191ba03524cd3169">findSymbol</a> (const QString &amp;symbol, <a class="el" href="classModel_1_1Node.html#a6026745a457fb0edde390e06c8168391">Node</a> *source, <a class="el" href="classModel_1_1Node.html#af2ff52f8a834ec055dca6867ba794208">FindSymbolMode</a> mode)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual QList&lt; <a class="el" href="classModel_1_1Node.html#a6026745a457fb0edde390e06c8168391">Node</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Method.html#aaec5dc54868b99126a563ae9d559f4c2">findSymbols</a> (const QRegExp &amp;symbolExp, <a class="el" href="classModel_1_1Node.html#a6026745a457fb0edde390e06c8168391">Node</a> *source, <a class="el" href="classModel_1_1Node.html#af2ff52f8a834ec055dca6867ba794208">FindSymbolMode</a> mode, bool exhaustAllScopes) override</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Method.html#ad53262e5057deab0cea8a8321758816b">isGeneric</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual const QString &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Method.html#a33f2d5c1bb247e5b4859ff347a1cb952">symbolName</a> () const </td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the name of the symbol defined by this node.  <a href="#a33f2d5c1bb247e5b4859ff347a1cb952"></a><br/></td></tr>
@@ -216,15 +216,15 @@ QString &amp;) ATTRIBUTE_VALUE(&#160;</td><td class="memItemRight" valign="botto
 
 </div>
 </div>
-<a class="anchor" id="a4c5ca7eb25f6b17b191ba03524cd3169"></a><!-- doxytag: member="OOModel::Method::findSymbol" ref="a4c5ca7eb25f6b17b191ba03524cd3169" args="(const QString &amp;symbol, Node *source, FindSymbolMode mode)" -->
+<a class="anchor" id="aaec5dc54868b99126a563ae9d559f4c2"></a><!-- doxytag: member="OOModel::Method::findSymbols" ref="aaec5dc54868b99126a563ae9d559f4c2" args="(const QRegExp &amp;symbolExp, Node *source, FindSymbolMode mode, bool exhaustAllScopes) override" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">QList&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a> * &gt; <a class="el" href="classOOModel_1_1Method.html#a4c5ca7eb25f6b17b191ba03524cd3169">OOModel::Method::findSymbol</a> </td>
+          <td class="memname">QList&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a> * &gt; <a class="el" href="classOOModel_1_1Method.html#aaec5dc54868b99126a563ae9d559f4c2">OOModel::Method::findSymbols</a> </td>
           <td>(</td>
-          <td class="paramtype">const QString &amp;&#160;</td>
-          <td class="paramname"><em>symbol</em>, </td>
+          <td class="paramtype">const QRegExp &amp;&#160;</td>
+          <td class="paramname"><em>symbolExp</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -236,12 +236,18 @@ QString &amp;) ATTRIBUTE_VALUE(&#160;</td><td class="memItemRight" valign="botto
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="classModel_1_1Node.html#af2ff52f8a834ec055dca6867ba794208">FindSymbolMode</a>&#160;</td>
-          <td class="paramname"><em>mode</em>&#160;</td>
+          <td class="paramname"><em>mode</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>exhaustAllScopes</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td><code> [private, virtual]</code></td>
+          <td></td><td><code> [override, private, virtual]</code></td>
         </tr>
       </table>
 </div>

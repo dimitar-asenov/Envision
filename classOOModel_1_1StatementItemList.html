@@ -121,18 +121,18 @@ Inheritance diagram for OOModel::StatementItemList:</div>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual QList&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1StatementItemList.html#a1e9683bd31aa2c1b17756b29a4e83834">findSymbol</a> (const QString &amp;symbol, <a class="el" href="classModel_1_1Node.html#a6026745a457fb0edde390e06c8168391">Node</a> *source, <a class="el" href="classModel_1_1Node.html#af2ff52f8a834ec055dca6867ba794208">FindSymbolMode</a> mode)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual QList&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1StatementItemList.html#a6d5826d8a7d3390751f8ed226d1a1008">findSymbols</a> (const QRegExp &amp;symbolExp, <a class="el" href="classModel_1_1Node.html#a6026745a457fb0edde390e06c8168391">Node</a> *source, <a class="el" href="classModel_1_1Node.html#af2ff52f8a834ec055dca6867ba794208">FindSymbolMode</a> mode, bool exhaustAllScopes) override</td></tr>
 </table>
 <hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="a1e9683bd31aa2c1b17756b29a4e83834"></a><!-- doxytag: member="OOModel::StatementItemList::findSymbol" ref="a1e9683bd31aa2c1b17756b29a4e83834" args="(const QString &amp;symbol, Node *source, FindSymbolMode mode)" -->
+<a class="anchor" id="a6d5826d8a7d3390751f8ed226d1a1008"></a><!-- doxytag: member="OOModel::StatementItemList::findSymbols" ref="a6d5826d8a7d3390751f8ed226d1a1008" args="(const QRegExp &amp;symbolExp, Node *source, FindSymbolMode mode, bool exhaustAllScopes) override" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">QList&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a> * &gt; <a class="el" href="classOOModel_1_1StatementItemList.html#a1e9683bd31aa2c1b17756b29a4e83834">OOModel::StatementItemList::findSymbol</a> </td>
+          <td class="memname">QList&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a> * &gt; <a class="el" href="classOOModel_1_1StatementItemList.html#a6d5826d8a7d3390751f8ed226d1a1008">OOModel::StatementItemList::findSymbols</a> </td>
           <td>(</td>
-          <td class="paramtype">const QString &amp;&#160;</td>
-          <td class="paramname"><em>symbol</em>, </td>
+          <td class="paramtype">const QRegExp &amp;&#160;</td>
+          <td class="paramname"><em>symbolExp</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -144,12 +144,18 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="classModel_1_1Node.html#af2ff52f8a834ec055dca6867ba794208">FindSymbolMode</a>&#160;</td>
-          <td class="paramname"><em>mode</em>&#160;</td>
+          <td class="paramname"><em>mode</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>exhaustAllScopes</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td><code> [virtual]</code></td>
+          <td></td><td><code> [override, virtual]</code></td>
         </tr>
       </table>
 </div>

@@ -10,6 +10,7 @@ var searchData=
   ['emptyline_5f',['emptyLine_',['../classOOVisualization_1_1VEmptyExpressionStyle.html#a24384a54c921a3fc7067a376ac42d209',1,'OOVisualization::VEmptyExpressionStyle']]],
   ['end_5ftokens_5f',['end_tokens_',['../classInteraction_1_1Parser.html#abf629e2c3e75a957ead81b56a84c7c50',1,'Interaction::Parser']]],
   ['entrance_5f',['entrance_',['../classControlFlowVisualization_1_1ControlFlowItem.html#ac252a281be8130f29ca9a7cbc07cb27f',1,'ControlFlowVisualization::ControlFlowItem']]],
+  ['entries_5f',['entries_',['../classInteraction_1_1AutoCompleteVis.html#a39973d7df4215d1a3b0c4199c79d659b',1,'Interaction::AutoCompleteVis']]],
   ['envisionmanager',['envisionManager',['../classVisualization_1_1VisualizationManager.html#a419c599dcd79f685c31216bd9f4714b5',1,'Visualization::VisualizationManager']]],
   ['errorcontainer',['errorContainer',['../classInteraction_1_1CommandPrompt.html#a3487642fca9dbd71b0de75268c89ae9c',1,'Interaction::CommandPrompt']]],
   ['errorcontainer_5f',['errorContainer_',['../classInteraction_1_1CommandPromptStyle.html#a194d09d9f812aad6bc40f5dffb40130d',1,'Interaction::CommandPromptStyle']]],
@@ -18,8 +19,9 @@ var searchData=
   ['errors',['errors',['../classInteraction_1_1ParseResult.html#a7ffa6fc6297e226f23da1b671e106f54',1,'Interaction::ParseResult']]],
   ['errors_5f',['errors_',['../classInteraction_1_1CommandResult.html#ac782eb3ada1c1157a68c65cdee99df0e',1,'Interaction::CommandResult']]],
   ['escape_5fsymbols',['ESCAPE_SYMBOLS',['../namespaceInteraction.html#ae230261326d354d7c05612669b343098',1,'Interaction']]],
-  ['eventtype',['EventType',['../classInteraction_1_1SetCursorEvent.html#ad9047ffcb94d28752f0885996db748c7',1,'Interaction::SetCursorEvent::EventType()'],['../classOOInteraction_1_1SetExpressionCursorEvent.html#aed4155d3d09dbe77c8187a82572133a0',1,'OOInteraction::SetExpressionCursorEvent::EventType()'],['../classVisualization_1_1UpdateSceneEvent.html#aa4b20594e1c12ff766c2208d23d79050',1,'Visualization::UpdateSceneEvent::EventType()']]],
+  ['eventtype',['EventType',['../classInteraction_1_1SetCursorEvent.html#ad9047ffcb94d28752f0885996db748c7',1,'Interaction::SetCursorEvent::EventType()'],['../classOOInteraction_1_1SetExpressionCursorEvent.html#aed4155d3d09dbe77c8187a82572133a0',1,'OOInteraction::SetExpressionCursorEvent::EventType()'],['../classVisualization_1_1CustomSceneEvent.html#adf86c8d4c8580c88b5bf387ce006f0a1',1,'Visualization::CustomSceneEvent::EventType()'],['../classVisualization_1_1UpdateSceneEvent.html#aa4b20594e1c12ff766c2208d23d79050',1,'Visualization::UpdateSceneEvent::EventType()']]],
   ['exclusiveaccess',['exclusiveAccess',['../classModel_1_1Model.html#ac7ae87570c8d651c9c409d85c00925be',1,'Model::Model']]],
+  ['execfunction_5f',['execFunction_',['../classInteraction_1_1AutoCompleteEntry.html#a851ad3981bdc0763126c8b839a4faf68',1,'Interaction::AutoCompleteEntry']]],
   ['executionengine_5f',['executionEngine_',['../classInteraction_1_1GenericHandler.html#a6348e5adf0601adf6b0734cd5e954543',1,'Interaction::GenericHandler']]],
   ['exit_5f',['exit_',['../classControlFlowVisualization_1_1ControlFlowItem.html#adc797fbba4b2c2999562a0315f34e118',1,'ControlFlowVisualization::ControlFlowItem']]],
   ['exitset',['exitSet',['../classCore_1_1DefaultEnvisionManager.html#a91f1a70b855c5c9c9208b37dd7e77814',1,'Core::DefaultEnvisionManager']]],
@@ -29,5 +31,6 @@ var searchData=
   ['expr_5f',['expr_',['../classOOVisualization_1_1VCastExpression.html#af90682db5f4909ac6d8caaa2cd0749ca',1,'OOVisualization::VCastExpression::expr_()'],['../classOOVisualization_1_1VUnaryOperation.html#abb2dfbdbcd3ed65b3436bd6acbd85416',1,'OOVisualization::VUnaryOperation::expr_()'],['../classOOVisualization_1_1VExpressionStatement.html#a3f50c13d47065aa4266f6a74bd2b3045',1,'OOVisualization::VExpressionStatement::expr_()']]],
   ['expression',['expression',['../classOOInteraction_1_1OOExpressionBuilder.html#a42387e9c904c9d91938e6dba572988cd',1,'OOInteraction::OOExpressionBuilder']]],
   ['extensionid_5f',['extensionId_',['../classTestNodes_1_1PositionExtension.html#a906c616e8ffc34387e395b08b34827cf',1,'TestNodes::PositionExtension']]],
-  ['extensions_5f',['extensions_',['../classModel_1_1AttributeChain.html#ac4040d3de98de5e0cd108c03d3ebf87e',1,'Model::AttributeChain']]]
+  ['extensions_5f',['extensions_',['../classModel_1_1AttributeChain.html#ac4040d3de98de5e0cd108c03d3ebf87e',1,'Model::AttributeChain']]],
+  ['extracursorsoutsideshape_5f',['extraCursorsOutsideShape_',['../classVisualization_1_1SequentialLayoutStyle.html#a491c304ce041d8bbd760548918cb4972',1,'Visualization::SequentialLayoutStyle']]]
 ];

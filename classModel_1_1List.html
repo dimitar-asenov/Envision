@@ -136,7 +136,9 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual QList&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1List.html#ad90082b4310f9bd1de70b0fa4944fbca">children</a> ()</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a list of all child nodes.  <a href="#ad90082b4310f9bd1de70b0fa4944fbca"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1List.html#a9a79f6289b437f37eb31dcd590601f68">clear</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1List.html#a6c384ecc4fe06504b5180c0eb861d230">findAllSymbolDefinitions</a> (const QString &amp;symbol, int beforeIndex=-1)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1List.html#a27813ef9ae9832205c4202ae6336d6e8">createDefaultElement</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision.">Node</a> that is suitable for inserting in the list.  <a href="#a27813ef9ae9832205c4202ae6336d6e8"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1List.html#a12d9f2c26a13d7bdfddbd3c67586aca1">findAllSymbolDefinitions</a> (const QRegExp &amp;symbolExp, int beforeIndex=-1)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1List.html#acc86682e6ad69a885c23bd3706719ded">findFirstSymbolDefinition</a> (const QString &amp;symbol, int beforeIndex=-1)</td></tr>
 <tr><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
 <tr><td class="memTemplItemLeft" align="right" valign="top">T *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classModel_1_1List.html#af974f5f9bcffaaf0e8db7ce0ff506f74">first</a> ()</td></tr>
@@ -325,15 +327,39 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a6c384ecc4fe06504b5180c0eb861d230"></a><!-- doxytag: member="Model::List::findAllSymbolDefinitions" ref="a6c384ecc4fe06504b5180c0eb861d230" args="(const QString &amp;symbol, int beforeIndex=&#45;1)" -->
+<a class="anchor" id="a27813ef9ae9832205c4202ae6336d6e8"></a><!-- doxytag: member="Model::List::createDefaultElement" ref="a27813ef9ae9832205c4202ae6336d6e8" args="()" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">QList&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt; <a class="el" href="classModel_1_1List.html#a6c384ecc4fe06504b5180c0eb861d230">Model::List::findAllSymbolDefinitions</a> </td>
+          <td class="memname"><a class="el" href="classModel_1_1Node.html">Node</a> * <a class="el" href="classModel_1_1List.html#a27813ef9ae9832205c4202ae6336d6e8">Model::List::createDefaultElement</a> </td>
           <td>(</td>
-          <td class="paramtype">const QString &amp;&#160;</td>
-          <td class="paramname"><em>symbol</em>, </td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Creates a new <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision.">Node</a> that is suitable for inserting in the list. </p>
+<p>The newly created node is not directly inserted into the list.</p>
+<p>The default implementation returns nullptr. This behavior is suitable for lists that are not managed by standard interaction handlers or where the creation of item in standard ways is not necessary.</p>
+<p>Reimplement this method in derived classes to control what <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision.">Node</a> is created.</p>
+<p>This method is used by higher level abstractions and in <a class="el" href="classModel_1_1TypedList.html">TypedList</a> to facilitate the automatic creation of list elements. </p>
+
+<p>Reimplemented in <a class="el" href="classModel_1_1TypedList.html#a7cf64c49f2997b97676c558e67e3a42d">Model::TypedList&lt; T &gt;</a>, <a class="el" href="classModel_1_1TypedList.html#a7cf64c49f2997b97676c558e67e3a42d">Model::TypedList&lt; StatementItem &gt;</a>, <a class="el" href="classModel_1_1TypedList.html#a8353c911089f1761c3a69b35d1d81c31">Model::TypedList&lt; T &gt;</a>, and <a class="el" href="classModel_1_1TypedList.html#a8353c911089f1761c3a69b35d1d81c31">Model::TypedList&lt; StatementItem &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a12d9f2c26a13d7bdfddbd3c67586aca1"></a><!-- doxytag: member="Model::List::findAllSymbolDefinitions" ref="a12d9f2c26a13d7bdfddbd3c67586aca1" args="(const QRegExp &amp;symbolExp, int beforeIndex=&#45;1)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QList&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt; <a class="el" href="classModel_1_1List.html#a12d9f2c26a13d7bdfddbd3c67586aca1">Model::List::findAllSymbolDefinitions</a> </td>
+          <td>(</td>
+          <td class="paramtype">const QRegExp &amp;&#160;</td>
+          <td class="paramname"><em>symbolExp</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>

@@ -121,7 +121,7 @@ Inheritance diagram for OOModel::CommaExpression:</div>
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="classOOModel_1_1Expression.html">Expression</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1CommaExpression.html#a25750d841f04583faffb41ec2bb652af">allSubOperands</a> (bool detachOperands)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns in a single list all expressions of this and nested <a class="el" href="classOOModel_1_1CommaExpression.html">CommaExpression</a> operators.  <a href="#a25750d841f04583faffb41ec2bb652af"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual QList&lt; <a class="el" href="classModel_1_1Node.html#a6026745a457fb0edde390e06c8168391">Node</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1CommaExpression.html#ac24f00ca057a891841c10618cf02f988">findSymbol</a> (const QString &amp;symbol, <a class="el" href="classModel_1_1Node.html#a6026745a457fb0edde390e06c8168391">Node</a> *source, <a class="el" href="classModel_1_1Node.html#af2ff52f8a834ec055dca6867ba794208">FindSymbolMode</a> mode)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual QList&lt; <a class="el" href="classModel_1_1Node.html#a6026745a457fb0edde390e06c8168391">Node</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1CommaExpression.html#ab2bd78e9320340faa0003ba65ffc876f">findSymbols</a> (const QRegExp &amp;symbolExp, <a class="el" href="classModel_1_1Node.html#a6026745a457fb0edde390e06c8168391">Node</a> *source, <a class="el" href="classModel_1_1Node.html#af2ff52f8a834ec055dca6867ba794208">FindSymbolMode</a> mode, bool exhaustAllScopes) override</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classOOModel_1_1Type.html">Type</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1CommaExpression.html#abba865c9d896fa246399d7e019a95ce1">type</a> ()</td></tr>
 </table>
 <hr/><h2>Member Function Documentation</h2>
@@ -145,15 +145,15 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ac24f00ca057a891841c10618cf02f988"></a><!-- doxytag: member="OOModel::CommaExpression::findSymbol" ref="ac24f00ca057a891841c10618cf02f988" args="(const QString &amp;symbol, Node *source, FindSymbolMode mode)" -->
+<a class="anchor" id="ab2bd78e9320340faa0003ba65ffc876f"></a><!-- doxytag: member="OOModel::CommaExpression::findSymbols" ref="ab2bd78e9320340faa0003ba65ffc876f" args="(const QRegExp &amp;symbolExp, Node *source, FindSymbolMode mode, bool exhaustAllScopes) override" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">QList&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a> * &gt; <a class="el" href="classOOModel_1_1CommaExpression.html#ac24f00ca057a891841c10618cf02f988">OOModel::CommaExpression::findSymbol</a> </td>
+          <td class="memname">QList&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a> * &gt; <a class="el" href="classOOModel_1_1CommaExpression.html#ab2bd78e9320340faa0003ba65ffc876f">OOModel::CommaExpression::findSymbols</a> </td>
           <td>(</td>
-          <td class="paramtype">const QString &amp;&#160;</td>
-          <td class="paramname"><em>symbol</em>, </td>
+          <td class="paramtype">const QRegExp &amp;&#160;</td>
+          <td class="paramname"><em>symbolExp</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -165,12 +165,18 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="classModel_1_1Node.html#af2ff52f8a834ec055dca6867ba794208">FindSymbolMode</a>&#160;</td>
-          <td class="paramname"><em>mode</em>&#160;</td>
+          <td class="paramname"><em>mode</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>exhaustAllScopes</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td><code> [virtual]</code></td>
+          <td></td><td><code> [override, virtual]</code></td>
         </tr>
       </table>
 </div>

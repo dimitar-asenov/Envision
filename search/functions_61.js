@@ -48,6 +48,7 @@ var searchData=
   ['addunresolvedreference',['addUnresolvedReference',['../classModel_1_1Model.html#a482b91fb73134c2860154e924816c344',1,'Model::Model']]],
   ['addvalue',['AddValue',['../classInteraction_1_1AddValue.html#afc13f9fcf65ac7557b30f18bd63e1e61',1,'Interaction::AddValue']]],
   ['addvisualization',['addVisualization',['../classVisualization_1_1VisualizationGroup.html#a70f97fc96b4f740c2afb7a70af1aa4f3',1,'Visualization::VisualizationGroup::addVisualization(VisualizationGroup::ItemConstructor visualization)'],['../classVisualization_1_1VisualizationGroup.html#a44e2601c9bd558267edbff10ba30f8b8',1,'Visualization::VisualizationGroup::addVisualization(VisualizationGroup::ItemConstructor visualization, ConditionFunction condition)']]],
+  ['adjustcursorregiontoavoidzerosize',['adjustCursorRegionToAvoidZeroSize',['../classVisualization_1_1SequentialLayout.html#a6cf77ebf506ffefdce825c035d87f27c',1,'Visualization::SequentialLayout']]],
   ['afterevent',['afterEvent',['../classVisualization_1_1InteractionHandler.html#a14fceba63f57ac567fb70deb920f54e7',1,'Visualization::InteractionHandler']]],
   ['alignment',['alignment',['../classVisualization_1_1PanelLayoutStyle.html#acf845c73ce1326cecfd952a9087ffb46',1,'Visualization::PanelLayoutStyle::alignment()'],['../classVisualization_1_1SequentialLayoutStyle.html#a4fe5d0727bedb260ed67fc7380869740',1,'Visualization::SequentialLayoutStyle::alignment()']]],
   ['allsuboperands',['allSubOperands',['../classOOModel_1_1CommaExpression.html#a25750d841f04583faffb41ec2bb652af',1,'OOModel::CommaExpression']]],
@@ -69,5 +70,7 @@ var searchData=
   ['attributesstyle',['attributesStyle',['../classVisualization_1_1VExtendableStyle.html#a9da85fd0fc70403cede305af977a82b0',1,'Visualization::VExtendableStyle']]],
   ['attributestoregister_5f',['attributesToRegister_',['../classTestNodes_1_1PositionExtension.html#af0d128aec56af089a57eb71ed38a6325',1,'TestNodes::PositionExtension']]],
   ['attributestoregisteratinitialization_5f',['attributesToRegisterAtInitialization_',['../classTestNodes_1_1BinaryNode.html#aa868617969e0e79f2dc4da8ce3d964f4',1,'TestNodes::BinaryNode::attributesToRegisterAtInitialization_()'],['../classTestNodes_1_1BinaryNodeAccessUnit.html#ad2824705fe51ffd5b1dea43429f6bb32',1,'TestNodes::BinaryNodeAccessUnit::attributesToRegisterAtInitialization_()'],['../classTestNodes_1_1BinaryNodePersistenceUnit.html#ace46b8368578c85a3484dfcdaab60a99',1,'TestNodes::BinaryNodePersistenceUnit::attributesToRegisterAtInitialization_()']]],
-  ['autocomplete',['autoComplete',['../classInteraction_1_1CommandExecutionEngine.html#a95bac9d831e86713881da5bc85d9e10e',1,'Interaction::CommandExecutionEngine']]]
+  ['autocomplete',['autoComplete',['../classInteraction_1_1CommandExecutionEngine.html#a95bac9d831e86713881da5bc85d9e10e',1,'Interaction::CommandExecutionEngine']]],
+  ['autocompleteentry',['AutoCompleteEntry',['../classInteraction_1_1AutoCompleteEntry.html#af5c631a4aa621036e0f25ba0a07020e8',1,'Interaction::AutoCompleteEntry']]],
+  ['autocompletevis',['AutoCompleteVis',['../classInteraction_1_1AutoCompleteVis.html#ac5b288ad6e0ee11d980f42372f6b8460',1,'Interaction::AutoCompleteVis']]]
 ];

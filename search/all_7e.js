@@ -1,6 +1,8 @@
 var searchData=
 [
   ['_7earraytype',['~ArrayType',['../classOOModel_1_1ArrayType.html#aaa3dd18cfbc6f74586d8dedbd5301225',1,'OOModel::ArrayType']]],
+  ['_7eautocompleteentry',['~AutoCompleteEntry',['../classInteraction_1_1AutoCompleteEntry.html#aacb5cbc126e77c50f5da4bc4fa1aeea8',1,'Interaction::AutoCompleteEntry']]],
+  ['_7eautocompletevis',['~AutoCompleteVis',['../classInteraction_1_1AutoCompleteVis.html#a890a92d0372073f42d98f03ee616633b',1,'Interaction::AutoCompleteVis']]],
   ['_7ecell',['~Cell',['../classOOInteraction_1_1Cell.html#a27bad0b9208f9fffbf50a12125364def',1,'OOInteraction::Cell']]],
   ['_7ecommand',['~Command',['../classInteraction_1_1Command.html#ae7482c6a210727ee57689756a8f9fdd0',1,'Interaction::Command']]],
   ['_7ecommanddescriptor',['~CommandDescriptor',['../classOOInteraction_1_1CommandDescriptor.html#a141ca5ab483b5228551277d30e0fbea8',1,'OOInteraction::CommandDescriptor']]],

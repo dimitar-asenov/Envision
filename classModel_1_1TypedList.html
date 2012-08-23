@@ -98,8 +98,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="#pri-static-attribs">Static Private Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">Model::TypedList&lt; T &gt; Class Template Reference</div>  </div>
@@ -120,6 +122,10 @@ Inheritance diagram for Model::TypedList&lt; T &gt;:</div>
 
 <p><a href="classModel_1_1TypedList-members.html">List of all members.</a></p>
 <table class="memberdecls">
+<tr><td colspan="2"><h2><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">typedef std::function&lt; T *()&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TypedList.html#a67e4e7abc1ab5e8924d7f04c4f6beff5">CreateDefaultElement</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">typedef std::function&lt; T *()&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TypedList.html#a67e4e7abc1ab5e8924d7f04c4f6beff5">CreateDefaultElement</a></td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TypedList.html#aa89f25ce5309be2f4ef6709aab54ff9e">TypedList</a> (::<a class="el" href="classModel_1_1Node.html">Model::Node</a> *<a class="el" href="classModel_1_1Node.html#a0027c2328323a4733b3e594958b6998a">parent</a>=nullptr)</td></tr>
@@ -128,6 +134,10 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TypedList.html#adb091c11eca86d5a3d8e4f7685597517">TypedList</a> (::<a class="el" href="classModel_1_1Node.html">Model::Node</a> *<a class="el" href="classModel_1_1Node.html#a0027c2328323a4733b3e594958b6998a">parent</a>,::<a class="el" href="classModel_1_1PersistentStore.html">Model::PersistentStore</a> &amp;store, bool partialLoadHint)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TypedList.html#a61c4814117837e601076c2aea0c48d92">at</a> (int i)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TypedList.html#a9c41484c5f681ff11db006050533ddf4">at</a> (int i)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TypedList.html#a8353c911089f1761c3a69b35d1d81c31">createDefaultElement</a> () override</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision.">Node</a> that is suitable for inserting in the list.  <a href="#a8353c911089f1761c3a69b35d1d81c31"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TypedList.html#a7cf64c49f2997b97676c558e67e3a42d">createDefaultElement</a> () override</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision.">Node</a> that is suitable for inserting in the list.  <a href="#a7cf64c49f2997b97676c558e67e3a42d"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TypedList.html#a461166fa5a7006fb9e04cfaf10010dae">first</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TypedList.html#a1a918e6a02fb7276f6d90d994abdce9e">first</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual QList&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TypedList.html#a85781b8d1d3d39c3dd5e815f9dc563aa">hierarchyTypeIds</a> () const </td></tr>
@@ -152,10 +162,16 @@ Public Member Functions</h2></td></tr>
 Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TypedList.html#a5f0250c20925ffd2966e10c804052de4">registerNodeType</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TypedList.html#a4b67acf8c742f0441a0a65d69e7b78ca">registerNodeType</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TypedList.html#a23b24e8c23d4cf17b937bd3758fadc66">setDefaultElementCreationFunction</a> (<a class="el" href="classModel_1_1TypedList.html#a67e4e7abc1ab5e8924d7f04c4f6beff5">CreateDefaultElement</a> function)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TypedList.html#ad6ad798101d344fcaf723ed9d1a548f2">setDefaultElementCreationFunction</a> (<a class="el" href="classModel_1_1TypedList.html#a67e4e7abc1ab5e8924d7f04c4f6beff5">CreateDefaultElement</a> function)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TypedList.html#acbff59451a3cf7f40d928a5e80fdecb7">typeIdStatic</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TypedList.html#ae0854f83d3aa24f1a05bcfff980384f1">typeIdStatic</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static const QString &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TypedList.html#a98db9a4018d2ef315c3215c013eae083">typeNameStatic</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static const QString &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TypedList.html#af7c579578c5cf798ff190feb7b14b834">typeNameStatic</a> ()</td></tr>
+<tr><td colspan="2"><h2><a name="pri-static-methods"></a>
+Static Private Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classModel_1_1TypedList.html#a67e4e7abc1ab5e8924d7f04c4f6beff5">CreateDefaultElement</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TypedList.html#af5353a6ba54f2045cdd294f362c7af49">creationFunction</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classModel_1_1TypedList.html#a67e4e7abc1ab5e8924d7f04c4f6beff5">CreateDefaultElement</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TypedList.html#a654e25bbb7b8e69e5b6301e26d293757">creationFunction</a> ()</td></tr>
 <tr><td colspan="2"><h2><a name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1TypedList.html#a7b38bd98aec6099c25b0ae3858df7538">typeId_</a> = -1</td></tr>
@@ -163,6 +179,37 @@ Static Private Attributes</h2></td></tr>
 <h3>template&lt;class T&gt;<br/>
  class Model::TypedList&lt; T &gt;</h3>
 
+<hr/><h2>Member Typedef Documentation</h2>
+<a class="anchor" id="a67e4e7abc1ab5e8924d7f04c4f6beff5"></a><!-- doxytag: member="Model::TypedList::CreateDefaultElement" ref="a67e4e7abc1ab5e8924d7f04c4f6beff5" args="" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef std::function&lt;T* ()&gt; <a class="el" href="classModel_1_1TypedList.html">Model::TypedList</a>&lt; T &gt;::<a class="el" href="classModel_1_1TypedList.html#a67e4e7abc1ab5e8924d7f04c4f6beff5">CreateDefaultElement</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a67e4e7abc1ab5e8924d7f04c4f6beff5"></a><!-- doxytag: member="Model::TypedList::CreateDefaultElement" ref="a67e4e7abc1ab5e8924d7f04c4f6beff5" args="" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef std::function&lt;T* ()&gt; <a class="el" href="classModel_1_1TypedList.html">Model::TypedList</a>&lt; T &gt;::<a class="el" href="classModel_1_1TypedList.html#a67e4e7abc1ab5e8924d7f04c4f6beff5">CreateDefaultElement</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
 <hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="aa89f25ce5309be2f4ef6709aab54ff9e"></a><!-- doxytag: member="Model::TypedList::TypedList" ref="aa89f25ce5309be2f4ef6709aab54ff9e" args="(::Model::Node *parent=nullptr)" -->
 <div class="memitem">
@@ -312,6 +359,94 @@ template&lt;class T&gt; </div>
 <div class="memdoc">
 
 <p>Reimplemented from <a class="el" href="classModel_1_1List.html#a120a17760e25adb8fe63915e3a2191d4">Model::List</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8353c911089f1761c3a69b35d1d81c31"></a><!-- doxytag: member="Model::TypedList::createDefaultElement" ref="a8353c911089f1761c3a69b35d1d81c31" args="() override" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classModel_1_1Node.html">Node</a> * <a class="el" href="classModel_1_1TypedList.html">Model::TypedList</a>&lt; T &gt;::<a class="el" href="classModel_1_1TypedList.html#a8353c911089f1761c3a69b35d1d81c31">createDefaultElement</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [override, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Creates a new <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision.">Node</a> that is suitable for inserting in the list. </p>
+<p>The newly created node is not directly inserted into the list.</p>
+<p>The default implementation returns nullptr. This behavior is suitable for lists that are not managed by standard interaction handlers or where the creation of item in standard ways is not necessary.</p>
+<p>Reimplement this method in derived classes to control what <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision.">Node</a> is created.</p>
+<p>This method is used by higher level abstractions and in <a class="el" href="classModel_1_1TypedList.html">TypedList</a> to facilitate the automatic creation of list elements. </p>
+
+<p>Reimplemented from <a class="el" href="classModel_1_1List.html#a27813ef9ae9832205c4202ae6336d6e8">Model::List</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7cf64c49f2997b97676c558e67e3a42d"></a><!-- doxytag: member="Model::TypedList::createDefaultElement" ref="a7cf64c49f2997b97676c558e67e3a42d" args="() override" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="classModel_1_1Node.html">Node</a>* <a class="el" href="classModel_1_1TypedList.html">Model::TypedList</a>&lt; T &gt;::<a class="el" href="classModel_1_1TypedList.html#a8353c911089f1761c3a69b35d1d81c31">createDefaultElement</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [override, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Creates a new <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision.">Node</a> that is suitable for inserting in the list. </p>
+<p>The newly created node is not directly inserted into the list.</p>
+<p>The default implementation returns nullptr. This behavior is suitable for lists that are not managed by standard interaction handlers or where the creation of item in standard ways is not necessary.</p>
+<p>Reimplement this method in derived classes to control what <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision.">Node</a> is created.</p>
+<p>This method is used by higher level abstractions and in <a class="el" href="classModel_1_1TypedList.html">TypedList</a> to facilitate the automatic creation of list elements. </p>
+
+<p>Reimplemented from <a class="el" href="classModel_1_1List.html#a27813ef9ae9832205c4202ae6336d6e8">Model::List</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af5353a6ba54f2045cdd294f362c7af49"></a><!-- doxytag: member="Model::TypedList::creationFunction" ref="af5353a6ba54f2045cdd294f362c7af49" args="()" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classModel_1_1TypedList.html">TypedList</a>&lt; T &gt;::<a class="el" href="classModel_1_1TypedList.html#a67e4e7abc1ab5e8924d7f04c4f6beff5">CreateDefaultElement</a> &amp; <a class="el" href="classModel_1_1TypedList.html">Model::TypedList</a>&lt; T &gt;::<a class="el" href="classModel_1_1TypedList.html#af5353a6ba54f2045cdd294f362c7af49">creationFunction</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [static, private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a654e25bbb7b8e69e5b6301e26d293757"></a><!-- doxytag: member="Model::TypedList::creationFunction" ref="a654e25bbb7b8e69e5b6301e26d293757" args="()" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classModel_1_1TypedList.html#a67e4e7abc1ab5e8924d7f04c4f6beff5">CreateDefaultElement</a>&amp; <a class="el" href="classModel_1_1TypedList.html">Model::TypedList</a>&lt; T &gt;::<a class="el" href="classModel_1_1TypedList.html#af5353a6ba54f2045cdd294f362c7af49">creationFunction</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [static, private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
 
 </div>
 </div>
@@ -564,6 +699,44 @@ template&lt;class T&gt; </div>
 <p>If <em>releaseOldChild</em> is true, the old child will be released from this node and can be used in other nodes. Otherwise the old child will be managed by the current node's Undo Queue and can not be used for other nodes. </p>
 
 <p>Reimplemented from <a class="el" href="classModel_1_1List.html#a3a6be2bdfe40b5753a9f04c729258f60">Model::List</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a23b24e8c23d4cf17b937bd3758fadc66"></a><!-- doxytag: member="Model::TypedList::setDefaultElementCreationFunction" ref="a23b24e8c23d4cf17b937bd3758fadc66" args="(CreateDefaultElement function)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classModel_1_1TypedList.html">Model::TypedList</a>&lt; T &gt;::<a class="el" href="classModel_1_1TypedList.html#a23b24e8c23d4cf17b937bd3758fadc66">setDefaultElementCreationFunction</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classModel_1_1TypedList.html#a67e4e7abc1ab5e8924d7f04c4f6beff5">CreateDefaultElement</a>&#160;</td>
+          <td class="paramname"><em>function</em></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ad6ad798101d344fcaf723ed9d1a548f2"></a><!-- doxytag: member="Model::TypedList::setDefaultElementCreationFunction" ref="ad6ad798101d344fcaf723ed9d1a548f2" args="(CreateDefaultElement function)" -->
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">static void <a class="el" href="classModel_1_1TypedList.html">Model::TypedList</a>&lt; T &gt;::<a class="el" href="classModel_1_1TypedList.html#a23b24e8c23d4cf17b937bd3758fadc66">setDefaultElementCreationFunction</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classModel_1_1TypedList.html#a67e4e7abc1ab5e8924d7f04c4f6beff5">CreateDefaultElement</a>&#160;</td>
+          <td class="paramname"><em>function</em></td><td>)</td>
+          <td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
 
 </div>
 </div>

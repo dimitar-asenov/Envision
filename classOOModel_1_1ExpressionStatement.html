@@ -121,6 +121,10 @@ Inheritance diagram for OOModel::ExpressionStatement:</div>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1ExpressionStatement.html#ad82ed6c91113ff8c542dd03e31d46878">ExpressionStatement</a> (<a class="el" href="classOOModel_1_1Expression.html">Expression</a> *e)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1ExpressionStatement.html#a983a24fd719bb8854bdb68b3f60fca1f">definesSymbol</a> () const </td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if this node defines a symbol and false otherwise.  <a href="#a983a24fd719bb8854bdb68b3f60fca1f"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual const QString &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1ExpressionStatement.html#a5e2e3e5808867e893a938c210ed27c4f">symbolName</a> () const </td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the name of the symbol defined by this node.  <a href="#a5e2e3e5808867e893a938c210ed27c4f"></a><br/></td></tr>
 </table>
 <hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="ad82ed6c91113ff8c542dd03e31d46878"></a><!-- doxytag: member="OOModel::ExpressionStatement::ExpressionStatement" ref="ad82ed6c91113ff8c542dd03e31d46878" args="(Expression *e)" -->
@@ -137,6 +141,49 @@ Public Member Functions</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
+
+</div>
+</div>
+<hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="a983a24fd719bb8854bdb68b3f60fca1f"></a><!-- doxytag: member="OOModel::ExpressionStatement::definesSymbol" ref="a983a24fd719bb8854bdb68b3f60fca1f" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classOOModel_1_1ExpressionStatement.html#a983a24fd719bb8854bdb68b3f60fca1f">OOModel::ExpressionStatement::definesSymbol</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const<code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Returns true if this node defines a symbol and false otherwise. </p>
+<p>The default implementaion returns false. Reimplement this method and <a class="el" href="classOOModel_1_1ExpressionStatement.html#a5e2e3e5808867e893a938c210ed27c4f" title="Returns the name of the symbol defined by this node.">symbolName()</a> in derived classes that define symbols. </p>
+
+<p>Reimplemented from <a class="el" href="classModel_1_1Node.html#acc19699b25363ba3474acf0000da4329">Model::Node</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5e2e3e5808867e893a938c210ed27c4f"></a><!-- doxytag: member="OOModel::ExpressionStatement::symbolName" ref="a5e2e3e5808867e893a938c210ed27c4f" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const QString &amp; <a class="el" href="classOOModel_1_1ExpressionStatement.html#a5e2e3e5808867e893a938c210ed27c4f">OOModel::ExpressionStatement::symbolName</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const<code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Returns the name of the symbol defined by this node. </p>
+<p>The default implementaion returns a null QString value. Reimplement this method and <a class="el" href="classOOModel_1_1ExpressionStatement.html#a983a24fd719bb8854bdb68b3f60fca1f" title="Returns true if this node defines a symbol and false otherwise.">definesSymbol()</a> in derived classes that define symbols. </p>
+
+<p>Reimplemented from <a class="el" href="classModel_1_1Node.html#ac0238f80b3ad5960919e56e959fb8b36">Model::Node</a>.</p>
 
 </div>
 </div>

@@ -156,8 +156,10 @@ Public Member Functions</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if this node defines a symbol and false otherwise.  <a href="#acc19699b25363ba3474acf0000da4329"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a9aad10e0ec7b9359f325db5a3c4fbf90">execute</a> (<a class="el" href="classModel_1_1UndoCommand.html">UndoCommand</a> *command)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes the specified command and pushes it on the undo stack.  <a href="#a9aad10e0ec7b9359f325db5a3c4fbf90"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual QList&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a5e2ba37d45dd3529e514404d86f75260">findSymbol</a> (const QString &amp;symbol, <a class="el" href="classModel_1_1Node.html">Node</a> *source, <a class="el" href="classModel_1_1Node.html#af2ff52f8a834ec055dca6867ba794208">FindSymbolMode</a> mode)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a list of all nodes which define a symbol with the name <em>symbol</em> in the scope of this node.  <a href="#a5e2ba37d45dd3529e514404d86f75260"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual QList&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a79f332d52ca064cf24683b6efe319249">findSymbols</a> (const QRegExp &amp;symbolExp, <a class="el" href="classModel_1_1Node.html">Node</a> *source, <a class="el" href="classModel_1_1Node.html#af2ff52f8a834ec055dca6867ba794208">FindSymbolMode</a> mode, bool exhaustAllScopes)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a list of all nodes which define a symbol with a name matching <em>symbolExp</em> in the scope of this node.  <a href="#a79f332d52ca064cf24683b6efe319249"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#ae14f15bda5e64f3f6e8fe62b6dde75bb">findSymbols</a> (const QString &amp;symbol, <a class="el" href="classModel_1_1Node.html">Node</a> *source, <a class="el" href="classModel_1_1Node.html#af2ff52f8a834ec055dca6867ba794208">FindSymbolMode</a> mode, bool exhaustAllScopes)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. This is equivalent to:  <a href="#ae14f15bda5e64f3f6e8fe62b6dde75bb"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual QList&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a99b6186b6f8f5259dc93ab37be1c1094">hierarchyTypeIds</a> () const </td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a list of all ids in the type hierarchy of this node (excluding abstract base classes).  <a href="#a99b6186b6f8f5259dc93ab37be1c1094"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a410cafa4e196e8f572d6f24992bfc914">incrementRevision</a> ()</td></tr>
@@ -299,11 +301,11 @@ Static Private Attributes</h2></td></tr>
 <div class="memdoc">
 <dl><dt><b>Enumerator: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
 <tr><td valign="top"><em><a class="anchor" id="af2ff52f8a834ec055dca6867ba794208a442bce153404d787512d1392ba9000fa"></a><!-- doxytag: member="SEARCH_UP" ref="af2ff52f8a834ec055dca6867ba794208a442bce153404d787512d1392ba9000fa" args="" -->SEARCH_UP</em>&nbsp;</td><td>
-<p>Looks for a symbol within the specified scope and enclosing scopes. </p>
+<p>Looks for symbols within the specified scope and enclosing scopes. </p>
 <p>Depending on the source, symbols in the current scope which come after the source will not be considered. This is the case e.g. with searches for local variable declarations in a method: only variables before the source node should be considered. </p>
 </td></tr>
 <tr><td valign="top"><em><a class="anchor" id="af2ff52f8a834ec055dca6867ba794208ad32cc9e783e89ba6ffb83011a55abe97"></a><!-- doxytag: member="SEARCH_DOWN" ref="af2ff52f8a834ec055dca6867ba794208ad32cc9e783e89ba6ffb83011a55abe97" args="" -->SEARCH_DOWN</em>&nbsp;</td><td>
-<p>Looks for a symbol inside the specified scope or subscopes. </p>
+<p>Looks for symbols inside the specified scope or subscopes. </p>
 <p>This is used for symbols that are requested in a specific context (typically after a '.') e.g. "list.sort()" </p>
 </td></tr>
 </table>
@@ -414,7 +416,7 @@ Static Private Attributes</h2></td></tr>
 <p>Returns a list of all child nodes. </p>
 <p>Reimplement this method in derived classes that have children. The default implementation returns an empty list. </p>
 
-<p>Reimplemented in <a class="el" href="classModel_1_1List.html#ad90082b4310f9bd1de70b0fa4944fbca">Model::List</a>, and <a class="el" href="classModel_1_1ExtendableNode.html#a390e2be2a76f198706326d3362e8d129">Model::ExtendableNode</a>.</p>
+<p>Reimplemented in <a class="el" href="classModel_1_1ExtendableNode.html#a390e2be2a76f198706326d3362e8d129">Model::ExtendableNode</a>, and <a class="el" href="classModel_1_1List.html#ad90082b4310f9bd1de70b0fa4944fbca">Model::List</a>.</p>
 
 </div>
 </div>
@@ -521,7 +523,7 @@ Static Private Attributes</h2></td></tr>
 <p>Returns true if this node defines a symbol and false otherwise. </p>
 <p>The default implementaion returns false. Reimplement this method and <a class="el" href="classModel_1_1Node.html#ac0238f80b3ad5960919e56e959fb8b36" title="Returns the name of the symbol defined by this node.">symbolName()</a> in derived classes that define symbols. </p>
 
-<p>Reimplemented in <a class="el" href="classOOModel_1_1Method.html#ab8cac3e4ac449ec288b0f172f0072e47">OOModel::Method</a>, <a class="el" href="classOOModel_1_1Class.html#a4094b0470110f96bb51ebd6aae14a851">OOModel::Class</a>, <a class="el" href="classOOModel_1_1Field.html#aa9ccb63bb4787250734621fc97fe02da">OOModel::Field</a>, and <a class="el" href="classOOModel_1_1ForEachStatement.html#ae5321b9cfc76603a8e2abf41530530da">OOModel::ForEachStatement</a>.</p>
+<p>Reimplemented in <a class="el" href="classOOModel_1_1Method.html#ab8cac3e4ac449ec288b0f172f0072e47">OOModel::Method</a>, <a class="el" href="classOOModel_1_1Class.html#a4094b0470110f96bb51ebd6aae14a851">OOModel::Class</a>, <a class="el" href="classOOModel_1_1Field.html#aa9ccb63bb4787250734621fc97fe02da">OOModel::Field</a>, <a class="el" href="classOOModel_1_1ForEachStatement.html#ae5321b9cfc76603a8e2abf41530530da">OOModel::ForEachStatement</a>, and <a class="el" href="classOOModel_1_1ExpressionStatement.html#a983a24fd719bb8854bdb68b3f60fca1f">OOModel::ExpressionStatement</a>.</p>
 
 </div>
 </div>
@@ -546,12 +548,58 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a5e2ba37d45dd3529e514404d86f75260"></a><!-- doxytag: member="Model::Node::findSymbol" ref="a5e2ba37d45dd3529e514404d86f75260" args="(const QString &amp;symbol, Node *source, FindSymbolMode mode)" -->
+<a class="anchor" id="a79f332d52ca064cf24683b6efe319249"></a><!-- doxytag: member="Model::Node::findSymbols" ref="a79f332d52ca064cf24683b6efe319249" args="(const QRegExp &amp;symbolExp, Node *source, FindSymbolMode mode, bool exhaustAllScopes)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">QList&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt; <a class="el" href="classModel_1_1Node.html#a5e2ba37d45dd3529e514404d86f75260">Model::Node::findSymbol</a> </td>
+          <td class="memname">QList&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt; <a class="el" href="classModel_1_1Node.html#a79f332d52ca064cf24683b6efe319249">Model::Node::findSymbols</a> </td>
+          <td>(</td>
+          <td class="paramtype">const QRegExp &amp;&#160;</td>
+          <td class="paramname"><em>symbolExp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td>
+          <td class="paramname"><em>source</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classModel_1_1Node.html#af2ff52f8a834ec055dca6867ba794208">FindSymbolMode</a>&#160;</td>
+          <td class="paramname"><em>mode</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>exhaustAllScopes</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Returns a list of all nodes which define a symbol with a name matching <em>symbolExp</em> in the scope of this node. </p>
+<p>The <em>source</em> <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision.">Node</a> specifies what node should be used as a reference when determining what symbols are visible.</p>
+<p>The <em>mode</em> specifies what search to perform.</p>
+<p>If <em>exhaustAllScopes</em> is false, the search will halt as soon as symbols are found within a scope. This is useful when resolving links and it is important to find the "nearest" symbols that match with respect to scope. If <em>exhaustAllScopes</em> is true, the search will explore all scopes in corresponding to the provided mode. This is useful when <em>symbolExp</em> can match multiple symbols with different names (for example during auto completion list build up).</p>
+<p>The default implementation returns a list with only the current node in it, in case the node defines the requested symbol. Otherwise if <em>mode</em> is FindSymbolMode::SEARCH_UP, the implementation of the parent node is called.</p>
+<p>Reimplement this method in derived classes to specify fine grained behavior and operation for search modes other than FindSymbolMode::SEARCH_UP </p>
+
+</div>
+</div>
+<a class="anchor" id="ae14f15bda5e64f3f6e8fe62b6dde75bb"></a><!-- doxytag: member="Model::Node::findSymbols" ref="ae14f15bda5e64f3f6e8fe62b6dde75bb" args="(const QString &amp;symbol, Node *source, FindSymbolMode mode, bool exhaustAllScopes)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QList&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt; <a class="el" href="classModel_1_1Node.html#a79f332d52ca064cf24683b6efe319249">Model::Node::findSymbols</a> </td>
           <td>(</td>
           <td class="paramtype">const QString &amp;&#160;</td>
           <td class="paramname"><em>symbol</em>, </td>
@@ -566,23 +614,26 @@ Static Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="classModel_1_1Node.html#af2ff52f8a834ec055dca6867ba794208">FindSymbolMode</a>&#160;</td>
-          <td class="paramname"><em>mode</em>&#160;</td>
+          <td class="paramname"><em>mode</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>exhaustAllScopes</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td><code> [virtual]</code></td>
+          <td></td><td><code> [inline]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
-<p>Returns a list of all nodes which define a symbol with the name <em>symbol</em> in the scope of this node. </p>
-<p>The <em>source</em> <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision.">Node</a> specifies what node should be used as a reference when determining what symbols are visible.</p>
-<p>The <em>mode</em> specifies what search to perform.</p>
-<p>The default implementation returns a list with only the current node in it, in case the node defines the requested symbol. Otherwise if <em>mode</em> is FindSymbolMode::SEARCH_UP, the implementation of the parent node is called.</p>
-<p>Reimplement this method in derived classes to specify fine grained behavior and operation for search modes other than FindSymbolMode::SEARCH_UP </p>
-
+<p>This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. This is equivalent to: </p>
+<div class="fragment"><pre class="fragment"> <a class="code" href="classModel_1_1Node.html#a79f332d52ca064cf24683b6efe319249" title="Returns a list of all nodes which define a symbol with a name matching symbolExp in the scope of this...">findSymbols</a>(QRegExp(symbol, Qt::CaseSensitive, QRegExp::FixedString), source, mode)
+</pre></div> 
 </div>
 </div>
 <a class="anchor" id="a99b6186b6f8f5259dc93ab37be1c1094"></a><!-- doxytag: member="Model::Node::hierarchyTypeIds" ref="a99b6186b6f8f5259dc93ab37be1c1094" args="() const " -->
@@ -1029,7 +1080,7 @@ Static Private Attributes</h2></td></tr>
 <p>Returns the name of the symbol defined by this node. </p>
 <p>The default implementaion returns a null QString value. Reimplement this method and <a class="el" href="classModel_1_1Node.html#acc19699b25363ba3474acf0000da4329" title="Returns true if this node defines a symbol and false otherwise.">definesSymbol()</a> in derived classes that define symbols. </p>
 
-<p>Reimplemented in <a class="el" href="classOOModel_1_1Method.html#a33f2d5c1bb247e5b4859ff347a1cb952">OOModel::Method</a>, <a class="el" href="classOOModel_1_1Class.html#a08abacf22e6a56c025cc4e1dc85241f1">OOModel::Class</a>, <a class="el" href="classOOModel_1_1Field.html#a8099408698a94e3c89f2c46ccd6b5cf7">OOModel::Field</a>, <a class="el" href="classOOModel_1_1Project.html#a7c88020c237b1c6a98507dab6c4beef4">OOModel::Project</a>, <a class="el" href="classOOModel_1_1Module.html#a433bb2a3b1d061029cf2c0f1dec935ee">OOModel::Module</a>, <a class="el" href="classOOModel_1_1FormalArgument.html#a94b5a337cd8a973b47bd6d0f332bbf7f">OOModel::FormalArgument</a>, <a class="el" href="classOOModel_1_1FormalTypeArgument.html#ac09cfe34b2fd012a3a52dbdc598e8f8c">OOModel::FormalTypeArgument</a>, <a class="el" href="classOOModel_1_1FormalResult.html#a0e1b39a31aeab3752204d43a06bc5a5c">OOModel::FormalResult</a>, and <a class="el" href="classOOModel_1_1ForEachStatement.html#a266f42823c614c18f7c89c8c7c1be9f8">OOModel::ForEachStatement</a>.</p>
+<p>Reimplemented in <a class="el" href="classOOModel_1_1Method.html#a33f2d5c1bb247e5b4859ff347a1cb952">OOModel::Method</a>, <a class="el" href="classOOModel_1_1Class.html#a08abacf22e6a56c025cc4e1dc85241f1">OOModel::Class</a>, <a class="el" href="classOOModel_1_1Field.html#a8099408698a94e3c89f2c46ccd6b5cf7">OOModel::Field</a>, <a class="el" href="classOOModel_1_1Project.html#a7c88020c237b1c6a98507dab6c4beef4">OOModel::Project</a>, <a class="el" href="classOOModel_1_1Module.html#a433bb2a3b1d061029cf2c0f1dec935ee">OOModel::Module</a>, <a class="el" href="classOOModel_1_1FormalArgument.html#a94b5a337cd8a973b47bd6d0f332bbf7f">OOModel::FormalArgument</a>, <a class="el" href="classOOModel_1_1FormalTypeArgument.html#ac09cfe34b2fd012a3a52dbdc598e8f8c">OOModel::FormalTypeArgument</a>, <a class="el" href="classOOModel_1_1FormalResult.html#a0e1b39a31aeab3752204d43a06bc5a5c">OOModel::FormalResult</a>, <a class="el" href="classOOModel_1_1ForEachStatement.html#a266f42823c614c18f7c89c8c7c1be9f8">OOModel::ForEachStatement</a>, and <a class="el" href="classOOModel_1_1ExpressionStatement.html#a5e2e3e5808867e893a938c210ed27c4f">OOModel::ExpressionStatement</a>.</p>
 
 </div>
 </div>
