@@ -1,0 +1,38 @@
+/*! \namespace SelfTest
+
+The SelfTest plug-in provides a basic unit test framework that can be used by other plug-ins to implement self-testing.
+
+Plug-in developers are encouraged to write code that tests their implementations using the services of SelfTest, but it
+is also possible to use other testing approaches.
+
+Clients who want to implement tests can do so with minimal efforts by using convenience macros defined within SelfTest.
+All tests for a plug-in are automatically registered with a TestManager. It can be used to run all tests or a specified
+test and report statistics. SelfTest offers a collection of commonly used assertions and checks and provides exception
+handling support. Classes for test cases are only allocated on request and do not occupy memory if tests are not
+running.
+
+<h3>Running a test from the command line</h3>
+
+Indicating that a specific plug-in should be tested after Envision is initialized can be done using the \e --test switch
+on the command line. Here is the syntax for this command:
+
+\verbatim envision --test pluginid[:testid] [pluginid:[testid]] ... \endverbatim
+
+\e pluginid is a mandatory argument that specifies which plug-in needs to be tested.
+
+If \e testid is specified only the corresponding test will be run, otherwise all tests for the indicated plug-in will be
+executed.
+
+To test multiple plug-ins or to run multiple tests for a plug-in, specify additional \e pluginid:testid pairs. Here are
+some examples:
+
+\verbatim envision --test modelbase \endverbatim
+Runs all tests for the modelbase plug-in.
+\verbatim envision --test modelbase:RemoveOptional \endverbatim
+Runs only the RemoveOptional test for the modelbase plug-in.
+\verbatim envision --test modelbase:RemoveOptional modelbase:ListCreation oomodel \endverbatim
+Runs the RemoveOptional and ListCreation tests for the modelbase plug-in and all tests for the oomodel plug-in. The
+tests will be run in the order indicated on the command line.
+
+
+*/
