@@ -171,6 +171,12 @@ int Node::typeId() const
 	return typeIdStatic();
 }
 
+const QString& Node::typeName() const
+{
+	static QString name = "Node";
+	return name;
+}
+
 Model* Node::model() const
 {
 	return Model::findModel(root());

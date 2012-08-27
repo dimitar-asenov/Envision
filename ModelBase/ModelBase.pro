@@ -1,11 +1,11 @@
 TARGET = modelbase
 include(../Core/common_plugin.pri)
-
 DEFINES += MODELBASE_LIBRARY
 win32:LIBS += -llogger \
     -lselftest
-
-HEADERS += src/InterruptibleThread.h \
+HEADERS += src/visitor/VisitorDefinition.h \
+    src/visitor/Visitor.h \
+    src/InterruptibleThread.h \
     src/Model.h \
     src/ModelException.h \
     src/NodeReadWriteLock.h \

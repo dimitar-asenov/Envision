@@ -319,7 +319,7 @@ class MODELBASE_API Node
 		 *
 		 * This value is used when persisting the node.
 		 */
-		virtual const QString& typeName() const = 0;
+		virtual const QString& typeName() const;
 
 		/**
 		 * Returns an integer id of the type of this Node. When a new node class is registered it receives a unique id.
