@@ -166,6 +166,11 @@ QList<Node*> Node::findSymbols(const QRegExp& symbolExp, Node* source, FindSymbo
 /***********************************************************************************************************************
  * GETTERS AND SETTERS
  **********************************************************************************************************************/
+int Node::typeId() const
+{
+	return typeIdStatic();
+}
+
 Model* Node::model() const
 {
 	return Model::findModel(root());
@@ -231,7 +236,9 @@ const QString& Node::symbolName() const
 
 QList<int> Node::hierarchyTypeIds() const
 {
-	return QList<int>();
+	QList<int> l;
+	l << typeIdStatic();
+	return l;
 }
 
 bool Node::isNewPersistenceUnit() const
@@ -293,7 +300,7 @@ int Node::registerNodeType(const QString &type, const NodeConstructor constructo
 	ModelBase::log()->add(Log::LOGINFO, "Registered new node type " + type);
 
 	++numRegisteredTypes_;
-	return numRegisteredTypes_ - 1;
+	return numRegisteredTypes_; // Id 0 is reserved for Node
 }
 
 Node* Node::createNewNode(const QString &type, Node* parent)

@@ -325,7 +325,9 @@ class MODELBASE_API Node
 		 * Returns an integer id of the type of this Node. When a new node class is registered it receives a unique id.
 		 * This id can be used later to quickly recognize objects of a specific type.
 		 */
-		virtual int typeId() const = 0;
+		virtual int typeId() const;
+
+		static int typeIdStatic();
 
 		/**
 		 * Returns a list of all ids in the type hierarchy of this node (excluding abstract base classes).
@@ -333,7 +335,7 @@ class MODELBASE_API Node
 		 *
 		 * The most derived id appears at the front of the list.
 		 *
-		 * The default implementation returns an empty list.
+		 * The default implementation returns a list containing only the id of Node.
 		 */
 		virtual QList<int> hierarchyTypeIds() const;
 
@@ -429,6 +431,11 @@ class MODELBASE_API Node
 		static QMap<QString, NodeConstructor> nodeConstructorRegister;
 		static QMap<QString, NodePersistenceConstructor> nodePersistenceConstructorRegister;
 };
+
+inline int Node::typeIdStatic()
+{
+	return 0;
+}
 
 /**
  * This is a convenience function that can be used when registering classes derived from Node using registerNodeType().
