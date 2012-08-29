@@ -44,7 +44,7 @@ class Node;
 // VISITOR /////////////////////////////////////////////////////////////////////////////////////////
 
 
-template <class ConcreteVisitor, class Result>
+template <class ConcreteVisitor, class Result = void>
 class Visitor {
 public:
 	virtual ~Visitor();
@@ -61,6 +61,7 @@ public:
 	}
 
 	Result visit(Node* n);
+	virtual Result visitChildren(Node* n);
 
 protected:
 	virtual VisitFunctionInstance findFunctionForId(int id);
@@ -70,25 +71,28 @@ private:
 };
 
 
-// INHERITED VISITOR ///////////////////////////////////////////////////////////////////////////////
+// EXTENDED VISITOR ////////////////////////////////////////////////////////////////////////////////
 
 
 template <class ConcreteVisitor, class BaseVisitor>
-class InheritVisitor : public BaseVisitor {
+class ExtendedVisitor : public BaseVisitor {
 	public:
+		typedef std::function<Result (ConcreteVisitor*, Node*)> VisitFunctionInstance;
+
 		template <class NodeType>
 		static void addType(std::function<typename BaseVisitor::VisitorResultType (ConcreteVisitor*, NodeType*)> f)
 		{
 			if (types().size() <= NodeType::typeIdStatic()) types().resize(NodeType::typeIdStatic());
-			types()[NodeType::typeIdStatic()] = [=](ConcreteVisitor* vis, Node* x) -> Result
-			{ return f(vis, static_cast<NodeType*>(x)); };
+			types()[NodeType::typeIdStatic()] = [=](ConcreteVisitor* vis, Node* x)
+					-> typename BaseVisitor::VisitorResultType
+			{ return f(static_cast<vis, static_cast<NodeType*>(x)); };
 		}
 
 	protected:
-		virtual typename BaseVisitor::VisitFunctionInstance findFunctionForId(int id) override;
+		virtual VisitFunctionInstance findFunctionForId(int id) override;
 
 	private:
-		static QVector<typename BaseVisitor::VisitFunctionInstance>& types();
+		static QVector<VisitFunctionInstance>& types();
 };
 
 } /* namespace Model */

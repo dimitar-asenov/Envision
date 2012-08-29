@@ -50,7 +50,8 @@ HEADERS += src/visitor/VisitorDefinition.h \
     src/commands/SetModificationTarget.h \
     test/PersistentStoreMock.h \
     src/modelbase.h
-SOURCES += src/persistence/PersistentStore.cpp \
+SOURCES += test/VisitorTests.cpp \
+    src/persistence/PersistentStore.cpp \
     src/adapter/AdapterManager.cpp \
     src/commands/AddModifiedNode.cpp \
     src/test_nodes/PositionExtension.cpp \
