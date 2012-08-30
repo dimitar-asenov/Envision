@@ -67,7 +67,7 @@ namespace ContractsLibrary {
 Library* createContractsLibrary()
 {
 	Library* lib = new Library("CodeContracts");
-	lib->extension<Position>()->setX(820);
+	lib->extension<Position>()->setX(1200);
 
 	Class* contract = new Class("Contract");
 	lib->classes()->append(contract);
@@ -103,6 +103,12 @@ Library* createContractsLibrary()
 	contract->methods()->append(contractClassFor);
 	contractClassFor->arguments()->append( new FormalArgument("class", new ReferenceExpression("Class")) );
 	contractClassFor->extension<Position>()->setY(300);
+
+	Method* out = new Method("ValueAtReturn", Visibility::PUBLIC, StorageSpecifier::CLASS_VARIABLE);
+	contract->methods()->append(out);
+	out->typeArguments()->append( new FormalTypeArgument("T") );
+	out->arguments()->append( new FormalArgument("argument", new ReferenceExpression("T")) );
+	out->extension<Position>()->setY(360);
 
 	// Register a group that holds the guard condition: are we visualizing a method belonging to the Contract class?
 	auto g = new VisualizationGroup();
@@ -163,6 +169,16 @@ Library* createContractsLibrary()
 				auto call = static_cast<OOModel::MethodCallExpression*>(node);
 				return call->methodDefinition() == res;
 			});
+	g->addVisualization([](Visualization::Item* parent, Model::Node* node) -> Item*
+			{
+				return new VContractCall(parent, static_cast<MethodCallExpression*> (node),
+						VContractCall::itemStyles().get("out"));
+			},
+			[=](Visualization::Item*, Model::Node* node) -> bool
+			{
+				auto call = static_cast<OOModel::MethodCallExpression*>(node);
+				return call->methodDefinition() == out;
+			});
 
 	Scene::defaultRenderer()->registerGroup(MethodCallExpression::typeIdStatic(), g);
 
@@ -221,6 +237,34 @@ Class* createDerivedClass()
 	car->extension<Position>()->setY(180);
 
 	return car;
+}
+
+Class* createMinMax()
+{
+	Class* minMaxClass = new Class("MinMax", Visibility::PUBLIC);
+
+	auto *minMax = new Method("minMax", Visibility::PUBLIC);
+	minMaxClass->methods()->append(minMax);
+	minMax->arguments()->append( new FormalArgument("x", new PrimitiveTypeExpression(PrimitiveType::INT)) );
+	minMax->arguments()->append( new FormalArgument("y", new PrimitiveTypeExpression(PrimitiveType::INT)) );
+	minMax->arguments()->append( new FormalArgument("min", new PrimitiveTypeExpression(PrimitiveType::INT)) );
+	minMax->arguments()->append( new FormalArgument("max", new PrimitiveTypeExpression(PrimitiveType::INT)) );
+
+	minMax->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
+			"CodeContracts.Contract.Ensures(CodeContracts.Contract.ValueAtReturn(min)<="
+			"CodeContracts.Contract.ValueAtReturn(max))")));
+
+	auto i = new IfStatement();
+	minMax->items()->append(i);
+	i->setCondition( OOExpressionBuilder::getOOExpression("a>b"));
+	i->thenBranch()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("max=a")));
+	i->thenBranch()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("min=b")));
+	i->elseBranch()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("max=b")));
+	i->elseBranch()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("min=a")));
+
+	minMaxClass->extension<Position>()->setX(820);
+
+	return minMaxClass;
 }
 
 Class* createInterface()
@@ -289,11 +333,12 @@ TEST(ContractsLibrary, ContractsLibraryTest)
 
 	// Create project
 	prj = dynamic_cast<Project*> (model->createRoot("Project"));
-	model->beginModification(prj, "build simple java library and a hello world app");
+	model->beginModification(prj, "create a few classes that use contracts");
 	prj->setName("HelloWorld");
 	prj->libraries()->append(createContractsLibrary());
 	prj->classes()->append( createBaseClass());
 	prj->classes()->append( createDerivedClass() );
+	prj->classes()->append( createMinMax() );
 	prj->classes()->append( createInterface() );
 	prj->classes()->append( createInterfaceContracts() );
 	model->endModification();
