@@ -24,44 +24,43 @@
  **
  **********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * contractslibrary.cpp
+/*
+ * ChangeMonitor.h
  *
- *  Created on: May 11, 2012
+ *  Created on: Aug 31, 2012
  *      Author: Dimitar Asenov
- **********************************************************************************************************************/
+ */
 
-#include "contractslibrary.h"
-#include "SelfTest/src/SelfTestSuite.h"
+#ifndef ContractsLibrary_CHANGEMONITOR_H_
+#define ContractsLibrary_CHANGEMONITOR_H_
 
-#include "items/VContractCall.h"
-#include "interaction/ContractCallOffsetProvider.h"
-#include "monitor/ValueAtReturnVisitor.h"
+#include "../contractslibrary_api.h"
 
-#include "OOInteraction/src/handlers/HExpression.h"
-
-#include "ModelBase/src/adapter/AdapterManager.h"
-
-Q_EXPORT_PLUGIN2( contractslibrary, ContractsLibrary::ContractsLibrary )
+namespace Model {
+	class Model;
+	class Node;
+}
 
 namespace ContractsLibrary {
 
-bool ContractsLibrary::initialize(Core::EnvisionManager&)
-{
-	VContractCall::setInteractionHandler(OOInteraction::HExpression::instance());
+class CONTRACTSLIBRARY_API ChangeMonitor : public QObject {
+	Q_OBJECT
 
-	Model::AdapterManager::registerAdapterViaConstructor
-		<OOInteraction::StringOffsetProvider, ContractCallOffsetProvider, VContractCall>();
+	private:
+		// This is needed in order to make the Signals and Slots mechanism work. Otherwise we are not able to connect to
+		// the signal provided from Model. This is because the signatures of the two methods, must match exactly
+		// (stringwise).
+		typedef Model::Node Node;
 
-	ValueAtReturnVisitor::init();
+	public:
+		ChangeMonitor();
+		virtual ~ChangeMonitor();
 
-	return true;
-}
+		void listenToModel(Model::Model* model);
 
-void ContractsLibrary::selfTest(QString testid)
-{
-	if (testid.isEmpty()) SelfTest::TestManager<ContractsLibrary>::runAllTests().printResultStatistics();
-	else SelfTest::TestManager<ContractsLibrary>::runTest(testid).printResultStatistics();
-}
+	public slots:
+		void nodesModified(QList<Node*> nodes);
+};
 
-}
+} /* namespace ContractsLibrary */
+#endif /* ContractsLibrary_CHANGEMONITOR_H_ */

@@ -37,6 +37,8 @@
 #include "items/ContractsVMethodAddOn.h"
 #include "items/VContractCall.h"
 #include "interaction/CreateContractMethod.h"
+#include "monitor/ValueAtReturnVisitor.h"
+#include "monitor/ChangeMonitor.h"
 
 #include "OOModel/src/allOOModelNodes.h"
 #include "ModelBase/src/Model.h"
@@ -109,6 +111,8 @@ Library* createContractsLibrary()
 	out->typeArguments()->append( new FormalTypeArgument("T") );
 	out->arguments()->append( new FormalArgument("argument", new ReferenceExpression("T")) );
 	out->extension<Position>()->setY(360);
+
+	ValueAtReturnVisitor::setMethods(ens, out);
 
 	// Register a group that holds the guard condition: are we visualizing a method belonging to the Contract class?
 	auto g = new VisualizationGroup();
@@ -247,8 +251,10 @@ Class* createMinMax()
 	minMaxClass->methods()->append(minMax);
 	minMax->arguments()->append( new FormalArgument("x", new PrimitiveTypeExpression(PrimitiveType::INT)) );
 	minMax->arguments()->append( new FormalArgument("y", new PrimitiveTypeExpression(PrimitiveType::INT)) );
-	minMax->arguments()->append( new FormalArgument("min", new PrimitiveTypeExpression(PrimitiveType::INT)) );
-	minMax->arguments()->append( new FormalArgument("max", new PrimitiveTypeExpression(PrimitiveType::INT)) );
+	minMax->arguments()->append(
+			new FormalArgument("min", new PrimitiveTypeExpression(PrimitiveType::INT), FormalArgument::OUT) );
+	minMax->arguments()->append(
+			new FormalArgument("max", new PrimitiveTypeExpression(PrimitiveType::INT), FormalArgument::OUT) );
 
 	minMax->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
 			"CodeContracts.Contract.Ensures(CodeContracts.Contract.ValueAtReturn(min)<="
@@ -349,6 +355,11 @@ TEST(ContractsLibrary, ContractsLibraryTest)
 
 	// Create view
 	MainView* view = new MainView(scene);
+
+	// Create a change monitor
+	auto cm = new ChangeMonitor();
+	cm->listenToModel(model);
+
 
 	CHECK_CONDITION(view != nullptr);
 }

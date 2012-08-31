@@ -24,44 +24,36 @@
  **
  **********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * contractslibrary.cpp
+/*
+ * ChangeMonitor.cpp
  *
- *  Created on: May 11, 2012
+ *  Created on: Aug 31, 2012
  *      Author: Dimitar Asenov
- **********************************************************************************************************************/
+ */
 
-#include "contractslibrary.h"
-#include "SelfTest/src/SelfTestSuite.h"
+#include "ChangeMonitor.h"
 
-#include "items/VContractCall.h"
-#include "interaction/ContractCallOffsetProvider.h"
-#include "monitor/ValueAtReturnVisitor.h"
-
-#include "OOInteraction/src/handlers/HExpression.h"
-
-#include "ModelBase/src/adapter/AdapterManager.h"
-
-Q_EXPORT_PLUGIN2( contractslibrary, ContractsLibrary::ContractsLibrary )
+#include "ValueAtReturnVisitor.h"
+#include "ModelBase/src/nodes/Node.h"
+#include "ModelBase/src/Model.h"
 
 namespace ContractsLibrary {
 
-bool ContractsLibrary::initialize(Core::EnvisionManager&)
+ChangeMonitor::ChangeMonitor()
+{}
+
+ChangeMonitor::~ChangeMonitor()
+{}
+
+void ChangeMonitor::listenToModel(Model::Model* model)
 {
-	VContractCall::setInteractionHandler(OOInteraction::HExpression::instance());
-
-	Model::AdapterManager::registerAdapterViaConstructor
-		<OOInteraction::StringOffsetProvider, ContractCallOffsetProvider, VContractCall>();
-
-	ValueAtReturnVisitor::init();
-
-	return true;
+	connect(model, SIGNAL(nodesModified(QList<Node*>)), this,  SLOT(nodesModified(QList<Node*>)), Qt::QueuedConnection);
 }
 
-void ContractsLibrary::selfTest(QString testid)
+void ChangeMonitor::nodesModified(QList<Node*> nodes)
 {
-	if (testid.isEmpty()) SelfTest::TestManager<ContractsLibrary>::runAllTests().printResultStatistics();
-	else SelfTest::TestManager<ContractsLibrary>::runTest(testid).printResultStatistics();
+	ValueAtReturnVisitor v;
+	for(auto n : nodes) v.visit(n);
 }
 
-}
+} /* namespace ContractsLibrary */

@@ -24,44 +24,58 @@
  **
  **********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * contractslibrary.cpp
+/*
+ * ValueAtReturnVisitor.h
  *
- *  Created on: May 11, 2012
+ *  Created on: Aug 31, 2012
  *      Author: Dimitar Asenov
- **********************************************************************************************************************/
+ */
 
-#include "contractslibrary.h"
-#include "SelfTest/src/SelfTestSuite.h"
+#ifndef ContractsLibrary_VALUEATRETURNVISITOR_H_
+#define ContractsLibrary_VALUEATRETURNVISITOR_H_
 
-#include "items/VContractCall.h"
-#include "interaction/ContractCallOffsetProvider.h"
-#include "monitor/ValueAtReturnVisitor.h"
+#include "../contractslibrary_api.h"
 
-#include "OOInteraction/src/handlers/HExpression.h"
+#if defined(CONTRACTSLIBRARY_LIBRARY)
+	#include "ModelBase/src/visitor/VisitorDefinition.h"
+#else
+	#include "ModelBase/src/visitor/Visitor.h"
+#endif
 
-#include "ModelBase/src/adapter/AdapterManager.h"
+namespace Model {
+	class Node;
+}
 
-Q_EXPORT_PLUGIN2( contractslibrary, ContractsLibrary::ContractsLibrary )
+namespace OOModel {
+	class MethodCallExpression;
+	class ReferenceExpression;
+	class Method;
+}
 
 namespace ContractsLibrary {
 
-bool ContractsLibrary::initialize(Core::EnvisionManager&)
-{
-	VContractCall::setInteractionHandler(OOInteraction::HExpression::instance());
+class CONTRACTSLIBRARY_API ValueAtReturnVisitor : public Model::Visitor<ValueAtReturnVisitor, Model::Node*> {
+	public:
+		ValueAtReturnVisitor();
+		virtual ~ValueAtReturnVisitor();
 
-	Model::AdapterManager::registerAdapterViaConstructor
-		<OOInteraction::StringOffsetProvider, ContractCallOffsetProvider, VContractCall>();
+		virtual Model::Node* visitChildren(Model::Node* n);
 
-	ValueAtReturnVisitor::init();
+		static Model::Node* visitMethodCall(ValueAtReturnVisitor* v, OOModel::MethodCallExpression* call);
+		static Model::Node* visitReference(ValueAtReturnVisitor* v, OOModel::ReferenceExpression* ref);
 
-	return true;
-}
+		static void init();
+		static void setMethods(OOModel::Method* ensuresMethod, OOModel::Method* valueAtReturnMethod);
 
-void ContractsLibrary::selfTest(QString testid)
-{
-	if (testid.isEmpty()) SelfTest::TestManager<ContractsLibrary>::runAllTests().printResultStatistics();
-	else SelfTest::TestManager<ContractsLibrary>::runTest(testid).printResultStatistics();
-}
+	private:
+		bool inEnsuresCall_;
+		bool inValueAtReturnCall_;
+		bool outReference_;
 
-}
+		static OOModel::Method* ensuresMethod_;
+		static OOModel::Method* valueAtReturnMethod_;
+
+};
+
+} /* namespace ContractsLibrary */
+#endif /* ContractsLibrary_VALUEATRETURNVISITOR_H_ */
