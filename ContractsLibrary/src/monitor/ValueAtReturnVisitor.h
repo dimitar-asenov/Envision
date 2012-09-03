@@ -57,7 +57,6 @@ namespace ContractsLibrary {
 class CONTRACTSLIBRARY_API ValueAtReturnVisitor : public Model::Visitor<ValueAtReturnVisitor, Model::Node*> {
 	public:
 		ValueAtReturnVisitor();
-		virtual ~ValueAtReturnVisitor();
 
 		virtual Model::Node* visitChildren(Model::Node* n);
 

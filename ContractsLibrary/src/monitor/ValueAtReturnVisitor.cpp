@@ -54,10 +54,6 @@ ValueAtReturnVisitor::ValueAtReturnVisitor() : inEnsuresCall_(false), inValueAtR
 {
 }
 
-ValueAtReturnVisitor::~ValueAtReturnVisitor()
-{
-}
-
 void ValueAtReturnVisitor::init()
 {
 	addType<OOModel::MethodCallExpression>(visitMethodCall);
