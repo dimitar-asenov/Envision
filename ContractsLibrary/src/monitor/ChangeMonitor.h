@@ -41,6 +41,10 @@ namespace Model {
 	class Node;
 }
 
+namespace OOModel {
+	class Expression;
+}
+
 namespace ContractsLibrary {
 
 class CONTRACTSLIBRARY_API ChangeMonitor : public QObject {
@@ -57,6 +61,8 @@ class CONTRACTSLIBRARY_API ChangeMonitor : public QObject {
 		virtual ~ChangeMonitor();
 
 		void listenToModel(Model::Model* model);
+
+		static void expressionModified(OOModel::Expression*& exp, int& cursorIndex);
 
 	public slots:
 		void nodesModified(QList<Node*> nodes);

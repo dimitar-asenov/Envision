@@ -59,6 +59,7 @@
 
 #include "OOInteraction/src/expression_editor/OOExpressionBuilder.h"
 #include "OOInteraction/src/expression_editor/operators/CommandDescriptor.h"
+#include "OOInteraction/src/handlers/HExpression.h"
 
 using namespace OOModel;
 using namespace Visualization;
@@ -357,8 +358,9 @@ TEST(ContractsLibrary, ContractsLibraryTest)
 	MainView* view = new MainView(scene);
 
 	// Create a change monitor
-	auto cm = new ChangeMonitor();
-	cm->listenToModel(model);
+	//auto cm = new ChangeMonitor();
+	//cm->listenToModel(model);
+	HExpression::instance()->appendExpressionMonitor(ChangeMonitor::expressionModified);
 
 
 	CHECK_CONDITION(view != nullptr);

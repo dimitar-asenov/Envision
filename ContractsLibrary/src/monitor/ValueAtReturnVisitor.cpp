@@ -50,7 +50,8 @@ void ValueAtReturnVisitor::setMethods(OOModel::Method* ensuresMethod, OOModel::M
 	valueAtReturnMethod_ = valueAtReturnMethod;
 }
 
-ValueAtReturnVisitor::ValueAtReturnVisitor() : inEnsuresCall_(false), inValueAtReturnCall_(false), outReference_(false)
+ValueAtReturnVisitor::ValueAtReturnVisitor() : inEnsuresCall_(false), inValueAtReturnCall_(false), outReference_(false),
+		numWrapped_(0), numUnwrapped_(0)
 {
 }
 
@@ -99,11 +100,11 @@ Model::Node* ValueAtReturnVisitor::visitMethodCall(ValueAtReturnVisitor* v, OOMo
 		{
 			// Replace this method call by its arguments
 			auto arg = call->arguments()->at(0);
-
 			auto model = call->model();
 			model->beginModification(call, "remove valueAtReturn call in visitor");
 			call->arguments()->remove(0, true);
 			model->endModification();
+			++v->numUnwrapped_;
 
 			return arg;
 		}
@@ -124,6 +125,7 @@ Model::Node* ValueAtReturnVisitor::visitReference(ValueAtReturnVisitor* v, OOMod
 
 		if (v->outReference_ && !v->inValueAtReturnCall_)
 		{
+			++v->numWrapped_;
 			auto retval = OOInteraction::OOExpressionBuilder::getOOExpression(
 					"CodeContracts.Contract.ValueAtReturn(" + ref->name() + ")");
 			return retval;

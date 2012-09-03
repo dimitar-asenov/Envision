@@ -66,15 +66,23 @@ class CONTRACTSLIBRARY_API ValueAtReturnVisitor : public Model::Visitor<ValueAtR
 		static void init();
 		static void setMethods(OOModel::Method* ensuresMethod, OOModel::Method* valueAtReturnMethod);
 
+		int numWrapped();
+		int numUnwrapped();
+
 	private:
 		bool inEnsuresCall_;
 		bool inValueAtReturnCall_;
 		bool outReference_;
+
+		int numWrapped_;
+		int numUnwrapped_;
 
 		static OOModel::Method* ensuresMethod_;
 		static OOModel::Method* valueAtReturnMethod_;
 
 };
 
+inline int ValueAtReturnVisitor::numWrapped() { return numWrapped_;}
+inline int ValueAtReturnVisitor::numUnwrapped() { return numUnwrapped_;}
 } /* namespace ContractsLibrary */
 #endif /* ContractsLibrary_VALUEATRETURNVISITOR_H_ */

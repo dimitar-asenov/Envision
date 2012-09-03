@@ -34,6 +34,7 @@
 #include "ChangeMonitor.h"
 
 #include "ValueAtReturnVisitor.h"
+#include "OOModel/src/expressions/Expression.h"
 #include "ModelBase/src/nodes/Node.h"
 #include "ModelBase/src/Model.h"
 
@@ -54,6 +55,14 @@ void ChangeMonitor::nodesModified(QList<Node*> nodes)
 {
 	ValueAtReturnVisitor v;
 	for(auto n : nodes) v.visit(n);
+}
+
+void ChangeMonitor::expressionModified(OOModel::Expression*& exp, int& cursorIndex)
+{
+	ValueAtReturnVisitor v;
+	v.visit(exp);
+	const int l = QString("CodeContracts.Contract.ValueAtReturn(").size();
+	cursorIndex += (v.numWrapped() - v.numUnwrapped())*l;
 }
 
 } /* namespace ContractsLibrary */
