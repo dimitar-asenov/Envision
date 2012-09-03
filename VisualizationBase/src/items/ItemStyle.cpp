@@ -60,6 +60,7 @@ void ItemStyle::load(StyleLoader& sl)
 	sl.load("wholeItemCursor", wholeItemCursor_);
 	sl.load("drawsOnlyShape", drawsOnlyShape_);
 	sl.load("drawShapeWhenEmpty", drawShapeWhenEmpty_);
+	sl.load("allowEquivalentCursorsThroughBoundary", allowEquivalentCursorsThroughBoundary_);
 	sl.load("shape", shapeName_);
 	shapeName_ = shapeName_.trimmed();
 

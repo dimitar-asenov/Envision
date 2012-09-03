@@ -33,6 +33,7 @@
 
 #include "cursor/Cursor.h"
 #include "items/Item.h"
+#include "items/ItemStyle.h"
 
 namespace Visualization {
 
@@ -78,7 +79,9 @@ bool Cursor::isLocationEquivalent(bool otherNotLocationEquivalent, CursorType ot
 	if (otherType != type() || otherType == BoxCursor) return false;
 	if (!otherIsAtBoundary && ! isAtBoundary()) return false;
 	if (owner() == otherOwner) return false;
-	if (!owner()->isAncestorOf(otherOwner) && !otherOwner->isAncestorOf(owner()) ) return false;
+	if (!( owner()->isAncestorOf(otherOwner) && otherOwner->style()->allowEquivalentCursorsThroughBoundary())
+			&& !(otherOwner->isAncestorOf(owner()) && owner()->style()->allowEquivalentCursorsThroughBoundary() ) )
+		return false;
 
 	return true;
 }

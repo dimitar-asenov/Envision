@@ -4,4 +4,5 @@
 	<drawsOnlyShape>true</drawsOnlyShape>
 	<drawShapeWhenEmpty>false</drawShapeWhenEmpty>
 	<wholeItemCursor>false</wholeItemCursor>
+	<allowEquivalentCursorsThroughBoundary>true</allowEquivalentCursorsThroughBoundary>
 </style>
