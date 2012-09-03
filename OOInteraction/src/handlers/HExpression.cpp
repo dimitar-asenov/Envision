@@ -371,6 +371,7 @@ void HExpression::setNewExpression(Visualization::Item* target, Visualization::I
 				int index)
 {
 	OOModel::Expression* newExpression = OOExpressionBuilder::getOOExpression( text );
+
 	Model::Node* containerNode = topMostItem->node()->parent();
 	containerNode->model()->beginModification(containerNode, "edit expression");
 	containerNode->replaceChild(topMostItem->node(), newExpression, false);
@@ -379,6 +380,9 @@ void HExpression::setNewExpression(Visualization::Item* target, Visualization::I
 	// Compute the new offset. This can change in case the string of the new expression is different.
 	QString expString = StringComponents::stringForNode(newExpression);
 	index += expString.length() - text.length();
+
+	// Let interested plug-ins know that an expression was edited. Plug-ins might decide to make changes.
+	for (auto monitor : expressionMonitors_) monitor(newExpression, index);
 
 	auto parent = topMostItem->parent();
 	target->scene()->addPostEventAction( new SetExpressionCursorEvent(parent, newExpression, index));
