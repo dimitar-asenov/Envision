@@ -146,6 +146,17 @@ void Scene::updateItems()
 		}
 	}
 
+	if (!cursors_.isEmpty())
+	{
+		for (auto view : views())
+			if (view->isActiveWindow())
+			{
+				auto vis = cursors_.at(0)->visualization();
+				if (!vis) vis = cursors_.at(0)->owner();
+				view->ensureVisible( vis->boundingRect().translated(vis->scenePos()), 5, 5);
+			}
+	}
+
 	needsUpdate_ = false;
 }
 
