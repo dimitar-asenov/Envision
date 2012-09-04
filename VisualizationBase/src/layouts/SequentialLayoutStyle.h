@@ -50,6 +50,7 @@ class VISUALIZATIONBASE_API SequentialLayoutStyle : public LayoutStyle
 		bool noInnerCursors_;
 		bool noBoundaryCursorsInsideShape_;
 		bool extraCursorsOutsideShape_;
+		bool hasCursorWhenEmpty_;
 		int minWidth_;
 		int minHeight_;
 
@@ -64,6 +65,7 @@ class VISUALIZATIONBASE_API SequentialLayoutStyle : public LayoutStyle
 		bool noInnerCursors() const;
 		bool noBoundaryCursorsInsideShape() const;
 		bool extraCursorsOutsideShape() const;
+		bool hasCursorWhenEmpty() const;
 		int minWidth() const;
 		int minHeight() const;
 
@@ -82,6 +84,7 @@ inline bool SequentialLayoutStyle::notLocationEquivalentCursors() const {return 
 inline bool SequentialLayoutStyle::noInnerCursors() const {return noInnerCursors_;}
 inline bool SequentialLayoutStyle::noBoundaryCursorsInsideShape() const {return noBoundaryCursorsInsideShape_;}
 inline bool SequentialLayoutStyle::extraCursorsOutsideShape() const {return extraCursorsOutsideShape_;}
+inline bool SequentialLayoutStyle::hasCursorWhenEmpty() const { return hasCursorWhenEmpty_; }
 inline int SequentialLayoutStyle::minWidth() const {return minWidth_;}
 inline int SequentialLayoutStyle::minHeight() const {return minHeight_;}
 

@@ -212,14 +212,17 @@ void SequentialLayout::updateGeometry(int, int)
 	bool horizontal = isHorizontal();
 	bool forward = isForward();
 
-	// NOTE: Specifying minWidth and minHeight only applies to the dimension opposite of the direction.
+	// minWidth and minHeight always apply to the dimension opposite of the direction.
+	// In case there are no items in the list the minimum in the direction of the list also applies.
 	if (horizontal)
 	{
 		if (maxChildHeight < style()->minHeight()) maxChildHeight = style()->minHeight();
+		if (items.isEmpty() ) maxChildWidth = style()->minWidth();
 	}
 	else
 	{
 		if (maxChildWidth < style()->minWidth()) maxChildWidth = style()->minWidth();
+		if (items.isEmpty()) maxChildHeight = style()->minHeight();
 	}
 
 	// Update the geometry of children whose size varies
@@ -301,7 +304,7 @@ QList<ItemRegion> SequentialLayout::regions()
 	QList<ItemRegion> regs;
 
 	// If this layout is not visible return no regions
-	if (isEmpty() && (!hasShape() || !style()->drawShapeWhenEmpty()))
+	if (isEmpty() && !style()->hasCursorWhenEmpty() && (!hasShape() || !style()->drawShapeWhenEmpty()))
 		return regs;
 
 	bool extraCursors = hasShape() && style()->extraCursorsOutsideShape();

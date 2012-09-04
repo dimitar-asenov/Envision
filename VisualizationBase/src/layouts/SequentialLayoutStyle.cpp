@@ -65,6 +65,7 @@ void SequentialLayoutStyle::load(StyleLoader& sl)
 	sl.load("noInnerCursors", noInnerCursors_);
 	sl.load("noBoundaryCursorsInsideShape", noBoundaryCursorsInsideShape_);
 	sl.load("extraCursorsOutsideShape", extraCursorsOutsideShape_);
+	sl.load("hasCursorWhenEmpty", hasCursorWhenEmpty_);
 	sl.load("minWidth", minWidth_);
 	sl.load("minHeight", minHeight_);
 }
