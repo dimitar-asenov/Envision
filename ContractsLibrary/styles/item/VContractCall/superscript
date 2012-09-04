@@ -6,6 +6,7 @@
 		<alignment>3</alignment>
 	</layout>
 	<keyword>
+		<allowEquivalentCursorsThroughBoundary>false</allowEquivalentCursorsThroughBoundary>
 		<font>
 			<size>8</size>
 		</font>
