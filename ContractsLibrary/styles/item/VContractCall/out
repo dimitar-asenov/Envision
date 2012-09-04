@@ -1,13 +1,6 @@
 <!DOCTYPE EnvisionVisualizationStyle>
-<style prototypes="item/Item/default">
-	<shape />
-	<layout prototypes="layout/SequentialLayout/default">
-		<notLocationEquivalentCursors>true</notLocationEquivalentCursors>
-		<spaceBetweenElements>1</spaceBetweenElements>
-		<direction>1</direction>
-		<alignment>3</alignment>
-	</layout>
-	<keyword prototypes="item/Symbol/default">
+<style prototypes="superscript">
+	<keyword>
 		<font>
 			<size>10</size>
 			<weight>0</weight>
@@ -22,13 +15,4 @@
 		</pen>
 		<symbol>↲</symbol>
 	</keyword>
-	<arguments prototypes="item/VList/default">
-		<drawShapeWhenEmpty>true</drawShapeWhenEmpty>
-		<shape />
-		<itemsStyle prototypes="layout/SequentialLayout/default">
-			<direction>0</direction>
-			<spaceBetweenElements>15</spaceBetweenElements>
-			<noInnerCursors>true</noInnerCursors>
-		</itemsStyle>
-	</arguments>
 </style>
