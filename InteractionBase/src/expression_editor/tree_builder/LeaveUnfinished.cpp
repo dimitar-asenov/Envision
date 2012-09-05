@@ -25,47 +25,24 @@
  **********************************************************************************************************************/
 
 /*
- * Parser.h
+ * LeaveUnfinished.cpp
  *
- *  Created on: Jan 11, 2012
+ *  Created on: Sep 5, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef INTERACTIONBASE_PARSER_H_
-#define INTERACTIONBASE_PARSER_H_
+#include "LeaveUnfinished.h"
 
-#include "../../interactionbase_api.h"
-
-#include "Token.h"
-#include "ParseResult.h"
+#include "expression_editor/tree_builder/ExpressionTreeBuilder.h"
+#include "expression_editor/UnfinishedOperator.h"
 
 namespace Interaction {
 
-class OperatorDescriptorList;
-class ExpressionTreeBuildInstruction;
+void LeaveUnfinished::perform(ExpressionTreeBuilder& tb)
+{
+	UnfinishedOperator* unf = tb.unfinished().last();
+	tb.unfinished().removeLast();
+	tb.left() = unf;
+}
 
-class INTERACTIONBASE_API Parser {
-	public:
-		Parser(const OperatorDescriptorList* ops);
-		QVector<ExpressionTreeBuildInstruction*> parse(QVector<Token> tokens);
-
-	private:
-		ParseResult parse(QVector<Token>::const_iterator token, ParseResult result, QStringList& expected, bool hasLeft,
-				QVector<ExpressionTreeBuildInstruction*>& instructions);
-
-		ParseResult processExpectedOperatorDelimiters(bool& processed, QStringList& expected,
-				QVector<Token>::const_iterator& token, ParseResult& result,
-				QVector<ExpressionTreeBuildInstruction*>& instructions);
-		void processIdentifiersAndLiterals(bool& processed, bool& error, QStringList& expected,
-				QVector<Token>::const_iterator& token, bool& hasLeft,
-				QVector<ExpressionTreeBuildInstruction*>& instructions);
-		void processNewOperatorDelimiters(bool& processed, bool& error, QStringList& expected,
-				QVector<Token>::const_iterator& token, bool& hasLeft, ParseResult& result,
-				QVector<ExpressionTreeBuildInstruction*>& instructions);
-
-		QVector<Token>::const_iterator end_tokens_;
-		const OperatorDescriptorList* ops_;
-};
-
-} /* namespace InteractionBase */
-#endif /* INTERACTIONBASE_PARSER_H_ */
+} /* namespace Interaction */

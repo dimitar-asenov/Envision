@@ -6,7 +6,8 @@ win32:LIBS += -llogger \
     -lmodelbase \
     -lfilepersistence \
     -lvisualizationbase
-HEADERS += test/HBinaryNode.h \
+HEADERS += src/expression_editor/tree_builder/LeaveUnfinished.h \
+    test/HBinaryNode.h \
     src/autocomplete/AutoComplete.h \
     src/autocomplete/AutoCompleteVisStyle.h \
     src/autocomplete/AutoCompleteVis.h \
@@ -58,7 +59,8 @@ HEADERS += test/HBinaryNode.h \
     src/vis/TextAndDescription.h \
     src/vis/TextAndDescriptionStyle.h \
     src/interactionbase.h
-SOURCES += test/HBinaryNode.cpp \
+SOURCES += src/expression_editor/tree_builder/LeaveUnfinished.cpp \
+    test/HBinaryNode.cpp \
     src/autocomplete/AutoComplete.cpp \
     src/autocomplete/AutoCompleteVisStyle.cpp \
     src/autocomplete/AutoCompleteVis.cpp \

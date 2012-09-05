@@ -25,47 +25,25 @@
  **********************************************************************************************************************/
 
 /*
- * Parser.h
+ * LeaveUnfinished.h
  *
- *  Created on: Jan 11, 2012
+ *  Created on: Sep 5, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef INTERACTIONBASE_PARSER_H_
-#define INTERACTIONBASE_PARSER_H_
+#ifndef InteractionBase_LEAVEUNFINISHED_H_
+#define InteractionBase_LEAVEUNFINISHED_H_
 
 #include "../../interactionbase_api.h"
 
-#include "Token.h"
-#include "ParseResult.h"
+#include "ExpressionTreeBuildInstruction.h"
 
 namespace Interaction {
 
-class OperatorDescriptorList;
-class ExpressionTreeBuildInstruction;
-
-class INTERACTIONBASE_API Parser {
+class INTERACTIONBASE_API LeaveUnfinished : public ExpressionTreeBuildInstruction {
 	public:
-		Parser(const OperatorDescriptorList* ops);
-		QVector<ExpressionTreeBuildInstruction*> parse(QVector<Token> tokens);
-
-	private:
-		ParseResult parse(QVector<Token>::const_iterator token, ParseResult result, QStringList& expected, bool hasLeft,
-				QVector<ExpressionTreeBuildInstruction*>& instructions);
-
-		ParseResult processExpectedOperatorDelimiters(bool& processed, QStringList& expected,
-				QVector<Token>::const_iterator& token, ParseResult& result,
-				QVector<ExpressionTreeBuildInstruction*>& instructions);
-		void processIdentifiersAndLiterals(bool& processed, bool& error, QStringList& expected,
-				QVector<Token>::const_iterator& token, bool& hasLeft,
-				QVector<ExpressionTreeBuildInstruction*>& instructions);
-		void processNewOperatorDelimiters(bool& processed, bool& error, QStringList& expected,
-				QVector<Token>::const_iterator& token, bool& hasLeft, ParseResult& result,
-				QVector<ExpressionTreeBuildInstruction*>& instructions);
-
-		QVector<Token>::const_iterator end_tokens_;
-		const OperatorDescriptorList* ops_;
+		virtual void perform(ExpressionTreeBuilder& tb);
 };
 
-} /* namespace InteractionBase */
-#endif /* INTERACTIONBASE_PARSER_H_ */
+} /* namespace Interaction */
+#endif /* InteractionBase_LEAVEUNFINISHED_H_ */

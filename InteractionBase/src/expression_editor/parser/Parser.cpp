@@ -38,10 +38,13 @@
 #include "expression_editor/tree_builder/AddOperator.h"
 #include "expression_editor/tree_builder/AddValue.h"
 #include "expression_editor/tree_builder/FinishOperator.h"
+#include "expression_editor/tree_builder/LeaveUnfinished.h"
 #include "expression_editor/tree_builder/SkipOperatorDelimiter.h"
 
 #include "expression_editor/OperatorDescriptorList.h"
 #include "expression_editor/OperatorDescriptor.h"
+
+#include "../../InteractionBaseException.h"
 
 namespace Interaction {
 
@@ -90,25 +93,35 @@ ParseResult Parser::parse(QVector<Token>::const_iterator token, ParseResult resu
 		return result;
 	}
 
-	bool processed = false;
 	bool error = false;
 
+	bool processedByLiterals = false;
 	if (token->type() == Token::Identifier || token->type() == Token::Literal)
-		processIdentifiersAndLiterals(processed, error, expected, token, hasLeft, instructions);
+		processIdentifiersAndLiterals(processedByLiterals, error, expected, token, hasLeft, instructions);
 
-	// If the current token is the same as the next expected delimiter
-	// put empty expressions where required and finish the intermediate operators
-	// TODO: This does not work for cases like 'template c< int a > 2 >'
-	if (!processed && !error && token->type() == Token::OperatorDelimiter)
-		processExpectedOperatorDelimiters(processed, expected, token, hasLeft, result, instructions);
-
-	if (!processed && !error && token->type() == Token::OperatorDelimiter)
+	// If the current token is the same as any of the next expected delimiters try to complete the parsing asuming
+	// missing expressions in between and finishing the intermediate operators.
+	bool processedByExpectedDelimiters = false;
+	ParseResult pr_expected_delim;
+	if (!processedByLiterals && !error && token->type() == Token::OperatorDelimiter)
 	{
-		processNewOperatorDelimiters(processed, error, expected, token, hasLeft, result, instructions);
-		if (processed) return result; // No need to redo the rest of the work as it has been done here.
+		pr_expected_delim = processExpectedOperatorDelimiters(processedByExpectedDelimiters, expected, token, result,
+				instructions);
 	}
 
-	if (!processed || error)
+	// Try to complete the parsing assuming that a new operator is being introduced by the current token.
+	bool processedByNewDelimiters = false;
+	if ( !processedByLiterals && !error && token->type() == Token::OperatorDelimiter)
+	{
+		processNewOperatorDelimiters(processedByNewDelimiters, error, expected, token, hasLeft, result, instructions);
+	}
+
+	if (processedByExpectedDelimiters && !processedByNewDelimiters) return pr_expected_delim;
+	if (!processedByExpectedDelimiters && processedByNewDelimiters) return result;
+	if (processedByExpectedDelimiters && processedByNewDelimiters)
+		return result < pr_expected_delim ? result : pr_expected_delim;
+
+	if (!processedByLiterals || error)
 	{
 		++result.errors;
 		instructions.append( new AddErrorOperator(token->text()) );
@@ -133,45 +146,78 @@ void Parser::processIdentifiersAndLiterals(bool& processed, bool& error, QString
 	else if (e == "id") error = true;
 }
 
-void Parser::processExpectedOperatorDelimiters(bool& processed, QStringList& expected,
-		QVector<Token>::const_iterator& token, bool& hasLeft, ParseResult& result,
+ParseResult Parser::processExpectedOperatorDelimiters(bool& processed, QStringList& expected,
+		QVector<Token>::const_iterator& token, ParseResult& result,
 		QVector<ExpressionTreeBuildInstruction*>& instructions)
 {
-	for (int index = 0; index<expected.size(); ++index)
-		if (expected.at(index) == token->text() && expected.at(index) != "expr" && expected.at(index) != "id"
-				&& expected.at(index) != "end")
-		{
-			processed = true;
-			result.missingInnerTokens += index;
+	// We should only fill using empty expressions the first unfinished operator. Any operator afterwards should be left
+	// untouched.
+	bool fillMissingWithEmptyExpressions = true;
 
+	// We can only use the current token to complete the first unseen delimiter of unfinished operators.
+	// In case unfinished operators have more than one unseen delimiter, only the first one will be tried and the rest
+	// skipped. The reason for this is mainly that we have no way of finishing an operator "in parts" e.g. a bit from
+	// the beginning and a bit from the end.
+	bool firstUnseenDelimiter = true;
+
+	ParseResult best_pr = result;
+	for (int index = 0; index<expected.size(); ++index)
+	{
+		bool expectedIsEnd = expected.at(index) == "end";
+		bool expectedIsDelimiter = !expectedIsEnd && expected.at(index) != "expr" && expected.at(index) != "id";
+
+		if (expected.at(index) == token->text() && expectedIsDelimiter && firstUnseenDelimiter)
+		{
+			QStringList new_expected = expected;
+			ParseResult pr = result;
+			QVector<ExpressionTreeBuildInstruction*> new_instructions = instructions;
+
+			pr.missingInnerTokens += index;
 			// Finish all intermediate positions
 			for (int i = 0; i<index; ++i)
 			{
-				if (expected.first() == "expr" || expected.first() == "id" )
+				auto exp = new_expected.takeFirst();
+
+				if (exp == "expr" || exp == "id" )
 				{
-					expected.removeFirst();
-					instructions.append( new AddEmptyValue() );
-					++result.emptyExpressions;
+					if (fillMissingWithEmptyExpressions) new_instructions.append( new AddEmptyValue() );
+					++pr.emptyExpressions;
 				}
-				else
+				else if (exp == "end")
 				{
 					// If the expectation is not an expression or an identifier then it must be an end
-					expected.removeFirst();
-					instructions.append(new FinishOperator());
-					result.numOperators++;
+					new_instructions.append(fillMissingWithEmptyExpressions ?
+							(ExpressionTreeBuildInstruction*)new FinishOperator() : new LeaveUnfinished());
+					pr.numOperators++;
 				}
+				// Do nothing in case we are skipping over a delimiter.
 			}
 
 			// Finish the actual delimiter
-			expected.removeFirst();
-			instructions.append(new SkipOperatorDelimiter());
+			new_expected.removeFirst();
+			new_instructions.append(new SkipOperatorDelimiter());
 
-			// Assume the finished delimiter was an infix one, therefore no left expression
+			// Assume the finished delimiter was an infix one, therefore there is no 'left' expression
 			// If the finished delimiter is a postfix the last unfinished operator will be finished
 			// in the beginning of the next call to parse() and then 'hasLeft' will be correctly set
-			hasLeft = false;
-			return;
+			pr = parse(token + 1, pr, new_expected, false, new_instructions);
+			if (!processed || pr < best_pr)
+			{
+				processed = true;
+				best_pr = pr;
+			}
 		}
+
+		if (expectedIsEnd)firstUnseenDelimiter = true;
+		else if (expectedIsDelimiter)
+		{
+			// The first time we encounter a delimiter we no longer should fill missing places with empty expressions
+			fillMissingWithEmptyExpressions = false;
+			firstUnseenDelimiter = false;
+		}
+	}
+
+	return best_pr;
 }
 
 void Parser::processNewOperatorDelimiters(bool& processed, bool& error, QStringList& expected,
@@ -193,15 +239,17 @@ void Parser::processNewOperatorDelimiters(bool& processed, bool& error, QStringL
 			matching_ops.append( ops_->findByPrefix(token->text()) );
 		}
 		else {
-			if (!hasLeft)
+			if (hasLeft)
+			{
+				matching_ops.append( ops_->findByInfixWithoutPrefix(token->text()) );
+				matching_ops.append( ops_->findByPostfixWithoutPreInfix(token->text()) );
+			}
+			else
 			{
 				// This situation arises for example in the 'delete []' operator where two different operator tokens follow
-				// each other.
-				processExpectedOperatorDelimiters(processed, expected, token, hasLeft, result, instructions);
-				return;
+				// one another. It is handled by processExpectedOperatorDelimiters()
 			}
-			matching_ops.append( ops_->findByInfixWithoutPrefix(token->text()) );
-			matching_ops.append( ops_->findByPostfixWithoutPreInfix(token->text()) );
+
 		}
 
 		if (matching_ops.isEmpty())
