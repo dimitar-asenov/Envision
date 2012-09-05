@@ -50,16 +50,21 @@ class INTERACTIONBASE_API Parser {
 		QVector<ExpressionTreeBuildInstruction*> parse(QVector<Token> tokens);
 
 	private:
-		ParseResult parse(QVector<Token>::const_iterator token, ParseResult result, QStringList& expected, bool hasLeft, QVector<ExpressionTreeBuildInstruction*>& instructions);
+		ParseResult parse(QVector<Token>::const_iterator token, ParseResult result, QStringList& expected, bool hasLeft,
+				QVector<ExpressionTreeBuildInstruction*>& instructions);
 
-		// Returns the finished expression
-		QString getNextExpectedDelimiter(const QStringList& expected, int& index);
-
-		// This method will advance the current operator if the next expected delimtier is seen. This is not always correct for example in this case: "template < a>b > ...".
+		// This method will advance the current operator if the next expected delimiter is seen. This is not always
+		// correct for example in this case: "template < a>b > ...".
 		// TODO: Fix the problem described above.
-		void processNextExpectedDelimiter(bool& processed, QStringList& expected, QVector<Token>::const_iterator& token, bool& hasLeft, ParseResult& result, QVector<ExpressionTreeBuildInstruction*>& instructions);
-		void processIdentifiersAndLiterals(bool& processed, bool& error, QStringList& expected, QVector<Token>::const_iterator& token, bool& hasLeft, QVector<ExpressionTreeBuildInstruction*>& instructions);
-		void processOperatorDelimiters(bool& processed, bool& error, QStringList& expected, QVector<Token>::const_iterator& token, bool& hasLeft, ParseResult& result, QVector<ExpressionTreeBuildInstruction*>& instructions);
+		void processExpectedOperatorDelimiters(bool& processed, QStringList& expected,
+				QVector<Token>::const_iterator& token, bool& hasLeft, ParseResult& result,
+				QVector<ExpressionTreeBuildInstruction*>& instructions);
+		void processIdentifiersAndLiterals(bool& processed, bool& error, QStringList& expected,
+				QVector<Token>::const_iterator& token, bool& hasLeft,
+				QVector<ExpressionTreeBuildInstruction*>& instructions);
+		void processNewOperatorDelimiters(bool& processed, bool& error, QStringList& expected,
+				QVector<Token>::const_iterator& token, bool& hasLeft, ParseResult& result,
+				QVector<ExpressionTreeBuildInstruction*>& instructions);
 
 		QVector<Token>::const_iterator end_tokens_;
 		const OperatorDescriptorList* ops_;

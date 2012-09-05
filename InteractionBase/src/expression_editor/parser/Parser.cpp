@@ -93,17 +93,18 @@ ParseResult Parser::parse(QVector<Token>::const_iterator token, ParseResult resu
 	bool processed = false;
 	bool error = false;
 
+	if (token->type() == Token::Identifier || token->type() == Token::Literal)
+		processIdentifiersAndLiterals(processed, error, expected, token, hasLeft, instructions);
+
 	// If the current token is the same as the next expected delimiter
 	// put empty expressions where required and finish the intermediate operators
 	// TODO: This does not work for cases like 'template c< int a > 2 >'
-	processNextExpectedDelimiter(processed, expected, token, hasLeft, result, instructions);
+	if (!processed && !error && token->type() == Token::OperatorDelimiter)
+		processExpectedOperatorDelimiters(processed, expected, token, hasLeft, result, instructions);
 
-	if (!processed && (token->type() == Token::Identifier || token->type() == Token::Literal) )
-		processIdentifiersAndLiterals(processed, error, expected, token, hasLeft, instructions);
-
-	if (!processed && token->type() == Token::OperatorDelimiter)
+	if (!processed && !error && token->type() == Token::OperatorDelimiter)
 	{
-		processOperatorDelimiters(processed, error, expected, token, hasLeft, result, instructions);
+		processNewOperatorDelimiters(processed, error, expected, token, hasLeft, result, instructions);
 		if (processed) return result; // No need to redo the rest of the work as it has been done here.
 	}
 
@@ -116,54 +117,6 @@ ParseResult Parser::parse(QVector<Token>::const_iterator token, ParseResult resu
 
 	++token;
 	return parse(token, result, expected, hasLeft, instructions);
-}
-
-QString Parser::getNextExpectedDelimiter(const QStringList& expected, int& index)
-{
-	for (index = 0; index<expected.size(); ++index)
-		if (expected.at(index) != "expr" && expected.at(index) != "id" && expected.at(index) != "end")
-			return expected.at(index);
-
-	return QString();
-}
-
-void Parser::processNextExpectedDelimiter(bool& processed, QStringList& expected, QVector<Token>::const_iterator& token,
-		bool& hasLeft, ParseResult& result, QVector<ExpressionTreeBuildInstruction*>& instructions)
-{
-	int index;
-	QString next_delim = getNextExpectedDelimiter(expected, index);
-
-	if (next_delim.isEmpty() || next_delim != token->text()) return;
-
-	processed = true;
-	result.missingInnerTokens += index;
-
-	// Finish all intermediate positions
-	for (int i = 0; i<index; ++i)
-	{
-		if (expected.first() == "expr" || expected.first() == "id" )
-		{
-			expected.removeFirst();
-			instructions.append( new AddEmptyValue() );
-			++result.emptyExpressions;
-		}
-		else
-		{
-			// If the expectation is not an expression or an identifier then it must be an end
-			expected.removeFirst();
-			instructions.append(new FinishOperator());
-			result.numOperators++;
-		}
-	}
-
-	// Finish the actual delimiter
-	expected.removeFirst();
-	instructions.append(new SkipOperatorDelimiter());
-
-	// Assume the finished delimtier was an infix one, therefore no left expression
-	// If the finished delimiter is a postfix the last unfinished operator will be finished
-	// in the beginning of the next call to parse() and then 'hasLeft' will be correctly set
-	hasLeft = false;
 }
 
 void Parser::processIdentifiersAndLiterals(bool& processed, bool& error, QStringList& expected,
@@ -180,7 +133,48 @@ void Parser::processIdentifiersAndLiterals(bool& processed, bool& error, QString
 	else if (e == "id") error = true;
 }
 
-void Parser::processOperatorDelimiters(bool& processed, bool& error, QStringList& expected,
+void Parser::processExpectedOperatorDelimiters(bool& processed, QStringList& expected,
+		QVector<Token>::const_iterator& token, bool& hasLeft, ParseResult& result,
+		QVector<ExpressionTreeBuildInstruction*>& instructions)
+{
+	for (int index = 0; index<expected.size(); ++index)
+		if (expected.at(index) == token->text() && expected.at(index) != "expr" && expected.at(index) != "id"
+				&& expected.at(index) != "end")
+		{
+			processed = true;
+			result.missingInnerTokens += index;
+
+			// Finish all intermediate positions
+			for (int i = 0; i<index; ++i)
+			{
+				if (expected.first() == "expr" || expected.first() == "id" )
+				{
+					expected.removeFirst();
+					instructions.append( new AddEmptyValue() );
+					++result.emptyExpressions;
+				}
+				else
+				{
+					// If the expectation is not an expression or an identifier then it must be an end
+					expected.removeFirst();
+					instructions.append(new FinishOperator());
+					result.numOperators++;
+				}
+			}
+
+			// Finish the actual delimiter
+			expected.removeFirst();
+			instructions.append(new SkipOperatorDelimiter());
+
+			// Assume the finished delimiter was an infix one, therefore no left expression
+			// If the finished delimiter is a postfix the last unfinished operator will be finished
+			// in the beginning of the next call to parse() and then 'hasLeft' will be correctly set
+			hasLeft = false;
+			return;
+		}
+}
+
+void Parser::processNewOperatorDelimiters(bool& processed, bool& error, QStringList& expected,
 		QVector<Token>::const_iterator& token, bool& hasLeft, ParseResult& result,
 		QVector<ExpressionTreeBuildInstruction*>& instructions)
 {
@@ -203,7 +197,7 @@ void Parser::processOperatorDelimiters(bool& processed, bool& error, QStringList
 			{
 				// This situation arises for example in the 'delete []' operator where two different operator tokens follow
 				// each other.
-				processNextExpectedDelimiter(processed, expected, token, hasLeft, result, instructions);
+				processExpectedOperatorDelimiters(processed, expected, token, hasLeft, result, instructions);
 				return;
 			}
 			matching_ops.append( ops_->findByInfixWithoutPrefix(token->text()) );
