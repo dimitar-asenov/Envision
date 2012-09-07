@@ -174,6 +174,10 @@ bool OOModel::initialize(Core::EnvisionManager&)
 	return true;
 }
 
+void OOModel::unload()
+{
+}
+
 void OOModel::selfTest(QString testid)
 {
 	if (testid.isEmpty()) SelfTest::TestManager<OOModel>::runAllTests().printResultStatistics();

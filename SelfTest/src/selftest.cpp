@@ -42,6 +42,10 @@ bool SelfTest::initialize(Core::EnvisionManager&)
 	return true;
 }
 
+void SelfTest::unload()
+{
+}
+
 void SelfTest::selfTest(QString)
 {
 }

@@ -62,48 +62,60 @@ Q_EXPORT_PLUGIN2( visualizationbase, Visualization::VisualizationBase )
 namespace Visualization
 {
 
-	bool VisualizationBase::initialize(Core::EnvisionManager& manager)
-	{
-		VisualizationManager::init(&manager);
-		Shape::registerShape<Box>();
-		Shape::registerShape<Diamond>();
-		Shape::registerShape<Braces>();
-		Shape::registerShape<SvgShape>();
+bool VisualizationBase::initialize(Core::EnvisionManager& manager)
+{
+	VisualizationManager::init(&manager);
+	Shape::registerShape<Box>();
+	Shape::registerShape<Diamond>();
+	Shape::registerShape<Braces>();
+	Shape::registerShape<SvgShape>();
 
-		// Register extensions
-		Position::registerExtension();
+	// Register extensions
+	Position::registerExtension();
 
-		// Register visualizations
-		Scene::defaultRenderer()->registerVisualization(Model::Text::typeIdStatic(), createVisualization<VText, Model::Text>);
-		Scene::defaultRenderer()->registerVisualization(Model::Integer::typeIdStatic(), createVisualization<VInteger, Model::Integer>);
-		Scene::defaultRenderer()->registerVisualization(Model::Float::typeIdStatic(), createVisualization<VFloat, Model::Float>);
-		Scene::defaultRenderer()->registerVisualization(Model::Character::typeIdStatic(), createVisualization<VCharacter, Model::Character>);
-		Scene::defaultRenderer()->registerVisualization(Model::Boolean::typeIdStatic(), createVisualization<VBoolean, Model::Boolean>);
-		Scene::defaultRenderer()->registerVisualization(Model::Reference::typeIdStatic(), createVisualization<VReference, Model::Reference>);
-		Scene::defaultRenderer()->registerVisualization(Model::ExtendableNode::typeIdStatic(), createVisualization<VExtendable, Model::ExtendableNode>);
-		Scene::defaultRenderer()->registerVisualization(Model::List::typeIdStatic(), createVisualization<VList, Model::List>);
+	// Register visualizations
+	Scene::defaultRenderer()->registerVisualization(
+			Model::Text::typeIdStatic(), createVisualization<VText, Model::Text>);
+	Scene::defaultRenderer()->registerVisualization(
+			Model::Integer::typeIdStatic(), createVisualization<VInteger, Model::Integer>);
+	Scene::defaultRenderer()->registerVisualization(
+			Model::Float::typeIdStatic(), createVisualization<VFloat, Model::Float>);
+	Scene::defaultRenderer()->registerVisualization(
+			Model::Character::typeIdStatic(), createVisualization<VCharacter, Model::Character>);
+	Scene::defaultRenderer()->registerVisualization(
+			Model::Boolean::typeIdStatic(), createVisualization<VBoolean, Model::Boolean>);
+	Scene::defaultRenderer()->registerVisualization(
+			Model::Reference::typeIdStatic(), createVisualization<VReference, Model::Reference>);
+	Scene::defaultRenderer()->registerVisualization(
+			Model::ExtendableNode::typeIdStatic(), createVisualization<VExtendable, Model::ExtendableNode>);
+	Scene::defaultRenderer()->registerVisualization(
+			Model::List::typeIdStatic(), createVisualization<VList, Model::List>);
 
-		// Register static visualizations
-		Static::registerStaticItem<Symbol>();
-		Static::registerStaticItem<SVGIcon>();
+	// Register static visualizations
+	Static::registerStaticItem<Symbol>();
+	Static::registerStaticItem<SVGIcon>();
 
-		// Enlarge and Center Main Window
+	// Enlarge and Center Main Window
 
-		VisualizationManager::instance().getMainWindow()->resize(1180,700);
-		QRect descktop( QApplication::desktop()->screenGeometry() );
-		int leftPos = descktop.width()/2-VisualizationManager::instance().getMainWindow()->width()/2;
-		int topPos = descktop.height()/2-VisualizationManager::instance().getMainWindow()->height()/2;
-		VisualizationManager::instance().getMainWindow()->move(leftPos,topPos);
+	VisualizationManager::instance().getMainWindow()->resize(1180,700);
+	QRect descktop( QApplication::desktop()->screenGeometry() );
+	int leftPos = descktop.width()/2-VisualizationManager::instance().getMainWindow()->width()/2;
+	int topPos = descktop.height()/2-VisualizationManager::instance().getMainWindow()->height()/2;
+	VisualizationManager::instance().getMainWindow()->move(leftPos,topPos);
 
-		//VisualizationManager::instance().getMainWindow()->showFullScreen();
+	//VisualizationManager::instance().getMainWindow()->showFullScreen();
 
-		return true;
-	}
+	return true;
+}
 
-	void VisualizationBase::selfTest(QString)
-	{
-		TestNodes::BinaryNode::init();
-		SelfTest::TestManager<VisualizationBase>::runAllTests().printResultStatistics();
-	}
+void VisualizationBase::unload()
+{
+}
+
+void VisualizationBase::selfTest(QString)
+{
+	TestNodes::BinaryNode::init();
+	SelfTest::TestManager<VisualizationBase>::runAllTests().printResultStatistics();
+}
 
 }

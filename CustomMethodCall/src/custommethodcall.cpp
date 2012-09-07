@@ -43,6 +43,10 @@ bool CustomMethodCall::initialize(Core::EnvisionManager&)
 	return true;
 }
 
+void CustomMethodCall::unload()
+{
+}
+
 void CustomMethodCall::selfTest(QString testid)
 {
 	if (testid.isEmpty()) SelfTest::TestManager<CustomMethodCall>::runAllTests().printResultStatistics();

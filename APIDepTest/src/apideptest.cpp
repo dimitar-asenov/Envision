@@ -46,6 +46,10 @@ bool APIDep::initialize(Core::EnvisionManager& em)
 	return true;
 }
 
+void APIDep::unload()
+{
+}
+
 void APIDep::selfTest(QString)
 {
 }

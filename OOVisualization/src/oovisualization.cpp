@@ -139,6 +139,10 @@ bool OOVisualization::initialize(Core::EnvisionManager&)
 	return true;
 }
 
+void OOVisualization::unload()
+{
+}
+
 void OOVisualization::selfTest(QString testid)
 {
 	if (testid.isEmpty()) SelfTest::TestManager<OOVisualization>::runAllTests().printResultStatistics();

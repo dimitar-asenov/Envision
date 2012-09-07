@@ -250,6 +250,10 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 	return true;
 }
 
+void OOInteraction::unload()
+{
+}
+
 void OOInteraction::selfTest(QString testid)
 {
 	if (testid.isEmpty()) SelfTest::TestManager<OOInteraction>::runAllTests().printResultStatistics();

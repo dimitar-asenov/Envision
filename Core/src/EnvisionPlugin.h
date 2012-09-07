@@ -62,6 +62,14 @@ class EnvisionPlugin
 		virtual bool initialize(EnvisionManager& manager) = 0;
 
 		/**
+		 * Frees up all resources allocated by this plug-in and prepares it to be unloaded.
+		 *
+		 * This function is called when Envision is about to exit or when a plug-in has manually been unloaded. At the
+		 * time when this function is called there will be no plug-ins dependent on this one.
+		 */
+		virtual void unload() = 0;
+
+		/**
 		 * Starts the indicated self-test for this plug-in.
 		 *
 		 * If the Envision system was started with a command line argument that indicates a particular plug-in should be

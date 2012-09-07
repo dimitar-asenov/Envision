@@ -99,6 +99,10 @@ bool InteractionBase::initialize(Core::EnvisionManager&)
 	return true;
 }
 
+void InteractionBase::unload()
+{
+}
+
 void InteractionBase::selfTest(QString testid)
 {
 	TestNodes::BinaryNode::init();

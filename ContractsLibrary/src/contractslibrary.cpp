@@ -58,6 +58,10 @@ bool ContractsLibrary::initialize(Core::EnvisionManager&)
 	return true;
 }
 
+void ContractsLibrary::unload()
+{
+}
+
 void ContractsLibrary::selfTest(QString testid)
 {
 	if (testid.isEmpty()) SelfTest::TestManager<ContractsLibrary>::runAllTests().printResultStatistics();

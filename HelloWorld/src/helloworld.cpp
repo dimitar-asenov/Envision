@@ -46,6 +46,10 @@ bool HelloWorld::initialize(Core::EnvisionManager&)
 	return true;
 }
 
+void HelloWorld::unload()
+{
+}
+
 void HelloWorld::selfTest(QString testId)
 {
 	QString greeting = (testId == QString::null ? "" : ( ". The selected test id was: " + testId ) );
