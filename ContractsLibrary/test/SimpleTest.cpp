@@ -38,7 +38,6 @@
 #include "items/VContractCall.h"
 #include "interaction/CreateContractMethod.h"
 #include "monitor/ValueAtReturnVisitor.h"
-#include "monitor/ChangeMonitor.h"
 
 #include "OOModel/src/allOOModelNodes.h"
 #include "ModelBase/src/Model.h"
@@ -54,7 +53,6 @@
 
 #include "OOInteraction/src/expression_editor/OOExpressionBuilder.h"
 #include "OOInteraction/src/expression_editor/operators/CommandDescriptor.h"
-#include "OOInteraction/src/handlers/HExpression.h"
 
 using namespace OOModel;
 using namespace Visualization;
@@ -339,11 +337,6 @@ TEST(ContractsLibrary, ContractsLibraryTest)
 	prj->classes()->append( createInterface() );
 	prj->classes()->append( createInterfaceContracts() );
 	model->endModification();
-
-	// Create a change monitor
-	//auto cm = new ChangeMonitor();
-	//cm->listenToModel(model);
-	HExpression::instance()->appendExpressionMonitor(ChangeMonitor::expressionModified);
 
 	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(prj));
 	VisualizationManager::instance().mainScene()->listenToModel(model);
