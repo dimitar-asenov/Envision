@@ -39,7 +39,7 @@
 #include "InteractionBase/src/autocomplete/AutoComplete.h"
 
 #include "VisualizationBase/src/Scene.h"
-#include "VisualizationBase/src/views/MainView.h"
+#include "VisualizationBase/src/VisualizationManager.h"
 #include "VisualizationBase/src/node_extensions/Position.h"
 #include "VisualizationBase/src/items/RootItem.h"
 
@@ -294,16 +294,10 @@ TEST(ControlFlowVisualization, SimpleTest)
 	else if(complicated) top_level = complicated;
 	else top_level = divbysix;
 
-	Scene* scene = new Scene();
-	Interaction::AutoComplete::setDefaultScene(scene);
-	scene->addTopLevelItem( new RootItem(top_level));
-	scene->scheduleUpdate();
-	scene->listenToModel(model);
+	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(top_level));
+	VisualizationManager::instance().mainScene()->listenToModel(model);
 
-	// Create view
-	MainView* view = new MainView(scene);
-
-	CHECK_CONDITION(view != nullptr);
+	CHECK_CONDITION(top_level != nullptr);
 }
 
 }

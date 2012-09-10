@@ -43,7 +43,6 @@
 
 #include "VisualizationBase/src/VisualizationManager.h"
 #include "VisualizationBase/src/Scene.h"
-#include "VisualizationBase/src/views/MainView.h"
 #include "VisualizationBase/src/renderer/ModelRenderer.h"
 #include "VisualizationBase/src/items/VExtendable.h"
 #include "VisualizationBase/src/items/VText.h"
@@ -649,9 +648,6 @@ Method* addFactorial(Model::Model* model, Class* parent)
 
 TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 {
-	Scene* scene = new Scene();
-	Interaction::AutoComplete::setDefaultScene(scene);
-
 	////////////////////////////////////////////////// Create Model
 	Model::Model* model = new Model::Model();
 	Project* prj = nullptr;
@@ -698,14 +694,10 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	else if (longMethod) top_level = longMethod;
 	else top_level = factorial;
 
-	scene->addTopLevelItem( new RootItem(top_level));
-	scene->scheduleUpdate();
-	scene->listenToModel(model);
+	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(top_level));
+	VisualizationManager::instance().mainScene()->listenToModel(model);
 
-	// Create view
-	MainView* view = new MainView(scene);
-
-	CHECK_CONDITION(view != nullptr);
+	CHECK_CONDITION(top_level != nullptr);
 }
 
 }

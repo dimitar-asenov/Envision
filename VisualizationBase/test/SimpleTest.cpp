@@ -32,8 +32,8 @@
  **********************************************************************************************************************/
 
 #include "visualizationbase.h"
+#include "VisualizationManager.h"
 #include "Scene.h"
-#include "views/MainView.h"
 #include "SelfTest/src/SelfTestSuite.h"
 #include "items/VExtendable.h"
 #include "items/VList.h"
@@ -48,8 +48,6 @@ namespace Visualization {
 
 TEST(VisualizationBase, ExtendableTest)
 {
-	Scene* scene = new Scene();
-
 	Model::Model* model = new Model::Model();
 	Model::List* list = static_cast<Model::List*> (model->createRoot("List"));
 
@@ -75,8 +73,8 @@ TEST(VisualizationBase, ExtendableTest)
 	model->endModification();
 
 	auto top = new RootItem(list);
+	auto scene = VisualizationManager::instance().mainScene();
 	scene->addTopLevelItem( top );
-	scene->scheduleUpdate();
 	QApplication::processEvents();
 
 	VList* l = dynamic_cast<VList*> (top->item());
@@ -84,10 +82,7 @@ TEST(VisualizationBase, ExtendableTest)
 	scene->scheduleUpdate();
 	scene->listenToModel(model);
 
-	// Create view
-	MainView* view = new MainView(scene);
-
-	CHECK_CONDITION(view != nullptr);
+	CHECK_CONDITION(scene);
 }
 
 }

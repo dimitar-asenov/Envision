@@ -38,7 +38,7 @@
 #include "SelfTest/src/SelfTestSuite.h"
 
 #include "VisualizationBase/src/Scene.h"
-#include "VisualizationBase/src/views/MainView.h"
+#include "VisualizationBase/src/VisualizationManager.h"
 #include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/items/VExtendable.h"
 #include "VisualizationBase/src/items/RootItem.h"
@@ -55,9 +55,6 @@ using namespace Visualization;
 TEST(InteractionBase, TextSelect)
 {
 	Visualization::VExtendable::setInteractionHandler(HBinaryNode::instance());
-
-	Scene* scene = new Scene();
-	AutoComplete::setDefaultScene(scene);
 
 	Model::Model* model = new Model::Model();
 	Model::List* list = static_cast<Model::List*> (model->createRoot("List"));
@@ -84,8 +81,8 @@ TEST(InteractionBase, TextSelect)
 	model->endModification();
 
 	auto top = new RootItem(list);
+	auto scene = VisualizationManager::instance().mainScene();
 	scene->addTopLevelItem( top );
-	scene->scheduleUpdate();
 	QApplication::processEvents();
 
 	VList* l = dynamic_cast<VList*> (top->item());
@@ -93,9 +90,7 @@ TEST(InteractionBase, TextSelect)
 	scene->scheduleUpdate();
 	scene->listenToModel(model);
 
-	// Create view
-	MainView* view = new MainView(scene);
-	CHECK_CONDITION(view != nullptr);
+	CHECK_CONDITION(scene);
 }
 
 }

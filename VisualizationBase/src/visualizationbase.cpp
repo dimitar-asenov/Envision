@@ -64,7 +64,8 @@ namespace Visualization
 
 bool VisualizationBase::initialize(Core::EnvisionManager& manager)
 {
-	VisualizationManager::init(&manager);
+	VisualizationManager& vmi = VisualizationManager::instance();
+	vmi.init(&manager);
 	Shape::registerShape<Box>();
 	Shape::registerShape<Diamond>();
 	Shape::registerShape<Braces>();
@@ -97,11 +98,11 @@ bool VisualizationBase::initialize(Core::EnvisionManager& manager)
 
 	// Enlarge and Center Main Window
 
-	VisualizationManager::instance().getMainWindow()->resize(1180,700);
+	vmi.getMainWindow()->resize(1180,700);
 	QRect descktop( QApplication::desktop()->screenGeometry() );
 	int leftPos = descktop.width()/2-VisualizationManager::instance().getMainWindow()->width()/2;
 	int topPos = descktop.height()/2-VisualizationManager::instance().getMainWindow()->height()/2;
-	VisualizationManager::instance().getMainWindow()->move(leftPos,topPos);
+	vmi.getMainWindow()->move(leftPos,topPos);
 
 	//VisualizationManager::instance().getMainWindow()->showFullScreen();
 
@@ -110,6 +111,7 @@ bool VisualizationBase::initialize(Core::EnvisionManager& manager)
 
 void VisualizationBase::unload()
 {
+	VisualizationManager::instance().cleanup();
 }
 
 void VisualizationBase::selfTest(QString)

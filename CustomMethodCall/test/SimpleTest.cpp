@@ -43,10 +43,8 @@
 
 #include "VisualizationBase/src/node_extensions/Position.h"
 #include "VisualizationBase/src/Scene.h"
-#include "VisualizationBase/src/views/MainView.h"
+#include "VisualizationBase/src/VisualizationManager.h"
 #include "VisualizationBase/src/items/RootItem.h"
-
-#include "InteractionBase/src/autocomplete/AutoComplete.h"
 
 using namespace OOModel;
 using namespace Visualization;
@@ -231,9 +229,6 @@ Class* addCollection(Model::Model* model, Project* parent)
 
 TEST(CustomMethodCall, CustomVisTest)
 {
-	Scene* scene = new Scene();
-	Interaction::AutoComplete::setDefaultScene(scene);
-
 	////////////////////////////////////////////////// Create Model
 	Model::Model* model = new Model::Model();
 
@@ -244,14 +239,10 @@ TEST(CustomMethodCall, CustomVisTest)
 	Model::Node* top_level = nullptr;
 	if(collection) top_level = collection;
 
-	scene->addTopLevelItem( new RootItem(top_level));
-	scene->scheduleUpdate();
-	scene->listenToModel(model);
+	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(top_level));
+	VisualizationManager::instance().mainScene()->listenToModel(model);
 
-	// Create view
-	MainView* view = new MainView(scene);
-
-	CHECK_CONDITION(view != nullptr);
+	CHECK_CONDITION(top_level != nullptr);
 }
 
 }

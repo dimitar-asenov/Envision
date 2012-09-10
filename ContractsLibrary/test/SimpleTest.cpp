@@ -47,11 +47,6 @@
 
 #include "VisualizationBase/src/VisualizationManager.h"
 #include "VisualizationBase/src/Scene.h"
-#include "VisualizationBase/src/views/MainView.h"
-#include "VisualizationBase/src/renderer/ModelRenderer.h"
-#include "VisualizationBase/src/items/VExtendable.h"
-#include "VisualizationBase/src/items/VText.h"
-#include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/node_extensions/Position.h"
 #include "VisualizationBase/src/items/RootItem.h"
 
@@ -329,11 +324,6 @@ Class* createInterfaceContracts()
 }
 TEST(ContractsLibrary, ContractsLibraryTest)
 {
-	CHECK_INT_EQUAL(1,1);
-
-	Scene* scene = new Scene();
-	Interaction::AutoComplete::setDefaultScene(scene);
-
 	////////////////////////////////////////////////// Create Model
 	Model::Model* model = new Model::Model();
 	Project* prj = nullptr;
@@ -350,20 +340,15 @@ TEST(ContractsLibrary, ContractsLibraryTest)
 	prj->classes()->append( createInterfaceContracts() );
 	model->endModification();
 
-	scene->addTopLevelItem( new RootItem(prj));
-	scene->scheduleUpdate();
-	scene->listenToModel(model);
-
-	// Create view
-	MainView* view = new MainView(scene);
-
 	// Create a change monitor
 	//auto cm = new ChangeMonitor();
 	//cm->listenToModel(model);
 	HExpression::instance()->appendExpressionMonitor(ChangeMonitor::expressionModified);
 
+	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(prj));
+	VisualizationManager::instance().mainScene()->listenToModel(model);
 
-	CHECK_CONDITION(view != nullptr);
+	CHECK_CONDITION(prj != nullptr);
 }
 
 }

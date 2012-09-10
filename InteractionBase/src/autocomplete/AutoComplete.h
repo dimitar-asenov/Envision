@@ -36,10 +36,6 @@
 
 #include "../interactionbase_api.h"
 
-namespace Visualization {
-	class Scene;
-}
-
 namespace Interaction {
 
 class AutoCompleteVis;
@@ -48,7 +44,6 @@ class AutoCompleteEntry;
 class INTERACTIONBASE_API AutoComplete {
 	public:
 
-		static void setDefaultScene(Visualization::Scene* scene);
 		static void show(const QList<AutoCompleteEntry*>& entries);
 
 		/**
@@ -73,7 +68,6 @@ class INTERACTIONBASE_API AutoComplete {
 		static AutoCompleteVis* visualization();
 
 	private:
-		static Visualization::Scene* defaultScene_;
 		static AutoCompleteVis* vis_;
 		static bool hideRequested_;
 };

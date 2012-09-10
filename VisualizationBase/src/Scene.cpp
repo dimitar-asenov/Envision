@@ -55,7 +55,8 @@ const QEvent::Type UpdateSceneEvent::EventType = static_cast<QEvent::Type> (QEve
 
 Scene::Scene()
 	: QGraphicsScene(VisualizationManager::instance().getMainWindow()), needsUpdate_(false),
-	  renderer_(defaultRenderer()), sceneHandlerItem_(new SceneHandlerItem(this)), inEventHandler_(false)
+	  renderer_(defaultRenderer()), sceneHandlerItem_(new SceneHandlerItem(this)), inEventHandler_(false),
+	  inAnUpdate_(false)
 {
 }
 
@@ -83,12 +84,14 @@ void Scene::addTopLevelItem(Item* item)
 {
 	topLevelItems_.append(item);
 	addItem(item);
+	scheduleUpdate();
 }
 
 void Scene::removeTopLevelItem(Item* item)
 {
 	topLevelItems_.removeAll(item);
 	removeItem(item);
+	scheduleUpdate();
 }
 
 void Scene::scheduleUpdate()
@@ -102,6 +105,7 @@ void Scene::scheduleUpdate()
 
 void Scene::updateItems()
 {
+	inAnUpdate_ = true;
 	// Update Top level items
 	for (int i = 0; i<topLevelItems_.size(); ++i)
 		topLevelItems_.at(i)->updateSubtree();
@@ -158,6 +162,7 @@ void Scene::updateItems()
 	}
 
 	needsUpdate_ = false;
+	inAnUpdate_ = false;
 }
 
 void Scene::listenToModel(Model::Model* model)
@@ -190,8 +195,9 @@ void Scene::customEvent(QEvent *event)
 
 bool Scene::event(QEvent *event)
 {
-	inEventHandler_ = true;
+	if (inAnUpdate_) return QGraphicsScene::event(event);
 
+	inEventHandler_ = true;
 	bool result = false;
 	if (event->type() != UpdateSceneEvent::EventType &&
 		 event->type() != QEvent::MetaCall  &&

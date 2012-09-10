@@ -103,6 +103,7 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		QList<QEvent*> postEventActions_;
 
 		bool inEventHandler_;
+		bool inAnUpdate_;
 
 		void updateItems();
 };
