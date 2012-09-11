@@ -55,11 +55,6 @@ void VisualizationManager::init(Core::EnvisionManager *manager)
 		envisionManager_ = manager;
 		mainScene_ = new Scene();
 		mainView_ = new MainView(mainScene_); // It gets automatically added as a top level view.
-
-		// This is needed to avoid problems during initialization. If the scene has no focus, it might be activated and
-		// gain focus later when items are created which will result in a focusIn event being sent (not posted) during
-		// an update and thus handleded immediately, which usually breaks things.
-		mainView_->activateWindow();
 	}
 }
 
