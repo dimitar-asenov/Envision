@@ -121,6 +121,7 @@ void Scene::updateItems()
 
 	if (!draw_selections)
 	{
+		// There is exactly one item and it has a cursor visualization
 		auto selectable = cursors_.first()->owner();
 		while (selectable && ! (selectable->flags() &  QGraphicsItem::ItemIsSelectable))
 			selectable = selectable->parent();
@@ -128,7 +129,7 @@ void Scene::updateItems()
 		draw_selections = !selectable || selectable != selected.first();
 	}
 
-	if (draw_selections)
+	if (draw_selections && !(selected.size() == 1 && selected.first() == sceneHandlerItem_))
 	{
 		for (int i = 0; i<selected.size(); ++i)
 		{
@@ -223,6 +224,9 @@ bool Scene::event(QEvent *event)
 		SAFE_DELETE(e);
 	}
 	postEventActions_.clear();
+
+	if (!focusItem())
+		sceneHandlerItem_->moveCursor(Item::MoveOnPosition, QPoint(0,0));
 
 	return result;
 }
