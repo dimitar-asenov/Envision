@@ -130,7 +130,7 @@ void CommandExecutionEngine::execute(Visualization::Item *originator, const QStr
 	}
 
 	// If no item can process this command dispatch it to the SceneItem
-	if (!processed)
+	if (!processed && originator != originator->scene()->sceneHandlerItem())
 	{
 		GenericHandler* handler = dynamic_cast<GenericHandler*> (source->scene()->sceneHandlerItem()->handler());
 
@@ -189,10 +189,13 @@ QList<CommandSuggestion*> CommandExecutionEngine::autoComplete(Visualization::It
 		}
 
 		// Get suggestions from the scene handler item
-		GenericHandler* handler = dynamic_cast<GenericHandler*> (source->scene()->sceneHandlerItem()->handler());
-		if ( handler )
-			for (int i = 0; i < handler->commands().size(); ++i)
-				result.append( handler->commands().at(i)->suggest(source, target, trimmed) );
+		if (originator != originator->scene()->sceneHandlerItem())
+		{
+			GenericHandler* handler = dynamic_cast<GenericHandler*> (source->scene()->sceneHandlerItem()->handler());
+			if ( handler )
+				for (int i = 0; i < handler->commands().size(); ++i)
+					result.append( handler->commands().at(i)->suggest(source, target, trimmed) );
+		}
 	}
 
 	return result;
