@@ -38,8 +38,10 @@
 namespace Visualization {
 
 Cursor::Cursor(Item* owner, CursorType type, Item* visualization)
-	: owner_(owner), visualization_(visualization), type_(type), notLocationEquivalent_(false)
-{}
+	: owner_(owner), visualization_(nullptr), type_(type), notLocationEquivalent_(false)
+{
+	if (visualization) setVisualization(visualization);
+}
 
 Cursor::~Cursor()
 {
@@ -55,6 +57,20 @@ void Cursor::setVisualization(Item* visualization)
 {
 	SAFE_DELETE_ITEM(visualization_);
 	visualization_ = visualization;
+
+	if (visualization_)
+	{
+		auto item = owner();
+		while (item)
+		{
+			if (item->flags() & Item::ItemIgnoresTransformations)
+			{
+				visualization_->setFlag(Item::ItemIgnoresTransformations);
+				break;
+			}
+			item = item->parent();
+		}
+	}
 }
 
 bool Cursor::isSame(Cursor* other)
