@@ -140,7 +140,6 @@ void Scene::updateItems()
 		}
 	}
 
-
 	// Update Cursors
 	for (Cursor* c : cursors_)
 	{
@@ -149,17 +148,6 @@ void Scene::updateItems()
 			if (c->visualization()->scene() != this) addItem(c->visualization());
 			c->visualization()->updateSubtree();
 		}
-	}
-
-	if (!cursors_.isEmpty())
-	{
-		for (auto view : views())
-			if (view->isActiveWindow())
-			{
-				auto vis = cursors_.at(0)->visualization();
-				if (!vis) vis = cursors_.at(0)->owner();
-				view->ensureVisible( vis->boundingRect().translated(vis->scenePos()), 5, 5);
-			}
 	}
 
 	computeSceneRect();
@@ -226,8 +214,21 @@ bool Scene::event(QEvent *event)
 	}
 	postEventActions_.clear();
 
-	if (!focusItem())
+	// Focus the sceneHandlerItem if no other item is focused after a mouse press
+	if (event->type() == QEvent::GraphicsSceneMousePress  && !focusItem())
 		sceneHandlerItem_->moveCursor(Item::MoveOnPosition, QPoint(0,0));
+
+	// On keyboard events, make sure the cursor is visible
+	if (event->type() == QEvent::KeyPress && !cursors_.isEmpty())
+	{
+		for (auto view : views())
+			if (view->isActiveWindow())
+			{
+				auto vis = cursors_.at(0)->visualization();
+				if (!vis) vis = cursors_.at(0)->owner();
+				view->ensureVisible( vis->boundingRect().translated(vis->scenePos()), 5, 5);
+			}
+	}
 
 	return result;
 }
