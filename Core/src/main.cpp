@@ -66,9 +66,7 @@ int main(int argc, char *argv[])
    	 testr.enqueueSelfTests(pm);
 
    	 QTextStream out(stdout);
-   	 out << "------------------------------" << endl;
-   	 out << "All plug-ins loaded." << endl;
-   	 out << "------------------------------" << endl;
+   	 out << "==============================" << endl;
 
    	 retCode = a.exec();
     }

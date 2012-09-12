@@ -60,6 +60,7 @@ QStringList UnaryOperatorStringComponents::components()
 		case OOModel::UnaryOperation::MINUS: pre = "-"; break;
 		case OOModel::UnaryOperation::NOT: pre = "!"; break;
 		case OOModel::UnaryOperation::COMPLEMENT: pre = "~"; break;
+		case OOModel::UnaryOperation::PARENTHESIS: {pre = "("; post = ")";} break;
 		default: break;
 	}
 

@@ -41,28 +41,36 @@
 namespace Visualization {
 
 class View;
+class MainView;
+class Scene;
 
 class VISUALIZATIONBASE_API VisualizationManager
 {
-	private:
-		static VisualizationManager theInstance;
-
-		Core::EnvisionManager *envisionManager;
-		QVector<View*> views;
-
-		VisualizationManager();
-		VisualizationManager(const VisualizationManager& other);
-		VisualizationManager&  operator = (const VisualizationManager& other);
-
 	public:
+		static VisualizationManager& instance();
+		VisualizationManager(const VisualizationManager& other) = delete;
+		VisualizationManager&  operator = (const VisualizationManager& other) = delete;
+
 		QWidget* getMainWindow();
 
 		void addTopLevelView(View* view);
+		void init(Core::EnvisionManager *manager);
+		void cleanup();
 
-		static VisualizationManager& instance();
-		static void init(Core::EnvisionManager *manager);
+		Scene* mainScene();
+		MainView* mainView();
+
+	private:
+		VisualizationManager();
+
+		Core::EnvisionManager *envisionManager_;
+		Scene* mainScene_;
+		MainView* mainView_;
+		QList<View*> views_;
 };
 
+inline Scene* VisualizationManager::mainScene() { return mainScene_; }
+inline MainView* VisualizationManager::mainView() { return mainView_; }
 }
 
 #endif /* VISUALIZATIONMANAGER_H_ */

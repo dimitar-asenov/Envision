@@ -73,7 +73,8 @@ bool Item::removeAddOn(VisualizationAddOn* addOn)
 }
 
 Item::Item(Item* parent, const StyleType* style) :
-	QGraphicsItem(parent), style_(nullptr), shape_(nullptr), needsUpdate_(FullUpdate), purpose_(-1)
+	QGraphicsItem(parent), style_(nullptr), shape_(nullptr), needsUpdate_(FullUpdate), purpose_(-1),
+	itemCategory_(Scene::NoItemCategory)
 {
 	if ( !style || style->drawsOnlyShape() ) setFlag(QGraphicsItem::ItemHasNoContents);
 
@@ -265,7 +266,8 @@ bool Item::isEmpty() const
 
 void Item::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-	if ( hasShape() && (style()->drawShapeWhenEmpty() || !isEmpty()) ) shape_->paint(painter, option, widget);
+	if ( hasShape() && (style()->drawShapeWhenEmpty() || !isEmpty()) && !isCategoryHiddenDuringPaint() )
+		shape_->paint(painter, option, widget);
 }
 
 InteractionHandler* Item::handler() const
@@ -426,14 +428,18 @@ QList<ItemRegion> Item::regions()
 	QList<ItemRegion> regs;
 
 	bool hasChildren = false;
-	for(auto item : childItems())
+
+	if (!style()->wholeItemCursor())
 	{
-		hasChildren = true;
-		Item* child = static_cast<Item*> (item);
-		QRect rect = child->boundingRect().toRect();
-		rect.translate(child->pos().toPoint());
-		regs.append(ItemRegion(rect));
-		regs.last().setItem(child);
+		for(auto item : childItems())
+		{
+			hasChildren = true;
+			Item* child = static_cast<Item*> (item);
+			QRect rect = child->boundingRect().toRect();
+			rect.translate(child->pos().toPoint());
+			regs.append(ItemRegion(rect));
+			regs.last().setItem(child);
+		}
 	}
 
 	if (!hasChildren)
@@ -651,6 +657,12 @@ void Item::putAddOnItemsInSequence(SequentialLayout* layout)
 
 	for (auto item : values)
 		layout->append(item);
+}
+
+Scene::ItemCategory Item::itemCategory()
+{
+	if (itemCategory_ == Scene::NoItemCategory && parent()) return parent()->itemCategory();
+	else return itemCategory_;
 }
 
 /***********************************************************************************************************************

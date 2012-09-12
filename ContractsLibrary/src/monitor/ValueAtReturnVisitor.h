@@ -25,67 +25,64 @@
  **********************************************************************************************************************/
 
 /*
- * HStatementItemList.cpp
+ * ValueAtReturnVisitor.h
  *
- *  Created on: Jun 5, 2012
+ *  Created on: Aug 31, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "HStatementItemList.h"
+#ifndef ContractsLibrary_VALUEATRETURNVISITOR_H_
+#define ContractsLibrary_VALUEATRETURNVISITOR_H_
 
-#include "OOVisualization/src/elements/VStatementItemList.h"
-#include "OOModel/src/expressions/EmptyExpression.h"
-#include "OOModel/src/statements/ExpressionStatement.h"
+#include "../contractslibrary_api.h"
 
-#include "InteractionBase/src/handlers/SetCursorEvent.h"
-#include "VisualizationBase/src/cursor/LayoutCursor.h"
+#if defined(CONTRACTSLIBRARY_LIBRARY)
+	#include "ModelBase/src/visitor/VisitorDefinition.h"
+#else
+	#include "ModelBase/src/visitor/Visitor.h"
+#endif
 
-namespace OOInteraction {
-
-HStatementItemList::HStatementItemList()
-{}
-
-HStatementItemList* HStatementItemList::instance()
-{
-	static HStatementItemList h;
-	return &h;
+namespace Model {
+	class Node;
 }
 
-void HStatementItemList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
-{
-	auto vis = dynamic_cast<OOVisualization::VStatementItemList*> ( target );
-	bool processed = false;
-
-	if (event->modifiers() == Qt::NoModifier && (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return))
-	{
-		int index = -1;
-		if (vis->scene()->mainCursor() && vis->scene()->mainCursor()->owner() == vis->layout())
-			index = vis->layout()->correspondingSceneCursor<Visualization::LayoutCursor>()->index();
-		else
-		{
-			index = vis->focusedElementIndex();
-			if (index >= 0) ++index;
-		}
-
-		if (index >= 0)
-		{
-			processed = true;
-			event->accept();
-
-			auto es = new OOModel::ExpressionStatement(new OOModel::EmptyExpression());
-			vis->node()->model()->beginModification(vis->node(), "add empty statement");
-			vis->node()->insert(index, es);
-			vis->node()->model()->endModification();
-
-			vis->setUpdateNeeded(Visualization::Item::StandardUpdate);
-				target->scene()->addPostEventAction( new Interaction::SetCursorEvent(vis, es->expression(),
-				Interaction::SetCursorEvent::CursorOnLeft));
-		}
-
-
-	}
-
-	if (!processed) HList::keyPressEvent(target, event);
+namespace OOModel {
+	class MethodCallExpression;
+	class ReferenceExpression;
+	class Method;
 }
 
-} /* namespace OOInteraction */
+namespace ContractsLibrary {
+
+class CONTRACTSLIBRARY_API ValueAtReturnVisitor : public Model::Visitor<ValueAtReturnVisitor, Model::Node*> {
+	public:
+		ValueAtReturnVisitor();
+
+		virtual Model::Node* visitChildren(Model::Node* n);
+
+		static Model::Node* visitMethodCall(ValueAtReturnVisitor* v, OOModel::MethodCallExpression* call);
+		static Model::Node* visitReference(ValueAtReturnVisitor* v, OOModel::ReferenceExpression* ref);
+
+		static void init();
+		static void setMethods(OOModel::Method* ensuresMethod, OOModel::Method* valueAtReturnMethod);
+
+		int numWrapped();
+		int numUnwrapped();
+
+	private:
+		bool inEnsuresCall_;
+		bool inValueAtReturnCall_;
+		bool outReference_;
+
+		int numWrapped_;
+		int numUnwrapped_;
+
+		static OOModel::Method* ensuresMethod_;
+		static OOModel::Method* valueAtReturnMethod_;
+
+};
+
+inline int ValueAtReturnVisitor::numWrapped() { return numWrapped_;}
+inline int ValueAtReturnVisitor::numUnwrapped() { return numUnwrapped_;}
+} /* namespace ContractsLibrary */
+#endif /* ContractsLibrary_VALUEATRETURNVISITOR_H_ */

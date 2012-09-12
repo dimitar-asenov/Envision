@@ -41,6 +41,35 @@
 
 namespace Model {
 
+/**
+ * The ExtendableNode class provides convenient functionality that simplifies the creation of new nodes and allows
+ * existing node types to be extended by plug-ins thereby adding new attributes to them.
+ *
+ * Here we will explain with an example the implementation details of this mechanism. The implementation is a variant of
+ * the Properties pattern which is described here:
+ *
+ * http://steve-yegge.blogspot.com/2008/10/universal-design-pattern.html.
+ *
+ * ExtendableNode and each class deriving from it contains a static member structure that contains meta data. This meta
+ * data describes exactly what attributes a class has. Attributes are child nodes and are specified by a name, a node
+ * type and three flags - optional, persisted and partially loaded.
+ *
+ * When a class Foo derives from ExtendableNode it should specify what attributes it has by registering them with its
+ * associated meta data object. When a particular instance of Foo is created, the new instance’s constructor does not do
+ * anything. Instead the base constructor of ExtendableNode initializes the object. The object contains a table (vector
+ * of vectors) of child nodes which is initialized according to the meta information of all derived classes. Once the
+ * object is initialized, it can be used just like any other object by calling methods directly on the instance.
+ *
+ * This scheme also allows for arbitrary extensions to be registered for a node type. For example it is possible to
+ * register the extension Bar for all nodes of type Foo. This will simply insert additional attributes in the meta
+ * information object for class Foo. When new instances of that class are created they will automatically have these new
+ * attributes. Thus an extension should only be registered before any instances of an object exist. To use an extension
+ * the programmer can simply call the extension method on any object deriving from ExtendableNode. This will return a
+ * pointer to an extension instance object which can be used to access the attributes defined by the extension. If the
+ * requested extension was not registered with the target node type, nullptr will be returned.
+ *
+ * The \file nodeMacros.h file contains many convenience macros which simplify the use of this extension mechanism.
+ */
 class MODELBASE_API ExtendableNode: public Node
 {
 	public:

@@ -39,12 +39,13 @@
 
 namespace OOModel {
 
-class StatementItemList : public Model::TypedList<StatementItem>
+class OOMODEL_API StatementItemList : public Model::TypedList<StatementItem>
 {
 	NODE_DECLARE_STANDARD_METHODS(StatementItemList)
 
 	public:
-		virtual QList<Model::Node*> findSymbol(const QString& symbol, Node* source, FindSymbolMode mode);
+		virtual QList<Model::Node*> findSymbols(const QRegExp& symbolExp, Node* source, FindSymbolMode mode,
+				bool exhaustAllScopes) override;
 };
 
 }

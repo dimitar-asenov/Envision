@@ -1,7 +1,7 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/Item/default">
 	<operators>
-		<length>8</length>
+		<length>9</length>
 		<e0 prototypes="default.operand">
 			<preSymbol prototypes="item/Symbol/default"><symbol>⁺⁺</symbol></preSymbol>
 		</e0>
@@ -26,5 +26,15 @@
 		<e7 prototypes="default.operand">
 			<preSymbol prototypes="item/Symbol/default"><symbol>~</symbol></preSymbol>
 		</e7>
+		<e8 prototypes="default.operand">
+			<layout>
+				<extraCursorsOutsideShape>true</extraCursorsOutsideShape>
+				<shape prototypes="shape/Braces/default">
+					Braces
+					<leftBrace>(</leftBrace>
+					<rightBrace>)</rightBrace>	
+				</shape>
+			</layout>
+		</e8>
 	</operators>
 </style>

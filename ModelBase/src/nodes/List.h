@@ -93,9 +93,23 @@ class MODELBASE_API List: public Node
 		const QVector<Node*>& nodes();
 
 		Node* findFirstSymbolDefinition(const QString& symbol, int beforeIndex = -1);
-		QList<Node*> findAllSymbolDefinitions(const QString& symbol, int beforeIndex = -1);
+		QList<Node*> findAllSymbolDefinitions(const QRegExp& symbolExp, int beforeIndex = -1);
 
 		virtual bool replaceChild(Node* child, Node* replacement, bool releaseOldChild = true);
+
+		/**
+		 * Creates a new Node that is suitable for inserting in the list. The newly created node is not directly inserted
+		 * into the list.
+		 *
+		 * The default implementation returns nullptr. This behavior is suitable for lists that are not managed by
+		 * standard interaction handlers or where the creation of item in standard ways is not necessary.
+		 *
+		 * Reimplement this method in derived classes to control what Node is created.
+		 *
+		 * This method is used by higher level abstractions and in TypedList to facilitate the automatic creation of list
+		 * elements.
+		 */
+		virtual Node* createDefaultElement();
 
 	private:
 		QVector<Node*> nodes_;

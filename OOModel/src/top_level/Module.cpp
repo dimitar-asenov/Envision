@@ -58,14 +58,18 @@ const QString& Module::symbolName() const
 	return name();
 }
 
-QList<Model::Node*> Module::findSymbol(const QString& symbol,Model::Node* source, FindSymbolMode mode)
+QList<Model::Node*> Module::findSymbols(const QRegExp& symbolExp,Model::Node* source, FindSymbolMode mode,
+		bool exhaustAllScopes)
 {
 	QList<Model::Node*> symbols;
 
-	symbols << modules()->findAllSymbolDefinitions(symbol);
-	symbols << classes()->findAllSymbolDefinitions(symbol);
+	symbols << modules()->findAllSymbolDefinitions(symbolExp);
+	symbols << classes()->findAllSymbolDefinitions(symbolExp);
 
-	return symbols.isEmpty() ? Node::findSymbol(symbol, source, mode) : symbols;
+	if (exhaustAllScopes || symbols.isEmpty())
+		symbols << Node::findSymbols(symbolExp, source, mode, exhaustAllScopes);
+
+	return symbols;
 }
 
 }

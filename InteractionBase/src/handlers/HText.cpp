@@ -169,27 +169,6 @@ void HText::focusOutEvent(Visualization::Item *target, QFocusEvent *)
 	target->setUpdateNeeded(Visualization::Item::StandardUpdate);
 }
 
-void HText::focusInEvent(Visualization::Item *target, QFocusEvent *event)
-{
-//	Visualization::TextRenderer* tr = static_cast<Visualization::TextRenderer*> (target);
-//	//tr->scene()->setMainCursor(new Visualization::TextCursor(tr));
-//
-//	GenericHandler::FocusDirection dir = GenericHandler::focusDirection();
-//
-//	int size = tr->text().length();
-//
-//	if (size > 0)
-//	{
-//		// Here we choose which child to focus.
-//		if (dir == GenericHandler::FROM_LEFT)
-//			tr->correspondingSceneCursor<Visualization::TextCursor>()->setCaretPosition(0);
-//		else if (dir == GenericHandler::FROM_RIGHT)
-//			tr->correspondingSceneCursor<Visualization::TextCursor>()->setCaretPosition(size);
-//	}
-
-	GenericHandler::focusInEvent(target, event);
-}
-
 // TextRenderer interface routines.
 void HText::erase(Visualization::Item *target, bool forwards, bool onlyDeleteIfSelected)
 {

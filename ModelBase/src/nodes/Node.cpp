@@ -146,21 +146,37 @@ bool Node::replaceChild(Node*, Node*, bool)
 	return false;
 }
 
-QList<Node*> Node::findSymbol(const QString& symbol, Node* source, FindSymbolMode mode)
+QList<Node*> Node::findSymbols(const QRegExp& symbolExp, Node* source, FindSymbolMode mode, bool exhaustAllScopes)
 {
-	if (definesSymbol() && symbolName() == symbol)
+	QList<Node*> res;
+
+	// If exhaustAllScopes is true and there is a parent item, we should let the parent find this symbol definition
+	// and add it to the result. This symbol should not report itself in that case.
+	if (mode == SEARCH_UP)
 	{
-		QList<Node*> res;
-		res << this;
-		return res;
+		if (definesSymbol() && symbolExp.exactMatch(symbolName()) && !(exhaustAllScopes && parent()))
+			res << this;
+		else if (parent_)
+			res << parent_->findSymbols(symbolExp, source, mode, exhaustAllScopes);
 	}
-	else if (mode == SEARCH_UP && parent_) return parent_->findSymbol(symbol, source, mode);
-	else return QList<Node*>();
+
+	return res;
 }
 
 /***********************************************************************************************************************
  * GETTERS AND SETTERS
  **********************************************************************************************************************/
+int Node::typeId() const
+{
+	return typeIdStatic();
+}
+
+const QString& Node::typeName() const
+{
+	static QString name = "Node";
+	return name;
+}
+
 Model* Node::model() const
 {
 	return Model::findModel(root());
@@ -226,7 +242,9 @@ const QString& Node::symbolName() const
 
 QList<int> Node::hierarchyTypeIds() const
 {
-	return QList<int>();
+	QList<int> l;
+	l << typeIdStatic();
+	return l;
 }
 
 bool Node::isNewPersistenceUnit() const
@@ -288,7 +306,7 @@ int Node::registerNodeType(const QString &type, const NodeConstructor constructo
 	ModelBase::log()->add(Log::LOGINFO, "Registered new node type " + type);
 
 	++numRegisteredTypes_;
-	return numRegisteredTypes_ - 1;
+	return numRegisteredTypes_; // Id 0 is reserved for Node
 }
 
 Node* Node::createNewNode(const QString &type, Node* parent)

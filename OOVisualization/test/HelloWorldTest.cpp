@@ -39,9 +39,10 @@
 
 #include "OOModel/src/allOOModelNodes.h"
 
+#include "InteractionBase/src/autocomplete/AutoComplete.h"
+
 #include "VisualizationBase/src/VisualizationManager.h"
 #include "VisualizationBase/src/Scene.h"
-#include "VisualizationBase/src/views/MainView.h"
 #include "VisualizationBase/src/renderer/ModelRenderer.h"
 #include "VisualizationBase/src/items/VExtendable.h"
 #include "VisualizationBase/src/items/VText.h"
@@ -411,8 +412,15 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 	longMethod->items()->append(new ExpressionStatement(var15));
 	var15->setName("var15");
 	var15->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
+	BinaryOperation* binOp0 = new BinaryOperation();
+	var15->setInitialValue(binOp0);
+	binOp0->setOp(BinaryOperation::DIVIDE);
+	UnaryOperation* uOp3 = new UnaryOperation();
+	binOp0->setLeft(uOp3);
+	binOp0->setRight(new IntegerLiteral(3));
+	uOp3->setOp(UnaryOperation::PARENTHESIS);
 	BinaryOperation* binOp1 = new BinaryOperation();
-	var15->setInitialValue(binOp1);
+	uOp3->setOperand(binOp1);
 	binOp1->setOp(BinaryOperation::PLUS);
 	binOp1->setLeft(new IntegerLiteral(41));
 	binOp1->setRight(new IntegerLiteral(1));
@@ -640,8 +648,6 @@ Method* addFactorial(Model::Model* model, Class* parent)
 
 TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 {
-	Scene* scene = new Scene();
-
 	////////////////////////////////////////////////// Create Model
 	Model::Model* model = new Model::Model();
 	Project* prj = nullptr;
@@ -688,14 +694,10 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	else if (longMethod) top_level = longMethod;
 	else top_level = factorial;
 
-	scene->addTopLevelItem( new RootItem(top_level));
-	scene->scheduleUpdate();
-	scene->listenToModel(model);
+	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(top_level));
+	VisualizationManager::instance().mainScene()->listenToModel(model);
 
-	// Create view
-	MainView* view = new MainView(scene);
-
-	CHECK_CONDITION(view != nullptr);
+	CHECK_CONDITION(top_level != nullptr);
 }
 
 }

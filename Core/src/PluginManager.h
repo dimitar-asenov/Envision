@@ -59,11 +59,23 @@ class PluginManager
 		PluginManager(QString path = "plugins/");
 
 		/**
+		 * Unloads all plug-ins.
+		 */
+		~PluginManager();
+
+		/**
 		 * Loads and initializes all plug-ins found in the plug-ins folder. Before a plug-in is loaded all its
 		 * dependencies are loaded first. Each plug-in is given a reference to the EnvisionManager object to communicate
 		 * to the core.
 		 */
 		void loadAllPlugins(EnvisionManager&);
+
+		/**
+		 * Unloads all currently loaded plug-ins.
+		 *
+		 * Before a plug-in is unloaded it's unload() method will be called giving the plug-in a chance to clean up.
+		 */
+		void unloadAllPlugins();
 
 		/**
 		 * Returns a list containing copies of the metadata for all plug-ins which are currently loaded in the system.

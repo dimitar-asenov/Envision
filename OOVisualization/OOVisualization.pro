@@ -5,7 +5,8 @@ win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase \
     -loomodel \
-    -lvisualizationbase
+    -lvisualizationbase \
+    -linteractionbase
 HEADERS += test/MethodAddOn.h \
     src/expressions/VEmptyExpressionStyle.h \
     src/elements/VStatementItemList.h \

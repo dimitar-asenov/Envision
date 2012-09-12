@@ -40,7 +40,7 @@ namespace Visualization {
 ITEM_COMMON_DEFINITIONS(SceneHandlerItem, "item")
 
 SceneHandlerItem::SceneHandlerItem(Scene* scene) :
-	Item(nullptr)
+	Item(nullptr, itemStyles().get())
 {
 	scene->addItem(this);
 }

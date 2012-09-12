@@ -1,0 +1,9 @@
+/*! \namespace Logger
+
+The Logger plug-in provides facilities to keep a system log.
+
+It exports a Log class that can store messages of different error levels. A client plug-in can use the log to record an
+event or to browse existing log events. Plug-ins (such as a visualization) can subscribe to the Log so that they get
+notified whenever a new event appears. In this way users can be notified as as soon as a new entry occurs.
+
+*/

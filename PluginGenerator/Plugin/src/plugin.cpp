@@ -43,6 +43,10 @@ bool PLUGINNAME::initialize(Core::EnvisionManager&)
 	return true;
 }
 
+void PLUGINNAME::unload()
+{
+}
+
 void PLUGINNAME::selfTest(QString testid)
 {
 	if (testid.isEmpty()) SelfTest::TestManager<PLUGINNAME>::runAllTests().printResultStatistics();

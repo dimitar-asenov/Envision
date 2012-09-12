@@ -101,8 +101,8 @@ void MainView::wheelEvent(QWheelEvent *event)
 	else scaleLevel++;
 
 	if ( scaleLevel <= 0 ) scaleLevel = 1;
-	qreal scaleFactor = SCALING_FACTOR / (qreal) scaleLevel;
-	setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
+	qreal factor = scaleFactor();
+	setTransform(QTransform::fromScale(factor, factor));
 
 	if ( miniMap ) miniMap->visibleRectChanged();
 }

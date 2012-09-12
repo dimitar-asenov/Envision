@@ -43,7 +43,8 @@
 
 namespace OOVisualization {
 
-class VExpressionStatement : public Visualization::ItemWithNode< Visualization::Item, OOModel::ExpressionStatement>
+class OOVISUALIZATION_API VExpressionStatement
+	: public Visualization::ItemWithNode< Visualization::Item, OOModel::ExpressionStatement>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VExpressionStatement, Visualization::ItemStyle)
 

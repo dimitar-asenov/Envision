@@ -59,6 +59,8 @@
 	</condition>
 	<content prototypes="layout/SequentialLayout/default">
 		<alignment>3</alignment>
+		<noInnerCursors>true</noInnerCursors>
+		<noBoundaryCursorsInsideShape>true</noBoundaryCursorsInsideShape>
 	</content>
 	<thenBranch prototypes="item/VList/default">
 		<shape prototypes="shape/Box/default">
@@ -78,6 +80,7 @@
 		</shape>
 		<itemsStyle>
 			<alignment>1</alignment>
+			<allowEquivalentCursorsThroughBoundary>false</allowEquivalentCursorsThroughBoundary>
 		</itemsStyle>
 	</thenBranch>
 	<elseBranch prototypes="item/VList/default">
@@ -98,6 +101,7 @@
 		</shape>
 		<itemsStyle>
 			<alignment>1</alignment>
+			<allowEquivalentCursorsThroughBoundary>false</allowEquivalentCursorsThroughBoundary>
 		</itemsStyle>
 	</elseBranch>
 </style>

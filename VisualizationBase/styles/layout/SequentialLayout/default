@@ -5,9 +5,12 @@
 	<spaceBetweenElements>0</spaceBetweenElements>
 	<notLocationEquivalentCursors>false</notLocationEquivalentCursors>
 	<noInnerCursors>false</noInnerCursors>
-	<noBoundaryCursors>false</noBoundaryCursors>
+	<noBoundaryCursorsInsideShape>false</noBoundaryCursorsInsideShape>
+	<extraCursorsOutsideShape>false</extraCursorsOutsideShape>
+	<hasCursorWhenEmpty>true</hasCursorWhenEmpty>
 	
-	<!-- Specifying minWidth and minHeight only applies to the dimension opposite of the direction. -->
+	<!--  minWidth and minHeight always apply to the dimension opposite of the direction.
+	In case there are no items in the list the minimum in the direction of the list also applies. -->
 	<minWidth>0</minWidth>
 	<minHeight>0</minHeight>
 </style>

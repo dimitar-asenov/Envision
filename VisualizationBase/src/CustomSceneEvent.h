@@ -40,10 +40,23 @@ namespace Visualization {
 
 class VISUALIZATIONBASE_API CustomSceneEvent : public QEvent{
 	public:
+		typedef std::function<void ()> EventFunction;
+
+		static const QEvent::Type EventType;
+
 		CustomSceneEvent(QEvent::Type type);
+		CustomSceneEvent(EventFunction f);
+
 		virtual ~CustomSceneEvent();
-		virtual void execute() = 0;
+		virtual void execute();
+
+		void setEventFunction(EventFunction f);
+
+	private:
+		EventFunction f_;
 };
+
+inline void CustomSceneEvent::setEventFunction(EventFunction f) { f_ = f; }
 
 } /* namespace Visualization */
 #endif /* VisualizationBase_CUSTOMSCENEEVENT_H_ */

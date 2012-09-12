@@ -3,6 +3,8 @@
 	<shape />
 	<layout prototypes="layout/SequentialLayout/default">
 		<direction>2</direction>
+		<noInnerCursors>true</noInnerCursors>
+		<noBoundaryCursorsInsideShape>true</noBoundaryCursorsInsideShape>
 	</layout>
 	<name prototypes="item/Text/default" />
 </style>

@@ -55,8 +55,9 @@ class HelloWorld : public QObject, public Core::EnvisionPlugin
 	Q_INTERFACES(Core::EnvisionPlugin)
 
 	public:
-		bool initialize(Core::EnvisionManager&);
-		void selfTest(QString testid);
+		bool initialize(Core::EnvisionManager&) override;
+		virtual void unload() override;
+		void selfTest(QString testid) override;
 };
 
 }

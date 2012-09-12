@@ -36,6 +36,7 @@
 #include "items/Item.h"
 #include "items/SceneHandlerItem.h"
 #include "items/SelectedItem.h"
+#include "renderer/ModelRenderer.h"
 #include "cursor/Cursor.h"
 #include "CustomSceneEvent.h"
 
@@ -55,7 +56,8 @@ const QEvent::Type UpdateSceneEvent::EventType = static_cast<QEvent::Type> (QEve
 
 Scene::Scene()
 	: QGraphicsScene(VisualizationManager::instance().getMainWindow()), needsUpdate_(false),
-	  renderer_(defaultRenderer()), sceneHandlerItem_(new SceneHandlerItem(this)), inEventHandler_(false)
+	  renderer_(defaultRenderer()), sceneHandlerItem_(new SceneHandlerItem(this)), inEventHandler_(false),
+	  inAnUpdate_(false), hiddenItemCategories_(NoItemCategory)
 {
 }
 
@@ -83,12 +85,14 @@ void Scene::addTopLevelItem(Item* item)
 {
 	topLevelItems_.append(item);
 	addItem(item);
+	scheduleUpdate();
 }
 
 void Scene::removeTopLevelItem(Item* item)
 {
 	topLevelItems_.removeAll(item);
 	removeItem(item);
+	scheduleUpdate();
 }
 
 void Scene::scheduleUpdate()
@@ -102,6 +106,7 @@ void Scene::scheduleUpdate()
 
 void Scene::updateItems()
 {
+	inAnUpdate_ = true;
 	// Update Top level items
 	for (int i = 0; i<topLevelItems_.size(); ++i)
 		topLevelItems_.at(i)->updateSubtree();
@@ -117,6 +122,7 @@ void Scene::updateItems()
 
 	if (!draw_selections)
 	{
+		// There is exactly one item and it has a cursor visualization
 		auto selectable = cursors_.first()->owner();
 		while (selectable && ! (selectable->flags() &  QGraphicsItem::ItemIsSelectable))
 			selectable = selectable->parent();
@@ -124,7 +130,7 @@ void Scene::updateItems()
 		draw_selections = !selectable || selectable != selected.first();
 	}
 
-	if (draw_selections)
+	if (draw_selections && !(selected.size() == 1 && selected.first() == sceneHandlerItem_))
 	{
 		for (int i = 0; i<selected.size(); ++i)
 		{
@@ -134,7 +140,6 @@ void Scene::updateItems()
 			selections_.last()->updateSubtree();
 		}
 	}
-
 
 	// Update Cursors
 	for (Cursor* c : cursors_)
@@ -146,7 +151,9 @@ void Scene::updateItems()
 		}
 	}
 
+	computeSceneRect();
 	needsUpdate_ = false;
+	inAnUpdate_ = false;
 }
 
 void Scene::listenToModel(Model::Model* model)
@@ -179,8 +186,9 @@ void Scene::customEvent(QEvent *event)
 
 bool Scene::event(QEvent *event)
 {
-	inEventHandler_ = true;
+	if (inAnUpdate_) return QGraphicsScene::event(event);
 
+	inEventHandler_ = true;
 	bool result = false;
 	if (event->type() != UpdateSceneEvent::EventType &&
 		 event->type() != QEvent::MetaCall  &&
@@ -207,6 +215,22 @@ bool Scene::event(QEvent *event)
 	}
 	postEventActions_.clear();
 
+	// Focus the sceneHandlerItem if no other item is focused after a mouse press
+	if (event->type() == QEvent::GraphicsSceneMousePress  && !focusItem())
+		sceneHandlerItem_->moveCursor(Item::MoveOnPosition, QPoint(0,0));
+
+	// On keyboard events, make sure the cursor is visible
+	if (event->type() == QEvent::KeyPress && !cursors_.isEmpty())
+	{
+		for (auto view : views())
+			if (view->isActiveWindow())
+			{
+				auto vis = cursors_.at(0)->visualization();
+				if (!vis) vis = cursors_.at(0)->owner();
+				view->ensureVisible( vis->boundingRect().translated(vis->scenePos()), 5, 5);
+			}
+	}
+
 	return result;
 }
 
@@ -227,6 +251,21 @@ void Scene::setMainCursor(Cursor* cursor)
 	}
 
 	if (cursor) cursors_.prepend(cursor);
+}
+
+void Scene::computeSceneRect()
+{
+	QRectF r;
+	for (auto i: topLevelItems_)
+	{
+		if (i->itemCategory() != MenuItemCategory && i->itemCategory() != CursorItemCategory)
+		{
+			QRectF br = i->boundingRect().translated(i->pos());
+			r = r.united(br);
+		}
+	}
+	r.adjust(-20,-20,20,20); // Add some margin
+	setSceneRect(r);
 }
 
 }

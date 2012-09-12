@@ -46,6 +46,9 @@ class OOMODEL_API ExpressionStatement : public Statement {
 
 	public:
 		ExpressionStatement(Expression* e);
+
+		virtual bool definesSymbol() const;
+		virtual const QString& symbolName() const;
 };
 
 } /* namespace OOModel */

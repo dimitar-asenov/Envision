@@ -1,11 +1,11 @@
 TARGET = modelbase
 include(../Core/common_plugin.pri)
-
 DEFINES += MODELBASE_LIBRARY
 win32:LIBS += -llogger \
     -lselftest
-
-HEADERS += src/InterruptibleThread.h \
+HEADERS += src/visitor/VisitorDefinition.h \
+    src/visitor/Visitor.h \
+    src/InterruptibleThread.h \
     src/Model.h \
     src/ModelException.h \
     src/NodeReadWriteLock.h \
@@ -50,7 +50,8 @@ HEADERS += src/InterruptibleThread.h \
     src/commands/SetModificationTarget.h \
     test/PersistentStoreMock.h \
     src/modelbase.h
-SOURCES += src/persistence/PersistentStore.cpp \
+SOURCES += test/VisitorTests.cpp \
+    src/persistence/PersistentStore.cpp \
     src/adapter/AdapterManager.cpp \
     src/commands/AddModifiedNode.cpp \
     src/test_nodes/PositionExtension.cpp \

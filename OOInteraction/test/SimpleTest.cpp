@@ -38,8 +38,8 @@
 
 #include "OOModel/src/allOOModelNodes.h"
 
+#include "VisualizationBase/src/VisualizationManager.h"
 #include "VisualizationBase/src/Scene.h"
-#include "VisualizationBase/src/views/MainView.h"
 #include "VisualizationBase/src/node_extensions/Position.h"
 #include "VisualizationBase/src/items/RootItem.h"
 
@@ -189,6 +189,11 @@ Method* addDivBySix(Model::Model* model, Class* parent)
 	divbysix->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("a||b||c||d-a+b+c+d")));
 	divbysix->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("a+b+c+d-d||a||b||c||d")));
 
+	divbysix->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("SomeClass var")));
+	divbysix->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("var.a")));
+
+	divbysix->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("int d=(a+b)/42")));
+
 	VariableDeclaration* result = new VariableDeclaration();
 	divbysix->items()->append( new ExpressionStatement(result) );
 	result->setName("result");
@@ -284,15 +289,11 @@ TEST(OOInteraction, SimpleTest)
 	else if (cl) top_level = cl;
 	else top_level = divbysix;
 
-	Scene* scene = new Scene();
-	scene->addTopLevelItem( new RootItem(top_level));
-	scene->scheduleUpdate();
-	scene->listenToModel(model);
 
-	// Create view
-	MainView* view = new MainView(scene);
+	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(top_level));
+	VisualizationManager::instance().mainScene()->listenToModel(model);
 
-	CHECK_CONDITION(view != nullptr);
+		CHECK_CONDITION(top_level != nullptr);
 }
 
 }

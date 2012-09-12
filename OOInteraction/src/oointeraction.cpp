@@ -43,7 +43,6 @@
 #include "handlers/HStatement.h"
 #include "handlers/HLoop.h"
 #include "handlers/HIfStatement.h"
-#include "handlers/HStatementItemList.h"
 
 #include "string_components/UnaryOperatorStringComponents.h"
 #include "string_components/BinaryOperatorStringComponents.h"
@@ -79,12 +78,14 @@
 #include "string_offset_providers/CastStringOffsetProvider.h"
 #include "string_offset_providers/VariableDeclarationStringOffsetProvider.h"
 #include "string_offset_providers/ReferenceExpressionStringOffsetProvider.h"
+#include "string_offset_providers/UnaryOperatorStringOffsetProvider.h"
 
 #include "OOVisualization/src/allOOVisualizations.h"
 
 #include "OOModel/src/allOOModelNodes.h"
 
 #include "InteractionBase/src/handlers/GenericHandler.h"
+#include "InteractionBase/src/handlers/HList.h"
 #include "InteractionBase/src/handlers/HText.h"
 
 #include "VisualizationBase/src/items/Static.h"
@@ -110,7 +111,7 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 	OOVisualization::VField::setInteractionHandler(Interaction::GenericHandler::instance());
 	OOVisualization::VFormalArgument::setInteractionHandler(HFormalArgument::instance());
 	OOVisualization::VFormalResult::setInteractionHandler(Interaction::GenericHandler::instance());
-	OOVisualization::VStatementItemList::setInteractionHandler(HStatementItemList::instance());
+	OOVisualization::VStatementItemList::setInteractionHandler(Interaction::HList::instance());
 	OOVisualization::VReferenceExpression::setInteractionHandler(HExpression::instance());
 	OOVisualization::VMethodCallExpression::setInteractionHandler(HExpression::instance());
 	OOVisualization::VThisExpression::setInteractionHandler(HExpression::instance());
@@ -220,6 +221,8 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, SimpleLiteralStringOffsetProvider, OOVisualization::VThisExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor
+		<StringOffsetProvider, UnaryOperatorStringOffsetProvider, OOVisualization::VUnaryOperation>();
+	Model::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, ReferenceExpressionStringOffsetProvider, OOVisualization::VReferenceExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, SequentialVisualizationStringOffsetProvider, OOVisualization::VUnfinishedOperator>();
@@ -245,6 +248,10 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 		<StringOffsetProvider, VariableDeclarationStringOffsetProvider, OOVisualization::VVariableDeclaration>();
 
 	return true;
+}
+
+void OOInteraction::unload()
+{
 }
 
 void OOInteraction::selfTest(QString testid)

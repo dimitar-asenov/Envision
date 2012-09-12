@@ -111,6 +111,8 @@ void TextRenderer::updateGeometry(int, int)
 
 void TextRenderer::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+	if (isCategoryHiddenDuringPaint()) return;
+
 	Item::paint(painter, option, widget);
 
 	//int numSelected = this->scene()->selectedItems().size();
