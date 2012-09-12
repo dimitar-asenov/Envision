@@ -162,6 +162,7 @@ void Scene::updateItems()
 			}
 	}
 
+	computeSceneRect();
 	needsUpdate_ = false;
 	inAnUpdate_ = false;
 }
@@ -248,6 +249,18 @@ void Scene::setMainCursor(Cursor* cursor)
 	}
 
 	if (cursor) cursors_.prepend(cursor);
+}
+
+void Scene::computeSceneRect()
+{
+	QRectF r;
+	for (auto i: topLevelItems_)
+	{
+		QRectF br = i->boundingRect().translated(i->pos());
+		r = r.united(br);
+	}
+	r.adjust(-20,-20,20,20); // Add some margin
+	setSceneRect(r);
 }
 
 }

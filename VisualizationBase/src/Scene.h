@@ -106,6 +106,7 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		bool inAnUpdate_;
 
 		void updateItems();
+		void computeSceneRect();
 };
 
 inline void Scene::setRenderer(ModelRenderer* renderer) { renderer_ = renderer? renderer : defaultRenderer(); }
