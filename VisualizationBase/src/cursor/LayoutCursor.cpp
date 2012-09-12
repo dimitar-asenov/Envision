@@ -38,7 +38,7 @@
 namespace Visualization {
 
 LayoutCursor::LayoutCursor(Layout* owner, CursorType type)
-	: Cursor(owner, type, new CursorShapeItem()), x_(0), y_(0), index_(0), isAtBoundary_(false)
+	: Cursor(owner, type, new CursorShapeItem(this)), x_(0), y_(0), index_(0), isAtBoundary_(false)
 {
 }
 

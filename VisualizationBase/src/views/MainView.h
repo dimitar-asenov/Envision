@@ -54,6 +54,8 @@ class VISUALIZATIONBASE_API MainView: public View
 		static const int MINIMAP_DEFAULT_WIDTH = 200;
 		static const int MINIMAP_DEFAULT_HEIGHT = 200;
 
+		qreal scaleFactor() const;
+
 	protected:
 		virtual bool event(QEvent *event);
 		virtual void resizeEvent( QResizeEvent *event );
@@ -68,6 +70,8 @@ class VISUALIZATIONBASE_API MainView: public View
 		static const int SCALING_FACTOR = 2;
 		int scaleLevel;
 };
+
+inline qreal MainView::scaleFactor() const {	return SCALING_FACTOR / (qreal) scaleLevel; }
 
 }
 

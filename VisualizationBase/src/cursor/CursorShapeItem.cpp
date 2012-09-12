@@ -31,16 +31,17 @@
  *      Author: Dimitar Asenov
  */
 
-#include "cursor/CursorShapeItem.h"
-
+#include "CursorShapeItem.h"
+#include "Cursor.h"
+#include "../views/MainView.h"
 #include "shapes/Shape.h"
 
 namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(CursorShapeItem, "item")
 
-CursorShapeItem::CursorShapeItem(const StyleType* style) :
-	Item(nullptr, style), useCenter_(false)
+CursorShapeItem::CursorShapeItem(Cursor* cursor, const StyleType* style) :
+	Item(nullptr, style), cursor_(cursor), useCenter_(false)
 {
 	setFlags(0);
 	setAcceptedMouseButtons(0);
@@ -69,13 +70,50 @@ void CursorShapeItem::updateGeometry(int, int)
 		getShape()->setInnerSize(size_.width(), size_.height());
 
 
-		if (useCenter_)
+		QPointF ref = useCenter_ ?
+				center_ - QPointF( getShape()->contentLeft(), getShape()->contentTop() ) : topLeft_;
+
+		// Adjust for the scaling if this cursor should ignore transformations
+		if (flags() & ItemIgnoresTransformations)
 		{
-			QPointF pos = QPointF( getShape()->contentLeft(), getShape()->contentTop() );
-			setPos(center_ - pos);
+			// TODO: While this does work, one might wonder if it is the best idea. Things get a bit too coupled.
+			for (auto v : scene()->views())
+			{
+				auto mv = dynamic_cast<MainView*>(v);
+				if (mv)
+				{
+					if (mv->scaleFactor() != 1.0)
+					{
+						// The top-left corner of the topmost parent of owner() is relative to where we should draw the cursor
+						// as this location is scaled normally regardless of ItemIgnoresTransformations
+						auto topmost = cursor_->owner();
+						while (topmost->parent()) topmost = topmost->parent();
+
+						// The difference to the top-left corner must be scaled with the reverse factor
+						auto diff = topmost->scenePos() - ref;
+						ref = topmost->scenePos();
+						diff /= mv->scaleFactor();
+						ref -= diff;
+					}
+					break;
+				}
+			}
 		}
-		else setPos(topLeft_);
+
+		setPos(ref);
 	}
+}
+
+void CursorShapeItem::setCursorCenter(const QPoint& center)
+{
+	center_ = center;
+	useCenter_=true;
+}
+
+void CursorShapeItem::setCursorTopLeft(const QPoint& topLeft)
+{
+	topLeft_ = topLeft;
+	useCenter_=false;
 }
 
 } /* namespace Visualization */
