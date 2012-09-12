@@ -45,6 +45,7 @@ CursorShapeItem::CursorShapeItem(const StyleType* style) :
 	setFlags(0);
 	setAcceptedMouseButtons(0);
 	setZValue(LAYER_CURSOR_Z);
+	setItemCategory(Scene::CursorItemCategory);
 }
 
 CursorShapeItem::~CursorShapeItem()

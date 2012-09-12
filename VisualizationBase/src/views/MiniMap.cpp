@@ -32,7 +32,6 @@
  **********************************************************************************************************************/
 
 #include "views/MiniMap.h"
-#include "Scene.h"
 
 #include <QtGui/QMouseEvent>
 
@@ -47,6 +46,8 @@ MiniMap::MiniMap(Scene *scene, View *parent_) : View(scene, parent_), parent(par
 	sceneRectChanged(scene->sceneRect());
 	visibleRectChanged();
 	setRenderHint(QPainter::Antialiasing);
+
+	setHiddenItemCategories(Scene::MenuItemCategory | Scene::CursorItemCategory);
 
 	connect(scene, SIGNAL(sceneRectChanged(const QRectF &)), this, SLOT(sceneRectChanged(const QRectF &)));
 }

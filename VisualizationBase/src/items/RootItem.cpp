@@ -41,6 +41,7 @@ ITEM_COMMON_DEFINITIONS(RootItem, "item")
 RootItem::RootItem(NodeType *node, int purpose) : ItemWithNode<Item>(nullptr, node, itemStyles().get()), item_(nullptr)
 {
 	setFlag(QGraphicsItem::ItemHasNoContents);
+	setItemCategory(Scene::CodeItemCategory);
 	setPurpose(purpose);
 }
 

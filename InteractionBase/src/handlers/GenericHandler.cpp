@@ -38,6 +38,7 @@
 #include "vis/CommandPrompt.h"
 
 #include "VisualizationBase/src/Scene.h"
+#include "VisualizationBase/src/renderer/ModelRenderer.h"
 #include "VisualizationBase/src/cursor/Cursor.h"
 #include "FilePersistence/src/SystemClipboard.h"
 #include "ModelBase/src/nodes/List.h"

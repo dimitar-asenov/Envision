@@ -44,6 +44,7 @@ SelectedItem::SelectedItem(Item* selectedItem, const StyleType* style) :
 	setFlags(0);
 	setAcceptedMouseButtons(0);
 	setZValue(LAYER_SELECTION_Z);
+	setItemCategory(Scene::SelectionItemCategory);
 }
 
 SelectedItem::~SelectedItem()

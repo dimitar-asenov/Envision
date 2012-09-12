@@ -36,6 +36,7 @@
 #include "items/Item.h"
 #include "items/SceneHandlerItem.h"
 #include "items/SelectedItem.h"
+#include "renderer/ModelRenderer.h"
 #include "cursor/Cursor.h"
 #include "CustomSceneEvent.h"
 
@@ -56,7 +57,7 @@ const QEvent::Type UpdateSceneEvent::EventType = static_cast<QEvent::Type> (QEve
 Scene::Scene()
 	: QGraphicsScene(VisualizationManager::instance().getMainWindow()), needsUpdate_(false),
 	  renderer_(defaultRenderer()), sceneHandlerItem_(new SceneHandlerItem(this)), inEventHandler_(false),
-	  inAnUpdate_(false)
+	  inAnUpdate_(false), hiddenItemCategories_(NoItemCategory)
 {
 }
 

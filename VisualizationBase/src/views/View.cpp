@@ -38,7 +38,7 @@
 namespace Visualization {
 
 View::View(Scene* scene, View *parent) :
-	QGraphicsView(scene, parent)
+	QGraphicsView(scene, parent), hiddenItemCategories_(0)
 {
 	if ( parent == nullptr )
 	{
@@ -61,6 +61,12 @@ QRectF View::visibleRect()
 Scene* View::scene()
 {
 	return static_cast<Scene*> (QGraphicsView::scene());
+}
+
+void View::paintEvent(QPaintEvent* event)
+{
+	scene()->setHiddenItemCategories(hiddenItemCategories_);
+	QGraphicsView::paintEvent(event);
 }
 
 }
