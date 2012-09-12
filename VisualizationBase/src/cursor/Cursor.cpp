@@ -33,12 +33,15 @@
 
 #include "cursor/Cursor.h"
 #include "items/Item.h"
+#include "items/ItemStyle.h"
 
 namespace Visualization {
 
 Cursor::Cursor(Item* owner, CursorType type, Item* visualization)
-	: owner_(owner), visualization_(visualization), type_(type), notLocationEquivalent_(false)
-{}
+	: owner_(owner), visualization_(nullptr), type_(type), notLocationEquivalent_(false)
+{
+	if (visualization) setVisualization(visualization);
+}
 
 Cursor::~Cursor()
 {
@@ -54,6 +57,20 @@ void Cursor::setVisualization(Item* visualization)
 {
 	SAFE_DELETE_ITEM(visualization_);
 	visualization_ = visualization;
+
+	if (visualization_)
+	{
+		auto item = owner();
+		while (item)
+		{
+			if (item->flags() & Item::ItemIgnoresTransformations)
+			{
+				visualization_->setFlag(Item::ItemIgnoresTransformations);
+				break;
+			}
+			item = item->parent();
+		}
+	}
 }
 
 bool Cursor::isSame(Cursor* other)
@@ -78,24 +95,11 @@ bool Cursor::isLocationEquivalent(bool otherNotLocationEquivalent, CursorType ot
 	if (otherType != type() || otherType == BoxCursor) return false;
 	if (!otherIsAtBoundary && ! isAtBoundary()) return false;
 	if (owner() == otherOwner) return false;
+	if (!( owner()->isAncestorOf(otherOwner) && otherOwner->style()->allowEquivalentCursorsThroughBoundary())
+			&& !(otherOwner->isAncestorOf(owner()) && owner()->style()->allowEquivalentCursorsThroughBoundary() ) )
+		return false;
 
-	Item* parent = nullptr;
-	Item* child = nullptr;
-	if ( owner()->isAncestorOf(otherOwner))
-	{
-		parent = static_cast<Item*>(owner());
-		child = static_cast<Item*>(otherOwner);
-	}
-	else if (otherOwner->isAncestorOf(owner()))
-	{
-		parent = static_cast<Item*>(otherOwner);
-		child = static_cast<Item*>(owner());
-	}
-	else return false;
-
-	auto item = child;
-	while (item != parent && !item->hasShape()) item = item->parent();
-	return item == parent;
+	return true;
 }
 
 } /* namespace Visualization */

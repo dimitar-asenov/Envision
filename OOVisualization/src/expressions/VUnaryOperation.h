@@ -57,6 +57,10 @@ class OOVISUALIZATION_API VUnaryOperation
 		VUnaryOperation(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VUnaryOperation();
 
+		Visualization::Static* prefix();
+		Visualization::Static* postfix();
+		Visualization::Item* expression();
+
 	protected:
 		virtual void determineChildren();
 
@@ -67,6 +71,10 @@ class OOVISUALIZATION_API VUnaryOperation
 		Visualization::Static* post_;
 		Visualization::Item* expr_;
 };
+
+inline Visualization::Static* VUnaryOperation::prefix() { return pre_; }
+inline Visualization::Static* VUnaryOperation::postfix() { return post_; }
+inline Visualization::Item* VUnaryOperation::expression() { return expr_; }
 
 }
 

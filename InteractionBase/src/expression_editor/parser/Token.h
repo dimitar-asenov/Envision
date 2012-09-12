@@ -57,6 +57,7 @@ class INTERACTIONBASE_API Token {
 		Type type_;
 
 		static bool tokenExistsInOperators(QString token, const OperatorDescriptorList* ops);
+		static QStringList specialSignatureWords_;
 };
 
 inline const QString& Token::text() const { return text_; }

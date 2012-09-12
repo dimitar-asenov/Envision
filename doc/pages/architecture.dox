@@ -1,0 +1,125 @@
+/*! \page architecture Architecture of the Envision environment
+
+In order to allow for new extensions to the basic core of Envision's design features a modular architecture. This design
+is inspired by the one of the Eclipse IDE, which has proven its solid foundation and suitability for large scale
+general-purpose software development.
+
+\section overview Overview
+	The plug-in based architecture of Envision is depicted in the figure below.
+
+	\image html "High-level architecture.png" "High-level architecture of Engision"
+
+	The design consists of layers, where each layer depends on the ones below it. A layer is just a logical entity and
+	has no representation in the source code. Each layer consists of plug-ins which are implemented as shared libraries
+	and loaded at run time. A plug-in may depend on other plug-ins from the same layer or on plug-ins from lower layers.
+	Circular dependencies are not allowed.
+
+	Each plug-in is implemented in a separate namespace. If you want to know more about a particular plug-in, see
+	<a href="namespaces.html">the Namespaces tab</a> and check out the documentation of the corresponding namespace.
+
+	\subsection executable-layer Executable
+		The executable layer, marked with gray, consists only of the application executable. It is solely responsible for
+		loading and managing plug-ins.
+	
+	\subsection generic-layer Generic functionality
+		The generic layer, marked with orange, consists of all plug-ins which form the core functionality of Envision.
+		This is where the foundation of the Model-View-Controller approach to programming is established. All other
+		plug-ins rely on and extend the functionality implemented here. This is where the interaction between the
+		different sub-systems is defined and where the interfaces of the generic components are specified. Here is a brief
+		description of each plug-in from this layer:
+			\li Logger provides a simple means to keep a log of events that have occurred in the system.
+			\li SelfTest implements a small test framework for Envision plug-ins.
+			\li \link Model ModelBase \endlink defines the foundation for application models. This includes some basic nodes,
+				concurrent access mechanisms, persistence interfaces and others.
+			\li \link Visualization VisualizationBase \endlink defines the basic visualization behavior of Envision. It
+				provides graphical representations for the generic nodes defined in ModelBase, a number of layouts, shapes
+				and other useful visual items.
+			\li \link Interaction InteractionBase \endlink defines the interaction framework that processes user input and
+				modifies the state of Envision. Custom behavior for some of the visualizations in \link Visualization 
+				VisualizationBase \endlink is
+				implemented here.
+			\li FilePersistence implements a persistent store that can save any model to an XML file. Additionally, it
+				provides access to the system clipboard.
+
+	\subsection	specific-layers Model specific layers
+		%Model specific layers, marked with green, consist of plug-ins that are centered around a particular
+		programming model. While different model types (e.g. for scripts or functional programming) can be supported, the
+		current implementation of Envision focuses on the object oriented programming paradigm and its corresponding
+		model.
+
+		Here is a description of the OO base plug-ins:
+			\li OOModel introduces many new model tree nodes specific for OOP, such as classes, methods, fields etc.
+			\li OOVisualization implements visualizations for all the constructs in OOModel.
+			\li OOInteraction defines mechanisms to create and edit an OO model through its visual representations.
+			\li OOCompilation (not yet implemented) will provide means to produce source code from an OO Envision model.
+				The initial plan is to support Java since it is simpler, but eventually support for C++/C# and others should
+				also be implemented.
+			\li OOAnalysis (not yet implemented) will define rules and procedures for checking the correctness and
+				consistency of an OO model. This includes type checking, formal verification, etc.
+
+		Note that this layer is focused on paradigms and features rather than a specific programming language. Thus it
+		is possible to compile an Envision application designed in the OO model to any programming language (Java, C++,
+		C#) as long as there is an appropriate plug-in that provides this service. Of course language dependent plug-in
+		services, such as type checking, should be parameterizable with the desired language.
+
+		The last layer consists of some OO extensions which are mainly designed to highlight the flexibility of the
+		Envision environment:
+			\li CustomMethodCall shows how one can register custom visualizations for specific method calls.
+			\li ControlFlowVisualization makes available an alternative visualization for a method body that explicitly
+				shows the control flow graph.
+			\li ContractsLibrary implements a simple C# style
+				<a href="http://research.microsoft.com/en-us/projects/contracts/default.aspx">CodeContracts</a> library
+				with custom visualizations and interaction mechanisms.
+
+\section qt The Qt framework and Envision
+	Envision uses the <a href="http://qt-project.org/">Qt framework</a> at the core of its design. Qt is a mature
+	application and UI framework originally designed by Trolltech, later developed by Nokia, and currently maintained as
+	an open-source community effort. The framework is released under the LGPL2 license and is available on many different
+	platforms including Linux, Microsoft Windows, Mac OS X and others. It is natively written in C++ but bindings to many
+	other languages are also available. Thanks to this and to the exceptionally good quality of its documentation, Qt
+	enjoys a vast community of developers who target the platform and offer support to others.
+
+	Here are some of the more important features of Qt that Envision uses:
+		\li Cross-platform development - Qt greatly simplifies the process of writing cross-platform code by providing a
+			single interface to many features commonly present in different operating systems, such as shared libraries,
+			input devices and synchronization mechanisms for multi-threaded programming.
+		\li Better collections - the collection classes offered by Qt have a richer interface and are generally more
+			convenient compared to their alternatives from the C++ standard library.
+		\li Unicode strings - Qt provides true Unicode character and string classes. Although this feature is now
+			natively supported in C++11, when the project was started C++ did not offer a good solution.
+		\li XML processing - classes for working with XML files and data structures are provided and different access
+			methods are supported (DOM and SAX).
+		\li Excellent graphics framework - <a href="http://qt-project.org/doc/qt-4.8/graphicsview.html">Qt’s GraphicsView
+			framework</a> is a perfect match for Envision’s visualization requirements. It offers a powerful toolkit for
+			designing custom visualizations and managing huge hierarchies of graphical objects. It also supports rendering
+			through OpenGL for optimized user experience.
+
+
+\section plug-in-extension Plug-in extensions
+	Except for a few service tasks all of the functionality of Envision is provided by plug-ins. A plug-in may use the
+	services of other plug-ins and provide services that others can use. The architecture does not enforce any particular
+	mechanism to achieve this and is very flexible in this respect. The plug-in developer can choose how to offer
+	services to others. Here are two suggestions which are currently used in Envision:
+		\li Using interfaces - a plug-in might offer interface classes (abstract classes with pure virtual methods) to
+			others which request its services. The actual implementation of the functionality is done in derived classes
+			which are private to the plug-in. This approach is flexible: as long as the interface is fixed the
+			implementation can change in any way and client code will not need to be recompiled or adjusted. The drawback
+			is that code cannot be reused, since clients are only aware of the interfaces.
+		\li Using classes - as an alternative a plug-in can instead export a complete class together with all other
+			classes from its inheritance hierarchy. Clients can then further extend this hierarchy and reuse functionality
+			from base classes. The drawback of this approach is that changes to base classes might more easily invalidate
+			client code and require recompilation.
+
+	Envision uses primarily the second approach, but also employs interfaces. This is typical for C++ systems: Qt for
+	instance, also exports complete classes which clients can inherit from and extend. This provides a more natural way
+	to use the library. Special techniques such as using a <a href="http://qt-project.org/wiki/Dpointer">"d-pointer"
+	developed by Trolltech’s Arnt Gulbrandsen</a> can mitigate the problems of this approach. This technique together
+	with some other considerations are discussed
+	<a href="http://techbase.kde.org/Policies/Binary_Compatibility_Issues_With_C++">here</a>.
+
+	Regardless of what way plug-ins offer services to others. This is always done via exporting symbols. These could be
+	classes, functions or global variables. Although there is no enforced restriction, the exporting of functions or
+	variables is strongly discouraged and not used within Envision. Exporting of classes (including static methods and
+	static fields) is supported by Envision by using built-in functionality provided by the Qt framework.
+
+*/ 

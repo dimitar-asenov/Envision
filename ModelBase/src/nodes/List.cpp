@@ -218,7 +218,7 @@ Node* List::findFirstSymbolDefinition(const QString& symbol, int beforeIndex)
 	return nullptr;
 }
 
-QList<Node*> List::findAllSymbolDefinitions(const QString& symbol, int beforeIndex)
+QList<Node*> List::findAllSymbolDefinitions(const QRegExp& symbolExp, int beforeIndex)
 {
 	QList<Node*> result;
 
@@ -226,10 +226,15 @@ QList<Node*> List::findAllSymbolDefinitions(const QString& symbol, int beforeInd
 	else if (beforeIndex > nodes_.size()) beforeIndex = nodes_.size();
 
 	for(int i = 0; i<beforeIndex; ++i)
-		if (nodes_[i]->definesSymbol() && nodes_[i]->symbolName() == symbol)
+		if (nodes_[i]->definesSymbol() && symbolExp.exactMatch(nodes_[i]->symbolName()))
 			result.append( nodes_[i] );
 
 	return result;
+}
+
+Node* List::createDefaultElement()
+{
+	return nullptr;
 }
 
 }

@@ -36,6 +36,8 @@
 
 #include "items/VContractCall.h"
 #include "interaction/ContractCallOffsetProvider.h"
+#include "monitor/ValueAtReturnVisitor.h"
+#include "monitor/ChangeMonitor.h"
 
 #include "OOInteraction/src/handlers/HExpression.h"
 
@@ -52,7 +54,18 @@ bool ContractsLibrary::initialize(Core::EnvisionManager&)
 	Model::AdapterManager::registerAdapterViaConstructor
 		<OOInteraction::StringOffsetProvider, ContractCallOffsetProvider, VContractCall>();
 
+	ValueAtReturnVisitor::init();
+
+	// Create a change monitor
+	//auto cm = new ChangeMonitor();
+	//cm->listenToModel(model);
+	OOInteraction::HExpression::instance()->appendExpressionMonitor(ChangeMonitor::expressionModified);
+
 	return true;
+}
+
+void ContractsLibrary::unload()
+{
 }
 
 void ContractsLibrary::selfTest(QString testid)

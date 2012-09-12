@@ -48,12 +48,31 @@ class Q_DECL_EXPORT TypedList: public List
 	NODE_DECLARE_STANDARD_METHODS(TypedList)
 
 	public:
+		typedef std::function<T* ()> CreateDefaultElement;
+
 		T* first();
 		T* last();
 		T* at(int i);
 
 		virtual bool replaceChild(Node* child, Node* replacement, bool releaseOldChild = true);
+
+		virtual Node* createDefaultElement() override;
+		static void setDefaultElementCreationFunction(CreateDefaultElement function);
+
+	private:
+		static CreateDefaultElement& creationFunction();
 };
+
+template<class T> typename TypedList<T>::CreateDefaultElement& TypedList<T>::creationFunction()
+{
+	static CreateDefaultElement function;
+	return function;
+}
+
+template<class T> void TypedList<T>::setDefaultElementCreationFunction(CreateDefaultElement function)
+{
+		creationFunction() = function;
+}
 
 template<class T>
 TypedList<T>::TypedList(::Model::Node* parent) :
@@ -125,6 +144,12 @@ template<class T> bool TypedList<T>::replaceChild(Node* child, Node* replacement
 {
 	if (!dynamic_cast<T*>(replacement)) return false;
 	else return List::replaceChild(child, replacement, releaseOldChild);
+}
+
+template<class T> Node* TypedList<T>::createDefaultElement()
+{
+	if (creationFunction()) return creationFunction()();
+	else return nullptr;
 }
 
 }

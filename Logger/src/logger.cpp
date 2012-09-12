@@ -44,6 +44,10 @@ bool LoggerPlugin::initialize(Core::EnvisionManager&)
 	return true;
 }
 
+void LoggerPlugin::unload()
+{
+}
+
 void LoggerPlugin::selfTest(QString)
 {
 	LogTester lt;

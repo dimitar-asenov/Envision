@@ -50,6 +50,10 @@ bool FilePersistence::initialize(Core::EnvisionManager&)
 	return true;
 }
 
+void FilePersistence::unload()
+{
+}
+
 void FilePersistence::selfTest(QString)
 {
 	TestNodes::BinaryNode::init();

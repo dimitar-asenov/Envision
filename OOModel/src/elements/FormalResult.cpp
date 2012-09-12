@@ -50,7 +50,7 @@ FormalResult::FormalResult(const QString& name, Expression* type)
 
 bool FormalResult::definesSymbol() const
 {
-	return true;
+	return !name().isEmpty();
 }
 
 const QString& FormalResult::symbolName() const

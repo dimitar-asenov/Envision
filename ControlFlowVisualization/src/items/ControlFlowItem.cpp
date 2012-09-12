@@ -144,6 +144,8 @@ void ControlFlowItem::clearConnectors()
 
 void ControlFlowItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+	if (isCategoryHiddenDuringPaint()) return;
+
 	Item::paint(painter, option, widget);
 
 	int xOffset = 0;

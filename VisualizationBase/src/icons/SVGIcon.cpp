@@ -54,6 +54,8 @@ void SVGIcon::updateGeometry(int, int)
 
 void SVGIcon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+	if (isCategoryHiddenDuringPaint()) return;
+
 	Icon::paint(painter, option, widget);
 
 	style()->paint(painter, xOffset(), yOffset() );

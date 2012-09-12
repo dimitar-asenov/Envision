@@ -49,7 +49,19 @@ class OOINTERACTION_API GridBasedOffsetProvider : public StringOffsetProvider {
 		virtual int offset(Qt::Key key);
 		virtual void setOffset(int newOffset);
 
+		/**
+		 * Adds the cell \a cell to the grid of this string provider.
+		 *
+		 * Every time a new cell is added the size of this provider will be adjusted if necessary to accommodate the new
+		 * cell.
+		 */
 		void add(Cell* cell);
+
+		/**
+		 * Sets the size of this grid string provider. It is only necessary to call this method if padding is required.
+		 * Otherwise simply using add() is sufficient.
+		 */
+		void setSize(int width, int height);
 
 	private:
 		QList<Cell*> cells_;
@@ -63,6 +75,8 @@ class OOINTERACTION_API GridBasedOffsetProvider : public StringOffsetProvider {
 		bool isOnBottom(Cell* cell) const;
 		bool isOnRight(Cell* cell) const;
 };
+
+inline void GridBasedOffsetProvider::setSize(int width, int height) { size_.setWidth(width); size_.setHeight(height); }
 
 } /* namespace OOInteraction */
 #endif /* OOInteraction_GRIDBASEDOFFSETPROVIDER_H_ */

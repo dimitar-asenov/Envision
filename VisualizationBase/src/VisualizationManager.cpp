@@ -32,50 +32,52 @@
  **********************************************************************************************************************/
 
 #include "VisualizationManager.h"
-#include "views/View.h"
+#include "views/MainView.h"
+#include "Scene.h"
 
 namespace Visualization {
 
-VisualizationManager VisualizationManager::theInstance = VisualizationManager();
-
 VisualizationManager::VisualizationManager() :
-	envisionManager(nullptr)
+	envisionManager_(nullptr), mainScene_(nullptr), mainView_(nullptr)
 {
-}
-
-VisualizationManager::VisualizationManager(const VisualizationManager&)
-{
-}
-
-VisualizationManager& VisualizationManager::operator =(const VisualizationManager&)
-{
-	return theInstance;
 }
 
 VisualizationManager& VisualizationManager::instance()
 {
+	static VisualizationManager theInstance;
 	return theInstance;
 }
 
 void VisualizationManager::init(Core::EnvisionManager *manager)
 {
-	theInstance.envisionManager = manager;
+	if (envisionManager_ == nullptr && manager)
+	{
+		envisionManager_ = manager;
+		mainScene_ = new Scene();
+		mainView_ = new MainView(mainScene_); // It gets automatically added as a top level view.
+	}
+}
+
+void VisualizationManager::cleanup()
+{
+	views_.removeAll(mainView_);
+	SAFE_DELETE(mainView_);
+	SAFE_DELETE(mainScene_);
+	envisionManager_ = nullptr;
 }
 
 QWidget* VisualizationManager::getMainWindow()
 {
-	return envisionManager->getMainWindow();
+	return envisionManager_->getMainWindow();
 }
 
 void VisualizationManager::addTopLevelView(View* view)
 {
-	views.append(view);
+	views_.append(view);
 
 	// If this is the only view maximize it
-	if (views.size() == 1)
-	{
-		envisionManager->getMainWindow()->setCentralWidget(view);
-	}
+	if (views_.size() == 1)
+		envisionManager_->getMainWindow()->setCentralWidget(view);
 }
 
 }

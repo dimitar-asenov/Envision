@@ -56,7 +56,7 @@ bool OOReference::resolve()
 		auto t = parent->prefix()->type();
 		if (auto sp = dynamic_cast<SymbolProviderType*>(t))
 		{
-			auto symbolList = sp->symbolProvider()->findSymbol(name(), this, SEARCH_DOWN);
+			auto symbolList = sp->symbolProvider()->findSymbols( name(), this, SEARCH_DOWN, false);
 			if (symbolList.size() == 1) symbol = symbolList.first();
 		}
 		SAFE_DELETE(t);
@@ -64,7 +64,7 @@ bool OOReference::resolve()
 	else
 	{
 		// Perform an upward search starting from the current node
-		auto symbolList = findSymbol(name(), this, SEARCH_UP);
+		auto symbolList = findSymbols(name(), this, SEARCH_UP, false);
 		if (symbolList.size() == 1) symbol = symbolList.first();
 	}
 

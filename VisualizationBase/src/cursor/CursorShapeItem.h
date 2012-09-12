@@ -40,12 +40,14 @@
 
 namespace Visualization {
 
+class Cursor;
+
 class VISUALIZATIONBASE_API CursorShapeItem: public Item
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(CursorShapeItem, ItemStyle)
 
 	public:
-		CursorShapeItem(const StyleType* style = itemStyles().get());
+		CursorShapeItem(Cursor* cursor, const StyleType* style = itemStyles().get());
 		virtual ~CursorShapeItem();
 
 		virtual UpdateType needsUpdate() override;
@@ -60,6 +62,7 @@ class VISUALIZATIONBASE_API CursorShapeItem: public Item
 	private:
 		typedef Item BaseItemType;
 
+		Cursor* cursor_;
 		bool useCenter_;
 		QSize size_;
 		QPoint center_;
@@ -67,8 +70,6 @@ class VISUALIZATIONBASE_API CursorShapeItem: public Item
 };
 
 inline void CursorShapeItem::setCursorSize(const QSize& size) { size_ = size; }
-inline void CursorShapeItem::setCursorCenter(const QPoint& center) { center_ = center; useCenter_=true;}
-inline void CursorShapeItem::setCursorTopLeft(const QPoint& topLeft) { topLeft_ = topLeft; useCenter_=false;}
 
 } /* namespace Visualization */
 #endif /* VisualizationBase_CURSORSHAPEITEM_H_ */

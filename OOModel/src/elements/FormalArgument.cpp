@@ -40,12 +40,21 @@ EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(FormalArgument, Model::Extendabl
 
 REGISTER_ATTRIBUTE(FormalArgument, name, Text, false, false, true)
 REGISTER_ATTRIBUTE(FormalArgument, typeExpression, Expression, false, false, true)
+REGISTER_ATTRIBUTE(FormalArgument, directionInt, Integer, false, false, true)
 
-FormalArgument::FormalArgument(const QString& name, Expression* type)
+FormalArgument::FormalArgument(const QString& name, Expression* type, const Direction& direction)
 : Model::ExtendableNode (nullptr, FormalArgument::getMetaData())
 {
 	setName(name);
+	setDirection(direction);
 	if (type) setTypeExpression(type);
+}
+
+FormalArgument::FormalArgument(const QString& name, const Direction& direction)
+: Model::ExtendableNode (nullptr, FormalArgument::getMetaData())
+{
+	setName(name);
+	setDirection(direction);
 }
 
 bool FormalArgument::definesSymbol() const

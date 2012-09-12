@@ -74,7 +74,7 @@ class MODELBASE_API Reference: public Node
 		void manageUnresolvedReferencesListInModel();
 };
 
-inline QString Reference::name() const { return target() ? target()->symbolName() : name_; }
+inline QString Reference::name() const { return target_ ? target_->symbolName() : name_; }
 inline Node* Reference::target() const { return target_; }
 inline bool Reference::isResolved() const { return target_; }
 

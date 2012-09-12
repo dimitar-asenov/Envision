@@ -37,18 +37,19 @@
 #include "interactionbase_api.h"
 #include "TextAndDescriptionStyle.h"
 
-#include "VisualizationBase/src/items/Item.h"
+#include "VisualizationBase/src/items/LayoutProvider.h"
 #include "VisualizationBase/src/items/Text.h"
 #include "VisualizationBase/src/layouts/SequentialLayout.h"
 
 namespace Interaction {
 
-class INTERACTIONBASE_API TextAndDescription : public Visualization::Item
+class INTERACTIONBASE_API TextAndDescription : public Visualization::LayoutProvider<>
 {
 	ITEM_COMMON(TextAndDescription)
 
 	public:
 		TextAndDescription(Item* parent, const StyleType* style = itemStyles().get());
+		TextAndDescription(const QString& text, const QString& description, const StyleType* style = itemStyles().get());
 		virtual ~TextAndDescription();
 
 		virtual bool sizeDependsOnParent() const;
@@ -57,14 +58,15 @@ class INTERACTIONBASE_API TextAndDescription : public Visualization::Item
 
 	protected:
 		virtual void determineChildren();
-		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
 		typedef Item BaseItemType;
 
-		Visualization::SequentialLayout* layout;
-		Visualization::Text* text;
-		Visualization::Text* description;
+		Visualization::Text* textVis_;
+		Visualization::Text* descriptionVis_;
+
+		QString text_;
+		QString description_;
 };
 
 }

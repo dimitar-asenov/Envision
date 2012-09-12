@@ -172,8 +172,19 @@ int GridBasedOffsetProvider::offset(Qt::Key key)
 		{
 			int index = layout_provider->layout()->correspondingSceneCursor<Visualization::LayoutCursor>()->index();
 
-			if (key == Qt::Key_Backspace && index == 0) return 0;
-			if (key == Qt::Key_Delete && index == layout_provider->layout()->length()) return components.join("").length();
+			// Handle extra cursors that fall outside the shape.
+			if ( layout_provider->layout()->style()->extraCursorsOutsideShape() )
+			{
+				if (index == -1) return 0;
+				if (index > layout_provider->layout()->length())
+					return components.join("").length();
+			}
+			else
+			{
+				if (key == Qt::Key_Backspace && index == 0) return 0;
+				if (key == Qt::Key_Delete && index == layout_provider->layout()->length())
+					return components.join("").length();
+			}
 
 			//Find the cells corresponding to the adjacent items
 			auto leftItem = index > 0 ? layout_provider->layout()->at<Visualization::Item>(index-1) : nullptr;

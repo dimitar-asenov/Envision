@@ -95,6 +95,10 @@ bool ControlFlowVisualization::initialize(Core::EnvisionManager&)
 	return true;
 }
 
+void ControlFlowVisualization::unload()
+{
+}
+
 void ControlFlowVisualization::selfTest(QString testid)
 {
 	if (testid.isEmpty()) SelfTest::TestManager<ControlFlowVisualization>::runAllTests().printResultStatistics();

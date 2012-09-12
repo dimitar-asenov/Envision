@@ -34,6 +34,7 @@
 #include "handlers/HFormalArgument.h"
 
 #include "OOVisualization/src/elements/VFormalArgument.h"
+#include "VisualizationBase/src/items/VText.h"
 
 namespace OOInteraction {
 
@@ -56,12 +57,17 @@ void HFormalArgument::keyPressEvent(Visualization::Item *target, QKeyEvent *even
 		if (event->key() == Qt::Key_Tab)
 		{
 			processed = true;
-			event->accept();
 
-			if (vis->layout()->at<Visualization::Item>(0)->itemOrChildHasFocus())
-				vis->layout()->at<Visualization::Item>(1)->moveCursor(Visualization::Item::MoveOnPosition, QPoint(0,0));
+			if (vis->name()->itemOrChildHasFocus())
+				vis->typeExpr()->moveCursor(Visualization::Item::MoveOnPosition, QPoint(0,0));
 			else
-				vis->layout()->at<Visualization::Item>(0)->moveCursor(Visualization::Item::MoveOnPosition, QPoint(0,0));
+				vis->name()->moveCursor(Visualization::Item::MoveOnPosition, QPoint(0,0));
+		}
+
+		if (vis->name()->itemOrChildHasFocus() && (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) )
+		{
+			processed = true;
+			vis->typeExpr()->moveCursor(Visualization::Item::MoveOnPosition, QPoint(0,0));
 		}
 	}
 

@@ -35,10 +35,9 @@
 #define VIEW_H_
 
 #include "../visualizationbase_api.h"
+#include "../Scene.h"
 
 namespace Visualization {
-
-class Scene;
 
 class VISUALIZATIONBASE_API View : public QGraphicsView
 {
@@ -47,7 +46,17 @@ class VISUALIZATIONBASE_API View : public QGraphicsView
 		virtual ~View();
 		QRectF visibleRect();
 		Scene* scene();
+
+		void setHiddenItemCategories( Scene::ItemCategories hidden = Scene::NoItemCategory);
+
+	protected:
+		virtual void paintEvent(QPaintEvent* event) override;
+
+	private:
+		Scene::ItemCategories hiddenItemCategories_;
 };
+
+inline void View::setHiddenItemCategories( Scene::ItemCategories hidden) {hiddenItemCategories_ = hidden;}
 
 }
 

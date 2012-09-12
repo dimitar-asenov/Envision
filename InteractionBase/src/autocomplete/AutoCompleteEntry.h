@@ -25,30 +25,56 @@
  **********************************************************************************************************************/
 
 /*
- * HStatementItemList.h
+ * AutoCompleteEntry.h
  *
- *  Created on: Jun 5, 2012
+ *  Created on: Jul 23, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef OOInteraction_HSTATEMENTITEMLIST_H_
-#define OOInteraction_HSTATEMENTITEMLIST_H_
+#ifndef InteractionBase_AUTOCOMPLETEENTRY_H_
+#define InteractionBase_AUTOCOMPLETEENTRY_H_
 
-#include "../oointeraction_api.h"
+#include "../interactionbase_api.h"
 
-#include "InteractionBase/src/handlers/HList.h"
+namespace Visualization {
+	class Item;
+}
 
-namespace OOInteraction {
+namespace Interaction {
 
-class OOINTERACTION_API HStatementItemList : public Interaction::HList {
+class INTERACTIONBASE_API AutoCompleteEntry
+{
 	public:
-		static HStatementItemList* instance();
+		typedef std::function<void (AutoCompleteEntry* entry)> ExecuteFunction;
 
-		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event);
+		AutoCompleteEntry(const QString& text = QString(), const QString& description = QString(),
+				Visualization::Item* visualization = nullptr, ExecuteFunction execFunction = nullptr);
+		virtual ~AutoCompleteEntry();
 
-	protected:
-		HStatementItemList();
+		virtual void execute();
+
+		const QString& text();
+		const QString& description();
+		Visualization::Item* visualization();
+
+		void setText(const QString& suggestion);
+		void setDescription(const QString& description);
+		void setVisualization(Visualization::Item* item);
+		void setExecutionFunction(ExecuteFunction execFunction);
+
+	private:
+		QString text_;
+		QString description_;
+		Visualization::Item* vis_;
+		ExecuteFunction execFunction_;
+
 };
 
-} /* namespace OOInteraction */
-#endif /* OOInteraction_HSTATEMENTITEMLIST_H_ */
+inline const QString& AutoCompleteEntry::text() { return text_; }
+inline const QString& AutoCompleteEntry::description() { return description_; }
+inline Visualization::Item* AutoCompleteEntry::visualization() { return vis_; }
+inline void AutoCompleteEntry::setText(const QString& text) { text_ = text; }
+inline void AutoCompleteEntry::setDescription(const QString& description) { description_ = description; }
+
+} /* namespace Interaction */
+#endif /* InteractionBase_AUTOCOMPLETEENTRY_H_ */

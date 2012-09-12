@@ -44,11 +44,19 @@ class TypedList: public List
 	NODE_DECLARE_STANDARD_METHODS(TypedList)
 
 	public:
+		typedef std::function<T* ()> CreateDefaultElement;
+
 		T* first();
 		T* last();
 		T* at(int i);
 
 		virtual bool replaceChild(Node* child, Node* replacement, bool releaseOldChild = true);
+
+		virtual Node* createDefaultElement() override;
+		static void setDefaultElementCreationFunction(CreateDefaultElement function);
+
+	private:
+		static CreateDefaultElement& creationFunction();
 };
 
 }

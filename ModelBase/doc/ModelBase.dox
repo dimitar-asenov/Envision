@@ -1,0 +1,235 @@
+/*! \namespace Model
+
+The ModelBase plug-in defines the structure and basic functionality of the application model in Envision.
+
+The application model is the primary source that defines an application. It also contains artifacts supporting the
+software engineering process. The model is a tree structure which is roughly similar to an abstract syntax tree (AST).
+Two major differences are that the model is not generated based on a different representation but is the original
+source and that it can contain arbitrary data. Similarly to an AST the different nodes in the model represent
+programming constructs (or or other artifacts) and the edges of the tree represent containment. The root of the tree is
+an entity which represents the entire application that is being developed.
+
+Models for specific programming paradigms (e.g. OO, scripting) can be created by extending the functionality defined by
+ModelBase.
+
+<h3>Structure of the application model</h3>
+The application model in Envision is a tree structure where each node is derived from Node. Each such tree structure has
+an associated Model object that manages various aspects of the model. Together these two classes form the core of the
+model in Envision.
+
+A node in the tree corresponds to a logical element in the application under development. This could be for instance a
+class, a method, a statement, a numerical value, an image, a comment, etc. A node's children are elements that define
+it. For example a class is defined by its name, methods, fields and others, all of which appear in the node's sub-tree.
+Node serves as a base class for all nodes and defines the minimum interface they should provide which contains the
+following functionality:
+	\li Type registration - each node type (each class inheriting from Node) has to be registered in the system before it
+	can be used. This is typically done during the initialization of the plug-in where this new node type is declared.
+	\li Tree navigation - nodes can navigate to their parents, children and to other nodes. A number of convenience
+	methods provide different ways to do this.
+	\li Persistence - a node should be able to store or load its contents. Such operations involve an object which
+	implements the PersistentStore interface. An implementation can store the node to disk, data base or any other
+	medium.
+	\li Modification - to enable undoing and redoing of node operations, modification happens in a controlled manner
+	based on the command pattern.
+	\li Meta information - nodes have various properties such as class name, class id and revision which are required for
+	the correct operation of the system.
+
+	Whenever possible default behavior is already implemented for the functions of Node to simplify development of new
+	node types.
+	
+	The Model class implements functionality for managing a single model tree. A tree corresponds to at most one such
+	object. Here are the management functions that it provides:
+	\li Tree creation - A newly constructed model does not yet have an associated tree. The Model object can be used to
+	construct the root node of the model.
+	\li Saving and loading - the Model coordinates the saving and loading of applications using a PersistentStore.
+	\li Access control - In order to assure correct behavior of the system when there is concurrent access to the model
+	tree, the access is controlled in the Model object.
+	\li Undo support - this object keeps a history of previous commands and provides methods that restore the tree
+	structure to a known previous state.
+
+<h3>Basic node types</h3>
+ 
+Basic node types which are commonly used in programming are defined in ModelBase for convenience. Plug-in developers
+are encouraged to use these types, but this is not an absolute requirement.
+
+The predefined types include:
+	\li Integer is a 32 bit signed integer.
+	\li Boolean is a boolean value.
+	\li Float is an 80 bit double precision floating point value.
+	\li Character is a Unicode character.
+	\li Text is a Unicode string.
+	\li Reference is a node that contains a string reference to another node. Resolving references is partially defined
+	in ModelBase and partially in extending plug-ins.
+	\li List is a node that contains an ordered list of nodes. This list is untyped.
+	\li TypedList is a thin wrapper around List that provides a statically typed equivalent to it.
+	\li ExtendableNode is a node that can be extended to contain children of arbitrary type. Plug-in developers can use
+	the functionality of this node to quickly design new node types.
+
+<h3>Node extensibility</h3>
+ 
+In order to create new types of nodes, a plug-in developer can inherit an existing predefined node or Node directly.
+The ExtendableNode class is specifically designed for implementing new custom nodes. It provides two main features to
+support extensibility:
+
+\li A class inheriting from ExtendableNode can declaratively specify what attributes (child nodes) it will have. The
+number and type of attributes can be arbitrary. A longer inheritance chain is also possible, where each derived class
+specifies additional child nodes. Attributes defined in base classes are of course also available in derived classes.
+
+\li Nodes deriving from ExtendableNode also support an extension mechanism. An extension can be dynamically registered
+for a node type at run-time as long as no instances of this class have been created yet. The attributes specified in the
+extension will be added to the attributes that are already defined in the node type being extended. This change will
+apply to all nodes that derive from the extended class. This feature can be used by plug-ins to attach new information
+to a model tree.
+
+The image below illustrates these mechanisms with an example.
+
+\image html "extendable.png" "A binary node hierarchy with extensions"
+
+A node type BinaryNode is defined that inherits from ExtendableNode and specifies two attributes: left and right.
+IntegerBinaryNode derives from BinaryNode and introduces an additional attribute - value. In addition, the Position
+extension has been registered for BinaryNode. This inserts the attributes x and y into BinaryNode and all its
+subclasses - in this case only IntegerBinaryNode. Finally one more extension has been registered for IntegerBinaryNode
+which provides that node type with the new attribute editable. On the right we see a summary of what attributes are
+available for the two different classes.
+
+There is no limit to how many extensions a node can have. Extensions are implemented as single classes and can be
+applied to any node that inherits directly or indirectly from ExtendableNode. A simple method is provided for asking if
+an extension has been registered for a node type and accessing its corresponding attributes.
+
+Persistence operations are automatically handled for any class deriving from ExtendableNode for all attributes and
+attributes of extensions.
+
+<h3>Concurrent access</h3>
+In today’s software engineering practices developers use many different tools and techniques to be more productive and
+to create high quality applications. Many of these tools work with the source code or the application binary. This
+includes compilation, testing, verification, profiling, and others. Modern IDEs are capable of performing some of these
+tasks in parallel in order to speed up development. For example the source can be automatically compiled behind the
+scenes while the user is typing. This allows the environment to show compilation mistakes or warnings immediately after
+the programmer writes the lines that generate them. This is an excellent feature that helps quickly eliminate trivial
+problems in the source code, without explicitly compiling the program first. Another feature popular among programmers
+is auto-complete - the ability of an IDE to suggest a complete symbol name based on just a few characters typed by the
+developer. Enabling this is a background process that keeps an up-to-date table of defined symbols by constantly parsing
+the source code and reading in new definitions. In some cases the IDE even performs more complicated background
+verification and analysis while the user is typing.
+
+Receiving information about the program such as compilation and verification errors, testing statistics, profiling
+reports, etc. in real time can be a huge boost to productivity. Therefore having a mechanism that enables concurrent
+access to the source code or the application model in the case of Envision is crucial. The ModelBase plug-in implements
+a such a mechanism that controls the access to the tree structure of a model. For maximum flexibility a number of
+different ways to access the tree exist. This allows tools with different needs to use an appropriate access mode and
+optimally utilize resources.
+
+The different access modes to an application model are presented below:
+
+\b Write - only one thread at a time is allowed to have write access to the tree structure. This assures that modifying
+threads will operate in a model that will stay in a consistent state. This is typically the thread which processes user
+input and acts on the tree structure accordingly.
+
+<b>Global read</b> - Any number of threads can simultaneously have global read access to the tree. The system guarantees
+that the tree will not be modified while there are active global readers. Any thread that needs to modify the tree will
+have to wait until all global readers have finished their operation. This mode can be used for threads which must
+operate on a consistent data structure throughout the entire model. Such tasks include persistence, compilation and
+others.
+
+<b>Local read</b> - Local readers can run in parallel with threads that modify the tree state. To better manage this
+process there are two types of local read access:
+	\li \b Blocking - these readers lock a part of the tree called an access unit. Any number of readers can read the
+	same access unit, but a writer has to wait for all blocking readers to finish their execution or leave the access
+	unit before the writer is granted permission to modify that access unit. A blocking local reader can simultaneously
+	operate on multiple access units. This access mode is designed for background tasks which work with the model but
+	should not hinder the programmer from manipulating it. Especially when coupled with the InterruptibleThread thread
+	class described below, the blocking access mode is a good choice for tasks such as symbol indexing, type-checking,
+	local analysis or collection of statistics.
+	\li \b Non-synchronized - such a reading thread does not use the built-in synchronization mechanism and may operate
+	in parallel with any other thread on the same access unit. The system provides no guarantees about the consistency
+	of nodes read by such a reader. This access mode should be used with caution and is designed to be used only in cases
+	where other synchronization means are employed.
+
+The concept of access units and the implementation of synchronization mechanisms in the tree model in Envision are
+illustrated in the figure below.
+
+\image html "concurency.png" "An example of a model with access locks"
+
+All synchronization is achieved by means of Reader-Writer locks provided by the Qt framework. Two such locks exist in
+the Model object corresponding to the tree. Optionally a node can declare that it is a new access unit and thus
+contains a lock of its own. When a node contains a lock the corresponding access unit spans that node and all its
+children reachable without passing through another node which contains a lock. In the figure above, the nodes
+\e A, \e B, \e C, \e D, \e E and \e F contain a lock. The corresponding access units are colored in orange. If the root
+node does not contain a lock then the root access unit lock inside the Model is used to define the root access unit as
+shown. Otherwise that lock is not used at all.
+
+A thread that wants to write must obtain the exclusive access lock inside the Model. To do this a plug-in needs to begin
+a modification session by calling the Model::beginModification(). This grants the plug-in write access. Afterwards it
+can modify any node belonging to a single access unit. During a modification session the plug-in can request access to a
+different access unit. A writing thread must therefore also obtain the lock for that unit. To avoid deadlocks in this
+case it must first release the access lock it currently holds. This behavior is enforced by the system. A writing thread
+which tries to acquire the locks of two different access units at the same time will be terminated with an exception.
+The exclusive access lock can be released once the thread is finished modifying the application tree by calling
+Model::endModification(). A deadlock situation can only occur if a thread tries to acquire both read-only and write
+access permissions. Plug-ins which need to modify the model should directly initiate a write session which also allows
+the reading of tree nodes.
+
+To receive global read access a thread acquires the exclusive access lock in the model thereby preventing any writers
+from accessing the tree. Such a thread does not acquire any other locks. Global access is granted in the form of an
+access session that can be started by calling Model::beginExclusiveRead() and can be terminated with
+Model::endExclusiveRead(). There is no possibility of a deadlock since all readers can run in parallel, and writers do
+not hold any locks while global readers are executing.
+
+Blocking local readers should only acquire a lock corresponding to the access unit containing the nodes they wish to
+read. The lock that defines the access unit of a node can be obtained by calling the node's Node::accessLock() method.
+It is possible to acquire the locks of multiple access units. There is no danger of a deadlock since multiple readers
+can hold the same lock at the same time, and a writer can only hold one such lock at any time.
+
+A blocking reader can optionally implement InterruptibleThread. When a writer tries to acquire a lock which currently
+belongs to an InterruptibleThread instance that thread will be signaled that there is a writer waiting. The reader may
+then decide to yield the lock and let the writer modify the tree. This supports the running of long operations such as
+verification, without blocking the responsiveness of the environment to normal user interaction.
+
+Non-synchronized readers do not acquire any locks. Developers should be careful not to read tree nodes in an
+inconsistent state. This access mode is provided for use in cases where other synchronization means are used that ones
+provided by ModelBase.
+
+<h3>Persistence interface</h3>
+
+Each node of the model supports an interface for saving and loading itself to and from a persistent store. This is a
+minimal interface that can work with integers, strings, floating point numbers and composite nodes. It is easy for
+plug-ins to provide implementations of this interface that work with specific storage media: files, databases, version
+control systems, etc.
+
+To reduce run-time memory load a node can support partial loading. A partially loaded node may load only a subset of
+its children from the persistent store. The node can be fully loaded at any time later when all of its subtree is
+needed. This is useful for example to skip the loading of method bodies, unless the user specifically wants to look at
+the implementation of a method.
+
+In order to enable granular management of the persistent store a node can declare that it is a persistence unit. For
+example a node representing classes might be declared to be a persistence unit which could signal to a file persistence
+store that each class should be saved in a separate file. In general being a persistence unit is only a hint for the
+underlying store. It can also be ignored which is the case, for instance, when copying nodes to clipboard.
+
+<h3>Undo</h3>
+The ModelBase plug-in provides undo functionality for tree operations. Following the command pattern each operation on
+the tree is executed as a command that can undo its effect. Of course once a command is undone it can be redone again.
+The command stack is part of the Model object managing each tree.
+
+Only writer threads are allowed to execute commands which modify the tree and only writer threads can request and undo
+or a redo operation. Each modification command is associated with a specific node. A writer thread must have acquired
+the lock corresponding to the access unit of that node. The interface of Model provides functionality for initiating
+and ending a write session and for changing the current write lock.
+
+<h3>Signals</h3>
+Client plug-ins can subscribe to a number of signals that are emitted by a Model object in order to receive
+notifications about model events. This is done using Qt’s signals and slots mechanism. Signals emitted include:
+	\li rootCreated - the specified node was just created as a root node for this model. A visualization plug-in can use
+	this signal in order to start visualizing the newly created model.
+	\li nodesModified - the specified nodes were modified. This signal is emitted after a part of the model tree has been
+	modified. Many different plug-ins have interest in this event. For example a visualization plug-in should examine the
+	list of nodes that have been modified and update their representation. A verification plug-in can examine the
+	modifications and look for semantic errors. An incremental compiler might compile the new version of the model in the
+	background.
+	\li nameModified - the name of a symbol definition node was modified. This can be used for refactoring and
+	consistency purposes. For example, a plug-in that keeps the tree in a consistent state can find all references to
+	this node and update the symbol they use to the new name.
+	\li nodeFullyLoaded/nodePartiallyLoaded - the specified node was just fully/partially loaded. This can be used by a
+	plug-in to update the node’s visualization or to persist its state.
+
+*/

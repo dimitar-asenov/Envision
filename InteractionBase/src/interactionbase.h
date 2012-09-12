@@ -55,8 +55,9 @@ class InteractionBase : public QObject, public Core::EnvisionPlugin
 	Q_INTERFACES(Core::EnvisionPlugin)
 
 	public:
-		bool initialize(Core::EnvisionManager&);
-		void selfTest(QString testid);
+		virtual bool initialize(Core::EnvisionManager&) override;
+		virtual void unload() override;
+		virtual void selfTest(QString testid) override;
 
 		static Logger::Log* log();
 

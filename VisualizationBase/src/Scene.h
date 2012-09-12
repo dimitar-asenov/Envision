@@ -35,7 +35,6 @@
 #define SCENE_H_
 
 #include "visualizationbase_api.h"
-#include "renderer/ModelRenderer.h"
 
 namespace Model {
 	class Model;
@@ -44,6 +43,8 @@ namespace Model {
 
 namespace Visualization {
 
+class Item;
+class ModelRenderer;
 class SceneHandlerItem;
 class SelectedItem;
 class Cursor;
@@ -79,7 +80,24 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 
 		virtual SceneHandlerItem* sceneHandlerItem();
 
+		/**
+		 * Adds an action to be executed after the current event.
+		 *
+		 * This method can only be called while handling an event.
+		 */
 		void addPostEventAction(QEvent* action);
+
+		enum ItemCategory {
+			NoItemCategory = 0x0,
+			CodeItemCategory = 0x1,
+			MenuItemCategory = 0x2,
+			SelectionItemCategory = 0x4,
+			CursorItemCategory = 0x8
+		};
+		Q_DECLARE_FLAGS(ItemCategories, ItemCategory)
+
+		void setHiddenItemCategories( ItemCategories hidden = NoItemCategory);
+		bool isHiddenCategory(ItemCategory cat);
 
 	public slots:
 		void nodesUpdated(QList<Node*> nodes);
@@ -98,9 +116,17 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		QList<QEvent*> postEventActions_;
 
 		bool inEventHandler_;
+		bool inAnUpdate_;
+
+		ItemCategories hiddenItemCategories_;
 
 		void updateItems();
+		void computeSceneRect();
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Scene::ItemCategories)
+inline void Scene::setHiddenItemCategories( ItemCategories hidden) {hiddenItemCategories_ = hidden;}
+inline bool Scene::isHiddenCategory(ItemCategory cat) {return cat & hiddenItemCategories_;}
 
 inline void Scene::setRenderer(ModelRenderer* renderer) { renderer_ = renderer? renderer : defaultRenderer(); }
 inline ModelRenderer* Scene::renderer() { return renderer_; }

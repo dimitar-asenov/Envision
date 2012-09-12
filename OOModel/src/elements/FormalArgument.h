@@ -42,6 +42,7 @@
 #include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
 #include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
+#include "ModelBase/src/nodes/Integer.h"
 
 namespace OOModel {
 
@@ -50,13 +51,23 @@ class OOMODEL_API FormalArgument : public Model::ExtendableNode
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(FormalArgument)
 	ATTRIBUTE_OOP_NAME
 	ATTRIBUTE(Expression, typeExpression, setTypeExpression)
+	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, directionInt, setDirectionInt, int)
 
 	public:
-		FormalArgument(const QString& name, Expression* type = nullptr);
+		enum Direction {IN, OUT, INOUT};
+
+		FormalArgument(const QString& name, Expression* type = nullptr, const Direction& direction = IN);
+		FormalArgument(const QString& name, const Direction& direction);
+
+		Direction direction() const;
+		void setDirection(const Direction& direction);
 
 		virtual bool definesSymbol() const;
 		virtual const QString& symbolName() const;
 };
+
+inline FormalArgument::Direction FormalArgument::direction() const { return static_cast<Direction> (directionInt()); }
+inline void FormalArgument::setDirection(const Direction& direction) { setDirectionInt(direction); }
 
 }
 

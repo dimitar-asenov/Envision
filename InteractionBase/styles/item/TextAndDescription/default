@@ -11,4 +11,5 @@
 	</layout>
 	<text prototypes="item/Text/default" />
 	<description prototypes="item/Text/darkGrey" />	
+	<wholeItemCursor>true</wholeItemCursor>
 </style>

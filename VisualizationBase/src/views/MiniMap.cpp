@@ -32,7 +32,6 @@
  **********************************************************************************************************************/
 
 #include "views/MiniMap.h"
-#include "Scene.h"
 
 #include <QtGui/QMouseEvent>
 
@@ -48,6 +47,8 @@ MiniMap::MiniMap(Scene *scene, View *parent_) : View(scene, parent_), parent(par
 	visibleRectChanged();
 	setRenderHint(QPainter::Antialiasing);
 
+	setHiddenItemCategories(Scene::MenuItemCategory | Scene::CursorItemCategory);
+
 	connect(scene, SIGNAL(sceneRectChanged(const QRectF &)), this, SLOT(sceneRectChanged(const QRectF &)));
 }
 
@@ -55,7 +56,7 @@ void MiniMap::updatePosition()
 {
 	QGraphicsView* parent = static_cast<QGraphicsView*> (parentWidget());
 
-	move(frameWidth(),parent->viewport()->height() - height() + 2*frameWidth());
+	move(0,parent->viewport()->height() - height() + 2*frameWidth());
 }
 
 void MiniMap::resizeEvent( QResizeEvent *event )
@@ -101,8 +102,10 @@ void MiniMap::updateMap()
 	QRectF maxRect;
 	maxRect.setLeft( sceneRect.x() < visibleRect.x() ? sceneRect.x() : visibleRect.x() );
 	maxRect.setTop( sceneRect.y() < visibleRect.y() ? sceneRect.y() : visibleRect.y() );
-	maxRect.setRight( (sceneRect.x() + sceneRect.width()) > (visibleRect.x()+visibleRect.width()) ? (sceneRect.x() + sceneRect.width()) : (visibleRect.x()+visibleRect.width()));
-	maxRect.setBottom( (sceneRect.y() + sceneRect.height()) > (visibleRect.y()+visibleRect.height()) ? (sceneRect.y() + sceneRect.height()) : (visibleRect.y()+visibleRect.height()));
+	maxRect.setRight( (sceneRect.x() + sceneRect.width()) > (visibleRect.x()+visibleRect.width())
+			? (sceneRect.x() + sceneRect.width()) : (visibleRect.x()+visibleRect.width()));
+	maxRect.setBottom( (sceneRect.y() + sceneRect.height()) > (visibleRect.y()+visibleRect.height())
+			? (sceneRect.y() + sceneRect.height()) : (visibleRect.y()+visibleRect.height()));
 
 	qreal xScale = (width() - 2*frameWidth() - 2*margin) / maxRect.width();
 	qreal yScale = (height() - 2*frameWidth() - 2*margin) / maxRect.height();

@@ -39,20 +39,22 @@ ITEM_COMMON_DEFINITIONS(TextAndDescription, "item")
 
 using namespace Visualization;
 
-TextAndDescription::TextAndDescription(Item* parent, const StyleType* style) :
-	Item(parent, style), layout(new SequentialLayout(this, &style->layout())), text( new Text(nullptr, &style->text())),
-	description( new Text(layout, &style->description()))
+TextAndDescription::TextAndDescription(Item* parent, const StyleType* style)
+	: Visualization::LayoutProvider<>(parent, style), textVis_(), descriptionVis_()
 {
-	layout->append(text);
-	layout->append(description);
 }
+
+TextAndDescription::TextAndDescription(const QString& text, const QString& description, const StyleType* style)
+	: TextAndDescription(nullptr, style)
+{
+	setContents(text, description);
+}
+
 TextAndDescription::~TextAndDescription()
 {
-	SAFE_DELETE_ITEM(layout);
-
 	// These will automatically be deleted by layout's destructor
-	text = nullptr;
-	description = nullptr;
+	textVis_ = nullptr;
+	descriptionVis_ = nullptr;
 }
 
 bool TextAndDescription::sizeDependsOnParent() const
@@ -60,19 +62,28 @@ bool TextAndDescription::sizeDependsOnParent() const
 	return true;
 }
 
-void TextAndDescription::setContents(const QString& text_, const QString& description_)
+void TextAndDescription::setContents(const QString& text, const QString& description)
 {
-	text->setText(text_);
-	description->setText(description_);
+	text_ = text;
+	description_ = description;
 }
 
 void TextAndDescription::determineChildren()
 {
-}
+	layout()->synchronizeFirst(textVis_, !text_.isEmpty(), &style()->text());
+	layout()->synchronizeLast(descriptionVis_, !description_.isEmpty(), &style()->description());
 
-void TextAndDescription::updateGeometry(int availableWidth, int availableHeight)
-{
-	Item::updateGeometry(layout, availableWidth, availableHeight);
+	layout()->setStyle( &style()->layout() );
+	if (textVis_)
+	{
+		textVis_->setStyle( &style()->text() );
+		textVis_->setText(text_);
+	}
+	if (descriptionVis_)
+	{
+		descriptionVis_->setStyle( &style()->description() );
+		descriptionVis_->setText(description_);
+	}
 }
 
 }

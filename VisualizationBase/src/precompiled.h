@@ -73,7 +73,6 @@
 
 #include <QtCore/QMultiMap>
 
-#include <functional>
 #include <cmath>
 
 #if defined(VISUALIZATIONBASE_LIBRARY)

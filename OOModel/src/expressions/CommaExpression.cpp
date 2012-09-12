@@ -65,17 +65,18 @@ QList<Expression*> CommaExpression::allSubOperands(bool detachOperands)
 	return operands;
 }
 
-QList<Model::Node*> CommaExpression::findSymbol(const QString& symbol, Node* source, FindSymbolMode mode)
+QList<Model::Node*> CommaExpression::findSymbols(const QRegExp& symbolExp, Node* source, FindSymbolMode mode,
+		bool exhaustAllScopes)
 {
 	if (mode == SEARCH_DOWN)
 	{
 		QList<Model::Node*> symbols;
-		symbols << left()->findSymbol(symbol, source, mode);
-		symbols << right()->findSymbol(symbol, source, mode);
+		symbols << left()->findSymbols(symbolExp, source, mode, exhaustAllScopes);
+		symbols << right()->findSymbols(symbolExp, source, mode, exhaustAllScopes);
 
 		return symbols;
 	}
-	else return Expression::findSymbol(symbol, source, mode);
+	else return Expression::findSymbols(symbolExp, source, mode, exhaustAllScopes);
 }
 
 Type* CommaExpression::type()

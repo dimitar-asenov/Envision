@@ -32,7 +32,7 @@
  */
 
 #include "PersistentStore.h"
-#include "src/nodes/Reference.h"
+#include "../nodes/Reference.h"
 
 namespace Model {
 

@@ -54,9 +54,27 @@ class OOINTERACTION_API HExpression : public Interaction::GenericHandler {
 
 		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event);
 
+		typedef std::function<void (OOModel::Expression*&, int&)> ExpressionChangeMonitorFunction;
+		void appendExpressionMonitor(ExpressionChangeMonitorFunction monitor);
+
 	private:
 		OOModel::ExpressionStatement* parentExpressionStatement(OOModel::Expression* e);
+		void toggleAutoComplete(Visualization::Item* target);
+		void showAutoComplete(Visualization::Item* target);
+
+		Visualization::Item* stringInfo(Visualization::Item* target, Qt::Key key, QString& str, int& index);
+
+		void doAutoComplete(Visualization::Item* target, const QString& autoCompleteStr);
+		void setNewExpression(Visualization::Item* target, Visualization::Item* topMostItem, const QString& text,
+				int index);
+
+		QList<ExpressionChangeMonitorFunction> expressionMonitors_;
 };
+
+inline void HExpression::appendExpressionMonitor(ExpressionChangeMonitorFunction monitor)
+{
+	expressionMonitors_.append(monitor);
+}
 
 } /* namespace OOInteraction */
 #endif /* OOInteraction_HEXPRESSION_H_ */

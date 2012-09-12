@@ -33,10 +33,12 @@
 
 #include "handlers/GenericHandler.h"
 
+#include "../autocomplete/AutoComplete.h"
 #include "commands/CommandExecutionEngine.h"
 #include "vis/CommandPrompt.h"
 
 #include "VisualizationBase/src/Scene.h"
+#include "VisualizationBase/src/renderer/ModelRenderer.h"
 #include "VisualizationBase/src/cursor/Cursor.h"
 #include "FilePersistence/src/SystemClipboard.h"
 #include "ModelBase/src/nodes/List.h"
@@ -342,9 +344,13 @@ void GenericHandler::moveCursor(Visualization::Item *target, int key)
 
 void GenericHandler::keyReleaseEvent(Visualization::Item *target, QKeyEvent *event)
 {
-	// Only show the command prompt if this event was not received within it.
-	if (event->key() == Qt::Key_Escape && !(prompt_ && prompt_->isAncestorOf(target)) )
+	if (event->key() == Qt::Key_Escape && AutoComplete::isVisible())
 	{
+		AutoComplete::hide();
+	}
+	else if (event->key() == Qt::Key_Escape && !(prompt_ && prompt_->isAncestorOf(target)) )
+	{
+		// Only show the command prompt if this event was not received within it.
 		showCommandPrompt(target);
 	}
 	else InteractionHandler::keyReleaseEvent(target, event);

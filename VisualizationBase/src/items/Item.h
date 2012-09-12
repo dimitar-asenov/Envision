@@ -56,6 +56,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 	public:
 		typedef ItemStyle StyleType;
 		const static int LAYER_DEFAULT_Z = 0;
+		const static int LAYER_AUTOCOMPLETE_Z = 50;
 		const static int LAYER_SELECTION_Z = 100;
 		const static int LAYER_CURSOR_Z = 200;
 
@@ -255,6 +256,10 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		 */
 		static bool removeAddOn(VisualizationAddOn* addOn);
 
+		void setItemCategory( Scene::ItemCategory cat = Scene::NoItemCategory);
+		Scene::ItemCategory itemCategory();
+		bool isCategoryHiddenDuringPaint();
+
 	protected:
 
 		void setWidth(int width);
@@ -322,6 +327,8 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		UpdateType needsUpdate_;
 		int purpose_;
 		QMap<const Model::Node*, int> childNodePurpose_;
+
+		Scene::ItemCategory itemCategory_;
 
 		void updateChildren();
 		void updateAddOnItems();
@@ -436,6 +443,9 @@ inline const QMultiMap<VisualizationAddOn*, Item* >& Item::addOnItems()
 {
 	return addOnItems_;
 }
+
+inline void Item::setItemCategory( Scene::ItemCategory cat) { itemCategory_ = cat; }
+inline bool Item::isCategoryHiddenDuringPaint() { return scene()->isHiddenCategory(itemCategory()); }
 
 }
 

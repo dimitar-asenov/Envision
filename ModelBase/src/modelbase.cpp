@@ -82,6 +82,10 @@ bool ModelBase::initialize(Core::EnvisionManager&)
 	return true;
 }
 
+void ModelBase::unload()
+{
+}
+
 void ModelBase::selfTest(QString)
 {
 	TestNodes::BinaryNode::init();

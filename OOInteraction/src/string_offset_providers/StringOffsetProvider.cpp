@@ -165,7 +165,7 @@ bool StringOffsetProvider::setOffsetInListItem(int& offset, Visualization::VList
 }
 
 int StringOffsetProvider::listItemOffset(Visualization::VList* list,
-		const QString& prefix, const QString& separator, const QString& /*postfix*/, Qt::Key key)
+		const QString& prefix, const QString& separator, const QString& postfix, Qt::Key key)
 {
 	QStringList components = StringOffsetProvider::components(list->node());
 
@@ -173,10 +173,22 @@ int StringOffsetProvider::listItemOffset(Visualization::VList* list,
 	if (list->scene()->mainCursor() && list->scene()->mainCursor()->owner() == list->layout())
 	{
 		int index = list->layout()->correspondingSceneCursor<Visualization::LayoutCursor>()->index();
-		for (int i = 0; i<index; ++i)
+
+		if (index < 0) result = 0;
+		else
 		{
-			if (i>0) result += separator.size();
-			result += components[i].size();
+			if (index > components.size())
+			{
+				result += postfix.size();
+				--index;
+			}
+
+			for (int i = 0; i<index; ++i)
+			{
+				if (i>0) result += separator.size();
+
+				result += components[i].size();
+			}
 		}
 	}
 	else

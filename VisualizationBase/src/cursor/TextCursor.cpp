@@ -37,7 +37,8 @@
 namespace Visualization {
 
 TextCursor::TextCursor(TextRenderer* owner)
-	: Cursor(owner, VerticalCursor, new CursorShapeItem()), selectionBegin_(0),  selectionEnd_(0), xBegin_(0), xEnd_(0)
+	: Cursor(owner, VerticalCursor, new CursorShapeItem(this)),
+	  selectionBegin_(0),  selectionEnd_(0), xBegin_(0), xEnd_(0)
 {
 }
 
