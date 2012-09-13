@@ -366,8 +366,14 @@ void GenericHandler::mousePressEvent(Visualization::Item *target, QGraphicsScene
 		return;
 	}
 
-	if (event->button() == Qt::LeftButton && event->modifiers() == Qt::NoModifier)
+	if (event->modifiers() == Qt::NoModifier)
 		target->moveCursor(Visualization::Item::MoveOnPosition, event->pos().toPoint());
+
+	if (event->button() == Qt::RightButton)
+	{
+		showCommandPrompt(target);
+		return;
+	}
 
 	InteractionHandler::mousePressEvent(target, event);
 }
