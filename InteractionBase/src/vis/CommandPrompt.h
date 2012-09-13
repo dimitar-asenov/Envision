@@ -91,8 +91,8 @@ class INTERACTIONBASE_API CommandPrompt : public Visualization::Item
 		CommandResult* result_;
 		QList<CommandSuggestion*> suggestions_;	//Suggestions from the result do not appear here.
 
-		// This is true when the item is created and is set to false after the first update.
-		bool justCreated;
+		// This is true when the item is created and when it is re-shown and is set to false after an update.
+		bool justShown;
 
 		void acquireCursor();
 		QPoint receiverCursorPosition;

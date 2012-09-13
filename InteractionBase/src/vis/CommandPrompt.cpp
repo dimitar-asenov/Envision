@@ -68,7 +68,7 @@ CommandPrompt::CommandPrompt(Item* commandReceiver, const StyleType* style) :
 	errorContainer(new SequentialLayout(layout, &style->errorContainer())),
 	command( new Text(layout, &style->commandText())),
 	result_(nullptr),
-	justCreated(true)
+	justShown(true)
 {
 	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(ItemIgnoresTransformations);
@@ -114,6 +114,7 @@ void CommandPrompt::takeSuggestion(CommandSuggestion* suggestion)
 
 void CommandPrompt::showPrompt()
 {
+	justShown = true;
 	show();
 	acquireCursor();
 	command->correspondingSceneCursor<Visualization::TextCursor>()
@@ -145,40 +146,23 @@ void CommandPrompt::updateGeometry(int availableWidth, int availableHeight)
 	Item::updateGeometry(layout, availableWidth, availableHeight);
 
 	// Set the position of the prompt
-	if (justCreated)
+	if (justShown)
 	{
-		QPointF promptPos;
-
-		if (commandReceiver_ == commandReceiver_->scene()->sceneHandlerItem())
+		QPointF promptPos = commandReceiver_->mapToScene(0,0);
+		if (commandReceiver_->height() < COMMAND_RECEIVER_ITEM_MIN_PROMPT_CENTER_HEIGHT)
 		{
-			for(auto v : commandReceiver_->scene()->views())
-			{
-				if (v->isActiveWindow())
-				{
-					promptPos = v->mapToScene(v->viewport()->rect().center());
-					promptPos -=QPointF(width()/2, height()/2);
-					break;
-				}
-			}
+			// Show the prompt under the receiver item.
+			promptPos.setY( promptPos.y() + commandReceiver_->height() + PROMPT_TO_RECEIVER_DISTANCE);
 		}
 		else
 		{
-			promptPos = commandReceiver_->mapToScene(0,0);
-			if (commandReceiver_->height() < COMMAND_RECEIVER_ITEM_MIN_PROMPT_CENTER_HEIGHT)
-			{
-				// Show the prompt under the receiver item.
-				promptPos.setY( promptPos.y() + commandReceiver_->height() + PROMPT_TO_RECEIVER_DISTANCE);
-			}
-			else
-			{
-				// Show the prompt at the center of the receiver item.
-				promptPos.setX( (commandReceiver_->width()-width()) / 2 );
-				promptPos.setY( (commandReceiver_->height()-height()) / 2 );
-			}
+			// Show the prompt at the center of the receiver item.
+			promptPos.setX( (commandReceiver_->width()-width()) / 2 );
+			promptPos.setY( (commandReceiver_->height()-height()) / 2 );
 		}
 
 		setPos(promptPos);
-		justCreated = false;
+		justShown = false;
 	}
 }
 
