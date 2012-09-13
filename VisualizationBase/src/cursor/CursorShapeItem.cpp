@@ -90,17 +90,18 @@ void CursorShapeItem::updateGeometry(int, int)
 						while (topmost->parent()) topmost = topmost->parent();
 
 						// The difference to the top-left corner must be scaled with the reverse factor
-						auto diff = topmost->scenePos() - ref;
-						ref = topmost->scenePos();
-						diff /= mv->scaleFactor();
-						ref -= diff;
+						ref += cursor_->owner()->scenePos() - topmost->scenePos();
+						ref /= mv->scaleFactor();
+						ref += topmost->scenePos();
+
+						setPos(ref);
+						return;
 					}
-					break;
 				}
 			}
 		}
 
-		setPos(ref);
+		setPos(cursor_->owner()->scenePos() + ref);
 	}
 }
 

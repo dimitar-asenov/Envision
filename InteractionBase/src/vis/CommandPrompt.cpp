@@ -126,8 +126,7 @@ void CommandPrompt::hidePrompt()
 	commandSelectedFirst = command->correspondingSceneCursor<Visualization::TextCursor>()->selectionFirstIndex();
 	commandSelectedLast = command->correspondingSceneCursor<Visualization::TextCursor>()->selectionLastIndex();
 	hide();
-	commandReceiver()->moveCursor(Visualization::Item::MoveOnPosition,
-			commandReceiver()->mapFromScene(receiverCursorPosition).toPoint());
+	commandReceiver()->moveCursor(Visualization::Item::MoveOnPosition, receiverCursorPosition);
 }
 
 void CommandPrompt::determineChildren()
@@ -271,14 +270,9 @@ void CommandPrompt::removeSuggestions()
 void CommandPrompt::acquireCursor()
 {
 	// Save the current cursor
+	receiverCursorPosition = QPoint(0,0);
 	if (commandReceiver_->scene()->mainCursor()->owner() == commandReceiver_)
-	{
 		receiverCursorPosition = commandReceiver_->scene()->mainCursor()->position();
-	}
-	else
-	{
-		receiverCursorPosition = commandReceiver_->scenePos().toPoint();
-	}
 
 	command->moveCursor(Visualization::Item::MoveOnPosition, QPoint(0,0));
 }

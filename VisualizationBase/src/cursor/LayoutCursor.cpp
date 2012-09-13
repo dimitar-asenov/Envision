@@ -55,7 +55,7 @@ void LayoutCursor::setVisualizationSize(const QSize& size)
 
 void LayoutCursor::setVisualizationPosition(const QPoint& pos)
 {
-	setPosition(owner()->scenePos().toPoint() + pos);
+	setPosition(pos);
 	CursorShapeItem* ci = static_cast<CursorShapeItem*> (visualization());
 	ci->setCursorTopLeft(position());
 }

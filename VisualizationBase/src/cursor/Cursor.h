@@ -51,8 +51,21 @@ class VISUALIZATIONBASE_API Cursor {
 
 		virtual Item* owner() const;
 
+		/**
+		 * Returns the position of this cursor in corrdinates local to owner()
+		 */
 		const QPoint& position();
+
+		/**
+		 * Returns the region of this cursor in corrdinates local to owner()
+		 */
 		const QRect& region();
+
+		/**
+		 * Returns the region of this cursor in scene coordinates
+		 */
+		QRect sceneRegion();
+
 		Item* visualization();
 
 		void setPosition(const QPoint& pos);

@@ -256,14 +256,14 @@ void GenericHandler::moveCursor(Visualization::Item *target, int key)
 	{
 		cursorMoveOrientation_ = VerticalOrientation;
 		Visualization::Cursor* c = target->scene()->mainCursor();
-		if (c) cursorOriginMidPoint_ = c->region().center();
+		if (c) cursorOriginMidPoint_ = c->sceneRegion().center();
 	}
 	if (	(key == Qt::Key_Left || key == Qt::Key_Right)
 			&& cursorMoveOrientation_ != HorizontalOrientation)
 	{
 		cursorMoveOrientation_ = HorizontalOrientation;
 		Visualization::Cursor* c = target->scene()->mainCursor();
-		if (c) cursorOriginMidPoint_ = c->region().center();
+		if (c) cursorOriginMidPoint_ = c->sceneRegion().center();
 	}
 
 	QPoint midpoint = target->mapFromScene(cursorOriginMidPoint_).toPoint();

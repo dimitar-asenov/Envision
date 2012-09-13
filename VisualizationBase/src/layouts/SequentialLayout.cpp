@@ -371,7 +371,7 @@ QList<ItemRegion> SequentialLayout::regions()
 
 		adjustCursorRegionToAvoidZeroSize(cursorRegion.region(), horizontal, forward, !extraCursors && i==0, false);
 
-		cursorRegion.cursor()->setRegion(mapToScene(cursorRegion.region()).boundingRect().toRect());
+		cursorRegion.cursor()->setRegion(cursorRegion.region());
 		if (style()->notLocationEquivalentCursors()) lc->setNotLocationEquivalent(true);
 
 		// Skip cursor?
@@ -398,7 +398,7 @@ QList<ItemRegion> SequentialLayout::regions()
 		lc->setIndex(items.size());
 		lc->setVisualizationPosition(regs.last().region().topLeft());
 		lc->setVisualizationSize(horizontal ? QSize(2, height()) : QSize(width(), 2));
-		lc->setRegion(mapToScene(trailing).boundingRect().toRect());
+		lc->setRegion(trailing);
 		if (!extraCursors) lc->setIsAtBoundary(true);
 		if (style()->notLocationEquivalentCursors()) lc->setNotLocationEquivalent(true);
 	}
@@ -423,7 +423,7 @@ QList<ItemRegion> SequentialLayout::regions()
 		lc->setIndex(-1);
 		lc->setVisualizationPosition(regs.last().region().topLeft());
 		lc->setVisualizationSize(horizontal ? QSize(2, height()) : QSize(width(), 2));
-		lc->setRegion(mapToScene(extra).boundingRect().toRect());
+		lc->setRegion(extra);
 		lc->setIsAtBoundary(true);
 		if (style()->notLocationEquivalentCursors()) lc->setNotLocationEquivalent(true);
 
@@ -442,7 +442,7 @@ QList<ItemRegion> SequentialLayout::regions()
 		lc->setIndex(items.size()+1);
 		lc->setVisualizationPosition(regs.last().region().topLeft());
 		lc->setVisualizationSize(horizontal ? QSize(2, height()) : QSize(width(), 2));
-		lc->setRegion(mapToScene(extra).boundingRect().toRect());
+		lc->setRegion(extra);
 		lc->setIsAtBoundary(true);
 		if (style()->notLocationEquivalentCursors()) lc->setNotLocationEquivalent(true);
 	}
