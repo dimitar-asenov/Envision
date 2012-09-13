@@ -197,6 +197,15 @@ bool Scene::event(QEvent *event)
 		)
 		scheduleUpdate();
 
+	// Always move the scene handler item to the location of the last mouse click.
+	// This assures that even if the user presses somewhere in the empty space of the scene, the scene handler item will
+	// be selected.
+	if (event->type() == QEvent::GraphicsSceneMousePress)
+	{
+		auto e = static_cast<QGraphicsSceneMouseEvent*>(event);
+		sceneHandlerItem_->setPos(e->scenePos() - QPointF(1,1));
+	}
+
 	if (event->type() == QEvent::KeyPress)
 	{
 		//Circumvent the standard TAB handling of the scene.
@@ -214,10 +223,6 @@ bool Scene::event(QEvent *event)
 		SAFE_DELETE(e);
 	}
 	postEventActions_.clear();
-
-	// Focus the sceneHandlerItem if no other item is focused after a mouse press
-	if (event->type() == QEvent::GraphicsSceneMousePress  && !focusItem())
-		sceneHandlerItem_->moveCursor(Item::MoveOnPosition, QPoint(0,0));
 
 	// On keyboard events, make sure the cursor is visible
 	if (event->type() == QEvent::KeyPress && !cursors_.isEmpty())
