@@ -42,11 +42,10 @@
 #include "handlers/HPositionLayout.h"
 #include "handlers/HRootItem.h"
 
-#include "events/SetCursorEvent.h"
-#include "events/ShowCommandPromptEvent.h"
-
 #include "vis/CommandPrompt.h"
 #include "vis/TextAndDescription.h"
+
+#include "events/DetectMainSceneActivated.h"
 
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/items/SceneHandlerItem.h"
@@ -66,7 +65,6 @@
 #include "VisualizationBase/src/layouts/PanelLayout.h"
 #include "VisualizationBase/src/layouts/PanelBorderLayout.h"
 #include "VisualizationBase/src/layouts/PositionLayout.h"
-
 #include "VisualizationBase/src/VisualizationManager.h"
 
 #include "ModelBase/src/test_nodes/BinaryNode.h"
@@ -104,9 +102,9 @@ bool InteractionBase::initialize(Core::EnvisionManager&)
 	CommandPrompt::setInteractionHandler(HCommandPrompt::instance());
 	TextAndDescription::setInteractionHandler(GenericHandler::instance());
 
+	// We use to show the prompt. It can only be shown once the Scene is activated.
 	auto mainScene = Visualization::VisualizationManager::instance().mainScene();
-	QApplication::postEvent(mainScene, new SetCursorEvent(mainScene->sceneHandlerItem(), SetCursorEvent::CursorOnLeft));
-	QApplication::postEvent(mainScene, new ShowCommandPromptEvent(mainScene));
+	mainScene->installEventFilter(new DetectMainSceneActivated());
 
 	return true;
 }

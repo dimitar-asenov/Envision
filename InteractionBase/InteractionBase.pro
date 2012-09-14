@@ -6,7 +6,8 @@ win32:LIBS += -llogger \
     -lmodelbase \
     -lfilepersistence \
     -lvisualizationbase
-HEADERS += src/events/ShowCommandPromptEvent.h \
+HEADERS += src/events/DetectMainSceneActivated.h \
+    src/events/ShowCommandPromptEvent.h \
     src/events/SetCursorEvent.h \
     src/commands/CreateNamedObjectWithAttributes.h \
     src/expression_editor/tree_builder/LeaveUnfinished.h \
@@ -61,7 +62,8 @@ HEADERS += src/events/ShowCommandPromptEvent.h \
     src/vis/TextAndDescription.h \
     src/vis/TextAndDescriptionStyle.h \
     src/interactionbase.h
-SOURCES += src/events/ShowCommandPromptEvent.cpp \
+SOURCES += src/events/DetectMainSceneActivated.cpp \
+    src/events/ShowCommandPromptEvent.cpp \
     src/events/SetCursorEvent.cpp \
     src/commands/CreateNamedObjectWithAttributes.cpp \
     src/expression_editor/tree_builder/LeaveUnfinished.cpp \
