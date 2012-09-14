@@ -36,26 +36,18 @@
 
 #include "../oointeraction_api.h"
 
-#include "InteractionBase/src/commands/Command.h"
+#include "InteractionBase/src/commands/CreateNamedObjectWithAttributes.h"
 
 namespace OOInteraction {
 
-class OOINTERACTION_API CProjectCreateClass : public Interaction::Command
+class OOINTERACTION_API CProjectCreateClass : public Interaction::CreateNamedObjectWithAttributes
 {
 	public:
-		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
-				const QStringList& commandTokens);
-		virtual Interaction::CommandResult* execute(Visualization::Item* source, Visualization::Item* target,
-				const QStringList& commandTokens);
+		CProjectCreateClass();
 
-		virtual QList<Interaction::CommandSuggestion*> suggest(Visualization::Item* source, Visualization::Item* target,
-				const QString& textSoFar);
-		virtual QStringList commandForms(Visualization::Item* source, Visualization::Item* target,
-				const QString& textSoFar);
-
-	private:
-		void findClass(const QStringList& tokens, QString& name, QString& visibility,
-				bool& classFound, bool& unknownFormat);
+	protected:
+		virtual Interaction::CommandResult* create(Visualization::Item* source, Visualization::Item* target,
+			const QString& name, const QStringList& attributes) override;
 };
 
 } /* namespace OOInteraction */

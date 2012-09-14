@@ -25,56 +25,47 @@
  **********************************************************************************************************************/
 
 /*
- * CClassCreateMethod.cpp
+ * CreateNamedObjectWithAttributes.h
  *
- *  Created on: Mar 1, 2012
+ *  Created on: Sep 14, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "commands/CClassCreateMethod.h"
+#ifndef InteractionBase_CREATENAMEDOBJECTWITHATTRIBUTES_H_
+#define InteractionBase_CREATENAMEDOBJECTWITHATTRIBUTES_H_
 
-#include "OOModel/src/top_level/Class.h"
-#include "OOModel/src/top_level/Method.h"
+#include "../interactionbase_api.h"
 
-#include "InteractionBase/src/handlers/SetCursorEvent.h"
+#include "Command.h"
 
-namespace OOInteraction {
+namespace Interaction {
 
-CClassCreateMethod::CClassCreateMethod() : CreateNamedObjectWithAttributes("method",
-		{{"public", "private","protected"}, {"static"}})
+class INTERACTIONBASE_API CreateNamedObjectWithAttributes : public Command
 {
-}
+	public:
+		CreateNamedObjectWithAttributes(const QString& commandName, const QList<QStringList>& attributes);
 
-Interaction::CommandResult* CClassCreateMethod::create(Visualization::Item* /*source*/, Visualization::Item* target,
-	const QString& name, const QStringList& attributes)
-{
-	auto cl = dynamic_cast<OOModel::Class*> (target->node());
-	Q_ASSERT(cl);
+		virtual bool canInterpret(Visualization::Item* source, Visualization::Item* target,
+				const QStringList& commandTokens) override;
+		virtual CommandResult* execute(Visualization::Item* source, Visualization::Item* target,
+				const QStringList& commandTokens) override;
 
-	auto m = new OOModel::Method();
-	if (!name.isEmpty()) m->setName(name);
+		virtual QList<CommandSuggestion*> suggest(Visualization::Item* source, Visualization::Item* target,
+				const QString& textSoFar) override;
+		virtual QStringList commandForms(Visualization::Item* source, Visualization::Item* target,
+				const QString& textSoFar) override;
 
-	// Set visibility
-	if (attributes.first() == "private" ) m->setVisibility(OOModel::Visibility::PRIVATE);
-	else if (attributes.first() == "protected" ) m->setVisibility(OOModel::Visibility::PROTECTED);
-	else if (attributes.first() == "public" ) m->setVisibility(OOModel::Visibility::PUBLIC);
-	else m->setVisibility(OOModel::Visibility::DEFAULT);
+	protected:
+		virtual CommandResult* create(Visualization::Item* source, Visualization::Item* target,
+				const QString& name, const QStringList& attributes) = 0;
 
-	// Set scope
-	if (attributes.last() == "static") m->setStorageSpecifier(OOModel::StorageSpecifier::CLASS_VARIABLE);
-	else m->setStorageSpecifier(OOModel::StorageSpecifier::INSTANCE_VARIABLE);
+	private:
+		void findParts(const QStringList& tokens, QString& name, QStringList& attributes,
+			bool& methodFound, bool& unknownFormat, bool useFirstValueAsDefaultAttribute = false);
 
-	cl->beginModification("create class");
-	cl->methods()->append(m);
-	cl->endModification();
+		const QString commandName_;
+		const QList<QStringList> attributes_;
+};
 
-	if (name.isNull()) target->scene()->addPostEventAction(
-		new Interaction::SetCursorEvent(target, m->nameNode(), Interaction::SetCursorEvent::CursorOnLeft));
-	else
-		target->scene()->addPostEventAction(
-			new Interaction::SetCursorEvent(target, m->nameNode(), Interaction::SetCursorEvent::CursorOnRight));
-
-	return new Interaction::CommandResult();
-}
-
-} /* namespace OOInteraction */
+} /* namespace InteractionBase */
+#endif /* InteractionBase_CREATENAMEDOBJECTWITHATTRIBUTES_H_ */
