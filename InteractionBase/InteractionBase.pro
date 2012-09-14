@@ -6,7 +6,9 @@ win32:LIBS += -llogger \
     -lmodelbase \
     -lfilepersistence \
     -lvisualizationbase
-HEADERS += src/commands/CreateNamedObjectWithAttributes.h \
+HEADERS += src/events/ShowCommandPromptEvent.h \
+    src/events/SetCursorEvent.h \
+    src/commands/CreateNamedObjectWithAttributes.h \
     src/expression_editor/tree_builder/LeaveUnfinished.h \
     test/HBinaryNode.h \
     src/autocomplete/AutoComplete.h \
@@ -52,7 +54,6 @@ HEADERS += src/commands/CreateNamedObjectWithAttributes.h \
     src/handlers/HPositionLayout.h \
     src/handlers/HSceneHandlerItem.h \
     src/handlers/HText.h \
-    src/handlers/SetCursorEvent.h \
     src/interactionbase_api.h \
     src/precompiled.h \
     src/vis/CommandPrompt.h \
@@ -60,7 +61,9 @@ HEADERS += src/commands/CreateNamedObjectWithAttributes.h \
     src/vis/TextAndDescription.h \
     src/vis/TextAndDescriptionStyle.h \
     src/interactionbase.h
-SOURCES += src/commands/CreateNamedObjectWithAttributes.cpp \
+SOURCES += src/events/ShowCommandPromptEvent.cpp \
+    src/events/SetCursorEvent.cpp \
+    src/commands/CreateNamedObjectWithAttributes.cpp \
     src/expression_editor/tree_builder/LeaveUnfinished.cpp \
     test/HBinaryNode.cpp \
     src/autocomplete/AutoComplete.cpp \
@@ -68,7 +71,6 @@ SOURCES += src/commands/CreateNamedObjectWithAttributes.cpp \
     src/autocomplete/AutoCompleteVis.cpp \
     src/autocomplete/AutoCompleteEntry.cpp \
     src/handlers/HRootItem.cpp \
-    src/handlers/SetCursorEvent.cpp \
     src/expression_editor/ExpressionVisitor.cpp \
     src/expression_editor/ExpressionEditor.cpp \
     src/expression_editor/ExpressionTreeUtils.cpp \

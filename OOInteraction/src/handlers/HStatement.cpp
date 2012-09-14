@@ -35,7 +35,7 @@
 #include "OOModel/src/expressions/EmptyExpression.h"
 #include "OOModel/src/statements/ExpressionStatement.h"
 
-#include "InteractionBase/src/handlers/SetCursorEvent.h"
+#include "InteractionBase/src/events/SetCursorEvent.h"
 #include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/cursor/LayoutCursor.h"
 

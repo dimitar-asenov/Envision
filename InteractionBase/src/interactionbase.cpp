@@ -42,9 +42,13 @@
 #include "handlers/HPositionLayout.h"
 #include "handlers/HRootItem.h"
 
+#include "events/SetCursorEvent.h"
+#include "events/ShowCommandPromptEvent.h"
+
 #include "vis/CommandPrompt.h"
 #include "vis/TextAndDescription.h"
 
+#include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/items/SceneHandlerItem.h"
 #include "VisualizationBase/src/items/VExtendable.h"
 #include "VisualizationBase/src/items/VList.h"
@@ -62,6 +66,9 @@
 #include "VisualizationBase/src/layouts/PanelLayout.h"
 #include "VisualizationBase/src/layouts/PanelBorderLayout.h"
 #include "VisualizationBase/src/layouts/PositionLayout.h"
+
+#include "VisualizationBase/src/VisualizationManager.h"
+
 #include "ModelBase/src/test_nodes/BinaryNode.h"
 
 #include "SelfTest/src/SelfTestSuite.h"
@@ -96,6 +103,11 @@ bool InteractionBase::initialize(Core::EnvisionManager&)
 	Visualization::PositionLayout::setInteractionHandler(HPositionLayout::instance());
 	CommandPrompt::setInteractionHandler(HCommandPrompt::instance());
 	TextAndDescription::setInteractionHandler(GenericHandler::instance());
+
+	auto mainScene = Visualization::VisualizationManager::instance().mainScene();
+	QApplication::postEvent(mainScene, new SetCursorEvent(mainScene->sceneHandlerItem(), SetCursorEvent::CursorOnLeft));
+	QApplication::postEvent(mainScene, new ShowCommandPromptEvent(mainScene));
+
 	return true;
 }
 

@@ -36,7 +36,7 @@
 #include "OOModel/src/top_level/Project.h"
 #include "OOModel/src/top_level/Class.h"
 
-#include "InteractionBase/src/handlers/SetCursorEvent.h"
+#include "InteractionBase/src/events/SetCursorEvent.h"
 
 namespace OOInteraction {
 

@@ -32,7 +32,7 @@
  */
 
 #include "HRootItem.h"
-#include "handlers/SetCursorEvent.h"
+#include "events/SetCursorEvent.h"
 
 #include "VisualizationBase/src/items/RootItem.h"
 #include "VisualizationBase/src/Scene.h"

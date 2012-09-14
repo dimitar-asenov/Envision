@@ -25,56 +25,49 @@
  **********************************************************************************************************************/
 
 /*
- * CCreateMethod.cpp
+ * SetCursorEvent.h
  *
  *  Created on: Mar 1, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "commands/CCreateMethod.h"
+#ifndef InteractionBase_SETCURSOREVENT_H_
+#define InteractionBase_SETCURSOREVENT_H_
 
-#include "OOModel/src/top_level/Class.h"
-#include "OOModel/src/top_level/Method.h"
+#include "../interactionbase_api.h"
 
-#include "InteractionBase/src/events/SetCursorEvent.h"
+#include "VisualizationBase/src/CustomSceneEvent.h"
 
-namespace OOInteraction {
-
-CCreateMethod::CCreateMethod() : CreateNamedObjectWithAttributes("method",
-		{{"public", "private","protected"}, {"static"}})
-{
+namespace Visualization {
+	class Item;
+	class Scene;
 }
 
-Interaction::CommandResult* CCreateMethod::create(Visualization::Item* /*source*/, Visualization::Item* target,
-	const QString& name, const QStringList& attributes)
-{
-	auto cl = dynamic_cast<OOModel::Class*> (target->node());
-	Q_ASSERT(cl);
-
-	auto m = new OOModel::Method();
-	if (!name.isEmpty()) m->setName(name);
-
-	// Set visibility
-	if (attributes.first() == "private" ) m->setVisibility(OOModel::Visibility::PRIVATE);
-	else if (attributes.first() == "protected" ) m->setVisibility(OOModel::Visibility::PROTECTED);
-	else if (attributes.first() == "public" ) m->setVisibility(OOModel::Visibility::PUBLIC);
-	else m->setVisibility(OOModel::Visibility::DEFAULT);
-
-	// Set scope
-	if (attributes.last() == "static") m->setStorageSpecifier(OOModel::StorageSpecifier::CLASS_VARIABLE);
-	else m->setStorageSpecifier(OOModel::StorageSpecifier::INSTANCE_VARIABLE);
-
-	cl->beginModification("create class");
-	cl->methods()->append(m);
-	cl->endModification();
-
-	if (name.isNull()) target->scene()->addPostEventAction(
-		new Interaction::SetCursorEvent(target, m->nameNode(), Interaction::SetCursorEvent::CursorOnLeft));
-	else
-		target->scene()->addPostEventAction(
-			new Interaction::SetCursorEvent(target, m->nameNode(), Interaction::SetCursorEvent::CursorOnRight));
-
-	return new Interaction::CommandResult();
+namespace Model {
+	class Node;
 }
 
-} /* namespace OOInteraction */
+namespace Interaction {
+
+class INTERACTIONBASE_API SetCursorEvent : public Visualization::CustomSceneEvent{
+	public:
+		static const QEvent::Type EventType;
+
+		enum CursorPlacement { CursorOnTop, CursorOnBottom, CursorOnLeft, CursorOnRight, CursorOnCenter,
+										CursorAboveOf, CursorBelowOf, CursorLeftOf, CursorRightOf};
+
+		SetCursorEvent(Visualization::Item* itemToGetCursor, CursorPlacement placement);
+		SetCursorEvent(Visualization::Item* parentContainer, Model::Node* node, CursorPlacement placement);
+		SetCursorEvent(Visualization::Scene* scene, Model::Node* node, CursorPlacement placement);
+		virtual void execute();
+
+	private:
+		Visualization::Item* itemToGetCursor_;
+		Visualization::Item* parentContainer_;
+		Visualization::Scene* scene_;
+		Model::Node* node_;
+		CursorPlacement placement_;
+};
+
+} /* namespace Interaction */
+#endif /* InteractionBase_SETCURSOREVENT_H_ */

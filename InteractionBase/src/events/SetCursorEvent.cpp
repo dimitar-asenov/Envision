@@ -31,7 +31,7 @@
  *      Author: Dimitar Asenov
  */
 
-#include "handlers/SetCursorEvent.h"
+#include "SetCursorEvent.h"
 
 #include "VisualizationBase/src/items/Item.h"
 #include "ModelBase/src/adapter/AdapterManager.h"
@@ -40,19 +40,28 @@ namespace Interaction {
 
 const QEvent::Type SetCursorEvent::EventType = static_cast<QEvent::Type> (QEvent::registerEventType());
 
+SetCursorEvent::SetCursorEvent(Visualization::Item* itemToGetCursor, CursorPlacement placement)
+: CustomSceneEvent(EventType), itemToGetCursor_(itemToGetCursor), parentContainer_(nullptr), scene_(nullptr),
+  node_(nullptr), placement_(placement)
+{}
+
 SetCursorEvent::SetCursorEvent(Visualization::Item* parentContainer, Model::Node* node, CursorPlacement placement)
-	: CustomSceneEvent(EventType), parentContainer_(parentContainer), scene_(nullptr), node_(node), placement_(placement)
+	: CustomSceneEvent(EventType), itemToGetCursor_(nullptr), parentContainer_(parentContainer), scene_(nullptr),
+	  node_(node), placement_(placement)
 {}
 
 SetCursorEvent::SetCursorEvent(Visualization::Scene* scene, Model::Node* node, CursorPlacement placement)
-	: CustomSceneEvent(EventType), parentContainer_(nullptr), scene_(scene), node_(node), placement_(placement)
+	: CustomSceneEvent(EventType), itemToGetCursor_(nullptr), parentContainer_(nullptr), scene_(scene), node_(node),
+	  placement_(placement)
 {}
 
 void SetCursorEvent::execute()
 {
 	Visualization::Item* item = nullptr;
 
-	if (parentContainer_)
+	if (itemToGetCursor_)
+		item = itemToGetCursor_;
+	else if (parentContainer_)
 	{
 		item = parentContainer_->findVisualizationOf(node_);
 		if (!item) item = parentContainer_;
@@ -66,7 +75,7 @@ void SetCursorEvent::execute()
 		}
 	}
 
-	if (!item ) return;
+	if (!item) return;
 	auto parent = item->parent();
 
 	switch(placement_)

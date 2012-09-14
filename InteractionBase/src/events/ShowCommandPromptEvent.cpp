@@ -25,47 +25,36 @@
  **********************************************************************************************************************/
 
 /*
- * SetCursorEvent.h
+ * ShowCommandPromptEvent.cpp
  *
- *  Created on: Mar 1, 2012
+ *  Created on: Sep 14, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef InteractionBase_SETCURSOREVENT_H_
-#define InteractionBase_SETCURSOREVENT_H_
+#include "ShowCommandPromptEvent.h"
+#include "handlers/GenericHandler.h"
 
-#include "../interactionbase_api.h"
-
-#include "VisualizationBase/src/CustomSceneEvent.h"
-
-namespace Visualization {
-	class Item;
-	class Scene;
-}
-
-namespace Model {
-	class Node;
-}
+#include "VisualizationBase/src/Scene.h"
+#include "VisualizationBase/src/cursor/Cursor.h"
 
 namespace Interaction {
 
-class INTERACTIONBASE_API SetCursorEvent : public Visualization::CustomSceneEvent{
-	public:
-		static const QEvent::Type EventType;
+const QEvent::Type ShowCommandPromptEvent::EventType = static_cast<QEvent::Type> (QEvent::registerEventType());
 
-		enum CursorPlacement { CursorOnTop, CursorOnBottom, CursorOnLeft, CursorOnRight, CursorOnCenter,
-										CursorAboveOf, CursorBelowOf, CursorLeftOf, CursorRightOf};
+ShowCommandPromptEvent::ShowCommandPromptEvent(Visualization::Scene* scene)
+: CustomSceneEvent(EventType), scene_(scene)
+{}
 
-		SetCursorEvent(Visualization::Item* parentContainer, Model::Node* node, CursorPlacement placement);
-		SetCursorEvent(Visualization::Scene* scene, Model::Node* node, CursorPlacement placement);
-		virtual void execute();
-
-	private:
-		Visualization::Item* parentContainer_;
-		Visualization::Scene* scene_;
-		Model::Node* node_;
-		CursorPlacement placement_;
-};
-
+void ShowCommandPromptEvent::execute()
+{
+	if (scene_ && scene_->mainCursor() && scene_->mainCursor()->owner())
+	{
+		auto handler = dynamic_cast<GenericHandler*>(scene_->mainCursor()->owner()->handler());
+		if (handler)
+		{
+			handler->showCommandPrompt(scene_->mainCursor()->owner());
+			scene_->scheduleUpdate();
+		}
+	}
+}
 } /* namespace Interaction */
-#endif /* InteractionBase_SETCURSOREVENT_H_ */

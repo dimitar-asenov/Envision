@@ -39,7 +39,7 @@
 #include "OOModel/src/statements/ExpressionStatement.h"
 #include "OOModel/src/elements/FormalArgument.h"
 
-#include "InteractionBase/src/handlers/SetCursorEvent.h"
+#include "InteractionBase/src/events/SetCursorEvent.h"
 #include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/items/VText.h"
 #include "VisualizationBase/src/cursor/LayoutCursor.h"

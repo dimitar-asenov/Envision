@@ -44,7 +44,7 @@
 #include "OOModel/src/allOOModelNodes.h"
 #include "OOModel/src/types/SymbolProviderType.h"
 
-#include "InteractionBase/src/handlers/SetCursorEvent.h"
+#include "InteractionBase/src/events/SetCursorEvent.h"
 #include "InteractionBase/src/autocomplete/AutoComplete.h"
 #include "InteractionBase/src/autocomplete/AutoCompleteEntry.h"
 #include "ModelBase/src/adapter/AdapterManager.h"

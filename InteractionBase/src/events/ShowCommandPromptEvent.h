@@ -25,56 +25,35 @@
  **********************************************************************************************************************/
 
 /*
- * CCreateMethod.cpp
+ * ShowCommandPromptEvent.h
  *
- *  Created on: Mar 1, 2012
+ *  Created on: Sep 14, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "commands/CCreateMethod.h"
+#ifndef InteractionBase_SHOWCOMMANDPROMPTEVENT_H_
+#define InteractionBase_SHOWCOMMANDPROMPTEVENT_H_
 
-#include "OOModel/src/top_level/Class.h"
-#include "OOModel/src/top_level/Method.h"
+#include "../interactionbase_api.h"
 
-#include "InteractionBase/src/events/SetCursorEvent.h"
+#include "VisualizationBase/src/CustomSceneEvent.h"
 
-namespace OOInteraction {
-
-CCreateMethod::CCreateMethod() : CreateNamedObjectWithAttributes("method",
-		{{"public", "private","protected"}, {"static"}})
-{
+namespace Visualization {
+	class Scene;
 }
 
-Interaction::CommandResult* CCreateMethod::create(Visualization::Item* /*source*/, Visualization::Item* target,
-	const QString& name, const QStringList& attributes)
-{
-	auto cl = dynamic_cast<OOModel::Class*> (target->node());
-	Q_ASSERT(cl);
+namespace Interaction {
 
-	auto m = new OOModel::Method();
-	if (!name.isEmpty()) m->setName(name);
+class INTERACTIONBASE_API ShowCommandPromptEvent : public Visualization::CustomSceneEvent{
+	public:
+		static const QEvent::Type EventType;
 
-	// Set visibility
-	if (attributes.first() == "private" ) m->setVisibility(OOModel::Visibility::PRIVATE);
-	else if (attributes.first() == "protected" ) m->setVisibility(OOModel::Visibility::PROTECTED);
-	else if (attributes.first() == "public" ) m->setVisibility(OOModel::Visibility::PUBLIC);
-	else m->setVisibility(OOModel::Visibility::DEFAULT);
+		ShowCommandPromptEvent(Visualization::Scene* scene);
+		virtual void execute();
 
-	// Set scope
-	if (attributes.last() == "static") m->setStorageSpecifier(OOModel::StorageSpecifier::CLASS_VARIABLE);
-	else m->setStorageSpecifier(OOModel::StorageSpecifier::INSTANCE_VARIABLE);
+	private:
+		Visualization::Scene* scene_;
+};
 
-	cl->beginModification("create class");
-	cl->methods()->append(m);
-	cl->endModification();
-
-	if (name.isNull()) target->scene()->addPostEventAction(
-		new Interaction::SetCursorEvent(target, m->nameNode(), Interaction::SetCursorEvent::CursorOnLeft));
-	else
-		target->scene()->addPostEventAction(
-			new Interaction::SetCursorEvent(target, m->nameNode(), Interaction::SetCursorEvent::CursorOnRight));
-
-	return new Interaction::CommandResult();
-}
-
-} /* namespace OOInteraction */
+} /* namespace Interaction */
+#endif /* InteractionBase_SHOWCOMMANDPROMPTEVENT_H_ */
