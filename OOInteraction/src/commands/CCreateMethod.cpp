@@ -25,54 +25,56 @@
  **********************************************************************************************************************/
 
 /*
- * CProjectCreateClass.cpp
+ * CCreateMethod.cpp
  *
- *  Created on: Mar 6, 2012
+ *  Created on: Mar 1, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "commands/CProjectCreateClass.h"
+#include "commands/CCreateMethod.h"
 
-#include "OOModel/src/top_level/Project.h"
 #include "OOModel/src/top_level/Class.h"
+#include "OOModel/src/top_level/Method.h"
 
 #include "InteractionBase/src/handlers/SetCursorEvent.h"
 
 namespace OOInteraction {
 
-CProjectCreateClass::CProjectCreateClass() : CreateNamedObjectWithAttributes("class",
-		{{"public", "private","protected"}})
+CCreateMethod::CCreateMethod() : CreateNamedObjectWithAttributes("method",
+		{{"public", "private","protected"}, {"static"}})
 {
 }
 
-Interaction::CommandResult* CProjectCreateClass::create(Visualization::Item* /*source*/, Visualization::Item* target,
+Interaction::CommandResult* CCreateMethod::create(Visualization::Item* /*source*/, Visualization::Item* target,
 	const QString& name, const QStringList& attributes)
 {
-	auto pr = dynamic_cast<OOModel::Project*> (target->node());
-	Q_ASSERT(pr);
+	auto cl = dynamic_cast<OOModel::Class*> (target->node());
+	Q_ASSERT(cl);
 
-	auto cl = new OOModel::Class();
-	if (!name.isEmpty()) cl->setName(name);
+	auto m = new OOModel::Method();
+	if (!name.isEmpty()) m->setName(name);
 
 	// Set visibility
-	if (attributes.first() == "private" ) cl->setVisibility(OOModel::Visibility::PRIVATE);
-	else if (attributes.first()  == "protected" ) cl->setVisibility(OOModel::Visibility::PROTECTED);
-	else if (attributes.first()  == "public" ) cl->setVisibility(OOModel::Visibility::PUBLIC);
-	else cl->setVisibility(OOModel::Visibility::DEFAULT);
+	if (attributes.first() == "private" ) m->setVisibility(OOModel::Visibility::PRIVATE);
+	else if (attributes.first() == "protected" ) m->setVisibility(OOModel::Visibility::PROTECTED);
+	else if (attributes.first() == "public" ) m->setVisibility(OOModel::Visibility::PUBLIC);
+	else m->setVisibility(OOModel::Visibility::DEFAULT);
 
-	pr->beginModification("create class");
-	pr->classes()->append(cl);
-	pr->endModification();
+	// Set scope
+	if (attributes.last() == "static") m->setStorageSpecifier(OOModel::StorageSpecifier::CLASS_VARIABLE);
+	else m->setStorageSpecifier(OOModel::StorageSpecifier::INSTANCE_VARIABLE);
+
+	cl->beginModification("create class");
+	cl->methods()->append(m);
+	cl->endModification();
 
 	if (name.isNull()) target->scene()->addPostEventAction(
-		new Interaction::SetCursorEvent(target, cl->nameNode(), Interaction::SetCursorEvent::CursorOnLeft));
+		new Interaction::SetCursorEvent(target, m->nameNode(), Interaction::SetCursorEvent::CursorOnLeft));
 	else
 		target->scene()->addPostEventAction(
-			new Interaction::SetCursorEvent(target, cl->nameNode(), Interaction::SetCursorEvent::CursorOnRight));
+			new Interaction::SetCursorEvent(target, m->nameNode(), Interaction::SetCursorEvent::CursorOnRight));
 
 	return new Interaction::CommandResult();
 }
-
-
 
 } /* namespace OOInteraction */

@@ -25,30 +25,52 @@
  **********************************************************************************************************************/
 
 /*
- * CProjectCreateClass.h
+ * CCreateClass.cpp
  *
  *  Created on: Mar 6, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef OOInteraction_CPROJECTCREATECLASS_H_
-#define OOInteraction_CPROJECTCREATECLASS_H_
+#include "commands/CCreateClass.h"
 
-#include "../oointeraction_api.h"
+#include "OOModel/src/top_level/Project.h"
+#include "OOModel/src/top_level/Class.h"
 
-#include "InteractionBase/src/commands/CreateNamedObjectWithAttributes.h"
+#include "InteractionBase/src/handlers/SetCursorEvent.h"
 
 namespace OOInteraction {
 
-class OOINTERACTION_API CProjectCreateClass : public Interaction::CreateNamedObjectWithAttributes
+CCreateClass::CCreateClass() : CreateNamedObjectWithAttributes("class",
+		{{"public", "private","protected"}})
 {
-	public:
-		CProjectCreateClass();
+}
 
-	protected:
-		virtual Interaction::CommandResult* create(Visualization::Item* source, Visualization::Item* target,
-			const QString& name, const QStringList& attributes) override;
-};
+Interaction::CommandResult* CCreateClass::create(Visualization::Item* /*source*/, Visualization::Item* target,
+	const QString& name, const QStringList& attributes)
+{
+	auto pr = dynamic_cast<OOModel::Project*> (target->node());
+	Q_ASSERT(pr);
+
+	auto cl = new OOModel::Class();
+	if (!name.isEmpty()) cl->setName(name);
+
+	// Set visibility
+	if (attributes.first() == "private" ) cl->setVisibility(OOModel::Visibility::PRIVATE);
+	else if (attributes.first()  == "protected" ) cl->setVisibility(OOModel::Visibility::PROTECTED);
+	else if (attributes.first()  == "public" ) cl->setVisibility(OOModel::Visibility::PUBLIC);
+	else cl->setVisibility(OOModel::Visibility::DEFAULT);
+
+	pr->beginModification("create class");
+	pr->classes()->append(cl);
+	pr->endModification();
+
+	if (name.isNull()) target->scene()->addPostEventAction(
+		new Interaction::SetCursorEvent(target, cl->nameNode(), Interaction::SetCursorEvent::CursorOnLeft));
+	else
+		target->scene()->addPostEventAction(
+			new Interaction::SetCursorEvent(target, cl->nameNode(), Interaction::SetCursorEvent::CursorOnRight));
+
+	return new Interaction::CommandResult();
+}
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_CPROJECTCREATECLASS_H_ */

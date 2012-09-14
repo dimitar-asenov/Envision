@@ -25,14 +25,14 @@
  **********************************************************************************************************************/
 
 /*
- * CClassCreateMethod.h
+ * CCreateClass.h
  *
- *  Created on: Mar 1, 2012
+ *  Created on: Mar 6, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef OOInteraction_CCLASSCREATEMETHOD_H_
-#define OOInteraction_CCLASSCREATEMETHOD_H_
+#ifndef OOInteraction_CCREATECLASS_H_
+#define OOInteraction_CCREATECLASS_H_
 
 #include "../oointeraction_api.h"
 
@@ -40,10 +40,10 @@
 
 namespace OOInteraction {
 
-class OOINTERACTION_API CClassCreateMethod : public Interaction::CreateNamedObjectWithAttributes
+class OOINTERACTION_API CCreateClass : public Interaction::CreateNamedObjectWithAttributes
 {
 	public:
-		CClassCreateMethod();
+		CCreateClass();
 
 	protected:
 		virtual Interaction::CommandResult* create(Visualization::Item* source, Visualization::Item* target,
@@ -51,4 +51,4 @@ class OOINTERACTION_API CClassCreateMethod : public Interaction::CreateNamedObje
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_CCLASSCREATEMETHOD_H_ */
+#endif /* OOInteraction_CCREATECLASS_H_ */

@@ -8,7 +8,9 @@ win32:LIBS += -llogger \
     -lvisualizationbase \
     -linteractionbase \
     -loovisualization
-HEADERS += ../InteractionBase/src/commands/CreateNamedObjectWithAttributes.h \
+HEADERS += src/commands/CCreateMethod.h \
+    src/commands/CCreateClass.h \
+    ../InteractionBase/src/commands/CreateNamedObjectWithAttributes.h \
     src/string_offset_providers/UnaryOperatorStringOffsetProvider.h \
     src/string_offset_providers/Cell.h \
     src/string_offset_providers/ListCell.h \
@@ -21,8 +23,6 @@ HEADERS += ../InteractionBase/src/commands/CreateNamedObjectWithAttributes.h \
     src/string_components/ConditionalExpressionStringComponents.h \
     src/expression_editor/operators/ConditionalExpressionDescriptor.h \
     src/OOInteractionException.h \
-    src/commands/CClassCreateMethod.h \
-    src/commands/CProjectCreateClass.h \
     src/expression_editor/OOExpressionBuilder.h \
     src/expression_editor/OOOperatorDescriptor.h \
     src/expression_editor/OOOperatorDescriptorList.h \
@@ -81,7 +81,9 @@ HEADERS += ../InteractionBase/src/commands/CreateNamedObjectWithAttributes.h \
     src/string_offset_providers/TextRendererStringOffsetProvider.h \
     src/string_offset_providers/VariableDeclarationStringOffsetProvider.h \
     src/oointeraction.h
-SOURCES += ../InteractionBase/src/commands/CreateNamedObjectWithAttributes.cpp \
+SOURCES += src/commands/CCreateMethod.cpp \
+    src/commands/CCreateClass.cpp \
+    ../InteractionBase/src/commands/CreateNamedObjectWithAttributes.cpp \
     src/string_offset_providers/UnaryOperatorStringOffsetProvider.cpp \
     src/string_offset_providers/Cell.cpp \
     src/string_offset_providers/ListCell.cpp \
@@ -116,13 +118,11 @@ SOURCES += ../InteractionBase/src/commands/CreateNamedObjectWithAttributes.cpp \
     src/expression_editor/operators/ArrayTypeDescriptor.cpp \
     src/string_components/PrimitiveTypeStringComponents.cpp \
     src/string_components/StringLiteralStringComponents.cpp \
-    src/commands/CProjectCreateClass.cpp \
     src/handlers/HMethod.cpp \
     src/handlers/HExpression.cpp \
     src/handlers/HClass.cpp \
     src/handlers/HProject.cpp \
     src/handlers/SetExpressionCursorEvent.cpp \
-    src/commands/CClassCreateMethod.cpp \
     src/string_components/CallStringComponents.cpp \
     src/expression_editor/operators/CallDescriptor.cpp \
     src/expression_editor/operators/MemberOperatorDescriptor.cpp \
