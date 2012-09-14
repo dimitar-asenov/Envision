@@ -33,7 +33,7 @@
 
 #include "SetModificationTarget.h"
 #include "nodes/Node.h"
-#include "NodeReadWriteLock.h"
+#include "../concurrent/NodeReadWriteLock.h"
 
 namespace Model {
 

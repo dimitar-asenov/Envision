@@ -35,7 +35,7 @@
 #include "commands/FieldSet.h"
 #include "nodes/Text.h"
 #include "nodes/Node.h"
-#include "Model.h"
+#include "../model/Model.h"
 
 namespace Model {
 

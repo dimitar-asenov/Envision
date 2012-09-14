@@ -35,7 +35,7 @@
 #include "shapes/Shape.h"
 #include "../renderer/ModelRenderer.h"
 
-#include "ModelBase/src/Model.h"
+#include "ModelBase/src/model/Model.h"
 
 namespace Visualization {
 

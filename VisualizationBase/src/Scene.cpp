@@ -41,7 +41,7 @@
 #include "CustomSceneEvent.h"
 
 #include "ModelBase/src/nodes/Node.h"
-#include "ModelBase/src/Model.h"
+#include "ModelBase/src/model/Model.h"
 
 namespace Visualization {
 

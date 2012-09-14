@@ -35,7 +35,7 @@
 #include "FileStore.h"
 #include "SelfTest/src/SelfTestSuite.h"
 #include "ModelBase/src/test_nodes/BinaryNode.h"
-#include "ModelBase/src/Model.h"
+#include "ModelBase/src/model/Model.h"
 #include "ModelBase/src/nodes/Integer.h"
 #include "ModelBase/src/nodes/Text.h"
 

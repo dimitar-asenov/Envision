@@ -33,7 +33,7 @@
 
 #include "literals/VCharacterLiteral.h"
 
-#include "ModelBase/src/Model.h"
+#include "ModelBase/src/model/Model.h"
 
 using namespace OOModel;
 using namespace Visualization;

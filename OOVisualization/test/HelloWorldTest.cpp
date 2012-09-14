@@ -50,7 +50,7 @@
 #include "VisualizationBase/src/node_extensions/Position.h"
 #include "VisualizationBase/src/items/RootItem.h"
 
-#include "ModelBase/src/Model.h"
+#include "ModelBase/src/model/Model.h"
 
 using namespace OOModel;
 using namespace Visualization;

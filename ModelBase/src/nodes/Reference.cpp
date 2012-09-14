@@ -33,7 +33,7 @@
 
 #include "nodes/Reference.h"
 #include "commands/FieldSet.h"
-#include "Model.h"
+#include "model/Model.h"
 #include "ModelException.h"
 
 namespace Model {

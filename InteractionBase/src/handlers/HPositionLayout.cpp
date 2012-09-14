@@ -35,7 +35,7 @@
 
 #include "VisualizationBase/src/layouts/PositionLayout.h"
 #include "VisualizationBase/src/Scene.h"
-#include "ModelBase/src/Model.h"
+#include "ModelBase/src/model/Model.h"
 
 namespace Interaction {
 

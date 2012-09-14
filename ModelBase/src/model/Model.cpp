@@ -32,11 +32,11 @@
  **********************************************************************************************************************/
 
 #include "Model.h"
-#include "ModelException.h"
-#include "commands/UndoCommand.h"
-#include "commands/SetModificationTarget.h"
-#include "commands/AddModifiedNode.h"
-#include "nodes/Reference.h"
+#include "../ModelException.h"
+#include "../commands/UndoCommand.h"
+#include "../commands/SetModificationTarget.h"
+#include "../commands/AddModifiedNode.h"
+#include "../nodes/Reference.h"
 
 namespace Model {
 

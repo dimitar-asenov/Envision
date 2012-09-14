@@ -32,7 +32,7 @@
  **********************************************************************************************************************/
 
 #include "NodeReadWriteLock.h"
-#include "ModelException.h"
+#include "../ModelException.h"
 
 namespace Model {
 

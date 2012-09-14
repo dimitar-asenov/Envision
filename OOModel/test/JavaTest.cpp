@@ -36,7 +36,7 @@
 
 #include "allOOModelNodes.h"
 
-#include "ModelBase/src/Model.h"
+#include "ModelBase/src/model/Model.h"
 
 namespace OOModel {
 

@@ -3,12 +3,12 @@ include(../Core/common_plugin.pri)
 DEFINES += MODELBASE_LIBRARY
 win32:LIBS += -llogger \
     -lselftest
-HEADERS += src/visitor/VisitorDefinition.h \
+HEADERS += src/concurrent/InterruptibleThread.h \
+    src/concurrent/NodeReadWriteLock.h \
+    src/model/Model.h \
+    src/visitor/VisitorDefinition.h \
     src/visitor/Visitor.h \
-    src/InterruptibleThread.h \
-    src/Model.h \
     src/ModelException.h \
-    src/NodeReadWriteLock.h \
     src/TypedListInstantiations.h \
     src/adapter/AdapterManager.h \
     src/commands/ExtendedNodeChild.h \
@@ -50,7 +50,9 @@ HEADERS += src/visitor/VisitorDefinition.h \
     src/commands/SetModificationTarget.h \
     test/PersistentStoreMock.h \
     src/modelbase.h
-SOURCES += test/VisitorTests.cpp \
+SOURCES += src/concurrent/NodeReadWriteLock.cpp \
+    src/model/Model.cpp \
+    test/VisitorTests.cpp \
     src/persistence/PersistentStore.cpp \
     src/adapter/AdapterManager.cpp \
     src/commands/AddModifiedNode.cpp \
@@ -81,7 +83,6 @@ SOURCES += test/VisitorTests.cpp \
     src/commands/UndoCommand.cpp \
     test/ConcurrencyTests.cpp \
     src/commands/SetModificationTarget.cpp \
-    src/NodeReadWriteLock.cpp \
     src/nodes/Reference.cpp \
     test/PersistenceTests.cpp \
     test/PersistentStoreMock.cpp \
@@ -91,5 +92,4 @@ SOURCES += test/VisitorTests.cpp \
     test/UndoRedoTests.cpp \
     test/SimpleTests.cpp \
     src/nodes/Text.cpp \
-    src/Model.cpp \
     src/modelbase.cpp

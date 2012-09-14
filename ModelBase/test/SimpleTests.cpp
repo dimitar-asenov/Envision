@@ -35,7 +35,7 @@
 #include "SelfTest/src/SelfTestSuite.h"
 #include "test_nodes/BinaryNode.h"
 #include "test_nodes/BinaryNodeAccessUnit.h"
-#include "Model.h"
+#include "model/Model.h"
 #include "nodes/Text.h"
 #include "nodes/Integer.h"
 #include "nodes/Reference.h"

@@ -34,7 +34,7 @@
 #include "FileStore.h"
 #include "FilePersistenceException.h"
 
-#include "ModelBase/src/Model.h"
+#include "ModelBase/src/model/Model.h"
 #include "ModelBase/src/nodes/Node.h"
 #include "ModelBase/src/ModelException.h"
 #include "ModelBase/src/persistence/PersistedNode.h"

@@ -34,7 +34,7 @@
 #include "modelbase.h"
 #include "SelfTest/src/SelfTestSuite.h"
 #include "test_nodes/BinaryNode.h"
-#include "Model.h"
+#include "model/Model.h"
 #include "nodes/Text.h"
 
 namespace Model {

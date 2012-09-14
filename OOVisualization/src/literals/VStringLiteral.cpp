@@ -34,7 +34,7 @@
 #include "literals/VStringLiteral.h"
 
 #include "VisualizationBase/src/items/Static.h"
-#include "ModelBase/src/Model.h"
+#include "ModelBase/src/model/Model.h"
 
 using namespace OOModel;
 using namespace Visualization;

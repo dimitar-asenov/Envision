@@ -38,7 +38,7 @@
 
 #include "Node.h"
 #include "nodeMacros.h"
-#include "../Model.h"
+#include "../model/Model.h"
 #include "../commands/ListInsert.h"
 #include "../ModelException.h"
 #include "../persistence/ClipboardStore.h"

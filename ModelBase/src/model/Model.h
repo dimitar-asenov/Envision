@@ -34,9 +34,9 @@
 #ifndef MODEL_H_
 #define MODEL_H_
 
-#include "modelbase_api.h"
-#include "nodes/Node.h"
-#include "NodeReadWriteLock.h"
+#include "../modelbase_api.h"
+#include "../nodes/Node.h"
+#include "../concurrent/NodeReadWriteLock.h"
 
 namespace Model {
 

@@ -33,7 +33,7 @@
 
 #include "items/VReference.h"
 
-#include "ModelBase/src/Model.h"
+#include "ModelBase/src/model/Model.h"
 
 namespace Visualization {
 

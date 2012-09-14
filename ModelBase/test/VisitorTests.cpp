@@ -33,7 +33,7 @@
 
 #include "modelbase.h"
 #include "SelfTest/src/SelfTestSuite.h"
-#include "Model.h"
+#include "model/Model.h"
 #include "nodes/List.h"
 #include "nodes/Integer.h"
 #include "nodes/Text.h"

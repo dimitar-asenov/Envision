@@ -34,7 +34,7 @@
 #ifndef NOTIFICATIONLISTENER_H_
 #define NOTIFICATIONLISTENER_H_
 
-#include "Model.h"
+#include "model/Model.h"
 #include "nodes/Node.h"
 
 namespace Model {

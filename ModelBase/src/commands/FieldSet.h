@@ -35,7 +35,7 @@
 #define FIELDSET_H_
 
 #include "UndoCommand.h"
-#include "../Model.h"
+#include "../model/Model.h"
 
 namespace Model {
 

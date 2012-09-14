@@ -40,7 +40,7 @@
 #include "monitor/ValueAtReturnVisitor.h"
 
 #include "OOModel/src/allOOModelNodes.h"
-#include "ModelBase/src/Model.h"
+#include "ModelBase/src/model/Model.h"
 
 #include "InteractionBase/src/autocomplete/AutoComplete.h"
 

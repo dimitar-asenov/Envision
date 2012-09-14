@@ -34,7 +34,7 @@
 #ifndef NODEREADWRITELOCK_H_
 #define NODEREADWRITELOCK_H_
 
-#include "modelbase_api.h"
+#include "../modelbase_api.h"
 #include "InterruptibleThread.h"
 
 namespace Model {

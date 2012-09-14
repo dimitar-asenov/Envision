@@ -34,7 +34,7 @@
 #include "SystemClipboard.h"
 #include "FilePersistenceException.h"
 
-#include "ModelBase/src/Model.h"
+#include "ModelBase/src/model/Model.h"
 #include "ModelBase/src/nodes/Reference.h"
 #include "ModelBase/src/persistence/PersistedNode.h"
 #include "ModelBase/src/persistence/PersistedValue.h"

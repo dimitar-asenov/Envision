@@ -33,7 +33,7 @@
 
 #include "nodes/Node.h"
 #include "modelbase.h"
-#include "Model.h"
+#include "../model/Model.h"
 #include "commands/UndoCommand.h"
 #include "ModelException.h"
 #include "Reference.h"

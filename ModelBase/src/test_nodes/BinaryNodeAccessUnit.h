@@ -37,7 +37,7 @@
 #include "../modelbase_api.h"
 
 #include "BinaryNode.h"
-#include "../NodeReadWriteLock.h"
+#include "../concurrent/NodeReadWriteLock.h"
 
 namespace TestNodes {
 

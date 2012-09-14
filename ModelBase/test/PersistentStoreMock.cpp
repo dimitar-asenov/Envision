@@ -33,7 +33,7 @@
 
 #include "PersistentStoreMock.h"
 #include "nodes/Node.h"
-#include "Model.h"
+#include "model/Model.h"
 #include "ModelException.h"
 
 namespace Model {

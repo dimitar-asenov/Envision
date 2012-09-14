@@ -34,7 +34,7 @@
 #ifndef INTERRUPTIBLETHREAD_H_
 #define INTERRUPTIBLETHREAD_H_
 
-#include "modelbase_api.h"
+#include "../modelbase_api.h"
 
 namespace Model {
 
