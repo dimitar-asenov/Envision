@@ -36,6 +36,7 @@
 #include "AutoCompleteEntry.h"
 #include "../vis/TextAndDescription.h"
 
+#include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/cursor/Cursor.h"
 #include "VisualizationBase/src/items/Static.h"
 #include "VisualizationBase/src/CustomSceneEvent.h"
@@ -56,6 +57,7 @@ AutoCompleteVis::AutoCompleteVis(const QList<AutoCompleteEntry*>& entries, const
 	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(QGraphicsItem::ItemClipsChildrenToShape);
 	setZValue(LAYER_AUTOCOMPLETE_Z);
+	setItemCategory(Visualization::Scene::MenuItemCategory);
 }
 
 AutoCompleteVis::~AutoCompleteVis()
