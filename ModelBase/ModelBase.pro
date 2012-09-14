@@ -3,7 +3,8 @@ include(../Core/common_plugin.pri)
 DEFINES += MODELBASE_LIBRARY
 win32:LIBS += -llogger \
     -lselftest
-HEADERS += src/concurrent/InterruptibleThread.h \
+HEADERS += src/model/ModelManager.h \
+    src/concurrent/InterruptibleThread.h \
     src/concurrent/NodeReadWriteLock.h \
     src/model/Model.h \
     src/visitor/VisitorDefinition.h \
@@ -50,7 +51,8 @@ HEADERS += src/concurrent/InterruptibleThread.h \
     src/commands/SetModificationTarget.h \
     test/PersistentStoreMock.h \
     src/modelbase.h
-SOURCES += src/concurrent/NodeReadWriteLock.cpp \
+SOURCES += src/model/ModelManager.cpp \
+    src/concurrent/NodeReadWriteLock.cpp \
     src/model/Model.cpp \
     test/VisitorTests.cpp \
     src/persistence/PersistentStore.cpp \

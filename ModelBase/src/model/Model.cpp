@@ -40,23 +40,17 @@
 
 namespace Model {
 
-QList<Model*> Model::loadedModels;
-
-void Model::init()
-{
-	qRegisterMetaType< QList<Node*> >("QList<Node*>");
-}
-
 Model::Model() :
-	root_(nullptr), currentModificationTarget(nullptr), currentModificationLock(nullptr), pushedNewCommandsOnTheStack(false), performedUndoRedo(false), modificationInProgress(false), store_(nullptr)
+	root_(nullptr), currentModificationTarget(nullptr), currentModificationLock(nullptr),
+	pushedNewCommandsOnTheStack(false), performedUndoRedo(false), modificationInProgress(false), store_(nullptr)
 {
 	commands.setUndoLimit(100);
-	loadedModels.append(this);
+	manager().add(this);
 }
 
 Model::~Model()
 {
-	loadedModels.removeAll(this);
+	manager().remove(this);
 
 	// TODO Make sure to persist and destroy the tree in a nice way.
 	// TODO Emit a signal that this model is no longer valid.
@@ -75,9 +69,11 @@ void Model::beginModification(Node* modificationTarget, const QString &text)
 
 void Model::changeModificationTarget(Node* modificationTarget)
 {
-	if ( !modificationInProgress ) throw ModelException("Switching modification targets without calling Model.beginModification() first");
+	if ( !modificationInProgress )
+		throw ModelException("Switching modification targets without calling Model.beginModification() first");
 
-	pushCommandOnUndoStack(new SetModificationTarget(currentModificationTarget, currentModificationLock, modifiedTargets, modificationTarget));
+	pushCommandOnUndoStack( new SetModificationTarget(currentModificationTarget, currentModificationLock,
+			modifiedTargets, modificationTarget));
 }
 
 void Model::endModification()
@@ -86,7 +82,8 @@ void Model::endModification()
 	{
 		if (!unresolvedReferences_.isEmpty()) tryResolvingReferences();
 
-		pushCommandOnUndoStack(new SetModificationTarget(currentModificationTarget, currentModificationLock, modifiedTargets, nullptr));
+		pushCommandOnUndoStack(new SetModificationTarget(currentModificationTarget, currentModificationLock,
+				modifiedTargets, nullptr));
 		pushedNewCommandsOnTheStack = false;
 		commands.endMacro();
 	}
@@ -129,8 +126,10 @@ bool Model::canBeModified(const Node* node) const
 
 void Model::pushCommandOnUndoStack(UndoCommand* command)
 {
-	if ( !modificationInProgress ) throw ModelException("Changing the application tree without calling Model.beginModification() first");
-	if ( performedUndoRedo ) throw ModelException("Trying to execute new commands after performing an Undo or a Redo operation.");
+	if ( !modificationInProgress )
+		throw ModelException("Changing the application tree without calling Model.beginModification() first");
+	if ( performedUndoRedo )
+		throw ModelException("Trying to execute new commands after performing an Undo or a Redo operation.");
 
 	if ( pushedNewCommandsOnTheStack == false )
 	{
@@ -144,8 +143,10 @@ void Model::pushCommandOnUndoStack(UndoCommand* command)
 
 void Model::undo()
 {
-	if ( !modificationInProgress ) throw ModelException("Requesting an Undo without calling Model.beginModification() first");
-	if ( pushedNewCommandsOnTheStack ) throw ModelException("Requesting an undo in the middle of a modification after executing new commands.");
+	if ( !modificationInProgress )
+		throw ModelException("Requesting an Undo without calling Model.beginModification() first");
+	if ( pushedNewCommandsOnTheStack )
+		throw ModelException("Requesting an undo in the middle of a modification after executing new commands.");
 	performedUndoRedo = true;
 
 	commands.undo();
@@ -153,8 +154,10 @@ void Model::undo()
 
 void Model::redo()
 {
-	if ( !modificationInProgress ) throw ModelException("Requesting a Redo without calling Model.beginModification() first");
-	if ( pushedNewCommandsOnTheStack ) throw ModelException("Requesting a Redo in the middle of a modification after executing new commands.");
+	if ( !modificationInProgress )
+		throw ModelException("Requesting a Redo without calling Model.beginModification() first");
+	if ( pushedNewCommandsOnTheStack )
+		throw ModelException("Requesting a Redo in the middle of a modification after executing new commands.");
 	performedUndoRedo = true;
 
 	commands.redo();
@@ -187,16 +190,6 @@ void Model::load(PersistentStore* store, const QString& name)
 		root_ = store_->loadModel(this, name_);
 		emit rootCreated(root_);
 	}
-}
-
-Model* Model::findModel(Node* root)
-{
-	for (QList<Model*>::iterator model = loadedModels.begin(); model != loadedModels.end(); model++)
-	{
-		if ( (*model)->root() == root ) return *model;
-	}
-
-	return nullptr;
 }
 
 Node* Model::createRoot(const QString &typeName)

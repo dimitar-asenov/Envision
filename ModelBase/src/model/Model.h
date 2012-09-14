@@ -37,6 +37,7 @@
 #include "../modelbase_api.h"
 #include "../nodes/Node.h"
 #include "../concurrent/NodeReadWriteLock.h"
+#include "ModelManager.h"
 
 namespace Model {
 
@@ -66,11 +67,6 @@ class MODELBASE_API Model: public QObject
 	// The moc compiler is used only to support signals and slots.
 
 	public:
-
-		/**
-		 * Registers types with the meta object system of Qt to allow signals and slots to work with lists.
-		 */
-		static void init();
 
 		/**
 		 * Constructs a new Model.
@@ -279,11 +275,6 @@ class MODELBASE_API Model: public QObject
 		void load(PersistentStore* store, const QString& name);
 
 		/**
-		 * Returns the model object that has as its root node the node indicated.
-		 */
-		static Model* findModel(Node* root);
-
-		/**
 		 * Returns the current store for this model.
 		 *
 		 * The current store is the store used to load the model. If this model was created rather than loaded and has
@@ -342,6 +333,8 @@ class MODELBASE_API Model: public QObject
 		 * This method must be called within a modification session.
 		 */
 		void tryResolvingReferences();
+
+		ModelManager& manager() const;
 
 	signals:
 		/**
@@ -478,12 +471,6 @@ class MODELBASE_API Model: public QObject
 		PersistentStore* store_;
 
 		/**
-		 * A list of all Model objects that are currently instantiated. This is used to find the Model corresponding to a
-		 * particular root object.
-		 */
-		static QList<Model*> loadedModels;
-
-		/**
 		 * A list of all unresolved references which are currently loaded nodes.
 		 */
 		QList<Reference*> unresolvedReferences_;
@@ -501,6 +488,8 @@ inline void Model::emitNodeFullyLoaded(Node* node) { emit nodeFullyLoaded(node);
 inline void Model::emitNodePartiallyLoaded(Node* node) { emit nodePartiallyLoaded(node); }
 
 inline const QList<Reference*>& Model::unresolvedReferences() const { return unresolvedReferences_; }
+
+inline ModelManager& Model::manager() const { return ModelManager::instance(); }
 
 }
 

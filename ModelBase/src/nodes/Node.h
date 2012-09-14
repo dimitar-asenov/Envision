@@ -413,6 +413,22 @@ class MODELBASE_API Node
 		 */
 		virtual bool replaceChild(Node* child, Node* replacement, bool releaseOldChild = true);
 
+		/**
+		 * Begins a modification session with the current node as a modification target.
+		 *
+		 * \a text is the description that will be associated with this modification.
+		 *
+		 * \sa Model::beginModification()
+		 */
+		void beginModification(const QString &text = QString());
+
+		/**
+		 * Ends a modification session.
+		 *
+		 * \sa Model::endModification()
+		 */
+		void endModification();
+
 	protected:
 
 		/**

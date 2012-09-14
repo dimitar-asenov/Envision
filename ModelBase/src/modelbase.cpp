@@ -34,7 +34,7 @@
 #include "modelbase.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
-#include "model/Model.h"
+#include "model/ModelManager.h"
 
 #include "nodes/Text.h"
 #include "nodes/Integer.h"
@@ -60,7 +60,7 @@ Log* ModelBase::logger = nullptr;
 
 bool ModelBase::initialize(Core::EnvisionManager&)
 {
-	Model::init();
+	ModelManager::init();
 
 	logger = Logger::Log::getLogger("modelbase");
 	Text::registerNodeType();
