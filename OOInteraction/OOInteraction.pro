@@ -8,7 +8,8 @@ win32:LIBS += -llogger \
     -lvisualizationbase \
     -linteractionbase \
     -loovisualization
-HEADERS += src/commands/CCreateMethod.h \
+HEADERS += src/commands/CCreateProject.h \
+    src/commands/CCreateMethod.h \
     src/commands/CCreateClass.h \
     ../InteractionBase/src/commands/CreateNamedObjectWithAttributes.h \
     src/string_offset_providers/UnaryOperatorStringOffsetProvider.h \
@@ -81,7 +82,8 @@ HEADERS += src/commands/CCreateMethod.h \
     src/string_offset_providers/TextRendererStringOffsetProvider.h \
     src/string_offset_providers/VariableDeclarationStringOffsetProvider.h \
     src/oointeraction.h
-SOURCES += src/commands/CCreateMethod.cpp \
+SOURCES += src/commands/CCreateProject.cpp \
+    src/commands/CCreateMethod.cpp \
     src/commands/CCreateClass.cpp \
     ../InteractionBase/src/commands/CreateNamedObjectWithAttributes.cpp \
     src/string_offset_providers/UnaryOperatorStringOffsetProvider.cpp \

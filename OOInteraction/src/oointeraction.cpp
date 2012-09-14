@@ -44,6 +44,8 @@
 #include "handlers/HLoop.h"
 #include "handlers/HIfStatement.h"
 
+#include "commands/CCreateProject.h"
+
 #include "string_components/UnaryOperatorStringComponents.h"
 #include "string_components/BinaryOperatorStringComponents.h"
 #include "string_components/EmptyExpressionStringComponents.h"
@@ -87,6 +89,7 @@
 #include "InteractionBase/src/handlers/GenericHandler.h"
 #include "InteractionBase/src/handlers/HList.h"
 #include "InteractionBase/src/handlers/HText.h"
+#include "InteractionBase/src/handlers/HSceneHandlerItem.h"
 
 #include "VisualizationBase/src/items/Static.h"
 #include "VisualizationBase/src/items/Symbol.h"
@@ -247,6 +250,7 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, VariableDeclarationStringOffsetProvider, OOVisualization::VVariableDeclaration>();
 
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CCreateProject());
 	return true;
 }
 
