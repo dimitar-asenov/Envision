@@ -83,7 +83,6 @@ CommandPrompt::CommandPrompt(Item* commandReceiver, const StyleType* style) :
 	commandReceiver->scene()->addTopLevelItem(this);
 
 	command->setText("Type a command");
-	updateGeometry(0,0);
 	setPromptPosition();
 	acquireCursor();
 	command->correspondingSceneCursor<Visualization::TextCursor>()->selectAll();
