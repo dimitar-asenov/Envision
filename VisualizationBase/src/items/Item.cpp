@@ -331,7 +331,8 @@ void Item::removeFromScene()
 		if (mc && isAncestorOf(mc->owner()))
 			scene()->setMainCursor(nullptr);
 
-		scene()->removeItem(this);
+		if (parent()) scene()->removeItem(this);
+		else scene()->removeTopLevelItem(this);
 	}
 	setParentItem(nullptr);
 }

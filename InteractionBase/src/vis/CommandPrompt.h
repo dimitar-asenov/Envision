@@ -66,7 +66,6 @@ class INTERACTIONBASE_API CommandPrompt : public Visualization::Item
 		Visualization::Item* commandReceiver();
 
 		QString text() const;
-		void initializeCommand();
 		void takeSuggestion(CommandSuggestion* suggestion);
 
 		void showPrompt();
@@ -91,11 +90,10 @@ class INTERACTIONBASE_API CommandPrompt : public Visualization::Item
 		CommandResult* result_;
 		QList<CommandSuggestion*> suggestions_;	//Suggestions from the result do not appear here.
 
-		// This is true when the item is created and when it is re-shown and is set to false after an update.
-		bool justShown;
+		QPoint receiverCursorPosition;
 
 		void acquireCursor();
-		QPoint receiverCursorPosition;
+		void setPromptPosition();
 };
 
 inline Visualization::Item* CommandPrompt::commandReceiver() { return commandReceiver_; }

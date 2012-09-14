@@ -85,7 +85,6 @@ CommandPrompt* GenericHandler::prompt()
 
 void GenericHandler::removeCommandPrompt()
 {
-	if (prompt_) prompt_->scene()->removeTopLevelItem(prompt_);
 	SAFE_DELETE_ITEM(prompt_);
 }
 
@@ -99,8 +98,6 @@ void GenericHandler::showCommandPrompt(Visualization::Item* commandReceiver)
 	{
 		removeCommandPrompt();
 		prompt_ = new CommandPrompt(commandReceiver);
-		commandReceiver->scene()->addTopLevelItem(prompt_);
-		prompt_->initializeCommand();
 	}
 }
 
