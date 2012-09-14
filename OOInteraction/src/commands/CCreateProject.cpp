@@ -49,6 +49,7 @@ Interaction::CommandResult* CCreateProject::create(Visualization::Item* /*source
 	auto parent = dynamic_cast<OOModel::Project*> (target->node());
 
 	OOModel::Project* project = nullptr;
+	bool newModel = false;
 	if (parent)
 	{
 		project = new OOModel::Project();
@@ -60,6 +61,7 @@ Interaction::CommandResult* CCreateProject::create(Visualization::Item* /*source
 	}
 	else
 	{
+		newModel = true;
 		auto model = new Model::Model();
 		project = dynamic_cast<OOModel::Project*> (model->createRoot("Project"));
 
@@ -74,11 +76,13 @@ Interaction::CommandResult* CCreateProject::create(Visualization::Item* /*source
 		target->scene()->listenToModel(model);
 	}
 
-	if (name.isNull()) target->scene()->addPostEventAction(
-		new Interaction::SetCursorEvent(target, project->nameNode(), Interaction::SetCursorEvent::CursorOnLeft));
+	if (newModel)
+		target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target->scene(), project->nameNode(),
+			name.isNull() ? Interaction::SetCursorEvent::CursorOnLeft : Interaction::SetCursorEvent::CursorOnRight));
 	else
-		target->scene()->addPostEventAction(
-			new Interaction::SetCursorEvent(target, project->nameNode(), Interaction::SetCursorEvent::CursorOnRight));
+		target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, project->nameNode(),
+			name.isNull() ? Interaction::SetCursorEvent::CursorOnLeft : Interaction::SetCursorEvent::CursorOnRight));
+
 
 	return new Interaction::CommandResult();
 }

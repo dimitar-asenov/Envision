@@ -99,6 +99,8 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		void setHiddenItemCategories( ItemCategories hidden = NoItemCategory);
 		bool isHiddenCategory(ItemCategory cat);
 
+		const QList<Item*>& topLevelItems() const;
+
 	public slots:
 		void nodesUpdated(QList<Node*> nodes);
 
@@ -132,6 +134,7 @@ inline void Scene::setRenderer(ModelRenderer* renderer) { renderer_ = renderer? 
 inline ModelRenderer* Scene::renderer() { return renderer_; }
 inline SceneHandlerItem* Scene::sceneHandlerItem() {return sceneHandlerItem_; }
 inline Cursor* Scene::mainCursor() { return cursors_.isEmpty() ? nullptr : cursors_.first(); }
+inline const QList<Item*>& Scene::topLevelItems() const {return topLevelItems_; }
 
 
 }

@@ -71,6 +71,7 @@ CommandPrompt::CommandPrompt(Item* commandReceiver, const StyleType* style) :
 {
 	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(ItemIgnoresTransformations);
+	setZValue(LAYER_COMMAND);
 	setItemCategory(Scene::MenuItemCategory);
 
 	command->setEditable(true);

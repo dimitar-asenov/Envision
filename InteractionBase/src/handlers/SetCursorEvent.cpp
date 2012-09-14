@@ -41,16 +41,32 @@ namespace Interaction {
 const QEvent::Type SetCursorEvent::EventType = static_cast<QEvent::Type> (QEvent::registerEventType());
 
 SetCursorEvent::SetCursorEvent(Visualization::Item* parentContainer, Model::Node* node, CursorPlacement placement)
-	: CustomSceneEvent(EventType), parentContainer_(parentContainer), node_(node), placement_(placement)
-{
-}
+	: CustomSceneEvent(EventType), parentContainer_(parentContainer), scene_(nullptr), node_(node), placement_(placement)
+{}
+
+SetCursorEvent::SetCursorEvent(Visualization::Scene* scene, Model::Node* node, CursorPlacement placement)
+	: CustomSceneEvent(EventType), parentContainer_(nullptr), scene_(scene), node_(node), placement_(placement)
+{}
 
 void SetCursorEvent::execute()
 {
-	auto item = parentContainer_->findVisualizationOf(node_);
+	Visualization::Item* item = nullptr;
 
-	if (!item) item = parentContainer_;
+	if (parentContainer_)
+	{
+		item = parentContainer_->findVisualizationOf(node_);
+		if (!item) item = parentContainer_;
+	}
+	else
+	{
+		for(auto i : scene_->topLevelItems())
+		{
+			item = i->findVisualizationOf(node_);
+			if (item) break;
+		}
+	}
 
+	if (!item ) return;
 	auto parent = item->parent();
 
 	switch(placement_)

@@ -56,6 +56,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 	public:
 		typedef ItemStyle StyleType;
 		const static int LAYER_DEFAULT_Z = 0;
+		const static int LAYER_COMMAND = 25;
 		const static int LAYER_AUTOCOMPLETE_Z = 50;
 		const static int LAYER_SELECTION_Z = 100;
 		const static int LAYER_CURSOR_Z = 200;

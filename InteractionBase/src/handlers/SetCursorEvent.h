@@ -40,6 +40,7 @@
 
 namespace Visualization {
 	class Item;
+	class Scene;
 }
 
 namespace Model {
@@ -56,10 +57,12 @@ class INTERACTIONBASE_API SetCursorEvent : public Visualization::CustomSceneEven
 										CursorAboveOf, CursorBelowOf, CursorLeftOf, CursorRightOf};
 
 		SetCursorEvent(Visualization::Item* parentContainer, Model::Node* node, CursorPlacement placement);
+		SetCursorEvent(Visualization::Scene* scene, Model::Node* node, CursorPlacement placement);
 		virtual void execute();
 
 	private:
 		Visualization::Item* parentContainer_;
+		Visualization::Scene* scene_;
 		Model::Node* node_;
 		CursorPlacement placement_;
 };
