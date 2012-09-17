@@ -68,6 +68,7 @@
 #include "string_components/AssignmentStringComponents.h"
 #include "string_components/VariableDeclarationStringComponents.h"
 #include "string_components/ListStringComponents.h"
+#include "string_components/ThrowStringComponents.h"
 
 #include "string_offset_providers/SequentialVisualizationStringOffsetProvider.h"
 #include "string_offset_providers/EmptyExpressionStringOffsetProvider.h"
@@ -77,6 +78,7 @@
 #include "string_offset_providers/InitializerStringOffsetProvider.h"
 #include "string_offset_providers/CallStringOffsetProvider.h"
 #include "string_offset_providers/NewArrayStringOffsetProvider.h"
+#include "string_offset_providers/ThrowStringOffsetProvider.h"
 #include "string_offset_providers/CastStringOffsetProvider.h"
 #include "string_offset_providers/VariableDeclarationStringOffsetProvider.h"
 #include "string_offset_providers/ReferenceExpressionStringOffsetProvider.h"
@@ -120,6 +122,7 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 	OOVisualization::VThisExpression::setInteractionHandler(HExpression::instance());
 	OOVisualization::VCastExpression::setInteractionHandler(HExpression::instance());
 	OOVisualization::VNewExpression::setInteractionHandler(HExpression::instance());
+	OOVisualization::VThrowExpression::setInteractionHandler(HExpression::instance());
 	OOVisualization::VUnaryOperation::setInteractionHandler(HExpression::instance());
 	OOVisualization::VBinaryOperation::setInteractionHandler(HExpression::instance());
 	OOVisualization::VCommaExpression::setInteractionHandler(HExpression::instance());
@@ -166,6 +169,8 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringComponents, NewArrayStringComponents, OOModel::NewExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor
+		<StringComponents, ThrowStringComponents, OOModel::ThrowExpression>();
+	Model::AdapterManager::registerAdapterViaConstructor
 		<StringComponents, BooleanLiteralStringComponents, OOModel::BooleanLiteral>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringComponents, IntegerLiteralStringComponents, OOModel::IntegerLiteral>();
@@ -209,6 +214,8 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 		<StringOffsetProvider, SequentialVisualizationStringOffsetProvider, OOVisualization::VConditionalExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, NewArrayStringOffsetProvider, OOVisualization::VNewExpression>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringOffsetProvider, ThrowStringOffsetProvider, OOVisualization::VThrowExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, SimpleLiteralStringOffsetProvider, OOVisualization::VBooleanLiteral>();
 	Model::AdapterManager::registerAdapterViaConstructor

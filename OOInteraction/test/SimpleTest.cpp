@@ -193,6 +193,7 @@ Method* addDivBySix(Model::Model* model, Class* parent)
 	divbysix->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("var.a")));
 
 	divbysix->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("int d=(a+b)/42")));
+	divbysix->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("throw BadException")));
 
 	VariableDeclaration* result = new VariableDeclaration();
 	divbysix->items()->append( new ExpressionStatement(result) );

@@ -8,7 +8,10 @@ win32:LIBS += -llogger \
     -lvisualizationbase \
     -linteractionbase \
     -loovisualization
-HEADERS += src/expression_editor/operators/NewObjectDescriptor.h \
+HEADERS += src/string_offset_providers/ThrowStringOffsetProvider.h \
+    src/string_components/ThrowStringComponents.h \
+    src/expression_editor/operators/ThrowDescriptor.h \
+    src/expression_editor/operators/NewObjectDescriptor.h \
     src/commands/CCreateProject.h \
     src/commands/CCreateMethod.h \
     src/commands/CCreateClass.h \
@@ -83,7 +86,10 @@ HEADERS += src/expression_editor/operators/NewObjectDescriptor.h \
     src/string_offset_providers/TextRendererStringOffsetProvider.h \
     src/string_offset_providers/VariableDeclarationStringOffsetProvider.h \
     src/oointeraction.h
-SOURCES += src/expression_editor/operators/NewObjectDescriptor.cpp \
+SOURCES += src/string_offset_providers/ThrowStringOffsetProvider.cpp \
+    src/string_components/ThrowStringComponents.cpp \
+    src/expression_editor/operators/ThrowDescriptor.cpp \
+    src/expression_editor/operators/NewObjectDescriptor.cpp \
     src/commands/CCreateProject.cpp \
     src/commands/CCreateMethod.cpp \
     src/commands/CCreateClass.cpp \

@@ -39,6 +39,7 @@
 #include "expression_editor/operators/CommaDescriptor.h"
 #include "expression_editor/operators/NewObjectDescriptor.h"
 #include "expression_editor/operators/NewArrayDescriptor.h"
+#include "expression_editor/operators/ThrowDescriptor.h"
 #include "expression_editor/operators/InitializerDescriptor.h"
 #include "expression_editor/operators/MemberOperatorDescriptor.h"
 #include "expression_editor/operators/CallDescriptor.h"
@@ -176,6 +177,8 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 			Interaction::OperatorDescriptor::RightAssociative));
 	instance()->addDescriptor(new DeclarationDescriptor( "variable declaration and initialization",
 			"expr SPACE id = expr", 3, 40, Interaction::OperatorDescriptor::RightAssociative));
+	instance()->addDescriptor(new ThrowDescriptor( "throw", "throw SPACE expr", 1, 30,
+					Interaction::OperatorDescriptor::RightAssociative));
 
 	// Command descriptors
 	instance()->addDescriptor(new CommandDescriptor( "command without params", "\\ id SPACE", 1, 0,
