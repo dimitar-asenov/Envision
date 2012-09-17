@@ -7,7 +7,9 @@ win32:LIBS += -llogger \
     -loomodel \
     -lvisualizationbase \
     -linteractionbase
-HEADERS += test/MethodAddOn.h \
+HEADERS += src/expressions/VThrowExpressionStyle.h \
+    src/expressions/VThrowExpression.h \
+    test/MethodAddOn.h \
     src/expressions/VEmptyExpressionStyle.h \
     src/elements/VStatementItemList.h \
     src/elements/VFormalTypeArgumentStyle.h \
@@ -83,7 +85,9 @@ HEADERS += test/MethodAddOn.h \
     src/types/VArrayTypeStyle.h \
     src/types/VPrimitiveType.h \
     src/oovisualization.h
-SOURCES += test/MethodAddOn.cpp \
+SOURCES += src/expressions/VThrowExpressionStyle.cpp \
+    src/expressions/VThrowExpression.cpp \
+    test/MethodAddOn.cpp \
     src/expressions/VEmptyExpressionStyle.cpp \
     src/elements/VStatementItemList.cpp \
     src/elements/VFormalTypeArgumentStyle.cpp \

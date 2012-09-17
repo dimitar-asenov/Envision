@@ -75,6 +75,7 @@
 #include "expressions/AssignmentExpression.h"
 #include "expressions/VariableDeclaration.h"
 #include "expressions/ConditionalExpression.h"
+#include "expressions/ThrowExpression.h"
 
 #include "expressions/types/TypeExpression.h"
 #include "expressions/types/PrimitiveTypeExpression.h"

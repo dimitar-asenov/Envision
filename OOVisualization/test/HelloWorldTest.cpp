@@ -489,6 +489,10 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 	ce->setTrueExpression(new IntegerLiteral(42));
 	ce->setFalseExpression(new IntegerLiteral(0));
 
+	auto throwExpr = new ThrowExpression();
+	longMethod->items()->append(new ExpressionStatement(throwExpr));
+	throwExpr->setExpr(new ReferenceExpression("AnException"));
+
 	IfStatement* ifs = new IfStatement();
 	longMethod->items()->append(ifs);
 	BinaryOperation* ifCond = new BinaryOperation();

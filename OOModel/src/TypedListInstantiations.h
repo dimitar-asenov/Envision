@@ -84,6 +84,7 @@ class UnfinishedOperator;
 class CommaExpression;
 class AssignmentExpression;
 class ConditionalExpression;
+class ThrowExpression;
 
 class TypeExpression;
 class PrimitiveTypeExpression;
@@ -138,6 +139,7 @@ template class Q_DECL_IMPORT Model::TypedList<OOModel::UnfinishedOperator>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::CommaExpression>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::AssignmentExpression>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::ConditionalExpression>;
+template class Q_DECL_IMPORT Model::TypedList<OOModel::ThrowExpression>;
 
 template class Q_DECL_IMPORT Model::TypedList<OOModel::TypeExpression>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::PrimitiveTypeExpression>;

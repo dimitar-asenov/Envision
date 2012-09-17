@@ -94,6 +94,7 @@ bool OOModel::initialize(Core::EnvisionManager&)
 	Model::TypedList<CommaExpression>::registerNodeType();
 	Model::TypedList<AssignmentExpression>::registerNodeType();
 	Model::TypedList<ConditionalExpression>::registerNodeType();
+	Model::TypedList<ThrowExpression>::registerNodeType();
 
 	Model::TypedList<TypeExpression>::registerNodeType();
 	Model::TypedList<PrimitiveTypeExpression>::registerNodeType();
@@ -147,6 +148,7 @@ bool OOModel::initialize(Core::EnvisionManager&)
 	CommaExpression::init();
 	AssignmentExpression::init();
 	ConditionalExpression::init();
+	ThrowExpression::init();
 
 	TypeExpression::init();
 	PrimitiveTypeExpression::init();

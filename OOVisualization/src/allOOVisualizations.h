@@ -57,6 +57,7 @@
 #include "expressions/VCommaExpression.h"
 #include "expressions/VVariableDeclaration.h"
 #include "expressions/VConditionalExpression.h"
+#include "expressions/VThrowExpression.h"
 
 #include "expressions/VEmptyExpression.h"
 #include "expressions/VErrorExpression.h"

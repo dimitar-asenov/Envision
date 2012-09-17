@@ -113,6 +113,9 @@ bool OOVisualization::initialize(Core::EnvisionManager&)
 			createVisualization<VAssignmentExpression, AssignmentExpression>);
 	Scene::defaultRenderer()->registerVisualization(ConditionalExpression::typeIdStatic(),
 			createVisualization<VConditionalExpression, ConditionalExpression>);
+	Scene::defaultRenderer()->registerVisualization(ThrowExpression::typeIdStatic(),
+			createVisualization<VThrowExpression, ThrowExpression>);
+
 	Scene::defaultRenderer()->registerVisualization(Block::typeIdStatic(),
 			createVisualization<VBlock, Block>);
 	Scene::defaultRenderer()->registerVisualization(ReturnStatement::typeIdStatic(),

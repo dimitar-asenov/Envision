@@ -81,6 +81,7 @@ template class Model::TypedList<OOModel::UnfinishedOperator>;
 template class Model::TypedList<OOModel::CommaExpression>;
 template class Model::TypedList<OOModel::AssignmentExpression>;
 template class Model::TypedList<OOModel::ConditionalExpression>;
+template class Model::TypedList<OOModel::ThrowExpression>;
 
 template class Model::TypedList<OOModel::TypeExpression>;
 template class Model::TypedList<OOModel::PrimitiveTypeExpression>;
