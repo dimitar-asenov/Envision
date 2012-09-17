@@ -37,6 +37,7 @@
 #include "expression_editor/operators/BinaryOperatorDescriptor.h"
 #include "expression_editor/operators/CastDescriptor.h"
 #include "expression_editor/operators/CommaDescriptor.h"
+#include "expression_editor/operators/NewObjectDescriptor.h"
 #include "expression_editor/operators/NewArrayDescriptor.h"
 #include "expression_editor/operators/InitializerDescriptor.h"
 #include "expression_editor/operators/MemberOperatorDescriptor.h"
@@ -157,6 +158,8 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 			Interaction::OperatorDescriptor::LeftAssociative));
 	instance()->addDescriptor(new InitializerDescriptor( "initializer", "{ expr }", 1, 0,
 			Interaction::OperatorDescriptor::NotAssociative));
+	instance()->addDescriptor(new NewObjectDescriptor( "new object", "new SPACE expr", 1, 2,
+			Interaction::OperatorDescriptor::RightAssociative));
 	instance()->addDescriptor(new NewArrayDescriptor( "new array", "new SPACE expr [ expr ]", 2, 2,
 			Interaction::OperatorDescriptor::RightAssociative));
 	instance()->addDescriptor(new MemberOperatorDescriptor( "member", "expr . id", 2, 1,

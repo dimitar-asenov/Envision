@@ -47,7 +47,8 @@ QStringList NewArrayStringComponents::components()
 	QStringList result;
 	if (!exp_) return result;
 
-	result<< "new" << " " << stringForNode(exp_->newType()) << "[" << stringForNode(exp_->amount()) << "]";
+	result<< "new" << " " << stringForNode(exp_->newType());
+	if (exp_->amount()) result << "[" << stringForNode(exp_->amount()) << "]";
 
 	return result;
 }

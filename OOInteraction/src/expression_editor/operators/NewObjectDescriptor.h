@@ -25,35 +25,27 @@
  **********************************************************************************************************************/
 
 /*
- * NewArrayStringOffsetProvider.cpp
+ * NewObjectDescriptor.h
  *
- *  Created on: Mar 14, 2012
+ *  Created on: Sep 17, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "NewArrayStringOffsetProvider.h"
-#include "Cell.h"
-#include "OOVisualization/src/expressions/VNewExpression.h"
+#ifndef OOInteraction_NEWOBJECTDESCRIPTOR_H_
+#define OOInteraction_NEWOBJECTDESCRIPTOR_H_
+
+#include "../../oointeraction_api.h"
+#include "../OOOperatorDescriptor.h"
 
 namespace OOInteraction {
 
-NewArrayStringOffsetProvider::NewArrayStringOffsetProvider(OOVisualization::VNewExpression* vis)
-	: GridBasedOffsetProvider(vis)
-{
-	if (vis->layout()->length() > 2)
-	{
-		// Includes amount -> new array
-		add(new Cell(0, vis->layout()->at<Visualization::Item>(0), 4));
-		add(new Cell(2, vis->layout()->at<Visualization::Item>(1), 0));
-		add(new Cell(4, vis->layout()->at<Visualization::Item>(2), 2));
-	}
-	else
-	{
-		// There is no amount -> new object
-		add(new Cell(0, vis->layout()->at<Visualization::Item>(0), 0));
-		add(new Cell(2, vis->layout()->at<Visualization::Item>(1), 2));
-	}
+class OOINTERACTION_API NewObjectDescriptor : public OOOperatorDescriptor {
+	public:
+	NewObjectDescriptor(const QString& name, const QString& signature, int num_operands, int precedence,
+			Associativity associativity);
 
-}
+		virtual OOModel::Expression* create(const QList<OOModel::Expression*>& operands);
+};
 
 } /* namespace OOInteraction */
+#endif /* OOInteraction_NEWOBJECTDESCRIPTOR_H_ */
