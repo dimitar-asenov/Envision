@@ -49,6 +49,7 @@ class FormalResult;
 class FormalTypeArgument;
 class Field;
 class OOReference;
+class CatchClause;
 
 class Statement;
 class Block;
@@ -62,6 +63,7 @@ class SwitchCase;
 class SwitchStatement;
 class VariableDeclaration;
 class ExpressionStatement;
+class TryCatchFinallyStatement;
 
 class Expression;
 class IntegerLiteral;
@@ -104,6 +106,7 @@ template class Q_DECL_IMPORT Model::TypedList<OOModel::FormalResult>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::FormalTypeArgument>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::Field>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::OOReference>;
+template class Q_DECL_IMPORT Model::TypedList<OOModel::CatchClause>;
 
 template class Q_DECL_IMPORT Model::TypedList<OOModel::Statement>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::Block>;
@@ -117,6 +120,7 @@ template class Q_DECL_IMPORT Model::TypedList<OOModel::SwitchCase>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::SwitchStatement>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::VariableDeclaration>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::ExpressionStatement>;
+template class Q_DECL_IMPORT Model::TypedList<OOModel::TryCatchFinallyStatement>;
 
 template class Q_DECL_IMPORT Model::TypedList<OOModel::Expression>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::IntegerLiteral>;

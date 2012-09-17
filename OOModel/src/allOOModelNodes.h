@@ -52,6 +52,7 @@
 #include "statements/SwitchCase.h"
 #include "statements/SwitchStatement.h"
 #include "statements/ExpressionStatement.h"
+#include "statements/TryCatchFinallyStatement.h"
 
 #include "expressions/Expression.h"
 #include "expressions/IntegerLiteral.h"
@@ -90,5 +91,6 @@
 #include "elements/FormalResult.h"
 #include "elements/FormalTypeArgument.h"
 #include "elements/OOReference.h"
+#include "elements/CatchClause.h"
 
 #endif /* ALLOOMODELNODES_H_ */

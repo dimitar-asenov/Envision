@@ -59,6 +59,7 @@ bool OOModel::initialize(Core::EnvisionManager&)
 	Model::TypedList<FormalTypeArgument>::registerNodeType();
 	Model::TypedList<Field>::registerNodeType();
 	Model::TypedList<OOReference>::registerNodeType();
+	Model::TypedList<CatchClause>::registerNodeType();
 
 	Model::TypedList<Statement>::registerNodeType();
 	Model::TypedList<Block>::registerNodeType();
@@ -72,6 +73,7 @@ bool OOModel::initialize(Core::EnvisionManager&)
 	Model::TypedList<SwitchStatement>::registerNodeType();
 	Model::TypedList<VariableDeclaration>::registerNodeType();
 	Model::TypedList<ExpressionStatement>::registerNodeType();
+	Model::TypedList<TryCatchFinallyStatement>::registerNodeType();
 
 	Model::TypedList<Expression>::registerNodeType();
 	Model::TypedList<IntegerLiteral>::registerNodeType();
@@ -113,6 +115,7 @@ bool OOModel::initialize(Core::EnvisionManager&)
 	FormalResult::init();
 	FormalTypeArgument::init();
 	Field::init();
+	CatchClause::init();
 
 	Statement::init();
 	Block::init();
@@ -126,6 +129,7 @@ bool OOModel::initialize(Core::EnvisionManager&)
 	SwitchStatement::init();
 	VariableDeclaration::init();
 	ExpressionStatement::init();
+	TryCatchFinallyStatement::init();
 
 	Expression::init();
 	IntegerLiteral::init();

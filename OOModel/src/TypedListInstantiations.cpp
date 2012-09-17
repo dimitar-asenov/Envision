@@ -46,6 +46,7 @@ template class Model::TypedList<OOModel::FormalResult>;
 template class Model::TypedList<OOModel::FormalTypeArgument>;
 template class Model::TypedList<OOModel::Field>;
 template class Model::TypedList<OOModel::OOReference>;
+template class Model::TypedList<OOModel::CatchClause>;
 
 template class Model::TypedList<OOModel::Statement>;
 template class Model::TypedList<OOModel::Block>;
@@ -59,6 +60,7 @@ template class Model::TypedList<OOModel::SwitchCase>;
 template class Model::TypedList<OOModel::SwitchStatement>;
 template class Model::TypedList<OOModel::VariableDeclaration>;
 template class Model::TypedList<OOModel::ExpressionStatement>;
+template class Model::TypedList<OOModel::TryCatchFinallyStatement>;
 
 template class Model::TypedList<OOModel::Expression>;
 template class Model::TypedList<OOModel::IntegerLiteral>;
