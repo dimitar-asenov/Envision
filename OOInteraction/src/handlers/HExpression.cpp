@@ -44,6 +44,7 @@
 #include "OOModel/src/allOOModelNodes.h"
 #include "OOModel/src/types/SymbolProviderType.h"
 
+#include "InteractionBase/src/handlers/HList.h"
 #include "InteractionBase/src/events/SetCursorEvent.h"
 #include "InteractionBase/src/autocomplete/AutoComplete.h"
 #include "InteractionBase/src/autocomplete/AutoCompleteEntry.h"
@@ -123,53 +124,32 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 				int itemToDeletelistIndex = thisItemListIndex + (key == Qt::Key_Backspace ? -1 : +1);
 				bool empty = dynamic_cast<OOModel::EmptyExpression*>(topMostItem->node());
 
-				if (itemToDeletelistIndex >= 0 && itemToDeletelistIndex < list->size())
-				{
-					// Delete the previous or the next item
-					auto st = dynamic_cast<OOModel::ExpressionStatement*>(list->at(itemToDeletelistIndex));
-					if (st && dynamic_cast<OOModel::EmptyExpression*>(st->expression()))
-					{
-						list->model()->beginModification(list, "remove empty line");
-						list->remove(itemToDeletelistIndex, false);
-						list->model()->endModification();
-
-						target->scene()->addPostEventAction(
-							new Interaction::SetCursorEvent(topMostItem->parent(), target->node(),
-									(key == Qt::Key_Backspace ?
-											Interaction::SetCursorEvent::CursorOnLeft
-											: Interaction::SetCursorEvent::CursorOnRight)));
-						return;
-					}
-				}
-
-				// If we could not delete the previous/next statements, then delete the current one if it is empty.
-				// In either case position the cursor appropriately
-
 				// Get a parent which represents a list (of statements or statement items)
 				auto parent = topMostItem->parent();
 				Visualization::VList* vlist = nullptr;
 				while (!(vlist = dynamic_cast<Visualization::VList*>(parent)) && parent->parent())
 					parent = parent->parent();
 
-				auto vis = vlist->findVisualizationOf(topMostItem->node()->parent());
-				if (key == Qt::Key_Backspace)
+				if (itemToDeletelistIndex >= 0 && itemToDeletelistIndex < list->size())
 				{
-					vlist->layout()->moveCursor(Visualization::Item::CursorMoveDirection::MoveUpOf,
-						vis->pos().toPoint() + QPoint(vis->width() / 2, 0));
-
-					if (empty)
+					// Delete the current or the previous or the next empty item
+					auto st = dynamic_cast<OOModel::ExpressionStatement*>(list->at(itemToDeletelistIndex));
+					if (st && dynamic_cast<OOModel::EmptyExpression*>(st->expression()))
 					{
-						list->model()->beginModification(list, "remove empty line");
-						list->remove(thisItemListIndex, false);
-						list->model()->endModification();
+						Interaction::HList::instance()->removeAndSetCursor(vlist,
+								empty ? thisItemListIndex : itemToDeletelistIndex, key == Qt::Key_Delete, key == Qt::Key_Delete
+								? Interaction::SetCursorEvent::CursorOnRight : Interaction::SetCursorEvent::CursorOnLeft);
+						return;
 					}
 				}
-				else
-				{
-					vlist->layout()->moveCursor(Visualization::Item::CursorMoveDirection::MoveDownOf,
-						vis->pos().toPoint() + QPoint(vis->width() / 2, vis->height()-1));
-				}
 
+				// If we could not delete the previous/next statements, then delete the current one if it is empty.
+				// In either case position the cursor appropriately
+				if (empty)
+					Interaction::HList::instance()->removeAndSetCursor(vlist, thisItemListIndex);
+				else
+					Interaction::HList::instance()->scheduleSetCursor(vlist, thisItemListIndex +
+							(key == Qt::Key_Delete ? 1 : 0));
 				return;
 			}
 		}

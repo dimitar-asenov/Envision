@@ -37,13 +37,44 @@
 #include "../interactionbase_api.h"
 
 #include "GenericHandler.h"
+#include "../events/SetCursorEvent.h"
+
+namespace Model {
+	class Node;
+}
+
+namespace Visualization {
+	class VList;
+}
 
 namespace Interaction {
 
 class INTERACTIONBASE_API HList : public GenericHandler
 {
 	public:
-		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event);
+		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event) override;
+
+
+		virtual void scheduleSetCursor(Visualization::VList* list, Model::Node* listItemToSelect,
+				SetCursorEvent::CursorPlacement howToSelectItem);
+
+		virtual void scheduleSetCursor(Visualization::VList* list, int setCursorIndex);
+
+		/**
+		 * Removes the item at position \a removeAt from \a list and sets the cursor inside the element below or above
+		 * the removed one according to \a setCursorDown and \a howToSelectItem
+		 */
+		virtual void removeAndSetCursor(Visualization::VList* list, int removeAt, bool setCursorDown,
+				SetCursorEvent::CursorPlacement howToSelectItem);
+		void removeAndSetCursor(Visualization::VList* list, Model::Node* removeNode, bool setCursorDown,
+				SetCursorEvent::CursorPlacement howToSelectItem);
+
+		/**
+		 * Removes the item at position \a removeAt from \a list and sets the cursor to the list cursor below or above
+		 * the removed element as indicated by \a setCursorDown
+		 */
+		virtual void removeAndSetCursor(Visualization::VList* list, int removeAt);
+		void removeAndSetCursor(Visualization::VList* list, Model::Node* removeNode);
 
 		static HList* instance();
 

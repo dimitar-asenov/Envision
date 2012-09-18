@@ -41,17 +41,22 @@ namespace Interaction {
 const QEvent::Type SetCursorEvent::EventType = static_cast<QEvent::Type> (QEvent::registerEventType());
 
 SetCursorEvent::SetCursorEvent(Visualization::Item* itemToGetCursor, CursorPlacement placement)
-: CustomSceneEvent(EventType), itemToGetCursor_(itemToGetCursor), parentContainer_(nullptr), scene_(nullptr),
-  node_(nullptr), placement_(placement)
+: CustomSceneEvent(EventType), itemToGetCursor_(itemToGetCursor), parentContainer_(), scene_(),
+  node_(), placement_(placement)
+{}
+
+SetCursorEvent::SetCursorEvent(GetItemFunction getItemToFocus, CursorPlacement placement)
+: CustomSceneEvent(EventType), itemToGetCursor_(), parentContainer_(), getItemToFocus_(getItemToFocus), scene_(),
+  node_(), placement_(placement)
 {}
 
 SetCursorEvent::SetCursorEvent(Visualization::Item* parentContainer, Model::Node* node, CursorPlacement placement)
-	: CustomSceneEvent(EventType), itemToGetCursor_(nullptr), parentContainer_(parentContainer), scene_(nullptr),
+	: CustomSceneEvent(EventType), itemToGetCursor_(), parentContainer_(parentContainer), scene_(),
 	  node_(node), placement_(placement)
 {}
 
 SetCursorEvent::SetCursorEvent(Visualization::Scene* scene, Model::Node* node, CursorPlacement placement)
-	: CustomSceneEvent(EventType), itemToGetCursor_(nullptr), parentContainer_(nullptr), scene_(scene), node_(node),
+	: CustomSceneEvent(EventType), itemToGetCursor_(), parentContainer_(), scene_(scene), node_(node),
 	  placement_(placement)
 {}
 
@@ -61,6 +66,8 @@ void SetCursorEvent::execute()
 
 	if (itemToGetCursor_)
 		item = itemToGetCursor_;
+	else if (getItemToFocus_)
+		item = getItemToFocus_();
 	else if (parentContainer_)
 	{
 		item = parentContainer_->findVisualizationOf(node_);
