@@ -309,8 +309,9 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			setNewExpression(target, topMostItem, newText, newIndex);
 
 			// Trigger auto complete
-			if (newText.endsWith('.')
-					|| (newText.size() > 0 && newText.at(newText.size()-1).isLetterOrNumber())
+			auto cutText = newText.left(newIndex);
+			if (cutText.endsWith('.')
+					|| (cutText.size() > 0 && cutText.at(cutText.size()-1).isLetterOrNumber())
 				)
 			{
 				auto s = target->scene();
