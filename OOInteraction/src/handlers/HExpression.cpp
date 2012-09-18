@@ -115,17 +115,17 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 
 		// Handle the removing of an empty line and moving up/down on BACKSPACE/DELETE
 		if (topMostItem->node()->parent()
-		      && ((key == Qt::Key_Backspace && index == 0)
-		            || (key == Qt::Key_Delete && index == str.length())))
+		      && ((key == Qt::Key_Backspace && index == 0) || (key == Qt::Key_Delete && index == str.length())))
 		{
-			auto list = dynamic_cast<OOModel::StatementItemList*>(topMostItem->node()->parent()->parent());
-			if (list)
+			if ( auto list = dynamic_cast<OOModel::StatementItemList*>(topMostItem->node()->parent()->parent()) )
 			{
 				int thisItemListIndex = list->indexOf(topMostItem->node()->parent());
 				int itemToDeletelistIndex = thisItemListIndex + (key == Qt::Key_Backspace ? -1 : +1);
+				bool empty = dynamic_cast<OOModel::EmptyExpression*>(topMostItem->node());
 
 				if (itemToDeletelistIndex >= 0 && itemToDeletelistIndex < list->size())
 				{
+					// Delete the previous or the next item
 					auto st = dynamic_cast<OOModel::ExpressionStatement*>(list->at(itemToDeletelistIndex));
 					if (st && dynamic_cast<OOModel::EmptyExpression*>(st->expression()))
 					{
@@ -139,36 +139,38 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 											Interaction::SetCursorEvent::CursorOnLeft
 											: Interaction::SetCursorEvent::CursorOnRight)));
 						return;
-					} else
-					{
-						// Get a parent which represents a list (of statements or statement items)
-						auto parent = topMostItem->parent();
-						Visualization::VList* vlist = nullptr;
-						while (!(vlist = dynamic_cast<Visualization::VList*>(parent)) && parent->parent())
-							parent = parent->parent();
-
-						auto vis = vlist->findVisualizationOf(topMostItem->node()->parent());
-						if (key == Qt::Key_Backspace)
-						{
-							vlist->layout()->moveCursor(Visualization::Item::CursorMoveDirection::MoveUpOf,
-								vis->pos().toPoint() + QPoint(vis->width() / 2, 0));
-
-							if (dynamic_cast<OOModel::EmptyExpression*>(topMostItem->node()))
-							{
-								list->model()->beginModification(list, "remove empty line");
-								list->remove(thisItemListIndex, false);
-								list->model()->endModification();
-							}
-						}
-						else
-						{
-							vlist->layout()->moveCursor(Visualization::Item::CursorMoveDirection::MoveDownOf,
-								vis->pos().toPoint() + QPoint(vis->width() / 2, vis->height()-1));
-						}
-
-						return;
 					}
 				}
+
+				// If we could not delete the previous/next statements, then delete the current one if it is empty.
+				// In either case position the cursor appropriately
+
+				// Get a parent which represents a list (of statements or statement items)
+				auto parent = topMostItem->parent();
+				Visualization::VList* vlist = nullptr;
+				while (!(vlist = dynamic_cast<Visualization::VList*>(parent)) && parent->parent())
+					parent = parent->parent();
+
+				auto vis = vlist->findVisualizationOf(topMostItem->node()->parent());
+				if (key == Qt::Key_Backspace)
+				{
+					vlist->layout()->moveCursor(Visualization::Item::CursorMoveDirection::MoveUpOf,
+						vis->pos().toPoint() + QPoint(vis->width() / 2, 0));
+
+					if (empty)
+					{
+						list->model()->beginModification(list, "remove empty line");
+						list->remove(thisItemListIndex, false);
+						list->model()->endModification();
+					}
+				}
+				else
+				{
+					vlist->layout()->moveCursor(Visualization::Item::CursorMoveDirection::MoveDownOf,
+						vis->pos().toPoint() + QPoint(vis->width() / 2, vis->height()-1));
+				}
+
+				return;
 			}
 		}
 
