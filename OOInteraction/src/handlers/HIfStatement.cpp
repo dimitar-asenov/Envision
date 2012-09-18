@@ -57,55 +57,57 @@ void HIfStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	auto vif = dynamic_cast<OOVisualization::VIfStatement*> ( target );
 	event->ignore();
 
-	if (event->modifiers() == Qt::NoModifier)
+	bool createDown = event->modifiers() == Qt::NoModifier &&
+			(event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return);
+	bool createRight = event->modifiers() == Qt::ShiftModifier &&
+			(event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return);
+	bool switchHorizontal = event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Tab;
+
+	if ( ( vif->condition()->itemOrChildHasFocus() && createDown)
+			|| (vif->elseBranch()->itemOrChildHasFocus() && switchHorizontal))
 	{
-		if ( ( vif->condition()->itemOrChildHasFocus()
-				&& (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) )
-			|| (vif->elseBranch()->itemOrChildHasFocus() && event->key() == Qt::Key_Tab))
+		event->accept();
+		if (vif->node()->thenBranch()->size() > 0)
 		{
-			event->accept();
-			if (vif->node()->thenBranch()->size() > 0)
-			{
-				target->scene()->addPostEventAction(
-						new Interaction::SetCursorEvent(target, vif->node()->thenBranch()->at(0),
-						Interaction::SetCursorEvent::CursorOnLeft));
-			}
-			else
-			{
-				auto empty = new OOModel::EmptyExpression();
-				auto es = new OOModel::ExpressionStatement();
-				es->setExpression(empty);
-				vif->node()->model()->beginModification(vif->node(), "create then branch");
-				vif->node()->thenBranch()->append(es);
-				vif->node()->model()->endModification();
-
-				vif->thenBranch()->setUpdateNeeded(Visualization::Item::StandardUpdate);
-				target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty,
-						Interaction::SetCursorEvent::CursorOnLeft));
-			}
+			target->scene()->addPostEventAction(
+					new Interaction::SetCursorEvent(target, vif->node()->thenBranch()->at(0),
+					Interaction::SetCursorEvent::CursorOnLeft));
 		}
-		else if (vif->thenBranch()->itemOrChildHasFocus() && event->key() == Qt::Key_Tab)
+		else
 		{
-			event->accept();
+			auto empty = new OOModel::EmptyExpression();
+			auto es = new OOModel::ExpressionStatement();
+			es->setExpression(empty);
+			vif->node()->model()->beginModification(vif->node(), "create then branch");
+			vif->node()->thenBranch()->append(es);
+			vif->node()->model()->endModification();
 
-			if (vif->node()->elseBranch()->size() > 0)
-			{
-				target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target,
-						vif->node()->elseBranch()->at(0), Interaction::SetCursorEvent::CursorOnLeft));
-			}
-			else
-			{
-				auto empty = new OOModel::EmptyExpression();
-				auto es = new OOModel::ExpressionStatement();
-				es->setExpression(empty);
-				vif->node()->model()->beginModification(vif->node(), "create else branch");
-				vif->node()->elseBranch()->append(es);
-				vif->node()->model()->endModification();
+			vif->thenBranch()->setUpdateNeeded(Visualization::Item::StandardUpdate);
+			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty,
+					Interaction::SetCursorEvent::CursorOnLeft));
+		}
+	}
+	else if (vif->thenBranch()->itemOrChildHasFocus() && (switchHorizontal || createRight))
+	{
+		event->accept();
 
-				vif->elseBranch()->setUpdateNeeded(Visualization::Item::StandardUpdate);
-				target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty,
-						Interaction::SetCursorEvent::CursorOnLeft));
-			}
+		if (vif->node()->elseBranch()->size() > 0)
+		{
+			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target,
+					vif->node()->elseBranch()->at(0), Interaction::SetCursorEvent::CursorOnLeft));
+		}
+		else
+		{
+			auto empty = new OOModel::EmptyExpression();
+			auto es = new OOModel::ExpressionStatement();
+			es->setExpression(empty);
+			vif->node()->model()->beginModification(vif->node(), "create else branch");
+			vif->node()->elseBranch()->append(es);
+			vif->node()->model()->endModification();
+
+			vif->elseBranch()->setUpdateNeeded(Visualization::Item::StandardUpdate);
+			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty,
+					Interaction::SetCursorEvent::CursorOnLeft));
 		}
 	}
 

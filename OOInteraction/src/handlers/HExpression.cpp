@@ -64,28 +64,32 @@ HExpression* HExpression::instance()
 
 void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
-	if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_Space)
+	auto key = event->key();
+	auto modifiers = event->modifiers();
+
+	if (modifiers == Qt::ControlModifier && key == Qt::Key_Space)
 	{
 		toggleAutoComplete(target);
 		return;
 	}
 
+	bool enterPressed = key == Qt::Key_Enter || key == Qt::Key_Return;
+	bool spacePressed = key == Qt::Key_Space;
+
 	// TODO implement this better. It is supposed to only let typed characters through and ignore modifier keys.
 	// However it does not work with e.g. ALTGR characters.
-	if ( event->key() != Qt::Key_Home && event->key() != Qt::Key_End && (
+	if ( key != Qt::Key_Home && key != Qt::Key_End && (
 			   event->text().isEmpty()
-			|| event->key() == Qt::Key_Escape
-			|| event->key() == Qt::Key_Tab
-			|| event->key() == Qt::Key_Semicolon
-			|| (event->modifiers() != Qt::NoModifier && event->modifiers() != Qt::ShiftModifier))
+			|| key == Qt::Key_Escape
+			|| key == Qt::Key_Tab
+			|| key == Qt::Key_Semicolon
+			|| (modifiers != Qt::NoModifier && modifiers != Qt::ShiftModifier)
+			|| (modifiers == Qt::ShiftModifier && (enterPressed || spacePressed)))
 			)
 	{
 		GenericHandler::keyPressEvent(target, event);
 		return;
 	}
-
-	bool enterPressed = event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return;
-	bool spacePressed = event->key() == Qt::Key_Space;
 
 	try
 	{
@@ -96,29 +100,29 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		// Find the top most parent that is adaptable to StringProvider
 		QString str;
 		int index;
-		Visualization::Item* topMostItem = stringInfo(target, (Qt::Key) event->key(), str, index);
+		Visualization::Item* topMostItem = stringInfo(target, (Qt::Key) key, str, index);
 
 		if (index < 0) return;
 
 		// Handle the HOME and END keys
-		if (event->key() == Qt::Key_Home || event->key() == Qt::Key_End)
+		if (key == Qt::Key_Home || key == Qt::Key_End)
 		{
 			auto parent = topMostItem->parent();
-			index = (event->key() == Qt::Key_Home ) ? 0 : str.length();
+			index = (key == Qt::Key_Home ) ? 0 : str.length();
 			target->scene()->addPostEventAction( new SetExpressionCursorEvent(parent, topMostItem->node(), index));
 			return;
 		}
 
 		// Handle the removing of an empty line and moving up/down on BACKSPACE/DELETE
 		if (topMostItem->node()->parent()
-		      && ((event->key() == Qt::Key_Backspace && index == 0)
-		            || (event->key() == Qt::Key_Delete && index == str.length())))
+		      && ((key == Qt::Key_Backspace && index == 0)
+		            || (key == Qt::Key_Delete && index == str.length())))
 		{
 			auto list = dynamic_cast<OOModel::StatementItemList*>(topMostItem->node()->parent()->parent());
 			if (list)
 			{
 				int thisItemListIndex = list->indexOf(topMostItem->node()->parent());
-				int itemToDeletelistIndex = thisItemListIndex + (event->key() == Qt::Key_Backspace ? -1 : +1);
+				int itemToDeletelistIndex = thisItemListIndex + (key == Qt::Key_Backspace ? -1 : +1);
 
 				if (itemToDeletelistIndex >= 0 && itemToDeletelistIndex < list->size())
 				{
@@ -131,7 +135,7 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 
 						target->scene()->addPostEventAction(
 							new Interaction::SetCursorEvent(topMostItem->parent(), target->node(),
-									(event->key() == Qt::Key_Backspace ?
+									(key == Qt::Key_Backspace ?
 											Interaction::SetCursorEvent::CursorOnLeft
 											: Interaction::SetCursorEvent::CursorOnRight)));
 						return;
@@ -144,7 +148,7 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 							parent = parent->parent();
 
 						auto vis = vlist->findVisualizationOf(topMostItem->node()->parent());
-						if (event->key() == Qt::Key_Backspace)
+						if (key == Qt::Key_Backspace)
 						{
 							vlist->layout()->moveCursor(Visualization::Item::CursorMoveDirection::MoveUpOf,
 								vis->pos().toPoint() + QPoint(vis->width() / 2, 0));
@@ -172,7 +176,7 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		// Modify the string, inserting the pressed key's text (or deleting text)
 		QString newText = str;
 		int newIndex = index;
-		switch (event->key())
+		switch (key)
 		{
 			case Qt::Key_Delete:
 			{
