@@ -114,7 +114,8 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		SceneHandlerItem* sceneHandlerItem_;
 		QList<Item*> topLevelItems_;
 		QList<SelectedItem*> selections_;
-		QList<Cursor*> cursors_;
+		Cursor* mainCursor_;
+		bool mainCursorsJustSet_;
 		QList<QEvent*> postEventActions_;
 
 		bool inEventHandler_;
@@ -133,7 +134,7 @@ inline bool Scene::isHiddenCategory(ItemCategory cat) {return cat & hiddenItemCa
 inline void Scene::setRenderer(ModelRenderer* renderer) { renderer_ = renderer? renderer : defaultRenderer(); }
 inline ModelRenderer* Scene::renderer() { return renderer_; }
 inline SceneHandlerItem* Scene::sceneHandlerItem() {return sceneHandlerItem_; }
-inline Cursor* Scene::mainCursor() { return cursors_.isEmpty() ? nullptr : cursors_.first(); }
+inline Cursor* Scene::mainCursor() { return mainCursor_; }
 inline const QList<Item*>& Scene::topLevelItems() const {return topLevelItems_; }
 
 

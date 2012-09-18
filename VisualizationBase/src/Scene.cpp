@@ -56,8 +56,8 @@ const QEvent::Type UpdateSceneEvent::EventType = static_cast<QEvent::Type> (QEve
 
 Scene::Scene()
 	: QGraphicsScene(VisualizationManager::instance().getMainWindow()), needsUpdate_(false),
-	  renderer_(defaultRenderer()), sceneHandlerItem_(new SceneHandlerItem(this)), inEventHandler_(false),
-	  inAnUpdate_(false), hiddenItemCategories_(NoItemCategory)
+	  renderer_(defaultRenderer()), sceneHandlerItem_(new SceneHandlerItem(this)), mainCursor_(nullptr),
+	  mainCursorsJustSet_(false), inEventHandler_(false), inAnUpdate_(false), hiddenItemCategories_(NoItemCategory)
 {
 }
 
@@ -67,8 +67,7 @@ Scene::~Scene()
 	topLevelItems_.clear();
 	for (SelectedItem* si : selections_) SAFE_DELETE_ITEM(si);
 	selections_.clear();
-	for (Cursor* c : cursors_) SAFE_DELETE(c);
-	cursors_.clear();
+	SAFE_DELETE(mainCursor_);
 	SAFE_DELETE_ITEM(sceneHandlerItem_);
 
 	if (renderer_ != defaultRenderer()) SAFE_DELETE(renderer_);
@@ -117,13 +116,12 @@ void Scene::updateItems()
 	QList<QGraphicsItem *> selected = selectedItems();
 
 	// Only display a selection when there are multiple selected items or no cursor
-	bool draw_selections = selected.size() !=1 || cursors_.isEmpty() || cursors_.first() == nullptr
-			|| cursors_.first()->visualization() == nullptr;
+	bool draw_selections = selected.size() !=1 || mainCursor_ == nullptr || mainCursor_->visualization() == nullptr;
 
 	if (!draw_selections)
 	{
 		// There is exactly one item and it has a cursor visualization
-		auto selectable = cursors_.first()->owner();
+		auto selectable = mainCursor_->owner();
 		while (selectable && ! (selectable->flags() &  QGraphicsItem::ItemIsSelectable))
 			selectable = selectable->parent();
 
@@ -141,14 +139,11 @@ void Scene::updateItems()
 		}
 	}
 
-	// Update Cursors
-	for (Cursor* c : cursors_)
+	// Update the main cursor
+	if (mainCursor_ && mainCursor_->visualization())
 	{
-		if (c->visualization())
-		{
-			if (c->visualization()->scene() != this) addItem(c->visualization());
-			c->visualization()->updateSubtree();
-		}
+		if (mainCursor_->visualization()->scene() != this) addItem(mainCursor_->visualization());
+		mainCursor_->visualization()->updateSubtree();
 	}
 
 	computeSceneRect();
@@ -225,14 +220,15 @@ bool Scene::event(QEvent *event)
 	postEventActions_.clear();
 
 	// On keyboard events, make sure the cursor is visible
-	if (event->type() == QEvent::KeyPress && !cursors_.isEmpty())
+	if (mainCursorsJustSet_ && mainCursor_ && mainCursor_->visualization()
+			&& mainCursor_->visualization()->boundingRect().isValid() )
 	{
 		for (auto view : views())
 			if (view->isActiveWindow())
 			{
-				auto vis = cursors_.at(0)->visualization();
-				if (!vis) vis = cursors_.at(0)->owner();
+				auto vis = mainCursor_->visualization();
 				view->ensureVisible( vis->boundingRect().translated(vis->scenePos()), 5, 5);
+				mainCursorsJustSet_ = false;
 			}
 	}
 
@@ -248,14 +244,9 @@ void Scene::addPostEventAction(QEvent* action)
 
 void Scene::setMainCursor(Cursor* cursor)
 {
-	if (!cursors_.isEmpty())
-	{
-		Cursor* main = cursors_.first();
-		SAFE_DELETE(main);
-		cursors_.removeFirst();
-	}
-
-	if (cursor) cursors_.prepend(cursor);
+	SAFE_DELETE(mainCursor_);
+	mainCursor_ = cursor;
+	mainCursorsJustSet_ = true;
 }
 
 void Scene::computeSceneRect()
