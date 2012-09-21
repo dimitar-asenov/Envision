@@ -176,6 +176,8 @@ bool OOModel::initialize(Core::EnvisionManager&)
 		auto field = new Field();
 		field->setTypeExpression(new EmptyExpression());
 		return field;} );
+	Model::TypedList<Expression>::setDefaultElementCreationFunction([]() -> Expression* {
+		return new EmptyExpression();} );
 
 	return true;
 }
