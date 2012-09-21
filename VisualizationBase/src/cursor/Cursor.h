@@ -109,6 +109,8 @@ class VISUALIZATIONBASE_API Cursor {
 		Item* visualization_;
 		CursorType type_;
 		bool notLocationEquivalent_;
+
+		bool allowEquivalentCursorsAcrossBoundaries(Item* parent, Item* child);
 };
 
 inline void Cursor::setPosition(const QPoint& pos) { position_ = pos; }

@@ -1,6 +1,7 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/Item/default">
 	<layout prototypes="layout/SequentialLayout/default">
+		<allowEquivalentCursorsThroughBoundary>false</allowEquivalentCursorsThroughBoundary>
 		<spaceBetweenElements>5</spaceBetweenElements>
 	</layout>
 	<symbol prototypes="icon/SVGIcon/default">

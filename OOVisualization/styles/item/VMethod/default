@@ -48,7 +48,7 @@
 		<itemsStyle prototypes="layout/SequentialLayout/default">
 			<alignment>1</alignment>
 			<direction>2</direction>
-			<spaceBetweenElements>0</spaceBetweenElements>
+			<spaceBetweenElements>1</spaceBetweenElements>
 		</itemsStyle>
 	</body>
 	<annotations prototypes="item/VList/default">

@@ -95,10 +95,21 @@ bool Cursor::isLocationEquivalent(bool otherNotLocationEquivalent, CursorType ot
 	if (otherType != type() || otherType == BoxCursor) return false;
 	if (!otherIsAtBoundary && ! isAtBoundary()) return false;
 	if (owner() == otherOwner) return false;
-	if (!( owner()->isAncestorOf(otherOwner) && otherOwner->style()->allowEquivalentCursorsThroughBoundary())
-			&& !(otherOwner->isAncestorOf(owner()) && owner()->style()->allowEquivalentCursorsThroughBoundary() ) )
+	if (!( owner()->isAncestorOf(otherOwner) && allowEquivalentCursorsAcrossBoundaries(owner(), otherOwner))
+			&& !(otherOwner->isAncestorOf(owner()) && allowEquivalentCursorsAcrossBoundaries(otherOwner, owner()) ) )
 		return false;
 
+	return true;
+}
+
+bool Cursor::allowEquivalentCursorsAcrossBoundaries(Item* parent, Item* child)
+{
+	if (!parent->style()->allowEquivalentCursorsThroughBoundary()) return false;
+	while (child != parent)
+	{
+		if (!child->style()->allowEquivalentCursorsThroughBoundary()) return false;
+		child = child->parent();
+	};
 	return true;
 }
 
