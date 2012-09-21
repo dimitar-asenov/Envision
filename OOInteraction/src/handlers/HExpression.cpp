@@ -115,43 +115,51 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		}
 
 		// Handle the removing of an empty line and moving up/down on BACKSPACE/DELETE
-		if (topMostItem->node()->parent()
-		      && ((key == Qt::Key_Backspace && index == 0) || (key == Qt::Key_Delete && index == str.length())))
+		if ((key == Qt::Key_Backspace && index == 0) || (key == Qt::Key_Delete && index == str.length()))
 		{
-			if ( auto list = dynamic_cast<OOModel::StatementItemList*>(topMostItem->node()->parent()->parent()) )
+			if (topMostItem->node()->parent()
+					&& topMostItem->node()->parent()->typeId() == OOModel::ExpressionStatement::typeIdStatic())
 			{
-				int thisItemListIndex = list->indexOf(topMostItem->node()->parent());
-				int itemToDeletelistIndex = thisItemListIndex + (key == Qt::Key_Backspace ? -1 : +1);
-				bool empty = dynamic_cast<OOModel::EmptyExpression*>(topMostItem->node());
-
-				// Get a parent which represents a list (of statements or statement items)
-				auto parent = topMostItem->parent();
-				Visualization::VList* vlist = nullptr;
-				while (!(vlist = dynamic_cast<Visualization::VList*>(parent)) && parent->parent())
-					parent = parent->parent();
-
-				if (itemToDeletelistIndex >= 0 && itemToDeletelistIndex < list->size())
+				if ( auto list = dynamic_cast<OOModel::StatementItemList*>(topMostItem->node()->parent()->parent()) )
 				{
-					// Delete the current or the previous or the next empty item
-					auto st = dynamic_cast<OOModel::ExpressionStatement*>(list->at(itemToDeletelistIndex));
-					if (st && dynamic_cast<OOModel::EmptyExpression*>(st->expression()))
-					{
-						Interaction::HList::instance()->removeAndSetCursor(vlist,
-								empty ? thisItemListIndex : itemToDeletelistIndex, key == Qt::Key_Delete, key == Qt::Key_Delete
-								? Interaction::SetCursorEvent::CursorOnRight : Interaction::SetCursorEvent::CursorOnLeft);
-						return;
-					}
-				}
+					int thisItemListIndex = list->indexOf(topMostItem->node()->parent());
+					int itemToDeletelistIndex = thisItemListIndex + (key == Qt::Key_Backspace ? -1 : +1);
+					bool empty = dynamic_cast<OOModel::EmptyExpression*>(topMostItem->node());
 
-				// If we could not delete the previous/next statements, then delete the current one if it is empty.
-				// In either case position the cursor appropriately
-				if (empty)
-					Interaction::HList::instance()->removeAndSetCursor(vlist, thisItemListIndex);
-				else
-					Interaction::HList::instance()->scheduleSetCursor(vlist, thisItemListIndex +
-							(key == Qt::Key_Delete ? 1 : 0));
-				return;
+					// Get a parent which represents a list (of statements or statement items)
+					auto parent = topMostItem->parent();
+					Visualization::VList* vlist = nullptr;
+					while (!(vlist = dynamic_cast<Visualization::VList*>(parent)) && parent->parent())
+						parent = parent->parent();
+
+					if (itemToDeletelistIndex >= 0 && itemToDeletelistIndex < list->size())
+					{
+						// Delete the current or the previous or the next empty item
+						auto st = dynamic_cast<OOModel::ExpressionStatement*>(list->at(itemToDeletelistIndex));
+						if (st && dynamic_cast<OOModel::EmptyExpression*>(st->expression()))
+						{
+							Interaction::HList::instance()->removeAndSetCursor(vlist,
+									empty ? thisItemListIndex : itemToDeletelistIndex, key == Qt::Key_Delete,
+										key == Qt::Key_Delete
+										? Interaction::SetCursorEvent::CursorOnRight : Interaction::SetCursorEvent::CursorOnLeft);
+							return;
+						}
+					}
+
+					// If we could not delete the previous/next statements, then delete the current one if it is empty.
+					// In either case position the cursor appropriately
+					if (empty)
+						Interaction::HList::instance()->removeAndSetCursor(vlist, thisItemListIndex);
+					else
+						Interaction::HList::instance()->scheduleSetCursor(vlist, thisItemListIndex +
+								(key == Qt::Key_Delete ? 1 : 0));
+					return;
+				}
 			}
+
+			// If we reach this point then we do not know how do handle these keys so just send them to the parent
+			GenericHandler::keyPressEvent(target, event);
+			return;
 		}
 
 
