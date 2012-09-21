@@ -35,8 +35,8 @@
 	</header>
 	<icon prototypes="icon/SVGIcon/default">
 		<filename>styles/icon/loop.svg</filename>
-		<width>30</width>
-		<height>30</height>
+		<width>22</width>
+		<height>22</height>
 	</icon>
 	<condition prototypes="layout/SequentialLayout/default">
 		<shape prototypes="shape/Box/default">
