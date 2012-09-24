@@ -42,7 +42,10 @@
 #include "handlers/HFormalArgument.h"
 #include "handlers/HStatement.h"
 #include "handlers/HLoop.h"
+#include "handlers/HForEachStatement.h"
 #include "handlers/HIfStatement.h"
+#include "handlers/HReturnStatement.h"
+#include "handlers/HKeywordStatement.h"
 
 #include "commands/CCreateProject.h"
 
@@ -142,11 +145,11 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 	OOVisualization::VExpressionStatement::setInteractionHandler(HStatement::instance());
 	OOVisualization::VIfStatement::setInteractionHandler(HIfStatement::instance());
 	OOVisualization::VLoopStatement::setInteractionHandler(HLoop::instance());
-	OOVisualization::VForEachStatement::setInteractionHandler(HStatement::instance());
-	OOVisualization::VBreakStatement::setInteractionHandler(HStatement::instance());
-	OOVisualization::VContinueStatement::setInteractionHandler(HStatement::instance());
+	OOVisualization::VForEachStatement::setInteractionHandler(HForEachStatement::instance());
+	OOVisualization::VBreakStatement::setInteractionHandler(HKeywordStatement::instance());
+	OOVisualization::VContinueStatement::setInteractionHandler(HKeywordStatement::instance());
 	OOVisualization::VBlock::setInteractionHandler(HStatement::instance());
-	OOVisualization::VReturnStatement::setInteractionHandler(HStatement::instance());
+	OOVisualization::VReturnStatement::setInteractionHandler(HReturnStatement::instance());
 	OOVisualization::VPrimitiveType::setInteractionHandler(HExpression::instance());
 	OOVisualization::VClassType::setInteractionHandler(HExpression::instance());
 	OOVisualization::VArrayType::setInteractionHandler(HExpression::instance());

@@ -58,6 +58,8 @@ class OOVISUALIZATION_API VReturnStatement
 		VReturnStatement(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VReturnStatement();
 
+		Visualization::Item* returnSymbol() const;
+
 	protected:
 		void determineChildren();
 

@@ -72,4 +72,9 @@ void VReturnStatement::determineChildren()
 	layout()->synchronizeLast(values_, node()->values(), &style()->values());
 }
 
+Visualization::Item* VReturnStatement::returnSymbol() const
+{
+	return symbol_->item();
+}
+
 }

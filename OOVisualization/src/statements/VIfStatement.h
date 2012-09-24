@@ -68,6 +68,7 @@ class OOVISUALIZATION_API VIfStatement
 		Visualization::SequentialLayout* content() const;
 		VStatementItemList* thenBranch() const;
 		VStatementItemList* elseBranch() const;
+		Item* icon() const;
 
 	protected:
 		void determineChildren();
@@ -90,6 +91,7 @@ inline Visualization::Item* VIfStatement::condition() const { return condition_;
 inline Visualization::SequentialLayout* VIfStatement::content() const { return content_; }
 inline VStatementItemList* VIfStatement::thenBranch() const { return thenBranch_; }
 inline VStatementItemList* VIfStatement::elseBranch() const { return elseBranch_; }
+inline Visualization::Item* VIfStatement::icon() const {return header_->at<Visualization::Item>(0);}
 
 }
 

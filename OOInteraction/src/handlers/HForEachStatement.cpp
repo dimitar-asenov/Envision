@@ -25,95 +25,113 @@
  **********************************************************************************************************************/
 
 /*
- * HIfStatement.cpp
+ * HForEachStatement.cpp
  *
- *  Created on: Mar 21, 2012
+ *  Created on: Sep 24, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "handlers/HIfStatement.h"
-
-#include "OOVisualization/src/statements/VIfStatement.h"
+#include "HForEachStatement.h"
+#include "OOVisualization/src/statements/VForEachStatement.h"
 #include "OOVisualization/src/elements/VStatementItemList.h"
 #include "OOModel/src/expressions/EmptyExpression.h"
 #include "OOModel/src/statements/ExpressionStatement.h"
 
 #include "InteractionBase/src/events/SetCursorEvent.h"
 #include "VisualizationBase/src/cursor/LayoutCursor.h"
+#include "VisualizationBase/src/items/VText.h"
 
 namespace OOInteraction {
 
-HIfStatement::HIfStatement()
+HForEachStatement::HForEachStatement()
 {}
 
-HIfStatement* HIfStatement::instance()
+HForEachStatement* HForEachStatement::instance()
 {
-	static HIfStatement h;
+	static HForEachStatement h;
 	return &h;
 }
 
-void HIfStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
+void HForEachStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
-	auto vif = dynamic_cast<OOVisualization::VIfStatement*> ( target );
+	auto vfor = dynamic_cast<OOVisualization::VForEachStatement*> ( target );
 	event->ignore();
 
 	bool createDown = event->modifiers() == Qt::NoModifier &&
 			(event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return);
 	bool createRight = event->modifiers() == Qt::ShiftModifier &&
 			(event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return);
-	bool switchHorizontal = event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Tab;
+	bool switchHorizontal = event->modifiers() == Qt::NoModifier &&
+			( event->key() == Qt::Key_Tab || event->key() == Qt::Key_Colon);
 
-	if ( ( vif->condition()->itemOrChildHasFocus() && createDown)
-			|| (vif->elseBranch()->itemOrChildHasFocus() && switchHorizontal))
+	if (vfor->varType() && vfor->varType()->itemOrChildHasFocus() && (switchHorizontal || createRight) )
 	{
 		event->accept();
-		if (vif->node()->thenBranch()->size() > 0)
+
+		target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target,
+			vfor->node()->varNameNode(), Interaction::SetCursorEvent::CursorOnLeft));
+	}
+	else if (vfor->varName() && vfor->varName()->itemOrChildHasFocus() && (switchHorizontal || createRight))
+	{
+		event->accept();
+		if (vfor->node()->collection()->typeId() != OOModel::Expression::typeIdStatic())
+			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target,
+				vfor->node()->collection(), Interaction::SetCursorEvent::CursorOnLeft));
+		else
+		{
+			auto empty = new OOModel::EmptyExpression();
+			vfor->node()->model()->beginModification(vfor->node(), "create collection");
+			vfor->node()->setCollection(empty);
+			vfor->node()->model()->endModification();
+
+			vfor->header()->setUpdateNeeded(Visualization::Item::StandardUpdate);
+			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty,
+					Interaction::SetCursorEvent::CursorOnLeft));
+		}
+	}
+	else if (vfor->collection() && vfor->collection()->itemOrChildHasFocus() && (switchHorizontal || createRight))
+	{
+		event->accept();
+		if (vfor->node()->varType())
+			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target,
+					vfor->node()->varType(), Interaction::SetCursorEvent::CursorOnLeft));
+		else
+		{
+			auto empty = new OOModel::EmptyExpression();
+			vfor->node()->model()->beginModification(vfor->node(), "create variable type");
+			vfor->node()->setVarType(empty);
+			vfor->node()->model()->endModification();
+
+			vfor->header()->setUpdateNeeded(Visualization::Item::StandardUpdate);
+			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty,
+					Interaction::SetCursorEvent::CursorOnLeft));
+		}
+
+	}
+	else if (vfor->body() && !vfor->body()->itemOrChildHasFocus() && createDown)
+	{
+		event->accept();
+		if (vfor->node()->body()->size() > 0)
 		{
 			target->scene()->addPostEventAction(
-					new Interaction::SetCursorEvent(target, vif->node()->thenBranch()->at(0),
-					Interaction::SetCursorEvent::CursorOnLeft));
+					new Interaction::SetCursorEvent(target, vfor->node()->body()->at(0),
+							Interaction::SetCursorEvent::CursorOnLeft));
 		}
 		else
 		{
 			auto empty = new OOModel::EmptyExpression();
-			auto es = new OOModel::ExpressionStatement();
-			es->setExpression(empty);
-			vif->node()->model()->beginModification(vif->node(), "create then branch");
-			vif->node()->thenBranch()->append(es);
-			vif->node()->model()->endModification();
+			vfor->node()->model()->beginModification(vfor->node(), "create loop body");
+			vfor->node()->body()->append( new OOModel::ExpressionStatement(empty) );
+			vfor->node()->model()->endModification();
 
-			vif->thenBranch()->setUpdateNeeded(Visualization::Item::StandardUpdate);
+			vfor->body()->setUpdateNeeded(Visualization::Item::StandardUpdate);
 			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty,
 					Interaction::SetCursorEvent::CursorOnLeft));
 		}
-	}
-	else if (vif->thenBranch()->itemOrChildHasFocus() && (switchHorizontal || createRight))
-	{
-		event->accept();
 
-		if (vif->node()->elseBranch()->size() > 0)
-		{
-			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target,
-					vif->node()->elseBranch()->at(0), Interaction::SetCursorEvent::CursorOnLeft));
-		}
-		else
-		{
-			auto empty = new OOModel::EmptyExpression();
-			auto es = new OOModel::ExpressionStatement();
-			es->setExpression(empty);
-			vif->node()->model()->beginModification(vif->node(), "create else branch");
-			vif->node()->elseBranch()->append(es);
-			vif->node()->model()->endModification();
-
-			vif->elseBranch()->setUpdateNeeded(Visualization::Item::StandardUpdate);
-			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty,
-					Interaction::SetCursorEvent::CursorOnLeft));
-		}
-	}
-	else if (event->modifiers() == Qt::NoModifier
-			&& ((event->key() == Qt::Key_Backspace && vif->condition()->itemOrChildHasFocus())
-					|| ((event->key() == Qt::Key_Backspace || event->key() == Qt::Key_Delete)
-							&& vif->icon()->itemOrChildHasFocus())))
+	}else if (event->modifiers() == Qt::NoModifier
+			&& ((event->key() == Qt::Key_Backspace || event->key() == Qt::Key_Delete)
+					&& vfor->icon()->itemOrChildHasFocus()))
 	{
 		event->accept();
 		removeFromList(target);

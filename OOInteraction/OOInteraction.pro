@@ -8,7 +8,10 @@ win32:LIBS += -llogger \
     -lvisualizationbase \
     -linteractionbase \
     -loovisualization
-HEADERS += src/string_offset_providers/ThrowStringOffsetProvider.h \
+HEADERS += src/handlers/HForEachStatement.h \
+    src/handlers/HKeywordStatement.h \
+    src/handlers/HReturnStatement.h \
+    src/string_offset_providers/ThrowStringOffsetProvider.h \
     src/string_components/ThrowStringComponents.h \
     src/expression_editor/operators/ThrowDescriptor.h \
     src/expression_editor/operators/NewObjectDescriptor.h \
@@ -86,7 +89,10 @@ HEADERS += src/string_offset_providers/ThrowStringOffsetProvider.h \
     src/string_offset_providers/TextRendererStringOffsetProvider.h \
     src/string_offset_providers/VariableDeclarationStringOffsetProvider.h \
     src/oointeraction.h
-SOURCES += src/string_offset_providers/ThrowStringOffsetProvider.cpp \
+SOURCES += src/handlers/HForEachStatement.cpp \
+    src/handlers/HKeywordStatement.cpp \
+    src/handlers/HReturnStatement.cpp \
+    src/string_offset_providers/ThrowStringOffsetProvider.cpp \
     src/string_components/ThrowStringComponents.cpp \
     src/expression_editor/operators/ThrowDescriptor.cpp \
     src/expression_editor/operators/NewObjectDescriptor.cpp \

@@ -62,6 +62,14 @@ class OOVISUALIZATION_API VForEachStatement
 		VForEachStatement(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VForEachStatement();
 
+		Visualization::SequentialLayout* header() const;
+
+		Visualization::VText* varName() const;
+		Visualization::Item* collection() const;
+		Visualization::Item* varType() const;
+		VStatementItemList* body() const;
+		Visualization::Item* icon() const;
+
 	protected:
 		void determineChildren();
 
@@ -69,16 +77,25 @@ class OOVISUALIZATION_API VForEachStatement
 		typedef Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
 				  OOModel::ForEachStatement> BaseItemType;
 
-		Visualization::SequentialLayout* header;
+		Visualization::SequentialLayout* header_;
 
-		Visualization::SequentialLayout* varContainer;
-		Visualization::SequentialLayout* collectionBackground;
+		Visualization::SequentialLayout* varContainer_;
+		Visualization::SequentialLayout* collectionBackground_;
 
-		Visualization::VText* varName;
-		Visualization::Item* collection;
-		Visualization::Item* varType;
-		VStatementItemList* body;
+		Visualization::VText* varName_;
+		Visualization::Item* collection_;
+		Visualization::Item* varType_;
+		VStatementItemList* body_;
 };
+
+	inline Visualization::SequentialLayout* VForEachStatement::header() const { return header_; }
+
+inline Visualization::VText* VForEachStatement::varName() const { return varName_; }
+inline Visualization::Item* VForEachStatement::collection() const { return collection_; }
+inline Visualization::Item* VForEachStatement::varType() const { return varType_; }
+inline VStatementItemList* VForEachStatement::body() const { return body_; }
+
+inline Visualization::Item* VForEachStatement::icon() const {return header_->at<Visualization::Item>(0);}
 
 }
 
