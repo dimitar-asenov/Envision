@@ -84,6 +84,14 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 		// Command events
 		virtual void command(Visualization::Item *target, const QString& command);
 
+		/**
+		 * Removes the node visualized by \a target from the list which contains it.
+		 *
+		 * Returns true if \a target has a parent of type VList and its list node contains the target node. Otherwise this
+		 * method does nothing and returns false.
+		 */
+		bool removeFromList(Visualization::Item* target);
+
 	protected:
 		GenericHandler();
 

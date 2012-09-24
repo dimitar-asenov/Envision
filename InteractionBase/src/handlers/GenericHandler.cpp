@@ -33,6 +33,7 @@
 
 #include "handlers/GenericHandler.h"
 
+#include "HList.h"
 #include "../autocomplete/AutoComplete.h"
 #include "commands/CommandExecutionEngine.h"
 #include "vis/CommandPrompt.h"
@@ -40,6 +41,7 @@
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/renderer/ModelRenderer.h"
 #include "VisualizationBase/src/cursor/Cursor.h"
+#include "VisualizationBase/src/items/VList.h"
 #include "FilePersistence/src/SystemClipboard.h"
 #include "ModelBase/src/nodes/List.h"
 #include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
@@ -483,6 +485,26 @@ void GenericHandler::arrangeNodesForClipboard(QList<const Model::Node*>& list)
 					if (parent->indexOf(list[k]) > parent->indexOf(list[k+1])) list.swap(k, k+1);
 		}
 	}
+}
+
+bool GenericHandler::removeFromList(Visualization::Item* target)
+{
+	Visualization::VList* list = nullptr;
+	auto p = target->parent();
+	while(p)
+	{
+		list = dynamic_cast<Visualization::VList* >(p);
+		if (list) break;
+		else p = p->parent();
+	}
+
+	auto index = list->node()->indexOf(target->node());
+	if (list && index >= 0)
+	{
+		Interaction::HList::instance()->removeAndSetCursor(list, index);
+		return true;
+	}
+	return false;
 }
 
 }
