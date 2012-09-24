@@ -193,16 +193,17 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 
 		// Process keywords for statements
 		OOModel::ExpressionStatement* replaceStatement = nullptr;
+		auto trimmedText = newText.trimmed();
 		if ( (enterPressed || spacePressed)
-				&& (newText.startsWith("for") || newText.startsWith("foreach")|| newText.startsWith("if")
-						|| newText.startsWith("continue") || newText.startsWith("break") || newText.startsWith("return")))
+				&& (trimmedText == "for" || trimmedText == "foreach" || trimmedText == "if"
+						|| trimmedText == "continue" || trimmedText == "break" || trimmedText == "return"))
 			replaceStatement = parentExpressionStatement(dynamic_cast<OOModel::Expression*>(target->node()));
 
 		if (replaceStatement)
 		{
 			OOModel::Statement* st = nullptr;
 			Model::Node* toFocus = nullptr;
-			if(newText.startsWith("for"))
+			if(trimmedText == "for")
 			{
 				auto loop =  new OOModel::LoopStatement();
 				loop->setInitStep(new OOModel::EmptyExpression());
@@ -210,7 +211,7 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 				toFocus = loop->initStep();
 				st = loop;
 			}
-			else if (newText.startsWith("foreach"))
+			else if (trimmedText == "foreach")
 			{
 				auto loop =  new OOModel::ForEachStatement();
 				loop->setCollection(new OOModel::EmptyExpression());
@@ -218,7 +219,7 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 				toFocus = loop->varNameNode();
 				st = loop;
 			}
-			else if (newText.startsWith("if"))
+			else if (trimmedText == "if")
 			{
 				auto ifs =  new OOModel::IfStatement();
 				ifs->setCondition(new OOModel::EmptyExpression());
@@ -226,17 +227,17 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 				toFocus = ifs->condition();
 				st = ifs;
 			}
-			else if (newText.startsWith("continue"))
+			else if (trimmedText == "continue")
 			{
 				st = new OOModel::ContinueStatement();
 				toFocus = st;
 			}
-			else if (newText.startsWith("break"))
+			else if (trimmedText == "break")
 			{
 				st = new OOModel::BreakStatement();
 				toFocus = st;
 			}
-			else if (newText.startsWith("return"))
+			else if (trimmedText == "return")
 			{
 				auto ret =  new OOModel::ReturnStatement();
 				ret->values()->append(new OOModel::EmptyExpression());
