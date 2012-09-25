@@ -361,6 +361,8 @@ QList<ItemRegion> SequentialLayout::regions()
 		}
 
 		itemRegion.setItem(items[i]);
+		adjustCursorRegionToAvoidZeroSize(cursorRegion.region(), horizontal, forward, !extraCursors && i==0, false);
+
 		// Note below, that a horizontal layout, means a vertical cursor
 		auto lc = new LayoutCursor(this, horizontal ? Cursor::VerticalCursor : Cursor::HorizontalCursor);
 		cursorRegion.setCursor(lc);
@@ -368,8 +370,6 @@ QList<ItemRegion> SequentialLayout::regions()
 		lc->setVisualizationPosition(cursorRegion.region().topLeft());
 		lc->setVisualizationSize(horizontal ? QSize(2, height()) : QSize(width(), 2));
 		if (i==0 && !extraCursors) lc->setIsAtBoundary(true);
-
-		adjustCursorRegionToAvoidZeroSize(cursorRegion.region(), horizontal, forward, !extraCursors && i==0, false);
 
 		cursorRegion.cursor()->setRegion(cursorRegion.region());
 		if (style()->notLocationEquivalentCursors()) lc->setNotLocationEquivalent(true);
