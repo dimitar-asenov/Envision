@@ -73,8 +73,7 @@ void HMethod::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			processed = true;
 			if (m->node()->items()->size() > 0)
 			{
-				target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, m->node()->items()->at(0),
-						Interaction::SetCursorEvent::CursorOnLeft));
+				target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, m->node()->items()->at(0)));
 			}
 			else
 			{
@@ -86,8 +85,7 @@ void HMethod::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 				m->node()->model()->endModification();
 
 				m->content()->setUpdateNeeded(Visualization::Item::StandardUpdate);
-				target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty,
-						Interaction::SetCursorEvent::CursorOnLeft));
+				target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty));
 			}
 		}
 		else if (m->name()->itemOrChildHasFocus() && switchHorizontal)
@@ -97,7 +95,7 @@ void HMethod::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			if (m->node()->arguments()->size() > 0)
 			{
 				target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target,
-						m->node()->arguments()->at(0), Interaction::SetCursorEvent::CursorOnLeft));
+						m->node()->arguments()->at(0)));
 			}
 		}
 		else if ( (m->name()->itemOrChildHasFocus()) && createRight)
@@ -119,8 +117,7 @@ void HMethod::createNewArgument(OOVisualization::VMethod* method, int position)
 	method->node()->model()->endModification();
 
 	method->arguments()->setUpdateNeeded(Visualization::Item::StandardUpdate);
-	method->scene()->addPostEventAction( new Interaction::SetCursorEvent(method, arg,
-			Interaction::SetCursorEvent::CursorOnTop));
+	method->scene()->addPostEventAction( new Interaction::SetCursorEvent(method, arg));
 }
 
 } /* namespace OOInteraction */

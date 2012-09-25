@@ -49,8 +49,9 @@ SetExpressionCursorEvent::SetExpressionCursorEvent(Visualization::Item* parentCo
 
 void SetExpressionCursorEvent::execute()
 {
-	Q_ASSERT(parentContainer_->findVisualizationOf(node_) != nullptr);
-	auto* sp = Model::AdapterManager::adapt<StringOffsetProvider>( parentContainer_->findVisualizationOf(node_) );
+	auto nodeVis = parentContainer_->findVisualizationOf(node_);
+	Q_ASSERT( nodeVis != nullptr);
+	auto* sp = Model::AdapterManager::adapt<StringOffsetProvider>( nodeVis );
 	if (sp)
 	{
 		sp->setOffset(offset_);

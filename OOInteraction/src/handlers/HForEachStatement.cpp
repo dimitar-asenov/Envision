@@ -67,16 +67,13 @@ void HForEachStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *ev
 	if (vfor->varType() && vfor->varType()->itemOrChildHasFocus() && (switchHorizontal || createRight) )
 	{
 		event->accept();
-
-		target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target,
-			vfor->node()->varNameNode(), Interaction::SetCursorEvent::CursorOnLeft));
+		target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, vfor->node()->varNameNode()));
 	}
 	else if (vfor->varName() && vfor->varName()->itemOrChildHasFocus() && (switchHorizontal || createRight))
 	{
 		event->accept();
 		if (vfor->node()->collection()->typeId() != OOModel::Expression::typeIdStatic())
-			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target,
-				vfor->node()->collection(), Interaction::SetCursorEvent::CursorOnLeft));
+			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, vfor->node()->collection()));
 		else
 		{
 			auto empty = new OOModel::EmptyExpression();
@@ -85,16 +82,14 @@ void HForEachStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *ev
 			vfor->node()->model()->endModification();
 
 			vfor->header()->setUpdateNeeded(Visualization::Item::StandardUpdate);
-			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty,
-					Interaction::SetCursorEvent::CursorOnLeft));
+			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty));
 		}
 	}
 	else if (vfor->collection() && vfor->collection()->itemOrChildHasFocus() && (switchHorizontal || createRight))
 	{
 		event->accept();
 		if (vfor->node()->varType())
-			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target,
-					vfor->node()->varType(), Interaction::SetCursorEvent::CursorOnLeft));
+			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, vfor->node()->varType()));
 		else
 		{
 			auto empty = new OOModel::EmptyExpression();
@@ -103,8 +98,7 @@ void HForEachStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *ev
 			vfor->node()->model()->endModification();
 
 			vfor->header()->setUpdateNeeded(Visualization::Item::StandardUpdate);
-			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty,
-					Interaction::SetCursorEvent::CursorOnLeft));
+			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty));
 		}
 
 	}
@@ -114,8 +108,7 @@ void HForEachStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *ev
 		if (vfor->node()->body()->size() > 0)
 		{
 			target->scene()->addPostEventAction(
-					new Interaction::SetCursorEvent(target, vfor->node()->body()->at(0),
-							Interaction::SetCursorEvent::CursorOnLeft));
+					new Interaction::SetCursorEvent(target, vfor->node()->body()->at(0)));
 		}
 		else
 		{
@@ -125,8 +118,7 @@ void HForEachStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *ev
 			vfor->node()->model()->endModification();
 
 			vfor->body()->setUpdateNeeded(Visualization::Item::StandardUpdate);
-			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty,
-					Interaction::SetCursorEvent::CursorOnLeft));
+			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty));
 		}
 
 	}else if (event->modifiers() == Qt::NoModifier

@@ -119,7 +119,11 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 			MoveUpOf, /**< Move the cursor as close as possible above the specified reference point. */
 			MoveDownOf, /**< Move the cursor as close as possible below the specified reference point. */
 			MoveLeftOf, /**< Move the cursor as close as possible to left of the specified reference point. */
-			MoveRightOf /**< Move the cursor as close as possible to right of the specified reference point. */
+			MoveRightOf, /**< Move the cursor as close as possible to right of the specified reference point. */
+			MoveDefault /**< Move the cursor to the default location. This is typically used after the item is created.
+			 	 	 	 	 	  The default behavior is to move the cursor to the top left corner. If a defaultMove cursor
+			 	 	 	 	 	  proxy is set, it will be selected instead. Subclasses might reimplement moveCursor to
+			 	 	 	 	 	  customize this behavior. */
 		};
 
 		/**
@@ -138,7 +142,8 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		 *
 		 * This method is responsible for creating a corresponding Cursor item and setting it as the main scene cursor.
 		 */
-		virtual bool moveCursor(CursorMoveDirection dir, const QPoint& reference = QPoint());
+		virtual bool moveCursor(CursorMoveDirection dir = MoveDefault, QPoint reference = QPoint());
+		void setDefaultMoveCursorProxy(Item* proxy);
 
 		virtual QList<ItemRegion> regions();
 
@@ -325,7 +330,10 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		QRectF boundingRect_;
 		const ItemStyle* style_;
 		Shape* shape_;
+
 		UpdateType needsUpdate_;
+		Item* defaultMoveCursorProxy_{};
+
 		int purpose_;
 		QMap<const Model::Node*, int> childNodePurpose_;
 
@@ -387,6 +395,7 @@ inline bool Item::hasShape() const { return shape_; }
 inline Shape* Item::getShape() const {	return shape_; }
 inline qreal Item::xEnd() const { return x() + width() - 1; }
 inline qreal Item::yEnd() const { return y() + height() - 1; }
+inline void Item::setDefaultMoveCursorProxy(Item* proxy) {defaultMoveCursorProxy_ = proxy;}
 
 template <class T> void Item::synchronizeItem(T*& item, bool present, const typename T::StyleType* style)
 {

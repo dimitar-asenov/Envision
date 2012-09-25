@@ -54,14 +54,15 @@ class INTERACTIONBASE_API SetCursorEvent : public Visualization::CustomSceneEven
 		static const QEvent::Type EventType;
 
 		enum CursorPlacement { CursorOnTop, CursorOnBottom, CursorOnLeft, CursorOnRight, CursorOnCenter,
-										CursorAboveOf, CursorBelowOf, CursorLeftOf, CursorRightOf};
+										CursorAboveOf, CursorBelowOf, CursorLeftOf, CursorRightOf, CursorDefault};
 
 		typedef std::function<Visualization::Item* ()> GetItemFunction;
 
-		SetCursorEvent(Visualization::Item* itemToGetCursor, CursorPlacement placement);
-		SetCursorEvent(GetItemFunction getItemToFocus, CursorPlacement placement);
-		SetCursorEvent(Visualization::Item* parentContainer, Model::Node* node, CursorPlacement placement);
-		SetCursorEvent(Visualization::Scene* scene, Model::Node* node, CursorPlacement placement);
+		SetCursorEvent(Visualization::Item* itemToGetCursor, CursorPlacement placement = CursorDefault);
+		SetCursorEvent(GetItemFunction getItemToFocus, CursorPlacement placement = CursorDefault);
+		SetCursorEvent(Visualization::Item* parentContainer, Model::Node* node,
+				CursorPlacement placement = CursorDefault);
+		SetCursorEvent(Visualization::Scene* scene, Model::Node* node, CursorPlacement placement = CursorDefault);
 		virtual void execute();
 
 	private:

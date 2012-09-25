@@ -70,8 +70,7 @@ void HIfStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		if (vif->node()->thenBranch()->size() > 0)
 		{
 			target->scene()->addPostEventAction(
-					new Interaction::SetCursorEvent(target, vif->node()->thenBranch()->at(0),
-					Interaction::SetCursorEvent::CursorOnLeft));
+					new Interaction::SetCursorEvent(target, vif->node()->thenBranch()->at(0)));
 		}
 		else
 		{
@@ -83,8 +82,7 @@ void HIfStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			vif->node()->model()->endModification();
 
 			vif->thenBranch()->setUpdateNeeded(Visualization::Item::StandardUpdate);
-			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty,
-					Interaction::SetCursorEvent::CursorOnLeft));
+			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty));
 		}
 	}
 	else if (vif->thenBranch()->itemOrChildHasFocus() && (switchHorizontal || createRight))
@@ -94,7 +92,7 @@ void HIfStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		if (vif->node()->elseBranch()->size() > 0)
 		{
 			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target,
-					vif->node()->elseBranch()->at(0), Interaction::SetCursorEvent::CursorOnLeft));
+					vif->node()->elseBranch()->at(0)));
 		}
 		else
 		{
@@ -106,8 +104,7 @@ void HIfStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			vif->node()->model()->endModification();
 
 			vif->elseBranch()->setUpdateNeeded(Visualization::Item::StandardUpdate);
-			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty,
-					Interaction::SetCursorEvent::CursorOnLeft));
+			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty));
 		}
 	}
 	else if (event->modifiers() == Qt::NoModifier

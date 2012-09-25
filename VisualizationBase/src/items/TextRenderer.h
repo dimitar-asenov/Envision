@@ -73,7 +73,7 @@ class VISUALIZATIONBASE_API TextRenderer : public Item
 
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
-		virtual bool moveCursor(CursorMoveDirection dir, const QPoint& reference = QPoint());
+		virtual bool moveCursor(CursorMoveDirection dir = MoveDefault, QPoint reference = QPoint()) override;
 
 		qreal textXOffset();
 		qreal textYOffset();

@@ -59,15 +59,15 @@ void HFormalArgument::keyPressEvent(Visualization::Item *target, QKeyEvent *even
 			processed = true;
 
 			if (vis->name()->itemOrChildHasFocus())
-				vis->typeExpr()->moveCursor(Visualization::Item::MoveOnPosition, QPoint(0,0));
+				vis->typeExpr()->moveCursor();
 			else
-				vis->name()->moveCursor(Visualization::Item::MoveOnPosition, QPoint(0,0));
+				vis->name()->moveCursor();
 		}
 
 		if (vis->name()->itemOrChildHasFocus() && (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) )
 		{
 			processed = true;
-			vis->typeExpr()->moveCursor(Visualization::Item::MoveOnPosition, QPoint(0,0));
+			vis->typeExpr()->moveCursor();
 		}
 	}
 

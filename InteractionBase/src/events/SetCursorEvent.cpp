@@ -106,9 +106,9 @@ void SetCursorEvent::execute()
 				item->pos().toPoint() + QPoint(0, item->height() / 2)); break;
 		case CursorRightOf: parent->moveCursor(Visualization::Item::CursorMoveDirection::MoveOnPosition,
 				item->pos().toPoint() + QPoint(item->width() - 1, item->height() / 2)); break;
+		case CursorDefault: item->moveCursor(); break;
 
-		default: item->moveCursor(Visualization::Item::CursorMoveDirection::MoveOnPosition,
-				QPoint(0, 0)); break;
+		default: item->moveCursor(); break;
 	}
 }
 

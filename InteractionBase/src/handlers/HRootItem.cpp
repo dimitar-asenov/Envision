@@ -63,7 +63,7 @@ void HRootItem::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		ri->setPurpose( (ri->purpose() + 1) % target->scene()->renderer()->numRegisteredPurposes() );
 
 		target->scene()->addPostEventAction(
-			new SetCursorEvent(target, ri->node(), Interaction::SetCursorEvent::CursorOnLeft));
+			new SetCursorEvent(target, ri->node()));
 	}
 	else GenericHandler::keyPressEvent(target, event);
 }

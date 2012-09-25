@@ -255,8 +255,7 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			auto parent = topMostItem->parent();
 			while (! dynamic_cast<Visualization::VList*>(parent) && parent->parent()) parent = parent->parent();
 
-			target->scene()->addPostEventAction(
-					new Interaction::SetCursorEvent(parent, toFocus, Interaction::SetCursorEvent::CursorOnLeft));
+			target->scene()->addPostEventAction(new Interaction::SetCursorEvent(parent, toFocus));
 			return;
 		}
 
@@ -380,7 +379,12 @@ void HExpression::setNewExpression(Visualization::Item* target, Visualization::I
 	// Let interested plug-ins know that an expression was edited. Plug-ins might decide to make changes.
 	for (auto monitor : expressionMonitors_) monitor(newExpression, index);
 
+	// Find an item that represents a node, as any intermediate items might disappear when during the update.
+	// E.g. VLoopStatement keeps it's condition inside a wrapper for background color that also get deleted during the
+	// update.
 	auto parent = topMostItem->parent();
+	while (!parent->node() && parent->parent()) parent=parent->parent();
+
 	target->scene()->addPostEventAction( new SetExpressionCursorEvent(parent, newExpression, index));
 }
 

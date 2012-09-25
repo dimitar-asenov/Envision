@@ -456,7 +456,7 @@ QList<ItemRegion> Item::regions()
 	return regs;
 }
 
-bool Item::moveCursor(CursorMoveDirection dir, const QPoint& reference)
+bool Item::moveCursor(CursorMoveDirection dir, QPoint reference)
 {
 	// The condition below is only true if this method is called from a parent item, after it was already called for the
 	// item itself. In that case simply return false as the original call returned false too.
@@ -465,10 +465,17 @@ bool Item::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 	return false;
 
 	QList<ItemRegion> regs = regions();
-
 	if (regs.isEmpty()) return false;
 
-	QPoint source = reference;
+	if (dir == MoveDefault)
+	{
+		if (defaultMoveCursorProxy_)
+		{
+			defaultMoveCursorProxy_->moveCursor(MoveDefault);
+			return true;
+		}
+		reference = QPoint(0,0);
+	}
 
 	ItemRegion* current = nullptr;
 	// Handle cursor movement in a specific direction
@@ -483,10 +490,10 @@ bool Item::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 				current = &r;
 				switch(dir)
 				{
-					case MoveUp: source = QPoint(reference.x(), r.region().y()); break;
-					case MoveDown: source = QPoint(reference.x(), r.region().y() + r.region().height()); break;
-					case MoveLeft: source = QPoint(r.region().x(), reference.y()); break;
-					case MoveRight: source = QPoint(r.region().x() + r.region().width(), reference.y()); break;
+					case MoveUp: reference = QPoint(reference.x(), r.region().y()); break;
+					case MoveDown: reference = QPoint(reference.x(), r.region().y() + r.region().height()); break;
+					case MoveLeft: reference = QPoint(r.region().x(), reference.y()); break;
+					case MoveRight: reference = QPoint(r.region().x() + r.region().width(), reference.y()); break;
 					default: /* Will never be the case because of the top-level if statement */ break;
 				}
 				break;
@@ -507,6 +514,7 @@ bool Item::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 		case MoveDownOf: constraints = ItemRegion::Below; break;
 		case MoveLeftOf: constraints = ItemRegion::LeftOf; break;
 		case MoveRightOf: constraints = ItemRegion::RightOf; break;
+		case MoveDefault: constraints = ItemRegion::NoConstraints; break;
 	}
 
 	// We use a map since the elements are kept ordered according to the key. As key we use the distance multiplied by 10
@@ -515,7 +523,7 @@ bool Item::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 
 	for (ItemRegion& r : regs)
 	{
-		ItemRegion::PositionConstraints satisfied = r.satisfiedPositionConstraints(source);
+		ItemRegion::PositionConstraints satisfied = r.satisfiedPositionConstraints(reference);
 		if (	(&r != current)
 				&& ( (( satisfied & constraints) == constraints)
 						// An overlapping cursor region is preferred, even if it does not satisfy the constraints.
@@ -525,7 +533,7 @@ bool Item::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 						|| (r.cursor() && (satisfied & ItemRegion::Overlap)) )
 			)
 		{
-			int distanceKey = r.distanceTo(source)*10;
+			int distanceKey = r.distanceTo(reference)*10;
 			if (r.cursor()) distanceKey -= 5;
 			matching.insert(distanceKey, &r);
 		}
@@ -562,8 +570,9 @@ bool Item::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 				case MoveDownOf: childDirection = MoveDownOf; break;
 				case MoveLeftOf: childDirection = MoveLeftOf; break;
 				case MoveRightOf: childDirection = MoveRightOf; break;
+				case MoveDefault: childDirection = MoveDefault; break;
 			}
-			if( r->item()->moveCursor(childDirection, mapToItem(r->item(), source).toPoint()))
+			if( r->item()->moveCursor(childDirection, mapToItem(r->item(), reference).toPoint()))
 			{
 				canFocus = true;
 				break;

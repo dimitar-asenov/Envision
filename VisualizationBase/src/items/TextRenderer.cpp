@@ -159,7 +159,7 @@ void TextRenderer::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 	}
 }
 
-bool TextRenderer::moveCursor(CursorMoveDirection dir, const QPoint& reference)
+bool TextRenderer::moveCursor(CursorMoveDirection dir, QPoint reference)
 {
 	if ( dir == MoveUpOf || dir == MoveDownOf || dir == MoveLeftOf || dir == MoveRightOf )
 	{
@@ -177,11 +177,14 @@ bool TextRenderer::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 		}
 		else return false;
 	}
-	else if (dir == MoveOnPosition)
+	else if (dir == MoveOnPosition || dir == MoveDefault)
 	{
 		setFocus();
 		TextCursor* tc = new TextCursor(this);
-		tc->setSelectedByDrag(reference.x(), reference.x());
+
+		if (dir == MoveDefault) tc->setCaretPosition(0);
+		else tc->setSelectedByDrag(reference.x(), reference.x());
+
 		scene()->setMainCursor(tc);
 		return true;
 	}

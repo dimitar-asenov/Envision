@@ -74,8 +74,7 @@ void HStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			lst->node()->model()->endModification();
 
 			lst->setUpdateNeeded(Visualization::Item::StandardUpdate);
-			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(lst, empty,
-					Interaction::SetCursorEvent::CursorOnLeft));
+			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(lst, empty));
 	}
 
 	if (!processed) GenericHandler::keyPressEvent(target, event);

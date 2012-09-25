@@ -253,7 +253,7 @@ void CommandPrompt::acquireCursor()
 	if (commandReceiver_->scene()->mainCursor()->owner() == commandReceiver_)
 		receiverCursorPosition = commandReceiver_->scene()->mainCursor()->position();
 
-	command->moveCursor(Visualization::Item::MoveOnPosition, QPoint(0,0));
+	command->moveCursor();
 }
 
 void CommandPrompt::setPromptPosition()
