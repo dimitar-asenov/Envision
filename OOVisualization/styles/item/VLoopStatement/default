@@ -86,10 +86,5 @@
 			<cornerType>2</cornerType>
 		</shape>
 	</updateStep>
-	<body prototypes="item/VList/default">
-		<shape/>
-		<itemsStyle>
-			<alignment>1</alignment>
-		</itemsStyle>
-	</body>
+	<body prototypes="item/VStatementItemList/default"/>
 </style>

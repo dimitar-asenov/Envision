@@ -62,7 +62,7 @@
 		<noInnerCursors>true</noInnerCursors>
 		<noBoundaryCursorsInsideShape>true</noBoundaryCursorsInsideShape>
 	</content>
-	<thenBranch prototypes="item/VList/default">
+	<thenBranch prototypes="item/VStatementItemList/default">
 		<shape prototypes="shape/Box/default">
 			Box
 			<outline><style>0</style></outline>
@@ -78,12 +78,8 @@
 			<cornerRadius>4</cornerRadius>
 			<cornerType>1</cornerType>
 		</shape>
-		<itemsStyle>
-			<alignment>1</alignment>
-			<allowEquivalentCursorsThroughBoundary>false</allowEquivalentCursorsThroughBoundary>
-		</itemsStyle>
 	</thenBranch>
-	<elseBranch prototypes="item/VList/default">
+	<elseBranch prototypes="item/VStatementItemList/default">
 		<shape prototypes="shape/Box/default">
 			Box
 			<outline><style>0</style></outline>
@@ -92,16 +88,12 @@
 				<color>
 					<alpha>255</alpha>
 					<red>255</red>
-					<green>200</green>
-					<blue>200</blue>
+					<green>224</green>
+					<blue>224</blue>
 				</color>
 			</backgroundBrush>
 			<cornerRadius>4</cornerRadius>
 			<cornerType>1</cornerType>
 		</shape>
-		<itemsStyle>
-			<alignment>1</alignment>
-			<allowEquivalentCursorsThroughBoundary>false</allowEquivalentCursorsThroughBoundary>
-		</itemsStyle>
 	</elseBranch>
 </style>
