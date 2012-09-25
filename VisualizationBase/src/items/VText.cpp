@@ -58,4 +58,13 @@ QString VText::currentText()
 	return node()->get();
 }
 
+bool VText::moveCursor(CursorMoveDirection dir, QPoint reference)
+{
+	if (dir == MoveDefault)
+	{
+		return ItemWithNode<TextRenderer, Model::Text>::moveCursor(MoveLeftOf, QPoint(xEnd()+1,0));
+	}
+	else return ItemWithNode<TextRenderer, Model::Text>::moveCursor(dir, reference);
+}
+
 }

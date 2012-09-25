@@ -62,6 +62,7 @@ VMethod::VMethod(Item* parent, NodeType* node, const StyleType* style) :
 
 	name_ =new VText(header_, node->nameNode(), &style->nameDefault());
 	header_->append(name_);
+	setDefaultMoveCursorProxy(name_);
 
 	typeArguments_ =new VList(header_, node->typeArguments(), &style->arguments());
 	header_->append(typeArguments_);

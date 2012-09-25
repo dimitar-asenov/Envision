@@ -58,6 +58,7 @@ VProject::VProject(Item* parent, NodeType* node, const StyleType* style) :
 	header->append(new Static(header, &style->icon()));
 	name = new VText(header, node->nameNode(), &style->name());
 	header->append(name);
+	setDefaultMoveCursorProxy(name);
 
 	content = new PositionLayout(layout(), &style->content());
 	layout()->setContent(content);

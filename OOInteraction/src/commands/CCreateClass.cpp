@@ -64,11 +64,7 @@ Interaction::CommandResult* CCreateClass::create(Visualization::Item* /*source*/
 	pr->classes()->append(cl);
 	pr->endModification();
 
-	if (name.isNull()) target->scene()->addPostEventAction(
-		new Interaction::SetCursorEvent(target, cl->nameNode(), Interaction::SetCursorEvent::CursorOnLeft));
-	else
-		target->scene()->addPostEventAction(
-			new Interaction::SetCursorEvent(target, cl->nameNode(), Interaction::SetCursorEvent::CursorOnRight));
+	target->scene()->addPostEventAction(new Interaction::SetCursorEvent(target, cl));
 
 	return new Interaction::CommandResult();
 }

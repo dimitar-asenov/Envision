@@ -76,12 +76,8 @@ Interaction::CommandResult* CCreateProject::create(Visualization::Item* /*source
 		target->scene()->listenToModel(model);
 	}
 
-	if (newModel)
-		target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target->scene(), project->nameNode(),
-			name.isNull() ? Interaction::SetCursorEvent::CursorOnLeft : Interaction::SetCursorEvent::CursorOnRight));
-	else
-		target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, project->nameNode(),
-			name.isNull() ? Interaction::SetCursorEvent::CursorOnLeft : Interaction::SetCursorEvent::CursorOnRight));
+	if (newModel) target->scene()->addPostEventAction(new Interaction::SetCursorEvent(target->scene(), project));
+	else target->scene()->addPostEventAction(new Interaction::SetCursorEvent(target, project));
 
 
 	return new Interaction::CommandResult();
