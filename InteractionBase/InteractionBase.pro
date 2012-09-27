@@ -6,7 +6,11 @@ win32:LIBS += -llogger \
     -lmodelbase \
     -lfilepersistence \
     -lvisualizationbase
-HEADERS += src/events/DetectMainSceneActivated.h \
+HEADERS += src/handlers/HActionPrompt.h \
+    src/actions/ActionPromptStyle.h \
+    src/actions/ActionPrompt.h \
+    src/actions/Action.h \
+    src/events/DetectMainSceneActivated.h \
     src/events/ShowCommandPromptEvent.h \
     src/events/SetCursorEvent.h \
     src/commands/CreateNamedObjectWithAttributes.h \
@@ -62,7 +66,11 @@ HEADERS += src/events/DetectMainSceneActivated.h \
     src/vis/TextAndDescription.h \
     src/vis/TextAndDescriptionStyle.h \
     src/interactionbase.h
-SOURCES += src/events/DetectMainSceneActivated.cpp \
+SOURCES += src/handlers/HActionPrompt.cpp \
+    src/actions/ActionPromptStyle.cpp \
+    src/actions/ActionPrompt.cpp \
+    src/actions/Action.cpp \
+    src/events/DetectMainSceneActivated.cpp \
     src/events/ShowCommandPromptEvent.cpp \
     src/events/SetCursorEvent.cpp \
     src/commands/CreateNamedObjectWithAttributes.cpp \

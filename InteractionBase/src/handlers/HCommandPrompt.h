@@ -48,7 +48,7 @@ class INTERACTIONBASE_API HCommandPrompt: public GenericHandler
 	public:
 		static HCommandPrompt* instance();
 
-		virtual void keyReleaseEvent(Visualization::Item *target, QKeyEvent *event);
+		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event);
 };
 
 }

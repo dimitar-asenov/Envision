@@ -38,12 +38,14 @@
 #include "handlers/HList.h"
 #include "handlers/HExtendable.h"
 #include "handlers/HCommandPrompt.h"
+#include "handlers/HActionPrompt.h"
 #include "handlers/HSceneHandlerItem.h"
 #include "handlers/HPositionLayout.h"
 #include "handlers/HRootItem.h"
 
 #include "vis/CommandPrompt.h"
 #include "vis/TextAndDescription.h"
+#include "actions/ActionPrompt.h"
 
 #include "events/DetectMainSceneActivated.h"
 
@@ -100,6 +102,7 @@ bool InteractionBase::initialize(Core::EnvisionManager&)
 	Visualization::PanelBorderLayout::setInteractionHandler(GenericHandler::instance());
 	Visualization::PositionLayout::setInteractionHandler(HPositionLayout::instance());
 	CommandPrompt::setInteractionHandler(HCommandPrompt::instance());
+	ActionPrompt::setInteractionHandler(HActionPrompt::instance());
 	TextAndDescription::setInteractionHandler(GenericHandler::instance());
 
 	// We use to show the prompt. It can only be shown once the Scene is activated.

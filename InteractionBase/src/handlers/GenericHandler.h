@@ -46,6 +46,7 @@ namespace Interaction {
 class Command;
 class CommandExecutionEngine;
 class CommandPrompt;
+class ActionPrompt;
 
 class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHandler
 {
@@ -63,7 +64,7 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 		const QList<Command*>& commands();
 		void addCommand(Command* command);
 
-		CommandPrompt* prompt();
+		CommandPrompt* commandPrompt();
 		void removeCommandPrompt();
 		void showCommandPrompt(Visualization::Item* commandRecevier);
 
@@ -71,7 +72,6 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 
 		// Keyboard events
 		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event);
-		virtual void keyReleaseEvent(Visualization::Item *target, QKeyEvent *event);
 
 		// Mouse events
 		virtual void mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event);
@@ -92,6 +92,11 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 		 */
 		bool removeFromList(Visualization::Item* target);
 
+		ActionPrompt* actionPrompt();
+		void removeActionPrompt();
+		void showActionPrompt(Visualization::Item *actionRecevier, bool autoExecuteAction);
+		virtual void action(Visualization::Item *target, const QString& action);
+
 	protected:
 		GenericHandler();
 
@@ -104,7 +109,8 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 		QList<Command*> supportedCommands;
 
 		static CommandExecutionEngine* executionEngine_;
-		static CommandPrompt* prompt_;
+		static CommandPrompt* commandPrompt_;
+		static ActionPrompt* actionPrompt_;
 
 		static QPoint cursorOriginMidPoint_;
 		static CursorMoveOrientation cursorMoveOrientation_;

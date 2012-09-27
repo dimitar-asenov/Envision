@@ -37,6 +37,8 @@
 #include "../autocomplete/AutoComplete.h"
 #include "commands/CommandExecutionEngine.h"
 #include "vis/CommandPrompt.h"
+#include "actions/Action.h"
+#include "actions/ActionPrompt.h"
 
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/renderer/ModelRenderer.h"
@@ -49,7 +51,8 @@
 namespace Interaction {
 
 CommandExecutionEngine* GenericHandler::executionEngine_ = CommandExecutionEngine::instance();
-CommandPrompt* GenericHandler::prompt_ = nullptr;
+CommandPrompt* GenericHandler::commandPrompt_{};
+ActionPrompt* GenericHandler::actionPrompt_{};
 
 QPoint GenericHandler::cursorOriginMidPoint_;
 GenericHandler::CursorMoveOrientation GenericHandler::cursorMoveOrientation_ = NoOrientation;
@@ -80,26 +83,26 @@ void GenericHandler::resetCursorOrigin()
 	cursorMoveOrientation_ = NoOrientation;
 }
 
-CommandPrompt* GenericHandler::prompt()
+CommandPrompt* GenericHandler::commandPrompt()
 {
-	return prompt_;
+	return commandPrompt_;
 }
 
 void GenericHandler::removeCommandPrompt()
 {
-	SAFE_DELETE_ITEM(prompt_);
+	SAFE_DELETE_ITEM(commandPrompt_);
 }
 
 void GenericHandler::showCommandPrompt(Visualization::Item* commandReceiver)
 {
-	if (prompt_ && prompt_->commandReceiver() == commandReceiver)
+	if (commandPrompt_ && commandPrompt_->commandReceiver() == commandReceiver)
 	{
-		prompt_->showPrompt();
+		commandPrompt_->showPrompt();
 	}
 	else
 	{
 		removeCommandPrompt();
-		prompt_ = new CommandPrompt(commandReceiver);
+		commandPrompt_ = new CommandPrompt(commandReceiver);
 	}
 }
 
@@ -132,7 +135,8 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 			if (item->hasNode()) nodesToCopy.append(item->node());
 		}
 
-		// In case there is exactly one selected item that is not a model item try to find the first parent that it has which is a model item.
+		// In case there is exactly one selected item that is not a model item try to find the first parent that it has
+		// which is a model item.
 		if (nodesToCopy.size() == 0 && selected.size() == 1)
 		{
 			Visualization::Item* item = static_cast<Visualization::Item*> (selected.at(0));
@@ -241,6 +245,23 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 
 		event->accept();
 	}
+	else if (event->key() == Qt::Key_Escape && AutoComplete::isVisible())
+	{
+		AutoComplete::hide();
+	}
+	else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Escape
+			&& !(actionPrompt_ && actionPrompt_->isVisible())
+			&& !(commandPrompt_ && (commandPrompt_ == target || commandPrompt_->isAncestorOf(target))) )
+	{
+		// Only show the command prompt if this event was not received within it.
+		showCommandPrompt(target);
+	}
+	else if (event->modifiers() == Qt::ShiftModifier && event->key() == Qt::Key_Escape && target->node()
+			&& !(commandPrompt_ && commandPrompt_->isVisible()))
+	{
+		// Only show the action prompt if none of the other "menu items" are visible
+		showActionPrompt(target, true);
+	}
 	else InteractionHandler::keyPressEvent(target, event);
 }
 
@@ -339,20 +360,6 @@ void GenericHandler::moveCursor(Visualization::Item *target, int key)
 			current = parent;
 		}
 	}
-}
-
-void GenericHandler::keyReleaseEvent(Visualization::Item *target, QKeyEvent *event)
-{
-	if (event->key() == Qt::Key_Escape && AutoComplete::isVisible())
-	{
-		AutoComplete::hide();
-	}
-	else if (event->key() == Qt::Key_Escape && !(prompt_ && prompt_->isAncestorOf(target)) )
-	{
-		// Only show the command prompt if this event was not received within it.
-		showCommandPrompt(target);
-	}
-	else InteractionHandler::keyReleaseEvent(target, event);
 }
 
 void GenericHandler::mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
@@ -505,6 +512,41 @@ bool GenericHandler::removeFromList(Visualization::Item* target)
 		return true;
 	}
 	return false;
+}
+
+ActionPrompt* GenericHandler::actionPrompt()
+{
+	return actionPrompt_;
+}
+
+void GenericHandler::removeActionPrompt()
+{
+	SAFE_DELETE_ITEM(actionPrompt_);
+}
+
+void GenericHandler::showActionPrompt(Visualization::Item *actionRecevier, bool autoExecuteAction)
+{
+	if (actionPrompt_ && actionPrompt_->actionReceiver() == actionRecevier)
+	{
+		actionPrompt_->showPrompt();
+	}
+	else
+	{
+		removeActionPrompt();
+		actionPrompt_ = new ActionPrompt(actionRecevier, autoExecuteAction);
+	}
+}
+
+void GenericHandler::action(Visualization::Item *target, const QString& action)
+{
+	for(auto a : Action::actions(target->node()))
+	{
+		if (a->shortcut() == action)
+		{
+			a->execute(target);
+			break;
+		}
+	}
 }
 
 }

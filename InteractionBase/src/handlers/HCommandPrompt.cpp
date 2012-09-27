@@ -51,7 +51,7 @@ HCommandPrompt* HCommandPrompt::instance()
 	return &h;
 }
 
-void HCommandPrompt::keyReleaseEvent(Visualization::Item *target, QKeyEvent *event)
+void HCommandPrompt::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
 	CommandPrompt* prompt = static_cast<CommandPrompt*> (target);
 
@@ -85,7 +85,7 @@ void HCommandPrompt::keyReleaseEvent(Visualization::Item *target, QKeyEvent *eve
 			else prompt->takeSuggestion(prompt->result()->suggestions().first());
 		}
 	}
-	else GenericHandler::keyReleaseEvent(target, event);
+	else GenericHandler::keyPressEvent(target, event);
 }
 
 }
