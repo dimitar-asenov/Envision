@@ -91,10 +91,13 @@
 
 #include "OOModel/src/allOOModelNodes.h"
 
+
+#include "InteractionBase/src/actions/Action.h"
 #include "InteractionBase/src/handlers/GenericHandler.h"
 #include "InteractionBase/src/handlers/HList.h"
 #include "InteractionBase/src/handlers/HText.h"
 #include "InteractionBase/src/handlers/HSceneHandlerItem.h"
+#include "InteractionBase/src/events/SetCursorEvent.h"
 
 #include "VisualizationBase/src/items/Static.h"
 #include "VisualizationBase/src/items/Symbol.h"
@@ -261,6 +264,9 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 		<StringOffsetProvider, VariableDeclarationStringOffsetProvider, OOVisualization::VVariableDeclaration>();
 
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CCreateProject());
+
+	initializeActions();
+
 	return true;
 }
 
@@ -272,6 +278,39 @@ void OOInteraction::selfTest(QString testid)
 {
 	if (testid.isEmpty()) SelfTest::TestManager<OOInteraction>::runAllTests().printResultStatistics();
 	else SelfTest::TestManager<OOInteraction>::runTest(testid).printResultStatistics();
+}
+
+void OOInteraction::initializeActions()
+{
+	Interaction::Action::add<OOModel::Method>(new Interaction::Action("r","Create result",
+		Interaction::Action::ActionFunctionOnItem([](Visualization::Item* item){
+			auto vis = dynamic_cast<OOVisualization::VMethod*>(item);
+			if(vis)
+			{
+				if ( vis->node()->results()->size() == 0)
+				{
+					vis->node()->beginModification("add result");
+					vis->node()->results()->append(new OOModel::FormalResult("", new OOModel::EmptyExpression()));
+					vis->node()->endModification();
+				}
+				vis->scene()->addPostEventAction(new Interaction::SetCursorEvent(vis, vis->node()->results()->first()));
+			}
+	})));
+
+	Interaction::Action::add<OOModel::Method>(new Interaction::Action("n","Create annotation",
+		Interaction::Action::ActionFunctionOnItem([](Visualization::Item* item){
+			auto vis = dynamic_cast<OOVisualization::VMethod*>(item);
+			if(vis)
+			{
+				if ( vis->node()->annotations()->size() == 0)
+				{
+					vis->node()->beginModification("add annotation");
+					vis->node()->annotations()->append(new OOModel::ExpressionStatement(new OOModel::EmptyExpression()));
+					vis->node()->endModification();
+				}
+				vis->scene()->addPostEventAction(new Interaction::SetCursorEvent(vis, vis->node()->annotations()->first()));
+			}
+	})));
 }
 
 }

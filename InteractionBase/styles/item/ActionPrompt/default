@@ -19,13 +19,14 @@
 		</backgroundBrush>
 	</shape>
 	<layout prototypes="layout/SequentialLayout/default">
-		<spaceBetweenElements>20</spaceBetweenElements>
+		<spaceBetweenElements>40</spaceBetweenElements>
 		<noInnerCursors>true</noInnerCursors>
 		<noBoundaryCursors>true</noBoundaryCursors>
 	</layout>
 	<actionsContainer prototypes="layout/SequentialLayout/default">
 		<noInnerCursors>true</noInnerCursors>
 		<noBoundaryCursors>true</noBoundaryCursors>
+		<spaceBetweenElements>20</spaceBetweenElements>
 	</actionsContainer>
 	<shortcutText prototypes="item/Text/default" />
 	<actionStyle prototypes="item/TextAndDescription/default">
@@ -33,6 +34,7 @@
 		<layout prototypes="layout/SequentialLayout/default">
 			<direction>0</direction>
 			<alignment>0</alignment>
+			<spaceBetweenElements>5</spaceBetweenElements>
 		</layout>
 	</actionStyle>
 </style>
