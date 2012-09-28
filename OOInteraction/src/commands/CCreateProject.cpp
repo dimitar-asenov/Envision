@@ -76,6 +76,7 @@ Interaction::CommandResult* CCreateProject::create(Visualization::Item* /*source
 		target->scene()->listenToModel(model);
 	}
 
+	target->setUpdateNeeded(Visualization::Item::StandardUpdate);
 	if (newModel) target->scene()->addPostEventAction(new Interaction::SetCursorEvent(target->scene(), project));
 	else target->scene()->addPostEventAction(new Interaction::SetCursorEvent(target, project));
 

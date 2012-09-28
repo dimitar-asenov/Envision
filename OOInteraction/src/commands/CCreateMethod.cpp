@@ -64,10 +64,11 @@ Interaction::CommandResult* CCreateMethod::create(Visualization::Item* /*source*
 	if (attributes.last() == "static") m->setStorageSpecifier(OOModel::StorageSpecifier::CLASS_VARIABLE);
 	else m->setStorageSpecifier(OOModel::StorageSpecifier::INSTANCE_VARIABLE);
 
-	cl->beginModification("create class");
+	cl->methods()->beginModification("create method");
 	cl->methods()->append(m);
-	cl->endModification();
+	cl->methods()->endModification();
 
+	target->setUpdateNeeded(Visualization::Item::StandardUpdate);
 	target->scene()->addPostEventAction(new Interaction::SetCursorEvent(target, m));
 
 	return new Interaction::CommandResult();

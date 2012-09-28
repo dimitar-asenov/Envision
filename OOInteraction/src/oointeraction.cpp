@@ -284,32 +284,28 @@ void OOInteraction::initializeActions()
 {
 	Interaction::Action::add<OOModel::Method>(new Interaction::Action("r","Create result",
 		Interaction::Action::ActionFunctionOnItem([](Visualization::Item* item){
-			auto vis = dynamic_cast<OOVisualization::VMethod*>(item);
-			if(vis)
+			auto node = static_cast<OOModel::Method*>(item->node());
+			if ( node->results()->size() == 0)
 			{
-				if ( vis->node()->results()->size() == 0)
-				{
-					vis->node()->beginModification("add result");
-					vis->node()->results()->append(new OOModel::FormalResult("", new OOModel::EmptyExpression()));
-					vis->node()->endModification();
-				}
-				vis->scene()->addPostEventAction(new Interaction::SetCursorEvent(vis, vis->node()->results()->first()));
+				node->beginModification("add result");
+				node->results()->append(new OOModel::FormalResult("", new OOModel::EmptyExpression()));
+				node->endModification();
 			}
+			item->setUpdateNeededForChildItem(Visualization::Item::StandardUpdate, node->results()->first());
+			item->scene()->addPostEventAction(new Interaction::SetCursorEvent(item, node->results()->first()));
 	})));
 
 	Interaction::Action::add<OOModel::Method>(new Interaction::Action("n","Create annotation",
 		Interaction::Action::ActionFunctionOnItem([](Visualization::Item* item){
-			auto vis = dynamic_cast<OOVisualization::VMethod*>(item);
-			if(vis)
+			auto node = static_cast<OOModel::Method*>(item->node());
+			if ( node->annotations()->size() == 0)
 			{
-				if ( vis->node()->annotations()->size() == 0)
-				{
-					vis->node()->beginModification("add annotation");
-					vis->node()->annotations()->append(new OOModel::ExpressionStatement(new OOModel::EmptyExpression()));
-					vis->node()->endModification();
-				}
-				vis->scene()->addPostEventAction(new Interaction::SetCursorEvent(vis, vis->node()->annotations()->first()));
+				node->beginModification("add annotation");
+				node->annotations()->append(new OOModel::ExpressionStatement(new OOModel::EmptyExpression()));
+				node->endModification();
 			}
+			item->setUpdateNeededForChildItem(Visualization::Item::StandardUpdate, node->annotations()->first());
+			item->scene()->addPostEventAction(new Interaction::SetCursorEvent(item, node->annotations()->first()));
 	})));
 }
 

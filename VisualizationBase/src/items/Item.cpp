@@ -105,6 +105,18 @@ void Item::setUpdateNeeded(UpdateType updateType)
 	}
 }
 
+void Item::setUpdateNeededForChildItem(UpdateType updateType, Model::Node* nodeVisualizedByChild)
+{
+	//TODO: Potentially quite expensive
+	Item* c{};
+	while (!c && nodeVisualizedByChild)
+	{
+		c = findVisualizationOf(nodeVisualizedByChild);
+		nodeVisualizedByChild = nodeVisualizedByChild->parent();
+	}
+	if (c) c->setUpdateNeeded(updateType);
+}
+
 Item::UpdateType Item::needsUpdate()
 {
 	return needsUpdate_;

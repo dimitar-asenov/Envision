@@ -97,6 +97,19 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		};
 		void setUpdateNeeded(UpdateType updateType);
 
+		/**
+		 * Finds the currently existing direct or indirect child Item that visualizes \a nodeVisualizedByChild and sets
+		 * it update status to \a updateType.
+		 *
+		 * If there is no child item which yet visualizes \a nodeVisualizedByChild then this method will search for the
+		 * Item which visualizes the parent of \a nodeVisualizedByChild. This will continue recursively until an existing
+		 * visualization of one of the ancestors of \a nodeVisualizedByChild is found.
+		 *
+		 * Use this method when a new node has been created and the a visualization needs to be updated in order to
+		 * display it.
+		 */
+		void setUpdateNeededForChildItem(UpdateType updateType, Model::Node* nodeVisualizedByChild);
+
 		virtual UpdateType needsUpdate();
 		virtual void updateSubtree();
 		virtual void changeGeometry(int availableWidth = 0, int availableHeight = 0);
