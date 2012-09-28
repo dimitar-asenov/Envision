@@ -112,13 +112,16 @@ void CreateNamedObjectWithAttributes::findParts(const QStringList& tokens, QStri
 	commandFound = false;
 	unknownFormat = false;
 
-	if (tokens.size() <= 2 + attributes_.size()) // 1 for name, 1 for comman and the rest for the number of attributes.
+	if (tokens.size() <= 2 + attributes_.size()) // 1 for name, 1 for command and the rest for the number of attributes.
 	{
+		int index = 0; // To keep track of how many tokens we've visited
 		for(QString t: tokens)
 		{
-			if (!name.isNull()) // The name should be the last argument
+			++index;
+			// If we've seen a command name and this is the last token, it is considered the name
+			if (commandFound && index == tokens.size())
 			{
-				unknownFormat = true;
+				name = t;
 				break;
 			}
 
@@ -129,9 +132,8 @@ void CreateNamedObjectWithAttributes::findParts(const QStringList& tokens, QStri
 			{
 				for (auto val : attrValues)
 				{
-					// Before the command keyword even a prefix of the attributes is enough.
-					// After the command keyword, anything which is not precise is considered the name.
-					if (commandFound ? t == val : val.startsWith(t))
+					// A prefix of the attributes is enough
+					if (val.startsWith(t))
 					{
 						*attr = val;
 						found = true;
@@ -142,11 +144,10 @@ void CreateNamedObjectWithAttributes::findParts(const QStringList& tokens, QStri
 				++attr;
 			}
 
-			// If this token was not recognized as an attribute try the command name or the object name
+			// If this token was not recognized as an attribute try the command name
 			if (!found)
 			{
 				if (commandName_.startsWith(t)) commandFound = true;
-				else if (commandFound) name = t;
 				else
 				{
 					unknownFormat = true;
