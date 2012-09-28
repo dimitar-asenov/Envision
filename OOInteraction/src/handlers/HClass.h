@@ -44,6 +44,8 @@ class OOINTERACTION_API HClass : public Interaction::GenericHandler {
 	protected:
 		HClass();
 
+		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event) override;
+
 	public:
 		static HClass* instance();
 };

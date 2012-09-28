@@ -49,4 +49,12 @@ HProject* HProject::instance()
 	return &h;
 }
 
+void HProject::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
+{
+	if (event->modifiers() == Qt::NoModifier && (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter))
+	{
+		showCommandPrompt(target);
+	}
+}
+
 } /* namespace OOInteraction */
