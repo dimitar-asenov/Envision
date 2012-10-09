@@ -120,7 +120,15 @@ Inheritance diagram for Interaction::HList:</div>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1HList.html#ac2662086f7862f8d9d8bd1a70dd77d9d">keyPressEvent</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *target, QKeyEvent *event)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1HList.html#a6a4c997992ccc8c53846e85391210622">keyPressEvent</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *target, QKeyEvent *event) override</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1HList.html#af6883aa62e359a53e142951d6169f307">removeAndSetCursor</a> (<a class="el" href="classVisualization_1_1VList.html">Visualization::VList</a> *list, int removeAt, bool setCursorDown, <a class="el" href="classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7">SetCursorEvent::CursorPlacement</a> howToSelectItem)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the item at position <em>removeAt</em> from <em>list</em> and sets the cursor inside the element below or above the removed one according to <em>setCursorDown</em> and <em>howToSelectItem</em>.  <a href="#af6883aa62e359a53e142951d6169f307"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1HList.html#ac63a0d898120ac9a1081b8dfd667510b">removeAndSetCursor</a> (<a class="el" href="classVisualization_1_1VList.html">Visualization::VList</a> *list, <a class="el" href="classModel_1_1Node.html">Model::Node</a> *removeNode, bool setCursorDown, <a class="el" href="classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7">SetCursorEvent::CursorPlacement</a> howToSelectItem)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1HList.html#ad7190703673cb93008da72388eb02d34">removeAndSetCursor</a> (<a class="el" href="classVisualization_1_1VList.html">Visualization::VList</a> *list, int removeAt)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the item at position <em>removeAt</em> from <em>list</em> and sets the cursor to the list cursor below or above the removed element as indicated by <em>setCursorDown</em>.  <a href="#ad7190703673cb93008da72388eb02d34"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1HList.html#a1841816a346bce56662dea0b89fcb326">removeAndSetCursor</a> (<a class="el" href="classVisualization_1_1VList.html">Visualization::VList</a> *list, <a class="el" href="classModel_1_1Node.html">Model::Node</a> *removeNode)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1HList.html#a93b19267da792a7b66c666b1f977148a">scheduleSetCursor</a> (<a class="el" href="classVisualization_1_1VList.html">Visualization::VList</a> *list, <a class="el" href="classModel_1_1Node.html">Model::Node</a> *listItemToSelect, <a class="el" href="classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7">SetCursorEvent::CursorPlacement</a> howToSelectItem)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1HList.html#a98b6962ccd1de48fd26c12313e888c85">scheduleSetCursor</a> (<a class="el" href="classVisualization_1_1VList.html">Visualization::VList</a> *list, int setCursorIndex)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classInteraction_1_1HList.html">HList</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1HList.html#a7faf8e50f7bc840f688329938a03d276">instance</a> ()</td></tr>
@@ -164,12 +172,12 @@ Protected Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ac2662086f7862f8d9d8bd1a70dd77d9d"></a><!-- doxytag: member="Interaction::HList::keyPressEvent" ref="ac2662086f7862f8d9d8bd1a70dd77d9d" args="(Visualization::Item *target, QKeyEvent *event)" -->
+<a class="anchor" id="a6a4c997992ccc8c53846e85391210622"></a><!-- doxytag: member="Interaction::HList::keyPressEvent" ref="a6a4c997992ccc8c53846e85391210622" args="(Visualization::Item *target, QKeyEvent *event) override" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classInteraction_1_1HList.html#ac2662086f7862f8d9d8bd1a70dd77d9d">Interaction::HList::keyPressEvent</a> </td>
+          <td class="memname">void <a class="el" href="classInteraction_1_1HList.html#a6a4c997992ccc8c53846e85391210622">Interaction::HList::keyPressEvent</a> </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *&#160;</td>
           <td class="paramname"><em>target</em>, </td>
@@ -183,13 +191,209 @@ Protected Member Functions</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td><code> [virtual]</code></td>
+          <td></td><td><code> [override, virtual]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
 <p>Reimplemented from <a class="el" href="classInteraction_1_1GenericHandler.html#a7d7a5a00bbaa255a7f8bad52403ec294">Interaction::GenericHandler</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af6883aa62e359a53e142951d6169f307"></a><!-- doxytag: member="Interaction::HList::removeAndSetCursor" ref="af6883aa62e359a53e142951d6169f307" args="(Visualization::VList *list, int removeAt, bool setCursorDown, SetCursorEvent::CursorPlacement howToSelectItem)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classInteraction_1_1HList.html#af6883aa62e359a53e142951d6169f307">Interaction::HList::removeAndSetCursor</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classVisualization_1_1VList.html">Visualization::VList</a> *&#160;</td>
+          <td class="paramname"><em>list</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>removeAt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>setCursorDown</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7">SetCursorEvent::CursorPlacement</a>&#160;</td>
+          <td class="paramname"><em>howToSelectItem</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Removes the item at position <em>removeAt</em> from <em>list</em> and sets the cursor inside the element below or above the removed one according to <em>setCursorDown</em> and <em>howToSelectItem</em>. </p>
+
+</div>
+</div>
+<a class="anchor" id="ac63a0d898120ac9a1081b8dfd667510b"></a><!-- doxytag: member="Interaction::HList::removeAndSetCursor" ref="ac63a0d898120ac9a1081b8dfd667510b" args="(Visualization::VList *list, Model::Node *removeNode, bool setCursorDown, SetCursorEvent::CursorPlacement howToSelectItem)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classInteraction_1_1HList.html#af6883aa62e359a53e142951d6169f307">Interaction::HList::removeAndSetCursor</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classVisualization_1_1VList.html">Visualization::VList</a> *&#160;</td>
+          <td class="paramname"><em>list</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td>
+          <td class="paramname"><em>removeNode</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>setCursorDown</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7">SetCursorEvent::CursorPlacement</a>&#160;</td>
+          <td class="paramname"><em>howToSelectItem</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ad7190703673cb93008da72388eb02d34"></a><!-- doxytag: member="Interaction::HList::removeAndSetCursor" ref="ad7190703673cb93008da72388eb02d34" args="(Visualization::VList *list, int removeAt)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classInteraction_1_1HList.html#af6883aa62e359a53e142951d6169f307">Interaction::HList::removeAndSetCursor</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classVisualization_1_1VList.html">Visualization::VList</a> *&#160;</td>
+          <td class="paramname"><em>list</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>removeAt</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Removes the item at position <em>removeAt</em> from <em>list</em> and sets the cursor to the list cursor below or above the removed element as indicated by <em>setCursorDown</em>. </p>
+
+</div>
+</div>
+<a class="anchor" id="a1841816a346bce56662dea0b89fcb326"></a><!-- doxytag: member="Interaction::HList::removeAndSetCursor" ref="a1841816a346bce56662dea0b89fcb326" args="(Visualization::VList *list, Model::Node *removeNode)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classInteraction_1_1HList.html#af6883aa62e359a53e142951d6169f307">Interaction::HList::removeAndSetCursor</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classVisualization_1_1VList.html">Visualization::VList</a> *&#160;</td>
+          <td class="paramname"><em>list</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td>
+          <td class="paramname"><em>removeNode</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a93b19267da792a7b66c666b1f977148a"></a><!-- doxytag: member="Interaction::HList::scheduleSetCursor" ref="a93b19267da792a7b66c666b1f977148a" args="(Visualization::VList *list, Model::Node *listItemToSelect, SetCursorEvent::CursorPlacement howToSelectItem)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classInteraction_1_1HList.html#a93b19267da792a7b66c666b1f977148a">Interaction::HList::scheduleSetCursor</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classVisualization_1_1VList.html">Visualization::VList</a> *&#160;</td>
+          <td class="paramname"><em>list</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td>
+          <td class="paramname"><em>listItemToSelect</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7">SetCursorEvent::CursorPlacement</a>&#160;</td>
+          <td class="paramname"><em>howToSelectItem</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a98b6962ccd1de48fd26c12313e888c85"></a><!-- doxytag: member="Interaction::HList::scheduleSetCursor" ref="a98b6962ccd1de48fd26c12313e888c85" args="(Visualization::VList *list, int setCursorIndex)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classInteraction_1_1HList.html#a93b19267da792a7b66c666b1f977148a">Interaction::HList::scheduleSetCursor</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classVisualization_1_1VList.html">Visualization::VList</a> *&#160;</td>
+          <td class="paramname"><em>list</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>setCursorIndex</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
 
 </div>
 </div>

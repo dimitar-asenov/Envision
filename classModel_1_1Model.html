@@ -100,9 +100,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="#signals">Signals</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="#pri-attribs">Private Attributes</a> &#124;
-<a href="#pri-static-attribs">Static Private Attributes</a>  </div>
+<a href="#pri-attribs">Private Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">Model::Model Class Reference</div>  </div>
 </div><!--header-->
@@ -155,6 +153,7 @@ Public Member Functions</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Ends a modification session.  <a href="#a995413407a52a23bea27ec69266e8074"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#a22bdbda92fbca40d55e3bfba4dfc64d7">load</a> (<a class="el" href="classModel_1_1PersistentStore.html">PersistentStore</a> *<a class="el" href="classModel_1_1Model.html#a3681a66d0ee5731c1f5e9f7135c2bfbb">store</a>, const QString &amp;<a class="el" href="classModel_1_1Model.html#ac3a70dce69b4d62cd902158aa7be56d0">name</a>)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads the current model tree from the specified persistent store.  <a href="#a22bdbda92fbca40d55e3bfba4dfc64d7"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1ModelManager.html">ModelManager</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#acc04869ab84d5924623c87618809657d">manager</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#ac3a70dce69b4d62cd902158aa7be56d0">name</a> ()</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the name of the model.  <a href="#ac3a70dce69b4d62cd902158aa7be56d0"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#a417d70c35fc6faaaf197076822e144ce">pushCommandOnUndoStack</a> (<a class="el" href="classModel_1_1UndoCommand.html">UndoCommand</a> *command)</td></tr>
@@ -179,12 +178,6 @@ Public Member Functions</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Undoes the commands executed in the previous modification block.  <a href="#af858da7a498955c10641f3e81014635b"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const QList&lt; <a class="el" href="classModel_1_1Reference.html">Reference</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#a40fce2a00530aeed64cfe9251d218230">unresolvedReferences</a> () const </td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a list of all loaded unresolved references in the model.  <a href="#a40fce2a00530aeed64cfe9251d218230"></a><br/></td></tr>
-<tr><td colspan="2"><h2><a name="pub-static-methods"></a>
-Static Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classModel_1_1Model.html">Model</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#afd52136ace3527cf0daafc5f01e4651d">findModel</a> (<a class="el" href="classModel_1_1Node.html">Node</a> *<a class="el" href="classModel_1_1Model.html#a0662c68a4b6d31308adf744e713b18ba">root</a>)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the model object that has as its root node the node indicated.  <a href="#afd52136ace3527cf0daafc5f01e4651d"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#a9acf820617e23bb26d4e200bab945df5">init</a> ()</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers types with the meta object system of Qt to allow signals and slots to work with lists.  <a href="#a9acf820617e23bb26d4e200bab945df5"></a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">QUndoStack&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#ac06e20eeee43092beea90b57af732a97">commands</a></td></tr>
@@ -215,10 +208,6 @@ Private Attributes</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">The persistent store where the model is currently stored.  <a href="#a605602e34387bc4f504ac89403d34b29"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="classModel_1_1Reference.html">Reference</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#af75f55ea27f7887f4683da678a425d65">unresolvedReferences_</a></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">A list of all unresolved references which are currently loaded nodes.  <a href="#af75f55ea27f7887f4683da678a425d65"></a><br/></td></tr>
-<tr><td colspan="2"><h2><a name="pri-static-attribs"></a>
-Static Private Attributes</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">static QList&lt; <a class="el" href="classModel_1_1Model.html">Model</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Model.html#a25f4d78e9be1e3c794f6fa2e08409cb8">loadedModels</a></td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">A list of all <a class="el" href="classModel_1_1Model.html" title="The Model class is a management and access entity for a program tree.">Model</a> objects that are currently instantiated.  <a href="#a25f4d78e9be1e3c794f6fa2e08409cb8"></a><br/></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>The <a class="el" href="classModel_1_1Model.html" title="The Model class is a management and access entity for a program tree.">Model</a> class is a management and access entity for a program tree. </p>
@@ -570,43 +559,6 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="afd52136ace3527cf0daafc5f01e4651d"></a><!-- doxytag: member="Model::Model::findModel" ref="afd52136ace3527cf0daafc5f01e4651d" args="(Node *root)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classModel_1_1Model.html">Model</a> * <a class="el" href="classModel_1_1Model.html#afd52136ace3527cf0daafc5f01e4651d">Model::Model::findModel</a> </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td>
-          <td class="paramname"><em>root</em></td><td>)</td>
-          <td><code> [static]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Returns the model object that has as its root node the node indicated. </p>
-
-</div>
-</div>
-<a class="anchor" id="a9acf820617e23bb26d4e200bab945df5"></a><!-- doxytag: member="Model::Model::init" ref="a9acf820617e23bb26d4e200bab945df5" args="()" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classModel_1_1Model.html#a9acf820617e23bb26d4e200bab945df5">Model::Model::init</a> </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td><code> [static]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Registers types with the meta object system of Qt to allow signals and slots to work with lists. </p>
-
-</div>
-</div>
 <a class="anchor" id="a22bdbda92fbca40d55e3bfba4dfc64d7"></a><!-- doxytag: member="Model::Model::load" ref="a22bdbda92fbca40d55e3bfba4dfc64d7" args="(PersistentStore *store, const QString &amp;name)" -->
 <div class="memitem">
 <div class="memproto">
@@ -642,6 +594,22 @@ Static Private Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a class="anchor" id="acc04869ab84d5924623c87618809657d"></a><!-- doxytag: member="Model::Model::manager" ref="acc04869ab84d5924623c87618809657d" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classModel_1_1ModelManager.html">ModelManager</a> &amp; <a class="el" href="classModel_1_1Model.html#acc04869ab84d5924623c87618809657d">Model::Model::manager</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const<code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
 
 </div>
 </div>
@@ -1103,22 +1071,6 @@ Static Private Attributes</h2></td></tr>
 <p>A ReadWrite lock used for exclusive writer or reader access. </p>
 <p>Writers always acquire this lock first and then proceed to acquire exactly one other lock corresponding to the access unit they want to write to.</p>
 <p>A reader that requires exclusive access (other readers can still read, but writers can not) can also acquire this lock. Typically however readers do not acquire this lock. </p>
-
-</div>
-</div>
-<a class="anchor" id="a25f4d78e9be1e3c794f6fa2e08409cb8"></a><!-- doxytag: member="Model::Model::loadedModels" ref="a25f4d78e9be1e3c794f6fa2e08409cb8" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">QList&lt; <a class="el" href="classModel_1_1Model.html">Model</a> * &gt; <a class="el" href="classModel_1_1Model.html#a25f4d78e9be1e3c794f6fa2e08409cb8">Model::Model::loadedModels</a><code> [static, private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>A list of all <a class="el" href="classModel_1_1Model.html" title="The Model class is a management and access entity for a program tree.">Model</a> objects that are currently instantiated. </p>
-<p>This is used to find the <a class="el" href="classModel_1_1Model.html" title="The Model class is a management and access entity for a program tree.">Model</a> corresponding to a particular root object. </p>
 
 </div>
 </div>

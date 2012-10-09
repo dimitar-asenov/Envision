@@ -121,10 +121,12 @@ Inheritance diagram for ControlFlowVisualization::ControlFlowVisualization:</div
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classControlFlowVisualization_1_1ControlFlowVisualization.html#a32301737423a06ce181c50b40e6f285b">initialize</a> (<a class="el" href="classCore_1_1EnvisionManager.html">Core::EnvisionManager</a> &amp;)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the plug-in.  <a href="#a32301737423a06ce181c50b40e6f285b"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classControlFlowVisualization_1_1ControlFlowVisualization.html#a6eb443100f0f58dd7d59126a3f25b00d">selfTest</a> (QString testid)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts the indicated self-test for this plug-in.  <a href="#a6eb443100f0f58dd7d59126a3f25b00d"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classControlFlowVisualization_1_1ControlFlowVisualization.html#ac5f0ae0f486636a7b898ab9804adf730">initialize</a> (<a class="el" href="classCore_1_1EnvisionManager.html">Core::EnvisionManager</a> &amp;) override</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the plug-in.  <a href="#ac5f0ae0f486636a7b898ab9804adf730"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classControlFlowVisualization_1_1ControlFlowVisualization.html#a35c5a173c254b4acab1d028e94e386af">selfTest</a> (QString testid) override</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts the indicated self-test for this plug-in.  <a href="#a35c5a173c254b4acab1d028e94e386af"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classControlFlowVisualization_1_1ControlFlowVisualization.html#aec9e4254a0ffa664fb4411c61aada138">unload</a> () override</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees up all resources allocated by this plug-in and prepares it to be unloaded.  <a href="#aec9e4254a0ffa664fb4411c61aada138"></a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classControlFlowVisualization_1_1ControlFlowVisualization.html#a3c48d129eadebae8071bdde183f58ad6">visualizationPurpose</a> ()</td></tr>
@@ -134,16 +136,16 @@ Static Public Member Functions</h2></td></tr>
 <p>The Envision core will use this interface to communicate with the plug-in. The plug-in will be initialized before any other operations are performed.</p>
 <p>The plug-in can use the supplied EnvisionManager object to find out more about the running environment. </p>
 </div><hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="a32301737423a06ce181c50b40e6f285b"></a><!-- doxytag: member="ControlFlowVisualization::ControlFlowVisualization::initialize" ref="a32301737423a06ce181c50b40e6f285b" args="(Core::EnvisionManager &amp;)" -->
+<a class="anchor" id="ac5f0ae0f486636a7b898ab9804adf730"></a><!-- doxytag: member="ControlFlowVisualization::ControlFlowVisualization::initialize" ref="ac5f0ae0f486636a7b898ab9804adf730" args="(Core::EnvisionManager &amp;) override" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classControlFlowVisualization_1_1ControlFlowVisualization.html#a32301737423a06ce181c50b40e6f285b">ControlFlowVisualization::ControlFlowVisualization::initialize</a> </td>
+          <td class="memname">bool <a class="el" href="classControlFlowVisualization_1_1ControlFlowVisualization.html#ac5f0ae0f486636a7b898ab9804adf730">ControlFlowVisualization::ControlFlowVisualization::initialize</a> </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classCore_1_1EnvisionManager.html">Core::EnvisionManager</a> &amp;&#160;</td>
           <td class="paramname"><em>manager</em></td><td>)</td>
-          <td><code> [virtual]</code></td>
+          <td><code> [override, virtual]</code></td>
         </tr>
       </table>
 </div>
@@ -163,16 +165,16 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a6eb443100f0f58dd7d59126a3f25b00d"></a><!-- doxytag: member="ControlFlowVisualization::ControlFlowVisualization::selfTest" ref="a6eb443100f0f58dd7d59126a3f25b00d" args="(QString testid)" -->
+<a class="anchor" id="a35c5a173c254b4acab1d028e94e386af"></a><!-- doxytag: member="ControlFlowVisualization::ControlFlowVisualization::selfTest" ref="a35c5a173c254b4acab1d028e94e386af" args="(QString testid) override" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classControlFlowVisualization_1_1ControlFlowVisualization.html#a6eb443100f0f58dd7d59126a3f25b00d">ControlFlowVisualization::ControlFlowVisualization::selfTest</a> </td>
+          <td class="memname">void <a class="el" href="classControlFlowVisualization_1_1ControlFlowVisualization.html#a35c5a173c254b4acab1d028e94e386af">ControlFlowVisualization::ControlFlowVisualization::selfTest</a> </td>
           <td>(</td>
           <td class="paramtype">QString&#160;</td>
           <td class="paramname"><em>testid</em></td><td>)</td>
-          <td><code> [virtual]</code></td>
+          <td><code> [override, virtual]</code></td>
         </tr>
       </table>
 </div>
@@ -192,6 +194,27 @@ Static Public Member Functions</h2></td></tr>
 </dl>
 
 <p>Implements <a class="el" href="classCore_1_1EnvisionPlugin.html#ac68c02acf86e553aa2a74629c456e6ea">Core::EnvisionPlugin</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aec9e4254a0ffa664fb4411c61aada138"></a><!-- doxytag: member="ControlFlowVisualization::ControlFlowVisualization::unload" ref="aec9e4254a0ffa664fb4411c61aada138" args="() override" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classControlFlowVisualization_1_1ControlFlowVisualization.html#aec9e4254a0ffa664fb4411c61aada138">ControlFlowVisualization::ControlFlowVisualization::unload</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [override, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Frees up all resources allocated by this plug-in and prepares it to be unloaded. </p>
+<p>This function is called when Envision is about to exit or when a plug-in has manually been unloaded. At the time when this function is called there will be no plug-ins dependent on this one. </p>
+
+<p>Implements <a class="el" href="classCore_1_1EnvisionPlugin.html#a819d63d8f0fc4ea07d692de66724cd54">Core::EnvisionPlugin</a>.</p>
 
 </div>
 </div>

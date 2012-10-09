@@ -8,12 +8,13 @@ var searchData=
   ['class',['Class',['../classOOModel_1_1Class.html#af685e62ee51cc6768fbd5863220f8670',1,'OOModel::Class']]],
   ['classtype_5f',['classType_',['../classVisualization_1_1StyleSet.html#a87e0597c85804ac58234143986958407',1,'Visualization::StyleSet']]],
   ['clipboard_5ftag',['CLIPBOARD_TAG',['../namespaceFilePersistence.html#a8c2706f92b6b1608e1fc73100e98de33',1,'FilePersistence']]],
-  ['collection',['collection',['../classOOVisualization_1_1VForEachStatement.html#accc60b11cc317cadb71bfe45b1979c30',1,'OOVisualization::VForEachStatement']]],
-  ['collection_5f',['collection_',['../classOOVisualization_1_1VForEachStatementStyle.html#a0a41e38bba4011b1580f747b872b790a',1,'OOVisualization::VForEachStatementStyle']]],
-  ['collectionbackground',['collectionBackground',['../classOOVisualization_1_1VForEachStatement.html#ac7e1aaca8934206d9413dadf003561b7',1,'OOVisualization::VForEachStatement']]],
+  ['collection_5f',['collection_',['../classOOVisualization_1_1VForEachStatement.html#af5114157d8e01e90f273408034ce6c79',1,'OOVisualization::VForEachStatement::collection_()'],['../classOOVisualization_1_1VForEachStatementStyle.html#a0a41e38bba4011b1580f747b872b790a',1,'OOVisualization::VForEachStatementStyle::collection_()']]],
+  ['collectionbackground_5f',['collectionBackground_',['../classOOVisualization_1_1VForEachStatement.html#ad88a1c3b83536a4e0b3bd7c5eeb90ebb',1,'OOVisualization::VForEachStatement']]],
   ['command',['command',['../classInteraction_1_1CommandPrompt.html#ae474e3b0a894495743b7f60f68c0ae99',1,'Interaction::CommandPrompt::command()'],['../classModel_1_1NameChange.html#aad69e1eda668bd500d4065d1b993f828',1,'Model::NameChange::command()']]],
   ['command_5freceiver_5fitem_5fmin_5fprompt_5fcenter_5fheight',['COMMAND_RECEIVER_ITEM_MIN_PROMPT_CENTER_HEIGHT',['../namespaceInteraction.html#a628973e366baa5addccd80f0e5b94eae',1,'Interaction']]],
   ['commanddescription',['commandDescription',['../classInteraction_1_1CommandSuggestion.html#a6e5e52126c1cbda6453f7a7a4d91c3b7',1,'Interaction::CommandSuggestion']]],
+  ['commandname_5f',['commandName_',['../classInteraction_1_1CreateNamedObjectWithAttributes.html#aaa477420fb5d398b4642cb6d18d1c6a8',1,'Interaction::CreateNamedObjectWithAttributes']]],
+  ['commandprompt_5f',['commandPrompt_',['../classInteraction_1_1GenericHandler.html#ae8c437ffd9d666bbe043305f363bef55',1,'Interaction::GenericHandler']]],
   ['commandreceiver_5f',['commandReceiver_',['../classInteraction_1_1CommandPrompt.html#ad7e87b540187ddcf121ac30a07e5b666',1,'Interaction::CommandPrompt']]],
   ['commands',['commands',['../classModel_1_1Model.html#ac06e20eeee43092beea90b57af732a97',1,'Model::Model::commands()'],['../classOOInteraction_1_1CommandDescriptor.html#a3578a2207613f0353bae62b5a0c5c676',1,'OOInteraction::CommandDescriptor::commands()']]],
   ['commandselectedfirst',['commandSelectedFirst',['../classInteraction_1_1CommandPrompt.html#af77f6e7c65d042b01d1cd5061856b8be',1,'Interaction::CommandPrompt']]],
@@ -41,8 +42,7 @@ var searchData=
   ['currentitemposition',['currentItemPosition',['../classInteraction_1_1HPositionLayout.html#a9bb1048e7aecddd0cd04515d2962e67c',1,'Interaction::HPositionLayout']]],
   ['currentmodificationlock',['currentModificationLock',['../classModel_1_1Model.html#a7f2537d9534d42fa876089c601b809b9',1,'Model::Model']]],
   ['currentmodificationtarget',['currentModificationTarget',['../classModel_1_1Model.html#a2a9ccf2a9ed7591c5a0728512506ace8',1,'Model::Model']]],
-  ['cursor_5f',['cursor_',['../classVisualization_1_1ItemRegion.html#a6641c51085727c5e9e75582963d9cb7a',1,'Visualization::ItemRegion']]],
+  ['cursor_5f',['cursor_',['../classVisualization_1_1CursorShapeItem.html#a1c4735cd48ab0fee1ec44ecbc40b04f0',1,'Visualization::CursorShapeItem::cursor_()'],['../classVisualization_1_1ItemRegion.html#a6641c51085727c5e9e75582963d9cb7a',1,'Visualization::ItemRegion::cursor_()']]],
   ['cursormoveorientation_5f',['cursorMoveOrientation_',['../classInteraction_1_1GenericHandler.html#a4f2c4fc5bcbd25872fc86372d10e4449',1,'Interaction::GenericHandler']]],
-  ['cursororiginmidpoint_5f',['cursorOriginMidPoint_',['../classInteraction_1_1GenericHandler.html#a2311d7d78a49b581e3c61d740132b043',1,'Interaction::GenericHandler']]],
-  ['cursors_5f',['cursors_',['../classVisualization_1_1Scene.html#a3cbb61f47f9258d341e92cd6fe470bc9',1,'Visualization::Scene']]]
+  ['cursororiginmidpoint_5f',['cursorOriginMidPoint_',['../classInteraction_1_1GenericHandler.html#a2311d7d78a49b581e3c61d740132b043',1,'Interaction::GenericHandler']]]
 ];

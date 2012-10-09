@@ -9,6 +9,7 @@ var searchData=
   ['model',['Model',['../classModel_1_1Model.html',1,'Model']]],
   ['modelbase',['ModelBase',['../classModel_1_1ModelBase.html',1,'Model']]],
   ['modelexception',['ModelException',['../classModel_1_1ModelException.html',1,'Model']]],
+  ['modelmanager',['ModelManager',['../classModel_1_1ModelManager.html',1,'Model']]],
   ['modelrenderer',['ModelRenderer',['../classVisualization_1_1ModelRenderer.html',1,'Visualization']]],
   ['module',['Module',['../classOOModel_1_1Module.html',1,'OOModel']]]
 ];

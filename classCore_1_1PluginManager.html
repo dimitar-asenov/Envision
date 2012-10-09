@@ -112,6 +112,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1PluginManager.html#ada1a85aba0865068dc3fab33ad9fb602">PluginManager</a> (QString path=&quot;plugins/&quot;)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new plug-in manager and reads the metadata files of all plug-ins in the specified plug-in folder.  <a href="#ada1a85aba0865068dc3fab33ad9fb602"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1PluginManager.html#a3cc5fbd601faf33d18a14e89afd25c20">~PluginManager</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Unloads all plug-ins.  <a href="#a3cc5fbd601faf33d18a14e89afd25c20"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="structCore_1_1PluginInfo.html">PluginInfo</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1PluginManager.html#a5e5890c4c5c203a82805e1b0ff73ae80">getAllLoadedPluginsInfo</a> ()</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a list containing copies of the metadata for all plug-ins which are currently loaded in the system.  <a href="#a5e5890c4c5c203a82805e1b0ff73ae80"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCore_1_1EnvisionPlugin.html">EnvisionPlugin</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1PluginManager.html#a91a40874bd6997eec2cfe9d53a5565a6">getLoadedPluginInterface</a> (QString pluginId)</td></tr>
@@ -120,6 +122,8 @@ Public Member Functions</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the specified plugin is loaded.  <a href="#a5238cbaecec576bd03b7aac3997bb461"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1PluginManager.html#ae22795d6cdb28f25ff6f0a3b17a1c16c">loadAllPlugins</a> (<a class="el" href="classCore_1_1EnvisionManager.html">EnvisionManager</a> &amp;)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads and initializes all plug-ins found in the plug-ins folder.  <a href="#ae22795d6cdb28f25ff6f0a3b17a1c16c"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1PluginManager.html#a5a2e01a4ffeb0ccfeed8f5a547b9f3ca">unloadAllPlugins</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Unloads all currently loaded plug-ins.  <a href="#a5a2e01a4ffeb0ccfeed8f5a547b9f3ca"></a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1PluginManager.html#a96c307b0cd362cca0ef8dc93d3a9dd42">getLibraryFileName</a> (const QString pluginId)</td></tr>
@@ -150,6 +154,24 @@ Private Attributes</h2></td></tr>
 <div class="memdoc">
 
 <p>Creates a new plug-in manager and reads the metadata files of all plug-ins in the specified plug-in folder. </p>
+
+</div>
+</div>
+<a class="anchor" id="a3cc5fbd601faf33d18a14e89afd25c20"></a><!-- doxytag: member="Core::PluginManager::~PluginManager" ref="a3cc5fbd601faf33d18a14e89afd25c20" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classCore_1_1PluginManager.html#a3cc5fbd601faf33d18a14e89afd25c20">Core::PluginManager::~PluginManager</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Unloads all plug-ins. </p>
 
 </div>
 </div>
@@ -278,6 +300,25 @@ Private Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a5a2e01a4ffeb0ccfeed8f5a547b9f3ca"></a><!-- doxytag: member="Core::PluginManager::unloadAllPlugins" ref="a5a2e01a4ffeb0ccfeed8f5a547b9f3ca" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classCore_1_1PluginManager.html#a5a2e01a4ffeb0ccfeed8f5a547b9f3ca">Core::PluginManager::unloadAllPlugins</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Unloads all currently loaded plug-ins. </p>
+<p>Before a plug-in is unloaded it's unload() method will be called giving the plug-in a chance to clean up. </p>
 
 </div>
 </div>

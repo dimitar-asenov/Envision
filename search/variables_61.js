@@ -1,9 +1,17 @@
 var searchData=
 [
   ['accesslock_5f',['accessLock_',['../classTestNodes_1_1BinaryNodeAccessUnit.html#ab0138286d461683d75f9ef032e5a0d8f',1,'TestNodes::BinaryNodeAccessUnit']]],
+  ['actiononitem_5f',['actionOnItem_',['../classInteraction_1_1Action.html#abcfee8b9c13c46831345327a68f1674c',1,'Interaction::Action']]],
+  ['actiononnode_5f',['actionOnNode_',['../classInteraction_1_1Action.html#aef1feb1c4582d3ea90deaab3589bc5a5',1,'Interaction::Action']]],
+  ['actionprompt_5f',['actionPrompt_',['../classInteraction_1_1GenericHandler.html#a6ad8539ce953a5d6a512045bbe95f469',1,'Interaction::GenericHandler']]],
+  ['actionreceiver_5f',['actionReceiver_',['../classInteraction_1_1ActionPrompt.html#ad3ff2b892c338e912b05f88b40a0c702',1,'Interaction::ActionPrompt']]],
+  ['actionscontainer_5f',['actionsContainer_',['../classInteraction_1_1ActionPrompt.html#a72df52de21b8b73cb61cfd52b060d26d',1,'Interaction::ActionPrompt::actionsContainer_()'],['../classInteraction_1_1ActionPromptStyle.html#a829e43c705a94ce98f92c71facbaba40',1,'Interaction::ActionPromptStyle::actionsContainer_()']]],
+  ['actionstyle_5f',['actionStyle_',['../classInteraction_1_1ActionPromptStyle.html#a5dd2b34c397987bd6eea717180c32300',1,'Interaction::ActionPromptStyle']]],
+  ['actiontext_5f',['actionText_',['../classInteraction_1_1ActionPrompt.html#abe5d5bc9bbb39ee5bb055108851af516',1,'Interaction::ActionPrompt']]],
   ['addonitems_5f',['addOnItems_',['../classVisualization_1_1Item.html#a9beeaf1dfeb9d2d4251a635963a31ef5',1,'Visualization::Item']]],
   ['addons_5f',['addons_',['../classOOVisualization_1_1VMethod.html#a7c0104ce3554b7c77354efeb343ed1d2',1,'OOVisualization::VMethod::addons_()'],['../classOOVisualization_1_1VMethodStyle.html#ac4df905f625c9e540b289d722292fb1c',1,'OOVisualization::VMethodStyle::addons_()']]],
   ['alignment_5f',['alignment_',['../classVisualization_1_1PanelLayoutStyle.html#a7688af468e273863caf3cf03e806cb62',1,'Visualization::PanelLayoutStyle::alignment_()'],['../classVisualization_1_1SequentialLayoutStyle.html#a41e4ba5ac22abd2b8b4e219336fff49a',1,'Visualization::SequentialLayoutStyle::alignment_()']]],
+  ['allowequivalentcursorsthroughboundary_5f',['allowEquivalentCursorsThroughBoundary_',['../classVisualization_1_1ItemStyle.html#a5c776fafece1df4739ed6a68ba335590',1,'Visualization::ItemStyle']]],
   ['amount_5f',['amount_',['../classOOVisualization_1_1VNewExpression.html#a8ddc8de08bfbceeb9d6389b1f2369c01',1,'OOVisualization::VNewExpression']]],
   ['annotations_5f',['annotations_',['../classOOVisualization_1_1VClass.html#a38386b9f93ebcf99231adbcb43b507ec',1,'OOVisualization::VClass::annotations_()'],['../classOOVisualization_1_1VClassStyle.html#a0f28c7dd407992746c96629760e99919',1,'OOVisualization::VClassStyle::annotations_()'],['../classOOVisualization_1_1VMethod.html#affd4dc3dcf57f53899c516a05668338e',1,'OOVisualization::VMethod::annotations_()'],['../classOOVisualization_1_1VMethodStyle.html#af7339473e6a264def868016ca97445f4',1,'OOVisualization::VMethodStyle::annotations_()']]],
   ['arg_5f',['arg_',['../classOOVisualization_1_1VErrorExpression.html#ad5b0f88a4ae90d5e83f6e492bb113be7',1,'OOVisualization::VErrorExpression']]],
@@ -17,5 +25,7 @@ var searchData=
   ['attribute_5ftrue',['ATTRIBUTE_TRUE',['../namespaceFilePersistence.html#a8c0b6de0db0563a6a33a10baae6eb86e',1,'FilePersistence']]],
   ['attributeindex',['attributeIndex',['../classModel_1_1ExtendedNodeChild.html#aebe88a81ec50b8e17805499af14387db',1,'Model::ExtendedNodeChild']]],
   ['attributes',['attributes',['../classVisualization_1_1VExtendable.html#a3e88e6e07fdaa47c9875756ec4da77e1',1,'Visualization::VExtendable']]],
-  ['attributesstyle_5f',['attributesStyle_',['../classVisualization_1_1VExtendableStyle.html#af23519a9d70714e9ed1bb607da42c21d',1,'Visualization::VExtendableStyle']]]
+  ['attributes_5f',['attributes_',['../classInteraction_1_1CreateNamedObjectWithAttributes.html#a8e039721f6f8678c5da7c283a5db04e2',1,'Interaction::CreateNamedObjectWithAttributes']]],
+  ['attributesstyle_5f',['attributesStyle_',['../classVisualization_1_1VExtendableStyle.html#af23519a9d70714e9ed1bb607da42c21d',1,'Visualization::VExtendableStyle']]],
+  ['autoexecuteaction_5f',['autoExecuteAction_',['../classInteraction_1_1ActionPrompt.html#a0434f3ed7220ffa7663d27da6f3fb00c',1,'Interaction::ActionPrompt']]]
 ];

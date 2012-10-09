@@ -120,26 +120,28 @@ Inheritance diagram for ContractsLibrary::ContractsLibrary:</div>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classContractsLibrary_1_1ContractsLibrary.html#a3f3b1f65d752b38319fe1c4d24f74b8d">initialize</a> (<a class="el" href="classCore_1_1EnvisionManager.html">Core::EnvisionManager</a> &amp;)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the plug-in.  <a href="#a3f3b1f65d752b38319fe1c4d24f74b8d"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classContractsLibrary_1_1ContractsLibrary.html#a2c4405d158b95dd54a3ab7b256822459">selfTest</a> (QString testid)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts the indicated self-test for this plug-in.  <a href="#a2c4405d158b95dd54a3ab7b256822459"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classContractsLibrary_1_1ContractsLibrary.html#aecf8f2b3cec2317da4fc597d53eec3dd">initialize</a> (<a class="el" href="classCore_1_1EnvisionManager.html">Core::EnvisionManager</a> &amp;) override</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the plug-in.  <a href="#aecf8f2b3cec2317da4fc597d53eec3dd"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classContractsLibrary_1_1ContractsLibrary.html#a7461eec5f26818a827edc542b49bfe81">selfTest</a> (QString testid) override</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts the indicated self-test for this plug-in.  <a href="#a7461eec5f26818a827edc542b49bfe81"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classContractsLibrary_1_1ContractsLibrary.html#a38c48e2cdb5f73d3e309fddf443d113b">unload</a> () override</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees up all resources allocated by this plug-in and prepares it to be unloaded.  <a href="#a38c48e2cdb5f73d3e309fddf443d113b"></a><br/></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Implements the interface between the <a class="el" href="classContractsLibrary_1_1ContractsLibrary.html" title="Implements the interface between the ContractsLibrary plug-in and Envision.">ContractsLibrary</a> plug-in and Envision. </p>
 <p>The Envision core will use this interface to communicate with the plug-in. The plug-in will be initialized before any other operations are performed.</p>
 <p>The plug-in can use the supplied EnvisionManager object to find out more about the running environment. </p>
 </div><hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="a3f3b1f65d752b38319fe1c4d24f74b8d"></a><!-- doxytag: member="ContractsLibrary::ContractsLibrary::initialize" ref="a3f3b1f65d752b38319fe1c4d24f74b8d" args="(Core::EnvisionManager &amp;)" -->
+<a class="anchor" id="aecf8f2b3cec2317da4fc597d53eec3dd"></a><!-- doxytag: member="ContractsLibrary::ContractsLibrary::initialize" ref="aecf8f2b3cec2317da4fc597d53eec3dd" args="(Core::EnvisionManager &amp;) override" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classContractsLibrary_1_1ContractsLibrary.html#a3f3b1f65d752b38319fe1c4d24f74b8d">ContractsLibrary::ContractsLibrary::initialize</a> </td>
+          <td class="memname">bool <a class="el" href="classContractsLibrary_1_1ContractsLibrary.html#aecf8f2b3cec2317da4fc597d53eec3dd">ContractsLibrary::ContractsLibrary::initialize</a> </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classCore_1_1EnvisionManager.html">Core::EnvisionManager</a> &amp;&#160;</td>
           <td class="paramname"><em>manager</em></td><td>)</td>
-          <td><code> [virtual]</code></td>
+          <td><code> [override, virtual]</code></td>
         </tr>
       </table>
 </div>
@@ -159,16 +161,16 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a2c4405d158b95dd54a3ab7b256822459"></a><!-- doxytag: member="ContractsLibrary::ContractsLibrary::selfTest" ref="a2c4405d158b95dd54a3ab7b256822459" args="(QString testid)" -->
+<a class="anchor" id="a7461eec5f26818a827edc542b49bfe81"></a><!-- doxytag: member="ContractsLibrary::ContractsLibrary::selfTest" ref="a7461eec5f26818a827edc542b49bfe81" args="(QString testid) override" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classContractsLibrary_1_1ContractsLibrary.html#a2c4405d158b95dd54a3ab7b256822459">ContractsLibrary::ContractsLibrary::selfTest</a> </td>
+          <td class="memname">void <a class="el" href="classContractsLibrary_1_1ContractsLibrary.html#a7461eec5f26818a827edc542b49bfe81">ContractsLibrary::ContractsLibrary::selfTest</a> </td>
           <td>(</td>
           <td class="paramtype">QString&#160;</td>
           <td class="paramname"><em>testid</em></td><td>)</td>
-          <td><code> [virtual]</code></td>
+          <td><code> [override, virtual]</code></td>
         </tr>
       </table>
 </div>
@@ -188,6 +190,27 @@ Public Member Functions</h2></td></tr>
 </dl>
 
 <p>Implements <a class="el" href="classCore_1_1EnvisionPlugin.html#ac68c02acf86e553aa2a74629c456e6ea">Core::EnvisionPlugin</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a38c48e2cdb5f73d3e309fddf443d113b"></a><!-- doxytag: member="ContractsLibrary::ContractsLibrary::unload" ref="a38c48e2cdb5f73d3e309fddf443d113b" args="() override" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classContractsLibrary_1_1ContractsLibrary.html#a38c48e2cdb5f73d3e309fddf443d113b">ContractsLibrary::ContractsLibrary::unload</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [override, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Frees up all resources allocated by this plug-in and prepares it to be unloaded. </p>
+<p>This function is called when Envision is about to exit or when a plug-in has manually been unloaded. At the time when this function is called there will be no plug-ins dependent on this one. </p>
+
+<p>Implements <a class="el" href="classCore_1_1EnvisionPlugin.html#a819d63d8f0fc4ea07d692de66724cd54">Core::EnvisionPlugin</a>.</p>
 
 </div>
 </div>

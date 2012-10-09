@@ -98,7 +98,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="header">
   <div class="summary">
-<a href="#pub-methods">Public Member Functions</a>  </div>
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a>  </div>
   <div class="headertitle">
 <div class="title">OOInteraction::OOInteraction Class Reference</div>  </div>
 </div><!--header-->
@@ -120,26 +121,31 @@ Inheritance diagram for OOInteraction::OOInteraction:</div>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOInteraction_1_1OOInteraction.html#aca3b6ed735b34d658a5809d3d3fdefcf">initialize</a> (<a class="el" href="classCore_1_1EnvisionManager.html">Core::EnvisionManager</a> &amp;)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the plug-in.  <a href="#aca3b6ed735b34d658a5809d3d3fdefcf"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOInteraction_1_1OOInteraction.html#a7ee0bb3bffbe652f65b62a6c4eab8008">selfTest</a> (QString testid)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts the indicated self-test for this plug-in.  <a href="#a7ee0bb3bffbe652f65b62a6c4eab8008"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOInteraction_1_1OOInteraction.html#ad55a70076d44074909e43be1a82b4ee8">initialize</a> (<a class="el" href="classCore_1_1EnvisionManager.html">Core::EnvisionManager</a> &amp;) override</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the plug-in.  <a href="#ad55a70076d44074909e43be1a82b4ee8"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOInteraction_1_1OOInteraction.html#a486f9e67f6aa4d10cffe2161d421558b">selfTest</a> (QString testid) override</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts the indicated self-test for this plug-in.  <a href="#a486f9e67f6aa4d10cffe2161d421558b"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOInteraction_1_1OOInteraction.html#a9872ccf98e207a393f39e78a4daede3a">unload</a> () override</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees up all resources allocated by this plug-in and prepares it to be unloaded.  <a href="#a9872ccf98e207a393f39e78a4daede3a"></a><br/></td></tr>
+<tr><td colspan="2"><h2><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOInteraction_1_1OOInteraction.html#a2591f92d6993613a8da0778ed5ef8cc0">initializeActions</a> ()</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Implements the interface between the <a class="el" href="classOOInteraction_1_1OOInteraction.html" title="Implements the interface between the OOInteraction plug-in and Envision.">OOInteraction</a> plug-in and Envision. </p>
 <p>The Envision core will use this interface to communicate with the plug-in. The plug-in will be initialized before any other operations are performed.</p>
 <p>The plug-in can use the supplied EnvisionManager object to find out more about the running environment. </p>
 </div><hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="aca3b6ed735b34d658a5809d3d3fdefcf"></a><!-- doxytag: member="OOInteraction::OOInteraction::initialize" ref="aca3b6ed735b34d658a5809d3d3fdefcf" args="(Core::EnvisionManager &amp;)" -->
+<a class="anchor" id="ad55a70076d44074909e43be1a82b4ee8"></a><!-- doxytag: member="OOInteraction::OOInteraction::initialize" ref="ad55a70076d44074909e43be1a82b4ee8" args="(Core::EnvisionManager &amp;) override" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classOOInteraction_1_1OOInteraction.html#aca3b6ed735b34d658a5809d3d3fdefcf">OOInteraction::OOInteraction::initialize</a> </td>
+          <td class="memname">bool <a class="el" href="classOOInteraction_1_1OOInteraction.html#ad55a70076d44074909e43be1a82b4ee8">OOInteraction::OOInteraction::initialize</a> </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classCore_1_1EnvisionManager.html">Core::EnvisionManager</a> &amp;&#160;</td>
           <td class="paramname"><em>manager</em></td><td>)</td>
-          <td><code> [virtual]</code></td>
+          <td><code> [override, virtual]</code></td>
         </tr>
       </table>
 </div>
@@ -159,16 +165,32 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a7ee0bb3bffbe652f65b62a6c4eab8008"></a><!-- doxytag: member="OOInteraction::OOInteraction::selfTest" ref="a7ee0bb3bffbe652f65b62a6c4eab8008" args="(QString testid)" -->
+<a class="anchor" id="a2591f92d6993613a8da0778ed5ef8cc0"></a><!-- doxytag: member="OOInteraction::OOInteraction::initializeActions" ref="a2591f92d6993613a8da0778ed5ef8cc0" args="()" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classOOInteraction_1_1OOInteraction.html#a7ee0bb3bffbe652f65b62a6c4eab8008">OOInteraction::OOInteraction::selfTest</a> </td>
+          <td class="memname">void <a class="el" href="classOOInteraction_1_1OOInteraction.html#a2591f92d6993613a8da0778ed5ef8cc0">OOInteraction::OOInteraction::initializeActions</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a486f9e67f6aa4d10cffe2161d421558b"></a><!-- doxytag: member="OOInteraction::OOInteraction::selfTest" ref="a486f9e67f6aa4d10cffe2161d421558b" args="(QString testid) override" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classOOInteraction_1_1OOInteraction.html#a486f9e67f6aa4d10cffe2161d421558b">OOInteraction::OOInteraction::selfTest</a> </td>
           <td>(</td>
           <td class="paramtype">QString&#160;</td>
           <td class="paramname"><em>testid</em></td><td>)</td>
-          <td><code> [virtual]</code></td>
+          <td><code> [override, virtual]</code></td>
         </tr>
       </table>
 </div>
@@ -188,6 +210,27 @@ Public Member Functions</h2></td></tr>
 </dl>
 
 <p>Implements <a class="el" href="classCore_1_1EnvisionPlugin.html#ac68c02acf86e553aa2a74629c456e6ea">Core::EnvisionPlugin</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a9872ccf98e207a393f39e78a4daede3a"></a><!-- doxytag: member="OOInteraction::OOInteraction::unload" ref="a9872ccf98e207a393f39e78a4daede3a" args="() override" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classOOInteraction_1_1OOInteraction.html#a9872ccf98e207a393f39e78a4daede3a">OOInteraction::OOInteraction::unload</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [override, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Frees up all resources allocated by this plug-in and prepares it to be unloaded. </p>
+<p>This function is called when Envision is about to exit or when a plug-in has manually been unloaded. At the time when this function is called there will be no plug-ins dependent on this one. </p>
+
+<p>Implements <a class="el" href="classCore_1_1EnvisionPlugin.html#a819d63d8f0fc4ea07d692de66724cd54">Core::EnvisionPlugin</a>.</p>
 
 </div>
 </div>

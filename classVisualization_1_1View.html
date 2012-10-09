@@ -98,7 +98,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="header">
   <div class="summary">
-<a href="#pub-methods">Public Member Functions</a>  </div>
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">Visualization::View Class Reference</div>  </div>
 </div><!--header-->
@@ -121,7 +123,14 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1View.html#a6dd4ede9f63e948fa9e0f04ec6bb42fe">View</a> (<a class="el" href="classVisualization_1_1Scene.html">Scene</a> *<a class="el" href="classVisualization_1_1View.html#a3232cc50c8d97095bda12062add92ebf">scene</a>, <a class="el" href="classVisualization_1_1View.html">View</a> *parent=nullptr)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1View.html#af25e5fb228781467fc5d05c6a73dcf98">~View</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1Scene.html">Scene</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1View.html#a3232cc50c8d97095bda12062add92ebf">scene</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1View.html#a7cdf5dd49475669b00a47f77fbf3e82e">setHiddenItemCategories</a> (Scene::ItemCategories hidden=<a class="el" href="classVisualization_1_1Scene.html#a493e1d97eee55349fc377f1f4f3abcddae2fded1b936d8e5165b4b40f0af738dd">Scene::NoItemCategory</a>)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">QRectF&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1View.html#aebbed643ce1a62c716a52b39d1d88fe9">visibleRect</a> ()</td></tr>
+<tr><td colspan="2"><h2><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1View.html#a8e41c4fb64f1f3c02c96197f2e2beaec">paintEvent</a> (QPaintEvent *event) override</td></tr>
+<tr><td colspan="2"><h2><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Scene::ItemCategories&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1View.html#a1012514139ed4db95f36d8f5df65d62c">hiddenItemCategories_</a></td></tr>
 </table>
 <hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a6dd4ede9f63e948fa9e0f04ec6bb42fe"></a><!-- doxytag: member="Visualization::View::View" ref="a6dd4ede9f63e948fa9e0f04ec6bb42fe" args="(Scene *scene, View *parent=nullptr)" -->
@@ -168,6 +177,25 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="a8e41c4fb64f1f3c02c96197f2e2beaec"></a><!-- doxytag: member="Visualization::View::paintEvent" ref="a8e41c4fb64f1f3c02c96197f2e2beaec" args="(QPaintEvent *event) override" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classVisualization_1_1View.html#a8e41c4fb64f1f3c02c96197f2e2beaec">Visualization::View::paintEvent</a> </td>
+          <td>(</td>
+          <td class="paramtype">QPaintEvent *&#160;</td>
+          <td class="paramname"><em>event</em></td><td>)</td>
+          <td><code> [override, protected, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Reimplemented in <a class="el" href="classVisualization_1_1MiniMap.html#a27f2eb994fb9e0a11734752b5a8f8372">Visualization::MiniMap</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a3232cc50c8d97095bda12062add92ebf"></a><!-- doxytag: member="Visualization::View::scene" ref="a3232cc50c8d97095bda12062add92ebf" args="()" -->
 <div class="memitem">
 <div class="memproto">
@@ -184,6 +212,23 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a7cdf5dd49475669b00a47f77fbf3e82e"></a><!-- doxytag: member="Visualization::View::setHiddenItemCategories" ref="a7cdf5dd49475669b00a47f77fbf3e82e" args="(Scene::ItemCategories hidden=Scene::NoItemCategory)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classVisualization_1_1View.html#a7cdf5dd49475669b00a47f77fbf3e82e">Visualization::View::setHiddenItemCategories</a> </td>
+          <td>(</td>
+          <td class="paramtype">Scene::ItemCategories&#160;</td>
+          <td class="paramname"><em>hidden</em> = <code><a class="el" href="classVisualization_1_1Scene.html#a493e1d97eee55349fc377f1f4f3abcddae2fded1b936d8e5165b4b40f0af738dd">Scene::NoItemCategory</a></code></td><td>)</td>
+          <td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="aebbed643ce1a62c716a52b39d1d88fe9"></a><!-- doxytag: member="Visualization::View::visibleRect" ref="aebbed643ce1a62c716a52b39d1d88fe9" args="()" -->
 <div class="memitem">
 <div class="memproto">
@@ -193,6 +238,20 @@ Public Member Functions</h2></td></tr>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<hr/><h2>Member Data Documentation</h2>
+<a class="anchor" id="a1012514139ed4db95f36d8f5df65d62c"></a><!-- doxytag: member="Visualization::View::hiddenItemCategories_" ref="a1012514139ed4db95f36d8f5df65d62c" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Scene::ItemCategories <a class="el" href="classVisualization_1_1View.html#a1012514139ed4db95f36d8f5df65d62c">Visualization::View::hiddenItemCategories_</a><code> [private]</code></td>
         </tr>
       </table>
 </div>

@@ -98,10 +98,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
-<a href="#pri-methods">Private Member Functions</a>  </div>
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">OOInteraction::HExpression Class Reference</div>  </div>
 </div><!--header-->
@@ -119,8 +121,13 @@ Inheritance diagram for OOInteraction::HExpression:</div>
 
 <p><a href="classOOInteraction_1_1HExpression-members.html">List of all members.</a></p>
 <table class="memberdecls">
+<tr><td colspan="2"><h2><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">typedef std::function&lt; void(<a class="el" href="classOOModel_1_1Expression.html">OOModel::Expression</a> <br class="typebreak"/>
+*&amp;, int &amp;)&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOInteraction_1_1HExpression.html#a9e458808a4c5c0de884f4763866d43ce">ExpressionChangeMonitorFunction</a> )</td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOInteraction_1_1HExpression.html#a87c0582740b664bd38535a6448865410">appendExpressionMonitor</a> (<a class="el" href="classOOInteraction_1_1HExpression.html#a9e458808a4c5c0de884f4763866d43ce">ExpressionChangeMonitorFunction</a> monitor)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOInteraction_1_1HExpression.html#a5401a7232846a890670939d68c51df71">keyPressEvent</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *target, QKeyEvent *event)</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -136,7 +143,25 @@ Private Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOInteraction_1_1HExpression.html#ad0a1fa9467c7cd13e5cbd9c2c1db301e">showAutoComplete</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *target)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOInteraction_1_1HExpression.html#a109360706ef512078534c2b73566f5b7">stringInfo</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *target, Qt::Key key, QString &amp;str, int &amp;index)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOInteraction_1_1HExpression.html#ade1d6c92bb3baf2191b58c6dc728a643">toggleAutoComplete</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *target)</td></tr>
+<tr><td colspan="2"><h2><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QList<br class="typebreak"/>
+&lt; <a class="el" href="classOOInteraction_1_1HExpression.html#a9e458808a4c5c0de884f4763866d43ce">ExpressionChangeMonitorFunction</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOInteraction_1_1HExpression.html#a142fe868dbd62ad3e50fbb7fedbf0672">expressionMonitors_</a></td></tr>
 </table>
+<hr/><h2>Member Typedef Documentation</h2>
+<a class="anchor" id="a9e458808a4c5c0de884f4763866d43ce"></a><!-- doxytag: member="OOInteraction::HExpression::ExpressionChangeMonitorFunction" ref="a9e458808a4c5c0de884f4763866d43ce" args=")" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef std::function&lt;void (<a class="el" href="classOOModel_1_1Expression.html">OOModel::Expression</a>*&amp;, int&amp;) <a class="el" href="classOOInteraction_1_1HExpression.html#a9e458808a4c5c0de884f4763866d43ce">OOInteraction::HExpression::ExpressionChangeMonitorFunction</a>)</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
 <hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a4d961651027d1eb89ec812432e09ae5b"></a><!-- doxytag: member="OOInteraction::HExpression::HExpression" ref="a4d961651027d1eb89ec812432e09ae5b" args="()" -->
 <div class="memitem">
@@ -155,6 +180,23 @@ Private Member Functions</h2></td></tr>
 </div>
 </div>
 <hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="a87c0582740b664bd38535a6448865410"></a><!-- doxytag: member="OOInteraction::HExpression::appendExpressionMonitor" ref="a87c0582740b664bd38535a6448865410" args="(ExpressionChangeMonitorFunction monitor)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classOOInteraction_1_1HExpression.html#a87c0582740b664bd38535a6448865410">OOInteraction::HExpression::appendExpressionMonitor</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classOOInteraction_1_1HExpression.html#a9e458808a4c5c0de884f4763866d43ce">ExpressionChangeMonitorFunction</a>&#160;</td>
+          <td class="paramname"><em>monitor</em></td><td>)</td>
+          <td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a03dc454be85283ae81c37ef5664611b1"></a><!-- doxytag: member="OOInteraction::HExpression::doAutoComplete" ref="a03dc454be85283ae81c37ef5664611b1" args="(Visualization::Item *target, const QString &amp;autoCompleteStr)" -->
 <div class="memitem">
 <div class="memproto">
@@ -351,6 +393,20 @@ Private Member Functions</h2></td></tr>
           <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *&#160;</td>
           <td class="paramname"><em>target</em></td><td>)</td>
           <td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<hr/><h2>Member Data Documentation</h2>
+<a class="anchor" id="a142fe868dbd62ad3e50fbb7fedbf0672"></a><!-- doxytag: member="OOInteraction::HExpression::expressionMonitors_" ref="a142fe868dbd62ad3e50fbb7fedbf0672" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QList&lt;<a class="el" href="classOOInteraction_1_1HExpression.html#a9e458808a4c5c0de884f4763866d43ce">ExpressionChangeMonitorFunction</a>&gt; <a class="el" href="classOOInteraction_1_1HExpression.html#a142fe868dbd62ad3e50fbb7fedbf0672">OOInteraction::HExpression::expressionMonitors_</a><code> [private]</code></td>
         </tr>
       </table>
 </div>

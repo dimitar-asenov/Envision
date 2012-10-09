@@ -120,26 +120,28 @@ Inheritance diagram for Hello::HelloWorld:</div>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHello_1_1HelloWorld.html#aa82fc221d76bda0982eea36f794cbdf0">initialize</a> (<a class="el" href="classCore_1_1EnvisionManager.html">Core::EnvisionManager</a> &amp;)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the plug-in.  <a href="#aa82fc221d76bda0982eea36f794cbdf0"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHello_1_1HelloWorld.html#a99979c4a1b5654b35b4f8ce734f2f264">selfTest</a> (QString testid)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts the indicated self-test for this plug-in.  <a href="#a99979c4a1b5654b35b4f8ce734f2f264"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHello_1_1HelloWorld.html#ab7fc44a22a9c37a3c80aeda97b1f133f">initialize</a> (<a class="el" href="classCore_1_1EnvisionManager.html">Core::EnvisionManager</a> &amp;) override</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the plug-in.  <a href="#ab7fc44a22a9c37a3c80aeda97b1f133f"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHello_1_1HelloWorld.html#af15beb9f5ff86f8db0a3c67901fff92b">selfTest</a> (QString testid) override</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts the indicated self-test for this plug-in.  <a href="#af15beb9f5ff86f8db0a3c67901fff92b"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHello_1_1HelloWorld.html#a2327a7c3d51c4e8e4e9974a928deae49">unload</a> () override</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees up all resources allocated by this plug-in and prepares it to be unloaded.  <a href="#a2327a7c3d51c4e8e4e9974a928deae49"></a><br/></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Implements the interface between the <a class="el" href="classHello_1_1HelloWorld.html" title="Implements the interface between the HelloWorld plug-in and Envision.">HelloWorld</a> plug-in and Envision. </p>
 <p>The Envision core will use this interface to communicate with the plug-in. The plug-in will be initialized before any other operations are performed.</p>
 <p>The plug-in can use the supplied EnvisionManager object to find out more about the running environment. </p>
 </div><hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="aa82fc221d76bda0982eea36f794cbdf0"></a><!-- doxytag: member="Hello::HelloWorld::initialize" ref="aa82fc221d76bda0982eea36f794cbdf0" args="(Core::EnvisionManager &amp;)" -->
+<a class="anchor" id="ab7fc44a22a9c37a3c80aeda97b1f133f"></a><!-- doxytag: member="Hello::HelloWorld::initialize" ref="ab7fc44a22a9c37a3c80aeda97b1f133f" args="(Core::EnvisionManager &amp;) override" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classHello_1_1HelloWorld.html#aa82fc221d76bda0982eea36f794cbdf0">Hello::HelloWorld::initialize</a> </td>
+          <td class="memname">bool <a class="el" href="classHello_1_1HelloWorld.html#ab7fc44a22a9c37a3c80aeda97b1f133f">Hello::HelloWorld::initialize</a> </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classCore_1_1EnvisionManager.html">Core::EnvisionManager</a> &amp;&#160;</td>
           <td class="paramname"><em>manager</em></td><td>)</td>
-          <td><code> [virtual]</code></td>
+          <td><code> [override, virtual]</code></td>
         </tr>
       </table>
 </div>
@@ -159,16 +161,16 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a99979c4a1b5654b35b4f8ce734f2f264"></a><!-- doxytag: member="Hello::HelloWorld::selfTest" ref="a99979c4a1b5654b35b4f8ce734f2f264" args="(QString testid)" -->
+<a class="anchor" id="af15beb9f5ff86f8db0a3c67901fff92b"></a><!-- doxytag: member="Hello::HelloWorld::selfTest" ref="af15beb9f5ff86f8db0a3c67901fff92b" args="(QString testid) override" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classHello_1_1HelloWorld.html#a99979c4a1b5654b35b4f8ce734f2f264">Hello::HelloWorld::selfTest</a> </td>
+          <td class="memname">void <a class="el" href="classHello_1_1HelloWorld.html#af15beb9f5ff86f8db0a3c67901fff92b">Hello::HelloWorld::selfTest</a> </td>
           <td>(</td>
           <td class="paramtype">QString&#160;</td>
           <td class="paramname"><em>testid</em></td><td>)</td>
-          <td><code> [virtual]</code></td>
+          <td><code> [override, virtual]</code></td>
         </tr>
       </table>
 </div>
@@ -188,6 +190,27 @@ Public Member Functions</h2></td></tr>
 </dl>
 
 <p>Implements <a class="el" href="classCore_1_1EnvisionPlugin.html#ac68c02acf86e553aa2a74629c456e6ea">Core::EnvisionPlugin</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a2327a7c3d51c4e8e4e9974a928deae49"></a><!-- doxytag: member="Hello::HelloWorld::unload" ref="a2327a7c3d51c4e8e4e9974a928deae49" args="() override" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classHello_1_1HelloWorld.html#a2327a7c3d51c4e8e4e9974a928deae49">Hello::HelloWorld::unload</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [override, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Frees up all resources allocated by this plug-in and prepares it to be unloaded. </p>
+<p>This function is called when Envision is about to exit or when a plug-in has manually been unloaded. At the time when this function is called there will be no plug-ins dependent on this one. </p>
+
+<p>Implements <a class="el" href="classCore_1_1EnvisionPlugin.html#a819d63d8f0fc4ea07d692de66724cd54">Core::EnvisionPlugin</a>.</p>
 
 </div>
 </div>

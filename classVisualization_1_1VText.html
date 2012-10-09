@@ -134,6 +134,8 @@ Public Member Functions</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns all visualization add-ons of this and inherited classes.  <a href="#a070c0d73fd7e947fed944a2210605fb6"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual <br class="typebreak"/>
 <a class="el" href="classVisualization_1_1InteractionHandler.html">Visualization::InteractionHandler</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VText.html#a28256f3577f064f3938ef445d049c480">handler</a> () const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VText.html#afe0bdec2d9a6805fa9c3a81d7b8435bb">moveCursor</a> (<a class="el" href="classVisualization_1_1Item.html#afb37d8f5484655f64919ac1541554c48">CursorMoveDirection</a> dir=<a class="el" href="classVisualization_1_1Item.html#afb37d8f5484655f64919ac1541554c48a83138369cdfce0933e93a541cb559600">MoveDefault</a>, QPoint reference=QPoint()) override</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Moves the position of the current main scene cursor within the item and returns true on success.  <a href="#afe0bdec2d9a6805fa9c3a81d7b8435bb"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VText.html#adf808973b77fd4ae92b89e2d623c273c">setStyle</a> (const <a class="el" href="classVisualization_1_1ItemStyle.html">Visualization::ItemStyle</a> *<a class="el" href="classVisualization_1_1VText.html#a6b973e5c451745da65c24c2e1a25dec9">style</a>)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VText.html#a4f580786e3bf5f38f1ea1f96941ec4ad">setText</a> (const QString &amp;newText)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the text of this item to <em>newText</em>.  <a href="#a4f580786e3bf5f38f1ea1f96941ec4ad"></a><br/></td></tr>
@@ -349,6 +351,41 @@ Static Private Attributes</h2></td></tr>
 <div class="memdoc">
 
 <p>Reimplemented from <a class="el" href="classVisualization_1_1TextRenderer.html#a3038460bd49f2c4590cac99e3e7e35b3">Visualization::TextRenderer</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="afe0bdec2d9a6805fa9c3a81d7b8435bb"></a><!-- doxytag: member="Visualization::VText::moveCursor" ref="afe0bdec2d9a6805fa9c3a81d7b8435bb" args="(CursorMoveDirection dir=MoveDefault, QPoint reference=QPoint()) override" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classVisualization_1_1VText.html#afe0bdec2d9a6805fa9c3a81d7b8435bb">Visualization::VText::moveCursor</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html#afb37d8f5484655f64919ac1541554c48">CursorMoveDirection</a>&#160;</td>
+          <td class="paramname"><em>dir</em> = <code><a class="el" href="classVisualization_1_1Item.html#afb37d8f5484655f64919ac1541554c48a83138369cdfce0933e93a541cb559600">MoveDefault</a></code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QPoint&#160;</td>
+          <td class="paramname"><em>reference</em> = <code>QPoint()</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [override, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Moves the position of the current main scene cursor within the item and returns true on success. </p>
+<p>The <em>dir</em> parameter determines how the cursor will be moved. Some modes of movement require a reference point provided in <em>reference</em> in item local coordinates.</p>
+<p>The method returns false if it is not possible to move the cursor within the borders of the current item given the provided movement parameters.</p>
+<p>The default implementation returns false when <em>dir</em> is any of MoveUp, MoveDown, MoveLeft, MoveRight or when the combination of <em>dir</em> and <em>reference</em> is not satisfiable. The item is assumed to have no children. If the item is focused a default cursor with no visualization will be created whose position is the item's scene position.</p>
+<p>This method is responsible for creating a corresponding <a class="el" href="classVisualization_1_1Cursor.html">Cursor</a> item and setting it as the main scene cursor. </p>
+
+<p>Reimplemented from <a class="el" href="classVisualization_1_1TextRenderer.html#a2df8cb361eaf684472a2fd07ccd54eea">Visualization::TextRenderer</a>.</p>
 
 </div>
 </div>

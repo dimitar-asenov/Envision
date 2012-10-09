@@ -120,26 +120,28 @@ Inheritance diagram for OOVisualization::OOVisualization:</div>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOVisualization_1_1OOVisualization.html#a65b57d2010521cbb3bdd86607ad75d98">initialize</a> (<a class="el" href="classCore_1_1EnvisionManager.html">Core::EnvisionManager</a> &amp;)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the plug-in.  <a href="#a65b57d2010521cbb3bdd86607ad75d98"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOVisualization_1_1OOVisualization.html#a443adfdfe653b546e63754835fc18f7f">selfTest</a> (QString testid)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts the indicated self-test for this plug-in.  <a href="#a443adfdfe653b546e63754835fc18f7f"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOVisualization_1_1OOVisualization.html#a66ae3777607a828284b0b4b5c51ad397">initialize</a> (<a class="el" href="classCore_1_1EnvisionManager.html">Core::EnvisionManager</a> &amp;) override</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the plug-in.  <a href="#a66ae3777607a828284b0b4b5c51ad397"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOVisualization_1_1OOVisualization.html#a66f0cba0b7b39d6c407b96d02b465b78">selfTest</a> (QString testid) override</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts the indicated self-test for this plug-in.  <a href="#a66f0cba0b7b39d6c407b96d02b465b78"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOVisualization_1_1OOVisualization.html#a19361191227fb4f55ad5da66ab2635dc">unload</a> () override</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees up all resources allocated by this plug-in and prepares it to be unloaded.  <a href="#a19361191227fb4f55ad5da66ab2635dc"></a><br/></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Implements the interface between the <a class="el" href="classOOVisualization_1_1OOVisualization.html" title="Implements the interface between the OOVisualization plug-in and Envision.">OOVisualization</a> plug-in and Envision. </p>
 <p>The Envision core will use this interface to communicate with the plug-in. The plug-in will be initialized before any other operations are performed.</p>
 <p>The plug-in can use the supplied EnvisionManager object to find out more about the running environment. </p>
 </div><hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="a65b57d2010521cbb3bdd86607ad75d98"></a><!-- doxytag: member="OOVisualization::OOVisualization::initialize" ref="a65b57d2010521cbb3bdd86607ad75d98" args="(Core::EnvisionManager &amp;)" -->
+<a class="anchor" id="a66ae3777607a828284b0b4b5c51ad397"></a><!-- doxytag: member="OOVisualization::OOVisualization::initialize" ref="a66ae3777607a828284b0b4b5c51ad397" args="(Core::EnvisionManager &amp;) override" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classOOVisualization_1_1OOVisualization.html#a65b57d2010521cbb3bdd86607ad75d98">OOVisualization::OOVisualization::initialize</a> </td>
+          <td class="memname">bool <a class="el" href="classOOVisualization_1_1OOVisualization.html#a66ae3777607a828284b0b4b5c51ad397">OOVisualization::OOVisualization::initialize</a> </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classCore_1_1EnvisionManager.html">Core::EnvisionManager</a> &amp;&#160;</td>
           <td class="paramname"><em>manager</em></td><td>)</td>
-          <td><code> [virtual]</code></td>
+          <td><code> [override, virtual]</code></td>
         </tr>
       </table>
 </div>
@@ -159,16 +161,16 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a443adfdfe653b546e63754835fc18f7f"></a><!-- doxytag: member="OOVisualization::OOVisualization::selfTest" ref="a443adfdfe653b546e63754835fc18f7f" args="(QString testid)" -->
+<a class="anchor" id="a66f0cba0b7b39d6c407b96d02b465b78"></a><!-- doxytag: member="OOVisualization::OOVisualization::selfTest" ref="a66f0cba0b7b39d6c407b96d02b465b78" args="(QString testid) override" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classOOVisualization_1_1OOVisualization.html#a443adfdfe653b546e63754835fc18f7f">OOVisualization::OOVisualization::selfTest</a> </td>
+          <td class="memname">void <a class="el" href="classOOVisualization_1_1OOVisualization.html#a66f0cba0b7b39d6c407b96d02b465b78">OOVisualization::OOVisualization::selfTest</a> </td>
           <td>(</td>
           <td class="paramtype">QString&#160;</td>
           <td class="paramname"><em>testid</em></td><td>)</td>
-          <td><code> [virtual]</code></td>
+          <td><code> [override, virtual]</code></td>
         </tr>
       </table>
 </div>
@@ -188,6 +190,27 @@ Public Member Functions</h2></td></tr>
 </dl>
 
 <p>Implements <a class="el" href="classCore_1_1EnvisionPlugin.html#ac68c02acf86e553aa2a74629c456e6ea">Core::EnvisionPlugin</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a19361191227fb4f55ad5da66ab2635dc"></a><!-- doxytag: member="OOVisualization::OOVisualization::unload" ref="a19361191227fb4f55ad5da66ab2635dc" args="() override" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classOOVisualization_1_1OOVisualization.html#a19361191227fb4f55ad5da66ab2635dc">OOVisualization::OOVisualization::unload</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [override, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Frees up all resources allocated by this plug-in and prepares it to be unloaded. </p>
+<p>This function is called when Envision is about to exit or when a plug-in has manually been unloaded. At the time when this function is called there will be no plug-ins dependent on this one. </p>
+
+<p>Implements <a class="el" href="classCore_1_1EnvisionPlugin.html#a819d63d8f0fc4ea07d692de66724cd54">Core::EnvisionPlugin</a>.</p>
 
 </div>
 </div>

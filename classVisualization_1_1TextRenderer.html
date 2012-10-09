@@ -144,8 +144,8 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual <br class="typebreak"/>
 <a class="el" href="classVisualization_1_1InteractionHandler.html">Visualization::InteractionHandler</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1TextRenderer.html#a3d35e002530dc18031f52f83a676fa9a">handler</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1TextRenderer.html#afccbfd7dc03a24ebc194a5f9e86a9000">isEditable</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1TextRenderer.html#a728d37b8cb70e73b57e3d3f481670e56">moveCursor</a> (<a class="el" href="classVisualization_1_1Item.html#afb37d8f5484655f64919ac1541554c48">CursorMoveDirection</a> dir, const QPoint &amp;reference=QPoint())</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Moves the position of the current main scene cursor within the item and returns true on success.  <a href="#a728d37b8cb70e73b57e3d3f481670e56"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1TextRenderer.html#a2df8cb361eaf684472a2fd07ccd54eea">moveCursor</a> (<a class="el" href="classVisualization_1_1Item.html#afb37d8f5484655f64919ac1541554c48">CursorMoveDirection</a> dir=<a class="el" href="classVisualization_1_1Item.html#afb37d8f5484655f64919ac1541554c48a83138369cdfce0933e93a541cb559600">MoveDefault</a>, QPoint reference=QPoint()) override</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Moves the position of the current main scene cursor within the item and returns true on success.  <a href="#a2df8cb361eaf684472a2fd07ccd54eea"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1TextRenderer.html#ab24ab7d314798b7f8c100118f9f55fc0">paint</a> (QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1TextRenderer.html#a4465ca3f30acf6c160dac956cd7b3ce0">selectedText</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1TextRenderer.html#a2ddda572083cef923ac46a8c6c339608">setEditable</a> (bool <a class="el" href="classVisualization_1_1TextRenderer.html#aea4653d333bda3109b5e59908abc340e">editable</a>)</td></tr>
@@ -208,7 +208,7 @@ Static Private Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="classOOVisualization_1_1VStorageSpecifier.html#af65dc3937bd285fb8775665a9039187b">OOVisualization::VStorageSpecifier</a>, <a class="el" href="classOOVisualization_1_1VVisibility.html#ab40e809941e91841515a655b8f6dc941">OOVisualization::VVisibility</a>, <a class="el" href="classVisualization_1_1VBoolean.html#a9ac802df3bb6d8869c33e73fb5824218">Visualization::VBoolean</a>, <a class="el" href="classVisualization_1_1VCharacter.html#aab5f71b77de454ebb396ee81e7d5be0c">Visualization::VCharacter</a>, <a class="el" href="classVisualization_1_1VFloat.html#af62fbc697fa3566dab8c4b940fff6919">Visualization::VFloat</a>, <a class="el" href="classVisualization_1_1VInteger.html#afab70ee52f716dd2071468fab4bf6dc3">Visualization::VInteger</a>, <a class="el" href="classVisualization_1_1VReference.html#a164992a427dce18d6d2c0fcf9c145b9a">Visualization::VReference</a>, <a class="el" href="classVisualization_1_1VText.html#a77b80ee5154dab7e8dffadade926ebb2">Visualization::VText</a>, <a class="el" href="classVisualization_1_1Symbol.html#af96f25b297a95e89c564dbc32637372d">Visualization::Symbol</a>, and <a class="el" href="classVisualization_1_1Text.html#a129ed448aff53e34427cd87df25153c2">Visualization::Text</a>.</p>
+<p>Reimplemented in <a class="el" href="classOOVisualization_1_1VStorageSpecifier.html#af65dc3937bd285fb8775665a9039187b">OOVisualization::VStorageSpecifier</a>, <a class="el" href="classOOVisualization_1_1VVisibility.html#ab40e809941e91841515a655b8f6dc941">OOVisualization::VVisibility</a>, <a class="el" href="classVisualization_1_1VText.html#a77b80ee5154dab7e8dffadade926ebb2">Visualization::VText</a>, <a class="el" href="classVisualization_1_1VBoolean.html#a9ac802df3bb6d8869c33e73fb5824218">Visualization::VBoolean</a>, <a class="el" href="classVisualization_1_1VCharacter.html#aab5f71b77de454ebb396ee81e7d5be0c">Visualization::VCharacter</a>, <a class="el" href="classVisualization_1_1VFloat.html#af62fbc697fa3566dab8c4b940fff6919">Visualization::VFloat</a>, <a class="el" href="classVisualization_1_1VInteger.html#afab70ee52f716dd2071468fab4bf6dc3">Visualization::VInteger</a>, <a class="el" href="classVisualization_1_1VReference.html#a164992a427dce18d6d2c0fcf9c145b9a">Visualization::VReference</a>, <a class="el" href="classVisualization_1_1Symbol.html#af96f25b297a95e89c564dbc32637372d">Visualization::Symbol</a>, and <a class="el" href="classVisualization_1_1Text.html#a129ed448aff53e34427cd87df25153c2">Visualization::Text</a>.</p>
 
 </div>
 </div>
@@ -345,7 +345,7 @@ Static Private Attributes</h2></td></tr>
 <p>This is an up-to-date value that may differ from the value of <a class="el" href="classVisualization_1_1TextRenderer.html#af5f64726c5ec36966aa7106b01996cc5" title="Returns the text that is currently cached in this TextRenderer item.">text()</a>. E.G. If this is an instance of ItemWithNode&lt;TextRenderer, Text&gt; and the text of the node has just changed, this method will returned the current value of the node, whereas <a class="el" href="classVisualization_1_1TextRenderer.html#af5f64726c5ec36966aa7106b01996cc5" title="Returns the text that is currently cached in this TextRenderer item.">text()</a> will still return the old value.</p>
 <p>When the <a class="el" href="classVisualization_1_1TextRenderer.html">TextRenderer</a> is updated the value returned by <a class="el" href="classVisualization_1_1TextRenderer.html#a00904037d3530a184e6fc12137485875" title="Returns the text of that is represented by the current item.">currentText()</a> is cached and will be subsequently returned by <a class="el" href="classVisualization_1_1TextRenderer.html#af5f64726c5ec36966aa7106b01996cc5" title="Returns the text that is currently cached in this TextRenderer item.">text()</a> and visualized on the screen. </p>
 
-<p>Implemented in <a class="el" href="classOOVisualization_1_1VStorageSpecifier.html#a47973623bdb2ab256314cb2c415441b3">OOVisualization::VStorageSpecifier</a>, <a class="el" href="classOOVisualization_1_1VVisibility.html#a4728bb8d0ce333e20b542bcddd4c5374">OOVisualization::VVisibility</a>, <a class="el" href="classVisualization_1_1VBoolean.html#ac94339f81caa41e1bcec8534e52d6c47">Visualization::VBoolean</a>, <a class="el" href="classVisualization_1_1VCharacter.html#ae393107d219e295310dba9f2e56de422">Visualization::VCharacter</a>, <a class="el" href="classVisualization_1_1VFloat.html#a49b218e65f2ef27653ba78c80b24b94b">Visualization::VFloat</a>, <a class="el" href="classVisualization_1_1VInteger.html#ad6d2683640227f32edc27529648c59cf">Visualization::VInteger</a>, <a class="el" href="classVisualization_1_1VReference.html#a61d6ac33ed499f68e7ecfc0882baf129">Visualization::VReference</a>, <a class="el" href="classVisualization_1_1VText.html#a6b7d9d33cc03fe2ca40061f11e667b07">Visualization::VText</a>, <a class="el" href="classVisualization_1_1Symbol.html#aaccd08f77dc94fc91c1d253ab099d631">Visualization::Symbol</a>, and <a class="el" href="classVisualization_1_1Text.html#a21f7b060ef95aacb5a90d70c560ec646">Visualization::Text</a>.</p>
+<p>Implemented in <a class="el" href="classOOVisualization_1_1VStorageSpecifier.html#a47973623bdb2ab256314cb2c415441b3">OOVisualization::VStorageSpecifier</a>, <a class="el" href="classOOVisualization_1_1VVisibility.html#a4728bb8d0ce333e20b542bcddd4c5374">OOVisualization::VVisibility</a>, <a class="el" href="classVisualization_1_1VText.html#a6b7d9d33cc03fe2ca40061f11e667b07">Visualization::VText</a>, <a class="el" href="classVisualization_1_1VBoolean.html#ac94339f81caa41e1bcec8534e52d6c47">Visualization::VBoolean</a>, <a class="el" href="classVisualization_1_1VCharacter.html#ae393107d219e295310dba9f2e56de422">Visualization::VCharacter</a>, <a class="el" href="classVisualization_1_1VFloat.html#a49b218e65f2ef27653ba78c80b24b94b">Visualization::VFloat</a>, <a class="el" href="classVisualization_1_1VInteger.html#ad6d2683640227f32edc27529648c59cf">Visualization::VInteger</a>, <a class="el" href="classVisualization_1_1VReference.html#a61d6ac33ed499f68e7ecfc0882baf129">Visualization::VReference</a>, <a class="el" href="classVisualization_1_1Symbol.html#aaccd08f77dc94fc91c1d253ab099d631">Visualization::Symbol</a>, and <a class="el" href="classVisualization_1_1Text.html#a21f7b060ef95aacb5a90d70c560ec646">Visualization::Text</a>.</p>
 
 </div>
 </div>
@@ -421,26 +421,26 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a728d37b8cb70e73b57e3d3f481670e56"></a><!-- doxytag: member="Visualization::TextRenderer::moveCursor" ref="a728d37b8cb70e73b57e3d3f481670e56" args="(CursorMoveDirection dir, const QPoint &amp;reference=QPoint())" -->
+<a class="anchor" id="a2df8cb361eaf684472a2fd07ccd54eea"></a><!-- doxytag: member="Visualization::TextRenderer::moveCursor" ref="a2df8cb361eaf684472a2fd07ccd54eea" args="(CursorMoveDirection dir=MoveDefault, QPoint reference=QPoint()) override" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classVisualization_1_1TextRenderer.html#a728d37b8cb70e73b57e3d3f481670e56">Visualization::TextRenderer::moveCursor</a> </td>
+          <td class="memname">bool <a class="el" href="classVisualization_1_1TextRenderer.html#a2df8cb361eaf684472a2fd07ccd54eea">Visualization::TextRenderer::moveCursor</a> </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html#afb37d8f5484655f64919ac1541554c48">CursorMoveDirection</a>&#160;</td>
-          <td class="paramname"><em>dir</em>, </td>
+          <td class="paramname"><em>dir</em> = <code><a class="el" href="classVisualization_1_1Item.html#afb37d8f5484655f64919ac1541554c48a83138369cdfce0933e93a541cb559600">MoveDefault</a></code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const QPoint &amp;&#160;</td>
+          <td class="paramtype">QPoint&#160;</td>
           <td class="paramname"><em>reference</em> = <code>QPoint()</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td><code> [virtual]</code></td>
+          <td></td><td><code> [override, virtual]</code></td>
         </tr>
       </table>
 </div>
@@ -452,7 +452,9 @@ Static Private Attributes</h2></td></tr>
 <p>The default implementation returns false when <em>dir</em> is any of MoveUp, MoveDown, MoveLeft, MoveRight or when the combination of <em>dir</em> and <em>reference</em> is not satisfiable. The item is assumed to have no children. If the item is focused a default cursor with no visualization will be created whose position is the item's scene position.</p>
 <p>This method is responsible for creating a corresponding <a class="el" href="classVisualization_1_1Cursor.html">Cursor</a> item and setting it as the main scene cursor. </p>
 
-<p>Reimplemented from <a class="el" href="classVisualization_1_1Item.html#a978e5436400aae6d6738a21ba12041c0">Visualization::Item</a>.</p>
+<p>Reimplemented from <a class="el" href="classVisualization_1_1Item.html#a63cbc3401b35b8ee08c1e5606d4a4d22">Visualization::Item</a>.</p>
+
+<p>Reimplemented in <a class="el" href="classVisualization_1_1VText.html#afe0bdec2d9a6805fa9c3a81d7b8435bb">Visualization::VText</a>.</p>
 
 </div>
 </div>

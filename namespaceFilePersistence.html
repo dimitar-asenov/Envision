@@ -83,6 +83,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">FilePersistence Namespace Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Thes <a class="el" href="namespaceFilePersistence.html" title="Thes FilePersistence plug-in implements a file and a clipboard application model stores based on XML...">FilePersistence</a> plug-in implements a file and a clipboard application model stores based on XML.  
+<a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="nested-classes"></a>
 Classes</h2></td></tr>
@@ -124,7 +127,66 @@ Variables</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFilePersistence.html#af973e52ea392ad7c8ebfbfceaade8887">XML_DOM_TYPE</a> = &quot;EnvisionFilePersistence&quot;</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFilePersistence.html#aee14e6859e371eace785b276a1004e09">XML_NEWUNIT_NODE_TAG</a> = &quot;persistencenewunit&quot;</td></tr>
 </table>
-<hr/><h2>Function Documentation</h2>
+<hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
+<div class="textblock"><p>Thes <a class="el" href="namespaceFilePersistence.html" title="Thes FilePersistence plug-in implements a file and a clipboard application model stores based on XML...">FilePersistence</a> plug-in implements a file and a clipboard application model stores based on XML. </p>
+<p>With the help of the <a class="el" href="classFilePersistence_1_1FileStore.html">FileStore</a> class a model can be stored as files on disk, where each persistence unit is saved to a different file. The precise data format is described below.</p>
+<p>The <a class="el" href="classFilePersistence_1_1SystemClipboard.html">SystemClipboard</a> class provides access to the system clipboard. It offers functionality to copy a node or a list of nodes to the clipboard. Nodes are copied as an XML text which is described in appendix A.3. Nodes from the clipboard can be pasted into a node of a list type or can be used to replace other nodes in the model.</p>
+<h3>Data persistence format</h3>
+<p>When application models are stored on disk using the <a class="el" href="classFilePersistence_1_1FileStore.html">FileStore</a> persistent store they are stored in a series of XML files. To describe the format of these files we will use the simple application model shown in the figure below.</p>
+<div class="image">
+<img src="examplePersistentUnit.png" alt="examplePersistentUnit.png"/>
+<div class="caption">
+A binary node hierarchy with a persistent unit</div></div>
+<p> The image shows a model called <em>units</em> that contains 8 nodes. During the store operation each node is assigned a unique id. The node ids are indicated in the corresponding circle. Nodes 0,2,4 and 6 are of type BinaryNode. A binary node always has a name an optionally has a left and right nodes. The name is just a string. Node 2 in the figure is a persistence unit. Persistence units are saved in separate files by the <a class="el" href="classFilePersistence_1_1FileStore.html">FileStore</a> class.</p>
+<p>There is a master file which belongs to the main persistence unit (the model) and a file for each other persistence unit if any. Here is an example of a master file:</p>
+<div class="fragment"><pre class="fragment">
+&lt;!DOCTYPE EnvisionFilePersistence&gt;
+&lt;model nextid="8"&gt;
+	&lt;BinaryNode id="0" name="units" partial="0"&gt;
+		&lt;Text id="1" name="name" partial="0" &gt;S_root&lt;/Text&gt;
+		&lt;persistencenewunitname ="left"&gt;S_2&lt;/persistencenewunit&gt;
+		&lt;BinaryNode id="4" name="right" partial="0"&gt;
+			&lt;Text id="5" name="name" partial="0"&gt;S_second&lt;/Text&gt;
+		&lt;/BinaryNode&gt;
+	&lt;/BinaryNode&gt;
+&lt;/model &gt;
+</pre></div><p>The root element is <em>model</em> and its <em>nextid</em> attribute indicates the id that should be given to the next node that is created. This is necessary in order to give each node a unique id.</p>
+<p>The tag name of all elements other than the model defines the type of the node they represent. The model always contains only one node - the root node. In this case a BinaryNode. Each node has the following attributes: </p>
+<ul>
+<li><b>id</b> - the integer id of the node. </li>
+<li><b>name</b> - the name of the node. This is always set by the parent of the node. The name of the root node is the model (application) name. This is the name by which the parent identifies the node. If the node has a name of its own (such as the name of a method node), this will appear as a sub-element of the node, rather than an attribute. </li>
+<li><b>partial</b> - whether the node should be partially loaded if possible. If this is 1, nodes which support partial loading should only load their content partially to avoid too much memory overhead. This property is controlled by the parent. Note that this is only a hint and the application model will ultimately decide which nodes are partially loaded or not, regardless of this of flag.</li>
+</ul>
+<p>The sub-elements of a node are defined by the Node::store method. They represent the content of the node. There are only three exceptions: String, Integer and Double value nodes. The value of such nodes is saved directly as text into the XML file. Depending on the node type the value is prefixed with 'S_', 'I_' or 'D_' for String, Integer and Double respectively. The root node above has sub-nodes <em>name</em>, <em>left</em> and <em>right</em>.</p>
+<p><b>persistencenewunit</b> is a special node which indicates that its content is defined in a different file. The type of this node is also defined in that file. The file name is represented as a string and is therefore preceded by 'S_'. In the example above this filename is simply '2'. Here is the content of that file:</p>
+<div class="fragment"><pre class="fragment">
+&lt;!DOCTYPE EnvisionFilePersistence&gt;
+&lt;BinaryNodePersistenceUnit id="2" name="left" partial="0"&gt;
+	&lt;Text id ="3" name="name" partial="0"&gt;S_first&lt;/Text&gt;
+	&lt;BinaryNode id="6" name="left" partial="0"&gt;
+		&lt;Text id="7" name="name" partial="0"&gt;S_last&lt;/Text&gt;
+	&lt;/BinaryNode&gt;
+&lt;/BinaryNodePersistenceUnit&gt;
+</pre></div><p>Its structure is identical to the one of the master file, with the exception of the model top-level element which is absent. It is possible to have nested persistence unit nodes, in which case each new unit will be saved in its own file.</p>
+<h3>Format of the clipboard store</h3>
+<p>When using the ClipboardStore class provided by <a class="el" href="namespaceFilePersistence.html" title="Thes FilePersistence plug-in implements a file and a clipboard application model stores based on XML...">FilePersistence</a> any copied nodes are stored as text in the system clipboard. The format is similar to the one for persisting the model on disk. Here is an example of two nodes being copied to clipboard:</p>
+<div class="fragment"><pre class="fragment">
+&lt;!DOCTYPE EnvisionFilePersistence&gt;
+&lt;clipboard&gt;
+	&lt;BinaryNode name="0" partial="0"&gt;
+		&lt;Text name="name" partial="0"&gt;S_first&lt;/Text&gt;
+	&lt;/BinaryNode&gt;
+	&lt;BinaryNode name="1" partial="0"&gt;
+		&lt;Text name="name" partial="0"&gt;S_second&lt;/Text&gt;
+	&lt;/BinaryNode&gt;
+&lt;/clipboard&gt;
+</pre></div><p>The main element is <em>clipboard</em> and it contains one sub-element for each node that was copied. The structure of these sub-node elements is identical to the one discussed above, with the following differences: </p>
+<ul>
+<li>There is no <em>node</em> <em>id</em> attribute. This attribute is meaningless across projects as it is specific for a model. </li>
+<li>The partial hint is always set to 0. Nodes loaded from the clipboard cannot be partially loaded. </li>
+<li>For direct children of clipboard the <em>name</em> attribute is simply an index that ranges from 0 to one less than the number of nodes copied to the clipboard. </li>
+</ul>
+</div><hr/><h2>Function Documentation</h2>
 <a class="anchor" id="af6659e9888c2274fbe2c7d388c3789ec"></a><!-- doxytag: member="FilePersistence::TEST" ref="af6659e9888c2274fbe2c7d388c3789ec" args="(FilePersistence, LoadRootOnly)" -->
 <div class="memitem">
 <div class="memproto">

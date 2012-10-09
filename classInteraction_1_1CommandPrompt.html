@@ -127,7 +127,6 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a5771ca77a1fccc06327f67c777ad0418">addSuggestions</a> (const QList&lt; <a class="el" href="classInteraction_1_1CommandSuggestion.html">CommandSuggestion</a> * &gt; &amp;<a class="el" href="classInteraction_1_1CommandPrompt.html#a342030636161983ec0c5e7f5bfc0586c">suggestions</a>)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a53c12b91bc3726362008159b11942954">commandReceiver</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a79dfbe906c192a9b72035d3c436245df">hidePrompt</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a5defa487d3e849804b5bc648da5cd0a5">initializeCommand</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a2421f7ed0bf5103398a19a4f8fc6148b">removeResult</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#acb7fc536e0a4a4aaa1dc09b540b2c95b">removeSuggestions</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classInteraction_1_1CommandResult.html">CommandResult</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#afbb126260fc836d6569a1819ee88ddbd">result</a> ()</td></tr>
@@ -146,6 +145,7 @@ Private Types</h2></td></tr>
 <tr><td colspan="2"><h2><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a32b3f64e670511ab8e736cf4c7b13da6">acquireCursor</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a15994a64001c13f56954e8b4de3fda15">setPromptPosition</a> ()</td></tr>
 <tr><td colspan="2"><h2><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1Text.html">Visualization::Text</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#ae474e3b0a894495743b7f60f68c0ae99">command</a></td></tr>
@@ -153,7 +153,6 @@ Private Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#af77f6e7c65d042b01d1cd5061856b8be">commandSelectedFirst</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a6bc8942e41a1783bd91d594b76e4d4d7">commandSelectedLast</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1SequentialLayout.html">Visualization::SequentialLayout</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a3487642fca9dbd71b0de75268c89ae9c">errorContainer</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a6512a8b111b454769e152ae46f382fca">justCreated</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1SequentialLayout.html">Visualization::SequentialLayout</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a1de06cd2900987cf1e5cfbb7707d8ce5">layout</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">QPoint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#a233020cdbe1a04c10c2f1361f11fa0dc">receiverCursorPosition</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classInteraction_1_1CommandResult.html">CommandResult</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1CommandPrompt.html#ac186b3d9926521a1aef71f9ccab0c896">result_</a></td></tr>
@@ -319,22 +318,6 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a5defa487d3e849804b5bc648da5cd0a5"></a><!-- doxytag: member="Interaction::CommandPrompt::initializeCommand" ref="a5defa487d3e849804b5bc648da5cd0a5" args="()" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classInteraction_1_1CommandPrompt.html#a5defa487d3e849804b5bc648da5cd0a5">Interaction::CommandPrompt::initializeCommand</a> </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
 <a class="anchor" id="a2421f7ed0bf5103398a19a4f8fc6148b"></a><!-- doxytag: member="Interaction::CommandPrompt::removeResult" ref="a2421f7ed0bf5103398a19a4f8fc6148b" args="()" -->
 <div class="memitem">
 <div class="memproto">
@@ -376,6 +359,22 @@ Private Attributes</h2></td></tr>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a15994a64001c13f56954e8b4de3fda15"></a><!-- doxytag: member="Interaction::CommandPrompt::setPromptPosition" ref="a15994a64001c13f56954e8b4de3fda15" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classInteraction_1_1CommandPrompt.html#a15994a64001c13f56954e8b4de3fda15">Interaction::CommandPrompt::setPromptPosition</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [private]</code></td>
         </tr>
       </table>
 </div>
@@ -553,19 +552,6 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classVisualization_1_1SequentialLayout.html">Visualization::SequentialLayout</a>* <a class="el" href="classInteraction_1_1CommandPrompt.html#a3487642fca9dbd71b0de75268c89ae9c">Interaction::CommandPrompt::errorContainer</a><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a6512a8b111b454769e152ae46f382fca"></a><!-- doxytag: member="Interaction::CommandPrompt::justCreated" ref="a6512a8b111b454769e152ae46f382fca" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool <a class="el" href="classInteraction_1_1CommandPrompt.html#a6512a8b111b454769e152ae46f382fca">Interaction::CommandPrompt::justCreated</a><code> [private]</code></td>
         </tr>
       </table>
 </div>

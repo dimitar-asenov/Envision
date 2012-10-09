@@ -1,5 +1,9 @@
 var searchData=
 [
+  ['maincursor_5f',['mainCursor_',['../classVisualization_1_1Scene.html#adbae5d627080435c95b5828e70a1b00f',1,'Visualization::Scene']]],
+  ['maincursorsjustset_5f',['mainCursorsJustSet_',['../classVisualization_1_1Scene.html#a8b028262f809335f6edd6a5fed551d9a',1,'Visualization::Scene']]],
+  ['mainscene_5f',['mainScene_',['../classVisualization_1_1VisualizationManager.html#acb08c827f69ea40d043e4385c81e5a61',1,'Visualization::VisualizationManager']]],
+  ['mainview_5f',['mainView_',['../classVisualization_1_1VisualizationManager.html#a310427d131983be85c1b6c749e7fff1c',1,'Visualization::VisualizationManager']]],
   ['mainwindow',['mainWindow',['../classCore_1_1DefaultEnvisionManager.html#a54c399b0f94f7c6d4e176cbfc1a16963',1,'Core::DefaultEnvisionManager']]],
   ['majorversion',['majorVersion',['../structCore_1_1PluginDependency.html#a0acedce37f195c86fb7b838c86402d2e',1,'Core::PluginDependency']]],
   ['map',['map',['../classFilePersistence_1_1NodeIdMap.html#abc6e7e804e416eec25b60fe8078866e1',1,'FilePersistence::NodeIdMap']]],

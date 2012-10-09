@@ -117,22 +117,24 @@ Inheritance diagram for Visualization::VisualizationBase:</div>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VisualizationBase.html#a05fddefd51881d42cfd5efc7fe25bc90">initialize</a> (<a class="el" href="classCore_1_1EnvisionManager.html">Core::EnvisionManager</a> &amp;)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the plug-in.  <a href="#a05fddefd51881d42cfd5efc7fe25bc90"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VisualizationBase.html#ad057e2a4e8653c28db71192eb03e80c6">selfTest</a> (QString testid)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts the indicated self-test for this plug-in.  <a href="#ad057e2a4e8653c28db71192eb03e80c6"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VisualizationBase.html#a43df1412070febdbe339df9a54f28d7a">initialize</a> (<a class="el" href="classCore_1_1EnvisionManager.html">Core::EnvisionManager</a> &amp;) override</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the plug-in.  <a href="#a43df1412070febdbe339df9a54f28d7a"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VisualizationBase.html#a73df5c07c9059f3081e3d38a4405965d">selfTest</a> (QString testid) override</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts the indicated self-test for this plug-in.  <a href="#a73df5c07c9059f3081e3d38a4405965d"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1VisualizationBase.html#afdfb2d0a32ddaa2b4af018a544943b2b">unload</a> () override</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees up all resources allocated by this plug-in and prepares it to be unloaded.  <a href="#afdfb2d0a32ddaa2b4af018a544943b2b"></a><br/></td></tr>
 </table>
 <hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="a05fddefd51881d42cfd5efc7fe25bc90"></a><!-- doxytag: member="Visualization::VisualizationBase::initialize" ref="a05fddefd51881d42cfd5efc7fe25bc90" args="(Core::EnvisionManager &amp;)" -->
+<a class="anchor" id="a43df1412070febdbe339df9a54f28d7a"></a><!-- doxytag: member="Visualization::VisualizationBase::initialize" ref="a43df1412070febdbe339df9a54f28d7a" args="(Core::EnvisionManager &amp;) override" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classVisualization_1_1VisualizationBase.html#a05fddefd51881d42cfd5efc7fe25bc90">Visualization::VisualizationBase::initialize</a> </td>
+          <td class="memname">bool <a class="el" href="classVisualization_1_1VisualizationBase.html#a43df1412070febdbe339df9a54f28d7a">Visualization::VisualizationBase::initialize</a> </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classCore_1_1EnvisionManager.html">Core::EnvisionManager</a> &amp;&#160;</td>
           <td class="paramname"><em>manager</em></td><td>)</td>
-          <td><code> [virtual]</code></td>
+          <td><code> [override, virtual]</code></td>
         </tr>
       </table>
 </div>
@@ -152,16 +154,16 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ad057e2a4e8653c28db71192eb03e80c6"></a><!-- doxytag: member="Visualization::VisualizationBase::selfTest" ref="ad057e2a4e8653c28db71192eb03e80c6" args="(QString testid)" -->
+<a class="anchor" id="a73df5c07c9059f3081e3d38a4405965d"></a><!-- doxytag: member="Visualization::VisualizationBase::selfTest" ref="a73df5c07c9059f3081e3d38a4405965d" args="(QString testid) override" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classVisualization_1_1VisualizationBase.html#ad057e2a4e8653c28db71192eb03e80c6">Visualization::VisualizationBase::selfTest</a> </td>
+          <td class="memname">void <a class="el" href="classVisualization_1_1VisualizationBase.html#a73df5c07c9059f3081e3d38a4405965d">Visualization::VisualizationBase::selfTest</a> </td>
           <td>(</td>
           <td class="paramtype">QString&#160;</td>
           <td class="paramname"><em>testid</em></td><td>)</td>
-          <td><code> [virtual]</code></td>
+          <td><code> [override, virtual]</code></td>
         </tr>
       </table>
 </div>
@@ -181,6 +183,27 @@ Public Member Functions</h2></td></tr>
 </dl>
 
 <p>Implements <a class="el" href="classCore_1_1EnvisionPlugin.html#ac68c02acf86e553aa2a74629c456e6ea">Core::EnvisionPlugin</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="afdfb2d0a32ddaa2b4af018a544943b2b"></a><!-- doxytag: member="Visualization::VisualizationBase::unload" ref="afdfb2d0a32ddaa2b4af018a544943b2b" args="() override" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classVisualization_1_1VisualizationBase.html#afdfb2d0a32ddaa2b4af018a544943b2b">Visualization::VisualizationBase::unload</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [override, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Frees up all resources allocated by this plug-in and prepares it to be unloaded. </p>
+<p>This function is called when Envision is about to exit or when a plug-in has manually been unloaded. At the time when this function is called there will be no plug-ins dependent on this one. </p>
+
+<p>Implements <a class="el" href="classCore_1_1EnvisionPlugin.html#a819d63d8f0fc4ea07d692de66724cd54">Core::EnvisionPlugin</a>.</p>
 
 </div>
 </div>

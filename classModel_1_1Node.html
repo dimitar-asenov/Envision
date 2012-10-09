@@ -150,10 +150,14 @@ Public Member Functions</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the lock used to control access to this node.  <a href="#aa33e411bb1aa1aabca6d162f66bc481f"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a72c0d0ffbf6398cc48fd6627ddab6cfe">addToRevision</a> (int valueToAdd)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Increments the revision of this node by the specified amount.  <a href="#a72c0d0ffbf6398cc48fd6627ddab6cfe"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#ae6c6fa88579de718cfc16e2a5c22e8e3">beginModification</a> (const QString &amp;text=QString())</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Begins a modification session with the current node as a modification target.  <a href="#ae6c6fa88579de718cfc16e2a5c22e8e3"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual QList&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a94bae646017c4e4cb3214d0ecc26c539">children</a> ()</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a list of all child nodes.  <a href="#a94bae646017c4e4cb3214d0ecc26c539"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#acc19699b25363ba3474acf0000da4329">definesSymbol</a> () const </td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if this node defines a symbol and false otherwise.  <a href="#acc19699b25363ba3474acf0000da4329"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#ad54d77f21d23364b560deeca22a6347e">endModification</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Ends a modification session.  <a href="#ad54d77f21d23364b560deeca22a6347e"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a9aad10e0ec7b9359f325db5a3c4fbf90">execute</a> (<a class="el" href="classModel_1_1UndoCommand.html">UndoCommand</a> *command)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Executes the specified command and pushes it on the undo stack.  <a href="#a9aad10e0ec7b9359f325db5a3c4fbf90"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual QList&lt; <a class="el" href="classModel_1_1Node.html">Node</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a79f332d52ca064cf24683b6efe319249">findSymbols</a> (const QRegExp &amp;symbolExp, <a class="el" href="classModel_1_1Node.html">Node</a> *source, <a class="el" href="classModel_1_1Node.html#af2ff52f8a834ec055dca6867ba794208">FindSymbolMode</a> mode, bool exhaustAllScopes)</td></tr>
@@ -196,10 +200,10 @@ Public Member Functions</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the parent of this <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision.">Node</a>.  <a href="#a0662a376982b4cce855e731a0d8134a8"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual const QString &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#ac0238f80b3ad5960919e56e959fb8b36">symbolName</a> () const </td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the name of the symbol defined by this node.  <a href="#ac0238f80b3ad5960919e56e959fb8b36"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a09c78a5461e03d132875ce03445a06c0">typeId</a> () const =0</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an integer id of the type of this <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision.">Node</a>.  <a href="#a09c78a5461e03d132875ce03445a06c0"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual const QString &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a1983a6cd958f2117602e273be8e3b2d8">typeName</a> () const =0</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the name of the type of this <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision.">Node</a>.  <a href="#a1983a6cd958f2117602e273be8e3b2d8"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a1dab7cf9f13060ea1d7c72f979844619">typeId</a> () const </td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an integer id of the type of this <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision.">Node</a>.  <a href="#a1dab7cf9f13060ea1d7c72f979844619"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual const QString &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a032a9d874557533b1c9c5295f6a4b11d">typeName</a> () const </td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the name of the type of this <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision.">Node</a>.  <a href="#a032a9d874557533b1c9c5295f6a4b11d"></a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classModel_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a0ca79f2a20d8993eea0e86ca6088da7c">createNewNode</a> (const QString &amp;type, <a class="el" href="classModel_1_1Node.html">Node</a> *<a class="el" href="classModel_1_1Node.html#a0027c2328323a4733b3e594958b6998a">parent</a>=nullptr)</td></tr>
@@ -210,6 +214,7 @@ Static Public Member Functions</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if there are already registered constructs for a type with the specified name and false otherwise.  <a href="#abce3db1f4cf4cf5192694631148aebcb"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#a96dd7615292eeba03fe903f623fb1305">registerNodeType</a> (const QString &amp;type, const <a class="el" href="classModel_1_1Node.html#a9eedfb121970934710f1f3c67c26f361">NodeConstructor</a> constructor, const <a class="el" href="classModel_1_1Node.html#a36d456dafe5835b3f28142507f90cd89">NodePersistenceConstructor</a> persistenceconstructor)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Registers the constructors of a class derived from <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision.">Node</a>.  <a href="#a96dd7615292eeba03fe903f623fb1305"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#ab01db2467f812532d1c3a441eeae22ea">typeIdStatic</a> ()</td></tr>
 <tr><td colspan="2"><h2><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1Node.html#aedd2b252f73e3ede9117bb92e6dfd516">fullyLoaded</a></td></tr>
@@ -399,6 +404,27 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ae6c6fa88579de718cfc16e2a5c22e8e3"></a><!-- doxytag: member="Model::Node::beginModification" ref="ae6c6fa88579de718cfc16e2a5c22e8e3" args="(const QString &amp;text=QString())" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classModel_1_1Node.html#ae6c6fa88579de718cfc16e2a5c22e8e3">Model::Node::beginModification</a> </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>text</em> = <code>QString()</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Begins a modification session with the current node as a modification target. </p>
+<p><em>text</em> is the description that will be associated with this modification.</p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classModel_1_1Model.html#aeb529525d3f1a3b95f9abfec9aa7487d" title="Begins a modification session.">Model::beginModification()</a> </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a94bae646017c4e4cb3214d0ecc26c539"></a><!-- doxytag: member="Model::Node::children" ref="a94bae646017c4e4cb3214d0ecc26c539" args="()" -->
 <div class="memitem">
 <div class="memproto">
@@ -523,7 +549,26 @@ Static Private Attributes</h2></td></tr>
 <p>Returns true if this node defines a symbol and false otherwise. </p>
 <p>The default implementaion returns false. Reimplement this method and <a class="el" href="classModel_1_1Node.html#ac0238f80b3ad5960919e56e959fb8b36" title="Returns the name of the symbol defined by this node.">symbolName()</a> in derived classes that define symbols. </p>
 
-<p>Reimplemented in <a class="el" href="classOOModel_1_1Method.html#ab8cac3e4ac449ec288b0f172f0072e47">OOModel::Method</a>, <a class="el" href="classOOModel_1_1Class.html#a4094b0470110f96bb51ebd6aae14a851">OOModel::Class</a>, <a class="el" href="classOOModel_1_1Field.html#aa9ccb63bb4787250734621fc97fe02da">OOModel::Field</a>, <a class="el" href="classOOModel_1_1ForEachStatement.html#ae5321b9cfc76603a8e2abf41530530da">OOModel::ForEachStatement</a>, and <a class="el" href="classOOModel_1_1ExpressionStatement.html#a983a24fd719bb8854bdb68b3f60fca1f">OOModel::ExpressionStatement</a>.</p>
+<p>Reimplemented in <a class="el" href="classOOModel_1_1Method.html#ab8cac3e4ac449ec288b0f172f0072e47">OOModel::Method</a>, <a class="el" href="classOOModel_1_1Class.html#a4094b0470110f96bb51ebd6aae14a851">OOModel::Class</a>, <a class="el" href="classOOModel_1_1Field.html#aa9ccb63bb4787250734621fc97fe02da">OOModel::Field</a>, <a class="el" href="classOOModel_1_1FormalArgument.html#a22f0cbb968a5887378329f36938154fa">OOModel::FormalArgument</a>, <a class="el" href="classOOModel_1_1ForEachStatement.html#ae5321b9cfc76603a8e2abf41530530da">OOModel::ForEachStatement</a>, and <a class="el" href="classOOModel_1_1ExpressionStatement.html#a983a24fd719bb8854bdb68b3f60fca1f">OOModel::ExpressionStatement</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad54d77f21d23364b560deeca22a6347e"></a><!-- doxytag: member="Model::Node::endModification" ref="ad54d77f21d23364b560deeca22a6347e" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classModel_1_1Node.html#ad54d77f21d23364b560deeca22a6347e">Model::Node::endModification</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Ends a modification session. </p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classModel_1_1Model.html#a995413407a52a23bea27ec69266e8074" title="Ends a modification session.">Model::endModification()</a> </dd></dl>
 
 </div>
 </div>
@@ -651,9 +696,9 @@ Static Private Attributes</h2></td></tr>
 <div class="memdoc">
 
 <p>Returns a list of all ids in the type hierarchy of this node (excluding abstract base classes). </p>
-<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classModel_1_1Node.html#a09c78a5461e03d132875ce03445a06c0" title="Returns an integer id of the type of this Node.">typeId()</a>.</dd></dl>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classModel_1_1Node.html#a1dab7cf9f13060ea1d7c72f979844619" title="Returns an integer id of the type of this Node.">typeId()</a>.</dd></dl>
 <p>The most derived id appears at the front of the list.</p>
-<p>The default implementation returns an empty list. </p>
+<p>The default implementation returns a list containing only the id of <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision.">Node</a>. </p>
 
 <p>Reimplemented in <a class="el" href="classModel_1_1ExtendableNode.html#a8830492627814a419e07ab97f0cd332e">Model::ExtendableNode</a>, <a class="el" href="classModel_1_1List.html#a310fb2a2b48e7c1f0247a42aca2cc925">Model::List</a>, <a class="el" href="classModel_1_1Text.html#a9247d130419e4b6c1b9ae76fce33f72e">Model::Text</a>, <a class="el" href="classModel_1_1TypedList.html#a945e841700fba50c31bf64eacf433685">Model::TypedList&lt; T &gt;</a>, <a class="el" href="classModel_1_1TypedList.html#a945e841700fba50c31bf64eacf433685">Model::TypedList&lt; StatementItem &gt;</a>, <a class="el" href="classTestNodes_1_1BinaryNode.html#aad536c58f91acb8d08357d9a231e2052">TestNodes::BinaryNode</a>, <a class="el" href="classModel_1_1Reference.html#a5df7762e4e3abd0aac9195cb43e8f5fd">Model::Reference</a>, <a class="el" href="classTestNodes_1_1BinaryNodeAccessUnit.html#a758df9a896c55fe3b2e8cd95c264e1d8">TestNodes::BinaryNodeAccessUnit</a>, <a class="el" href="classTestNodes_1_1BinaryNodePersistenceUnit.html#aeb714f8766b929ebd692e9b3c7e71134">TestNodes::BinaryNodePersistenceUnit</a>, <a class="el" href="classModel_1_1Boolean.html#a4e616690f3e6ae76ad68a912f2425f79">Model::Boolean</a>, <a class="el" href="classModel_1_1Character.html#ac4a2a444a51feb46f81f4ec32c1689b3">Model::Character</a>, <a class="el" href="classModel_1_1Float.html#a4ddaa7e3f6f74be075fb9fdadb003223">Model::Float</a>, <a class="el" href="classModel_1_1Integer.html#ab4399387bf2d583ae60ed24b71084ee8">Model::Integer</a>, <a class="el" href="classModel_1_1TypedList.html#a85781b8d1d3d39c3dd5e815f9dc563aa">Model::TypedList&lt; T &gt;</a>, and <a class="el" href="classModel_1_1TypedList.html#a85781b8d1d3d39c3dd5e815f9dc563aa">Model::TypedList&lt; StatementItem &gt;</a>.</p>
 
@@ -1080,19 +1125,19 @@ Static Private Attributes</h2></td></tr>
 <p>Returns the name of the symbol defined by this node. </p>
 <p>The default implementaion returns a null QString value. Reimplement this method and <a class="el" href="classModel_1_1Node.html#acc19699b25363ba3474acf0000da4329" title="Returns true if this node defines a symbol and false otherwise.">definesSymbol()</a> in derived classes that define symbols. </p>
 
-<p>Reimplemented in <a class="el" href="classOOModel_1_1Method.html#a33f2d5c1bb247e5b4859ff347a1cb952">OOModel::Method</a>, <a class="el" href="classOOModel_1_1Class.html#a08abacf22e6a56c025cc4e1dc85241f1">OOModel::Class</a>, <a class="el" href="classOOModel_1_1Field.html#a8099408698a94e3c89f2c46ccd6b5cf7">OOModel::Field</a>, <a class="el" href="classOOModel_1_1Project.html#a7c88020c237b1c6a98507dab6c4beef4">OOModel::Project</a>, <a class="el" href="classOOModel_1_1Module.html#a433bb2a3b1d061029cf2c0f1dec935ee">OOModel::Module</a>, <a class="el" href="classOOModel_1_1FormalArgument.html#a94b5a337cd8a973b47bd6d0f332bbf7f">OOModel::FormalArgument</a>, <a class="el" href="classOOModel_1_1FormalTypeArgument.html#ac09cfe34b2fd012a3a52dbdc598e8f8c">OOModel::FormalTypeArgument</a>, <a class="el" href="classOOModel_1_1FormalResult.html#a0e1b39a31aeab3752204d43a06bc5a5c">OOModel::FormalResult</a>, <a class="el" href="classOOModel_1_1ForEachStatement.html#a266f42823c614c18f7c89c8c7c1be9f8">OOModel::ForEachStatement</a>, and <a class="el" href="classOOModel_1_1ExpressionStatement.html#a5e2e3e5808867e893a938c210ed27c4f">OOModel::ExpressionStatement</a>.</p>
+<p>Reimplemented in <a class="el" href="classOOModel_1_1Method.html#a33f2d5c1bb247e5b4859ff347a1cb952">OOModel::Method</a>, <a class="el" href="classOOModel_1_1Class.html#a08abacf22e6a56c025cc4e1dc85241f1">OOModel::Class</a>, <a class="el" href="classOOModel_1_1Field.html#a8099408698a94e3c89f2c46ccd6b5cf7">OOModel::Field</a>, <a class="el" href="classOOModel_1_1FormalArgument.html#a94b5a337cd8a973b47bd6d0f332bbf7f">OOModel::FormalArgument</a>, <a class="el" href="classOOModel_1_1Project.html#a7c88020c237b1c6a98507dab6c4beef4">OOModel::Project</a>, <a class="el" href="classOOModel_1_1Module.html#a433bb2a3b1d061029cf2c0f1dec935ee">OOModel::Module</a>, <a class="el" href="classOOModel_1_1FormalTypeArgument.html#ac09cfe34b2fd012a3a52dbdc598e8f8c">OOModel::FormalTypeArgument</a>, <a class="el" href="classOOModel_1_1FormalResult.html#a0e1b39a31aeab3752204d43a06bc5a5c">OOModel::FormalResult</a>, <a class="el" href="classOOModel_1_1ForEachStatement.html#a266f42823c614c18f7c89c8c7c1be9f8">OOModel::ForEachStatement</a>, and <a class="el" href="classOOModel_1_1ExpressionStatement.html#a5e2e3e5808867e893a938c210ed27c4f">OOModel::ExpressionStatement</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a09c78a5461e03d132875ce03445a06c0"></a><!-- doxytag: member="Model::Node::typeId" ref="a09c78a5461e03d132875ce03445a06c0" args="() const =0" -->
+<a class="anchor" id="a1dab7cf9f13060ea1d7c72f979844619"></a><!-- doxytag: member="Model::Node::typeId" ref="a1dab7cf9f13060ea1d7c72f979844619" args="() const " -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual int <a class="el" href="classModel_1_1Node.html#a09c78a5461e03d132875ce03445a06c0">Model::Node::typeId</a> </td>
+          <td class="memname">int <a class="el" href="classModel_1_1Node.html#a1dab7cf9f13060ea1d7c72f979844619">Model::Node::typeId</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> const<code> [pure virtual]</code></td>
+          <td> const<code> [virtual]</code></td>
         </tr>
       </table>
 </div>
@@ -1101,19 +1146,37 @@ Static Private Attributes</h2></td></tr>
 <p>Returns an integer id of the type of this <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision.">Node</a>. </p>
 <p>When a new node class is registered it receives a unique id. This id can be used later to quickly recognize objects of a specific type. </p>
 
-<p>Implemented in <a class="el" href="classModel_1_1ExtendableNode.html#abf6ee053d976820435be009dbcd237f8">Model::ExtendableNode</a>, <a class="el" href="classModel_1_1List.html#aa429554ce28ef8a3e5cd319417c2e7db">Model::List</a>, <a class="el" href="classModel_1_1Text.html#a755ff9466e00a3250c37d524b8203a01">Model::Text</a>, <a class="el" href="classModel_1_1TypedList.html#a69d3e8d4c2d22e99f8ee823657061c54">Model::TypedList&lt; T &gt;</a>, <a class="el" href="classModel_1_1TypedList.html#a69d3e8d4c2d22e99f8ee823657061c54">Model::TypedList&lt; StatementItem &gt;</a>, <a class="el" href="classTestNodes_1_1BinaryNode.html#acac8023bff78df68d4d45063a8d72e34">TestNodes::BinaryNode</a>, <a class="el" href="classModel_1_1Reference.html#a9e0114bda8878c6d650a9b0060da9fca">Model::Reference</a>, <a class="el" href="classTestNodes_1_1BinaryNodeAccessUnit.html#a865f8c7033230b3f1d2e604eb6bb9026">TestNodes::BinaryNodeAccessUnit</a>, <a class="el" href="classTestNodes_1_1BinaryNodePersistenceUnit.html#adea7aa8a80f5e26565665459323c6226">TestNodes::BinaryNodePersistenceUnit</a>, <a class="el" href="classModel_1_1Boolean.html#a7eac2edefb8deedef9527ce7d0afbf9d">Model::Boolean</a>, <a class="el" href="classModel_1_1Character.html#af93c34f450f9c697bc8cd9da2f36c432">Model::Character</a>, <a class="el" href="classModel_1_1Float.html#ae2ef8666860bcd20d3ff1da47f7efaf0">Model::Float</a>, <a class="el" href="classModel_1_1Integer.html#a7cdbf7900f98f645545d8e2a4fe6085a">Model::Integer</a>, <a class="el" href="classModel_1_1TypedList.html#a5a348aa67eedc738501d87ce47dcb730">Model::TypedList&lt; T &gt;</a>, and <a class="el" href="classModel_1_1TypedList.html#a5a348aa67eedc738501d87ce47dcb730">Model::TypedList&lt; StatementItem &gt;</a>.</p>
+<p>Reimplemented in <a class="el" href="classModel_1_1ExtendableNode.html#abf6ee053d976820435be009dbcd237f8">Model::ExtendableNode</a>, <a class="el" href="classModel_1_1List.html#aa429554ce28ef8a3e5cd319417c2e7db">Model::List</a>, <a class="el" href="classModel_1_1Text.html#a755ff9466e00a3250c37d524b8203a01">Model::Text</a>, <a class="el" href="classModel_1_1TypedList.html#a69d3e8d4c2d22e99f8ee823657061c54">Model::TypedList&lt; T &gt;</a>, <a class="el" href="classModel_1_1TypedList.html#a69d3e8d4c2d22e99f8ee823657061c54">Model::TypedList&lt; StatementItem &gt;</a>, <a class="el" href="classTestNodes_1_1BinaryNode.html#acac8023bff78df68d4d45063a8d72e34">TestNodes::BinaryNode</a>, <a class="el" href="classModel_1_1Reference.html#a9e0114bda8878c6d650a9b0060da9fca">Model::Reference</a>, <a class="el" href="classTestNodes_1_1BinaryNodeAccessUnit.html#a865f8c7033230b3f1d2e604eb6bb9026">TestNodes::BinaryNodeAccessUnit</a>, <a class="el" href="classTestNodes_1_1BinaryNodePersistenceUnit.html#adea7aa8a80f5e26565665459323c6226">TestNodes::BinaryNodePersistenceUnit</a>, <a class="el" href="classModel_1_1Boolean.html#a7eac2edefb8deedef9527ce7d0afbf9d">Model::Boolean</a>, <a class="el" href="classModel_1_1Character.html#af93c34f450f9c697bc8cd9da2f36c432">Model::Character</a>, <a class="el" href="classModel_1_1Float.html#ae2ef8666860bcd20d3ff1da47f7efaf0">Model::Float</a>, <a class="el" href="classModel_1_1Integer.html#a7cdbf7900f98f645545d8e2a4fe6085a">Model::Integer</a>, <a class="el" href="classModel_1_1TypedList.html#a5a348aa67eedc738501d87ce47dcb730">Model::TypedList&lt; T &gt;</a>, and <a class="el" href="classModel_1_1TypedList.html#a5a348aa67eedc738501d87ce47dcb730">Model::TypedList&lt; StatementItem &gt;</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a1983a6cd958f2117602e273be8e3b2d8"></a><!-- doxytag: member="Model::Node::typeName" ref="a1983a6cd958f2117602e273be8e3b2d8" args="() const =0" -->
+<a class="anchor" id="ab01db2467f812532d1c3a441eeae22ea"></a><!-- doxytag: member="Model::Node::typeIdStatic" ref="ab01db2467f812532d1c3a441eeae22ea" args="()" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">virtual const QString&amp; <a class="el" href="classModel_1_1Node.html#a1983a6cd958f2117602e273be8e3b2d8">Model::Node::typeName</a> </td>
+          <td class="memname">int <a class="el" href="classModel_1_1Node.html#ab01db2467f812532d1c3a441eeae22ea">Model::Node::typeIdStatic</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> const<code> [pure virtual]</code></td>
+          <td><code> [inline, static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Reimplemented in <a class="el" href="classModel_1_1ExtendableNode.html#a2384a6458357fd2f198d6e84dbb5ee5d">Model::ExtendableNode</a>, <a class="el" href="classModel_1_1List.html#a4585ddf7782392169c16c3bb418bd852">Model::List</a>, <a class="el" href="classModel_1_1Text.html#a06e10b29a93de74b8e0526e021c8ae8c">Model::Text</a>, <a class="el" href="classModel_1_1TypedList.html#ae0854f83d3aa24f1a05bcfff980384f1">Model::TypedList&lt; T &gt;</a>, <a class="el" href="classModel_1_1TypedList.html#ae0854f83d3aa24f1a05bcfff980384f1">Model::TypedList&lt; StatementItem &gt;</a>, <a class="el" href="classTestNodes_1_1BinaryNode.html#a399df5fb07c9d98bf691bd8fc6cf3857">TestNodes::BinaryNode</a>, <a class="el" href="classModel_1_1Reference.html#aef23e5f2913bd8f2786ef4a021a88ebb">Model::Reference</a>, <a class="el" href="classTestNodes_1_1BinaryNodeAccessUnit.html#a606d7a2fd24f31f7e6c2ecbd8139153e">TestNodes::BinaryNodeAccessUnit</a>, <a class="el" href="classTestNodes_1_1BinaryNodePersistenceUnit.html#af53ca18d57612ec15300d10dfa2f89ef">TestNodes::BinaryNodePersistenceUnit</a>, <a class="el" href="classModel_1_1Boolean.html#ae7316b7332abd1f74f003a12882dfe7d">Model::Boolean</a>, <a class="el" href="classModel_1_1Character.html#aa14fbeac3ea30ab559fbfc6aef85985c">Model::Character</a>, <a class="el" href="classModel_1_1Float.html#a24dd27a676129364085ef8872e17e2a9">Model::Float</a>, <a class="el" href="classModel_1_1Integer.html#a5d3c85e40dcbe4bcb995dd220f7c2595">Model::Integer</a>, <a class="el" href="classModel_1_1TypedList.html#acbff59451a3cf7f40d928a5e80fdecb7">Model::TypedList&lt; T &gt;</a>, and <a class="el" href="classModel_1_1TypedList.html#acbff59451a3cf7f40d928a5e80fdecb7">Model::TypedList&lt; StatementItem &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a032a9d874557533b1c9c5295f6a4b11d"></a><!-- doxytag: member="Model::Node::typeName" ref="a032a9d874557533b1c9c5295f6a4b11d" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const QString &amp; <a class="el" href="classModel_1_1Node.html#a032a9d874557533b1c9c5295f6a4b11d">Model::Node::typeName</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const<code> [virtual]</code></td>
         </tr>
       </table>
 </div>
@@ -1123,7 +1186,7 @@ Static Private Attributes</h2></td></tr>
 <p>This is typically a string identical to the class name.</p>
 <p>This value is used when persisting the node. </p>
 
-<p>Implemented in <a class="el" href="classModel_1_1ExtendableNode.html#a470d4736f5f452b7a82503f03925b550">Model::ExtendableNode</a>, <a class="el" href="classModel_1_1List.html#ab2202c90a6d1f1a43867d56c88b262eb">Model::List</a>, <a class="el" href="classModel_1_1Text.html#abcc08e5cf83a1607f4d1e03f66e3215c">Model::Text</a>, <a class="el" href="classModel_1_1TypedList.html#a5779b92a0a4b60ee81de96c6c806d4f1">Model::TypedList&lt; T &gt;</a>, <a class="el" href="classModel_1_1TypedList.html#a5779b92a0a4b60ee81de96c6c806d4f1">Model::TypedList&lt; StatementItem &gt;</a>, <a class="el" href="classTestNodes_1_1BinaryNode.html#a64b91d9e0719e3b42c37ee6d17085e06">TestNodes::BinaryNode</a>, <a class="el" href="classModel_1_1Reference.html#a91dc51c54ec2cf8549f83c82c375768c">Model::Reference</a>, <a class="el" href="classTestNodes_1_1BinaryNodeAccessUnit.html#a7fb2465fbb207a329f8890c113f5a10f">TestNodes::BinaryNodeAccessUnit</a>, <a class="el" href="classTestNodes_1_1BinaryNodePersistenceUnit.html#aa1f1779edfd403bc821ea1fb3a52200a">TestNodes::BinaryNodePersistenceUnit</a>, <a class="el" href="classModel_1_1Boolean.html#ab8c99802258c2cf634754d144006a9ac">Model::Boolean</a>, <a class="el" href="classModel_1_1Character.html#a2ce1329f757ada5ba5cab101eea9e3f1">Model::Character</a>, <a class="el" href="classModel_1_1Float.html#af59295616c737167a57c4af4e7bc253c">Model::Float</a>, <a class="el" href="classModel_1_1Integer.html#aec1185d2b3826d886490f750f9a0f63a">Model::Integer</a>, <a class="el" href="classModel_1_1TypedList.html#a7257ab928f8c9ddb5344038c611cb121">Model::TypedList&lt; T &gt;</a>, and <a class="el" href="classModel_1_1TypedList.html#a7257ab928f8c9ddb5344038c611cb121">Model::TypedList&lt; StatementItem &gt;</a>.</p>
+<p>Reimplemented in <a class="el" href="classModel_1_1ExtendableNode.html#a470d4736f5f452b7a82503f03925b550">Model::ExtendableNode</a>, <a class="el" href="classModel_1_1List.html#ab2202c90a6d1f1a43867d56c88b262eb">Model::List</a>, <a class="el" href="classModel_1_1Text.html#abcc08e5cf83a1607f4d1e03f66e3215c">Model::Text</a>, <a class="el" href="classModel_1_1TypedList.html#a5779b92a0a4b60ee81de96c6c806d4f1">Model::TypedList&lt; T &gt;</a>, <a class="el" href="classModel_1_1TypedList.html#a5779b92a0a4b60ee81de96c6c806d4f1">Model::TypedList&lt; StatementItem &gt;</a>, <a class="el" href="classTestNodes_1_1BinaryNode.html#a64b91d9e0719e3b42c37ee6d17085e06">TestNodes::BinaryNode</a>, <a class="el" href="classModel_1_1Reference.html#a91dc51c54ec2cf8549f83c82c375768c">Model::Reference</a>, <a class="el" href="classTestNodes_1_1BinaryNodeAccessUnit.html#a7fb2465fbb207a329f8890c113f5a10f">TestNodes::BinaryNodeAccessUnit</a>, <a class="el" href="classTestNodes_1_1BinaryNodePersistenceUnit.html#aa1f1779edfd403bc821ea1fb3a52200a">TestNodes::BinaryNodePersistenceUnit</a>, <a class="el" href="classModel_1_1Boolean.html#ab8c99802258c2cf634754d144006a9ac">Model::Boolean</a>, <a class="el" href="classModel_1_1Character.html#a2ce1329f757ada5ba5cab101eea9e3f1">Model::Character</a>, <a class="el" href="classModel_1_1Float.html#af59295616c737167a57c4af4e7bc253c">Model::Float</a>, <a class="el" href="classModel_1_1Integer.html#aec1185d2b3826d886490f750f9a0f63a">Model::Integer</a>, <a class="el" href="classModel_1_1TypedList.html#a7257ab928f8c9ddb5344038c611cb121">Model::TypedList&lt; T &gt;</a>, and <a class="el" href="classModel_1_1TypedList.html#a7257ab928f8c9ddb5344038c611cb121">Model::TypedList&lt; StatementItem &gt;</a>.</p>
 
 </div>
 </div>

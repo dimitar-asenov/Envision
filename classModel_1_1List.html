@@ -442,7 +442,7 @@ template&lt;class T &gt; </div>
 <p>Returns a list of all ids in the type hierarchy of this node (excluding abstract base classes). </p>
 <dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classModel_1_1List.html#aa429554ce28ef8a3e5cd319417c2e7db" title="Returns an integer id of the type of this Node.">typeId()</a>.</dd></dl>
 <p>The most derived id appears at the front of the list.</p>
-<p>The default implementation returns an empty list. </p>
+<p>The default implementation returns a list containing only the id of <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision.">Node</a>. </p>
 
 <p>Reimplemented from <a class="el" href="classModel_1_1Node.html#a99b6186b6f8f5259dc93ab37be1c1094">Model::Node</a>.</p>
 
@@ -832,7 +832,7 @@ template&lt;class T &gt; </div>
 <p>Returns an integer id of the type of this <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision.">Node</a>. </p>
 <p>When a new node class is registered it receives a unique id. This id can be used later to quickly recognize objects of a specific type. </p>
 
-<p>Implements <a class="el" href="classModel_1_1Node.html#a09c78a5461e03d132875ce03445a06c0">Model::Node</a>.</p>
+<p>Reimplemented from <a class="el" href="classModel_1_1Node.html#a1dab7cf9f13060ea1d7c72f979844619">Model::Node</a>.</p>
 
 <p>Reimplemented in <a class="el" href="classModel_1_1TypedList.html#a69d3e8d4c2d22e99f8ee823657061c54">Model::TypedList&lt; T &gt;</a>, <a class="el" href="classModel_1_1TypedList.html#a69d3e8d4c2d22e99f8ee823657061c54">Model::TypedList&lt; StatementItem &gt;</a>, <a class="el" href="classModel_1_1TypedList.html#a5a348aa67eedc738501d87ce47dcb730">Model::TypedList&lt; T &gt;</a>, and <a class="el" href="classModel_1_1TypedList.html#a5a348aa67eedc738501d87ce47dcb730">Model::TypedList&lt; StatementItem &gt;</a>.</p>
 
@@ -851,6 +851,8 @@ template&lt;class T &gt; </div>
       </table>
 </div>
 <div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="classModel_1_1Node.html#ab01db2467f812532d1c3a441eeae22ea">Model::Node</a>.</p>
 
 <p>Reimplemented in <a class="el" href="classModel_1_1TypedList.html#ae0854f83d3aa24f1a05bcfff980384f1">Model::TypedList&lt; T &gt;</a>, <a class="el" href="classModel_1_1TypedList.html#ae0854f83d3aa24f1a05bcfff980384f1">Model::TypedList&lt; StatementItem &gt;</a>, <a class="el" href="classModel_1_1TypedList.html#acbff59451a3cf7f40d928a5e80fdecb7">Model::TypedList&lt; T &gt;</a>, and <a class="el" href="classModel_1_1TypedList.html#acbff59451a3cf7f40d928a5e80fdecb7">Model::TypedList&lt; StatementItem &gt;</a>.</p>
 
@@ -874,7 +876,7 @@ template&lt;class T &gt; </div>
 <p>This is typically a string identical to the class name.</p>
 <p>This value is used when persisting the node. </p>
 
-<p>Implements <a class="el" href="classModel_1_1Node.html#a1983a6cd958f2117602e273be8e3b2d8">Model::Node</a>.</p>
+<p>Reimplemented from <a class="el" href="classModel_1_1Node.html#a032a9d874557533b1c9c5295f6a4b11d">Model::Node</a>.</p>
 
 <p>Reimplemented in <a class="el" href="classModel_1_1TypedList.html#a5779b92a0a4b60ee81de96c6c806d4f1">Model::TypedList&lt; T &gt;</a>, <a class="el" href="classModel_1_1TypedList.html#a5779b92a0a4b60ee81de96c6c806d4f1">Model::TypedList&lt; StatementItem &gt;</a>, <a class="el" href="classModel_1_1TypedList.html#a7257ab928f8c9ddb5344038c611cb121">Model::TypedList&lt; T &gt;</a>, and <a class="el" href="classModel_1_1TypedList.html#a7257ab928f8c9ddb5344038c611cb121">Model::TypedList&lt; StatementItem &gt;</a>.</p>
 

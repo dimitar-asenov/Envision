@@ -120,26 +120,28 @@ Inheritance diagram for CustomMethodCall::CustomMethodCall:</div>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCustomMethodCall_1_1CustomMethodCall.html#a19fa0ccaa3a11c3d6765a23a196c607e">initialize</a> (<a class="el" href="classCore_1_1EnvisionManager.html">Core::EnvisionManager</a> &amp;)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the plug-in.  <a href="#a19fa0ccaa3a11c3d6765a23a196c607e"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCustomMethodCall_1_1CustomMethodCall.html#a4117b443634bb3629d2abad12d90df1e">selfTest</a> (QString testid)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts the indicated self-test for this plug-in.  <a href="#a4117b443634bb3629d2abad12d90df1e"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCustomMethodCall_1_1CustomMethodCall.html#a6bf546fc2dc931a24ec8f85346465d78">initialize</a> (<a class="el" href="classCore_1_1EnvisionManager.html">Core::EnvisionManager</a> &amp;) override</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the plug-in.  <a href="#a6bf546fc2dc931a24ec8f85346465d78"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCustomMethodCall_1_1CustomMethodCall.html#a1e7c335c4fa3ee4a7a96d95001b1662f">selfTest</a> (QString testid) override</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts the indicated self-test for this plug-in.  <a href="#a1e7c335c4fa3ee4a7a96d95001b1662f"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCustomMethodCall_1_1CustomMethodCall.html#a1ec025b0ff02bffe979d38ea830f2c57">unload</a> () override</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees up all resources allocated by this plug-in and prepares it to be unloaded.  <a href="#a1ec025b0ff02bffe979d38ea830f2c57"></a><br/></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Implements the interface between the <a class="el" href="classCustomMethodCall_1_1CustomMethodCall.html" title="Implements the interface between the CustomMethodCall plug-in and Envision.">CustomMethodCall</a> plug-in and Envision. </p>
 <p>The Envision core will use this interface to communicate with the plug-in. The plug-in will be initialized before any other operations are performed.</p>
 <p>The plug-in can use the supplied EnvisionManager object to find out more about the running environment. </p>
 </div><hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="a19fa0ccaa3a11c3d6765a23a196c607e"></a><!-- doxytag: member="CustomMethodCall::CustomMethodCall::initialize" ref="a19fa0ccaa3a11c3d6765a23a196c607e" args="(Core::EnvisionManager &amp;)" -->
+<a class="anchor" id="a6bf546fc2dc931a24ec8f85346465d78"></a><!-- doxytag: member="CustomMethodCall::CustomMethodCall::initialize" ref="a6bf546fc2dc931a24ec8f85346465d78" args="(Core::EnvisionManager &amp;) override" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classCustomMethodCall_1_1CustomMethodCall.html#a19fa0ccaa3a11c3d6765a23a196c607e">CustomMethodCall::CustomMethodCall::initialize</a> </td>
+          <td class="memname">bool <a class="el" href="classCustomMethodCall_1_1CustomMethodCall.html#a6bf546fc2dc931a24ec8f85346465d78">CustomMethodCall::CustomMethodCall::initialize</a> </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classCore_1_1EnvisionManager.html">Core::EnvisionManager</a> &amp;&#160;</td>
           <td class="paramname"><em>manager</em></td><td>)</td>
-          <td><code> [virtual]</code></td>
+          <td><code> [override, virtual]</code></td>
         </tr>
       </table>
 </div>
@@ -159,16 +161,16 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a4117b443634bb3629d2abad12d90df1e"></a><!-- doxytag: member="CustomMethodCall::CustomMethodCall::selfTest" ref="a4117b443634bb3629d2abad12d90df1e" args="(QString testid)" -->
+<a class="anchor" id="a1e7c335c4fa3ee4a7a96d95001b1662f"></a><!-- doxytag: member="CustomMethodCall::CustomMethodCall::selfTest" ref="a1e7c335c4fa3ee4a7a96d95001b1662f" args="(QString testid) override" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classCustomMethodCall_1_1CustomMethodCall.html#a4117b443634bb3629d2abad12d90df1e">CustomMethodCall::CustomMethodCall::selfTest</a> </td>
+          <td class="memname">void <a class="el" href="classCustomMethodCall_1_1CustomMethodCall.html#a1e7c335c4fa3ee4a7a96d95001b1662f">CustomMethodCall::CustomMethodCall::selfTest</a> </td>
           <td>(</td>
           <td class="paramtype">QString&#160;</td>
           <td class="paramname"><em>testid</em></td><td>)</td>
-          <td><code> [virtual]</code></td>
+          <td><code> [override, virtual]</code></td>
         </tr>
       </table>
 </div>
@@ -188,6 +190,27 @@ Public Member Functions</h2></td></tr>
 </dl>
 
 <p>Implements <a class="el" href="classCore_1_1EnvisionPlugin.html#ac68c02acf86e553aa2a74629c456e6ea">Core::EnvisionPlugin</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1ec025b0ff02bffe979d38ea830f2c57"></a><!-- doxytag: member="CustomMethodCall::CustomMethodCall::unload" ref="a1ec025b0ff02bffe979d38ea830f2c57" args="() override" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classCustomMethodCall_1_1CustomMethodCall.html#a1ec025b0ff02bffe979d38ea830f2c57">CustomMethodCall::CustomMethodCall::unload</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [override, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Frees up all resources allocated by this plug-in and prepares it to be unloaded. </p>
+<p>This function is called when Envision is about to exit or when a plug-in has manually been unloaded. At the time when this function is called there will be no plug-ins dependent on this one. </p>
+
+<p>Implements <a class="el" href="classCore_1_1EnvisionPlugin.html#a819d63d8f0fc4ea07d692de66724cd54">Core::EnvisionPlugin</a>.</p>
 
 </div>
 </div>

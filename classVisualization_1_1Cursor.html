@@ -101,6 +101,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">Visualization::Cursor Class Reference</div>  </div>
@@ -138,7 +139,11 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Cursor.html#a8ac3678893f4b70a15ad9b94e62dd20b">notLocationEquivalent</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classVisualization_1_1Item.html">Item</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Cursor.html#a5e4d8979f8d9d93b27e2847ce7c5de8d">owner</a> () const </td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const QPoint &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Cursor.html#ae3c3cd0d12ec521ca20e21fe811567d5">position</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the position of this cursor in corrdinates local to <a class="el" href="classVisualization_1_1Cursor.html#a5e4d8979f8d9d93b27e2847ce7c5de8d">owner()</a>  <a href="#ae3c3cd0d12ec521ca20e21fe811567d5"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const QRect &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Cursor.html#ae4e48912a0f572def84dac5c891afb7b">region</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the region of this cursor in corrdinates local to <a class="el" href="classVisualization_1_1Cursor.html#a5e4d8979f8d9d93b27e2847ce7c5de8d">owner()</a>  <a href="#ae4e48912a0f572def84dac5c891afb7b"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QRect&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Cursor.html#a085bcbdc31778030d61da6834975ef1a">sceneRegion</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the region of this cursor in scene coordinates.  <a href="#a085bcbdc31778030d61da6834975ef1a"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Cursor.html#ad851a70447cc6cf688eaba4bbcee412b">setNotLocationEquivalent</a> (bool notEquivalent)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Cursor.html#ab611e9892b13764c20c357f81d72dd68">setPosition</a> (const QPoint &amp;pos)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Cursor.html#a837886cb0d9187d37d1d137da8032814">setRegion</a> (const QRect &amp;<a class="el" href="classVisualization_1_1Cursor.html#ae4e48912a0f572def84dac5c891afb7b">region</a>)</td></tr>
@@ -147,6 +152,9 @@ Public Member Functions</h2></td></tr>
 <tr><td colspan="2"><h2><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Cursor.html#a3e320decca1ef99cb38a94142fc16285">setVisualization</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *<a class="el" href="classVisualization_1_1Cursor.html#a4cc57366d14f77eb0f6280c415017a39">visualization</a>)</td></tr>
+<tr><td colspan="2"><h2><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Cursor.html#a2625b9704d22c8545a1b35415d1d127c">allowEquivalentCursorsAcrossBoundaries</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *parent, <a class="el" href="classVisualization_1_1Item.html">Item</a> *child)</td></tr>
 <tr><td colspan="2"><h2><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Cursor.html#a32276b1e9c759f0a71580ad9edf190ed">notLocationEquivalent_</a></td></tr>
@@ -231,6 +239,33 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="a2625b9704d22c8545a1b35415d1d127c"></a><!-- doxytag: member="Visualization::Cursor::allowEquivalentCursorsAcrossBoundaries" ref="a2625b9704d22c8545a1b35415d1d127c" args="(Item *parent, Item *child)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classVisualization_1_1Cursor.html#a2625b9704d22c8545a1b35415d1d127c">Visualization::Cursor::allowEquivalentCursorsAcrossBoundaries</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Item</a> *&#160;</td>
+          <td class="paramname"><em>parent</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Item</a> *&#160;</td>
+          <td class="paramname"><em>child</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="ac175180d1b1e05430943901928659f16"></a><!-- doxytag: member="Visualization::Cursor::isAtBoundary" ref="ac175180d1b1e05430943901928659f16" args="() const " -->
 <div class="memitem">
 <div class="memproto">
@@ -270,7 +305,8 @@ Private Attributes</h2></td></tr>
 <li>None of the cursors is set to be not location equivalent.</li>
 <li>The type of both cursors is the same. Furthermore the type can not be BoxCursor.</li>
 <li>The owners of the two cursors are in a child-parent relationship. Two cursors from peer entities are not location equivalent. Two cursors from the same owner can not be location equivalent</li>
-<li>At least one of the cursors is a boundary cursor. </li>
+<li>At least one of the cursors is a boundary cursor.</li>
+<li>The inner item's style allows for cursors equivalent through a boundary. </li>
 </ul>
 
 </div>
@@ -384,6 +420,8 @@ Private Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 
+<p>Returns the position of this cursor in corrdinates local to <a class="el" href="classVisualization_1_1Cursor.html#a5e4d8979f8d9d93b27e2847ce7c5de8d">owner()</a> </p>
+
 </div>
 </div>
 <a class="anchor" id="ae4e48912a0f572def84dac5c891afb7b"></a><!-- doxytag: member="Visualization::Cursor::region" ref="ae4e48912a0f572def84dac5c891afb7b" args="()" -->
@@ -399,6 +437,26 @@ Private Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
+
+<p>Returns the region of this cursor in corrdinates local to <a class="el" href="classVisualization_1_1Cursor.html#a5e4d8979f8d9d93b27e2847ce7c5de8d">owner()</a> </p>
+
+</div>
+</div>
+<a class="anchor" id="a085bcbdc31778030d61da6834975ef1a"></a><!-- doxytag: member="Visualization::Cursor::sceneRegion" ref="a085bcbdc31778030d61da6834975ef1a" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QRect <a class="el" href="classVisualization_1_1Cursor.html#a085bcbdc31778030d61da6834975ef1a">Visualization::Cursor::sceneRegion</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Returns the region of this cursor in scene coordinates. </p>
 
 </div>
 </div>

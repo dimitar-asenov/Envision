@@ -14,8 +14,8 @@ var searchData=
   ['errorexpression',['ErrorExpression',['../classOOModel_1_1ErrorExpression.html',1,'OOModel']]],
   ['errorexpressionstringcomponents',['ErrorExpressionStringComponents',['../classOOInteraction_1_1ErrorExpressionStringComponents.html',1,'OOInteraction']]],
   ['errortype',['ErrorType',['../classOOModel_1_1ErrorType.html',1,'OOModel']]],
-  ['expression',['Expression',['../classOOModel_1_1Expression.html',1,'OOModel']]],
   ['expression',['Expression',['../classInteraction_1_1Expression.html',1,'Interaction']]],
+  ['expression',['Expression',['../classOOModel_1_1Expression.html',1,'OOModel']]],
   ['expressioncontext',['ExpressionContext',['../classInteraction_1_1ExpressionContext.html',1,'Interaction']]],
   ['expressioneditor',['ExpressionEditor',['../classInteraction_1_1ExpressionEditor.html',1,'Interaction']]],
   ['expressionstatement',['ExpressionStatement',['../classOOModel_1_1ExpressionStatement.html',1,'OOModel']]],
@@ -25,5 +25,7 @@ var searchData=
   ['expressionvisitor',['ExpressionVisitor',['../classInteraction_1_1ExpressionVisitor.html',1,'Interaction']]],
   ['extendableindex',['ExtendableIndex',['../classModel_1_1ExtendableIndex.html',1,'Model']]],
   ['extendablenode',['ExtendableNode',['../classModel_1_1ExtendableNode.html',1,'Model']]],
-  ['extendednodechild',['ExtendedNodeChild',['../classModel_1_1ExtendedNodeChild.html',1,'Model']]]
+  ['extendednodechild',['ExtendedNodeChild',['../classModel_1_1ExtendedNodeChild.html',1,'Model']]],
+  ['extendedvisitor',['ExtendedVisitor',['../classModel_1_1ExtendedVisitor.html',1,'Model']]],
+  ['extendedvisitor_3c_20visitorb_2c_20visitora_20_3e',['ExtendedVisitor< VisitorB, VisitorA >',['../classModel_1_1ExtendedVisitor.html',1,'Model']]]
 ];

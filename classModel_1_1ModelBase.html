@@ -119,10 +119,12 @@ Inheritance diagram for Model::ModelBase:</div>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1ModelBase.html#af9f5dfa9b16f04dcaf3e13361f467a3d">initialize</a> (<a class="el" href="classCore_1_1EnvisionManager.html">Core::EnvisionManager</a> &amp;)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the plug-in.  <a href="#af9f5dfa9b16f04dcaf3e13361f467a3d"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1ModelBase.html#a5a297645ecabd85ab249175e676a2ff5">selfTest</a> (QString testid)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts the indicated self-test for this plug-in.  <a href="#a5a297645ecabd85ab249175e676a2ff5"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1ModelBase.html#a96ee775528799b51c1f03e65fdf78a9a">initialize</a> (<a class="el" href="classCore_1_1EnvisionManager.html">Core::EnvisionManager</a> &amp;) override</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the plug-in.  <a href="#a96ee775528799b51c1f03e65fdf78a9a"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1ModelBase.html#a0959ebca02829b35f0a90e953711847f">selfTest</a> (QString testid) override</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts the indicated self-test for this plug-in.  <a href="#a0959ebca02829b35f0a90e953711847f"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1ModelBase.html#a22e6226543bee70cd4f826cb8ef1e72e">unload</a> () override</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees up all resources allocated by this plug-in and prepares it to be unloaded.  <a href="#a22e6226543bee70cd4f826cb8ef1e72e"></a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classLogger_1_1Log.html">Logger::Log</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1ModelBase.html#ab12bdd37a3ec8aab5789312d7b0a3247">log</a> ()</td></tr>
@@ -131,16 +133,16 @@ Static Private Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classLogger_1_1Log.html">Logger::Log</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1ModelBase.html#a4fc758dee57bd52cb4dd8655435bdadb">logger</a> = nullptr</td></tr>
 </table>
 <hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="af9f5dfa9b16f04dcaf3e13361f467a3d"></a><!-- doxytag: member="Model::ModelBase::initialize" ref="af9f5dfa9b16f04dcaf3e13361f467a3d" args="(Core::EnvisionManager &amp;)" -->
+<a class="anchor" id="a96ee775528799b51c1f03e65fdf78a9a"></a><!-- doxytag: member="Model::ModelBase::initialize" ref="a96ee775528799b51c1f03e65fdf78a9a" args="(Core::EnvisionManager &amp;) override" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classModel_1_1ModelBase.html#af9f5dfa9b16f04dcaf3e13361f467a3d">Model::ModelBase::initialize</a> </td>
+          <td class="memname">bool <a class="el" href="classModel_1_1ModelBase.html#a96ee775528799b51c1f03e65fdf78a9a">Model::ModelBase::initialize</a> </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classCore_1_1EnvisionManager.html">Core::EnvisionManager</a> &amp;&#160;</td>
           <td class="paramname"><em>manager</em></td><td>)</td>
-          <td><code> [virtual]</code></td>
+          <td><code> [override, virtual]</code></td>
         </tr>
       </table>
 </div>
@@ -176,16 +178,16 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a5a297645ecabd85ab249175e676a2ff5"></a><!-- doxytag: member="Model::ModelBase::selfTest" ref="a5a297645ecabd85ab249175e676a2ff5" args="(QString testid)" -->
+<a class="anchor" id="a0959ebca02829b35f0a90e953711847f"></a><!-- doxytag: member="Model::ModelBase::selfTest" ref="a0959ebca02829b35f0a90e953711847f" args="(QString testid) override" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classModel_1_1ModelBase.html#a5a297645ecabd85ab249175e676a2ff5">Model::ModelBase::selfTest</a> </td>
+          <td class="memname">void <a class="el" href="classModel_1_1ModelBase.html#a0959ebca02829b35f0a90e953711847f">Model::ModelBase::selfTest</a> </td>
           <td>(</td>
           <td class="paramtype">QString&#160;</td>
           <td class="paramname"><em>testid</em></td><td>)</td>
-          <td><code> [virtual]</code></td>
+          <td><code> [override, virtual]</code></td>
         </tr>
       </table>
 </div>
@@ -205,6 +207,27 @@ Static Private Attributes</h2></td></tr>
 </dl>
 
 <p>Implements <a class="el" href="classCore_1_1EnvisionPlugin.html#ac68c02acf86e553aa2a74629c456e6ea">Core::EnvisionPlugin</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a22e6226543bee70cd4f826cb8ef1e72e"></a><!-- doxytag: member="Model::ModelBase::unload" ref="a22e6226543bee70cd4f826cb8ef1e72e" args="() override" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classModel_1_1ModelBase.html#a22e6226543bee70cd4f826cb8ef1e72e">Model::ModelBase::unload</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [override, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Frees up all resources allocated by this plug-in and prepares it to be unloaded. </p>
+<p>This function is called when Envision is about to exit or when a plug-in has manually been unloaded. At the time when this function is called there will be no plug-ins dependent on this one. </p>
+
+<p>Implements <a class="el" href="classCore_1_1EnvisionPlugin.html#a819d63d8f0fc4ea07d692de66724cd54">Core::EnvisionPlugin</a>.</p>
 
 </div>
 </div>

@@ -9,6 +9,7 @@ var searchData=
   ['layoutprovider_3c_3e',['LayoutProvider<>',['../classVisualization_1_1LayoutProvider.html',1,'Visualization']]],
   ['layoutproviderbase',['LayoutProviderBase',['../classVisualization_1_1LayoutProviderBase.html',1,'Visualization']]],
   ['layoutstyle',['LayoutStyle',['../classVisualization_1_1LayoutStyle.html',1,'Visualization']]],
+  ['leaveunfinished',['LeaveUnfinished',['../classInteraction_1_1LeaveUnfinished.html',1,'Interaction']]],
   ['library',['Library',['../classOOModel_1_1Library.html',1,'OOModel']]],
   ['list',['List',['../classModel_1_1List.html',1,'Model']]],
   ['listcell',['ListCell',['../classOOInteraction_1_1ListCell.html',1,'OOInteraction']]],

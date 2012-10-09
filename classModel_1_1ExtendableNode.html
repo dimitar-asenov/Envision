@@ -116,19 +116,20 @@ Inheritance diagram for Model::ExtendableNode:</div>
   <img src="classModel_1_1ExtendableNode.png" usemap="#Model::ExtendableNode_map" alt=""/>
   <map id="Model::ExtendableNode_map" name="Model::ExtendableNode_map">
 <area href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision." alt="Model::Node" shape="rect" coords="0,0,194,24"/>
-<area href="classOOModel_1_1Class.html" alt="OOModel::Class" shape="rect" coords="204,112,398,136"/>
-<area href="classOOModel_1_1Expression.html" alt="OOModel::Expression" shape="rect" coords="204,168,398,192"/>
-<area href="classOOModel_1_1Field.html" alt="OOModel::Field" shape="rect" coords="204,224,398,248"/>
-<area href="classOOModel_1_1FormalArgument.html" alt="OOModel::FormalArgument" shape="rect" coords="204,280,398,304"/>
-<area href="classOOModel_1_1FormalResult.html" alt="OOModel::FormalResult" shape="rect" coords="204,336,398,360"/>
-<area href="classOOModel_1_1FormalTypeArgument.html" alt="OOModel::FormalTypeArgument" shape="rect" coords="204,392,398,416"/>
-<area href="classOOModel_1_1Method.html" alt="OOModel::Method" shape="rect" coords="204,448,398,472"/>
-<area href="classOOModel_1_1Module.html" alt="OOModel::Module" shape="rect" coords="204,504,398,528"/>
-<area href="classOOModel_1_1Project.html" alt="OOModel::Project" shape="rect" coords="204,560,398,584"/>
-<area href="classOOModel_1_1StatementItem.html" alt="OOModel::StatementItem" shape="rect" coords="204,616,398,640"/>
-<area href="classOOModel_1_1SwitchCase.html" alt="OOModel::SwitchCase" shape="rect" coords="204,672,398,696"/>
-<area href="classTestNodes_1_1BinaryNode.html" alt="TestNodes::BinaryNode" shape="rect" coords="204,728,398,752"/>
-<area href="classTestNodes_1_1PartialList.html" alt="TestNodes::PartialList" shape="rect" coords="204,784,398,808"/>
+<area href="classOOModel_1_1CatchClause.html" alt="OOModel::CatchClause" shape="rect" coords="204,112,398,136"/>
+<area href="classOOModel_1_1Class.html" alt="OOModel::Class" shape="rect" coords="204,168,398,192"/>
+<area href="classOOModel_1_1Expression.html" alt="OOModel::Expression" shape="rect" coords="204,224,398,248"/>
+<area href="classOOModel_1_1Field.html" alt="OOModel::Field" shape="rect" coords="204,280,398,304"/>
+<area href="classOOModel_1_1FormalArgument.html" alt="OOModel::FormalArgument" shape="rect" coords="204,336,398,360"/>
+<area href="classOOModel_1_1FormalResult.html" alt="OOModel::FormalResult" shape="rect" coords="204,392,398,416"/>
+<area href="classOOModel_1_1FormalTypeArgument.html" alt="OOModel::FormalTypeArgument" shape="rect" coords="204,448,398,472"/>
+<area href="classOOModel_1_1Method.html" alt="OOModel::Method" shape="rect" coords="204,504,398,528"/>
+<area href="classOOModel_1_1Module.html" alt="OOModel::Module" shape="rect" coords="204,560,398,584"/>
+<area href="classOOModel_1_1Project.html" alt="OOModel::Project" shape="rect" coords="204,616,398,640"/>
+<area href="classOOModel_1_1StatementItem.html" alt="OOModel::StatementItem" shape="rect" coords="204,672,398,696"/>
+<area href="classOOModel_1_1SwitchCase.html" alt="OOModel::SwitchCase" shape="rect" coords="204,728,398,752"/>
+<area href="classTestNodes_1_1BinaryNode.html" alt="TestNodes::BinaryNode" shape="rect" coords="204,784,398,808"/>
+<area href="classTestNodes_1_1PartialList.html" alt="TestNodes::PartialList" shape="rect" coords="204,840,398,864"/>
 </map>
  </div></div>
 
@@ -467,7 +468,7 @@ template&lt;class T &gt; </div>
 <p>Returns a list of all ids in the type hierarchy of this node (excluding abstract base classes). </p>
 <dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="classModel_1_1ExtendableNode.html#abf6ee053d976820435be009dbcd237f8" title="Returns an integer id of the type of this Node.">typeId()</a>.</dd></dl>
 <p>The most derived id appears at the front of the list.</p>
-<p>The default implementation returns an empty list. </p>
+<p>The default implementation returns a list containing only the id of <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision.">Node</a>. </p>
 
 <p>Reimplemented from <a class="el" href="classModel_1_1Node.html#a99b6186b6f8f5259dc93ab37be1c1094">Model::Node</a>.</p>
 
@@ -788,7 +789,7 @@ template&lt;class T &gt; </div>
 <p>Returns an integer id of the type of this <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision.">Node</a>. </p>
 <p>When a new node class is registered it receives a unique id. This id can be used later to quickly recognize objects of a specific type. </p>
 
-<p>Implements <a class="el" href="classModel_1_1Node.html#a09c78a5461e03d132875ce03445a06c0">Model::Node</a>.</p>
+<p>Reimplemented from <a class="el" href="classModel_1_1Node.html#a1dab7cf9f13060ea1d7c72f979844619">Model::Node</a>.</p>
 
 <p>Reimplemented in <a class="el" href="classTestNodes_1_1BinaryNode.html#acac8023bff78df68d4d45063a8d72e34">TestNodes::BinaryNode</a>, <a class="el" href="classTestNodes_1_1BinaryNodeAccessUnit.html#a865f8c7033230b3f1d2e604eb6bb9026">TestNodes::BinaryNodeAccessUnit</a>, and <a class="el" href="classTestNodes_1_1BinaryNodePersistenceUnit.html#adea7aa8a80f5e26565665459323c6226">TestNodes::BinaryNodePersistenceUnit</a>.</p>
 
@@ -807,6 +808,8 @@ template&lt;class T &gt; </div>
       </table>
 </div>
 <div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="classModel_1_1Node.html#ab01db2467f812532d1c3a441eeae22ea">Model::Node</a>.</p>
 
 <p>Reimplemented in <a class="el" href="classTestNodes_1_1BinaryNode.html#a399df5fb07c9d98bf691bd8fc6cf3857">TestNodes::BinaryNode</a>, <a class="el" href="classTestNodes_1_1BinaryNodeAccessUnit.html#a606d7a2fd24f31f7e6c2ecbd8139153e">TestNodes::BinaryNodeAccessUnit</a>, and <a class="el" href="classTestNodes_1_1BinaryNodePersistenceUnit.html#af53ca18d57612ec15300d10dfa2f89ef">TestNodes::BinaryNodePersistenceUnit</a>.</p>
 
@@ -830,7 +833,7 @@ template&lt;class T &gt; </div>
 <p>This is typically a string identical to the class name.</p>
 <p>This value is used when persisting the node. </p>
 
-<p>Implements <a class="el" href="classModel_1_1Node.html#a1983a6cd958f2117602e273be8e3b2d8">Model::Node</a>.</p>
+<p>Reimplemented from <a class="el" href="classModel_1_1Node.html#a032a9d874557533b1c9c5295f6a4b11d">Model::Node</a>.</p>
 
 <p>Reimplemented in <a class="el" href="classTestNodes_1_1BinaryNode.html#a64b91d9e0719e3b42c37ee6d17085e06">TestNodes::BinaryNode</a>, <a class="el" href="classTestNodes_1_1BinaryNodeAccessUnit.html#a7fb2465fbb207a329f8890c113f5a10f">TestNodes::BinaryNodeAccessUnit</a>, and <a class="el" href="classTestNodes_1_1BinaryNodePersistenceUnit.html#aa1f1779edfd403bc821ea1fb3a52200a">TestNodes::BinaryNodePersistenceUnit</a>.</p>
 

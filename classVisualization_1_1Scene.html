@@ -98,6 +98,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-slots">Public Slots</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
@@ -112,6 +113,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <!-- doxytag: class="Visualization::Scene" -->
 <p><a href="classVisualization_1_1Scene-members.html">List of all members.</a></p>
 <table class="memberdecls">
+<tr><td colspan="2"><h2><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a493e1d97eee55349fc377f1f4f3abcdd">ItemCategory</a> { <a class="el" href="classVisualization_1_1Scene.html#a493e1d97eee55349fc377f1f4f3abcddae2fded1b936d8e5165b4b40f0af738dd">NoItemCategory</a> =  0x0, 
+<a class="el" href="classVisualization_1_1Scene.html#a493e1d97eee55349fc377f1f4f3abcdda4466d302ed2feaefdc4d9abd425c1946">CodeItemCategory</a> =  0x1, 
+<a class="el" href="classVisualization_1_1Scene.html#a493e1d97eee55349fc377f1f4f3abcddac6ee5cb8edcd9a9b428abc5354247d73">MenuItemCategory</a> =  0x2, 
+<a class="el" href="classVisualization_1_1Scene.html#a493e1d97eee55349fc377f1f4f3abcdda7e31c3687503550a8a174f22163cb127">SelectionItemCategory</a> =  0x4, 
+<a class="el" href="classVisualization_1_1Scene.html#a493e1d97eee55349fc377f1f4f3abcdda059a79989a7581ebce0dced551e7665b">CursorItemCategory</a> =  0x8
+ }</td></tr>
 <tr><td colspan="2"><h2><a name="pub-slots"></a>
 Public Slots</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a4c3344e30bac78bd430b28234d255b89">nodesUpdated</a> (QList&lt; <a class="el" href="classVisualization_1_1Scene.html#a41fbc535e56c11864b4eed4c54fac7eb">Node</a> * &gt; nodes)</td></tr>
@@ -123,14 +132,17 @@ Public Member Functions</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an action to be executed after the current event.  <a href="#a7958ff559a8792633a9939d4b626a76f"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#ace991cd6ccee83d1516916e17ad1a3c1">addTopLevelItem</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a1cb91c173ebc009b5e485f4f73aebcc7">customEvent</a> (QEvent *<a class="el" href="classVisualization_1_1Scene.html#a970c98b1c76a23fd5cb2d16c851f1d35">event</a>)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a002fd8063039d5f128b74d6393ec47d1">isHiddenCategory</a> (<a class="el" href="classVisualization_1_1Scene.html#a493e1d97eee55349fc377f1f4f3abcdd">ItemCategory</a> cat)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a8d8fc417f3b7e22b690bb63741bcd033">listenToModel</a> (<a class="el" href="classModel_1_1Model.html">Model::Model</a> *model)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1Cursor.html">Cursor</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a8cb114ab6af758a8e3a5ad36911d496f">mainCursor</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a103aa125c2dfccbbf0b33bf48a1d590a">removeTopLevelItem</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1ModelRenderer.html">ModelRenderer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a43650faf7c83feeede86f8ce354a9f5f">renderer</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classVisualization_1_1SceneHandlerItem.html">SceneHandlerItem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a3a3deb0f82f5c6f386bd4d8619caed55">sceneHandlerItem</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a4665ffba0f64242bebdce741c712e534">scheduleUpdate</a> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a3c0788560e4a691044af2f7646ea4d8c">setHiddenItemCategories</a> (ItemCategories hidden=<a class="el" href="classVisualization_1_1Scene.html#a493e1d97eee55349fc377f1f4f3abcddae2fded1b936d8e5165b4b40f0af738dd">NoItemCategory</a>)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#ab09b5d2ddb88f975e3698676ee6c7365">setMainCursor</a> (<a class="el" href="classVisualization_1_1Cursor.html">Cursor</a> *cursor)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a3762a526238072e86179f6bc2346f8b3">setRenderer</a> (<a class="el" href="classVisualization_1_1ModelRenderer.html">ModelRenderer</a> *<a class="el" href="classVisualization_1_1Scene.html#a43650faf7c83feeede86f8ce354a9f5f">renderer</a>)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const QList&lt; <a class="el" href="classVisualization_1_1Item.html">Item</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#aa3583704dd21370f35a907f07856c4a3">topLevelItems</a> () const </td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classVisualization_1_1ModelRenderer.html">ModelRenderer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a8a7fc6f3ebf9b92aabc06b93fd93be28">defaultRenderer</a> ()</td></tr>
@@ -142,11 +154,15 @@ Private Types</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classModel_1_1Node.html">Model::Node</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a41fbc535e56c11864b4eed4c54fac7eb">Node</a></td></tr>
 <tr><td colspan="2"><h2><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a504edce4b1b296ba7ca76499b57b3466">computeSceneRect</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a23909ab1dc6c3c1efaaa82a7c2ed30d7">updateItems</a> ()</td></tr>
 <tr><td colspan="2"><h2><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="classVisualization_1_1Cursor.html">Cursor</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a3cbb61f47f9258d341e92cd6fe470bc9">cursors_</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">ItemCategories&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a6cfcbccb2058c9d691923bf6ed865097">hiddenItemCategories_</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a7f18d062b249f463dcd50122e97de3fe">inAnUpdate_</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#aafee0bd160f6bba0176a6b194dfb58ef">inEventHandler_</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1Cursor.html">Cursor</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#adbae5d627080435c95b5828e70a1b00f">mainCursor_</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a8b028262f809335f6edd6a5fed551d9a">mainCursorsJustSet_</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a7147ad01e16030fcf8b2b916eec63934">needsUpdate_</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">QList&lt; QEvent * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a4c9a19694ff2b1327e24f532376ae0e9">postEventActions_</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1ModelRenderer.html">ModelRenderer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a73b3be20dd0d87f6c5c3d32796adcdf9">renderer_</a></td></tr>
@@ -165,6 +181,34 @@ Private Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
+
+</div>
+</div>
+<hr/><h2>Member Enumeration Documentation</h2>
+<a class="anchor" id="a493e1d97eee55349fc377f1f4f3abcdd"></a><!-- doxytag: member="Visualization::Scene::ItemCategory" ref="a493e1d97eee55349fc377f1f4f3abcdd" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classVisualization_1_1Scene.html#a493e1d97eee55349fc377f1f4f3abcdd">Visualization::Scene::ItemCategory</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl><dt><b>Enumerator: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
+<tr><td valign="top"><em><a class="anchor" id="a493e1d97eee55349fc377f1f4f3abcddae2fded1b936d8e5165b4b40f0af738dd"></a><!-- doxytag: member="NoItemCategory" ref="a493e1d97eee55349fc377f1f4f3abcddae2fded1b936d8e5165b4b40f0af738dd" args="" -->NoItemCategory</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a493e1d97eee55349fc377f1f4f3abcdda4466d302ed2feaefdc4d9abd425c1946"></a><!-- doxytag: member="CodeItemCategory" ref="a493e1d97eee55349fc377f1f4f3abcdda4466d302ed2feaefdc4d9abd425c1946" args="" -->CodeItemCategory</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a493e1d97eee55349fc377f1f4f3abcddac6ee5cb8edcd9a9b428abc5354247d73"></a><!-- doxytag: member="MenuItemCategory" ref="a493e1d97eee55349fc377f1f4f3abcddac6ee5cb8edcd9a9b428abc5354247d73" args="" -->MenuItemCategory</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a493e1d97eee55349fc377f1f4f3abcdda7e31c3687503550a8a174f22163cb127"></a><!-- doxytag: member="SelectionItemCategory" ref="a493e1d97eee55349fc377f1f4f3abcdda7e31c3687503550a8a174f22163cb127" args="" -->SelectionItemCategory</em>&nbsp;</td><td>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a493e1d97eee55349fc377f1f4f3abcdda059a79989a7581ebce0dced551e7665b"></a><!-- doxytag: member="CursorItemCategory" ref="a493e1d97eee55349fc377f1f4f3abcdda059a79989a7581ebce0dced551e7665b" args="" -->CursorItemCategory</em>&nbsp;</td><td>
+</td></tr>
+</table>
+</dd>
+</dl>
 
 </div>
 </div>
@@ -239,6 +283,22 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a504edce4b1b296ba7ca76499b57b3466"></a><!-- doxytag: member="Visualization::Scene::computeSceneRect" ref="a504edce4b1b296ba7ca76499b57b3466" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classVisualization_1_1Scene.html#a504edce4b1b296ba7ca76499b57b3466">Visualization::Scene::computeSceneRect</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a1cb91c173ebc009b5e485f4f73aebcc7"></a><!-- doxytag: member="Visualization::Scene::customEvent" ref="a1cb91c173ebc009b5e485f4f73aebcc7" args="(QEvent *event)" -->
 <div class="memitem">
 <div class="memproto">
@@ -282,6 +342,23 @@ Private Attributes</h2></td></tr>
           <td class="paramtype">QEvent *&#160;</td>
           <td class="paramname"><em>event</em></td><td>)</td>
           <td><code> [protected]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a002fd8063039d5f128b74d6393ec47d1"></a><!-- doxytag: member="Visualization::Scene::isHiddenCategory" ref="a002fd8063039d5f128b74d6393ec47d1" args="(ItemCategory cat)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classVisualization_1_1Scene.html#a002fd8063039d5f128b74d6393ec47d1">Visualization::Scene::isHiddenCategory</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classVisualization_1_1Scene.html#a493e1d97eee55349fc377f1f4f3abcdd">ItemCategory</a>&#160;</td>
+          <td class="paramname"><em>cat</em></td><td>)</td>
+          <td><code> [inline]</code></td>
         </tr>
       </table>
 </div>
@@ -404,6 +481,23 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a3c0788560e4a691044af2f7646ea4d8c"></a><!-- doxytag: member="Visualization::Scene::setHiddenItemCategories" ref="a3c0788560e4a691044af2f7646ea4d8c" args="(ItemCategories hidden=NoItemCategory)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classVisualization_1_1Scene.html#a3c0788560e4a691044af2f7646ea4d8c">Visualization::Scene::setHiddenItemCategories</a> </td>
+          <td>(</td>
+          <td class="paramtype">ItemCategories&#160;</td>
+          <td class="paramname"><em>hidden</em> = <code><a class="el" href="classVisualization_1_1Scene.html#a493e1d97eee55349fc377f1f4f3abcddae2fded1b936d8e5165b4b40f0af738dd">NoItemCategory</a></code></td><td>)</td>
+          <td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="ab09b5d2ddb88f975e3698676ee6c7365"></a><!-- doxytag: member="Visualization::Scene::setMainCursor" ref="ab09b5d2ddb88f975e3698676ee6c7365" args="(Cursor *cursor)" -->
 <div class="memitem">
 <div class="memproto">
@@ -438,6 +532,22 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="aa3583704dd21370f35a907f07856c4a3"></a><!-- doxytag: member="Visualization::Scene::topLevelItems" ref="aa3583704dd21370f35a907f07856c4a3" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const QList&lt; <a class="el" href="classVisualization_1_1Item.html">Item</a> * &gt; &amp; <a class="el" href="classVisualization_1_1Scene.html#aa3583704dd21370f35a907f07856c4a3">Visualization::Scene::topLevelItems</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const<code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a23909ab1dc6c3c1efaaa82a7c2ed30d7"></a><!-- doxytag: member="Visualization::Scene::updateItems" ref="a23909ab1dc6c3c1efaaa82a7c2ed30d7" args="()" -->
 <div class="memitem">
 <div class="memproto">
@@ -455,12 +565,25 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <hr/><h2>Member Data Documentation</h2>
-<a class="anchor" id="a3cbb61f47f9258d341e92cd6fe470bc9"></a><!-- doxytag: member="Visualization::Scene::cursors_" ref="a3cbb61f47f9258d341e92cd6fe470bc9" args="" -->
+<a class="anchor" id="a6cfcbccb2058c9d691923bf6ed865097"></a><!-- doxytag: member="Visualization::Scene::hiddenItemCategories_" ref="a6cfcbccb2058c9d691923bf6ed865097" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">QList&lt;<a class="el" href="classVisualization_1_1Cursor.html">Cursor</a>*&gt; <a class="el" href="classVisualization_1_1Scene.html#a3cbb61f47f9258d341e92cd6fe470bc9">Visualization::Scene::cursors_</a><code> [private]</code></td>
+          <td class="memname">ItemCategories <a class="el" href="classVisualization_1_1Scene.html#a6cfcbccb2058c9d691923bf6ed865097">Visualization::Scene::hiddenItemCategories_</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a7f18d062b249f463dcd50122e97de3fe"></a><!-- doxytag: member="Visualization::Scene::inAnUpdate_" ref="a7f18d062b249f463dcd50122e97de3fe" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classVisualization_1_1Scene.html#a7f18d062b249f463dcd50122e97de3fe">Visualization::Scene::inAnUpdate_</a><code> [private]</code></td>
         </tr>
       </table>
 </div>
@@ -474,6 +597,32 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">bool <a class="el" href="classVisualization_1_1Scene.html#aafee0bd160f6bba0176a6b194dfb58ef">Visualization::Scene::inEventHandler_</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="adbae5d627080435c95b5828e70a1b00f"></a><!-- doxytag: member="Visualization::Scene::mainCursor_" ref="adbae5d627080435c95b5828e70a1b00f" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classVisualization_1_1Cursor.html">Cursor</a>* <a class="el" href="classVisualization_1_1Scene.html#adbae5d627080435c95b5828e70a1b00f">Visualization::Scene::mainCursor_</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a8b028262f809335f6edd6a5fed551d9a"></a><!-- doxytag: member="Visualization::Scene::mainCursorsJustSet_" ref="a8b028262f809335f6edd6a5fed551d9a" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classVisualization_1_1Scene.html#a8b028262f809335f6edd6a5fed551d9a">Visualization::Scene::mainCursorsJustSet_</a><code> [private]</code></td>
         </tr>
       </table>
 </div>

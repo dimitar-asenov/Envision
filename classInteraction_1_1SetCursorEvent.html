@@ -128,21 +128,44 @@ Public Types</h2></td></tr>
 <a class="el" href="classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7ac107d1c187fb4def26eef44b28a13944">CursorAboveOf</a>, 
 <a class="el" href="classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7a45f5b7dd3073df0d681e06edc3c2487b">CursorBelowOf</a>, 
 <a class="el" href="classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7a6b81f09a042674c69624c16cc6fcd9d6">CursorLeftOf</a>, 
-<a class="el" href="classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7a6a3948300b8f334733f51c5d75ccb781">CursorRightOf</a>
+<a class="el" href="classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7a6a3948300b8f334733f51c5d75ccb781">CursorRightOf</a>, 
+<a class="el" href="classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7a5f26dcb6a2952d774aa6eeb4904194c1">CursorDefault</a>
  }</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">typedef std::function<br class="typebreak"/>
+&lt; <a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *()&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1SetCursorEvent.html#a6cca2eb2139115d7ae31589644db8677">GetItemFunction</a></td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1SetCursorEvent.html#aa996e5cfec6f382f37902ab6e1421428">SetCursorEvent</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *parentContainer, <a class="el" href="classModel_1_1Node.html">Model::Node</a> *node, <a class="el" href="classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7">CursorPlacement</a> placement)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1SetCursorEvent.html#aea2b8aa80d3af04d7aeaaf268d87a80d">SetCursorEvent</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *itemToGetCursor, <a class="el" href="classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7">CursorPlacement</a> placement=<a class="el" href="classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7a5f26dcb6a2952d774aa6eeb4904194c1">CursorDefault</a>)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1SetCursorEvent.html#a610277b268a851b308496ef619d1d51a">SetCursorEvent</a> (<a class="el" href="classInteraction_1_1SetCursorEvent.html#a6cca2eb2139115d7ae31589644db8677">GetItemFunction</a> getItemToFocus, <a class="el" href="classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7">CursorPlacement</a> placement=<a class="el" href="classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7a5f26dcb6a2952d774aa6eeb4904194c1">CursorDefault</a>)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1SetCursorEvent.html#a0b477ee6181449a1a91691395a023c42">SetCursorEvent</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *parentContainer, <a class="el" href="classModel_1_1Node.html">Model::Node</a> *node, <a class="el" href="classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7">CursorPlacement</a> placement=<a class="el" href="classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7a5f26dcb6a2952d774aa6eeb4904194c1">CursorDefault</a>)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1SetCursorEvent.html#aeefe98edd2898047f06d3796c298de5e">SetCursorEvent</a> (<a class="el" href="classVisualization_1_1Scene.html">Visualization::Scene</a> *scene, <a class="el" href="classModel_1_1Node.html">Model::Node</a> *node, <a class="el" href="classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7">CursorPlacement</a> placement=<a class="el" href="classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7a5f26dcb6a2952d774aa6eeb4904194c1">CursorDefault</a>)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1SetCursorEvent.html#a019ce7298d79cdba99b351eee0d0940d">execute</a> ()</td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">static const QEvent::Type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1SetCursorEvent.html#ad9047ffcb94d28752f0885996db748c7">EventType</a> = static_cast&lt;QEvent::Type&gt; (QEvent::registerEventType())</td></tr>
 <tr><td colspan="2"><h2><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classInteraction_1_1SetCursorEvent.html#a6cca2eb2139115d7ae31589644db8677">GetItemFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1SetCursorEvent.html#a72b2839a5102e9dd58421bda73788f27">getItemToFocus_</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1SetCursorEvent.html#a7bce017a0874841473e68095fa1d8e2c">itemToGetCursor_</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1SetCursorEvent.html#afe81c09b4ce76f3b30aad2e404252c35">node_</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1SetCursorEvent.html#ad607a974c115af293ccfdbf404bddd91">parentContainer_</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7">CursorPlacement</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1SetCursorEvent.html#a931d45d0cd3cfe5015fa9c1d3c54a97f">placement_</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1Scene.html">Visualization::Scene</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1SetCursorEvent.html#a8d29187f171742258898c67cb2258d14">scene_</a></td></tr>
 </table>
+<hr/><h2>Member Typedef Documentation</h2>
+<a class="anchor" id="a6cca2eb2139115d7ae31589644db8677"></a><!-- doxytag: member="Interaction::SetCursorEvent::GetItemFunction" ref="a6cca2eb2139115d7ae31589644db8677" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef std::function&lt;<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a>* ()&gt; <a class="el" href="classInteraction_1_1SetCursorEvent.html#a6cca2eb2139115d7ae31589644db8677">Interaction::SetCursorEvent::GetItemFunction</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
 <hr/><h2>Member Enumeration Documentation</h2>
 <a class="anchor" id="a4989d85b0a2bd550c1e0ba9419d301e7"></a><!-- doxytag: member="Interaction::SetCursorEvent::CursorPlacement" ref="a4989d85b0a2bd550c1e0ba9419d301e7" args="" -->
 <div class="memitem">
@@ -173,6 +196,8 @@ Private Attributes</h2></td></tr>
 </td></tr>
 <tr><td valign="top"><em><a class="anchor" id="a4989d85b0a2bd550c1e0ba9419d301e7a6a3948300b8f334733f51c5d75ccb781"></a><!-- doxytag: member="CursorRightOf" ref="a4989d85b0a2bd550c1e0ba9419d301e7a6a3948300b8f334733f51c5d75ccb781" args="" -->CursorRightOf</em>&nbsp;</td><td>
 </td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a4989d85b0a2bd550c1e0ba9419d301e7a5f26dcb6a2952d774aa6eeb4904194c1"></a><!-- doxytag: member="CursorDefault" ref="a4989d85b0a2bd550c1e0ba9419d301e7a5f26dcb6a2952d774aa6eeb4904194c1" args="" -->CursorDefault</em>&nbsp;</td><td>
+</td></tr>
 </table>
 </dd>
 </dl>
@@ -180,12 +205,66 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <hr/><h2>Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="aa996e5cfec6f382f37902ab6e1421428"></a><!-- doxytag: member="Interaction::SetCursorEvent::SetCursorEvent" ref="aa996e5cfec6f382f37902ab6e1421428" args="(Visualization::Item *parentContainer, Model::Node *node, CursorPlacement placement)" -->
+<a class="anchor" id="aea2b8aa80d3af04d7aeaaf268d87a80d"></a><!-- doxytag: member="Interaction::SetCursorEvent::SetCursorEvent" ref="aea2b8aa80d3af04d7aeaaf268d87a80d" args="(Visualization::Item *itemToGetCursor, CursorPlacement placement=CursorDefault)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classInteraction_1_1SetCursorEvent.html#aa996e5cfec6f382f37902ab6e1421428">Interaction::SetCursorEvent::SetCursorEvent</a> </td>
+          <td class="memname"><a class="el" href="classInteraction_1_1SetCursorEvent.html#aea2b8aa80d3af04d7aeaaf268d87a80d">Interaction::SetCursorEvent::SetCursorEvent</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *&#160;</td>
+          <td class="paramname"><em>itemToGetCursor</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7">CursorPlacement</a>&#160;</td>
+          <td class="paramname"><em>placement</em> = <code><a class="el" href="classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7a5f26dcb6a2952d774aa6eeb4904194c1">CursorDefault</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a610277b268a851b308496ef619d1d51a"></a><!-- doxytag: member="Interaction::SetCursorEvent::SetCursorEvent" ref="a610277b268a851b308496ef619d1d51a" args="(GetItemFunction getItemToFocus, CursorPlacement placement=CursorDefault)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classInteraction_1_1SetCursorEvent.html#aea2b8aa80d3af04d7aeaaf268d87a80d">Interaction::SetCursorEvent::SetCursorEvent</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classInteraction_1_1SetCursorEvent.html#a6cca2eb2139115d7ae31589644db8677">GetItemFunction</a>&#160;</td>
+          <td class="paramname"><em>getItemToFocus</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7">CursorPlacement</a>&#160;</td>
+          <td class="paramname"><em>placement</em> = <code><a class="el" href="classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7a5f26dcb6a2952d774aa6eeb4904194c1">CursorDefault</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a0b477ee6181449a1a91691395a023c42"></a><!-- doxytag: member="Interaction::SetCursorEvent::SetCursorEvent" ref="a0b477ee6181449a1a91691395a023c42" args="(Visualization::Item *parentContainer, Model::Node *node, CursorPlacement placement=CursorDefault)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classInteraction_1_1SetCursorEvent.html#aea2b8aa80d3af04d7aeaaf268d87a80d">Interaction::SetCursorEvent::SetCursorEvent</a> </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *&#160;</td>
           <td class="paramname"><em>parentContainer</em>, </td>
@@ -200,7 +279,40 @@ Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7">CursorPlacement</a>&#160;</td>
-          <td class="paramname"><em>placement</em>&#160;</td>
+          <td class="paramname"><em>placement</em> = <code><a class="el" href="classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7a5f26dcb6a2952d774aa6eeb4904194c1">CursorDefault</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aeefe98edd2898047f06d3796c298de5e"></a><!-- doxytag: member="Interaction::SetCursorEvent::SetCursorEvent" ref="aeefe98edd2898047f06d3796c298de5e" args="(Visualization::Scene *scene, Model::Node *node, CursorPlacement placement=CursorDefault)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classInteraction_1_1SetCursorEvent.html#aea2b8aa80d3af04d7aeaaf268d87a80d">Interaction::SetCursorEvent::SetCursorEvent</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classVisualization_1_1Scene.html">Visualization::Scene</a> *&#160;</td>
+          <td class="paramname"><em>scene</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classModel_1_1Node.html">Model::Node</a> *&#160;</td>
+          <td class="paramname"><em>node</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7">CursorPlacement</a>&#160;</td>
+          <td class="paramname"><em>placement</em> = <code><a class="el" href="classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7a5f26dcb6a2952d774aa6eeb4904194c1">CursorDefault</a></code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -248,6 +360,32 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a72b2839a5102e9dd58421bda73788f27"></a><!-- doxytag: member="Interaction::SetCursorEvent::getItemToFocus_" ref="a72b2839a5102e9dd58421bda73788f27" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classInteraction_1_1SetCursorEvent.html#a6cca2eb2139115d7ae31589644db8677">GetItemFunction</a> <a class="el" href="classInteraction_1_1SetCursorEvent.html#a72b2839a5102e9dd58421bda73788f27">Interaction::SetCursorEvent::getItemToFocus_</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a7bce017a0874841473e68095fa1d8e2c"></a><!-- doxytag: member="Interaction::SetCursorEvent::itemToGetCursor_" ref="a7bce017a0874841473e68095fa1d8e2c" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a>* <a class="el" href="classInteraction_1_1SetCursorEvent.html#a7bce017a0874841473e68095fa1d8e2c">Interaction::SetCursorEvent::itemToGetCursor_</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="afe81c09b4ce76f3b30aad2e404252c35"></a><!-- doxytag: member="Interaction::SetCursorEvent::node_" ref="afe81c09b4ce76f3b30aad2e404252c35" args="" -->
 <div class="memitem">
 <div class="memproto">
@@ -280,6 +418,19 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7">CursorPlacement</a> <a class="el" href="classInteraction_1_1SetCursorEvent.html#a931d45d0cd3cfe5015fa9c1d3c54a97f">Interaction::SetCursorEvent::placement_</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a8d29187f171742258898c67cb2258d14"></a><!-- doxytag: member="Interaction::SetCursorEvent::scene_" ref="a8d29187f171742258898c67cb2258d14" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classVisualization_1_1Scene.html">Visualization::Scene</a>* <a class="el" href="classInteraction_1_1SetCursorEvent.html#a8d29187f171742258898c67cb2258d14">Interaction::SetCursorEvent::scene_</a><code> [private]</code></td>
         </tr>
       </table>
 </div>
