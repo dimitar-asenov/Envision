@@ -65,7 +65,8 @@ Interaction::CommandResult* CCreateClass::create(Visualization::Item* /*source*/
 	pr->endModification();
 
 	target->setUpdateNeeded(Visualization::Item::StandardUpdate);
-	target->scene()->addPostEventAction(new Interaction::SetCursorEvent(target, cl));
+	target->scene()->addPostEventAction(new Interaction::SetCursorEvent(target, cl,
+			Interaction::SetCursorEvent::CursorDefault, true));
 
 	return new Interaction::CommandResult();
 }

@@ -77,8 +77,10 @@ Interaction::CommandResult* CCreateProject::create(Visualization::Item* /*source
 	}
 
 	target->setUpdateNeeded(Visualization::Item::StandardUpdate);
-	if (newModel) target->scene()->addPostEventAction(new Interaction::SetCursorEvent(target->scene(), project));
-	else target->scene()->addPostEventAction(new Interaction::SetCursorEvent(target, project));
+	if (newModel) target->scene()->addPostEventAction(new Interaction::SetCursorEvent(target->scene(), project,
+			Interaction::SetCursorEvent::CursorDefault, true));
+	else target->scene()->addPostEventAction(new Interaction::SetCursorEvent(target, project,
+			Interaction::SetCursorEvent::CursorDefault, true));
 
 
 	return new Interaction::CommandResult();

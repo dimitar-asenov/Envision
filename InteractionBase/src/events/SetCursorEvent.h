@@ -58,20 +58,24 @@ class INTERACTIONBASE_API SetCursorEvent : public Visualization::CustomSceneEven
 
 		typedef std::function<Visualization::Item* ()> GetItemFunction;
 
-		SetCursorEvent(Visualization::Item* itemToGetCursor, CursorPlacement placement = CursorDefault);
-		SetCursorEvent(GetItemFunction getItemToFocus, CursorPlacement placement = CursorDefault);
+		SetCursorEvent(Visualization::Item* itemToGetCursor, CursorPlacement placement = CursorDefault,
+				bool showPrompt = false);
+		SetCursorEvent(GetItemFunction getItemToFocus, CursorPlacement placement = CursorDefault,
+				bool showPrompt = false);
 		SetCursorEvent(Visualization::Item* parentContainer, Model::Node* node,
-				CursorPlacement placement = CursorDefault);
-		SetCursorEvent(Visualization::Scene* scene, Model::Node* node, CursorPlacement placement = CursorDefault);
+				CursorPlacement placement = CursorDefault, bool showPrompt = false);
+		SetCursorEvent(Visualization::Scene* scene, Model::Node* node, CursorPlacement placement = CursorDefault,
+				bool showPrompt = false);
 		virtual void execute();
 
 	private:
-		Visualization::Item* itemToGetCursor_;
-		Visualization::Item* parentContainer_;
-		GetItemFunction getItemToFocus_;
-		Visualization::Scene* scene_;
-		Model::Node* node_;
-		CursorPlacement placement_;
+		Visualization::Item* itemToGetCursor_{};
+		Visualization::Item* parentContainer_{};
+		GetItemFunction getItemToFocus_{};
+		Visualization::Scene* scene_{};
+		Model::Node* node_{};
+		CursorPlacement placement_{};
+		bool showPrompt_{false};
 };
 
 } /* namespace Interaction */
