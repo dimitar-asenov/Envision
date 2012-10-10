@@ -83,8 +83,9 @@ CommandPrompt::CommandPrompt(Item* commandReceiver, const StyleType* style) :
 	commandReceiver->scene()->addTopLevelItem(this);
 
 	command->setText("Type a command");
+	saveReceiverCursorPosition();
 	setPromptPosition();
-	acquireCursor();
+	command->moveCursor();
 	command->correspondingSceneCursor<Visualization::TextCursor>()->selectAll();
 }
 
@@ -107,15 +108,16 @@ CommandPrompt::~CommandPrompt()
 void CommandPrompt::takeSuggestion(CommandSuggestion* suggestion)
 {
 	command->setText(suggestion->suggestion());
-	acquireCursor();
+	command->moveCursor();
 	command->correspondingSceneCursor<Visualization::TextCursor>()->setCaretPosition(suggestion->suggestion().size());
 }
 
 void CommandPrompt::showPrompt()
 {
+	saveReceiverCursorPosition();
 	setPromptPosition();
 	show();
-	acquireCursor();
+	command->moveCursor();
 	command->correspondingSceneCursor<Visualization::TextCursor>()
 			->setSelectedCharacters(commandSelectedFirst, commandSelectedLast);
 }
@@ -246,14 +248,12 @@ void CommandPrompt::removeSuggestions()
 	setUpdateNeeded(Visualization::Item::StandardUpdate);
 }
 
-void CommandPrompt::acquireCursor()
+void CommandPrompt::saveReceiverCursorPosition()
 {
 	// Save the current cursor
 	receiverCursorPosition = QPoint(0,0);
 	if (commandReceiver_->scene()->mainCursor()->owner() == commandReceiver_)
 		receiverCursorPosition = commandReceiver_->scene()->mainCursor()->position();
-
-	command->moveCursor();
 }
 
 void CommandPrompt::setPromptPosition()
@@ -266,9 +266,8 @@ void CommandPrompt::setPromptPosition()
 	}
 	else
 	{
-		// Show the prompt at the center of the receiver item.
-		promptPos.rx() += (commandReceiver_->width()-width()) / 2;
-		promptPos.ry() += (commandReceiver_->height()-height()) / 2;
+		// If the item is rather large show the prompt at the cursor
+		promptPos += receiverCursorPosition;
 	}
 
 	setPos(promptPos);

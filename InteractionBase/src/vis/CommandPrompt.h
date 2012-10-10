@@ -92,7 +92,7 @@ class INTERACTIONBASE_API CommandPrompt : public Visualization::Item
 
 		QPoint receiverCursorPosition;
 
-		void acquireCursor();
+		void saveReceiverCursorPosition();
 		void setPromptPosition();
 };
 
