@@ -63,12 +63,13 @@ Scene::Scene()
 
 Scene::~Scene()
 {
+	SAFE_DELETE(mainCursor_);
+	SAFE_DELETE_ITEM(sceneHandlerItem_);
+
 	for (Item* i : topLevelItems_) SAFE_DELETE_ITEM(i);
 	topLevelItems_.clear();
 	for (SelectedItem* si : selections_) SAFE_DELETE_ITEM(si);
 	selections_.clear();
-	SAFE_DELETE(mainCursor_);
-	SAFE_DELETE_ITEM(sceneHandlerItem_);
 
 	if (renderer_ != defaultRenderer()) SAFE_DELETE(renderer_);
 	else renderer_ = nullptr;
