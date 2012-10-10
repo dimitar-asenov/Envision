@@ -254,11 +254,8 @@ void Scene::computeSceneRect()
 	QRectF r;
 	for (auto i: topLevelItems_)
 	{
-		if (i->itemCategory() != MenuItemCategory && i->itemCategory() != CursorItemCategory)
-		{
-			QRectF br = i->boundingRect().translated(i->pos());
-			r = r.united(br);
-		}
+		QRectF br = i->boundingRect().translated(i->pos());
+		r = r.united(br);
 	}
 	r.adjust(-20,-20,20,20); // Add some margin
 	setSceneRect(r);
