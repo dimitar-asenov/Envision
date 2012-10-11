@@ -45,6 +45,7 @@ SceneHandlerItem::SceneHandlerItem(Scene* scene) :
 	// It should be possible to click inside the item. This happens when the user clicks on an "empty" space in the scene
 	// as this item is automatically moved to that empty spot before the click is processed.
 	setSize(3,3);
+	setItemCategory(Scene::MenuItemCategory);
 	scene->addItem(this);
 
 	// Make sure this item is behind all others.
