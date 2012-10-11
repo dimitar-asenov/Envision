@@ -99,10 +99,25 @@ void ActionPrompt::determineChildren()
 {
 	actionsContainer_->clear();
 
-	for(auto a : Action::actions(actionReceiver_->node()))
+	// Find a parent that has a node which contains actions
+	auto item = actionReceiver_;
+	while (item)
 	{
-		if (a->shortcut().startsWith(actionText_->text()))
-			actionsContainer_->append(new TextAndDescription(a->shortcut(), a->name(), &style()->actionStyle()));
+		if (item->node() != nullptr)
+		{
+			auto actionList = Action::actions(item->node());
+			if (!actionList.isEmpty())
+			{
+				for(auto a : actionList)
+				{
+					if (a->shortcut().startsWith(actionText_->text()))
+						actionsContainer_->append(new TextAndDescription(a->shortcut(), a->name(), &style()->actionStyle()));
+				}
+				break;
+			}
+		}
+
+		item = item->parent();
 	}
 }
 
