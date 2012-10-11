@@ -40,6 +40,7 @@ namespace Visualization {
 View::View(Scene* scene, View *parent) :
 	QGraphicsView(scene, parent), hiddenItemCategories_(0)
 {
+	setOptimizationFlag(DontSavePainterState);
 	if ( parent == nullptr )
 	{
 		setParent(VisualizationManager::instance().getMainWindow());
