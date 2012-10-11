@@ -99,25 +99,10 @@ void ActionPrompt::determineChildren()
 {
 	actionsContainer_->clear();
 
-	// Find a parent that has a node which contains actions
-	auto item = actionReceiver_;
-	while (item)
+	for(auto a : actions())
 	{
-		if (item->node() != nullptr)
-		{
-			auto actionList = Action::actions(item->node());
-			if (!actionList.isEmpty())
-			{
-				for(auto a : actionList)
-				{
-					if (a->shortcut().startsWith(actionText_->text()))
-						actionsContainer_->append(new TextAndDescription(a->shortcut(), a->name(), &style()->actionStyle()));
-				}
-				break;
-			}
-		}
-
-		item = item->parent();
+		if (a->shortcut().startsWith(actionText_->text()))
+			actionsContainer_->append(new TextAndDescription(a->shortcut(), a->name(), &style()->actionStyle()));
 	}
 }
 
@@ -132,7 +117,7 @@ void ActionPrompt::acquireCursor()
 	receiverCursorPosition_ = QPoint(0,0);
 	if (actionReceiver_->scene()->mainCursor()->owner() == actionReceiver_)
 		receiverCursorPosition_ = actionReceiver_->scene()->mainCursor()->position();
-
+		
 	actionText_->moveCursor();
 }
 
@@ -146,6 +131,74 @@ void ActionPrompt::setPromptPosition()
 			break;
 		}
 	}
+}
+
+QList<Action*> ActionPrompt::actions()
+{
+	int level = parentActionsLevel_;
+
+	if (level >= 0)
+	{
+		// Find a parent that has a node with actions
+		auto item = actionReceiver_;
+		while (item)
+		{
+			if (item->node() != nullptr)
+			{
+				auto actionList = Action::actions(item->node());
+				if (!actionList.isEmpty())
+				{
+					if (level == 0) return actionList;
+					else --level;
+				}
+			}
+			item = item->parent();
+		}
+	}
+	else
+	{
+		// Get a linear order of children
+		auto children = childItems();
+		int i = 0;
+		while(i < children.size())
+		{
+			// While exploring the children in a BFS manner, look out for reaching the desired child node
+			auto child = static_cast<Visualization::Item*>(children.at(i));
+			if (child->node())
+			{
+				auto actionList = Action::actions(child->node());
+				if (!actionList.isEmpty())
+				{
+					++level;
+					if (level == 0) return actionList;
+				}
+			}
+
+			children.append(child->childItems());
+			++i;
+		}
+
+	}
+
+	return {};
+}
+
+void ActionPrompt::upParentActionsLevel()
+{
+	++parentActionsLevel_;
+
+	// Only allow this if we can actually get to an item that contains a node with actions or if we end up at 0
+	if (parentActionsLevel_ > 0 && actions().isEmpty()) --parentActionsLevel_;
+	else setUpdateNeeded(StandardUpdate);
+}
+
+void ActionPrompt::downParentActionsLevel()
+{
+	--parentActionsLevel_;
+
+	// Only allow this if we can actually get to an item that contains a node with actions or if we end up at 0
+	if (parentActionsLevel_ < 0 && actions().isEmpty()) ++parentActionsLevel_;
+	else setUpdateNeeded(StandardUpdate);
 }
 
 } /* namespace Interaction */

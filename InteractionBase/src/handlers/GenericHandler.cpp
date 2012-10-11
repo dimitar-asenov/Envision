@@ -227,23 +227,32 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 					|| event->key() == Qt::Key_Left
 					|| event->key() == Qt::Key_Right))
 	{
-		bool oldNotLocationEquivalent;
-		Visualization::Cursor::CursorType oldType;
-		bool oldBoundary;
-		Visualization::Item* oldOwner;
-		Visualization::Item* t = target;
-		do
+		// Only initiate the movement procedure if the target is the cursor owner
+		if (!target->scene()->mainCursor() || target != target->scene()->mainCursor()->owner())
+			InteractionHandler::keyPressEvent(target, event);
+		else
 		{
-			oldNotLocationEquivalent = t->scene()->mainCursor()->notLocationEquivalent();
-			oldType = t->scene()->mainCursor()->type();
-			oldBoundary = t->scene()->mainCursor()->isAtBoundary();
-			oldOwner = t->scene()->mainCursor()->owner();
-			moveCursor(t, event->key());
-			t = t->scene()->mainCursor()->owner();
-		} while
-			(t->scene()->mainCursor()->isLocationEquivalent(oldNotLocationEquivalent, oldType, oldBoundary, oldOwner));
+			bool oldNotLocationEquivalent;
+			Visualization::Cursor::CursorType oldType;
+			bool oldBoundary;
+			Visualization::Item* oldOwner;
+			Visualization::Item* t = target;
+			bool moved = false;
+			do
+			{
+				oldNotLocationEquivalent = t->scene()->mainCursor()->notLocationEquivalent();
+				oldType = t->scene()->mainCursor()->type();
+				oldBoundary = t->scene()->mainCursor()->isAtBoundary();
+				oldOwner = t->scene()->mainCursor()->owner();
+				moved = moveCursor(t, event->key()) || moved;
+				t = t->scene()->mainCursor()->owner();
+			} while
+				(t->scene()->mainCursor()->isLocationEquivalent(oldNotLocationEquivalent, oldType, oldBoundary, oldOwner));
 
-		event->accept();
+			// If the arrow key did not result in a movement, let the handlers of parent items try and process the key
+			// press.
+			if(!moved) InteractionHandler::keyPressEvent(target, event);
+		}
 	}
 	else if (event->key() == Qt::Key_Escape && AutoComplete::isVisible())
 	{
@@ -265,7 +274,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 	else InteractionHandler::keyPressEvent(target, event);
 }
 
-void GenericHandler::moveCursor(Visualization::Item *target, int key)
+bool GenericHandler::moveCursor(Visualization::Item *target, int key)
 {
 	bool processed = false;
 	Visualization::Item::CursorMoveDirection dir;
@@ -360,6 +369,8 @@ void GenericHandler::moveCursor(Visualization::Item *target, int key)
 			current = parent;
 		}
 	}
+
+	return processed;
 }
 
 void GenericHandler::mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)

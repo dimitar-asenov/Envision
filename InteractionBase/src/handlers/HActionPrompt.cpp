@@ -76,6 +76,12 @@ void HActionPrompt::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		prompt->text()->setText(prompt->text()->text() + event->text());
 		prompt->scene()->addPostEventAction(new SetCursorEvent(prompt->text(), SetCursorEvent::CursorOnRight));
 		if (prompt->autoExecuteAction()) tryExecutingAction(prompt);
+	} else if ( event->key() == Qt::Key_Up )
+	{
+		prompt->upParentActionsLevel();
+	} else if ( event->key() == Qt::Key_Down )
+	{
+		prompt->downParentActionsLevel();
 	}
 	else GenericHandler::keyPressEvent(target, event);
 }
