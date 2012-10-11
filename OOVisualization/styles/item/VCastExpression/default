@@ -20,6 +20,6 @@
 		</shape>
 		<direction>2</direction>
 		<noInnerCursors>true</noInnerCursors>
-		<noBoundaryCursors>true</noBoundaryCursors>
+		<noBoundaryCursorsInsideShape>true</noBoundaryCursorsInsideShape>
 	</layout>
 </style>
