@@ -69,7 +69,6 @@ class VISUALIZATIONBASE_API MiniMap : public View
 		View *parent;
 		int margin;
 
-		QRectF sceneRect;
 		QRectF visibleRect;
 		QRect drawnRect;
 
