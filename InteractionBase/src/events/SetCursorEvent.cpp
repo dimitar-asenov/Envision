@@ -118,7 +118,15 @@ void SetCursorEvent::execute()
 		{
 			if(auto hand = dynamic_cast<Interaction::GenericHandler*>(it->handler()))
 			{
-				hand->showCommandPrompt(it);
+				// This indirection (add a new event) is necessary because otherwise, something goes wrong with the view
+				// update and there are some pixels which are not cleared and still remain after the new prompt has been
+				// shown. It is not clear what the problem exactly is and where it should be fixed but the workaround below
+				// works.
+				// TODO: Investigate the "dirty" pixels further
+				qApp->postEvent(item->scene(), new CustomSceneEvent([=](){
+					hand->showCommandPrompt(it);
+				}));
+
 			}
 		}
 	}
