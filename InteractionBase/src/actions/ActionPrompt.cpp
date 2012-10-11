@@ -127,7 +127,7 @@ void ActionPrompt::setPromptPosition()
 	{
 		if (v->isActiveWindow())
 		{
-			setPos(v->mapToScene(210, v->height() - 40)); // Put it after the mini map on the bottom
+			setPos(v->mapToScene(210, v->viewport()->height() - 40)); // Put it after the mini map on the bottom
 			break;
 		}
 	}
