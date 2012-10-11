@@ -252,14 +252,54 @@ void Scene::setMainCursor(Cursor* cursor)
 
 void Scene::computeSceneRect()
 {
-	QRectF r;
+	QRectF sceneRect;
+	QRectF viewRect;
 	for (auto i: topLevelItems_)
 	{
 		QRectF br = i->boundingRect().translated(i->pos());
-		r = r.united(br);
+		sceneRect = sceneRect.united(br);
+		if (i->itemCategory() != MenuItemCategory && i->itemCategory() != CursorItemCategory)
+			viewRect = viewRect.united(br);
 	}
-	r.adjust(-20,-20,20,20); // Add some margin
-	setSceneRect(r);
+
+	if (viewRect.isNull()) viewRect = QRectF(sceneRect.x(),sceneRect.y(),1,1);
+
+	//So far viewRect is strictly inside sceneRect.
+	//Counterbalance the visible rect so that the main content is not displaced
+	//At the end any extra space in the scene that is filled with menu items will be counterbalanced with equal amounts
+	//at the opposite end.
+//	int leftExtra = viewRect.left() - sceneRect.left();
+//	int rightExtra = sceneRect.right() - viewRect.right();
+//	int topExtra = viewRect.top() - sceneRect.top();
+//	int bottomExtra = sceneRect.bottom() - viewRect.bottom();
+//
+//	if (leftExtra > rightExtra)
+//	{
+//		viewRect.setWidth(viewRect.width() + leftExtra - rightExtra);
+//		viewRect.setX(viewRect.x() - leftExtra +  rightExtra);
+//	}
+//	if (rightExtra > leftExtra)
+//	{
+//		viewRect.setWidth(viewRect.width() + rightExtra - leftExtra);
+//		viewRect.setX(viewRect.x() - rightExtra + leftExtra);
+//	}
+//	if (topExtra > bottomExtra)
+//	{
+//		viewRect.setHeight(viewRect.height() + topExtra - bottomExtra);
+//		viewRect.setY(viewRect.y() - topExtra +  bottomExtra);
+//	}
+//	if (bottomExtra > topExtra)
+//	{
+//		viewRect.setHeight(viewRect.height() + bottomExtra - topExtra);
+//		viewRect.setY(viewRect.y() - bottomExtra + topExtra);
+//	}
+
+	viewRect.adjust(-20,-20,20,20); // Add some margin
+	sceneRect.adjust(-20,-20,20,20); // Add some margin
+
+	//sceneRect = viewRect.united(sceneRect);
+	setSceneRect(sceneRect);
+	for(auto v: views()) v->setSceneRect(viewRect);
 }
 
 }
