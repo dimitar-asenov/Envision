@@ -53,7 +53,9 @@ class INTERACTIONBASE_API ActionPrompt : public Visualization::Item
 				const StyleType* style = itemStyles().get());
 		virtual ~ActionPrompt();
 
-		Visualization::Item* actionReceiver();
+		Visualization::Item* originalActionReceiver();
+		Visualization::Item* currentActionReceiver();
+
 		int numActions();
 		bool autoExecuteAction() const;
 
@@ -73,7 +75,8 @@ class INTERACTIONBASE_API ActionPrompt : public Visualization::Item
 		typedef Item BaseItemType;
 
 		bool autoExecuteAction_;
-		Visualization::Item* actionReceiver_;
+		Visualization::Item* originalActionReceiver_;
+		Visualization::Item* currentActionReceiver_;
 		Visualization::SequentialLayout* layout_;
 		Visualization::SequentialLayout* actionsContainer_;
 		Visualization::Text* actionText_;
@@ -97,10 +100,12 @@ class INTERACTIONBASE_API ActionPrompt : public Visualization::Item
 
 		void acquireCursor();
 		void setPromptPosition();
+		void computeCurrentActionReceiver();
 		QList<Action*> actions();
 };
 
-inline Visualization::Item* ActionPrompt::actionReceiver() { return actionReceiver_; }
+inline Visualization::Item* ActionPrompt::originalActionReceiver() { return originalActionReceiver_; }
+inline Visualization::Item* ActionPrompt::currentActionReceiver() { return currentActionReceiver_; }
 inline Visualization::Text* ActionPrompt::text() {return actionText_;}
 inline int ActionPrompt::numActions() { return actionsContainer_->length(); }
 inline bool ActionPrompt::autoExecuteAction() const { return autoExecuteAction_; }

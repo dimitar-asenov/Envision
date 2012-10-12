@@ -73,9 +73,18 @@ void HActionPrompt::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	}
 	else if (!event->text().isEmpty())
 	{
+		// Add character to the action text
 		prompt->text()->setText(prompt->text()->text() + event->text());
-		prompt->scene()->addPostEventAction(new SetCursorEvent(prompt->text(), SetCursorEvent::CursorOnRight));
-		if (prompt->autoExecuteAction()) tryExecutingAction(prompt);
+
+		// Try executing
+		bool executed = false;
+		if (prompt->autoExecuteAction())
+			executed = tryExecutingAction(prompt);
+
+		// If execution failed and the prompt is still visible, focus the end of the text.
+		if (!executed)
+			prompt->scene()->addPostEventAction(new SetCursorEvent(prompt->text(), SetCursorEvent::CursorOnRight));
+
 	} else if ( event->key() == Qt::Key_Up )
 	{
 		prompt->upParentActionsLevel();
@@ -89,7 +98,7 @@ void HActionPrompt::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 bool HActionPrompt::tryExecutingAction(ActionPrompt *prompt)
 {
 	Action* found{};
-	for(auto a : Action::actions(prompt->actionReceiver()->node()) )
+	for(auto a : Action::actions(prompt->currentActionReceiver()->node()) )
 	{
 		if( a->shortcut().startsWith(prompt->text()->text()))
 		{
@@ -105,8 +114,8 @@ bool HActionPrompt::tryExecutingAction(ActionPrompt *prompt)
 
 	if (found)
 	{
-		found->execute(prompt->actionReceiver());
 		prompt->hidePrompt();
+		found->execute(prompt->currentActionReceiver());
 		return true;
 	}
 	return false;

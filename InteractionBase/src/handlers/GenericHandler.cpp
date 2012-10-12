@@ -537,7 +537,7 @@ void GenericHandler::removeActionPrompt()
 
 void GenericHandler::showActionPrompt(Visualization::Item *actionRecevier, bool autoExecuteAction)
 {
-	if (actionPrompt_ && actionPrompt_->actionReceiver() == actionRecevier)
+	if (actionPrompt_ && actionPrompt_->originalActionReceiver() == actionRecevier)
 	{
 		actionPrompt_->showPrompt();
 	}

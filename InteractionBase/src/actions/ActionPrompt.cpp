@@ -49,7 +49,8 @@ ITEM_COMMON_DEFINITIONS(ActionPrompt, "item")
 ActionPrompt::ActionPrompt(Item* actionReceiver,  bool autoExecuteAction, const StyleType* style) :
 	Item(nullptr, style),
 	autoExecuteAction_(autoExecuteAction),
-	actionReceiver_(actionReceiver),
+	originalActionReceiver_(actionReceiver),
+	currentActionReceiver_(actionReceiver),
 	layout_(new SequentialLayout(this, &style->layout())),
 	actionsContainer_(new SequentialLayout(layout_, &style->actionsContainer())),
 	actionText_( new Text(layout_, &style->shortcutText()))
@@ -62,7 +63,8 @@ ActionPrompt::ActionPrompt(Item* actionReceiver,  bool autoExecuteAction, const 
 	layout_->append(actionText_);
 	layout_->append(actionsContainer_);
 
-	actionReceiver_->scene()->addTopLevelItem(this);
+	computeCurrentActionReceiver();
+	originalActionReceiver_->scene()->addTopLevelItem(this);
 
 	actionText_->setText("");
 	setPromptPosition();
@@ -72,7 +74,10 @@ ActionPrompt::ActionPrompt(Item* actionReceiver,  bool autoExecuteAction, const 
 ActionPrompt::~ActionPrompt()
 {
 	if(scene()) scene()->removeTopLevelItem(this);
-	actionReceiver_ = nullptr; // This item is completely out of our control, we just know about it.
+
+	// These itemi are completely out of our control, we just know about them.
+	currentActionReceiver_ = nullptr;
+	originalActionReceiver_ = nullptr;
 
 	SAFE_DELETE_ITEM(layout_);
 
@@ -83,16 +88,20 @@ ActionPrompt::~ActionPrompt()
 
 void ActionPrompt::showPrompt()
 {
+	parentActionsLevel_ = 0;
+	computeCurrentActionReceiver();
+
 	actionText_->setText("");
 	setPromptPosition();
 	show();
 	acquireCursor();
+	setUpdateNeeded(StandardUpdate);
 }
 
 void ActionPrompt::hidePrompt()
 {
 	hide();
-	actionReceiver_->moveCursor(Visualization::Item::MoveOnPosition, receiverCursorPosition_);
+	originalActionReceiver_->moveCursor(Visualization::Item::MoveOnPosition, receiverCursorPosition_);
 }
 
 void ActionPrompt::determineChildren()
@@ -115,15 +124,15 @@ void ActionPrompt::acquireCursor()
 {
 	// Save the current cursor
 	receiverCursorPosition_ = QPoint(0,0);
-	if (actionReceiver_->scene()->mainCursor()->owner() == actionReceiver_)
-		receiverCursorPosition_ = actionReceiver_->scene()->mainCursor()->position();
+	if (originalActionReceiver_->scene()->mainCursor()->owner() == originalActionReceiver_)
+		receiverCursorPosition_ = originalActionReceiver_->scene()->mainCursor()->position();
 		
 	actionText_->moveCursor();
 }
 
 void ActionPrompt::setPromptPosition()
 {
-	for( auto v : actionReceiver_->scene()->views())
+	for( auto v : originalActionReceiver_->scene()->views())
 	{
 		if (v->isActiveWindow())
 		{
@@ -133,22 +142,30 @@ void ActionPrompt::setPromptPosition()
 	}
 }
 
-QList<Action*> ActionPrompt::actions()
+void ActionPrompt::computeCurrentActionReceiver()
 {
 	int level = parentActionsLevel_;
 
 	if (level >= 0)
 	{
 		// Find a parent that has a node with actions
-		auto item = actionReceiver_;
+		auto item = originalActionReceiver_;
+		QList<Model::Node*> nodesSeen;
 		while (item)
 		{
-			if (item->node() != nullptr)
+			// In some cases it happens that a single node is visualized multiple times in the hierarchy (e.g. RootItem
+			// visualizes the same node as its child). We count only the first occurence.
+			if (item->node() != nullptr && !nodesSeen.contains(item->node()))
 			{
+				nodesSeen.prepend(item->node());
 				auto actionList = Action::actions(item->node());
 				if (!actionList.isEmpty())
 				{
-					if (level == 0) return actionList;
+					if (level == 0)
+					{
+						currentActionReceiver_ = item;
+						return;
+					}
 					else --level;
 				}
 			}
@@ -158,7 +175,7 @@ QList<Action*> ActionPrompt::actions()
 	else
 	{
 		// Get a linear order of children
-		auto children = childItems();
+		auto children = originalActionReceiver_->childItems();
 		int i = 0;
 		while(i < children.size())
 		{
@@ -170,34 +187,53 @@ QList<Action*> ActionPrompt::actions()
 				if (!actionList.isEmpty())
 				{
 					++level;
-					if (level == 0) return actionList;
+					if (level == 0)
+					{
+						currentActionReceiver_ = child;
+						return;
+					}
 				}
 			}
 
 			children.append(child->childItems());
 			++i;
 		}
-
 	}
 
-	return {};
+	currentActionReceiver_ = nullptr;
+}
+
+QList<Action*> ActionPrompt::actions()
+{
+	return Action::actions(currentActionReceiver_->node());
 }
 
 void ActionPrompt::upParentActionsLevel()
 {
 	++parentActionsLevel_;
+	computeCurrentActionReceiver();
 
 	// Only allow this if we can actually get to an item that contains a node with actions or if we end up at 0
-	if (parentActionsLevel_ > 0 && actions().isEmpty()) --parentActionsLevel_;
+	if (parentActionsLevel_ > 0 && !currentActionReceiver_)
+	{
+		--parentActionsLevel_;
+		computeCurrentActionReceiver();
+	}
+
 	else setUpdateNeeded(StandardUpdate);
 }
 
 void ActionPrompt::downParentActionsLevel()
 {
 	--parentActionsLevel_;
+	computeCurrentActionReceiver();
 
 	// Only allow this if we can actually get to an item that contains a node with actions or if we end up at 0
-	if (parentActionsLevel_ < 0 && actions().isEmpty()) ++parentActionsLevel_;
+	if (parentActionsLevel_ < 0 && !currentActionReceiver_)
+	{
+		++parentActionsLevel_;
+		computeCurrentActionReceiver();
+	}
 	else setUpdateNeeded(StandardUpdate);
 }
 
