@@ -99,8 +99,8 @@ void TextCursor::setSelectedByDrag(int xBegin, int xEnd)
 	for (int i = 1; i <= owner()->text().length(); ++i)
 	{
 		int new_width = qfm.width(owner()->text().left(i));
-		if ( xBegin > (new_width + width + 1) / 2 ) selectionBegin_++;
-		if ( xEnd > (new_width + width + 1) / 2 ) selectionEnd_++;
+		if ( xBegin - owner()->textXOffset() > (new_width + width + 1) / 2 ) selectionBegin_++;
+		if ( xEnd - owner()->textXOffset() > (new_width + width + 1) / 2 ) selectionEnd_++;
 		width = new_width;
 	}
 
@@ -128,7 +128,7 @@ int TextCursor::cursorAtX(int x) const
 	for (int i = 1; i <= owner()->text().length(); ++i)
 	{
 		int new_width = qfm.width(owner()->text().left(i));
-		if ( x > (new_width + width + 1) / 2 ) pos++;
+		if ( x - owner()->textXOffset() > (new_width + width + 1) / 2 ) pos++;
 		width = new_width;
 	}
 
