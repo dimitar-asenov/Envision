@@ -37,8 +37,6 @@
 
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/cursor/Cursor.h"
-//#include "VisualizationBase/src/cursor/TextCursor.h"
-//#include "VisualizationBase/src/items/SceneHandlerItem.h"
 
 using namespace Visualization;
 
@@ -75,7 +73,7 @@ ActionPrompt::~ActionPrompt()
 {
 	if(scene()) scene()->removeTopLevelItem(this);
 
-	// These itemi are completely out of our control, we just know about them.
+	// These items are completely out of our control, we just know about them.
 	currentActionReceiver_ = nullptr;
 	originalActionReceiver_ = nullptr;
 
