@@ -277,7 +277,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 bool GenericHandler::moveCursor(Visualization::Item *target, int key)
 {
 	bool processed = false;
-	Visualization::Item::CursorMoveDirection dir;
+	Visualization::Item::CursorMoveDirection dir{};
 
 	// Set the source navigation point when beginning to navigate in a new direction
 	if (	(key == Qt::Key_Up || key == Qt::Key_Down)

@@ -583,6 +583,7 @@ bool Item::moveCursor(CursorMoveDirection dir, QPoint reference)
 				case MoveLeftOf: childDirection = MoveLeftOf; break;
 				case MoveRightOf: childDirection = MoveRightOf; break;
 				case MoveDefault: childDirection = MoveDefault; break;
+				default: throw VisualizationException("Unknown move direction: " + QString::number(dir));
 			}
 			if( r->item()->moveCursor(childDirection, mapToItem(r->item(), reference).toPoint()))
 			{
