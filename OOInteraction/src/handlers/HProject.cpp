@@ -35,6 +35,10 @@
 
 #include "commands/CCreateClass.h"
 
+#include "OOVisualization/src/top_level/VProject.h"
+#include "OOModel/src/top_level/Project.h"
+#include "FilePersistence/src/SystemClipboard.h"
+
 namespace OOInteraction {
 
 HProject::HProject()
@@ -51,10 +55,30 @@ HProject* HProject::instance()
 
 void HProject::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
-	if (event->modifiers() == Qt::NoModifier && (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter))
+	if (event->matches(QKeySequence::Paste))
+	{
+		FilePersistence::SystemClipboard clipboard;
+		if (clipboard.numNodes() == 1 && clipboard.currentNodeType() == OOModel::Project::typeNameStatic())
+		{
+			if (target->hasNode() && target->node()->typeName() == clipboard.currentNodeType())
+			{
+				auto proj = static_cast<OOVisualization::VProject*>(target);
+				proj->node()->beginModification("paste a project");
+				auto newProj = new OOModel::Project();
+				proj->node()->projects()->append(newProj);
+				newProj->load(clipboard);
+				proj->node()->model()->endModification();
+				proj->setUpdateNeeded(Visualization::Item::StandardUpdate);
+			}
+			else GenericHandler::keyPressEvent(target, event);
+		}
+		else GenericHandler::keyPressEvent(target, event);
+	}
+	else if (event->modifiers() == Qt::NoModifier && (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter))
 	{
 		showCommandPrompt(target);
 	}
+	else GenericHandler::keyPressEvent(target, event);
 }
 
 } /* namespace OOInteraction */
