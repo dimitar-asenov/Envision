@@ -39,7 +39,10 @@ void BoxStyle::load(StyleLoader& sl)
 {
 	ShapeStyle::load(sl);
 	sl.load("backgroundBrush", background_);
-	sl.load("cornerType", (int&)corner_);
+	// Indirect reading of enums in order to avoid compiler errors
+	int enumVal{};
+	sl.load("cornerType", enumVal);
+	corner_ = (CornerType) enumVal;
 	sl.load("cornerRadius", cornerRadius_);
 	sl.load("shadowBrush", shadow_);
 	sl.load("shadowXOffset", xShadowOffset_);

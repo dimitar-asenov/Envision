@@ -267,9 +267,9 @@ void SequentialLayout::updateGeometry(int, int)
 		if ( horizontal )
 		{
 			int y = h;
-			if ( style()->alignment() == SequentialLayoutStyle::BottomAlignment )
+			if ( style()->alignment() == SequentialLayoutStyle::Alignment::Bottom )
 				y += maxChildHeight - items[i]->height();
-			if ( style()->alignment() == SequentialLayoutStyle::CenterAlignment )
+			if ( style()->alignment() == SequentialLayoutStyle::Alignment::Center )
 				y += (maxChildHeight - items[i]->height()) / 2;
 
 			if ( i != begin ) w += spaceBetweenElements();
@@ -279,9 +279,9 @@ void SequentialLayout::updateGeometry(int, int)
 		else
 		{
 			int x = w;
-			if ( style()->alignment() == SequentialLayoutStyle::RightAlignment )
+			if ( style()->alignment() == SequentialLayoutStyle::Alignment::Right )
 				x += maxChildWidth - items[i]->width();
-			if ( style()->alignment() == SequentialLayoutStyle::CenterAlignment )
+			if ( style()->alignment() == SequentialLayoutStyle::Alignment::Center )
 				x += (maxChildWidth - items[i]->width()) / 2;
 
 			if ( i != begin ) h += spaceBetweenElements();

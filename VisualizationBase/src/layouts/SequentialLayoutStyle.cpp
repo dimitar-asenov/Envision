@@ -36,7 +36,7 @@
 namespace Visualization {
 
 SequentialLayoutStyle::SequentialLayoutStyle() :
-	direction_(LeftToRight), alignment_(CenterAlignment), spaceBetweenElements_(2)
+	direction_(Direction::LeftToRight), alignment_(Alignment::Center), spaceBetweenElements_(2)
 {
 }
 
@@ -58,8 +58,12 @@ void SequentialLayoutStyle::setSpaceBetweenElements(int space)
 void SequentialLayoutStyle::load(StyleLoader& sl)
 {
 	LayoutStyle::load(sl);
-	sl.load("direction", (int&) direction_);
-	sl.load("alignment", (int&) alignment_);
+	// Indirect reading of enums in order to avoid compiler errors
+	int enumVal{};
+	sl.load("direction", enumVal);
+	direction_ = (Direction) enumVal;
+	sl.load("alignment", enumVal);
+	alignment_ = (Alignment) enumVal;
 	sl.load("spaceBetweenElements", spaceBetweenElements_);
 	sl.load("notLocationEquivalentCursors", notLocationEquivalentCursors_);
 	sl.load("noInnerCursors", noInnerCursors_);

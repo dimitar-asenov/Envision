@@ -89,9 +89,9 @@ inline int SequentialLayoutStyle::minWidth() const {return minWidth_;}
 inline int SequentialLayoutStyle::minHeight() const {return minHeight_;}
 
 inline bool SequentialLayoutStyle::isHorizontal() const
-	{ return direction_ == LeftToRight || direction_ == RightToLeft;}
+	{ return direction_ == Direction::LeftToRight || direction_ == Direction::RightToLeft;}
 inline bool SequentialLayoutStyle::isForward() const
-	{ return direction_ == LeftToRight || direction_ == TopToBottom;}
+	{ return direction_ == Direction::LeftToRight || direction_ == Direction::TopToBottom;}
 
 }
 

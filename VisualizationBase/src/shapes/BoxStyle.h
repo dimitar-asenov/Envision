@@ -43,7 +43,7 @@ namespace Visualization {
 class VISUALIZATIONBASE_API BoxStyle : public ShapeStyle
 {
 	public:
-		typedef enum {RightAngleCorner, RoundCorner, CutCorner} CornerType;
+		enum class CornerType : int {RightAngle, Round, Cut} ;
 
 	protected:
 		QBrush background_;

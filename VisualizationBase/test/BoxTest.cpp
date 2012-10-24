@@ -46,7 +46,7 @@ BoxTest::BoxTest(Item* parent, int sub) :
 	setFlag(QGraphicsItem::ItemIsMovable);
 //	style.setMargins(4);
 //	style.setSpaceBetweenElements(3);
-//	style.setAlignment(SequentialLayoutStyle::CenterAlignment);
+//	style.setAlignment(SequentialLayoutStyle::Alignment::Center);
 //	style.setDirection(SequentialLayoutStyle::LeftToRight);
 //
 //	boxStyle.setCorner(BoxStyle::RoundCorner,10);

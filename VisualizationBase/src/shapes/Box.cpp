@@ -53,26 +53,26 @@ QPainterPath Box::getRectanglePath(qreal x, qreal y, int width, int height)
 
 	path.moveTo(width + x, radius + y);
 
-	if ( corner == BoxStyle::RightAngleCorner ) path.lineTo(width + x, y);
-	else if ( corner == BoxStyle::CutCorner ) path.lineTo(width + x - radius, y);
+	if ( corner == BoxStyle::CornerType::RightAngle ) path.lineTo(width + x, y);
+	else if ( corner == BoxStyle::CornerType::Cut ) path.lineTo(width + x - radius, y);
 	else path.arcTo(width - 2 * radius + x, y, radius * 2, radius * 2, 0.0, 90.0);
 
 	path.lineTo(radius + x, y);
 
-	if ( corner == BoxStyle::RightAngleCorner ) path.lineTo(x, y);
-	else if ( corner == BoxStyle::CutCorner ) path.lineTo(x, radius + y);
+	if ( corner == BoxStyle::CornerType::RightAngle ) path.lineTo(x, y);
+	else if ( corner == BoxStyle::CornerType::Cut ) path.lineTo(x, radius + y);
 	else path.arcTo(x, y, radius * 2, radius * 2, 90.0, 90.0);
 
 	path.lineTo(x, height - radius + y);
 
-	if ( corner == BoxStyle::RightAngleCorner ) path.lineTo(x, height + y);
-	else if ( corner == BoxStyle::CutCorner ) path.lineTo(x + radius, height + y);
+	if ( corner == BoxStyle::CornerType::RightAngle ) path.lineTo(x, height + y);
+	else if ( corner == BoxStyle::CornerType::Cut ) path.lineTo(x + radius, height + y);
 	else path.arcTo(x, height - 2 * radius + y, radius * 2, radius * 2, 180.0, 90.0);
 
 	path.lineTo(width - radius + x, height + y);
 
-	if ( corner == BoxStyle::RightAngleCorner ) path.lineTo(width + x, height + y);
-	else if ( corner == BoxStyle::CutCorner ) path.lineTo(x + width, height - radius + y);
+	if ( corner == BoxStyle::CornerType::RightAngle ) path.lineTo(width + x, height + y);
+	else if ( corner == BoxStyle::CornerType::Cut ) path.lineTo(x + width, height - radius + y);
 	else path.arcTo(width - 2 * radius + x, height - 2 * radius + y, radius * 2, radius * 2, 270.0, 90.0);
 
 	path.closeSubpath();
@@ -104,7 +104,8 @@ void Box::update()
 	}
 	else
 	{
-		setItemSize(xOffset() + std::ceil(contentBoxWidth) + style()->xShadowOffset(), yOffset() + std::ceil(contentBoxHeight) + style()->yShadowOffset());
+		setItemSize(xOffset() + std::ceil(contentBoxWidth) + style()->xShadowOffset(),
+				yOffset() + std::ceil(contentBoxHeight) + style()->yShadowOffset());
 	}
 }
 
@@ -169,14 +170,16 @@ void Box::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 	{
 		painter->setPen(Qt::NoPen);
 		painter->setBrush(style()->shadow());
-		painter->drawPath(getRectanglePath(xOffset() + style()->xShadowOffset(), yOffset() + style()->yShadowOffset(), contentBoxWidth, contentBoxHeight));
+		painter->drawPath(getRectanglePath(xOffset() + style()->xShadowOffset(), yOffset() + style()->yShadowOffset(),
+				contentBoxWidth, contentBoxHeight));
 	}
 
 	// Draw box.
 	painter->setPen(style()->outline());
 
 	// Set the brush and fix the gradient if needed.
-	if ( style()->background().style() == Qt::LinearGradientPattern && style()->background().gradient()->coordinateMode() == QGradient::LogicalMode )
+	if ( style()->background().style() == Qt::LinearGradientPattern
+			&& style()->background().gradient()->coordinateMode() == QGradient::LogicalMode )
 	{
 		QLinearGradient g = *(static_cast<const QLinearGradient*> (style()->background().gradient()));
 		g.setStart(x + g.start().x(), y + g.start().y());
@@ -184,7 +187,8 @@ void Box::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 		painter->setBrush(g);
 
 	}
-	else if ( style()->background().style()  == Qt::RadialGradientPattern && style()->background().gradient()->coordinateMode() == QGradient::LogicalMode )
+	else if ( style()->background().style()  == Qt::RadialGradientPattern
+			&& style()->background().gradient()->coordinateMode() == QGradient::LogicalMode )
 	{
 		QRadialGradient g = *(static_cast<const QRadialGradient*> (style()->background().gradient()));
 		g.setCenter(x + g.center().x(), y + g.center().y());

@@ -242,12 +242,12 @@ void GridLayout::updateGeometry(int, int)
 			if (items_[x][y] != nullptr)
 			{
 				int xPos = left;
-				if (style()->horizontalAlignment() == LayoutStyle::CenterAlignment) xPos += (widestInColumn[x] - items_[x][y]->width())/2;
-				else if (style()->horizontalAlignment() == LayoutStyle::RightAlignment) xPos += (widestInColumn[x] - items_[x][y]->width());
+				if (style()->horizontalAlignment() == LayoutStyle::Alignment::Center) xPos += (widestInColumn[x] - items_[x][y]->width())/2;
+				else if (style()->horizontalAlignment() == LayoutStyle::Alignment::Right) xPos += (widestInColumn[x] - items_[x][y]->width());
 
 				int yPos = top;
-				if (style()->verticalAlignment() == LayoutStyle::CenterAlignment) yPos += (tallestInRow[y] - items_[x][y]->height())/2;
-				else if (style()->verticalAlignment() == LayoutStyle::BottomAlignment) yPos += (tallestInRow[y] - items_[x][y]->height());
+				if (style()->verticalAlignment() == LayoutStyle::Alignment::Center) yPos += (tallestInRow[y] - items_[x][y]->height())/2;
+				else if (style()->verticalAlignment() == LayoutStyle::Alignment::Bottom) yPos += (tallestInRow[y] - items_[x][y]->height());
 
 				items_[x][y]->setPos(xPos, yPos);
 			}
