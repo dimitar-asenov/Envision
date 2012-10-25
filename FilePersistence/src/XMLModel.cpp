@@ -147,7 +147,8 @@ int XMLModel::loadIntValue() const
 	bool ok = true;
 
 	int res = elem.firstChild().nodeValue().mid(PREFIX_INTEGER.size()).toInt(&ok);
-	if ( !ok ) throw FilePersistenceException("Could read integer value " + elem.firstChild().nodeValue());
+	if ( !ok ) throw FilePersistenceException("Could not read integer value " + elem.firstChild().nodeValue()
+			+ " at line: " + QString::number( elem.lineNumber() ));
 
 	return res;
 }
@@ -162,7 +163,8 @@ double XMLModel::loadDoubleValue() const
 	bool ok = true;
 
 	double res = elem.firstChild().nodeValue().mid(PREFIX_DOUBLE.size()).toDouble(&ok);
-	if ( !ok ) throw FilePersistenceException("Could read real value " + elem.firstChild().nodeValue());
+	if ( !ok ) throw FilePersistenceException("Could read real value " + elem.firstChild().nodeValue()
+			+ " at line: " + QString::number( elem.lineNumber() ));
 
 	return res;
 }
