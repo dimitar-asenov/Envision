@@ -87,6 +87,7 @@ class VISUALIZATIONBASE_API PositionLayout : public Layout
 
 		QVector<Item*> items;
 		QVector<Position*> positions;
+		bool allNodesLackPositionInfo{};
 
 		void swap(int i, int j);
 };

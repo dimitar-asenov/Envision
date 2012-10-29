@@ -139,9 +139,23 @@ void PositionLayout::swap(int i, int j)
 
 void PositionLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes, ModelRenderer* renderer)
 {
+	allNodesLackPositionInfo = items.isEmpty();
+
 	// Inserts elements that are not yet visualized and adjusts the order to match that in 'nodes'.
 	for (int i = 0; i < nodes.size(); ++i)
 	{
+		// Check if node has position info
+		Model::ExtendableNode* extNode = dynamic_cast<Model::ExtendableNode*> (nodes[i]);
+		if (extNode)
+		{
+			Position* pos = extNode->extension<Position>();
+			if (pos)
+			{
+				if (pos->xNode() || pos->yNode())
+					allNodesLackPositionInfo = false;
+			}
+		}
+
 		if (i >= items.size() ) insert( renderer->render(this, nodes[i]));	// This node is new
 		else if ( items[i]->node() == nodes[i] ) continue;	// This node is already there
 		else
@@ -189,6 +203,80 @@ bool PositionLayout::isEmpty() const
 
 void PositionLayout::updateGeometry(int, int)
 {
+	// Arrange items if they were all missing positions.
+	if (allNodesLackPositionInfo && !items.isEmpty())
+	{
+		// Get averages
+		double averageWidth = 0;
+		double averageHeight = 0;
+		for(auto i : items)
+		{
+			averageWidth += i->width();
+			averageHeight += i->height();
+		}
+		averageWidth /= items.size();
+		averageHeight /= items.size();
+
+		// Get 'optimal' number of rows to achieve a square
+		double prevRatio = 0;
+		int rows = 1;
+		for (rows = 1; rows<items.size(); ++rows)
+		{
+			int cols = (items.size()/rows) + ((items.size()%rows)?1:0);
+			double ratio = (averageWidth*cols) / (averageHeight*rows);
+
+			if (ratio > 1) ratio = 1/ratio;
+
+			if (ratio > prevRatio)
+			{
+				prevRatio = ratio;
+			}
+			else
+			{
+				if (rows > 1) --rows;
+				break;
+			}
+		}
+
+		int heightLimit = rows*averageHeight;
+
+		//Compute the columns and set the positions
+		int lastBottom = 0;
+		int lastRight = 0;
+		int colWidth = 0;
+
+		for(int i = 0; i<items.size(); ++i)
+		{
+			int x = lastRight;
+			int y = lastBottom;
+
+			if (lastBottom == 0 || (lastBottom + items[i]->height() <= heightLimit))
+			{
+				lastBottom += 10 + items[i]->height();
+				lastBottom = toGrid(lastBottom);
+
+				if (items[i]->width() > colWidth) colWidth =  items[i]->width();
+			}
+			else
+			{
+				y = 0;
+				lastBottom = 10 + items[i]->height();
+
+				lastRight += 10 + colWidth;
+				lastRight = toGrid(lastRight);
+				x = lastRight;
+				colWidth = items[i]->width();
+			}
+
+			items[i]->node()->beginModification("Automatically set position");
+			positions[i]->setX(x);
+			positions[i]->setY(y);
+			items[i]->node()->endModification();
+		}
+
+		allNodesLackPositionInfo = false;
+	}
+
 	QPoint topLeft;
 	QPoint bottomRight;
 
