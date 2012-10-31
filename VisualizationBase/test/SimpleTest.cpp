@@ -78,7 +78,7 @@ TEST(VisualizationBase, ExtendableTest)
 	QApplication::processEvents();
 
 	VList* l = dynamic_cast<VList*> (top->item());
-	l->at<VExtendable>(0)->setExpanded();
+	l->at<VExtendable>(1)->setExpanded(false);
 	scene->scheduleUpdate();
 	scene->listenToModel(model);
 
