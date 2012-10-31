@@ -56,8 +56,11 @@ bool OOReference::resolve()
 		auto t = parent->prefix()->type();
 		if (auto sp = dynamic_cast<SymbolProviderType*>(t))
 		{
-			auto symbolList = sp->symbolProvider()->findSymbols( name(), this, SEARCH_DOWN, false);
-			if (symbolList.size() == 1) symbol = symbolList.first();
+			if (sp->symbolProvider())
+			{
+				auto symbolList = sp->symbolProvider()->findSymbols( name(), this, SEARCH_DOWN, false);
+				if (symbolList.size() == 1) symbol = symbolList.first();
+			}
 		}
 		SAFE_DELETE(t);
 	}
