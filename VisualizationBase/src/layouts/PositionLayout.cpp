@@ -245,6 +245,10 @@ void PositionLayout::updateGeometry(int, int)
 		int lastRight = 0;
 		int colWidth = 0;
 
+		auto model = items[0]->node()->model();
+		model->beginModification(items[0]->node(), "Automatically set position");
+		// It is important to batch the modifications, since model::endModification() send a notification signal.
+
 		for(int i = 0; i<items.size(); ++i)
 		{
 			int x = lastRight;
@@ -268,12 +272,12 @@ void PositionLayout::updateGeometry(int, int)
 				colWidth = items[i]->width();
 			}
 
-			items[i]->node()->beginModification("Automatically set position");
+			model->changeModificationTarget(items[i]->node());
 			positions[i]->setX(x);
 			positions[i]->setY(y);
-			items[i]->node()->endModification();
 		}
 
+		model->endModification();
 		allNodesLackPositionInfo = false;
 	}
 
