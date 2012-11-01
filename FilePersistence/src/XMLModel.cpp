@@ -63,7 +63,8 @@ XMLModel::XMLModel(const QString& filename) :
 	if ( !doc.setContent(&file, &error, &line, &col) )
 	{
 		file.close();
-		throw FilePersistenceException("Reading of the XML structure of file " + file.fileName() + " failed." + error + " line: " + line + " col: " + col);
+		throw FilePersistenceException("Reading of the XML structure of file " + file.fileName() + " failed."
+				+ error + " line: " + QString::number(line) + " col: " + QString::number(col));
 	}
 	file.close();
 }
