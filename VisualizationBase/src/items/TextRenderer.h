@@ -97,7 +97,7 @@ class VISUALIZATIONBASE_API TextRenderer : public Item
 	private:
 		typedef Item BaseItemType;
 
-		QString text_;
+		QStaticText staticText_;
 
 		qreal textXOffset_; //Base line
 		qreal textYOffset_;
@@ -105,9 +105,12 @@ class VISUALIZATIONBASE_API TextRenderer : public Item
 		bool editable;
 
 		const static int MIN_TEXT_WIDTH = 10;
+
+		QRectF bound();
+		QRectF bound(QFontMetrics &qfm);
 };
 
-inline QString TextRenderer::text() { return text_; }
+inline QString TextRenderer::text() { return staticText_.text(); }
 inline bool TextRenderer::isEditable() { return editable; }
 inline void TextRenderer::setEditable(bool editable_) { editable = editable_; }
 

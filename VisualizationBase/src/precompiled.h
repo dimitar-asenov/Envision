@@ -50,6 +50,7 @@
 
 #include <QtXml/QDomDocument>
 
+#include <QtGui/QStaticText>
 #include <QtGui/QPainter>
 #include <QtGui/QFont>
 #include <QtGui/QPen>
