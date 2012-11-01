@@ -48,6 +48,7 @@
 #include "handlers/HKeywordStatement.h"
 
 #include "commands/CCreateProject.h"
+#include "commands/CSceneHandlerItemTest.h"
 
 #include "string_components/UnaryOperatorStringComponents.h"
 #include "string_components/BinaryOperatorStringComponents.h"
@@ -266,6 +267,8 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CCreateProject());
 
 	initializeActions();
+
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CSceneHandlerItemTest());
 
 	return true;
 }
