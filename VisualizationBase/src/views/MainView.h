@@ -71,8 +71,6 @@ class VISUALIZATIONBASE_API MainView: public View
 		int scaleLevel;
 };
 
-inline qreal MainView::scaleFactor() const {	return SCALING_FACTOR / (qreal) scaleLevel; }
-
 }
 
 #endif /* MAINVIEW_H_ */
