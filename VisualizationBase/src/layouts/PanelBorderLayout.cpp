@@ -93,6 +93,13 @@ void PanelBorderLayout::updateGeometry(int, int)
 	int contentWidth = content_ ? content_->width() : 0;
 	int contentHeight = content_ ? content_->height() : 0;
 
+	if (hasShape() && style()->shapeOnlyOnContent() && getShape()->style()->outline() != Qt::NoPen)
+	{
+		int shapeOutline = getShape()->style()->outline().width();
+		contentWidth += shapeOutline;
+		contentHeight += shapeOutline;
+	}
+
 	// Compute middle sizes
 	int middleWidth = contentWidth + style()->leftInnerMargin() + style()->rightInnerMargin();
 	if ( left_ && !style()->isLeftProtrusionFixed()) middleWidth += left_->width() / 2;

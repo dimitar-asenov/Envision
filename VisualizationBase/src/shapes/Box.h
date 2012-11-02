@@ -46,10 +46,8 @@ class VISUALIZATIONBASE_API Box: public Shape
 	SHAPE_COMMON(Box)
 
 	protected:
-		qreal contentBoxWidth;
-		qreal contentBoxHeight;
-
-		QPainterPath getRectanglePath(qreal x, qreal y, int width, int height);
+		int contentBoxWidth;
+		int contentBoxHeight;
 
 	public:
 		Box(Item *parent, StyleType *style = itemStyles().get());
