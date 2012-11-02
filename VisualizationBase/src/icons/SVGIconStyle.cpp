@@ -47,21 +47,25 @@ void SVGIconStyle::load(StyleLoader& sl)
 
 void SVGIconStyle::paint(QPainter* painter, int x, int y) const
 {
-	//OLD version that is not optimized
+	//OLD, one-line version that is not optimized
 	//renderer_.render(painter, QRectF(x, y, width_, height_));
 
 	if(!mipmap_.paint(painter,x,y))
 	{
 		qreal scaleFactor = painter->worldTransform().m11();
 
-		QImage img = QImage(QSize(width_,height_) * scaleFactor, QImage::Format_ARGB32);
-		img.fill(0);
-		QPainter pai(&img);
-		renderer_.render(&pai);
+		auto size = (QSizeF(width_,height_) * scaleFactor).toSize();
+		if (size.width() > 0 && size.height() > 0)
+		{
+			QImage img = QImage(size, QImage::Format_ARGB32);
+			img.fill(0);
+			QPainter pai(&img);
+			renderer_.render(&pai);
 
-		mipmap_.setImage(img, scaleFactor);
+			mipmap_.setImage(img, scaleFactor);
 
-		Q_ASSERT(mipmap_.paint(painter,x,y));
+			Q_ASSERT(mipmap_.paint(painter,x,y));
+		}
 	}
 }
 

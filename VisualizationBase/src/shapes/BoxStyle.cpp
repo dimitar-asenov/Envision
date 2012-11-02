@@ -158,15 +158,24 @@ void BoxStyle::optimizedPaint(QPainter* painter, int xOffset, int yOffset, int c
 	if (cornerRadius_ > 0)
 	{
 		qreal scaleFactor = painter->worldTransform().m11();
-		if (!topLeftCorner_.containsImageForScale(scaleFactor)) generatePixmaps(scaleFactor, painter);
 
-		int rightCornerStart = contentBoxWidth - subImageSize;
-		int bottomCornerStart = contentBoxHeight - subImageSize;
+		if (scaleFactor*cornerRadius_ >= 1)
+		{
+			// Draw the corners in case there are at least one pixel
+			bool hasScale = topLeftCorner_.paint(painter, xOffset, yOffset);
+			if (!hasScale)
+			{
+				generatePixmaps(scaleFactor, painter);
+				topLeftCorner_.paint(painter, xOffset, yOffset);
+			}
 
-		Q_ASSERT(topLeftCorner_.paint(painter, xOffset, yOffset));
-		Q_ASSERT(topRightCorner_.paint(painter, xOffset + rightCornerStart, yOffset));
-		Q_ASSERT(bottomLeftCorner_.paint(painter, xOffset, yOffset + bottomCornerStart));
-		Q_ASSERT(bottomRightCorner_.paint(painter, xOffset + rightCornerStart, yOffset + bottomCornerStart));
+			int rightCornerStart = contentBoxWidth - subImageSize;
+			int bottomCornerStart = contentBoxHeight - subImageSize;
+
+			topRightCorner_.paint(painter, xOffset + rightCornerStart, yOffset);
+			bottomLeftCorner_.paint(painter, xOffset, yOffset + bottomCornerStart);
+			bottomRightCorner_.paint(painter, xOffset + rightCornerStart, yOffset + bottomCornerStart);
+		}
 	}
 
 	int innerWidth = contentBoxWidth - 2*(cornerRadius_ +outlineWidth);
