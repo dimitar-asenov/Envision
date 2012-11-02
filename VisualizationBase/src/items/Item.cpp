@@ -80,6 +80,8 @@ Item::Item(Item* parent, const StyleType* style) :
 
 	setFlag(QGraphicsItem::ItemIsFocusable);
 	setFlag(QGraphicsItem::ItemIsSelectable);
+	setFlag(QGraphicsItem::ItemClipsToShape);
+	setFlag(QGraphicsItem::ItemClipsChildrenToShape);
 	setStyle(style);
 	setZValue(LAYER_DEFAULT_Z);
 }
