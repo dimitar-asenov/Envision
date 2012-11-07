@@ -82,6 +82,12 @@ Item::Item(Item* parent, const StyleType* style) :
 	setFlag(QGraphicsItem::ItemIsSelectable);
 	setFlag(QGraphicsItem::ItemClipsToShape);
 	setFlag(QGraphicsItem::ItemClipsChildrenToShape);
+
+#ifdef QT_GRAPHICSVIEW_ENVISION_EXTENSIONS
+	setFlag(QGraphicsItem::ItemDoesNotEnforceClip);
+	setFlag(QGraphicsItem::ItemSkipsPaintingIfTooSmall);
+#endif
+
 	setStyle(style);
 	setZValue(LAYER_DEFAULT_Z);
 }

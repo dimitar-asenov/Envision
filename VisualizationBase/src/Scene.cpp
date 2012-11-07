@@ -59,6 +59,7 @@ Scene::Scene()
 	  renderer_(defaultRenderer()), sceneHandlerItem_(new SceneHandlerItem(this)), mainCursor_(nullptr),
 	  mainCursorsJustSet_(false), inEventHandler_(false), inAnUpdate_(false), hiddenItemCategories_(NoItemCategory)
 {
+	setItemIndexMethod(NoIndex);
 }
 
 Scene::~Scene()
