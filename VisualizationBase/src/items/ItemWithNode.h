@@ -62,6 +62,7 @@ class ItemWithNode : public Super
 template <class Super, class ContainedNode> ItemWithNode<Super,ContainedNode>::ItemWithNode(Item* parent, ContainedNode* node, const typename Super::StyleType* style)
 	: Super(parent, style), node_(node), revision_(-1)
 {
+	Super::nodeItemsMap().insert(node,this);
 }
 
 template <class Super, class ContainedNode> bool ItemWithNode<Super,ContainedNode>::hasNode() const { return true; }

@@ -72,6 +72,12 @@ bool Item::removeAddOn(VisualizationAddOn* addOn)
 	return staticAddOns().removeAll(addOn) != 0;
 }
 
+QMultiHash<Model::Node*, Item*>& Item::nodeItemsMap()
+{
+	static QMultiHash<Model::Node*, Item*> map;
+	return map;
+}
+
 Item::Item(Item* parent, const StyleType* style) :
 	QGraphicsItem(parent), style_(nullptr), shape_(nullptr), needsUpdate_(FullUpdate), purpose_(-1),
 	itemCategory_(Scene::NoItemCategory)
@@ -200,7 +206,6 @@ void Item::updateSubtree()
 
 void Item::changeGeometry(int availableWidth, int availableHeight)
 {
-	prepareGeometryChange();
 	updateGeometry(availableWidth, availableHeight);
 	update();
 }
@@ -616,11 +621,13 @@ Item* Item::findVisualizationOf(Model::Node* node)
 {
 	if (this->node() == node) return this;
 
-	for(auto child : childItems())
+	auto it = nodeItemsMap().find(node);
+	auto end = Item::nodeItemsMap().end();
+	while (it != end && it.key() == node)
 	{
-		Item* item = static_cast<Item*>(child);
-		item = item->findVisualizationOf(node);
-		if (item) return item;
+		auto item = it.value();
+		if (isAncestorOf(item)) return item;
+		++it;
 	}
 
 	return nullptr;
@@ -694,6 +701,39 @@ Scene::ItemCategory Item::itemCategory()
 {
 	if (itemCategory_ == Scene::NoItemCategory && parent()) return parent()->itemCategory();
 	else return itemCategory_;
+}
+
+void Item::setWidth(int width)
+{
+	if (width != this->width())
+	{
+		prepareGeometryChange();
+		boundingRect_.setWidth(width);
+	}
+}
+void Item::setHeight(int height)
+{
+	if (height != this->height())
+	{
+		prepareGeometryChange();
+		boundingRect_.setHeight(height);
+	}
+}
+void Item::setSize(int width, int height)
+{
+	if (width != this->width() || height != this->height())
+	{
+		prepareGeometryChange();
+		boundingRect_.setSize(QSizeF(width, height));
+	}
+}
+void Item::setSize(const QSizeF& size)
+{
+	if (size != this->size())
+	{
+		prepareGeometryChange();
+		boundingRect_.setSize(size);
+	}
 }
 
 /***********************************************************************************************************************

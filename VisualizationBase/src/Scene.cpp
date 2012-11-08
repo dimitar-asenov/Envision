@@ -160,11 +160,16 @@ void Scene::listenToModel(Model::Model* model)
 
 void Scene::nodesUpdated(QList<Node*> nodes)
 {
-	// TODO implement this in a more efficient way.
-	for (QGraphicsItem* graphics_item :  items())
+	for(auto node : nodes)
 	{
-		Item* item = static_cast<Item*> ( graphics_item );
-		if (item->hasNode() && nodes.contains(item->node())) item->setUpdateNeeded(Item::StandardUpdate);
+		auto it = Item::nodeItemsMap().find(node);
+		auto end = Item::nodeItemsMap().end();
+		while (it != end && it.key() == node)
+		{
+			auto item = it.value();
+			if (item->scene() == this) item->setUpdateNeeded(Item::StandardUpdate);
+			++it;
+		}
 	}
 
 	scheduleUpdate();
