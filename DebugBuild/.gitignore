@@ -3,3 +3,4 @@
 /plugins
 /core
 /qt
+/callgrind.out.*
