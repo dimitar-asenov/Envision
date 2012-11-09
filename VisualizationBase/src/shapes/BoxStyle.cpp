@@ -208,8 +208,8 @@ void BoxStyle::optimizedPaint(QPainter* painter, int xOffset, int yOffset, int c
 		}
 	}
 
-	int innerWidth = contentBoxWidth - 2*(cornerRadius_ +outlineWidth);
-	int innerHeight = contentBoxHeight - 2*(cornerRadius_ + outlineWidth);
+	int innerWidth = contentBoxWidth - 2*subImageSize;
+	int innerHeight = contentBoxHeight - 2*subImageSize;
 
 	// Paint background
 	if (background_.style() == Qt::SolidPattern)
