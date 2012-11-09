@@ -150,15 +150,45 @@ void BoxStyle::unoptimizedPaint(QPainter* painter, int xOffset, int yOffset, int
 void BoxStyle::optimizedPaint(QPainter* painter, int xOffset, int yOffset, int contentBoxWidth,
 				int contentBoxHeight) const
 {
+	qreal scaleFactor = painter->worldTransform().m11();
 	int outlineWidth = outline_.style()==Qt::SolidLine ? outline_.width() : 0;
 	int halfOutline = std::ceil(outlineWidth/2.0);
+
+	if (corner_ == CornerType::RightAngle || cornerRadius_*scaleFactor <= 1.0 )
+	{
+		int innerWidth = contentBoxWidth - 2*halfOutline;
+		int innerHieght = contentBoxHeight - 2*halfOutline;
+
+		// Note that the half of the outline overlaps the background.
+
+		// Draw a simplified version
+		if (background_.style() == Qt::SolidPattern)
+			painter->fillRect(xOffset + halfOutline, yOffset + halfOutline, innerWidth, innerHieght, background_.color());
+
+		// Paint outline
+		if (outline_.style() == Qt::SolidLine)
+		{
+			//Top
+			painter->fillRect(xOffset, yOffset, contentBoxWidth, outlineWidth, outline_.color());
+			//Left
+			painter->fillRect(xOffset, yOffset + outlineWidth, outlineWidth,
+					contentBoxHeight-2*outlineWidth, outline_.color());
+			//Bottom
+			painter->fillRect(xOffset, yOffset + contentBoxHeight - outlineWidth, contentBoxWidth,
+					outlineWidth, outline_.color());
+			//Right
+			painter->fillRect(xOffset + contentBoxWidth - outlineWidth, yOffset + outlineWidth,
+					outlineWidth, contentBoxHeight-2*outlineWidth, outline_.color());
+		}
+
+		return;
+	}
+
 	int subImageSize = cornerRadius_ + halfOutline;
 
 	// Paint corners
 	if (cornerRadius_ > 0)
 	{
-		qreal scaleFactor = painter->worldTransform().m11();
-
 		if (scaleFactor*cornerRadius_ >= 1)
 		{
 			// Draw the corners in case there are at least one pixel
@@ -200,16 +230,16 @@ void BoxStyle::optimizedPaint(QPainter* painter, int xOffset, int yOffset, int c
 	{
 		// top
 		painter->fillRect(xOffset + subImageSize, yOffset,
-				innerWidth, outlineWidth, outline_.brush());
+				innerWidth, outlineWidth, outline_.color());
 		// bottom
 		painter->fillRect(xOffset + subImageSize, yOffset + contentBoxHeight - outlineWidth,
-				innerWidth, outlineWidth, outline_.brush());
+				innerWidth, outlineWidth, outline_.color());
 		// left
 		painter->fillRect(xOffset , yOffset + subImageSize,
-				outlineWidth, innerHeight, outline_.brush());
+				outlineWidth, innerHeight, outline_.color());
 		// right
 		painter->fillRect(xOffset + contentBoxWidth - outlineWidth, yOffset + subImageSize,
-				outlineWidth, innerHeight, outline_.brush());
+				outlineWidth, innerHeight, outline_.color());
 	}
 }
 
