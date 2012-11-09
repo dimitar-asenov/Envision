@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 WORKSPACE_DIR=$( cd $(dirname $0)/.. ; pwd )
 QT_SRC_DIR=$WORKSPACE_DIR/qt/qt-envision-enhancements
