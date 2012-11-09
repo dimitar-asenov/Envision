@@ -4,3 +4,4 @@
 /core
 /qt
 /callgrind.out.*
+/test

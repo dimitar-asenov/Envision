@@ -52,7 +52,7 @@ Interaction::CommandResult* CSceneHandlerItemTest::execute(Visualization::Item*,
 {
 	//Test code goes here
 
-	QString testDir = "/home/dasenov/eclipse_workspaces/test/TestJavaParser/out/";
+	QString testDir = "test/";
 	Model::Model* model = new Model::Model();
 	FilePersistence::FileStore store;
 	store.setBaseFolder(testDir);
