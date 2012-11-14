@@ -8,7 +8,9 @@ win32:LIBS += -llogger \
     -lvisualizationbase \
     -linteractionbase \
     -loovisualization
-HEADERS += src/commands/CSceneHandlerItemTest.h \
+HEADERS += src/string_offset_providers/ClassTypeStringOffsetProvider.h \
+    src/string_components/ClassTypeStringComponents.h \
+    src/commands/CSceneHandlerItemTest.h \
     src/handlers/HForEachStatement.h \
     src/handlers/HKeywordStatement.h \
     src/handlers/HReturnStatement.h \
@@ -90,7 +92,9 @@ HEADERS += src/commands/CSceneHandlerItemTest.h \
     src/string_offset_providers/TextRendererStringOffsetProvider.h \
     src/string_offset_providers/VariableDeclarationStringOffsetProvider.h \
     src/oointeraction.h
-SOURCES += src/commands/CSceneHandlerItemTest.cpp \
+SOURCES += src/string_offset_providers/ClassTypeStringOffsetProvider.cpp \
+    src/string_components/ClassTypeStringComponents.cpp \
+    src/commands/CSceneHandlerItemTest.cpp \
     src/handlers/HForEachStatement.cpp \
     src/handlers/HKeywordStatement.cpp \
     src/handlers/HReturnStatement.cpp \

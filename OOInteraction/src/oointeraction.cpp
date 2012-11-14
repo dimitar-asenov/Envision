@@ -69,6 +69,7 @@
 #include "string_components/CallStringComponents.h"
 #include "string_components/PrimitiveTypeStringComponents.h"
 #include "string_components/ArrayTypeStringComponents.h"
+#include "string_components/ClassTypeStringComponents.h"
 #include "string_components/AssignmentStringComponents.h"
 #include "string_components/VariableDeclarationStringComponents.h"
 #include "string_components/ListStringComponents.h"
@@ -87,6 +88,7 @@
 #include "string_offset_providers/VariableDeclarationStringOffsetProvider.h"
 #include "string_offset_providers/ReferenceExpressionStringOffsetProvider.h"
 #include "string_offset_providers/UnaryOperatorStringOffsetProvider.h"
+#include "string_offset_providers/ClassTypeStringOffsetProvider.h"
 
 #include "OOVisualization/src/allOOVisualizations.h"
 
@@ -200,6 +202,8 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringComponents, ArrayTypeStringComponents, OOModel::ArrayTypeExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor
+		<StringComponents, ClassTypeStringComponents, OOModel::ClassTypeExpression>();
+	Model::AdapterManager::registerAdapterViaConstructor
 		<StringComponents, AssignmentStringComponents, OOModel::AssignmentExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringComponents, VariableDeclarationStringComponents, OOModel::VariableDeclaration>();
@@ -259,6 +263,8 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 		<StringOffsetProvider, SimpleLiteralStringOffsetProvider, OOVisualization::VPrimitiveType>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, SequentialVisualizationStringOffsetProvider, OOVisualization::VArrayType>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringOffsetProvider, ClassTypeStringOffsetProvider, OOVisualization::VClassType>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, SequentialVisualizationStringOffsetProvider, OOVisualization::VAssignmentExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor
