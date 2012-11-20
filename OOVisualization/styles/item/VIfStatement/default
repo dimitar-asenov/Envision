@@ -7,25 +7,19 @@
 				<width>1</width>
 				<color>
 					<alpha>255</alpha>
-					<red>128</red>
-					<green>128</green>
-					<blue>128</blue>
+					<red>224</red>
+					<green>224</green>
+					<blue>200</blue>
 				</color>
 			</outline>
 			<backgroundBrush>
-				<gradient>
-					<stopPoints>
-						<e1>
-							<first>1.0</first>
-							<second>
-								<alpha>255</alpha>
-								<red>255</red>
-								<green>255</green>
-								<blue>224</blue>
-							</second>
-						</e1>	
-					</stopPoints>
-				</gradient>
+				<style>1</style>
+				<color>
+					<alpha>255</alpha>
+					<red>255</red>
+					<green>255</green>
+					<blue>224</blue>
+				</color>
 			</backgroundBrush>
 			<cornerRadius>4</cornerRadius>
 		</shape>
@@ -57,11 +51,22 @@
 			<cornerType>2</cornerType>
 		</shape>
 	</condition>
-	<content prototypes="layout/SequentialLayout/default">
+	
+	<contentHorizontal prototypes="layout/SequentialLayout/default">
 		<alignment>3</alignment>
 		<noInnerCursors>true</noInnerCursors>
 		<noBoundaryCursorsInsideShape>true</noBoundaryCursorsInsideShape>
-	</content>
+		<spaceBetweenElements>1</spaceBetweenElements>
+	</contentHorizontal>
+	<contentVertical prototypes="layout/SequentialLayout/default">
+		<alignment>1</alignment>
+		<direction>2</direction>
+		<noInnerCursors>true</noInnerCursors>
+		<noBoundaryCursorsInsideShape>true</noBoundaryCursorsInsideShape>
+		<spaceBetweenElements>1</spaceBetweenElements>
+	</contentVertical>
+	<contentWidthSwitchTreshold>800</contentWidthSwitchTreshold>
+	
 	<thenBranch prototypes="item/VStatementItemList/default">
 		<shape prototypes="shape/Box/default">
 			Box

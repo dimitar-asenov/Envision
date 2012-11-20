@@ -51,7 +51,10 @@ class OOVISUALIZATION_API VIfStatementStyle : public Visualization::ItemStyle
 		Visualization::StaticStyle icon_;
 		Visualization::SequentialLayoutStyle condition_;
 
-		Visualization::SequentialLayoutStyle content_;
+		Visualization::SequentialLayoutStyle contentVertical_;
+		Visualization::SequentialLayoutStyle contentHorizontal_;
+		int contentWidthSwitchTreshold_;
+
 		Visualization::VListStyle thenBranch_;
 		Visualization::VListStyle elseBranch_;
 
@@ -63,7 +66,10 @@ class OOVISUALIZATION_API VIfStatementStyle : public Visualization::ItemStyle
 		const Visualization::StaticStyle& icon() const;
 		const Visualization::SequentialLayoutStyle& condition() const;
 
-		const Visualization::SequentialLayoutStyle& content() const;
+		const Visualization::SequentialLayoutStyle& contentVertical() const;
+		const Visualization::SequentialLayoutStyle& contentHorizontal() const;
+		int contentWidthSwitchTreshold() const;
+
 		const Visualization::VListStyle& thenBranch() const;
 		const Visualization::VListStyle& elseBranch() const;
 };
@@ -73,7 +79,12 @@ inline const Visualization::SequentialLayoutStyle& VIfStatementStyle::header() c
 inline const Visualization::StaticStyle& VIfStatementStyle::icon() const { return icon_; }
 inline const Visualization::SequentialLayoutStyle& VIfStatementStyle::condition() const { return condition_; }
 
-inline const Visualization::SequentialLayoutStyle& VIfStatementStyle::content() const { return content_; }
+inline const Visualization::SequentialLayoutStyle& VIfStatementStyle::contentVertical() const
+		{ return contentVertical_; }
+inline const Visualization::SequentialLayoutStyle& VIfStatementStyle::contentHorizontal() const
+		{ return contentHorizontal_; }
+inline int VIfStatementStyle::contentWidthSwitchTreshold() const { return contentWidthSwitchTreshold_; }
+
 inline const Visualization::VListStyle& VIfStatementStyle::thenBranch() const { return thenBranch_; }
 inline const Visualization::VListStyle& VIfStatementStyle::elseBranch() const { return elseBranch_; }
 

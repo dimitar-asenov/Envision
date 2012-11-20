@@ -57,7 +57,7 @@ VIfStatement::VIfStatement(Item* parent, NodeType* node, const StyleType* style)
 	conditionBackground_ =new SequentialLayout(header_, &style->condition());
 	header_->append(conditionBackground_);
 
-	content_ = new SequentialLayout(layout(), &style->content());
+	content_ = new SequentialLayout(layout(), &style->contentHorizontal());
 	layout()->setContent(content_);
 }
 
@@ -87,9 +87,19 @@ void VIfStatement::determineChildren()
 	header_->setStyle(&style()->header());
 	header_->at<Static>(0)->setStyle(&style()->icon());
 	conditionBackground_->setStyle( &style()->condition() );
-	content_->setStyle(&style()->content());
-	if (thenBranch_) thenBranch_->setStyle( &style()->thenBranch() );
-	if (elseBranch_) elseBranch_->setStyle( &style()->elseBranch() );
+
+	int contentWidth = 0;
+	if (thenBranch_)
+	{
+		thenBranch_->setStyle( &style()->thenBranch() );
+		contentWidth += thenBranch_->width();
+	}
+	if (elseBranch_)
+	{
+		elseBranch_->setStyle( &style()->elseBranch() );
+		contentWidth += elseBranch_->width();
+	}
+	content_->setStyle(contentWidth ? &style()->contentHorizontal() : &style()->contentVertical());
 }
 
 }

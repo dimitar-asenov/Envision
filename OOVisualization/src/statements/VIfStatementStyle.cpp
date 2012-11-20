@@ -43,7 +43,9 @@ void VIfStatementStyle::load(Visualization::StyleLoader& sl)
 	sl.load("header", header_);
 	sl.load("icon", icon_);
 	sl.load("condition", condition_);
-	sl.load("content", content_);
+	sl.load("contentVertical", contentVertical_);
+	sl.load("contentHorizontal", contentHorizontal_);
+	sl.load("contentWidthSwitchTreshold", contentWidthSwitchTreshold_);
 	sl.load("thenBranch", thenBranch_);
 	sl.load("elseBranch", elseBranch_);
 }
