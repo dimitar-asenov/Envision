@@ -156,6 +156,8 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 	OOVisualization::VContinueStatement::setInteractionHandler(HKeywordStatement::instance());
 	OOVisualization::VBlock::setInteractionHandler(HStatement::instance());
 	OOVisualization::VReturnStatement::setInteractionHandler(HReturnStatement::instance());
+	OOVisualization::VTryCatchFinally::setInteractionHandler(Interaction::GenericHandler::instance());
+	OOVisualization::VCatchClause::setInteractionHandler(Interaction::GenericHandler::instance());
 	OOVisualization::VPrimitiveType::setInteractionHandler(HExpression::instance());
 	OOVisualization::VClassType::setInteractionHandler(HExpression::instance());
 	OOVisualization::VArrayType::setInteractionHandler(HExpression::instance());

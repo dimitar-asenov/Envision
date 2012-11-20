@@ -78,6 +78,8 @@
 #include "statements/VBreakStatement.h"
 #include "statements/VContinueStatement.h"
 #include "statements/VExpressionStatement.h"
+#include "statements/VTryCatchFinally.h"
+#include "statements/VCatchClause.h"
 
 #include "types/VClassType.h"
 #include "types/VPrimitiveType.h"

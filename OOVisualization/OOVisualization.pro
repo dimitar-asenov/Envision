@@ -7,7 +7,11 @@ win32:LIBS += -llogger \
     -loomodel \
     -lvisualizationbase \
     -linteractionbase
-HEADERS += src/expressions/VThrowExpressionStyle.h \
+HEADERS += src/statements/VTryCatchFinallyStyle.h \
+    src/statements/VCatchClauseStyle.h \
+    src/statements/VCatchClause.h \
+    src/statements/VTryCatchFinally.h \
+    src/expressions/VThrowExpressionStyle.h \
     src/expressions/VThrowExpression.h \
     test/MethodAddOn.h \
     src/expressions/VEmptyExpressionStyle.h \
@@ -85,7 +89,11 @@ HEADERS += src/expressions/VThrowExpressionStyle.h \
     src/types/VArrayTypeStyle.h \
     src/types/VPrimitiveType.h \
     src/oovisualization.h
-SOURCES += src/expressions/VThrowExpressionStyle.cpp \
+SOURCES += src/statements/VTryCatchFinallyStyle.cpp \
+    src/statements/VCatchClauseStyle.cpp \
+    src/statements/VCatchClause.cpp \
+    src/statements/VTryCatchFinally.cpp \
+    src/expressions/VThrowExpressionStyle.cpp \
     src/expressions/VThrowExpression.cpp \
     test/MethodAddOn.cpp \
     src/expressions/VEmptyExpressionStyle.cpp \

@@ -132,6 +132,11 @@ bool OOVisualization::initialize(Core::EnvisionManager&)
 			createVisualization<VContinueStatement, ContinueStatement>);
 	Scene::defaultRenderer()->registerVisualization(ExpressionStatement::typeIdStatic(),
 			createVisualization<VExpressionStatement, ExpressionStatement>);
+	Scene::defaultRenderer()->registerVisualization(TryCatchFinallyStatement::typeIdStatic(),
+			createVisualization<VTryCatchFinally, TryCatchFinallyStatement>);
+	Scene::defaultRenderer()->registerVisualization(CatchClause::typeIdStatic(),
+			createVisualization<VCatchClause, CatchClause>);
+
 	Scene::defaultRenderer()->registerVisualization(ClassTypeExpression::typeIdStatic(),
 			createVisualization<VClassType, ClassTypeExpression>);
 	Scene::defaultRenderer()->registerVisualization(PrimitiveTypeExpression::typeIdStatic(),
