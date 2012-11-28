@@ -186,7 +186,7 @@ void PositionLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes, Mode
 	while (items.size() > nodes.size()) remove(items.size()-1);
 }
 
-inline int PositionLayout::toGrid(const int& pos) const
+int PositionLayout::toGrid(const int& pos) const
 {
 	int mod = (pos >=0) ? ( pos % style()->gridSize() ) : ( (-pos) % style()->gridSize() );
 	int add = (pos >=0) ? ( style()->gridSize() - mod) : mod;
