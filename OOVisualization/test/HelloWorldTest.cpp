@@ -208,6 +208,93 @@ Class* addAnnotated(Model::Model* model, Project* parent)
 	return ann;
 }
 
+Module* addLambda()
+{
+	auto mod = new Module("Lambda");
+
+	auto iUnary = new Class("IUnary", Visibility::PUBLIC);
+	mod->classes()->append(iUnary);
+	auto unMet = new Method("op");
+	iUnary->methods()->append(unMet);
+	unMet->results()->append(new FormalResult("",
+			new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT)));
+	unMet->arguments()->append(new FormalArgument("x",
+				new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT)));
+
+	auto iBinary = new Class("IBinary", Visibility::PUBLIC);
+	mod->classes()->append(iBinary);
+	auto binMet = new Method("op");
+	iBinary->methods()->append(binMet);
+	binMet->results()->append(new FormalResult("",
+			new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT)));
+	binMet->arguments()->append(new FormalArgument("x",
+				new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT)));
+	binMet->arguments()->append(new FormalArgument("y",
+				new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT)));
+
+	auto iNoRet = new Class("INoReturn", Visibility::PUBLIC);
+	mod->classes()->append(iNoRet);
+	auto noRetMet = new Method("op");
+	iNoRet->methods()->append(noRetMet);
+	noRetMet->arguments()->append(new FormalArgument("x",
+				new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT)));
+
+	auto test = new Class("LambdaTest", Visibility::PUBLIC);
+	mod->classes()->append(test);
+
+	auto acceptUnary =  new Method("unary");
+	test->methods()->append(acceptUnary);
+	acceptUnary->arguments()->append(new FormalArgument("x",
+					new ClassTypeExpression(new ReferenceExpression("IUnary"))));
+
+	auto acceptBinary =  new Method("binary");
+	test->methods()->append(acceptBinary);
+	acceptBinary->arguments()->append(new FormalArgument("x",
+					new ClassTypeExpression(new ReferenceExpression("IBinary"))));
+
+	auto acceptNoReturn =  new Method("noreturn");
+	test->methods()->append(acceptNoReturn);
+	acceptNoReturn->arguments()->append(new FormalArgument("x",
+					new ClassTypeExpression(new ReferenceExpression("INoReturn"))));
+
+	auto testMet = new Method("test");
+	test->methods()->append(testMet);
+
+	auto callUnary = new MethodCallExpression("unary");
+	testMet->items()->append(new ExpressionStatement(callUnary));
+	auto le = new LambdaExpression();
+	callUnary->arguments()->append(le);
+	le->arguments()->append(new FormalArgument("x",
+			new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT)));
+	le->body()->append(new ReturnStatement(new BinaryOperation(BinaryOperation::PLUS,
+			new ReferenceExpression("x"), new IntegerLiteral(1))));
+
+	auto callBinary= new MethodCallExpression("binary");
+	testMet->items()->append(new ExpressionStatement(callBinary));
+	le = new LambdaExpression();
+	callBinary->arguments()->append(le);
+	le->arguments()->append(new FormalArgument("x",
+			new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT)));
+	le->arguments()->append(new FormalArgument("y",
+			new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT)));
+	le->body()->append(new ReturnStatement(new BinaryOperation(BinaryOperation::PLUS,
+			new ReferenceExpression("x"), new ReferenceExpression("y"))));
+
+	auto callNoRet= new MethodCallExpression("noreturn");
+	testMet->items()->append(new ExpressionStatement(callNoRet));
+	le = new LambdaExpression();
+	callNoRet->arguments()->append(le);
+	le->arguments()->append(new FormalArgument("x",
+			new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT)));
+	auto someOpCall = new MethodCallExpression("someOp");
+	someOpCall->arguments()->append(new ReferenceExpression("x"));
+	le->body()->append(new ExpressionStatement(someOpCall));
+
+	// Positions
+	mod->extension<Position>()->set(720,300);
+	return mod;
+}
+
 Library* addJavaLibrary(Model::Model* model, Project* parent)
 {
 	Library* java = nullptr;
@@ -684,6 +771,10 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 //	// Add a third method
 	Method* factorial = nullptr;
 	factorial = addFactorial(model, hello);
+
+	prj->beginModification("add lambda module");
+	prj->modules()->append(addLambda());
+	prj->endModification();
 
 // Add a method Add-on
 	VMethod::addAddOn(new MethodAddOn("foo"));

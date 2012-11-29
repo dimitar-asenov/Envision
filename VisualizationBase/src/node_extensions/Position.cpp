@@ -39,4 +39,10 @@ DEFINE_EXTENSION(Position)
 REGISTER_EXTENSION_ATTRIBUTE(Position, x, Integer, false, true, true)
 REGISTER_EXTENSION_ATTRIBUTE(Position, y, Integer, false, true, true)
 
+void Position::set(int x, int y)
+{
+	setX(x);
+	setY(y);
+}
+
 }

@@ -48,6 +48,9 @@ class VISUALIZATIONBASE_API Position
 
 	EXTENSION_ATTRIBUTE_VALUE(Model::Integer, x, setX, int)
 	EXTENSION_ATTRIBUTE_VALUE(Model::Integer, y, setY, int)
+
+	public:
+		void set(int x, int y);
 };
 
 }
