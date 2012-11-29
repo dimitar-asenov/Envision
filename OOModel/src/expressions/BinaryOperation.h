@@ -56,6 +56,8 @@ class OOMODEL_API BinaryOperation: public Expression
 		OperatorTypes op() const;
 		void setOp(const OperatorTypes& oper);
 
+		BinaryOperation(OperatorTypes op, Expression* left = nullptr, Expression* right = nullptr);
+
 		virtual Type* type();
 };
 

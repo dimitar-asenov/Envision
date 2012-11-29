@@ -47,6 +47,7 @@ class OOMODEL_API ClassTypeExpression : public TypeExpression
 	ATTRIBUTE(ReferenceExpression, typeExpression, setTypeExpression)
 
 	public:
+		ClassTypeExpression(ReferenceExpression* ref);
 		virtual Type* type();
 };
 

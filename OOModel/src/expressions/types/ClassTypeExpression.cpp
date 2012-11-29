@@ -42,6 +42,12 @@ EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(ClassTypeExpression, TypeExpress
 
 REGISTER_ATTRIBUTE(ClassTypeExpression, typeExpression, ReferenceExpression, false, false, true)
 
+ClassTypeExpression::ClassTypeExpression(ReferenceExpression* ref)
+: TypeExpression (nullptr, ClassTypeExpression::getMetaData())
+{
+	if (ref) setTypeExpression(ref);
+}
+
 Type* ClassTypeExpression::type()
 {
 	return new ClassType( dynamic_cast<Class*> (typeExpression()->target()), false);

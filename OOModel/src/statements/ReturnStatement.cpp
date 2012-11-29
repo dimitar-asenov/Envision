@@ -40,4 +40,10 @@ EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(ReturnStatement, Statement)
 
 REGISTER_ATTRIBUTE(ReturnStatement, values, TypedListOfExpression, false, false, true)
 
+ReturnStatement::ReturnStatement(Expression* firstReturnValue)
+: Statement (nullptr, ReturnStatement::getMetaData())
+{
+	if(firstReturnValue) values()->append(firstReturnValue);
+}
+
 }

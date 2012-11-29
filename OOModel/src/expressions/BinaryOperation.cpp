@@ -44,6 +44,14 @@ REGISTER_ATTRIBUTE(BinaryOperation, left, Expression, false, false, true)
 REGISTER_ATTRIBUTE(BinaryOperation, right, Expression, false, false, true)
 REGISTER_ATTRIBUTE(BinaryOperation, opr, Integer, false, false, true)
 
+BinaryOperation::BinaryOperation(OperatorTypes op, Expression* left, Expression* right)
+: Expression (nullptr, BinaryOperation::getMetaData())
+{
+	setOp(op);
+	if (left) setLeft(left);
+	if (right) setRight(right);
+}
+
 Type* BinaryOperation::type()
 {
 	auto lt = left()->type();
