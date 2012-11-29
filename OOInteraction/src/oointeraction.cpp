@@ -132,6 +132,7 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 	OOVisualization::VCastExpression::setInteractionHandler(HExpression::instance());
 	OOVisualization::VNewExpression::setInteractionHandler(HExpression::instance());
 	OOVisualization::VThrowExpression::setInteractionHandler(HExpression::instance());
+	OOVisualization::VLambdaExpression::setInteractionHandler(HExpression::instance());
 	OOVisualization::VUnaryOperation::setInteractionHandler(HExpression::instance());
 	OOVisualization::VBinaryOperation::setInteractionHandler(HExpression::instance());
 	OOVisualization::VCommaExpression::setInteractionHandler(HExpression::instance());

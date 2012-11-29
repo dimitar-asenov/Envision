@@ -40,6 +40,7 @@ void VFormalArgumentStyle::load(Visualization::StyleLoader& sl)
 	ItemStyle::load(sl);
 
 	sl.load("layout", layout_);
+	sl.load("lambdaLayout", lambdaLayout_);
 	sl.load("name", name_);
 }
 

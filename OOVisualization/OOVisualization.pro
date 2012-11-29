@@ -7,7 +7,9 @@ win32:LIBS += -llogger \
     -loomodel \
     -lvisualizationbase \
     -linteractionbase
-HEADERS += src/statements/VTryCatchFinallyStyle.h \
+HEADERS += src/expressions/VLambdaExpressionStyle.h \
+    src/expressions/VLambdaExpression.h \
+    src/statements/VTryCatchFinallyStyle.h \
     src/statements/VCatchClauseStyle.h \
     src/statements/VCatchClause.h \
     src/statements/VTryCatchFinally.h \
@@ -89,7 +91,9 @@ HEADERS += src/statements/VTryCatchFinallyStyle.h \
     src/types/VArrayTypeStyle.h \
     src/types/VPrimitiveType.h \
     src/oovisualization.h
-SOURCES += src/statements/VTryCatchFinallyStyle.cpp \
+SOURCES += src/expressions/VLambdaExpressionStyle.cpp \
+    src/expressions/VLambdaExpression.cpp \
+    src/statements/VTryCatchFinallyStyle.cpp \
     src/statements/VCatchClauseStyle.cpp \
     src/statements/VCatchClause.cpp \
     src/statements/VTryCatchFinally.cpp \

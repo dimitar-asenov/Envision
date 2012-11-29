@@ -1,0 +1,32 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/Item/default">
+	<shape />
+	
+	<layout prototypes="layout/SequentialLayout/default" />
+	
+	<arguments prototypes="item/VList/default">
+		<shape />	
+		<drawShapeWhenEmpty>true</drawShapeWhenEmpty>	
+		<itemsStyle prototypes="layout/SequentialLayout/default">
+			<shape prototypes="shape/Braces/default">
+				Braces
+				<leftBrace>(</leftBrace>
+				<rightBrace>)</rightBrace>	
+			</shape>
+			<direction>0</direction>
+			<spaceBetweenElements>15</spaceBetweenElements>
+			<noInnerCursors>true</noInnerCursors>
+			<minHeight>15</minHeight>
+			<drawShapeWhenEmpty>true</drawShapeWhenEmpty>
+			<extraCursorsOutsideShape>true</extraCursorsOutsideShape>
+		</itemsStyle>
+	</arguments>
+	
+	<icon prototypes="icon/SVGIcon/default">
+		<filename>styles/icon/gears.svg</filename>
+		<width>15</width>
+		<height>15</height>
+	</icon>
+	
+	<body prototypes="item/VStatementItemList/default"/>
+</style>
