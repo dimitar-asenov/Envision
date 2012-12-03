@@ -82,6 +82,8 @@ void MiniMap::paintEvent(QPaintEvent *event)
 	QPainter painter(viewport());
 	painter.setPen(Qt::red);
 	painter.drawRect(drawnRect);
+	if (drawnRect.width() <= 2 || drawnRect.height() <= 2)
+		painter.drawEllipse(drawnRect.center(), 5,5);
 }
 
 void MiniMap::mouseMoveEvent(QMouseEvent *event)
