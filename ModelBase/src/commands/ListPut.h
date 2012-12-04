@@ -38,6 +38,10 @@
 
 namespace Model {
 
+/**
+ * This command is used to put a list element at a specific position in a list. The position must not already contain
+ * an element and if it exist should be nullptr.
+ */
 class MODELBASE_API ListPut: public UndoCommand
 {
 	private:

@@ -38,6 +38,10 @@
 
 namespace Model {
 
+/**
+ * This command is used to insert a list element at a specific position in a list. All elements which are currently
+ * at or after the specified position will be shifted once to the right.
+ */
 class MODELBASE_API ListInsert: public UndoCommand
 {
 	private:
