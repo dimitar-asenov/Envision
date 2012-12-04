@@ -33,7 +33,7 @@
 
 #include "Model.h"
 #include "../ModelException.h"
-#include "../commands/UndoCommand.h"
+#include "../commands/NodeOwningCommand.h"
 #include "../commands/SetModificationTarget.h"
 #include "../commands/AddModifiedNode.h"
 #include "../nodes/Reference.h"
@@ -161,6 +161,29 @@ void Model::redo()
 	performedUndoRedo = true;
 
 	commands.redo();
+}
+
+bool Model::isOwnedByUndoStack(const Node* node, const NodeOwningCommand* excludeCommand) const
+{
+	for(int i = 0; i<commands.count(); ++i)
+	{
+		auto parent = commands.command(i);
+		Q_ASSERT(parent->childCount() > 0);
+		for(int childIndex = 0; childIndex < parent->childCount(); ++childIndex)
+			if (isOwnedByCommand(node, static_cast<const UndoCommand*>(parent->child(childIndex)), excludeCommand))
+				return true;
+	}
+	return false;
+}
+
+bool Model::isOwnedByCommand(const Node* node, const UndoCommand* cmd, const NodeOwningCommand* excludeCommand)
+{
+	if ( cmd->owned() == node && cmd!=excludeCommand) return true;
+	for(int childIndex = 0; childIndex < cmd->childCount(); ++childIndex)
+		if (isOwnedByCommand(node, static_cast<const UndoCommand*>(cmd->child(childIndex)), excludeCommand))
+			return true;
+
+	return false;
 }
 
 void Model::save(PersistentStore* store)

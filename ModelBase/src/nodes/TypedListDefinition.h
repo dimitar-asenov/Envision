@@ -54,7 +54,7 @@ class Q_DECL_EXPORT TypedList: public List
 		T* last();
 		T* at(int i);
 
-		virtual bool replaceChild(Node* child, Node* replacement, bool releaseOldChild = true);
+		virtual bool replaceChild(Node* child, Node* replacement);
 
 		virtual Node* createDefaultElement() override;
 		static void setDefaultElementCreationFunction(CreateDefaultElement function);
@@ -140,10 +140,10 @@ template<class T> T* TypedList<T>::at(int i)
 	return List::at<T>(i);
 }
 
-template<class T> bool TypedList<T>::replaceChild(Node* child, Node* replacement, bool releaseOldChild)
+template<class T> bool TypedList<T>::replaceChild(Node* child, Node* replacement)
 {
 	if (!dynamic_cast<T*>(replacement)) return false;
-	else return List::replaceChild(child, replacement, releaseOldChild);
+	else return List::replaceChild(child, replacement);
 }
 
 template<class T> Node* TypedList<T>::createDefaultElement()

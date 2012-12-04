@@ -34,7 +34,7 @@
 #ifndef LISTINSERT_H_
 #define LISTINSERT_H_
 
-#include "UndoCommand.h"
+#include "NodeOwningCommand.h"
 
 namespace Model {
 
@@ -42,7 +42,7 @@ namespace Model {
  * This command is used to insert a list element at a specific position in a list. All elements which are currently
  * at or after the specified position will be shifted once to the right.
  */
-class MODELBASE_API ListInsert: public UndoCommand
+class MODELBASE_API ListInsert: public NodeOwningCommand
 {
 	private:
 		QVector<Node*>& nodes;
@@ -51,7 +51,6 @@ class MODELBASE_API ListInsert: public UndoCommand
 
 	public:
 		ListInsert(Node *target, QVector<Node*>& nodes, Node* newNode, int position);
-		virtual ~ListInsert();
 
 		virtual void redo();
 		virtual void undo();

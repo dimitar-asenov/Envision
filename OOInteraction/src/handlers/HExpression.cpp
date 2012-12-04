@@ -248,7 +248,7 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 
 			Model::Node* containerNode = replaceStatement->parent();
 			containerNode->model()->beginModification(containerNode, "replace expression statement");
-			containerNode->replaceChild(replaceStatement, st, false);
+			containerNode->replaceChild(replaceStatement, st);
 			containerNode->model()->endModification();
 
 			// Get a parent which represents a list (of statements or statement items)
@@ -369,7 +369,7 @@ void HExpression::setNewExpression(Visualization::Item* target, Visualization::I
 
 	Model::Node* containerNode = topMostItem->node()->parent();
 	containerNode->model()->beginModification(containerNode, "edit expression");
-	containerNode->replaceChild(topMostItem->node(), newExpression, false);
+	containerNode->replaceChild(topMostItem->node(), newExpression);
 	containerNode->model()->endModification();
 
 	// Compute the new offset. This can change in case the string of the new expression is different.

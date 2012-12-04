@@ -150,7 +150,7 @@ ExtendableIndex ExtendableNode::registerNewAttribute(AttributeChain& metaData, c
 void ExtendableNode::set(const ExtendableIndex &attributeIndex, Node* node)
 {
 	if ( !attributeIndex.isValid() ) throw ModelException("Trying to set an attribute with an invalid Index");
-	execute(new ExtendedNodeChild(this, node, false, attributeIndex, &subnodes));
+	execute(new ExtendedNodeChild(this, node, attributeIndex, &subnodes));
 }
 
 Node* ExtendableNode::get(const QString &attributeName) const
@@ -182,7 +182,7 @@ QList<Node*> ExtendableNode::children()
 	return result;
 }
 
-bool ExtendableNode::replaceChild(Node* child, Node* replacement, bool releaseOldChild)
+bool ExtendableNode::replaceChild(Node* child, Node* replacement)
 {
 	if (!child || !replacement) return false;
 
@@ -190,7 +190,7 @@ bool ExtendableNode::replaceChild(Node* child, Node* replacement, bool releaseOl
 	if (!index.isValid()) return false;
 
 	if ( !index.isValid() ) throw ModelException("Trying to set an attribute with an invalid Index");
-	execute(new ExtendedNodeChild(this, replacement, releaseOldChild, index, &subnodes));
+	execute(new ExtendedNodeChild(this, replacement, index, &subnodes));
 	return true;
 }
 
@@ -219,7 +219,7 @@ void ExtendableNode::removeOptional(const ExtendableIndex &attributeIndex)
 {
 	if ( meta.attribute(attributeIndex).optional() )
 	{
-		execute(new ExtendedNodeChild(this, nullptr, false, attributeIndex, &subnodes));
+		execute(new ExtendedNodeChild(this, nullptr, attributeIndex, &subnodes));
 	}
 	else
 		throw ModelException("Trying to remove a non-optional attribute");
@@ -253,7 +253,7 @@ void ExtendableNode::load(PersistentStore &store)
 			throw ModelException("Node has attribute "
 					+ ln->name + " in persistent store, but this attribute is not registered");
 
-		execute(new ExtendedNodeChild(this, ln->node, false, ExtendableIndex(index.level(),index.index()), &subnodes));
+		execute(new ExtendedNodeChild(this, ln->node, ExtendableIndex(index.level(),index.index()), &subnodes));
 	}
 
 	verifyHasAllMandatoryAttributes();
@@ -264,7 +264,7 @@ void ExtendableNode::removeAllNodes()
 	for (int level = 0; level < subnodes.size(); ++level)
 		for (int i = 0; i < subnodes[level].size(); ++i)
 			if ( subnodes[level][i] )
-				execute(new ExtendedNodeChild(this, nullptr, false, ExtendableIndex(level,i), &subnodes));
+				execute(new ExtendedNodeChild(this, nullptr, ExtendableIndex(level,i), &subnodes));
 }
 
 void ExtendableNode::verifyHasAllMandatoryAttributes()

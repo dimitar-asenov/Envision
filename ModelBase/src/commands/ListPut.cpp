@@ -36,29 +36,25 @@
 
 namespace Model {
 
-ListPut::ListPut(Node *target, QVector<Node*>& nodes_, Node* newNode_, int position) :
-	UndoCommand(target, "insert node"), nodes(nodes_), newNode(newNode_), putPosition(position), oldSize(nodes_.size())
+ListPut::ListPut(Node *target, QVector<Node*>& nodes_, Node* newNode_, int position)
+: NodeOwningCommand(target, "insert node", nullptr, newNode_), nodes(nodes_), newNode(newNode_), putPosition(position),
+  oldSize(nodes_.size())
 {
 	Q_ASSERT(putPosition >= nodes_.size() || nodes_[putPosition] == nullptr);
-}
-
-ListPut::~ListPut()
-{
-	if ( isUndone() && newNode ) SAFE_DELETE(newNode);
 }
 
 void ListPut::redo()
 {
 	if ( putPosition >= nodes.size() ) nodes.resize(putPosition + 1);
 	nodes[putPosition] = newNode;
-	UndoCommand::redo();
+	NodeOwningCommand::redo();
 }
 
 void ListPut::undo()
 {
 	nodes[putPosition] = nullptr;
 	if (nodes.size() != oldSize) nodes.resize(oldSize);
-	UndoCommand::undo();
+	NodeOwningCommand::undo();
 }
 
 }

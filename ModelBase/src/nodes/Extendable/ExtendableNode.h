@@ -87,7 +87,7 @@ class MODELBASE_API ExtendableNode: public Node
 		ExtendableIndex indexOf(Node* node) const;
 
 		virtual QList<Node*> children();
-		virtual bool replaceChild(Node* child, Node* replacement, bool releaseOldChild = true);
+		virtual bool replaceChild(Node* child, Node* replacement);
 
 		void set(const ExtendableIndex &attributeIndex, Node* node);
 

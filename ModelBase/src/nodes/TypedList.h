@@ -50,7 +50,7 @@ class TypedList: public List
 		T* last();
 		T* at(int i);
 
-		virtual bool replaceChild(Node* child, Node* replacement, bool releaseOldChild = true);
+		virtual bool replaceChild(Node* child, Node* replacement);
 
 		virtual Node* createDefaultElement() override;
 		static void setDefaultElementCreationFunction(CreateDefaultElement function);

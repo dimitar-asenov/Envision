@@ -34,7 +34,7 @@
 #ifndef LISTPUT_H_
 #define LISTPUT_H_
 
-#include "UndoCommand.h"
+#include "NodeOwningCommand.h"
 
 namespace Model {
 
@@ -42,7 +42,7 @@ namespace Model {
  * This command is used to put a list element at a specific position in a list. The position must not already contain
  * an element and if it exist should be nullptr.
  */
-class MODELBASE_API ListPut: public UndoCommand
+class MODELBASE_API ListPut: public NodeOwningCommand
 {
 	private:
 		QVector<Node*>& nodes;
@@ -52,7 +52,6 @@ class MODELBASE_API ListPut: public UndoCommand
 
 	public:
 		ListPut(Node *target, QVector<Node*>& nodes, Node* newNode, int position);
-		virtual ~ListPut();
 
 		virtual void redo();
 		virtual void undo();

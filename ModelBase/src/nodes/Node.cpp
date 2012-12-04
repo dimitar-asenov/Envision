@@ -142,7 +142,7 @@ bool Node::isModifyable() const
 	return !m || m->canBeModified(this);
 }
 
-bool Node::replaceChild(Node*, Node*, bool)
+bool Node::replaceChild(Node*, Node*)
 {
 	return false;
 }

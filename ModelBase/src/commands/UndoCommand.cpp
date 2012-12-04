@@ -76,4 +76,9 @@ void UndoCommand::undo()
 	undone = true;
 }
 
+Node* UndoCommand::owned() const
+{
+	return nullptr;
+}
+
 }

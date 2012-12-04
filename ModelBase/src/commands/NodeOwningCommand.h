@@ -25,74 +25,32 @@
  **********************************************************************************************************************/
 
 /*
- * ModelManager.h
+ * NodeOwningCommand.h
  *
- *  Created on: Sep 14, 2012
+ *  Created on: Dec 4, 2012
  *      Author: Dimitar Asenov
  */
 
-#ifndef ModelBase_MODELMANAGER_H_
-#define ModelBase_MODELMANAGER_H_
+#ifndef ModelBase_NODEOWNINGCOMMAND_H_
+#define ModelBase_NODEOWNINGCOMMAND_H_
 
-#include "../modelbase_api.h"
+#include "UndoCommand.h"
 
 namespace Model {
 
-class Model;
 class Node;
 
-/**
- * The ModelManager class contains all existing models.
- */
-class MODELBASE_API ModelManager {
-	friend class Model;
-
+class MODELBASE_API NodeOwningCommand : public UndoCommand {
 	public:
-		~ModelManager();
+		NodeOwningCommand(Node* target, const QString & text, Node* ownedIfDone, Node* ownedIfUndone);
+		virtual ~NodeOwningCommand();
 
-		/**
-		 * Registers types with the meta object system of Qt to allow signals and slots to work with lists.
-		 */
-		static void init();
-
-		static ModelManager& instance();
-
-		/**
-		 * Returns the model object that has as its root node the node indicated.
-		 */
-		Model* find(Node* root) const;
-
-		/**
-		 * Returns a list to all currently loaded models.
-		 */
-		const QList<Model*>& loadedModels() const;
+		virtual Node* owned() const override;
 
 	private:
-		ModelManager();
-
-		/**
-		 * Adds \a model the list of managed models. This manager will take ownership of \a model.
-		 *
-		 * Newly created instances of Model call this method in their constructors.
-		 */
-		void add(Model* model);
-
-		/**
-		 * Removes \a model from the list of managed models. This manager will give up ownership of \a model.
-		 *
-		 * The removed model is returned. This method is called in the desctructor of Model.
-		 *
-		 */
-		Model* remove(Model* model);
-
-		/**
-		 * A list of all Model objects that are currently instantiated. This is used to find the Model corresponding to a
-		 * particular root object.
-		 */
-		QList<Model*> loadedModels_;
+		Node* ownedIfDone_{};
+		Node* ownedIfUndone_{};
 };
 
-inline const QList<Model*>& ModelManager::loadedModels() const { return loadedModels_; }
-
 } /* namespace Model */
-#endif /* ModelBase_MODELMANAGER_H_ */
+#endif /* ModelBase_NODEOWNINGCOMMAND_H_ */

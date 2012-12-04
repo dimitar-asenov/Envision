@@ -175,7 +175,7 @@ void HList::removeAndSetCursor(Visualization::VList* list, int removeAt, bool se
 	Q_ASSERT(removeAt >= 0 && removeAt < node->size());
 
 	node->beginModification("Remove list item");
-	node->remove(removeAt, false);
+	node->remove(removeAt);
 	node->endModification();
 	list->setUpdateNeeded(Visualization::Item::StandardUpdate);
 
@@ -192,7 +192,7 @@ void HList::removeAndSetCursor(Visualization::VList* list, int removeAt)
 	Q_ASSERT(removeAt >= 0 && removeAt < node->size());
 
 	node->beginModification("Remove list item");
-	node->remove(removeAt, false);
+	node->remove(removeAt);
 	node->endModification();
 	list->setUpdateNeeded(Visualization::Item::StandardUpdate);
 

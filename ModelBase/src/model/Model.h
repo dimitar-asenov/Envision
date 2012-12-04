@@ -43,6 +43,7 @@ namespace Model {
 
 class Reference;
 class UndoCommand;
+class NodeOwningCommand;
 
 /**
  * The Model class is a management and access entity for a program tree.
@@ -248,6 +249,13 @@ class MODELBASE_API Model: public QObject
 		void redo();
 
 		/**
+		 * Returns whether \a node is owned by a command in the undo stack.
+		 *
+		 * If \a node is only owned by \a excludeCommand this method returns false.
+		 */
+		bool isOwnedByUndoStack(const Node* node, const NodeOwningCommand* excludeCommand) const;
+
+		/**
 		 * Saves the model tree in persistent store of the model.
 		 *
 		 * If this model does not have a current store, the store argument must not be NULL. In that case the provided
@@ -383,6 +391,13 @@ class MODELBASE_API Model: public QObject
 		void nodePartiallyLoaded(Node* node);
 
 	private:
+
+		/**
+		 * Returns whether \a node is transitively owned by \a cmd.
+		 *
+		 * If \a node is only owned by \a excludeCommand this method returns false.
+		 */
+		static bool isOwnedByCommand(const Node* node, const UndoCommand* cmd, const NodeOwningCommand* excludeCommand);
 
 		/** The name of this model. This name will be used to save the model in the persistent store. */
 		QString name_;
