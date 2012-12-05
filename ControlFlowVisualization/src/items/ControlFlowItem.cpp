@@ -59,8 +59,6 @@ QPainterPath ControlFlowItem::connector(const QList< QPoint >& points, bool arro
 	{
 		QPoint last = points.last();
 		QPoint prev = points.at( sizeMinusTwo );
-		prev = last;
-		last = prev;
 
 		if (last.y() == prev.y())
 		{
@@ -160,6 +158,7 @@ void ControlFlowItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 	}
 
 	painter->setPen( style()->pin());
+	painter->setBrush(Qt::NoBrush);
 	painter->translate( xOffset + style()->pin().width()/2.0, yOffset + style()->pin().width()/2.0);
 
 	for(int i = 0; i < connectors_.size(); ++i)
