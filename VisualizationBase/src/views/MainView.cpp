@@ -122,7 +122,8 @@ void MainView::scrollContentsBy(int dx, int dy)
 
 void MainView::keyPressEvent(QKeyEvent *event)
 {
-	if ( (event->modifiers() & Qt::ControlModifier || event->modifiers() & Qt::ShiftModifier) && event->key() == Qt::Key_Print)
+	if ( (event->modifiers() & Qt::ControlModifier || event->modifiers() & Qt::ShiftModifier)
+			&& event->key() == Qt::Key_Print)
 	{
 		event->accept();
 
@@ -181,6 +182,25 @@ void MainView::keyPressEvent(QKeyEvent *event)
 			render(&pmapPainter);
 			image.save("screenshot-view.png");
 		}
+	}
+	else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_F11)
+	{
+		QWidget* window = this;
+		while (window->parentWidget()) window = window->parentWidget();
+
+		if (window->isFullScreen()) window->showNormal();
+		else window->showFullScreen();
+	}
+	else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_F10)
+	{
+		if (miniMap->width() == MINIMAP_DEFAULT_WIDTH && miniMap->height() ==  MINIMAP_DEFAULT_HEIGHT)
+			setMiniMapSize(width(), height());
+		else setMiniMapSize(MINIMAP_DEFAULT_WIDTH, MINIMAP_DEFAULT_HEIGHT);
+	}
+	else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_F9)
+	{
+		if (miniMap->isVisible()) miniMap->hide();
+		else miniMap->show();
 	}
 	else View::keyPressEvent(event);
 }
