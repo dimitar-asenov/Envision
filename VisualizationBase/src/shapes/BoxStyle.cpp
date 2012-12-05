@@ -86,11 +86,11 @@ QPainterPath BoxStyle::getRectanglePath(qreal x, qreal y, int width, int height)
 
 void BoxStyle::paint(QPainter* painter, int xOffset, int yOffset, int contentBoxWidth, int contentBoxHeight) const
 {
-	if (shadow() == Qt::NoBrush
-			&& (background_.style() == Qt::NoBrush || background_.style() == Qt::SolidPattern)
-			&& (outline_.style() == Qt::NoPen || outline_.style() == Qt::SolidLine))
-		optimizedPaint(painter, xOffset, yOffset, contentBoxWidth, contentBoxHeight);
-	else
+//	if (shadow() == Qt::NoBrush
+//			&& (background_.style() == Qt::NoBrush || background_.style() == Qt::SolidPattern)
+//			&& (outline_.style() == Qt::NoPen || outline_.style() == Qt::SolidLine))
+//		optimizedPaint(painter, xOffset, yOffset, contentBoxWidth, contentBoxHeight);
+//	else
 		unoptimizedPaint(painter, xOffset, yOffset, contentBoxWidth, contentBoxHeight);
 }
 
