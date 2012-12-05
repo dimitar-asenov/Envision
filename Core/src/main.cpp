@@ -62,6 +62,7 @@ int main(int argc, char *argv[])
 
 	if(setrlimit(RLIMIT_CORE, &core_limit) < 0)
 		qDebug() << "Error while enabling core dumps:" << strerror(errno);
+	else QFile::remove("./core");
 #endif
 #endif
 
