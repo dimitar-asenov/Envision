@@ -88,18 +88,23 @@ void VIfStatement::determineChildren()
 	header_->at<Static>(0)->setStyle(&style()->icon());
 	conditionBackground_->setStyle( &style()->condition() );
 
+	if (thenBranch_) thenBranch_->setStyle( &style()->thenBranch() );
+	if (elseBranch_) elseBranch_->setStyle( &style()->elseBranch() );
+	content_->setStyle( horizontal_ ? &style()->contentHorizontal() : &style()->contentVertical());
+}
+
+void VIfStatement::updateGeometry(int availableWidth, int availableHeight)
+{
 	int contentWidth = 0;
-	if (thenBranch_)
+	if (thenBranch_) contentWidth += thenBranch_->width();
+	if (elseBranch_) contentWidth += elseBranch_->width();
+	if( horizontal_ != (contentWidth <= style()->contentWidthSwitchTreshold()))
 	{
-		thenBranch_->setStyle( &style()->thenBranch() );
-		contentWidth += thenBranch_->width();
+		horizontal_ = !horizontal_;
+		setUpdateNeeded(RepeatUpdate);
 	}
-	if (elseBranch_)
-	{
-		elseBranch_->setStyle( &style()->elseBranch() );
-		contentWidth += elseBranch_->width();
-	}
-	content_->setStyle(contentWidth ? &style()->contentHorizontal() : &style()->contentVertical());
+
+	BaseItemType::updateGeometry(availableWidth, availableHeight);
 }
 
 }

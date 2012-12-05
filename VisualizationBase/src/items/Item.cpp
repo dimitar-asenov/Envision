@@ -192,15 +192,22 @@ void Item::updateSubtree()
 	// It is safe to assume that an item is updated before its parent item is updated. When an item's size depends on the
 	// parent's size, we must first update the item without providing any size constraints, so that the item can report a
 	// minimum size during the parent's update procedure.
-	if ( (needsUpdate_ != NoUpdate) || needsUpdate() || sizeDependsOnParent()
-			|| (hasNode() && revision() != node()->revision()))
+
+	bool doUpdate = (needsUpdate_ != NoUpdate) || needsUpdate() || sizeDependsOnParent()
+					|| (hasNode() && revision() != node()->revision());
+	while (doUpdate)
 	{
 		updateAddOnItems();
 		determineChildren();
 		updateChildren();
 		changeGeometry();
-		needsUpdate_ = NoUpdate;
-		if (hasNode()) setRevision( node()->revision() );
+		if (needsUpdate_ == RepeatUpdate) needsUpdate_ = StandardUpdate;
+		else
+		{
+			needsUpdate_ = NoUpdate;
+			doUpdate = false;
+			if (hasNode()) setRevision( node()->revision() );
+		}
 	}
 }
 

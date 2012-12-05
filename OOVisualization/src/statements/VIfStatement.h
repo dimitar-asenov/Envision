@@ -71,12 +71,14 @@ class OOVISUALIZATION_API VIfStatement
 		Item* icon() const;
 
 	protected:
-		void determineChildren();
+		virtual void determineChildren() override;
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
 		typedef Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
 				  OOModel::IfStatement> BaseItemType;
 
+		bool horizontal_{};
 		Visualization::SequentialLayout* header_;
 		Visualization::SequentialLayout* conditionBackground_;
 		Visualization::Item* condition_;
