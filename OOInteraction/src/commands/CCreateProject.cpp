@@ -82,7 +82,6 @@ Interaction::CommandResult* CCreateProject::create(Visualization::Item* /*source
 	else target->scene()->addPostEventAction(new Interaction::SetCursorEvent(target, project,
 			Interaction::SetCursorEvent::CursorDefault, true));
 
-
 	return new Interaction::CommandResult();
 }
 

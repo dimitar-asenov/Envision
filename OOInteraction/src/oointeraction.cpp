@@ -48,6 +48,7 @@
 #include "handlers/HKeywordStatement.h"
 
 #include "commands/CCreateProject.h"
+#include "commands/CCreateClass.h"
 #include "commands/CSceneHandlerItemTest.h"
 
 #include "string_components/UnaryOperatorStringComponents.h"
@@ -280,10 +281,12 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 		<StringOffsetProvider, CompoundObjectStringOffsetProvider, OOVisualization::VLambdaExpression>();
 
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CCreateProject());
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CCreateClass());
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CSceneHandlerItemTest());
 
 	initializeActions();
 
-	Interaction::HSceneHandlerItem::instance()->addCommand(new CSceneHandlerItemTest());
+
 
 	return true;
 }
