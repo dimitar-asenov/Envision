@@ -25,54 +25,29 @@
  **********************************************************************************************************************/
 
 /*
- * CCreateMethod.cpp
+ * CCreateField.h
  *
- *  Created on: Mar 1, 2012
+ *  Created on: Dec 6, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "commands/CCreateMethod.h"
+#ifndef OOInteraction_CCREATEFIELD_H_
+#define OOInteraction_CCREATEFIELD_H_
 
-#include "OOModel/src/top_level/Class.h"
-#include "OOModel/src/top_level/Method.h"
-
-#include "InteractionBase/src/events/SetCursorEvent.h"
+#include "../oointeraction_api.h"
+#include "InteractionBase/src/commands/CreateNamedObjectWithAttributes.h"
 
 namespace OOInteraction {
 
-CCreateMethod::CCreateMethod() : CreateNamedObjectWithAttributes("method",
-		{{"public", "private","protected"}, {"static"}})
+class OOINTERACTION_API CCreateField : public Interaction::CreateNamedObjectWithAttributes
 {
-}
+	public:
+		CCreateField();
 
-Interaction::CommandResult* CCreateMethod::create(Visualization::Item* /*source*/, Visualization::Item* target,
-	const QString& name, const QStringList& attributes)
-{
-	auto cl = dynamic_cast<OOModel::Class*> (target->node());
-	Q_ASSERT(cl);
-
-	auto m = new OOModel::Method();
-	if (!name.isEmpty()) m->setName(name);
-
-	// Set visibility
-	if (attributes.first() == "private" ) m->setVisibility(OOModel::Visibility::PRIVATE);
-	else if (attributes.first() == "protected" ) m->setVisibility(OOModel::Visibility::PROTECTED);
-	else if (attributes.first() == "public" ) m->setVisibility(OOModel::Visibility::PUBLIC);
-	else m->setVisibility(OOModel::Visibility::DEFAULT);
-
-	// Set scope
-	if (attributes.last() == "static") m->setStorageSpecifier(OOModel::StorageSpecifier::CLASS_VARIABLE);
-	else m->setStorageSpecifier(OOModel::StorageSpecifier::INSTANCE_VARIABLE);
-
-	cl->methods()->beginModification("create method");
-	cl->methods()->append(m);
-	cl->methods()->endModification();
-
-	target->setUpdateNeeded(Visualization::Item::StandardUpdate);
-	target->scene()->addPostEventAction(new Interaction::SetCursorEvent(target, m,
-			Interaction::SetCursorEvent::CursorDefault, false));
-
-	return new Interaction::CommandResult();
-}
+	protected:
+		virtual Interaction::CommandResult* create(Visualization::Item* source, Visualization::Item* target,
+			const QString& name, const QStringList& attributes) override;
+};
 
 } /* namespace OOInteraction */
+#endif /* OOInteraction_CCREATEFIELD_H_ */

@@ -25,51 +25,54 @@
  **********************************************************************************************************************/
 
 /*
- * CCreateMethod.cpp
+ * CCreateField.cpp
  *
- *  Created on: Mar 1, 2012
+ *  Created on: Dec 6, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "commands/CCreateMethod.h"
+#include "CCreateField.h"
 
 #include "OOModel/src/top_level/Class.h"
-#include "OOModel/src/top_level/Method.h"
+#include "OOModel/src/top_level/Field.h"
+#include "OOModel/src/expressions/EmptyExpression.h"
 
 #include "InteractionBase/src/events/SetCursorEvent.h"
 
 namespace OOInteraction {
 
-CCreateMethod::CCreateMethod() : CreateNamedObjectWithAttributes("method",
+CCreateField::CCreateField() : CreateNamedObjectWithAttributes("field",
 		{{"public", "private","protected"}, {"static"}})
 {
 }
 
-Interaction::CommandResult* CCreateMethod::create(Visualization::Item* /*source*/, Visualization::Item* target,
+Interaction::CommandResult* CCreateField::create(Visualization::Item* /*source*/, Visualization::Item* target,
 	const QString& name, const QStringList& attributes)
 {
 	auto cl = dynamic_cast<OOModel::Class*> (target->node());
 	Q_ASSERT(cl);
 
-	auto m = new OOModel::Method();
-	if (!name.isEmpty()) m->setName(name);
+	auto f = new OOModel::Field();
+	f->setTypeExpression(new OOModel::EmptyExpression());
+	if (!name.isEmpty()) f->setName(name);
 
 	// Set visibility
-	if (attributes.first() == "private" ) m->setVisibility(OOModel::Visibility::PRIVATE);
-	else if (attributes.first() == "protected" ) m->setVisibility(OOModel::Visibility::PROTECTED);
-	else if (attributes.first() == "public" ) m->setVisibility(OOModel::Visibility::PUBLIC);
-	else m->setVisibility(OOModel::Visibility::DEFAULT);
+	if (attributes.first() == "private" ) f->setVisibility(OOModel::Visibility::PRIVATE);
+	else if (attributes.first() == "protected" ) f->setVisibility(OOModel::Visibility::PROTECTED);
+	else if (attributes.first() == "public" ) f->setVisibility(OOModel::Visibility::PUBLIC);
+	else f->setVisibility(OOModel::Visibility::DEFAULT);
 
 	// Set scope
-	if (attributes.last() == "static") m->setStorageSpecifier(OOModel::StorageSpecifier::CLASS_VARIABLE);
-	else m->setStorageSpecifier(OOModel::StorageSpecifier::INSTANCE_VARIABLE);
+	if (attributes.last() == "static") f->setStorageSpecifier(OOModel::StorageSpecifier::CLASS_VARIABLE);
+	else f->setStorageSpecifier(OOModel::StorageSpecifier::INSTANCE_VARIABLE);
 
-	cl->methods()->beginModification("create method");
-	cl->methods()->append(m);
-	cl->methods()->endModification();
+	cl->fields()->beginModification("create field");
+	cl->fields()->append(f);
+	cl->fields()->endModification();
 
 	target->setUpdateNeeded(Visualization::Item::StandardUpdate);
-	target->scene()->addPostEventAction(new Interaction::SetCursorEvent(target, m,
+	target->scene()->addPostEventAction(new Interaction::SetCursorEvent(target,
+			(name.isEmpty() ? static_cast<Model::Node*>(f->nameNode()) : f->typeExpression()),
 			Interaction::SetCursorEvent::CursorDefault, false));
 
 	return new Interaction::CommandResult();
