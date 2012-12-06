@@ -64,7 +64,8 @@ void SVGIconStyle::paint(QPainter* painter, int x, int y) const
 
 			mipmap_.setImage(img, scaleFactor);
 
-			Q_ASSERT(mipmap_.paint(painter,x,y));
+			auto painted = mipmap_.paint(painter,x,y);
+			Q_ASSERT(painted);
 		}
 	}
 }
