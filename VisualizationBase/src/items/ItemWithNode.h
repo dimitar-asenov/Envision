@@ -48,6 +48,7 @@ class ItemWithNode : public Super
 	public:
 		typedef ContainedNode NodeType;
 		ItemWithNode(Item* parent, ContainedNode* node, const typename Super::StyleType* style = nullptr);
+		~ItemWithNode();
 
 		virtual bool hasNode() const;
 		virtual ContainedNode* node() const;
@@ -63,6 +64,12 @@ template <class Super, class ContainedNode> ItemWithNode<Super,ContainedNode>::I
 	: Super(parent, style), node_(node), revision_(-1)
 {
 	Super::nodeItemsMap().insert(node,this);
+}
+
+template <class Super, class ContainedNode> ItemWithNode<Super,ContainedNode>::~ItemWithNode()
+{
+	auto removed = Super::nodeItemsMap().remove(node_,this);
+	Q_ASSERT(removed == 1);
 }
 
 template <class Super, class ContainedNode> bool ItemWithNode<Super,ContainedNode>::hasNode() const { return true; }
