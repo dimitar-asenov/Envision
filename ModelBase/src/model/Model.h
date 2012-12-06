@@ -132,6 +132,8 @@ class MODELBASE_API Model: public QObject
 		 */
 		void endModification();
 
+		bool isBeingModified() const;
+
 		/**
 		 * Changes the modification target and possibly the access unit that the current writer is allowed to access.
 		 *
@@ -146,6 +148,8 @@ class MODELBASE_API Model: public QObject
 		 * 				if this method is called without calling Model::beginModification() first.
 		 */
 		void changeModificationTarget(Node* modificationTarget);
+
+		Node* modificationTarget() const;
 
 		/**
 		 * Begins an exclusive read.
@@ -491,6 +495,8 @@ class MODELBASE_API Model: public QObject
 		QList<Reference*> unresolvedReferences_;
 };
 
+inline bool Model::isBeingModified() const { return modificationInProgress; }
+inline Node* Model::modificationTarget() const { return currentModificationTarget; }
 inline NodeReadWriteLock* Model::rootLock() { return &rootLock_; }
 
 inline Node* Model::root(){ return root_; }

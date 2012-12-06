@@ -74,6 +74,7 @@
 #include "string_components/VariableDeclarationStringComponents.h"
 #include "string_components/ListStringComponents.h"
 #include "string_components/ThrowStringComponents.h"
+#include "string_components/LambdaStringComponents.h"
 
 #include "string_offset_providers/SequentialVisualizationStringOffsetProvider.h"
 #include "string_offset_providers/EmptyExpressionStringOffsetProvider.h"
@@ -89,6 +90,7 @@
 #include "string_offset_providers/ReferenceExpressionStringOffsetProvider.h"
 #include "string_offset_providers/UnaryOperatorStringOffsetProvider.h"
 #include "string_offset_providers/ClassTypeStringOffsetProvider.h"
+#include "string_offset_providers/CompoundObjectStringOffsetProvider.h"
 
 #include "OOVisualization/src/allOOVisualizations.h"
 
@@ -214,6 +216,8 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 		<StringComponents, ListStringComponents, Model::TypedList<OOModel::Expression> >();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringComponents, ListStringComponents, Model::TypedList<OOModel::Statement> >();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringComponents, LambdaStringComponents, OOModel::LambdaExpression>();
 
 	// Register string providers
 	Model::AdapterManager::registerAdapterViaConstructor
@@ -272,6 +276,8 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 		<StringOffsetProvider, SequentialVisualizationStringOffsetProvider, OOVisualization::VAssignmentExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, VariableDeclarationStringOffsetProvider, OOVisualization::VVariableDeclaration>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringOffsetProvider, CompoundObjectStringOffsetProvider, OOVisualization::VLambdaExpression>();
 
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CCreateProject());
 

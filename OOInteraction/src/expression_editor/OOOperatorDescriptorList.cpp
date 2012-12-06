@@ -49,6 +49,7 @@
 #include "expression_editor/operators/ConditionalExpressionDescriptor.h"
 #include "expression_editor/operators/TypeArgumentsDescriptor.h"
 #include "expression_editor/operators/CommandDescriptor.h"
+#include "expression_editor/operators/CompoundObjectDescriptor.h"
 
 namespace OOInteraction {
 
@@ -185,6 +186,10 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 			Interaction::OperatorDescriptor::NotAssociative));
 	instance()->addDescriptor(new CommandDescriptor( "command with params", "\\ id ( expr )", 2, 0,
 			Interaction::OperatorDescriptor::NotAssociative));
+
+	instance()->addDescriptor(new CompoundObjectDescriptor( "compound object",
+			CompoundObjectDescriptor::compoundSignature(), 1, 0, Interaction::OperatorDescriptor::NotAssociative));
 }
+
 
 } /* namespace OOInteraction */
