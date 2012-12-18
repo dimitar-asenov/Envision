@@ -51,6 +51,7 @@ class OOINTERACTION_API LambdaStringComponents : public StringComponents {
 
 	private:
 		OOModel::LambdaExpression* exp_;
+		QString str_;
 };
 
 } /* namespace OOInteraction */

@@ -34,6 +34,7 @@
 #include "HExpression.h"
 #include "../OOInteractionException.h"
 
+#include "../expression_editor/operators/CompoundObjectDescriptor.h"
 #include "string_components/StringComponents.h"
 #include "string_offset_providers/StringOffsetProvider.h"
 #include "expression_editor/OOExpressionBuilder.h"
@@ -168,18 +169,26 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		int newIndex = index;
 		switch (key)
 		{
+			// Below we let CompoundObjectDescriptor process Delete and Backspace since it might need to remove
+			// extra characters if those keys are pressed just on the boundary of a compound object
 			case Qt::Key_Delete:
 			{
-				if (index < str.size() ) newText.remove(index, 1);
+				if (index < str.size() )
+				{
+					if (! CompoundObjectDescriptor::processDeleteOrBackspaceKey(Qt::Key_Delete, newText, newIndex))
+						newText.remove(index, 1);
+				}
 			} break;
 			case Qt::Key_Backspace:
 			{
 				if (index > 0 )
 				{
-					newText.remove(index-1, 1);
-					--newIndex;
+					if (! CompoundObjectDescriptor::processDeleteOrBackspaceKey(Qt::Key_Backspace, newText, newIndex))
+					{
+						newText.remove(index-1, 1);
+						--newIndex;
+					}
 				}
-
 			} break;
 			default:
 			{
@@ -386,6 +395,13 @@ void HExpression::setNewExpression(Visualization::Item* target, Visualization::I
 	while (!parent->node() && parent->parent()) parent=parent->parent();
 
 	target->scene()->addPostEventAction( new SetExpressionCursorEvent(parent, newExpression, index));
+
+	// Clear any compound objects that were stored during this expression processing
+	// TODO: This is not always what we want. For example if we type a quote when trying to make a new string argument
+	// that appears before a lambda, the lambda will be converted to a string but will not be immediately converted back
+	// to a lambda. If we clean all stored compound object, we won't be able to restore the lambda, once the closing
+	// quote is typed.
+	CompoundObjectDescriptor::cleanAllStoredExpressions();
 }
 
 void HExpression::showAutoComplete(Visualization::Item* target)

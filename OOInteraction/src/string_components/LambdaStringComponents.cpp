@@ -37,7 +37,8 @@
 
 namespace OOInteraction {
 
-LambdaStringComponents::LambdaStringComponents( OOModel::LambdaExpression* e ) : exp_(e)
+LambdaStringComponents::LambdaStringComponents( OOModel::LambdaExpression* e )
+: exp_(e), str_(e?CompoundObjectDescriptor::storeExpression(e):QString{})
 {}
 
 QStringList LambdaStringComponents::components()
@@ -45,7 +46,7 @@ QStringList LambdaStringComponents::components()
 	QStringList result;
 	if (!exp_) return result;
 
-	result << CompoundObjectDescriptor::storeExpression(exp_);
+	result << str_;
 
 	return result;
 }

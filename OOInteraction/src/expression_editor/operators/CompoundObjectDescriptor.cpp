@@ -85,6 +85,7 @@ QMap<int,OOModel::Expression*>& CompoundObjectDescriptor::storedExpressions()
 
 const QString& CompoundObjectDescriptor::compoundSignature()
 {
+	// If the signature is changed the processDeleteOrBackspaceKey() method must be adjusted accordingly
 	static const QString sig{"@@ expr @@"};
 	return sig;
 }
@@ -97,8 +98,15 @@ int CompoundObjectDescriptor::nextId()
 
 const QString CompoundObjectDescriptor::storeExpression(OOModel::Expression* object)
 {
-	int id = nextId();
-	storedExpressions().insert(id,object);
+	int id;
+
+	if (storedExpressions().values().contains(object))
+		id = storedExpressions().key(object);
+	else
+	{
+		id = nextId();
+		storedExpressions().insert(id,object);
+	}
 
 	auto str = compoundSignature();
 	str.replace(" expr ", QString::number(id));
@@ -110,6 +118,83 @@ void CompoundObjectDescriptor::cleanAllStoredExpressions()
 {
 	// We do not need to delete the original expressions. This is handled by the Undo system.
 	storedExpressions().clear();
+}
+
+bool CompoundObjectDescriptor::processDeleteOrBackspaceKey(Qt::Key key, QString& expression, int& index)
+{
+	// A little optimization to speed up the most common case
+	if (key == Qt::Key_Delete)
+	{
+		if ( expression.at(index) != '@') return false;
+		if (isInQuotes(index,expression)) return false;
+	}
+	if (key == Qt::Key_Backspace)
+	{
+		if (expression.at(index-1) != '@') return false;
+		if (isInQuotes(index,expression)) return false;
+	}
+
+	// Try to match the expression to the compound signature
+	QString number;
+	int delimitersFound = 0;
+	int i = key == Qt::Key_Delete ? index : index-1;
+	int step = key == Qt::Key_Delete ? 1 : -1;
+
+	while(i>=0 && i < expression.length())
+	{
+		auto c = expression.at(i);
+		if ( c == '@') ++delimitersFound;
+		else if (c.isDigit() && delimitersFound == 2)
+		{
+			if (key == Qt::Key_Delete) number.append(c);
+			else number.prepend(c);
+		}
+		else return false;
+
+		if (delimitersFound > 2 && number.isEmpty()) return false;
+		if (delimitersFound == 4) break;
+
+		i+=step;
+	}
+
+	if (delimitersFound != 4) return false;
+
+	// If we reach this point then the user is indeed trying to delete a compound expression. Make sure the number it
+	// refers to exists.
+	bool conversionOK = false;
+	int n = number.toInt(&conversionOK, 10);
+	if (!conversionOK) return false;
+
+	if (!storedExpressions().contains(n)) return false;
+
+	// Everything checks out, delete the compound expression
+	auto compundLenght = delimitersFound + number.length();
+	if (key == Qt::Key_Backspace) index-=compundLenght;
+	expression.remove(index, compundLenght);
+	storedExpressions().remove(n);
+
+	return true;
+}
+
+bool CompoundObjectDescriptor::isInQuotes(int index, const QString& string, const QChar& quote)
+{
+	bool inQuote = false;
+	bool escaped = false;
+
+	for(int i = 0; i<index; ++i)
+	{
+		if (escaped)
+		{
+			// TODO: This assumes that the escape sequence after an escape slash \ is only one character long. Improve
+			escaped = false;
+			continue;
+		}
+
+		if (string.at(i) == quote) inQuote = !inQuote;
+		else if (inQuote && string.at(i) == '\\') escaped = true;
+	}
+
+	return inQuote;
 }
 
 } /* namespace OOVisualization */
