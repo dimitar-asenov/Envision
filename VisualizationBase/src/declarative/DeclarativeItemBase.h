@@ -63,6 +63,7 @@ class VISUALIZATIONBASE_API DeclarativeItemBase: public Item
 
 	private:
 		typedef Item BaseItemType;
+		int currentFormIndex_;
 };
 
 

@@ -40,6 +40,7 @@ class ItemWrapperElement : public Element
 		using ChildItem = Item* ParentType::*;
 		ItemWrapperElement(ChildItem item);
 		// TODO: if form changes, need to remove unused items
+		virtual void computeSize(Item* size, int availableWidth, int availableHeight) override;
 
 	protected:
 		ChildItem item() const;
@@ -52,6 +53,19 @@ template <class ParentType>
 ItemWrapperElement<ParentType>::ItemWrapperElement(ChildItem item)
 : item_(item)
 {}
+
+template <class ParentType>
+void ItemWrapperElement<ParentType>::computeSize(Item* item, int, int)
+{
+	auto& childItem = (static_cast<ParentType*>(item))->*this->item();
+	if(childItem)
+	{
+		int width = childItem->width() + leftMargin() + rightMargin();
+		int height = childItem->height() + topMargin() + bottomMargin();
+		setSize(QSize(width, height));
+	}
+	else setSize(QSize());
+}
 
 template <class ParentType>
 typename ItemWrapperElement<ParentType>::ChildItem ItemWrapperElement<ParentType>::item() const

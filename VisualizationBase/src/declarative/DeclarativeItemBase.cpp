@@ -44,13 +44,14 @@ int DeclarativeItemBase::determineForm()
 
 void DeclarativeItemBase::determineChildren()
 {
-	int formIndex = determineForm();
-	forms().at(formIndex)->synchronizeWithItem(this);
+	currentFormIndex_ = determineForm();
+	forms().at(currentFormIndex_)->synchronizeWithItem(this);
 }
 
-void DeclarativeItemBase::updateGeometry(int, int)
+void DeclarativeItemBase::updateGeometry(int availableWidth, int avaiableHeight)
 {
-	setSize(150,150);
+	forms().at(currentFormIndex_)->computeSize(this, availableWidth, avaiableHeight);
+	setSize(forms().at(currentFormIndex_)->size());
 }
 
 }

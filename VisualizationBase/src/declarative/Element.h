@@ -47,12 +47,22 @@ class VISUALIZATIONBASE_API Element
 
 	public: // Methods executable when items need to be rendered
 		virtual void synchronizeWithItem(Item* item) = 0;
+		virtual void computeSize(Item* item, int availableWidth, int availableHeight) = 0;
+		QSize size() const;
+
+	protected:
+		void setSize(const QSize& size);
+		int topMargin();
+		int bottomMargin();
+		int leftMargin();
+		int rightMargin();
 
 	private:
 		int marginTop_{};
 		int marginBottom_{};
 		int marginLeft_{};
 		int marginRight_{};
+		QSize size_{};
 };
 
 inline void Element::setMargins(int left, int top, int right, int bottom)
@@ -73,6 +83,14 @@ inline void Element::setTopMargin(int top) {marginTop_ = top;}
 inline void Element::setBottomMargin(int bottom) {marginBottom_ = bottom;}
 inline void Element::setLeftMargin(int left) {marginLeft_ = left;}
 inline void Element::setRightMargin(int right) {marginRight_ = right;}
+
+inline QSize Element::size() const {return size_;}
+inline void Element::setSize(const QSize& size) {size_ = size;}
+
+inline int Element::topMargin() {return marginTop_;}
+inline int Element::bottomMargin() {return marginBottom_;}
+inline int Element::leftMargin() {return marginLeft_;}
+inline int Element::rightMargin() {return marginRight_;}
 
 }
 
