@@ -99,7 +99,13 @@ HEADERS += src/nodes/TestBoxNode.h \
     src/visualizationbase_api.h \
     test/BoxTest.h \
     src/visualizationbase.h
-SOURCES += src/nodes/TestBoxNode.cpp \
+SOURCES += test/DeclarativeTest.cpp \
+    src/declarative/GridLayoutElement.cpp \
+    src/declarative/AnchorLayoutElement.cpp \
+    src/declarative/SequentialLayoutElement.cpp \
+    src/declarative/Element.cpp \
+    src/declarative/DeclarativeItemBase.cpp \
+    src/nodes/TestBoxNode.cpp \
     src/items/TestBox.cpp \
     src/items/LineStyle.cpp \
     src/items/Line.cpp \

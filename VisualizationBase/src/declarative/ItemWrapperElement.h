@@ -29,70 +29,34 @@
 
 #include "../visualizationbase_api.h"
 #include "Element.h"
-#include "../items/Text.h"
-
-#include "ModelBase/src/nodes/Node.h"
-#include "../renderer/ModelRenderer.h"
+#include "../items/Item.h"
 
 namespace Visualization {
 
-// We need a default that can be constructed. The default is never used.
-template <class ParentType, class VisualizationType = Text>
-class VISUALIZATIONBASE_API ItemWrapperElement : public Element
+template <class ParentType>
+class ItemWrapperElement : public Element
 {
 	public: // Methods executable on element definition
 		using ChildItem = Item* ParentType::*;
-		using ChildStyle = const typename VisualizationType::StyleType*;
-		using GetNodeFunction = std::function<Model::Node* (ParentType* v)>;
-		ItemWrapperElement(ChildItem item, ChildStyle style);
-		ItemWrapperElement(ChildItem item, GetNodeFunction nodeGetter);
+		ItemWrapperElement(ChildItem item);
+		// TODO: if form changes, need to remove unused items
 
-	public: // Methods executable when items need to be rendered
-		virtual void synchronizeWithItem(Item* item) override;
+	protected:
+		ChildItem item() const;
 
 	private:
 		ChildItem item_{};
-		GetNodeFunction nodeGetter_{};
-		ChildStyle style_{};
 };
 
-template <class ParentType, class VisualizationType>
-ItemWrapperElement<ParentType, VisualizationType>::ItemWrapperElement(ChildItem item, ChildStyle style)
-: item_{item}, style_{style}
+template <class ParentType>
+ItemWrapperElement<ParentType>::ItemWrapperElement(ChildItem item)
+: item_(item)
 {}
 
-template <class ParentType, class VisualizationType>
-ItemWrapperElement<ParentType, VisualizationType>::ItemWrapperElement(ChildItem item, GetNodeFunction nodeGetter)
-: item_{item}, nodeGetter_{nodeGetter}
-{}
-
-template <class ParentType, class VisualizationType>
-void ItemWrapperElement<ParentType, VisualizationType>::synchronizeWithItem(Item* item)
+template <class ParentType>
+typename ItemWrapperElement<ParentType>::ChildItem ItemWrapperElement<ParentType>::item() const
 {
-	// TODO: more special cases (node, ...)
-	if(!nodeGetter_ && style_)
-	{
-		auto& childItem = (static_cast<ParentType*>(item))->*item_;
-		if(!childItem) childItem = new VisualizationType(item, style_);
-		childItem->setStyle(style_);
-	}
-	else if(!style_ && nodeGetter_)
-	{
-		auto& childItem = (static_cast<ParentType*>(item))->*item_;
-		auto node = nodeGetter_(static_cast<ParentType*>(item));
-
-		if(childItem && childItem->node() != node)
-		{
-			SAFE_DELETE_ITEM(childItem);
-			item->setUpdateNeeded(Item::StandardUpdate);
-		}
-
-		if(!childItem)
-		{
-			childItem = item->renderer()->render(item, node);
-			item->setUpdateNeeded(Item::StandardUpdate);
-		}
-	}
+	return item_;
 }
 
 }

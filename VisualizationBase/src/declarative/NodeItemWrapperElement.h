@@ -24,35 +24,52 @@
  **
  **********************************************************************************************************************/
 
-#include "DeclarativeItemBase.h"
-#include "Element.h"
+#ifndef VisualizationBase_NODEITEMWRAPPERELEMENT_H_
+#define VisualizationBase_NODEITEMWRAPPERELEMENT_H_
+
+#include "ItemWrapperElement.h"
+
+#include "ModelBase/src/nodes/Node.h"
+#include "../renderer/ModelRenderer.h"
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(DeclarativeItemBase, "item")
+template <class ParentType>
+class NodeItemWrapperElement : public ItemWrapperElement<ParentType> {
+	public:
+		using ChildItem = typename ItemWrapperElement<ParentType>::ChildItem;
+		using GetNodeFunction = std::function<Model::Node* (ParentType* v)>;
 
-DeclarativeItemBase::DeclarativeItemBase(Item* parent) :
-		Item(parent)
+		NodeItemWrapperElement(ChildItem item, GetNodeFunction nodeGetter);
+		virtual void synchronizeWithItem(Item* item) override;
+
+	private:
+		GetNodeFunction nodeGetter_{};
+};
+
+template <class ParentType>
+NodeItemWrapperElement<ParentType>::NodeItemWrapperElement(ChildItem item, GetNodeFunction nodeGetter)
+: ItemWrapperElement<ParentType>{item}, nodeGetter_{nodeGetter}
+{}
+
+template <class ParentType>
+void NodeItemWrapperElement<ParentType>::synchronizeWithItem(Item* item)
 {
+	auto& childItem = (static_cast<ParentType*>(item))->*this->item();
+	auto node = nodeGetter_(static_cast<ParentType*>(item));
 
+	if(childItem && childItem->node() != node)
+	{
+		SAFE_DELETE_ITEM(childItem);
+		item->setUpdateNeeded(Item::StandardUpdate);
+	}
+
+	if(!childItem && node)
+	{
+		childItem = item->renderer()->render(item, node);
+		item->setUpdateNeeded(Item::StandardUpdate);
+	}
 }
 
-int DeclarativeItemBase::determineForm()
-{
-	return 0;
-}
-
-void DeclarativeItemBase::determineChildren()
-{
-	int formIndex = determineForm();
-	forms().at(formIndex)->synchronizeWithItem(this);
-}
-
-void DeclarativeItemBase::updateGeometry(int, int)
-{
-	setSize(150,150);
-}
-
-}
-
-
+} /* namespace Visualization */
+#endif /* VisualizationBase_NODEITEMWRAPPERELEMENT_H_ */

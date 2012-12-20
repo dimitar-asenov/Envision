@@ -24,35 +24,39 @@
  **
  **********************************************************************************************************************/
 
-#include "DeclarativeItemBase.h"
-#include "Element.h"
+#ifndef VisualizationBase_VISUALIZATIONITEMWRAPPERELEMENT_H_
+#define VisualizationBase_VISUALIZATIONITEMWRAPPERELEMENT_H_
+
+#include "ItemWrapperElement.h"
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(DeclarativeItemBase, "item")
+template <class ParentType, class VisualizationType>
+class VisualizationItemWrapperElement : public ItemWrapperElement<ParentType> {
+	public:
+		using ChildItem = typename ItemWrapperElement<ParentType>::ChildItem;
+		using ChildStyle = const typename VisualizationType::StyleType*;
 
-DeclarativeItemBase::DeclarativeItemBase(Item* parent) :
-		Item(parent)
+		VisualizationItemWrapperElement(ChildItem item, ChildStyle style);
+		virtual void synchronizeWithItem(Item* item) override;
+
+	private:
+		ChildStyle style_{};
+};
+
+template <class ParentType, class VisualizationType>
+VisualizationItemWrapperElement<ParentType, VisualizationType>::VisualizationItemWrapperElement(
+		ChildItem item, ChildStyle style)
+: ItemWrapperElement<ParentType>{item}, style_{style}
+{}
+
+template <class ParentType, class VisualizationType>
+void VisualizationItemWrapperElement<ParentType, VisualizationType>::synchronizeWithItem(Item* item)
 {
-
+	auto& childItem = (static_cast<ParentType*>(item))->*this->item();
+	if(!childItem) childItem = new VisualizationType(item, style_);
+	childItem->setStyle(style_);
 }
 
-int DeclarativeItemBase::determineForm()
-{
-	return 0;
-}
-
-void DeclarativeItemBase::determineChildren()
-{
-	int formIndex = determineForm();
-	forms().at(formIndex)->synchronizeWithItem(this);
-}
-
-void DeclarativeItemBase::updateGeometry(int, int)
-{
-	setSize(150,150);
-}
-
-}
-
-
+} /* namespace Visualization */
+#endif /* VisualizationBase_VISUALIZATIONITEMWRAPPERELEMENT_H_ */

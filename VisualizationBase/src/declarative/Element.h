@@ -46,7 +46,6 @@ class VISUALIZATIONBASE_API Element
 		void setRightMargin(int right);
 
 	public: // Methods executable when items need to be rendered
-		// TODO: is there a render method? Would that be "determine children"?
 		virtual void synchronizeWithItem(Item* item) = 0;
 
 	private:

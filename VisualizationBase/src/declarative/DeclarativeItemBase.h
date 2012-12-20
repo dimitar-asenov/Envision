@@ -30,7 +30,9 @@
 #include "../visualizationbase_api.h"
 #include "../items/Item.h"
 #include "../items/ItemStyle.h"
-#include "ItemWrapperElement.h"
+#include "VisualizationItemWrapperElement.h"
+#include "NodeItemWrapperElement.h"
+#include "NodeWithVisualizationItemWrapperElement.h"
 
 namespace Visualization {
 
@@ -49,11 +51,15 @@ class VISUALIZATIONBASE_API DeclarativeItemBase: public Item
 
 		// factory methods for ItemWrapperElement
 		template <class VisualizationType, class ParentType>
-			static ItemWrapperElement<ParentType, VisualizationType>*
+			static VisualizationItemWrapperElement<ParentType, VisualizationType>*
 			item(Item* ParentType::* item, const typename VisualizationType::StyleType* style);
 		template <class ParentType>
-			static ItemWrapperElement<ParentType>*
+			static NodeItemWrapperElement<ParentType>*
 			item(Item* ParentType::* item, std::function<Model::Node* (ParentType* v)> nodeGetter);
+		template <class VisualizationType, class ParentType>
+			static NodeWithVisualizationItemWrapperElement<ParentType, VisualizationType>*
+			item(Item* ParentType::* item, std::function<typename VisualizationType::NodeType* (ParentType* v)> nodeGetter,
+					const typename VisualizationType::StyleType* style);
 
 	private:
 		typedef Item BaseItemType;
@@ -61,17 +67,26 @@ class VISUALIZATIONBASE_API DeclarativeItemBase: public Item
 
 
 template <class VisualizationType, class ParentType>
-	ItemWrapperElement<ParentType, VisualizationType>*
+	VisualizationItemWrapperElement<ParentType, VisualizationType>*
 	DeclarativeItemBase::item(Item* ParentType::* item, const typename VisualizationType::StyleType* style)
 {
-	return new ItemWrapperElement<ParentType, VisualizationType>(item, style);
+	return new VisualizationItemWrapperElement<ParentType, VisualizationType>(item, style);
 }
 
 template <class ParentType>
-	ItemWrapperElement<ParentType>*
+	NodeItemWrapperElement<ParentType>*
 	DeclarativeItemBase::item(Item* ParentType::* item, std::function<Model::Node* (ParentType* v)> nodeGetter)
 {
-	return new ItemWrapperElement<ParentType>(item, nodeGetter);
+	return new NodeItemWrapperElement<ParentType>(item, nodeGetter);
+}
+
+template <class VisualizationType, class ParentType>
+	NodeWithVisualizationItemWrapperElement<ParentType, VisualizationType>*
+	DeclarativeItemBase::item(Item* ParentType::* item,
+			std::function<typename VisualizationType::NodeType* (ParentType* v)> nodeGetter,
+			const typename VisualizationType::StyleType* style)
+{
+	return new NodeWithVisualizationItemWrapperElement<ParentType, VisualizationType>(item, nodeGetter, style);
 }
 
 }

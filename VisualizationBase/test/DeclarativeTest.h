@@ -31,6 +31,10 @@
 #include "../src/declarative/ItemWrapperElement.h"
 #include "../src/items/SymbolStyle.h"
 
+namespace TestNodes {
+class BinaryNode;
+}
+
 namespace Visualization {
 
 class Item;
@@ -40,14 +44,14 @@ class DeclarativeTest : public DeclarativeItem<DeclarativeTest> {
 	ITEM_COMMON_CUSTOM_STYLENAME(DeclarativeTest, SymbolStyle)
 
 	public:
-		DeclarativeTest(Item* parent, Model::Node* node);
+		DeclarativeTest(Item* parent, TestNodes::BinaryNode* node);
 		static void initializeForms();
 
 	private:
 		typedef DeclarativeItem<DeclarativeTest> BaseItemType;
 		Item* testItem_{};
 		Item* testNodeItem_{};
-		Model::Node* testNode_{};
+		TestNodes::BinaryNode* testNode_{};
 };
 
 } /* namespace Visualization */

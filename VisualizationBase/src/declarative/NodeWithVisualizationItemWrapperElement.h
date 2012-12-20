@@ -24,27 +24,56 @@
  **
  **********************************************************************************************************************/
 
-#include "DeclarativeTest.h"
+#ifndef VisualizationBase_NODEWITHVISUALIZATIONITEMWRAPPERELEMENT_H_
+#define VisualizationBase_NODEWITHVISUALIZATIONITEMWRAPPERELEMENT_H_
 
-#include "../src/items/Symbol.h"
-#include "../src/items/VExtendable.h"
-#include "ModelBase/src/test_nodes/BinaryNode.h"
+#include "ItemWrapperElement.h"
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(DeclarativeTest, "item")
+template <class ParentType, class VisualizationType>
+class NodeWithVisualizationItemWrapperElement : public ItemWrapperElement<ParentType> {
+	public:
+		using ChildItem = typename ItemWrapperElement<ParentType>::ChildItem;
+		using ChildStyle = const typename VisualizationType::StyleType*;
+		using GetNodeTypeFunction = std::function<typename VisualizationType::NodeType* (ParentType* v)>;
 
-DeclarativeTest::DeclarativeTest(Item* parent, TestNodes::BinaryNode* node) :
-		DeclarativeItem<DeclarativeTest>(parent), testNode_{node}
-{
-	setPurpose(0);
-}
+		NodeWithVisualizationItemWrapperElement(ChildItem item, GetNodeTypeFunction nodeGetter, ChildStyle style);
+		virtual void synchronizeWithItem(Item* item) override;
 
-void DeclarativeTest::initializeForms()
+	private:
+		GetNodeTypeFunction nodeGetter_;
+		ChildStyle style_;
+};
+
+template <class ParentType, class VisualizationType>
+NodeWithVisualizationItemWrapperElement<ParentType, VisualizationType>::NodeWithVisualizationItemWrapperElement(
+		ChildItem item, GetNodeTypeFunction nodeGetter, ChildStyle style)
+: ItemWrapperElement<ParentType>{item}, nodeGetter_{nodeGetter}, style_{style}
+{}
+
+template <class ParentType, class VisualizationType>
+void NodeWithVisualizationItemWrapperElement<ParentType, VisualizationType>::synchronizeWithItem(Item* item)
 {
-//	addForm(item<Symbol>(&I::testItem_, itemStyles().get()));
-//	addForm(item<I>(&I::testNodeItem_, [](I* v){return v->testNode_;}));
-	addForm(item<VExtendable,I>(&I::testNodeItem_, [](I* v){return v->testNode_;}, VExtendable::itemStyles().get()));
+	auto& childItem = (static_cast<ParentType*>(item))->*this->item();
+	auto node = nodeGetter_(static_cast<ParentType*>(item));
+
+	if (childItem && childItem->node() != node )
+	{
+		SAFE_DELETE_ITEM(childItem);
+		item->setUpdateNeeded(Item::StandardUpdate);
+	}
+
+	if (!childItem && node)
+	{
+		if (style_) childItem = new VisualizationType(item, node, style_);
+		else childItem = new VisualizationType(item, node);
+
+		item->setUpdateNeeded(Item::StandardUpdate);
+	}
+
+	if(childItem) childItem->setStyle(style_);
 }
 
 } /* namespace Visualization */
+#endif /* VisualizationBase_NODEWITHVISUALIZATIONITEMWRAPPERELEMENT_H_ */
