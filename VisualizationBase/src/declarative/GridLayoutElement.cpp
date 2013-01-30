@@ -28,15 +28,109 @@
 
 namespace Visualization {
 
-GridLayoutElement::GridLayoutElement()
+GridLayoutElement::GridLayoutElement(int numHorizontalCells, int numVerticalCells)
+: numHorizontalCells_(numHorizontalCells), numVerticalCells_(numVerticalCells)
 {
-	// TODO Auto-generated constructor stub
-
+	elementGrid_ = QVector<QVector<Element*>>(numHorizontalCells_, QVector<Element*>(numVerticalCells_));
 }
 
 GridLayoutElement::~GridLayoutElement()
 {
-	// TODO Auto-generated destructor stub
+	for(int x=0; x<numHorizontalCells_; x++)
+		for(int y=0; y<numVerticalCells_; y++)
+			SAFE_DELETE(elementGrid_[x][y]);
+}
+
+void GridLayoutElement::add(int cellX, int cellY, Element* element)
+{
+	if (elementGrid_[cellX][cellY] != nullptr)
+		SAFE_DELETE(elementGrid_[cellX][cellY]);
+	elementGrid_[cellX][cellY] = element;
+}
+
+void GridLayoutElement::synchronizeWithItem(Item* item)
+{
+	for(int x=0; x<numHorizontalCells_; x++)
+	{
+		for(int y=0; y<numVerticalCells_; y++)
+			if (elementGrid_[x][y] != nullptr)
+			{
+				elementGrid_[x][y]->synchronizeWithItem(item);
+			}
+	}
+}
+
+void GridLayoutElement::setItemPositions(Item* item, int parentX, int parentY)
+{
+	for(int x=0; x<numHorizontalCells_; x++)
+	{
+		for(int y=0; y<numVerticalCells_; y++)
+			if (elementGrid_[x][y] != nullptr)
+			{
+				Element* element = elementGrid_[x][y];
+				element->setItemPositions(item, parentX + pos().x(), parentY + pos().y());
+			}
+	}
+}
+
+void GridLayoutElement::computeSize(Item* item, int availableWidth, int availableHeight)
+{
+	// Get the widest and tallest items
+	QVector<int> widestInColumn(numHorizontalCells_, 0);
+	QVector<int> tallestInRow(numVerticalCells_, 0);
+	for(int x=0; x<numHorizontalCells_; x++)
+	{
+		for(int y=0; y<numVerticalCells_; y++)
+			if (elementGrid_[x][y] != nullptr)
+			{
+				Element* element = elementGrid_[x][y];
+				// TODO: do something better with the available width/height
+				element->computeSize(item, availableWidth / numHorizontalCells_, availableHeight / numVerticalCells_);
+				QSize size = element->size();
+				if (size.width() > widestInColumn[x]) widestInColumn[x] = size.width();
+				if (size.height() > tallestInRow[y]) tallestInRow[y] = size.height();
+			}
+	}
+
+	// Compute size
+	int totalWidth = 0;
+	for (int x = 0; x<numHorizontalCells_; ++x) totalWidth += widestInColumn[x];
+	if (numHorizontalCells_ > 1) totalWidth += leftMargin() + rightMargin();
+
+	int totalHeight = 0;
+	for (int y = 0; y<numVerticalCells_; ++y) totalHeight += tallestInRow[y];
+	if (numVerticalCells_ > 1) totalHeight += topMargin() + bottomMargin();
+
+	setSize(QSize(totalWidth, totalHeight));
+
+	// Set item positions
+
+	int left = leftMargin();
+	for(int x=0; x<numHorizontalCells_; ++x)
+	{
+		int top = topMargin();
+		for(int y=0; y<numVerticalCells_; ++y)
+		{
+			if (elementGrid_[x][y] != nullptr)
+			{
+				// assume alignment is top-left
+				// TODO: generalize alignment
+				int xPos = left;
+//				if (style()->horizontalAlignment() == LayoutStyle::Alignment::Center) xPos += (widestInColumn[x] - items_[x][y]->width())/2;
+//				else if (style()->horizontalAlignment() == LayoutStyle::Alignment::Right) xPos += (widestInColumn[x] - items_[x][y]->width());
+
+				int yPos = top;
+//				if (style()->verticalAlignment() == LayoutStyle::Alignment::Center) yPos += (tallestInRow[y] - items_[x][y]->height())/2;
+//				else if (style()->verticalAlignment() == LayoutStyle::Alignment::Bottom) yPos += (tallestInRow[y] - items_[x][y]->height());
+
+				elementGrid_[x][y]->setPos(QPoint(xPos, yPos));
+			}
+
+			top += tallestInRow[y];
+		}
+
+		left += widestInColumn[x];
+	}
 }
 
 } /* namespace Visualization */

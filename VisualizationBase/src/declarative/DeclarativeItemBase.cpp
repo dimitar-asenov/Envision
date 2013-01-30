@@ -31,8 +31,8 @@ namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(DeclarativeItemBase, "item")
 
-DeclarativeItemBase::DeclarativeItemBase(Item* parent) :
-		Item(parent)
+DeclarativeItemBase::DeclarativeItemBase(Item* parent, const StyleType* style) :
+		Item(parent, style)
 {
 
 }
@@ -52,6 +52,7 @@ void DeclarativeItemBase::updateGeometry(int availableWidth, int avaiableHeight)
 {
 	forms().at(currentFormIndex_)->computeSize(this, availableWidth, avaiableHeight);
 	setSize(forms().at(currentFormIndex_)->size());
+	forms().at(currentFormIndex_)->setItemPositions(this);
 }
 
 }

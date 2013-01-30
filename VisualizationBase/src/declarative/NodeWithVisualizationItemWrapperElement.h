@@ -32,9 +32,9 @@
 namespace Visualization {
 
 template <class ParentType, class VisualizationType>
-class NodeWithVisualizationItemWrapperElement : public ItemWrapperElement<ParentType> {
+class NodeWithVisualizationItemWrapperElement : public ItemWrapperElement<ParentType, VisualizationType> {
 	public:
-		using ChildItem = typename ItemWrapperElement<ParentType>::ChildItem;
+		using ChildItem = typename ItemWrapperElement<ParentType, VisualizationType>::ChildItem;
 		using ChildStyle = const typename VisualizationType::StyleType*;
 		using GetNodeTypeFunction = std::function<typename VisualizationType::NodeType* (ParentType* v)>;
 
@@ -49,7 +49,7 @@ class NodeWithVisualizationItemWrapperElement : public ItemWrapperElement<Parent
 template <class ParentType, class VisualizationType>
 NodeWithVisualizationItemWrapperElement<ParentType, VisualizationType>::NodeWithVisualizationItemWrapperElement(
 		ChildItem item, GetNodeTypeFunction nodeGetter, ChildStyle style)
-: ItemWrapperElement<ParentType>{item}, nodeGetter_{nodeGetter}, style_{style}
+: ItemWrapperElement<ParentType, VisualizationType>{item}, nodeGetter_{nodeGetter}, style_{style}
 {}
 
 template <class ParentType, class VisualizationType>

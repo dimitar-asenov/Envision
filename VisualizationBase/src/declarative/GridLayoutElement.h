@@ -32,10 +32,21 @@
 
 namespace Visualization {
 
-class GridLayoutElement : public Visualization::LayoutElement {
-	public:
-		GridLayoutElement();
+class GridLayoutElement : public LayoutElement {
+	public: // Methods executable on element definition
+		GridLayoutElement(int numHorizontalCells, int numVerticalCells);
 		virtual ~GridLayoutElement();
+		void add(int cellX, int cellY, Element* element);
+
+	public: // Methods executable when items need to be rendered
+		virtual void computeSize(Item* item, int availableWidth, int availableHeight) override;
+		virtual void setItemPositions(Item* item, int parentX, int parentY) override;
+		virtual void synchronizeWithItem(Item* item) override;
+
+	private:
+		int numHorizontalCells_;
+		int numVerticalCells_;
+		QVector<QVector<Element*>> elementGrid_{};
 };
 
 } /* namespace Visualization */

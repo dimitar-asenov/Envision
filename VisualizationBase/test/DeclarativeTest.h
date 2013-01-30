@@ -38,6 +38,8 @@ class BinaryNode;
 namespace Visualization {
 
 class Item;
+class Symbol;
+class VExtendable;
 
 class DeclarativeTest : public DeclarativeItem<DeclarativeTest> {
 
@@ -49,8 +51,12 @@ class DeclarativeTest : public DeclarativeItem<DeclarativeTest> {
 
 	private:
 		typedef DeclarativeItem<DeclarativeTest> BaseItemType;
-		Item* testItem_{};
-		Item* testNodeItem_{};
+		Symbol* testItem_{};
+		Symbol* testItem2_{};
+		Symbol* testItem3_{};
+		Symbol* testItem4_{};
+		VExtendable* testNodeItem_{};
+		Item* testNodeItemGeneral_{};
 		TestNodes::BinaryNode* testNode_{};
 };
 

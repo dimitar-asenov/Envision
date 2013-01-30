@@ -33,14 +33,18 @@
 
 namespace Visualization {
 
-template <class ParentType>
+template <class ParentType, class ChildItemType = Item>
 class ItemWrapperElement : public Element
 {
 	public: // Methods executable on element definition
-		using ChildItem = Item* ParentType::*;
+		using ChildItem = ChildItemType* ParentType::*;
 		ItemWrapperElement(ChildItem item);
 		// TODO: if form changes, need to remove unused items
-		virtual void computeSize(Item* size, int availableWidth, int availableHeight) override;
+		// TODO: properly destroy all child items recursively
+
+	public: // Methods executable when items need to be rendered
+		virtual void computeSize(Item* item, int availableWidth, int availableHeight) override;
+		virtual void setItemPositions(Item* item, int parentX, int parentY) override;
 
 	protected:
 		ChildItem item() const;
@@ -49,13 +53,13 @@ class ItemWrapperElement : public Element
 		ChildItem item_{};
 };
 
-template <class ParentType>
-ItemWrapperElement<ParentType>::ItemWrapperElement(ChildItem item)
+template <class ParentType, class ChildItemType>
+ItemWrapperElement<ParentType,ChildItemType>::ItemWrapperElement(ChildItem item)
 : item_(item)
 {}
 
-template <class ParentType>
-void ItemWrapperElement<ParentType>::computeSize(Item* item, int, int)
+template <class ParentType, class ChildItemType>
+void ItemWrapperElement<ParentType,ChildItemType>::computeSize(Item* item, int, int)
 {
 	auto& childItem = (static_cast<ParentType*>(item))->*this->item();
 	if(childItem)
@@ -64,11 +68,22 @@ void ItemWrapperElement<ParentType>::computeSize(Item* item, int, int)
 		int height = childItem->height() + topMargin() + bottomMargin();
 		setSize(QSize(width, height));
 	}
-	else setSize(QSize());
+	else setSize(QSize(0,0));
 }
 
-template <class ParentType>
-typename ItemWrapperElement<ParentType>::ChildItem ItemWrapperElement<ParentType>::item() const
+template <class ParentType, class ChildItemType>
+void ItemWrapperElement<ParentType,ChildItemType>::setItemPositions(Item* item, int parentX, int parentY)
+{
+	auto& childItem = (static_cast<ParentType*>(item))->*this->item();
+	if(childItem)
+	{
+		childItem->setPos(parentX + pos().x() + leftMargin(), parentY + pos().y() + topMargin());
+	}
+}
+
+template <class ParentType, class ChildItemType>
+typename ItemWrapperElement<ParentType,ChildItemType>::ChildItem
+ItemWrapperElement<ParentType,ChildItemType>::item() const
 {
 	return item_;
 }

@@ -43,7 +43,7 @@ class VISUALIZATIONBASE_API DeclarativeItemBase: public Item
 	ITEM_COMMON_CUSTOM_STYLENAME(DeclarativeItemBase, ItemStyle)
 
 	public:
-		DeclarativeItemBase(Item* parent);
+		DeclarativeItemBase(Item* parent, const StyleType* style = itemStyles().get());
 		virtual void determineChildren() override;
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 		virtual QList<Element*>& forms() = 0; // array or forms
@@ -52,13 +52,15 @@ class VISUALIZATIONBASE_API DeclarativeItemBase: public Item
 		// factory methods for ItemWrapperElement
 		template <class VisualizationType, class ParentType>
 			static VisualizationItemWrapperElement<ParentType, VisualizationType>*
-			item(Item* ParentType::* item, const typename VisualizationType::StyleType* style);
+			item(VisualizationType* ParentType::* item,
+					std::function<const typename VisualizationType::StyleType* (ParentType* v)> style);
 		template <class ParentType>
 			static NodeItemWrapperElement<ParentType>*
 			item(Item* ParentType::* item, std::function<Model::Node* (ParentType* v)> nodeGetter);
 		template <class VisualizationType, class ParentType>
 			static NodeWithVisualizationItemWrapperElement<ParentType, VisualizationType>*
-			item(Item* ParentType::* item, std::function<typename VisualizationType::NodeType* (ParentType* v)> nodeGetter,
+			item(VisualizationType* ParentType::* item,
+					std::function<typename VisualizationType::NodeType* (ParentType* v)> nodeGetter,
 					const typename VisualizationType::StyleType* style);
 
 	private:
@@ -66,10 +68,10 @@ class VISUALIZATIONBASE_API DeclarativeItemBase: public Item
 		int currentFormIndex_;
 };
 
-
 template <class VisualizationType, class ParentType>
 	VisualizationItemWrapperElement<ParentType, VisualizationType>*
-	DeclarativeItemBase::item(Item* ParentType::* item, const typename VisualizationType::StyleType* style)
+	DeclarativeItemBase::item(VisualizationType* ParentType::* item,
+										std::function<const typename VisualizationType::StyleType* (ParentType* v)> style)
 {
 	return new VisualizationItemWrapperElement<ParentType, VisualizationType>(item, style);
 }
@@ -83,7 +85,7 @@ template <class ParentType>
 
 template <class VisualizationType, class ParentType>
 	NodeWithVisualizationItemWrapperElement<ParentType, VisualizationType>*
-	DeclarativeItemBase::item(Item* ParentType::* item,
+	DeclarativeItemBase::item(VisualizationType* ParentType::* item,
 			std::function<typename VisualizationType::NodeType* (ParentType* v)> nodeGetter,
 			const typename VisualizationType::StyleType* style)
 {

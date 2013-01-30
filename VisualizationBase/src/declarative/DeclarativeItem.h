@@ -39,7 +39,7 @@ class DeclarativeItem : public DeclarativeItemBase
 {
 	public:
 		using I = VisualizationType;
-		DeclarativeItem(Item* parent);
+		DeclarativeItem(Item* parent, const StyleType* style = itemStyles().get());
 		virtual QList<Element*>& forms() override;
 	protected:
 		static QList<Element*>& formsStatic();
@@ -47,8 +47,8 @@ class DeclarativeItem : public DeclarativeItemBase
 };
 
 template <class VisualizationType>
-DeclarativeItem<VisualizationType>::DeclarativeItem(Item* parent) :
-		DeclarativeItemBase(parent)
+DeclarativeItem<VisualizationType>::DeclarativeItem(Item* parent, const StyleType* style) :
+		DeclarativeItemBase(parent, style)
 {
 		static bool initialized = false;
 		if(!initialized)

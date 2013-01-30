@@ -48,6 +48,9 @@ class VISUALIZATIONBASE_API Element
 	public: // Methods executable when items need to be rendered
 		virtual void synchronizeWithItem(Item* item) = 0;
 		virtual void computeSize(Item* item, int availableWidth, int availableHeight) = 0;
+		virtual void setItemPositions(Item* item, int parentX=0, int parentY=0) = 0;
+		void setPos(const QPoint& pos);
+		QPoint pos() const;
 		QSize size() const;
 
 	protected:
@@ -63,6 +66,7 @@ class VISUALIZATIONBASE_API Element
 		int marginLeft_{};
 		int marginRight_{};
 		QSize size_{};
+		QPoint pos_{}; // Position relative to the parent element
 };
 
 inline void Element::setMargins(int left, int top, int right, int bottom)
@@ -86,6 +90,9 @@ inline void Element::setRightMargin(int right) {marginRight_ = right;}
 
 inline QSize Element::size() const {return size_;}
 inline void Element::setSize(const QSize& size) {size_ = size;}
+
+inline QPoint Element::pos() const {return pos_;}
+inline void Element::setPos(const QPoint& pos) {pos_ = pos;}
 
 inline int Element::topMargin() {return marginTop_;}
 inline int Element::bottomMargin() {return marginBottom_;}

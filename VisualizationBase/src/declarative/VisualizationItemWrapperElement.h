@@ -32,30 +32,31 @@
 namespace Visualization {
 
 template <class ParentType, class VisualizationType>
-class VisualizationItemWrapperElement : public ItemWrapperElement<ParentType> {
+class VisualizationItemWrapperElement : public ItemWrapperElement<ParentType, VisualizationType> {
 	public:
-		using ChildItem = typename ItemWrapperElement<ParentType>::ChildItem;
-		using ChildStyle = const typename VisualizationType::StyleType*;
+		using ChildItem = typename ItemWrapperElement<ParentType, VisualizationType>::ChildItem;
+		using GetStyleFunction = std::function<const typename VisualizationType::StyleType* (ParentType* v)>;
 
-		VisualizationItemWrapperElement(ChildItem item, ChildStyle style);
+		VisualizationItemWrapperElement(ChildItem item, GetStyleFunction style);
 		virtual void synchronizeWithItem(Item* item) override;
 
 	private:
-		ChildStyle style_{};
+		GetStyleFunction style_{};
 };
 
 template <class ParentType, class VisualizationType>
 VisualizationItemWrapperElement<ParentType, VisualizationType>::VisualizationItemWrapperElement(
-		ChildItem item, ChildStyle style)
-: ItemWrapperElement<ParentType>{item}, style_{style}
+		ChildItem item, GetStyleFunction style)
+: ItemWrapperElement<ParentType, VisualizationType>{item}, style_{style}
 {}
 
 template <class ParentType, class VisualizationType>
 void VisualizationItemWrapperElement<ParentType, VisualizationType>::synchronizeWithItem(Item* item)
 {
 	auto& childItem = (static_cast<ParentType*>(item))->*this->item();
-	if(!childItem) childItem = new VisualizationType(item, style_);
-	childItem->setStyle(style_);
+	auto style = style_(static_cast<ParentType*>(item));
+	if(!childItem) childItem = new VisualizationType(item, style);
+	childItem->setStyle(style);
 }
 
 } /* namespace Visualization */
