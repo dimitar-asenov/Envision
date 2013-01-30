@@ -30,22 +30,20 @@
 #include "VStatementItem.h"
 
 #include "VisualizationBase/src/items/Static.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
 #include "OOModel/src/statements/ContinueStatement.h"
 
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VContinueStatement
-	: public Super<VStatementItem<VContinueStatement, Visualization::Item, OOModel::ContinueStatement>>
+	: public Super<VStatementItem<VContinueStatement, Visualization::DeclarativeItem<VContinueStatement>, OOModel::ContinueStatement>>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VContinueStatement, Visualization::StaticStyle)
 
 	public:
 		VContinueStatement(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VContinueStatement();
-
-	protected:
-		virtual void determineChildren();
-		virtual void updateGeometry(int availableWidth, int availableHeight);
+		static void initializeForms();
 
 	private:
 		Visualization::Static* vis_;
