@@ -29,7 +29,8 @@
 namespace Visualization {
 
 GridLayoutElement::GridLayoutElement(int numHorizontalCells, int numVerticalCells)
-: numHorizontalCells_(numHorizontalCells), numVerticalCells_(numVerticalCells)
+: numHorizontalCells_(numHorizontalCells), numVerticalCells_(numVerticalCells),
+  horizontalSpacing_{}, verticalSpacing_{}
 {
 	elementGrid_ = QVector<QVector<Element*>>(numHorizontalCells_, QVector<Element*>(numVerticalCells_));
 }
@@ -96,10 +97,12 @@ void GridLayoutElement::computeSize(Item* item, int availableWidth, int availabl
 	int totalWidth = 0;
 	for (int x = 0; x<numHorizontalCells_; ++x) totalWidth += widestInColumn[x];
 	if (numHorizontalCells_ > 0) totalWidth += leftMargin() + rightMargin();
+	if (numHorizontalCells_ > 1) totalWidth += horizontalSpacing_ * (numHorizontalCells_ - 1);
 
 	int totalHeight = 0;
 	for (int y = 0; y<numVerticalCells_; ++y) totalHeight += tallestInRow[y];
 	if (numVerticalCells_ > 0) totalHeight += topMargin() + bottomMargin();
+	if (numVerticalCells_ > 1) totalHeight += verticalSpacing_ * (verticalSpacing_ - 1);
 
 	setSize(QSize(totalWidth, totalHeight));
 
@@ -126,10 +129,10 @@ void GridLayoutElement::computeSize(Item* item, int availableWidth, int availabl
 				elementGrid_[x][y]->setPos(QPoint(xPos, yPos));
 			}
 
-			top += tallestInRow[y];
+			top += tallestInRow[y] + verticalSpacing_;
 		}
 
-		left += widestInColumn[x];
+		left += widestInColumn[x] + horizontalSpacing_;
 	}
 }
 

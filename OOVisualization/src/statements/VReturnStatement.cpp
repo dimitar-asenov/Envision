@@ -56,9 +56,8 @@ void VReturnStatement::initializeForms()
 	GridLayoutElement* element = new GridLayoutElement(2, 1);
 	element->setTopMargin(5);
 	element->setBottomMargin(5);
-	auto* symbol = item<Static, I>(&I::symbol_, [](I* v){return &v->style()->symbol();});
-	symbol->setRightMargin(5);
-	element->add(0, 0, symbol);
+	element->setHorizontalSpacing(5);
+	element->add(0, 0, item<Static, I>(&I::symbol_, [](I* v){return &v->style()->symbol();}));
 	element->add(1, 0, item<VList,I>(&I::values_, [](I* v){return v->node()->values();},
 												[](I* v){return &v->style()->values();}));
 	addForm(element);

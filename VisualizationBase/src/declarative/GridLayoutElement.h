@@ -37,6 +37,10 @@ class GridLayoutElement : public LayoutElement {
 		GridLayoutElement(int numHorizontalCells, int numVerticalCells);
 		virtual ~GridLayoutElement();
 		void add(int cellX, int cellY, Element* element);
+		void setSpacing(int spacing);
+		void setSpacing(int horizontalSpacing, int verticalSpacing);
+		void setHorizontalSpacing(int horizontalSpacing);
+		void setVerticalSpacing(int verticalSpacing);
 
 	public: // Methods executable when items need to be rendered
 		virtual void computeSize(Item* item, int availableWidth, int availableHeight) override;
@@ -46,8 +50,23 @@ class GridLayoutElement : public LayoutElement {
 	private:
 		int numHorizontalCells_;
 		int numVerticalCells_;
+		int horizontalSpacing_;
+		int verticalSpacing_;
 		QVector<QVector<Element*>> elementGrid_{};
 };
+
+inline void GridLayoutElement::setSpacing(int spacing)
+{
+	horizontalSpacing_ = spacing;
+	verticalSpacing_ = spacing;
+}
+inline void GridLayoutElement::setSpacing(int horizontalSpacing, int verticalSpacing)
+{
+	horizontalSpacing_ = horizontalSpacing;
+	verticalSpacing_ = verticalSpacing;
+}
+inline void GridLayoutElement::setHorizontalSpacing(int horizontalSpacing){horizontalSpacing_ = horizontalSpacing;}
+inline void GridLayoutElement::setVerticalSpacing(int verticalSpacing){verticalSpacing_ = verticalSpacing;}
 
 } /* namespace Visualization */
 
