@@ -95,11 +95,11 @@ void GridLayoutElement::computeSize(Item* item, int availableWidth, int availabl
 	// Compute size
 	int totalWidth = 0;
 	for (int x = 0; x<numHorizontalCells_; ++x) totalWidth += widestInColumn[x];
-	if (numHorizontalCells_ > 1) totalWidth += leftMargin() + rightMargin();
+	if (numHorizontalCells_ > 0) totalWidth += leftMargin() + rightMargin();
 
 	int totalHeight = 0;
 	for (int y = 0; y<numVerticalCells_; ++y) totalHeight += tallestInRow[y];
-	if (numVerticalCells_ > 1) totalHeight += topMargin() + bottomMargin();
+	if (numVerticalCells_ > 0) totalHeight += topMargin() + bottomMargin();
 
 	setSize(QSize(totalWidth, totalHeight));
 

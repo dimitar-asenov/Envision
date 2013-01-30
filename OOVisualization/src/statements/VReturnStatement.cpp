@@ -28,6 +28,7 @@
 
 #include "VisualizationBase/src/items/Static.h"
 #include "VisualizationBase/src/items/VList.h"
+#include "VisualizationBase/src/declarative/GridLayoutElement.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -38,31 +39,29 @@ ITEM_COMMON_DEFINITIONS(VReturnStatement, "item")
 
 VReturnStatement::VReturnStatement(Item* parent, NodeType* node, const StyleType* style) :
 	Super(parent, node, style),
-	symbol_( new Static(layout(), &style->symbol() )),
-	values_( new VList(layout(), node->values()) )
+	symbol_( new Static(this, &style->symbol() )),
+	values_( new VList(this, node->values()) )
 {
-	layout()->append(symbol_);
-	layout()->append(values_);
 }
 
 VReturnStatement::~VReturnStatement()
 {
-	// These were automatically deleted by LayoutProvider's destructor
-	symbol_ = nullptr;
-	values_ = nullptr;
+	SAFE_DELETE_ITEM(symbol_);
+	SAFE_DELETE_ITEM(values_);
 }
 
-void VReturnStatement::determineChildren()
+void VReturnStatement::initializeForms()
 {
-	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
-	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
-	//			what's the reason they are being updated.
-	// The style needs to be updated every time since if our own style changes, so will that of the children.
-	layout()->setStyle( &style()->layout());
-	symbol_->setStyle( &style()->symbol());
-	values_->setStyle( &style()->values() );
-
-	layout()->synchronizeLast(values_, node()->values(), &style()->values());
+	// TODO: layout style is not needed anymore, remove it?
+	GridLayoutElement* element = new GridLayoutElement(2, 1);
+	element->setTopMargin(5);
+	element->setBottomMargin(5);
+	auto* symbol = item<Static, I>(&I::symbol_, [](I* v){return &v->style()->symbol();});
+	symbol->setRightMargin(5);
+	element->add(0, 0, symbol);
+	element->add(1, 0, item<VList,I>(&I::values_, [](I* v){return v->node()->values();},
+												[](I* v){return &v->style()->values();}));
+	addForm(element);
 }
 
 Visualization::Item* VReturnStatement::returnSymbol() const
