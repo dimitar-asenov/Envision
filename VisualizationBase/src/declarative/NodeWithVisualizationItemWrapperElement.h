@@ -35,21 +35,22 @@ template <class ParentType, class VisualizationType>
 class NodeWithVisualizationItemWrapperElement : public ItemWrapperElement<ParentType, VisualizationType> {
 	public:
 		using ChildItem = typename ItemWrapperElement<ParentType, VisualizationType>::ChildItem;
-		using ChildStyle = const typename VisualizationType::StyleType*;
+		using GetStyleTypeFunction = std::function<const typename VisualizationType::StyleType* (ParentType* v)>;
 		using GetNodeTypeFunction = std::function<typename VisualizationType::NodeType* (ParentType* v)>;
 
-		NodeWithVisualizationItemWrapperElement(ChildItem item, GetNodeTypeFunction nodeGetter, ChildStyle style);
+		NodeWithVisualizationItemWrapperElement(ChildItem item, GetNodeTypeFunction nodeGetter,
+																GetStyleTypeFunction styleGetter);
 		virtual void synchronizeWithItem(Item* item) override;
 
 	private:
 		GetNodeTypeFunction nodeGetter_;
-		ChildStyle style_;
+		GetStyleTypeFunction styleGetter_;
 };
 
 template <class ParentType, class VisualizationType>
 NodeWithVisualizationItemWrapperElement<ParentType, VisualizationType>::NodeWithVisualizationItemWrapperElement(
-		ChildItem item, GetNodeTypeFunction nodeGetter, ChildStyle style)
-: ItemWrapperElement<ParentType, VisualizationType>{item}, nodeGetter_{nodeGetter}, style_{style}
+		ChildItem item, GetNodeTypeFunction nodeGetter, GetStyleTypeFunction styleGetter)
+: ItemWrapperElement<ParentType, VisualizationType>{item}, nodeGetter_{nodeGetter}, styleGetter_{styleGetter}
 {}
 
 template <class ParentType, class VisualizationType>
@@ -57,6 +58,7 @@ void NodeWithVisualizationItemWrapperElement<ParentType, VisualizationType>::syn
 {
 	auto& childItem = (static_cast<ParentType*>(item))->*this->item();
 	auto node = nodeGetter_(static_cast<ParentType*>(item));
+	auto style = styleGetter_(static_cast<ParentType*>(item));
 
 	if (childItem && childItem->node() != node )
 	{
@@ -66,13 +68,13 @@ void NodeWithVisualizationItemWrapperElement<ParentType, VisualizationType>::syn
 
 	if (!childItem && node)
 	{
-		if (style_) childItem = new VisualizationType(item, node, style_);
+		if (style) childItem = new VisualizationType(item, node, style);
 		else childItem = new VisualizationType(item, node);
 
 		item->setUpdateNeeded(Item::StandardUpdate);
 	}
 
-	if(childItem) childItem->setStyle(style_);
+	if(childItem) childItem->setStyle(style);
 }
 
 } /* namespace Visualization */
