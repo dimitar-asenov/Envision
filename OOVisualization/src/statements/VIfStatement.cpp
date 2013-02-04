@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -57,7 +57,7 @@ VIfStatement::VIfStatement(Item* parent, NodeType* node, const StyleType* style)
 	conditionBackground_ =new SequentialLayout(header_, &style->condition());
 	header_->append(conditionBackground_);
 
-	content_ = new SequentialLayout(layout(), &style->content());
+	content_ = new SequentialLayout(layout(), &style->contentHorizontal());
 	layout()->setContent(content_);
 }
 
@@ -87,9 +87,24 @@ void VIfStatement::determineChildren()
 	header_->setStyle(&style()->header());
 	header_->at<Static>(0)->setStyle(&style()->icon());
 	conditionBackground_->setStyle( &style()->condition() );
-	content_->setStyle(&style()->content());
+
 	if (thenBranch_) thenBranch_->setStyle( &style()->thenBranch() );
 	if (elseBranch_) elseBranch_->setStyle( &style()->elseBranch() );
+	content_->setStyle( horizontal_ ? &style()->contentHorizontal() : &style()->contentVertical());
+}
+
+void VIfStatement::updateGeometry(int availableWidth, int availableHeight)
+{
+	int contentWidth = 0;
+	if (thenBranch_) contentWidth += thenBranch_->width();
+	if (elseBranch_) contentWidth += elseBranch_->width();
+	if( horizontal_ != (contentWidth <= style()->contentWidthSwitchTreshold()))
+	{
+		horizontal_ = !horizontal_;
+		setUpdateNeeded(RepeatUpdate);
+	}
+
+	BaseItemType::updateGeometry(availableWidth, availableHeight);
 }
 
 }

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -33,6 +33,7 @@
 
 #include "elements/VFormalArgument.h"
 
+#include "OOModel/src/expressions/LambdaExpression.h"
 #include "VisualizationBase/src/items/VText.h"
 
 using namespace Visualization;
@@ -65,7 +66,11 @@ void VFormalArgument::determineChildren()
 	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
 	//			what's the reason they are being updated.
 	// The style needs to be updated every time since if our own style changes, so will that of the children.
-	layout()->setStyle( &style()->layout() );
+	if (node()->parent() && node()->parent()->parent() && node()->parent()->parent()->typeId()
+			== OOModel::LambdaExpression::typeIdStatic())
+		layout()->setStyle( &style()->lambdaLayout() );
+	else
+		layout()->setStyle( &style()->layout() );
 	name_->setStyle( &style()->name());
 }
 

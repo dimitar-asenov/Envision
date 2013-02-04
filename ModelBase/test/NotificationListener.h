@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -34,7 +34,7 @@
 #ifndef NOTIFICATIONLISTENER_H_
 #define NOTIFICATIONLISTENER_H_
 
-#include "Model.h"
+#include "model/Model.h"
 #include "nodes/Node.h"
 
 namespace Model {

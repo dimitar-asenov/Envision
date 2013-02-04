@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -63,7 +63,8 @@ XMLModel::XMLModel(const QString& filename) :
 	if ( !doc.setContent(&file, &error, &line, &col) )
 	{
 		file.close();
-		throw FilePersistenceException("Reading of the XML structure of file " + file.fileName() + " failed." + error + " line: " + line + " col: " + col);
+		throw FilePersistenceException("Reading of the XML structure of file " + file.fileName() + " failed."
+				+ error + " line: " + QString::number(line) + " col: " + QString::number(col));
 	}
 	file.close();
 }
@@ -147,7 +148,8 @@ int XMLModel::loadIntValue() const
 	bool ok = true;
 
 	int res = elem.firstChild().nodeValue().mid(PREFIX_INTEGER.size()).toInt(&ok);
-	if ( !ok ) throw FilePersistenceException("Could read integer value " + elem.firstChild().nodeValue());
+	if ( !ok ) throw FilePersistenceException("Could not read integer value " + elem.firstChild().nodeValue()
+			+ " at line: " + QString::number( elem.lineNumber() ));
 
 	return res;
 }
@@ -162,7 +164,8 @@ double XMLModel::loadDoubleValue() const
 	bool ok = true;
 
 	double res = elem.firstChild().nodeValue().mid(PREFIX_DOUBLE.size()).toDouble(&ok);
-	if ( !ok ) throw FilePersistenceException("Could read real value " + elem.firstChild().nodeValue());
+	if ( !ok ) throw FilePersistenceException("Could read real value " + elem.firstChild().nodeValue()
+			+ " at line: " + QString::number( elem.lineNumber() ));
 
 	return res;
 }

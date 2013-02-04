@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -69,7 +69,6 @@ class VISUALIZATIONBASE_API MiniMap : public View
 		View *parent;
 		int margin;
 
-		QRectF sceneRect;
 		QRectF visibleRect;
 		QRect drawnRect;
 

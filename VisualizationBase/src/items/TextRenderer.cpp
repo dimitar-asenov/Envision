@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -44,13 +44,15 @@ namespace Visualization {
 ITEM_COMMON_DEFINITIONS(TextRenderer, "item")
 
 TextRenderer::TextRenderer(Item* parent, const StyleType *style, const QString& text) :
-	Item(parent, style), text_(text), editable(true)
+	Item(parent, style), staticText_(text), editable(true)
 {
+	staticText_.setPerformanceHint(QStaticText::AggressiveCaching);
+	staticText_.setTextFormat(Qt::PlainText);
 }
 
 bool TextRenderer::setText(const QString& newText)
 {
-	text_ = newText;
+	staticText_.setText( newText );
 	this->setUpdateNeeded(StandardUpdate);
 	return true;
 }
@@ -63,7 +65,7 @@ QString TextRenderer::selectedText()
 		int xstart = cur->selectionFirstIndex();
 		int xend = cur->selectionLastIndex();
 
-		return text_.mid(xstart, xend - xstart);
+		return staticText_.text().mid(xstart, xend - xstart);
 	}
 	else return QString();
 }
@@ -72,30 +74,42 @@ void TextRenderer::determineChildren()
 {
 }
 
-void TextRenderer::updateGeometry(int, int)
+inline QRectF TextRenderer::bound()
 {
-	text_ = currentText();
 	QFontMetrics qfm(style()->font());
+	return bound(qfm);
+}
 
+inline QRectF TextRenderer::bound(QFontMetrics& qfm)
+{
 	QRectF bound;
-	if (text_.isEmpty()) bound.setRect(0, 0, MIN_TEXT_WIDTH, qfm.height());
+
+	if (staticText_.text().isEmpty()) bound.setRect(0, 0, MIN_TEXT_WIDTH, qfm.height());
 	else
 	{
-		bound = qfm.boundingRect(text_);
-		if (bound.width() < qfm.width(text_)) bound.setWidth(qfm.width(text_));
+		bound = qfm.boundingRect(staticText_.text());
+		if (bound.width() < qfm.width(staticText_.text())) bound.setWidth(qfm.width(staticText_.text()));
 		if (bound.height() < qfm.height()) bound.setHeight(qfm.height());
 	}
+	return bound;
+}
 
+void TextRenderer::updateGeometry(int, int)
+{
+	staticText_.setText(currentText());
+
+	QFontMetrics qfm(style()->font());
+	auto bound = this->bound(qfm);
 	if (this->hasShape())
 	{
 		this->getShape()->setInnerSize(bound.width(), bound.height());
-		textXOffset_ = -bound.left() + this->getShape()->contentLeft();
-		textYOffset_ = -bound.top() + this->getShape()->contentTop();
+		textXOffset_ = this->getShape()->contentLeft();
+		textYOffset_ = this->getShape()->contentTop();
 	}
 	else
 	{
-		textXOffset_ = -bound.left();
-		textYOffset_ = -bound.top();
+		textXOffset_ = 0;
+		textYOffset_ = 0;
 		this->setSize(bound.size());
 	}
 
@@ -119,18 +133,24 @@ void TextRenderer::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 
 	if ( !this->hasFocus() /*|| numSelected > 1  || (numSelected == 1 && !this->isSelected())*/)
 	{
+		// In this common case use static text.
 		painter->setPen(style()->pen());
 		painter->setFont(style()->font());
-		painter->drawText(QPointF(textXOffset_, textYOffset_), text_);
+		painter->drawStaticText(QPointF(textXOffset_, textYOffset_), staticText_);
 	}
 	else
 	{
+		// In the selected case do not use static text.
+
 		TextCursor* cur = correspondingSceneCursor<TextCursor>();
 		if ( cur->hasSelection() )
 		{
 			// Some text is selected, draw it differently than non-selected text.
 			int start = cur->selectionFirstIndex();
 			int end = cur->selectionLastIndex();
+
+			QPointF offset(textXOffset_, textYOffset_);
+			offset -= bound().topLeft();
 
 			// Draw selection background
 			painter->setPen(Qt::NoPen);
@@ -141,25 +161,26 @@ void TextRenderer::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 			// Draw selected text
 			painter->setPen(style()->selectionPen());
 			painter->setFont(style()->selectionFont());
-			painter->drawText(QPointF(textXOffset_ + cur->xBegin(), textYOffset_), text_.mid(start, end - start));
+			painter->drawText(QPointF(offset.x() + cur->xBegin(), offset.y()),
+					staticText_.text().mid(start, end - start));
 
 			// Draw non-selected text
 			painter->setPen(style()->pen());
 			painter->setFont(style()->font());
-			painter->drawText(textXOffset_, textYOffset_, text_.left(start));
-			painter->drawText(QPointF(textXOffset_ + cur->xEnd(), textYOffset_), text_.mid(end));
+			painter->drawText(offset, staticText_.text().left(start));
+			painter->drawText(QPointF(offset.x() + cur->xEnd(), offset.y()), staticText_.text().mid(end));
 		}
 		else
 		{
 			// No text is selected, draw all text at once using normal style
 			painter->setPen(style()->pen());
 			painter->setFont(style()->font());
-			painter->drawText(QPointF(textXOffset_, textYOffset_), text_);
+			painter->drawStaticText(QPointF(textXOffset_, textYOffset_), staticText_);
 		}
 	}
 }
 
-bool TextRenderer::moveCursor(CursorMoveDirection dir, const QPoint& reference)
+bool TextRenderer::moveCursor(CursorMoveDirection dir, QPoint reference)
 {
 	if ( dir == MoveUpOf || dir == MoveDownOf || dir == MoveLeftOf || dir == MoveRightOf )
 	{
@@ -177,25 +198,28 @@ bool TextRenderer::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 		}
 		else return false;
 	}
-	else if (dir == MoveOnPosition)
+	else if (dir == MoveOnPosition || dir == MoveDefault)
 	{
 		setFocus();
 		TextCursor* tc = new TextCursor(this);
-		tc->setSelectedByDrag(reference.x(), reference.x());
+
+		if (dir == MoveDefault) tc->setCaretPosition(0);
+		else tc->setSelectedByDrag(reference.x(), reference.x());
+
 		scene()->setMainCursor(tc);
 		return true;
 	}
 	else if (dir == MoveLeft)
 	{
 		int position = correspondingSceneCursor<Visualization::TextCursor>()->caretPosition();
-		if ( text_.isEmpty() || position <= 0) return false;
+		if ( staticText_.text().isEmpty() || position <= 0) return false;
 		else correspondingSceneCursor<Visualization::TextCursor>()->setCaretPosition(position - 1);
 		return true;
 	}
 	else if (dir == MoveRight)
 	{
 		int position = correspondingSceneCursor<Visualization::TextCursor>()->caretPosition();
-		if ( text_.isEmpty() || position >= text_.size()) return false;
+		if ( staticText_.text().isEmpty() || position >= staticText_.text().size()) return false;
 		else correspondingSceneCursor<Visualization::TextCursor>()->setCaretPosition(position + 1);
 		return true;
 	}

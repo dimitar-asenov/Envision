@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -43,6 +43,14 @@ EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(BinaryOperation, Expression)
 REGISTER_ATTRIBUTE(BinaryOperation, left, Expression, false, false, true)
 REGISTER_ATTRIBUTE(BinaryOperation, right, Expression, false, false, true)
 REGISTER_ATTRIBUTE(BinaryOperation, opr, Integer, false, false, true)
+
+BinaryOperation::BinaryOperation(OperatorTypes op, Expression* left, Expression* right)
+: Expression (nullptr, BinaryOperation::getMetaData())
+{
+	setOp(op);
+	if (left) setLeft(left);
+	if (right) setRight(right);
+}
 
 Type* BinaryOperation::type()
 {

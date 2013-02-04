@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -67,11 +67,11 @@ CommandPrompt::CommandPrompt(Item* commandReceiver, const StyleType* style) :
 	suggestionContainer(new SequentialLayout(layout, &style->suggestionContainer())),
 	errorContainer(new SequentialLayout(layout, &style->errorContainer())),
 	command( new Text(layout, &style->commandText())),
-	result_(nullptr),
-	justCreated(true)
+	result_(nullptr)
 {
 	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(ItemIgnoresTransformations);
+	setZValue(LAYER_COMMAND);
 	setItemCategory(Scene::MenuItemCategory);
 
 	command->setEditable(true);
@@ -80,11 +80,18 @@ CommandPrompt::CommandPrompt(Item* commandReceiver, const StyleType* style) :
 	layout->append(errorContainer);
 	layout->append(suggestionContainer);
 
-	updateGeometry(0,0);
+	commandReceiver->scene()->addTopLevelItem(this);
+
+	command->setText("Type a command");
+	saveReceiverCursorPosition();
+	setPromptPosition();
+	command->moveCursor();
+	command->correspondingSceneCursor<Visualization::TextCursor>()->selectAll();
 }
 
 CommandPrompt::~CommandPrompt()
 {
+	if(scene()) scene()->removeTopLevelItem(this);
 	commandReceiver_ = nullptr; // This item is completely out of our control, we just know about it.
 
 	removeResult();
@@ -98,24 +105,19 @@ CommandPrompt::~CommandPrompt()
 	errorContainer = nullptr;
 }
 
-void CommandPrompt::initializeCommand()
-{
-	command->setText("Type a command");
-	acquireCursor();
-	command->correspondingSceneCursor<Visualization::TextCursor>()->selectAll();
-}
-
 void CommandPrompt::takeSuggestion(CommandSuggestion* suggestion)
 {
 	command->setText(suggestion->suggestion());
-	acquireCursor();
+	command->moveCursor();
 	command->correspondingSceneCursor<Visualization::TextCursor>()->setCaretPosition(suggestion->suggestion().size());
 }
 
 void CommandPrompt::showPrompt()
 {
+	saveReceiverCursorPosition();
+	setPromptPosition();
 	show();
-	acquireCursor();
+	command->moveCursor();
 	command->correspondingSceneCursor<Visualization::TextCursor>()
 			->setSelectedCharacters(commandSelectedFirst, commandSelectedLast);
 }
@@ -125,8 +127,7 @@ void CommandPrompt::hidePrompt()
 	commandSelectedFirst = command->correspondingSceneCursor<Visualization::TextCursor>()->selectionFirstIndex();
 	commandSelectedLast = command->correspondingSceneCursor<Visualization::TextCursor>()->selectionLastIndex();
 	hide();
-	commandReceiver()->moveCursor(Visualization::Item::MoveOnPosition,
-			commandReceiver()->mapFromScene(receiverCursorPosition).toPoint());
+	commandReceiver()->moveCursor(Visualization::Item::MoveOnPosition, receiverCursorPosition);
 }
 
 void CommandPrompt::determineChildren()
@@ -143,43 +144,6 @@ void CommandPrompt::determineChildren()
 void CommandPrompt::updateGeometry(int availableWidth, int availableHeight)
 {
 	Item::updateGeometry(layout, availableWidth, availableHeight);
-
-	// Set the position of the prompt
-	if (justCreated)
-	{
-		QPointF promptPos;
-
-		if (commandReceiver_ == commandReceiver_->scene()->sceneHandlerItem())
-		{
-			for(auto v : commandReceiver_->scene()->views())
-			{
-				if (v->isActiveWindow())
-				{
-					promptPos = v->mapToScene(v->viewport()->rect().center());
-					promptPos -=QPointF(width()/2, height()/2);
-					break;
-				}
-			}
-		}
-		else
-		{
-			promptPos = commandReceiver_->mapToScene(0,0);
-			if (commandReceiver_->height() < COMMAND_RECEIVER_ITEM_MIN_PROMPT_CENTER_HEIGHT)
-			{
-				// Show the prompt under the receiver item.
-				promptPos.setY( promptPos.y() + commandReceiver_->height() + PROMPT_TO_RECEIVER_DISTANCE);
-			}
-			else
-			{
-				// Show the prompt at the center of the receiver item.
-				promptPos.setX( (commandReceiver_->width()-width()) / 2 );
-				promptPos.setY( (commandReceiver_->height()-height()) / 2 );
-			}
-		}
-
-		setPos(promptPos);
-		justCreated = false;
-	}
 }
 
 void CommandPrompt::setResult(CommandResult* result)
@@ -284,19 +248,29 @@ void CommandPrompt::removeSuggestions()
 	setUpdateNeeded(Visualization::Item::StandardUpdate);
 }
 
-void CommandPrompt::acquireCursor()
+void CommandPrompt::saveReceiverCursorPosition()
 {
 	// Save the current cursor
+	receiverCursorPosition = QPoint(0,0);
 	if (commandReceiver_->scene()->mainCursor()->owner() == commandReceiver_)
-	{
 		receiverCursorPosition = commandReceiver_->scene()->mainCursor()->position();
+}
+
+void CommandPrompt::setPromptPosition()
+{
+	QPointF promptPos = commandReceiver_->mapToScene(0,0);
+	if (commandReceiver_->height() < COMMAND_RECEIVER_ITEM_MIN_PROMPT_CENTER_HEIGHT)
+	{
+		// Show the prompt under the receiver item.
+		promptPos.setY( promptPos.y() + commandReceiver_->height() + PROMPT_TO_RECEIVER_DISTANCE);
 	}
 	else
 	{
-		receiverCursorPosition = commandReceiver_->scenePos().toPoint();
+		// If the item is rather large show the prompt at the cursor
+		promptPos += receiverCursorPosition;
 	}
 
-	command->moveCursor(Visualization::Item::MoveOnPosition, QPoint(0,0));
+	setPos(promptPos);
 }
 
 }

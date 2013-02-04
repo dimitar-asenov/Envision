@@ -23,19 +23,19 @@
 		<alignment>1</alignment>
 		<spaceBetweenElements>1</spaceBetweenElements>
 		<noInnerCursors>true</noInnerCursors>
-		<noBoundaryCursors>true</noBoundaryCursors>
+		<noBoundaryCursorsInsideShape>true</noBoundaryCursorsInsideShape>
 	</layout>
 	<suggestionContainer prototypes="layout/SequentialLayout/default">
 		<direction>2</direction>
 		<alignment>1</alignment>
 		<noInnerCursors>true</noInnerCursors>
-		<noBoundaryCursors>true</noBoundaryCursors>
+		<noBoundaryCursorsInsideShape>true</noBoundaryCursorsInsideShape>
 	</suggestionContainer>
 	<errorContainer prototypes="layout/SequentialLayout/default">
 		<direction>2</direction>
 		<alignment>1</alignment>
 		<noInnerCursors>true</noInnerCursors>
-		<noBoundaryCursors>true</noBoundaryCursors>
+		<noBoundaryCursorsInsideShape>true</noBoundaryCursorsInsideShape>
 	</errorContainer>
 	<commandText prototypes="item/Text/default" />
 	<defaultSuggestion prototypes="item/TextAndDescription/default">

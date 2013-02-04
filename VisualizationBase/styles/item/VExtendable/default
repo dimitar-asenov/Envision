@@ -1,6 +1,6 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/Item/default">
-	<expanded>false</expanded>
+	<expanded>true</expanded>
 	<borderStyle prototypes="layout/PanelBorderLayout/default" />
 	<headerStyle prototypes="layout/SequentialLayout/default">
 		<shape prototypes="shape/Box/default">

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -57,6 +57,8 @@ class OOVISUALIZATION_API VReturnStatement
 	public:
 		VReturnStatement(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VReturnStatement();
+
+		Visualization::Item* returnSymbol() const;
 
 	protected:
 		void determineChildren();

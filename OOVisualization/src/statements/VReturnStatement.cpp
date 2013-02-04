@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -70,6 +70,11 @@ void VReturnStatement::determineChildren()
 	values_->setStyle( &style()->values() );
 
 	layout()->synchronizeLast(values_, node()->values(), &style()->values());
+}
+
+Visualization::Item* VReturnStatement::returnSymbol() const
+{
+	return symbol_->item();
 }
 
 }

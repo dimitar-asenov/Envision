@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -36,6 +36,13 @@
 #include "DefaultEnvisionManager.h"
 #include "TestRunner.h"
 
+// Enable core dumps of debug builds on Linux
+#ifdef Q_OS_LINUX
+#ifdef DEBUG
+#include <sys/resource.h>
+#endif
+#endif
+
 using namespace Core;
 
 /**
@@ -44,37 +51,50 @@ using namespace Core;
  */
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+	QApplication a(argc, argv);
 
-    EnvisionWindow w;
-    w.show();
+	// Enable core dumps of debug builds on Linux
+#ifdef Q_OS_LINUX
+#ifdef DEBUG
+	struct rlimit core_limit;
+	core_limit.rlim_cur = RLIM_INFINITY;
+	core_limit.rlim_max = RLIM_INFINITY;
 
-    TestRunner testr;
+	if(setrlimit(RLIMIT_CORE, &core_limit) < 0)
+		qDebug() << "Error while enabling core dumps:" << strerror(errno);
+	else QFile::remove("./core");
+#endif
+#endif
 
-    int retCode = 0;
-    try
-    {
-   	 PluginManager pm;
-   	 DefaultEnvisionManager manager;
+	EnvisionWindow w;
+	w.show();
 
-   	 // Give the Envision manager all the information it needs to operate properly.
-   	 manager.setPluginManager(&pm);
-   	 manager.setMainWindow(&w);
+	TestRunner testr;
 
-   	 pm.loadAllPlugins(manager);
+	int retCode = 0;
+	try
+	{
+		PluginManager pm;
+		DefaultEnvisionManager manager;
 
-   	 testr.enqueueSelfTests(pm);
+		// Give the Envision manager all the information it needs to operate properly.
+		manager.setPluginManager(&pm);
+		manager.setMainWindow(&w);
 
-   	 QTextStream out(stdout);
-   	 out << "==============================" << endl;
+		pm.loadAllPlugins(manager);
 
-   	 retCode = a.exec();
-    }
-    catch (EnvisionException &e)
-    {
-   	 e.printError();
-   	 retCode = 1;
-    }
+		testr.enqueueSelfTests(pm);
 
-    return retCode;
+		QTextStream out(stdout);
+		out << "==============================" << endl;
+
+		retCode = a.exec();
+	}
+	catch (EnvisionException &e)
+	{
+		e.printError();
+		retCode = 1;
+	}
+
+	return retCode;
 }

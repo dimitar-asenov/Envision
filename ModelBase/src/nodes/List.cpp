@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -159,36 +159,36 @@ void List::insert(int position, Node* node)
 	execute(new ListInsert(this, nodes_, node, position));
 }
 
-void List::remove(int index, bool release )
+void List::remove(int index)
 {
 	if (!fullyLoaded) loadFully(* (model()->store()));
 
-	execute(new ListRemove(this, nodes_, index, release));
+	execute(new ListRemove(this, nodes_, index));
 }
 
-void List::remove(Node* instance, bool release )
+void List::remove(Node* instance )
 {
 	if (!fullyLoaded) loadFully(* (model()->store()));
 
 	int index = nodes_.indexOf(instance);
-	if ( index >= 0 ) remove(index, release);
+	if ( index >= 0 ) remove(index);
 }
 
 void List::clear()
 {
 	if (!fullyLoaded) loadFully(* (model()->store()));
 
-	while (!nodes_.isEmpty()) remove(0, false);
+	while (!nodes_.isEmpty()) remove(0);
 }
 
-bool List::replaceChild(Node* child, Node* replacement, bool releaseOldChild)
+bool List::replaceChild(Node* child, Node* replacement)
 {
 	if (!child || !replacement) return false;
 
 	int index = indexOf(child);
 	if (index < 0) return false;
 
-	remove(index, releaseOldChild);
+	remove(index);
 	insert(index, replacement);
 	return true;
 }

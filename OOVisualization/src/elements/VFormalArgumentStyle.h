@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -45,16 +45,19 @@ class OOVISUALIZATION_API VFormalArgumentStyle : public Visualization::ItemStyle
 {
 	private:
 		Visualization::SequentialLayoutStyle layout_;
+		Visualization::SequentialLayoutStyle lambdaLayout_;
 		Visualization::TextStyle name_;
 
 	public:
 		void load(Visualization::StyleLoader& sl);
 
 		const Visualization::SequentialLayoutStyle& layout() const;
+		const Visualization::SequentialLayoutStyle& lambdaLayout() const;
 		const Visualization::TextStyle& name() const;
 };
 
 inline const Visualization::SequentialLayoutStyle& VFormalArgumentStyle::layout() const { return layout_; }
+inline const Visualization::SequentialLayoutStyle& VFormalArgumentStyle::lambdaLayout() const { return lambdaLayout_; }
 inline const Visualization::TextStyle& VFormalArgumentStyle::name() const { return name_; }
 
 }

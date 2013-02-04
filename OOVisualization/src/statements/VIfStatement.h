@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -68,14 +68,17 @@ class OOVISUALIZATION_API VIfStatement
 		Visualization::SequentialLayout* content() const;
 		VStatementItemList* thenBranch() const;
 		VStatementItemList* elseBranch() const;
+		Item* icon() const;
 
 	protected:
-		void determineChildren();
+		virtual void determineChildren() override;
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
 		typedef Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
 				  OOModel::IfStatement> BaseItemType;
 
+		bool horizontal_{};
 		Visualization::SequentialLayout* header_;
 		Visualization::SequentialLayout* conditionBackground_;
 		Visualization::Item* condition_;
@@ -90,6 +93,7 @@ inline Visualization::Item* VIfStatement::condition() const { return condition_;
 inline Visualization::SequentialLayout* VIfStatement::content() const { return content_; }
 inline VStatementItemList* VIfStatement::thenBranch() const { return thenBranch_; }
 inline VStatementItemList* VIfStatement::elseBranch() const { return elseBranch_; }
+inline Visualization::Item* VIfStatement::icon() const {return header_->at<Visualization::Item>(0);}
 
 }
 

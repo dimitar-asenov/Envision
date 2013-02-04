@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -35,7 +35,7 @@
 #include "shapes/Shape.h"
 #include "../renderer/ModelRenderer.h"
 
-#include "ModelBase/src/Model.h"
+#include "ModelBase/src/model/Model.h"
 
 namespace Visualization {
 
@@ -139,9 +139,23 @@ void PositionLayout::swap(int i, int j)
 
 void PositionLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes, ModelRenderer* renderer)
 {
+	allNodesLackPositionInfo = items.isEmpty();
+
 	// Inserts elements that are not yet visualized and adjusts the order to match that in 'nodes'.
 	for (int i = 0; i < nodes.size(); ++i)
 	{
+		// Check if node has position info
+		Model::ExtendableNode* extNode = dynamic_cast<Model::ExtendableNode*> (nodes[i]);
+		if (extNode)
+		{
+			Position* pos = extNode->extension<Position>();
+			if (pos)
+			{
+				if (pos->xNode() || pos->yNode())
+					allNodesLackPositionInfo = false;
+			}
+		}
+
 		if (i >= items.size() ) insert( renderer->render(this, nodes[i]));	// This node is new
 		else if ( items[i]->node() == nodes[i] ) continue;	// This node is already there
 		else
@@ -172,7 +186,7 @@ void PositionLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes, Mode
 	while (items.size() > nodes.size()) remove(items.size()-1);
 }
 
-inline int PositionLayout::toGrid(const int& pos) const
+int PositionLayout::toGrid(const int& pos) const
 {
 	int mod = (pos >=0) ? ( pos % style()->gridSize() ) : ( (-pos) % style()->gridSize() );
 	int add = (pos >=0) ? ( style()->gridSize() - mod) : mod;
@@ -189,19 +203,100 @@ bool PositionLayout::isEmpty() const
 
 void PositionLayout::updateGeometry(int, int)
 {
+	// Arrange items if they were all missing positions.
+	if (allNodesLackPositionInfo && !items.isEmpty())
+	{
+		// Get averages
+		double averageWidth = 0;
+		double averageHeight = 0;
+		for(auto i : items)
+		{
+			averageWidth += i->width();
+			averageHeight += i->height();
+		}
+		averageWidth /= items.size();
+		averageHeight /= items.size();
+
+		// Get 'optimal' number of rows to achieve a square
+		double prevRatio = 0;
+		int rows = 1;
+		for (rows = 1; rows<items.size(); ++rows)
+		{
+			int cols = (items.size()/rows) + ((items.size()%rows)?1:0);
+			double ratio = (averageWidth*cols) / (averageHeight*rows);
+
+			if (ratio > 1) ratio = 1/ratio;
+
+			if (ratio > prevRatio)
+			{
+				prevRatio = ratio;
+			}
+			else
+			{
+				if (rows > 1) --rows;
+				break;
+			}
+		}
+
+		int heightLimit = rows*averageHeight;
+
+		//Compute the columns and set the positions
+		int lastBottom = 0;
+		int lastRight = 0;
+		int colWidth = 0;
+
+		auto model = items[0]->node()->model();
+		model->beginModification(items[0]->node(), "Automatically set position");
+		// It is important to batch the modifications, since model::endModification() send a notification signal.
+
+		for(int i = 0; i<items.size(); ++i)
+		{
+			int x = lastRight;
+			int y = lastBottom;
+
+			if (lastBottom == 0 || (lastBottom + items[i]->height() <= heightLimit))
+			{
+				lastBottom += 10 + items[i]->height();
+				lastBottom = toGrid(lastBottom);
+
+				if (items[i]->width() > colWidth) colWidth =  items[i]->width();
+			}
+			else
+			{
+				y = 0;
+				lastBottom = 10 + items[i]->height();
+
+				lastRight += 10 + colWidth;
+				lastRight = toGrid(lastRight);
+				x = lastRight;
+				colWidth = items[i]->width();
+			}
+
+			model->changeModificationTarget(items[i]->node());
+			positions[i]->setX(x);
+			positions[i]->setY(y);
+		}
+
+		model->endModification();
+		allNodesLackPositionInfo = false;
+	}
+
 	QPoint topLeft;
 	QPoint bottomRight;
 
 	for(int i = 0; i<items.size(); ++i)
 	{
-		if (i==0 || topLeft.x() > toGrid(positions[i]->x()) )
-			topLeft.setX( toGrid(positions[i]->x()) );
-		if (i==0 || topLeft.y() > toGrid(positions[i]->y()) )
-			topLeft.setY( toGrid(positions[i]->y()) );
-		if (i==0 || bottomRight.x() < toGrid(positions[i]->x()) + items[i]->width()  )
-			bottomRight.setX( toGrid(positions[i]->x()) + items[i]->width() );
-		if (i==0 || bottomRight.y() < toGrid(positions[i]->y()) + items[i]->height() )
-			bottomRight.setY( toGrid(positions[i]->y()) + items[i]->height() );
+		int x = positions[i]->xNode() ? toGrid(positions[i]->x()) : 0;
+		int y = positions[i]->yNode() ? toGrid(positions[i]->y()) : 0;
+
+		if (i==0 || topLeft.x() > x )
+			topLeft.setX( x );
+		if (i==0 || topLeft.y() > y )
+			topLeft.setY( y );
+		if (i==0 || bottomRight.x() < x + items[i]->width()  )
+			bottomRight.setX( x + items[i]->width() );
+		if (i==0 || bottomRight.y() < y + items[i]->height() )
+			bottomRight.setY( y + items[i]->height() );
 	}
 
 	int sizeWidth = bottomRight.x() - topLeft.x() + style()->leftInnerMargin() + style()->rightInnerMargin();
@@ -209,8 +304,12 @@ void PositionLayout::updateGeometry(int, int)
 	setInnerSize(sizeWidth, sizeHeight);
 
 	for (int i =0; i<items.size(); ++i)
-		items[i]->setPos( xOffset() + style()->leftInnerMargin() + toGrid(positions[i]->x()) - topLeft.x(),
-								yOffset() + style()->topInnerMargin() + toGrid(positions[i]->y()) - topLeft.y());
+	{
+		int x = positions[i]->xNode() ? toGrid(positions[i]->x()) : 0;
+		int y = positions[i]->yNode() ? toGrid(positions[i]->y()) : 0;
+		items[i]->setPos( xOffset() + style()->leftInnerMargin() + x - topLeft.x(),
+								yOffset() + style()->topInnerMargin() + y - topLeft.y());
+	}
 }
 
 int PositionLayout::focusedElementIndex() const

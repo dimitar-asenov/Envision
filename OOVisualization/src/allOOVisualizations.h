@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -57,6 +57,8 @@
 #include "expressions/VCommaExpression.h"
 #include "expressions/VVariableDeclaration.h"
 #include "expressions/VConditionalExpression.h"
+#include "expressions/VThrowExpression.h"
+#include "expressions/VLambdaExpression.h"
 
 #include "expressions/VEmptyExpression.h"
 #include "expressions/VErrorExpression.h"
@@ -77,9 +79,13 @@
 #include "statements/VBreakStatement.h"
 #include "statements/VContinueStatement.h"
 #include "statements/VExpressionStatement.h"
+#include "statements/VTryCatchFinally.h"
+#include "statements/VCatchClause.h"
 
 #include "types/VClassType.h"
 #include "types/VPrimitiveType.h"
 #include "types/VArrayType.h"
+
+#include "alternative/VKeywordMethodCall.h"
 
 #endif /* ALLOOVISUALIZATIONS_H_ */

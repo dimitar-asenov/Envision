@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -50,14 +50,15 @@ QPainterPath ControlFlowItem::connector(const QList< QPoint >& points, bool arro
 	QPainterPath path;
 
 	// Draw Linear path
-	if (!points.isEmpty() > 0) path.moveTo(points.at(0));
+	if (!points.isEmpty() ) path.moveTo(points.at(0));
 	for(int i = 1; i<points.size(); ++i) path.lineTo(points.at(i));
 
 	// Draw arrow if specified
-	if (arrowEnding && points.size() >= 2)
+	int sizeMinusTwo = points.size() - 2; // This is used in order to avoid a GCC warning about overflow
+	if (arrowEnding && sizeMinusTwo >= 0)
 	{
 		QPoint last = points.last();
-		QPoint prev = points.at( points.length()-2 );
+		QPoint prev = points.at( sizeMinusTwo );
 
 		if (last.y() == prev.y())
 		{
@@ -157,6 +158,7 @@ void ControlFlowItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 	}
 
 	painter->setPen( style()->pin());
+	painter->setBrush(Qt::NoBrush);
 	painter->translate( xOffset + style()->pin().width()/2.0, yOffset + style()->pin().width()/2.0);
 
 	for(int i = 0; i < connectors_.size(); ++i)

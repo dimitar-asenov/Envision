@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -71,6 +71,7 @@ class OOVISUALIZATION_API VLoopStatement
 		Visualization::Item* initStep() const;
 		Visualization::Item* updateStep() const;
 		VStatementItemList* body() const;
+		Visualization::Item* icon() const;
 
 	protected:
 		virtual void determineChildren();
@@ -101,6 +102,7 @@ inline Visualization::Item* VLoopStatement::condition() const { return condition
 inline Visualization::Item* VLoopStatement::initStep() const { return initStep_; }
 inline Visualization::Item* VLoopStatement::updateStep() const { return updateStep_; }
 inline VStatementItemList* VLoopStatement::body() const { return body_; }
+inline Visualization::Item* VLoopStatement::icon() const {return header_->at<Visualization::Item>(0);}
 
 }
 

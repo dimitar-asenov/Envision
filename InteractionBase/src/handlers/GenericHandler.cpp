@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -33,13 +33,17 @@
 
 #include "handlers/GenericHandler.h"
 
+#include "HList.h"
 #include "../autocomplete/AutoComplete.h"
 #include "commands/CommandExecutionEngine.h"
 #include "vis/CommandPrompt.h"
+#include "actions/Action.h"
+#include "actions/ActionPrompt.h"
 
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/renderer/ModelRenderer.h"
 #include "VisualizationBase/src/cursor/Cursor.h"
+#include "VisualizationBase/src/items/VList.h"
 #include "FilePersistence/src/SystemClipboard.h"
 #include "ModelBase/src/nodes/List.h"
 #include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
@@ -47,7 +51,8 @@
 namespace Interaction {
 
 CommandExecutionEngine* GenericHandler::executionEngine_ = CommandExecutionEngine::instance();
-CommandPrompt* GenericHandler::prompt_ = nullptr;
+CommandPrompt* GenericHandler::commandPrompt_{};
+ActionPrompt* GenericHandler::actionPrompt_{};
 
 QPoint GenericHandler::cursorOriginMidPoint_;
 GenericHandler::CursorMoveOrientation GenericHandler::cursorMoveOrientation_ = NoOrientation;
@@ -78,29 +83,26 @@ void GenericHandler::resetCursorOrigin()
 	cursorMoveOrientation_ = NoOrientation;
 }
 
-CommandPrompt* GenericHandler::prompt()
+CommandPrompt* GenericHandler::commandPrompt()
 {
-	return prompt_;
+	return commandPrompt_;
 }
 
 void GenericHandler::removeCommandPrompt()
 {
-	if (prompt_) prompt_->scene()->removeTopLevelItem(prompt_);
-	SAFE_DELETE_ITEM(prompt_);
+	SAFE_DELETE_ITEM(commandPrompt_);
 }
 
 void GenericHandler::showCommandPrompt(Visualization::Item* commandReceiver)
 {
-	if (prompt_ && prompt_->commandReceiver() == commandReceiver)
+	if (commandPrompt_ && commandPrompt_->commandReceiver() == commandReceiver)
 	{
-		prompt_->showPrompt();
+		commandPrompt_->showPrompt();
 	}
 	else
 	{
 		removeCommandPrompt();
-		prompt_ = new CommandPrompt(commandReceiver);
-		commandReceiver->scene()->addTopLevelItem(prompt_);
-		prompt_->initializeCommand();
+		commandPrompt_ = new CommandPrompt(commandReceiver);
 	}
 }
 
@@ -133,7 +135,8 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 			if (item->hasNode()) nodesToCopy.append(item->node());
 		}
 
-		// In case there is exactly one selected item that is not a model item try to find the first parent that it has which is a model item.
+		// In case there is exactly one selected item that is not a model item try to find the first parent that it has
+		// which is a model item.
 		if (nodesToCopy.size() == 0 && selected.size() == 1)
 		{
 			Visualization::Item* item = static_cast<Visualization::Item*> (selected.at(0));
@@ -224,31 +227,57 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 					|| event->key() == Qt::Key_Left
 					|| event->key() == Qt::Key_Right))
 	{
-		bool oldNotLocationEquivalent;
-		Visualization::Cursor::CursorType oldType;
-		bool oldBoundary;
-		Visualization::Item* oldOwner;
-		Visualization::Item* t = target;
-		do
+		// Only initiate the movement procedure if the target is the cursor owner
+		if (!target->scene()->mainCursor() || target != target->scene()->mainCursor()->owner())
+			InteractionHandler::keyPressEvent(target, event);
+		else
 		{
-			oldNotLocationEquivalent = t->scene()->mainCursor()->notLocationEquivalent();
-			oldType = t->scene()->mainCursor()->type();
-			oldBoundary = t->scene()->mainCursor()->isAtBoundary();
-			oldOwner = t->scene()->mainCursor()->owner();
-			moveCursor(t, event->key());
-			t = t->scene()->mainCursor()->owner();
-		} while
-			(t->scene()->mainCursor()->isLocationEquivalent(oldNotLocationEquivalent, oldType, oldBoundary, oldOwner));
+			bool oldNotLocationEquivalent;
+			Visualization::Cursor::CursorType oldType;
+			bool oldBoundary;
+			Visualization::Item* oldOwner;
+			Visualization::Item* t = target;
+			bool moved = false;
+			do
+			{
+				oldNotLocationEquivalent = t->scene()->mainCursor()->notLocationEquivalent();
+				oldType = t->scene()->mainCursor()->type();
+				oldBoundary = t->scene()->mainCursor()->isAtBoundary();
+				oldOwner = t->scene()->mainCursor()->owner();
+				moved = moveCursor(t, event->key()) || moved;
+				t = t->scene()->mainCursor()->owner();
+			} while
+				(t->scene()->mainCursor()->isLocationEquivalent(oldNotLocationEquivalent, oldType, oldBoundary, oldOwner));
 
-		event->accept();
+			// If the arrow key did not result in a movement, let the handlers of parent items try and process the key
+			// press.
+			if(!moved) InteractionHandler::keyPressEvent(target, event);
+		}
+	}
+	else if (event->key() == Qt::Key_Escape && AutoComplete::isVisible())
+	{
+		AutoComplete::hide();
+	}
+	else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Escape
+			&& !(actionPrompt_ && actionPrompt_->isVisible())
+			&& !(commandPrompt_ && (commandPrompt_ == target || commandPrompt_->isAncestorOf(target))) )
+	{
+		// Only show the command prompt if this event was not received within it.
+		showCommandPrompt(target);
+	}
+	else if (event->modifiers() == Qt::ShiftModifier && event->key() == Qt::Key_Escape && target->node()
+			&& !(commandPrompt_ && commandPrompt_->isVisible()))
+	{
+		// Only show the action prompt if none of the other "menu items" are visible
+		showActionPrompt(target, true);
 	}
 	else InteractionHandler::keyPressEvent(target, event);
 }
 
-void GenericHandler::moveCursor(Visualization::Item *target, int key)
+bool GenericHandler::moveCursor(Visualization::Item *target, int key)
 {
 	bool processed = false;
-	Visualization::Item::CursorMoveDirection dir;
+	Visualization::Item::CursorMoveDirection dir{};
 
 	// Set the source navigation point when beginning to navigate in a new direction
 	if (	(key == Qt::Key_Up || key == Qt::Key_Down)
@@ -256,14 +285,14 @@ void GenericHandler::moveCursor(Visualization::Item *target, int key)
 	{
 		cursorMoveOrientation_ = VerticalOrientation;
 		Visualization::Cursor* c = target->scene()->mainCursor();
-		if (c) cursorOriginMidPoint_ = c->region().center();
+		if (c) cursorOriginMidPoint_ = c->sceneRegion().center();
 	}
 	if (	(key == Qt::Key_Left || key == Qt::Key_Right)
 			&& cursorMoveOrientation_ != HorizontalOrientation)
 	{
 		cursorMoveOrientation_ = HorizontalOrientation;
 		Visualization::Cursor* c = target->scene()->mainCursor();
-		if (c) cursorOriginMidPoint_ = c->region().center();
+		if (c) cursorOriginMidPoint_ = c->sceneRegion().center();
 	}
 
 	QPoint midpoint = target->mapFromScene(cursorOriginMidPoint_).toPoint();
@@ -340,20 +369,8 @@ void GenericHandler::moveCursor(Visualization::Item *target, int key)
 			current = parent;
 		}
 	}
-}
 
-void GenericHandler::keyReleaseEvent(Visualization::Item *target, QKeyEvent *event)
-{
-	if (event->key() == Qt::Key_Escape && AutoComplete::isVisible())
-	{
-		AutoComplete::hide();
-	}
-	else if (event->key() == Qt::Key_Escape && !(prompt_ && prompt_->isAncestorOf(target)) )
-	{
-		// Only show the command prompt if this event was not received within it.
-		showCommandPrompt(target);
-	}
-	else InteractionHandler::keyReleaseEvent(target, event);
+	return processed;
 }
 
 void GenericHandler::mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
@@ -366,8 +383,14 @@ void GenericHandler::mousePressEvent(Visualization::Item *target, QGraphicsScene
 		return;
 	}
 
-	if (event->button() == Qt::LeftButton && event->modifiers() == Qt::NoModifier)
+	if (event->modifiers() == Qt::NoModifier)
 		target->moveCursor(Visualization::Item::MoveOnPosition, event->pos().toPoint());
+
+	if (event->button() == Qt::RightButton)
+	{
+		showCommandPrompt(target);
+		return;
+	}
 
 	InteractionHandler::mousePressEvent(target, event);
 }
@@ -478,6 +501,61 @@ void GenericHandler::arrangeNodesForClipboard(QList<const Model::Node*>& list)
 			for (int i = list.size() - 1; i > 0; --i)
 				for (int k = 0; k < i; ++k)
 					if (parent->indexOf(list[k]) > parent->indexOf(list[k+1])) list.swap(k, k+1);
+		}
+	}
+}
+
+bool GenericHandler::removeFromList(Visualization::Item* target)
+{
+	Visualization::VList* list = nullptr;
+	auto p = target->parent();
+	while(p)
+	{
+		list = dynamic_cast<Visualization::VList* >(p);
+		if (list) break;
+		else p = p->parent();
+	}
+
+	auto index = list->node()->indexOf(target->node());
+	if (list && index >= 0)
+	{
+		Interaction::HList::instance()->removeAndSetCursor(list, index);
+		return true;
+	}
+	return false;
+}
+
+ActionPrompt* GenericHandler::actionPrompt()
+{
+	return actionPrompt_;
+}
+
+void GenericHandler::removeActionPrompt()
+{
+	SAFE_DELETE_ITEM(actionPrompt_);
+}
+
+void GenericHandler::showActionPrompt(Visualization::Item *actionRecevier, bool autoExecuteAction)
+{
+	if (actionPrompt_ && actionPrompt_->originalActionReceiver() == actionRecevier)
+	{
+		actionPrompt_->showPrompt();
+	}
+	else
+	{
+		removeActionPrompt();
+		actionPrompt_ = new ActionPrompt(actionRecevier, autoExecuteAction);
+	}
+}
+
+void GenericHandler::action(Visualization::Item *target, const QString& action)
+{
+	for(auto a : Action::actions(target->node()))
+	{
+		if (a->shortcut() == action)
+		{
+			a->execute(target);
+			break;
 		}
 	}
 }

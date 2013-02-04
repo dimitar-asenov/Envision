@@ -23,7 +23,7 @@
 		<alignment>1</alignment>
 		<spaceBetweenElements>1</spaceBetweenElements>
 		<noInnerCursors>true</noInnerCursors>
-		<noBoundaryCursors>true</noBoundaryCursors>
+		<noBoundaryCursorsInsideShape>true</noBoundaryCursorsInsideShape>
 	</layout>
 	<noProposals prototypes="item/Symbol/default">
 		<pen>t

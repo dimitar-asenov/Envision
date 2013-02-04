@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -36,6 +36,7 @@
 
 #include "../visualizationbase_api.h"
 
+#include "../items/Mipmap.h"
 #include "ShapeStyle.h"
 
 namespace Visualization {
@@ -43,7 +44,20 @@ namespace Visualization {
 class VISUALIZATIONBASE_API BoxStyle : public ShapeStyle
 {
 	public:
-		typedef enum {RightAngleCorner, RoundCorner, CutCorner} CornerType;
+		enum class CornerType : int {RightAngle, Round, Cut} ;
+
+		virtual void load(StyleLoader& sl);
+
+		const QBrush& background() const;
+
+		CornerType corner() const;
+		int cornerRadius() const;
+
+		const QBrush& shadow() const;
+		int xShadowOffset() const;
+		int yShadowOffset() const;
+
+		void paint(QPainter* painter, int xOffset, int yOffset, int contentBoxWidth, int contentBoxHeight) const;
 
 	protected:
 		QBrush background_;
@@ -55,17 +69,18 @@ class VISUALIZATIONBASE_API BoxStyle : public ShapeStyle
 		int xShadowOffset_;
 		int yShadowOffset_;
 
-	public:
-		virtual void load(StyleLoader& sl);
+		mutable Mipmap topLeftCorner_;
+		mutable Mipmap topRightCorner_;
+		mutable Mipmap bottomLeftCorner_;
+		mutable Mipmap bottomRightCorner_;
 
-		const QBrush& background() const;
+		QPainterPath getRectanglePath(qreal x, qreal y, int width, int height) const;
 
-		CornerType corner() const;
-		int cornerRadius() const;
-
-		const QBrush& shadow() const;
-		int xShadowOffset() const;
-		int yShadowOffset() const;
+		void unoptimizedPaint(QPainter* painter, int xOffset, int yOffset, int contentBoxWidth,
+						int contentBoxHeight) const;
+		void optimizedPaint(QPainter* painter, int xOffset, int yOffset, int contentBoxWidth,
+								int contentBoxHeight) const;
+		void generatePixmaps(qreal scaleFactor, const QPainter* painterSpecifyingRenderHints) const;
 };
 
 inline const QBrush& BoxStyle::background() const { return background_; }

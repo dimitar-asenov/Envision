@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -49,6 +49,7 @@ class FormalResult;
 class FormalTypeArgument;
 class Field;
 class OOReference;
+class CatchClause;
 
 class Statement;
 class Block;
@@ -62,6 +63,7 @@ class SwitchCase;
 class SwitchStatement;
 class VariableDeclaration;
 class ExpressionStatement;
+class TryCatchFinallyStatement;
 
 class Expression;
 class IntegerLiteral;
@@ -84,6 +86,8 @@ class UnfinishedOperator;
 class CommaExpression;
 class AssignmentExpression;
 class ConditionalExpression;
+class ThrowExpression;
+class LambdaExpression;
 
 class TypeExpression;
 class PrimitiveTypeExpression;
@@ -103,6 +107,7 @@ template class Q_DECL_IMPORT Model::TypedList<OOModel::FormalResult>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::FormalTypeArgument>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::Field>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::OOReference>;
+template class Q_DECL_IMPORT Model::TypedList<OOModel::CatchClause>;
 
 template class Q_DECL_IMPORT Model::TypedList<OOModel::Statement>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::Block>;
@@ -116,6 +121,7 @@ template class Q_DECL_IMPORT Model::TypedList<OOModel::SwitchCase>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::SwitchStatement>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::VariableDeclaration>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::ExpressionStatement>;
+template class Q_DECL_IMPORT Model::TypedList<OOModel::TryCatchFinallyStatement>;
 
 template class Q_DECL_IMPORT Model::TypedList<OOModel::Expression>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::IntegerLiteral>;
@@ -138,6 +144,8 @@ template class Q_DECL_IMPORT Model::TypedList<OOModel::UnfinishedOperator>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::CommaExpression>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::AssignmentExpression>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::ConditionalExpression>;
+template class Q_DECL_IMPORT Model::TypedList<OOModel::ThrowExpression>;
+template class Q_DECL_IMPORT Model::TypedList<OOModel::LambdaExpression>;
 
 template class Q_DECL_IMPORT Model::TypedList<OOModel::TypeExpression>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::PrimitiveTypeExpression>;

@@ -1,12 +1,13 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/Item/default">
 	<layout prototypes="layout/SequentialLayout/default">
+		<allowEquivalentCursorsThroughBoundary>false</allowEquivalentCursorsThroughBoundary>
 		<spaceBetweenElements>5</spaceBetweenElements>
 	</layout>
 	<symbol prototypes="icon/SVGIcon/default">
 		<filename>styles/icon/icon-exit.svg</filename>
-		<width>30</width>
-		<height>25</height>
+		<width>22</width>
+		<height>15</height>
 	</symbol>
 	<values prototypes="item/VList/default">
 		<shape/>

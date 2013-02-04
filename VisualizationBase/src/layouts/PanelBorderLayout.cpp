@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -92,6 +92,13 @@ void PanelBorderLayout::updateGeometry(int, int)
 	// Get content size
 	int contentWidth = content_ ? content_->width() : 0;
 	int contentHeight = content_ ? content_->height() : 0;
+
+	if (hasShape() && style()->shapeOnlyOnContent() && getShape()->style()->outline() != Qt::NoPen)
+	{
+		int shapeOutline = getShape()->style()->outline().width();
+		contentWidth += shapeOutline;
+		contentHeight += shapeOutline;
+	}
 
 	// Compute middle sizes
 	int middleWidth = contentWidth + style()->leftInnerMargin() + style()->rightInnerMargin();

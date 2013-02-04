@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2012 ETH Zurich
+ ** Copyright (c) 2011, 2013 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -43,6 +43,8 @@ namespace OOInteraction {
 class OOINTERACTION_API HClass : public Interaction::GenericHandler {
 	protected:
 		HClass();
+
+		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event) override;
 
 	public:
 		static HClass* instance();

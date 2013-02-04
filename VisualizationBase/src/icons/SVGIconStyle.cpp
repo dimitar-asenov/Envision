@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -47,8 +47,27 @@ void SVGIconStyle::load(StyleLoader& sl)
 
 void SVGIconStyle::paint(QPainter* painter, int x, int y) const
 {
-	QSvgRenderer& r = const_cast<QSvgRenderer&> (renderer_);
-	r.render(painter, QRectF(x, y, width_, height_));
+	//OLD, one-line version that is not optimized
+	//renderer_.render(painter, QRectF(x, y, width_, height_));
+
+	if(!mipmap_.paint(painter,x,y))
+	{
+		qreal scaleFactor = painter->worldTransform().m11();
+
+		auto size = (QSizeF(width_,height_) * scaleFactor).toSize();
+		if (size.width() > 0 && size.height() > 0)
+		{
+			QImage img = QImage(size, QImage::Format_ARGB32);
+			img.fill(0);
+			QPainter pai(&img);
+			renderer_.render(&pai);
+
+			mipmap_.setImage(img, scaleFactor);
+
+			auto painted = mipmap_.paint(painter,x,y);
+			Q_ASSERT(painted);
+		}
+	}
 }
 
 }

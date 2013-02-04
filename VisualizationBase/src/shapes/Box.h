@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -46,10 +46,8 @@ class VISUALIZATIONBASE_API Box: public Shape
 	SHAPE_COMMON(Box)
 
 	protected:
-		qreal contentBoxWidth;
-		qreal contentBoxHeight;
-
-		QPainterPath getRectanglePath(qreal x, qreal y, int width, int height);
+		int contentBoxWidth;
+		int contentBoxHeight;
 
 	public:
 		Box(Item *parent, StyleType *style = itemStyles().get());

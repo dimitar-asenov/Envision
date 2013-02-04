@@ -8,7 +8,26 @@ win32:LIBS += -llogger \
     -lvisualizationbase \
     -linteractionbase \
     -loovisualization
-HEADERS += src/string_offset_providers/UnaryOperatorStringOffsetProvider.h \
+HEADERS += src/string_offset_providers/KeywordMethodCallStringOffsetProvider.h \
+    src/commands/CCreateField.h \
+    src/string_offset_providers/CompoundObjectStringOffsetProvider.h \
+    src/string_components/LambdaStringComponents.h \
+    src/expression_editor/operators/CompoundObjectDescriptor.h \
+    src/string_offset_providers/ClassTypeStringOffsetProvider.h \
+    src/string_components/ClassTypeStringComponents.h \
+    src/commands/CSceneHandlerItemTest.h \
+    src/handlers/HForEachStatement.h \
+    src/handlers/HKeywordStatement.h \
+    src/handlers/HReturnStatement.h \
+    src/string_offset_providers/ThrowStringOffsetProvider.h \
+    src/string_components/ThrowStringComponents.h \
+    src/expression_editor/operators/ThrowDescriptor.h \
+    src/expression_editor/operators/NewObjectDescriptor.h \
+    src/commands/CCreateProject.h \
+    src/commands/CCreateMethod.h \
+    src/commands/CCreateClass.h \
+    ../InteractionBase/src/commands/CreateNamedObjectWithAttributes.h \
+    src/string_offset_providers/UnaryOperatorStringOffsetProvider.h \
     src/string_offset_providers/Cell.h \
     src/string_offset_providers/ListCell.h \
     src/string_offset_providers/GridBasedOffsetProvider.h \
@@ -20,8 +39,6 @@ HEADERS += src/string_offset_providers/UnaryOperatorStringOffsetProvider.h \
     src/string_components/ConditionalExpressionStringComponents.h \
     src/expression_editor/operators/ConditionalExpressionDescriptor.h \
     src/OOInteractionException.h \
-    src/commands/CClassCreateMethod.h \
-    src/commands/CProjectCreateClass.h \
     src/expression_editor/OOExpressionBuilder.h \
     src/expression_editor/OOOperatorDescriptor.h \
     src/expression_editor/OOOperatorDescriptorList.h \
@@ -80,7 +97,26 @@ HEADERS += src/string_offset_providers/UnaryOperatorStringOffsetProvider.h \
     src/string_offset_providers/TextRendererStringOffsetProvider.h \
     src/string_offset_providers/VariableDeclarationStringOffsetProvider.h \
     src/oointeraction.h
-SOURCES += src/string_offset_providers/UnaryOperatorStringOffsetProvider.cpp \
+SOURCES += src/string_offset_providers/KeywordMethodCallStringOffsetProvider.cpp \
+    src/commands/CCreateField.cpp \
+    src/string_offset_providers/CompoundObjectStringOffsetProvider.cpp \
+    src/string_components/LambdaStringComponents.cpp \
+    src/expression_editor/operators/CompoundObjectDescriptor.cpp \
+    src/string_offset_providers/ClassTypeStringOffsetProvider.cpp \
+    src/string_components/ClassTypeStringComponents.cpp \
+    src/commands/CSceneHandlerItemTest.cpp \
+    src/handlers/HForEachStatement.cpp \
+    src/handlers/HKeywordStatement.cpp \
+    src/handlers/HReturnStatement.cpp \
+    src/string_offset_providers/ThrowStringOffsetProvider.cpp \
+    src/string_components/ThrowStringComponents.cpp \
+    src/expression_editor/operators/ThrowDescriptor.cpp \
+    src/expression_editor/operators/NewObjectDescriptor.cpp \
+    src/commands/CCreateProject.cpp \
+    src/commands/CCreateMethod.cpp \
+    src/commands/CCreateClass.cpp \
+    ../InteractionBase/src/commands/CreateNamedObjectWithAttributes.cpp \
+    src/string_offset_providers/UnaryOperatorStringOffsetProvider.cpp \
     src/string_offset_providers/Cell.cpp \
     src/string_offset_providers/ListCell.cpp \
     src/string_offset_providers/GridBasedOffsetProvider.cpp \
@@ -114,13 +150,11 @@ SOURCES += src/string_offset_providers/UnaryOperatorStringOffsetProvider.cpp \
     src/expression_editor/operators/ArrayTypeDescriptor.cpp \
     src/string_components/PrimitiveTypeStringComponents.cpp \
     src/string_components/StringLiteralStringComponents.cpp \
-    src/commands/CProjectCreateClass.cpp \
     src/handlers/HMethod.cpp \
     src/handlers/HExpression.cpp \
     src/handlers/HClass.cpp \
     src/handlers/HProject.cpp \
     src/handlers/SetExpressionCursorEvent.cpp \
-    src/commands/CClassCreateMethod.cpp \
     src/string_components/CallStringComponents.cpp \
     src/expression_editor/operators/CallDescriptor.cpp \
     src/expression_editor/operators/MemberOperatorDescriptor.cpp \

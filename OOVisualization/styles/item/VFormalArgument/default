@@ -7,4 +7,10 @@
 		<noBoundaryCursorsInsideShape>true</noBoundaryCursorsInsideShape>
 	</layout>
 	<name prototypes="item/Text/default" />
+	<lambdaLayout prototypes="layout/SequentialLayout/default">
+		<direction>1</direction>
+		<spaceBetweenElements>5</spaceBetweenElements>
+		<noInnerCursors>true</noInnerCursors>
+		<noBoundaryCursorsInsideShape>true</noBoundaryCursorsInsideShape>
+	</lambdaLayout>
 </style>

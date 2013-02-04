@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -36,7 +36,13 @@
 namespace Visualization {
 
 DEFINE_EXTENSION(Position)
-REGISTER_EXTENSION_ATTRIBUTE(Position, x, Integer, false, false, true)
-REGISTER_EXTENSION_ATTRIBUTE(Position, y, Integer, false, false, true)
+REGISTER_EXTENSION_ATTRIBUTE(Position, x, Integer, false, true, true)
+REGISTER_EXTENSION_ATTRIBUTE(Position, y, Integer, false, true, true)
+
+void Position::set(int x, int y)
+{
+	setX(x);
+	setY(y);
+}
 
 }

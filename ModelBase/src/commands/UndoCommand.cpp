@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -74,6 +74,11 @@ void UndoCommand::undo()
 
 	// set command state to done
 	undone = true;
+}
+
+Node* UndoCommand::owned() const
+{
+	return nullptr;
 }
 
 }

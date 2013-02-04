@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -39,5 +39,11 @@ EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(ReturnStatement, Statement)
 EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(ReturnStatement, Statement)
 
 REGISTER_ATTRIBUTE(ReturnStatement, values, TypedListOfExpression, false, false, true)
+
+ReturnStatement::ReturnStatement(Expression* firstReturnValue)
+: Statement (nullptr, ReturnStatement::getMetaData())
+{
+	if(firstReturnValue) values()->append(firstReturnValue);
+}
 
 }

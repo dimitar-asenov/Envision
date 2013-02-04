@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -72,6 +72,12 @@ bool Item::removeAddOn(VisualizationAddOn* addOn)
 	return staticAddOns().removeAll(addOn) != 0;
 }
 
+QMultiHash<Model::Node*, Item*>& Item::nodeItemsMap()
+{
+	static QMultiHash<Model::Node*, Item*> map;
+	return map;
+}
+
 Item::Item(Item* parent, const StyleType* style) :
 	QGraphicsItem(parent), style_(nullptr), shape_(nullptr), needsUpdate_(FullUpdate), purpose_(-1),
 	itemCategory_(Scene::NoItemCategory)
@@ -80,6 +86,14 @@ Item::Item(Item* parent, const StyleType* style) :
 
 	setFlag(QGraphicsItem::ItemIsFocusable);
 	setFlag(QGraphicsItem::ItemIsSelectable);
+	setFlag(QGraphicsItem::ItemClipsToShape);
+	setFlag(QGraphicsItem::ItemClipsChildrenToShape);
+
+#ifdef QT_GRAPHICSVIEW_ENVISION_EXTENSIONS
+	setFlag(QGraphicsItem::ItemDoesNotEnforceClip);
+	setFlag(QGraphicsItem::ItemSkipsPaintingIfTooSmall);
+#endif
+
 	setStyle(style);
 	setZValue(LAYER_DEFAULT_Z);
 }
@@ -103,6 +117,18 @@ void Item::setUpdateNeeded(UpdateType updateType)
 		if (p->needsUpdate() == NoUpdate) p->needsUpdate_ = StandardUpdate;
 		p = p->parent();
 	}
+}
+
+void Item::setUpdateNeededForChildItem(UpdateType updateType, Model::Node* nodeVisualizedByChild)
+{
+	//TODO: Potentially quite expensive
+	Item* c{};
+	while (!c && nodeVisualizedByChild)
+	{
+		c = findVisualizationOf(nodeVisualizedByChild);
+		nodeVisualizedByChild = nodeVisualizedByChild->parent();
+	}
+	if (c) c->setUpdateNeeded(updateType);
 }
 
 Item::UpdateType Item::needsUpdate()
@@ -166,21 +192,27 @@ void Item::updateSubtree()
 	// It is safe to assume that an item is updated before its parent item is updated. When an item's size depends on the
 	// parent's size, we must first update the item without providing any size constraints, so that the item can report a
 	// minimum size during the parent's update procedure.
-	if ( (needsUpdate_ != NoUpdate) || needsUpdate() || sizeDependsOnParent()
-			|| (hasNode() && revision() != node()->revision()))
+
+	bool doUpdate = (needsUpdate_ != NoUpdate) || needsUpdate() || sizeDependsOnParent()
+					|| (hasNode() && revision() != node()->revision());
+	while (doUpdate)
 	{
 		updateAddOnItems();
 		determineChildren();
 		updateChildren();
 		changeGeometry();
-		needsUpdate_ = NoUpdate;
-		if (hasNode()) setRevision( node()->revision() );
+		if (needsUpdate_ == RepeatUpdate) needsUpdate_ = StandardUpdate;
+		else
+		{
+			needsUpdate_ = NoUpdate;
+			doUpdate = false;
+			if (hasNode()) setRevision( node()->revision() );
+		}
 	}
 }
 
 void Item::changeGeometry(int availableWidth, int availableHeight)
 {
-	prepareGeometryChange();
 	updateGeometry(availableWidth, availableHeight);
 	update();
 }
@@ -331,7 +363,8 @@ void Item::removeFromScene()
 		if (mc && isAncestorOf(mc->owner()))
 			scene()->setMainCursor(nullptr);
 
-		scene()->removeItem(this);
+		if (parent()) scene()->removeItem(this);
+		else scene()->removeTopLevelItem(this);
 	}
 	setParentItem(nullptr);
 }
@@ -447,15 +480,15 @@ QList<ItemRegion> Item::regions()
 		regs.append(ItemRegion(boundingRect_.toRect()));
 
 		Cursor* cur = new Cursor(this, Cursor::BoxCursor);
-		cur->setRegion( boundingRect_.translated( (-1)*scenePos() ).toRect() );
-		cur->setPosition( cur->region().center() );
+		cur->setRegion( boundingRect_.toRect() );
+		cur->setPosition( boundingRect_.center().toPoint() );
 		regs.last().setCursor(cur);
 	}
 
 	return regs;
 }
 
-bool Item::moveCursor(CursorMoveDirection dir, const QPoint& reference)
+bool Item::moveCursor(CursorMoveDirection dir, QPoint reference)
 {
 	// The condition below is only true if this method is called from a parent item, after it was already called for the
 	// item itself. In that case simply return false as the original call returned false too.
@@ -464,10 +497,17 @@ bool Item::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 	return false;
 
 	QList<ItemRegion> regs = regions();
-
 	if (regs.isEmpty()) return false;
 
-	QPoint source = reference;
+	if (dir == MoveDefault)
+	{
+		if (defaultMoveCursorProxy_)
+		{
+			defaultMoveCursorProxy_->moveCursor(MoveDefault);
+			return true;
+		}
+		reference = QPoint(0,0);
+	}
 
 	ItemRegion* current = nullptr;
 	// Handle cursor movement in a specific direction
@@ -482,10 +522,10 @@ bool Item::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 				current = &r;
 				switch(dir)
 				{
-					case MoveUp: source = QPoint(reference.x(), r.region().y()); break;
-					case MoveDown: source = QPoint(reference.x(), r.region().y() + r.region().height()); break;
-					case MoveLeft: source = QPoint(r.region().x(), reference.y()); break;
-					case MoveRight: source = QPoint(r.region().x() + r.region().width(), reference.y()); break;
+					case MoveUp: reference = QPoint(reference.x(), r.region().y()); break;
+					case MoveDown: reference = QPoint(reference.x(), r.region().y() + r.region().height()); break;
+					case MoveLeft: reference = QPoint(r.region().x(), reference.y()); break;
+					case MoveRight: reference = QPoint(r.region().x() + r.region().width(), reference.y()); break;
 					default: /* Will never be the case because of the top-level if statement */ break;
 				}
 				break;
@@ -506,6 +546,7 @@ bool Item::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 		case MoveDownOf: constraints = ItemRegion::Below; break;
 		case MoveLeftOf: constraints = ItemRegion::LeftOf; break;
 		case MoveRightOf: constraints = ItemRegion::RightOf; break;
+		case MoveDefault: constraints = ItemRegion::NoConstraints; break;
 	}
 
 	// We use a map since the elements are kept ordered according to the key. As key we use the distance multiplied by 10
@@ -514,7 +555,7 @@ bool Item::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 
 	for (ItemRegion& r : regs)
 	{
-		ItemRegion::PositionConstraints satisfied = r.satisfiedPositionConstraints(source);
+		ItemRegion::PositionConstraints satisfied = r.satisfiedPositionConstraints(reference);
 		if (	(&r != current)
 				&& ( (( satisfied & constraints) == constraints)
 						// An overlapping cursor region is preferred, even if it does not satisfy the constraints.
@@ -524,7 +565,7 @@ bool Item::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 						|| (r.cursor() && (satisfied & ItemRegion::Overlap)) )
 			)
 		{
-			int distanceKey = r.distanceTo(source)*10;
+			int distanceKey = r.distanceTo(reference)*10;
 			if (r.cursor()) distanceKey -= 5;
 			matching.insert(distanceKey, &r);
 		}
@@ -561,8 +602,10 @@ bool Item::moveCursor(CursorMoveDirection dir, const QPoint& reference)
 				case MoveDownOf: childDirection = MoveDownOf; break;
 				case MoveLeftOf: childDirection = MoveLeftOf; break;
 				case MoveRightOf: childDirection = MoveRightOf; break;
+				case MoveDefault: childDirection = MoveDefault; break;
+				default: throw VisualizationException("Unknown move direction: " + QString::number(dir));
 			}
-			if( r->item()->moveCursor(childDirection, mapToItem(r->item(), source).toPoint()))
+			if( r->item()->moveCursor(childDirection, mapToItem(r->item(), reference).toPoint()))
 			{
 				canFocus = true;
 				break;
@@ -585,11 +628,13 @@ Item* Item::findVisualizationOf(Model::Node* node)
 {
 	if (this->node() == node) return this;
 
-	for(auto child : childItems())
+	auto it = nodeItemsMap().find(node);
+	auto end = Item::nodeItemsMap().end();
+	while (it != end && it.key() == node)
 	{
-		Item* item = static_cast<Item*>(child);
-		item = item->findVisualizationOf(node);
-		if (item) return item;
+		auto item = it.value();
+		if (isAncestorOf(item)) return item;
+		++it;
 	}
 
 	return nullptr;
@@ -663,6 +708,39 @@ Scene::ItemCategory Item::itemCategory()
 {
 	if (itemCategory_ == Scene::NoItemCategory && parent()) return parent()->itemCategory();
 	else return itemCategory_;
+}
+
+void Item::setWidth(int width)
+{
+	if (width != this->width())
+	{
+		prepareGeometryChange();
+		boundingRect_.setWidth(width);
+	}
+}
+void Item::setHeight(int height)
+{
+	if (height != this->height())
+	{
+		prepareGeometryChange();
+		boundingRect_.setHeight(height);
+	}
+}
+void Item::setSize(int width, int height)
+{
+	if (width != this->width() || height != this->height())
+	{
+		prepareGeometryChange();
+		boundingRect_.setSize(QSizeF(width, height));
+	}
+}
+void Item::setSize(const QSizeF& size)
+{
+	if (size != this->size())
+	{
+		prepareGeometryChange();
+		boundingRect_.setSize(size);
+	}
 }
 
 /***********************************************************************************************************************

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -48,7 +48,7 @@ class INTERACTIONBASE_API HCommandPrompt: public GenericHandler
 	public:
 		static HCommandPrompt* instance();
 
-		virtual void keyReleaseEvent(Visualization::Item *target, QKeyEvent *event);
+		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event);
 };
 
 }

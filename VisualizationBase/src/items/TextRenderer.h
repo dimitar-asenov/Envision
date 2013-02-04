@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -73,7 +73,7 @@ class VISUALIZATIONBASE_API TextRenderer : public Item
 
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
-		virtual bool moveCursor(CursorMoveDirection dir, const QPoint& reference = QPoint());
+		virtual bool moveCursor(CursorMoveDirection dir = MoveDefault, QPoint reference = QPoint()) override;
 
 		qreal textXOffset();
 		qreal textYOffset();
@@ -97,7 +97,7 @@ class VISUALIZATIONBASE_API TextRenderer : public Item
 	private:
 		typedef Item BaseItemType;
 
-		QString text_;
+		QStaticText staticText_;
 
 		qreal textXOffset_; //Base line
 		qreal textYOffset_;
@@ -105,9 +105,12 @@ class VISUALIZATIONBASE_API TextRenderer : public Item
 		bool editable;
 
 		const static int MIN_TEXT_WIDTH = 10;
+
+		QRectF bound();
+		QRectF bound(QFontMetrics &qfm);
 };
 
-inline QString TextRenderer::text() { return text_; }
+inline QString TextRenderer::text() { return staticText_.text(); }
 inline bool TextRenderer::isEditable() { return editable; }
 inline void TextRenderer::setEditable(bool editable_) { editable = editable_; }
 

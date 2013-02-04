@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2012 ETH Zurich
+ ** Copyright (c) 2011, 2013 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -33,20 +33,30 @@
 
 #include "handlers/HClass.h"
 
-#include "commands/CClassCreateMethod.h"
+#include "commands/CCreateMethod.h"
+#include "commands/CCreateField.h"
 
 namespace OOInteraction {
 
 HClass::HClass()
 {
 	// TODO: is it appropriate to add commands in the constructor or should they be registered somewhere else?
-	addCommand(new CClassCreateMethod());
+	addCommand(new CCreateMethod());
+	addCommand(new CCreateField());
 }
 
 HClass* HClass::instance()
 {
 	static HClass h;
 	return &h;
+}
+
+void HClass::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
+{
+	if (event->modifiers() == Qt::NoModifier && (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter))
+	{
+		showCommandPrompt(target);
+	}
 }
 
 } /* namespace OOInteraction */

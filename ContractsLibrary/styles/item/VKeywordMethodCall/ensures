@@ -1,0 +1,6 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="default_text">
+	<keyword>
+		<symbol>ensures</symbol>
+	</keyword>
+</style>

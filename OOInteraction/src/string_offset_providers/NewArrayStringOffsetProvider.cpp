@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2012 ETH Zurich
+ ** Copyright (c) 2011, 2013 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -40,9 +40,20 @@ namespace OOInteraction {
 NewArrayStringOffsetProvider::NewArrayStringOffsetProvider(OOVisualization::VNewExpression* vis)
 	: GridBasedOffsetProvider(vis)
 {
-	add(new Cell(0, vis->layout()->at<Visualization::Item>(0), 4));
-	add(new Cell(2, vis->layout()->at<Visualization::Item>(1), 0));
-	add(new Cell(4, vis->layout()->at<Visualization::Item>(2), 2));
+	if (vis->layout()->length() > 2)
+	{
+		// Includes amount -> new array
+		add(new Cell(0, vis->layout()->at<Visualization::Item>(0), 4));
+		add(new Cell(2, vis->layout()->at<Visualization::Item>(1), 0));
+		add(new Cell(4, vis->layout()->at<Visualization::Item>(2), 2));
+	}
+	else
+	{
+		// There is no amount -> new object
+		add(new Cell(0, vis->layout()->at<Visualization::Item>(0), 0));
+		add(new Cell(2, vis->layout()->at<Visualization::Item>(1), 2));
+	}
+
 }
 
 } /* namespace OOInteraction */

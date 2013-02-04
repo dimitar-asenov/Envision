@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2012 ETH Zurich
+ ** Copyright (c) 2011, 2013 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -70,7 +70,7 @@ Model::Node* ValueAtReturnVisitor::visitChildren(Model::Node* n)
 		{
 			auto model = n->model();
 			model->beginModification(n, "replace child in visitor");
-			n->replaceChild(child, newChild, false);
+			n->replaceChild(child, newChild);
 			model->endModification();
 		}
 	}
@@ -102,7 +102,7 @@ Model::Node* ValueAtReturnVisitor::visitMethodCall(ValueAtReturnVisitor* v, OOMo
 			auto arg = call->arguments()->at(0);
 			auto model = call->model();
 			model->beginModification(call, "remove valueAtReturn call in visitor");
-			call->arguments()->remove(0, true);
+			call->arguments()->remove(0);
 			model->endModification();
 			++v->numUnwrapped_;
 

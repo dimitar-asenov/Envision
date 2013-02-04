@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2012 ETH Zurich
+ ** Copyright (c) 2011, 2013 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -51,8 +51,21 @@ class VISUALIZATIONBASE_API Cursor {
 
 		virtual Item* owner() const;
 
+		/**
+		 * Returns the position of this cursor in corrdinates local to owner()
+		 */
 		const QPoint& position();
+
+		/**
+		 * Returns the region of this cursor in corrdinates local to owner()
+		 */
 		const QRect& region();
+
+		/**
+		 * Returns the region of this cursor in scene coordinates
+		 */
+		QRect sceneRegion();
+
 		Item* visualization();
 
 		void setPosition(const QPoint& pos);
@@ -96,6 +109,8 @@ class VISUALIZATIONBASE_API Cursor {
 		Item* visualization_;
 		CursorType type_;
 		bool notLocationEquivalent_;
+
+		bool allowEquivalentCursorsAcrossBoundaries(Item* parent, Item* child);
 };
 
 inline void Cursor::setPosition(const QPoint& pos) { position_ = pos; }

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -35,7 +35,7 @@
 
 #include "VisualizationBase/src/layouts/PositionLayout.h"
 #include "VisualizationBase/src/Scene.h"
-#include "ModelBase/src/Model.h"
+#include "ModelBase/src/model/Model.h"
 
 namespace Interaction {
 
@@ -77,8 +77,8 @@ void HPositionLayout::mousePressEvent(Visualization::Item *target, QGraphicsScen
 			target->scene()->clearFocus();
 			itemToMove->setSelected(true);
 
-			originalX = pos->x();
-			originalY = pos->y();
+			originalX = pos->xNode() ? pos->x() : 0;
+			originalY = pos->yNode() ? pos->y() : 0;
 			currentItem = itemToMove;
 			currentItemPosition = pos;
 		}
@@ -98,7 +98,9 @@ void HPositionLayout::mouseMoveEvent(Visualization::Item *target, QGraphicsScene
 			int newX = layout->toGrid( originalX + event->pos().x() - event->buttonDownPos(Qt::LeftButton).x() );
 			int newY = layout->toGrid( originalY + event->pos().y() - event->buttonDownPos(Qt::LeftButton).y() );;
 
-			if (newX != currentItemPosition->x() || newY != currentItemPosition->y())
+			int currentItemPositionX = currentItemPosition->xNode() ? currentItemPosition->x() : 0;
+			int currentItemPositionY = currentItemPosition->yNode() ? currentItemPosition->y() : 0;
+			if (newX != currentItemPositionX || newY != currentItemPositionY)
 			{
 				currentItem->node()->model()->beginModification(currentItem->node(),"Change position");
 				currentItemPosition->setX( newX );

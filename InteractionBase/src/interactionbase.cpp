@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -38,13 +38,18 @@
 #include "handlers/HList.h"
 #include "handlers/HExtendable.h"
 #include "handlers/HCommandPrompt.h"
+#include "handlers/HActionPrompt.h"
 #include "handlers/HSceneHandlerItem.h"
 #include "handlers/HPositionLayout.h"
 #include "handlers/HRootItem.h"
 
 #include "vis/CommandPrompt.h"
 #include "vis/TextAndDescription.h"
+#include "actions/ActionPrompt.h"
 
+#include "events/DetectMainSceneActivated.h"
+
+#include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/items/SceneHandlerItem.h"
 #include "VisualizationBase/src/items/VExtendable.h"
 #include "VisualizationBase/src/items/VList.h"
@@ -62,6 +67,8 @@
 #include "VisualizationBase/src/layouts/PanelLayout.h"
 #include "VisualizationBase/src/layouts/PanelBorderLayout.h"
 #include "VisualizationBase/src/layouts/PositionLayout.h"
+#include "VisualizationBase/src/VisualizationManager.h"
+
 #include "ModelBase/src/test_nodes/BinaryNode.h"
 
 #include "SelfTest/src/SelfTestSuite.h"
@@ -95,7 +102,13 @@ bool InteractionBase::initialize(Core::EnvisionManager&)
 	Visualization::PanelBorderLayout::setInteractionHandler(GenericHandler::instance());
 	Visualization::PositionLayout::setInteractionHandler(HPositionLayout::instance());
 	CommandPrompt::setInteractionHandler(HCommandPrompt::instance());
+	ActionPrompt::setInteractionHandler(HActionPrompt::instance());
 	TextAndDescription::setInteractionHandler(GenericHandler::instance());
+
+	// We use to show the prompt. It can only be shown once the Scene is activated.
+	auto mainScene = Visualization::VisualizationManager::instance().mainScene();
+	mainScene->installEventFilter(new DetectMainSceneActivated());
+
 	return true;
 }
 

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -113,6 +113,11 @@ bool OOVisualization::initialize(Core::EnvisionManager&)
 			createVisualization<VAssignmentExpression, AssignmentExpression>);
 	Scene::defaultRenderer()->registerVisualization(ConditionalExpression::typeIdStatic(),
 			createVisualization<VConditionalExpression, ConditionalExpression>);
+	Scene::defaultRenderer()->registerVisualization(ThrowExpression::typeIdStatic(),
+			createVisualization<VThrowExpression, ThrowExpression>);
+	Scene::defaultRenderer()->registerVisualization(LambdaExpression::typeIdStatic(),
+					createVisualization<VLambdaExpression, LambdaExpression>);
+
 	Scene::defaultRenderer()->registerVisualization(Block::typeIdStatic(),
 			createVisualization<VBlock, Block>);
 	Scene::defaultRenderer()->registerVisualization(ReturnStatement::typeIdStatic(),
@@ -129,6 +134,11 @@ bool OOVisualization::initialize(Core::EnvisionManager&)
 			createVisualization<VContinueStatement, ContinueStatement>);
 	Scene::defaultRenderer()->registerVisualization(ExpressionStatement::typeIdStatic(),
 			createVisualization<VExpressionStatement, ExpressionStatement>);
+	Scene::defaultRenderer()->registerVisualization(TryCatchFinallyStatement::typeIdStatic(),
+			createVisualization<VTryCatchFinally, TryCatchFinallyStatement>);
+	Scene::defaultRenderer()->registerVisualization(CatchClause::typeIdStatic(),
+			createVisualization<VCatchClause, CatchClause>);
+
 	Scene::defaultRenderer()->registerVisualization(ClassTypeExpression::typeIdStatic(),
 			createVisualization<VClassType, ClassTypeExpression>);
 	Scene::defaultRenderer()->registerVisualization(PrimitiveTypeExpression::typeIdStatic(),

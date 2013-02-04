@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2012 ETH Zurich
+ ** Copyright (c) 2011, 2013 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -42,7 +42,14 @@
 #include "handlers/HFormalArgument.h"
 #include "handlers/HStatement.h"
 #include "handlers/HLoop.h"
+#include "handlers/HForEachStatement.h"
 #include "handlers/HIfStatement.h"
+#include "handlers/HReturnStatement.h"
+#include "handlers/HKeywordStatement.h"
+
+#include "commands/CCreateProject.h"
+#include "commands/CCreateClass.h"
+#include "commands/CSceneHandlerItemTest.h"
 
 #include "string_components/UnaryOperatorStringComponents.h"
 #include "string_components/BinaryOperatorStringComponents.h"
@@ -63,9 +70,12 @@
 #include "string_components/CallStringComponents.h"
 #include "string_components/PrimitiveTypeStringComponents.h"
 #include "string_components/ArrayTypeStringComponents.h"
+#include "string_components/ClassTypeStringComponents.h"
 #include "string_components/AssignmentStringComponents.h"
 #include "string_components/VariableDeclarationStringComponents.h"
 #include "string_components/ListStringComponents.h"
+#include "string_components/ThrowStringComponents.h"
+#include "string_components/LambdaStringComponents.h"
 
 #include "string_offset_providers/SequentialVisualizationStringOffsetProvider.h"
 #include "string_offset_providers/EmptyExpressionStringOffsetProvider.h"
@@ -75,18 +85,26 @@
 #include "string_offset_providers/InitializerStringOffsetProvider.h"
 #include "string_offset_providers/CallStringOffsetProvider.h"
 #include "string_offset_providers/NewArrayStringOffsetProvider.h"
+#include "string_offset_providers/ThrowStringOffsetProvider.h"
 #include "string_offset_providers/CastStringOffsetProvider.h"
 #include "string_offset_providers/VariableDeclarationStringOffsetProvider.h"
 #include "string_offset_providers/ReferenceExpressionStringOffsetProvider.h"
 #include "string_offset_providers/UnaryOperatorStringOffsetProvider.h"
+#include "string_offset_providers/ClassTypeStringOffsetProvider.h"
+#include "string_offset_providers/CompoundObjectStringOffsetProvider.h"
+#include "string_offset_providers/KeywordMethodCallStringOffsetProvider.h"
 
 #include "OOVisualization/src/allOOVisualizations.h"
 
 #include "OOModel/src/allOOModelNodes.h"
 
+
+#include "InteractionBase/src/actions/Action.h"
 #include "InteractionBase/src/handlers/GenericHandler.h"
 #include "InteractionBase/src/handlers/HList.h"
 #include "InteractionBase/src/handlers/HText.h"
+#include "InteractionBase/src/handlers/HSceneHandlerItem.h"
+#include "InteractionBase/src/events/SetCursorEvent.h"
 
 #include "VisualizationBase/src/items/Static.h"
 #include "VisualizationBase/src/items/Symbol.h"
@@ -117,6 +135,8 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 	OOVisualization::VThisExpression::setInteractionHandler(HExpression::instance());
 	OOVisualization::VCastExpression::setInteractionHandler(HExpression::instance());
 	OOVisualization::VNewExpression::setInteractionHandler(HExpression::instance());
+	OOVisualization::VThrowExpression::setInteractionHandler(HExpression::instance());
+	OOVisualization::VLambdaExpression::setInteractionHandler(HExpression::instance());
 	OOVisualization::VUnaryOperation::setInteractionHandler(HExpression::instance());
 	OOVisualization::VBinaryOperation::setInteractionHandler(HExpression::instance());
 	OOVisualization::VCommaExpression::setInteractionHandler(HExpression::instance());
@@ -136,14 +156,17 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 	OOVisualization::VExpressionStatement::setInteractionHandler(HStatement::instance());
 	OOVisualization::VIfStatement::setInteractionHandler(HIfStatement::instance());
 	OOVisualization::VLoopStatement::setInteractionHandler(HLoop::instance());
-	OOVisualization::VForEachStatement::setInteractionHandler(HStatement::instance());
-	OOVisualization::VBreakStatement::setInteractionHandler(HStatement::instance());
-	OOVisualization::VContinueStatement::setInteractionHandler(HStatement::instance());
+	OOVisualization::VForEachStatement::setInteractionHandler(HForEachStatement::instance());
+	OOVisualization::VBreakStatement::setInteractionHandler(HKeywordStatement::instance());
+	OOVisualization::VContinueStatement::setInteractionHandler(HKeywordStatement::instance());
 	OOVisualization::VBlock::setInteractionHandler(HStatement::instance());
-	OOVisualization::VReturnStatement::setInteractionHandler(HStatement::instance());
+	OOVisualization::VReturnStatement::setInteractionHandler(HReturnStatement::instance());
+	OOVisualization::VTryCatchFinally::setInteractionHandler(Interaction::GenericHandler::instance());
+	OOVisualization::VCatchClause::setInteractionHandler(Interaction::GenericHandler::instance());
 	OOVisualization::VPrimitiveType::setInteractionHandler(HExpression::instance());
 	OOVisualization::VClassType::setInteractionHandler(HExpression::instance());
 	OOVisualization::VArrayType::setInteractionHandler(HExpression::instance());
+	OOVisualization::VKeywordMethodCall::setInteractionHandler(HExpression::instance());
 
 	// Register string components that convert an expression to a string list representing its components
 	Model::AdapterManager::registerAdapterViaConstructor
@@ -162,6 +185,8 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 		<StringComponents, CallStringComponents, OOModel::MethodCallExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringComponents, NewArrayStringComponents, OOModel::NewExpression>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringComponents, ThrowStringComponents, OOModel::ThrowExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringComponents, BooleanLiteralStringComponents, OOModel::BooleanLiteral>();
 	Model::AdapterManager::registerAdapterViaConstructor
@@ -185,6 +210,8 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringComponents, ArrayTypeStringComponents, OOModel::ArrayTypeExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor
+		<StringComponents, ClassTypeStringComponents, OOModel::ClassTypeExpression>();
+	Model::AdapterManager::registerAdapterViaConstructor
 		<StringComponents, AssignmentStringComponents, OOModel::AssignmentExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringComponents, VariableDeclarationStringComponents, OOModel::VariableDeclaration>();
@@ -192,6 +219,8 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 		<StringComponents, ListStringComponents, Model::TypedList<OOModel::Expression> >();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringComponents, ListStringComponents, Model::TypedList<OOModel::Statement> >();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringComponents, LambdaStringComponents, OOModel::LambdaExpression>();
 
 	// Register string providers
 	Model::AdapterManager::registerAdapterViaConstructor
@@ -206,6 +235,8 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 		<StringOffsetProvider, SequentialVisualizationStringOffsetProvider, OOVisualization::VConditionalExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, NewArrayStringOffsetProvider, OOVisualization::VNewExpression>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringOffsetProvider, ThrowStringOffsetProvider, OOVisualization::VThrowExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, SimpleLiteralStringOffsetProvider, OOVisualization::VBooleanLiteral>();
 	Model::AdapterManager::registerAdapterViaConstructor
@@ -243,9 +274,23 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, SequentialVisualizationStringOffsetProvider, OOVisualization::VArrayType>();
 	Model::AdapterManager::registerAdapterViaConstructor
+		<StringOffsetProvider, ClassTypeStringOffsetProvider, OOVisualization::VClassType>();
+	Model::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, SequentialVisualizationStringOffsetProvider, OOVisualization::VAssignmentExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, VariableDeclarationStringOffsetProvider, OOVisualization::VVariableDeclaration>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringOffsetProvider, CompoundObjectStringOffsetProvider, OOVisualization::VLambdaExpression>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringOffsetProvider, KeywordMethodCallStringOffsetProvider, OOVisualization::VKeywordMethodCall>();
+
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CCreateProject());
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CCreateClass());
+	Interaction::HSceneHandlerItem::instance()->addCommand(new CSceneHandlerItemTest());
+
+	initializeActions();
+
+
 
 	return true;
 }
@@ -258,6 +303,35 @@ void OOInteraction::selfTest(QString testid)
 {
 	if (testid.isEmpty()) SelfTest::TestManager<OOInteraction>::runAllTests().printResultStatistics();
 	else SelfTest::TestManager<OOInteraction>::runTest(testid).printResultStatistics();
+}
+
+void OOInteraction::initializeActions()
+{
+	Interaction::Action::add<OOModel::Method>(new Interaction::Action("r","Create result",
+		Interaction::Action::ActionFunctionOnItem([](Visualization::Item* item){
+			auto node = static_cast<OOModel::Method*>(item->node());
+			if ( node->results()->size() == 0)
+			{
+				node->beginModification("add result");
+				node->results()->append(new OOModel::FormalResult("", new OOModel::EmptyExpression()));
+				node->endModification();
+			}
+			item->setUpdateNeededForChildItem(Visualization::Item::StandardUpdate, node->results()->first());
+			item->scene()->addPostEventAction(new Interaction::SetCursorEvent(item, node->results()->first()));
+	})));
+
+	Interaction::Action::add<OOModel::Method>(new Interaction::Action("n","Create annotation",
+		Interaction::Action::ActionFunctionOnItem([](Visualization::Item* item){
+			auto node = static_cast<OOModel::Method*>(item->node());
+			if ( node->annotations()->size() == 0)
+			{
+				node->beginModification("add annotation");
+				node->annotations()->append(new OOModel::ExpressionStatement(new OOModel::EmptyExpression()));
+				node->endModification();
+			}
+			item->setUpdateNeededForChildItem(Visualization::Item::StandardUpdate, node->annotations()->first());
+			item->scene()->addPostEventAction(new Interaction::SetCursorEvent(item, node->annotations()->first()));
+	})));
 }
 
 }

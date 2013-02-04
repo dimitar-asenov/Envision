@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2012 ETH Zurich
+ ** Copyright (c) 2011, 2013 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -90,17 +90,18 @@ void CursorShapeItem::updateGeometry(int, int)
 						while (topmost->parent()) topmost = topmost->parent();
 
 						// The difference to the top-left corner must be scaled with the reverse factor
-						auto diff = topmost->scenePos() - ref;
-						ref = topmost->scenePos();
-						diff /= mv->scaleFactor();
-						ref -= diff;
+						ref += cursor_->owner()->scenePos() - topmost->scenePos();
+						ref /= mv->scaleFactor();
+						ref += topmost->scenePos();
+
+						setPos(ref);
+						return;
 					}
-					break;
 				}
 			}
 		}
 
-		setPos(ref);
+		setPos(cursor_->owner()->scenePos() + ref);
 	}
 }
 

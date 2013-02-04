@@ -4,7 +4,13 @@ DEFINES += OOMODEL_LIBRARY
 win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase
-HEADERS += src/elements/FormalTypeArgument.h \
+HEADERS += src/types/LambdaType.h \
+    src/expressions/LambdaExpression.h \
+    src/elements/CatchClause.h \
+    src/statements/TryCatchFinallyStatement.h \
+    src/types/ThrownExceptionType.h \
+    src/expressions/ThrowExpression.h \
+    src/elements/FormalTypeArgument.h \
     src/types/StringType.h \
     src/types/NullType.h \
     src/types/SymbolProviderType.h \
@@ -70,7 +76,13 @@ HEADERS += src/elements/FormalTypeArgument.h \
     src/top_level/Module.h \
     src/top_level/Project.h \
     src/oomodel.h
-SOURCES += src/elements/FormalTypeArgument.cpp \
+SOURCES += src/types/LambdaType.cpp \
+    src/expressions/LambdaExpression.cpp \
+    src/elements/CatchClause.cpp \
+    src/statements/TryCatchFinallyStatement.cpp \
+    src/types/ThrownExceptionType.cpp \
+    src/expressions/ThrowExpression.cpp \
+    src/elements/FormalTypeArgument.cpp \
     src/types/StringType.cpp \
     src/types/NullType.cpp \
     src/types/SymbolProviderType.cpp \
