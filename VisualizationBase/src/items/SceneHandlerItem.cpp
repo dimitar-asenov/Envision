@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -42,7 +42,14 @@ ITEM_COMMON_DEFINITIONS(SceneHandlerItem, "item")
 SceneHandlerItem::SceneHandlerItem(Scene* scene) :
 	Item(nullptr, itemStyles().get())
 {
+	// It should be possible to click inside the item. This happens when the user clicks on an "empty" space in the scene
+	// as this item is automatically moved to that empty spot before the click is processed.
+	setSize(3,3);
+	setItemCategory(Scene::MenuItemCategory);
 	scene->addItem(this);
+
+	// Make sure this item is behind all others.
+	setZValue(Item::LAYER_DEFAULT_Z - 1);
 }
 
 void SceneHandlerItem::determineChildren()

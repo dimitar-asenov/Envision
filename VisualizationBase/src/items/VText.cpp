@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -33,7 +33,7 @@
 
 #include "items/VText.h"
 
-#include "ModelBase/src/Model.h"
+#include "ModelBase/src/model/Model.h"
 
 namespace Visualization {
 
@@ -56,6 +56,15 @@ bool VText::setText(const QString& newText)
 QString VText::currentText()
 {
 	return node()->get();
+}
+
+bool VText::moveCursor(CursorMoveDirection dir, QPoint reference)
+{
+	if (dir == MoveDefault)
+	{
+		return ItemWithNode<TextRenderer, Model::Text>::moveCursor(MoveLeftOf, QPoint(xEnd()+1,0));
+	}
+	else return ItemWithNode<TextRenderer, Model::Text>::moveCursor(dir, reference);
 }
 
 }

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -78,7 +78,7 @@ void PanelLayout::updateGeometry(int availableWidth, int availableHeight)
 	if (last_) last.setSize( QSize(last_->width(), last_->height()) );
 
 
-	if ( style()->orientation() == PanelLayoutStyle::HorizontalOrientation )
+	if ( style()->orientation() == PanelLayoutStyle::Orientation::Horizontal )
 	{
 		// Get the height
 		int maxChildHeight = first.height();
@@ -101,25 +101,25 @@ void PanelLayout::updateGeometry(int availableWidth, int availableHeight)
 
 		// Begin
 		int x = xOffset();
-		if ( style()->alignment() == PanelLayoutStyle::BottomAlignment )
+		if ( style()->alignment() == PanelLayoutStyle::Alignment::Bottom )
 			first.moveTo(x, y + maxChildHeight - first.height());
-		if ( style()->alignment() == PanelLayoutStyle::CenterAlignment )
+		if ( style()->alignment() == PanelLayoutStyle::Alignment::Center )
 			first.moveTo(x, y + (maxChildHeight - first.height()) / 2);
 
 		// End
 		x = xOffset() + width - last.width();
-		if ( style()->alignment() == PanelLayoutStyle::BottomAlignment )
+		if ( style()->alignment() == PanelLayoutStyle::Alignment::Bottom )
 			last.moveTo(x, y + maxChildHeight - last.height());
-		if ( style()->alignment() == PanelLayoutStyle::CenterAlignment )
+		if ( style()->alignment() == PanelLayoutStyle::Alignment::Center )
 			last.moveTo(x, y + (maxChildHeight - last.height()) / 2);
 
 		// Center
 		x = xOffset() + (width - middle.width()) / 2;
 		int minX = first.x() + first.width() + style()->spaceBetweenElements();
 		if ( x < minX ) x = minX;
-		if ( style()->alignment() == PanelLayoutStyle::BottomAlignment )
+		if ( style()->alignment() == PanelLayoutStyle::Alignment::Bottom )
 			middle.moveTo(x, y + maxChildHeight - middle.height());
-		if ( style()->alignment() == PanelLayoutStyle::CenterAlignment )
+		if ( style()->alignment() == PanelLayoutStyle::Alignment::Center )
 			middle.moveTo(x, y + (maxChildHeight - middle.height()) / 2);
 	}
 	else
@@ -145,25 +145,25 @@ void PanelLayout::updateGeometry(int availableWidth, int availableHeight)
 
 		// Begin
 		int y = yOffset();
-		if ( style()->alignment() == PanelLayoutStyle::RightAlignment )
+		if ( style()->alignment() == PanelLayoutStyle::Alignment::Right )
 			first.moveTo(x + maxChildWidth - first.width(), y);
-		if ( style()->alignment() == PanelLayoutStyle::CenterAlignment )
+		if ( style()->alignment() == PanelLayoutStyle::Alignment::Center )
 			first.moveTo(x + (maxChildWidth - first.width()) / 2, y);
 
 		// End
 		y = yOffset() + height - last.height();
-		if ( style()->alignment() == PanelLayoutStyle::RightAlignment )
+		if ( style()->alignment() == PanelLayoutStyle::Alignment::Right )
 			last.moveTo(x + maxChildWidth - last.width(), y);
-		if ( style()->alignment() == PanelLayoutStyle::CenterAlignment )
+		if ( style()->alignment() == PanelLayoutStyle::Alignment::Center )
 			last.moveTo(x + (maxChildWidth - last.width()) / 2, y);
 
 		// Center
 		y = yOffset() + (height - middle.height()) / 2;
 		int minY = first.y() + first.height() + style()->spaceBetweenElements();
 		if ( y < minY ) y = minY;
-		if ( style()->alignment() == PanelLayoutStyle::RightAlignment )
+		if ( style()->alignment() == PanelLayoutStyle::Alignment::Right )
 			middle.moveTo(x + maxChildWidth - middle.width(), y);
-		if ( style()->alignment() == PanelLayoutStyle::CenterAlignment )
+		if ( style()->alignment() == PanelLayoutStyle::Alignment::Center )
 			middle.moveTo(x + (maxChildWidth - middle.width()) / 2, y);
 	}
 

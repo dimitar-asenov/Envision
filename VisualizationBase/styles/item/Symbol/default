@@ -2,7 +2,7 @@
 <style prototypes="../Text/default">
 	<itemClass>Symbol</itemClass> <!-- This is only used by 'Static' when a symbol is displayed through a static element -->
 	<font>
-		<weight>50</weight>
+		<weight>1</weight>
 	</font>
 	<symbol>.</symbol>
 </style>

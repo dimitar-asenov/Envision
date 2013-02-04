@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -36,29 +36,23 @@
 
 namespace Model {
 
-ListRemove::ListRemove(Node *target, QVector<Node*>& nodes_, int position, bool release) :
-	UndoCommand(target, "remove node"), nodes(nodes_), removedNode(nodes_[position]), removePosition(position),
-	release(release)
-{
-}
-
-ListRemove::~ListRemove()
-{
-	if ( !isUndone() && removedNode && !release) SAFE_DELETE(removedNode);
-}
+ListRemove::ListRemove(Node *target, QVector<Node*>& nodes_, int position)
+: NodeOwningCommand(target, "remove node", nodes_[position], nullptr), nodes(nodes_), removedNode(nodes_[position]),
+  removePosition(position)
+{}
 
 void ListRemove::redo()
 {
 	if (removedNode) removedNode->setParent(nullptr);
 	nodes.remove(removePosition);
-	UndoCommand::redo();
+	NodeOwningCommand::redo();
 }
 
 void ListRemove::undo()
 {
 	nodes.insert(removePosition, removedNode);
 	if (removedNode) removedNode->setParent(target());
-	UndoCommand::undo();
+	NodeOwningCommand::undo();
 }
 
 }

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2012 ETH Zurich
+ ** Copyright (c) 2011, 2013 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -35,7 +35,7 @@
 #include "OOModel/src/expressions/EmptyExpression.h"
 #include "OOModel/src/statements/ExpressionStatement.h"
 
-#include "InteractionBase/src/handlers/SetCursorEvent.h"
+#include "InteractionBase/src/events/SetCursorEvent.h"
 #include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/cursor/LayoutCursor.h"
 
@@ -74,8 +74,7 @@ void HStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			lst->node()->model()->endModification();
 
 			lst->setUpdateNeeded(Visualization::Item::StandardUpdate);
-			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(lst, empty,
-					Interaction::SetCursorEvent::CursorOnLeft));
+			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(lst, empty));
 	}
 
 	if (!processed) GenericHandler::keyPressEvent(target, event);

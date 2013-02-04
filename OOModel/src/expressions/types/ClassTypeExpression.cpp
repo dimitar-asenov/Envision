@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -41,6 +41,12 @@ EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(ClassTypeExpression, TypeExpression)
 EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(ClassTypeExpression, TypeExpression)
 
 REGISTER_ATTRIBUTE(ClassTypeExpression, typeExpression, ReferenceExpression, false, false, true)
+
+ClassTypeExpression::ClassTypeExpression(ReferenceExpression* ref)
+: TypeExpression (nullptr, ClassTypeExpression::getMetaData())
+{
+	if (ref) setTypeExpression(ref);
+}
 
 Type* ClassTypeExpression::type()
 {

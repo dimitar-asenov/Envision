@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -34,26 +34,24 @@
 #ifndef EXTENDEDNODECHILD_H_
 #define EXTENDEDNODECHILD_H_
 
-#include "UndoCommand.h"
+#include "NodeOwningCommand.h"
 #include "../nodes/Extendable/ExtendableIndex.h"
 
 namespace Model {
 
 class Node;
 
-class MODELBASE_API ExtendedNodeChild: public UndoCommand
+class MODELBASE_API ExtendedNodeChild: public NodeOwningCommand
 {
 	private:
 		Node* newVal;
 		Node* oldVal;
 		ExtendableIndex attributeIndex;
 		QVector< QVector<Node*> >* subnodes;
-		bool detached_;
 
 	public:
-		ExtendedNodeChild(Node* target, Node* newValue,  bool detached, const ExtendableIndex &attributeIndex,
+		ExtendedNodeChild(Node* target, Node* newValue, const ExtendableIndex &attributeIndex,
 				QVector< QVector<Node*> >* subnodes);
-		virtual ~ExtendedNodeChild();
 
 		virtual void redo();
 		virtual void undo();

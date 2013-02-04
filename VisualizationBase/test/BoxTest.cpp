@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -46,7 +46,7 @@ BoxTest::BoxTest(Item* parent, int sub) :
 	setFlag(QGraphicsItem::ItemIsMovable);
 //	style.setMargins(4);
 //	style.setSpaceBetweenElements(3);
-//	style.setAlignment(SequentialLayoutStyle::CenterAlignment);
+//	style.setAlignment(SequentialLayoutStyle::Alignment::Center);
 //	style.setDirection(SequentialLayoutStyle::LeftToRight);
 //
 //	boxStyle.setCorner(BoxStyle::RoundCorner,10);

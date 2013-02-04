@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -56,6 +56,7 @@ VLibrary::VLibrary(Item* parent, OOModel::Library* node, const VLibraryStyle* st
 	header->append(new Static(header, &style->icon()));
 	name = new VText(header, node->nameNode(), &style->name());
 	header->append(name);
+	setDefaultMoveCursorProxy(name);
 
 	content = new PositionLayout(layout(), &style->content());
 	layout()->setContent(content);

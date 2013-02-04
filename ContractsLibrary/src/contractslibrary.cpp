@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2012 ETH Zurich
+ ** Copyright (c) 2011, 2013 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -34,8 +34,6 @@
 #include "contractslibrary.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
-#include "items/VContractCall.h"
-#include "interaction/ContractCallOffsetProvider.h"
 #include "monitor/ValueAtReturnVisitor.h"
 #include "monitor/ChangeMonitor.h"
 
@@ -49,11 +47,6 @@ namespace ContractsLibrary {
 
 bool ContractsLibrary::initialize(Core::EnvisionManager&)
 {
-	VContractCall::setInteractionHandler(OOInteraction::HExpression::instance());
-
-	Model::AdapterManager::registerAdapterViaConstructor
-		<OOInteraction::StringOffsetProvider, ContractCallOffsetProvider, VContractCall>();
-
 	ValueAtReturnVisitor::init();
 
 	// Create a change monitor

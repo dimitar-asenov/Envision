@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -43,7 +43,7 @@ MiniMap::MiniMap(Scene *scene, View *parent_) : View(scene, parent_), parent(par
 {
 	setInteractive(false);
 	updatePosition();
-	sceneRectChanged(scene->sceneRect());
+	updateMap();
 	visibleRectChanged();
 	setRenderHint(QPainter::Antialiasing);
 
@@ -65,9 +65,8 @@ void MiniMap::resizeEvent( QResizeEvent *event )
 	updatePosition();
 }
 
-void MiniMap::sceneRectChanged(const QRectF & rect)
+void MiniMap::sceneRectChanged(const QRectF & /*rect*/)
 {
-	sceneRect = rect;
 	updateMap();
 }
 
@@ -83,6 +82,8 @@ void MiniMap::paintEvent(QPaintEvent *event)
 	QPainter painter(viewport());
 	painter.setPen(Qt::red);
 	painter.drawRect(drawnRect);
+	if (drawnRect.width() <= 2 || drawnRect.height() <= 2)
+		painter.drawEllipse(drawnRect.center(), 5,5);
 }
 
 void MiniMap::mouseMoveEvent(QMouseEvent *event)
@@ -100,12 +101,12 @@ void MiniMap::mousePressEvent(QMouseEvent *event)
 void MiniMap::updateMap()
 {
 	QRectF maxRect;
-	maxRect.setLeft( sceneRect.x() < visibleRect.x() ? sceneRect.x() : visibleRect.x() );
-	maxRect.setTop( sceneRect.y() < visibleRect.y() ? sceneRect.y() : visibleRect.y() );
-	maxRect.setRight( (sceneRect.x() + sceneRect.width()) > (visibleRect.x()+visibleRect.width())
-			? (sceneRect.x() + sceneRect.width()) : (visibleRect.x()+visibleRect.width()));
-	maxRect.setBottom( (sceneRect.y() + sceneRect.height()) > (visibleRect.y()+visibleRect.height())
-			? (sceneRect.y() + sceneRect.height()) : (visibleRect.y()+visibleRect.height()));
+	maxRect.setLeft( sceneRect().x() < visibleRect.x() ? sceneRect().x() : visibleRect.x() );
+	maxRect.setTop( sceneRect().y() < visibleRect.y() ? sceneRect().y() : visibleRect.y() );
+	maxRect.setRight( (sceneRect().x() + sceneRect().width()) > (visibleRect.x()+visibleRect.width())
+			? (sceneRect().x() + sceneRect().width()) : (visibleRect.x()+visibleRect.width()));
+	maxRect.setBottom( (sceneRect().y() + sceneRect().height()) > (visibleRect.y()+visibleRect.height())
+			? (sceneRect().y() + sceneRect().height()) : (visibleRect.y()+visibleRect.height()));
 
 	qreal xScale = (width() - 2*frameWidth() - 2*margin) / maxRect.width();
 	qreal yScale = (height() - 2*frameWidth() - 2*margin) / maxRect.height();

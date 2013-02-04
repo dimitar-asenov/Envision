@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -41,7 +41,7 @@
 #include "CustomSceneEvent.h"
 
 #include "ModelBase/src/nodes/Node.h"
-#include "ModelBase/src/Model.h"
+#include "ModelBase/src/model/Model.h"
 
 namespace Visualization {
 
@@ -56,20 +56,21 @@ const QEvent::Type UpdateSceneEvent::EventType = static_cast<QEvent::Type> (QEve
 
 Scene::Scene()
 	: QGraphicsScene(VisualizationManager::instance().getMainWindow()), needsUpdate_(false),
-	  renderer_(defaultRenderer()), sceneHandlerItem_(new SceneHandlerItem(this)), inEventHandler_(false),
-	  inAnUpdate_(false), hiddenItemCategories_(NoItemCategory)
+	  renderer_(defaultRenderer()), sceneHandlerItem_(new SceneHandlerItem(this)), mainCursor_(nullptr),
+	  mainCursorsJustSet_(false), inEventHandler_(false), inAnUpdate_(false), hiddenItemCategories_(NoItemCategory)
 {
+	setItemIndexMethod(NoIndex);
 }
 
 Scene::~Scene()
 {
+	SAFE_DELETE(mainCursor_);
+	SAFE_DELETE_ITEM(sceneHandlerItem_);
+
 	for (Item* i : topLevelItems_) SAFE_DELETE_ITEM(i);
 	topLevelItems_.clear();
 	for (SelectedItem* si : selections_) SAFE_DELETE_ITEM(si);
 	selections_.clear();
-	for (Cursor* c : cursors_) SAFE_DELETE(c);
-	cursors_.clear();
-	SAFE_DELETE_ITEM(sceneHandlerItem_);
 
 	if (renderer_ != defaultRenderer()) SAFE_DELETE(renderer_);
 	else renderer_ = nullptr;
@@ -117,13 +118,12 @@ void Scene::updateItems()
 	QList<QGraphicsItem *> selected = selectedItems();
 
 	// Only display a selection when there are multiple selected items or no cursor
-	bool draw_selections = selected.size() !=1 || cursors_.isEmpty() || cursors_.first() == nullptr
-			|| cursors_.first()->visualization() == nullptr;
+	bool draw_selections = selected.size() !=1 || mainCursor_ == nullptr || mainCursor_->visualization() == nullptr;
 
 	if (!draw_selections)
 	{
 		// There is exactly one item and it has a cursor visualization
-		auto selectable = cursors_.first()->owner();
+		auto selectable = mainCursor_->owner();
 		while (selectable && ! (selectable->flags() &  QGraphicsItem::ItemIsSelectable))
 			selectable = selectable->parent();
 
@@ -141,14 +141,11 @@ void Scene::updateItems()
 		}
 	}
 
-	// Update Cursors
-	for (Cursor* c : cursors_)
+	// Update the main cursor
+	if (mainCursor_ && mainCursor_->visualization())
 	{
-		if (c->visualization())
-		{
-			if (c->visualization()->scene() != this) addItem(c->visualization());
-			c->visualization()->updateSubtree();
-		}
+		if (mainCursor_->visualization()->scene() != this) addItem(mainCursor_->visualization());
+		mainCursor_->visualization()->updateSubtree();
 	}
 
 	computeSceneRect();
@@ -163,11 +160,16 @@ void Scene::listenToModel(Model::Model* model)
 
 void Scene::nodesUpdated(QList<Node*> nodes)
 {
-	// TODO implement this in a more efficient way.
-	for (QGraphicsItem* graphics_item :  items())
+	for(auto node : nodes)
 	{
-		Item* item = static_cast<Item*> ( graphics_item );
-		if (item->hasNode() && nodes.contains(item->node())) item->setUpdateNeeded(Item::StandardUpdate);
+		auto it = Item::nodeItemsMap().find(node);
+		auto end = Item::nodeItemsMap().end();
+		while (it != end && it.key() == node)
+		{
+			auto item = it.value();
+			if (item->scene() == this) item->setUpdateNeeded(Item::StandardUpdate);
+			++it;
+		}
 	}
 
 	scheduleUpdate();
@@ -197,6 +199,15 @@ bool Scene::event(QEvent *event)
 		)
 		scheduleUpdate();
 
+	// Always move the scene handler item to the location of the last mouse click.
+	// This assures that even if the user presses somewhere in the empty space of the scene, the scene handler item will
+	// be selected.
+	if (event->type() == QEvent::GraphicsSceneMousePress)
+	{
+		auto e = static_cast<QGraphicsSceneMouseEvent*>(event);
+		sceneHandlerItem_->setPos(e->scenePos() - QPointF(1,1));
+	}
+
 	if (event->type() == QEvent::KeyPress)
 	{
 		//Circumvent the standard TAB handling of the scene.
@@ -215,19 +226,16 @@ bool Scene::event(QEvent *event)
 	}
 	postEventActions_.clear();
 
-	// Focus the sceneHandlerItem if no other item is focused after a mouse press
-	if (event->type() == QEvent::GraphicsSceneMousePress  && !focusItem())
-		sceneHandlerItem_->moveCursor(Item::MoveOnPosition, QPoint(0,0));
-
 	// On keyboard events, make sure the cursor is visible
-	if (event->type() == QEvent::KeyPress && !cursors_.isEmpty())
+	if (mainCursorsJustSet_ && mainCursor_ && mainCursor_->visualization()
+			&& mainCursor_->visualization()->boundingRect().isValid() )
 	{
 		for (auto view : views())
 			if (view->isActiveWindow())
 			{
-				auto vis = cursors_.at(0)->visualization();
-				if (!vis) vis = cursors_.at(0)->owner();
+				auto vis = mainCursor_->visualization();
 				view->ensureVisible( vis->boundingRect().translated(vis->scenePos()), 5, 5);
+				mainCursorsJustSet_ = false;
 			}
 	}
 
@@ -243,29 +251,65 @@ void Scene::addPostEventAction(QEvent* action)
 
 void Scene::setMainCursor(Cursor* cursor)
 {
-	if (!cursors_.isEmpty())
-	{
-		Cursor* main = cursors_.first();
-		SAFE_DELETE(main);
-		cursors_.removeFirst();
-	}
-
-	if (cursor) cursors_.prepend(cursor);
+	SAFE_DELETE(mainCursor_);
+	mainCursor_ = cursor;
+	mainCursorsJustSet_ = true;
 }
 
 void Scene::computeSceneRect()
 {
-	QRectF r;
+	QRectF sceneRect;
+	QRectF viewRect;
 	for (auto i: topLevelItems_)
 	{
+		QRectF br = i->boundingRect().translated(i->pos());
+		sceneRect = sceneRect.united(br);
 		if (i->itemCategory() != MenuItemCategory && i->itemCategory() != CursorItemCategory)
-		{
-			QRectF br = i->boundingRect().translated(i->pos());
-			r = r.united(br);
-		}
+			viewRect = viewRect.united(br);
 	}
-	r.adjust(-20,-20,20,20); // Add some margin
-	setSceneRect(r);
+
+	if (viewRect.isNull()) viewRect = QRectF(sceneRect.x(),sceneRect.y(),1,1);
+
+	// TODO: Currently the user is not able to scroll in a way that will make menu items visible, if they are outside
+	// the outter bounding (scene) rectangle of normal items. The code below was meant to fix this, but it caused
+	// other issues, with too many scroll bars appearing when they are not necessary. In the future this should be fixed.
+
+	//So far viewRect is strictly inside sceneRect.
+	//Counterbalance the visible rect so that the main content is not displaced
+	//At the end any extra space in the scene that is filled with menu items will be counterbalanced with equal amounts
+	//at the opposite end.
+//	int leftExtra = viewRect.left() - sceneRect.left();
+//	int rightExtra = sceneRect.right() - viewRect.right();
+//	int topExtra = viewRect.top() - sceneRect.top();
+//	int bottomExtra = sceneRect.bottom() - viewRect.bottom();
+//
+//	if (leftExtra > rightExtra)
+//	{
+//		viewRect.setWidth(viewRect.width() + leftExtra - rightExtra);
+//		viewRect.setX(viewRect.x() - leftExtra +  rightExtra);
+//	}
+//	if (rightExtra > leftExtra)
+//	{
+//		viewRect.setWidth(viewRect.width() + rightExtra - leftExtra);
+//		viewRect.setX(viewRect.x() - rightExtra + leftExtra);
+//	}
+//	if (topExtra > bottomExtra)
+//	{
+//		viewRect.setHeight(viewRect.height() + topExtra - bottomExtra);
+//		viewRect.setY(viewRect.y() - topExtra +  bottomExtra);
+//	}
+//	if (bottomExtra > topExtra)
+//	{
+//		viewRect.setHeight(viewRect.height() + bottomExtra - topExtra);
+//		viewRect.setY(viewRect.y() - bottomExtra + topExtra);
+//	}
+
+	viewRect.adjust(-20,-20,20,20); // Add some margin
+	sceneRect.adjust(-20,-20,20,20); // Add some margin
+
+	//sceneRect = viewRect.united(sceneRect);
+	setSceneRect(sceneRect);
+	for(auto v: views()) v->setSceneRect(viewRect);
 }
 
 }

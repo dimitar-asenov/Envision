@@ -6,7 +6,15 @@ win32:LIBS += -llogger \
     -lmodelbase \
     -lfilepersistence \
     -lvisualizationbase
-HEADERS += src/expression_editor/tree_builder/LeaveUnfinished.h \
+HEADERS += src/handlers/HActionPrompt.h \
+    src/actions/ActionPromptStyle.h \
+    src/actions/ActionPrompt.h \
+    src/actions/Action.h \
+    src/events/DetectMainSceneActivated.h \
+    src/events/ShowCommandPromptEvent.h \
+    src/events/SetCursorEvent.h \
+    src/commands/CreateNamedObjectWithAttributes.h \
+    src/expression_editor/tree_builder/LeaveUnfinished.h \
     test/HBinaryNode.h \
     src/autocomplete/AutoComplete.h \
     src/autocomplete/AutoCompleteVisStyle.h \
@@ -51,7 +59,6 @@ HEADERS += src/expression_editor/tree_builder/LeaveUnfinished.h \
     src/handlers/HPositionLayout.h \
     src/handlers/HSceneHandlerItem.h \
     src/handlers/HText.h \
-    src/handlers/SetCursorEvent.h \
     src/interactionbase_api.h \
     src/precompiled.h \
     src/vis/CommandPrompt.h \
@@ -59,14 +66,21 @@ HEADERS += src/expression_editor/tree_builder/LeaveUnfinished.h \
     src/vis/TextAndDescription.h \
     src/vis/TextAndDescriptionStyle.h \
     src/interactionbase.h
-SOURCES += src/expression_editor/tree_builder/LeaveUnfinished.cpp \
+SOURCES += src/handlers/HActionPrompt.cpp \
+    src/actions/ActionPromptStyle.cpp \
+    src/actions/ActionPrompt.cpp \
+    src/actions/Action.cpp \
+    src/events/DetectMainSceneActivated.cpp \
+    src/events/ShowCommandPromptEvent.cpp \
+    src/events/SetCursorEvent.cpp \
+    src/commands/CreateNamedObjectWithAttributes.cpp \
+    src/expression_editor/tree_builder/LeaveUnfinished.cpp \
     test/HBinaryNode.cpp \
     src/autocomplete/AutoComplete.cpp \
     src/autocomplete/AutoCompleteVisStyle.cpp \
     src/autocomplete/AutoCompleteVis.cpp \
     src/autocomplete/AutoCompleteEntry.cpp \
     src/handlers/HRootItem.cpp \
-    src/handlers/SetCursorEvent.cpp \
     src/expression_editor/ExpressionVisitor.cpp \
     src/expression_editor/ExpressionEditor.cpp \
     src/expression_editor/ExpressionTreeUtils.cpp \

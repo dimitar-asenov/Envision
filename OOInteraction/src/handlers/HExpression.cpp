@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2012 ETH Zurich
+ ** Copyright (c) 2011, 2013 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -34,6 +34,7 @@
 #include "HExpression.h"
 #include "../OOInteractionException.h"
 
+#include "../expression_editor/operators/CompoundObjectDescriptor.h"
 #include "string_components/StringComponents.h"
 #include "string_offset_providers/StringOffsetProvider.h"
 #include "expression_editor/OOExpressionBuilder.h"
@@ -44,7 +45,8 @@
 #include "OOModel/src/allOOModelNodes.h"
 #include "OOModel/src/types/SymbolProviderType.h"
 
-#include "InteractionBase/src/handlers/SetCursorEvent.h"
+#include "InteractionBase/src/handlers/HList.h"
+#include "InteractionBase/src/events/SetCursorEvent.h"
 #include "InteractionBase/src/autocomplete/AutoComplete.h"
 #include "InteractionBase/src/autocomplete/AutoCompleteEntry.h"
 #include "ModelBase/src/adapter/AdapterManager.h"
@@ -64,28 +66,32 @@ HExpression* HExpression::instance()
 
 void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
-	if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_Space)
+	auto key = event->key();
+	auto modifiers = event->modifiers();
+
+	if (modifiers == Qt::ControlModifier && key == Qt::Key_Space)
 	{
 		toggleAutoComplete(target);
 		return;
 	}
 
+	bool enterPressed = key == Qt::Key_Enter || key == Qt::Key_Return;
+	bool spacePressed = key == Qt::Key_Space;
+
 	// TODO implement this better. It is supposed to only let typed characters through and ignore modifier keys.
 	// However it does not work with e.g. ALTGR characters.
-	if ( event->key() != Qt::Key_Home && event->key() != Qt::Key_End && (
+	if ( key != Qt::Key_Home && key != Qt::Key_End && (
 			   event->text().isEmpty()
-			|| event->key() == Qt::Key_Escape
-			|| event->key() == Qt::Key_Tab
-			|| event->key() == Qt::Key_Semicolon
-			|| (event->modifiers() != Qt::NoModifier && event->modifiers() != Qt::ShiftModifier))
+			|| key == Qt::Key_Escape
+			|| key == Qt::Key_Tab
+			|| key == Qt::Key_Semicolon
+			|| (modifiers != Qt::NoModifier && modifiers != Qt::ShiftModifier)
+			|| (modifiers == Qt::ShiftModifier && (enterPressed || spacePressed)))
 			)
 	{
 		GenericHandler::keyPressEvent(target, event);
 		return;
 	}
-
-	bool enterPressed = event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return;
-	bool spacePressed = event->key() == Qt::Key_Space;
 
 	try
 	{
@@ -96,96 +102,93 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		// Find the top most parent that is adaptable to StringProvider
 		QString str;
 		int index;
-		Visualization::Item* topMostItem = stringInfo(target, (Qt::Key) event->key(), str, index);
+		Visualization::Item* topMostItem = stringInfo(target, (Qt::Key) key, str, index);
 
 		if (index < 0) return;
 
 		// Handle the HOME and END keys
-		if (event->key() == Qt::Key_Home || event->key() == Qt::Key_End)
+		if (key == Qt::Key_Home || key == Qt::Key_End)
 		{
 			auto parent = topMostItem->parent();
-			index = (event->key() == Qt::Key_Home ) ? 0 : str.length();
+			index = (key == Qt::Key_Home ) ? 0 : str.length();
 			target->scene()->addPostEventAction( new SetExpressionCursorEvent(parent, topMostItem->node(), index));
 			return;
 		}
 
 		// Handle the removing of an empty line and moving up/down on BACKSPACE/DELETE
-		if (topMostItem->node()->parent()
-		      && ((event->key() == Qt::Key_Backspace && index == 0)
-		            || (event->key() == Qt::Key_Delete && index == str.length())))
+		if ((key == Qt::Key_Backspace && index == 0) || (key == Qt::Key_Delete && index == str.length()))
 		{
-			auto list = dynamic_cast<OOModel::StatementItemList*>(topMostItem->node()->parent()->parent());
-			if (list)
+			if (topMostItem->node()->parent()
+					&& topMostItem->node()->parent()->typeId() == OOModel::ExpressionStatement::typeIdStatic())
 			{
-				int thisItemListIndex = list->indexOf(topMostItem->node()->parent());
-				int itemToDeletelistIndex = thisItemListIndex + (event->key() == Qt::Key_Backspace ? -1 : +1);
-
-				if (itemToDeletelistIndex >= 0 && itemToDeletelistIndex < list->size())
+				if ( auto list = dynamic_cast<OOModel::StatementItemList*>(topMostItem->node()->parent()->parent()) )
 				{
-					auto st = dynamic_cast<OOModel::ExpressionStatement*>(list->at(itemToDeletelistIndex));
-					if (st && dynamic_cast<OOModel::EmptyExpression*>(st->expression()))
+					int thisItemListIndex = list->indexOf(topMostItem->node()->parent());
+					int itemToDeletelistIndex = thisItemListIndex + (key == Qt::Key_Backspace ? -1 : +1);
+					bool empty = dynamic_cast<OOModel::EmptyExpression*>(topMostItem->node());
+
+					// Get a parent which represents a list (of statements or statement items)
+					auto parent = topMostItem->parent();
+					Visualization::VList* vlist = nullptr;
+					while (!(vlist = dynamic_cast<Visualization::VList*>(parent)) && parent->parent())
+						parent = parent->parent();
+
+					if (itemToDeletelistIndex >= 0 && itemToDeletelistIndex < list->size())
 					{
-						list->model()->beginModification(list, "remove empty line");
-						list->remove(itemToDeletelistIndex, false);
-						list->model()->endModification();
-
-						target->scene()->addPostEventAction(
-							new Interaction::SetCursorEvent(topMostItem->parent(), target->node(),
-									(event->key() == Qt::Key_Backspace ?
-											Interaction::SetCursorEvent::CursorOnLeft
-											: Interaction::SetCursorEvent::CursorOnRight)));
-						return;
-					} else
-					{
-						// Get a parent which represents a list (of statements or statement items)
-						auto parent = topMostItem->parent();
-						Visualization::VList* vlist = nullptr;
-						while (!(vlist = dynamic_cast<Visualization::VList*>(parent)) && parent->parent())
-							parent = parent->parent();
-
-						auto vis = vlist->findVisualizationOf(topMostItem->node()->parent());
-						if (event->key() == Qt::Key_Backspace)
+						// Delete the current or the previous or the next empty item
+						auto st = dynamic_cast<OOModel::ExpressionStatement*>(list->at(itemToDeletelistIndex));
+						if (st && dynamic_cast<OOModel::EmptyExpression*>(st->expression()))
 						{
-							vlist->layout()->moveCursor(Visualization::Item::CursorMoveDirection::MoveUpOf,
-								vis->pos().toPoint() + QPoint(vis->width() / 2, 0));
-
-							if (dynamic_cast<OOModel::EmptyExpression*>(topMostItem->node()))
-							{
-								list->model()->beginModification(list, "remove empty line");
-								list->remove(thisItemListIndex, false);
-								list->model()->endModification();
-							}
+							Interaction::HList::instance()->removeAndSetCursor(vlist,
+									empty ? thisItemListIndex : itemToDeletelistIndex, key == Qt::Key_Delete,
+										key == Qt::Key_Delete
+										? Interaction::SetCursorEvent::CursorOnRight : Interaction::SetCursorEvent::CursorOnLeft);
+							return;
 						}
-						else
-						{
-							vlist->layout()->moveCursor(Visualization::Item::CursorMoveDirection::MoveDownOf,
-								vis->pos().toPoint() + QPoint(vis->width() / 2, vis->height()-1));
-						}
-
-						return;
 					}
+
+					// If we could not delete the previous/next statements, then delete the current one if it is empty.
+					// In either case position the cursor appropriately
+					if (empty)
+						Interaction::HList::instance()->removeAndSetCursor(vlist, thisItemListIndex);
+					else
+						Interaction::HList::instance()->scheduleSetCursor(vlist, thisItemListIndex +
+								(key == Qt::Key_Delete ? 1 : 0));
+					return;
 				}
 			}
+
+			// If we reach this point then we do not know how do handle these keys so just send them to the parent
+			GenericHandler::keyPressEvent(target, event);
+			return;
 		}
 
 
 		// Modify the string, inserting the pressed key's text (or deleting text)
 		QString newText = str;
 		int newIndex = index;
-		switch (event->key())
+		switch (key)
 		{
+			// Below we let CompoundObjectDescriptor process Delete and Backspace since it might need to remove
+			// extra characters if those keys are pressed just on the boundary of a compound object
 			case Qt::Key_Delete:
 			{
-				if (index < str.size() ) newText.remove(index, 1);
+				if (index < str.size() )
+				{
+					if (! CompoundObjectDescriptor::processDeleteOrBackspaceKey(Qt::Key_Delete, newText, newIndex))
+						newText.remove(index, 1);
+				}
 			} break;
 			case Qt::Key_Backspace:
 			{
 				if (index > 0 )
 				{
-					newText.remove(index-1, 1);
-					--newIndex;
+					if (! CompoundObjectDescriptor::processDeleteOrBackspaceKey(Qt::Key_Backspace, newText, newIndex))
+					{
+						newText.remove(index-1, 1);
+						--newIndex;
+					}
 				}
-
 			} break;
 			default:
 			{
@@ -199,16 +202,17 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 
 		// Process keywords for statements
 		OOModel::ExpressionStatement* replaceStatement = nullptr;
+		auto trimmedText = newText.trimmed();
 		if ( (enterPressed || spacePressed)
-				&& (newText.startsWith("for") || newText.startsWith("foreach")|| newText.startsWith("if")
-						|| newText.startsWith("continue") || newText.startsWith("break") || newText.startsWith("return")))
+				&& (trimmedText == "for" || trimmedText == "foreach" || trimmedText == "if"
+						|| trimmedText == "continue" || trimmedText == "break" || trimmedText == "return"))
 			replaceStatement = parentExpressionStatement(dynamic_cast<OOModel::Expression*>(target->node()));
 
 		if (replaceStatement)
 		{
 			OOModel::Statement* st = nullptr;
 			Model::Node* toFocus = nullptr;
-			if(newText.startsWith("for"))
+			if(trimmedText == "for")
 			{
 				auto loop =  new OOModel::LoopStatement();
 				loop->setInitStep(new OOModel::EmptyExpression());
@@ -216,7 +220,7 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 				toFocus = loop->initStep();
 				st = loop;
 			}
-			else if (newText.startsWith("foreach"))
+			else if (trimmedText == "foreach")
 			{
 				auto loop =  new OOModel::ForEachStatement();
 				loop->setCollection(new OOModel::EmptyExpression());
@@ -224,7 +228,7 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 				toFocus = loop->varNameNode();
 				st = loop;
 			}
-			else if (newText.startsWith("if"))
+			else if (trimmedText == "if")
 			{
 				auto ifs =  new OOModel::IfStatement();
 				ifs->setCondition(new OOModel::EmptyExpression());
@@ -232,17 +236,17 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 				toFocus = ifs->condition();
 				st = ifs;
 			}
-			else if (newText.startsWith("continue"))
+			else if (trimmedText == "continue")
 			{
 				st = new OOModel::ContinueStatement();
 				toFocus = st;
 			}
-			else if (newText.startsWith("break"))
+			else if (trimmedText == "break")
 			{
 				st = new OOModel::BreakStatement();
 				toFocus = st;
 			}
-			else if (newText.startsWith("return"))
+			else if (trimmedText == "return")
 			{
 				auto ret =  new OOModel::ReturnStatement();
 				ret->values()->append(new OOModel::EmptyExpression());
@@ -253,15 +257,14 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 
 			Model::Node* containerNode = replaceStatement->parent();
 			containerNode->model()->beginModification(containerNode, "replace expression statement");
-			containerNode->replaceChild(replaceStatement, st, false);
+			containerNode->replaceChild(replaceStatement, st);
 			containerNode->model()->endModification();
 
 			// Get a parent which represents a list (of statements or statement items)
 			auto parent = topMostItem->parent();
 			while (! dynamic_cast<Visualization::VList*>(parent) && parent->parent()) parent = parent->parent();
 
-			target->scene()->addPostEventAction(
-					new Interaction::SetCursorEvent(parent, toFocus, Interaction::SetCursorEvent::CursorOnLeft));
+			target->scene()->addPostEventAction(new Interaction::SetCursorEvent(parent, toFocus));
 			return;
 		}
 
@@ -305,8 +308,9 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			setNewExpression(target, topMostItem, newText, newIndex);
 
 			// Trigger auto complete
-			if (newText.endsWith('.')
-					|| (newText.size() > 0 && newText.at(newText.size()-1).isLetterOrNumber())
+			auto cutText = newText.left(newIndex);
+			if (cutText.endsWith('.')
+					|| (cutText.size() > 0 && cutText.at(cutText.size()-1).isLetterOrNumber())
 				)
 			{
 				auto s = target->scene();
@@ -374,7 +378,7 @@ void HExpression::setNewExpression(Visualization::Item* target, Visualization::I
 
 	Model::Node* containerNode = topMostItem->node()->parent();
 	containerNode->model()->beginModification(containerNode, "edit expression");
-	containerNode->replaceChild(topMostItem->node(), newExpression, false);
+	containerNode->replaceChild(topMostItem->node(), newExpression);
 	containerNode->model()->endModification();
 
 	// Compute the new offset. This can change in case the string of the new expression is different.
@@ -384,8 +388,20 @@ void HExpression::setNewExpression(Visualization::Item* target, Visualization::I
 	// Let interested plug-ins know that an expression was edited. Plug-ins might decide to make changes.
 	for (auto monitor : expressionMonitors_) monitor(newExpression, index);
 
+	// Find an item that represents a node, as any intermediate items might disappear when during the update.
+	// E.g. VLoopStatement keeps it's condition inside a wrapper for background color that also get deleted during the
+	// update.
 	auto parent = topMostItem->parent();
+	while (!parent->node() && parent->parent()) parent=parent->parent();
+
 	target->scene()->addPostEventAction( new SetExpressionCursorEvent(parent, newExpression, index));
+
+	// Clear any compound objects that were stored during this expression processing
+	// TODO: This is not always what we want. For example if we type a quote when trying to make a new string argument
+	// that appears before a lambda, the lambda will be converted to a string but will not be immediately converted back
+	// to a lambda. If we clean all stored compound object, we won't be able to restore the lambda, once the closing
+	// quote is typed.
+	CompoundObjectDescriptor::cleanAllStoredExpressions();
 }
 
 void HExpression::showAutoComplete(Visualization::Item* target)

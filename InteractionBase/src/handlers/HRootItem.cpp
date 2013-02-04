@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2012 ETH Zurich
+ ** Copyright (c) 2011, 2013 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -32,7 +32,7 @@
  */
 
 #include "HRootItem.h"
-#include "handlers/SetCursorEvent.h"
+#include "events/SetCursorEvent.h"
 
 #include "VisualizationBase/src/items/RootItem.h"
 #include "VisualizationBase/src/Scene.h"
@@ -63,7 +63,7 @@ void HRootItem::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		ri->setPurpose( (ri->purpose() + 1) % target->scene()->renderer()->numRegisteredPurposes() );
 
 		target->scene()->addPostEventAction(
-			new SetCursorEvent(target, ri->node(), Interaction::SetCursorEvent::CursorOnLeft));
+			new SetCursorEvent(target, ri->node()));
 	}
 	else GenericHandler::keyPressEvent(target, event);
 }

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -34,21 +34,19 @@
 #ifndef LISTREMOVE_H_
 #define LISTREMOVE_H_
 
-#include "UndoCommand.h"
+#include "NodeOwningCommand.h"
 
 namespace Model {
 
-class MODELBASE_API ListRemove: public UndoCommand
+class MODELBASE_API ListRemove: public NodeOwningCommand
 {
 	private:
 		QVector<Node*>& nodes;
 		Node* removedNode;
 		int removePosition;
-		bool release;
 
 	public:
-		ListRemove(Node *target, QVector<Node*>& nodes, int position, bool release);
-		virtual ~ListRemove();
+		ListRemove(Node *target, QVector<Node*>& nodes, int position);
 
 		virtual void redo();
 		virtual void undo();

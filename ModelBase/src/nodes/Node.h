@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -407,11 +407,24 @@ class MODELBASE_API Node
 		 *
 		 * The default implementation always returns false and is suitable for nodes without children. Reimplement this
 		 * method if you are implementing a composite node that has replaceable child nodes.
-		 *
-		 * If \a releaseOldChild is true, the old child will be released from this node and can be used in other nodes.
-		 * Otherwise the old child will be managed by the current node's Undo Queue and can not be used for other nodes.
 		 */
-		virtual bool replaceChild(Node* child, Node* replacement, bool releaseOldChild = true);
+		virtual bool replaceChild(Node* child, Node* replacement);
+
+		/**
+		 * Begins a modification session with the current node as a modification target.
+		 *
+		 * \a text is the description that will be associated with this modification.
+		 *
+		 * \sa Model::beginModification()
+		 */
+		void beginModification(const QString &text = QString());
+
+		/**
+		 * Ends a modification session.
+		 *
+		 * \sa Model::endModification()
+		 */
+		void endModification();
 
 	protected:
 

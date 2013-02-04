@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -34,7 +34,7 @@
 #include "modelbase.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
-#include "Model.h"
+#include "model/ModelManager.h"
 
 #include "nodes/Text.h"
 #include "nodes/Integer.h"
@@ -60,7 +60,7 @@ Log* ModelBase::logger = nullptr;
 
 bool ModelBase::initialize(Core::EnvisionManager&)
 {
-	Model::init();
+	ModelManager::init();
 
 	logger = Logger::Log::getLogger("modelbase");
 	Text::registerNodeType();

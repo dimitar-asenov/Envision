@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -35,6 +35,8 @@
 #define SVGICONSTYLE_H_
 
 #include "../visualizationbase_api.h"
+
+#include "../items/Mipmap.h"
 #include "IconStyle.h"
 
 namespace Visualization {
@@ -43,7 +45,8 @@ class VISUALIZATIONBASE_API SVGIconStyle : public IconStyle
 {
 	private:
 		QString filename_;
-		QSvgRenderer renderer_;
+		mutable QSvgRenderer renderer_;
+		mutable Mipmap mipmap_;
 		int width_;
 		int height_;
 

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -36,7 +36,7 @@
 namespace Visualization {
 
 PanelLayoutStyle::PanelLayoutStyle() :
-	orientation_(HorizontalOrientation), alignment_(CenterAlignment), spaceBetweenElements_(5)
+	orientation_(Orientation::Horizontal), alignment_(Alignment::Center), spaceBetweenElements_(5)
 {
 }
 
@@ -58,8 +58,12 @@ void PanelLayoutStyle::setSpaceBetweenElements(int space)
 void PanelLayoutStyle::load(StyleLoader& sl)
 {
 	LayoutStyle::load(sl);
-	sl.load("orientation", (int&) orientation_);
-	sl.load("alignment", (int&) alignment_);
+	// Indirect reading of enums in order to avoid compiler errors
+	int enumVal{};
+	sl.load("orientation", enumVal );
+	orientation_ = (Orientation) enumVal;
+	sl.load("alignment", enumVal );
+	alignment_ = (Alignment) enumVal;
 	sl.load("spaceBetweenElements", spaceBetweenElements_);
 }
 }

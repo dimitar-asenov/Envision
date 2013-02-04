@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -56,6 +56,7 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 	public:
 		typedef ItemStyle StyleType;
 		const static int LAYER_DEFAULT_Z = 0;
+		const static int LAYER_COMMAND = 25;
 		const static int LAYER_AUTOCOMPLETE_Z = 50;
 		const static int LAYER_SELECTION_Z = 100;
 		const static int LAYER_CURSOR_Z = 200;
@@ -90,11 +91,29 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 			StandardUpdate, /**< Update the geometry of the item and properties depending on child items. This update
 									should be used when a child item has changed and the parent just needs to account for this
 									change.*/
-			FullUpdate /**< The item should completely update itself and recreate all child items. This should be used when
-								the item has been directly edited, or when it's style, purpose or similar defining properties
-								have changed. */
+			FullUpdate, /**< The item should completely update itself and recreate all child items. This should be used
+								when the item has been directly edited, or when it's style, purpose or similar defining
+								properties have changed. */
+			RepeatUpdate /**< This update is similar to StandardUpdate but can also be requested while the item is being
+			 	 	 	 	 	updated. Normally, update requests which happen while an item is being updated are disregarded.
+			 	 	 	 	 	If a RepeatUpdate is requested, the item will be updated one more time after the current update
+			 	 	 	 	 	is finished. This is useful when the item needs to consider how its children are drawn (their
+			 	 	 	 	 	size) and update accordingly.*/
 		};
 		void setUpdateNeeded(UpdateType updateType);
+
+		/**
+		 * Finds the currently existing direct or indirect child Item that visualizes \a nodeVisualizedByChild and sets
+		 * it update status to \a updateType.
+		 *
+		 * If there is no child item which yet visualizes \a nodeVisualizedByChild then this method will search for the
+		 * Item which visualizes the parent of \a nodeVisualizedByChild. This will continue recursively until an existing
+		 * visualization of one of the ancestors of \a nodeVisualizedByChild is found.
+		 *
+		 * Use this method when a new node has been created and the a visualization needs to be updated in order to
+		 * display it.
+		 */
+		void setUpdateNeededForChildItem(UpdateType updateType, Model::Node* nodeVisualizedByChild);
 
 		virtual UpdateType needsUpdate();
 		virtual void updateSubtree();
@@ -118,7 +137,11 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 			MoveUpOf, /**< Move the cursor as close as possible above the specified reference point. */
 			MoveDownOf, /**< Move the cursor as close as possible below the specified reference point. */
 			MoveLeftOf, /**< Move the cursor as close as possible to left of the specified reference point. */
-			MoveRightOf /**< Move the cursor as close as possible to right of the specified reference point. */
+			MoveRightOf, /**< Move the cursor as close as possible to right of the specified reference point. */
+			MoveDefault /**< Move the cursor to the default location. This is typically used after the item is created.
+			 	 	 	 	 	  The default behavior is to move the cursor to the top left corner. If a defaultMove cursor
+			 	 	 	 	 	  proxy is set, it will be selected instead. Subclasses might reimplement moveCursor to
+			 	 	 	 	 	  customize this behavior. */
 		};
 
 		/**
@@ -137,7 +160,8 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		 *
 		 * This method is responsible for creating a corresponding Cursor item and setting it as the main scene cursor.
 		 */
-		virtual bool moveCursor(CursorMoveDirection dir, const QPoint& reference = QPoint());
+		virtual bool moveCursor(CursorMoveDirection dir = MoveDefault, QPoint reference = QPoint());
+		void setDefaultMoveCursorProxy(Item* proxy);
 
 		virtual QList<ItemRegion> regions();
 
@@ -260,6 +284,8 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		Scene::ItemCategory itemCategory();
 		bool isCategoryHiddenDuringPaint();
 
+		static QMultiHash<Model::Node*, Item*>& nodeItemsMap();
+
 	protected:
 
 		void setWidth(int width);
@@ -324,7 +350,10 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		QRectF boundingRect_;
 		const ItemStyle* style_;
 		Shape* shape_;
+
 		UpdateType needsUpdate_;
+		Item* defaultMoveCursorProxy_{};
+
 		int purpose_;
 		QMap<const Model::Node*, int> childNodePurpose_;
 
@@ -377,15 +406,12 @@ inline Item* Item::parent() const {return static_cast<Item*>(parentItem()); }
 inline int Item::width() const { return boundingRect_.width(); }
 inline int Item::height() const { return boundingRect_.height(); }
 inline QSizeF Item::size() const { return boundingRect_.size();}
-inline void Item::setWidth(int width)  { boundingRect_.setWidth(width); }
-inline void Item::setHeight(int height) { boundingRect_.setHeight(height);}
-inline void Item::setSize(int width, int height) { boundingRect_.setSize(QSizeF(width, height)); }
-inline void Item::setSize(const QSizeF& size) { boundingRect_.setSize(size); }
 inline const ItemStyle* Item::style() const { return style_; }
 inline bool Item::hasShape() const { return shape_; }
 inline Shape* Item::getShape() const {	return shape_; }
 inline qreal Item::xEnd() const { return x() + width() - 1; }
 inline qreal Item::yEnd() const { return y() + height() - 1; }
+inline void Item::setDefaultMoveCursorProxy(Item* proxy) {defaultMoveCursorProxy_ = proxy;}
 
 template <class T> void Item::synchronizeItem(T*& item, bool present, const typename T::StyleType* style)
 {

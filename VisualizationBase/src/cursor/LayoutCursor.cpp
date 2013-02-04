@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2012 ETH Zurich
+ ** Copyright (c) 2011, 2013 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -55,7 +55,7 @@ void LayoutCursor::setVisualizationSize(const QSize& size)
 
 void LayoutCursor::setVisualizationPosition(const QPoint& pos)
 {
-	setPosition(owner()->scenePos().toPoint() + pos);
+	setPosition(pos);
 	CursorShapeItem* ci = static_cast<CursorShapeItem*> (visualization());
 	ci->setCursorTopLeft(position());
 }

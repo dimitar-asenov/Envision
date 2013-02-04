@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -48,6 +48,7 @@ class ItemWithNode : public Super
 	public:
 		typedef ContainedNode NodeType;
 		ItemWithNode(Item* parent, ContainedNode* node, const typename Super::StyleType* style = nullptr);
+		~ItemWithNode();
 
 		virtual bool hasNode() const;
 		virtual ContainedNode* node() const;
@@ -62,6 +63,13 @@ class ItemWithNode : public Super
 template <class Super, class ContainedNode> ItemWithNode<Super,ContainedNode>::ItemWithNode(Item* parent, ContainedNode* node, const typename Super::StyleType* style)
 	: Super(parent, style), node_(node), revision_(-1)
 {
+	Super::nodeItemsMap().insert(node,this);
+}
+
+template <class Super, class ContainedNode> ItemWithNode<Super,ContainedNode>::~ItemWithNode()
+{
+	auto removed = Super::nodeItemsMap().remove(node_,this);
+	Q_ASSERT(removed == 1);
 }
 
 template <class Super, class ContainedNode> bool ItemWithNode<Super,ContainedNode>::hasNode() const { return true; }

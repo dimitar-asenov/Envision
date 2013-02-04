@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -40,6 +40,7 @@ void VFormalArgumentStyle::load(Visualization::StyleLoader& sl)
 	ItemStyle::load(sl);
 
 	sl.load("layout", layout_);
+	sl.load("lambdaLayout", lambdaLayout_);
 	sl.load("name", name_);
 }
 

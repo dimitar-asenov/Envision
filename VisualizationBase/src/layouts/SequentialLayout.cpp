@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -267,9 +267,9 @@ void SequentialLayout::updateGeometry(int, int)
 		if ( horizontal )
 		{
 			int y = h;
-			if ( style()->alignment() == SequentialLayoutStyle::BottomAlignment )
+			if ( style()->alignment() == SequentialLayoutStyle::Alignment::Bottom )
 				y += maxChildHeight - items[i]->height();
-			if ( style()->alignment() == SequentialLayoutStyle::CenterAlignment )
+			if ( style()->alignment() == SequentialLayoutStyle::Alignment::Center )
 				y += (maxChildHeight - items[i]->height()) / 2;
 
 			if ( i != begin ) w += spaceBetweenElements();
@@ -279,9 +279,9 @@ void SequentialLayout::updateGeometry(int, int)
 		else
 		{
 			int x = w;
-			if ( style()->alignment() == SequentialLayoutStyle::RightAlignment )
+			if ( style()->alignment() == SequentialLayoutStyle::Alignment::Right )
 				x += maxChildWidth - items[i]->width();
-			if ( style()->alignment() == SequentialLayoutStyle::CenterAlignment )
+			if ( style()->alignment() == SequentialLayoutStyle::Alignment::Center )
 				x += (maxChildWidth - items[i]->width()) / 2;
 
 			if ( i != begin ) h += spaceBetweenElements();
@@ -361,6 +361,8 @@ QList<ItemRegion> SequentialLayout::regions()
 		}
 
 		itemRegion.setItem(items[i]);
+		adjustCursorRegionToAvoidZeroSize(cursorRegion.region(), horizontal, forward, !extraCursors && i==0, false);
+
 		// Note below, that a horizontal layout, means a vertical cursor
 		auto lc = new LayoutCursor(this, horizontal ? Cursor::VerticalCursor : Cursor::HorizontalCursor);
 		cursorRegion.setCursor(lc);
@@ -369,9 +371,7 @@ QList<ItemRegion> SequentialLayout::regions()
 		lc->setVisualizationSize(horizontal ? QSize(2, height()) : QSize(width(), 2));
 		if (i==0 && !extraCursors) lc->setIsAtBoundary(true);
 
-		adjustCursorRegionToAvoidZeroSize(cursorRegion.region(), horizontal, forward, !extraCursors && i==0, false);
-
-		cursorRegion.cursor()->setRegion(mapToScene(cursorRegion.region()).boundingRect().toRect());
+		cursorRegion.cursor()->setRegion(cursorRegion.region());
 		if (style()->notLocationEquivalentCursors()) lc->setNotLocationEquivalent(true);
 
 		// Skip cursor?
@@ -398,7 +398,7 @@ QList<ItemRegion> SequentialLayout::regions()
 		lc->setIndex(items.size());
 		lc->setVisualizationPosition(regs.last().region().topLeft());
 		lc->setVisualizationSize(horizontal ? QSize(2, height()) : QSize(width(), 2));
-		lc->setRegion(mapToScene(trailing).boundingRect().toRect());
+		lc->setRegion(trailing);
 		if (!extraCursors) lc->setIsAtBoundary(true);
 		if (style()->notLocationEquivalentCursors()) lc->setNotLocationEquivalent(true);
 	}
@@ -423,7 +423,7 @@ QList<ItemRegion> SequentialLayout::regions()
 		lc->setIndex(-1);
 		lc->setVisualizationPosition(regs.last().region().topLeft());
 		lc->setVisualizationSize(horizontal ? QSize(2, height()) : QSize(width(), 2));
-		lc->setRegion(mapToScene(extra).boundingRect().toRect());
+		lc->setRegion(extra);
 		lc->setIsAtBoundary(true);
 		if (style()->notLocationEquivalentCursors()) lc->setNotLocationEquivalent(true);
 
@@ -442,7 +442,7 @@ QList<ItemRegion> SequentialLayout::regions()
 		lc->setIndex(items.size()+1);
 		lc->setVisualizationPosition(regs.last().region().topLeft());
 		lc->setVisualizationSize(horizontal ? QSize(2, height()) : QSize(width(), 2));
-		lc->setRegion(mapToScene(extra).boundingRect().toRect());
+		lc->setRegion(extra);
 		lc->setIsAtBoundary(true);
 		if (style()->notLocationEquivalentCursors()) lc->setNotLocationEquivalent(true);
 	}

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -46,6 +46,7 @@ namespace Interaction {
 class Command;
 class CommandExecutionEngine;
 class CommandPrompt;
+class ActionPrompt;
 
 class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHandler
 {
@@ -63,7 +64,7 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 		const QList<Command*>& commands();
 		void addCommand(Command* command);
 
-		CommandPrompt* prompt();
+		CommandPrompt* commandPrompt();
 		void removeCommandPrompt();
 		void showCommandPrompt(Visualization::Item* commandRecevier);
 
@@ -71,7 +72,6 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 
 		// Keyboard events
 		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event);
-		virtual void keyReleaseEvent(Visualization::Item *target, QKeyEvent *event);
 
 		// Mouse events
 		virtual void mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event);
@@ -84,19 +84,33 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 		// Command events
 		virtual void command(Visualization::Item *target, const QString& command);
 
+		/**
+		 * Removes the node visualized by \a target from the list which contains it.
+		 *
+		 * Returns true if \a target has a parent of type VList and its list node contains the target node. Otherwise this
+		 * method does nothing and returns false.
+		 */
+		bool removeFromList(Visualization::Item* target);
+
+		ActionPrompt* actionPrompt();
+		void removeActionPrompt();
+		void showActionPrompt(Visualization::Item *actionRecevier, bool autoExecuteAction);
+		virtual void action(Visualization::Item *target, const QString& action);
+
 	protected:
 		GenericHandler();
 
 		virtual void filterSelectedItems(Visualization::Item *target, QGraphicsSceneMouseEvent *event);
 		virtual void arrangeNodesForClipboard(QList<const Model::Node*>& list);
 
-		void moveCursor(Visualization::Item *target, int key);
+		bool moveCursor(Visualization::Item *target, int key);
 
 	private:
 		QList<Command*> supportedCommands;
 
 		static CommandExecutionEngine* executionEngine_;
-		static CommandPrompt* prompt_;
+		static CommandPrompt* commandPrompt_;
+		static ActionPrompt* actionPrompt_;
 
 		static QPoint cursorOriginMidPoint_;
 		static CursorMoveOrientation cursorMoveOrientation_;

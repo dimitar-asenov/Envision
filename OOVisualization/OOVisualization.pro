@@ -7,7 +7,17 @@ win32:LIBS += -llogger \
     -loomodel \
     -lvisualizationbase \
     -linteractionbase
-HEADERS += test/MethodAddOn.h \
+HEADERS += src/alternative/VKeywordMethodCallStyle.h \
+    src/alternative/VKeywordMethodCall.h \
+    src/expressions/VLambdaExpressionStyle.h \
+    src/expressions/VLambdaExpression.h \
+    src/statements/VTryCatchFinallyStyle.h \
+    src/statements/VCatchClauseStyle.h \
+    src/statements/VCatchClause.h \
+    src/statements/VTryCatchFinally.h \
+    src/expressions/VThrowExpressionStyle.h \
+    src/expressions/VThrowExpression.h \
+    test/MethodAddOn.h \
     src/expressions/VEmptyExpressionStyle.h \
     src/elements/VStatementItemList.h \
     src/elements/VFormalTypeArgumentStyle.h \
@@ -83,7 +93,17 @@ HEADERS += test/MethodAddOn.h \
     src/types/VArrayTypeStyle.h \
     src/types/VPrimitiveType.h \
     src/oovisualization.h
-SOURCES += test/MethodAddOn.cpp \
+SOURCES += src/alternative/VKeywordMethodCallStyle.cpp \
+    src/alternative/VKeywordMethodCall.cpp \
+    src/expressions/VLambdaExpressionStyle.cpp \
+    src/expressions/VLambdaExpression.cpp \
+    src/statements/VTryCatchFinallyStyle.cpp \
+    src/statements/VCatchClauseStyle.cpp \
+    src/statements/VCatchClause.cpp \
+    src/statements/VTryCatchFinally.cpp \
+    src/expressions/VThrowExpressionStyle.cpp \
+    src/expressions/VThrowExpression.cpp \
+    test/MethodAddOn.cpp \
     src/expressions/VEmptyExpressionStyle.cpp \
     src/elements/VStatementItemList.cpp \
     src/elements/VFormalTypeArgumentStyle.cpp \

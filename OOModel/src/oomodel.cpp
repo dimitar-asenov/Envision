@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -59,6 +59,7 @@ bool OOModel::initialize(Core::EnvisionManager&)
 	Model::TypedList<FormalTypeArgument>::registerNodeType();
 	Model::TypedList<Field>::registerNodeType();
 	Model::TypedList<OOReference>::registerNodeType();
+	Model::TypedList<CatchClause>::registerNodeType();
 
 	Model::TypedList<Statement>::registerNodeType();
 	Model::TypedList<Block>::registerNodeType();
@@ -72,6 +73,7 @@ bool OOModel::initialize(Core::EnvisionManager&)
 	Model::TypedList<SwitchStatement>::registerNodeType();
 	Model::TypedList<VariableDeclaration>::registerNodeType();
 	Model::TypedList<ExpressionStatement>::registerNodeType();
+	Model::TypedList<TryCatchFinallyStatement>::registerNodeType();
 
 	Model::TypedList<Expression>::registerNodeType();
 	Model::TypedList<IntegerLiteral>::registerNodeType();
@@ -94,6 +96,8 @@ bool OOModel::initialize(Core::EnvisionManager&)
 	Model::TypedList<CommaExpression>::registerNodeType();
 	Model::TypedList<AssignmentExpression>::registerNodeType();
 	Model::TypedList<ConditionalExpression>::registerNodeType();
+	Model::TypedList<ThrowExpression>::registerNodeType();
+	Model::TypedList<LambdaExpression>::registerNodeType();
 
 	Model::TypedList<TypeExpression>::registerNodeType();
 	Model::TypedList<PrimitiveTypeExpression>::registerNodeType();
@@ -112,6 +116,7 @@ bool OOModel::initialize(Core::EnvisionManager&)
 	FormalResult::init();
 	FormalTypeArgument::init();
 	Field::init();
+	CatchClause::init();
 
 	Statement::init();
 	Block::init();
@@ -125,6 +130,7 @@ bool OOModel::initialize(Core::EnvisionManager&)
 	SwitchStatement::init();
 	VariableDeclaration::init();
 	ExpressionStatement::init();
+	TryCatchFinallyStatement::init();
 
 	Expression::init();
 	IntegerLiteral::init();
@@ -147,6 +153,8 @@ bool OOModel::initialize(Core::EnvisionManager&)
 	CommaExpression::init();
 	AssignmentExpression::init();
 	ConditionalExpression::init();
+	ThrowExpression::init();
+	LambdaExpression::init();
 
 	TypeExpression::init();
 	PrimitiveTypeExpression::init();
@@ -170,6 +178,8 @@ bool OOModel::initialize(Core::EnvisionManager&)
 		auto field = new Field();
 		field->setTypeExpression(new EmptyExpression());
 		return field;} );
+	Model::TypedList<Expression>::setDefaultElementCreationFunction([]() -> Expression* {
+		return new EmptyExpression();} );
 
 	return true;
 }

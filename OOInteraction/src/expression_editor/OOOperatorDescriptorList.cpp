@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2012 ETH Zurich
+ ** Copyright (c) 2011, 2013 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -37,7 +37,9 @@
 #include "expression_editor/operators/BinaryOperatorDescriptor.h"
 #include "expression_editor/operators/CastDescriptor.h"
 #include "expression_editor/operators/CommaDescriptor.h"
+#include "expression_editor/operators/NewObjectDescriptor.h"
 #include "expression_editor/operators/NewArrayDescriptor.h"
+#include "expression_editor/operators/ThrowDescriptor.h"
 #include "expression_editor/operators/InitializerDescriptor.h"
 #include "expression_editor/operators/MemberOperatorDescriptor.h"
 #include "expression_editor/operators/CallDescriptor.h"
@@ -47,6 +49,7 @@
 #include "expression_editor/operators/ConditionalExpressionDescriptor.h"
 #include "expression_editor/operators/TypeArgumentsDescriptor.h"
 #include "expression_editor/operators/CommandDescriptor.h"
+#include "expression_editor/operators/CompoundObjectDescriptor.h"
 
 namespace OOInteraction {
 
@@ -157,6 +160,8 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 			Interaction::OperatorDescriptor::LeftAssociative));
 	instance()->addDescriptor(new InitializerDescriptor( "initializer", "{ expr }", 1, 0,
 			Interaction::OperatorDescriptor::NotAssociative));
+	instance()->addDescriptor(new NewObjectDescriptor( "new object", "new SPACE expr", 1, 2,
+			Interaction::OperatorDescriptor::RightAssociative));
 	instance()->addDescriptor(new NewArrayDescriptor( "new array", "new SPACE expr [ expr ]", 2, 2,
 			Interaction::OperatorDescriptor::RightAssociative));
 	instance()->addDescriptor(new MemberOperatorDescriptor( "member", "expr . id", 2, 1,
@@ -173,12 +178,18 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 			Interaction::OperatorDescriptor::RightAssociative));
 	instance()->addDescriptor(new DeclarationDescriptor( "variable declaration and initialization",
 			"expr SPACE id = expr", 3, 40, Interaction::OperatorDescriptor::RightAssociative));
+	instance()->addDescriptor(new ThrowDescriptor( "throw", "throw SPACE expr", 1, 30,
+					Interaction::OperatorDescriptor::RightAssociative));
 
 	// Command descriptors
 	instance()->addDescriptor(new CommandDescriptor( "command without params", "\\ id SPACE", 1, 0,
 			Interaction::OperatorDescriptor::NotAssociative));
 	instance()->addDescriptor(new CommandDescriptor( "command with params", "\\ id ( expr )", 2, 0,
 			Interaction::OperatorDescriptor::NotAssociative));
+
+	instance()->addDescriptor(new CompoundObjectDescriptor( "compound object",
+			CompoundObjectDescriptor::compoundSignature(), 1, 0, Interaction::OperatorDescriptor::NotAssociative));
 }
+
 
 } /* namespace OOInteraction */

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -70,8 +70,6 @@ class VISUALIZATIONBASE_API MainView: public View
 		static const int SCALING_FACTOR = 2;
 		int scaleLevel;
 };
-
-inline qreal MainView::scaleFactor() const {	return SCALING_FACTOR / (qreal) scaleLevel; }
 
 }
 

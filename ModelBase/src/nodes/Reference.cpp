@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -33,7 +33,7 @@
 
 #include "nodes/Reference.h"
 #include "commands/FieldSet.h"
-#include "Model.h"
+#include "model/Model.h"
 #include "ModelException.h"
 
 namespace Model {

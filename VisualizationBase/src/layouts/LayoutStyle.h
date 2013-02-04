@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -43,9 +43,9 @@ namespace Visualization {
 class VISUALIZATIONBASE_API LayoutStyle : public ItemStyle
 {
 	public:
-		enum Orientation { HorizontalOrientation, VerticalOrientation};
-		enum Alignment { CenterAlignment, LeftAlignment, RightAlignment, TopAlignment, BottomAlignment};
-		enum Direction { LeftToRight, RightToLeft, TopToBottom, BottomToTop};
+		enum class Orientation : int { Horizontal, Vertical};
+		enum class Alignment : int { Center, Left, Right, Top, Bottom};
+		enum class Direction : int { LeftToRight, RightToLeft, TopToBottom, BottomToTop};
 
 	private:
 		int leftMargin_;

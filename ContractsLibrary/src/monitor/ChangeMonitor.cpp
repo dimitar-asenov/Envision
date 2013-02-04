@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2012 ETH Zurich
+ ** Copyright (c) 2011, 2013 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -36,7 +36,7 @@
 #include "ValueAtReturnVisitor.h"
 #include "OOModel/src/expressions/Expression.h"
 #include "ModelBase/src/nodes/Node.h"
-#include "ModelBase/src/Model.h"
+#include "ModelBase/src/model/Model.h"
 
 namespace ContractsLibrary {
 

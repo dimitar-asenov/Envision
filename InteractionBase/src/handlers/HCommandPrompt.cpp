@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -51,7 +51,7 @@ HCommandPrompt* HCommandPrompt::instance()
 	return &h;
 }
 
-void HCommandPrompt::keyReleaseEvent(Visualization::Item *target, QKeyEvent *event)
+void HCommandPrompt::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 {
 	CommandPrompt* prompt = static_cast<CommandPrompt*> (target);
 
@@ -85,7 +85,7 @@ void HCommandPrompt::keyReleaseEvent(Visualization::Item *target, QKeyEvent *eve
 			else prompt->takeSuggestion(prompt->result()->suggestions().first());
 		}
 	}
-	else GenericHandler::keyReleaseEvent(target, event);
+	else GenericHandler::keyPressEvent(target, event);
 }
 
 }

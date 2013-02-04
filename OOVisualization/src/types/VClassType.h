@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -49,6 +49,8 @@ class OOVISUALIZATION_API VClassType
 		VClassType(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VClassType();
 
+		VReferenceExpression* reference() const;
+
 	protected:
 		void determineChildren();
 		void updateGeometry(int availableWidth, int availableHeight);
@@ -58,6 +60,8 @@ class OOVISUALIZATION_API VClassType
 
 		VReferenceExpression* vis_;
 };
+
+inline VReferenceExpression* VClassType::reference() const { return vis_; }
 
 }
 

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -48,6 +48,9 @@ class VISUALIZATIONBASE_API Position
 
 	EXTENSION_ATTRIBUTE_VALUE(Model::Integer, x, setX, int)
 	EXTENSION_ATTRIBUTE_VALUE(Model::Integer, y, setY, int)
+
+	public:
+		void set(int x, int y);
 };
 
 }

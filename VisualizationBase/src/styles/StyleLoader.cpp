@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -65,7 +65,7 @@ void StyleLoader::load(const QString& propertyName, int& value)
 	bool ok = true;
 
 	value = getProperty(propertyName).toInt(&ok);
-	if ( !ok ) throw VisualizationException("Could read integer value property '" + propertyName + "'");
+	if ( !ok ) throw VisualizationException("Could not read integer value property '" + propertyName + "'");
 }
 
 void StyleLoader::load(const QString& propertyName, bool& value)
@@ -83,7 +83,7 @@ void StyleLoader::load(const QString& propertyName, double& value)
 	bool ok = true;
 
 	value = getProperty(propertyName).toDouble(&ok);
-	if ( !ok ) throw VisualizationException("Could read double value property '" + propertyName + "'");
+	if ( !ok ) throw VisualizationException("Could not read double value property '" + propertyName + "'");
 }
 
 void StyleLoader::loadComposite(QPointF& value)

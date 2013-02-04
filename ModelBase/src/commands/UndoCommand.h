@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -66,13 +66,20 @@ class MODELBASE_API UndoCommand: public QUndoCommand
 		 * - The command has been undone and a new command has been pushed on top of the stack. In this case the current
 		 * command is deleted and isUndone is true.
 		 */
-		bool isUndone();
+		bool isUndone() const;
 
-		Node* target();
+		Node* target() const;
+
+		/**
+		 * Returns the node owned by this command or nullptr if no node is owned.
+		 *
+		 * Nodes which are owned should be deleted by the command when it is deleted.
+		 */
+		virtual Node* owned() const;
 };
 
-inline bool UndoCommand::isUndone() { return undone; }
-inline Node* UndoCommand::target() { return target_; }
+inline bool UndoCommand::isUndone() const { return undone; }
+inline Node* UndoCommand::target() const { return target_; }
 
 }
 

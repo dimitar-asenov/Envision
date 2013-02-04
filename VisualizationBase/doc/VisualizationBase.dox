@@ -1,0 +1,276 @@
+/*! \namespace Visualization
+
+The VisualizationBase plug-in sets the foundations of the visualization framework in Envision.
+
+Envision's visualization framework is based on
+<a href="http://qt-project.org/doc/graphicsview.html">Qt's GraphicsView framework</a>.
+In that framework a QGraphicsScene is a virtual canvas where QGraphicsItem objects are drawn. A QGraphicsView is used
+to visualize the scene or parts of it.
+
+VisualizationBase defines classes built upon the functionality of the Graphics View framework to provide essential
+features for visualizing and navigating application models. A number of extensibility concepts are also implemented
+which make it easy to add custom functionality.
+
+<h3>Scenes</h3>
+A Scene is a data structure that contains the visual representation of one or more models and possibly other graphical
+entities. It is a virtual canvas that is not visible itself but serves as the source for one or more views. Objects
+on this canvas are instances of Item or derived classes. Items which are part of a model visualization are structured
+in a hierarchy similar to the one of the model tree. Other graphical objects can have an arbitrary structure.
+
+A Scene has an associated ModelRenderer which is used to construct a visualization (instance of Item) from an arbitrary
+node in a model. Classes deriving from Item which represent a node must be registered with a ModelRenderer indicating
+what node type they can depict. The renderer is then used to draw visualizations of a model or of individual nodes.
+It is possible to have multiple renderers and switch between them in order to use different sets of visualizations.
+
+The scene accepts user input events from associated views and propagates them to the appropriate item (e.g. the item
+under the cursor or the focused item). Each scene also has a default SceneHandlerItem. User actions which are not
+processed by any other item on the scene will be forwarded to this object. Default interaction mechanisms can be
+implemented there. The scene is automatically updated after the user interacts with any of its associated views.
+
+Items on the scene need to be updated whenever a change in the model or in a visual representation occurs. In order
+to avoid unnecessary updates which are costly this process has been optimized to only adjust affected visual elements.
+The mechanism relies on the hierarchy of items on the scene. Whenever the visualization of an item becomes invalid,
+only it and all of its ancestors will be updated. Siblings which explicitly indicate that their visualization depends
+on the one of their parent, may also be updated.
+
+<h3>Views</h3>
+To display the contents of a scene a View widget must be placed on the main screen of Envision. Multiple views can be
+used to show the same scene from different viewpoints simultaneously. Views can visualize the scene using a variety of
+transformations such as scaling, rotation and translation. Views support zooming in and out, moving to different parts
+of the scene and also provide scene interaction.
+
+A view can be either a master view (i.e. has no parent) or a child view which must specify a parent view. The position
+and size on screen of child views are controlled by their parent. Master views are managed by the VisualizationManager
+singleton. It is responsible for positioning and resizing the views within Envision's main window.
+
+VisualizationBase provides a default view. The MainView master view provides two distinct features: a fixed step zoom
+behavior controlled by the mouse wheel and a mini map navigation. The mini map navigation is implemented in the child
+view MiniMap which at all times shows the entire scene and outlines in red the region currently displayed by its parent.
+The user can navigate the main view by clicking or dragging within the mini map located in the lower left corner.
+
+The figure below shows a screen shot of the two views. Here only part of the canvas is visible and the mini map helps
+the user to stay oriented.
+
+\image html "navigation.png" "Mini-map example"
+
+<h3>Items</h3>
+A central concept in VisualizationBase is the item. Items are the building blocks of the visualizations in Envision.
+An item belongs to a scene and can draw anything on it: text, shapes, images, etc. Items can also have child items
+thus allowing a natural hierarchical structure.
+
+Items in Envision inherit from the Item class. It implements facilities to configure the geometry of an item, to
+perform updates, to communicate with the scene, to process input events and to handle the item's style and shape.
+Subclasses are responsible for specifying what should be drawn and what children, if any, an item has.
+
+Generally items are used to visualize nodes from the application model. Some items directly correspond to a node
+(inherit from ItemWithNode), while others perform service functions in the visualization. For example a method
+item corresponds to a construct from the application tree. Other items, such as icons, layouts, lines, connectors,
+etc. might be part of a method's visualization but are only used to achieve a certain look and are not directly
+associated with a node. Typically one of the ancestors of these items is an ItemWithNode.
+
+Each item has a style. A style is a collection of properties which define how an item should be drawn. This could
+include for example, a color scheme for the item, positions for children items, a style for children items and
+others. Styles allow for the customization of most aspects of the visualization without the need to understand or
+modify program source code, therefore simplifying the task of experimenting with different appearances.
+
+The developer of a subclass of Item decides what visualization parameters the new class should contain. During the
+construction of an Item or at a later time a particular style can be set that defines the values of all required
+properties. VisualizationBase provides a convenient way of instantiating styles based on XML files. Defining a
+specific look and feel in such a way is very flexible: the files provide reuse mechanisms which make it easy to
+create a family of styles that have a common base. This flexibility is granular and can be applied to an entire
+set of properties or singe parameters. Using this built-in mechanism provided by the singleton Styles a single style
+object will be shared among all items which share the same properties. The format of style files
+and more details on how to use them are discussed below.
+
+Specified in each item's style is an optional shape. A Shape is a static image drawn behind the item, such as for
+example a box. By default the item's content is fully enclosed by the shape and appears on top of it, but this
+behavior can be overridden if desired. Changing the appearance of the shape or even substituting a shape for
+another one can be achieved easily by modifying the item's style file. A shape itself has properties which are
+also defined there. Shapes already defined in VisualizationBase include a Box, a Diamond, Braces, and SvgShape.
+
+<h4>%Interaction</h4>
+%Interaction with the scene is performed at the item level. When the user presses a key on the keyboard, moves the
+mouse or clicks a mouse button, a corresponding event is sent to the scene which then dispatches it to the
+appropriate Item object. This is for example the top-most visible object under the cursor or the focused item
+for keyboard events.
+
+An item can either handle or ignore an event. By default all keyboard and most mouse events are ignored. An ignored
+mouse event is propagated to the the next visible item under the current one. Some basic selection behavior is
+enabled for all items. All default mechanisms are provided by Qt.
+
+VisualizationBase also introduces a \e command handling mechanism for all items. Each item can receive a string
+command and execute it. The exact mechanism is specified in InteractionBase, VisualizationBase only provides the
+necessary infrastructure.
+
+To enable more advanced item interaction, event and command processing for each item is performed by an
+InteractionHandler object. Such an object is associated with each item class. The default implementation simply
+ignores commands and forwards events to the underlying Qt event handling methods. Plug-in developers can create
+new handlers and replace the default one in order to allow custom interaction. A handler can override the behavior
+for mouse, keyboard and command events. InteractionBase provides a GenericHandler which implements many useful
+functions.
+
+<h4>Predefined items</h4>
+A number of items which are frequently used in visualizations are provided for convenience by VisualizationBase:
+
+TextRenderer - This is an abstract item that can be used to render any Unicode string on screen. Any other item
+which has an inherent textual representation can inherit from TextRenderer and use the facilities it provides
+which include text selection and modification (in conjunction with an appropriate interaction handler). This is
+suitable for literals, identifiers, keywords, comments, special symbols, etc. TextRenderer supports a rich style
+definition, that allows the configuration of the font, size, mode, color and background in both the normal and
+the selected state.
+
+Text - A thin wrapper around TextRenderer that just renders some text on screen. The text to display can be set
+at run-time and may optionally be editable.
+
+Symbol - An item that renders static text on screen. The text to render is determined by the style file of the
+item. This is useful for defining the visualization of ’fixed’ items, such as unary and binary operator symbols,
+keywords, etc.
+
+LayoutProvider - This item makes it easy to design a new visualization based on a layout. Typically a client
+will inherit from LayoutProvider specifying a particular layout to use. LayoutProvider will automatically take
+care of all drawing and service functions and the derived class must only populate the layout with children elements.
+
+SVGIcon - This item displays the content of an SVG file as an icon. The file to use and the icon size are specified
+in the item's style.
+
+VBoolean, VCharacter, VInteger, VFloat, VText, VReference, VList, VExtendable - As a convention item names of the
+form \e Vnode are used when they visualize the correspondingly named node. Thus these items are used to show the
+similarly named nodes defined in ModelBase. Most of these items are thin wrappers around TextRenderer. VList uses
+a SequentialLayout and shows the contents of a List object. VExtendable is based on a PanelBorderLayout layout
+and serves as a generic visualization for any class deriving from ExtendableNode. It lists all the attributes
+of such an item as a pair of attribute name and attribute visualization per row.
+
+The figure below is a screen shot from Envision showing how some of the predefined items are visualized.
+
+\image html "default_vis.png" "The default visualization of generic items"
+
+The figure shows a list with a gray background which consists of three items. The first two items are VExtendable
+objects representing a simple BinaryNode node. The last item is a VText object rendering of a Text node. A binary
+node has a name, and optionally a left and right child nodes. VExtendable shows all attributes of the node it
+represents as a vertical list of pairs. In gray we see on the left the name of the attribute. On the right we see
+the visualization of the attribute value. Since VExtendable can be used to visualize any node that inherits from
+ExtendableNode there needs to be away to know exactly what node type is being visualized. The name of the node
+type appears in gray in the top bar of the visualization. In case there is an attribute called \e name VExtendable
+puts this in the title before the type name, instead of the normal list of attributes. Thus in the image above the
+first two elements of the list are called 'First node' and 'Empty node'. Furthermore we see that both child
+elements of 'First node' are present and are called 'left node' and 'right node'. All instances of VExtendable
+represent BinaryNode objects as indicated by their type in gray text.
+
+<h4>Layouts</h4>
+Layouts are items whose only purpose is to contain other items and manage their position on screen. A composite
+item can use one or several layouts to simplify the management of children. For example the visualization of a
+node representing a class can contain a layout that displays all of the class' methods in a linear sequence,
+or in a grid.
+
+Several common layouts are provided by VisualizationBase. Most of the options that control aspects of their
+visualizations are configurable in styles. Only more interesting options will are mentioned below.
+
+SequentialLayout - This layout arranges its children items in a linear sequence. Its interface is similar to a
+collection, items can be inserted and removed anywhere in the layout. The way the items are visualized depends
+on the layout's style and includes options for ordering, orientation, alignment and spacing. The figure below
+shows four instances of a sequential layout visualizing the same items ( \e A, \e B and \e C) with different
+style settings.
+
+\image html "sequential_layout.png" "A sequential layout with different orientations, item orderings and alignments."
+
+This layout is useful for arranging objects which logically belong to an ordered sequence, such as the statements
+of a method.
+
+PanelLayout - This layout visualizes a linear sequence of up to three items called \e first , \e middle and \e last.
+The layout will stretch along the sequence direction in order to fill any space that the parent reports as available.
+The \e first item will be placed in the beginning of the space available to the layout, the \e middle one at the
+center and the \e last item will be located at the end. The figure below illustrates this concept with a few examples.
+
+\image html "panel_layout.png" "A panel layout. Available space reported by the parent is indicated in green. If the parent reports more available space than required, the layout will stretch to fill this space."
+
+This layout is useful for headers of objects. For example an icon can be placed on the left, while the object title
+appears in the middle.
+
+PanelBorderLayout - This is a complex layout that consists of one item in the middle, surrounded by four instances of
+PanelLayout that serve as a border. The objects on the border are optional. The figure below depicts the look of this
+layout.
+
+\image html "panel_border_layout.png" "A panel border layout. The background shape is shown in green."
+
+PanelBorderLayout can also override the default drawing of its background shape, if any. In this case the shape is not
+drawn to encompass all objects in the layout, but rather goes through the middle of the panel layouts on the border.
+
+This layout is useful for displaying objects which represent higher level composite entities. For example classes or
+methods visualized in such a way can include an icon and a name in the top bar while having their content displayed in
+the middle. Additional indicators can be placed on the side bars.
+
+GridLayout - Items in this layout are arranged in a grid as demonstrated on the figure below. It is possible to adjust
+the horizontal and vertical alignment of items as well as the space between them. For maximum convenience it is possible
+to have empty grid spaces.
+
+\image html "grid_layout.png" "A grid layout where the contained items are horizontally and vertically centered. Not all grid positions are filled."
+
+This layout can be used to show a group of items more concisely compared to a SequentialLayout. Some constructs such as
+matrices are also naturally represented by a grid arrangement.
+
+PositionLayout - This layout arranges items which contain a position. Visualizations which can be used in this layout
+must represents nodes that have the Position extension. This extension class is defined in VisualizationBase and can be
+registered for any node type that inherits from ExtendableNode. It provides \e x and \e y coordinates that define the
+position of the node. The figure below shows an example visualization of three items.
+
+\image html "position_layout.png" "A position layout. The location of each item is determined from its x and y coordinates stored in the application model."
+
+This layout is suitable for the rendering of unordered sets or lists, such as a collection of classes or methods.
+
+<h4>Styles</h4>
+Each visual item in Envision has a style, which is a set of properties that define how the item should be drawn. The values
+of these properties are defined by a style file. A sample file is shown below:
+
+\verbatim
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/Item/default">
+	<shape prototypes="shape/Box/default">
+		Box
+		<backgroundBrush>
+			<gradient>
+				<stopPoints>
+					<e1>
+						<first>1.0</first>
+						<second>
+							<alpha>255</alpha>
+							<red>192</red>
+							<green>192</green>
+							<blue>192</blue>
+						</second>
+					</e1>	
+				</stopPoints>
+			</gradient>
+		</backgroundBrush>
+		<cornerType>0</cornerType>
+		<cornerRadius>5</cornerRadius>
+	</shape>
+	<itemsStyle prototypes="layout/SequentialLayout/default">
+		<direction>2</direction>
+		<spaceBetweenElements>5</spaceBetweenElements>
+	</itemsStyle>
+</style>
+\endverbatim
+
+The root element is always called \e style. The tags of its child elements are the names of the properties whose value
+needs to be defined. A value can be a simple text, boolean, number or a composite style that itself consists of other
+values. The meaning of these properties is defined by the style class.
+
+Each property may have one or more prototypes defined using the prototypes attribute. A prototype is a style file.
+This enables a specialization scheme for composite properties. When such a property has at least one prototype, it is
+not necessary to explicitly specify all of its sub-elements. The value of any elements that are not specified will be
+taken from the first prototype in the prototype list that has a definition for this value.
+
+In the example above the entire style uses a prototype - the default Item style. This is a common practice as the
+default item style specifies properties which each item must define such as a shape. Afterwards two properties are
+defined - \e shape and \e itemsStyle. The shape property overrides the one from the default item style and specifies that a
+box shape will be used. This shape has many properties which are not explicitly specified here, therefore the shape's
+default style is used as a prototype. Only the sub-properties of the shape that differ from the prototype are defined in
+the current style file. This is essentially the second color of the background gradient, the corner type and the corner
+radius. The other property - \e itemsStyle - defines the direction and the space between elements of the underlying
+sequential layout that is used within VList to display its content. Any other properties that the sequential layout
+style requires are taken from the default prototype.
+
+Multiple prototype entries in the prototypes attribute can be specified by using a comma. The paths specified there can be
+either relative to the current file, or can begin in the 'styles' folder of a deployed Envision installation.
+
+*/

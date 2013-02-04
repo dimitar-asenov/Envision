@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -46,6 +46,7 @@ template class Model::TypedList<OOModel::FormalResult>;
 template class Model::TypedList<OOModel::FormalTypeArgument>;
 template class Model::TypedList<OOModel::Field>;
 template class Model::TypedList<OOModel::OOReference>;
+template class Model::TypedList<OOModel::CatchClause>;
 
 template class Model::TypedList<OOModel::Statement>;
 template class Model::TypedList<OOModel::Block>;
@@ -59,6 +60,7 @@ template class Model::TypedList<OOModel::SwitchCase>;
 template class Model::TypedList<OOModel::SwitchStatement>;
 template class Model::TypedList<OOModel::VariableDeclaration>;
 template class Model::TypedList<OOModel::ExpressionStatement>;
+template class Model::TypedList<OOModel::TryCatchFinallyStatement>;
 
 template class Model::TypedList<OOModel::Expression>;
 template class Model::TypedList<OOModel::IntegerLiteral>;
@@ -81,6 +83,8 @@ template class Model::TypedList<OOModel::UnfinishedOperator>;
 template class Model::TypedList<OOModel::CommaExpression>;
 template class Model::TypedList<OOModel::AssignmentExpression>;
 template class Model::TypedList<OOModel::ConditionalExpression>;
+template class Model::TypedList<OOModel::ThrowExpression>;
+template class Model::TypedList<OOModel::LambdaExpression>;
 
 template class Model::TypedList<OOModel::TypeExpression>;
 template class Model::TypedList<OOModel::PrimitiveTypeExpression>;

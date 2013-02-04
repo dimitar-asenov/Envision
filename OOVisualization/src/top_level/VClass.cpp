@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -70,6 +70,7 @@ VClass::VClass(Item* parent, NodeType* node, const StyleType* style) :
 	header_->append(icon_);
 	name_ = new VText(header_, node->nameNode(), &style->nameDefault());
 	header_->append(name_);
+	setDefaultMoveCursorProxy(name_);
 	typeArguments_ = new VList(header_, node->typeArguments(), &style->typeArguments());
 	header_->append(typeArguments_);
 	baseClasses_ = new VList(header_, node->baseClasses(), &style->baseClasses());

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -35,7 +35,7 @@
 #define FIELDSET_H_
 
 #include "UndoCommand.h"
-#include "../Model.h"
+#include "../model/Model.h"
 
 namespace Model {
 

@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -31,9 +31,10 @@
  *      Author: Dimitar Asenov
  **********************************************************************************************************************/
 
-#include "nodes/Node.h"
-#include "modelbase.h"
-#include "Model.h"
+#include "Node.h"
+#include "../modelbase.h"
+#include "../model/Model.h"
+#include "../model/ModelManager.h"
 #include "commands/UndoCommand.h"
 #include "ModelException.h"
 #include "Reference.h"
@@ -141,7 +142,7 @@ bool Node::isModifyable() const
 	return !m || m->canBeModified(this);
 }
 
-bool Node::replaceChild(Node*, Node*, bool)
+bool Node::replaceChild(Node*, Node*)
 {
 	return false;
 }
@@ -163,6 +164,16 @@ QList<Node*> Node::findSymbols(const QRegExp& symbolExp, Node* source, FindSymbo
 	return res;
 }
 
+void Node::beginModification(const QString &text)
+{
+	model()->beginModification(this, text);
+}
+
+void Node::endModification()
+{
+	model()->endModification();
+}
+
 /***********************************************************************************************************************
  * GETTERS AND SETTERS
  **********************************************************************************************************************/
@@ -179,7 +190,7 @@ const QString& Node::typeName() const
 
 Model* Node::model() const
 {
-	return Model::findModel(root());
+	return ModelManager::instance().find(root());
 }
 
 Node* Node::root() const

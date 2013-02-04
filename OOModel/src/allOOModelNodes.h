@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -52,6 +52,7 @@
 #include "statements/SwitchCase.h"
 #include "statements/SwitchStatement.h"
 #include "statements/ExpressionStatement.h"
+#include "statements/TryCatchFinallyStatement.h"
 
 #include "expressions/Expression.h"
 #include "expressions/IntegerLiteral.h"
@@ -75,6 +76,8 @@
 #include "expressions/AssignmentExpression.h"
 #include "expressions/VariableDeclaration.h"
 #include "expressions/ConditionalExpression.h"
+#include "expressions/ThrowExpression.h"
+#include "expressions/LambdaExpression.h"
 
 #include "expressions/types/TypeExpression.h"
 #include "expressions/types/PrimitiveTypeExpression.h"
@@ -89,5 +92,6 @@
 #include "elements/FormalResult.h"
 #include "elements/FormalTypeArgument.h"
 #include "elements/OOReference.h"
+#include "elements/CatchClause.h"
 
 #endif /* ALLOOMODELNODES_H_ */

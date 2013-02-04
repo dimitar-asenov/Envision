@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -38,23 +38,14 @@
 
 namespace Model {
 
-ExtendedNodeChild::ExtendedNodeChild(Node* target, Node* newValue_, bool detached,
+ExtendedNodeChild::ExtendedNodeChild(Node* target, Node* newValue_,
 		const ExtendableIndex &attributeIndex_, QVector< QVector<Node*> >* subnodes_) :
-	UndoCommand(target, "set node"), newVal(newValue_),
-	oldVal((*subnodes_)[attributeIndex_.level()][attributeIndex_.index()]),
-	attributeIndex(attributeIndex_), subnodes(subnodes_), detached_(detached)
+		NodeOwningCommand(target, "set node", (*subnodes_)[attributeIndex_.level()][attributeIndex_.index()], newValue_),
+		newVal(newValue_), oldVal((*subnodes_)[attributeIndex_.level()][attributeIndex_.index()]),
+	attributeIndex(attributeIndex_), subnodes(subnodes_)
 {
 	if (newValue_ && newValue_->parent())
 		throw ModelException("Set as a child of ExtenableNode a node that already has a parent.");
-}
-
-ExtendedNodeChild::~ExtendedNodeChild()
-{
-	if (!detached_)
-	{
-		if ( isUndone() ) SAFE_DELETE(newVal);
-		else SAFE_DELETE(oldVal);
-	}
 }
 
 void ExtendedNodeChild::redo()
@@ -62,7 +53,7 @@ void ExtendedNodeChild::redo()
 	(*subnodes)[attributeIndex.level()][attributeIndex.index()] = newVal;
 	if (newVal) newVal->setParent(target());
 	if (oldVal) oldVal->setParent(nullptr);
-	UndoCommand::redo();
+	NodeOwningCommand::redo();
 }
 
 void ExtendedNodeChild::undo()
@@ -70,7 +61,7 @@ void ExtendedNodeChild::undo()
 	(*subnodes)[attributeIndex.level()][attributeIndex.index()] = oldVal;
 	if (newVal) newVal->setParent(nullptr);
 	if (oldVal) oldVal->setParent(target());
-	UndoCommand::undo();
+	NodeOwningCommand::undo();
 }
 
 }

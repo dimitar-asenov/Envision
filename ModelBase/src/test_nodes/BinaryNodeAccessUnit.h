@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **
-** Copyright (c) 2011, ETH Zurich
+** Copyright (c) 2011, 2013 ETH Zurich
 ** All rights reserved.
 **
 ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -37,7 +37,7 @@
 #include "../modelbase_api.h"
 
 #include "BinaryNode.h"
-#include "../NodeReadWriteLock.h"
+#include "../concurrent/NodeReadWriteLock.h"
 
 namespace TestNodes {
 

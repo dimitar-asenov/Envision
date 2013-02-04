@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2012 ETH Zurich
+ ** Copyright (c) 2011, 2013 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -33,20 +33,52 @@
 
 #include "handlers/HProject.h"
 
-#include "commands/CProjectCreateClass.h"
+#include "commands/CCreateClass.h"
+
+#include "OOVisualization/src/top_level/VProject.h"
+#include "OOModel/src/top_level/Project.h"
+#include "FilePersistence/src/SystemClipboard.h"
 
 namespace OOInteraction {
 
 HProject::HProject()
 {
 	// TODO: is it appropriate to add commands in the constructor or should they be registered somewhere else?
-	addCommand(new CProjectCreateClass());
+	addCommand(new CCreateClass());
 }
 
 HProject* HProject::instance()
 {
 	static HProject h;
 	return &h;
+}
+
+void HProject::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
+{
+	if (event->matches(QKeySequence::Paste))
+	{
+		FilePersistence::SystemClipboard clipboard;
+		if (clipboard.numNodes() == 1 && clipboard.currentNodeType() == OOModel::Project::typeNameStatic())
+		{
+			if (target->hasNode() && target->node()->typeName() == clipboard.currentNodeType())
+			{
+				auto proj = static_cast<OOVisualization::VProject*>(target);
+				proj->node()->beginModification("paste a project");
+				auto newProj = new OOModel::Project();
+				proj->node()->projects()->append(newProj);
+				newProj->load(clipboard);
+				proj->node()->model()->endModification();
+				proj->setUpdateNeeded(Visualization::Item::StandardUpdate);
+			}
+			else GenericHandler::keyPressEvent(target, event);
+		}
+		else GenericHandler::keyPressEvent(target, event);
+	}
+	else if (event->modifiers() == Qt::NoModifier && (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter))
+	{
+		showCommandPrompt(target);
+	}
+	else GenericHandler::keyPressEvent(target, event);
 }
 
 } /* namespace OOInteraction */
