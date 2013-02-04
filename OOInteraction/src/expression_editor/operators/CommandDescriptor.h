@@ -24,19 +24,12 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CommandDescriptor.h
- *
- *  Created on: May 31, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_COMMANDDESCRIPTOR_H_
 #define OOInteraction_COMMANDDESCRIPTOR_H_
 
 #include "../../oointeraction_api.h"
 #include "../OOOperatorDescriptor.h"
-#include "CommandExpression.h"
+#include "commands/CommandExpression.h"
 
 namespace OOModel {
 	class UnfinishedOperator;

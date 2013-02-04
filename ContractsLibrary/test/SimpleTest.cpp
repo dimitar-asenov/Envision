@@ -35,7 +35,7 @@
 #include "SelfTest/src/SelfTestSuite.h"
 
 #include "items/ContractsVMethodAddOn.h"
-#include "interaction/CreateContractMethod.h"
+#include "OOInteraction/src/expression_editor/operators/commands/CreateMethodCall.h"
 #include "monitor/ValueAtReturnVisitor.h"
 
 #include "OOModel/src/allOOModelNodes.h"
@@ -57,6 +57,7 @@
 using namespace OOModel;
 using namespace Visualization;
 using namespace OOInteraction;
+using namespace OOVisualization;
 
 namespace ContractsLibrary {
 
@@ -129,8 +130,8 @@ Library* createContractsLibrary()
 	// Register Visualizations in the group
 	g->addVisualization([](Visualization::Item* parent, Model::Node* node) -> Item*
 			{
-				return new OOVisualization::VKeywordMethodCall(parent, static_cast<MethodCallExpression*> (node),
-						OOVisualization::VKeywordMethodCall::itemStyles().get("requires"));
+				return new VKeywordMethodCall(parent, static_cast<MethodCallExpression*> (node),
+						VKeywordMethodCall::itemStyles().get("requires"));
 			},
 			[=](Visualization::Item*, Model::Node* node) -> bool
 			{
@@ -139,8 +140,8 @@ Library* createContractsLibrary()
 			});
 	g->addVisualization([](Visualization::Item* parent, Model::Node* node) -> Item*
 			{
-				return new OOVisualization::VKeywordMethodCall(parent, static_cast<MethodCallExpression*> (node),
-						OOVisualization::VKeywordMethodCall::itemStyles().get("ensures"));
+				return new VKeywordMethodCall(parent, static_cast<MethodCallExpression*> (node),
+						VKeywordMethodCall::itemStyles().get("ensures"));
 			},
 			[=](Visualization::Item*, Model::Node* node) -> bool
 			{
@@ -149,8 +150,8 @@ Library* createContractsLibrary()
 			});
 	g->addVisualization([](Visualization::Item* parent, Model::Node* node) -> Item*
 			{
-				return new OOVisualization::VKeywordMethodCall(parent, static_cast<MethodCallExpression*> (node),
-						OOVisualization::VKeywordMethodCall::itemStyles().get("old"));
+				return new VKeywordMethodCall(parent, static_cast<MethodCallExpression*> (node),
+						VKeywordMethodCall::itemStyles().get("old"));
 			},
 			[=](Visualization::Item*, Model::Node* node) -> bool
 			{
@@ -159,8 +160,8 @@ Library* createContractsLibrary()
 			});
 	g->addVisualization([](Visualization::Item* parent, Model::Node* node) -> Item*
 			{
-				return new OOVisualization::VKeywordMethodCall(parent, static_cast<MethodCallExpression*> (node),
-						OOVisualization::VKeywordMethodCall::itemStyles().get("result"));
+				return new VKeywordMethodCall(parent, static_cast<MethodCallExpression*> (node),
+						VKeywordMethodCall::itemStyles().get("result"));
 			},
 			[=](Visualization::Item*, Model::Node* node) -> bool
 			{
@@ -169,8 +170,8 @@ Library* createContractsLibrary()
 			});
 	g->addVisualization([](Visualization::Item* parent, Model::Node* node) -> Item*
 			{
-				return new OOVisualization::VKeywordMethodCall(parent, static_cast<MethodCallExpression*> (node),
-						OOVisualization::VKeywordMethodCall::itemStyles().get("out"));
+				return new VKeywordMethodCall(parent, static_cast<MethodCallExpression*> (node),
+						VKeywordMethodCall::itemStyles().get("out"));
 			},
 			[=](Visualization::Item*, Model::Node* node) -> bool
 			{
@@ -181,13 +182,13 @@ Library* createContractsLibrary()
 	Scene::defaultRenderer()->registerGroup(MethodCallExpression::typeIdStatic(), g);
 
 	// Register custom input
-	CommandDescriptor::registerCommand(new CreateContractMethod("requires", "Requires"));
-	CommandDescriptor::registerCommand(new CreateContractMethod("ensures", "Ensures"));
-	CommandDescriptor::registerCommand(new CreateContractMethod("old", "OldValue"));
-	CommandDescriptor::registerCommand(new CreateContractMethod("result", "Result",1));
+	CommandDescriptor::registerCommand(new CreateMethodCall("requires", "CodeContracts.Contract.Requires"));
+	CommandDescriptor::registerCommand(new CreateMethodCall("ensures", "CodeContracts.Contract.Ensures"));
+	CommandDescriptor::registerCommand(new CreateMethodCall("old", "CodeContracts.Contract.OldValue"));
+	CommandDescriptor::registerCommand(new CreateMethodCall("result", "CodeContracts.Contract.Result",1));
 
 	// Register method add on
-	OOVisualization::VMethod::addAddOn( new ContractsVMethodAddOn(contractClass) );
+	VMethod::addAddOn( new ContractsVMethodAddOn(contractClass) );
 
 	return lib;
 }

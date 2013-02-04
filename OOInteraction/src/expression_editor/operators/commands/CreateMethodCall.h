@@ -24,25 +24,17 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CreateContractMethod.h
- *
- *  Created on: May 31, 2012
- *      Author: Dimitar Asenov
- */
+#pragma once
 
-#ifndef ContractsLibrary_CREATECONTRACTMETHOD_H_
-#define ContractsLibrary_CREATECONTRACTMETHOD_H_
+#include "../../../oointeraction_api.h"
 
-#include "../contractslibrary_api.h"
+#include "CommandExpression.h"
 
-#include "OOInteraction/src/expression_editor/operators/CommandExpression.h"
+namespace OOInteraction {
 
-namespace ContractsLibrary {
-
-class CONTRACTSLIBRARY_API CreateContractMethod : public OOInteraction::CommandExpression {
+class OOINTERACTION_API CreateMethodCall : public CommandExpression {
 	public:
-		CreateContractMethod(const QString& name, const QString& methodToCreate, int expectedTypeArguments = 0);
+		CreateMethodCall(const QString& name, const QString& methodToCreate, int expectedTypeArguments = 0);
 
 		virtual const QString& name() const;
 		virtual OOModel::Expression* create(const QList<OOModel::Expression*>& arguments);
@@ -54,5 +46,4 @@ class CONTRACTSLIBRARY_API CreateContractMethod : public OOInteraction::CommandE
 
 };
 
-} /* namespace ContractsLibrary */
-#endif /* ContractsLibrary_CREATECONTRACTMETHOD_H_ */
+} /* namespace OOInteraction */

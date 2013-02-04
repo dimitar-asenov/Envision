@@ -24,29 +24,41 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CommandExpression.h
- *
- *  Created on: May 31, 2012
- *      Author: Dimitar Asenov
- */
+#include "CreateMethodCall.h"
+#include "../../OOExpressionBuilder.h"
 
-#ifndef OOInteraction_COMMANDEXPRESSION_H_
-#define OOInteraction_COMMANDEXPRESSION_H_
+#include "OOModel/src/expressions/MethodCallExpression.h"
 
-#include "../../oointeraction_api.h"
-
-namespace OOModel {
-	class Expression;
-}
 namespace OOInteraction {
 
-class OOINTERACTION_API CommandExpression {
-	public:
-		virtual ~CommandExpression() {}
-		virtual const QString& name() const = 0;
-		virtual OOModel::Expression* create(const QList<OOModel::Expression*>& arguments) = 0;
-};
+CreateMethodCall::CreateMethodCall(const QString& name, const QString& methodToCreate,
+		int expectedTypeArguments)
+: name_(name), methodToCreate_(methodToCreate), expectedTypeArguments_(expectedTypeArguments)
+{}
+
+const QString& CreateMethodCall::name() const
+{
+	return name_;
+}
+
+OOModel::Expression* CreateMethodCall::create(const QList<OOModel::Expression*>& arguments)
+{
+	auto method = static_cast<OOModel::MethodCallExpression*>(
+			OOInteraction::OOExpressionBuilder::getOOExpression(methodToCreate_ + "()"));
+
+	int typeArguments = expectedTypeArguments_;
+	for(auto a: arguments)
+	{
+		if (typeArguments > 0)
+		{
+			method->ref()->typeArguments()->append(a);
+			--typeArguments;
+		}
+		else
+			method->arguments()->append(a);
+	}
+
+	return method;
+}
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_COMMANDEXPRESSION_H_ */

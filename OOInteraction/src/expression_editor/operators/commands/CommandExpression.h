@@ -25,47 +25,28 @@
  **********************************************************************************************************************/
 
 /*
- * CreateContractMethod.cpp
+ * CommandExpression.h
  *
  *  Created on: May 31, 2012
  *      Author: Dimitar Asenov
  */
 
-#include "CreateContractMethod.h"
-#include "OOInteraction/src/expression_editor/OOExpressionBuilder.h"
+#ifndef OOInteraction_COMMANDEXPRESSION_H_
+#define OOInteraction_COMMANDEXPRESSION_H_
 
-#include "OOModel/src/expressions/MethodCallExpression.h"
+#include "../../../oointeraction_api.h"
 
-namespace ContractsLibrary {
-
-CreateContractMethod::CreateContractMethod(const QString& name, const QString& methodToCreate,
-		int expectedTypeArguments)
-: name_(name), methodToCreate_(methodToCreate), expectedTypeArguments_(expectedTypeArguments)
-{}
-
-const QString& CreateContractMethod::name() const
-{
-	return name_;
+namespace OOModel {
+	class Expression;
 }
+namespace OOInteraction {
 
-OOModel::Expression* CreateContractMethod::create(const QList<OOModel::Expression*>& arguments)
-{
-	auto method = static_cast<OOModel::MethodCallExpression*>(
-			OOInteraction::OOExpressionBuilder::getOOExpression("CodeContracts.Contract." + methodToCreate_ + "()"));
+class OOINTERACTION_API CommandExpression {
+	public:
+		virtual ~CommandExpression() {}
+		virtual const QString& name() const = 0;
+		virtual OOModel::Expression* create(const QList<OOModel::Expression*>& arguments) = 0;
+};
 
-	int typeArguments = expectedTypeArguments_;
-	for(auto a: arguments)
-	{
-		if (typeArguments > 0)
-		{
-			method->ref()->typeArguments()->append(a);
-			--typeArguments;
-		}
-		else
-			method->arguments()->append(a);
-	}
-
-	return method;
-}
-
-} /* namespace ContractsLibrary */
+} /* namespace OOInteraction */
+#endif /* OOInteraction_COMMANDEXPRESSION_H_ */
