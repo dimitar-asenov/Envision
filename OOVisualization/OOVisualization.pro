@@ -7,7 +7,9 @@ win32:LIBS += -llogger \
     -loomodel \
     -lvisualizationbase \
     -linteractionbase
-HEADERS += src/expressions/VLambdaExpressionStyle.h \
+HEADERS += src/alternative/VKeywordMethodCallStyle.h \
+    src/alternative/VKeywordMethodCall.h \
+    src/expressions/VLambdaExpressionStyle.h \
     src/expressions/VLambdaExpression.h \
     src/statements/VTryCatchFinallyStyle.h \
     src/statements/VCatchClauseStyle.h \
@@ -91,7 +93,9 @@ HEADERS += src/expressions/VLambdaExpressionStyle.h \
     src/types/VArrayTypeStyle.h \
     src/types/VPrimitiveType.h \
     src/oovisualization.h
-SOURCES += src/expressions/VLambdaExpressionStyle.cpp \
+SOURCES += src/alternative/VKeywordMethodCallStyle.cpp \
+    src/alternative/VKeywordMethodCall.cpp \
+    src/expressions/VLambdaExpressionStyle.cpp \
     src/expressions/VLambdaExpression.cpp \
     src/statements/VTryCatchFinallyStyle.cpp \
     src/statements/VCatchClauseStyle.cpp \

@@ -8,7 +8,8 @@ win32:LIBS += -llogger \
     -lvisualizationbase \
     -linteractionbase \
     -loovisualization
-HEADERS += src/commands/CCreateField.h \
+HEADERS += src/string_offset_providers/KeywordMethodCallStringOffsetProvider.h \
+    src/commands/CCreateField.h \
     src/string_offset_providers/CompoundObjectStringOffsetProvider.h \
     src/string_components/LambdaStringComponents.h \
     src/expression_editor/operators/CompoundObjectDescriptor.h \
@@ -96,7 +97,8 @@ HEADERS += src/commands/CCreateField.h \
     src/string_offset_providers/TextRendererStringOffsetProvider.h \
     src/string_offset_providers/VariableDeclarationStringOffsetProvider.h \
     src/oointeraction.h
-SOURCES += src/commands/CCreateField.cpp \
+SOURCES += src/string_offset_providers/KeywordMethodCallStringOffsetProvider.cpp \
+    src/commands/CCreateField.cpp \
     src/string_offset_providers/CompoundObjectStringOffsetProvider.cpp \
     src/string_components/LambdaStringComponents.cpp \
     src/expression_editor/operators/CompoundObjectDescriptor.cpp \

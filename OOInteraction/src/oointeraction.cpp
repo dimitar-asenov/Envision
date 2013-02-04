@@ -92,6 +92,7 @@
 #include "string_offset_providers/UnaryOperatorStringOffsetProvider.h"
 #include "string_offset_providers/ClassTypeStringOffsetProvider.h"
 #include "string_offset_providers/CompoundObjectStringOffsetProvider.h"
+#include "string_offset_providers/KeywordMethodCallStringOffsetProvider.h"
 
 #include "OOVisualization/src/allOOVisualizations.h"
 
@@ -165,6 +166,7 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 	OOVisualization::VPrimitiveType::setInteractionHandler(HExpression::instance());
 	OOVisualization::VClassType::setInteractionHandler(HExpression::instance());
 	OOVisualization::VArrayType::setInteractionHandler(HExpression::instance());
+	OOVisualization::VKeywordMethodCall::setInteractionHandler(HExpression::instance());
 
 	// Register string components that convert an expression to a string list representing its components
 	Model::AdapterManager::registerAdapterViaConstructor
@@ -279,6 +281,8 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 		<StringOffsetProvider, VariableDeclarationStringOffsetProvider, OOVisualization::VVariableDeclaration>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, CompoundObjectStringOffsetProvider, OOVisualization::VLambdaExpression>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringOffsetProvider, KeywordMethodCallStringOffsetProvider, OOVisualization::VKeywordMethodCall>();
 
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CCreateProject());
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CCreateClass());

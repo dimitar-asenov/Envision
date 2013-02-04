@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2012 ETH Zurich
+ ** Copyright (c) 2011, 2013 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,25 +24,17 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VContractCallStyle.h
- *
- *  Created on: May 23, 2012
- *      Author: Dimitar Asenov
- */
+#pragma once
 
-#ifndef ContractsLibrary_VCONTRACTCALLSTYLE_H_
-#define ContractsLibrary_VCONTRACTCALLSTYLE_H_
-
-#include "../contractslibrary_api.h"
+#include "../oovisualization_api.h"
 
 #include "VisualizationBase/src/items/StaticStyle.h"
 #include "VisualizationBase/src/layouts/SequentialLayout.h"
 #include "VisualizationBase/src/items/VListStyle.h"
 
-namespace ContractsLibrary {
+namespace OOVisualization {
 
-class CONTRACTSLIBRARY_API VContractCallStyle : public Visualization::ItemStyle
+class OOVISUALIZATION_API VKeywordMethodCallStyle : public Visualization::ItemStyle
 {
 	public:
 		void load(Visualization::StyleLoader& sl);
@@ -57,9 +49,8 @@ class CONTRACTSLIBRARY_API VContractCallStyle : public Visualization::ItemStyle
 		Visualization::VListStyle arguments_;
 };
 
-inline const Visualization::SequentialLayoutStyle& VContractCallStyle::layout() const { return layout_; }
-inline const Visualization::StaticStyle& VContractCallStyle::keyword() const { return keyword_; }
-inline const Visualization::VListStyle& VContractCallStyle::arguments() const { return arguments_; }
+inline const Visualization::SequentialLayoutStyle& VKeywordMethodCallStyle::layout() const { return layout_; }
+inline const Visualization::StaticStyle& VKeywordMethodCallStyle::keyword() const { return keyword_; }
+inline const Visualization::VListStyle& VKeywordMethodCallStyle::arguments() const { return arguments_; }
 
-} /* namespace ContractsLibrary */
-#endif /* ContractsLibrary_VCONTRACTCALLSTYLE_H_ */
+} /* namespace OOVisualization */

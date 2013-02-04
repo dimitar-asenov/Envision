@@ -1,6 +1,6 @@
 <!DOCTYPE EnvisionVisualizationStyle>
-<style prototypes="common">
+<style prototypes="superscript_text">
 	<keyword>
-		<symbol>requires</symbol>
+		<symbol>OLD</symbol>
 	</keyword>
 </style>

@@ -1,6 +1,6 @@
 <!DOCTYPE EnvisionVisualizationStyle>
-<style prototypes="common">
+<style prototypes="default_text">
 	<keyword>
-		<symbol>ensures</symbol>
+		<symbol>requires</symbol>
 	</keyword>
 </style>

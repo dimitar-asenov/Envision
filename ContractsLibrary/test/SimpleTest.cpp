@@ -35,7 +35,6 @@
 #include "SelfTest/src/SelfTestSuite.h"
 
 #include "items/ContractsVMethodAddOn.h"
-#include "items/VContractCall.h"
 #include "interaction/CreateContractMethod.h"
 #include "monitor/ValueAtReturnVisitor.h"
 
@@ -50,6 +49,7 @@
 #include "VisualizationBase/src/items/RootItem.h"
 
 #include "OOVisualization/src/top_level/VMethod.h"
+#include "OOVisualization/src/alternative/VKeywordMethodCall.h"
 
 #include "OOInteraction/src/expression_editor/OOExpressionBuilder.h"
 #include "OOInteraction/src/expression_editor/operators/CommandDescriptor.h"
@@ -129,8 +129,8 @@ Library* createContractsLibrary()
 	// Register Visualizations in the group
 	g->addVisualization([](Visualization::Item* parent, Model::Node* node) -> Item*
 			{
-				return new VContractCall(parent, static_cast<MethodCallExpression*> (node),
-						VContractCall::itemStyles().get("requires"));
+				return new OOVisualization::VKeywordMethodCall(parent, static_cast<MethodCallExpression*> (node),
+						OOVisualization::VKeywordMethodCall::itemStyles().get("requires"));
 			},
 			[=](Visualization::Item*, Model::Node* node) -> bool
 			{
@@ -139,8 +139,8 @@ Library* createContractsLibrary()
 			});
 	g->addVisualization([](Visualization::Item* parent, Model::Node* node) -> Item*
 			{
-				return new VContractCall(parent, static_cast<MethodCallExpression*> (node),
-						VContractCall::itemStyles().get("ensures"));
+				return new OOVisualization::VKeywordMethodCall(parent, static_cast<MethodCallExpression*> (node),
+						OOVisualization::VKeywordMethodCall::itemStyles().get("ensures"));
 			},
 			[=](Visualization::Item*, Model::Node* node) -> bool
 			{
@@ -149,8 +149,8 @@ Library* createContractsLibrary()
 			});
 	g->addVisualization([](Visualization::Item* parent, Model::Node* node) -> Item*
 			{
-				return new VContractCall(parent, static_cast<MethodCallExpression*> (node),
-						VContractCall::itemStyles().get("old"));
+				return new OOVisualization::VKeywordMethodCall(parent, static_cast<MethodCallExpression*> (node),
+						OOVisualization::VKeywordMethodCall::itemStyles().get("old"));
 			},
 			[=](Visualization::Item*, Model::Node* node) -> bool
 			{
@@ -159,8 +159,8 @@ Library* createContractsLibrary()
 			});
 	g->addVisualization([](Visualization::Item* parent, Model::Node* node) -> Item*
 			{
-				return new VContractCall(parent, static_cast<MethodCallExpression*> (node),
-						VContractCall::itemStyles().get("result"));
+				return new OOVisualization::VKeywordMethodCall(parent, static_cast<MethodCallExpression*> (node),
+						OOVisualization::VKeywordMethodCall::itemStyles().get("result"));
 			},
 			[=](Visualization::Item*, Model::Node* node) -> bool
 			{
@@ -169,8 +169,8 @@ Library* createContractsLibrary()
 			});
 	g->addVisualization([](Visualization::Item* parent, Model::Node* node) -> Item*
 			{
-				return new VContractCall(parent, static_cast<MethodCallExpression*> (node),
-						VContractCall::itemStyles().get("out"));
+				return new OOVisualization::VKeywordMethodCall(parent, static_cast<MethodCallExpression*> (node),
+						OOVisualization::VKeywordMethodCall::itemStyles().get("out"));
 			},
 			[=](Visualization::Item*, Model::Node* node) -> bool
 			{

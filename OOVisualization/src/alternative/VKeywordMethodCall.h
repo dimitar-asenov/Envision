@@ -24,18 +24,10 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VContractCall.h
- *
- *  Created on: May 23, 2012
- *      Author: Dimitar Asenov
- */
+#pragma once
 
-#ifndef ContractsLibrary_VCONTRACTCALL_H_
-#define ContractsLibrary_VCONTRACTCALL_H_
-
-#include "../contractslibrary_api.h"
-#include "VContractCallStyle.h"
+#include "../oovisualization_api.h"
+#include "VKeywordMethodCallStyle.h"
 
 #include "OOModel/src/expressions/MethodCallExpression.h"
 
@@ -47,16 +39,16 @@ namespace Visualization {
 	class VList;
 }
 
-namespace ContractsLibrary {
+namespace OOVisualization {
 
-class CONTRACTSLIBRARY_API VContractCall
+class OOVISUALIZATION_API VKeywordMethodCall
 	: public Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::MethodCallExpression>
 {
-		ITEM_COMMON(VContractCall)
+		ITEM_COMMON(VKeywordMethodCall)
 
 	public:
-		VContractCall(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		virtual ~VContractCall();
+		VKeywordMethodCall(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+		virtual ~VKeywordMethodCall();
 
 		Visualization::Static* keyword() const;
 		Visualization::VList* arguments() const;
@@ -71,8 +63,7 @@ class CONTRACTSLIBRARY_API VContractCall
 		Visualization::VList* arguments_;
 };
 
-inline Visualization::Static* VContractCall::keyword() const { return keyword_; }
-inline Visualization::VList* VContractCall::arguments() const { return arguments_; }
+inline Visualization::Static* VKeywordMethodCall::keyword() const { return keyword_; }
+inline Visualization::VList* VKeywordMethodCall::arguments() const { return arguments_; }
 
-} /* namespace ContractsLibrary */
-#endif /* ContractsLibrary_VCONTRACTCALL_H_ */
+} /* namespace OOVisualization */

@@ -1,5 +1,5 @@
 <!DOCTYPE EnvisionVisualizationStyle>
-<style prototypes="common">
+<style prototypes="default_text">
 	<shape />
 	<layout >
 		<spaceBetweenElements>1</spaceBetweenElements>

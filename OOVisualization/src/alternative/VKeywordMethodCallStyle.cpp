@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2012 ETH Zurich
+ ** Copyright (c) 2011, 2013 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,18 +24,11 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VContractCallStyle.cpp
- *
- *  Created on: May 23, 2012
- *      Author: Dimitar Asenov
- */
+#include "VKeywordMethodCallStyle.h"
 
-#include "VContractCallStyle.h"
+namespace OOVisualization {
 
-namespace ContractsLibrary {
-
-void VContractCallStyle::load(Visualization::StyleLoader& sl)
+void VKeywordMethodCallStyle::load(Visualization::StyleLoader& sl)
 {
 	ItemStyle::load(sl);
 
@@ -44,4 +37,4 @@ void VContractCallStyle::load(Visualization::StyleLoader& sl)
 	sl.load("arguments", arguments_);
 }
 
-} /* namespace ContractsLibrary */
+} /* namespace OOVisualization */

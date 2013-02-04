@@ -24,28 +24,45 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ContractCallOffsetProvider.h
- *
- *  Created on: Jun 4, 2012
- *      Author: Dimitar Asenov
- */
+#include "VKeywordMethodCall.h"
 
-#ifndef ContractsLibrary_CONTRACTCALLOFFSETPROVIDER_H_
-#define ContractsLibrary_CONTRACTCALLOFFSETPROVIDER_H_
+#include "VisualizationBase/src/items/Static.h"
+#include "VisualizationBase/src/items/VList.h"
 
-#include "../contractslibrary_api.h"
-#include "OOInteraction/src/string_offset_providers/GridBasedOffsetProvider.h"
+using namespace Visualization;
+using namespace OOModel;
 
-namespace ContractsLibrary {
+namespace OOVisualization {
 
-class VContractCall;
+ITEM_COMMON_DEFINITIONS(VKeywordMethodCall, "item")
 
-class CONTRACTSLIBRARY_API ContractCallOffsetProvider : public OOInteraction::GridBasedOffsetProvider
+VKeywordMethodCall::VKeywordMethodCall(Item* parent, NodeType* node, const StyleType* style) :
+	ItemWithNode<LayoutProvider<>, MethodCallExpression>(parent, node, style),
+	keyword_(),
+	arguments_()
 {
-	public:
-		ContractCallOffsetProvider(VContractCall* vis);
-};
+}
 
-} /* namespace ContractsLibrary */
-#endif /* ContractsLibrary_CONTRACTCALLOFFSETPROVIDER_H_ */
+VKeywordMethodCall::~VKeywordMethodCall()
+{
+	// These were automatically deleted by LayoutProvider's destructor
+	keyword_ = nullptr;
+	arguments_ = nullptr;
+}
+
+void VKeywordMethodCall::determineChildren()
+{
+	layout()->synchronizeFirst(keyword_, true, &style()->keyword());
+	layout()->synchronizeLast(arguments_, node()->arguments(), &style()->arguments());
+
+	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
+	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
+	//			what's the reason they are being updated.
+	// The style needs to be updated every time since if our own style changes, so will that of the children.
+	layout()->setStyle( &style()->layout());
+	arguments_->setStyle( &style()->arguments() );
+	arguments_->setSuppressDefaultRemovalHandler(true);
+	keyword_->setStyle( &style()->keyword());
+}
+
+} /* namespace OOVisualization */

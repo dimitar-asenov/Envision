@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
  **
- ** Copyright (c) 2011, 2012 ETH Zurich
+ ** Copyright (c) 2011, 2013 ETH Zurich
  ** All rights reserved.
  **
  ** Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
@@ -24,28 +24,20 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ContractCallOffsetProvider.cpp
- *
- *  Created on: Jun 4, 2012
- *      Author: Dimitar Asenov
- */
+#pragma once
 
-#include "ContractCallOffsetProvider.h"
-#include "../items/VContractCall.h"
+#include "GridBasedOffsetProvider.h"
 
-#include "OOInteraction/src/string_offset_providers/Cell.h"
-#include "OOInteraction/src/string_offset_providers/ListCell.h"
-#include "VisualizationBase/src/items/Static.h"
-#include "VisualizationBase/src/items/VList.h"
-
-namespace ContractsLibrary {
-
-ContractCallOffsetProvider::ContractCallOffsetProvider(VContractCall* vis)
-	: GridBasedOffsetProvider(vis)
-{
-	add(new OOInteraction::Cell(0, vis->keyword(), 0));
-	add(new OOInteraction::ListCell(1, vis->arguments(), 1, "(", ",", ")"));
+namespace OOVisualization {
+	class VKeywordMethodCall;
 }
 
-} /* namespace ContractsLibrary */
+namespace OOInteraction {
+
+class OOINTERACTION_API KeywordMethodCallStringOffsetProvider : public GridBasedOffsetProvider
+{
+	public:
+		KeywordMethodCallStringOffsetProvider(OOVisualization::VKeywordMethodCall* vis);
+};
+
+} /* namespace OOInteraction */

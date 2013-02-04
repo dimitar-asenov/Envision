@@ -86,4 +86,6 @@
 #include "types/VPrimitiveType.h"
 #include "types/VArrayType.h"
 
+#include "alternative/VKeywordMethodCall.h"
+
 #endif /* ALLOOVISUALIZATIONS_H_ */
