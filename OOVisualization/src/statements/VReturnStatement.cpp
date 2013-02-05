@@ -38,16 +38,8 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VReturnStatement, "item")
 
 VReturnStatement::VReturnStatement(Item* parent, NodeType* node, const StyleType* style) :
-	Super(parent, node, style),
-	symbol_( new Static(this, &style->symbol() )),
-	values_( new VList(this, node->values()) )
+	Super(parent, node, style)
 {
-}
-
-VReturnStatement::~VReturnStatement()
-{
-	SAFE_DELETE_ITEM(symbol_);
-	SAFE_DELETE_ITEM(values_);
 }
 
 void VReturnStatement::initializeForms()

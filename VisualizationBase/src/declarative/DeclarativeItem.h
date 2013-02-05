@@ -40,6 +40,7 @@ class DeclarativeItem : public DeclarativeItemBase
 	public:
 		using I = VisualizationType;
 		DeclarativeItem(Item* parent, const StyleType* style = itemStyles().get());
+		virtual ~DeclarativeItem();
 		virtual QList<Element*>& forms() override;
 	protected:
 		static QList<Element*>& formsStatic();
@@ -56,6 +57,15 @@ DeclarativeItem<VisualizationType>::DeclarativeItem(Item* parent, const StyleTyp
 			VisualizationType::initializeForms();
 			initialized = true;
 		}
+}
+
+template <class VisualizationType>
+DeclarativeItem<VisualizationType>::~DeclarativeItem()
+{
+	for(int i=0; i<formsStatic().length(); i++)
+	{
+		formsStatic().at(i)->destroyChildItems(this);
+	}
 }
 
 template <class VisualizationType>

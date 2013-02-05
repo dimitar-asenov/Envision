@@ -47,11 +47,14 @@ class GridLayoutElement : public LayoutElement {
 		virtual void setItemPositions(Item* item, int parentX, int parentY) override;
 		virtual void synchronizeWithItem(Item* item) override;
 
+	public: // Recursive item destruction
+		virtual void destroyChildItems(Item* item) override;
+
 	private:
-		int numHorizontalCells_;
-		int numVerticalCells_;
-		int horizontalSpacing_;
-		int verticalSpacing_;
+		int numHorizontalCells_{};
+		int numVerticalCells_{};
+		int horizontalSpacing_{};
+		int verticalSpacing_{};
 		QVector<QVector<Element*>> elementGrid_{};
 };
 

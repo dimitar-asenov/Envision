@@ -53,6 +53,9 @@ class VISUALIZATIONBASE_API Element
 		QPoint pos() const;
 		QSize size() const;
 
+	public: // Recursive item destruction
+		virtual void destroyChildItems(Item* item) = 0;
+
 	protected:
 		void setSize(const QSize& size);
 		int topMargin();

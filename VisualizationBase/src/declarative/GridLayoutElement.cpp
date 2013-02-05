@@ -42,6 +42,13 @@ GridLayoutElement::~GridLayoutElement()
 			SAFE_DELETE(elementGrid_[x][y]);
 }
 
+void GridLayoutElement::destroyChildItems(Item* item)
+{
+	for(int x=0; x<numHorizontalCells_; x++)
+		for(int y=0; y<numVerticalCells_; y++)
+			elementGrid_[x][y]->destroyChildItems(item);
+}
+
 void GridLayoutElement::add(int cellX, int cellY, Element* element)
 {
 	if (elementGrid_[cellX][cellY] != nullptr)

@@ -46,6 +46,9 @@ class ItemWrapperElement : public Element
 		virtual void computeSize(Item* item, int availableWidth, int availableHeight) override;
 		virtual void setItemPositions(Item* item, int parentX, int parentY) override;
 
+	public: // Recursive item destruction
+		virtual void destroyChildItems(Item* item) override;
+
 	protected:
 		ChildItem item() const;
 
@@ -79,6 +82,13 @@ void ItemWrapperElement<ParentType,ChildItemType>::setItemPositions(Item* item, 
 	{
 		childItem->setPos(parentX + pos().x() + leftMargin(), parentY + pos().y() + topMargin());
 	}
+}
+
+template <class ParentType, class ChildItemType>
+void ItemWrapperElement<ParentType,ChildItemType>::destroyChildItems(Item* item)
+{
+	auto& childItem = (static_cast<ParentType*>(item))->*this->item();
+	SAFE_DELETE_ITEM(childItem);
 }
 
 template <class ParentType, class ChildItemType>

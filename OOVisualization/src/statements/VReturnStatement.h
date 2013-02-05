@@ -48,14 +48,13 @@ class OOVISUALIZATION_API VReturnStatement
 
 	public:
 		VReturnStatement(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		virtual ~VReturnStatement();
 
 		Visualization::Item* returnSymbol() const;
 		static void initializeForms();
 
 	private:
-		Visualization::Static* symbol_;
-		Visualization::VList* values_;
+		Visualization::Static* symbol_{};
+		Visualization::VList* values_{};
 };
 
 }
