@@ -30,7 +30,8 @@ namespace Visualization {
 
 GridLayoutElement::GridLayoutElement(int numHorizontalCells, int numVerticalCells)
 : numHorizontalCells_(numHorizontalCells), numVerticalCells_(numVerticalCells),
-  horizontalSpacing_{}, verticalSpacing_{}
+  horizontalSpacing_{}, verticalSpacing_{}, horizontalAlignment_{LayoutStyle::Alignment::Left},
+  verticalAlignment_{LayoutStyle::Alignment::Top}
 {
 	elementGrid_ = QVector<QVector<Element*>>(numHorizontalCells_, QVector<Element*>(numVerticalCells_));
 }
@@ -124,15 +125,17 @@ void GridLayoutElement::computeSize(Item* item, int availableWidth, int availabl
 		{
 			if (elementGrid_[x][y] != nullptr)
 			{
-				// assume alignment is top-left
-				// TODO: generalize alignment
 				int xPos = left;
-//				if (style()->horizontalAlignment() == LayoutStyle::Alignment::Center) xPos += (widestInColumn[x] - items_[x][y]->width())/2;
-//				else if (style()->horizontalAlignment() == LayoutStyle::Alignment::Right) xPos += (widestInColumn[x] - items_[x][y]->width());
+				if (horizontalAlignment_ == LayoutStyle::Alignment::Center)
+					xPos += (widestInColumn[x] - elementGrid_[x][y]->size().width())/2;
+				else if (horizontalAlignment_ == LayoutStyle::Alignment::Right)
+					xPos += (widestInColumn[x] - elementGrid_[x][y]->size().width());
 
 				int yPos = top;
-//				if (style()->verticalAlignment() == LayoutStyle::Alignment::Center) yPos += (tallestInRow[y] - items_[x][y]->height())/2;
-//				else if (style()->verticalAlignment() == LayoutStyle::Alignment::Bottom) yPos += (tallestInRow[y] - items_[x][y]->height());
+				if (verticalAlignment_ == LayoutStyle::Alignment::Center)
+					yPos += (tallestInRow[y] - elementGrid_[x][y]->size().height())/2;
+				else if (verticalAlignment_ == LayoutStyle::Alignment::Bottom)
+					yPos += (tallestInRow[y] - elementGrid_[x][y]->size().height());
 
 				elementGrid_[x][y]->setPos(QPoint(xPos, yPos));
 			}

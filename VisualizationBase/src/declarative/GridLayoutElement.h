@@ -29,6 +29,7 @@
 
 #include "../visualizationbase_api.h"
 #include "LayoutElement.h"
+#include "../layouts/LayoutStyle.h" // TODO: is it OK to import the alignments form here or not?
 
 namespace Visualization {
 
@@ -43,6 +44,8 @@ class GridLayoutElement : public LayoutElement {
 		GridLayoutElement* setSpacing(int horizontalSpacing, int verticalSpacing);
 		GridLayoutElement* setHorizontalSpacing(int horizontalSpacing);
 		GridLayoutElement* setVerticalSpacing(int verticalSpacing);
+		GridLayoutElement* setHorizontalAlignment(LayoutStyle::Alignment horizontalAlignment);
+		GridLayoutElement* setVerticalAlignment(LayoutStyle::Alignment verticalAlignment);
 
 	public: // Methods executable when items need to be rendered
 		virtual void computeSize(Item* item, int availableWidth, int availableHeight) override;
@@ -57,6 +60,8 @@ class GridLayoutElement : public LayoutElement {
 		int numVerticalCells_{};
 		int horizontalSpacing_{};
 		int verticalSpacing_{};
+		LayoutStyle::Alignment horizontalAlignment_{};
+		LayoutStyle::Alignment verticalAlignment_{};
 		QVector<QVector<Element*>> elementGrid_{};
 };
 
@@ -80,6 +85,16 @@ inline GridLayoutElement* GridLayoutElement::setHorizontalSpacing(int horizontal
 inline GridLayoutElement* GridLayoutElement::setVerticalSpacing(int verticalSpacing)
 {
 	verticalSpacing_ = verticalSpacing;
+	return this;
+}
+inline GridLayoutElement* GridLayoutElement::setHorizontalAlignment(LayoutStyle::Alignment horizontalAlignment)
+{
+	horizontalAlignment_ = horizontalAlignment;
+	return this;
+}
+inline GridLayoutElement* GridLayoutElement::setVerticalAlignment(LayoutStyle::Alignment verticalAlignment)
+{
+	verticalAlignment_ = verticalAlignment;
 	return this;
 }
 
