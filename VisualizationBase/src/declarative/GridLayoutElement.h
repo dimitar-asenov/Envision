@@ -38,7 +38,7 @@ class GridLayoutElement : public LayoutElement {
 	public: // Methods executable on element definition
 		GridLayoutElement(int numHorizontalCells, int numVerticalCells);
 		virtual ~GridLayoutElement();
-		GridLayoutElement* add(int cellX, int cellY, Element* element);
+		GridLayoutElement* addElement(int cellX, int cellY, Element* element);
 		GridLayoutElement* setSpacing(int spacing);
 		GridLayoutElement* setSpacing(int horizontalSpacing, int verticalSpacing);
 		GridLayoutElement* setHorizontalSpacing(int horizontalSpacing);

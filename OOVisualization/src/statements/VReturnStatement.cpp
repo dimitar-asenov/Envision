@@ -49,8 +49,8 @@ void VReturnStatement::initializeForms()
 				->setTopMargin(5)
 				->setBottomMargin(5)
 				->setHorizontalSpacing(5)
-				->add(0, 0, item<Static, I>(&I::symbol_, [](I* v){return &v->style()->symbol();}))
-				->add(1, 0, item<VList,I>(&I::values_, [](I* v){return v->node()->values();},
+				->addElement(0, 0, item<Static, I>(&I::symbol_, [](I* v){return &v->style()->symbol();}))
+				->addElement(1, 0, item<VList,I>(&I::values_, [](I* v){return v->node()->values();},
 												[](I* v){return &v->style()->values();})));
 }
 

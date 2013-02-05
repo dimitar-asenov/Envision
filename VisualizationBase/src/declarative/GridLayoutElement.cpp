@@ -49,7 +49,7 @@ void GridLayoutElement::destroyChildItems(Item* item)
 			elementGrid_[x][y]->destroyChildItems(item);
 }
 
-GridLayoutElement* GridLayoutElement::add(int cellX, int cellY, Element* element)
+GridLayoutElement* GridLayoutElement::addElement(int cellX, int cellY, Element* element)
 {
 	if (elementGrid_[cellX][cellY] != nullptr)
 		SAFE_DELETE(elementGrid_[cellX][cellY]);
