@@ -45,14 +45,13 @@ VReturnStatement::VReturnStatement(Item* parent, NodeType* node, const StyleType
 void VReturnStatement::initializeForms()
 {
 	// TODO: layout style is not needed anymore, remove it?
-	GridLayoutElement* element = new GridLayoutElement(2, 1);
-	element->setTopMargin(5);
-	element->setBottomMargin(5);
-	element->setHorizontalSpacing(5);
-	element->add(0, 0, item<Static, I>(&I::symbol_, [](I* v){return &v->style()->symbol();}));
-	element->add(1, 0, item<VList,I>(&I::values_, [](I* v){return v->node()->values();},
-												[](I* v){return &v->style()->values();}));
-	addForm(element);
+	addForm((new GridLayoutElement(2, 1))
+				->setTopMargin(5)
+				->setBottomMargin(5)
+				->setHorizontalSpacing(5)
+				->add(0, 0, item<Static, I>(&I::symbol_, [](I* v){return &v->style()->symbol();}))
+				->add(1, 0, item<VList,I>(&I::values_, [](I* v){return v->node()->values();},
+												[](I* v){return &v->style()->values();})));
 }
 
 Visualization::Item* VReturnStatement::returnSymbol() const

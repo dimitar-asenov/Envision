@@ -33,6 +33,8 @@ namespace Visualization {
 
 template <class ParentType, class VisualizationType>
 class NodeWithVisualizationItemWrapperElement : public ItemWrapperElement<ParentType, VisualizationType> {
+		FLUENT_ELEMENT_INTERFACE(NodeWithVisualizationItemWrapperElement);
+
 	public:
 		using ChildItem = typename ItemWrapperElement<ParentType, VisualizationType>::ChildItem;
 		using GetStyleTypeFunction = std::function<const typename VisualizationType::StyleType* (ParentType* v)>;

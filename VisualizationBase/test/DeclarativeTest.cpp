@@ -54,17 +54,14 @@ void DeclarativeTest::initializeForms()
 //											[](I*){return VExtendable::itemStyles().get();}));
 
 	// Test GridLayoutElement
-	GridLayoutElement* element = new GridLayoutElement(3, 2);
-	element->add(0, 0, item<Symbol, I>(&I::testItem_, [](I*){return itemStyles().get();}));
-	element->add(0, 1,
-				item<VExtendable,I>(&I::testNodeItem_, [](I* v){return v->testNode_;},
-											[](I*){return VExtendable::itemStyles().get();}));
-	GridLayoutElement* subElement = new GridLayoutElement(2, 2);
-	subElement->add(0, 0, item<Symbol, I>(&I::testItem2_, [](I*){return itemStyles().get();}));
-	subElement->add(1, 1, item<Symbol, I>(&I::testItem3_, [](I*){return itemStyles().get();}));
-	element->add(1, 1, subElement);
-	element->add(2, 0, item<Symbol, I>(&I::testItem4_, [](I*){return itemStyles().get();}));
-	addForm(element);
+	addForm((new GridLayoutElement(3, 2))
+				->add(0, 0, item<Symbol, I>(&I::testItem_, [](I*){return itemStyles().get();}))
+				->add(0, 1, item<VExtendable,I>(&I::testNodeItem_, [](I* v){return v->testNode_;},
+														[](I*){return VExtendable::itemStyles().get();}))
+				->add(1, 1, (new GridLayoutElement(2, 2))
+								->add(0, 0, item<Symbol, I>(&I::testItem2_, [](I*){return itemStyles().get();}))
+								->add(1, 1, item<Symbol, I>(&I::testItem3_, [](I*){return itemStyles().get();})))
+				->add(2, 0, item<Symbol, I>(&I::testItem4_, [](I*){return itemStyles().get();})));
 }
 
 } /* namespace Visualization */

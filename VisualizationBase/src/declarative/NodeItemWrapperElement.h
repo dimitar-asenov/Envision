@@ -36,6 +36,8 @@ namespace Visualization {
 
 template <class ParentType>
 class NodeItemWrapperElement : public ItemWrapperElement<ParentType> {
+		FLUENT_ELEMENT_INTERFACE(NodeItemWrapperElement);
+
 	public:
 		using ChildItem = typename ItemWrapperElement<ParentType>::ChildItem;
 		using GetNodeFunction = std::function<Model::Node* (ParentType* v)>;

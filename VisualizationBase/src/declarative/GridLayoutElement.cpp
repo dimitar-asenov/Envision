@@ -49,11 +49,12 @@ void GridLayoutElement::destroyChildItems(Item* item)
 			elementGrid_[x][y]->destroyChildItems(item);
 }
 
-void GridLayoutElement::add(int cellX, int cellY, Element* element)
+GridLayoutElement* GridLayoutElement::add(int cellX, int cellY, Element* element)
 {
 	if (elementGrid_[cellX][cellY] != nullptr)
 		SAFE_DELETE(elementGrid_[cellX][cellY]);
 	elementGrid_[cellX][cellY] = element;
+	return this;
 }
 
 void GridLayoutElement::synchronizeWithItem(Item* item)

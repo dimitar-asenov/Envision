@@ -33,14 +33,16 @@
 namespace Visualization {
 
 class GridLayoutElement : public LayoutElement {
+		FLUENT_ELEMENT_INTERFACE(GridLayoutElement);
+
 	public: // Methods executable on element definition
 		GridLayoutElement(int numHorizontalCells, int numVerticalCells);
 		virtual ~GridLayoutElement();
-		void add(int cellX, int cellY, Element* element);
-		void setSpacing(int spacing);
-		void setSpacing(int horizontalSpacing, int verticalSpacing);
-		void setHorizontalSpacing(int horizontalSpacing);
-		void setVerticalSpacing(int verticalSpacing);
+		GridLayoutElement* add(int cellX, int cellY, Element* element);
+		GridLayoutElement* setSpacing(int spacing);
+		GridLayoutElement* setSpacing(int horizontalSpacing, int verticalSpacing);
+		GridLayoutElement* setHorizontalSpacing(int horizontalSpacing);
+		GridLayoutElement* setVerticalSpacing(int verticalSpacing);
 
 	public: // Methods executable when items need to be rendered
 		virtual void computeSize(Item* item, int availableWidth, int availableHeight) override;
@@ -58,18 +60,28 @@ class GridLayoutElement : public LayoutElement {
 		QVector<QVector<Element*>> elementGrid_{};
 };
 
-inline void GridLayoutElement::setSpacing(int spacing)
+inline GridLayoutElement* GridLayoutElement::setSpacing(int spacing)
 {
 	horizontalSpacing_ = spacing;
 	verticalSpacing_ = spacing;
+	return this;
 }
-inline void GridLayoutElement::setSpacing(int horizontalSpacing, int verticalSpacing)
+inline GridLayoutElement* GridLayoutElement::setSpacing(int horizontalSpacing, int verticalSpacing)
 {
 	horizontalSpacing_ = horizontalSpacing;
 	verticalSpacing_ = verticalSpacing;
+	return this;
 }
-inline void GridLayoutElement::setHorizontalSpacing(int horizontalSpacing){horizontalSpacing_ = horizontalSpacing;}
-inline void GridLayoutElement::setVerticalSpacing(int verticalSpacing){verticalSpacing_ = verticalSpacing;}
+inline GridLayoutElement* GridLayoutElement::setHorizontalSpacing(int horizontalSpacing)
+{
+	horizontalSpacing_ = horizontalSpacing;
+	return this;
+}
+inline GridLayoutElement* GridLayoutElement::setVerticalSpacing(int verticalSpacing)
+{
+	verticalSpacing_ = verticalSpacing;
+	return this;
+}
 
 } /* namespace Visualization */
 

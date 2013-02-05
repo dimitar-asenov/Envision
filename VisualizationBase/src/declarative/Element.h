@@ -38,12 +38,12 @@ class VISUALIZATIONBASE_API Element
 	public: // Methods executable on element definition
 		virtual ~Element();
 		// set margins
-		void setMargins(int left, int top, int right, int bottom);
-		void setMargins(int margin);
-		void setTopMargin(int top);
-		void setBottomMargin(int bottom);
-		void setLeftMargin(int left);
-		void setRightMargin(int right);
+		Element* setMargins(int left, int top, int right, int bottom);
+		Element* setMargins(int margin);
+		Element* setTopMargin(int top);
+		Element* setBottomMargin(int bottom);
+		Element* setLeftMargin(int left);
+		Element* setRightMargin(int right);
 
 	public: // Methods executable when items need to be rendered
 		virtual void synchronizeWithItem(Item* item) = 0;
@@ -72,24 +72,26 @@ class VISUALIZATIONBASE_API Element
 		QPoint pos_{}; // Position relative to the parent element
 };
 
-inline void Element::setMargins(int left, int top, int right, int bottom)
+inline Element* Element::setMargins(int left, int top, int right, int bottom)
 {
 	marginLeft_ = left;
 	marginTop_ = top;
 	marginRight_ = right;
 	marginBottom_ = bottom;
+	return this;
 }
-inline void Element::setMargins(int margin)
+inline Element* Element::setMargins(int margin)
 {
 	marginLeft_ = margin;
 	marginTop_ = margin;
 	marginRight_ = margin;
 	marginBottom_ = margin;
+	return this;
 }
-inline void Element::setTopMargin(int top) {marginTop_ = top;}
-inline void Element::setBottomMargin(int bottom) {marginBottom_ = bottom;}
-inline void Element::setLeftMargin(int left) {marginLeft_ = left;}
-inline void Element::setRightMargin(int right) {marginRight_ = right;}
+inline Element* Element::setTopMargin(int top) {marginTop_ = top; return this;}
+inline Element* Element::setBottomMargin(int bottom) {marginBottom_ = bottom; return this;}
+inline Element* Element::setLeftMargin(int left) {marginLeft_ = left; return this;}
+inline Element* Element::setRightMargin(int right) {marginRight_ = right; return this;}
 
 inline QSize Element::size() const {return size_;}
 inline void Element::setSize(const QSize& size) {size_ = size;}
@@ -104,5 +106,15 @@ inline int Element::rightMargin() {return marginRight_;}
 
 }
 
+#define FLUENT_ELEMENT_INTERFACE(ClassName)																									\
+public:																																					\
+	ClassName* setMargins(int left, int top, int right, int bottom) {																	\
+		return static_cast<ClassName*>(Element::setMargins(left, top, right, bottom));											\
+	}																																						\
+	ClassName* setMargins(int margin) {return static_cast<ClassName*>(Element::setMargins(margin));}						\
+	ClassName* setTopMargin(int top) {return static_cast<ClassName*>(Element::setTopMargin(top));}							\
+	ClassName* setBottomMargin(int bottom) {return static_cast<ClassName*>(Element::setBottomMargin(bottom));}			\
+	ClassName* setLeftMargin(int left) {return static_cast<ClassName*>(Element::setLeftMargin(left));}						\
+	ClassName* setRightMargin(int right) {return static_cast<ClassName*>(Element::setRightMargin(right));}
 
 #endif /* VisualizationBase_ELEMENT_H_ */
