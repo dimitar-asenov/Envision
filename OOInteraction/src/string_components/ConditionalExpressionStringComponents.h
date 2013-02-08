@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ConditionalExpressionStringComponents.h
- *
- *  Created on: Mar 27, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_CONDITIONALEXPRESSIONSTRINGCOMPONENTS_H_
 #define OOInteraction_CONDITIONALEXPRESSIONSTRINGCOMPONENTS_H_
 

@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * NodeIdMap.h
- *
- *  Created on: Jan 16, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef FilePersistence_NODEIDMAP_H_
 #define FilePersistence_NODEIDMAP_H_
 

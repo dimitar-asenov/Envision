@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * BinaryOperatorDescriptor.h
- *
- *  Created on: Jan 18, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_BINARYOPERATORDESCRIPTOR_H_
 #define OOInteraction_BINARYOPERATORDESCRIPTOR_H_
 

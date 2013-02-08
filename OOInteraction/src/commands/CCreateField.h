@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CCreateField.h
- *
- *  Created on: Dec 6, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_CCREATEFIELD_H_
 #define OOInteraction_CCREATEFIELD_H_
 

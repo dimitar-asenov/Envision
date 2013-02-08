@@ -24,16 +24,6 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * oovisualization_api.h
- *
- *  Created on: Feb 01, 2011
- *      Author: Dimitar Asenov
- *
- * This header defines the import/export macro which should be used when this plug-in wants to export classes or
- * functions to other classes.
- **********************************************************************************************************************/
-
 #ifndef OOVISUALIZATION_API_H_
 #define OOVISUALIZATION_API_H_
 

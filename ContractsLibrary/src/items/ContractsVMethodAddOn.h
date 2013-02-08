@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ContractsVMethodAddOn.h
- *
- *  Created on: Jul 17, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef ContractsLibrary_CONTRACTSVMETHODADDON_H_
 #define ContractsLibrary_CONTRACTSVMETHODADDON_H_
 

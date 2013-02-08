@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * OOExpressionBuilder.h
- *
- *  Created on: Jan 12, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_OOEXPRESSIONBUILDER_H_
 #define OOInteraction_OOEXPRESSIONBUILDER_H_
 

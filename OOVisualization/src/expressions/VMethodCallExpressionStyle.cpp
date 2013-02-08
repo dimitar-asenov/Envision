@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VMethodCallExpressionStyle.cpp
- *
- *  Created on: Feb 29, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "expressions/VMethodCallExpressionStyle.h"
 
 namespace OOVisualization {

@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VariableDeclarationStringComponents.h
- *
- *  Created on: Mar 19, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_VARIABLEDECLARATIONSTRINGCOMPONENTS_H_
 #define OOInteraction_VARIABLEDECLARATIONSTRINGCOMPONENTS_H_
 

@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * PrimitiveTypeStringComponents.cpp
- *
- *  Created on: Mar 8, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "string_components/PrimitiveTypeStringComponents.h"
 #include "OOInteractionException.h"
 

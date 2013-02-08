@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VEmptyExpression.h
- *
- *  Created on: Jan 20, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOVisualization_VEMPTYEXPRESSION_H_
 #define OOVisualization_VEMPTYEXPRESSION_H_
 

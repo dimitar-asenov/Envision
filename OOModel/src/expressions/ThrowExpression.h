@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ThrowExpression.h
- *
- *  Created on: Sep 17, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOModel_THROWEXPRESSION_H_
 #define OOModel_THROWEXPRESSION_H_
 

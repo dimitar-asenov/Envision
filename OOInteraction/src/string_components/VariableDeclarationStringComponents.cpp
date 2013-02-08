@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VariableDeclarationStringComponents.cpp
- *
- *  Created on: Mar 19, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "string_components/VariableDeclarationStringComponents.h"
 
 #include "OOModel/src/expressions/VariableDeclaration.h"

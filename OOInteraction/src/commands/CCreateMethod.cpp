@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CCreateMethod.cpp
- *
- *  Created on: Mar 1, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "commands/CCreateMethod.h"
 
 #include "OOModel/src/top_level/Class.h"

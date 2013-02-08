@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CursorShapeItem.h
- *
- *  Created on: Jan 26, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef VisualizationBase_CURSORSHAPEITEM_H_
 #define VisualizationBase_CURSORSHAPEITEM_H_
 

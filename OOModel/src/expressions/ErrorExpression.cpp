@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ErrorExpression.cpp
- *
- *  Created on: Jan 12, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "expressions/ErrorExpression.h"
 #include "../types/ErrorType.h"
 

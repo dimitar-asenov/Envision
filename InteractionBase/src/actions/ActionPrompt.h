@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ActionPrompt.h
- *
- *  Created on: Sep 27, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef InteractionBase_ACTIONPROMPT_H_
 #define InteractionBase_ACTIONPROMPT_H_
 

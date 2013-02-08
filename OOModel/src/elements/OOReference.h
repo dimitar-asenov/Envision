@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * OOReference.h
- *
- *  Created on: Mar 29, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOModel_OOREFERENCE_H_
 #define OOModel_OOREFERENCE_H_
 

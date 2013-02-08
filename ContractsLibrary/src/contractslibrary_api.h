@@ -24,16 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * contractslibrary_api.h
- *
- *  Created on: May 11, 2012
- *      Author: Dimitar Asenov
- *
- * This header defines the import/export macro which should be used when this plug-in wants to export classes or
- * functions to other classes.
- **********************************************************************************************************************/
-
 #ifndef CONTRACTSLIBRARY_API_H_
 #define CONTRACTSLIBRARY_API_H_
 

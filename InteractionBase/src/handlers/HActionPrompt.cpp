@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * HActionPrompt.cpp
- *
- *  Created on: Sep 27, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "HActionPrompt.h"
 
 #include "actions/ActionPrompt.h"

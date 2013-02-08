@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VCatchClause.h
- *
- *  Created on: Nov 20, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOVisualization_VCATCHCLAUSE_H_
 #define OOVisualization_VCATCHCLAUSE_H_
 

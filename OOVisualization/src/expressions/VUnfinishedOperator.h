@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VUnfinishedOperator.h
- *
- *  Created on: Jan 19, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOVisualization_VUNFINISHEDOPERATOR_H_
 #define OOVisualization_VUNFINISHEDOPERATOR_H_
 

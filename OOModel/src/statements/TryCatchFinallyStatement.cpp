@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * TryCatchFinallyStatement.cpp
- *
- *  Created on: Sep 17, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "TryCatchFinallyStatement.h"
 
 namespace OOModel {

@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * MemberOperatorDescriptor.h
- *
- *  Created on: Feb 29, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_MEMBEROPERATORDESCRIPTOR_H_
 #define OOInteraction_MEMBEROPERATORDESCRIPTOR_H_
 

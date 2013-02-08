@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * Cell.h
- *
- *  Created on: Jun 11, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_CELL_H_
 #define OOInteraction_CELL_H_
 

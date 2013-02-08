@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * SvgShape.h
- *
- *  Created on: May 22, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef VisualizationBase_SVGSHAPE_H_
 #define VisualizationBase_SVGSHAPE_H_
 

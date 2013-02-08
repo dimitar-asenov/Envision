@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * LayoutCursor.h
- *
- *  Created on: Jan 30, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef VisualizationBase_LAYOUTCURSOR_H_
 #define VisualizationBase_LAYOUTCURSOR_H_
 

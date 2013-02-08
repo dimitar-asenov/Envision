@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * LambdaType.h
- *
- *  Created on: Nov 29, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOModel_LAMBDATYPE_H_
 #define OOModel_LAMBDATYPE_H_
 

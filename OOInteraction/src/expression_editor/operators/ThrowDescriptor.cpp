@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ThrowDescriptor.cpp
- *
- *  Created on: Sep 17, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "ThrowDescriptor.h"
 
 #include "OOModel/src/expressions/ThrowExpression.h"

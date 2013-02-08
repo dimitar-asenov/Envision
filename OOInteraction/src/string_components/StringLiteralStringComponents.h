@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * StringLiteralStringComponents.h
- *
- *  Created on: Mar 8, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_STRINGLITERALSTRINGCOMPONENTS_H_
 #define OOInteraction_STRINGLITERALSTRINGCOMPONENTS_H_
 

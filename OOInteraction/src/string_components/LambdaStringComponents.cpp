@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * LambdaStringComponents.cpp
- *
- *  Created on: Dec 4, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "LambdaStringComponents.h"
 #include "OOModel/src/expressions/LambdaExpression.h"
 #include "../expression_editor/operators/CompoundObjectDescriptor.h"

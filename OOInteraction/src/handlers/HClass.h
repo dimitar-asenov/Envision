@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * HClass.h
- *
- *  Created on: Mar 1, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_HCLASS_H_
 #define OOInteraction_HCLASS_H_
 

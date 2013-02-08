@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * AutoCompleteVis.h
- *
- *  Created on: Jul 24, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef InteractionBase_AUTOCOMPLETEVIS_H_
 #define InteractionBase_AUTOCOMPLETEVIS_H_
 

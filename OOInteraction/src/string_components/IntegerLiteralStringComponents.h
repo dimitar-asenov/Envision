@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * IntegerLiteralStringComponents.h
- *
- *  Created on: Feb 17, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_INTEGERLITERALSTRINGCOMPONENTS_H_
 #define OOInteraction_INTEGERLITERALSTRINGCOMPONENTS_H_
 

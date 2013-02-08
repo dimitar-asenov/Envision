@@ -24,13 +24,6 @@
  **
  ***********************************************************************************************************************/
 
-/*
- * OperatorDescriptorList.h
- *
- *  Created on: Jan 10, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef INTERACTIONBASE_OPERATORDESCRIPTORLIST_H_
 #define INTERACTIONBASE_OPERATORDESCRIPTORLIST_H_
 

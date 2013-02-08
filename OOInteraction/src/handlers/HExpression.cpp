@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * HExpression.cpp
- *
- *  Created on: Feb 8, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "HExpression.h"
 #include "../OOInteractionException.h"
 

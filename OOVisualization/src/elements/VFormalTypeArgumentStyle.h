@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VFormalTypeArgumentStyle.h
- *
- *  Created on: May 30, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOVisualization_VFORMALTYPEARGUMENTSTYLE_H_
 #define OOVisualization_VFORMALTYPEARGUMENTSTYLE_H_
 

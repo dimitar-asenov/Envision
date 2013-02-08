@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ActionPromptStyle.h
- *
- *  Created on: Sep 27, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef InteractionBase_ACTIONPROMPTSTYLE_H_
 #define InteractionBase_ACTIONPROMPTSTYLE_H_
 

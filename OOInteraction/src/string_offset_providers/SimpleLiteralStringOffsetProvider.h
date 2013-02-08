@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * SimpleLiteralStringOffsetProvider.h
- *
- *  Created on: Feb 15, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_SIMPLELITERALSTRINGOFFSETPROVIDER_H_
 #define OOInteraction_SIMPLELITERALSTRINGOFFSETPROVIDER_H_
 

@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ClassTypeStringComponents.h
- *
- *  Created on: Nov 13, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_CLASSTYPESTRINGCOMPONENTS_H_
 #define OOInteraction_CLASSTYPESTRINGCOMPONENTS_H_
 

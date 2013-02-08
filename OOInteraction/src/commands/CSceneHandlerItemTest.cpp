@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CSceneHandlerItemTest.cpp
- *
- *  Created on: Oct 31, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "CSceneHandlerItemTest.h"
 
 #include "VisualizationBase/src/items/RootItem.h"

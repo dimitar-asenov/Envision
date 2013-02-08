@@ -24,13 +24,6 @@
 **
 ***********************************************************************************************************************/
 
-/*
- * OperatorDescriptorList.cpp
- *
- *  Created on: Jan 10, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "expression_editor/OperatorDescriptorList.h"
 
 #include "expression_editor/OperatorDescriptor.h"

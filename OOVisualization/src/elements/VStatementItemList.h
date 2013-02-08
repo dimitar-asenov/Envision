@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VStatementItemList.h
- *
- *  Created on: Jun 5, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOVisualization_VSTATEMENTITEMLIST_H_
 #define OOVisualization_VSTATEMENTITEMLIST_H_
 

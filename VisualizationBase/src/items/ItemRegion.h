@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ItemRegion.h
- *
- *  Created on: Feb 2, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef VisualizationBase_ITEMREGION_H_
 #define VisualizationBase_ITEMREGION_H_
 

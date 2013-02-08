@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * SimpleLiteralStringOffsetProvider.cpp
- *
- *  Created on: Feb 15, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "string_offset_providers/SimpleLiteralStringOffsetProvider.h"
 
 #include "VisualizationBase/src/cursor/TextCursor.h"

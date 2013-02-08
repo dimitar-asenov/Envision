@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VisualizationSuitabilityScore.h
- *
- *  Created on: Apr 13, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef VisualizationBase_VISUALIZATIONSUITABILITYSCORE_H_
 #define VisualizationBase_VISUALIZATIONSUITABILITYSCORE_H_
 

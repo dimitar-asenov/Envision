@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CreateNamedObjectWithAttributes.h
- *
- *  Created on: Sep 14, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef InteractionBase_CREATENAMEDOBJECTWITHATTRIBUTES_H_
 #define InteractionBase_CREATENAMEDOBJECTWITHATTRIBUTES_H_
 

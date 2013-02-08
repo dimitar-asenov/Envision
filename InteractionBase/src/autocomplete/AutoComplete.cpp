@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * AutoComplete.cpp
- *
- *  Created on: Jul 24, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "AutoComplete.h"
 #include "AutoCompleteVis.h"
 #include "VisualizationBase/src/CustomSceneEvent.h"

@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ExpressionStatement.h
- *
- *  Created on: Feb 29, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOModel_EXPRESSIONSTATEMENT_H_
 #define OOModel_EXPRESSIONSTATEMENT_H_
 

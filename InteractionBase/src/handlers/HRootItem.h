@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * HRootItem.h
- *
- *  Created on: Apr 26, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef InteractionBase_HROOTITEM_H_
 #define InteractionBase_HROOTITEM_H_
 

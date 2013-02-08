@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ContractsVMethodAddOn.cpp
- *
- *  Created on: Jul 17, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "ContractsVMethodAddOn.h"
 #include "OOVisualization/src/top_level/VMethod.h"
 #include "OOVisualization/src/elements/VStatementItemList.h"

@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * AutoCompleteEntry.h
- *
- *  Created on: Jul 23, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef InteractionBase_AUTOCOMPLETEENTRY_H_
 #define InteractionBase_AUTOCOMPLETEENTRY_H_
 

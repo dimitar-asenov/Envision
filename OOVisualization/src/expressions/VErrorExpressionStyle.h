@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VErrorExpressionStyle.h
- *
- *  Created on: Jan 19, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOVisualization_VERROREXPRESSIONSTYLE_H_
 #define OOVisualization_VERROREXPRESSIONSTYLE_H_
 

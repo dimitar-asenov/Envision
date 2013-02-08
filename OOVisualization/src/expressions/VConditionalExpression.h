@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VConditionalExpression.h
- *
- *  Created on: Mar 27, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOVisualization_VCONDITIONALEXPRESSION_H_
 #define OOVisualization_VCONDITIONALEXPRESSION_H_
 

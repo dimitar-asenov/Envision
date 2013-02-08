@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VariableDeclarationStringOffsetProvider.h
- *
- *  Created on: Mar 19, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_VARIABLEDECLARATIONSTRINGOFFSETPROVIDER_H_
 #define OOInteraction_VARIABLEDECLARATIONSTRINGOFFSETPROVIDER_H_
 

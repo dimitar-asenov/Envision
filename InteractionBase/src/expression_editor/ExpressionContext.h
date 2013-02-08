@@ -24,13 +24,6 @@
  **
  ***********************************************************************************************************************/
 
-/*
- * ExpressionContext.h
- *
- *  Created on: Jan 10, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef INTERACTIONBASE_EXPRESSIONCONTEXT_H_
 #define INTERACTIONBASE_EXPRESSIONCONTEXT_H_
 

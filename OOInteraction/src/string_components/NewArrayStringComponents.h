@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * NewArrayStringComponents.h
- *
- *  Created on: Feb 24, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_NEWARRAYSTRINGCOMPONENTS_H_
 #define OOInteraction_NEWARRAYSTRINGCOMPONENTS_H_
 

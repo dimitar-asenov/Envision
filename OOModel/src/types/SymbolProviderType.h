@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * SymbolProviderType.h
- *
- *  Created on: Apr 5, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOModel_SYMBOLPROVIDERTYPE_H_
 #define OOModel_SYMBOLPROVIDERTYPE_H_
 

@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * InitializerDescriptor.h
- *
- *  Created on: Feb 24, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_INITIALIZERDESCRIPTOR_H_
 #define OOInteraction_INITIALIZERDESCRIPTOR_H_
 

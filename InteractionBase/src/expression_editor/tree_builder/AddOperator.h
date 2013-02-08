@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * AddOperator.h
- *
- *  Created on: Jan 11, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef INTERACTIONBASE_ADDOPERATOR_H_
 #define INTERACTIONBASE_ADDOPERATOR_H_
 

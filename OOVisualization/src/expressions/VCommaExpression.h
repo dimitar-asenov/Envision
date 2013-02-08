@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VCommaExpression.h
- *
- *  Created on: Feb 24, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOVisualization_VCOMMAEXPRESSION_H_
 #define OOVisualization_VCOMMAEXPRESSION_H_
 

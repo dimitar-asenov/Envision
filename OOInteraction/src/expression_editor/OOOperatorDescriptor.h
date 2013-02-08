@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * OOOperatorDescriptor.h
- *
- *  Created on: Jan 18, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_OOOPERATORDESCRIPTOR_H_
 #define OOInteraction_OOOPERATORDESCRIPTOR_H_
 

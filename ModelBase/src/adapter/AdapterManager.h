@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * AdapterManager.h
- *
- *  Created on: Feb 14, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef ModelBase_ADAPTERMANAGER_H_
 #define ModelBase_ADAPTERMANAGER_H_
 

@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * HStatement.h
- *
- *  Created on: Mar 8, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_HSTATEMENT_H_
 #define OOInteraction_HSTATEMENT_H_
 

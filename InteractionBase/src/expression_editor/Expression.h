@@ -24,13 +24,6 @@
 **
 ***********************************************************************************************************************/
 
-/*
- * Expression.h
- *
- *  Created on: Jan 10, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef INTERACTIONBASE_EXPRESSION_H_
 #define INTERACTIONBASE_EXPRESSION_H_
 

@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * LeaveUnfinished.h
- *
- *  Created on: Sep 5, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef InteractionBase_LEAVEUNFINISHED_H_
 #define InteractionBase_LEAVEUNFINISHED_H_
 

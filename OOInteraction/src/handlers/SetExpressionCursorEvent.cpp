@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * SetExpressionCursorEvent.cpp
- *
- *  Created on: Feb 17, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "handlers/SetExpressionCursorEvent.h"
 
 #include "string_offset_providers/StringOffsetProvider.h"

@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ErrorType.h
- *
- *  Created on: Apr 3, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOModel_ERRORTYPE_H_
 #define OOModel_ERRORTYPE_H_
 

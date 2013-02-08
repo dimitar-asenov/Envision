@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VEmptyExpression.cpp
- *
- *  Created on: Jan 20, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "expressions/VEmptyExpression.h"
 
 #include "OOModel/src/expressions/EmptyExpression.h"

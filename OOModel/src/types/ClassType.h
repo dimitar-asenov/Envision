@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ClassType.h
- *
- *  Created on: Apr 3, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOModel_CLASSTYPE_H_
 #define OOModel_CLASSTYPE_H_
 

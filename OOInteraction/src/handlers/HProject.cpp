@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * HProject.cpp
- *
- *  Created on: Mar 6, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "handlers/HProject.h"
 
 #include "commands/CCreateClass.h"

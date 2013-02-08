@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * InitializerStringOffsetProvider.h
- *
- *  Created on: Feb 29, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_INITIALIZERSTRINGOFFSETPROVIDER_H_
 #define OOInteraction_INITIALIZERSTRINGOFFSETPROVIDER_H_
 

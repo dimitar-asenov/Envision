@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CallStringComponents.h
- *
- *  Created on: Feb 29, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_CALLSTRINGCOMPONENTS_H_
 #define OOInteraction_CALLSTRINGCOMPONENTS_H_
 

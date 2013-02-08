@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VThrowExpressionStyle.h
- *
- *  Created on: Sep 17, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOVisualization_VTHROWEXPRESSIONSTYLE_H_
 #define OOVisualization_VTHROWEXPRESSIONSTYLE_H_
 

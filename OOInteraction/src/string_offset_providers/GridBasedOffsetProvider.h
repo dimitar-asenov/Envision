@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * GridBasedOffsetProvider.h
- *
- *  Created on: Jun 11, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_GRIDBASEDOFFSETPROVIDER_H_
 #define OOInteraction_GRIDBASEDOFFSETPROVIDER_H_
 

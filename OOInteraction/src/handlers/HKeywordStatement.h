@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * HKeywordStatement.h
- *
- *  Created on: Sep 24, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_HKEYWORDSTATEMENT_H_
 #define OOInteraction_HKEYWORDSTATEMENT_H_
 

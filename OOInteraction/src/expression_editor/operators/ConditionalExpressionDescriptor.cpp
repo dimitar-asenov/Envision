@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ConditionalExpressionDescriptor.cpp
- *
- *  Created on: Mar 27, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "expression_editor/operators/ConditionalExpressionDescriptor.h"
 
 #include "OOModel/src/expressions/ConditionalExpression.h"

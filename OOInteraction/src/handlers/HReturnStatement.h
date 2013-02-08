@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * HReturnStatement.h
- *
- *  Created on: Sep 24, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_HRETURNSTATEMENT_H_
 #define OOInteraction_HRETURNSTATEMENT_H_
 

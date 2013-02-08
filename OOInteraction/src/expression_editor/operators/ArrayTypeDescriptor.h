@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ArrayTypeDescriptor.h
- *
- *  Created on: Mar 8, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_ARRAYTYPEDESCRIPTOR_H_
 #define OOInteraction_ARRAYTYPEDESCRIPTOR_H_
 

@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * HMethod.h
- *
- *  Created on: Mar 1, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_HMETHOD_H_
 #define OOInteraction_HMETHOD_H_
 

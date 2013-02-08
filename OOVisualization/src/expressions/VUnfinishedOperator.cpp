@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VUnfinishedOperator.cpp
- *
- *  Created on: Jan 19, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "expressions/VUnfinishedOperator.h"
 
 #include "VisualizationBase/src/items/VText.h"

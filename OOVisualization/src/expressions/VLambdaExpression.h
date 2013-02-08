@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VLambdaExpression.h
- *
- *  Created on: Nov 29, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOVisualization_VLAMBDAEXPRESSION_H_
 #define OOVisualization_VLAMBDAEXPRESSION_H_
 

@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * DeclarationDescriptor.h
- *
- *  Created on: Mar 16, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_DECLARATIONDESCRIPTOR_H_
 #define OOInteraction_DECLARATIONDESCRIPTOR_H_
 

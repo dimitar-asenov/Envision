@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * BinaryOperatorStringComponents.h
- *
- *  Created on: Feb 17, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_BINARYOPERATORSTRINGCOMPONENTS_H_
 #define OOInteraction_BINARYOPERATORSTRINGCOMPONENTS_H_
 

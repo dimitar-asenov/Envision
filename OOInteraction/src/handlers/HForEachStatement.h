@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * HForEachStatement.h
- *
- *  Created on: Sep 24, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_HFOREACHSTATEMENT_H_
 #define OOInteraction_HFOREACHSTATEMENT_H_
 

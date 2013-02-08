@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CallStringOffsetProvider.h
- *
- *  Created on: Feb 29, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_CALLSTRINGOFFSETPROVIDER_H_
 #define OOInteraction_CALLSTRINGOFFSETPROVIDER_H_
 

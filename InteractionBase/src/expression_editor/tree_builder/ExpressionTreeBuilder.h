@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ExpressionTreeBuilder.h
- *
- *  Created on: Jan 11, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef INTERACTIONBASE_EXPRESSIONTREEBUILDER_H_
 #define INTERACTIONBASE_EXPRESSIONTREEBUILDER_H_
 

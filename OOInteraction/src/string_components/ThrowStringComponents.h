@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ThrowStringComponents.h
- *
- *  Created on: Sep 17, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_THROWSTRINGCOMPONENTS_H_
 #define OOInteraction_THROWSTRINGCOMPONENTS_H_
 

@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * RootItem.h
- *
- *  Created on: Apr 18, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef VisualizationBase_ROOTITEM_H_
 #define VisualizationBase_ROOTITEM_H_
 

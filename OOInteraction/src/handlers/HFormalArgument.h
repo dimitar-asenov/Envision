@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * HFormalArgument.h
- *
- *  Created on: Mar 8, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_HFORMALARGUMENT_H_
 #define OOInteraction_HFORMALARGUMENT_H_
 

@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VCatchClauseStyle.h
- *
- *  Created on: Nov 20, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOVisualization_VCATCHCLAUSESTYLE_H_
 #define OOVisualization_VCATCHCLAUSESTYLE_H_
 

@@ -24,16 +24,6 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * logger_api.h
- *
- *  Created on: Nov 2, 2010
- *      Author: Dimitar Asenov
- *
- * This header defines the import/export macro which should be used when this plug-in wants to export classes or
- * functions to other classes.
- **********************************************************************************************************************/
-
 #ifndef LOGGER_API_H_
 #define LOGGER_API_H_
 

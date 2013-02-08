@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ArrayTypeStringComponents.h
- *
- *  Created on: Mar 8, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_ARRAYTYPESTRINGCOMPONENTS_H_
 #define OOInteraction_ARRAYTYPESTRINGCOMPONENTS_H_
 

@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CustomSceneEvent.h
- *
- *  Created on: Feb 17, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef VisualizationBase_CUSTOMSCENEEVENT_H_
 #define VisualizationBase_CUSTOMSCENEEVENT_H_
 

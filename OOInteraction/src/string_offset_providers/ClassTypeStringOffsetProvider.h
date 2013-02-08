@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ClassTypeStringOffsetProvider.h
- *
- *  Created on: Nov 14, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_CLASSTYPESTRINGOFFSETPROVIDER_H_
 #define OOInteraction_CLASSTYPESTRINGOFFSETPROVIDER_H_
 

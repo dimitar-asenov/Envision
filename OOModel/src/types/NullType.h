@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * NullType.h
- *
- *  Created on: Apr 5, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOModel_NULLTYPE_H_
 #define OOModel_NULLTYPE_H_
 

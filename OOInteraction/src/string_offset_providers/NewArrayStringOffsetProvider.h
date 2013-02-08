@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * NewArrayStringOffsetProvider.h
- *
- *  Created on: Mar 14, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_NEWARRAYSTRINGOFFSETPROVIDER_H_
 #define OOInteraction_NEWARRAYSTRINGOFFSETPROVIDER_H_
 

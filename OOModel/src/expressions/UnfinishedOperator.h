@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * UnfinishedOperator.h
- *
- *  Created on: Jan 12, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOModel_UNFINISHEDOPERATOR_H_
 #define OOModel_UNFINISHEDOPERATOR_H_
 

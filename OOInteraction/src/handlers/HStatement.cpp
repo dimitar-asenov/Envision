@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * HStatement.cpp
- *
- *  Created on: Mar 8, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "handlers/HStatement.h"
 #include "OOModel/src/expressions/EmptyExpression.h"
 #include "OOModel/src/statements/ExpressionStatement.h"

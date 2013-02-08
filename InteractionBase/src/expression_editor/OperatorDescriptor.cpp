@@ -24,13 +24,6 @@
 **
 ***********************************************************************************************************************/
 
-/*
- * OperatorDescriptor.cpp
- *
- *  Created on: Jan 10, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "expression_editor/OperatorDescriptor.h"
 
 namespace Interaction {

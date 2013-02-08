@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * SetExpressionCursorEvent.h
- *
- *  Created on: Feb 17, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_SETEXPRESSIONCURSOREVENT_H_
 #define OOInteraction_SETEXPRESSIONCURSOREVENT_H_
 

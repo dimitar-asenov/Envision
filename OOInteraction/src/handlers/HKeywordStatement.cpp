@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * HKeywordStatement.cpp
- *
- *  Created on: Sep 24, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "HKeywordStatement.h"
 
 namespace OOInteraction {

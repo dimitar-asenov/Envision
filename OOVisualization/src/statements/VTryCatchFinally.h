@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VTryCatchFinally.h
- *
- *  Created on: Nov 20, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOVisualization_VTRYCATCHFINALLY_H_
 #define OOVisualization_VTRYCATCHFINALLY_H_
 

@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * HBinaryNode.h
- *
- *  Created on: Jul 24, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef InteractionBase_HBINARYNODE_H_
 #define InteractionBase_HBINARYNODE_H_
 

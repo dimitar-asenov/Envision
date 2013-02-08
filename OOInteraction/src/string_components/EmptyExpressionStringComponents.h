@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * EmptyExpressionStringComponents.h
- *
- *  Created on: Feb 17, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_EMPTYEXPRESSIONSTRINGCOMPONENTS_H_
 #define OOInteraction_EMPTYEXPRESSIONSTRINGCOMPONENTS_H_
 

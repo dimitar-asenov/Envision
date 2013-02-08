@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * HExpression.h
- *
- *  Created on: Feb 8, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_HEXPRESSION_H_
 #define OOInteraction_HEXPRESSION_H_
 

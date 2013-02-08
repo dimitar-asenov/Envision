@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * UnfinishedOperatorStringComponents.h
- *
- *  Created on: Feb 17, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_UNFINISHEDOPERATORSTRINGCOMPONENTS_H_
 #define OOInteraction_UNFINISHEDOPERATORSTRINGCOMPONENTS_H_
 

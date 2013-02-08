@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ValueAtReturnVisitor.h
- *
- *  Created on: Aug 31, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef ContractsLibrary_VALUEATRETURNVISITOR_H_
 #define ContractsLibrary_VALUEATRETURNVISITOR_H_
 

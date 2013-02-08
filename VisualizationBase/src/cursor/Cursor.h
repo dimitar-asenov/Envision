@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * Cursor.h
- *
- *  Created on: Jan 26, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef VisualizationBase_CURSOR_H_
 #define VisualizationBase_CURSOR_H_
 

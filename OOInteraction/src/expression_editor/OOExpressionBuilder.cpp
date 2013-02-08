@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * OOExpressionBuilder.cpp
- *
- *  Created on: Jan 12, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "expression_editor/OOExpressionBuilder.h"
 
 #include "expression_editor/OOOperatorDescriptorList.h"

@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * SkipOperatorDelimiter.h
- *
- *  Created on: Jan 11, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef INTERACTIONBASE_SKIPOPERATORDELIMITER_H_
 #define INTERACTIONBASE_SKIPOPERATORDELIMITER_H_
 

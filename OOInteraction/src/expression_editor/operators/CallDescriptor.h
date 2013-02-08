@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CallDescriptor.h
- *
- *  Created on: Feb 29, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_CALLDESCRIPTOR_H_
 #define OOInteraction_CALLDESCRIPTOR_H_
 

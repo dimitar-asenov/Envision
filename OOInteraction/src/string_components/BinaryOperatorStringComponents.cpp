@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * BinaryOperatorStringComponents.cpp
- *
- *  Created on: Feb 17, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "string_components/BinaryOperatorStringComponents.h"
 
 #include "OOModel/src/expressions/BinaryOperation.h"

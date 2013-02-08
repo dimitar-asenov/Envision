@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ListStringComponents.h
- *
- *  Created on: Mar 15, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_LISTSTRINGCOMPONENTS_H_
 #define OOInteraction_LISTSTRINGCOMPONENTS_H_
 

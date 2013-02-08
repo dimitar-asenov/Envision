@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * FormalTypeArgument.h
- *
- *  Created on: May 29, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOModel_FORMALTYPEARGUMENT_H_
 #define OOModel_FORMALTYPEARGUMENT_H_
 

@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * SetCursorEvent.cpp
- *
- *  Created on: Mar 1, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "SetCursorEvent.h"
 
 #include "InteractionBase/src/handlers/GenericHandler.h"

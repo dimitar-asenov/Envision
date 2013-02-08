@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CommandExpression.h
- *
- *  Created on: May 31, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_COMMANDEXPRESSION_H_
 #define OOInteraction_COMMANDEXPRESSION_H_
 

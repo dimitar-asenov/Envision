@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * DetectMainSceneActivated.h
- *
- *  Created on: Sep 14, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef InteractionBase_DETECTMAINSCENEACTIVATED_H_
 #define InteractionBase_DETECTMAINSCENEACTIVATED_H_
 

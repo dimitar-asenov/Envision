@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CCreateClass.h
- *
- *  Created on: Mar 6, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_CCREATECLASS_H_
 #define OOInteraction_CCREATECLASS_H_
 

@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VisitorDefinition.h
- *
- *  Created on: Aug 27, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef ModelBase_VISITORDEFINITION_H_
 #define ModelBase_VISITORDEFINITION_H_
 

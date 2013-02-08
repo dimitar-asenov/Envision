@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ModelManager.h
- *
- *  Created on: Sep 14, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef ModelBase_MODELMANAGER_H_
 #define ModelBase_MODELMANAGER_H_
 

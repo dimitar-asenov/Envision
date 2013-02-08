@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CastStringOffsetProvider.h
- *
- *  Created on: Mar 16, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_CASTSTRINGOFFSETPROVIDER_H_
 #define OOInteraction_CASTSTRINGOFFSETPROVIDER_H_
 

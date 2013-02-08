@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CommaExpression.h
- *
- *  Created on: Feb 24, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOModel_COMMAEXPRESSION_H_
 #define OOModel_COMMAEXPRESSION_H_
 

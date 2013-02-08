@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * NodeOwningCommand.h
- *
- *  Created on: Dec 4, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef ModelBase_NODEOWNINGCOMMAND_H_
 #define ModelBase_NODEOWNINGCOMMAND_H_
 

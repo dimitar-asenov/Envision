@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * TextRendererStringOffsetProvider.h
- *
- *  Created on: Feb 17, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_TEXTRENDERERSTRINGOFFSETPROVIDER_H_
 #define OOInteraction_TEXTRENDERERSTRINGOFFSETPROVIDER_H_
 

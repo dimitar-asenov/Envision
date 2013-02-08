@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ExpressionTreeUtils.h
- *
- *  Created on: Jan 11, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef INTERACTIONBASE_EXPRESSIONTREEUTILS_H_
 #define INTERACTIONBASE_EXPRESSIONTREEUTILS_H_
 

@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CSceneHandlerItemTest.h
- *
- *  Created on: Oct 31, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_CSCENEHANDLERITEMTEST_H_
 #define OOInteraction_CSCENEHANDLERITEMTEST_H_
 

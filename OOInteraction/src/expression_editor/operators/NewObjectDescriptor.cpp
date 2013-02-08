@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * NewObjectDescriptor.cpp
- *
- *  Created on: Sep 17, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "NewObjectDescriptor.h"
 
 #include "OOModel/src/expressions/NewExpression.h"

@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ShowCommandPromptEvent.cpp
- *
- *  Created on: Sep 14, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "ShowCommandPromptEvent.h"
 #include "handlers/GenericHandler.h"
 

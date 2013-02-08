@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * OOOperatorDescriptor.cpp
- *
- *  Created on: Jan 18, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "expression_editor/OOOperatorDescriptor.h"
 
 namespace OOInteraction {

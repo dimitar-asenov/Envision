@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * EmptyExpression.h
- *
- *  Created on: Jan 12, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOModel_EMPTYEXPRESSION_H_
 #define OOModel_EMPTYEXPRESSION_H_
 

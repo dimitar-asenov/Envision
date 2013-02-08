@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VStatementItemList.cpp
- *
- *  Created on: Jun 5, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "VStatementItemList.h"
 
 namespace OOVisualization {

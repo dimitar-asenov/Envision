@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ParseResult.h
- *
- *  Created on: Jan 11, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef INTERACTIONBASE_PARSERESULT_H_
 #define INTERACTIONBASE_PARSERESULT_H_
 

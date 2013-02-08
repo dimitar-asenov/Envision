@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * InitializerStringComponents.h
- *
- *  Created on: Feb 24, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_INITIALIZERSTRINGCOMPONENTS_H_
 #define OOInteraction_INITIALIZERSTRINGCOMPONENTS_H_
 

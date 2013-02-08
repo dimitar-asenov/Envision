@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ArrayType.h
- *
- *  Created on: Apr 3, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOModel_ARRAYTYPE_H_
 #define OOModel_ARRAYTYPE_H_
 

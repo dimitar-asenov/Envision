@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * Action.h
- *
- *  Created on: Sep 27, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef InteractionBase_ACTION_H_
 #define InteractionBase_ACTION_H_
 

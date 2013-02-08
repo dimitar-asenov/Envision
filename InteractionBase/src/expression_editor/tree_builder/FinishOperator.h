@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * FinishOperator.h
- *
- *  Created on: Jan 11, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef INTERACTIONBASE_FINISHOPERATOR_H_
 #define INTERACTIONBASE_FINISHOPERATOR_H_
 

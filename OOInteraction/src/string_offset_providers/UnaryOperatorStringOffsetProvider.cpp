@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * UnaryOperatorStringOffsetProvider.cpp
- *
- *  Created on: Aug 2, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "UnaryOperatorStringOffsetProvider.h"
 #include "Cell.h"
 

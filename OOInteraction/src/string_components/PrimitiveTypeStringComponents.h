@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * PrimitiveTypeStringComponents.h
- *
- *  Created on: Mar 8, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_PRIMITIVETYPESTRINGCOMPONENTS_H_
 #define OOInteraction_PRIMITIVETYPESTRINGCOMPONENTS_H_
 

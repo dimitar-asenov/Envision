@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VCatchClause.cpp
- *
- *  Created on: Nov 20, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "VCatchClause.h"
 #include "../elements/VStatementItemList.h"
 

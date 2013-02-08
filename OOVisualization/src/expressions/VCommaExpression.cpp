@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VCommaExpression.cpp
- *
- *  Created on: Feb 24, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "expressions/VCommaExpression.h"
 
 #include "VisualizationBase/src/items/Static.h"

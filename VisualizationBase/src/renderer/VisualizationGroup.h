@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VisualizationGroup.h
- *
- *  Created on: Apr 13, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef VisualizationBase_VISUALIZATIONGROUP_H_
 #define VisualizationBase_VISUALIZATIONGROUP_H_
 

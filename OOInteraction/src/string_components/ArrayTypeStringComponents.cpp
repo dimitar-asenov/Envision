@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ArrayTypeStringComponents.cpp
- *
- *  Created on: Mar 8, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "string_components/ArrayTypeStringComponents.h"
 
 #include "OOModel/src/expressions/types/ArrayTypeExpression.h"

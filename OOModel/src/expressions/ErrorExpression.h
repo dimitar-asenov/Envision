@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ErrorExpression.h
- *
- *  Created on: Jan 12, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOModel_ERROREXPRESSION_H_
 #define OOModel_ERROREXPRESSION_H_
 

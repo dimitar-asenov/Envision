@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * MethodAddOn.h
- *
- *  Created on: Jul 16, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOVisualization_METHODADDON_H_
 #define OOVisualization_METHODADDON_H_
 

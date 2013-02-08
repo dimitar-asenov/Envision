@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CompoundObjectDescriptor.h
- *
- *  Created on: Dec 3, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_COMPOUNDOBJECTDESCRIPTOR_H_
 #define OOInteraction_COMPOUNDOBJECTDESCRIPTOR_H_
 

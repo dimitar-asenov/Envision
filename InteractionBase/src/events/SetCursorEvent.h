@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * SetCursorEvent.h
- *
- *  Created on: Mar 1, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef InteractionBase_SETCURSOREVENT_H_
 #define InteractionBase_SETCURSOREVENT_H_
 

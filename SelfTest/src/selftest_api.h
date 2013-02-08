@@ -24,16 +24,6 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * selftest_api.h
- *
- *  Created on: Nov 9, 2010
- *      Author: Dimitar Asenov
- *
- * This header defines the import/export macro which should be used when this plug-in wants to export classes or
- * functions to other classes.
- **********************************************************************************************************************/
-
 #ifndef SELFTEST_API_H_
 #define SELFTEST_API_H_
 

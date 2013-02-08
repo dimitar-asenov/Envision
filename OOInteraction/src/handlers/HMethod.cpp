@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * HMethod.cpp
- *
- *  Created on: Mar 1, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "handlers/HMethod.h"
 
 #include "OOVisualization/src/top_level/VMethod.h"

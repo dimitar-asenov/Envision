@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * BooleanLiteralStringComponents.cpp
- *
- *  Created on: Feb 24, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "string_components/BooleanLiteralStringComponents.h"
 
 #include "OOModel/src/expressions/BooleanLiteral.h"

@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * StringOffsetProvider.h
- *
- *  Created on: Feb 14, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_STRINGOFFSETPROVIDER_H_
 #define OOInteraction_STRINGOFFSETPROVIDER_H_
 

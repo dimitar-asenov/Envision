@@ -24,13 +24,6 @@
 **
 ***********************************************************************************************************************/
 
-/*
- * OperatorDescriptor.h
- *
- *  Created on: Jan 10, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef INTERACTIONBASE_OPERATORDESCRIPTOR_H_
 #define INTERACTIONBASE_OPERATORDESCRIPTOR_H_
 

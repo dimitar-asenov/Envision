@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * EmptyExpressionStringComponents.cpp
- *
- *  Created on: Feb 17, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "string_components/EmptyExpressionStringComponents.h"
 
 #include "OOModel/src/expressions/EmptyExpression.h"

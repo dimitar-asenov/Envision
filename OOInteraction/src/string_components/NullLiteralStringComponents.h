@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * NullLiteralStringComponents.h
- *
- *  Created on: Feb 24, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_NULLLITERALSTRINGCOMPONENTS_H_
 #define OOInteraction_NULLLITERALSTRINGCOMPONENTS_H_
 

@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CCreateProject.h
- *
- *  Created on: Sep 14, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_CCREATEPROJECT_H_
 #define OOInteraction_CCREATEPROJECT_H_
 

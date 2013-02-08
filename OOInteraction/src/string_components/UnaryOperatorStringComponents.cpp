@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * UnaryOperatorStringComponents.cpp
- *
- *  Created on: Feb 24, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "string_components/UnaryOperatorStringComponents.h"
 
 #include "OOModel/src/expressions/UnaryOperation.h"

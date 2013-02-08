@@ -24,13 +24,6 @@
  **
  ***********************************************************************************************************************/
 
-/*
- * UnfinishedOperator.h
- *
- *  Created on: Jan 10, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef INTERACTIONBASE_UNFINISHEDOPERATOR_H_
 #define INTERACTIONBASE_UNFINISHEDOPERATOR_H_
 

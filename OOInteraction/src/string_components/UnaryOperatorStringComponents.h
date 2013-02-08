@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * UnaryOperatorStringComponents.h
- *
- *  Created on: Feb 24, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_UNARYOPERATORSTRINGCOMPONENTS_H_
 #define OOInteraction_UNARYOPERATORSTRINGCOMPONENTS_H_
 

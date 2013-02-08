@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ListCell.h
- *
- *  Created on: Jul 2, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_LISTCELL_H_
 #define OOInteraction_LISTCELL_H_
 

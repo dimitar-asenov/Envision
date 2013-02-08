@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ReferenceExpressionStringOffsetProvider.h
- *
- *  Created on: May 30, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_REFERENCEEXPRESSIONSTRINGOFFSETPROVIDER_H_
 #define OOInteraction_REFERENCEEXPRESSIONSTRINGOFFSETPROVIDER_H_
 

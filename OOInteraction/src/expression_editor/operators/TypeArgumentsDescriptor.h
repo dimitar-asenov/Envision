@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * TypeArgumentsDescriptor.h
- *
- *  Created on: May 30, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_TYPEARGUMENTSDESCRIPTOR_H_
 #define OOInteraction_TYPEARGUMENTSDESCRIPTOR_H_
 

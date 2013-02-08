@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * PersistentStore.cpp
- *
- *  Created on: Mar 29, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "PersistentStore.h"
 #include "../nodes/Reference.h"
 

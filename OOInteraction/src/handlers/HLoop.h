@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * HLoop.h
- *
- *  Created on: Mar 21, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_HLOOP_H_
 #define OOInteraction_HLOOP_H_
 

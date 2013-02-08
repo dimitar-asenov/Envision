@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * UnaryOperatorStringOffsetProvider.h
- *
- *  Created on: Aug 2, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_UNARYOPERATORSTRINGOFFSETPROVIDER_H_
 #define OOInteraction_UNARYOPERATORSTRINGOFFSETPROVIDER_H_
 

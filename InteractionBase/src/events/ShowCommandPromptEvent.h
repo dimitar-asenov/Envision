@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ShowCommandPromptEvent.h
- *
- *  Created on: Sep 14, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef InteractionBase_SHOWCOMMANDPROMPTEVENT_H_
 #define InteractionBase_SHOWCOMMANDPROMPTEVENT_H_
 

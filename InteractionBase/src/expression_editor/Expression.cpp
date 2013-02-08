@@ -24,13 +24,6 @@
 **
 ***********************************************************************************************************************/
 
-/*
- * Expression.cpp
- *
- *  Created on: Jan 10, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "expression_editor/Expression.h"
 #include "expression_editor/Operator.h"
 

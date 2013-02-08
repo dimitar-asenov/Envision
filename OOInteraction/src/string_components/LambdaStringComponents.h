@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * LambdaStringComponents.h
- *
- *  Created on: Dec 4, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_LAMBDASTRINGCOMPONENTS_H_
 #define OOInteraction_LAMBDASTRINGCOMPONENTS_H_
 

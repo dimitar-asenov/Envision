@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * HIfStatement.h
- *
- *  Created on: Mar 21, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_HIFSTATEMENT_H_
 #define OOInteraction_HIFSTATEMENT_H_
 

@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * UnaryOperatorDescriptor.cpp
- *
- *  Created on: Feb 24, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "expression_editor/operators/UnaryOperatorDescriptor.h"
 
 namespace OOInteraction {

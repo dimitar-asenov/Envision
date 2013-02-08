@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CastExpressionStringComponents.h
- *
- *  Created on: Feb 24, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_CASTEXPRESSIONSTRINGCOMPONENTS_H_
 #define OOInteraction_CASTEXPRESSIONSTRINGCOMPONENTS_H_
 

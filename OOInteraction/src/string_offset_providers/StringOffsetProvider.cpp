@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * StringOffsetProvider.cpp
- *
- *  Created on: Feb 14, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "string_offset_providers/StringOffsetProvider.h"
 #include "string_components/StringComponents.h"
 

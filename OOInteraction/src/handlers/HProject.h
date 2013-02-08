@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * HProject.h
- *
- *  Created on: Mar 6, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_HPROJECT_H_
 #define OOInteraction_HPROJECT_H_
 

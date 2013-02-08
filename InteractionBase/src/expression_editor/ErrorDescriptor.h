@@ -24,13 +24,6 @@
 **
 ***********************************************************************************************************************/
 
-/*
- * ErrorDescriptor.h
- *
- *  Created on: Jan 10, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef INTERACTIONBASE_ERRORDESCRIPTOR_H_
 #define INTERACTIONBASE_ERRORDESCRIPTOR_H_
 

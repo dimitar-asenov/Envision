@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * PrimitiveType.h
- *
- *  Created on: Apr 3, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOModel_PRIMITIVETYPE_H_
 #define OOModel_PRIMITIVETYPE_H_
 

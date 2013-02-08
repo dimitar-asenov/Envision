@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * AddEmptyValue.h
- *
- *  Created on: Jan 11, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef INTERACTIONBASE_ADDEMPTYVALUE_H_
 #define INTERACTIONBASE_ADDEMPTYVALUE_H_
 

@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * UnaryOperatorDescriptor.h
- *
- *  Created on: Feb 24, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_UNARYOPERATORDESCRIPTOR_H_
 #define OOInteraction_UNARYOPERATORDESCRIPTOR_H_
 

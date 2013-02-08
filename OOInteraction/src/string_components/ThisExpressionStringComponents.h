@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ThisExpressionStringComponents.h
- *
- *  Created on: Feb 24, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_THISEXPRESSIONSTRINGCOMPONENTS_H_
 #define OOInteraction_THISEXPRESSIONSTRINGCOMPONENTS_H_
 

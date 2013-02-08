@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ThrowDescriptor.h
- *
- *  Created on: Sep 17, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOInteraction_THROWDESCRIPTOR_H_
 #define OOInteraction_THROWDESCRIPTOR_H_
 

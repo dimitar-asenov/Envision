@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CCreateField.cpp
- *
- *  Created on: Dec 6, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "CCreateField.h"
 
 #include "OOModel/src/top_level/Class.h"

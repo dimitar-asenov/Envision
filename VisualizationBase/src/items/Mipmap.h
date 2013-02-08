@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * Mipmap.h
- *
- *  Created on: Nov 1, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef VisualizationBase_MIPMAP_H_
 #define VisualizationBase_MIPMAP_H_
 

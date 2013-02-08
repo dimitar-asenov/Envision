@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ThrownExceptionType.h
- *
- *  Created on: Sep 17, 2012
- *      Author: Dimitar Asenov
- */
-
 #ifndef OOModel_THROWNEXCEPTIONTYPE_H_
 #define OOModel_THROWNEXCEPTIONTYPE_H_
 

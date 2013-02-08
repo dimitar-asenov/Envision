@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * HIfStatement.cpp
- *
- *  Created on: Mar 21, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "handlers/HIfStatement.h"
 
 #include "OOVisualization/src/statements/VIfStatement.h"
