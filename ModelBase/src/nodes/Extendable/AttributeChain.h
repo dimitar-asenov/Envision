@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef ATTRIBUTECHAIN_H_
-#define ATTRIBUTECHAIN_H_
+#pragma once
 
 #include "../../modelbase_api.h"
 #include "Attribute.h"
@@ -61,5 +60,3 @@ class MODELBASE_API AttributeChain: public QVector<Attribute>
 };
 
 }
-
-#endif /* ATTRIBUTECHAIN_H_ */

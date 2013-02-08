@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef UNDOCOMMAND_H_
-#define UNDOCOMMAND_H_
+#pragma once
 
 #include "../modelbase_api.h"
 
@@ -75,5 +74,3 @@ inline bool UndoCommand::isUndone() const { return undone; }
 inline Node* UndoCommand::target() const { return target_; }
 
 }
-
-#endif /* UNDOCOMMAND_H_ */

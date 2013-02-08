@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef FORMALARGUMENT_H_
-#define FORMALARGUMENT_H_
+#pragma once
 
 #include "../oomodel_api.h"
 
@@ -63,5 +62,3 @@ inline FormalArgument::Direction FormalArgument::direction() const { return stat
 inline void FormalArgument::setDirection(const Direction& direction) { setDirectionInt(direction); }
 
 }
-
-#endif /* FORMALARGUMENT_H_ */

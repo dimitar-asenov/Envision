@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOVisualization_VEMPTYEXPRESSIONSTYLE_H_
-#define OOVisualization_VEMPTYEXPRESSIONSTYLE_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -50,4 +49,3 @@ inline const Visualization::StaticStyle& VEmptyExpressionStyle::normal() const {
 inline const Visualization::StaticStyle& VEmptyExpressionStyle::emptyLine() const { return emptyLine_; }
 
 } /* namespace OOVisualization */
-#endif /* OOVisualization_VEMPTYEXPRESSIONSTYLE_H_ */

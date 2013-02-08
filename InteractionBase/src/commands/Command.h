@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef COMMAND_H_
-#define COMMAND_H_
+#pragma once
 
 #include "../interactionbase_api.h"
 
@@ -51,5 +50,3 @@ class INTERACTIONBASE_API Command
 };
 
 }
-
-#endif /* COMMAND_H_ */

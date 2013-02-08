@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef ADDMODIFIEDNODE_H_
-#define ADDMODIFIEDNODE_H_
+#pragma once
 
 #include "commands/UndoCommand.h"
 
@@ -44,5 +43,3 @@ class AddModifiedNode: public UndoCommand
 };
 
 }
-
-#endif /* ADDMODIFIEDNODE_H_ */

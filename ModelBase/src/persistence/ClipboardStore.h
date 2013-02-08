@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef CLIPBOARDSTORE_H_
-#define CLIPBOARDSTORE_H_
+#pragma once
 
 #include "../modelbase_api.h"
 
@@ -47,5 +46,3 @@ class MODELBASE_API ClipboardStore: public PersistentStore
 };
 
 }
-
-#endif /* CLIPBOARDSTORE_H_ */

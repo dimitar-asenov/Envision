@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VMETHODSTYLE_H_
-#define VMETHODSTYLE_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -103,5 +102,3 @@ inline const Visualization::VListStyle& VMethodStyle::typeArguments() const { re
 inline const Visualization::VListStyle& VMethodStyle::results() const { return results_; }
 
 }
-
-#endif /* VMETHODSTYLE_H_ */

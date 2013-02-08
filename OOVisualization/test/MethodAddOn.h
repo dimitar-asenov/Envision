@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOVisualization_METHODADDON_H_
-#define OOVisualization_METHODADDON_H_
+#pragma once
 
 #include "VisualizationBase/src/items/VisualizationAddOn.h"
 
@@ -43,4 +42,3 @@ class MethodAddOn : public Visualization::VisualizationAddOn {
 };
 
 } /* namespace OOVisualization */
-#endif /* OOVisualization_METHODADDON_H_ */

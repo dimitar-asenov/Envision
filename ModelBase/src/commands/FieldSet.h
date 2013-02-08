@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef FIELDSET_H_
-#define FIELDSET_H_
+#pragma once
 
 #include "UndoCommand.h"
 #include "../model/Model.h"
@@ -60,5 +59,3 @@ class FieldSet: public UndoCommand
 };
 
 }
-
-#endif /* FIELDSET_H_ */

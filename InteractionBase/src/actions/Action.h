@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef InteractionBase_ACTION_H_
-#define InteractionBase_ACTION_H_
+#pragma once
 
 #include "../interactionbase_api.h"
 #include "ModelBase/src/nodes/Node.h"
@@ -73,4 +72,3 @@ inline QList<Action*>& Action::actions(Model::Node* node) { return actions(node-
 template<class T> inline void Action::add(Action* action) { actions(T::typeIdStatic()).append(action);}
 
 } /* namespace Interaction */
-#endif /* InteractionBase_ACTION_H_ */

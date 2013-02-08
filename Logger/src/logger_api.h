@@ -24,16 +24,13 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef LOGGER_API_H_
-#define LOGGER_API_H_
+#pragma once
 
 #include "precompiled.h"
 
 // This should be defined in the project file of the plug-in that exports symbols
 #if defined(LOGGER_LIBRARY)
-#  define LOGGER_API Q_DECL_EXPORT
+	#define LOGGER_API Q_DECL_EXPORT
 #else
-#  define LOGGER_API Q_DECL_IMPORT
+	#define LOGGER_API Q_DECL_IMPORT
 #endif
-
-#endif /* LOGGER_API_H_ */

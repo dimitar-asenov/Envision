@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VCASTEXPRESSIONSTYLE_H_
-#define VCASTEXPRESSIONSTYLE_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -48,5 +47,3 @@ class OOVISUALIZATION_API VCastExpressionStyle : public Visualization::ItemStyle
 inline const Visualization::SequentialLayoutStyle& VCastExpressionStyle::layout() const { return layout_; }
 
 }
-
-#endif /* VCASTEXPRESSIONSTYLE_H_ */

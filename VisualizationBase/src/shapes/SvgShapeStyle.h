@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef VisualizationBase_SVGSHAPESTYLE_H_
-#define VisualizationBase_SVGSHAPESTYLE_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -62,4 +61,3 @@ inline double SvgShapeStyle::leftContentMarginFraction() const { return leftCont
 inline double SvgShapeStyle::rightContentMarginFraction() const { return rightContentMarginFraction_; }
 
 } /* namespace Visualization */
-#endif /* VisualizationBase_SVGSHAPESTYLE_H_ */

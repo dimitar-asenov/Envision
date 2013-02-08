@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef InteractionBase_ACTIONPROMPTSTYLE_H_
-#define InteractionBase_ACTIONPROMPTSTYLE_H_
+#pragma once
 
 #include "interactionbase_api.h"
 
@@ -57,4 +56,3 @@ inline const Visualization::TextStyle& ActionPromptStyle::shortcutText() const {
 inline const TextAndDescriptionStyle& ActionPromptStyle::actionStyle() const {return actionStyle_; }
 
 } /* namespace Interaction */
-#endif /* InteractionBase_ACTIONPROMPTSTYLE_H_ */

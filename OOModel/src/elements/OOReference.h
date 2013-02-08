@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOModel_OOREFERENCE_H_
-#define OOModel_OOREFERENCE_H_
+#pragma once
 
 #include "../oomodel_api.h"
 
@@ -42,4 +41,3 @@ class OOMODEL_API OOReference : public Model::Reference {
 };
 
 } /* namespace OOModel */
-#endif /* OOModel_OOREFERENCE_H_ */

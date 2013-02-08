@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VNEWEXPRESSION_H_
-#define VNEWEXPRESSION_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 #include "VNewExpressionStyle.h"
@@ -62,5 +61,3 @@ OOModel::NewExpression>
 };
 
 }
-
-#endif /* VNEWEXPRESSION_H_ */

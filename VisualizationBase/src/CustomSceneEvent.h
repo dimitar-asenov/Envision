@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef VisualizationBase_CUSTOMSCENEEVENT_H_
-#define VisualizationBase_CUSTOMSCENEEVENT_H_
+#pragma once
 
 #include "visualizationbase_api.h"
 
@@ -52,4 +51,3 @@ class VISUALIZATIONBASE_API CustomSceneEvent : public QEvent{
 inline void CustomSceneEvent::setEventFunction(EventFunction f) { f_ = f; }
 
 } /* namespace Visualization */
-#endif /* VisualizationBase_CUSTOMSCENEEVENT_H_ */

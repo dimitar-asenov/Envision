@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef STRINGLITERAL_H_
-#define STRINGLITERAL_H_
+#pragma once
 
 #include "Expression.h"
 
@@ -45,5 +44,3 @@ class OOMODEL_API StringLiteral: public Expression
 };
 
 }
-
-#endif /* STRINGLITERAL_H_ */

@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef COMMANDERROR_H_
-#define COMMANDERROR_H_
+#pragma once
 
 #include "../interactionbase_api.h"
 
@@ -61,5 +60,3 @@ inline void CommandError::addResolutionTip(const QString& resolutionTip) { resol
 inline void CommandError::setVisualization(Visualization::Item* item) { visualization_ = item; }
 
 }
-
-#endif /* COMMANDERROR_H_ */

@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef SWITCHSTATEMENT_H_
-#define SWITCHSTATEMENT_H_
+#pragma once
 
 #include "Statement.h"
 
@@ -47,5 +46,3 @@ class OOMODEL_API SwitchStatement: public Statement
 };
 
 }
-
-#endif /* SWITCHSTATEMENT_H_ */

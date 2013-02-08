@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VMETHODCALLEXPRESSIONSTYLE_H_
-#define VMETHODCALLEXPRESSIONSTYLE_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -56,5 +55,3 @@ inline const VReferenceExpressionStyle& VMethodCallExpressionStyle::name() const
 inline const Visualization::VListStyle& VMethodCallExpressionStyle::arguments() const { return arguments_; }
 
 }
-
-#endif /* VMETHODCALLEXPRESSIONSTYLE_H_ */

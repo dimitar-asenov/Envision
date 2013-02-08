@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VREFERENCEEXPRESSION_H_
-#define VREFERENCEEXPRESSION_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 #include "VReferenceExpressionStyle.h"
@@ -75,5 +74,3 @@ inline Visualization::Item* VReferenceExpression::prefix() const { return prefix
 inline Visualization::VList* VReferenceExpression::typeArguments() const { return typeArguments_; }
 
 }
-
-#endif /* VREFERENCEEXPRESSION_H_ */

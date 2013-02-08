@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOInteraction_COMPOUNDOBJECTDESCRIPTOR_H_
-#define OOInteraction_COMPOUNDOBJECTDESCRIPTOR_H_
+#pragma once
 
 #include "../../oointeraction_api.h"
 #include "../OOOperatorDescriptor.h"
@@ -54,4 +53,3 @@ class OOINTERACTION_API CompoundObjectDescriptor : public OOOperatorDescriptor {
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_COMPOUNDOBJECTDESCRIPTOR_H_ */

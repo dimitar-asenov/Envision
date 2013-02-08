@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef MODULE_H_
-#define MODULE_H_
+#pragma once
 
 #include "../oomodel_api.h"
 
@@ -60,5 +59,3 @@ class OOMODEL_API Module : public Model::ExtendableNode
 };
 
 }
-
-#endif /* MODULE_H_ */

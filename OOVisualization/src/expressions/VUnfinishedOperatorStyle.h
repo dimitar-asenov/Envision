@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOVisualization_VUNFINISHEDOPERATORSTYLE_H_
-#define OOVisualization_VUNFINISHEDOPERATORSTYLE_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -51,4 +50,3 @@ inline const Visualization::SequentialLayoutStyle& VUnfinishedOperatorStyle::lay
 inline const Visualization::TextStyle& VUnfinishedOperatorStyle::delimiters() const { return delimiters_; }
 
 } /* namespace OOVisualization */
-#endif /* OOVisualization_VUNFINISHEDOPERATORSTYLE_H_ */

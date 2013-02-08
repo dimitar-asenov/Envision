@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef STYLELOADER_H_
-#define STYLELOADER_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 #include "StyleNode.h"
@@ -130,5 +129,3 @@ template <typename F, typename S> void StyleLoader::loadComposite(QPair<F,S>& va
 }
 
 }
-
-#endif /* STYLELOADER_H_ */

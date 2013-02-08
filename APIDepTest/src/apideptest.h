@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef APIDEPTEST_H
-#define APIDEPTEST_H
+#pragma once
 
 #include "Core/src/EnvisionPlugin.h"
 #include "precompiled.h"
@@ -52,5 +51,3 @@ class APIDep : public QObject, public Core::EnvisionPlugin
 };
 
 }
-
-#endif // APIDEPTEST_H

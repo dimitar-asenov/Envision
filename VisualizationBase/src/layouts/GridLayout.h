@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef GRIDLAYOUT_H_
-#define GRIDLAYOUT_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -137,5 +136,3 @@ template <class T> void GridLayout::synchronize(T*& item, typename T::NodeType* 
 }
 
 }
-
-#endif /* GRIDLAYOUT_H_ */

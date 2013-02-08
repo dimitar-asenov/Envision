@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef HLIST_H_
-#define HLIST_H_
+#pragma once
 
 #include "../interactionbase_api.h"
 
@@ -76,5 +75,3 @@ class INTERACTIONBASE_API HList : public GenericHandler
 };
 
 }
-
-#endif /* HLIST_H_ */

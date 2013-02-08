@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef InteractionBase_SETCURSOREVENT_H_
-#define InteractionBase_SETCURSOREVENT_H_
+#pragma once
 
 #include "../interactionbase_api.h"
 
@@ -72,4 +71,3 @@ class INTERACTIONBASE_API SetCursorEvent : public Visualization::CustomSceneEven
 };
 
 } /* namespace Interaction */
-#endif /* InteractionBase_SETCURSOREVENT_H_ */

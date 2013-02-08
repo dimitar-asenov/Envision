@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef TEST_H_
-#define TEST_H_
+#pragma once
 
 #include "selftest_api.h"
 #include "TestResults.h"
@@ -107,5 +106,3 @@ class pluginClass##Test##testName : public SelfTest::Test																				\
 int pluginClass##Test##testName::initTrigger = pluginClass##Test##testName::init();												\
 void pluginClass##Test##testName::runCustom(SelfTest::TestResults& testResults, bool &allChecksPassedFlag)
 /**********************************************************************************************************************/
-
-#endif /* TEST_H_ */

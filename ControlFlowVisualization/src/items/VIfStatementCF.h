@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VIFSTATEMENTCF_H_
-#define VIFSTATEMENTCF_H_
+#pragma once
 
 #include "../controlflowvisualization_api.h"
 #include "VIfStatementCFStyle.h"
@@ -62,5 +61,3 @@ class CONTROLFLOWVISUALIZATION_API VIfStatementCF
 };
 
 }
-
-#endif /* VIFSTATEMENTCF_H_ */

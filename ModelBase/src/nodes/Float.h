@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef FLOAT_H_
-#define FLOAT_H_
+#pragma once
 
 #include "Node.h"
 #include "nodeMacros.h"
@@ -52,5 +51,3 @@ inline double Float::get() const { return value; }
 
 
 }
-
-#endif /* FLOAT_H_ */

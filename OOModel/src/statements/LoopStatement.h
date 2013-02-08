@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef LOOPSTATEMENT_H_
-#define LOOPSTATEMENT_H_
+#pragma once
 
 #include "Statement.h"
 
@@ -49,5 +48,3 @@ class OOMODEL_API LoopStatement: public Statement
 };
 
 }
-
-#endif /* LOOPSTATEMENT_H_ */

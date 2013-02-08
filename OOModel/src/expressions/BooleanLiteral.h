@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef BOOLEANLITERAL_H_
-#define BOOLEANLITERAL_H_
+#pragma once
 
 #include "Expression.h"
 
@@ -47,5 +46,3 @@ class OOMODEL_API BooleanLiteral: public Expression
 
 
 }
-
-#endif /* BOOLEANLITERAL_H_ */

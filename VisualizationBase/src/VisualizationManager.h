@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VISUALIZATIONMANAGER_H_
-#define VISUALIZATIONMANAGER_H_
+#pragma once
 
 #include "visualizationbase_api.h"
 
@@ -65,5 +64,3 @@ class VISUALIZATIONBASE_API VisualizationManager
 inline Scene* VisualizationManager::mainScene() { return mainScene_; }
 inline MainView* VisualizationManager::mainView() { return mainView_; }
 }
-
-#endif /* VISUALIZATIONMANAGER_H_ */

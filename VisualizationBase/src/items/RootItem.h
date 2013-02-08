@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef VisualizationBase_ROOTITEM_H_
-#define VisualizationBase_ROOTITEM_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 #include "Item.h"
@@ -58,4 +57,3 @@ class VISUALIZATIONBASE_API RootItem : public ItemWithNode<Item> {
 inline Item* RootItem::item() { return item_; }
 
 } /* namespace Visualization */
-#endif /* VisualizationBase_ROOTITEM_H_ */

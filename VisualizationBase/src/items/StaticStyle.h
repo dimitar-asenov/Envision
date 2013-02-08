@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef STATICSTYLE_H_
-#define STATICSTYLE_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -70,5 +69,3 @@ inline const ItemStyle& StaticStyle::itemStyle() const { return *itemStyle_.data
 inline bool StaticStyle::isEmpty() const { return itemClass_.isEmpty(); }
 
 }
-
-#endif /* STATICSTYLE_H_ */

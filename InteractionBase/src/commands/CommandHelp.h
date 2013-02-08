@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef COMMANDHELP_H_
-#define COMMANDHELP_H_
+#pragma once
 
 #include "../interactionbase_api.h"
 
@@ -50,5 +49,3 @@ inline Visualization::Item* CommandHelp::visualization() { return visualization_
 inline void CommandHelp::setVisualization(Visualization::Item* item) { visualization_ = item; }
 
 }
-
-#endif /* COMMANDHELP_H_ */

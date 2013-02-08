@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VARRAYINITIALIZERSTYLE_H_
-#define VARRAYINITIALIZERSTYLE_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -51,5 +50,3 @@ inline const Visualization::GridLayoutStyle& VArrayInitializerStyle::layout() co
 inline const Visualization::VListStyle& VArrayInitializerStyle::values() const { return values_; }
 
 }
-
-#endif /* VARRAYINITIALIZERSTYLE_H_ */

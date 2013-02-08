@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOInteraction_SETEXPRESSIONCURSOREVENT_H_
-#define OOInteraction_SETEXPRESSIONCURSOREVENT_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 
@@ -54,4 +53,3 @@ class OOINTERACTION_API SetExpressionCursorEvent : public Visualization::CustomS
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_SETEXPRESSIONCURSOREVENT_H_ */

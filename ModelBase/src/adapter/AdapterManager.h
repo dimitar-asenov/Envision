@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef ModelBase_ADAPTERMANAGER_H_
-#define ModelBase_ADAPTERMANAGER_H_
+#pragma once
 
 #include "../modelbase_api.h"
 
@@ -101,4 +100,3 @@ template <class AdapterBase, class Adapter, class Adaptee> void AdapterManager::
 }
 
 } /* namespace Model */
-#endif /* ModelBase_ADAPTERMANAGER_H_ */

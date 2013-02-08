@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef INSERTMETHODVIS_H_
-#define INSERTMETHODVIS_H_
+#pragma once
 
 #include "../custommethodcall_api.h"
 #include "InsertMethodVisStyle.h"
@@ -64,5 +63,3 @@ class CUSTOMMETHODCALL_API InsertMethodVis
 };
 
 }
-
-#endif /* INSERTMETHODVIS_H_ */

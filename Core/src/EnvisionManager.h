@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef ENVISIONMANAGER_H_
-#define ENVISIONMANAGER_H_
+#pragma once
 
 #include "PluginInfo.h"
 
@@ -60,5 +59,3 @@ class EnvisionManager
 };
 
 }
-
-#endif /* ENVISIONMANAGER_H_ */

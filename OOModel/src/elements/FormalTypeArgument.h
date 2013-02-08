@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOModel_FORMALTYPEARGUMENT_H_
-#define OOModel_FORMALTYPEARGUMENT_H_
+#pragma once
 
 #include "../oomodel_api.h"
 
@@ -52,4 +51,3 @@ class OOMODEL_API FormalTypeArgument : public Model::ExtendableNode
 };
 
 } /* namespace OOModel */
-#endif /* OOModel_FORMALTYPEARGUMENT_H_ */

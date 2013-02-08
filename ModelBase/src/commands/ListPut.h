@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef LISTPUT_H_
-#define LISTPUT_H_
+#pragma once
 
 #include "NodeOwningCommand.h"
 
@@ -51,5 +50,3 @@ class MODELBASE_API ListPut: public NodeOwningCommand
 };
 
 }
-
-#endif /* LISTPUT_H_ */

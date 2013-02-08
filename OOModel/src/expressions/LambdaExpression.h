@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOModel_LAMBDAEXPRESSION_H_
-#define OOModel_LAMBDAEXPRESSION_H_
+#pragma once
 
 #include "../elements/FormalArgument.h"
 #include "../elements/StatementItemList.h"
@@ -47,4 +46,3 @@ class OOMODEL_API LambdaExpression: public Expression
 };
 
 } /* namespace OOModel */
-#endif /* OOModel_LAMBDAEXPRESSION_H_ */

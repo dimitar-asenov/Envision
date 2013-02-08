@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VMODULESTYLE_H_
-#define VMODULESTYLE_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -63,5 +62,3 @@ inline const Visualization::StaticStyle& VModuleStyle::icon() const {return icon
 inline const Visualization::PositionLayoutStyle& VModuleStyle::content() const {return content_; }
 
 }
-
-#endif /* VMODULESTYLE_H_ */

@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef PANELLAYOUTSTYLE_H_
-#define PANELLAYOUTSTYLE_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -58,5 +57,3 @@ inline LayoutStyle::Alignment PanelLayoutStyle::alignment() const {	return align
 inline int PanelLayoutStyle::spaceBetweenElements() const {	return spaceBetweenElements_; }
 
 }
-
-#endif /* PANELLAYOUTSTYLE_H_ */

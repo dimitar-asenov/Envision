@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VARRAYTYPESTYLE_H_
-#define VARRAYTYPESTYLE_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -51,5 +50,3 @@ inline const Visualization::SequentialLayoutStyle& VArrayTypeStyle::layout() con
 inline const Visualization::StaticStyle& VArrayTypeStyle::symbol() const { return symbol_; }
 
 }
-
-#endif /* VARRAYTYPESTYLE_H_ */

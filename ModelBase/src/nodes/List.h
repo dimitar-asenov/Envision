@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef LIST_H_
-#define LIST_H_
+#pragma once
 
 #include "../modelbase_api.h"
 
@@ -132,5 +131,3 @@ inline void List::append(Node* node) { insert(nodes_.size(), node); }
 inline void List::prepend(Node* node) { insert(0, node); }
 
 }
-
-#endif /* LIST_H_ */

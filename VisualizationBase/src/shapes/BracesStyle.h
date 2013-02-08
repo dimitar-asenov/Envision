@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef BRACESSTYLE_H_
-#define BRACESSTYLE_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -68,5 +67,3 @@ inline const QFont& BracesStyle::rightBraceFont() const { return rightBraceFont_
 inline const QString& BracesStyle::rightBrace() const { return rightBrace_; }
 
 }
-
-#endif /* BRACESSTYLE_H_ */

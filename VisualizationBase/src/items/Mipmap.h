@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef VisualizationBase_MIPMAP_H_
-#define VisualizationBase_MIPMAP_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -64,4 +63,3 @@ inline qreal Mipmap::minimalScaleFactor() { return minimalScaleFactor_; }
 inline void Mipmap::setMinimalScaleFactor(qreal factor) { minimalScaleFactor_ = factor; }
 
 } /* namespace Visualization */
-#endif /* VisualizationBase_MIPMAP_H_ */

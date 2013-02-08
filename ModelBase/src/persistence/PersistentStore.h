@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef PERSISTENTSTORE_H_
-#define PERSISTENTSTORE_H_
+#pragma once
 
 #include "../modelbase_api.h"
 
@@ -83,5 +82,3 @@ class MODELBASE_API PersistentStore
 };
 
 }
-
-#endif /* PERSISTENTSTORE_H_ */

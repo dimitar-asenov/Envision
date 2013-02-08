@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef PRIMITIVETYPEEXPRESSION_H_
-#define PRIMITIVETYPEEXPRESSION_H_
+#pragma once
 
 #include "TypeExpression.h"
 #include "../../types/PrimitiveType.h"
@@ -54,5 +53,3 @@ inline PrimitiveTypeExpression::PrimitiveTypes PrimitiveTypeExpression::typeValu
 inline void PrimitiveTypeExpression::setTypeValue(const PrimitiveTypes& type) { setVal(type); }
 
 }
-
-#endif /* PRIMITIVETYPEEXPRESSION_H_ */

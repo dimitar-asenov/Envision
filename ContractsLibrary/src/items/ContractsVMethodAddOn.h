@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef ContractsLibrary_CONTRACTSVMETHODADDON_H_
-#define ContractsLibrary_CONTRACTSVMETHODADDON_H_
+#pragma once
 
 #include "../contractslibrary_api.h"
 #include "VisualizationBase/src/items/VisualizationAddOn.h"
@@ -49,4 +48,3 @@ class CONTRACTSLIBRARY_API ContractsVMethodAddOn : public Visualization::Visuali
 };
 
 } /* namespace ContractsLibrary */
-#endif /* ContractsLibrary_CONTRACTSVMETHODADDON_H_ */

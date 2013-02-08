@@ -24,8 +24,7 @@
  **
  ***********************************************************************************************************************/
 
-#ifndef INTERACTIONBASE_VALUE_H_
-#define INTERACTIONBASE_VALUE_H_
+#pragma once
 
 #include "../interactionbase_api.h"
 
@@ -59,4 +58,3 @@ inline int Value::type() { return 1; }
 
 
 } /* namespace InteractionBase */
-#endif /* INTERACTIONBASE_VALUE_H_ */

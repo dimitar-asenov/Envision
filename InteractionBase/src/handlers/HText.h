@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef HTEXT_H_
-#define HTEXT_H_
+#pragma once
 
 #include "../interactionbase_api.h"
 
@@ -56,5 +55,3 @@ class INTERACTIONBASE_API HText : public GenericHandler
 };
 
 }
-
-#endif /* HTEXT_H_ */

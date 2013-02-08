@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef LAYOUTPROVIDER_H_
-#define LAYOUTPROVIDER_H_
+#pragma once
 
 #include "LayoutProviderBase.h"
 #include "../layouts/SequentialLayout.h"
@@ -54,5 +53,3 @@ LayoutProviderBase(parent, style, new LayoutTypeName(nullptr))
 }
 
 }
-
-#endif /* LAYOUTPROVIDER_H_ */

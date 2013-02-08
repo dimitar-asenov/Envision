@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VARIABLEDECLARATION_H_
-#define VARIABLEDECLARATION_H_
+#pragma once
 
 #include "Expression.h"
 
@@ -51,5 +50,3 @@ class OOMODEL_API VariableDeclaration: public Expression
 };
 
 }
-
-#endif /* VARIABLEDECLARATION_H_ */

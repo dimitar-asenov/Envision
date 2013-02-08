@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef EXTENDABLEINDEX_H_
-#define EXTENDABLEINDEX_H_
+#pragma once
 
 #include "../../modelbase_api.h"
 
@@ -48,5 +47,3 @@ class MODELBASE_API ExtendableIndex
 };
 
 }
-
-#endif /* EXTENDABLEINDEX_H_ */

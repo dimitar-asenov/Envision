@@ -24,16 +24,13 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOINTERACTION_API_H_
-#define OOINTERACTION_API_H_
+#pragma once
 
 #include "precompiled.h"
 
 // This should be defined in the project file of the plug-in that exports symbols
 #if defined(OOINTERACTION_LIBRARY)
-#  define OOINTERACTION_API Q_DECL_EXPORT
+	#define OOINTERACTION_API Q_DECL_EXPORT
 #else
-#  define OOINTERACTION_API Q_DECL_IMPORT
+	#define OOINTERACTION_API Q_DECL_IMPORT
 #endif
-
-#endif /* OOINTERACTION_API_H_ */

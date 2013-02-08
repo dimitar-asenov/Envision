@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VBLOCK_H_
-#define VBLOCK_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 #include "VBlockStyle.h"
@@ -58,5 +57,3 @@ class OOVISUALIZATION_API VBlock : public Visualization::ItemWithNode< Visualiza
 };
 
 }
-
-#endif /* VBLOCK_H_ */

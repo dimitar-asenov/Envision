@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef ICON_H_
-#define ICON_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -54,5 +53,3 @@ class VISUALIZATIONBASE_API Icon: public Item
 };
 
 }
-
-#endif /* ICON_H_ */

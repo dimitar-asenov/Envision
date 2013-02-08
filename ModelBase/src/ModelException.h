@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef MODELEXCEPTION_H_
-#define MODELEXCEPTION_H_
+#pragma once
 
 #include "modelbase_api.h"
 #include "Core/src/EnvisionException.h"
@@ -40,5 +39,3 @@ class MODELBASE_API ModelException : public Core::EnvisionException
 };
 
 }
-
-#endif /* MODELEXCEPTION_H_ */

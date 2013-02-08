@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VIFSTATEMENTCFSTYLE_H_
-#define VIFSTATEMENTCFSTYLE_H_
+#pragma once
 
 #include "../controlflowvisualization_api.h"
 #include "ControlFlowItemStyle.h"
@@ -55,5 +54,3 @@ inline const VListCFStyle& VIfStatementCFStyle::thenBranch() const { return then
 inline const VListCFStyle& VIfStatementCFStyle::elseBranch() const { return elseBranch_; }
 
 }
-
-#endif /* VIFSTATEMENTCFSTYLE_H_ */

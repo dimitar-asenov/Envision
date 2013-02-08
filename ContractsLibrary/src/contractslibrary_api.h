@@ -24,16 +24,13 @@
  **
  **********************************************************************************************************************/
 
-#ifndef CONTRACTSLIBRARY_API_H_
-#define CONTRACTSLIBRARY_API_H_
+#pragma once
 
 #include "precompiled.h"
 
 // This should be defined in the project file of the plug-in that exports symbols
 #if defined(CONTRACTSLIBRARY_LIBRARY)
-#  define CONTRACTSLIBRARY_API Q_DECL_EXPORT
+	#define CONTRACTSLIBRARY_API Q_DECL_EXPORT
 #else
-#  define CONTRACTSLIBRARY_API Q_DECL_IMPORT
+	#define CONTRACTSLIBRARY_API Q_DECL_IMPORT
 #endif
-
-#endif /* CONTRACTSLIBRARY_API_H_ */

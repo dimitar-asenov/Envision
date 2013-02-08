@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOModel_ARRAYTYPE_H_
-#define OOModel_ARRAYTYPE_H_
+#pragma once
 
 #include "Type.h"
 
@@ -46,4 +45,3 @@ class OOMODEL_API ArrayType : public Type {
 
 inline const Type* ArrayType::elementType() const { return elementType_; }
 } /* namespace OOModel */
-#endif /* OOModel_ARRAYTYPE_H_ */

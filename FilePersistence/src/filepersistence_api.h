@@ -24,16 +24,13 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef FILEPERSISTENCE_API_H_
-#define FILEPERSISTENCE_API_H_
+#pragma once
 
 #include "precompiled.h"
 
 // This should be defined in the project file of the plug-in that exports symbols
 #if defined(FILEPERSISTENCE_LIBRARY)
-#  define FILEPERSISTENCE_API Q_DECL_EXPORT
+	#define FILEPERSISTENCE_API Q_DECL_EXPORT
 #else
-#  define FILEPERSISTENCE_API Q_DECL_IMPORT
+	#define FILEPERSISTENCE_API Q_DECL_IMPORT
 #endif
-
-#endif /* FILEPERSISTENCE_API_H_ */

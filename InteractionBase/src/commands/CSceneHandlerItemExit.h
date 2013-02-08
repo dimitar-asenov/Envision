@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef CSCENEHANDLERITEMEXIT_H_
-#define CSCENEHANDLERITEMEXIT_H_
+#pragma once
 
 #include "../interactionbase_api.h"
 
@@ -44,5 +43,3 @@ class INTERACTIONBASE_API CSceneHandlerItemExit : public Command
 };
 
 }
-
-#endif /* CSCENEHANDLERITEMEXIT_H_ */

@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef OOMODEL_H
-#define OOMODEL_H
+#pragma once
 
 #include "Core/src/EnvisionPlugin.h"
 #include "precompiled.h"
@@ -52,5 +51,3 @@ class OOModel : public QObject, public Core::EnvisionPlugin
 };
 
 }
-
-#endif // OOMODEL_H

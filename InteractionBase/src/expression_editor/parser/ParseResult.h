@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef INTERACTIONBASE_PARSERESULT_H_
-#define INTERACTIONBASE_PARSERESULT_H_
+#pragma once
 
 #include "../../interactionbase_api.h"
 
@@ -50,4 +49,3 @@ class INTERACTIONBASE_API ParseResult {
 bool operator< (const ParseResult& left, const ParseResult& right);
 
 } /* namespace InteractionBase */
-#endif /* INTERACTIONBASE_PARSERESULT_H_ */

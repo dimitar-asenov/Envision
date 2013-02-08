@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOModel_NULLTYPE_H_
-#define OOModel_NULLTYPE_H_
+#pragma once
 
 #include "Type.h"
 
@@ -39,4 +38,3 @@ class OOMODEL_API NullType : public Type {
 };
 
 } /* namespace OOModel */
-#endif /* OOModel_NULLTYPE_H_ */

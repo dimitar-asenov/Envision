@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOInteraction_LISTCELL_H_
-#define OOInteraction_LISTCELL_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 #include "Cell.h"
@@ -53,4 +52,3 @@ class OOINTERACTION_API ListCell : public Cell
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_LISTCELL_H_ */

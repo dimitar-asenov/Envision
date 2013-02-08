@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef BINARYNODEACCESSUNIT_H_
-#define BINARYNODEACCESSUNIT_H_
+#pragma once
 
 #include "../modelbase_api.h"
 
@@ -46,5 +45,3 @@ class MODELBASE_API BinaryNodeAccessUnit: public BinaryNode
 };
 
 }
-
-#endif /* BINARYNODEACCESSUNIT_H_ */

@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VARRAYTYPE_H_
-#define VARRAYTYPE_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -62,5 +61,3 @@ class OOVISUALIZATION_API VArrayType
 };
 
 }
-
-#endif /* VARRAYTYPE_H_ */

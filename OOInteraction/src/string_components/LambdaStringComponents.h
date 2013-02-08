@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOInteraction_LAMBDASTRINGCOMPONENTS_H_
-#define OOInteraction_LAMBDASTRINGCOMPONENTS_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 #include "StringComponents.h"
@@ -48,4 +47,3 @@ class OOINTERACTION_API LambdaStringComponents : public StringComponents {
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_LAMBDASTRINGCOMPONENTS_H_ */

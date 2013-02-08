@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VVISIBILITY_H_
-#define VVISIBILITY_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -54,5 +53,3 @@ class OOVISUALIZATION_API VVisibility
 };
 
 }
-
-#endif /* VVISIBILITY_H_ */

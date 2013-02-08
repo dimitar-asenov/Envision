@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef EMPTYMETHODVIS_H_
-#define EMPTYMETHODVIS_H_
+#pragma once
 
 #include "../custommethodcall_api.h"
 #include "EmptyMethodVisStyle.h"
@@ -62,5 +61,3 @@ class CUSTOMMETHODCALL_API EmptyMethodVis
 };
 
 }
-
-#endif /* EMPTYMETHODVIS_H_ */

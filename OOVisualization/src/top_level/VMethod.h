@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VMETHOD_H_
-#define VMETHOD_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 #include "VMethodStyle.h"
@@ -89,5 +88,3 @@ inline Visualization::VList* VMethod::typeArguments() const { return typeArgumen
 inline Visualization::VList* VMethod::arguments() const { return arguments_; }
 
 }
-
-#endif /* VMETHOD_H_ */

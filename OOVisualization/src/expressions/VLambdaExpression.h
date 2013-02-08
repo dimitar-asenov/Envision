@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOVisualization_VLAMBDAEXPRESSION_H_
-#define OOVisualization_VLAMBDAEXPRESSION_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 #include "VLambdaExpressionStyle.h"
@@ -73,4 +72,3 @@ inline Visualization::Static* VLambdaExpression::icon() const { return icon_; }
 inline VStatementItemList* VLambdaExpression::body() const { return body_; }
 
 } /* namespace OOVisualization */
-#endif /* OOVisualization_VLAMBDAEXPRESSION_H_ */

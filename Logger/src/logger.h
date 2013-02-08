@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef LOGGER_H
-#define LOGGER_H
+#pragma once
 
 #include "Core/src/EnvisionPlugin.h"
 #include "precompiled.h"
@@ -44,5 +43,3 @@ class LoggerPlugin : public QObject, public Core::EnvisionPlugin
 };
 
 }
-
-#endif // LOGGER_H

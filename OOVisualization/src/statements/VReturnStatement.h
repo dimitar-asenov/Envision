@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VRETURNSTATEMENT_H_
-#define VRETURNSTATEMENT_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 #include "VReturnStatementStyle.h"
@@ -64,5 +63,3 @@ class OOVISUALIZATION_API VReturnStatement
 };
 
 }
-
-#endif /* VRETURNSTATEMENT_H_ */

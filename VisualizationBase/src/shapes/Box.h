@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef BOX_H_
-#define BOX_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -56,5 +55,3 @@ class VISUALIZATIONBASE_API Box: public Shape
 };
 
 }
-
-#endif /* BOX_H_ */

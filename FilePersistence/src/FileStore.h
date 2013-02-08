@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef FILESTORE_H_
-#define FILESTORE_H_
+#pragma once
 
 #include "filepersistence_api.h"
 #include "XMLModel.h"
@@ -120,5 +119,3 @@ class FILEPERSISTENCE_API FileStore: public Model::PersistentStore
 };
 
 }
-
-#endif /* FILESTORE_H_ */

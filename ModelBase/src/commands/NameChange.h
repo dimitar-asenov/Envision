@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef NAMECHANGE_H_
-#define NAMECHANGE_H_
+#pragma once
 
 #include "UndoCommand.h"
 
@@ -49,5 +48,3 @@ class MODELBASE_API NameChange: public UndoCommand
 };
 
 }
-
-#endif /* NAMECHANGE_H_ */

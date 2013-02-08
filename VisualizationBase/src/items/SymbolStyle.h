@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef SYMBOLSTYLE_H_
-#define SYMBOLSTYLE_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -48,5 +47,3 @@ inline const QString& SymbolStyle::symbol() const { return symbol_; }
 
 
 }
-
-#endif /* SYMBOLSTYLE_H_ */

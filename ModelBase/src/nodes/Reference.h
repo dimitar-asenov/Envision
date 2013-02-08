@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef REFERENCE_H_
-#define REFERENCE_H_
+#pragma once
 
 #include "Node.h"
 #include "nodeMacros.h"
@@ -72,5 +71,3 @@ inline Node* Reference::target() const { return target_; }
 inline bool Reference::isResolved() const { return target_; }
 
 }
-
-#endif /* REFERENCE_H_ */

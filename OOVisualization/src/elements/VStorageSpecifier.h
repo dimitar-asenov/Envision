@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VSTORAGESPECIFIER_H_
-#define VSTORAGESPECIFIER_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -54,5 +53,3 @@ class OOVISUALIZATION_API VStorageSpecifier
 };
 
 }
-
-#endif /* VSTORAGESPECIFIER_H_ */

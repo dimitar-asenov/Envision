@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef LAYOUTSTYLE_H_
-#define LAYOUTSTYLE_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -65,5 +64,3 @@ inline int LayoutStyle::topMargin() const { return topMargin_; }
 inline int LayoutStyle::bottomMargin() const {return bottomMargin_; }
 
 }
-
-#endif /* LAYOUTSTYLE_H_ */

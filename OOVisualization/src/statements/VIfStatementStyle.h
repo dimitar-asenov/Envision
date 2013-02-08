@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VIFSTATEMENTSTYLE_H_
-#define VIFSTATEMENTSTYLE_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -82,5 +81,3 @@ inline const Visualization::VListStyle& VIfStatementStyle::thenBranch() const { 
 inline const Visualization::VListStyle& VIfStatementStyle::elseBranch() const { return elseBranch_; }
 
 }
-
-#endif /* VIFSTATEMENTSTYLE_H_ */

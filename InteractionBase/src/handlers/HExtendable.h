@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef HEXTENDABLE_H_
-#define HEXTENDABLE_H_
+#pragma once
 
 #include "../interactionbase_api.h"
 
@@ -45,5 +44,3 @@ class INTERACTIONBASE_API HExtendable : public GenericHandler
 };
 
 }
-
-#endif /* HEXTENDABLE_H_ */

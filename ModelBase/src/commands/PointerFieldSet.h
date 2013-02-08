@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef POINTERFIELDSET_H_
-#define POINTERFIELDSET_H_
+#pragma once
 
 #include "FieldSet.h"
 
@@ -48,5 +47,3 @@ class PointerFieldSet: public FieldSet<T*>
 };
 
 }
-
-#endif /* POINTERFIELDSET_H_ */

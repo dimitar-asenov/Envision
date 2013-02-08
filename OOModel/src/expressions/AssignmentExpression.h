@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef ASSIGNMENTEXPRESSION_H_
-#define ASSIGNMENTEXPRESSION_H_
+#pragma once
 
 #include "Expression.h"
 
@@ -56,5 +55,3 @@ inline AssignmentExpression::AssignmentTypes AssignmentExpression::op() const { 
 inline void AssignmentExpression::setOp(const AssignmentTypes& oper) { setOpr(oper); }
 
 }
-
-#endif /* ASSIGNMENTEXPRESSION_H_ */

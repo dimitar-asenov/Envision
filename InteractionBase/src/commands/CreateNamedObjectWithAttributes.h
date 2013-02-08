@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef InteractionBase_CREATENAMEDOBJECTWITHATTRIBUTES_H_
-#define InteractionBase_CREATENAMEDOBJECTWITHATTRIBUTES_H_
+#pragma once
 
 #include "../interactionbase_api.h"
 
@@ -61,4 +60,3 @@ class INTERACTIONBASE_API CreateNamedObjectWithAttributes : public Command
 };
 
 } /* namespace InteractionBase */
-#endif /* InteractionBase_CREATENAMEDOBJECTWITHATTRIBUTES_H_ */

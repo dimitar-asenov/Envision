@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VCHARACTER_H_
-#define VCHARACTER_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -52,5 +51,3 @@ class VISUALIZATIONBASE_API VCharacter : public ItemWithNode< TextRenderer, Mode
 };
 
 }
-
-#endif /* VCHARACTER_H_ */

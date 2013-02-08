@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef InteractionBase_LEAVEUNFINISHED_H_
-#define InteractionBase_LEAVEUNFINISHED_H_
+#pragma once
 
 #include "../../interactionbase_api.h"
 
@@ -39,4 +38,3 @@ class INTERACTIONBASE_API LeaveUnfinished : public ExpressionTreeBuildInstructio
 };
 
 } /* namespace Interaction */
-#endif /* InteractionBase_LEAVEUNFINISHED_H_ */

@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VMODULE_H_
-#define VMODULE_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 #include "VModuleStyle.h"
@@ -65,5 +64,3 @@ class OOVISUALIZATION_API VModule
 };
 
 }
-
-#endif /* VMODULE_H_ */

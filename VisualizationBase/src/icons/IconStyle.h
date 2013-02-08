@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef ICONSTYLE_H_
-#define ICONSTYLE_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 #include "../items/ItemStyle.h"
@@ -46,5 +45,3 @@ class VISUALIZATIONBASE_API IconStyle : public ItemStyle
 inline const QPen& IconStyle::outline() const { return outline_; }
 
 }
-
-#endif /* ICONSTYLE_H_ */

@@ -24,16 +24,13 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef CONTROLFLOWVISUALIZATION_API_H_
-#define CONTROLFLOWVISUALIZATION_API_H_
+#pragma once
 
 #include "precompiled.h"
 
 // This should be defined in the project file of the plug-in that exports symbols
 #if defined(CONTROLFLOWVISUALIZATION_LIBRARY)
-#  define CONTROLFLOWVISUALIZATION_API Q_DECL_EXPORT
+	#define CONTROLFLOWVISUALIZATION_API Q_DECL_EXPORT
 #else
-#  define CONTROLFLOWVISUALIZATION_API Q_DECL_IMPORT
+	#define CONTROLFLOWVISUALIZATION_API Q_DECL_IMPORT
 #endif
-
-#endif /* CONTROLFLOWVISUALIZATION_API_H_ */

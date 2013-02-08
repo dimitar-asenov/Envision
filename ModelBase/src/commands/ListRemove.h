@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef LISTREMOVE_H_
-#define LISTREMOVE_H_
+#pragma once
 
 #include "NodeOwningCommand.h"
 
@@ -46,5 +45,3 @@ class MODELBASE_API ListRemove: public NodeOwningCommand
 };
 
 }
-
-#endif /* LISTREMOVE_H_ */

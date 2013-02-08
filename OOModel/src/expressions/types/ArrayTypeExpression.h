@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef ARRAYTYPEEXPRESSION_H_
-#define ARRAYTYPEEXPRESSION_H_
+#pragma once
 
 #include "TypeExpression.h"
 
@@ -42,5 +41,3 @@ class OOMODEL_API ArrayTypeExpression : public TypeExpression
 };
 
 }
-
-#endif /* ARRAYTYPEEXPRESSION_H_ */

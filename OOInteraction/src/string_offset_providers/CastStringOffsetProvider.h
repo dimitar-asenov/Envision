@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOInteraction_CASTSTRINGOFFSETPROVIDER_H_
-#define OOInteraction_CASTSTRINGOFFSETPROVIDER_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 #include "GridBasedOffsetProvider.h"
@@ -43,4 +42,3 @@ class OOINTERACTION_API CastStringOffsetProvider : public GridBasedOffsetProvide
 
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_CASTSTRINGOFFSETPROVIDER_H_ */

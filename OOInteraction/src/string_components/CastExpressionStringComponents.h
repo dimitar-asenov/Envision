@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOInteraction_CASTEXPRESSIONSTRINGCOMPONENTS_H_
-#define OOInteraction_CASTEXPRESSIONSTRINGCOMPONENTS_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 #include "StringComponents.h"
@@ -47,4 +46,3 @@ class OOINTERACTION_API CastExpressionStringComponents : public StringComponents
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_CASTEXPRESSIONSTRINGCOMPONENTS_H_ */

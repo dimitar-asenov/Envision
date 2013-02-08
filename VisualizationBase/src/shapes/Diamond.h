@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef DIAMOND_H_
-#define DIAMOND_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -59,5 +58,3 @@ class VISUALIZATIONBASE_API Diamond: public Shape
 };
 
 }
-
-#endif /* DIAMOND_H_ */

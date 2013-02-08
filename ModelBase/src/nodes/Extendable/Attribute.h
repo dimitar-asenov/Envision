@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef ATTRIBUTE_H_
-#define ATTRIBUTE_H_
+#pragma once
 
 #include "../../modelbase_api.h"
 
@@ -60,5 +59,3 @@ class MODELBASE_API Attribute
 };
 
 }
-
-#endif /* ATTRIBUTE_H_ */

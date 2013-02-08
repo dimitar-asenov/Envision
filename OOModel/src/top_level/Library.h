@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef LIBRARY_H_
-#define LIBRARY_H_
+#pragma once
 
 #include "Project.h"
 
@@ -40,5 +39,3 @@ class OOMODEL_API Library : public Project
 };
 
 }
-
-#endif /* LIBRARY_H_ */

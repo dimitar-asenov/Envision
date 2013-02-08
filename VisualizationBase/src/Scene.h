@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef SCENE_H_
-#define SCENE_H_
+#pragma once
 
 #include "visualizationbase_api.h"
 
@@ -132,5 +131,3 @@ inline const QList<Item*>& Scene::topLevelItems() const {return topLevelItems_; 
 
 
 }
-
-#endif /* SCENE_H_ */

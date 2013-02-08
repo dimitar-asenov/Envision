@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef SCENEHANDLERITEM_H_
-#define SCENEHANDLERITEM_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -52,5 +51,3 @@ class VISUALIZATIONBASE_API SceneHandlerItem : public Item
 };
 
 }
-
-#endif /* SCENEHANDLERITEM_H_ */

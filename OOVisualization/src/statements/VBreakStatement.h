@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VBREAKSTATEMENT_H_
-#define VBREAKSTATEMENT_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -56,5 +55,3 @@ class OOVISUALIZATION_API VBreakStatement
 };
 
 }
-
-#endif /* VBREAKSTATEMENT_H_ */

@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef OOVISUALIZATIONEXCEPTION_H_
-#define OOVISUALIZATIONEXCEPTION_H_
+#pragma once
 
 #include "oovisualization_api.h"
 #include "Core/src/EnvisionException.h"
@@ -40,5 +39,3 @@ class OOVISUALIZATION_API OOVisualizationException : public Core::EnvisionExcept
 };
 
 }
-
-#endif /* MODELEXCEPTION_H_ */

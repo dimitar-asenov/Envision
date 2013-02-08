@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef TEXTANDDESCRIPTION_H_
-#define TEXTANDDESCRIPTION_H_
+#pragma once
 
 #include "interactionbase_api.h"
 #include "TextAndDescriptionStyle.h"
@@ -63,5 +62,3 @@ class INTERACTIONBASE_API TextAndDescription : public Visualization::LayoutProvi
 };
 
 }
-
-#endif /* TEXTANDDESCRIPTION_H_ */

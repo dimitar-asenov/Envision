@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef TESTRESULT_H_
-#define TESTRESULT_H_
+#pragma once
 
 #include "selftest_api.h"
 
@@ -60,5 +59,3 @@ class SELFTEST_API TestResult
 };
 
 }
-
-#endif /* TESTRESULT_H_ */

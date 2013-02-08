@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef SVGICONSTYLE_H_
-#define SVGICONSTYLE_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -58,5 +57,3 @@ inline int SVGIconStyle::width() const { return width_; }
 inline int SVGIconStyle::height() const { return height_; }
 
 }
-
-#endif /* SVGICONSTYLE_H_ */

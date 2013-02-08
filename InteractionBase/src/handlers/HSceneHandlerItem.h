@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef HSCENEHANDLERITEM_H_
-#define HSCENEHANDLERITEM_H_
+#pragma once
 
 #include "../interactionbase_api.h"
 
@@ -43,5 +42,3 @@ class INTERACTIONBASE_API HSceneHandlerItem : public GenericHandler
 };
 
 }
-
-#endif /* HSCENEHANDLERITEM_H_ */

@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef GRIDLAYOUTSTYLE_H_
-#define GRIDLAYOUTSTYLE_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -56,5 +55,3 @@ inline int GridLayoutStyle::horizontalSpace() const { return horizontalSpace_; }
 inline int GridLayoutStyle::verticalSpace() const { return verticalSpace_; }
 
 }
-
-#endif /* GRIDLAYOUTSTYLE_H_ */

@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef COMMANDEXECUTIONENGINE_H_
-#define COMMANDEXECUTIONENGINE_H_
+#pragma once
 
 #include "interactionbase_api.h"
 
@@ -65,5 +64,3 @@ class INTERACTIONBASE_API CommandExecutionEngine
 };
 
 }
-
-#endif /* COMMANDEXECUTIONENGINE_H_ */

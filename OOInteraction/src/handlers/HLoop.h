@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOInteraction_HLOOP_H_
-#define OOInteraction_HLOOP_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 
@@ -44,4 +43,3 @@ class OOINTERACTION_API HLoop : public HStatement {
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_HLOOP_H_ */

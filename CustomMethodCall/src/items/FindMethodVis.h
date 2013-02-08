@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef FINDMETHODVIS_H_
-#define FINDMETHODVIS_H_
+#pragma once
 
 #include "../custommethodcall_api.h"
 #include "FindMethodVisStyle.h"
@@ -65,5 +64,3 @@ class CUSTOMMETHODCALL_API FindMethodVis
 };
 
 }
-
-#endif /* FINDMETHODVIS_H_ */

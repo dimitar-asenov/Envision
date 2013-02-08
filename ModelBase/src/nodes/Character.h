@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef CHARACTER_H_
-#define CHARACTER_H_
+#pragma once
 
 #include "Node.h"
 #include "nodeMacros.h"
@@ -50,5 +49,3 @@ class MODELBASE_API Character: public Node
 
 inline QChar Character::get() const { return value; }
 }
-
-#endif /* CHARACTER_H_ */

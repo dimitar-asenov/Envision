@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef TESTRUNNER_H_
-#define TESTRUNNER_H_
+#pragma once
 
 #include "PluginManager.h"
 
@@ -47,5 +46,3 @@ class TestRunner: public QObject
 };
 
 }
-
-#endif /* TESTRUNNER_H_ */

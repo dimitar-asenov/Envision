@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VLISTCFSTYLE_H_
-#define VLISTCFSTYLE_H_
+#pragma once
 
 #include "../controlflowvisualization_api.h"
 #include "ControlFlowItemStyle.h"
@@ -49,5 +48,3 @@ class CONTROLFLOWVISUALIZATION_API VListCFStyle : public ControlFlowItemStyle
 inline const Visualization::SequentialLayoutStyle& VListCFStyle::sequence() const { return sequence_; }
 
 }
-
-#endif /* VLISTCFSTYLE_H_ */

@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef STATIC_H_
-#define STATIC_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -91,5 +90,3 @@ template<class T> ItemStyle* Static::staticItemStyleConstructor()
 }
 
 }
-
-#endif /* STATIC_H_ */

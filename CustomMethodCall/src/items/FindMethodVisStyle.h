@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef FINDMETHODVISSTYLE_H_
-#define FINDMETHODVISSTYLE_H_
+#pragma once
 
 #include "../custommethodcall_api.h"
 
@@ -59,5 +58,3 @@ inline const Visualization::StaticStyle& FindMethodVisStyle::separator() const {
 inline const Visualization::VListStyle& FindMethodVisStyle::arguments() const { return arguments_; }
 
 }
-
-#endif /* FINDMETHODVISSTYLE_H_ */

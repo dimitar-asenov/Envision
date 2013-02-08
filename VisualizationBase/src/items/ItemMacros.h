@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef ITEMMACROS_H_
-#define ITEMMACROS_H_
+#pragma once
 
 #include "VisualizationBase/src/styles/StyleSet.h"
 
@@ -138,5 +137,3 @@ QList<Visualization::VisualizationAddOn*> ItemClass::addOns()																			
 }																																							\
 
 /**********************************************************************************************************************/
-
-#endif /* ITEMMACROS_H_ */

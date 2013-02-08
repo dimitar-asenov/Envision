@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef SHAPEMACROS_H_
-#define SHAPEMACROS_H_
+#pragma once
 
 #include "VisualizationBase/src/styles/StyleSet.h"
 
@@ -89,5 +88,3 @@ StyleSet<ShapeClass>& ShapeClass::itemStyles()																								\
 	return styles;																																		\
 }
 /**********************************************************************************************************************/
-
-#endif /* SHAPEMACROS_H_ */

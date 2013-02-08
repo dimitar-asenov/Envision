@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef STATEMENTITEM_H_
-#define STATEMENTITEM_H_
+#pragma once
 
 #include "../oomodel_api.h"
 
@@ -40,5 +39,3 @@ class OOMODEL_API StatementItem : public Model::ExtendableNode
 };
 
 }
-
-#endif /* STATEMENTITEM_H_ */

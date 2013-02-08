@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef PERSISTENTSTOREMOCK_H_
-#define PERSISTENTSTOREMOCK_H_
+#pragma once
 
 #include "persistence/PersistentStore.h"
 
@@ -70,5 +69,3 @@ class PersistentStoreMock: public PersistentStore
 };
 
 }
-
-#endif /* PERSISTENTSTOREMOCK_H_ */

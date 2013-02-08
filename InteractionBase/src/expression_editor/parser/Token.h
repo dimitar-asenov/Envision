@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef INTERACTIONBASE_TOKEN_H_
-#define INTERACTIONBASE_TOKEN_H_
+#pragma once
 
 #include "../../interactionbase_api.h"
 
@@ -57,4 +56,3 @@ inline const QString& Token::text() const { return text_; }
 inline Token::Type Token::type() const { return type_; }
 
 } /* namespace InteractionBase */
-#endif /* INTERACTIONBASE_TOKEN_H_ */

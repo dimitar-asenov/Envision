@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOVisualization_VCONDITIONALEXPRESSION_H_
-#define OOVisualization_VCONDITIONALEXPRESSION_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 #include "OperatorStyle.h"
@@ -66,4 +65,3 @@ class OOVISUALIZATION_API VConditionalExpression : public Visualization::ItemWit
 };
 
 } /* namespace OOVisualization */
-#endif /* OOVisualization_VCONDITIONALEXPRESSION_H_ */

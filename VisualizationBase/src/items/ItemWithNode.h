@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef ITEMWITHNODE_H_
-#define ITEMWITHNODE_H_
+#pragma once
 
 // This is included for convenience. There is a very big chance that whoever uses ItemWithNode will want to use the
 // ModelRenderer too.
@@ -71,5 +70,3 @@ template <class Super, class ContainedNode> int ItemWithNode<Super,ContainedNode
 template <class Super, class ContainedNode> void ItemWithNode<Super,ContainedNode>::setRevision(int newRevision) { revision_ = newRevision; }
 
 }
-
-#endif /* ITEMWITHNODE_H_ */

@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef ENVISIONPLUGIN_H_
-#define ENVISIONPLUGIN_H_
+#pragma once
 
 #include "EnvisionManager.h"
 
@@ -89,5 +88,3 @@ class EnvisionPlugin
 }
 
 Q_DECLARE_INTERFACE(Core::EnvisionPlugin, "EnvisionPlugin/1.0")
-
-#endif /* ENVISIONPLUGIN_H_ */

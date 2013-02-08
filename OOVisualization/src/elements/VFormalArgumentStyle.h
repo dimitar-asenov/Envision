@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VFORMALARGUMENTSTYLE_H_
-#define VFORMALARGUMENTSTYLE_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -54,5 +53,3 @@ inline const Visualization::SequentialLayoutStyle& VFormalArgumentStyle::lambdaL
 inline const Visualization::TextStyle& VFormalArgumentStyle::name() const { return name_; }
 
 }
-
-#endif /* VFORMALARGUMENTSTYLE_H_ */

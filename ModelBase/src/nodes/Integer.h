@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef INTEGER_H_
-#define INTEGER_H_
+#pragma once
 
 #include "Node.h"
 #include "nodeMacros.h"
@@ -51,5 +50,3 @@ class MODELBASE_API Integer: public Node
 inline int Integer::get() const { return integer; }
 
 }
-
-#endif /* INTEGER_H_ */

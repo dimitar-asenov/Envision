@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef METHOD_H_
-#define METHOD_H_
+#pragma once
 
 #include "../oomodel_api.h"
 
@@ -73,5 +72,3 @@ class OOMODEL_API Method : public Model::ExtendableNode
 };
 
 }
-
-#endif /* METHOD_H_ */

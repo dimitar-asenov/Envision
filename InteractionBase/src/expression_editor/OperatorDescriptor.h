@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef INTERACTIONBASE_OPERATORDESCRIPTOR_H_
-#define INTERACTIONBASE_OPERATORDESCRIPTOR_H_
+#pragma once
 
 #include "../interactionbase_api.h"
 
@@ -85,5 +84,3 @@ inline const QString& OperatorDescriptor::infix(int at) { return infixes_.at(at)
 inline const QString& OperatorDescriptor::postfix() { return postfix_; }
 
 }
-
-#endif /* INTERACTIONBASE_OPERATORDESCRIPTOR_H_ */

@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VLOOPSTATEMENTCF_H_
-#define VLOOPSTATEMENTCF_H_
+#pragma once
 
 #include "../controlflowvisualization_api.h"
 #include "VLoopStatementCFStyle.h"
@@ -65,5 +64,3 @@ class CONTROLFLOWVISUALIZATION_API VLoopStatementCF
 };
 
 }
-
-#endif /* VLOOPSTATEMENTCF_H_ */

@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef CLASSTYPEEXPRESSION_H_
-#define CLASSTYPEEXPRESSION_H_
+#pragma once
 
 #include "TypeExpression.h"
 
@@ -45,5 +44,3 @@ class OOMODEL_API ClassTypeExpression : public TypeExpression
 };
 
 }
-
-#endif /* CLASSTYPEEXPRESSION_H_ */

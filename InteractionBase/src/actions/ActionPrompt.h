@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef InteractionBase_ACTIONPROMPT_H_
-#define InteractionBase_ACTIONPROMPT_H_
+#pragma once
 
 #include "interactionbase_api.h"
 #include "ActionPromptStyle.h"
@@ -104,4 +103,3 @@ inline int ActionPrompt::numActions() { return actionsContainer_->length(); }
 inline bool ActionPrompt::autoExecuteAction() const { return autoExecuteAction_; }
 
 } /* namespace Interaction */
-#endif /* InteractionBase_ACTIONPROMPT_H_ */

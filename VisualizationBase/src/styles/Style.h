@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef STYLE_H_
-#define STYLE_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 #include "StyleLoader.h"
@@ -39,5 +38,3 @@ class VISUALIZATIONBASE_API Style
 };
 
 }
-
-#endif /* STYLE_H_ */

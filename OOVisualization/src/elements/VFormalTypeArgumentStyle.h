@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOVisualization_VFORMALTYPEARGUMENTSTYLE_H_
-#define OOVisualization_VFORMALTYPEARGUMENTSTYLE_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -65,4 +64,3 @@ inline const Visualization::StaticStyle& VFormalTypeArgumentStyle::superTypeSymb
 
 
 } /* namespace OOVisualization */
-#endif /* OOVisualization_VFORMALTYPEARGUMENTSTYLE_H_ */

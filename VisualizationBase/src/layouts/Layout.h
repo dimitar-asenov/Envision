@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef LAYOUT_H_
-#define LAYOUT_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -117,5 +116,3 @@ template <class T> void Layout::synchronizeItem(Item*& layoutItem, T*& externalI
 }
 
 }
-
-#endif /* LAYOUT_H_ */

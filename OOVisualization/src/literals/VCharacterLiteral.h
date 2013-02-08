@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VCHARACTERLITERAL_H_
-#define VCHARACTERLITERAL_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -57,5 +56,3 @@ OOModel::CharacterLiteral>
 };
 
 }
-
-#endif /* VCHARACTERLITERAL_H_ */

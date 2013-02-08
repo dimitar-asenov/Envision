@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef DEFAULTLOG_H_
-#define DEFAULTLOG_H_
+#pragma once
 
 #include "Log.h"
 
@@ -53,5 +52,3 @@ class DefaultLog: public Log
 };
 
 }
-
-#endif /* DEFAULTLOG_H_ */

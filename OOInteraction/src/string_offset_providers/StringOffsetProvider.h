@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOInteraction_STRINGOFFSETPROVIDER_H_
-#define OOInteraction_STRINGOFFSETPROVIDER_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 
@@ -83,4 +82,3 @@ class OOINTERACTION_API StringOffsetProvider {
 inline Visualization::Item* StringOffsetProvider::item() const { return vis_; }
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_STRINGOFFSETPROVIDER_H_ */

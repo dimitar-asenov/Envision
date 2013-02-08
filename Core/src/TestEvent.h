@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef TESTEVENT_H_
-#define TESTEVENT_H_
+#pragma once
 
 namespace Core {
 
@@ -42,5 +41,3 @@ class TestEvent: public QEvent
 };
 
 }
-
-#endif /* TESTEVENT_H_ */

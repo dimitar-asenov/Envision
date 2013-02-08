@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VFOREACHSTATEMENT_H_
-#define VFOREACHSTATEMENT_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 #include "VForEachStatementStyle.h"
@@ -91,5 +90,3 @@ inline VStatementItemList* VForEachStatement::body() const { return body_; }
 inline Visualization::Item* VForEachStatement::icon() const {return header_->at<Visualization::Item>(0);}
 
 }
-
-#endif /* VFOREACHSTATEMENT_H_ */

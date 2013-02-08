@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOInteraction_OOEXPRESSIONBUILDER_H_
-#define OOInteraction_OOEXPRESSIONBUILDER_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 
@@ -60,4 +59,3 @@ class OOINTERACTION_API OOExpressionBuilder : public Interaction::ExpressionVisi
 };
 
 } /* namespace InteractionBase */
-#endif /* OOInteraction_OOEXPRESSIONBUILDER_H_ */

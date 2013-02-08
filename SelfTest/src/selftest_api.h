@@ -24,16 +24,13 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef SELFTEST_API_H_
-#define SELFTEST_API_H_
+#pragma once
 
 #include "precompiled.h"
 
 // This should be defined in the project file of the plug-in that exports symbols
 #if defined(SELFTEST_LIBRARY)
-#  define SELFTEST_API Q_DECL_EXPORT
+	#define SELFTEST_API Q_DECL_EXPORT
 #else
-#  define SELFTEST_API Q_DECL_IMPORT
+	#define SELFTEST_API Q_DECL_IMPORT
 #endif
-
-#endif /* SELFTEST_API_H_ */

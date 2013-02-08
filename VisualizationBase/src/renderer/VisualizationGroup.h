@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef VisualizationBase_VISUALIZATIONGROUP_H_
-#define VisualizationBase_VISUALIZATIONGROUP_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 #include "VisualizationSuitabilityScore.h"
@@ -78,4 +77,3 @@ bool operator< (const QPair<VisualizationSuitabilityScore, VisualizationGroup::I
 		const QPair<VisualizationSuitabilityScore, VisualizationGroup::ItemConstructor>& right);
 
 } /* namespace Visualization */
-#endif /* VisualizationBase_VISUALIZATIONGROUP_H_ */

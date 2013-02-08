@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef THISEXPRESSION_H_
-#define THISEXPRESSION_H_
+#pragma once
 
 #include "Expression.h"
 
@@ -40,5 +39,3 @@ class OOMODEL_API ThisExpression: public Expression
 };
 
 }
-
-#endif /* THISEXPRESSION_H_ */

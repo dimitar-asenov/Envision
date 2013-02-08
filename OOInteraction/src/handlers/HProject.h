@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOInteraction_HPROJECT_H_
-#define OOInteraction_HPROJECT_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 
@@ -44,4 +43,3 @@ class OOINTERACTION_API HProject : public Interaction::GenericHandler {
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_HPROJECT_H_ */

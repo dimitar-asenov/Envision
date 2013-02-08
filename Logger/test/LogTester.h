@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef LOGTESTER_H_
-#define LOGTESTER_H_
+#pragma once
 
 #include "Log.h"
 
@@ -50,5 +49,3 @@ class LogTester: public QObject
 };
 
 }
-
-#endif /* LOGTESTER_H_ */

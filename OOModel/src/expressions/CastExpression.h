@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef CASTEXPRESSION_H_
-#define CASTEXPRESSION_H_
+#pragma once
 
 #include "Expression.h"
 
@@ -43,5 +42,3 @@ class OOMODEL_API CastExpression: public Expression
 };
 
 }
-
-#endif /* CASTEXPRESSION_H_ */

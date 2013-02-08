@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VISUALIZATIONEXCEPTION_H_
-#define VISUALIZATIONEXCEPTION_H_
+#pragma once
 
 #include "visualizationbase_api.h"
 #include "Core/src/EnvisionException.h"
@@ -40,5 +39,3 @@ class VISUALIZATIONBASE_API VisualizationException : public Core::EnvisionExcept
 };
 
 }
-
-#endif /* VISUALIZATIONBASEEXCEPTION_H_ */

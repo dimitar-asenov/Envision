@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOInteraction_VARIABLEDECLARATIONSTRINGCOMPONENTS_H_
-#define OOInteraction_VARIABLEDECLARATIONSTRINGCOMPONENTS_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 #include "StringComponents.h"
@@ -47,4 +46,3 @@ class OOINTERACTION_API VariableDeclarationStringComponents : public StringCompo
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_VARIABLEDECLARATIONSTRINGCOMPONENTS_H_ */

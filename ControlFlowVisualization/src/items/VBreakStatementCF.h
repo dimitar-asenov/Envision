@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VBREAKSTATEMENTCF_H_
-#define VBREAKSTATEMENTCF_H_
+#pragma once
 
 #include "../controlflowvisualization_api.h"
 #include "ControlFlowItem.h"
@@ -54,5 +53,3 @@ class CONTROLFLOWVISUALIZATION_API VBreakStatementCF
 };
 
 }
-
-#endif /* VBREAKSTATEMENTCF_H_ */

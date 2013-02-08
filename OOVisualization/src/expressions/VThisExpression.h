@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VTHISEXPRESSION_H_
-#define VTHISEXPRESSION_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -56,5 +55,3 @@ OOModel::ThisExpression>
 };
 
 }
-
-#endif /* VTHISEXPRESSION_H_ */

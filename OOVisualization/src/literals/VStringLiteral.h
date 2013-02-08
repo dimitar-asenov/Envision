@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VSTRINGLITERAL_H_
-#define VSTRINGLITERAL_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -65,5 +64,3 @@ class OOVISUALIZATION_API VStringLiteral
 };
 
 }
-
-#endif /* VSTRINGLITERAL_H_ */

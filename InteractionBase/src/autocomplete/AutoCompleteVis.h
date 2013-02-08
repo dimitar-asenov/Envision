@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef InteractionBase_AUTOCOMPLETEVIS_H_
-#define InteractionBase_AUTOCOMPLETEVIS_H_
+#pragma once
 
 #include "interactionbase_api.h"
 #include "AutoCompleteVisStyle.h"
@@ -72,4 +71,3 @@ class INTERACTIONBASE_API AutoCompleteVis : public Visualization::LayoutProvider
 };
 
 } /* namespace Interaction */
-#endif /* InteractionBase_AUTOCOMPLETEVIS_H_ */

@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef SUMMETHODVIS_H_
-#define SUMMETHODVIS_H_
+#pragma once
 
 #include "../custommethodcall_api.h"
 #include "SumMethodVisStyle.h"
@@ -64,5 +63,3 @@ class CUSTOMMETHODCALL_API SumMethodVis
 };
 
 }
-
-#endif /* SUMMETHODVIS_H_ */

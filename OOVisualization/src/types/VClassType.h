@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VCLASSTYPE_H_
-#define VCLASSTYPE_H_
+#pragma once
 
 #include "../expressions/VReferenceExpression.h"
 
@@ -57,5 +56,3 @@ class OOVISUALIZATION_API VClassType
 inline VReferenceExpression* VClassType::reference() const { return vis_; }
 
 }
-
-#endif /* VCLASSTYPE_H_ */

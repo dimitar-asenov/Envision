@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef REFERENCEEXPRESSION_H_
-#define REFERENCEEXPRESSION_H_
+#pragma once
 
 #include "Expression.h"
 #include "../elements/OOReference.h"
@@ -59,5 +58,3 @@ inline void ReferenceExpression::setName(const QString& name) {ref()->setName(na
 inline QString ReferenceExpression::name() {return ref()->name();}
 
 }
-
-#endif /* REFERENCEEXPRESSION_H_ */

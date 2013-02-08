@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VRETURNSTATEMENTCF_H_
-#define VRETURNSTATEMENTCF_H_
+#pragma once
 
 #include "../controlflowvisualization_api.h"
 #include "ControlFlowItem.h"
@@ -54,5 +53,3 @@ class CONTROLFLOWVISUALIZATION_API VReturnStatementCF
 };
 
 }
-
-#endif /* VRETURNSTATEMENTCF_H_ */

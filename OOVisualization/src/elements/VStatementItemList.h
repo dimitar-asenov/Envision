@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOVisualization_VSTATEMENTITEMLIST_H_
-#define OOVisualization_VSTATEMENTITEMLIST_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -45,4 +44,3 @@ class OOVISUALIZATION_API VStatementItemList : public Visualization::VList
 };
 
 } /* namespace OOVisualization */
-#endif /* OOVisualization_VSTATEMENTITEMLIST_H_ */

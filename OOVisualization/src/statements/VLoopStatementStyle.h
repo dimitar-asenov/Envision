@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VLOOPSTATEMENTSTYLE_H_
-#define VLOOPSTATEMENTSTYLE_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -70,5 +69,3 @@ inline const Visualization::SequentialLayoutStyle& VLoopStatementStyle::updateSt
 inline const Visualization::VListStyle& VLoopStatementStyle::body() const { return body_; }
 
 }
-
-#endif /* VLOOPSTATEMENTSTYLE_H_ */

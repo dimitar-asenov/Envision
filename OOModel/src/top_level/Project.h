@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef PROJECT_H_
-#define PROJECT_H_
+#pragma once
 
 #include "../oomodel_api.h"
 
@@ -63,5 +62,3 @@ class OOMODEL_API Project : public Model::ExtendableNode
 };
 
 }
-
-#endif /* PROJECT_H_ */

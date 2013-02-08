@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef LOG_H_
-#define LOG_H_
+#pragma once
 
 #include "logger_api.h"
 
@@ -118,5 +117,3 @@ class LOGGER_API Log : public QObject
 
 
 }
-
-#endif /* LOG_H_ */

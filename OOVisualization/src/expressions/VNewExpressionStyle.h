@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VNEWEXPRESSIONSTYLE_H_
-#define VNEWEXPRESSIONSTYLE_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -51,5 +50,3 @@ inline const Visualization::SequentialLayoutStyle& VNewExpressionStyle::layout()
 inline const Visualization::StaticStyle& VNewExpressionStyle::newSymbol() const { return newSymbol_; }
 
 }
-
-#endif /* VNEWEXPRESSIONSTYLE_H_ */

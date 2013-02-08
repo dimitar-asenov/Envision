@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef TEXTSTYLE_H_
-#define TEXTSTYLE_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -60,5 +59,3 @@ inline const QFont& TextStyle::selectionFont() const { return selectionFont_; }
 inline const QBrush& TextStyle::selectionBackground() const { return selectionBackground_; }
 
 }
-
-#endif /* TEXTSTYLE_H_ */

@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef POSITIONEXTENSION_H_
-#define POSITIONEXTENSION_H_
+#pragma once
 
 #include "../modelbase_api.h"
 #include "../nodes/Extendable/ExtendableNode.h"
@@ -43,5 +42,3 @@ class MODELBASE_API PositionExtension
 };
 
 }
-
-#endif /* POSITIONEXTENSION_H_ */

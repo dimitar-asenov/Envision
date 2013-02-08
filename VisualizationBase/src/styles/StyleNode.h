@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef STYLENODE_H_
-#define STYLENODE_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -66,5 +65,3 @@ class VISUALIZATIONBASE_API StyleNode
 inline bool StyleNode::hasProperty(QStringList path) { return !getElement(path).isNull(); }
 
 }
-
-#endif /* STYLENODE_H_ */

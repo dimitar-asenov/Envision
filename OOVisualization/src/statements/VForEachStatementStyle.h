@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VFOREACHSTATEMENTSTYLE_H_
-#define VFOREACHSTATEMENTSTYLE_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -71,5 +70,3 @@ inline const Visualization::SequentialLayoutStyle& VForEachStatementStyle::colle
 inline const Visualization::VListStyle& VForEachStatementStyle::body() const { return body_; }
 
 }
-
-#endif /* VFOREACHSTATEMENTSTYLE_H_ */

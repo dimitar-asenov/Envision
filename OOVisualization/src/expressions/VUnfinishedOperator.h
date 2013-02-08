@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOVisualization_VUNFINISHEDOPERATOR_H_
-#define OOVisualization_VUNFINISHEDOPERATOR_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 #include "VUnfinishedOperatorStyle.h"
@@ -61,4 +60,3 @@ OOModel::UnfinishedOperator>
 };
 
 } /* namespace OOVisualization */
-#endif /* OOVisualization_VUNFINISHEDOPERATOR_H_ */

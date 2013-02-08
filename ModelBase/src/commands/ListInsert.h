@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef LISTINSERT_H_
-#define LISTINSERT_H_
+#pragma once
 
 #include "NodeOwningCommand.h"
 
@@ -50,5 +49,3 @@ class MODELBASE_API ListInsert: public NodeOwningCommand
 };
 
 }
-
-#endif /* LISTINSERT_H_ */

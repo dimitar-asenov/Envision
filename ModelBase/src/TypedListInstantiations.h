@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef TYPEDLISTINSTANTIATIONS_H_
-#define TYPEDLISTINSTANTIATIONS_H_
+#pragma once
 
 #include "nodes/TypedList.h"
 
@@ -50,5 +49,3 @@ class Text;
 template class Q_DECL_IMPORT TypedList<Text>;
 
 }
-
-#endif /* TYPEDLISTINSTANTIATIONS_H_ */

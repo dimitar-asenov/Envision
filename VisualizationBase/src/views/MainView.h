@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef MAINVIEW_H_
-#define MAINVIEW_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -65,5 +64,3 @@ class VISUALIZATIONBASE_API MainView: public View
 };
 
 }
-
-#endif /* MAINVIEW_H_ */

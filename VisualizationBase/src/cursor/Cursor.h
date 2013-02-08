@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef VisualizationBase_CURSOR_H_
-#define VisualizationBase_CURSOR_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -117,4 +116,3 @@ inline bool Cursor::notLocationEquivalent() const { return notLocationEquivalent
 inline void Cursor::setNotLocationEquivalent(bool notEquivalent) { notLocationEquivalent_ = notEquivalent; }
 
 } /* namespace Visualization */
-#endif /* VisualizationBase_CURSOR_H_ */

@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef MODEL_H_
-#define MODEL_H_
+#pragma once
 
 #include "../modelbase_api.h"
 #include "../nodes/Node.h"
@@ -506,5 +505,3 @@ inline const QList<Reference*>& Model::unresolvedReferences() const { return unr
 inline ModelManager& Model::manager() const { return ModelManager::instance(); }
 
 }
-
-#endif /* MODEL_H_ */

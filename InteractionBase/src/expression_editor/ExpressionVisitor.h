@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef INTERACTIONBASE_EXPRESSIONVISITOR_H_
-#define INTERACTIONBASE_EXPRESSIONVISITOR_H_
+#pragma once
 
 #include "../interactionbase_api.h"
 
@@ -49,4 +48,3 @@ class INTERACTIONBASE_API ExpressionVisitor {
 };
 
 } /* namespace InteractionBase */
-#endif /* INTERACTIONBASE_EXPRESSIONVISITOR_H_ */

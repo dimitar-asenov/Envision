@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOInteraction_CONDITIONALEXPRESSIONSTRINGCOMPONENTS_H_
-#define OOInteraction_CONDITIONALEXPRESSIONSTRINGCOMPONENTS_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 #include "StringComponents.h"
@@ -47,4 +46,3 @@ class OOINTERACTION_API ConditionalExpressionStringComponents : public StringCom
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_CONDITIONALEXPRESSIONSTRINGCOMPONENTS_H_ */

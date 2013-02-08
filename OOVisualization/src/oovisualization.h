@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef OOVISUALIZATION_H
-#define OOVISUALIZATION_H
+#pragma once
 
 #include "precompiled.h"
 #include "Core/src/EnvisionPlugin.h"
@@ -52,5 +51,3 @@ class OOVisualization : public QObject, public Core::EnvisionPlugin
 };
 
 }
-
-#endif // OOVISUALIZATION_H

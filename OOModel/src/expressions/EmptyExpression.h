@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOModel_EMPTYEXPRESSION_H_
-#define OOModel_EMPTYEXPRESSION_H_
+#pragma once
 
 #include "Expression.h"
 
@@ -39,4 +38,3 @@ class OOMODEL_API EmptyExpression : public Expression {
 };
 
 } /* namespace InteractionBase */
-#endif /* OOModel_EMPTYEXPRESSION_H_ */

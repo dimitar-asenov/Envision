@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VSTRINGLITERALSTYLE_H_
-#define VSTRINGLITERALSTYLE_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -58,5 +57,3 @@ inline const Visualization::StaticStyle& VStringLiteralStyle::preSymbol() const 
 inline const Visualization::StaticStyle& VStringLiteralStyle::postSymbol() const { return postSymbol_; }
 
 }
-
-#endif /* VSTRINGLITERALSTYLE_H_ */

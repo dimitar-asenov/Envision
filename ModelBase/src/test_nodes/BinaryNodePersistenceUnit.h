@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef BINARYNODEPERSISTENCEUNIT_H_
-#define BINARYNODEPERSISTENCEUNIT_H_
+#pragma once
 
 #include "../modelbase_api.h"
 
@@ -42,5 +41,3 @@ class MODELBASE_API BinaryNodePersistenceUnit: public BinaryNode
 };
 
 }
-
-#endif /* BINARYNODEPERSISTENCEUNIT_H_ */

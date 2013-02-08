@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef InteractionBase_HROOTITEM_H_
-#define InteractionBase_HROOTITEM_H_
+#pragma once
 
 #include "../interactionbase_api.h"
 
@@ -45,5 +44,3 @@ class INTERACTIONBASE_API HRootItem : public GenericHandler
 };
 
 } /* namespace Interaction */
-
-#endif /* InteractionBase_HROOTITEM_H_ */

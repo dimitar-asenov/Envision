@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef SYMBOL_H_
-#define SYMBOL_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -51,5 +50,3 @@ class VISUALIZATIONBASE_API Symbol : public TextRenderer
 };
 
 }
-
-#endif /* SYMBOL_H_ */

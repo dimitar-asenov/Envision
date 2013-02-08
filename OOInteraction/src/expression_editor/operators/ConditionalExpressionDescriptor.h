@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOInteraction_CONDITIONALEXPRESSIONDESCRIPTOR_H_
-#define OOInteraction_CONDITIONALEXPRESSIONDESCRIPTOR_H_
+#pragma once
 
 #include "../../oointeraction_api.h"
 #include "../OOOperatorDescriptor.h"
@@ -41,4 +40,3 @@ class OOINTERACTION_API ConditionalExpressionDescriptor : public OOOperatorDescr
 };
 
 } /* namespace OOVisualization */
-#endif /* OOInteraction_CONDITIONALEXPRESSIONDESCRIPTOR_H_ */

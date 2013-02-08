@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VCLASSSTYLE_H_
-#define VCLASSSTYLE_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -100,5 +99,3 @@ inline const Visualization::SequentialLayoutStyle& VClassStyle::protectedFieldAr
 inline const Visualization::SequentialLayoutStyle& VClassStyle::defaultFieldArea() const { return defaultFieldArea_; }
 
 }
-
-#endif /* VCLASSSTYLE_H_ */

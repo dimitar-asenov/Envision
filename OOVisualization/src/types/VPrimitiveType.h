@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VPRIMITIVETYPE_H_
-#define VPRIMITIVETYPE_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -61,5 +60,3 @@ class OOVISUALIZATION_API VPrimitiveType
 };
 
 }
-
-#endif /* VPRIMITIVETYPE_H_ */

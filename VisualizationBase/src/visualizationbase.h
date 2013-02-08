@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VISUALIZATIONBASE_H
-#define VISUALIZATIONBASE_H
+#pragma once
 
 #include "Core/src/EnvisionPlugin.h"
 #include "precompiled.h"
@@ -44,5 +43,3 @@ class VisualizationBase : public QObject, public Core::EnvisionPlugin
 };
 
 }
-
-#endif // VISUALIZATIONBASE_H

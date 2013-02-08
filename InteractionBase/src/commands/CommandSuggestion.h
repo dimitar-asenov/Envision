@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef COMMANDSUGGESTION_H_
-#define COMMANDSUGGESTION_H_
+#pragma once
 
 #include "../interactionbase_api.h"
 
@@ -62,5 +61,3 @@ inline void CommandSuggestion::setDescription(const QString& description) { comm
 inline void CommandSuggestion::setVisualization(Visualization::Item* item) { suggestionVisualization = item; }
 
 }
-
-#endif /* COMMANDSUGGESTION_H_ */

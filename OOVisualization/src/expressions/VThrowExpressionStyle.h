@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOVisualization_VTHROWEXPRESSIONSTYLE_H_
-#define OOVisualization_VTHROWEXPRESSIONSTYLE_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -51,4 +50,3 @@ inline const Visualization::SequentialLayoutStyle& VThrowExpressionStyle::layout
 inline const Visualization::StaticStyle& VThrowExpressionStyle::throwSymbol() const { return throwSymbol_; }
 
 } /* namespace OOVisualization */
-#endif /* OOVisualization_VTHROWEXPRESSIONSTYLE_H_ */

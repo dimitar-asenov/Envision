@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VFLOATLITERAL_H_
-#define VFLOATLITERAL_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -57,5 +56,3 @@ class OOVISUALIZATION_API VFloatLiteral
 };
 
 }
-
-#endif /* VFLOATLITERAL_H_ */

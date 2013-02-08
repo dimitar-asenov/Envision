@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VCASTEXPRESSION_H_
-#define VCASTEXPRESSION_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 #include "VCastExpressionStyle.h"
@@ -61,5 +60,3 @@ class OOVISUALIZATION_API VCastExpression
 };
 
 }
-
-#endif /* VCASTEXPRESSION_H_ */

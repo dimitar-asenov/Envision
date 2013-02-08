@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOModel_CATCHCLAUSE_H_
-#define OOModel_CATCHCLAUSE_H_
+#pragma once
 
 #include "StatementItemList.h"
 #include "../expressions/Expression.h"
@@ -45,4 +44,3 @@ class OOMODEL_API CatchClause : public Model::ExtendableNode
 };
 
 } /* namespace OOModel */
-#endif /* OOModel_CATCHCLAUSE_H_ */

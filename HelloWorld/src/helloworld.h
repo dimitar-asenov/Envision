@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef HELLOWORLD_H
-#define HELLOWORLD_H
+#pragma once
 
 #include "Core/src/EnvisionPlugin.h"
 #include "precompiled.h"
@@ -52,5 +51,3 @@ class HelloWorld : public QObject, public Core::EnvisionPlugin
 };
 
 }
-
-#endif // HELLOWORLD_H

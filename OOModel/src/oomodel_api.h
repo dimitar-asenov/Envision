@@ -24,16 +24,13 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef OOMODEL_API_H_
-#define OOMODEL_API_H_
+#pragma once
 
 #include "precompiled.h"
 
 // This should be defined in the project file of the plug-in that exports symbols
 #if defined(OOMODEL_LIBRARY)
-#  define OOMODEL_API Q_DECL_EXPORT
+	#define OOMODEL_API Q_DECL_EXPORT
 #else
-#  define OOMODEL_API Q_DECL_IMPORT
+	#define OOMODEL_API Q_DECL_IMPORT
 #endif
-
-#endif /* OOMODEL_API_H_ */

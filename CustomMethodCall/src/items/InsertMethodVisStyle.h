@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef INSERTMETHODVISSTYLE_H_
-#define INSERTMETHODVISSTYLE_H_
+#pragma once
 
 #include "../custommethodcall_api.h"
 
@@ -58,5 +57,3 @@ inline const Visualization::StaticStyle& InsertMethodVisStyle::separator() const
 inline const Visualization::VListStyle& InsertMethodVisStyle::arguments() const { return arguments_; }
 
 }
-
-#endif /* INSERTMETHODVISSTYLE_H_ */

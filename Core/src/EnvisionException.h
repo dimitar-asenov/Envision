@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef ENVISIONEXCEPTION_H_
-#define ENVISIONEXCEPTION_H_
+#pragma once
 
 namespace Core {
 
@@ -72,5 +71,3 @@ class EnvisionException
 };
 
 }
-
-#endif /* ENVISIONEXCEPTION_H_ */

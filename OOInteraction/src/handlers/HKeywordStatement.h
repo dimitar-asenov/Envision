@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOInteraction_HKEYWORDSTATEMENT_H_
-#define OOInteraction_HKEYWORDSTATEMENT_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 
@@ -44,4 +43,3 @@ class OOINTERACTION_API HKeywordStatement : public HStatement {
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_HKEYWORDSTATEMENT_H_ */

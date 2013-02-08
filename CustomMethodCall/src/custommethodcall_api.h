@@ -24,16 +24,13 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef CUSTOMMETHODCALL_API_H_
-#define CUSTOMMETHODCALL_API_H_
+#pragma once
 
 #include "precompiled.h"
 
 // This should be defined in the project file of the plug-in that exports symbols
 #if defined(CUSTOMMETHODCALL_LIBRARY)
-#  define CUSTOMMETHODCALL_API Q_DECL_EXPORT
+	#define CUSTOMMETHODCALL_API Q_DECL_EXPORT
 #else
-#  define CUSTOMMETHODCALL_API Q_DECL_IMPORT
+	#define CUSTOMMETHODCALL_API Q_DECL_IMPORT
 #endif
-
-#endif /* CUSTOMMETHODCALL_API_H_ */

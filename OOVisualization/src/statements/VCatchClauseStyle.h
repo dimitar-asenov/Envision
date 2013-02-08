@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOVisualization_VCATCHCLAUSESTYLE_H_
-#define OOVisualization_VCATCHCLAUSESTYLE_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -63,4 +62,3 @@ inline const Visualization::SequentialLayoutStyle& VCatchClauseStyle::expression
 inline const Visualization::VListStyle& VCatchClauseStyle::body() const { return body_; }
 
 } /* namespace OOVisualization */
-#endif /* OOVisualization_VCATCHCLAUSESTYLE_H_ */

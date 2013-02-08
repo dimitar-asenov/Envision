@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef OOMODELEXCEPTION_H_
-#define OOMODELEXCEPTION_H_
+#pragma once
 
 #include "oomodel_api.h"
 #include "Core/src/EnvisionException.h"
@@ -40,5 +39,3 @@ class OOMODEL_API OOModelException : public Core::EnvisionException
 };
 
 }
-
-#endif /* MODELEXCEPTION_H_ */

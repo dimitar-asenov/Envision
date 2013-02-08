@@ -24,16 +24,13 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef OOVISUALIZATION_API_H_
-#define OOVISUALIZATION_API_H_
+#pragma once
 
 #include "precompiled.h"
 
 // This should be defined in the project file of the plug-in that exports symbols
 #if defined(OOVISUALIZATION_LIBRARY)
-#  define OOVISUALIZATION_API Q_DECL_EXPORT
+	#define OOVISUALIZATION_API Q_DECL_EXPORT
 #else
-#  define OOVISUALIZATION_API Q_DECL_IMPORT
+	#define OOVISUALIZATION_API Q_DECL_IMPORT
 #endif
-
-#endif /* OOVISUALIZATION_API_H_ */

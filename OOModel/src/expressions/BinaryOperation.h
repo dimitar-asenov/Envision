@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef BINARYOPERATION_H_
-#define BINARYOPERATION_H_
+#pragma once
 
 #include "Expression.h"
 
@@ -58,5 +57,3 @@ inline BinaryOperation::OperatorTypes BinaryOperation::op() const { return stati
 inline void BinaryOperation::setOp(const OperatorTypes& oper) { setOpr(oper); }
 
 }
-
-#endif /* BINARYOPERATION_H_ */

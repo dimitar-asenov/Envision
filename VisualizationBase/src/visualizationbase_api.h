@@ -24,16 +24,13 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VISUALIZATIONBASE_API_H_
-#define VISUALIZATIONBASE_API_H_
+#pragma once
 
 #include "precompiled.h"
 
 // This should be defined in the project file of the plug-in that exports symbols
 #if defined(VISUALIZATIONBASE_LIBRARY)
-#define VISUALIZATIONBASE_API Q_DECL_EXPORT
+	#define VISUALIZATIONBASE_API Q_DECL_EXPORT
 #else
-#define VISUALIZATIONBASE_API Q_DECL_IMPORT
+	#define VISUALIZATIONBASE_API Q_DECL_IMPORT
 #endif
-
-#endif /* VISUALIZATIONBASE_API_H_ */

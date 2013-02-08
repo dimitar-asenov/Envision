@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef FIELD_H_
-#define FIELD_H_
+#pragma once
 
 #include "../oomodel_api.h"
 
@@ -63,5 +62,3 @@ class OOMODEL_API Field : public Model::ExtendableNode
 
 
 }
-
-#endif /* FIELD_H_ */

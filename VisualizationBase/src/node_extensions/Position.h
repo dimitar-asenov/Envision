@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef POSITION_H_
-#define POSITION_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -47,5 +46,3 @@ class VISUALIZATIONBASE_API Position
 };
 
 }
-
-#endif /* POSITION_H_ */

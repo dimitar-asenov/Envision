@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef IFSTATEMENT_H_
-#define IFSTATEMENT_H_
+#pragma once
 
 #include "Statement.h"
 
@@ -48,5 +47,3 @@ class OOMODEL_API IfStatement: public Statement
 };
 
 }
-
-#endif /* IFSTATEMENT_H_ */

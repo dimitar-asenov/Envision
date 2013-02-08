@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VPROJECT_H_
-#define VPROJECT_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 #include "VProjectStyle.h"
@@ -66,5 +65,3 @@ class OOVISUALIZATION_API VProject
 };
 
 }
-
-#endif /* VPROJECT_H_ */

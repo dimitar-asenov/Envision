@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOInteraction_ARRAYTYPEDESCRIPTOR_H_
-#define OOInteraction_ARRAYTYPEDESCRIPTOR_H_
+#pragma once
 
 #include "../../oointeraction_api.h"
 #include "../OOOperatorDescriptor.h"
@@ -41,4 +40,3 @@ class OOINTERACTION_API ArrayTypeDescriptor : public OOOperatorDescriptor {
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_ARRAYTYPEDESCRIPTOR_H_ */

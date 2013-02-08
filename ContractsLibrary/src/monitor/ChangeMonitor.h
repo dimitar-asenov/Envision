@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef ContractsLibrary_CHANGEMONITOR_H_
-#define ContractsLibrary_CHANGEMONITOR_H_
+#pragma once
 
 #include "../contractslibrary_api.h"
 
@@ -62,4 +61,3 @@ class CONTRACTSLIBRARY_API ChangeMonitor : public QObject {
 };
 
 } /* namespace ContractsLibrary */
-#endif /* ContractsLibrary_CHANGEMONITOR_H_ */

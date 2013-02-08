@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef INTERACTIONBASE_EMPTY_H_
-#define INTERACTIONBASE_EMPTY_H_
+#pragma once
 
 #include "../interactionbase_api.h"
 
@@ -50,4 +49,3 @@ class INTERACTIONBASE_API Empty : public Expression {
 inline int Empty::type() { return 0; }
 
 } /* namespace InteractionBase */
-#endif /* INTERACTIONBASE_EMPTY_H_ */

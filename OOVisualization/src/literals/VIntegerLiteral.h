@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VINTEGERLITERAL_H_
-#define VINTEGERLITERAL_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -57,5 +56,3 @@ class OOVISUALIZATION_API VIntegerLiteral
 };
 
 }
-
-#endif /* VINTEGERLITERAL_H_ */

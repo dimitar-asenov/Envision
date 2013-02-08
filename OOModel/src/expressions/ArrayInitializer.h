@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef ARRAYINITIALIZER_H_
-#define ARRAYINITIALIZER_H_
+#pragma once
 
 #include "Expression.h"
 
@@ -44,5 +43,3 @@ class OOMODEL_API ArrayInitializer: public Expression
 };
 
 }
-
-#endif /* ARRAYINITIALIZER_H_ */

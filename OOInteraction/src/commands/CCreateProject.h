@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOInteraction_CCREATEPROJECT_H_
-#define OOInteraction_CCREATEPROJECT_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 
@@ -44,4 +43,3 @@ class OOINTERACTION_API CCreateProject : public Interaction::CreateNamedObjectWi
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_CCREATEPROJECT_H_ */

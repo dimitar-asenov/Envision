@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VBOOLEANLITERAL_H_
-#define VBOOLEANLITERAL_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -57,5 +56,3 @@ OOModel::BooleanLiteral>
 };
 
 }
-
-#endif /* VBOOLEANLITERAL_H_ */

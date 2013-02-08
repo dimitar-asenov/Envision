@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOInteraction_HSTATEMENT_H_
-#define OOInteraction_HSTATEMENT_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 
@@ -44,4 +43,3 @@ class OOINTERACTION_API HStatement : public Interaction::GenericHandler {
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_HSTATEMENT_H_ */

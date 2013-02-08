@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef POSITIONLAYOUTSTYLE_H_
-#define POSITIONLAYOUTSTYLE_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -63,5 +62,3 @@ inline int PositionLayoutStyle::spaceBetweenElements() const {	return spaceBetwe
 inline int PositionLayoutStyle::gridSize() const {	return gridSize_; }
 
 }
-
-#endif /* POSITIONLAYOUTSTYLE_H_ */

@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef PLUGININFO_H_
-#define PLUGININFO_H_
+#pragma once
 
 namespace Core {
 
@@ -51,6 +50,3 @@ struct PluginInfo
 };
 
 }
-
-
-#endif /* PLUGININFO_H_ */

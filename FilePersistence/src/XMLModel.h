@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef XMLMODEL_H_
-#define XMLMODEL_H_
+#pragma once
 
 #include "filepersistence_api.h"
 
@@ -93,5 +92,3 @@ class FILEPERSISTENCE_API XMLModel
 };
 
 }
-
-#endif /* XMLMODEL_H_ */

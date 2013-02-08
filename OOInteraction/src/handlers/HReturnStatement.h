@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOInteraction_HRETURNSTATEMENT_H_
-#define OOInteraction_HRETURNSTATEMENT_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 
@@ -44,4 +43,3 @@ class OOINTERACTION_API HReturnStatement : public HStatement {
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_HRETURNSTATEMENT_H_ */

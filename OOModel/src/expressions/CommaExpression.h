@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOModel_COMMAEXPRESSION_H_
-#define OOModel_COMMAEXPRESSION_H_
+#pragma once
 
 #include "Expression.h"
 
@@ -54,4 +53,3 @@ class OOMODEL_API CommaExpression: public Expression
 };
 
 } /* namespace OOModel */
-#endif /* OOModel_COMMAEXPRESSION_H_ */

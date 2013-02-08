@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef INTERACTIONBASE_ADDOPERATOR_H_
-#define INTERACTIONBASE_ADDOPERATOR_H_
+#pragma once
 
 #include "../../interactionbase_api.h"
 
@@ -46,4 +45,3 @@ class INTERACTIONBASE_API AddOperator : public ExpressionTreeBuildInstruction
 };
 
 } /* namespace InteractionBase */
-#endif /* INTERACTIONBASE_ADDOPERATOR_H_ */

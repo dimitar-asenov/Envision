@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef GLOBAL_H_
-#define GLOBAL_H_
+#pragma once
 
 template <class T> inline void SAFE_DELETE( T* & object)
 {
@@ -35,5 +34,3 @@ template <class T> inline void SAFE_DELETE( T* & object)
 		object = nullptr;
 	}
 }
-
-#endif /* GLOBAL_H_ */

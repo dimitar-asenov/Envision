@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef CONTRACTSLIBRARY_H
-#define CONTRACTSLIBRARY_H
+#pragma once
 
 #include "Core/src/EnvisionPlugin.h"
 #include "precompiled.h"
@@ -52,5 +51,3 @@ class ContractsLibrary : public QObject, public Core::EnvisionPlugin
 };
 
 }
-
-#endif // CONTRACTSLIBRARY_H

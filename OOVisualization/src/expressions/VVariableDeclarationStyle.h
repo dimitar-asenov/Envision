@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VVARIABLEDECLARATIONSTYLE_H_
-#define VVARIABLEDECLARATIONSTYLE_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -55,5 +54,3 @@ inline const Visualization::TextStyle& VVariableDeclarationStyle::name() const {
 inline const Visualization::StaticStyle& VVariableDeclarationStyle::assignmentSymbol() const { return assignmentSymbol_; }
 
 }
-
-#endif /* VVARIABLEDECLARATIONSTYLE_H_ */

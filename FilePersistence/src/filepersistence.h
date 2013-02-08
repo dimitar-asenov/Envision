@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef FILEPERSISTENCE_H
-#define FILEPERSISTENCE_H
+#pragma once
 
 #include "Core/src/EnvisionPlugin.h"
 #include "precompiled.h"
@@ -44,5 +43,3 @@ class FilePersistence : public QObject, public Core::EnvisionPlugin
 };
 
 }
-
-#endif // FILEPERSISTENCE_H

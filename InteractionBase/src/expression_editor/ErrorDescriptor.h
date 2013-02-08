@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef INTERACTIONBASE_ERRORDESCRIPTOR_H_
-#define INTERACTIONBASE_ERRORDESCRIPTOR_H_
+#pragma once
 
 #include "../interactionbase_api.h"
 
@@ -49,4 +48,3 @@ inline const QString& ErrorDescriptor::errorPrefix() const { return errorPrefix_
 inline const QString& ErrorDescriptor::errorPostfix() const { return errorPostfix_; }
 
 } /* namespace InteractionBase */
-#endif /* INTERACTIONBASE_ERRORDESCRIPTOR_H_ */

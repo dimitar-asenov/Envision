@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef NULLLITERAL_H_
-#define NULLLITERAL_H_
+#pragma once
 
 #include "Expression.h"
 
@@ -40,5 +39,3 @@ class OOMODEL_API NullLiteral: public Expression
 };
 
 }
-
-#endif /* NULLLITERAL_H_ */

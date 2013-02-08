@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef INTERACTIONBASE_EXPRESSION_H_
-#define INTERACTIONBASE_EXPRESSION_H_
+#pragma once
 
 #include "../interactionbase_api.h"
 
@@ -67,4 +66,3 @@ class INTERACTIONBASE_API Expression {
 };
 
 } /* namespace InteractionBase */
-#endif /* INTERACTIONBASE_EXPRESSION_H_ */

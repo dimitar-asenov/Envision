@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef SEQUENTIALLAYOUT_H_
-#define SEQUENTIALLAYOUT_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -159,5 +158,3 @@ template <class T> void SequentialLayout::synchronizeMid(T*& item, typename T::N
 }
 
 }
-
-#endif /* SEQUENTIALLAYOUT_H_ */

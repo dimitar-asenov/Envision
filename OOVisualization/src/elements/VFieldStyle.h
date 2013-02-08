@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VFIELDSTYLE_H_
-#define VFIELDSTYLE_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -73,5 +72,3 @@ inline const Visualization::TextStyle& VFieldStyle::nameStaticPrivate() const { 
 inline const Visualization::TextStyle& VFieldStyle::nameStaticProtected() const { return nameStaticProtected_; }
 
 }
-
-#endif /* VFIELDSTYLE_H_ */

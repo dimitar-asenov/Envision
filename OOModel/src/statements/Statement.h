@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef STATEMENT_H_
-#define STATEMENT_H_
+#pragma once
 
 #include "../oomodel_api.h"
 #include "../elements/StatementItem.h"
@@ -38,5 +37,3 @@ class OOMODEL_API Statement: public StatementItem
 };
 
 }
-
-#endif /* STATEMENT_H_ */

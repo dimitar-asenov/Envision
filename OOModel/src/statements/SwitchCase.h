@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef SWITCHCASE_H_
-#define SWITCHCASE_H_
+#pragma once
 
 #include "../oomodel_api.h"
 #include "Statement.h"
@@ -46,5 +45,3 @@ class OOMODEL_API SwitchCase : public Model::ExtendableNode
 };
 
 }
-
-#endif /* SWITCHCASE_H_ */

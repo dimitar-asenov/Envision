@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef SELECTEDITEM_H_
-#define SELECTEDITEM_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 #include "items/ItemStyle.h"
@@ -58,5 +57,3 @@ class VISUALIZATIONBASE_API SelectedItem: public Item
 inline Item* SelectedItem::selectedItem() { return selectedItem_; }
 
 }
-
-#endif /* SELECTEDITEM_H_ */

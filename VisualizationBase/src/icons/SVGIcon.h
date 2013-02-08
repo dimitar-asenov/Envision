@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef SVGICON_H_
-#define SVGICON_H_
+#pragma once
 
 #include "Icon.h"
 #include "SVGIconStyle.h"
@@ -48,5 +47,3 @@ class VISUALIZATIONBASE_API SVGIcon : public Icon
 };
 
 }
-
-#endif /* SVGICON_H_ */

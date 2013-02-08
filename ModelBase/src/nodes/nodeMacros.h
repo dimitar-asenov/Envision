@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef NODEMACROS_H_
-#define NODEMACROS_H_
+#pragma once
 
 #include "ModelBase/src/nodes/Extendable/Attribute.h"
 #include "ModelBase/src/nodes/Extendable/ExtendableIndex.h"
@@ -712,4 +711,3 @@ int className::attributeName##Index = className::addAttributeToRegister_(							
 	::Model::Attribute("_ext_" #className "_" #attributeName, #attributeType, optional, partial, persistent));			\
 
 /*********************************************************************************************************************/
-#endif /* NODEMACROS_H_ */

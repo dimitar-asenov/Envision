@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef BREAKSTATEMENT_H_
-#define BREAKSTATEMENT_H_
+#pragma once
 
 #include "Statement.h"
 
@@ -37,5 +36,3 @@ class OOMODEL_API BreakStatement: public Statement
 };
 
 }
-
-#endif /* BREAKSTATEMENT_H_ */

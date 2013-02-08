@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VBOOLEAN_H_
-#define VBOOLEAN_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -52,5 +51,3 @@ class VISUALIZATIONBASE_API VBoolean : public ItemWithNode<TextRenderer, Model::
 };
 
 }
-
-#endif /* VBOOLEAN_H_ */

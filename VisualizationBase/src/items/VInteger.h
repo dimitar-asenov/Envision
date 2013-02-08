@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VINTEGER_H_
-#define VINTEGER_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -52,5 +51,3 @@ class VISUALIZATIONBASE_API VInteger : public ItemWithNode<TextRenderer, Model::
 };
 
 }
-
-#endif /* VINTEGER_H_ */

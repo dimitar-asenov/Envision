@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOModel_SYMBOLPROVIDERTYPE_H_
-#define OOModel_SYMBOLPROVIDERTYPE_H_
+#pragma once
 
 #include "Type.h"
 
@@ -50,4 +49,3 @@ class OOMODEL_API SymbolProviderType : public Type {
 inline Model::Node* SymbolProviderType::symbolProvider() const {return symbolProvider_;}
 
 } /* namespace OOModel */
-#endif /* OOModel_SYMBOLPROVIDERTYPE_H_ */

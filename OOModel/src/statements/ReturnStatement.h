@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef RETURNSTATEMENT_H_
-#define RETURNSTATEMENT_H_
+#pragma once
 
 #include "Statement.h"
 #include "../expressions/Expression.h"
@@ -45,5 +44,3 @@ class OOMODEL_API ReturnStatement: public Statement
 };
 
 }
-
-#endif /* RETURNSTATEMENT_H_ */

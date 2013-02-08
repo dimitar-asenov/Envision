@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VCLASS_H_
-#define VCLASS_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 #include "VClassStyle.h"
@@ -77,5 +76,3 @@ class OOVISUALIZATION_API VClass
 };
 
 }
-
-#endif /* VCLASS_H_ */

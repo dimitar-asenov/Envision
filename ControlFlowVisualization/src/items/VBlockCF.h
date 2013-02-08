@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VBLOCKCF_H_
-#define VBLOCKCF_H_
+#pragma once
 
 #include "../controlflowvisualization_api.h"
 #include "VBlockCFStyle.h"
@@ -57,5 +56,3 @@ class CONTROLFLOWVISUALIZATION_API VBlockCF : public Visualization::ItemWithNode
 };
 
 }
-
-#endif /* VBLOCKCF_H_ */

@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef INTERRUPTIBLETHREAD_H_
-#define INTERRUPTIBLETHREAD_H_
+#pragma once
 
 #include "../modelbase_api.h"
 
@@ -53,5 +52,3 @@ class MODELBASE_API InterruptibleThread: public QThread
 };
 
 }
-
-#endif /* INTERRUPTIBLETHREAD_H_ */

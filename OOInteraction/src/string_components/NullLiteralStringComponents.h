@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOInteraction_NULLLITERALSTRINGCOMPONENTS_H_
-#define OOInteraction_NULLLITERALSTRINGCOMPONENTS_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 #include "StringComponents.h"
@@ -47,4 +46,3 @@ class OOINTERACTION_API NullLiteralStringComponents : public StringComponents {
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_NULLLITERALSTRINGCOMPONENTS_H_ */

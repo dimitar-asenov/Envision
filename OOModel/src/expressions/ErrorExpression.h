@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOModel_ERROREXPRESSION_H_
-#define OOModel_ERROREXPRESSION_H_
+#pragma once
 
 #include "Expression.h"
 
@@ -46,4 +45,3 @@ class OOMODEL_API ErrorExpression : public Expression {
 };
 
 } /* namespace OOModel */
-#endif /* OOModel_ERROREXPRESSION_H_ */

@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef HCOMMANDPROMPT_H_
-#define HCOMMANDPROMPT_H_
+#pragma once
 
 #include "../interactionbase_api.h"
 
@@ -45,5 +44,3 @@ class INTERACTIONBASE_API HCommandPrompt: public GenericHandler
 };
 
 }
-
-#endif /* HCOMMANDPROMPT_H_ */

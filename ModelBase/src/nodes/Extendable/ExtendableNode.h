@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef EXTENDABLENODE_H_
-#define EXTENDABLENODE_H_
+#pragma once
 
 #include "AttributeChain.h"
 #include "../Node.h"
@@ -136,5 +135,3 @@ template <class T> T* ExtendableNode::extension()
 }
 
 }
-
-#endif /* EXTENDABLENODE_H_ */

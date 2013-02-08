@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOInteraction_UNARYOPERATORDESCRIPTOR_H_
-#define OOInteraction_UNARYOPERATORDESCRIPTOR_H_
+#pragma once
 
 #include "../../oointeraction_api.h"
 #include "../OOOperatorDescriptor.h"
@@ -46,4 +45,3 @@ class OOINTERACTION_API UnaryOperatorDescriptor : public OOOperatorDescriptor {
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_UNARYOPERATORDESCRIPTOR_H_ */

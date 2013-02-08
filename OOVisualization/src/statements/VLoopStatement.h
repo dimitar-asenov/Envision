@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VLOOPSTATEMENT_H_
-#define VLOOPSTATEMENT_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 #include "VLoopStatementStyle.h"
@@ -98,5 +97,3 @@ inline VStatementItemList* VLoopStatement::body() const { return body_; }
 inline Visualization::Item* VLoopStatement::icon() const {return header_->at<Visualization::Item>(0);}
 
 }
-
-#endif /* VLOOPSTATEMENT_H_ */

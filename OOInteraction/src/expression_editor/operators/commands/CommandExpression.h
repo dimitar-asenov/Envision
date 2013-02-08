@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOInteraction_COMMANDEXPRESSION_H_
-#define OOInteraction_COMMANDEXPRESSION_H_
+#pragma once
 
 #include "../../../oointeraction_api.h"
 
@@ -42,4 +41,3 @@ class OOINTERACTION_API CommandExpression {
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_COMMANDEXPRESSION_H_ */

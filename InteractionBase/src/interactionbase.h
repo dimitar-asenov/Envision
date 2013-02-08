@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef INTERACTIONBASE_H
-#define INTERACTIONBASE_H
+#pragma once
 
 #include "Core/src/EnvisionPlugin.h"
 #include "precompiled.h"
@@ -59,5 +58,3 @@ class InteractionBase : public QObject, public Core::EnvisionPlugin
 };
 
 }
-
-#endif // INTERACTIONBASE_H

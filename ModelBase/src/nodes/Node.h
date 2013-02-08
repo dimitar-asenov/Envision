@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef NODE_H_
-#define NODE_H_
+#pragma once
 
 #include "../modelbase_api.h"
 #include "../persistence/PersistentStore.h"
@@ -465,5 +464,3 @@ inline QList<Node*> Node::findSymbols(const QString& symbol, Node* source, FindS
 }
 
 }
-
-#endif /* NODE_H_ */

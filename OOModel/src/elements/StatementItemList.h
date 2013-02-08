@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef STATEMENTITEMLIST_H_
-#define STATEMENTITEMLIST_H_
+#pragma once
 
 #include "../elements/StatementItem.h"
 #include "ModelBase/src/nodes/TypedList.h"
@@ -42,5 +41,3 @@ class OOMODEL_API StatementItemList : public Model::TypedList<StatementItem>
 };
 
 }
-
-#endif /* STATEMENTITEMLIST_H_ */

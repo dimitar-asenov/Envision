@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VPROJECTSTYLE_H_
-#define VPROJECTSTYLE_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -63,5 +62,3 @@ inline const Visualization::StaticStyle& VProjectStyle::icon() const {return ico
 inline const Visualization::PositionLayoutStyle& VProjectStyle::content() const {return content_; }
 
 }
-
-#endif /* VPROJECTSTYLE_H_ */

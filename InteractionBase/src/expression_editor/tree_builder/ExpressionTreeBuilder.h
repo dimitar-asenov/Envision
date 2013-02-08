@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef INTERACTIONBASE_EXPRESSIONTREEBUILDER_H_
-#define INTERACTIONBASE_EXPRESSIONTREEBUILDER_H_
+#pragma once
 
 #include "../../interactionbase_api.h"
 
@@ -56,4 +55,3 @@ inline QList<UnfinishedOperator*>& ExpressionTreeBuilder::unfinished() { return 
 inline Expression*& ExpressionTreeBuilder::left() { return left_; }
 
 } /* namespace InteractionBase */
-#endif /* INTERACTIONBASE_EXPRESSIONTREEBUILDER_H_ */

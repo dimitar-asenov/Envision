@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VLIST_H_
-#define VLIST_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -68,5 +67,3 @@ inline bool VList::suppressDefaultRemovalHandler() const { return suppressDefaul
 inline void VList::setSuppressDefaultRemovalHandler(bool suppress) { suppressDefaultRemovalHandler_ = suppress; }
 
 }
-
-#endif /* VLIST_H_ */

@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VLIBRARYSTYLE_H_
-#define VLIBRARYSTYLE_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -62,5 +61,3 @@ inline const Visualization::TextStyle& VLibraryStyle::name() const {return name_
 inline const Visualization::StaticStyle& VLibraryStyle::icon() const {return icon_; }
 inline const Visualization::PositionLayoutStyle& VLibraryStyle::content() const {return content_; }
 }
-
-#endif /* VLIBRARYSTYLE_H_ */

@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOInteraction_EMPTYEXPRESSIONSTRINGCOMPONENTS_H_
-#define OOInteraction_EMPTYEXPRESSIONSTRINGCOMPONENTS_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 #include "StringComponents.h"
@@ -47,4 +46,3 @@ class OOINTERACTION_API EmptyExpressionStringComponents : public StringComponent
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_EMPTYEXPRESSIONSTRINGCOMPONENTS_H_ */

@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VNULLLITERAL_H_
-#define VNULLLITERAL_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -56,5 +55,3 @@ class OOVISUALIZATION_API VNullLiteral
 };
 
 }
-
-#endif /* VNULLLITERAL_H_ */

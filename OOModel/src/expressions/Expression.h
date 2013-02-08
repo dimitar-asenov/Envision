@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef EXPRESSION_H_
-#define EXPRESSION_H_
+#pragma once
 
 #include "../oomodel_api.h"
 
@@ -46,5 +45,3 @@ class OOMODEL_API Expression : public Model::ExtendableNode
 };
 
 }
-
-#endif /* EXPRESSION_H_ */

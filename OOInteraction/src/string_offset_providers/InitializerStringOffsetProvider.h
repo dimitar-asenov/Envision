@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOInteraction_INITIALIZERSTRINGOFFSETPROVIDER_H_
-#define OOInteraction_INITIALIZERSTRINGOFFSETPROVIDER_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 #include "StringOffsetProvider.h"
@@ -48,4 +47,3 @@ class OOINTERACTION_API InitializerStringOffsetProvider : public StringOffsetPro
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_INITIALIZERSTRINGOFFSETPROVIDER_H_ */

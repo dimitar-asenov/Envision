@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef COMMANDPROMPTSTYLE_H_
-#define COMMANDPROMPTSTYLE_H_
+#pragma once
 
 #include "interactionbase_api.h"
 
@@ -61,5 +60,3 @@ inline const Visualization::TextStyle& CommandPromptStyle::commandText() const {
 inline const TextAndDescriptionStyle& CommandPromptStyle::defaultSuggestion() const {return defaultSuggestion_; }
 inline const TextAndDescriptionStyle& CommandPromptStyle::defaultError() const {return defaultError_; }
 }
-
-#endif /* COMMANDPROMPTSTYLE_H_ */

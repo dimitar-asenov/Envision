@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef BLOCK_H_
-#define BLOCK_H_
+#pragma once
 
 #include "Statement.h"
 #include "../elements/StatementItemList.h"
@@ -40,5 +39,3 @@ class OOMODEL_API Block: public Statement
 };
 
 }
-
-#endif /* BLOCK_H_ */

@@ -24,16 +24,13 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef INTERACTIONBASE_API_H_
-#define INTERACTIONBASE_API_H_
+#pragma once
 
 #include "precompiled.h"
 
 // This should be defined in the project file of the plug-in that exports symbols
 #if defined(INTERACTIONBASE_LIBRARY)
-#  define INTERACTIONBASE_API Q_DECL_EXPORT
+	#define INTERACTIONBASE_API Q_DECL_EXPORT
 #else
-#  define INTERACTIONBASE_API Q_DECL_IMPORT
+	#define INTERACTIONBASE_API Q_DECL_IMPORT
 #endif
-
-#endif /* INTERACTIONBASE_API_H_ */

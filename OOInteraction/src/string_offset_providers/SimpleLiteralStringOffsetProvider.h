@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOInteraction_SIMPLELITERALSTRINGOFFSETPROVIDER_H_
-#define OOInteraction_SIMPLELITERALSTRINGOFFSETPROVIDER_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 
@@ -46,4 +45,3 @@ class OOINTERACTION_API SimpleLiteralStringOffsetProvider : public StringOffsetP
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_SIMPLELITERALSTRINGOFFSETPROVIDER_H_ */

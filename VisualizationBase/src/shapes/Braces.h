@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef BRACES_H_
-#define BRACES_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -63,5 +62,3 @@ class VISUALIZATIONBASE_API Braces: public Shape
 };
 
 }
-
-#endif /* BRACES_H_ */

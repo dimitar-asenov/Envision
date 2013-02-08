@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VFORMALRESULTSTYLE_H_
-#define VFORMALRESULTSTYLE_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -51,5 +50,3 @@ inline const Visualization::SequentialLayoutStyle& VFormalResultStyle::layout() 
 inline const Visualization::TextStyle& VFormalResultStyle::name() const { return name_; }
 
 }
-
-#endif /* VFORMALRESULTSTYLE_H_ */

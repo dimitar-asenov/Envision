@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOInteraction_OOOPERATORDESCRIPTOR_H_
-#define OOInteraction_OOOPERATORDESCRIPTOR_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 
@@ -43,4 +42,3 @@ class OOINTERACTION_API OOOperatorDescriptor : public Interaction::OperatorDescr
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_OOOPERATORDESCRIPTOR_H_ */

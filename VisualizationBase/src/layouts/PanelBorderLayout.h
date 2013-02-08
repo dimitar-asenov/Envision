@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef PANELBORDERLAYOUT_H_
-#define PANELBORDERLAYOUT_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -104,5 +103,3 @@ inline void PanelBorderLayout::synchronizeContent(T*& item, typename T::NodeType
 }
 
 }
-
-#endif /* PANELBORDERLAYOUT_H_ */

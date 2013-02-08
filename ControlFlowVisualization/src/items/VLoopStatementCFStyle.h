@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VLOOPSTATEMENTCFSTYLE_H_
-#define VLOOPSTATEMENTCFSTYLE_H_
+#pragma once
 
 #include "../controlflowvisualization_api.h"
 #include "ControlFlowItemStyle.h"
@@ -59,5 +58,3 @@ inline const Visualization::SequentialLayoutStyle& VLoopStatementCFStyle::update
 inline const VListCFStyle& VLoopStatementCFStyle::body() const { return body_; }
 
 }
-
-#endif /* VLOOPSTATEMENTCFSTYLE_H_ */

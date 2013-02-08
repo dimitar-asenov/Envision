@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef NEWEXPRESSION_H_
-#define NEWEXPRESSION_H_
+#pragma once
 
 #include "Expression.h"
 
@@ -43,5 +42,3 @@ class OOMODEL_API NewExpression: public Expression
 };
 
 }
-
-#endif /* NEWEXPRESSION_H_ */

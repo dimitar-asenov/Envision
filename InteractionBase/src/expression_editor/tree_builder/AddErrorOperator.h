@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef INTERACTIONBASE_ADDERROROPERATOR_H_
-#define INTERACTIONBASE_ADDERROROPERATOR_H_
+#pragma once
 
 #include "../../interactionbase_api.h"
 
@@ -50,4 +49,3 @@ inline void AddErrorOperator::setText(QString new_text) { text_ = new_text; }
 
 
 } /* namespace InteractionBase */
-#endif /* INTERACTIONBASE_ADDERROROPERATOR_H_ */

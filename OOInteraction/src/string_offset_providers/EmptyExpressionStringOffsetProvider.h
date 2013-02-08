@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOInteraction_EMPTYEXPRESSIONSTRINGOFFSETPROVIDER_H_
-#define OOInteraction_EMPTYEXPRESSIONSTRINGOFFSETPROVIDER_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 
@@ -48,4 +47,3 @@ class OOINTERACTION_API EmptyExpressionStringOffsetProvider : public StringOffse
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_EMPTYEXPRESSIONSTRINGOFFSETPROVIDER_H_ */

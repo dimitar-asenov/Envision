@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef PLUGINMANAGER_H_
-#define PLUGINMANAGER_H_
+#pragma once
 
 #include "PluginInfo.h"
 #include "EnvisionPlugin.h"
@@ -92,5 +91,3 @@ class PluginManager
 };
 
 }
-
-#endif /* PLUGINMANAGER_H_ */

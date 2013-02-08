@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VREFERENCE_H_
-#define VREFERENCE_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -52,5 +51,3 @@ class VISUALIZATIONBASE_API VReference : public ItemWithNode<TextRenderer, Model
 };
 
 }
-
-#endif /* VREFERENCE_H_ */

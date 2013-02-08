@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOInteraction_LISTSTRINGCOMPONENTS_H_
-#define OOInteraction_LISTSTRINGCOMPONENTS_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 #include "StringComponents.h"
@@ -47,4 +46,3 @@ class OOINTERACTION_API ListStringComponents : public StringComponents {
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_LISTSTRINGCOMPONENTS_H_ */

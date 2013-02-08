@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef TEXTANDDESCRIPTIONSTYLE_H_
-#define TEXTANDDESCRIPTIONSTYLE_H_
+#pragma once
 
 #include "interactionbase_api.h"
 
@@ -55,5 +54,3 @@ inline const Visualization::TextStyle& TextAndDescriptionStyle::text() const {re
 inline const Visualization::TextStyle& TextAndDescriptionStyle::description() const {return description_; }
 
 }
-
-#endif /* TEXTANDDESCRIPTIONSTYLE_H_ */

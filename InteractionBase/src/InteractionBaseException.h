@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef INTERACTIONBASEEXCEPTION_H_
-#define INTERACTIONBASEEXCEPTION_H_
+#pragma once
 
 #include "interactionbase_api.h"
 #include "Core/src/EnvisionException.h"
@@ -40,5 +39,3 @@ class INTERACTIONBASE_API InteractionBaseException : public Core::EnvisionExcept
 };
 
 }
-
-#endif /* INTERACTIONBASEEXCEPTION_H_ */

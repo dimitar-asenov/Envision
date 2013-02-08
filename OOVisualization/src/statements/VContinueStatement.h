@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VCONTINUESTATEMENT_H_
-#define VCONTINUESTATEMENT_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -56,5 +55,3 @@ class OOVISUALIZATION_API VContinueStatement
 };
 
 }
-
-#endif /* VCONTINUESTATEMENT_H_ */

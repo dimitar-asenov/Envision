@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VLISTCF_H_
-#define VLISTCF_H_
+#pragma once
 
 #include "../controlflowvisualization_api.h"
 #include "VListCFStyle.h"
@@ -62,5 +61,3 @@ class CONTROLFLOWVISUALIZATION_API VListCF : public Visualization::ItemWithNode<
 };
 
 }
-
-#endif /* VLISTCF_H_ */

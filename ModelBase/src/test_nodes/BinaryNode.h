@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef BINARYNODE_H_
-#define BINARYNODE_H_
+#pragma once
 
 #include "../modelbase_api.h"
 
@@ -53,5 +52,3 @@ inline void BinaryNode::removeLeftNode() { removeOptional(leftIndex); }
 inline void BinaryNode::removeRightNode() { removeOptional(rightIndex); }
 
 }
-
-#endif /* BINARYNODE_H_ */

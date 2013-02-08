@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef OOModel_TYPE_H_
-#define OOModel_TYPE_H_
+#pragma once
 
 #include "../oomodel_api.h"
 
@@ -63,4 +62,3 @@ inline void Type::setValueType(bool isValueType) { isValueType_ = isValueType; }
 
 
 } /* namespace OOModel */
-#endif /* OOModel_TYPE_H_ */

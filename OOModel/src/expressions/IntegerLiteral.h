@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef INTEGERLITERAL_H_
-#define INTEGERLITERAL_H_
+#pragma once
 
 #include "Expression.h"
 
@@ -46,5 +45,3 @@ class OOMODEL_API IntegerLiteral: public Expression
 };
 
 }
-
-#endif /* INTEGERLITERAL_H_ */

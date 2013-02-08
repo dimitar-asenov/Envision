@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef BOOLEAN_H_
-#define BOOLEAN_H_
+#pragma once
 
 #include "Node.h"
 #include "nodeMacros.h"
@@ -51,5 +50,3 @@ class MODELBASE_API Boolean: public Node
 inline bool Boolean::get() const { return value; }
 
 }
-
-#endif /* BOOLEAN_H_ */

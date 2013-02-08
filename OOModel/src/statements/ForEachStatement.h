@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef FOREACHSTATEMENT_H_
-#define FOREACHSTATEMENT_H_
+#pragma once
 
 #include "Statement.h"
 
@@ -50,5 +49,3 @@ class OOMODEL_API ForEachStatement: public Statement
 };
 
 }
-
-#endif /* FOREACHSTATEMENT_H_ */

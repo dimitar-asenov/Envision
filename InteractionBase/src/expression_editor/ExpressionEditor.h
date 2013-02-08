@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef INTERACTIONBASE_EXPRESSIONEDITOR_H_
-#define INTERACTIONBASE_EXPRESSIONEDITOR_H_
+#pragma once
 
 #include "../interactionbase_api.h"
 
@@ -50,4 +49,3 @@ inline void ExpressionEditor::setText(const QString& expression_text) { text_ = 
 inline void ExpressionEditor::setOperatorDescriptors(const OperatorDescriptorList* ops) { ops_ = ops; }
 
 } /* namespace InteractionBase */
-#endif /* INTERACTIONBASE_EXPRESSIONEDITOR_H_ */

@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef HELLOWORLDPRINTER_H_
-#define HELLOWORLDPRINTER_H_
+#pragma once
 
 #include "helloworld_api.h"
 
@@ -48,4 +47,3 @@ class HELLOWORLD_API HelloWorldPrinter
 };
 
 }
-#endif /* HELLOWORLDPRINTER_H_ */

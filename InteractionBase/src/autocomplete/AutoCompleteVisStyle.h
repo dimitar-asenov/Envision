@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef InteractionBase_AUTOCOMPLETEVISSTYLE_H_
-#define InteractionBase_AUTOCOMPLETEVISSTYLE_H_
+#pragma once
 
 #include "interactionbase_api.h"
 #include "VisualizationBase/src/layouts/SequentialLayoutStyle.h"
@@ -56,4 +55,3 @@ inline int AutoCompleteVisStyle::heightLimit() const {return heightLimit_; }
 inline int AutoCompleteVisStyle::distanceToCursor() const {return distanceToCursor_; }
 
 } /* namespace Interaction */
-#endif /* InteractionBase_AUTOCOMPLETEVISSTYLE_H_ */

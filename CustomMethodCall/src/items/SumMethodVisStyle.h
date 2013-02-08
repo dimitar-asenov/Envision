@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef SUMMETHODVISSTYLE_H_
-#define SUMMETHODVISSTYLE_H_
+#pragma once
 
 #include "../custommethodcall_api.h"
 
@@ -54,5 +53,3 @@ inline const Visualization::StaticStyle& SumMethodVisStyle::name() const { retur
 inline const Visualization::SequentialLayoutStyle& SumMethodVisStyle::arguments() const { return arguments_; }
 
 }
-
-#endif /* SUMMETHODVISSTYLE_H_ */

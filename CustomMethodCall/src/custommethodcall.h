@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef CUSTOMMETHODCALL_H
-#define CUSTOMMETHODCALL_H
+#pragma once
 
 #include "Core/src/EnvisionPlugin.h"
 #include "precompiled.h"
@@ -52,5 +51,3 @@ class CustomMethodCall : public QObject, public Core::EnvisionPlugin
 };
 
 }
-
-#endif // CUSTOMMETHODCALL_H

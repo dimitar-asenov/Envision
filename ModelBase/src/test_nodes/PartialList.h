@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef PARTIALLIST_H_
-#define PARTIALLIST_H_
+#pragma once
 
 #include "../modelbase_api.h"
 
@@ -42,5 +41,3 @@ class MODELBASE_API PartialList: public Model::ExtendableNode
 };
 
 }
-
-#endif /* PARTIALLIST_H_ */

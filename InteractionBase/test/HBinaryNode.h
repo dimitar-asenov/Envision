@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef InteractionBase_HBINARYNODE_H_
-#define InteractionBase_HBINARYNODE_H_
+#pragma once
 
 #include "../src/handlers/HExtendable.h"
 
@@ -43,4 +42,3 @@ class HBinaryNode : public HExtendable
 };
 
 } /* namespace Interaction */
-#endif /* InteractionBase_HBINARYNODE_H_ */

@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef CHARACTERLITERAL_H_
-#define CHARACTERLITERAL_H_
+#pragma once
 
 #include "Expression.h"
 
@@ -47,5 +46,3 @@ class OOMODEL_API CharacterLiteral: public Expression
 
 
 }
-
-#endif /* CHARACTERLITERAL_H_ */

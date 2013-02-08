@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef FLOATLITERAL_H_
-#define FLOATLITERAL_H_
+#pragma once
 
 #include "Expression.h"
 
@@ -46,5 +45,3 @@ class OOMODEL_API FloatLiteral: public Expression
 };
 
 }
-
-#endif /* FLOATLITERAL_H_ */

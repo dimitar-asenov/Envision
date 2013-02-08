@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VFLOAT_H_
-#define VFLOAT_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -52,5 +51,3 @@ class VISUALIZATIONBASE_API VFloat : public ItemWithNode<TextRenderer, Model::Fl
 };
 
 }
-
-#endif /* VFLOAT_H_ */

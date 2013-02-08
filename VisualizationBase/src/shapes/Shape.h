@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef SHAPE_H_
-#define SHAPE_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 #include "shapeMacros.h"
@@ -124,5 +123,3 @@ template <class ShapeClass> inline void Shape::registerShape()
 }
 
 }
-
-#endif /* SHAPE_H_ */
