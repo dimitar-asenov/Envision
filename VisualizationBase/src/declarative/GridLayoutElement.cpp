@@ -36,6 +36,7 @@ GridLayoutElement::GridLayoutElement(int numColumns, int numRows)
 	spanGrid_ = QVector<QVector<QPair<int, int>>>(numColumns_, QVector<QPair<int, int>>(numRows_));
 	columnStretchFactors_ = QVector<float>(numColumns_, 0);
 	rowStretchFactors_ = QVector<float>(numRows_, 0);
+	computeOverallStretchFactors();
 }
 
 GridLayoutElement::~GridLayoutElement()
@@ -88,35 +89,112 @@ void GridLayoutElement::setItemPositions(Item* item, int parentX, int parentY)
 
 void GridLayoutElement::computeSize(Item* item, int availableWidth, int availableHeight)
 {
-	// Get the widest and tallest items
+	// Compute default sizes of all the elements
+	// Get the widest and tallest items (without merged cells)
 	QVector<int> widestInColumn(numColumns_, 0);
 	QVector<int> tallestInRow(numRows_, 0);
+	bool hasMultiColumn = false;
+	bool hasMultiRow = false;
 	for(int x=0; x<numColumns_; x++)
 	{
 		for(int y=0; y<numRows_; y++)
 			if (elementGrid_[x][y] != nullptr)
 			{
 				Element* element = elementGrid_[x][y];
-				// TODO: do something better with the available width/height
-				element->computeSize(item, availableWidth / numColumns_, availableHeight / numRows_);
-				QSize size = element->size();
-				if (size.width() > widestInColumn[x]) widestInColumn[x] = size.width();
-				if (size.height() > tallestInRow[y]) tallestInRow[y] = size.height();
+				QPair<int, int> cellSpan = spanGrid_[x][y];
+				element->computeSize(item, 0, 0); // any additional space is distributed later
+				if (cellSpan.first == 1)
+				{
+					if (element->size().width() > widestInColumn[x]) widestInColumn[x] = element->size().width();
+				}
+				else
+					hasMultiColumn = true;
+				if (cellSpan.second == 1)
+				{
+					if (element->size().height() > tallestInRow[y]) tallestInRow[y] = element->size().height();
+				}
+				else
+					hasMultiRow = true;
 			}
 	}
 
-	// Compute size
+	// Compute grid size
 	int totalWidth = 0;
-	for (int x = 0; x<numColumns_; ++x) totalWidth += widestInColumn[x];
-	if (numColumns_ > 0) totalWidth += leftMargin() + rightMargin();
-	if (numColumns_ > 1) totalWidth += spaceBetweenColumns_ * (numColumns_ - 1);
-
 	int totalHeight = 0;
-	for (int y = 0; y<numRows_; ++y) totalHeight += tallestInRow[y];
-	if (numRows_ > 0) totalHeight += topMargin() + bottomMargin();
-	if (numRows_ > 1) totalHeight += spaceBetweenRows_ * (numRows_ - 1);
+
+	// No merged cells on X-axis
+	if (!hasMultiColumn)
+	{
+		for (int x = 0; x<numColumns_; ++x) totalWidth += widestInColumn[x];
+		if (numColumns_ > 0) totalWidth += leftMargin() + rightMargin();
+		if (numColumns_ > 1) totalWidth += spaceBetweenColumns_ * (numColumns_ - 1);
+
+		int additionalSpace = availableWidth - totalWidth;
+		// if availableWidth == 0, this is always false
+		if (additionalSpace > 0)
+		{
+			if (overallColumnStretchFactor_ == 0)
+			{
+				// add the additional space to some column
+				widestInColumn[numColumns_ - 1] += additionalSpace;
+			}
+			else
+			{
+				// distribute the additional space according to the stretch factors
+				for (int x = 0; x<numColumns_; ++x)
+					widestInColumn[x] += additionalSpace / overallColumnStretchFactor_ * columnStretchFactors_[x];
+			}
+			totalWidth = availableWidth;
+		}
+	}
+	// TODO: else
+
+	// No merged cells on Y-axis
+	if (!hasMultiRow)
+	{
+		for (int y = 0; y<numRows_; ++y) totalHeight += tallestInRow[y];
+		if (numRows_ > 0) totalHeight += topMargin() + bottomMargin();
+		if (numRows_ > 1) totalHeight += spaceBetweenRows_ * (numRows_ - 1);
+
+		int additionalSpace = availableHeight - totalHeight;
+		// if availableHeight == 0, this is always false
+		if (additionalSpace > 0)
+		{
+			if (overallRowStretchFactor_ == 0)
+			{
+				// add the additional space to some row
+				tallestInRow[numRows_ - 1] += additionalSpace;
+			}
+			else
+			{
+				// distribute the additional space according to the stretch factors
+				for (int y = 0; y<numRows_; ++y)
+					tallestInRow[y] += additionalSpace / overallRowStretchFactor_ * rowStretchFactors_[y];
+			}
+			totalHeight = availableHeight;
+		}
+	}
+	// TODO: else
 
 	setSize(QSize(totalWidth, totalHeight));
+
+	// recompute all the sizes, if they matter now
+	// TODO: is this assumption correct, or do I need to recompute in every case?
+	if (availableWidth > 0 or availableHeight > 0)
+	{
+		for(int x=0; x<numColumns_; x++)
+		{
+			for(int y=0; y<numRows_; y++)
+				if (elementGrid_[x][y] != nullptr)
+				{
+					Element* element = elementGrid_[x][y];
+					QPair<int, int> cellSpan = spanGrid_[x][y];
+					if (cellSpan.first == 1 and cellSpan.second == 1)
+						element->computeSize(item, widestInColumn[x], tallestInRow[y]);
+					// TODO: else
+				}
+		}
+	}
 
 	// Set item positions
 
@@ -147,6 +225,20 @@ void GridLayoutElement::computeSize(Item* item, int availableWidth, int availabl
 		}
 
 		left += widestInColumn[x] + spaceBetweenColumns_;
+	}
+}
+
+void GridLayoutElement::computeOverallStretchFactors()
+{
+	overallColumnStretchFactor_ = 0;
+	for(int x=0; x<numColumns_; ++x)
+	{
+		overallColumnStretchFactor_ += columnStretchFactors_[x];
+	}
+	overallRowStretchFactor_ = 0;
+	for(int y=0; y<numRows_; ++y)
+	{
+		overallRowStretchFactor_ += rowStretchFactors_[y];
 	}
 }
 

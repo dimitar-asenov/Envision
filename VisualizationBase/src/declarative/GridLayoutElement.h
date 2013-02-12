@@ -71,6 +71,9 @@ class GridLayoutElement : public LayoutElement {
 		QVector<QVector<QPair<int, int>>> spanGrid_{};
 		QVector<float> columnStretchFactors_{};
 		QVector<float> rowStretchFactors_{};
+		float overallColumnStretchFactor_{};
+		float overallRowStretchFactor_{};
+		void computeOverallStretchFactors();
 };
 
 inline GridLayoutElement* GridLayoutElement::setSpacing(int spacing)
@@ -108,27 +111,32 @@ inline GridLayoutElement* GridLayoutElement::setVerticalAlignment(LayoutStyle::A
 inline GridLayoutElement* GridLayoutElement::setColumnStretchFactor(int column, float stretchFactor)
 {
 	columnStretchFactors_[column] = stretchFactor;
+	computeOverallStretchFactors();
 	return this;
 }
 inline GridLayoutElement* GridLayoutElement::setColumnStretchFactors(float stretchFactor)
 {
 	columnStretchFactors_ = QVector<float>(numColumns_, stretchFactor);
+	computeOverallStretchFactors();
 	return this;
 }
 inline GridLayoutElement* GridLayoutElement::setRowStretchFactor(int row, float stretchFactor)
 {
 	rowStretchFactors_[row] = stretchFactor;
+	computeOverallStretchFactors();
 	return this;
 }
 inline GridLayoutElement* GridLayoutElement::setRowStretchFactors(float stretchFactor)
 {
 	rowStretchFactors_ = QVector<float>(numRows_, stretchFactor);
+	computeOverallStretchFactors();
 	return this;
 }
 inline GridLayoutElement* GridLayoutElement::setStretchFactors(float stretchFactor)
 {
 	columnStretchFactors_ = QVector<float>(numColumns_, stretchFactor);
 	rowStretchFactors_ = QVector<float>(numRows_, stretchFactor);
+	computeOverallStretchFactors();
 	return this;
 }
 
