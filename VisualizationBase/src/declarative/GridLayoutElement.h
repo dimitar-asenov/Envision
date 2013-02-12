@@ -46,6 +46,11 @@ class GridLayoutElement : public LayoutElement {
 		GridLayoutElement* setVerticalSpacing(int spaceBetweenRows);
 		GridLayoutElement* setHorizontalAlignment(LayoutStyle::Alignment horizontalAlignment);
 		GridLayoutElement* setVerticalAlignment(LayoutStyle::Alignment verticalAlignment);
+		GridLayoutElement* setColumnStretchFactor(int column, float stretchFactor);
+		GridLayoutElement* setColumnStretchFactors(float stretchFactor);
+		GridLayoutElement* setRowStretchFactor(int row, float stretchFactor);
+		GridLayoutElement* setRowStretchFactors(float stretchFactor);
+		GridLayoutElement* setStretchFactors(float stretchFactor);
 
 	public: // Methods executable when items need to be rendered
 		virtual void computeSize(Item* item, int availableWidth, int availableHeight) override;
@@ -98,6 +103,32 @@ inline GridLayoutElement* GridLayoutElement::setHorizontalAlignment(LayoutStyle:
 inline GridLayoutElement* GridLayoutElement::setVerticalAlignment(LayoutStyle::Alignment verticalAlignment)
 {
 	verticalAlignment_ = verticalAlignment;
+	return this;
+}
+inline GridLayoutElement* GridLayoutElement::setColumnStretchFactor(int column, float stretchFactor)
+{
+	columnStretchFactors_[column] = stretchFactor;
+	return this;
+}
+inline GridLayoutElement* GridLayoutElement::setColumnStretchFactors(float stretchFactor)
+{
+	columnStretchFactors_ = QVector<float>(numColumns_, stretchFactor);
+	return this;
+}
+inline GridLayoutElement* GridLayoutElement::setRowStretchFactor(int row, float stretchFactor)
+{
+	rowStretchFactors_[row] = stretchFactor;
+	return this;
+}
+inline GridLayoutElement* GridLayoutElement::setRowStretchFactors(float stretchFactor)
+{
+	rowStretchFactors_ = QVector<float>(numRows_, stretchFactor);
+	return this;
+}
+inline GridLayoutElement* GridLayoutElement::setStretchFactors(float stretchFactor)
+{
+	columnStretchFactors_ = QVector<float>(numColumns_, stretchFactor);
+	rowStretchFactors_ = QVector<float>(numRows_, stretchFactor);
 	return this;
 }
 
