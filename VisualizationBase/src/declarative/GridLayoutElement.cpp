@@ -28,41 +28,44 @@
 
 namespace Visualization {
 
-GridLayoutElement::GridLayoutElement(int numHorizontalCells, int numVerticalCells)
-: numHorizontalCells_(numHorizontalCells), numVerticalCells_(numVerticalCells),
-  horizontalSpacing_{}, verticalSpacing_{}, horizontalAlignment_{LayoutStyle::Alignment::Left},
-  verticalAlignment_{LayoutStyle::Alignment::Top}
+GridLayoutElement::GridLayoutElement(int numColumns, int numRows)
+: numColumns_(numColumns), numRows_(numRows), spaceBetweenColumns_{}, spaceBetweenRows_{},
+  horizontalAlignment_{LayoutStyle::Alignment::Left}, verticalAlignment_{LayoutStyle::Alignment::Top}
 {
-	elementGrid_ = QVector<QVector<Element*>>(numHorizontalCells_, QVector<Element*>(numVerticalCells_));
+	elementGrid_ = QVector<QVector<Element*>>(numColumns_, QVector<Element*>(numRows_));
+	spanGrid_ = QVector<QVector<QPair<int, int>>>(numColumns_, QVector<QPair<int, int>>(numRows_));
+	columnStretchFactors_ = QVector<float>(numColumns_, 0);
+	rowStretchFactors_ = QVector<float>(numRows_, 0);
 }
 
 GridLayoutElement::~GridLayoutElement()
 {
-	for(int x=0; x<numHorizontalCells_; x++)
-		for(int y=0; y<numVerticalCells_; y++)
+	for(int x=0; x<numColumns_; x++)
+		for(int y=0; y<numRows_; y++)
 			SAFE_DELETE(elementGrid_[x][y]);
 }
 
 void GridLayoutElement::destroyChildItems(Item* item)
 {
-	for(int x=0; x<numHorizontalCells_; x++)
-		for(int y=0; y<numVerticalCells_; y++)
+	for(int x=0; x<numColumns_; x++)
+		for(int y=0; y<numRows_; y++)
 			elementGrid_[x][y]->destroyChildItems(item);
 }
 
-GridLayoutElement* GridLayoutElement::addElement(int cellX, int cellY, Element* element)
+GridLayoutElement* GridLayoutElement::addElement(Element* element, int column, int row, int columnSpan, int rowSpan)
 {
-	if (elementGrid_[cellX][cellY] != nullptr)
-		SAFE_DELETE(elementGrid_[cellX][cellY]);
-	elementGrid_[cellX][cellY] = element;
+	SAFE_DELETE(elementGrid_[column][row]);
+	elementGrid_[column][row] = element;
+	spanGrid_[column][row] = QPair<int, int>(columnSpan, rowSpan);
+	// TODO: How can I make sure that row and column span are valid? Can I use assert?
 	return this;
 }
 
 void GridLayoutElement::synchronizeWithItem(Item* item)
 {
-	for(int x=0; x<numHorizontalCells_; x++)
+	for(int x=0; x<numColumns_; x++)
 	{
-		for(int y=0; y<numVerticalCells_; y++)
+		for(int y=0; y<numRows_; y++)
 			if (elementGrid_[x][y] != nullptr)
 			{
 				elementGrid_[x][y]->synchronizeWithItem(item);
@@ -72,9 +75,9 @@ void GridLayoutElement::synchronizeWithItem(Item* item)
 
 void GridLayoutElement::setItemPositions(Item* item, int parentX, int parentY)
 {
-	for(int x=0; x<numHorizontalCells_; x++)
+	for(int x=0; x<numColumns_; x++)
 	{
-		for(int y=0; y<numVerticalCells_; y++)
+		for(int y=0; y<numRows_; y++)
 			if (elementGrid_[x][y] != nullptr)
 			{
 				Element* element = elementGrid_[x][y];
@@ -86,16 +89,16 @@ void GridLayoutElement::setItemPositions(Item* item, int parentX, int parentY)
 void GridLayoutElement::computeSize(Item* item, int availableWidth, int availableHeight)
 {
 	// Get the widest and tallest items
-	QVector<int> widestInColumn(numHorizontalCells_, 0);
-	QVector<int> tallestInRow(numVerticalCells_, 0);
-	for(int x=0; x<numHorizontalCells_; x++)
+	QVector<int> widestInColumn(numColumns_, 0);
+	QVector<int> tallestInRow(numRows_, 0);
+	for(int x=0; x<numColumns_; x++)
 	{
-		for(int y=0; y<numVerticalCells_; y++)
+		for(int y=0; y<numRows_; y++)
 			if (elementGrid_[x][y] != nullptr)
 			{
 				Element* element = elementGrid_[x][y];
 				// TODO: do something better with the available width/height
-				element->computeSize(item, availableWidth / numHorizontalCells_, availableHeight / numVerticalCells_);
+				element->computeSize(item, availableWidth / numColumns_, availableHeight / numRows_);
 				QSize size = element->size();
 				if (size.width() > widestInColumn[x]) widestInColumn[x] = size.width();
 				if (size.height() > tallestInRow[y]) tallestInRow[y] = size.height();
@@ -104,24 +107,24 @@ void GridLayoutElement::computeSize(Item* item, int availableWidth, int availabl
 
 	// Compute size
 	int totalWidth = 0;
-	for (int x = 0; x<numHorizontalCells_; ++x) totalWidth += widestInColumn[x];
-	if (numHorizontalCells_ > 0) totalWidth += leftMargin() + rightMargin();
-	if (numHorizontalCells_ > 1) totalWidth += horizontalSpacing_ * (numHorizontalCells_ - 1);
+	for (int x = 0; x<numColumns_; ++x) totalWidth += widestInColumn[x];
+	if (numColumns_ > 0) totalWidth += leftMargin() + rightMargin();
+	if (numColumns_ > 1) totalWidth += spaceBetweenColumns_ * (numColumns_ - 1);
 
 	int totalHeight = 0;
-	for (int y = 0; y<numVerticalCells_; ++y) totalHeight += tallestInRow[y];
-	if (numVerticalCells_ > 0) totalHeight += topMargin() + bottomMargin();
-	if (numVerticalCells_ > 1) totalHeight += verticalSpacing_ * (verticalSpacing_ - 1);
+	for (int y = 0; y<numRows_; ++y) totalHeight += tallestInRow[y];
+	if (numRows_ > 0) totalHeight += topMargin() + bottomMargin();
+	if (numRows_ > 1) totalHeight += spaceBetweenRows_ * (numRows_ - 1);
 
 	setSize(QSize(totalWidth, totalHeight));
 
 	// Set item positions
 
 	int left = leftMargin();
-	for(int x=0; x<numHorizontalCells_; ++x)
+	for(int x=0; x<numColumns_; ++x)
 	{
 		int top = topMargin();
-		for(int y=0; y<numVerticalCells_; ++y)
+		for(int y=0; y<numRows_; ++y)
 		{
 			if (elementGrid_[x][y] != nullptr)
 			{
@@ -140,10 +143,10 @@ void GridLayoutElement::computeSize(Item* item, int availableWidth, int availabl
 				elementGrid_[x][y]->setPos(QPoint(xPos, yPos));
 			}
 
-			top += tallestInRow[y] + verticalSpacing_;
+			top += tallestInRow[y] + spaceBetweenRows_;
 		}
 
-		left += widestInColumn[x] + horizontalSpacing_;
+		left += widestInColumn[x] + spaceBetweenColumns_;
 	}
 }
 

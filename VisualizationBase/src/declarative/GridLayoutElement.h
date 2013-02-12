@@ -37,13 +37,13 @@ class GridLayoutElement : public LayoutElement {
 		FLUENT_ELEMENT_INTERFACE(GridLayoutElement);
 
 	public: // Methods executable on element definition
-		GridLayoutElement(int numHorizontalCells, int numVerticalCells);
+		GridLayoutElement(int numColumns, int numRows);
 		virtual ~GridLayoutElement();
-		GridLayoutElement* addElement(int cellX, int cellY, Element* element);
+		GridLayoutElement* addElement(Element* element, int column, int row, int columnSpan=1, int rowSpan=1);
 		GridLayoutElement* setSpacing(int spacing);
-		GridLayoutElement* setSpacing(int horizontalSpacing, int verticalSpacing);
-		GridLayoutElement* setHorizontalSpacing(int horizontalSpacing);
-		GridLayoutElement* setVerticalSpacing(int verticalSpacing);
+		GridLayoutElement* setSpacing(int spaceBetweenColumns, int spaceBetweenRows);
+		GridLayoutElement* setHorizontalSpacing(int spaceBetweenColumns);
+		GridLayoutElement* setVerticalSpacing(int spaceBetweenRows);
 		GridLayoutElement* setHorizontalAlignment(LayoutStyle::Alignment horizontalAlignment);
 		GridLayoutElement* setVerticalAlignment(LayoutStyle::Alignment verticalAlignment);
 
@@ -56,35 +56,38 @@ class GridLayoutElement : public LayoutElement {
 		virtual void destroyChildItems(Item* item) override;
 
 	private:
-		int numHorizontalCells_{};
-		int numVerticalCells_{};
-		int horizontalSpacing_{};
-		int verticalSpacing_{};
+		int numColumns_{};
+		int numRows_{};
+		int spaceBetweenColumns_{};
+		int spaceBetweenRows_{};
 		LayoutStyle::Alignment horizontalAlignment_{};
 		LayoutStyle::Alignment verticalAlignment_{};
 		QVector<QVector<Element*>> elementGrid_{};
+		QVector<QVector<QPair<int, int>>> spanGrid_{};
+		QVector<float> columnStretchFactors_{};
+		QVector<float> rowStretchFactors_{};
 };
 
 inline GridLayoutElement* GridLayoutElement::setSpacing(int spacing)
 {
-	horizontalSpacing_ = spacing;
-	verticalSpacing_ = spacing;
+	spaceBetweenRows_ = spacing;
+	spaceBetweenColumns_ = spacing;
 	return this;
 }
-inline GridLayoutElement* GridLayoutElement::setSpacing(int horizontalSpacing, int verticalSpacing)
+inline GridLayoutElement* GridLayoutElement::setSpacing(int spaceBetweenColumns, int spaceBetweenRows)
 {
-	horizontalSpacing_ = horizontalSpacing;
-	verticalSpacing_ = verticalSpacing;
+	spaceBetweenColumns_ = spaceBetweenColumns;
+	spaceBetweenRows_ = spaceBetweenRows;
 	return this;
 }
-inline GridLayoutElement* GridLayoutElement::setHorizontalSpacing(int horizontalSpacing)
+inline GridLayoutElement* GridLayoutElement::setHorizontalSpacing(int spaceBetweenColumns)
 {
-	horizontalSpacing_ = horizontalSpacing;
+	spaceBetweenColumns_ = spaceBetweenColumns;
 	return this;
 }
-inline GridLayoutElement* GridLayoutElement::setVerticalSpacing(int verticalSpacing)
+inline GridLayoutElement* GridLayoutElement::setVerticalSpacing(int spaceBetweenRows)
 {
-	verticalSpacing_ = verticalSpacing;
+	spaceBetweenRows_ = spaceBetweenRows;
 	return this;
 }
 inline GridLayoutElement* GridLayoutElement::setHorizontalAlignment(LayoutStyle::Alignment horizontalAlignment)
