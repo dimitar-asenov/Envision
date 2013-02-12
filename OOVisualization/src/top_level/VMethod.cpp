@@ -32,6 +32,7 @@
 #include "VisualizationBase/src/items/Static.h"
 #include "VisualizationBase/src/items/VText.h"
 #include "VisualizationBase/src/items/VList.h"
+#include "VisualizationBase/src/items/Line.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -41,9 +42,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VMethod, "item")
 
 VMethod::VMethod(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode<LayoutProvider<PanelBorderLayout>, Method>(parent, node, style),
-	header_(), icon_(), name_(), typeArguments_(), arguments_(), body_(), annotations_(), addons_(), content_(),
-	results_()
+	ItemWithNode<LayoutProvider<PanelBorderLayout>, Method>(parent, node, style)
 {
 	layout()->setTop(true);
 
@@ -70,6 +69,9 @@ VMethod::VMethod(Item* parent, NodeType* node, const StyleType* style) :
 	content_ = new SequentialLayout(layout(), &style->content());
 	layout()->setContent(content_);
 
+	signatureLine_ = new Line(content_, &style->signatureLine());
+	content_->append(signatureLine_);
+
 	body_ = new VStatementItemList(content_, node->items(), &style->body());
 	content_->append(body_);
 }
@@ -81,6 +83,7 @@ VMethod::~VMethod()
 	icon_ = nullptr;
 	name_ = nullptr;
 	body_ = nullptr;
+	signatureLine_ = nullptr;
 	annotations_ = nullptr;
 	addons_ = nullptr;
 	content_ = nullptr;
@@ -122,6 +125,9 @@ void VMethod::determineChildren()
 	content_->synchronizeMid(annotations_,
 				node()->annotations()->size() > 0 ? node()->annotations() : nullptr,
 						&style()->annotations(), addons_ ? 1 : 0);
+
+	content_->synchronizeMid(signatureLine_, addons_ || annotations_ || node()->items()->size(),
+			&style()->signatureLine(), (addons_ ?1:0) + (annotations_ ?1:0));
 
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
 	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know

@@ -39,6 +39,7 @@ namespace Visualization {
 	class VList;
 	class Static;
 	class PanelBorderLayout;
+	class Line;
 }
 
 namespace OOVisualization {
@@ -68,16 +69,17 @@ class OOVISUALIZATION_API VMethod
 		typedef Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
 				OOModel::Method> BaseItemType;
 
-		Visualization::SequentialLayout* header_;
-		Visualization::Static* icon_;
-		Visualization::VText* name_;
-		Visualization::VList* typeArguments_;
-		Visualization::VList* arguments_;
-		VStatementItemList* body_;
-		VStatementItemList* annotations_;
-		Visualization::SequentialLayout* addons_;
-		Visualization::SequentialLayout* content_;
-		Visualization::VList* results_;
+		Visualization::SequentialLayout* header_{};
+		Visualization::Static* icon_{};
+		Visualization::VText* name_{};
+		Visualization::VList* typeArguments_{};
+		Visualization::VList* arguments_{};
+		Visualization::Line* signatureLine_{};
+		VStatementItemList* body_{};
+		VStatementItemList* annotations_{};
+		Visualization::SequentialLayout* addons_{};
+		Visualization::SequentialLayout* content_{};
+		Visualization::VList* results_{};
 };
 
 inline Visualization::VText* VMethod::name() const { return name_; }
