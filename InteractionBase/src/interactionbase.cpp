@@ -48,6 +48,7 @@
 #include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/items/Text.h"
 #include "VisualizationBase/src/items/Symbol.h"
+#include "VisualizationBase/src/items/Line.h"
 #include "VisualizationBase/src/items/VText.h"
 #include "VisualizationBase/src/items/VInteger.h"
 #include "VisualizationBase/src/items/VFloat.h"
@@ -82,6 +83,7 @@ bool InteractionBase::initialize(Core::EnvisionManager&)
 	Visualization::VList::setInteractionHandler(HList::instance());
 	Visualization::Text::setInteractionHandler(HText::instance());
 	Visualization::Symbol::setInteractionHandler(HText::instance());
+	Visualization::Line::setInteractionHandler(GenericHandler::instance());
 	Visualization::VText::setInteractionHandler(HText::instance());
 	Visualization::VInteger::setInteractionHandler(HText::instance());
 	Visualization::VFloat::setInteractionHandler(HText::instance());

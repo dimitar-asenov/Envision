@@ -43,6 +43,7 @@
 
 #include "items/Static.h"
 #include "items/Symbol.h"
+#include "items/Line.h"
 #include "icons/SVGIcon.h"
 
 #include "node_extensions/Position.h"
@@ -88,6 +89,7 @@ bool VisualizationBase::initialize(Core::EnvisionManager& manager)
 	// Register static visualizations
 	Static::registerStaticItem<Symbol>();
 	Static::registerStaticItem<SVGIcon>();
+	Static::registerStaticItem<Line>();
 
 	// Enlarge and Center Main Window
 
