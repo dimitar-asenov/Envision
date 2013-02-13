@@ -39,8 +39,16 @@ class OOVISUALIZATION_API VStatementItemList : public Visualization::VList
 	public:
 		VStatementItemList(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 
+		typedef std::function<void (VStatementItemList* item, int& begin, int& end)> RangeFilter;
+		static void addRangeFilter(RangeFilter filter);
+
+	protected:
+		virtual void determineRange() override;
+
 	private:
 		typedef Visualization::VList BaseItemType;
+
+		static QList<RangeFilter>& rangeFilters();
 };
 
 } /* namespace OOVisualization */
