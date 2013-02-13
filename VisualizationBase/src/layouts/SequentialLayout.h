@@ -48,6 +48,7 @@ class VISUALIZATIONBASE_API SequentialLayout: public Layout
 		virtual bool isEmpty() const;
 
 		virtual void updateGeometry(int availableWidth, int availableHeight);
+		virtual bool sizeDependsOnParent() const override;
 
 		int focusedElementIndex() const;
 

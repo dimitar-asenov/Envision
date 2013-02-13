@@ -184,14 +184,38 @@ void SequentialLayout::setSpaceBetweenElements(bool use, int space)
 	spaceBetweenElements_ = use ? space : -1;
 }
 
-void SequentialLayout::updateGeometry(int, int)
+bool SequentialLayout::sizeDependsOnParent() const
 {
-	// Get the maximum width and height of any element.
+	for (auto item : items) if (item->sizeDependsOnParent()) return true;
+	return false;
+}
+
+void SequentialLayout::updateGeometry(int availableWidth, int availableHeight)
+{
 	int maxChildWidth = 0;
 	int maxChildHeight = 0;
+
+	// Determine what sort of sequence we're building
+	bool horizontal = isHorizontal();
+	bool forward = isForward();
+
+	if ((horizontal && availableHeight > 0) || (!horizontal && availableWidth > 0))
+	{
+		// This sequential layout's size depends on its parent size and more space is available.
+		QSize innerSize{availableWidth, availableHeight};
+		if (hasShape())
+		{
+			innerSize = getShape()->innerSize(horizontal ? width() : availableWidth,
+				horizontal ? availableHeight: height() );
+		}
+
+		if (horizontal) maxChildHeight = innerSize.height() - style()->topMargin() - style()->bottomMargin();
+		else maxChildWidth = innerSize.width() - style()->leftMargin() - style()->rightMargin();
+	}
+
+	// Get the maximum width and height of any element and use those to compute the total width and height.
 	int sizeWidth = 0;
 	int sizeHeight = 0;
-
 	for (int i = 0; i != items.size(); ++i)
 	{
 		if ( maxChildWidth < items[i]->width() ) maxChildWidth = items[i]->width();
@@ -200,10 +224,6 @@ void SequentialLayout::updateGeometry(int, int)
 		sizeWidth += items[i]->width() + (i > 0 ? spaceBetweenElements() : 0);
 		sizeHeight += items[i]->height() + (i > 0 ? spaceBetweenElements() : 0);
 	}
-
-	// Determine what sort of sequence we're building
-	bool horizontal = isHorizontal();
-	bool forward = isForward();
 
 	// minWidth and minHeight always apply to the dimension opposite of the direction.
 	// In case there are no items in the list the minimum in the direction of the list also applies.
