@@ -35,10 +35,10 @@ namespace OOModel {
 
 namespace ContractsLibrary {
 
-class CONTRACTSLIBRARY_API ContractsVMethodAddOn : public Visualization::VisualizationAddOn
+class CONTRACTSLIBRARY_API SignatureContractsVMethodAddOn : public Visualization::VisualizationAddOn
 {
 	public:
-		ContractsVMethodAddOn(OOModel::Method* contractsClassMethodDefinition);
+		SignatureContractsVMethodAddOn(OOModel::Method* contractsClassMethodDefinition);
 
 		virtual QList<Visualization::Item*> determineItems(Visualization::Item* vis,
 			const QList<Visualization::Item*>& currentItems) override;

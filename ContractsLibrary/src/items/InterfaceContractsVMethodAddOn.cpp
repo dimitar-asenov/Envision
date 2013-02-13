@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "ContractsVMethodAddOn.h"
+#include "InterfaceContractsVMethodAddOn.h"
 #include "OOVisualization/src/top_level/VMethod.h"
 #include "OOVisualization/src/elements/VStatementItemList.h"
 #include "OOModel/src/top_level/Class.h"
@@ -37,12 +37,12 @@
 
 namespace ContractsLibrary {
 
-ContractsVMethodAddOn::ContractsVMethodAddOn(OOModel::Method* contractsClassMethodDefinition)
+InterfaceContractsVMethodAddOn::InterfaceContractsVMethodAddOn(OOModel::Method* contractsClassMethodDefinition)
 : contractClassMethod_(contractsClassMethodDefinition)
 {
 }
 
-QList<Visualization::Item*> ContractsVMethodAddOn::determineItems(Visualization::Item* vis,
+QList<Visualization::Item*> InterfaceContractsVMethodAddOn::determineItems(Visualization::Item* vis,
 				const QList<Visualization::Item*>& currentItems)
 {
 	QList<Visualization::Item*> result;

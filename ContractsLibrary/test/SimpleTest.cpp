@@ -27,7 +27,9 @@
 #include "contractslibrary.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
-#include "items/ContractsVMethodAddOn.h"
+#include "items/InterfaceContractsVMethodAddOn.h"
+#include "items/SignatureContractsVMethodAddOn.h"
+#include "items/ContractFilter.h"
 #include "OOInteraction/src/expression_editor/operators/commands/CreateMethodCall.h"
 #include "monitor/ValueAtReturnVisitor.h"
 
@@ -42,6 +44,7 @@
 #include "VisualizationBase/src/items/RootItem.h"
 
 #include "OOVisualization/src/top_level/VMethod.h"
+#include "OOVisualization/src/elements/VStatementItemList.h"
 #include "OOVisualization/src/alternative/VKeywordMethodCall.h"
 
 #include "OOInteraction/src/expression_editor/OOExpressionBuilder.h"
@@ -180,8 +183,15 @@ Library* createContractsLibrary()
 	CommandDescriptor::registerCommand(new CreateMethodCall("old", "CodeContracts.Contract.OldValue"));
 	CommandDescriptor::registerCommand(new CreateMethodCall("result", "CodeContracts.Contract.Result",1));
 
-	// Register method add on
-	VMethod::addAddOn( new ContractsVMethodAddOn(contractClass) );
+	// Register method add-ons
+	VMethod::addAddOn( new InterfaceContractsVMethodAddOn(contractClass) );
+	VMethod::addAddOn( new SignatureContractsVMethodAddOn(contractClass) );
+
+	// Let items know what is the contractClass
+	ContractFilter::setContractsClass(contract);
+	// Install filters
+	OOVisualization::VStatementItemList::addRangeFilter( ContractFilter::showOnlyContractsFilter );
+	OOVisualization::VStatementItemList::addRangeFilter( ContractFilter::hideContractsFilter );
 
 	return lib;
 }
