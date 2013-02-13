@@ -79,7 +79,7 @@ TEST(InteractionBase, TextSelect)
 	QApplication::processEvents();
 
 	VList* l = dynamic_cast<VList*> (top->item());
-	l->at<VExtendable>(0)->setExpanded();
+	l->itemAt<VExtendable>(0)->setExpanded();
 	scene->scheduleUpdate();
 	scene->listenToModel(model);
 

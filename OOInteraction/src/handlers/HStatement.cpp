@@ -57,7 +57,7 @@ void HStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			processed = true;
 			event->accept();
 
-			int index = lst->focusedElementIndex() + 1;
+			int index = lst->focusedNodeIndex() + 1;
 
 			auto empty = new OOModel::EmptyExpression();
 			auto es = new OOModel::ExpressionStatement();

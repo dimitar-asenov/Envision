@@ -56,14 +56,15 @@ void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		processed = true;
 		FilePersistence::SystemClipboard clipboard;
 		int selIndex = list->layout()->correspondingSceneCursor<Visualization::LayoutCursor>()->index();
-		if (selIndex > list->length()) selIndex = list->length();
+		if (selIndex > list->XXlength()) selIndex = list->XXlength();
 		if (selIndex < 0) selIndex = 0;
+		selIndex += list->rangeBegin();
 
 		if (clipboard.numNodes() > 0)
 		{
 			Model::List* l = dynamic_cast<Model::List*> (list->node());
 			FilePersistence::SystemClipboard clipboard;
-			l->model()->beginModification(l,"paste into list");
+			l->model()->beginModification(l, "paste into list");
 			if (l) l->paste(clipboard, selIndex);
 			l->model()->endModification();
 			target->setUpdateNeeded(Visualization::Item::StandardUpdate);
@@ -73,13 +74,13 @@ void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	{
 		processed = true;
 		FilePersistence::SystemClipboard clipboard;
-		int selIndex = list->focusedElementIndex();
+		int selIndex = list->focusedNodeIndex();
 
 		if (clipboard.numNodes() > 0 && selIndex >= 0)
 		{
 			Model::List* l = dynamic_cast<Model::List*> (list->node());
 			FilePersistence::SystemClipboard clipboard;
-			l->model()->beginModification(l,"paste");
+			l->model()->beginModification(l, "paste into list");
 			if (l) l->paste(clipboard, selIndex+1);
 			l->model()->endModification();
 			target->setUpdateNeeded(Visualization::Item::StandardUpdate);
@@ -94,11 +95,11 @@ void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 
 		int index = list->layout()->correspondingSceneCursor<Visualization::LayoutCursor>()->index();
 		if (event->key() == Qt::Key_Backspace) --index;
-		// Delete the element corresponding to index
 
+		// Delete the node corresponding to index. Make sure not to delete invisible nodes, that this list is currently
+		// not displaying. Check the boundaries on the layout, not on the nodes() array.
 		if (index >=0 && index < list->layout()->length())
-			removeAndSetCursor(list, index);
-
+			removeNodeAndSetCursor(list, index + list->rangeBegin());
 	}
 
 	if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)
@@ -119,19 +120,20 @@ void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 					index = list->layout()->correspondingSceneCursor<Visualization::LayoutCursor>()->index();
 				else
 				{
-					index = list->focusedElementIndex();
+					index = list->focusedItemIndex();
 					if (index >= 0) ++index;
 				}
 
+				// At this point, index indicates where in the LAYOUT we should put the new element.
 				if (index >= 0)
 				{
 					list->node()->model()->beginModification(list->node(), "add new list element");
-					list->node()->insert(index, newElem);
+					list->node()->insert(index + list->rangeBegin(), newElem);
 					list->node()->model()->endModification();
 
 					list->setUpdateNeeded(Visualization::Item::StandardUpdate);
-						target->scene()->addPostEventAction( new SetCursorEvent(list, newElem,
-							createDown ? SetCursorEvent::CursorOnLeft : SetCursorEvent::CursorOnTop));
+					target->scene()->addPostEventAction( new SetCursorEvent(list, newElem,
+						createDown ? SetCursorEvent::CursorOnLeft : SetCursorEvent::CursorOnTop));
 				}
 			}
 		}
@@ -141,66 +143,86 @@ void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	if (!processed) GenericHandler::keyPressEvent(target, event);
 }
 
-void HList::scheduleSetCursor(Visualization::VList* list, Model::Node* listItemToSelect,
+void HList::scheduleSetCursor(Visualization::VList* list, Model::Node* listNodeToSelect,
 		SetCursorEvent::CursorPlacement howToSelectItem)
 {
-	list->scene()->addPostEventAction( new SetCursorEvent(list, listItemToSelect, howToSelectItem));
+	list->scene()->addPostEventAction( new SetCursorEvent(list, listNodeToSelect, howToSelectItem));
 }
 
-void HList::scheduleSetCursor(Visualization::VList* list, int setCursorIndex)
+void HList::scheduleSetCursor(Visualization::VList* list, int setCursorNodeIndex)
 {
-	Q_ASSERT(setCursorIndex >= 0 && setCursorIndex <= list->length());
+	Q_ASSERT(setCursorNodeIndex >= 0 && setCursorNodeIndex <= list->node()->size());
 
-	if (setCursorIndex == 0)
-		list->scene()->addPostEventAction(
-			new SetCursorEvent([=](){return list->length() ? list->at<Visualization::Item>(0) : list;},
-					(list->layout()->isHorizontal() ? SetCursorEvent::CursorLeftOf : SetCursorEvent::CursorAboveOf)));
-	else
-		list->scene()->addPostEventAction(
-			new SetCursorEvent([=](){return list->at<Visualization::Item>(setCursorIndex-1);},
-					(list->layout()->isHorizontal() ? SetCursorEvent::CursorRightOf : SetCursorEvent::CursorBelowOf)));
+	list->scene()->addPostEventAction(new SetCursorEvent(
+		[=](){
+			int setCursorItemIndex = 0;
+			if (setCursorNodeIndex < list->rangeBegin()) setCursorItemIndex = 0;
+			else if (setCursorNodeIndex > list->rangeEnd()) setCursorItemIndex = list->XXlength();
+			else setCursorItemIndex = setCursorNodeIndex - list->rangeBegin();
+
+			if (setCursorItemIndex == 0) return list->XXlength() ? list->itemAt<Visualization::Item>(0) : list;
+			else return list->itemAt<Visualization::Item>(setCursorItemIndex-1);
+		},
+		[=](){
+			int setCursorItemIndex = 0;
+			if (setCursorNodeIndex < list->rangeBegin()) setCursorItemIndex = 0;
+			else if (setCursorNodeIndex > list->rangeEnd()) setCursorItemIndex = list->XXlength();
+			else setCursorItemIndex = setCursorNodeIndex - list->rangeBegin();
+
+			if (setCursorItemIndex == 0)
+				return (list->layout()->isHorizontal() ? SetCursorEvent::CursorLeftOf : SetCursorEvent::CursorAboveOf);
+			else
+				return (list->layout()->isHorizontal() ? SetCursorEvent::CursorRightOf : SetCursorEvent::CursorBelowOf);
+		}
+	));
 }
 
-void HList::removeAndSetCursor(Visualization::VList* list, int removeAt, bool setCursorDown,
+void HList::removeNodeAndSetCursor(Visualization::VList* list, int removeAtNodeIndex, bool setCursorDown,
 				SetCursorEvent::CursorPlacement howToSelectItem)
 {
 	auto node = list->node();
-	Q_ASSERT(removeAt >= 0 && removeAt < node->size());
+	Q_ASSERT(removeAtNodeIndex >= 0 && removeAtNodeIndex < node->size());
+
+	// Do not remove nodes which are not visible in this list.
+	if (removeAtNodeIndex < list->rangeBegin() || removeAtNodeIndex >= list->rangeEnd()) return;
 
 	node->beginModification("Remove list item");
-	node->remove(removeAt);
+	node->remove(removeAtNodeIndex);
 	node->endModification();
 	list->setUpdateNeeded(Visualization::Item::StandardUpdate);
 
-	if (!setCursorDown) --removeAt;
-	if (removeAt >=0 && removeAt < node->size())
-		scheduleSetCursor(list, node->at<Model::Node>(removeAt), howToSelectItem);
+	if (!setCursorDown) --removeAtNodeIndex;
+	if (removeAtNodeIndex >=0 && removeAtNodeIndex < node->size())
+		scheduleSetCursor(list, node->at<Model::Node>(removeAtNodeIndex), howToSelectItem);
 	else
-		scheduleSetCursor(list, removeAt < 0 ? 0 : removeAt);
+		scheduleSetCursor(list, removeAtNodeIndex < 0 ? 0 : removeAtNodeIndex);
 }
 
-void HList::removeAndSetCursor(Visualization::VList* list, int removeAt)
+void HList::removeNodeAndSetCursor(Visualization::VList* list, int removeAtNodeIndex)
 {
 	auto node = list->node();
-	Q_ASSERT(removeAt >= 0 && removeAt < node->size());
+	Q_ASSERT(removeAtNodeIndex >= 0 && removeAtNodeIndex < node->size());
+
+	// Do not remove nodes which are not visible in this list.
+	if (removeAtNodeIndex < list->rangeBegin() || removeAtNodeIndex >= list->rangeEnd()) return;
 
 	node->beginModification("Remove list item");
-	node->remove(removeAt);
+	node->remove(removeAtNodeIndex);
 	node->endModification();
 	list->setUpdateNeeded(Visualization::Item::StandardUpdate);
 
-	scheduleSetCursor(list, removeAt);
+	scheduleSetCursor(list, removeAtNodeIndex);
 }
 
-void HList::removeAndSetCursor(Visualization::VList* list, Model::Node* removeNode, bool setCursorDown,
+void HList::removeNodeAndSetCursor(Visualization::VList* list, Model::Node* removeNode, bool setCursorDown,
 			SetCursorEvent::CursorPlacement howToSelectItem)
 {
-	removeAndSetCursor(list, list->node()->indexOf(removeNode), setCursorDown, howToSelectItem);
+	removeNodeAndSetCursor(list, list->node()->indexOf(removeNode), setCursorDown, howToSelectItem);
 }
 
-void HList::removeAndSetCursor(Visualization::VList* list, Model::Node* removeNode)
+void HList::removeNodeAndSetCursor(Visualization::VList* list, Model::Node* removeNode)
 {
-	removeAndSetCursor(list, list->node()->indexOf(removeNode));
+	removeNodeAndSetCursor(list, list->node()->indexOf(removeNode));
 }
 
 }

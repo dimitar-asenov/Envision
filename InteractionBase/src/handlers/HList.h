@@ -47,26 +47,26 @@ class INTERACTIONBASE_API HList : public GenericHandler
 		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event) override;
 
 
-		virtual void scheduleSetCursor(Visualization::VList* list, Model::Node* listItemToSelect,
+		virtual void scheduleSetCursor(Visualization::VList* list, Model::Node* listNodeToSelect,
 				SetCursorEvent::CursorPlacement howToSelectItem);
 
-		virtual void scheduleSetCursor(Visualization::VList* list, int setCursorIndex);
-
-		/**
-		 * Removes the item at position \a removeAt from \a list and sets the cursor inside the element below or above
-		 * the removed one according to \a setCursorDown and \a howToSelectItem
-		 */
-		virtual void removeAndSetCursor(Visualization::VList* list, int removeAt, bool setCursorDown,
-				SetCursorEvent::CursorPlacement howToSelectItem);
-		void removeAndSetCursor(Visualization::VList* list, Model::Node* removeNode, bool setCursorDown,
-				SetCursorEvent::CursorPlacement howToSelectItem);
+		virtual void scheduleSetCursor(Visualization::VList* list, int setCursorNodeIndex);
 
 		/**
-		 * Removes the item at position \a removeAt from \a list and sets the cursor to the list cursor below or above
-		 * the removed element as indicated by \a setCursorDown
+		 * Removes the node at position \a removeAtNodeIndex from \a list and sets the cursor inside the element below
+		 * or above the removed one according to \a setCursorDown and \a howToSelectItem
 		 */
-		virtual void removeAndSetCursor(Visualization::VList* list, int removeAt);
-		void removeAndSetCursor(Visualization::VList* list, Model::Node* removeNode);
+		virtual void removeNodeAndSetCursor(Visualization::VList* list, int removeAtNodeIndex, bool setCursorDown,
+				SetCursorEvent::CursorPlacement howToSelectItem);
+		void removeNodeAndSetCursor(Visualization::VList* list, Model::Node* removeNode, bool setCursorDown,
+				SetCursorEvent::CursorPlacement howToSelectItem);
+
+		/**
+		 * Removes the node at position \a removeAtNodeIndex from \a list and sets the cursor to the list cursor below
+		 * or above the removed element as indicated by \a setCursorDown
+		 */
+		virtual void removeNodeAndSetCursor(Visualization::VList* list, int removeAtNodeIndex);
+		void removeNodeAndSetCursor(Visualization::VList* list, Model::Node* removeNode);
 
 		static HList* instance();
 

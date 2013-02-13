@@ -43,27 +43,61 @@ class VISUALIZATIONBASE_API VList: public ItemWithNode< LayoutProvider<>, Model:
 	public:
 		VList(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 
-		int length() const;
-		template <class T> T* at(int index);
-		int focusedElementIndex() const;
+		int XXlength() const;
+		template <class T> T* itemAt(int itemIndex);
+		template <class T> T* itemAtNodeIndex(int nodeIndex);
+		int focusedItemIndex() const;
+		int focusedNodeIndex() const;
+		int rangeBegin() const;
+		int rangeEnd() const;
+		bool showsPartialRange() const;
 
 		bool suppressDefaultRemovalHandler() const;
 		void setSuppressDefaultRemovalHandler(bool suppress);
 
 	protected:
-		virtual void determineChildren();
+		virtual void determineChildren() override;
+
+		/**
+		 * Called during determineChildren() in order to determine which nodes should be shown.
+		 *
+		 * The default implementation sets the range to cover all nodes. Override this in a derived class and call
+		 * setRange() in order to control the range of displayed nodes.
+		 */
+		virtual void determineRange();
+		/**
+		 * Sets the range of nodes that should be displayed by this list visualization to start with the node at location
+		 * \a begin and end before the node at location \a end.
+		 *
+		 * VList can display whole lists or a continuous subpart of a list. Use this method to set what part of the nodes
+		 * should be set.
+		 */
+		void setRange(int begin, int end);
 
 	private:
 		typedef ItemWithNode< LayoutProvider<>, Model::List> BaseItemType;
 
-		bool suppressDefaultRemovalHandler_;
+		bool suppressDefaultRemovalHandler_{};
+		int rangeBegin_{};
+		int rangeEnd_{};
 };
 
-inline int VList::length() const { return layout()->length(); }
-inline int VList::focusedElementIndex() const { return layout()->focusedElementIndex(); }
-template <class T> inline T* VList::at(int index) { return layout()->at<T>(index); }
+inline int VList::XXlength() const { return layout()->length(); }
+inline int VList::focusedItemIndex() const { return layout()->focusedElementIndex(); }
+inline int VList::focusedNodeIndex() const { return focusedItemIndex() + rangeBegin_; }
+template <class T> inline T* VList::itemAt(int itemIndex) { return layout()->at<T>(itemIndex); }
+template <class T> inline T* VList::itemAtNodeIndex(int nodeIndex)
+{
+		Q_ASSERT(rangeBegin_ <= nodeIndex);
+		Q_ASSERT(nodeIndex  < rangeEnd_);
+		return itemAt<T>(nodeIndex - rangeBegin_);
+}
 
 inline bool VList::suppressDefaultRemovalHandler() const { return suppressDefaultRemovalHandler_; }
 inline void VList::setSuppressDefaultRemovalHandler(bool suppress) { suppressDefaultRemovalHandler_ = suppress; }
+
+inline int VList::rangeBegin() const { return rangeBegin_; }
+inline int VList::rangeEnd() const { return rangeEnd_; }
+inline bool VList::showsPartialRange() const { return rangeBegin_ != 0 || rangeEnd_ != node()->size();}
 
 }

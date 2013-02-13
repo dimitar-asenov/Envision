@@ -138,13 +138,21 @@ bool StringOffsetProvider::setOffsetInListItem(int& offset, Visualization::VList
 	offset -= prefix.size();
 	QStringList components = StringOffsetProvider::components(list->node());
 
-	for (int i = 0; i<list->length(); ++i)
+	for (int i = 0; i<components.size(); ++i)
 	{
 		if (i>0) offset -= separator.size();
 
 		if (offset <= components[i].size())
 		{
-			if ( setOffsetInItem(offset, list->at<Visualization::Item>(i)) )
+			// If the offset is in a node before any visualized node go to the beginning of the list.
+			if (i < list->rangeBegin() )
+				return list->moveCursor( Visualization::Item::MoveOnPosition, QPoint(0,0));
+
+			// If the offset is in a node after any visualized node go to the end of the list.
+			if (i >= list->rangeEnd() )
+				return list->moveCursor( Visualization::Item::MoveOnPosition, QPoint(list->width()-1, list->height()-1));
+
+			if ( setOffsetInItem(offset, list->itemAt<Visualization::Item>(i - list->rangeBegin())) )
 				return true;
 		}
 		else
@@ -170,6 +178,9 @@ int StringOffsetProvider::listItemOffset(Visualization::VList* list,
 		if (index < 0) result = 0;
 		else
 		{
+			// Adjust for the range but only if the cursor is inside the list
+			index += list->rangeBegin();
+
 			if (index > components.size())
 			{
 				result += postfix.size();
@@ -186,13 +197,14 @@ int StringOffsetProvider::listItemOffset(Visualization::VList* list,
 	}
 	else
 	{
-		int focused = list->focusedElementIndex();
-		Q_ASSERT(focused >= 0);
+		int focusedNodeIndex = list->focusedNodeIndex();
+		Q_ASSERT(focusedNodeIndex >= 0);
 
-		for(int i = 0; i<focused; ++i)
+		for(int i = 0; i<focusedNodeIndex; ++i)
 			result += components[i].size() + separator.size();
 
-		result += itemOffset(list->at<Visualization::Item>(focused), components[focused].length(), key);
+		result += itemOffset(list->itemAt<Visualization::Item>(list->focusedItemIndex()),
+				components[focusedNodeIndex].length(), key);
 	}
 
 	return result;
