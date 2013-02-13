@@ -52,6 +52,9 @@ VMethod::VMethod(Item* parent, NodeType* node, const StyleType* style) :
 	icon_ = new Static(header_, &style->icon());
 	header_->append(icon_);
 
+	results_ =new VList(header_, node->results(), &style->results());
+	header_->append(results_);
+
 	name_ =new VText(header_, node->nameNode(), &style->nameDefault());
 	header_->append(name_);
 	setDefaultMoveCursorProxy(name_);
@@ -61,10 +64,6 @@ VMethod::VMethod(Item* parent, NodeType* node, const StyleType* style) :
 
 	arguments_ =new VList(header_, node->arguments(), &style->arguments());
 	header_->append(arguments_);
-
-	layout()->setLeft(true);
-	results_ =new VList(layout()->left(), node->results(), &style->results());
-	layout()->left()->setFirst(results_);
 
 	content_ = new SequentialLayout(layout(), &style->content());
 	layout()->setContent(content_);
@@ -113,10 +112,11 @@ void VMethod::determineChildren()
 	}
 	else throw OOVisualizationException("Unknown static type in VMethod::determineChildren");
 
-	header_->synchronizeMid(name_, node()->nameNode(), nameStyle, 1);
-	header_->synchronizeMid(typeArguments_, node()->typeArguments(), &style()->typeArguments(),2);
+
+	header_->synchronizeMid(results_, node()->results(), &style()->results(), 1);
+	header_->synchronizeMid(name_, node()->nameNode(), nameStyle, results_ ? 2 : 1);
+	header_->synchronizeMid(typeArguments_, node()->typeArguments(), &style()->typeArguments(), results_ ? 3 : 2);
 	header_->synchronizeLast(arguments_, node()->arguments(), &style()->arguments());
-	layout()->left()->synchronizeFirst(results_, node()->results(), &style()->results());
 
 	content_->synchronizeLast(body_, node()->items(), &style()->body());
 	content_->synchronizeFirst(addons_, !addOnItems().isEmpty(), &style()->addons());
