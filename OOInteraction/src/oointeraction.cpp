@@ -87,6 +87,8 @@
 #include "string_offset_providers/CompoundObjectStringOffsetProvider.h"
 #include "string_offset_providers/KeywordMethodCallStringOffsetProvider.h"
 
+#include "customization/MethodDefinitionVisitor.h"
+
 #include "OOVisualization/src/allOOVisualizations.h"
 
 #include "OOModel/src/allOOModelNodes.h"
@@ -283,7 +285,17 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 
 	initializeActions();
 
-
+	// Initialize customization support
+	auto customizationGroup = new Visualization::VisualizationGroup();
+	customizationGroup->setConditionFunction([=](Visualization::Item*, Model::Node* node) -> bool
+	{
+		auto call = static_cast<OOModel::MethodCallExpression*>(node);
+		if (call->methodDefinition()) return true;
+		return false;
+	});
+	Visualization::Scene::defaultRenderer()->registerGroup(
+		OOModel::MethodCallExpression::typeIdStatic(), customizationGroup);
+	MethodDefinitionVisitor::init(customizationGroup);
 
 	return true;
 }

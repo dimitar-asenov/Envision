@@ -49,6 +49,7 @@
 
 #include "OOInteraction/src/expression_editor/OOExpressionBuilder.h"
 #include "OOInteraction/src/expression_editor/operators/CommandDescriptor.h"
+#include "OOInteraction/src/customization/MethodDefinitionVisitor.h"
 
 using namespace OOModel;
 using namespace Visualization;
@@ -69,119 +70,144 @@ Library* createContractsLibrary()
 	Method* req = new Method("Requires", Visibility::PUBLIC, StorageSpecifier::CLASS_VARIABLE);
 	contract->methods()->append(req);
 	req->arguments()->append( new FormalArgument("precondition", new PrimitiveTypeExpression(PrimitiveType::BOOLEAN)) );
+	req->annotations()->append(new ExpressionStatement(
+		OOExpressionBuilder::getOOExpression("EnvisionKeywordVisualization(\"contract_requires\")")));
+	req->annotations()->append(new ExpressionStatement(
+		OOExpressionBuilder::getOOExpression("EnvisionShortcut(\"requires\")")));
 	req->extension<Position>()->setY(0);
 
 	Method* ens = new Method("Ensures", Visibility::PUBLIC, StorageSpecifier::CLASS_VARIABLE);
 	contract->methods()->append(ens);
 	ens->arguments()->append( new FormalArgument("postcondition", new PrimitiveTypeExpression(PrimitiveType::BOOLEAN)) );
-	ens->extension<Position>()->setY(60);
+	ens->annotations()->append(new ExpressionStatement(
+			OOExpressionBuilder::getOOExpression("EnvisionKeywordVisualization(\"contract_ensures\")")));
+	ens->annotations()->append(new ExpressionStatement(
+		OOExpressionBuilder::getOOExpression("EnvisionShortcut(\"ensures\")")));
+	ens->extension<Position>()->setY(120);
 
 	Method* res = new Method("Result", Visibility::PUBLIC, StorageSpecifier::CLASS_VARIABLE);
 	contract->methods()->append(res);
 	res->typeArguments()->append( new FormalTypeArgument("T") );
-	res->extension<Position>()->setY(120);
+	res->annotations()->append(new ExpressionStatement(
+		OOExpressionBuilder::getOOExpression("EnvisionKeywordVisualization(\"contract_result\")")));
+	res->annotations()->append(new ExpressionStatement(
+		OOExpressionBuilder::getOOExpression("EnvisionShortcut(\"result\",1)")));
+	res->extension<Position>()->setY(240);
 
 	Method* old = new Method("OldValue", Visibility::PUBLIC, StorageSpecifier::CLASS_VARIABLE);
 	contract->methods()->append(old);
 	old->typeArguments()->append(new FormalTypeArgument("T"));
 	old->arguments()->append( new FormalArgument("variable", new ReferenceExpression("T")) );
-	old->extension<Position>()->setY(180);
+	old->annotations()->append(new ExpressionStatement(
+		OOExpressionBuilder::getOOExpression("EnvisionKeywordVisualization(\"contract_old\")")));
+	old->annotations()->append(new ExpressionStatement(
+		OOExpressionBuilder::getOOExpression("EnvisionShortcut(\"old\")")));
+	old->extension<Position>()->setY(360);
 
 	Method* contractClass = new Method("ContractClass", Visibility::PUBLIC, StorageSpecifier::CLASS_VARIABLE);
 	contract->methods()->append(contractClass);
 	contractClass->arguments()->append( new FormalArgument("class", new ReferenceExpression("Class")) );
-	contractClass->extension<Position>()->setY(240);
+	contractClass->extension<Position>()->setY(480);
 
 	Method* contractClassFor = new Method("ContractClassFor", Visibility::PUBLIC, StorageSpecifier::CLASS_VARIABLE);
 	contract->methods()->append(contractClassFor);
 	contractClassFor->arguments()->append( new FormalArgument("class", new ReferenceExpression("Class")) );
-	contractClassFor->extension<Position>()->setY(300);
+	contractClassFor->extension<Position>()->setY(600);
 
 	Method* out = new Method("ValueAtReturn", Visibility::PUBLIC, StorageSpecifier::CLASS_VARIABLE);
 	contract->methods()->append(out);
 	out->typeArguments()->append( new FormalTypeArgument("T") );
 	out->arguments()->append( new FormalArgument("argument", new ReferenceExpression("T")) );
-	out->extension<Position>()->setY(360);
+	out->annotations()->append(new ExpressionStatement(
+				OOExpressionBuilder::getOOExpression("EnvisionKeywordVisualization(\"contract_out\")")));
+	out->extension<Position>()->setY(720);
 
 	ValueAtReturnVisitor::setMethods(ens, out);
 
+	// DO NOT DELETE THE COMMENTED CODE BELOW
+	// It can be used as a good example of how to do visualization groups with a condition.
+	// Plus it is a nice example of what code was substituted by just using annotations within the code.
+
+
+
+
 	// Register a group that holds the guard condition: are we visualizing a method belonging to the Contract class?
-	auto g = new VisualizationGroup();
-	g->setConditionFunction([=](Visualization::Item*, Model::Node* node) -> bool
-	{
-		auto call = static_cast<OOModel::MethodCallExpression*>(node);
-		if (auto def = call->methodDefinition())
-		{
-			auto* p = def->parent();
-			while (p)
-			{
-				if (p == contract) return true;
-				p = p->parent();
-			}
-		}
-
-		return false;
-	});
-
-	// Register Visualizations in the group
-	g->addVisualization([](Visualization::Item* parent, Model::Node* node) -> Item*
-			{
-				return new VKeywordMethodCall(parent, static_cast<MethodCallExpression*> (node),
-						VKeywordMethodCall::itemStyles().get("requires"));
-			},
-			[=](Visualization::Item*, Model::Node* node) -> bool
-			{
-				auto call = static_cast<OOModel::MethodCallExpression*>(node);
-				return call->methodDefinition() == req;
-			});
-	g->addVisualization([](Visualization::Item* parent, Model::Node* node) -> Item*
-			{
-				return new VKeywordMethodCall(parent, static_cast<MethodCallExpression*> (node),
-						VKeywordMethodCall::itemStyles().get("ensures"));
-			},
-			[=](Visualization::Item*, Model::Node* node) -> bool
-			{
-				auto call = static_cast<OOModel::MethodCallExpression*>(node);
-				return call->methodDefinition() == ens;
-			});
-	g->addVisualization([](Visualization::Item* parent, Model::Node* node) -> Item*
-			{
-				return new VKeywordMethodCall(parent, static_cast<MethodCallExpression*> (node),
-						VKeywordMethodCall::itemStyles().get("old"));
-			},
-			[=](Visualization::Item*, Model::Node* node) -> bool
-			{
-				auto call = static_cast<OOModel::MethodCallExpression*>(node);
-				return call->methodDefinition() == old;
-			});
-	g->addVisualization([](Visualization::Item* parent, Model::Node* node) -> Item*
-			{
-				return new VKeywordMethodCall(parent, static_cast<MethodCallExpression*> (node),
-						VKeywordMethodCall::itemStyles().get("result"));
-			},
-			[=](Visualization::Item*, Model::Node* node) -> bool
-			{
-				auto call = static_cast<OOModel::MethodCallExpression*>(node);
-				return call->methodDefinition() == res;
-			});
-	g->addVisualization([](Visualization::Item* parent, Model::Node* node) -> Item*
-			{
-				return new VKeywordMethodCall(parent, static_cast<MethodCallExpression*> (node),
-						VKeywordMethodCall::itemStyles().get("out"));
-			},
-			[=](Visualization::Item*, Model::Node* node) -> bool
-			{
-				auto call = static_cast<OOModel::MethodCallExpression*>(node);
-				return call->methodDefinition() == out;
-			});
-
-	Scene::defaultRenderer()->registerGroup(MethodCallExpression::typeIdStatic(), g);
-
-	// Register custom input
-	CommandDescriptor::registerCommand(new CreateMethodCall("requires", "CodeContracts.Contract.Requires"));
-	CommandDescriptor::registerCommand(new CreateMethodCall("ensures", "CodeContracts.Contract.Ensures"));
-	CommandDescriptor::registerCommand(new CreateMethodCall("old", "CodeContracts.Contract.OldValue"));
-	CommandDescriptor::registerCommand(new CreateMethodCall("result", "CodeContracts.Contract.Result",1));
+//	auto g = new VisualizationGroup();
+//	g->setConditionFunction([=](Visualization::Item*, Model::Node* node) -> bool
+//	{
+//		auto call = static_cast<OOModel::MethodCallExpression*>(node);
+//		if (auto def = call->methodDefinition())
+//		{
+//			auto* p = def->parent();
+//			while (p)
+//			{
+//				if (p == contract) return true;
+//				p = p->parent();
+//			}
+//		}
+//
+//		return false;
+//	});
+//
+//	// Register Visualizations in the group
+//	g->addVisualization([](Visualization::Item* parent, Model::Node* node) -> Item*
+//			{
+//				return new VKeywordMethodCall(parent, static_cast<MethodCallExpression*> (node),
+//						VKeywordMethodCall::itemStyles().get("requires"));
+//			},
+//			[=](Visualization::Item*, Model::Node* node) -> bool
+//			{
+//				auto call = static_cast<OOModel::MethodCallExpression*>(node);
+//				return call->methodDefinition() == req;
+//			});
+//	g->addVisualization([](Visualization::Item* parent, Model::Node* node) -> Item*
+//			{
+//				return new VKeywordMethodCall(parent, static_cast<MethodCallExpression*> (node),
+//						VKeywordMethodCall::itemStyles().get("ensures"));
+//			},
+//			[=](Visualization::Item*, Model::Node* node) -> bool
+//			{
+//				auto call = static_cast<OOModel::MethodCallExpression*>(node);
+//				return call->methodDefinition() == ens;
+//			});
+//	g->addVisualization([](Visualization::Item* parent, Model::Node* node) -> Item*
+//			{
+//				return new VKeywordMethodCall(parent, static_cast<MethodCallExpression*> (node),
+//						VKeywordMethodCall::itemStyles().get("old"));
+//			},
+//			[=](Visualization::Item*, Model::Node* node) -> bool
+//			{
+//				auto call = static_cast<OOModel::MethodCallExpression*>(node);
+//				return call->methodDefinition() == old;
+//			});
+//	g->addVisualization([](Visualization::Item* parent, Model::Node* node) -> Item*
+//			{
+//				return new VKeywordMethodCall(parent, static_cast<MethodCallExpression*> (node),
+//						VKeywordMethodCall::itemStyles().get("result"));
+//			},
+//			[=](Visualization::Item*, Model::Node* node) -> bool
+//			{
+//				auto call = static_cast<OOModel::MethodCallExpression*>(node);
+//				return call->methodDefinition() == res;
+//			});
+//	g->addVisualization([](Visualization::Item* parent, Model::Node* node) -> Item*
+//			{
+//				return new VKeywordMethodCall(parent, static_cast<MethodCallExpression*> (node),
+//						VKeywordMethodCall::itemStyles().get("out"));
+//			},
+//			[=](Visualization::Item*, Model::Node* node) -> bool
+//			{
+//				auto call = static_cast<OOModel::MethodCallExpression*>(node);
+//				return call->methodDefinition() == out;
+//			});
+//
+//	Scene::defaultRenderer()->registerGroup(MethodCallExpression::typeIdStatic(), g);
+//
+//	// Register custom input
+//	CommandDescriptor::registerCommand(new CreateMethodCall("requires", "CodeContracts.Contract.Requires"));
+//	CommandDescriptor::registerCommand(new CreateMethodCall("ensures", "CodeContracts.Contract.Ensures"));
+//	CommandDescriptor::registerCommand(new CreateMethodCall("old", "CodeContracts.Contract.OldValue"));
+//	CommandDescriptor::registerCommand(new CreateMethodCall("result", "CodeContracts.Contract.Result",1));
 
 	// Register method add-ons
 	VMethod::addAddOn( new InterfaceContractsVMethodAddOn(contractClass) );
@@ -344,6 +370,9 @@ TEST(ContractsLibrary, ContractsLibraryTest)
 
 	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(prj));
 	VisualizationManager::instance().mainScene()->listenToModel(model);
+
+	MethodDefinitionVisitor methodVisitor;
+	methodVisitor.visit(prj);
 
 	CHECK_CONDITION(prj != nullptr);
 }
