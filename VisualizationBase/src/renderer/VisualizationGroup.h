@@ -40,8 +40,7 @@ class Item;
 class VISUALIZATIONBASE_API VisualizationGroup {
 
 	public:
-
-		typedef Item* (*ItemConstructor)(Item* parent, Model::Node* node);
+		typedef std::function<Item* (Item* parent, Model::Node* node)> ItemConstructor;
 		typedef std::function<bool (Item* parent, Model::Node* node)> ConditionFunction;
 
 		VisualizationGroup();
