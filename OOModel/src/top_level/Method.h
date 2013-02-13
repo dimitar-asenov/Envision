@@ -65,6 +65,7 @@ class OOMODEL_API Method : public Model::ExtendableNode
 
 		virtual bool definesSymbol() const;
 		virtual const QString& symbolName() const;
+		QString fullyQualifiedName() const;
 		bool isGeneric();
 
 		virtual QList<Node*> findSymbols(const QRegExp& symbolExp, Node* source, FindSymbolMode mode,

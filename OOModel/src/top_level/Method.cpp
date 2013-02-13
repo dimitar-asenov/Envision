@@ -78,6 +78,25 @@ const QString& Method::symbolName() const
 	return name();
 }
 
+QString Method::fullyQualifiedName() const
+{
+	const Model::Node* n = this;
+	QString result;
+
+	// We omit the symbol of the top project name
+	while (n && n->parent())
+	{
+		if (n->definesSymbol())
+		{
+			if (result.isEmpty()) result = n->symbolName();
+			else result.prepend(n->symbolName() +".");
+		}
+		n = n->parent();
+	}
+
+	return result;
+}
+
 QList<Model::Node*> Method::findSymbols(const QRegExp& symbolExp, Model::Node* source, FindSymbolMode mode,
 		bool exhaustAllScopes)
 {
