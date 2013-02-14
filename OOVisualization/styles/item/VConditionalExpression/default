@@ -2,11 +2,17 @@
 <style prototypes="item/Item/default">
 	<layout prototypes="layout/SequentialLayout/default" />
 	<preSymbol prototypes="item/Static/default" />
-	<inSymbol prototypes="icon/SVGIcon/default">
-		<filename>styles/icon/if.svg</filename>
-		<width>15</width>
-		<height>15</height>
+	<inSymbol prototypes="item/Symbol/default">
+		<font>
+			<weight>99</weight>
+		</font>
+		<symbol> ? </symbol>
 	</inSymbol>
-	<in2Symbol prototypes="item/Symbol/default"><symbol>:</symbol></in2Symbol>
+	<in2Symbol prototypes="item/Symbol/default">
+		<font>
+			<weight>99</weight>
+		</font>
+		<symbol> : </symbol>
+	</in2Symbol>
 	<postSymbol prototypes="item/Static/default" />
 </style>
