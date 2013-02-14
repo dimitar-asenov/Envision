@@ -61,7 +61,7 @@ namespace ContractsLibrary {
 Library* createContractsLibrary()
 {
 	Library* lib = new Library("CodeContracts");
-	lib->extension<Position>()->setX(1200);
+	lib->extension<Position>()->setX(1260);
 
 	Class* contract = new Class("Contract");
 	lib->classes()->append(contract);
@@ -262,19 +262,58 @@ Class* createDerivedClass()
 	travel->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
 			"CodeContracts.Contract.Requires(numPassengers>=0)")));
 
-	car->extension<Position>()->setY(180);
+	car->extension<Position>()->setY(200);
 
 	return car;
 }
 
-Class* createMinMax()
+Class* createInterface()
 {
-	Class* minMaxClass = new Class("MinMax", Visibility::PUBLIC);
+	Class* interface = new Class("ICalc", Visibility::PUBLIC);
+	interface->annotations()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
+			"CodeContracts.Contract.ContractClass(ICalcContracts)")));
+
+	auto *op = new Method("op", Visibility::PUBLIC);
+	interface->methods()->append(op);
+	op->arguments()->append( new FormalArgument("x", new PrimitiveTypeExpression(PrimitiveType::INT)) );
+	op->arguments()->append( new FormalArgument("y", new PrimitiveTypeExpression(PrimitiveType::INT)) );
+	op->results()->append( new FormalResult(QString(), new PrimitiveTypeExpression(PrimitiveType::INT)) );
+
+	interface->extension<Position>()->setX(420);
+
+	return interface;
+}
+
+Class* createInterfaceContracts()
+{
+	Class* calcContracts = new Class("ICalcContracts", Visibility::PUBLIC);
+	calcContracts->annotations()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
+				"CodeContracts.Contract.ContractClassFor(ICalc)")));
+	calcContracts->baseClasses()->append(OOExpressionBuilder::getOOExpression("ICalc"));
+
+	auto *op = new Method("op", Visibility::PUBLIC);
+	calcContracts->methods()->append(op);
+	op->arguments()->append( new FormalArgument("x", new PrimitiveTypeExpression(PrimitiveType::INT)) );
+	op->arguments()->append( new FormalArgument("y", new PrimitiveTypeExpression(PrimitiveType::INT)) );
+	op->results()->append( new FormalResult(QString(), new PrimitiveTypeExpression(PrimitiveType::INT)) );
+	op->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
+				"CodeContracts.Contract.Requires(x!=y)")));
+
+	calcContracts->extension<Position>()->setX(420);
+	calcContracts->extension<Position>()->setY(180);
+
+	return calcContracts;
+}
+
+Class* createPaper()
+{
+	Class* paperClass = new Class("Paper", Visibility::PUBLIC);
+	paperClass->extension<Position>()->setX(860);
 
 	auto *minMax = new Method("minMax", Visibility::PUBLIC);
-	minMaxClass->methods()->append(minMax);
-	minMax->arguments()->append( new FormalArgument("x", new PrimitiveTypeExpression(PrimitiveType::INT)) );
-	minMax->arguments()->append( new FormalArgument("y", new PrimitiveTypeExpression(PrimitiveType::INT)) );
+	paperClass->methods()->append(minMax);
+	minMax->arguments()->append( new FormalArgument("a", new PrimitiveTypeExpression(PrimitiveType::INT)) );
+	minMax->arguments()->append( new FormalArgument("b", new PrimitiveTypeExpression(PrimitiveType::INT)) );
 	minMax->arguments()->append(
 			new FormalArgument("min", new PrimitiveTypeExpression(PrimitiveType::INT), FormalArgument::OUT) );
 	minMax->arguments()->append(
@@ -291,65 +330,34 @@ Class* createMinMax()
 	i->thenBranch()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("min=b")));
 	i->elseBranch()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("max=b")));
 	i->elseBranch()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("min=a")));
-
-	minMaxClass->extension<Position>()->setX(820);
-
-	return minMaxClass;
-}
-
-Class* createInterface()
-{
-	Class* interface = new Class("ICalc", Visibility::PUBLIC);
-	interface->annotations()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
-			"CodeContracts.Contract.ContractClass(ICalcContracts)")));
+	minMax->extension<Position>()->setY(0);
 
 	auto *fact = new Method("factorial", Visibility::PUBLIC);
-	interface->methods()->append(fact);
-	fact->arguments()->append( new FormalArgument("a", new PrimitiveTypeExpression(PrimitiveType::INT)) );
-	fact->results()->append( new FormalResult(QString(), new PrimitiveTypeExpression(PrimitiveType::INT)) );
-
-	auto *div = new Method("divide", Visibility::PUBLIC);
-	interface->methods()->append(div);
-	div->arguments()->append( new FormalArgument("x", new PrimitiveTypeExpression(PrimitiveType::DOUBLE)) );
-	div->arguments()->append( new FormalArgument("divisor", new PrimitiveTypeExpression(PrimitiveType::DOUBLE)) );
-	div->results()->append( new FormalResult(QString(), new PrimitiveTypeExpression(PrimitiveType::DOUBLE)) );
-	div->extension<Position>()->setY(120);
-
-	interface->extension<Position>()->setX(380);
-
-	return interface;
-}
-
-Class* createInterfaceContracts()
-{
-	Class* calcContracts = new Class("ICalcContracts", Visibility::PUBLIC);
-	calcContracts->annotations()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
-				"CodeContracts.Contract.ContractClassFor(ICalc)")));
-	calcContracts->baseClasses()->append(OOExpressionBuilder::getOOExpression("ICalc"));
-
-	auto *fact = new Method("factorial", Visibility::PUBLIC);
-	calcContracts->methods()->append(fact);
-	fact->arguments()->append( new FormalArgument("a", new PrimitiveTypeExpression(PrimitiveType::INT)) );
+	paperClass->methods()->append(fact);
+	fact->arguments()->append( new FormalArgument("x", new PrimitiveTypeExpression(PrimitiveType::INT)) );
 	fact->results()->append( new FormalResult(QString(), new PrimitiveTypeExpression(PrimitiveType::INT)) );
 	fact->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
-				"CodeContracts.Contract.Requires(a>=0)")));
+				"CodeContracts.Contract.Requires(x>=0)")));
 	fact->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
 			"CodeContracts.Contract.Ensures(CodeContracts.Contract.Result<int>()>0)")));
+	fact->items()->append(new ReturnStatement( OOExpressionBuilder::getOOExpression(
+				"x<=1?1:x*factorial(x-1)")));
+	fact->extension<Position>()->setY(180);
 
-	auto *div = new Method("divide", Visibility::PUBLIC);
-	calcContracts->methods()->append(div);
-	div->arguments()->append( new FormalArgument("x", new PrimitiveTypeExpression(PrimitiveType::DOUBLE)) );
-	div->arguments()->append( new FormalArgument("divisor", new PrimitiveTypeExpression(PrimitiveType::DOUBLE)) );
-	div->results()->append( new FormalResult(QString(), new PrimitiveTypeExpression(PrimitiveType::DOUBLE)) );
-	div->extension<Position>()->setY(100);
-	div->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
-				"CodeContracts.Contract.Requires(divisor!=0)")));
+	auto *app = new Method("append", Visibility::PUBLIC);
+	paperClass->methods()->append(app);
+	app->arguments()->append( new FormalArgument("x", new PrimitiveTypeExpression(PrimitiveType::INT)) );
+	app->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
+				"CodeContracts.Contract.Ensures(elements[size-1]==x)")));
+	app->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
+			"CodeContracts.Contract.Ensures(CodeContracts.Contract.OldValue(size)+1)")));
+	app->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
+				"elements[size++]=x")));
+	app->extension<Position>()->setY(320);
 
-	calcContracts->extension<Position>()->setX(380);
-	calcContracts->extension<Position>()->setY(340);
-
-	return calcContracts;
+	return paperClass;
 }
+
 TEST(ContractsLibrary, ContractsLibraryTest)
 {
 	////////////////////////////////////////////////// Create Model
@@ -363,7 +371,7 @@ TEST(ContractsLibrary, ContractsLibraryTest)
 	prj->libraries()->append(createContractsLibrary());
 	prj->classes()->append( createBaseClass());
 	prj->classes()->append( createDerivedClass() );
-	prj->classes()->append( createMinMax() );
+	prj->classes()->append( createPaper() );
 	prj->classes()->append( createInterface() );
 	prj->classes()->append( createInterfaceContracts() );
 	model->endModification();

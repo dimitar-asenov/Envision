@@ -1,13 +1,6 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/VList/default">
-	<shape prototypes="shape/SvgShape/default">
-		SvgShape
-		<filename>styles/images/contract.svg</filename>
-		<topContentMarginFraction>0.15</topContentMarginFraction>
-		<bottomContentMarginFraction>0.15</bottomContentMarginFraction>
-		<leftContentMarginFraction>0.1</leftContentMarginFraction>
-		<rightContentMarginFraction>0.2</rightContentMarginFraction>
-	</shape>
+	<shape />
 	<itemsStyle prototypes="layout/SequentialLayout/default">
 		<alignment>1</alignment>
 		<direction>2</direction>
