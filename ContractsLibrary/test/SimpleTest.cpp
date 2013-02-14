@@ -310,7 +310,7 @@ Class* createPaper()
 	Class* paperClass = new Class("Paper", Visibility::PUBLIC);
 	paperClass->extension<Position>()->setX(860);
 
-	auto *minMax = new Method("minMax", Visibility::PUBLIC);
+	auto *minMax = new Method("min_max", Visibility::PUBLIC);
 	paperClass->methods()->append(minMax);
 	minMax->arguments()->append( new FormalArgument("a", new PrimitiveTypeExpression(PrimitiveType::INT)) );
 	minMax->arguments()->append( new FormalArgument("b", new PrimitiveTypeExpression(PrimitiveType::INT)) );
@@ -350,7 +350,7 @@ Class* createPaper()
 	app->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
 				"CodeContracts.Contract.Ensures(elements[size-1]==x)")));
 	app->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
-			"CodeContracts.Contract.Ensures(CodeContracts.Contract.OldValue(size)+1)")));
+			"CodeContracts.Contract.Ensures(size==CodeContracts.Contract.OldValue(size)+1)")));
 	app->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
 				"elements[size++]=x")));
 	app->extension<Position>()->setY(320);
