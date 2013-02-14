@@ -32,6 +32,7 @@
 #include "OOModel/src/top_level/Method.h"
 #include "OOModel/src/expressions/MethodCallExpression.h"
 #include "OOModel/src/expressions/StringLiteral.h"
+#include "OOModel/src/expressions/IntegerLiteral.h"
 #include "OOModel/src/statements/ExpressionStatement.h"
 #include "VisualizationBase/src/renderer/VisualizationGroup.h"
 
@@ -80,8 +81,12 @@ Model::Node* MethodDefinitionVisitor::visitMethod(MethodDefinitionVisitor*, OOMo
 				{
 					if (auto keyword = dynamic_cast<OOModel::StringLiteral*>(call->arguments()->first()))
 					{
-						CommandDescriptor::registerCommand(
+						if (call->arguments()->size() == 1)
+							CommandDescriptor::registerCommand(
 								new CreateMethodCall(keyword->value(), met->fullyQualifiedName()));
+						else if (auto numArgs = dynamic_cast<OOModel::IntegerLiteral*>(call->arguments()->last()))
+								CommandDescriptor::registerCommand(
+									new CreateMethodCall(keyword->value(), met->fullyQualifiedName(), numArgs->value()));
 					}
 				}
 			}
