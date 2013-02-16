@@ -1,6 +1,10 @@
 TARGET = selftest
 include(../Core/common_plugin.pri)
 
+TEMPLATE=lib
+
+CONFIG+=debug_and_release
+
 DEFINES += SELFTEST_LIBRARY
 QT = core
 
