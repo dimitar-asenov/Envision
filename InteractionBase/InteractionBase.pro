@@ -1,10 +1,5 @@
 TARGET = interactionbase
 include(../Core/common_plugin.pri)
-
-TEMPLATE=lib
-
-CONFIG+=debug_and_release
-
 DEFINES += INTERACTIONBASE_LIBRARY
 win32:LIBS += -llogger \
     -lselftest \

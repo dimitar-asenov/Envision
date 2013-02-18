@@ -1,10 +1,5 @@
 TARGET = visualizationbase
 include(../Core/common_plugin.pri)
-
-TEMPLATE=lib
-
-CONFIG+=debug_and_release
-
 DEFINES += VISUALIZATIONBASE_LIBRARY
 win32:DEFINES += WIN32 # needed for lpsolve
 win32:LIBS += -llogger \
