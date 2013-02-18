@@ -1,10 +1,5 @@
 TARGET = logger
 include(../Core/common_plugin.pri)
-
-TEMPLATE=lib
-
-CONFIG+=debug_and_release
-
 DEFINES += LOGGER_LIBRARY
 QT = core
 

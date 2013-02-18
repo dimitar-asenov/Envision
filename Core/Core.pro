@@ -1,7 +1,6 @@
 include(common.pri)
 
 TEMPLATE = app
-CONFIG+=debug_and_release
 TARGET = Envision
 target.path = $$BUILD_DIR
 INSTALLS += target

@@ -1,10 +1,5 @@
 TARGET = oomodel
 include(../Core/common_plugin.pri)
-
-TEMPLATE=lib
-
-CONFIG+=debug_and_release
-
 DEFINES += OOMODEL_LIBRARY
 win32:LIBS += -llogger \
     -lselftest \
