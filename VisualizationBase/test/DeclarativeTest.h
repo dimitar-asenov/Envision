@@ -48,6 +48,7 @@ class DeclarativeTest : public DeclarativeItem<DeclarativeTest> {
 	public:
 		DeclarativeTest(Item* parent, TestNodes::BinaryNode* node);
 		static void initializeForms();
+		virtual int determineForm() override;
 
 	private:
 		typedef DeclarativeItem<DeclarativeTest> BaseItemType;

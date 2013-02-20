@@ -43,43 +43,67 @@ DeclarativeTest::DeclarativeTest(Item* parent, TestNodes::BinaryNode* node) :
 
 void DeclarativeTest::initializeForms()
 {
-	// Test VisualizationItemWrapperElement
-//	addForm(item<Symbol, I>(&I::testItem_, [](I*){return itemStyles().get();}));
+	// Test 0: VisualizationItemWrapperElement
+	addForm(item<Symbol, I>(&I::testItem_, [](I*){return itemStyles().get();}));
 
-	// Test NodeItemWrapperElement
-//	addForm(item<I>(&I::testNodeItemGeneral_, [](I* v){return v->testNode_;}));
+	// Test 1: NodeItemWrapperElement
+	addForm(item<I>(&I::testNodeItemGeneral_, [](I* v){return v->testNode_;}));
 
-	// Test NodeWithVisualizationItemWrapperElement
-//	addForm(item<VExtendable,I>(&I::testNodeItem_, [](I* v){return v->testNode_;},
-//											[](I*){return VExtendable::itemStyles().get();}));
+	// Test 2: NodeWithVisualizationItemWrapperElement
+	addForm(item<VExtendable,I>(&I::testNodeItem_, [](I* v){return v->testNode_;},
+											[](I*){return VExtendable::itemStyles().get();}));
 
-	// Test GridLayoutElement
-//	addForm((new GridLayoutElement(3, 2))
-//				->setVerticalAlignment(LayoutStyle::Alignment::Center)
-//				->setHorizontalAlignment(LayoutStyle::Alignment::Right)
-//				->addElement(item<Symbol, I>(&I::testItem_, [](I*){return itemStyles().get();}), 0, 0)
-//				->addElement(item<VExtendable,I>(&I::testNodeItem_, [](I* v){return v->testNode_;},
-//															[](I*){return VExtendable::itemStyles().get();}), 0, 1)
-//				->addElement((new GridLayoutElement(2, 2))
-//									->addElement(item<Symbol, I>(&I::testItem2_, [](I*){return itemStyles().get();}), 0, 0)
-//									->addElement(item<Symbol, I>(&I::testItem3_, [](I*){return itemStyles().get();}), 1, 1),
-//									1, 1)
-//				->addElement(item<Symbol, I>(&I::testItem4_, [](I*){return itemStyles().get();}), 2, 0));
+	// Test 3: GridLayoutElement
+	addForm((new GridLayoutElement())
+				->setVerticalAlignment(LayoutStyle::Alignment::Center)
+				->setHorizontalAlignment(LayoutStyle::Alignment::Right)
+				->addElement(item<Symbol, I>(&I::testItem_, [](I*){return itemStyles().get();}), 0, 0)
+				->addElement(item<VExtendable,I>(&I::testNodeItem_, [](I* v){return v->testNode_;},
+															[](I*){return VExtendable::itemStyles().get();}), 0, 1)
+				->addElement((new GridLayoutElement())
+									->addElement(item<Symbol, I>(&I::testItem2_, [](I*){return itemStyles().get();}), 0, 0)
+									->addElement(item<Symbol, I>(&I::testItem3_, [](I*){return itemStyles().get();}), 1, 1),
+									1, 1)
+				->addElement(item<Symbol, I>(&I::testItem4_, [](I*){return itemStyles().get();}), 2, 0));
 
-	// Test GridLayoutElement with merged cells
-	addForm((new GridLayoutElement(3, 2))
+	// Test 4: GridLayoutElement with merged cells
+	addForm((new GridLayoutElement())
 				->setVerticalAlignment(LayoutStyle::Alignment::Center)
 				->setHorizontalAlignment(LayoutStyle::Alignment::Center)
 				->setColumnStretchFactor(1, 1)
 				->setRowStretchFactors(1)
-				->addElement((new GridLayoutElement(3, 1))
+				->addElement((new GridLayoutElement())
+									->setHorizontalSpacing(10)
 									->addElement(item<Symbol, I>(&I::testItem_, [](I*){return itemStyles().get();}), 0, 0)
 									->addElement(item<Symbol, I>(&I::testItem2_, [](I*){return itemStyles().get();}), 1, 0)
 									->addElement(item<Symbol, I>(&I::testItem3_, [](I*){return itemStyles().get();}), 2, 0),
 									0, 0, 2, 1)
 				->addElement(item<VExtendable,I>(&I::testNodeItem_, [](I* v){return v->testNode_;},
 															[](I*){return VExtendable::itemStyles().get();}), 2, 0, 1, 2)
-				->addElement(item<Symbol, I>(&I::testItem4_, [](I*){return itemStyles().get();}), 0, 1));
+				->addElement(item<Symbol, I>(&I::testItem4_, [](I*){return itemStyles().get();}), 0, 1)
+				);
+
+	// Test 5: Size dependencies inside the grid & alignment
+	addForm((new GridLayoutElement())
+				->setVerticalAlignment(LayoutStyle::Alignment::Center)
+				->addElement((new GridLayoutElement())
+									->setHorizontalSpacing(300)
+									->addElement(item<Symbol, I>(&I::testItem_, [](I*){return itemStyles().get();}), 0, 0)
+									->addElement(item<Symbol, I>(&I::testItem2_, [](I*){return itemStyles().get();}), 1, 0),
+									0, 0))
+				->addElement((new GridLayoutElement())
+									->setColumnStretchFactor(1, 1)
+									->setCellVerticalAlignment(2, 0, LayoutStyle::Alignment:: Center)
+									->addElement(item<VExtendable,I>(&I::testNodeItem_, [](I* v){return v->testNode_;},
+																				[](I*){return VExtendable::itemStyles().get();}), 0, 0)
+									->addElement(item<Symbol, I>(&I::testItem3_, [](I*){return itemStyles().get();}), 2, 0),
+									0, 1)
+				->addElement(item<Symbol, I>(&I::testItem4_, [](I*){return itemStyles().get();}), 1, 0, 1, 2);
+}
+
+int DeclarativeTest::determineForm()
+{
+	return 5;
 }
 
 } /* namespace Visualization */
