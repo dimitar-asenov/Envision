@@ -146,7 +146,8 @@ void GridLayoutElement::computeSize(Item* item, int availableWidth, int availabl
 						{
 							// distribute the additional space according to the stretch factors
 							for (int column=x; column<x+spanGrid_[x][y].first; column++)
-								widestInColumn[column] += missingSpace / availableStretchFactor * columnStretchFactors_[column];
+								widestInColumn[column] +=
+										std::ceil(missingSpace / availableStretchFactor * columnStretchFactors_[column]);
 						}
 					}
 				}
@@ -173,7 +174,8 @@ void GridLayoutElement::computeSize(Item* item, int availableWidth, int availabl
 						{
 							// distribute the additional space according to the stretch factors
 							for (int row=y; row<y+spanGrid_[x][y].second; row++)
-								tallestInRow[row] += missingSpace / availableStretchFactor * rowStretchFactors_[row];
+								tallestInRow[row] +=
+										std::ceil(missingSpace / availableStretchFactor * rowStretchFactors_[row]);
 						}
 					}
 				}
