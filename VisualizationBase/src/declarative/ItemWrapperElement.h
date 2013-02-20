@@ -45,6 +45,7 @@ class ItemWrapperElement : public Element
 	public: // Methods executable when items need to be rendered
 		virtual void computeSize(Item* item, int availableWidth, int availableHeight) override;
 		virtual void setItemPositions(Item* item, int parentX, int parentY) override;
+		virtual bool sizeDependsOnParent(const Item* item) const override;
 
 	public: // Recursive item destruction
 		virtual void destroyChildItems(Item* item) override;
@@ -82,6 +83,17 @@ void ItemWrapperElement<ParentType,ChildItemType>::setItemPositions(Item* item, 
 	{
 		childItem->setPos(parentX + pos().x() + leftMargin(), parentY + pos().y() + topMargin());
 	}
+}
+
+template <class ParentType, class ChildItemType>
+bool ItemWrapperElement<ParentType,ChildItemType>::sizeDependsOnParent(const Item* item) const
+{
+	auto& childItem = (static_cast<const ParentType*>(item))->*this->item();
+	if(childItem)
+	{
+		return childItem->sizeDependsOnParent();
+	}
+	else return false;
 }
 
 template <class ParentType, class ChildItemType>

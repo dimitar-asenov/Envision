@@ -332,6 +332,11 @@ void GridLayoutElement::computeSize(Item* item, int availableWidth, int availabl
 	}
 }
 
+bool GridLayoutElement::sizeDependsOnParent(const Item*) const
+{
+	return overallColumnStretchFactor_ > 0 || overallRowStretchFactor_ > 0;
+}
+
 void GridLayoutElement::computeOverallStretchFactors()
 {
 	overallColumnStretchFactor_ = 0;

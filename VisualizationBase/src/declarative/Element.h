@@ -49,6 +49,7 @@ class VISUALIZATIONBASE_API Element
 		virtual void synchronizeWithItem(Item* item) = 0;
 		virtual void computeSize(Item* item, int availableWidth, int availableHeight) = 0;
 		virtual void setItemPositions(Item* item, int parentX=0, int parentY=0) = 0;
+		virtual bool sizeDependsOnParent(const Item* item) const = 0;
 		void setPos(const QPoint& pos);
 		QPoint pos() const;
 		QSize size() const;

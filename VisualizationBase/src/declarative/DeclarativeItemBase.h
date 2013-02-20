@@ -45,8 +45,9 @@ class VISUALIZATIONBASE_API DeclarativeItemBase: public Item
 	public:
 		DeclarativeItemBase(Item* parent, const StyleType* style = itemStyles().get());
 		virtual void determineChildren() override;
-		virtual void updateGeometry(int availableWidth, int availableHeight);
-		virtual QList<Element*>& forms() = 0; // array or forms
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
+		virtual bool sizeDependsOnParent() const override;
+		virtual QList<Element*>& forms() const = 0; // array or forms
 		virtual int determineForm(); // get the appropriate form for the situation
 
 		// factory methods for ItemWrapperElement

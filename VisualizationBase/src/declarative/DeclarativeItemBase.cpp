@@ -55,6 +55,11 @@ void DeclarativeItemBase::updateGeometry(int availableWidth, int avaiableHeight)
 	forms().at(currentFormIndex_)->setItemPositions(this);
 }
 
+bool DeclarativeItemBase::sizeDependsOnParent() const
+{
+	return forms().at(currentFormIndex_)->sizeDependsOnParent(this);
+}
+
 }
 
 

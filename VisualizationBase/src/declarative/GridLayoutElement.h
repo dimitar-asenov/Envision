@@ -56,6 +56,7 @@ class GridLayoutElement : public LayoutElement {
 		virtual void computeSize(Item* item, int availableWidth, int availableHeight) override;
 		virtual void setItemPositions(Item* item, int parentX, int parentY) override;
 		virtual void synchronizeWithItem(Item* item) override;
+		virtual bool sizeDependsOnParent(const Item* item) const override;
 
 	public: // Recursive item destruction
 		virtual void destroyChildItems(Item* item) override;
