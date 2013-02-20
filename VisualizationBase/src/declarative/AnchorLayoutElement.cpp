@@ -39,4 +39,109 @@ AnchorLayoutElement::~AnchorLayoutElement()
 	// TODO Auto-generated destructor stub
 }
 
+AnchorLayoutElement* AnchorLayoutElement::put(PlaceEdge placeEdge, Element* placeElement, AtEdge atEdge,
+		Element* fixedElement)
+{
+	Edge edgeToBePlaced = static_cast<Edge>(placeEdge);
+	Edge fixedEdge = static_cast<Edge>(atEdge);
+
+	Orientation o = inferOrientation(edgeToBePlaced, fixedEdge);
+
+	if (o == Orientation::Horizontal) {
+		return putX(relativePosition(edgeToBePlaced), placeElement, 0, relativePosition(fixedEdge), fixedElement);
+	}
+	else {
+		return putY(relativePosition(edgeToBePlaced), placeElement, 0, relativePosition(fixedEdge), fixedElement);
+	}
+}
+
+AnchorLayoutElement* AnchorLayoutElement::put(PlaceEdge placeEdge, Element* placeElement, int offset, FromEdge fromEdge,
+		Element* fixedElement)
+{
+	Edge edgeToBePlaced = static_cast<Edge>(placeEdge);
+	Edge fixedEdge = static_cast<Edge>(fromEdge);
+
+	Orientation o = inferOrientation(edgeToBePlaced, fixedEdge);
+
+	// compute correct offset
+	if (fixedEdge == Edge::Left || fixedEdge == Edge::Top)
+		offset = -offset;
+
+	if (o == Orientation::Horizontal) {
+		return putX(relativePosition(edgeToBePlaced), placeElement, offset, relativePosition(fixedEdge), fixedElement);
+	}
+	else {
+		return putY(relativePosition(edgeToBePlaced), placeElement, offset, relativePosition(fixedEdge), fixedElement);
+	}
+}
+
+AnchorLayoutElement* AnchorLayoutElement::put(PlaceEdge placeEdge, Element* placeElement, float relativeEdgePosition,
+		Element* fixedElement)
+{
+	Edge edgeToBePlaced = static_cast<Edge>(placeEdge);
+
+	Orientation o = orientation(edgeToBePlaced);
+	Q_ASSERT(o != Orientation::Auto);
+
+	if (o == Orientation::Horizontal) {
+		return putX(relativePosition(edgeToBePlaced), placeElement, 0, relativeEdgePosition, fixedElement);
+	}
+	else {
+		return putY(relativePosition(edgeToBePlaced), placeElement, 0, relativeEdgePosition, fixedElement);
+	}
+}
+
+AnchorLayoutElement::Orientation AnchorLayoutElement::orientation(Edge edge)
+{
+	switch (edge) {
+		case Edge::Left:
+		case Edge::Right:
+		case Edge::HCenter:
+			return Orientation::Horizontal;
+		case Edge::Top:
+		case Edge::Bottom:
+		case Edge::VCenter:
+			return Orientation::Vertical;
+		default:
+			return Orientation::Auto;
+	}
+}
+
+/**
+ * Computes orientation of the two edges, fails if orientation cannot be inferred (both are Center) of if the edges
+ * have conflicting orientations (e.g. Orientation::Left and Orientation::Top).
+ *
+ * @return Either Orientation::Horizontal or Orientation::Vertical
+ */
+AnchorLayoutElement::Orientation AnchorLayoutElement::inferOrientation(Edge firstEdge, Edge secondEdge)
+{
+	Orientation firstOrientation = orientation(firstEdge);
+	Orientation secondOrientation = orientation(secondEdge);
+
+	Q_ASSERT(firstOrientation != Orientation::Auto || secondOrientation != Orientation::Auto);
+
+	if (firstOrientation != Orientation::Auto) {
+		Q_ASSERT(firstOrientation == secondOrientation || secondOrientation == Orientation::Auto);
+		return firstOrientation;
+	}
+	else // secondOrientation != Orientation::Auto && firstOrientation == Orientation::Auto
+	{
+		return secondOrientation;
+	}
+}
+
+float AnchorLayoutElement::relativePosition(Edge edge)
+{
+	switch (edge) {
+		case Edge::Left:
+		case Edge::Top:
+			return 0.0;
+		case Edge::Right:
+		case Edge::Bottom:
+			return 1.0;
+		default:
+			return 0.5;
+	}
+}
+
 }

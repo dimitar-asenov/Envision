@@ -34,10 +34,29 @@ namespace Visualization {
 
 class AnchorLayoutElement : public LayoutElement {
 	public:
+		enum class PlaceEdge : int {LeftOf, RightOf, CenterOf, VCenterOf, HCenterOf, TopOf, BottomOf};
+		enum class AtEdge : int {AtLeftOf, AtRightOf, AtCenterOf, AtVCenterOf, AtHCenterOf, AtTopOf, AtBottomOf};
+		enum class FromEdge : int {FromLeftOf, FromRightOf, FromCenterOf, FromVCenterOf, FromHCenterOf, Above, Below};
+
+		// Methods executable on element definition
 		AnchorLayoutElement();
 		virtual ~AnchorLayoutElement();
+		AnchorLayoutElement* put(PlaceEdge placeEdge, Element* placeElement, AtEdge atEdge, Element* fixedElement);
+		AnchorLayoutElement* put(PlaceEdge placeEdge, Element* placeElement, int offset, FromEdge fromEdge,
+											Element* fixedElement);
+		AnchorLayoutElement* put(PlaceEdge placeEdge, Element* placeElement, float relativeEdgePosition,
+											Element* fixedElement);
 
-		void addElement(Element* element);
+	private:
+		enum class Edge : int {Left, Right, Center, VCenter, HCenter, Top, Bottom};
+		enum class Orientation : int {Auto, Horizontal, Vertical};
+		AnchorLayoutElement* putX(float relativePlaceEdgePosition, Element* placeElement, int offset,
+												float relativeFixedEdgePosition, Element* fixedElement);
+		AnchorLayoutElement* putY(float relativePlaceEdgePosition, Element* placeElement, int offset,
+												float relativeFixedEdgePosition, Element* fixedElement);
+		Orientation orientation(Edge edge);
+		Orientation inferOrientation(Edge firstEdge, Edge secondEdge);
+		float relativePosition(Edge edge);
 
 };
 
