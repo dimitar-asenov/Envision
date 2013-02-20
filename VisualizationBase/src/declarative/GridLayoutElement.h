@@ -37,7 +37,7 @@ class GridLayoutElement : public LayoutElement {
 		FLUENT_ELEMENT_INTERFACE(GridLayoutElement);
 
 	public: // Methods executable on element definition
-		GridLayoutElement(int numColumns, int numRows);
+		GridLayoutElement(int numColumns=1, int numRows=1);
 		virtual ~GridLayoutElement();
 		GridLayoutElement* addElement(Element* element, int column, int row, int columnSpan=1, int rowSpan=1);
 		GridLayoutElement* setSpacing(int spacing);
@@ -46,6 +46,12 @@ class GridLayoutElement : public LayoutElement {
 		GridLayoutElement* setVerticalSpacing(int spaceBetweenRows);
 		GridLayoutElement* setHorizontalAlignment(LayoutStyle::Alignment horizontalAlignment);
 		GridLayoutElement* setVerticalAlignment(LayoutStyle::Alignment verticalAlignment);
+		GridLayoutElement* setColumnHorizontalAlignment(int column, LayoutStyle::Alignment horizontalAlignment);
+		GridLayoutElement* setRowVerticalAlignment(int row, LayoutStyle::Alignment verticalAlignment);
+		GridLayoutElement* setCellHorizontalAlignment(int column, int row, LayoutStyle::Alignment horizontalAlignment);
+		GridLayoutElement* setCellVerticalAlignment(int column, int row, LayoutStyle::Alignment verticalAlignment);
+		GridLayoutElement* setCellAlignment(int column, int row, LayoutStyle::Alignment horizontalAlignment,
+																					LayoutStyle::Alignment verticalAlignment);
 		GridLayoutElement* setColumnStretchFactor(int column, float stretchFactor);
 		GridLayoutElement* setColumnStretchFactors(float stretchFactor);
 		GridLayoutElement* setRowStretchFactor(int row, float stretchFactor);
@@ -66,15 +72,22 @@ class GridLayoutElement : public LayoutElement {
 		int numRows_{};
 		int spaceBetweenColumns_{};
 		int spaceBetweenRows_{};
-		LayoutStyle::Alignment horizontalAlignment_{};
-		LayoutStyle::Alignment verticalAlignment_{};
 		QVector<QVector<Element*>> elementGrid_{};
 		QVector<QVector<QPair<int, int>>> spanGrid_{};
+		LayoutStyle::Alignment defaultHorizontalAlignment_{};
+		LayoutStyle::Alignment defaultVerticalAlignment_{};
+		QVector<LayoutStyle::Alignment> defaultRowVerticalAlignments_{};
+		QVector<LayoutStyle::Alignment> defaultColumnHorizontalAlignments_{};
+		QVector<QVector<LayoutStyle::Alignment>> cellHorizontalAlignmentGrid_{};
+		QVector<QVector<LayoutStyle::Alignment>> cellVerticalAlignmentGrid_{};
+		float defaultColumnStretchFactor_{};
+		float defaultRowStretchFactor_{};
 		QVector<float> columnStretchFactors_{};
 		QVector<float> rowStretchFactors_{};
 		float overallColumnStretchFactor_{};
 		float overallRowStretchFactor_{};
 		void computeOverallStretchFactors();
+		void adjustSize(int containColumn, int containRow);
 };
 
 inline GridLayoutElement* GridLayoutElement::setSpacing(int spacing)
@@ -101,40 +114,109 @@ inline GridLayoutElement* GridLayoutElement::setVerticalSpacing(int spaceBetween
 }
 inline GridLayoutElement* GridLayoutElement::setHorizontalAlignment(LayoutStyle::Alignment horizontalAlignment)
 {
-	horizontalAlignment_ = horizontalAlignment;
+	defaultHorizontalAlignment_ = horizontalAlignment;
+	for (int x = 0; x < numColumns_; x++)
+	{
+		defaultColumnHorizontalAlignments_[x] = horizontalAlignment;
+		for (int y = 0; y < numRows_; y++)
+		{
+			cellHorizontalAlignmentGrid_[x][y] = horizontalAlignment;
+		}
+	}
+
 	return this;
 }
 inline GridLayoutElement* GridLayoutElement::setVerticalAlignment(LayoutStyle::Alignment verticalAlignment)
 {
-	verticalAlignment_ = verticalAlignment;
+	defaultVerticalAlignment_ = verticalAlignment;
+	for (int y = 0; y < numRows_; y++)
+	{
+		defaultRowVerticalAlignments_[y] = verticalAlignment;
+		for (int x = 0; x < numColumns_; x++)
+		{
+			cellVerticalAlignmentGrid_[x][y] = verticalAlignment;
+		}
+	}
+	return this;
+}
+inline GridLayoutElement* GridLayoutElement::setColumnHorizontalAlignment(int column,
+		LayoutStyle::Alignment horizontalAlignment)
+{
+	adjustSize(column, 0);
+
+	defaultColumnHorizontalAlignments_[column] = horizontalAlignment;
+	for (int y = 0; y < numRows_; y++)
+	{
+		cellHorizontalAlignmentGrid_[column][y] = horizontalAlignment;
+	}
+
+	return this;
+}
+inline GridLayoutElement* GridLayoutElement::setRowVerticalAlignment(int row, LayoutStyle::Alignment verticalAlignment)
+{
+	adjustSize(0, row);
+
+	defaultRowVerticalAlignments_[row] = verticalAlignment;
+	for (int x = 0; x < numColumns_; x++)
+	{
+		cellVerticalAlignmentGrid_[x][row] = verticalAlignment;
+	}
+	return this;
+}
+inline GridLayoutElement* GridLayoutElement::setCellHorizontalAlignment(int column, int row,
+		LayoutStyle::Alignment horizontalAlignment)
+{
+	adjustSize(column, row);
+	cellHorizontalAlignmentGrid_[column][row] = horizontalAlignment;
+	return this;
+}
+inline GridLayoutElement* GridLayoutElement::setCellVerticalAlignment(int column, int row,
+		LayoutStyle::Alignment verticalAlignment)
+{
+	adjustSize(column, row);
+	cellVerticalAlignmentGrid_[column][row] = verticalAlignment;
+	return this;
+}
+inline GridLayoutElement* GridLayoutElement::setCellAlignment(int column, int row,
+		LayoutStyle::Alignment horizontalAlignment, LayoutStyle::Alignment verticalAlignment)
+{
+	adjustSize(column, row);
+	cellHorizontalAlignmentGrid_[column][row] = horizontalAlignment;
+	cellVerticalAlignmentGrid_[column][row] = verticalAlignment;
 	return this;
 }
 inline GridLayoutElement* GridLayoutElement::setColumnStretchFactor(int column, float stretchFactor)
 {
+	adjustSize(column, 0);
 	columnStretchFactors_[column] = stretchFactor;
 	computeOverallStretchFactors();
 	return this;
 }
 inline GridLayoutElement* GridLayoutElement::setColumnStretchFactors(float stretchFactor)
 {
+	defaultColumnStretchFactor_ = stretchFactor;
 	columnStretchFactors_ = QVector<float>(numColumns_, stretchFactor);
 	computeOverallStretchFactors();
 	return this;
 }
 inline GridLayoutElement* GridLayoutElement::setRowStretchFactor(int row, float stretchFactor)
 {
+	adjustSize(0, row);
 	rowStretchFactors_[row] = stretchFactor;
 	computeOverallStretchFactors();
 	return this;
 }
 inline GridLayoutElement* GridLayoutElement::setRowStretchFactors(float stretchFactor)
 {
+	defaultRowStretchFactor_ = stretchFactor;
 	rowStretchFactors_ = QVector<float>(numRows_, stretchFactor);
 	computeOverallStretchFactors();
 	return this;
 }
 inline GridLayoutElement* GridLayoutElement::setStretchFactors(float stretchFactor)
 {
+	defaultColumnStretchFactor_ = stretchFactor;
+	defaultRowStretchFactor_ = stretchFactor;
 	columnStretchFactors_ = QVector<float>(numColumns_, stretchFactor);
 	rowStretchFactors_ = QVector<float>(numRows_, stretchFactor);
 	computeOverallStretchFactors();

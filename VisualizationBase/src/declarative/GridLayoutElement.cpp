@@ -30,12 +30,26 @@ namespace Visualization {
 
 GridLayoutElement::GridLayoutElement(int numColumns, int numRows)
 : numColumns_(numColumns), numRows_(numRows), spaceBetweenColumns_{}, spaceBetweenRows_{},
-  horizontalAlignment_{LayoutStyle::Alignment::Left}, verticalAlignment_{LayoutStyle::Alignment::Top}
+  defaultHorizontalAlignment_{LayoutStyle::Alignment::Left}, defaultVerticalAlignment_{LayoutStyle::Alignment::Top},
+  defaultColumnStretchFactor_{0}, defaultRowStretchFactor_{0}
 {
+	// initialize element grid
 	elementGrid_ = QVector<QVector<Element*>>(numColumns_, QVector<Element*>(numRows_));
+
+	// initialize span grid
 	spanGrid_ = QVector<QVector<QPair<int, int>>>(numColumns_, QVector<QPair<int, int>>(numRows_));
-	columnStretchFactors_ = QVector<float>(numColumns_, 0);
-	rowStretchFactors_ = QVector<float>(numRows_, 0);
+
+	// initialize alignments
+	defaultColumnHorizontalAlignments_ = QVector<LayoutStyle::Alignment>(numColumns_, defaultVerticalAlignment_);
+	defaultRowVerticalAlignments_ = QVector<LayoutStyle::Alignment>(numRows_, defaultHorizontalAlignment_);
+	cellVerticalAlignmentGrid_ = QVector<QVector<LayoutStyle::Alignment>>(numColumns_,
+			QVector<LayoutStyle::Alignment>(numRows_, defaultVerticalAlignment_));
+	cellHorizontalAlignmentGrid_ = QVector<QVector<LayoutStyle::Alignment>>(numColumns_,
+			QVector<LayoutStyle::Alignment>(numRows_, defaultHorizontalAlignment_));
+
+	// initialize stretch factors
+	columnStretchFactors_ = QVector<float>(numColumns_, defaultColumnStretchFactor_);
+	rowStretchFactors_ = QVector<float>(numRows_, defaultRowStretchFactor_);
 	computeOverallStretchFactors();
 }
 
@@ -55,10 +69,11 @@ void GridLayoutElement::destroyChildItems(Item* item)
 
 GridLayoutElement* GridLayoutElement::addElement(Element* element, int column, int row, int columnSpan, int rowSpan)
 {
+	adjustSize(column + columnSpan - 1, row + rowSpan - 1);
+
 	SAFE_DELETE(elementGrid_[column][row]);
 	elementGrid_[column][row] = element;
 	spanGrid_[column][row] = QPair<int, int>(columnSpan, rowSpan);
-	// TODO: How can I make sure that row and column span are valid? Can I use assert? Do I need to?
 	return this;
 }
 
@@ -195,12 +210,7 @@ void GridLayoutElement::computeSize(Item* item, int availableWidth, int availabl
 	// if availableWidth == 0, this is always false
 	if (additionalWidth > 0)
 	{
-		if (overallColumnStretchFactor_ == 0)
-		{
-			// add the additional space to some column
-			widestInColumn[numColumns_ - 1] += additionalWidth;
-		}
-		else
+		if (overallColumnStretchFactor_ > 0)
 		{
 			// distribute the additional space according to the stretch factors
 			for (int x = 0; x<numColumns_; ++x)
@@ -219,12 +229,7 @@ void GridLayoutElement::computeSize(Item* item, int availableWidth, int availabl
 	// if availableHeight == 0, this is always false
 	if (additionalHeight > 0)
 	{
-		if (overallRowStretchFactor_ == 0)
-		{
-			// add the additional space to some row
-			tallestInRow[numRows_ - 1] += additionalHeight;
-		}
-		else
+		if (overallRowStretchFactor_ > 0)
 		{
 			// distribute the additional space according to the stretch factors
 			for (int y = 0; y<numRows_; ++y)
@@ -235,32 +240,28 @@ void GridLayoutElement::computeSize(Item* item, int availableWidth, int availabl
 
 	setSize(QSize(totalWidth, totalHeight));
 
-	// Recompute all the sizes, if they matter now
-	// TODO: is this assumption correct, or do I need to recompute in every case?
-	if (availableWidth > 0 or availableHeight > 0)
+	// Recompute all the element's sizes, if their size depends on their parent's size
+	for(int x=0; x<numColumns_; x++)
 	{
-		for(int x=0; x<numColumns_; x++)
-		{
-			for(int y=0; y<numRows_; y++)
-				if (elementGrid_[x][y] != nullptr)
+		for(int y=0; y<numRows_; y++)
+			if (elementGrid_[x][y] != nullptr && elementGrid_[x][y]->sizeDependsOnParent(item))
+			{
+				Element* element = elementGrid_[x][y];
+				QPair<int, int> cellSpan = spanGrid_[x][y];
+				if (cellSpan.first == 1 && cellSpan.second == 1)
+					element->computeSize(item, widestInColumn[x], tallestInRow[y]);
+				else
 				{
-					Element* element = elementGrid_[x][y];
-					QPair<int, int> cellSpan = spanGrid_[x][y];
-					if (cellSpan.first == 1 and cellSpan.second == 1)
-						element->computeSize(item, widestInColumn[x], tallestInRow[y]);
-					else
-					{
-						int localAvailableWidth = 0;
-						for (int column=x; column<x+spanGrid_[x][y].first; column++)
-							localAvailableWidth += widestInColumn[column];
+					int localAvailableWidth = 0;
+					for (int column=x; column<x+spanGrid_[x][y].first; column++)
+						localAvailableWidth += widestInColumn[column];
 
-						int localAvailableHeight = 0;
-						for (int row=y; row<y+spanGrid_[x][y].second; row++)
-							localAvailableHeight += tallestInRow[row];
-						element->computeSize(item, localAvailableWidth, localAvailableHeight);
-					}
+					int localAvailableHeight = 0;
+					for (int row=y; row<y+spanGrid_[x][y].second; row++)
+						localAvailableHeight += tallestInRow[row];
+					element->computeSize(item, localAvailableWidth, localAvailableHeight);
 				}
-		}
+			}
 	}
 
 	// Set item positions
@@ -273,7 +274,7 @@ void GridLayoutElement::computeSize(Item* item, int availableWidth, int availabl
 			if (elementGrid_[x][y] != nullptr)
 			{
 				int xPos = left;
-				if (horizontalAlignment_ == LayoutStyle::Alignment::Center)
+				if (cellHorizontalAlignmentGrid_[x][y] == LayoutStyle::Alignment::Center)
 				{
 					if (spanGrid_[x][y].first == 1)
 						xPos += (widestInColumn[x] - elementGrid_[x][y]->size().width())/2;
@@ -285,7 +286,7 @@ void GridLayoutElement::computeSize(Item* item, int availableWidth, int availabl
 						xPos += (localAvailableWidth - elementGrid_[x][y]->size().width())/2;
 					}
 				}
-				else if (horizontalAlignment_ == LayoutStyle::Alignment::Right)
+				else if (cellHorizontalAlignmentGrid_[x][y] == LayoutStyle::Alignment::Right)
 				{
 					if (spanGrid_[x][y].first == 1)
 						xPos += (widestInColumn[x] - elementGrid_[x][y]->size().width());
@@ -299,7 +300,7 @@ void GridLayoutElement::computeSize(Item* item, int availableWidth, int availabl
 				}
 
 				int yPos = top;
-				if (verticalAlignment_ == LayoutStyle::Alignment::Center)
+				if (cellVerticalAlignmentGrid_[x][y] == LayoutStyle::Alignment::Center)
 				{
 					if (spanGrid_[x][y].second == 1)
 						yPos += (tallestInRow[y] - elementGrid_[x][y]->size().height())/2;
@@ -311,7 +312,7 @@ void GridLayoutElement::computeSize(Item* item, int availableWidth, int availabl
 						yPos += (localAvailableHeight - elementGrid_[x][y]->size().height())/2;
 					}
 				}
-				else if (verticalAlignment_ == LayoutStyle::Alignment::Bottom)
+				else if (cellVerticalAlignmentGrid_[x][y] == LayoutStyle::Alignment::Bottom)
 				{
 					if (spanGrid_[x][y].second == 1)
 						yPos += tallestInRow[y] - elementGrid_[x][y]->size().height();
@@ -350,6 +351,90 @@ void GridLayoutElement::computeOverallStretchFactors()
 	for(int y=0; y<numRows_; ++y)
 	{
 		overallRowStretchFactor_ += rowStretchFactors_[y];
+	}
+}
+
+void GridLayoutElement::adjustSize(int containColumn, int containRow)
+{
+	if (containColumn >= numColumns_ || containRow >= numRows_)
+	{
+		// calculate new size
+		int newNumColumns = (containColumn < numColumns_) ? numColumns_ : containColumn + 1;
+		int newNumRows = (containRow < numRows_) ? numRows_ : containRow + 1;
+
+		// adjust element grid
+		auto newElementGrid = QVector<QVector<Element*>>(newNumColumns, QVector<Element*>(newNumRows, nullptr));
+		for (int x=0; x<numColumns_; x++)
+			for (int y=0; y<numRows_; y++)
+				newElementGrid[x][y] = elementGrid_[x][y];
+		elementGrid_ = newElementGrid;
+
+		// adjust span grid
+		auto newSpanGrid = QVector<QVector<QPair<int, int>>>(newNumColumns, QVector<QPair<int, int>>(newNumRows));
+		for (int x=0; x<numColumns_; x++)
+			for (int y=0; y<numRows_; y++)
+				newSpanGrid[x][y] = spanGrid_[x][y];
+		spanGrid_ = newSpanGrid;
+
+		// adjust alignments
+		if (numColumns_ < newNumColumns)
+		{
+			auto newColumnAlignments = QVector<LayoutStyle::Alignment>(newNumColumns, defaultHorizontalAlignment_);
+			for (int x=0; x<numColumns_; x++)
+				newColumnAlignments[x] = defaultColumnHorizontalAlignments_[x];
+			defaultColumnHorizontalAlignments_ = newColumnAlignments;
+		}
+
+		if (numRows_ < newNumRows)
+		{
+			auto newRowAlignments = QVector<LayoutStyle::Alignment>(newNumRows, defaultVerticalAlignment_);
+			for (int y=0; y<numRows_; y++)
+				newRowAlignments[y] = defaultRowVerticalAlignments_[y];
+			defaultRowVerticalAlignments_ = newRowAlignments;
+		}
+
+		auto newCellHorizontalGrid = QVector<QVector<LayoutStyle::Alignment>>(newNumColumns,
+				QVector<LayoutStyle::Alignment>(newNumRows));
+		for (int x=0; x<newNumColumns; x++)
+			for (int y=0; y<newNumRows; y++)
+				if (x<numColumns_ && y<numRows_)
+					newCellHorizontalGrid[x][y] = cellHorizontalAlignmentGrid_[x][y];
+				else
+				{
+					newCellHorizontalGrid[x][y] = defaultColumnHorizontalAlignments_[x];
+				}
+		cellHorizontalAlignmentGrid_ = newCellHorizontalGrid;
+
+		auto newCellVerticalGrid = QVector<QVector<LayoutStyle::Alignment>>(newNumColumns,
+				QVector<LayoutStyle::Alignment>(newNumRows));
+		for (int x=0; x<newNumColumns; x++)
+			for (int y=0; y<newNumRows; y++)
+				if (x<numColumns_ && y<numRows_)
+					newCellVerticalGrid[x][y] = cellVerticalAlignmentGrid_[x][y];
+				else
+					newCellVerticalGrid[x][y] = defaultRowVerticalAlignments_[y];
+		cellVerticalAlignmentGrid_ = newCellVerticalGrid;
+
+		// adjust stretch factors
+		if (numColumns_ < newNumColumns)
+		{
+			auto newColumnStretchFactors = QVector<float>(newNumColumns, defaultColumnStretchFactor_);
+			for (int x=0; x<numColumns_; x++)
+				newColumnStretchFactors[x] = columnStretchFactors_[x];
+			columnStretchFactors_ = newColumnStretchFactors;
+		}
+
+		if (numRows_ < newNumRows)
+		{
+			auto newRowStretchFactors = QVector<float>(newNumRows, defaultRowStretchFactor_);
+			for (int y=0; y<numRows_; y++)
+				newRowStretchFactors[y] = rowStretchFactors_[y];
+			rowStretchFactors_ = newRowStretchFactors;
+		}
+
+		// set new grid size
+		numColumns_ = newNumColumns;
+		numRows_ = newNumRows;
 	}
 }
 
