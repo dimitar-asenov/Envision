@@ -63,13 +63,17 @@ ItemWrapperElement<ParentType,ChildItemType>::ItemWrapperElement(ChildItem item)
 {}
 
 template <class ParentType, class ChildItemType>
-void ItemWrapperElement<ParentType,ChildItemType>::computeSize(Item* item, int, int)
+void ItemWrapperElement<ParentType,ChildItemType>::computeSize(Item* item, int availableWidth, int availableHeight)
 {
 	auto& childItem = (static_cast<ParentType*>(item))->*this->item();
 	if(childItem)
 	{
 		int width = childItem->width() + leftMargin() + rightMargin();
 		int height = childItem->height() + topMargin() + bottomMargin();
+		if (availableWidth > width) width = availableWidth;
+		if (availableHeight > height) height = availableHeight;
+		if (availableWidth > 0 || availableHeight > 0)
+			childItem->changeGeometry(width - leftMargin() - rightMargin(), height - topMargin() - bottomMargin());
 		setSize(QSize(width, height));
 	}
 	else setSize(QSize(0,0));

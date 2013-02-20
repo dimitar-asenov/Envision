@@ -50,6 +50,7 @@ void DeclarativeItemBase::determineChildren()
 
 void DeclarativeItemBase::updateGeometry(int availableWidth, int avaiableHeight)
 {
+	// TODO: adjust for shape
 	forms().at(currentFormIndex_)->computeSize(this, availableWidth, avaiableHeight);
 	setSize(forms().at(currentFormIndex_)->size());
 	forms().at(currentFormIndex_)->setItemPositions(this);
