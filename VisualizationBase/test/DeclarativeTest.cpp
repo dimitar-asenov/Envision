@@ -44,27 +44,33 @@ DeclarativeTest::DeclarativeTest(Item* parent, TestNodes::BinaryNode* node) :
 
 void DeclarativeTest::initializeForms()
 {
+	Element* testItemElement = item<Symbol, I>(&I::testItem_, [](I*){return itemStyles().get();});
+	Element* testItem2Element = item<Symbol, I>(&I::testItem2_, [](I*){return itemStyles().get();});
+	Element* testItem3Element = item<Symbol, I>(&I::testItem3_, [](I*){return itemStyles().get();});
+	Element* testItem4Element = item<Symbol, I>(&I::testItem4_, [](I*){return itemStyles().get();});
+	Element* testNodeItemGeneralElement = item<I>(&I::testNodeItemGeneral_, [](I* v){return v->testNode_;});
+	Element* testNodeItemElement = item<VExtendable,I>(&I::testNodeItem_, [](I* v){return v->testNode_;},
+																		[](I*){return VExtendable::itemStyles().get();});
+
 	// Test 0: VisualizationItemWrapperElement
-	addForm(item<Symbol, I>(&I::testItem_, [](I*){return itemStyles().get();}));
+	addForm(testItemElement);
 
 	// Test 1: NodeItemWrapperElement
-	addForm(item<I>(&I::testNodeItemGeneral_, [](I* v){return v->testNode_;}));
+	addForm(testNodeItemGeneralElement);
 
 	// Test 2: NodeWithVisualizationItemWrapperElement
-	addForm(item<VExtendable,I>(&I::testNodeItem_, [](I* v){return v->testNode_;},
-											[](I*){return VExtendable::itemStyles().get();}));
+	addForm(testNodeItemElement);
 
 	// Test 3: GridLayoutElement
 	addForm((new GridLayoutElement())
 				->setVerticalAlignment(LayoutStyle::Alignment::Center)
 				->setHorizontalAlignment(LayoutStyle::Alignment::Right)
-				->put(0, 0, item<Symbol, I>(&I::testItem_, [](I*){return itemStyles().get();}))
-				->put(0, 1, item<VExtendable,I>(&I::testNodeItem_, [](I* v){return v->testNode_;},
-															[](I*){return VExtendable::itemStyles().get();}))
+				->put(0, 0, testItemElement)
+				->put(0, 1, testNodeItemElement)
 				->put(1, 1, (new GridLayoutElement())
-									->put(0, 0, item<Symbol, I>(&I::testItem2_, [](I*){return itemStyles().get();}))
-									->put(1, 1, item<Symbol, I>(&I::testItem3_, [](I*){return itemStyles().get();})))
-				->put(2, 0, item<Symbol, I>(&I::testItem4_, [](I*){return itemStyles().get();})));
+									->put(0, 0, testItem2Element)
+									->put(1, 1, testItem3Element))
+				->put(2, 0, testItem4Element));
 
 	// Test 4: GridLayoutElement with merged cells
 	addForm((new GridLayoutElement())
@@ -74,14 +80,13 @@ void DeclarativeTest::initializeForms()
 				->setRowStretchFactors(1)
 				->put(0, 0, (new GridLayoutElement())
 									->setHorizontalSpacing(10)
-									->put(0, 0, item<Symbol, I>(&I::testItem_, [](I*){return itemStyles().get();}))
-									->put(1, 0, item<Symbol, I>(&I::testItem2_, [](I*){return itemStyles().get();}))
-									->put(2, 0, item<Symbol, I>(&I::testItem3_, [](I*){return itemStyles().get();})))
+									->put(0, 0, testItemElement)
+									->put(1, 0, testItem2Element)
+									->put(2, 0, testItem3Element))
 				->setCellSpanning(2, 1)
-				->put(2, 0, item<VExtendable,I>(&I::testNodeItem_, [](I* v){return v->testNode_;},
-															[](I*){return VExtendable::itemStyles().get();}))
+				->put(2, 0, testNodeItemElement)
 				->setCellSpanning(1, 2)
-				->put(0, 1, item<Symbol, I>(&I::testItem4_, [](I*){return itemStyles().get();}))
+				->put(0, 1, testItem4Element)
 				);
 
 	// Test 5: Size dependencies inside the grid & alignment
@@ -89,23 +94,20 @@ void DeclarativeTest::initializeForms()
 				->setVerticalAlignment(LayoutStyle::Alignment::Center)
 				->put(0, 0, (new GridLayoutElement())
 									->setHorizontalSpacing(300)
-									->put(0, 0, item<Symbol, I>(&I::testItem_, [](I*){return itemStyles().get();}))
-									->put(1, 0, item<Symbol, I>(&I::testItem2_, [](I*){return itemStyles().get();}))))
+									->put(0, 0, testItemElement)
+									->put(1, 0, testItem2Element)))
 				->put(0, 1, (new GridLayoutElement())
 									->setColumnStretchFactor(1, 1)
-									->put(0, 0, item<VExtendable,I>(&I::testNodeItem_, [](I* v){return v->testNode_;},
-																				[](I*){return VExtendable::itemStyles().get();}))
-									->put(2, 0, item<Symbol, I>(&I::testItem3_, [](I*){return itemStyles().get();}))
+									->put(0, 0, testNodeItemElement)
+									->put(2, 0, testItem3Element)
 									->setCellVerticalAlignment(LayoutStyle::Alignment:: Center))
-				->put(1, 0, item<Symbol, I>(&I::testItem4_, [](I*){return itemStyles().get();}))
+				->put(1, 0, testItem4Element)
 				->setCellSpanning(1, 2);
 
 	// Test 6: Anchor layout
 	addForm((new AnchorLayoutElement())
-				->put(AnchorLayoutElement::PlaceEdge::TopOf,
-						item<Symbol, I>(&I::testItem_, [](I*){return itemStyles().get();}),
-						AnchorLayoutElement::AtEdge::AtBottomOf,
-						item<Symbol, I>(&I::testItem2_, [](I*){return itemStyles().get();})));
+				->put(AnchorLayoutElement::PlaceEdge::TopOf, testItemElement,
+						AnchorLayoutElement::AtEdge::AtBottomOf, testItem2Element));
 }
 
 int DeclarativeTest::determineForm()
