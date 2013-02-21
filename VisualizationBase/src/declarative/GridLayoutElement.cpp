@@ -28,8 +28,8 @@
 
 namespace Visualization {
 
-GridLayoutElement::GridLayoutElement(int numColumns, int numRows)
-: numColumns_(numColumns), numRows_(numRows), spaceBetweenColumns_{}, spaceBetweenRows_{},
+GridLayoutElement::GridLayoutElement()
+: numColumns_(1), numRows_(1), spaceBetweenColumns_{}, spaceBetweenRows_{},
   defaultHorizontalAlignment_{LayoutStyle::Alignment::Left}, defaultVerticalAlignment_{LayoutStyle::Alignment::Top},
   defaultColumnStretchFactor_{0}, defaultRowStretchFactor_{0}
 {
@@ -67,7 +67,7 @@ void GridLayoutElement::destroyChildItems(Item* item)
 			elementGrid_[x][y]->destroyChildItems(item);
 }
 
-GridLayoutElement* GridLayoutElement::addElement(Element* element, int column, int row, int columnSpan, int rowSpan)
+GridLayoutElement* GridLayoutElement::put(int column, int row, Element* element, int columnSpan, int rowSpan)
 {
 	adjustSize(column + columnSpan - 1, row + rowSpan - 1);
 

@@ -37,9 +37,9 @@ class GridLayoutElement : public LayoutElement {
 		FLUENT_ELEMENT_INTERFACE(GridLayoutElement);
 
 	public: // Methods executable on element definition
-		GridLayoutElement(int numColumns=1, int numRows=1);
+		GridLayoutElement();
 		virtual ~GridLayoutElement();
-		GridLayoutElement* addElement(Element* element, int column, int row, int columnSpan=1, int rowSpan=1);
+		GridLayoutElement* put(int column, int row, Element* element, int columnSpan=1, int rowSpan=1);
 		GridLayoutElement* setSpacing(int spacing);
 		GridLayoutElement* setSpacing(int spaceBetweenColumns, int spaceBetweenRows);
 		GridLayoutElement* setHorizontalSpacing(int spaceBetweenColumns);
