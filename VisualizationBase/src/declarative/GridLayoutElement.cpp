@@ -37,7 +37,7 @@ GridLayoutElement::GridLayoutElement()
 	elementGrid_ = QVector<QVector<Element*>>(numColumns_, QVector<Element*>(numRows_));
 
 	// initialize span grid
-	spanGrid_ = QVector<QVector<QPair<int, int>>>(numColumns_, QVector<QPair<int, int>>(numRows_));
+	spanGrid_ = QVector<QVector<QPair<int, int>>>(numColumns_,QVector<QPair<int, int>>(numRows_, QPair<int, int>(1, 1)));
 
 	// initialize alignments
 	defaultColumnHorizontalAlignments_ = QVector<LayoutStyle::Alignment>(numColumns_, defaultVerticalAlignment_);
@@ -67,14 +67,13 @@ void GridLayoutElement::destroyChildItems(Item* item)
 			elementGrid_[x][y]->destroyChildItems(item);
 }
 
-GridLayoutElement* GridLayoutElement::put(int column, int row, Element* element, int columnSpan, int rowSpan)
+GridLayoutElement* GridLayoutElement::put(int column, int row, Element* element)
 {
-	adjustSize(column + columnSpan - 1, row + rowSpan - 1);
+	adjustSize(column, row);
 	lastCell_ = QPair<int, int>(column, row);
 
 	SAFE_DELETE(elementGrid_[column][row]);
 	elementGrid_[column][row] = element;
-	spanGrid_[column][row] = QPair<int, int>(columnSpan, rowSpan);
 	return this;
 }
 
@@ -371,7 +370,8 @@ void GridLayoutElement::adjustSize(int containColumn, int containRow)
 		elementGrid_ = newElementGrid;
 
 		// adjust span grid
-		auto newSpanGrid = QVector<QVector<QPair<int, int>>>(newNumColumns, QVector<QPair<int, int>>(newNumRows));
+		auto newSpanGrid = QVector<QVector<QPair<int, int>>>(
+				newNumColumns,QVector<QPair<int, int>>(newNumRows, QPair<int, int>(1, 1)));
 		for (int x=0; x<numColumns_; x++)
 			for (int y=0; y<numRows_; y++)
 				newSpanGrid[x][y] = spanGrid_[x][y];

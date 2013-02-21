@@ -75,9 +75,11 @@ void DeclarativeTest::initializeForms()
 									->setHorizontalSpacing(10)
 									->put(0, 0, item<Symbol, I>(&I::testItem_, [](I*){return itemStyles().get();}))
 									->put(1, 0, item<Symbol, I>(&I::testItem2_, [](I*){return itemStyles().get();}))
-									->put(2, 0, item<Symbol, I>(&I::testItem3_, [](I*){return itemStyles().get();})), 2, 1)
+									->put(2, 0, item<Symbol, I>(&I::testItem3_, [](I*){return itemStyles().get();})))
+				->setCellSpanning(2, 1)
 				->put(2, 0, item<VExtendable,I>(&I::testNodeItem_, [](I* v){return v->testNode_;},
-															[](I*){return VExtendable::itemStyles().get();}), 1, 2)
+															[](I*){return VExtendable::itemStyles().get();}))
+				->setCellSpanning(1, 2)
 				->put(0, 1, item<Symbol, I>(&I::testItem4_, [](I*){return itemStyles().get();}))
 				);
 
@@ -94,7 +96,8 @@ void DeclarativeTest::initializeForms()
 																				[](I*){return VExtendable::itemStyles().get();}))
 									->put(2, 0, item<Symbol, I>(&I::testItem3_, [](I*){return itemStyles().get();}))
 									->setCellVerticalAlignment(LayoutStyle::Alignment:: Center))
-				->put(1, 0, item<Symbol, I>(&I::testItem4_, [](I*){return itemStyles().get();}), 1, 2);
+				->put(1, 0, item<Symbol, I>(&I::testItem4_, [](I*){return itemStyles().get();}))
+				->setCellSpanning(1, 2);
 }
 
 int DeclarativeTest::determineForm()

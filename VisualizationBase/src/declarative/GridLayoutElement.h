@@ -39,7 +39,7 @@ class GridLayoutElement : public LayoutElement {
 	public: // Methods executable on element definition
 		GridLayoutElement();
 		virtual ~GridLayoutElement();
-		GridLayoutElement* put(int column, int row, Element* element, int columnSpan=1, int rowSpan=1);
+		GridLayoutElement* put(int column, int row, Element* element);
 		GridLayoutElement* setSpacing(int spacing);
 		GridLayoutElement* setSpacing(int spaceBetweenColumns, int spaceBetweenRows);
 		GridLayoutElement* setHorizontalSpacing(int spaceBetweenColumns);
@@ -52,6 +52,7 @@ class GridLayoutElement : public LayoutElement {
 		GridLayoutElement* setCellVerticalAlignment(LayoutStyle::Alignment verticalAlignment);
 		GridLayoutElement* setCellAlignment(LayoutStyle::Alignment horizontalAlignment,
 														LayoutStyle::Alignment verticalAlignment);
+		GridLayoutElement* setCellSpanning(int columnSpan, int rowSpan);
 		GridLayoutElement* setColumnStretchFactor(int column, float stretchFactor);
 		GridLayoutElement* setColumnStretchFactors(float stretchFactor);
 		GridLayoutElement* setRowStretchFactor(int row, float stretchFactor);
@@ -185,6 +186,14 @@ inline GridLayoutElement* GridLayoutElement::setCellAlignment(LayoutStyle::Align
 	int row = lastCell_.second;
 	cellHorizontalAlignmentGrid_[column][row] = horizontalAlignment;
 	cellVerticalAlignmentGrid_[column][row] = verticalAlignment;
+	return this;
+}
+inline GridLayoutElement* GridLayoutElement::setCellSpanning(int columnSpan, int rowSpan)
+{
+	int column = lastCell_.first;
+	int row = lastCell_.second;
+	adjustSize(column + columnSpan - 1, row + rowSpan - 1);
+	spanGrid_[column][row] = QPair<int, int>(columnSpan, rowSpan);
 	return this;
 }
 inline GridLayoutElement* GridLayoutElement::setColumnStretchFactor(int column, float stretchFactor)
