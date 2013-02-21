@@ -48,10 +48,10 @@ class GridLayoutElement : public LayoutElement {
 		GridLayoutElement* setVerticalAlignment(LayoutStyle::Alignment verticalAlignment);
 		GridLayoutElement* setColumnHorizontalAlignment(int column, LayoutStyle::Alignment horizontalAlignment);
 		GridLayoutElement* setRowVerticalAlignment(int row, LayoutStyle::Alignment verticalAlignment);
-		GridLayoutElement* setCellHorizontalAlignment(int column, int row, LayoutStyle::Alignment horizontalAlignment);
-		GridLayoutElement* setCellVerticalAlignment(int column, int row, LayoutStyle::Alignment verticalAlignment);
-		GridLayoutElement* setCellAlignment(int column, int row, LayoutStyle::Alignment horizontalAlignment,
-																					LayoutStyle::Alignment verticalAlignment);
+		GridLayoutElement* setCellHorizontalAlignment(LayoutStyle::Alignment horizontalAlignment);
+		GridLayoutElement* setCellVerticalAlignment(LayoutStyle::Alignment verticalAlignment);
+		GridLayoutElement* setCellAlignment(LayoutStyle::Alignment horizontalAlignment,
+														LayoutStyle::Alignment verticalAlignment);
 		GridLayoutElement* setColumnStretchFactor(int column, float stretchFactor);
 		GridLayoutElement* setColumnStretchFactors(float stretchFactor);
 		GridLayoutElement* setRowStretchFactor(int row, float stretchFactor);
@@ -72,6 +72,7 @@ class GridLayoutElement : public LayoutElement {
 		int numRows_{};
 		int spaceBetweenColumns_{};
 		int spaceBetweenRows_{};
+		QPair<int, int> lastCell_{};
 		QVector<QVector<Element*>> elementGrid_{};
 		QVector<QVector<QPair<int, int>>> spanGrid_{};
 		LayoutStyle::Alignment defaultHorizontalAlignment_{};
@@ -163,24 +164,25 @@ inline GridLayoutElement* GridLayoutElement::setRowVerticalAlignment(int row, La
 	}
 	return this;
 }
-inline GridLayoutElement* GridLayoutElement::setCellHorizontalAlignment(int column, int row,
-		LayoutStyle::Alignment horizontalAlignment)
+inline GridLayoutElement* GridLayoutElement::setCellHorizontalAlignment(LayoutStyle::Alignment horizontalAlignment)
 {
-	adjustSize(column, row);
+	int column = lastCell_.first;
+	int row = lastCell_.second;
 	cellHorizontalAlignmentGrid_[column][row] = horizontalAlignment;
 	return this;
 }
-inline GridLayoutElement* GridLayoutElement::setCellVerticalAlignment(int column, int row,
-		LayoutStyle::Alignment verticalAlignment)
+inline GridLayoutElement* GridLayoutElement::setCellVerticalAlignment(LayoutStyle::Alignment verticalAlignment)
 {
-	adjustSize(column, row);
+	int column = lastCell_.first;
+	int row = lastCell_.second;
 	cellVerticalAlignmentGrid_[column][row] = verticalAlignment;
 	return this;
 }
-inline GridLayoutElement* GridLayoutElement::setCellAlignment(int column, int row,
-		LayoutStyle::Alignment horizontalAlignment, LayoutStyle::Alignment verticalAlignment)
+inline GridLayoutElement* GridLayoutElement::setCellAlignment(LayoutStyle::Alignment horizontalAlignment,
+																					LayoutStyle::Alignment verticalAlignment)
 {
-	adjustSize(column, row);
+	int column = lastCell_.first;
+	int row = lastCell_.second;
 	cellHorizontalAlignmentGrid_[column][row] = horizontalAlignment;
 	cellVerticalAlignmentGrid_[column][row] = verticalAlignment;
 	return this;

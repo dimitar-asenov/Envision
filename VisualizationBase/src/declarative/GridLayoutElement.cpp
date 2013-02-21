@@ -29,7 +29,7 @@
 namespace Visualization {
 
 GridLayoutElement::GridLayoutElement()
-: numColumns_(1), numRows_(1), spaceBetweenColumns_{}, spaceBetweenRows_{},
+: numColumns_(1), numRows_(1), spaceBetweenColumns_{}, spaceBetweenRows_{}, lastCell_{QPair<int, int>(0, 0)},
   defaultHorizontalAlignment_{LayoutStyle::Alignment::Left}, defaultVerticalAlignment_{LayoutStyle::Alignment::Top},
   defaultColumnStretchFactor_{0}, defaultRowStretchFactor_{0}
 {
@@ -70,6 +70,7 @@ void GridLayoutElement::destroyChildItems(Item* item)
 GridLayoutElement* GridLayoutElement::put(int column, int row, Element* element, int columnSpan, int rowSpan)
 {
 	adjustSize(column + columnSpan - 1, row + rowSpan - 1);
+	lastCell_ = QPair<int, int>(column, row);
 
 	SAFE_DELETE(elementGrid_[column][row]);
 	elementGrid_[column][row] = element;

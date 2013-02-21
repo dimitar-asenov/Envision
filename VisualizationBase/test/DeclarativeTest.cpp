@@ -93,7 +93,7 @@ void DeclarativeTest::initializeForms()
 									->put(0, 0, item<VExtendable,I>(&I::testNodeItem_, [](I* v){return v->testNode_;},
 																				[](I*){return VExtendable::itemStyles().get();}))
 									->put(2, 0, item<Symbol, I>(&I::testItem3_, [](I*){return itemStyles().get();}))
-									->setCellVerticalAlignment(2, 0, LayoutStyle::Alignment:: Center))
+									->setCellVerticalAlignment(LayoutStyle::Alignment:: Center))
 				->put(1, 0, item<Symbol, I>(&I::testItem4_, [](I*){return itemStyles().get();}), 1, 2);
 }
 
