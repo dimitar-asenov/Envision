@@ -47,6 +47,15 @@ class AnchorLayoutElement : public LayoutElement {
 		AnchorLayoutElement* put(PlaceEdge placeEdge, Element* placeElement, float relativeEdgePosition,
 											Element* fixedElement);
 
+		// Methods executable when items need to be rendered
+		virtual void computeSize(Item* item, int availableWidth, int availableHeight) override;
+		virtual void setItemPositions(Item* item, int parentX, int parentY) override;
+		virtual void synchronizeWithItem(Item* item) override;
+		virtual bool sizeDependsOnParent(const Item* item) const override;
+
+		// Recursive item destruction
+		virtual void destroyChildItems(Item* item) override;
+
 	private:
 		enum class Edge : int {Left, Right, Center, VCenter, HCenter, Top, Bottom};
 		enum class Orientation : int {Auto, Horizontal, Vertical};
@@ -58,7 +67,36 @@ class AnchorLayoutElement : public LayoutElement {
 		Orientation inferOrientation(Edge firstEdge, Edge secondEdge);
 		float relativePosition(Edge edge);
 
+		QList<Element*> elementList_{};
+		class Placement
+		{
+			public:
+				Placement(float relativePlaceEdgePosition, Element* placeElement, int offset,
+								float relativeFixedEdgePosition, Element* fixedElement);
+				virtual ~Placement();
+				void execute(Orientation orientation);
+				Element* placeElement() const;
+				Element* fixedElement() const;
+
+			private:
+				float relativePlaceEdgePosition_{};
+				Element* placeElement_{};
+				int offset_{};
+				float relativeFixedEdgePosition_{};
+				Element* fixedElement_{};
+		};
+		QList<Placement*> horizontalPlacements_{};
+		QList<Placement*> verticalPlacements_{};
 };
+
+inline Element* AnchorLayoutElement::Placement::placeElement() const
+{
+	return placeElement_;
+}
+inline Element* AnchorLayoutElement::Placement::fixedElement() const
+{
+	return fixedElement_;
+}
 
 }
 

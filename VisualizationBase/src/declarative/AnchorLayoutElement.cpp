@@ -91,6 +91,125 @@ AnchorLayoutElement* AnchorLayoutElement::put(PlaceEdge placeEdge, Element* plac
 	}
 }
 
+void AnchorLayoutElement::computeSize(Item* item, int /*availableWidth*/, int /*availableHeight*/)
+{
+	// TODO: what to do with the additional size?
+	// compute size of each sub-element and set their position to (0, 0)
+	for (int i=0; i<elementList_.length(); i++)
+	{
+		elementList_.at(i)->computeSize(item, 0, 0);
+		elementList_.at(i)->setPos(QPoint(0, 0));
+	}
+
+	// place elements horizontally
+	int minX = 0;
+	for (int i=0; i<horizontalPlacements_.length(); i++)
+	{
+		horizontalPlacements_.at(i)->execute(Orientation::Horizontal);
+		int posX = horizontalPlacements_.at(i)->placeElement()->pos().x();
+		if (posX < minX)
+			minX = posX;
+	}
+
+	// place elements vertically
+	int minY = 0;
+	for (int i=0; i<verticalPlacements_.length(); i++)
+	{
+		verticalPlacements_.at(i)->execute(Orientation::Vertical);
+		int posY = verticalPlacements_.at(i)->placeElement()->pos().y();
+		if (posY < minY)
+			minY = posY;
+	}
+
+	// adjust positions, such that the minimum on each axis is at left/right margin, and compute overall element width
+	// and height
+	int adjustmentX = minX * -1 + leftMargin();
+	int adjustmentY = minY * -1 + topMargin();
+	int maxX = 0;
+	int maxY = 0;
+	for (int i=0; i<elementList_.length(); i++)
+	{
+		Element* element = elementList_.at(i);
+		element->setPos(QPoint(element->pos().x() + adjustmentX, element->pos().y() + adjustmentY));
+		int rightEdge = element->pos().x() + element->size().width();
+		int bottomEdge = element->pos().y() + element->size().height();
+		if (rightEdge > maxX)
+			maxX = rightEdge;
+		if (bottomEdge > maxY)
+			maxY = bottomEdge;
+	}
+	setSize(QSize(maxX + rightMargin(), maxY + bottomMargin()));
+}
+
+void AnchorLayoutElement::setItemPositions(Item* item, int parentX, int parentY)
+{
+	for(int i=0; i<elementList_.length(); i++)
+		elementList_.at(i)->setItemPositions(item, parentX + pos().x(), parentY + pos().y());
+}
+
+void AnchorLayoutElement::synchronizeWithItem(Item* item)
+{
+	for(int i=0; i<elementList_.length(); i++)
+		if (elementList_.at(i) != nullptr)
+			elementList_.at(i)->synchronizeWithItem(item);
+}
+
+bool AnchorLayoutElement::sizeDependsOnParent(const Item* /*item*/) const
+{
+	// TODO: implement sizeDependsOnParent
+	return false;
+}
+
+AnchorLayoutElement* AnchorLayoutElement::putX(float relativePlaceEdgePosition, Element* placeElement, int offset,
+																float relativeFixedEdgePosition, Element* fixedElement)
+{
+	if (elementList_.contains(placeElement))
+		// check if element is not already assumed to be fixed/placed
+		for (int i = 0; i < horizontalPlacements_.length(); ++i)
+		{
+			Q_ASSERT(horizontalPlacements_.at(i)->fixedElement() != placeElement);
+			Q_ASSERT(horizontalPlacements_.at(i)->placeElement() != placeElement);
+		}
+	else
+		elementList_.append(placeElement);
+
+	if (!elementList_.contains(fixedElement))
+		elementList_.append(fixedElement);
+
+	horizontalPlacements_.append(new Placement(relativePlaceEdgePosition, placeElement, offset,
+																relativeFixedEdgePosition, fixedElement));
+
+	return this;
+}
+
+AnchorLayoutElement* AnchorLayoutElement::putY(float relativePlaceEdgePosition, Element* placeElement, int offset,
+																float relativeFixedEdgePosition, Element* fixedElement)
+{
+	if (elementList_.contains(placeElement))
+		// check if element is not already assumed to be fixed/placed
+		for (int i = 0; i < verticalPlacements_.length(); ++i)
+		{
+			Q_ASSERT(verticalPlacements_.at(i)->fixedElement() != placeElement);
+			Q_ASSERT(verticalPlacements_.at(i)->placeElement() != placeElement);
+		}
+	else
+		elementList_.append(placeElement);
+
+	if (!elementList_.contains(fixedElement))
+		elementList_.append(fixedElement);
+
+	verticalPlacements_.append(new Placement(relativePlaceEdgePosition, placeElement, offset,
+															relativeFixedEdgePosition, fixedElement));
+
+	return this;
+}
+
+void AnchorLayoutElement::destroyChildItems(Item* item)
+{
+	for (int i = 0; i < elementList_.length(); ++i)
+		elementList_.at(i)->destroyChildItems(item);
+}
+
 AnchorLayoutElement::Orientation AnchorLayoutElement::orientation(Edge edge)
 {
 	switch (edge) {
@@ -141,6 +260,39 @@ float AnchorLayoutElement::relativePosition(Edge edge)
 			return 1.0;
 		default:
 			return 0.5;
+	}
+}
+
+AnchorLayoutElement::Placement::Placement(float relativePlaceEdgePosition, Element* placeElement, int offset,
+		float relativeFixedEdgePosition, Element* fixedElement)
+: relativePlaceEdgePosition_{relativePlaceEdgePosition}, placeElement_{placeElement}, offset_{offset},
+  relativeFixedEdgePosition_{relativeFixedEdgePosition}, fixedElement_{fixedElement}
+{}
+
+AnchorLayoutElement::Placement::~Placement()
+{}
+
+/**
+ * Calculates the position in the orientation axis of the element to be placed, assuming it's size was already
+ * calculated, and the position on the orientation axis of the fixed element is already fixed.
+ */
+void AnchorLayoutElement::Placement::execute(Orientation orientation)
+{
+	Q_ASSERT(orientation != Orientation::Auto);
+
+	if (orientation == Orientation::Horizontal)
+	{
+		int edgePosition = fixedElement_->pos().x() + offset_ +
+									fixedElement_->size().width() * relativeFixedEdgePosition_;
+		int placeX = edgePosition - placeElement_->size().width() * relativePlaceEdgePosition_;
+		placeElement_->setPos(QPoint(placeX, placeElement_->pos().y()));
+	}
+	else // orientation == Orientation::Vertical
+	{
+		int edgePosition = fixedElement_->pos().y() + offset_ +
+									fixedElement_->size().height() * relativeFixedEdgePosition_;
+		int placeY = edgePosition - placeElement_->size().height() * relativePlaceEdgePosition_;
+		placeElement_->setPos(QPoint(placeElement_->pos().x(), placeY));
 	}
 }
 

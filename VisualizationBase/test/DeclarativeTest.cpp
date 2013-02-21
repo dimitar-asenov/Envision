@@ -30,6 +30,7 @@
 #include "../src/items/VExtendable.h"
 #include "ModelBase/src/test_nodes/BinaryNode.h"
 #include "../src/declarative/GridLayoutElement.h"
+#include "../src/declarative/AnchorLayoutElement.h"
 
 namespace Visualization {
 
@@ -98,11 +99,18 @@ void DeclarativeTest::initializeForms()
 									->setCellVerticalAlignment(LayoutStyle::Alignment:: Center))
 				->put(1, 0, item<Symbol, I>(&I::testItem4_, [](I*){return itemStyles().get();}))
 				->setCellSpanning(1, 2);
+
+	// Test 6: Anchor layout
+	addForm((new AnchorLayoutElement())
+				->put(AnchorLayoutElement::PlaceEdge::TopOf,
+						item<Symbol, I>(&I::testItem_, [](I*){return itemStyles().get();}),
+						AnchorLayoutElement::AtEdge::AtBottomOf,
+						item<Symbol, I>(&I::testItem2_, [](I*){return itemStyles().get();})));
 }
 
 int DeclarativeTest::determineForm()
 {
-	return 5;
+	return 6;
 }
 
 } /* namespace Visualization */
