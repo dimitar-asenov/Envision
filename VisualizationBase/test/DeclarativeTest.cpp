@@ -106,8 +106,20 @@ void DeclarativeTest::initializeForms()
 
 	// Test 6: Anchor layout
 	addForm((new AnchorLayoutElement())
-				->put(AnchorLayoutElement::PlaceEdge::TopOf, testItemElement,
-						AnchorLayoutElement::AtEdge::AtBottomOf, testItem2Element));
+				->put(AnchorLayoutElement::PlaceEdge::BottomOf, testItemElement, 20,
+						AnchorLayoutElement::FromEdge::Above, testNodeItemElement)
+				->put(AnchorLayoutElement::PlaceEdge::LeftOf, testItemElement,
+						AnchorLayoutElement::AtEdge::AtLeftOf, testNodeItemElement)
+				->put(AnchorLayoutElement::PlaceEdge::VCenterOf, testItem2Element,
+						AnchorLayoutElement::AtEdge::AtCenterOf, testItemElement)
+				->put(AnchorLayoutElement::PlaceEdge::LeftOf, testItem2Element, 20,
+						AnchorLayoutElement::FromEdge::FromRightOf, testItemElement)
+				->put(AnchorLayoutElement::PlaceEdge::HCenterOf, testItem3Element,
+						AnchorLayoutElement::AtEdge::AtCenterOf, testItem2Element)
+				->put(AnchorLayoutElement::PlaceEdge::TopOf, testItem3Element, 20,
+						AnchorLayoutElement::FromEdge::Below, testNodeItemElement)
+				->put(AnchorLayoutElement::PlaceEdge::TopOf, testItem4Element, 0.33, testItem3Element)
+				->put(AnchorLayoutElement::PlaceEdge::RightOf, testItem4Element, 0.1, testNodeItemElement));
 }
 
 int DeclarativeTest::determineForm()
