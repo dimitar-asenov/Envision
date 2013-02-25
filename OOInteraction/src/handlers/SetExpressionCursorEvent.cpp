@@ -36,19 +36,51 @@ namespace OOInteraction {
 const QEvent::Type SetExpressionCursorEvent::EventType = static_cast<QEvent::Type> (QEvent::registerEventType());
 
 SetExpressionCursorEvent::SetExpressionCursorEvent(Visualization::Item* parentContainer, Model::Node* node, int offset)
-	: CustomSceneEvent(EventType), parentContainer_(parentContainer), node_(node), offset_(offset)
+	: CustomSceneEvent(EventType), parentContainerChain_{}, node_(node), offset_(offset)
 {
+	while(parentContainer)
+	{
+		parentContainerChain_.prepend(parentContainer);
+		parentContainer = parentContainer->parent();
+	}
 }
 
 void SetExpressionCursorEvent::execute()
 {
-	auto nodeVis = parentContainer_->findVisualizationOf(node_);
-	Q_ASSERT( nodeVis != nullptr);
-	auto* sp = Model::AdapterManager::adapt<StringOffsetProvider>( nodeVis );
-	if (sp)
+	// First start with the parent container and try to find the last descendent item that is still in the chain
+	// TODO: Do not assume that the first element of the parentContainerChain_ is a valid (non-deleted) item.
+	int container = 0;
+	while(container+1 < parentContainerChain_.size() &&
+			parentContainerChain_.at(container)->childItems().contains(parentContainerChain_.at(container+1)))
+		++container;
+
+
+	int mostSpecificContainer = container;
+	// Now start from the last found container and go up the chain, until the visualization of the node is found.
+	while (container >=0)
 	{
-		sp->setOffset(offset_);
-		SAFE_DELETE(sp);
+		auto nodeVis = parentContainerChain_.at(container)->findVisualizationOf(node_);
+		if (nodeVis)
+		{
+			auto* sp = Model::AdapterManager::adapt<StringOffsetProvider>( nodeVis );
+			if (sp)
+			{
+				sp->setOffset(offset_);
+				SAFE_DELETE(sp);
+			}
+			return;
+		}
+		--container;
+	}
+
+	// A visualization was not found, repost this event, as most likely there are some updates pending.
+	// TODO: This is quite a hack, ideally we shouldn't have to do this at all, but the currently broken Qt event
+	// handling makes our life harder.
+	if (!reposted_)
+	{
+		auto event = new SetExpressionCursorEvent(parentContainerChain_.at(mostSpecificContainer), node_, offset_);
+		event->reposted_ = true;
+		qApp->postEvent(parentContainerChain_.first()->scene(), event);
 	}
 }
 

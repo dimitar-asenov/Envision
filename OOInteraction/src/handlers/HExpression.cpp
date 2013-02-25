@@ -309,9 +309,14 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 				auto s = target->scene();
 				s->addPostEventAction(new Visualization::CustomSceneEvent(
 						[s, this]() {
-							auto o = s->mainCursor()->owner();
-							while (o && o->handler() != this) o = o->parent();
-							if (o) showAutoComplete(o);
+							auto mc = s->mainCursor();
+							if (mc) // This will be null if 'target' was deleted, e.g. because the new expression
+								// else whereis visualized
+							{
+								auto o = mc->owner();
+								while (o && o->handler() != this) o = o->parent();
+								if (o) showAutoComplete(o);
+							}
 						}));
 			}
 			else
