@@ -24,36 +24,38 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ContractsVMethodAddOn.h
- *
- *  Created on: Jul 17, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef ContractsLibrary_CONTRACTSVMETHODADDON_H_
-#define ContractsLibrary_CONTRACTSVMETHODADDON_H_
+#pragma once
 
 #include "../contractslibrary_api.h"
-#include "VisualizationBase/src/items/VisualizationAddOn.h"
+
+namespace OOVisualization {
+	class VStatementItemList;
+}
 
 namespace OOModel {
-	class Method;
+	class Class;
+	class StatementItemList;
+	class StatementItem;
 }
 
 namespace ContractsLibrary {
 
-class CONTRACTSLIBRARY_API ContractsVMethodAddOn : public Visualization::VisualizationAddOn
-{
+class CONTRACTSLIBRARY_API ContractFilter {
 	public:
-		ContractsVMethodAddOn(OOModel::Method* contractsClassMethodDefinition);
+		static void setContractsClass(OOModel::Class* contractClass);
 
-		virtual QList<Visualization::Item*> determineItems(Visualization::Item* vis,
-			const QList<Visualization::Item*>& currentItems) override;
+		static void showOnlyContractsFilter(OOVisualization::VStatementItemList* list, int& begin, int& end);
+		static void hideContractsFilter(OOVisualization::VStatementItemList*, int& begin, int& end);
+
+		static int indexOfLastContractStatement(OOModel::StatementItemList* statements);
+		static bool isDefinitelyAContractStatement(OOModel::StatementItem* statement);
+		static bool isPotentiallyAContractStatement(OOModel::StatementItem* statement);
 
 	private:
-		OOModel::Method* contractClassMethod_;
+
+		static OOModel::Class* contractClass_;
 };
 
+inline void ContractFilter::setContractsClass(OOModel::Class* contractClass) { contractClass_ = contractClass; }
+
 } /* namespace ContractsLibrary */
-#endif /* ContractsLibrary_CONTRACTSVMETHODADDON_H_ */

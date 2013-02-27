@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ClassTypeStringOffsetProvider.cpp
- *
- *  Created on: Nov 14, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "ClassTypeStringOffsetProvider.h"
 #include "Cell.h"
 #include "OOVisualization/src/types/VClassType.h"

@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * AddValue.h
- *
- *  Created on: Jan 11, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef INTERACTIONBASE_ADDVALUE_H_
-#define INTERACTIONBASE_ADDVALUE_H_
+#pragma once
 
 #include "../../interactionbase_api.h"
 
@@ -51,4 +43,3 @@ class INTERACTIONBASE_API AddValue : public ExpressionTreeBuildInstruction
 };
 
 } /* namespace InteractionBase */
-#endif /* INTERACTIONBASE_ADDVALUE_H_ */

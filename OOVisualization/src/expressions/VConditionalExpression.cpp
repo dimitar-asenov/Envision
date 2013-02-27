@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VConditionalExpression.cpp
- *
- *  Created on: Mar 27, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "expressions/VConditionalExpression.h"
 
 #include "VisualizationBase/src/items/Static.h"

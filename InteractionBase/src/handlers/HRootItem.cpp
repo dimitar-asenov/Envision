@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * HRootItem.cpp
- *
- *  Created on: Apr 26, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "HRootItem.h"
 #include "events/SetCursorEvent.h"
 

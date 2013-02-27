@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CommaExpressionStringComponents.h
- *
- *  Created on: Feb 24, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOInteraction_COMMAEXPRESSIONSTRINGCOMPONENTS_H_
-#define OOInteraction_COMMAEXPRESSIONSTRINGCOMPONENTS_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 #include "StringComponents.h"
@@ -54,4 +46,3 @@ class OOINTERACTION_API CommaExpressionStringComponents : public StringComponent
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_COMMAEXPRESSIONSTRINGCOMPONENTS_H_ */

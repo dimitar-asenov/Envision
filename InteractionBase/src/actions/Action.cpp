@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * Action.cpp
- *
- *  Created on: Sep 27, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "Action.h"
 
 #include "../InteractionBaseException.h"

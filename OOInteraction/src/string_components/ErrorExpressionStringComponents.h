@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ErrorExpressionStringComponents.h
- *
- *  Created on: Feb 17, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOInteraction_ERROREXPRESSIONSTRINGCOMPONENTS_H_
-#define OOInteraction_ERROREXPRESSIONSTRINGCOMPONENTS_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 #include "StringComponents.h"
@@ -54,4 +46,3 @@ class OOINTERACTION_API ErrorExpressionStringComponents : public StringComponent
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_ERROREXPRESSIONSTRINGCOMPONENTS_H_ */

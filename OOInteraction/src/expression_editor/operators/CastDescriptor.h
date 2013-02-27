@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CastDescriptor.h
- *
- *  Created on: Feb 24, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOInteraction_CASTDESCRIPTOR_H_
-#define OOInteraction_CASTDESCRIPTOR_H_
+#pragma once
 
 #include "../../oointeraction_api.h"
 #include "../OOOperatorDescriptor.h"
@@ -48,4 +40,3 @@ class OOINTERACTION_API CastDescriptor : public OOOperatorDescriptor {
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_CASTDESCRIPTOR_H_ */

@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * View.h
- *
- *  Created on: Dec 6, 2010
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef VIEW_H_
-#define VIEW_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 #include "../Scene.h"
@@ -59,5 +51,3 @@ class VISUALIZATIONBASE_API View : public QGraphicsView
 inline void View::setHiddenItemCategories( Scene::ItemCategories hidden) {hiddenItemCategories_ = hidden;}
 
 }
-
-#endif /* VIEW_H_ */

@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * SetCursorEvent.cpp
- *
- *  Created on: Mar 1, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "SetCursorEvent.h"
 
 #include "InteractionBase/src/handlers/GenericHandler.h"
@@ -47,6 +40,11 @@ SetCursorEvent::SetCursorEvent(Visualization::Item* itemToGetCursor, CursorPlace
 
 SetCursorEvent::SetCursorEvent(GetItemFunction getItemToFocus, CursorPlacement placement, bool showPrompt)
 : CustomSceneEvent(EventType), getItemToFocus_(getItemToFocus), placement_(placement), showPrompt_(showPrompt)
+{}
+
+SetCursorEvent::SetCursorEvent(GetItemFunction getItemToFocus, GetCursorPlacement getCursorPlacement, bool showPrompt)
+: CustomSceneEvent(EventType), getItemToFocus_(getItemToFocus), getCursorPlacement_(getCursorPlacement),
+	showPrompt_(showPrompt)
 {}
 
 SetCursorEvent::SetCursorEvent(Visualization::Item* parentContainer, Model::Node* node, CursorPlacement placement,
@@ -85,6 +83,7 @@ void SetCursorEvent::execute()
 	if (!item) return;
 	auto parent = item->parent();
 
+	if (getCursorPlacement_) placement_ = getCursorPlacement_();
 	switch(placement_)
 	{
 		case CursorOnTop: item->moveCursor(Visualization::Item::CursorMoveDirection::MoveOnPosition,

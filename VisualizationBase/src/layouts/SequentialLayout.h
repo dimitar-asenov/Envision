@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * SequentialLayout.h
- *
- *  Created on: Dec 9, 2010
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef SEQUENTIALLAYOUT_H_
-#define SEQUENTIALLAYOUT_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -56,6 +48,7 @@ class VISUALIZATIONBASE_API SequentialLayout: public Layout
 		virtual bool isEmpty() const;
 
 		virtual void updateGeometry(int availableWidth, int availableHeight);
+		virtual bool sizeDependsOnParent() const override;
 
 		int focusedElementIndex() const;
 
@@ -166,5 +159,3 @@ template <class T> void SequentialLayout::synchronizeMid(T*& item, typename T::N
 }
 
 }
-
-#endif /* SEQUENTIALLAYOUT_H_ */

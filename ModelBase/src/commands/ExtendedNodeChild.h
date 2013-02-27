@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * ExtendedNodeChild.h
- *
- *  Created on: Nov 8, 2010
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef EXTENDEDNODECHILD_H_
-#define EXTENDEDNODECHILD_H_
+#pragma once
 
 #include "NodeOwningCommand.h"
 #include "../nodes/Extendable/ExtendableIndex.h"
@@ -58,5 +50,3 @@ class MODELBASE_API ExtendedNodeChild: public NodeOwningCommand
 };
 
 }
-
-#endif /* EXTENDEDNODECHILD_H_ */

@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * TypedListInstantiations.h
- *
- *  Created on: Feb 1, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef TYPEDLISTINSTANTIATIONS_H_
-#define TYPEDLISTINSTANTIATIONS_H_
+#pragma once
 
 #include "ModelBase/src/nodes/TypedList.h"
 
@@ -151,6 +143,3 @@ template class Q_DECL_IMPORT Model::TypedList<OOModel::TypeExpression>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::PrimitiveTypeExpression>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::ClassTypeExpression>;
 template class Q_DECL_IMPORT Model::TypedList<OOModel::ArrayTypeExpression>;
-
-
-#endif /* TYPEDLISTINSTANTIATIONS_H_ */

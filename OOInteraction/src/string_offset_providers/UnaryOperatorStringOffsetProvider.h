@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * UnaryOperatorStringOffsetProvider.h
- *
- *  Created on: Aug 2, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOInteraction_UNARYOPERATORSTRINGOFFSETPROVIDER_H_
-#define OOInteraction_UNARYOPERATORSTRINGOFFSETPROVIDER_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 #include "GridBasedOffsetProvider.h"
@@ -58,4 +50,3 @@ class OOINTERACTION_API UnaryOperatorStringOffsetProvider  : public GridBasedOff
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_UNARYOPERATORSTRINGOFFSETPROVIDER_H_ */

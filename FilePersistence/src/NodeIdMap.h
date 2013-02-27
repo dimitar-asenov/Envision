@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * NodeIdMap.h
- *
- *  Created on: Jan 16, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef FilePersistence_NODEIDMAP_H_
-#define FilePersistence_NODEIDMAP_H_
+#pragma once
 
 #include "ModelBase/src/nodes/Node.h"
 
@@ -63,4 +55,3 @@ inline void NodeIdMap::setNextId(NodeIdType nextId) { nextId_ = nextId; }
 inline void NodeIdMap::clear() { map.clear(); }
 
 } /* namespace FilePersistence */
-#endif /* FilePersistence_NODEIDMAP_H_ */

@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VTryCatchFinally.h
- *
- *  Created on: Nov 20, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOVisualization_VTRYCATCHFINALLY_H_
-#define OOVisualization_VTRYCATCHFINALLY_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 #include "VTryCatchFinallyStyle.h"
@@ -102,4 +94,3 @@ inline Visualization::Static* VTryCatchFinally::finallyIcon() const {return fina
 inline VStatementItemList* VTryCatchFinally::finallyBody() const {return finallyBody_; }
 
 } /* namespace OOVisualization */
-#endif /* OOVisualization_VTRYCATCHFINALLY_H_ */

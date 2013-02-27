@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CallStringComponents.h
- *
- *  Created on: Feb 29, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOInteraction_CALLSTRINGCOMPONENTS_H_
-#define OOInteraction_CALLSTRINGCOMPONENTS_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 #include "StringComponents.h"
@@ -54,4 +46,3 @@ class OOINTERACTION_API CallStringComponents : public StringComponents {
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_CALLSTRINGCOMPONENTS_H_ */

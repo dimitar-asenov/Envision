@@ -24,13 +24,6 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * SimpleTest.cpp
- *
- *  Created on: Jan 11, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
 #include "interactionbase.h"
 #include "HBinaryNode.h"
 #include "../src/autocomplete/AutoComplete.h"
@@ -86,7 +79,7 @@ TEST(InteractionBase, TextSelect)
 	QApplication::processEvents();
 
 	VList* l = dynamic_cast<VList*> (top->item());
-	l->at<VExtendable>(0)->setExpanded();
+	l->itemAt<VExtendable>(0)->setExpanded();
 	scene->scheduleUpdate();
 	scene->listenToModel(model);
 

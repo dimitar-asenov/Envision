@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * VIfStatementStyle.h
- *
- *  Created on: Feb 16, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef VIFSTATEMENTSTYLE_H_
-#define VIFSTATEMENTSTYLE_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -89,5 +81,3 @@ inline const Visualization::VListStyle& VIfStatementStyle::thenBranch() const { 
 inline const Visualization::VListStyle& VIfStatementStyle::elseBranch() const { return elseBranch_; }
 
 }
-
-#endif /* VIFSTATEMENTSTYLE_H_ */

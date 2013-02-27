@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * oointeraction.h
- *
- *  Created on: Jan 12, 2012
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef OOINTERACTION_H
-#define OOINTERACTION_H
+#pragma once
 
 #include "Core/src/EnvisionPlugin.h"
 #include "precompiled.h"
@@ -62,5 +54,3 @@ class OOInteraction : public QObject, public Core::EnvisionPlugin
 };
 
 }
-
-#endif // OOINTERACTION_H

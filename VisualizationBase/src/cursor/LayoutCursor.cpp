@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * LayoutCursor.cpp
- *
- *  Created on: Jan 30, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "cursor/LayoutCursor.h"
 #include "cursor/CursorShapeItem.h"
 #include "layouts/Layout.h"

@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * Visibility.h
- *
- *  Created on: Jan 28, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef VISIBILITY_H_
-#define VISIBILITY_H_
+#pragma once
 
 #include "../oomodel_api.h"
 
@@ -65,5 +57,3 @@ class OOMODEL_API Visibility :  public Model::Node
 inline Visibility::VisibilityType Visibility::get() const { return vis; }
 
 }
-
-#endif /* VISIBILITY_H_ */

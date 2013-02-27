@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * GridBasedOffsetProvider.h
- *
- *  Created on: Jun 11, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOInteraction_GRIDBASEDOFFSETPROVIDER_H_
-#define OOInteraction_GRIDBASEDOFFSETPROVIDER_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 #include "StringOffsetProvider.h"
@@ -79,4 +71,3 @@ class OOINTERACTION_API GridBasedOffsetProvider : public StringOffsetProvider {
 inline void GridBasedOffsetProvider::setSize(int width, int height) { size_.setWidth(width); size_.setHeight(height); }
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_GRIDBASEDOFFSETPROVIDER_H_ */

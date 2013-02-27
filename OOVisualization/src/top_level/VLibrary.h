@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * VLibrary.h
- *
- *  Created on: Feb 9, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef VLIBRARY_H_
-#define VLIBRARY_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 #include "VLibraryStyle.h"
@@ -71,5 +63,3 @@ class OOVISUALIZATION_API VLibrary
 		Visualization::PositionLayout* content;
 };
 }
-
-#endif /* VLIBRARY_H_ */

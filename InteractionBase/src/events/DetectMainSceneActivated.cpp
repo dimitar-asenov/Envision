@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * DetectMainSceneActivated.cpp
- *
- *  Created on: Sep 14, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "DetectMainSceneActivated.h"
 
 #include "events/SetCursorEvent.h"

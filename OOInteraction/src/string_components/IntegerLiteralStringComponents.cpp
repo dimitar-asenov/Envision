@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * IntegerLiteralStringComponents.cpp
- *
- *  Created on: Feb 17, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "string_components/IntegerLiteralStringComponents.h"
 
 #include "OOModel/src/expressions/IntegerLiteral.h"

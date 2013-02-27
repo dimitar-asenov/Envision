@@ -24,48 +24,37 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CreateContractMethod.cpp
- *
- *  Created on: May 31, 2012
- *      Author: Dimitar Asenov
- */
+#pragma once
 
-#include "CreateContractMethod.h"
-#include "OOInteraction/src/expression_editor/OOExpressionBuilder.h"
+#include "../oointeraction_api.h"
 
-#include "OOModel/src/expressions/MethodCallExpression.h"
+#if defined(OOINTERACTION_LIBRARY)
+	#include "ModelBase/src/visitor/VisitorDefinition.h"
+#else
+	#include "ModelBase/src/visitor/Visitor.h"
+#endif
 
-namespace ContractsLibrary {
-
-CreateContractMethod::CreateContractMethod(const QString& name, const QString& methodToCreate,
-		int expectedTypeArguments)
-: name_(name), methodToCreate_(methodToCreate), expectedTypeArguments_(expectedTypeArguments)
-{}
-
-const QString& CreateContractMethod::name() const
-{
-	return name_;
+namespace Model {
+	class Node;
 }
 
-OOModel::Expression* CreateContractMethod::create(const QList<OOModel::Expression*>& arguments)
-{
-	auto method = static_cast<OOModel::MethodCallExpression*>(
-			OOInteraction::OOExpressionBuilder::getOOExpression("CodeContracts.Contract." + methodToCreate_ + "()"));
-
-	int typeArguments = expectedTypeArguments_;
-	for(auto a: arguments)
-	{
-		if (typeArguments > 0)
-		{
-			method->ref()->typeArguments()->append(a);
-			--typeArguments;
-		}
-		else
-			method->arguments()->append(a);
-	}
-
-	return method;
+namespace OOModel {
+	class Method;
 }
 
-} /* namespace ContractsLibrary */
+namespace Visualization {
+	class VisualizationGroup;
+}
+
+namespace OOInteraction {
+
+class OOINTERACTION_API MethodDefinitionVisitor : public Model::Visitor<MethodDefinitionVisitor, Model::Node*> {
+	public:
+		static void init(Visualization::VisualizationGroup* customizationGroup);
+		static Model::Node* visitMethod(MethodDefinitionVisitor* v, OOModel::Method* met);
+
+	private:
+		static Visualization::VisualizationGroup* customizationGroup_;
+};
+
+} /* namespace OOInteraction */

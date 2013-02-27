@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * VIfStatement.h
- *
- *  Created on: Feb 16, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef VIFSTATEMENT_H_
-#define VIFSTATEMENT_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 #include "VIfStatementStyle.h"
@@ -96,5 +88,3 @@ inline VStatementItemList* VIfStatement::elseBranch() const { return elseBranch_
 inline Visualization::Item* VIfStatement::icon() const {return header_->at<Visualization::Item>(0);}
 
 }
-
-#endif /* VIFSTATEMENT_H_ */

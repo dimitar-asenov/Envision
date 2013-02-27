@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * IntegerLiteralStringComponents.h
- *
- *  Created on: Feb 17, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOInteraction_INTEGERLITERALSTRINGCOMPONENTS_H_
-#define OOInteraction_INTEGERLITERALSTRINGCOMPONENTS_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 #include "StringComponents.h"
@@ -54,4 +46,3 @@ class OOINTERACTION_API IntegerLiteralStringComponents : public StringComponents
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_INTEGERLITERALSTRINGCOMPONENTS_H_ */

@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * StringLiteralStringComponents.cpp
- *
- *  Created on: Mar 8, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "string_components/StringLiteralStringComponents.h"
 
 #include "OOModel/src/expressions/StringLiteral.h"

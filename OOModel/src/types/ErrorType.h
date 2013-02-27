@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ErrorType.h
- *
- *  Created on: Apr 3, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOModel_ERRORTYPE_H_
-#define OOModel_ERRORTYPE_H_
+#pragma once
 
 #include "Type.h"
 
@@ -54,4 +46,3 @@ class OOMODEL_API ErrorType : public Type {
 inline const QString& ErrorType::message() const { return message_; }
 
 } /* namespace OOModel */
-#endif /* OOModel_ERRORTYPE_H_ */

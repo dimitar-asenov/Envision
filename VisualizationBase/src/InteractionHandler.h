@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * InteractionHandler.h
- *
- *  Created on: Jan 11, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef INTERACTIONHANDLER_H_
-#define INTERACTIONHANDLER_H_
+#pragma once
 
 #include "visualizationbase_api.h"
 
@@ -89,5 +81,3 @@ class VISUALIZATIONBASE_API InteractionHandler
 };
 
 }
-
-#endif /* INTERACTIONHANDLER_H_ */

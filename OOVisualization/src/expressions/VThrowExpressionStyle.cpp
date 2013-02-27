@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VThrowExpressionStyle.cpp
- *
- *  Created on: Sep 17, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "VThrowExpressionStyle.h"
 
 namespace OOVisualization {

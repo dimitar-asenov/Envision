@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * PrimitiveTypeStringComponents.h
- *
- *  Created on: Mar 8, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOInteraction_PRIMITIVETYPESTRINGCOMPONENTS_H_
-#define OOInteraction_PRIMITIVETYPESTRINGCOMPONENTS_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 #include "StringComponents.h"
@@ -54,4 +46,3 @@ class OOINTERACTION_API PrimitiveTypeStringComponents : public StringComponents 
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_PRIMITIVETYPESTRINGCOMPONENTS_H_ */

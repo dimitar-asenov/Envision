@@ -24,35 +24,27 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CreateContractMethod.h
- *
- *  Created on: May 31, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef ContractsLibrary_CREATECONTRACTMETHOD_H_
-#define ContractsLibrary_CREATECONTRACTMETHOD_H_
+#pragma once
 
 #include "../contractslibrary_api.h"
+#include "VisualizationBase/src/items/VisualizationAddOn.h"
 
-#include "OOInteraction/src/expression_editor/operators/CommandExpression.h"
+namespace OOModel {
+	class Method;
+}
 
 namespace ContractsLibrary {
 
-class CONTRACTSLIBRARY_API CreateContractMethod : public OOInteraction::CommandExpression {
+class CONTRACTSLIBRARY_API SignatureContractsVMethodAddOn : public Visualization::VisualizationAddOn
+{
 	public:
-		CreateContractMethod(const QString& name, const QString& methodToCreate, int expectedTypeArguments = 0);
+		SignatureContractsVMethodAddOn(OOModel::Method* contractsClassMethodDefinition);
 
-		virtual const QString& name() const;
-		virtual OOModel::Expression* create(const QList<OOModel::Expression*>& arguments);
+		virtual QList<Visualization::Item*> determineItems(Visualization::Item* vis,
+			const QList<Visualization::Item*>& currentItems) override;
 
 	private:
-		QString name_;
-		QString methodToCreate_;
-		int expectedTypeArguments_;
-
+		OOModel::Method* contractClassMethod_;
 };
 
 } /* namespace ContractsLibrary */
-#endif /* ContractsLibrary_CREATECONTRACTMETHOD_H_ */

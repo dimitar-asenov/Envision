@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CustomSceneEvent.cpp
- *
- *  Created on: Feb 17, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "CustomSceneEvent.h"
 
 namespace Visualization {

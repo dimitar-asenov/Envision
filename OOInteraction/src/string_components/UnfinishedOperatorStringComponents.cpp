@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * UnfinishedOperatorStringComponents.cpp
- *
- *  Created on: Feb 17, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "string_components/UnfinishedOperatorStringComponents.h"
 
 #include "OOModel/src/expressions/UnfinishedOperator.h"

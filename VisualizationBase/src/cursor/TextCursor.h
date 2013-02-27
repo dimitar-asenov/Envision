@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * TextCursor.h
- *
- *  Created on: Jan 30, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef VisualizationBase_TEXTCURSOR_H_
-#define VisualizationBase_TEXTCURSOR_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 #include "../items/TextRenderer.h"
@@ -114,4 +106,3 @@ inline bool TextCursor:: hasSelection() { return selectionEnd_ != selectionBegin
 
 
 } /* namespace Visualization */
-#endif /* VisualizationBase_TEXTCURSOR_H_ */

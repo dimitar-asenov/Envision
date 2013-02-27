@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ConditionalExpressionStringComponents.cpp
- *
- *  Created on: Mar 27, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "string_components/ConditionalExpressionStringComponents.h"
 
 #include "OOModel/src/expressions/ConditionalExpression.h"

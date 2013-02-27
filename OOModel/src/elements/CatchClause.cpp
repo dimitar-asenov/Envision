@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CatchClause.cpp
- *
- *  Created on: Sep 17, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "CatchClause.h"
 
 namespace OOModel {

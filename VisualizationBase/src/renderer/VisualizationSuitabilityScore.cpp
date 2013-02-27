@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VisualizationSuitabilityScore.cpp
- *
- *  Created on: Apr 13, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "VisualizationSuitabilityScore.h"
 
 namespace Visualization {

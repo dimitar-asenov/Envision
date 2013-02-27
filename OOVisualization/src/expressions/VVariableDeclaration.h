@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * VVariableDeclaration.h
- *
- *  Created on: Feb 11, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef VVARIABLEDECLARATION_H_
-#define VVARIABLEDECLARATION_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 #include "VVariableDeclarationStyle.h"
@@ -81,5 +73,3 @@ inline Visualization::Static* VVariableDeclaration::assignmentSymbol() const {re
 inline Visualization::Item* VVariableDeclaration::initialValue() const {return initialValue_;}
 
 }
-
-#endif /* VVARIABLEDECLARATION_H_ */

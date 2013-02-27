@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * StorageSpecifier.h
- *
- *  Created on: Feb 1, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef STORAGESPECIFIER_H_
-#define STORAGESPECIFIER_H_
+#pragma once
 
 #include "../oomodel_api.h"
 
@@ -65,5 +57,3 @@ class OOMODEL_API StorageSpecifier :  public Model::Node
 inline StorageSpecifier::StorageSpecifierTypes StorageSpecifier::get() const { return specifier; }
 
 }
-
-#endif /* STORAGESPECIFIER_H_ */

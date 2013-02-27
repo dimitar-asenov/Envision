@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VariableDeclarationStringOffsetProvider.cpp
- *
- *  Created on: Mar 19, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "string_offset_providers/VariableDeclarationStringOffsetProvider.h"
 #include "Cell.h"
 

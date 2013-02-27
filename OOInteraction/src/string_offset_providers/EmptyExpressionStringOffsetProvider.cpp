@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * EmptyExpressionStringOffsetProvider.cpp
- *
- *  Created on: Feb 15, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "string_offset_providers/EmptyExpressionStringOffsetProvider.h"
 
 #include "OOVisualization/src/expressions/VEmptyExpression.h"

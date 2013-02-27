@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VEmptyExpression.h
- *
- *  Created on: Jan 20, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOVisualization_VEMPTYEXPRESSION_H_
-#define OOVisualization_VEMPTYEXPRESSION_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 #include "VEmptyExpressionStyle.h"
@@ -64,4 +56,3 @@ OOModel::EmptyExpression>
 };
 
 } /* namespace OOVisualization */
-#endif /* OOVisualization_VEMPTYEXPRESSION_H_ */

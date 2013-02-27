@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ItemRegion.cpp
- *
- *  Created on: Feb 2, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "items/ItemRegion.h"
 
 namespace Visualization {

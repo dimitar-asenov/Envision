@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * PersistedValue.h
- *
- *  Created on: Jan 20, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef PERSISTEDSTRING_H_
-#define PERSISTEDSTRING_H_
+#pragma once
 
 #include "../modelbase_api.h"
 #include "PersistedNode.h"
@@ -77,5 +69,3 @@ template <class T> PersistedValue< QList<T*> >::~PersistedValue()
 template <class T> inline QList<T*>& PersistedValue< QList<T*> >::value() { return value_; }
 
 }
-
-#endif /* PERSISTEDSTRING_H_ */

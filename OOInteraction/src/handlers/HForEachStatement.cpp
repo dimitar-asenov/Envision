@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * HForEachStatement.cpp
- *
- *  Created on: Sep 24, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "HForEachStatement.h"
 #include "OOVisualization/src/statements/VForEachStatement.h"
 #include "OOVisualization/src/elements/VStatementItemList.h"

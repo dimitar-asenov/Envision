@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * ItemStyle.h
- *
- *  Created on: Dec 21, 2010
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef ITEMSTYLE_H_
-#define ITEMSTYLE_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 #include "../styles/Style.h"
@@ -76,5 +68,3 @@ inline bool ItemStyle::wholeItemCursor() const {return wholeItemCursor_; }
 inline bool ItemStyle::allowEquivalentCursorsThroughBoundary() const {return allowEquivalentCursorsThroughBoundary_;}
 
 }
-
-#endif /* ITEMSTYLE_H_ */

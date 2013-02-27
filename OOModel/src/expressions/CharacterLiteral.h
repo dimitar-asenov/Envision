@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * CharacterLiteral.h
- *
- *  Created on: Jan 31, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef CHARACTERLITERAL_H_
-#define CHARACTERLITERAL_H_
+#pragma once
 
 #include "Expression.h"
 
@@ -54,5 +46,3 @@ class OOMODEL_API CharacterLiteral: public Expression
 
 
 }
-
-#endif /* CHARACTERLITERAL_H_ */

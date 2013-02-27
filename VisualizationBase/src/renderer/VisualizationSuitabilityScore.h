@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VisualizationSuitabilityScore.h
- *
- *  Created on: Apr 13, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef VisualizationBase_VISUALIZATIONSUITABILITYSCORE_H_
-#define VisualizationBase_VISUALIZATIONSUITABILITYSCORE_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -48,4 +40,3 @@ class VISUALIZATIONBASE_API VisualizationSuitabilityScore {
 bool operator< (const VisualizationSuitabilityScore& left, const VisualizationSuitabilityScore& right);
 
 } /* namespace Visualization */
-#endif /* VisualizationBase_VISUALIZATIONSUITABILITYSCORE_H_ */

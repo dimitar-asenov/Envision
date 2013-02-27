@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * PanelBorderLayoutStyle.h
- *
- *  Created on: Dec 15, 2010
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef PANELBORDERLAYOUTSTYLE_H_
-#define PANELBORDERLAYOUTSTYLE_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -95,5 +87,3 @@ inline int PanelBorderLayoutStyle::leftProtrusion() const { return leftProtrusio
 
 inline bool PanelBorderLayoutStyle::shapeOnlyOnContent() const { return shapeOnlyOnContent_; }
 }
-
-#endif /* PANELBORDERLAYOUTSTYLE_H_ */

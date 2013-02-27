@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * allOOModelNodes.h
- *
- *  Created on: Feb 11, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef ALLOOMODELNODES_H_
-#define ALLOOMODELNODES_H_
+#pragma once
 
 #include "top_level/Project.h"
 #include "top_level/Library.h"
@@ -93,5 +85,3 @@
 #include "elements/FormalTypeArgument.h"
 #include "elements/OOReference.h"
 #include "elements/CatchClause.h"
-
-#endif /* ALLOOMODELNODES_H_ */

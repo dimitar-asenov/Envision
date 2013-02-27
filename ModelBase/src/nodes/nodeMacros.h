@@ -24,18 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * nodeMacros.h
- *
- *  Created on: Nov 9, 2010
- *      Author: Dimitar Asenov
- *
- *  This file contains a few macros that can be used when creating new classes derived from Node. Using these macros
- *  might help reduce the size of boilerplate code that needs to be written.
- **********************************************************************************************************************/
-
-#ifndef NODEMACROS_H_
-#define NODEMACROS_H_
+#pragma once
 
 #include "ModelBase/src/nodes/Extendable/Attribute.h"
 #include "ModelBase/src/nodes/Extendable/ExtendableIndex.h"
@@ -722,4 +711,3 @@ int className::attributeName##Index = className::addAttributeToRegister_(							
 	::Model::Attribute("_ext_" #className "_" #attributeName, #attributeType, optional, partial, persistent));			\
 
 /*********************************************************************************************************************/
-#endif /* NODEMACROS_H_ */

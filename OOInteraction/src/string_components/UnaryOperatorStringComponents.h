@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * UnaryOperatorStringComponents.h
- *
- *  Created on: Feb 24, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOInteraction_UNARYOPERATORSTRINGCOMPONENTS_H_
-#define OOInteraction_UNARYOPERATORSTRINGCOMPONENTS_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 #include "StringComponents.h"
@@ -54,4 +46,3 @@ class OOINTERACTION_API UnaryOperatorStringComponents : public StringComponents 
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_UNARYOPERATORSTRINGCOMPONENTS_H_ */

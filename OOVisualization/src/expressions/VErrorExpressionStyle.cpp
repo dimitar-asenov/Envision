@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VErrorExpressionStyle.cpp
- *
- *  Created on: Jan 19, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "expressions/VErrorExpressionStyle.h"
 
 namespace OOVisualization {

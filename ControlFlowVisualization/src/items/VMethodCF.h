@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * VMethodCF.h
- *
- *  Created on: Feb 24, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef VMETHODCF_H_
-#define VMETHODCF_H_
+#pragma once
 
 #include "../controlflowvisualization_api.h"
 #include "VMethodCFStyle.h"
@@ -77,5 +69,3 @@ class CONTROLFLOWVISUALIZATION_API VMethodCF : public Visualization::ItemWithNod
 };
 
 }
-
-#endif /* VMETHODCF_H_ */

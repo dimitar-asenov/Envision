@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * NodeOwningCommand.cpp
- *
- *  Created on: Dec 4, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "NodeOwningCommand.h"
 #include "../nodes/Node.h"
 #include "../model/ModelManager.h"

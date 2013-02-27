@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * HForEachStatement.h
- *
- *  Created on: Sep 24, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOInteraction_HFOREACHSTATEMENT_H_
-#define OOInteraction_HFOREACHSTATEMENT_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 
@@ -50,4 +42,3 @@ class OOINTERACTION_API HForEachStatement : public HStatement {
 		HForEachStatement();
 };
 } /* namespace OOInteraction */
-#endif /* OOInteraction_HFOREACHSTATEMENT_H_ */

@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * MethodAddOn.cpp
- *
- *  Created on: Jul 16, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "MethodAddOn.h"
 #include "../src/top_level/VMethod.h"
 #include "VisualizationBase/src/items/Text.h"

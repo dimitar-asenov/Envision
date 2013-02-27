@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CommaExpressionStringComponents.cpp
- *
- *  Created on: Feb 24, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "string_components/CommaExpressionStringComponents.h"
 
 #include "OOModel/src/expressions/CommaExpression.h"

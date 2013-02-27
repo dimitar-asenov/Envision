@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ShowCommandPromptEvent.h
- *
- *  Created on: Sep 14, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef InteractionBase_SHOWCOMMANDPROMPTEVENT_H_
-#define InteractionBase_SHOWCOMMANDPROMPTEVENT_H_
+#pragma once
 
 #include "../interactionbase_api.h"
 
@@ -56,4 +48,3 @@ class INTERACTIONBASE_API ShowCommandPromptEvent : public Visualization::CustomS
 };
 
 } /* namespace Interaction */
-#endif /* InteractionBase_SHOWCOMMANDPROMPTEVENT_H_ */

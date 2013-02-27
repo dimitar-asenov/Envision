@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * NodeOwningCommand.h
- *
- *  Created on: Dec 4, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef ModelBase_NODEOWNINGCOMMAND_H_
-#define ModelBase_NODEOWNINGCOMMAND_H_
+#pragma once
 
 #include "UndoCommand.h"
 
@@ -53,4 +45,3 @@ class MODELBASE_API NodeOwningCommand : public UndoCommand {
 };
 
 } /* namespace Model */
-#endif /* ModelBase_NODEOWNINGCOMMAND_H_ */

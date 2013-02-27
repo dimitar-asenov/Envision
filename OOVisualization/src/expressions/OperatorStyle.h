@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * OperatorStyle.h
- *
- *  Created on: Feb 14, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef OPERATORSTYLE_H_
-#define OPERATORSTYLE_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -80,5 +72,3 @@ class OOVISUALIZATION_API OperatorSequenceStyle : public Visualization::ItemStyl
 inline const OperatorStyle& OperatorSequenceStyle::op(int i) const { return seq_.at(i); }
 
 }
-
-#endif /* OPERATORSTYLE_H_ */

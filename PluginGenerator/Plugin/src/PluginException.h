@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * PLUGINNAMEException.h
- *
- *  Created on: DATE
- *      Author: AUTHOR
- **********************************************************************************************************************/
-
-#ifndef PLUGINNAME_UPPERCASEEXCEPTION_H_
-#define PLUGINNAME_UPPERCASEEXCEPTION_H_
+#pragma once
 
 #include "PLUGINNAME_LOWERCASE_api.h"
 #include "Core/src/EnvisionException.h"
@@ -47,5 +39,3 @@ class PLUGINNAME_UPPERCASE_API PLUGINNAMEException : public Core::EnvisionExcept
 };
 
 }
-
-#endif /* MODELEXCEPTION_H_ */

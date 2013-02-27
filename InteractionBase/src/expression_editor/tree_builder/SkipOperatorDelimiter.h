@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * SkipOperatorDelimiter.h
- *
- *  Created on: Jan 11, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef INTERACTIONBASE_SKIPOPERATORDELIMITER_H_
-#define INTERACTIONBASE_SKIPOPERATORDELIMITER_H_
+#pragma once
 
 #include "../../interactionbase_api.h"
 
@@ -46,4 +38,3 @@ class INTERACTIONBASE_API SkipOperatorDelimiter : public ExpressionTreeBuildInst
 };
 
 } /* namespace InteractionBase */
-#endif /* INTERACTIONBASE_SKIPOPERATORDELIMITER_H_ */

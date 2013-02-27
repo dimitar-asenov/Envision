@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * TextRenderer.h
- *
- *  Created on: Jan 12, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef TEXTRENDERER_H_
-#define TEXTRENDERER_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -118,5 +110,3 @@ inline qreal TextRenderer::textXOffset() { return textXOffset_; }
 inline qreal TextRenderer::textYOffset() { return textYOffset_; }
 
 }
-
-#endif /* TEXTRENDERER_H_ */

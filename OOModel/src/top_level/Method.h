@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * Method.h
- *
- *  Created on: Jan 28, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef METHOD_H_
-#define METHOD_H_
+#pragma once
 
 #include "../oomodel_api.h"
 
@@ -73,6 +65,7 @@ class OOMODEL_API Method : public Model::ExtendableNode
 
 		virtual bool definesSymbol() const;
 		virtual const QString& symbolName() const;
+		QString fullyQualifiedName() const;
 		bool isGeneric();
 
 		virtual QList<Node*> findSymbols(const QRegExp& symbolExp, Node* source, FindSymbolMode mode,
@@ -80,5 +73,3 @@ class OOMODEL_API Method : public Model::ExtendableNode
 };
 
 }
-
-#endif /* METHOD_H_ */

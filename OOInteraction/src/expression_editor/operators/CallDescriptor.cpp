@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CallDescriptor.cpp
- *
- *  Created on: Feb 29, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "expression_editor/operators/CallDescriptor.h"
 
 #include "OOModel/src/expressions/ReferenceExpression.h"

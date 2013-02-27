@@ -24,16 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * visualizationbase.h
- *
- *  Created on: Dec 6, 2010
- *      Author: Dimitar Asenov
- *
- **********************************************************************************************************************/
-
-#ifndef VISUALIZATIONBASE_H
-#define VISUALIZATIONBASE_H
+#pragma once
 
 #include "Core/src/EnvisionPlugin.h"
 #include "precompiled.h"
@@ -52,5 +43,3 @@ class VisualizationBase : public QObject, public Core::EnvisionPlugin
 };
 
 }
-
-#endif // VISUALIZATIONBASE_H

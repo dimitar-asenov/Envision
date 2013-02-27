@@ -1,6 +1,5 @@
 TARGET = helloworld
 include(../Core/common_plugin.pri)
-
 DEFINES += HELLOWORLD_LIBRARY
 QT = core
 

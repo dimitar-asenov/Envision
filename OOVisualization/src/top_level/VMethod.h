@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * VMethod.h
- *
- *  Created on: Feb 4, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef VMETHOD_H_
-#define VMETHOD_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 #include "VMethodStyle.h"
@@ -47,6 +39,7 @@ namespace Visualization {
 	class VList;
 	class Static;
 	class PanelBorderLayout;
+	class Line;
 }
 
 namespace OOVisualization {
@@ -76,16 +69,17 @@ class OOVISUALIZATION_API VMethod
 		typedef Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
 				OOModel::Method> BaseItemType;
 
-		Visualization::SequentialLayout* header_;
-		Visualization::Static* icon_;
-		Visualization::VText* name_;
-		Visualization::VList* typeArguments_;
-		Visualization::VList* arguments_;
-		VStatementItemList* body_;
-		VStatementItemList* annotations_;
-		Visualization::SequentialLayout* addons_;
-		Visualization::SequentialLayout* content_;
-		Visualization::VList* results_;
+		Visualization::SequentialLayout* header_{};
+		Visualization::Static* icon_{};
+		Visualization::VText* name_{};
+		Visualization::VList* typeArguments_{};
+		Visualization::VList* arguments_{};
+		Visualization::Line* signatureLine_{};
+		VStatementItemList* body_{};
+		VStatementItemList* annotations_{};
+		Visualization::SequentialLayout* addons_{};
+		Visualization::SequentialLayout* content_{};
+		Visualization::VList* results_{};
 };
 
 inline Visualization::VText* VMethod::name() const { return name_; }
@@ -96,5 +90,3 @@ inline Visualization::VList* VMethod::typeArguments() const { return typeArgumen
 inline Visualization::VList* VMethod::arguments() const { return arguments_; }
 
 }
-
-#endif /* VMETHOD_H_ */

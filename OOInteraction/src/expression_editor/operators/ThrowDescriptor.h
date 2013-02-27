@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ThrowDescriptor.h
- *
- *  Created on: Sep 17, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOInteraction_THROWDESCRIPTOR_H_
-#define OOInteraction_THROWDESCRIPTOR_H_
+#pragma once
 
 #include "../../oointeraction_api.h"
 #include "../OOOperatorDescriptor.h"
@@ -48,4 +40,3 @@ class OOINTERACTION_API ThrowDescriptor : public OOOperatorDescriptor {
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_THROWDESCRIPTOR_H_ */

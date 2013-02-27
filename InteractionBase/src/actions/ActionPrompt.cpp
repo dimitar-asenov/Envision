@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ActionPrompt.cpp
- *
- *  Created on: Sep 27, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "ActionPrompt.h"
 #include "../vis/TextAndDescription.h"
 #include "Action.h"

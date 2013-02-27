@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * VReferenceExpressionStyle.h
- *
- *  Created on: Feb 8, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef VREFERENCEEXPRESSIONSTYLE_H_
-#define VREFERENCEEXPRESSIONSTYLE_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -66,5 +58,3 @@ inline const Visualization::StaticStyle& VReferenceExpressionStyle::separator() 
 inline const Visualization::VListStyle& VReferenceExpressionStyle::typeArguments() const { return typeArguments_; }
 
 }
-
-#endif /* VREFERENCEEXPRESSIONSTYLE_H_ */

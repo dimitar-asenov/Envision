@@ -24,13 +24,6 @@
  **
  ***********************************************************************************************************************/
 
-/*
- * Empty.cpp
- *
- *  Created on: Jan 10, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "expression_editor/Empty.h"
 
 #include "expression_editor/ExpressionVisitor.h"

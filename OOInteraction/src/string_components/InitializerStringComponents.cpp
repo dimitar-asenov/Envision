@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * InitializerStringComponents.cpp
- *
- *  Created on: Feb 24, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "string_components/InitializerStringComponents.h"
 
 #include "OOModel/src/expressions/ArrayInitializer.h"

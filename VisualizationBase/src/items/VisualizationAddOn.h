@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VisualizationAddOn.h
- *
- *  Created on: Jul 13, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef VisualizationBase_VISUALIZATIONADDON_H_
-#define VisualizationBase_VISUALIZATIONADDON_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -49,4 +41,3 @@ class VISUALIZATIONBASE_API VisualizationAddOn {
 };
 
 } /* namespace Visualization */
-#endif /* VisualizationBase_VISUALIZATIONADDON_H_ */

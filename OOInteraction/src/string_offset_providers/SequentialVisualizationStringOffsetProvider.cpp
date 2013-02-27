@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * SequentialVisualizationStringOffsetProvider.cpp
- *
- *  Created on: Feb 17, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "string_offset_providers/SequentialVisualizationStringOffsetProvider.h"
 #include "Cell.h"
 

@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ModelManager.h
- *
- *  Created on: Sep 14, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef ModelBase_MODELMANAGER_H_
-#define ModelBase_MODELMANAGER_H_
+#pragma once
 
 #include "../modelbase_api.h"
 
@@ -95,4 +87,3 @@ class MODELBASE_API ModelManager {
 inline const QList<Model*>& ModelManager::loadedModels() const { return loadedModels_; }
 
 } /* namespace Model */
-#endif /* ModelBase_MODELMANAGER_H_ */

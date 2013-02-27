@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * VBlockCFStyle.h
- *
- *  Created on: Mar 2, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef VBLOCKCFSTYLE_H_
-#define VBLOCKCFSTYLE_H_
+#pragma once
 
 #include "../controlflowvisualization_api.h"
 #include "ControlFlowItemStyle.h"
@@ -56,5 +48,3 @@ class CONTROLFLOWVISUALIZATION_API VBlockCFStyle : public ControlFlowItemStyle
 inline const VListCFStyle& VBlockCFStyle::statements() const { return statements_; }
 
 }
-
-#endif /* VBLOCKCFSTYLE_H_ */

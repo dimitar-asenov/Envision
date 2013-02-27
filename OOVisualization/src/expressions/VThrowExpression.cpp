@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VThrowExpression.cpp
- *
- *  Created on: Sep 17, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "VThrowExpression.h"
 
 #include "VisualizationBase/src/items/Static.h"

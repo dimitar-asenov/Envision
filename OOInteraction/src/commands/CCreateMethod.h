@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CCreateMethod.h
- *
- *  Created on: Mar 1, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOInteraction_CCREATEMETHOD_H_
-#define OOInteraction_CCREATEMETHOD_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 
@@ -51,4 +43,3 @@ class OOINTERACTION_API CCreateMethod : public Interaction::CreateNamedObjectWit
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_CCREATEMETHOD_H_ */

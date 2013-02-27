@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * Cell.h
- *
- *  Created on: Jun 11, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOInteraction_CELL_H_
-#define OOInteraction_CELL_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 #include "StringOffsetProvider.h"
@@ -74,4 +66,3 @@ inline int Cell::stringComponentsStart() const { return stringComponentsStart_; 
 inline int Cell::stringComponentsEnd() const { return stringComponentsEnd_; }
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_CELL_H_ */

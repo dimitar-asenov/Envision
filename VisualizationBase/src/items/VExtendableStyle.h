@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * VExtendableStyle.h
- *
- *  Created on: Dec 21, 2010
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef VEXTENDABLESTYLE_H_
-#define VEXTENDABLESTYLE_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -68,5 +60,3 @@ inline const SequentialLayoutStyle& VExtendableStyle::attributesStyle() const {r
 inline bool VExtendableStyle::expanded() const { return expanded_; }
 
 }
-
-#endif /* VEXTENDABLESTYLE_H_ */

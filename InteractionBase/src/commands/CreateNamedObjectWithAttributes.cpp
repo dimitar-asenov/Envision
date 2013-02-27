@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CreateNamedObjectWithAttributes.cpp
- *
- *  Created on: Sep 14, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "CreateNamedObjectWithAttributes.h"
 
 namespace Interaction {

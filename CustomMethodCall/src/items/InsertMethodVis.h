@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * InsertMethodVis.h
- *
- *  Created on: Mar 25, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef INSERTMETHODVIS_H_
-#define INSERTMETHODVIS_H_
+#pragma once
 
 #include "../custommethodcall_api.h"
 #include "InsertMethodVisStyle.h"
@@ -71,5 +63,3 @@ class CUSTOMMETHODCALL_API InsertMethodVis
 };
 
 }
-
-#endif /* INSERTMETHODVIS_H_ */

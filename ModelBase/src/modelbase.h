@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * modelbase.h
- *
- *  Created on: Nov 3, 2010
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef MODELBASE_H
-#define MODELBASE_H
+#pragma once
 
 #include "Core/src/EnvisionPlugin.h"
 #include "precompiled.h"
@@ -58,5 +50,3 @@ class ModelBase : public QObject, public Core::EnvisionPlugin
 };
 
 }
-
-#endif // MODELBASE_H

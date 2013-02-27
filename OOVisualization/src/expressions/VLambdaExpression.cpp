@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VLambdaExpression.cpp
- *
- *  Created on: Nov 29, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "../elements/VStatementItemList.h"
 #include "VLambdaExpression.h"
 

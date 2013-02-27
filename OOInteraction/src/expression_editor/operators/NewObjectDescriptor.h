@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * NewObjectDescriptor.h
- *
- *  Created on: Sep 17, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOInteraction_NEWOBJECTDESCRIPTOR_H_
-#define OOInteraction_NEWOBJECTDESCRIPTOR_H_
+#pragma once
 
 #include "../../oointeraction_api.h"
 #include "../OOOperatorDescriptor.h"
@@ -48,4 +40,3 @@ class OOINTERACTION_API NewObjectDescriptor : public OOOperatorDescriptor {
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_NEWOBJECTDESCRIPTOR_H_ */

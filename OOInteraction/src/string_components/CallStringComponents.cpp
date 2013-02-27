@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CallStringComponents.cpp
- *
- *  Created on: Feb 29, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "string_components/CallStringComponents.h"
 
 #include "OOModel/src/expressions/MethodCallExpression.h"

@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * AutoCompleteVis.cpp
- *
- *  Created on: Jul 24, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "AutoCompleteVis.h"
 #include "AutoComplete.h"
 #include "AutoCompleteEntry.h"

@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VEmptyExpressionStyle.cpp
- *
- *  Created on: Jul 5, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "VEmptyExpressionStyle.h"
 
 namespace OOVisualization {

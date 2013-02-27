@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * HExpression.cpp
- *
- *  Created on: Feb 8, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "HExpression.h"
 #include "../OOInteractionException.h"
 
@@ -123,8 +116,8 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			{
 				if ( auto list = dynamic_cast<OOModel::StatementItemList*>(topMostItem->node()->parent()->parent()) )
 				{
-					int thisItemListIndex = list->indexOf(topMostItem->node()->parent());
-					int itemToDeletelistIndex = thisItemListIndex + (key == Qt::Key_Backspace ? -1 : +1);
+					int thisNodeListIndex = list->indexOf(topMostItem->node()->parent());
+					int nodeToDeletelistIndex = thisNodeListIndex + (key == Qt::Key_Backspace ? -1 : +1);
 					bool empty = dynamic_cast<OOModel::EmptyExpression*>(topMostItem->node());
 
 					// Get a parent which represents a list (of statements or statement items)
@@ -133,14 +126,14 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 					while (!(vlist = dynamic_cast<Visualization::VList*>(parent)) && parent->parent())
 						parent = parent->parent();
 
-					if (itemToDeletelistIndex >= 0 && itemToDeletelistIndex < list->size())
+					if (nodeToDeletelistIndex >= 0 && nodeToDeletelistIndex < list->size())
 					{
 						// Delete the current or the previous or the next empty item
-						auto st = dynamic_cast<OOModel::ExpressionStatement*>(list->at(itemToDeletelistIndex));
+						auto st = dynamic_cast<OOModel::ExpressionStatement*>(list->at(nodeToDeletelistIndex));
 						if (st && dynamic_cast<OOModel::EmptyExpression*>(st->expression()))
 						{
-							Interaction::HList::instance()->removeAndSetCursor(vlist,
-									empty ? thisItemListIndex : itemToDeletelistIndex, key == Qt::Key_Delete,
+							Interaction::HList::instance()->removeNodeAndSetCursor(vlist,
+									empty ? thisNodeListIndex : nodeToDeletelistIndex, key == Qt::Key_Delete,
 										key == Qt::Key_Delete
 										? Interaction::SetCursorEvent::CursorOnRight : Interaction::SetCursorEvent::CursorOnLeft);
 							return;
@@ -150,9 +143,9 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 					// If we could not delete the previous/next statements, then delete the current one if it is empty.
 					// In either case position the cursor appropriately
 					if (empty)
-						Interaction::HList::instance()->removeAndSetCursor(vlist, thisItemListIndex);
+						Interaction::HList::instance()->removeNodeAndSetCursor(vlist, thisNodeListIndex);
 					else
-						Interaction::HList::instance()->scheduleSetCursor(vlist, thisItemListIndex +
+						Interaction::HList::instance()->scheduleSetCursor(vlist, thisNodeListIndex +
 								(key == Qt::Key_Delete ? 1 : 0));
 					return;
 				}
@@ -316,9 +309,14 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 				auto s = target->scene();
 				s->addPostEventAction(new Visualization::CustomSceneEvent(
 						[s, this]() {
-							auto o = s->mainCursor()->owner();
-							while (o && o->handler() != this) o = o->parent();
-							if (o) showAutoComplete(o);
+							auto mc = s->mainCursor();
+							if (mc) // This will be null if 'target' was deleted, e.g. because the new expression
+								// else whereis visualized
+							{
+								auto o = mc->owner();
+								while (o && o->handler() != this) o = o->parent();
+								if (o) showAutoComplete(o);
+							}
 						}));
 			}
 			else

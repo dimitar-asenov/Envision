@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * SequentialVisualizationStringOffsetProvider.h
- *
- *  Created on: Feb 17, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOInteraction_SEQUENTIALVISUALIZATIONSTRINGOFFSETPROVIDER_H_
-#define OOInteraction_SEQUENTIALVISUALIZATIONSTRINGOFFSETPROVIDER_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 #include "GridBasedOffsetProvider.h"
@@ -54,4 +46,3 @@ class OOINTERACTION_API SequentialVisualizationStringOffsetProvider : public Gri
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_SEQUENTIALVISUALIZATIONSTRINGOFFSETPROVIDER_H_ */

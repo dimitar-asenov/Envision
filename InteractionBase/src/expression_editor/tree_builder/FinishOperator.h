@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * FinishOperator.h
- *
- *  Created on: Jan 11, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef INTERACTIONBASE_FINISHOPERATOR_H_
-#define INTERACTIONBASE_FINISHOPERATOR_H_
+#pragma once
 
 #include "../../interactionbase_api.h"
 
@@ -46,4 +38,3 @@ class INTERACTIONBASE_API FinishOperator : public ExpressionTreeBuildInstruction
 };
 
 } /* namespace InteractionBase */
-#endif /* INTERACTIONBASE_FINISHOPERATOR_H_ */

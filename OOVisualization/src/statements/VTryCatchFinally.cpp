@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VTryCatchFinally.cpp
- *
- *  Created on: Nov 20, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "VTryCatchFinally.h"
 #include "../elements/VStatementItemList.h"
 

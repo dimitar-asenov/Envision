@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * NewArrayStringOffsetProvider.cpp
- *
- *  Created on: Mar 14, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "NewArrayStringOffsetProvider.h"
 #include "Cell.h"
 #include "OOVisualization/src/expressions/VNewExpression.h"

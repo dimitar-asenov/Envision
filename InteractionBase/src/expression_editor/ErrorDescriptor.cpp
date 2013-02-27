@@ -24,13 +24,6 @@
 **
 ***********************************************************************************************************************/
 
-/*
- * ErrorDescriptor.cpp
- *
- *  Created on: Jan 10, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "expression_editor/ErrorDescriptor.h"
 
 namespace Interaction {

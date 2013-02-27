@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ItemRegion.h
- *
- *  Created on: Feb 2, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef VisualizationBase_ITEMREGION_H_
-#define VisualizationBase_ITEMREGION_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -89,4 +81,3 @@ inline Item* ItemRegion::item() const { return item_; }
 inline Cursor* ItemRegion::cursor() const { return cursor_; }
 
 } /* namespace Visualization */
-#endif /* VisualizationBase_ITEMREGION_H_ */

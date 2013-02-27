@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * MemberOperatorDescriptor.cpp
- *
- *  Created on: Feb 29, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "expression_editor/operators/MemberOperatorDescriptor.h"
 
 #include "OOModel/src/expressions/ReferenceExpression.h"

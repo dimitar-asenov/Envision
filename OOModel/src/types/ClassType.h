@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ClassType.h
- *
- *  Created on: Apr 3, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOModel_CLASSTYPE_H_
-#define OOModel_CLASSTYPE_H_
+#pragma once
 
 #include "SymbolProviderType.h"
 
@@ -48,4 +40,3 @@ class OOMODEL_API ClassType : public SymbolProviderType {
 };
 
 } /* namespace OOModel */
-#endif /* OOModel_CLASSTYPE_H_ */

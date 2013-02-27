@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * TestManager.h
- *
- *  Created on: Nov 9, 2010
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef TESTMANAGER_H_
-#define TESTMANAGER_H_
+#pragma once
 
 #include "selftest_api.h"
 #include "Test.h"
@@ -124,5 +116,3 @@ class TestManager
 template<class T> QMap<QString, Test::TestConstructor>* TestManager<T>::testConstructors = nullptr;
 
 }
-
-#endif /* TESTMANAGER_H_ */

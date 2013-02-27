@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * InitializerStringComponents.h
- *
- *  Created on: Feb 24, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOInteraction_INITIALIZERSTRINGCOMPONENTS_H_
-#define OOInteraction_INITIALIZERSTRINGCOMPONENTS_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 #include "StringComponents.h"
@@ -54,4 +46,3 @@ class OOINTERACTION_API InitializerStringComponents : public StringComponents {
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_INITIALIZERSTRINGCOMPONENTS_H_ */

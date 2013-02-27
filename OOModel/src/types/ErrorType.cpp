@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ErrorType.cpp
- *
- *  Created on: Apr 3, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "ErrorType.h"
 
 namespace OOModel {

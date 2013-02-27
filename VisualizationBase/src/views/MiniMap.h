@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * MiniMap.h
- *
- *  Created on: Jan 10, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef MINIMAP_H_
-#define MINIMAP_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -79,5 +71,3 @@ class VISUALIZATIONBASE_API MiniMap : public View
 inline void MiniMap::setMargin(qreal margin_) { margin = margin_; }
 
 }
-
-#endif /* MINIMAP_H_ */

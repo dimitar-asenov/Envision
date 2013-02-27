@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ArrayType.cpp
- *
- *  Created on: Apr 3, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "ArrayType.h"
 
 namespace OOModel {

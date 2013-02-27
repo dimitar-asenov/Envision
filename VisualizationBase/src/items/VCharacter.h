@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * VCharacter.h
- *
- *  Created on: Feb 11, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef VCHARACTER_H_
-#define VCHARACTER_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -59,5 +51,3 @@ class VISUALIZATIONBASE_API VCharacter : public ItemWithNode< TextRenderer, Mode
 };
 
 }
-
-#endif /* VCHARACTER_H_ */

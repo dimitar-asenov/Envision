@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * ModelRenderer.h
- *
- *  Created on: Dec 9, 2010
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef MODELRENDERER_H_
-#define MODELRENDERER_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 #include "VisualizationGroup.h"
@@ -90,5 +82,3 @@ inline QString ModelRenderer::purposeName(int purpose) { return purposes_[purpos
 
 
 }
-
-#endif /* MODELRENDERER_H_ */

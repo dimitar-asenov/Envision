@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * AssignmentStringComponents.cpp
- *
- *  Created on: Mar 9, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "string_components/AssignmentStringComponents.h"
 
 #include "OOModel/src/expressions/AssignmentExpression.h"

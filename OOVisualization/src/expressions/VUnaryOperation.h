@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * VUnaryOperation.h
- *
- *  Created on: Feb 14, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef VUNARYOPERATION_H_
-#define VUNARYOPERATION_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 #include "OperatorStyle.h"
@@ -77,5 +69,3 @@ inline Visualization::Static* VUnaryOperation::postfix() { return post_; }
 inline Visualization::Item* VUnaryOperation::expression() { return expr_; }
 
 }
-
-#endif /* VUNARYOPERATION_H_ */

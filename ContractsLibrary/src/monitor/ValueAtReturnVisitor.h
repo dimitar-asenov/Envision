@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ValueAtReturnVisitor.h
- *
- *  Created on: Aug 31, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef ContractsLibrary_VALUEATRETURNVISITOR_H_
-#define ContractsLibrary_VALUEATRETURNVISITOR_H_
+#pragma once
 
 #include "../contractslibrary_api.h"
 
@@ -85,4 +77,3 @@ class CONTRACTSLIBRARY_API ValueAtReturnVisitor : public Model::Visitor<ValueAtR
 inline int ValueAtReturnVisitor::numWrapped() { return numWrapped_;}
 inline int ValueAtReturnVisitor::numUnwrapped() { return numUnwrapped_;}
 } /* namespace ContractsLibrary */
-#endif /* ContractsLibrary_VALUEATRETURNVISITOR_H_ */

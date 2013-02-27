@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * NewArrayStringComponents.cpp
- *
- *  Created on: Feb 24, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "string_components/NewArrayStringComponents.h"
 
 #include "OOModel/src/expressions/NewExpression.h"

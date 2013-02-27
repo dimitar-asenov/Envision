@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * Item.h
- *
- *  Created on: Dec 9, 2010
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef ITEM_H_
-#define ITEM_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 #include "ItemMacros.h"
@@ -474,5 +466,3 @@ inline void Item::setItemCategory( Scene::ItemCategory cat) { itemCategory_ = ca
 inline bool Item::isCategoryHiddenDuringPaint() { return scene()->isHiddenCategory(itemCategory()); }
 
 }
-
-#endif /* ITEM_H_ */

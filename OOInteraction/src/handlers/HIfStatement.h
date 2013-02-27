@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * HIfStatement.h
- *
- *  Created on: Mar 21, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOInteraction_HIFSTATEMENT_H_
-#define OOInteraction_HIFSTATEMENT_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 
@@ -51,4 +43,3 @@ class OOINTERACTION_API HIfStatement : public HStatement {
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_HIFSTATEMENT_H_ */

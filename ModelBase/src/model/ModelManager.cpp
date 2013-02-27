@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ModelManager.cpp
- *
- *  Created on: Sep 14, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "ModelManager.h"
 #include "Model.h"
 

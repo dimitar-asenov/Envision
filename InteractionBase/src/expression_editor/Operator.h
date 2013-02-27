@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/*
- * Operator.h
- *
- *  Created on: Jan 10, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef INTERACTIONBASE_OPERATOR_H_
-#define INTERACTIONBASE_OPERATOR_H_
+#pragma once
 
 #include "../interactionbase_api.h"
 
@@ -100,4 +92,3 @@ inline OperatorDescriptor* Operator::descriptor() { return descriptor_; }
 inline void Operator::setDoNotDeleteTransientDescriptor(bool doNotDelete) { do_not_delete_transient_descriptor_ = doNotDelete; }
 
 } /* namespace InteractionBase */
-#endif /* INTERACTIONBASE_OPERATOR_H_ */

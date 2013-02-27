@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * AssignmentStringComponents.h
- *
- *  Created on: Mar 9, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOInteraction_ASSIGNMENTSTRINGCOMPONENTS_H_
-#define OOInteraction_ASSIGNMENTSTRINGCOMPONENTS_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 #include "StringComponents.h"
@@ -54,4 +46,3 @@ class OOINTERACTION_API AssignmentStringComponents : public StringComponents {
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_ASSIGNMENTSTRINGCOMPONENTS_H_ */

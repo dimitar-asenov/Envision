@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * DeclarationDescriptor.cpp
- *
- *  Created on: Mar 16, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "expression_editor/operators/DeclarationDescriptor.h"
 
 #include "OOModel/src/expressions/VariableDeclaration.h"

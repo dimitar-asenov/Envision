@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * CommandPrompt.h
- *
- *  Created on: Jan 18, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef COMMANDPROMPT_H_
-#define COMMANDPROMPT_H_
+#pragma once
 
 #include "interactionbase_api.h"
 #include "CommandPromptStyle.h"
@@ -103,5 +95,3 @@ inline CommandResult* CommandPrompt::result() { return result_; }
 inline QList<CommandSuggestion*>& CommandPrompt::suggestions() { return suggestions_; }
 
 }
-
-#endif /* COMMANDPROMPT_H_ */

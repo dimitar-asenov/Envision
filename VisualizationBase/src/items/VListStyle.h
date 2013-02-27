@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * VListStyle.h
- *
- *  Created on: Jan 7, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef VLISTSTYLE_H_
-#define VLISTSTYLE_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -55,5 +47,3 @@ class VISUALIZATIONBASE_API VListStyle : public ItemStyle
 inline const SequentialLayoutStyle& VListStyle::itemsStyle() const {return itemsStyle_; }
 
 }
-
-#endif /* VLISTSTYLE_H_ */

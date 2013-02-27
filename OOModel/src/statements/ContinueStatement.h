@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * ContinueStatement.h
- *
- *  Created on: Jan 31, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef CONTINUESTATEMENT_H_
-#define CONTINUESTATEMENT_H_
+#pragma once
 
 #include "Statement.h"
 
@@ -44,5 +36,3 @@ class OOMODEL_API ContinueStatement: public Statement
 };
 
 }
-
-#endif /* CONTINUESTATEMENT_H_ */

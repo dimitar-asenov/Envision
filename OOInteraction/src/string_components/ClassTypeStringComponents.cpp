@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ClassTypeStringComponents.cpp
- *
- *  Created on: Nov 13, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "ClassTypeStringComponents.h"
 
 #include "OOModel/src/expressions/types/ClassTypeExpression.h"

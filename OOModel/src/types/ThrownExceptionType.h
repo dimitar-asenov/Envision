@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ThrownExceptionType.h
- *
- *  Created on: Sep 17, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOModel_THROWNEXCEPTIONTYPE_H_
-#define OOModel_THROWNEXCEPTIONTYPE_H_
+#pragma once
 
 #include "Type.h"
 
@@ -54,4 +46,3 @@ class OOMODEL_API ThrownExceptionType : public Type {
 inline const Type* ThrownExceptionType::exceptionType() const { return exceptionType_; }
 
 } /* namespace OOModel */
-#endif /* OOModel_THROWNEXCEPTIONTYPE_H_ */

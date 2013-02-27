@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * VBinaryOperation.h
- *
- *  Created on: Feb 14, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef VBINARYOPERATION_H_
-#define VBINARYOPERATION_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 #include "OperatorStyle.h"
@@ -73,5 +65,3 @@ class OOVISUALIZATION_API VBinaryOperation
 };
 
 }
-
-#endif /* VBINARYOPERATION_H_ */

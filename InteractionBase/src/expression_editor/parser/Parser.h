@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * Parser.h
- *
- *  Created on: Jan 11, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef INTERACTIONBASE_PARSER_H_
-#define INTERACTIONBASE_PARSER_H_
+#pragma once
 
 #include "../../interactionbase_api.h"
 
@@ -68,4 +60,3 @@ class INTERACTIONBASE_API Parser {
 };
 
 } /* namespace InteractionBase */
-#endif /* INTERACTIONBASE_PARSER_H_ */

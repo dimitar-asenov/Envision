@@ -24,17 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * filepersistence.h
- *
- *  Created on: Dec 2, 2010
- *      Author: Dimitar Asenov
- *
- * This file is an example of how to define the interface to an Envision plug-in.
- **********************************************************************************************************************/
-
-#ifndef FILEPERSISTENCE_H
-#define FILEPERSISTENCE_H
+#pragma once
 
 #include "Core/src/EnvisionPlugin.h"
 #include "precompiled.h"
@@ -53,5 +43,3 @@ class FilePersistence : public QObject, public Core::EnvisionPlugin
 };
 
 }
-
-#endif // FILEPERSISTENCE_H

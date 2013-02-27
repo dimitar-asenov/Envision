@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * SetModificationTarget.h
- *
- *  Created on: Nov 25, 2010
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef SETMODIFICATIONTARGET_H_
-#define SETMODIFICATIONTARGET_H_
+#pragma once
 
 #include "commands/UndoCommand.h"
 
@@ -57,5 +49,3 @@ class SetModificationTarget: public UndoCommand
 };
 
 }
-
-#endif /* SETMODIFICATIONTARGET_H_ */

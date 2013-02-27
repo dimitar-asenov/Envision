@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * PLUGINNAME_LOWERCASE.h
- *
- *  Created on: DATE
- *      Author: AUTHOR
- **********************************************************************************************************************/
-
-#ifndef PLUGINNAME_UPPERCASE_H
-#define PLUGINNAME_UPPERCASE_H
+#pragma once
 
 #include "Core/src/EnvisionPlugin.h"
 #include "precompiled.h"
@@ -59,5 +51,3 @@ class PLUGINNAME : public QObject, public Core::EnvisionPlugin
 };
 
 }
-
-#endif // PLUGINNAME_UPPERCASE_H

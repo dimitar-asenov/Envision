@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CastExpressionStringComponents.cpp
- *
- *  Created on: Feb 24, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "string_components/CastExpressionStringComponents.h"
 
 #include "OOModel/src/expressions/CastExpression.h"

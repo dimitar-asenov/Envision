@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * FormalResult.h
- *
- *  Created on: Feb 11, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef FORMALRESULT_H_
-#define FORMALRESULT_H_
+#pragma once
 
 #include "../oomodel_api.h"
 #include "../expressions/Expression.h"
@@ -58,5 +50,3 @@ class OOMODEL_API FormalResult : public Model::ExtendableNode
 };
 
 }
-
-#endif /* FORMALRESULT_H_ */

@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * VFieldStyle.h
- *
- *  Created on: Feb 4, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef VFIELDSTYLE_H_
-#define VFIELDSTYLE_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -80,5 +72,3 @@ inline const Visualization::TextStyle& VFieldStyle::nameStaticPrivate() const { 
 inline const Visualization::TextStyle& VFieldStyle::nameStaticProtected() const { return nameStaticProtected_; }
 
 }
-
-#endif /* VFIELDSTYLE_H_ */

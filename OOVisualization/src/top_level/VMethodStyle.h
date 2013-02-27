@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * VMethodStyle.h
- *
- *  Created on: Feb 4, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef VMETHODSTYLE_H_
-#define VMETHODSTYLE_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -40,6 +32,7 @@
 #include "VisualizationBase/src/items/TextStyle.h"
 #include "VisualizationBase/src/items/VListStyle.h"
 #include "VisualizationBase/src/items/StaticStyle.h"
+#include "VisualizationBase/src/items/LineStyle.h"
 #include "VisualizationBase/src/layouts/PanelBorderLayoutStyle.h"
 #include "VisualizationBase/src/layouts/SequentialLayoutStyle.h"
 
@@ -59,6 +52,7 @@ class OOVISUALIZATION_API VMethodStyle : public Visualization::ItemStyle
 		Visualization::TextStyle nameStaticProtected_;
 		Visualization::StaticStyle icon_;
 		Visualization::SequentialLayoutStyle header_;
+		Visualization::LineStyle signatureLine_;
 		Visualization::VListStyle body_;
 		Visualization::VListStyle annotations_;
 		Visualization::SequentialLayoutStyle addons_;
@@ -81,6 +75,7 @@ class OOVISUALIZATION_API VMethodStyle : public Visualization::ItemStyle
 		const Visualization::TextStyle& nameStaticProtected() const;
 		const Visualization::StaticStyle& icon() const;
 		const Visualization::SequentialLayoutStyle& header() const;
+		const Visualization::LineStyle& signatureLine() const;
 		const Visualization::VListStyle& body() const;
 		const Visualization::VListStyle& annotations() const;
 		const Visualization::SequentialLayoutStyle& addons() const;
@@ -101,6 +96,7 @@ inline const Visualization::TextStyle& VMethodStyle::nameStaticPrivate() const {
 inline const Visualization::TextStyle& VMethodStyle::nameStaticProtected() const { return nameStaticProtected_; }
 inline const Visualization::StaticStyle& VMethodStyle::icon() const { return icon_; }
 inline const Visualization::SequentialLayoutStyle& VMethodStyle::header() const { return header_; }
+inline const Visualization::LineStyle& VMethodStyle::signatureLine() const { return signatureLine_; }
 inline const Visualization::VListStyle& VMethodStyle::body() const { return body_; }
 inline const Visualization::VListStyle& VMethodStyle::annotations() const { return annotations_; }
 inline const Visualization::SequentialLayoutStyle& VMethodStyle::addons() const { return addons_; }
@@ -110,5 +106,3 @@ inline const Visualization::VListStyle& VMethodStyle::typeArguments() const { re
 inline const Visualization::VListStyle& VMethodStyle::results() const { return results_; }
 
 }
-
-#endif /* VMETHODSTYLE_H_ */

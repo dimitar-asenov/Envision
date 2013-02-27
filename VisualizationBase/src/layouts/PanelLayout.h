@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * PanelLayout.h
- *
- *  Created on: Dec 14, 2010
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef PANELLAYOUT_H_
-#define PANELLAYOUT_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -133,5 +125,3 @@ template <class T> inline void PanelLayout::synchronizeLast(T*& item, typename T
 }
 
 }
-
-#endif /* PANELLAYOUT_H_ */

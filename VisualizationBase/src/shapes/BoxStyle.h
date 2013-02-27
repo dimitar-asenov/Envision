@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * BoxStyle.h
- *
- *  Created on: Dec 13, 2010
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef BOXSTYLE_H_
-#define BOXSTYLE_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -91,5 +83,3 @@ inline int BoxStyle::xShadowOffset() const { return xShadowOffset_; }
 inline int BoxStyle::yShadowOffset() const { return yShadowOffset_; }
 
 }
-
-#endif /* BOXSTYLE_H_ */

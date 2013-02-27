@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * NewArrayStringOffsetProvider.h
- *
- *  Created on: Mar 14, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOInteraction_NEWARRAYSTRINGOFFSETPROVIDER_H_
-#define OOInteraction_NEWARRAYSTRINGOFFSETPROVIDER_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 #include "GridBasedOffsetProvider.h"
@@ -49,4 +41,3 @@ class OOINTERACTION_API NewArrayStringOffsetProvider : public GridBasedOffsetPro
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_NEWARRAYSTRINGOFFSETPROVIDER_H_ */

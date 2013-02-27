@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CommaDescriptor.cpp
- *
- *  Created on: Feb 24, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "expression_editor/operators/CommaDescriptor.h"
 
 #include "OOModel/src/expressions/CommaExpression.h"

@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CompoundObjectStringOffsetProvider.h
- *
- *  Created on: Dec 4, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOInteraction_COMPOUNDOBJECTSTRINGOFFSETPROVIDER_H_
-#define OOInteraction_COMPOUNDOBJECTSTRINGOFFSETPROVIDER_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 #include "StringOffsetProvider.h"
@@ -50,4 +42,3 @@ class CompoundObjectStringOffsetProvider : public StringOffsetProvider {
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_COMPOUNDOBJECTSTRINGOFFSETPROVIDER_H_ */

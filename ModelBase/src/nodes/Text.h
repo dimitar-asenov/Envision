@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * Text.h
- *
- *  Created on: Nov 9, 2010
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef MODEL_TEXT_H_
-#define MODEL_TEXT_H_
+#pragma once
 
 #include "Node.h"
 #include "nodeMacros.h"
@@ -68,5 +60,3 @@ inline const QString& Text::get() const { return text; }
 inline Text::operator const QString&() const { return text; }
 
 }
-
-#endif /* MODEL_TEXT_H_ */

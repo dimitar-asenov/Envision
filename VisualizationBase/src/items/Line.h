@@ -24,29 +24,29 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CommandExpression.h
- *
- *  Created on: May 31, 2012
- *      Author: Dimitar Asenov
- */
+#pragma once
 
-#ifndef OOInteraction_COMMANDEXPRESSION_H_
-#define OOInteraction_COMMANDEXPRESSION_H_
+#include "../visualizationbase_api.h"
 
-#include "../../oointeraction_api.h"
+#include "../items/Item.h"
+#include "LineStyle.h"
 
-namespace OOModel {
-	class Expression;
-}
-namespace OOInteraction {
+namespace Visualization {
 
-class OOINTERACTION_API CommandExpression {
+class VISUALIZATIONBASE_API Line : public Item {
+	ITEM_COMMON(Line)
+
 	public:
-		virtual ~CommandExpression() {}
-		virtual const QString& name() const = 0;
-		virtual OOModel::Expression* create(const QList<OOModel::Expression*>& arguments) = 0;
+		Line(Item* parent, const LineStyle* style = itemStyles().get());
+
+	protected:
+		virtual void determineChildren() override;
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
+		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+		virtual bool sizeDependsOnParent() const override;
+
+	private:
+		typedef Item BaseItemType;
 };
 
-} /* namespace OOInteraction */
-#endif /* OOInteraction_COMMANDEXPRESSION_H_ */
+} /* namespace Visualization */

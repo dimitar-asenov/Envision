@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CCreateField.h
- *
- *  Created on: Dec 6, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOInteraction_CCREATEFIELD_H_
-#define OOInteraction_CCREATEFIELD_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 #include "InteractionBase/src/commands/CreateNamedObjectWithAttributes.h"
@@ -50,4 +42,3 @@ class OOINTERACTION_API CCreateField : public Interaction::CreateNamedObjectWith
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_CCREATEFIELD_H_ */

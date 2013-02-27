@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * SkipOperatorDelimiter.cpp
- *
- *  Created on: Jan 11, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "expression_editor/tree_builder/SkipOperatorDelimiter.h"
 
 #include "expression_editor/tree_builder/ExpressionTreeBuilder.h"

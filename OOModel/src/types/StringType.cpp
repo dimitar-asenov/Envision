@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * StringType.cpp
- *
- *  Created on: Apr 5, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "StringType.h"
 
 namespace OOModel {

@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * Cursor.cpp
- *
- *  Created on: Jan 26, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "cursor/Cursor.h"
 #include "items/Item.h"
 #include "items/ItemStyle.h"

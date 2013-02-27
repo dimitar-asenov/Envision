@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * AutoComplete.h
- *
- *  Created on: Jul 24, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef InteractionBase_AUTOCOMPLETE_H_
-#define InteractionBase_AUTOCOMPLETE_H_
+#pragma once
 
 #include "../interactionbase_api.h"
 
@@ -73,4 +65,3 @@ class INTERACTIONBASE_API AutoComplete {
 };
 
 } /* namespace Interaction */
-#endif /* InteractionBase_AUTOCOMPLETE_H_ */

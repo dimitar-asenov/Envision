@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ExpressionTreeUtils.h
- *
- *  Created on: Jan 11, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef INTERACTIONBASE_EXPRESSIONTREEUTILS_H_
-#define INTERACTIONBASE_EXPRESSIONTREEUTILS_H_
+#pragma once
 
 #include "../interactionbase_api.h"
 
@@ -68,4 +60,3 @@ class INTERACTIONBASE_API ExpressionTreeUtils {
 };
 
 } /* namespace InteractionBase */
-#endif /* INTERACTIONBASE_EXPRESSIONTREEUTILS_H_ */

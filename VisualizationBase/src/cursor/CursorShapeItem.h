@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CursorShapeItem.h
- *
- *  Created on: Jan 26, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef VisualizationBase_CURSORSHAPEITEM_H_
-#define VisualizationBase_CURSORSHAPEITEM_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 #include "../items/ItemStyle.h"
@@ -72,4 +64,3 @@ class VISUALIZATIONBASE_API CursorShapeItem: public Item
 inline void CursorShapeItem::setCursorSize(const QSize& size) { size_ = size; }
 
 } /* namespace Visualization */
-#endif /* VisualizationBase_CURSORSHAPEITEM_H_ */

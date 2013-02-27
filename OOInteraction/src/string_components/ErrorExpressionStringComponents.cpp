@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ErrorExpressionStringComponents.cpp
- *
- *  Created on: Feb 17, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "string_components/ErrorExpressionStringComponents.h"
 
 #include "OOModel/src/expressions/ErrorExpression.h"

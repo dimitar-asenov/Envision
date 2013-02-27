@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ThrowStringOffsetProvider.cpp
- *
- *  Created on: Sep 17, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "ThrowStringOffsetProvider.h"
 #include "Cell.h"
 #include "OOVisualization/src/expressions/VThrowExpression.h"

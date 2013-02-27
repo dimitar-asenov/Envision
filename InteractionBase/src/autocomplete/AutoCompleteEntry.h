@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * AutoCompleteEntry.h
- *
- *  Created on: Jul 23, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef InteractionBase_AUTOCOMPLETEENTRY_H_
-#define InteractionBase_AUTOCOMPLETEENTRY_H_
+#pragma once
 
 #include "../interactionbase_api.h"
 
@@ -77,4 +69,3 @@ inline void AutoCompleteEntry::setText(const QString& text) { text_ = text; }
 inline void AutoCompleteEntry::setDescription(const QString& description) { description_ = description; }
 
 } /* namespace Interaction */
-#endif /* InteractionBase_AUTOCOMPLETEENTRY_H_ */

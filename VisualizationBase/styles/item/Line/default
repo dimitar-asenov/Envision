@@ -1,0 +1,21 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/Item/default" >
+	<itemClass>Line</itemClass> <!-- This is only used by 'Static' when a Line is displayed through a static element. -->
+	<drawsOnlyShape>false</drawsOnlyShape>
+	<wholeItemCursor>true</wholeItemCursor>
+	<allowEquivalentCursorsThroughBoundary>false</allowEquivalentCursorsThroughBoundary>
+	<width>0</width>
+	<height>1</height>
+	<pen>
+		<width>1.0</width>
+		<style>1</style>
+		<color>
+			<alpha>255</alpha>
+			<red>0</red>
+			<green>0</green>
+			<blue>0</blue>
+		</color>
+		<capStyle>0</capStyle>
+		<joinStyle>0</joinStyle>
+	</pen>
+</style>

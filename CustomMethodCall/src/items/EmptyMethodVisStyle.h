@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * EmptyMethodVisStyle.h
- *
- *  Created on: Mar 25, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef EMPTYMETHODVISSTYLE_H_
-#define EMPTYMETHODVISSTYLE_H_
+#pragma once
 
 #include "../custommethodcall_api.h"
 
@@ -61,5 +53,3 @@ inline const Visualization::StaticStyle& EmptyMethodVisStyle::icon() const { ret
 inline const Visualization::StaticStyle& EmptyMethodVisStyle::separator() const { return separator_; }
 
 }
-
-#endif /* EMPTYMETHODVISSTYLE_H_ */

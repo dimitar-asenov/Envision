@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * ControlFlowVisualizationException.h
- *
- *  Created on: Feb 24, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef CONTROLFLOWVISUALIZATIONEXCEPTION_H_
-#define CONTROLFLOWVISUALIZATIONEXCEPTION_H_
+#pragma once
 
 #include "controlflowvisualization_api.h"
 #include "Core/src/EnvisionException.h"
@@ -47,5 +39,3 @@ class CONTROLFLOWVISUALIZATION_API ControlFlowVisualizationException : public Co
 };
 
 }
-
-#endif /* MODELEXCEPTION_H_ */

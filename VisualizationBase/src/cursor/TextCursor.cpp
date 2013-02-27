@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * TextCursorData.cpp
- *
- *  Created on: Jan 30, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "cursor/TextCursor.h"
 #include "cursor/CursorShapeItem.h"
 

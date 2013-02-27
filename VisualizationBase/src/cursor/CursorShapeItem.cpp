@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CursorShapeItem.cpp
- *
- *  Created on: Jan 26, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "CursorShapeItem.h"
 #include "Cursor.h"
 #include "../views/MainView.h"
