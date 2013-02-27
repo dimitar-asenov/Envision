@@ -11,6 +11,28 @@ win32:LIBS += -llogger \
     -loovisualization \
     -loointeraction
 
+
+LIBS += -lclangTooling\
+                                -lclangFrontendTool\
+                                -lclangFrontend\
+                                -lclangDriver\
+                                -lclangSerialization\
+                                -lclangCodeGen\
+                                -lclangParse\
+                                -lclangSema\
+                                -lclangStaticAnalyzerFrontend\
+                                -lclangStaticAnalyzerCheckers\
+                                -lclangStaticAnalyzerCore\
+                                -lclangAnalysis\
+                                -lclangARCMigrate\
+                                -lclangRewriteFrontend\
+                                -lclangRewriteCore\
+                                -lclangEdit\
+                                -lclangAST\
+                                -lclangLex\
+                                -lclangBasic\
+                                $(shell llvm-config --libs)
+
 HEADERS += src/precompiled.h \
     src/CppImportException.h \
 	src/cppimport_api.h \
