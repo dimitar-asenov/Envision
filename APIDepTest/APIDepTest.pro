@@ -1,6 +1,5 @@
 TARGET = apideptest
 include(../Core/common_plugin.pri)
-
 DEFINES += APIDEPTEST_LIBRARY
 win32:LIBS += -lhelloworld
 QT = core
