@@ -12,6 +12,15 @@ win32:LIBS += -llogger \
     -loointeraction
 
 
+
+## LLVM SPECIFIC
+LLVMCOMPONENTS = cppbackend
+
+INCLUDEPATH += /usr/include/
+
+DEFINES += _GNU_SOURCE __STDC_CONSTANT_MACROS __STDC_FORMAT_MACROS __STDC_LIMIT_MACROS
+
+
 LIBS += -lclangTooling\
                                 -lclangFrontendTool\
                                 -lclangFrontend\
@@ -31,7 +40,10 @@ LIBS += -lclangTooling\
                                 -lclangAST\
                                 -lclangLex\
                                 -lclangBasic\
-                                $(shell llvm-config --libs)
+                                ""$(shell llvm-config --libs)"" \
+                                $$system(llvm-config --ldflags --libs cppbackend)
+
+## END LLVM SPECIFIC
 
 HEADERS += src/precompiled.h \
     src/CppImportException.h \
