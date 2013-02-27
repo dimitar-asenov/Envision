@@ -28,7 +28,13 @@
 
 namespace Visualization {
 
+/*
+ * AnchorLayoutElement
+ */
+
 AnchorLayoutElement::AnchorLayoutElement()
+: elementList_{QList<Element*>()}, horizontalConstraints_{Orientation::Horizontal},
+  verticalConstraints_{Orientation::Vertical}
 {
 	// TODO Auto-generated constructor stub
 
@@ -45,14 +51,10 @@ AnchorLayoutElement* AnchorLayoutElement::put(PlaceEdge placeEdge, Element* plac
 	Edge edgeToBePlaced = static_cast<Edge>(placeEdge);
 	Edge fixedEdge = static_cast<Edge>(atEdge);
 
-	Orientation o = inferOrientation(edgeToBePlaced, fixedEdge);
+	Orientation orientation = inferOrientation(edgeToBePlaced, fixedEdge);
 
-	if (o == Orientation::Horizontal) {
-		return putX(relativePosition(edgeToBePlaced), placeElement, 0, relativePosition(fixedEdge), fixedElement);
-	}
-	else {
-		return putY(relativePosition(edgeToBePlaced), placeElement, 0, relativePosition(fixedEdge), fixedElement);
-	}
+	return put(orientation, relativePosition(edgeToBePlaced), placeElement, 0, relativePosition(fixedEdge),
+					fixedElement);
 }
 
 AnchorLayoutElement* AnchorLayoutElement::put(PlaceEdge placeEdge, Element* placeElement, int offset, FromEdge fromEdge,
@@ -61,18 +63,14 @@ AnchorLayoutElement* AnchorLayoutElement::put(PlaceEdge placeEdge, Element* plac
 	Edge edgeToBePlaced = static_cast<Edge>(placeEdge);
 	Edge fixedEdge = static_cast<Edge>(fromEdge);
 
-	Orientation o = inferOrientation(edgeToBePlaced, fixedEdge);
+	Orientation orientation = inferOrientation(edgeToBePlaced, fixedEdge);
 
 	// compute correct offset
 	if (fixedEdge == Edge::Left || fixedEdge == Edge::Top)
 		offset = -offset;
 
-	if (o == Orientation::Horizontal) {
-		return putX(relativePosition(edgeToBePlaced), placeElement, offset, relativePosition(fixedEdge), fixedElement);
-	}
-	else {
-		return putY(relativePosition(edgeToBePlaced), placeElement, offset, relativePosition(fixedEdge), fixedElement);
-	}
+	return put(orientation, relativePosition(edgeToBePlaced), placeElement, offset, relativePosition(fixedEdge),
+					fixedElement);
 }
 
 AnchorLayoutElement* AnchorLayoutElement::put(PlaceEdge placeEdge, Element* placeElement, float relativeEdgePosition,
@@ -80,15 +78,10 @@ AnchorLayoutElement* AnchorLayoutElement::put(PlaceEdge placeEdge, Element* plac
 {
 	Edge edgeToBePlaced = static_cast<Edge>(placeEdge);
 
-	Orientation o = orientation(edgeToBePlaced);
-	Q_ASSERT(o != Orientation::Auto);
+	Orientation orientation = this->orientation(edgeToBePlaced);
+	Q_ASSERT(orientation != Orientation::Auto);
 
-	if (o == Orientation::Horizontal) {
-		return putX(relativePosition(edgeToBePlaced), placeElement, 0, relativeEdgePosition, fixedElement);
-	}
-	else {
-		return putY(relativePosition(edgeToBePlaced), placeElement, 0, relativeEdgePosition, fixedElement);
-	}
+	return put(orientation, relativePosition(edgeToBePlaced), placeElement, 0, relativeEdgePosition, fixedElement);
 }
 
 void AnchorLayoutElement::computeSize(Item* item, int /*availableWidth*/, int /*availableHeight*/)
@@ -102,24 +95,10 @@ void AnchorLayoutElement::computeSize(Item* item, int /*availableWidth*/, int /*
 	}
 
 	// place elements horizontally
-	int minX = 0;
-	for (int i=0; i<horizontalPlacements_.length(); i++)
-	{
-		horizontalPlacements_.at(i)->execute(Orientation::Horizontal);
-		int posX = horizontalPlacements_.at(i)->placeElement()->pos().x();
-		if (posX < minX)
-			minX = posX;
-	}
+	int minX = horizontalConstraints_.placeElements(item);
 
 	// place elements vertically
-	int minY = 0;
-	for (int i=0; i<verticalPlacements_.length(); i++)
-	{
-		verticalPlacements_.at(i)->execute(Orientation::Vertical);
-		int posY = verticalPlacements_.at(i)->placeElement()->pos().y();
-		if (posY < minY)
-			minY = posY;
-	}
+	int minY = verticalConstraints_.placeElements(item);
 
 	// adjust positions, such that the minimum on each axis is at left/right margin, and compute overall element width
 	// and height
@@ -160,47 +139,22 @@ bool AnchorLayoutElement::sizeDependsOnParent(const Item* /*item*/) const
 	return false;
 }
 
-AnchorLayoutElement* AnchorLayoutElement::putX(float relativePlaceEdgePosition, Element* placeElement, int offset,
-																float relativeFixedEdgePosition, Element* fixedElement)
+AnchorLayoutElement* AnchorLayoutElement::put(Orientation orientation, float relativePlaceEdgePosition,
+		Element* placeElement, int offset, float relativeFixedEdgePosition, Element* fixedElement)
 {
-	if (elementList_.contains(placeElement))
-		// check if element is not already assumed to be fixed/placed
-		for (int i = 0; i < horizontalPlacements_.length(); ++i)
-		{
-			Q_ASSERT(horizontalPlacements_.at(i)->fixedElement() != placeElement);
-			Q_ASSERT(horizontalPlacements_.at(i)->placeElement() != placeElement);
-		}
-	else
-		elementList_.append(placeElement);
+	Q_ASSERT(orientation != Orientation::Auto);
 
+	if (!elementList_.contains(placeElement))
+		elementList_.append(placeElement);
 	if (!elementList_.contains(fixedElement))
 		elementList_.append(fixedElement);
 
-	horizontalPlacements_.append(new Placement(relativePlaceEdgePosition, placeElement, offset,
-																relativeFixedEdgePosition, fixedElement));
-
-	return this;
-}
-
-AnchorLayoutElement* AnchorLayoutElement::putY(float relativePlaceEdgePosition, Element* placeElement, int offset,
-																float relativeFixedEdgePosition, Element* fixedElement)
-{
-	if (elementList_.contains(placeElement))
-		// check if element is not already assumed to be fixed/placed
-		for (int i = 0; i < verticalPlacements_.length(); ++i)
-		{
-			Q_ASSERT(verticalPlacements_.at(i)->fixedElement() != placeElement);
-			Q_ASSERT(verticalPlacements_.at(i)->placeElement() != placeElement);
-		}
-	else
-		elementList_.append(placeElement);
-
-	if (!elementList_.contains(fixedElement))
-		elementList_.append(fixedElement);
-
-	verticalPlacements_.append(new Placement(relativePlaceEdgePosition, placeElement, offset,
-															relativeFixedEdgePosition, fixedElement));
-
+	if (orientation == Orientation::Horizontal)
+		horizontalConstraints_.addConstraint(relativePlaceEdgePosition, placeElement, offset,
+																relativeFixedEdgePosition, fixedElement);
+	else // orientation == Orientation::Vertical
+		verticalConstraints_.addConstraint(relativePlaceEdgePosition, placeElement, offset,
+																relativeFixedEdgePosition, fixedElement);
 	return this;
 }
 
@@ -263,20 +217,63 @@ float AnchorLayoutElement::relativePosition(Edge edge)
 	}
 }
 
-AnchorLayoutElement::Placement::Placement(float relativePlaceEdgePosition, Element* placeElement, int offset,
-		float relativeFixedEdgePosition, Element* fixedElement)
+/*
+ * AnchorLayoutElement::AxisConstraints
+ */
+
+AnchorLayoutElement::AxisConstraints::AxisConstraints(Orientation orientation)
+: orientation_{orientation}, constraints_{QList<Constraint*>()}
+{}
+
+AnchorLayoutElement::AxisConstraints::~AxisConstraints()
+{}
+
+void AnchorLayoutElement::AxisConstraints::addConstraint(float relativePlaceEdgePosition, Element* placeElement,
+		int offset, float relativeFixedEdgePosition, Element* fixedElement)
+{
+	// check if element is not already assumed to be fixed/placed
+	for (int i = 0; i < constraints_.length(); ++i)
+	{
+		Q_ASSERT(constraints_.at(i)->fixedElement() != placeElement);
+		Q_ASSERT(constraints_.at(i)->placeElement() != placeElement);
+	}
+
+	constraints_.append(new Constraint(relativePlaceEdgePosition, placeElement, offset,
+															relativeFixedEdgePosition, fixedElement));
+}
+
+int AnchorLayoutElement::AxisConstraints::placeElements(Item* /*item*/)
+{
+	// place elements on axis
+	int minPos = 0;
+	for (int i=0; i<constraints_.length(); i++)
+	{
+		int pos = constraints_.at(i)->execute(orientation_);
+		if (pos < minPos)
+			minPos = pos;
+	}
+
+	return minPos;
+}
+
+/*
+ * AnchorLayoutElement::AxisConstraints::Constraint
+ */
+
+AnchorLayoutElement::AxisConstraints::Constraint::Constraint(float relativePlaceEdgePosition, Element* placeElement,
+		int offset, float relativeFixedEdgePosition, Element* fixedElement)
 : relativePlaceEdgePosition_{relativePlaceEdgePosition}, placeElement_{placeElement}, offset_{offset},
   relativeFixedEdgePosition_{relativeFixedEdgePosition}, fixedElement_{fixedElement}
 {}
 
-AnchorLayoutElement::Placement::~Placement()
+AnchorLayoutElement::AxisConstraints::Constraint::~Constraint()
 {}
 
 /**
  * Calculates the position in the orientation axis of the element to be placed, assuming it's size was already
  * calculated, and the position on the orientation axis of the fixed element is already fixed.
  */
-void AnchorLayoutElement::Placement::execute(Orientation orientation)
+int AnchorLayoutElement::AxisConstraints::Constraint::execute(Orientation orientation)
 {
 	Q_ASSERT(orientation != Orientation::Auto);
 
@@ -286,6 +283,7 @@ void AnchorLayoutElement::Placement::execute(Orientation orientation)
 									fixedElement_->size().width() * relativeFixedEdgePosition_;
 		int placeX = edgePosition - placeElement_->size().width() * relativePlaceEdgePosition_;
 		placeElement_->setPos(QPoint(placeX, placeElement_->pos().y()));
+		return placeX;
 	}
 	else // orientation == Orientation::Vertical
 	{
@@ -293,6 +291,7 @@ void AnchorLayoutElement::Placement::execute(Orientation orientation)
 									fixedElement_->size().height() * relativeFixedEdgePosition_;
 		int placeY = edgePosition - placeElement_->size().height() * relativePlaceEdgePosition_;
 		placeElement_->setPos(QPoint(placeElement_->pos().x(), placeY));
+		return placeY;
 	}
 }
 

@@ -59,41 +59,55 @@ class AnchorLayoutElement : public LayoutElement {
 	private:
 		enum class Edge : int {Left, Right, Center, VCenter, HCenter, Top, Bottom};
 		enum class Orientation : int {Auto, Horizontal, Vertical};
-		AnchorLayoutElement* putX(float relativePlaceEdgePosition, Element* placeElement, int offset,
-												float relativeFixedEdgePosition, Element* fixedElement);
-		AnchorLayoutElement* putY(float relativePlaceEdgePosition, Element* placeElement, int offset,
-												float relativeFixedEdgePosition, Element* fixedElement);
+		AnchorLayoutElement* put(Orientation orientation, float relativePlaceEdgePosition, Element* placeElement,
+											int offset, float relativeFixedEdgePosition, Element* fixedElement);
 		Orientation orientation(Edge edge);
 		Orientation inferOrientation(Edge firstEdge, Edge secondEdge);
 		float relativePosition(Edge edge);
 
 		QList<Element*> elementList_{};
-		class Placement
+		class AxisConstraints
 		{
 			public:
-				Placement(float relativePlaceEdgePosition, Element* placeElement, int offset,
-								float relativeFixedEdgePosition, Element* fixedElement);
-				virtual ~Placement();
-				void execute(Orientation orientation);
-				Element* placeElement() const;
-				Element* fixedElement() const;
+				// Methods executable on element definition
+				AxisConstraints(Orientation orientation);
+				virtual ~AxisConstraints();
+				void addConstraint(float relativePlaceEdgePosition, Element* placeElement, int offset,
+											float relativeFixedEdgePosition, Element* fixedElement);
+
+				// Methods executable when items need to be rendered
+				int placeElements(Item* item);
 
 			private:
-				float relativePlaceEdgePosition_{};
-				Element* placeElement_{};
-				int offset_{};
-				float relativeFixedEdgePosition_{};
-				Element* fixedElement_{};
+				Orientation orientation_{};
+				class Constraint
+				{
+					public:
+						Constraint(float relativePlaceEdgePosition, Element* placeElement, int offset,
+										float relativeFixedEdgePosition, Element* fixedElement);
+						virtual ~Constraint();
+						int execute(Orientation orientation);
+						Element* placeElement() const;
+						Element* fixedElement() const;
+
+					private:
+						float relativePlaceEdgePosition_{};
+						Element* placeElement_{};
+						int offset_{};
+						float relativeFixedEdgePosition_{};
+						Element* fixedElement_{};
+				};
+				QList<Constraint*> constraints_{};
 		};
-		QList<Placement*> horizontalPlacements_{};
-		QList<Placement*> verticalPlacements_{};
+		AxisConstraints horizontalConstraints_{Orientation::Horizontal};
+		AxisConstraints verticalConstraints_{Orientation::Vertical};
 };
 
-inline Element* AnchorLayoutElement::Placement::placeElement() const
+inline Element* AnchorLayoutElement::AxisConstraints::Constraint::placeElement() const
 {
 	return placeElement_;
 }
-inline Element* AnchorLayoutElement::Placement::fixedElement() const
+inline Element* AnchorLayoutElement::AxisConstraints::Constraint::fixedElement() const
 {
 	return fixedElement_;
 }
