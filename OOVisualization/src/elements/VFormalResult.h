@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * VFormalResult.h
- *
- *  Created on: Feb 11, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef VFORMALRESULT_H_
-#define VFORMALRESULT_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 #include "VFormalResultStyle.h"
@@ -68,5 +60,3 @@ class OOVISUALIZATION_API VFormalResult
 };
 
 }
-
-#endif /* VFORMALRESULT_H_ */

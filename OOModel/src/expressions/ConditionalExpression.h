@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ConditionalExpression.h
- *
- *  Created on: Mar 27, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOModel_CONDITIONALEXPRESSION_H_
-#define OOModel_CONDITIONALEXPRESSION_H_
+#pragma once
 
 #include "Expression.h"
 
@@ -51,4 +43,3 @@ class OOMODEL_API ConditionalExpression: public Expression
 };
 
 } /* namespace OOModel */
-#endif /* OOModel_CONDITIONALEXPRESSION_H_ */

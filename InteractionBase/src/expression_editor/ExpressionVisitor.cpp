@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ExpressionVisitor.cpp
- *
- *  Created on: Jan 11, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "expression_editor/ExpressionVisitor.h"
 
 #include "expression_editor/Operator.h"

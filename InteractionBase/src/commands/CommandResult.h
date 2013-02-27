@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * CommandResult.h
- *
- *  Created on: Jan 17, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef COMMANDRESULT_H_
-#define COMMANDRESULT_H_
+#pragma once
 
 #include "../interactionbase_api.h"
 
@@ -70,5 +62,3 @@ inline const QList<CommandError*>& CommandResult::errors() const { return errors
 inline const QList<CommandSuggestion*>& CommandResult::suggestions() const {return suggestions_; }
 
 }
-
-#endif /* COMMANDRESULT_H_ */

@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * PrimitiveType.h
- *
- *  Created on: Apr 3, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOModel_PRIMITIVETYPE_H_
-#define OOModel_PRIMITIVETYPE_H_
+#pragma once
 
 #include "Type.h"
 
@@ -58,4 +50,3 @@ class OOMODEL_API PrimitiveType : public Type {
 inline PrimitiveType::PrimitiveTypes PrimitiveType::type() const { return type_; }
 
 } /* namespace OOModel */
-#endif /* OOModel_PRIMITIVETYPE_H_ */

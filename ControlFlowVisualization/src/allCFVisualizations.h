@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * allCFVisualizations.h
- *
- *  Created on: Feb 24, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef ALLCFVISUALIZATIONS_H_
-#define ALLCFVISUALIZATIONS_H_
+#pragma once
 
 #include "items/ControlFlowItem.h"
 #include "items/VMethodCF.h"
@@ -43,5 +35,3 @@
 #include "items/VIfStatementCF.h"
 #include "items/VReturnStatementCF.h"
 #include "items/VBlockCF.h"
-
-#endif /* ALLCFVISUALIZATIONS_H_ */

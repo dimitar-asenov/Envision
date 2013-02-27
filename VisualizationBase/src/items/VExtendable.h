@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * VExtendable.h
- *
- *  Created on: Dec 14, 2010
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef VEXTENDABLE_H_
-#define VEXTENDABLE_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -74,5 +66,3 @@ class VISUALIZATIONBASE_API VExtendable : public ItemWithNode<Item, Model::Exten
 inline bool VExtendable::expanded() const { return expanded_; }
 
 }
-
-#endif /* VEXTENDABLE_H_ */

@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * HExpression.h
- *
- *  Created on: Feb 8, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOInteraction_HEXPRESSION_H_
-#define OOInteraction_HEXPRESSION_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 
@@ -77,4 +69,3 @@ inline void HExpression::appendExpressionMonitor(ExpressionChangeMonitorFunction
 }
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_HEXPRESSION_H_ */

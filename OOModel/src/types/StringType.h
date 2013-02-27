@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * StringType.h
- *
- *  Created on: Apr 5, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOModel_STRINGTYPE_H_
-#define OOModel_STRINGTYPE_H_
+#pragma once
 
 #include "Type.h"
 
@@ -46,4 +38,3 @@ class OOMODEL_API StringType : public Type {
 };
 
 } /* namespace OOModel */
-#endif /* OOModel_STRINGTYPE_H_ */

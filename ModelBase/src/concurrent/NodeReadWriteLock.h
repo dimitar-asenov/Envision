@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * NodeReadWriteLock.h
- *
- *  Created on: Nov 25, 2010
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef NODEREADWRITELOCK_H_
-#define NODEREADWRITELOCK_H_
+#pragma once
 
 #include "../modelbase_api.h"
 #include "InterruptibleThread.h"
@@ -59,5 +51,3 @@ class MODELBASE_API NodeReadWriteLock
 };
 
 }
-
-#endif /* NODEREADWRITELOCK_H_ */

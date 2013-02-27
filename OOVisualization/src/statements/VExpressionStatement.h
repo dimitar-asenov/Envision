@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VExpressionStatement.h
- *
- *  Created on: Feb 29, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOVisualization_VEXPRESSIONSTATEMENT_H_
-#define OOVisualization_VEXPRESSIONSTATEMENT_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -63,4 +55,3 @@ class OOVISUALIZATION_API VExpressionStatement
 };
 
 } /* namespace OOVisualization */
-#endif /* OOVisualization_VEXPRESSIONSTATEMENT_H_ */

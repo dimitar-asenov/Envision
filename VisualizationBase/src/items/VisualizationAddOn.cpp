@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VisualizationAddOn.cpp
- *
- *  Created on: Jul 13, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "VisualizationAddOn.h"
 
 namespace Visualization {

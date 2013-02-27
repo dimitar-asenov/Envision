@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * EmptyExpression.cpp
- *
- *  Created on: Jan 12, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "expressions/EmptyExpression.h"
 #include "../types/ErrorType.h"
 

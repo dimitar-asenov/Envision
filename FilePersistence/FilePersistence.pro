@@ -1,6 +1,5 @@
 TARGET = filepersistence
 include(../Core/common_plugin.pri)
-
 DEFINES += FILEPERSISTENCE_LIBRARY
 win32:LIBS += -llogger \
     -lselftest \

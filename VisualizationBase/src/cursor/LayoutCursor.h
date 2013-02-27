@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * LayoutCursor.h
- *
- *  Created on: Jan 30, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef VisualizationBase_LAYOUTCURSOR_H_
-#define VisualizationBase_LAYOUTCURSOR_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 #include "../layouts/Layout.h"
@@ -77,4 +69,3 @@ inline int LayoutCursor::index() { return index_; }
 inline void LayoutCursor::setIsAtBoundary(bool isAtBoundary) { isAtBoundary_ = isAtBoundary; }
 
 } /* namespace Visualization */
-#endif /* VisualizationBase_LAYOUTCURSOR_H_ */

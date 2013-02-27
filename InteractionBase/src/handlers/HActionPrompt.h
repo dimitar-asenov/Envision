@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * HActionPrompt.h
- *
- *  Created on: Sep 27, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef InteractionBase_HACTIONPROMPT_H_
-#define InteractionBase_HACTIONPROMPT_H_
+#pragma once
 
 #include "../interactionbase_api.h"
 
@@ -57,4 +49,3 @@ class INTERACTIONBASE_API HActionPrompt: public GenericHandler
 };
 
 } /* namespace Interaction */
-#endif /* InteractionBase_HACTIONPROMPT_H_ */

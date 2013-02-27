@@ -24,13 +24,6 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * VMethodStyle.cpp
- *
- *  Created on: Feb 4, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
 #include "top_level/VMethodStyle.h"
 
 namespace OOVisualization {
@@ -50,6 +43,7 @@ void VMethodStyle::load(Visualization::StyleLoader& sl)
 	sl.load("nameStaticProtected", nameStaticProtected_);
 	sl.load("icon", icon_);
 	sl.load("header", header_);
+	sl.load("signatureLine",signatureLine_);
 	sl.load("body", body_);
 	sl.load("annotations", annotations_);
 	sl.load("addons", addons_);

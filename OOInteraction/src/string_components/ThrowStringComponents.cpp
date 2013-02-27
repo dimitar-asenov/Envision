@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ThrowStringComponents.cpp
- *
- *  Created on: Sep 17, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "ThrowStringComponents.h"
 
 #include "OOModel/src/expressions/ThrowExpression.h"

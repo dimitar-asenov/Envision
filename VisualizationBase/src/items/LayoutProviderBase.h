@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * LayoutProviderBase.h
- *
- *  Created on: Feb 18, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef LAYOUTPROVIDERBASE_H_
-#define LAYOUTPROVIDERBASE_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -69,5 +61,3 @@ class VISUALIZATIONBASE_API LayoutProviderBase : public Item
 inline Layout* LayoutProviderBase::layout() const { return layout_; }
 
 }
-
-#endif /* LAYOUTPROVIDERBASE_H_ */

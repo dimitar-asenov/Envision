@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * StaticStringOffsetProvider.cpp
- *
- *  Created on: Feb 17, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "string_offset_providers/StaticStringOffsetProvider.h"
 
 #include "VisualizationBase/src/items/Static.h"

@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * VField.h
- *
- *  Created on: Feb 4, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef VFIELD_H_
-#define VFIELD_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 #include "VFieldStyle.h"
@@ -66,5 +58,3 @@ class OOVISUALIZATION_API VField : public Visualization::ItemWithNode< Visualiza
 		Visualization::Item* type_;
 };
 }
-
-#endif /* VFIELD_H_ */

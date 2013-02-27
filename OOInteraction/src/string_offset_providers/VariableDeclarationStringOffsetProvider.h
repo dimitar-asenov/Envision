@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VariableDeclarationStringOffsetProvider.h
- *
- *  Created on: Mar 19, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOInteraction_VARIABLEDECLARATIONSTRINGOFFSETPROVIDER_H_
-#define OOInteraction_VARIABLEDECLARATIONSTRINGOFFSETPROVIDER_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 #include "GridBasedOffsetProvider.h"
@@ -49,4 +41,3 @@ class OOINTERACTION_API VariableDeclarationStringOffsetProvider : public GridBas
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_VARIABLEDECLARATIONSTRINGOFFSETPROVIDER_H_ */

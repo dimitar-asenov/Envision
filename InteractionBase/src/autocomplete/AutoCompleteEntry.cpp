@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * AutoCompleteEntry.cpp
- *
- *  Created on: Jul 23, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "AutoCompleteEntry.h"
 
 #include "VisualizationBase/src/items/Item.h"

@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * LeaveUnfinished.cpp
- *
- *  Created on: Sep 5, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "LeaveUnfinished.h"
 
 #include "expression_editor/tree_builder/ExpressionTreeBuilder.h"

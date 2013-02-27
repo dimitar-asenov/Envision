@@ -7,6 +7,6 @@ QMAKE_CXXFLAGS += -std=c++11 -pedantic-errors -Werror -Wextra -O2 -g -fno-omit-f
 QMAKE_LFLAGS += '-Wl,-rpath,\'\$$ORIGIN/qt\'' # Used so that the main executable can link to custom built Qt
 QMAKE_LFLAGS += '-Wl,-rpath,\'\$$ORIGIN/../qt\'' # Used so that plugins can link to custom built Qt
 INCLUDEPATH += ./src ./test $${ENVISION_ROOT_DIR}
-CONFIG += qt warn_on thread precompile_header
+CONFIG += qt warn_on thread precompile_header debug_and_release
 QT = core gui
 PRECOMPILED_HEADER = src/precompiled.h

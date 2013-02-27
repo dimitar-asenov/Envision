@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * FindMethodVis.h
- *
- *  Created on: Mar 24, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef FINDMETHODVIS_H_
-#define FINDMETHODVIS_H_
+#pragma once
 
 #include "../custommethodcall_api.h"
 #include "FindMethodVisStyle.h"
@@ -72,5 +64,3 @@ class CUSTOMMETHODCALL_API FindMethodVis
 };
 
 }
-
-#endif /* FINDMETHODVIS_H_ */

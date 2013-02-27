@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ThrowStringOffsetProvider.h
- *
- *  Created on: Sep 17, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOInteraction_THROWSTRINGOFFSETPROVIDER_H_
-#define OOInteraction_THROWSTRINGOFFSETPROVIDER_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 #include "GridBasedOffsetProvider.h"
@@ -49,4 +41,3 @@ class OOINTERACTION_API ThrowStringOffsetProvider : public GridBasedOffsetProvid
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_THROWSTRINGOFFSETPROVIDER_H_ */

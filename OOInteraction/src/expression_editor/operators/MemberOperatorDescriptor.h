@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * MemberOperatorDescriptor.h
- *
- *  Created on: Feb 29, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOInteraction_MEMBEROPERATORDESCRIPTOR_H_
-#define OOInteraction_MEMBEROPERATORDESCRIPTOR_H_
+#pragma once
 
 #include "../../oointeraction_api.h"
 #include "../OOOperatorDescriptor.h"
@@ -48,4 +40,3 @@ class OOINTERACTION_API MemberOperatorDescriptor : public OOOperatorDescriptor {
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_MEMBEROPERATORDESCRIPTOR_H_ */

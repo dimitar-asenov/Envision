@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * ShapeStyle.h
- *
- *  Created on: Dec 13, 2010
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef SHAPESTYLE_H_
-#define SHAPESTYLE_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 #include "../styles/Style.h"
@@ -56,5 +48,3 @@ class VISUALIZATIONBASE_API ShapeStyle : public Style
 
 inline const QPen& ShapeStyle::outline() const { return outline_; }
 }
-
-#endif /* SHAPESTYLE_H_ */

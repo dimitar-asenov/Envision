@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CommandDescriptor.cpp
- *
- *  Created on: May 31, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "CommandDescriptor.h"
 
 #include "OOModel/src/expressions/ReferenceExpression.h"

@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ValueAtReturnVisitor.cpp
- *
- *  Created on: Aug 31, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "ValueAtReturnVisitor.h"
 #include "OOModel/src/expressions/MethodCallExpression.h"
 #include "OOModel/src/expressions/ReferenceExpression.h"

@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VFormalTypeArgument.h
- *
- *  Created on: May 30, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOVisualization_VFORMALTYPEARGUMENT_H_
-#define OOVisualization_VFORMALTYPEARGUMENT_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 #include "VFormalTypeArgumentStyle.h"
@@ -74,4 +66,3 @@ class OOVISUALIZATION_API VFormalTypeArgument
 };
 
 } /* namespace OOVisualization */
-#endif /* OOVisualization_VFORMALTYPEARGUMENT_H_ */

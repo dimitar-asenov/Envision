@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VFormalTypeArgument.cpp
- *
- *  Created on: May 30, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "VFormalTypeArgument.h"
 
 #include "VisualizationBase/src/items/VText.h"

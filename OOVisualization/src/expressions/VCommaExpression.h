@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VCommaExpression.h
- *
- *  Created on: Feb 24, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOVisualization_VCOMMAEXPRESSION_H_
-#define OOVisualization_VCOMMAEXPRESSION_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 #include "OperatorStyle.h"
@@ -71,4 +63,3 @@ class OOVISUALIZATION_API VCommaExpression : public Visualization::ItemWithNode<
 };
 
 } /* namespace OOVisualization */
-#endif /* OOVisualization_VCOMMAEXPRESSION_H_ */

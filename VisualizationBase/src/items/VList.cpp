@@ -24,13 +24,6 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * VList.cpp
- *
- *  Created on: Jan 7, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
 #include "items/VList.h"
 #include "items/Text.h"
 
@@ -39,7 +32,7 @@ namespace Visualization {
 ITEM_COMMON_DEFINITIONS(VList, "item")
 
 VList::VList(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode< LayoutProvider<>, Model::List>(parent, node, style), suppressDefaultRemovalHandler_(false)
+	ItemWithNode< LayoutProvider<>, Model::List>(parent, node, style)
 {
 }
 
@@ -47,7 +40,24 @@ void VList::determineChildren()
 {
 	// TODO: find a better way and place to determine the style of children
 	layout()->setStyle(&style()->itemsStyle());
-	layout()->synchronizeWithNodes(node()->nodes().toList(), renderer());
+	determineRange();
+	layout()->synchronizeWithNodes(node()->nodes().toList().mid(rangeBegin_, rangeEnd_ - rangeBegin_), renderer());
+}
+
+void VList::determineRange()
+{
+	setRange(0, node()->size());
+}
+
+void VList::setRange(int begin, int end)
+{
+	Q_ASSERT(0 <= begin);
+	Q_ASSERT(begin <= end);
+	Q_ASSERT(end <= node()->size());
+	Q_ASSERT(begin < node()->size() || node()->size() == 0);
+
+	rangeBegin_ = begin;
+	rangeEnd_ = end;
 }
 
 }

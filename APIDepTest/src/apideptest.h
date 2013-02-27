@@ -24,18 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * apideptest.h
- *
- *  Created on: Nov 1, 2010
- *      Author: Dimitar Asenov
- *
- * The APIDepTest plug-in tests if it can import the API provided by the Hello World plug-in and print a message. It is
- * also test the functionality of the core module to load all dependent plug-ins first.
- **********************************************************************************************************************/
-
-#ifndef APIDEPTEST_H
-#define APIDEPTEST_H
+#pragma once
 
 #include "Core/src/EnvisionPlugin.h"
 #include "precompiled.h"
@@ -62,5 +51,3 @@ class APIDep : public QObject, public Core::EnvisionPlugin
 };
 
 }
-
-#endif // APIDEPTEST_H

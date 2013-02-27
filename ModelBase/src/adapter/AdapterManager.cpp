@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * AdapterManager.cpp
- *
- *  Created on: Feb 14, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "adapter/AdapterManager.h"
 
 namespace Model {

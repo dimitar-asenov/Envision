@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * controlflowvisualization.h
- *
- *  Created on: Feb 24, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef CONTROLFLOWVISUALIZATION_H
-#define CONTROLFLOWVISUALIZATION_H
+#pragma once
 
 #include "Core/src/EnvisionPlugin.h"
 #include "precompiled.h"
@@ -61,5 +53,3 @@ class ControlFlowVisualization : public QObject, public Core::EnvisionPlugin
 };
 
 }
-
-#endif // CONTROLFLOWVISUALIZATION_H

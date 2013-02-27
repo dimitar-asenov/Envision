@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * VArrayInitializer.h
- *
- *  Created on: Mar 21, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef VARRAYINITIALIZER_H_
-#define VARRAYINITIALIZER_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 #include "VArrayInitializerStyle.h"
@@ -81,5 +73,3 @@ inline bool VArrayInitializer::isShownInMatrixForm() const { return matrixForm_;
 inline Visualization::VList* VArrayInitializer::values() const { return values_; }
 
 }
-
-#endif /* VARRAYINITIALIZER_H_ */

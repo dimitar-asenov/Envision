@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * OOOperatorDescriptorList.cpp
- *
- *  Created on: Jan 18, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "expression_editor/OOOperatorDescriptorList.h"
 
 #include "expression_editor/operators/UnaryOperatorDescriptor.h"

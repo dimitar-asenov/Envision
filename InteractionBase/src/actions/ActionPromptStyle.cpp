@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ActionPromptStyle.cpp
- *
- *  Created on: Sep 27, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "ActionPromptStyle.h"
 
 namespace Interaction {

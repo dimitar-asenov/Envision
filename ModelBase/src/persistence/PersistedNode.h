@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * PersistedNode.h
- *
- *  Created on: Jan 20, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef PERSISTEDNODE_H_
-#define PERSISTEDNODE_H_
+#pragma once
 
 #include "../modelbase_api.h"
 #include "PersistentStore.h"
@@ -78,5 +70,3 @@ inline bool PersistedNode::partialHint() const { return partialHint_; }
 inline bool PersistedNode::isNewPersistenceUnit() const { return isNewPersistenceUnit_; }
 
 }
-
-#endif /* PERSISTEDNODE_H_ */

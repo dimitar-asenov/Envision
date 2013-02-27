@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ClassTypeStringOffsetProvider.h
- *
- *  Created on: Nov 14, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOInteraction_CLASSTYPESTRINGOFFSETPROVIDER_H_
-#define OOInteraction_CLASSTYPESTRINGOFFSETPROVIDER_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 #include "GridBasedOffsetProvider.h"
@@ -49,4 +41,3 @@ class OOINTERACTION_API ClassTypeStringOffsetProvider : public GridBasedOffsetPr
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_CLASSTYPESTRINGOFFSETPROVIDER_H_ */

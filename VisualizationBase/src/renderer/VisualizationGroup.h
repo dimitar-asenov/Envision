@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VisualizationGroup.h
- *
- *  Created on: Apr 13, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef VisualizationBase_VISUALIZATIONGROUP_H_
-#define VisualizationBase_VISUALIZATIONGROUP_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 #include "VisualizationSuitabilityScore.h"
@@ -48,8 +40,7 @@ class Item;
 class VISUALIZATIONBASE_API VisualizationGroup {
 
 	public:
-
-		typedef Item* (*ItemConstructor)(Item* parent, Model::Node* node);
+		typedef std::function<Item* (Item* parent, Model::Node* node)> ItemConstructor;
 		typedef std::function<bool (Item* parent, Model::Node* node)> ConditionFunction;
 
 		VisualizationGroup();
@@ -85,4 +76,3 @@ bool operator< (const QPair<VisualizationSuitabilityScore, VisualizationGroup::I
 		const QPair<VisualizationSuitabilityScore, VisualizationGroup::ItemConstructor>& right);
 
 } /* namespace Visualization */
-#endif /* VisualizationBase_VISUALIZATIONGROUP_H_ */

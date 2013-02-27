@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CompoundObjectStringOffsetProvider.cpp
- *
- *  Created on: Dec 4, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "CompoundObjectStringOffsetProvider.h"
 #include "VisualizationBase/src/items/Item.h"
 

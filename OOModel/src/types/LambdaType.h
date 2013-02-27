@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * LambdaType.h
- *
- *  Created on: Nov 29, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOModel_LAMBDATYPE_H_
-#define OOModel_LAMBDATYPE_H_
+#pragma once
 
 #include "Type.h"
 
@@ -56,4 +48,3 @@ class OOMODEL_API LambdaType : public Type {
 
 inline LambdaExpression* LambdaType::lambda() const { return lambda_; }
 } /* namespace OOModel */
-#endif /* OOModel_LAMBDATYPE_H_ */

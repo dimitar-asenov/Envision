@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * Mipmap.cpp
- *
- *  Created on: Nov 1, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "Mipmap.h"
 
 namespace Visualization {

@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * GridBasedOffsetProvider.cpp
- *
- *  Created on: Jun 11, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "GridBasedOffsetProvider.h"
 #include "Cell.h"
 #include "../OOInteractionException.h"

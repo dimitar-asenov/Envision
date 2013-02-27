@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * BooleanLiteralStringComponents.h
- *
- *  Created on: Feb 24, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOInteraction_BOOLEANLITERALSTRINGCOMPONENTS_H_
-#define OOInteraction_BOOLEANLITERALSTRINGCOMPONENTS_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 #include "StringComponents.h"
@@ -54,4 +46,3 @@ class OOINTERACTION_API BooleanLiteralStringComponents : public StringComponents
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_BOOLEANLITERALSTRINGCOMPONENTS_H_ */

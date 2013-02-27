@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * FormalTypeArgument.cpp
- *
- *  Created on: May 29, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "FormalTypeArgument.h"
 
 namespace OOModel {

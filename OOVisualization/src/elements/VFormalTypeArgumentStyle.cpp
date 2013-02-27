@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VFormalTypeArgumentStyle.cpp
- *
- *  Created on: May 30, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "VFormalTypeArgumentStyle.h"
 
 namespace OOVisualization {

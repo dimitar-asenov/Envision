@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * custommethodcall.h
- *
- *  Created on: Mar 24, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef CUSTOMMETHODCALL_H
-#define CUSTOMMETHODCALL_H
+#pragma once
 
 #include "Core/src/EnvisionPlugin.h"
 #include "precompiled.h"
@@ -59,5 +51,3 @@ class CustomMethodCall : public QObject, public Core::EnvisionPlugin
 };
 
 }
-
-#endif // CUSTOMMETHODCALL_H

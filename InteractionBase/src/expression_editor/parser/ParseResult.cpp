@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ParseResult.cpp
- *
- *  Created on: Jan 11, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "expression_editor/parser/ParseResult.h"
 
 namespace Interaction {

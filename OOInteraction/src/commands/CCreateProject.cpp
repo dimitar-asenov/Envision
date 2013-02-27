@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CCreateProject.cpp
- *
- *  Created on: Sep 14, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "CCreateProject.h"
 
 #include "OOModel/src/top_level/Project.h"

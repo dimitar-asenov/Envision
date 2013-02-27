@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * HReturnStatement.cpp
- *
- *  Created on: Sep 24, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "HReturnStatement.h"
 #include "OOVisualization/src/statements/VReturnStatement.h"
 

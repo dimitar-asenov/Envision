@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * PositionLayout.h
- *
- *  Created on: Feb 2, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef POSITIONLAYOUT_H_
-#define POSITIONLAYOUT_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 #include "../node_extensions/Position.h"
@@ -96,5 +88,3 @@ template <class T> T* PositionLayout::at(int index) { return static_cast<T*> (it
 template <class T> T* PositionLayout::at(int index) const { return static_cast<T*> (items[index]); }
 
 }
-
-#endif /* POSITIONLAYOUT_H_ */

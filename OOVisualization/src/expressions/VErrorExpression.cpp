@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VErrorExpression.cpp
- *
- *  Created on: Jan 19, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "expressions/VErrorExpression.h"
 
 #include "VisualizationBase/src/items/VText.h"

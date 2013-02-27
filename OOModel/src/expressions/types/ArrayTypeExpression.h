@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * ArrayTypeExpression.h
- *
- *  Created on: Feb 17, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef ARRAYTYPEEXPRESSION_H_
-#define ARRAYTYPEEXPRESSION_H_
+#pragma once
 
 #include "TypeExpression.h"
 
@@ -49,5 +41,3 @@ class OOMODEL_API ArrayTypeExpression : public TypeExpression
 };
 
 }
-
-#endif /* ARRAYTYPEEXPRESSION_H_ */

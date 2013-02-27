@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * StyleSet.h
- *
- *  Created on: Mar 28, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef STYLESET_H_
-#define STYLESET_H_
+#pragma once
 
 #include "../VisualizationException.h"
 #include "StyleLoader.h"
@@ -79,5 +71,3 @@ template<class T> typename T::StyleType* StyleSet<T>::get(const QString& styleNa
 }
 
 }
-
-#endif /* STYLESET_H_ */

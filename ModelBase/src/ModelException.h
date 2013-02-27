@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * ModelException.h
- *
- *  Created on: Nov 11, 2010
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef MODELEXCEPTION_H_
-#define MODELEXCEPTION_H_
+#pragma once
 
 #include "modelbase_api.h"
 #include "Core/src/EnvisionException.h"
@@ -47,5 +39,3 @@ class MODELBASE_API ModelException : public Core::EnvisionException
 };
 
 }
-
-#endif /* MODELEXCEPTION_H_ */

@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * SequentialLayoutStyle.h
- *
- *  Created on: Dec 9, 2010
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef SEQUENTIALLAYOUTSTYLE_H_
-#define SEQUENTIALLAYOUTSTYLE_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -94,5 +86,3 @@ inline bool SequentialLayoutStyle::isForward() const
 	{ return direction_ == Direction::LeftToRight || direction_ == Direction::TopToBottom;}
 
 }
-
-#endif /* SEQUENTIALLAYOUTSTYLE_H_ */

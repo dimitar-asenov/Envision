@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * HClass.h
- *
- *  Created on: Mar 1, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOInteraction_HCLASS_H_
-#define OOInteraction_HCLASS_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 
@@ -51,4 +43,3 @@ class OOINTERACTION_API HClass : public Interaction::GenericHandler {
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_HCLASS_H_ */

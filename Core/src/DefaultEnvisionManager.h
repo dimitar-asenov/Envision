@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * DefaultEnvisionManager.h
- *
- *  Created on: Oct 29, 2010
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef DEFAULTENVISIONMANAGER_H_
-#define DEFAULTENVISIONMANAGER_H_
+#pragma once
 
 #include "EnvisionManager.h"
 #include "PluginManager.h"
@@ -61,5 +53,3 @@ class DefaultEnvisionManager: public EnvisionManager
 };
 
 }
-
-#endif /* DEFAULTENVISIONMANAGER_H_ */

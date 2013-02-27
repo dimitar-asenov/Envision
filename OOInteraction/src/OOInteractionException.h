@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * OOInteractionException.h
- *
- *  Created on: Jan 12, 2012
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef OOINTERACTIONEXCEPTION_H_
-#define OOINTERACTIONEXCEPTION_H_
+#pragma once
 
 #include "oointeraction_api.h"
 #include "Core/src/EnvisionException.h"
@@ -47,5 +39,3 @@ class OOINTERACTION_API OOInteractionException : public Core::EnvisionException
 };
 
 }
-
-#endif /* MODELEXCEPTION_H_ */

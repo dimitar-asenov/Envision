@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * StaticStringOffsetProvider.h
- *
- *  Created on: Feb 17, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOInteraction_STATICSTRINGOFFSETPROVIDER_H_
-#define OOInteraction_STATICSTRINGOFFSETPROVIDER_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 
@@ -58,4 +50,3 @@ class StaticStringOffsetProvider : public StringOffsetProvider {
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_STATICSTRINGOFFSETPROVIDER_H_ */

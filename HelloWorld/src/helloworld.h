@@ -24,17 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * helloworld.h
- *
- *  Created on: Nov 1, 2010
- *      Author: Dimitar Asenov
- *
- * This file is an example of how to define the interface to an Envision plug-in.
- **********************************************************************************************************************/
-
-#ifndef HELLOWORLD_H
-#define HELLOWORLD_H
+#pragma once
 
 #include "Core/src/EnvisionPlugin.h"
 #include "precompiled.h"
@@ -61,5 +51,3 @@ class HelloWorld : public QObject, public Core::EnvisionPlugin
 };
 
 }
-
-#endif // HELLOWORLD_H

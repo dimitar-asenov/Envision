@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * GenericHandler.h
- *
- *  Created on: Jan 13, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef GENERICHANDLER_H_
-#define GENERICHANDLER_H_
+#pragma once
 
 #include "../interactionbase_api.h"
 
@@ -122,5 +114,3 @@ inline const QList<Command*>& GenericHandler::commands() { return supportedComma
 inline void GenericHandler::addCommand(Command* command) { supportedCommands.append(command); }
 
 }
-
-#endif /* GENERICHANDLER_H_ */

@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ThrownExceptionType.cpp
- *
- *  Created on: Sep 17, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "ThrownExceptionType.h"
 
 namespace OOModel {

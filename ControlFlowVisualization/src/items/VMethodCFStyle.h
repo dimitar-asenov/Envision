@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * VMethodCFStyle.h
- *
- *  Created on: Feb 24, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef VMETHODCFSTYLE_H_
-#define VMETHODCFSTYLE_H_
+#pragma once
 
 #include "../controlflowvisualization_api.h"
 #include "VListCFStyle.h"
@@ -55,5 +47,3 @@ class CONTROLFLOWVISUALIZATION_API VMethodCFStyle : public OOVisualization::VMet
 inline const VListCFStyle& VMethodCFStyle::contentCF() const { return contentCF_; }
 
 }
-
-#endif /* VMETHODCFSTYLE_H_ */

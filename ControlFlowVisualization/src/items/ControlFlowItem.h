@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * ControlFlowItem.h
- *
- *  Created on: Feb 24, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef CONTROLFLOWITEM_H_
-#define CONTROLFLOWITEM_H_
+#pragma once
 
 #include "ControlFlowItemStyle.h"
 
@@ -94,5 +86,3 @@ inline void ControlFlowItem::setPreferredContinueExit(PreferedExitDirection pref
 inline void ControlFlowItem::setPreferredBreakExit(PreferedExitDirection preference) { preferredBreakExit_ = preference; }
 
 }
-
-#endif /* CONTROLFLOWITEM_H_ */

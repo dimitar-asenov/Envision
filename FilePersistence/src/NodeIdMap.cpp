@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * NodeIdMap.cpp
- *
- *  Created on: Jan 16, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "NodeIdMap.h"
 #include "FilePersistenceException.h"
 

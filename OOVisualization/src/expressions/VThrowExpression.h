@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VThrowExpression.h
- *
- *  Created on: Sep 17, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOVisualization_VTHROWEXPRESSION_H_
-#define OOVisualization_VTHROWEXPRESSION_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 #include "VThrowExpressionStyle.h"
@@ -68,4 +60,3 @@ OOModel::ThrowExpression>
 };
 
 } /* namespace OOVisualization */
-#endif /* OOVisualization_VTHROWEXPRESSION_H_ */

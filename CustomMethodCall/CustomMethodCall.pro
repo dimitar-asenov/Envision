@@ -1,6 +1,5 @@
 TARGET = custommethodcall
 include(../Core/common_plugin.pri)
-
 DEFINES += CUSTOMMETHODCALL_LIBRARY
 win32:LIBS += -llogger \
     -lselftest \

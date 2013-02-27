@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CallStringOffsetProvider.h
- *
- *  Created on: Feb 29, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOInteraction_CALLSTRINGOFFSETPROVIDER_H_
-#define OOInteraction_CALLSTRINGOFFSETPROVIDER_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 #include "GridBasedOffsetProvider.h"
@@ -49,4 +41,3 @@ class OOINTERACTION_API CallStringOffsetProvider : public GridBasedOffsetProvide
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_CALLSTRINGOFFSETPROVIDER_H_ */

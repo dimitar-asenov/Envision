@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * HClass.cpp
- *
- *  Created on: Mar 1, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "handlers/HClass.h"
 
 #include "commands/CCreateMethod.h"

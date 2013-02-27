@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * CSceneHandlerItemExit.h
- *
- *  Created on: Jan 19, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef CSCENEHANDLERITEMEXIT_H_
-#define CSCENEHANDLERITEMEXIT_H_
+#pragma once
 
 #include "../interactionbase_api.h"
 
@@ -51,5 +43,3 @@ class INTERACTIONBASE_API CSceneHandlerItemExit : public Command
 };
 
 }
-
-#endif /* CSCENEHANDLERITEMEXIT_H_ */

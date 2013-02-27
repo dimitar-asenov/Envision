@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ConditionalExpression.cpp
- *
- *  Created on: Mar 27, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "expressions/ConditionalExpression.h"
 
 namespace OOModel {

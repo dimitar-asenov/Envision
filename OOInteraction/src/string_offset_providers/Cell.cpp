@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * Cell.cpp
- *
- *  Created on: Jun 11, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "Cell.h"
 
 namespace OOInteraction {

@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VErrorExpressionStyle.h
- *
- *  Created on: Jan 19, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOVisualization_VERROREXPRESSIONSTYLE_H_
-#define OOVisualization_VERROREXPRESSIONSTYLE_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -61,4 +53,3 @@ inline const Visualization::TextStyle& VErrorExpressionStyle::prefix() const { r
 inline const Visualization::TextStyle& VErrorExpressionStyle::postfix() const { return postfix_; }
 
 } /* namespace OOVisualization */
-#endif /* OOVisualization_VERROREXPRESSIONSTYLE_H_ */

@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * TypeArgumentsDescriptor.cpp
- *
- *  Created on: May 30, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "TypeArgumentsDescriptor.h"
 
 #include "OOModel/src/expressions/ReferenceExpression.h"

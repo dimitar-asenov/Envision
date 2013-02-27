@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * TryCatchFinallyStatement.h
- *
- *  Created on: Sep 17, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOModel_TRYCATCHFINALLYSTATEMENT_H_
-#define OOModel_TRYCATCHFINALLYSTATEMENT_H_
+#pragma once
 
 #include "Statement.h"
 
@@ -52,4 +44,3 @@ class OOMODEL_API TryCatchFinallyStatement: public Statement
 };
 
 } /* namespace OOModel */
-#endif /* OOModel_TRYCATCHFINALLYSTATEMENT_H_ */

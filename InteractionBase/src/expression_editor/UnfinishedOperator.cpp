@@ -24,13 +24,6 @@
  **
  ***********************************************************************************************************************/
 
-/*
- * UnfinishedOperator.cpp
- *
- *  Created on: Jan 10, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "expression_editor/UnfinishedOperator.h"
 
 #include "expression_editor/OperatorDescriptor.h"

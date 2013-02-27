@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * AssignmentDescriptor.cpp
- *
- *  Created on: Mar 9, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "expression_editor/operators/AssignmentDescriptor.h"
 
 namespace OOInteraction {

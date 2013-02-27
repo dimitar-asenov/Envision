@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * VContinueStatementCF.h
- *
- *  Created on: Feb 25, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef VCONTINUESTATEMENTCF_H_
-#define VCONTINUESTATEMENTCF_H_
+#pragma once
 
 #include "../controlflowvisualization_api.h"
 #include "ControlFlowItem.h"
@@ -61,5 +53,3 @@ class CONTROLFLOWVISUALIZATION_API VContinueStatementCF
 };
 
 }
-
-#endif /* VCONTINUESTATEMENTCF_H_ */

@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * SetCursorEvent.h
- *
- *  Created on: Mar 1, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef InteractionBase_SETCURSOREVENT_H_
-#define InteractionBase_SETCURSOREVENT_H_
+#pragma once
 
 #include "../interactionbase_api.h"
 
@@ -57,10 +49,13 @@ class INTERACTIONBASE_API SetCursorEvent : public Visualization::CustomSceneEven
 										CursorAboveOf, CursorBelowOf, CursorLeftOf, CursorRightOf, CursorDefault};
 
 		typedef std::function<Visualization::Item* ()> GetItemFunction;
+		typedef std::function<CursorPlacement ()> GetCursorPlacement;
 
 		SetCursorEvent(Visualization::Item* itemToGetCursor, CursorPlacement placement = CursorDefault,
 				bool showPrompt = false);
 		SetCursorEvent(GetItemFunction getItemToFocus, CursorPlacement placement = CursorDefault,
+				bool showPrompt = false);
+		SetCursorEvent(GetItemFunction getItemToFocus, GetCursorPlacement getCursorPlacement,
 				bool showPrompt = false);
 		SetCursorEvent(Visualization::Item* parentContainer, Model::Node* node,
 				CursorPlacement placement = CursorDefault, bool showPrompt = false);
@@ -72,6 +67,7 @@ class INTERACTIONBASE_API SetCursorEvent : public Visualization::CustomSceneEven
 		Visualization::Item* itemToGetCursor_{};
 		Visualization::Item* parentContainer_{};
 		GetItemFunction getItemToFocus_{};
+		GetCursorPlacement getCursorPlacement_{};
 		Visualization::Scene* scene_{};
 		Model::Node* node_{};
 		CursorPlacement placement_{};
@@ -79,4 +75,3 @@ class INTERACTIONBASE_API SetCursorEvent : public Visualization::CustomSceneEven
 };
 
 } /* namespace Interaction */
-#endif /* InteractionBase_SETCURSOREVENT_H_ */

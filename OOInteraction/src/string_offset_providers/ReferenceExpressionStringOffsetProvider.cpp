@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ReferenceExpressionStringOffsetProvider.cpp
- *
- *  Created on: May 30, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "ReferenceExpressionStringOffsetProvider.h"
 #include "Cell.h"
 #include "ListCell.h"

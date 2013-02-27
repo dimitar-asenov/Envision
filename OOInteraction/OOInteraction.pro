@@ -8,7 +8,10 @@ win32:LIBS += -llogger \
     -lvisualizationbase \
     -linteractionbase \
     -loovisualization
-HEADERS += src/string_offset_providers/KeywordMethodCallStringOffsetProvider.h \
+HEADERS += src/customization/MethodDefinitionVisitor.h \
+    src/expression_editor/operators/commands/CommandExpression.h \
+    src/expression_editor/operators/commands/CreateMethodCall.h \
+    src/string_offset_providers/KeywordMethodCallStringOffsetProvider.h \
     src/commands/CCreateField.h \
     src/string_offset_providers/CompoundObjectStringOffsetProvider.h \
     src/string_components/LambdaStringComponents.h \
@@ -31,7 +34,6 @@ HEADERS += src/string_offset_providers/KeywordMethodCallStringOffsetProvider.h \
     src/string_offset_providers/Cell.h \
     src/string_offset_providers/ListCell.h \
     src/string_offset_providers/GridBasedOffsetProvider.h \
-    src/expression_editor/operators/CommandExpression.h \
     src/expression_editor/operators/CommandDescriptor.h \
     src/expression_editor/operators/TypeArgumentsDescriptor.h \
     src/string_offset_providers/ReferenceExpressionStringOffsetProvider.h \
@@ -97,7 +99,9 @@ HEADERS += src/string_offset_providers/KeywordMethodCallStringOffsetProvider.h \
     src/string_offset_providers/TextRendererStringOffsetProvider.h \
     src/string_offset_providers/VariableDeclarationStringOffsetProvider.h \
     src/oointeraction.h
-SOURCES += src/string_offset_providers/KeywordMethodCallStringOffsetProvider.cpp \
+SOURCES += src/customization/MethodDefinitionVisitor.cpp \
+    src/expression_editor/operators/commands/CreateMethodCall.cpp \
+    src/string_offset_providers/KeywordMethodCallStringOffsetProvider.cpp \
     src/commands/CCreateField.cpp \
     src/string_offset_providers/CompoundObjectStringOffsetProvider.cpp \
     src/string_components/LambdaStringComponents.cpp \

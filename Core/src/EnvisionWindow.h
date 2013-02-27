@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef ENVISIONWINDOW_H
-#define ENVISIONWINDOW_H
+#pragma once
 
 class EnvisionWindow: public QMainWindow
 {
@@ -35,5 +34,3 @@ class EnvisionWindow: public QMainWindow
 		EnvisionWindow(QWidget *parent = 0);
 		~EnvisionWindow();
 };
-
-#endif // ENVISIONWINDOW_H

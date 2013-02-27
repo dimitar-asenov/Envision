@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ReferenceExpressionStringOffsetProvider.h
- *
- *  Created on: May 30, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOInteraction_REFERENCEEXPRESSIONSTRINGOFFSETPROVIDER_H_
-#define OOInteraction_REFERENCEEXPRESSIONSTRINGOFFSETPROVIDER_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 #include "GridBasedOffsetProvider.h"
@@ -49,4 +41,3 @@ class OOINTERACTION_API ReferenceExpressionStringOffsetProvider : public GridBas
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_REFERENCEEXPRESSIONSTRINGOFFSETPROVIDER_H_ */

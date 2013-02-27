@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CallStringOffsetProvider.cpp
- *
- *  Created on: Feb 29, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "CallStringOffsetProvider.h"
 #include "Cell.h"
 #include "ListCell.h"

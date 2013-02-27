@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * TextRendererStringOffsetProvider.cpp
- *
- *  Created on: Feb 17, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "string_offset_providers/TextRendererStringOffsetProvider.h"
 
 #include "VisualizationBase/src/items/TextRenderer.h"

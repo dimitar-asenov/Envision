@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * RootItem.cpp
- *
- *  Created on: Apr 18, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "RootItem.h"
 #include "ItemStyle.h"
 

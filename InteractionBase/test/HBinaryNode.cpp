@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * HBinaryNode.cpp
- *
- *  Created on: Jul 24, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "HBinaryNode.h"
 #include "../src/autocomplete/AutoComplete.h"
 #include "../src/autocomplete/AutoCompleteEntry.h"

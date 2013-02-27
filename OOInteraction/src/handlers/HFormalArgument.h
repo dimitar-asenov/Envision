@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * HFormalArgument.h
- *
- *  Created on: Mar 8, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOInteraction_HFORMALARGUMENT_H_
-#define OOInteraction_HFORMALARGUMENT_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 
@@ -51,4 +43,3 @@ class OOINTERACTION_API HFormalArgument : public Interaction::GenericHandler {
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_HFORMALARGUMENT_H_ */

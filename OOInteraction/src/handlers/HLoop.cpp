@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * HLoop.cpp
- *
- *  Created on: Mar 21, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "handlers/HLoop.h"
 #include "OOVisualization/src/statements/VLoopStatement.h"
 #include "OOVisualization/src/elements/VStatementItemList.h"

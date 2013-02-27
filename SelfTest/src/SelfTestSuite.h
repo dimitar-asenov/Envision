@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * SelfTestSuite.h
- *
- *  Created on: Nov 10, 2010
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef SELFTESTSUITE_H_
-#define SELFTESTSUITE_H_
+#pragma once
 
 /**
  * Include this header file in any .cpp source file which performs testing operations.
@@ -41,5 +33,3 @@
 #include "TestManager.h"
 #include "TestResults.h"
 #include "TestAssertions.h"
-
-#endif /* SELFTESTSUITE_H_ */

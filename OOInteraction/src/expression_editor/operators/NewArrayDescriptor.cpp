@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * NewArrayDescriptor.cpp
- *
- *  Created on: Feb 24, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "expression_editor/operators/NewArrayDescriptor.h"
 
 #include "OOModel/src/expressions/NewExpression.h"

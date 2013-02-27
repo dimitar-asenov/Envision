@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * VMethodCallExpression.h
- *
- *  Created on: Feb 14, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef VMETHODCALLEXPRESSION_H_
-#define VMETHODCALLEXPRESSION_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 #include "VMethodCallExpressionStyle.h"
@@ -73,5 +65,3 @@ OOModel::MethodCallExpression>
 
 inline Visualization::VList* VMethodCallExpression::arguments() const { return arguments_; }
 }
-
-#endif /* VMETHODCALLEXPRESSION_H_ */

@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ExpressionVisitor.h
- *
- *  Created on: Jan 11, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef INTERACTIONBASE_EXPRESSIONVISITOR_H_
-#define INTERACTIONBASE_EXPRESSIONVISITOR_H_
+#pragma once
 
 #include "../interactionbase_api.h"
 
@@ -56,4 +48,3 @@ class INTERACTIONBASE_API ExpressionVisitor {
 };
 
 } /* namespace InteractionBase */
-#endif /* INTERACTIONBASE_EXPRESSIONVISITOR_H_ */

@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * InitializerStringOffsetProvider.cpp
- *
- *  Created on: Feb 29, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "string_offset_providers/InitializerStringOffsetProvider.h"
 
 #include "OOVisualization/src/expressions/VArrayInitializer.h"

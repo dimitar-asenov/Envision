@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ReferenceExpressionStringComponents.cpp
- *
- *  Created on: Feb 17, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "string_components/ReferenceExpressionStringComponents.h"
 
 #include "OOModel/src/expressions/ReferenceExpression.h"

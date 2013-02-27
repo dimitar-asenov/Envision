@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * HFormalArgument.cpp
- *
- *  Created on: Mar 8, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "handlers/HFormalArgument.h"
 
 #include "OOVisualization/src/elements/VFormalArgument.h"

@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * DiamondStyle.h
- *
- *  Created on: Mar 2, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef DIAMONDSTYLE_H_
-#define DIAMONDSTYLE_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -64,5 +56,3 @@ inline int DiamondStyle::xShadowOffset() const { return xShadowOffset_; }
 inline int DiamondStyle::yShadowOffset() const { return yShadowOffset_; }
 
 }
-
-#endif /* DIAMONDSTYLE_H_ */

@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VStatementItemList.cpp
- *
- *  Created on: Jun 5, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "VStatementItemList.h"
 
 namespace OOVisualization {
@@ -41,5 +34,26 @@ VStatementItemList::VStatementItemList(Item* parent, NodeType* node, const Style
 	Visualization::VList(parent, node, style)
 {
 }
+
+QList<VStatementItemList::RangeFilter>& VStatementItemList::rangeFilters()
+{
+	static QList<VStatementItemList::RangeFilter> f;
+	return f;
+}
+
+void VStatementItemList::addRangeFilter(RangeFilter filter)
+{
+	rangeFilters().append(filter);
+}
+
+void VStatementItemList::determineRange() {
+	int begin = 0;
+	int end = node()->size();
+	for (auto filter : rangeFilters()) filter(this, begin, end);
+
+	setRange(begin, end);
+}
+
+
 
 } /* namespace OOVisualization */

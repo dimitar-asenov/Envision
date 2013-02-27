@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CommaExpression.cpp
- *
- *  Created on: Feb 24, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "expressions/CommaExpression.h"
 
 #include "expressions/EmptyExpression.h"

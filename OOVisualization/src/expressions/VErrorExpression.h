@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VErrorExpression.h
- *
- *  Created on: Jan 19, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOVisualization_VERROREXPRESSION_H_
-#define OOVisualization_VERROREXPRESSION_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 #include "VErrorExpressionStyle.h"
@@ -69,4 +61,3 @@ OOModel::ErrorExpression> {
 };
 
 } /* namespace OOVisualization */
-#endif /* OOVisualization_VERROREXPRESSION_H_ */

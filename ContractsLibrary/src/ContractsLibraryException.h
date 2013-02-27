@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * ContractsLibraryException.h
- *
- *  Created on: May 11, 2012
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef CONTRACTSLIBRARYEXCEPTION_H_
-#define CONTRACTSLIBRARYEXCEPTION_H_
+#pragma once
 
 #include "contractslibrary_api.h"
 #include "Core/src/EnvisionException.h"
@@ -47,5 +39,3 @@ class CONTRACTSLIBRARY_API ContractsLibraryException : public Core::EnvisionExce
 };
 
 }
-
-#endif /* MODELEXCEPTION_H_ */

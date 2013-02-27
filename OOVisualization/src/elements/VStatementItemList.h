@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VStatementItemList.h
- *
- *  Created on: Jun 5, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOVisualization_VSTATEMENTITEMLIST_H_
-#define OOVisualization_VSTATEMENTITEMLIST_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -47,9 +39,16 @@ class OOVISUALIZATION_API VStatementItemList : public Visualization::VList
 	public:
 		VStatementItemList(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 
+		typedef std::function<void (VStatementItemList* item, int& begin, int& end)> RangeFilter;
+		static void addRangeFilter(RangeFilter filter);
+
+	protected:
+		virtual void determineRange() override;
+
 	private:
 		typedef Visualization::VList BaseItemType;
+
+		static QList<RangeFilter>& rangeFilters();
 };
 
 } /* namespace OOVisualization */
-#endif /* OOVisualization_VSTATEMENTITEMLIST_H_ */

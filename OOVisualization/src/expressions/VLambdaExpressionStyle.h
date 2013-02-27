@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VLambdaExpressionStyle.h
- *
- *  Created on: Nov 29, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOVisualization_VLAMBDAEXPRESSIONSTYLE_H_
-#define OOVisualization_VLAMBDAEXPRESSIONSTYLE_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -67,4 +59,3 @@ inline const Visualization::StaticStyle& VLambdaExpressionStyle::icon() const { 
 inline const Visualization::VListStyle& VLambdaExpressionStyle::body() const { return body_; }
 
 } /* namespace OOVisualization */
-#endif /* OOVisualization_VLAMBDAEXPRESSIONSTYLE_H_ */

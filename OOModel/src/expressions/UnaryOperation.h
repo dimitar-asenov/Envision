@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * UnaryOperation.h
- *
- *  Created on: Jan 31, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef UNARYOPERATION_H_
-#define UNARYOPERATION_H_
+#pragma once
 
 #include "Expression.h"
 
@@ -61,5 +53,3 @@ inline UnaryOperation::OperatorTypes UnaryOperation::op() const { return static_
 inline void UnaryOperation::setOp(const OperatorTypes& oper) { setOpr(oper); }
 
 }
-
-#endif /* UNARYOPERATION_H_ */

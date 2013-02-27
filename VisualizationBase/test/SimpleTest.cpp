@@ -24,13 +24,6 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * SimpleTest.cpp
- *
- *  Created on: Dec 6, 2010
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
 #include "visualizationbase.h"
 #include "VisualizationManager.h"
 #include "Scene.h"
@@ -78,7 +71,7 @@ TEST(VisualizationBase, ExtendableTest)
 	QApplication::processEvents();
 
 	VList* l = dynamic_cast<VList*> (top->item());
-	l->at<VExtendable>(1)->setExpanded(false);
+	l->itemAt<VExtendable>(1)->setExpanded(false);
 	scene->scheduleUpdate();
 	scene->listenToModel(model);
 

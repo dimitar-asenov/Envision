@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * MethodCallExpression.h
- *
- *  Created on: Jan 31, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef METHODCALLEXPRESSION_H_
-#define METHODCALLEXPRESSION_H_
+#pragma once
 
 #include "ReferenceExpression.h"
 
@@ -57,5 +49,3 @@ class OOMODEL_API MethodCallExpression: public Expression
 };
 
 }
-
-#endif /* METHODCALLEXPRESSION_H_ */

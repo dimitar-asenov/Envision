@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ClassType.cpp
- *
- *  Created on: Apr 3, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "ClassType.h"
 #include "../top_level/Class.h"
 

@@ -24,26 +24,13 @@
  **
  **********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * oointeraction_api.h
- *
- *  Created on: Jan 12, 2012
- *      Author: Dimitar Asenov
- *
- * This header defines the import/export macro which should be used when this plug-in wants to export classes or
- * functions to other classes.
- **********************************************************************************************************************/
-
-#ifndef OOINTERACTION_API_H_
-#define OOINTERACTION_API_H_
+#pragma once
 
 #include "precompiled.h"
 
 // This should be defined in the project file of the plug-in that exports symbols
 #if defined(OOINTERACTION_LIBRARY)
-#  define OOINTERACTION_API Q_DECL_EXPORT
+	#define OOINTERACTION_API Q_DECL_EXPORT
 #else
-#  define OOINTERACTION_API Q_DECL_IMPORT
+	#define OOINTERACTION_API Q_DECL_IMPORT
 #endif
-
-#endif /* OOINTERACTION_API_H_ */

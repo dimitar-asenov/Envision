@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * TypeExpression.h
- *
- *  Created on: Jan 31, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef TYPEEXPRESSION_H_
-#define TYPEEXPRESSION_H_
+#pragma once
 
 #include "../Expression.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
@@ -47,5 +39,3 @@ class OOMODEL_API TypeExpression : public Expression
 };
 
 }
-
-#endif /* TYPEEXPRESSION_H_ */

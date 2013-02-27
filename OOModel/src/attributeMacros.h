@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * attributeMacros.h
- *
- *  Created on: Jan 28, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef ATTRIBUTEMACROS_H_
-#define ATTRIBUTEMACROS_H_
+#pragma once
 
 /**
  * Declares a 'name' attribute of type Model::Text.
@@ -66,7 +58,8 @@
  * A new value can be set via setStorageSpecifier()
  */
 #define ATTRIBUTE_OOP_STORAGESPECIFIER																										\
-	ATTRIBUTE_VALUE(::OOModel::StorageSpecifier, storageSpecifier, setStorageSpecifier, ::OOModel::StorageSpecifier::StorageSpecifierTypes)
+	ATTRIBUTE_VALUE(::OOModel::StorageSpecifier, storageSpecifier, setStorageSpecifier,										\
+	::OOModel::StorageSpecifier::StorageSpecifierTypes)
 
 /*********************************************************************************************************************/
 
@@ -76,7 +69,7 @@
  * The annotations list can be accessed via annotations()
  * A new value can be set via setAnnotations()
  */
-#define ATTRIBUTE_OOP_ANNOTATIONS																															\
+#define ATTRIBUTE_OOP_ANNOTATIONS																												\
 	ATTRIBUTE(::OOModel::StatementItemList, annotations, setAnnotations)
 
-#endif /* ATTRIBUTEMACROS_H_ */
+/*********************************************************************************************************************/

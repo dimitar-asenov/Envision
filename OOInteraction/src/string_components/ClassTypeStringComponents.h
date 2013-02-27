@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ClassTypeStringComponents.h
- *
- *  Created on: Nov 13, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOInteraction_CLASSTYPESTRINGCOMPONENTS_H_
-#define OOInteraction_CLASSTYPESTRINGCOMPONENTS_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 #include "StringComponents.h"
@@ -53,4 +45,3 @@ class OOINTERACTION_API ClassTypeStringComponents : public StringComponents {
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_CLASSTYPESTRINGCOMPONENTS_H_ */

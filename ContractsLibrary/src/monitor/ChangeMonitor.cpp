@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ChangeMonitor.cpp
- *
- *  Created on: Aug 31, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "ChangeMonitor.h"
 
 #include "ValueAtReturnVisitor.h"

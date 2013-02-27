@@ -24,15 +24,7 @@
  **
  ***********************************************************************************************************************/
 
-/*
- * UnfinishedOperator.h
- *
- *  Created on: Jan 10, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef INTERACTIONBASE_UNFINISHEDOPERATOR_H_
-#define INTERACTIONBASE_UNFINISHEDOPERATOR_H_
+#pragma once
 
 #include "../interactionbase_api.h"
 
@@ -65,4 +57,3 @@ class INTERACTIONBASE_API UnfinishedOperator : public Operator {
 inline int UnfinishedOperator::numComplete() { return num_complete_; }
 
 } /* namespace InteractionBase */
-#endif /* INTERACTIONBASE_UNFINISHEDOPERATOR_H_ */

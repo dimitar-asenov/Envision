@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * HStatement.cpp
- *
- *  Created on: Mar 8, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "handlers/HStatement.h"
 #include "OOModel/src/expressions/EmptyExpression.h"
 #include "OOModel/src/statements/ExpressionStatement.h"
@@ -64,7 +57,7 @@ void HStatement::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			processed = true;
 			event->accept();
 
-			int index = lst->focusedElementIndex() + 1;
+			int index = lst->focusedNodeIndex() + 1;
 
 			auto empty = new OOModel::EmptyExpression();
 			auto es = new OOModel::ExpressionStatement();

@@ -24,17 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * HelloWorldPrinter.h
- *
- *  Created on: Nov 1, 2010
- *      Author: Dimitar Asenov
- *
- * This illustrates how to export classes from a plug-in.
- **********************************************************************************************************************/
-
-#ifndef HELLOWORLDPRINTER_H_
-#define HELLOWORLDPRINTER_H_
+#pragma once
 
 #include "helloworld_api.h"
 
@@ -57,4 +47,3 @@ class HELLOWORLD_API HelloWorldPrinter
 };
 
 }
-#endif /* HELLOWORLDPRINTER_H_ */

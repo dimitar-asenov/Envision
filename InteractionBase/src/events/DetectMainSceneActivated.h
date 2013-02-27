@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * DetectMainSceneActivated.h
- *
- *  Created on: Sep 14, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef InteractionBase_DETECTMAINSCENEACTIVATED_H_
-#define InteractionBase_DETECTMAINSCENEACTIVATED_H_
+#pragma once
 
 #include "../interactionbase_api.h"
 
@@ -47,4 +39,3 @@ class INTERACTIONBASE_API DetectMainSceneActivated : public QObject
 };
 
 } /* namespace Interaction */
-#endif /* InteractionBase_DETECTMAINSCENEACTIVATED_H_ */

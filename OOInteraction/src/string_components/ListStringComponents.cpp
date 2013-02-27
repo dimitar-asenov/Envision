@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ListStringComponents.cpp
- *
- *  Created on: Mar 15, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "string_components/ListStringComponents.h"
 
 #include "ModelBase/src/nodes/List.h"

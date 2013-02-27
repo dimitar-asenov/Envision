@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * AutoCompleteVisStyle.cpp
- *
- *  Created on: Jul 24, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "AutoCompleteVisStyle.h"
 
 namespace Interaction {

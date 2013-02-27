@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * selftest.h
- *
- *  Created on: Nov 9, 2010
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef SELFTEST_H
-#define SELFTEST_H
+#pragma once
 
 #include "Core/src/EnvisionPlugin.h"
 #include "precompiled.h"
@@ -51,5 +43,3 @@ class SelfTest : public QObject, public Core::EnvisionPlugin
 };
 
 }
-
-#endif // SELFTEST_H

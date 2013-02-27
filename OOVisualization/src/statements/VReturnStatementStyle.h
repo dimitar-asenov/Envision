@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * VReturnStatementStyle.h
- *
- *  Created on: Feb 15, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef VRETURNSTATEMENTSTYLE_H_
-#define VRETURNSTATEMENTSTYLE_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -61,5 +53,3 @@ inline const Visualization::SequentialLayoutStyle& VReturnStatementStyle::layout
 inline const Visualization::StaticStyle& VReturnStatementStyle::symbol() const { return symbol_; }
 inline const Visualization::VListStyle& VReturnStatementStyle::values() const { return values_; }
 }
-
-#endif /* VRETURNSTATEMENTSTYLE_H_ */

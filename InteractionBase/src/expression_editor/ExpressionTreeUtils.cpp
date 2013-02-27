@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ExpressionTreeUtils.cpp
- *
- *  Created on: Jan 11, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "expression_editor/ExpressionTreeUtils.h"
 
 #include "expression_editor/Value.h"

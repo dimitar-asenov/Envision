@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * StringComponents.h
- *
- *  Created on: Feb 17, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOInteraction_STRINGCOMPONENTS_H_
-#define OOInteraction_STRINGCOMPONENTS_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 
@@ -55,4 +47,3 @@ class OOINTERACTION_API StringComponents {
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_STRINGCOMPONENTS_H_ */

@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * SystemClipboard.h
- *
- *  Created on: Jan 21, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef SYSTEMCLIPBOARD_H_
-#define SYSTEMCLIPBOARD_H_
+#pragma once
 
 #include "filepersistence_api.h"
 #include "XMLModel.h"
@@ -95,5 +87,3 @@ class FILEPERSISTENCE_API SystemClipboard : public Model::ClipboardStore
 };
 
 }
-
-#endif /* SYSTEMCLIPBOARD_H_ */

@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * AssignmentDescriptor.h
- *
- *  Created on: Mar 9, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOInteraction_ASSIGNMENTDESCRIPTOR_H_
-#define OOInteraction_ASSIGNMENTDESCRIPTOR_H_
+#pragma once
 
 #include "../../oointeraction_api.h"
 #include "../OOOperatorDescriptor.h"
@@ -53,4 +45,3 @@ class OOINTERACTION_API AssignmentDescriptor : public OOOperatorDescriptor {
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_ASSIGNMENTDESCRIPTOR_H_ */

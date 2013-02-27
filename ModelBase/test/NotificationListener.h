@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * NotificationListener.h
- *
- *  Created on: Nov 29, 2010
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef NOTIFICATIONLISTENER_H_
-#define NOTIFICATIONLISTENER_H_
+#pragma once
 
 #include "model/Model.h"
 #include "nodes/Node.h"
@@ -55,5 +47,3 @@ class NotificationListener : public QObject
 };
 
 }
-
-#endif /* NOTIFICATIONLISTENER_H_ */

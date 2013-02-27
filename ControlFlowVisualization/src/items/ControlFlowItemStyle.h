@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * ControlFlowItemStyle.h
- *
- *  Created on: Feb 24, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef CONTROLFLOWITEMSTYLE_H_
-#define CONTROLFLOWITEMSTYLE_H_
+#pragma once
 
 #include "../controlflowvisualization_api.h"
 
@@ -57,5 +49,3 @@ inline int ControlFlowItemStyle::pinLength() const {	return pinLength_; }
 inline const QPen& ControlFlowItemStyle::pin() const {	return pin_; }
 
 }
-
-#endif /* CONTROLFLOWITEMSTYLE_H_ */

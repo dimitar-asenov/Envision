@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CompoundObjectDescriptor.cpp
- *
- *  Created on: Dec 3, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "CompoundObjectDescriptor.h"
 #include "OOModel/src/expressions/IntegerLiteral.h"
 #include "OOModel/src/expressions/EmptyExpression.h"

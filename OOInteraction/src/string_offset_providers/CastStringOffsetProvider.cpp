@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CastStringOffsetProvider.cpp
- *
- *  Created on: Mar 16, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "CastStringOffsetProvider.h"
 #include "Cell.h"
 #include "OOVisualization/src/expressions/VCastExpression.h"

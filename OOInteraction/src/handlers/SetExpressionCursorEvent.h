@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * SetExpressionCursorEvent.h
- *
- *  Created on: Feb 17, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOInteraction_SETEXPRESSIONCURSOREVENT_H_
-#define OOInteraction_SETEXPRESSIONCURSOREVENT_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 
@@ -55,10 +47,22 @@ class OOINTERACTION_API SetExpressionCursorEvent : public Visualization::CustomS
 		virtual void execute();
 
 	private:
-		Visualization::Item* parentContainer_;
+
+		/**
+		 * Instead of just storing the visualization that contains the visualization node, this field stores all
+		 * ancestors of that visualization. The reason is that when this cursor event object is constructed, before an
+		 * update, a parent container is provided that might turn out to be the wrong container after the update. For
+		 * example the expression node, might be recognized as a special expression and its visualization might be
+		 * transferred somewhere else.
+		 *
+		 * Having the entire chain of parents makes it possible to assure that:
+		 * - The container that was specified was not deleted.
+		 * - The new place where this node is visualized is properly given the cursor.
+		 */
+		QList<Visualization::Item*> parentContainerChain_;
 		Model::Node* node_;
 		int offset_;
+		bool reposted_{};
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_SETEXPRESSIONCURSOREVENT_H_ */

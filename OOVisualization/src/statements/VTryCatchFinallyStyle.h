@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VTryCatchFinallyStyle.h
- *
- *  Created on: Nov 20, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOVisualization_VTRYCATCHFINALLYSTYLE_H_
-#define OOVisualization_VTRYCATCHFINALLYSTYLE_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -85,4 +77,3 @@ inline const Visualization::StaticStyle& VTryCatchFinallyStyle::finallyIcon() co
 inline const Visualization::VListStyle& VTryCatchFinallyStyle::finallyBody() const { return finallyBody_; }
 
 } /* namespace OOVisualization */
-#endif /* OOVisualization_VTRYCATCHFINALLYSTYLE_H_ */

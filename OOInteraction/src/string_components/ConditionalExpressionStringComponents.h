@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ConditionalExpressionStringComponents.h
- *
- *  Created on: Mar 27, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOInteraction_CONDITIONALEXPRESSIONSTRINGCOMPONENTS_H_
-#define OOInteraction_CONDITIONALEXPRESSIONSTRINGCOMPONENTS_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 #include "StringComponents.h"
@@ -54,4 +46,3 @@ class OOINTERACTION_API ConditionalExpressionStringComponents : public StringCom
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_CONDITIONALEXPRESSIONSTRINGCOMPONENTS_H_ */

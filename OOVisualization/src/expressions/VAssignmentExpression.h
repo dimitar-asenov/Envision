@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * VAssignmentExpression.h
- *
- *  Created on: Feb 15, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef VASSIGNMENTEXPRESSION_H_
-#define VASSIGNMENTEXPRESSION_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 #include "../expressions/OperatorStyle.h"
@@ -70,5 +62,3 @@ class OOVISUALIZATION_API VAssignmentExpression : public Visualization::ItemWith
 };
 
 }
-
-#endif /* VASSIGNMENTEXPRESSION_H_ */

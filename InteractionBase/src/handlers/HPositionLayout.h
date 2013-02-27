@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * HPositionLayout.h
- *
- *  Created on: Feb 3, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef HPOSITIONLAYOUT_H_
-#define HPOSITIONLAYOUT_H_
+#pragma once
 
 #include "../interactionbase_api.h"
 
@@ -65,5 +57,3 @@ class INTERACTIONBASE_API HPositionLayout : public GenericHandler
 };
 
 }
-
-#endif /* HPOSITIONLAYOUT_H_ */

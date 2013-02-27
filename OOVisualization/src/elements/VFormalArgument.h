@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * VFormalArgument.h
- *
- *  Created on: Feb 9, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef VFORMALARGUMENT_H_
-#define VFORMALARGUMENT_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 #include "VFormalArgumentStyle.h"
@@ -73,5 +65,3 @@ class OOVISUALIZATION_API VFormalArgument
 inline Visualization::VText* VFormalArgument::name() { return name_; }
 inline Visualization::Item* VFormalArgument::typeExpr() { return type_; }
 }
-
-#endif /* VFORMALARGUMENT_H_ */

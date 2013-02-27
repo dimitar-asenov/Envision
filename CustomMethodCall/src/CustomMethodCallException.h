@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * CustomMethodCallException.h
- *
- *  Created on: Mar 24, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef CUSTOMMETHODCALLEXCEPTION_H_
-#define CUSTOMMETHODCALLEXCEPTION_H_
+#pragma once
 
 #include "custommethodcall_api.h"
 #include "Core/src/EnvisionException.h"
@@ -47,5 +39,3 @@ class CUSTOMMETHODCALL_API CustomMethodCallException : public Core::EnvisionExce
 };
 
 }
-
-#endif /* MODELEXCEPTION_H_ */

@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * OOReference.cpp
- *
- *  Created on: Mar 29, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "OOReference.h"
 #include "../expressions/ReferenceExpression.h"
 #include "../top_level/Class.h"

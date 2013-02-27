@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * BinaryOperatorStringComponents.h
- *
- *  Created on: Feb 17, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOInteraction_BINARYOPERATORSTRINGCOMPONENTS_H_
-#define OOInteraction_BINARYOPERATORSTRINGCOMPONENTS_H_
+#pragma once
 
 #include "../oointeraction_api.h"
 #include "StringComponents.h"
@@ -54,4 +46,3 @@ class OOINTERACTION_API BinaryOperatorStringComponents : public StringComponents
 };
 
 } /* namespace OOInteraction */
-#endif /* OOInteraction_BINARYOPERATORSTRINGCOMPONENTS_H_ */

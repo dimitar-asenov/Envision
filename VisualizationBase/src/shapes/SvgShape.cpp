@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * SvgShape.cpp
- *
- *  Created on: May 22, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "SvgShape.h"
 #include "VisualizationException.h"
 

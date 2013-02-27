@@ -24,15 +24,7 @@
  **
  ***********************************************************************************************************************/
 
-/*
- * ExpressionContext.h
- *
- *  Created on: Jan 10, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef INTERACTIONBASE_EXPRESSIONCONTEXT_H_
-#define INTERACTIONBASE_EXPRESSIONCONTEXT_H_
+#pragma once
 
 #include "../interactionbase_api.h"
 
@@ -129,4 +121,3 @@ inline QString ExpressionContext::leftText() { return left_text_; }
 inline QString ExpressionContext::rightText() { return right_text_; }
 
 } /* namespace InteractionBase */
-#endif /* INTERACTIONBASE_EXPRESSIONCONTEXT_H_ */

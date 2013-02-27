@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * FilePersistenceException.h
- *
- *  Created on: Dec 2, 2010
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef FILEPERSISTENCEEXCEPTION_H_
-#define FILEPERSISTENCEEXCEPTION_H_
+#pragma once
 
 #include "filepersistence_api.h"
 #include "Core/src/EnvisionException.h"
@@ -47,5 +39,3 @@ class FILEPERSISTENCE_API FilePersistenceException : public Core::EnvisionExcept
 };
 
 }
-
-#endif /* FILEPERSISTENCEEXCEPTION_H_ */

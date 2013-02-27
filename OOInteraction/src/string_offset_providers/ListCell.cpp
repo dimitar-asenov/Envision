@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ListCell.cpp
- *
- *  Created on: Jul 2, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "ListCell.h"
 
 #include "VisualizationBase/src/items/VList.h"

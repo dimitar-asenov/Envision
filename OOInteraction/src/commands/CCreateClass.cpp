@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * CCreateClass.cpp
- *
- *  Created on: Mar 6, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "commands/CCreateClass.h"
 
 #include "OOModel/src/top_level/Project.h"

@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * allOOVisualizations.h
- *
- *  Created on: Feb 11, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef ALLOOVISUALIZATIONS_H_
-#define ALLOOVISUALIZATIONS_H_
+#pragma once
 
 #include "top_level/VProject.h"
 #include "top_level/VLibrary.h"
@@ -87,5 +79,3 @@
 #include "types/VArrayType.h"
 
 #include "alternative/VKeywordMethodCall.h"
-
-#endif /* ALLOOVISUALIZATIONS_H_ */

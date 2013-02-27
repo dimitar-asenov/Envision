@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ThisExpressionStringComponents.cpp
- *
- *  Created on: Feb 24, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "string_components/ThisExpressionStringComponents.h"
 
 namespace OOInteraction {

@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * Text.h
- *
- *  Created on: Dec 14, 2010
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef VISUALIZATION_TEXT_H_
-#define VISUALIZATION_TEXT_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -56,5 +48,3 @@ class VISUALIZATIONBASE_API Text : public TextRenderer
 };
 
 }
-
-#endif /* VISUALIZATION_TEXT_H_ */

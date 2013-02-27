@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * OOVisualizationException.h
- *
- *  Created on: Feb 01, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef OOVISUALIZATIONEXCEPTION_H_
-#define OOVISUALIZATIONEXCEPTION_H_
+#pragma once
 
 #include "oovisualization_api.h"
 #include "Core/src/EnvisionException.h"
@@ -47,5 +39,3 @@ class OOVISUALIZATION_API OOVisualizationException : public Core::EnvisionExcept
 };
 
 }
-
-#endif /* MODELEXCEPTION_H_ */

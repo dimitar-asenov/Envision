@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * ExpressionStatement.h
- *
- *  Created on: Feb 29, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOModel_EXPRESSIONSTATEMENT_H_
-#define OOModel_EXPRESSIONSTATEMENT_H_
+#pragma once
 
 #include "Statement.h"
 #include "../expressions/Expression.h"
@@ -52,4 +44,3 @@ class OOMODEL_API ExpressionStatement : public Statement {
 };
 
 } /* namespace OOModel */
-#endif /* OOModel_EXPRESSIONSTATEMENT_H_ */

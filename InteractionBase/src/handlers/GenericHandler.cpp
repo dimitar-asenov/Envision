@@ -24,13 +24,6 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * GenericHandler.cpp
- *
- *  Created on: Jan 13, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
 #include "handlers/GenericHandler.h"
 
 #include "HList.h"
@@ -516,10 +509,10 @@ bool GenericHandler::removeFromList(Visualization::Item* target)
 		else p = p->parent();
 	}
 
-	auto index = list->node()->indexOf(target->node());
-	if (list && index >= 0)
+	auto nodeIndex = list->node()->indexOf(target->node());
+	if (list && nodeIndex >= 0)
 	{
-		Interaction::HList::instance()->removeAndSetCursor(list, index);
+		Interaction::HList::instance()->removeNodeAndSetCursor(list, nodeIndex);
 		return true;
 	}
 	return false;

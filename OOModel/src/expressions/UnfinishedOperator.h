@@ -24,15 +24,7 @@
  **
  **********************************************************************************************************************/
 
-/*
- * UnfinishedOperator.h
- *
- *  Created on: Jan 12, 2012
- *      Author: Dimitar Asenov
- */
-
-#ifndef OOModel_UNFINISHEDOPERATOR_H_
-#define OOModel_UNFINISHEDOPERATOR_H_
+#pragma once
 
 #include "Expression.h"
 
@@ -53,4 +45,3 @@ class OOMODEL_API UnfinishedOperator : public Expression {
 };
 
 } /* namespace OOModel */
-#endif /* OOModel_UNFINISHEDOPERATOR_H_ */

@@ -24,15 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-/***********************************************************************************************************************
- * VBlockStyle.h
- *
- *  Created on: Feb 15, 2011
- *      Author: Dimitar Asenov
- **********************************************************************************************************************/
-
-#ifndef VBLOCKSTYLE_H_
-#define VBLOCKSTYLE_H_
+#pragma once
 
 #include "../oovisualization_api.h"
 
@@ -54,5 +46,3 @@ class OOVISUALIZATION_API VBlockStyle : public Visualization::ItemStyle
 inline const Visualization::VListStyle& VBlockStyle::items() const { return items_; }
 
 }
-
-#endif /* VBLOCKSTYLE_H_ */

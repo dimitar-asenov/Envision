@@ -24,13 +24,6 @@
  **
  **********************************************************************************************************************/
 
-/*
- * VExpressionStatement.cpp
- *
- *  Created on: Feb 29, 2012
- *      Author: Dimitar Asenov
- */
-
 #include "statements/VExpressionStatement.h"
 #include "VisualizationBase/src/items/ItemStyle.h"
 
