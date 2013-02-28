@@ -25,6 +25,9 @@ bool ClangAstVisitor::VisitStmt(clang::Stmt *S)
 
 bool ClangAstVisitor::VisitDecl(clang::Decl *D)
 {
+    std::cout << "visiting DECL " << D->getDeclKindName() <<  D->getDeclKindName() <<std::endl;
+
+
     if(isa<CXXRecordDecl>(D))
     {
         CXXRecordDecl *recDecl = cast<CXXRecordDecl>(D);
@@ -44,10 +47,20 @@ bool ClangAstVisitor::VisitDecl(clang::Decl *D)
             ooClass->setName(QString::fromStdString(recDecl->getName().str()));
 
             currentModel_->endModification();
-            return ooClass;
-
         }
     }
 
+    return true;
+}
+
+bool ClangAstVisitor::VisitCXXRecordDecl(CXXRecordDecl *rd)
+{
+    std::cout << "Visiting ClassDecl " << rd->getName().str() <<std::endl;
+    return true;
+}
+
+bool ClangAstVisitor::VisitVarDecl(VarDecl *vd)
+{
+    std::cout << "Visiting VarDecl " << vd->getName().str() <<std::endl;
     return true;
 }

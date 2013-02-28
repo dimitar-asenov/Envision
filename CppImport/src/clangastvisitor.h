@@ -1,8 +1,10 @@
 #ifndef CLANGASTVISITOR_H
 #define CLANGASTVISITOR_H
 
-//ENVISION
 
+#include <iostream>
+
+//ENVISION
 #include "OOModel/src/allOOModelNodes.h"
 
 
@@ -39,6 +41,8 @@ public:
     ClangAstVisitor(Model::Model *model, OOModel::Project *currentProject);
     bool VisitStmt(clang::Stmt *S);
     bool VisitDecl(clang::Decl *D);
+    bool VisitCXXRecordDecl(clang::CXXRecordDecl *rd);
+    bool VisitVarDecl(clang::VarDecl *vd);
 
 protected:
     OOModel::Project* currentProject_;
