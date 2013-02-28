@@ -8,6 +8,7 @@ var searchData=
   ['newobjectdescriptor',['NewObjectDescriptor',['../classOOInteraction_1_1NewObjectDescriptor.html',1,'OOInteraction']]],
   ['node',['Node',['../classModel_1_1Node.html',1,'Model']]],
   ['nodeidmap',['NodeIdMap',['../classFilePersistence_1_1NodeIdMap.html',1,'FilePersistence']]],
+  ['nodeowningcommand',['NodeOwningCommand',['../classModel_1_1NodeOwningCommand.html',1,'Model']]],
   ['nodereadwritelock',['NodeReadWriteLock',['../classModel_1_1NodeReadWriteLock.html',1,'Model']]],
   ['notificationlistener',['NotificationListener',['../classModel_1_1NotificationListener.html',1,'Model']]],
   ['nullliteral',['NullLiteral',['../classOOModel_1_1NullLiteral.html',1,'OOModel']]],

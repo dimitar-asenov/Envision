@@ -1,7 +1,6 @@
 var searchData=
 [
   ['cannotinterpret',['CanNotInterpret',['../classInteraction_1_1CommandResult.html#a3a0031a9567c97241132101924a2d2a4af40c11d6dd47c8ea86e0b096f4c68f02',1,'Interaction::CommandResult']]],
-  ['centeralignment',['CenterAlignment',['../classVisualization_1_1LayoutStyle.html#a32eadcb7950288222355c0c368bb7944af3b688a3ea1c017c4ea8894ef5809905',1,'Visualization::LayoutStyle']]],
   ['char',['CHAR',['../classOOModel_1_1PrimitiveType.html#ac8006ae2bb33cdf51aa806c3c2d6bc05ad9a7edc1312d22f5276d8a33a2e97af3',1,'OOModel::PrimitiveType']]],
   ['class_5fvariable',['CLASS_VARIABLE',['../classOOModel_1_1StorageSpecifier.html#aa4c64ecb64dd812016be98015bac877aa4f89c02c194fc9322b4bfb379da6bf7d',1,'OOModel::StorageSpecifier']]],
   ['codeitemcategory',['CodeItemCategory',['../classVisualization_1_1Scene.html#a493e1d97eee55349fc377f1f4f3abcdda4466d302ed2feaefdc4d9abd425c1946',1,'Visualization::Scene']]],
@@ -18,6 +17,5 @@ var searchData=
   ['cursoronleft',['CursorOnLeft',['../classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7a92d45c10b1184d64eafefd8332d3f738',1,'Interaction::SetCursorEvent']]],
   ['cursoronright',['CursorOnRight',['../classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7acf9a8ad7b6b311b1de7a7d2c7e219cf6',1,'Interaction::SetCursorEvent']]],
   ['cursorontop',['CursorOnTop',['../classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7a7b9979249881fa707653983acfb3f04c',1,'Interaction::SetCursorEvent']]],
-  ['cursorrightof',['CursorRightOf',['../classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7a6a3948300b8f334733f51c5d75ccb781',1,'Interaction::SetCursorEvent']]],
-  ['cutcorner',['CutCorner',['../classVisualization_1_1BoxStyle.html#a8ed780dcb5148bd9f3e1775d47344237ab3a0f0aaa9f76a0cb0035304359577d1',1,'Visualization::BoxStyle']]]
+  ['cursorrightof',['CursorRightOf',['../classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7a6a3948300b8f334733f51c5d75ccb781',1,'Interaction::SetCursorEvent']]]
 ];

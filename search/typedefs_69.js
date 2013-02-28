@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['itemconstructor',['ItemConstructor',['../classVisualization_1_1VisualizationGroup.html#a65d0fca71dd469e28d69e392af81590e',1,'Visualization::VisualizationGroup']]]
+  ['itemconstructor',['ItemConstructor',['../classVisualization_1_1VisualizationGroup.html#a0946b10b8aeb60d482af73dcdc82e2dd',1,'Visualization::VisualizationGroup']]]
 ];

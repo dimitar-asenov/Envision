@@ -6,5 +6,6 @@ var searchData=
   ['xmlmodel',['XMLModel',['../classFilePersistence_1_1XMLModel.html#a551c3ea11ac089c0e5b2962c3ddd05f0',1,'FilePersistence::XMLModel::XMLModel()'],['../classFilePersistence_1_1XMLModel.html#aedc66313f6a7e1e964c7cace7902f224',1,'FilePersistence::XMLModel::XMLModel(const QString &amp;filename)']]],
   ['xnode',['xNode',['../classTestNodes_1_1PositionExtension.html#acc65629ba61c0548233db308e8c8e7ea',1,'TestNodes::PositionExtension']]],
   ['xoffset',['xOffset',['../classVisualization_1_1Icon.html#af439bd0e9c3593473db8ee29ce3f58a8',1,'Visualization::Icon::xOffset()'],['../classVisualization_1_1Layout.html#a7d5b9828841ac365dcf8bb528951d43a',1,'Visualization::Layout::xOffset()'],['../classVisualization_1_1Shape.html#a2b126e7ac14b2bccb11e82fd93b555a0',1,'Visualization::Shape::xOffset()']]],
-  ['xshadowoffset',['xShadowOffset',['../classVisualization_1_1BoxStyle.html#aafa4539cd3e169ddae5204ef8ab7cd83',1,'Visualization::BoxStyle::xShadowOffset()'],['../classVisualization_1_1DiamondStyle.html#a84be5e157e3dad005dc6042a14de7c41',1,'Visualization::DiamondStyle::xShadowOffset()']]]
+  ['xshadowoffset',['xShadowOffset',['../classVisualization_1_1BoxStyle.html#aafa4539cd3e169ddae5204ef8ab7cd83',1,'Visualization::BoxStyle::xShadowOffset()'],['../classVisualization_1_1DiamondStyle.html#a84be5e157e3dad005dc6042a14de7c41',1,'Visualization::DiamondStyle::xShadowOffset()']]],
+  ['xxlength',['XXlength',['../classVisualization_1_1VList.html#a1f082e3892d598070c4e648b4367a70d',1,'Visualization::VList']]]
 ];

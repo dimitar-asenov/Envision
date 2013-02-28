@@ -17,5 +17,6 @@ var searchData=
   ['xoffset_5f',['xOffset_',['../classVisualization_1_1Shape.html#a341a2a8b57b87e153004eaab1d7a1c09',1,'Visualization::Shape']]],
   ['xor',['XOR',['../classOOModel_1_1BinaryOperation.html#af590e3bc8d2168e470ed1c5190d2d3c2a3270011030b6f7c46b3c9aaeb619ba73',1,'OOModel::BinaryOperation']]],
   ['xshadowoffset',['xShadowOffset',['../classVisualization_1_1BoxStyle.html#aafa4539cd3e169ddae5204ef8ab7cd83',1,'Visualization::BoxStyle::xShadowOffset()'],['../classVisualization_1_1DiamondStyle.html#a84be5e157e3dad005dc6042a14de7c41',1,'Visualization::DiamondStyle::xShadowOffset()']]],
-  ['xshadowoffset_5f',['xShadowOffset_',['../classVisualization_1_1BoxStyle.html#a1fa5023b78e5e6a266c7d3505bf691a5',1,'Visualization::BoxStyle::xShadowOffset_()'],['../classVisualization_1_1DiamondStyle.html#a10d7dade258a44171a589541f110165f',1,'Visualization::DiamondStyle::xShadowOffset_()']]]
+  ['xshadowoffset_5f',['xShadowOffset_',['../classVisualization_1_1BoxStyle.html#a1fa5023b78e5e6a266c7d3505bf691a5',1,'Visualization::BoxStyle::xShadowOffset_()'],['../classVisualization_1_1DiamondStyle.html#a10d7dade258a44171a589541f110165f',1,'Visualization::DiamondStyle::xShadowOffset_()']]],
+  ['xxlength',['XXlength',['../classVisualization_1_1VList.html#a1f082e3892d598070c4e648b4367a70d',1,'Visualization::VList']]]
 ];

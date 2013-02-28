@@ -9,7 +9,7 @@ var searchData=
   ['partiallist',['PartialList',['../classTestNodes_1_1PartialList.html',1,'TestNodes']]],
   ['persistednode',['PersistedNode',['../classModel_1_1PersistedNode.html',1,'Model']]],
   ['persistedvalue',['PersistedValue',['../classModel_1_1PersistedValue.html',1,'Model']]],
-  ['persistedvalue_3c_20qlist_3c_20t_20_2a_20_3e_20_3e',['PersistedValue< QList< T * > >',['../classModel_1_1PersistedValue_3_01QList_3_01T_01_5_01_4_01_4.html',1,'Model']]],
+  ['persistedvalue_3c_20qlist_3c_20t_20_2a_20_3e_20_3e',['PersistedValue&lt; QList&lt; T * &gt; &gt;',['../classModel_1_1PersistedValue_3_01QList_3_01T_01_5_01_4_01_4.html',1,'Model']]],
   ['persistentstore',['PersistentStore',['../classModel_1_1PersistentStore.html',1,'Model']]],
   ['persistentstoremock',['PersistentStoreMock',['../classModel_1_1PersistentStoreMock.html',1,'Model']]],
   ['plugindependency',['PluginDependency',['../structCore_1_1PluginDependency.html',1,'Core']]],

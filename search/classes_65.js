@@ -27,5 +27,5 @@ var searchData=
   ['extendablenode',['ExtendableNode',['../classModel_1_1ExtendableNode.html',1,'Model']]],
   ['extendednodechild',['ExtendedNodeChild',['../classModel_1_1ExtendedNodeChild.html',1,'Model']]],
   ['extendedvisitor',['ExtendedVisitor',['../classModel_1_1ExtendedVisitor.html',1,'Model']]],
-  ['extendedvisitor_3c_20visitorb_2c_20visitora_20_3e',['ExtendedVisitor< VisitorB, VisitorA >',['../classModel_1_1ExtendedVisitor.html',1,'Model']]]
+  ['extendedvisitor_3c_20visitorb_2c_20visitora_20_3e',['ExtendedVisitor&lt; VisitorB, VisitorA &gt;',['../classModel_1_1ExtendedVisitor.html',1,'Model']]]
 ];

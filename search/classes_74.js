@@ -26,6 +26,6 @@ var searchData=
   ['type',['Type',['../classOOModel_1_1Type.html',1,'OOModel']]],
   ['typeargumentsdescriptor',['TypeArgumentsDescriptor',['../classOOInteraction_1_1TypeArgumentsDescriptor.html',1,'OOInteraction']]],
   ['typedlist',['TypedList',['../classModel_1_1TypedList.html',1,'Model']]],
-  ['typedlist_3c_20statementitem_20_3e',['TypedList< StatementItem >',['../classModel_1_1TypedList.html',1,'Model']]],
+  ['typedlist_3c_20statementitem_20_3e',['TypedList&lt; StatementItem &gt;',['../classModel_1_1TypedList.html',1,'Model']]],
   ['typeexpression',['TypeExpression',['../classOOModel_1_1TypeExpression.html',1,'OOModel']]]
 ];
