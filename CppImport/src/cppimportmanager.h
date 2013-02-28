@@ -17,6 +17,8 @@
 #include "clang/Frontend/ASTUnit.h"
 #include "clang/Frontend/CompilerInvocation.h"
 
+#include "clang/Basic/IdentifierTable.h"
+#include "clang/Basic/Builtins.h"
 
 //LLVM
 //#include "llvm/ADT/IntrusiveRefCntPtr.h"
@@ -36,6 +38,8 @@ protected:
     OOModel::Project *testProject_;
     clang::CompilerInstance compilerInstance_;
     ClangAstConsumer *astConsumer_;
+    clang::ASTContext *astContext_;
+
 };
 
 #endif // CPPIMPORTMANAGER_H
