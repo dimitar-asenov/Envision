@@ -10,6 +10,16 @@
 //CLANG
 #include "clang/Basic/TargetOptions.h"
 #include "clang/Basic/TargetInfo.h"
+#include "clang/Basic/LangOptions.h"
+
+#include "clang/Lex/HeaderSearch.h"
+
+#include "clang/Frontend/ASTUnit.h"
+#include "clang/Frontend/CompilerInvocation.h"
+
+
+//LLVM
+//#include "llvm/ADT/IntrusiveRefCntPtr.h"
 
 class CppImportManager
 {
@@ -19,6 +29,7 @@ public:
     Model::Model *getModel();
     OOModel::Project *getProject();
     void parseFile();
+
 
 protected:
     Model::Model *testModel_;

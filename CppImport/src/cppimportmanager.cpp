@@ -23,6 +23,7 @@ CppImportManager::CppImportManager()
 
     compilerInstance_.createFileManager();
     compilerInstance_.createSourceManager(compilerInstance_.getFileManager());
+
     compilerInstance_.createPreprocessor();
 
     //setup astConsumer
