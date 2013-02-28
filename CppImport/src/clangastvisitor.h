@@ -1,6 +1,10 @@
 #ifndef CLANGASTVISITOR_H
 #define CLANGASTVISITOR_H
 
+//ENVISION
+
+#include "OOModel/src/allOOModelNodes.h"
+
 
 //CLANG
 #include "clang/AST/RecursiveASTVisitor.h"
@@ -32,9 +36,14 @@ using clang::RecursiveASTVisitor;
 class ClangAstVisitor : public RecursiveASTVisitor <ClangAstVisitor>
 {
 public:
-
+    ClangAstVisitor(Model::Model *model, OOModel::Project *currentProject);
     bool VisitStmt(clang::Stmt *S);
     bool VisitDecl(clang::Decl *D);
+
+protected:
+    OOModel::Project* currentProject_;
+    Model::Model* currentModel_;
+
 };
 
 #endif // CLANGASTVISITOR_H
