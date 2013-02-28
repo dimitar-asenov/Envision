@@ -1,7 +1,7 @@
 /*! \mainpage Welcome to Envision
 
 \section about About
-	The Envision project aims to develop an IDE for object oriented languages that features a visual structured code
+	The Envision project aims to develop an IDE for object-oriented languages that features a visual structured code
 	editor and is used for large-scale software development. 
 
 	Envision is an open-source project using the BSD license. The project is based on the
@@ -47,5 +47,7 @@ For building Envision from source see \ref compilation "the compilation instruct
 
 For hints on running Envision see the \ref try_envision "\"Try Envision\" page". 
 
+\section contribute For contributors
+Contributions to the project are welcome. Please visit \ref contribution "the contribution guidelines" for more details.
 
 */

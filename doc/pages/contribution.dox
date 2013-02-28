@@ -1,0 +1,66 @@
+/*! \page contribution Contributing to Envision
+
+All contributions to the Envision source code such as enhancements or bug fixes are much appreciated. If you want to
+join the development effort please read the information on this page.
+
+
+
+\section workflow Workflow
+The main repository for the project is maintained by Dimitar and can be found
+<a href="https://github.com/dimitar-asenov/Envision">here</a>. There are two main branches:
+	- \c development - Contains the latest changes and features. This branch is updated regularly, and any contributions
+		should be based on it.
+	- \c master - The idea is that this branch contains a somewhat more stable version of the IDE. However currently,
+		it simply contains an older version, that is occasionally synchronized with the \c development branch.
+
+Contributors should create their own forks of Envision on github and create a feature branch based on the
+\c development branch. Work on new features or bug fixes should be done in this branch and the branch should be rebased
+prior to being merged back into the \c development branch of the main Envision repository.
+
+This simple workflow is sufficient for the small team of people who are currently contributing to Envision.
+
+
+
+\section environment Build environment
+See \ref compilation "the compilation instructions".
+
+
+
+\section style Code style
+Qt is an excellent framework and is used throughout the Envision project. Not surprisingly Envision adopts many of the
+code style conventions of Qt. Have a look at:
+	- <a href="http://qt-project.org/wiki/Qt_Coding_Style">The Qt Coding Style</a>
+	- <a href="http://qt-project.org/wiki/Coding-Conventions">The Qt Coding Conventions</a>
+	- In addition, you might want to have a look at 
+		<a href="http://qt-project.org/wiki/API-Design-Principles">Qt's API Design Principles</a>
+		or even read the
+		<a href="http://www4.in.tum.de/~blanchet/api-design.pdf">more elaborate PDF version</a>.
+
+Here a few important points, and things where Envision differs from Qt:
+	- Always use TABs for indentation and never spaces. Configure your editor to display a tab as 3 spaces.
+	- Lines should be shorter than 120 characters. A TAB counts as 3 characters.
+	- Use exceptions and RTTI where appropriate.
+	- Make use of C++11 features.
+	- When reimplementing a virtual method, put the virtual and the override keywords in your method declaration.
+	- If the body of an if, while, or for is a single statement do not use curly braces around it. If the statement is
+		short and simple put it on the same line, otherwise put it on a newline.
+
+Of course you can always have a look at the existing code in case you are not sure about something. If you feel like
+some additional clarifications should be added here, let Dimitar know.
+
+
+
+\section committing Commit policy
+	- A single commit should focus on a single bug fix, or a single aspect of an enhancement. Unrelated changes should be
+		committed separately.
+	- Do not squash multiple commits into one. A bug fix or enhancement should have its own branch that contains all
+		necessary commits.
+	- Always include a commit message which should at a minimum contain at least a title
+	- Commit titles should be limited to 72 characters and use the present tense to indicate what the commit does:
+		- Right: \verbatim Fix a bug where typing 42 would crash Envision\endverbatim
+		- Wrong: \verbatim Fixes a bug where typing 42 would crash Envision\endverbatim
+			\verbatim Fixed a bug where typing 42 would crash Envision\endverbatim
+	- If the commit title does not sufficiently describe the commit, include a more detailed commit message.
+
+
+*/
