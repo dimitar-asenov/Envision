@@ -27,6 +27,7 @@
 #include "DeclarativeTest.h"
 
 #include "../src/items/Symbol.h"
+#include "../src/items/Text.h"
 #include "../src/items/VExtendable.h"
 #include "ModelBase/src/test_nodes/BinaryNode.h"
 #include "../src/declarative/GridLayoutElement.h"
@@ -45,9 +46,9 @@ DeclarativeTest::DeclarativeTest(Item* parent, TestNodes::BinaryNode* node) :
 void DeclarativeTest::initializeForms()
 {
 	Element* testItemElement = item<Symbol, I>(&I::testItem_, [](I*){return itemStyles().get();});
-	Element* testItem2Element = item<Symbol, I>(&I::testItem2_, [](I*){return itemStyles().get();});
-	Element* testItem3Element = item<Symbol, I>(&I::testItem3_, [](I*){return itemStyles().get();});
-	Element* testItem4Element = item<Symbol, I>(&I::testItem4_, [](I*){return itemStyles().get();});
+	Element* testItem2Element = item<Text, I>(&I::testItem2_, [](I*){return Text::itemStyles().get();});
+	Element* testItem3Element = item<Text, I>(&I::testItem3_, [](I*){return Text::itemStyles().get();});
+	Element* testItem4Element = item<Text, I>(&I::testItem4_, [](I*){return Text::itemStyles().get();});
 	Element* testNodeItemGeneralElement = item<I>(&I::testNodeItemGeneral_, [](I* v){return v->testNode_;});
 	Element* testNodeItemElement = item<VExtendable,I>(&I::testNodeItem_, [](I* v){return v->testNode_;},
 																		[](I*){return VExtendable::itemStyles().get();});
@@ -119,12 +120,21 @@ void DeclarativeTest::initializeForms()
 				->put(AnchorLayoutElement::PlaceEdge::TopOf, testItem3Element, 20,
 						AnchorLayoutElement::FromEdge::Below, testNodeItemElement)
 				->put(AnchorLayoutElement::PlaceEdge::TopOf, testItem4Element, 0.33, testItem3Element)
-				->put(AnchorLayoutElement::PlaceEdge::RightOf, testItem4Element, 0.1, testNodeItemElement));
+				->put(AnchorLayoutElement::PlaceEdge::RightOf, testItem4Element, 0.1, testNodeItemElement)
+				);
 }
 
 int DeclarativeTest::determineForm()
 {
 	return 6;
+}
+
+void DeclarativeTest::determineChildren()
+{
+	BaseItemType::determineChildren();
+	if (testItem2_) testItem2_->setText("second");
+	if (testItem3_) testItem3_->setText("third");
+	if (testItem4_) testItem4_->setText("fourth");
 }
 
 } /* namespace Visualization */

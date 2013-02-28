@@ -39,6 +39,7 @@ namespace Visualization {
 
 class Item;
 class Symbol;
+class Text;
 class VExtendable;
 
 class DeclarativeTest : public DeclarativeItem<DeclarativeTest> {
@@ -50,12 +51,15 @@ class DeclarativeTest : public DeclarativeItem<DeclarativeTest> {
 		static void initializeForms();
 		virtual int determineForm() override;
 
+	protected:
+		virtual void determineChildren() override;
+
 	private:
 		typedef DeclarativeItem<DeclarativeTest> BaseItemType;
 		Symbol* testItem_{};
-		Symbol* testItem2_{};
-		Symbol* testItem3_{};
-		Symbol* testItem4_{};
+		Text* testItem2_{};
+		Text* testItem3_{};
+		Text* testItem4_{};
 		VExtendable* testNodeItem_{};
 		Item* testNodeItemGeneral_{};
 		TestNodes::BinaryNode* testNode_{};
