@@ -35,10 +35,7 @@ namespace Visualization {
 AnchorLayoutElement::AnchorLayoutElement()
 : elementList_{QList<Element*>()}, horizontalConstraints_{Orientation::Horizontal},
   verticalConstraints_{Orientation::Vertical}
-{
-	// TODO Auto-generated constructor stub
-
-}
+{}
 
 AnchorLayoutElement::~AnchorLayoutElement()
 {
@@ -231,15 +228,9 @@ AnchorLayoutElement::AxisConstraints::~AxisConstraints()
 void AnchorLayoutElement::AxisConstraints::addConstraint(float relativePlaceEdgePosition, Element* placeElement,
 		int offset, float relativeFixedEdgePosition, Element* fixedElement)
 {
-	// check if element is not already assumed to be fixed/placed
-	for (int i = 0; i < constraints_.length(); ++i)
-	{
-		Q_ASSERT(constraints_.at(i)->fixedElement() != placeElement);
-		Q_ASSERT(constraints_.at(i)->placeElement() != placeElement);
-	}
-
 	constraints_.append(new Constraint(relativePlaceEdgePosition, placeElement, offset,
 															relativeFixedEdgePosition, fixedElement));
+	sortConstraints();
 }
 
 int AnchorLayoutElement::AxisConstraints::placeElements(Item* /*item*/)
@@ -254,6 +245,51 @@ int AnchorLayoutElement::AxisConstraints::placeElements(Item* /*item*/)
 	}
 
 	return minPos;
+}
+
+void AnchorLayoutElement::AxisConstraints::sortConstraints()
+{
+	// find all constraints which have a fixed node that depends on nothing
+	QList<Constraint*> sortedConstraints;
+	QList<Element*> elementQueue;
+	for (auto c1 : constraints_)
+	{
+		bool dependsOnSomething = false;
+		for (auto c2 : constraints_)
+			if (c1->dependsOn(c2, constraints_))
+			{
+				dependsOnSomething = true;
+				break;
+			}
+		if (!dependsOnSomething)
+		{
+			if (!elementQueue.contains(c1->fixedElement()))
+				elementQueue.append(c1->fixedElement());
+		}
+	}
+
+	// TODO: if visitedElements is empty, but constraints_ isn't, then there is a circular dependency
+
+	for (int elementIndex=0; elementIndex<elementQueue.length(); ++elementIndex)
+	{
+		for (auto c:constraints_)
+		{
+			if (c->fixedElement() == elementQueue.at(elementIndex))
+			{
+				sortedConstraints.append(c);
+				if (elementQueue.contains(c->placeElement()))
+				{
+					if (elementQueue.indexOf(c->placeElement()) <= elementIndex)
+					{
+						// TODO: circular dependency!!!
+					}
+				}
+				else elementQueue.append(c->placeElement());
+			}
+		}
+	}
+
+	constraints_ = sortedConstraints;
 }
 
 /*
@@ -293,6 +329,24 @@ int AnchorLayoutElement::AxisConstraints::Constraint::execute(Orientation orient
 		placeElement_->setPos(QPoint(placeElement_->pos().x(), placeY));
 		return placeY;
 	}
+}
+
+bool AnchorLayoutElement::AxisConstraints::Constraint::dependsOn(Constraint* other, QList<Constraint*>& allConstraints)
+{
+	QList<Constraint*> dependsOn = {this};
+
+	while (!dependsOn.empty())
+	{
+		for (auto c : allConstraints)
+			if (c->placeElement() == dependsOn.first()->fixedElement())
+			{
+				if (c == other) return true;
+				dependsOn.append(c);
+			}
+		dependsOn.removeFirst();
+	}
+
+	return false;
 }
 
 }

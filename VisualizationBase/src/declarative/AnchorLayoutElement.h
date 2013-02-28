@@ -89,6 +89,7 @@ class AnchorLayoutElement : public LayoutElement {
 						int execute(Orientation orientation);
 						Element* placeElement() const;
 						Element* fixedElement() const;
+						bool dependsOn(Constraint* other, QList<Constraint*>& allConstraints);
 
 					private:
 						float relativePlaceEdgePosition_{};
@@ -98,6 +99,7 @@ class AnchorLayoutElement : public LayoutElement {
 						Element* fixedElement_{};
 				};
 				QList<Constraint*> constraints_{};
+				void sortConstraints();
 		};
 		AxisConstraints horizontalConstraints_{Orientation::Horizontal};
 		AxisConstraints verticalConstraints_{Orientation::Vertical};
