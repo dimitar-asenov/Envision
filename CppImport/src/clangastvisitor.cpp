@@ -6,7 +6,7 @@ using namespace clang;
 using namespace llvm;
 using namespace OOModel;
 
-ClangAstVisitor::ClangAstVisitor(Model::Model* model,OOModel::Project *currentProject = nullptr)
+ClangAstVisitor::ClangAstVisitor(Model::Model* model,OOModel::Project* currentProject = nullptr)
 {
     this->currentModel_ = model;
     this->currentProject_ = currentProject;
@@ -30,21 +30,21 @@ bool ClangAstVisitor::VisitDecl(clang::Decl *D)
         CXXRecordDecl *recDecl = cast<CXXRecordDecl>(D);
         if(recDecl->isClass())
         {
-            Class* cl = nullptr;
+            Class* ooClass = nullptr;
 
-            if (!currentProject_) cl = dynamic_cast<Class*> (currentModel_->createRoot("Class"));
-            currentModel_->beginModification(currentProject_ ? static_cast<Model::Node*> (currentProject_) :cl, "Adding a class.");
-            if (!cl)
+            if (!currentProject_) ooClass = dynamic_cast<Class*> (currentModel_->createRoot("Class"));
+            currentModel_->beginModification(currentProject_ ? static_cast<Model::Node*> (currentProject_) : ooClass, "Adding a class.");
+            if (!ooClass)
             {
-                cl = new Class();
-                currentProject_->classes()->append(cl);
+                ooClass = new Class();
+                currentProject_->classes()->append(ooClass);
             }
 
             //TODO is name correct?
-            cl->setName(QString::fromStdString(recDecl->getName().str()));
+            ooClass->setName(QString::fromStdString(recDecl->getName().str()));
 
             currentModel_->endModification();
-            return cl;
+            return ooClass;
 
         }
     }

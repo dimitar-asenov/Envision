@@ -14,6 +14,7 @@ class ClangAstConsumer : public clang::ASTConsumer
 {
 public:
     ClangAstConsumer(Model::Model* model,OOModel::Project *currentProject = nullptr);
+    virtual bool HandleTopLevelDecl(DeclGroupRef D) override;
 
 protected:
     ClangAstVisitor* astVisitor_;
