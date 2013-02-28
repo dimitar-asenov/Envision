@@ -64,15 +64,19 @@ class AnchorLayoutElement : public LayoutElement {
 		AnchorLayoutConstraint::Orientation orientation(Edge edge);
 		AnchorLayoutConstraint::Orientation inferOrientation(Edge firstEdge, Edge secondEdge);
 		float relativePosition(Edge edge);
-		void addConstraint(QList<AnchorLayoutConstraint*>& constraints, float relativePlaceEdgePosition,
-				Element* placeElement, int offset, float relativeFixedEdgePosition, Element* fixedElement);
+		void addConstraint(QList<AnchorLayoutConstraint*>& constraints, AnchorLayoutConstraint::Orientation orientation,
+				float relativePlaceEdgePosition, Element* placeElement, int offset, float relativeFixedEdgePosition,
+				Element* fixedElement);
 		int placeElements(QList<AnchorLayoutConstraint*>& constraints, AnchorLayoutConstraint::Orientation orientation,
 				Item* item);
-		void sortConstraints(QList<AnchorLayoutConstraint*>& constraints);
+		void sortConstraints(QList<AnchorLayoutConstraint*>& constraints,
+				AnchorLayoutConstraint::Orientation orientation);
 
 		QList<Element*> elementList_{};
 		QList<AnchorLayoutConstraint*> horizontalConstraints_{};
 		QList<AnchorLayoutConstraint*> verticalConstraints_{};
+		bool horizontalHasCircularDependencies_{};
+		bool verticalHasCircularDependencies_{};
 };
 
 }

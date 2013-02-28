@@ -34,7 +34,8 @@ namespace Visualization {
 
 AnchorLayoutElement::AnchorLayoutElement()
 : elementList_{QList<Element*>()}, horizontalConstraints_{QList<AnchorLayoutConstraint*>()},
-  verticalConstraints_{QList<AnchorLayoutConstraint*>()}
+  verticalConstraints_{QList<AnchorLayoutConstraint*>()}, horizontalHasCircularDependencies_{false},
+  verticalHasCircularDependencies_{false}
 {}
 
 AnchorLayoutElement::~AnchorLayoutElement()
@@ -148,11 +149,11 @@ AnchorLayoutElement* AnchorLayoutElement::put(AnchorLayoutConstraint::Orientatio
 		elementList_.append(fixedElement);
 
 	if (orientation == AnchorLayoutConstraint::Orientation::Horizontal)
-		addConstraint(horizontalConstraints_, relativePlaceEdgePosition, placeElement, offset,
-															relativeFixedEdgePosition, fixedElement);
+		addConstraint(horizontalConstraints_, orientation, relativePlaceEdgePosition, placeElement, offset,
+																			relativeFixedEdgePosition, fixedElement);
 	else // orientation == AnchorLayoutConstraint::Orientation::Vertical
-		addConstraint(verticalConstraints_, relativePlaceEdgePosition, placeElement, offset,
-															relativeFixedEdgePosition, fixedElement);
+		addConstraint(verticalConstraints_, orientation, relativePlaceEdgePosition, placeElement, offset,
+																			relativeFixedEdgePosition, fixedElement);
 	return this;
 }
 
@@ -218,12 +219,13 @@ float AnchorLayoutElement::relativePosition(Edge edge)
 	}
 }
 
-void AnchorLayoutElement::addConstraint(QList<AnchorLayoutConstraint*>& constraints, float relativePlaceEdgePosition,
-		Element* placeElement, int offset, float relativeFixedEdgePosition, Element* fixedElement)
+void AnchorLayoutElement::addConstraint(QList<AnchorLayoutConstraint*>& constraints,
+		AnchorLayoutConstraint::Orientation orientation, float relativePlaceEdgePosition, Element* placeElement,
+		int offset, float relativeFixedEdgePosition, Element* fixedElement)
 {
 	constraints.append(new AnchorLayoutConstraint(relativePlaceEdgePosition, placeElement, offset,
 																	relativeFixedEdgePosition, fixedElement));
-	sortConstraints(constraints);
+	sortConstraints(constraints, orientation);
 }
 
 int AnchorLayoutElement::placeElements(QList<AnchorLayoutConstraint*>& constraints,
@@ -241,8 +243,16 @@ int AnchorLayoutElement::placeElements(QList<AnchorLayoutConstraint*>& constrain
 	return minPos;
 }
 
-void AnchorLayoutElement::sortConstraints(QList<AnchorLayoutConstraint*>& constraints)
+void AnchorLayoutElement::sortConstraints(QList<AnchorLayoutConstraint*>& constraints,
+		AnchorLayoutConstraint::Orientation orientation)
 {
+	// check if this orientation does not already have circular dependencies (if so, don't sort)
+	Q_ASSERT(orientation != AnchorLayoutConstraint::Orientation::Auto);
+	if (orientation == AnchorLayoutConstraint::Orientation::Horizontal && horizontalHasCircularDependencies_)
+		return;
+	else if (orientation == AnchorLayoutConstraint::Orientation::Vertical && verticalHasCircularDependencies_)
+		return;
+
 	// find all constraints which have a fixed node that depends on nothing
 	QList<AnchorLayoutConstraint*> sortedConstraints;
 	QList<Element*> elementQueue;
@@ -262,7 +272,15 @@ void AnchorLayoutElement::sortConstraints(QList<AnchorLayoutConstraint*>& constr
 		}
 	}
 
-	// TODO: if visitedElements is empty, but constraints_ isn't, then there is a circular dependency
+	// if elementQueue is empty, but constraints isn't, then there is a circular dependency
+	if (elementQueue.empty() && !constraints.empty())
+	{
+		if (orientation == AnchorLayoutConstraint::Orientation::Horizontal)
+			horizontalHasCircularDependencies_ = true;
+		else // orientation == AnchorLayoutConstraint::Orientation::Vertical
+			verticalHasCircularDependencies_ = true;
+		return;
+	}
 
 	for (int elementIndex=0; elementIndex<elementQueue.length(); ++elementIndex)
 	{
@@ -275,7 +293,11 @@ void AnchorLayoutElement::sortConstraints(QList<AnchorLayoutConstraint*>& constr
 				{
 					if (elementQueue.indexOf(c->placeElement()) <= elementIndex)
 					{
-						// TODO: circular dependency!!!
+						if (orientation == AnchorLayoutConstraint::Orientation::Horizontal)
+							horizontalHasCircularDependencies_ = true;
+						else // orientation == AnchorLayoutConstraint::Orientation::Vertical
+							verticalHasCircularDependencies_ = true;
+						return;
 					}
 				}
 				else elementQueue.append(c->placeElement());
