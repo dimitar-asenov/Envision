@@ -48,7 +48,9 @@ LIBS += -lclangTooling\
 HEADERS += src/precompiled.h \
     src/CppImportException.h \
 	src/cppimport_api.h \
-    src/cppimport.h
+    src/cppimport.h \
+    src/clangastvisitor.h
 SOURCES += src/CppImportException.cpp \
 	src/cppimport.cpp \
-	test/SimpleTest.cpp
+	test/SimpleTest.cpp \
+    src/clangastvisitor.cpp
