@@ -62,10 +62,8 @@ DeclarativeItem<VisualizationType>::DeclarativeItem(Item* parent, const StyleTyp
 template <class VisualizationType>
 DeclarativeItem<VisualizationType>::~DeclarativeItem()
 {
-	for(int i=0; i<formsStatic().length(); i++)
-	{
-		formsStatic().at(i)->destroyChildItems(this);
-	}
+	for(Element* form : formsStatic())
+		form->destroyChildItems(this);
 }
 
 template <class VisualizationType>

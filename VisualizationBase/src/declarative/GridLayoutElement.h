@@ -121,9 +121,7 @@ inline GridLayoutElement* GridLayoutElement::setHorizontalAlignment(LayoutStyle:
 	{
 		defaultColumnHorizontalAlignments_[x] = horizontalAlignment;
 		for (int y = 0; y < numRows_; y++)
-		{
 			cellHorizontalAlignmentGrid_[x][y] = horizontalAlignment;
-		}
 	}
 
 	return this;
@@ -135,9 +133,7 @@ inline GridLayoutElement* GridLayoutElement::setVerticalAlignment(LayoutStyle::A
 	{
 		defaultRowVerticalAlignments_[y] = verticalAlignment;
 		for (int x = 0; x < numColumns_; x++)
-		{
 			cellVerticalAlignmentGrid_[x][y] = verticalAlignment;
-		}
 	}
 	return this;
 }
@@ -148,9 +144,7 @@ inline GridLayoutElement* GridLayoutElement::setColumnHorizontalAlignment(int co
 
 	defaultColumnHorizontalAlignments_[column] = horizontalAlignment;
 	for (int y = 0; y < numRows_; y++)
-	{
 		cellHorizontalAlignmentGrid_[column][y] = horizontalAlignment;
-	}
 
 	return this;
 }
@@ -160,9 +154,7 @@ inline GridLayoutElement* GridLayoutElement::setRowVerticalAlignment(int row, La
 
 	defaultRowVerticalAlignments_[row] = verticalAlignment;
 	for (int x = 0; x < numColumns_; x++)
-	{
 		cellVerticalAlignmentGrid_[x][row] = verticalAlignment;
-	}
 	return this;
 }
 inline GridLayoutElement* GridLayoutElement::setCellHorizontalAlignment(LayoutStyle::Alignment horizontalAlignment)

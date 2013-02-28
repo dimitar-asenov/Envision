@@ -84,9 +84,7 @@ void ItemWrapperElement<ParentType,ChildItemType>::setItemPositions(Item* item, 
 {
 	auto& childItem = (static_cast<ParentType*>(item))->*this->item();
 	if(childItem)
-	{
 		childItem->setPos(parentX + pos().x() + leftMargin(), parentY + pos().y() + topMargin());
-	}
 }
 
 template <class ParentType, class ChildItemType>
@@ -94,9 +92,7 @@ bool ItemWrapperElement<ParentType,ChildItemType>::sizeDependsOnParent(const Ite
 {
 	auto& childItem = (static_cast<const ParentType*>(item))->*this->item();
 	if(childItem)
-	{
 		return childItem->sizeDependsOnParent();
-	}
 	else return false;
 }
 

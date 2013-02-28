@@ -80,26 +80,19 @@ GridLayoutElement* GridLayoutElement::put(int column, int row, Element* element)
 void GridLayoutElement::synchronizeWithItem(Item* item)
 {
 	for(int x=0; x<numColumns_; x++)
-	{
 		for(int y=0; y<numRows_; y++)
-			if (elementGrid_[x][y] != nullptr)
-			{
-				elementGrid_[x][y]->synchronizeWithItem(item);
-			}
-	}
+			if (elementGrid_[x][y] != nullptr) elementGrid_[x][y]->synchronizeWithItem(item);
 }
 
 void GridLayoutElement::setItemPositions(Item* item, int parentX, int parentY)
 {
 	for(int x=0; x<numColumns_; x++)
-	{
 		for(int y=0; y<numRows_; y++)
 			if (elementGrid_[x][y] != nullptr)
 			{
 				Element* element = elementGrid_[x][y];
 				element->setItemPositions(item, parentX + pos().x(), parentY + pos().y());
 			}
-	}
 }
 
 void GridLayoutElement::computeSize(Item* item, int availableWidth, int availableHeight)
@@ -111,7 +104,6 @@ void GridLayoutElement::computeSize(Item* item, int availableWidth, int availabl
 	bool hasMultiColumn = false;
 	bool hasMultiRow = false;
 	for(int x=0; x<numColumns_; x++)
-	{
 		for(int y=0; y<numRows_; y++)
 			if (elementGrid_[x][y] != nullptr)
 			{
@@ -122,16 +114,13 @@ void GridLayoutElement::computeSize(Item* item, int availableWidth, int availabl
 				{
 					if (element->size().width() > widestInColumn[x]) widestInColumn[x] = element->size().width();
 				}
-				else
-					hasMultiColumn = true;
+				else hasMultiColumn = true;
 				if (cellSpan.second == 1)
 				{
 					if (element->size().height() > tallestInRow[y]) tallestInRow[y] = element->size().height();
 				}
-				else
-					hasMultiRow = true;
+				else hasMultiRow = true;
 			}
-	}
 
 	// modify widest cells in columns and tallest cells in rows if there are merged columns
 	if (hasMultiColumn or hasMultiRow)
@@ -152,18 +141,12 @@ void GridLayoutElement::computeSize(Item* item, int availableWidth, int availabl
 					int missingSpace = elementGrid_[x][y]->size().width() - availableSpace;
 					if (missingSpace > 0)
 					{
-						if (availableStretchFactor == 0)
-						{
-							// add the additional space to some column
+						if (availableStretchFactor == 0) // add the additional space to some column
 							widestInColumn[x] += missingSpace;
-						}
-						else
-						{
-							// distribute the additional space according to the stretch factors
+						else // distribute the additional space according to the stretch factors
 							for (int column=x; column<x+spanGrid_[x][y].first; column++)
 								widestInColumn[column] +=
 										std::ceil(missingSpace / availableStretchFactor * columnStretchFactors_[column]);
-						}
 					}
 				}
 				if (spanGrid_[x][y].second > 1)
@@ -180,21 +163,15 @@ void GridLayoutElement::computeSize(Item* item, int availableWidth, int availabl
 					int missingSpace = elementGrid_[x][y]->size().height() - availableSpace;
 					if (missingSpace > 0)
 					{
-						if (availableStretchFactor == 0)
-						{
-							// add the additional space to some column
+						if (availableStretchFactor == 0) // add the additional space to some column
 							tallestInRow[y] += missingSpace;
-						}
-						else
-						{
-							// distribute the additional space according to the stretch factors
+						else // distribute the additional space according to the stretch factors
 							for (int row=y; row<y+spanGrid_[x][y].second; row++)
 								tallestInRow[row] +=
 										std::ceil(missingSpace / availableStretchFactor * rowStretchFactors_[row]);
-						}
 					}
 				}
-	}
+			}
 
 	// Compute grid size
 	int totalWidth = 0;
@@ -210,12 +187,9 @@ void GridLayoutElement::computeSize(Item* item, int availableWidth, int availabl
 	// if availableWidth == 0, this is always false
 	if (additionalWidth > 0)
 	{
-		if (overallColumnStretchFactor_ > 0)
-		{
-			// distribute the additional space according to the stretch factors
+		if (overallColumnStretchFactor_ > 0) // distribute the additional space according to the stretch factors
 			for (int x = 0; x<numColumns_; ++x)
 				widestInColumn[x] += additionalWidth / overallColumnStretchFactor_ * columnStretchFactors_[x];
-		}
 		totalWidth = availableWidth;
 	}
 
@@ -229,12 +203,9 @@ void GridLayoutElement::computeSize(Item* item, int availableWidth, int availabl
 	// if availableHeight == 0, this is always false
 	if (additionalHeight > 0)
 	{
-		if (overallRowStretchFactor_ > 0)
-		{
-			// distribute the additional space according to the stretch factors
+		if (overallRowStretchFactor_ > 0) // distribute the additional space according to the stretch factors
 			for (int y = 0; y<numRows_; ++y)
 				tallestInRow[y] += additionalHeight / overallRowStretchFactor_ * rowStretchFactors_[y];
-		}
 		totalHeight = availableHeight;
 	}
 
@@ -242,7 +213,6 @@ void GridLayoutElement::computeSize(Item* item, int availableWidth, int availabl
 
 	// Recompute all the element's sizes, if their size depends on their parent's size
 	for(int x=0; x<numColumns_; x++)
-	{
 		for(int y=0; y<numRows_; y++)
 			if (elementGrid_[x][y] != nullptr && elementGrid_[x][y]->sizeDependsOnParent(item))
 			{
@@ -262,7 +232,6 @@ void GridLayoutElement::computeSize(Item* item, int availableWidth, int availabl
 					element->computeSize(item, localAvailableWidth, localAvailableHeight);
 				}
 			}
-	}
 
 	// Set item positions
 	int left = leftMargin();
@@ -343,15 +312,10 @@ bool GridLayoutElement::sizeDependsOnParent(const Item*) const
 void GridLayoutElement::computeOverallStretchFactors()
 {
 	overallColumnStretchFactor_ = 0;
-	for(int x=0; x<numColumns_; ++x)
-	{
-		overallColumnStretchFactor_ += columnStretchFactors_[x];
-	}
+	for(int x=0; x<numColumns_; ++x) overallColumnStretchFactor_ += columnStretchFactors_[x];
+
 	overallRowStretchFactor_ = 0;
-	for(int y=0; y<numRows_; ++y)
-	{
-		overallRowStretchFactor_ += rowStretchFactors_[y];
-	}
+	for(int y=0; y<numRows_; ++y) overallRowStretchFactor_ += rowStretchFactors_[y];
 }
 
 void GridLayoutElement::adjustSize(int containColumn, int containRow)
@@ -401,9 +365,7 @@ void GridLayoutElement::adjustSize(int containColumn, int containRow)
 				if (x<numColumns_ && y<numRows_)
 					newCellHorizontalGrid[x][y] = cellHorizontalAlignmentGrid_[x][y];
 				else
-				{
 					newCellHorizontalGrid[x][y] = defaultColumnHorizontalAlignments_[x];
-				}
 		cellHorizontalAlignmentGrid_ = newCellHorizontalGrid;
 
 		auto newCellVerticalGrid = QVector<QVector<LayoutStyle::Alignment>>(newNumColumns,

@@ -64,8 +64,7 @@ AnchorLayoutElement* AnchorLayoutElement::put(PlaceEdge placeEdge, Element* plac
 	AnchorLayoutConstraint::Orientation orientation = inferOrientation(edgeToBePlaced, fixedEdge);
 
 	// compute correct offset
-	if (fixedEdge == Edge::Left || fixedEdge == Edge::Top)
-		offset = -offset;
+	if (fixedEdge == Edge::Left || fixedEdge == Edge::Top) offset = -offset;
 
 	return put(orientation, relativePosition(edgeToBePlaced), placeElement, offset, relativePosition(fixedEdge),
 					fixedElement);
@@ -86,10 +85,10 @@ void AnchorLayoutElement::computeSize(Item* item, int /*availableWidth*/, int /*
 {
 	// TODO: what to do with the additional size?
 	// compute size of each sub-element and set their position to (0, 0)
-	for (int i=0; i<elementList_.length(); i++)
+	for (Element* element : elementList_)
 	{
-		elementList_.at(i)->computeSize(item, 0, 0);
-		elementList_.at(i)->setPos(QPoint(0, 0));
+		element->computeSize(item, 0, 0);
+		element->setPos(QPoint(0, 0));
 	}
 
 	// place elements horizontally
@@ -104,9 +103,8 @@ void AnchorLayoutElement::computeSize(Item* item, int /*availableWidth*/, int /*
 	int adjustmentY = minY * -1 + topMargin();
 	int maxX = 0;
 	int maxY = 0;
-	for (int i=0; i<elementList_.length(); i++)
+	for (Element* element : elementList_)
 	{
-		Element* element = elementList_.at(i);
 		element->setPos(QPoint(element->pos().x() + adjustmentX, element->pos().y() + adjustmentY));
 		int rightEdge = element->pos().x() + element->size().width();
 		int bottomEdge = element->pos().y() + element->size().height();
@@ -120,15 +118,14 @@ void AnchorLayoutElement::computeSize(Item* item, int /*availableWidth*/, int /*
 
 void AnchorLayoutElement::setItemPositions(Item* item, int parentX, int parentY)
 {
-	for(int i=0; i<elementList_.length(); i++)
-		elementList_.at(i)->setItemPositions(item, parentX + pos().x(), parentY + pos().y());
+	for(Element* element : elementList_)
+		element->setItemPositions(item, parentX + pos().x(), parentY + pos().y());
 }
 
 void AnchorLayoutElement::synchronizeWithItem(Item* item)
 {
-	for(int i=0; i<elementList_.length(); i++)
-		if (elementList_.at(i) != nullptr)
-			elementList_.at(i)->synchronizeWithItem(item);
+	for(Element* element : elementList_)
+		if (element != nullptr) element->synchronizeWithItem(item);
 }
 
 bool AnchorLayoutElement::sizeDependsOnParent(const Item* /*item*/) const
@@ -143,10 +140,8 @@ AnchorLayoutElement* AnchorLayoutElement::put(AnchorLayoutConstraint::Orientatio
 {
 	Q_ASSERT(orientation != AnchorLayoutConstraint::Orientation::Auto);
 
-	if (!elementList_.contains(placeElement))
-		elementList_.append(placeElement);
-	if (!elementList_.contains(fixedElement))
-		elementList_.append(fixedElement);
+	if (!elementList_.contains(placeElement)) elementList_.append(placeElement);
+	if (!elementList_.contains(fixedElement)) elementList_.append(fixedElement);
 
 	if (orientation == AnchorLayoutConstraint::Orientation::Horizontal)
 		addConstraint(horizontalConstraints_, orientation, relativePlaceEdgePosition, placeElement, offset,
@@ -159,8 +154,7 @@ AnchorLayoutElement* AnchorLayoutElement::put(AnchorLayoutConstraint::Orientatio
 
 void AnchorLayoutElement::destroyChildItems(Item* item)
 {
-	for (int i = 0; i < elementList_.length(); ++i)
-		elementList_.at(i)->destroyChildItems(item);
+	for (Element* element : elementList_) element->destroyChildItems(item);
 }
 
 AnchorLayoutConstraint::Orientation AnchorLayoutElement::orientation(Edge edge)
@@ -200,9 +194,7 @@ AnchorLayoutConstraint::Orientation AnchorLayoutElement::inferOrientation(Edge f
 	}
 	else  // secondOrientation != AnchorLayoutConstraint::Orientation::Auto
 			// && firstOrientation == AnchorLayoutConstraint::Orientation::Auto
-	{
 		return secondOrientation;
-	}
 }
 
 float AnchorLayoutElement::relativePosition(Edge edge)
@@ -233,11 +225,10 @@ int AnchorLayoutElement::placeElements(QList<AnchorLayoutConstraint*>& constrain
 {
 	// place elements on axis
 	int minPos = 0;
-	for (int i=0; i<constraints.length(); i++)
+	for (AnchorLayoutConstraint* c : constraints)
 	{
-		int pos = constraints.at(i)->execute(orientation);
-		if (pos < minPos)
-			minPos = pos;
+		int pos = c->execute(orientation);
+		if (pos < minPos) minPos = pos;
 	}
 
 	return minPos;
@@ -267,8 +258,7 @@ void AnchorLayoutElement::sortConstraints(QList<AnchorLayoutConstraint*>& constr
 			}
 		if (!dependsOnSomething)
 		{
-			if (!elementQueue.contains(c1->fixedElement()))
-				elementQueue.append(c1->fixedElement());
+			if (!elementQueue.contains(c1->fixedElement())) elementQueue.append(c1->fixedElement());
 		}
 	}
 
