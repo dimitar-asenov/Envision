@@ -48,13 +48,17 @@ namespace Visualization {
 
 namespace OOInteraction {
 
-class OOINTERACTION_API MethodDefinitionVisitor : public Model::Visitor<MethodDefinitionVisitor, Model::Node*> {
+class CommandExpression;
+
+class OOINTERACTION_API CustomizationVisitor : public Model::Visitor<CustomizationVisitor, Model::Node*> {
 	public:
 		static void init(Visualization::VisualizationGroup* customizationGroup);
-		static Model::Node* visitMethod(MethodDefinitionVisitor* v, OOModel::Method* met);
+		static Model::Node* visitMethod(CustomizationVisitor* v, OOModel::Method* met);
+		static void resetCustomizations();
 
 	private:
 		static Visualization::VisualizationGroup* customizationGroup_;
+		static QList<CommandExpression*> registeredCommands_;
 };
 
 } /* namespace OOInteraction */

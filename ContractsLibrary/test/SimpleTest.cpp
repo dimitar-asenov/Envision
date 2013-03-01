@@ -49,7 +49,7 @@
 
 #include "OOInteraction/src/expression_editor/OOExpressionBuilder.h"
 #include "OOInteraction/src/expression_editor/operators/CommandDescriptor.h"
-#include "OOInteraction/src/customization/MethodDefinitionVisitor.h"
+#include "OOInteraction/src/customization/CustomizationVisitor.h"
 
 using namespace OOModel;
 using namespace Visualization;
@@ -379,8 +379,8 @@ TEST(ContractsLibrary, ContractsLibraryTest)
 	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(prj));
 	VisualizationManager::instance().mainScene()->listenToModel(model);
 
-	MethodDefinitionVisitor methodVisitor;
-	methodVisitor.visit(prj);
+	CustomizationVisitor customizations;
+	customizations.visit(prj);
 
 	CHECK_CONDITION(prj != nullptr);
 }
