@@ -37,13 +37,115 @@ code style conventions of Qt. Have a look at:
 		<a href="http://www4.in.tum.de/~blanchet/api-design.pdf">more elaborate PDF version</a>.
 
 Here a few important points, and things where Envision differs from Qt:
-	- Always use TABs for indentation and never spaces. Configure your editor to display a tab as 3 spaces.
-	- Lines should be shorter than 120 characters. A TAB counts as 3 characters.
-	- Use exceptions and RTTI where appropriate.
-	- Make use of C++11 features.
-	- When reimplementing a virtual method, put the virtual and the override keywords in your method declaration.
-	- If the body of an if, while, or for is a single statement do not use curly braces around it. If the statement is
-		short and simple put it on the same line, otherwise put it on a newline.
+	- <b>Language features</b>
+		- Strive for <a href="http://en.wikipedia.org/wiki/Const-correctness">const-correctness</a>.
+		- Use exceptions and RTTI where appropriate.
+		- Make use of the <a href="http://www.stroustrup.com/C++11FAQ.html">new C++11 features</a>.
+		- All class members should have a default initializer using the new C++11 syntax with curly braces in the class
+			declaration:
+\code
+// Wrong:
+class PointAndItem
+{
+	public:
+		PointAnditem();
+	private:
+		int x_;
+		int y_;
+		Item* item_;
+}
+
+PointAndItem::PointAndItem() : x_(0), y_(0), item_(nullptr)
+{
+}
+
+// Correct:
+class PointAndItem
+{
+	private:
+		int x_{};
+		int y_{};
+		Item* item_{};
+}
+\endcode
+		- When reimplementing a virtual method, put the \c virtual and the \c override keywords in your method declaration.
+		- Only define private fields, never public or protected.
+		- All non-virtual methods that are simple and short should be declared inline. The method definition of inlined methods should appear
+			after the class body:
+\code
+// Wrong:
+class Cell
+{
+	public:
+		int value() const { return value_;}
+	private:
+		int value_;
+}
+
+// Correct:
+class Cell
+{
+	public:
+		int value() const;
+	private:
+		int value_;
+}
+
+inline int Cell::value() const { return value_;}
+\endcode
+		- Wherever possible prefer to use classes provided by Qt over STL or other libraries.
+		- If you are defining new templates make sure those work across platforms and shared object boundaries.
+	- \b Formatting
+		- Always use TABs for indentation and never spaces. Configure your editor to display a tab as 3 spaces.
+		- Lines should be shorter than 120 characters. A TAB counts as 3 characters.
+		- If the body of an \c if, \c while, or \c for is a single statement, do not use curly braces around it. If the
+			condition and statement fit nicely on the same line write them on one line, otherwise put the statement on a
+			newline:
+\code
+// Wrong:
+if (foo)
+{
+	bar();
+}
+
+if (aMoreComplicatedOrMultilineCondition) anExtremelyLongAndComplicatedStatement();
+
+// Correct:
+if (foo) bar();
+
+if (aMoreComplicatedOrMultilineCondition)
+	anExtremelyLongAndComplicatedStatement();
+\endcode
+		- Curly braces should appear in a line on their own, except when using lambdas:
+\code
+// Wrong:
+if (foo) {
+}
+
+// Correct:
+if (foo)
+{
+}
+\endcode
+		- Leave a single space after a \c // comment delimiter.
+		- For pointers or references, do not leave any space between the type and '*' or '&', but write a single space
+			between the '*' or '&' and the variable name:
+\code
+QString& string;
+Item* item;
+const QString& message;
+\endcode
+		- Field names should follow the Qt naming conventions and additionally should end with an underscore:
+\code
+private:
+	int length_;
+	Item* myFirstItem_;
+\endcode
+		- Private and protected methods do not end with an underscore.
+		- When declaring a class, list the members in the following order starting from the top: \c public, \c protected,
+			\c private.
+		- In the \c .cpp file defining a class, define all members in the following order starting from the top: \c static,
+			\c constructors, \c destructors, <tt>the rest</tt>
 
 Of course you can always have a look at the existing code in case you are not sure about something. If you feel like
 some additional clarifications should be added here, let Dimitar know.
@@ -57,10 +159,12 @@ some additional clarifications should be added here, let Dimitar know.
 		necessary commits.
 	- Always include a commit message which should at a minimum contain at least a title
 	- Commit titles should be limited to 72 characters and use the present tense to indicate what the commit does:
-		- Right: \verbatim Fix a bug where typing 42 would crash Envision\endverbatim
-		- Wrong: \verbatim Fixes a bug where typing 42 would crash Envision\endverbatim
-			\verbatim Fixed a bug where typing 42 would crash Envision\endverbatim
-	- If the commit title does not sufficiently describe the commit, include a more detailed commit message.
+\verbatim
+Right: Fix a bug where typing 42 would crash Envision
+Wrong: Fixes a bug where typing 42 would crash Envision
+Wrong: Fixed a bug where typing 42 would crash Envision
+\endverbatim
+	- If the commit title does not sufficiently describe the commit, also include a more detailed commit description.
 
 
 */
