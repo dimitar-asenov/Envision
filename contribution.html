@@ -102,12 +102,100 @@ Code style</h1>
 </ul>
 <p>Here a few important points, and things where Envision differs from Qt:</p>
 <ul>
+<li><b>Language features</b><ul>
+<li>Strive for <a href="http://en.wikipedia.org/wiki/Const-correctness">const-correctness</a>.</li>
+<li>Use exceptions and RTTI where appropriate.</li>
+<li>Make use of the <a href="http://www.stroustrup.com/C++11FAQ.html">new C++11 features</a>.</li>
+<li>All class members should have a default initializer using the new C++11 syntax with curly braces in the class declaration: <div class="fragment"><div class="line"><span class="comment">// Wrong:</span></div>
+<div class="line"><span class="keyword">class </span>PointAndItem</div>
+<div class="line">{</div>
+<div class="line">   <span class="keyword">public</span>:</div>
+<div class="line">      PointAnditem();</div>
+<div class="line">   <span class="keyword">private</span>:</div>
+<div class="line">      <span class="keywordtype">int</span> x_;</div>
+<div class="line">      <span class="keywordtype">int</span> y_;</div>
+<div class="line">      Item* item_;</div>
+<div class="line">}</div>
+<div class="line"></div>
+<div class="line">PointAndItem::PointAndItem() : x_(0), y_(0), item_(nullptr)</div>
+<div class="line">{</div>
+<div class="line">}</div>
+<div class="line"></div>
+<div class="line"><span class="comment">// Correct:</span></div>
+<div class="line"><span class="keyword">class </span>PointAndItem</div>
+<div class="line">{</div>
+<div class="line">   <span class="keyword">private</span>:</div>
+<div class="line">      <span class="keywordtype">int</span> x_{};</div>
+<div class="line">      <span class="keywordtype">int</span> y_{};</div>
+<div class="line">      Item* item_{};</div>
+<div class="line">}</div>
+</div><!-- fragment --></li>
+<li>When reimplementing a virtual method, put the <code>virtual</code> and the <code>override</code> keywords in your method declaration.</li>
+<li>Only define private fields, never public or protected.</li>
+<li>All non-virtual methods that are simple and short should be declared inline. The method definition of inlined methods should appear after the class body: <div class="fragment"><div class="line"><span class="comment">// Wrong:</span></div>
+<div class="line"><span class="keyword">class </span>Cell</div>
+<div class="line">{</div>
+<div class="line">   <span class="keyword">public</span>:</div>
+<div class="line">      <span class="keywordtype">int</span> value()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> value_;}</div>
+<div class="line">   <span class="keyword">private</span>:</div>
+<div class="line">      <span class="keywordtype">int</span> value_;</div>
+<div class="line">}</div>
+<div class="line"></div>
+<div class="line"><span class="comment">// Correct:</span></div>
+<div class="line"><span class="keyword">class </span>Cell</div>
+<div class="line">{</div>
+<div class="line">   <span class="keyword">public</span>:</div>
+<div class="line">      <span class="keywordtype">int</span> value() <span class="keyword">const</span>;</div>
+<div class="line">   <span class="keyword">private</span>:</div>
+<div class="line">      <span class="keywordtype">int</span> value_;</div>
+<div class="line">}</div>
+<div class="line"></div>
+<div class="line"><span class="keyword">inline</span> <span class="keywordtype">int</span> Cell::value()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> value_;}</div>
+</div><!-- fragment --></li>
+<li>Wherever possible prefer to use classes provided by Qt over STL or other libraries.</li>
+<li>If you are defining new templates make sure those work across platforms and shared object boundaries.</li>
+</ul>
+</li>
+<li><b>Formatting</b> <ul>
 <li>Always use TABs for indentation and never spaces. Configure your editor to display a tab as 3 spaces.</li>
 <li>Lines should be shorter than 120 characters. A TAB counts as 3 characters.</li>
-<li>Use exceptions and RTTI where appropriate.</li>
-<li>Make use of C++11 features.</li>
-<li>When reimplementing a virtual method, put the virtual and the override keywords in your method declaration.</li>
-<li>If the body of an if, while, or for is a single statement do not use curly braces around it. If the statement is short and simple put it on the same line, otherwise put it on a newline.</li>
+<li>If the body of an <code>if</code>, <code>while</code>, or <code>for</code> is a single statement, do not use curly braces around it. If the condition and statement fit nicely on the same line write them on one line, otherwise put the statement on a newline: <div class="fragment"><div class="line"><span class="comment">// Wrong:</span></div>
+<div class="line"><span class="keywordflow">if</span> (foo)</div>
+<div class="line">{</div>
+<div class="line">   bar();</div>
+<div class="line">}</div>
+<div class="line"></div>
+<div class="line"><span class="keywordflow">if</span> (aMoreComplicatedOrMultilineCondition) anExtremelyLongAndComplicatedStatement();</div>
+<div class="line"></div>
+<div class="line"><span class="comment">// Correct:</span></div>
+<div class="line"><span class="keywordflow">if</span> (foo) bar();</div>
+<div class="line"></div>
+<div class="line"><span class="keywordflow">if</span> (aMoreComplicatedOrMultilineCondition)</div>
+<div class="line">   anExtremelyLongAndComplicatedStatement();</div>
+</div><!-- fragment --></li>
+<li>Curly braces should appear in a line on their own, except when using lambdas: <div class="fragment"><div class="line"><span class="comment">// Wrong:</span></div>
+<div class="line"><span class="keywordflow">if</span> (foo) {</div>
+<div class="line">}</div>
+<div class="line"></div>
+<div class="line"><span class="comment">// Correct:</span></div>
+<div class="line"><span class="keywordflow">if</span> (foo)</div>
+<div class="line">{</div>
+<div class="line">}</div>
+</div><!-- fragment --></li>
+<li>Leave a single space after a <code>//</code> comment delimiter.</li>
+<li>For pointers or references, do not leave any space between the type and '*' or '&amp;', but write a single space between the '*' or '&amp;' and the variable name: <div class="fragment"><div class="line">QString&amp; string;</div>
+<div class="line">Item* item;</div>
+<div class="line"><span class="keyword">const</span> QString&amp; message;</div>
+</div><!-- fragment --></li>
+<li>Field names should follow the Qt naming conventions and additionally should end with an underscore: <div class="fragment"><div class="line"><span class="keyword">private</span>:</div>
+<div class="line">   <span class="keywordtype">int</span> length_;</div>
+<div class="line">   Item* myFirstItem_;</div>
+</div><!-- fragment --></li>
+<li>Private and protected methods do not end with an underscore.</li>
+<li>When declaring a class, list the members in the following order starting from the top: <code>public</code>, <code>protected</code>, <code>private</code>.</li>
+<li>In the <code></code>.cpp file defining a class, define all members in the following order starting from the top: <code>static</code>, <code>constructors</code>, <code>destructors</code>, <code>the rest</code></li>
+</ul>
+</li>
 </ul>
 <p>Of course you can always have a look at the existing code in case you are not sure about something. If you feel like some additional clarifications should be added here, let Dimitar know.</p>
 <h1><a class="anchor" id="committing"></a>
@@ -116,12 +204,11 @@ Commit policy</h1>
 <li>A single commit should focus on a single bug fix, or a single aspect of an enhancement. Unrelated changes should be committed separately.</li>
 <li>Do not squash multiple commits into one. A bug fix or enhancement should have its own branch that contains all necessary commits.</li>
 <li>Always include a commit message which should at a minimum contain at least a title</li>
-<li>Commit titles should be limited to 72 characters and use the present tense to indicate what the commit does:<ul>
-<li>Right: <pre class="fragment">Fix a bug where typing 42 would crash Envision</pre></li>
-<li>Wrong: <pre class="fragment">Fixes a bug where typing 42 would crash Envision</pre> <pre class="fragment">Fixed a bug where typing 42 would crash Envision</pre></li>
-</ul>
-</li>
-<li>If the commit title does not sufficiently describe the commit, include a more detailed commit message. </li>
+<li>Commit titles should be limited to 72 characters and use the present tense to indicate what the commit does: <pre class="fragment">Right: Fix a bug where typing 42 would crash Envision
+Wrong: Fixes a bug where typing 42 would crash Envision
+Wrong: Fixed a bug where typing 42 would crash Envision
+</pre></li>
+<li>If the commit title does not sufficiently describe the commit, also include a more detailed commit description. </li>
 </ul>
 </div></div><!-- contents -->
 <!-- start footer part -->
