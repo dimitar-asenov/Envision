@@ -17,6 +17,7 @@
 
 
 #include "clang/AST/ASTConsumer.h"
+#include "clang/AST/ASTContext.h"
 #include "clang/AST/RecursiveASTVisitor.h"
 #include "clang/Basic/Diagnostic.h"
 #include "clang/Basic/FileManager.h"
@@ -38,7 +39,7 @@ using clang::RecursiveASTVisitor;
 class ClangAstVisitor : public RecursiveASTVisitor <ClangAstVisitor>
 {
 public:
-    ClangAstVisitor(Model::Model *model, OOModel::Project *currentProject);
+    ClangAstVisitor(clang::ASTContext *context, Model::Model *model, OOModel::Project *currentProject);
     bool VisitStmt(clang::Stmt *S);
     bool VisitDecl(clang::Decl *D);
     bool VisitCXXRecordDecl(clang::CXXRecordDecl *rd);
@@ -47,6 +48,7 @@ public:
 protected:
     OOModel::Project* currentProject_;
     Model::Model* currentModel_;
+    clang::ASTContext* astContext_;
 
 };
 

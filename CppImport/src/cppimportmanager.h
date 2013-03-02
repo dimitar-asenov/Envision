@@ -3,6 +3,7 @@
 
 //ENVISION - CPPIMPORT
 #include "clangastconsumer.h"
+#include "clangastfrontendactions.h"
 
 //ENVISION
 #include "OOModel/src/allOOModelNodes.h"
@@ -19,6 +20,8 @@
 
 #include "clang/Basic/IdentifierTable.h"
 #include "clang/Basic/Builtins.h"
+
+#include "clang/Tooling/Tooling.h"
 
 //LLVM
 //#include "llvm/ADT/IntrusiveRefCntPtr.h"
