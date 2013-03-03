@@ -6,11 +6,10 @@ using namespace clang;
 using namespace llvm;
 using namespace OOModel;
 
-ClangAstVisitor::ClangAstVisitor(ASTContext *context, Model::Model* model, OOModel::Project* currentProject = nullptr)
+ClangAstVisitor::ClangAstVisitor(Model::Model* model, OOModel::Project* currentProject = nullptr)
 {
     this->currentModel_ = model;
     this->currentProject_ = currentProject;
-    this->astContext_ = context;
 }
 
 bool ClangAstVisitor::VisitStmt(clang::Stmt *S)

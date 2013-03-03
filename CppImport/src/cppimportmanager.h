@@ -1,9 +1,16 @@
 #ifndef CPPIMPORTMANAGER_H
 #define CPPIMPORTMANAGER_H
 
+
+#include <vector>
+#include <string>
+#include <iostream>
+
 //ENVISION - CPPIMPORT
 #include "clangastconsumer.h"
 #include "clangastfrontendactions.h"
+#include "clangconsumerfactory.h"
+#include "helpersingleton.h"
 
 //ENVISION
 #include "OOModel/src/allOOModelNodes.h"
@@ -22,6 +29,7 @@
 #include "clang/Basic/Builtins.h"
 
 #include "clang/Tooling/Tooling.h"
+#include "clang/Tooling/CommonOptionsParser.h"
 
 //LLVM
 //#include "llvm/ADT/IntrusiveRefCntPtr.h"
@@ -42,6 +50,7 @@ protected:
     clang::CompilerInstance compilerInstance_;
     ClangAstConsumer *astConsumer_;
     clang::ASTContext *astContext_;
+    clang::tooling::ClangTool *myTool_;
 
 };
 

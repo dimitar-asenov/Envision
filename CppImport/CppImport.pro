@@ -52,11 +52,13 @@ HEADERS += src/precompiled.h \
     src/clangastvisitor.h \
     src/clangastconsumer.h \
     src/cppimportmanager.h \
-    src/clangastfrontendactions.h
+    src/clangastfrontendactions.h \
+    src/clangconsumerfactory.h
 SOURCES += src/CppImportException.cpp \
 	src/cppimport.cpp \
 	test/SimpleTest.cpp \
     src/clangastvisitor.cpp \
     src/clangastconsumer.cpp \
     src/cppimportmanager.cpp \
-    src/clangastfrontendactions.cpp
+    src/clangastfrontendactions.cpp \
+    src/clangconsumerfactory.cpp

@@ -19,7 +19,8 @@ public:
     virtual clang::ASTConsumer *CreateASTConsumer(
       clang::CompilerInstance &Compiler, llvm::StringRef InFile) {
         InFile.str();
-      return new ClangAstConsumer(&Compiler.getASTContext(),model_,project_);
+        Compiler.getASTConsumer();
+      return new ClangAstConsumer(model_,project_);
     }
 
 private:

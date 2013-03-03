@@ -3,9 +3,9 @@
 
 using namespace clang;
 
-ClangAstConsumer::ClangAstConsumer(ASTContext *context, Model::Model *model, OOModel::Project *currentProject)
+ClangAstConsumer::ClangAstConsumer(Model::Model *model, OOModel::Project *currentProject)
 {
-    this->astVisitor_ = new ClangAstVisitor(context, model, currentProject);
+    this->astVisitor_ = new ClangAstVisitor(model, currentProject);
 }
 
 bool ClangAstConsumer::HandleTopLevelDecl(DeclGroupRef D)
@@ -14,7 +14,7 @@ bool ClangAstConsumer::HandleTopLevelDecl(DeclGroupRef D)
 
     for (; iterator != D.end(); ++iterator)
     {
-        astVisitor_->TraverseDecl(*iterator);
+//        astVisitor_->TraverseDecl(*iterator);
     }
     return true; // keep going
 }
