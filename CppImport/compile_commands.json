@@ -1,0 +1,5 @@
+[
+  { "directory": "/home/luke/BachelorThesis/TestClang",
+    "command": "/usr/bin/clang++ -Irelative -c -o test.o test.cpp",
+    "file": "test.cpp" }
+] 
