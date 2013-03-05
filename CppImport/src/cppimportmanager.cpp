@@ -7,22 +7,32 @@ CppImportManager::CppImportManager()
     testModel_->beginModification(testProject_, "Adding a project");
     testProject_->setName("NewProject");
     testModel_->endModification();
-
-    //CLANG SETUP
-    std::vector<std::string> Sources;
-    Sources.push_back("/home/luke/BachelorThesis/Envision/CppImport/test.cpp");
-    std::string Error = "DATABASE NOT OK";
-    clang::tooling::CompilationDatabase* compDB = NULL;
-    compDB = clang::tooling::CompilationDatabase::loadFromDirectory("/home/luke/BachelorThesis/Envision/CppImport",Error);
-
-    if(!compDB)
-        std::cout << "ERROR NO COMPDB" << std::endl;
-    myTool_ = new clang::tooling::ClangTool(*compDB,Sources);
 }
 
-void CppImportManager::importSrcFile(QString fileName)
+void CppImportManager::setSrcFile(QString fileName)
 {
-    fileName.at(1);
+    sources_.push_back(fileName.toStdString());
+}
+
+bool CppImportManager::setCompilationDbPath(QString path)
+{
+    std::string Error = "DATABASE NOT OK";
+    compilationDB_ = nullptr;
+    compilationDB_ = clang::tooling::CompilationDatabase::loadFromDirectory(path.toAscii().data(),Error);
+
+    if(!compilationDB_)
+    {
+        std::cout << "ERROR NO COMPDB" << std::endl;
+        return false;
+    }
+    return true;
+}
+
+void CppImportManager::visualizeSrcFile()
+{
+    myTool_ = new clang::tooling::ClangTool(*compilationDB_,sources_);
+    ClangConsumerFactory* myFac = new ClangConsumerFactory(testModel_,testProject_);
+    myTool_->run(clang::tooling::newFrontendActionFactory<ClangConsumerFactory>(myFac));
 }
 
 Model::Model* CppImportManager::getModel()
@@ -33,14 +43,4 @@ Model::Model* CppImportManager::getModel()
 OOModel::Project* CppImportManager::getProject()
 {
     return this->testProject_;
-}
-
-void CppImportManager::parseFile()
-{
-    //    clang::tooling::runToolOnCode(new ClangAstFrontendActions(testModel_,testProject_), "class Test{};");
-    //    ClangAstFrontendActions *cafa = new ClangAstFrontendActions(testModel_,testProject_);
-    //    clang::tooling::FrontendActionFactory* frontendActFact = clang::tooling::newFrontendActionFactory<ClangAstFrontendActions>();
-    ////    frontendActFact->
-    ClangConsumerFactory* myFac = new ClangConsumerFactory(testModel_,testProject_);
-    myTool_->run(clang::tooling::newFrontendActionFactory<ClangConsumerFactory>(myFac));
 }

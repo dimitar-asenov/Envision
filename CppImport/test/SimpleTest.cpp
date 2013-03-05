@@ -285,8 +285,9 @@ TEST(CppImport, SimpleTest)
 //    else if (cl) top_level = cl;
 //    else top_level = divbysix;
     CppImportManager manager;
-    manager.importSrcFile("/home/luke/BachelorThesis/TestClang/test.cpp");
-    manager.parseFile();
+    manager.setSrcFile("/home/luke/BachelorThesis/Envision/CppImport/test.cpp");
+    manager.setCompilationDbPath("/home/luke/BachelorThesis/Envision/CppImport");
+    manager.visualizeSrcFile();
 
     Model::Node *top_level = manager.getProject();
     Model::Model* model = manager.getModel();

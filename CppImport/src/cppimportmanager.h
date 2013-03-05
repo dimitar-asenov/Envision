@@ -37,11 +37,11 @@ class CppImportManager
 {
 public:
     CppImportManager();
-    void importSrcFile(QString fileName);
+    void setSrcFile(QString fileName);
+    bool setCompilationDbPath(QString path);
+    void visualizeSrcFile();
     Model::Model* getModel();
     OOModel::Project* getProject();
-    void parseFile();
-
 
 protected:
     Model::Model* testModel_;
@@ -50,6 +50,8 @@ protected:
     ClangAstConsumer* astConsumer_;
     clang::ASTContext* astContext_;
     clang::tooling::ClangTool* myTool_;
+    clang::tooling::CompilationDatabase* compilationDB_;
+    std::vector<std::string> sources_;
 
 };
 
