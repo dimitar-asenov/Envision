@@ -1,0 +1,4 @@
+class Testing {
+public:
+    Testing(){}
+};
