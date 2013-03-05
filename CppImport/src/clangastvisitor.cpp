@@ -10,6 +10,8 @@ ClangAstVisitor::ClangAstVisitor(Model::Model* model, OOModel::Project* currentP
 {
     this->currentModel_ = model;
     this->currentProject_ = currentProject;
+    currentClass_ = nullptr;
+    currentMethod_ = nullptr;
 }
 
 bool ClangAstVisitor::VisitStmt(clang::Stmt* S)
@@ -63,6 +65,19 @@ bool ClangAstVisitor::VisitCXXRecordDecl(CXXRecordDecl* rd)
 bool ClangAstVisitor::VisitVarDecl(VarDecl* vd)
 {
     std::cout << "Visiting VarDecl " << vd->getName().str() <<std::endl;
+    if(currentMethod_)
+    {
+        VariableDeclaration* varDecl = new VariableDeclaration();
+        varDecl->setName(QString::fromStdString(vd->getName().str()));
+        if(vd->getType().getTypePtr()->isIntegerType())
+        {
+            varDecl->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
+        }
+
+        currentMethod_->beginModification("Adding a Variable");
+        currentMethod_->items()->append(varDecl);
+        currentMethod_->endModification();
+    }
     return true;
 }
 
@@ -95,10 +110,19 @@ bool ClangAstVisitor::VisitFunctionDecl(FunctionDecl* funcdecl)
     Method* method = new Method();
 
     method->setName(QString::fromStdString(funcdecl->getName().str()));
+
+    if(funcdecl->getResultType().getTypePtr()->isIntegerType())
+    {
+            FormalResult* methodResult = new FormalResult();
+            methodResult->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
+            method->results()->append(methodResult);
+    }
 //    method->setArguments();
     currentClass_->beginModification("Adding a Method");
     currentClass_->methods()->append(method);
     currentClass_->endModification();
+
+    currentMethod_ = method;
 
     return true;
 }

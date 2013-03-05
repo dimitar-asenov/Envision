@@ -52,6 +52,8 @@ protected:
     Model::Model* currentModel_;
     clang::ASTContext* astContext_;
     OOModel::Class* currentClass_;
+    OOModel::Method* currentMethod_;
+    Model::Node* currentNode_;
 
 };
 
