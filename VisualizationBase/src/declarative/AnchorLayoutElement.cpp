@@ -83,7 +83,6 @@ AnchorLayoutElement* AnchorLayoutElement::put(PlaceEdge placeEdge, Element* plac
 
 void AnchorLayoutElement::computeSize(Item* item, int /*availableWidth*/, int /*availableHeight*/)
 {
-	// TODO: what to do with the additional size?
 	// compute size of each sub-element and set their position to (0, 0)
 	for (Element* element : elementList_)
 	{
@@ -130,7 +129,6 @@ void AnchorLayoutElement::synchronizeWithItem(Item* item)
 
 bool AnchorLayoutElement::sizeDependsOnParent(const Item* /*item*/) const
 {
-	// TODO: implement sizeDependsOnParent
 	return false;
 }
 
@@ -221,14 +219,83 @@ void AnchorLayoutElement::addConstraint(QList<AnchorLayoutConstraint*>& constrai
 }
 
 int AnchorLayoutElement::placeElements(QList<AnchorLayoutConstraint*>& constraints,
-		AnchorLayoutConstraint::Orientation orientation, Item* /*item*/)
+		AnchorLayoutConstraint::Orientation orientation, Item* item)
 {
-	// place elements on axis
+	Q_ASSERT(orientation != AnchorLayoutConstraint::Orientation::Auto);
+	bool axisHasCircularDependencies = (orientation == AnchorLayoutConstraint::Orientation::Horizontal
+														&& horizontalHasCircularDependencies_)
+												|| (orientation == AnchorLayoutConstraint::Orientation::Vertical
+														&& verticalHasCircularDependencies_);
+
 	int minPos = 0;
+	QList<Element*> alreadyPlacedInThisRound;
+	QList<float> placedAtEdgePosition;
+
+	// first round of placing elements
 	for (AnchorLayoutConstraint* c : constraints)
 	{
-		int pos = c->execute(orientation);
+		if (alreadyPlacedInThisRound.contains(c->placeElement()))
+		{
+			int index = alreadyPlacedInThisRound.indexOf(c->placeElement());
+			float lastEdge = placedAtEdgePosition.at(index);
+			if (c->relativePlaceEdgePosition() < lastEdge)
+			{
+				c->execute(orientation);
+				placedAtEdgePosition[index] = c->relativePlaceEdgePosition();
+			}
+			else
+				c->execute(orientation, true, item);
+		}
+		else
+		{
+			c->execute(orientation);
+			alreadyPlacedInThisRound.append(c->placeElement());
+			placedAtEdgePosition.append(c->relativePlaceEdgePosition());
+		}
+		int pos = 0;
+		if (orientation == AnchorLayoutConstraint::Orientation::Horizontal)
+			pos = c->placeElement()->pos().x();
+		else // orientation == AnchorLayoutConstraint::Orientation::Vertical
+			pos = c->placeElement()->pos().y();
 		if (pos < minPos) minPos = pos;
+	}
+
+	if (axisHasCircularDependencies)
+	{
+		int maxIterations = 1000;
+		bool somethingChanged = true;
+		for (int i=0; (i<maxIterations) && somethingChanged; ++i)
+		{
+			somethingChanged = false;
+
+			for (AnchorLayoutConstraint* c : constraints)
+			{
+				if (alreadyPlacedInThisRound.contains(c->placeElement()))
+				{
+					int index = alreadyPlacedInThisRound.indexOf(c->placeElement());
+					float lastEdge = placedAtEdgePosition.at(index);
+					if (c->relativePlaceEdgePosition() < lastEdge)
+					{
+						somethingChanged = c->execute(orientation) || somethingChanged;
+						placedAtEdgePosition[index] = c->relativePlaceEdgePosition();
+					}
+					else
+						somethingChanged = c->execute(orientation, true, item) || somethingChanged;
+				}
+				else
+				{
+					somethingChanged = c->execute(orientation) || somethingChanged;
+					alreadyPlacedInThisRound.append(c->placeElement());
+					placedAtEdgePosition.append(c->relativePlaceEdgePosition());
+				}
+				int pos = 0;
+				if (orientation == AnchorLayoutConstraint::Orientation::Horizontal)
+					pos = c->placeElement()->pos().x();
+				else // orientation == AnchorLayoutConstraint::Orientation::Vertical
+					pos = c->placeElement()->pos().y();
+				if (pos < minPos) minPos = pos;
+			}
+		}
 	}
 
 	return minPos;
@@ -244,9 +311,33 @@ void AnchorLayoutElement::sortConstraints(QList<AnchorLayoutConstraint*>& constr
 	else if (orientation == AnchorLayoutConstraint::Orientation::Vertical && verticalHasCircularDependencies_)
 		return;
 
-	// find all constraints which have a fixed node that depends on nothing
+	qDebug() << constraints.length();
 	QList<AnchorLayoutConstraint*> sortedConstraints;
 	QList<Element*> elementQueue;
+
+	// pre-sort, such that a dependencies among constraints with equal placeElements are satisfied
+	for (auto c : constraints)
+		if (!elementQueue.contains(c->placeElement()))
+			elementQueue.append(c->placeElement());
+	for (auto e : elementQueue)
+	{
+		QList<AnchorLayoutConstraint*> placeElementConstraints;
+		for (auto c : constraints)
+			if (c->placeElement() == e)
+				placeElementConstraints.append(c);
+		if (placeElementConstraints.length() > 1)
+		qSort(placeElementConstraints.begin(), placeElementConstraints.end(),
+				[](AnchorLayoutConstraint* c1, AnchorLayoutConstraint* c2)
+				{return c1->relativePlaceEdgePosition() < c2->relativePlaceEdgePosition();});
+		for (auto c : placeElementConstraints)
+			sortedConstraints.append(c);
+	}
+	constraints = sortedConstraints;
+	sortedConstraints.clear();
+	elementQueue.clear();
+
+
+	// find all constraints which have a fixed node that depends on nothing
 	for (auto c1 : constraints)
 	{
 		bool dependsOnSomething = false;

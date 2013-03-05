@@ -29,6 +29,7 @@
 
 namespace Visualization {
 
+class Item;
 class Element;
 
 class AnchorLayoutConstraint {
@@ -37,10 +38,11 @@ class AnchorLayoutConstraint {
 		AnchorLayoutConstraint(float relativePlaceEdgePosition, Element* placeElement, int offset,
 				float relativeFixedEdgePosition, Element* fixedElement);
 		virtual ~AnchorLayoutConstraint();
-		int execute(Orientation orientation);
+		bool execute(Orientation orientation, bool stretchPlaceElement=false, Item* item=nullptr);
 		Element* placeElement() const;
 		Element* fixedElement() const;
 		bool dependsOn(AnchorLayoutConstraint* other, QList<AnchorLayoutConstraint*>& allConstraints);
+		float relativePlaceEdgePosition() const;
 
 	private:
 		float relativePlaceEdgePosition_{};
@@ -57,6 +59,10 @@ inline Element* AnchorLayoutConstraint::placeElement() const
 inline Element* AnchorLayoutConstraint::fixedElement() const
 {
 	return fixedElement_;
+}
+inline float AnchorLayoutConstraint::relativePlaceEdgePosition() const
+{
+	return relativePlaceEdgePosition_;
 }
 
 } /* namespace Visualization */

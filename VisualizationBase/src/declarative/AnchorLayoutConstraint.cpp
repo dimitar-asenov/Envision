@@ -25,6 +25,7 @@
  **********************************************************************************************************************/
 
 #include "AnchorLayoutConstraint.h"
+#include "../items/Item.h"
 #include "Element.h"
 
 namespace Visualization {
@@ -42,7 +43,7 @@ AnchorLayoutConstraint::~AnchorLayoutConstraint()
  * Calculates the position in the orientation axis of the element to be placed, assuming it's size was already
  * calculated, and the position on the orientation axis of the fixed element is already fixed.
  */
-int AnchorLayoutConstraint::execute(Orientation orientation)
+bool AnchorLayoutConstraint::execute(Orientation orientation, bool stretchPlaceElement, Item* item)
 {
 	Q_ASSERT(orientation != Orientation::Auto);
 
@@ -50,17 +51,73 @@ int AnchorLayoutConstraint::execute(Orientation orientation)
 	{
 		int edgePosition = fixedElement_->pos().x() + offset_ +
 									fixedElement_->size().width() * relativeFixedEdgePosition_;
-		int placeX = edgePosition - placeElement_->size().width() * relativePlaceEdgePosition_;
-		placeElement_->setPos(QPoint(placeX, placeElement_->pos().y()));
-		return placeX;
+		if (stretchPlaceElement)
+		{
+			Q_ASSERT(item != nullptr);
+			Q_ASSERT(placeElement_->sizeDependsOnParent(item));
+			Q_ASSERT(fixedElement_->sizeDependsOnParent(item));
+			int placeMaxSizeX = (edgePosition - placeElement_->pos().x()) * relativePlaceEdgePosition_;
+			if (placeElement_->size().width() < placeMaxSizeX)
+			{
+				placeElement_->computeSize(item, placeMaxSizeX, placeElement_->size().height());
+				return true;
+			}
+			else if (placeElement_->size().width() > placeMaxSizeX)
+			{
+				edgePosition += placeElement_->size().width() - placeMaxSizeX;
+				int newFixedElementSizeX = (edgePosition - fixedElement_->pos().x()) * relativeFixedEdgePosition_;
+				fixedElement_->computeSize(item, newFixedElementSizeX, fixedElement_->size().height());
+				return true;
+			}
+			return false;
+		}
+		else
+		{
+			int placeX = edgePosition - placeElement_->size().width() * relativePlaceEdgePosition_;
+			if (placeX == placeElement_->pos().x())
+				return false;
+			else
+			{
+				placeElement_->setPos(QPoint(placeX, placeElement_->pos().y()));
+				return true;
+			}
+		}
 	}
 	else // orientation == Orientation::Vertical
 	{
 		int edgePosition = fixedElement_->pos().y() + offset_ +
 									fixedElement_->size().height() * relativeFixedEdgePosition_;
-		int placeY = edgePosition - placeElement_->size().height() * relativePlaceEdgePosition_;
-		placeElement_->setPos(QPoint(placeElement_->pos().x(), placeY));
-		return placeY;
+		if (stretchPlaceElement)
+		{
+			Q_ASSERT(item != nullptr);
+			Q_ASSERT(placeElement_->sizeDependsOnParent(item));
+			Q_ASSERT(fixedElement_->sizeDependsOnParent(item));
+			int placeMaxSizeY = (edgePosition - placeElement_->pos().y()) * relativePlaceEdgePosition_;
+			if (placeElement_->size().height() < placeMaxSizeY)
+			{
+				placeElement_->computeSize(item, placeElement_->size().width(), placeMaxSizeY);
+				return true;
+			}
+			else if (placeElement_->size().height() > placeMaxSizeY)
+			{
+				edgePosition += placeElement_->size().height() - placeMaxSizeY;
+				int newFixedElementSizeY = (edgePosition - fixedElement_->pos().y()) * relativeFixedEdgePosition_;
+				fixedElement_->computeSize(item, fixedElement_->size().width(), newFixedElementSizeY);
+				return true;
+			}
+			return false;
+		}
+		else
+		{
+			int placeY = edgePosition - placeElement_->size().height() * relativePlaceEdgePosition_;
+			if (placeY == placeElement_->pos().y())
+				return false;
+			else
+			{
+				placeElement_->setPos(QPoint(placeElement_->pos().x(), placeY));
+				return true;
+			}
+		}
 	}
 }
 
