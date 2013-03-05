@@ -178,7 +178,7 @@ void GridLayoutElement::computeSize(Item* item, int availableWidth, int availabl
 	int totalHeight = 0;
 
 	// Compute grid width
-	for (int x = 0; x<numColumns_; ++x) totalWidth += widestInColumn[x];
+	for (auto columnWidth : widestInColumn) totalWidth += columnWidth;
 	if (numColumns_ > 0) totalWidth += leftMargin() + rightMargin();
 	if (numColumns_ > 1) totalWidth += spaceBetweenColumns_ * (numColumns_ - 1);
 
@@ -189,12 +189,12 @@ void GridLayoutElement::computeSize(Item* item, int availableWidth, int availabl
 	{
 		if (overallColumnStretchFactor_ > 0) // distribute the additional space according to the stretch factors
 			for (int x = 0; x<numColumns_; ++x)
-				widestInColumn[x] += additionalWidth / overallColumnStretchFactor_ * columnStretchFactors_[x];
+				widestInColumn[x] += std::floor(additionalWidth / overallColumnStretchFactor_ * columnStretchFactors_[x]);
 		totalWidth = availableWidth;
 	}
 
 	// Compute grid height
-	for (int y = 0; y<numRows_; ++y) totalHeight += tallestInRow[y];
+	for (auto rowHeight : tallestInRow) totalHeight += rowHeight;
 	if (numRows_ > 0) totalHeight += topMargin() + bottomMargin();
 	if (numRows_ > 1) totalHeight += spaceBetweenRows_ * (numRows_ - 1);
 
@@ -205,7 +205,7 @@ void GridLayoutElement::computeSize(Item* item, int availableWidth, int availabl
 	{
 		if (overallRowStretchFactor_ > 0) // distribute the additional space according to the stretch factors
 			for (int y = 0; y<numRows_; ++y)
-				tallestInRow[y] += additionalHeight / overallRowStretchFactor_ * rowStretchFactors_[y];
+				tallestInRow[y] += std::floor(additionalHeight / overallRowStretchFactor_ * rowStretchFactors_[y]);
 		totalHeight = availableHeight;
 	}
 
@@ -229,6 +229,7 @@ void GridLayoutElement::computeSize(Item* item, int availableWidth, int availabl
 					int localAvailableHeight = 0;
 					for (int row=y; row<y+spanGrid_[x][y].second; row++)
 						localAvailableHeight += tallestInRow[row];
+
 					element->computeSize(item, localAvailableWidth, localAvailableHeight);
 				}
 			}
@@ -312,10 +313,10 @@ bool GridLayoutElement::sizeDependsOnParent(const Item*) const
 void GridLayoutElement::computeOverallStretchFactors()
 {
 	overallColumnStretchFactor_ = 0;
-	for(int x=0; x<numColumns_; ++x) overallColumnStretchFactor_ += columnStretchFactors_[x];
+	for(auto stretchFactor : columnStretchFactors_) overallColumnStretchFactor_ += stretchFactor;
 
 	overallRowStretchFactor_ = 0;
-	for(int y=0; y<numRows_; ++y) overallRowStretchFactor_ += rowStretchFactors_[y];
+	for(auto stretchFactor : rowStretchFactors_) overallRowStretchFactor_ += stretchFactor;
 }
 
 void GridLayoutElement::adjustSize(int containColumn, int containRow)
@@ -394,6 +395,8 @@ void GridLayoutElement::adjustSize(int containColumn, int containRow)
 				newRowStretchFactors[y] = rowStretchFactors_[y];
 			rowStretchFactors_ = newRowStretchFactors;
 		}
+
+		computeOverallStretchFactors();
 
 		// set new grid size
 		numColumns_ = newNumColumns;
