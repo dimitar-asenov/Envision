@@ -8,18 +8,9 @@ CppImportManager::CppImportManager()
     testProject_->setName("NewProject");
     testModel_->endModification();
 
-
-
+    //CLANG SETUP
     std::vector<std::string> Sources;
     Sources.push_back("/home/luke/BachelorThesis/Envision/CppImport/test.cpp");
-
-    //    int i = 3;
-    //    const char *argv[4];
-    //    argv[0] = "clang++";
-    //    argv[1] = "-cc1";
-    //    argv[2] = "/home/luke/BachelorThesis/TestClang/test.cpp";
-    //    argv[3] = NULL;
-    //    clang::tooling::CommonOptionsParser optionsParser(i,argv);
     std::string Error = "DATABASE NOT OK";
     clang::tooling::CompilationDatabase* compDB = NULL;
     compDB = clang::tooling::CompilationDatabase::loadFromDirectory("/home/luke/BachelorThesis/Envision/CppImport",Error);
@@ -34,12 +25,12 @@ void CppImportManager::importSrcFile(QString fileName)
     fileName.at(1);
 }
 
-Model::Model *CppImportManager::getModel()
+Model::Model* CppImportManager::getModel()
 {
     return this->testModel_;
 }
 
-OOModel::Project *CppImportManager::getProject()
+OOModel::Project* CppImportManager::getProject()
 {
     return this->testProject_;
 }

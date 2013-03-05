@@ -39,11 +39,11 @@ using clang::RecursiveASTVisitor;
 class ClangAstVisitor : public RecursiveASTVisitor <ClangAstVisitor>
 {
 public:
-    ClangAstVisitor(Model::Model *model, OOModel::Project *currentProject);
-    bool VisitStmt(clang::Stmt *S);
-    bool VisitDecl(clang::Decl *D);
-    bool VisitCXXRecordDecl(clang::CXXRecordDecl *rd);
-    bool VisitVarDecl(clang::VarDecl *vd);
+    ClangAstVisitor(Model::Model* model, OOModel::Project* currentProject);
+    bool VisitStmt(clang::Stmt* S);
+    bool VisitDecl(clang::Decl* D);
+    bool VisitCXXRecordDecl(clang::CXXRecordDecl* rd);
+    bool VisitVarDecl(clang::VarDecl* vd);
     bool VisitFieldDecl(clang::FieldDecl* fd);
     bool VisitFunctionDecl(clang::FunctionDecl* funcdecl);
 

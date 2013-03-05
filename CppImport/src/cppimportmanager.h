@@ -38,18 +38,18 @@ class CppImportManager
 public:
     CppImportManager();
     void importSrcFile(QString fileName);
-    Model::Model *getModel();
-    OOModel::Project *getProject();
+    Model::Model* getModel();
+    OOModel::Project* getProject();
     void parseFile();
 
 
 protected:
-    Model::Model *testModel_;
-    OOModel::Project *testProject_;
+    Model::Model* testModel_;
+    OOModel::Project* testProject_;
     clang::CompilerInstance compilerInstance_;
-    ClangAstConsumer *astConsumer_;
-    clang::ASTContext *astContext_;
-    clang::tooling::ClangTool *myTool_;
+    ClangAstConsumer* astConsumer_;
+    clang::ASTContext* astContext_;
+    clang::tooling::ClangTool* myTool_;
 
 };
 

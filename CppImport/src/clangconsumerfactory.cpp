@@ -5,7 +5,7 @@ ClangConsumerFactory::ClangConsumerFactory(Model::Model *model, OOModel::Project
 {
 }
 
-clang::ASTConsumer *ClangConsumerFactory::newASTConsumer()
+clang::ASTConsumer* ClangConsumerFactory::newASTConsumer()
 {
     return new ClangAstConsumer(model_,project_);
 }
