@@ -291,6 +291,8 @@ TEST(CppImport, SimpleTest)
     Model::Node *top_level = manager.getProject();
     Model::Model* model = manager.getModel();
 
+    QDir::setCurrent(qApp->applicationDirPath());
+
 
 
     VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(top_level));

@@ -11,7 +11,7 @@ CppImportManager::CppImportManager()
 
 
     std::vector<std::string> Sources;
-    Sources.push_back("/home/luke/BachelorThesis/TestClang/test.cpp");
+    Sources.push_back("/home/luke/BachelorThesis/Envision/CppImport/test.cpp");
 
     //    int i = 3;
     //    const char *argv[4];
@@ -22,7 +22,7 @@ CppImportManager::CppImportManager()
     //    clang::tooling::CommonOptionsParser optionsParser(i,argv);
     std::string Error = "DATABASE NOT OK";
     clang::tooling::CompilationDatabase* compDB = NULL;
-    compDB = clang::tooling::CompilationDatabase::loadFromDirectory("/home/luke/BachelorThesis/Envision/DebugBuild",Error);
+    compDB = clang::tooling::CompilationDatabase::loadFromDirectory("/home/luke/BachelorThesis/Envision/CppImport",Error);
 
     if(!compDB)
         std::cout << "ERROR NO COMPDB" << std::endl;

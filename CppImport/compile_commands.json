@@ -1,5 +1,5 @@
 [
-  { "directory": "/home/luke/BachelorThesis/TestClang",
+  { "directory": "/home/luke/BachelorThesis/Envision/CppImport",
     "command": "/usr/bin/clang++ -Irelative -c -o test.o test.cpp",
     "file": "test.cpp" }
 ] 

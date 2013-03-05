@@ -51,6 +51,7 @@
 // plug-ins which depend on this one will not include these headers.
 
 // add clang here
+#include <QtCore/QDir>
 
 #endif
 
