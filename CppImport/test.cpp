@@ -11,7 +11,9 @@ public:
 
 
 class Another {
-
+    bool aBoolVar;
+    void aVoidFunc(){
+        bool aNotherBoolVar;};
 };
 
 

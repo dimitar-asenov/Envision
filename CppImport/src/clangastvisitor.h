@@ -4,6 +4,8 @@
 
 #include <iostream>
 
+#include "cppimportutilities.h"
+
 //ENVISION
 #include "OOModel/src/allOOModelNodes.h"
 
@@ -45,7 +47,7 @@ public:
     bool VisitCXXRecordDecl(clang::CXXRecordDecl* rd);
     bool VisitVarDecl(clang::VarDecl* vd);
     bool VisitFieldDecl(clang::FieldDecl* fd);
-    bool VisitFunctionDecl(clang::FunctionDecl* funcdecl);
+    bool VisitCXXMethodDecl(clang::CXXMethodDecl* methotDecl);
 
 protected:
     OOModel::Project* currentProject_;

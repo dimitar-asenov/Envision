@@ -51,7 +51,6 @@ bool ClangAstVisitor::VisitCXXRecordDecl(CXXRecordDecl* rd)
                 currentProject_->classes()->append(ooClass);
             }
 
-            //TODO is name correct?
             ooClass->setName(QString::fromStdString(recDecl->getName().str()));
 
             currentModel_->endModification();
@@ -69,10 +68,9 @@ bool ClangAstVisitor::VisitVarDecl(VarDecl* vd)
     {
         VariableDeclaration* varDecl = new VariableDeclaration();
         varDecl->setName(QString::fromStdString(vd->getName().str()));
-        if(vd->getType().getTypePtr()->isIntegerType())
-        {
-            varDecl->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
-        }
+
+        Expression* type = CppImportUtilities::convertClangType(vd->getType());
+        if(type) varDecl->setVarType(type);
 
         currentMethod_->beginModification("Adding a Variable");
         currentMethod_->items()->append(varDecl);
@@ -85,15 +83,10 @@ bool ClangAstVisitor::VisitFieldDecl(FieldDecl* fd)
 {
     std::cout << "Visiting FieldDecl " << fd->getName().str() << std::endl;
 
-    Field* field = nullptr;
+    Field* field = new Field();
 
-    field = new Field();
-
-    //TODO HOW TO SUPPORT ALL KINDS OF TYPES
-    if(fd->getType().getTypePtr()->isIntegerType())
-    {
-        field->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
-    }
+    Expression* type = CppImportUtilities::convertClangType(fd->getType());
+    if(type) field->setTypeExpression(type);
     field->setName(QString::fromStdString(fd->getName().str()));
     currentClass_->beginModification("Adding a Field");
     currentClass_->fields()->append(field);
@@ -101,23 +94,27 @@ bool ClangAstVisitor::VisitFieldDecl(FieldDecl* fd)
     return true;
 }
 
-bool ClangAstVisitor::VisitFunctionDecl(FunctionDecl* funcdecl)
+bool ClangAstVisitor::VisitCXXMethodDecl(CXXMethodDecl *methodDecl)
 {
-    if(isa<CXXConstructorDecl>(funcdecl))
+    if(isa<CXXConstructorDecl>(methodDecl))
         return true;
-    std::cout << "Visiting FunctionDecl " << funcdecl->getName().str() << std::endl;
+    std::cout << "Visiting FunctionDecl " << methodDecl->getName().str() << std::endl;
 
     Method* method = new Method();
 
-    method->setName(QString::fromStdString(funcdecl->getName().str()));
+    method->setName(QString::fromStdString(methodDecl->getName().str()));
 
-    if(funcdecl->getResultType().getTypePtr()->isIntegerType())
+    Expression* restype = CppImportUtilities::convertClangType(methodDecl->getResultType());
+    if(restype)
     {
             FormalResult* methodResult = new FormalResult();
-            methodResult->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
+            methodResult->setTypeExpression(restype);
             method->results()->append(methodResult);
     }
-//    method->setArguments();
+
+
+
+    //TODO HANDLE ARGUMENTS
     currentClass_->beginModification("Adding a Method");
     currentClass_->methods()->append(method);
     currentClass_->endModification();

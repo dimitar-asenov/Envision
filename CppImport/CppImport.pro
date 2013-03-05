@@ -53,7 +53,8 @@ HEADERS += src/precompiled.h \
     src/clangastconsumer.h \
     src/cppimportmanager.h \
     src/clangastfrontendactions.h \
-    src/clangconsumerfactory.h
+    src/clangconsumerfactory.h \
+    src/cppimportutilities.h
 SOURCES += src/CppImportException.cpp \
 	src/cppimport.cpp \
 	test/SimpleTest.cpp \
@@ -61,4 +62,5 @@ SOURCES += src/CppImportException.cpp \
     src/clangastconsumer.cpp \
     src/cppimportmanager.cpp \
     src/clangastfrontendactions.cpp \
-    src/clangconsumerfactory.cpp
+    src/clangconsumerfactory.cpp \
+    src/cppimportutilities.cpp
