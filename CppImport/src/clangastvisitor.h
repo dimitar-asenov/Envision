@@ -45,6 +45,7 @@ public:
     bool VisitCXXRecordDecl(clang::CXXRecordDecl *rd);
     bool VisitVarDecl(clang::VarDecl *vd);
     bool VisitFieldDecl(clang::FieldDecl* fd);
+    bool VisitFunctionDecl(clang::FunctionDecl* funcdecl);
 
 protected:
     OOModel::Project* currentProject_;

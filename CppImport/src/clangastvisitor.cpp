@@ -94,7 +94,7 @@ bool ClangAstVisitor::VisitFieldDecl(FieldDecl *fd)
     std::cout << "Visiting FieldDecl " << fd->getName().str() << std::endl;
 
     Field* field = nullptr;
-    currentClass_->beginModification("Adding a Field");
+
     field = new Field();
 
     //TODO HOW TO SUPPORT ALL KINDS OF TYPES
@@ -103,7 +103,25 @@ bool ClangAstVisitor::VisitFieldDecl(FieldDecl *fd)
         field->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
     }
     field->setName(QString::fromStdString(fd->getName().str()));
+    currentClass_->beginModification("Adding a Field");
     currentClass_->fields()->append(field);
     currentClass_->endModification();
+    return true;
+}
+
+bool ClangAstVisitor::VisitFunctionDecl(FunctionDecl *funcdecl)
+{
+    if(isa<CXXConstructorDecl>(funcdecl))
+        return true;
+    std::cout << "Visiting FunctionDecl " << funcdecl->getName().str() << std::endl;
+
+    Method* method = new Method();
+
+    method->setName(QString::fromStdString(funcdecl->getName().str()));
+//    method->setArguments();
+    currentClass_->beginModification("Adding a Method");
+    currentClass_->methods()->append(method);
+    currentClass_->endModification();
+
     return true;
 }
