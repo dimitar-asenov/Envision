@@ -31,6 +31,11 @@ bool CppImportManager::setCompilationDbPath(QString path)
 void CppImportManager::visualizeSrcFile()
 {
     myTool_ = new clang::tooling::ClangTool(*compilationDB_,sources_);
+
+//    ClangPPFrontendAction* myPP = new ClangPPFrontendAction(testModel_,testProject_);
+    myTool_->run(clang::tooling::newFrontendActionFactory<ClangPPFrontendAction>());
+
+
     ClangConsumerFactory* myFac = new ClangConsumerFactory(testModel_,testProject_);
     myTool_->run(clang::tooling::newFrontendActionFactory<ClangConsumerFactory>(myFac));
 }
