@@ -10,7 +10,6 @@
 #include "clangastconsumer.h"
 #include "clangastfrontendactions.h"
 #include "clangconsumerfactory.h"
-#include "helpersingleton.h"
 
 //ENVISION
 #include "OOModel/src/allOOModelNodes.h"
