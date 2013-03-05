@@ -112,9 +112,16 @@ bool ClangAstVisitor::VisitCXXMethodDecl(CXXMethodDecl *methodDecl)
             method->results()->append(methodResult);
     }
 
+    clang::FunctionDecl::param_const_iterator it = methodDecl->param_begin();
+    for(;it != methodDecl->param_end();++it)
+    {
+        FormalArgument* arg = new FormalArgument();
+        arg->setName(QString::fromStdString((*it)->getName().str()));
+        Expression* type = CppImportUtilities::convertClangType((*it)->getType());
+        if(type) arg->setTypeExpression(type);
+        method->arguments()->append(arg);
+    }
 
-
-    //TODO HANDLE ARGUMENTS
     currentClass_->beginModification("Adding a Method");
     currentClass_->methods()->append(method);
     currentClass_->endModification();

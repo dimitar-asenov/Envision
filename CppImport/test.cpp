@@ -4,7 +4,7 @@ class Testing {
 public:
     int i;
     Testing(){}
-    int myFunction(){
+    int myFunction(int argument1, bool argument2){
         int k;
         return 0;}
 };
