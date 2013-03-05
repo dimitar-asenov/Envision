@@ -44,11 +44,13 @@ public:
     bool VisitDecl(clang::Decl *D);
     bool VisitCXXRecordDecl(clang::CXXRecordDecl *rd);
     bool VisitVarDecl(clang::VarDecl *vd);
+    bool VisitFieldDecl(clang::FieldDecl* fd);
 
 protected:
     OOModel::Project* currentProject_;
     Model::Model* currentModel_;
     clang::ASTContext* astContext_;
+    OOModel::Class* currentClass_;
 
 };
 

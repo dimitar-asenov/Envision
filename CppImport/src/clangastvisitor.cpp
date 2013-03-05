@@ -76,6 +76,8 @@ bool ClangAstVisitor::VisitCXXRecordDecl(CXXRecordDecl *rd)
             ooClass->setName(QString::fromStdString(recDecl->getName().str()));
 
             currentModel_->endModification();
+
+            currentClass_ = ooClass;
         }
     }
     return true;
@@ -84,5 +86,24 @@ bool ClangAstVisitor::VisitCXXRecordDecl(CXXRecordDecl *rd)
 bool ClangAstVisitor::VisitVarDecl(VarDecl *vd)
 {
     std::cout << "Visiting VarDecl " << vd->getName().str() <<std::endl;
+    return true;
+}
+
+bool ClangAstVisitor::VisitFieldDecl(FieldDecl *fd)
+{
+    std::cout << "Visiting FieldDecl " << fd->getName().str() << std::endl;
+
+    Field* field = nullptr;
+    currentClass_->beginModification("Adding a Field");
+    field = new Field();
+
+    //TODO HOW TO SUPPORT ALL KINDS OF TYPES
+    if(fd->getType().getTypePtr()->isIntegerType())
+    {
+        field->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
+    }
+    field->setName(QString::fromStdString(fd->getName().str()));
+    currentClass_->fields()->append(field);
+    currentClass_->endModification();
     return true;
 }
