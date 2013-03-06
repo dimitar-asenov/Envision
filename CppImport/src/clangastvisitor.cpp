@@ -37,7 +37,6 @@ bool ClangAstVisitor::VisitCXXRecordDecl(CXXRecordDecl* rd)
 {
     std::cout << "Visiting ClassDecl " << rd->getName().str() <<std::endl;
 
-    trMngr_->insertClass(rd);
 
     if(isa<CXXRecordDecl>(rd))
     {
@@ -58,6 +57,8 @@ bool ClangAstVisitor::VisitCXXRecordDecl(CXXRecordDecl* rd)
 
             currentModel_->endModification();
 
+            trMngr_->insertClass(rd,ooClass);
+
             currentClass_ = ooClass;
         }
     }
@@ -74,6 +75,8 @@ bool ClangAstVisitor::VisitVarDecl(VarDecl* vd)
 
         Expression* type = CppImportUtilities::convertClangType(vd->getType());
         if(type) varDecl->setVarType(type);
+
+        trMngr_->insertVar(vd,varDecl);
 
         currentMethod_->beginModification("Adding a Variable");
         currentMethod_->items()->append(varDecl);
@@ -126,18 +129,22 @@ bool ClangAstVisitor::VisitCXXMethodDecl(CXXMethodDecl *methodDecl)
     }
 
 
-    trMngr_->insertMethodDecl(methodDecl);
+    trMngr_->insertMethodDecl(methodDecl,method);
+
+    currentMethod_ = method;
+
+    VisitStmt(methodDecl->getBody());
 
     //decide where to add
 
 
     clang::CXXRecordDecl* parentF = methodDecl->getParent();
     std::cout << "-----FUNCTION-->   " << methodDecl->getName().str() << " ----PARENT ---> "<<parentF->getName().str() << std::endl;
-    currentClass_->beginModification("Adding a Method");
-    currentClass_->methods()->append(method);
-    currentClass_->endModification();
+//    currentClass_->beginModification("Adding a Method");
+//    currentClass_->methods()->append(method);
+//    currentClass_->endModification();
 
-    currentMethod_ = method;
+
 
     return true;
 }
