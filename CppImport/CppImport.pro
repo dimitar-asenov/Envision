@@ -55,7 +55,8 @@ HEADERS += src/precompiled.h \
     src/clangastfrontendactions.h \
     src/clangconsumerfactory.h \
     src/cppimportutilities.h \
-    src/clangppfrontendaction.h
+    src/clangppfrontendaction.h \
+    src/translatemanager.h
 SOURCES += src/CppImportException.cpp \
 	src/cppimport.cpp \
 	test/SimpleTest.cpp \
@@ -65,4 +66,5 @@ SOURCES += src/CppImportException.cpp \
     src/clangastfrontendactions.cpp \
     src/clangconsumerfactory.cpp \
     src/cppimportutilities.cpp \
-    src/clangppfrontendaction.cpp
+    src/clangppfrontendaction.cpp \
+    src/translatemanager.cpp

@@ -1,3 +1,3 @@
 class Header{
-  
+    int headerFunc();
 };

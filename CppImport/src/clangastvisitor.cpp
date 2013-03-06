@@ -122,6 +122,9 @@ bool ClangAstVisitor::VisitCXXMethodDecl(CXXMethodDecl *methodDecl)
         method->arguments()->append(arg);
     }
 
+    //decide where to add
+    clang::CXXRecordDecl* parentF = methodDecl->getParent();
+    std::cout << "-----FUNCTION-->   " << methodDecl->getName().str() << " ----PARENT ---> "<<parentF->getName().str() << std::endl;
     currentClass_->beginModification("Adding a Method");
     currentClass_->methods()->append(method);
     currentClass_->endModification();

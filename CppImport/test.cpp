@@ -26,3 +26,9 @@ class OneMore{
         return 100;
     }
 };
+
+int Header::headerFunc()
+{
+    int someVarInCPP;
+    return 0;
+}
