@@ -49,6 +49,8 @@ void DeclarativeTest::initializeForms()
 	Element* testItem2Element = item<Text, I>(&I::testItem2_, [](I*){return Text::itemStyles().get();});
 	Element* testItem3Element = item<Text, I>(&I::testItem3_, [](I*){return Text::itemStyles().get();});
 	Element* testItem4Element = item<Text, I>(&I::testItem4_, [](I*){return Text::itemStyles().get();});
+	Element* testItem5Element = item<Text, I>(&I::testItem5_, [](I*){return Text::itemStyles().get();});
+	Element* testItem6Element = item<Text, I>(&I::testItem6_, [](I*){return Text::itemStyles().get();});
 	Element* testNodeItemGeneralElement = item<I>(&I::testNodeItemGeneral_, [](I* v){return v->testNode_;});
 	Element* testNodeItemElement = item<VExtendable,I>(&I::testNodeItem_, [](I* v){return v->testNode_;},
 																		[](I*){return VExtendable::itemStyles().get();});
@@ -123,31 +125,8 @@ void DeclarativeTest::initializeForms()
 				->put(AnchorLayoutElement::PlaceEdge::RightOf, testItem4Element, 0.1, testNodeItemElement)
 				);
 
-	// Test 7: Anchor Layout with stretching Elements, vertically
-	Element* stretchableGrid1 = (new GridLayoutElement)
-										->setColumnStretchFactors(1)
-										->put(0, 0, testItemElement)
-										->setCellHorizontalAlignment(LayoutStyle::Alignment::Left)
-										->put(1, 0, testItem2Element)
-										->setCellHorizontalAlignment(LayoutStyle::Alignment::Center)
-										->put(2, 0, testItem3Element)
-										->setCellHorizontalAlignment(LayoutStyle::Alignment::Right);
-	Element* stretchableGrid2 = (new GridLayoutElement)
-										->setColumnStretchFactors(1)
-										->put(0, 0, testItem4Element)
-										->setCellHorizontalAlignment(LayoutStyle::Alignment::Left)
-										->put(1, 0, testNodeItemElement)
-										->setCellHorizontalAlignment(LayoutStyle::Alignment::Right);
-	addForm((new AnchorLayoutElement())
-				->put(AnchorLayoutElement::PlaceEdge::RightOf, stretchableGrid1,
-						AnchorLayoutElement::AtEdge::AtRightOf, stretchableGrid2)
-				->put(AnchorLayoutElement::PlaceEdge::LeftOf, stretchableGrid1,
-						AnchorLayoutElement::AtEdge::AtLeftOf, stretchableGrid2)
-				->put(AnchorLayoutElement::PlaceEdge::TopOf, stretchableGrid1, 20,
-						AnchorLayoutElement::FromEdge::Below, stretchableGrid2));
-
-	// Test 8: Anchor Layout with stretching Elements, horizontally
-	Element* stretchableGrid3 = (new GridLayoutElement)
+	// Test 7: Anchor Layout with stretching Elements, in order specification
+	Element* verticalGrid1 = (new GridLayoutElement)
 										->setRowStretchFactors(1)
 										->put(0, 0, testItemElement)
 										->setCellVerticalAlignment(LayoutStyle::Alignment::Top)
@@ -155,24 +134,62 @@ void DeclarativeTest::initializeForms()
 										->setCellVerticalAlignment(LayoutStyle::Alignment::Center)
 										->put(0, 2, testItem3Element)
 										->setCellVerticalAlignment(LayoutStyle::Alignment::Bottom);
-	Element* stretchableGrid4 = (new GridLayoutElement)
+	Element* verticalGrid2 = (new GridLayoutElement)
 										->setRowStretchFactors(1)
 										->put(0, 0, testItem4Element)
 										->setCellVerticalAlignment(LayoutStyle::Alignment::Top)
 										->put(0, 1, testNodeItemElement)
 										->setCellVerticalAlignment(LayoutStyle::Alignment::Bottom);
 	addForm((new AnchorLayoutElement())
-				->put(AnchorLayoutElement::PlaceEdge::TopOf, stretchableGrid3,
-						AnchorLayoutElement::AtEdge::AtTopOf, stretchableGrid4)
-				->put(AnchorLayoutElement::PlaceEdge::BottomOf, stretchableGrid3,
-						AnchorLayoutElement::AtEdge::AtBottomOf, stretchableGrid4)
-				->put(AnchorLayoutElement::PlaceEdge::LeftOf, stretchableGrid3, 20,
-						AnchorLayoutElement::FromEdge::FromRightOf, stretchableGrid4));
+				->put(AnchorLayoutElement::PlaceEdge::TopOf, verticalGrid1,
+						AnchorLayoutElement::AtEdge::AtTopOf, verticalGrid2)
+				->put(AnchorLayoutElement::PlaceEdge::BottomOf, verticalGrid1,
+						AnchorLayoutElement::AtEdge::AtBottomOf, verticalGrid2)
+				->put(AnchorLayoutElement::PlaceEdge::LeftOf, verticalGrid1, 20,
+						AnchorLayoutElement::FromEdge::FromRightOf, verticalGrid2));
+
+	// Test 8: Anchor Layout out of order specification with more elements, circular dependencies
+	Element* stretchableElement1 = (new GridLayoutElement)
+											->setColumnStretchFactors(1)
+											->put(0, 0, testItemElement)
+											->setCellVerticalAlignment(LayoutStyle::Alignment::Left)
+											->put(1, 0, testItem2Element)
+											->setCellVerticalAlignment(LayoutStyle::Alignment::Right);
+	Element* stretchableElement2 = (new GridLayoutElement)
+											->setColumnStretchFactors(1)
+											->put(0, 0, testItem3Element)
+											->setCellVerticalAlignment(LayoutStyle::Alignment::Left)
+											->put(1, 0, testItem4Element)
+											->setCellVerticalAlignment(LayoutStyle::Alignment::Right);
+	Element* stretchableElement3 = (new GridLayoutElement)
+											->setColumnStretchFactors(1)
+											->put(0, 0, testItem5Element)
+											->setCellVerticalAlignment(LayoutStyle::Alignment::Left)
+											->put(1, 0, testItem6Element)
+											->setCellVerticalAlignment(LayoutStyle::Alignment::Right);
+	addForm((new AnchorLayoutElement())
+				// arrange them on top of each other
+				->put(AnchorLayoutElement::PlaceEdge::TopOf, stretchableElement1, 20,
+						AnchorLayoutElement::FromEdge::Below, stretchableElement2)
+				->put(AnchorLayoutElement::PlaceEdge::TopOf, stretchableElement2, 20,
+						AnchorLayoutElement::FromEdge::Below, stretchableElement3)
+				// right edges elements 1 and 2
+				->put(AnchorLayoutElement::PlaceEdge::RightOf, stretchableElement1,
+						AnchorLayoutElement::AtEdge::AtRightOf, stretchableElement2)
+				// left edges elements 3 and 2
+				->put(AnchorLayoutElement::PlaceEdge::LeftOf, stretchableElement3,
+						AnchorLayoutElement::AtEdge::AtLeftOf, stretchableElement2)
+				// left edges elements 1 and 3
+				->put(AnchorLayoutElement::PlaceEdge::LeftOf, stretchableElement1,
+						AnchorLayoutElement::AtEdge::AtLeftOf, stretchableElement3)
+				// right edges elements 1 and 3
+				->put(AnchorLayoutElement::PlaceEdge::RightOf, stretchableElement1,
+						AnchorLayoutElement::AtEdge::AtRightOf, stretchableElement3));
 }
 
 int DeclarativeTest::determineForm()
 {
-	return 7;
+	return 8;
 }
 
 void DeclarativeTest::determineChildren()
@@ -181,6 +198,8 @@ void DeclarativeTest::determineChildren()
 	if (testItem2_) testItem2_->setText("second");
 	if (testItem3_) testItem3_->setText("third");
 	if (testItem4_) testItem4_->setText("fourth");
+	if (testItem5_) testItem5_->setText("fifth");
+	if (testItem6_) testItem6_->setText("sixth");
 }
 
 } /* namespace Visualization */

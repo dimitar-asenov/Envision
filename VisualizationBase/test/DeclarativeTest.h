@@ -60,6 +60,8 @@ class DeclarativeTest : public DeclarativeItem<DeclarativeTest> {
 		Text* testItem2_{};
 		Text* testItem3_{};
 		Text* testItem4_{};
+		Text* testItem5_{};
+		Text* testItem6_{};
 		VExtendable* testNodeItem_{};
 		Item* testNodeItemGeneral_{};
 		TestNodes::BinaryNode* testNode_{};
