@@ -21,6 +21,7 @@ private:
     OOModel::Project* project_;
 
     QMap<clang::CXXRecordDecl*, OOModel::Class*> classMap_;
+    QMap<clang::CXXMethodDecl*, OOModel::Method*> methodMap_;
 };
 
 #endif // CLASSMANAGER_H
