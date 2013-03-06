@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include "cppimportutilities.h"
+#include "translatemanager.h"
 
 //ENVISION
 #include "OOModel/src/allOOModelNodes.h"
@@ -56,6 +57,7 @@ protected:
     OOModel::Class* currentClass_;
     OOModel::Method* currentMethod_;
     Model::Node* currentNode_;
+    TranslateManager* trMngr_;
 
 };
 

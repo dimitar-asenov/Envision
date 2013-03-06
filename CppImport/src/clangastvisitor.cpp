@@ -12,6 +12,7 @@ ClangAstVisitor::ClangAstVisitor(Model::Model* model, OOModel::Project* currentP
     this->currentProject_ = currentProject;
     currentClass_ = nullptr;
     currentMethod_ = nullptr;
+    trMngr_ = new TranslateManager(model,currentProject);
 }
 
 bool ClangAstVisitor::VisitStmt(clang::Stmt* S)
@@ -35,6 +36,8 @@ bool ClangAstVisitor::VisitDecl(clang::Decl* D)
 bool ClangAstVisitor::VisitCXXRecordDecl(CXXRecordDecl* rd)
 {
     std::cout << "Visiting ClassDecl " << rd->getName().str() <<std::endl;
+
+    trMngr_->insertClass(rd);
 
     if(isa<CXXRecordDecl>(rd))
     {

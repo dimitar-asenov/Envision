@@ -1,6 +1,8 @@
 #ifndef CLASSMANAGER_H
 #define CLASSMANAGER_H
 
+#include <iostream>
+
 #include "OOModel/src/allOOModelNodes.h"
 #include "clang/AST/DeclCXX.h"
 
@@ -17,6 +19,8 @@ public:
 private:
     Model::Model* model_;
     OOModel::Project* project_;
+
+    QMap<clang::CXXRecordDecl*, OOModel::Class*> classMap_;
 };
 
 #endif // CLASSMANAGER_H
