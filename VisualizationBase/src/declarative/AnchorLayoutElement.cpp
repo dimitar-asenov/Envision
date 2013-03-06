@@ -230,71 +230,39 @@ int AnchorLayoutElement::placeElements(QList<AnchorLayoutConstraint*>& constrain
 	int minPos = 0;
 	QList<Element*> alreadyPlacedInThisRound;
 	QList<float> placedAtEdgePosition;
+	int maxIterations = 1000;
+	bool somethingChanged = true;
 
-	// first round of placing elements
-	for (AnchorLayoutConstraint* c : constraints)
+	for (int i=0; i<1 || (axisHasCircularDependencies && (i<maxIterations) && somethingChanged); ++i)
 	{
-		if (alreadyPlacedInThisRound.contains(c->placeElement()))
-		{
-			int index = alreadyPlacedInThisRound.indexOf(c->placeElement());
-			float lastEdge = placedAtEdgePosition.at(index);
-			if (c->relativePlaceEdgePosition() < lastEdge)
-			{
-				c->execute(orientation);
-				placedAtEdgePosition[index] = c->relativePlaceEdgePosition();
-			}
-			else
-				c->execute(orientation, true, item);
-		}
-		else
-		{
-			c->execute(orientation);
-			alreadyPlacedInThisRound.append(c->placeElement());
-			placedAtEdgePosition.append(c->relativePlaceEdgePosition());
-		}
-		int pos = 0;
-		if (orientation == AnchorLayoutConstraint::Orientation::Horizontal)
-			pos = c->placeElement()->pos().x();
-		else // orientation == AnchorLayoutConstraint::Orientation::Vertical
-			pos = c->placeElement()->pos().y();
-		if (pos < minPos) minPos = pos;
-	}
+		somethingChanged = false;
 
-	if (axisHasCircularDependencies)
-	{
-		int maxIterations = 1000;
-		bool somethingChanged = true;
-		for (int i=0; (i<maxIterations) && somethingChanged; ++i)
+		for (AnchorLayoutConstraint* c : constraints)
 		{
-			somethingChanged = false;
-
-			for (AnchorLayoutConstraint* c : constraints)
+			if (alreadyPlacedInThisRound.contains(c->placeElement()))
 			{
-				if (alreadyPlacedInThisRound.contains(c->placeElement()))
-				{
-					int index = alreadyPlacedInThisRound.indexOf(c->placeElement());
-					float lastEdge = placedAtEdgePosition.at(index);
-					if (c->relativePlaceEdgePosition() < lastEdge)
-					{
-						somethingChanged = c->execute(orientation) || somethingChanged;
-						placedAtEdgePosition[index] = c->relativePlaceEdgePosition();
-					}
-					else
-						somethingChanged = c->execute(orientation, true, item) || somethingChanged;
-				}
-				else
+				int index = alreadyPlacedInThisRound.indexOf(c->placeElement());
+				float lastEdge = placedAtEdgePosition.at(index);
+				if (c->relativePlaceEdgePosition() < lastEdge)
 				{
 					somethingChanged = c->execute(orientation) || somethingChanged;
-					alreadyPlacedInThisRound.append(c->placeElement());
-					placedAtEdgePosition.append(c->relativePlaceEdgePosition());
+					placedAtEdgePosition[index] = c->relativePlaceEdgePosition();
 				}
-				int pos = 0;
-				if (orientation == AnchorLayoutConstraint::Orientation::Horizontal)
-					pos = c->placeElement()->pos().x();
-				else // orientation == AnchorLayoutConstraint::Orientation::Vertical
-					pos = c->placeElement()->pos().y();
-				if (pos < minPos) minPos = pos;
+				else
+					somethingChanged = c->execute(orientation, true, item) || somethingChanged;
 			}
+			else
+			{
+				somethingChanged = c->execute(orientation) || somethingChanged;
+				alreadyPlacedInThisRound.append(c->placeElement());
+				placedAtEdgePosition.append(c->relativePlaceEdgePosition());
+			}
+			int pos = 0;
+			if (orientation == AnchorLayoutConstraint::Orientation::Horizontal)
+				pos = c->placeElement()->pos().x();
+			else // orientation == AnchorLayoutConstraint::Orientation::Vertical
+				pos = c->placeElement()->pos().y();
+			if (pos < minPos) minPos = pos;
 		}
 	}
 
@@ -311,7 +279,6 @@ void AnchorLayoutElement::sortConstraints(QList<AnchorLayoutConstraint*>& constr
 	else if (orientation == AnchorLayoutConstraint::Orientation::Vertical && verticalHasCircularDependencies_)
 		return;
 
-	qDebug() << constraints.length();
 	QList<AnchorLayoutConstraint*> sortedConstraints;
 	QList<Element*> elementQueue;
 
