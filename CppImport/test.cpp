@@ -1,5 +1,5 @@
 #include "test.h"
-
+//TEst comment
 
 int NOCLASSFIELD;
 
@@ -14,6 +14,7 @@ public:
 
 
 class Another {
+    //COMMENT IN CLAS
     bool aBoolVar;
     void aVoidFunc(){
         bool aNotherBoolVar;};

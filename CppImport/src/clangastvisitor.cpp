@@ -17,9 +17,12 @@ ClangAstVisitor::ClangAstVisitor(Model::Model* model, OOModel::Project* currentP
 
 bool ClangAstVisitor::VisitStmt(clang::Stmt* S)
 {
-    if(isa<IfStmt>(S))
+    if(S)
     {
+        if(isa<IfStmt>(S))
+        {
 
+        }
     }
     return true;
 }
@@ -113,9 +116,9 @@ bool ClangAstVisitor::VisitCXXMethodDecl(CXXMethodDecl *methodDecl)
     Expression* restype = CppImportUtilities::convertClangType(methodDecl->getResultType());
     if(restype)
     {
-            FormalResult* methodResult = new FormalResult();
-            methodResult->setTypeExpression(restype);
-            method->results()->append(methodResult);
+        FormalResult* methodResult = new FormalResult();
+        methodResult->setTypeExpression(restype);
+        method->results()->append(methodResult);
     }
 
     clang::FunctionDecl::param_const_iterator it = methodDecl->param_begin();
@@ -140,9 +143,9 @@ bool ClangAstVisitor::VisitCXXMethodDecl(CXXMethodDecl *methodDecl)
 
     clang::CXXRecordDecl* parentF = methodDecl->getParent();
     std::cout << "-----FUNCTION-->   " << methodDecl->getName().str() << " ----PARENT ---> "<<parentF->getName().str() << std::endl;
-//    currentClass_->beginModification("Adding a Method");
-//    currentClass_->methods()->append(method);
-//    currentClass_->endModification();
+    //    currentClass_->beginModification("Adding a Method");
+    //    currentClass_->methods()->append(method);
+    //    currentClass_->endModification();
 
 
 

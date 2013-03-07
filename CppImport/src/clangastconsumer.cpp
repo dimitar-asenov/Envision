@@ -14,12 +14,18 @@ bool ClangAstConsumer::HandleTopLevelDecl(DeclGroupRef D)
 
     for (; iterator != D.end(); ++iterator)
     {
-//        astVisitor_->TraverseDecl(*iterator);
+        clang::RawCommentList cList = (*iterator)->getASTContext().getRawCommentList();
+       // clang::RawCommentList cList = astContext->getRawCommentList();
+        cList.getComments();
+        astVisitor_->TraverseDecl(*iterator);
     }
     return true; // keep going
 }
 
 void ClangAstConsumer::HandleTranslationUnit(ASTContext &Context)
 {
-    astVisitor_->TraverseDecl(Context.getTranslationUnitDecl());
+    clang::RawCommentList cList = Context.getRawCommentList();
+    cList.getComments();
+    Context.getTranslationUnitDecl();
+    // astVisitor_->TraverseDecl(Context.getTranslationUnitDecl());
 }
