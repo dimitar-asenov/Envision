@@ -15,25 +15,76 @@ void TranslateManager::insertClass(clang::CXXRecordDecl* rDecl, OOModel::Class *
     }
 }
 
-void TranslateManager::insertMethodDecl(clang::CXXMethodDecl* mDecl, OOModel::Method *ooMethod)
+OOModel::Method* TranslateManager::insertMethodDecl(clang::CXXMethodDecl* mDecl)
 {
-//    mDecl->getParent();
+    OOModel::Method* method = nullptr;
+
     if(!methodMap_.contains(mDecl))
     {
         if(methodMap_.contains(mDecl->getCorrespondingMethodInClass(mDecl->getParent())))
             std::cout << "IS DECLARED BEFORE" << std::endl;
+        //Look if there is a function with same name in map
+        QMap<clang::CXXMethodDecl*,OOModel::Method*>::iterator it = methodMap_.begin();
+        for(;it!=methodMap_.end();++it)
+        {
+            clang::CXXMethodDecl* inMapDecl = it.key();
+            if(mDecl->getName().equals(inMapDecl->getName()) &&
+                    !inMapDecl->isThisDeclarationADefinition() && mDecl->isThisDeclarationADefinition())
+            {
+                //found a pair with same name and only one is defined
+                if((mDecl->getResultType() == inMapDecl->getResultType()) &&
+                        (mDecl->param_size() == inMapDecl->param_size()))
+                {
+                    bool matching = true;
+                    for(unsigned i = 0; i < mDecl->param_size(); i++)
+                    {
+                        if(mDecl->getParamDecl(i)->getType() != inMapDecl->getParamDecl(i)->getType())
+                            matching = false;
+                    }
+                    if(matching)
+                    {
+                        method = it.value();
+                        break;
+                    }
+                }
+            }
+        }
 
-        std::cout << "-------------------------->METHOD " << mDecl->getName().str() << " NOT IN MAP ---->ID " << mDecl->isThisDeclarationADefinition() <<std::endl;
-        OOModel::Class* parent = classMap_.value(mDecl->getParent());
+        if(!method)
+        {
+            method = new OOModel::Method();
+            method->setName(QString::fromStdString(mDecl->getName().str()));
+
+            OOModel::Expression* restype = CppImportUtilities::convertClangType(mDecl->getResultType());
+            if(restype)
+            {
+                OOModel::FormalResult* methodResult = new OOModel::FormalResult();
+                methodResult->setTypeExpression(restype);
+                method->results()->append(methodResult);
+            }
+
+            clang::FunctionDecl::param_const_iterator it = mDecl->param_begin();
+            for(;it != mDecl->param_end();++it)
+            {
+                OOModel::FormalArgument* arg = new OOModel::FormalArgument();
+                arg->setName(QString::fromStdString((*it)->getName().str()));
+                OOModel::Expression* type = CppImportUtilities::convertClangType((*it)->getType());
+                if(type) arg->setTypeExpression(type);
+                method->arguments()->append(arg);
+            }
+
+            OOModel::Class* parent = classMap_.value(mDecl->getParent());
+
+            parent->beginModification("Adding a Method");
+            parent->methods()->append(method);
+            parent->endModification();
 
 
-        parent->beginModification("Adding a Method");
-        parent->methods()->append(ooMethod);
-        parent->endModification();
-
-
-        methodMap_.insert(mDecl,ooMethod);
+            methodMap_.insert(mDecl,method);
+        }
     }
+
+    return method;
 }
 
 void TranslateManager::insertField(clang::FieldDecl* fDecl)

@@ -1,13 +1,14 @@
 #pragma once
 
 #include "cppimport_api.h"
+#include "CppImportUtilities.h"
 
 class TranslateManager
 {
 public:
     TranslateManager(Model::Model* model, OOModel::Project* project);
     void insertClass(clang::CXXRecordDecl* rDecl,OOModel::Class* ooClass);
-    void insertMethodDecl(clang::CXXMethodDecl* mDecl, OOModel::Method* ooMethod);
+    OOModel::Method* insertMethodDecl(clang::CXXMethodDecl* mDecl);
     void insertField(clang::FieldDecl* fDecl);
     void insertVar(clang::VarDecl* vDecl, OOModel::VariableDeclaration* ooVarDecl);
 

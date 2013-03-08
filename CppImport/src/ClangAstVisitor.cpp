@@ -108,33 +108,10 @@ bool ClangAstVisitor::VisitCXXMethodDecl(clang::CXXMethodDecl *methodDecl)
         return true;
     std::cout << "Visiting FunctionDecl " << methodDecl->getName().str() << std::endl;
 
-    OOModel::Method* method = new OOModel::Method();
-
-    method->setName(QString::fromStdString(methodDecl->getName().str()));
-
-    OOModel::Expression* restype = CppImportUtilities::convertClangType(methodDecl->getResultType());
-    if(restype)
-    {
-        OOModel::FormalResult* methodResult = new OOModel::FormalResult();
-        methodResult->setTypeExpression(restype);
-        method->results()->append(methodResult);
-    }
-
-    clang::FunctionDecl::param_const_iterator it = methodDecl->param_begin();
-    for(;it != methodDecl->param_end();++it)
-    {
-        OOModel::FormalArgument* arg = new OOModel::FormalArgument();
-        arg->setName(QString::fromStdString((*it)->getName().str()));
-        OOModel::Expression* type = CppImportUtilities::convertClangType((*it)->getType());
-        if(type) arg->setTypeExpression(type);
-        method->arguments()->append(arg);
-    }
-
-
-    trMngr_->insertMethodDecl(methodDecl,method);
-
-    currentMethod_ = method;
-
+    OOModel::Method* method = trMngr_->insertMethodDecl(methodDecl);
+    if(method) currentMethod_ = method;
+    else
+        std::cout << "___________ERROR NO OOMODEL::METHOD FOR THIS DECL_______" << std::endl;
     VisitStmt(methodDecl->getBody());
 
     //decide where to add
