@@ -1,4 +1,4 @@
-#include "clangconsumerfactory.h"
+#include "ClangConsumerFactory.h"
 
 ClangConsumerFactory::ClangConsumerFactory(Model::Model *model, OOModel::Project *project)
     : model_(model) , project_(project)

@@ -4,8 +4,8 @@
 
 #include <iostream>
 
-#include "cppimportutilities.h"
-#include "translatemanager.h"
+#include "CppImportUtilities.h"
+#include "TranslateManager.h"
 
 //ENVISION
 #include "OOModel/src/allOOModelNodes.h"

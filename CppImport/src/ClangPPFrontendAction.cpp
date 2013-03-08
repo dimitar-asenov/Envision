@@ -1,4 +1,4 @@
-#include "clangppfrontendaction.h"
+#include "ClangPPFrontendAction.h"
 
 ClangPPFrontendAction::ClangPPFrontendAction()
 {

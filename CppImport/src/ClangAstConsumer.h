@@ -2,7 +2,7 @@
 #define CLANGASTCONSUMER_H
 
 //ENVISION - CPPIMPORT
-#include "clangastvisitor.h"
+#include "ClangAstVisitor.h"
 
 //ENVISION
 #include "OOModel/src/allOOModelNodes.h"

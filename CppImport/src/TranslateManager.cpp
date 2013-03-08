@@ -1,4 +1,4 @@
-#include "translatemanager.h"
+#include "TranslateManager.h"
 
 TranslateManager::TranslateManager(Model::Model* model, OOModel::Project* project) :
     model_(model), project_(project)

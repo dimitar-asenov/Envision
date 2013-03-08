@@ -2,7 +2,7 @@
 #define CLANGPPFRONTENDACTION_H
 
 
-#include "clangastconsumer.h"
+#include "ClangAstConsumer.h"
 #include "OOModel/src/allOOModelNodes.h"
 
 #include "clang/Rewrite/Frontend/FrontendActions.h"

@@ -1,4 +1,4 @@
-#include "cppimportmanager.h"
+#include "CppImportManager.h"
 
 CppImportManager::CppImportManager()
 {

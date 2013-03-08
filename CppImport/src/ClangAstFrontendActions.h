@@ -2,7 +2,7 @@
 #define CLANGASTFRONTENDACTIONS_H
 
 
-#include "clangastconsumer.h"
+#include "ClangAstConsumer.h"
 
 //ENVISION
 #include "OOModel/src/allOOModelNodes.h"

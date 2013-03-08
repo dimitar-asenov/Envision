@@ -7,10 +7,10 @@
 #include <iostream>
 
 //ENVISION - CPPIMPORT
-#include "clangastconsumer.h"
-#include "clangastfrontendactions.h"
-#include "clangconsumerfactory.h"
-#include "clangppfrontendaction.h"
+#include "ClangAstConsumer.h"
+#include "ClangAstFrontendActions.h"
+#include "ClangConsumerFactory.h"
+#include "ClangPPFrontendAction.h"
 
 //ENVISION
 #include "OOModel/src/allOOModelNodes.h"

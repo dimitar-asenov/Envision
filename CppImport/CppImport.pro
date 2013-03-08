@@ -49,22 +49,22 @@ HEADERS += src/precompiled.h \
     src/CppImportException.h \
 	src/cppimport_api.h \
     src/cppimport.h \
-    src/clangastvisitor.h \
-    src/clangastconsumer.h \
-    src/cppimportmanager.h \
-    src/clangastfrontendactions.h \
-    src/clangconsumerfactory.h \
-    src/cppimportutilities.h \
-    src/clangppfrontendaction.h \
-    src/translatemanager.h
+    src/ClangAstConsumer.h \
+    src/ClangAstFrontendActions.h \
+    src/ClangAstVisitor.h \
+    src/ClangConsumerFactory.h \
+    src/ClangPPFrontendAction.h \
+    src/CppImportManager.h \
+    src/CppImportUtilities.h \
+    src/TranslateManager.h
 SOURCES += src/CppImportException.cpp \
 	src/cppimport.cpp \
 	test/SimpleTest.cpp \
-    src/clangastvisitor.cpp \
-    src/clangastconsumer.cpp \
-    src/cppimportmanager.cpp \
-    src/clangastfrontendactions.cpp \
-    src/clangconsumerfactory.cpp \
-    src/cppimportutilities.cpp \
-    src/clangppfrontendaction.cpp \
-    src/translatemanager.cpp
+    src/ClangAstConsumer.cpp \
+    src/ClangAstFrontendActions.cpp \
+    src/ClangAstVisitor.cpp \
+    src/ClangConsumerFactory.cpp \
+    src/ClangPPFrontendAction.cpp \
+    src/CppImportManager.cpp \
+    src/CppImportUtilities.cpp \
+    src/TranslateManager.cpp
