@@ -1,16 +1,14 @@
 #include "ClangAstConsumer.h"
 
 
-using namespace clang;
-
 ClangAstConsumer::ClangAstConsumer(Model::Model *model, OOModel::Project *currentProject)
 {
     this->astVisitor_ = new ClangAstVisitor(model, currentProject);
 }
 
-bool ClangAstConsumer::HandleTopLevelDecl(DeclGroupRef D)
+bool ClangAstConsumer::HandleTopLevelDecl(clang::DeclGroupRef D)
 {
-    DeclGroupRef::iterator iterator = D.begin();
+    clang::DeclGroupRef::iterator iterator = D.begin();
 
     for (; iterator != D.end(); ++iterator)
     {
@@ -22,7 +20,7 @@ bool ClangAstConsumer::HandleTopLevelDecl(DeclGroupRef D)
     return true; // keep going
 }
 
-void ClangAstConsumer::HandleTranslationUnit(ASTContext &Context)
+void ClangAstConsumer::HandleTranslationUnit(clang::ASTContext &Context)
 {
     clang::RawCommentList cList = Context.getRawCommentList();
     cList.getComments();

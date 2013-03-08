@@ -4,8 +4,6 @@
 #include "cppimport_api.h"
 #include "ClangAstVisitor.h"
 
-
-
 class ClangAstConsumer : public clang::ASTConsumer
 {
 public:

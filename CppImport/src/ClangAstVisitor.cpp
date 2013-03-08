@@ -1,11 +1,5 @@
 #include "ClangAstVisitor.h"
 
-
-
-using namespace clang;
-using namespace llvm;
-using namespace OOModel;
-
 ClangAstVisitor::ClangAstVisitor(Model::Model* model, OOModel::Project* currentProject = nullptr)
 {
     this->currentModel_ = model;
@@ -19,7 +13,7 @@ bool ClangAstVisitor::VisitStmt(clang::Stmt* S)
 {
     if(S)
     {
-        if(isa<IfStmt>(S))
+        if(llvm::isa<clang::IfStmt>(S))
         {
 
         }
@@ -36,23 +30,23 @@ bool ClangAstVisitor::VisitDecl(clang::Decl* D)
     return true;
 }
 
-bool ClangAstVisitor::VisitCXXRecordDecl(CXXRecordDecl* rd)
+bool ClangAstVisitor::VisitCXXRecordDecl(clang::CXXRecordDecl* rd)
 {
     std::cout << "Visiting ClassDecl " << rd->getName().str() <<std::endl;
 
 
-    if(isa<CXXRecordDecl>(rd))
+    if(llvm::isa<clang::CXXRecordDecl>(rd))
     {
-        CXXRecordDecl* recDecl = cast<CXXRecordDecl>(rd);
+        clang::CXXRecordDecl* recDecl = llvm::cast<clang::CXXRecordDecl>(rd);
         if(recDecl->isClass())
         {
-            Class* ooClass = nullptr;
+            OOModel::Class* ooClass = nullptr;
 
-            if (!currentProject_) ooClass = dynamic_cast<Class*> (currentModel_->createRoot("Class"));
+            if (!currentProject_) ooClass = dynamic_cast<OOModel::Class*> (currentModel_->createRoot("Class"));
             currentModel_->beginModification(currentProject_ ? static_cast<Model::Node*> (currentProject_) : ooClass, "Adding a class.");
             if (!ooClass)
             {
-                ooClass = new Class();
+                ooClass = new OOModel::Class();
                 currentProject_->classes()->append(ooClass);
             }
 
@@ -68,15 +62,15 @@ bool ClangAstVisitor::VisitCXXRecordDecl(CXXRecordDecl* rd)
     return true;
 }
 
-bool ClangAstVisitor::VisitVarDecl(VarDecl* vd)
+bool ClangAstVisitor::VisitVarDecl(clang::VarDecl* vd)
 {
     std::cout << "Visiting VarDecl " << vd->getName().str() <<std::endl;
     if(currentMethod_)
     {
-        VariableDeclaration* varDecl = new VariableDeclaration();
+        OOModel::VariableDeclaration* varDecl = new OOModel::VariableDeclaration();
         varDecl->setName(QString::fromStdString(vd->getName().str()));
 
-        Expression* type = CppImportUtilities::convertClangType(vd->getType());
+        OOModel::Expression* type = CppImportUtilities::convertClangType(vd->getType());
         if(type) varDecl->setVarType(type);
 
         trMngr_->insertVar(vd,varDecl);
@@ -88,13 +82,13 @@ bool ClangAstVisitor::VisitVarDecl(VarDecl* vd)
     return true;
 }
 
-bool ClangAstVisitor::VisitFieldDecl(FieldDecl* fd)
+bool ClangAstVisitor::VisitFieldDecl(clang::FieldDecl* fd)
 {
     std::cout << "Visiting FieldDecl " << fd->getName().str() << std::endl;
 
-    Field* field = new Field();
+    OOModel::Field* field = new OOModel::Field();
 
-    Expression* type = CppImportUtilities::convertClangType(fd->getType());
+    OOModel::Expression* type = CppImportUtilities::convertClangType(fd->getType());
     if(type) field->setTypeExpression(type);
     field->setName(QString::fromStdString(fd->getName().str()));
     currentClass_->beginModification("Adding a Field");
@@ -103,20 +97,20 @@ bool ClangAstVisitor::VisitFieldDecl(FieldDecl* fd)
     return true;
 }
 
-bool ClangAstVisitor::VisitCXXMethodDecl(CXXMethodDecl *methodDecl)
+bool ClangAstVisitor::VisitCXXMethodDecl(clang::CXXMethodDecl *methodDecl)
 {
-    if(isa<CXXConstructorDecl>(methodDecl))
+    if(llvm::isa<clang::CXXConstructorDecl>(methodDecl))
         return true;
     std::cout << "Visiting FunctionDecl " << methodDecl->getName().str() << std::endl;
 
-    Method* method = new Method();
+    OOModel::Method* method = new OOModel::Method();
 
     method->setName(QString::fromStdString(methodDecl->getName().str()));
 
-    Expression* restype = CppImportUtilities::convertClangType(methodDecl->getResultType());
+    OOModel::Expression* restype = CppImportUtilities::convertClangType(methodDecl->getResultType());
     if(restype)
     {
-        FormalResult* methodResult = new FormalResult();
+        OOModel::FormalResult* methodResult = new OOModel::FormalResult();
         methodResult->setTypeExpression(restype);
         method->results()->append(methodResult);
     }
@@ -124,9 +118,9 @@ bool ClangAstVisitor::VisitCXXMethodDecl(CXXMethodDecl *methodDecl)
     clang::FunctionDecl::param_const_iterator it = methodDecl->param_begin();
     for(;it != methodDecl->param_end();++it)
     {
-        FormalArgument* arg = new FormalArgument();
+        OOModel::FormalArgument* arg = new OOModel::FormalArgument();
         arg->setName(QString::fromStdString((*it)->getName().str()));
-        Expression* type = CppImportUtilities::convertClangType((*it)->getType());
+        OOModel::Expression* type = CppImportUtilities::convertClangType((*it)->getType());
         if(type) arg->setTypeExpression(type);
         method->arguments()->append(arg);
     }

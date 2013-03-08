@@ -4,9 +4,7 @@
 #include "CppImportUtilities.h"
 #include "TranslateManager.h"
 
-using clang::RecursiveASTVisitor;
-
-class ClangAstVisitor : public RecursiveASTVisitor <ClangAstVisitor>
+class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 {
 public:
     ClangAstVisitor(Model::Model* model, OOModel::Project* currentProject);
