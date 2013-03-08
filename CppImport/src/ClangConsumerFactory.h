@@ -1,9 +1,7 @@
 #pragma once
 
+#include "cppimport_api.h"
 #include "ClangAstConsumer.h"
-
-#include "OOModel/src/allOOModelNodes.h"
-#include "clang/AST/ASTConsumer.h"
 
 class ClangConsumerFactory
 {

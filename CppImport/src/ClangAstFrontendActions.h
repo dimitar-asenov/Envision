@@ -1,14 +1,8 @@
 #pragma once
 
+
+#include "cppimport_api.h"
 #include "ClangAstConsumer.h"
-
-//ENVISION
-#include "OOModel/src/allOOModelNodes.h"
-
-#include "clang/Frontend/CompilerInstance.h"
-#include "clang/Frontend/FrontendAction.h"
-#include "clang/Tooling/Tooling.h"
-#include "clang/AST/ASTContext.h"
 
 class ClangAstFrontendActions : public clang::ASTFrontendAction
 {

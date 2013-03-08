@@ -1,36 +1,10 @@
 #pragma once
 
-#include <vector>
-#include <string>
-#include <iostream>
-
-//ENVISION - CPPIMPORT
+#include "cppimport_api.h"
 #include "ClangAstConsumer.h"
 #include "ClangAstFrontendActions.h"
 #include "ClangConsumerFactory.h"
 #include "ClangPPFrontendAction.h"
-
-//ENVISION
-#include "OOModel/src/allOOModelNodes.h"
-
-//CLANG
-#include "clang/Basic/TargetOptions.h"
-#include "clang/Basic/TargetInfo.h"
-#include "clang/Basic/LangOptions.h"
-
-#include "clang/Lex/HeaderSearch.h"
-
-#include "clang/Frontend/ASTUnit.h"
-#include "clang/Frontend/CompilerInvocation.h"
-
-#include "clang/Basic/IdentifierTable.h"
-#include "clang/Basic/Builtins.h"
-
-#include "clang/Tooling/Tooling.h"
-#include "clang/Tooling/CommonOptionsParser.h"
-
-//LLVM
-//#include "llvm/ADT/IntrusiveRefCntPtr.h"
 
 class CppImportManager
 {

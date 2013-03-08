@@ -1,9 +1,6 @@
 #pragma once
 
-#include <iostream>
-
-#include "OOModel/src/allOOModelNodes.h"
-#include "clang/AST/DeclCXX.h"
+#include "cppimport_api.h"
 
 class TranslateManager
 {

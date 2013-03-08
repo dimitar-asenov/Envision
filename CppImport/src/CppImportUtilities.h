@@ -1,7 +1,6 @@
 #pragma once
 
-#include "OOModel/src/allOOModelNodes.h"
-#include "clang/AST/Type.h"
+#include "cppimport_api.h"
 
 class CppImportUtilities
 {

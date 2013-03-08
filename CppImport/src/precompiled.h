@@ -51,7 +51,48 @@
 // plug-ins which depend on this one will not include these headers.
 
 // add clang here
+
+
+#include <iostream>
+#include <vector>
+#include <string>
+
 #include <QtCore/QDir>
+
+
+#include "OOModel/src/allOOModelNodes.h"
+
+#include "clang/AST/ASTConsumer.h"
+#include "clang/AST/ASTContext.h"
+#include "clang/AST/RecursiveASTVisitor.h"
+#include "clang/AST/DeclCXX.h"
+#include "clang/AST/Decl.h"
+#include "clang/AST/Stmt.h"
+#include "clang/AST/Type.h"
+
+#include "clang/Frontend/CompilerInstance.h"
+#include "clang/Frontend/CompilerInvocation.h"
+#include "clang/Frontend/FrontendAction.h"
+#include "clang/Frontend/ASTUnit.h"
+
+#include "clang/Tooling/Tooling.h"
+#include "clang/Tooling/CommonOptionsParser.h"
+
+#include "clang/Basic/Diagnostic.h"
+#include "clang/Basic/FileManager.h"
+#include "clang/Basic/SourceManager.h"
+#include "clang/Basic/TargetOptions.h"
+#include "clang/Basic/TargetInfo.h"
+#include "clang/Basic/LangOptions.h"
+#include "clang/Basic/IdentifierTable.h"
+#include "clang/Basic/Builtins.h"
+
+#include "clang/Lex/Preprocessor.h"
+#include "clang/Lex/HeaderSearch.h"
+
+#include "clang/Parse/ParseAST.h"
+
+#include "clang/Rewrite/Frontend/FrontendActions.h"
 
 #endif
 

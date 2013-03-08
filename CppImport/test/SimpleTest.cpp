@@ -25,7 +25,7 @@
  **********************************************************************************************************************/
 
 #include "cppimport.h"
-#include "cppimportmanager.h"
+#include "CppImportManager.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
 #include "OOInteraction/src/expression_editor/OOExpressionBuilder.h"

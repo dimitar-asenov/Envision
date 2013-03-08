@@ -1,14 +1,10 @@
 #pragma once
 
-//ENVISION - CPPIMPORT
+
+#include "cppimport_api.h"
 #include "ClangAstVisitor.h"
 
-//ENVISION
-#include "OOModel/src/allOOModelNodes.h"
 
-//CLANG
-#include "clang/AST/ASTConsumer.h"
-#include "clang/AST/ASTContext.h"
 
 class ClangAstConsumer : public clang::ASTConsumer
 {
