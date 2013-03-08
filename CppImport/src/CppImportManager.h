@@ -1,6 +1,4 @@
-#ifndef CPPIMPORTMANAGER_H
-#define CPPIMPORTMANAGER_H
-
+#pragma once
 
 #include <vector>
 #include <string>
@@ -55,5 +53,3 @@ protected:
     std::vector<std::string> sources_;
 
 };
-
-#endif // CPPIMPORTMANAGER_H

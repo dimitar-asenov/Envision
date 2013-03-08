@@ -1,5 +1,4 @@
-#ifndef CLASSMANAGER_H
-#define CLASSMANAGER_H
+#pragma once
 
 #include <iostream>
 
@@ -23,5 +22,3 @@ private:
     QMap<clang::CXXRecordDecl*, OOModel::Class*> classMap_;
     QMap<clang::CXXMethodDecl*, OOModel::Method*> methodMap_;
 };
-
-#endif // CLASSMANAGER_H

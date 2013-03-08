@@ -1,6 +1,4 @@
-#ifndef CLANGPPFRONTENDACTION_H
-#define CLANGPPFRONTENDACTION_H
-
+#pragma once
 
 #include "ClangAstConsumer.h"
 #include "OOModel/src/allOOModelNodes.h"
@@ -21,4 +19,3 @@ private:
     OOModel::Project* project_;
 };
 
-#endif // CLANGPPFRONTENDACTION_H

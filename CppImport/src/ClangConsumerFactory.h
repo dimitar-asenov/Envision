@@ -1,5 +1,4 @@
-#ifndef CLANGCONSUMERFACTORY_H
-#define CLANGCONSUMERFACTORY_H
+#pragma once
 
 #include "ClangAstConsumer.h"
 
@@ -17,4 +16,3 @@ private:
     OOModel::Project* project_;
 };
 
-#endif // CLANGCONSUMERFACTORY_H

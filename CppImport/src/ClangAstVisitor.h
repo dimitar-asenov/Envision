@@ -1,6 +1,4 @@
-#ifndef CLANGASTVISITOR_H
-#define CLANGASTVISITOR_H
-
+#pragma once
 
 #include <iostream>
 
@@ -60,5 +58,3 @@ protected:
     TranslateManager* trMngr_;
 
 };
-
-#endif // CLANGASTVISITOR_H

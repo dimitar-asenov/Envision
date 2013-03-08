@@ -1,6 +1,4 @@
-#ifndef CLANGASTFRONTENDACTIONS_H
-#define CLANGASTFRONTENDACTIONS_H
-
+#pragma once
 
 #include "ClangAstConsumer.h"
 
@@ -27,5 +25,3 @@ private:
     Model::Model* model_;
     OOModel::Project* project_;
 };
-
-#endif // CLANGASTFRONTENDACTIONS_H

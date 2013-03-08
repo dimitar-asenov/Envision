@@ -1,5 +1,4 @@
-#ifndef CLANGASTCONSUMER_H
-#define CLANGASTCONSUMER_H
+#pragma once
 
 //ENVISION - CPPIMPORT
 #include "ClangAstVisitor.h"
@@ -22,5 +21,3 @@ protected:
     ClangAstVisitor* astVisitor_;
 
 };
-
-#endif // CLANGASTCONSUMER_H

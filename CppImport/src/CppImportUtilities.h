@@ -1,5 +1,4 @@
-#ifndef CPPIMPORTUTILITIES_H
-#define CPPIMPORTUTILITIES_H
+#pragma once
 
 #include "OOModel/src/allOOModelNodes.h"
 #include "clang/AST/Type.h"
@@ -10,5 +9,3 @@ public:
     CppImportUtilities();
     static OOModel::Expression* convertClangType(clang::QualType type);
 };
-
-#endif // CPPIMPORTUTILITIES_H
