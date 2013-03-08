@@ -18,4 +18,5 @@ private:
 
     QMap<clang::CXXRecordDecl*, OOModel::Class*> classMap_;
     QMap<clang::CXXMethodDecl*, OOModel::Method*> methodMap_;
+    QMap<clang::VarDecl*, OOModel::VariableDeclaration*> varMap_;
 };

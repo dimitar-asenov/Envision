@@ -65,7 +65,7 @@ bool ClangAstVisitor::VisitCXXRecordDecl(clang::CXXRecordDecl* rd)
 bool ClangAstVisitor::VisitVarDecl(clang::VarDecl* vd)
 {
     std::cout << "Visiting VarDecl " << vd->getName().str() <<std::endl;
-    if(currentMethod_)
+    if(currentMethod_ && vd->isFunctionOrMethodVarDecl())
     {
         OOModel::VariableDeclaration* varDecl = new OOModel::VariableDeclaration();
         varDecl->setName(QString::fromStdString(vd->getName().str()));
@@ -78,6 +78,11 @@ bool ClangAstVisitor::VisitVarDecl(clang::VarDecl* vd)
         currentMethod_->beginModification("Adding a Variable");
         currentMethod_->items()->append(varDecl);
         currentMethod_->endModification();
+    }
+    else
+    {
+        if(!llvm::isa<clang::ParmVarDecl>(vd))
+            std::cout << "--->WARNING : THIS VARIABLE IS NOT SUPPORTED : " << vd->getName().str() << std::endl;
     }
     return true;
 }

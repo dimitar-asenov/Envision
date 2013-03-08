@@ -43,6 +43,17 @@ void TranslateManager::insertField(clang::FieldDecl* fDecl)
 
 void TranslateManager::insertVar(clang::VarDecl* vDecl, OOModel::VariableDeclaration* ooVarDecl)
 {
+    if(!varMap_.contains(vDecl))
+    {
+        varMap_.insert(vDecl,ooVarDecl);
+    }
+    else
+    {
+        std::cout << "---------->VAR : " << vDecl->getName().str() << " IS ALREADY IN THE MAP" << std::endl;
+    }
+
+
+
     if(vDecl->getParentFunctionOrMethod())
     {
         //add to method
