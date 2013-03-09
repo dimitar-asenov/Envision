@@ -43,6 +43,7 @@ namespace Visualization {
 }
 
 namespace OOVisualization {
+class VStatementItemList;
 
 class OOVISUALIZATION_API VClass
 : public Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::Class>
@@ -65,7 +66,7 @@ class OOVISUALIZATION_API VClass
 		Visualization::VText* name_;
 		Visualization::VList* typeArguments_;
 		Visualization::VList* baseClasses_;
-		Visualization::VList* annotations_;
+		VStatementItemList* annotations_;
 		Visualization::PositionLayout* body_;
 		Visualization::SequentialLayout* content_;
 		Visualization::SequentialLayout* fieldContainer_;
