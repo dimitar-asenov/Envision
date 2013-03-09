@@ -9,6 +9,14 @@ public:
     Testing(){}
     int myFunction(int argument1, bool argument2){
         int k;
+        if(10)
+        {
+            k=20;
+        }
+        else
+        {
+            k=0;
+        }
         return 0;}
 };
 

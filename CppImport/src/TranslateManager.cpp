@@ -116,3 +116,10 @@ void TranslateManager::insertVar(clang::VarDecl* vDecl, OOModel::VariableDeclara
         ooVarDecl->getAllAttributes();
     }
 }
+
+OOModel::IfStatement *TranslateManager::insertIfStmt(clang::IfStmt* ifStmt)
+{
+    OOModel::IfStatement* ooIfStmt = new OOModel::IfStatement();
+    ifStmtMap_.insert(ifStmt,ooIfStmt);
+    return ooIfStmt;
+}

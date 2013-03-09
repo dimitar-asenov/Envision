@@ -6,6 +6,7 @@ ClangAstVisitor::ClangAstVisitor(Model::Model* model, OOModel::Project* currentP
     this->currentProject_ = currentProject;
     currentClass_ = nullptr;
     currentMethod_ = nullptr;
+    currentIfStmt_ = nullptr;
     trMngr_ = new TranslateManager(model,currentProject);
 }
 
@@ -17,6 +18,23 @@ bool ClangAstVisitor::VisitStmt(clang::Stmt* S)
         {
 
         }
+    }
+    return true;
+}
+
+bool ClangAstVisitor::VisitIfStmt(clang::IfStmt *ifStmt)
+{
+    if(currentMethod_)
+    {
+        OOModel::IfStatement* ooIfStmt = trMngr_->insertIfStmt(ifStmt);
+        currentIfStmt_ = ooIfStmt;
+        VisitStmt(ifStmt->getCond());
+        VisitStmt(ifStmt->getThen());
+        VisitStmt(ifStmt->getElse());
+        currentMethod_->beginModification("Adding if stmt");
+        currentMethod_->items()->append(ooIfStmt);
+        currentMethod_->endModification();
+        currentIfStmt_ = nullptr;
     }
     return true;
 }

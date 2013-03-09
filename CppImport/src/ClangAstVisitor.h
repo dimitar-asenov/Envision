@@ -9,6 +9,7 @@ class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 public:
     ClangAstVisitor(Model::Model* model, OOModel::Project* currentProject);
     bool VisitStmt(clang::Stmt* S);
+    bool VisitIfStmt(clang::IfStmt* ifStmt);
     bool VisitDecl(clang::Decl* D);
     bool VisitCXXRecordDecl(clang::CXXRecordDecl* rd);
     bool VisitVarDecl(clang::VarDecl* vd);
@@ -21,6 +22,7 @@ protected:
     clang::ASTContext* astContext_;
     OOModel::Class* currentClass_;
     OOModel::Method* currentMethod_;
+    OOModel::IfStatement* currentIfStmt_;
     Model::Node* currentNode_;
     TranslateManager* trMngr_;
 
