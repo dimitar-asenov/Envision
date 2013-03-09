@@ -298,6 +298,7 @@ Class* createInterfaceContracts()
 	op->results()->append( new FormalResult(QString(), new PrimitiveTypeExpression(PrimitiveType::INT)) );
 	op->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
 				"CodeContracts.Contract.Requires(x!=y)")));
+	op->items()->append(new ReturnStatement( OOExpressionBuilder::getOOExpression("0")));
 
 	calcContracts->extension<Position>()->setX(420);
 	calcContracts->extension<Position>()->setY(180);
