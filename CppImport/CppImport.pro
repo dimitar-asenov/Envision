@@ -12,6 +12,8 @@ win32:LIBS += -llogger \
     -loointeraction
 
 
+#QMAKE_CXXFLAGS -= -Werror
+
 
 ## LLVM SPECIFIC
 LLVMCOMPONENTS = cppbackend
@@ -56,7 +58,8 @@ HEADERS += src/precompiled.h \
     src/ClangPPFrontendAction.h \
     src/CppImportManager.h \
     src/CppImportUtilities.h \
-    src/TranslateManager.h
+    src/TranslateManager.h \
+    src/ClangPPCallbacks.h
 SOURCES += src/CppImportException.cpp \
 	src/cppimport.cpp \
 	test/SimpleTest.cpp \
@@ -67,4 +70,5 @@ SOURCES += src/CppImportException.cpp \
     src/ClangPPFrontendAction.cpp \
     src/CppImportManager.cpp \
     src/CppImportUtilities.cpp \
-    src/TranslateManager.cpp
+    src/TranslateManager.cpp \
+    src/ClangPPCallbacks.cpp
