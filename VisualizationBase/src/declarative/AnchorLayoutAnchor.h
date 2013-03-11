@@ -24,24 +24,24 @@
  **
  **********************************************************************************************************************/
 
-#ifndef VisualizationBase_ANCHORLAYOUTCONSTRAINT_H_
-#define VisualizationBase_ANCHORLAYOUTCONSTRAINT_H_
+#ifndef VisualizationBase_ANCHORLAYOUTANCHOR_H_
+#define VisualizationBase_ANCHORLAYOUTANCHOR_H_
 
 namespace Visualization {
 
 class Item;
 class Element;
 
-class AnchorLayoutConstraint {
+class AnchorLayoutAnchor {
 	public:
 		enum class Orientation : int {Auto, Horizontal, Vertical};
-		AnchorLayoutConstraint(float relativePlaceEdgePosition, Element* placeElement, int offset,
+		AnchorLayoutAnchor(float relativePlaceEdgePosition, Element* placeElement, int offset,
 				float relativeFixedEdgePosition, Element* fixedElement);
-		virtual ~AnchorLayoutConstraint();
+		virtual ~AnchorLayoutAnchor();
 		bool execute(Orientation orientation, bool stretchPlaceElement=false, Item* item=nullptr);
 		Element* placeElement() const;
 		Element* fixedElement() const;
-		bool dependsOn(AnchorLayoutConstraint* other, QList<AnchorLayoutConstraint*>& allConstraints);
+		bool dependsOn(AnchorLayoutAnchor* other, QList<AnchorLayoutAnchor*>& allConstraints);
 		float relativePlaceEdgePosition() const;
 
 	private:
@@ -52,18 +52,18 @@ class AnchorLayoutConstraint {
 		Element* fixedElement_{};
 };
 
-inline Element* AnchorLayoutConstraint::placeElement() const
+inline Element* AnchorLayoutAnchor::placeElement() const
 {
 	return placeElement_;
 }
-inline Element* AnchorLayoutConstraint::fixedElement() const
+inline Element* AnchorLayoutAnchor::fixedElement() const
 {
 	return fixedElement_;
 }
-inline float AnchorLayoutConstraint::relativePlaceEdgePosition() const
+inline float AnchorLayoutAnchor::relativePlaceEdgePosition() const
 {
 	return relativePlaceEdgePosition_;
 }
 
 } /* namespace Visualization */
-#endif /* VisualizationBase_ANCHORLAYOUTCONSTRAINT_H_ */
+#endif /* VisualizationBase_ANCHORLAYOUTANCHOR_H_ */

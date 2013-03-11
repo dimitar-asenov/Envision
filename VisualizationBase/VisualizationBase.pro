@@ -10,7 +10,7 @@ HEADERS += src/nodes/TestBoxNode.h \
     src/items/TestBox.h \
     src/items/LineStyle.h \
     src/items/Line.h \
-    src/declarative/AnchorLayoutConstraint.h \
+	src/declarative/AnchorLayoutAnchor.h \
     src/declarative/NodeWithVisualizationItemWrapperElement.h \
     src/declarative/VisualizationItemWrapperElement.h \
     src/declarative/NodeItemWrapperElement.h \

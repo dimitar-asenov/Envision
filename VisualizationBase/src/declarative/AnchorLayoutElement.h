@@ -29,7 +29,7 @@
 
 #include "../visualizationbase_api.h"
 #include "LayoutElement.h"
-#include "AnchorLayoutConstraint.h"
+#include "AnchorLayoutAnchor.h"
 
 namespace Visualization {
 
@@ -59,22 +59,22 @@ class AnchorLayoutElement : public LayoutElement {
 
 	private:
 		enum class Edge : int {Left, Right, Center, VCenter, HCenter, Top, Bottom};
-		AnchorLayoutElement* put(AnchorLayoutConstraint::Orientation orientation, float relativePlaceEdgePosition,
+		AnchorLayoutElement* put(AnchorLayoutAnchor::Orientation orientation, float relativePlaceEdgePosition,
 				Element* placeElement, int offset, float relativeFixedEdgePosition, Element* fixedElement);
-		AnchorLayoutConstraint::Orientation orientation(Edge edge);
-		AnchorLayoutConstraint::Orientation inferOrientation(Edge firstEdge, Edge secondEdge);
+		AnchorLayoutAnchor::Orientation orientation(Edge edge);
+		AnchorLayoutAnchor::Orientation inferOrientation(Edge firstEdge, Edge secondEdge);
 		float relativePosition(Edge edge);
-		void addConstraint(QList<AnchorLayoutConstraint*>& constraints, AnchorLayoutConstraint::Orientation orientation,
+		void addConstraint(QList<AnchorLayoutAnchor*>& constraints, AnchorLayoutAnchor::Orientation orientation,
 				float relativePlaceEdgePosition, Element* placeElement, int offset, float relativeFixedEdgePosition,
 				Element* fixedElement);
-		int placeElements(QList<AnchorLayoutConstraint*>& constraints, AnchorLayoutConstraint::Orientation orientation,
+		int placeElements(QList<AnchorLayoutAnchor*>& constraints, AnchorLayoutAnchor::Orientation orientation,
 				Item* item);
-		void sortConstraints(QList<AnchorLayoutConstraint*>& constraints,
-				AnchorLayoutConstraint::Orientation orientation);
+		void sortConstraints(QList<AnchorLayoutAnchor*>& constraints,
+				AnchorLayoutAnchor::Orientation orientation);
 
 		QList<Element*> elementList_{};
-		QList<AnchorLayoutConstraint*> horizontalConstraints_{};
-		QList<AnchorLayoutConstraint*> verticalConstraints_{};
+		QList<AnchorLayoutAnchor*> horizontalConstraints_{};
+		QList<AnchorLayoutAnchor*> verticalConstraints_{};
 		bool horizontalHasCircularDependencies_{};
 		bool verticalHasCircularDependencies_{};
 };

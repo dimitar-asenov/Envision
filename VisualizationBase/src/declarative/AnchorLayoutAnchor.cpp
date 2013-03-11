@@ -24,26 +24,26 @@
  **
  **********************************************************************************************************************/
 
-#include "AnchorLayoutConstraint.h"
+#include "AnchorLayoutAnchor.h"
 #include "../items/Item.h"
 #include "Element.h"
 
 namespace Visualization {
 
-AnchorLayoutConstraint::AnchorLayoutConstraint(float relativePlaceEdgePosition, Element* placeElement, int offset,
+AnchorLayoutAnchor::AnchorLayoutAnchor(float relativePlaceEdgePosition, Element* placeElement, int offset,
 		float relativeFixedEdgePosition, Element* fixedElement)
 : relativePlaceEdgePosition_{relativePlaceEdgePosition}, placeElement_{placeElement}, offset_{offset},
   relativeFixedEdgePosition_{relativeFixedEdgePosition}, fixedElement_{fixedElement}
 {}
 
-AnchorLayoutConstraint::~AnchorLayoutConstraint()
+AnchorLayoutAnchor::~AnchorLayoutAnchor()
 {}
 
 /**
  * Calculates the position in the orientation axis of the element to be placed, assuming it's size was already
  * calculated, and the position on the orientation axis of the fixed element is already fixed.
  */
-bool AnchorLayoutConstraint::execute(Orientation orientation, bool stretchPlaceElement, Item* item)
+bool AnchorLayoutAnchor::execute(Orientation orientation, bool stretchPlaceElement, Item* item)
 {
 	Q_ASSERT(orientation != Orientation::Auto);
 
@@ -113,9 +113,9 @@ bool AnchorLayoutConstraint::execute(Orientation orientation, bool stretchPlaceE
 	}
 }
 
-bool AnchorLayoutConstraint::dependsOn(AnchorLayoutConstraint* other, QList<AnchorLayoutConstraint*>& allConstraints)
+bool AnchorLayoutAnchor::dependsOn(AnchorLayoutAnchor* other, QList<AnchorLayoutAnchor*>& allConstraints)
 {
-	QList<AnchorLayoutConstraint*> dependsOn = {this};
+	QList<AnchorLayoutAnchor*> dependsOn = {this};
 
 	while (!dependsOn.empty())
 	{
