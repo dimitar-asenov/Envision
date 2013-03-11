@@ -41,3 +41,9 @@ int Header::headerFunc()
     int someVarInCPP;
     return 0;
 }
+
+int Header::headerFunc(int k)
+{
+    int anotherVar;
+    return 100;
+}
