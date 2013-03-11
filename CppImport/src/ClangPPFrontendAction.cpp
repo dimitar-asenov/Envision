@@ -35,3 +35,8 @@ void ClangPPFrontendAction::ExecuteAction()
 {
     std::cout << "EXECUTE ACTION " << std::endl;
 }
+
+void ClangPPFrontendAction::usesPreprocessorOnly() const
+{
+    return true;
+}

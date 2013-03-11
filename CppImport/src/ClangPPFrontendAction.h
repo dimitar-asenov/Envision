@@ -11,6 +11,7 @@ public:
     virtual clang::ASTConsumer* CreateASTConsumer(clang::CompilerInstance &CI, llvm::StringRef InFile) override;
     virtual bool BeginSourceFileAction(clang::CompilerInstance &CI, llvm::StringRef Filename) override;
     virtual void ExecuteAction() override;
+    virtual void usesPreprocessorOnly() const override;
 
 private:
     Model::Model* model_;
