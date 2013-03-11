@@ -71,7 +71,7 @@ Library* createContractsLibrary()
 	contract->methods()->append(req);
 	req->arguments()->append( new FormalArgument("precondition", new PrimitiveTypeExpression(PrimitiveType::BOOLEAN)) );
 	req->annotations()->append(new ExpressionStatement(
-		OOExpressionBuilder::getOOExpression("EnvisionKeywordVisualization(\"contract_requires\")")));
+		OOExpressionBuilder::getOOExpression("EnvisionKeywordVisualization(\"contracts/requires\")")));
 	req->annotations()->append(new ExpressionStatement(
 		OOExpressionBuilder::getOOExpression("EnvisionShortcut(\"requires\")")));
 	req->extension<Position>()->setY(0);
@@ -80,7 +80,7 @@ Library* createContractsLibrary()
 	contract->methods()->append(ens);
 	ens->arguments()->append( new FormalArgument("postcondition", new PrimitiveTypeExpression(PrimitiveType::BOOLEAN)) );
 	ens->annotations()->append(new ExpressionStatement(
-			OOExpressionBuilder::getOOExpression("EnvisionKeywordVisualization(\"contract_ensures\")")));
+			OOExpressionBuilder::getOOExpression("EnvisionKeywordVisualization(\"contracts/ensures\")")));
 	ens->annotations()->append(new ExpressionStatement(
 		OOExpressionBuilder::getOOExpression("EnvisionShortcut(\"ensures\")")));
 	ens->extension<Position>()->setY(120);
@@ -89,7 +89,7 @@ Library* createContractsLibrary()
 	contract->methods()->append(res);
 	res->typeArguments()->append( new FormalTypeArgument("T") );
 	res->annotations()->append(new ExpressionStatement(
-		OOExpressionBuilder::getOOExpression("EnvisionKeywordVisualization(\"contract_result\")")));
+		OOExpressionBuilder::getOOExpression("EnvisionKeywordVisualization(\"contracts/result\")")));
 	res->annotations()->append(new ExpressionStatement(
 		OOExpressionBuilder::getOOExpression("EnvisionShortcut(\"result\",1)")));
 	res->extension<Position>()->setY(240);
@@ -99,7 +99,7 @@ Library* createContractsLibrary()
 	old->typeArguments()->append(new FormalTypeArgument("T"));
 	old->arguments()->append( new FormalArgument("variable", new ReferenceExpression("T")) );
 	old->annotations()->append(new ExpressionStatement(
-		OOExpressionBuilder::getOOExpression("EnvisionKeywordVisualization(\"contract_old\")")));
+		OOExpressionBuilder::getOOExpression("EnvisionKeywordVisualization(\"contracts/old\")")));
 	old->annotations()->append(new ExpressionStatement(
 		OOExpressionBuilder::getOOExpression("EnvisionShortcut(\"old\")")));
 	old->extension<Position>()->setY(360);
@@ -119,7 +119,7 @@ Library* createContractsLibrary()
 	out->typeArguments()->append( new FormalTypeArgument("T") );
 	out->arguments()->append( new FormalArgument("argument", new ReferenceExpression("T")) );
 	out->annotations()->append(new ExpressionStatement(
-				OOExpressionBuilder::getOOExpression("EnvisionKeywordVisualization(\"contract_out\")")));
+				OOExpressionBuilder::getOOExpression("EnvisionKeywordVisualization(\"contracts/out\")")));
 	out->extension<Position>()->setY(720);
 
 	ValueAtReturnVisitor::setMethods(ens, out);
