@@ -33,7 +33,15 @@ namespace Visualization {
 class VISUALIZATIONBASE_API StyleNode
 {
 	public:
-		StyleNode(const QString& rootStyleFileName, const QString& folderWithinStyles);
+		/**
+		 * Creates a node representing the requested style.
+		 *
+		 * \a folderWithinStyles is the folder that contains the style file \a rootStyleNameAndPath. The \a
+		 * rootStyleNameAndPath might be just a simple file name or can contain an additional sub-style separated by a '/'
+		 * e.g. "keywordStyleFile/requiresKeyword". The latter case indicates that, the style is not the root XML node,
+		 * but the is contained by the node with a name indicated by the string after the '/'.
+		 */
+		StyleNode(const QString& rootStyleNameAndPath, const QString& folderWithinStyles);
 		virtual ~StyleNode();
 
 		static void setBaseFolder( const QString &baseFolder);
