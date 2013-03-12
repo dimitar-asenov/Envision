@@ -19,24 +19,29 @@ clang::ASTConsumer *ClangPPFrontendAction::CreateASTConsumer(clang::CompilerInst
     InFile.str();
 //    CI.getASTConsumer();
     CI.hasASTConsumer();
-    return new ClangAstConsumer(model_,project_);
+    return new ClangAstConsumer(&CI,model_,project_);
 }
 
-bool ClangPPFrontendAction::BeginSourceFileAction(clang::CompilerInstance &CI, llvm::StringRef Filename)
-{
-    Filename.str();
-    CI.hasASTConsumer();
-//    CI.getASTConsumer();
-    std::cout << "BEGIN SOURCE FILE ACTION - HAS PP: " << CI.hasPreprocessor() << std::endl;
-    return true;
-}
+//bool ClangPPFrontendAction::BeginSourceFileAction(clang::CompilerInstance &CI, llvm::StringRef Filename)
+//{
+//    Filename.str();
+//    CI.hasASTConsumer();
+////    CI.getASTConsumer();
+//    std::cout << "BEGIN SOURCE FILE ACTION - HAS PP: " << CI.hasPreprocessor() << std::endl;
+//    return true;
+//}
 
-void ClangPPFrontendAction::ExecuteAction()
-{
-    std::cout << "EXECUTE ACTION " << std::endl;
-}
+//void ClangPPFrontendAction::EndSourceFileAction()
+//{
+//    std::cout << "END SOURCE FILE ACTION  " << std::endl;
+//}
 
-void ClangPPFrontendAction::usesPreprocessorOnly() const
-{
-    return true;
-}
+//void ClangPPFrontendAction::ExecuteAction()
+//{
+//    std::cout << "EXECUTE ACTION " << std::endl;
+//}
+
+//bool ClangPPFrontendAction::usesPreprocessorOnly() const
+//{
+//    return false;
+//}
