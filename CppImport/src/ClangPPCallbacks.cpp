@@ -1,6 +1,6 @@
 #include "ClangPPCallbacks.h"
 
-ClangPPCallbacks::ClangPPCallbacks()
+ClangPPCallbacks::ClangPPCallbacks() : clang::PPCallbacks()
 {
 }
 
