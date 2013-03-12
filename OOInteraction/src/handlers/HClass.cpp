@@ -50,6 +50,7 @@ void HClass::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	{
 		showCommandPrompt(target);
 	}
+	else GenericHandler::keyPressEvent(target, event);
 }
 
 } /* namespace OOInteraction */
