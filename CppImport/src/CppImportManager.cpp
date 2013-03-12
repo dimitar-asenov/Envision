@@ -7,6 +7,8 @@ CppImportManager::CppImportManager()
     testModel_->beginModification(testProject_, "Adding a project");
     testProject_->setName("NewProject");
     testModel_->endModification();
+    HelperSingleton::getInstance().setModel(testModel_);
+    HelperSingleton::getInstance().setProject(testProject_);
 }
 
 void CppImportManager::setSrcFile(QString fileName)
@@ -33,11 +35,11 @@ void CppImportManager::visualizeSrcFile()
     myTool_ = new clang::tooling::ClangTool(*compilationDB_,sources_);
 
 //    ClangPPFrontendAction* myPP = new ClangPPFrontendAction(testModel_,testProject_);
-    myTool_->run(clang::tooling::newFrontendActionFactory<ClangPPFrontendAction>());
+//    myTool_->run(clang::tooling::newFrontendActionFactory<ClangPPFrontendAction>());
 
 
-    ClangConsumerFactory* myFac = new ClangConsumerFactory(testModel_,testProject_);
-    myTool_->run(clang::tooling::newFrontendActionFactory<ClangConsumerFactory>(myFac));
+//    ClangConsumerFactory* myFac = new ClangConsumerFactory(testModel_,testProject_);
+    myTool_->run(clang::tooling::newFrontendActionFactory<ClangConsumerFactory>());
 }
 
 Model::Model* CppImportManager::getModel()

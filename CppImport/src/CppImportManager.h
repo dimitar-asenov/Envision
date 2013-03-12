@@ -5,6 +5,7 @@
 #include "ClangAstFrontendActions.h"
 #include "ClangConsumerFactory.h"
 #include "ClangPPFrontendAction.h"
+#include "HelperSingleton.h"
 
 class CppImportManager
 {

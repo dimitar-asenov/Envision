@@ -59,7 +59,8 @@ HEADERS += src/precompiled.h \
     src/CppImportManager.h \
     src/CppImportUtilities.h \
     src/TranslateManager.h \
-    src/ClangPPCallbacks.h
+    src/ClangPPCallbacks.h \
+    src/HelperSingleton.h
 SOURCES += src/CppImportException.cpp \
 	src/cppimport.cpp \
 	test/SimpleTest.cpp \
@@ -71,4 +72,5 @@ SOURCES += src/CppImportException.cpp \
     src/CppImportManager.cpp \
     src/CppImportUtilities.cpp \
     src/TranslateManager.cpp \
-    src/ClangPPCallbacks.cpp
+    src/ClangPPCallbacks.cpp \
+    src/HelperSingleton.cpp

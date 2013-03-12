@@ -2,12 +2,15 @@
 
 #include "cppimport_api.h"
 #include "ClangAstConsumer.h"
+#include "HelperSingleton.h"
 
-class ClangConsumerFactory
+class ClangConsumerFactory : public clang::ASTFrontendAction
 {
 public:
+    ClangConsumerFactory();
     ClangConsumerFactory(Model::Model* model, OOModel::Project* project);
-    clang::ASTConsumer* newASTConsumer();
+//    clang::ASTConsumer* newASTConsumer();
+    virtual clang::ASTConsumer* CreateASTConsumer(clang::CompilerInstance &CI, llvm::StringRef InFile) override;
 
 private:
     Model::Model* model_;
