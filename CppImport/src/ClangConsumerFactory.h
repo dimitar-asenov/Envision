@@ -7,11 +7,11 @@ class ClangConsumerFactory : public clang::ASTFrontendAction
 {
 public:
     ClangConsumerFactory();
-    static Model::Model* getModel() { return model_;}
+//    static Model::Model* getModel() { return model_;}
+    static Model::Model* model_;
     virtual clang::ASTConsumer* CreateASTConsumer(clang::CompilerInstance &CI, llvm::StringRef InFile) override;
 
 private:
-    static Model::Model* model_;
-    static OOModel::Project* project_;
+    OOModel::Project* project_;
 };
 

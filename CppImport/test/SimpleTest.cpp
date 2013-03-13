@@ -290,7 +290,7 @@ TEST(CppImport, SimpleTest)
     manager.setCompilationDbPath("/home/luke/BachelorThesis/Envision/CppImport");
     manager.visualizeSrcFile();
 
-    Model::Model* model = ClangConsumerFactory::getModel();
+    Model::Model* model = ClangConsumerFactory::model_;
     Model::Node* top_level = model->root();
 
     QDir::setCurrent(qApp->applicationDirPath());
