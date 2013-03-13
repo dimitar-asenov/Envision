@@ -1,9 +1,5 @@
 #include "CppImportUtilities.h"
 
-CppImportUtilities::CppImportUtilities()
-{
-}
-
 OOModel::Expression *CppImportUtilities::convertClangType(clang::QualType type)
 {
     if(type.getTypePtr()->isIntegerType())

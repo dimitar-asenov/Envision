@@ -5,6 +5,6 @@
 class CppImportUtilities
 {
 public:
-    CppImportUtilities();
+    CppImportUtilities() {}
     static OOModel::Expression* convertClangType(clang::QualType type);
 };

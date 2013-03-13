@@ -26,6 +26,7 @@
 
 #include "cppimport.h"
 #include "CppImportManager.h"
+#include "ClangConsumerFactory.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
 #include "OOInteraction/src/expression_editor/OOExpressionBuilder.h"
@@ -289,8 +290,8 @@ TEST(CppImport, SimpleTest)
     manager.setCompilationDbPath("/home/luke/BachelorThesis/Envision/CppImport");
     manager.visualizeSrcFile();
 
-    Model::Node *top_level = manager.getProject();
-    Model::Model* model = manager.getModel();
+    Model::Model* model = ClangConsumerFactory::getModel();
+    Model::Node* top_level = model->root();
 
     QDir::setCurrent(qApp->applicationDirPath());
 

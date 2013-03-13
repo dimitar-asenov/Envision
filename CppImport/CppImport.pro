@@ -52,25 +52,19 @@ HEADERS += src/precompiled.h \
 	src/cppimport_api.h \
     src/cppimport.h \
     src/ClangAstConsumer.h \
-    src/ClangAstFrontendActions.h \
     src/ClangAstVisitor.h \
     src/ClangConsumerFactory.h \
-    src/ClangPPFrontendAction.h \
     src/CppImportManager.h \
     src/CppImportUtilities.h \
     src/TranslateManager.h \
-    src/ClangPPCallbacks.h \
-    src/HelperSingleton.h
+    src/ClangPPCallbacks.h
 SOURCES += src/CppImportException.cpp \
 	src/cppimport.cpp \
 	test/SimpleTest.cpp \
     src/ClangAstConsumer.cpp \
-    src/ClangAstFrontendActions.cpp \
     src/ClangAstVisitor.cpp \
     src/ClangConsumerFactory.cpp \
-    src/ClangPPFrontendAction.cpp \
     src/CppImportManager.cpp \
     src/CppImportUtilities.cpp \
     src/TranslateManager.cpp \
-    src/ClangPPCallbacks.cpp \
-    src/HelperSingleton.cpp
+    src/ClangPPCallbacks.cpp

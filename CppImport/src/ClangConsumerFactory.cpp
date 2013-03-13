@@ -2,19 +2,12 @@
 
 ClangConsumerFactory::ClangConsumerFactory()
 {
-    model_  = HelperSingleton::getInstance().getModel();
-    project_ = HelperSingleton::getInstance().getProject();
+    this->model_ = new Model::Model();
+    this->project_ = dynamic_cast<OOModel::Project*> (model_->createRoot("Project"));
+    model_->beginModification(project_, "Adding a project");
+    project_->setName("NewProject");
+    model_->endModification();
 }
-
-ClangConsumerFactory::ClangConsumerFactory(Model::Model *model, OOModel::Project *project)
-    : model_(model) , project_(project)
-{
-}
-
-//clang::ASTConsumer* ClangConsumerFactory::newASTConsumer()
-//{
-//    return new ClangAstConsumer(model_,project_);
-//}
 
 clang::ASTConsumer *ClangConsumerFactory::CreateASTConsumer(clang::CompilerInstance &CI, llvm::StringRef InFile)
 {

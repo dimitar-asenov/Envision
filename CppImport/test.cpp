@@ -12,6 +12,7 @@ public:
         int k;
         if(10)
         {
+            int l;
             k=20;
         }
         else

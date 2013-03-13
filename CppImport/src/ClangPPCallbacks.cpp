@@ -1,9 +1,5 @@
 #include "ClangPPCallbacks.h"
 
-ClangPPCallbacks::ClangPPCallbacks() : clang::PPCallbacks()
-{
-}
-
 void ClangPPCallbacks::FileChanged(clang::SourceLocation Loc, clang::PPCallbacks::FileChangeReason Reason, clang::SrcMgr::CharacteristicKind FileType, clang::FileID PrevFID)
 {
     Loc.isFileID();

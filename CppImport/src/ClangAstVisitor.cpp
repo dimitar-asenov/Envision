@@ -28,9 +28,6 @@ bool ClangAstVisitor::VisitIfStmt(clang::IfStmt *ifStmt)
     {
         OOModel::IfStatement* ooIfStmt = trMngr_->insertIfStmt(ifStmt);
         currentIfStmt_ = ooIfStmt;
-        VisitStmt(ifStmt->getCond());
-        VisitStmt(ifStmt->getThen());
-        VisitStmt(ifStmt->getElse());
         currentMethod_->beginModification("Adding if stmt");
         currentMethod_->items()->append(ooIfStmt);
         currentMethod_->endModification();
