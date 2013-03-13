@@ -152,21 +152,21 @@ void DeclarativeTest::initializeForms()
 	Element* stretchableElement1 = (new GridLayoutElement)
 											->setColumnStretchFactors(1)
 											->put(0, 0, testItemElement)
-											->setCellVerticalAlignment(LayoutStyle::Alignment::Left)
+											->setCellHorizontalAlignment(LayoutStyle::Alignment::Left)
 											->put(1, 0, testItem2Element)
-											->setCellVerticalAlignment(LayoutStyle::Alignment::Right);
+											->setCellHorizontalAlignment(LayoutStyle::Alignment::Right);
 	Element* stretchableElement2 = (new GridLayoutElement)
 											->setColumnStretchFactors(1)
 											->put(0, 0, testItem3Element)
-											->setCellVerticalAlignment(LayoutStyle::Alignment::Left)
+											->setCellHorizontalAlignment(LayoutStyle::Alignment::Left)
 											->put(1, 0, testItem4Element)
-											->setCellVerticalAlignment(LayoutStyle::Alignment::Right);
+											->setCellHorizontalAlignment(LayoutStyle::Alignment::Right);
 	Element* stretchableElement3 = (new GridLayoutElement)
 											->setColumnStretchFactors(1)
 											->put(0, 0, testItem5Element)
-											->setCellVerticalAlignment(LayoutStyle::Alignment::Left)
+											->setCellHorizontalAlignment(LayoutStyle::Alignment::Left)
 											->put(1, 0, testItem6Element)
-											->setCellVerticalAlignment(LayoutStyle::Alignment::Right);
+											->setCellHorizontalAlignment(LayoutStyle::Alignment::Right);
 	addForm((new AnchorLayoutElement())
 				// arrange them on top of each other
 				->put(AnchorLayoutElement::PlaceEdge::TopOf, stretchableElement1, 20,
@@ -195,11 +195,11 @@ int DeclarativeTest::determineForm()
 void DeclarativeTest::determineChildren()
 {
 	BaseItemType::determineChildren();
-	if (testItem2_) testItem2_->setText("second");
-	if (testItem3_) testItem3_->setText("third");
-	if (testItem4_) testItem4_->setText("fourth");
-	if (testItem5_) testItem5_->setText("fifth");
-	if (testItem6_) testItem6_->setText("sixth");
+	if (testItem2_) testItem2_->setText("...second");
+	if (testItem3_) testItem3_->setText("third..");
+	if (testItem4_) testItem4_->setText("fou.....................rth");
+	if (testItem5_) testItem5_->setText("fifth..");
+	if (testItem6_) testItem6_->setText("..sixth");
 }
 
 } /* namespace Visualization */
