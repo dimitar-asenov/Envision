@@ -38,7 +38,7 @@ namespace Visualization {
 ITEM_COMMON_DEFINITIONS(DeclarativeTest, "item")
 
 DeclarativeTest::DeclarativeTest(Item* parent, TestNodes::BinaryNode* node) :
-		DeclarativeItem<DeclarativeTest>(parent), testNode_{node}
+		DeclarativeItem<DeclarativeTest>(parent, itemStyles().get()), testNode_{node}
 {
 	setPurpose(0);
 }
@@ -197,9 +197,9 @@ void DeclarativeTest::determineChildren()
 	BaseItemType::determineChildren();
 	if (testItem2_) testItem2_->setText("...second");
 	if (testItem3_) testItem3_->setText("third..");
-	if (testItem4_) testItem4_->setText("fou.....................rth");
+	if (testItem4_) testItem4_->setText("fourth");
 	if (testItem5_) testItem5_->setText("fifth..");
-	if (testItem6_) testItem6_->setText("..sixth");
+	if (testItem6_) testItem6_->setText("..si.....................xth");
 }
 
 } /* namespace Visualization */

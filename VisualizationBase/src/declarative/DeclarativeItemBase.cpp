@@ -26,6 +26,8 @@
 
 #include "DeclarativeItemBase.h"
 #include "Element.h"
+#include "shapes/Shape.h"
+#include "shapes/ShapeStyle.h"
 
 namespace Visualization {
 
@@ -46,12 +48,40 @@ void DeclarativeItemBase::determineChildren()
 	forms().at(currentFormIndex_)->synchronizeWithItem(this);
 }
 
-void DeclarativeItemBase::updateGeometry(int availableWidth, int avaiableHeight)
+void DeclarativeItemBase::updateGeometry(int availableWidth, int availableHeight)
 {
-	// TODO: adjust for shape
-	forms().at(currentFormIndex_)->computeSize(this, availableWidth, avaiableHeight);
-	setSize(forms().at(currentFormIndex_)->size());
-	forms().at(currentFormIndex_)->setItemPositions(this);
+	Element* currentForm = forms().at(currentFormIndex_);
+
+	if (hasShape())
+	{
+		getShape()->setOffset(0, 0);
+
+		if ( sizeDependsOnParent() && (availableWidth > 0 || availableHeight > 0) )
+		{
+			QSize inner = getShape()->innerSize(availableWidth, availableHeight);
+			currentForm->computeSize(this, inner.width(), inner.height());
+
+			if (currentForm->size().width() > inner.width()) inner.setWidth(currentForm->size().width());
+			if (currentForm->size().height() > inner.height()) inner.setHeight(currentForm->size().height());
+
+			getShape()->setInnerSize(inner.width(), inner.height());
+		}
+		else
+		{
+			currentForm->computeSize(this, 0, 0);
+			getShape()->setInnerSize(currentForm->size().width(), currentForm->size().height());
+		}
+
+		currentForm->setItemPositions(this, getShape()->contentLeft(), getShape()->contentTop());
+	}
+	else
+	{
+		if (sizeDependsOnParent() && (availableWidth > 0 || availableHeight > 0))
+			currentForm->computeSize(this, availableWidth, availableHeight);
+		else currentForm->computeSize(this, 0, 0);
+		currentForm->setItemPositions(this);
+		setSize(currentForm->size());
+	}
 }
 
 bool DeclarativeItemBase::sizeDependsOnParent() const
