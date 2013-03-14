@@ -28,6 +28,8 @@
 
 #include "Element.h"
 
+#include <lpsolve/lp_lib.h>
+
 namespace Visualization {
 
 AnchorLayoutConstraintSolver::AnchorLayoutConstraintSolver()
@@ -168,6 +170,25 @@ QVector<float> AnchorLayoutConstraintSolver::solveConstraints()
 	for (int i=0; i<numVariables_; ++i)
 		result.append((float) rowValues_[i]);
 	return result;
+}
+
+void AnchorLayoutConstraintSolver::initializeConstraintSolver(int numVariables)
+{
+	lp_ = make_lp(0, numVariables);
+	Q_ASSERT(lp_ != nullptr);
+	rowValues_ = new double[numVariables];
+	columnIndices_ = new int[numVariables];
+	numVariables_ = numVariables;
+	set_add_rowmode(lp_, true);
+}
+
+void AnchorLayoutConstraintSolver::cleanUpConstraintSolver()
+{
+	SAFE_DELETE(lp_);
+	// make safe, add to destructor
+	delete[] rowValues_;
+	delete[] columnIndices_;
+	numVariables_ = 0;
 }
 
 } /* namespace Visualization */

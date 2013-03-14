@@ -29,7 +29,7 @@
 
 #include "AnchorLayoutAnchor.h"
 
-#include <lpsolve/lp_lib.h>
+struct _lprec;
 
 namespace Visualization {
 
@@ -53,29 +53,13 @@ class AnchorLayoutConstraintSolver {
 		int startVariable(int elementIndex);
 		int endVariable(int elementIndex);
 
-		lprec* lp_{};
+		_lprec* lp_{};
 		double* rowValues_{};
 		int* columnIndices_{};
 		int numVariables_{};
 
 };
 
-inline void AnchorLayoutConstraintSolver::initializeConstraintSolver(int numVariables)
-{
-	lp_ = make_lp(0, numVariables);
-	Q_ASSERT(lp_ != nullptr);
-	rowValues_ = new double[numVariables];
-	columnIndices_ = new int[numVariables];
-	numVariables_ = numVariables;
-	set_add_rowmode(lp_, true);
-}
-inline void AnchorLayoutConstraintSolver::cleanUpConstraintSolver()
-{
-	SAFE_DELETE(lp_);
-	delete[] rowValues_;
-	delete[] columnIndices_;
-	numVariables_ = 0;
-}
 inline int AnchorLayoutConstraintSolver::startVariable(int elementIndex)
 {
 	return 2 * elementIndex;
