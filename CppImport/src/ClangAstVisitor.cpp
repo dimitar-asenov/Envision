@@ -8,10 +8,53 @@ ClangAstVisitor::ClangAstVisitor(Model::Model* model, OOModel::Project* currentP
     currentMethod_ = nullptr;
     currentIfStmt_ = nullptr;
     trMngr_ = new TranslateManager(model,currentProject);
+
+    ooStack.push(currentProject_);
 }
+
+//bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl *rd)
+//{
+//    std::cout << "Visiting ClassDecl " << rd->getName().str() <<std::endl;
+
+
+//    if(llvm::isa<clang::CXXRecordDecl>(rd))
+//    {
+//        clang::CXXRecordDecl* recDecl = llvm::cast<clang::CXXRecordDecl>(rd);
+//        if(recDecl->isClass())
+//        {
+//            OOModel::Class* ooClass = new OOModel::Class();
+//            currentProject_->classes()->append(ooClass);
+//            ooClass->setName(QString::fromStdString(recDecl->getName().str()));
+
+//            trMngr_->insertClass(rd,ooClass);
+//            currentClass_ = ooClass;
+
+//            ooStack.push(ooClass);
+//        }
+//    }
+//    return VisitDecl(rd);
+//}
+
+//bool ClangAstVisitor::TraverseIfStmt(clang::IfStmt *ifStmt)
+//{
+//    if(currentMethod_)
+//    {
+//        OOModel::IfStatement* ooIfStmt = trMngr_->insertIfStmt(ifStmt);
+//        currentIfStmt_ = ooIfStmt;
+//        currentMethod_->items()->append(ooIfStmt);
+//        std::cout << "TRAVERSING IF STMT" << std::endl;
+//        VisitStmt(ifStmt->getCond());
+//        VisitStmt(ifStmt->getThen());
+//        VisitStmt(ifStmt->getElse());
+//        std::cout << "TRAVERSING IF STMT END" << std::endl;
+//        currentIfStmt_ = nullptr;
+//    }
+//    return true;
+//}
 
 bool ClangAstVisitor::VisitStmt(clang::Stmt* S)
 {
+    std::cout << "VISITING STMT" << std::endl;
     if(S)
     {
         if(llvm::isa<clang::IfStmt>(S))
@@ -19,6 +62,7 @@ bool ClangAstVisitor::VisitStmt(clang::Stmt* S)
 
         }
     }
+    S->dump();
     return true;
 }
 
@@ -29,6 +73,11 @@ bool ClangAstVisitor::VisitIfStmt(clang::IfStmt *ifStmt)
         OOModel::IfStatement* ooIfStmt = trMngr_->insertIfStmt(ifStmt);
         currentIfStmt_ = ooIfStmt;
         currentMethod_->items()->append(ooIfStmt);
+        std::cout << "TRAVERSING IF STMT" << std::endl;
+        VisitStmt(ifStmt->getCond());
+        VisitStmt(ifStmt->getThen());
+        VisitStmt(ifStmt->getElse());
+        std::cout << "TRAVERSING IF STMT END" << std::endl;
         currentIfStmt_ = nullptr;
     }
     return true;
@@ -110,7 +159,7 @@ bool ClangAstVisitor::VisitCXXMethodDecl(clang::CXXMethodDecl *methodDecl)
     if(method) currentMethod_ = method;
     else
         std::cout << "___________ERROR NO OOMODEL::METHOD FOR THIS DECL_______" << std::endl;
-   // VisitStmt(methodDecl->getBody());
+    // VisitStmt(methodDecl->getBody());
 
     //decide where to add
 

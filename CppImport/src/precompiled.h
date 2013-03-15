@@ -58,6 +58,7 @@
 #include <string>
 
 #include <QtCore/QDir>
+#include <QtCore/QStack>
 
 
 #include "OOModel/src/allOOModelNodes.h"
