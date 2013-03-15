@@ -41,6 +41,10 @@ TestBox::TestBox(const QString& label, QColor color, bool sizeDependsOnParent)
 : TextRenderer{nullptr, itemStyles().get(), label}, color_(color), sizeDependsOnParent_(sizeDependsOnParent)
 {}
 
+TestBox::TestBox(const QString& label, bool sizeDependsOnParent)
+: TextRenderer{nullptr, itemStyles().get(), label}, sizeDependsOnParent_(sizeDependsOnParent)
+{}
+
 bool TestBox::hasNode() const
 {
 	return node_;

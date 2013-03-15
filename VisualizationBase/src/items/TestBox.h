@@ -40,7 +40,8 @@ class VISUALIZATIONBASE_API TestBox : public TextRenderer {
 
 		TestBox(Item* parent, NodeType* node);
 		TestBox(NodeType* node);
-		TestBox(const QString& label, QColor color = Qt::yellow, bool sizeDependsOnParent = false);
+		TestBox(const QString& label, QColor color, bool sizeDependsOnParent = false);
+		TestBox(const QString& label, bool sizeDependsOnParent = false);
 
 		virtual bool sizeDependsOnParent() const override;
 
@@ -65,7 +66,7 @@ class VISUALIZATIONBASE_API TestBox : public TextRenderer {
 		NodeType* node_{};
 		int nodeRevision_{-1};
 
-		QColor color_;
+		QColor color_{Qt::yellow};
 		bool sizeDependsOnParent_{};
 };
 
