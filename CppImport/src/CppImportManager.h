@@ -8,14 +8,13 @@ class CppImportManager
 {
 public:
     CppImportManager(){}
+    ~CppImportManager();
     void setSrcFile(QString fileName);
     bool setCompilationDbPath(QString path);
     void visualizeSrcFile();
 
 protected:
     clang::CompilerInstance compilerInstance_;
-    ClangAstConsumer* astConsumer_;
-    clang::ASTContext* astContext_;
     clang::tooling::ClangTool* myTool_;
     clang::tooling::CompilationDatabase* compilationDB_;
     std::vector<std::string> sources_;

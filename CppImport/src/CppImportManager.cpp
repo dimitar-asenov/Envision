@@ -1,5 +1,11 @@
 #include "CppImportManager.h"
 
+CppImportManager::~CppImportManager()
+{
+    delete compilationDB_;
+    delete myTool_;
+}
+
 void CppImportManager::setSrcFile(QString fileName)
 {
     sources_.push_back(fileName.toStdString());
