@@ -49,39 +49,9 @@ OOModel::Method* TranslateManager::insertMethodDecl(clang::CXXMethodDecl* mDecl)
                 }
             }
         }
-
-        if(!method)
-        {
-            method = new OOModel::Method();
-            method->setName(QString::fromStdString(mDecl->getName().str()));
-
-            OOModel::Expression* restype = CppImportUtilities::convertClangType(mDecl->getResultType());
-            if(restype)
-            {
-                OOModel::FormalResult* methodResult = new OOModel::FormalResult();
-                methodResult->setTypeExpression(restype);
-                method->results()->append(methodResult);
-            }
-
-            clang::FunctionDecl::param_const_iterator it = mDecl->param_begin();
-            for(;it != mDecl->param_end();++it)
-            {
-                OOModel::FormalArgument* arg = new OOModel::FormalArgument();
-                arg->setName(QString::fromStdString((*it)->getName().str()));
-                OOModel::Expression* type = CppImportUtilities::convertClangType((*it)->getType());
-                if(type) arg->setTypeExpression(type);
-                method->arguments()->append(arg);
-            }
-
-            OOModel::Class* parent = classMap_.value(mDecl->getParent());
-
-            parent->methods()->append(method);
-
-
-            methodMap_.insert(mDecl,method);
-        }
+        // check if method node exists or else create one
+        method = method ? method : addNewMethod(mDecl);
     }
-
     return method;
 }
 
@@ -120,4 +90,36 @@ OOModel::IfStatement *TranslateManager::insertIfStmt(clang::IfStmt* ifStmt)
     OOModel::IfStatement* ooIfStmt = new OOModel::IfStatement();
     ifStmtMap_.insert(ifStmt,ooIfStmt);
     return ooIfStmt;
+}
+
+OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl)
+{
+    // add a new method
+    OOModel::Method* method = new OOModel::Method();
+    method->setName(QString::fromStdString(mDecl->getName().str()));
+    // process result type
+    OOModel::Expression* restype = CppImportUtilities::convertClangType(mDecl->getResultType());
+    if(restype)
+    {
+        OOModel::FormalResult* methodResult = new OOModel::FormalResult();
+        methodResult->setTypeExpression(restype);
+        method->results()->append(methodResult);
+    }
+    // process arguments
+    clang::FunctionDecl::param_const_iterator it = mDecl->param_begin();
+    for(;it != mDecl->param_end();++it)
+    {
+        OOModel::FormalArgument* arg = new OOModel::FormalArgument();
+        arg->setName(QString::fromStdString((*it)->getName().str()));
+        OOModel::Expression* type = CppImportUtilities::convertClangType((*it)->getType());
+        if(type) arg->setTypeExpression(type);
+        method->arguments()->append(arg);
+    }
+    // find the correct class to add the method
+    OOModel::Class* parent = classMap_.value(mDecl->getParent());
+    parent->methods()->append(method);
+
+    methodMap_.insert(mDecl,method);
+
+    return method;
 }

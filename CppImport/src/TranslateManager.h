@@ -15,6 +15,9 @@ public:
 
 
 private:
+    OOModel::Method* addNewMethod(clang::CXXMethodDecl* mDecl);
+
+
     Model::Model* model_;
     OOModel::Project* project_;
 
