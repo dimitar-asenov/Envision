@@ -6,7 +6,9 @@ win32:LIBS += -llogger \
     -lmodelbase
 QT += xml \
     svg
-HEADERS += src/items/LineStyle.h \
+HEADERS += src/nodes/TestBoxNode.h \
+    src/items/TestBox.h \
+    src/items/LineStyle.h \
     src/items/Line.h \
     src/items/Mipmap.h \
     src/items/VisualizationAddOn.h \
@@ -88,7 +90,9 @@ HEADERS += src/items/LineStyle.h \
     src/visualizationbase_api.h \
     test/BoxTest.h \
     src/visualizationbase.h
-SOURCES += src/items/LineStyle.cpp \
+SOURCES += src/nodes/TestBoxNode.cpp \
+    src/items/TestBox.cpp \
+    src/items/LineStyle.cpp \
     src/items/Line.cpp \
     src/items/Mipmap.cpp \
     src/items/VisualizationAddOn.cpp \

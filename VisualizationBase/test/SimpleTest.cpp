@@ -31,6 +31,7 @@
 #include "items/VExtendable.h"
 #include "items/VList.h"
 #include "items/RootItem.h"
+#include "nodes/TestBoxNode.h"
 
 #include "ModelBase/src/test_nodes/BinaryNode.h"
 #include "ModelBase/src/nodes/Text.h"
@@ -63,6 +64,10 @@ TEST(VisualizationBase, ExtendableTest)
 	second->name()->set("Empty node");
 
 	third->set("Some independent text");
+
+	list->append(new TestBoxNode("someText"));
+	list->append(new TestBoxNode("stretch", true));
+
 	model->endModification();
 
 	auto top = new RootItem(list);
