@@ -75,9 +75,7 @@ OOModel::Method* TranslateManager::insertMethodDecl(clang::CXXMethodDecl* mDecl)
 
             OOModel::Class* parent = classMap_.value(mDecl->getParent());
 
-            parent->beginModification("Adding a Method");
             parent->methods()->append(method);
-            parent->endModification();
 
 
             methodMap_.insert(mDecl,method);

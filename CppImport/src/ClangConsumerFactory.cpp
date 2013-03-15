@@ -6,7 +6,6 @@ ClangConsumerFactory::ClangConsumerFactory()
     project_ = dynamic_cast<OOModel::Project*> (model_->createRoot("Project"));
     model_->beginModification(project_, "Adding a project");
     project_->setName("NewProject");
-    model_->endModification();
 }
 
 clang::ASTConsumer *ClangConsumerFactory::CreateASTConsumer(clang::CompilerInstance &CI, llvm::StringRef InFile)
