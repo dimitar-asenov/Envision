@@ -9,11 +9,11 @@ class CppImportManager
 public:
     CppImportManager(){}
     ~CppImportManager();
-    void setSrcFile(QString fileName);
-    bool setCompilationDbPath(QString path);
+    bool setSrcPath(QString& path);
     void visualizeSrcFile();
 
 protected:
+    bool setCompilationDbPath(QString& path);
     clang::CompilerInstance compilerInstance_;
     clang::tooling::ClangTool* myTool_;
     clang::tooling::CompilationDatabase* compilationDB_;
