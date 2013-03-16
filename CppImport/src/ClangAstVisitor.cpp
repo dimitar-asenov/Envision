@@ -55,13 +55,7 @@ ClangAstVisitor::ClangAstVisitor(Model::Model* model, OOModel::Project* currentP
 bool ClangAstVisitor::VisitStmt(clang::Stmt* S)
 {
     std::cout << "VISITING STMT" << std::endl;
-    if(S)
-    {
-        if(llvm::isa<clang::IfStmt>(S))
-        {
-
-        }
-    }
+    llvm::errs() << "VISITING STMT" << "\n";
     S->dump();
     return true;
 }
@@ -126,7 +120,14 @@ bool ClangAstVisitor::VisitVarDecl(clang::VarDecl* vd)
 
         trMngr_->insertVar(vd,varDecl);
 
-        currentMethod_->items()->append(varDecl);
+        if(currentIfStmt_)
+        {
+            OOModel::StatementItemList* items = new OOModel::StatementItemList();
+            items->append(varDecl);
+            currentIfStmt_->setThenBranch(items);
+        }
+        else
+            currentMethod_->items()->append(varDecl);
     }
     else
     {
