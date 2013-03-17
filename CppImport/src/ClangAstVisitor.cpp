@@ -12,28 +12,28 @@ ClangAstVisitor::ClangAstVisitor(Model::Model* model, OOModel::Project* currentP
     ooStack.push(currentProject_);
 }
 
-//bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl *rd)
-//{
-//    std::cout << "Visiting ClassDecl " << rd->getName().str() <<std::endl;
+bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl *rd)
+{
+    std::cout << "Visiting ClassDecl " << rd->getName().str() <<std::endl;
 
 
-//    if(llvm::isa<clang::CXXRecordDecl>(rd))
-//    {
-//        clang::CXXRecordDecl* recDecl = llvm::cast<clang::CXXRecordDecl>(rd);
-//        if(recDecl->isClass())
-//        {
-//            OOModel::Class* ooClass = new OOModel::Class();
-//            currentProject_->classes()->append(ooClass);
-//            ooClass->setName(QString::fromStdString(recDecl->getName().str()));
+    if(llvm::isa<clang::CXXRecordDecl>(rd))
+    {
+        clang::CXXRecordDecl* recDecl = llvm::cast<clang::CXXRecordDecl>(rd);
+        if(recDecl->isClass())
+        {
+            OOModel::Class* ooClass = new OOModel::Class();
+            currentProject_->classes()->append(ooClass);
+            ooClass->setName(QString::fromStdString(recDecl->getName().str()));
 
-//            trMngr_->insertClass(rd,ooClass);
-//            currentClass_ = ooClass;
+            trMngr_->insertClass(rd,ooClass);
+            currentClass_ = ooClass;
 
-//            ooStack.push(ooClass);
-//        }
-//    }
-//    return VisitDecl(rd);
-//}
+            ooStack.push(ooClass);
+        }
+    }
+    return Base::TraverseCXXRecordDecl(rd);
+}
 
 //bool ClangAstVisitor::TraverseIfStmt(clang::IfStmt *ifStmt)
 //{
@@ -57,7 +57,7 @@ bool ClangAstVisitor::VisitStmt(clang::Stmt* S)
     std::cout << "VISITING STMT" << std::endl;
     llvm::errs() << "VISITING STMT" << "\n";
     S->dump();
-    return true;
+    return Base::VisitStmt(S);
 }
 
 bool ClangAstVisitor::VisitIfStmt(clang::IfStmt *ifStmt)
@@ -67,11 +67,14 @@ bool ClangAstVisitor::VisitIfStmt(clang::IfStmt *ifStmt)
         OOModel::IfStatement* ooIfStmt = trMngr_->insertIfStmt(ifStmt);
         currentIfStmt_ = ooIfStmt;
         currentMethod_->items()->append(ooIfStmt);
-        std::cout << "TRAVERSING IF STMT" << std::endl;
-        VisitStmt(ifStmt->getCond());
-        VisitStmt(ifStmt->getThen());
-        VisitStmt(ifStmt->getElse());
-        std::cout << "TRAVERSING IF STMT END" << std::endl;
+        llvm::errs() << "TRAVERSING IF STMT" << "\n";
+        StmtVisitor* stmtV = new StmtVisitor();
+        stmtV->TraverseStmt(ifStmt->getThen());
+        ooIfStmt->setThenBranch(stmtV->getItems());
+//        VisitStmt(ifStmt->getCond());
+//        VisitStmt(ifStmt->getThen());
+//        VisitStmt(ifStmt->getElse());
+        llvm::errs() << "TRAVERSING IF STMT END" << "\n";
         currentIfStmt_ = nullptr;
     }
     return true;
@@ -86,26 +89,26 @@ bool ClangAstVisitor::VisitDecl(clang::Decl* D)
     return true;
 }
 
-bool ClangAstVisitor::VisitCXXRecordDecl(clang::CXXRecordDecl* rd)
-{
-    std::cout << "Visiting ClassDecl " << rd->getName().str() <<std::endl;
+//bool ClangAstVisitor::VisitCXXRecordDecl(clang::CXXRecordDecl* rd)
+//{
+//    std::cout << "Visiting ClassDecl " << rd->getName().str() <<std::endl;
 
 
-    if(llvm::isa<clang::CXXRecordDecl>(rd))
-    {
-        clang::CXXRecordDecl* recDecl = llvm::cast<clang::CXXRecordDecl>(rd);
-        if(recDecl->isClass())
-        {
-            OOModel::Class* ooClass = new OOModel::Class();;
-            currentProject_->classes()->append(ooClass);
-            ooClass->setName(QString::fromStdString(recDecl->getName().str()));
+//    if(llvm::isa<clang::CXXRecordDecl>(rd))
+//    {
+//        clang::CXXRecordDecl* recDecl = llvm::cast<clang::CXXRecordDecl>(rd);
+//        if(recDecl->isClass())
+//        {
+//            OOModel::Class* ooClass = new OOModel::Class();;
+//            currentProject_->classes()->append(ooClass);
+//            ooClass->setName(QString::fromStdString(recDecl->getName().str()));
 
-            trMngr_->insertClass(rd,ooClass);
-            currentClass_ = ooClass;
-        }
-    }
-    return true;
-}
+//            trMngr_->insertClass(rd,ooClass);
+//            currentClass_ = ooClass;
+//        }
+//    }
+//    return true;
+//}
 
 bool ClangAstVisitor::VisitVarDecl(clang::VarDecl* vd)
 {
@@ -152,6 +155,7 @@ bool ClangAstVisitor::VisitFieldDecl(clang::FieldDecl* fd)
 
 bool ClangAstVisitor::VisitCXXMethodDecl(clang::CXXMethodDecl *methodDecl)
 {
+    //Constructors not yet handled
     if(llvm::isa<clang::CXXConstructorDecl>(methodDecl))
         return true;
     std::cout << "Visiting FunctionDecl " << methodDecl->getName().str() << std::endl;
@@ -160,13 +164,5 @@ bool ClangAstVisitor::VisitCXXMethodDecl(clang::CXXMethodDecl *methodDecl)
     if(method) currentMethod_ = method;
     else
         std::cout << "___________ERROR NO OOMODEL::METHOD FOR THIS DECL_______" << std::endl;
-    // VisitStmt(methodDecl->getBody());
-
-    //decide where to add
-
-
-    clang::CXXRecordDecl* parentF = methodDecl->getParent();
-    std::cout << "-----FUNCTION-->   " << methodDecl->getName().str() << " ----PARENT ---> "<<parentF->getName().str() << std::endl;
-
     return true;
 }

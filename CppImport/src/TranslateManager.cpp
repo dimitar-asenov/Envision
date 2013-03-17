@@ -75,6 +75,7 @@ void TranslateManager::insertVar(clang::VarDecl* vDecl, OOModel::VariableDeclara
 
     if(vDecl->getParentFunctionOrMethod())
     {
+        std::cout << "HAS PARENT FUNCTION OR METHOD ________" << vDecl->getName().str() << std::endl;
         //add to method
 //        clang::FunctionDecl* parentFunc = dynamic_cast<clang::FunctionDecl*>(vDecl->getParentFunctionOrMethod());
 //        if(methodMap_.contains(llvm::dyn_cast<clang::CXXMethodDecl*>(vDecl->getParentFunctionOrMethod())))
