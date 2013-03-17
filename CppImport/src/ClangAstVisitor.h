@@ -14,10 +14,10 @@ public:
     //bool TraverseExpr(clang::Expr* expression);
    // bool TraverseStmt(clang::Stmt* S);
     bool TraverseCXXRecordDecl(clang::CXXRecordDecl* rd);
-//    bool TraverseIfStmt(clang::IfStmt* ifStmt);
+    bool TraverseIfStmt(clang::IfStmt* ifStmt);
 
     bool VisitStmt(clang::Stmt* S);
-    bool VisitIfStmt(clang::IfStmt* ifStmt);
+//    bool VisitIfStmt(clang::IfStmt* ifStmt);
     bool VisitDecl(clang::Decl* D);
 //    bool VisitCXXRecordDecl(clang::CXXRecordDecl* rd);
     bool VisitVarDecl(clang::VarDecl* vd);

@@ -35,22 +35,22 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl *rd)
     return Base::TraverseCXXRecordDecl(rd);
 }
 
-//bool ClangAstVisitor::TraverseIfStmt(clang::IfStmt *ifStmt)
-//{
-//    if(currentMethod_)
-//    {
-//        OOModel::IfStatement* ooIfStmt = trMngr_->insertIfStmt(ifStmt);
-//        currentIfStmt_ = ooIfStmt;
-//        currentMethod_->items()->append(ooIfStmt);
-//        std::cout << "TRAVERSING IF STMT" << std::endl;
-//        VisitStmt(ifStmt->getCond());
-//        VisitStmt(ifStmt->getThen());
-//        VisitStmt(ifStmt->getElse());
-//        std::cout << "TRAVERSING IF STMT END" << std::endl;
-//        currentIfStmt_ = nullptr;
-//    }
-//    return true;
-//}
+bool ClangAstVisitor::TraverseIfStmt(clang::IfStmt *ifStmt)
+{
+    if(currentMethod_)
+    {
+        OOModel::IfStatement* ooIfStmt = trMngr_->insertIfStmt(ifStmt);
+        currentIfStmt_ = ooIfStmt;
+        currentMethod_->items()->append(ooIfStmt);
+        std::cout << "TRAVERSING IF STMT" << std::endl;
+        TraverseStmt(ifStmt->getCond());
+        TraverseStmt(ifStmt->getThen());
+        TraverseStmt(ifStmt->getElse());
+        std::cout << "TRAVERSING IF STMT END" << std::endl;
+        currentIfStmt_ = nullptr;
+    }
+    return true;
+}
 
 bool ClangAstVisitor::VisitStmt(clang::Stmt* S)
 {
@@ -60,25 +60,27 @@ bool ClangAstVisitor::VisitStmt(clang::Stmt* S)
     return Base::VisitStmt(S);
 }
 
-bool ClangAstVisitor::VisitIfStmt(clang::IfStmt *ifStmt)
-{
-    if(currentMethod_)
-    {
-        OOModel::IfStatement* ooIfStmt = trMngr_->insertIfStmt(ifStmt);
-        currentIfStmt_ = ooIfStmt;
-        currentMethod_->items()->append(ooIfStmt);
-        llvm::errs() << "TRAVERSING IF STMT" << "\n";
-        StmtVisitor* stmtV = new StmtVisitor();
-        stmtV->TraverseStmt(ifStmt->getThen());
-        ooIfStmt->setThenBranch(stmtV->getItems());
-//        VisitStmt(ifStmt->getCond());
-//        VisitStmt(ifStmt->getThen());
-//        VisitStmt(ifStmt->getElse());
-        llvm::errs() << "TRAVERSING IF STMT END" << "\n";
-        currentIfStmt_ = nullptr;
-    }
-    return true;
-}
+//bool ClangAstVisitor::VisitIfStmt(clang::IfStmt *ifStmt)
+//{
+//    if(currentMethod_)
+//    {
+//        OOModel::IfStatement* ooIfStmt = trMngr_->insertIfStmt(ifStmt);
+//        currentIfStmt_ = ooIfStmt;
+//        currentMethod_->items()->append(ooIfStmt);
+//        llvm::errs() << "TRAVERSING IF STMT" << "\n";
+//        llvm::errs() << "IFSTMT THEN BRANCH DUMP   ";
+//        ifStmt->getThen()->dump();
+//        StmtVisitor* stmtV = new StmtVisitor();
+//        stmtV->TraverseStmt(ifStmt->getThen());
+//        ooIfStmt->setThenBranch(stmtV->getItems());
+////        VisitStmt(ifStmt->getCond());
+////        VisitStmt(ifStmt->getThen());
+////        VisitStmt(ifStmt->getElse());
+//        llvm::errs() << "TRAVERSING IF STMT END" << "\n";
+//        currentIfStmt_ = nullptr;
+//    }
+//    return true;
+//}
 
 
 

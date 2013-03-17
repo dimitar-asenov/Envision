@@ -9,6 +9,9 @@ public:
     StmtVisitor();
     OOModel::StatementItemList* getItems() { return items_;}
     bool VisitVarDecl(clang::VarDecl* vd);
+    bool VisitBinaryOperator(clang::BinaryOperator* binOp);
+    bool VisitIntegerLiteral(clang::IntegerLiteral* intLit);
+//    bool VisitDeclStmt(clang::DeclStmt* declStmt);
 
 private:
     OOModel::StatementItemList* items_;

@@ -7,4 +7,5 @@ class CppImportUtilities
 public:
     CppImportUtilities() {}
     static OOModel::Expression* convertClangType(clang::QualType type);
+    static OOModel::BinaryOperation::OperatorTypes convertClangOpcode(clang::BinaryOperatorKind kind);
 };

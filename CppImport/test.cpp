@@ -9,17 +9,17 @@ public:
     int i;
     Testing(){}
     int myFunction(int argument1, bool argument2){
-        int k;
-        if(10)
+        int k = 20;
+        if(k == 10)
         {
-            int l;
+            int l = 10;
             k=20;
         }
         else
         {
             k=0;
         }
-        return 0;}
+        return k;}
 };
 
 

@@ -11,3 +11,17 @@ OOModel::Expression *CppImportUtilities::convertClangType(clang::QualType type)
     else
         return nullptr;
 }
+
+OOModel::BinaryOperation::OperatorTypes CppImportUtilities::convertClangOpcode(clang::BinaryOperatorKind kind)
+{
+    switch (kind) {
+    case clang::BO_EQ:
+        return OOModel::BinaryOperation::EQUALS;
+        break;
+    case clang::BO_Add:
+        return OOModel::BinaryOperation::PLUS;
+    default:
+        return OOModel::BinaryOperation::GREATER;
+        break;
+    }
+}

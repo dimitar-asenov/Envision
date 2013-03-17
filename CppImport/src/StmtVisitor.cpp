@@ -18,3 +18,16 @@ bool StmtVisitor::VisitVarDecl(clang::VarDecl *vd)
     items_->append(varDecl);
     return true;
 }
+
+bool StmtVisitor::VisitBinaryOperator(clang::BinaryOperator *binOp)
+{
+    OOModel::BinaryOperation::OperatorTypes type = CppImportUtilities::convertClangOpcode(binOp->getOpcode());
+    std::cout << "TYPE          BIN OP : " << type << std::endl;
+    return true;
+}
+
+bool StmtVisitor::VisitIntegerLiteral(clang::IntegerLiteral *intLit)
+{
+    intLit->getValue();
+    return true;
+}
