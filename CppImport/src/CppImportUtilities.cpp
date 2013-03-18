@@ -15,15 +15,32 @@ OOModel::Expression *CppImportUtilities::convertClangType(clang::QualType type)
 OOModel::BinaryOperation::OperatorTypes CppImportUtilities::convertClangOpcode(clang::BinaryOperatorKind kind)
 {
     switch (kind) {
-    case clang::BO_EQ:
-        return OOModel::BinaryOperation::EQUALS;
-        break;
+    case clang::BO_Mul:
+        return OOModel::BinaryOperation::TIMES;
+    case clang::BO_Div:
+        return OOModel::BinaryOperation::DIVIDE;
+    case clang::BO_Rem:
+        return OOModel::BinaryOperation::REMAINDER;
     case clang::BO_Add:
         return OOModel::BinaryOperation::PLUS;
-    case clang::BO_Assign:
+    case clang::BO_Sub:
+        return OOModel::BinaryOperation::MINUS;
+    case clang::BO_LT:
+        return OOModel::BinaryOperation::LESS;
+    case clang::BO_GT:
+        return OOModel::BinaryOperation::GREATER;
+    case clang::BO_EQ:
+        return OOModel::BinaryOperation::EQUALS;
+    case clang::BO_NE:
+        return OOModel::BinaryOperation::NOT_EQUALS;
+    case clang::BO_And:
+        return OOModel::BinaryOperation::AND;
+    case clang::BO_Xor:
+        return OOModel::BinaryOperation::XOR;
+    case clang::BO_Or:
+        return OOModel::BinaryOperation::OR;
     default:
         return OOModel::BinaryOperation::GREATER;
-        break;
     }
 }
 
@@ -32,9 +49,19 @@ OOModel::AssignmentExpression::AssignmentTypes CppImportUtilities::convertClangA
     switch (kind) {
     case clang::BO_Assign:
         return OOModel::AssignmentExpression::ASSIGN;
-        break;
+    case clang::BO_MulAssign:
+        return OOModel::AssignmentExpression::TIMES_ASSIGN;
+    case clang::BO_DivAssign:
+        return OOModel::AssignmentExpression::DIVIDE_ASSIGN;
+    case clang::BO_RemAssign:
+        return OOModel::AssignmentExpression::REMAINDER_ASSIGN;
+    case clang::BO_AddAssign:
+        return OOModel::AssignmentExpression::PLUS_ASSIGN;
+    case clang::BO_SubAssign:
+        return OOModel::AssignmentExpression::MINUS_ASSIGN;
+        //
+
     default:
         return OOModel::AssignmentExpression::ASSIGN;
-        break;
     }
 }
