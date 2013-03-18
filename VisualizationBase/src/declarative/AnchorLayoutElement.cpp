@@ -26,6 +26,8 @@
 
 #include "AnchorLayoutElement.h"
 
+#include "AnchorLayoutConstraintSolver.h"
+
 namespace Visualization {
 
 /*
@@ -34,13 +36,14 @@ namespace Visualization {
 
 AnchorLayoutElement::AnchorLayoutElement()
 : elementList_{QList<Element*>()}, horizontalConstraints_{QList<AnchorLayoutAnchor*>()},
-  verticalConstraints_{QList<AnchorLayoutAnchor*>()}, horizontalHasCircularDependencies_{false},
-  verticalHasCircularDependencies_{false}
+  verticalConstraints_{QList<AnchorLayoutAnchor*>()}, horizontalNeedsConstraintSolver_{false},
+  verticalNeedsConstraintSolver_{false}, solver_{new AnchorLayoutConstraintSolver()}
 {}
 
 AnchorLayoutElement::~AnchorLayoutElement()
 {
 	// TODO: delete all contained elements
+	SAFE_DELETE(solver_);
 }
 
 AnchorLayoutElement* AnchorLayoutElement::put(PlaceEdge placeEdge, Element* placeElement, AtEdge atEdge,
@@ -222,50 +225,21 @@ int AnchorLayoutElement::placeElements(QList<AnchorLayoutAnchor*>& constraints,
 		AnchorLayoutAnchor::Orientation orientation, Item* item)
 {
 	Q_ASSERT(orientation != AnchorLayoutAnchor::Orientation::Auto);
-	bool axisHasCircularDependencies = (orientation == AnchorLayoutAnchor::Orientation::Horizontal
-														&& horizontalHasCircularDependencies_)
+	bool axisNeedsConstraintSolver = (orientation == AnchorLayoutAnchor::Orientation::Horizontal
+														&& horizontalNeedsConstraintSolver_)
 												|| (orientation == AnchorLayoutAnchor::Orientation::Vertical
-														&& verticalHasCircularDependencies_);
+														&& verticalNeedsConstraintSolver_);
 
 	int minPos = 0;
-	QList<Element*> alreadyPlacedInThisRound;
-	QList<float> placedAtEdgePosition;
-	int maxIterations = 1000;
-	bool somethingChanged = true;
-
-	for (int i=0; i<1 || (axisHasCircularDependencies && (i<maxIterations) && somethingChanged); ++i)
-	{
-		somethingChanged = false;
-
-		for (AnchorLayoutAnchor* c : constraints)
+	if (axisNeedsConstraintSolver)
+		solver_->placeElements(elementList_, constraints, orientation, item);
+	else
+		for (auto c : constraints)
 		{
-			if (alreadyPlacedInThisRound.contains(c->placeElement()))
-			{
-				int index = alreadyPlacedInThisRound.indexOf(c->placeElement());
-				float lastEdge = placedAtEdgePosition.at(index);
-				if (c->relativePlaceEdgePosition() < lastEdge)
-				{
-					somethingChanged = c->execute(orientation) || somethingChanged;
-					placedAtEdgePosition[index] = c->relativePlaceEdgePosition();
-				}
-				else
-					somethingChanged = c->execute(orientation, true, item) || somethingChanged;
-			}
-			else
-			{
-				somethingChanged = c->execute(orientation) || somethingChanged;
-				alreadyPlacedInThisRound.append(c->placeElement());
-				placedAtEdgePosition.append(c->relativePlaceEdgePosition());
-			}
-			int pos = 0;
-			if (orientation == AnchorLayoutAnchor::Orientation::Horizontal)
-				pos = c->placeElement()->pos().x();
-			else // orientation == AnchorLayoutConstraint::Orientation::Vertical
-				pos = c->placeElement()->pos().y();
-			if (pos < minPos) minPos = pos;
+			int pos = c->execute(orientation);
+			if (pos < minPos)
+				minPos = pos;
 		}
-	}
-
 	return minPos;
 }
 
@@ -274,35 +248,13 @@ void AnchorLayoutElement::sortConstraints(QList<AnchorLayoutAnchor*>& constraint
 {
 	// check if this orientation does not already have circular dependencies (if so, don't sort)
 	Q_ASSERT(orientation != AnchorLayoutAnchor::Orientation::Auto);
-	if (orientation == AnchorLayoutAnchor::Orientation::Horizontal && horizontalHasCircularDependencies_)
+	if (orientation == AnchorLayoutAnchor::Orientation::Horizontal && horizontalNeedsConstraintSolver_)
 		return;
-	else if (orientation == AnchorLayoutAnchor::Orientation::Vertical && verticalHasCircularDependencies_)
+	else if (orientation == AnchorLayoutAnchor::Orientation::Vertical && verticalNeedsConstraintSolver_)
 		return;
 
 	QList<AnchorLayoutAnchor*> sortedConstraints;
 	QList<Element*> elementQueue;
-
-	// pre-sort, such that a dependencies among constraints with equal placeElements are satisfied
-	for (auto c : constraints)
-		if (!elementQueue.contains(c->placeElement()))
-			elementQueue.append(c->placeElement());
-	for (auto e : elementQueue)
-	{
-		QList<AnchorLayoutAnchor*> placeElementConstraints;
-		for (auto c : constraints)
-			if (c->placeElement() == e)
-				placeElementConstraints.append(c);
-		if (placeElementConstraints.length() > 1)
-		qSort(placeElementConstraints.begin(), placeElementConstraints.end(),
-				[](AnchorLayoutAnchor* c1, AnchorLayoutAnchor* c2)
-				{return c1->relativePlaceEdgePosition() < c2->relativePlaceEdgePosition();});
-		for (auto c : placeElementConstraints)
-			sortedConstraints.append(c);
-	}
-	constraints = sortedConstraints;
-	sortedConstraints.clear();
-	elementQueue.clear();
-
 
 	// find all constraints which have a fixed node that depends on nothing
 	for (auto c1 : constraints)
@@ -324,9 +276,9 @@ void AnchorLayoutElement::sortConstraints(QList<AnchorLayoutAnchor*>& constraint
 	if (elementQueue.empty() && !constraints.empty())
 	{
 		if (orientation == AnchorLayoutAnchor::Orientation::Horizontal)
-			horizontalHasCircularDependencies_ = true;
+			horizontalNeedsConstraintSolver_ = true;
 		else // orientation == AnchorLayoutConstraint::Orientation::Vertical
-			verticalHasCircularDependencies_ = true;
+			verticalNeedsConstraintSolver_ = true;
 		return;
 	}
 
@@ -342,9 +294,9 @@ void AnchorLayoutElement::sortConstraints(QList<AnchorLayoutAnchor*>& constraint
 					if (elementQueue.indexOf(c->placeElement()) <= elementIndex)
 					{
 						if (orientation == AnchorLayoutAnchor::Orientation::Horizontal)
-							horizontalHasCircularDependencies_ = true;
+							horizontalNeedsConstraintSolver_ = true;
 						else // orientation == AnchorLayoutConstraint::Orientation::Vertical
-							verticalHasCircularDependencies_ = true;
+							verticalNeedsConstraintSolver_ = true;
 						return;
 					}
 				}
@@ -354,6 +306,27 @@ void AnchorLayoutElement::sortConstraints(QList<AnchorLayoutAnchor*>& constraint
 	}
 
 	constraints = sortedConstraints;
+
+	// check if element is not already assumed to be fixed/placed
+	bool needsConstraintSolver = false;
+	for (int i=0; i<constraints.size(); ++i)
+	{
+		Element* lastPlaceElement = constraints.at(i)->placeElement();
+		for (int j = 0; j < i; ++j)
+		{
+			if (constraints.at(j)->fixedElement() == lastPlaceElement)
+				needsConstraintSolver = true;
+			if (constraints.at(j)->placeElement() == lastPlaceElement)
+				needsConstraintSolver = true;
+		}
+	}
+	if (needsConstraintSolver)
+	{
+		if (orientation == AnchorLayoutAnchor::Orientation::Horizontal)
+			horizontalNeedsConstraintSolver_ = true;
+		else // orientation == AnchorLayoutAnchor::Orientation::Vertical
+			verticalNeedsConstraintSolver_ = true;
+	}
 }
 
 }

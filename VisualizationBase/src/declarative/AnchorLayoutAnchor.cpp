@@ -43,7 +43,7 @@ AnchorLayoutAnchor::~AnchorLayoutAnchor()
  * Calculates the position in the orientation axis of the element to be placed, assuming it's size was already
  * calculated, and the position on the orientation axis of the fixed element is already fixed.
  */
-bool AnchorLayoutAnchor::execute(Orientation orientation, bool stretchPlaceElement, Item* item)
+int AnchorLayoutAnchor::execute(Orientation orientation)
 {
 	Q_ASSERT(orientation != Orientation::Auto);
 
@@ -68,49 +68,15 @@ bool AnchorLayoutAnchor::execute(Orientation orientation, bool stretchPlaceEleme
 	}
 
 	int edgePosition = fixedElementPosition + offset_ + fixedElementSize * relativeFixedEdgePosition_;
-	if (stretchPlaceElement)
+	int newPosition = edgePosition - placeElementSize * relativePlaceEdgePosition_;
+	if (newPosition != placeElementPosition)
 	{
-		Q_ASSERT(item != nullptr);
-		Q_ASSERT(placeElement_->sizeDependsOnParent(item));
-		Q_ASSERT(fixedElement_->sizeDependsOnParent(item));
-
-		int placeElementMaxSize = (edgePosition - placeElementPosition * relativePlaceEdgePosition_);
-		if (placeElementSize < placeElementMaxSize)
-		{
-			// stretch placeElement_
-			if (orientation == Orientation::Horizontal)
-				placeElement_->computeSize(item, placeElementMaxSize, placeElement_->size().height());
-			else // orientation == Orientation::Vertical
-				placeElement_->computeSize(item, placeElement_->size().width(), placeElementMaxSize);
-			return true;
-		}
-		else if (placeElementSize > placeElementMaxSize)
-		{
-			// stretch fixedElement_
-			edgePosition += placeElementSize - placeElementMaxSize;
-			int newFixedElementSize = (edgePosition - fixedElementPosition) * relativeFixedEdgePosition_;
-			if (orientation == Orientation::Horizontal)
-				fixedElement_->computeSize(item, newFixedElementSize, fixedElement_->size().height());
-			else // orientation == Orientation::Vertical
-				fixedElement_->computeSize(item, fixedElement_->size().width(), newFixedElementSize);
-			return true;
-		}
-		return false;
+		if (orientation == Orientation::Horizontal)
+			placeElement_->setPos(QPoint(newPosition, placeElement_->pos().y()));
+		else // orientation == Orientation::Vertical
+			placeElement_->setPos(QPoint(placeElement_->pos().x(), newPosition));
 	}
-	else
-	{
-		int newPosition = edgePosition - placeElementSize * relativePlaceEdgePosition_;
-		if (newPosition == placeElementPosition)
-			return false;
-		else
-		{
-			if (orientation == Orientation::Horizontal)
-				placeElement_->setPos(QPoint(newPosition, placeElement_->pos().y()));
-			else // orientation == Orientation::Vertical
-				placeElement_->setPos(QPoint(placeElement_->pos().x(), newPosition));
-			return true;
-		}
-	}
+	return newPosition;
 }
 
 bool AnchorLayoutAnchor::dependsOn(AnchorLayoutAnchor* other, QList<AnchorLayoutAnchor*>& allConstraints)

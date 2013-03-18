@@ -33,6 +33,8 @@
 
 namespace Visualization {
 
+class AnchorLayoutConstraintSolver;
+
 class AnchorLayoutElement : public LayoutElement {
 	public:
 		enum class PlaceEdge : int {LeftOf, RightOf, CenterOf, VCenterOf, HCenterOf, TopOf, BottomOf};
@@ -75,8 +77,10 @@ class AnchorLayoutElement : public LayoutElement {
 		QList<Element*> elementList_{};
 		QList<AnchorLayoutAnchor*> horizontalConstraints_{};
 		QList<AnchorLayoutAnchor*> verticalConstraints_{};
-		bool horizontalHasCircularDependencies_{};
-		bool verticalHasCircularDependencies_{};
+		bool horizontalNeedsConstraintSolver_{};
+		bool verticalNeedsConstraintSolver_{};
+
+		AnchorLayoutConstraintSolver* solver_{};
 };
 
 }

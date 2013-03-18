@@ -4,13 +4,15 @@ DEFINES += VISUALIZATIONBASE_LIBRARY
 win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase
+LIBS += -llpsolve55
 QT += xml \
     svg
 HEADERS += src/nodes/TestBoxNode.h \
     src/items/TestBox.h \
     src/items/LineStyle.h \
     src/items/Line.h \
-	src/declarative/AnchorLayoutAnchor.h \
+    src/declarative/AnchorLayoutConstraintSolver.h \
+    src/declarative/AnchorLayoutAnchor.h \
     src/declarative/NodeWithVisualizationItemWrapperElement.h \
     src/declarative/VisualizationItemWrapperElement.h \
     src/declarative/NodeItemWrapperElement.h \
@@ -103,7 +105,9 @@ HEADERS += src/nodes/TestBoxNode.h \
     src/visualizationbase_api.h \
     test/BoxTest.h \
     src/visualizationbase.h
-SOURCES += test/DeclarativeTest.cpp \
+SOURCES += src/declarative/AnchorLayoutAnchor.cpp \
+    src/declarative/AnchorLayoutConstraintSolver.cpp \
+    test/DeclarativeTest.cpp \
     src/declarative/GridLayoutElement.cpp \
     src/declarative/AnchorLayoutElement.cpp \
     src/declarative/SequentialLayoutElement.cpp \

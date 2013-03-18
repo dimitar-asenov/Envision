@@ -24,56 +24,65 @@
  **
  **********************************************************************************************************************/
 
-#ifndef VisualizationBase_ANCHORLAYOUTANCHOR_H_
-#define VisualizationBase_ANCHORLAYOUTANCHOR_H_
+#ifndef VisualizationBase_ANCHORLAYOUTCONSTRAINTSOLVER_H_
+#define VisualizationBase_ANCHORLAYOUTCONSTRAINTSOLVER_H_
+
+#include "AnchorLayoutAnchor.h"
+
+#include <lpsolve/lp_lib.h>
 
 namespace Visualization {
 
-class Item;
 class Element;
+class Item;
 
-class AnchorLayoutAnchor {
+class AnchorLayoutConstraintSolver {
 	public:
-		enum class Orientation : int {Auto, Horizontal, Vertical};
-		AnchorLayoutAnchor(float relativePlaceEdgePosition, Element* placeElement, int offset,
-				float relativeFixedEdgePosition, Element* fixedElement);
-		virtual ~AnchorLayoutAnchor();
-		int execute(Orientation orientation);
-		Element* placeElement() const;
-		Element* fixedElement() const;
-		bool dependsOn(AnchorLayoutAnchor* other, QList<AnchorLayoutAnchor*>& allConstraints);
-		float relativePlaceEdgePosition() const;
-		float relativeFixedEdgePosition() const;
-		int offset() const;
-
+		AnchorLayoutConstraintSolver();
+		virtual ~AnchorLayoutConstraintSolver();
+		void placeElements(QList<Element*>& elements, QList<AnchorLayoutAnchor*>& anchors,
+				AnchorLayoutAnchor::Orientation orientation, Item* item);
 	private:
-		float relativePlaceEdgePosition_{};
-		Element* placeElement_{};
-		int offset_{};
-		float relativeFixedEdgePosition_{};
-		Element* fixedElement_{};
+		void initializeConstraintSolver(int numVariables);
+		void addGreaterEqualConstraint(QVector<QPair<int, float>> constraintRow, float result);
+		void addEqualConstraint(QVector<QPair<int, float>> constraintRow, float result);
+		void setMinimizeObjective(QVector<float> objectiveRow);
+		QVector<float> solveConstraints();
+		void cleanUpConstraintSolver();
+
+		int startVariable(int elementIndex);
+		int endVariable(int elementIndex);
+
+		lprec* lp_{};
+		double* rowValues_{};
+		int* columnIndices_{};
+		int numVariables_{};
+
 };
 
-inline Element* AnchorLayoutAnchor::placeElement() const
+inline void AnchorLayoutConstraintSolver::initializeConstraintSolver(int numVariables)
 {
-	return placeElement_;
+	lp_ = make_lp(0, numVariables);
+	Q_ASSERT(lp_ != nullptr);
+	rowValues_ = new double[numVariables];
+	columnIndices_ = new int[numVariables];
+	numVariables_ = numVariables;
+	set_add_rowmode(lp_, true);
 }
-inline Element* AnchorLayoutAnchor::fixedElement() const
+inline void AnchorLayoutConstraintSolver::cleanUpConstraintSolver()
 {
-	return fixedElement_;
+	SAFE_DELETE(lp_);
+	delete[] rowValues_;
+	delete[] columnIndices_;
+	numVariables_ = 0;
 }
-inline float AnchorLayoutAnchor::relativePlaceEdgePosition() const
+inline int AnchorLayoutConstraintSolver::startVariable(int elementIndex)
 {
-	return relativePlaceEdgePosition_;
+	return 2 * elementIndex;
 }
-inline float AnchorLayoutAnchor::relativeFixedEdgePosition() const
+inline int AnchorLayoutConstraintSolver::endVariable(int elementIndex)
 {
-	return relativeFixedEdgePosition_;
+	return 2 * elementIndex + 1;
 }
-inline int AnchorLayoutAnchor::offset() const
-{
-	return offset_;
-}
-
 } /* namespace Visualization */
-#endif /* VisualizationBase_ANCHORLAYOUTANCHOR_H_ */
+#endif /* VisualizationBase_ANCHORLAYOUTCONSTRAINTSOLVER_H_ */
