@@ -4,9 +4,6 @@ ClangAstVisitor::ClangAstVisitor(Model::Model* model, OOModel::Project* currentP
 {
     this->currentModel_ = model;
     this->currentProject_ = currentProject;
-    currentClass_ = nullptr;
-    currentMethod_ = nullptr;
-    currentIfStmt_ = nullptr;
     trMngr_ = new TranslateManager(model,currentProject);
 
     ooStack.push(currentProject_);
@@ -27,28 +24,53 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl *rd)
             ooClass->setName(QString::fromStdString(recDecl->getName().str()));
 
             trMngr_->insertClass(rd,ooClass);
-            currentClass_ = ooClass;
-
             ooStack.push(ooClass);
         }
     }
     return Base::TraverseCXXRecordDecl(rd);
 }
 
+bool ClangAstVisitor::TraverseCXXMethodDecl(clang::CXXMethodDecl *methodDecl)
+{
+    //Constructors not yet handled
+    if(llvm::isa<clang::CXXConstructorDecl>(methodDecl))
+        return true;
+    //translation Manager will insert method in correct class
+    OOModel::Method* method = trMngr_->insertMethodDecl(methodDecl);
+    if(!method)
+    {
+        std::cout << "___________ERROR NO OOMODEL::METHOD FOR THIS DECL_______" << std::endl;
+        //for now return false to see error
+        return false;
+    }
+    //only visit the body if we are at the definition
+    if(methodDecl->isThisDeclarationADefinition())
+    {
+        ooStack.push(method->items());
+        TraverseStmt(methodDecl->getBody());
+        ooStack.pop();
+    }
+    return true;
+}
+
 bool ClangAstVisitor::TraverseIfStmt(clang::IfStmt *ifStmt)
 {
-    if(currentMethod_)
+    OOModel::IfStatement* ooIfStmt = trMngr_->insertIfStmt(ifStmt);
+    OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack.top());
+    if(itemList)
     {
-        OOModel::IfStatement* ooIfStmt = trMngr_->insertIfStmt(ifStmt);
-        currentIfStmt_ = ooIfStmt;
-        currentMethod_->items()->append(ooIfStmt);
+        itemList->append(ooIfStmt);
         std::cout << "TRAVERSING IF STMT" << std::endl;
         TraverseStmt(ifStmt->getCond());
+        ooStack.push(ooIfStmt->thenBranch());
         TraverseStmt(ifStmt->getThen());
+        ooStack.pop();
+        ooStack.push(ooIfStmt->elseBranch());
         TraverseStmt(ifStmt->getElse());
+        ooStack.pop();
         std::cout << "TRAVERSING IF STMT END" << std::endl;
-        currentIfStmt_ = nullptr;
     }
+
     return true;
 }
 
@@ -60,30 +82,6 @@ bool ClangAstVisitor::VisitStmt(clang::Stmt* S)
     return Base::VisitStmt(S);
 }
 
-//bool ClangAstVisitor::VisitIfStmt(clang::IfStmt *ifStmt)
-//{
-//    if(currentMethod_)
-//    {
-//        OOModel::IfStatement* ooIfStmt = trMngr_->insertIfStmt(ifStmt);
-//        currentIfStmt_ = ooIfStmt;
-//        currentMethod_->items()->append(ooIfStmt);
-//        llvm::errs() << "TRAVERSING IF STMT" << "\n";
-//        llvm::errs() << "IFSTMT THEN BRANCH DUMP   ";
-//        ifStmt->getThen()->dump();
-//        StmtVisitor* stmtV = new StmtVisitor();
-//        stmtV->TraverseStmt(ifStmt->getThen());
-//        ooIfStmt->setThenBranch(stmtV->getItems());
-////        VisitStmt(ifStmt->getCond());
-////        VisitStmt(ifStmt->getThen());
-////        VisitStmt(ifStmt->getElse());
-//        llvm::errs() << "TRAVERSING IF STMT END" << "\n";
-//        currentIfStmt_ = nullptr;
-//    }
-//    return true;
-//}
-
-
-
 bool ClangAstVisitor::VisitDecl(clang::Decl* D)
 {
     std::cout << "visiting DECL " << D->getDeclKindName() <<  D->getDeclKindName() <<std::endl;
@@ -91,31 +89,12 @@ bool ClangAstVisitor::VisitDecl(clang::Decl* D)
     return true;
 }
 
-//bool ClangAstVisitor::VisitCXXRecordDecl(clang::CXXRecordDecl* rd)
-//{
-//    std::cout << "Visiting ClassDecl " << rd->getName().str() <<std::endl;
-
-
-//    if(llvm::isa<clang::CXXRecordDecl>(rd))
-//    {
-//        clang::CXXRecordDecl* recDecl = llvm::cast<clang::CXXRecordDecl>(rd);
-//        if(recDecl->isClass())
-//        {
-//            OOModel::Class* ooClass = new OOModel::Class();;
-//            currentProject_->classes()->append(ooClass);
-//            ooClass->setName(QString::fromStdString(recDecl->getName().str()));
-
-//            trMngr_->insertClass(rd,ooClass);
-//            currentClass_ = ooClass;
-//        }
-//    }
-//    return true;
-//}
-
 bool ClangAstVisitor::VisitVarDecl(clang::VarDecl* vd)
 {
     std::cout << "Visiting VarDecl " << vd->getName().str() <<std::endl;
-    if(currentMethod_ && vd->isFunctionOrMethodVarDecl())
+
+    OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack.top());
+    if(itemList)
     {
         OOModel::VariableDeclaration* varDecl = new OOModel::VariableDeclaration();
         varDecl->setName(QString::fromStdString(vd->getName().str()));
@@ -125,14 +104,7 @@ bool ClangAstVisitor::VisitVarDecl(clang::VarDecl* vd)
 
         trMngr_->insertVar(vd,varDecl);
 
-        if(currentIfStmt_)
-        {
-            OOModel::StatementItemList* items = new OOModel::StatementItemList();
-            items->append(varDecl);
-            currentIfStmt_->setThenBranch(items);
-        }
-        else
-            currentMethod_->items()->append(varDecl);
+        itemList->append(varDecl);
     }
     else
     {
@@ -144,27 +116,28 @@ bool ClangAstVisitor::VisitVarDecl(clang::VarDecl* vd)
 
 bool ClangAstVisitor::VisitFieldDecl(clang::FieldDecl* fd)
 {
-    std::cout << "Visiting FieldDecl " << fd->getName().str() << std::endl;
-
-    OOModel::Field* field = new OOModel::Field();
-
-    OOModel::Expression* type = CppImportUtilities::convertClangType(fd->getType());
-    if(type) field->setTypeExpression(type);
-    field->setName(QString::fromStdString(fd->getName().str()));
-    currentClass_->fields()->append(field);
+    OOModel::Field* field = trMngr_->insertField(fd);
+    if(!field)
+    {
+        std::cout << "ERROR COULDN'T INSERT FIELD NO CURRENT OOCLASS" << std::endl;
+        return false;
+    }
     return true;
 }
 
-bool ClangAstVisitor::VisitCXXMethodDecl(clang::CXXMethodDecl *methodDecl)
-{
-    //Constructors not yet handled
-    if(llvm::isa<clang::CXXConstructorDecl>(methodDecl))
-        return true;
-    std::cout << "Visiting FunctionDecl " << methodDecl->getName().str() << std::endl;
-
-    OOModel::Method* method = trMngr_->insertMethodDecl(methodDecl);
-    if(method) currentMethod_ = method;
-    else
-        std::cout << "___________ERROR NO OOMODEL::METHOD FOR THIS DECL_______" << std::endl;
-    return true;
-}
+//bool ClangAstVisitor::VisitCXXMethodDecl(clang::CXXMethodDecl *methodDecl)
+//{
+//    //Constructors not yet handled
+//    if(llvm::isa<clang::CXXConstructorDecl>(methodDecl))
+//        return true;
+//    //translation Manager will insert method in correct class
+//    OOModel::Method* method = trMngr_->insertMethodDecl(methodDecl);
+//    if(!method)
+//    {
+//        std::cout << "___________ERROR NO OOMODEL::METHOD FOR THIS DECL_______" << std::endl;
+//        //for now return false to see error
+//        return false;
+//    }
+//    ooStack.push(method->items());
+//    return true;
+//}
