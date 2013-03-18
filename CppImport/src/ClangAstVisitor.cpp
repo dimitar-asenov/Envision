@@ -7,6 +7,8 @@ ClangAstVisitor::ClangAstVisitor(Model::Model* model, OOModel::Project* currentP
     trMngr_ = new TranslateManager(model,currentProject);
 
     ooStack.push(currentProject_);
+
+    inBody_ = true;
 }
 
 bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl *rd)
@@ -61,7 +63,9 @@ bool ClangAstVisitor::TraverseIfStmt(clang::IfStmt *ifStmt)
     {
         itemList->append(ooIfStmt);
         std::cout << "TRAVERSING IF STMT" << std::endl;
+        inBody_ = false;
         TraverseStmt(ifStmt->getCond());
+        inBody_ = true;
         ooIfStmt->setCondition(ooExprStack.pop());
         ooStack.push(ooIfStmt->thenBranch());
         TraverseStmt(ifStmt->getThen());
@@ -80,7 +84,7 @@ bool ClangAstVisitor::TraverseStmt(clang::Stmt *S)
     if(S && llvm::isa<clang::BinaryOperator>(S))
     {
         std::cout << "TRAVERSE STMT BINARY OPERATOR" << std::endl;
-//        TraverseBinaryOperator(llvm::dyn_cast<clang::BinaryOperator>(S));
+        //        TraverseBinaryOperator(llvm::dyn_cast<clang::BinaryOperator>(S));
     }
     return Base::TraverseStmt(S);
 }
@@ -145,32 +149,15 @@ bool ClangAstVisitor::VisitFieldDecl(clang::FieldDecl* fd)
 
 bool ClangAstVisitor::TraverseBinEQ(clang::BinaryOperator* binOp)
 {
-    std::cout << "BIIIIIINARY OOP" << std::endl;
-    OOModel::BinaryOperation::OperatorTypes ooOperatorType = CppImportUtilities::convertClangOpcode(binOp->getOpcode());
-    OOModel::BinaryOperation* ooBinOp = new OOModel::BinaryOperation();
-    ooBinOp->setOp(ooOperatorType);
-    //    ooExprStack.push(ooBinOp->left());
-    TraverseStmt(binOp->getLHS());
-    ooBinOp->setLeft(ooExprStack.pop());
-    //    ooExprStack.push(ooBinOp->right());
-    TraverseStmt(binOp->getRHS());
-    ooBinOp->setRight(ooExprStack.pop());
-    //    OOModel::Expression* expr = dynamic_cast<OOModel::Expression*> (ooStack.top());
-    //    if(expr)
-    //    {
-    //        expr = ooBinOp;
-
-    //    }
-    //    else
-    //    {
-    //        OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*> (ooStack.top());
-    //        if(itemList) itemList->append(ooBinOp);
-    //    }
-    ooExprStack.push(ooBinOp );
-    return true;
+    return TraverseBinaryOp(binOp);
 }
 
-bool ClangAstVisitor::VisitIntegerLiteral(clang::IntegerLiteral *intLit)
+bool ClangAstVisitor::TraverseBinAssign(clang::BinaryOperator* binOp)
+{
+    return TraverseBinaryOp(binOp);
+}
+
+bool ClangAstVisitor::VisitIntegerLiteral(clang::IntegerLiteral* intLit)
 {
     OOModel::IntegerLiteral* ooIntLit = new OOModel::IntegerLiteral();
     ooIntLit->setValue(intLit->getValue().getLimitedValue());
@@ -179,9 +166,50 @@ bool ClangAstVisitor::VisitIntegerLiteral(clang::IntegerLiteral *intLit)
     return true;
 }
 
-bool ClangAstVisitor::VisitDeclRefExpr(clang::DeclRefExpr *declRef)
+bool ClangAstVisitor::VisitDeclRefExpr(clang::DeclRefExpr* declRef)
 {
-    OOModel::ReferenceExpression* refExpr = new OOModel::ReferenceExpression(QString::fromStdString(declRef->getNameInfo().getName().getAsString()));
+    OOModel::ReferenceExpression* refExpr = new OOModel::ReferenceExpression();
+//    if(llvm::isa<clang::VarDecl>(declRef->getDecl()))
+//    {
+//        OOModel::VariableDeclaration* ooVar = trMngr_->getVar(llvm::dyn_cast<clang::VarDecl>(declRef->getDecl()));
+//        if(ooVar) refExpr->setPrefix(ooVar);
+//        else refExpr->setName(QString::fromStdString(declRef->getNameInfo().getName().getAsString()));
+//    }
+//    else
+//    {
+        refExpr->setName(QString::fromStdString(declRef->getNameInfo().getName().getAsString()));
+//    }
     ooExprStack.push(refExpr);
+    return true;
+}
+
+bool ClangAstVisitor::shouldUseDataRecursionFor(clang::Stmt *S)
+{
+    //-unused var
+    S->getStmtClass();
+    return false;
+}
+
+bool ClangAstVisitor::TraverseBinaryOp(clang::BinaryOperator* binOp)
+{
+    OOModel::BinaryOperation::OperatorTypes ooOperatorType = CppImportUtilities::convertClangOpcode(binOp->getOpcode());
+    OOModel::BinaryOperation* ooBinOp = new OOModel::BinaryOperation();
+    bool inBody = inBody_;
+    inBody_ = false;
+    ooBinOp->setOp(ooOperatorType);
+    TraverseStmt(binOp->getLHS());
+    ooBinOp->setLeft(ooExprStack.pop());
+    TraverseStmt(binOp->getRHS());
+    ooBinOp->setRight(ooExprStack.pop());
+
+    if(inBody)
+    {
+        OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack.top());
+        if(itemList) itemList->append(ooBinOp);
+        else std::cout << "ERROR INSERT BINOP" << std::endl;
+    }
+    else
+        ooExprStack.push(ooBinOp);
+    inBody_ = inBody;
     return true;
 }

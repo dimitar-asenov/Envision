@@ -18,6 +18,8 @@ public:
     bool TraverseVarDecl(clang::VarDecl* vd);
 
     bool TraverseBinEQ(clang::BinaryOperator* binOp);
+    bool TraverseBinAssign(clang::BinaryOperator* binOp);
+
 
     bool VisitStmt(clang::Stmt* S);
     bool VisitDecl(clang::Decl* D);
@@ -27,8 +29,16 @@ public:
     bool VisitDeclRefExpr(clang::DeclRefExpr* declRef);
 
 
+    bool shouldUseDataRecursionFor(clang::Stmt* S);
+
+
 private:
     QStack<OOModel::Expression*> ooExprStack;
+
+
+    bool TraverseBinaryOp(clang::BinaryOperator* binOp);
+
+    bool inBody_;
 
 protected:
     OOModel::Project* currentProject_;
@@ -37,5 +47,7 @@ protected:
     TranslateManager* trMngr_;
 
     QStack<Model::Node*> ooStack;
+
+
 
 };
