@@ -10,6 +10,15 @@ HEADERS += src/nodes/TestBoxNode.h \
     src/items/TestBox.h \
     src/items/LineStyle.h \
     src/items/Line.h \
+	test/DeclarativeTest.h \
+    src/declarative/GridLayoutElement.h \
+    src/declarative/AnchorLayoutElement.h \
+    src/declarative/DeclarativeItem.h \
+    src/declarative/DeclarativeItemBase.h \
+    src/declarative/Element.h \
+    src/declarative/ItemWrapperElement.h \
+    src/declarative/LayoutElement.h \
+    src/declarative/SequentialLayoutElement.h \
     src/items/Mipmap.h \
     src/items/VisualizationAddOn.h \
     src/shapes/SvgShapeStyle.h \
