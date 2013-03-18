@@ -62,6 +62,7 @@ bool ClangAstVisitor::TraverseIfStmt(clang::IfStmt *ifStmt)
         itemList->append(ooIfStmt);
         std::cout << "TRAVERSING IF STMT" << std::endl;
         TraverseStmt(ifStmt->getCond());
+        ooIfStmt->setCondition(ooExprStack.pop());
         ooStack.push(ooIfStmt->thenBranch());
         TraverseStmt(ifStmt->getThen());
         ooStack.pop();
@@ -72,6 +73,11 @@ bool ClangAstVisitor::TraverseIfStmt(clang::IfStmt *ifStmt)
     }
 
     return true;
+}
+
+bool ClangAstVisitor::TraverseStmt(clang::Stmt *S)
+{
+    return Base::TraverseStmt(S);
 }
 
 bool ClangAstVisitor::VisitStmt(clang::Stmt* S)
@@ -86,10 +92,10 @@ bool ClangAstVisitor::VisitDecl(clang::Decl* D)
 {
     std::cout << "visiting DECL " << D->getDeclKindName() <<  D->getDeclKindName() <<std::endl;
 
-    return true;
+    return Base::VisitDecl(D);
 }
 
-bool ClangAstVisitor::VisitVarDecl(clang::VarDecl* vd)
+bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* vd)
 {
     std::cout << "Visiting VarDecl " << vd->getName().str() <<std::endl;
 
@@ -101,6 +107,12 @@ bool ClangAstVisitor::VisitVarDecl(clang::VarDecl* vd)
 
         OOModel::Expression* type = CppImportUtilities::convertClangType(vd->getType());
         if(type) varDecl->setVarType(type);
+
+        if(vd->hasInit())
+        {
+            TraverseStmt(vd->getInit());
+            varDecl->setInitialValue(ooExprStack.pop());
+        }
 
         trMngr_->insertVar(vd,varDecl);
 
@@ -122,5 +134,49 @@ bool ClangAstVisitor::VisitFieldDecl(clang::FieldDecl* fd)
         std::cout << "ERROR COULDN'T INSERT FIELD NO CURRENT OOCLASS" << std::endl;
         return false;
     }
+    return true;
+}
+
+
+bool ClangAstVisitor::TraverseBinaryOperator(clang::BinaryOperator* binOp)
+{
+    std::cout << "BIIIIIINARY OOP" << std::endl;
+    OOModel::BinaryOperation::OperatorTypes ooOperatorType = CppImportUtilities::convertClangOpcode(binOp->getOpcode());
+    OOModel::BinaryOperation* ooBinOp = new OOModel::BinaryOperation();
+    ooBinOp->setOp(ooOperatorType);
+    //    ooExprStack.push(ooBinOp->left());
+    TraverseStmt(binOp->getLHS());
+    ooBinOp->setLeft(ooExprStack.pop());
+    //    ooExprStack.push(ooBinOp->right());
+    TraverseStmt(binOp->getRHS());
+    ooBinOp->setRight(ooExprStack.pop());
+    //    OOModel::Expression* expr = dynamic_cast<OOModel::Expression*> (ooStack.top());
+    //    if(expr)
+    //    {
+    //        expr = ooBinOp;
+
+    //    }
+    //    else
+    //    {
+    //        OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*> (ooStack.top());
+    //        if(itemList) itemList->append(ooBinOp);
+    //    }
+    ooExprStack.push(ooBinOp );
+    return true;
+}
+
+bool ClangAstVisitor::VisitIntegerLiteral(clang::IntegerLiteral *intLit)
+{
+    OOModel::IntegerLiteral* ooIntLit = new OOModel::IntegerLiteral();
+    ooIntLit->setValue(intLit->getValue().getLimitedValue());
+    ooExprStack.push(ooIntLit);
+
+    return true;
+}
+
+bool ClangAstVisitor::VisitDeclRefExpr(clang::DeclRefExpr *declRef)
+{
+    OOModel::ReferenceExpression* refExpr = new OOModel::ReferenceExpression(QString::fromStdString(declRef->getNameInfo().getName().getAsString()));
+    ooExprStack.push(refExpr);
     return true;
 }

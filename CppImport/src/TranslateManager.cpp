@@ -87,11 +87,11 @@ void TranslateManager::insertVar(clang::VarDecl* vDecl, OOModel::VariableDeclara
     {
         std::cout << "HAS PARENT FUNCTION OR METHOD ________" << vDecl->getName().str() << std::endl;
         //add to method
-//        clang::FunctionDecl* parentFunc = dynamic_cast<clang::FunctionDecl*>(vDecl->getParentFunctionOrMethod());
-//        if(methodMap_.contains(llvm::dyn_cast<clang::CXXMethodDecl*>(vDecl->getParentFunctionOrMethod())))
-//        {
-//            std::cout << "FOUND A SUITABLE FUNCTION FOR VAR ------------> " << vDecl->getName().str() << std::endl;
-//        }
+        clang::FunctionDecl* parentFunc = llvm::dyn_cast<clang::FunctionDecl>(vDecl->getParentFunctionOrMethod());
+        if(methodMap_.contains(llvm::dyn_cast<clang::CXXMethodDecl>(parentFunc)))
+        {
+            std::cout << "FOUND A SUITABLE FUNCTION FOR VAR ------------> " << vDecl->getName().str() << std::endl;
+        }
         ooVarDecl->getAllAttributes();
     }
 }

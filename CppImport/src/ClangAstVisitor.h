@@ -14,10 +14,20 @@ public:
     bool TraverseCXXMethodDecl(clang::CXXMethodDecl* methodDecl);
     bool TraverseIfStmt(clang::IfStmt* ifStmt);
 
+    bool TraverseStmt(clang::Stmt *S);
+    bool TraverseVarDecl(clang::VarDecl* vd);
+    bool TraverseBinaryOperator(clang::BinaryOperator* binOp);
+
     bool VisitStmt(clang::Stmt* S);
     bool VisitDecl(clang::Decl* D);
-    bool VisitVarDecl(clang::VarDecl* vd);
     bool VisitFieldDecl(clang::FieldDecl* fd);
+
+    bool VisitIntegerLiteral(clang::IntegerLiteral* intLit);
+    bool VisitDeclRefExpr(clang::DeclRefExpr* declRef);
+
+
+private:
+    QStack<OOModel::Expression*> ooExprStack;
 
 protected:
     OOModel::Project* currentProject_;

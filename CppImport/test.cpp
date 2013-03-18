@@ -12,7 +12,7 @@ public:
         int k = 20;
         if(k == 10)
         {
-            int l = 10;
+            int l = 100;
             k=20;
         }
         else
