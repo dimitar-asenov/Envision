@@ -17,6 +17,7 @@ public:
         }
         else
         {
+            int f=0;
             k=0;
         }
         return k;}
