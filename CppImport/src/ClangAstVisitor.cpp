@@ -77,6 +77,11 @@ bool ClangAstVisitor::TraverseIfStmt(clang::IfStmt *ifStmt)
 
 bool ClangAstVisitor::TraverseStmt(clang::Stmt *S)
 {
+    if(S && llvm::isa<clang::BinaryOperator>(S))
+    {
+        std::cout << "TRAVERSE STMT BINARY OPERATOR" << std::endl;
+//        TraverseBinaryOperator(llvm::dyn_cast<clang::BinaryOperator>(S));
+    }
     return Base::TraverseStmt(S);
 }
 
@@ -138,7 +143,7 @@ bool ClangAstVisitor::VisitFieldDecl(clang::FieldDecl* fd)
 }
 
 
-bool ClangAstVisitor::TraverseBinaryOperator(clang::BinaryOperator* binOp)
+bool ClangAstVisitor::TraverseBinEQ(clang::BinaryOperator* binOp)
 {
     std::cout << "BIIIIIINARY OOP" << std::endl;
     OOModel::BinaryOperation::OperatorTypes ooOperatorType = CppImportUtilities::convertClangOpcode(binOp->getOpcode());
