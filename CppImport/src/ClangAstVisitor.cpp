@@ -81,19 +81,14 @@ bool ClangAstVisitor::TraverseIfStmt(clang::IfStmt *ifStmt)
 
 bool ClangAstVisitor::TraverseStmt(clang::Stmt *S)
 {
-    if(S && llvm::isa<clang::BinaryOperator>(S))
-    {
-        std::cout << "TRAVERSE STMT BINARY OPERATOR" << std::endl;
-        //        TraverseBinaryOperator(llvm::dyn_cast<clang::BinaryOperator>(S));
-    }
     return Base::TraverseStmt(S);
 }
 
 bool ClangAstVisitor::VisitStmt(clang::Stmt* S)
 {
-    std::cout << "VISITING STMT" << std::endl;
-    llvm::errs() << "VISITING STMT" << "\n";
-    S->dump();
+//    std::cout << "VISITING STMT" << std::endl;
+//    llvm::errs() << "VISITING STMT" << "\n";
+//    S->dump();
     return Base::VisitStmt(S);
 }
 
@@ -141,7 +136,7 @@ bool ClangAstVisitor::VisitFieldDecl(clang::FieldDecl* fd)
     if(!field)
     {
         std::cout << "ERROR COULDN'T INSERT FIELD NO CURRENT OOCLASS" << std::endl;
-        return false;
+//        return false;
     }
     return true;
 }

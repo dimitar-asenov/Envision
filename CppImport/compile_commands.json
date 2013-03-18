@@ -1,5 +1,5 @@
 [
   { "directory": "/home/luke/BachelorThesis/Envision/CppImport",
-    "command": "/usr/bin/clang++ -Irelative -c -o test.o test.cpp",
+    "command": "/usr/bin/clang++ -Irelative -I/usr/lib/clang/3.2/include/ -c -o test.o test.cpp",
     "file": "test.cpp" }
 ] 
