@@ -9,7 +9,7 @@ public:
     TranslateManager(Model::Model* model, OOModel::Project* project);
     void insertClass(clang::CXXRecordDecl* rDecl,OOModel::Class* ooClass);
     OOModel::Method* insertMethodDecl(clang::CXXMethodDecl* mDecl);
-    void insertField(clang::FieldDecl* fDecl);
+    OOModel::Field* insertField(clang::FieldDecl* fDecl);
     void insertVar(clang::VarDecl* vDecl, OOModel::VariableDeclaration* ooVarDecl);
     OOModel::IfStatement* insertIfStmt(clang::IfStmt* ifStmt);
 

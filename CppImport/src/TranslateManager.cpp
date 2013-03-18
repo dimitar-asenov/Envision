@@ -55,9 +55,19 @@ OOModel::Method* TranslateManager::insertMethodDecl(clang::CXXMethodDecl* mDecl)
     return method;
 }
 
-void TranslateManager::insertField(clang::FieldDecl* fDecl)
+OOModel::Field *TranslateManager::insertField(clang::FieldDecl* fDecl)
 {
-    fDecl->getParent();
+    clang::CXXRecordDecl* parentClass = llvm::dyn_cast<clang::CXXRecordDecl>(fDecl->getParent());
+    if(parentClass && classMap_.contains(parentClass))
+    {
+        OOModel::Field* field = new OOModel::Field();
+        OOModel::Expression* type = CppImportUtilities::convertClangType(fDecl->getType());
+        if(type) field->setTypeExpression(type);
+        field->setName(QString::fromStdString(fDecl->getName().str()));
+        classMap_.value(parentClass)->fields()->append(field);
+        return field;
+    }
+    return nullptr;
 }
 
 void TranslateManager::insertVar(clang::VarDecl* vDecl, OOModel::VariableDeclaration* ooVarDecl)
