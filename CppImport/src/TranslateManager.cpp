@@ -103,6 +103,13 @@ OOModel::IfStatement *TranslateManager::insertIfStmt(clang::IfStmt* ifStmt)
     return ooIfStmt;
 }
 
+OOModel::VariableDeclaration *TranslateManager::getVar(clang::VarDecl* vDecl)
+{
+    if(varMap_.contains(vDecl))
+        return varMap_.value(vDecl);
+    return nullptr;
+}
+
 OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl)
 {
     // add a new method

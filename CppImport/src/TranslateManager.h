@@ -13,6 +13,8 @@ public:
     void insertVar(clang::VarDecl* vDecl, OOModel::VariableDeclaration* ooVarDecl);
     OOModel::IfStatement* insertIfStmt(clang::IfStmt* ifStmt);
 
+    OOModel::VariableDeclaration* getVar(clang::VarDecl* vDecl);
+
 
 private:
     OOModel::Method* addNewMethod(clang::CXXMethodDecl* mDecl);
