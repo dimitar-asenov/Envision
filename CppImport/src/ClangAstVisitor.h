@@ -17,8 +17,14 @@ public:
     bool TraverseStmt(clang::Stmt *S);
     bool TraverseVarDecl(clang::VarDecl* vd);
 
-    bool TraverseBinEQ(clang::BinaryOperator* binOp);
-    bool TraverseBinAssign(clang::BinaryOperator* binOp);
+
+    //binary ops
+    bool TraverseBinEQ(clang::BinaryOperator* binOp)
+    {return TraverseBinaryOp(binOp);}
+    bool TraverseBinAssign(clang::BinaryOperator* binOp)
+    {return TraverseAssignment(binOp);}
+    bool TraverseBinAdd(clang::BinaryOperator* binOp)
+    {return TraverseBinaryOp(binOp);}
 
 
     bool VisitStmt(clang::Stmt* S);

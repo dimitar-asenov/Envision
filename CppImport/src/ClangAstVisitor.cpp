@@ -146,17 +146,6 @@ bool ClangAstVisitor::VisitFieldDecl(clang::FieldDecl* fd)
     return true;
 }
 
-
-bool ClangAstVisitor::TraverseBinEQ(clang::BinaryOperator* binOp)
-{
-    return TraverseBinaryOp(binOp);
-}
-
-bool ClangAstVisitor::TraverseBinAssign(clang::BinaryOperator* binOp)
-{
-    return TraverseAssignment(binOp);
-}
-
 bool ClangAstVisitor::VisitIntegerLiteral(clang::IntegerLiteral* intLit)
 {
     OOModel::IntegerLiteral* ooIntLit = new OOModel::IntegerLiteral();

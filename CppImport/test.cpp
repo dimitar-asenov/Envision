@@ -35,6 +35,7 @@ class Another {
 class OneMore{
     int oneMoreFunction(){
         int oneMoreVariable, oneMoreVar2;
+        oneMoreVariable = 100 + oneMoreVar2;
         return 100;
     }
 };
