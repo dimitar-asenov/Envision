@@ -134,8 +134,15 @@ OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl)
         method->arguments()->append(arg);
     }
     // find the correct class to add the method
-    OOModel::Class* parent = classMap_.value(mDecl->getParent());
-    parent->methods()->append(method);
+    if(classMap_.contains(mDecl->getParent()))
+    {
+        OOModel::Class* parent = classMap_.value(mDecl->getParent());
+        parent->methods()->append(method);
+    }
+    else
+    {
+        std::cout << "METHOD DECL NO PARENT FOUND" << std::endl;
+    }
 
     methodMap_.insert(mDecl,method);
 

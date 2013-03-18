@@ -13,14 +13,12 @@ ClangAstVisitor::ClangAstVisitor(Model::Model* model, OOModel::Project* currentP
 
 bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl *rd)
 {
-    std::cout << "Visiting ClassDecl " << rd->getName().str() <<std::endl;
-
-
     if(llvm::isa<clang::CXXRecordDecl>(rd))
     {
         clang::CXXRecordDecl* recDecl = llvm::cast<clang::CXXRecordDecl>(rd);
         if(recDecl->isClass())
         {
+            std::cout << "Visiting ClassDecl " << rd->getName().str() <<std::endl;
             OOModel::Class* ooClass = new OOModel::Class();
             currentProject_->classes()->append(ooClass);
             ooClass->setName(QString::fromStdString(recDecl->getName().str()));
