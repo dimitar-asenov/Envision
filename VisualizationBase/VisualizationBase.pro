@@ -10,7 +10,11 @@ HEADERS += src/nodes/TestBoxNode.h \
     src/items/TestBox.h \
     src/items/LineStyle.h \
     src/items/Line.h \
-	test/DeclarativeTest.h \
+    src/declarative/AnchorLayoutConstraint.h \
+    src/declarative/NodeWithVisualizationItemWrapperElement.h \
+    src/declarative/VisualizationItemWrapperElement.h \
+    src/declarative/NodeItemWrapperElement.h \
+    test/DeclarativeTest.h \
     src/declarative/GridLayoutElement.h \
     src/declarative/AnchorLayoutElement.h \
     src/declarative/DeclarativeItem.h \

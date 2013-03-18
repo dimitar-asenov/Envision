@@ -33,13 +33,13 @@ namespace Visualization {
  */
 
 AnchorLayoutElement::AnchorLayoutElement()
-: elementList_{QList<Element*>()}, horizontalConstraints_{Orientation::Horizontal},
-  verticalConstraints_{Orientation::Vertical}
+: elementList_{QList<Element*>()}, horizontalConstraints_{QList<AnchorLayoutConstraint*>()},
+  verticalConstraints_{QList<AnchorLayoutConstraint*>()}
 {}
 
 AnchorLayoutElement::~AnchorLayoutElement()
 {
-	// TODO Auto-generated destructor stub
+	// TODO: delete all contained elements
 }
 
 AnchorLayoutElement* AnchorLayoutElement::put(PlaceEdge placeEdge, Element* placeElement, AtEdge atEdge,
@@ -48,7 +48,7 @@ AnchorLayoutElement* AnchorLayoutElement::put(PlaceEdge placeEdge, Element* plac
 	Edge edgeToBePlaced = static_cast<Edge>(placeEdge);
 	Edge fixedEdge = static_cast<Edge>(atEdge);
 
-	Orientation orientation = inferOrientation(edgeToBePlaced, fixedEdge);
+	AnchorLayoutConstraint::Orientation orientation = inferOrientation(edgeToBePlaced, fixedEdge);
 
 	return put(orientation, relativePosition(edgeToBePlaced), placeElement, 0, relativePosition(fixedEdge),
 					fixedElement);
@@ -60,7 +60,7 @@ AnchorLayoutElement* AnchorLayoutElement::put(PlaceEdge placeEdge, Element* plac
 	Edge edgeToBePlaced = static_cast<Edge>(placeEdge);
 	Edge fixedEdge = static_cast<Edge>(fromEdge);
 
-	Orientation orientation = inferOrientation(edgeToBePlaced, fixedEdge);
+	AnchorLayoutConstraint::Orientation orientation = inferOrientation(edgeToBePlaced, fixedEdge);
 
 	// compute correct offset
 	if (fixedEdge == Edge::Left || fixedEdge == Edge::Top)
@@ -75,8 +75,8 @@ AnchorLayoutElement* AnchorLayoutElement::put(PlaceEdge placeEdge, Element* plac
 {
 	Edge edgeToBePlaced = static_cast<Edge>(placeEdge);
 
-	Orientation orientation = this->orientation(edgeToBePlaced);
-	Q_ASSERT(orientation != Orientation::Auto);
+	AnchorLayoutConstraint::Orientation orientation = this->orientation(edgeToBePlaced);
+	Q_ASSERT(orientation != AnchorLayoutConstraint::Orientation::Auto);
 
 	return put(orientation, relativePosition(edgeToBePlaced), placeElement, 0, relativeEdgePosition, fixedElement);
 }
@@ -92,10 +92,10 @@ void AnchorLayoutElement::computeSize(Item* item, int /*availableWidth*/, int /*
 	}
 
 	// place elements horizontally
-	int minX = horizontalConstraints_.placeElements(item);
+	int minX = placeElements(horizontalConstraints_, AnchorLayoutConstraint::Orientation::Horizontal, item);
 
 	// place elements vertically
-	int minY = verticalConstraints_.placeElements(item);
+	int minY = placeElements(verticalConstraints_, AnchorLayoutConstraint::Orientation::Vertical, item);
 
 	// adjust positions, such that the minimum on each axis is at left/right margin, and compute overall element width
 	// and height
@@ -136,22 +136,23 @@ bool AnchorLayoutElement::sizeDependsOnParent(const Item* /*item*/) const
 	return false;
 }
 
-AnchorLayoutElement* AnchorLayoutElement::put(Orientation orientation, float relativePlaceEdgePosition,
-		Element* placeElement, int offset, float relativeFixedEdgePosition, Element* fixedElement)
+AnchorLayoutElement* AnchorLayoutElement::put(AnchorLayoutConstraint::Orientation orientation,
+		float relativePlaceEdgePosition, Element* placeElement, int offset, float relativeFixedEdgePosition,
+		Element* fixedElement)
 {
-	Q_ASSERT(orientation != Orientation::Auto);
+	Q_ASSERT(orientation != AnchorLayoutConstraint::Orientation::Auto);
 
 	if (!elementList_.contains(placeElement))
 		elementList_.append(placeElement);
 	if (!elementList_.contains(fixedElement))
 		elementList_.append(fixedElement);
 
-	if (orientation == Orientation::Horizontal)
-		horizontalConstraints_.addConstraint(relativePlaceEdgePosition, placeElement, offset,
-																relativeFixedEdgePosition, fixedElement);
-	else // orientation == Orientation::Vertical
-		verticalConstraints_.addConstraint(relativePlaceEdgePosition, placeElement, offset,
-																relativeFixedEdgePosition, fixedElement);
+	if (orientation == AnchorLayoutConstraint::Orientation::Horizontal)
+		addConstraint(horizontalConstraints_, relativePlaceEdgePosition, placeElement, offset,
+															relativeFixedEdgePosition, fixedElement);
+	else // orientation == AnchorLayoutConstraint::Orientation::Vertical
+		addConstraint(verticalConstraints_, relativePlaceEdgePosition, placeElement, offset,
+															relativeFixedEdgePosition, fixedElement);
 	return this;
 }
 
@@ -161,19 +162,19 @@ void AnchorLayoutElement::destroyChildItems(Item* item)
 		elementList_.at(i)->destroyChildItems(item);
 }
 
-AnchorLayoutElement::Orientation AnchorLayoutElement::orientation(Edge edge)
+AnchorLayoutConstraint::Orientation AnchorLayoutElement::orientation(Edge edge)
 {
 	switch (edge) {
 		case Edge::Left:
 		case Edge::Right:
 		case Edge::HCenter:
-			return Orientation::Horizontal;
+			return AnchorLayoutConstraint::Orientation::Horizontal;
 		case Edge::Top:
 		case Edge::Bottom:
 		case Edge::VCenter:
-			return Orientation::Vertical;
+			return AnchorLayoutConstraint::Orientation::Vertical;
 		default:
-			return Orientation::Auto;
+			return AnchorLayoutConstraint::Orientation::Auto;
 	}
 }
 
@@ -183,18 +184,21 @@ AnchorLayoutElement::Orientation AnchorLayoutElement::orientation(Edge edge)
  *
  * @return Either Orientation::Horizontal or Orientation::Vertical
  */
-AnchorLayoutElement::Orientation AnchorLayoutElement::inferOrientation(Edge firstEdge, Edge secondEdge)
+AnchorLayoutConstraint::Orientation AnchorLayoutElement::inferOrientation(Edge firstEdge, Edge secondEdge)
 {
-	Orientation firstOrientation = orientation(firstEdge);
-	Orientation secondOrientation = orientation(secondEdge);
+	AnchorLayoutConstraint::Orientation firstOrientation = orientation(firstEdge);
+	AnchorLayoutConstraint::Orientation secondOrientation = orientation(secondEdge);
 
-	Q_ASSERT(firstOrientation != Orientation::Auto || secondOrientation != Orientation::Auto);
+	Q_ASSERT(firstOrientation != AnchorLayoutConstraint::Orientation::Auto
+			||secondOrientation != AnchorLayoutConstraint::Orientation::Auto);
 
-	if (firstOrientation != Orientation::Auto) {
-		Q_ASSERT(firstOrientation == secondOrientation || secondOrientation == Orientation::Auto);
+	if (firstOrientation != AnchorLayoutConstraint::Orientation::Auto) {
+		Q_ASSERT(firstOrientation == secondOrientation
+				|| secondOrientation == AnchorLayoutConstraint::Orientation::Auto);
 		return firstOrientation;
 	}
-	else // secondOrientation != Orientation::Auto && firstOrientation == Orientation::Auto
+	else  // secondOrientation != AnchorLayoutConstraint::Orientation::Auto
+			// && firstOrientation == AnchorLayoutConstraint::Orientation::Auto
 	{
 		return secondOrientation;
 	}
@@ -214,32 +218,22 @@ float AnchorLayoutElement::relativePosition(Edge edge)
 	}
 }
 
-/*
- * AnchorLayoutElement::AxisConstraints
- */
-
-AnchorLayoutElement::AxisConstraints::AxisConstraints(Orientation orientation)
-: orientation_{orientation}, constraints_{QList<Constraint*>()}
-{}
-
-AnchorLayoutElement::AxisConstraints::~AxisConstraints()
-{}
-
-void AnchorLayoutElement::AxisConstraints::addConstraint(float relativePlaceEdgePosition, Element* placeElement,
-		int offset, float relativeFixedEdgePosition, Element* fixedElement)
+void AnchorLayoutElement::addConstraint(QList<AnchorLayoutConstraint*>& constraints, float relativePlaceEdgePosition,
+		Element* placeElement, int offset, float relativeFixedEdgePosition, Element* fixedElement)
 {
-	constraints_.append(new Constraint(relativePlaceEdgePosition, placeElement, offset,
-															relativeFixedEdgePosition, fixedElement));
-	sortConstraints();
+	constraints.append(new AnchorLayoutConstraint(relativePlaceEdgePosition, placeElement, offset,
+																	relativeFixedEdgePosition, fixedElement));
+	sortConstraints(constraints);
 }
 
-int AnchorLayoutElement::AxisConstraints::placeElements(Item* /*item*/)
+int AnchorLayoutElement::placeElements(QList<AnchorLayoutConstraint*>& constraints,
+		AnchorLayoutConstraint::Orientation orientation, Item* /*item*/)
 {
 	// place elements on axis
 	int minPos = 0;
-	for (int i=0; i<constraints_.length(); i++)
+	for (int i=0; i<constraints.length(); i++)
 	{
-		int pos = constraints_.at(i)->execute(orientation_);
+		int pos = constraints.at(i)->execute(orientation);
 		if (pos < minPos)
 			minPos = pos;
 	}
@@ -247,16 +241,16 @@ int AnchorLayoutElement::AxisConstraints::placeElements(Item* /*item*/)
 	return minPos;
 }
 
-void AnchorLayoutElement::AxisConstraints::sortConstraints()
+void AnchorLayoutElement::sortConstraints(QList<AnchorLayoutConstraint*>& constraints)
 {
 	// find all constraints which have a fixed node that depends on nothing
-	QList<Constraint*> sortedConstraints;
+	QList<AnchorLayoutConstraint*> sortedConstraints;
 	QList<Element*> elementQueue;
-	for (auto c1 : constraints_)
+	for (auto c1 : constraints)
 	{
 		bool dependsOnSomething = false;
-		for (auto c2 : constraints_)
-			if (c1->dependsOn(c2, constraints_))
+		for (auto c2 : constraints)
+			if (c1->dependsOn(c2, constraints))
 			{
 				dependsOnSomething = true;
 				break;
@@ -272,7 +266,7 @@ void AnchorLayoutElement::AxisConstraints::sortConstraints()
 
 	for (int elementIndex=0; elementIndex<elementQueue.length(); ++elementIndex)
 	{
-		for (auto c:constraints_)
+		for (auto c:constraints)
 		{
 			if (c->fixedElement() == elementQueue.at(elementIndex))
 			{
@@ -289,64 +283,7 @@ void AnchorLayoutElement::AxisConstraints::sortConstraints()
 		}
 	}
 
-	constraints_ = sortedConstraints;
-}
-
-/*
- * AnchorLayoutElement::AxisConstraints::Constraint
- */
-
-AnchorLayoutElement::AxisConstraints::Constraint::Constraint(float relativePlaceEdgePosition, Element* placeElement,
-		int offset, float relativeFixedEdgePosition, Element* fixedElement)
-: relativePlaceEdgePosition_{relativePlaceEdgePosition}, placeElement_{placeElement}, offset_{offset},
-  relativeFixedEdgePosition_{relativeFixedEdgePosition}, fixedElement_{fixedElement}
-{}
-
-AnchorLayoutElement::AxisConstraints::Constraint::~Constraint()
-{}
-
-/**
- * Calculates the position in the orientation axis of the element to be placed, assuming it's size was already
- * calculated, and the position on the orientation axis of the fixed element is already fixed.
- */
-int AnchorLayoutElement::AxisConstraints::Constraint::execute(Orientation orientation)
-{
-	Q_ASSERT(orientation != Orientation::Auto);
-
-	if (orientation == Orientation::Horizontal)
-	{
-		int edgePosition = fixedElement_->pos().x() + offset_ +
-									fixedElement_->size().width() * relativeFixedEdgePosition_;
-		int placeX = edgePosition - placeElement_->size().width() * relativePlaceEdgePosition_;
-		placeElement_->setPos(QPoint(placeX, placeElement_->pos().y()));
-		return placeX;
-	}
-	else // orientation == Orientation::Vertical
-	{
-		int edgePosition = fixedElement_->pos().y() + offset_ +
-									fixedElement_->size().height() * relativeFixedEdgePosition_;
-		int placeY = edgePosition - placeElement_->size().height() * relativePlaceEdgePosition_;
-		placeElement_->setPos(QPoint(placeElement_->pos().x(), placeY));
-		return placeY;
-	}
-}
-
-bool AnchorLayoutElement::AxisConstraints::Constraint::dependsOn(Constraint* other, QList<Constraint*>& allConstraints)
-{
-	QList<Constraint*> dependsOn = {this};
-
-	while (!dependsOn.empty())
-	{
-		for (auto c : allConstraints)
-			if (c->placeElement() == dependsOn.first()->fixedElement())
-			{
-				if (c == other) return true;
-				dependsOn.append(c);
-			}
-		dependsOn.removeFirst();
-	}
-
-	return false;
+	constraints = sortedConstraints;
 }
 
 }
