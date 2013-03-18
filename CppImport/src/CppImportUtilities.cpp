@@ -20,8 +20,21 @@ OOModel::BinaryOperation::OperatorTypes CppImportUtilities::convertClangOpcode(c
         break;
     case clang::BO_Add:
         return OOModel::BinaryOperation::PLUS;
+    case clang::BO_Assign:
     default:
         return OOModel::BinaryOperation::GREATER;
+        break;
+    }
+}
+
+OOModel::AssignmentExpression::AssignmentTypes CppImportUtilities::convertClangAssignOpcode(clang::BinaryOperatorKind kind)
+{
+    switch (kind) {
+    case clang::BO_Assign:
+        return OOModel::AssignmentExpression::ASSIGN;
+        break;
+    default:
+        return OOModel::AssignmentExpression::ASSIGN;
         break;
     }
 }

@@ -8,4 +8,5 @@ public:
     CppImportUtilities() {}
     static OOModel::Expression* convertClangType(clang::QualType type);
     static OOModel::BinaryOperation::OperatorTypes convertClangOpcode(clang::BinaryOperatorKind kind);
+    static OOModel::AssignmentExpression::AssignmentTypes convertClangAssignOpcode(clang::BinaryOperatorKind kind);
 };

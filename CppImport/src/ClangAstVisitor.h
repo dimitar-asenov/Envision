@@ -37,6 +37,7 @@ private:
 
 
     bool TraverseBinaryOp(clang::BinaryOperator* binOp);
+    bool TraverseAssignment(clang::BinaryOperator* binOp);
 
     bool inBody_;
 

@@ -154,7 +154,7 @@ bool ClangAstVisitor::TraverseBinEQ(clang::BinaryOperator* binOp)
 
 bool ClangAstVisitor::TraverseBinAssign(clang::BinaryOperator* binOp)
 {
-    return TraverseBinaryOp(binOp);
+    return TraverseAssignment(binOp);
 }
 
 bool ClangAstVisitor::VisitIntegerLiteral(clang::IntegerLiteral* intLit)
@@ -194,6 +194,30 @@ bool ClangAstVisitor::TraverseBinaryOp(clang::BinaryOperator* binOp)
 {
     OOModel::BinaryOperation::OperatorTypes ooOperatorType = CppImportUtilities::convertClangOpcode(binOp->getOpcode());
     OOModel::BinaryOperation* ooBinOp = new OOModel::BinaryOperation();
+    bool inBody = inBody_;
+    inBody_ = false;
+    ooBinOp->setOp(ooOperatorType);
+    TraverseStmt(binOp->getLHS());
+    ooBinOp->setLeft(ooExprStack.pop());
+    TraverseStmt(binOp->getRHS());
+    ooBinOp->setRight(ooExprStack.pop());
+
+    if(inBody)
+    {
+        OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack.top());
+        if(itemList) itemList->append(ooBinOp);
+        else std::cout << "ERROR INSERT BINOP" << std::endl;
+    }
+    else
+        ooExprStack.push(ooBinOp);
+    inBody_ = inBody;
+    return true;
+}
+
+bool ClangAstVisitor::TraverseAssignment(clang::BinaryOperator *binOp)
+{
+    OOModel::AssignmentExpression::AssignmentTypes ooOperatorType = CppImportUtilities::convertClangAssignOpcode(binOp->getOpcode());
+    OOModel::AssignmentExpression* ooBinOp = new OOModel::AssignmentExpression();
     bool inBody = inBody_;
     inBody_ = false;
     ooBinOp->setOp(ooOperatorType);
