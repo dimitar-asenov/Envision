@@ -31,6 +31,10 @@
 #include "../src/declarative/ItemWrapperElement.h"
 #include "../src/items/SymbolStyle.h"
 
+namespace Model {
+class Node;
+}
+
 namespace TestNodes {
 class BinaryNode;
 }
@@ -39,7 +43,6 @@ namespace Visualization {
 
 class Item;
 class Symbol;
-class Text;
 class VExtendable;
 
 class DeclarativeTest : public DeclarativeItem<DeclarativeTest> {
@@ -47,24 +50,25 @@ class DeclarativeTest : public DeclarativeItem<DeclarativeTest> {
 	ITEM_COMMON_CUSTOM_STYLENAME(DeclarativeTest, SymbolStyle)
 
 	public:
-		DeclarativeTest(Item* parent, TestNodes::BinaryNode* node);
+		DeclarativeTest(Item* parent, TestNodes::BinaryNode* node, Model::Node* first, Model::Node* second,
+				Model::Node* third, Model::Node* fourth);
 		static void initializeForms();
 		virtual int determineForm() override;
-
-	protected:
-		virtual void determineChildren() override;
 
 	private:
 		typedef DeclarativeItem<DeclarativeTest> BaseItemType;
 		Symbol* testItem_{};
-		Text* testItem2_{};
-		Text* testItem3_{};
-		Text* testItem4_{};
-		Text* testItem5_{};
-		Text* testItem6_{};
 		VExtendable* testNodeItem_{};
 		Item* testNodeItemGeneral_{};
 		TestNodes::BinaryNode* testNode_{};
+		Model::Node* firstNode_{};
+		Model::Node* secondNode_{};
+		Model::Node* thirdNode_{};
+		Model::Node* fourthNode_{};
+		Item* firstItem_{};
+		Item* secondItem_{};
+		Item* thirdItem_{};
+		Item* fourthItem_{};
 };
 
 } /* namespace Visualization */

@@ -27,7 +27,7 @@
 #include "DeclarativeTest.h"
 
 #include "../src/items/Symbol.h"
-#include "../src/items/Text.h"
+#include "../src/items/TestBox.h"
 #include "../src/items/VExtendable.h"
 #include "ModelBase/src/test_nodes/BinaryNode.h"
 #include "../src/declarative/GridLayoutElement.h"
@@ -37,8 +37,10 @@ namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(DeclarativeTest, "item")
 
-DeclarativeTest::DeclarativeTest(Item* parent, TestNodes::BinaryNode* node) :
-		DeclarativeItem<DeclarativeTest>(parent, itemStyles().get()), testNode_{node}
+DeclarativeTest::DeclarativeTest(Item* parent, TestNodes::BinaryNode* node, Model::Node* first, Model::Node* second,
+		Model::Node* third, Model::Node* fourth) :
+		DeclarativeItem<DeclarativeTest>(parent, itemStyles().get()), testNode_{node}, firstNode_{first},
+		secondNode_{second}, thirdNode_{third}, fourthNode_{fourth}
 {
 	setPurpose(0);
 }
@@ -46,14 +48,13 @@ DeclarativeTest::DeclarativeTest(Item* parent, TestNodes::BinaryNode* node) :
 void DeclarativeTest::initializeForms()
 {
 	Element* testItemElement = item<Symbol, I>(&I::testItem_, [](I*){return itemStyles().get();});
-	Element* testItem2Element = item<Text, I>(&I::testItem2_, [](I*){return Text::itemStyles().get();});
-	Element* testItem3Element = item<Text, I>(&I::testItem3_, [](I*){return Text::itemStyles().get();});
-	Element* testItem4Element = item<Text, I>(&I::testItem4_, [](I*){return Text::itemStyles().get();});
-	Element* testItem5Element = item<Text, I>(&I::testItem5_, [](I*){return Text::itemStyles().get();});
-	Element* testItem6Element = item<Text, I>(&I::testItem6_, [](I*){return Text::itemStyles().get();});
 	Element* testNodeItemGeneralElement = item<I>(&I::testNodeItemGeneral_, [](I* v){return v->testNode_;});
 	Element* testNodeItemElement = item<VExtendable,I>(&I::testNodeItem_, [](I* v){return v->testNode_;},
 																		[](I*){return VExtendable::itemStyles().get();});
+	Element* firstElement = item<I>(&I::firstItem_, [](I* v){return v->firstNode_;});
+	Element* secondElement = item<I>(&I::secondItem_, [](I* v){return v->secondNode_;});
+	Element* thirdElement = item<I>(&I::thirdItem_, [](I* v){return v->thirdNode_;});
+	Element* fourthElement = item<I>(&I::fourthItem_, [](I* v){return v->fourthNode_;});
 
 	// Test 0: VisualizationItemWrapperElement
 	addForm(testItemElement);
@@ -68,12 +69,12 @@ void DeclarativeTest::initializeForms()
 	addForm((new GridLayoutElement())
 				->setVerticalAlignment(LayoutStyle::Alignment::Center)
 				->setHorizontalAlignment(LayoutStyle::Alignment::Right)
-				->put(0, 0, testItemElement)
+				->put(0, 0, firstElement)
 				->put(0, 1, testNodeItemElement)
 				->put(1, 1, (new GridLayoutElement())
-									->put(0, 0, testItem2Element)
-									->put(1, 1, testItem3Element))
-				->put(2, 0, testItem4Element));
+									->put(0, 0, secondElement)
+									->put(1, 1, thirdElement))
+				->put(2, 0, fourthElement));
 
 	// Test 4: GridLayoutElement with merged cells
 	addForm((new GridLayoutElement())
@@ -83,13 +84,13 @@ void DeclarativeTest::initializeForms()
 				->setRowStretchFactors(1)
 				->put(0, 0, (new GridLayoutElement())
 									->setHorizontalSpacing(10)
-									->put(0, 0, testItemElement)
-									->put(1, 0, testItem2Element)
-									->put(2, 0, testItem3Element))
+									->put(0, 0, firstElement)
+									->put(1, 0, secondElement)
+									->put(2, 0, thirdElement))
 				->setCellSpanning(2, 1)
 				->put(2, 0, testNodeItemElement)
 				->setCellSpanning(1, 2)
-				->put(0, 1, testItem4Element)
+				->put(0, 1, fourthElement)
 				);
 
 	// Test 5: Size dependencies inside the grid & alignment
@@ -97,46 +98,46 @@ void DeclarativeTest::initializeForms()
 				->setVerticalAlignment(LayoutStyle::Alignment::Center)
 				->put(0, 0, (new GridLayoutElement())
 									->setHorizontalSpacing(300)
-									->put(0, 0, testItemElement)
-									->put(1, 0, testItem2Element)))
+									->put(0, 0, firstElement)
+									->put(1, 0, secondElement)))
 				->put(0, 1, (new GridLayoutElement())
 									->setColumnStretchFactor(1, 1)
 									->put(0, 0, testNodeItemElement)
-									->put(2, 0, testItem3Element)
+									->put(2, 0, thirdElement)
 									->setCellVerticalAlignment(LayoutStyle::Alignment:: Center))
-				->put(1, 0, testItem4Element)
+				->put(1, 0, fourthElement)
 				->setCellSpanning(1, 2);
 
 	// Test 6: Anchor layout
 	addForm((new AnchorLayoutElement())
-				->put(AnchorLayoutElement::PlaceEdge::BottomOf, testItemElement, 20,
+				->put(AnchorLayoutElement::PlaceEdge::BottomOf, firstElement, 20,
 						AnchorLayoutElement::FromEdge::Above, testNodeItemElement)
-				->put(AnchorLayoutElement::PlaceEdge::LeftOf, testItemElement,
+				->put(AnchorLayoutElement::PlaceEdge::LeftOf, firstElement,
 						AnchorLayoutElement::AtEdge::AtLeftOf, testNodeItemElement)
-				->put(AnchorLayoutElement::PlaceEdge::VCenterOf, testItem2Element,
-						AnchorLayoutElement::AtEdge::AtCenterOf, testItemElement)
-				->put(AnchorLayoutElement::PlaceEdge::LeftOf, testItem2Element, 20,
-						AnchorLayoutElement::FromEdge::FromRightOf, testItemElement)
-				->put(AnchorLayoutElement::PlaceEdge::HCenterOf, testItem3Element,
-						AnchorLayoutElement::AtEdge::AtCenterOf, testItem2Element)
-				->put(AnchorLayoutElement::PlaceEdge::TopOf, testItem3Element, 20,
+				->put(AnchorLayoutElement::PlaceEdge::VCenterOf, secondElement,
+						AnchorLayoutElement::AtEdge::AtCenterOf, firstElement)
+				->put(AnchorLayoutElement::PlaceEdge::LeftOf, secondElement, 20,
+						AnchorLayoutElement::FromEdge::FromRightOf, firstElement)
+				->put(AnchorLayoutElement::PlaceEdge::HCenterOf, thirdElement,
+						AnchorLayoutElement::AtEdge::AtCenterOf, secondElement)
+				->put(AnchorLayoutElement::PlaceEdge::TopOf, thirdElement, 20,
 						AnchorLayoutElement::FromEdge::Below, testNodeItemElement)
-				->put(AnchorLayoutElement::PlaceEdge::TopOf, testItem4Element, 0.33, testItem3Element)
-				->put(AnchorLayoutElement::PlaceEdge::RightOf, testItem4Element, 0.1, testNodeItemElement)
+				->put(AnchorLayoutElement::PlaceEdge::TopOf, fourthElement, 0.33, thirdElement)
+				->put(AnchorLayoutElement::PlaceEdge::RightOf, fourthElement, 0.1, testNodeItemElement)
 				);
 
 	// Test 7: Anchor Layout with stretching Elements, in order specification
 	Element* verticalGrid1 = (new GridLayoutElement)
 										->setRowStretchFactors(1)
-										->put(0, 0, testItemElement)
+										->put(0, 0, firstElement)
 										->setCellVerticalAlignment(LayoutStyle::Alignment::Top)
-										->put(0, 1, testItem2Element)
+										->put(0, 1, secondElement)
 										->setCellVerticalAlignment(LayoutStyle::Alignment::Center)
-										->put(0, 2, testItem3Element)
+										->put(0, 2, thirdElement)
 										->setCellVerticalAlignment(LayoutStyle::Alignment::Bottom);
 	Element* verticalGrid2 = (new GridLayoutElement)
 										->setRowStretchFactors(1)
-										->put(0, 0, testItem4Element)
+										->put(0, 0, fourthElement)
 										->setCellVerticalAlignment(LayoutStyle::Alignment::Top)
 										->put(0, 1, testNodeItemElement)
 										->setCellVerticalAlignment(LayoutStyle::Alignment::Bottom);
@@ -149,57 +150,29 @@ void DeclarativeTest::initializeForms()
 						AnchorLayoutElement::FromEdge::FromRightOf, verticalGrid2));
 
 	// Test 8: Anchor Layout out of order specification with more elements, circular dependencies
-	Element* stretchableElement1 = (new GridLayoutElement)
-											->setColumnStretchFactors(1)
-											->put(0, 0, testItemElement)
-											->setCellHorizontalAlignment(LayoutStyle::Alignment::Left)
-											->put(1, 0, testItem2Element)
-											->setCellHorizontalAlignment(LayoutStyle::Alignment::Right);
-	Element* stretchableElement2 = (new GridLayoutElement)
-											->setColumnStretchFactors(1)
-											->put(0, 0, testItem3Element)
-											->setCellHorizontalAlignment(LayoutStyle::Alignment::Left)
-											->put(1, 0, testItem4Element)
-											->setCellHorizontalAlignment(LayoutStyle::Alignment::Right);
-	Element* stretchableElement3 = (new GridLayoutElement)
-											->setColumnStretchFactors(1)
-											->put(0, 0, testItem5Element)
-											->setCellHorizontalAlignment(LayoutStyle::Alignment::Left)
-											->put(1, 0, testItem6Element)
-											->setCellHorizontalAlignment(LayoutStyle::Alignment::Right);
 	addForm((new AnchorLayoutElement())
 				// arrange them on top of each other
-				->put(AnchorLayoutElement::PlaceEdge::TopOf, stretchableElement1, 20,
-						AnchorLayoutElement::FromEdge::Below, stretchableElement2)
-				->put(AnchorLayoutElement::PlaceEdge::TopOf, stretchableElement2, 20,
-						AnchorLayoutElement::FromEdge::Below, stretchableElement3)
+				->put(AnchorLayoutElement::PlaceEdge::TopOf, firstElement, 20,
+						AnchorLayoutElement::FromEdge::Below, secondElement)
+				->put(AnchorLayoutElement::PlaceEdge::TopOf, secondElement, 20,
+						AnchorLayoutElement::FromEdge::Below, thirdElement)
 				// right edges elements 1 and 2
-				->put(AnchorLayoutElement::PlaceEdge::RightOf, stretchableElement1,
-						AnchorLayoutElement::AtEdge::AtRightOf, stretchableElement2)
+				->put(AnchorLayoutElement::PlaceEdge::RightOf, firstElement,
+						AnchorLayoutElement::AtEdge::AtRightOf, secondElement)
 				// left edges elements 3 and 2
-				->put(AnchorLayoutElement::PlaceEdge::LeftOf, stretchableElement3,
-						AnchorLayoutElement::AtEdge::AtLeftOf, stretchableElement2)
+				->put(AnchorLayoutElement::PlaceEdge::LeftOf, thirdElement,
+						AnchorLayoutElement::AtEdge::AtLeftOf, secondElement)
 				// left edges elements 1 and 3
-				->put(AnchorLayoutElement::PlaceEdge::LeftOf, stretchableElement1,
-						AnchorLayoutElement::AtEdge::AtLeftOf, stretchableElement3)
+				->put(AnchorLayoutElement::PlaceEdge::LeftOf, firstElement,
+						AnchorLayoutElement::AtEdge::AtLeftOf, thirdElement)
 				// right edges elements 1 and 3
-				->put(AnchorLayoutElement::PlaceEdge::RightOf, stretchableElement1,
-						AnchorLayoutElement::AtEdge::AtRightOf, stretchableElement3));
+				->put(AnchorLayoutElement::PlaceEdge::RightOf, firstElement,
+						AnchorLayoutElement::AtEdge::AtRightOf, thirdElement));
 }
 
 int DeclarativeTest::determineForm()
 {
 	return 8;
-}
-
-void DeclarativeTest::determineChildren()
-{
-	BaseItemType::determineChildren();
-	if (testItem2_) testItem2_->setText("...second");
-	if (testItem3_) testItem3_->setText("third..");
-	if (testItem4_) testItem4_->setText("fourth");
-	if (testItem5_) testItem5_->setText("fifth..");
-	if (testItem6_) testItem6_->setText("..si.....................xth");
 }
 
 } /* namespace Visualization */
