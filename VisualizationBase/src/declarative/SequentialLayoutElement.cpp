@@ -26,7 +26,53 @@
 
 #include "SequentialLayoutElement.h"
 
+#include "ModelBase/src/nodes/List.h"
+
 namespace Visualization {
+
+SequentialLayoutElement::SequentialLayoutElement(Model::List* listNode) :
+		listNode_{listNode}, nodeListGetter_{}, itemListGetter_{}, spaceBetweenElements_{}, orientation_{Qt::Horizontal}
+{}
+
+SequentialLayoutElement::SequentialLayoutElement(std::function<QList<Model::Node*>()> nodeListGetter) :
+		listNode_{}, nodeListGetter_{nodeListGetter}, itemListGetter_{}, spaceBetweenElements_{},
+		orientation_{Qt::Horizontal}
+{}
+
+SequentialLayoutElement::SequentialLayoutElement(std::function<QList<Item*>()> itemListGetter) :
+		listNode_{}, nodeListGetter_{}, itemListGetter_{itemListGetter}, spaceBetweenElements_{},
+		orientation_{Qt::Horizontal}
+{}
+
+SequentialLayoutElement::~SequentialLayoutElement()
+{
+	SAFE_DELETE(listNode_);
+}
+
+void SequentialLayoutElement::computeSize(Item* /*item*/, int /*availableWidth*/, int /*availableHeight*/)
+{
+
+}
+
+void SequentialLayoutElement::setItemPositions(Item* /*item*/, int /*parentX*/, int /*parentY*/)
+{
+
+}
+
+void SequentialLayoutElement::synchronizeWithItem(Item* /*item*/)
+{
+
+}
+
+bool SequentialLayoutElement::sizeDependsOnParent(const Item* /*item*/) const
+{
+	return false;
+}
+
+void SequentialLayoutElement::destroyChildItems(Item* /*item*/)
+{
+
+}
 
 }
 

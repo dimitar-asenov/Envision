@@ -30,32 +30,69 @@
 #include "../visualizationbase_api.h"
 #include "LayoutElement.h"
 
+namespace Model {
+class Node;
+class List;
+}
+
 namespace Visualization {
 
 class Element;
 
 class VISUALIZATIONBASE_API SequentialLayoutElement : public LayoutElement
 {
-	public: // Functions executable on element definition
-		void addElement(Element* element);
-		void setSpaceBetweenElements(int space);
+	public:
+		// Functions executable on element definition
+		SequentialLayoutElement(Model::List* listNode);
+		SequentialLayoutElement(std::function<QList<Model::Node*>()> nodeListGetter);
+		SequentialLayoutElement(std::function<QList<Item*>()> itemListGetter);
+		virtual ~SequentialLayoutElement();
 
-		// set the orientation
-		void setOrientation(Qt::Orientation o);
-		void setHorizontal();
-		void setVertical();
+		SequentialLayoutElement* setSpaceBetweenElements(int space);
+		SequentialLayoutElement* setOrientation(Qt::Orientation o);
+		SequentialLayoutElement* setHorizontal();
+		SequentialLayoutElement* setVertical();
+
+		// Methods executable when items need to be rendered
+		virtual void computeSize(Item* item, int availableWidth, int availableHeight) override;
+		virtual void setItemPositions(Item* item, int parentX, int parentY) override;
+		virtual void synchronizeWithItem(Item* item) override;
+		virtual bool sizeDependsOnParent(const Item* item) const override;
+
+		// Recursive item destruction
+		virtual void destroyChildItems(Item* item) override;
 
 	private:
-		QList<Element*> elements_;
+		Model::List* listNode_{};
+		std::function<QList<Model::Node*>()> nodeListGetter_{};
+		std::function<QList<Item*>()> itemListGetter_{};
+
 		int spaceBetweenElements_{};
 		Qt::Orientation orientation_{Qt::Horizontal};
+
+		QList<Item*> computeItems(Item* item);
 };
 
-inline void SequentialLayoutElement::addElement(Element* element) {elements_.append(element);}
-inline void SequentialLayoutElement::setSpaceBetweenElements(int space) {spaceBetweenElements_ = space;}
-inline void SequentialLayoutElement::setOrientation(Qt::Orientation o) {orientation_ = o;}
-inline void SequentialLayoutElement::setHorizontal() {setOrientation(Qt::Horizontal);}
-inline void SequentialLayoutElement::setVertical() {setOrientation(Qt::Vertical);}
+inline SequentialLayoutElement* SequentialLayoutElement::setSpaceBetweenElements(int space)
+{
+	spaceBetweenElements_ = space;
+	return this;
+}
+inline SequentialLayoutElement* SequentialLayoutElement::setOrientation(Qt::Orientation o)
+{
+	orientation_ = o;
+	return this;
+}
+inline SequentialLayoutElement* SequentialLayoutElement::setHorizontal()
+{
+	setOrientation(Qt::Horizontal);
+	return this;
+}
+inline SequentialLayoutElement* SequentialLayoutElement::setVertical()
+{
+	setOrientation(Qt::Vertical);
+	return this;
+}
 
 }
 
