@@ -124,20 +124,3 @@ bool ClangAstVisitor::VisitFieldDecl(clang::FieldDecl* fd)
     }
     return true;
 }
-
-//bool ClangAstVisitor::VisitCXXMethodDecl(clang::CXXMethodDecl *methodDecl)
-//{
-//    //Constructors not yet handled
-//    if(llvm::isa<clang::CXXConstructorDecl>(methodDecl))
-//        return true;
-//    //translation Manager will insert method in correct class
-//    OOModel::Method* method = trMngr_->insertMethodDecl(methodDecl);
-//    if(!method)
-//    {
-//        std::cout << "___________ERROR NO OOMODEL::METHOD FOR THIS DECL_______" << std::endl;
-//        //for now return false to see error
-//        return false;
-//    }
-//    ooStack.push(method->items());
-//    return true;
-//}

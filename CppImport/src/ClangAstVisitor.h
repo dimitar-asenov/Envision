@@ -3,7 +3,6 @@
 #include "cppimport_api.h"
 #include "CppImportUtilities.h"
 #include "TranslateManager.h"
-#include "StmtVisitor.h"
 
 class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 {
