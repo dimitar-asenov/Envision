@@ -13,12 +13,12 @@ public:
         if(k == 10)
         {
             int l = 100;
-            k=20;
+            k+=20;
         }
         else
         {
             int f=0;
-            k=0;
+            k*=0;
         }
         return k;}
 };

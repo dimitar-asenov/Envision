@@ -63,8 +63,16 @@ OOModel::AssignmentExpression::AssignmentTypes CppImportUtilities::convertClangA
         return OOModel::AssignmentExpression::PLUS_ASSIGN;
     case clang::BO_SubAssign:
         return OOModel::AssignmentExpression::MINUS_ASSIGN;
-        //
-
+    case clang::BO_ShlAssign:
+        return OOModel::AssignmentExpression::LEFT_SHIFT_ASSIGN;
+    case clang::BO_ShrAssign:
+        return OOModel::AssignmentExpression::RIGHT_SHIFT_SIGNED_ASSIGN;
+    case clang::BO_AndAssign:
+        return OOModel::AssignmentExpression::BIT_AND_ASSIGN;
+    case clang::BO_XorAssign:
+        return OOModel::AssignmentExpression::BIT_XOR_ASSIGN;
+    case clang::BO_OrAssign:
+        return OOModel::AssignmentExpression::BIT_OR_ASSIGN;
     default:
         return OOModel::AssignmentExpression::ASSIGN;
     }
