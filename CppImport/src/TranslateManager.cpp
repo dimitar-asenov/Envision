@@ -5,24 +5,26 @@ TranslateManager::TranslateManager(Model::Model* model, OOModel::Project* projec
 {
 }
 
-void TranslateManager::insertClass(clang::CXXRecordDecl* rDecl, OOModel::Class *ooClass)
+OOModel::Class* TranslateManager::insertClass(clang::CXXRecordDecl* rDecl)
 {
+    OOModel::Class* ooClass = nullptr;
     // if rdecl is not managed yet add it:
     if(!classMap_.contains(rDecl))
     {
-        std::cout << "-------------------------->CLASS " << rDecl->getName().str() << " NOT IN MAP " << std::endl;
+        ooClass = new OOModel::Class();
+        ooClass->setName(QString::fromStdString(rDecl->getName().str()));
         classMap_.insert(rDecl,ooClass);
     }
+    else
+        std::cout << "ERROR TRANSLATEMNGR: CLASS"<< rDecl->getName().str() << " ALREADY IN MAP" << std::endl;
+    return ooClass;
 }
 
 OOModel::Method* TranslateManager::insertMethodDecl(clang::CXXMethodDecl* mDecl)
 {
     OOModel::Method* method = nullptr;
-
     if(!methodMap_.contains(mDecl))
     {
-        if(methodMap_.contains(mDecl->getCorrespondingMethodInClass(mDecl->getParent())))
-            std::cout << "IS DECLARED BEFORE" << std::endl;
         // Look if there is a function with same name in map
         QMap<clang::CXXMethodDecl*,OOModel::Method*>::iterator it = methodMap_.begin();
         for(;it!=methodMap_.end();++it)
@@ -55,7 +57,7 @@ OOModel::Method* TranslateManager::insertMethodDecl(clang::CXXMethodDecl* mDecl)
     return method;
 }
 
-OOModel::Field *TranslateManager::insertField(clang::FieldDecl* fDecl)
+OOModel::Field* TranslateManager::insertField(clang::FieldDecl* fDecl)
 {
     clang::CXXRecordDecl* parentClass = llvm::dyn_cast<clang::CXXRecordDecl>(fDecl->getParent());
     if(parentClass && classMap_.contains(parentClass))
@@ -70,40 +72,21 @@ OOModel::Field *TranslateManager::insertField(clang::FieldDecl* fDecl)
     return nullptr;
 }
 
-void TranslateManager::insertVar(clang::VarDecl* vDecl, OOModel::VariableDeclaration* ooVarDecl)
+OOModel::VariableDeclaration* TranslateManager::insertVar(clang::VarDecl* vDecl)
 {
+    OOModel::VariableDeclaration* ooVarDecl = nullptr;
     if(!varMap_.contains(vDecl))
     {
+        ooVarDecl = new OOModel::VariableDeclaration();
+        ooVarDecl->setName(QString::fromStdString(vDecl->getName().str()));
         varMap_.insert(vDecl,ooVarDecl);
     }
     else
-    {
-        std::cout << "---------->VAR : " << vDecl->getName().str() << " IS ALREADY IN THE MAP" << std::endl;
-    }
-
-
-
-    if(vDecl->getParentFunctionOrMethod())
-    {
-        std::cout << "HAS PARENT FUNCTION OR METHOD ________" << vDecl->getName().str() << std::endl;
-        // add to method
-        clang::FunctionDecl* parentFunc = llvm::dyn_cast<clang::FunctionDecl>(vDecl->getParentFunctionOrMethod());
-        if(methodMap_.contains(llvm::dyn_cast<clang::CXXMethodDecl>(parentFunc)))
-        {
-            std::cout << "FOUND A SUITABLE FUNCTION FOR VAR ------------> " << vDecl->getName().str() << std::endl;
-        }
-        ooVarDecl->getAllAttributes();
-    }
+        std::cout << "ERROR TRANSLATEMNGR: ---------->VAR : " << vDecl->getName().str() << " IS ALREADY IN THE MAP" << std::endl;
+    return ooVarDecl;
 }
 
-OOModel::IfStatement *TranslateManager::insertIfStmt(clang::IfStmt* ifStmt)
-{
-    OOModel::IfStatement* ooIfStmt = new OOModel::IfStatement();
-    ifStmtMap_.insert(ifStmt,ooIfStmt);
-    return ooIfStmt;
-}
-
-OOModel::VariableDeclaration *TranslateManager::getVar(clang::VarDecl* vDecl)
+OOModel::VariableDeclaration* TranslateManager::getVar(clang::VarDecl* vDecl)
 {
     if(varMap_.contains(vDecl))
         return varMap_.value(vDecl);
@@ -140,9 +123,7 @@ OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl)
         parent->methods()->append(method);
     }
     else
-    {
-        std::cout << "METHOD DECL NO PARENT FOUND" << std::endl;
-    }
+        std::cout << "ERROR TRANSLATEMNGR: METHOD DECL NO PARENT FOUND" << std::endl;
 
     methodMap_.insert(mDecl,method);
 

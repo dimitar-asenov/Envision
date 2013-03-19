@@ -39,7 +39,6 @@ public:
 
 
     bool VisitStmt(clang::Stmt* S);
-    bool VisitDecl(clang::Decl* D);
     bool VisitFieldDecl(clang::FieldDecl* fd);
 
     bool VisitIntegerLiteral(clang::IntegerLiteral* intLit);
@@ -53,8 +52,8 @@ private:
     QStack<Model::Node*> ooStack{};
     QStack<OOModel::Expression*> ooExprStack{};
 
-    OOModel::Project* currentProject_{};
     Model::Model* currentModel_{};
+    OOModel::Project* currentProject_{};
     clang::ASTContext* astContext_{};
     TranslateManager* trMngr_{};
     bool inBody_{false};

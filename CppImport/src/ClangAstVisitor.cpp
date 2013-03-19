@@ -1,11 +1,9 @@
 #include "ClangAstVisitor.h"
 
-ClangAstVisitor::ClangAstVisitor(Model::Model* model, OOModel::Project* currentProject = nullptr)
+ClangAstVisitor::ClangAstVisitor(Model::Model* model, OOModel::Project* currentProject = nullptr) :
+    currentModel_(model) , currentProject_(currentProject)
 {
-    this->currentModel_ = model;
-    this->currentProject_ = currentProject;
     trMngr_ = new TranslateManager(model,currentProject);
-
     ooStack.push(currentProject_);
 }
 
@@ -21,12 +19,10 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl *rd)
         clang::CXXRecordDecl* recDecl = llvm::cast<clang::CXXRecordDecl>(rd);
         if(recDecl->isClass())
         {
-            std::cout << "Visiting ClassDecl " << rd->getName().str() <<std::endl;
-            OOModel::Class* ooClass = new OOModel::Class();
+            OOModel::Class* ooClass = trMngr_->insertClass(rd);
+            // check if there was an error inserting class
+            if(!ooClass) return false;
             currentProject_->classes()->append(ooClass);
-            ooClass->setName(QString::fromStdString(recDecl->getName().str()));
-
-            trMngr_->insertClass(rd,ooClass);
             ooStack.push(ooClass);
         }
     }
@@ -43,7 +39,7 @@ bool ClangAstVisitor::TraverseCXXMethodDecl(clang::CXXMethodDecl *methodDecl)
     if(!method)
     {
         std::cout << "___________ERROR NO OOMODEL::METHOD FOR THIS DECL_______" << std::endl;
-        // for now return false to see error
+        // for now return false to see error (interupts visitor)
         return false;
     }
     // only visit the body if we are at the definition
@@ -58,7 +54,7 @@ bool ClangAstVisitor::TraverseCXXMethodDecl(clang::CXXMethodDecl *methodDecl)
 
 bool ClangAstVisitor::TraverseIfStmt(clang::IfStmt *ifStmt)
 {
-    OOModel::IfStatement* ooIfStmt = trMngr_->insertIfStmt(ifStmt);
+    OOModel::IfStatement* ooIfStmt = new OOModel::IfStatement();
     OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack.top());
     if(itemList)
     {
@@ -126,13 +122,6 @@ bool ClangAstVisitor::VisitStmt(clang::Stmt* S)
     return Base::VisitStmt(S);
 }
 
-bool ClangAstVisitor::VisitDecl(clang::Decl* D)
-{
-    std::cout << "visiting DECL " << D->getDeclKindName() <<  D->getDeclKindName() <<std::endl;
-
-    return Base::VisitDecl(D);
-}
-
 bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* vd)
 {
     std::cout << "Visiting VarDecl " << vd->getName().str() <<std::endl;
@@ -140,9 +129,7 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* vd)
     OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack.top());
     if(itemList)
     {
-        OOModel::VariableDeclaration* varDecl = new OOModel::VariableDeclaration();
-        varDecl->setName(QString::fromStdString(vd->getName().str()));
-
+        OOModel::VariableDeclaration* varDecl = trMngr_->insertVar(vd);
         OOModel::Expression* type = CppImportUtilities::convertClangType(vd->getType());
         if(type) varDecl->setVarType(type);
 
@@ -151,9 +138,6 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* vd)
             TraverseStmt(vd->getInit());
             varDecl->setInitialValue(ooExprStack.pop());
         }
-
-        trMngr_->insertVar(vd,varDecl);
-
         itemList->append(varDecl);
     }
     else
