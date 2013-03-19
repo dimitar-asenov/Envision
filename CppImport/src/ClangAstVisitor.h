@@ -22,61 +22,32 @@ public:
 
 
     // binary ops
-//    bool TraverseBinMul(clang::BinaryOperator* binOp)
-//    {return TraverseBinaryOp(binOp);}
-//    bool TraverseBinDiv(clang::BinaryOperator* binOp)
-//    {return TraverseBinaryOp(binOp);}
-//    bool TraverseBinRem(clang::BinaryOperator* binOp)
-//    {return TraverseBinaryOp(binOp);}
-    bool TraverseBinAdd(clang::BinaryOperator* binOp)
-    {return TraverseBinaryOp(binOp);}
-//    bool TraverseBinSub(clang::BinaryOperator* binOp)
-//    {return TraverseBinaryOp(binOp);}
-    bool TraverseBinAdd(clang::BinaryOperator* binOp)
-    {return TraverseBinaryOp(binOp);}
-//    bool TraverseBinSub(clang::BinaryOperator* binOp)
-//    {return TraverseBinaryOp(binOp);}
-    bool TraverseBinLT(clang::BinaryOperator* binOp)
-    {return TraverseBinaryOp(binOp);}
-    bool TraverseBinGT(clang::BinaryOperator* binOp)
-    {return TraverseBinaryOp(binOp);}
-    bool TraverseBinLE(clang::BinaryOperator* binOp)
-    {return TraverseBinaryOp(binOp);}
-    bool TraverseBinGE(clang::BinaryOperator* binOp)
-    {return TraverseBinaryOp(binOp);}
-    bool TraverseBinEQ(clang::BinaryOperator* binOp)
-    {return TraverseBinaryOp(binOp);}
-    bool TraverseBinNE(clang::BinaryOperator* binOp)
-    {return TraverseBinaryOp(binOp);}
-//    bool TraverseBinAnd(clang::BinaryOperator* binOp)
-//    {return TraverseBinaryOp(binOp);}
-//    bool TraverseBinXor(clang::BinaryOperator* binOp)
-//    {return TraverseBinaryOp(binOp);}
-//    bool TraverseBinOr(clang::BinaryOperator* binOp)
-//    {return TraverseBinaryOp(binOp);}
-    // binary assigns
-    bool TraverseBinAssign(clang::BinaryOperator* binOp)
-    {return TraverseAssignment(binOp);}
-//    bool TraverseBinMulAssign(clang::CompoundAssignOperator* binOp)
-//    {return TraverseAssignment(binOp);}
-//    bool TraverseBinDivAssign(clang::CompoundAssignOperator* binOp)
-//    {return TraverseAssignment(binOp);}
-//    bool TraverseBinRemAssign(clang::CompoundAssignOperator* binOp)
-//    {return TraverseAssignment(binOp);}
-//    bool TraverseBinAddAssign(clang::CompoundAssignOperator* binOp)
-//    {return TraverseAssignment(binOp);}
-//    bool TraverseBinSubAssign(clang::CompoundAssignOperator* binOp)
-//    {return TraverseAssignment(binOp);}
-//    bool TraverseBinShlAssign(clang::CompoundAssignOperator* binOp)
-//    {return TraverseAssignment(binOp);}
-//    bool TraverseBinShrAssign(clang::CompoundAssignOperator* binOp)
-//    {return TraverseAssignment(binOp);}
-//    bool TraverseBinAndAssign(clang::CompoundAssignOperator* binOp)
-//    {return TraverseAssignment(binOp);}
-//    bool TraverseBinXorAssign(clang::CompoundAssignOperator* binOp)
-//    {return TraverseAssignment(binOp);}
-//    bool TraverseBinOrAssign(clang::CompoundAssignOperator* binOp)
-//    {return TraverseAssignment(binOp);}
+//    bool TraverseBinMul(clang::BinaryOperator* binOp);
+//    bool TraverseBinDiv(clang::BinaryOperator* binOp);
+//    bool TraverseBinRem(clang::BinaryOperator* binOp);
+    bool TraverseBinAdd(clang::BinaryOperator* binOp);
+//    bool TraverseBinSub(clang::BinaryOperator* binOp);
+    bool TraverseBinLT(clang::BinaryOperator* binOp);
+    bool TraverseBinGT(clang::BinaryOperator* binOp);
+    bool TraverseBinLE(clang::BinaryOperator* binOp);
+    bool TraverseBinGE(clang::BinaryOperator* binOp);
+    bool TraverseBinEQ(clang::BinaryOperator* binOp);
+    bool TraverseBinNE(clang::BinaryOperator* binOp);
+//    bool TraverseBinAnd(clang::BinaryOperator* binOp);
+//    bool TraverseBinXor(clang::BinaryOperator* binOp);
+//    bool TraverseBinOr(clang::BinaryOperator* binOp);
+//     binary assigns
+    bool TraverseBinAssign(clang::BinaryOperator* binOp);
+//    bool TraverseBinMulAssign(clang::CompoundAssignOperator* binOp);
+//    bool TraverseBinDivAssign(clang::CompoundAssignOperator* binOp);
+//    bool TraverseBinRemAssign(clang::CompoundAssignOperator* binOp);
+//    bool TraverseBinAddAssign(clang::CompoundAssignOperator* binOp);
+//    bool TraverseBinSubAssign(clang::CompoundAssignOperator* binOp);
+//    bool TraverseBinShlAssign(clang::CompoundAssignOperator* binOp);
+//    bool TraverseBinShrAssign(clang::CompoundAssignOperator* binOp);
+//    bool TraverseBinAndAssign(clang::CompoundAssignOperator* binOp);
+//    bool TraverseBinXorAssign(clang::CompoundAssignOperator* binOp);
+//    bool TraverseBinOrAssign(clang::CompoundAssignOperator* binOp);
 
 
     bool VisitStmt(clang::Stmt* S);
@@ -99,3 +70,59 @@ private:
     TranslateManager* trMngr_{};
     bool inBody_{false};
 };
+
+
+
+
+// binary ops
+//    inline bool ClangAstVisitor::TraverseBinMul(clang::BinaryOperator* binOp)
+//    {return TraverseBinaryOp(binOp);}
+//    inline bool ClangAstVisitor::TraverseBinDiv(clang::BinaryOperator* binOp)
+//    {return TraverseBinaryOp(binOp);}
+//    inline bool ClangAstVisitor::TraverseBinRem(clang::BinaryOperator* binOp)
+//    {return TraverseBinaryOp(binOp);}
+inline bool ClangAstVisitor::TraverseBinAdd(clang::BinaryOperator* binOp)
+{return TraverseBinaryOp(binOp);}
+//    inline bool ClangAstVisitor::TraverseBinSub(clang::BinaryOperator* binOp)
+//    {return TraverseBinaryOp(binOp);}
+inline bool ClangAstVisitor::TraverseBinLT(clang::BinaryOperator* binOp)
+{return TraverseBinaryOp(binOp);}
+inline bool ClangAstVisitor::TraverseBinGT(clang::BinaryOperator* binOp)
+{return TraverseBinaryOp(binOp);}
+inline bool ClangAstVisitor::TraverseBinLE(clang::BinaryOperator* binOp)
+{return TraverseBinaryOp(binOp);}
+inline bool ClangAstVisitor::TraverseBinGE(clang::BinaryOperator* binOp)
+{return TraverseBinaryOp(binOp);}
+inline bool ClangAstVisitor::TraverseBinEQ(clang::BinaryOperator* binOp)
+{return TraverseBinaryOp(binOp);}
+inline bool ClangAstVisitor::TraverseBinNE(clang::BinaryOperator* binOp)
+{return TraverseBinaryOp(binOp);}
+//    inline bool ClangAstVisitor::TraverseBinAnd(clang::BinaryOperator* binOp)
+//    {return TraverseBinaryOp(binOp);}
+//    inline bool ClangAstVisitor::TraverseBinXor(clang::BinaryOperator* binOp)
+//    {return TraverseBinaryOp(binOp);}
+//    inline bool ClangAstVisitor::TraverseBinOr(clang::BinaryOperator* binOp)
+//    {return TraverseBinaryOp(binOp);}
+// binary assigns
+inline bool ClangAstVisitor::TraverseBinAssign(clang::BinaryOperator* binOp)
+{return TraverseAssignment(binOp);}
+//    inline bool ClangAstVisitor::TraverseBinMulAssign(clang::CompoundAssignOperator* binOp)
+//    {return TraverseAssignment(binOp);}
+//    inline bool ClangAstVisitor::TraverseBinDivAssign(clang::CompoundAssignOperator* binOp)
+//    {return TraverseAssignment(binOp);}
+//    inline bool ClangAstVisitor::TraverseBinRemAssign(clang::CompoundAssignOperator* binOp)
+//    {return TraverseAssignment(binOp);}
+//    inline bool ClangAstVisitor::TraverseBinAddAssign(clang::CompoundAssignOperator* binOp)
+//    {return TraverseAssignment(binOp);}
+//    inline bool ClangAstVisitor::TraverseBinSubAssign(clang::CompoundAssignOperator* binOp)
+//    {return TraverseAssignment(binOp);}
+//    inline bool ClangAstVisitor::TraverseBinShlAssign(clang::CompoundAssignOperator* binOp)
+//    {return TraverseAssignment(binOp);}
+//    inline bool ClangAstVisitor::TraverseBinShrAssign(clang::CompoundAssignOperator* binOp)
+//    {return TraverseAssignment(binOp);}
+//    inline bool ClangAstVisitor::TraverseBinAndAssign(clang::CompoundAssignOperator* binOp)
+//    {return TraverseAssignment(binOp);}
+//    inline bool ClangAstVisitor::TraverseBinXorAssign(clang::CompoundAssignOperator* binOp)
+//    {return TraverseAssignment(binOp);}
+//    inline bool ClangAstVisitor::TraverseBinOrAssign(clang::CompoundAssignOperator* binOp)
+//    {return TraverseAssignment(binOp);}
