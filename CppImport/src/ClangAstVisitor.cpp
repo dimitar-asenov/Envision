@@ -144,7 +144,6 @@ bool ClangAstVisitor::TraverseIfStmt(clang::IfStmt *ifStmt)
         TraverseStmt(ifStmt->getElse());
         ooStack_.pop();
     }
-
     return true;
 }
 
