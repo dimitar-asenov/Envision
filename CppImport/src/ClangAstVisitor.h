@@ -32,13 +32,12 @@ public:
     {return TraverseBinaryOp(binOp);}
 //    bool TraverseBinSub(clang::BinaryOperator* binOp)
 //    {return TraverseBinaryOp(binOp);}
-    {return TraverseBinaryOp(binOp);}
-    {return TraverseBinaryOp(binOp);}
     bool TraverseBinAdd(clang::BinaryOperator* binOp)
     {return TraverseBinaryOp(binOp);}
-    bool TraverseBinSub(clang::BinaryOperator* binOp)
-    {return TraverseBinaryOp(binOp);}
+//    bool TraverseBinSub(clang::BinaryOperator* binOp)
+//    {return TraverseBinaryOp(binOp);}
     bool TraverseBinLT(clang::BinaryOperator* binOp)
+    {return TraverseBinaryOp(binOp);}
     bool TraverseBinGT(clang::BinaryOperator* binOp)
     {return TraverseBinaryOp(binOp);}
     bool TraverseBinLE(clang::BinaryOperator* binOp)
