@@ -77,6 +77,39 @@ bool ClangAstVisitor::TraverseIfStmt(clang::IfStmt *ifStmt)
     return true;
 }
 
+bool ClangAstVisitor::TraverseWhileStmt(clang::WhileStmt* wStmt)
+{
+    OOModel::LoopStatement* ooLoop = new OOModel::LoopStatement();
+    OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack.top());
+    if(itemList)
+    {
+        itemList->append(ooLoop);
+        inBody_ = false;
+        TraverseStmt(wStmt->getCond());
+        inBody_ = true;
+        ooLoop->setCondition(ooExprStack.pop());
+        ooStack.push(ooLoop->body());
+        TraverseStmt(wStmt->getBody());
+        ooStack.pop();
+    }
+    return true;
+}
+
+bool ClangAstVisitor::TraverseReturnStmt(clang::ReturnStmt* rStmt)
+{
+    OOModel::ReturnStatement* ooReturn = new OOModel::ReturnStatement();
+    OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack.top());
+    if(itemList)
+    {
+        itemList->append(ooReturn);
+        inBody_ = false;
+        TraverseStmt(rStmt->getRetValue());
+        inBody_ = true;
+        ooReturn->values()->append(ooExprStack.pop());
+    }
+    return true;
+}
+
 bool ClangAstVisitor::TraverseStmt(clang::Stmt *S)
 {
     return Base::TraverseStmt(S);
@@ -86,7 +119,7 @@ bool ClangAstVisitor::VisitStmt(clang::Stmt* S)
 {
 //    std::cout << "VISITING STMT" << std::endl;
 //    llvm::errs() << "VISITING STMT" << "\n";
-//    S->dump();
+    S->dump();
     return Base::VisitStmt(S);
 }
 

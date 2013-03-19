@@ -36,6 +36,10 @@ class OneMore{
     int oneMoreFunction(){
         int oneMoreVariable, oneMoreVar2;
         oneMoreVariable = 100 + oneMoreVar2;
+        while(oneMoreVariable < 1000)
+        {
+            oneMoreVariable = oneMoreVariable+100;
+        }
         return 100;
     }
 };

@@ -13,6 +13,8 @@ public:
     bool TraverseCXXRecordDecl(clang::CXXRecordDecl* rd);
     bool TraverseCXXMethodDecl(clang::CXXMethodDecl* methodDecl);
     bool TraverseIfStmt(clang::IfStmt* ifStmt);
+    bool TraverseWhileStmt(clang::WhileStmt* wStmt);
+    bool TraverseReturnStmt(clang::ReturnStmt* rStmt);
 
     bool TraverseStmt(clang::Stmt *S);
     bool TraverseVarDecl(clang::VarDecl* vd);
@@ -20,6 +22,8 @@ public:
 
     //binary ops
     bool TraverseBinEQ(clang::BinaryOperator* binOp)
+    {return TraverseBinaryOp(binOp);}
+    bool TraverseBinLT(clang::BinaryOperator* binOp)
     {return TraverseBinaryOp(binOp);}
     bool TraverseBinAssign(clang::BinaryOperator* binOp)
     {return TraverseAssignment(binOp);}
