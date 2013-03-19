@@ -288,7 +288,7 @@ TEST(CppImport, SimpleTest)
     CppImportManager manager;
     QString srcPath("/home/luke/BachelorThesis/Envision/CppImport");
     manager.setSrcPath(srcPath);
-    manager.visualizeSrcFile();
+    manager.createModel();
 
     Model::Model* model = ClangConsumerFactory::model_;
     Model::Node* top_level = model->root();

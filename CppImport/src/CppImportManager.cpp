@@ -49,7 +49,7 @@ bool CppImportManager::setSrcPath(QString& path)
     return setCompilationDbPath(path);
 }
 
-void CppImportManager::visualizeSrcFile()
+void CppImportManager::createModel()
 {
     myTool_ = new clang::tooling::ClangTool(*compilationDB_,sources_);
     // run overtakes pointer so no need to free it later

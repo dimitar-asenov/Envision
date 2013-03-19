@@ -36,7 +36,7 @@ public:
     CppImportManager(){}
     ~CppImportManager();
     bool setSrcPath(QString& path);
-    void visualizeSrcFile();
+    void createModel();
 
 protected:
     bool setCompilationDbPath(QString& path);
