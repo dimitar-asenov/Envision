@@ -1,10 +1,13 @@
 #include "test.h"
-//#include <iostream>
+#include <iostream>
 //TEst comment
 
 int NOCLASSFIELD;
 
 namespace TestSpace{
+namespace TestSpace {
+
+
 
 class Testing {
 public:
@@ -24,6 +27,7 @@ public:
         }
         return k;}
 };
+}
 
 
 namespace innerNameSpace {

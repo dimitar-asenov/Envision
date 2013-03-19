@@ -33,6 +33,7 @@ class TranslateManager
 {
 public:
     TranslateManager(Model::Model* model, OOModel::Project* project);
+    OOModel::Module* insertNamespace(clang::NamespaceDecl* nd);
     OOModel::Class* insertClass(clang::CXXRecordDecl* rDecl);
     OOModel::Method* insertMethodDecl(clang::CXXMethodDecl* mDecl);
     OOModel::Field* insertField(clang::FieldDecl* fDecl);
@@ -45,7 +46,8 @@ private:
     Model::Model* model_{};
     OOModel::Project* project_{};
 
-    QMap<clang::CXXRecordDecl*, OOModel::Class*> classMap_{};
-    QMap<clang::CXXMethodDecl*, OOModel::Method*> methodMap_{};
-    QMap<clang::VarDecl*, OOModel::VariableDeclaration*> varMap_{};
+    QMap<clang::NamespaceDecl*, OOModel::Module*> nameSpaceMap_;
+    QMap<clang::CXXRecordDecl*, OOModel::Class*> classMap_;
+    QMap<clang::CXXMethodDecl*, OOModel::Method*> methodMap_;
+    QMap<clang::VarDecl*, OOModel::VariableDeclaration*> varMap_;
 };

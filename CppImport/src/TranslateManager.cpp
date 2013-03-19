@@ -31,6 +31,19 @@ TranslateManager::TranslateManager(Model::Model* model, OOModel::Project* projec
 {
 }
 
+OOModel::Module *TranslateManager::insertNamespace(clang::NamespaceDecl *nd)
+{
+    if(nameSpaceMap_.contains(nd))
+        return nameSpaceMap_.value(nd);
+    else
+    {
+        OOModel::Module* ooModule = new OOModel::Module();
+        ooModule->setName(QString::fromStdString(nd->getNameAsString()));
+        nameSpaceMap_.insert(nd,ooModule);
+        return ooModule;
+    }
+}
+
 OOModel::Class* TranslateManager::insertClass(clang::CXXRecordDecl* rDecl)
 {
     OOModel::Class* ooClass = nullptr;

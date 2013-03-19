@@ -41,8 +41,7 @@ ClangAstVisitor::~ClangAstVisitor()
 
 bool ClangAstVisitor::TraverseNamespaceDecl(clang::NamespaceDecl *nd)
 {
-    OOModel::Module* ooModule = new OOModel::Module();
-    ooModule->setName(QString::fromStdString(nd->getNameAsString()));
+    OOModel::Module* ooModule = trMngr_->insertNamespace(nd);
     // insert it in model
     if(OOModel::Project* curProject = dynamic_cast<OOModel::Project*>(ooStack_.top()))
         curProject->modules()->append(ooModule);
@@ -195,7 +194,7 @@ bool ClangAstVisitor::VisitStmt(clang::Stmt* S)
 
 bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* vd)
 {
-    std::cout << "Visiting VarDecl " << vd->getNameAsString() <<std::endl;
+//    std::cout << "Visiting VarDecl " << vd->getNameAsString() <<std::endl;
 
     OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top());
     if(itemList)
