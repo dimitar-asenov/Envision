@@ -13,18 +13,14 @@ ClangAstVisitor::~ClangAstVisitor()
 }
 
 bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl *rd)
-{
-    if(llvm::isa<clang::CXXRecordDecl>(rd))
+{   
+    if(rd->isClass())
     {
-        clang::CXXRecordDecl* recDecl = llvm::cast<clang::CXXRecordDecl>(rd);
-        if(recDecl->isClass())
-        {
-            OOModel::Class* ooClass = trMngr_->insertClass(rd);
-            // check if there was an error inserting class
-            if(!ooClass) return false;
-            currentProject_->classes()->append(ooClass);
-            ooStack.push(ooClass);
-        }
+        OOModel::Class* ooClass = trMngr_->insertClass(rd);
+        // check if there was an error inserting class
+        if(!ooClass) return false;
+        currentProject_->classes()->append(ooClass);
+        ooStack.push(ooClass);
     }
     return Base::TraverseCXXRecordDecl(rd);
 }
