@@ -116,8 +116,8 @@ bool ClangAstVisitor::TraverseStmt(clang::Stmt *S)
 
 bool ClangAstVisitor::VisitStmt(clang::Stmt* S)
 {
-//    std::cout << "VISITING STMT" << std::endl;
-//    llvm::errs() << "VISITING STMT" << "\n";
+    //    std::cout << "VISITING STMT" << std::endl;
+    //    llvm::errs() << "VISITING STMT" << "\n";
     S->dump();
     return Base::VisitStmt(S);
 }
@@ -130,8 +130,23 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* vd)
     if(itemList)
     {
         OOModel::VariableDeclaration* varDecl = trMngr_->insertVar(vd);
-        OOModel::Expression* type = CppImportUtilities::convertClangType(vd->getType());
-        if(type) varDecl->setVarType(type);
+        if(vd->getType().getTypePtr()->isArrayType())
+        {
+            const clang::ArrayType* arrType =  vd->getType().getTypePtr()->getAsArrayTypeUnsafe();
+            if(arrType)
+            {
+                if(llvm::isa<clang::ConstantArrayType>(arrType))
+                {
+                    const clang::ConstantArrayType* constArr = llvm::dyn_cast<clang::ConstantArrayType>(arrType);
+                    std::cout << "Const Array Size: " << constArr->getSize().getLimitedValue() << std::endl;
+                }
+            }
+        }
+        else
+        {
+            OOModel::Expression* type = CppImportUtilities::convertClangType(vd->getType());
+            if(type) varDecl->setVarType(type);
+        }
 
         if(vd->hasInit())
         {
@@ -154,7 +169,7 @@ bool ClangAstVisitor::VisitFieldDecl(clang::FieldDecl* fd)
     if(!field)
     {
         std::cout << "ERROR COULDN'T INSERT FIELD NO CURRENT OOCLASS" << std::endl;
-//        return false;
+        //        return false;
     }
     return true;
 }
@@ -171,16 +186,16 @@ bool ClangAstVisitor::VisitIntegerLiteral(clang::IntegerLiteral* intLit)
 bool ClangAstVisitor::VisitDeclRefExpr(clang::DeclRefExpr* declRef)
 {
     OOModel::ReferenceExpression* refExpr = new OOModel::ReferenceExpression();
-//    if(llvm::isa<clang::VarDecl>(declRef->getDecl()))
-//    {
-//        OOModel::VariableDeclaration* ooVar = trMngr_->getVar(llvm::dyn_cast<clang::VarDecl>(declRef->getDecl()));
-//        if(ooVar) refExpr->setPrefix(ooVar);
-//        else refExpr->setName(QString::fromStdString(declRef->getNameInfo().getName().getAsString()));
-//    }
-//    else
-//    {
-        refExpr->setName(QString::fromStdString(declRef->getNameInfo().getName().getAsString()));
-//    }
+    //    if(llvm::isa<clang::VarDecl>(declRef->getDecl()))
+    //    {
+    //        OOModel::VariableDeclaration* ooVar = trMngr_->getVar(llvm::dyn_cast<clang::VarDecl>(declRef->getDecl()));
+    //        if(ooVar) refExpr->setPrefix(ooVar);
+    //        else refExpr->setName(QString::fromStdString(declRef->getNameInfo().getName().getAsString()));
+    //    }
+    //    else
+    //    {
+    refExpr->setName(QString::fromStdString(declRef->getNameInfo().getName().getAsString()));
+    //    }
     ooExprStack.push(refExpr);
     return true;
 }

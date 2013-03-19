@@ -1,5 +1,5 @@
 #include "test.h"
-#include <iostream>
+//#include <iostream>
 //TEst comment
 
 int NOCLASSFIELD;
@@ -58,7 +58,7 @@ class OneMore{
 
 int Header::headerFunc()
 {
-    int someVarInCPP;
+    int someVarInCPP[10];
     return 0;
 }
 
