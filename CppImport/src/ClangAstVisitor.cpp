@@ -124,7 +124,7 @@ bool ClangAstVisitor::VisitStmt(clang::Stmt* S)
 
 bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* vd)
 {
-    std::cout << "Visiting VarDecl " << vd->getName().str() <<std::endl;
+    std::cout << "Visiting VarDecl " << vd->getNameAsString() <<std::endl;
 
     OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack.top());
     if(itemList)
@@ -143,7 +143,7 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* vd)
     else
     {
         if(!llvm::isa<clang::ParmVarDecl>(vd))
-            std::cout << "--->WARNING : THIS VARIABLE IS NOT SUPPORTED : " << vd->getName().str() << std::endl;
+            std::cout << "--->WARNING : THIS VARIABLE IS NOT SUPPORTED : " << vd->getNameAsString() << std::endl;
     }
     return true;
 }
