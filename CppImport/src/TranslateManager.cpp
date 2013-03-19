@@ -7,7 +7,7 @@ TranslateManager::TranslateManager(Model::Model* model, OOModel::Project* projec
 
 void TranslateManager::insertClass(clang::CXXRecordDecl* rDecl, OOModel::Class *ooClass)
 {
-    //if rdecl is not managed yet add it:
+    // if rdecl is not managed yet add it:
     if(!classMap_.contains(rDecl))
     {
         std::cout << "-------------------------->CLASS " << rDecl->getName().str() << " NOT IN MAP " << std::endl;
@@ -23,7 +23,7 @@ OOModel::Method* TranslateManager::insertMethodDecl(clang::CXXMethodDecl* mDecl)
     {
         if(methodMap_.contains(mDecl->getCorrespondingMethodInClass(mDecl->getParent())))
             std::cout << "IS DECLARED BEFORE" << std::endl;
-        //Look if there is a function with same name in map
+        // Look if there is a function with same name in map
         QMap<clang::CXXMethodDecl*,OOModel::Method*>::iterator it = methodMap_.begin();
         for(;it!=methodMap_.end();++it)
         {
@@ -31,7 +31,7 @@ OOModel::Method* TranslateManager::insertMethodDecl(clang::CXXMethodDecl* mDecl)
             if(mDecl->getName().equals(inMapDecl->getName()) &&
                     !inMapDecl->isThisDeclarationADefinition() && mDecl->isThisDeclarationADefinition())
             {
-                //found a pair with same name and only one is defined
+                // found a pair with same name and only one is defined
                 if((mDecl->getResultType() == inMapDecl->getResultType()) &&
                         (mDecl->param_size() == inMapDecl->param_size()))
                 {
@@ -86,7 +86,7 @@ void TranslateManager::insertVar(clang::VarDecl* vDecl, OOModel::VariableDeclara
     if(vDecl->getParentFunctionOrMethod())
     {
         std::cout << "HAS PARENT FUNCTION OR METHOD ________" << vDecl->getName().str() << std::endl;
-        //add to method
+        // add to method
         clang::FunctionDecl* parentFunc = llvm::dyn_cast<clang::FunctionDecl>(vDecl->getParentFunctionOrMethod());
         if(methodMap_.contains(llvm::dyn_cast<clang::CXXMethodDecl>(parentFunc)))
         {

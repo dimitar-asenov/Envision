@@ -40,6 +40,18 @@ class OneMore{
         {
             oneMoreVariable = oneMoreVariable+100;
         }
+        if(oneMoreVariable <=1000)
+        {
+            oneMoreVariable = oneMoreVariable+50;
+        }
+        else if(oneMoreVariable > 1000)
+        {
+            oneMoreVariable = oneMoreVariable+200;
+        }
+        else if(oneMoreVar2 >= 1000)
+        {
+            oneMoreVariable = oneMoreVariable+300;
+        }
         return 100;
     }
 };

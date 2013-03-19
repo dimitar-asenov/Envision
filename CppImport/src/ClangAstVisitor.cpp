@@ -7,8 +7,11 @@ ClangAstVisitor::ClangAstVisitor(Model::Model* model, OOModel::Project* currentP
     trMngr_ = new TranslateManager(model,currentProject);
 
     ooStack.push(currentProject_);
+}
 
-    inBody_ = true;
+ClangAstVisitor::~ClangAstVisitor()
+{
+    delete trMngr_;
 }
 
 bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl *rd)
@@ -32,18 +35,18 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl *rd)
 
 bool ClangAstVisitor::TraverseCXXMethodDecl(clang::CXXMethodDecl *methodDecl)
 {
-    //Constructors not yet handled
+    // Constructors not yet handled
     if(llvm::isa<clang::CXXConstructorDecl>(methodDecl))
         return true;
-    //translation Manager will insert method in correct class
+    // translation Manager will insert method in correct class
     OOModel::Method* method = trMngr_->insertMethodDecl(methodDecl);
     if(!method)
     {
         std::cout << "___________ERROR NO OOMODEL::METHOD FOR THIS DECL_______" << std::endl;
-        //for now return false to see error
+        // for now return false to see error
         return false;
     }
-    //only visit the body if we are at the definition
+    // only visit the body if we are at the definition
     if(methodDecl->isThisDeclarationADefinition())
     {
         ooStack.push(method->items());
@@ -200,7 +203,7 @@ bool ClangAstVisitor::VisitDeclRefExpr(clang::DeclRefExpr* declRef)
 
 bool ClangAstVisitor::shouldUseDataRecursionFor(clang::Stmt *S)
 {
-    //-unused var
+    // -unused var
     S->getStmtClass();
     return false;
 }

@@ -12,6 +12,6 @@ public:
     virtual clang::ASTConsumer* CreateASTConsumer(clang::CompilerInstance &CI, llvm::StringRef InFile) override;
 
 private:
-    OOModel::Project* project_;
+    OOModel::Project* project_{};
 };
 

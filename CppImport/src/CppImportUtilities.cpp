@@ -29,6 +29,10 @@ OOModel::BinaryOperation::OperatorTypes CppImportUtilities::convertClangOpcode(c
         return OOModel::BinaryOperation::LESS;
     case clang::BO_GT:
         return OOModel::BinaryOperation::GREATER;
+    case clang::BO_LE:
+        return OOModel::BinaryOperation::LESS_EQUALS;
+    case clang::BO_GE:
+        return OOModel::BinaryOperation::GREATER_EQUALS;
     case clang::BO_EQ:
         return OOModel::BinaryOperation::EQUALS;
     case clang::BO_NE:

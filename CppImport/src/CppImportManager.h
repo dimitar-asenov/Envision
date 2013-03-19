@@ -14,9 +14,9 @@ public:
 
 protected:
     bool setCompilationDbPath(QString& path);
-    clang::CompilerInstance compilerInstance_;
-    clang::tooling::ClangTool* myTool_;
-    clang::tooling::CompilationDatabase* compilationDB_;
-    std::vector<std::string> sources_;
+    clang::CompilerInstance compilerInstance_{};
+    clang::tooling::ClangTool* myTool_{};
+    clang::tooling::CompilationDatabase* compilationDB_{};
+    std::vector<std::string> sources_{};
 
 };

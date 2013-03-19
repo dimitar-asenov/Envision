@@ -9,6 +9,7 @@ class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
     typedef clang::RecursiveASTVisitor<ClangAstVisitor> Base;
 public:
     ClangAstVisitor(Model::Model* model, OOModel::Project* currentProject);
+    ~ClangAstVisitor();
 
     bool TraverseCXXRecordDecl(clang::CXXRecordDecl* rd);
     bool TraverseCXXMethodDecl(clang::CXXMethodDecl* methodDecl);
@@ -20,10 +21,16 @@ public:
     bool TraverseVarDecl(clang::VarDecl* vd);
 
 
-    //binary ops
+    // binary ops
     bool TraverseBinEQ(clang::BinaryOperator* binOp)
     {return TraverseBinaryOp(binOp);}
     bool TraverseBinLT(clang::BinaryOperator* binOp)
+    {return TraverseBinaryOp(binOp);}
+    bool TraverseBinLE(clang::BinaryOperator* binOp)
+    {return TraverseBinaryOp(binOp);}
+    bool TraverseBinGT(clang::BinaryOperator* binOp)
+    {return TraverseBinaryOp(binOp);}
+    bool TraverseBinGE(clang::BinaryOperator* binOp)
     {return TraverseBinaryOp(binOp);}
     bool TraverseBinAssign(clang::BinaryOperator* binOp)
     {return TraverseAssignment(binOp);}
@@ -38,27 +45,17 @@ public:
     bool VisitIntegerLiteral(clang::IntegerLiteral* intLit);
     bool VisitDeclRefExpr(clang::DeclRefExpr* declRef);
 
-
     bool shouldUseDataRecursionFor(clang::Stmt* S);
-
-
 private:
-    QStack<OOModel::Expression*> ooExprStack;
-
-
     bool TraverseBinaryOp(clang::BinaryOperator* binOp);
     bool TraverseAssignment(clang::BinaryOperator* binOp);
 
-    bool inBody_;
+    QStack<Model::Node*> ooStack{};
+    QStack<OOModel::Expression*> ooExprStack{};
 
-protected:
-    OOModel::Project* currentProject_;
-    Model::Model* currentModel_;
-    clang::ASTContext* astContext_;
-    TranslateManager* trMngr_;
-
-    QStack<Model::Node*> ooStack;
-
-
-
+    OOModel::Project* currentProject_{};
+    Model::Model* currentModel_{};
+    clang::ASTContext* astContext_{};
+    TranslateManager* trMngr_{};
+    bool inBody_{false};
 };
