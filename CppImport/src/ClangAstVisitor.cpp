@@ -31,7 +31,7 @@ ClangAstVisitor::ClangAstVisitor(Model::Model* model, OOModel::Project* currentP
     currentModel_(model) , currentProject_(currentProject)
 {
     trMngr_ = new TranslateManager(model,currentProject);
-    ooStack.push(currentProject_);
+    ooStack_.push(currentProject_);
 }
 
 ClangAstVisitor::~ClangAstVisitor()
@@ -39,19 +39,68 @@ ClangAstVisitor::~ClangAstVisitor()
     delete trMngr_;
 }
 
+bool ClangAstVisitor::TraverseNamespaceDecl(clang::NamespaceDecl *nd)
+{
+    OOModel::Module* ooModule = new OOModel::Module();
+    ooModule->setName(QString::fromStdString(nd->getNameAsString()));
+    // insert it in model
+    if(OOModel::Project* curProject = dynamic_cast<OOModel::Project*>(ooStack_.top()))
+        curProject->modules()->append(ooModule);
+    else if(OOModel::Module* curModel = dynamic_cast<OOModel::Module*>(ooStack_.top()))
+        curModel->modules()->append(ooModule);
+    else
+        std::cout << "ERROR UNKNOWN WHERE TO PUT NAMESPACE" << std::endl;
+
+    ooStack_.push(ooModule);
+    clang::DeclContext::decl_iterator it = nd->decls_begin();
+    for(;it!=nd->decls_end();++it)
+    {
+        TraverseDecl(*it);
+    }
+    ooStack_.pop();
+    return true;
+}
+
 bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl *rd)
 {   
+    if(rd->getParent()->isNamespace())
+        std::cout <<  "CLASS " << rd->getNameAsString() << " has Namespace as Parent" << std::endl;
     if(rd->isClass())
     {
         OOModel::Class* ooClass = trMngr_->insertClass(rd);
         // check if there was an error inserting class
         if(!ooClass) return false;
-        currentProject_->classes()->append(ooClass);
-        ooStack.push(ooClass);
+
+        // insert in model
+        if(OOModel::Project* curProject = dynamic_cast<OOModel::Project*>(ooStack_.top()))
+            curProject->modules()->append(ooClass);
+        else if(OOModel::Module* curModel = dynamic_cast<OOModel::Module*>(ooStack_.top()))
+            curModel->modules()->append(ooClass);
+        //TODO: support inner classes in OOModel::Class*
+//        else if(OOModel::Class* curClass = dynamic_cast<OOModel::Class*>(ooStack_.top()))
+//            curClass->
+        else
+            std::cout << "ERROR UNKNOWN WHERE TO PUT CLASS" << std::endl;
+        // visit child decls
+        ooStack_.push(ooClass);
+        clang::DeclContext::decl_iterator it = rd->decls_begin();
+        for(;it!=rd->decls_end();++it)
+        {
+            TraverseDecl(*it);
+        }
+        ooStack_.pop();
     }
     else if(rd->isStruct())
+    {
         std::cout << "Struct found " << rd->getNameAsString() << std::endl;
-    return Base::TraverseCXXRecordDecl(rd);
+        return Base::TraverseCXXRecordDecl(rd);
+    }
+    else
+    {
+        std::cout << "Neither class nor Struct " << rd->getNameAsString() << std::endl;
+        return Base::TraverseCXXRecordDecl(rd);
+    }
+    return true;
 }
 
 bool ClangAstVisitor::TraverseCXXMethodDecl(clang::CXXMethodDecl *methodDecl)
@@ -70,9 +119,9 @@ bool ClangAstVisitor::TraverseCXXMethodDecl(clang::CXXMethodDecl *methodDecl)
     // only visit the body if we are at the definition
     if(methodDecl->isThisDeclarationADefinition())
     {
-        ooStack.push(method->items());
+        ooStack_.push(method->items());
         TraverseStmt(methodDecl->getBody());
-        ooStack.pop();
+        ooStack_.pop();
     }
     return true;
 }
@@ -80,22 +129,20 @@ bool ClangAstVisitor::TraverseCXXMethodDecl(clang::CXXMethodDecl *methodDecl)
 bool ClangAstVisitor::TraverseIfStmt(clang::IfStmt *ifStmt)
 {
     OOModel::IfStatement* ooIfStmt = new OOModel::IfStatement();
-    OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack.top());
+    OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top());
     if(itemList)
     {
         itemList->append(ooIfStmt);
-        std::cout << "TRAVERSING IF STMT" << std::endl;
         inBody_ = false;
         TraverseStmt(ifStmt->getCond());
         inBody_ = true;
-        ooIfStmt->setCondition(ooExprStack.pop());
-        ooStack.push(ooIfStmt->thenBranch());
+        ooIfStmt->setCondition(ooExprStack_.pop());
+        ooStack_.push(ooIfStmt->thenBranch());
         TraverseStmt(ifStmt->getThen());
-        ooStack.pop();
-        ooStack.push(ooIfStmt->elseBranch());
+        ooStack_.pop();
+        ooStack_.push(ooIfStmt->elseBranch());
         TraverseStmt(ifStmt->getElse());
-        ooStack.pop();
-        std::cout << "TRAVERSING IF STMT END" << std::endl;
+        ooStack_.pop();
     }
 
     return true;
@@ -104,17 +151,17 @@ bool ClangAstVisitor::TraverseIfStmt(clang::IfStmt *ifStmt)
 bool ClangAstVisitor::TraverseWhileStmt(clang::WhileStmt* wStmt)
 {
     OOModel::LoopStatement* ooLoop = new OOModel::LoopStatement();
-    OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack.top());
+    OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top());
     if(itemList)
     {
         itemList->append(ooLoop);
         inBody_ = false;
         TraverseStmt(wStmt->getCond());
         inBody_ = true;
-        ooLoop->setCondition(ooExprStack.pop());
-        ooStack.push(ooLoop->body());
+        ooLoop->setCondition(ooExprStack_.pop());
+        ooStack_.push(ooLoop->body());
         TraverseStmt(wStmt->getBody());
-        ooStack.pop();
+        ooStack_.pop();
     }
     return true;
 }
@@ -122,14 +169,14 @@ bool ClangAstVisitor::TraverseWhileStmt(clang::WhileStmt* wStmt)
 bool ClangAstVisitor::TraverseReturnStmt(clang::ReturnStmt* rStmt)
 {
     OOModel::ReturnStatement* ooReturn = new OOModel::ReturnStatement();
-    OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack.top());
+    OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top());
     if(itemList)
     {
         itemList->append(ooReturn);
         inBody_ = false;
         TraverseStmt(rStmt->getRetValue());
         inBody_ = true;
-        ooReturn->values()->append(ooExprStack.pop());
+        ooReturn->values()->append(ooExprStack_.pop());
     }
     return true;
 }
@@ -143,7 +190,7 @@ bool ClangAstVisitor::VisitStmt(clang::Stmt* S)
 {
     //    std::cout << "VISITING STMT" << std::endl;
     //    llvm::errs() << "VISITING STMT" << "\n";
-    S->dump();
+    //    S->dump();
     return Base::VisitStmt(S);
 }
 
@@ -151,7 +198,7 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* vd)
 {
     std::cout << "Visiting VarDecl " << vd->getNameAsString() <<std::endl;
 
-    OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack.top());
+    OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top());
     if(itemList)
     {
         OOModel::VariableDeclaration* varDecl = trMngr_->insertVar(vd);
@@ -176,7 +223,7 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* vd)
         if(vd->hasInit())
         {
             TraverseStmt(vd->getInit());
-            varDecl->setInitialValue(ooExprStack.pop());
+            varDecl->setInitialValue(ooExprStack_.pop());
         }
         itemList->append(varDecl);
     }
@@ -203,7 +250,7 @@ bool ClangAstVisitor::VisitIntegerLiteral(clang::IntegerLiteral* intLit)
 {
     OOModel::IntegerLiteral* ooIntLit = new OOModel::IntegerLiteral();
     ooIntLit->setValue(intLit->getValue().getLimitedValue());
-    ooExprStack.push(ooIntLit);
+    ooExprStack_.push(ooIntLit);
 
     return true;
 }
@@ -221,7 +268,7 @@ bool ClangAstVisitor::VisitDeclRefExpr(clang::DeclRefExpr* declRef)
     //    {
     refExpr->setName(QString::fromStdString(declRef->getNameInfo().getName().getAsString()));
     //    }
-    ooExprStack.push(refExpr);
+    ooExprStack_.push(refExpr);
     return true;
 }
 
@@ -240,18 +287,18 @@ bool ClangAstVisitor::TraverseBinaryOp(clang::BinaryOperator* binOp)
     inBody_ = false;
     ooBinOp->setOp(ooOperatorType);
     TraverseStmt(binOp->getLHS());
-    ooBinOp->setLeft(ooExprStack.pop());
+    ooBinOp->setLeft(ooExprStack_.pop());
     TraverseStmt(binOp->getRHS());
-    ooBinOp->setRight(ooExprStack.pop());
+    ooBinOp->setRight(ooExprStack_.pop());
 
     if(inBody)
     {
-        OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack.top());
+        OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top());
         if(itemList) itemList->append(ooBinOp);
         else std::cout << "ERROR INSERT BINOP" << std::endl;
     }
     else
-        ooExprStack.push(ooBinOp);
+        ooExprStack_.push(ooBinOp);
     inBody_ = inBody;
     return true;
 }
@@ -264,18 +311,18 @@ bool ClangAstVisitor::TraverseAssignment(clang::BinaryOperator *binOp)
     inBody_ = false;
     ooBinOp->setOp(ooOperatorType);
     TraverseStmt(binOp->getLHS());
-    ooBinOp->setLeft(ooExprStack.pop());
+    ooBinOp->setLeft(ooExprStack_.pop());
     TraverseStmt(binOp->getRHS());
-    ooBinOp->setRight(ooExprStack.pop());
+    ooBinOp->setRight(ooExprStack_.pop());
 
     if(inBody)
     {
-        OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack.top());
+        OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top());
         if(itemList) itemList->append(ooBinOp);
         else std::cout << "ERROR INSERT BINOP" << std::endl;
     }
     else
-        ooExprStack.push(ooBinOp);
+        ooExprStack_.push(ooBinOp);
     inBody_ = inBody;
     return true;
 }

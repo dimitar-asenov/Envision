@@ -36,6 +36,7 @@ public:
     ClangAstVisitor(Model::Model* model, OOModel::Project* currentProject);
     ~ClangAstVisitor();
 
+    bool TraverseNamespaceDecl(clang::NamespaceDecl* nd);
     bool TraverseCXXRecordDecl(clang::CXXRecordDecl* rd);
     bool TraverseCXXMethodDecl(clang::CXXMethodDecl* methodDecl);
     bool TraverseIfStmt(clang::IfStmt* ifStmt);
@@ -82,12 +83,13 @@ public:
     bool VisitDeclRefExpr(clang::DeclRefExpr* declRef);
 
     bool shouldUseDataRecursionFor(clang::Stmt* S);
+
 private:
     bool TraverseBinaryOp(clang::BinaryOperator* binOp);
     bool TraverseAssignment(clang::BinaryOperator* binOp);
 
-    QStack<Model::Node*> ooStack{};
-    QStack<OOModel::Expression*> ooExprStack{};
+    QStack<Model::Node*> ooStack_;
+    QStack<OOModel::Expression*> ooExprStack_;
 
     Model::Model* currentModel_{};
     OOModel::Project* currentProject_{};

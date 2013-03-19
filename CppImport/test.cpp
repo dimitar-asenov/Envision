@@ -1,8 +1,10 @@
 #include "test.h"
-#include <iostream>
+//#include <iostream>
 //TEst comment
 
 int NOCLASSFIELD;
+
+namespace TestSpace{
 
 class Testing {
 public:
@@ -24,13 +26,22 @@ public:
 };
 
 
+namespace innerNameSpace {
+
+
 class Another {
     //COMMENT IN CLAS
     bool aBoolVar;
     void aVoidFunc(){
         bool aNotherBoolVar;};
-};
+private:
+    class InAnotherClass{
+        int inAnotherVar;
+    };
 
+};
+}
+}
 
 class OneMore{
     int oneMoreFunction(){
