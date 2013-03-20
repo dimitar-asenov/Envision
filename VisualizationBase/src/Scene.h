@@ -53,6 +53,9 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		typedef Model::Node Node;
 
 	public:
+
+		using RefreshActionFunction = std::function<void (Scene* scene)>;
+
 		Scene();
 		virtual ~Scene();
 		void setRenderer(ModelRenderer* renderer);
@@ -93,11 +96,14 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 
 		const QList<Item*>& topLevelItems() const;
 
+		void addRefreshActionFunction(RefreshActionFunction func);
+
 	public slots:
 		void nodesUpdated(QList<Node*> nodes);
 
 	protected:
-		bool event(QEvent *event);
+		virtual bool event(QEvent *event) override;
+		virtual void keyPressEvent (QKeyEvent *event) override;
 
 	private:
 		bool needsUpdate_;
@@ -115,6 +121,8 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 
 		ItemCategories hiddenItemCategories_;
 
+		QList<RefreshActionFunction> refreshActionFunctions_;
+
 		void updateItems();
 		void computeSceneRect();
 };
@@ -128,6 +136,7 @@ inline ModelRenderer* Scene::renderer() { return renderer_; }
 inline SceneHandlerItem* Scene::sceneHandlerItem() {return sceneHandlerItem_; }
 inline Cursor* Scene::mainCursor() { return mainCursor_; }
 inline const QList<Item*>& Scene::topLevelItems() const {return topLevelItems_; }
+inline void Scene::addRefreshActionFunction(RefreshActionFunction func) {refreshActionFunctions_.append(func); }
 
 
 }

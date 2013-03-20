@@ -29,6 +29,7 @@
 #include "items/Item.h"
 #include "items/SceneHandlerItem.h"
 #include "items/SelectedItem.h"
+#include "items/RootItem.h"
 #include "renderer/ModelRenderer.h"
 #include "cursor/Cursor.h"
 #include "CustomSceneEvent.h"
@@ -240,6 +241,26 @@ void Scene::addPostEventAction(QEvent* action)
 	if (inEventHandler_)
 		postEventActions_.append(action);
 	else throw VisualizationException("Can not add post event actions when not in event!");
+}
+
+void Scene::keyPressEvent (QKeyEvent *event)
+{
+	if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_F5)
+	{
+		event->accept();
+
+		for (auto f : refreshActionFunctions_) f(this);
+
+		for (auto top : topLevelItems_)
+		{
+			auto parent = top;
+			while (parent->parentItem()) parent = static_cast<Item*>(parent->parentItem());
+
+			auto rootItem = dynamic_cast<Visualization::RootItem*>(parent);
+			if (rootItem) rootItem->setUpdateNeeded(Visualization::Item::FullUpdate);
+		}
+	}
+	else QGraphicsScene::keyPressEvent(event);
 }
 
 void Scene::setMainCursor(Cursor* cursor)
