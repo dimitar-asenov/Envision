@@ -28,12 +28,13 @@
 
 #include "cppimport_api.h"
 #include "TranslateManager.h"
+#include "CppImportLogger.h"
 
 class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 {
     typedef clang::RecursiveASTVisitor<ClangAstVisitor> Base;
 public:
-    ClangAstVisitor(Model::Model* model, OOModel::Project* currentProject);
+    ClangAstVisitor(Model::Model* model, OOModel::Project* currentProject, CppImportLogger* logger);
     ~ClangAstVisitor();
 
     bool TraverseNamespaceDecl(clang::NamespaceDecl* nd);
@@ -95,6 +96,7 @@ private:
     OOModel::Project* currentProject_{};
     clang::ASTContext* astContext_{};
     TranslateManager* trMngr_{};
+    CppImportLogger* log_{};
     bool inBody_{false};
 };
 

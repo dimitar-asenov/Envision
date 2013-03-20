@@ -27,8 +27,8 @@
 #include "ClangAstVisitor.h"
 #include "CppImportUtilities.h"
 
-ClangAstVisitor::ClangAstVisitor(Model::Model* model, OOModel::Project* currentProject = nullptr) :
-    currentModel_(model) , currentProject_(currentProject)
+ClangAstVisitor::ClangAstVisitor(Model::Model* model, OOModel::Project* currentProject, CppImportLogger* logger) :
+    currentModel_(model) , currentProject_(currentProject) , log_(logger)
 {
     trMngr_ = new TranslateManager(model,currentProject);
     ooStack_.push(currentProject_);

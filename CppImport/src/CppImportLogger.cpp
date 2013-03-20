@@ -31,6 +31,11 @@ CppImportLogger::CppImportLogger()
     initStreams();
 }
 
+CppImportLogger::~CppImportLogger()
+{
+    delete errStream_;
+    delete warnStream_;
+}
 
 void CppImportLogger::writeOut(QString &inWhichClass, QString &reason, QString &clangType, QString &clangName, CppImportLogger::OUTTYPE outType)
 {

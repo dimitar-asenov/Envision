@@ -30,8 +30,7 @@
 ClangAstConsumer::ClangAstConsumer(Model::Model *model, OOModel::Project *currentProject) :
     clang::ASTConsumer()
 {
-    this->astVisitor_ = new ClangAstVisitor(model, currentProject);
-    ci_ = nullptr;
+    this->astVisitor_ = new ClangAstVisitor(model, currentProject, logger_);
 }
 
 ClangAstConsumer::ClangAstConsumer(clang::CompilerInstance *ci, Model::Model *model, OOModel::Project *currentProject) :
@@ -39,7 +38,13 @@ ClangAstConsumer::ClangAstConsumer(clang::CompilerInstance *ci, Model::Model *mo
 {
     if(ci)
         ci->getPreprocessor().enableIncrementalProcessing();
-    this->astVisitor_ = new ClangAstVisitor(model, currentProject);
+    this->astVisitor_ = new ClangAstVisitor(model, currentProject, logger_);
+}
+
+ClangAstConsumer::~ClangAstConsumer()
+{
+    delete astVisitor_;
+    delete logger_;
 }
 
 bool ClangAstConsumer::HandleTopLevelDecl(clang::DeclGroupRef D)
