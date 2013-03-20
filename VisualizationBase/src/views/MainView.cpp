@@ -178,6 +178,7 @@ void MainView::keyPressEvent(QKeyEvent *event)
 	}
 	else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_F11)
 	{
+		event->accept();
 		QWidget* window = this;
 		while (window->parentWidget()) window = window->parentWidget();
 
@@ -186,12 +187,14 @@ void MainView::keyPressEvent(QKeyEvent *event)
 	}
 	else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_F10)
 	{
+		event->accept();
 		if (miniMap->width() == MINIMAP_DEFAULT_WIDTH && miniMap->height() ==  MINIMAP_DEFAULT_HEIGHT)
 			setMiniMapSize(width(), height());
 		else setMiniMapSize(MINIMAP_DEFAULT_WIDTH, MINIMAP_DEFAULT_HEIGHT);
 	}
 	else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_F9)
 	{
+		event->accept();
 		if (miniMap->isVisible()) miniMap->hide();
 		else miniMap->show();
 	}
