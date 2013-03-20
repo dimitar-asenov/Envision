@@ -105,6 +105,7 @@
 #include "VisualizationBase/src/items/Symbol.h"
 #include "VisualizationBase/src/items/Text.h"
 #include "VisualizationBase/src/items/VText.h"
+#include "VisualizationBase/src/VisualizationManager.h"
 
 #include "ModelBase/src/adapter/AdapterManager.h"
 
@@ -296,6 +297,9 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 	Visualization::Scene::defaultRenderer()->registerGroup(
 		OOModel::MethodCallExpression::typeIdStatic(), customizationGroup);
 	CustomizationVisitor::init(customizationGroup);
+
+	Visualization::VisualizationManager::instance().mainScene()->addRefreshActionFunction(
+			CustomizationVisitor::onSceneRefresh);
 
 	return true;
 }

@@ -108,4 +108,12 @@ void CustomizationVisitor::resetCustomizations()
 	registeredCommands_.clear();
 }
 
+void CustomizationVisitor::onSceneRefresh(Visualization::Scene* scene)
+{
+	resetCustomizations();
+	CustomizationVisitor customizations;
+	for (auto top : scene->topLevelItems())
+		if (top->hasNode()) customizations.visit(top->node());
+}
+
 } /* namespace OOInteraction */

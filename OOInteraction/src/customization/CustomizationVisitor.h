@@ -44,6 +44,7 @@ namespace OOModel {
 
 namespace Visualization {
 	class VisualizationGroup;
+	class Scene;
 }
 
 namespace OOInteraction {
@@ -55,6 +56,7 @@ class OOINTERACTION_API CustomizationVisitor : public Model::Visitor<Customizati
 		static void init(Visualization::VisualizationGroup* customizationGroup);
 		static Model::Node* visitMethod(CustomizationVisitor* v, OOModel::Method* met);
 		static void resetCustomizations();
+		static void onSceneRefresh(Visualization::Scene* scene);
 
 	private:
 		static Visualization::VisualizationGroup* customizationGroup_;
