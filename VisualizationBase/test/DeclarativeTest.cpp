@@ -32,6 +32,7 @@
 #include "ModelBase/src/test_nodes/BinaryNode.h"
 #include "../src/declarative/GridLayoutElement.h"
 #include "../src/declarative/AnchorLayoutElement.h"
+#include "../src/declarative/SequentialLayoutElement.h"
 
 namespace Visualization {
 
@@ -168,11 +169,23 @@ void DeclarativeTest::initializeForms()
 				// right edges elements 1 and 3
 				->put(AnchorLayoutElement::PlaceEdge::RightOf, firstElement,
 						AnchorLayoutElement::AtEdge::AtRightOf, thirdElement));
+
+	// Test 9: Test sequential layout
+	Element* horizontalSequential = (new SequentialLayoutElement())
+			->setListOfItems([](){return QList<Item*>{new TestBox("a"), new TestBox("b"), new TestBox("cde")};});
+	Element* verticalSequential = (new SequentialLayoutElement())
+			->setListOfNodes([](){return QList<Model::Node*>{new TestBoxNode("dfsdfs", true),
+																				new TestBoxNode("sfsdfsdf")};})
+			->setVertical();
+
+	addForm((new AnchorLayoutElement())
+			->put(AnchorLayoutElement::PlaceEdge::LeftOf, horizontalSequential, 20,
+					AnchorLayoutElement::FromEdge::FromRightOf, verticalSequential));
 }
 
 int DeclarativeTest::determineForm()
 {
-	return 8;
+	return 9;
 }
 
 } /* namespace Visualization */

@@ -29,6 +29,7 @@
 
 #include "../visualizationbase_api.h"
 #include "LayoutElement.h"
+#include "../layouts/LayoutStyle.h"
 
 namespace Model {
 class Node;
@@ -41,17 +42,29 @@ class Element;
 
 class VISUALIZATIONBASE_API SequentialLayoutElement : public LayoutElement
 {
+		FLUENT_ELEMENT_INTERFACE(SequentialLayoutElement);
+
 	public:
+		using ListNodeGetterFunction = std::function<Model::List*()>;
+		using ListOfNodesGetterFunction = std::function<QList<Model::Node*>()>;
+		using ListOfItemsGetterFunction = std::function<QList<Item*>()>;
+
 		// Functions executable on element definition
-		SequentialLayoutElement(Model::List* listNode);
-		SequentialLayoutElement(std::function<QList<Model::Node*>()> nodeListGetter);
-		SequentialLayoutElement(std::function<QList<Item*>()> itemListGetter);
+		SequentialLayoutElement();
 		virtual ~SequentialLayoutElement();
 
+		SequentialLayoutElement* setListNode(ListNodeGetterFunction listNodeGetter);
+		SequentialLayoutElement* setListOfNodes(ListOfNodesGetterFunction nodeListGetter);
+		SequentialLayoutElement* setListOfItems(ListOfItemsGetterFunction itemListGetter);
 		SequentialLayoutElement* setSpaceBetweenElements(int space);
+		SequentialLayoutElement* setSpaceBetweenElements(std::function<int()> spaceBetweenElementsGetter);
 		SequentialLayoutElement* setOrientation(Qt::Orientation o);
 		SequentialLayoutElement* setHorizontal();
 		SequentialLayoutElement* setVertical();
+		SequentialLayoutElement* setAlignment(LayoutStyle::Alignment a);
+		SequentialLayoutElement* setForward(bool forward);
+		SequentialLayoutElement* setMinWidth(int minWidth);
+		SequentialLayoutElement* setMinHeight(int minHeight);
 
 		// Methods executable when items need to be rendered
 		virtual void computeSize(Item* item, int availableWidth, int availableHeight) override;
@@ -63,34 +76,96 @@ class VISUALIZATIONBASE_API SequentialLayoutElement : public LayoutElement
 		virtual void destroyChildItems(Item* item) override;
 
 	private:
-		Model::List* listNode_{};
-		std::function<QList<Model::Node*>()> nodeListGetter_{};
-		std::function<QList<Item*>()> itemListGetter_{};
+		ListNodeGetterFunction listNodeGetter_{};
+		ListOfNodesGetterFunction nodeListGetter_{};
+		ListOfItemsGetterFunction itemListGetter_{};
 
-		int spaceBetweenElements_{};
+		std::function<int()> spaceBetweenElementsGetter_;
+
+		int defaultSpaceBetweenElements_{0};
 		Qt::Orientation orientation_{Qt::Horizontal};
+		LayoutStyle::Alignment alignment_{LayoutStyle::Alignment::Bottom};
+		bool forward_{true};
+		int minWidth_{};
+		int minHeight_{};
 
-		QList<Item*> computeItems(Item* item);
+		mutable QHash<const Item*, QList<Item*>*> itemListMap_{};
+
+		QList<Item*>& listForItem(const Item* item) const;
+		int spaceBetweenElements();
+		void synchronizeWithNodes(Item* item, const QList<Model::Node*>& nodes);
+		void synchronizeWithItems(Item* item, const QList<Item*>& items);
+		void swap(Item* item, int i, int j);
 };
 
+inline SequentialLayoutElement* SequentialLayoutElement::setListNode(ListNodeGetterFunction listNodeGetter)
+{
+	Q_ASSERT(!nodeListGetter_ && !itemListGetter_);
+	listNodeGetter_ = listNodeGetter;
+	return this;
+}
+inline SequentialLayoutElement* SequentialLayoutElement::setListOfNodes(ListOfNodesGetterFunction nodeListGetter)
+{
+	Q_ASSERT(!listNodeGetter_ && !itemListGetter_);
+	nodeListGetter_ = nodeListGetter;
+	return this;
+}
+inline SequentialLayoutElement* SequentialLayoutElement::setListOfItems(ListOfItemsGetterFunction itemListGetter)
+{
+	Q_ASSERT(!nodeListGetter_ && !listNodeGetter_);
+	itemListGetter_ = itemListGetter;
+	return this;
+}
 inline SequentialLayoutElement* SequentialLayoutElement::setSpaceBetweenElements(int space)
 {
-	spaceBetweenElements_ = space;
+	defaultSpaceBetweenElements_ = space;
+	return this;
+}
+inline SequentialLayoutElement* SequentialLayoutElement::setSpaceBetweenElements(
+		std::function<int()> spaceBetweenElementsGetter)
+{
+	spaceBetweenElementsGetter_ = spaceBetweenElementsGetter;
 	return this;
 }
 inline SequentialLayoutElement* SequentialLayoutElement::setOrientation(Qt::Orientation o)
 {
 	orientation_ = o;
+	if (orientation_ == Qt::Horizontal)
+		alignment_ = LayoutStyle::Alignment::Bottom;
+	else
+		alignment_ = LayoutStyle::Alignment::Left;
 	return this;
 }
 inline SequentialLayoutElement* SequentialLayoutElement::setHorizontal()
 {
-	setOrientation(Qt::Horizontal);
+	orientation_ = Qt::Horizontal;
+	alignment_ = LayoutStyle::Alignment::Bottom;
 	return this;
 }
 inline SequentialLayoutElement* SequentialLayoutElement::setVertical()
 {
-	setOrientation(Qt::Vertical);
+	orientation_ = Qt::Vertical;
+	alignment_ = LayoutStyle::Alignment::Left;
+	return this;
+}
+inline SequentialLayoutElement* SequentialLayoutElement::setAlignment(LayoutStyle::Alignment a)
+{
+	alignment_ = a;
+	return this;
+}
+inline SequentialLayoutElement* SequentialLayoutElement::setForward(bool forward)
+{
+	forward_ = forward;
+	return this;
+}
+inline SequentialLayoutElement* SequentialLayoutElement::setMinWidth(int minWidht)
+{
+	minWidth_ = minWidht;
+	return this;
+}
+inline SequentialLayoutElement* SequentialLayoutElement::setMinHeight(int minHeight)
+{
+	minHeight_ = minHeight;
 	return this;
 }
 

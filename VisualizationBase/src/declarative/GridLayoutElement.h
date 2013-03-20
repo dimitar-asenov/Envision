@@ -29,7 +29,7 @@
 
 #include "../visualizationbase_api.h"
 #include "LayoutElement.h"
-#include "../layouts/LayoutStyle.h" // TODO: is it OK to import the alignments form here or not?
+#include "../layouts/LayoutStyle.h"
 
 namespace Visualization {
 
