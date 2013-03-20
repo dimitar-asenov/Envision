@@ -34,7 +34,8 @@ class OOMODEL_API NullType : public Type {
 	public:
 		NullType();
 
-		virtual bool equals(const Type* other) const;
+		virtual bool equals(const Type* other) const override;
+		virtual NullType* clone() const override;
 };
 
 } /* namespace OOModel */

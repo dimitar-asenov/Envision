@@ -31,6 +31,10 @@ namespace OOModel {
 ThrownExceptionType::ThrownExceptionType(Type* exceptionType) : Type(true), exceptionType_(exceptionType)
 {}
 
+ThrownExceptionType::ThrownExceptionType(const ThrownExceptionType& other)
+: Type(other.isValueType()), exceptionType_(other.exceptionType()->clone())
+{}
+
 ThrownExceptionType::~ThrownExceptionType()
 {
 	SAFE_DELETE(exceptionType_);
@@ -42,6 +46,11 @@ bool ThrownExceptionType::equals(const Type* other) const
 		return exceptionType_ != nullptr && exceptionType_->equals(at->exceptionType_);
 
 	return false;
+}
+
+ThrownExceptionType* ThrownExceptionType::clone() const
+{
+	return new ThrownExceptionType(*this);
 }
 
 } /* namespace OOModel */

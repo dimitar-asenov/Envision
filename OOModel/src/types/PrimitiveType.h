@@ -37,7 +37,8 @@ class OOMODEL_API PrimitiveType : public Type {
 
 		PrimitiveType(PrimitiveTypes type, bool isValueType);
 
-		virtual bool equals(const Type* other) const;
+		virtual bool equals(const Type* other) const override;
+		virtual PrimitiveType* clone() const override;
 
 		PrimitiveTypes type() const;
 

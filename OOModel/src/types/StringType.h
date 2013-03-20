@@ -34,7 +34,8 @@ class OOMODEL_API StringType : public Type {
 	public:
 		StringType();
 
-		virtual bool equals(const Type* other) const;
+		virtual bool equals(const Type* other) const override;
+		virtual StringType* clone() const override;
 };
 
 } /* namespace OOModel */

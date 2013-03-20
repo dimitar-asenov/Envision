@@ -55,4 +55,9 @@ PrimitiveType::PrimitiveTypes PrimitiveType::resultFromBinaryOperation(Primitive
 	return VOID;
 }
 
+PrimitiveType* PrimitiveType::clone() const
+{
+	return new PrimitiveType(*this);
+}
+
 } /* namespace OOModel */
