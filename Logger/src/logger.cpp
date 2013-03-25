@@ -26,6 +26,7 @@
 
 #include "logger.h"
 #include "Log.h"
+#include "Timer.h"
 #include "LogTester.h"
 
 Q_EXPORT_PLUGIN2( logger, Logger::LoggerPlugin )
@@ -39,6 +40,7 @@ bool LoggerPlugin::initialize(Core::EnvisionManager&)
 
 void LoggerPlugin::unload()
 {
+	Timer::removeAllTimers();
 }
 
 void LoggerPlugin::selfTest(QString)
