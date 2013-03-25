@@ -98,6 +98,7 @@ private:
     TranslateManager* trMngr_{};
     CppImportLogger* log_{};
     bool inBody_{false};
+    QString className_{"ClangAstVisitor"};
 };
 
 

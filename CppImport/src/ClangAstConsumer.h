@@ -45,6 +45,6 @@ public:
 private:
     ClangAstVisitor* astVisitor_{};
     clang::CompilerInstance* ci_{};
-    CppImportLogger* logger_{};
+    CppImportLogger* logger_{new CppImportLogger()};
 
 };

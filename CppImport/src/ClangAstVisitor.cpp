@@ -48,7 +48,7 @@ bool ClangAstVisitor::TraverseNamespaceDecl(clang::NamespaceDecl *nd)
     else if(OOModel::Module* curModel = dynamic_cast<OOModel::Module*>(ooStack_.top()))
         curModel->modules()->append(ooModule);
     else
-        std::cout << "ERROR UNKNOWN WHERE TO PUT NAMESPACE" << std::endl;
+        log_->writeError(className_,QString("uknown where to put namespace"),QString("NamespaceDecl"),nd->getNameAsString());
 
     ooStack_.push(ooModule);
     clang::DeclContext::decl_iterator it = nd->decls_begin();
@@ -79,7 +79,7 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl *rd)
 //        else if(OOModel::Class* curClass = dynamic_cast<OOModel::Class*>(ooStack_.top()))
 //            curClass->
         else
-            std::cout << "ERROR UNKNOWN WHERE TO PUT CLASS" << std::endl;
+            log_->writeError(className_,QString("uknown where to put class"),QString("CXXRecordDecl"),rd->getNameAsString());
         // visit child decls
         ooStack_.push(ooClass);
         clang::DeclContext::decl_iterator it = rd->decls_begin();
@@ -111,7 +111,7 @@ bool ClangAstVisitor::TraverseCXXMethodDecl(clang::CXXMethodDecl *methodDecl)
     OOModel::Method* method = trMngr_->insertMethodDecl(methodDecl);
     if(!method)
     {
-        std::cout << "___________ERROR NO OOMODEL::METHOD FOR THIS DECL_______" << std::endl;
+        log_->writeError(className_,QString("no ooModel::method found"),QString("CXXMethodDecl"),methodDecl->getNameAsString());
         // for now return false to see error (interupts visitor)
         return false;
     }
@@ -228,7 +228,7 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* vd)
     else
     {
         if(!llvm::isa<clang::ParmVarDecl>(vd))
-            std::cout << "--->WARNING : THIS VARIABLE IS NOT SUPPORTED : " << vd->getNameAsString() << std::endl;
+            log_->writeWarning(className_,QString("this variable is not supported"),QString("VarDecl"),vd->getNameAsString());
     }
     return true;
 }
@@ -238,7 +238,7 @@ bool ClangAstVisitor::VisitFieldDecl(clang::FieldDecl* fd)
     OOModel::Field* field = trMngr_->insertField(fd);
     if(!field)
     {
-        std::cout << "ERROR COULDN'T INSERT FIELD NO CURRENT OOCLASS" << std::endl;
+        log_->writeError(className_,QString("no parent found for this field"),QString("FieldDecl"),fd->getNameAsString());
         //        return false;
     }
     return true;

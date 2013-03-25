@@ -37,7 +37,7 @@ CppImportLogger::~CppImportLogger()
     delete warnStream_;
 }
 
-void CppImportLogger::writeOut(QString &inWhichClass, QString &reason, QString &clangType, QString &clangName, CppImportLogger::OUTTYPE outType)
+void CppImportLogger::writeOut(QString &inWhichClass, QString &reason, QString &clangType, QString clangName, CppImportLogger::OUTTYPE outType)
 {
     QTextStream* outStream;
     switch(outType)
@@ -55,7 +55,7 @@ void CppImportLogger::writeOut(QString &inWhichClass, QString &reason, QString &
 
     if(outStream)
     {
-        (*outStream) << "ERR/WARN in class " << inWhichClass << " because of " << reason << " clang node " << clangType << " name " << clangName << "\n";
+        (*outStream) << "ERR/WARN: \t In class : " << inWhichClass << " \n\t reason : " << reason << " \n\t in clang node : " << clangType << " \n\t clang node name : " << clangName << "\n";
     }
 }
 

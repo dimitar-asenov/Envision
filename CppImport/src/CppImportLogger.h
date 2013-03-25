@@ -33,12 +33,12 @@ class CppImportLogger
 public:
     CppImportLogger();
     ~CppImportLogger();
-    void writeError(QString& inWhichClass, QString& reason, QString& clangType, QString& clangName);
-    void writeWarning(QString& inWhichClass, QString& reason, QString& clangType, QString& clangName);
+    void writeError(QString inWhichClass, QString reason, QString clangType, std::string clangName);
+    void writeWarning(QString inWhichClass, QString reason, QString clangType, std::string clangName);
 private:
     // type of output for writeOut function
     enum OUTTYPE {ERROR,WARNING};
-    void writeOut(QString& inWhichClass, QString& reason, QString& clangType, QString& clangName, OUTTYPE outType);
+    void writeOut(QString& inWhichClass, QString& reason, QString& clangType, QString clangName, OUTTYPE outType);
     void initStreams();
 
     // outstreams
@@ -49,11 +49,11 @@ private:
     bool writeToFile_{false};
 };
 
-inline void CppImportLogger::writeError(QString &inWhichClass, QString &reason, QString &clangType, QString &clangName)
-{ writeOut(inWhichClass,reason,clangType,clangName,ERROR); }
+inline void CppImportLogger::writeError(QString inWhichClass, QString reason, QString clangType, std::string clangName)
+{ writeOut(inWhichClass,reason,clangType,QString::fromStdString(clangName),ERROR); }
 
-inline void CppImportLogger::writeWarning(QString &inWhichClass, QString &reason, QString &clangType, QString &clangName)
-{ writeOut(inWhichClass,reason,clangType,clangName,WARNING); }
+inline void CppImportLogger::writeWarning(QString inWhichClass, QString reason, QString clangType, std::string clangName)
+{ writeOut(inWhichClass,reason,clangType,QString::fromStdString(clangName),WARNING); }
 
 
 
