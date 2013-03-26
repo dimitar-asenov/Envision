@@ -240,6 +240,7 @@ void MainView::updateInfoLabels()
 		if (infoLabels_.size() <= labelIndex)
 		{
 			label = new QLabel(this);
+			label->setAttribute(Qt::WA_TransparentForMouseEvents);
 			infoLabels_.append(label);
 			label->show();
 			label->setStyleSheet("QLabel { color : red; }");
