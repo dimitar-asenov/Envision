@@ -43,6 +43,7 @@
 
 #include <QtXml/QDomDocument>
 
+#include <QtGui/QLabel>
 #include <QtGui/QStaticText>
 #include <QtGui/QPainter>
 #include <QtGui/QFont>

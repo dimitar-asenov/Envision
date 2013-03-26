@@ -37,6 +37,8 @@
 #include "ModelBase/src/nodes/Node.h"
 #include "ModelBase/src/model/Model.h"
 
+#include "Logger/src/Timer.h"
+
 namespace Visualization {
 
 class UpdateSceneEvent : public QEvent
@@ -102,6 +104,8 @@ void Scene::scheduleUpdate()
 void Scene::updateItems()
 {
 	inAnUpdate_ = true;
+	auto updateTimer = Logger::Timer::start("Scene update");
+
 	// Update Top level items
 	for (int i = 0; i<topLevelItems_.size(); ++i)
 		topLevelItems_.at(i)->updateSubtree();
@@ -143,6 +147,8 @@ void Scene::updateItems()
 	}
 
 	computeSceneRect();
+
+	updateTimer->tick();
 	needsUpdate_ = false;
 	inAnUpdate_ = false;
 }
@@ -174,7 +180,9 @@ void Scene::customEvent(QEvent *event)
 	if ( event->type() == UpdateSceneEvent::EventType ) updateItems();
 	else if (auto e = dynamic_cast<CustomSceneEvent*>(event))
 	{
+		auto t = Logger::Timer::start("Custom event");
 		e->execute();
+		t->tick();
 	}
 	else
 		QGraphicsScene::customEvent(event);
@@ -182,55 +190,68 @@ void Scene::customEvent(QEvent *event)
 
 bool Scene::event(QEvent *event)
 {
-	if (inAnUpdate_) return QGraphicsScene::event(event);
-
-	inEventHandler_ = true;
 	bool result = false;
-	if (event->type() != UpdateSceneEvent::EventType &&
-		 event->type() != QEvent::MetaCall  &&
-		 event->type() != QEvent::GraphicsSceneMouseMove &&
-		 event->type() != QEvent::GraphicsSceneHoverMove
-		)
-		scheduleUpdate();
 
-	// Always move the scene handler item to the location of the last mouse click.
-	// This assures that even if the user presses somewhere in the empty space of the scene, the scene handler item will
-	// be selected.
-	if (event->type() == QEvent::GraphicsSceneMousePress)
+	if (inAnUpdate_)
+		result = QGraphicsScene::event(event);
+	else
 	{
-		auto e = static_cast<QGraphicsSceneMouseEvent*>(event);
-		sceneHandlerItem_->setPos(e->scenePos() - QPointF(1,1));
-	}
+		inEventHandler_ = true;
 
-	if (event->type() == QEvent::KeyPress)
-	{
-		//Circumvent the standard TAB handling of the scene.
-		keyPressEvent(static_cast<QKeyEvent *>(event));
-		result = true;
-	}
-	else result = QGraphicsScene::event(event);
+		if (event->type() != UpdateSceneEvent::EventType &&
+			 event->type() != QEvent::MetaCall  &&
+			 event->type() != QEvent::GraphicsSceneMouseMove &&
+			 event->type() != QEvent::GraphicsSceneHoverMove
+			)
+			scheduleUpdate();
 
-	inEventHandler_ = false;
+		// Always move the scene handler item to the location of the last mouse click.
+		// This assures that even if the user presses somewhere in the empty space of the scene, the scene handler item will
+		// be selected.
 
-	if (needsUpdate_) updateItems();
-	for(auto e : postEventActions_)
-	{
-		customEvent(e);
-		SAFE_DELETE(e);
-	}
-	postEventActions_.clear();
+		Logger::Timer* tInputEvent{};
+		if (event->type() == QEvent::GraphicsSceneMousePress || event->type() == QEvent::KeyPress)
+			tInputEvent = Logger::Timer::start("Input event");
 
-	// On keyboard events, make sure the cursor is visible
-	if (mainCursorsJustSet_ && mainCursor_ && mainCursor_->visualization()
-			&& mainCursor_->visualization()->boundingRect().isValid() )
-	{
-		for (auto view : views())
-			if (view->isActiveWindow())
-			{
-				auto vis = mainCursor_->visualization();
-				view->ensureVisible( vis->boundingRect().translated(vis->scenePos()), 5, 5);
-				mainCursorsJustSet_ = false;
-			}
+		if (event->type() == QEvent::GraphicsSceneMousePress)
+		{
+			auto e = static_cast<QGraphicsSceneMouseEvent*>(event);
+			sceneHandlerItem_->setPos(e->scenePos() - QPointF(1,1));
+		}
+
+		if (event->type() == QEvent::KeyPress)
+		{
+			//Circumvent the standard TAB handling of the scene.
+			keyPressEvent(static_cast<QKeyEvent *>(event));
+			result = true;
+		}
+		else result = QGraphicsScene::event(event);
+
+		if (event->type() == QEvent::GraphicsSceneMousePress || event->type() == QEvent::KeyPress)
+			tInputEvent->tick();
+
+		inEventHandler_ = false;
+
+		if (needsUpdate_) updateItems();
+		for(auto e : postEventActions_)
+		{
+			customEvent(e);
+			SAFE_DELETE(e);
+		}
+		postEventActions_.clear();
+
+		// On keyboard events, make sure the cursor is visible
+		if (mainCursorsJustSet_ && mainCursor_ && mainCursor_->visualization()
+				&& mainCursor_->visualization()->boundingRect().isValid() )
+		{
+			for (auto view : views())
+				if (view->isActiveWindow())
+				{
+					auto vis = mainCursor_->visualization();
+					view->ensureVisible( vis->boundingRect().translated(vis->scenePos()), 5, 5);
+					mainCursorsJustSet_ = false;
+				}
+		}
 	}
 
 	return result;

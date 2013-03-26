@@ -26,6 +26,7 @@
 
 #include "views/MainView.h"
 #include "Scene.h"
+#include "Logger/src/Timer.h"
 
 namespace Visualization {
 
@@ -56,6 +57,8 @@ void MainView::setMiniMapSize(int width, int height)
 
 bool MainView::event( QEvent *event )
 {
+	bool result = false;
+
 	switch (event->type())
 	{
 		case QEvent::KeyPress :
@@ -63,7 +66,7 @@ bool MainView::event( QEvent *event )
 			QKeyEvent *k = (QKeyEvent *)event;
 			keyPressEvent(k);
 			if (k->key() == Qt::Key_Backtab || k->key() == Qt::Key_Tab ) event->accept();
-			return true;
+			result = true;
 		}
 		break;
 		case QEvent::KeyRelease :
@@ -71,11 +74,18 @@ bool MainView::event( QEvent *event )
 			QKeyEvent *k = (QKeyEvent *)event;
 			keyReleaseEvent(k);
 			if (k->key() == Qt::Key_Backtab || k->key() == Qt::Key_Tab ) event->accept();
-			return true;
+			result = true;
 		}
 		break;
-		default: return View::event( event );
+		default: result = View::event( event );
+		break;
 	}
+
+	// The checks below are necessary to avoid infinite recursion.
+	if ( event->type() != QEvent::ChildAdded
+			&& event->type() != QEvent::ChildRemoved
+			&& event->type() != QEvent::ChildPolished) updateInfoLabels();
+	return result;
 }
 
 void MainView::resizeEvent(QResizeEvent *event)
@@ -198,7 +208,72 @@ void MainView::keyPressEvent(QKeyEvent *event)
 		if (miniMap->isVisible()) miniMap->hide();
 		else miniMap->show();
 	}
+	else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_F7)
+	{
+		event->accept();
+		showTimers_ = ~showTimers_;
+		updateInfoLabels();
+	}
 	else View::keyPressEvent(event);
+}
+
+void MainView::updateInfoLabels()
+{
+	if (!showTimers_)
+	{
+		if (!infoLabels_.isEmpty())
+		{
+			for (auto l : infoLabels_) SAFE_DELETE(l);
+			infoLabels_.clear();
+		}
+		return;
+	}
+
+	int labelIndex = 0;
+	int yPos = 10;
+
+	// Add timers
+	for (auto name : Logger::Timer::timerNames())
+	{
+		QLabel* label{};
+
+		if (infoLabels_.size() <= labelIndex)
+		{
+			label = new QLabel(this);
+			infoLabels_.append(label);
+			label->show();
+			label->setStyleSheet("QLabel { color : red; }");
+		}
+		else label = infoLabels_.at(labelIndex);
+
+		// Set the position of the label
+		label->move(10, yPos);
+
+		// Construct label text
+		auto info = name + ":  ";
+		for (auto val : Logger::Timer::timer(name)->values())
+			info += QString::number(val) + "  ";
+
+		label->setText(info);
+		label->adjustSize();
+
+		++labelIndex;
+		yPos+=label->height();
+	}
+
+	// Remove unnecessary labels
+	while (labelIndex < infoLabels_.size() )
+	{
+		SAFE_DELETE(infoLabels_.last());
+		infoLabels_.removeLast();
+	}
+}
+
+void MainView::paintEvent(QPaintEvent* event)
+{
+	auto t = Logger::Timer::start("Main view paint");
+	View::paintEvent(event);
+	t->tick();
 }
 
 }
