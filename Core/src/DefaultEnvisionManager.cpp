@@ -29,6 +29,18 @@
 
 namespace Core {
 
+QList<DefaultEnvisionManager::EventPrePostAction>& DefaultEnvisionManager::preEventActions()
+{
+	static QList<EventPrePostAction> a;
+	return a;
+}
+
+QList<DefaultEnvisionManager::EventPrePostAction>& DefaultEnvisionManager::postEventActions()
+{
+	static QList<EventPrePostAction> a;
+	return a;
+}
+
 DefaultEnvisionManager::DefaultEnvisionManager() :
 	pm(nullptr), exitSet(false)
 {
@@ -66,6 +78,26 @@ void DefaultEnvisionManager::setMainWindow(QMainWindow* mainWindow_)
 void DefaultEnvisionManager::exit()
 {
 	exitSet = true;
+}
+
+void DefaultEnvisionManager::addPreEventAction(EventPrePostAction action)
+{
+	preEventActions().append(action);
+}
+
+void DefaultEnvisionManager::addPostEventAction(EventPrePostAction action)
+{
+	postEventActions().append(action);
+}
+
+void DefaultEnvisionManager::processPreEventActions(QObject* receiver, QEvent* event)
+{
+	for (auto a : preEventActions()) a(receiver, event);
+}
+
+void DefaultEnvisionManager::processPostEventActions(QObject* receiver, QEvent* event)
+{
+	for (auto a : postEventActions()) a(receiver, event);
 }
 
 }
