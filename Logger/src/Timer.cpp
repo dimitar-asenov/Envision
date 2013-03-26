@@ -64,6 +64,8 @@ void Timer::setNumValuesLimit(int limit)
 qint64 Timer::tick()
 {
 	auto val = qtTimer_.restart();
+	if (val == 0 && ignoreZeroValues_) return 0;
+
 	values_.append(val);
 	if (values_.size() > numValuesLimit_) values_.removeFirst();
 	totalSum_ += val;

@@ -47,6 +47,7 @@ class LOGGER_API Timer
 		void setNumValuesLimit(int limit);
 		double totalAverage() const;
 		double latestValuesAverage() const;
+		void setIgnoreZeroValues(bool ignore);
 
 	private:
 		Timer();
@@ -58,6 +59,7 @@ class LOGGER_API Timer
 		qint64 totalSum_{};
 		qint64 totalCount_{};
 		int numValuesLimit_{10};
+		bool ignoreZeroValues_{true};
 };
 
 inline Timer* Timer::start(const QString& timer) { auto t = Timer::timer(timer); t->start(); return t; }
@@ -68,5 +70,6 @@ inline void Timer::start() { qtTimer_.start(); }
 inline const QString& Timer::name() const { return name_; }
 inline const QList<qint64> Timer::values() const { return values_; }
 inline double Timer::totalAverage() const { return (double) totalSum_/totalCount_; }
+inline void Timer::setIgnoreZeroValues(bool ignore) { ignoreZeroValues_ = ignore; }
 
 } /* namespace Logger */
