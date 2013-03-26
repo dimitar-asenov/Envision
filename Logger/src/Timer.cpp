@@ -35,14 +35,14 @@ QMap<QString, Timer*>& Timer::timers()
 }
 
 
-Timer& Timer::timer(const QString& timer)
+Timer* Timer::timer(const QString& timer)
 {
 	if (timers().contains(timer))
-		return *timers().value(timer);
+		return timers().value(timer);
 
 	auto t = new Timer();
 	timers().insert(timer, t);
-	return *t;
+	return t;
 }
 
 void Timer::removeAllTimers()

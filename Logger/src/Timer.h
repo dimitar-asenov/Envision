@@ -33,11 +33,11 @@ namespace Logger {
 class LOGGER_API Timer
 {
 	public:
-		static void start(const QString& timer);
+		static Timer* start(const QString& timer);
 		static qint64 tick(const QString& timer);
 
 		static QStringList timerNames();
-		static Timer& timer(const QString& timer);
+		static Timer* timer(const QString& timer);
 		static void removeAllTimers();
 
 		void start();
@@ -60,8 +60,8 @@ class LOGGER_API Timer
 		int numValuesLimit_{10};
 };
 
-inline void Timer::start(const QString& timer) { Timer::timer(timer).start(); }
-inline qint64 Timer::tick(const QString& timer) { return Timer::timer(timer).tick(); }
+inline Timer* Timer::start(const QString& timer) { auto t = Timer::timer(timer); t->start(); return t; }
+inline qint64 Timer::tick(const QString& timer) { return Timer::timer(timer)->tick(); }
 inline QStringList Timer::timerNames() { return timers().keys(); }
 
 inline void Timer::start() { qtTimer_.start(); }
