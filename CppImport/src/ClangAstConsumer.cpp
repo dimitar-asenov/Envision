@@ -47,19 +47,19 @@ ClangAstConsumer::~ClangAstConsumer()
     delete logger_;
 }
 
-bool ClangAstConsumer::HandleTopLevelDecl(clang::DeclGroupRef D)
-{
-    clang::DeclGroupRef::iterator iterator = D.begin();
+//bool ClangAstConsumer::HandleTopLevelDecl(clang::DeclGroupRef D)
+//{
+//    clang::DeclGroupRef::iterator iterator = D.begin();
 
-        for (; iterator != D.end(); ++iterator)
-        {
-//            clang::RawCommentList cList = (*iterator)->getASTContext().getRawCommentList();
-//           // clang::RawCommentList cList = astContext->getRawCommentList();
-//            cList.getComments();
-//            astVisitor_->TraverseDecl(*iterator);
-        }
-    return true; // keep going
-}
+//        for (; iterator != D.end(); ++iterator)
+//        {
+////            clang::RawCommentList cList = (*iterator)->getASTContext().getRawCommentList();
+////           // clang::RawCommentList cList = astContext->getRawCommentList();
+////            cList.getComments();
+////            astVisitor_->TraverseDecl(*iterator);
+//        }
+//    return true; // keep going
+//}
 
 void ClangAstConsumer::HandleTranslationUnit(clang::ASTContext &Context)
 {

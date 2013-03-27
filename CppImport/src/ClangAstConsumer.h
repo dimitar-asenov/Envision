@@ -38,7 +38,7 @@ public:
     ClangAstConsumer(Model::Model* model, OOModel::Project* currentProject = nullptr);
     ClangAstConsumer(clang::CompilerInstance* ci, Model::Model* model, OOModel::Project* currentProject = nullptr);
     ~ClangAstConsumer();
-    virtual bool HandleTopLevelDecl(clang::DeclGroupRef D) override;
+//    virtual bool HandleTopLevelDecl(clang::DeclGroupRef D) override;
     virtual void HandleTranslationUnit(clang::ASTContext &Context) override;
     virtual void Initialize(clang::ASTContext &Context) override;
 
