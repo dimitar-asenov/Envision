@@ -92,8 +92,9 @@ public:
     bool VisitStmt(clang::Stmt* S);
     bool VisitFieldDecl(clang::FieldDecl* fd);
 
-    bool VisitCallExpr(clang::CallExpr* cExpr);
+    bool TraverseCXXMemberCallExpr(clang::CXXMemberCallExpr* cExpr);
     bool VisitIntegerLiteral(clang::IntegerLiteral* intLit);
+    bool VisitCXXBoolLiteralExpr(clang::CXXBoolLiteralExpr* bExpr);
     bool VisitDeclRefExpr(clang::DeclRefExpr* declRef);
 
     bool shouldUseDataRecursionFor(clang::Stmt* S);

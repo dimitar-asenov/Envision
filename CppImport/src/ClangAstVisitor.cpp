@@ -288,17 +288,20 @@ bool ClangAstVisitor::VisitFieldDecl(clang::FieldDecl* fd)
     return true;
 }
 
-bool ClangAstVisitor::VisitCallExpr(clang::CallExpr *cExpr)
+bool ClangAstVisitor::TraverseCXXMemberCallExpr(clang::CXXMemberCallExpr *cExpr)
 {
-    OOModel::MethodCallExpression* ooMCall = nullptr;
-    auto nd = llvm::dyn_cast_or_null<clang::NamedDecl>(cExpr->getCalleeDecl());
-    if(nd)
-       ooMCall = new OOModel::MethodCallExpression(QString::fromStdString(nd->getNameAsString()));
-    else
+    OOModel::MethodCallExpression* ooMCall = new OOModel::MethodCallExpression(QString::fromStdString(cExpr->getMethodDecl()->getNameAsString()));
+
+    // visit arguments
+    bool inBody = inBody_;
+    inBody_ = false;
+    clang::ExprIterator argIt = cExpr->arg_begin();
+    for(;argIt!=cExpr->arg_end();++argIt)
     {
-        std::cout << "Couldn't add call expr" << std::endl;
-        return false;
+        TraverseStmt(*argIt);
+        ooMCall->arguments()->append(ooExprStack_.pop());
     }
+    inBody_ = inBody;
     if(inBody_)
     {
         OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top());
@@ -314,6 +317,14 @@ bool ClangAstVisitor::VisitIntegerLiteral(clang::IntegerLiteral* intLit)
     OOModel::IntegerLiteral* ooIntLit = new OOModel::IntegerLiteral();
     ooIntLit->setValue(intLit->getValue().getLimitedValue());
     ooExprStack_.push(ooIntLit);
+    return true;
+}
+
+bool ClangAstVisitor::VisitCXXBoolLiteralExpr(clang::CXXBoolLiteralExpr* bExpr)
+{
+    OOModel::BooleanLiteral* ooBoolLit = new OOModel::BooleanLiteral();
+    ooBoolLit->setValue(bExpr->getValue());
+    ooExprStack_.push(ooBoolLit);
     return true;
 }
 

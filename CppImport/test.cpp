@@ -26,6 +26,9 @@ public:
             k*=0;
         }
         return k;}
+    int callExpr() {
+        return myFunction(1,true);
+    }
 };
 }
 
