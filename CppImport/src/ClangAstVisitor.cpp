@@ -164,6 +164,32 @@ bool ClangAstVisitor::TraverseWhileStmt(clang::WhileStmt* wStmt)
     return true;
 }
 
+bool ClangAstVisitor::TraverseForStmt(clang::ForStmt *fStmt)
+{
+    OOModel::LoopStatement* ooLoop = new OOModel::LoopStatement();
+    OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top());
+    if(itemList)
+    {
+        itemList->append(ooLoop);
+        inBody_ = false;
+        // init
+        TraverseStmt(fStmt->getInit());
+        ooLoop->setInitStep(ooExprStack_.pop());
+        // condition
+        TraverseStmt(fStmt->getCond());
+        ooLoop->setCondition(ooExprStack_.pop());
+        // update
+        TraverseStmt(fStmt->getInc());
+        ooLoop->setUpdateStep(ooExprStack_.pop());
+        inBody_ = true;
+        // body
+        ooStack_.push(ooLoop->body());
+        TraverseStmt(fStmt->getBody());
+        ooStack_.pop();
+    }
+    return true;
+}
+
 bool ClangAstVisitor::TraverseReturnStmt(clang::ReturnStmt* rStmt)
 {
     OOModel::ReturnStatement* ooReturn = new OOModel::ReturnStatement();
@@ -188,7 +214,7 @@ bool ClangAstVisitor::VisitStmt(clang::Stmt* S)
 {
     //    std::cout << "VISITING STMT" << std::endl;
     //    llvm::errs() << "VISITING STMT" << "\n";
-    //    S->dump();
+        S->dump();
     return Base::VisitStmt(S);
 }
 
@@ -223,7 +249,10 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* vd)
             TraverseStmt(vd->getInit());
             varDecl->setInitialValue(ooExprStack_.pop());
         }
-        itemList->append(varDecl);
+        if(inBody_)
+            itemList->append(varDecl);
+        else
+            ooExprStack_.push(varDecl);
     }
     else
     {
@@ -321,6 +350,28 @@ bool ClangAstVisitor::TraverseAssignment(clang::BinaryOperator *binOp)
     }
     else
         ooExprStack_.push(ooBinOp);
+    inBody_ = inBody;
+    return true;
+}
+
+bool ClangAstVisitor::TraverseUnaryOp(clang::UnaryOperator *uOp)
+{
+    OOModel::UnaryOperation::OperatorTypes ooOperatorType = CppImportUtilities::convertUnaryOpcode(uOp->getOpcode());
+    OOModel::UnaryOperation* ooUnaryOp = new OOModel::UnaryOperation();
+    bool inBody = inBody_;
+    inBody_ = false;
+    ooUnaryOp->setOp(ooOperatorType);
+    TraverseStmt(uOp->getSubExpr());
+    ooUnaryOp->setOperand(ooExprStack_.pop());
+
+    if(inBody)
+    {
+        OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top());
+        if(itemList) itemList->append(ooUnaryOp);
+        else std::cout << "ERROR INSERT Unary" << std::endl;
+    }
+    else
+        ooExprStack_.push(ooUnaryOp);
     inBody_ = inBody;
     return true;
 }

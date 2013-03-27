@@ -42,6 +42,7 @@ public:
     bool TraverseCXXMethodDecl(clang::CXXMethodDecl* methodDecl);
     bool TraverseIfStmt(clang::IfStmt* ifStmt);
     bool TraverseWhileStmt(clang::WhileStmt* wStmt);
+    bool TraverseForStmt(clang::ForStmt* fStmt);
     bool TraverseReturnStmt(clang::ReturnStmt* rStmt);
 
     bool TraverseStmt(clang::Stmt *S);
@@ -49,20 +50,20 @@ public:
 
 
     // binary ops
-//    bool TraverseBinMul(clang::BinaryOperator* binOp);
-//    bool TraverseBinDiv(clang::BinaryOperator* binOp);
-//    bool TraverseBinRem(clang::BinaryOperator* binOp);
+    bool TraverseBinMul(clang::BinaryOperator* binOp);
+    bool TraverseBinDiv(clang::BinaryOperator* binOp);
+    bool TraverseBinRem(clang::BinaryOperator* binOp);
     bool TraverseBinAdd(clang::BinaryOperator* binOp);
-//    bool TraverseBinSub(clang::BinaryOperator* binOp);
+    bool TraverseBinSub(clang::BinaryOperator* binOp);
     bool TraverseBinLT(clang::BinaryOperator* binOp);
     bool TraverseBinGT(clang::BinaryOperator* binOp);
     bool TraverseBinLE(clang::BinaryOperator* binOp);
     bool TraverseBinGE(clang::BinaryOperator* binOp);
     bool TraverseBinEQ(clang::BinaryOperator* binOp);
     bool TraverseBinNE(clang::BinaryOperator* binOp);
-//    bool TraverseBinAnd(clang::BinaryOperator* binOp);
-//    bool TraverseBinXor(clang::BinaryOperator* binOp);
-//    bool TraverseBinOr(clang::BinaryOperator* binOp);
+    bool TraverseBinAnd(clang::BinaryOperator* binOp);
+    bool TraverseBinXor(clang::BinaryOperator* binOp);
+    bool TraverseBinOr(clang::BinaryOperator* binOp);
 //     binary assigns
     bool TraverseBinAssign(clang::BinaryOperator* binOp);
 //    bool TraverseBinMulAssign(clang::CompoundAssignOperator* binOp);
@@ -76,6 +77,17 @@ public:
 //    bool TraverseBinXorAssign(clang::CompoundAssignOperator* binOp);
 //    bool TraverseBinOrAssign(clang::CompoundAssignOperator* binOp);
 
+    // unary ops
+    bool TraverseUnaryPostInc(clang::UnaryOperator* uOp);
+    bool TraverseUnaryPostDec(clang::UnaryOperator* uOp);
+    bool TraverseUnaryPreInc(clang::UnaryOperator* uOp);
+    bool TraverseUnaryPreDec(clang::UnaryOperator* uOp);
+//    bool TraverseUnaryAddrOf(clang::UnaryOperator* uOp);
+//    bool TraverseUnaryDeref(clang::UnaryOperator* uOp);
+    bool TraverseUnaryPlus(clang::UnaryOperator* uOp);
+    bool TraverseUnaryMinus(clang::UnaryOperator* uOp);
+    bool TraverseUnaryNot(clang::UnaryOperator* uOp);
+
 
     bool VisitStmt(clang::Stmt* S);
     bool VisitFieldDecl(clang::FieldDecl* fd);
@@ -88,6 +100,8 @@ public:
 private:
     bool TraverseBinaryOp(clang::BinaryOperator* binOp);
     bool TraverseAssignment(clang::BinaryOperator* binOp);
+
+    bool TraverseUnaryOp(clang::UnaryOperator* uOp);
 
     QStack<Model::Node*> ooStack_;
     QStack<OOModel::Expression*> ooExprStack_;
@@ -105,16 +119,16 @@ private:
 
 
 // binary ops
-//    inline bool ClangAstVisitor::TraverseBinMul(clang::BinaryOperator* binOp)
-//    {return TraverseBinaryOp(binOp);}
-//    inline bool ClangAstVisitor::TraverseBinDiv(clang::BinaryOperator* binOp)
-//    {return TraverseBinaryOp(binOp);}
-//    inline bool ClangAstVisitor::TraverseBinRem(clang::BinaryOperator* binOp)
-//    {return TraverseBinaryOp(binOp);}
+    inline bool ClangAstVisitor::TraverseBinMul(clang::BinaryOperator* binOp)
+    {return TraverseBinaryOp(binOp);}
+    inline bool ClangAstVisitor::TraverseBinDiv(clang::BinaryOperator* binOp)
+    {return TraverseBinaryOp(binOp);}
+    inline bool ClangAstVisitor::TraverseBinRem(clang::BinaryOperator* binOp)
+    {return TraverseBinaryOp(binOp);}
 inline bool ClangAstVisitor::TraverseBinAdd(clang::BinaryOperator* binOp)
 {return TraverseBinaryOp(binOp);}
-//    inline bool ClangAstVisitor::TraverseBinSub(clang::BinaryOperator* binOp)
-//    {return TraverseBinaryOp(binOp);}
+    inline bool ClangAstVisitor::TraverseBinSub(clang::BinaryOperator* binOp)
+    {return TraverseBinaryOp(binOp);}
 inline bool ClangAstVisitor::TraverseBinLT(clang::BinaryOperator* binOp)
 {return TraverseBinaryOp(binOp);}
 inline bool ClangAstVisitor::TraverseBinGT(clang::BinaryOperator* binOp)
@@ -127,12 +141,12 @@ inline bool ClangAstVisitor::TraverseBinEQ(clang::BinaryOperator* binOp)
 {return TraverseBinaryOp(binOp);}
 inline bool ClangAstVisitor::TraverseBinNE(clang::BinaryOperator* binOp)
 {return TraverseBinaryOp(binOp);}
-//    inline bool ClangAstVisitor::TraverseBinAnd(clang::BinaryOperator* binOp)
-//    {return TraverseBinaryOp(binOp);}
-//    inline bool ClangAstVisitor::TraverseBinXor(clang::BinaryOperator* binOp)
-//    {return TraverseBinaryOp(binOp);}
-//    inline bool ClangAstVisitor::TraverseBinOr(clang::BinaryOperator* binOp)
-//    {return TraverseBinaryOp(binOp);}
+    inline bool ClangAstVisitor::TraverseBinAnd(clang::BinaryOperator* binOp)
+    {return TraverseBinaryOp(binOp);}
+    inline bool ClangAstVisitor::TraverseBinXor(clang::BinaryOperator* binOp)
+    {return TraverseBinaryOp(binOp);}
+    inline bool ClangAstVisitor::TraverseBinOr(clang::BinaryOperator* binOp)
+    {return TraverseBinaryOp(binOp);}
 // binary assigns
 inline bool ClangAstVisitor::TraverseBinAssign(clang::BinaryOperator* binOp)
 {return TraverseAssignment(binOp);}
@@ -156,3 +170,24 @@ inline bool ClangAstVisitor::TraverseBinAssign(clang::BinaryOperator* binOp)
 //    {return TraverseAssignment(binOp);}
 //    inline bool ClangAstVisitor::TraverseBinOrAssign(clang::CompoundAssignOperator* binOp)
 //    {return TraverseAssignment(binOp);}
+
+
+//unary ops
+inline bool ClangAstVisitor::TraverseUnaryPostInc(clang::UnaryOperator* uOp)
+{return TraverseUnaryOp(uOp);}
+inline bool ClangAstVisitor::TraverseUnaryPostDec(clang::UnaryOperator* uOp)
+{return TraverseUnaryOp(uOp);}
+inline bool ClangAstVisitor::TraverseUnaryPreInc(clang::UnaryOperator* uOp)
+{return TraverseUnaryOp(uOp);}
+inline bool ClangAstVisitor::TraverseUnaryPreDec(clang::UnaryOperator* uOp)
+{return TraverseUnaryOp(uOp);}
+//inline bool ClangAstVisitor::TraverseUnaryAddrOf(clang::UnaryOperator* uOp)
+//{return TraverseUnaryOp(uOp);}
+//inline bool ClangAstVisitor::TraverseUnaryDeref(clang::UnaryOperator* uOp)
+//{return TraverseUnaryOp(uOp);}
+inline bool ClangAstVisitor::TraverseUnaryPlus(clang::UnaryOperator* uOp)
+{return TraverseUnaryOp(uOp);}
+inline bool ClangAstVisitor::TraverseUnaryMinus(clang::UnaryOperator* uOp)
+{return TraverseUnaryOp(uOp);}
+inline bool ClangAstVisitor::TraverseUnaryNot(clang::UnaryOperator* uOp)
+{return TraverseUnaryOp(uOp);}

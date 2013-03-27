@@ -1,5 +1,5 @@
 #include "test.h"
-//#include <iostream>
+#include <iostream>
 //TEst comment
 
 int NOCLASSFIELD;
@@ -74,6 +74,11 @@ class OneMore{
 int Header::headerFunc()
 {
     int someVarInCPP[10];
+    int k;
+    for(int i=0; i<100;i++)
+    {
+        k = i;
+    }
     return 0;
 }
 

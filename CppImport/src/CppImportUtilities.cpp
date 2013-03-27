@@ -40,7 +40,8 @@ OOModel::Expression *CppImportUtilities::convertClangType(clang::QualType type)
 
 OOModel::BinaryOperation::OperatorTypes CppImportUtilities::convertClangOpcode(clang::BinaryOperatorKind kind)
 {
-    switch (kind) {
+    switch (kind)
+    {
     case clang::BO_Mul:
         return OOModel::BinaryOperation::TIMES;
     case clang::BO_Div:
@@ -76,7 +77,8 @@ OOModel::BinaryOperation::OperatorTypes CppImportUtilities::convertClangOpcode(c
 
 OOModel::AssignmentExpression::AssignmentTypes CppImportUtilities::convertClangAssignOpcode(clang::BinaryOperatorKind kind)
 {
-    switch (kind) {
+    switch (kind)
+    {
     case clang::BO_Assign:
         return OOModel::AssignmentExpression::ASSIGN;
     case clang::BO_MulAssign:
@@ -101,5 +103,40 @@ OOModel::AssignmentExpression::AssignmentTypes CppImportUtilities::convertClangA
         return OOModel::AssignmentExpression::BIT_OR_ASSIGN;
     default:
         return OOModel::AssignmentExpression::ASSIGN;
+    }
+}
+
+OOModel::UnaryOperation::OperatorTypes CppImportUtilities::convertUnaryOpcode(clang::UnaryOperatorKind kind)
+{
+    switch (kind)
+    {
+    case clang::UO_PostInc:
+        return OOModel::UnaryOperation::POSTINCREMENT;
+    case clang::UO_PostDec:
+        return OOModel::UnaryOperation::POSTDECREMENT;
+    case clang::UO_PreInc:
+        return OOModel::UnaryOperation::PREINCREMENT;
+    case clang::UO_PreDec:
+        return OOModel::UnaryOperation::PREDECREMENT;
+    case clang::UO_AddrOf:
+        return OOModel::UnaryOperation::ADDRESSOF;
+    case clang::UO_Deref:
+        return OOModel::UnaryOperation::DEREFERENCE;
+    case clang::UO_Plus:
+        return OOModel::UnaryOperation::PLUS;
+    case clang::UO_Minus:
+        return OOModel::UnaryOperation::MINUS;
+    case clang::UO_Not:
+        return OOModel::UnaryOperation::NOT;
+        //    case clang::UO_LNot:
+        //        return OOModel::UnaryOperation:
+        //    case clang::UO_Real:
+        //        return OOModel::UnaryOperation:
+        //    case clang::UO_Imag:
+        //        return OOModel::UnaryOperation:
+        //    case clang::UO_Extension:
+        //        return OOModel::UnaryOperation:
+    default:
+        return OOModel::UnaryOperation::POSTDECREMENT;
     }
 }
