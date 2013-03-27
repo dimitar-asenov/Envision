@@ -33,6 +33,13 @@ Element::~Element()
 
 }
 
+ElementCache& Element::getCache(Item* item) const
+{
+	if (!elementCache_.contains(item))
+		elementCache_.insert(item, new ElementCache());
+	return *elementCache_.value(item);
+}
+
 }
 
 

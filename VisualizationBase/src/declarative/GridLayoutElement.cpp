@@ -91,7 +91,7 @@ void GridLayoutElement::setItemPositions(Item* item, int parentX, int parentY)
 			if (elementGrid_[x][y] != nullptr)
 			{
 				Element* element = elementGrid_[x][y];
-				element->setItemPositions(item, parentX + pos().x(), parentY + pos().y());
+				element->setItemPositions(item, parentX + pos(item).x(), parentY + pos(item).y());
 			}
 }
 
@@ -112,12 +112,12 @@ void GridLayoutElement::computeSize(Item* item, int availableWidth, int availabl
 				element->computeSize(item, 0, 0); // any additional space is distributed later
 				if (cellSpan.first == 1)
 				{
-					if (element->size().width() > widestInColumn[x]) widestInColumn[x] = element->size().width();
+					if (element->size(item).width() > widestInColumn[x]) widestInColumn[x] = element->size(item).width();
 				}
 				else hasMultiColumn = true;
 				if (cellSpan.second == 1)
 				{
-					if (element->size().height() > tallestInRow[y]) tallestInRow[y] = element->size().height();
+					if (element->size(item).height() > tallestInRow[y]) tallestInRow[y] = element->size(item).height();
 				}
 				else hasMultiRow = true;
 			}
@@ -138,7 +138,7 @@ void GridLayoutElement::computeSize(Item* item, int availableWidth, int availabl
 					}
 					availableSpace += spaceBetweenColumns_ * (spanGrid_[x][y].first - 1);
 
-					int missingSpace = elementGrid_[x][y]->size().width() - availableSpace;
+					int missingSpace = elementGrid_[x][y]->size(item).width() - availableSpace;
 					if (missingSpace > 0)
 					{
 						if (availableStretchFactor == 0) // add the additional space to some column
@@ -160,7 +160,7 @@ void GridLayoutElement::computeSize(Item* item, int availableWidth, int availabl
 					}
 					availableSpace += spaceBetweenRows_ * (spanGrid_[x][y].second - 1);
 
-					int missingSpace = elementGrid_[x][y]->size().height() - availableSpace;
+					int missingSpace = elementGrid_[x][y]->size(item).height() - availableSpace;
 					if (missingSpace > 0)
 					{
 						if (availableStretchFactor == 0) // add the additional space to some column
@@ -209,7 +209,7 @@ void GridLayoutElement::computeSize(Item* item, int availableWidth, int availabl
 		totalHeight = availableHeight;
 	}
 
-	setSize(QSize(totalWidth, totalHeight));
+	setSize(item, QSize(totalWidth, totalHeight));
 
 	// Recompute all the element's sizes, if their size depends on their parent's size
 	for(int x=0; x<numColumns_; x++)
@@ -247,25 +247,25 @@ void GridLayoutElement::computeSize(Item* item, int availableWidth, int availabl
 				if (cellHorizontalAlignmentGrid_[x][y] == LayoutStyle::Alignment::Center)
 				{
 					if (spanGrid_[x][y].first == 1)
-						xPos += (widestInColumn[x] - elementGrid_[x][y]->size().width())/2;
+						xPos += (widestInColumn[x] - elementGrid_[x][y]->size(item).width())/2;
 					else
 					{
 						int localAvailableWidth = 0;
 						for (int column=x; column<x+spanGrid_[x][y].first; column++)
 							localAvailableWidth += widestInColumn[column];
-						xPos += (localAvailableWidth - elementGrid_[x][y]->size().width())/2;
+						xPos += (localAvailableWidth - elementGrid_[x][y]->size(item).width())/2;
 					}
 				}
 				else if (cellHorizontalAlignmentGrid_[x][y] == LayoutStyle::Alignment::Right)
 				{
 					if (spanGrid_[x][y].first == 1)
-						xPos += (widestInColumn[x] - elementGrid_[x][y]->size().width());
+						xPos += (widestInColumn[x] - elementGrid_[x][y]->size(item).width());
 					else
 					{
 						int localAvailableWidth = 0;
 						for (int column=x; column<x+spanGrid_[x][y].first; column++)
 							localAvailableWidth += widestInColumn[column];
-						xPos += (localAvailableWidth - elementGrid_[x][y]->size().width());
+						xPos += (localAvailableWidth - elementGrid_[x][y]->size(item).width());
 					}
 				}
 
@@ -273,29 +273,29 @@ void GridLayoutElement::computeSize(Item* item, int availableWidth, int availabl
 				if (cellVerticalAlignmentGrid_[x][y] == LayoutStyle::Alignment::Center)
 				{
 					if (spanGrid_[x][y].second == 1)
-						yPos += (tallestInRow[y] - elementGrid_[x][y]->size().height())/2;
+						yPos += (tallestInRow[y] - elementGrid_[x][y]->size(item).height())/2;
 					else
 					{
 						int localAvailableHeight = 0;
 						for (int row=y; row<y+spanGrid_[x][y].second; row++)
 							localAvailableHeight += tallestInRow[row];
-						yPos += (localAvailableHeight - elementGrid_[x][y]->size().height())/2;
+						yPos += (localAvailableHeight - elementGrid_[x][y]->size(item).height())/2;
 					}
 				}
 				else if (cellVerticalAlignmentGrid_[x][y] == LayoutStyle::Alignment::Bottom)
 				{
 					if (spanGrid_[x][y].second == 1)
-						yPos += tallestInRow[y] - elementGrid_[x][y]->size().height();
+						yPos += tallestInRow[y] - elementGrid_[x][y]->size(item).height();
 					else
 					{
 						int localAvailableHeight = 0;
 						for (int row=y; row<y+spanGrid_[x][y].second; row++)
 							localAvailableHeight += tallestInRow[row];
-						yPos += localAvailableHeight - elementGrid_[x][y]->size().height();
+						yPos += localAvailableHeight - elementGrid_[x][y]->size(item).height();
 					}
 				}
 
-				elementGrid_[x][y]->setPos(QPoint(xPos, yPos));
+				elementGrid_[x][y]->setPos(item, QPoint(xPos, yPos));
 			}
 
 			top += tallestInRow[y] + spaceBetweenRows_;

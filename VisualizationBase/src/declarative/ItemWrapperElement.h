@@ -74,9 +74,9 @@ void ItemWrapperElement<ParentType,ChildItemType>::computeSize(Item* item, int a
 		if (availableHeight > height) height = availableHeight;
 		if (availableWidth > 0 || availableHeight > 0)
 			childItem->changeGeometry(width - leftMargin() - rightMargin(), height - topMargin() - bottomMargin());
-		setSize(QSize(width, height));
+		setSize(item, QSize(width, height));
 	}
-	else setSize(QSize(0,0));
+	else setSize(item, QSize(0,0));
 }
 
 template <class ParentType, class ChildItemType>
@@ -84,7 +84,7 @@ void ItemWrapperElement<ParentType,ChildItemType>::setItemPositions(Item* item, 
 {
 	auto& childItem = (static_cast<ParentType*>(item))->*this->item();
 	if(childItem)
-		childItem->setPos(parentX + pos().x() + leftMargin(), parentY + pos().y() + topMargin());
+		childItem->setPos(parentX + pos(item).x() + leftMargin(), parentY + pos(item).y() + topMargin());
 }
 
 template <class ParentType, class ChildItemType>

@@ -100,7 +100,7 @@ void SequentialLayoutElement::computeSize(Item* item, int availableWidth, int av
 	if (horizontal) sizeHeight = topMargin() + maxChildHeight + bottomMargin();
 	else sizeWidth = leftMargin() + maxChildWidth + rightMargin();
 
-	setSize(QSize(sizeWidth, sizeHeight));
+	setSize(item, QSize(sizeWidth, sizeHeight));
 
 	// Get the iteration parameters
 	int begin;
@@ -154,7 +154,8 @@ void SequentialLayoutElement::computeSize(Item* item, int availableWidth, int av
 void SequentialLayoutElement::setItemPositions(Item* item, int parentX, int parentY)
 {
 	for (auto i : listForItem(item))
-		i->setPos(parentX + pos().x() + i->pos().x() + leftMargin(), parentY + pos().y() + i->pos().y() + topMargin());
+		i->setPos(parentX + pos(item).x() + i->pos().x() + leftMargin(),
+					parentY + pos(item).y() + i->pos().y() + topMargin());
 }
 
 void SequentialLayoutElement::synchronizeWithItem(Item* item)

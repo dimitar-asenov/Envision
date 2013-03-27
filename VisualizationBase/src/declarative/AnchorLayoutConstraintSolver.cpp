@@ -63,9 +63,9 @@ void AnchorLayoutConstraintSolver::placeElements(QList<Element*>& elements, QLis
 																	QPair<int, float>(startVariable(elementIndex), -1.0)};
 		float size;
 		if (orientation == AnchorLayoutAnchor::Orientation::Horizontal)
-			size = (float) e->size().width();
+			size = (float) e->size(item).width();
 		else // orientation == AnchorLayoutAnchor::Orientation::Vertical
-			size = (float) e->size().height();
+			size = (float) e->size(item).height();
 		if (e->sizeDependsOnParent(item))
 			addGreaterEqualConstraint(constraintRow, size);
 		else
@@ -113,15 +113,15 @@ void AnchorLayoutConstraintSolver::placeElements(QList<Element*>& elements, QLis
 
 		if (orientation == AnchorLayoutAnchor::Orientation::Horizontal)
 		{
-			if (size > element->size().width())
-				element->computeSize(item, size, element->size().height());
-			element->setPos(QPoint(position, element->pos().y()));
+			if (size > element->size(item).width())
+				element->computeSize(item, size, element->size(item).height());
+			element->setPos(item, QPoint(position, element->pos(item).y()));
 		}
 		else // orientation == AnchorLayoutAnchor::Orientation::Vertical
 		{
-			if (size > element->size().height())
-				element->computeSize(item, element->size().width(), size);
-			element->setPos(QPoint(element->pos().x(), position));
+			if (size > element->size(item).height())
+				element->computeSize(item, element->size(item).width(), size);
+			element->setPos(item, QPoint(element->pos(item).x(), position));
 		}
 	}
 }

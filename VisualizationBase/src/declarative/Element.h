@@ -32,6 +32,21 @@
 namespace Visualization {
 
 class Item;
+class ItemRegion;
+
+class ElementCache
+{
+	public:
+		ElementCache() {};
+		void setSize(const QSize& size);
+		void setPos(const QPoint& pos);
+		QSize size() const;
+		QPoint pos() const;
+
+	private:
+		QSize size_{};
+		QPoint pos_{}; // Position relative to the parent element
+};
 
 class VISUALIZATIONBASE_API Element
 {
@@ -50,15 +65,15 @@ class VISUALIZATIONBASE_API Element
 		virtual void computeSize(Item* item, int availableWidth, int availableHeight) = 0;
 		virtual void setItemPositions(Item* item, int parentX=0, int parentY=0) = 0;
 		virtual bool sizeDependsOnParent(const Item* item) const = 0;
-		void setPos(const QPoint& pos);
-		QPoint pos() const;
-		QSize size() const;
+		void setPos(Item* item, const QPoint& pos);
+		QPoint pos(Item* item) const;
+		QSize size(Item* item) const;
 
 	public: // Recursive item destruction
 		virtual void destroyChildItems(Item* item) = 0;
 
 	protected:
-		void setSize(const QSize& size);
+		void setSize(Item* item, const QSize& size);
 		int topMargin();
 		int bottomMargin();
 		int leftMargin();
@@ -69,8 +84,8 @@ class VISUALIZATIONBASE_API Element
 		int marginBottom_{};
 		int marginLeft_{};
 		int marginRight_{};
-		QSize size_{};
-		QPoint pos_{}; // Position relative to the parent element
+		ElementCache& getCache(Item* item) const;
+		mutable QHash<const Item*, ElementCache*> elementCache_{};
 };
 
 inline Element* Element::setMargins(int left, int top, int right, int bottom)
@@ -89,16 +104,21 @@ inline Element* Element::setMargins(int margin)
 	marginBottom_ = margin;
 	return this;
 }
+inline void ElementCache::setSize(const QSize& size) {size_ = size;}
+inline void ElementCache::setPos(const QPoint& pos) {pos_ = pos;}
+inline QSize ElementCache::size() const {return size_;}
+inline QPoint ElementCache::pos() const {return pos_;}
+
 inline Element* Element::setTopMargin(int top) {marginTop_ = top; return this;}
 inline Element* Element::setBottomMargin(int bottom) {marginBottom_ = bottom; return this;}
 inline Element* Element::setLeftMargin(int left) {marginLeft_ = left; return this;}
 inline Element* Element::setRightMargin(int right) {marginRight_ = right; return this;}
 
-inline QSize Element::size() const {return size_;}
-inline void Element::setSize(const QSize& size) {size_ = size;}
+inline QSize Element::size(Item* item) const {return getCache(item).size();}
+inline void Element::setSize(Item* item, const QSize& size) {getCache(item).setSize(size);}
 
-inline QPoint Element::pos() const {return pos_;}
-inline void Element::setPos(const QPoint& pos) {pos_ = pos;}
+inline QPoint Element::pos(Item* item) const {return getCache(item).pos();}
+inline void Element::setPos(Item* item, const QPoint& pos) {getCache(item).setPos(pos);}
 
 inline int Element::topMargin() {return marginTop_;}
 inline int Element::bottomMargin() {return marginBottom_;}

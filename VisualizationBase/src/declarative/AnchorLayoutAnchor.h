@@ -38,7 +38,7 @@ class AnchorLayoutAnchor {
 		AnchorLayoutAnchor(float relativePlaceEdgePosition, Element* placeElement, int offset,
 				float relativeFixedEdgePosition, Element* fixedElement);
 		virtual ~AnchorLayoutAnchor();
-		int execute(Orientation orientation);
+		int execute(Item* item, Orientation orientation);
 		Element* placeElement() const;
 		Element* fixedElement() const;
 		bool dependsOn(AnchorLayoutAnchor* other, QList<AnchorLayoutAnchor*>& allConstraints);

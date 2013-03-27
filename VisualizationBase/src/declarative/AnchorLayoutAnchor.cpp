@@ -43,7 +43,7 @@ AnchorLayoutAnchor::~AnchorLayoutAnchor()
  * Calculates the position in the orientation axis of the element to be placed, assuming it's size was already
  * calculated, and the position on the orientation axis of the fixed element is already fixed.
  */
-int AnchorLayoutAnchor::execute(Orientation orientation)
+int AnchorLayoutAnchor::execute(Item* item, Orientation orientation)
 {
 	Q_ASSERT(orientation != Orientation::Auto);
 
@@ -54,17 +54,17 @@ int AnchorLayoutAnchor::execute(Orientation orientation)
 
 	if (orientation == Orientation::Horizontal)
 	{
-		fixedElementPosition = fixedElement_->pos().x();
-		fixedElementSize = fixedElement_->size().width();
-		placeElementPosition = placeElement_->pos().x();
-		placeElementSize = placeElement_->size().width();
+		fixedElementPosition = fixedElement_->pos(item).x();
+		fixedElementSize = fixedElement_->size(item).width();
+		placeElementPosition = placeElement_->pos(item).x();
+		placeElementSize = placeElement_->size(item).width();
 	}
 	else // orientation == Orientation::Vertical
 	{
-		fixedElementPosition = fixedElement_->pos().y();
-		fixedElementSize = fixedElement_->size().height();
-		placeElementPosition = placeElement_->pos().y();
-		placeElementSize = placeElement_->size().height();
+		fixedElementPosition = fixedElement_->pos(item).y();
+		fixedElementSize = fixedElement_->size(item).height();
+		placeElementPosition = placeElement_->pos(item).y();
+		placeElementSize = placeElement_->size(item).height();
 	}
 
 	int edgePosition = fixedElementPosition + offset_ + fixedElementSize * relativeFixedEdgePosition_;
@@ -72,9 +72,9 @@ int AnchorLayoutAnchor::execute(Orientation orientation)
 	if (newPosition != placeElementPosition)
 	{
 		if (orientation == Orientation::Horizontal)
-			placeElement_->setPos(QPoint(newPosition, placeElement_->pos().y()));
+			placeElement_->setPos(item, QPoint(newPosition, placeElement_->pos(item).y()));
 		else // orientation == Orientation::Vertical
-			placeElement_->setPos(QPoint(placeElement_->pos().x(), newPosition));
+			placeElement_->setPos(item, QPoint(placeElement_->pos(item).x(), newPosition));
 	}
 	return newPosition;
 }

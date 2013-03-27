@@ -90,7 +90,7 @@ void AnchorLayoutElement::computeSize(Item* item, int /*availableWidth*/, int /*
 	for (Element* element : elementList_)
 	{
 		element->computeSize(item, 0, 0);
-		element->setPos(QPoint(0, 0));
+		element->setPos(item, QPoint(0, 0));
 	}
 
 	// place elements horizontally
@@ -107,21 +107,21 @@ void AnchorLayoutElement::computeSize(Item* item, int /*availableWidth*/, int /*
 	int maxY = 0;
 	for (Element* element : elementList_)
 	{
-		element->setPos(QPoint(element->pos().x() + adjustmentX, element->pos().y() + adjustmentY));
-		int rightEdge = element->pos().x() + element->size().width();
-		int bottomEdge = element->pos().y() + element->size().height();
+		element->setPos(item, QPoint(element->pos(item).x() + adjustmentX, element->pos(item).y() + adjustmentY));
+		int rightEdge = element->pos(item).x() + element->size(item).width();
+		int bottomEdge = element->pos(item).y() + element->size(item).height();
 		if (rightEdge > maxX)
 			maxX = rightEdge;
 		if (bottomEdge > maxY)
 			maxY = bottomEdge;
 	}
-	setSize(QSize(maxX + rightMargin(), maxY + bottomMargin()));
+	setSize(item, QSize(maxX + rightMargin(), maxY + bottomMargin()));
 }
 
 void AnchorLayoutElement::setItemPositions(Item* item, int parentX, int parentY)
 {
 	for(Element* element : elementList_)
-		element->setItemPositions(item, parentX + pos().x(), parentY + pos().y());
+		element->setItemPositions(item, parentX + pos(item).x(), parentY + pos(item).y());
 }
 
 void AnchorLayoutElement::synchronizeWithItem(Item* item)
@@ -236,7 +236,7 @@ int AnchorLayoutElement::placeElements(QList<AnchorLayoutAnchor*>& constraints,
 	else
 		for (auto c : constraints)
 		{
-			int pos = c->execute(orientation);
+			int pos = c->execute(item, orientation);
 			if (pos < minPos)
 				minPos = pos;
 		}
