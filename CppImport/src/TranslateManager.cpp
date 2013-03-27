@@ -59,6 +59,21 @@ OOModel::Class* TranslateManager::insertClass(clang::CXXRecordDecl* rDecl)
     return ooClass;
 }
 
+OOModel::Class *TranslateManager::insertStruct(clang::CXXRecordDecl* sDecl)
+{
+    OOModel::Class* ooClass = nullptr;
+    // if rdecl is not managed yet add it:
+    if(!structMap_.contains(sDecl))
+    {
+        ooClass = new OOModel::Class();
+            ooClass->setName(QString::fromStdString(sDecl->getNameAsString()));
+        classMap_.insert(sDecl,ooClass);
+    }
+    else
+        std::cout << "ERROR TRANSLATEMNGR: CLASS"<< sDecl->getNameAsString() << " ALREADY IN MAP" << std::endl;
+    return ooClass;
+}
+
 OOModel::Method* TranslateManager::insertMethodDecl(clang::CXXMethodDecl* mDecl)
 {
     OOModel::Method* method = nullptr;

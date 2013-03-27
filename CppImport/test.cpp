@@ -1,5 +1,5 @@
 #include "test.h"
-#include <iostream>
+//#include <iostream>
 //TEst comment
 
 int NOCLASSFIELD;
@@ -85,5 +85,5 @@ int Header::headerFunc()
 int Header::headerFunc(int k)
 {
     int anotherVar;
-    return 100;
+    return headerFunc();
 }

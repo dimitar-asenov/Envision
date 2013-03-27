@@ -92,6 +92,7 @@ public:
     bool VisitStmt(clang::Stmt* S);
     bool VisitFieldDecl(clang::FieldDecl* fd);
 
+    bool VisitCallExpr(clang::CallExpr* cExpr);
     bool VisitIntegerLiteral(clang::IntegerLiteral* intLit);
     bool VisitDeclRefExpr(clang::DeclRefExpr* declRef);
 
