@@ -229,7 +229,7 @@ bool ClangAstVisitor::VisitStmt(clang::Stmt* S)
 {
     //    std::cout << "VISITING STMT" << std::endl;
     //    llvm::errs() << "VISITING STMT" << "\n";
-        S->dump();
+//        S->dump();
     return Base::VisitStmt(S);
 }
 
@@ -333,6 +333,18 @@ bool ClangAstVisitor::VisitDeclRefExpr(clang::DeclRefExpr* declRef)
     OOModel::ReferenceExpression* refExpr = new OOModel::ReferenceExpression();
     refExpr->setName(QString::fromStdString(declRef->getNameInfo().getName().getAsString()));
     ooExprStack_.push(refExpr);
+    return true;
+}
+
+bool ClangAstVisitor::VisitBreakStmt(clang::BreakStmt *bStmt)
+{
+    //-unused var
+    bStmt->getBreakLoc();
+    OOModel::BreakStatement* ooBreak = new OOModel::BreakStatement();
+    OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top());
+    if(itemList) itemList->append(ooBreak);
+    else
+        log_->writeError(className_,QString("not able to put break stmt"),QString("BreakStmt"),std::string("bStmt"));
     return true;
 }
 

@@ -97,6 +97,8 @@ public:
     bool VisitCXXBoolLiteralExpr(clang::CXXBoolLiteralExpr* bExpr);
     bool VisitDeclRefExpr(clang::DeclRefExpr* declRef);
 
+    bool VisitBreakStmt(clang::BreakStmt* bStmt);
+
     bool shouldUseDataRecursionFor(clang::Stmt* S);
 
 private:
