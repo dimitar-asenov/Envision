@@ -82,8 +82,8 @@ public:
     bool TraverseUnaryPostDec(clang::UnaryOperator* uOp);
     bool TraverseUnaryPreInc(clang::UnaryOperator* uOp);
     bool TraverseUnaryPreDec(clang::UnaryOperator* uOp);
-//    bool TraverseUnaryAddrOf(clang::UnaryOperator* uOp);
-//    bool TraverseUnaryDeref(clang::UnaryOperator* uOp);
+    bool TraverseUnaryAddrOf(clang::UnaryOperator* uOp);
+    bool TraverseUnaryDeref(clang::UnaryOperator* uOp);
     bool TraverseUnaryPlus(clang::UnaryOperator* uOp);
     bool TraverseUnaryMinus(clang::UnaryOperator* uOp);
     bool TraverseUnaryNot(clang::UnaryOperator* uOp);
@@ -185,10 +185,10 @@ inline bool ClangAstVisitor::TraverseUnaryPreInc(clang::UnaryOperator* uOp)
 {return TraverseUnaryOp(uOp);}
 inline bool ClangAstVisitor::TraverseUnaryPreDec(clang::UnaryOperator* uOp)
 {return TraverseUnaryOp(uOp);}
-//inline bool ClangAstVisitor::TraverseUnaryAddrOf(clang::UnaryOperator* uOp)
-//{return TraverseUnaryOp(uOp);}
-//inline bool ClangAstVisitor::TraverseUnaryDeref(clang::UnaryOperator* uOp)
-//{return TraverseUnaryOp(uOp);}
+inline bool ClangAstVisitor::TraverseUnaryAddrOf(clang::UnaryOperator* uOp)
+{return TraverseUnaryOp(uOp);}
+inline bool ClangAstVisitor::TraverseUnaryDeref(clang::UnaryOperator* uOp)
+{return TraverseUnaryOp(uOp);}
 inline bool ClangAstVisitor::TraverseUnaryPlus(clang::UnaryOperator* uOp)
 {return TraverseUnaryOp(uOp);}
 inline bool ClangAstVisitor::TraverseUnaryMinus(clang::UnaryOperator* uOp)
