@@ -56,21 +56,21 @@ bool ModelBase::initialize(Core::EnvisionManager&)
 	ModelManager::init();
 
 	logger = Logger::Log::getLogger("modelbase");
-	Text::registerNodeType();
-	Integer::registerNodeType();
-	Float::registerNodeType();
-	Boolean::registerNodeType();
-	Character::registerNodeType();
-	Reference::registerNodeType();
-	ExtendableNode::registerNodeType();
-	List::registerNodeType();
+	Text::init();
+	Integer::init();
+	Float::init();
+	Boolean::init();
+	Character::init();
+	Reference::init();
+	ExtendableNode::init();
+	List::init();
 
-	TypedList<Text>::registerNodeType();
-	TypedList<Integer>::registerNodeType();
-	TypedList<Float>::registerNodeType();
-	TypedList<Boolean>::registerNodeType();
-	TypedList<Character>::registerNodeType();
-	TypedList<Reference>::registerNodeType();
+	TypedList<Text>::init();
+	TypedList<Integer>::init();
+	TypedList<Float>::init();
+	TypedList<Boolean>::init();
+	TypedList<Character>::init();
+	TypedList<Reference>::init();
 
 	return true;
 }

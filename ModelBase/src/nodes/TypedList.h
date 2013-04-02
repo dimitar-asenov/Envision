@@ -130,6 +130,12 @@ void TypedList<T>::registerNodeType()
 			::Model::createNodeFromPersistence<TypedList<T> >);
 }
 
+template<class T>
+void TypedList<T>::init()
+{
+	registerNodeType();
+}
+
 template<class T> T* TypedList<T>::first()
 {
 	return List::first<T>();

@@ -58,6 +58,7 @@
 		static const QString& typeNameStatic();																								\
 		static int typeIdStatic();																													\
 		static void registerNodeType();																											\
+		static void init();																															\
 																																							\
 	private:																																				\
 		static int typeId_;																															\
@@ -212,6 +213,11 @@ void className::registerNodeType()																												\
 {																																							\
 	typeId_ = Node::registerNodeType(#className, ::Model::createNewNode< className >,											\
 			::Model::createNodeFromPersistence< className >);																				\
+}																																							\
+																																							\
+void className::init()																																\
+{																																							\
+	registerNodeType();																																\
 }
 /*********************************************************************************************************************/
 
