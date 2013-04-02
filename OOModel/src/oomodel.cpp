@@ -33,126 +33,15 @@ Q_EXPORT_PLUGIN2( oomodel, OOModel::OOModel )
 
 namespace OOModel {
 
+Model::InitializationRegistry& nodeTypeInitializationRegistry()
+{
+	static Model::InitializationRegistry r;
+	return r;
+}
+
 bool OOModel::initialize(Core::EnvisionManager&)
 {
-	// Initialize common nodes
-	Visibility::registerNodeType();
-	StorageSpecifier::registerNodeType();
-	OOReference::registerNodeType();
-
-	// Register TypedList instantiations
-	Model::TypedList<Project>::init();
-	Model::TypedList<Library>::init();
-	Model::TypedList<Module>::init();
-	Model::TypedList<Class>::init();
-	Model::TypedList<Method>::init();
-	Model::TypedList<StatementItem>::init();
-	Model::TypedList<FormalArgument>::init();
-	Model::TypedList<FormalResult>::init();
-	Model::TypedList<FormalTypeArgument>::init();
-	Model::TypedList<Field>::init();
-	Model::TypedList<OOReference>::init();
-	Model::TypedList<CatchClause>::init();
-
-	Model::TypedList<Statement>::init();
-	Model::TypedList<Block>::init();
-	Model::TypedList<BreakStatement>::init();
-	Model::TypedList<ContinueStatement>::init();
-	Model::TypedList<ForEachStatement>::init();
-	Model::TypedList<IfStatement>::init();
-	Model::TypedList<LoopStatement>::init();
-	Model::TypedList<ReturnStatement>::init();
-	Model::TypedList<SwitchCase>::init();
-	Model::TypedList<SwitchStatement>::init();
-	Model::TypedList<VariableDeclaration>::init();
-	Model::TypedList<ExpressionStatement>::init();
-	Model::TypedList<TryCatchFinallyStatement>::init();
-
-	Model::TypedList<Expression>::init();
-	Model::TypedList<IntegerLiteral>::init();
-	Model::TypedList<FloatLiteral>::init();
-	Model::TypedList<BooleanLiteral>::init();
-	Model::TypedList<StringLiteral>::init();
-	Model::TypedList<CharacterLiteral>::init();
-	Model::TypedList<NullLiteral>::init();
-	Model::TypedList<ThisExpression>::init();
-	Model::TypedList<NewExpression>::init();
-	Model::TypedList<MethodCallExpression>::init();
-	Model::TypedList<UnaryOperation>::init();
-	Model::TypedList<BinaryOperation>::init();
-	Model::TypedList<CastExpression>::init();
-	Model::TypedList<ReferenceExpression>::init();
-	Model::TypedList<ArrayInitializer>::init();
-	Model::TypedList<ErrorExpression>::init();
-	Model::TypedList<UnfinishedOperator>::init();
-	Model::TypedList<EmptyExpression>::init();
-	Model::TypedList<CommaExpression>::init();
-	Model::TypedList<AssignmentExpression>::init();
-	Model::TypedList<ConditionalExpression>::init();
-	Model::TypedList<ThrowExpression>::init();
-	Model::TypedList<LambdaExpression>::init();
-
-	Model::TypedList<TypeExpression>::init();
-	Model::TypedList<PrimitiveTypeExpression>::init();
-	Model::TypedList<ClassTypeExpression>::init();
-	Model::TypedList<ArrayTypeExpression>::init();
-
-	// Initialize OO Node types
-	Project::init();
-	Library::init();
-	Module::init();
-	Class::init();
-	Method::init();
-	StatementItem::init();
-	StatementItemList::init();
-	FormalArgument::init();
-	FormalResult::init();
-	FormalTypeArgument::init();
-	Field::init();
-	CatchClause::init();
-
-	Statement::init();
-	Block::init();
-	BreakStatement::init();
-	ContinueStatement::init();
-	ForEachStatement::init();
-	IfStatement::init();
-	LoopStatement::init();
-	ReturnStatement::init();
-	SwitchCase::init();
-	SwitchStatement::init();
-	VariableDeclaration::init();
-	ExpressionStatement::init();
-	TryCatchFinallyStatement::init();
-
-	Expression::init();
-	IntegerLiteral::init();
-	FloatLiteral::init();
-	BooleanLiteral::init();
-	StringLiteral::init();
-	CharacterLiteral::init();
-	NullLiteral::init();
-	ThisExpression::init();
-	NewExpression::init();
-	MethodCallExpression::init();
-	UnaryOperation::init();
-	BinaryOperation::init();
-	CastExpression::init();
-	ReferenceExpression::init();
-	ArrayInitializer::init();
-	EmptyExpression::init();
-	ErrorExpression::init();
-	UnfinishedOperator::init();
-	CommaExpression::init();
-	AssignmentExpression::init();
-	ConditionalExpression::init();
-	ThrowExpression::init();
-	LambdaExpression::init();
-
-	TypeExpression::init();
-	PrimitiveTypeExpression::init();
-	ClassTypeExpression::init();
-	ArrayTypeExpression::init();
+	nodeTypeInitializationRegistry().initializeAll();
 
 	// Register default element creation functions for some lists
 	Model::TypedList<StatementItem>::setDefaultElementCreationFunction([]() -> StatementItem* {

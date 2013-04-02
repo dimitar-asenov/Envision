@@ -58,6 +58,12 @@ Q_EXPORT_PLUGIN2( visualizationbase, Visualization::VisualizationBase )
 namespace Visualization
 {
 
+Model::InitializationRegistry& nodeTypeInitializationRegistry()
+{
+	static Model::InitializationRegistry r;
+	return r;
+}
+
 bool VisualizationBase::initialize(Core::EnvisionManager& manager)
 {
 	VisualizationManager& vmi = VisualizationManager::instance();
@@ -69,7 +75,7 @@ bool VisualizationBase::initialize(Core::EnvisionManager& manager)
 
 	// Register extensions and nodes
 	Position::registerExtension();
-	TestBoxNode::init();
+	nodeTypeInitializationRegistry().initializeAll();
 
 	// Register visualizations
 	Scene::defaultRenderer()->registerVisualization(

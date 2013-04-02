@@ -28,6 +28,7 @@
 #include "ModelBase/src/test_nodes/BinaryNode.h"
 #include "ModelBase/src/test_nodes/BinaryNodePersistenceUnit.h"
 #include "ModelBase/src/test_nodes/PartialList.h"
+#include "ModelBase/src/test_nodes/TestNodesInitializer.h"
 
 #include "SelfTest/src/SelfTestSuite.h"
 
@@ -49,9 +50,7 @@ void FilePersistence::unload()
 
 void FilePersistence::selfTest(QString)
 {
-	TestNodes::BinaryNode::init();
-	TestNodes::BinaryNodePersistenceUnit::init();
-	TestNodes::PartialList::init();
+	TestNodes::nodeTypeInitializationRegistry().initializeAll();
 	SelfTest::TestManager<FilePersistence>::runAllTests().printResultStatistics();
 }
 

@@ -26,23 +26,21 @@
 
 #pragma once
 
-#include "Core/src/EnvisionPlugin.h"
-#include "visualizationbase_api.h"
-#include "ModelBase/src/InitializationRegistry.h"
+#include "modelbase_api.h"
 
-namespace Visualization {
+namespace Model {
 
-class VisualizationBase : public QObject, public Core::EnvisionPlugin
+class MODELBASE_API InitializationRegistry
 {
-	Q_OBJECT
-	Q_INTERFACES(Core::EnvisionPlugin)
-
 	public:
-		virtual bool initialize(Core::EnvisionManager&) override;
-		virtual void unload() override;
-		virtual void selfTest(QString testid) override;
-};
+		using InitializationFunction = std::function<void ()>;
 
-VISUALIZATIONBASE_API Model::InitializationRegistry& nodeTypeInitializationRegistry();
+		void add(InitializationFunction func);
+		void initializeAll();
+
+	private:
+		QList<InitializationFunction> initializationFunctions_;
+		bool initialized_{false};
+};
 
 }

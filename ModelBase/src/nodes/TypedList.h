@@ -88,7 +88,16 @@ TypedList<T>::TypedList(::Model::Node *parent, ::Model::PersistentStore &store, 
 {
 }
 
-template<class T> int TypedList<T>::typeId_ = -1; /* This must be set to the result of Node::registerNodeType */
+template<class T>
+::Model::InitializationRegistry& TypedList<T>::initializationRegistry()
+{
+	return T::initializationRegistry();
+}
+
+// This must be set to the result of Node::registerNodeType
+// This variable uses a clever trick to register an initialization function that will be called during the
+// plug-in's initialization routine
+template<class T> int TypedList<T>::typeId_ = (initializationRegistry().add(TypedList<T>::init) , -1);
 
 template<class T>
 const QString& TypedList<T>::typeName() const

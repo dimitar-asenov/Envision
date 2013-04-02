@@ -3,7 +3,9 @@ include(../Core/common_plugin.pri)
 DEFINES += MODELBASE_LIBRARY
 win32:LIBS += -llogger \
     -lselftest
-HEADERS += src/commands/NodeOwningCommand.h \
+HEADERS += src/test_nodes/TestNodesInitializer.h \
+    src/InitializationRegistry.h \
+    src/commands/NodeOwningCommand.h \
     src/model/ModelManager.h \
     src/concurrent/InterruptibleThread.h \
     src/concurrent/NodeReadWriteLock.h \
@@ -52,7 +54,9 @@ HEADERS += src/commands/NodeOwningCommand.h \
     src/commands/SetModificationTarget.h \
     test/PersistentStoreMock.h \
     src/modelbase.h
-SOURCES += src/commands/NodeOwningCommand.cpp \
+SOURCES += src/test_nodes/TestNodesInitializer.cpp \
+    src/InitializationRegistry.cpp \
+    src/commands/NodeOwningCommand.cpp \
     src/model/ModelManager.cpp \
     src/concurrent/NodeReadWriteLock.cpp \
     src/model/Model.cpp \
