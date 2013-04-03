@@ -7,7 +7,8 @@ win32:LIBS += -llogger \
     -loomodel \
     -lvisualizationbase \
     -linteractionbase \
-    -loovisualization
+    -loovisualization \
+    -lfilepersistence
 HEADERS += src/customization/CustomizationVisitor.h \
     src/expression_editor/operators/commands/CommandExpression.h \
     src/expression_editor/operators/commands/CreateMethodCall.h \
@@ -29,7 +30,6 @@ HEADERS += src/customization/CustomizationVisitor.h \
     src/commands/CCreateProject.h \
     src/commands/CCreateMethod.h \
     src/commands/CCreateClass.h \
-    ../InteractionBase/src/commands/CreateNamedObjectWithAttributes.h \
     src/string_offset_providers/UnaryOperatorStringOffsetProvider.h \
     src/string_offset_providers/Cell.h \
     src/string_offset_providers/ListCell.h \
@@ -119,7 +119,6 @@ SOURCES += src/customization/CustomizationVisitor.cpp \
     src/commands/CCreateProject.cpp \
     src/commands/CCreateMethod.cpp \
     src/commands/CCreateClass.cpp \
-    ../InteractionBase/src/commands/CreateNamedObjectWithAttributes.cpp \
     src/string_offset_providers/UnaryOperatorStringOffsetProvider.cpp \
     src/string_offset_providers/Cell.cpp \
     src/string_offset_providers/ListCell.cpp \

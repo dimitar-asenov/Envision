@@ -66,7 +66,6 @@ inline Timer* Timer::start(const QString& timer) { auto t = Timer::timer(timer);
 inline qint64 Timer::tick(const QString& timer) { return Timer::timer(timer)->tick(); }
 inline QStringList Timer::timerNames() { return timers().keys(); }
 
-inline void Timer::start() { qtTimer_.start(); }
 inline const QString& Timer::name() const { return name_; }
 inline const QList<qint64> Timer::values() const { return values_; }
 inline double Timer::totalAverage() const { return (double) totalSum_/totalCount_; }

@@ -60,6 +60,10 @@ void Timer::setNumValuesLimit(int limit)
 	while (values_.size() > limit) values_.removeFirst();
 }
 
+void Timer::start()
+{
+	qtTimer_.start();
+}
 
 qint64 Timer::tick()
 {
