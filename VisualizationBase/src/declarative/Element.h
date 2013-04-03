@@ -70,7 +70,7 @@ class VISUALIZATIONBASE_API Element
 		QSize size(Item* item) const;
 
 	public: // Recursive item destruction
-		virtual void destroyChildItems(Item* item) = 0;
+		virtual void destroyChildItems(Item* item);
 
 	protected:
 		void setSize(Item* item, const QSize& size);

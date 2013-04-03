@@ -40,6 +40,21 @@ ElementCache& Element::getCache(Item* item) const
 	return *elementCache_.value(item);
 }
 
+void Element::clearCache(Item* item)
+{
+	if (elementCache_.contains(item))
+	{
+		auto e = elementCache_.value(item);
+		elementCache_.remove(item);
+		SAFE_DELETE(e);
+	}
+}
+
+void Element::destroyChildItems(Item* item)
+{
+	clearCache(item);
+}
+
 }
 
 

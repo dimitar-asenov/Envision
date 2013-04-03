@@ -155,6 +155,7 @@ AnchorLayoutElement* AnchorLayoutElement::put(AnchorLayoutAnchor::Orientation or
 
 void AnchorLayoutElement::destroyChildItems(Item* item)
 {
+	LayoutElement::destroyChildItems(item);
 	for (Element* element : elementList_) element->destroyChildItems(item);
 }
 

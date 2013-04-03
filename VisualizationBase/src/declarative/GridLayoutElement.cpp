@@ -62,6 +62,7 @@ GridLayoutElement::~GridLayoutElement()
 
 void GridLayoutElement::destroyChildItems(Item* item)
 {
+	LayoutElement::destroyChildItems(item);
 	for(int x=0; x<numColumns_; x++)
 		for(int y=0; y<numRows_; y++)
 			elementGrid_[x][y]->destroyChildItems(item);

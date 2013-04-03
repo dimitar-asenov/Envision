@@ -186,6 +186,7 @@ bool SequentialLayoutElement::sizeDependsOnParent(const Item* item) const
 
 void SequentialLayoutElement::destroyChildItems(Item* item)
 {
+	LayoutElement::destroyChildItems(item);
 	if (itemListMap_.contains(item))
 	{
 		for (auto i : *itemListMap_.value(item))

@@ -99,6 +99,7 @@ bool ItemWrapperElement<ParentType,ChildItemType>::sizeDependsOnParent(const Ite
 template <class ParentType, class ChildItemType>
 void ItemWrapperElement<ParentType,ChildItemType>::destroyChildItems(Item* item)
 {
+	Element::destroyChildItems(item);
 	auto& childItem = (static_cast<ParentType*>(item))->*this->item();
 	SAFE_DELETE_ITEM(childItem);
 }
