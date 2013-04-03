@@ -156,8 +156,7 @@ void SequentialLayoutElement::computeSize(Item* item, int availableWidth, int av
 void SequentialLayoutElement::setItemPositions(Item* item, int parentX, int parentY)
 {
 	for (auto i : listForItem(item))
-		i->setPos(parentX + pos(item).x() + i->pos().x() + leftMargin(),
-					parentY + pos(item).y() + i->pos().y() + topMargin());
+		i->setPos(parentX + x(item) + i->x() + leftMargin(), parentY + y(item) + i->y() + topMargin());
 }
 
 void SequentialLayoutElement::synchronizeWithItem(Item* item)
@@ -296,7 +295,7 @@ QList<ItemRegion> SequentialLayoutElement::regions(Item* item, int parentX, int 
 	if (itemList.isEmpty() && !hasCursorWhenEmpty_)
 		return regs;
 
-	QRect wholeArea = QRect(QPoint(pos(item).x() + parentX, pos(item).y() + parentY), size(item));
+	QRect wholeArea = QRect(QPoint(x(item) + parentX, y(item) + parentY), size(item));
 	QRect elementsArea = QRect(QPoint(wholeArea.left() + leftMargin(), wholeArea.top() + topMargin()),
 										QPoint(wholeArea.right() - rightMargin(), wholeArea.bottom() - bottomMargin()));
 
@@ -352,7 +351,7 @@ QList<ItemRegion> SequentialLayoutElement::regions(Item* item, int parentX, int 
 		cursorRegion.setCursor(lc);
 		lc->setIndex(i);
 		lc->setVisualizationPosition(cursorRegion.region().topLeft());
-		lc->setVisualizationSize(horizontal ? QSize(2, size(item).height()) : QSize(size(item).width(), 2));
+		lc->setVisualizationSize(horizontal ? QSize(2, height(item)) : QSize(width(item), 2));
 		lc->setOwnerElement(this);
 		if (i==0) lc->setIsAtBoundary(true);
 
@@ -386,7 +385,7 @@ QList<ItemRegion> SequentialLayoutElement::regions(Item* item, int parentX, int 
 		regs.last().setCursor(lc);
 		lc->setIndex(itemList.size());
 		lc->setVisualizationPosition(regs.last().region().topLeft());
-		lc->setVisualizationSize(horizontal ? QSize(2, size(item).height()) : QSize(size(item).width(), 2));
+		lc->setVisualizationSize(horizontal ? QSize(2, height(item)) : QSize(width(item), 2));
 		lc->setRegion(trailing);
 		lc->setIsAtBoundary(true);
 		if (notLocationEquivalentCursors_) lc->setNotLocationEquivalent(true);
@@ -411,5 +410,3 @@ inline void SequentialLayoutElement::adjustCursorRegionToAvoidZeroSize(QRect& re
 }
 
 }
-
-

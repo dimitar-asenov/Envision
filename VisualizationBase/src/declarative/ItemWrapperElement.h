@@ -85,7 +85,7 @@ void ItemWrapperElement<ParentType,ChildItemType>::setItemPositions(Item* item, 
 {
 	auto& childItem = (static_cast<ParentType*>(item))->*this->item();
 	if(childItem)
-		childItem->setPos(parentX + pos(item).x() + leftMargin(), parentY + pos(item).y() + topMargin());
+		childItem->setPos(parentX + x(item) + leftMargin(), parentY + y(item) + topMargin());
 }
 
 template <class ParentType, class ChildItemType>

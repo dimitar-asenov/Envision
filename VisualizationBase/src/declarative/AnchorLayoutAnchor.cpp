@@ -54,17 +54,17 @@ int AnchorLayoutAnchor::execute(Item* item, Orientation orientation)
 
 	if (orientation == Orientation::Horizontal)
 	{
-		fixedElementPosition = fixedElement_->pos(item).x();
-		fixedElementSize = fixedElement_->size(item).width();
-		placeElementPosition = placeElement_->pos(item).x();
-		placeElementSize = placeElement_->size(item).width();
+		fixedElementPosition = fixedElement_->x(item);
+		fixedElementSize = fixedElement_->width(item);
+		placeElementPosition = placeElement_->x(item);
+		placeElementSize = placeElement_->width(item);
 	}
 	else // orientation == Orientation::Vertical
 	{
-		fixedElementPosition = fixedElement_->pos(item).y();
-		fixedElementSize = fixedElement_->size(item).height();
-		placeElementPosition = placeElement_->pos(item).y();
-		placeElementSize = placeElement_->size(item).height();
+		fixedElementPosition = fixedElement_->y(item);
+		fixedElementSize = fixedElement_->height(item);
+		placeElementPosition = placeElement_->y(item);
+		placeElementSize = placeElement_->height(item);
 	}
 
 	int edgePosition = fixedElementPosition + offset_ + fixedElementSize * relativeFixedEdgePosition_;
@@ -72,9 +72,9 @@ int AnchorLayoutAnchor::execute(Item* item, Orientation orientation)
 	if (newPosition != placeElementPosition)
 	{
 		if (orientation == Orientation::Horizontal)
-			placeElement_->setPos(item, QPoint(newPosition, placeElement_->pos(item).y()));
+			placeElement_->setPos(item, QPoint(newPosition, placeElement_->y(item)));
 		else // orientation == Orientation::Vertical
-			placeElement_->setPos(item, QPoint(placeElement_->pos(item).x(), newPosition));
+			placeElement_->setPos(item, QPoint(placeElement_->x(item), newPosition));
 	}
 	return newPosition;
 }

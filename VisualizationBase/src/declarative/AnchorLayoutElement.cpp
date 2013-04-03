@@ -108,13 +108,9 @@ void AnchorLayoutElement::computeSize(Item* item, int /*availableWidth*/, int /*
 	int maxY = 0;
 	for (Element* element : elementList_)
 	{
-		element->setPos(item, QPoint(element->pos(item).x() + adjustmentX, element->pos(item).y() + adjustmentY));
-		int rightEdge = element->pos(item).x() + element->size(item).width();
-		int bottomEdge = element->pos(item).y() + element->size(item).height();
-		if (rightEdge > maxX)
-			maxX = rightEdge;
-		if (bottomEdge > maxY)
-			maxY = bottomEdge;
+		element->setPos(item, QPoint(element->x(item) + adjustmentX, element->y(item) + adjustmentY));
+		if (element->xEnd(item) > maxX) maxX = element->xEnd(item);
+		if (element->yEnd(item) > maxY) maxY = element->yEnd(item);
 	}
 	setSize(item, QSize(maxX + rightMargin(), maxY + bottomMargin()));
 }
@@ -122,7 +118,7 @@ void AnchorLayoutElement::computeSize(Item* item, int /*availableWidth*/, int /*
 void AnchorLayoutElement::setItemPositions(Item* item, int parentX, int parentY)
 {
 	for(Element* element : elementList_)
-		element->setItemPositions(item, parentX + pos(item).x(), parentY + pos(item).y());
+		element->setItemPositions(item, parentX + x(item), parentY + y(item));
 }
 
 void AnchorLayoutElement::synchronizeWithItem(Item* item)
@@ -140,7 +136,7 @@ QList<ItemRegion> AnchorLayoutElement::regions(Item* item, int parentX, int pare
 {
 	QList<ItemRegion> allRegions;
 	for (auto element : elementList_)
-		allRegions.append(element->regions(item, pos(item).x() + parentX, pos(item).y() + parentY));
+		allRegions.append(element->regions(item, x(item) + parentX, y(item) + parentY));
 	return allRegions;
 }
 

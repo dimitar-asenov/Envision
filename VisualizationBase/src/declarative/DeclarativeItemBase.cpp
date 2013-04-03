@@ -61,15 +61,15 @@ void DeclarativeItemBase::updateGeometry(int availableWidth, int availableHeight
 			QSize inner = getShape()->innerSize(availableWidth, availableHeight);
 			currentForm->computeSize(this, inner.width(), inner.height());
 
-			if (currentForm->size(this).width() > inner.width()) inner.setWidth(currentForm->size(this).width());
-			if (currentForm->size(this).height() > inner.height()) inner.setHeight(currentForm->size(this).height());
+			if (currentForm->width(this) > inner.width()) inner.setWidth(currentForm->width(this));
+			if (currentForm->height(this) > inner.height()) inner.setHeight(currentForm->height(this));
 
 			getShape()->setInnerSize(inner.width(), inner.height());
 		}
 		else
 		{
 			currentForm->computeSize(this, 0, 0);
-			getShape()->setInnerSize(currentForm->size(this).width(), currentForm->size(this).height());
+			getShape()->setInnerSize(currentForm->width(this), currentForm->height(this));
 		}
 
 		currentForm->setPos(this, QPoint(getShape()->contentLeft(), getShape()->contentTop()));
