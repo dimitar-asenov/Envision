@@ -65,6 +65,10 @@ class VISUALIZATIONBASE_API SequentialLayoutElement : public LayoutElement
 		SequentialLayoutElement* setForward(bool forward);
 		SequentialLayoutElement* setMinWidth(int minWidth);
 		SequentialLayoutElement* setMinHeight(int minHeight);
+		SequentialLayoutElement* setHasCursorWhenEmpty(bool cursorWhenEmpty);
+		SequentialLayoutElement* setNotLocationEquivalentCursors(bool notLocationEquivalent);
+		SequentialLayoutElement* setNoBoudaryCursors(bool noBoundaryCursors);
+		SequentialLayoutElement* setNoInnerCursors(bool noInnerCursors);
 
 		// Methods executable when items need to be rendered
 		virtual void computeSize(Item* item, int availableWidth, int availableHeight) override;
@@ -89,6 +93,10 @@ class VISUALIZATIONBASE_API SequentialLayoutElement : public LayoutElement
 		bool forward_{true};
 		int minWidth_{};
 		int minHeight_{};
+		bool hasCursorWhenEmpty_{false};
+		bool notLocationEquivalentCursors_{false};
+		bool noBoundaryCursors_{false};
+		bool noInnerCursors_{false};
 
 		mutable QHash<const Item*, QList<Item*>*> itemListMap_{};
 
@@ -97,6 +105,7 @@ class VISUALIZATIONBASE_API SequentialLayoutElement : public LayoutElement
 		void synchronizeWithNodes(Item* item, const QList<Model::Node*>& nodes);
 		void synchronizeWithItems(Item* item, const QList<Item*>& items);
 		void swap(Item* item, int i, int j);
+		void adjustCursorRegionToAvoidZeroSize(QRect& region, bool horizontal, bool first, bool last);
 };
 
 inline SequentialLayoutElement* SequentialLayoutElement::setListNode(ListNodeGetterFunction listNodeGetter)
@@ -167,6 +176,27 @@ inline SequentialLayoutElement* SequentialLayoutElement::setMinWidth(int minWidh
 inline SequentialLayoutElement* SequentialLayoutElement::setMinHeight(int minHeight)
 {
 	minHeight_ = minHeight;
+	return this;
+}
+inline SequentialLayoutElement* SequentialLayoutElement::setHasCursorWhenEmpty(bool cursorWhenEmpty)
+{
+	hasCursorWhenEmpty_ = cursorWhenEmpty;
+	return this;
+}
+inline SequentialLayoutElement* SequentialLayoutElement::setNotLocationEquivalentCursors(
+		bool notLocationEquivalentCursors)
+{
+	notLocationEquivalentCursors_ = notLocationEquivalentCursors;
+	return this;
+}
+inline SequentialLayoutElement* SequentialLayoutElement::setNoBoudaryCursors(bool noBoundaryCursors)
+{
+	noBoundaryCursors_ = noBoundaryCursors;
+	return this;
+}
+inline SequentialLayoutElement* SequentialLayoutElement::setNoInnerCursors(bool noInnerCursors)
+{
+	noInnerCursors_ = noInnerCursors;
 	return this;
 }
 
