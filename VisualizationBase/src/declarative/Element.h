@@ -69,6 +69,12 @@ class VISUALIZATIONBASE_API Element
 		void setPos(Item* item, const QPoint& pos);
 		QPoint pos(Item* item) const;
 		QSize size(Item* item) const;
+		int x(Item* item) const;
+		int y(Item* item) const;
+		int width(Item* item) const;
+		int height(Item* item) const;
+		int xEnd(Item* item) const;
+		int yEnd(Item* item) const;
 
 	public: // Recursive item destruction
 		virtual void destroyChildItems(Item* item);
@@ -127,6 +133,13 @@ inline int Element::topMargin() {return marginTop_;}
 inline int Element::bottomMargin() {return marginBottom_;}
 inline int Element::leftMargin() {return marginLeft_;}
 inline int Element::rightMargin() {return marginRight_;}
+
+inline int Element::x(Item* item) const {return pos(item).x();}
+inline int Element::y(Item* item) const {return pos(item).y();}
+inline int Element::width(Item* item) const {return size(item).width();}
+inline int Element::height(Item* item) const {return size(item).height();}
+inline int Element::xEnd(Item* item) const {return pos(item).x() + size(item).width();}
+inline int Element::yEnd(Item* item) const {return pos(item).y() + size(item).height();}
 
 }
 
