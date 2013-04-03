@@ -46,6 +46,7 @@ class ItemWrapperElement : public Element
 		virtual void computeSize(Item* item, int availableWidth, int availableHeight) override;
 		virtual void setItemPositions(Item* item, int parentX, int parentY) override;
 		virtual bool sizeDependsOnParent(const Item* item) const override;
+		virtual QList<ItemRegion> regions(Item* item, int parentX, int parentY) override;
 
 	public: // Recursive item destruction
 		virtual void destroyChildItems(Item* item) override;
@@ -94,6 +95,14 @@ bool ItemWrapperElement<ParentType,ChildItemType>::sizeDependsOnParent(const Ite
 	if(childItem)
 		return childItem->sizeDependsOnParent();
 	else return false;
+}
+
+template <class ParentType, class ChildItemType>
+QList<ItemRegion> ItemWrapperElement<ParentType,ChildItemType>::regions(Item* item, int , int)
+{
+	auto& childItem = (static_cast<const ParentType*>(item))->*this->item();
+	if(childItem) return childItem->regions();
+	else return QList<ItemRegion>();
 }
 
 template <class ParentType, class ChildItemType>

@@ -27,6 +27,7 @@
 #include "AnchorLayoutElement.h"
 
 #include "AnchorLayoutConstraintSolver.h"
+#include "../items/ItemRegion.h"
 
 namespace Visualization {
 
@@ -133,6 +134,14 @@ void AnchorLayoutElement::synchronizeWithItem(Item* item)
 bool AnchorLayoutElement::sizeDependsOnParent(const Item* /*item*/) const
 {
 	return false;
+}
+
+QList<ItemRegion> AnchorLayoutElement::regions(Item* item, int parentX, int parentY)
+{
+	QList<ItemRegion> allRegions;
+	for (auto element : elementList_)
+		allRegions.append(element->regions(item, pos(item).x() + parentX, pos(item).y() + parentY));
+	return allRegions;
 }
 
 AnchorLayoutElement* AnchorLayoutElement::put(AnchorLayoutAnchor::Orientation orientation,

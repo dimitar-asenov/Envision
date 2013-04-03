@@ -55,6 +55,7 @@ class AnchorLayoutElement : public LayoutElement {
 		virtual void setItemPositions(Item* item, int parentX, int parentY) override;
 		virtual void synchronizeWithItem(Item* item) override;
 		virtual bool sizeDependsOnParent(const Item* item) const override;
+		virtual QList<ItemRegion> regions(Item* item, int parentX, int parentY) override;
 
 		// Recursive item destruction
 		virtual void destroyChildItems(Item* item) override;

@@ -285,6 +285,12 @@ void SequentialLayoutElement::swap(Item* item, int i, int j)
 	item->setUpdateNeeded(Item::StandardUpdate);
 }
 
+QList<ItemRegion> SequentialLayoutElement::regions(Item* item, int parentX, int parentY)
+{
+	QList<ItemRegion> regs;
+	return regs;
+}
+
 }
 
 

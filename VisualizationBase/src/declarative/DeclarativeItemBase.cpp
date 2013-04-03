@@ -72,6 +72,7 @@ void DeclarativeItemBase::updateGeometry(int availableWidth, int availableHeight
 			getShape()->setInnerSize(currentForm->size(this).width(), currentForm->size(this).height());
 		}
 
+		currentForm->setPos(this, QPoint(getShape()->contentLeft(), getShape()->contentTop()));
 		currentForm->setItemPositions(this);
 	}
 	else
@@ -87,6 +88,12 @@ void DeclarativeItemBase::updateGeometry(int availableWidth, int availableHeight
 bool DeclarativeItemBase::sizeDependsOnParent() const
 {
 	return forms().at(currentFormIndex_)->sizeDependsOnParent(this);
+}
+
+QList<ItemRegion> DeclarativeItemBase::regions()
+{
+	Element* currentForm = forms().at(currentFormIndex_);
+	return currentForm->regions(this);
 }
 
 }

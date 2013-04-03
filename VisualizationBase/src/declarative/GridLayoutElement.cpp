@@ -25,6 +25,7 @@
  **********************************************************************************************************************/
 
 #include "GridLayoutElement.h"
+#include "../items/ItemRegion.h"
 
 namespace Visualization {
 
@@ -309,6 +310,16 @@ void GridLayoutElement::computeSize(Item* item, int availableWidth, int availabl
 bool GridLayoutElement::sizeDependsOnParent(const Item*) const
 {
 	return overallColumnStretchFactor_ > 0 || overallRowStretchFactor_ > 0;
+}
+
+QList<ItemRegion> GridLayoutElement::regions(Item* item, int parentX, int parentY)
+{
+	QList<ItemRegion> allRegions;
+	for(int x=0; x<numColumns_; x++)
+		for(int y=0; y<numRows_; y++)
+			allRegions.append(elementGrid_[x][y]->regions(item, pos(item).x() + parentX, pos(item).y() + parentY));
+	// TODO: if grid consists of exactly one row or one column, add more cursor regions
+	return allRegions;
 }
 
 void GridLayoutElement::computeOverallStretchFactors()
