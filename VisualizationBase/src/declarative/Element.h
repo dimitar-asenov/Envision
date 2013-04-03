@@ -84,7 +84,9 @@ class VISUALIZATIONBASE_API Element
 		int marginBottom_{};
 		int marginLeft_{};
 		int marginRight_{};
+
 		ElementCache& getCache(Item* item) const;
+		void clearCache(Item* item);
 		mutable QHash<const Item*, ElementCache*> elementCache_{};
 };
 
