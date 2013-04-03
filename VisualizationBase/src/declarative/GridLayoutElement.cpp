@@ -25,7 +25,9 @@
  **********************************************************************************************************************/
 
 #include "GridLayoutElement.h"
+
 #include "../items/ItemRegion.h"
+#include "../cursor/LayoutCursor.h"
 
 namespace Visualization {
 
@@ -315,10 +317,95 @@ bool GridLayoutElement::sizeDependsOnParent(const Item*) const
 QList<ItemRegion> GridLayoutElement::regions(Item* item, int parentX, int parentY)
 {
 	QList<ItemRegion> allRegions;
+
+	// regions for the child elements
 	for(int x=0; x<numColumns_; x++)
 		for(int y=0; y<numRows_; y++)
-			allRegions.append(elementGrid_[x][y]->regions(item, pos(item).x() + parentX, pos(item).y() + parentY));
-	// TODO: if grid consists of exactly one row or one column, add more cursor regions
+			allRegions.append(elementGrid_[x][y]->regions(item, this->x(item) + parentX, this->y(item) + parentY));
+
+	// if grid consists of exactly one row or one column, add more cursor regions
+	if (numColumns_ == 1 || numRows_ == 1)
+	{
+		QRect wholeArea = QRect(QPoint(x(item) + parentX, y(item) + parentY), size(item));
+		QRect elementsArea = QRect(QPoint(wholeArea.left() + leftMargin(), wholeArea.top() + topMargin()),
+											QPoint(wholeArea.right() - rightMargin(), wholeArea.bottom() - bottomMargin()));
+
+		// This is the rectangle half-way between the bounding box of the layout and elementsArea.
+		QRect midArea = QRect(QPoint(wholeArea.left() + leftMargin()/2, wholeArea.top() + topMargin()/2),
+											QPoint(wholeArea.right() - rightMargin()/2, wholeArea.bottom() - bottomMargin()/2));
+
+		// if there is exactly one cell, the orientation is vertical
+		bool horizontal = (numColumns_ != 1);
+
+		int offset;
+		if (horizontal)
+			offset = (spaceBetweenColumns_ > 0) ? spaceBetweenColumns_/2 : 1;
+		else
+			offset = (spaceBetweenRows_ > 0) ? spaceBetweenRows_/2 : 1;
+
+		int last = horizontal ? midArea.left() : midArea.top();
+		int list_size = horizontal ? numColumns_ : numRows_;
+
+		for(int i = 0; i < (list_size); ++i)
+		{
+			ItemRegion cursorRegion;
+			if (horizontal)
+			{
+				auto element = elementGrid_[i][0];
+				cursorRegion.setRegion(QRect(last, elementsArea.top(), element->x(item) - last, elementsArea.height()));
+				last = element->xEnd(item) + offset;
+			}
+			else
+			{
+				auto element = elementGrid_[0][i];
+				cursorRegion.setRegion(QRect(elementsArea.left(), last,  elementsArea.width(), element->y(item) - last));
+				last = element->yEnd(item) + offset;
+			}
+
+			adjustCursorRegionToAvoidZeroSize(cursorRegion.region(), horizontal, i==0, false);
+
+			// Note below, that a horizontal layout, means a vertical cursor
+			auto lc = new LayoutCursor(item, horizontal ? Cursor::VerticalCursor : Cursor::HorizontalCursor);
+			lc->setOwnerElement(this);
+			cursorRegion.setCursor(lc);
+			lc->setIndex(i);
+			lc->setVisualizationPosition(cursorRegion.region().topLeft());
+			lc->setVisualizationSize(horizontal ? QSize(2, size(item).height()) : QSize(size(item).width(), 2));
+			lc->setOwnerElement(this);
+			if (i==0) lc->setIsAtBoundary(true);
+
+			cursorRegion.cursor()->setRegion(cursorRegion.region());
+			if (notLocationEquivalentCursors_) lc->setNotLocationEquivalent(true);
+
+			// Skip cursor?
+			if (!((i == 0) && noBoundaryCursors_) && !((i > 0) && noInnerCursors_))
+				allRegions.append(cursorRegion);
+		}
+
+		// Add trailing cursor region if not omitted
+		if (!noBoundaryCursors_)
+		{
+			QRect trailing;
+			if (horizontal)
+				trailing.setRect(last, elementsArea.top(), midArea.right() + 1 - last, elementsArea.height());
+			else
+				trailing.setRect(elementsArea.left(), last,  elementsArea.width(), midArea.bottom() + 1 - last);
+
+			adjustCursorRegionToAvoidZeroSize(trailing, horizontal, false, true);
+
+			allRegions.append(ItemRegion(trailing));
+			// Note below, that a horizontal layout, means a vertical cursor
+			auto lc = new LayoutCursor(item, horizontal ? Cursor::VerticalCursor : Cursor::HorizontalCursor);
+			lc->setOwnerElement(this);
+			allRegions.last().setCursor(lc);
+			lc->setIndex(list_size);
+			lc->setVisualizationPosition(allRegions.last().region().topLeft());
+			lc->setVisualizationSize(horizontal ? QSize(2, size(item).height()) : QSize(size(item).width(), 2));
+			lc->setRegion(trailing);
+			lc->setIsAtBoundary(true);
+			if (notLocationEquivalentCursors_) lc->setNotLocationEquivalent(true);
+		}
+	}
 	return allRegions;
 }
 
@@ -414,6 +501,13 @@ void GridLayoutElement::adjustSize(int containColumn, int containRow)
 		numColumns_ = newNumColumns;
 		numRows_ = newNumRows;
 	}
+}
+
+inline void GridLayoutElement::adjustCursorRegionToAvoidZeroSize(QRect& region, bool horizontal, bool first, bool last)
+{
+	// Make sure there is at least some space for the cursor Region.
+	if (horizontal && region.width() == 0) region.adjust((first?0:-1), 0, (last?0:1), 0);
+	if (!horizontal && region.height() == 0 ) region.adjust(0, (first?0:-1), 0, (last?0:1));
 }
 
 } /* namespace Visualization */

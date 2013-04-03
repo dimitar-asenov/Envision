@@ -58,6 +58,10 @@ class GridLayoutElement : public LayoutElement {
 		GridLayoutElement* setRowStretchFactor(int row, float stretchFactor);
 		GridLayoutElement* setRowStretchFactors(float stretchFactor);
 		GridLayoutElement* setStretchFactors(float stretchFactor);
+		GridLayoutElement* setHasCursorWhenEmpty(bool cursorWhenEmpty);
+		GridLayoutElement* setNotLocationEquivalentCursors(bool notLocationEquivalent);
+		GridLayoutElement* setNoBoudaryCursors(bool noBoundaryCursors);
+		GridLayoutElement* setNoInnerCursors(bool noInnerCursors);
 
 	public: // Methods executable when items need to be rendered
 		virtual void computeSize(Item* item, int availableWidth, int availableHeight) override;
@@ -74,23 +78,34 @@ class GridLayoutElement : public LayoutElement {
 		int numRows_{};
 		int spaceBetweenColumns_{};
 		int spaceBetweenRows_{};
+
 		QPair<int, int> lastCell_{};
+
 		QVector<QVector<Element*>> elementGrid_{};
 		QVector<QVector<QPair<int, int>>> spanGrid_{};
+
 		LayoutStyle::Alignment defaultHorizontalAlignment_{};
 		LayoutStyle::Alignment defaultVerticalAlignment_{};
 		QVector<LayoutStyle::Alignment> defaultRowVerticalAlignments_{};
 		QVector<LayoutStyle::Alignment> defaultColumnHorizontalAlignments_{};
 		QVector<QVector<LayoutStyle::Alignment>> cellHorizontalAlignmentGrid_{};
 		QVector<QVector<LayoutStyle::Alignment>> cellVerticalAlignmentGrid_{};
+
 		float defaultColumnStretchFactor_{};
 		float defaultRowStretchFactor_{};
 		QVector<float> columnStretchFactors_{};
 		QVector<float> rowStretchFactors_{};
 		float overallColumnStretchFactor_{};
 		float overallRowStretchFactor_{};
+
+		bool hasCursorWhenEmpty_{false};
+		bool notLocationEquivalentCursors_{false};
+		bool noBoundaryCursors_{false};
+		bool noInnerCursors_{false};
+
 		void computeOverallStretchFactors();
 		void adjustSize(int containColumn, int containRow);
+		void adjustCursorRegionToAvoidZeroSize(QRect& region, bool horizontal, bool first, bool last);
 };
 
 inline GridLayoutElement* GridLayoutElement::setSpacing(int spacing)
@@ -224,6 +239,27 @@ inline GridLayoutElement* GridLayoutElement::setStretchFactors(float stretchFact
 	columnStretchFactors_ = QVector<float>(numColumns_, stretchFactor);
 	rowStretchFactors_ = QVector<float>(numRows_, stretchFactor);
 	computeOverallStretchFactors();
+	return this;
+}
+inline GridLayoutElement* GridLayoutElement::setHasCursorWhenEmpty(bool cursorWhenEmpty)
+{
+	hasCursorWhenEmpty_ = cursorWhenEmpty;
+	return this;
+}
+inline GridLayoutElement* GridLayoutElement::setNotLocationEquivalentCursors(
+		bool notLocationEquivalentCursors)
+{
+	notLocationEquivalentCursors_ = notLocationEquivalentCursors;
+	return this;
+}
+inline GridLayoutElement* GridLayoutElement::setNoBoudaryCursors(bool noBoundaryCursors)
+{
+	noBoundaryCursors_ = noBoundaryCursors;
+	return this;
+}
+inline GridLayoutElement* GridLayoutElement::setNoInnerCursors(bool noInnerCursors)
+{
+	noInnerCursors_ = noInnerCursors;
 	return this;
 }
 
