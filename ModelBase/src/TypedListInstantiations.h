@@ -31,21 +31,21 @@
 namespace Model {
 
 class Boolean;
-template class Q_DECL_IMPORT TypedList<Boolean>;
+extern template class Q_DECL_IMPORT TypedList<Boolean>;
 
 class Float;
-template class Q_DECL_IMPORT TypedList<Float>;
+extern template class Q_DECL_IMPORT TypedList<Float>;
 
 class Integer;
-template class Q_DECL_IMPORT TypedList<Integer>;
+extern template class Q_DECL_IMPORT TypedList<Integer>;
 
 class Character;
-template class Q_DECL_IMPORT TypedList<Character>;
+extern template class Q_DECL_IMPORT TypedList<Character>;
 
 class Reference;
-template class Q_DECL_IMPORT TypedList<Reference>;
+extern template class Q_DECL_IMPORT TypedList<Reference>;
 
 class Text;
-template class Q_DECL_IMPORT TypedList<Text>;
+extern template class Q_DECL_IMPORT TypedList<Text>;
 
 }

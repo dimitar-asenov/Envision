@@ -25,6 +25,7 @@
 ***********************************************************************************************************************/
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
+#include "ModelBase/src/TypedListInstantiations.h"
 
 #include "allOOModelNodes.h"
 
