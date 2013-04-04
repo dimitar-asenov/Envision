@@ -409,4 +409,24 @@ inline void SequentialLayoutElement::adjustCursorRegionToAvoidZeroSize(QRect& re
 	}
 }
 
+bool SequentialLayoutElement::elementOrChildHasFocus(Item* item) const
+{
+	if (LayoutElement::elementOrChildHasFocus(item))
+		return true;
+	for (auto i : listForItem(item))
+		if (i->itemOrChildHasFocus())
+			return true;
+	return false;
+}
+
+int SequentialLayoutElement::focusedElementIndex(Item* item) const
+{
+	auto& itemList = listForItem(item);
+
+	for (int i = 0; i<itemList.size(); ++i)
+		if (itemList[i]->itemOrChildHasFocus()) return i;
+
+	return -1;
+}
+
 }

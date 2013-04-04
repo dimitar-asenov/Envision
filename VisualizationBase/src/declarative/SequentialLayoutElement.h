@@ -77,6 +77,9 @@ class VISUALIZATIONBASE_API SequentialLayoutElement : public LayoutElement
 		virtual bool sizeDependsOnParent(const Item* item) const override;
 		virtual QList<ItemRegion> regions(Item* item, int parentX, int parentY) override;
 
+		bool elementOrChildHasFocus(Item* item) const override;
+		int focusedElementIndex(Item* item) const;
+
 		// Recursive item destruction
 		virtual void destroyChildItems(Item* item) override;
 

@@ -146,8 +146,17 @@ AnchorLayoutElement* AnchorLayoutElement::put(AnchorLayoutAnchor::Orientation or
 {
 	Q_ASSERT(orientation != AnchorLayoutAnchor::Orientation::Auto);
 
-	if (!elementList_.contains(placeElement)) elementList_.append(placeElement);
-	if (!elementList_.contains(fixedElement)) elementList_.append(fixedElement);
+	if (!elementList_.contains(placeElement))
+	{
+		elementList_.append(placeElement);
+		addChild(placeElement);
+	}
+
+	if (!elementList_.contains(fixedElement))
+	{
+		elementList_.append(fixedElement);
+		addChild(fixedElement);
+	}
 
 	if (orientation == AnchorLayoutAnchor::Orientation::Horizontal)
 		addConstraint(horizontalConstraints_, orientation, relativePlaceEdgePosition, placeElement, offset,

@@ -25,6 +25,8 @@
  **********************************************************************************************************************/
 
 #include "Element.h"
+#include "../items/Item.h"
+#include "../cursor/LayoutCursor.h"
 
 namespace Visualization {
 
@@ -53,6 +55,25 @@ void Element::clearCache(Item* item)
 void Element::destroyChildItems(Item* item)
 {
 	clearCache(item);
+}
+
+bool Element::elementOrChildHasFocus(Item* item) const
+{
+	auto cursor = item->scene()->mainCursor();
+	if (cursor && cursor->owner() == item)
+	{
+		auto layoutCursor = dynamic_cast<LayoutCursor*> (cursor);
+		if (layoutCursor)
+			if (layoutCursor->ownerElement() == this)
+				return true;
+	}
+	for (auto child : children())
+	{
+		bool ret = child->elementOrChildHasFocus(item);
+		if (ret) return true;
+	}
+
+	return false;
 }
 
 }

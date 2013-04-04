@@ -70,6 +70,8 @@ class GridLayoutElement : public LayoutElement {
 		virtual bool sizeDependsOnParent(const Item* item) const override;
 		virtual QList<ItemRegion> regions(Item* item, int parentX, int parentY) override;
 
+		int focusedElementIndex(Item* item) const;
+
 	public: // Recursive item destruction
 		virtual void destroyChildItems(Item* item) override;
 

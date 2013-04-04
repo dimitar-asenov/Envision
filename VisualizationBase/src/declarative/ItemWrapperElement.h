@@ -47,6 +47,7 @@ class ItemWrapperElement : public Element
 		virtual void setItemPositions(Item* item, int parentX, int parentY) override;
 		virtual bool sizeDependsOnParent(const Item* item) const override;
 		virtual QList<ItemRegion> regions(Item* item, int parentX, int parentY) override;
+		bool elementOrChildHasFocus(Item* item) const override;
 
 	public: // Recursive item destruction
 		virtual void destroyChildItems(Item* item) override;
@@ -118,6 +119,15 @@ typename ItemWrapperElement<ParentType,ChildItemType>::ChildItem
 ItemWrapperElement<ParentType,ChildItemType>::item() const
 {
 	return item_;
+}
+
+template <class ParentType, class ChildItemType>
+bool ItemWrapperElement<ParentType,ChildItemType>::elementOrChildHasFocus(Item* item) const
+{
+	if (Element::elementOrChildHasFocus(item))
+		return true;
+	auto& childItem = (static_cast<ParentType*>(item))->*this->item();
+	return childItem->itemOrChildHasFocus();
 }
 
 }

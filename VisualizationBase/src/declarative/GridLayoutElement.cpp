@@ -76,6 +76,9 @@ GridLayoutElement* GridLayoutElement::put(int column, int row, Element* element)
 	adjustSize(column, row);
 	lastCell_ = QPair<int, int>(column, row);
 
+	removeChild(elementGrid_[column][row]);
+	addChild(element);
+
 	SAFE_DELETE(elementGrid_[column][row]);
 	elementGrid_[column][row] = element;
 	return this;
@@ -508,6 +511,18 @@ inline void GridLayoutElement::adjustCursorRegionToAvoidZeroSize(QRect& region, 
 	// Make sure there is at least some space for the cursor Region.
 	if (horizontal && region.width() == 0) region.adjust((first?0:-1), 0, (last?0:1), 0);
 	if (!horizontal && region.height() == 0 ) region.adjust(0, (first?0:-1), 0, (last?0:1));
+}
+
+int GridLayoutElement::focusedElementIndex(Item* item) const
+{
+	if (numColumns_ == 1)
+		for (int y=0; y<numRows_; ++y)
+			if (elementGrid_[0][y]->elementOrChildHasFocus(item)) return y;
+	if (numRows_ == 1)
+		for (int x=0; x<numColumns_; ++x)
+			if (elementGrid_[x][0]->elementOrChildHasFocus(item)) return x;
+
+	return -1;
 }
 
 } /* namespace Visualization */

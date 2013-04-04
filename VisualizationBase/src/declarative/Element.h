@@ -75,6 +75,7 @@ class VISUALIZATIONBASE_API Element
 		int height(Item* item) const;
 		int xEnd(Item* item) const;
 		int yEnd(Item* item) const;
+		virtual bool elementOrChildHasFocus(Item* item) const;
 
 	public: // Recursive item destruction
 		virtual void destroyChildItems(Item* item);
@@ -85,12 +86,19 @@ class VISUALIZATIONBASE_API Element
 		int bottomMargin();
 		int leftMargin();
 		int rightMargin();
+		void addChild(Element* child);
+		void removeChild(Element* child);
+		const QVector<Element*>& children() const;
+		Element* parent();
 
 	private:
 		int marginTop_{};
 		int marginBottom_{};
 		int marginLeft_{};
 		int marginRight_{};
+
+		QVector<Element*> children_{};
+		Element* parent_{};
 
 		ElementCache& getCache(Item* item) const;
 		void clearCache(Item* item);
@@ -140,6 +148,15 @@ inline int Element::width(Item* item) const {return size(item).width();}
 inline int Element::height(Item* item) const {return size(item).height();}
 inline int Element::xEnd(Item* item) const {return pos(item).x() + size(item).width();}
 inline int Element::yEnd(Item* item) const {return pos(item).y() + size(item).height();}
+
+inline void Element::addChild(Element* child){children_.append(child); child->parent_ = this;}
+inline void Element::removeChild(Element* child)
+{
+	if (child)
+		for (int i=0; i<children_.size(); ++i)
+			if (child == children_[i]) children_.remove(i);
+}
+inline const QVector<Element*>& Element::children() const {return children_;}
 
 }
 
