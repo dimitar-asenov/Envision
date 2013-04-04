@@ -27,6 +27,9 @@
 #include "expressions/UnfinishedOperator.h"
 #include "../types/ErrorType.h"
 
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(OOModel::UnfinishedOperator)
+
 namespace OOModel {
 
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(UnfinishedOperator, Expression)

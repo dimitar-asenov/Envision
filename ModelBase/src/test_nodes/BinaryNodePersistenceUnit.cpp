@@ -26,6 +26,9 @@
 
 #include "test_nodes/BinaryNodePersistenceUnit.h"
 
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(TestNodes::BinaryNodePersistenceUnit)
+
 namespace TestNodes {
 
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(BinaryNodePersistenceUnit, BinaryNode)

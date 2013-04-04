@@ -26,6 +26,9 @@
 
 #include "test_nodes/BinaryNodeAccessUnit.h"
 
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(TestNodes::BinaryNodeAccessUnit)
+
 namespace TestNodes {
 
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(BinaryNodeAccessUnit, BinaryNode)

@@ -30,6 +30,8 @@
 
 #include "ModelBase/src/nodes/Text.h"
 
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, ErrorExpression)
+
 namespace OOModel {
 
 class OOMODEL_API ErrorExpression : public Expression {

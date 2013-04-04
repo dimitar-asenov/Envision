@@ -30,6 +30,8 @@
 
 #include "../ReferenceExpression.h"
 
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, ClassTypeExpression)
+
 namespace OOModel {
 
 class OOMODEL_API ClassTypeExpression : public TypeExpression

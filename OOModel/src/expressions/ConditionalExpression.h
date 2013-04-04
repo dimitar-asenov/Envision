@@ -28,6 +28,8 @@
 
 #include "Expression.h"
 
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, ConditionalExpression)
+
 namespace OOModel {
 
 class OOMODEL_API ConditionalExpression: public Expression

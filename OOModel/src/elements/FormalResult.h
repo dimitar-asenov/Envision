@@ -34,6 +34,8 @@
 #include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
 
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, FormalResult)
+
 namespace OOModel {
 
 class OOMODEL_API FormalResult : public Model::ExtendableNode

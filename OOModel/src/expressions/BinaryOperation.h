@@ -30,6 +30,8 @@
 
 #include "ModelBase/src/nodes/Integer.h"
 
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, BinaryOperation)
+
 namespace OOModel {
 
 class OOMODEL_API BinaryOperation: public Expression

@@ -30,6 +30,8 @@
 
 #include "BinaryNode.h"
 
+DECLARE_TYPED_LIST(MODELBASE_API, TestNodes, BinaryNodePersistenceUnit)
+
 namespace TestNodes {
 
 class MODELBASE_API BinaryNodePersistenceUnit: public BinaryNode

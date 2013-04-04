@@ -29,6 +29,8 @@
 #include "StatementItemList.h"
 #include "../expressions/Expression.h"
 
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, CatchClause)
+
 namespace OOModel {
 
 class OOMODEL_API CatchClause : public Model::ExtendableNode

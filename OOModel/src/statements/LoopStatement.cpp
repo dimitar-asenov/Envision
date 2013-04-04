@@ -26,6 +26,9 @@
 
 #include "statements/LoopStatement.h"
 
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(OOModel::LoopStatement)
+
 namespace OOModel {
 
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(LoopStatement, Statement)

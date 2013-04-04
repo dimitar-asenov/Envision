@@ -27,6 +27,9 @@
 #include "expressions/StringLiteral.h"
 #include "../types/StringType.h"
 
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(OOModel::StringLiteral)
+
 namespace OOModel {
 
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(StringLiteral, Expression)

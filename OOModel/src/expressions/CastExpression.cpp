@@ -27,6 +27,9 @@
 #include "expressions/CastExpression.h"
 #include "../types/Type.h"
 
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(OOModel::CastExpression)
+
 namespace OOModel {
 
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(CastExpression, Expression)

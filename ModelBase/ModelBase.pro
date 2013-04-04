@@ -13,7 +13,6 @@ HEADERS += src/test_nodes/TestNodesInitializer.h \
     src/visitor/VisitorDefinition.h \
     src/visitor/Visitor.h \
     src/ModelException.h \
-    src/TypedListInstantiations.h \
     src/adapter/AdapterManager.h \
     src/commands/ExtendedNodeChild.h \
     src/commands/FieldSet.h \
@@ -65,7 +64,6 @@ SOURCES += src/test_nodes/TestNodesInitializer.cpp \
     src/adapter/AdapterManager.cpp \
     src/commands/AddModifiedNode.cpp \
     src/test_nodes/PositionExtension.cpp \
-    src/TypedListInstantiations.cpp \
     src/nodes/Character.cpp \
     src/nodes/Boolean.cpp \
     src/nodes/Float.cpp \

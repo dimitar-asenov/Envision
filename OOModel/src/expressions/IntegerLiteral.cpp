@@ -27,6 +27,9 @@
 #include "expressions/IntegerLiteral.h"
 #include "../types/PrimitiveType.h"
 
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(OOModel::IntegerLiteral)
+
 namespace OOModel {
 
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(IntegerLiteral, Expression)

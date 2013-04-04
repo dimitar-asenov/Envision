@@ -26,8 +26,10 @@
 
 #pragma once
 
-#include "Node.h"
+#include "TypedList.h"
 #include "nodeMacros.h"
+
+DECLARE_TYPED_LIST(MODELBASE_API, Model, Integer)
 
 namespace Model {
 

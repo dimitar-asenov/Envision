@@ -28,7 +28,8 @@
 
 #include "../elements/FormalArgument.h"
 #include "../elements/StatementItemList.h"
-#include "ModelBase/src/nodes/TypedList.h"
+
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, LambdaExpression)
 
 namespace OOModel {
 

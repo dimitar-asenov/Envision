@@ -26,6 +26,9 @@
 
 #include "test_nodes/BinaryNode.h"
 
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(TestNodes::BinaryNode)
+
 namespace TestNodes {
 
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(BinaryNode, Model::ExtendableNode)

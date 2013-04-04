@@ -34,6 +34,8 @@
 #include "ModelBase/src/nodes/Boolean.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
 
+DECLARE_TYPED_LIST(VISUALIZATIONBASE_API, Visualization, TestBoxNode)
+
 namespace Visualization {
 
 class VISUALIZATIONBASE_API TestBoxNode : public Model::ExtendableNode {

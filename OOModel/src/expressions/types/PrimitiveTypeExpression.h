@@ -30,6 +30,8 @@
 #include "../../types/PrimitiveType.h"
 #include "ModelBase/src/nodes/Integer.h"
 
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, PrimitiveTypeExpression)
+
 namespace OOModel {
 
 class OOMODEL_API PrimitiveTypeExpression : public TypeExpression

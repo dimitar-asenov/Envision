@@ -32,8 +32,7 @@
 #include "../expressions/Expression.h"
 #include "SwitchCase.h"
 
-#include "ModelBase/src/nodes/TypedList.h"
-
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, SwitchStatement)
 
 namespace OOModel {
 
