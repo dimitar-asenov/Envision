@@ -30,15 +30,11 @@
 
 namespace Visualization {
 
-LayoutCursor::LayoutCursor(Layout* owner, CursorType type)
+LayoutCursor::LayoutCursor(Item* owner, CursorType type)
 	: Cursor(owner, type, new CursorShapeItem(this)), x_(0), y_(0), index_(0), isAtBoundary_(false)
 {
 }
 
-Layout* LayoutCursor::owner() const
-{
-	return static_cast<Layout*> (Cursor::owner());
-}
 
 void LayoutCursor::setVisualizationSize(const QSize& size)
 {

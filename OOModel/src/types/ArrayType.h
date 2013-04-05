@@ -33,9 +33,11 @@ namespace OOModel {
 class OOMODEL_API ArrayType : public Type {
 	public:
 		ArrayType(Type* elementType, bool isValueType);
+		ArrayType(const ArrayType& other);
 		virtual ~ArrayType();
 
-		virtual bool equals(const Type* other) const;
+		virtual bool equals(const Type* other) const override;
+		virtual ArrayType* clone() const override;
 
 		const Type* elementType() const;
 

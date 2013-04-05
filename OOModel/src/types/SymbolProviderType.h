@@ -38,7 +38,8 @@ class OOMODEL_API SymbolProviderType : public Type {
 	public:
 		SymbolProviderType(Model::Node* symbolProviderNode, bool isValueType);
 
-		virtual bool equals(const Type* other) const;
+		virtual bool equals(const Type* other) const override;
+		virtual SymbolProviderType* clone() const override;
 
 		Model::Node* symbolProvider() const;
 

@@ -32,6 +32,8 @@
 
 #include "ModelBase/src/nodes/Text.h"
 
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, VariableDeclaration)
+
 namespace OOModel {
 
 class OOMODEL_API VariableDeclaration: public Expression

@@ -27,6 +27,8 @@
 #include "top_level/VClass.h"
 #include "OOVisualizationException.h"
 
+#include "../elements/VStatementItemList.h"
+
 #include "VisualizationBase/src/layouts/PanelBorderLayout.h"
 #include "VisualizationBase/src/layouts/PositionLayout.h"
 #include "VisualizationBase/src/items/VText.h"

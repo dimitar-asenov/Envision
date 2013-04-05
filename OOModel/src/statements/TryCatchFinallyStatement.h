@@ -32,6 +32,8 @@
 #include "../elements/StatementItemList.h"
 #include "../elements/CatchClause.h"
 
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, TryCatchFinallyStatement)
+
 namespace OOModel {
 
 class OOMODEL_API TryCatchFinallyStatement: public Statement

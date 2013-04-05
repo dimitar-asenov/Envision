@@ -38,8 +38,9 @@
 
 #include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
 #include "ModelBase/src/nodes/Text.h"
-#include "ModelBase/src/nodes/TypedList.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
+
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Class)
 
 namespace OOModel {
 

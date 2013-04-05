@@ -33,23 +33,31 @@ namespace Core {
 
 class DefaultEnvisionManager: public EnvisionManager
 {
+	public:
+		DefaultEnvisionManager();
+		~DefaultEnvisionManager();
+
+		virtual QList<PluginInfo> getAllLoadedPluginsInfo() override;
+		virtual QMainWindow* getMainWindow() override;
+		virtual void addPreEventAction(EventPrePostAction action) override;
+		virtual void addPostEventAction(EventPrePostAction action) override;
+
+		void setPluginManager(PluginManager*);
+		void setMainWindow(QMainWindow*);
+
+		void exit();
+
+		static void processPreEventActions(QObject* receiver, QEvent* event);
+		static void processPostEventActions(QObject* receiver, QEvent* event);
+
 	private:
 		PluginManager* pm;
 		QMainWindow* mainWindow;
 
 		bool exitSet;
 
-	public:
-		DefaultEnvisionManager();
-		~DefaultEnvisionManager();
-
-		QList<PluginInfo> getAllLoadedPluginsInfo();
-		QMainWindow* getMainWindow();
-
-		void setPluginManager(PluginManager*);
-		void setMainWindow(QMainWindow*);
-
-		void exit();
+		static QList<EventPrePostAction>& preEventActions();
+		static QList<EventPrePostAction>& postEventActions();
 };
 
 }

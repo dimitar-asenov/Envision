@@ -52,6 +52,7 @@ class OOMODEL_API Type {
 		void setValueType(bool isValueType);
 
 		virtual bool equals(const Type* other) const = 0;
+		virtual Type* clone() const = 0;
 
 	private:
 		bool isValueType_;

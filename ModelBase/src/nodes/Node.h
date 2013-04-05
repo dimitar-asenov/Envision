@@ -28,6 +28,7 @@
 
 #include "../modelbase_api.h"
 #include "../persistence/PersistentStore.h"
+#include "../InitializationRegistry.h"
 
 namespace Model {
 

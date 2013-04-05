@@ -29,7 +29,10 @@
 #include "../oomodel_api.h"
 
 #include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
+#include "ModelBase/src/nodes/TypedList.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
+
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, StatementItem)
 
 namespace OOModel {
 

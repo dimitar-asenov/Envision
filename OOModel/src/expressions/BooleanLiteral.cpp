@@ -27,6 +27,9 @@
 #include "expressions/BooleanLiteral.h"
 #include "../types/PrimitiveType.h"
 
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(OOModel::BooleanLiteral)
+
 namespace OOModel {
 
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(BooleanLiteral, Expression)

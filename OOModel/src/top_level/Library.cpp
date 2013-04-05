@@ -26,6 +26,9 @@
 
 #include "top_level/Library.h"
 
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(OOModel::Library)
+
 namespace OOModel {
 
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(Library, Project)

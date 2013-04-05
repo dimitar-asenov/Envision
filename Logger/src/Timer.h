@@ -26,35 +26,49 @@
 
 #pragma once
 
-#include "../oointeraction_api.h"
+#include "logger_api.h"
 
-#if defined(OOINTERACTION_LIBRARY)
-	#include "ModelBase/src/visitor/VisitorDefinition.h"
-#else
-	#include "ModelBase/src/visitor/Visitor.h"
-#endif
+namespace Logger {
 
-namespace Model {
-	class Node;
-}
-
-namespace OOModel {
-	class Method;
-}
-
-namespace Visualization {
-	class VisualizationGroup;
-}
-
-namespace OOInteraction {
-
-class OOINTERACTION_API MethodDefinitionVisitor : public Model::Visitor<MethodDefinitionVisitor, Model::Node*> {
+class LOGGER_API Timer
+{
 	public:
-		static void init(Visualization::VisualizationGroup* customizationGroup);
-		static Model::Node* visitMethod(MethodDefinitionVisitor* v, OOModel::Method* met);
+		static Timer* start(const QString& timer);
+		static qint64 tick(const QString& timer);
+
+		static QStringList timerNames();
+		static Timer* timer(const QString& timer);
+		static void removeAllTimers();
+
+		void start();
+		qint64 tick();
+		const QString& name() const;
+		const QList<qint64> values() const;
+		void setNumValuesLimit(int limit);
+		double totalAverage() const;
+		double latestValuesAverage() const;
+		void setIgnoreZeroValues(bool ignore);
 
 	private:
-		static Visualization::VisualizationGroup* customizationGroup_;
+		Timer();
+		static QMap<QString, Timer*>& timers();
+
+		QString name_;
+		QList<qint64> values_;
+		QElapsedTimer qtTimer_;
+		qint64 totalSum_{};
+		qint64 totalCount_{};
+		int numValuesLimit_{10};
+		bool ignoreZeroValues_{true};
 };
 
-} /* namespace OOInteraction */
+inline Timer* Timer::start(const QString& timer) { auto t = Timer::timer(timer); t->start(); return t; }
+inline qint64 Timer::tick(const QString& timer) { return Timer::timer(timer)->tick(); }
+inline QStringList Timer::timerNames() { return timers().keys(); }
+
+inline const QString& Timer::name() const { return name_; }
+inline const QList<qint64> Timer::values() const { return values_; }
+inline double Timer::totalAverage() const { return (double) totalSum_/totalCount_; }
+inline void Timer::setIgnoreZeroValues(bool ignore) { ignoreZeroValues_ = ignore; }
+
+} /* namespace Logger */

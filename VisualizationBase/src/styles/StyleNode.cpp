@@ -60,12 +60,30 @@ StyleNode::StyleNode(StyleNode* parent_, const QString& prototypeName, const QSt
 	init();
 }
 
-StyleNode::StyleNode(const QString& rootStyleFileName, const QString& folderWithinStyles) :
+StyleNode::StyleNode(const QString& rootStyleNameAndPath, const QString& folderWithinStyles) :
 	parent(nullptr)
 {
+	QString styleFileName = rootStyleNameAndPath;
+	QString subNodeName;
+	auto subPathIndex = styleFileName.indexOf('/');
+	if ( subPathIndex > 0 )
+	{
+		subNodeName = styleFileName.mid(subPathIndex+1);
+		styleFileName = styleFileName.left(subPathIndex);
+	}
+
 	folder = QDir::current().absoluteFilePath(baseFolder + "/" + folderWithinStyles);
-	doc = openStyleDoc(folder + "/" + rootStyleFileName);
+	doc = openStyleDoc(folder + "/" + styleFileName);
 	elem = doc.documentElement();
+
+	if (!subNodeName.isEmpty())
+	{
+		elem = elem.firstChildElement(subNodeName);
+		if (elem.isNull())
+			throw VisualizationException("Could not find the substyle " + subNodeName + " within the style file "
+					+ folder + "/" + styleFileName);
+	}
+
 	init();
 }
 

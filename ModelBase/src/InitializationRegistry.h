@@ -26,26 +26,21 @@
 
 #pragma once
 
-#include "nodes/TypedList.h"
+#include "modelbase_api.h"
 
 namespace Model {
 
-class Boolean;
-template class Q_DECL_IMPORT TypedList<Boolean>;
+class MODELBASE_API InitializationRegistry
+{
+	public:
+		using InitializationFunction = std::function<void ()>;
 
-class Float;
-template class Q_DECL_IMPORT TypedList<Float>;
+		void add(InitializationFunction func);
+		void initializeAll();
 
-class Integer;
-template class Q_DECL_IMPORT TypedList<Integer>;
-
-class Character;
-template class Q_DECL_IMPORT TypedList<Character>;
-
-class Reference;
-template class Q_DECL_IMPORT TypedList<Reference>;
-
-class Text;
-template class Q_DECL_IMPORT TypedList<Text>;
+	private:
+		QList<InitializationFunction> initializationFunctions_;
+		bool initialized_{false};
+};
 
 }

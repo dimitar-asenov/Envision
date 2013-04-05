@@ -26,6 +26,9 @@
 
 #include "statements/Block.h"
 
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(OOModel::Block)
+
 namespace OOModel {
 
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(Block, Statement)

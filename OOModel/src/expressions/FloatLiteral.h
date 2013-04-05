@@ -30,6 +30,8 @@
 
 #include "ModelBase/src/nodes/Float.h"
 
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, FloatLiteral)
+
 namespace OOModel {
 
 class OOMODEL_API FloatLiteral: public Expression

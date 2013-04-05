@@ -7,8 +7,9 @@ win32:LIBS += -llogger \
     -loomodel \
     -lvisualizationbase \
     -linteractionbase \
-    -loovisualization
-HEADERS += src/customization/MethodDefinitionVisitor.h \
+    -loovisualization \
+    -lfilepersistence
+HEADERS += src/customization/CustomizationVisitor.h \
     src/expression_editor/operators/commands/CommandExpression.h \
     src/expression_editor/operators/commands/CreateMethodCall.h \
     src/string_offset_providers/KeywordMethodCallStringOffsetProvider.h \
@@ -29,7 +30,6 @@ HEADERS += src/customization/MethodDefinitionVisitor.h \
     src/commands/CCreateProject.h \
     src/commands/CCreateMethod.h \
     src/commands/CCreateClass.h \
-    ../InteractionBase/src/commands/CreateNamedObjectWithAttributes.h \
     src/string_offset_providers/UnaryOperatorStringOffsetProvider.h \
     src/string_offset_providers/Cell.h \
     src/string_offset_providers/ListCell.h \
@@ -99,7 +99,7 @@ HEADERS += src/customization/MethodDefinitionVisitor.h \
     src/string_offset_providers/TextRendererStringOffsetProvider.h \
     src/string_offset_providers/VariableDeclarationStringOffsetProvider.h \
     src/oointeraction.h
-SOURCES += src/customization/MethodDefinitionVisitor.cpp \
+SOURCES += src/customization/CustomizationVisitor.cpp \
     src/expression_editor/operators/commands/CreateMethodCall.cpp \
     src/string_offset_providers/KeywordMethodCallStringOffsetProvider.cpp \
     src/commands/CCreateField.cpp \
@@ -119,7 +119,6 @@ SOURCES += src/customization/MethodDefinitionVisitor.cpp \
     src/commands/CCreateProject.cpp \
     src/commands/CCreateMethod.cpp \
     src/commands/CCreateClass.cpp \
-    ../InteractionBase/src/commands/CreateNamedObjectWithAttributes.cpp \
     src/string_offset_providers/UnaryOperatorStringOffsetProvider.cpp \
     src/string_offset_providers/Cell.cpp \
     src/string_offset_providers/ListCell.cpp \

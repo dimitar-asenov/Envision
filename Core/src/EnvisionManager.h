@@ -55,6 +55,22 @@ class EnvisionManager
 		 */
 		virtual QMainWindow* getMainWindow() = 0;
 
+		using EventPrePostAction = std::function<void (QObject* receiver, QEvent* event)>;
+
+		/**
+		 * Adds \a action to the list of actions that will be executed prior to dispatching an event.
+		 *
+		 * The provided action function will be called before any event for any object is dispatched.
+		 */
+		virtual void addPreEventAction(EventPrePostAction action) = 0;
+
+		/**
+		 * Adds \a action to the list of actions that will be executed after dispatching an event.
+		 *
+		 * The provided action function will be called after any event for any object is dispatched.
+		 */
+		virtual void addPostEventAction(EventPrePostAction action) = 0;
+
 		virtual ~EnvisionManager() {};
 };
 

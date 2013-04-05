@@ -42,6 +42,8 @@
 #include "ModelBase/src/nodes/TypedList.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
 
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Method)
+
 namespace OOModel {
 
 class OOMODEL_API Method : public Model::ExtendableNode

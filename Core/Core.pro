@@ -1,13 +1,12 @@
 include(common.pri)
-
 TEMPLATE = app
 TARGET = Envision
 target.path = $$BUILD_DIR
 INSTALLS += target
 DEFINES += CORE_LIBRARY
 QT += xml
-
-HEADERS += src/EnvisionException.h \
+HEADERS += src/EnvisionApplication.h \
+    src/EnvisionException.h \
     src/EnvisionManager.h \
     src/EnvisionPlugin.h \
     src/PluginInfo.h \
@@ -18,7 +17,8 @@ HEADERS += src/EnvisionException.h \
     src/DefaultEnvisionManager.h \
     src/PluginManager.h \
     src/EnvisionWindow.h
-SOURCES += src/TestEvent.cpp \
+SOURCES += src/EnvisionApplication.cpp \
+    src/TestEvent.cpp \
     src/TestRunner.cpp \
     src/DefaultEnvisionManager.cpp \
     src/PluginManager.cpp \

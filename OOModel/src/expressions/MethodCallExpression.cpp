@@ -30,6 +30,9 @@
 #include "../types/PrimitiveType.h"
 #include "../types/ErrorType.h"
 
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(OOModel::MethodCallExpression)
+
 namespace OOModel {
 
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(MethodCallExpression, Expression)

@@ -36,4 +36,9 @@ bool StringType::equals(const Type* other) const
 	return dynamic_cast<const StringType*>(other);
 }
 
+StringType* StringType::clone() const
+{
+	return new StringType(*this);
+}
+
 } /* namespace OOModel */

@@ -36,4 +36,9 @@ bool LambdaType::equals(const Type*) const
 	return false;
 }
 
+LambdaType* LambdaType::clone() const
+{
+	return new LambdaType(*this);
+}
+
 } /* namespace OOModel */

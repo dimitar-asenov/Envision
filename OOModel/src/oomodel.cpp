@@ -33,126 +33,15 @@ Q_EXPORT_PLUGIN2( oomodel, OOModel::OOModel )
 
 namespace OOModel {
 
+Model::InitializationRegistry& nodeTypeInitializationRegistry()
+{
+	static Model::InitializationRegistry r;
+	return r;
+}
+
 bool OOModel::initialize(Core::EnvisionManager&)
 {
-	// Initialize common nodes
-	Visibility::registerNodeType();
-	StorageSpecifier::registerNodeType();
-	OOReference::registerNodeType();
-
-	// Register TypedList instantiations
-	Model::TypedList<Project>::registerNodeType();
-	Model::TypedList<Library>::registerNodeType();
-	Model::TypedList<Module>::registerNodeType();
-	Model::TypedList<Class>::registerNodeType();
-	Model::TypedList<Method>::registerNodeType();
-	Model::TypedList<StatementItem>::registerNodeType();
-	Model::TypedList<FormalArgument>::registerNodeType();
-	Model::TypedList<FormalResult>::registerNodeType();
-	Model::TypedList<FormalTypeArgument>::registerNodeType();
-	Model::TypedList<Field>::registerNodeType();
-	Model::TypedList<OOReference>::registerNodeType();
-	Model::TypedList<CatchClause>::registerNodeType();
-
-	Model::TypedList<Statement>::registerNodeType();
-	Model::TypedList<Block>::registerNodeType();
-	Model::TypedList<BreakStatement>::registerNodeType();
-	Model::TypedList<ContinueStatement>::registerNodeType();
-	Model::TypedList<ForEachStatement>::registerNodeType();
-	Model::TypedList<IfStatement>::registerNodeType();
-	Model::TypedList<LoopStatement>::registerNodeType();
-	Model::TypedList<ReturnStatement>::registerNodeType();
-	Model::TypedList<SwitchCase>::registerNodeType();
-	Model::TypedList<SwitchStatement>::registerNodeType();
-	Model::TypedList<VariableDeclaration>::registerNodeType();
-	Model::TypedList<ExpressionStatement>::registerNodeType();
-	Model::TypedList<TryCatchFinallyStatement>::registerNodeType();
-
-	Model::TypedList<Expression>::registerNodeType();
-	Model::TypedList<IntegerLiteral>::registerNodeType();
-	Model::TypedList<FloatLiteral>::registerNodeType();
-	Model::TypedList<BooleanLiteral>::registerNodeType();
-	Model::TypedList<StringLiteral>::registerNodeType();
-	Model::TypedList<CharacterLiteral>::registerNodeType();
-	Model::TypedList<NullLiteral>::registerNodeType();
-	Model::TypedList<ThisExpression>::registerNodeType();
-	Model::TypedList<NewExpression>::registerNodeType();
-	Model::TypedList<MethodCallExpression>::registerNodeType();
-	Model::TypedList<UnaryOperation>::registerNodeType();
-	Model::TypedList<BinaryOperation>::registerNodeType();
-	Model::TypedList<CastExpression>::registerNodeType();
-	Model::TypedList<ReferenceExpression>::registerNodeType();
-	Model::TypedList<ArrayInitializer>::registerNodeType();
-	Model::TypedList<ErrorExpression>::registerNodeType();
-	Model::TypedList<UnfinishedOperator>::registerNodeType();
-	Model::TypedList<EmptyExpression>::registerNodeType();
-	Model::TypedList<CommaExpression>::registerNodeType();
-	Model::TypedList<AssignmentExpression>::registerNodeType();
-	Model::TypedList<ConditionalExpression>::registerNodeType();
-	Model::TypedList<ThrowExpression>::registerNodeType();
-	Model::TypedList<LambdaExpression>::registerNodeType();
-
-	Model::TypedList<TypeExpression>::registerNodeType();
-	Model::TypedList<PrimitiveTypeExpression>::registerNodeType();
-	Model::TypedList<ClassTypeExpression>::registerNodeType();
-	Model::TypedList<ArrayTypeExpression>::registerNodeType();
-
-	// Initialize OO Node types
-	Project::init();
-	Library::init();
-	Module::init();
-	Class::init();
-	Method::init();
-	StatementItem::init();
-	StatementItemList::registerNodeType();
-	FormalArgument::init();
-	FormalResult::init();
-	FormalTypeArgument::init();
-	Field::init();
-	CatchClause::init();
-
-	Statement::init();
-	Block::init();
-	BreakStatement::init();
-	ContinueStatement::init();
-	ForEachStatement::init();
-	IfStatement::init();
-	LoopStatement::init();
-	ReturnStatement::init();
-	SwitchCase::init();
-	SwitchStatement::init();
-	VariableDeclaration::init();
-	ExpressionStatement::init();
-	TryCatchFinallyStatement::init();
-
-	Expression::init();
-	IntegerLiteral::init();
-	FloatLiteral::init();
-	BooleanLiteral::init();
-	StringLiteral::init();
-	CharacterLiteral::init();
-	NullLiteral::init();
-	ThisExpression::init();
-	NewExpression::init();
-	MethodCallExpression::init();
-	UnaryOperation::init();
-	BinaryOperation::init();
-	CastExpression::init();
-	ReferenceExpression::init();
-	ArrayInitializer::init();
-	EmptyExpression::init();
-	ErrorExpression::init();
-	UnfinishedOperator::init();
-	CommaExpression::init();
-	AssignmentExpression::init();
-	ConditionalExpression::init();
-	ThrowExpression::init();
-	LambdaExpression::init();
-
-	TypeExpression::init();
-	PrimitiveTypeExpression::init();
-	ClassTypeExpression::init();
-	ArrayTypeExpression::init();
+	nodeTypeInitializationRegistry().initializeAll();
 
 	// Register default element creation functions for some lists
 	Model::TypedList<StatementItem>::setDefaultElementCreationFunction([]() -> StatementItem* {

@@ -29,6 +29,8 @@
 #include "../elements/StatementItem.h"
 #include "ModelBase/src/nodes/TypedList.h"
 
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, StatementItemList)
+
 namespace OOModel {
 
 class OOMODEL_API StatementItemList : public Model::TypedList<StatementItem>

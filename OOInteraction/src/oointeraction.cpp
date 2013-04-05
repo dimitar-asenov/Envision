@@ -87,7 +87,7 @@
 #include "string_offset_providers/CompoundObjectStringOffsetProvider.h"
 #include "string_offset_providers/KeywordMethodCallStringOffsetProvider.h"
 
-#include "customization/MethodDefinitionVisitor.h"
+#include "customization/CustomizationVisitor.h"
 
 #include "OOVisualization/src/allOOVisualizations.h"
 
@@ -105,6 +105,7 @@
 #include "VisualizationBase/src/items/Symbol.h"
 #include "VisualizationBase/src/items/Text.h"
 #include "VisualizationBase/src/items/VText.h"
+#include "VisualizationBase/src/VisualizationManager.h"
 
 #include "ModelBase/src/adapter/AdapterManager.h"
 
@@ -295,7 +296,10 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 	});
 	Visualization::Scene::defaultRenderer()->registerGroup(
 		OOModel::MethodCallExpression::typeIdStatic(), customizationGroup);
-	MethodDefinitionVisitor::init(customizationGroup);
+	CustomizationVisitor::init(customizationGroup);
+
+	Visualization::VisualizationManager::instance().mainScene()->addRefreshActionFunction(
+			CustomizationVisitor::onSceneRefresh);
 
 	return true;
 }

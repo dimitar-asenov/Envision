@@ -29,7 +29,7 @@
 #include "Statement.h"
 #include "../expressions/Expression.h"
 
-#include "ModelBase/src/nodes/TypedList.h"
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, ReturnStatement)
 
 namespace OOModel {
 

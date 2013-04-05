@@ -34,6 +34,8 @@
 #include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
 
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, SwitchCase)
+
 namespace OOModel {
 
 class OOMODEL_API SwitchCase : public Model::ExtendableNode

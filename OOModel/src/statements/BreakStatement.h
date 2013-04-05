@@ -28,6 +28,8 @@
 
 #include "Statement.h"
 
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, BreakStatement)
+
 namespace OOModel {
 
 class OOMODEL_API BreakStatement: public Statement

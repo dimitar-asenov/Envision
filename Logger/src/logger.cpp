@@ -26,19 +26,40 @@
 
 #include "logger.h"
 #include "Log.h"
+#include "Timer.h"
 #include "LogTester.h"
 
 Q_EXPORT_PLUGIN2( logger, Logger::LoggerPlugin )
 
 namespace Logger {
 
-bool LoggerPlugin::initialize(Core::EnvisionManager&)
+bool LoggerPlugin::initialize(Core::EnvisionManager& m)
 {
+	// Add a timer that tracks the total time for processing events
+	static bool processingEvents = false;
+	static auto t = Timer::start("Total event processing time");
+	m.addPreEventAction([](QObject*, QEvent*){
+		if (!processingEvents)
+		{
+			processingEvents = true;
+			t->start();
+		}
+	});
+
+	m.addPostEventAction([](QObject*, QEvent*){
+		if (!qApp->hasPendingEvents())
+		{
+			processingEvents = false;
+			t->tick();
+		}
+	});
+
 	return true;
 }
 
 void LoggerPlugin::unload()
 {
+	Timer::removeAllTimers();
 }
 
 void LoggerPlugin::selfTest(QString)

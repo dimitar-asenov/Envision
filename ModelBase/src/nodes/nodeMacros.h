@@ -58,6 +58,8 @@
 		static const QString& typeNameStatic();																								\
 		static int typeIdStatic();																													\
 		static void registerNodeType();																											\
+		static void init();																															\
+		static ::Model::InitializationRegistry& initializationRegistry();													\
 																																							\
 	private:																																				\
 		static int typeId_;																															\
@@ -90,6 +92,7 @@
 			::Model::AttributeChain& metaData); 																								\
 																																							\
 		static void init();																															\
+		static ::Model::InitializationRegistry& initializationRegistry();													\
 																																							\
 		static ::Model::AttributeChain& getMetaData();																						\
 		static ::Model::ExtendableIndex registerNewAttribute(const QString &attributeName,										\
@@ -120,6 +123,51 @@
 		static ::Model::ExtendableIndex addAttributeToInitialRegistrationList_														\
 				(::Model::ExtendableIndex& index, const QString &attributeName, const QString &attributeType, 				\
 					bool canBePartiallyLoaded, bool isOptional, bool isPersistent);													\
+
+/*********************************************************************************************************************/
+
+/**
+ * Declares an exported/imported extern specialization of TypedList for a yet to be defined node type.
+ *
+ * @param importExportSpec
+ * 			The macro that specifies whether this should be an imported or an exported specialization. Typically this
+ * 			is of the form PLUGINNAME_API.
+ *
+  * @param namespaceName
+ * 			The name of the namespace that contains the node type for which we are specializing the TypedList template.
+ *
+  * @param className
+ * 			The name of the class being defined. This class must inherit from Node, directly or indirectly.
+ *
+ * This macro should appear just before a class declaration, outside of a namespace e.g. :
+ *
+ * DECLARE_TYPED_LIST( MYMODEL_API, MyModel, MyNewNode)
+ * namespace MyModel {
+ * 	class MyNewNode : public Node
+ * 	{
+ * 		...
+ */
+#define DECLARE_TYPED_LIST( importExportSpec, namespaceName, className)																\
+namespace namespaceName { class className; }																									\
+extern template class importExportSpec Model::TypedList<namespaceName::className>;												\
+
+/*********************************************************************************************************************/
+
+/**
+ * Defines an exported explicit specialization of TypedList for a node type.
+ *
+ * @param className
+ * 			The name of the class being defined including its namespace. This class must inherit from Node, directly
+ * 			or indirectly.
+ *
+ * Use this in the .cpp file that defines the node type, just before the namespace.
+ *
+ * DEFINE_TYPED_LIST(MyModel::MyNewNode)
+ * namespace MyModel {
+ * 		...
+ */
+#define DEFINE_TYPED_LIST(className)																											\
+template class Model::TypedList<className>;																									\
 
 /*********************************************************************************************************************/
 
@@ -181,7 +229,17 @@
  * Use this macro in the .cpp file that defines the new Node type.
  */
 #define NODE_DEFINE_TYPE_REGISTRATION_METHODS(className, superClassName)															\
-int className::typeId_ = -1; /* This must be set to the result of Node::registerNodeType */									\
+/* Forward declaration. This function must be defined in the enclosing namespace*/												\
+::Model::InitializationRegistry& nodeTypeInitializationRegistry();																			\
+::Model::InitializationRegistry& className::initializationRegistry()														\
+{																																							\
+	return nodeTypeInitializationRegistry();																										\
+}																																							\
+																																							\
+/* This must be set to the result of Node::registerNodeType */																			\
+/* This variable uses a clever trick to register an initialization function that will be called during the */			\
+/* plug-in's initialization routine */																											\
+int className::typeId_ = (initializationRegistry().add(className::init) , -1); 										\
 																																							\
 const QString& className::typeName() const																									\
 {																																							\
@@ -212,6 +270,11 @@ void className::registerNodeType()																												\
 {																																							\
 	typeId_ = Node::registerNodeType(#className, ::Model::createNewNode< className >,											\
 			::Model::createNodeFromPersistence< className >);																				\
+}																																							\
+																																							\
+void className::init()																																\
+{																																							\
+	registerNodeType();																																\
 }
 /*********************************************************************************************************************/
 
@@ -228,7 +291,17 @@ void className::registerNodeType()																												\
  * Use this macro in the .cpp file that defines the new Node type.
  */
 #define EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(className, superClassName)												\
-int className::typeId_ = -1; /* This must be set to the result of Node::registerNodeType */									\
+/* Forward declaration. This function must be defined in the enclosing namespace*/												\
+::Model::InitializationRegistry& nodeTypeInitializationRegistry();																			\
+::Model::InitializationRegistry& className::initializationRegistry()														\
+{																																							\
+	return nodeTypeInitializationRegistry();																										\
+}																																							\
+																																							\
+/* This must be set to the result of Node::registerNodeType */																			\
+/* This variable uses a clever trick to register an initialization function that will be called during the */			\
+/* plug-in's initialization routine */																											\
+int className::typeId_ = (initializationRegistry().add(className::init) , -1); 										\
 																																							\
 const QString& className::typeName() const																									\
 {																																							\

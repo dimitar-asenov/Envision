@@ -26,6 +26,9 @@
 
 #include "TryCatchFinallyStatement.h"
 
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(OOModel::TryCatchFinallyStatement)
+
 namespace OOModel {
 
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(TryCatchFinallyStatement, Statement)

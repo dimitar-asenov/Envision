@@ -30,6 +30,8 @@
 
 #include "ModelBase/src/nodes/Text.h"
 
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, StringLiteral)
+
 namespace OOModel {
 
 class OOMODEL_API StringLiteral: public Expression

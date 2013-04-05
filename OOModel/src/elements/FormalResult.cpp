@@ -26,6 +26,9 @@
 
 #include "elements/FormalResult.h"
 
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(OOModel::FormalResult)
+
 namespace OOModel {
 
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(FormalResult, Model::ExtendableNode)

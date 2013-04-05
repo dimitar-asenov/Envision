@@ -81,8 +81,12 @@ template <class T> T* StyleLoader::loadStyle(const QString& path, const QString&
 {
 	rootStyleNode = new StyleNode(styleName, path);
 
+	QString styleRootNodeName = "style";
+	auto subNodeIndex = styleName.indexOf('/');
+	if (subNodeIndex > 0) styleRootNodeName = styleName.mid(subNodeIndex+1);
+
 	T* style = new T();
-	load("style", *style);
+	load(styleRootNodeName, *style);
 
 	SAFE_DELETE(rootStyleNode);
 

@@ -46,6 +46,7 @@ class OOINTERACTION_API CommandDescriptor : public OOOperatorDescriptor {
 		virtual OOModel::Expression* create(const QList<OOModel::Expression*>& operands);
 
 		static bool registerCommand(CommandExpression* command);
+		static void unregisterCommand(CommandExpression* command);
 
 	private:
 		OOModel::UnfinishedOperator* createUnfinished(const QString& name, const QList<OOModel::Expression*>& arguments);

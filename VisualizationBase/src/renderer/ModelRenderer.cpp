@@ -94,6 +94,7 @@ int ModelRenderer::registerVisualizationPurpose(const QString& name)
 void ModelRenderer::registerVisualization(int nodeTypeId, int purpose,
 		VisualizationGroup::ItemConstructor visualization)
 {
+	Q_ASSERT(nodeTypeId > 0);
 	if (nodeTypeId >= groups_.size()) groups_.resize(nodeTypeId + 1);
 	if (purpose >= groups_[nodeTypeId].size()) groups_[nodeTypeId].resize(purpose+1);
 

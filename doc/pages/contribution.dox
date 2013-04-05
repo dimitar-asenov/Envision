@@ -1,0 +1,170 @@
+/*! \page contribution Contributing to Envision
+
+All contributions to the Envision source code such as enhancements or bug fixes are much appreciated. If you want to
+join the development effort please read the information on this page.
+
+
+
+\section workflow Workflow
+The main repository for the project is maintained by Dimitar and can be found
+<a href="https://github.com/dimitar-asenov/Envision">here</a>. There are two main branches:
+	- \c development - Contains the latest changes and features. This branch is updated regularly, and any contributions
+		should be based on it.
+	- \c master - The idea is that this branch contains a somewhat more stable version of the IDE. However currently,
+		it simply contains an older version, that is occasionally synchronized with the \c development branch.
+
+Contributors should create their own forks of Envision on github and create a feature branch based on the
+\c development branch. Work on new features or bug fixes should be done in this branch and the branch should be rebased
+prior to being merged back into the \c development branch of the main Envision repository.
+
+This simple workflow is sufficient for the small team of people who are currently contributing to Envision.
+
+
+
+\section environment Build environment
+See \ref compilation "the compilation instructions".
+
+
+
+\section style Code style
+Qt is an excellent framework and is used throughout the Envision project. Not surprisingly Envision adopts many of the
+code style conventions of Qt. Have a look at:
+	- <a href="http://qt-project.org/wiki/Qt_Coding_Style">The Qt Coding Style</a>
+	- <a href="http://qt-project.org/wiki/Coding-Conventions">The Qt Coding Conventions</a>
+	- In addition, you might want to have a look at 
+		<a href="http://qt-project.org/wiki/API-Design-Principles">Qt's API Design Principles</a>
+		or even read the
+		<a href="http://www4.in.tum.de/~blanchet/api-design.pdf">more elaborate PDF version</a>.
+
+Here a few important points, and things where Envision differs from Qt:
+	- <b>Language features</b>
+		- Strive for <a href="http://en.wikipedia.org/wiki/Const-correctness">const-correctness</a>.
+		- Use exceptions and RTTI where appropriate.
+		- Make use of the <a href="http://www.stroustrup.com/C++11FAQ.html">new C++11 features</a>.
+		- All class members should have a default initializer using the new C++11 syntax with curly braces in the class
+			declaration:
+\code
+// Wrong:
+class PointAndItem
+{
+	public:
+		PointAnditem();
+	private:
+		int x_;
+		int y_;
+		Item* item_;
+}
+
+PointAndItem::PointAndItem() : x_(0), y_(0), item_(nullptr)
+{
+}
+
+// Correct:
+class PointAndItem
+{
+	private:
+		int x_{};
+		int y_{};
+		Item* item_{};
+}
+\endcode
+		- When reimplementing a virtual method, put the \c virtual and the \c override keywords in your method declaration.
+		- Only define private fields, never public or protected.
+		- All non-virtual methods that are simple and short should be declared inline. The method definition of inlined methods should appear
+			after the class body:
+\code
+// Wrong:
+class Cell
+{
+	public:
+		int value() const { return value_;}
+	private:
+		int value_;
+}
+
+// Correct:
+class Cell
+{
+	public:
+		int value() const;
+	private:
+		int value_;
+}
+
+inline int Cell::value() const { return value_;}
+\endcode
+		- Wherever possible prefer to use classes provided by Qt over STL or other libraries.
+		- If you are defining new templates make sure those work across platforms and shared object boundaries.
+	- \b Formatting
+		- Always use TABs for indentation and never spaces. Configure your editor to display a tab as 3 spaces.
+		- Lines should be shorter than 120 characters. A TAB counts as 3 characters.
+		- If the body of an \c if, \c while, or \c for is a single statement, do not use curly braces around it. If the
+			condition and statement fit nicely on the same line write them on one line, otherwise put the statement on a
+			newline:
+\code
+// Wrong:
+if (foo)
+{
+	bar();
+}
+
+if (aMoreComplicatedOrMultilineCondition) anExtremelyLongAndComplicatedStatement();
+
+// Correct:
+if (foo) bar();
+
+if (aMoreComplicatedOrMultilineCondition)
+	anExtremelyLongAndComplicatedStatement();
+\endcode
+		- Curly braces should appear in a line on their own, except when using lambdas:
+\code
+// Wrong:
+if (foo) {
+}
+
+// Correct:
+if (foo)
+{
+}
+\endcode
+		- Leave a single space after a \c // comment delimiter.
+		- For pointers or references, do not leave any space between the type and '*' or '&', but write a single space
+			between the '*' or '&' and the variable name:
+\code
+QString& string;
+Item* item;
+const QString& message;
+\endcode
+		- Field names should follow the Qt naming conventions and additionally should end with an underscore:
+\code
+private:
+	int length_;
+	Item* myFirstItem_;
+\endcode
+		- Private and protected methods do not end with an underscore.
+		- When declaring a class, list the members in the following order starting from the top: \c public, \c protected,
+			\c private.
+		- In the \c .cpp file defining a class, define all members in the following order starting from the top: \c static,
+			\c constructors, \c destructors, <tt>the rest</tt>
+
+Of course you can always have a look at the existing code in case you are not sure about something. If you feel like
+some additional clarifications should be added here, let Dimitar know.
+
+
+
+\section committing Commit policy
+	- A single commit should focus on a single bug fix, or a single aspect of an enhancement. Unrelated changes should be
+		committed separately.
+	- Do not squash multiple commits into one. A bug fix or enhancement should have its own branch that contains all
+		necessary commits.
+	- Always include a commit message which should at a minimum contain at least a title
+	- Commit titles should be limited to 72 characters and use the present tense to indicate what the commit does:
+\verbatim
+Right: Fix a bug where typing 42 would crash Envision
+Wrong: Fixes a bug where typing 42 would crash Envision
+Wrong: Fixed a bug where typing 42 would crash Envision
+\endverbatim
+	- If the commit title does not sufficiently describe the commit, also include a more detailed commit description.
+
+
+*/

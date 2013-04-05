@@ -49,6 +49,7 @@
 #include "VisualizationBase/src/items/Text.h"
 #include "VisualizationBase/src/items/Symbol.h"
 #include "VisualizationBase/src/items/Line.h"
+#include "VisualizationBase/src/items/TestBox.h"
 #include "VisualizationBase/src/items/VText.h"
 #include "VisualizationBase/src/items/VInteger.h"
 #include "VisualizationBase/src/items/VFloat.h"
@@ -84,6 +85,7 @@ bool InteractionBase::initialize(Core::EnvisionManager&)
 	Visualization::Text::setInteractionHandler(HText::instance());
 	Visualization::Symbol::setInteractionHandler(HText::instance());
 	Visualization::Line::setInteractionHandler(GenericHandler::instance());
+	Visualization::TestBox::setInteractionHandler(HText::instance());
 	Visualization::VText::setInteractionHandler(HText::instance());
 	Visualization::VInteger::setInteractionHandler(HText::instance());
 	Visualization::VFloat::setInteractionHandler(HText::instance());

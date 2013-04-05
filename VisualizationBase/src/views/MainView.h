@@ -49,11 +49,12 @@ class VISUALIZATIONBASE_API MainView: public View
 		qreal scaleFactor() const;
 
 	protected:
-		virtual bool event(QEvent *event);
-		virtual void resizeEvent( QResizeEvent *event );
-		virtual void wheelEvent(QWheelEvent *event);
-		virtual void scrollContentsBy(int dx, int dy);
-		virtual void keyPressEvent (QKeyEvent *event);
+		virtual bool event(QEvent* event) override;
+		virtual void resizeEvent(QResizeEvent* event) override;
+		virtual void wheelEvent(QWheelEvent* event) override;
+		virtual void scrollContentsBy(int dx, int dy) override;
+		virtual void keyPressEvent(QKeyEvent* event) override;
+		virtual void paintEvent(QPaintEvent* event) override;
 
 
 	private:
@@ -61,6 +62,11 @@ class VISUALIZATIONBASE_API MainView: public View
 
 		static const int SCALING_FACTOR = 2;
 		int scaleLevel;
+
+		bool showTimers_{false};
+		QList<QLabel*> infoLabels_; ///< Information text displayed in the top left corner
+
+		void updateInfoLabels();
 };
 
 }

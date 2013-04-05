@@ -37,6 +37,9 @@
 #include "ModelBase/src/nodes/TypedList.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
 
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Project)
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Library)
+
 namespace OOModel {
 
 class Library;

@@ -29,7 +29,7 @@
 #include "Expression.h"
 #include "../elements/OOReference.h"
 
-#include "ModelBase/src/nodes/TypedList.h"
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, ReferenceExpression)
 
 namespace OOModel {
 

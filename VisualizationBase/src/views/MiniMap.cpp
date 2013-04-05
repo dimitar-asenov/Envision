@@ -26,9 +26,7 @@
 
 #include "views/MiniMap.h"
 
-#include <QtGui/QMouseEvent>
-
-#include <cmath>
+#include "Logger/src/Timer.h"
 
 namespace Visualization {
 
@@ -71,12 +69,16 @@ void MiniMap::visibleRectChanged()
 
 void MiniMap::paintEvent(QPaintEvent *event)
 {
+	auto t = Logger::Timer::start("Minimap paint");
 	View::paintEvent(event);
+
 	QPainter painter(viewport());
 	painter.setPen(Qt::red);
 	painter.drawRect(drawnRect);
 	if (drawnRect.width() <= 2 || drawnRect.height() <= 2)
 		painter.drawEllipse(drawnRect.center(), 5,5);
+
+	t->tick();
 }
 
 void MiniMap::mouseMoveEvent(QMouseEvent *event)

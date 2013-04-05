@@ -30,6 +30,8 @@
 
 #include "ModelBase/src/nodes/Boolean.h"
 
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, BooleanLiteral)
+
 namespace OOModel {
 
 class OOMODEL_API BooleanLiteral: public Expression

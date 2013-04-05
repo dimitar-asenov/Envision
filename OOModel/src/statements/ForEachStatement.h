@@ -32,6 +32,8 @@
 #include "../elements/StatementItemList.h"
 #include "../expressions/Expression.h"
 
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, ForEachStatement)
+
 namespace OOModel {
 
 class OOMODEL_API ForEachStatement: public Statement

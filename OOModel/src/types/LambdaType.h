@@ -40,7 +40,9 @@ class OOMODEL_API LambdaType : public Type {
 		/**
 		 * Always returns false, two lambdas are never equal.
 		 */
-		virtual bool equals(const Type* other) const;
+		virtual bool equals(const Type* other) const override;
+
+		virtual LambdaType* clone() const override;
 
 	private:
 		LambdaExpression* lambda_;

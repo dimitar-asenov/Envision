@@ -36,4 +36,9 @@ bool NullType::equals(const Type* other) const
 	return dynamic_cast<const NullType*>(other);
 }
 
+NullType* NullType::clone() const
+{
+	return new NullType(*this);
+}
+
 } /* namespace OOModel */
