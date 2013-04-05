@@ -3,6 +3,8 @@
 Envision is written in C++ and uses some features of the new C++11 standard. Make sure your C++ compiler is up-to-date.
 Gcc versions 4.7 and newer should be sufficient.
 
+Envision currently uses the Qt 4.8 libraries but a migration to Qt 5 is planned.
+
 \section eclipse Using Eclipse (recommended)
 
 	-# If you do not have the Qt development version installed, download and install it.
@@ -13,12 +15,15 @@ Gcc versions 4.7 and newer should be sufficient.
 	-# Load all projects into Eclipse. Eclipse/Qt might try to change some project files. Reject all requested changes.
 	-# Build all projects.
 
-\section no_eclipse Not using Eclipse
+\section no_eclipse Using the command line or Qt Creator
 
-	-# If you do not have the Qt development version installed, download and install it.
-	-# Download Envision's sources. The project is structured in separate directories and each one is a Qt project.
-	-# Run \verbatim qmake \endverbatim in all directories.
-	-# Run \verbatim make debug debug-install \endverbatim in all directories
+	-# If you do not have the Qt SDK installed, download and install it.
+	-# Download Envision's sources. The main project is a Qt folders project which contains all the plug-ins. If you
+		want to use Qt Creator you should open the \c envision.pro file in the main directory.
+		Support for Qt Creator is minimal, but will be improved in the future.
+	-# In the top-level project directory run
+		\verbatim qmake -recursive
+sh maker.sh\endverbatim
 
 After you have compiled Envision give it a try! See \ref try_envision "this page" for some interesting examples.
 */

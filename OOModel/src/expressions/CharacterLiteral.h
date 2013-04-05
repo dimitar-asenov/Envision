@@ -30,6 +30,8 @@
 
 #include "ModelBase/src/nodes/Character.h"
 
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, CharacterLiteral)
+
 namespace OOModel {
 
 class OOMODEL_API CharacterLiteral: public Expression

@@ -26,6 +26,9 @@
 
 #include "statements/SwitchStatement.h"
 
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(OOModel::SwitchStatement)
+
 namespace OOModel {
 
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(SwitchStatement, Statement)

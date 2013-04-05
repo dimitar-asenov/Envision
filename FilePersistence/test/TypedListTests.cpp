@@ -31,7 +31,6 @@
 #include "ModelBase/src/model/Model.h"
 #include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/List.h"
-#include "ModelBase/src/TypedListInstantiations.h"
 
 namespace FilePersistence {
 

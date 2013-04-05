@@ -33,9 +33,11 @@ namespace OOModel {
 class OOMODEL_API ThrownExceptionType : public Type {
 	public:
 		ThrownExceptionType(Type* exceptionType);
+		ThrownExceptionType(const ThrownExceptionType& other);
 		virtual ~ThrownExceptionType();
 
-		virtual bool equals(const Type* other) const;
+		virtual bool equals(const Type* other) const override;
+		virtual ThrownExceptionType* clone() const override;
 
 		const Type* exceptionType() const;
 

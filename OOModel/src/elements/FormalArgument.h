@@ -36,6 +36,8 @@
 #include "ModelBase/src/nodes/nodeMacros.h"
 #include "ModelBase/src/nodes/Integer.h"
 
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, FormalArgument)
+
 namespace OOModel {
 
 class OOMODEL_API FormalArgument : public Model::ExtendableNode

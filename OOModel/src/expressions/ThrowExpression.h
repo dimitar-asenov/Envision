@@ -28,6 +28,8 @@
 
 #include "Expression.h"
 
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, ThrowExpression)
+
 namespace OOModel {
 
 class OOMODEL_API ThrowExpression: public Expression

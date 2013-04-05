@@ -1,0 +1,48 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style>
+	<requires prototypes="default_text">
+		<keyword>
+			<symbol>requires</symbol>
+		</keyword>
+	</requires>
+	<ensures prototypes="default_text">
+		<keyword>
+			<symbol>ensures</symbol>
+		</keyword>
+	</ensures>
+	<old prototypes="superscript_text">
+		<keyword>
+			<symbol>OLD</symbol>
+		</keyword>
+	</old>
+	<result prototypes="default_text">
+		<shape />
+		<layout >
+			<spaceBetweenElements>1</spaceBetweenElements>
+		</layout>
+		<keyword>
+			<symbol>result</symbol>
+		</keyword>
+		<arguments prototypes="item/VList/default">
+			<drawShapeWhenEmpty>false</drawShapeWhenEmpty>
+			<shape />
+		</arguments>
+	</result>
+	<out prototypes="superscript_text">
+		<keyword>
+			<font>
+				<size>10</size>
+				<weight>0</weight>
+			</font>
+			<pen>t
+				<color>
+					<alpha>255</alpha>
+					<red>255</red>
+					<green>0</green>
+					<blue>0</blue>
+				</color>
+			</pen>
+			<symbol>↲</symbol>
+		</keyword>
+	</out>
+</style>

@@ -26,6 +26,9 @@
 
 #include "statements/ContinueStatement.h"
 
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(OOModel::ContinueStatement)
+
 namespace OOModel {
 
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(ContinueStatement, Statement)

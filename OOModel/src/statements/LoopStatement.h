@@ -31,6 +31,8 @@
 #include "../expressions/Expression.h"
 #include "../elements/StatementItemList.h"
 
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, LoopStatement)
+
 namespace OOModel {
 
 class OOMODEL_API LoopStatement: public Statement

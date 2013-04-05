@@ -31,6 +31,9 @@
 #include "ModelBase/src/nodes/Node.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
 #include "ModelBase/src/persistence/PersistentStore.h"
+#include "ModelBase/src/nodes/TypedList.h"
+
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, StorageSpecifier)
 
 namespace OOModel {
 

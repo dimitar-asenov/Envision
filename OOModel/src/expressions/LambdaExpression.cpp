@@ -26,6 +26,10 @@
 
 #include "LambdaExpression.h"
 #include "../types/LambdaType.h"
+
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(OOModel::LambdaExpression)
+
 namespace OOModel {
 
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(LambdaExpression, Expression)

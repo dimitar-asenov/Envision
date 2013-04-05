@@ -34,8 +34,9 @@ class OOMODEL_API ErrorType : public Type {
 	public:
 		ErrorType(const QString& message);
 
-		virtual bool isError() const;
-		virtual bool equals(const Type* other) const;
+		virtual bool isError() const override;
+		virtual bool equals(const Type* other) const override;
+		virtual ErrorType* clone() const override;
 
 		const QString& message() const;
 

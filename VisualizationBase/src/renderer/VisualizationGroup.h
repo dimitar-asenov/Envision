@@ -50,6 +50,7 @@ class VISUALIZATIONBASE_API VisualizationGroup {
 		void addVisualization(VisualizationGroup::ItemConstructor visualization);
 		void addVisualization(VisualizationGroup::ItemConstructor visualization, ConditionFunction condition);
 		void addSubGroup(VisualizationGroup* group);
+		void clear();
 
 		void setConditionFunction(ConditionFunction condition, int scorePoints = 1);
 
@@ -69,6 +70,7 @@ class VISUALIZATIONBASE_API VisualizationGroup {
 inline void VisualizationGroup::addVisualization(VisualizationGroup::ItemConstructor visualization)
 { visualizations_ << visualization; }
 inline void VisualizationGroup::addSubGroup(VisualizationGroup* group) { subGroups_ << group; }
+inline void VisualizationGroup::clear() {visualizations_.clear(); subGroups_.clear();}
 inline void VisualizationGroup::setConditionFunction(ConditionFunction condition, int scorePoints)
 { contextCondition_ = condition; scorePoints_ = scorePoints;}
 

@@ -29,6 +29,9 @@
 #include "../types/ClassType.h"
 #include "../types/ErrorType.h"
 
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(OOModel::ThisExpression)
+
 namespace OOModel {
 
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(ThisExpression, Expression)

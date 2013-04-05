@@ -43,6 +43,11 @@ bool CommandDescriptor::registerCommand(CommandExpression* command)
 	return true;
 }
 
+void CommandDescriptor::unregisterCommand(CommandExpression* command)
+{
+	if (command) commands.remove(command->name());
+}
+
 CommandDescriptor::CommandDescriptor(const QString& name, const QString& signature, int num_operands,
 		int precedence, Associativity associativity)
 		: OOOperatorDescriptor(name, signature, num_operands, precedence, associativity)

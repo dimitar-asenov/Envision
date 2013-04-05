@@ -26,6 +26,7 @@
 
 #include "EnvisionWindow.h"
 #include "PluginManager.h"
+#include "EnvisionApplication.h"
 #include "EnvisionException.h"
 #include "DefaultEnvisionManager.h"
 #include "TestRunner.h"
@@ -45,7 +46,7 @@ using namespace Core;
  */
 int main(int argc, char *argv[])
 {
-	QApplication a(argc, argv);
+	EnvisionApplication a(argc, argv);
 
 	// Enable core dumps of debug builds on Linux
 #ifdef Q_OS_LINUX

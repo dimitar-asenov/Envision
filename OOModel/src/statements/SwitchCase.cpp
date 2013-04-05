@@ -26,6 +26,9 @@
 
 #include "statements/SwitchCase.h"
 
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(OOModel::SwitchCase)
+
 namespace OOModel {
 
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(SwitchCase, Model::ExtendableNode)

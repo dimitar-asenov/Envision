@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "MethodDefinitionVisitor.h"
+#include "CustomizationVisitor.h"
 #include "../expression_editor/operators/CommandDescriptor.h"
 #include "../expression_editor/operators/commands/CreateMethodCall.h"
 
@@ -38,15 +38,16 @@
 
 namespace OOInteraction {
 
-Visualization::VisualizationGroup* MethodDefinitionVisitor::customizationGroup_{};
+Visualization::VisualizationGroup* CustomizationVisitor::customizationGroup_{};
+QList<CommandExpression*> CustomizationVisitor::registeredCommands_;
 
-void MethodDefinitionVisitor::init(Visualization::VisualizationGroup* customizationGroup)
+void CustomizationVisitor::init(Visualization::VisualizationGroup* customizationGroup)
 {
 	customizationGroup_ = customizationGroup;
 	addType<OOModel::Method>(visitMethod);
 }
 
-Model::Node* MethodDefinitionVisitor::visitMethod(MethodDefinitionVisitor*, OOModel::Method* met)
+Model::Node* CustomizationVisitor::visitMethod(CustomizationVisitor*, OOModel::Method* met)
 {
 	for(int i = 0; i<met->annotations()->size(); ++i)
 	{
@@ -81,12 +82,17 @@ Model::Node* MethodDefinitionVisitor::visitMethod(MethodDefinitionVisitor*, OOMo
 				{
 					if (auto keyword = dynamic_cast<OOModel::StringLiteral*>(call->arguments()->first()))
 					{
+						CommandExpression* command{};
 						if (call->arguments()->size() == 1)
-							CommandDescriptor::registerCommand(
-								new CreateMethodCall(keyword->value(), met->fullyQualifiedName()));
+							command = new CreateMethodCall(keyword->value(), met->fullyQualifiedName());
 						else if (auto numArgs = dynamic_cast<OOModel::IntegerLiteral*>(call->arguments()->last()))
-								CommandDescriptor::registerCommand(
-									new CreateMethodCall(keyword->value(), met->fullyQualifiedName(), numArgs->value()));
+							command = new CreateMethodCall(keyword->value(), met->fullyQualifiedName(), numArgs->value());
+
+						if (command)
+						{
+							registeredCommands_.append(command);
+							CommandDescriptor::registerCommand(command);
+						}
 					}
 				}
 			}
@@ -95,5 +101,19 @@ Model::Node* MethodDefinitionVisitor::visitMethod(MethodDefinitionVisitor*, OOMo
 	return met;
 }
 
+void CustomizationVisitor::resetCustomizations()
+{
+	if (customizationGroup_) customizationGroup_->clear();
+	for (auto command : registeredCommands_) CommandDescriptor::unregisterCommand(command);
+	registeredCommands_.clear();
+}
+
+void CustomizationVisitor::onSceneRefresh(Visualization::Scene* scene)
+{
+	resetCustomizations();
+	CustomizationVisitor customizations;
+	for (auto top : scene->topLevelItems())
+		if (top->hasNode()) customizations.visit(top->node());
+}
 
 } /* namespace OOInteraction */

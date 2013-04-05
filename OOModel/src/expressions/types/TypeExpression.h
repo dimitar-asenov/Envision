@@ -29,6 +29,8 @@
 #include "../Expression.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
 
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, TypeExpression)
+
 namespace OOModel {
 
 class Class;

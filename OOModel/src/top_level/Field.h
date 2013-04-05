@@ -37,6 +37,8 @@
 #include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
 
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Field)
+
 namespace OOModel {
 
 class OOMODEL_API Field : public Model::ExtendableNode

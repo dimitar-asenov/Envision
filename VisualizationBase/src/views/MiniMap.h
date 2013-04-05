@@ -52,10 +52,10 @@ class VISUALIZATIONBASE_API MiniMap : public View
 		void visibleRectChanged();
 
 	protected:
-		virtual void resizeEvent(QResizeEvent *event);
-		virtual void paintEvent(QPaintEvent *event);
-		virtual void mouseMoveEvent(QMouseEvent *event);
-		virtual void mousePressEvent(QMouseEvent *event);
+		virtual void resizeEvent(QResizeEvent* event) override;
+		virtual void paintEvent(QPaintEvent* event) override;
+		virtual void mouseMoveEvent(QMouseEvent* event) override;
+		virtual void mousePressEvent(QMouseEvent* event) override;
 
 	private:
 		View *parent;
@@ -65,7 +65,6 @@ class VISUALIZATIONBASE_API MiniMap : public View
 		QRect drawnRect;
 
 		void updateMap();
-
 };
 
 inline void MiniMap::setMargin(qreal margin_) { margin = margin_; }

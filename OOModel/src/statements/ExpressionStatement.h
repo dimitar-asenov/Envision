@@ -29,6 +29,8 @@
 #include "Statement.h"
 #include "../expressions/Expression.h"
 
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, ExpressionStatement)
+
 namespace OOModel {
 
 class OOMODEL_API ExpressionStatement : public Statement {

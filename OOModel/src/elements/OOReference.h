@@ -30,6 +30,8 @@
 
 #include "ModelBase/src/nodes/Reference.h"
 
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, OOReference)
+
 namespace OOModel {
 
 class OOMODEL_API OOReference : public Model::Reference {

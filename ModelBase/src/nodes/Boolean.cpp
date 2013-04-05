@@ -28,6 +28,9 @@
 #include "commands/FieldSet.h"
 #include "ModelException.h"
 
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(Model::Boolean)
+
 namespace Model {
 
 NODE_DEFINE_TYPE_REGISTRATION_METHODS(Boolean, Node)

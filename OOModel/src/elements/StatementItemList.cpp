@@ -26,6 +26,9 @@
 
 #include "elements/StatementItemList.h"
 
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(OOModel::StatementItemList)
+
 namespace OOModel {
 
 NODE_DEFINE_EMPTY_CONSTRUCTORS(StatementItemList, Model::TypedList<StatementItem> )

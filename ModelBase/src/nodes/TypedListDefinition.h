@@ -25,5 +25,112 @@
 ***********************************************************************************************************************/
 
 #pragma once
-#define ModelBase_TypedListDefinition
 #include "TypedList.h"
+
+namespace Model {
+
+template<class T> typename TypedList<T>::CreateDefaultElement& TypedList<T>::creationFunction()
+{
+	static CreateDefaultElement function;
+	return function;
+}
+
+template<class T> void TypedList<T>::setDefaultElementCreationFunction(CreateDefaultElement function)
+{
+		creationFunction() = function;
+}
+
+template<class T>
+TypedList<T>::TypedList(::Model::Node* parent) :
+	List(parent)
+{
+}
+
+template<class T>
+TypedList<T>::TypedList(::Model::Node *parent, ::Model::PersistentStore &store, bool partialLoadHint) :
+	List(parent, store, partialLoadHint)
+{
+}
+
+template<class T>
+::Model::InitializationRegistry& TypedList<T>::initializationRegistry()
+{
+	return T::initializationRegistry();
+}
+
+// This must be set to the result of Node::registerNodeType
+// This variable uses a clever trick to register an initialization function that will be called during the
+// plug-in's initialization routine
+template<class T> int TypedList<T>::typeId_ = (initializationRegistry().add(TypedList<T>::init) , -1);
+
+template<class T>
+const QString& TypedList<T>::typeName() const
+{
+	return typeNameStatic();
+}
+
+template<class T>
+int TypedList<T>::typeId() const
+{
+	return typeId_;
+}
+
+template<class T>
+QList<int> TypedList<T>::hierarchyTypeIds() const
+{
+	auto l = List::hierarchyTypeIds();
+	l.prepend(typeIdStatic());
+	return l;
+}
+
+template<class T>
+int TypedList<T>::typeIdStatic()
+{
+	return typeId_;
+}
+
+template<class T>
+const QString& TypedList<T>::typeNameStatic()
+{
+	static QString typeName_(QString("TypedListOf") + T::typeNameStatic());
+	return typeName_;
+}
+
+template<class T>
+void TypedList<T>::registerNodeType()
+{
+	typeId_ = Node::registerNodeType(typeNameStatic(), ::Model::createNewNode<TypedList<T> >,
+			::Model::createNodeFromPersistence<TypedList<T> >);
+}
+
+template<class T>
+void TypedList<T>::init()
+{
+	registerNodeType();
+}
+
+template<class T> T* TypedList<T>::first()
+{
+	return List::first<T>();
+}
+template<class T> T* TypedList<T>::last()
+{
+	return List::last<T>();
+}
+template<class T> T* TypedList<T>::at(int i)
+{
+	return List::at<T>(i);
+}
+
+template<class T> bool TypedList<T>::replaceChild(Node* child, Node* replacement)
+{
+	if (!dynamic_cast<T*>(replacement)) return false;
+	else return List::replaceChild(child, replacement);
+}
+
+template<class T> Node* TypedList<T>::createDefaultElement()
+{
+	if (creationFunction()) return creationFunction()();
+	else return nullptr;
+}
+}

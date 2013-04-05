@@ -35,6 +35,8 @@
 #include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
 
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, FormalTypeArgument)
+
 namespace OOModel {
 
 class OOMODEL_API FormalTypeArgument : public Model::ExtendableNode

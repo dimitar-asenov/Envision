@@ -27,6 +27,9 @@
 #include "expressions/FloatLiteral.h"
 #include "../types/PrimitiveType.h"
 
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(OOModel::FloatLiteral)
+
 namespace OOModel {
 
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(FloatLiteral, Expression)

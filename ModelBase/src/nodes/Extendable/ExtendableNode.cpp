@@ -58,6 +58,11 @@ void ExtendableNode::registerNodeType()
 			::Model::createNodeFromPersistence< ExtendableNode >);
 }
 
+void ExtendableNode::init()
+{
+	registerNodeType();
+}
+
 AttributeChain& ExtendableNode::topLevelMeta()
 {
 	return meta;

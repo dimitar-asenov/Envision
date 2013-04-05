@@ -32,6 +32,8 @@
 #include "../nodes/nodeMacros.h"
 #include "../nodes/Text.h"
 
+DECLARE_TYPED_LIST(MODELBASE_API, TestNodes, BinaryNode)
+
 namespace TestNodes {
 
 class MODELBASE_API BinaryNode: public Model::ExtendableNode

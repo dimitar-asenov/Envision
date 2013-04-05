@@ -44,9 +44,11 @@
 #include "items/Static.h"
 #include "items/Symbol.h"
 #include "items/Line.h"
+#include "items/TestBox.h"
 #include "icons/SVGIcon.h"
 
 #include "node_extensions/Position.h"
+#include "nodes/TestBoxNode.h"
 
 #include "ModelBase/src/test_nodes/BinaryNode.h"
 #include "SelfTest/src/SelfTestSuite.h"
@@ -55,6 +57,12 @@ Q_EXPORT_PLUGIN2( visualizationbase, Visualization::VisualizationBase )
 
 namespace Visualization
 {
+
+Model::InitializationRegistry& nodeTypeInitializationRegistry()
+{
+	static Model::InitializationRegistry r;
+	return r;
+}
 
 bool VisualizationBase::initialize(Core::EnvisionManager& manager)
 {
@@ -65,8 +73,9 @@ bool VisualizationBase::initialize(Core::EnvisionManager& manager)
 	Shape::registerShape<Braces>();
 	Shape::registerShape<SvgShape>();
 
-	// Register extensions
+	// Register extensions and nodes
 	Position::registerExtension();
+	nodeTypeInitializationRegistry().initializeAll();
 
 	// Register visualizations
 	Scene::defaultRenderer()->registerVisualization(
@@ -85,6 +94,8 @@ bool VisualizationBase::initialize(Core::EnvisionManager& manager)
 			Model::ExtendableNode::typeIdStatic(), createVisualization<VExtendable, Model::ExtendableNode>);
 	Scene::defaultRenderer()->registerVisualization(
 			Model::List::typeIdStatic(), createVisualization<VList, Model::List>);
+	Scene::defaultRenderer()->registerVisualization(
+			TestBoxNode::typeIdStatic(), createVisualization<TestBox, TestBoxNode>);
 
 	// Register static visualizations
 	Static::registerStaticItem<Symbol>();

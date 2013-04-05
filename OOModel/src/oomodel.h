@@ -26,8 +26,9 @@
 
 #pragma once
 
+#include "ModelBase/src/InitializationRegistry.h"
 #include "Core/src/EnvisionPlugin.h"
-#include "precompiled.h"
+#include "oomodel_api.h"
 
 namespace OOModel {
 
@@ -49,5 +50,7 @@ class OOModel : public QObject, public Core::EnvisionPlugin
 		virtual void unload() override;
 		virtual void selfTest(QString testid) override;
 };
+
+OOMODEL_API Model::InitializationRegistry& nodeTypeInitializationRegistry();
 
 }

@@ -41,4 +41,9 @@ bool SymbolProviderType::equals(const Type* other) const
 	return false;
 }
 
+SymbolProviderType* SymbolProviderType::clone() const
+{
+	return new SymbolProviderType(*this);
+}
+
 } /* namespace OOModel */

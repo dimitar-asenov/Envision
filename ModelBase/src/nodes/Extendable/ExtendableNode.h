@@ -100,6 +100,7 @@ class MODELBASE_API ExtendableNode: public Node
 		static const QString& typeNameStatic();
 		static int typeIdStatic();
 		static void registerNodeType();
+		static void init();
 		static int registerExtensionId();
 
 		template <class T> T* extension();

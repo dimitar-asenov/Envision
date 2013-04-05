@@ -3,7 +3,9 @@ include(../Core/common_plugin.pri)
 DEFINES += MODELBASE_LIBRARY
 win32:LIBS += -llogger \
     -lselftest
-HEADERS += src/commands/NodeOwningCommand.h \
+HEADERS += src/test_nodes/TestNodesInitializer.h \
+    src/InitializationRegistry.h \
+    src/commands/NodeOwningCommand.h \
     src/model/ModelManager.h \
     src/concurrent/InterruptibleThread.h \
     src/concurrent/NodeReadWriteLock.h \
@@ -11,7 +13,6 @@ HEADERS += src/commands/NodeOwningCommand.h \
     src/visitor/VisitorDefinition.h \
     src/visitor/Visitor.h \
     src/ModelException.h \
-    src/TypedListInstantiations.h \
     src/adapter/AdapterManager.h \
     src/commands/ExtendedNodeChild.h \
     src/commands/FieldSet.h \
@@ -52,7 +53,9 @@ HEADERS += src/commands/NodeOwningCommand.h \
     src/commands/SetModificationTarget.h \
     test/PersistentStoreMock.h \
     src/modelbase.h
-SOURCES += src/commands/NodeOwningCommand.cpp \
+SOURCES += src/test_nodes/TestNodesInitializer.cpp \
+    src/InitializationRegistry.cpp \
+    src/commands/NodeOwningCommand.cpp \
     src/model/ModelManager.cpp \
     src/concurrent/NodeReadWriteLock.cpp \
     src/model/Model.cpp \
@@ -61,7 +64,6 @@ SOURCES += src/commands/NodeOwningCommand.cpp \
     src/adapter/AdapterManager.cpp \
     src/commands/AddModifiedNode.cpp \
     src/test_nodes/PositionExtension.cpp \
-    src/TypedListInstantiations.cpp \
     src/nodes/Character.cpp \
     src/nodes/Boolean.cpp \
     src/nodes/Float.cpp \

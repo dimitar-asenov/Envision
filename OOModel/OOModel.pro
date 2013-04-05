@@ -26,7 +26,6 @@ HEADERS += src/types/LambdaType.h \
     src/elements/OOReference.h \
     src/expressions/ConditionalExpression.h \
     src/OOModelException.h \
-    src/TypedListInstantiations.h \
     src/allOOModelNodes.h \
     src/attributeMacros.h \
     src/elements/FormalArgument.h \
@@ -142,7 +141,6 @@ SOURCES += src/types/LambdaType.cpp \
     src/expressions/IntegerLiteral.cpp \
     src/statements/Statement.cpp \
     src/expressions/Expression.cpp \
-    src/TypedListInstantiations.cpp \
     src/OOModelException.cpp \
     src/oomodel.cpp \
     test/SimpleTest.cpp

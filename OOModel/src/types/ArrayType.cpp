@@ -31,6 +31,10 @@ namespace OOModel {
 ArrayType::ArrayType(Type* elementType, bool isValueType) : Type(isValueType), elementType_(elementType)
 {}
 
+ArrayType::ArrayType(const ArrayType& other)
+: Type(other.isValueType()), elementType_(other.elementType()->clone())
+{}
+
 ArrayType::~ArrayType()
 {
 	SAFE_DELETE(elementType_);
@@ -42,6 +46,11 @@ bool ArrayType::equals(const Type* other) const
 		return elementType_ != nullptr && elementType_->equals(at->elementType_);
 
 	return false;
+}
+
+ArrayType* ArrayType::clone() const
+{
+	return new ArrayType(*this);
 }
 
 } /* namespace OOModel */

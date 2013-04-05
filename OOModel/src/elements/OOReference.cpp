@@ -30,6 +30,9 @@
 
 #include "../types/SymbolProviderType.h"
 
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(OOModel::OOReference)
+
 namespace OOModel {
 
 NODE_DEFINE_EMPTY_CONSTRUCTORS(OOReference, Model::Reference)

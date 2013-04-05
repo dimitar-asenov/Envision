@@ -26,6 +26,9 @@
 
 #include "expressions/UnaryOperation.h"
 
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(OOModel::UnaryOperation)
+
 namespace OOModel {
 
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(UnaryOperation, Expression)

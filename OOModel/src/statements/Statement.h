@@ -29,6 +29,8 @@
 #include "../oomodel_api.h"
 #include "../elements/StatementItem.h"
 
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Statement)
+
 namespace OOModel {
 
 class OOMODEL_API Statement: public StatementItem

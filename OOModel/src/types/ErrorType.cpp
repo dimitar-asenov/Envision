@@ -41,4 +41,9 @@ bool ErrorType::equals(const Type*) const
 	return false;
 }
 
+ErrorType* ErrorType::clone() const
+{
+	return new ErrorType(*this);
+}
+
 } /* namespace OOModel */

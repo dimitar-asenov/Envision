@@ -26,6 +26,9 @@
 
 #include "statements/ExpressionStatement.h"
 
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(OOModel::ExpressionStatement)
+
 namespace OOModel {
 
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(ExpressionStatement, Statement)
