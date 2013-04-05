@@ -349,20 +349,24 @@ QList<ItemRegion> GridLayoutElement::regions(Item* item, int parentX, int parent
 		int last = horizontal ? midArea.left() : midArea.top();
 		int list_size = horizontal ? numColumns_ : numRows_;
 
+		int thisElementPos = horizontal ? parentX + x(item) : parentY + y(item);
+
 		for(int i = 0; i < (list_size); ++i)
 		{
 			ItemRegion cursorRegion;
 			if (horizontal)
 			{
-				auto element = elementGrid_[i][0];
-				cursorRegion.setRegion(QRect(last, elementsArea.top(), element->x(item) - last, elementsArea.height()));
-				last = element->xEnd(item) + offset;
+				auto child = elementGrid_[i][0];
+				cursorRegion.setRegion(QRect(last, elementsArea.top(), thisElementPos + child->x(item) - last,
+														elementsArea.height()));
+				last = thisElementPos + child->xEnd(item) + offset;
 			}
 			else
 			{
-				auto element = elementGrid_[0][i];
-				cursorRegion.setRegion(QRect(elementsArea.left(), last,  elementsArea.width(), element->y(item) - last));
-				last = element->yEnd(item) + offset;
+				auto child = elementGrid_[0][i];
+				cursorRegion.setRegion(QRect(elementsArea.left(), last,  elementsArea.width(),
+														thisElementPos + child->y(item) - last));
+				last = thisElementPos + child->yEnd(item) + offset;
 			}
 
 			adjustCursorRegionToAvoidZeroSize(cursorRegion.region(), horizontal, i==0, false);
