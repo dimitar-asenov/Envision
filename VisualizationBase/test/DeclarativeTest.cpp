@@ -173,11 +173,11 @@ void DeclarativeTest::initializeForms()
 	// Test 9: Test sequential layout
 	Element* horizontalSequential = (new SequentialLayoutElement())
 			->setSpaceBetweenElements(5)
-			->setListOfItems([](){return QList<Item*>{new TestBox("a"), new TestBox("b"), new TestBox("cde")};});
+			->setListOfItems([](Item*){return QList<Item*>{new TestBox("a"), new TestBox("b"), new TestBox("cde")};});
 	Element* verticalSequential = (new SequentialLayoutElement())
 			->setSpaceBetweenElements(5)
-			->setListOfNodes([](){return QList<Model::Node*>{new TestBoxNode("dfsdfs", true),
-																				new TestBoxNode("sfsdfsdf")};})
+			->setListOfNodes([](Item*){return QList<Model::Node*>{new TestBoxNode("dfsdfs", true),
+																					new TestBoxNode("sfsdfsdf")};})
 			->setVertical();
 
 	addForm((new AnchorLayoutElement())
@@ -187,7 +187,7 @@ void DeclarativeTest::initializeForms()
 
 int DeclarativeTest::determineForm()
 {
-	return 7;
+	return 9;
 }
 
 } /* namespace Visualization */

@@ -164,15 +164,15 @@ void SequentialLayoutElement::synchronizeWithItem(Item* item)
 	auto& itemList = listForItem(item);
 	if (listNodeGetter_)
 	{
-		Model::List* listNode = listNodeGetter_();
+		Model::List* listNode = listNodeGetter_(item);
 		synchronizeWithNodes(item, listNode->children());
 	}
 	else if (nodeListGetter_)
-		synchronizeWithNodes(item, nodeListGetter_());
+		synchronizeWithNodes(item, nodeListGetter_(item));
 	else
 	{
 		Q_ASSERT(itemListGetter_);
-		synchronizeWithItems(item, itemListGetter_());
+		synchronizeWithItems(item, itemListGetter_(item));
 	}
 	for (auto i : itemList) i->setParentItem(item);
 }

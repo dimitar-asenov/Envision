@@ -45,9 +45,9 @@ class VISUALIZATIONBASE_API SequentialLayoutElement : public LayoutElement
 		FLUENT_ELEMENT_INTERFACE(SequentialLayoutElement);
 
 	public:
-		using ListNodeGetterFunction = std::function<Model::List*()>;
-		using ListOfNodesGetterFunction = std::function<QList<Model::Node*>()>;
-		using ListOfItemsGetterFunction = std::function<QList<Item*>()>;
+		using ListNodeGetterFunction = std::function<Model::List*(Item* item)>;
+		using ListOfNodesGetterFunction = std::function<QList<Model::Node*>(Item* item)>;
+		using ListOfItemsGetterFunction = std::function<QList<Item*>(Item* item)>;
 
 		// Functions executable on element definition
 		SequentialLayoutElement();
