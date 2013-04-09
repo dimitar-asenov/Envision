@@ -40,6 +40,7 @@ class VisualizationItemWrapperElement : public ItemWrapperElement<ParentType, Vi
 		using GetStyleFunction = std::function<const typename VisualizationType::StyleType* (ParentType* v)>;
 
 		VisualizationItemWrapperElement(ChildItem item, GetStyleFunction style);
+		virtual ~VisualizationItemWrapperElement() {};
 		virtual void synchronizeWithItem(Item* item) override;
 
 	private:

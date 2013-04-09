@@ -37,6 +37,9 @@ DeclarativeItemBase::DeclarativeItemBase(Item* parent, const StyleType* style) :
 		Item(parent, style)
 {}
 
+DeclarativeItemBase::~DeclarativeItemBase()
+{}
+
 /**
  * This method is called when it needs to be decided which form needs to be used for rendering.
  * By default it returns 0, but it can be overridden to return some other index, as needed.

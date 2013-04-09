@@ -34,7 +34,8 @@ namespace Visualization {
 
 class VISUALIZATIONBASE_API LayoutElement : public Element
 {
-
+	public:
+		~LayoutElement() {};
 };
 
 }

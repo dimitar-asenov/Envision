@@ -44,6 +44,7 @@ class VISUALIZATIONBASE_API DeclarativeItemBase: public Item
 
 	public:
 		DeclarativeItemBase(Item* parent, const StyleType* style = itemStyles().get());
+		virtual ~DeclarativeItemBase();
 		virtual void determineChildren() override;
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 		virtual bool sizeDependsOnParent() const override;

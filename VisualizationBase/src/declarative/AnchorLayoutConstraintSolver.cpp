@@ -40,7 +40,7 @@ AnchorLayoutConstraintSolver::AnchorLayoutConstraintSolver()
 
 AnchorLayoutConstraintSolver::~AnchorLayoutConstraintSolver()
 {
-	// TODO Auto-generated destructor stub
+	cleanUpConstraintSolver();
 }
 
 
@@ -185,9 +185,16 @@ void AnchorLayoutConstraintSolver::initializeConstraintSolver(int numVariables)
 void AnchorLayoutConstraintSolver::cleanUpConstraintSolver()
 {
 	SAFE_DELETE(lp_);
-	// make safe, add to destructor
-	delete[] rowValues_;
-	delete[] columnIndices_;
+	if (rowValues_)
+	{
+		delete[] rowValues_;
+		rowValues_ = nullptr;
+	}
+	if (columnIndices_)
+	{
+		delete[] columnIndices_;
+		columnIndices_ = nullptr;
+	}
 	numVariables_ = 0;
 }
 

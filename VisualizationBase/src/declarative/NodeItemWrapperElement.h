@@ -43,6 +43,7 @@ class NodeItemWrapperElement : public ItemWrapperElement<ParentType> {
 		using GetNodeFunction = std::function<Model::Node* (ParentType* v)>;
 
 		NodeItemWrapperElement(ChildItem item, GetNodeFunction nodeGetter);
+		virtual ~NodeItemWrapperElement() {};
 		virtual void synchronizeWithItem(Item* item) override;
 
 	private:

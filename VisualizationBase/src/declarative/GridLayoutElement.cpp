@@ -58,9 +58,7 @@ GridLayoutElement::GridLayoutElement()
 
 GridLayoutElement::~GridLayoutElement()
 {
-	for(int x=0; x<numColumns_; x++)
-		for(int y=0; y<numRows_; y++)
-			SAFE_DELETE(elementGrid_[x][y]);
+	// elements were deleted by Element
 }
 
 void GridLayoutElement::destroyChildItems(Item* item)

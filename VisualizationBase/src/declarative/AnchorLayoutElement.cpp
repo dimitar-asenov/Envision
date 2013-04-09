@@ -39,7 +39,7 @@ AnchorLayoutElement::AnchorLayoutElement()
 
 AnchorLayoutElement::~AnchorLayoutElement()
 {
-	// TODO: delete all contained elements
+	// elements were deleted by Element
 	SAFE_DELETE(solver_);
 }
 

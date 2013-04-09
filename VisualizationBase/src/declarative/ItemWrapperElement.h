@@ -39,8 +39,7 @@ class ItemWrapperElement : public Element
 	public: // Methods executable on element definition
 		using ChildItem = ChildItemType* ParentType::*;
 		ItemWrapperElement(ChildItem item);
-		// TODO: if form changes, need to remove unused items
-		// TODO: properly destroy all child items recursively
+		virtual ~ItemWrapperElement() {};
 
 	public: // Methods executable when items need to be rendered
 		virtual void computeSize(Item* item, int availableWidth, int availableHeight) override;

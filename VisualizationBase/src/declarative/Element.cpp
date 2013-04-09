@@ -32,7 +32,13 @@ namespace Visualization {
 
 Element::~Element()
 {
-
+	for (auto i : elementCache_.keys())
+		clearCache(i);
+	for (auto e : children())
+	{
+		removeChild(e);
+		SAFE_DELETE(e);
+	}
 }
 
 /**
@@ -40,7 +46,7 @@ Element::~Element()
  * @param item The item for which to get the cache
  * @return The element cache for the specified item
  */
-ElementCache& Element::getCache(Item* item) const
+ElementCache& Element::getCache(const Item* item) const
 {
 	if (!elementCache_.contains(item))
 		elementCache_.insert(item, new ElementCache());
@@ -51,7 +57,7 @@ ElementCache& Element::getCache(Item* item) const
  * Clears the element property cache of this element for a specific item.
  * @param item The item for which to clear the cache
  */
-void Element::clearCache(Item* item)
+void Element::clearCache(const Item* item)
 {
 	if (elementCache_.contains(item))
 	{

@@ -42,6 +42,7 @@ class NodeWithVisualizationItemWrapperElement : public ItemWrapperElement<Parent
 
 		NodeWithVisualizationItemWrapperElement(ChildItem item, GetNodeTypeFunction nodeGetter,
 																GetStyleTypeFunction styleGetter);
+		virtual ~NodeWithVisualizationItemWrapperElement() {};
 		virtual void synchronizeWithItem(Item* item) override;
 
 	private:

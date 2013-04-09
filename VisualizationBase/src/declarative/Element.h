@@ -41,6 +41,7 @@ class ElementCache
 {
 	public:
 		ElementCache() {};
+		virtual ~ElementCache() {};
 		void setSize(const QSize& size);
 		void setPos(const QPoint& pos);
 		QSize size() const;
@@ -106,8 +107,8 @@ class VISUALIZATIONBASE_API Element
 		QVector<Element*> children_{};
 		Element* parent_{};
 
-		ElementCache& getCache(Item* item) const;
-		void clearCache(Item* item);
+		ElementCache& getCache(const Item* item) const;
+		void clearCache(const Item* item);
 		mutable QHash<const Item*, ElementCache*> elementCache_{};
 };
 
