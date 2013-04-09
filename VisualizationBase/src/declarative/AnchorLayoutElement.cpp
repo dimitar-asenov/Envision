@@ -172,12 +172,6 @@ AnchorLayoutElement* AnchorLayoutElement::put(AnchorLayoutAnchor::Orientation or
 	return this;
 }
 
-void AnchorLayoutElement::destroyChildItems(Item* item)
-{
-	LayoutElement::destroyChildItems(item);
-	for (Element* element : children()) element->destroyChildItems(item);
-}
-
 AnchorLayoutAnchor::Orientation AnchorLayoutElement::orientation(Edge edge)
 {
 	switch (edge) {

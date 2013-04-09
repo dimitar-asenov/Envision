@@ -104,6 +104,7 @@ void Element::synchronizeWithItem(Item* item)
 void Element::destroyChildItems(Item* item)
 {
 	clearCache(item);
+	for (Element* element : children()) element->destroyChildItems(item);
 }
 
 /**

@@ -79,7 +79,6 @@ class VISUALIZATIONBASE_API Element
 		int height(Item* item) const;
 		int xEnd(Item* item) const;
 		int yEnd(Item* item) const;
-		// TODO: make default elementOrChildHasFocus using list of children
 		virtual bool elementOrChildHasFocus(Item* item) const;
 
 	public: // Recursive item destruction

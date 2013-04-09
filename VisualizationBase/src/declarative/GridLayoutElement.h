@@ -70,9 +70,6 @@ class GridLayoutElement : public LayoutElement {
 
 		int focusedElementIndex(Item* item) const;
 
-	public: // Recursive item destruction
-		virtual void destroyChildItems(Item* item) override;
-
 	private:
 		int numColumns_{};
 		int numRows_{};

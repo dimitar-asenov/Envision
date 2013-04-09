@@ -57,9 +57,6 @@ class AnchorLayoutElement : public LayoutElement {
 		virtual bool sizeDependsOnParent(const Item* item) const override;
 		virtual QList<ItemRegion> regions(Item* item, int parentX, int parentY) override;
 
-		// Recursive item destruction
-		virtual void destroyChildItems(Item* item) override;
-
 	private:
 		enum class Edge : int {Left, Right, Center, VCenter, HCenter, Top, Bottom};
 		AnchorLayoutElement* put(AnchorLayoutAnchor::Orientation orientation, float relativePlaceEdgePosition,

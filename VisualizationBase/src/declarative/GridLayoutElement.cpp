@@ -61,14 +61,6 @@ GridLayoutElement::~GridLayoutElement()
 	// elements were deleted by Element
 }
 
-void GridLayoutElement::destroyChildItems(Item* item)
-{
-	LayoutElement::destroyChildItems(item);
-	for(int x=0; x<numColumns_; x++)
-		for(int y=0; y<numRows_; y++)
-			elementGrid_[x][y]->destroyChildItems(item);
-}
-
 /**
  * Puts the element at the specified position in the grid.
  * @param column The column where to put the element
