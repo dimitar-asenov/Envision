@@ -138,7 +138,7 @@ inline QPoint ElementCache::pos() const {return pos_;}
  * @param top Top margin
  * @param right Right margin
  * @param bottom Bottom margin
- * @return A pointer to this element
+ * @return A pointer to this Element
  */
 inline Element* Element::setMargins(int left, int top, int right, int bottom)
 {
@@ -151,7 +151,7 @@ inline Element* Element::setMargins(int left, int top, int right, int bottom)
 /**
  * Sets all the margins of this element
  * @param margin Margin for all four sides
- * @return A pointer to this element
+ * @return A pointer to this Element
  */
 inline Element* Element::setMargins(int margin)
 {
@@ -164,25 +164,25 @@ inline Element* Element::setMargins(int margin)
 /**
  * Sets the top margin of this element
  * @param top Top margin
- * @return A pointer to this element
+ * @return A pointer to this Element
  */
 inline Element* Element::setTopMargin(int top) {marginTop_ = top; return this;}
 /**
  * Sets the bottom margin of this element
  * @param bottom Bottom margin
- * @return A pointer to this element
+ * @return A pointer to this Element
  */
 inline Element* Element::setBottomMargin(int bottom) {marginBottom_ = bottom; return this;}
 /**
  * Sets the left margin of this element
  * @param left Left margin
- * @return A pointer to this element
+ * @return A pointer to this Element
  */
 inline Element* Element::setLeftMargin(int left) {marginLeft_ = left; return this;}
 /**
  * Sets the right margin of this element
  * @param right Right margin
- * @return A pointer to this element
+ * @return A pointer to this Element
  */
 inline Element* Element::setRightMargin(int right) {marginRight_ = right; return this;}
 
@@ -316,6 +316,7 @@ inline const QVector<Element*>& Element::children() const {return children_;}
 
 }
 
+// TODO: add documentation for the methods of each class with the help of this macro
 #define FLUENT_ELEMENT_INTERFACE(ClassName)																									\
 public:																																					\
 	ClassName* setMargins(int left, int top, int right, int bottom) {																	\

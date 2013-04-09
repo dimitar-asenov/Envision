@@ -71,6 +71,13 @@ void GridLayoutElement::destroyChildItems(Item* item)
 			elementGrid_[x][y]->destroyChildItems(item);
 }
 
+/**
+ * Puts the element at the specified position in the grid.
+ * @param column The column where to put the element
+ * @param row The row where to put the element
+ * @param element The element to put in the grid
+ * @return A pointer to this GridLayoutElement
+ */
 GridLayoutElement* GridLayoutElement::put(int column, int row, Element* element)
 {
 	adjustSize(column, row);

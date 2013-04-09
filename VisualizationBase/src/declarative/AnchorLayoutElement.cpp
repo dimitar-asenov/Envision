@@ -31,10 +31,6 @@
 
 namespace Visualization {
 
-/*
- * AnchorLayoutElement
- */
-
 AnchorLayoutElement::AnchorLayoutElement()
 : elementList_{QList<Element*>()}, horizontalConstraints_{QList<AnchorLayoutAnchor*>()},
   verticalConstraints_{QList<AnchorLayoutAnchor*>()}, horizontalNeedsConstraintSolver_{false},
@@ -53,7 +49,7 @@ AnchorLayoutElement::~AnchorLayoutElement()
  * @param placeElement The element to place
  * @param atEdge The edge where to place the placeEdge
  * @param fixedElement The element where atEdge belongs to
- * @return A pointer to this element
+ * @return A pointer to this AnchorLayoutElement
  */
 AnchorLayoutElement* AnchorLayoutElement::put(PlaceEdge placeEdge, Element* placeElement, AtEdge atEdge,
 		Element* fixedElement)
@@ -75,7 +71,7 @@ AnchorLayoutElement* AnchorLayoutElement::put(PlaceEdge placeEdge, Element* plac
  * @param offset The offset between the placeElement's placeEdge and the fixedElement's fromEdge
  * @param fromEdge The edge relative to which the placeEdge will be placed
  * @param fixedElement The element where fromEdge belongs to
- * @return A pointer to this element
+ * @return A pointer to this AnchorLayoutElement
  */
 AnchorLayoutElement* AnchorLayoutElement::put(PlaceEdge placeEdge, Element* placeElement, int offset, FromEdge fromEdge,
 		Element* fixedElement)
@@ -99,7 +95,7 @@ AnchorLayoutElement* AnchorLayoutElement::put(PlaceEdge placeEdge, Element* plac
  * @param placeElement The element to place
  * @param relativeEdge The edge relative to which the placeEdge will be placed
  * @param fixedElement The element where fromEdge belongs to
- * @return A pointer to this element
+ * @return A pointer to this AnchorLayoutElement
  */
 AnchorLayoutElement* AnchorLayoutElement::put(PlaceEdge placeEdge, Element* placeElement, float relativeEdgePosition,
 		Element* fixedElement)

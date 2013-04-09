@@ -110,28 +110,54 @@ class GridLayoutElement : public LayoutElement {
 		void adjustCursorRegionToAvoidZeroSize(QRect& region, bool horizontal, bool first, bool last);
 };
 
+/**
+ * Sets the horizontal and the vertical spacing to the same value.
+ * @param spacing The space between rows and columns
+ * @return A pointer to this GridLayoutElement
+ */
 inline GridLayoutElement* GridLayoutElement::setSpacing(int spacing)
 {
 	spaceBetweenRows_ = spacing;
 	spaceBetweenColumns_ = spacing;
 	return this;
 }
+/**
+ * Sets the horizontal and the vertical spacing to two individual values.
+ * @param spaceBetweenColumns The horizontal spacing
+ * @param spaceBetweenRows The vertical spacing
+ * @return A pointer to this GridLayoutElement
+ */
 inline GridLayoutElement* GridLayoutElement::setSpacing(int spaceBetweenColumns, int spaceBetweenRows)
 {
 	spaceBetweenColumns_ = spaceBetweenColumns;
 	spaceBetweenRows_ = spaceBetweenRows;
 	return this;
 }
+/**
+ * Sets the horizontal spacing.
+ * @param spaceBetweenColumns The horizontal spacing
+ * @return A pointer to this GridLayoutElement
+ */
 inline GridLayoutElement* GridLayoutElement::setHorizontalSpacing(int spaceBetweenColumns)
 {
 	spaceBetweenColumns_ = spaceBetweenColumns;
 	return this;
 }
+/**
+ * Sets the vertical spacing
+ * @param spaceBetweenRows The vertical spacing
+ * @return A pointer to this GridLayoutElement
+ */
 inline GridLayoutElement* GridLayoutElement::setVerticalSpacing(int spaceBetweenRows)
 {
 	spaceBetweenRows_ = spaceBetweenRows;
 	return this;
 }
+/**
+ * Sets the horizontal alignment for all the cells in the grid.
+ * @param horizontalAlignment The horizontal alignment
+ * @return A pointer to this GridLayoutElement
+ */
 inline GridLayoutElement* GridLayoutElement::setHorizontalAlignment(LayoutStyle::Alignment horizontalAlignment)
 {
 	defaultHorizontalAlignment_ = horizontalAlignment;
@@ -144,6 +170,11 @@ inline GridLayoutElement* GridLayoutElement::setHorizontalAlignment(LayoutStyle:
 
 	return this;
 }
+/**
+ * Sets the vertical alignment for all the cells in the grid.
+ * @param verticalAlignment
+ * @return A pointer to this GridLayoutElement
+ */
 inline GridLayoutElement* GridLayoutElement::setVerticalAlignment(LayoutStyle::Alignment verticalAlignment)
 {
 	defaultVerticalAlignment_ = verticalAlignment;
@@ -155,6 +186,12 @@ inline GridLayoutElement* GridLayoutElement::setVerticalAlignment(LayoutStyle::A
 	}
 	return this;
 }
+/**
+ * Sets the horizontal alignment for all the cells in a specific column.
+ * @param column The column to set the horizontal alignment
+ * @param horizontalAlignment The horizontal alignment to set to the column
+ * @return A pointer to this GridLayoutElement
+ */
 inline GridLayoutElement* GridLayoutElement::setColumnHorizontalAlignment(int column,
 		LayoutStyle::Alignment horizontalAlignment)
 {
@@ -166,6 +203,12 @@ inline GridLayoutElement* GridLayoutElement::setColumnHorizontalAlignment(int co
 
 	return this;
 }
+/**
+ * Sets the vertical alignment for all the cells in a specific row.
+ * @param row The row to set the vertical alignment
+ * @param verticalAlignment The vertical alignment to set to the column
+ * @return A pointer to this GridLayoutElement
+ */
 inline GridLayoutElement* GridLayoutElement::setRowVerticalAlignment(int row, LayoutStyle::Alignment verticalAlignment)
 {
 	adjustSize(0, row);
@@ -175,6 +218,11 @@ inline GridLayoutElement* GridLayoutElement::setRowVerticalAlignment(int row, La
 		cellVerticalAlignmentGrid_[x][row] = verticalAlignment;
 	return this;
 }
+/**
+ * Sets the horizontal alignment of the cell where the last element was added.
+ * @param horizontalAlignment The horizontal alignment to set
+ * @return A pointer to this GridLayoutElement
+ */
 inline GridLayoutElement* GridLayoutElement::setCellHorizontalAlignment(LayoutStyle::Alignment horizontalAlignment)
 {
 	int column = lastCell_.first;
@@ -182,6 +230,11 @@ inline GridLayoutElement* GridLayoutElement::setCellHorizontalAlignment(LayoutSt
 	cellHorizontalAlignmentGrid_[column][row] = horizontalAlignment;
 	return this;
 }
+/**
+ * Sets the vertical alignment of the cell where the last element was added.
+ * @param verticalAlignment The vertical alignment to set
+ * @return A pointer to this GridLayoutElement
+ */
 inline GridLayoutElement* GridLayoutElement::setCellVerticalAlignment(LayoutStyle::Alignment verticalAlignment)
 {
 	int column = lastCell_.first;
@@ -189,6 +242,12 @@ inline GridLayoutElement* GridLayoutElement::setCellVerticalAlignment(LayoutStyl
 	cellVerticalAlignmentGrid_[column][row] = verticalAlignment;
 	return this;
 }
+/**
+ * Sets the horizontal and vertical alignment of the cell where the last element was added.
+ * @param horizontalAlignment The horizontal alignment to set
+ * @param verticalAlignment The vertical alignment to set
+ * @return A pointer to this GridLayoutElement
+ */
 inline GridLayoutElement* GridLayoutElement::setCellAlignment(LayoutStyle::Alignment horizontalAlignment,
 																					LayoutStyle::Alignment verticalAlignment)
 {
@@ -198,6 +257,14 @@ inline GridLayoutElement* GridLayoutElement::setCellAlignment(LayoutStyle::Align
 	cellVerticalAlignmentGrid_[column][row] = verticalAlignment;
 	return this;
 }
+/**
+ * Set the cell spanning of the cell where the last element was added. This means columnSpan x rowSpan cells will be merged
+ * into a new cell, of which the column and row of the last added cell is the top left corner. A default cell has a
+ * columnSpan and rowSpan of one each.
+ * @param columnSpan Number of columns to merge
+ * @param rowSpan Number of rows to merge
+ * @return A pointer to this GridLayoutElement
+ */
 inline GridLayoutElement* GridLayoutElement::setCellSpanning(int columnSpan, int rowSpan)
 {
 	int column = lastCell_.first;
