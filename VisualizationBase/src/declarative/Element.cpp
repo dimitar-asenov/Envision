@@ -35,6 +35,11 @@ Element::~Element()
 
 }
 
+/**
+ * Gets the element property cache of this element for a specific item.
+ * @param item The item for which to get the cache
+ * @return The element cache for the specified item
+ */
 ElementCache& Element::getCache(Item* item) const
 {
 	if (!elementCache_.contains(item))
@@ -42,6 +47,10 @@ ElementCache& Element::getCache(Item* item) const
 	return *elementCache_.value(item);
 }
 
+/**
+ * Clears the element property cache of this element for a specific item.
+ * @param item The item for which to clear the cache
+ */
 void Element::clearCache(Item* item)
 {
 	if (elementCache_.contains(item))
@@ -52,11 +61,25 @@ void Element::clearCache(Item* item)
 	}
 }
 
+/**
+ * This method is called while rendering the item.
+ *
+ * Method recursively called on all elements to recursively destroy all the information they might have about a specific
+ * item.
+ * @param item The item for which to destroy the information
+ */
 void Element::destroyChildItems(Item* item)
 {
 	clearCache(item);
 }
 
+/**
+ * This method is called while rendering the item.
+ *
+ * Recursively determines if this element or any of its children has the focus.
+ * @param item The item for which to decide
+ * @return Whether this element or any of its children have focus, relative to the specified item
+ */
 bool Element::elementOrChildHasFocus(Item* item) const
 {
 	auto cursor = item->scene()->mainCursor();

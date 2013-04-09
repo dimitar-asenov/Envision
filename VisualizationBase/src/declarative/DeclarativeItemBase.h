@@ -70,14 +70,31 @@ class VISUALIZATIONBASE_API DeclarativeItemBase: public Item
 		int currentFormIndex_;
 };
 
+/**
+ * A factory method to get an item wrapper element with a visualization only. To call it, one has to supply the
+ * visualization type and the parent type (which is always 'I') as the template arguments.
+ *
+ * @param item A pointer to member, where the wrapped item can be stored
+ * @param styleGetter A method that, given a pointer to this class, returns a style to display the item with, matching
+ * the visualization type specified in the template argument
+ * @return A pointer to an item wrapper element
+ */
 template <class VisualizationType, class ParentType>
 	VisualizationItemWrapperElement<ParentType, VisualizationType>*
 	DeclarativeItemBase::item(VisualizationType* ParentType::* item,
-										std::function<const typename VisualizationType::StyleType* (ParentType* v)> style)
+										std::function<const typename VisualizationType::StyleType* (ParentType* v)> styleGetter)
 {
-	return new VisualizationItemWrapperElement<ParentType, VisualizationType>(item, style);
+	return new VisualizationItemWrapperElement<ParentType, VisualizationType>(item, styleGetter);
 }
 
+/**
+ * A factory method to get an item wrapper element with a node only. This means the node gets visualized with its
+ * default style. To call it, one has to supply the parent type (which is always 'I') as template argument.
+ *
+ * @param item A pointer to member, where the wrapped item can be stored
+ * @param nodeGetter A method that, given a pointer to this class, returns a node to be displayed
+ * @return A pointer to an item wrapper element
+ */
 template <class ParentType>
 	NodeItemWrapperElement<ParentType>*
 	DeclarativeItemBase::item(Item* ParentType::* item, std::function<Model::Node* (ParentType* v)> nodeGetter)
@@ -85,6 +102,18 @@ template <class ParentType>
 	return new NodeItemWrapperElement<ParentType>(item, nodeGetter);
 }
 
+/**
+ * A factory method to get an item wrapper element with a node and a visualization. This means the node gets visualized
+ * using the given visualization. To call it, one has to supply the visualization type and the parent type (which is
+ * always 'I') as template arguments.
+ *
+ * @param item A pointer to member, where the wrapped item can be stored
+ * @param nodeGetter A method that, given a pointer to this class, returns a node to be displayed, matching the
+ * visualization type specified in the template argument
+ * @param styleGetter A method that, given a pointer to this class, returns a style to display the item with, matching
+ * the visualization type specified in the template argument
+ * @return A pointer to an item wrapper element
+ */
 template <class VisualizationType, class ParentType>
 	NodeWithVisualizationItemWrapperElement<ParentType, VisualizationType>*
 	DeclarativeItemBase::item(VisualizationType* ParentType::* item,

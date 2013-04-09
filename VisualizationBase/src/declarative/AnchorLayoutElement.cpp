@@ -47,6 +47,14 @@ AnchorLayoutElement::~AnchorLayoutElement()
 	SAFE_DELETE(solver_);
 }
 
+/**
+ * Add an anchor to the layout. The anchor places the placeEdge of the placeElement at the atEdge of the fixedElement.
+ * @param placeEdge The edge to place
+ * @param placeElement The element to place
+ * @param atEdge The edge where to place the placeEdge
+ * @param fixedElement The element where atEdge belongs to
+ * @return A pointer to this element
+ */
 AnchorLayoutElement* AnchorLayoutElement::put(PlaceEdge placeEdge, Element* placeElement, AtEdge atEdge,
 		Element* fixedElement)
 {
@@ -59,6 +67,16 @@ AnchorLayoutElement* AnchorLayoutElement::put(PlaceEdge placeEdge, Element* plac
 					fixedElement);
 }
 
+/**
+ * Add an anchor to the layout. The anchor places the placeEdge of the placeElement offset units from the fromEdge of the
+ * fixedElement.
+ * @param placeEdge The edge to place
+ * @param placeElement The element to place
+ * @param offset The offset between the placeElement's placeEdge and the fixedElement's fromEdge
+ * @param fromEdge The edge relative to which the placeEdge will be placed
+ * @param fixedElement The element where fromEdge belongs to
+ * @return A pointer to this element
+ */
 AnchorLayoutElement* AnchorLayoutElement::put(PlaceEdge placeEdge, Element* placeElement, int offset, FromEdge fromEdge,
 		Element* fixedElement)
 {
@@ -74,6 +92,15 @@ AnchorLayoutElement* AnchorLayoutElement::put(PlaceEdge placeEdge, Element* plac
 					fixedElement);
 }
 
+/**
+ * Add an anchor to the layout. The anchor places the placeEdge of the placeElement at the position
+ * fixedElement.position + fixedElement.size * relativeEdge in the axis given by the placeEdge.
+ * @param placeEdge The edge to place
+ * @param placeElement The element to place
+ * @param relativeEdge The edge relative to which the placeEdge will be placed
+ * @param fixedElement The element where fromEdge belongs to
+ * @return A pointer to this element
+ */
 AnchorLayoutElement* AnchorLayoutElement::put(PlaceEdge placeEdge, Element* placeElement, float relativeEdgePosition,
 		Element* fixedElement)
 {

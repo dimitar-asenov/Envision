@@ -37,6 +37,12 @@ DeclarativeItemBase::DeclarativeItemBase(Item* parent, const StyleType* style) :
 		Item(parent, style)
 {}
 
+/**
+ * This method is called when it needs to be decided which form needs to be used for rendering.
+ * By default it returns 0, but it can be overridden to return some other index, as needed.
+ *
+ * @return The index of the appropriate form to use for rendering.
+ */
 int DeclarativeItemBase::determineForm()
 {
 	return 0;

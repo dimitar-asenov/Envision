@@ -75,6 +75,7 @@ class AnchorLayoutElement : public LayoutElement {
 		void sortConstraints(QList<AnchorLayoutAnchor*>& constraints,
 				AnchorLayoutAnchor::Orientation orientation);
 
+		// TODO: reuse list of children inherited from Element class
 		QList<Element*> elementList_{};
 		QList<AnchorLayoutAnchor*> horizontalConstraints_{};
 		QList<AnchorLayoutAnchor*> verticalConstraints_{};

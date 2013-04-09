@@ -79,10 +79,17 @@ QList<Element*>& DeclarativeItem<VisualizationType>::forms() const
 	return formsStatic();
 }
 
+/**
+ * Add an form to the static list of forms
+ *
+ * @param element The form to be added at the next index
+ * @return
+ */
 template <class VisualizationType>
 template <class ElementType>
 ElementType* DeclarativeItem<VisualizationType>::addForm(ElementType* element)
 {
+	// TODO: does it make sense for addForm to return an Element* ?
 	formsStatic().append(element);
 	return element;
 }
