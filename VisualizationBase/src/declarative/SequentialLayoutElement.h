@@ -77,7 +77,9 @@ class VISUALIZATIONBASE_API SequentialLayoutElement : public LayoutElement
 		virtual QList<ItemRegion> regions(Item* item, int parentX, int parentY) override;
 
 		bool elementOrChildHasFocus(Item* item) const override;
-		int focusedElementIndex(Item* item) const;
+		int focusedElementIndex(const Item* item) const;
+		int length(const Item* item) const;
+		template <class T> T* itemAt(const Item* item, int itemIndex) const;
 
 		// Recursive item destruction
 		virtual void destroyChildItems(Item* item) override;
@@ -200,6 +202,12 @@ inline SequentialLayoutElement* SequentialLayoutElement::setNoInnerCursors(bool 
 {
 	noInnerCursors_ = noInnerCursors;
 	return this;
+}
+
+template <class T> T* SequentialLayoutElement::itemAt(const Item* item, int itemIndex) const
+{
+	auto& itemList = listForItem(item);
+	return static_cast<T>(itemList.at(itemIndex));
 }
 
 } /* namespace Visualization */

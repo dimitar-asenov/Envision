@@ -419,7 +419,7 @@ bool SequentialLayoutElement::elementOrChildHasFocus(Item* item) const
 	return false;
 }
 
-int SequentialLayoutElement::focusedElementIndex(Item* item) const
+int SequentialLayoutElement::focusedElementIndex(const Item* item) const
 {
 	auto& itemList = listForItem(item);
 
@@ -427,6 +427,15 @@ int SequentialLayoutElement::focusedElementIndex(Item* item) const
 		if (itemList[i]->itemOrChildHasFocus()) return i;
 
 	return -1;
+}
+
+/**
+ * Returns the length of the displayed list of items for this item.
+ */
+int SequentialLayoutElement::length(const Item* item) const
+{
+	auto& itemList = listForItem(item);
+	return itemList.size();
 }
 
 }
