@@ -65,8 +65,7 @@ class VISUALIZATIONBASE_API Element
 		Element* setRightMargin(int right);
 
 	public: // Methods executable when items need to be rendered
-		// TODO: make default synchronizeWithItem using list of children
-		virtual void synchronizeWithItem(Item* item) = 0;
+		virtual void synchronizeWithItem(Item* item);
 		virtual void computeSize(Item* item, int availableWidth, int availableHeight) = 0;
 		virtual void setItemPositions(Item* item, int parentX=0, int parentY=0);
 		virtual bool sizeDependsOnParent(const Item* item) const = 0;

@@ -138,12 +138,6 @@ void AnchorLayoutElement::computeSize(Item* item, int /*availableWidth*/, int /*
 	setSize(item, QSize(maxX + rightMargin(), maxY + bottomMargin()));
 }
 
-void AnchorLayoutElement::synchronizeWithItem(Item* item)
-{
-	for(Element* element : children())
-		if (element != nullptr) element->synchronizeWithItem(item);
-}
-
 bool AnchorLayoutElement::sizeDependsOnParent(const Item* /*item*/) const
 {
 	return false;

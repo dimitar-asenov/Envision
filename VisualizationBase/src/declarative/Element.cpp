@@ -84,6 +84,19 @@ void Element::setItemPositions(Item* item, int parentX, int parentY)
 /**
  * This method is called while rendering the item.
  *
+ * The method is recursively called to synchronize the elements with the item. This means if any nodes or child items
+ * changed, this needs to be reflected by the item wrappers and the sequential layout.
+ * @param item The parent Item
+ */
+void Element::synchronizeWithItem(Item* item)
+{
+	for(Element* element : children())
+		if (element != nullptr) element->synchronizeWithItem(item);
+}
+
+/**
+ * This method is called while rendering the item.
+ *
  * Method recursively called on all elements to recursively destroy all the information they might have about a specific
  * item.
  * @param item The item for which to destroy the information

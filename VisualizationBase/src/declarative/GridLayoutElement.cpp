@@ -89,13 +89,6 @@ GridLayoutElement* GridLayoutElement::put(int column, int row, Element* element)
 	return this;
 }
 
-void GridLayoutElement::synchronizeWithItem(Item* item)
-{
-	for(int x=0; x<numColumns_; x++)
-		for(int y=0; y<numRows_; y++)
-			if (elementGrid_[x][y] != nullptr) elementGrid_[x][y]->synchronizeWithItem(item);
-}
-
 void GridLayoutElement::computeSize(Item* item, int availableWidth, int availableHeight)
 {
 	// Compute default sizes of all the elements
