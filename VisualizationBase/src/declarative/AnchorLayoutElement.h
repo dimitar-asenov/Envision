@@ -36,6 +36,8 @@ namespace Visualization {
 class AnchorLayoutConstraintSolver;
 
 class AnchorLayoutElement : public LayoutElement {
+		FLUENT_ELEMENT_INTERFACE(AnchorLayoutElement);
+
 	public:
 		enum class PlaceEdge : int {LeftOf, RightOf, CenterOf, VCenterOf, HCenterOf, TopOf, BottomOf};
 		enum class AtEdge : int {AtLeftOf, AtRightOf, AtCenterOf, AtVCenterOf, AtHCenterOf, AtTopOf, AtBottomOf};

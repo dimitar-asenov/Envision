@@ -312,16 +312,48 @@ inline const QVector<Element*>& Element::children() const {return children_;}
 
 }
 
-// TODO: add documentation for the methods of each class with the help of this macro
 #define FLUENT_ELEMENT_INTERFACE(ClassName)																									\
 public:																																					\
+	/**
+	 * Sets all the margins of this element
+	 * @param left Left margin
+	 * @param top Top margin
+	 * @param right Right margin
+	 * @param bottom Bottom margin
+	 * @return A pointer to this element
+	 */																																					\
 	ClassName* setMargins(int left, int top, int right, int bottom) {																	\
 		return static_cast<ClassName*>(Element::setMargins(left, top, right, bottom));											\
 	}																																						\
+	/**
+	 * Sets all the margins of this element
+	 * @param margin Margin for all four sides
+	 * @return A pointer to this element
+	 */																																					\
 	ClassName* setMargins(int margin) {return static_cast<ClassName*>(Element::setMargins(margin));}						\
+	/**
+	 * Sets the top margin of this element
+	 * @param top Top margin
+	 * @return A pointer to this element
+	 */																																					\
 	ClassName* setTopMargin(int top) {return static_cast<ClassName*>(Element::setTopMargin(top));}							\
+	/**
+	 * Sets the bottom margin of this element
+	 * @param bottom Bottom margin
+	 * @return A pointer to this element
+	 */																																					\
 	ClassName* setBottomMargin(int bottom) {return static_cast<ClassName*>(Element::setBottomMargin(bottom));}			\
+	/**
+	 * Sets the left margin of this element
+	 * @param left Left margin
+	 * @return A pointer to this element
+	 */																																					\
 	ClassName* setLeftMargin(int left) {return static_cast<ClassName*>(Element::setLeftMargin(left));}						\
+	/**
+	 * Sets the right margin of this element
+	 * @param right Right margin
+	 * @return A pointer to this element
+	 */																																					\
 	ClassName* setRightMargin(int right) {return static_cast<ClassName*>(Element::setRightMargin(right));}
 
 #endif /* VisualizationBase_ELEMENT_H_ */
