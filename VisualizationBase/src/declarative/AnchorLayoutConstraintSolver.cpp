@@ -44,7 +44,7 @@ AnchorLayoutConstraintSolver::~AnchorLayoutConstraintSolver()
 }
 
 
-void AnchorLayoutConstraintSolver::placeElements(QList<Element*>& elements, QList<AnchorLayoutAnchor*>& anchors,
+void AnchorLayoutConstraintSolver::placeElements(const QVector<Element*>& elements, QList<AnchorLayoutAnchor*>& anchors,
 		AnchorLayoutAnchor::Orientation orientation, Item* item)
 {
 	// elements already have a minimum size

@@ -291,14 +291,12 @@ inline int Element::xEnd(Item* item) const {return pos(item).x() + size(item).wi
 inline int Element::yEnd(Item* item) const {return pos(item).y() + size(item).height();}
 
 /**
- * Adds a child to the list of children. This list is used for determining if any child has the focus and is not used by
- * the layouts to manage their children.
+ * Adds a child to the list of children.
  * @param child The child element to add
  */
 inline void Element::addChild(Element* child){children_.append(child); child->parent_ = this;}
 /**
- * Removes a child to the list of children. This list is used for determining if any child has the focus and is not used by
- * the layouts to manage their children.
+ * Removes a child to the list of children.
  * @param child The child element to remove
  */
 inline void Element::removeChild(Element* child)
@@ -308,8 +306,7 @@ inline void Element::removeChild(Element* child)
 			if (child == children_[i]) children_.remove(i);
 }
 /**
- * Returns the list of children. This list is used for determining if any child has the focus and is not used by
- * the layouts to manage their children.
+ * Returns the list of children.
  * @return child The list of child elements
  */
 inline const QVector<Element*>& Element::children() const {return children_;}

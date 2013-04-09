@@ -40,7 +40,7 @@ class AnchorLayoutConstraintSolver {
 	public:
 		AnchorLayoutConstraintSolver();
 		virtual ~AnchorLayoutConstraintSolver();
-		void placeElements(QList<Element*>& elements, QList<AnchorLayoutAnchor*>& anchors,
+		void placeElements(const QVector<Element*>& elements, QList<AnchorLayoutAnchor*>& anchors,
 				AnchorLayoutAnchor::Orientation orientation, Item* item);
 	private:
 		void initializeConstraintSolver(int numVariables);

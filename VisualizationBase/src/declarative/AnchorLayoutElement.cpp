@@ -32,9 +32,9 @@
 namespace Visualization {
 
 AnchorLayoutElement::AnchorLayoutElement()
-: elementList_{QList<Element*>()}, horizontalConstraints_{QList<AnchorLayoutAnchor*>()},
-  verticalConstraints_{QList<AnchorLayoutAnchor*>()}, horizontalNeedsConstraintSolver_{false},
-  verticalNeedsConstraintSolver_{false}, solver_{new AnchorLayoutConstraintSolver()}
+: horizontalConstraints_{QList<AnchorLayoutAnchor*>()}, verticalConstraints_{QList<AnchorLayoutAnchor*>()},
+  horizontalNeedsConstraintSolver_{false}, verticalNeedsConstraintSolver_{false},
+  solver_{new AnchorLayoutConstraintSolver()}
 {}
 
 AnchorLayoutElement::~AnchorLayoutElement()
@@ -111,7 +111,7 @@ AnchorLayoutElement* AnchorLayoutElement::put(PlaceEdge placeEdge, Element* plac
 void AnchorLayoutElement::computeSize(Item* item, int /*availableWidth*/, int /*availableHeight*/)
 {
 	// compute size of each sub-element and set their position to (0, 0)
-	for (Element* element : elementList_)
+	for (Element* element : children())
 	{
 		element->computeSize(item, 0, 0);
 		element->setPos(item, QPoint(0, 0));
@@ -129,7 +129,7 @@ void AnchorLayoutElement::computeSize(Item* item, int /*availableWidth*/, int /*
 	int adjustmentY = minY * -1 + topMargin();
 	int maxX = 0;
 	int maxY = 0;
-	for (Element* element : elementList_)
+	for (Element* element : children())
 	{
 		element->setPos(item, QPoint(element->x(item) + adjustmentX, element->y(item) + adjustmentY));
 		if (element->xEnd(item) > maxX) maxX = element->xEnd(item);
@@ -140,13 +140,13 @@ void AnchorLayoutElement::computeSize(Item* item, int /*availableWidth*/, int /*
 
 void AnchorLayoutElement::setItemPositions(Item* item, int parentX, int parentY)
 {
-	for(Element* element : elementList_)
+	for(Element* element : children())
 		element->setItemPositions(item, parentX + x(item), parentY + y(item));
 }
 
 void AnchorLayoutElement::synchronizeWithItem(Item* item)
 {
-	for(Element* element : elementList_)
+	for(Element* element : children())
 		if (element != nullptr) element->synchronizeWithItem(item);
 }
 
@@ -158,7 +158,7 @@ bool AnchorLayoutElement::sizeDependsOnParent(const Item* /*item*/) const
 QList<ItemRegion> AnchorLayoutElement::regions(Item* item, int parentX, int parentY)
 {
 	QList<ItemRegion> allRegions;
-	for (auto element : elementList_)
+	for (auto element : children())
 		allRegions.append(element->regions(item, x(item) + parentX, y(item) + parentY));
 	return allRegions;
 }
@@ -169,17 +169,11 @@ AnchorLayoutElement* AnchorLayoutElement::put(AnchorLayoutAnchor::Orientation or
 {
 	Q_ASSERT(orientation != AnchorLayoutAnchor::Orientation::Auto);
 
-	if (!elementList_.contains(placeElement))
-	{
-		elementList_.append(placeElement);
+	if (!children().contains(placeElement))
 		addChild(placeElement);
-	}
 
-	if (!elementList_.contains(fixedElement))
-	{
-		elementList_.append(fixedElement);
+	if (!children().contains(fixedElement))
 		addChild(fixedElement);
-	}
 
 	if (orientation == AnchorLayoutAnchor::Orientation::Horizontal)
 		addConstraint(horizontalConstraints_, orientation, relativePlaceEdgePosition, placeElement, offset,
@@ -193,7 +187,7 @@ AnchorLayoutElement* AnchorLayoutElement::put(AnchorLayoutAnchor::Orientation or
 void AnchorLayoutElement::destroyChildItems(Item* item)
 {
 	LayoutElement::destroyChildItems(item);
-	for (Element* element : elementList_) element->destroyChildItems(item);
+	for (Element* element : children()) element->destroyChildItems(item);
 }
 
 AnchorLayoutAnchor::Orientation AnchorLayoutElement::orientation(Edge edge)
@@ -270,7 +264,7 @@ int AnchorLayoutElement::placeElements(QList<AnchorLayoutAnchor*>& constraints,
 
 	int minPos = 0;
 	if (axisNeedsConstraintSolver)
-		solver_->placeElements(elementList_, constraints, orientation, item);
+		solver_->placeElements(children(), constraints, orientation, item);
 	else
 		for (auto c : constraints)
 		{
