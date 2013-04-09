@@ -138,12 +138,6 @@ void AnchorLayoutElement::computeSize(Item* item, int /*availableWidth*/, int /*
 	setSize(item, QSize(maxX + rightMargin(), maxY + bottomMargin()));
 }
 
-void AnchorLayoutElement::setItemPositions(Item* item, int parentX, int parentY)
-{
-	for(Element* element : children())
-		element->setItemPositions(item, parentX + x(item), parentY + y(item));
-}
-
 void AnchorLayoutElement::synchronizeWithItem(Item* item)
 {
 	for(Element* element : children())

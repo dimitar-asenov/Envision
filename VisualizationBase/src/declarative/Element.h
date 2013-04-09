@@ -68,8 +68,7 @@ class VISUALIZATIONBASE_API Element
 		// TODO: make default synchronizeWithItem using list of children
 		virtual void synchronizeWithItem(Item* item) = 0;
 		virtual void computeSize(Item* item, int availableWidth, int availableHeight) = 0;
-		// TODO: make default setItemPositions using list of children
-		virtual void setItemPositions(Item* item, int parentX=0, int parentY=0) = 0;
+		virtual void setItemPositions(Item* item, int parentX=0, int parentY=0);
 		virtual bool sizeDependsOnParent(const Item* item) const = 0;
 		virtual QList<ItemRegion> regions(Item* item, int parentX=0, int parentY=0) = 0;
 		void setPos(Item* item, const QPoint& pos);

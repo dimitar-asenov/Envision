@@ -70,6 +70,20 @@ void Element::clearCache(const Item* item)
 /**
  * This method is called while rendering the item.
  *
+ * The method is recursively called to set the position of the items correctly relative to its parent Item.
+ * @param item The parent Item
+ * @param parentX The position on the x-axis of the parent Element relative to the parent Item
+ * @param parentY The position on the y-axis of the parent Element relative to the parent Item
+ */
+void Element::setItemPositions(Item* item, int parentX, int parentY)
+{
+	for(Element* element : children())
+		element->setItemPositions(item, parentX + x(item), parentY + y(item));
+}
+
+/**
+ * This method is called while rendering the item.
+ *
  * Method recursively called on all elements to recursively destroy all the information they might have about a specific
  * item.
  * @param item The item for which to destroy the information

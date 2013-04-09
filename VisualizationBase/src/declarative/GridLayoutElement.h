@@ -65,7 +65,6 @@ class GridLayoutElement : public LayoutElement {
 
 	public: // Methods executable when items need to be rendered
 		virtual void computeSize(Item* item, int availableWidth, int availableHeight) override;
-		virtual void setItemPositions(Item* item, int parentX, int parentY) override;
 		virtual void synchronizeWithItem(Item* item) override;
 		virtual bool sizeDependsOnParent(const Item* item) const override;
 		virtual QList<ItemRegion> regions(Item* item, int parentX, int parentY) override;

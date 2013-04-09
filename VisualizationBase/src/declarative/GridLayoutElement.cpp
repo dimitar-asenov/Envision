@@ -96,17 +96,6 @@ void GridLayoutElement::synchronizeWithItem(Item* item)
 			if (elementGrid_[x][y] != nullptr) elementGrid_[x][y]->synchronizeWithItem(item);
 }
 
-void GridLayoutElement::setItemPositions(Item* item, int parentX, int parentY)
-{
-	for(int x=0; x<numColumns_; x++)
-		for(int y=0; y<numRows_; y++)
-			if (elementGrid_[x][y] != nullptr)
-			{
-				Element* element = elementGrid_[x][y];
-				element->setItemPositions(item, parentX + pos(item).x(), parentY + pos(item).y());
-			}
-}
-
 void GridLayoutElement::computeSize(Item* item, int availableWidth, int availableHeight)
 {
 	// Compute default sizes of all the elements
