@@ -44,31 +44,7 @@
 #include "commands/CCreateClass.h"
 #include "commands/CSceneHandlerItemTest.h"
 
-#include "string_components/UnaryOperatorStringComponents.h"
-#include "string_components/BinaryOperatorStringComponents.h"
-#include "string_components/EmptyExpressionStringComponents.h"
-#include "string_components/ErrorExpressionStringComponents.h"
-#include "string_components/CastExpressionStringComponents.h"
-#include "string_components/CommaExpressionStringComponents.h"
-#include "string_components/ConditionalExpressionStringComponents.h"
-#include "string_components/NewArrayStringComponents.h"
-#include "string_components/InitializerStringComponents.h"
-#include "string_components/BooleanLiteralStringComponents.h"
-#include "string_components/IntegerLiteralStringComponents.h"
-#include "string_components/StringLiteralStringComponents.h"
-#include "string_components/NullLiteralStringComponents.h"
-#include "string_components/ThisExpressionStringComponents.h"
-#include "string_components/UnfinishedOperatorStringComponents.h"
-#include "string_components/ReferenceExpressionStringComponents.h"
-#include "string_components/CallStringComponents.h"
-#include "string_components/PrimitiveTypeStringComponents.h"
-#include "string_components/ArrayTypeStringComponents.h"
-#include "string_components/ClassTypeStringComponents.h"
-#include "string_components/AssignmentStringComponents.h"
-#include "string_components/VariableDeclarationStringComponents.h"
-#include "string_components/ListStringComponents.h"
-#include "string_components/ThrowStringComponents.h"
-#include "string_components/LambdaStringComponents.h"
+#include "string_offset_providers/StringComponents.h"
 
 #include "string_offset_providers/SequentialVisualizationStringOffsetProvider.h"
 #include "string_offset_providers/EmptyExpressionStringOffsetProvider.h"
@@ -165,58 +141,7 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 	OOVisualization::VKeywordMethodCall::setInteractionHandler(HExpression::instance());
 
 	// Register string components that convert an expression to a string list representing its components
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringComponents, UnaryOperatorStringComponents, OOModel::UnaryOperation>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringComponents, BinaryOperatorStringComponents, OOModel::BinaryOperation>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringComponents, CastExpressionStringComponents, OOModel::CastExpression>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringComponents, CommaExpressionStringComponents, OOModel::CommaExpression>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringComponents, ConditionalExpressionStringComponents, OOModel::ConditionalExpression>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringComponents, InitializerStringComponents, OOModel::ArrayInitializer>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringComponents, CallStringComponents, OOModel::MethodCallExpression>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringComponents, NewArrayStringComponents, OOModel::NewExpression>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringComponents, ThrowStringComponents, OOModel::ThrowExpression>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringComponents, BooleanLiteralStringComponents, OOModel::BooleanLiteral>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringComponents, IntegerLiteralStringComponents, OOModel::IntegerLiteral>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringComponents, StringLiteralStringComponents, OOModel::StringLiteral>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringComponents, NullLiteralStringComponents, OOModel::NullLiteral>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringComponents, ThisExpressionStringComponents, OOModel::ThisExpression>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringComponents, ReferenceExpressionStringComponents, OOModel::ReferenceExpression>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringComponents, UnfinishedOperatorStringComponents, OOModel::UnfinishedOperator>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringComponents, ErrorExpressionStringComponents, OOModel::ErrorExpression>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringComponents, EmptyExpressionStringComponents, OOModel::EmptyExpression>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringComponents, PrimitiveTypeStringComponents, OOModel::PrimitiveTypeExpression>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringComponents, ArrayTypeStringComponents, OOModel::ArrayTypeExpression>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringComponents, ClassTypeStringComponents, OOModel::ClassTypeExpression>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringComponents, AssignmentStringComponents, OOModel::AssignmentExpression>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringComponents, VariableDeclarationStringComponents, OOModel::VariableDeclaration>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringComponents, ListStringComponents, Model::TypedList<OOModel::Expression> >();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringComponents, ListStringComponents, Model::TypedList<OOModel::Statement> >();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringComponents, LambdaStringComponents, OOModel::LambdaExpression>();
+	StringComponents::initConversions();
 
 	// Register string providers
 	Model::AdapterManager::registerAdapterViaConstructor

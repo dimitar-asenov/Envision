@@ -24,8 +24,8 @@
  **
  **********************************************************************************************************************/
 
-#include "string_offset_providers/StringOffsetProvider.h"
-#include "string_components/StringComponents.h"
+#include "StringOffsetProvider.h"
+#include "StringComponents.h"
 
 #include "VisualizationBase/src/cursor/LayoutCursor.h"
 #include "VisualizationBase/src/items/VList.h"
@@ -57,16 +57,7 @@ QStringList StringOffsetProvider::components()
 QStringList StringOffsetProvider::components(Model::Node* node)
 {
 	if (!node) return QStringList();
-
-	QStringList result;
-	StringComponents* sc = Model::AdapterManager::adapt<StringComponents>(node);
-	if (sc)
-	{
-		result = sc->components();
-		SAFE_DELETE(sc);
-	}
-
-	return result;
+	else return StringComponents(node).components();
 }
 
 QString StringOffsetProvider::stringFromComponenets(Model::Node* node)

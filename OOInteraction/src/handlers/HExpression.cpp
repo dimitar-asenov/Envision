@@ -28,7 +28,7 @@
 #include "../OOInteractionException.h"
 
 #include "../expression_editor/operators/CompoundObjectDescriptor.h"
-#include "string_components/StringComponents.h"
+#include "string_offset_providers/StringComponents.h"
 #include "string_offset_providers/StringOffsetProvider.h"
 #include "expression_editor/OOExpressionBuilder.h"
 #include "handlers/SetExpressionCursorEvent.h"
