@@ -54,12 +54,12 @@ int DeclarativeItemBase::determineForm()
 void DeclarativeItemBase::determineChildren()
 {
 	currentFormIndex_ = determineForm();
-	forms().at(currentFormIndex_)->synchronizeWithItem(this);
+	currentForm()->synchronizeWithItem(this);
 }
 
 void DeclarativeItemBase::updateGeometry(int availableWidth, int availableHeight)
 {
-	Element* currentForm = forms().at(currentFormIndex_);
+	Element* form = this->currentForm();
 
 	if (hasShape())
 	{
@@ -68,41 +68,40 @@ void DeclarativeItemBase::updateGeometry(int availableWidth, int availableHeight
 		if ( sizeDependsOnParent() && (availableWidth > 0 || availableHeight > 0) )
 		{
 			QSize inner = getShape()->innerSize(availableWidth, availableHeight);
-			currentForm->computeSize(this, inner.width(), inner.height());
+			form->computeSize(this, inner.width(), inner.height());
 
-			if (currentForm->width(this) > inner.width()) inner.setWidth(currentForm->width(this));
-			if (currentForm->height(this) > inner.height()) inner.setHeight(currentForm->height(this));
+			if (form->width(this) > inner.width()) inner.setWidth(form->width(this));
+			if (form->height(this) > inner.height()) inner.setHeight(form->height(this));
 
 			getShape()->setInnerSize(inner.width(), inner.height());
 		}
 		else
 		{
-			currentForm->computeSize(this, 0, 0);
-			getShape()->setInnerSize(currentForm->width(this), currentForm->height(this));
+			form->computeSize(this, 0, 0);
+			getShape()->setInnerSize(form->width(this), form->height(this));
 		}
 
-		currentForm->setPos(this, QPoint(getShape()->contentLeft(), getShape()->contentTop()));
-		currentForm->setItemPositions(this);
+		form->setPos(this, QPoint(getShape()->contentLeft(), getShape()->contentTop()));
+		form->setItemPositions(this);
 	}
 	else
 	{
 		if (sizeDependsOnParent() && (availableWidth > 0 || availableHeight > 0))
-			currentForm->computeSize(this, availableWidth, availableHeight);
-		else currentForm->computeSize(this, 0, 0);
-		currentForm->setItemPositions(this);
-		setSize(currentForm->size(this));
+			form->computeSize(this, availableWidth, availableHeight);
+		else form->computeSize(this, 0, 0);
+		form->setItemPositions(this);
+		setSize(form->size(this));
 	}
 }
 
 bool DeclarativeItemBase::sizeDependsOnParent() const
 {
-	return forms().at(currentFormIndex_)->sizeDependsOnParent(this);
+	return currentForm()->sizeDependsOnParent(this);
 }
 
 QList<ItemRegion> DeclarativeItemBase::regions()
 {
-	Element* currentForm = forms().at(currentFormIndex_);
-	return currentForm->regions(this);
+	return currentForm()->regions(this);
 }
 
 }
