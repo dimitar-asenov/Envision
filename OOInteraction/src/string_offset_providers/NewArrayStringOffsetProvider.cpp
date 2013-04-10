@@ -33,18 +33,13 @@ namespace OOInteraction {
 NewArrayStringOffsetProvider::NewArrayStringOffsetProvider(OOVisualization::VNewExpression* vis)
 	: GridBasedOffsetProvider(vis)
 {
+	add(new Cell(0, vis->layout()->at<Visualization::Item>(0), 0));
+	add(new Cell(2, vis->layout()->at<Visualization::Item>(1), 2));
 	if (vis->layout()->length() > 2)
 	{
-		// Includes amount -> new array
-		add(new Cell(0, vis->layout()->at<Visualization::Item>(0), 4));
-		add(new Cell(2, vis->layout()->at<Visualization::Item>(1), 0));
-		add(new Cell(4, vis->layout()->at<Visualization::Item>(2), 2));
-	}
-	else
-	{
-		// There is no amount -> new object
-		add(new Cell(0, vis->layout()->at<Visualization::Item>(0), 0));
-		add(new Cell(2, vis->layout()->at<Visualization::Item>(1), 2));
+		add(new Cell(3, vis->layout()->at<Visualization::Item>(2), 3));
+		add(new Cell(4, vis->layout()->at<Visualization::Item>(3), 4));
+		add(new Cell(5, vis->layout()->at<Visualization::Item>(4), 5));
 	}
 
 }

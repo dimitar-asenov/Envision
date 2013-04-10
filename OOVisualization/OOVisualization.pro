@@ -48,7 +48,6 @@ HEADERS += src/alternative/VKeywordMethodCallStyle.h \
     src/expressions/VMethodCallExpression.h \
     src/expressions/VMethodCallExpressionStyle.h \
     src/expressions/VNewExpression.h \
-    src/expressions/VNewExpressionStyle.h \
     src/expressions/VReferenceExpression.h \
     src/expressions/VReferenceExpressionStyle.h \
     src/expressions/VThisExpression.h \
@@ -160,7 +159,6 @@ SOURCES += src/alternative/VKeywordMethodCallStyle.cpp \
     src/expressions/VUnaryOperation.cpp \
     src/expressions/OperatorStyle.cpp \
     src/expressions/VNewExpression.cpp \
-    src/expressions/VNewExpressionStyle.cpp \
     src/expressions/VCastExpression.cpp \
     src/expressions/VCastExpressionStyle.cpp \
     src/expressions/VThisExpression.cpp \

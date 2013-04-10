@@ -37,32 +37,40 @@ ITEM_COMMON_DEFINITIONS(VNewExpression, "item")
 
 VNewExpression::VNewExpression(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode<LayoutProvider<>, NewExpression>(parent, node, style),
-	newSymbol_( new Static(layout(), &style->newSymbol()) ),
+	pre_( new Static(layout(), &style->preSymbol()) ),
 	type_(nullptr),
 	amount_(nullptr)
 {
-	layout()->append(newSymbol_);
+	layout()->append(pre_);
 }
 
 VNewExpression::~VNewExpression()
 {
 	// These were automatically deleted by LayoutProvider's destructor
-	newSymbol_ = nullptr;
+	pre_ = nullptr;
+	in_ = nullptr;
+	post_ = nullptr;
 	type_ = nullptr;
 	amount_ = nullptr;
 }
 
 void VNewExpression::determineChildren()
 {
-	layout()->synchronizeFirst(amount_, node()->amount());
-	layout()->synchronizeLast(type_, node()->newType());
+	layout()->synchronizeMid(type_, node()->newType(), 1);
+
+	bool hasAmount = node()->amount();
+	layout()->synchronizeMid(in_ , hasAmount, &style()->inSymbol(), 2);
+	layout()->synchronizeMid(amount_ , node()->amount(), 3);
+	layout()->synchronizeLast(post_ , hasAmount, &style()->postSymbol());
 
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
 	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
 	//			what's the reason they are being updated.
 	// The style needs to be updated every time since if our own style changes, so will that of the children.
 	layout()->setStyle( &style()->layout());
-	newSymbol_->setStyle( &style()->newSymbol());
+	if (pre_) pre_->setStyle( &style()->preSymbol());
+	if (in_) in_->setStyle( &style()->inSymbol());
+	if (post_) post_->setStyle( &style()->postSymbol());
 }
 
 }

@@ -22,20 +22,8 @@
 		<noInnerCursors>true</noInnerCursors>
 		<noBoundaryCursorsInsideShape>true</noBoundaryCursorsInsideShape>
 	</layout>
-	<newSymbol prototypes="item/Symbol/default">
-		<font>
-			<weight>75</weight>
-		</font>
-		<symbol>new</symbol>
-		<pen>
-			<width>1.0</width>
-			<style>1</style>
-			<color>
-				<alpha>255</alpha>
-				<red>0</red>
-				<green>0</green>
-				<blue>255</blue>
-			</color>
-		</pen>
-	</newSymbol>
+	<preSymbol prototypes="item/Symbol/keyword"><symbol>new</symbol></preSymbol>
+	<inSymbol prototypes="item/Symbol/default"><symbol>[</symbol></inSymbol>
+	<in2Symbol prototypes="item/Static/default" />
+	<postSymbol prototypes="item/Symbol/default"><symbol>]</symbol></postSymbol>
 </style>

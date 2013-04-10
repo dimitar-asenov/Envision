@@ -27,7 +27,7 @@
 #pragma once
 
 #include "../oovisualization_api.h"
-#include "VNewExpressionStyle.h"
+#include "OperatorStyle.h"
 
 #include "OOModel/src/expressions/NewExpression.h"
 
@@ -43,7 +43,7 @@ namespace OOVisualization {
 class OOVISUALIZATION_API VNewExpression : public Visualization::ItemWithNode< Visualization::LayoutProvider<>,
 OOModel::NewExpression>
 {
-	ITEM_COMMON(VNewExpression)
+	ITEM_COMMON_CUSTOM_STYLENAME(VNewExpression, OperatorStyle)
 
 	public:
 		VNewExpression(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
@@ -55,9 +55,11 @@ OOModel::NewExpression>
 	private:
 		typedef Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::NewExpression> BaseItemType;
 
-		Visualization::Static* newSymbol_;
-		Visualization::Item* type_;
-		Visualization::Item* amount_;
+		Visualization::Static* pre_{};
+		Visualization::Static* in_{};
+		Visualization::Static* post_{};
+		Visualization::Item* type_{};
+		Visualization::Item* amount_{};
 };
 
 }
