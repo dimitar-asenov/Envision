@@ -32,8 +32,6 @@
 
 #include "OOInteraction/src/handlers/HExpression.h"
 
-#include "ModelBase/src/adapter/AdapterManager.h"
-
 Q_EXPORT_PLUGIN2( contractslibrary, ContractsLibrary::ContractsLibrary )
 
 namespace ContractsLibrary {

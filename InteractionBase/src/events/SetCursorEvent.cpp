@@ -28,7 +28,6 @@
 
 #include "InteractionBase/src/handlers/GenericHandler.h"
 #include "VisualizationBase/src/items/Item.h"
-#include "ModelBase/src/adapter/AdapterManager.h"
 
 namespace Interaction {
 
