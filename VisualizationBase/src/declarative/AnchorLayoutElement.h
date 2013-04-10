@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef VisualizationBase_ANCHORLAYOUTELEMENT_H_
-#define VisualizationBase_ANCHORLAYOUTELEMENT_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 #include "LayoutElement.h"
@@ -78,6 +77,4 @@ class AnchorLayoutElement : public LayoutElement {
 		AnchorLayoutConstraintSolver* solver_{};
 };
 
-}
-
-#endif /* VisualizationBase_ANCHORLAYOUTELEMENT_H_ */
+} /* namespace Visualization */

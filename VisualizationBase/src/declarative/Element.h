@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VisualizationBase_ELEMENT_H_
-#define VisualizationBase_ELEMENT_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 
@@ -309,7 +308,7 @@ inline void Element::removeChild(Element* child)
  */
 inline const QVector<Element*>& Element::children() const {return children_;}
 
-}
+} /* namespace Visualization */
 
 #define FLUENT_ELEMENT_INTERFACE(ClassName)																									\
 public:																																					\
@@ -354,5 +353,3 @@ public:																																					\
 	 * @return A pointer to this element
 	 */																																					\
 	ClassName* setRightMargin(int right) {return static_cast<ClassName*>(Element::setRightMargin(right));}
-
-#endif /* VisualizationBase_ELEMENT_H_ */

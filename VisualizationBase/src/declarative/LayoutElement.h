@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VisualizationBase_LAYOUTELEMENT_H_
-#define VisualizationBase_LAYOUTELEMENT_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 #include "Element.h"
@@ -38,6 +37,4 @@ class VISUALIZATIONBASE_API LayoutElement : public Element
 		~LayoutElement() {};
 };
 
-}
-
-#endif /* VisualizationBase_LAYOUTELEMENT_H_ */
+} /* namespace Visualization */

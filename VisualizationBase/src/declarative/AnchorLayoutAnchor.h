@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef VisualizationBase_ANCHORLAYOUTANCHOR_H_
-#define VisualizationBase_ANCHORLAYOUTANCHOR_H_
+#pragma once
 
 namespace Visualization {
 
@@ -76,4 +75,3 @@ inline int AnchorLayoutAnchor::offset() const
 }
 
 } /* namespace Visualization */
-#endif /* VisualizationBase_ANCHORLAYOUTANCHOR_H_ */

@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef VisualizationBase_NODEITEMWRAPPERELEMENT_H_
-#define VisualizationBase_NODEITEMWRAPPERELEMENT_H_
+#pragma once
 
 #include "ItemWrapperElement.h"
 
@@ -75,4 +74,3 @@ void NodeItemWrapperElement<ParentType>::synchronizeWithItem(Item* item)
 }
 
 } /* namespace Visualization */
-#endif /* VisualizationBase_NODEITEMWRAPPERELEMENT_H_ */

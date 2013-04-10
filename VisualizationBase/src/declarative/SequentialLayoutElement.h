@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VisualizationBase_SEQUENTIALLAYOUTELEMENT_H_
-#define VisualizationBase_SEQUENTIALLAYOUTELEMENT_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 #include "LayoutElement.h"
@@ -203,6 +202,4 @@ inline SequentialLayoutElement* SequentialLayoutElement::setNoInnerCursors(bool 
 	return this;
 }
 
-}
-
-#endif /* VisualizationBase_SEQUENTIALLAYOUTELEMENT_H_ */
+} /* namespace Visualization */

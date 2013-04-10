@@ -24,8 +24,7 @@
  **
  ***********************************************************************************************************************/
 
-#ifndef VisualizationBase_DECLARATIVEITEMBASE_H_
-#define VisualizationBase_DECLARATIVEITEMBASE_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 #include "../items/Item.h"
@@ -124,6 +123,4 @@ template <class VisualizationType, class ParentType>
 	return new NodeWithVisualizationItemWrapperElement<ParentType, VisualizationType>(item, nodeGetter, styleGetter);
 }
 
-}
-
-#endif /* VisualizationBase_DECLARATIVEITEMBASE_H_ */
+} /* namespace Visualization */

@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef VisualizationBase_NODEWITHVISUALIZATIONITEMWRAPPERELEMENT_H_
-#define VisualizationBase_NODEWITHVISUALIZATIONITEMWRAPPERELEMENT_H_
+#pragma once
 
 #include "ItemWrapperElement.h"
 
@@ -81,4 +80,3 @@ void NodeWithVisualizationItemWrapperElement<ParentType, VisualizationType>::syn
 }
 
 } /* namespace Visualization */
-#endif /* VisualizationBase_NODEWITHVISUALIZATIONITEMWRAPPERELEMENT_H_ */

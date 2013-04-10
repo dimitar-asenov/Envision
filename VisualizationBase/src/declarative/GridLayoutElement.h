@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef VisualizationBase_GRIDLAYOUTELEMENT_H_
-#define VisualizationBase_GRIDLAYOUTELEMENT_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 #include "LayoutElement.h"
@@ -328,5 +327,3 @@ inline GridLayoutElement* GridLayoutElement::setNoInnerCursors(bool noInnerCurso
 }
 
 } /* namespace Visualization */
-
-#endif /* VisualizationBase_GRIDLAYOUTELEMENT_H_ */

@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VisualizationBase_ITEMWRAPPERELEMENT_H_
-#define VisualizationBase_ITEMWRAPPERELEMENT_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 #include "Element.h"
@@ -129,6 +128,4 @@ bool ItemWrapperElement<ParentType,ChildItemType>::elementOrChildHasFocus(Item* 
 	return childItem->itemOrChildHasFocus();
 }
 
-}
-
-#endif /* VisualizationBase_ITEMWRAPPERELEMENT_H_ */
+} /* namespace Visualization */

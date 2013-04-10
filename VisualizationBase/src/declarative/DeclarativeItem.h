@@ -24,8 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#ifndef VisualizationBase_DECLARATIVEITEM_H_
-#define VisualizationBase_DECLARATIVEITEM_H_
+#pragma once
 
 #include "../visualizationbase_api.h"
 #include "DeclarativeItemBase.h"
@@ -94,6 +93,4 @@ ElementType* DeclarativeItem<VisualizationType>::addForm(ElementType* element)
 	return element;
 }
 
-}
-
-#endif /* VisualizationBase_DECLARATIVEITEM_H_ */
+} /* namespace Visualization */

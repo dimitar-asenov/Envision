@@ -24,8 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#ifndef VisualizationBase_ANCHORLAYOUTCONSTRAINTSOLVER_H_
-#define VisualizationBase_ANCHORLAYOUTCONSTRAINTSOLVER_H_
+#pragma once
 
 #include "AnchorLayoutAnchor.h"
 
@@ -69,4 +68,3 @@ inline int AnchorLayoutConstraintSolver::endVariable(int elementIndex)
 	return 2 * elementIndex + 1;
 }
 } /* namespace Visualization */
-#endif /* VisualizationBase_ANCHORLAYOUTCONSTRAINTSOLVER_H_ */
