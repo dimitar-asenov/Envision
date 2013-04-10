@@ -28,10 +28,7 @@
 		<bottomInnerMargin>0</bottomInnerMargin>
 	</layout>
 	
-	<tryIcon prototypes="item/Symbol/default">
-		<font>
-			<weight>99</weight>
-		</font>
+	<tryIcon prototypes="item/Symbol/keyword">
 		<symbol>try</symbol>
 	</tryIcon>
 		
@@ -84,10 +81,7 @@
 		<bottomInnerMargin>0</bottomInnerMargin>
 	</finallyOutline>
 	
-	<finallyIcon prototypes="item/Symbol/default">
-		<font>
-			<weight>99</weight>
-		</font>
+	<finallyIcon prototypes="item/Symbol/keyword">
 		<symbol>finally</symbol>
 	</finallyIcon>
 	

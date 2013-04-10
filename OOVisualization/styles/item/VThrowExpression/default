@@ -6,20 +6,7 @@
 		<noInnerCursors>true</noInnerCursors>
 		<noBoundaryCursorsInsideShape>true</noBoundaryCursorsInsideShape>
 	</layout>
-	<throwSymbol prototypes="item/Symbol/default">
-		<font>
-			<weight>75</weight>
-		</font>
+	<throwSymbol prototypes="item/Symbol/keyword">
 		<symbol>throw</symbol>
-		<pen>
-			<width>1.0</width>
-			<style>1</style>
-			<color>
-				<alpha>255</alpha>
-				<red>0</red>
-				<green>0</green>
-				<blue>255</blue>
-			</color>
-		</pen>
 	</throwSymbol>
 </style>

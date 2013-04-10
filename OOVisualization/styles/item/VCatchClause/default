@@ -32,10 +32,7 @@
 		<spaceBetweenElements>5</spaceBetweenElements>
 	</header>
 	
-	<icon prototypes="item/Symbol/default">
-		<font>
-			<weight>99</weight>
-		</font>
+	<icon prototypes="item/Symbol/keyword">
 		<symbol>catch</symbol>
 	</icon>
 	
