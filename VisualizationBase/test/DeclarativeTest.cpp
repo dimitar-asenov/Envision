@@ -111,20 +111,14 @@ void DeclarativeTest::initializeForms()
 
 	// Test 6: Anchor layout
 	addForm((new AnchorLayoutElement())
-				->put(AnchorLayoutElement::PlaceEdge::BottomOf, firstElement, 20,
-						AnchorLayoutElement::FromEdge::Above, testNodeItemElement)
-				->put(AnchorLayoutElement::PlaceEdge::LeftOf, firstElement,
-						AnchorLayoutElement::AtEdge::AtLeftOf, testNodeItemElement)
-				->put(AnchorLayoutElement::PlaceEdge::VCenterOf, secondElement,
-						AnchorLayoutElement::AtEdge::AtCenterOf, firstElement)
-				->put(AnchorLayoutElement::PlaceEdge::LeftOf, secondElement, 20,
-						AnchorLayoutElement::FromEdge::FromRightOf, firstElement)
-				->put(AnchorLayoutElement::PlaceEdge::HCenterOf, thirdElement,
-						AnchorLayoutElement::AtEdge::AtCenterOf, secondElement)
-				->put(AnchorLayoutElement::PlaceEdge::TopOf, thirdElement, 20,
-						AnchorLayoutElement::FromEdge::Below, testNodeItemElement)
-				->put(AnchorLayoutElement::PlaceEdge::TopOf, fourthElement, 0.33, thirdElement)
-				->put(AnchorLayoutElement::PlaceEdge::RightOf, fourthElement, 0.1, testNodeItemElement)
+				->put(TheBottomOf, firstElement, 20, FromTopOf, testNodeItemElement)
+				->put(TheLeftOf, firstElement, AtLeftOf, testNodeItemElement)
+				->put(TheVCenterOf, secondElement, AtCenterOf, firstElement)
+				->put(TheLeftOf, secondElement, 20, FromRightOf, firstElement)
+				->put(TheHCenterOf, thirdElement, AtCenterOf, secondElement)
+				->put(TheTopOf, thirdElement, 20, FromBottomOf, testNodeItemElement)
+				->put(TheTopOf, fourthElement, 0.33, thirdElement)
+				->put(TheRightOf, fourthElement, 0.1, testNodeItemElement)
 				);
 
 	// Test 7: Anchor Layout with stretching Elements, in order specification
@@ -143,32 +137,23 @@ void DeclarativeTest::initializeForms()
 										->put(0, 1, testNodeItemElement)
 										->setCellVerticalAlignment(LayoutStyle::Alignment::Bottom);
 	addForm((new AnchorLayoutElement())
-				->put(AnchorLayoutElement::PlaceEdge::TopOf, verticalGrid1,
-						AnchorLayoutElement::AtEdge::AtTopOf, verticalGrid2)
-				->put(AnchorLayoutElement::PlaceEdge::BottomOf, verticalGrid1,
-						AnchorLayoutElement::AtEdge::AtBottomOf, verticalGrid2)
-				->put(AnchorLayoutElement::PlaceEdge::LeftOf, verticalGrid1, 20,
-						AnchorLayoutElement::FromEdge::FromRightOf, verticalGrid2));
+				->put(TheTopOf, verticalGrid1, AtTopOf, verticalGrid2)
+				->put(TheBottomOf, verticalGrid1, AtBottomOf, verticalGrid2)
+				->put(TheLeftOf, verticalGrid1, 20, FromRightOf, verticalGrid2));
 
 	// Test 8: Anchor Layout out of order specification with more elements, circular dependencies
 	addForm((new AnchorLayoutElement())
 				// arrange them on top of each other
-				->put(AnchorLayoutElement::PlaceEdge::TopOf, firstElement, 20,
-						AnchorLayoutElement::FromEdge::Below, secondElement)
-				->put(AnchorLayoutElement::PlaceEdge::TopOf, secondElement, 20,
-						AnchorLayoutElement::FromEdge::Below, thirdElement)
+				->put(TheTopOf, firstElement, 20, FromBottomOf, secondElement)
+				->put(TheTopOf, secondElement, 20, FromBottomOf, thirdElement)
 				// right edges elements 1 and 2
-				->put(AnchorLayoutElement::PlaceEdge::RightOf, firstElement,
-						AnchorLayoutElement::AtEdge::AtRightOf, secondElement)
+				->put(TheRightOf, firstElement, AtRightOf, secondElement)
 				// left edges elements 3 and 2
-				->put(AnchorLayoutElement::PlaceEdge::LeftOf, thirdElement,
-						AnchorLayoutElement::AtEdge::AtLeftOf, secondElement)
+				->put(TheLeftOf, thirdElement, AtLeftOf, secondElement)
 				// left edges elements 1 and 3
-				->put(AnchorLayoutElement::PlaceEdge::LeftOf, firstElement,
-						AnchorLayoutElement::AtEdge::AtLeftOf, thirdElement)
+				->put(TheLeftOf, firstElement, AtLeftOf, thirdElement)
 				// right edges elements 1 and 3
-				->put(AnchorLayoutElement::PlaceEdge::RightOf, firstElement,
-						AnchorLayoutElement::AtEdge::AtRightOf, thirdElement));
+				->put(TheRightOf, firstElement, AtRightOf, thirdElement));
 
 	// Test 9: Test sequential layout
 	Element* horizontalSequential = (new SequentialLayoutElement())
@@ -181,8 +166,7 @@ void DeclarativeTest::initializeForms()
 			->setVertical();
 
 	addForm((new AnchorLayoutElement())
-			->put(AnchorLayoutElement::PlaceEdge::LeftOf, horizontalSequential, 20,
-					AnchorLayoutElement::FromEdge::FromRightOf, verticalSequential));
+			->put(TheLeftOf, horizontalSequential, 20, FromRightOf, verticalSequential));
 }
 
 int DeclarativeTest::determineForm()

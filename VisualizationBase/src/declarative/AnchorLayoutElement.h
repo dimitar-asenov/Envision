@@ -30,7 +30,9 @@
 #include "../visualizationbase_api.h"
 #include "LayoutElement.h"
 #include "AnchorLayoutAnchor.h"
+#include "Enumerations.h"
 
+using namespace DeclarativeEnumerations;
 namespace Visualization {
 
 class AnchorLayoutConstraintSolver;
@@ -39,10 +41,6 @@ class AnchorLayoutElement : public LayoutElement {
 		FLUENT_ELEMENT_INTERFACE(AnchorLayoutElement);
 
 	public:
-		enum class PlaceEdge : int {LeftOf, RightOf, CenterOf, VCenterOf, HCenterOf, TopOf, BottomOf};
-		enum class AtEdge : int {AtLeftOf, AtRightOf, AtCenterOf, AtVCenterOf, AtHCenterOf, AtTopOf, AtBottomOf};
-		enum class FromEdge : int {FromLeftOf, FromRightOf, FromCenterOf, FromVCenterOf, FromHCenterOf, Above, Below};
-
 		// Methods executable on element definition
 		AnchorLayoutElement();
 		virtual ~AnchorLayoutElement();
@@ -58,7 +56,7 @@ class AnchorLayoutElement : public LayoutElement {
 		virtual QList<ItemRegion> regions(Item* item, int parentX, int parentY) override;
 
 	private:
-		enum class Edge : int {Left, Right, Center, VCenter, HCenter, Top, Bottom};
+		enum Edge {Left, Right, Center, VCenter, HCenter, Top, Bottom};
 		AnchorLayoutElement* put(AnchorLayoutAnchor::Orientation orientation, float relativePlaceEdgePosition,
 				Element* placeElement, int offset, float relativeFixedEdgePosition, Element* fixedElement);
 		AnchorLayoutAnchor::Orientation orientation(Edge edge);

@@ -7,7 +7,8 @@ win32:LIBS += -llogger \
 LIBS += -llpsolve55
 QT += xml \
     svg
-HEADERS += src/nodes/TestBoxNode.h \
+HEADERS += src/declarative/Enumerations.h \
+    src/nodes/TestBoxNode.h \
     src/items/TestBox.h \
     src/items/LineStyle.h \
     src/items/Line.h \
