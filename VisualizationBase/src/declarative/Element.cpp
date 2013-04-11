@@ -123,6 +123,14 @@ void Element::destroyChildItems(Item* item)
 	for (Element* element : children()) element->destroyChildItems(item);
 }
 
+bool Element::isEmpty(const Item* item) const
+{
+	for (auto e : children())
+		if (!e->isEmpty(item))
+			return false;
+	return true;
+}
+
 /**
  * This method is called while rendering the item.
  *

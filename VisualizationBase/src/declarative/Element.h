@@ -80,6 +80,7 @@ class VISUALIZATIONBASE_API Element
 		int xEnd(Item* item) const;
 		int yEnd(Item* item) const;
 		virtual bool elementOrChildHasFocus(Item* item) const;
+		virtual bool isEmpty(const Item* item) const;
 
 	public: // Recursive item destruction
 		virtual void destroyChildItems(Item* item);

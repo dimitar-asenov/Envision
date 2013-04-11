@@ -114,6 +114,11 @@ bool DeclarativeItemBase::sizeDependsOnParent() const
 	return currentForm()->sizeDependsOnParent(this);
 }
 
+bool DeclarativeItemBase::isEmpty() const
+{
+	return currentForm()->isEmpty(this);
+}
+
 QList<ItemRegion> DeclarativeItemBase::regions()
 {
 	return currentForm()->regions(this);

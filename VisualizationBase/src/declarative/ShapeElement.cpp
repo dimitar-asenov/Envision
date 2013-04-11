@@ -56,4 +56,9 @@ bool ShapeElement::sizeDependsOnParent(const Item* /*item*/) const
 	return true;
 }
 
+bool ShapeElement::isEmpty(const Item* /*item*/) const
+{
+	return true;
+}
+
 } /* namespace Visualization */

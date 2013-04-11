@@ -409,6 +409,14 @@ inline void SequentialLayoutElement::adjustCursorRegionToAvoidZeroSize(QRect& re
 	}
 }
 
+bool SequentialLayoutElement::isEmpty(const Item* item) const
+{
+	for (auto i : listForItem(item))
+		if (!i->isEmpty())
+			return false;
+	return true;
+}
+
 bool SequentialLayoutElement::elementOrChildHasFocus(Item* item) const
 {
 	if (LayoutElement::elementOrChildHasFocus(item))

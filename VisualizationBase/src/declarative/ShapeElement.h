@@ -38,6 +38,7 @@ class ShapeElement : public Visualization::Element {
 		virtual QList<Element*> shapeElements() override;
 		virtual void computeSize(Item* item, int availableWidth, int availableHeight) override;
 		virtual bool sizeDependsOnParent(const Item* item) const override;
+		virtual bool isEmpty(const Item* item) const override;
 };
 
 } /* namespace Visualization */
