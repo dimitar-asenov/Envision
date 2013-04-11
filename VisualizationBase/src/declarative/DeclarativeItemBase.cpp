@@ -65,23 +65,38 @@ void DeclarativeItemBase::updateGeometry(int availableWidth, int availableHeight
 	{
 		getShape()->setOffset(0, 0);
 
-		if ( sizeDependsOnParent() && (availableWidth > 0 || availableHeight > 0) )
+		if (currentShapeElements().isEmpty())
 		{
-			QSize inner = getShape()->innerSize(availableWidth, availableHeight);
-			form->computeSize(this, inner.width(), inner.height());
+			if ( sizeDependsOnParent() && (availableWidth > 0 || availableHeight > 0) )
+			{
+				QSize inner = getShape()->innerSize(availableWidth, availableHeight);
+				form->computeSize(this, inner.width(), inner.height());
 
-			if (form->width(this) > inner.width()) inner.setWidth(form->width(this));
-			if (form->height(this) > inner.height()) inner.setHeight(form->height(this));
+				if (form->width(this) > inner.width()) inner.setWidth(form->width(this));
+				if (form->height(this) > inner.height()) inner.setHeight(form->height(this));
 
-			getShape()->setInnerSize(inner.width(), inner.height());
+				getShape()->setInnerSize(inner.width(), inner.height());
+			}
+			else
+			{
+				form->computeSize(this, 0, 0);
+				getShape()->setInnerSize(form->width(this), form->height(this));
+			}
+			form->setPos(this, QPoint(getShape()->contentLeft(), getShape()->contentTop()));
 		}
 		else
 		{
-			form->computeSize(this, 0, 0);
-			getShape()->setInnerSize(form->width(this), form->height(this));
-		}
+			auto currentShape = currentShapeElements().first();
+			if (sizeDependsOnParent() && (availableWidth > 0 || availableHeight > 0))
+				form->computeSize(this, availableWidth, availableHeight);
+			else form->computeSize(this, 0, 0);
 
-		form->setPos(this, QPoint(getShape()->contentLeft(), getShape()->contentTop()));
+			getShape()->setOffset(currentShape->x(this), currentShape->y(this));
+			getShape()->setOutterSize(currentShape->width(this), currentShape->height(this));
+
+			form->setPos(this, QPoint(0, 0));
+			setSize(form->size(this));
+		}
 		form->setItemPositions(this);
 	}
 	else

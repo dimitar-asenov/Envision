@@ -67,6 +67,14 @@ void Element::clearCache(const Item* item)
 	}
 }
 
+QList<Element*> Element::shapeElements()
+{
+	auto elements = QList<Element*>();
+	for (auto c : children())
+		elements.append(c->shapeElements());
+	return elements;
+}
+
 /**
  * This method is called while rendering the item.
  *

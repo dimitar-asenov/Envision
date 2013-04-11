@@ -51,6 +51,8 @@ class VISUALIZATIONBASE_API DeclarativeItemBase: public Item
 		virtual QList<Element*>& forms() const = 0; // array or forms
 		virtual int determineForm(); // get the appropriate form for the situation
 		Element* currentForm() const;
+		virtual QList<QList<Element*>>& shapeElements() const = 0;
+		QList<Element*> currentShapeElements() const;
 
 		// factory methods for ItemWrapperElement
 		template <class VisualizationType, class ParentType>
@@ -72,6 +74,7 @@ class VISUALIZATIONBASE_API DeclarativeItemBase: public Item
 };
 
 inline Element* DeclarativeItemBase::currentForm() const {return forms().at(currentFormIndex_);}
+inline QList<Element*> DeclarativeItemBase::currentShapeElements() const {return shapeElements().at(currentFormIndex_);}
 
 /**
  * A factory method to get an item wrapper element with a visualization only. To call it, one has to supply the

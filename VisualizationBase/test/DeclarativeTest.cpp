@@ -33,6 +33,7 @@
 #include "../src/declarative/GridLayoutElement.h"
 #include "../src/declarative/AnchorLayoutElement.h"
 #include "../src/declarative/SequentialLayoutElement.h"
+#include "../src/declarative/ShapeElement.h"
 
 namespace Visualization {
 
@@ -141,7 +142,8 @@ void DeclarativeTest::initializeForms()
 				->put(TheBottomOf, verticalGrid1, AtBottomOf, verticalGrid2)
 				->put(TheLeftOf, verticalGrid1, 20, FromRightOf, verticalGrid2));
 
-	// Test 8: Anchor Layout out of order specification with more elements, circular dependencies
+	// Test 8: Anchor Layout out of order specification with more elements, circular dependencies + shape element test
+	auto shapeElement = new ShapeElement();
 	addForm((new AnchorLayoutElement())
 				// arrange them on top of each other
 				->put(TheTopOf, firstElement, 20, FromBottomOf, secondElement)
@@ -153,7 +155,12 @@ void DeclarativeTest::initializeForms()
 				// left edges elements 1 and 3
 				->put(TheLeftOf, firstElement, AtLeftOf, thirdElement)
 				// right edges elements 1 and 3
-				->put(TheRightOf, firstElement, AtRightOf, thirdElement));
+				->put(TheRightOf, firstElement, AtRightOf, thirdElement)
+				// place shape element
+				->put(TheLeftOf, shapeElement, 10, FromLeftOf, secondElement)
+				->put(TheRightOf, shapeElement, 10, FromRightOf, secondElement)
+				->put(TheTopOf, shapeElement, 10, FromTopOf, secondElement)
+				->put(TheBottomOf, shapeElement, 10, FromBottomOf, secondElement));
 
 	// Test 9: Test sequential layout
 	Element* horizontalSequential = (new SequentialLayoutElement())

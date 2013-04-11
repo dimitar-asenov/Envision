@@ -41,8 +41,10 @@ class DeclarativeItem : public DeclarativeItemBase
 		DeclarativeItem(Item* parent, const StyleType* style = itemStyles().get());
 		virtual ~DeclarativeItem();
 		virtual QList<Element*>& forms() const override;
+		virtual QList<QList<Element*>>& shapeElements() const override;
 	protected:
 		static QList<Element*>& formsStatic();
+		static QList<QList<Element*>>& shapeElementsStatic();
 		template <class ElementType> static ElementType* addForm(ElementType* element);
 };
 
@@ -54,6 +56,9 @@ DeclarativeItem<VisualizationType>::DeclarativeItem(Item* parent, const StyleTyp
 		if(!initialized)
 		{
 			VisualizationType::initializeForms();
+			for (auto f : forms())
+				shapeElementsStatic().append(f->shapeElements());
+			for (auto s : shapeElementsStatic())
 			initialized = true;
 		}
 }
@@ -76,6 +81,19 @@ template <class VisualizationType>
 QList<Element*>& DeclarativeItem<VisualizationType>::forms() const
 {
 	return formsStatic();
+}
+
+template <class VisualizationType>
+QList<QList<Element*>>& DeclarativeItem<VisualizationType>::shapeElementsStatic()
+{
+	static QList<QList<Element*>> list;
+	return list;
+}
+
+template <class VisualizationType>
+QList<QList<Element*>>& DeclarativeItem<VisualizationType>::shapeElements() const
+{
+	return shapeElementsStatic();
 }
 
 /**
