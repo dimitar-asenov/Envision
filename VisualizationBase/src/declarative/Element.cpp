@@ -81,6 +81,14 @@ void Element::setItemPositions(Item* item, int parentX, int parentY)
 		element->setItemPositions(item, parentX + x(item), parentY + y(item));
 }
 
+QList<ItemRegion> Element::regions(Item* item, int parentX, int parentY)
+{
+	QList<ItemRegion> allRegions;
+	for (auto element : children())
+		allRegions.append(element->regions(item, x(item) + parentX, y(item) + parentY));
+	return allRegions;
+}
+
 /**
  * This method is called while rendering the item.
  *

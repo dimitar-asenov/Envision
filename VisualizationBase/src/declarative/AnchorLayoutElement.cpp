@@ -143,14 +143,6 @@ bool AnchorLayoutElement::sizeDependsOnParent(const Item* /*item*/) const
 	return false;
 }
 
-QList<ItemRegion> AnchorLayoutElement::regions(Item* item, int parentX, int parentY)
-{
-	QList<ItemRegion> allRegions;
-	for (auto element : children())
-		allRegions.append(element->regions(item, x(item) + parentX, y(item) + parentY));
-	return allRegions;
-}
-
 AnchorLayoutElement* AnchorLayoutElement::put(AnchorLayoutAnchor::Orientation orientation,
 		float relativePlaceEdgePosition, Element* placeElement, int offset, float relativeFixedEdgePosition,
 		Element* fixedElement)
