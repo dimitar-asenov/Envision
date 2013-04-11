@@ -26,33 +26,47 @@
 
 #pragma once
 
-#include "../oomodel_api.h"
+#include "../oovisualization_api.h"
+#include "VEnumeratorStyle.h"
 
-#include "../attributeMacros.h"
-#include "../expressions/Expression.h"
+#include "OOModel/src/top_level/Enumerator.h"
 
-#include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
-#include "ModelBase/src/nodes/Text.h"
-#include "ModelBase/src/nodes/nodeMacros.h"
+#include "VisualizationBase/src/items/ItemWithNode.h"
+#include "VisualizationBase/src/items/LayoutProvider.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Enumerator)
-
-namespace OOModel {
-
-class OOMODEL_API Enumerator : public Model::ExtendableNode
-{
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Enumerator)
-
-	ATTRIBUTE_OOP_NAME
-	ATTRIBUTE(Expression, value, setValue)
-
-	public:
-
-		Enumerator(const QString& name, Expression* value = nullptr);
-
-		virtual bool definesSymbol() const;
-		virtual const QString& symbolName() const;
-};
-
+namespace Visualization {
+	class Static;
+	class VText;
 }
 
+namespace OOVisualization {
+
+class OOVISUALIZATION_API VEnumerator : public Visualization::ItemWithNode< Visualization::LayoutProvider<>,
+OOModel::Enumerator>
+{
+	ITEM_COMMON(VEnumerator)
+
+	public:
+		VEnumerator(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+		virtual ~VEnumerator();
+
+		Visualization::VText* name() const;
+		Visualization::Static* assignmentSymbol() const;
+		Visualization::Item* value() const;
+
+	protected:
+		void determineChildren();
+
+	private:
+		typedef Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::Enumerator> BaseItemType;
+
+		Visualization::VText* name_{};
+		Visualization::Static* assignmentSymbol_{};
+		Visualization::Item* value_{};
+};
+
+inline Visualization::VText* VEnumerator::name() const {return name_;}
+inline Visualization::Static* VEnumerator::assignmentSymbol() const {return assignmentSymbol_;}
+inline Visualization::Item* VEnumerator::value() const {return value_;}
+
+}

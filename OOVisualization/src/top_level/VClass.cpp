@@ -43,20 +43,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VClass, "item")
 
 VClass::VClass(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode<LayoutProvider<PanelBorderLayout>, Class>(parent, node, style),
-	header_(),
-	icon_(),
-	name_(),
-	typeArguments_(),
-	baseClasses_(),
-	annotations_(),
-	body_(),
-	content_(),
-	fieldContainer_(),
-	publicFieldArea_(),
-	privateFieldArea_(),
-	protectedFieldArea_(),
-	defaultFieldArea_()
+	ItemWithNode<LayoutProvider<PanelBorderLayout>, Class>(parent, node, style)
 {
 	layout()->setTop(true);
 	header_ = new SequentialLayout(layout()->top(), &style->header());
@@ -100,6 +87,7 @@ VClass::~VClass()
 	typeArguments_ = nullptr;
 	baseClasses_ = nullptr;
 	annotations_ = nullptr;
+	enumerators_ = nullptr;
 	body_ = nullptr;
 	content_ = nullptr;
 	fieldContainer_ = nullptr;
@@ -129,6 +117,7 @@ void VClass::determineChildren()
 	name_->setStyle( nameStyle );
 	body_->setStyle( &style()->body() );
 	if (annotations_) annotations_->setStyle( &style()->annotations() );
+	if (enumerators_) enumerators_->setStyle( &style()->enumerators() );
 	content_->setStyle( &style()->content() );
 	typeArguments_->setStyle( &style()->typeArguments() );
 	baseClasses_->setStyle( &style()->baseClasses() );
@@ -147,8 +136,10 @@ void VClass::determineChildren()
 	if (body_->needsUpdate() == FullUpdate) body_->clear(true);
 	body_->synchronizeWithNodes(node()->methods()->nodes().toList(), renderer());
 	content_->synchronizeFirst(annotations_,
-			node()->annotations()->size() > 0 ? node()->annotations() : nullptr,
-					&style()->annotations());
+			node()->annotations()->size() > 0 ? node()->annotations() : nullptr, &style()->annotations());
+	int index = annotations_ ? 1 : 0;
+	content_->synchronizeMid(enumerators_,
+			node()->enumerators()->size() > 0 ? node()->enumerators() : nullptr,	&style()->enumerators(), index);
 
 	// Synchronize fields
 	QList<Model::Node*> publicFields;

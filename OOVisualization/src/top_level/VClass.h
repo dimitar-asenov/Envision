@@ -61,19 +61,20 @@ class OOVISUALIZATION_API VClass
 		typedef Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
 				OOModel::Class> BaseItemType;
 
-		Visualization::SequentialLayout* header_;
-		Visualization::Static* icon_;
-		Visualization::VText* name_;
-		Visualization::VList* typeArguments_;
-		Visualization::VList* baseClasses_;
-		VStatementItemList* annotations_;
-		Visualization::PositionLayout* body_;
-		Visualization::SequentialLayout* content_;
-		Visualization::SequentialLayout* fieldContainer_;
-		Visualization::SequentialLayout* publicFieldArea_;
-		Visualization::SequentialLayout* privateFieldArea_;
-		Visualization::SequentialLayout* protectedFieldArea_;
-		Visualization::SequentialLayout* defaultFieldArea_;
+		Visualization::SequentialLayout* header_{};
+		Visualization::Static* icon_{};
+		Visualization::VText* name_{};
+		Visualization::VList* typeArguments_{};
+		Visualization::VList* baseClasses_{};
+		VStatementItemList* annotations_{};
+		Visualization::VList* enumerators_{};
+		Visualization::PositionLayout* body_{};
+		Visualization::SequentialLayout* content_{};
+		Visualization::SequentialLayout* fieldContainer_{};
+		Visualization::SequentialLayout* publicFieldArea_{};
+		Visualization::SequentialLayout* privateFieldArea_{};
+		Visualization::SequentialLayout* protectedFieldArea_{};
+		Visualization::SequentialLayout* defaultFieldArea_{};
 };
 
 }

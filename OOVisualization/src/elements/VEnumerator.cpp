@@ -24,35 +24,45 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
+#include "VEnumerator.h"
 
-#include "../oomodel_api.h"
+#include "VisualizationBase/src/items/Static.h"
+#include "VisualizationBase/src/items/VText.h"
 
-#include "../attributeMacros.h"
-#include "../expressions/Expression.h"
+using namespace Visualization;
+using namespace OOModel;
 
-#include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
-#include "ModelBase/src/nodes/Text.h"
-#include "ModelBase/src/nodes/nodeMacros.h"
+namespace OOVisualization {
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Enumerator)
+ITEM_COMMON_DEFINITIONS(VEnumerator, "item")
 
-namespace OOModel {
-
-class OOMODEL_API Enumerator : public Model::ExtendableNode
+VEnumerator::VEnumerator(Item* parent, NodeType* node, const StyleType* style) :
+	BaseItemType(parent, node, style),
+	name_(new VText(layout(), node->nameNode(), &style->name()) )
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Enumerator)
-
-	ATTRIBUTE_OOP_NAME
-	ATTRIBUTE(Expression, value, setValue)
-
-	public:
-
-		Enumerator(const QString& name, Expression* value = nullptr);
-
-		virtual bool definesSymbol() const;
-		virtual const QString& symbolName() const;
-};
-
+	layout()->append(name_);
 }
 
+VEnumerator::~VEnumerator()
+{
+	// These were automatically deleted by LayoutProvider's destructor
+	name_ = nullptr;
+	assignmentSymbol_ = nullptr;
+	value_ = nullptr;
+}
+
+void VEnumerator::determineChildren()
+{
+	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
+	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
+	//			what's the reason they are being updated.
+	// The style needs to be updated every time since if our own style changes, so will that of the children.
+	layout()->setStyle( &style()->layout());
+	name_->setStyle( &style()->name());
+
+	layout()->synchronizeFirst(name_, node()->nameNode(), &style()->name());
+	layout()->synchronizeMid(assignmentSymbol_, node()->value() != nullptr, &style()->assignmentSymbol(), 1);
+	layout()->synchronizeLast(value_, node()->value());
+}
+
+}

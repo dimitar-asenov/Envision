@@ -162,10 +162,10 @@ Class* addGeneric(Model::Model* model, Project* parent)
 	foobar->items()->append(callBarSt);
 
 	// Set positions
-	gen->extension<Position>()->setX(400);
+	gen->extension<Position>()->setX(460);
 	gen->extension<Position>()->setY(300);
-	bar->extension<Position>()->setY(60);
-	foobar->extension<Position>()->setY(120);
+	bar->extension<Position>()->setY(80);
+	foobar->extension<Position>()->setY(140);
 
 	model->endModification();
 	return gen;
@@ -199,11 +199,37 @@ Class* addAnnotated(Model::Model* model, Project* parent)
 	var->setInitialValue(new IntegerLiteral(42));
 
 	// Set positions
-	ann->extension<Position>()->setX(400);
-	ann->extension<Position>()->setY(600);
+	ann->extension<Position>()->setX(460);
+	ann->extension<Position>()->setY(620);
 
 	model->endModification();
 	return ann;
+}
+
+Class* addEnumeration(Model::Model* model, Project* parent)
+{
+	Class* en = nullptr;
+
+	if (!parent) en = dynamic_cast<Class*> (model->createRoot("Class"));
+	model->beginModification(parent ? static_cast<Model::Node*> (parent) :en, "Adding an enumeration class.");
+	if (!en)
+	{
+		en = new Class();
+		parent->classes()->append(en);
+	}
+
+	en->setName("Colors");
+	en->setVisibility(Visibility::PUBLIC);
+	en->enumerators()->append( new Enumerator("RED"));
+	en->enumerators()->append( new Enumerator("GREEN"));
+	en->enumerators()->append( new Enumerator("BLUE", new IntegerLiteral(5)));
+
+	// Set positions
+	en->extension<Position>()->setX(460);
+	en->extension<Position>()->setY(840);
+
+	model->endModification();
+	return en;
 }
 
 Module* addLambda()
@@ -289,7 +315,7 @@ Module* addLambda()
 	le->body()->append(new ExpressionStatement(someOpCall));
 
 	// Positions
-	mod->extension<Position>()->set(720,300);
+	mod->extension<Position>()->set(900,300);
 	return mod;
 }
 
@@ -353,7 +379,7 @@ Library* addJavaLibrary(Model::Model* model, Project* parent)
 	prefix->ref()->setName("io");
 
 	// Set positions
-	java->extension<Position>()->setX(400);
+	java->extension<Position>()->setX(460);
 	string->extension<Position>()->setY(100);
 	io->extension<Position>()->setX(240);
 
@@ -762,6 +788,10 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	Class* ann = nullptr;
 	ann = addAnnotated(model, prj);
 
+	// Build a simple enumeration
+	Class* en = nullptr;
+	en = addEnumeration(model, prj);
+
 //	// Add a second method
 	Method* longMethod = nullptr;
 	longMethod = addLongMethod(model, hello);
@@ -783,6 +813,7 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	else if(hello) top_level = hello;
 	else if(gen) top_level = gen;
 	else if(ann) top_level = ann;
+	else if(en) top_level = en;
 	else if(java) top_level = java;
 	else if (longMethod) top_level = longMethod;
 	else top_level = factorial;

@@ -24,35 +24,17 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
+#include "VEnumeratorStyle.h"
 
-#include "../oomodel_api.h"
+namespace OOVisualization {
 
-#include "../attributeMacros.h"
-#include "../expressions/Expression.h"
-
-#include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
-#include "ModelBase/src/nodes/Text.h"
-#include "ModelBase/src/nodes/nodeMacros.h"
-
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Enumerator)
-
-namespace OOModel {
-
-class OOMODEL_API Enumerator : public Model::ExtendableNode
+void VEnumeratorStyle::load(Visualization::StyleLoader& sl)
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Enumerator)
+	ItemStyle::load(sl);
 
-	ATTRIBUTE_OOP_NAME
-	ATTRIBUTE(Expression, value, setValue)
-
-	public:
-
-		Enumerator(const QString& name, Expression* value = nullptr);
-
-		virtual bool definesSymbol() const;
-		virtual const QString& symbolName() const;
-};
-
+	sl.load("layout", layout_);
+	sl.load("name", name_);
+	sl.load("assignmentSymbol", assignmentSymbol_);
 }
 
+} /* namespace OOVisualization */

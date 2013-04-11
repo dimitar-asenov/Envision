@@ -32,6 +32,7 @@
 #include "top_level/VClass.h"
 #include "top_level/VMethod.h"
 #include "elements/VField.h"
+#include "elements/VEnumerator.h"
 #include "elements/VFormalArgument.h"
 #include "elements/VFormalResult.h"
 #include "elements/VFormalTypeArgument.h"

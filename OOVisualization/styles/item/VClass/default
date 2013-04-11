@@ -92,6 +92,34 @@
 			<spaceBetweenElements>0</spaceBetweenElements>
 		</itemsStyle>
 	</annotations>
+	<enumerators prototypes="item/VList/default">
+		<shape prototypes="shape/Box/default">
+			Box
+			<outline>
+				<width>1</width>
+				<color>
+					<alpha>255</alpha>
+					<red>100</red>
+					<green>164</green>
+					<blue>200</blue>
+				</color>
+			</outline>
+			<cornerRadius>1</cornerRadius>
+			<cornerType>0</cornerType>
+			<backgroundBrush>
+				<style>1</style>
+				<color>
+					<alpha>255</alpha>
+					<red>200</red>
+					<green>224</green>
+					<blue>255</blue>
+				</color>
+			</backgroundBrush>
+		</shape>
+		<itemsStyle prototypes="layout/SequentialLayout/default">
+			<spaceBetweenElements>15</spaceBetweenElements>
+		</itemsStyle>
+	</enumerators>
 	<fieldContainer prototypes="layout/SequentialLayout/default">
 		<shape prototypes="shape/Box/default">
 			Box

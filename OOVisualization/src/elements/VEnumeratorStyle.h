@@ -26,33 +26,31 @@
 
 #pragma once
 
-#include "../oomodel_api.h"
+#include "../oovisualization_api.h"
 
-#include "../attributeMacros.h"
-#include "../expressions/Expression.h"
+#include "VisualizationBase/src/items/TextStyle.h"
+#include "VisualizationBase/src/items/StaticStyle.h"
+#include "VisualizationBase/src/layouts/SequentialLayout.h"
 
-#include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
-#include "ModelBase/src/nodes/Text.h"
-#include "ModelBase/src/nodes/nodeMacros.h"
+namespace OOVisualization {
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Enumerator)
-
-namespace OOModel {
-
-class OOMODEL_API Enumerator : public Model::ExtendableNode
+class OOVISUALIZATION_API VEnumeratorStyle : public Visualization::ItemStyle
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Enumerator)
-
-	ATTRIBUTE_OOP_NAME
-	ATTRIBUTE(Expression, value, setValue)
+	private:
+		Visualization::SequentialLayoutStyle layout_;
+		Visualization::TextStyle name_;
+		Visualization::StaticStyle assignmentSymbol_;
 
 	public:
+		void load(Visualization::StyleLoader& sl);
 
-		Enumerator(const QString& name, Expression* value = nullptr);
-
-		virtual bool definesSymbol() const;
-		virtual const QString& symbolName() const;
+		const Visualization::SequentialLayoutStyle& layout() const;
+		const Visualization::TextStyle& name() const;
+		const Visualization::StaticStyle& assignmentSymbol() const;
 };
 
-}
+inline const Visualization::SequentialLayoutStyle& VEnumeratorStyle::layout() const { return layout_; }
+inline const Visualization::TextStyle& VEnumeratorStyle::name() const { return name_; }
+inline const Visualization::StaticStyle& VEnumeratorStyle::assignmentSymbol() const { return assignmentSymbol_; }
 
+}

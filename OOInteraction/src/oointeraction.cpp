@@ -99,6 +99,7 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 	OOVisualization::VClass::setInteractionHandler(HClass::instance());
 	OOVisualization::VMethod::setInteractionHandler(HMethod::instance());
 	OOVisualization::VField::setInteractionHandler(Interaction::GenericHandler::instance());
+	OOVisualization::VEnumerator::setInteractionHandler(Interaction::GenericHandler::instance());
 	OOVisualization::VFormalArgument::setInteractionHandler(HFormalArgument::instance());
 	OOVisualization::VFormalResult::setInteractionHandler(Interaction::GenericHandler::instance());
 	OOVisualization::VStatementItemList::setInteractionHandler(Interaction::HList::instance());

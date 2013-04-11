@@ -42,6 +42,7 @@ void VClassStyle::load(Visualization::StyleLoader& sl)
 	sl.load("typeArguments", typeArguments_);
 	sl.load("baseClasses", baseClasses_);
 	sl.load("annotations", annotations_);
+	sl.load("enumerators", enumerators_);
 	sl.load("body", body_);
 	sl.load("content", content_);
 	sl.load("fieldContainer", fieldContainer_);
