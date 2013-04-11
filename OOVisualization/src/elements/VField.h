@@ -36,6 +36,7 @@
 
 namespace Visualization {
 	class VText;
+	class Static;
 }
 
 namespace OOVisualization {
@@ -54,7 +55,9 @@ class OOVISUALIZATION_API VField : public Visualization::ItemWithNode< Visualiza
 	private:
 		typedef Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::Field > BaseItemType;
 
-		Visualization::VText* name_;
-		Visualization::Item* type_;
+		Visualization::VText* name_{};
+		Visualization::Item* type_{};
+		Visualization::Static* assignmentSymbol_{};
+		Visualization::Item* initialValue_{};
 };
 }

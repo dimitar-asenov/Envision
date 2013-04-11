@@ -110,6 +110,11 @@ Class* addGeneric(Model::Model* model, Project* parent)
 	gen->typeArguments()->append(new FormalTypeArgument("Q", new ReferenceExpression("P")));
 	gen->typeArguments()->append(new FormalTypeArgument("R", nullptr, new ReferenceExpression("P")));
 
+	// Add some fields
+	gen->fields()->append(new Field("index", new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT),
+			new IntegerLiteral(42)));
+	gen->fields()->append(new Field("data", new ClassTypeExpression(new ReferenceExpression("P"))));
+
 	Method* foo = new Method();
 	gen->methods()->append(foo);
 	foo->setName("foo");

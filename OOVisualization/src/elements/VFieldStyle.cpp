@@ -45,6 +45,7 @@ void VFieldStyle::load(Visualization::StyleLoader& sl)
 	sl.load("nameStaticPublic", nameStaticPublic_);
 	sl.load("nameStaticPrivate", nameStaticPrivate_);
 	sl.load("nameStaticProtected", nameStaticProtected_);
+	sl.load("assignmentSymbol", assignmentSymbol_);
 }
 
 }

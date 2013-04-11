@@ -29,6 +29,7 @@
 #include "../oovisualization_api.h"
 
 #include "VisualizationBase/src/items/TextStyle.h"
+#include "VisualizationBase/src/items/StaticStyle.h"
 #include "VisualizationBase/src/layouts/SequentialLayout.h"
 
 namespace OOVisualization {
@@ -45,6 +46,7 @@ class OOVISUALIZATION_API VFieldStyle : public Visualization::ItemStyle
 		Visualization::TextStyle nameStaticPublic_;
 		Visualization::TextStyle nameStaticPrivate_;
 		Visualization::TextStyle nameStaticProtected_;
+		Visualization::StaticStyle assignmentSymbol_;
 
 	public:
 		VFieldStyle();
@@ -59,6 +61,7 @@ class OOVISUALIZATION_API VFieldStyle : public Visualization::ItemStyle
 		const Visualization::TextStyle& nameStaticPublic() const;
 		const Visualization::TextStyle& nameStaticPrivate() const;
 		const Visualization::TextStyle& nameStaticProtected() const;
+		const Visualization::StaticStyle& assignmentSymbol() const;
 };
 
 inline const Visualization::SequentialLayoutStyle& VFieldStyle::layout() const { return layout_; }
@@ -70,5 +73,6 @@ inline const Visualization::TextStyle& VFieldStyle::nameStaticDefault() const { 
 inline const Visualization::TextStyle& VFieldStyle::nameStaticPublic() const { return nameStaticPublic_; }
 inline const Visualization::TextStyle& VFieldStyle::nameStaticPrivate() const { return nameStaticPrivate_; }
 inline const Visualization::TextStyle& VFieldStyle::nameStaticProtected() const { return nameStaticProtected_; }
+inline const Visualization::StaticStyle& VFieldStyle::assignmentSymbol() const { return assignmentSymbol_; }
 
 }

@@ -28,6 +28,7 @@
 #include "OOVisualizationException.h"
 
 #include "VisualizationBase/src/items/VText.h"
+#include "VisualizationBase/src/items/Static.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -38,8 +39,7 @@ ITEM_COMMON_DEFINITIONS(VField, "item")
 
 VField::VField(Item* parent, NodeType* node, const StyleType* style) :
 	ItemWithNode< LayoutProvider<>, Field >(parent, node, style),
-	name_(new VText(layout(), node->nameNode(), &style->nameDefault()) ),
-	type_(nullptr)
+	name_(new VText(layout(), node->nameNode(), &style->nameDefault()) )
 {
 	layout()->append(name_);
 }
@@ -49,6 +49,8 @@ VField::~VField()
 	// These were automatically deleted by LayoutProvider's destructor
 	name_ = nullptr;
 	type_ = nullptr;
+	assignmentSymbol_ = nullptr;
+	initialValue_ = nullptr;
 }
 
 void VField::determineChildren()
@@ -72,8 +74,10 @@ void VField::determineChildren()
 	}
 	else throw OOVisualizationException("Unknown static type in VField::determineChildren");
 
-	layout()->synchronizeFirst(name_, node()->nameNode(), nameStyle);
-	layout()->synchronizeLast(type_, node()->typeExpression());
+	layout()->synchronizeFirst(type_, node()->typeExpression());
+	layout()->synchronizeMid(name_, node()->nameNode(), nameStyle, 1);
+	layout()->synchronizeMid(assignmentSymbol_, node()->initialValue() != nullptr, &style()->assignmentSymbol(), 2);
+	layout()->synchronizeLast(initialValue_, node()->initialValue());
 
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
 	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
@@ -81,5 +85,7 @@ void VField::determineChildren()
 	// The style needs to be updated every time since if our own style changes, so will that of the children.
 	layout()->setStyle( &style()->layout() );
 	name_->setStyle(nameStyle);
+	if (assignmentSymbol_) assignmentSymbol_->setStyle( &style()->assignmentSymbol() );
 }
+
 }
