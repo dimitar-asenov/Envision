@@ -38,11 +38,8 @@
 #include "ModelBase/src/nodes/nodeMacros.h"
 
 DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Project)
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Library)
 
 namespace OOModel {
-
-class Library;
 
 class OOMODEL_API Project : public Model::ExtendableNode
 {
@@ -50,7 +47,6 @@ class OOMODEL_API Project : public Model::ExtendableNode
 
 	ATTRIBUTE_OOP_NAME
 	ATTRIBUTE(Model::TypedList<Project>, projects, setProjects)
-	ATTRIBUTE(Model::TypedList<Library>, libraries, setLibraries)
 	ATTRIBUTE(Model::TypedList<Module>, modules, setModules)
 	ATTRIBUTE(Model::TypedList<Class>, classes, setClasses)
 

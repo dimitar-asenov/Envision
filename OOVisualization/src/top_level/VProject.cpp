@@ -26,8 +26,6 @@
 
 #include "top_level/VProject.h"
 
-#include "OOModel/src/top_level/Library.h"
-
 #include "VisualizationBase/src/layouts/PanelBorderLayout.h"
 #include "VisualizationBase/src/layouts/PositionLayout.h"
 #include "VisualizationBase/src/items/VText.h"
@@ -81,7 +79,6 @@ void VProject::determineChildren()
 
 	QList<Model::Node*> nodes;
 	for (int k = 0; k<node()->projects()->size(); ++k) nodes.append(node()->projects()->at(k));
-	for (int k = 0; k<node()->libraries()->size(); ++k) nodes.append(node()->libraries()->at(k));
 	for (int k = 0; k<node()->modules()->size(); ++k) nodes.append(node()->modules()->at(k));
 	for (int k = 0; k<node()->classes()->size(); ++k) nodes.append(node()->classes()->at(k));
 	content->synchronizeWithNodes(nodes, renderer());

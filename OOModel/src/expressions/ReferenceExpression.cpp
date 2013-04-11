@@ -28,7 +28,6 @@
 #include "expressions/VariableDeclaration.h"
 #include "statements/ExpressionStatement.h"
 #include "top_level/Project.h"
-#include "top_level/Library.h"
 #include "top_level/Module.h"
 #include "top_level/Class.h"
 #include "top_level/Field.h"
@@ -62,8 +61,6 @@ Type* ReferenceExpression::type()
 
 	if ( auto project = dynamic_cast<Project*>( ref()->target() ) )
 		return new SymbolProviderType(project, false);
-	else if ( auto library = dynamic_cast<Library*>( ref()->target() ) )
-		return new SymbolProviderType(library, false);
 	else if ( auto module = dynamic_cast<Module*>( ref()->target() ) )
 		return new SymbolProviderType(module, false);
 	else if ( auto cl = dynamic_cast<Class*>( ref()->target() ) )

@@ -82,8 +82,6 @@ HEADERS += src/elements/VEnumerator.h \
     src/statements/VReturnStatementStyle.h \
     src/top_level/VClass.h \
     src/top_level/VClassStyle.h \
-    src/top_level/VLibrary.h \
-    src/top_level/VLibraryStyle.h \
     src/top_level/VMethod.h \
     src/top_level/VMethodStyle.h \
     src/top_level/VModule.h \
@@ -145,8 +143,6 @@ SOURCES += src/elements/VEnumerator.cpp \
     src/elements/VVisibility.cpp \
     src/top_level/VClass.cpp \
     src/top_level/VClassStyle.cpp \
-    src/top_level/VLibrary.cpp \
-    src/top_level/VLibraryStyle.cpp \
     src/top_level/VMethod.cpp \
     src/top_level/VMethodStyle.cpp \
     src/top_level/VModule.cpp \

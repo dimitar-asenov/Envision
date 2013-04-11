@@ -58,9 +58,9 @@ using namespace OOVisualization;
 
 namespace ContractsLibrary {
 
-Library* createContractsLibrary()
+Project* createContractsLibrary()
 {
-	Library* lib = new Library("CodeContracts");
+	Project* lib = new Project("CodeContracts");
 	lib->extension<Position>()->setX(1260);
 
 	Class* contract = new Class("Contract");
@@ -369,7 +369,7 @@ TEST(ContractsLibrary, ContractsLibraryTest)
 	prj = dynamic_cast<Project*> (model->createRoot("Project"));
 	model->beginModification(prj, "create a few classes that use contracts");
 	prj->setName("HelloWorld");
-	prj->libraries()->append(createContractsLibrary());
+	prj->projects()->append(createContractsLibrary());
 	prj->classes()->append( createBaseClass());
 	prj->classes()->append( createDerivedClass() );
 	prj->classes()->append( createPaper() );

@@ -71,7 +71,6 @@ HEADERS += src/top_level/Enumerator.h \
     src/statements/SwitchStatement.h \
     src/top_level/Class.h \
     src/top_level/Field.h \
-    src/top_level/Library.h \
     src/top_level/Method.h \
     src/top_level/Module.h \
     src/top_level/Project.h \
@@ -114,7 +113,6 @@ SOURCES += src/top_level/Enumerator.cpp \
     src/elements/StatementItem.cpp \
     src/top_level/Class.cpp \
     src/top_level/Field.cpp \
-    src/top_level/Library.cpp \
     src/top_level/Method.cpp \
     src/top_level/Module.cpp \
     src/top_level/Project.cpp \

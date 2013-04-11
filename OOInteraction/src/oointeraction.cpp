@@ -94,7 +94,6 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 	OOOperatorDescriptorList::initializeWithDefaultOperators();
 
 	OOVisualization::VProject::setInteractionHandler(HProject::instance());
-	OOVisualization::VLibrary::setInteractionHandler(Interaction::GenericHandler::instance());
 	OOVisualization::VModule::setInteractionHandler(Interaction::GenericHandler::instance());
 	OOVisualization::VClass::setInteractionHandler(HClass::instance());
 	OOVisualization::VMethod::setInteractionHandler(HMethod::instance());

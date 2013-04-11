@@ -27,7 +27,6 @@
 #pragma once
 
 #include "top_level/Project.h"
-#include "top_level/Library.h"
 #include "top_level/Module.h"
 #include "top_level/Class.h"
 #include "top_level/Method.h"

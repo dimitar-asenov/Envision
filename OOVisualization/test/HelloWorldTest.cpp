@@ -319,16 +319,16 @@ Module* addLambda()
 	return mod;
 }
 
-Library* addJavaLibrary(Model::Model* model, Project* parent)
+Project* addJavaLibrary(Model::Model* model, Project* parent)
 {
-	Library* java = nullptr;
+	Project* java = nullptr;
 
-	if (!parent) java = dynamic_cast<Library*> (model->createRoot("Library"));
+	if (!parent) java = dynamic_cast<Project*> (model->createRoot("Project"));
 	model->beginModification(parent? static_cast<Model::Node*> (parent) :java, "Adding a java library.");
 	if (!java)
 	{
-		java = new Library();
-		parent->libraries()->append( java );
+		java = new Project();
+		parent->projects()->append( java );
 	}
 
 	java->setName("Java");
@@ -773,7 +773,7 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	prj->setName("HelloWorld");
 	model->endModification();
 
-	Library* java = nullptr;
+	Project* java = nullptr;
 	java = addJavaLibrary(model, prj);
 
 	// Build a simple HelloWorld Application

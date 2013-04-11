@@ -27,7 +27,6 @@
 #pragma once
 
 #include "top_level/VProject.h"
-#include "top_level/VLibrary.h"
 #include "top_level/VModule.h"
 #include "top_level/VClass.h"
 #include "top_level/VMethod.h"

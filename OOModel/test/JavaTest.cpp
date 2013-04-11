@@ -42,8 +42,8 @@ TEST(OOModel, JavaLibraryAndHelloWorldTest)
 	prj->setName("HelloWorld");
 
 	// Build a simple Java Library
-	Library* java = new Library();
-	prj->libraries()->append(java);
+	Project* java = new Project();
+	prj->projects()->append(java);
 	java->setName("Java");
 
 	Class* string = new Class();
