@@ -4,7 +4,8 @@ DEFINES += OOMODEL_LIBRARY
 win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase
-HEADERS += src/types/LambdaType.h \
+HEADERS += src/top_level/Enumerator.h \
+    src/types/LambdaType.h \
     src/expressions/LambdaExpression.h \
     src/elements/CatchClause.h \
     src/statements/TryCatchFinallyStatement.h \
@@ -75,7 +76,8 @@ HEADERS += src/types/LambdaType.h \
     src/top_level/Module.h \
     src/top_level/Project.h \
     src/oomodel.h
-SOURCES += src/types/LambdaType.cpp \
+SOURCES += src/top_level/Enumerator.cpp \
+    src/types/LambdaType.cpp \
     src/expressions/LambdaExpression.cpp \
     src/elements/CatchClause.cpp \
     src/statements/TryCatchFinallyStatement.cpp \

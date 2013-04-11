@@ -39,6 +39,7 @@ REGISTER_ATTRIBUTE(Class, baseClasses, TypedListOfExpression, false, false, true
 REGISTER_ATTRIBUTE(Class, typeArguments, TypedListOfFormalTypeArgument, false, false, true)
 REGISTER_ATTRIBUTE(Class, fields, TypedListOfField, false, false, true)
 REGISTER_ATTRIBUTE(Class, methods, TypedListOfMethod, false, false, true)
+REGISTER_ATTRIBUTE(Class, enumerators, TypedListOfEnumerator, false, false, true)
 REGISTER_ATTRIBUTE(Class, visibility, Visibility, false, false, true)
 REGISTER_ATTRIBUTE(Class, annotations, StatementItemList, false, false, true)
 
@@ -72,6 +73,7 @@ QList<Model::Node*> Class::findSymbols(const QRegExp& symbolExp,Model::Node* sou
 
 	symbols << methods()->findAllSymbolDefinitions(symbolExp);
 	symbols << fields()->findAllSymbolDefinitions(symbolExp);
+	symbols << enumerators()->findAllSymbolDefinitions(symbolExp);
 
 	if (exhaustAllScopes || symbols.isEmpty())
 		symbols << Node::findSymbols(symbolExp, source, mode, exhaustAllScopes);

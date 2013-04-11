@@ -32,6 +32,7 @@
 #include "top_level/Class.h"
 #include "top_level/Method.h"
 #include "top_level/Field.h"
+#include "top_level/Enumerator.h"
 
 #include "statements/Statement.h"
 #include "statements/Block.h"

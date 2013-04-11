@@ -30,6 +30,7 @@
 
 #include "Method.h"
 #include "Field.h"
+#include "Enumerator.h"
 #include "../attributeMacros.h"
 #include "../elements/Visibility.h"
 #include "../elements/FormalTypeArgument.h"
@@ -53,6 +54,7 @@ class OOMODEL_API Class : public Model::ExtendableNode
 	ATTRIBUTE(Model::TypedList<FormalTypeArgument>, typeArguments, setTypeArguments)
 	ATTRIBUTE(Model::TypedList<Field>, fields, setFields)
 	ATTRIBUTE(Model::TypedList<Method>, methods, setMethods)
+	ATTRIBUTE(Model::TypedList<Enumerator>, enumerators, setEnumerators)
 	ATTRIBUTE_OOP_VISIBILITY
 	ATTRIBUTE_OOP_ANNOTATIONS
 
