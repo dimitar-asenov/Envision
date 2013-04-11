@@ -132,9 +132,11 @@ void VClass::determineChildren()
 	header_->synchronizeMid(typeArguments_, node()->typeArguments(), &style()->typeArguments(), 2);
 	header_->synchronizeLast(baseClasses_, node()->baseClasses(), &style()->baseClasses());
 
-	// Synchronize methods
+	// Synchronize inner classes, methods, annotations and enumerations
 	if (body_->needsUpdate() == FullUpdate) body_->clear(true);
-	body_->synchronizeWithNodes(node()->methods()->nodes().toList(), renderer());
+	QList<Model::Node*> bodyItems = node()->classes()->nodes().toList();
+	bodyItems << node()->methods()->nodes().toList();
+	body_->synchronizeWithNodes( bodyItems, renderer());
 	content_->synchronizeFirst(annotations_,
 			node()->annotations()->size() > 0 ? node()->annotations() : nullptr, &style()->annotations());
 	int index = annotations_ ? 1 : 0;

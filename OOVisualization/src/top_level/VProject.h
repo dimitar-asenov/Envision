@@ -39,6 +39,7 @@ namespace Visualization {
 	class PanelBorderLayout;
 	class PositionLayout;
 	class SequentialLayout;
+	class VList;
 }
 
 namespace OOVisualization {
@@ -59,9 +60,11 @@ class OOVISUALIZATION_API VProject
 		typedef Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
 				OOModel::Project> BaseItemType;
 
-		Visualization::SequentialLayout* header;
-		Visualization::VText* name;
-		Visualization::PositionLayout* content;
+		Visualization::SequentialLayout* header{};
+		Visualization::VText* name{};
+		Visualization::PositionLayout* body_{};
+		Visualization::SequentialLayout* content_{};
+		Visualization::VList* fields_{};
 };
 
 }

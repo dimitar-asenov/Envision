@@ -52,8 +52,9 @@ class OOMODEL_API Class : public Model::ExtendableNode
 	ATTRIBUTE_OOP_NAME
 	ATTRIBUTE(Model::TypedList<Expression>, baseClasses, setBaseClasses)
 	ATTRIBUTE(Model::TypedList<FormalTypeArgument>, typeArguments, setTypeArguments)
-	ATTRIBUTE(Model::TypedList<Field>, fields, setFields)
+	ATTRIBUTE(Model::TypedList<Class>, classes, setClasses)
 	ATTRIBUTE(Model::TypedList<Method>, methods, setMethods)
+	ATTRIBUTE(Model::TypedList<Field>, fields, setFields)
 	ATTRIBUTE(Model::TypedList<Enumerator>, enumerators, setEnumerators)
 	ATTRIBUTE_OOP_VISIBILITY
 	ATTRIBUTE_OOP_ANNOTATIONS

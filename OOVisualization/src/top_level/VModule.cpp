@@ -31,6 +31,7 @@
 #include "VisualizationBase/src/layouts/PositionLayoutStyle.h"
 #include "VisualizationBase/src/items/VText.h"
 #include "VisualizationBase/src/items/Static.h"
+#include "VisualizationBase/src/items/VList.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -39,9 +40,7 @@ namespace OOVisualization {
 
 ITEM_COMMON_DEFINITIONS(VModule, "item")
 
-VModule::VModule(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode<LayoutProvider<PanelBorderLayout>, Module>(parent, node, style),
-	header(), name(), content()
+VModule::VModule(Item* parent, NodeType* node, const StyleType* style) : BaseItemType(parent, node, style)
 {
 	layout()->setTop(true);
 	header = new SequentialLayout(layout()->top(), &style->header());
@@ -52,8 +51,11 @@ VModule::VModule(Item* parent, NodeType* node, const StyleType* style) :
 	header->append(name);
 	setDefaultMoveCursorProxy(name);
 
-	content = new PositionLayout(layout(), &style->content());
-	layout()->setContent(content);
+	content_ = new SequentialLayout(layout(), &style->content());
+	layout()->setContent(content_);
+
+	body_ = new PositionLayout(content_, &style->body());
+	content_->append(body_);
 }
 
 VModule::~VModule()
@@ -61,7 +63,9 @@ VModule::~VModule()
 	// These were automatically deleted by LayoutProvider's destructor
 	header = nullptr;
 	name = nullptr;
-	content = nullptr;
+	body_ = nullptr;
+	content_ = nullptr;
+	fields_ = nullptr;
 }
 
 void VModule::determineChildren()
@@ -70,18 +74,20 @@ void VModule::determineChildren()
 	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
 	//			what's the reason they are being updated.
 	// The style needs to be updated every time since if our own style changes, so will that of the children.
+	layout()->setStyle(&style()->layout());
 	header->setStyle(&style()->header());
 	name->setStyle(&style()->name());
-	content->setStyle(&style()->content());
-	layout()->setStyle(&style()->layout());
+	body_->setStyle( &style()->body() );
+	content_->setStyle(&style()->content());
 	header->at<Static>(0)->setStyle(&style()->icon());
 
-	header->synchronizeMid(name, node()->nameNode(), &style()->name(), 1);
+	header->synchronizeLast(name, node()->nameNode(), &style()->name());
 
-	QList<Model::Node*> nodes;
-	for (int k = 0; k<node()->modules()->size(); ++k) nodes.append(node()->modules()->at(k));
-	for (int k = 0; k<node()->classes()->size(); ++k) nodes.append(node()->classes()->at(k));
-	content->synchronizeWithNodes(nodes, renderer());
+	QList<Model::Node*> bodyItems = node()->modules()->nodes().toList();
+	bodyItems << node()->classes()->nodes().toList();
+	bodyItems << node()->methods()->nodes().toList();
+	body_->synchronizeWithNodes(bodyItems, renderer());
+	content_->synchronizeFirst(fields_, node()->fields()->size() > 0 ? node()->fields() : nullptr, &style()->fields());
 }
 
 }

@@ -36,7 +36,9 @@ void VModuleStyle::load(Visualization::StyleLoader& sl)
 	sl.load("header", header_);
 	sl.load("name", name_);
 	sl.load("icon", icon_);
+	sl.load("body", body_);
 	sl.load("content", content_);
+	sl.load("fields", fields_);
 }
 
 }

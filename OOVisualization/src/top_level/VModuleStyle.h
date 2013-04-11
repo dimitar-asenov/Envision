@@ -30,6 +30,7 @@
 
 #include "VisualizationBase/src/items/TextStyle.h"
 #include "VisualizationBase/src/items/StaticStyle.h"
+#include "VisualizationBase/src/items/VListStyle.h"
 #include "VisualizationBase/src/layouts/PanelBorderLayoutStyle.h"
 #include "VisualizationBase/src/layouts/PositionLayoutStyle.h"
 #include "VisualizationBase/src/layouts/SequentialLayoutStyle.h"
@@ -43,7 +44,9 @@ class OOVISUALIZATION_API VModuleStyle : public Visualization::ItemStyle
 		Visualization::SequentialLayoutStyle header_;
 		Visualization::TextStyle name_;
 		Visualization::StaticStyle icon_;
-		Visualization::PositionLayoutStyle content_;
+		Visualization::PositionLayoutStyle body_;
+		Visualization::SequentialLayoutStyle content_;
+		Visualization::VListStyle fields_;
 
 	public:
 		void load(Visualization::StyleLoader& sl);
@@ -52,13 +55,17 @@ class OOVISUALIZATION_API VModuleStyle : public Visualization::ItemStyle
 		const Visualization::SequentialLayoutStyle&  header() const;
 		const Visualization::TextStyle&  name() const;
 		const Visualization::StaticStyle&  icon() const;
-		const Visualization::PositionLayoutStyle&  content() const;
+		const Visualization::PositionLayoutStyle& body() const;
+		const Visualization::SequentialLayoutStyle& content() const;
+		const Visualization::VListStyle& fields() const;
 };
 
 inline const Visualization::PanelBorderLayoutStyle& VModuleStyle::layout() const {return layout_; }
 inline const Visualization::SequentialLayoutStyle& VModuleStyle::header() const {return header_; }
 inline const Visualization::TextStyle& VModuleStyle::name() const {return name_; }
 inline const Visualization::StaticStyle& VModuleStyle::icon() const {return icon_; }
-inline const Visualization::PositionLayoutStyle& VModuleStyle::content() const {return content_; }
+inline const Visualization::PositionLayoutStyle& VModuleStyle::body() const { return body_; }
+inline const Visualization::SequentialLayoutStyle& VModuleStyle::content() const { return content_; }
+inline const Visualization::VListStyle& VModuleStyle::fields() const { return fields_; }
 
 }

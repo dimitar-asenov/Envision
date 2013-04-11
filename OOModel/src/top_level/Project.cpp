@@ -38,6 +38,8 @@ REGISTER_ATTRIBUTE(Project, name, Text, false, false, true)
 REGISTER_ATTRIBUTE(Project, projects, TypedListOfProject, false, false, true)
 REGISTER_ATTRIBUTE(Project, modules, TypedListOfModule, false, false, true)
 REGISTER_ATTRIBUTE(Project, classes, TypedListOfClass, false, false, true)
+REGISTER_ATTRIBUTE(Project, methods, TypedListOfMethod, false, false, true)
+REGISTER_ATTRIBUTE(Project, fields, TypedListOfField, false, false, true)
 
 Project::Project(const QString& name)
 : Model::ExtendableNode (nullptr, Project::getMetaData())
@@ -63,6 +65,8 @@ QList<Model::Node*> Project::findSymbols(const QRegExp& symbolExp,Model::Node* s
 	symbols << projects()->findAllSymbolDefinitions(symbolExp);
 	symbols << modules()->findAllSymbolDefinitions(symbolExp);
 	symbols << classes()->findAllSymbolDefinitions(symbolExp);
+	symbols << methods()->findAllSymbolDefinitions(symbolExp);
+	symbols << fields()->findAllSymbolDefinitions(symbolExp);
 
 	if (exhaustAllScopes || symbols.isEmpty())
 		symbols << Node::findSymbols(symbolExp, source, mode, exhaustAllScopes);

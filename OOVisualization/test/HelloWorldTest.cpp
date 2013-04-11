@@ -235,6 +235,8 @@ Class* addEnumeration(Model::Model* model, Project* parent)
 Module* addLambda()
 {
 	auto mod = new Module("Lambda");
+	mod->fields()->append(new Field("common",
+			new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT)));
 
 	auto iUnary = new Class("IUnary", Visibility::PUBLIC);
 	mod->classes()->append(iUnary);
@@ -317,6 +319,19 @@ Module* addLambda()
 	// Positions
 	mod->extension<Position>()->set(900,300);
 	return mod;
+}
+
+Class* addInner()
+{
+	Class* outer = new Class("Outer", Visibility::PUBLIC);
+
+	outer->classes()->append( new Class("Inner1"));
+	outer->classes()->append( new Class("Inner2"));
+
+	// Set positions
+	outer->extension<Position>()->set(900,760);
+
+	return outer;
 }
 
 Project* addJavaLibrary(Model::Model* model, Project* parent)
@@ -771,6 +786,10 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	prj = dynamic_cast<Project*> (model->createRoot("Project"));
 	model->beginModification(prj, "build simple java library and a hello world app");
 	prj->setName("HelloWorld");
+	prj->fields()->append(new Field("global",
+			new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT)));
+	prj->fields()->append(new Field("global2",
+			new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_LONG)));
 	model->endModification();
 
 	Project* java = nullptr;
@@ -802,6 +821,7 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 
 	prj->beginModification("add lambda module");
 	prj->modules()->append(addLambda());
+	prj->classes()->append(addInner());
 	prj->endModification();
 
 // Add a method Add-on

@@ -30,6 +30,8 @@
 
 #include "../attributeMacros.h"
 #include "Class.h"
+#include "Method.h"
+#include "Field.h"
 
 #include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
 #include "ModelBase/src/nodes/Text.h"
@@ -40,8 +42,6 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Module)
 
 namespace OOModel {
 
-class Project;
-
 class OOMODEL_API Module : public Model::ExtendableNode
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Module)
@@ -49,6 +49,8 @@ class OOMODEL_API Module : public Model::ExtendableNode
 	ATTRIBUTE_OOP_NAME
 	ATTRIBUTE(Model::TypedList<Module>, modules, setModules)
 	ATTRIBUTE(Model::TypedList<Class>, classes, setClasses)
+	ATTRIBUTE(Model::TypedList<Method>, methods, setMethods)
+	ATTRIBUTE(Model::TypedList<Field>, fields, setFields)
 
 	public:
 		Module(const QString& name);

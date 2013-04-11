@@ -31,6 +31,8 @@
 #include "../attributeMacros.h"
 #include "Module.h"
 #include "Class.h"
+#include "Method.h"
+#include "Field.h"
 
 #include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
 #include "ModelBase/src/nodes/Text.h"
@@ -49,6 +51,8 @@ class OOMODEL_API Project : public Model::ExtendableNode
 	ATTRIBUTE(Model::TypedList<Project>, projects, setProjects)
 	ATTRIBUTE(Model::TypedList<Module>, modules, setModules)
 	ATTRIBUTE(Model::TypedList<Class>, classes, setClasses)
+	ATTRIBUTE(Model::TypedList<Method>, methods, setMethods)
+	ATTRIBUTE(Model::TypedList<Field>, fields, setFields)
 
 	public:
 		Project(const QString& name);

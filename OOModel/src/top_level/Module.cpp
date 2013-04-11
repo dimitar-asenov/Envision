@@ -37,6 +37,8 @@ EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(Module, Model::ExtendableNode)
 REGISTER_ATTRIBUTE(Module, name, Text, false, false, true)
 REGISTER_ATTRIBUTE(Module, modules, TypedListOfModule, false, false, true)
 REGISTER_ATTRIBUTE(Module, classes, TypedListOfClass, false, false, true)
+REGISTER_ATTRIBUTE(Module, methods, TypedListOfMethod, false, false, true)
+REGISTER_ATTRIBUTE(Module, fields, TypedListOfField, false, false, true)
 
 Module::Module(const QString& name)
 : Model::ExtendableNode (nullptr, Module::getMetaData())
@@ -61,6 +63,8 @@ QList<Model::Node*> Module::findSymbols(const QRegExp& symbolExp,Model::Node* so
 
 	symbols << modules()->findAllSymbolDefinitions(symbolExp);
 	symbols << classes()->findAllSymbolDefinitions(symbolExp);
+	symbols << methods()->findAllSymbolDefinitions(symbolExp);
+	symbols << fields()->findAllSymbolDefinitions(symbolExp);
 
 	if (exhaustAllScopes || symbols.isEmpty())
 		symbols << Node::findSymbols(symbolExp, source, mode, exhaustAllScopes);
