@@ -36,6 +36,7 @@ EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(Field, Model::ExtendableNode)
 
 REGISTER_ATTRIBUTE(Field, name, Text, false, false, true)
 REGISTER_ATTRIBUTE(Field, typeExpression, Expression, false, false, true)
+REGISTER_ATTRIBUTE(Field, initialValue, Expression, false, true, true)
 REGISTER_ATTRIBUTE(Field, visibility, Visibility, false, false, true)
 REGISTER_ATTRIBUTE(Field, storageSpecifier, StorageSpecifier, false, false, true)
 
@@ -44,6 +45,14 @@ Field::Field(const QString& name, Expression* type)
 {
 	setName(name);
 	if (type) setTypeExpression(type);
+}
+
+Field::Field(const QString& name, Expression* type, Expression* initialValue)
+: Model::ExtendableNode (nullptr, Field::getMetaData())
+{
+	setName(name);
+	if (type) setTypeExpression(type);
+	if (initialValue) setInitialValue(initialValue);
 }
 
 Field::Field(const QString& name, Expression* type, Visibility::VisibilityType vis)
@@ -63,13 +72,14 @@ Field::Field(const QString& name, Expression* type, StorageSpecifier::StorageSpe
 }
 
 Field::Field(const QString& name, Expression* type, Visibility::VisibilityType vis,
-		StorageSpecifier::StorageSpecifierTypes storage)
+		StorageSpecifier::StorageSpecifierTypes storage, Expression* initialValue)
 : Model::ExtendableNode (nullptr, Field::getMetaData())
 {
 	setName(name);
 	if (type) setTypeExpression(type);
 	setVisibility(vis);
 	setStorageSpecifier(storage);
+	if (initialValue) setInitialValue(initialValue);
 }
 
 bool Field::definesSymbol() const
