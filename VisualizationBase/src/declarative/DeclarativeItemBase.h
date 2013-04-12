@@ -71,7 +71,7 @@ class VISUALIZATIONBASE_API DeclarativeItemBase: public Item
 
 	private:
 		typedef Item BaseItemType;
-		int currentFormIndex_;
+		int currentFormIndex_{};
 };
 
 inline Element* DeclarativeItemBase::currentForm() const {return forms().at(currentFormIndex_);}

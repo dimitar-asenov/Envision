@@ -84,16 +84,14 @@ template <class ParentType, class ChildItemType>
 void ItemWrapperElement<ParentType,ChildItemType>::setItemPositions(Item* item, int parentX, int parentY)
 {
 	auto& childItem = (static_cast<ParentType*>(item))->*this->item();
-	if(childItem)
-		childItem->setPos(parentX + x(item) + leftMargin(), parentY + y(item) + topMargin());
+	if(childItem) childItem->setPos(parentX + x(item) + leftMargin(), parentY + y(item) + topMargin());
 }
 
 template <class ParentType, class ChildItemType>
 bool ItemWrapperElement<ParentType,ChildItemType>::sizeDependsOnParent(const Item* item) const
 {
 	auto& childItem = (static_cast<const ParentType*>(item))->*this->item();
-	if(childItem)
-		return childItem->sizeDependsOnParent();
+	if(childItem) return childItem->sizeDependsOnParent();
 	else return false;
 }
 
@@ -126,14 +124,16 @@ bool ItemWrapperElement<ParentType,ChildItemType>::elementOrChildHasFocus(Item* 
 	if (Element::elementOrChildHasFocus(item))
 		return true;
 	auto& childItem = (static_cast<ParentType*>(item))->*this->item();
-	return childItem->itemOrChildHasFocus();
+	if (childItem) return childItem->itemOrChildHasFocus();
+	else return false;
 }
 
 template <class ParentType, class ChildItemType>
 bool ItemWrapperElement<ParentType,ChildItemType>::isEmpty(const Item* item) const
 {
 	auto& childItem = (static_cast<const ParentType*>(item))->*this->item();
-	return childItem->isEmpty();
+	if (childItem) return childItem->isEmpty();
+	else return true;
 }
 
 } /* namespace Visualization */
