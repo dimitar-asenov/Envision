@@ -1,7 +1,6 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/Item/default">
 	<operators>
-		<length>9</length>
 		<e0 prototypes="default.operand">
 			<preSymbol prototypes="item/Symbol/default"><symbol>⁺⁺</symbol></preSymbol>
 		</e0>
