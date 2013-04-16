@@ -59,7 +59,7 @@
 		static int typeIdStatic();																													\
 		static void registerNodeType();																											\
 		static void init();																															\
-		static ::Model::InitializationRegistry& initializationRegistry();													\
+		static ::Model::InitializationRegistry& initializationRegistry();																\
 																																							\
 	private:																																				\
 		static int typeId_;																															\
@@ -92,7 +92,7 @@
 			::Model::AttributeChain& metaData); 																								\
 																																							\
 		static void init();																															\
-		static ::Model::InitializationRegistry& initializationRegistry();													\
+		static ::Model::InitializationRegistry& initializationRegistry();																\
 																																							\
 		static ::Model::AttributeChain& getMetaData();																						\
 		static ::Model::ExtendableIndex registerNewAttribute(const QString &attributeName,										\
@@ -230,16 +230,16 @@ template class Model::TypedList<className>;																									\
  */
 #define NODE_DEFINE_TYPE_REGISTRATION_METHODS(className, superClassName)															\
 /* Forward declaration. This function must be defined in the enclosing namespace*/												\
-::Model::InitializationRegistry& nodeTypeInitializationRegistry();																			\
-::Model::InitializationRegistry& className::initializationRegistry()														\
+::Model::InitializationRegistry& nodeTypeInitializationRegistry();																	\
+::Model::InitializationRegistry& className::initializationRegistry()																	\
 {																																							\
-	return nodeTypeInitializationRegistry();																										\
+	return nodeTypeInitializationRegistry();																									\
 }																																							\
 																																							\
 /* This must be set to the result of Node::registerNodeType */																			\
 /* This variable uses a clever trick to register an initialization function that will be called during the */			\
 /* plug-in's initialization routine */																											\
-int className::typeId_ = (initializationRegistry().add(className::init) , -1); 										\
+int className::typeId_ = (initializationRegistry().add(className::init) , -1); 													\
 																																							\
 const QString& className::typeName() const																									\
 {																																							\
@@ -292,16 +292,16 @@ void className::init()																																\
  */
 #define EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(className, superClassName)												\
 /* Forward declaration. This function must be defined in the enclosing namespace*/												\
-::Model::InitializationRegistry& nodeTypeInitializationRegistry();																			\
-::Model::InitializationRegistry& className::initializationRegistry()														\
+::Model::InitializationRegistry& nodeTypeInitializationRegistry();																	\
+::Model::InitializationRegistry& className::initializationRegistry()																	\
 {																																							\
-	return nodeTypeInitializationRegistry();																										\
+	return nodeTypeInitializationRegistry();																									\
 }																																							\
 																																							\
 /* This must be set to the result of Node::registerNodeType */																			\
 /* This variable uses a clever trick to register an initialization function that will be called during the */			\
 /* plug-in's initialization routine */																											\
-int className::typeId_ = (initializationRegistry().add(className::init) , -1); 										\
+int className::typeId_ = (initializationRegistry().add(className::init) , -1); 													\
 																																							\
 const QString& className::typeName() const																									\
 {																																							\
