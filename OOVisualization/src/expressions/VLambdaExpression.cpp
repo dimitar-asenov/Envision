@@ -38,7 +38,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VLambdaExpression, "item")
 
 VLambdaExpression::VLambdaExpression(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode<LayoutProvider<>, LambdaExpression>(parent, node, style)
+	BaseItemType(parent, node, style)
 {
 	icon_ = new Static(layout(), &style->icon());
 	layout()->append(icon_);

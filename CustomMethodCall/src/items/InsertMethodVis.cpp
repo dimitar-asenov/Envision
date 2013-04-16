@@ -37,7 +37,7 @@ namespace CustomMethodCall {
 ITEM_COMMON_DEFINITIONS(InsertMethodVis, "item")
 
 InsertMethodVis::InsertMethodVis(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode<LayoutProvider<>, MethodCallExpression>(parent, node, style),
+	BaseItemType(parent, node, style),
 	icon_(new Static(nullptr, &style->icon()) ),
 	separator_(nullptr),
 	prefix_(nullptr),

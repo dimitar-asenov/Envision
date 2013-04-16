@@ -41,7 +41,7 @@ namespace Visualization {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VEnumerator : public Visualization::ItemWithNode< Visualization::LayoutProvider<>,
+class OOVISUALIZATION_API VEnumerator : public Visualization::ItemWithNode<VEnumerator, Visualization::LayoutProvider<>,
 OOModel::Enumerator>
 {
 	ITEM_COMMON(VEnumerator)
@@ -58,7 +58,8 @@ OOModel::Enumerator>
 		void determineChildren();
 
 	private:
-		typedef Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::Enumerator> BaseItemType;
+		typedef Visualization::ItemWithNode<VEnumerator, Visualization::LayoutProvider<>, OOModel::Enumerator>
+			BaseItemType;
 
 		Visualization::VText* name_{};
 		Visualization::Static* assignmentSymbol_{};

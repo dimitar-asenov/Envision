@@ -37,7 +37,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VArrayInitializer, "item")
 
 VArrayInitializer::VArrayInitializer(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode< LayoutProvider<GridLayout>, ArrayInitializer>(parent, node, style),
+	BaseItemType(parent, node, style),
 	values_(nullptr),
 	matrixForm_(false)
 {

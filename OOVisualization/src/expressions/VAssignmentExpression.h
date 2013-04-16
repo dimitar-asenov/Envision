@@ -40,8 +40,8 @@ namespace Visualization {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VAssignmentExpression : public Visualization::ItemWithNode< Visualization::LayoutProvider<>,
-	OOModel::AssignmentExpression>
+class OOVISUALIZATION_API VAssignmentExpression : public Visualization::ItemWithNode<VAssignmentExpression,
+	Visualization::LayoutProvider<>, OOModel::AssignmentExpression>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VAssignmentExpression, OperatorSequenceStyle)
 
@@ -53,7 +53,7 @@ class OOVISUALIZATION_API VAssignmentExpression : public Visualization::ItemWith
 		void determineChildren();
 
 	private:
-		typedef Visualization::ItemWithNode< Visualization::LayoutProvider<>,
+		typedef Visualization::ItemWithNode<VAssignmentExpression, Visualization::LayoutProvider<>,
 				OOModel::AssignmentExpression> BaseItemType;
 
 		Visualization::Static* assignmentSymbol_;

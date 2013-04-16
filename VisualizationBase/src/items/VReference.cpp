@@ -33,7 +33,7 @@ namespace Visualization {
 ITEM_COMMON_DEFINITIONS(VReference, "item")
 
 VReference::VReference(Item* parent, NodeType *node, const StyleType *style) :
-	ItemWithNode<TextRenderer, Model::Reference>(parent, node, style)
+	BaseItemType(parent, node, style)
 {
 }
 

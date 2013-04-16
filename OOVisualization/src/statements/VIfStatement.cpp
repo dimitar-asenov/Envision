@@ -38,8 +38,7 @@ namespace OOVisualization {
 
 ITEM_COMMON_DEFINITIONS(VIfStatement, "item")
 
-VIfStatement::VIfStatement(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode<LayoutProvider<PanelBorderLayout>, IfStatement>(parent, node, style),
+VIfStatement::VIfStatement(Item* parent, NodeType* node, const StyleType* style) : BaseItemType(parent, node, style),
 	header_(), conditionBackground_(), condition_(), content_(), thenBranch_(), elseBranch_()
 {
 	layout()->setTop(true);

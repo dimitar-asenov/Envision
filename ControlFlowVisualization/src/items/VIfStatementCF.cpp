@@ -35,7 +35,7 @@ namespace ControlFlowVisualization {
 ITEM_COMMON_DEFINITIONS(VIfStatementCF, "item")
 
 VIfStatementCF::VIfStatementCF(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode<ControlFlowItem, IfStatement>(parent, node, style),
+	BaseItemType(parent, node, style),
 	conditionBackground(), condition(), thenBranch(), elseBranch()
 {
 }

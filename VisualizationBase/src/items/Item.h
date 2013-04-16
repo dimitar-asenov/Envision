@@ -278,6 +278,8 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 
 		static QMultiHash<Model::Node*, Item*>& nodeItemsMap();
 
+		static void defaultInit();
+
 	protected:
 
 		void setWidth(int width);
@@ -464,5 +466,6 @@ inline const QMultiMap<VisualizationAddOn*, Item* >& Item::addOnItems()
 
 inline void Item::setItemCategory( Scene::ItemCategory cat) { itemCategory_ = cat; }
 inline bool Item::isCategoryHiddenDuringPaint() { return scene()->isHiddenCategory(itemCategory()); }
+inline void Item::defaultInit(){}
 
 }

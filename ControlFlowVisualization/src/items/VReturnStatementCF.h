@@ -34,7 +34,7 @@
 namespace ControlFlowVisualization {
 
 class CONTROLFLOWVISUALIZATION_API VReturnStatementCF
-: public Visualization::ItemWithNode< ControlFlowItem, OOModel::ReturnStatement >
+: public Visualization::ItemWithNode<VReturnStatementCF, ControlFlowItem, OOModel::ReturnStatement, false>
 {
 		ITEM_COMMON_CUSTOM_STYLENAME(VReturnStatementCF, ControlFlowItemStyle)
 
@@ -47,7 +47,8 @@ class CONTROLFLOWVISUALIZATION_API VReturnStatementCF
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		typedef Visualization::ItemWithNode< ControlFlowItem, OOModel::ReturnStatement > BaseItemType;
+		typedef Visualization::ItemWithNode<VReturnStatementCF, ControlFlowItem, OOModel::ReturnStatement, false >
+			BaseItemType;
 
 		OOVisualization::VReturnStatement* vis_;
 };

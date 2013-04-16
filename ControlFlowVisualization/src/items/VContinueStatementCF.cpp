@@ -37,7 +37,7 @@ namespace ControlFlowVisualization {
 ITEM_COMMON_DEFINITIONS(VContinueStatementCF, "item")
 
 VContinueStatementCF::VContinueStatementCF(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode<ControlFlowItem, ContinueStatement>(parent, node, style),
+	BaseItemType(parent, node, style),
 	vis_(nullptr)
 {
 }

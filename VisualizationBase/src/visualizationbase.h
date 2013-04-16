@@ -44,5 +44,6 @@ class VisualizationBase : public QObject, public Core::EnvisionPlugin
 };
 
 VISUALIZATIONBASE_API Model::InitializationRegistry& nodeTypeInitializationRegistry();
+VISUALIZATIONBASE_API Model::InitializationRegistry& itemTypeInitializationRegistry();
 
 }

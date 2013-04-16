@@ -37,7 +37,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VFormalArgument, "item")
 
 VFormalArgument::VFormalArgument(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode< LayoutProvider<>, FormalArgument>(parent, node, style),
+	BaseItemType(parent, node, style),
 	name_(),
 	type_()
 {

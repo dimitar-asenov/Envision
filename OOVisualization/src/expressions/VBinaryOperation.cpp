@@ -36,7 +36,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VBinaryOperation, "item")
 
 VBinaryOperation::VBinaryOperation(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode<LayoutProvider<>, BinaryOperation>(parent, node, style),
+	BaseItemType(parent, node, style),
 	pre_(nullptr),
 	in_(nullptr),
 	post_(nullptr),

@@ -36,8 +36,15 @@ Q_EXPORT_PLUGIN2( contractslibrary, ContractsLibrary::ContractsLibrary )
 
 namespace ContractsLibrary {
 
+Model::InitializationRegistry& itemTypeInitializationRegistry()
+{
+	static Model::InitializationRegistry r;
+	return r;
+}
+
 bool ContractsLibrary::initialize(Core::EnvisionManager&)
 {
+	itemTypeInitializationRegistry().initializeAll();
 	ValueAtReturnVisitor::init();
 
 	// Create a change monitor

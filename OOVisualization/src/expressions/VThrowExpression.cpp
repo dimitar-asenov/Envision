@@ -36,7 +36,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VThrowExpression, "item")
 
 VThrowExpression::VThrowExpression(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode<LayoutProvider<>, ThrowExpression>(parent, node, style),
+	BaseItemType(parent, node, style),
 	throwSymbol_( new Static(layout(), &style->throwSymbol()) ),
 	expressionToThrow_(nullptr)
 {

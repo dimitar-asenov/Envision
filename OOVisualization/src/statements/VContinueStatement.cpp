@@ -36,7 +36,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VContinueStatement, "item")
 
 VContinueStatement::VContinueStatement(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode<Item, ContinueStatement>(parent, node, style),
+	BaseItemType(parent, node, style),
 	vis_(new Static(this, style))
 {
 }

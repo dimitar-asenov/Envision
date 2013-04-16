@@ -37,7 +37,7 @@
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VVisibility
-	: public Visualization::ItemWithNode< Visualization::TextRenderer, OOModel::Visibility>
+	: public Visualization::ItemWithNode<VVisibility, Visualization::TextRenderer, OOModel::Visibility>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VVisibility, Visualization::TextStyle)
 
@@ -49,7 +49,7 @@ class OOVISUALIZATION_API VVisibility
 		virtual QString currentText();
 
 	private:
-		typedef Visualization::ItemWithNode< Visualization::TextRenderer, OOModel::Visibility> BaseItemType;
+		typedef Visualization::ItemWithNode<VVisibility, Visualization::TextRenderer, OOModel::Visibility> BaseItemType;
 };
 
 }

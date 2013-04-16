@@ -45,7 +45,7 @@ namespace OOVisualization {
 class VStatementItemList;
 
 class OOVISUALIZATION_API VCatchClause
-	: public Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
+	: public Visualization::ItemWithNode<VCatchClause, Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
 	  OOModel::CatchClause>
 {
 	ITEM_COMMON(VCatchClause)
@@ -64,7 +64,7 @@ class OOVISUALIZATION_API VCatchClause
 		void determineChildren();
 
 	private:
-		typedef Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
+		typedef Visualization::ItemWithNode<VCatchClause, Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
 				  OOModel::CatchClause> BaseItemType;
 
 		Visualization::SequentialLayout* header_{};

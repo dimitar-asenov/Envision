@@ -35,7 +35,7 @@ namespace ControlFlowVisualization {
 ITEM_COMMON_DEFINITIONS(VLoopStatementCF, "item")
 
 VLoopStatementCF::VLoopStatementCF(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode<ControlFlowItem, LoopStatement>(parent, node, style),
+	BaseItemType(parent, node, style),
 	conditionBackground(),
 	initStepBackground(),
 	updateStepBackground(),

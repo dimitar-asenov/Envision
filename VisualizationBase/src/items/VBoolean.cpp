@@ -32,8 +32,7 @@ namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(VBoolean, "item")
 
-VBoolean::VBoolean(Item* parent, NodeType *node, const StyleType *style) :
-	ItemWithNode< TextRenderer, Model::Boolean >(parent, node, style)
+VBoolean::VBoolean(Item* parent, NodeType *node, const StyleType *style) : BaseItemType(parent, node, style)
 {
 	if (node->get()) TextRenderer::setText( "true" );
 	else TextRenderer::setText( "false" );

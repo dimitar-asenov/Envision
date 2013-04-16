@@ -33,7 +33,7 @@ namespace Visualization {
 ITEM_COMMON_DEFINITIONS(VInteger, "item")
 
 VInteger::VInteger(Item* parent, NodeType *node, const StyleType *style) :
-	ItemWithNode<TextRenderer, Model::Integer>(parent, node, style)
+	BaseItemType(parent, node, style)
 {
 	TextRenderer::setText( QString::number(node->get()) );
 }

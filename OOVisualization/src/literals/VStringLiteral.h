@@ -44,7 +44,7 @@ namespace Visualization {
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VStringLiteral
-	: public Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::StringLiteral>
+	: public Visualization::ItemWithNode<VStringLiteral, Visualization::LayoutProvider<>, OOModel::StringLiteral>
 {
 	ITEM_COMMON(VStringLiteral)
 
@@ -56,7 +56,8 @@ class OOVISUALIZATION_API VStringLiteral
 		virtual void determineChildren();
 
 	private:
-		typedef Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::StringLiteral> BaseItemType;
+		typedef Visualization::ItemWithNode<VStringLiteral, Visualization::LayoutProvider<>, OOModel::StringLiteral>
+			BaseItemType;
 
 		Visualization::Static* pre_;
 		Visualization::Static* post_;

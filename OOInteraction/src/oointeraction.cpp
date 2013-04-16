@@ -89,6 +89,12 @@ Q_EXPORT_PLUGIN2( oointeraction, OOInteraction::OOInteraction )
 
 namespace OOInteraction {
 
+Model::InitializationRegistry& itemTypeInitializationRegistry()
+{
+	static Model::InitializationRegistry r;
+	return r;
+}
+
 bool OOInteraction::initialize(Core::EnvisionManager&)
 {
 	OOOperatorDescriptorList::initializeWithDefaultOperators();

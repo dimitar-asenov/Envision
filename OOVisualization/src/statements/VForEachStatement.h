@@ -45,8 +45,8 @@ namespace OOVisualization {
 class VStatementItemList;
 
 class OOVISUALIZATION_API VForEachStatement
-	: public Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
-	  OOModel::ForEachStatement>
+	: public Visualization::ItemWithNode<VForEachStatement,
+	  Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::ForEachStatement>
 {
 	ITEM_COMMON(VForEachStatement)
 
@@ -66,8 +66,9 @@ class OOVISUALIZATION_API VForEachStatement
 		void determineChildren();
 
 	private:
-		typedef Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
-				  OOModel::ForEachStatement> BaseItemType;
+		typedef Visualization::ItemWithNode<VForEachStatement,
+				Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
+				OOModel::ForEachStatement> BaseItemType;
 
 		Visualization::SequentialLayout* header_;
 

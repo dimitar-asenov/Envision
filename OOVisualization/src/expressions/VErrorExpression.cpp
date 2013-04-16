@@ -36,7 +36,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VErrorExpression, "item")
 
 VErrorExpression::VErrorExpression(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode<LayoutProvider<>, ErrorExpression>(parent, node, style),
+	BaseItemType(parent, node, style),
 	prefix_(nullptr),
 	arg_(nullptr),
 	postfix_(nullptr )

@@ -35,8 +35,7 @@ namespace OOVisualization {
 
 ITEM_COMMON_DEFINITIONS(VBlock, "item")
 
-VBlock::VBlock(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode<Item, Block>(parent, node, style),
+VBlock::VBlock(Item* parent, NodeType* node, const StyleType* style) : BaseItemType(parent, node, style),
 	items_( new VStatementItemList(this, node->items()) )
 {
 }

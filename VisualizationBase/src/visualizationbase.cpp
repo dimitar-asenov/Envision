@@ -64,6 +64,12 @@ Model::InitializationRegistry& nodeTypeInitializationRegistry()
 	return r;
 }
 
+Model::InitializationRegistry& itemTypeInitializationRegistry()
+{
+	static Model::InitializationRegistry r;
+	return r;
+}
+
 bool VisualizationBase::initialize(Core::EnvisionManager& manager)
 {
 	VisualizationManager& vmi = VisualizationManager::instance();
@@ -78,22 +84,7 @@ bool VisualizationBase::initialize(Core::EnvisionManager& manager)
 	nodeTypeInitializationRegistry().initializeAll();
 
 	// Register visualizations
-	Scene::defaultRenderer()->registerVisualization(
-			Model::Text::typeIdStatic(), createVisualization<VText, Model::Text>);
-	Scene::defaultRenderer()->registerVisualization(
-			Model::Integer::typeIdStatic(), createVisualization<VInteger, Model::Integer>);
-	Scene::defaultRenderer()->registerVisualization(
-			Model::Float::typeIdStatic(), createVisualization<VFloat, Model::Float>);
-	Scene::defaultRenderer()->registerVisualization(
-			Model::Character::typeIdStatic(), createVisualization<VCharacter, Model::Character>);
-	Scene::defaultRenderer()->registerVisualization(
-			Model::Boolean::typeIdStatic(), createVisualization<VBoolean, Model::Boolean>);
-	Scene::defaultRenderer()->registerVisualization(
-			Model::Reference::typeIdStatic(), createVisualization<VReference, Model::Reference>);
-	Scene::defaultRenderer()->registerVisualization(
-			Model::ExtendableNode::typeIdStatic(), createVisualization<VExtendable, Model::ExtendableNode>);
-	Scene::defaultRenderer()->registerVisualization(
-			Model::List::typeIdStatic(), createVisualization<VList, Model::List>);
+	itemTypeInitializationRegistry().initializeAll();
 	Scene::defaultRenderer()->registerVisualization(
 			TestBoxNode::typeIdStatic(), createVisualization<TestBox, TestBoxNode>);
 

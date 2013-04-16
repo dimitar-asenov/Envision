@@ -113,4 +113,14 @@ void ModelRenderer::registerGroup(int nodeTypeId, int purpose, VisualizationGrou
 	groups_[nodeTypeId][purpose]->addSubGroup(group);
 }
 
+bool ModelRenderer::hasVisualization(int nodeTypeId, int purpose)
+{
+	Q_ASSERT(nodeTypeId > 0);
+	if (nodeTypeId >= groups_.size()) return false;
+	if (purpose >= groups_[nodeTypeId].size()) return false;
+	if (!groups_[nodeTypeId][purpose]) return false;
+	return true;
+	//TODO: One could also check whether there are any registered visualizations/subgroups.
+}
+
 }

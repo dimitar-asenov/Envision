@@ -26,8 +26,9 @@
 
 #pragma once
 
-#include "precompiled.h"
+#include "oovisualization_api.h"
 #include "Core/src/EnvisionPlugin.h"
+#include "ModelBase/src/InitializationRegistry.h"
 
 namespace OOVisualization {
 
@@ -49,5 +50,8 @@ class OOVisualization : public QObject, public Core::EnvisionPlugin
 		virtual void unload() override;
 		virtual void selfTest(QString testid) override;
 };
+
+
+OOVISUALIZATION_API Model::InitializationRegistry& itemTypeInitializationRegistry();
 
 }

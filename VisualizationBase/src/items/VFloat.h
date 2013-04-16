@@ -35,7 +35,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API VFloat : public ItemWithNode<TextRenderer, Model::Float>
+class VISUALIZATIONBASE_API VFloat : public ItemWithNode<VFloat, TextRenderer, Model::Float>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VFloat, TextStyle)
 
@@ -47,7 +47,7 @@ class VISUALIZATIONBASE_API VFloat : public ItemWithNode<TextRenderer, Model::Fl
 		virtual QString currentText();
 
 	private:
-		typedef ItemWithNode<TextRenderer, Model::Float> BaseItemType;
+		typedef ItemWithNode<VFloat, TextRenderer, Model::Float> BaseItemType;
 };
 
 }

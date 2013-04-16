@@ -36,7 +36,7 @@
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VBreakStatement
-	: public Visualization::ItemWithNode< Visualization::Item, OOModel::BreakStatement>
+	: public Visualization::ItemWithNode<VBreakStatement, Visualization::Item, OOModel::BreakStatement>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VBreakStatement, Visualization::StaticStyle)
 
@@ -49,7 +49,7 @@ class OOVISUALIZATION_API VBreakStatement
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		typedef Visualization::ItemWithNode< Visualization::Item, OOModel::BreakStatement> BaseItemType;
+		typedef Visualization::ItemWithNode<VBreakStatement, Visualization::Item, OOModel::BreakStatement> BaseItemType;
 
 		Visualization::Static* vis_;
 };

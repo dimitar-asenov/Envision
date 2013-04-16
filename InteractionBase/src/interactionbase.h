@@ -27,8 +27,9 @@
 #pragma once
 
 #include "Core/src/EnvisionPlugin.h"
-#include "precompiled.h"
+#include "interactionbase_api.h"
 
+#include "ModelBase/src/InitializationRegistry.h"
 #include "Logger/src/Log.h"
 
 namespace Interaction {
@@ -56,5 +57,8 @@ class InteractionBase : public QObject, public Core::EnvisionPlugin
 	private:
 		static Logger::Log* logger;
 };
+
+
+INTERACTIONBASE_API Model::InitializationRegistry& itemTypeInitializationRegistry();
 
 }

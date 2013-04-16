@@ -37,7 +37,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VPrimitiveType, "item")
 
 VPrimitiveType::VPrimitiveType(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode< Item, PrimitiveTypeExpression>(parent, node, style),
+	BaseItemType(parent, node, style),
 	vis_(nullptr)
 {
 }

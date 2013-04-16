@@ -31,8 +31,7 @@ namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(VList, "item")
 
-VList::VList(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode< LayoutProvider<>, Model::List>(parent, node, style)
+VList::VList(Item* parent, NodeType* node, const StyleType* style) : BaseItemType(parent, node, style)
 {
 }
 

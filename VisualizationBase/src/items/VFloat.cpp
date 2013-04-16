@@ -32,8 +32,7 @@ namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(VFloat, "item")
 
-VFloat::VFloat(Item* parent, NodeType *node, const StyleType *style) :
-	ItemWithNode< TextRenderer, Model::Float >(parent, node, style)
+VFloat::VFloat(Item* parent, NodeType *node, const StyleType *style) : BaseItemType(parent, node, style)
 {
 	TextRenderer::setText( QString::number(node->get()) );
 }

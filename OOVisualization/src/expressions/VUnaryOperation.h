@@ -41,7 +41,7 @@ namespace Visualization {
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VUnaryOperation
-	: public Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::UnaryOperation>
+	: public Visualization::ItemWithNode<VUnaryOperation, Visualization::LayoutProvider<>, OOModel::UnaryOperation>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VUnaryOperation, OperatorSequenceStyle)
 
@@ -57,7 +57,8 @@ class OOVISUALIZATION_API VUnaryOperation
 		virtual void determineChildren();
 
 	private:
-		typedef Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::UnaryOperation> BaseItemType;
+		typedef Visualization::ItemWithNode<VUnaryOperation, Visualization::LayoutProvider<>, OOModel::UnaryOperation>
+			BaseItemType;
 
 		Visualization::Static* pre_;
 		Visualization::Static* post_;

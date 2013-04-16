@@ -47,6 +47,11 @@ class VISUALIZATIONBASE_API ModelRenderer
 		 */
 		virtual Item* render(Item* parent, Model::Node* node, int purpose = -1);
 
+		/**
+		 * Returns whether a specific visualization has been registered for nodes of type \a nodeTypeId  and the provided
+		 * \a purpose.
+		 */
+		bool hasVisualization(int nodeTypeId, int purpose = 0);
 		void registerVisualization(int nodeTypeId, int purpose, VisualizationGroup::ItemConstructor visualization);
 		void registerVisualization(int nodeTypeId, VisualizationGroup::ItemConstructor visualization);
 		void registerGroup(int nodeTypeId, int purpose, VisualizationGroup* group);

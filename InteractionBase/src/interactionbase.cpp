@@ -76,6 +76,12 @@ namespace Interaction {
 
 Log* InteractionBase::logger = nullptr;
 
+Model::InitializationRegistry& itemTypeInitializationRegistry()
+{
+	static Model::InitializationRegistry r;
+	return r;
+}
+
 bool InteractionBase::initialize(Core::EnvisionManager&)
 {
 	logger = Logger::Log::getLogger("interactionbase");

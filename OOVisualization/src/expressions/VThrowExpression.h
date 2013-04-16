@@ -40,8 +40,8 @@ namespace Visualization {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VThrowExpression : public Visualization::ItemWithNode< Visualization::LayoutProvider<>,
-OOModel::ThrowExpression>
+class OOVISUALIZATION_API VThrowExpression : public Visualization::ItemWithNode<VThrowExpression,
+	Visualization::LayoutProvider<>, OOModel::ThrowExpression>
 {
 	ITEM_COMMON(VThrowExpression)
 
@@ -53,7 +53,8 @@ OOModel::ThrowExpression>
 		void determineChildren();
 
 	private:
-		typedef Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::ThrowExpression> BaseItemType;
+		typedef Visualization::ItemWithNode<VThrowExpression, Visualization::LayoutProvider<>, OOModel::ThrowExpression>
+			BaseItemType;
 
 		Visualization::Static* throwSymbol_;
 		Visualization::Item* expressionToThrow_;

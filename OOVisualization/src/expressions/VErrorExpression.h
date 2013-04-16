@@ -40,8 +40,8 @@ namespace Visualization {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VErrorExpression : public Visualization::ItemWithNode<Visualization::LayoutProvider<>,
-OOModel::ErrorExpression> {
+class OOVISUALIZATION_API VErrorExpression : public Visualization::ItemWithNode<VErrorExpression,
+	Visualization::LayoutProvider<>, OOModel::ErrorExpression> {
 
 	ITEM_COMMON(VErrorExpression)
 
@@ -53,7 +53,8 @@ OOModel::ErrorExpression> {
 		void determineChildren();
 
 	private:
-		typedef Visualization::ItemWithNode<Visualization::LayoutProvider<>, OOModel::ErrorExpression> BaseItemType;
+		typedef Visualization::ItemWithNode<VErrorExpression, Visualization::LayoutProvider<>,
+			OOModel::ErrorExpression> BaseItemType;
 
 		Visualization::VText* prefix_;
 		Visualization::Item* arg_;

@@ -45,7 +45,7 @@ namespace Visualization {
 namespace ControlFlowVisualization {
 
 class CONTROLFLOWVISUALIZATION_API VMethodCF : public Visualization::ItemWithNode
-	< Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::Method>
+	<VMethodCF, Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::Method, false>
 {
 	ITEM_COMMON(VMethodCF)
 
@@ -57,8 +57,8 @@ class CONTROLFLOWVISUALIZATION_API VMethodCF : public Visualization::ItemWithNod
 		void determineChildren();
 
 	private:
-		typedef Visualization::ItemWithNode
-				< Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::Method> BaseItemType;
+		typedef Visualization::ItemWithNode<VMethodCF,  Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
+				OOModel::Method, false> BaseItemType;
 
 		Visualization::SequentialLayout* header_;
 		Visualization::Static* icon_;

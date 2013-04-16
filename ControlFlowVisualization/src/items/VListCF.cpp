@@ -34,7 +34,7 @@ namespace ControlFlowVisualization {
 ITEM_COMMON_DEFINITIONS( VListCF, "item" )
 
 VListCF::VListCF(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode< ControlFlowItem, List>(parent, node, style)
+	BaseItemType(parent, node, style)
 {
 
 }

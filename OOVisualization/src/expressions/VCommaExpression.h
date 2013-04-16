@@ -40,8 +40,8 @@ namespace Visualization {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VCommaExpression : public Visualization::ItemWithNode<Visualization::LayoutProvider<>,
-	OOModel::CommaExpression>
+class OOVISUALIZATION_API VCommaExpression : public Visualization::ItemWithNode<VCommaExpression,
+	Visualization::LayoutProvider<>, OOModel::CommaExpression>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VCommaExpression, OperatorSequenceStyle)
 
@@ -53,7 +53,8 @@ class OOVISUALIZATION_API VCommaExpression : public Visualization::ItemWithNode<
 		void determineChildren();
 
 	private:
-		typedef Visualization::ItemWithNode<Visualization::LayoutProvider<>, OOModel::CommaExpression> BaseItemType;
+		typedef Visualization::ItemWithNode<VCommaExpression, Visualization::LayoutProvider<>,
+			OOModel::CommaExpression> BaseItemType;
 
 		Visualization::Static* pre_;
 		Visualization::Static* in_;

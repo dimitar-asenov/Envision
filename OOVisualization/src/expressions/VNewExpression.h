@@ -40,8 +40,8 @@ namespace Visualization {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VNewExpression : public Visualization::ItemWithNode< Visualization::LayoutProvider<>,
-OOModel::NewExpression>
+class OOVISUALIZATION_API VNewExpression : public Visualization::ItemWithNode<VNewExpression,
+	Visualization::LayoutProvider<>, OOModel::NewExpression>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VNewExpression, OperatorStyle)
 
@@ -53,7 +53,8 @@ OOModel::NewExpression>
 		void determineChildren();
 
 	private:
-		typedef Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::NewExpression> BaseItemType;
+		typedef Visualization::ItemWithNode<VNewExpression, Visualization::LayoutProvider<>, OOModel::NewExpression>
+			BaseItemType;
 
 		Visualization::Static* pre_{};
 		Visualization::Static* in_{};

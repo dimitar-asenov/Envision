@@ -36,7 +36,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VFormalResult, "item")
 
 VFormalResult::VFormalResult(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode< LayoutProvider<>, FormalResult>(parent, node, style),
+	BaseItemType(parent, node, style),
 	name_(new VText(layout(), node->nameNode(), &style->name()) ),
 	type_(nullptr)
 {

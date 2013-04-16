@@ -39,7 +39,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VTryCatchFinally, "item")
 
 VTryCatchFinally::VTryCatchFinally(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode<LayoutProvider<PanelBorderLayout>, TryCatchFinallyStatement>(parent, node, style)
+	BaseItemType(parent, node, style)
 {
 	layout()->setTop(true);
 	tryIcon_ = new Static(layout()->top(), &style->tryIcon());

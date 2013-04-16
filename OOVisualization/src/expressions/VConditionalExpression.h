@@ -40,8 +40,8 @@ namespace Visualization {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VConditionalExpression : public Visualization::ItemWithNode<Visualization::LayoutProvider<>,
-	OOModel::ConditionalExpression>
+class OOVISUALIZATION_API VConditionalExpression : public Visualization::ItemWithNode<VConditionalExpression,
+	Visualization::LayoutProvider<>, OOModel::ConditionalExpression>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VConditionalExpression, OperatorStyle)
 
@@ -53,7 +53,8 @@ class OOVISUALIZATION_API VConditionalExpression : public Visualization::ItemWit
 		void determineChildren();
 
 	private:
-		typedef Visualization::ItemWithNode<Visualization::LayoutProvider<>, OOModel::ConditionalExpression> BaseItemType;
+		typedef Visualization::ItemWithNode<VConditionalExpression,
+				Visualization::LayoutProvider<>, OOModel::ConditionalExpression> BaseItemType;
 
 		Visualization::Static* pre_;
 		Visualization::Static* in_;

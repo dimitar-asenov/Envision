@@ -41,7 +41,7 @@ namespace Visualization {
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VArrayType
-: public Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::ArrayTypeExpression>
+: public Visualization::ItemWithNode<VArrayType, Visualization::LayoutProvider<>, OOModel::ArrayTypeExpression>
 {
 	ITEM_COMMON(VArrayType)
 
@@ -54,7 +54,8 @@ class OOVISUALIZATION_API VArrayType
 		void determineChildren();
 
 	private:
-		typedef Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::ArrayTypeExpression> BaseItemType;
+		typedef Visualization::ItemWithNode<VArrayType, Visualization::LayoutProvider<>, OOModel::ArrayTypeExpression>
+			BaseItemType;
 
 		Visualization::Static* symbol_;
 		Visualization::Item* type_;

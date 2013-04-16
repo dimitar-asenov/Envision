@@ -36,7 +36,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VCommaExpression, "item")
 
 VCommaExpression::VCommaExpression(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode<LayoutProvider<>, CommaExpression>(parent, node, style),
+	BaseItemType(parent, node, style),
 	pre_(nullptr),
 	in_(nullptr),
 	post_(nullptr),

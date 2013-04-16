@@ -36,7 +36,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API VList: public ItemWithNode< LayoutProvider<>, Model::List>
+class VISUALIZATIONBASE_API VList: public ItemWithNode<VList, LayoutProvider<>, Model::List>
 {
 	ITEM_COMMON(VList)
 
@@ -75,7 +75,7 @@ class VISUALIZATIONBASE_API VList: public ItemWithNode< LayoutProvider<>, Model:
 		void setRange(int begin, int end);
 
 	private:
-		typedef ItemWithNode< LayoutProvider<>, Model::List> BaseItemType;
+		typedef ItemWithNode<VList, LayoutProvider<>, Model::List> BaseItemType;
 
 		bool suppressDefaultRemovalHandler_{};
 		int rangeBegin_{};

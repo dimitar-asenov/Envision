@@ -41,7 +41,7 @@ namespace Visualization {
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VPrimitiveType
-	: public Visualization::ItemWithNode< Visualization::Item, OOModel::PrimitiveTypeExpression>
+	: public Visualization::ItemWithNode<VPrimitiveType, Visualization::Item, OOModel::PrimitiveTypeExpression>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VPrimitiveType, Visualization::StaticSequenceStyle)
 
@@ -54,7 +54,8 @@ class OOVISUALIZATION_API VPrimitiveType
 		void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		typedef Visualization::ItemWithNode< Visualization::Item, OOModel::PrimitiveTypeExpression> BaseItemType;
+		typedef Visualization::ItemWithNode<VPrimitiveType, Visualization::Item, OOModel::PrimitiveTypeExpression>
+			BaseItemType;
 
 		Visualization::Static* vis_;
 };

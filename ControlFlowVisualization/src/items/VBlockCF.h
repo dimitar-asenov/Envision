@@ -34,7 +34,8 @@
 
 namespace ControlFlowVisualization {
 
-class CONTROLFLOWVISUALIZATION_API VBlockCF : public Visualization::ItemWithNode<ControlFlowItem, OOModel::Block>
+class CONTROLFLOWVISUALIZATION_API VBlockCF : public Visualization::ItemWithNode<VBlockCF, ControlFlowItem,
+	OOModel::Block, false>
 {
 	ITEM_COMMON(VBlockCF)
 
@@ -50,7 +51,7 @@ class CONTROLFLOWVISUALIZATION_API VBlockCF : public Visualization::ItemWithNode
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		typedef Visualization::ItemWithNode<ControlFlowItem, OOModel::Block> BaseItemType;
+		typedef Visualization::ItemWithNode<VBlockCF, ControlFlowItem, OOModel::Block, false> BaseItemType;
 
 		VListCF* statements;
 };

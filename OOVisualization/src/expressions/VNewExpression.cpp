@@ -36,7 +36,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VNewExpression, "item")
 
 VNewExpression::VNewExpression(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode<LayoutProvider<>, NewExpression>(parent, node, style),
+	BaseItemType(parent, node, style),
 	pre_( new Static(layout(), &style->preSymbol()) ),
 	type_(nullptr),
 	amount_(nullptr)

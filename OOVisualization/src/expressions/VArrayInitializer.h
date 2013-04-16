@@ -42,7 +42,7 @@ namespace Visualization {
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VArrayInitializer
-	: public Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::GridLayout>,
+	: public Visualization::ItemWithNode<VArrayInitializer, Visualization::LayoutProvider<Visualization::GridLayout>,
 	  OOModel::ArrayInitializer>
 {
 	ITEM_COMMON(VArrayInitializer)
@@ -60,7 +60,7 @@ class OOVISUALIZATION_API VArrayInitializer
 		void determineChildren();
 
 	private:
-		typedef Visualization::ItemWithNode< Visualization::LayoutProvider<Visualization::GridLayout>,
+		typedef Visualization::ItemWithNode<VArrayInitializer, Visualization::LayoutProvider<Visualization::GridLayout>,
 				OOModel::ArrayInitializer> BaseItemType;
 
 		Visualization::VList* values_;

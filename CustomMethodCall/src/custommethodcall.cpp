@@ -31,8 +31,15 @@ Q_EXPORT_PLUGIN2( custommethodcall, CustomMethodCall::CustomMethodCall )
 
 namespace CustomMethodCall {
 
+Model::InitializationRegistry& itemTypeInitializationRegistry()
+{
+	static Model::InitializationRegistry r;
+	return r;
+}
+
 bool CustomMethodCall::initialize(Core::EnvisionManager&)
 {
+	itemTypeInitializationRegistry().initializeAll();
 	return true;
 }
 

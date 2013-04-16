@@ -36,7 +36,7 @@
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VExpressionStatement
-	: public Visualization::ItemWithNode< Visualization::Item, OOModel::ExpressionStatement>
+	: public Visualization::ItemWithNode<VExpressionStatement, Visualization::Item, OOModel::ExpressionStatement>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VExpressionStatement, Visualization::ItemStyle)
 
@@ -49,7 +49,8 @@ class OOVISUALIZATION_API VExpressionStatement
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		typedef Visualization::ItemWithNode< Visualization::Item, OOModel::ExpressionStatement> BaseItemType;
+		typedef Visualization::ItemWithNode<VExpressionStatement, Visualization::Item, OOModel::ExpressionStatement>
+			BaseItemType;
 
 		Visualization::Item* expr_;
 };

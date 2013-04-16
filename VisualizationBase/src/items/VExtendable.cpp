@@ -32,8 +32,7 @@ namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(VExtendable, "item")
 
-VExtendable::VExtendable(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode<Item, Model::ExtendableNode>(parent, node, style),
+VExtendable::VExtendable(Item* parent, NodeType* node, const StyleType* style) : BaseItemType(parent, node, style),
 	header( new SequentialLayout(this, &style->smallHeaderStyle())),
 	layout(),
 	attributes(),

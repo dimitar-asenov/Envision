@@ -37,7 +37,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VArrayType, "item")
 
 VArrayType::VArrayType(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode<LayoutProvider<>, ArrayTypeExpression>(parent, node, style),
+	BaseItemType(parent, node, style),
 	symbol_( new Static(layout(), &style->symbol())),
 	type_(nullptr)
 {

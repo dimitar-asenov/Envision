@@ -28,13 +28,14 @@
 
 // This is included for convenience. There is a very big chance that whoever uses ItemWithNode will want to use the
 // ModelRenderer too.
+#include "../Scene.h"
 #include "../renderer/ModelRenderer.h"
 
 namespace Visualization {
 
 class Item;
 
-template <class Super, class ContainedNode = Model::Node>
+template <class Derived, class Super, class ContainedNode, bool defaultInitialization = true>
 class ItemWithNode : public Super
 {
 	public:
@@ -47,26 +48,50 @@ class ItemWithNode : public Super
 		virtual int revision() const;
 		virtual void setRevision(int newRevision);
 
+		static void defaultInit();
 	private:
 		ContainedNode* node_;
 		int revision_;
 };
 
-template <class Super, class ContainedNode> ItemWithNode<Super,ContainedNode>::ItemWithNode(Item* parent, ContainedNode* node, const typename Super::StyleType* style)
+template <class Derived, class Super, class ContainedNode, bool defaultInitialization>
+ItemWithNode<Derived,Super,ContainedNode,defaultInitialization>::ItemWithNode(Item* parent, ContainedNode* node,
+		const typename Super::StyleType* style)
 	: Super(parent, style), node_(node), revision_(-1)
 {
 	Super::nodeItemsMap().insert(node,this);
 }
 
-template <class Super, class ContainedNode> ItemWithNode<Super,ContainedNode>::~ItemWithNode()
+template <class Derived, class Super, class ContainedNode, bool defaultInitialization>
+ItemWithNode<Derived,Super,ContainedNode,defaultInitialization>::~ItemWithNode()
 {
 	auto removed = Super::nodeItemsMap().remove(node_,this);
 	Q_ASSERT(removed == 1);
 }
 
-template <class Super, class ContainedNode> bool ItemWithNode<Super,ContainedNode>::hasNode() const { return true; }
-template <class Super, class ContainedNode> ContainedNode* ItemWithNode<Super,ContainedNode>::node() const { return node_; }
-template <class Super, class ContainedNode> int ItemWithNode<Super,ContainedNode>::revision() const { return revision_; }
-template <class Super, class ContainedNode> void ItemWithNode<Super,ContainedNode>::setRevision(int newRevision) { revision_ = newRevision; }
+template <class Derived, class Super, class ContainedNode, bool defaultInitialization>
+inline bool ItemWithNode<Derived,Super,ContainedNode,defaultInitialization>::hasNode() const { return true; }
+
+template <class Derived, class Super, class ContainedNode, bool defaultInitialization>
+inline  ContainedNode* ItemWithNode<Derived,Super,ContainedNode,defaultInitialization>::node() const { return node_; }
+
+template <class Derived, class Super, class ContainedNode, bool defaultInitialization>
+inline  int ItemWithNode<Derived,Super,ContainedNode,defaultInitialization>::revision() const { return revision_; }
+
+template <class Derived, class Super, class ContainedNode, bool defaultInitialization>
+inline  void ItemWithNode<Derived,Super,ContainedNode,defaultInitialization>::setRevision(int newRevision)
+{ revision_ = newRevision; }
+
+template <class Derived, class Super, class ContainedNode, bool defaultInitialization>
+void ItemWithNode<Derived,Super,ContainedNode,defaultInitialization>::defaultInit()
+{
+	if (defaultInitialization && !Scene::defaultRenderer()->hasVisualization(NodeType::typeIdStatic()))
+	{
+		// Only register a default visualization if there is no other visualization so far.
+		Scene::defaultRenderer()->registerVisualization(
+				NodeType::typeIdStatic(), createVisualization<Derived, NodeType>);
+	}
+	Super::defaultInit();
+}
 
 }

@@ -36,7 +36,7 @@
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VContinueStatement
-	: public Visualization::ItemWithNode< Visualization::Item, OOModel::ContinueStatement>
+	: public Visualization::ItemWithNode<VContinueStatement, Visualization::Item, OOModel::ContinueStatement>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VContinueStatement, Visualization::StaticStyle)
 
@@ -49,7 +49,8 @@ class OOVISUALIZATION_API VContinueStatement
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		typedef Visualization::ItemWithNode< Visualization::Item, OOModel::ContinueStatement> BaseItemType;
+		typedef Visualization::ItemWithNode<VContinueStatement, Visualization::Item, OOModel::ContinueStatement>
+			BaseItemType;
 
 		Visualization::Static* vis_;
 };

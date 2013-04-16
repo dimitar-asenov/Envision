@@ -33,8 +33,7 @@ namespace OOVisualization {
 
 ITEM_COMMON_DEFINITIONS(VClassType, "item")
 
-VClassType::VClassType(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode<Item, ClassTypeExpression>(parent, node, style),
+VClassType::VClassType(Item* parent, NodeType* node, const StyleType* style) : BaseItemType(parent, node, style),
 	vis_( new VReferenceExpression(this, node->typeExpression(), style))
 {
 }

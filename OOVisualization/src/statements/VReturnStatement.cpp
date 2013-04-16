@@ -37,7 +37,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VReturnStatement, "item")
 
 VReturnStatement::VReturnStatement(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode< LayoutProvider<>, ReturnStatement>(parent, node, style),
+	BaseItemType(parent, node, style),
 	symbol_( new Static(layout(), &style->symbol() )),
 	values_( new VList(layout(), node->values()) )
 {

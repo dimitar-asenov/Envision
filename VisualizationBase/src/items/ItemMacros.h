@@ -55,6 +55,8 @@ public:																																					\
 	static void addAddOn(Visualization::VisualizationAddOn* addOn);																	\
 	static bool removeAddOn(Visualization::VisualizationAddOn* addOn);																\
 																																							\
+	static ::Model::InitializationRegistry& initializationRegistry();																	\
+	static void defaultInit();																														\
 private:																																					\
 	static Visualization::InteractionHandler* handler_;																					\
 	static QList<Visualization::VisualizationAddOn*>& staticAddOns();
@@ -79,7 +81,22 @@ private:																																					\
  * 			look for this item's style directory. Typical values are "item", "shape", "layout" and "icon".
  */
 #define ITEM_COMMON_DEFINITIONS( ItemClass, classType )																					\
-Visualization::InteractionHandler* ItemClass::handler_ = Visualization::InteractionHandler::instance();					\
+/* Forward declaration. This function must be defined in the enclosing namespace*/												\
+::Model::InitializationRegistry& itemTypeInitializationRegistry();																	\
+::Model::InitializationRegistry& ItemClass::initializationRegistry()																	\
+{																																							\
+	return itemTypeInitializationRegistry();																									\
+}																																							\
+																																							\
+void ItemClass::defaultInit()																														\
+{																																							\
+	BaseItemType::defaultInit();																													\
+}																																							\
+																																							\
+/* This variable uses a clever trick to register an initialization function that will be called during the */			\
+/* plug-in's initialization routine */																											\
+Visualization::InteractionHandler* ItemClass::handler_ =																					\
+	(initializationRegistry().add(ItemClass::defaultInit) , Visualization::InteractionHandler::instance() );				\
 																																							\
 void ItemClass::setStyle(const Visualization::ItemStyle* style_)																		\
 {																																							\
