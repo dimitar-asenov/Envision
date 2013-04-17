@@ -265,6 +265,7 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* vd)
         OOModel::VariableDeclaration* varDecl = trMngr_->insertVar(vd);
         if(vd->getType().getTypePtr()->isArrayType())
         {
+            //TODO this array section is very nasty
             const clang::ArrayType* arrType =  vd->getType().getTypePtr()->getAsArrayTypeUnsafe();
             if(arrType)
             {
@@ -272,6 +273,10 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* vd)
                 {
                     const clang::ConstantArrayType* constArr = llvm::dyn_cast<clang::ConstantArrayType>(arrType);
                     std::cout << "Const Array Size: " << constArr->getSize().getLimitedValue() << std::endl;
+                    OOModel::ArrayTypeExpression* varType = new OOModel::ArrayTypeExpression();
+                    if(OOModel::Expression* expr = CppImportUtilities::convertClangType(arrType->getElementType()))
+                        varType->setTypeExpression(expr);
+                    varDecl->setVarType(varType);
                 }
             }
         }

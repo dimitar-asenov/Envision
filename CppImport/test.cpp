@@ -78,6 +78,7 @@ class OneMore{
 int Header::headerFunc()
 {
     int someVarInCPP[10];
+    int array[] = {1,2,3};
     int k;
     for(int i=0; i<100;i++)
     {
