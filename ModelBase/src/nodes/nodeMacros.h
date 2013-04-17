@@ -236,10 +236,18 @@ template class Model::TypedList<className>;																									\
 	return nodeTypeInitializationRegistry();																									\
 }																																							\
 																																							\
+/* Used to register a default initialization routine*/																					\
+class className##InitializerClass{																												\
+	public:																																				\
+		className##InitializerClass()																												\
+		{																																					\
+			className::initializationRegistry().add(className::init);																	\
+		}																																					\
+};																																							\
+static className##InitializerClass className##InitializerClassInstance_;															\
+																																							\
 /* This must be set to the result of Node::registerNodeType */																			\
-/* This variable uses a clever trick to register an initialization function that will be called during the */			\
-/* plug-in's initialization routine */																											\
-int className::typeId_ = (initializationRegistry().add(className::init) , -1); 													\
+int className::typeId_ = -1; 																														\
 																																							\
 const QString& className::typeName() const																									\
 {																																							\
@@ -298,10 +306,20 @@ void className::init()																																\
 	return nodeTypeInitializationRegistry();																									\
 }																																							\
 																																							\
+ /* Used to register a default initialization routine*/																					\
+ class className##InitializerClass{																												\
+ 	public:																																				\
+ 		className##InitializerClass()																												\
+ 		{																																					\
+ 			className::initializationRegistry().add(className::init);																	\
+ 		}																																					\
+ };																																						\
+ static className##InitializerClass className##InitializerClassInstance_;															\
+ 																																							\
 /* This must be set to the result of Node::registerNodeType */																			\
 /* This variable uses a clever trick to register an initialization function that will be called during the */			\
 /* plug-in's initialization routine */																											\
-int className::typeId_ = (initializationRegistry().add(className::init) , -1); 													\
+int className::typeId_ = -1; 																														\
 																																							\
 const QString& className::typeName() const																									\
 {																																							\
