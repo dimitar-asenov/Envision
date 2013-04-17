@@ -140,3 +140,20 @@ OOModel::UnaryOperation::OperatorTypes CppImportUtilities::convertUnaryOpcode(cl
         return OOModel::UnaryOperation::POSTDECREMENT;
     }
 }
+
+OOModel::Visibility::VisibilityType CppImportUtilities::convertAccessSpecifier(clang::AccessSpecifier as)
+{
+    switch (as)
+    {
+    case clang::AS_public:
+        return OOModel::Visibility::PUBLIC;
+    case clang::AS_protected:
+        return OOModel::Visibility::PROTECTED;
+    case clang::AS_private:
+        return OOModel::Visibility::PRIVATE;
+    case clang::AS_none:
+        return OOModel::Visibility::DEFAULT;
+    default:
+        return OOModel::Visibility::DEFAULT;
+    }
+}

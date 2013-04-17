@@ -151,6 +151,8 @@ bool ClangAstVisitor::TraverseCXXMethodDecl(clang::CXXMethodDecl *methodDecl)
         TraverseStmt(methodDecl->getBody());
         ooStack_.pop();
     }
+    // specify the visibility of the method
+    method->setVisibility(CppImportUtilities::convertAccessSpecifier(methodDecl->getAccess()));
     return true;
 }
 
@@ -312,6 +314,8 @@ bool ClangAstVisitor::VisitFieldDecl(clang::FieldDecl* fd)
         log_->writeError(className_,QString("no parent found for this field"),QString("FieldDecl"),fd->getNameAsString());
         //        return false;
     }
+    else
+        field->setVisibility(CppImportUtilities::convertAccessSpecifier(fd->getAccess()));
     return true;
 }
 

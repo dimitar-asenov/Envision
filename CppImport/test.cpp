@@ -1,5 +1,5 @@
 #include "test.h"
-#include <iostream>
+//#include <iostream>
 //TEst comment
 
 int NOCLASSFIELD;
@@ -41,6 +41,12 @@ class Another {
     bool aBoolVar;
     void aVoidFunc(){
         bool aNotherBoolVar;};
+public:
+    int aPublicvar;
+    int aPublicFunction(){
+        return 0;
+    }
+
 private:
     class InAnotherClass{
         int inAnotherVar;
