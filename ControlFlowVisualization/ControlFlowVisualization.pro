@@ -7,7 +7,8 @@ win32:LIBS += -llogger \
     -loomodel \
     -lvisualizationbase \
     -linteractionbase \
-    -loovisualization
+    -loovisualization \
+    -loointeraction
 HEADERS += src/ControlFlowVisualizationException.h \
     src/allCFVisualizations.h \
     src/controlflowvisualization_api.h \

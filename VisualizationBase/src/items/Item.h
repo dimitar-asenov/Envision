@@ -280,6 +280,9 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 
 		static void defaultInit();
 
+		static void setDefaultClassHandler(InteractionHandler* handler);
+		static InteractionHandler* defaultClassHandler();
+
 	protected:
 
 		void setWidth(int width);
@@ -362,6 +365,8 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		 * Use addAddOn() and removeAddOn() to change the contents of the list.
 		 */
 		static QList<VisualizationAddOn*>& staticAddOns();
+
+		static InteractionHandler* defaultClassHandler_;
 
 		QMultiMap<VisualizationAddOn*, Item* > addOnItems_;
 
@@ -467,5 +472,8 @@ inline const QMultiMap<VisualizationAddOn*, Item* >& Item::addOnItems()
 inline void Item::setItemCategory( Scene::ItemCategory cat) { itemCategory_ = cat; }
 inline bool Item::isCategoryHiddenDuringPaint() { return scene()->isHiddenCategory(itemCategory()); }
 inline void Item::defaultInit(){}
+
+inline void Item::setDefaultClassHandler(InteractionHandler* handler) {defaultClassHandler_ = handler;}
+inline InteractionHandler* Item::defaultClassHandler() {return defaultClassHandler_;}
 
 }

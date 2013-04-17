@@ -48,8 +48,9 @@ public:																																					\
 	virtual void setStyle(const Visualization::ItemStyle* style);																		\
 	static Visualization::StyleSet<ItemClass>& itemStyles();																				\
 																																							\
-	virtual Visualization::InteractionHandler* handler() const { return handler_; };												\
-	static void setInteractionHandler(Visualization::InteractionHandler* handler) {handler_ = handler;}					\
+	virtual Visualization::InteractionHandler* handler() const;																			\
+	static void setDefaultClassHandler(Visualization::InteractionHandler* handler) {defaultClassHandler_ = handler;}	\
+	static Visualization::InteractionHandler* defaultClassHandler() {return defaultClassHandler_;}							\
 																																							\
 	virtual QList<Visualization::VisualizationAddOn*> addOns();																			\
 	static void addAddOn(Visualization::VisualizationAddOn* addOn);																	\
@@ -58,7 +59,7 @@ public:																																					\
 	static ::Model::InitializationRegistry& initializationRegistry();																	\
 	static void defaultInit();																														\
 private:																																					\
-	static Visualization::InteractionHandler* handler_;																					\
+	static Visualization::InteractionHandler* defaultClassHandler_;																	\
 	static QList<Visualization::VisualizationAddOn*>& staticAddOns();
 /**********************************************************************************************************************/
 
@@ -93,10 +94,17 @@ void ItemClass::defaultInit()																														\
 	BaseItemType::defaultInit();																													\
 }																																							\
 																																							\
-/* This variable uses a clever trick to register an initialization function that will be called during the */			\
-/* plug-in's initialization routine */																											\
-Visualization::InteractionHandler* ItemClass::handler_ =																					\
-	(initializationRegistry().add(ItemClass::defaultInit) , Visualization::InteractionHandler::instance() );				\
+/* Used to register a default initialization routine*/																					\
+class ItemClass##InitializerClass{																												\
+	public:																																				\
+		ItemClass##InitializerClass()																												\
+		{																																					\
+			ItemClass::initializationRegistry().add(ItemClass::defaultInit);															\
+		}																																					\
+};																																							\
+static ItemClass##InitializerClass ItemClass##InitializerClassInstance_;															\
+																																							\
+Visualization::InteractionHandler* ItemClass::defaultClassHandler_ =	 nullptr;													\
 																																							\
 void ItemClass::setStyle(const Visualization::ItemStyle* style_)																		\
 {																																							\
@@ -104,6 +112,12 @@ void ItemClass::setStyle(const Visualization::ItemStyle* style_)																
 	const StyleType* s = dynamic_cast<const StyleType*> (style_);																		\
 	if (!s) throw Visualization::VisualizationException("Invalid style type when calling " #ItemClass "::setStyle");	\
 	Item::setStyle(s);																																\
+}																																							\
+																																							\
+Visualization::InteractionHandler* ItemClass::handler() const																			\
+{																																							\
+	if (defaultClassHandler()) return defaultClassHandler();																				\
+	return BaseItemType::handler();																												\
 }																																							\
 																																							\
 const QString& ItemClass::className()																											\

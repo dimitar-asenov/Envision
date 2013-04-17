@@ -33,9 +33,6 @@
 
 #include "VisualizationBase/src/Scene.h"
 
-#include "InteractionBase/src/handlers/GenericHandler.h"
-#include "InteractionBase/src/handlers/HText.h"
-
 Q_EXPORT_PLUGIN2( controlflowvisualization, ControlFlowVisualization::ControlFlowVisualization )
 
 using namespace OOModel;
@@ -80,17 +77,7 @@ bool ControlFlowVisualization::initialize(Core::EnvisionManager&)
 			createVisualization<VContinueStatementCF, ContinueStatement>);
 
 	// Register handlers
-	// TODO: replace this with custom handlers, possibly from OOInteraction Plugin
-	// TODO: when you do that fix dependencies in the .plugin meta file
-	VListCF::setInteractionHandler(Interaction::GenericHandler::instance());
-	VMethodCF::setInteractionHandler(Interaction::GenericHandler::instance());
-	VIfStatementCF::setInteractionHandler(Interaction::GenericHandler::instance());
-	VLoopStatementCF::setInteractionHandler(Interaction::GenericHandler::instance());
-//	VForEachStatementCF::setInteractionHandler(Interaction::GenericHandler::instance());
-	VBreakStatementCF::setInteractionHandler(Interaction::GenericHandler::instance());
-	VContinueStatementCF::setInteractionHandler(Interaction::GenericHandler::instance());
-	VBlockCF::setInteractionHandler(Interaction::GenericHandler::instance());
-	VReturnStatementCF::setInteractionHandler(Interaction::GenericHandler::instance());
+	// TODO: register custom handlers, possibly from OOInteraction Plugin
 
 	return true;
 }

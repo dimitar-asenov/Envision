@@ -56,7 +56,7 @@ void HBinaryNode::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			AutoComplete::show(entr);
 		}
 	}
-	else InteractionHandler::keyPressEvent(target, event);
+	else HExtendable::keyPressEvent(target, event);
 }
 
 } /* namespace Interaction */

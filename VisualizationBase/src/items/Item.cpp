@@ -38,6 +38,8 @@
 
 namespace Visualization {
 
+InteractionHandler* Item::defaultClassHandler_ = InteractionHandler::instance();
+
 int Item::registerVisualization()
 {
 	static QMutex mutex;
@@ -297,7 +299,7 @@ void Item::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
 
 InteractionHandler* Item::handler() const
 {
-	return InteractionHandler::instance();
+	return defaultClassHandler();
 }
 
 void Item::execute(const QString& command)

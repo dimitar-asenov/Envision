@@ -47,7 +47,7 @@ using namespace Visualization;
 
 TEST(InteractionBase, TextSelect)
 {
-	Visualization::VExtendable::setInteractionHandler(HBinaryNode::instance());
+	Visualization::VExtendable::setDefaultClassHandler(HBinaryNode::instance());
 
 	Model::Model* model = new Model::Model();
 	Model::List* list = static_cast<Model::List*> (model->createRoot("List"));
