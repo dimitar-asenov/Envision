@@ -32,6 +32,9 @@
 
 namespace Visualization {
 
+/**
+ * Base class for an element wrapping an item.
+ */
 template <class ParentType, class ChildItemType = Item>
 class ItemWrapperElement : public Element
 {

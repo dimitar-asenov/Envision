@@ -48,25 +48,72 @@ class VISUALIZATIONBASE_API SequentialLayoutElement : public LayoutElement
 		using ListOfNodesGetterFunction = std::function<QList<Model::Node*>(Item* item)>;
 		using ListOfItemsGetterFunction = std::function<QList<Item*>(Item* item)>;
 
-		// Functions executable on element definition
 		SequentialLayoutElement();
 		virtual ~SequentialLayoutElement();
 
+		// Functions executable on element definition
+		/**
+		 * Sets the getter (\a listNodeGetter) for getting a node of type List, from which the list of items to render in
+		 * the sequential layout can be computed. The items will be rendered with their default style.
+		 */
 		SequentialLayoutElement* setListNode(ListNodeGetterFunction listNodeGetter);
+		/**
+		 * Sets the getter (\a nodeListGetter) for getting a list of nodes, from which the list of items to render in the
+		 * sequential layout can be computed. The items will be rendered with their default style.
+		 */
 		SequentialLayoutElement* setListOfNodes(ListOfNodesGetterFunction nodeListGetter);
+		/**
+		 * Sets the getter (\a itemListGetter) for getting a list of items to render in the sequential layout.
+		 */
 		SequentialLayoutElement* setListOfItems(ListOfItemsGetterFunction itemListGetter);
+		/**
+		 * Sets what the \a space between two elements in the sequential layout should be.
+		 */
 		SequentialLayoutElement* setSpaceBetweenElements(int space);
+		/**
+		 * Sets a getter (\a spaceBetweenElementsGetter) for getting the appropriate space between two elements dynamically
+		 * while rendering. If this getter is set, anything set with the setSpaceBetweenElements(int) will be ignored.
+		 */
 		SequentialLayoutElement* setSpaceBetweenElements(std::function<int()> spaceBetweenElementsGetter);
-		SequentialLayoutElement* setOrientation(Qt::Orientation o);
+		/**
+		 * Sets the \a orientation of this sequential layout. Also sets the alignment to the default (bottom for horizontal,
+		 * left for vertical).
+		 */
+		SequentialLayoutElement* setOrientation(Qt::Orientation orientation);
+		/**
+		 * Sets this sequential layout to be horizontal, also sets the alignment to the default (bottom)
+		 */
 		SequentialLayoutElement* setHorizontal();
+		/**
+		 * Sets this sequential layout to be vertical, also sets the alignment to the default (left)
+		 */
 		SequentialLayoutElement* setVertical();
-		SequentialLayoutElement* setAlignment(LayoutStyle::Alignment a);
+		/**
+		 * Sets the \a alignment. If it is not compatible with the layout's orientation, it will fall back to the default.
+		 */
+		SequentialLayoutElement* setAlignment(LayoutStyle::Alignment alignment);
+		/**
+		 * Defines if this layout should be displayed forwards (true) or backwards (false).
+		 * Example:
+		 * forwards (default): |0|1|2|3|
+		 * backwards:          |3|2|1|0|
+		 */
 		SequentialLayoutElement* setForward(bool forward);
+		/**
+		 * Sets the minimum width to \a minWidth.
+		 */
 		SequentialLayoutElement* setMinWidth(int minWidth);
+		/**
+		 * Sets the minimum height to \a minHeight.
+		 */
 		SequentialLayoutElement* setMinHeight(int minHeight);
+		// TODO: documentation setHasCursorWhenEmpty
 		SequentialLayoutElement* setHasCursorWhenEmpty(bool cursorWhenEmpty);
+		// TODO: documentation setNotLocationEquivalentCursors
 		SequentialLayoutElement* setNotLocationEquivalentCursors(bool notLocationEquivalent);
+		// TODO: documentation setNoBoundaryCursors
 		SequentialLayoutElement* setNoBoudaryCursors(bool noBoundaryCursors);
+		// TODO: documentation setNoInnerCursors
 		SequentialLayoutElement* setNoInnerCursors(bool noInnerCursors);
 
 		// Methods executable when items need to be rendered
@@ -78,8 +125,18 @@ class VISUALIZATIONBASE_API SequentialLayoutElement : public LayoutElement
 
 		bool isEmpty(const Item* item) const override;
 		bool elementOrChildHasFocus(Item* item) const override;
+		/**
+		 * Returns the index of the focused element for the specified \a item. If no element is focused, returns -1. This
+		 * method is very similar to the focsedElementIndex of SequentialLayout (layouts folder).
+		 */
 		int focusedElementIndex(const Item* item) const;
+		/**
+		 * Returns the length of the displayed list of items for this item.
+		 */
 		int length(const Item* item) const;
+		/**
+		 * Returns the item at \a itemIndex for this \a item.
+		 */
 		template <class T> T* itemAt(const Item* item, int itemIndex) const;
 
 		// Recursive item destruction
@@ -105,10 +162,25 @@ class VISUALIZATIONBASE_API SequentialLayoutElement : public LayoutElement
 
 		mutable QHash<const Item*, QList<Item*>*> itemListMap_{};
 
+		/**
+		 * Returns the cached item list for this item.
+		 */
 		QList<Item*>& listForItem(const Item* item) const;
+		/**
+		 * Computes the space between elements from the getter and the previously set space.
+		 */
 		int spaceBetweenElements();
+		/**
+		 * Synchronizes the old list of items for this \a item with the new list of \a nodes.
+		 */
 		void synchronizeWithNodes(Item* item, const QList<Model::Node*>& nodes);
+		/**
+		 * Synchronizes the old list of items for this \a item with the new list of \a items.
+		 */
 		void synchronizeWithItems(Item* item, const QList<Item*>& items);
+		/**
+		 * Swaps the items at positions \a i and \a j in the list of items for \a item.
+		 */
 		void swap(Item* item, int i, int j);
 		void adjustCursorRegionToAvoidZeroSize(QRect& region, bool horizontal, bool first, bool last);
 };
@@ -142,9 +214,9 @@ inline SequentialLayoutElement* SequentialLayoutElement::setSpaceBetweenElements
 	spaceBetweenElementsGetter_ = spaceBetweenElementsGetter;
 	return this;
 }
-inline SequentialLayoutElement* SequentialLayoutElement::setOrientation(Qt::Orientation o)
+inline SequentialLayoutElement* SequentialLayoutElement::setOrientation(Qt::Orientation orientation)
 {
-	orientation_ = o;
+	orientation_ = orientation;
 	if (orientation_ == Qt::Horizontal)
 		alignment_ = LayoutStyle::Alignment::Bottom;
 	else
@@ -163,9 +235,9 @@ inline SequentialLayoutElement* SequentialLayoutElement::setVertical()
 	alignment_ = LayoutStyle::Alignment::Left;
 	return this;
 }
-inline SequentialLayoutElement* SequentialLayoutElement::setAlignment(LayoutStyle::Alignment a)
+inline SequentialLayoutElement* SequentialLayoutElement::setAlignment(LayoutStyle::Alignment alignment)
 {
-	alignment_ = a;
+	alignment_ = alignment;
 	return this;
 }
 inline SequentialLayoutElement* SequentialLayoutElement::setForward(bool forward)

@@ -61,13 +61,6 @@ GridLayoutElement::~GridLayoutElement()
 	// elements were deleted by Element
 }
 
-/**
- * Puts the element at the specified position in the grid.
- * @param column The column where to put the element
- * @param row The row where to put the element
- * @param element The element to put in the grid
- * @return A pointer to this GridLayoutElement
- */
 GridLayoutElement* GridLayoutElement::put(int column, int row, Element* element)
 {
 	adjustSize(column, row);
@@ -220,7 +213,7 @@ void GridLayoutElement::computeSize(Item* item, int availableWidth, int availabl
 				}
 			}
 
-	// Set item positions
+	// Set element positions
 	int left = leftMargin();
 	for(int x=0; x<numColumns_; ++x)
 	{

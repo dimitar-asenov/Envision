@@ -33,6 +33,14 @@ namespace Visualization {
 
 class Item;
 
+/**
+ * The DeclarativeItem class is the base class for all visualization items that use the declarative API for visualizations.
+ *
+ * It is a template class, such that every descendant visualization type has its own static list of available forms.
+ *
+ * To use the declarative API, one needs to inherit from DeclarativeItem, and implement a static method initializeForms
+ * in which the list of forms and their properties is set up.
+ */
 template <class VisualizationType>
 class DeclarativeItem : public DeclarativeItemBase
 {
@@ -43,8 +51,19 @@ class DeclarativeItem : public DeclarativeItemBase
 		virtual QList<Element*>& forms() const override;
 		virtual QList<QList<Element*>>& shapeElements() const override;
 	protected:
+		/**
+		 * Static vertion of the method forms, returning the list of forms for this declarative item type.
+		 */
 		static QList<Element*>& formsStatic();
+		/**
+		 * Static version of the method shapeElements, returning the list of shape element lists for each form.
+		 */
 		static QList<QList<Element*>>& shapeElementsStatic();
+		/**
+		 * Add an \a element to the list of forms. All the forms should be added via this method inside the static
+		 * method initializeForms.
+		 * Returns a pointer to the added element.
+		 */
 		template <class ElementType> static ElementType* addForm(ElementType* element);
 };
 
@@ -96,17 +115,10 @@ QList<QList<Element*>>& DeclarativeItem<VisualizationType>::shapeElements() cons
 	return shapeElementsStatic();
 }
 
-/**
- * Add an form to the static list of forms
- *
- * @param element The form to be added at the next index
- * @return
- */
 template <class VisualizationType>
 template <class ElementType>
 ElementType* DeclarativeItem<VisualizationType>::addForm(ElementType* element)
 {
-	// TODO: does it make sense for addForm to return an Element* ?
 	formsStatic().append(element);
 	return element;
 }

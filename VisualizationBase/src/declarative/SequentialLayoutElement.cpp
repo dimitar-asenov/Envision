@@ -437,9 +437,6 @@ int SequentialLayoutElement::focusedElementIndex(const Item* item) const
 	return -1;
 }
 
-/**
- * Returns the length of the displayed list of items for this item.
- */
 int SequentialLayoutElement::length(const Item* item) const
 {
 	auto& itemList = listForItem(item);

@@ -41,9 +41,21 @@ class ElementCache
 	public:
 		ElementCache() {};
 		virtual ~ElementCache() {};
+		/**
+		 * Sets the size property of this element cache to the specified \a size.
+		 */
 		void setSize(const QSize& size);
-		void setPos(const QPoint& pos);
+		/**
+		 * Sets the position property for this element cache to the specified \a position.
+		 */
+		void setPos(const QPoint& position);
+		/**
+		 * Returns the size property of this element cache.
+		 */
 		QSize size() const;
+		/**
+		 * Returns the position property of this element cache.
+		 */
 		QPoint pos() const;
 
 	private:
@@ -51,49 +63,179 @@ class ElementCache
 		QPoint pos_{}; // Position relative to the parent element
 };
 
+/**
+ * Base class for all the elements, that can be added as a form to a DeclarativeItem.
+ *
+ * It implements some basic behavior, such as a list of children, and margins.
+ */
 class VISUALIZATIONBASE_API Element
 {
-	public: // Methods executable on element definition
+	public:
 		virtual ~Element();
-		// set margins
-		Element* setMargins(int left, int top, int right, int bottom);
-		Element* setMargins(int margin);
-		Element* setTopMargin(int top);
-		Element* setBottomMargin(int bottom);
-		Element* setLeftMargin(int left);
-		Element* setRightMargin(int right);
+		/**
+		 * Returns the list of shape elements inside this element.
+		 * Recursively collects the shape elements from the element's children.
+		 * Method is called once after the static initialization of the visualization item type.
+		 */
 		virtual QList<Element*> shapeElements();
 
-	public: // Methods executable when items need to be rendered
-		virtual void synchronizeWithItem(Item* item);
-		virtual void computeSize(Item* item, int availableWidth, int availableHeight) = 0;
-		virtual void setItemPositions(Item* item, int parentX=0, int parentY=0);
-		virtual bool sizeDependsOnParent(const Item* item) const = 0;
-		virtual QList<ItemRegion> regions(Item* item, int parentX=0, int parentY=0);
-		void setPos(Item* item, const QPoint& pos);
-		QPoint pos(Item* item) const;
-		QSize size(Item* item) const;
-		int x(Item* item) const;
-		int y(Item* item) const;
-		int width(Item* item) const;
-		int height(Item* item) const;
-		int xEnd(Item* item) const;
-		int yEnd(Item* item) const;
-		virtual bool elementOrChildHasFocus(Item* item) const;
-		virtual bool isEmpty(const Item* item) const;
+		// Methods executable on element definition
+		/**
+		 * Sets the \a left, \a top, \a right and \a bottom margins to the respective values.
+		 * Returns a pointer to this Element.
+		 */
+		Element* setMargins(int left, int top, int right, int bottom);
+		/**
+		 * Sets all the margins of this element to the value specified as \a margin.
+		 * Returns a pointer to this Element.
+		 */
+		Element* setMargins(int margin);
+		/**
+		 * Sets the \a top margin of this element.
+		 * Returns a pointer to this Element.
+		 */
+		Element* setTopMargin(int top);
+		/**
+		 * Sets the \a bottom margin of this element.
+		 * Returns a pointer to this Element.
+		 */
+		Element* setBottomMargin(int bottom);
+		/**
+		 * Sets the \a left margin of this element.
+		 * Returns a pointer to this Element.
+		 */
+		Element* setLeftMargin(int left);
+		/**
+		 * Sets the \a right margin of this element.
+		 * Returns a pointer to this Element.
+		 */
+		Element* setRightMargin(int right);
 
-	public: // Recursive item destruction
+		// Methods executable when items need to be rendered
+		/**
+		 * Method called inside the \a item's determineChildren method to let the element and it's children update their
+		 * information about items and nodes belonging to this \a item.
+		 *
+		 * If any nodes or child items changed, this method allows the item wrappers and sequential layout to reflect those
+		 * changes.
+		 */
+		virtual void synchronizeWithItem(Item* item);
+		/**
+		 * Method called inside the \a item's updateGeometry method to compute it's size and position it's child elements.
+		 * The arguments \a availableWidth and \a availableHeight are similar to those of Item::updateGeometry. If they are
+		 * zero, the element calculates its minimum size, if it they are bigger, the element tries to stretch/grow to this
+		 * size, but not further.
+		 */
+		virtual void computeSize(Item* item, int availableWidth, int availableHeight) = 0;
+		/**
+		 * Method called inside the \a item's updateGeometry method to recursively position it's child items relative to
+		 * the \a item's position. \a parentX and \a parentY are the offsets that this element needs to have from the
+		 * parent \a item. The element then puts its children at this offset plus the offset for its children relative to
+		 * itself.
+		 */
+		virtual void setItemPositions(Item* item, int parentX=0, int parentY=0);
+		/**
+		 * Method called inside the \a item's sizeDependsOnParent method, and by some layout elements. If the element
+		 * returns true it can be, that computeSize is called on it a second time with non-zero availableWidth and
+		 * availableHeight.
+		 */
+		virtual bool sizeDependsOnParent(const Item* item) const = 0;
+		/**
+		 * Method called inside the \a item's elementOrChildHasFocus and by some layout elements. It recursively determines
+		 * if this element or any of its children has the focus for the specified \a item.
+		 */
+		virtual bool elementOrChildHasFocus(Item* item) const;
+		/**
+		 * Method called inside the \a item's isEmpty method, and by some layout elements. It recursively determines
+		 * whether the element is empty for the specified \a item.
+		 */
+		virtual bool isEmpty(const Item* item) const;
+		/**
+		 * Method called inside the \a item's regions method and returns cursor and item regions of all contained elements
+		 * for this \a item. \a parentX and \a parentY are the offsets that this element needs to have from the parent
+		 * \a item (similar to the setItemPositions method).
+		 */
+		virtual QList<ItemRegion> regions(Item* item, int parentX=0, int parentY=0);
+		/**
+		 * Caches the \a position of this element for the specified \a item.
+		 */
+		void setPos(Item* item, const QPoint& position);
+		/**
+		 * Returns the cached position of this element for the specified \a item.
+		 */
+		QPoint pos(Item* item) const;
+		/**
+		 * Returns the cached size of this element for the specified \a item.
+		 */
+		QSize size(Item* item) const;
+		/**
+		 * Returns the cached position on the x-axis of this element for the specified \a item.
+		 */
+		int x(Item* item) const;
+		/**
+		 * Returns the cached position on the y-axis of this element for the specified \a item.
+		 */
+		int y(Item* item) const;
+		/**
+		 * Returns the cached width of this element for the specified \a item.
+		 */
+		int width(Item* item) const;
+		/**
+		 * Returns the cached height of this element for the specified \a item.
+		 */
+		int height(Item* item) const;
+		/**
+		 * Returns the cached position on the x-axis where this element ends for the specified \a item. That is the position
+		 * on the x-axis + width.
+		 */
+		int xEnd(Item* item) const;
+		/**
+		 * Returns the cached position on the y-axis where this element ends for the specified \a item. That is the position
+		 * on the y-axis + height.
+		 */
+		int yEnd(Item* item) const;
+		/**
+		 * This method is recursively called on all elements to destroy all the information they might have about a
+		 * specific \a item.
+		 */
 		virtual void destroyChildItems(Item* item);
 
 	protected:
+		/**
+		 * Caches the \a size of this element for the specified \a item.
+		 */
 		void setSize(Item* item, const QSize& size);
+		/**
+		 * Returns the top margin.
+		 */
 		int topMargin();
+		/**
+		 * Returns the bottom margin.
+		 */
 		int bottomMargin();
+		/**
+		 * Returns the left margin.
+		 */
 		int leftMargin();
+		/**
+		 * Returns the right margin.
+		 */
 		int rightMargin();
+		/**
+		 * Adds a \a child to the list of children.
+		 */
 		void addChild(Element* child);
+		/**
+		 * Removes a \a child from the list of children.
+		 */
 		void removeChild(Element* child);
+		/**
+		 * Returns the list of children.
+		 */
 		const QVector<Element*>& children() const;
+		/**
+		 * Returns the element's parent element.
+		 */
 		Element* parent();
 
 	private:
@@ -105,40 +247,22 @@ class VISUALIZATIONBASE_API Element
 		QVector<Element*> children_{};
 		Element* parent_{};
 
+		/**
+		 * Returns the element property cache of this element for a specific \a item.
+		 */
 		ElementCache& getCache(const Item* item) const;
+		/**
+		 * Clears the element property cache of this element for a specific \a item.
+		 */
 		void clearCache(const Item* item);
 		mutable QHash<const Item*, ElementCache*> elementCache_{};
 };
 
-/**
- * Sets the size property of this element cache.
- * @param size The size to set the property to
- */
 inline void ElementCache::setSize(const QSize& size) {size_ = size;}
-/**
- * Sets the position property for this element cache.
- * @param pos The position to set the property to
- */
-inline void ElementCache::setPos(const QPoint& pos) {pos_ = pos;}
-/**
- * Gets the size property of this element cache.
- * @return The cached size
- */
+inline void ElementCache::setPos(const QPoint& position) {pos_ = position;}
 inline QSize ElementCache::size() const {return size_;}
-/**
- * Gets the position property of this element cache.
- * @return The cached position
- */
 inline QPoint ElementCache::pos() const {return pos_;}
 
-/**
- * Sets all the margins of this element
- * @param left Left margin
- * @param top Top margin
- * @param right Right margin
- * @param bottom Bottom margin
- * @return A pointer to this Element
- */
 inline Element* Element::setMargins(int left, int top, int right, int bottom)
 {
 	marginLeft_ = left;
@@ -147,11 +271,6 @@ inline Element* Element::setMargins(int left, int top, int right, int bottom)
 	marginBottom_ = bottom;
 	return this;
 }
-/**
- * Sets all the margins of this element
- * @param margin Margin for all four sides
- * @return A pointer to this Element
- */
 inline Element* Element::setMargins(int margin)
 {
 	marginLeft_ = margin;
@@ -160,154 +279,35 @@ inline Element* Element::setMargins(int margin)
 	marginBottom_ = margin;
 	return this;
 }
-/**
- * Sets the top margin of this element
- * @param top Top margin
- * @return A pointer to this Element
- */
 inline Element* Element::setTopMargin(int top) {marginTop_ = top; return this;}
-/**
- * Sets the bottom margin of this element
- * @param bottom Bottom margin
- * @return A pointer to this Element
- */
 inline Element* Element::setBottomMargin(int bottom) {marginBottom_ = bottom; return this;}
-/**
- * Sets the left margin of this element
- * @param left Left margin
- * @return A pointer to this Element
- */
 inline Element* Element::setLeftMargin(int left) {marginLeft_ = left; return this;}
-/**
- * Sets the right margin of this element
- * @param right Right margin
- * @return A pointer to this Element
- */
 inline Element* Element::setRightMargin(int right) {marginRight_ = right; return this;}
 
-/**
- * This method is called while rendering the item.
- *
- * Gets the cached size of this element for the specified item.
- * @param item The item for which to get the size of the element
- * @return The size of this element, as cached for the specified item
- */
 inline QSize Element::size(Item* item) const {return getCache(item).size();}
-/**
- * This method is called while rendering the item.
- *
- * Caches the size of this element for the specified item.
- * @param item Item for which to cache the element's size
- * @param size The size to cache for this element
- */
 inline void Element::setSize(Item* item, const QSize& size) {getCache(item).setSize(size);}
-
-/**
- * This method is called while rendering the item.
- *
- * Gets the cached position of this element for the specified item.
- * @param item The item for which to get the position of the element
- * @return The position of this element, as cached for the specified item
- */
 inline QPoint Element::pos(Item* item) const {return getCache(item).pos();}
-/**
- * This method is called while rendering the item.
- *
- * Caches the position of this element for the specified item.
- * @param item Item for which to cache the element's position
- * @param size The position to cache for this element
- */
-inline void Element::setPos(Item* item, const QPoint& pos) {getCache(item).setPos(pos);}
+inline void Element::setPos(Item* item, const QPoint& position) {getCache(item).setPos(position);}
 
-/**
- * Gets the top margin
- * @return Top margin
- */
-inline int Element::topMargin() {return marginTop_;}
-/**
- * Gets the bottom margin
- * @return Bottom margin
- */
-inline int Element::bottomMargin() {return marginBottom_;}
-/**
- * Gets the left margin
- * @return Left margin
- */
-inline int Element::leftMargin() {return marginLeft_;}
-/**
- * Gets the right margin
- * @return Right margin
- */
-inline int Element::rightMargin() {return marginRight_;}
-
-/**
- * This method is called while rendering the item.
- *
- * Gets the cached position on x-axis of this element for the specified item.
- * @param item The item for which to get the position of the element
- * @return The position on the x-axis of this element, as cached for the specified item
- */
 inline int Element::x(Item* item) const {return pos(item).x();}
-/**
- * This method is called while rendering the item.
- *
- * Gets the cached position on y-axis of this element for the specified item.
- * @param item The item for which to get the position of the element
- * @return The position on the y-axis of this element, as cached for the specified item
- */
 inline int Element::y(Item* item) const {return pos(item).y();}
-/**
- * This method is called while rendering the item.
- *
- * Gets the cached width of this element for the specified item.
- * @param item The item for which to get the width of the element
- * @return The width of this element, as cached for the specified item
- */
 inline int Element::width(Item* item) const {return size(item).width();}
-/**
- * This method is called while rendering the item.
- *
- * Gets the cached height of this element for the specified item.
- * @param item The item for which to get the height of the element
- * @return The height of this element, as cached for the specified item
- */
 inline int Element::height(Item* item) const {return size(item).height();}
-/**
- * This method is called while rendering the item.
- *
- * Gets the cached position on x-axis where this element ends for the specified item. That is position on x-axis + width.
- * @param item The item for which to get the position of the element
- * @return The position on the x-axis of this element, as cached for the specified item
- */
 inline int Element::xEnd(Item* item) const {return pos(item).x() + size(item).width();}
-/**
- * This method is called while rendering the item.
- *
- * Gets the cached position on y-axis where this element ends for the specified item. That is position on y-axis + height.
- * @param item The item for which to get the position of the element
- * @return The position on the y-axis of this element, as cached for the specified item
- */
 inline int Element::yEnd(Item* item) const {return pos(item).y() + size(item).height();}
 
-/**
- * Adds a child to the list of children.
- * @param child The child element to add
- */
+inline int Element::topMargin() {return marginTop_;}
+inline int Element::bottomMargin() {return marginBottom_;}
+inline int Element::leftMargin() {return marginLeft_;}
+inline int Element::rightMargin() {return marginRight_;}
+
 inline void Element::addChild(Element* child){children_.append(child); child->parent_ = this;}
-/**
- * Removes a child to the list of children.
- * @param child The child element to remove
- */
 inline void Element::removeChild(Element* child)
 {
 	if (child)
 		for (int i=0; i<children_.size(); ++i)
 			if (child == children_[i]) children_.remove(i);
 }
-/**
- * Returns the list of children.
- * @return child The list of child elements
- */
 inline const QVector<Element*>& Element::children() const {return children_;}
 
 } /* namespace Visualization */
@@ -315,43 +315,34 @@ inline const QVector<Element*>& Element::children() const {return children_;}
 #define FLUENT_ELEMENT_INTERFACE(ClassName)																									\
 public:																																					\
 	/**
-	 * Sets all the margins of this element
-	 * @param left Left margin
-	 * @param top Top margin
-	 * @param right Right margin
-	 * @param bottom Bottom margin
-	 * @return A pointer to this element
+	 * Sets the \a left, \a top, \a right and \a bottom margins to the respective values.
+	 * Returns a pointer to this element.
 	 */																																					\
 	ClassName* setMargins(int left, int top, int right, int bottom) {																	\
 		return static_cast<ClassName*>(Element::setMargins(left, top, right, bottom));											\
 	}																																						\
 	/**
-	 * Sets all the margins of this element
-	 * @param margin Margin for all four sides
-	 * @return A pointer to this element
+	 * Sets all the margins of this element to the value specified as \a margin.
+	 * Returns a pointer to this element.
 	 */																																					\
 	ClassName* setMargins(int margin) {return static_cast<ClassName*>(Element::setMargins(margin));}						\
 	/**
-	 * Sets the top margin of this element
-	 * @param top Top margin
-	 * @return A pointer to this element
+	 * Sets the \a top margin of this element.
+	 * Returns a pointer to this element.
 	 */																																					\
 	ClassName* setTopMargin(int top) {return static_cast<ClassName*>(Element::setTopMargin(top));}							\
 	/**
-	 * Sets the bottom margin of this element
-	 * @param bottom Bottom margin
-	 * @return A pointer to this element
+	 * Sets the \a bottom margin of this element.
+	 * Returns a pointer to this element.
 	 */																																					\
 	ClassName* setBottomMargin(int bottom) {return static_cast<ClassName*>(Element::setBottomMargin(bottom));}			\
 	/**
-	 * Sets the left margin of this element
-	 * @param left Left margin
-	 * @return A pointer to this element
+	 * Sets the \a left margin of this element.
+	 * Returns a pointer to this element.
 	 */																																					\
 	ClassName* setLeftMargin(int left) {return static_cast<ClassName*>(Element::setLeftMargin(left));}						\
 	/**
-	 * Sets the right margin of this element
-	 * @param right Right margin
-	 * @return A pointer to this element
+	 * Sets the \a right margin of this element.
+	 * Returns a pointer to this element.
 	 */																																					\
 	ClassName* setRightMargin(int right) {return static_cast<ClassName*>(Element::setRightMargin(right));}
