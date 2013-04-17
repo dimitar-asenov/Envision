@@ -32,7 +32,7 @@ public:
 };
 }
 
-
+namespace TestSpace{
 namespace innerNameSpace {
 
 
@@ -47,6 +47,7 @@ private:
     };
 
 };
+}
 }
 }
 

@@ -41,12 +41,34 @@ ClangAstVisitor::~ClangAstVisitor()
 
 bool ClangAstVisitor::TraverseNamespaceDecl(clang::NamespaceDecl *nd)
 {
-    OOModel::Module* ooModule = trMngr_->insertNamespace(nd);
+    OOModel::Module* ooModule = nullptr;
     // insert it in model
     if(OOModel::Project* curProject = dynamic_cast<OOModel::Project*>(ooStack_.top()))
-        curProject->modules()->append(ooModule);
+    {
+        ooModule = trMngr_->insertNamespace(nd, ooStack_.size()-1);
+        // TODO this is a loop which is bad an should be avoided by a contains operation
+        bool list_contains_val = false;
+        for(int i = 0; i < curProject->modules()->size();i++)
+            if(curProject->modules()->at(i) == ooModule)
+                list_contains_val = true;
+        if(!list_contains_val)
+           curProject->modules()->append(ooModule);
+    }
     else if(OOModel::Module* curModel = dynamic_cast<OOModel::Module*>(ooStack_.top()))
-        curModel->modules()->append(ooModule);
+    {
+        ooModule = trMngr_->insertNamespace(nd, ooStack_.size());
+        // check if the namespace is already the one which is active
+        if(curModel == ooModule)
+            return true;
+        // TODO this is a loop which is bad an should be avoided by a contains operation
+        bool list_contains_val = false;
+        for(int i = 0; i < curModel->modules()->size();i++)
+            if(curModel->modules()->at(i) == ooModule)
+                list_contains_val = true;
+        if(!list_contains_val)
+            curModel->modules()->append(ooModule);
+
+    }
     else
         log_->writeError(className_,QString("uknown where to put namespace"),QString("NamespaceDecl"),nd->getNameAsString());
 

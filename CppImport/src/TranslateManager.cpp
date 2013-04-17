@@ -31,15 +31,28 @@ TranslateManager::TranslateManager(Model::Model* model, OOModel::Project* projec
 {
 }
 
-OOModel::Module *TranslateManager::insertNamespace(clang::NamespaceDecl *nd)
+OOModel::Module *TranslateManager::insertNamespace(clang::NamespaceDecl *nd, int depth)
 {
     if(nameSpaceMap_.contains(nd))
-        return nameSpaceMap_.value(nd);
+        return nameSpaceMap_.value(nd).first;
     else
     {
+        QMap<clang::NamespaceDecl*, QPair<OOModel::Module*,int> >::iterator it = nameSpaceMap_.begin();
+        for(;it!=nameSpaceMap_.end();++it)
+        {
+            if(it.key()->getNameAsString() == nd->getNameAsString())
+            {
+                // the namespace is already in the map
+                // check if both have the same depth
+                if(it.value().second == depth)
+                    // the namespace is already existing
+                    return it.value().first;
+            }
+        }
         OOModel::Module* ooModule = new OOModel::Module();
         ooModule->setName(QString::fromStdString(nd->getNameAsString()));
-        nameSpaceMap_.insert(nd,ooModule);
+        // TODO handle depth of namespace
+        nameSpaceMap_.insert(nd,qMakePair(ooModule,depth));
         return ooModule;
     }
 }
