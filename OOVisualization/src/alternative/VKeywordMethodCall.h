@@ -28,10 +28,10 @@
 
 #include "../oovisualization_api.h"
 #include "VKeywordMethodCallStyle.h"
+#include "../expressions/VExpression.h"
 
 #include "OOModel/src/expressions/MethodCallExpression.h"
 
-#include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/items/LayoutProvider.h"
 
 namespace Visualization {
@@ -42,7 +42,7 @@ namespace Visualization {
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VKeywordMethodCall
-	: public Visualization::ItemWithNode<VKeywordMethodCall,
+	: public VExpression<VKeywordMethodCall,
 	  Visualization::LayoutProvider<>, OOModel::MethodCallExpression, false>
 {
 		ITEM_COMMON(VKeywordMethodCall)
@@ -58,7 +58,7 @@ class OOVISUALIZATION_API VKeywordMethodCall
 		void determineChildren();
 
 	private:
-		typedef Visualization::ItemWithNode<VKeywordMethodCall,
+		typedef VExpression<VKeywordMethodCall,
 				Visualization::LayoutProvider<>, OOModel::MethodCallExpression, false> BaseItemType;
 
 		Visualization::Static* keyword_;

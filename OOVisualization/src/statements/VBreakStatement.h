@@ -27,16 +27,15 @@
 #pragma once
 
 #include "../oovisualization_api.h"
+#include "VStatementItem.h"
 
-#include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/items/Static.h"
-
 #include "OOModel/src/statements/BreakStatement.h"
 
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VBreakStatement
-	: public Visualization::ItemWithNode<VBreakStatement, Visualization::Item, OOModel::BreakStatement>
+	: public VStatementItem<VBreakStatement, Visualization::Item, OOModel::BreakStatement>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VBreakStatement, Visualization::StaticStyle)
 
@@ -49,7 +48,7 @@ class OOVISUALIZATION_API VBreakStatement
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		typedef Visualization::ItemWithNode<VBreakStatement, Visualization::Item, OOModel::BreakStatement> BaseItemType;
+		typedef VStatementItem<VBreakStatement, Visualization::Item, OOModel::BreakStatement> BaseItemType;
 
 		Visualization::Static* vis_;
 };

@@ -27,16 +27,15 @@
 #pragma once
 
 #include "../oovisualization_api.h"
+#include "../expressions/VExpression.h"
 
-#include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/items/Static.h"
-
 #include "OOModel/src/expressions/NullLiteral.h"
 
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VNullLiteral
-	: public Visualization::ItemWithNode<VNullLiteral, Visualization::Item, OOModel::NullLiteral>
+	: public VExpression<VNullLiteral, Visualization::Item, OOModel::NullLiteral>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VNullLiteral, Visualization::StaticStyle)
 
@@ -49,7 +48,7 @@ class OOVISUALIZATION_API VNullLiteral
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		typedef Visualization::ItemWithNode<VNullLiteral, Visualization::Item, OOModel::NullLiteral> BaseItemType;
+		typedef VExpression<VNullLiteral, Visualization::Item, OOModel::NullLiteral> BaseItemType;
 
 		Visualization::Static* vis_;
 };

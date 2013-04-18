@@ -28,10 +28,9 @@
 
 #include "../oovisualization_api.h"
 #include "OperatorStyle.h"
+#include "VExpression.h"
 
 #include "OOModel/src/expressions/ConditionalExpression.h"
-
-#include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/items/LayoutProvider.h"
 
 namespace Visualization {
@@ -40,7 +39,7 @@ namespace Visualization {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VConditionalExpression : public Visualization::ItemWithNode<VConditionalExpression,
+class OOVISUALIZATION_API VConditionalExpression : public VExpression<VConditionalExpression,
 	Visualization::LayoutProvider<>, OOModel::ConditionalExpression>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VConditionalExpression, OperatorStyle)
@@ -53,8 +52,8 @@ class OOVISUALIZATION_API VConditionalExpression : public Visualization::ItemWit
 		void determineChildren();
 
 	private:
-		typedef Visualization::ItemWithNode<VConditionalExpression,
-				Visualization::LayoutProvider<>, OOModel::ConditionalExpression> BaseItemType;
+		typedef VExpression<VConditionalExpression, Visualization::LayoutProvider<>, OOModel::ConditionalExpression>
+			BaseItemType;
 
 		Visualization::Static* pre_;
 		Visualization::Static* in_;

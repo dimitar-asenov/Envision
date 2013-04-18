@@ -28,10 +28,9 @@
 
 #include "../oovisualization_api.h"
 #include "VVariableDeclarationStyle.h"
+#include "VExpression.h"
 
 #include "OOModel/src/expressions/VariableDeclaration.h"
-
-#include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/items/LayoutProvider.h"
 
 namespace Visualization {
@@ -41,7 +40,7 @@ namespace Visualization {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VVariableDeclaration : public Visualization::ItemWithNode<VVariableDeclaration,
+class OOVISUALIZATION_API VVariableDeclaration : public VExpression<VVariableDeclaration,
 	Visualization::LayoutProvider<>, OOModel::VariableDeclaration>
 {
 	ITEM_COMMON(VVariableDeclaration)
@@ -59,7 +58,7 @@ class OOVISUALIZATION_API VVariableDeclaration : public Visualization::ItemWithN
 		void determineChildren();
 
 	private:
-		typedef Visualization::ItemWithNode<VVariableDeclaration, Visualization::LayoutProvider<>,
+		typedef VExpression<VVariableDeclaration, Visualization::LayoutProvider<>,
 			OOModel::VariableDeclaration> BaseItemType;
 
 		Visualization::VText* name_;

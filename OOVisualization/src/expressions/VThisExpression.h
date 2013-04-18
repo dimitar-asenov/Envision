@@ -27,15 +27,14 @@
 #pragma once
 
 #include "../oovisualization_api.h"
+#include "VExpression.h"
 
-#include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/items/Static.h"
-
 #include "OOModel/src/expressions/ThisExpression.h"
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VThisExpression : public Visualization::ItemWithNode<VThisExpression, Visualization::Item,
+class OOVISUALIZATION_API VThisExpression : public VExpression<VThisExpression, Visualization::Item,
 OOModel::ThisExpression>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VThisExpression, Visualization::StaticStyle)
@@ -49,7 +48,7 @@ OOModel::ThisExpression>
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		typedef Visualization::ItemWithNode<VThisExpression, Visualization::Item, OOModel::ThisExpression> BaseItemType;
+		typedef VExpression<VThisExpression, Visualization::Item, OOModel::ThisExpression> BaseItemType;
 
 		Visualization::Static* vis_;
 };

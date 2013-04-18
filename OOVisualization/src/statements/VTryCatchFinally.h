@@ -28,10 +28,9 @@
 
 #include "../oovisualization_api.h"
 #include "VTryCatchFinallyStyle.h"
+#include "VStatementItem.h"
 
 #include "OOModel/src/statements/TryCatchFinallyStatement.h"
-
-#include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/items/LayoutProvider.h"
 
 namespace Visualization {
@@ -46,7 +45,7 @@ namespace OOVisualization {
 class VStatementItemList;
 
 class OOVISUALIZATION_API VTryCatchFinally
-	: public Visualization::ItemWithNode<VTryCatchFinally,
+	: public VStatementItem<VTryCatchFinally,
 	  Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::TryCatchFinallyStatement>
 {
 	ITEM_COMMON(VTryCatchFinally)
@@ -69,7 +68,7 @@ class OOVISUALIZATION_API VTryCatchFinally
 		void determineChildren();
 
 	private:
-		typedef Visualization::ItemWithNode<VTryCatchFinally,
+		typedef VStatementItem<VTryCatchFinally,
 			Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
 			OOModel::TryCatchFinallyStatement> BaseItemType;
 

@@ -28,10 +28,9 @@
 
 #include "../oovisualization_api.h"
 #include "OperatorStyle.h"
+#include "VExpression.h"
 
 #include "OOModel/src/expressions/UnaryOperation.h"
-
-#include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/items/LayoutProvider.h"
 
 namespace Visualization {
@@ -41,7 +40,7 @@ namespace Visualization {
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VUnaryOperation
-	: public Visualization::ItemWithNode<VUnaryOperation, Visualization::LayoutProvider<>, OOModel::UnaryOperation>
+	: public VExpression<VUnaryOperation, Visualization::LayoutProvider<>, OOModel::UnaryOperation>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VUnaryOperation, OperatorSequenceStyle)
 
@@ -57,7 +56,7 @@ class OOVISUALIZATION_API VUnaryOperation
 		virtual void determineChildren();
 
 	private:
-		typedef Visualization::ItemWithNode<VUnaryOperation, Visualization::LayoutProvider<>, OOModel::UnaryOperation>
+		typedef VExpression<VUnaryOperation, Visualization::LayoutProvider<>, OOModel::UnaryOperation>
 			BaseItemType;
 
 		Visualization::Static* pre_;

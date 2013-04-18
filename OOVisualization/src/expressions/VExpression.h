@@ -27,48 +27,48 @@
 #pragma once
 
 #include "../oovisualization_api.h"
-#include "VLambdaExpressionStyle.h"
-#include "VExpression.h"
-
-#include "OOModel/src/expressions/LambdaExpression.h"
-#include "VisualizationBase/src/items/LayoutProvider.h"
+#include "VisualizationBase/src/items/ItemWithNode.h"
 
 namespace Visualization {
-	class VList;
-	class Static;
+	class InteractionHandler;
 }
 
 namespace OOVisualization {
 
-class VStatementItemList;
-
-class OOVISUALIZATION_API VLambdaExpression : public VExpression<VLambdaExpression,
-	Visualization::LayoutProvider<>, OOModel::LambdaExpression>
+class OOVISUALIZATION_API VExpressionStaticData
 {
-	ITEM_COMMON(VLambdaExpression)
-
 	public:
-		VLambdaExpression(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		virtual ~VLambdaExpression();
-
-		Visualization::VList* arguments() const;
-		Visualization::Static* icon() const;
-		VStatementItemList* body() const;
-
-	protected:
-		void determineChildren();
+		static void setDefaultClassHandler(Visualization::InteractionHandler* handler);
+		static Visualization::InteractionHandler* defaultClassHandler();
 
 	private:
-		typedef VExpression<VLambdaExpression, Visualization::LayoutProvider<>, OOModel::LambdaExpression>
-			BaseItemType;
+		static Visualization::InteractionHandler* defaultClassHandler_;
+};
+inline void VExpressionStaticData::setDefaultClassHandler(Visualization::InteractionHandler* handler)
+	{defaultClassHandler_ = handler;}
+inline Visualization::InteractionHandler* VExpressionStaticData::defaultClassHandler()
+	{return defaultClassHandler_;}
 
-		Visualization::VList* arguments_{};
-		Visualization::Static* icon_{};
-		VStatementItemList* body_{};
+
+template <class Derived, class Super, class ContainedNode, bool defaultInitialization = true>
+class VExpression  : public Visualization::ItemWithNode<Derived, Super, ContainedNode, defaultInitialization> {
+	public:
+		VExpression(Visualization::Item* parent, ContainedNode* node, const typename Super::StyleType* style=nullptr);
+
+		virtual Visualization::InteractionHandler* handler() const override;
 };
 
-inline Visualization::VList* VLambdaExpression::arguments() const { return arguments_; }
-inline Visualization::Static* VLambdaExpression::icon() const { return icon_; }
-inline VStatementItemList* VLambdaExpression::body() const { return body_; }
+template <class Derived, class Super, class ContainedNode, bool defaultInitialization>
+VExpression<Derived,Super,ContainedNode,defaultInitialization>::
+	VExpression(Visualization::Item* parent, ContainedNode* node, const typename Super::StyleType* style)
+	:Visualization::ItemWithNode<Derived, Super, ContainedNode, defaultInitialization>(parent, node, style)
+{}
+
+template <class Derived, class Super, class ContainedNode, bool defaultInitialization>
+Visualization::InteractionHandler*  VExpression<Derived,Super,ContainedNode,defaultInitialization>::handler() const
+{
+	if (VExpressionStaticData::defaultClassHandler()) return VExpressionStaticData::defaultClassHandler();
+	return Visualization::ItemWithNode<Derived, Super, ContainedNode, defaultInitialization>::handler();
+}
 
 } /* namespace OOVisualization */

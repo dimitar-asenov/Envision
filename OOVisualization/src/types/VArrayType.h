@@ -27,11 +27,11 @@
 #pragma once
 
 #include "../oovisualization_api.h"
+#include "../expressions/VExpression.h"
 
 #include "OOModel/src/expressions/types/ArrayTypeExpression.h"
 
 #include "VArrayTypeStyle.h"
-#include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/items/LayoutProvider.h"
 
 namespace Visualization {
@@ -41,7 +41,7 @@ namespace Visualization {
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VArrayType
-: public Visualization::ItemWithNode<VArrayType, Visualization::LayoutProvider<>, OOModel::ArrayTypeExpression>
+: public VExpression<VArrayType, Visualization::LayoutProvider<>, OOModel::ArrayTypeExpression>
 {
 	ITEM_COMMON(VArrayType)
 
@@ -54,7 +54,7 @@ class OOVISUALIZATION_API VArrayType
 		void determineChildren();
 
 	private:
-		typedef Visualization::ItemWithNode<VArrayType, Visualization::LayoutProvider<>, OOModel::ArrayTypeExpression>
+		typedef VExpression<VArrayType, Visualization::LayoutProvider<>, OOModel::ArrayTypeExpression>
 			BaseItemType;
 
 		Visualization::Static* symbol_;

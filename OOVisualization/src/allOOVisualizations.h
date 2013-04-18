@@ -30,13 +30,16 @@
 #include "top_level/VModule.h"
 #include "top_level/VClass.h"
 #include "top_level/VMethod.h"
+
 #include "elements/VField.h"
 #include "elements/VEnumerator.h"
 #include "elements/VFormalArgument.h"
 #include "elements/VFormalResult.h"
 #include "elements/VFormalTypeArgument.h"
 #include "elements/VStatementItemList.h"
+#include "elements/VCatchClause.h"
 
+#include "expressions/VExpression.h"
 #include "expressions/VAssignmentExpression.h"
 #include "expressions/VMethodCallExpression.h"
 #include "expressions/VReferenceExpression.h"
@@ -63,6 +66,7 @@
 #include "literals/VBooleanLiteral.h"
 #include "literals/VNullLiteral.h"
 
+#include "statements/VStatementItem.h"
 #include "statements/VBlock.h"
 #include "statements/VReturnStatement.h"
 #include "statements/VIfStatement.h"
@@ -72,7 +76,6 @@
 #include "statements/VContinueStatement.h"
 #include "statements/VExpressionStatement.h"
 #include "statements/VTryCatchFinally.h"
-#include "statements/VCatchClause.h"
 
 #include "types/VClassType.h"
 #include "types/VPrimitiveType.h"

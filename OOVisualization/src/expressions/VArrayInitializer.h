@@ -31,7 +31,7 @@
 
 #include "OOModel/src/expressions/ArrayInitializer.h"
 
-#include "VisualizationBase/src/items/ItemWithNode.h"
+#include "VExpression.h"
 #include "VisualizationBase/src/items/LayoutProvider.h"
 
 namespace Visualization {
@@ -42,7 +42,7 @@ namespace Visualization {
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VArrayInitializer
-	: public Visualization::ItemWithNode<VArrayInitializer, Visualization::LayoutProvider<Visualization::GridLayout>,
+	: public VExpression<VArrayInitializer, Visualization::LayoutProvider<Visualization::GridLayout>,
 	  OOModel::ArrayInitializer>
 {
 	ITEM_COMMON(VArrayInitializer)
@@ -60,7 +60,7 @@ class OOVISUALIZATION_API VArrayInitializer
 		void determineChildren();
 
 	private:
-		typedef Visualization::ItemWithNode<VArrayInitializer, Visualization::LayoutProvider<Visualization::GridLayout>,
+		typedef VExpression<VArrayInitializer, Visualization::LayoutProvider<Visualization::GridLayout>,
 				OOModel::ArrayInitializer> BaseItemType;
 
 		Visualization::VList* values_;

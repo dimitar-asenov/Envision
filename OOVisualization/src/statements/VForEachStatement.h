@@ -28,10 +28,10 @@
 
 #include "../oovisualization_api.h"
 #include "VForEachStatementStyle.h"
+#include "VStatementItem.h"
 
 #include "OOModel/src/statements/ForEachStatement.h"
 
-#include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/items/LayoutProvider.h"
 
 namespace Visualization {
@@ -45,7 +45,7 @@ namespace OOVisualization {
 class VStatementItemList;
 
 class OOVISUALIZATION_API VForEachStatement
-	: public Visualization::ItemWithNode<VForEachStatement,
+	: public VStatementItem<VForEachStatement,
 	  Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::ForEachStatement>
 {
 	ITEM_COMMON(VForEachStatement)
@@ -66,7 +66,7 @@ class OOVISUALIZATION_API VForEachStatement
 		void determineChildren();
 
 	private:
-		typedef Visualization::ItemWithNode<VForEachStatement,
+		typedef VStatementItem<VForEachStatement,
 				Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
 				OOModel::ForEachStatement> BaseItemType;
 

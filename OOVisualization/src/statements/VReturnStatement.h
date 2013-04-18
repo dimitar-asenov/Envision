@@ -28,10 +28,9 @@
 
 #include "../oovisualization_api.h"
 #include "VReturnStatementStyle.h"
+#include "VStatementItem.h"
 
 #include "OOModel/src/statements/ReturnStatement.h"
-
-#include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/items/LayoutProvider.h"
 
 namespace Visualization {
@@ -42,7 +41,7 @@ namespace Visualization {
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VReturnStatement
-	: public Visualization::ItemWithNode<VReturnStatement, Visualization::LayoutProvider<>, OOModel::ReturnStatement>
+	: public VStatementItem<VReturnStatement, Visualization::LayoutProvider<>, OOModel::ReturnStatement>
 {
 	ITEM_COMMON(VReturnStatement)
 
@@ -56,7 +55,7 @@ class OOVISUALIZATION_API VReturnStatement
 		void determineChildren();
 
 	private:
-		typedef Visualization::ItemWithNode<VReturnStatement, Visualization::LayoutProvider<>, OOModel::ReturnStatement>
+		typedef VStatementItem<VReturnStatement, Visualization::LayoutProvider<>, OOModel::ReturnStatement>
 			BaseItemType;
 
 		Visualization::Static* symbol_;

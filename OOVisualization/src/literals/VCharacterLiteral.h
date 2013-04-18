@@ -27,8 +27,8 @@
 #pragma once
 
 #include "../oovisualization_api.h"
+#include "../expressions/VExpression.h"
 
-#include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/items/TextStyle.h"
 #include "VisualizationBase/src/items/VCharacter.h"
 
@@ -36,7 +36,7 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VCharacterLiteral : public Visualization::ItemWithNode<VCharacterLiteral, Visualization::Item,
+class OOVISUALIZATION_API VCharacterLiteral : public VExpression<VCharacterLiteral, Visualization::Item,
 OOModel::CharacterLiteral>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VCharacterLiteral, Visualization::TextStyle)
@@ -50,7 +50,7 @@ OOModel::CharacterLiteral>
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		typedef Visualization::ItemWithNode<VCharacterLiteral, Visualization::Item, OOModel::CharacterLiteral>
+		typedef VExpression<VCharacterLiteral, Visualization::Item, OOModel::CharacterLiteral>
 			BaseItemType;
 
 		Visualization::VCharacter* vis_;

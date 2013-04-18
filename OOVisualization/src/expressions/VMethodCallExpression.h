@@ -28,10 +28,9 @@
 
 #include "../oovisualization_api.h"
 #include "VMethodCallExpressionStyle.h"
+#include "VExpression.h"
 
 #include "OOModel/src/expressions/MethodCallExpression.h"
-
-#include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/items/LayoutProvider.h"
 
 namespace Visualization {
@@ -42,7 +41,7 @@ namespace OOVisualization {
 
 class VReferenceExpression;
 
-class OOVISUALIZATION_API VMethodCallExpression : public Visualization::ItemWithNode<VMethodCallExpression,
+class OOVISUALIZATION_API VMethodCallExpression : public VExpression<VMethodCallExpression,
 	Visualization::LayoutProvider<>,	OOModel::MethodCallExpression>
 {
 	ITEM_COMMON(VMethodCallExpression)
@@ -57,7 +56,7 @@ class OOVISUALIZATION_API VMethodCallExpression : public Visualization::ItemWith
 		void determineChildren();
 
 	private:
-		typedef Visualization::ItemWithNode<VMethodCallExpression,
+		typedef VExpression<VMethodCallExpression,
 			Visualization::LayoutProvider<>, OOModel::MethodCallExpression> BaseItemType;
 
 		VReferenceExpression* name_;

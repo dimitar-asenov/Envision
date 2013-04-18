@@ -28,10 +28,9 @@
 
 #include "../oovisualization_api.h"
 #include "VThrowExpressionStyle.h"
+#include "VExpression.h"
 
 #include "OOModel/src/expressions/ThrowExpression.h"
-
-#include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/items/LayoutProvider.h"
 
 namespace Visualization {
@@ -40,7 +39,7 @@ namespace Visualization {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VThrowExpression : public Visualization::ItemWithNode<VThrowExpression,
+class OOVISUALIZATION_API VThrowExpression : public VExpression<VThrowExpression,
 	Visualization::LayoutProvider<>, OOModel::ThrowExpression>
 {
 	ITEM_COMMON(VThrowExpression)
@@ -53,7 +52,7 @@ class OOVISUALIZATION_API VThrowExpression : public Visualization::ItemWithNode<
 		void determineChildren();
 
 	private:
-		typedef Visualization::ItemWithNode<VThrowExpression, Visualization::LayoutProvider<>, OOModel::ThrowExpression>
+		typedef VExpression<VThrowExpression, Visualization::LayoutProvider<>, OOModel::ThrowExpression>
 			BaseItemType;
 
 		Visualization::Static* throwSymbol_;

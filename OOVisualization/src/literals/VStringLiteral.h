@@ -27,10 +27,9 @@
 #pragma once
 
 #include "../oovisualization_api.h"
-
+#include "../expressions/VExpression.h"
 #include "VStringLiteralStyle.h"
 
-#include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/items/LayoutProvider.h"
 #include "VisualizationBase/src/items/TextStyle.h"
 #include "VisualizationBase/src/items/VText.h"
@@ -44,7 +43,7 @@ namespace Visualization {
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VStringLiteral
-	: public Visualization::ItemWithNode<VStringLiteral, Visualization::LayoutProvider<>, OOModel::StringLiteral>
+	: public VExpression<VStringLiteral, Visualization::LayoutProvider<>, OOModel::StringLiteral>
 {
 	ITEM_COMMON(VStringLiteral)
 
@@ -56,8 +55,7 @@ class OOVISUALIZATION_API VStringLiteral
 		virtual void determineChildren();
 
 	private:
-		typedef Visualization::ItemWithNode<VStringLiteral, Visualization::LayoutProvider<>, OOModel::StringLiteral>
-			BaseItemType;
+		typedef VExpression<VStringLiteral, Visualization::LayoutProvider<>, OOModel::StringLiteral> BaseItemType;
 
 		Visualization::Static* pre_;
 		Visualization::Static* post_;

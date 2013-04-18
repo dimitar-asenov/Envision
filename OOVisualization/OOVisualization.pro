@@ -7,15 +7,17 @@ win32:LIBS += -llogger \
     -loomodel \
     -lvisualizationbase \
     -linteractionbase
-HEADERS += src/elements/VEnumerator.h \
+HEADERS += src/elements/VCatchClauseStyle.h \
+    src/expressions/VExpression.h \
+    src/elements/VCatchClause.h \
+    src/statements/VStatementItem.h \
+    src/elements/VEnumerator.h \
     src/elements/VEnumeratorStyle.h \
     src/alternative/VKeywordMethodCallStyle.h \
     src/alternative/VKeywordMethodCall.h \
     src/expressions/VLambdaExpressionStyle.h \
     src/expressions/VLambdaExpression.h \
     src/statements/VTryCatchFinallyStyle.h \
-    src/statements/VCatchClauseStyle.h \
-    src/statements/VCatchClause.h \
     src/statements/VTryCatchFinally.h \
     src/expressions/VThrowExpressionStyle.h \
     src/expressions/VThrowExpression.h \
@@ -92,15 +94,17 @@ HEADERS += src/elements/VEnumerator.h \
     src/types/VArrayTypeStyle.h \
     src/types/VPrimitiveType.h \
     src/oovisualization.h
-SOURCES += src/elements/VEnumerator.cpp \
+SOURCES += src/elements/VCatchClauseStyle.cpp \
+    src/expressions/VExpression.cpp \
+    src/elements/VCatchClause.cpp \
+    src/statements/VStatementItem.cpp \
+    src/elements/VEnumerator.cpp \
     src/elements/VEnumeratorStyle.cpp \
     src/alternative/VKeywordMethodCallStyle.cpp \
     src/alternative/VKeywordMethodCall.cpp \
     src/expressions/VLambdaExpressionStyle.cpp \
     src/expressions/VLambdaExpression.cpp \
     src/statements/VTryCatchFinallyStyle.cpp \
-    src/statements/VCatchClauseStyle.cpp \
-    src/statements/VCatchClause.cpp \
     src/statements/VTryCatchFinally.cpp \
     src/expressions/VThrowExpressionStyle.cpp \
     src/expressions/VThrowExpression.cpp \

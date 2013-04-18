@@ -27,16 +27,15 @@
 #pragma once
 
 #include "../oovisualization_api.h"
+#include "VStatementItem.h"
 
-#include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/items/Static.h"
-
 #include "OOModel/src/statements/ContinueStatement.h"
 
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VContinueStatement
-	: public Visualization::ItemWithNode<VContinueStatement, Visualization::Item, OOModel::ContinueStatement>
+	: public VStatementItem<VContinueStatement, Visualization::Item, OOModel::ContinueStatement>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VContinueStatement, Visualization::StaticStyle)
 
@@ -49,8 +48,7 @@ class OOVISUALIZATION_API VContinueStatement
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		typedef Visualization::ItemWithNode<VContinueStatement, Visualization::Item, OOModel::ContinueStatement>
-			BaseItemType;
+		typedef VStatementItem<VContinueStatement, Visualization::Item, OOModel::ContinueStatement> BaseItemType;
 
 		Visualization::Static* vis_;
 };

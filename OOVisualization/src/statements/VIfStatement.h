@@ -28,6 +28,7 @@
 
 #include "../oovisualization_api.h"
 #include "VIfStatementStyle.h"
+#include "VStatementItem.h"
 
 #include "OOModel/src/statements/IfStatement.h"
 
@@ -45,7 +46,7 @@ namespace OOVisualization {
 class VStatementItemList;
 
 class OOVISUALIZATION_API VIfStatement
-	: public Visualization::ItemWithNode<VIfStatement, Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
+	: public VStatementItem<VIfStatement, Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
 	  OOModel::IfStatement>
 {
 	ITEM_COMMON(VIfStatement)
@@ -67,7 +68,7 @@ class OOVISUALIZATION_API VIfStatement
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
-		typedef Visualization::ItemWithNode<VIfStatement, Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
+		typedef VStatementItem<VIfStatement, Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
 				  OOModel::IfStatement> BaseItemType;
 
 		bool horizontal_{};

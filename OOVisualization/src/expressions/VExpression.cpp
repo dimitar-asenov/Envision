@@ -24,51 +24,10 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
-
-#include "../oovisualization_api.h"
-#include "VLambdaExpressionStyle.h"
 #include "VExpression.h"
-
-#include "OOModel/src/expressions/LambdaExpression.h"
-#include "VisualizationBase/src/items/LayoutProvider.h"
-
-namespace Visualization {
-	class VList;
-	class Static;
-}
 
 namespace OOVisualization {
 
-class VStatementItemList;
-
-class OOVISUALIZATION_API VLambdaExpression : public VExpression<VLambdaExpression,
-	Visualization::LayoutProvider<>, OOModel::LambdaExpression>
-{
-	ITEM_COMMON(VLambdaExpression)
-
-	public:
-		VLambdaExpression(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		virtual ~VLambdaExpression();
-
-		Visualization::VList* arguments() const;
-		Visualization::Static* icon() const;
-		VStatementItemList* body() const;
-
-	protected:
-		void determineChildren();
-
-	private:
-		typedef VExpression<VLambdaExpression, Visualization::LayoutProvider<>, OOModel::LambdaExpression>
-			BaseItemType;
-
-		Visualization::VList* arguments_{};
-		Visualization::Static* icon_{};
-		VStatementItemList* body_{};
-};
-
-inline Visualization::VList* VLambdaExpression::arguments() const { return arguments_; }
-inline Visualization::Static* VLambdaExpression::icon() const { return icon_; }
-inline VStatementItemList* VLambdaExpression::body() const { return body_; }
+Visualization::InteractionHandler* VExpressionStaticData::defaultClassHandler_ = nullptr;
 
 } /* namespace OOVisualization */

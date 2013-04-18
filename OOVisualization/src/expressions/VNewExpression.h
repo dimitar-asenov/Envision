@@ -28,10 +28,9 @@
 
 #include "../oovisualization_api.h"
 #include "OperatorStyle.h"
+#include "VExpression.h"
 
 #include "OOModel/src/expressions/NewExpression.h"
-
-#include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/items/LayoutProvider.h"
 
 namespace Visualization {
@@ -40,7 +39,7 @@ namespace Visualization {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VNewExpression : public Visualization::ItemWithNode<VNewExpression,
+class OOVISUALIZATION_API VNewExpression : public VExpression<VNewExpression,
 	Visualization::LayoutProvider<>, OOModel::NewExpression>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VNewExpression, OperatorStyle)
@@ -53,8 +52,7 @@ class OOVISUALIZATION_API VNewExpression : public Visualization::ItemWithNode<VN
 		void determineChildren();
 
 	private:
-		typedef Visualization::ItemWithNode<VNewExpression, Visualization::LayoutProvider<>, OOModel::NewExpression>
-			BaseItemType;
+		typedef VExpression<VNewExpression, Visualization::LayoutProvider<>, OOModel::NewExpression> BaseItemType;
 
 		Visualization::Static* pre_{};
 		Visualization::Static* in_{};

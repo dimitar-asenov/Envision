@@ -27,13 +27,14 @@
 #pragma once
 
 #include "../expressions/VReferenceExpression.h"
+#include "../expressions/VExpression.h"
 
 #include "OOModel/src/expressions/types/ClassTypeExpression.h"
 
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VClassType
-	: public Visualization::ItemWithNode<VClassType, Visualization::Item, OOModel::ClassTypeExpression>
+	: public VExpression<VClassType, Visualization::Item, OOModel::ClassTypeExpression>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VClassType, VReferenceExpressionStyle)
 
@@ -48,7 +49,7 @@ class OOVISUALIZATION_API VClassType
 		void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		typedef Visualization::ItemWithNode<VClassType, Visualization::Item, OOModel::ClassTypeExpression> BaseItemType;
+		typedef VExpression<VClassType, Visualization::Item, OOModel::ClassTypeExpression> BaseItemType;
 
 		VReferenceExpression* vis_;
 };

@@ -99,45 +99,18 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 {
 	OOOperatorDescriptorList::initializeWithDefaultOperators();
 
+	OOVisualization::VExpressionStaticData::setDefaultClassHandler(HExpression::instance());
+	OOVisualization::VStatementItemStaticData::setDefaultClassHandler(HStatement::instance());
 	OOVisualization::VProject::setDefaultClassHandler(HProject::instance());
 	OOVisualization::VClass::setDefaultClassHandler(HClass::instance());
 	OOVisualization::VMethod::setDefaultClassHandler(HMethod::instance());
 	OOVisualization::VFormalArgument::setDefaultClassHandler(HFormalArgument::instance());
-	OOVisualization::VReferenceExpression::setDefaultClassHandler(HExpression::instance());
-	OOVisualization::VMethodCallExpression::setDefaultClassHandler(HExpression::instance());
-	OOVisualization::VThisExpression::setDefaultClassHandler(HExpression::instance());
-	OOVisualization::VCastExpression::setDefaultClassHandler(HExpression::instance());
-	OOVisualization::VNewExpression::setDefaultClassHandler(HExpression::instance());
-	OOVisualization::VThrowExpression::setDefaultClassHandler(HExpression::instance());
-	OOVisualization::VLambdaExpression::setDefaultClassHandler(HExpression::instance());
-	OOVisualization::VUnaryOperation::setDefaultClassHandler(HExpression::instance());
-	OOVisualization::VBinaryOperation::setDefaultClassHandler(HExpression::instance());
-	OOVisualization::VCommaExpression::setDefaultClassHandler(HExpression::instance());
-	OOVisualization::VConditionalExpression::setDefaultClassHandler(HExpression::instance());
-	OOVisualization::VArrayInitializer::setDefaultClassHandler(HExpression::instance());
-	OOVisualization::VEmptyExpression::setDefaultClassHandler(HExpression::instance());
-	OOVisualization::VErrorExpression::setDefaultClassHandler(HExpression::instance());
-	OOVisualization::VUnfinishedOperator::setDefaultClassHandler(HExpression::instance());
-	OOVisualization::VStringLiteral::setDefaultClassHandler(HExpression::instance());
-	OOVisualization::VIntegerLiteral::setDefaultClassHandler(HExpression::instance());
-	OOVisualization::VFloatLiteral::setDefaultClassHandler(HExpression::instance());
-	OOVisualization::VCharacterLiteral::setDefaultClassHandler(HExpression::instance());
-	OOVisualization::VBooleanLiteral::setDefaultClassHandler(HExpression::instance());
-	OOVisualization::VNullLiteral::setDefaultClassHandler(HExpression::instance());
-	OOVisualization::VVariableDeclaration::setDefaultClassHandler(HExpression::instance());
-	OOVisualization::VAssignmentExpression::setDefaultClassHandler(HExpression::instance());
-	OOVisualization::VExpressionStatement::setDefaultClassHandler(HStatement::instance());
 	OOVisualization::VIfStatement::setDefaultClassHandler(HIfStatement::instance());
 	OOVisualization::VLoopStatement::setDefaultClassHandler(HLoop::instance());
 	OOVisualization::VForEachStatement::setDefaultClassHandler(HForEachStatement::instance());
 	OOVisualization::VBreakStatement::setDefaultClassHandler(HKeywordStatement::instance());
 	OOVisualization::VContinueStatement::setDefaultClassHandler(HKeywordStatement::instance());
-	OOVisualization::VBlock::setDefaultClassHandler(HStatement::instance());
 	OOVisualization::VReturnStatement::setDefaultClassHandler(HReturnStatement::instance());
-	OOVisualization::VPrimitiveType::setDefaultClassHandler(HExpression::instance());
-	OOVisualization::VClassType::setDefaultClassHandler(HExpression::instance());
-	OOVisualization::VArrayType::setDefaultClassHandler(HExpression::instance());
-	OOVisualization::VKeywordMethodCall::setDefaultClassHandler(HExpression::instance());
 
 	// Register string components that convert an expression to a string list representing its components
 	StringComponents::initConversions();

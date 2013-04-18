@@ -27,11 +27,10 @@
 #pragma once
 
 #include "../oovisualization_api.h"
-#include "../expressions/OperatorStyle.h"
+#include "VExpression.h"
+#include "OperatorStyle.h"
 
 #include "OOModel/src/expressions/AssignmentExpression.h"
-
-#include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/items/LayoutProvider.h"
 
 namespace Visualization {
@@ -40,7 +39,7 @@ namespace Visualization {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VAssignmentExpression : public Visualization::ItemWithNode<VAssignmentExpression,
+class OOVISUALIZATION_API VAssignmentExpression : public VExpression<VAssignmentExpression,
 	Visualization::LayoutProvider<>, OOModel::AssignmentExpression>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VAssignmentExpression, OperatorSequenceStyle)
@@ -53,7 +52,7 @@ class OOVISUALIZATION_API VAssignmentExpression : public Visualization::ItemWith
 		void determineChildren();
 
 	private:
-		typedef Visualization::ItemWithNode<VAssignmentExpression, Visualization::LayoutProvider<>,
+		typedef VExpression<VAssignmentExpression, Visualization::LayoutProvider<>,
 				OOModel::AssignmentExpression> BaseItemType;
 
 		Visualization::Static* assignmentSymbol_;

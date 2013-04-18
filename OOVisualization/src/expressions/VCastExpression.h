@@ -28,10 +28,9 @@
 
 #include "../oovisualization_api.h"
 #include "VCastExpressionStyle.h"
+#include "VExpression.h"
 
 #include "OOModel/src/expressions/CastExpression.h"
-
-#include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/items/LayoutProvider.h"
 
 namespace Visualization {
@@ -41,7 +40,7 @@ namespace Visualization {
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VCastExpression
-	: public Visualization::ItemWithNode<VCastExpression, Visualization::LayoutProvider<>, OOModel::CastExpression>
+	: public VExpression<VCastExpression, Visualization::LayoutProvider<>, OOModel::CastExpression>
 {
 	ITEM_COMMON(VCastExpression)
 
@@ -53,7 +52,7 @@ class OOVISUALIZATION_API VCastExpression
 		void determineChildren();
 
 	private:
-		typedef Visualization::ItemWithNode<VCastExpression, Visualization::LayoutProvider<>, OOModel::CastExpression>
+		typedef VExpression<VCastExpression, Visualization::LayoutProvider<>, OOModel::CastExpression>
 			BaseItemType;
 
 		Visualization::Item* type_;
