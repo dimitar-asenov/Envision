@@ -38,14 +38,10 @@ Core::InitializationRegistry& nodeTypeInitializationRegistry()
 	static Core::InitializationRegistry r;
 	return r;
 }
-    Model::TypedList<PointerTypeExpression>::registerNodeType();
-    Model::TypedList<ReferenceTypeExpression>::registerNodeType();
 
 bool OOModel::initialize(Core::EnvisionManager&)
 {
 	nodeTypeInitializationRegistry().initializeAll();
-    PointerTypeExpression::init();
-    ReferenceTypeExpression::init();
 
 	return true;
 }

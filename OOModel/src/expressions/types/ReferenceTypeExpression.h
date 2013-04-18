@@ -28,6 +28,8 @@
 
 #include "TypeExpression.h"
 
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, ReferenceTypeExpression)
+
 namespace OOModel {
 
 class OOMODEL_API ReferenceTypeExpression : public Super<TypeExpression>

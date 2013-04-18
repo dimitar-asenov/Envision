@@ -27,6 +27,9 @@
 #include "ReferenceTypeExpression.h"
 #include "../../types/ReferenceType.h"
 
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(OOModel::ReferenceTypeExpression)
+
 namespace OOModel {
 
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(ReferenceTypeExpression)

@@ -59,10 +59,6 @@ bool OOVisualization::initialize(Core::EnvisionManager&)
 	itemTypeInitializationRegistry().initializeAll();
 	Scene::defaultRenderer()->registerVisualization(StatementItemList::typeIdStatic(),
 			createVisualization<VStatementItemList, StatementItemList>);
-    Scene::defaultRenderer()->registerVisualization(PointerTypeExpression::typeIdStatic(),
-            createVisualization<VPointerType, PointerTypeExpression>);
-    Scene::defaultRenderer()->registerVisualization(ReferenceTypeExpression::typeIdStatic(),
-            createVisualization<VReferenceType, ReferenceTypeExpression>);
 
 	return true;
 }
