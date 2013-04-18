@@ -104,11 +104,7 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl *rd)
         else if(OOModel::Module* curModel = dynamic_cast<OOModel::Module*>(ooStack_.top()))
             curModel->modules()->append(ooClass);
         else if(OOModel::Class* curClass = dynamic_cast<OOModel::Class*>(ooStack_.top()))
-        {
-            //TODO: support inner classes in OOModel::Class*
-            log_->writeError(className_,QString("inner class found not yet supported"),QString("CXXRecordDecl"),rd->getNameAsString());
-            curClass->getAllAttributes();
-        }
+            curClass->classes()->append(ooClass);
         else
             log_->writeError(className_,QString("uknown where to put class"),QString("CXXRecordDecl"),rd->getNameAsString());
         // visit child decls
