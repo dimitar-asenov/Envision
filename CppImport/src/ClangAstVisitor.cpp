@@ -48,12 +48,8 @@ bool ClangAstVisitor::TraverseNamespaceDecl(clang::NamespaceDecl *nd)
     if(OOModel::Project* curProject = dynamic_cast<OOModel::Project*>(ooStack_.top()))
     {
         ooModule = trMngr_->insertNamespace(nd, ooStack_.size()-1);
-        // TODO this is a loop which is bad an should be avoided by a contains operation
-        bool list_contains_val = false;
-        for(int i = 0; i < curProject->modules()->size();i++)
-            if(curProject->modules()->at(i) == ooModule)
-                list_contains_val = true;
-        if(!list_contains_val)
+        // TODO this should be replaced with modules()->contains(..)  as soon as supported
+        if(!curProject->modules()->nodes().contains(ooModule))
            curProject->modules()->append(ooModule);
     }
     else if(OOModel::Module* curModel = dynamic_cast<OOModel::Module*>(ooStack_.top()))
@@ -62,12 +58,8 @@ bool ClangAstVisitor::TraverseNamespaceDecl(clang::NamespaceDecl *nd)
         // check if the namespace is already the one which is active
         if(curModel == ooModule)
             return true;
-        // TODO this is a loop which is bad an should be avoided by a contains operation
-        bool list_contains_val = false;
-        for(int i = 0; i < curModel->modules()->size();i++)
-            if(curModel->modules()->at(i) == ooModule)
-                list_contains_val = true;
-        if(!list_contains_val)
+        // TODO this should be replaced with modules()->contains(..)  as soon as supported
+        if(!curModel->modules()->nodes().contains(ooModule))
             curModel->modules()->append(ooModule);
 
     }
