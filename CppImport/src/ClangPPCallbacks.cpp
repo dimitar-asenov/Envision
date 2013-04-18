@@ -26,6 +26,8 @@
 
 #include "ClangPPCallbacks.h"
 
+namespace CppImport {
+
 void ClangPPCallbacks::FileChanged(clang::SourceLocation Loc, clang::PPCallbacks::FileChangeReason Reason, clang::SrcMgr::CharacteristicKind FileType, clang::FileID PrevFID)
 {
     Loc.isFileID();
@@ -43,4 +45,6 @@ void ClangPPCallbacks::InclusionDirective(clang::SourceLocation HashLoc, const c
     SearchPath.str();
 
     std::cout << "INCLUDE DIRECTIVE " << RelativePath.str() << "   " << FileName.str() << " IS ANGLED " << IsAngled <<   std::endl;
+}
+
 }

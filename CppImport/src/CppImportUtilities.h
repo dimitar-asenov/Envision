@@ -28,6 +28,8 @@
 
 #include "cppimport_api.h"
 
+namespace CppImport {
+
 class CppImportUtilities
 {
 public:
@@ -38,3 +40,4 @@ public:
     static OOModel::UnaryOperation::OperatorTypes convertUnaryOpcode(clang::UnaryOperatorKind kind);
     static OOModel::Visibility::VisibilityType convertAccessSpecifier(clang::AccessSpecifier as);
 };
+}

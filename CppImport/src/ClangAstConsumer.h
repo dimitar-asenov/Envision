@@ -32,6 +32,8 @@
 #include "ClangPPCallbacks.h"
 #include "CppImportLogger.h"
 
+namespace CppImport {
+
 class ClangAstConsumer : public clang::ASTConsumer
 {
 public:
@@ -48,3 +50,4 @@ private:
     CppImportLogger* logger_{new CppImportLogger()};
 
 };
+}

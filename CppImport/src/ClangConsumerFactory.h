@@ -29,6 +29,8 @@
 #include "cppimport_api.h"
 #include "ClangAstConsumer.h"
 
+namespace CppImport {
+
 class ClangConsumerFactory : public clang::ASTFrontendAction
 {
 public:
@@ -40,4 +42,6 @@ public:
 private:
     OOModel::Project* project_{};
 };
+
+}
 

@@ -26,6 +26,8 @@
 
 #include "CppImportManager.h"
 
+namespace CppImport {
+
 CppImportManager::~CppImportManager()
 {
     delete compilationDB_;
@@ -69,4 +71,6 @@ bool CppImportManager::setCompilationDbPath(QString& path)
         return false;
     }
     return true;
+}
+
 }

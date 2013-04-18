@@ -26,6 +26,8 @@
 
 #include "CppImportLogger.h"
 
+namespace CppImport {
+
 CppImportLogger::CppImportLogger()
 {
     initStreams();
@@ -70,4 +72,6 @@ void CppImportLogger::initStreams()
         errStream_ = new QTextStream(stderr);
         warnStream_ = new QTextStream(stdout);
     }
+}
+
 }

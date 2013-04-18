@@ -29,6 +29,8 @@
 #include "cppimport_api.h"
 #include "CppImportUtilities.h"
 
+namespace CppImport {
+
 class TranslateManager
 {
 public:
@@ -53,3 +55,5 @@ private:
     QMap<clang::CXXMethodDecl*, OOModel::Method*> methodMap_;
     QMap<clang::VarDecl*, OOModel::VariableDeclaration*> varMap_;
 };
+
+}

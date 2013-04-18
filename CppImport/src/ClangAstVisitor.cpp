@@ -27,6 +27,8 @@
 #include "ClangAstVisitor.h"
 #include "CppImportUtilities.h"
 
+namespace CppImport {
+
 ClangAstVisitor::ClangAstVisitor(Model::Model* model, OOModel::Project* currentProject, CppImportLogger* logger) :
     currentModel_(model) , currentProject_(currentProject) , log_(logger)
 {
@@ -457,4 +459,6 @@ bool ClangAstVisitor::TraverseUnaryOp(clang::UnaryOperator *uOp)
         ooExprStack_.push(ooUnaryOp);
     inBody_ = inBody;
     return true;
+}
+
 }

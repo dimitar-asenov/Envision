@@ -26,6 +26,8 @@
 
 #include "TranslateManager.h"
 
+namespace CppImport {
+
 TranslateManager::TranslateManager(Model::Model* model, OOModel::Project* project) :
     model_(model), project_(project)
 {
@@ -195,4 +197,6 @@ OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl)
     methodMap_.insert(mDecl,method);
 
     return method;
+}
+
 }

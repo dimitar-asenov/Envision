@@ -30,6 +30,8 @@
 #include "TranslateManager.h"
 #include "CppImportLogger.h"
 
+namespace CppImport {
+
 class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 {
     typedef clang::RecursiveASTVisitor<ClangAstVisitor> Base;
@@ -195,3 +197,5 @@ inline bool ClangAstVisitor::TraverseUnaryMinus(clang::UnaryOperator* uOp)
 {return TraverseUnaryOp(uOp);}
 inline bool ClangAstVisitor::TraverseUnaryNot(clang::UnaryOperator* uOp)
 {return TraverseUnaryOp(uOp);}
+
+}

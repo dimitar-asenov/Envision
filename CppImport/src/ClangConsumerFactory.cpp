@@ -26,6 +26,8 @@
 
 #include "ClangConsumerFactory.h"
 
+namespace CppImport {
+
 ClangConsumerFactory::ClangConsumerFactory()
 {
     model_ = new Model::Model();
@@ -41,3 +43,5 @@ clang::ASTConsumer *ClangConsumerFactory::CreateASTConsumer(clang::CompilerInsta
 }
 
 Model::Model* ClangConsumerFactory::model_;
+
+}

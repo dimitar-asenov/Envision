@@ -26,6 +26,8 @@
 
 #include "CppImportUtilities.h"
 
+namespace CppImport {
+
 OOModel::Expression *CppImportUtilities::convertClangType(clang::QualType type)
 {
     if(type.getTypePtr()->isBooleanType())
@@ -156,4 +158,6 @@ OOModel::Visibility::VisibilityType CppImportUtilities::convertAccessSpecifier(c
     default:
         return OOModel::Visibility::DEFAULT;
     }
+}
+
 }

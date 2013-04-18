@@ -26,6 +26,8 @@
 
 #include "ClangAstConsumer.h"
 
+namespace CppImport {
+
 
 ClangAstConsumer::ClangAstConsumer(Model::Model *model, OOModel::Project *currentProject) :
     clang::ASTConsumer()
@@ -76,4 +78,6 @@ void ClangAstConsumer::Initialize(clang::ASTContext &Context)
     {
         ci_->getPreprocessor().addPPCallbacks(new ClangPPCallbacks());
     }
+}
+
 }

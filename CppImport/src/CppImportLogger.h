@@ -28,6 +28,8 @@
 
 #include "cppimport_api.h"
 
+namespace CppImport {
+
 class CppImportLogger
 {
 public:
@@ -54,6 +56,8 @@ inline void CppImportLogger::writeError(QString inWhichClass, QString reason, QS
 
 inline void CppImportLogger::writeWarning(QString inWhichClass, QString reason, QString clangType, std::string clangName)
 { writeOut(inWhichClass,reason,clangType,QString::fromStdString(clangName),WARNING); }
+
+}
 
 
 

@@ -30,6 +30,8 @@
 #include "ClangAstConsumer.h"
 #include "ClangConsumerFactory.h"
 
+namespace CppImport {
+
 class CppImportManager
 {
 public:
@@ -46,3 +48,5 @@ protected:
     std::vector<std::string> sources_{};
 
 };
+
+}
