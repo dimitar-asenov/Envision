@@ -33,12 +33,14 @@
 #include "OOModel/src/statements/IfStatement.h"
 
 #include "VisualizationBase/src/items/ItemWithNode.h"
-#include "VisualizationBase/src/items/LayoutProvider.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
 
 namespace Visualization {
 	class PanelBorderLayout;
 	class PositionLayout;
 	class SequentialLayout;
+	class Static;
+	class NodeWrapper;
 }
 
 namespace OOVisualization {
@@ -46,43 +48,36 @@ namespace OOVisualization {
 class VStatementItemList;
 
 class OOVISUALIZATION_API VIfStatement
-	: public Super<VStatementItem<VIfStatement, Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
+	: public Super<VStatementItem<VIfStatement, Visualization::DeclarativeItem<VIfStatement>,
 	  OOModel::IfStatement>>
 {
 	ITEM_COMMON(VIfStatement)
 
 	public:
 		VIfStatement(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		virtual ~VIfStatement();
 
-		Visualization::SequentialLayout* header() const;
-		Visualization::SequentialLayout* conditionBackground() const;
-		Visualization::Item* condition() const;
-		Visualization::SequentialLayout* content() const;
+		Visualization::NodeWrapper* condition() const;
 		VStatementItemList* thenBranch() const;
 		VStatementItemList* elseBranch() const;
-		Item* icon() const;
+		Visualization::Static* icon() const;
+
+		static void initializeForms();
+		virtual int determineForm() override;
 
 	protected:
-		virtual void determineChildren() override;
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
 		bool horizontal_{};
-		Visualization::SequentialLayout* header_;
-		Visualization::SequentialLayout* conditionBackground_;
-		Visualization::Item* condition_;
-		Visualization::SequentialLayout* content_;
-		VStatementItemList* thenBranch_;
-		VStatementItemList* elseBranch_;
+		Visualization::NodeWrapper* condition_{};
+		VStatementItemList* thenBranch_{};
+		VStatementItemList* elseBranch_{};
+		Visualization::Static* icon_{};
 };
 
-inline Visualization::SequentialLayout* VIfStatement::header() const { return header_; }
-inline Visualization::SequentialLayout* VIfStatement::conditionBackground() const { return conditionBackground_; }
-inline Visualization::Item* VIfStatement::condition() const { return condition_; }
-inline Visualization::SequentialLayout* VIfStatement::content() const { return content_; }
+inline Visualization::NodeWrapper* VIfStatement::condition() const { return condition_; }
 inline VStatementItemList* VIfStatement::thenBranch() const { return thenBranch_; }
 inline VStatementItemList* VIfStatement::elseBranch() const { return elseBranch_; }
-inline Visualization::Item* VIfStatement::icon() const {return header_->at<Visualization::Item>(0);}
+inline Visualization::Static* VIfStatement::icon() const {return icon_;}
 
 }

@@ -27,9 +27,13 @@
 #include "statements/VIfStatement.h"
 #include "../elements/VStatementItemList.h"
 
-#include "VisualizationBase/src/layouts/PanelBorderLayout.h"
-#include "VisualizationBase/src/layouts/SequentialLayout.h"
+//#include "VisualizationBase/src/layouts/PanelBorderLayout.h"
+//#include "VisualizationBase/src/layouts/SequentialLayout.h"
 #include "VisualizationBase/src/items/Static.h"
+#include "VisualizationBase/src/declarative/GridLayoutElement.h"
+#include "VisualizationBase/src/declarative/AnchorLayoutElement.h"
+#include "VisualizationBase/src/declarative/ShapeElement.h"
+#include "VisualizationBase/src/items/NodeWrapper.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -38,52 +42,8 @@ namespace OOVisualization {
 
 ITEM_COMMON_DEFINITIONS(VIfStatement, "item")
 
-VIfStatement::VIfStatement(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style),
-	header_(), conditionBackground_(), condition_(), content_(), thenBranch_(), elseBranch_()
-{
-	layout()->setTop(true);
-	header_ = new SequentialLayout(layout()->top(), &style->header());
-	layout()->top()->setFirst(header_);
-	header_->append(new Static(header_, &style->icon()));
-
-	conditionBackground_ =new SequentialLayout(header_, &style->condition());
-	header_->append(conditionBackground_);
-
-	content_ = new SequentialLayout(layout(), &style->contentHorizontal());
-	layout()->setContent(content_);
-}
-
-VIfStatement::~VIfStatement()
-{
-	// These were automatically deleted by LayoutProvider's destructor
-	header_ = nullptr;
-	conditionBackground_ = nullptr;
-	condition_ = nullptr;
-	content_ = nullptr;
-	thenBranch_ = nullptr;
-	elseBranch_ = nullptr;
-}
-
-void VIfStatement::determineChildren()
-{
-	conditionBackground_->synchronizeFirst(condition_, node()->condition());
-	content_->synchronizeFirst( thenBranch_, node()->thenBranch(), &style()->thenBranch());
-	content_->synchronizeLast( elseBranch_, node()->elseBranch(), &style()->elseBranch());
-
-
-	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
-	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
-	//			what's the reason they are being updated.
-	// The style needs to be updated every time since if our own style changes, so will that of the children.
-	layout()->setStyle(&style()->layout());
-	header_->setStyle(&style()->header());
-	header_->at<Static>(0)->setStyle(&style()->icon());
-	conditionBackground_->setStyle( &style()->condition() );
-
-	if (thenBranch_) thenBranch_->setStyle( &style()->thenBranch() );
-	if (elseBranch_) elseBranch_->setStyle( &style()->elseBranch() );
-	content_->setStyle( horizontal_ ? &style()->contentHorizontal() : &style()->contentVertical());
-}
+VIfStatement::VIfStatement(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style)
+{}
 
 void VIfStatement::updateGeometry(int availableWidth, int availableHeight)
 {
@@ -97,6 +57,56 @@ void VIfStatement::updateGeometry(int availableWidth, int availableHeight)
 	}
 
 	Super::updateGeometry(availableWidth, availableHeight);
+}
+
+void VIfStatement::initializeForms()
+{
+	auto header = (new GridLayoutElement())
+			->setColumnStretchFactor(1, 1)->setVerticalAlignment(LayoutStyle::Alignment::Center)
+			->setHorizontalSpacing(3)
+			->put(0, 0, item<Static, I>(&I::icon_, [](I* v){return &v->style()->icon();}))
+			->put(1, 0, item<NodeWrapper, I>(&I::condition_, [](I* v){return v->node()->condition();},
+																[](I* v){return &v->style()->condition();}));
+
+	auto thenBranch = item<VStatementItemList, I>(&I::thenBranch_, [](I* v){return v->node()->thenBranch();},
+																[](I* v){return &v->style()->thenBranch();});
+
+	auto elseBranch = item<VStatementItemList, I>(&I::elseBranch_, [](I* v){return v->node()->elseBranch();},
+																[](I* v){return &v->style()->elseBranch();});
+
+	auto shapeElement = new ShapeElement();
+
+	// Form 0: then and else branch arranged horizontally
+	auto contentElement = (new GridLayoutElement())->setColumnStretchFactor(1, 1)->setRowStretchFactor(0, 1)
+			->put(0, 0, thenBranch)->put(1, 0, elseBranch);
+
+	addForm((new AnchorLayoutElement())
+			->put(TheLeftOf, header, AtLeftOf, contentElement)
+			->put(TheLeftOf, shapeElement, 2, FromLeftOf, contentElement)
+			->put(TheRightOf, header, AtRightOf, contentElement)
+			->put(TheRightOf, shapeElement, 2, FromRightOf, contentElement)
+			->put(TheBottomOf, header, 3, FromTopOf, contentElement)
+			->put(TheTopOf, shapeElement, AtCenterOf, header)
+			->put(TheBottomOf, shapeElement, 2, FromBottomOf, contentElement));
+
+	// Form 1: then and else branch arranged vertically
+	contentElement = (new GridLayoutElement())->setColumnStretchFactor(0, 1)->setRowStretchFactor(1, 1)
+			->put(0, 0, thenBranch)->put(0, 1, elseBranch);
+
+	addForm((new AnchorLayoutElement())
+			->put(TheLeftOf, header, AtLeftOf, contentElement)
+			->put(TheLeftOf, shapeElement, 2, FromLeftOf, contentElement)
+			->put(TheRightOf, header, AtRightOf, contentElement)
+			->put(TheRightOf, shapeElement, 2, FromRightOf, contentElement)
+			->put(TheBottomOf, header, 3, FromTopOf, contentElement)
+			->put(TheTopOf, shapeElement, AtCenterOf, header)
+			->put(TheBottomOf, shapeElement, 2, FromBottomOf, contentElement));
+}
+
+int VIfStatement::determineForm()
+{
+	if(horizontal_) return 0;
+	else return 1;
 }
 
 }
