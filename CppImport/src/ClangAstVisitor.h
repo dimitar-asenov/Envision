@@ -39,18 +39,18 @@ class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 		ClangAstVisitor(Model::Model* model, OOModel::Project* currentProject, CppImportLogger* logger);
 		~ClangAstVisitor();
 
-		bool TraverseNamespaceDecl(clang::NamespaceDecl* nd);
-		bool TraverseCXXRecordDecl(clang::CXXRecordDecl* rd);
+		bool TraverseNamespaceDecl(clang::NamespaceDecl* namespaceDecl);
+		bool TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl);
 		bool TraverseCXXMethodDecl(clang::CXXMethodDecl* methodDecl);
 		bool TraverseIfStmt(clang::IfStmt* ifStmt);
-		bool TraverseWhileStmt(clang::WhileStmt* wStmt);
-		bool TraverseForStmt(clang::ForStmt* fStmt);
-		bool TraverseReturnStmt(clang::ReturnStmt* rStmt);
+		bool TraverseWhileStmt(clang::WhileStmt* whileStmt);
+		bool TraverseForStmt(clang::ForStmt* forStmt);
+		bool TraverseReturnStmt(clang::ReturnStmt* returnStmt);
 
 		bool TraverseStmt(clang::Stmt *S);
-		bool TraverseVarDecl(clang::VarDecl* vd);
+		bool TraverseVarDecl(clang::VarDecl* varDecl);
 
-		bool TraverseEnumDecl(clang::EnumDecl* ed);
+		bool TraverseEnumDecl(clang::EnumDecl* enumDecl);
 
 
 		// binary ops
@@ -94,22 +94,22 @@ class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 
 
 		bool VisitStmt(clang::Stmt* S);
-		bool VisitFieldDecl(clang::FieldDecl* fd);
+		bool VisitFieldDecl(clang::FieldDecl* fieldDecl);
 
-		bool TraverseCXXMemberCallExpr(clang::CXXMemberCallExpr* cExpr);
+		bool TraverseCXXMemberCallExpr(clang::CXXMemberCallExpr* callExpr);
 		bool VisitIntegerLiteral(clang::IntegerLiteral* intLit);
-		bool VisitCXXBoolLiteralExpr(clang::CXXBoolLiteralExpr* bExpr);
-		bool VisitDeclRefExpr(clang::DeclRefExpr* declRef);
+		bool VisitCXXBoolLiteralExpr(clang::CXXBoolLiteralExpr* boolLitExpr);
+		bool VisitDeclRefExpr(clang::DeclRefExpr* declRefExpr);
 
-		bool VisitBreakStmt(clang::BreakStmt* bStmt);
+		bool VisitBreakStmt(clang::BreakStmt* breakStmt);
 
 		bool shouldUseDataRecursionFor(clang::Stmt* S);
 
 	private:
-		bool TraverseBinaryOp(clang::BinaryOperator* binOp);
-		bool TraverseAssignment(clang::BinaryOperator* binOp);
+		bool TraverseBinaryOp(clang::BinaryOperator* binaryOperator);
+		bool TraverseAssignment(clang::BinaryOperator* binaryOperator);
 
-		bool TraverseUnaryOp(clang::UnaryOperator* uOp);
+		bool TraverseUnaryOp(clang::UnaryOperator* unaryOperator);
 
 		QStack<Model::Node*> ooStack_;
 		QStack<OOModel::Expression*> ooExprStack_;

@@ -41,34 +41,37 @@ ClangAstVisitor::~ClangAstVisitor()
 	delete trMngr_;
 }
 
-bool ClangAstVisitor::TraverseNamespaceDecl(clang::NamespaceDecl *nd)
+bool ClangAstVisitor::TraverseNamespaceDecl(clang::NamespaceDecl* namespaceDecl)
 {
 	OOModel::Module* ooModule = nullptr;
 	// insert it in model
 	if(OOModel::Project* curProject = dynamic_cast<OOModel::Project*>(ooStack_.top()))
 	{
-		ooModule = trMngr_->insertNamespace(nd, ooStack_.size()-1);
-		// TODO this should be replaced with modules()->contains(..)  as soon as supported
-		if(!curProject->modules()->nodes().contains(ooModule))
+		ooModule = trMngr_->insertNamespace(namespaceDecl, ooStack_.size()-1);
+		// if the module is not yet in the list add it
+		if(!curProject->modules()->contains(ooModule))
 			curProject->modules()->append(ooModule);
 	}
 	else if(OOModel::Module* curModel = dynamic_cast<OOModel::Module*>(ooStack_.top()))
 	{
-		ooModule = trMngr_->insertNamespace(nd, ooStack_.size());
+		ooModule = trMngr_->insertNamespace(namespaceDecl, ooStack_.size());
 		// check if the namespace is already the one which is active
 		if(curModel == ooModule)
 			return true;
-		// TODO this should be replaced with modules()->contains(..)  as soon as supported
-		if(!curModel->modules()->nodes().contains(ooModule))
+		// if the module is not yet in the list add it
+		if(!curModel->modules()->contains(ooModule))
 			curModel->modules()->append(ooModule);
-
 	}
 	else
-		log_->writeError(className_,QString("uknown where to put namespace"),QString("NamespaceDecl"),nd->getNameAsString());
-
+	{
+		log_->writeError(className_,QString("uknown where to put namespace"),QString("NamespaceDecl"),namespaceDecl->getNameAsString());
+		// this is a severe error which should not happen therefore stop visiting
+		return false;
+	}
+	// visit the body of the namespace
 	ooStack_.push(ooModule);
-	clang::DeclContext::decl_iterator it = nd->decls_begin();
-	for(;it!=nd->decls_end();++it)
+	clang::DeclContext::decl_iterator it = namespaceDecl->decls_begin();
+	for(;it!=namespaceDecl->decls_end();++it)
 	{
 		TraverseDecl(*it);
 	}
@@ -76,15 +79,15 @@ bool ClangAstVisitor::TraverseNamespaceDecl(clang::NamespaceDecl *nd)
 	return true;
 }
 
-bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl *rd)
+bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl)
 {
-	if(rd->getParent()->isNamespace())
-		std::cout <<  "CLASS " << rd->getNameAsString() << " has Namespace as Parent" << std::endl;
-	if(rd->isClass() || rd->isStruct())
+	if(recordDecl->getParent()->isNamespace())
+		std::cout <<  "CLASS " << recordDecl->getNameAsString() << " has Namespace as Parent" << std::endl;
+	if(recordDecl->isClass() || recordDecl->isStruct())
 	{
 		OOModel::Class* ooClass;
 		//        if(rd->isClass())
-		ooClass = trMngr_->insertClass(rd);
+		ooClass = trMngr_->insertClass(recordDecl);
 		//        else
 		//            ooClass = trMngr_->insertStruct(rd);
 		// check if there was an error inserting class
@@ -98,11 +101,11 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl *rd)
 		else if(OOModel::Class* curClass = dynamic_cast<OOModel::Class*>(ooStack_.top()))
 			curClass->classes()->append(ooClass);
 		else
-			log_->writeError(className_,QString("uknown where to put class"),QString("CXXRecordDecl"),rd->getNameAsString());
+			log_->writeError(className_,QString("uknown where to put class"),QString("CXXRecordDecl"),recordDecl->getNameAsString());
 		// visit child decls
 		ooStack_.push(ooClass);
-		clang::DeclContext::decl_iterator it = rd->decls_begin();
-		for(;it!=rd->decls_end();++it)
+		clang::DeclContext::decl_iterator it = recordDecl->decls_begin();
+		for(;it!=recordDecl->decls_end();++it)
 		{
 			TraverseDecl(*it);
 		}
@@ -115,20 +118,20 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl *rd)
 	//    }
 	else
 	{
-		std::cout << "Neither class nor Struct " << rd->getNameAsString() << std::endl;
-		return Base::TraverseCXXRecordDecl(rd);
+		std::cout << "Neither class nor Struct " << recordDecl->getNameAsString() << std::endl;
+		return Base::TraverseCXXRecordDecl(recordDecl);
 	}
 	return true;
 }
 
-bool ClangAstVisitor::TraverseCXXMethodDecl(clang::CXXMethodDecl *methodDecl)
+bool ClangAstVisitor::TraverseCXXMethodDecl(clang::CXXMethodDecl* methodDecl)
 {
 	// Constructors not yet handled
 	if(llvm::isa<clang::CXXConstructorDecl>(methodDecl))
 		return true;
 	// translation Manager will insert method in correct class
-	OOModel::Method* method = trMngr_->insertMethodDecl(methodDecl);
-	if(!method)
+	OOModel::Method* ooMethod = trMngr_->insertMethodDecl(methodDecl);
+	if(!ooMethod)
 	{
 		log_->writeError(className_,QString("no ooModel::method found"),QString("CXXMethodDecl"),methodDecl->getNameAsString());
 		// for now return false to see error (interupts visitor)
@@ -137,16 +140,16 @@ bool ClangAstVisitor::TraverseCXXMethodDecl(clang::CXXMethodDecl *methodDecl)
 	// only visit the body if we are at the definition
 	if(methodDecl->isThisDeclarationADefinition())
 	{
-		ooStack_.push(method->items());
+		ooStack_.push(ooMethod->items());
 		TraverseStmt(methodDecl->getBody());
 		ooStack_.pop();
 	}
 	// specify the visibility of the method
-	method->setVisibility(CppImportUtilities::convertAccessSpecifier(methodDecl->getAccess()));
+	ooMethod->setVisibility(CppImportUtilities::convertAccessSpecifier(methodDecl->getAccess()));
 	return true;
 }
 
-bool ClangAstVisitor::TraverseIfStmt(clang::IfStmt *ifStmt)
+bool ClangAstVisitor::TraverseIfStmt(clang::IfStmt* ifStmt)
 {
 	OOModel::IfStatement* ooIfStmt = new OOModel::IfStatement();
 	OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top());
@@ -171,7 +174,7 @@ bool ClangAstVisitor::TraverseIfStmt(clang::IfStmt *ifStmt)
 	return true;
 }
 
-bool ClangAstVisitor::TraverseWhileStmt(clang::WhileStmt* wStmt)
+bool ClangAstVisitor::TraverseWhileStmt(clang::WhileStmt* whileStmt)
 {
 	OOModel::LoopStatement* ooLoop = new OOModel::LoopStatement();
 	OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top());
@@ -181,18 +184,18 @@ bool ClangAstVisitor::TraverseWhileStmt(clang::WhileStmt* wStmt)
 		itemList->append(ooLoop);
 		// condition
 		inBody_ = false;
-		TraverseStmt(wStmt->getCond());
+		TraverseStmt(whileStmt->getCond());
 		inBody_ = true;
 		ooLoop->setCondition(ooExprStack_.pop());
 		// body
 		ooStack_.push(ooLoop->body());
-		TraverseStmt(wStmt->getBody());
+		TraverseStmt(whileStmt->getBody());
 		ooStack_.pop();
 	}
 	return true;
 }
 
-bool ClangAstVisitor::TraverseForStmt(clang::ForStmt *fStmt)
+bool ClangAstVisitor::TraverseForStmt(clang::ForStmt* forStmt)
 {
 	OOModel::LoopStatement* ooLoop = new OOModel::LoopStatement();
 	OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top());
@@ -201,24 +204,24 @@ bool ClangAstVisitor::TraverseForStmt(clang::ForStmt *fStmt)
 		itemList->append(ooLoop);
 		inBody_ = false;
 		// init
-		TraverseStmt(fStmt->getInit());
+		TraverseStmt(forStmt->getInit());
 		ooLoop->setInitStep(ooExprStack_.pop());
 		// condition
-		TraverseStmt(fStmt->getCond());
+		TraverseStmt(forStmt->getCond());
 		ooLoop->setCondition(ooExprStack_.pop());
 		// update
-		TraverseStmt(fStmt->getInc());
+		TraverseStmt(forStmt->getInc());
 		ooLoop->setUpdateStep(ooExprStack_.pop());
 		inBody_ = true;
 		// body
 		ooStack_.push(ooLoop->body());
-		TraverseStmt(fStmt->getBody());
+		TraverseStmt(forStmt->getBody());
 		ooStack_.pop();
 	}
 	return true;
 }
 
-bool ClangAstVisitor::TraverseReturnStmt(clang::ReturnStmt* rStmt)
+bool ClangAstVisitor::TraverseReturnStmt(clang::ReturnStmt* returnStmt)
 {
 	OOModel::ReturnStatement* ooReturn = new OOModel::ReturnStatement();
 	OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top());
@@ -227,14 +230,14 @@ bool ClangAstVisitor::TraverseReturnStmt(clang::ReturnStmt* rStmt)
 		itemList->append(ooReturn);
 		// return expression
 		inBody_ = false;
-		TraverseStmt(rStmt->getRetValue());
+		TraverseStmt(returnStmt->getRetValue());
 		inBody_ = true;
 		ooReturn->values()->append(ooExprStack_.pop());
 	}
 	return true;
 }
 
-bool ClangAstVisitor::TraverseStmt(clang::Stmt *S)
+bool ClangAstVisitor::TraverseStmt(clang::Stmt* S)
 {
 	return Base::TraverseStmt(S);
 }
@@ -247,18 +250,18 @@ bool ClangAstVisitor::VisitStmt(clang::Stmt* S)
 	return Base::VisitStmt(S);
 }
 
-bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* vd)
+bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 {
 	//    std::cout << "Visiting VarDecl " << vd->getNameAsString() <<std::endl;
 
 	OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top());
 	if(itemList)
 	{
-		OOModel::VariableDeclaration* varDecl = trMngr_->insertVar(vd);
-		if(vd->getType().getTypePtr()->isArrayType())
+		OOModel::VariableDeclaration* ooVarDecl = trMngr_->insertVar(varDecl);
+		if(varDecl->getType().getTypePtr()->isArrayType())
 		{
 			//TODO this array section is very nasty
-			const clang::ArrayType* arrType =  vd->getType().getTypePtr()->getAsArrayTypeUnsafe();
+			const clang::ArrayType* arrType =  varDecl->getType().getTypePtr()->getAsArrayTypeUnsafe();
 			if(arrType)
 			{
 				if(llvm::isa<clang::ConstantArrayType>(arrType))
@@ -268,62 +271,62 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* vd)
 					OOModel::ArrayTypeExpression* varType = new OOModel::ArrayTypeExpression();
 					if(OOModel::Expression* expr = CppImportUtilities::convertClangType(arrType->getElementType()))
 						varType->setTypeExpression(expr);
-					varDecl->setVarType(varType);
+					ooVarDecl->setVarType(varType);
 				}
 			}
 		}
 		else
 		{
-			OOModel::Expression* type = CppImportUtilities::convertClangType(vd->getType());
-			if(type) varDecl->setVarType(type);
+			OOModel::Expression* type = CppImportUtilities::convertClangType(varDecl->getType());
+			if(type) ooVarDecl->setVarType(type);
 		}
 
-		if(vd->hasInit())
+		if(varDecl->hasInit())
 		{
-			TraverseStmt(vd->getInit());
-			varDecl->setInitialValue(ooExprStack_.pop());
+			TraverseStmt(varDecl->getInit());
+			ooVarDecl->setInitialValue(ooExprStack_.pop());
 		}
 		if(inBody_)
-			itemList->append(varDecl);
+			itemList->append(ooVarDecl);
 		else
-			ooExprStack_.push(varDecl);
+			ooExprStack_.push(ooVarDecl);
 	}
 	else
 	{
-		if(!llvm::isa<clang::ParmVarDecl>(vd))
-			log_->writeWarning(className_,QString("this variable is not supported"),QString("VarDecl"),vd->getNameAsString());
+		if(!llvm::isa<clang::ParmVarDecl>(varDecl))
+			log_->writeWarning(className_,QString("this variable is not supported"),QString("VarDecl"),varDecl->getNameAsString());
 	}
 	return true;
 }
 
-bool ClangAstVisitor::TraverseEnumDecl(clang::EnumDecl* ed)
+bool ClangAstVisitor::TraverseEnumDecl(clang::EnumDecl* enumDecl)
 {
-	std::cout << "Traversing enum : " << ed->getNameAsString() << std::endl;
+	std::cout << "Traversing enum : " << enumDecl->getNameAsString() << std::endl;
 	return true;
 }
 
-bool ClangAstVisitor::VisitFieldDecl(clang::FieldDecl* fd)
+bool ClangAstVisitor::VisitFieldDecl(clang::FieldDecl* fieldDecl)
 {
-	OOModel::Field* field = trMngr_->insertField(fd);
+	OOModel::Field* field = trMngr_->insertField(fieldDecl);
 	if(!field)
 	{
-		log_->writeError(className_,QString("no parent found for this field"),QString("FieldDecl"),fd->getNameAsString());
+		log_->writeError(className_,QString("no parent found for this field"),QString("FieldDecl"),fieldDecl->getNameAsString());
 		//        return false;
 	}
 	else
-		field->setVisibility(CppImportUtilities::convertAccessSpecifier(fd->getAccess()));
+		field->setVisibility(CppImportUtilities::convertAccessSpecifier(fieldDecl->getAccess()));
 	return true;
 }
 
-bool ClangAstVisitor::TraverseCXXMemberCallExpr(clang::CXXMemberCallExpr *cExpr)
+bool ClangAstVisitor::TraverseCXXMemberCallExpr(clang::CXXMemberCallExpr* callExpr)
 {
-	OOModel::MethodCallExpression* ooMCall = new OOModel::MethodCallExpression(QString::fromStdString(cExpr->getMethodDecl()->getNameAsString()));
+	OOModel::MethodCallExpression* ooMCall = new OOModel::MethodCallExpression(QString::fromStdString(callExpr->getMethodDecl()->getNameAsString()));
 
 	// visit arguments
 	bool inBody = inBody_;
 	inBody_ = false;
-	clang::ExprIterator argIt = cExpr->arg_begin();
-	for(;argIt!=cExpr->arg_end();++argIt)
+	clang::ExprIterator argIt = callExpr->arg_begin();
+	for(;argIt!=callExpr->arg_end();++argIt)
 	{
 		TraverseStmt(*argIt);
 		ooMCall->arguments()->append(ooExprStack_.pop());
@@ -347,26 +350,26 @@ bool ClangAstVisitor::VisitIntegerLiteral(clang::IntegerLiteral* intLit)
 	return true;
 }
 
-bool ClangAstVisitor::VisitCXXBoolLiteralExpr(clang::CXXBoolLiteralExpr* bExpr)
+bool ClangAstVisitor::VisitCXXBoolLiteralExpr(clang::CXXBoolLiteralExpr* boolLitExpr)
 {
 	OOModel::BooleanLiteral* ooBoolLit = new OOModel::BooleanLiteral();
-	ooBoolLit->setValue(bExpr->getValue());
+	ooBoolLit->setValue(boolLitExpr->getValue());
 	ooExprStack_.push(ooBoolLit);
 	return true;
 }
 
-bool ClangAstVisitor::VisitDeclRefExpr(clang::DeclRefExpr* declRef)
+bool ClangAstVisitor::VisitDeclRefExpr(clang::DeclRefExpr* declRefExpr)
 {
 	OOModel::ReferenceExpression* refExpr = new OOModel::ReferenceExpression();
-	refExpr->setName(QString::fromStdString(declRef->getNameInfo().getName().getAsString()));
+	refExpr->setName(QString::fromStdString(declRefExpr->getNameInfo().getName().getAsString()));
 	ooExprStack_.push(refExpr);
 	return true;
 }
 
-bool ClangAstVisitor::VisitBreakStmt(clang::BreakStmt *bStmt)
+bool ClangAstVisitor::VisitBreakStmt(clang::BreakStmt* breakStmt)
 {
 	//-unused var
-	bStmt->getBreakLoc();
+	breakStmt->getBreakLoc();
 	OOModel::BreakStatement* ooBreak = new OOModel::BreakStatement();
 	OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top());
 	if(itemList) itemList->append(ooBreak);
@@ -375,24 +378,24 @@ bool ClangAstVisitor::VisitBreakStmt(clang::BreakStmt *bStmt)
 	return true;
 }
 
-bool ClangAstVisitor::shouldUseDataRecursionFor(clang::Stmt *S)
+bool ClangAstVisitor::shouldUseDataRecursionFor(clang::Stmt* S)
 {
 	// -unused var
 	S->getStmtClass();
 	return false;
 }
 
-bool ClangAstVisitor::TraverseBinaryOp(clang::BinaryOperator* binOp)
+bool ClangAstVisitor::TraverseBinaryOp(clang::BinaryOperator* binaryOperator)
 {
-	OOModel::BinaryOperation::OperatorTypes ooOperatorType = CppImportUtilities::convertClangOpcode(binOp->getOpcode());
+	OOModel::BinaryOperation::OperatorTypes ooOperatorType = CppImportUtilities::convertClangOpcode(binaryOperator->getOpcode());
 	OOModel::BinaryOperation* ooBinOp = new OOModel::BinaryOperation();
 	// save inBody_ value for recursive expressions
 	bool inBody = inBody_;
 	inBody_ = false;
 	ooBinOp->setOp(ooOperatorType);
-	TraverseStmt(binOp->getLHS());
+	TraverseStmt(binaryOperator->getLHS());
 	ooBinOp->setLeft(ooExprStack_.pop());
-	TraverseStmt(binOp->getRHS());
+	TraverseStmt(binaryOperator->getRHS());
 	ooBinOp->setRight(ooExprStack_.pop());
 
 	if(inBody)
@@ -407,17 +410,17 @@ bool ClangAstVisitor::TraverseBinaryOp(clang::BinaryOperator* binOp)
 	return true;
 }
 
-bool ClangAstVisitor::TraverseAssignment(clang::BinaryOperator *binOp)
+bool ClangAstVisitor::TraverseAssignment(clang::BinaryOperator* binaryOperator)
 {
-	OOModel::AssignmentExpression::AssignmentTypes ooOperatorType = CppImportUtilities::convertClangAssignOpcode(binOp->getOpcode());
+	OOModel::AssignmentExpression::AssignmentTypes ooOperatorType = CppImportUtilities::convertClangAssignOpcode(binaryOperator->getOpcode());
 	OOModel::AssignmentExpression* ooBinOp = new OOModel::AssignmentExpression();
 	// save inBody_ value for recursive expressions
 	bool inBody = inBody_;
 	inBody_ = false;
 	ooBinOp->setOp(ooOperatorType);
-	TraverseStmt(binOp->getLHS());
+	TraverseStmt(binaryOperator->getLHS());
 	ooBinOp->setLeft(ooExprStack_.pop());
-	TraverseStmt(binOp->getRHS());
+	TraverseStmt(binaryOperator->getRHS());
 	ooBinOp->setRight(ooExprStack_.pop());
 
 	if(inBody)
@@ -432,15 +435,15 @@ bool ClangAstVisitor::TraverseAssignment(clang::BinaryOperator *binOp)
 	return true;
 }
 
-bool ClangAstVisitor::TraverseUnaryOp(clang::UnaryOperator *uOp)
+bool ClangAstVisitor::TraverseUnaryOp(clang::UnaryOperator* unaryOperator)
 {
-	OOModel::UnaryOperation::OperatorTypes ooOperatorType = CppImportUtilities::convertUnaryOpcode(uOp->getOpcode());
+	OOModel::UnaryOperation::OperatorTypes ooOperatorType = CppImportUtilities::convertUnaryOpcode(unaryOperator->getOpcode());
 	OOModel::UnaryOperation* ooUnaryOp = new OOModel::UnaryOperation();
 	// save inBody_ value for recursive expressions
 	bool inBody = inBody_;
 	inBody_ = false;
 	ooUnaryOp->setOp(ooOperatorType);
-	TraverseStmt(uOp->getSubExpr());
+	TraverseStmt(unaryOperator->getSubExpr());
 	ooUnaryOp->setOperand(ooExprStack_.pop());
 
 	if(inBody)
@@ -455,4 +458,4 @@ bool ClangAstVisitor::TraverseUnaryOp(clang::UnaryOperator *uOp)
 	return true;
 }
 
-}
+} // namespace cppimport
