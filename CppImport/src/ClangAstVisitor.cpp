@@ -294,7 +294,8 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 	else
 	{
 		if(!llvm::isa<clang::ParmVarDecl>(varDecl))
-			log_->writeWarning(className_,QString("this variable is not supported"),QString("VarDecl"),varDecl->getNameAsString());
+			log_->writeWarning(className_,QString("this variable is not supported"),
+									 QString("VarDecl"),varDecl->getNameAsString());
 	}
 	return true;
 }
@@ -302,6 +303,37 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 bool ClangAstVisitor::TraverseEnumDecl(clang::EnumDecl* enumDecl)
 {
 	std::cout << "Traversing enum : " << enumDecl->getNameAsString() << std::endl;
+	OOModel::Class* ooEnumClass = new OOModel::Class(QString::fromStdString(enumDecl->getNameAsString()));
+	// insert in model
+	if(OOModel::Project* curProject = dynamic_cast<OOModel::Project*>(ooStack_.top()))
+		curProject->classes()->append(ooEnumClass);
+	else if(OOModel::Module* curModel = dynamic_cast<OOModel::Module*>(ooStack_.top()))
+		curModel->classes()->append(ooEnumClass);
+	else if(OOModel::Class* curClass = dynamic_cast<OOModel::Class*>(ooStack_.top()))
+		curClass->classes()->append(ooEnumClass);
+	else
+	{
+		log_->writeWarning(className_,QString("Enums are only supported global, in namespaces or in classes"),
+								 QString("EnumDecl"),enumDecl->getNameAsString());
+		// no need to further process this enum
+		return true;
+	}
+	clang::EnumDecl::enumerator_iterator it = enumDecl->enumerator_begin();
+	bool inBody = inBody_;
+	inBody_ = false;
+	for(;it!=enumDecl->enumerator_end();++it)
+	{
+		// check if there is an initializing expression if so visit it first and then add it to the enum
+		if(auto e = it->getInitExpr())
+		{
+			TraverseStmt(e);
+			ooEnumClass->enumerators()->append(new OOModel::Enumerator
+														  (QString::fromStdString(it->getNameAsString()),ooExprStack_.pop()));
+		}
+		else
+			ooEnumClass->enumerators()->append(new OOModel::Enumerator(QString::fromStdString(it->getNameAsString())));
+	}
+	inBody_ = inBody;
 	return true;
 }
 
@@ -310,7 +342,8 @@ bool ClangAstVisitor::VisitFieldDecl(clang::FieldDecl* fieldDecl)
 	OOModel::Field* field = trMngr_->insertField(fieldDecl);
 	if(!field)
 	{
-		log_->writeError(className_,QString("no parent found for this field"),QString("FieldDecl"),fieldDecl->getNameAsString());
+		log_->writeError(className_,QString("no parent found for this field"),
+							  QString("FieldDecl"),fieldDecl->getNameAsString());
 		return false;
 	}
 	clang::QualType ctype = fieldDecl->getType();

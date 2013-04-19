@@ -4,17 +4,20 @@
 
 int NOCLASSFIELD;
 
+enum SomeNameEnum {FIRST};
+
 namespace TestSpace{
 namespace TestSpace {
 
-
+enum SomeNameEnum {FIRST=10,SECOND};
 
 class Testing {
 public:
     int i;
     Testing(){}
-    enum AnEnum {FIRST,SECOND};
+    enum AnEnum {FIRST,SECOND=(100+25),THIRD};
     int myFunction(int argument1, bool argument2){
+        enum FuncEnum {LOL,LOL1};
         int k = 20;
         if(k && argument2)
         {
