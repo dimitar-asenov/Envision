@@ -132,8 +132,6 @@ OOModel::Field* TranslateManager::insertField(clang::FieldDecl* fDecl)
 	if(parentClass && classMap_.contains(parentClass))
 	{
 		OOModel::Field* field = new OOModel::Field();
-		OOModel::Expression* type = CppImportUtilities::convertClangType(fDecl->getType());
-		if(type) field->setTypeExpression(type);
 		field->setName(QString::fromStdString(fDecl->getNameAsString()));
 		classMap_.value(parentClass)->fields()->append(field);
 		return field;

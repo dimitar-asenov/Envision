@@ -16,9 +16,10 @@ public:
     enum AnEnum {FIRST,SECOND};
     int myFunction(int argument1, bool argument2){
         int k = 20;
-        if(k == 10)
+        if(k && argument2)
         {
             int l = 100;
+            l = k | 10;
             k+=20;
         }
         else
@@ -39,6 +40,7 @@ namespace innerNameSpace {
 
 class Another {
     //COMMENT IN CLAS
+    Testing aTestingObj;
     bool aBoolVar;
     void aVoidFunc(){
         bool aNotherBoolVar;};
@@ -64,7 +66,7 @@ class OneMore{
         oneMoreVariable = 100 + oneMoreVar2;
         while(oneMoreVariable < 1000)
         {
-            oneMoreVariable = oneMoreVariable+100;
+            oneMoreVariable = (oneMoreVariable+100);
         }
         if(oneMoreVariable <=1000)
         {

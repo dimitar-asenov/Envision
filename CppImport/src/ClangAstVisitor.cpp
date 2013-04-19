@@ -246,7 +246,7 @@ bool ClangAstVisitor::VisitStmt(clang::Stmt* S)
 {
 	//    std::cout << "VISITING STMT" << std::endl;
 	//    llvm::errs() << "VISITING STMT" << "\n";
-	//        S->dump();
+//			  S->dump();
 	return Base::VisitStmt(S);
 }
 
@@ -311,10 +311,12 @@ bool ClangAstVisitor::VisitFieldDecl(clang::FieldDecl* fieldDecl)
 	if(!field)
 	{
 		log_->writeError(className_,QString("no parent found for this field"),QString("FieldDecl"),fieldDecl->getNameAsString());
-		//        return false;
+		return false;
 	}
-	else
-		field->setVisibility(CppImportUtilities::convertAccessSpecifier(fieldDecl->getAccess()));
+	clang::QualType ctype = fieldDecl->getType();
+	OOModel::Expression* type = CppImportUtilities::convertClangType(ctype);
+	if(type) field->setTypeExpression(type);
+	field->setVisibility(CppImportUtilities::convertAccessSpecifier(fieldDecl->getAccess()));
 	return true;
 }
 
@@ -363,6 +365,35 @@ bool ClangAstVisitor::VisitDeclRefExpr(clang::DeclRefExpr* declRefExpr)
 	OOModel::ReferenceExpression* refExpr = new OOModel::ReferenceExpression();
 	refExpr->setName(QString::fromStdString(declRefExpr->getNameInfo().getName().getAsString()));
 	ooExprStack_.push(refExpr);
+	return true;
+}
+
+bool ClangAstVisitor::VisitCXXUnresolvedConstructorExpr(clang::CXXUnresolvedConstructExpr* unresolvedConstructorExpr)
+{
+	unresolvedConstructorExpr->getBitField();
+	ooExprStack_.push(new OOModel::Expression());
+	return true;
+}
+
+bool ClangAstVisitor::TraverseParenExpr(clang::ParenExpr* parenthesizedExpr)
+{
+	OOModel::UnaryOperation* ooParenExpr = new OOModel::UnaryOperation();
+	ooParenExpr->setOp(OOModel::UnaryOperation::PARENTHESIS);
+	// save inBody_ value for recursive expressions
+	bool inBody = inBody_;
+	inBody_ = false;
+	TraverseStmt(parenthesizedExpr->getSubExpr());
+	ooParenExpr->setOperand(ooExprStack_.pop());
+
+	if(inBody)
+	{
+		OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top());
+		if(itemList) itemList->append(ooParenExpr);
+		else std::cout << "ERROR INSERT Parenthesized Expression" << std::endl;
+	}
+	else
+		ooExprStack_.push(ooParenExpr);
+	inBody_ = inBody;
 	return true;
 }
 
