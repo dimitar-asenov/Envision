@@ -1,19 +1,20 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/Item/default">
+	<shape prototypes="shape/Box/default">
+		Box
+		<cornerRadius>15</cornerRadius>
+		<backgroundBrush>
+			<style>1</style>
+			<color>
+				<alpha>128</alpha>
+				<red>255</red>
+				<green>255</green>
+				<blue>255</blue>
+			</color>
+		</backgroundBrush>
+	</shape>
 	<layout prototypes="layout/PanelBorderLayout/default">
-		<shape prototypes="shape/Box/default">
-			Box
-			<cornerRadius>15</cornerRadius>
-			<backgroundBrush>
-				<style>1</style>
-				<color>
-					<alpha>128</alpha>
-					<red>255</red>
-					<green>255</green>
-					<blue>255</blue>
-				</color>
-			</backgroundBrush>
-		</shape>
+		<shape prototypes="shape/Box/default" />
 		<isLeftProtrusionFixed>true</isLeftProtrusionFixed>
 		<leftProtrusion>10</leftProtrusion>
 	</layout>

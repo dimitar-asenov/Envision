@@ -32,34 +32,36 @@
 #include "OOModel/src/top_level/Class.h"
 
 #include "VisualizationBase/src/items/ItemWithNode.h"
-#include "VisualizationBase/src/items/LayoutProvider.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
 
 namespace Visualization {
 	class VText;
 	class VList;
-	class PanelBorderLayout;
 	class Static;
 	class PositionLayout;
+	class NodeWrapper;
+}
+
+namespace Model {
+	class Node;
 }
 
 namespace OOVisualization {
 class VStatementItemList;
 
 class OOVISUALIZATION_API VClass
-: public Super<Visualization::ItemWithNode<VClass, Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
-  OOModel::Class>>
+: public Super<Visualization::ItemWithNode<VClass, Visualization::DeclarativeItem<VClass>, OOModel::Class>>
 {
 	ITEM_COMMON(VClass)
 
 	public:
 		VClass(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		virtual ~VClass();
 
-	protected:
-		void determineChildren();
+		static void initializeForms();
+		int determineForm() override;
+		void determineChildren() override;
 
 	private:
-		Visualization::SequentialLayout* header_{};
 		Visualization::Static* icon_{};
 		Visualization::VText* name_{};
 		Visualization::VList* typeArguments_{};
@@ -67,12 +69,11 @@ class OOVISUALIZATION_API VClass
 		VStatementItemList* annotations_{};
 		Visualization::VList* enumerators_{};
 		Visualization::PositionLayout* body_{};
-		Visualization::SequentialLayout* content_{};
-		Visualization::SequentialLayout* fieldContainer_{};
-		Visualization::SequentialLayout* publicFieldArea_{};
-		Visualization::SequentialLayout* privateFieldArea_{};
-		Visualization::SequentialLayout* protectedFieldArea_{};
-		Visualization::SequentialLayout* defaultFieldArea_{};
+		Visualization::NodeWrapper* fieldBackground_{};
+		QList<Model::Node*> publicFields_{};
+		QList<Model::Node*> privateFields_{};
+		QList<Model::Node*> protectedFields_{};
+		QList<Model::Node*> defaultFields_{};
 };
 
 }

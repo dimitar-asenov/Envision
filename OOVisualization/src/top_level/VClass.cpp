@@ -29,11 +29,18 @@
 
 #include "../elements/VStatementItemList.h"
 
-#include "VisualizationBase/src/layouts/PanelBorderLayout.h"
 #include "VisualizationBase/src/layouts/PositionLayout.h"
 #include "VisualizationBase/src/items/VText.h"
 #include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/items/Static.h"
+
+#include "VisualizationBase/src/declarative/AnchorLayoutElement.h"
+#include "VisualizationBase/src/declarative/GridLayoutElement.h"
+#include "VisualizationBase/src/declarative/SequentialLayoutElement.h"
+#include "VisualizationBase/src/declarative/ShapeElement.h"
+#include "VisualizationBase/src/items/NodeWrapper.h"
+
+#include "ModelBase/src/nodes/Node.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -44,126 +51,129 @@ ITEM_COMMON_DEFINITIONS(VClass, "item")
 
 VClass::VClass(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style)
 {
-	layout()->setTop(true);
-	header_ = new SequentialLayout(layout()->top(), &style->header());
-	layout()->top()->setFirst(header_);
-	icon_ = new Static(header_, &style->icon());
-	header_->append(icon_);
-	name_ = new VText(header_, node->nameNode(), &style->nameDefault());
-	header_->append(name_);
 	setDefaultMoveCursorProxy(name_);
-	typeArguments_ = new VList(header_, node->typeArguments(), &style->typeArguments());
-	header_->append(typeArguments_);
-	baseClasses_ = new VList(header_, node->baseClasses(), &style->baseClasses());
-	header_->append(baseClasses_);
-
-	layout()->setLeft(true);
-	fieldContainer_ = new SequentialLayout(layout()->left(), &style->fieldContainer());
-	layout()->left()->setFirst(fieldContainer_);
-
-	publicFieldArea_ = new SequentialLayout(fieldContainer_, &style->publicFieldArea());
-	fieldContainer_->append(publicFieldArea_);
-	protectedFieldArea_ = new SequentialLayout(fieldContainer_, &style->protectedFieldArea());
-	fieldContainer_->append(protectedFieldArea_);
-	defaultFieldArea_ = new SequentialLayout(fieldContainer_, &style->defaultFieldArea());
-	fieldContainer_->append(defaultFieldArea_);
-	privateFieldArea_ = new SequentialLayout(fieldContainer_, &style->privateFieldArea());
-	fieldContainer_->append(privateFieldArea_);
-
-	content_ = new SequentialLayout(layout(), &style->content());
-	layout()->setContent(content_);
-
-	body_ = new PositionLayout(content_, &style->body());
-	content_->append(body_);
-}
-
-VClass::~VClass()
-{
-	// These were automatically deleted by LayoutProvider's destructor
-	header_ = nullptr;
-	icon_ = nullptr;
-	name_ = nullptr;
-	typeArguments_ = nullptr;
-	baseClasses_ = nullptr;
-	annotations_ = nullptr;
-	enumerators_ = nullptr;
-	body_ = nullptr;
-	content_ = nullptr;
-	fieldContainer_ = nullptr;
-	publicFieldArea_ = nullptr;
-	privateFieldArea_ = nullptr;
-	protectedFieldArea_ = nullptr;
-	defaultFieldArea_ = nullptr;
+	body_ = new PositionLayout(this, &style->body());
 }
 
 void VClass::determineChildren()
 {
-	const TextStyle* nameStyle = nullptr;
-
-	if (node()->visibility() == Visibility::DEFAULT) nameStyle = &style()->nameDefault();
-	else if (node()->visibility() == Visibility::PUBLIC) nameStyle = &style()->namePublic();
-	else if (node()->visibility() == Visibility::PRIVATE) nameStyle = &style()->namePrivate();
-	else if (node()->visibility() == Visibility::PROTECTED) nameStyle = &style()->nameProtected();
-	else throw OOVisualizationException("Unknown visibility in VClass::determineChildren");
-
-	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
-	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
-	//			what's the reason they are being updated.
-	// The style needs to be updated every time since if our own style changes, so will that of the children.
-	layout()->setStyle( &style()->layout() );
-	icon_->setStyle(&style()->icon());
-	header_->setStyle( &style()->header() );
-	name_->setStyle( nameStyle );
-	body_->setStyle( &style()->body() );
-	if (annotations_) annotations_->setStyle( &style()->annotations() );
-	if (enumerators_) enumerators_->setStyle( &style()->enumerators() );
-	content_->setStyle( &style()->content() );
-	typeArguments_->setStyle( &style()->typeArguments() );
-	baseClasses_->setStyle( &style()->baseClasses() );
-	fieldContainer_->setStyle( &style()->fieldContainer() );
-	publicFieldArea_->setStyle( &style()->publicFieldArea() );
-	privateFieldArea_->setStyle( &style()->privateFieldArea() );
-	protectedFieldArea_->setStyle( &style()->protectedFieldArea() );
-	defaultFieldArea_->setStyle( &style()->defaultFieldArea() );
-
-	// Synchronize header
-	header_->synchronizeMid(name_, node()->nameNode(), nameStyle, 1);
-	header_->synchronizeMid(typeArguments_, node()->typeArguments(), &style()->typeArguments(), 2);
-	header_->synchronizeLast(baseClasses_, node()->baseClasses(), &style()->baseClasses());
-
-	// Synchronize inner classes, methods, annotations and enumerations
+	// manually update the body item
 	if (body_->needsUpdate() == FullUpdate) body_->clear(true);
 	QList<Model::Node*> bodyItems = node()->classes()->nodes().toList();
 	bodyItems << node()->methods()->nodes().toList();
-	body_->synchronizeWithNodes( bodyItems, renderer());
-	content_->synchronizeFirst(annotations_,
-			node()->annotations()->size() > 0 ? node()->annotations() : nullptr, &style()->annotations());
-	int index = annotations_ ? 1 : 0;
-	content_->synchronizeMid(enumerators_,
-			node()->enumerators()->size() > 0 ? node()->enumerators() : nullptr,	&style()->enumerators(), index);
+	body_->synchronizeWithNodes( bodyItems, renderer());;
 
-	// Synchronize fields
-	QList<Model::Node*> publicFields;
-	QList<Model::Node*> privateFields;
-	QList<Model::Node*> protectedFields;
-	QList<Model::Node*> defaultFields;
-	for (auto field : *node()->fields())
+	// call determineChildren of super class
+	BaseItemType::determineChildren();
+
+	// make field background behave as a special background element
+	if (fieldBackground_) fieldBackground_->setStretchable(true);
+}
+
+void VClass::initializeForms()
+{
+	auto headerElement = (new GridLayoutElement())
+				->setHorizontalSpacing(3)->setColumnStretchFactor(3, 1)
+				->setVerticalAlignment(LayoutStyle::Alignment::Center)
+				->put(0, 0, item<Static, I>(&I::icon_, [](I* v){return &v->style()->icon();}))
+				->put(1, 0, item<VText, I>(&I::name_, [](I* v){return v->node()->nameNode();}, [](I* v)
+						{
+							// return the correct name style, depending on the classes visibility
+							if (v->node()->visibility() == Visibility::DEFAULT) return &v->style()->nameDefault();
+							else if (v->node()->visibility() == Visibility::PUBLIC) return &v->style()->namePublic();
+							else if (v->node()->visibility() == Visibility::PRIVATE) return &v->style()->namePrivate();
+							else if (v->node()->visibility() == Visibility::PROTECTED) return &v->style()->nameProtected();
+							else throw OOVisualizationException("Unknown visibility in VClass::initializeForms");
+						}))
+				->put(2, 0, item<VList, I>(&I::typeArguments_, [](I* v){return v->node()->typeArguments();},
+																				[](I* v){return &v->style()->typeArguments();}))
+				->put(3, 0, item<VList, I>(&I::baseClasses_, [](I* v){return v->node()->baseClasses();},
+																			[](I* v){return &v->style()->baseClasses();}));
+
+	auto contentElement = (new GridLayoutElement())
+				->setVerticalSpacing(3)->setColumnStretchFactor(0, 1)
+				->put(0, 0, item<VStatementItemList, I>(&I::annotations_, [](I* v)
+											{return v->node()->annotations()->size() > 0 ? v->node()->annotations() : nullptr;},
+								[](I* v){return &v->style()->annotations();}))
+				->put(0, 1, item<VList, I>(&I::enumerators_, [](I* v)
+											{return v->node()->enumerators()->size() > 0 ? v->node()->enumerators() : nullptr;},
+								[](I* v){return &v->style()->enumerators();}))
+				->put(0, 2, item<PositionLayout, I>(&I::body_, [](I* v){return &v->style()->body();}));
+
+	auto fieldContainerElement = (new GridLayoutElement())
+				->setVerticalSpacing(3)
+				->put(0, 0, (new SequentialLayoutElement())->setVertical()
+								->setListOfNodes([](Item* i){return (static_cast<VClass*>(i))->publicFields_;}))
+				->put(0, 1, (new SequentialLayoutElement())->setVertical()
+								->setListOfNodes([](Item* i){return (static_cast<VClass*>(i))->privateFields_;}))
+				->put(0, 2, (new SequentialLayoutElement())->setVertical()
+								->setListOfNodes([](Item* i){return (static_cast<VClass*>(i))->protectedFields_;}))
+				->put(0, 3, (new SequentialLayoutElement())->setVertical()
+								->setListOfNodes([](Item* i){return (static_cast<VClass*>(i))->defaultFields_;}));
+
+	auto shapeElement = new ShapeElement();
+	auto backgroundElement = item<NodeWrapper, I>(&I::fieldBackground_, [](I*){return nullptr;},
+																	[](I* v){return &v->style()->fieldContainer();})
+										->setCreateIfNoNode(true);
+
+	// Form 0: with field nodes
+	addForm((new AnchorLayoutElement())
+				// place the top left corner of the field container element
+				->put(TheLeftOf, fieldContainerElement, 10, FromLeftOf, headerElement)
+				->put(TheTopOf, fieldContainerElement, 5, FromBottomOf, headerElement)
+				// place the top left corner of the content element
+				->put(TheLeftOf, contentElement, 10, FromRightOf, fieldContainerElement)
+				->put(TheTopOf, contentElement, AtBottomOf, headerElement)
+				// align content and header on their right side
+				->put(TheRightOf, contentElement, AtRightOf, headerElement)
+				// put the shape element at the right place
+				->put(TheTopOf, shapeElement, AtCenterOf, headerElement)
+				->put(TheLeftOf, shapeElement, AtLeftOf, headerElement)
+				->put(TheBottomOf, shapeElement, 10, FromBottomOf, contentElement)
+				->put(TheRightOf, shapeElement, 10, FromRightOf, headerElement)
+				// put the background element around the field container element
+				->put(TheLeftOf, backgroundElement, 3, FromLeftOf, fieldContainerElement)
+				->put(TheRightOf, backgroundElement, 3, FromRightOf, fieldContainerElement)
+				->put(TheTopOf, backgroundElement, 3, FromTopOf, fieldContainerElement)
+				->put(TheBottomOf, backgroundElement, 3, FromBottomOf, fieldContainerElement));
+
+	// Form 1: without field nodes
+	addForm((new AnchorLayoutElement())
+				// place the top left corner of the content element
+				->put(TheLeftOf, headerElement, 10, FromLeftOf, contentElement)
+				->put(TheTopOf, contentElement, AtBottomOf, headerElement)
+				// align content and header on their right side
+				->put(TheRightOf, contentElement, AtRightOf, headerElement)
+				// put the shape element at the right place
+				->put(TheTopOf, shapeElement, AtCenterOf, headerElement)
+				->put(TheLeftOf, shapeElement, AtLeftOf, headerElement)
+				->put(TheBottomOf, shapeElement, 10, FromBottomOf, contentElement)
+				->put(TheRightOf, shapeElement, 10, FromRightOf, headerElement));
+}
+
+int VClass::determineForm()
+{
+	// Update Field Nodes
+	publicFields_.clear();
+	privateFields_.clear();
+	protectedFields_.clear();
+	defaultFields_.clear();
+
+	for (int i = 0; i< node()->fields()->size(); ++i)
 	{
-		if (field->visibility() == Visibility::PUBLIC)
-			publicFields.append(field);
-		else if (field->visibility() == Visibility::PRIVATE)
-			privateFields.append(field);
-		else if (field->visibility() == Visibility::PROTECTED)
-			protectedFields.append(field);
-		else if (field->visibility() == Visibility::DEFAULT)
-			defaultFields.append(field);
+		if (node()->fields()->at(i)->visibility() == Visibility::PUBLIC)
+			publicFields_.append(node()->fields()->at(i));
+		else if (node()->fields()->at(i)->visibility() == Visibility::PRIVATE)
+			privateFields_.append(node()->fields()->at(i));
+		else if (node()->fields()->at(i)->visibility() == Visibility::PROTECTED)
+			protectedFields_.append(node()->fields()->at(i));
+		else if (node()->fields()->at(i)->visibility() == Visibility::DEFAULT)
+			defaultFields_.append(node()->fields()->at(i));
 		else throw OOVisualizationException("Unknown visibility value when updating VClass instance.");
 	}
 
-	publicFieldArea_->synchronizeWithNodes(publicFields, renderer());
-	privateFieldArea_->synchronizeWithNodes(privateFields, renderer());
-	protectedFieldArea_->synchronizeWithNodes(protectedFields, renderer());
-	defaultFieldArea_->synchronizeWithNodes(defaultFields, renderer());
+	if (node()->fields()->size() > 0) return 0;
+	else return 1;
 }
 
 }
