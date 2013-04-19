@@ -33,27 +33,27 @@ namespace CppImport {
 
 class TranslateManager
 {
-public:
-    TranslateManager(Model::Model* model, OOModel::Project* project);
-    OOModel::Module* insertNamespace(clang::NamespaceDecl* nd, int depth);
-    OOModel::Class* insertClass(clang::CXXRecordDecl* rDecl);
-    OOModel::Class* insertStruct(clang::CXXRecordDecl* sDecl);
-    OOModel::Method* insertMethodDecl(clang::CXXMethodDecl* mDecl);
-    OOModel::Field* insertField(clang::FieldDecl* fDecl);
-    OOModel::VariableDeclaration* insertVar(clang::VarDecl* vDecl);
-    OOModel::VariableDeclaration* getVar(clang::VarDecl* vDecl);
+	public:
+		TranslateManager(Model::Model* model, OOModel::Project* project);
+		OOModel::Module* insertNamespace(clang::NamespaceDecl* nd, int depth);
+		OOModel::Class* insertClass(clang::CXXRecordDecl* rDecl);
+		OOModel::Class* insertStruct(clang::CXXRecordDecl* sDecl);
+		OOModel::Method* insertMethodDecl(clang::CXXMethodDecl* mDecl);
+		OOModel::Field* insertField(clang::FieldDecl* fDecl);
+		OOModel::VariableDeclaration* insertVar(clang::VarDecl* vDecl);
+		OOModel::VariableDeclaration* getVar(clang::VarDecl* vDecl);
 
-private:
-    OOModel::Method* addNewMethod(clang::CXXMethodDecl* mDecl);
+	private:
+		OOModel::Method* addNewMethod(clang::CXXMethodDecl* mDecl);
 
-    Model::Model* model_{};
-    OOModel::Project* project_{};
+		Model::Model* model_{};
+		OOModel::Project* project_{};
 
-    QMap<clang::NamespaceDecl*, QPair<OOModel::Module*,int> > nameSpaceMap_;
-    QMap<clang::CXXRecordDecl*, OOModel::Class*> classMap_;
-    QMap<clang::CXXRecordDecl*, OOModel::Class*> structMap_;
-    QMap<clang::CXXMethodDecl*, OOModel::Method*> methodMap_;
-    QMap<clang::VarDecl*, OOModel::VariableDeclaration*> varMap_;
+		QMap<clang::NamespaceDecl*, QPair<OOModel::Module*,int> > nameSpaceMap_;
+		QMap<clang::CXXRecordDecl*, OOModel::Class*> classMap_;
+		QMap<clang::CXXRecordDecl*, OOModel::Class*> structMap_;
+		QMap<clang::CXXMethodDecl*, OOModel::Method*> methodMap_;
+		QMap<clang::VarDecl*, OOModel::VariableDeclaration*> varMap_;
 };
 
 }

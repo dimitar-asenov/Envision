@@ -30,48 +30,48 @@ namespace CppImport {
 
 CppImportLogger::CppImportLogger()
 {
-    initStreams();
+	initStreams();
 }
 
 CppImportLogger::~CppImportLogger()
 {
-    delete errStream_;
-    delete warnStream_;
+	delete errStream_;
+	delete warnStream_;
 }
 
 void CppImportLogger::writeOut(QString &inWhichClass, QString &reason, QString &clangType, QString clangName, CppImportLogger::OUTTYPE outType)
 {
-    QTextStream* outStream;
-    switch(outType)
-    {
-    case ERROR:
-        outStream = errStream_;
-        break;
-    case WARNING:
-        outStream = warnStream_;
-        break;
-    default:
-        outStream = nullptr;
-        break;
-    }
+	QTextStream* outStream;
+	switch(outType)
+	{
+		case ERROR:
+			outStream = errStream_;
+			break;
+		case WARNING:
+			outStream = warnStream_;
+			break;
+		default:
+			outStream = nullptr;
+			break;
+	}
 
-    if(outStream)
-    {
-        (*outStream) << "ERR/WARN: \t In class : " << inWhichClass << " \n\t reason : " << reason << " \n\t in clang node : " << clangType << " \n\t clang node name : " << clangName << "\n";
-    }
+	if(outStream)
+	{
+		(*outStream) << "ERR/WARN: \t In class : " << inWhichClass << " \n\t reason : " << reason << " \n\t in clang node : " << clangType << " \n\t clang node name : " << clangName << "\n";
+	}
 }
 
 void CppImportLogger::initStreams()
 {
-    if(writeToFile_)
-    {
-        std::cout << "LOGGER ERR: NOT YET SUPPORTED TO WRITE TO FILE" << std::endl;
-    }
-    else
-    {
-        errStream_ = new QTextStream(stderr);
-        warnStream_ = new QTextStream(stdout);
-    }
+	if(writeToFile_)
+	{
+		std::cout << "LOGGER ERR: NOT YET SUPPORTED TO WRITE TO FILE" << std::endl;
+	}
+	else
+	{
+		errStream_ = new QTextStream(stderr);
+		warnStream_ = new QTextStream(stdout);
+	}
 }
 
 }

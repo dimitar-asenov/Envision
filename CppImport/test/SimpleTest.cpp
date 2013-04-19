@@ -270,37 +270,37 @@ namespace CppImport {
 
 TEST(CppImport, SimpleTest)
 {
-//    Model::Model* model = new Model::Model();
+	//    Model::Model* model = new Model::Model();
 
-//    Project* pr = nullptr;
-//    pr = addProject(model);
+	//    Project* pr = nullptr;
+	//    pr = addProject(model);
 
-//    Class* cl = nullptr;
-//    cl = addClass(model, pr);
+	//    Class* cl = nullptr;
+	//    cl = addClass(model, pr);
 
-//    Method* divbysix = nullptr;
-//    divbysix = addDivBySix(model, cl);
+	//    Method* divbysix = nullptr;
+	//    divbysix = addDivBySix(model, cl);
 
-//    Model::Node* top_level = nullptr;
-//    if (pr) top_level = pr;
-//    else if (cl) top_level = cl;
-//    else top_level = divbysix;
-    CppImportManager manager;
-    QString srcPath("/home/luke/BachelorThesis/Envision/CppImport");
-    manager.setSrcPath(srcPath);
-    manager.createModel();
+	//    Model::Node* top_level = nullptr;
+	//    if (pr) top_level = pr;
+	//    else if (cl) top_level = cl;
+	//    else top_level = divbysix;
+	CppImportManager manager;
+	QString srcPath("/home/luke/BachelorThesis/Envision/CppImport");
+	manager.setSrcPath(srcPath);
+	manager.createModel();
 
-    Model::Model* model = ClangConsumerFactory::model_;
-    Model::Node* top_level = model->root();
+	Model::Model* model = ClangConsumerFactory::model_;
+	Model::Node* top_level = model->root();
 
-    QDir::setCurrent(qApp->applicationDirPath());
+	QDir::setCurrent(qApp->applicationDirPath());
 
 
 
-    VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(top_level));
-    VisualizationManager::instance().mainScene()->listenToModel(model);
+	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(top_level));
+	VisualizationManager::instance().mainScene()->listenToModel(model);
 
-        CHECK_CONDITION(top_level != nullptr);
+	CHECK_CONDITION(top_level != nullptr);
 }
 
 }

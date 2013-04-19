@@ -30,23 +30,23 @@ namespace CppImport {
 
 
 ClangAstConsumer::ClangAstConsumer(Model::Model *model, OOModel::Project *currentProject) :
-    clang::ASTConsumer()
+	clang::ASTConsumer()
 {
-    this->astVisitor_ = new ClangAstVisitor(model, currentProject, logger_);
+	this->astVisitor_ = new ClangAstVisitor(model, currentProject, logger_);
 }
 
 ClangAstConsumer::ClangAstConsumer(clang::CompilerInstance *ci, Model::Model *model, OOModel::Project *currentProject) :
-    clang::ASTConsumer(), ci_(ci)
+	clang::ASTConsumer(), ci_(ci)
 {
-    if(ci)
-        ci->getPreprocessor().enableIncrementalProcessing();
-    this->astVisitor_ = new ClangAstVisitor(model, currentProject, logger_);
+	if(ci)
+		ci->getPreprocessor().enableIncrementalProcessing();
+	this->astVisitor_ = new ClangAstVisitor(model, currentProject, logger_);
 }
 
 ClangAstConsumer::~ClangAstConsumer()
 {
-    delete astVisitor_;
-    delete logger_;
+	delete astVisitor_;
+	delete logger_;
 }
 
 //bool ClangAstConsumer::HandleTopLevelDecl(clang::DeclGroupRef D)
@@ -65,19 +65,19 @@ ClangAstConsumer::~ClangAstConsumer()
 
 void ClangAstConsumer::HandleTranslationUnit(clang::ASTContext &Context)
 {
-    clang::RawCommentList cList = Context.getRawCommentList();
-    cList.getComments();
-    Context.getTranslationUnitDecl();
-    astVisitor_->TraverseDecl(Context.getTranslationUnitDecl());
+	clang::RawCommentList cList = Context.getRawCommentList();
+	cList.getComments();
+	Context.getTranslationUnitDecl();
+	astVisitor_->TraverseDecl(Context.getTranslationUnitDecl());
 }
 
 void ClangAstConsumer::Initialize(clang::ASTContext &Context)
 {
-    Context.getRawCommentList();
-    if(ci_)
-    {
-        ci_->getPreprocessor().addPPCallbacks(new ClangPPCallbacks());
-    }
+	Context.getRawCommentList();
+	if(ci_)
+	{
+		ci_->getPreprocessor().addPPCallbacks(new ClangPPCallbacks());
+	}
 }
 
 }

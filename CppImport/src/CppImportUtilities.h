@@ -32,12 +32,12 @@ namespace CppImport {
 
 class CppImportUtilities
 {
-public:
-    CppImportUtilities() {}
-    static OOModel::Expression* convertClangType(clang::QualType type);
-    static OOModel::BinaryOperation::OperatorTypes convertClangOpcode(clang::BinaryOperatorKind kind);
-    static OOModel::AssignmentExpression::AssignmentTypes convertClangAssignOpcode(clang::BinaryOperatorKind kind);
-    static OOModel::UnaryOperation::OperatorTypes convertUnaryOpcode(clang::UnaryOperatorKind kind);
-    static OOModel::Visibility::VisibilityType convertAccessSpecifier(clang::AccessSpecifier as);
+	public:
+		CppImportUtilities() {}
+		static OOModel::Expression* convertClangType(clang::QualType type);
+		static OOModel::BinaryOperation::OperatorTypes convertClangOpcode(clang::BinaryOperatorKind kind);
+		static OOModel::AssignmentExpression::AssignmentTypes convertClangAssignOpcode(clang::BinaryOperatorKind kind);
+		static OOModel::UnaryOperation::OperatorTypes convertUnaryOpcode(clang::UnaryOperatorKind kind);
+		static OOModel::Visibility::VisibilityType convertAccessSpecifier(clang::AccessSpecifier as);
 };
 }

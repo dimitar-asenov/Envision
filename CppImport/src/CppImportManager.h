@@ -34,18 +34,18 @@ namespace CppImport {
 
 class CppImportManager
 {
-public:
-    CppImportManager(){}
-    ~CppImportManager();
-    bool setSrcPath(QString& path);
-    void createModel();
+	public:
+		CppImportManager(){}
+		~CppImportManager();
+		bool setSrcPath(QString& path);
+		void createModel();
 
-protected:
-    bool setCompilationDbPath(QString& path);
-    clang::CompilerInstance compilerInstance_{};
-    clang::tooling::ClangTool* myTool_{};
-    clang::tooling::CompilationDatabase* compilationDB_{};
-    std::vector<std::string> sources_{};
+	protected:
+		bool setCompilationDbPath(QString& path);
+		clang::CompilerInstance compilerInstance_{};
+		clang::tooling::ClangTool* myTool_{};
+		clang::tooling::CompilationDatabase* compilationDB_{};
+		std::vector<std::string> sources_{};
 
 };
 
