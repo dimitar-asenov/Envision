@@ -147,16 +147,16 @@ void VClass::determineChildren()
 	QList<Model::Node*> privateFields;
 	QList<Model::Node*> protectedFields;
 	QList<Model::Node*> defaultFields;
-	for (int i = 0; i< node()->fields()->size(); ++i)
+	for (auto field : *node()->fields())
 	{
-		if (node()->fields()->at(i)->visibility() == Visibility::PUBLIC)
-			publicFields.append(node()->fields()->at(i));
-		else if (node()->fields()->at(i)->visibility() == Visibility::PRIVATE)
-			privateFields.append(node()->fields()->at(i));
-		else if (node()->fields()->at(i)->visibility() == Visibility::PROTECTED)
-			protectedFields.append(node()->fields()->at(i));
-		else if (node()->fields()->at(i)->visibility() == Visibility::DEFAULT)
-			defaultFields.append(node()->fields()->at(i));
+		if (field->visibility() == Visibility::PUBLIC)
+			publicFields.append(field);
+		else if (field->visibility() == Visibility::PRIVATE)
+			privateFields.append(field);
+		else if (field->visibility() == Visibility::PROTECTED)
+			protectedFields.append(field);
+		else if (field->visibility() == Visibility::DEFAULT)
+			defaultFields.append(field);
 		else throw OOVisualizationException("Unknown visibility value when updating VClass instance.");
 	}
 

@@ -49,9 +49,8 @@ void CustomizationVisitor::init(Visualization::VisualizationGroup* customization
 
 Model::Node* CustomizationVisitor::visitMethod(CustomizationVisitor*, OOModel::Method* met)
 {
-	for(int i = 0; i<met->annotations()->size(); ++i)
+	for(auto annotation : *met->annotations())
 	{
-		auto annotation = met->annotations()->at(i);
 		if ( auto sti = dynamic_cast<OOModel::ExpressionStatement*>(annotation) )
 			if (auto call = dynamic_cast<OOModel::MethodCallExpression*>(sti->expression()) )
 			{

@@ -44,8 +44,7 @@ class VisitorA : public Visitor<VisitorA, QString>{
 
 			addType<List>( [](VisitorA* v, List* n) -> QString {
 				QString res = "List(";
-				for(int i = 0; i< n->size(); ++i)
-					res += v->visit(n->at<Node>(i)) + ",";
+				for(auto node : *n) res += v->visit(node) + ",";
 				res+=")";
 				return res;
 			});

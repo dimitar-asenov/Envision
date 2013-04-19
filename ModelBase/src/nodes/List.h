@@ -59,6 +59,7 @@ class MODELBASE_API List: public Node
 
 		int indexOf(const Node* item) const;
 		int indexOfSubitem(const Node* item) const;
+		bool contains(const Node* node) const;
 
 		void append(Node* node);
 		void prepend(Node* node);
@@ -75,6 +76,16 @@ class MODELBASE_API List: public Node
 		 */
 		void remove(Node* instance);
 		void clear();
+
+		using iterator = QVector<Node*>::Iterator;
+		using const_iterator = QVector<Node*>::ConstIterator;
+
+		iterator begin();
+		const_iterator begin() const;
+		const_iterator cbegin() const;
+		iterator end();
+		const_iterator end() const;
+		const_iterator cend() const;
 
 		const QVector<Node*>& nodes();
 
@@ -103,6 +114,13 @@ class MODELBASE_API List: public Node
 		void loadSubNodes(QList<LoadedNode>& nodeList);
 };
 
+inline List::iterator List::begin() {return nodes_.begin();}
+inline List::const_iterator List::begin() const {return nodes_.begin();}
+inline List::const_iterator List::cbegin() const {return nodes_.constBegin();}
+inline List::iterator List::end() {return nodes_.end();}
+inline List::const_iterator List::end() const {return nodes_.end();}
+inline List::const_iterator List::cend() const {return nodes_.constEnd();}
+
 template <class T> T* List::first()
 {
 	if (!fullyLoaded) loadFully(* (model()->store()));
@@ -129,5 +147,6 @@ template <class T> T* List::at(int i)
 inline const QVector<Node*>& List::nodes() { return nodes_; }
 inline void List::append(Node* node) { insert(nodes_.size(), node); }
 inline void List::prepend(Node* node) { insert(0, node); }
+inline bool List::contains(const Node* node) const {return nodes_.contains(const_cast<Node*>(node));}
 
 }

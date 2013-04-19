@@ -83,17 +83,17 @@ void VArrayInitializer::determineChildren()
 		useShape();
 
 		QList< QList< Model::Node*> > nodes;
-		for(int y = 0; y<node()->values()->size(); ++y)
+		for(auto genericRow : *node()->values())
 		{
 			nodes.append( QList< Model::Node*>() );
 
-			ArrayInitializer* column = dynamic_cast< ArrayInitializer* >(node()->values()->at(y));
+			ArrayInitializer* column = dynamic_cast< ArrayInitializer* >(genericRow);
 			if (column)
 			{
-				for(int x = 0; x < column->values()->size(); ++x)
-					nodes.last().append(column->values()->at(x));
+				for(auto genericColumn : *column->values())
+					nodes.last().append(genericColumn);
 			}
-			else nodes.last().append( node()->values()->at(y) );
+			else nodes.last().append( genericRow );
 		}
 
 		layout()->synchronizeWithNodes(nodes, renderer());

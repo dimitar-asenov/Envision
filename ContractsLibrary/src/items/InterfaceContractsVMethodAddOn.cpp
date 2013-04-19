@@ -57,9 +57,8 @@ QList<Visualization::Item*> InterfaceContractsVMethodAddOn::determineItems(Visua
 	if (!cl) return result;
 
 
-	for (int i = 0; i<cl->annotations()->size(); ++i)
+	for (auto st : *cl->annotations())
 	{
-		auto st = cl->annotations()->at(i);
 		if ( auto sti = dynamic_cast<OOModel::ExpressionStatement*>(st) )
 			if (auto call = dynamic_cast<OOModel::MethodCallExpression*>(sti->expression()) )
 				if (call->methodDefinition() == contractClassMethod_ && call->arguments()->size() == 1)
@@ -71,9 +70,8 @@ QList<Visualization::Item*> InterfaceContractsVMethodAddOn::determineItems(Visua
 									if (firstBaseClassExp->target() == cl)
 									{
 										//TODO: make this work properly in case of overloading/overriding
-										for (int i = 0; i< contractClass->methods()->size(); ++i)
+										for (auto m : *contractClass->methods())
 										{
-											auto m = contractClass->methods()->at(i);
 											if (m->name() == vMet->node()->name())
 											{
 												auto contracts = m->items();
