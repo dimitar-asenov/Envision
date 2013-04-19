@@ -28,11 +28,15 @@
 #include "../elements/VStatementItemList.h"
 #include "OOVisualizationException.h"
 
-#include "VisualizationBase/src/layouts/PanelBorderLayout.h"
 #include "VisualizationBase/src/items/Static.h"
 #include "VisualizationBase/src/items/VText.h"
 #include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/items/Line.h"
+
+#include "VisualizationBase/src/declarative/AnchorLayoutElement.h"
+#include "VisualizationBase/src/declarative/GridLayoutElement.h"
+#include "VisualizationBase/src/declarative/SequentialLayoutElement.h"
+#include "VisualizationBase/src/declarative/ShapeElement.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -42,106 +46,71 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VMethod, "item")
 
 VMethod::VMethod(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style)
+{}
+
+void VMethod::initializeForms()
 {
-	layout()->setTop(true);
+	auto headerElement = (new GridLayoutElement())
+		->setHorizontalSpacing(3)->setVerticalAlignment(LayoutStyle::Alignment::Center)->setColumnStretchFactor(4, 1)
+		->put(0, 0, item<Static, I>(&I::icon_, [](I* v){return &v->style()->icon();}))
+		->put(1, 0, item<VList, I>(&I::results_, [](I* v){return v->node()->results();},
+											[](I* v){return &v->style()->results();}))
+		->put(2, 0, item<VText, I>(&I::name_, [](I* v){return v->node()->nameNode();}, [](I* v)
+				{
+					// return the correct name style according to visibility and static type of the method
+					if (v->node()->storageSpecifier() == StorageSpecifier::INSTANCE_VARIABLE)
+					{
+						if (v->node()->visibility() == Visibility::DEFAULT) return &v->style()->nameDefault();
+						else if (v->node()->visibility() == Visibility::PRIVATE) return &v->style()->namePrivate();
+						else if (v->node()->visibility() == Visibility::PROTECTED) return &v->style()->nameProtected();
+						else if (v->node()->visibility() == Visibility::PUBLIC) return &v->style()->namePublic();
+						else throw OOVisualizationException("Unknown visibility type in VMethod::initializeForms");
+					}
+					else if (v->node()->storageSpecifier() == StorageSpecifier::CLASS_VARIABLE)
+					{
+						if (v->node()->visibility() == Visibility::DEFAULT) return &v->style()->nameStaticDefault();
+						else if (v->node()->visibility() == Visibility::PRIVATE)return &v->style()->nameStaticPrivate();
+						else if (v->node()->visibility() == Visibility::PROTECTED) return &v->style()->nameStaticProtected();
+						else if (v->node()->visibility() == Visibility::PUBLIC) return &v->style()->nameStaticPublic();
+						else throw OOVisualizationException("Unknown visibility type in VMethod::determineChildren");
+					}
+					else throw OOVisualizationException("Unknown static type in VMethod::determineChildren");
+				}))
+		->put(3, 0, item<VList, I>(&I::typeArguments_, [](I* v){return v->node()->typeArguments();},
+											[](I* v){return &v->style()->arguments();}))
+		->put(4, 0, item<VList, I>(&I::arguments_, [](I* v){return v->node()->arguments();},
+											[](I* v){return &v->style()->arguments();}));
 
-	header_ = new SequentialLayout(layout()->top(), &style->header());
-	layout()->top()->setFirst(header_);
+	auto addonsElement = (new SequentialLayoutElement())
+								->setVertical()
+								->setListOfItems([](Item* i){return (static_cast<VMethod*>(i))->addOnItems().values();});
 
-	icon_ = new Static(header_, &style->icon());
-	header_->append(icon_);
+	auto annotationsElement = item<VStatementItemList, I>(&I::annotations_, [](I* v)
+											{return v->node()->annotations()->size() > 0 ? v->node()->annotations() : nullptr;},
+											[](I* v){return &v->style()->annotations();});
 
-	results_ =new VList(header_, node->results(), &style->results());
-	header_->append(results_);
+	auto signatureLineElement = item<Line, I>(&I::signatureLine_, [](I* v){return &v->style()->signatureLine();});
 
-	name_ =new VText(header_, node->nameNode(), &style->nameDefault());
-	header_->append(name_);
-	setDefaultMoveCursorProxy(name_);
+	auto bodyElement = item<VStatementItemList, I>(&I::body_, [](I* v){return v->node()->items();},
+											[](I* v){return &v->style()->body();});
 
-	typeArguments_ =new VList(header_, node->typeArguments(), &style->arguments());
-	header_->append(typeArguments_);
+	auto contentElement = (new GridLayoutElement())
+			->setVerticalSpacing(3)->setColumnStretchFactors(1)
+			->put(0, 0, addonsElement)
+			->put(0, 1, annotationsElement)
+			->put(0, 2, signatureLineElement)
+			->put(0, 3, bodyElement);
 
-	arguments_ =new VList(header_, node->arguments(), &style->arguments());
-	header_->append(arguments_);
+	auto shapeElement = new ShapeElement();
 
-	content_ = new SequentialLayout(layout(), &style->content());
-	layout()->setContent(content_);
-
-	signatureLine_ = new Line(content_, &style->signatureLine());
-	content_->append(signatureLine_);
-
-	body_ = new VStatementItemList(content_, node->items(), &style->body());
-	content_->append(body_);
-}
-
-VMethod::~VMethod()
-{
-	// These were automatically deleted by LayoutProvider's destructor
-	header_ = nullptr;
-	icon_ = nullptr;
-	name_ = nullptr;
-	body_ = nullptr;
-	signatureLine_ = nullptr;
-	annotations_ = nullptr;
-	addons_ = nullptr;
-	content_ = nullptr;
-	typeArguments_ = nullptr;
-	arguments_ = nullptr;
-	results_ = nullptr;
-}
-
-void VMethod::determineChildren()
-{
-	const TextStyle* nameStyle = nullptr;
-	if (node()->storageSpecifier() == StorageSpecifier::INSTANCE_VARIABLE)
-	{
-		if (node()->visibility() == Visibility::DEFAULT) nameStyle = &style()->nameDefault();
-		else if (node()->visibility() == Visibility::PRIVATE) nameStyle = &style()->namePrivate();
-		else if (node()->visibility() == Visibility::PROTECTED) nameStyle = &style()->nameProtected();
-		else if (node()->visibility() == Visibility::PUBLIC) nameStyle = &style()->namePublic();
-		else throw OOVisualizationException("Unknown visibility type in VMethod::determineChildren");
-	}
-	else if (node()->storageSpecifier() == StorageSpecifier::CLASS_VARIABLE)
-	{
-		if (node()->visibility() == Visibility::DEFAULT) nameStyle = &style()->nameStaticDefault();
-		else if (node()->visibility() == Visibility::PRIVATE)nameStyle = &style()->nameStaticPrivate();
-		else if (node()->visibility() == Visibility::PROTECTED) nameStyle = &style()->nameStaticProtected();
-		else if (node()->visibility() == Visibility::PUBLIC) nameStyle = &style()->nameStaticPublic();
-		else throw OOVisualizationException("Unknown visibility type in VMethod::determineChildren");
-	}
-	else throw OOVisualizationException("Unknown static type in VMethod::determineChildren");
-
-
-	header_->synchronizeMid(results_, node()->results(), &style()->results(), 1);
-	header_->synchronizeMid(name_, node()->nameNode(), nameStyle, results_ ? 2 : 1);
-	header_->synchronizeMid(typeArguments_, node()->typeArguments(), &style()->typeArguments(), results_ ? 3 : 2);
-	header_->synchronizeLast(arguments_, node()->arguments(), &style()->arguments());
-
-	content_->synchronizeLast(body_, node()->items(), &style()->body());
-	content_->synchronizeFirst(addons_, !addOnItems().isEmpty(), &style()->addons());
-	if (addons_) putAddOnItemsInSequence(addons_);
-
-	content_->synchronizeMid(annotations_,
-				node()->annotations()->size() > 0 ? node()->annotations() : nullptr,
-						&style()->annotations(), addons_ ? 1 : 0);
-
-	content_->synchronizeMid(signatureLine_, addons_ || annotations_ || node()->items()->size(),
-			&style()->signatureLine(), (addons_ ?1:0) + (annotations_ ?1:0));
-
-	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
-	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
-	//			what's the reason they are being updated.
-	// The style needs to be updated every time since if our own style changes, so will that of the children.
-	layout()->setStyle( &style()->layout() );
-	icon_->setStyle( &style()->icon());
-	header_->setStyle( &style()->header() );
-	name_->setStyle(nameStyle);
-	body_->setStyle( &style()->body() );
-	if (annotations_) annotations_->setStyle( &style()->annotations() );
-	content_->setStyle( &style()->content() );
-	typeArguments_->setStyle( &style()->typeArguments() );
-	arguments_->setStyle( &style()->arguments() );
-	results_->setStyle( &style()->results() );
+	addForm((new AnchorLayoutElement())
+			->put(TheLeftOf, shapeElement, AtLeftOf, headerElement)
+			->put(TheTopOf, shapeElement, AtCenterOf, headerElement)
+			->put(TheLeftOf, shapeElement, 10, FromLeftOf, contentElement)
+			->put(TheRightOf, contentElement, AtRightOf, headerElement)
+			->put(TheTopOf, contentElement, 10,FromBottomOf, headerElement)
+			->put(TheRightOf, shapeElement, 10, FromRightOf, contentElement)
+			->put(TheBottomOf, shapeElement, 10, FromBottomOf, contentElement));
 }
 
 }
