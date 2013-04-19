@@ -82,7 +82,7 @@ class VISUALIZATIONBASE_API SequentialLayoutElement : public LayoutElement
 		 * dynamically while rendering. If this getter is set, anything set with the setSpaceBetweenElements(int) will be
 		 * ignored.
 		 */
-		SequentialLayoutElement* setSpaceBetweenElements(std::function<int()> spaceBetweenElementsGetter);
+		SequentialLayoutElement* setSpaceBetweenElements(std::function<int(Item* item)> spaceBetweenElementsGetter);
 		/**
 		 * Sets the \a orientation of this sequential layout. Also sets the alignment to the default (bottom for
 		 * horizontal, left for vertical).
@@ -168,7 +168,7 @@ class VISUALIZATIONBASE_API SequentialLayoutElement : public LayoutElement
 		ListOfNodesGetterFunction nodeListGetter_{};
 		ListOfItemsGetterFunction itemListGetter_{};
 
-		std::function<int()> spaceBetweenElementsGetter_;
+		std::function<int(Item* item)> spaceBetweenElementsGetter_;
 
 		int defaultSpaceBetweenElements_{0};
 		Qt::Orientation orientation_{Qt::Horizontal};
@@ -190,7 +190,7 @@ class VISUALIZATIONBASE_API SequentialLayoutElement : public LayoutElement
 		/**
 		 * Computes the space between elements from the getter and the previously set space.
 		 */
-		int spaceBetweenElements();
+		int spaceBetweenElements(Item* item);
 		/**
 		 * Synchronizes the old list of items for this \a item with the new list of \a nodes.
 		 */
@@ -234,7 +234,7 @@ inline SequentialLayoutElement* SequentialLayoutElement::setSpaceBetweenElements
 	return this;
 }
 inline SequentialLayoutElement* SequentialLayoutElement::setSpaceBetweenElements(
-		std::function<int()> spaceBetweenElementsGetter)
+		std::function<int(Item* item)> spaceBetweenElementsGetter)
 {
 	spaceBetweenElementsGetter_ = spaceBetweenElementsGetter;
 	return this;

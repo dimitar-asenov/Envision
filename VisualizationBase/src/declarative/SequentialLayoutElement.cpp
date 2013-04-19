@@ -73,8 +73,8 @@ void SequentialLayoutElement::computeSize(Item* item, int availableWidth, int av
 	}
 	if (!itemList.isEmpty())
 	{
-		sizeWidth += (itemList.size() - 1) * spaceBetweenElements();
-		sizeHeight += (itemList.size() - 1) * spaceBetweenElements();
+		sizeWidth += (itemList.size() - 1) * spaceBetweenElements(item);
+		sizeHeight += (itemList.size() - 1) * spaceBetweenElements(item);
 	}
 
 	// minWidth and minHeight always apply to the dimension opposite of the direction.
@@ -134,7 +134,7 @@ void SequentialLayoutElement::computeSize(Item* item, int availableWidth, int av
 			if (alignment_ == LayoutStyle::Alignment::Center)
 				y += (maxChildHeight - itemList[i]->height()) / 2;
 
-			if ( i != begin ) w += spaceBetweenElements();
+			if ( i != begin ) w += spaceBetweenElements(item);
 			itemList[i]->setPos(w, y);
 			w += itemList[i]->width();
 		}
@@ -146,7 +146,7 @@ void SequentialLayoutElement::computeSize(Item* item, int availableWidth, int av
 			if (alignment_ == LayoutStyle::Alignment::Center)
 				x += (maxChildWidth - itemList[i]->width()) / 2;
 
-			if ( i != begin ) h += spaceBetweenElements();
+			if ( i != begin ) h += spaceBetweenElements(item);
 			itemList[i]->setPos(x, h);
 			h += itemList[i]->height();
 		}
@@ -203,10 +203,10 @@ QList<Item*>& SequentialLayoutElement::listForItem(const Item* item) const
 	return *itemListMap_.value(item);
 }
 
-int SequentialLayoutElement::spaceBetweenElements()
+int SequentialLayoutElement::spaceBetweenElements(Item* item)
 {
 	if (spaceBetweenElementsGetter_)
-		return spaceBetweenElementsGetter_();
+		return spaceBetweenElementsGetter_(item);
 	return defaultSpaceBetweenElements_;
 }
 
@@ -314,7 +314,7 @@ QList<ItemRegion> SequentialLayoutElement::regions(Item* item, int parentX, int 
 
 	bool horizontal = (orientation_ == Qt::Horizontal);
 
-	int offset = (spaceBetweenElements() > 0) ? spaceBetweenElements()/2 : 1;
+	int offset = (spaceBetweenElements(item) > 0) ? spaceBetweenElements(item)/2 : 1;
 
 	int last = forward_ ?
 			( horizontal ? midArea.left() : midArea.top()) :
