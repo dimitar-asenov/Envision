@@ -31,6 +31,9 @@
 
 namespace Visualization {
 
+/**
+ * Base class for a layout element.
+ */
 class VISUALIZATIONBASE_API LayoutElement : public Element
 {
 	public:

@@ -122,15 +122,15 @@ class GridLayoutElement : public LayoutElement {
 		/**
 		 * Sets the stretch factor of this \a column to \a stretchFactor.
 		 * The stretch factor determines, how much of the additionally available space this column gets if there is any.
-		 * By default this is 0, meaning the column does not stretch. If the stretch factor is bigger than zero, the column
-		 * gets a portion of additional space computed by (\a stretchFactor) / (sum of all column stretch factors).
+		 * By default this is 0, meaning the column does not stretch. If the stretch factor is bigger than zero, the
+		 * column gets a portion of additional space computed by (\a stretchFactor) / (sum of all column stretch factors).
 		 */
 		GridLayoutElement* setColumnStretchFactor(int column, float stretchFactor);
 		/**
 		 * Sets the stretch factor of all columns to \a stretchFactor.
 		 * The stretch factor determines, how much of the additionally available space each column gets if there is any.
-		 * By default this is 0, meaning the column does not stretch. If the stretch factor is bigger than zero, the column
-		 * gets a portion of additional space computed by (\a stretchFactor) / (sum of all column stretch factors).
+		 * By default this is 0, meaning the column does not stretch. If the stretch factor is bigger than zero, the
+		 * column gets a portion of additional space computed by (\a stretchFactor) / (sum of all column stretch factors).
 		 */
 		GridLayoutElement* setColumnStretchFactors(float stretchFactor);
 		/**
@@ -149,19 +149,32 @@ class GridLayoutElement : public LayoutElement {
 		GridLayoutElement* setRowStretchFactors(float stretchFactor);
 		/**
 		 * Sets the stretch factor of all columns and rows to \a stretchFactor.
-		 * The stretch factor determines, how much of the additionally available space each column/row gets if there is any.
-		 * By default this is 0, meaning the column/row does not stretch. If the stretch factor is bigger than zero, the
-		 * column/row gets a portion of additional space computed by
+		 * The stretch factor determines, how much of the additionally available space each column/row gets if there is
+		 * any. By default this is 0, meaning the column/row does not stretch. If the stretch factor is bigger than zero,
+		 * the column/row gets a portion of additional space computed by
 		 * (\a stretchFactor) / (sum of all column/row stretch factors).
 		 */
 		GridLayoutElement* setStretchFactors(float stretchFactor);
-		// TODO: documentation setHasCursorWhenEmpty
+		/**
+		 * Sets if the element has a cursor if it is empty to \a cursorWhenEmpty. Is false by default.
+		 * Also see SequentialLayoutStyle::hasCursorWhenEmpty().
+		 */
 		GridLayoutElement* setHasCursorWhenEmpty(bool cursorWhenEmpty);
-		// TODO: documentation setNotLocationEquivalentCursors
+		/**
+		 * Sets if the element does not have location equivalent cursors to \a notLocationEquivalent. Is false by
+		 * default.
+		 * Also see SequentialLayoutStyle::notLocationEquivalentCursors().
+		 */
 		GridLayoutElement* setNotLocationEquivalentCursors(bool notLocationEquivalent);
-		// TODO: documentation setNoBoundaryCursors
+		/**
+		 * Sets if the element has no boundary cursors to \a noBoundaryCursors. Is false by default.
+		 * Also see SequentialLayoutStyle::noBoundaryCursorsInsideShape().
+		 */
 		GridLayoutElement* setNoBoudaryCursors(bool noBoundaryCursors);
-		// TODO: documentation setNoInnerCursors
+		/**
+		 * Sets if the element has no inner cursors to \a noInnerCursors. Is false by default.
+		 * Also see SequentialLayoutStyle::noInnerCursors().
+		 */
 		GridLayoutElement* setNoInnerCursors(bool noInnerCursors);
 
 		// Methods executable when items need to be rendered

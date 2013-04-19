@@ -33,6 +33,9 @@
 
 namespace Visualization {
 
+/**
+ * This is an item wrapper element, with a specifiable node to create the item with.
+ */
 template <class ParentType>
 class NodeItemWrapperElement : public ItemWrapperElement<ParentType> {
 		FLUENT_ELEMENT_INTERFACE(NodeItemWrapperElement);

@@ -29,15 +29,10 @@
 namespace Visualization {
 
 ShapeElement::ShapeElement()
-{
-	// TODO Auto-generated constructor stub
-
-}
+{}
 
 ShapeElement::~ShapeElement()
-{
-	// TODO Auto-generated destructor stub
-}
+{}
 
 QList<Element*> ShapeElement::shapeElements()
 {

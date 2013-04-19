@@ -105,9 +105,9 @@ class VISUALIZATIONBASE_API DeclarativeItemBase: public Item
 			item(Item* ParentType::* item, std::function<Model::Node* (ParentType* v)> nodeGetter);
 		/**
 		 * A factory method to get an item wrapper element with a node and a visualization, it takes a pointer to member,
-		 * where the visualization \a item should be stored, a method to get the style (\a styleGetter), and a method to get
-		 * the node (\a nodeGetter). The node then gets visualized using the given visualization and style. To call it, one
-		 * has to supply the visualization type and the parent type (which is always 'I') as template arguments.
+		 * where the visualization \a item should be stored, a method to get the style (\a styleGetter), and a method to
+		 * get the node (\a nodeGetter). The node then gets visualized using the given visualization and style. To call
+		 * it, one has to supply the visualization type and the parent type (which is always 'I') as template arguments.
 		 */
 		template <class VisualizationType, class ParentType>
 			static NodeWithVisualizationItemWrapperElement<ParentType, VisualizationType>*

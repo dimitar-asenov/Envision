@@ -39,10 +39,6 @@ AnchorLayoutAnchor::AnchorLayoutAnchor(float relativePlaceEdgePosition, Element*
 AnchorLayoutAnchor::~AnchorLayoutAnchor()
 {}
 
-/**
- * Calculates the position in the orientation axis of the element to be placed, assuming it's size was already
- * calculated, and the position on the orientation axis of the fixed element is already fixed.
- */
 int AnchorLayoutAnchor::execute(Item* item, Orientation orientation)
 {
 	Q_ASSERT(orientation != Orientation::Auto);

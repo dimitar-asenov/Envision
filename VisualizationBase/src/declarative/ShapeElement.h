@@ -30,6 +30,10 @@
 
 namespace Visualization {
 
+/**
+ * The shape element is a placeholder element, stretching to encompass all the available space. It is used to put the
+ * shape at a custom position.
+ */
 class ShapeElement : public Visualization::Element {
 	public:
 		ShapeElement();

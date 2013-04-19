@@ -39,6 +39,13 @@ namespace Visualization {
 
 class Element;
 
+/**
+ * The sequential layout element can display a list of items either horizontally or vertically.
+ *
+ * It can directly be given a getter for a list of items, or alternatively a list of nodes or a node of type
+ * Model::List, out of which the list of items then can be constructed by rendering each node with its default
+ * visualization.
+ */
 class VISUALIZATIONBASE_API SequentialLayoutElement : public LayoutElement
 {
 		FLUENT_ELEMENT_INTERFACE(SequentialLayoutElement);
@@ -71,13 +78,14 @@ class VISUALIZATIONBASE_API SequentialLayoutElement : public LayoutElement
 		 */
 		SequentialLayoutElement* setSpaceBetweenElements(int space);
 		/**
-		 * Sets a getter (\a spaceBetweenElementsGetter) for getting the appropriate space between two elements dynamically
-		 * while rendering. If this getter is set, anything set with the setSpaceBetweenElements(int) will be ignored.
+		 * Sets a getter (\a spaceBetweenElementsGetter) for getting the appropriate space between two elements
+		 * dynamically while rendering. If this getter is set, anything set with the setSpaceBetweenElements(int) will be
+		 * ignored.
 		 */
 		SequentialLayoutElement* setSpaceBetweenElements(std::function<int()> spaceBetweenElementsGetter);
 		/**
-		 * Sets the \a orientation of this sequential layout. Also sets the alignment to the default (bottom for horizontal,
-		 * left for vertical).
+		 * Sets the \a orientation of this sequential layout. Also sets the alignment to the default (bottom for
+		 * horizontal, left for vertical).
 		 */
 		SequentialLayoutElement* setOrientation(Qt::Orientation orientation);
 		/**
@@ -107,13 +115,26 @@ class VISUALIZATIONBASE_API SequentialLayoutElement : public LayoutElement
 		 * Sets the minimum height to \a minHeight.
 		 */
 		SequentialLayoutElement* setMinHeight(int minHeight);
-		// TODO: documentation setHasCursorWhenEmpty
+		/**
+		 * Sets if the element has a cursor if it is empty to \a cursorWhenEmpty. Is false by default.
+		 * Also see SequentialLayoutStyle::hasCursorWhenEmpty().
+		 */
 		SequentialLayoutElement* setHasCursorWhenEmpty(bool cursorWhenEmpty);
-		// TODO: documentation setNotLocationEquivalentCursors
+		/**
+		 * Sets if the element does not have location equivalent cursors to \a notLocationEquivalent. Is false by
+		 * default.
+		 * Also see SequentialLayoutStyle::notLocationEquivalentCursors().
+		 */
 		SequentialLayoutElement* setNotLocationEquivalentCursors(bool notLocationEquivalent);
-		// TODO: documentation setNoBoundaryCursors
+		/**
+		 * Sets if the element has no boundary cursors to \a noBoundaryCursors. Is false by default.
+		 * Also see SequentialLayoutStyle::noBoundaryCursorsInsideShape().
+		 */
 		SequentialLayoutElement* setNoBoudaryCursors(bool noBoundaryCursors);
-		// TODO: documentation setNoInnerCursors
+		/**
+		 * Sets if the element has no inner cursors to \a noInnerCursors. Is false by default.
+		 * Also see SequentialLayoutStyle::noInnerCursors().
+		 */
 		SequentialLayoutElement* setNoInnerCursors(bool noInnerCursors);
 
 		// Methods executable when items need to be rendered

@@ -85,8 +85,8 @@ class AnchorLayoutElement : public LayoutElement {
 		 */
 		AnchorLayoutAnchor::Orientation orientation(Edge edge);
 		/**
-		 * Computes orientation of \a firstEdge and \a secondEdge, fails if orientation cannot be inferred (both are Center)
-		 * of if the edges have conflicting orientations (e.g. Orientation::Left and Orientation::Top).
+		 * Computes orientation of \a firstEdge and \a secondEdge, fails if orientation cannot be inferred (both are
+		 * Center) of if the edges have conflicting orientations (e.g. Orientation::Left and Orientation::Top).
 		 * Returns either Orientation::Horizontal or Orientation::Vertical.
 		 */
 		AnchorLayoutAnchor::Orientation inferOrientation(Edge firstEdge, Edge secondEdge);

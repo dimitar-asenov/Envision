@@ -35,10 +35,21 @@ namespace Visualization {
 class Element;
 class Item;
 
+/**
+ * This class can solve the linear program given by a list of elements and anchors. That is, it can place elements
+ * along an axis, even if there are some circular dependencies involved. This solver is only used, if there are such
+ * dependencies along the axis to be handled.
+ *
+ * The library used to solve the linear programming problem is lp_solve.
+ */
 class AnchorLayoutConstraintSolver {
 	public:
 		AnchorLayoutConstraintSolver();
 		virtual ~AnchorLayoutConstraintSolver();
+		/**
+		 * Taking a list of \a elements and a list of \a anchors, computes the positions along the axis given by
+		 * \a orientation for all the \a elements, relative to the \a item.
+		 */
 		void placeElements(const QVector<Element*>& elements, QList<AnchorLayoutAnchor*>& anchors,
 				AnchorLayoutAnchor::Orientation orientation, Item* item);
 	private:

@@ -116,15 +116,15 @@ class VISUALIZATIONBASE_API Element
 		 * Method called inside the \a item's determineChildren method to let the element and it's children update their
 		 * information about items and nodes belonging to this \a item.
 		 *
-		 * If any nodes or child items changed, this method allows the item wrappers and sequential layout to reflect those
-		 * changes.
+		 * If any nodes or child items changed, this method allows the item wrappers and sequential layout to reflect
+		 * those changes.
 		 */
 		virtual void synchronizeWithItem(Item* item);
 		/**
 		 * Method called inside the \a item's updateGeometry method to compute it's size and position it's child elements.
-		 * The arguments \a availableWidth and \a availableHeight are similar to those of Item::updateGeometry. If they are
-		 * zero, the element calculates its minimum size, if it they are bigger, the element tries to stretch/grow to this
-		 * size, but not further.
+		 * The arguments \a availableWidth and \a availableHeight are similar to those of Item::updateGeometry. If they
+		 * are zero, the element calculates its minimum size, if it they are bigger, the element tries to stretch/grow to
+		 * this size, but not further.
 		 */
 		virtual void computeSize(Item* item, int availableWidth, int availableHeight) = 0;
 		/**
@@ -141,8 +141,8 @@ class VISUALIZATIONBASE_API Element
 		 */
 		virtual bool sizeDependsOnParent(const Item* item) const = 0;
 		/**
-		 * Method called inside the \a item's elementOrChildHasFocus and by some layout elements. It recursively determines
-		 * if this element or any of its children has the focus for the specified \a item.
+		 * Method called inside the \a item's elementOrChildHasFocus and by some layout elements. It recursively
+		 * determines if this element or any of its children has the focus for the specified \a item.
 		 */
 		virtual bool elementOrChildHasFocus(Item* item) const;
 		/**
@@ -185,13 +185,13 @@ class VISUALIZATIONBASE_API Element
 		 */
 		int height(Item* item) const;
 		/**
-		 * Returns the cached position on the x-axis where this element ends for the specified \a item. That is the position
-		 * on the x-axis + width.
+		 * Returns the cached position on the x-axis where this element ends for the specified \a item. That is the
+		 * position on the x-axis + width.
 		 */
 		int xEnd(Item* item) const;
 		/**
-		 * Returns the cached position on the y-axis where this element ends for the specified \a item. That is the position
-		 * on the y-axis + height.
+		 * Returns the cached position on the y-axis where this element ends for the specified \a item. That is the
+		 * position on the y-axis + height.
 		 */
 		int yEnd(Item* item) const;
 		/**

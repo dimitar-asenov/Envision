@@ -31,18 +31,47 @@ namespace Visualization {
 class Item;
 class Element;
 
+/**
+ * An anchor is a constraint on how two elements are positioned relative to each other along one axis.
+ * This class holds information about one such constraint.
+ * Also, if there are no circular dependencies on the axis to compute, and the fixed element of this class is really
+ * already fixed, the method execute can be used to calculate the position of the place element.
+ */
 class AnchorLayoutAnchor {
 	public:
 		enum class Orientation : int {Auto, Horizontal, Vertical};
 		AnchorLayoutAnchor(float relativePlaceEdgePosition, Element* placeElement, int offset,
 				float relativeFixedEdgePosition, Element* fixedElement);
 		virtual ~AnchorLayoutAnchor();
+
+		/**
+		 * Returns the position on the \a orientation axis of the element to be placed, assuming its size for \a item was
+		 * already calculated, and the position on the orientation axis of the fixed element is already fixed for \a item.
+		 */
 		int execute(Item* item, Orientation orientation);
+		/**
+		 * Returns the place element.
+		 */
 		Element* placeElement() const;
+		/**
+		 * Returns the fixed element.
+		 */
 		Element* fixedElement() const;
+		/**
+		 * Returns whether this anchor depends on \a other, given the list of all anchors (\a allConstraints).
+		 */
 		bool dependsOn(AnchorLayoutAnchor* other, QList<AnchorLayoutAnchor*>& allConstraints);
+		/**
+		 * Returns the relative place edge position.
+		 */
 		float relativePlaceEdgePosition() const;
+		/**
+		 * Returns the relative fixed edge position.
+		 */
 		float relativeFixedEdgePosition() const;
+		/**
+		 * Returns the offset.
+		 */
 		int offset() const;
 
 	private:
