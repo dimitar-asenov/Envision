@@ -24,24 +24,34 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
+#include "PointerType.h"
 
-#include "../../oointeraction_api.h"
-#include "../OOOperatorDescriptor.h"
 
-#include "OOModel/src/expressions/UnaryOperation.h"
+namespace OOModel {
 
-namespace OOInteraction {
+PointerType::PointerType(Type* baseType, bool isValueType) : Type(isValueType), baseType_(baseType)
+{}
 
-class OOINTERACTION_API UnaryOperatorDescriptor : public OOOperatorDescriptor {
-	public:
-	UnaryOperatorDescriptor(OOModel::UnaryOperation::OperatorTypes op, const QString& name,
-			const QString& signature, int num_operands, int precedence, Associativity associativity);
+PointerType::PointerType(const PointerType &other)
+    : Type(other.isValueType()), baseType_(other.baseType()->clone())
+{}
 
-		virtual OOModel::Expression* create(const QList<OOModel::Expression*>& operands);
+PointerType::~PointerType()
+{
+    SAFE_DELETE(baseType_);
+}
 
-	private:
-		OOModel::UnaryOperation::OperatorTypes op_;
-};
+bool PointerType::equals(const Type* other) const
+{
+    if (auto at = dynamic_cast<const PointerType*> (other))
+        return baseType_ != nullptr && baseType_->equals(at->baseType_);
 
-} /* namespace OOInteraction */
+    return false;
+}
+
+PointerType* PointerType::clone() const
+{
+    return new PointerType(*this);
+}
+
+} /* namespace OOModel */

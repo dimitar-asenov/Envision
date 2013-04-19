@@ -35,5 +35,11 @@
 				</shape>
 			</layout>
 		</e8>
+		<e9 prototypes="default.operand">
+			<preSymbol prototypes="item/Symbol/default"><symbol>*</symbol></preSymbol>
+		</e9>
+		<e10 prototypes="default.operand">
+			<preSymbol prototypes="item/Symbol/default"><symbol>&amp;</symbol></preSymbol>
+		</e10>
 	</operators>
 </style>

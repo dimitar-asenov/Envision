@@ -37,6 +37,8 @@
 #include "expression_editor/operators/MemberOperatorDescriptor.h"
 #include "expression_editor/operators/CallDescriptor.h"
 #include "expression_editor/operators/ArrayTypeDescriptor.h"
+#include "expression_editor/operators/PointerTypeDescriptor.h"
+#include "expression_editor/operators/ReferenceTypeDescriptor.h"
 #include "expression_editor/operators/AssignmentDescriptor.h"
 #include "expression_editor/operators/DeclarationDescriptor.h"
 #include "expression_editor/operators/ConditionalExpressionDescriptor.h"
@@ -69,10 +71,14 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 			"unary minus", "- expr", 1, 2, Interaction::OperatorDescriptor::RightAssociative));
 	instance()->addDescriptor(new UnaryOperatorDescriptor(OOModel::UnaryOperation::NOT,
 			"not", "! expr", 1, 2, Interaction::OperatorDescriptor::RightAssociative));
-	instance()->addDescriptor(new UnaryOperatorDescriptor(OOModel::UnaryOperation::COMPLEMENT,
-			"complement", "~ expr", 1, 2, Interaction::OperatorDescriptor::RightAssociative));
+    instance()->addDescriptor(new UnaryOperatorDescriptor(OOModel::UnaryOperation::COMPLEMENT,
+            "complement", "~ expr", 1, 2, Interaction::OperatorDescriptor::RightAssociative));
 	instance()->addDescriptor(new UnaryOperatorDescriptor(OOModel::UnaryOperation::PARENTHESIS,
 			"parenthesis", "( expr )", 1, 1, Interaction::OperatorDescriptor::NotAssociative));
+    instance()->addDescriptor(new UnaryOperatorDescriptor(OOModel::UnaryOperation::DEREFERENCE,
+            "dereference", "* expr", 1, 2, Interaction::OperatorDescriptor::RightAssociative));
+    instance()->addDescriptor(new UnaryOperatorDescriptor(OOModel::UnaryOperation::ADDRESSOF,
+            "addressof", "& expr", 1, 2, Interaction::OperatorDescriptor::RightAssociative));
 
 	// Binary operators
 	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::TIMES,
@@ -167,6 +173,10 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 			Interaction::OperatorDescriptor::LeftAssociative));
 	instance()->addDescriptor(new ArrayTypeDescriptor( "array type", "expr []", 1, 1,
 			Interaction::OperatorDescriptor::LeftAssociative));
+    instance()->addDescriptor(new PointerTypeDescriptor( "pointer type", "expr *", 1, 1,
+            Interaction::OperatorDescriptor::LeftAssociative));
+    instance()->addDescriptor(new ReferenceTypeDescriptor( "reference type", "expr &", 1, 1,
+            Interaction::OperatorDescriptor::LeftAssociative));
 	instance()->addDescriptor(new DeclarationDescriptor( "variable declaration", "expr SPACE id", 2, 40,
 			Interaction::OperatorDescriptor::RightAssociative));
 	instance()->addDescriptor(new DeclarationDescriptor( "variable declaration and initialization",

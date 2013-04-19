@@ -80,5 +80,7 @@
 #include "types/VClassType.h"
 #include "types/VPrimitiveType.h"
 #include "types/VArrayType.h"
+#include "types/VPointerType.h"
+#include "types/VReferenceType.h"
 
 #include "alternative/VKeywordMethodCall.h"

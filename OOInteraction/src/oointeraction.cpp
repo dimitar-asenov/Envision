@@ -166,6 +166,10 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 		<StringOffsetProvider, SimpleLiteralStringOffsetProvider, OOVisualization::VPrimitiveType>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, SequentialVisualizationStringOffsetProvider, OOVisualization::VArrayType>();
+    Model::AdapterManager::registerAdapterViaConstructor
+        <StringOffsetProvider, SequentialVisualizationStringOffsetProvider, OOVisualization::VPointerType>();
+    Model::AdapterManager::registerAdapterViaConstructor
+        <StringOffsetProvider, SequentialVisualizationStringOffsetProvider, OOVisualization::VReferenceType>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, ClassTypeStringOffsetProvider, OOVisualization::VClassType>();
 	Model::AdapterManager::registerAdapterViaConstructor

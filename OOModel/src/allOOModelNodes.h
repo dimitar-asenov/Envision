@@ -75,6 +75,8 @@
 #include "expressions/types/PrimitiveTypeExpression.h"
 #include "expressions/types/ClassTypeExpression.h"
 #include "expressions/types/ArrayTypeExpression.h"
+#include "expressions/types/PointerTypeExpression.h"
+#include "expressions/types/ReferenceTypeExpression.h"
 
 #include "elements/Visibility.h"
 #include "elements/StorageSpecifier.h"

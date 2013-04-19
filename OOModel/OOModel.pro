@@ -74,7 +74,12 @@ HEADERS += src/top_level/Enumerator.h \
     src/top_level/Method.h \
     src/top_level/Module.h \
     src/top_level/Project.h \
-    src/oomodel.h
+    src/oomodel.h \
+    src/types/ReferenceType.h \
+    src/types/PointerType.h \
+    src/expressions/types/PointerTypeExpression.h \
+    src/expressions/types/ReferenceTypeExpression.h
+    
 SOURCES += src/top_level/Enumerator.cpp \
     src/types/LambdaType.cpp \
     src/expressions/LambdaExpression.cpp \
@@ -143,4 +148,8 @@ SOURCES += src/top_level/Enumerator.cpp \
     src/expressions/Expression.cpp \
     src/OOModelException.cpp \
     src/oomodel.cpp \
-    test/SimpleTest.cpp
+    test/SimpleTest.cpp \
+    src/types/ReferenceType.cpp \
+    src/types/PointerType.cpp \
+    src/expressions/types/PointerTypeExpression.cpp \
+    src/expressions/types/ReferenceTypeExpression.cpp

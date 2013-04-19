@@ -73,6 +73,8 @@ HEADERS += src/string_offset_providers/StringComponents.h \
     src/string_offset_providers/StringOffsetProvider.h \
     src/string_offset_providers/TextRendererStringOffsetProvider.h \
     src/string_offset_providers/VariableDeclarationStringOffsetProvider.h \
+    src/expression_editor/operators/PointerTypeDescriptor.h \
+    src/expression_editor/operators/ReferenceTypeDescriptor.h \
     src/oointeraction.h
 SOURCES += src/string_offset_providers/StringComponents.cpp \
     src/customization/CustomizationVisitor.cpp \
@@ -136,4 +138,6 @@ SOURCES += src/string_offset_providers/StringComponents.cpp \
     src/expression_editor/OOExpressionBuilder.cpp \
     src/OOInteractionException.cpp \
     src/oointeraction.cpp \
-    test/SimpleTest.cpp
+    test/SimpleTest.cpp \
+    src/expression_editor/operators/PointerTypeDescriptor.cpp \
+    src/expression_editor/operators/ReferenceTypeDescriptor.cpp

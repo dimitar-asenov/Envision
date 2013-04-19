@@ -26,22 +26,26 @@
 
 #pragma once
 
-#include "../../oointeraction_api.h"
-#include "../OOOperatorDescriptor.h"
+#include "../oomodel_api.h"
+#include "Type.h"
 
-#include "OOModel/src/expressions/UnaryOperation.h"
+namespace OOModel {
 
-namespace OOInteraction {
+class OOMODEL_API PointerType : public Type {
+public:
+    PointerType(Type* baseType, bool isValueType);
+    PointerType(const PointerType& other);
+    virtual ~PointerType();
 
-class OOINTERACTION_API UnaryOperatorDescriptor : public OOOperatorDescriptor {
-	public:
-	UnaryOperatorDescriptor(OOModel::UnaryOperation::OperatorTypes op, const QString& name,
-			const QString& signature, int num_operands, int precedence, Associativity associativity);
+    virtual bool equals(const Type* other) const;
+    virtual PointerType* clone() const override;
 
-		virtual OOModel::Expression* create(const QList<OOModel::Expression*>& operands);
+    //TODO: was const Type* baseType() const;
+    Type* baseType() const;
 
-	private:
-		OOModel::UnaryOperation::OperatorTypes op_;
+private:
+    Type* baseType_;
 };
 
-} /* namespace OOInteraction */
+inline Type *PointerType::baseType() const { return baseType_; }
+} /* namespace OOModel */

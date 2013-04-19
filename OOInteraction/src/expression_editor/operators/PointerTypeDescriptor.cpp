@@ -24,24 +24,22 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
+#include "expression_editor/operators/PointerTypeDescriptor.h"
 
-#include "../../oointeraction_api.h"
-#include "../OOOperatorDescriptor.h"
-
-#include "OOModel/src/expressions/UnaryOperation.h"
+#include "OOModel/src/expressions/types/PointerTypeExpression.h"
 
 namespace OOInteraction {
 
-class OOINTERACTION_API UnaryOperatorDescriptor : public OOOperatorDescriptor {
-	public:
-	UnaryOperatorDescriptor(OOModel::UnaryOperation::OperatorTypes op, const QString& name,
-			const QString& signature, int num_operands, int precedence, Associativity associativity);
+PointerTypeDescriptor::PointerTypeDescriptor(const QString& name, const QString& signature, int num_operands,
+        int precedence, Associativity associativity)
+        : OOOperatorDescriptor(name, signature, num_operands, precedence, associativity)
+{}
 
-		virtual OOModel::Expression* create(const QList<OOModel::Expression*>& operands);
-
-	private:
-		OOModel::UnaryOperation::OperatorTypes op_;
-};
+OOModel::Expression* PointerTypeDescriptor::create(const QList<OOModel::Expression*>& operands)
+{
+    OOModel::PointerTypeExpression* at = new OOModel::PointerTypeExpression();
+    at->setTypeExpression(operands.first());
+    return at;
+}
 
 } /* namespace OOInteraction */

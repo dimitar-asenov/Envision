@@ -26,32 +26,20 @@
 
 #pragma once
 
-#include "Expression.h"
+#include "TypeExpression.h"
 
-#include "ModelBase/src/nodes/Integer.h"
-
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, UnaryOperation)
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, PointerTypeExpression)
 
 namespace OOModel {
 
-class OOMODEL_API UnaryOperation: public Expression
+class OOMODEL_API PointerTypeExpression : public TypeExpression
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(UnaryOperation)
+    EXTENDABLENODE_DECLARE_STANDARD_METHODS(PointerTypeExpression)
 
-	ATTRIBUTE(Expression, operand, setOperand)
-	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, opr, setOpr, int)
+    ATTRIBUTE(Expression, typeExpression, setTypeExpression)
 
-	public:
-		enum OperatorTypes {PREINCREMENT, PREDECREMENT, POSTINCREMENT, POSTDECREMENT, PLUS, MINUS, NOT, COMPLEMENT,
-            PARENTHESIS, DEREFERENCE, ADDRESSOF};
-
-		OperatorTypes op() const;
-		void setOp(const OperatorTypes& oper);
-
-		virtual Type* type();
+    public:
+        virtual Type* type();
 };
-
-inline UnaryOperation::OperatorTypes UnaryOperation::op() const { return static_cast<OperatorTypes> (opr()); }
-inline void UnaryOperation::setOp(const OperatorTypes& oper) { setOpr(oper); }
 
 }

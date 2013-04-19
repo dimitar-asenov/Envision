@@ -29,19 +29,14 @@
 #include "../../oointeraction_api.h"
 #include "../OOOperatorDescriptor.h"
 
-#include "OOModel/src/expressions/UnaryOperation.h"
-
 namespace OOInteraction {
 
-class OOINTERACTION_API UnaryOperatorDescriptor : public OOOperatorDescriptor {
-	public:
-	UnaryOperatorDescriptor(OOModel::UnaryOperation::OperatorTypes op, const QString& name,
-			const QString& signature, int num_operands, int precedence, Associativity associativity);
+class OOINTERACTION_API ReferenceTypeDescriptor : public OOOperatorDescriptor {
+    public:
+        ReferenceTypeDescriptor(const QString& name, const QString& signature, int num_operands, int precedence,
+            Associativity associativity);
 
-		virtual OOModel::Expression* create(const QList<OOModel::Expression*>& operands);
-
-	private:
-		OOModel::UnaryOperation::OperatorTypes op_;
+        virtual OOModel::Expression* create(const QList<OOModel::Expression*>& operands);
 };
 
 } /* namespace OOInteraction */

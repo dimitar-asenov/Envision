@@ -26,32 +26,38 @@
 
 #pragma once
 
-#include "Expression.h"
+#include "../oovisualization_api.h"
 
-#include "ModelBase/src/nodes/Integer.h"
+#include "OOModel/src/expressions/types/PointerTypeExpression.h"
+#include "../expressions/VExpression.h"
+//TODO rename style appropriately
+#include "VArrayTypeStyle.h"
+#include "VisualizationBase/src/items/LayoutProvider.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, UnaryOperation)
+namespace Visualization {
+    class Static;
+}
 
-namespace OOModel {
+namespace OOVisualization {
 
-class OOMODEL_API UnaryOperation: public Expression
+class OOVISUALIZATION_API VPointerType
+: public VExpression<VPointerType, Visualization::LayoutProvider<>, OOModel::PointerTypeExpression>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(UnaryOperation)
+    ITEM_COMMON_CUSTOM_STYLENAME(VPointerType,VArrayTypeStyle)
 
-	ATTRIBUTE(Expression, operand, setOperand)
-	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, opr, setOpr, int)
+    public:
+        VPointerType(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+        virtual ~VPointerType();
 
-	public:
-		enum OperatorTypes {PREINCREMENT, PREDECREMENT, POSTINCREMENT, POSTDECREMENT, PLUS, MINUS, NOT, COMPLEMENT,
-            PARENTHESIS, DEREFERENCE, ADDRESSOF};
 
-		OperatorTypes op() const;
-		void setOp(const OperatorTypes& oper);
+    protected:
+        void determineChildren();
 
-		virtual Type* type();
+    private:
+        typedef VExpression<VPointerType, Visualization::LayoutProvider<>, OOModel::PointerTypeExpression> BaseItemType;
+
+        Visualization::Static* symbol_;
+        Visualization::Item* type_;
 };
-
-inline UnaryOperation::OperatorTypes UnaryOperation::op() const { return static_cast<OperatorTypes> (opr()); }
-inline void UnaryOperation::setOp(const OperatorTypes& oper) { setOpr(oper); }
 
 }

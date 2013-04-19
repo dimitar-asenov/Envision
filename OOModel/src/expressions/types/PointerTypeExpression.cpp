@@ -24,34 +24,22 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "PointerTypeExpression.h"
+#include "../../types/PointerType.h"
 
-#include "Expression.h"
-
-#include "ModelBase/src/nodes/Integer.h"
-
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, UnaryOperation)
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(OOModel::PointerTypeExpression)
 
 namespace OOModel {
 
-class OOMODEL_API UnaryOperation: public Expression
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(PointerTypeExpression, TypeExpression)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(PointerTypeExpression, TypeExpression)
+
+REGISTER_ATTRIBUTE(PointerTypeExpression, typeExpression, Expression, false, false, true)
+
+Type* PointerTypeExpression::type()
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(UnaryOperation)
-
-	ATTRIBUTE(Expression, operand, setOperand)
-	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, opr, setOpr, int)
-
-	public:
-		enum OperatorTypes {PREINCREMENT, PREDECREMENT, POSTINCREMENT, POSTDECREMENT, PLUS, MINUS, NOT, COMPLEMENT,
-            PARENTHESIS, DEREFERENCE, ADDRESSOF};
-
-		OperatorTypes op() const;
-		void setOp(const OperatorTypes& oper);
-
-		virtual Type* type();
-};
-
-inline UnaryOperation::OperatorTypes UnaryOperation::op() const { return static_cast<OperatorTypes> (opr()); }
-inline void UnaryOperation::setOp(const OperatorTypes& oper) { setOpr(oper); }
+    return new PointerType(typeExpression()->type(), false);
+}
 
 }

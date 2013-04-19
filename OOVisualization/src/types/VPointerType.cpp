@@ -24,34 +24,43 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "types/VPointerType.h"
 
-#include "Expression.h"
+#include "VisualizationBase/src/layouts/SequentialLayout.h"
+#include "VisualizationBase/src/items/Static.h"
 
-#include "ModelBase/src/nodes/Integer.h"
+using namespace Visualization;
+using namespace OOModel;
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, UnaryOperation)
+namespace OOVisualization {
 
-namespace OOModel {
+ITEM_COMMON_DEFINITIONS(VPointerType, "item")
 
-class OOMODEL_API UnaryOperation: public Expression
+VPointerType::VPointerType(Item* parent, NodeType* node, const StyleType* style) :
+    BaseItemType(parent, node, style),
+    symbol_( new Static(layout(), &style->symbol())),
+    type_(nullptr)
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(UnaryOperation)
+    layout()->append(symbol_);
+}
 
-	ATTRIBUTE(Expression, operand, setOperand)
-	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, opr, setOpr, int)
+VPointerType::~VPointerType()
+{
+    // These were automatically deleted by LayoutProvider's destructor
+    symbol_ = nullptr;
+    type_ = nullptr;
+}
 
-	public:
-		enum OperatorTypes {PREINCREMENT, PREDECREMENT, POSTINCREMENT, POSTDECREMENT, PLUS, MINUS, NOT, COMPLEMENT,
-            PARENTHESIS, DEREFERENCE, ADDRESSOF};
+void VPointerType::determineChildren()
+{
+    layout()->synchronizeFirst(type_, node()->typeExpression());
 
-		OperatorTypes op() const;
-		void setOp(const OperatorTypes& oper);
-
-		virtual Type* type();
-};
-
-inline UnaryOperation::OperatorTypes UnaryOperation::op() const { return static_cast<OperatorTypes> (opr()); }
-inline void UnaryOperation::setOp(const OperatorTypes& oper) { setOpr(oper); }
+    // TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
+    // TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
+    //			what's the reason they are being updated.
+    // The style needs to be updated every time since if our own style changes, so will that of the children.
+    layout()->setStyle( &style()->layout());
+    symbol_->setStyle( &style()->symbol());
+}
 
 }

@@ -26,22 +26,25 @@
 
 #pragma once
 
-#include "../../oointeraction_api.h"
-#include "../OOOperatorDescriptor.h"
+#include "../oomodel_api.h"
+#include "Type.h"
 
-#include "OOModel/src/expressions/UnaryOperation.h"
+namespace OOModel {
 
-namespace OOInteraction {
+class OOMODEL_API ReferenceType : public Type {
+    public:
+    ReferenceType(Type* baseType, bool isValueType);
+    ReferenceType(const ReferenceType& other);
+    virtual ~ReferenceType();
 
-class OOINTERACTION_API UnaryOperatorDescriptor : public OOOperatorDescriptor {
-	public:
-	UnaryOperatorDescriptor(OOModel::UnaryOperation::OperatorTypes op, const QString& name,
-			const QString& signature, int num_operands, int precedence, Associativity associativity);
+    virtual bool equals(const Type* other) const;
+    virtual ReferenceType* clone() const override;
 
-		virtual OOModel::Expression* create(const QList<OOModel::Expression*>& operands);
+    const Type* baseType() const;
 
-	private:
-		OOModel::UnaryOperation::OperatorTypes op_;
+private:
+    Type* baseType_;
 };
 
-} /* namespace OOInteraction */
+inline const Type* ReferenceType::baseType() const { return baseType_; }
+} /* namespace OOModel */

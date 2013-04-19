@@ -24,24 +24,34 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
+#include "ReferenceType.h"
 
-#include "../../oointeraction_api.h"
-#include "../OOOperatorDescriptor.h"
+namespace OOModel {
 
-#include "OOModel/src/expressions/UnaryOperation.h"
+ReferenceType::ReferenceType(Type* baseType, bool isValueType)
+    : Type(isValueType), baseType_(baseType)
+{}
 
-namespace OOInteraction {
+ReferenceType::ReferenceType(const ReferenceType& other)
+    : Type(other.isValueType()), baseType_(other.baseType()->clone())
+{}
 
-class OOINTERACTION_API UnaryOperatorDescriptor : public OOOperatorDescriptor {
-	public:
-	UnaryOperatorDescriptor(OOModel::UnaryOperation::OperatorTypes op, const QString& name,
-			const QString& signature, int num_operands, int precedence, Associativity associativity);
+ReferenceType::~ReferenceType()
+{
+    SAFE_DELETE(baseType_);
+}
 
-		virtual OOModel::Expression* create(const QList<OOModel::Expression*>& operands);
+bool ReferenceType::equals(const Type* other) const
+{
+    if (auto at = dynamic_cast<const ReferenceType*> (other))
+        return baseType_ != nullptr && baseType_->equals(at->baseType_);
 
-	private:
-		OOModel::UnaryOperation::OperatorTypes op_;
-};
+    return false;
+}
 
-} /* namespace OOInteraction */
+ReferenceType* ReferenceType::clone() const
+{
+    return new ReferenceType(*this);
+}
+
+} /* namespace OOModel */

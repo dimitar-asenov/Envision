@@ -93,7 +93,9 @@ HEADERS += src/elements/VCatchClauseStyle.h \
     src/types/VArrayType.h \
     src/types/VArrayTypeStyle.h \
     src/types/VPrimitiveType.h \
-    src/oovisualization.h
+    src/oovisualization.h \
+    src/types/VPointerType.h \
+    src/types/VReferenceType.h
 SOURCES += src/elements/VCatchClauseStyle.cpp \
     src/expressions/VExpression.cpp \
     src/elements/VCatchClause.cpp \
@@ -178,4 +180,6 @@ SOURCES += src/elements/VCatchClauseStyle.cpp \
     src/expressions/VReferenceExpressionStyle.cpp \
     test/HelloWorldTest.cpp \
     src/OOVisualizationException.cpp \
-    src/oovisualization.cpp
+    src/oovisualization.cpp \
+    src/types/VPointerType.cpp \
+    src/types/VReferenceType.cpp

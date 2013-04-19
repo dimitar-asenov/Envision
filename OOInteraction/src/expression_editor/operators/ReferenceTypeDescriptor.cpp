@@ -24,24 +24,22 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
+#include "expression_editor/operators/ReferenceTypeDescriptor.h"
 
-#include "../../oointeraction_api.h"
-#include "../OOOperatorDescriptor.h"
-
-#include "OOModel/src/expressions/UnaryOperation.h"
+#include "OOModel/src/expressions/types/ReferenceTypeExpression.h"
 
 namespace OOInteraction {
 
-class OOINTERACTION_API UnaryOperatorDescriptor : public OOOperatorDescriptor {
-	public:
-	UnaryOperatorDescriptor(OOModel::UnaryOperation::OperatorTypes op, const QString& name,
-			const QString& signature, int num_operands, int precedence, Associativity associativity);
+ReferenceTypeDescriptor::ReferenceTypeDescriptor(const QString& name, const QString& signature, int num_operands,
+        int precedence, Associativity associativity)
+        : OOOperatorDescriptor(name, signature, num_operands, precedence, associativity)
+{}
 
-		virtual OOModel::Expression* create(const QList<OOModel::Expression*>& operands);
-
-	private:
-		OOModel::UnaryOperation::OperatorTypes op_;
-};
+OOModel::Expression* ReferenceTypeDescriptor::create(const QList<OOModel::Expression*>& operands)
+{
+    OOModel::ReferenceTypeExpression* at = new OOModel::ReferenceTypeExpression();
+    at->setTypeExpression(operands.first());
+    return at;
+}
 
 } /* namespace OOInteraction */

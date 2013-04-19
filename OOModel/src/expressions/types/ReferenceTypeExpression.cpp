@@ -24,34 +24,22 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "ReferenceTypeExpression.h"
+#include "../../types/ReferenceType.h"
 
-#include "Expression.h"
-
-#include "ModelBase/src/nodes/Integer.h"
-
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, UnaryOperation)
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(OOModel::ReferenceTypeExpression)
 
 namespace OOModel {
 
-class OOMODEL_API UnaryOperation: public Expression
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(ReferenceTypeExpression, TypeExpression)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(ReferenceTypeExpression, TypeExpression)
+
+REGISTER_ATTRIBUTE(ReferenceTypeExpression, typeExpression, Expression, false, false, true)
+
+Type* ReferenceTypeExpression::type()
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(UnaryOperation)
-
-	ATTRIBUTE(Expression, operand, setOperand)
-	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, opr, setOpr, int)
-
-	public:
-		enum OperatorTypes {PREINCREMENT, PREDECREMENT, POSTINCREMENT, POSTDECREMENT, PLUS, MINUS, NOT, COMPLEMENT,
-            PARENTHESIS, DEREFERENCE, ADDRESSOF};
-
-		OperatorTypes op() const;
-		void setOp(const OperatorTypes& oper);
-
-		virtual Type* type();
-};
-
-inline UnaryOperation::OperatorTypes UnaryOperation::op() const { return static_cast<OperatorTypes> (opr()); }
-inline void UnaryOperation::setOp(const OperatorTypes& oper) { setOpr(oper); }
+    return new ReferenceType(typeExpression()->type(), false);
+}
 
 }
