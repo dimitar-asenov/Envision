@@ -31,15 +31,15 @@
 namespace OOInteraction {
 
 ReferenceTypeDescriptor::ReferenceTypeDescriptor(const QString& name, const QString& signature, int num_operands,
-        int precedence, Associativity associativity)
-        : OOOperatorDescriptor(name, signature, num_operands, precedence, associativity)
+		int precedence, Associativity associativity)
+		: OOOperatorDescriptor(name, signature, num_operands, precedence, associativity)
 {}
 
 OOModel::Expression* ReferenceTypeDescriptor::create(const QList<OOModel::Expression*>& operands)
 {
-    OOModel::ReferenceTypeExpression* at = new OOModel::ReferenceTypeExpression();
-    at->setTypeExpression(operands.first());
-    return at;
+	OOModel::ReferenceTypeExpression* at = new OOModel::ReferenceTypeExpression();
+	at->setTypeExpression(operands.first());
+	return at;
 }
 
 } /* namespace OOInteraction */

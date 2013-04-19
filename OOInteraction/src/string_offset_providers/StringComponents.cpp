@@ -105,8 +105,8 @@ void StringComponents::initConversions()
 {
 	// Types
 	add<ArrayTypeExpression>([](ArrayTypeExpression* e){ return c( Optional(e->typeExpression(), AUTO), "[]"); });
-    add<ReferenceTypeExpression>([](ReferenceTypeExpression* e){ return c( Optional(e->typeExpression(), AUTO), "&"); });
-    add<PointerTypeExpression>([](PointerTypeExpression* e){ return c( Optional(e->typeExpression(), AUTO), "*"); });
+	add<ReferenceTypeExpression>([](ReferenceTypeExpression* e){ return c( Optional(e->typeExpression(), AUTO), "&"); });
+	add<PointerTypeExpression>([](PointerTypeExpression* e){ return c( Optional(e->typeExpression(), AUTO), "*"); });
 	add<ClassTypeExpression>([](ClassTypeExpression* e){ return c( Optional(e->typeExpression(), AUTO) ); });
 	add<PrimitiveTypeExpression>([](PrimitiveTypeExpression* e){ return c(
 		choose(e->typeValue(),
@@ -173,9 +173,9 @@ void StringComponents::initConversions()
 			UnaryOperation::MINUS, "-",
 			UnaryOperation::NOT, "!",
 			UnaryOperation::COMPLEMENT, "~",
-            UnaryOperation::PARENTHESIS, "(",
-            UnaryOperation::DEREFERENCE, "*",
-            UnaryOperation::ADDRESSOF, "&"),
+			UnaryOperation::PARENTHESIS, "(",
+			UnaryOperation::DEREFERENCE, "*",
+			UnaryOperation::ADDRESSOF, "&"),
 		e->operand(),
 		choose(e->op(),
 			UnaryOperation::PREINCREMENT, Optional(),
@@ -186,9 +186,9 @@ void StringComponents::initConversions()
 			UnaryOperation::MINUS, Optional(),
 			UnaryOperation::NOT, Optional(),
 			UnaryOperation::COMPLEMENT, Optional(),
-            UnaryOperation::PARENTHESIS, ")",
-            UnaryOperation::DEREFERENCE, Optional(),
-            UnaryOperation::ADDRESSOF, Optional())
+			UnaryOperation::PARENTHESIS, ")",
+			UnaryOperation::DEREFERENCE, Optional(),
+			UnaryOperation::ADDRESSOF, Optional())
 	); });
 
 	// Literals

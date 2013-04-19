@@ -29,29 +29,29 @@
 namespace OOModel {
 
 ReferenceType::ReferenceType(Type* baseType, bool isValueType)
-    : Type(isValueType), baseType_(baseType)
+	: Type(isValueType), baseType_(baseType)
 {}
 
 ReferenceType::ReferenceType(const ReferenceType& other)
-    : Type(other.isValueType()), baseType_(other.baseType()->clone())
+	: Type(other.isValueType()), baseType_(other.baseType()->clone())
 {}
 
 ReferenceType::~ReferenceType()
 {
-    SAFE_DELETE(baseType_);
+	SAFE_DELETE(baseType_);
 }
 
 bool ReferenceType::equals(const Type* other) const
 {
-    if (auto at = dynamic_cast<const ReferenceType*> (other))
-        return baseType_ != nullptr && baseType_->equals(at->baseType_);
+	if (auto at = dynamic_cast<const ReferenceType*> (other))
+		return baseType_ != nullptr && baseType_->equals(at->baseType_);
 
-    return false;
+	return false;
 }
 
 ReferenceType* ReferenceType::clone() const
 {
-    return new ReferenceType(*this);
+	return new ReferenceType(*this);
 }
 
 } /* namespace OOModel */

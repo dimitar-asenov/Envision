@@ -39,7 +39,7 @@ REGISTER_ATTRIBUTE(ReferenceTypeExpression, typeExpression, Expression, false, f
 
 Type* ReferenceTypeExpression::type()
 {
-    return new ReferenceType(typeExpression()->type(), false);
+	return new ReferenceType(typeExpression()->type(), false);
 }
 
 }

@@ -37,30 +37,30 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VReferenceType, "item")
 
 VReferenceType::VReferenceType(Item* parent, NodeType* node, const StyleType* style) :
-    BaseItemType(parent, node, style),
-    symbol_( new Static(layout(), &style->symbol())),
-    type_(nullptr)
+	BaseItemType(parent, node, style),
+	symbol_( new Static(layout(), &style->symbol())),
+	type_(nullptr)
 {
-    layout()->append(symbol_);
+	layout()->append(symbol_);
 }
 
 VReferenceType::~VReferenceType()
 {
-    // These were automatically deleted by LayoutProvider's destructor
-    symbol_ = nullptr;
-    type_ = nullptr;
+	// These were automatically deleted by LayoutProvider's destructor
+	symbol_ = nullptr;
+	type_ = nullptr;
 }
 
 void VReferenceType::determineChildren()
 {
-    layout()->synchronizeFirst(type_, node()->typeExpression());
+	layout()->synchronizeFirst(type_, node()->typeExpression());
 
-    // TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
-    // TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
-    //			what's the reason they are being updated.
-    // The style needs to be updated every time since if our own style changes, so will that of the children.
-    layout()->setStyle( &style()->layout());
-    symbol_->setStyle( &style()->symbol());
+	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
+	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
+	//			what's the reason they are being updated.
+	// The style needs to be updated every time since if our own style changes, so will that of the children.
+	layout()->setStyle( &style()->layout());
+	symbol_->setStyle( &style()->symbol());
 }
 
 }

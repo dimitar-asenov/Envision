@@ -32,11 +32,11 @@
 namespace OOInteraction {
 
 class OOINTERACTION_API PointerTypeDescriptor : public OOOperatorDescriptor {
-    public:
-        PointerTypeDescriptor(const QString& name, const QString& signature, int num_operands, int precedence,
-            Associativity associativity);
+	public:
+		PointerTypeDescriptor(const QString& name, const QString& signature, int num_operands, int precedence,
+			Associativity associativity);
 
-        virtual OOModel::Expression* create(const QList<OOModel::Expression*>& operands);
+		virtual OOModel::Expression* create(const QList<OOModel::Expression*>& operands);
 };
 
 } /* namespace OOInteraction */

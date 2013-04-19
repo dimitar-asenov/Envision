@@ -34,12 +34,12 @@ namespace OOModel {
 
 class OOMODEL_API ReferenceTypeExpression : public TypeExpression
 {
-    EXTENDABLENODE_DECLARE_STANDARD_METHODS(ReferenceTypeExpression)
+	EXTENDABLENODE_DECLARE_STANDARD_METHODS(ReferenceTypeExpression)
 
-    ATTRIBUTE(Expression, typeExpression, setTypeExpression)
+	ATTRIBUTE(Expression, typeExpression, setTypeExpression)
 
-    public:
-        virtual Type* type();
+	public:
+		virtual Type* type();
 };
 
 }

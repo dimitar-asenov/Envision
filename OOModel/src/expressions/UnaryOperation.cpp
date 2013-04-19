@@ -41,25 +41,24 @@ REGISTER_ATTRIBUTE(UnaryOperation, opr, Integer, false, false, true)
 
 Type* UnaryOperation::type()
 {
-    if(opr() == DEREFERENCE)
-    {
-        auto t = operand()->type();
-        if(PointerType* pt = dynamic_cast<PointerType*>(t))
-        {
-            auto bt = pt->baseType()->clone();
-            SAFE_DELETE(t);
-            return bt;
-        }
-        else
-        {
-            SAFE_DELETE(t);
-            return new ErrorType("dereferencing a value that is not a pointer");
-        }
-    }
-    else if(opr() == ADDRESSOF)
-        return new PointerType(operand()->type(),false);
-    else
-        return operand()->type();
+	if (opr() == DEREFERENCE)
+	{
+		auto t = operand()->type();
+		if (PointerType* pt = dynamic_cast<PointerType*>(t))
+		{
+			auto bt = pt->baseType()->clone();
+			SAFE_DELETE(t);
+			return bt;
+		} else
+		{
+			SAFE_DELETE(t);
+			return new ErrorType("dereferencing a value that is not a pointer");
+		}
+	}
+	else if (opr() == ADDRESSOF)
+		return new PointerType(operand()->type(), false);
+	else
+		return operand()->type();
 }
 
 }

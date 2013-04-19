@@ -35,7 +35,7 @@
 #include "VisualizationBase/src/items/LayoutProvider.h"
 
 namespace Visualization {
-    class Static;
+	class Static;
 }
 
 namespace OOVisualization {
@@ -43,21 +43,21 @@ namespace OOVisualization {
 class OOVISUALIZATION_API VPointerType
 : public VExpression<VPointerType, Visualization::LayoutProvider<>, OOModel::PointerTypeExpression>
 {
-    ITEM_COMMON_CUSTOM_STYLENAME(VPointerType,VArrayTypeStyle)
+	ITEM_COMMON_CUSTOM_STYLENAME(VPointerType,VArrayTypeStyle)
 
-    public:
-        VPointerType(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-        virtual ~VPointerType();
+	public:
+		VPointerType(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+		virtual ~VPointerType();
 
 
-    protected:
-        void determineChildren();
+	protected:
+		void determineChildren();
 
-    private:
-        typedef VExpression<VPointerType, Visualization::LayoutProvider<>, OOModel::PointerTypeExpression> BaseItemType;
+	private:
+		typedef VExpression<VPointerType, Visualization::LayoutProvider<>, OOModel::PointerTypeExpression> BaseItemType;
 
-        Visualization::Static* symbol_;
-        Visualization::Item* type_;
+		Visualization::Static* symbol_;
+		Visualization::Item* type_;
 };
 
 }

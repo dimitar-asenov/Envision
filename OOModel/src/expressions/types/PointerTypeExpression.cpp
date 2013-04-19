@@ -39,7 +39,7 @@ REGISTER_ATTRIBUTE(PointerTypeExpression, typeExpression, Expression, false, fal
 
 Type* PointerTypeExpression::type()
 {
-    return new PointerType(typeExpression()->type(), false);
+	return new PointerType(typeExpression()->type(), false);
 }
 
 }

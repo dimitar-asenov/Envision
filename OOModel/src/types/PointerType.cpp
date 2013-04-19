@@ -33,25 +33,25 @@ PointerType::PointerType(Type* baseType, bool isValueType) : Type(isValueType), 
 {}
 
 PointerType::PointerType(const PointerType &other)
-    : Type(other.isValueType()), baseType_(other.baseType()->clone())
+	: Type(other.isValueType()), baseType_(other.baseType()->clone())
 {}
 
 PointerType::~PointerType()
 {
-    SAFE_DELETE(baseType_);
+	SAFE_DELETE(baseType_);
 }
 
 bool PointerType::equals(const Type* other) const
 {
-    if (auto at = dynamic_cast<const PointerType*> (other))
-        return baseType_ != nullptr && baseType_->equals(at->baseType_);
+	if (auto at = dynamic_cast<const PointerType*> (other))
+		return baseType_ != nullptr && baseType_->equals(at->baseType_);
 
-    return false;
+	return false;
 }
 
 PointerType* PointerType::clone() const
 {
-    return new PointerType(*this);
+	return new PointerType(*this);
 }
 
 } /* namespace OOModel */

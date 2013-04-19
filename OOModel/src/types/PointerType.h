@@ -32,19 +32,19 @@
 namespace OOModel {
 
 class OOMODEL_API PointerType : public Type {
-public:
-    PointerType(Type* baseType, bool isValueType);
-    PointerType(const PointerType& other);
-    virtual ~PointerType();
+	public:
+		PointerType(Type* baseType, bool isValueType);
+		PointerType(const PointerType& other);
+		virtual ~PointerType();
 
-    virtual bool equals(const Type* other) const;
-    virtual PointerType* clone() const override;
+		virtual bool equals(const Type* other) const;
+		virtual PointerType* clone() const override;
 
-    //TODO: was const Type* baseType() const;
-    Type* baseType() const;
+		//TODO: was const Type* baseType() const;
+		Type* baseType() const;
 
-private:
-    Type* baseType_;
+	private:
+		Type* baseType_;
 };
 
 inline Type *PointerType::baseType() const { return baseType_; }

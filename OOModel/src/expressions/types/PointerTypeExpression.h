@@ -34,12 +34,12 @@ namespace OOModel {
 
 class OOMODEL_API PointerTypeExpression : public TypeExpression
 {
-    EXTENDABLENODE_DECLARE_STANDARD_METHODS(PointerTypeExpression)
+	EXTENDABLENODE_DECLARE_STANDARD_METHODS(PointerTypeExpression)
 
-    ATTRIBUTE(Expression, typeExpression, setTypeExpression)
+	ATTRIBUTE(Expression, typeExpression, setTypeExpression)
 
-    public:
-        virtual Type* type();
+	public:
+		virtual Type* type();
 };
 
 }

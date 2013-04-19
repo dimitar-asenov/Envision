@@ -32,11 +32,11 @@
 namespace OOInteraction {
 
 class OOINTERACTION_API ReferenceTypeDescriptor : public OOOperatorDescriptor {
-    public:
-        ReferenceTypeDescriptor(const QString& name, const QString& signature, int num_operands, int precedence,
-            Associativity associativity);
+	public:
+		ReferenceTypeDescriptor(const QString& name, const QString& signature, int num_operands, int precedence,
+			Associativity associativity);
 
-        virtual OOModel::Expression* create(const QList<OOModel::Expression*>& operands);
+		virtual OOModel::Expression* create(const QList<OOModel::Expression*>& operands);
 };
 
 } /* namespace OOInteraction */

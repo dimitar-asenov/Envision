@@ -31,15 +31,15 @@
 namespace OOInteraction {
 
 PointerTypeDescriptor::PointerTypeDescriptor(const QString& name, const QString& signature, int num_operands,
-        int precedence, Associativity associativity)
-        : OOOperatorDescriptor(name, signature, num_operands, precedence, associativity)
+		int precedence, Associativity associativity)
+		: OOOperatorDescriptor(name, signature, num_operands, precedence, associativity)
 {}
 
 OOModel::Expression* PointerTypeDescriptor::create(const QList<OOModel::Expression*>& operands)
 {
-    OOModel::PointerTypeExpression* at = new OOModel::PointerTypeExpression();
-    at->setTypeExpression(operands.first());
-    return at;
+	OOModel::PointerTypeExpression* at = new OOModel::PointerTypeExpression();
+	at->setTypeExpression(operands.first());
+	return at;
 }
 
 } /* namespace OOInteraction */
