@@ -77,7 +77,7 @@ bool ClangAstVisitor::TraverseNamespaceDecl(clang::NamespaceDecl *nd)
 }
 
 bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl *rd)
-{   
+{
     if(rd->getParent()->isNamespace())
         std::cout <<  "CLASS " << rd->getNameAsString() << " has Namespace as Parent" << std::endl;
     if(rd->isClass() || rd->isStruct())
@@ -293,6 +293,12 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* vd)
         if(!llvm::isa<clang::ParmVarDecl>(vd))
             log_->writeWarning(className_,QString("this variable is not supported"),QString("VarDecl"),vd->getNameAsString());
     }
+    return true;
+}
+
+bool ClangAstVisitor::TraverseEnumDecl(clang::EnumDecl* ed)
+{
+    std::cout << "Traversing enum : " << ed->getNameAsString() << std::endl;
     return true;
 }
 

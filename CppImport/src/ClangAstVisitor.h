@@ -50,6 +50,8 @@ public:
     bool TraverseStmt(clang::Stmt *S);
     bool TraverseVarDecl(clang::VarDecl* vd);
 
+    bool TraverseEnumDecl(clang::EnumDecl* ed);
+
 
     // binary ops
     bool TraverseBinMul(clang::BinaryOperator* binOp);

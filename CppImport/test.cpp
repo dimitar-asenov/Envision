@@ -13,6 +13,7 @@ class Testing {
 public:
     int i;
     Testing(){}
+    enum AnEnum {FIRST,SECOND};
     int myFunction(int argument1, bool argument2){
         int k = 20;
         if(k == 10)
