@@ -25,6 +25,7 @@
  **********************************************************************************************************************/
 
 #include "NodeWrapper.h"
+#include "../shapes/Shape.h"
 
 namespace Visualization {
 
@@ -52,9 +53,40 @@ void NodeWrapper::determineChildren()
 		wrappedItem_ = renderer()->render(this, node());
 }
 
+bool NodeWrapper::isEmpty() const
+{
+	if (stretchable_ && !node()) return false;
+	else if (wrappedItem_) return wrappedItem_->isEmpty();
+	else return true;
+}
+
+bool NodeWrapper::hasNode() const
+{
+	// TODO: should not need to redefine this
+	return node() != nullptr;
+}
+
+bool NodeWrapper::sizeDependsOnParent() const
+{
+	if (stretchable_ && !node()) return true;
+	else if (wrappedItem_) return wrappedItem_->sizeDependsOnParent();
+	else return false;
+}
+
 void NodeWrapper::updateGeometry(int availableWidth, int availableHeight)
 {
-	Item::updateGeometry(wrappedItem_, availableWidth, availableHeight);
+	if (stretchable_ && !node())
+	{
+		getShape()->setOffset(0, 0);
+		getShape()->setOutterSize(availableWidth, availableHeight);
+		setSize(availableWidth, availableHeight);
+		setZValue(-1);
+	}
+	else
+	{
+		Item::updateGeometry(wrappedItem_, availableWidth, availableHeight);
+		setZValue(0);
+	}
 }
 
 } /* namespace Visualization */

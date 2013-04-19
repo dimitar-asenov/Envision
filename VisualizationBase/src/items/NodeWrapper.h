@@ -50,14 +50,28 @@ class VISUALIZATIONBASE_API NodeWrapper : public ItemWithNode<NodeWrapper, Item,
 		NodeWrapper(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~NodeWrapper();
 
+		/**
+		 * Sets if the item is a special \a stretchable item. This means if its node is nullptr, it is not empty and
+		 * stretches as far as it has space to.
+		 */
+		void setStretchable(bool stretchable);
+		virtual bool isEmpty() const override;
+		virtual bool sizeDependsOnParent() const override;
+		// TODO: should not need to redefine this
+		virtual bool hasNode() const override;
+
 	protected:
-		void determineChildren() override;
-		void updateGeometry(int availableWidth, int availableHeight) override;
+		virtual void determineChildren() override;
+		virtual void updateGeometry(int availableWidth, int availableHeight) override;
+
 
 	private:
 		typedef ItemWithNode<NodeWrapper, Item, Model::Node, false> BaseItemType;
 
 		Item* wrappedItem_{};
+		bool stretchable_{false};
 };
+
+inline void NodeWrapper::setStretchable(bool stretchable) {stretchable_ = stretchable;}
 
 } /* namespace Visualization */

@@ -48,8 +48,14 @@ class NodeItemWrapperElement : public ItemWrapperElement<ParentType> {
 		virtual ~NodeItemWrapperElement() {};
 		virtual void synchronizeWithItem(Item* item) override;
 
+		/**
+		 * Sets if a wrapped item is created, even if there is no node to \a create. It is false by default.
+		 */
+		NodeItemWrapperElement<ParentType>* setCreateIfNoNode(bool create);
+
 	private:
 		GetNodeFunction nodeGetter_{};
+		bool createIfNoNode_{false};
 };
 
 template <class ParentType>
@@ -69,11 +75,18 @@ void NodeItemWrapperElement<ParentType>::synchronizeWithItem(Item* item)
 		item->setUpdateNeeded(Item::StandardUpdate);
 	}
 
-	if(!childItem && node)
+	if(!childItem && (node || createIfNoNode_))
 	{
 		childItem = item->renderer()->render(item, node);
 		item->setUpdateNeeded(Item::StandardUpdate);
 	}
+}
+
+template <class ParentType>
+inline NodeItemWrapperElement<ParentType>* NodeItemWrapperElement<ParentType>::setCreateIfNoNode(bool create)
+{
+	createIfNoNode_ = create;
+	return this;
 }
 
 } /* namespace Visualization */
