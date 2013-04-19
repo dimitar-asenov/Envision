@@ -204,6 +204,10 @@ class VISUALIZATIONBASE_API SequentialLayoutElement : public LayoutElement
 		 */
 		void swap(Item* item, int i, int j);
 		void adjustCursorRegionToAvoidZeroSize(QRect& region, bool horizontal, bool first, bool last);
+		/**
+		 * Removes the item at \a index from the itemList of \a item. If \a deleteItem is set, the item also gets deleted.
+		 */
+		void removeFromItemList(Item* item, int index, bool deleteItem);
 };
 
 inline SequentialLayoutElement* SequentialLayoutElement::setListNode(ListNodeGetterFunction listNodeGetter)
@@ -301,7 +305,7 @@ inline SequentialLayoutElement* SequentialLayoutElement::setNoInnerCursors(bool 
 template <class T> T* SequentialLayoutElement::itemAt(const Item* item, int itemIndex) const
 {
 	auto& itemList = listForItem(item);
-	return static_cast<T>(itemList.at(itemIndex));
+	return static_cast<T*>(itemList.at(itemIndex));
 }
 
 } /* namespace Visualization */

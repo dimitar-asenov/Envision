@@ -240,7 +240,7 @@ void SequentialLayoutElement::synchronizeWithNodes(Item* item, const QList<Model
 	}
 
 	// Remove excess items
-	while (itemList.size() > nodes.size()) itemList.removeAt(itemList.size()-1);
+	while (itemList.size() > nodes.size()) removeFromItemList(item, itemList.size()-1, true);
 }
 
 void SequentialLayoutElement::synchronizeWithItems(Item* item, const QList<Item*>& items)
@@ -273,7 +273,16 @@ void SequentialLayoutElement::synchronizeWithItems(Item* item, const QList<Item*
 	}
 
 	// Remove excess items
-	while (itemList.size() > items.size()) itemList.removeAt(itemList.size()-1);
+	while (itemList.size() > items.size()) removeFromItemList(item, itemList.size()-1, false);
+}
+
+void SequentialLayoutElement::removeFromItemList(Item* item, int index, bool deleteItem)
+{
+	auto& itemList = listForItem(item);
+	if (deleteItem) SAFE_DELETE_ITEM( itemList[index]);
+	else itemList[index]->setParentItem(nullptr);
+	itemList.removeAt(index);
+	item->setUpdateNeeded(Item::StandardUpdate);
 }
 
 void SequentialLayoutElement::swap(Item* item, int i, int j)
