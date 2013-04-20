@@ -64,7 +64,8 @@ bool ClangAstVisitor::TraverseNamespaceDecl(clang::NamespaceDecl* namespaceDecl)
 	}
 	else
 	{
-		log_->writeError(className_,QString("uknown where to put namespace"),QString("NamespaceDecl"),namespaceDecl->getNameAsString());
+		log_->writeError(className_,QString("uknown where to put namespace"),
+							  QString("NamespaceDecl"),namespaceDecl->getNameAsString());
 		// this is a severe error which should not happen therefore stop visiting
 		return false;
 	}
@@ -81,8 +82,8 @@ bool ClangAstVisitor::TraverseNamespaceDecl(clang::NamespaceDecl* namespaceDecl)
 
 bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl)
 {
-	if(recordDecl->getParent()->isNamespace())
-		std::cout <<  "CLASS " << recordDecl->getNameAsString() << " has Namespace as Parent" << std::endl;
+//	if(recordDecl->getParent()->isNamespace())
+//		std::cout <<  "CLASS " << recordDecl->getNameAsString() << " has Namespace as Parent" << std::endl;
 	if(recordDecl->isClass() || recordDecl->isStruct())
 	{
 		OOModel::Class* ooClass;
@@ -101,7 +102,8 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl)
 		else if(OOModel::Class* curClass = dynamic_cast<OOModel::Class*>(ooStack_.top()))
 			curClass->classes()->append(ooClass);
 		else
-			log_->writeError(className_,QString("uknown where to put class"),QString("CXXRecordDecl"),recordDecl->getNameAsString());
+			log_->writeError(className_,QString("uknown where to put class"),
+								  QString("CXXRecordDecl"),recordDecl->getNameAsString());
 		// visit child decls
 		ooStack_.push(ooClass);
 		clang::DeclContext::decl_iterator it = recordDecl->decls_begin();
@@ -133,7 +135,8 @@ bool ClangAstVisitor::TraverseCXXMethodDecl(clang::CXXMethodDecl* methodDecl)
 	OOModel::Method* ooMethod = trMngr_->insertMethodDecl(methodDecl);
 	if(!ooMethod)
 	{
-		log_->writeError(className_,QString("no ooModel::method found"),QString("CXXMethodDecl"),methodDecl->getNameAsString());
+		log_->writeError(className_,QString("no ooModel::method found"),
+							  QString("CXXMethodDecl"),methodDecl->getNameAsString());
 		// for now return false to see error (interupts visitor)
 		return false;
 	}
@@ -232,7 +235,11 @@ bool ClangAstVisitor::TraverseReturnStmt(clang::ReturnStmt* returnStmt)
 		inBody_ = false;
 		TraverseStmt(returnStmt->getRetValue());
 		inBody_ = true;
-		ooReturn->values()->append(ooExprStack_.pop());
+		if(!ooExprStack_.empty())
+			ooReturn->values()->append(ooExprStack_.pop());
+		else
+			log_->writeError(className_,QString("Return expr not supported"),
+								  QString("Expr"),returnStmt->getRetValue()->getType().getAsString());
 	}
 	return true;
 }
@@ -284,7 +291,11 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 		if(varDecl->hasInit())
 		{
 			TraverseStmt(varDecl->getInit());
-			ooVarDecl->setInitialValue(ooExprStack_.pop());
+			if(!ooExprStack_.empty())
+				ooVarDecl->setInitialValue(ooExprStack_.pop());
+			else
+				log_->writeError(className_,QString("Var Init Expr no supported"),
+									  QString("Expr"),varDecl->getInit()->getType().getAsString());
 		}
 		if(inBody_)
 			itemList->append(ooVarDecl);
@@ -355,7 +366,8 @@ bool ClangAstVisitor::VisitFieldDecl(clang::FieldDecl* fieldDecl)
 
 bool ClangAstVisitor::TraverseCXXMemberCallExpr(clang::CXXMemberCallExpr* callExpr)
 {
-	OOModel::MethodCallExpression* ooMCall = new OOModel::MethodCallExpression(QString::fromStdString(callExpr->getMethodDecl()->getNameAsString()));
+	OOModel::MethodCallExpression* ooMCall = new OOModel::MethodCallExpression
+			(QString::fromStdString(callExpr->getMethodDecl()->getNameAsString()));
 
 	// visit arguments
 	bool inBody = inBody_;
@@ -451,16 +463,25 @@ bool ClangAstVisitor::shouldUseDataRecursionFor(clang::Stmt* S)
 
 bool ClangAstVisitor::TraverseBinaryOp(clang::BinaryOperator* binaryOperator)
 {
-	OOModel::BinaryOperation::OperatorTypes ooOperatorType = CppImportUtilities::convertClangOpcode(binaryOperator->getOpcode());
+	OOModel::BinaryOperation::OperatorTypes ooOperatorType =
+			CppImportUtilities::convertClangOpcode(binaryOperator->getOpcode());
 	OOModel::BinaryOperation* ooBinOp = new OOModel::BinaryOperation();
 	// save inBody_ value for recursive expressions
 	bool inBody = inBody_;
 	inBody_ = false;
 	ooBinOp->setOp(ooOperatorType);
 	TraverseStmt(binaryOperator->getLHS());
-	ooBinOp->setLeft(ooExprStack_.pop());
+	if(!ooExprStack_.empty())
+		ooBinOp->setLeft(ooExprStack_.pop());
+	else
+		log_->writeError(className_,QString("BOP: LHSExpr not supported"),
+							  QString("Expr"),binaryOperator->getLHS()->getType().getAsString());
 	TraverseStmt(binaryOperator->getRHS());
-	ooBinOp->setRight(ooExprStack_.pop());
+	if(!ooExprStack_.empty())
+		ooBinOp->setRight(ooExprStack_.pop());
+	else
+		log_->writeError(className_,QString("BOP: RHSExpr not supported"),
+							  QString("Expr"),binaryOperator->getRHS()->getType().getAsString());
 
 	if(inBody)
 	{
@@ -476,16 +497,25 @@ bool ClangAstVisitor::TraverseBinaryOp(clang::BinaryOperator* binaryOperator)
 
 bool ClangAstVisitor::TraverseAssignment(clang::BinaryOperator* binaryOperator)
 {
-	OOModel::AssignmentExpression::AssignmentTypes ooOperatorType = CppImportUtilities::convertClangAssignOpcode(binaryOperator->getOpcode());
+	OOModel::AssignmentExpression::AssignmentTypes ooOperatorType =
+			CppImportUtilities::convertClangAssignOpcode(binaryOperator->getOpcode());
 	OOModel::AssignmentExpression* ooBinOp = new OOModel::AssignmentExpression();
 	// save inBody_ value for recursive expressions
 	bool inBody = inBody_;
 	inBody_ = false;
 	ooBinOp->setOp(ooOperatorType);
 	TraverseStmt(binaryOperator->getLHS());
-	ooBinOp->setLeft(ooExprStack_.pop());
+	if(!ooExprStack_.empty())
+		ooBinOp->setLeft(ooExprStack_.pop());
+	else
+		log_->writeError(className_,QString("BOP: LHSExpr not supported"),
+							  QString("Expr"),binaryOperator->getLHS()->getType().getAsString());
 	TraverseStmt(binaryOperator->getRHS());
-	ooBinOp->setRight(ooExprStack_.pop());
+	if(!ooExprStack_.empty())
+		ooBinOp->setRight(ooExprStack_.pop());
+	else
+		log_->writeError(className_,QString("BOP: RHSExpr not supported"),
+							  QString("Expr"),binaryOperator->getRHS()->getType().getAsString());
 
 	if(inBody)
 	{
@@ -501,14 +531,19 @@ bool ClangAstVisitor::TraverseAssignment(clang::BinaryOperator* binaryOperator)
 
 bool ClangAstVisitor::TraverseUnaryOp(clang::UnaryOperator* unaryOperator)
 {
-	OOModel::UnaryOperation::OperatorTypes ooOperatorType = CppImportUtilities::convertUnaryOpcode(unaryOperator->getOpcode());
+	OOModel::UnaryOperation::OperatorTypes ooOperatorType =
+			CppImportUtilities::convertUnaryOpcode(unaryOperator->getOpcode());
 	OOModel::UnaryOperation* ooUnaryOp = new OOModel::UnaryOperation();
 	// save inBody_ value for recursive expressions
 	bool inBody = inBody_;
 	inBody_ = false;
 	ooUnaryOp->setOp(ooOperatorType);
 	TraverseStmt(unaryOperator->getSubExpr());
-	ooUnaryOp->setOperand(ooExprStack_.pop());
+	if(!ooExprStack_.empty())
+		ooUnaryOp->setOperand(ooExprStack_.pop());
+	else
+		log_->writeError(className_,QString("UOP: SubExpr not supported"),
+							  QString("Expr"),unaryOperator->getSubExpr()->getType().getAsString());
 
 	if(inBody)
 	{
