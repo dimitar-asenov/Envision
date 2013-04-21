@@ -39,12 +39,14 @@ class TranslateManager
 		OOModel::Class* insertClass(clang::CXXRecordDecl* rDecl);
 		OOModel::Class* insertStruct(clang::CXXRecordDecl* sDecl);
 		OOModel::Method* insertMethodDecl(clang::CXXMethodDecl* mDecl);
+		OOModel::Method* insertFunctionDecl(clang::FunctionDecl* functionDecl);
 		OOModel::Field* insertField(clang::FieldDecl* fDecl);
 		OOModel::VariableDeclaration* insertVar(clang::VarDecl* vDecl);
 		OOModel::VariableDeclaration* getVar(clang::VarDecl* vDecl);
 
 	private:
 		OOModel::Method* addNewMethod(clang::CXXMethodDecl* mDecl);
+		OOModel::Method* addNewFunction(clang::FunctionDecl* functionDecl);
 
 		Model::Model* model_{};
 		OOModel::Project* project_{};
@@ -53,6 +55,7 @@ class TranslateManager
 		QMap<clang::CXXRecordDecl*, OOModel::Class*> classMap_;
 		QMap<clang::CXXRecordDecl*, OOModel::Class*> structMap_;
 		QMap<clang::CXXMethodDecl*, OOModel::Method*> methodMap_;
+		QMap<clang::FunctionDecl*, OOModel::Method*> functionMap_;
 		QMap<clang::VarDecl*, OOModel::VariableDeclaration*> varMap_;
 };
 

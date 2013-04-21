@@ -126,6 +126,43 @@ OOModel::Method* TranslateManager::insertMethodDecl(clang::CXXMethodDecl* mDecl)
 	return method;
 }
 
+OOModel::Method*TranslateManager::insertFunctionDecl(clang::FunctionDecl* functionDecl)
+{
+	OOModel::Method* ooFunction = nullptr;
+	if(!functionMap_.contains(functionDecl))
+	{
+		// Look if there is a function with same name in map
+		QMap<clang::FunctionDecl*,OOModel::Method*>::iterator it = functionMap_.begin();
+		for(;it!=functionMap_.end();++it)
+		{
+			clang::FunctionDecl* inMapDecl = it.key();
+			if(!functionDecl->getNameAsString().compare(inMapDecl->getNameAsString()) &&
+					!inMapDecl->isThisDeclarationADefinition() && functionDecl->isThisDeclarationADefinition())
+			{
+				// found a pair with same name and only one is defined
+				if((functionDecl->getResultType() == inMapDecl->getResultType()) &&
+						(functionDecl->param_size() == inMapDecl->param_size()))
+				{
+					bool matching = true;
+					for(unsigned i = 0; i < functionDecl->param_size(); i++)
+					{
+						if(functionDecl->getParamDecl(i)->getType() != inMapDecl->getParamDecl(i)->getType())
+							matching = false;
+					}
+					if(matching)
+					{
+						ooFunction = it.value();
+						break;
+					}
+				}
+			}
+		}
+		// check if method node exists or else create one
+		ooFunction = ooFunction ? ooFunction : addNewFunction(functionDecl);
+	}
+	return ooFunction;
+}
+
 OOModel::Field* TranslateManager::insertField(clang::FieldDecl* fDecl)
 {
 	clang::CXXRecordDecl* parentClass = llvm::dyn_cast<clang::CXXRecordDecl>(fDecl->getParent());
@@ -189,12 +226,45 @@ OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl)
 		OOModel::Class* parent = classMap_.value(mDecl->getParent());
 		parent->methods()->append(method);
 	}
+	else if(mDecl->getParent())
+	{
+		std::cout << "METHOD HAS PARENT WHICH IS NOT IN CLASS MAP" << std::endl;
+	}
 	else
 		std::cout << "ERROR TRANSLATEMNGR: METHOD DECL NO PARENT FOUND" << std::endl;
 
 	methodMap_.insert(mDecl,method);
 
 	return method;
+}
+
+OOModel::Method*TranslateManager::addNewFunction(clang::FunctionDecl* functionDecl)
+{
+	// add a new method
+	OOModel::Method* ooFunction= new OOModel::Method();
+	ooFunction->setName(QString::fromStdString(functionDecl->getNameAsString()));
+	// process result type
+	OOModel::Expression* restype = CppImportUtilities::convertClangType(functionDecl->getResultType());
+	if(restype)
+	{
+		OOModel::FormalResult* methodResult = new OOModel::FormalResult();
+		methodResult->setTypeExpression(restype);
+		ooFunction->results()->append(methodResult);
+	}
+	// process arguments
+	clang::FunctionDecl::param_const_iterator it = functionDecl->param_begin();
+	for(;it != functionDecl->param_end();++it)
+	{
+		OOModel::FormalArgument* arg = new OOModel::FormalArgument();
+		arg->setName(QString::fromStdString((*it)->getNameAsString()));
+		OOModel::Expression* type = CppImportUtilities::convertClangType((*it)->getType());
+		if(type) arg->setTypeExpression(type);
+		ooFunction->arguments()->append(arg);
+	}
+
+	functionMap_.insert(functionDecl,ooFunction);
+
+	return ooFunction;
 }
 
 }

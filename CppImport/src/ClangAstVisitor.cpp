@@ -82,17 +82,13 @@ bool ClangAstVisitor::TraverseNamespaceDecl(clang::NamespaceDecl* namespaceDecl)
 
 bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl)
 {
-//	if(recordDecl->getParent()->isNamespace())
-//		std::cout <<  "CLASS " << recordDecl->getNameAsString() << " has Namespace as Parent" << std::endl;
 	if(recordDecl->isClass() || recordDecl->isStruct())
 	{
+		// TODO might be better to handle structs and classes separately
 		OOModel::Class* ooClass;
-		//        if(rd->isClass())
 		ooClass = trMngr_->insertClass(recordDecl);
-		//        else
-		//            ooClass = trMngr_->insertStruct(rd);
-		// check if there was an error inserting class
-		if(!ooClass) return false;
+		if(!ooClass)
+			return false;
 
 		// insert in model
 		if(OOModel::Project* curProject = dynamic_cast<OOModel::Project*>(ooStack_.top()))
@@ -113,11 +109,12 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl)
 		}
 		ooStack_.pop();
 	}
-	//    else if(rd->isStruct())
-	//    {
-	//        std::cout << "Struct found " << rd->getNameAsString() << std::endl;
-	//        return Base::TraverseCXXRecordDecl(rd);
-	//    }
+	else if(recordDecl->isUnion())
+	{
+		log_->writeWarning(className_,QString("Unions not supported"),
+								 QString("CXXRecordDecl"),recordDecl->getNameAsString());
+		return Base::TraverseCXXRecordDecl(recordDecl);
+	}
 	else
 	{
 		std::cout << "Neither class nor Struct " << recordDecl->getNameAsString() << std::endl;
@@ -144,11 +141,51 @@ bool ClangAstVisitor::TraverseCXXMethodDecl(clang::CXXMethodDecl* methodDecl)
 	if(methodDecl->isThisDeclarationADefinition())
 	{
 		ooStack_.push(ooMethod->items());
+		bool inBody = inBody_;
+		inBody_ = true;
 		TraverseStmt(methodDecl->getBody());
+		inBody_ = inBody;
 		ooStack_.pop();
 	}
 	// specify the visibility of the method
 	ooMethod->setVisibility(CppImportUtilities::convertAccessSpecifier(methodDecl->getAccess()));
+	return true;
+}
+
+bool ClangAstVisitor::TraverseFunctionDecl(clang::FunctionDecl* functionDecl)
+{
+	if(llvm::isa<clang::CXXMethodDecl>(functionDecl))
+		// already handled
+		return true;
+	OOModel::Method* ooFunction = trMngr_->insertFunctionDecl(functionDecl);
+	if(ooFunction)
+	{
+		// insert in model
+		if(OOModel::Project* curProject = dynamic_cast<OOModel::Project*>(ooStack_.top()))
+			curProject->methods()->append(ooFunction);
+		else if(OOModel::Module* curModel = dynamic_cast<OOModel::Module*>(ooStack_.top()))
+			curModel->methods()->append(ooFunction);
+		else
+			log_->writeError(className_,QString("uknown where to put function"),
+								  QString("FunctionDecl"),functionDecl->getNameAsString());
+
+		// only visit the body if we are at the definition
+		if(functionDecl->isThisDeclarationADefinition())
+		{
+			ooStack_.push(ooFunction->items());
+			bool inBody = inBody_;
+			inBody_ = true;
+			if(auto body = functionDecl->getBody())
+				TraverseStmt(body);
+			inBody_ = inBody;
+			ooStack_.pop();
+		}
+	}
+	else
+	{
+		log_->writeError(className_,QString("could no insert function"),
+							  QString("FunctionDecl"),functionDecl->getNameAsString());
+	}
 	return true;
 }
 

@@ -4,10 +4,18 @@
 
 int NOCLASSFIELD;
 
+void globalMethod(){
+    int aVarInGlobalMethod = 100;
+}
+
 enum SomeNameEnum {FIRST};
 
 namespace TestSpace{
 namespace TestSpace {
+
+int NameSpaceMethod(){
+    return 100;
+}
 
 enum SomeNameEnum {FIRST=10,SECOND};
 
