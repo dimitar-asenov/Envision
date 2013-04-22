@@ -26,30 +26,34 @@
 
 #pragma once
 
-#include "top_level/VProject.h"
-#include "top_level/VModule.h"
-#include "top_level/VClass.h"
-#include "top_level/VMethod.h"
+#include "../VReferenceExpression.h"
+#include "../VExpression.h"
 
-#include "elements/VField.h"
-#include "elements/VEnumerator.h"
-#include "elements/VFormalArgument.h"
-#include "elements/VFormalResult.h"
-#include "elements/VFormalTypeArgument.h"
-#include "elements/VStatementItemList.h"
-#include "elements/VCatchClause.h"
+#include "OOModel/src/expressions/types/ClassTypeExpression.h"
 
-#include "expressions/allOOExpressionVisualizations.h"
+namespace OOVisualization {
 
-#include "statements/VStatementItem.h"
-#include "statements/VBlock.h"
-#include "statements/VReturnStatement.h"
-#include "statements/VIfStatement.h"
-#include "statements/VLoopStatement.h"
-#include "statements/VForEachStatement.h"
-#include "statements/VBreakStatement.h"
-#include "statements/VContinueStatement.h"
-#include "statements/VExpressionStatement.h"
-#include "statements/VTryCatchFinally.h"
+class OOVISUALIZATION_API VClassType
+	: public VExpression<VClassType, Visualization::Item, OOModel::ClassTypeExpression>
+{
+	ITEM_COMMON_CUSTOM_STYLENAME(VClassType, VReferenceExpressionStyle)
 
-#include "alternative/VKeywordMethodCall.h"
+	public:
+		VClassType(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+		virtual ~VClassType();
+
+		VReferenceExpression* reference() const;
+
+	protected:
+		void determineChildren();
+		void updateGeometry(int availableWidth, int availableHeight);
+
+	private:
+		typedef VExpression<VClassType, Visualization::Item, OOModel::ClassTypeExpression> BaseItemType;
+
+		VReferenceExpression* vis_;
+};
+
+inline VReferenceExpression* VClassType::reference() const { return vis_; }
+
+}

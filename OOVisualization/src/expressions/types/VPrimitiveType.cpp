@@ -24,32 +24,39 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "VPrimitiveType.h"
+#include "OOVisualizationException.h"
 
-#include "top_level/VProject.h"
-#include "top_level/VModule.h"
-#include "top_level/VClass.h"
-#include "top_level/VMethod.h"
+#include "VisualizationBase/src/items/Static.h"
 
-#include "elements/VField.h"
-#include "elements/VEnumerator.h"
-#include "elements/VFormalArgument.h"
-#include "elements/VFormalResult.h"
-#include "elements/VFormalTypeArgument.h"
-#include "elements/VStatementItemList.h"
-#include "elements/VCatchClause.h"
+using namespace Visualization;
+using namespace OOModel;
 
-#include "expressions/allOOExpressionVisualizations.h"
+namespace OOVisualization {
 
-#include "statements/VStatementItem.h"
-#include "statements/VBlock.h"
-#include "statements/VReturnStatement.h"
-#include "statements/VIfStatement.h"
-#include "statements/VLoopStatement.h"
-#include "statements/VForEachStatement.h"
-#include "statements/VBreakStatement.h"
-#include "statements/VContinueStatement.h"
-#include "statements/VExpressionStatement.h"
-#include "statements/VTryCatchFinally.h"
+ITEM_COMMON_DEFINITIONS(VPrimitiveType, "item")
 
-#include "alternative/VKeywordMethodCall.h"
+VPrimitiveType::VPrimitiveType(Item* parent, NodeType* node, const StyleType* style) :
+	BaseItemType(parent, node, style),
+	vis_(nullptr)
+{
+}
+
+VPrimitiveType::~VPrimitiveType()
+{
+	SAFE_DELETE_ITEM(vis_);
+}
+
+void VPrimitiveType::determineChildren()
+{
+	const StaticStyle* stStyle = &style()->stat( node()->typeValue() );
+
+	synchronizeItem(vis_, !stStyle->isEmpty(), stStyle);
+}
+
+void VPrimitiveType::updateGeometry(int availableWidth, int availableHeight)
+{
+	Item::updateGeometry(vis_, availableWidth, availableHeight);
+}
+
+}

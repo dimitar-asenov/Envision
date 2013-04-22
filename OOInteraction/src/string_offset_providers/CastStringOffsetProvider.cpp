@@ -26,7 +26,7 @@
 
 #include "CastStringOffsetProvider.h"
 #include "Cell.h"
-#include "OOVisualization/src/expressions/VCastExpression.h"
+#include "OOVisualization/src/expressions/allOOExpressionVisualizations.h"
 
 namespace OOInteraction {
 

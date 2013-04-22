@@ -26,30 +26,34 @@
 
 #pragma once
 
-#include "top_level/VProject.h"
-#include "top_level/VModule.h"
-#include "top_level/VClass.h"
-#include "top_level/VMethod.h"
+#include "../../oovisualization_api.h"
 
-#include "elements/VField.h"
-#include "elements/VEnumerator.h"
-#include "elements/VFormalArgument.h"
-#include "elements/VFormalResult.h"
-#include "elements/VFormalTypeArgument.h"
-#include "elements/VStatementItemList.h"
-#include "elements/VCatchClause.h"
+#include "VisualizationBase/src/items/StaticStyle.h"
+#include "VisualizationBase/src/items/TextStyle.h"
+#include "VisualizationBase/src/layouts/SequentialLayout.h"
 
-#include "expressions/allOOExpressionVisualizations.h"
+namespace OOVisualization {
 
-#include "statements/VStatementItem.h"
-#include "statements/VBlock.h"
-#include "statements/VReturnStatement.h"
-#include "statements/VIfStatement.h"
-#include "statements/VLoopStatement.h"
-#include "statements/VForEachStatement.h"
-#include "statements/VBreakStatement.h"
-#include "statements/VContinueStatement.h"
-#include "statements/VExpressionStatement.h"
-#include "statements/VTryCatchFinally.h"
+class OOVISUALIZATION_API VStringLiteralStyle : public Visualization::ItemStyle
+{
+	private:
+		Visualization::SequentialLayoutStyle layout_;
+		Visualization::TextStyle string_;
+		Visualization::StaticStyle preSymbol_;
+		Visualization::StaticStyle postSymbol_;
 
-#include "alternative/VKeywordMethodCall.h"
+	public:
+		void load(Visualization::StyleLoader& sl);
+
+		const Visualization::SequentialLayoutStyle& layout() const;
+		const Visualization::TextStyle& string() const;
+		const Visualization::StaticStyle& preSymbol() const;
+		const Visualization::StaticStyle& postSymbol() const;
+};
+
+inline const Visualization::SequentialLayoutStyle& VStringLiteralStyle::layout() const { return layout_; }
+inline const Visualization::TextStyle& VStringLiteralStyle::string() const { return string_; }
+inline const Visualization::StaticStyle& VStringLiteralStyle::preSymbol() const { return preSymbol_; }
+inline const Visualization::StaticStyle& VStringLiteralStyle::postSymbol() const { return postSymbol_; }
+
+}

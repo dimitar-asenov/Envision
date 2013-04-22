@@ -24,40 +24,29 @@
  **
  **********************************************************************************************************************/
 
-#include "UnaryOperatorStringOffsetProvider.h"
-#include "Cell.h"
+#pragma once
 
-#include "OOVisualization/src/expressions/allOOExpressionVisualizations.h"
+#include "VExpression.h"
+#include "StandardExpressionVisualizations.h"
 
-namespace OOInteraction {
+#include "VMethodCallExpression.h"
+#include "VReferenceExpression.h"
+#include "VThisExpression.h"
+#include "VBinaryOperation.h"
+#include "VArrayInitializer.h"
+#include "VVariableDeclaration.h"
+#include "VLambdaExpression.h"
 
-UnaryOperatorStringOffsetProvider::UnaryOperatorStringOffsetProvider(OOVisualization::VUnaryOperation* vis)
-	: GridBasedOffsetProvider(vis), vis_(vis)
-{
-	if (vis->node()->op() == OOModel::UnaryOperation::PARENTHESIS)
-	{
-		add(new Cell(1, vis->operand(), 1));
-		setSize(3, 1);
-	}
-	else
-		for(int i = 0; i<vis->layout()->length(); ++i)
-			add(new Cell(i, vis->layout()->at<Visualization::Item>(i), i));
-}
+#include "VEmptyExpression.h"
+#include "VErrorExpression.h"
+#include "VUnfinishedOperator.h"
 
-QStringList UnaryOperatorStringOffsetProvider::components()
-{
-	QStringList components = StringOffsetProvider::components();
+#include "literals/VStringLiteral.h"
+#include "literals/VIntegerLiteral.h"
+#include "literals/VFloatLiteral.h"
+#include "literals/VCharacterLiteral.h"
+#include "literals/VBooleanLiteral.h"
+#include "literals/VNullLiteral.h"
 
-	if (components.size() != vis_->layout()->length())
-	{
-		for (int i = components.size() - 1; i>=0; --i)
-			if (components[i].isNull())
-				components.removeAt(i);
-	}
-	if (components.size() != vis_->layout()->length())
-		components.removeAll(QString(""));
-
-	return components;
-}
-
-} /* namespace OOInteraction */
+#include "types/VClassType.h"
+#include "types/VPrimitiveType.h"

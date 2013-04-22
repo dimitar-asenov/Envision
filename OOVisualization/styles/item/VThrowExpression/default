@@ -1,12 +1,9 @@
 <!DOCTYPE EnvisionVisualizationStyle>
-<style prototypes="item/Item/default">
+<style prototypes="item/VUnaryOperation/default.operand">
 	<layout prototypes="layout/SequentialLayout/default">
-		<shape />
 		<spaceBetweenElements>3</spaceBetweenElements>
 		<noInnerCursors>true</noInnerCursors>
 		<noBoundaryCursorsInsideShape>true</noBoundaryCursorsInsideShape>
 	</layout>
-	<throwSymbol prototypes="item/Symbol/keyword">
-		<symbol>throw</symbol>
-	</throwSymbol>
+	<preSymbol prototypes="item/Symbol/keyword"><symbol>throw</symbol></preSymbol>
 </style>

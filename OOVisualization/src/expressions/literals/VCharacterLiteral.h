@@ -26,30 +26,34 @@
 
 #pragma once
 
-#include "top_level/VProject.h"
-#include "top_level/VModule.h"
-#include "top_level/VClass.h"
-#include "top_level/VMethod.h"
+#include "../../oovisualization_api.h"
+#include "../VExpression.h"
 
-#include "elements/VField.h"
-#include "elements/VEnumerator.h"
-#include "elements/VFormalArgument.h"
-#include "elements/VFormalResult.h"
-#include "elements/VFormalTypeArgument.h"
-#include "elements/VStatementItemList.h"
-#include "elements/VCatchClause.h"
+#include "VisualizationBase/src/items/TextStyle.h"
+#include "VisualizationBase/src/items/VCharacter.h"
 
-#include "expressions/allOOExpressionVisualizations.h"
+#include "OOModel/src/expressions/CharacterLiteral.h"
 
-#include "statements/VStatementItem.h"
-#include "statements/VBlock.h"
-#include "statements/VReturnStatement.h"
-#include "statements/VIfStatement.h"
-#include "statements/VLoopStatement.h"
-#include "statements/VForEachStatement.h"
-#include "statements/VBreakStatement.h"
-#include "statements/VContinueStatement.h"
-#include "statements/VExpressionStatement.h"
-#include "statements/VTryCatchFinally.h"
+namespace OOVisualization {
 
-#include "alternative/VKeywordMethodCall.h"
+class OOVISUALIZATION_API VCharacterLiteral : public VExpression<VCharacterLiteral, Visualization::Item,
+OOModel::CharacterLiteral>
+{
+	ITEM_COMMON_CUSTOM_STYLENAME(VCharacterLiteral, Visualization::TextStyle)
+
+	public:
+		VCharacterLiteral(Item* parent, NodeType* literal, const StyleType* style = itemStyles().get());
+		virtual ~VCharacterLiteral();
+
+	protected:
+		virtual void determineChildren();
+		virtual void updateGeometry(int availableWidth, int availableHeight);
+
+	private:
+		typedef VExpression<VCharacterLiteral, Visualization::Item, OOModel::CharacterLiteral>
+			BaseItemType;
+
+		Visualization::VCharacter* vis_;
+};
+
+}

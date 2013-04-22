@@ -26,7 +26,7 @@
 
 #include "ClassTypeStringOffsetProvider.h"
 #include "Cell.h"
-#include "OOVisualization/src/types/VClassType.h"
+#include "OOVisualization/src/expressions/types/VClassType.h"
 
 namespace OOInteraction {
 

@@ -26,7 +26,7 @@
 
 #include "NewArrayStringOffsetProvider.h"
 #include "Cell.h"
-#include "OOVisualization/src/expressions/VNewExpression.h"
+#include "OOVisualization/src/expressions/allOOExpressionVisualizations.h"
 
 namespace OOInteraction {
 

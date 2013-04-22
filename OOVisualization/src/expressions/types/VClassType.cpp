@@ -24,32 +24,34 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "VClassType.h"
 
-#include "top_level/VProject.h"
-#include "top_level/VModule.h"
-#include "top_level/VClass.h"
-#include "top_level/VMethod.h"
+using namespace Visualization;
+using namespace OOModel;
 
-#include "elements/VField.h"
-#include "elements/VEnumerator.h"
-#include "elements/VFormalArgument.h"
-#include "elements/VFormalResult.h"
-#include "elements/VFormalTypeArgument.h"
-#include "elements/VStatementItemList.h"
-#include "elements/VCatchClause.h"
+namespace OOVisualization {
 
-#include "expressions/allOOExpressionVisualizations.h"
+ITEM_COMMON_DEFINITIONS(VClassType, "item")
 
-#include "statements/VStatementItem.h"
-#include "statements/VBlock.h"
-#include "statements/VReturnStatement.h"
-#include "statements/VIfStatement.h"
-#include "statements/VLoopStatement.h"
-#include "statements/VForEachStatement.h"
-#include "statements/VBreakStatement.h"
-#include "statements/VContinueStatement.h"
-#include "statements/VExpressionStatement.h"
-#include "statements/VTryCatchFinally.h"
+VClassType::VClassType(Item* parent, NodeType* node, const StyleType* style) : BaseItemType(parent, node, style),
+	vis_( new VReferenceExpression(this, node->typeExpression(), style))
+{
+}
 
-#include "alternative/VKeywordMethodCall.h"
+VClassType::~VClassType()
+{
+	SAFE_DELETE_ITEM(vis_);
+}
+
+void VClassType::determineChildren()
+{
+	synchronizeItem(vis_, node()->typeExpression(), style());
+	vis_->setStyle(style());
+}
+
+void VClassType::updateGeometry(int availableWidth, int availableHeight)
+{
+	Item::updateGeometry(vis_, availableWidth, availableHeight);
+}
+
+}

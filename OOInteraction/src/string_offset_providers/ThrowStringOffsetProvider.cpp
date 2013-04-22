@@ -26,7 +26,7 @@
 
 #include "ThrowStringOffsetProvider.h"
 #include "Cell.h"
-#include "OOVisualization/src/expressions/VThrowExpression.h"
+#include "OOVisualization/src/expressions/allOOExpressionVisualizations.h"
 
 namespace OOInteraction {
 

@@ -24,32 +24,39 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "VBooleanLiteral.h"
 
-#include "top_level/VProject.h"
-#include "top_level/VModule.h"
-#include "top_level/VClass.h"
-#include "top_level/VMethod.h"
+#include "ModelBase/src/model/Model.h"
 
-#include "elements/VField.h"
-#include "elements/VEnumerator.h"
-#include "elements/VFormalArgument.h"
-#include "elements/VFormalResult.h"
-#include "elements/VFormalTypeArgument.h"
-#include "elements/VStatementItemList.h"
-#include "elements/VCatchClause.h"
 
-#include "expressions/allOOExpressionVisualizations.h"
+using namespace OOModel;
+using namespace Visualization;
 
-#include "statements/VStatementItem.h"
-#include "statements/VBlock.h"
-#include "statements/VReturnStatement.h"
-#include "statements/VIfStatement.h"
-#include "statements/VLoopStatement.h"
-#include "statements/VForEachStatement.h"
-#include "statements/VBreakStatement.h"
-#include "statements/VContinueStatement.h"
-#include "statements/VExpressionStatement.h"
-#include "statements/VTryCatchFinally.h"
+namespace OOVisualization {
 
-#include "alternative/VKeywordMethodCall.h"
+ITEM_COMMON_DEFINITIONS(VBooleanLiteral, "item")
+
+VBooleanLiteral::VBooleanLiteral(Item* parent, NodeType *literal, const StyleType *style) :
+	BaseItemType(parent, literal, style),
+	vis_(nullptr)
+{
+}
+
+VBooleanLiteral::~VBooleanLiteral()
+{
+	SAFE_DELETE_ITEM(vis_);
+}
+
+void VBooleanLiteral::determineChildren()
+{
+	synchronizeItem(vis_, node()->valueNode(), style());
+	vis_->setEditable(false);
+	vis_->setStyle( style() );
+}
+
+void VBooleanLiteral::updateGeometry(int availableWidth, int availableHeight)
+{
+	Item::updateGeometry(vis_, availableWidth, availableHeight);
+}
+
+}

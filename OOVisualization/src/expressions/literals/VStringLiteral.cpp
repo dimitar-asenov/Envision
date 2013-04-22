@@ -24,32 +24,54 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "VStringLiteral.h"
 
-#include "top_level/VProject.h"
-#include "top_level/VModule.h"
-#include "top_level/VClass.h"
-#include "top_level/VMethod.h"
+#include "VisualizationBase/src/items/Static.h"
+#include "ModelBase/src/model/Model.h"
 
-#include "elements/VField.h"
-#include "elements/VEnumerator.h"
-#include "elements/VFormalArgument.h"
-#include "elements/VFormalResult.h"
-#include "elements/VFormalTypeArgument.h"
-#include "elements/VStatementItemList.h"
-#include "elements/VCatchClause.h"
+using namespace OOModel;
+using namespace Visualization;
 
-#include "expressions/allOOExpressionVisualizations.h"
+namespace OOVisualization {
 
-#include "statements/VStatementItem.h"
-#include "statements/VBlock.h"
-#include "statements/VReturnStatement.h"
-#include "statements/VIfStatement.h"
-#include "statements/VLoopStatement.h"
-#include "statements/VForEachStatement.h"
-#include "statements/VBreakStatement.h"
-#include "statements/VContinueStatement.h"
-#include "statements/VExpressionStatement.h"
-#include "statements/VTryCatchFinally.h"
+ITEM_COMMON_DEFINITIONS(VStringLiteral, "item")
 
-#include "alternative/VKeywordMethodCall.h"
+VStringLiteral::VStringLiteral(Item* parent, NodeType* literal, const StyleType* style) :
+	BaseItemType(parent, literal, style),
+	pre_(nullptr),
+	post_(nullptr),
+	vis_(nullptr)
+{
+}
+
+VStringLiteral::~VStringLiteral()
+{
+	// These were automatically deleted by LayoutProvider's destructor
+	pre_ = nullptr;
+	post_ = nullptr;
+	vis_ = nullptr;
+}
+
+void VStringLiteral::determineChildren()
+{
+	int index = 0;
+	layout()->synchronizeFirst(pre_ , !style()->preSymbol().isEmpty(), &style()->preSymbol());
+	index += pre_?1:0;
+
+	layout()->synchronizeMid(vis_, node()->valueNode(), &style()->string(), index);
+	index += vis_?1:0;
+
+	layout()->synchronizeLast(post_ , !style()->postSymbol().isEmpty(), &style()->postSymbol());
+
+	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
+	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
+	//			what's the reason they are being updated.
+	// The style needs to be updated every time since if our own style changes, so will that of the children.
+	layout()->setStyle( &style()->layout());
+	vis_->setStyle( &style()->string() );
+	vis_->setEditable(false);
+	if (pre_) pre_->setStyle( &style()->preSymbol());
+	if (post_) post_->setStyle( &style()->postSymbol());
+}
+
+}

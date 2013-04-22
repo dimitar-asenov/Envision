@@ -26,30 +26,38 @@
 
 #pragma once
 
-#include "top_level/VProject.h"
-#include "top_level/VModule.h"
-#include "top_level/VClass.h"
-#include "top_level/VMethod.h"
+#include "../../oovisualization_api.h"
+#include "../VExpression.h"
 
-#include "elements/VField.h"
-#include "elements/VEnumerator.h"
-#include "elements/VFormalArgument.h"
-#include "elements/VFormalResult.h"
-#include "elements/VFormalTypeArgument.h"
-#include "elements/VStatementItemList.h"
-#include "elements/VCatchClause.h"
+#include "OOModel/src/expressions/types/PrimitiveTypeExpression.h"
 
-#include "expressions/allOOExpressionVisualizations.h"
+#include "VisualizationBase/src/items/Item.h"
+#include "VisualizationBase/src/items/StaticStyle.h"
 
-#include "statements/VStatementItem.h"
-#include "statements/VBlock.h"
-#include "statements/VReturnStatement.h"
-#include "statements/VIfStatement.h"
-#include "statements/VLoopStatement.h"
-#include "statements/VForEachStatement.h"
-#include "statements/VBreakStatement.h"
-#include "statements/VContinueStatement.h"
-#include "statements/VExpressionStatement.h"
-#include "statements/VTryCatchFinally.h"
+namespace Visualization {
+	class Static;
+}
 
-#include "alternative/VKeywordMethodCall.h"
+namespace OOVisualization {
+
+class OOVISUALIZATION_API VPrimitiveType
+	: public VExpression<VPrimitiveType, Visualization::Item, OOModel::PrimitiveTypeExpression>
+{
+	ITEM_COMMON_CUSTOM_STYLENAME(VPrimitiveType, Visualization::StaticSequenceStyle)
+
+	public:
+		VPrimitiveType(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+		virtual ~VPrimitiveType();
+
+	protected:
+		void determineChildren();
+		void updateGeometry(int availableWidth, int availableHeight);
+
+	private:
+		typedef VExpression<VPrimitiveType, Visualization::Item, OOModel::PrimitiveTypeExpression>
+			BaseItemType;
+
+		Visualization::Static* vis_;
+};
+
+}

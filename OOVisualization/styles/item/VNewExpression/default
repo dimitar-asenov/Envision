@@ -1,5 +1,5 @@
 <!DOCTYPE EnvisionVisualizationStyle>
-<style prototypes="item/Item/default">
+<style prototypes="item/VUnaryOperation/default.operand">
 	<layout prototypes="layout/SequentialLayout/default">
 		<shape prototypes="shape/Box/default">
 			Box
@@ -24,6 +24,5 @@
 	</layout>
 	<preSymbol prototypes="item/Symbol/keyword"><symbol>new</symbol></preSymbol>
 	<inSymbol prototypes="item/Symbol/default"><symbol>[</symbol></inSymbol>
-	<in2Symbol prototypes="item/Static/default" />
 	<postSymbol prototypes="item/Symbol/default"><symbol>]</symbol></postSymbol>
 </style>

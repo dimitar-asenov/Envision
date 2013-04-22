@@ -24,32 +24,18 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "VStringLiteralStyle.h"
 
-#include "top_level/VProject.h"
-#include "top_level/VModule.h"
-#include "top_level/VClass.h"
-#include "top_level/VMethod.h"
+namespace OOVisualization {
 
-#include "elements/VField.h"
-#include "elements/VEnumerator.h"
-#include "elements/VFormalArgument.h"
-#include "elements/VFormalResult.h"
-#include "elements/VFormalTypeArgument.h"
-#include "elements/VStatementItemList.h"
-#include "elements/VCatchClause.h"
+void VStringLiteralStyle::load(Visualization::StyleLoader& sl)
+{
+	ItemStyle::load(sl);
 
-#include "expressions/allOOExpressionVisualizations.h"
+	sl.load("layout", layout_);
+	sl.load("string", string_);
+	sl.load("preSymbol", preSymbol_);
+	sl.load("postSymbol", postSymbol_);
+}
 
-#include "statements/VStatementItem.h"
-#include "statements/VBlock.h"
-#include "statements/VReturnStatement.h"
-#include "statements/VIfStatement.h"
-#include "statements/VLoopStatement.h"
-#include "statements/VForEachStatement.h"
-#include "statements/VBreakStatement.h"
-#include "statements/VContinueStatement.h"
-#include "statements/VExpressionStatement.h"
-#include "statements/VTryCatchFinally.h"
-
-#include "alternative/VKeywordMethodCall.h"
+}

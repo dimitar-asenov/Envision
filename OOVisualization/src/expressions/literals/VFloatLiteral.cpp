@@ -24,32 +24,37 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "VFloatLiteral.h"
 
-#include "top_level/VProject.h"
-#include "top_level/VModule.h"
-#include "top_level/VClass.h"
-#include "top_level/VMethod.h"
+#include "ModelBase/src/model/Model.h"
 
-#include "elements/VField.h"
-#include "elements/VEnumerator.h"
-#include "elements/VFormalArgument.h"
-#include "elements/VFormalResult.h"
-#include "elements/VFormalTypeArgument.h"
-#include "elements/VStatementItemList.h"
-#include "elements/VCatchClause.h"
+using namespace OOModel;
+using namespace Visualization;
 
-#include "expressions/allOOExpressionVisualizations.h"
+namespace OOVisualization {
 
-#include "statements/VStatementItem.h"
-#include "statements/VBlock.h"
-#include "statements/VReturnStatement.h"
-#include "statements/VIfStatement.h"
-#include "statements/VLoopStatement.h"
-#include "statements/VForEachStatement.h"
-#include "statements/VBreakStatement.h"
-#include "statements/VContinueStatement.h"
-#include "statements/VExpressionStatement.h"
-#include "statements/VTryCatchFinally.h"
+ITEM_COMMON_DEFINITIONS(VFloatLiteral, "item")
 
-#include "alternative/VKeywordMethodCall.h"
+VFloatLiteral::VFloatLiteral(Item* parent, NodeType *node, const StyleType *style) :
+	BaseItemType(parent, node, style),
+	vis_(nullptr)
+{
+}
+
+VFloatLiteral::~VFloatLiteral()
+{
+	SAFE_DELETE_ITEM(vis_);
+}
+
+void VFloatLiteral::determineChildren()
+{
+	synchronizeItem(vis_, node()->valueNode(), style());
+	vis_->setStyle( style() );
+}
+
+void VFloatLiteral::updateGeometry(int availableWidth, int availableHeight)
+{
+	Item::updateGeometry(vis_, availableWidth, availableHeight);
+}
+
+}

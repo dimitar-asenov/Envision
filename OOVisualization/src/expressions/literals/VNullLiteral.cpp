@@ -24,32 +24,38 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "VNullLiteral.h"
 
-#include "top_level/VProject.h"
-#include "top_level/VModule.h"
-#include "top_level/VClass.h"
-#include "top_level/VMethod.h"
+#include "OOModel/src/expressions/NullLiteral.h"
 
-#include "elements/VField.h"
-#include "elements/VEnumerator.h"
-#include "elements/VFormalArgument.h"
-#include "elements/VFormalResult.h"
-#include "elements/VFormalTypeArgument.h"
-#include "elements/VStatementItemList.h"
-#include "elements/VCatchClause.h"
+#include "VisualizationBase/src/items/Text.h"
 
-#include "expressions/allOOExpressionVisualizations.h"
+using namespace Visualization;
+using namespace OOModel;
 
-#include "statements/VStatementItem.h"
-#include "statements/VBlock.h"
-#include "statements/VReturnStatement.h"
-#include "statements/VIfStatement.h"
-#include "statements/VLoopStatement.h"
-#include "statements/VForEachStatement.h"
-#include "statements/VBreakStatement.h"
-#include "statements/VContinueStatement.h"
-#include "statements/VExpressionStatement.h"
-#include "statements/VTryCatchFinally.h"
+namespace OOVisualization {
 
-#include "alternative/VKeywordMethodCall.h"
+ITEM_COMMON_DEFINITIONS(VNullLiteral, "item")
+
+VNullLiteral::VNullLiteral(Item* parent, NodeType* node, const StyleType* style) :
+	BaseItemType(parent, node, style),
+	vis_(new Static(this, style))
+{
+}
+
+VNullLiteral::~VNullLiteral()
+{
+	SAFE_DELETE_ITEM(vis_);
+}
+
+void VNullLiteral::determineChildren()
+{
+	vis_->setStyle( style());
+}
+
+void VNullLiteral::updateGeometry(int availableWidth, int availableHeight)
+{
+	Item::updateGeometry(vis_, availableWidth, availableHeight);
+}
+
+}
