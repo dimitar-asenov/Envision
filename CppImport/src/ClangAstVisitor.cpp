@@ -163,6 +163,7 @@ bool ClangAstVisitor::TraverseFunctionDecl(clang::FunctionDecl* functionDecl)
 	{
 		if(ooFunction->parent())
 		{
+			// TODO find out why this happens
 			std::cout << "FUNCTION HAS OOPARENT " << functionDecl->getNameAsString() << std::endl;
 			return true;
 		}
@@ -171,6 +172,13 @@ bool ClangAstVisitor::TraverseFunctionDecl(clang::FunctionDecl* functionDecl)
 			curProject->methods()->append(ooFunction);
 		else if(OOModel::Module* curModel = dynamic_cast<OOModel::Module*>(ooStack_.top()))
 			curModel->methods()->append(ooFunction);
+		else if(OOModel::Class* curClass = dynamic_cast<OOModel::Class*>(ooStack_.top()))
+		{
+			// function Probably is a friend of class
+			std::cout<< "FRIEND FUNCTION ??? CLASS ON TOP OF STACK " << curClass->name().toStdString() <<
+							" Function name: " << functionDecl->getNameAsString() << std::endl;
+
+		}
 		else
 			log_->writeError(className_,QString("uknown where to put function"),
 								  QString("FunctionDecl"),functionDecl->getNameAsString());
