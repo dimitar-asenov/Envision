@@ -38,6 +38,7 @@ class TranslateManager
 		OOModel::Module* insertNamespace(clang::NamespaceDecl* nd, int depth);
 		OOModel::Class* insertClass(clang::CXXRecordDecl* rDecl);
 		OOModel::Class* insertStruct(clang::CXXRecordDecl* sDecl);
+		bool containsClass(clang::CXXRecordDecl* recordDecl);
 		OOModel::Method* insertMethodDecl(clang::CXXMethodDecl* mDecl);
 		OOModel::Method* insertFunctionDecl(clang::FunctionDecl* functionDecl);
 		OOModel::Field* insertField(clang::FieldDecl* fDecl);
@@ -58,5 +59,10 @@ class TranslateManager
 		QMap<clang::FunctionDecl*, OOModel::Method*> functionMap_;
 		QMap<clang::VarDecl*, OOModel::VariableDeclaration*> varMap_;
 };
+
+inline bool TranslateManager::containsClass(clang::CXXRecordDecl* recordDecl)
+{
+	return classMap_.contains(recordDecl);
+}
 
 }

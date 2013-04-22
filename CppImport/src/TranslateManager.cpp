@@ -70,7 +70,7 @@ OOModel::Class* TranslateManager::insertClass(clang::CXXRecordDecl* rDecl)
 		classMap_.insert(rDecl,ooClass);
 	}
 	else
-		std::cout << "ERROR TRANSLATEMNGR: CLASS"<< rDecl->getNameAsString() << " ALREADY IN MAP" << std::endl;
+		std::cout << "ERROR TRANSLATEMNGR: CLASS "<< rDecl->getNameAsString() << " ALREADY IN MAP" << std::endl;
 	return ooClass;
 }
 
@@ -92,36 +92,40 @@ OOModel::Class *TranslateManager::insertStruct(clang::CXXRecordDecl* sDecl)
 OOModel::Method* TranslateManager::insertMethodDecl(clang::CXXMethodDecl* mDecl)
 {
 	OOModel::Method* method = nullptr;
-	if(!methodMap_.contains(mDecl))
+	// only consider methods where the parent has already been visited
+	if(classMap_.contains(mDecl->getParent()))
 	{
-		// Look if there is a function with same name in map
-		QMap<clang::CXXMethodDecl*,OOModel::Method*>::iterator it = methodMap_.begin();
-		for(;it!=methodMap_.end();++it)
+		if(!methodMap_.contains(mDecl))
 		{
-			clang::CXXMethodDecl* inMapDecl = it.key();
-			if(!mDecl->getNameAsString().compare(inMapDecl->getNameAsString()) &&
-					!inMapDecl->isThisDeclarationADefinition() && mDecl->isThisDeclarationADefinition())
+			// Look if there is a function with same name in map
+			QMap<clang::CXXMethodDecl*,OOModel::Method*>::iterator it = methodMap_.begin();
+			for(;it!=methodMap_.end();++it)
 			{
-				// found a pair with same name and only one is defined
-				if((mDecl->getResultType() == inMapDecl->getResultType()) &&
-						(mDecl->param_size() == inMapDecl->param_size()))
+				clang::CXXMethodDecl* inMapDecl = it.key();
+				if(!mDecl->getNameAsString().compare(inMapDecl->getNameAsString()) &&
+						!inMapDecl->isThisDeclarationADefinition() && mDecl->isThisDeclarationADefinition())
 				{
-					bool matching = true;
-					for(unsigned i = 0; i < mDecl->param_size(); i++)
+					// found a pair with same name and only one is defined
+					if((mDecl->getResultType() == inMapDecl->getResultType()) &&
+							(mDecl->param_size() == inMapDecl->param_size()))
 					{
-						if(mDecl->getParamDecl(i)->getType() != inMapDecl->getParamDecl(i)->getType())
-							matching = false;
-					}
-					if(matching)
-					{
-						method = it.value();
-						break;
+						bool matching = true;
+						for(unsigned i = 0; i < mDecl->param_size(); i++)
+						{
+							if(mDecl->getParamDecl(i)->getType() != inMapDecl->getParamDecl(i)->getType())
+								matching = false;
+						}
+						if(matching)
+						{
+							method = it.value();
+							break;
+						}
 					}
 				}
 			}
+			// check if method node exists or else create one
+			method = method ? method : addNewMethod(mDecl);
 		}
-		// check if method node exists or else create one
-		method = method ? method : addNewMethod(mDecl);
 	}
 	return method;
 }
@@ -225,10 +229,6 @@ OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl)
 	{
 		OOModel::Class* parent = classMap_.value(mDecl->getParent());
 		parent->methods()->append(method);
-	}
-	else if(mDecl->getParent())
-	{
-		std::cout << "METHOD HAS PARENT WHICH IS NOT IN CLASS MAP" << std::endl;
 	}
 	else
 		std::cout << "ERROR TRANSLATEMNGR: METHOD DECL NO PARENT FOUND" << std::endl;

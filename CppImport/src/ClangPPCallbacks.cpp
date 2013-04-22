@@ -32,7 +32,10 @@ void ClangPPCallbacks::FileChanged(clang::SourceLocation Loc, clang::PPCallbacks
 {
 	Loc.isFileID();
 	PrevFID.isInvalid();
-	std::cout << "FILE CHANGED REASON " << Reason << "  FILETYPE " << FileType << std::endl;
+//	std::cout << "FILE CHANGED REASON " << Reason << "  FILETYPE " << FileType << std::endl;
+	// TODO
+	Q_UNUSED(Reason)
+	Q_UNUSED(FileType)
 }
 
 void ClangPPCallbacks::InclusionDirective(clang::SourceLocation HashLoc, const clang::Token &IncludeTok, llvm::StringRef FileName, bool IsAngled, clang::CharSourceRange FilenameRange, const clang::FileEntry *File, llvm::StringRef SearchPath, llvm::StringRef RelativePath, const clang::Module *Imported)
@@ -44,7 +47,12 @@ void ClangPPCallbacks::InclusionDirective(clang::SourceLocation HashLoc, const c
 	FilenameRange.getBegin();
 	SearchPath.str();
 
-	std::cout << "INCLUDE DIRECTIVE " << RelativePath.str() << "   " << FileName.str() << " IS ANGLED " << IsAngled <<   std::endl;
+
+//	std::cout << "INCLUDE DIRECTIVE " << RelativePath.str() << "   " << FileName.str() << " IS ANGLED " << IsAngled <<   std::endl;
+	// TODO
+	Q_UNUSED(FileName)
+	Q_UNUSED(IsAngled)
+	Q_UNUSED(RelativePath)
 }
 
 }

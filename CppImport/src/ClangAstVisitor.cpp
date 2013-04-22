@@ -128,14 +128,15 @@ bool ClangAstVisitor::TraverseCXXMethodDecl(clang::CXXMethodDecl* methodDecl)
 	// Constructors not yet handled
 	if(llvm::isa<clang::CXXConstructorDecl>(methodDecl))
 		return true;
-	// translation Manager will insert method in correct class
 	OOModel::Method* ooMethod = trMngr_->insertMethodDecl(methodDecl);
 	if(!ooMethod)
 	{
-		log_->writeError(className_,QString("no ooModel::method found"),
-							  QString("CXXMethodDecl"),methodDecl->getNameAsString());
-		// for now return false to see error (interupts visitor)
-		return false;
+		// TODO is this correct?
+		// only consider a method where the parent has been visited
+		if(trMngr_->containsClass(methodDecl->getParent()))
+			log_->writeError(className_,QString("no ooModel::method found"),
+								  QString("CXXMethodDecl"),methodDecl->getNameAsString());
+		return true;
 	}
 	// only visit the body if we are at the definition
 	if(methodDecl->isThisDeclarationADefinition())
@@ -160,6 +161,11 @@ bool ClangAstVisitor::TraverseFunctionDecl(clang::FunctionDecl* functionDecl)
 	OOModel::Method* ooFunction = trMngr_->insertFunctionDecl(functionDecl);
 	if(ooFunction)
 	{
+		if(ooFunction->parent())
+		{
+			std::cout << "FUNCTION HAS OOPARENT " << functionDecl->getNameAsString() << std::endl;
+			return true;
+		}
 		// insert in model
 		if(OOModel::Project* curProject = dynamic_cast<OOModel::Project*>(ooStack_.top()))
 			curProject->methods()->append(ooFunction);
@@ -357,7 +363,6 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 
 bool ClangAstVisitor::TraverseEnumDecl(clang::EnumDecl* enumDecl)
 {
-	std::cout << "Traversing enum : " << enumDecl->getNameAsString() << std::endl;
 	OOModel::Class* ooEnumClass = new OOModel::Class(QString::fromStdString(enumDecl->getNameAsString()));
 	// insert in model
 	if(OOModel::Project* curProject = dynamic_cast<OOModel::Project*>(ooStack_.top()))
