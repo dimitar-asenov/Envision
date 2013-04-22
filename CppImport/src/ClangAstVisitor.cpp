@@ -198,6 +198,7 @@ bool ClangAstVisitor::TraverseIfStmt(clang::IfStmt* ifStmt)
 		// append the if stmt to current stmt list
 		itemList->append(ooIfStmt);
 		// condition
+		bool inBody = inBody_;
 		inBody_ = false;
 		TraverseStmt(ifStmt->getCond());
 		inBody_ = true;
@@ -209,6 +210,7 @@ bool ClangAstVisitor::TraverseIfStmt(clang::IfStmt* ifStmt)
 		// else branch
 		ooStack_.push(ooIfStmt->elseBranch());
 		TraverseStmt(ifStmt->getElse());
+		inBody_ = inBody;
 		ooStack_.pop();
 	}
 	return true;
@@ -223,6 +225,7 @@ bool ClangAstVisitor::TraverseWhileStmt(clang::WhileStmt* whileStmt)
 		// append the loop to current stmt list
 		itemList->append(ooLoop);
 		// condition
+		bool inBody = inBody_;
 		inBody_ = false;
 		TraverseStmt(whileStmt->getCond());
 		inBody_ = true;
@@ -230,6 +233,7 @@ bool ClangAstVisitor::TraverseWhileStmt(clang::WhileStmt* whileStmt)
 		// body
 		ooStack_.push(ooLoop->body());
 		TraverseStmt(whileStmt->getBody());
+		inBody_ = inBody;
 		ooStack_.pop();
 	}
 	return true;
@@ -242,6 +246,7 @@ bool ClangAstVisitor::TraverseForStmt(clang::ForStmt* forStmt)
 	if(itemList)
 	{
 		itemList->append(ooLoop);
+		bool inBody = inBody_;
 		inBody_ = false;
 		// init
 		TraverseStmt(forStmt->getInit());
@@ -256,6 +261,7 @@ bool ClangAstVisitor::TraverseForStmt(clang::ForStmt* forStmt)
 		// body
 		ooStack_.push(ooLoop->body());
 		TraverseStmt(forStmt->getBody());
+		inBody_ = inBody;
 		ooStack_.pop();
 	}
 	return true;
@@ -269,14 +275,15 @@ bool ClangAstVisitor::TraverseReturnStmt(clang::ReturnStmt* returnStmt)
 	{
 		itemList->append(ooReturn);
 		// return expression
+		bool inBody = inBody_;
 		inBody_ = false;
 		TraverseStmt(returnStmt->getRetValue());
-		inBody_ = true;
 		if(!ooExprStack_.empty())
 			ooReturn->values()->append(ooExprStack_.pop());
 		else
 			log_->writeError(className_,QString("Return expr not supported"),
 								  QString("Expr"),returnStmt->getRetValue()->getType().getAsString());
+		inBody_ = inBody;
 	}
 	return true;
 }
@@ -290,7 +297,7 @@ bool ClangAstVisitor::VisitStmt(clang::Stmt* S)
 {
 	//    std::cout << "VISITING STMT" << std::endl;
 	//    llvm::errs() << "VISITING STMT" << "\n";
-//			  S->dump();
+	//			  S->dump();
 	return Base::VisitStmt(S);
 }
 
@@ -392,7 +399,9 @@ bool ClangAstVisitor::VisitFieldDecl(clang::FieldDecl* fieldDecl)
 	{
 		log_->writeError(className_,QString("no parent found for this field"),
 							  QString("FieldDecl"),fieldDecl->getNameAsString());
-		return false;
+		// TODO
+		// return false;
+		return true;
 	}
 	clang::QualType ctype = fieldDecl->getType();
 	OOModel::Expression* type = CppImportUtilities::convertClangType(ctype);
