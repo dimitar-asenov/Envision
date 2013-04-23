@@ -28,18 +28,11 @@
 
 namespace CppImport {
 
-
-ClangAstConsumer::ClangAstConsumer(Model::Model *model, OOModel::Project *currentProject) :
-	clang::ASTConsumer()
-{
-	this->astVisitor_ = new ClangAstVisitor(model, currentProject, logger_);
-}
-
 ClangAstConsumer::ClangAstConsumer(clang::CompilerInstance *ci, Model::Model *model, OOModel::Project *currentProject) :
 	clang::ASTConsumer(), ci_(ci)
 {
-	if(ci)
-		ci->getPreprocessor().enableIncrementalProcessing();
+	Q_ASSERT(ci);
+	logger_ = new CppImportLogger(&ci_->getSourceManager());
 	this->astVisitor_ = new ClangAstVisitor(model, currentProject, logger_);
 }
 

@@ -33,14 +33,17 @@ namespace CppImport {
 class CppImportLogger
 {
 	public:
-		CppImportLogger();
+		CppImportLogger(clang::SourceManager* sourceManager);
 		~CppImportLogger();
-		void writeError(QString inWhichClass, QString reason, QString clangType, std::string clangName);
-		void writeWarning(QString inWhichClass, QString reason, QString clangType, std::string clangName);
+		void writeError(QString inWhichClass, QString reason, QString clangType, clang::NamedDecl* decl);
+		void writeWarning(QString inWhichClass, QString reason, QString clangType, clang::NamedDecl* decl);
+		void writeError(QString inWhichClass, QString reason, QString clangType, clang::Stmt* stmt);
+		void writeWarning(QString inWhichClass, QString reason, QString clangType, clang::Stmt* stmt);
 	private:
 		// type of output for writeOut function
 		enum OUTTYPE {ERROR,WARNING};
-		void writeOut(QString& inWhichClass, QString& reason, QString& clangType, QString clangName, OUTTYPE outType);
+		void writeOut(QString& inWhichClass, QString& reason, QString& clangType, clang::NamedDecl* decl, OUTTYPE outType);
+		void writeOut(QString &inWhichClass, QString &reason, QString &clangType, clang::Stmt *stmt, OUTTYPE outType);
 		void initStreams();
 
 		// outstreams
@@ -49,13 +52,22 @@ class CppImportLogger
 
 		// set to true if you want output in file(s)
 		bool writeToFile_{false};
+
+		// SourceManager to get file names from clang
+		clang::SourceManager* sourceManger_{};
 };
 
-inline void CppImportLogger::writeError(QString inWhichClass, QString reason, QString clangType, std::string clangName)
-{ writeOut(inWhichClass,reason,clangType,QString::fromStdString(clangName),ERROR); }
+inline void CppImportLogger::writeError(QString inWhichClass, QString reason, QString clangType, clang::NamedDecl* decl)
+{ writeOut(inWhichClass, reason, clangType, decl, ERROR); }
 
-inline void CppImportLogger::writeWarning(QString inWhichClass, QString reason, QString clangType, std::string clangName)
-{ writeOut(inWhichClass,reason,clangType,QString::fromStdString(clangName),WARNING); }
+inline void CppImportLogger::writeWarning(QString inWhichClass, QString reason, QString clangType, clang::NamedDecl* decl)
+{ writeOut(inWhichClass, reason, clangType, decl, WARNING); }
+
+inline void CppImportLogger::writeError(QString inWhichClass, QString reason, QString clangType, clang::Stmt* stmt)
+{ writeOut(inWhichClass, reason, clangType, stmt, ERROR); }
+
+inline void CppImportLogger::writeWarning(QString inWhichClass, QString reason, QString clangType, clang::Stmt* stmt)
+{ writeOut(inWhichClass, reason, clangType, stmt, WARNING); }
 
 }
 

@@ -37,7 +37,6 @@ namespace CppImport {
 class ClangAstConsumer : public clang::ASTConsumer
 {
 	public:
-		ClangAstConsumer(Model::Model* model, OOModel::Project* currentProject = nullptr);
 		ClangAstConsumer(clang::CompilerInstance* ci, Model::Model* model, OOModel::Project* currentProject = nullptr);
 		~ClangAstConsumer();
 		//    virtual bool HandleTopLevelDecl(clang::DeclGroupRef D) override;
@@ -47,7 +46,7 @@ class ClangAstConsumer : public clang::ASTConsumer
 	private:
 		ClangAstVisitor* astVisitor_{};
 		clang::CompilerInstance* ci_{};
-		CppImportLogger* logger_{new CppImportLogger()};
+		CppImportLogger* logger_{};
 
 };
 }

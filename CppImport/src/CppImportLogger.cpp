@@ -28,7 +28,8 @@
 
 namespace CppImport {
 
-CppImportLogger::CppImportLogger()
+CppImportLogger::CppImportLogger(clang::SourceManager* sourceManager) :
+	sourceManger_(sourceManager)
 {
 	initStreams();
 }
@@ -39,7 +40,7 @@ CppImportLogger::~CppImportLogger()
 	delete warnStream_;
 }
 
-void CppImportLogger::writeOut(QString &inWhichClass, QString &reason, QString &clangType, QString clangName, CppImportLogger::OUTTYPE outType)
+void CppImportLogger::writeOut(QString &inWhichClass, QString &reason, QString &clangType, clang::NamedDecl* decl, CppImportLogger::OUTTYPE outType)
 {
 	QTextStream* outStream;
 	switch(outType)
@@ -51,14 +52,39 @@ void CppImportLogger::writeOut(QString &inWhichClass, QString &reason, QString &
 			outStream = warnStream_;
 			break;
 		default:
-			outStream = nullptr;
-			break;
+			return;
 	}
+	(*outStream) << "ERR/WARN: \t In class : " << inWhichClass << " \n\t reason : " << reason
+					 << " \n\t in clang node : " << clangType
+					 << " \n\t clang node name : " << QString::fromStdString(decl->getNameAsString())
+					 << " \n\t in file : " << sourceManger_->getBufferName(decl->getLocation())
+						 // TODO also get line number
+					 << "\n";
 
-	if(outStream)
+}
+
+void CppImportLogger::writeOut(QString &inWhichClass, QString &reason, QString &clangType, clang::Stmt* stmt, CppImportLogger::OUTTYPE outType)
+{
+	QTextStream* outStream;
+	switch(outType)
 	{
-		(*outStream) << "ERR/WARN: \t In class : " << inWhichClass << " \n\t reason : " << reason << " \n\t in clang node : " << clangType << " \n\t clang node name : " << clangName << "\n";
+		case ERROR:
+			outStream = errStream_;
+			break;
+		case WARNING:
+			outStream = warnStream_;
+			break;
+		default:
+			return;
 	}
+	(*outStream) << "ERR/WARN: \t In class : " << inWhichClass << " \n\t reason : " << reason
+					 << " \n\t in clang node : " << clangType
+						 // TODO maybe output something more useful
+					 << " \n\t in stmt class node : " << stmt->getStmtClassName()
+					 << " \n\t in file : " << sourceManger_->getBufferName(stmt->getLocStart())
+						 // TODO also get line number
+					 << "\n";
+
 }
 
 void CppImportLogger::initStreams()

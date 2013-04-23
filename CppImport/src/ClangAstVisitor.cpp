@@ -65,7 +65,7 @@ bool ClangAstVisitor::TraverseNamespaceDecl(clang::NamespaceDecl* namespaceDecl)
 	else
 	{
 		log_->writeError(className_,QString("uknown where to put namespace"),
-							  QString("NamespaceDecl"),namespaceDecl->getNameAsString());
+							  QString("NamespaceDecl"),namespaceDecl);
 		// this is a severe error which should not happen therefore stop visiting
 		return false;
 	}
@@ -99,7 +99,7 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl)
 			curClass->classes()->append(ooClass);
 		else
 			log_->writeError(className_,QString("uknown where to put class"),
-								  QString("CXXRecordDecl"),recordDecl->getNameAsString());
+								  QString("CXXRecordDecl"),recordDecl);
 		// visit child decls
 		ooStack_.push(ooClass);
 		clang::DeclContext::decl_iterator it = recordDecl->decls_begin();
@@ -112,7 +112,7 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl)
 	else if(recordDecl->isUnion())
 	{
 		log_->writeWarning(className_,QString("Unions not supported"),
-								 QString("CXXRecordDecl"),recordDecl->getNameAsString());
+								 QString("CXXRecordDecl"),recordDecl);
 		return Base::TraverseCXXRecordDecl(recordDecl);
 	}
 	else
@@ -135,7 +135,7 @@ bool ClangAstVisitor::TraverseCXXMethodDecl(clang::CXXMethodDecl* methodDecl)
 		// only consider a method where the parent has been visited
 		if(trMngr_->containsClass(methodDecl->getParent()))
 			log_->writeError(className_,QString("no ooModel::method found"),
-								  QString("CXXMethodDecl"),methodDecl->getNameAsString());
+								  QString("CXXMethodDecl"),methodDecl);
 		return true;
 	}
 	// only visit the body if we are at the definition
@@ -181,7 +181,7 @@ bool ClangAstVisitor::TraverseFunctionDecl(clang::FunctionDecl* functionDecl)
 		}
 		else
 			log_->writeError(className_,QString("uknown where to put function"),
-								  QString("FunctionDecl"),functionDecl->getNameAsString());
+								  QString("FunctionDecl"),functionDecl);
 
 		// only visit the body if we are at the definition
 		if(functionDecl->isThisDeclarationADefinition())
@@ -198,7 +198,7 @@ bool ClangAstVisitor::TraverseFunctionDecl(clang::FunctionDecl* functionDecl)
 	else
 	{
 		log_->writeError(className_,QString("could no insert function"),
-							  QString("FunctionDecl"),functionDecl->getNameAsString());
+							  QString("FunctionDecl"),functionDecl);
 	}
 	return true;
 }
@@ -296,7 +296,7 @@ bool ClangAstVisitor::TraverseReturnStmt(clang::ReturnStmt* returnStmt)
 			ooReturn->values()->append(ooExprStack_.pop());
 		else
 			log_->writeError(className_,QString("Return expr not supported"),
-								  QString("Expr"),returnStmt->getRetValue()->getType().getAsString());
+								  QString("Expr"),returnStmt->getRetValue());
 		inBody_ = inBody;
 	}
 	return true;
@@ -353,7 +353,7 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 				ooVarDecl->setInitialValue(ooExprStack_.pop());
 			else
 				log_->writeError(className_,QString("Var Init Expr no supported"),
-									  QString("Expr"),varDecl->getInit()->getType().getAsString());
+									  QString("Expr"),varDecl->getInit());
 		}
 		if(inBody_)
 			itemList->append(ooVarDecl);
@@ -364,7 +364,7 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 	{
 		if(!llvm::isa<clang::ParmVarDecl>(varDecl))
 			log_->writeWarning(className_,QString("this variable is not supported"),
-									 QString("VarDecl"),varDecl->getNameAsString());
+									 QString("VarDecl"),varDecl);
 	}
 	return true;
 }
@@ -382,7 +382,7 @@ bool ClangAstVisitor::TraverseEnumDecl(clang::EnumDecl* enumDecl)
 	else
 	{
 		log_->writeWarning(className_,QString("Enums are only supported global, in namespaces or in classes"),
-								 QString("EnumDecl"),enumDecl->getNameAsString());
+								 QString("EnumDecl"),enumDecl);
 		// no need to further process this enum
 		return true;
 	}
@@ -411,7 +411,7 @@ bool ClangAstVisitor::VisitFieldDecl(clang::FieldDecl* fieldDecl)
 	if(!field)
 	{
 		log_->writeError(className_,QString("no parent found for this field"),
-							  QString("FieldDecl"),fieldDecl->getNameAsString());
+							  QString("FieldDecl"),fieldDecl);
 		// TODO
 		// return false;
 		return true;
@@ -509,7 +509,8 @@ bool ClangAstVisitor::VisitBreakStmt(clang::BreakStmt* breakStmt)
 	OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top());
 	if(itemList) itemList->append(ooBreak);
 	else
-		log_->writeError(className_,QString("not able to put break stmt"),QString("BreakStmt"),std::string("bStmt"));
+		log_->writeError(className_,QString("not able to put break stmt"),
+							  QString("BreakStmt"),breakStmt);
 	return true;
 }
 
@@ -534,13 +535,13 @@ bool ClangAstVisitor::TraverseBinaryOp(clang::BinaryOperator* binaryOperator)
 		ooBinOp->setLeft(ooExprStack_.pop());
 	else
 		log_->writeError(className_,QString("BOP: LHSExpr not supported"),
-							  QString("Expr"),binaryOperator->getLHS()->getType().getAsString());
+							  QString("Expr"),binaryOperator->getLHS());
 	TraverseStmt(binaryOperator->getRHS());
 	if(!ooExprStack_.empty())
 		ooBinOp->setRight(ooExprStack_.pop());
 	else
 		log_->writeError(className_,QString("BOP: RHSExpr not supported"),
-							  QString("Expr"),binaryOperator->getRHS()->getType().getAsString());
+							  QString("Expr"),binaryOperator->getRHS());
 
 	if(inBody)
 	{
@@ -568,13 +569,13 @@ bool ClangAstVisitor::TraverseAssignment(clang::BinaryOperator* binaryOperator)
 		ooBinOp->setLeft(ooExprStack_.pop());
 	else
 		log_->writeError(className_,QString("BOP: LHSExpr not supported"),
-							  QString("Expr"),binaryOperator->getLHS()->getType().getAsString());
+							  QString("Expr"),binaryOperator->getLHS());
 	TraverseStmt(binaryOperator->getRHS());
 	if(!ooExprStack_.empty())
 		ooBinOp->setRight(ooExprStack_.pop());
 	else
 		log_->writeError(className_,QString("BOP: RHSExpr not supported"),
-							  QString("Expr"),binaryOperator->getRHS()->getType().getAsString());
+							  QString("Expr"),binaryOperator->getRHS());
 
 	if(inBody)
 	{
@@ -602,7 +603,7 @@ bool ClangAstVisitor::TraverseUnaryOp(clang::UnaryOperator* unaryOperator)
 		ooUnaryOp->setOperand(ooExprStack_.pop());
 	else
 		log_->writeError(className_,QString("UOP: SubExpr not supported"),
-							  QString("Expr"),unaryOperator->getSubExpr()->getType().getAsString());
+							  QString("Expr"),unaryOperator->getSubExpr());
 
 	if(inBody)
 	{
