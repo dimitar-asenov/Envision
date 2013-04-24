@@ -107,18 +107,20 @@ Inheritance diagram for Model::ExtendableNode:</div>
 <area href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision." alt="Model::Node" shape="rect" coords="0,0,194,24"/>
 <area href="classOOModel_1_1CatchClause.html" alt="OOModel::CatchClause" shape="rect" coords="204,112,398,136"/>
 <area href="classOOModel_1_1Class.html" alt="OOModel::Class" shape="rect" coords="204,168,398,192"/>
-<area href="classOOModel_1_1Expression.html" alt="OOModel::Expression" shape="rect" coords="204,224,398,248"/>
-<area href="classOOModel_1_1Field.html" alt="OOModel::Field" shape="rect" coords="204,280,398,304"/>
-<area href="classOOModel_1_1FormalArgument.html" alt="OOModel::FormalArgument" shape="rect" coords="204,336,398,360"/>
-<area href="classOOModel_1_1FormalResult.html" alt="OOModel::FormalResult" shape="rect" coords="204,392,398,416"/>
-<area href="classOOModel_1_1FormalTypeArgument.html" alt="OOModel::FormalTypeArgument" shape="rect" coords="204,448,398,472"/>
-<area href="classOOModel_1_1Method.html" alt="OOModel::Method" shape="rect" coords="204,504,398,528"/>
-<area href="classOOModel_1_1Module.html" alt="OOModel::Module" shape="rect" coords="204,560,398,584"/>
-<area href="classOOModel_1_1Project.html" alt="OOModel::Project" shape="rect" coords="204,616,398,640"/>
-<area href="classOOModel_1_1StatementItem.html" alt="OOModel::StatementItem" shape="rect" coords="204,672,398,696"/>
-<area href="classOOModel_1_1SwitchCase.html" alt="OOModel::SwitchCase" shape="rect" coords="204,728,398,752"/>
-<area href="classTestNodes_1_1BinaryNode.html" alt="TestNodes::BinaryNode" shape="rect" coords="204,784,398,808"/>
-<area href="classTestNodes_1_1PartialList.html" alt="TestNodes::PartialList" shape="rect" coords="204,840,398,864"/>
+<area href="classOOModel_1_1Enumerator.html" alt="OOModel::Enumerator" shape="rect" coords="204,224,398,248"/>
+<area href="classOOModel_1_1Expression.html" alt="OOModel::Expression" shape="rect" coords="204,280,398,304"/>
+<area href="classOOModel_1_1Field.html" alt="OOModel::Field" shape="rect" coords="204,336,398,360"/>
+<area href="classOOModel_1_1FormalArgument.html" alt="OOModel::FormalArgument" shape="rect" coords="204,392,398,416"/>
+<area href="classOOModel_1_1FormalResult.html" alt="OOModel::FormalResult" shape="rect" coords="204,448,398,472"/>
+<area href="classOOModel_1_1FormalTypeArgument.html" alt="OOModel::FormalTypeArgument" shape="rect" coords="204,504,398,528"/>
+<area href="classOOModel_1_1Method.html" alt="OOModel::Method" shape="rect" coords="204,560,398,584"/>
+<area href="classOOModel_1_1Module.html" alt="OOModel::Module" shape="rect" coords="204,616,398,640"/>
+<area href="classOOModel_1_1Project.html" alt="OOModel::Project" shape="rect" coords="204,672,398,696"/>
+<area href="classOOModel_1_1StatementItem.html" alt="OOModel::StatementItem" shape="rect" coords="204,728,398,752"/>
+<area href="classOOModel_1_1SwitchCase.html" alt="OOModel::SwitchCase" shape="rect" coords="204,784,398,808"/>
+<area href="classTestNodes_1_1BinaryNode.html" alt="TestNodes::BinaryNode" shape="rect" coords="204,840,398,864"/>
+<area href="classTestNodes_1_1PartialList.html" alt="TestNodes::PartialList" shape="rect" coords="204,896,398,920"/>
+<area href="classVisualization_1_1TestBoxNode.html" alt="Visualization::TestBoxNode" shape="rect" coords="204,952,398,976"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -204,6 +206,7 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:afeffa9286955cc6b2a455df925d2dacd"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classModel_1_1AttributeChain.html">AttributeChain</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1ExtendableNode.html#afeffa9286955cc6b2a455df925d2dacd">getMetaData</a> ()</td></tr>
+<tr class="memitem:a9412a187a58d24ab9c8f5f8871d3cccd"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1ExtendableNode.html#a9412a187a58d24ab9c8f5f8871d3cccd">init</a> ()</td></tr>
 <tr class="memitem:a30d1fea9c1aba0bdfdf91ad8f59a8d00"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1ExtendableNode.html#a30d1fea9c1aba0bdfdf91ad8f59a8d00">registerExtensionId</a> ()</td></tr>
 <tr class="memitem:a7ab7b45806f66b81d7357b66ab3c7c6a"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1ExtendableNode.html#a7ab7b45806f66b81d7357b66ab3c7c6a">registerNodeType</a> ()</td></tr>
 <tr class="memitem:a2384a6458357fd2f198d6e84dbb5ee5d"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1ExtendableNode.html#a2384a6458357fd2f198d6e84dbb5ee5d">typeIdStatic</a> ()</td></tr>
@@ -580,6 +583,31 @@ template&lt;class T &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a9412a187a58d24ab9c8f5f8871d3cccd"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Model::ExtendableNode::init </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented in <a class="el" href="classTestNodes_1_1BinaryNode.html#aa7fbf6ed334259a73f93dedf1fc0d7a5">TestNodes::BinaryNode</a>, <a class="el" href="classTestNodes_1_1BinaryNodeAccessUnit.html#a02096dccba64de5aaa25a5adef2d5316">TestNodes::BinaryNodeAccessUnit</a>, and <a class="el" href="classTestNodes_1_1BinaryNodePersistenceUnit.html#af2a43870284dbae827322a205ab66756">TestNodes::BinaryNodePersistenceUnit</a>.</p>
 
 </div>
 </div>

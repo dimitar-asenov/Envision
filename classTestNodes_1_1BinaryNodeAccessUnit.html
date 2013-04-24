@@ -210,8 +210,9 @@ Public Member Functions</h2></td></tr>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a9f34a374e78dbf1c8af32057224b1f24"><td class="memItemLeft" align="right" valign="top">static::Model::AttributeChain &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTestNodes_1_1BinaryNodeAccessUnit.html#a9f34a374e78dbf1c8af32057224b1f24">getMetaData</a> ()</td></tr>
 <tr class="memitem:a02096dccba64de5aaa25a5adef2d5316"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTestNodes_1_1BinaryNodeAccessUnit.html#a02096dccba64de5aaa25a5adef2d5316">init</a> ()</td></tr>
-<tr class="memitem:a40643e9c12158d0485f645ebc9d871a0"><td class="memItemLeft" align="right" valign="top">static::Model::ExtendableIndex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTestNodes_1_1BinaryNodeAccessUnit.html#a40643e9c12158d0485f645ebc9d871a0">registerNewAttribute</a> (const ::<a class="el" href="classModel_1_1Attribute.html">Model::Attribute</a> &amp;attribute)</td></tr>
+<tr class="memitem:a6cad8fbf24036a232e4bc539055b5ee0"><td class="memItemLeft" align="right" valign="top">static::Model::InitializationRegistry &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTestNodes_1_1BinaryNodeAccessUnit.html#a6cad8fbf24036a232e4bc539055b5ee0">initializationRegistry</a> ()</td></tr>
 <tr class="memitem:a3d69f40b482cd3b99adf556b38780443"><td class="memItemLeft" align="right" valign="top">static::Model::ExtendableIndex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTestNodes_1_1BinaryNodeAccessUnit.html#a3d69f40b482cd3b99adf556b38780443">registerNewAttribute</a> (const QString &amp;attributeName, const QString &amp;attributeType, bool canBePartiallyLoaded, bool isOptional, bool isPersistent)</td></tr>
+<tr class="memitem:a40643e9c12158d0485f645ebc9d871a0"><td class="memItemLeft" align="right" valign="top">static::Model::ExtendableIndex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTestNodes_1_1BinaryNodeAccessUnit.html#a40643e9c12158d0485f645ebc9d871a0">registerNewAttribute</a> (const ::<a class="el" href="classModel_1_1Attribute.html">Model::Attribute</a> &amp;attribute)</td></tr>
 <tr class="memitem:a76b4c011f910999d659d2a0ab5c1d732"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
 <tr class="memitem:a76b4c011f910999d659d2a0ab5c1d732"><td class="memTemplItemLeft" align="right" valign="top">static void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classTestNodes_1_1BinaryNodeAccessUnit.html#a76b4c011f910999d659d2a0ab5c1d732">registerNewExtension</a> ()</td></tr>
 <tr class="memitem:a816f0fc2adefe268ca32a67c46f7702e"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTestNodes_1_1BinaryNodeAccessUnit.html#a816f0fc2adefe268ca32a67c46f7702e">registerNodeType</a> ()</td></tr>
@@ -558,7 +559,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a40643e9c12158d0485f645ebc9d871a0"></a>
+<a class="anchor" id="a6cad8fbf24036a232e4bc539055b5ee0"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -566,10 +567,9 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static ::<a class="el" href="classModel_1_1ExtendableIndex.html">Model::ExtendableIndex</a> TestNodes::BinaryNodeAccessUnit::registerNewAttribute </td>
+          <td class="memname">static ::<a class="el" href="classModel_1_1InitializationRegistry.html">Model::InitializationRegistry</a>&amp; TestNodes::BinaryNodeAccessUnit::initializationRegistry </td>
           <td>(</td>
-          <td class="paramtype">const ::<a class="el" href="classModel_1_1Attribute.html">Model::Attribute</a> &amp;&#160;</td>
-          <td class="paramname"><em>attribute</em></td><td>)</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -580,7 +580,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Reimplemented from <a class="el" href="classTestNodes_1_1BinaryNode.html#a65b34db64b97e8762b50fc0cc2164d5f">TestNodes::BinaryNode</a>.</p>
+<p>Reimplemented from <a class="el" href="classTestNodes_1_1BinaryNode.html#a7f51d3de22a0eca5fcbdf6d2cb567143">TestNodes::BinaryNode</a>.</p>
 
 </div>
 </div>
@@ -635,6 +635,32 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Reimplemented from <a class="el" href="classTestNodes_1_1BinaryNode.html#a606be02beae4c1650d2e13b48fe1d20c">TestNodes::BinaryNode</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a40643e9c12158d0485f645ebc9d871a0"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static ::<a class="el" href="classModel_1_1ExtendableIndex.html">Model::ExtendableIndex</a> TestNodes::BinaryNodeAccessUnit::registerNewAttribute </td>
+          <td>(</td>
+          <td class="paramtype">const ::<a class="el" href="classModel_1_1Attribute.html">Model::Attribute</a> &amp;&#160;</td>
+          <td class="paramname"><em>attribute</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="classTestNodes_1_1BinaryNode.html#a65b34db64b97e8762b50fc0cc2164d5f">TestNodes::BinaryNode</a>.</p>
 
 </div>
 </div>

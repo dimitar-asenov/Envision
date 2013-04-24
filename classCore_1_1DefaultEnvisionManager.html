@@ -88,6 +88,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="classCore_1_1DefaultEnvisionManager-members.html">List of all members</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">Core::DefaultEnvisionManager Class Reference</div>  </div>
@@ -107,15 +109,31 @@ Inheritance diagram for Core::DefaultEnvisionManager:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a1ac3bc96bffbbf8d3944f6c1f07be975"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1DefaultEnvisionManager.html#a1ac3bc96bffbbf8d3944f6c1f07be975">DefaultEnvisionManager</a> ()</td></tr>
 <tr class="memitem:abcfdff72de62ac251056f1a602805cb6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1DefaultEnvisionManager.html#abcfdff72de62ac251056f1a602805cb6">~DefaultEnvisionManager</a> ()</td></tr>
+<tr class="memitem:ad8d80ea5c94ce65d2ddada468edce0fa"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1DefaultEnvisionManager.html#ad8d80ea5c94ce65d2ddada468edce0fa">addPostEventAction</a> (EventPrePostAction action) override</td></tr>
+<tr class="memdesc:ad8d80ea5c94ce65d2ddada468edce0fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds <em>action</em> to the list of actions that will be executed after dispatching an event.  <a href="#ad8d80ea5c94ce65d2ddada468edce0fa"></a><br/></td></tr>
+<tr class="memitem:a5585175c6a76c40fbbada41b6738d1b8"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1DefaultEnvisionManager.html#a5585175c6a76c40fbbada41b6738d1b8">addPreEventAction</a> (EventPrePostAction action) override</td></tr>
+<tr class="memdesc:a5585175c6a76c40fbbada41b6738d1b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds <em>action</em> to the list of actions that will be executed prior to dispatching an event.  <a href="#a5585175c6a76c40fbbada41b6738d1b8"></a><br/></td></tr>
 <tr class="memitem:a6df0de14e46dbd99912d091c582c7761"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1DefaultEnvisionManager.html#a6df0de14e46dbd99912d091c582c7761">exit</a> ()</td></tr>
-<tr class="memitem:a57b33b151488b1b852e7d996e2c98bde"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="structCore_1_1PluginInfo.html">PluginInfo</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1DefaultEnvisionManager.html#a57b33b151488b1b852e7d996e2c98bde">getAllLoadedPluginsInfo</a> ()</td></tr>
-<tr class="memdesc:a57b33b151488b1b852e7d996e2c98bde"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a list of all the plug-ins currently loaded in the system.  <a href="#a57b33b151488b1b852e7d996e2c98bde"></a><br/></td></tr>
-<tr class="memitem:a08fcee258953a186dd98bd1828abf983"><td class="memItemLeft" align="right" valign="top">QMainWindow *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1DefaultEnvisionManager.html#a08fcee258953a186dd98bd1828abf983">getMainWindow</a> ()</td></tr>
-<tr class="memdesc:a08fcee258953a186dd98bd1828abf983"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the main window of the application.  <a href="#a08fcee258953a186dd98bd1828abf983"></a><br/></td></tr>
+<tr class="memitem:afdf7797090301207b8e07b9126cfca7f"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; <a class="el" href="structCore_1_1PluginInfo.html">PluginInfo</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1DefaultEnvisionManager.html#afdf7797090301207b8e07b9126cfca7f">getAllLoadedPluginsInfo</a> () override</td></tr>
+<tr class="memdesc:afdf7797090301207b8e07b9126cfca7f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a list of all the plug-ins currently loaded in the system.  <a href="#afdf7797090301207b8e07b9126cfca7f"></a><br/></td></tr>
+<tr class="memitem:a54c3e209a8b871473fc34fcf7e2e60d3"><td class="memItemLeft" align="right" valign="top">virtual QMainWindow *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1DefaultEnvisionManager.html#a54c3e209a8b871473fc34fcf7e2e60d3">getMainWindow</a> () override</td></tr>
+<tr class="memdesc:a54c3e209a8b871473fc34fcf7e2e60d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the main window of the application.  <a href="#a54c3e209a8b871473fc34fcf7e2e60d3"></a><br/></td></tr>
 <tr class="memitem:af5f1fbf6975f80c3618265b63ed4b111"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1DefaultEnvisionManager.html#af5f1fbf6975f80c3618265b63ed4b111">setMainWindow</a> (QMainWindow *)</td></tr>
 <tr class="memitem:a8d3c66f7b1129fc4f6d7168da72afd08"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1DefaultEnvisionManager.html#a8d3c66f7b1129fc4f6d7168da72afd08">setPluginManager</a> (<a class="el" href="classCore_1_1PluginManager.html">PluginManager</a> *)</td></tr>
 <tr class="inherit_header pub_methods_classCore_1_1EnvisionManager"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classCore_1_1EnvisionManager')"><img src="closed.png" alt="-"/>&nbsp;Public Member Functions inherited from <a class="el" href="classCore_1_1EnvisionManager.html">Core::EnvisionManager</a></td></tr>
 <tr class="memitem:a125e3816d578fe4cd35e54772284f28c inherit pub_methods_classCore_1_1EnvisionManager"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1EnvisionManager.html#a125e3816d578fe4cd35e54772284f28c">~EnvisionManager</a> ()</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a3255b1335da126c66e4f24773eae02b0"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1DefaultEnvisionManager.html#a3255b1335da126c66e4f24773eae02b0">processPostEventActions</a> (QObject *receiver, QEvent *event)</td></tr>
+<tr class="memitem:a77c3fbba29c842f923f623cadf8ce9c1"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1DefaultEnvisionManager.html#a77c3fbba29c842f923f623cadf8ce9c1">processPreEventActions</a> (QObject *receiver, QEvent *event)</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2><a name="pri-static-methods"></a>
+Static Private Member Functions</h2></td></tr>
+<tr class="memitem:aaa085e74f84477d8315bbd481548d682"><td class="memItemLeft" align="right" valign="top">static QList<br class="typebreak"/>
+&lt; EventPrePostAction &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1DefaultEnvisionManager.html#aaa085e74f84477d8315bbd481548d682">postEventActions</a> ()</td></tr>
+<tr class="memitem:a1f969d994e1f7d78eaa8fa89ea8e0487"><td class="memItemLeft" align="right" valign="top">static QList<br class="typebreak"/>
+&lt; EventPrePostAction &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1DefaultEnvisionManager.html#a1f969d994e1f7d78eaa8fa89ea8e0487">preEventActions</a> ()</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -155,6 +173,64 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2>Member Function Documentation</h2>
+<a class="anchor" id="ad8d80ea5c94ce65d2ddada468edce0fa"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Core::DefaultEnvisionManager::addPostEventAction </td>
+          <td>(</td>
+          <td class="paramtype">EventPrePostAction&#160;</td>
+          <td class="paramname"><em>action</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds <em>action</em> to the list of actions that will be executed after dispatching an event. </p>
+<p>The provided action function will be called after any event for any object is dispatched. </p>
+
+<p>Implements <a class="el" href="classCore_1_1EnvisionManager.html#a6b8baff2a3e9dd53fba4fde6405cb4b6">Core::EnvisionManager</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5585175c6a76c40fbbada41b6738d1b8"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Core::DefaultEnvisionManager::addPreEventAction </td>
+          <td>(</td>
+          <td class="paramtype">EventPrePostAction&#160;</td>
+          <td class="paramname"><em>action</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds <em>action</em> to the list of actions that will be executed prior to dispatching an event. </p>
+<p>The provided action function will be called before any event for any object is dispatched. </p>
+
+<p>Implements <a class="el" href="classCore_1_1EnvisionManager.html#a11a6847ffb94680df4072dbebdf5b6ae">Core::EnvisionManager</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a6df0de14e46dbd99912d091c582c7761"></a>
 <div class="memitem">
 <div class="memproto">
@@ -170,7 +246,7 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a57b33b151488b1b852e7d996e2c98bde"></a>
+<a class="anchor" id="afdf7797090301207b8e07b9126cfca7f"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -186,7 +262,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -198,7 +274,7 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a08fcee258953a186dd98bd1828abf983"></a>
+<a class="anchor" id="a54c3e209a8b871473fc34fcf7e2e60d3"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -214,7 +290,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -223,6 +299,120 @@ Private Attributes</h2></td></tr>
 <p>This can be used by visualization plug-ins to draw custom components. </p>
 
 <p>Implements <a class="el" href="classCore_1_1EnvisionManager.html#ac8b014c194e40b84a69e3ef04f30c7c7">Core::EnvisionManager</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aaa085e74f84477d8315bbd481548d682"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QList&lt; DefaultEnvisionManager::EventPrePostAction &gt; &amp; Core::DefaultEnvisionManager::postEventActions </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a1f969d994e1f7d78eaa8fa89ea8e0487"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QList&lt; DefaultEnvisionManager::EventPrePostAction &gt; &amp; Core::DefaultEnvisionManager::preEventActions </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a3255b1335da126c66e4f24773eae02b0"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Core::DefaultEnvisionManager::processPostEventActions </td>
+          <td>(</td>
+          <td class="paramtype">QObject *&#160;</td>
+          <td class="paramname"><em>receiver</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QEvent *&#160;</td>
+          <td class="paramname"><em>event</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a77c3fbba29c842f923f623cadf8ce9c1"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Core::DefaultEnvisionManager::processPreEventActions </td>
+          <td>(</td>
+          <td class="paramtype">QObject *&#160;</td>
+          <td class="paramname"><em>receiver</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QEvent *&#160;</td>
+          <td class="paramname"><em>event</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

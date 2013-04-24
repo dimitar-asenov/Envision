@@ -26,7 +26,6 @@ var searchData=
   ['storagespecifier',['StorageSpecifier',['../classOOModel_1_1StorageSpecifier.html',1,'OOModel']]],
   ['stringcomponents',['StringComponents',['../classOOInteraction_1_1StringComponents.html',1,'OOInteraction']]],
   ['stringliteral',['StringLiteral',['../classOOModel_1_1StringLiteral.html',1,'OOModel']]],
-  ['stringliteralstringcomponents',['StringLiteralStringComponents',['../classOOInteraction_1_1StringLiteralStringComponents.html',1,'OOInteraction']]],
   ['stringoffsetprovider',['StringOffsetProvider',['../classOOInteraction_1_1StringOffsetProvider.html',1,'OOInteraction']]],
   ['stringtype',['StringType',['../classOOModel_1_1StringType.html',1,'OOModel']]],
   ['style',['Style',['../classVisualization_1_1Style.html',1,'Visualization']]],

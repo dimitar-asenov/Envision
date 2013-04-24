@@ -45,7 +45,6 @@ var searchData=
   ['statictext_5f',['staticText_',['../classVisualization_1_1TextRenderer.html#a22e3063cd68ec8090af341a034a841e8',1,'Visualization::TextRenderer']]],
   ['store_5f',['store_',['../classModel_1_1Model.html#a605602e34387bc4f504ac89403d34b29',1,'Model::Model']]],
   ['storeaccess',['storeAccess',['../classFilePersistence_1_1FileStore.html#a508f2359e004125084503a7c736a1fcb',1,'FilePersistence::FileStore']]],
-  ['str_5f',['str_',['../classOOInteraction_1_1LambdaStringComponents.html#a0bc761e00f982e332609f711026cef24',1,'OOInteraction::LambdaStringComponents']]],
   ['string_5f',['string_',['../classOOVisualization_1_1VStringLiteralStyle.html#a99bdd331181f1f3c599c333897151da1',1,'OOVisualization::VStringLiteralStyle']]],
   ['stringcomponentsend_5f',['stringComponentsEnd_',['../classOOInteraction_1_1Cell.html#a69694c94ab4d6cd0c68f9612f56c0420',1,'OOInteraction::Cell']]],
   ['stringcomponentsstart_5f',['stringComponentsStart_',['../classOOInteraction_1_1Cell.html#adea1a4e2a8aede935fce7909dbd0c411',1,'OOInteraction::Cell']]],
@@ -71,7 +70,7 @@ var searchData=
   ['supportedcommands',['supportedCommands',['../classInteraction_1_1GenericHandler.html#a090dd7d499da93665e60ee6d81629bf7',1,'Interaction::GenericHandler']]],
   ['svgheight',['svgHeight',['../classVisualization_1_1SvgShape.html#a567a5084f9b06034882c14e593302296',1,'Visualization::SvgShape']]],
   ['svgwidth',['svgWidth',['../classVisualization_1_1SvgShape.html#aec476506fcf0a3f3bbdfa01f33a6b48c',1,'Visualization::SvgShape']]],
-  ['symbol_5f',['symbol_',['../classOOVisualization_1_1VReturnStatement.html#a2e61e8a0ce617f3632f9d12aab5bfed3',1,'OOVisualization::VReturnStatement::symbol_()'],['../classOOVisualization_1_1VReturnStatementStyle.html#afea54ea04f9c971505e5ab69a15cff1b',1,'OOVisualization::VReturnStatementStyle::symbol_()'],['../classOOVisualization_1_1VArrayType.html#a33c6ea0c09e86fe9ce695c2313efc1c5',1,'OOVisualization::VArrayType::symbol_()'],['../classOOVisualization_1_1VArrayTypeStyle.html#a5e21b2cd963d9ebaaa9377e918774ca0',1,'OOVisualization::VArrayTypeStyle::symbol_()'],['../classVisualization_1_1SymbolStyle.html#a72fd481232736a68de27afc23f81c916',1,'Visualization::SymbolStyle::symbol_()']]],
+  ['symbol_5f',['symbol_',['../classOOVisualization_1_1VReturnStatement.html#a2e61e8a0ce617f3632f9d12aab5bfed3',1,'OOVisualization::VReturnStatement::symbol_()'],['../classOOVisualization_1_1VReturnStatementStyle.html#afea54ea04f9c971505e5ab69a15cff1b',1,'OOVisualization::VReturnStatementStyle::symbol_()'],['../classVisualization_1_1SymbolStyle.html#a72fd481232736a68de27afc23f81c916',1,'Visualization::SymbolStyle::symbol_()']]],
   ['symbolname',['symbolName',['../classOOModel_1_1VariableDeclaration.html#a53fd1230c5491f26e19fffe143122cde',1,'OOModel::VariableDeclaration']]],
   ['symbolprovider_5f',['symbolProvider_',['../classOOModel_1_1SymbolProviderType.html#af811fab11b5c59157419455a1b3ecaf7',1,'OOModel::SymbolProviderType']]]
 ];

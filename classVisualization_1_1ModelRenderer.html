@@ -98,6 +98,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a0e39ff64e91ae9dec0e92719e3c735c7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ModelRenderer.html#a0e39ff64e91ae9dec0e92719e3c735c7">ModelRenderer</a> ()</td></tr>
 <tr class="memitem:a42f3ea8813bac94674b203ba6b516709"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ModelRenderer.html#a42f3ea8813bac94674b203ba6b516709">~ModelRenderer</a> ()</td></tr>
+<tr class="memitem:ac895d8b4e266047d8c7f06d9bc3742c0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ModelRenderer.html#ac895d8b4e266047d8c7f06d9bc3742c0">hasVisualization</a> (int nodeTypeId, int purpose=0)</td></tr>
+<tr class="memdesc:ac895d8b4e266047d8c7f06d9bc3742c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether a specific visualization has been registered for nodes of type <em>nodeTypeId</em> and the provided <em>purpose</em>.  <a href="#ac895d8b4e266047d8c7f06d9bc3742c0"></a><br/></td></tr>
 <tr class="memitem:a52f1dacfe7944684bdd42b6cf74b968f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ModelRenderer.html#a52f1dacfe7944684bdd42b6cf74b968f">numRegisteredPurposes</a> () const </td></tr>
 <tr class="memitem:a293974edf29ee4e0777178ed76ee1c05"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ModelRenderer.html#a293974edf29ee4e0777178ed76ee1c05">purposeName</a> (int purpose)</td></tr>
 <tr class="memitem:a48c1ca9db4812e71af08ddc0d65ad6d9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1ModelRenderer.html#a48c1ca9db4812e71af08ddc0d65ad6d9">registerGroup</a> (int nodeTypeId, int purpose, <a class="el" href="classVisualization_1_1VisualizationGroup.html">VisualizationGroup</a> *group)</td></tr>
@@ -154,6 +156,34 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2>Member Function Documentation</h2>
+<a class="anchor" id="ac895d8b4e266047d8c7f06d9bc3742c0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Visualization::ModelRenderer::hasVisualization </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>nodeTypeId</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>purpose</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns whether a specific visualization has been registered for nodes of type <em>nodeTypeId</em> and the provided <em>purpose</em>. </p>
+
+</div>
+</div>
 <a class="anchor" id="a52f1dacfe7944684bdd42b6cf74b968f"></a>
 <div class="memitem">
 <div class="memproto">

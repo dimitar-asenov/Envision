@@ -14,5 +14,6 @@ var searchData=
   ['operatordescriptor',['OperatorDescriptor',['../classInteraction_1_1OperatorDescriptor.html',1,'Interaction']]],
   ['operatordescriptorlist',['OperatorDescriptorList',['../classInteraction_1_1OperatorDescriptorList.html',1,'Interaction']]],
   ['operatorsequencestyle',['OperatorSequenceStyle',['../classOOVisualization_1_1OperatorSequenceStyle.html',1,'OOVisualization']]],
-  ['operatorstyle',['OperatorStyle',['../classOOVisualization_1_1OperatorStyle.html',1,'OOVisualization']]]
+  ['operatorstyle',['OperatorStyle',['../classOOVisualization_1_1OperatorStyle.html',1,'OOVisualization']]],
+  ['optional',['Optional',['../structOOInteraction_1_1StringComponents_1_1Optional.html',1,'OOInteraction::StringComponents']]]
 ];

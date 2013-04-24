@@ -5,7 +5,6 @@ var searchData=
   ['method',['Method',['../classOOModel_1_1Method.html',1,'OOModel']]],
   ['methodaddon',['MethodAddOn',['../classOOVisualization_1_1MethodAddOn.html',1,'OOVisualization']]],
   ['methodcallexpression',['MethodCallExpression',['../classOOModel_1_1MethodCallExpression.html',1,'OOModel']]],
-  ['methoddefinitionvisitor',['MethodDefinitionVisitor',['../classOOInteraction_1_1MethodDefinitionVisitor.html',1,'OOInteraction']]],
   ['minimap',['MiniMap',['../classVisualization_1_1MiniMap.html',1,'Visualization']]],
   ['mipmap',['Mipmap',['../classVisualization_1_1Mipmap.html',1,'Visualization']]],
   ['model',['Model',['../classModel_1_1Model.html',1,'Model']]],

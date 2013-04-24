@@ -99,7 +99,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a2a487382f87ab88c4852a8154a7d2186"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1StyleNode.html#a2a487382f87ab88c4852a8154a7d2186">StyleNode</a> (const QString &amp;rootStyleFileName, const QString &amp;folderWithinStyles)</td></tr>
+<tr class="memitem:a10f71faf4478b4781ed449125112b615"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1StyleNode.html#a10f71faf4478b4781ed449125112b615">StyleNode</a> (const QString &amp;rootStyleNameAndPath, const QString &amp;folderWithinStyles)</td></tr>
+<tr class="memdesc:a10f71faf4478b4781ed449125112b615"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a node representing the requested style.  <a href="#a10f71faf4478b4781ed449125112b615"></a><br/></td></tr>
 <tr class="memitem:a7d9bc9d099340b03be247465d4ece057"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1StyleNode.html#a7d9bc9d099340b03be247465d4ece057">~StyleNode</a> ()</td></tr>
 <tr class="memitem:a269c831e32edcf4ce349985a2ee0f721"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1StyleNode.html#a269c831e32edcf4ce349985a2ee0f721">getProperty</a> (QStringList path)</td></tr>
 <tr class="memitem:a8cddc88845e26bc266c0e1d4d1713216"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1StyleNode.html#a8cddc88845e26bc266c0e1d4d1713216">hasProperty</a> (QStringList path)</td></tr>
@@ -131,7 +132,7 @@ Static Private Attributes</h2></td></tr>
 <tr class="memitem:aeab1da15d78344db9ea82dbc4ac81465"><td class="memItemLeft" align="right" valign="top">static QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1StyleNode.html#aeab1da15d78344db9ea82dbc4ac81465">baseFolder</a> = &quot;styles&quot;</td></tr>
 </table>
 <h2>Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a2a487382f87ab88c4852a8154a7d2186"></a>
+<a class="anchor" id="a10f71faf4478b4781ed449125112b615"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -139,7 +140,7 @@ Static Private Attributes</h2></td></tr>
           <td class="memname">Visualization::StyleNode::StyleNode </td>
           <td>(</td>
           <td class="paramtype">const QString &amp;&#160;</td>
-          <td class="paramname"><em>rootStyleFileName</em>, </td>
+          <td class="paramname"><em>rootStyleNameAndPath</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -154,6 +155,9 @@ Static Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Creates a node representing the requested style. </p>
+<p><em>folderWithinStyles</em> is the folder that contains the style file <em>rootStyleNameAndPath</em>. The <em>rootStyleNameAndPath</em> might be just a simple file name or can contain an additional sub-style separated by a '/' e.g. "keywordStyleFile/requiresKeyword". The latter case indicates that, the style is not the root XML node, but the is contained by the node with a name indicated by the string after the '/'. </p>
 
 </div>
 </div>

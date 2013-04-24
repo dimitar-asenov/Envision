@@ -119,8 +119,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a10a78b21e53b5b670a2965ff07fa0dd2"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a10a78b21e53b5b670a2965ff07fa0dd2">~Scene</a> ()</td></tr>
 <tr class="memitem:a7958ff559a8792633a9939d4b626a76f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a7958ff559a8792633a9939d4b626a76f">addPostEventAction</a> (QEvent *action)</td></tr>
 <tr class="memdesc:a7958ff559a8792633a9939d4b626a76f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an action to be executed after the current event.  <a href="#a7958ff559a8792633a9939d4b626a76f"></a><br/></td></tr>
+<tr class="memitem:abbc0d09eda10b13aa034ce3f2dd8c3b6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#abbc0d09eda10b13aa034ce3f2dd8c3b6">addRefreshActionFunction</a> (RefreshActionFunction func)</td></tr>
 <tr class="memitem:ace991cd6ccee83d1516916e17ad1a3c1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#ace991cd6ccee83d1516916e17ad1a3c1">addTopLevelItem</a> (<a class="el" href="classVisualization_1_1Item.html">Item</a> *item)</td></tr>
-<tr class="memitem:a1cb91c173ebc009b5e485f4f73aebcc7"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a1cb91c173ebc009b5e485f4f73aebcc7">customEvent</a> (QEvent *<a class="el" href="classVisualization_1_1Scene.html#a970c98b1c76a23fd5cb2d16c851f1d35">event</a>)</td></tr>
+<tr class="memitem:a1cb91c173ebc009b5e485f4f73aebcc7"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a1cb91c173ebc009b5e485f4f73aebcc7">customEvent</a> (QEvent *<a class="el" href="classVisualization_1_1Scene.html#a71390cf32fbb6ea1366daa5e42af18c6">event</a>)</td></tr>
 <tr class="memitem:a002fd8063039d5f128b74d6393ec47d1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a002fd8063039d5f128b74d6393ec47d1">isHiddenCategory</a> (<a class="el" href="classVisualization_1_1Scene.html#a493e1d97eee55349fc377f1f4f3abcdd">ItemCategory</a> cat)</td></tr>
 <tr class="memitem:a8d8fc417f3b7e22b690bb63741bcd033"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a8d8fc417f3b7e22b690bb63741bcd033">listenToModel</a> (<a class="el" href="classModel_1_1Model.html">Model::Model</a> *model)</td></tr>
 <tr class="memitem:a8cb114ab6af758a8e3a5ad36911d496f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1Cursor.html">Cursor</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a8cb114ab6af758a8e3a5ad36911d496f">mainCursor</a> ()</td></tr>
@@ -139,7 +140,8 @@ Static Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:a970c98b1c76a23fd5cb2d16c851f1d35"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a970c98b1c76a23fd5cb2d16c851f1d35">event</a> (QEvent *event)</td></tr>
+<tr class="memitem:a71390cf32fbb6ea1366daa5e42af18c6"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a71390cf32fbb6ea1366daa5e42af18c6">event</a> (QEvent *event) override</td></tr>
+<tr class="memitem:a7c6542a77782af90b8fa751ed7db2f61"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a7c6542a77782af90b8fa751ed7db2f61">keyPressEvent</a> (QKeyEvent *<a class="el" href="classVisualization_1_1Scene.html#a71390cf32fbb6ea1366daa5e42af18c6">event</a>) override</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2><a name="pri-types"></a>
 Private Types</h2></td></tr>
@@ -159,6 +161,7 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:a8b028262f809335f6edd6a5fed551d9a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a8b028262f809335f6edd6a5fed551d9a">mainCursorsJustSet_</a></td></tr>
 <tr class="memitem:a7147ad01e16030fcf8b2b916eec63934"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a7147ad01e16030fcf8b2b916eec63934">needsUpdate_</a></td></tr>
 <tr class="memitem:a4c9a19694ff2b1327e24f532376ae0e9"><td class="memItemLeft" align="right" valign="top">QList&lt; QEvent * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a4c9a19694ff2b1327e24f532376ae0e9">postEventActions_</a></td></tr>
+<tr class="memitem:a57d8f8af575c706b89e791ef6edf2801"><td class="memItemLeft" align="right" valign="top">QList&lt; RefreshActionFunction &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a57d8f8af575c706b89e791ef6edf2801">refreshActionFunctions_</a></td></tr>
 <tr class="memitem:a73b3be20dd0d87f6c5c3d32796adcdf9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1ModelRenderer.html">ModelRenderer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#a73b3be20dd0d87f6c5c3d32796adcdf9">renderer_</a></td></tr>
 <tr class="memitem:aba40f9f47957c0f0736a9075e41d0275"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classVisualization_1_1SceneHandlerItem.html">SceneHandlerItem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#aba40f9f47957c0f0736a9075e41d0275">sceneHandlerItem_</a></td></tr>
 <tr class="memitem:ad26186263fb08c47b215ebbcddc13130"><td class="memItemLeft" align="right" valign="top">QList&lt; <a class="el" href="classVisualization_1_1SelectedItem.html">SelectedItem</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Scene.html#ad26186263fb08c47b215ebbcddc13130">selections_</a></td></tr>
@@ -271,6 +274,30 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="abbc0d09eda10b13aa034ce3f2dd8c3b6"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Visualization::Scene::addRefreshActionFunction </td>
+          <td>(</td>
+          <td class="paramtype">RefreshActionFunction&#160;</td>
+          <td class="paramname"><em>func</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="ace991cd6ccee83d1516916e17ad1a3c1"></a>
 <div class="memitem">
 <div class="memproto">
@@ -357,7 +384,7 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a970c98b1c76a23fd5cb2d16c851f1d35"></a>
+<a class="anchor" id="a71390cf32fbb6ea1366daa5e42af18c6"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -374,7 +401,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -399,6 +426,30 @@ Private Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a7c6542a77782af90b8fa751ed7db2f61"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Visualization::Scene::keyPressEvent </td>
+          <td>(</td>
+          <td class="paramtype">QKeyEvent *&#160;</td>
+          <td class="paramname"><em>event</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -785,6 +836,26 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">QList&lt;QEvent*&gt; Visualization::Scene::postEventActions_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a57d8f8af575c706b89e791ef6edf2801"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QList&lt;RefreshActionFunction&gt; Visualization::Scene::refreshActionFunctions_</td>
         </tr>
       </table>
   </td>

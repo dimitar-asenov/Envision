@@ -106,9 +106,10 @@ Inheritance diagram for OOModel::ErrorType:</div>
 <tr class="heading"><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a6071be22765c875aa23a3e7f83d82c84"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1ErrorType.html#a6071be22765c875aa23a3e7f83d82c84">ErrorType</a> (const QString &amp;<a class="el" href="classOOModel_1_1ErrorType.html#afcda3336f7d02ad00806dbaeec30ce7d">message</a>)</td></tr>
-<tr class="memitem:aac274085f99c805333172db05b0a02d8"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1ErrorType.html#aac274085f99c805333172db05b0a02d8">equals</a> (const <a class="el" href="classOOModel_1_1Type.html">Type</a> *other) const </td></tr>
-<tr class="memitem:a4333f2e3784669ee569e3c4ff8a31afe"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1ErrorType.html#a4333f2e3784669ee569e3c4ff8a31afe">isError</a> () const </td></tr>
-<tr class="memdesc:a4333f2e3784669ee569e3c4ff8a31afe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if this is an error type.  <a href="#a4333f2e3784669ee569e3c4ff8a31afe"></a><br/></td></tr>
+<tr class="memitem:a122b0c044677a6b862a9f5a0c075853c"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classOOModel_1_1ErrorType.html">ErrorType</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1ErrorType.html#a122b0c044677a6b862a9f5a0c075853c">clone</a> () const override</td></tr>
+<tr class="memitem:a0069d8f0caa779abe3dd5aea8098ab4b"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1ErrorType.html#a0069d8f0caa779abe3dd5aea8098ab4b">equals</a> (const <a class="el" href="classOOModel_1_1Type.html">Type</a> *other) const override</td></tr>
+<tr class="memitem:ab5fad802e8f472a0b606afafdf7faf8d"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1ErrorType.html#ab5fad802e8f472a0b606afafdf7faf8d">isError</a> () const override</td></tr>
+<tr class="memdesc:ab5fad802e8f472a0b606afafdf7faf8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if this is an error type.  <a href="#ab5fad802e8f472a0b606afafdf7faf8d"></a><br/></td></tr>
 <tr class="memitem:afcda3336f7d02ad00806dbaeec30ce7d"><td class="memItemLeft" align="right" valign="top">const QString &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1ErrorType.html#afcda3336f7d02ad00806dbaeec30ce7d">message</a> () const </td></tr>
 <tr class="inherit_header pub_methods_classOOModel_1_1Type"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classOOModel_1_1Type')"><img src="closed.png" alt="-"/>&nbsp;Public Member Functions inherited from <a class="el" href="classOOModel_1_1Type.html">OOModel::Type</a></td></tr>
 <tr class="memitem:a233fcf4d65bb0afcbef1af12893291ee inherit pub_methods_classOOModel_1_1Type"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOOModel_1_1Type.html#a233fcf4d65bb0afcbef1af12893291ee">Type</a> (bool <a class="el" href="classOOModel_1_1Type.html#a50437cb76b7612b425525d246d8b4479">isValueType</a>)</td></tr>
@@ -139,7 +140,32 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2>Member Function Documentation</h2>
-<a class="anchor" id="aac274085f99c805333172db05b0a02d8"></a>
+<a class="anchor" id="a122b0c044677a6b862a9f5a0c075853c"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classOOModel_1_1ErrorType.html">ErrorType</a> * OOModel::ErrorType::clone </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classOOModel_1_1Type.html#a48e77494fb4dcf15ad35b9a4a591c52f">OOModel::Type</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0069d8f0caa779abe3dd5aea8098ab4b"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -156,7 +182,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -165,7 +191,7 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a4333f2e3784669ee569e3c4ff8a31afe"></a>
+<a class="anchor" id="ab5fad802e8f472a0b606afafdf7faf8d"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -181,7 +207,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

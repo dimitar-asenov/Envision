@@ -108,6 +108,10 @@ Inheritance diagram for Core::EnvisionManager:</div>
 <tr class="heading"><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a125e3816d578fe4cd35e54772284f28c"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1EnvisionManager.html#a125e3816d578fe4cd35e54772284f28c">~EnvisionManager</a> ()</td></tr>
+<tr class="memitem:a6b8baff2a3e9dd53fba4fde6405cb4b6"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1EnvisionManager.html#a6b8baff2a3e9dd53fba4fde6405cb4b6">addPostEventAction</a> (EventPrePostAction action)=0</td></tr>
+<tr class="memdesc:a6b8baff2a3e9dd53fba4fde6405cb4b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds <em>action</em> to the list of actions that will be executed after dispatching an event.  <a href="#a6b8baff2a3e9dd53fba4fde6405cb4b6"></a><br/></td></tr>
+<tr class="memitem:a11a6847ffb94680df4072dbebdf5b6ae"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1EnvisionManager.html#a11a6847ffb94680df4072dbebdf5b6ae">addPreEventAction</a> (EventPrePostAction action)=0</td></tr>
+<tr class="memdesc:a11a6847ffb94680df4072dbebdf5b6ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds <em>action</em> to the list of actions that will be executed prior to dispatching an event.  <a href="#a11a6847ffb94680df4072dbebdf5b6ae"></a><br/></td></tr>
 <tr class="memitem:a39b21f6f982bf19307dabc9abd9bd141"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; <a class="el" href="structCore_1_1PluginInfo.html">PluginInfo</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1EnvisionManager.html#a39b21f6f982bf19307dabc9abd9bd141">getAllLoadedPluginsInfo</a> ()=0</td></tr>
 <tr class="memdesc:a39b21f6f982bf19307dabc9abd9bd141"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a list of all the plug-ins currently loaded in the system.  <a href="#a39b21f6f982bf19307dabc9abd9bd141"></a><br/></td></tr>
 <tr class="memitem:ac8b014c194e40b84a69e3ef04f30c7c7"><td class="memItemLeft" align="right" valign="top">virtual QMainWindow *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCore_1_1EnvisionManager.html#ac8b014c194e40b84a69e3ef04f30c7c7">getMainWindow</a> ()=0</td></tr>
@@ -141,6 +145,64 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2>Member Function Documentation</h2>
+<a class="anchor" id="a6b8baff2a3e9dd53fba4fde6405cb4b6"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Core::EnvisionManager::addPostEventAction </td>
+          <td>(</td>
+          <td class="paramtype">EventPrePostAction&#160;</td>
+          <td class="paramname"><em>action</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds <em>action</em> to the list of actions that will be executed after dispatching an event. </p>
+<p>The provided action function will be called after any event for any object is dispatched. </p>
+
+<p>Implemented in <a class="el" href="classCore_1_1DefaultEnvisionManager.html#ad8d80ea5c94ce65d2ddada468edce0fa">Core::DefaultEnvisionManager</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a11a6847ffb94680df4072dbebdf5b6ae"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Core::EnvisionManager::addPreEventAction </td>
+          <td>(</td>
+          <td class="paramtype">EventPrePostAction&#160;</td>
+          <td class="paramname"><em>action</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds <em>action</em> to the list of actions that will be executed prior to dispatching an event. </p>
+<p>The provided action function will be called before any event for any object is dispatched. </p>
+
+<p>Implemented in <a class="el" href="classCore_1_1DefaultEnvisionManager.html#a5585175c6a76c40fbbada41b6738d1b8">Core::DefaultEnvisionManager</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a39b21f6f982bf19307dabc9abd9bd141"></a>
 <div class="memitem">
 <div class="memproto">
@@ -165,7 +227,7 @@ Public Member Functions</h2></td></tr>
 <p>Returns a list of all the plug-ins currently loaded in the system. </p>
 <p>If this method is called during the initialization phase of Envision, only the plug-ins loaded so far will be included in the list. If a list of all plug-ins is needed, make sure to call this method after Envision has been fully initialized. </p>
 
-<p>Implemented in <a class="el" href="classCore_1_1DefaultEnvisionManager.html#a57b33b151488b1b852e7d996e2c98bde">Core::DefaultEnvisionManager</a>.</p>
+<p>Implemented in <a class="el" href="classCore_1_1DefaultEnvisionManager.html#afdf7797090301207b8e07b9126cfca7f">Core::DefaultEnvisionManager</a>.</p>
 
 </div>
 </div>
@@ -193,7 +255,7 @@ Public Member Functions</h2></td></tr>
 <p>Returns the main window of the application. </p>
 <p>This can be used by visualization plug-ins to draw custom components. </p>
 
-<p>Implemented in <a class="el" href="classCore_1_1DefaultEnvisionManager.html#a08fcee258953a186dd98bd1828abf983">Core::DefaultEnvisionManager</a>.</p>
+<p>Implemented in <a class="el" href="classCore_1_1DefaultEnvisionManager.html#a54c3e209a8b871473fc34fcf7e2e60d3">Core::DefaultEnvisionManager</a>.</p>
 
 </div>
 </div>

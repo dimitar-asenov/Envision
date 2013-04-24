@@ -241,7 +241,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="classVisualization_1_1ItemStyle.html#a39687a30556810862f53d91f583e6a58">Visualization::ItemStyle</a>
 </li>
 <li>~ItemWithNode()
-: <a class="el" href="classVisualization_1_1ItemWithNode.html#ab8a809bc3c81bf71bc26506415d1a572">Visualization::ItemWithNode&lt; Super, ContainedNode &gt;</a>
+: <a class="el" href="classVisualization_1_1ItemWithNode.html#a300cdc86efdc81a9445389feb2cf7d16">Visualization::ItemWithNode&lt; Derived, Super, ContainedNode, defaultInitialization &gt;</a>
 </li>
 <li>~LayoutProviderBase()
 : <a class="el" href="classVisualization_1_1LayoutProviderBase.html#a5d32d54746fa20c626a972b86901a931">Visualization::LayoutProviderBase</a>
@@ -313,8 +313,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>~PointerFieldSet()
 : <a class="el" href="classModel_1_1PointerFieldSet.html#a7684cb3760e08d4ffa0b1b739ab3fc52">Model::PointerFieldSet&lt; T &gt;</a>
 </li>
+<li>~PointerType()
+: <a class="el" href="classOOModel_1_1PointerType.html#acad4dadd75c2f574070bc8b850fcfce0">OOModel::PointerType</a>
+</li>
 <li>~PositionLayout()
 : <a class="el" href="classVisualization_1_1PositionLayout.html#afba1a5e04c9308d8301ab2f855881476">Visualization::PositionLayout</a>
+</li>
+<li>~ReferenceType()
+: <a class="el" href="classOOModel_1_1ReferenceType.html#a85eb4f41d590e4f950ffa97648e4073e">OOModel::ReferenceType</a>
 </li>
 <li>~RootItem()
 : <a class="el" href="classVisualization_1_1RootItem.html#ad0b7b5bda0c845aa2c70ddc935f6144f">Visualization::RootItem</a>
@@ -388,12 +394,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>~VArrayInitializer()
 : <a class="el" href="classOOVisualization_1_1VArrayInitializer.html#aa8464a6cea83ab830a86ec3fce1d3162">OOVisualization::VArrayInitializer</a>
 </li>
-<li>~VArrayType()
-: <a class="el" href="classOOVisualization_1_1VArrayType.html#a72a321268ee1b7605e6960b90c6bdea9">OOVisualization::VArrayType</a>
-</li>
-<li>~VAssignmentExpression()
-: <a class="el" href="classOOVisualization_1_1VAssignmentExpression.html#ab391f357f7528e5c7d9c9341fe0ea63d">OOVisualization::VAssignmentExpression</a>
-</li>
 <li>~VBinaryOperation()
 : <a class="el" href="classOOVisualization_1_1VBinaryOperation.html#af30d45a2fb5ebedb041c15c502ad9c91">OOVisualization::VBinaryOperation</a>
 </li>
@@ -412,9 +412,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>~VBreakStatementCF()
 : <a class="el" href="classControlFlowVisualization_1_1VBreakStatementCF.html#a6f1bdb0ec9fd4e43b2a5a02d3d5e696b">ControlFlowVisualization::VBreakStatementCF</a>
 </li>
-<li>~VCastExpression()
-: <a class="el" href="classOOVisualization_1_1VCastExpression.html#af00717547001ff26a02150637e245432">OOVisualization::VCastExpression</a>
-</li>
 <li>~VCatchClause()
 : <a class="el" href="classOOVisualization_1_1VCatchClause.html#aec1c5f2c523f5c326d527ae12e7c2682">OOVisualization::VCatchClause</a>
 </li>
@@ -427,12 +424,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>~VClassType()
 : <a class="el" href="classOOVisualization_1_1VClassType.html#a0e3d51215e1a2b5de33f6a2c837a6d8e">OOVisualization::VClassType</a>
 </li>
-<li>~VCommaExpression()
-: <a class="el" href="classOOVisualization_1_1VCommaExpression.html#a76ca3978566bb99600b1e456e29f55ec">OOVisualization::VCommaExpression</a>
-</li>
-<li>~VConditionalExpression()
-: <a class="el" href="classOOVisualization_1_1VConditionalExpression.html#a7875d9e275817275706d014db32f1038">OOVisualization::VConditionalExpression</a>
-</li>
 <li>~VContinueStatement()
 : <a class="el" href="classOOVisualization_1_1VContinueStatement.html#a602f57177b4a00e846cb1f92ffdf5660">OOVisualization::VContinueStatement</a>
 </li>
@@ -441,6 +432,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 <li>~VEmptyExpression()
 : <a class="el" href="classOOVisualization_1_1VEmptyExpression.html#a0c03a10a482519d2d4f98f8ecd41b508">OOVisualization::VEmptyExpression</a>
+</li>
+<li>~VEnumerator()
+: <a class="el" href="classOOVisualization_1_1VEnumerator.html#ab6558a05fb51a1b6a961c426992ca9c1">OOVisualization::VEnumerator</a>
 </li>
 <li>~VErrorExpression()
 : <a class="el" href="classOOVisualization_1_1VErrorExpression.html#ac09c484eb1785a509ef88117648cb1a3">OOVisualization::VErrorExpression</a>
@@ -496,9 +490,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>~VLambdaExpression()
 : <a class="el" href="classOOVisualization_1_1VLambdaExpression.html#abc31adf090955be24552ead081112e9e">OOVisualization::VLambdaExpression</a>
 </li>
-<li>~VLibrary()
-: <a class="el" href="classOOVisualization_1_1VLibrary.html#af8881a4f911980f6c7125e113a44946e">OOVisualization::VLibrary</a>
-</li>
 <li>~VListCF()
 : <a class="el" href="classControlFlowVisualization_1_1VListCF.html#a557e5c47cdeb47b3f56e4aa83993f70d">ControlFlowVisualization::VListCF</a>
 </li>
@@ -519,9 +510,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 <li>~VModule()
 : <a class="el" href="classOOVisualization_1_1VModule.html#a5ee0aa4e4108d19954d4f84e9ee88427">OOVisualization::VModule</a>
-</li>
-<li>~VNewExpression()
-: <a class="el" href="classOOVisualization_1_1VNewExpression.html#acdc089a43c3d4df0d0f260e89b38ee5f">OOVisualization::VNewExpression</a>
 </li>
 <li>~VNullLiteral()
 : <a class="el" href="classOOVisualization_1_1VNullLiteral.html#aeb5f6b0a4f2294e58747aa200cacd7c3">OOVisualization::VNullLiteral</a>
@@ -547,14 +535,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>~VThisExpression()
 : <a class="el" href="classOOVisualization_1_1VThisExpression.html#a907685f30acd497afef573a105f80957">OOVisualization::VThisExpression</a>
 </li>
-<li>~VThrowExpression()
-: <a class="el" href="classOOVisualization_1_1VThrowExpression.html#aa600aa40402241e56c0862ee22df9e9b">OOVisualization::VThrowExpression</a>
-</li>
 <li>~VTryCatchFinally()
 : <a class="el" href="classOOVisualization_1_1VTryCatchFinally.html#a289611d9daf46b66b8426720eb508c51">OOVisualization::VTryCatchFinally</a>
-</li>
-<li>~VUnaryOperation()
-: <a class="el" href="classOOVisualization_1_1VUnaryOperation.html#a4a260fe91f128330116a3213d5701d63">OOVisualization::VUnaryOperation</a>
 </li>
 <li>~VUnfinishedOperator()
 : <a class="el" href="classOOVisualization_1_1VUnfinishedOperator.html#aa9619decc0151f2b1ce710486a2848a1">OOVisualization::VUnfinishedOperator</a>

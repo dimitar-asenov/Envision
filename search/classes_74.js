@@ -1,6 +1,9 @@
 var searchData=
 [
   ['test',['Test',['../classSelfTest_1_1Test.html',1,'SelfTest']]],
+  ['testbox',['TestBox',['../classVisualization_1_1TestBox.html',1,'Visualization']]],
+  ['testboxinitializerclass',['TestBoxInitializerClass',['../classVisualization_1_1TestBoxInitializerClass.html',1,'Visualization']]],
+  ['testboxnode',['TestBoxNode',['../classVisualization_1_1TestBoxNode.html',1,'Visualization']]],
   ['testevent',['TestEvent',['../classCore_1_1TestEvent.html',1,'Core']]],
   ['testmanager',['TestManager',['../classSelfTest_1_1TestManager.html',1,'SelfTest']]],
   ['testresult',['TestResult',['../classSelfTest_1_1TestResult.html',1,'SelfTest']]],
@@ -15,16 +18,16 @@ var searchData=
   ['textrendererstringoffsetprovider',['TextRendererStringOffsetProvider',['../classOOInteraction_1_1TextRendererStringOffsetProvider.html',1,'OOInteraction']]],
   ['textstyle',['TextStyle',['../classVisualization_1_1TextStyle.html',1,'Visualization']]],
   ['thisexpression',['ThisExpression',['../classOOModel_1_1ThisExpression.html',1,'OOModel']]],
-  ['thisexpressionstringcomponents',['ThisExpressionStringComponents',['../classOOInteraction_1_1ThisExpressionStringComponents.html',1,'OOInteraction']]],
   ['throwdescriptor',['ThrowDescriptor',['../classOOInteraction_1_1ThrowDescriptor.html',1,'OOInteraction']]],
   ['throwexpression',['ThrowExpression',['../classOOModel_1_1ThrowExpression.html',1,'OOModel']]],
   ['thrownexceptiontype',['ThrownExceptionType',['../classOOModel_1_1ThrownExceptionType.html',1,'OOModel']]],
-  ['throwstringcomponents',['ThrowStringComponents',['../classOOInteraction_1_1ThrowStringComponents.html',1,'OOInteraction']]],
   ['throwstringoffsetprovider',['ThrowStringOffsetProvider',['../classOOInteraction_1_1ThrowStringOffsetProvider.html',1,'OOInteraction']]],
+  ['timer',['Timer',['../classLogger_1_1Timer.html',1,'Logger']]],
   ['token',['Token',['../classInteraction_1_1Token.html',1,'Interaction']]],
   ['trycatchfinallystatement',['TryCatchFinallyStatement',['../classOOModel_1_1TryCatchFinallyStatement.html',1,'OOModel']]],
   ['type',['Type',['../classOOModel_1_1Type.html',1,'OOModel']]],
   ['typeargumentsdescriptor',['TypeArgumentsDescriptor',['../classOOInteraction_1_1TypeArgumentsDescriptor.html',1,'OOInteraction']]],
+  ['typediterator',['TypedIterator',['../structModel_1_1TypedList_1_1TypedIterator.html',1,'Model::TypedList']]],
   ['typedlist',['TypedList',['../classModel_1_1TypedList.html',1,'Model']]],
   ['typedlist_3c_20statementitem_20_3e',['TypedList&lt; StatementItem &gt;',['../classModel_1_1TypedList.html',1,'Model']]],
   ['typeexpression',['TypeExpression',['../classOOModel_1_1TypeExpression.html',1,'OOModel']]]

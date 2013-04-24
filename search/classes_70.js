@@ -16,12 +16,14 @@ var searchData=
   ['plugininfo',['PluginInfo',['../structCore_1_1PluginInfo.html',1,'Core']]],
   ['pluginmanager',['PluginManager',['../classCore_1_1PluginManager.html',1,'Core']]],
   ['pointerfieldset',['PointerFieldSet',['../classModel_1_1PointerFieldSet.html',1,'Model']]],
+  ['pointertype',['PointerType',['../classOOModel_1_1PointerType.html',1,'OOModel']]],
+  ['pointertypedescriptor',['PointerTypeDescriptor',['../classOOInteraction_1_1PointerTypeDescriptor.html',1,'OOInteraction']]],
+  ['pointertypeexpression',['PointerTypeExpression',['../classOOModel_1_1PointerTypeExpression.html',1,'OOModel']]],
   ['position',['Position',['../classVisualization_1_1Position.html',1,'Visualization']]],
   ['positionextension',['PositionExtension',['../classTestNodes_1_1PositionExtension.html',1,'TestNodes']]],
   ['positionlayout',['PositionLayout',['../classVisualization_1_1PositionLayout.html',1,'Visualization']]],
   ['positionlayoutstyle',['PositionLayoutStyle',['../classVisualization_1_1PositionLayoutStyle.html',1,'Visualization']]],
   ['primitivetype',['PrimitiveType',['../classOOModel_1_1PrimitiveType.html',1,'OOModel']]],
   ['primitivetypeexpression',['PrimitiveTypeExpression',['../classOOModel_1_1PrimitiveTypeExpression.html',1,'OOModel']]],
-  ['primitivetypestringcomponents',['PrimitiveTypeStringComponents',['../classOOInteraction_1_1PrimitiveTypeStringComponents.html',1,'OOInteraction']]],
   ['project',['Project',['../classOOModel_1_1Project.html',1,'OOModel']]]
 ];
