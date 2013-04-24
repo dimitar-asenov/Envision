@@ -64,6 +64,9 @@ public:
 private:
     class InAnotherClass{
         int inAnotherVar;
+        InAnotherClass* getClass(){
+            return this;
+        }
     };
 
 };
@@ -93,6 +96,11 @@ class OneMore{
         }
         return 100;
     }
+};
+
+class HeaderChild : public Header, public OneMore{
+private:
+    int test;
 };
 
 int Header::headerFunc()

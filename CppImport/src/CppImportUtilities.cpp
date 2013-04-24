@@ -43,6 +43,12 @@ OOModel::Expression *CppImportUtilities::convertClangType(clang::QualType type)
 																	 QString::fromStdString(recordDecl->getNameAsString())));
 		return nullptr;
 	}
+	else if(type.getTypePtr()->isPointerType())
+	{
+		OOModel::PointerTypeExpression* ooPtr = new OOModel::PointerTypeExpression();
+		ooPtr->setTypeExpression(convertClangType(type.getTypePtr()->getPointeeType()));
+		return ooPtr;
+	}
 	else
 		return nullptr;
 }

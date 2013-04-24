@@ -108,6 +108,24 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl)
 			TraverseDecl(*it);
 		}
 		ooStack_.pop();
+
+		// visit base classes
+		// can only query base classes if there is a definition otherwise a clang assertion is failed
+		if(recordDecl->isThisDeclarationADefinition())
+		{
+			for(auto base_itr = recordDecl->bases_begin(); base_itr!=recordDecl->bases_end(); ++base_itr)
+			{
+				if(auto baseClass = base_itr->getType().getTypePtr()->getAsCXXRecordDecl())
+				{
+					OOModel::ClassTypeExpression* parent = new OOModel::ClassTypeExpression();
+					parent->typeExpression()->ref()->setName(QString::fromStdString(baseClass->getNameAsString()));
+					ooClass->baseClasses()->append(parent);
+				}
+			}
+		}
+
+		// set visibility
+		ooClass->setVisibility(CppImportUtilities::convertAccessSpecifier(recordDecl->getAccess()));
 	}
 	else if(recordDecl->isUnion())
 	{
@@ -125,6 +143,7 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl)
 
 bool ClangAstVisitor::TraverseCXXMethodDecl(clang::CXXMethodDecl* methodDecl)
 {
+	methodDecl->getResultType().dump();
 	// Constructors not yet handled
 	if(llvm::isa<clang::CXXConstructorDecl>(methodDecl))
 		return true;
@@ -498,6 +517,22 @@ bool ClangAstVisitor::TraverseParenExpr(clang::ParenExpr* parenthesizedExpr)
 	else
 		ooExprStack_.push(ooParenExpr);
 	inBody_ = inBody;
+	return true;
+}
+
+bool ClangAstVisitor::VisitCXXThisExpr(clang::CXXThisExpr* thisExpr)
+{
+	// we don't actually need thisExpr var
+	Q_UNUSED(thisExpr)
+
+	if(inBody_)
+	{
+		// TODO ..
+	}
+	else
+	{
+		ooExprStack_.push(new OOModel::ThisExpression());
+	}
 	return true;
 }
 
