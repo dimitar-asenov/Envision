@@ -50,7 +50,7 @@
 #include "node_extensions/Position.h"
 #include "nodes/TestBoxNode.h"
 
-#include "ModelBase/src/test_nodes/BinaryNode.h"
+#include "ModelBase/src/test_nodes/TestNodesInitializer.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
 Q_EXPORT_PLUGIN2( visualizationbase, Visualization::VisualizationBase )
@@ -113,7 +113,7 @@ void VisualizationBase::unload()
 
 void VisualizationBase::selfTest(QString)
 {
-	TestNodes::BinaryNode::init();
+	TestNodes::nodeTypeInitializationRegistry().initializeAll();
 	SelfTest::TestManager<VisualizationBase>::runAllTests().printResultStatistics();
 }
 
