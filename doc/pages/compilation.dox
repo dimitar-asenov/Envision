@@ -1,7 +1,7 @@
 /*! \page compilation Compiling Envision from source
 
-Envision is written in C++ and uses some features of the new C++11 standard. Make sure your C++ compiler is up-to-date.
-Gcc versions 4.7 and newer should be sufficient.
+Envision is written in C++ and uses features from the C++11 standard. Make sure your C++ compiler is up-to-date.
+GCC version 4.8 or newer should be sufficient.
 
 Envision currently uses the Qt 4.8 libraries but a migration to Qt 5 is planned.
 

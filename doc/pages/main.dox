@@ -36,18 +36,17 @@
 		- Import and export to and from any programming language
 		- Support for external libraries
 
-\section dev-doc Developer documentation
-	NOTE: This developer documentation is currently being created and new content is added on a weekly basis.
+\section dev-doc Developer documentation and guidelines for contributors
+	NOTE: This developer documentation is currently being created and is not fully complete.
 
 	For an introduction to the project's design and organization for contributors, please check out
 	\ref architecture "the architecture of Envision".
+	
+	Contributions to the project are welcome. Please visit \ref contribution "the contribution guidelines" for more details.
 
 \section compile How to compile and run Envision?
 For building Envision from source see \ref compilation "the compilation instructions".
 
 For hints on running Envision see the \ref try_envision "\"Try Envision\" page". 
-
-\section contribute For contributors
-Contributions to the project are welcome. Please visit \ref contribution "the contribution guidelines" for more details.
 
 */
