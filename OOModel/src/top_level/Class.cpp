@@ -31,8 +31,8 @@ DEFINE_TYPED_LIST(OOModel::Class)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(Class, Model::ExtendableNode)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(Class, Model::ExtendableNode)
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(Class, StatementItem)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(Class, StatementItem)
 
 REGISTER_ATTRIBUTE(Class, name, Text, false, false, true)
 REGISTER_ATTRIBUTE(Class, baseClasses, TypedListOfExpression, false, false, true)
@@ -45,13 +45,13 @@ REGISTER_ATTRIBUTE(Class, visibility, Visibility, false, false, true)
 REGISTER_ATTRIBUTE(Class, annotations, StatementItemList, false, false, true)
 
 Class::Class(const QString& name)
-: Model::ExtendableNode (nullptr, Class::getMetaData())
+: StatementItem (nullptr, Class::getMetaData())
 {
 	setName(name);
 }
 
 Class::Class(const QString& name, Visibility::VisibilityType vis)
-: Model::ExtendableNode (nullptr, Class::getMetaData())
+: StatementItem (nullptr, Class::getMetaData())
 {
 	setName(name);
 	setVisibility(vis);

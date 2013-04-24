@@ -37,7 +37,7 @@
 #include "../elements/StatementItemList.h"
 #include "../expressions/Expression.h"
 
-#include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
+#include "../elements/StatementItem.h"
 #include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
 
@@ -45,7 +45,7 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Class)
 
 namespace OOModel {
 
-class OOMODEL_API Class : public Model::ExtendableNode
+class OOMODEL_API Class : public StatementItem
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Class)
 
