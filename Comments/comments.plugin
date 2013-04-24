@@ -1,0 +1,10 @@
+<!DOCTYPE EnvisionPlugin>
+<plugin id="comments" name="Comments" version="1.0.0">
+	<dependencies>
+		<dependency pluginid="logger" version="0" />
+		<dependency pluginid="selftest" version="0" />
+		<dependency pluginid="modelbase" version="0" />
+		<dependency pluginid="visualizationbase" version="0" />
+		<dependency pluginid="interactionbase" version="1" />
+	</dependencies>
+</plugin>
