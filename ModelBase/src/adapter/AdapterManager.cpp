@@ -34,4 +34,10 @@ QHash<AdapterManager::AdapterKey, AdapterManager::AdapterCreationFunction>& Adap
 	return map;
 }
 
+QHash<AdapterManager::TypeIdType, AdapterManager::AdapterCreationFunction>& AdapterManager::defaultAdapters()
+{
+	static QHash<TypeIdType, AdapterCreationFunction> map;
+	return map;
+}
+
 } /* namespace Model */

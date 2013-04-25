@@ -32,10 +32,13 @@ namespace Model {
 
 class MODELBASE_API AdapterManager {
 	public:
-		typedef void* (*AdapterCreationFunction)(void* adaptee);
+		using AdapterCreationFunction = void* (*)(void* adaptee);
 
 		template <class Adapter, class Adaptee>
 		static void registerAdapter( Adapter* (*creationFunction)(Adaptee* adaptee) );
+
+		template <class Adapter>
+		static void registerDefaultAdapter( Adapter* (*creationFunction)(typename Adapter::BaseAdapteeType* adaptee) );
 
 		template <class Adapter, class Adaptee>
 		static Adapter* adapt(Adaptee* object);
@@ -48,12 +51,23 @@ class MODELBASE_API AdapterManager {
 		template <class AdapterBase, class Adapter, class Adaptee>
 		static AdapterBase* createFrom(Adaptee* a);
 
+		/**
+		 * \brief Checks whether \a can be adapted using the Adapter::canAdapt() method and if so
+		 * creates an instance of \a Adapter using it's Adapter::Adapter(Adaptee* a) constructor.
+		 *
+		 * This is a convenience method for creating default adapter functions.
+		 */
+		template <class AdapterBase, class Adapter>
+		static AdapterBase* checkAndCreateFrom(typename Adapter::BaseAdapteeType* a);
+
 		template <class AdapterBase, class Adapter, class Adaptee>
 		static void registerAdapterViaConstructor( );
+		template <class AdapterBase, class Adapter>
+		static void registerStandardDefaultAdapter( );
 
 	private:
-		typedef std::size_t TypeIdType;
-		typedef QPair<TypeIdType, TypeIdType> AdapterKey;
+		using TypeIdType = std::size_t;
+		using AdapterKey =  QPair<TypeIdType, TypeIdType>;
 
 		template <class type>
 		static TypeIdType typeId();
@@ -62,6 +76,7 @@ class MODELBASE_API AdapterManager {
 		static TypeIdType typeId( type* object);
 
 		static QHash<AdapterKey, AdapterCreationFunction>& adapters();
+		static QHash<TypeIdType, AdapterCreationFunction>& defaultAdapters();
 };
 
 template <class type> AdapterManager::TypeIdType AdapterManager::typeId()
@@ -82,11 +97,30 @@ void AdapterManager::registerAdapter( Adapter* (*creationFunction)(Adaptee* adap
 			reinterpret_cast<AdapterCreationFunction>(creationFunction));
 }
 
+template <class Adapter>
+void AdapterManager::registerDefaultAdapter( Adapter* (*creationFunction)(typename Adapter::BaseAdapteeType* adaptee) )
+{
+	defaultAdapters().insert( typeId<Adapter>(), reinterpret_cast<AdapterCreationFunction>(creationFunction));
+}
+
 template <class Adapter, class Adaptee> Adapter* AdapterManager::adapt(Adaptee* object)
 {
-	auto cf = adapters().find( qMakePair(typeId<Adapter>(), typeId<Adaptee>(object)) );
-	if (cf == adapters().end()) return nullptr;
-	return reinterpret_cast<Adapter*> ( (*cf)( reinterpret_cast<void*>(object) ) );
+	// Try to find a specific adapter
+	auto specific = adapters().find( qMakePair(typeId<Adapter>(), typeId<Adaptee>(object)) );
+	if (specific != adapters().end())
+		return reinterpret_cast<Adapter*> ( (*specific)( reinterpret_cast<void*>(object) ) );
+
+	// Try to find a default adapter
+	auto defaultAdp = defaultAdapters().find( typeId<Adapter>() );
+	if (defaultAdp != defaultAdapters().end())
+	{
+		// Force check to make sure we are adapting the right object type
+		typename Adapter::BaseAdapteeType* obj = object;
+
+		return reinterpret_cast<Adapter*> ( (*defaultAdp)( reinterpret_cast<void*>(obj) ) );
+	}
+
+	return nullptr;
 }
 
 template <class AdapterBase, class Adapter, class Adaptee > AdapterBase* AdapterManager::createFrom(Adaptee* a)
@@ -94,9 +128,21 @@ template <class AdapterBase, class Adapter, class Adaptee > AdapterBase* Adapter
 	return new Adapter(a);
 }
 
+template <class AdapterBase, class Adapter>
+AdapterBase* AdapterManager::checkAndCreateFrom(typename Adapter::BaseAdapteeType* a)
+{
+	if (Adapter::canAdapt(a)) return new Adapter(a);
+	else return nullptr;
+}
+
 template <class AdapterBase, class Adapter, class Adaptee> void AdapterManager::registerAdapterViaConstructor( )
 {
 	registerAdapter<AdapterBase, Adaptee>( createFrom<AdapterBase, Adapter, Adaptee> );
+}
+
+template <class AdapterBase, class Adapter> void AdapterManager::registerStandardDefaultAdapter( )
+{
+	registerDefaultAdapter<AdapterBase>( checkAndCreateFrom<AdapterBase, Adapter> );
 }
 
 } /* namespace Model */
