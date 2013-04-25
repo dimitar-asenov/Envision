@@ -106,6 +106,7 @@ class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 		bool VisitCXXUnresolvedConstructorExpr(clang::CXXUnresolvedConstructExpr* unresolvedConstructorExpr);
 		bool TraverseParenExpr(clang::ParenExpr* parenthesizedExpr);
 		bool VisitCXXThisExpr(clang::CXXThisExpr* thisExpr);
+		bool VisitMemberExpr(clang::MemberExpr* memberExpr);
 
 		bool VisitBreakStmt(clang::BreakStmt* breakStmt);
 

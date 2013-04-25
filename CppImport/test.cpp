@@ -1,5 +1,5 @@
 #include "test.h"
-#include <iostream>
+//#include <iostream>
 //TEst comment
 
 int NOCLASSFIELD;
@@ -40,7 +40,11 @@ public:
         }
         return k;}
     int callExpr() {
-        return myFunction(1,true);
+        return this->myFunction(1,true);
+    }
+
+    int someCall() {
+        return myFunction(1,false);
     }
 };
 }
@@ -54,6 +58,7 @@ class Another {
     Testing aTestingObj;
     bool aBoolVar;
     void aVoidFunc(){
+        aTestingObj.myFunction(10,true);
         bool aNotherBoolVar;};
 public:
     int aPublicvar;

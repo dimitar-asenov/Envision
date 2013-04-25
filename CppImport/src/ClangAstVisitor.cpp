@@ -143,7 +143,6 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl)
 
 bool ClangAstVisitor::TraverseCXXMethodDecl(clang::CXXMethodDecl* methodDecl)
 {
-	methodDecl->getResultType().dump();
 	// Constructors not yet handled
 	if(llvm::isa<clang::CXXConstructorDecl>(methodDecl))
 		return true;
@@ -456,6 +455,17 @@ bool ClangAstVisitor::TraverseCXXMemberCallExpr(clang::CXXMemberCallExpr* callEx
 		TraverseStmt(*argIt);
 		ooMCall->arguments()->append(ooExprStack_.pop());
 	}
+
+	// set target
+	// TODO multiple levels possible
+	if(auto callee = llvm::dyn_cast<clang::MemberExpr>(callExpr->getCallee()))
+	{
+		TraverseStmt(callee->getBase());
+		if(!ooExprStack_.empty())
+			ooMCall->ref()->setPrefix(ooExprStack_.pop());
+	}
+
+	// set the correct parent
 	inBody_ = inBody;
 	if(inBody_)
 	{
@@ -522,16 +532,27 @@ bool ClangAstVisitor::TraverseParenExpr(clang::ParenExpr* parenthesizedExpr)
 
 bool ClangAstVisitor::VisitCXXThisExpr(clang::CXXThisExpr* thisExpr)
 {
-	// we don't actually need thisExpr var
-	Q_UNUSED(thisExpr)
-
-	if(inBody_)
+	if(!thisExpr->isImplicit())
 	{
-		// TODO ..
+		if(inBody_)
+		{
+			// TODO ..
+		}
+		else
+		{
+			ooExprStack_.push(new OOModel::ThisExpression());
+		}
 	}
-	else
+	return true;
+}
+
+bool ClangAstVisitor::VisitMemberExpr(clang::MemberExpr* memberExpr)
+{
+	if(memberExpr->isImplicitAccess())
 	{
-		ooExprStack_.push(new OOModel::ThisExpression());
+		OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression();
+		ooRef->ref()->setName(QString::fromStdString(memberExpr->getMemberDecl()->getNameAsString()));
+		ooExprStack_.push(ooRef);
 	}
 	return true;
 }
