@@ -43,11 +43,13 @@ REGISTER_ATTRIBUTE(Class, fields, TypedListOfField, false, false, true)
 REGISTER_ATTRIBUTE(Class, enumerators, TypedListOfEnumerator, false, false, true)
 REGISTER_ATTRIBUTE(Class, visibility, Visibility, false, false, true)
 REGISTER_ATTRIBUTE(Class, annotations, StatementItemList, false, false, true)
+REGISTER_ATTRIBUTE(Class, cKind, Integer, false, false, true)
 
 Class::Class(const QString& name)
 : StatementItem (nullptr, Class::getMetaData())
 {
 	setName(name);
+	setConstructKind(ConstructKind::Class);
 }
 
 Class::Class(const QString& name, Visibility::VisibilityType vis)
@@ -55,6 +57,22 @@ Class::Class(const QString& name, Visibility::VisibilityType vis)
 {
 	setName(name);
 	setVisibility(vis);
+	setConstructKind(ConstructKind::Class);
+}
+
+Class::Class(const QString& name, ConstructKind kind)
+	: StatementItem (nullptr, Class::getMetaData())
+{
+	setName(name);
+	setConstructKind(kind);
+}
+
+Class::Class(const QString& name, Visibility::VisibilityType vis, ConstructKind kind)
+	: StatementItem (nullptr, Class::getMetaData())
+{
+	setName(name);
+	setVisibility(vis);
+	setConstructKind(kind);
 }
 
 bool Class::definesSymbol() const

@@ -56,12 +56,21 @@ class OOMODEL_API Class : public StatementItem
 	ATTRIBUTE(Model::TypedList<Method>, methods, setMethods)
 	ATTRIBUTE(Model::TypedList<Field>, fields, setFields)
 	ATTRIBUTE(Model::TypedList<Enumerator>, enumerators, setEnumerators)
+	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, cKind, setCKind, int)
 	ATTRIBUTE_OOP_VISIBILITY
 	ATTRIBUTE_OOP_ANNOTATIONS
 
 	public:
 		Class(const QString& name);
 		Class(const QString& name, Visibility::VisibilityType vis);
+
+		enum class ConstructKind : int {Class, Interface, Struct, Union, Enum};
+
+		Class(const QString& name, ConstructKind kind);
+		Class(const QString& name, Visibility::VisibilityType vis, ConstructKind kind);
+
+		ConstructKind constructKind() const;
+		void setConstructKind(const ConstructKind& kind);
 
 		virtual bool definesSymbol() const;
 		virtual const QString& symbolName() const;
@@ -70,5 +79,8 @@ class OOMODEL_API Class : public StatementItem
 		virtual QList<Node*> findSymbols(const QRegExp& symbolExp, Node* source, FindSymbolMode mode,
 				bool exhaustAllScopes) override;
 };
+
+inline Class::ConstructKind Class::constructKind() const { return static_cast<ConstructKind> (cKind()); }
+inline void Class::setConstructKind(const ConstructKind& kind) { setCKind(static_cast<int> (kind)); }
 
 }
