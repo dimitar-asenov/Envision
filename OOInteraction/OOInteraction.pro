@@ -9,32 +9,28 @@ win32:LIBS += -llogger \
     -linteractionbase \
     -loovisualization \
     -lfilepersistence
-HEADERS += src/string_offset_providers/StringComponents.h \
+HEADERS += src/string_offset_providers/GridConstructors.h \
+    src/string_offset_providers/StringComponents.h \
     src/customization/CustomizationVisitor.h \
     src/expression_editor/operators/commands/CommandExpression.h \
     src/expression_editor/operators/commands/CreateMethodCall.h \
-    src/string_offset_providers/KeywordMethodCallStringOffsetProvider.h \
     src/commands/CCreateField.h \
     src/string_offset_providers/CompoundObjectStringOffsetProvider.h \
     src/expression_editor/operators/CompoundObjectDescriptor.h \
-    src/string_offset_providers/ClassTypeStringOffsetProvider.h \
     src/commands/CSceneHandlerItemTest.h \
     src/handlers/HForEachStatement.h \
     src/handlers/HKeywordStatement.h \
     src/handlers/HReturnStatement.h \
-    src/string_offset_providers/ThrowStringOffsetProvider.h \
     src/expression_editor/operators/ThrowDescriptor.h \
     src/expression_editor/operators/NewObjectDescriptor.h \
     src/commands/CCreateProject.h \
     src/commands/CCreateMethod.h \
     src/commands/CCreateClass.h \
-    src/string_offset_providers/UnaryOperatorStringOffsetProvider.h \
     src/string_offset_providers/Cell.h \
     src/string_offset_providers/ListCell.h \
     src/string_offset_providers/GridBasedOffsetProvider.h \
     src/expression_editor/operators/CommandDescriptor.h \
     src/expression_editor/operators/TypeArgumentsDescriptor.h \
-    src/string_offset_providers/ReferenceExpressionStringOffsetProvider.h \
     src/expression_editor/operators/ConditionalExpressionDescriptor.h \
     src/OOInteractionException.h \
     src/expression_editor/OOExpressionBuilder.h \
@@ -62,60 +58,46 @@ HEADERS += src/string_offset_providers/StringComponents.h \
     src/handlers/SetExpressionCursorEvent.h \
     src/oointeraction_api.h \
     src/precompiled.h \
-    src/string_offset_providers/CallStringOffsetProvider.h \
-    src/string_offset_providers/CastStringOffsetProvider.h \
     src/string_offset_providers/EmptyExpressionStringOffsetProvider.h \
     src/string_offset_providers/InitializerStringOffsetProvider.h \
-    src/string_offset_providers/NewArrayStringOffsetProvider.h \
-    src/string_offset_providers/SequentialVisualizationStringOffsetProvider.h \
     src/string_offset_providers/SimpleLiteralStringOffsetProvider.h \
     src/string_offset_providers/StaticStringOffsetProvider.h \
     src/string_offset_providers/StringOffsetProvider.h \
     src/string_offset_providers/TextRendererStringOffsetProvider.h \
-    src/string_offset_providers/VariableDeclarationStringOffsetProvider.h \
     src/expression_editor/operators/PointerTypeDescriptor.h \
     src/expression_editor/operators/ReferenceTypeDescriptor.h \
     src/oointeraction.h
-SOURCES += src/string_offset_providers/StringComponents.cpp \
+SOURCES += src/string_offset_providers/GridConstructors.cpp \
+    src/string_offset_providers/StringComponents.cpp \
     src/customization/CustomizationVisitor.cpp \
     src/expression_editor/operators/commands/CreateMethodCall.cpp \
-    src/string_offset_providers/KeywordMethodCallStringOffsetProvider.cpp \
     src/commands/CCreateField.cpp \
     src/string_offset_providers/CompoundObjectStringOffsetProvider.cpp \
     src/expression_editor/operators/CompoundObjectDescriptor.cpp \
-    src/string_offset_providers/ClassTypeStringOffsetProvider.cpp \
     src/commands/CSceneHandlerItemTest.cpp \
     src/handlers/HForEachStatement.cpp \
     src/handlers/HKeywordStatement.cpp \
     src/handlers/HReturnStatement.cpp \
-    src/string_offset_providers/ThrowStringOffsetProvider.cpp \
     src/expression_editor/operators/ThrowDescriptor.cpp \
     src/expression_editor/operators/NewObjectDescriptor.cpp \
     src/commands/CCreateProject.cpp \
     src/commands/CCreateMethod.cpp \
     src/commands/CCreateClass.cpp \
-    src/string_offset_providers/UnaryOperatorStringOffsetProvider.cpp \
     src/string_offset_providers/Cell.cpp \
     src/string_offset_providers/ListCell.cpp \
     src/string_offset_providers/GridBasedOffsetProvider.cpp \
     src/expression_editor/operators/CommandDescriptor.cpp \
     src/expression_editor/operators/TypeArgumentsDescriptor.cpp \
-    src/string_offset_providers/ReferenceExpressionStringOffsetProvider.cpp \
     src/expression_editor/operators/ConditionalExpressionDescriptor.cpp \
     src/handlers/HLoop.cpp \
     src/handlers/HIfStatement.cpp \
-    src/string_offset_providers/VariableDeclarationStringOffsetProvider.cpp \
     src/expression_editor/operators/DeclarationDescriptor.cpp \
-    src/string_offset_providers/CastStringOffsetProvider.cpp \
     src/string_offset_providers/TextRendererStringOffsetProvider.cpp \
     src/string_offset_providers/StringOffsetProvider.cpp \
     src/string_offset_providers/StaticStringOffsetProvider.cpp \
     src/string_offset_providers/SimpleLiteralStringOffsetProvider.cpp \
-    src/string_offset_providers/SequentialVisualizationStringOffsetProvider.cpp \
-    src/string_offset_providers/NewArrayStringOffsetProvider.cpp \
     src/string_offset_providers/InitializerStringOffsetProvider.cpp \
     src/string_offset_providers/EmptyExpressionStringOffsetProvider.cpp \
-    src/string_offset_providers/CallStringOffsetProvider.cpp \
     src/expression_editor/operators/AssignmentDescriptor.cpp \
     src/handlers/HStatement.cpp \
     src/handlers/HFormalArgument.cpp \

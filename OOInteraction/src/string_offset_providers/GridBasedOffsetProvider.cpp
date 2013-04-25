@@ -34,9 +34,36 @@
 
 namespace OOInteraction {
 
+QMap<int, void (*)(GridBasedOffsetProvider* provider, Visualization::Item* item)>&
+		GridBasedOffsetProvider::gridConstructors()
+{
+	static QMap<int, void (*)(GridBasedOffsetProvider* provider, Visualization::Item* item)> map;
+	return map;
+}
+
 GridBasedOffsetProvider::GridBasedOffsetProvider(Visualization::Item* vis)
 	: StringOffsetProvider(vis)
 {
+	auto gridConstructor = gridConstructors().find(vis->typeId());
+	if (gridConstructor != gridConstructors().end())
+	{
+		(*gridConstructor)(this, vis);
+		return;
+	}
+
+	// See if this item uses a sequential layout and use a standard way to handle it
+	if (auto layoutProvider = dynamic_cast<Visualization::LayoutProviderBase*>(vis))
+		if( auto layout = dynamic_cast<Visualization::SequentialLayout*>(layoutProvider->layout()))
+		{
+			setFilterNullAndEmptyComponents();
+			for(int i = 0; i < layout->length(); ++i)
+				add(new Cell(i, layout->at<Visualization::Item>(i), i));
+
+			return;
+		}
+
+	throw OOInteractionException("Creating an unknown GridBasedOffsetProvider for a visualization of type " +
+			vis->typeName());
 }
 
 GridBasedOffsetProvider::~GridBasedOffsetProvider()
@@ -269,6 +296,30 @@ void GridBasedOffsetProvider::setOffset(int newOffset)
 	// TODO choose a cell in possibly a smarter way
 	if (indexCell) indexCell->setOffset(offset);
 	else nextCell->setOffset(0);
+}
+
+QStringList GridBasedOffsetProvider::components()
+{
+	QStringList components = StringOffsetProvider::components();
+
+	if (filterNullAndEmptyComponents_)
+	{
+		auto layoutProvider = dynamic_cast<Visualization::LayoutProviderBase*>(item());
+		Q_ASSERT(layoutProvider);
+		auto layout = dynamic_cast<Visualization::SequentialLayout*>(layoutProvider->layout());
+		Q_ASSERT(layout);
+
+		if (components.size() != layout->length())
+		{
+			for (int i = components.size() - 1; i>=0; --i)
+				if (components[i].isNull())
+					components.removeAt(i);
+		}
+		if (components.size() != layout->length())
+			components.removeAll(QString(""));
+	}
+
+	return components;
 }
 
 } /* namespace OOInteraction */

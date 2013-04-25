@@ -24,40 +24,13 @@
  **
  **********************************************************************************************************************/
 
-#include "UnaryOperatorStringOffsetProvider.h"
-#include "Cell.h"
-
-#include "OOVisualization/src/expressions/allOOExpressionVisualizations.h"
+#pragma once
 
 namespace OOInteraction {
 
-UnaryOperatorStringOffsetProvider::UnaryOperatorStringOffsetProvider(OOVisualization::VUnaryOperation* vis)
-	: GridBasedOffsetProvider(vis), vis_(vis)
-{
-	if (vis->node()->op() == OOModel::UnaryOperation::PARENTHESIS)
-	{
-		add(new Cell(1, vis->operand(), 1));
-		setSize(3, 1);
-	}
-	else
-		for(int i = 0; i<vis->layout()->length(); ++i)
-			add(new Cell(i, vis->layout()->at<Visualization::Item>(i), i));
-}
-
-QStringList UnaryOperatorStringOffsetProvider::components()
-{
-	QStringList components = StringOffsetProvider::components();
-
-	if (components.size() != vis_->layout()->length())
-	{
-		for (int i = components.size() - 1; i>=0; --i)
-			if (components[i].isNull())
-				components.removeAt(i);
-	}
-	if (components.size() != vis_->layout()->length())
-		components.removeAll(QString(""));
-
-	return components;
-}
+class GridConstructors {
+	public:
+		static void initializeAll();
+};
 
 } /* namespace OOInteraction */

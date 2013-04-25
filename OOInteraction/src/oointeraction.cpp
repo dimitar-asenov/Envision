@@ -46,22 +46,14 @@
 
 #include "string_offset_providers/StringComponents.h"
 
-#include "string_offset_providers/SequentialVisualizationStringOffsetProvider.h"
+#include "string_offset_providers/GridConstructors.h"
+#include "string_offset_providers/GridBasedOffsetProvider.h"
 #include "string_offset_providers/EmptyExpressionStringOffsetProvider.h"
 #include "string_offset_providers/SimpleLiteralStringOffsetProvider.h"
 #include "string_offset_providers/TextRendererStringOffsetProvider.h"
 #include "string_offset_providers/StaticStringOffsetProvider.h"
 #include "string_offset_providers/InitializerStringOffsetProvider.h"
-#include "string_offset_providers/CallStringOffsetProvider.h"
-#include "string_offset_providers/NewArrayStringOffsetProvider.h"
-#include "string_offset_providers/ThrowStringOffsetProvider.h"
-#include "string_offset_providers/CastStringOffsetProvider.h"
-#include "string_offset_providers/VariableDeclarationStringOffsetProvider.h"
-#include "string_offset_providers/ReferenceExpressionStringOffsetProvider.h"
-#include "string_offset_providers/UnaryOperatorStringOffsetProvider.h"
-#include "string_offset_providers/ClassTypeStringOffsetProvider.h"
 #include "string_offset_providers/CompoundObjectStringOffsetProvider.h"
-#include "string_offset_providers/KeywordMethodCallStringOffsetProvider.h"
 
 #include "customization/CustomizationVisitor.h"
 
@@ -116,42 +108,63 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 	StringComponents::initConversions();
 
 	// Register string providers
+	GridConstructors::initializeAll();
+
+	// Grid based: Standard sequential grid
 	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, SequentialVisualizationStringOffsetProvider, OOVisualization::VUnaryOperation>();
+		<StringOffsetProvider, GridBasedOffsetProvider, OOVisualization::VUnaryOperation>();
 	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, SequentialVisualizationStringOffsetProvider, OOVisualization::VBinaryOperation>();
+		<StringOffsetProvider, GridBasedOffsetProvider, OOVisualization::VBinaryOperation>();
 	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, CastStringOffsetProvider, OOVisualization::VCastExpression>();
+		<StringOffsetProvider, GridBasedOffsetProvider, OOVisualization::VCommaExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, SequentialVisualizationStringOffsetProvider, OOVisualization::VCommaExpression>();
+		<StringOffsetProvider, GridBasedOffsetProvider, OOVisualization::VConditionalExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, SequentialVisualizationStringOffsetProvider, OOVisualization::VConditionalExpression>();
+		<StringOffsetProvider, GridBasedOffsetProvider, OOVisualization::VStringLiteral>();
 	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, NewArrayStringOffsetProvider, OOVisualization::VNewExpression>();
+		<StringOffsetProvider, GridBasedOffsetProvider, OOVisualization::VUnfinishedOperator>();
 	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, ThrowStringOffsetProvider, OOVisualization::VThrowExpression>();
+		<StringOffsetProvider, GridBasedOffsetProvider, OOVisualization::VErrorExpression>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringOffsetProvider, GridBasedOffsetProvider, OOVisualization::VArrayType>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringOffsetProvider, GridBasedOffsetProvider, OOVisualization::VPointerType>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringOffsetProvider, GridBasedOffsetProvider, OOVisualization::VReferenceType>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringOffsetProvider, GridBasedOffsetProvider, OOVisualization::VAssignmentExpression>();
+
+	// Grid based: custom grid specified in GridConstructors.h
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringOffsetProvider, GridBasedOffsetProvider, OOVisualization::VMethodCallExpression>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringOffsetProvider, GridBasedOffsetProvider, OOVisualization::VCastExpression>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringOffsetProvider, GridBasedOffsetProvider, OOVisualization::VClassType>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringOffsetProvider, GridBasedOffsetProvider, OOVisualization::VKeywordMethodCall>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringOffsetProvider, GridBasedOffsetProvider, OOVisualization::VNewExpression>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringOffsetProvider, GridBasedOffsetProvider, OOVisualization::VReferenceExpression>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringOffsetProvider, GridBasedOffsetProvider, OOVisualization::VThrowExpression>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringOffsetProvider, GridBasedOffsetProvider, OOVisualization::VVariableDeclaration>();
+	Model::AdapterManager::registerAdapterViaConstructor
+		<StringOffsetProvider, GridBasedOffsetProvider, OOVisualization::VUnaryOperation>();
+
+	// Custom string offset providers
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, SimpleLiteralStringOffsetProvider, OOVisualization::VBooleanLiteral>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, InitializerStringOffsetProvider, OOVisualization::VArrayInitializer>();
 	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, CallStringOffsetProvider, OOVisualization::VMethodCallExpression>();
-	Model::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, SimpleLiteralStringOffsetProvider, OOVisualization::VIntegerLiteral>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, SequentialVisualizationStringOffsetProvider, OOVisualization::VStringLiteral>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, SimpleLiteralStringOffsetProvider, OOVisualization::VNullLiteral>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, SimpleLiteralStringOffsetProvider, OOVisualization::VThisExpression>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, UnaryOperatorStringOffsetProvider, OOVisualization::VUnaryOperation>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, ReferenceExpressionStringOffsetProvider, OOVisualization::VReferenceExpression>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, SequentialVisualizationStringOffsetProvider, OOVisualization::VUnfinishedOperator>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, SequentialVisualizationStringOffsetProvider, OOVisualization::VErrorExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, EmptyExpressionStringOffsetProvider, OOVisualization::VEmptyExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor
@@ -165,21 +178,7 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, SimpleLiteralStringOffsetProvider, OOVisualization::VPrimitiveType>();
 	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, SequentialVisualizationStringOffsetProvider, OOVisualization::VArrayType>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, SequentialVisualizationStringOffsetProvider, OOVisualization::VPointerType>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, SequentialVisualizationStringOffsetProvider, OOVisualization::VReferenceType>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, ClassTypeStringOffsetProvider, OOVisualization::VClassType>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, SequentialVisualizationStringOffsetProvider, OOVisualization::VAssignmentExpression>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, VariableDeclarationStringOffsetProvider, OOVisualization::VVariableDeclaration>();
-	Model::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, CompoundObjectStringOffsetProvider, OOVisualization::VLambdaExpression>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, KeywordMethodCallStringOffsetProvider, OOVisualization::VKeywordMethodCall>();
 
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CCreateProject());
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CCreateClass());
