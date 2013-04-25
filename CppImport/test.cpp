@@ -46,6 +46,10 @@ public:
     int someCall() {
         return myFunction(1,false);
     }
+
+    int takesRef(int& ref) {
+
+    }
 };
 }
 

@@ -49,6 +49,12 @@ OOModel::Expression *CppImportUtilities::convertClangType(clang::QualType type)
 		ooPtr->setTypeExpression(convertClangType(type.getTypePtr()->getPointeeType()));
 		return ooPtr;
 	}
+	else if(type.getTypePtr()->isReferenceType())
+	{
+		OOModel::ReferenceTypeExpression* ooRef = new OOModel::ReferenceTypeExpression();
+		ooRef->setTypeExpression(convertClangType(type.getTypePtr()->getPointeeType()));
+		return ooRef;
+	}
 	else
 		return nullptr;
 }
