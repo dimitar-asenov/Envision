@@ -60,7 +60,6 @@ HEADERS += src/string_offset_providers/GridConstructors.h \
     src/precompiled.h \
     src/string_offset_providers/EmptyExpressionStringOffsetProvider.h \
     src/string_offset_providers/InitializerStringOffsetProvider.h \
-    src/string_offset_providers/SimpleLiteralStringOffsetProvider.h \
     src/string_offset_providers/StaticStringOffsetProvider.h \
     src/string_offset_providers/StringOffsetProvider.h \
     src/string_offset_providers/TextRendererStringOffsetProvider.h \
@@ -95,7 +94,6 @@ SOURCES += src/string_offset_providers/GridConstructors.cpp \
     src/string_offset_providers/TextRendererStringOffsetProvider.cpp \
     src/string_offset_providers/StringOffsetProvider.cpp \
     src/string_offset_providers/StaticStringOffsetProvider.cpp \
-    src/string_offset_providers/SimpleLiteralStringOffsetProvider.cpp \
     src/string_offset_providers/InitializerStringOffsetProvider.cpp \
     src/string_offset_providers/EmptyExpressionStringOffsetProvider.cpp \
     src/expression_editor/operators/AssignmentDescriptor.cpp \

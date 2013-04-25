@@ -95,6 +95,10 @@ Method* addDivBySix(Model::Model* model, Class* parent)
 	es->setExpression( new EmptyExpression());
 	divbysix->items()->append(es);
 
+	divbysix->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("int")));
+	divbysix->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("true")));
+	divbysix->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("123456")));
+
 	VariableDeclaration* exprtest = new VariableDeclaration();
 	divbysix->items()->append(new ExpressionStatement(exprtest));
 	exprtest->setName("exprtest");

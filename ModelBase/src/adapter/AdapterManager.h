@@ -51,19 +51,8 @@ class MODELBASE_API AdapterManager {
 		template <class AdapterBase, class Adapter, class Adaptee>
 		static AdapterBase* createFrom(Adaptee* a);
 
-		/**
-		 * \brief Checks whether \a can be adapted using the Adapter::canAdapt() method and if so
-		 * creates an instance of \a Adapter using it's Adapter::Adapter(Adaptee* a) constructor.
-		 *
-		 * This is a convenience method for creating default adapter functions.
-		 */
-		template <class AdapterBase, class Adapter>
-		static AdapterBase* checkAndCreateFrom(typename Adapter::BaseAdapteeType* a);
-
 		template <class AdapterBase, class Adapter, class Adaptee>
 		static void registerAdapterViaConstructor( );
-		template <class AdapterBase, class Adapter>
-		static void registerStandardDefaultAdapter( );
 
 	private:
 		using TypeIdType = std::size_t;
@@ -128,21 +117,9 @@ template <class AdapterBase, class Adapter, class Adaptee > AdapterBase* Adapter
 	return new Adapter(a);
 }
 
-template <class AdapterBase, class Adapter>
-AdapterBase* AdapterManager::checkAndCreateFrom(typename Adapter::BaseAdapteeType* a)
-{
-	if (Adapter::canAdapt(a)) return new Adapter(a);
-	else return nullptr;
-}
-
 template <class AdapterBase, class Adapter, class Adaptee> void AdapterManager::registerAdapterViaConstructor( )
 {
 	registerAdapter<AdapterBase, Adaptee>( createFrom<AdapterBase, Adapter, Adaptee> );
-}
-
-template <class AdapterBase, class Adapter> void AdapterManager::registerStandardDefaultAdapter( )
-{
-	registerDefaultAdapter<AdapterBase>( checkAndCreateFrom<AdapterBase, Adapter> );
 }
 
 } /* namespace Model */

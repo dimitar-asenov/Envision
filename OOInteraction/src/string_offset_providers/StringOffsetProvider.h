@@ -75,6 +75,8 @@ class OOINTERACTION_API StringOffsetProvider {
 		static int listItemOffset(Visualization::VList* list,
 				const QString& prefix, const QString& separator, const QString& postfix, Qt::Key key);
 
+		static StringOffsetProvider* defaultProvider(Visualization::Item* item);
+
 	protected:
 		// Helper methods
 		virtual QStringList components();

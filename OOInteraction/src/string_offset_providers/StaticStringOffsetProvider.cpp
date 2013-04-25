@@ -27,6 +27,7 @@
 #include "string_offset_providers/StaticStringOffsetProvider.h"
 
 #include "VisualizationBase/src/items/Static.h"
+#include "VisualizationBase/src/items/TextRenderer.h"
 
 namespace OOInteraction {
 
@@ -53,7 +54,20 @@ void StaticStringOffsetProvider::setOffset(int offset)
 
 bool StaticStringOffsetProvider::isIndivisible()
 {
-	return true;
+	auto v = dynamic_cast<Visualization::TextRenderer*> (vis_);
+	if (!v && vis_)
+	{
+		auto ci = vis_->childItems();
+		while (ci.length() == 1)
+		{
+			v =  dynamic_cast<Visualization::TextRenderer*> (ci.first());
+			if (v) break;
+
+			ci = ci.first()->childItems();
+		}
+	}
+
+	return !v || v->text().length() != string().length();
 }
 
 } /* namespace OOInteraction */

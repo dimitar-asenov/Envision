@@ -43,6 +43,8 @@ OOModel::ThisExpression>
 		VThisExpression(Item* parent, NodeType *expr, const StyleType *style = itemStyles().get());
 		virtual ~VThisExpression();
 
+		Visualization::Static* item() const;
+
 	protected:
 		virtual void determineChildren();
 		virtual void updateGeometry(int availableWidth, int availableHeight);
@@ -52,5 +54,7 @@ OOModel::ThisExpression>
 
 		Visualization::Static* vis_;
 };
+
+inline Visualization::Static* VThisExpression::item() const { return vis_;}
 
 }

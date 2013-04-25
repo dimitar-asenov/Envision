@@ -49,6 +49,8 @@ class OOVISUALIZATION_API VPrimitiveType
 		VPrimitiveType(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 		virtual ~VPrimitiveType();
 
+		Visualization::Static* item() const;
+
 	protected:
 		void determineChildren();
 		void updateGeometry(int availableWidth, int availableHeight);
@@ -59,5 +61,7 @@ class OOVISUALIZATION_API VPrimitiveType
 
 		Visualization::Static* vis_;
 };
+
+inline Visualization::Static* VPrimitiveType::item() const { return vis_;}
 
 }

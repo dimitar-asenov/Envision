@@ -49,7 +49,6 @@
 #include "string_offset_providers/GridConstructors.h"
 #include "string_offset_providers/GridBasedOffsetProvider.h"
 #include "string_offset_providers/EmptyExpressionStringOffsetProvider.h"
-#include "string_offset_providers/SimpleLiteralStringOffsetProvider.h"
 #include "string_offset_providers/TextRendererStringOffsetProvider.h"
 #include "string_offset_providers/StaticStringOffsetProvider.h"
 #include "string_offset_providers/InitializerStringOffsetProvider.h"
@@ -109,19 +108,11 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 
 	// Register default string offset providers
 	GridConstructors::initializeAll();
-	Model::AdapterManager::registerStandardDefaultAdapter<StringOffsetProvider, GridBasedOffsetProvider>();
+	Model::AdapterManager::registerDefaultAdapter<StringOffsetProvider>(StringOffsetProvider::defaultProvider);
 
 	// Register custom string offset providers
 	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, SimpleLiteralStringOffsetProvider, OOVisualization::VBooleanLiteral>();
-	Model::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, InitializerStringOffsetProvider, OOVisualization::VArrayInitializer>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, SimpleLiteralStringOffsetProvider, OOVisualization::VIntegerLiteral>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, SimpleLiteralStringOffsetProvider, OOVisualization::VNullLiteral>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, SimpleLiteralStringOffsetProvider, OOVisualization::VThisExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, EmptyExpressionStringOffsetProvider, OOVisualization::VEmptyExpression>();
 	Model::AdapterManager::registerAdapterViaConstructor
@@ -132,8 +123,6 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 		<StringOffsetProvider, TextRendererStringOffsetProvider, Visualization::Symbol>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, StaticStringOffsetProvider, Visualization::Static>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, SimpleLiteralStringOffsetProvider, OOVisualization::VPrimitiveType>();
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, CompoundObjectStringOffsetProvider, OOVisualization::VLambdaExpression>();
 

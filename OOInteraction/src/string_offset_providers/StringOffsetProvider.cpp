@@ -26,10 +26,14 @@
 
 #include "StringOffsetProvider.h"
 #include "StringComponents.h"
+#include "GridBasedOffsetProvider.h"
+#include "TextRendererStringOffsetProvider.h"
 
+#include "OOModel/src/expressions/Expression.h"
 #include "VisualizationBase/src/cursor/LayoutCursor.h"
 #include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/items/Item.h"
+#include "VisualizationBase/src/items/TextRenderer.h"
 #include "ModelBase/src/adapter/AdapterManager.h"
 
 namespace OOInteraction {
@@ -111,13 +115,12 @@ bool StringOffsetProvider::setOffsetInItem(int offset, Visualization::Item* item
 int StringOffsetProvider::itemOffset(Visualization::Item* item, int stringComponentLenght, Qt::Key key)
 {
 	StringOffsetProvider* child = Model::AdapterManager::adapt<StringOffsetProvider>(item);
-	int offset = 0;
-	if (child)
-	{
-		offset = child->offset(key);
-		if (offset > 0 && child->isIndivisible()) offset = stringComponentLenght;
-		SAFE_DELETE(child);
-	}
+	Q_ASSERT(child);
+
+	int offset = child->offset(key);
+	if (offset > 0 && child->isIndivisible()) offset = stringComponentLenght;
+	SAFE_DELETE(child);
+
 	return offset;
 }
 
@@ -199,6 +202,19 @@ int StringOffsetProvider::listItemOffset(Visualization::VList* list,
 	}
 
 	return result;
+}
+
+StringOffsetProvider* StringOffsetProvider::defaultProvider(Visualization::Item* item)
+{
+	if ( GridBasedOffsetProvider::hasGridConstructorFor(item)) return new GridBasedOffsetProvider(item);
+	if ( auto tr = dynamic_cast<Visualization::TextRenderer*>(item)) return new TextRendererStringOffsetProvider(tr);
+
+	// TODO: The next condition is a bit flaky. Find a way to improve that. Perhaps with information regarding the parent
+	// class, which is always a form of VExpression<...>
+	if ( !dynamic_cast<OOModel::Expression*>(item->node()) ) return nullptr;
+	if ( dynamic_cast<Visualization::LayoutProvider<>*>(item) )	return new GridBasedOffsetProvider(item);
+
+	return nullptr;
 }
 
 } /* namespace OOInteraction */

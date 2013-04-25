@@ -45,6 +45,8 @@ OOModel::BooleanLiteral>
 		VBooleanLiteral(Item* parent, NodeType *literal, const StyleType *style = itemStyles().get());
 		virtual ~VBooleanLiteral();
 
+		Visualization::VBoolean* item() const;
+
 	protected:
 		virtual void determineChildren();
 		virtual void updateGeometry(int availableWidth, int availableHeight);
@@ -54,5 +56,7 @@ OOModel::BooleanLiteral>
 
 		Visualization::VBoolean* vis_;
 };
+
+inline Visualization::VBoolean* VBooleanLiteral::item() const {return vis_;}
 
 }

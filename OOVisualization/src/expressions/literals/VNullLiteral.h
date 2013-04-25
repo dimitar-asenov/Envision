@@ -43,6 +43,8 @@ class OOVISUALIZATION_API VNullLiteral
 		VNullLiteral(Item* parent, NodeType* literal, const StyleType* style = itemStyles().get());
 		virtual ~VNullLiteral();
 
+		Visualization::Static* item() const;
+
 	protected:
 		virtual void determineChildren();
 		virtual void updateGeometry(int availableWidth, int availableHeight);
@@ -52,5 +54,7 @@ class OOVISUALIZATION_API VNullLiteral
 
 		Visualization::Static* vis_;
 };
+
+inline Visualization::Static* VNullLiteral::item() const { return vis_;}
 
 }

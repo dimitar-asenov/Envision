@@ -28,7 +28,7 @@
 #include "Cell.h"
 #include "../OOInteractionException.h"
 
-#include "OOModel/src/expressions/Expression.h"
+
 #include "VisualizationBase/src/items/LayoutProvider.h"
 #include "VisualizationBase/src/layouts/SequentialLayout.h"
 #include "VisualizationBase/src/cursor/LayoutCursor.h"
@@ -72,16 +72,9 @@ GridBasedOffsetProvider::~GridBasedOffsetProvider()
 	cells_.clear();
 }
 
-bool GridBasedOffsetProvider::canAdapt(BaseAdapteeType* vis)
+bool GridBasedOffsetProvider::hasGridConstructorFor(Visualization::Item* item)
 {
-	if ( gridConstructors().find(vis->typeId()) != gridConstructors().end() ) return true;
-
-	// TODO: The next condition is a bit flaky. Find a way to improve that. Perhaps with information regarding the parent
-	// class, which is always a form of VExpression<...>
-	if ( !dynamic_cast<OOModel::Expression*>(vis->node()) ) return false;
-	if ( dynamic_cast<Visualization::LayoutProvider<>*>(vis) )	return true;
-
-	return false;
+	return (gridConstructors().find(item->typeId()) != gridConstructors().end());
 }
 
 void GridBasedOffsetProvider::add(Cell* cell)
@@ -330,6 +323,11 @@ QStringList GridBasedOffsetProvider::components()
 	}
 
 	return components;
+}
+
+bool GridBasedOffsetProvider::isIndivisible()
+{
+	return isIndivisible_;
 }
 
 } /* namespace OOInteraction */

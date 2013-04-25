@@ -37,6 +37,24 @@
 using namespace OOVisualization;
 namespace OOInteraction {
 
+bool GridConstructors::isIndivisible(Visualization::Item* item)
+{
+	auto v = dynamic_cast<Visualization::TextRenderer*> (item);
+	if (!v && item)
+	{
+		auto ci = item->childItems();
+		while (ci.length() == 1)
+		{
+			v =  dynamic_cast<Visualization::TextRenderer*> (ci.first());
+			if (v) break;
+
+			ci = ci.first()->childItems();
+		}
+	}
+
+	return !v || v->text().length() != StringOffsetProvider::stringFromComponenets(item).length();
+}
+
 void GridConstructors::initializeAll()
 {
 	GridBasedOffsetProvider::addGridConstructor<VMethodCallExpression>(
@@ -54,6 +72,38 @@ void GridConstructors::initializeAll()
 	GridBasedOffsetProvider::addGridConstructor<VClassType>(
 	[](GridBasedOffsetProvider* grid, VClassType* vis){
 		grid->add(new Cell(0, vis->reference(), 0));
+		// This is different from below since reference() does not simply return a TextRenderer
+		// There is no need to manually set isIndivisible
+	});
+
+	GridBasedOffsetProvider::addGridConstructor<VPrimitiveType>(
+	[](GridBasedOffsetProvider* grid, VPrimitiveType* vis){
+		grid->add(new Cell(0, vis->item(), 0));
+		grid->setIsIndivisible(isIndivisible(vis));
+	});
+
+	GridBasedOffsetProvider::addGridConstructor<VBooleanLiteral>(
+	[](GridBasedOffsetProvider* grid, VBooleanLiteral* vis){
+		grid->add(new Cell(0, vis->item(), 0));
+		grid->setIsIndivisible(isIndivisible(vis));
+	});
+
+	GridBasedOffsetProvider::addGridConstructor<VIntegerLiteral>(
+	[](GridBasedOffsetProvider* grid, VIntegerLiteral* vis){
+		grid->add(new Cell(0, vis->item(), 0));
+		grid->setIsIndivisible(isIndivisible(vis));
+	});
+
+	GridBasedOffsetProvider::addGridConstructor<VNullLiteral>(
+	[](GridBasedOffsetProvider* grid, VNullLiteral* vis){
+		grid->add(new Cell(0, vis->item(), 0));
+		grid->setIsIndivisible(isIndivisible(vis));
+	});
+
+	GridBasedOffsetProvider::addGridConstructor<VThisExpression>(
+	[](GridBasedOffsetProvider* grid, VThisExpression* vis){
+		grid->add(new Cell(0, vis->item(), 0));
+		grid->setIsIndivisible(isIndivisible(vis));
 	});
 
 	GridBasedOffsetProvider::addGridConstructor<VKeywordMethodCall>(

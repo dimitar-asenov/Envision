@@ -26,11 +26,18 @@
 
 #pragma once
 
+namespace Visualization {
+	class Item;
+}
+
 namespace OOInteraction {
 
 class GridConstructors {
 	public:
 		static void initializeAll();
+
+	private:
+		static bool isIndivisible(Visualization::Item* item);
 };
 
 } /* namespace OOInteraction */

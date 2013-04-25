@@ -45,6 +45,8 @@ class OOVISUALIZATION_API VIntegerLiteral
 		VIntegerLiteral(Item* parent, NodeType *literal, const StyleType *style = itemStyles().get());
 		virtual ~VIntegerLiteral();
 
+		Visualization::VInteger* item() const;
+
 	protected:
 		virtual void determineChildren();
 		virtual void updateGeometry(int availableWidth, int availableHeight);
@@ -54,5 +56,7 @@ class OOVISUALIZATION_API VIntegerLiteral
 
 		Visualization::VInteger* vis_;
 };
+
+inline Visualization::VInteger* VIntegerLiteral::item() const {return vis_;}
 
 }
