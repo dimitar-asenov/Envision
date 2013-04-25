@@ -36,6 +36,7 @@ EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(Class, StatementItem)
 
 REGISTER_ATTRIBUTE(Class, name, Text, false, false, true)
 REGISTER_ATTRIBUTE(Class, baseClasses, TypedListOfExpression, false, false, true)
+REGISTER_ATTRIBUTE(Class, friends, TypedListOfExpression, false, false, true)
 REGISTER_ATTRIBUTE(Class, typeArguments, TypedListOfFormalTypeArgument, false, false, true)
 REGISTER_ATTRIBUTE(Class, classes, TypedListOfClass, false, false, true)
 REGISTER_ATTRIBUTE(Class, methods, TypedListOfMethod, false, false, true)

@@ -51,6 +51,7 @@ class OOMODEL_API Class : public StatementItem
 
 	ATTRIBUTE_OOP_NAME
 	ATTRIBUTE(Model::TypedList<Expression>, baseClasses, setBaseClasses)
+	ATTRIBUTE(Model::TypedList<Expression>, friends, setFriends)
 	ATTRIBUTE(Model::TypedList<FormalTypeArgument>, typeArguments, setTypeArguments)
 	ATTRIBUTE(Model::TypedList<Class>, classes, setClasses)
 	ATTRIBUTE(Model::TypedList<Method>, methods, setMethods)
