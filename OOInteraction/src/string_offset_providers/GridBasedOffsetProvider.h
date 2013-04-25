@@ -56,6 +56,7 @@ class OOINTERACTION_API GridBasedOffsetProvider : public StringOffsetProvider {
 		void setSize(int width, int height);
 
 		template <class T> static void addGridConstructor(void(*constructor)(GridBasedOffsetProvider* provider, T* item));
+		static bool canAdapt(BaseAdapteeType* vis);
 
 		void setFilterNullAndEmptyComponents();
 

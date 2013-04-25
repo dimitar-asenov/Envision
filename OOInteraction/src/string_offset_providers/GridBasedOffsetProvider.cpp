@@ -28,6 +28,7 @@
 #include "Cell.h"
 #include "../OOInteractionException.h"
 
+#include "OOModel/src/expressions/Expression.h"
 #include "VisualizationBase/src/items/LayoutProvider.h"
 #include "VisualizationBase/src/layouts/SequentialLayout.h"
 #include "VisualizationBase/src/cursor/LayoutCursor.h"
@@ -52,15 +53,14 @@ GridBasedOffsetProvider::GridBasedOffsetProvider(Visualization::Item* vis)
 	}
 
 	// See if this item uses a sequential layout and use a standard way to handle it
-	if (auto layoutProvider = dynamic_cast<Visualization::LayoutProviderBase*>(vis))
-		if( auto layout = dynamic_cast<Visualization::SequentialLayout*>(layoutProvider->layout()))
-		{
-			setFilterNullAndEmptyComponents();
-			for(int i = 0; i < layout->length(); ++i)
-				add(new Cell(i, layout->at<Visualization::Item>(i), i));
+	if (auto layoutProvider = dynamic_cast<Visualization::LayoutProvider<>*>(vis))
+	{
+		setFilterNullAndEmptyComponents();
+		for(int i = 0; i < layoutProvider->layout()->length(); ++i)
+			add(new Cell(i, layoutProvider->layout()->at<Visualization::Item>(i), i));
 
-			return;
-		}
+		return;
+	}
 
 	throw OOInteractionException("Creating an unknown GridBasedOffsetProvider for a visualization of type " +
 			vis->typeName());
@@ -70,6 +70,18 @@ GridBasedOffsetProvider::~GridBasedOffsetProvider()
 {
 	for (auto c : cells_) SAFE_DELETE(c);
 	cells_.clear();
+}
+
+bool GridBasedOffsetProvider::canAdapt(BaseAdapteeType* vis)
+{
+	if ( gridConstructors().find(vis->typeId()) != gridConstructors().end() ) return true;
+
+	// TODO: The next condition is a bit flaky. Find a way to improve that. Perhaps with information regarding the parent
+	// class, which is always a form of VExpression<...>
+	if ( !dynamic_cast<OOModel::Expression*>(vis->node()) ) return false;
+	if ( dynamic_cast<Visualization::LayoutProvider<>*>(vis) )	return true;
+
+	return false;
 }
 
 void GridBasedOffsetProvider::add(Cell* cell)
@@ -187,7 +199,7 @@ int GridBasedOffsetProvider::offset(Qt::Key key)
 	// None of the cells has the cursor. Try a sequential layout.
 	if (!target)
 	{
-		auto layout_provider = dynamic_cast<Visualization::LayoutProvider<Visualization::SequentialLayout>*>(item());
+		auto layout_provider = dynamic_cast<Visualization::LayoutProvider<>*>(item());
 		if (layout_provider && layout_provider->scene()->mainCursor()->owner() == layout_provider->layout())
 		{
 			int index = layout_provider->layout()->correspondingSceneCursor<Visualization::LayoutCursor>()->index();
@@ -304,18 +316,16 @@ QStringList GridBasedOffsetProvider::components()
 
 	if (filterNullAndEmptyComponents_)
 	{
-		auto layoutProvider = dynamic_cast<Visualization::LayoutProviderBase*>(item());
+		auto layoutProvider = dynamic_cast<Visualization::LayoutProvider<>*>(item());
 		Q_ASSERT(layoutProvider);
-		auto layout = dynamic_cast<Visualization::SequentialLayout*>(layoutProvider->layout());
-		Q_ASSERT(layout);
 
-		if (components.size() != layout->length())
+		if (components.size() != layoutProvider->layout()->length())
 		{
 			for (int i = components.size() - 1; i>=0; --i)
 				if (components[i].isNull())
 					components.removeAt(i);
 		}
-		if (components.size() != layout->length())
+		if (components.size() != layoutProvider->layout()->length())
 			components.removeAll(QString(""));
 	}
 

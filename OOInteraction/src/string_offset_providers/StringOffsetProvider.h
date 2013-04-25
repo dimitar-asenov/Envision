@@ -41,6 +41,10 @@ namespace OOInteraction {
 
 class OOINTERACTION_API StringOffsetProvider {
 	public:
+
+		// This is needed in order to enable default adapters. See the AdapterManager class for more info.
+		using BaseAdapteeType = Visualization::Item;
+
 		StringOffsetProvider(Visualization::Item* item);
 
 		virtual QString string();

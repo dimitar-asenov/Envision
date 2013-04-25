@@ -107,54 +107,11 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 	// Register string components that convert an expression to a string list representing its components
 	StringComponents::initConversions();
 
-	// Register string providers
+	// Register default string offset providers
 	GridConstructors::initializeAll();
+	Model::AdapterManager::registerStandardDefaultAdapter<StringOffsetProvider, GridBasedOffsetProvider>();
 
-	// Grid based: Standard sequential grid
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, GridBasedOffsetProvider, OOVisualization::VUnaryOperation>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, GridBasedOffsetProvider, OOVisualization::VBinaryOperation>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, GridBasedOffsetProvider, OOVisualization::VCommaExpression>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, GridBasedOffsetProvider, OOVisualization::VConditionalExpression>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, GridBasedOffsetProvider, OOVisualization::VStringLiteral>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, GridBasedOffsetProvider, OOVisualization::VUnfinishedOperator>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, GridBasedOffsetProvider, OOVisualization::VErrorExpression>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, GridBasedOffsetProvider, OOVisualization::VArrayType>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, GridBasedOffsetProvider, OOVisualization::VPointerType>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, GridBasedOffsetProvider, OOVisualization::VReferenceType>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, GridBasedOffsetProvider, OOVisualization::VAssignmentExpression>();
-
-	// Grid based: custom grid specified in GridConstructors.h
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, GridBasedOffsetProvider, OOVisualization::VMethodCallExpression>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, GridBasedOffsetProvider, OOVisualization::VCastExpression>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, GridBasedOffsetProvider, OOVisualization::VClassType>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, GridBasedOffsetProvider, OOVisualization::VKeywordMethodCall>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, GridBasedOffsetProvider, OOVisualization::VNewExpression>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, GridBasedOffsetProvider, OOVisualization::VReferenceExpression>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, GridBasedOffsetProvider, OOVisualization::VThrowExpression>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, GridBasedOffsetProvider, OOVisualization::VVariableDeclaration>();
-	Model::AdapterManager::registerAdapterViaConstructor
-		<StringOffsetProvider, GridBasedOffsetProvider, OOVisualization::VUnaryOperation>();
-
-	// Custom string offset providers
+	// Register custom string offset providers
 	Model::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, SimpleLiteralStringOffsetProvider, OOVisualization::VBooleanLiteral>();
 	Model::AdapterManager::registerAdapterViaConstructor
