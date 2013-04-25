@@ -50,7 +50,7 @@ void Shape::setStyle(const Visualization::ShapeStyle* newStyle)
 	}
 }
 
-const QString& Shape::className()
+const QString& Shape::staticTypeName()
 {
 	static QString name("Shape");
 	return name;

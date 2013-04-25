@@ -98,6 +98,12 @@ Item::~Item()
 	SAFE_DELETE(shape_);
 }
 
+const QString& Item::typeName() const
+{
+	static const QString name("Item");
+	return name;
+}
+
 QRectF Item::boundingRect() const
 {
 	return boundingRect_;

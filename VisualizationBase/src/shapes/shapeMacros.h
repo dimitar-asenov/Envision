@@ -40,7 +40,7 @@
 #define SHAPE_COMMON_CUSTOM_STYLENAME( ShapeClass, StyleTypeName)																		\
 public:																																					\
 	typedef StyleTypeName StyleType;																												\
-	static const QString& className();																											\
+	static const QString& staticTypeName();																									\
 																																							\
 	const StyleType* style() const { return static_cast<const StyleType*> (Shape::style()); }									\
 	virtual void setStyle(const Visualization::ShapeStyle* style);																		\
@@ -76,7 +76,7 @@ void ShapeClass::setStyle(const Visualization::ShapeStyle* style_)														
 	Shape::setStyle(s);																																\
 }																																							\
 																																							\
-const QString& ShapeClass::className()																											\
+const QString& ShapeClass::staticTypeName()																									\
 {																																							\
 	static QString name(#ShapeClass);																											\
 	return name;																																		\

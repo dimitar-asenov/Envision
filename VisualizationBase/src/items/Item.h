@@ -56,6 +56,8 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		Item(Item* parent, const StyleType* style = nullptr);
 		virtual ~Item();
 
+		virtual const QString& typeName() const;
+
 		Item* parent() const;
 		Scene* scene() const;
 

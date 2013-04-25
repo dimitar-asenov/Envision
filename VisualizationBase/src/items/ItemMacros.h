@@ -40,7 +40,8 @@
 #define ITEM_COMMON_CUSTOM_STYLENAME( ItemClass, StyleTypeName)																		\
 public:																																					\
 	typedef StyleTypeName StyleType;																												\
-	static const QString& className();																											\
+	virtual const QString& typeName() const override;																						\
+	static const QString& staticTypeName();																									\
 	virtual int typeId() const override;																										\
 	static int staticTypeId();																														\
 																																							\
@@ -120,7 +121,12 @@ Visualization::InteractionHandler* ItemClass::handler() const																			
 	return BaseItemType::handler();																												\
 }																																							\
 																																							\
-const QString& ItemClass::className()																											\
+const QString& ItemClass::typeName() const																									\
+{																																							\
+	return staticTypeName();																														\
+}																																							\
+																																							\
+const QString& ItemClass::staticTypeName()																									\
 {																																							\
 	static QString name(#ItemClass);																												\
 	return name;																																		\

@@ -40,7 +40,7 @@ class VISUALIZATIONBASE_API Shape
 {
 	public:
 		typedef ShapeStyle StyleType;
-		static const QString& className();
+		static const QString& staticTypeName();
 
 		const StyleType* style() const;
 		virtual void setStyle(const Visualization::ShapeStyle* style);
@@ -115,11 +115,14 @@ template <class Base, class Actual> inline Base* Shape::makeDefaultShape(Item* p
 
 template <class ShapeClass> inline void Shape::registerShape()
 {
-	if (shapeConstructors.contains(ShapeClass::className()))
-		throw VisualizationException("Trying to register an already registered shape type " + ShapeClass::className());
+	if (shapeConstructors.contains(ShapeClass::staticTypeName()))
+		throw VisualizationException("Trying to register an already registered shape type "
+				+ ShapeClass::staticTypeName());
 
-	shapeConstructors.insert(ShapeClass::className(),makeDefaultShape<Shape,ShapeClass>);
-	shapeStyleConstructors.insert(ShapeClass::className(),makeDefaultStyle<ShapeStyle,typename ShapeClass::StyleType>);
+	shapeConstructors.insert(ShapeClass::staticTypeName(),
+			makeDefaultShape<Shape,ShapeClass>);
+	shapeStyleConstructors.insert(ShapeClass::staticTypeName(),
+			makeDefaultStyle<ShapeStyle,typename ShapeClass::StyleType>);
 }
 
 }
