@@ -30,12 +30,72 @@ namespace CppImport {
 
 OOModel::Expression *CppImportUtilities::convertClangType(clang::QualType type)
 {
-	if(type.getTypePtr()->isBooleanType())
-		return new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::BOOLEAN);
-	else if(type.getTypePtr()->isIntegerType())
-		return new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::INT);
-	else if(type.getTypePtr()->isVoidType())
-		return new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::VOID);
+	type.dump();
+	if(type.getTypePtr()->isBuiltinType())
+	{
+		const clang::BuiltinType* builtinType = type.getTypePtr()->getAs<clang::BuiltinType>();
+		switch(builtinType->getKind())
+		{
+			case clang::BuiltinType::Void:
+				return new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::VOID);
+			// unsigned types
+			case clang::BuiltinType::Bool:
+				return new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::BOOLEAN);
+			case clang::BuiltinType::Char_U:
+				return nullptr;
+			case clang::BuiltinType::UChar:
+				return nullptr;
+			case clang::BuiltinType::WChar_U:
+				return nullptr;
+			case clang::BuiltinType::Char16:
+				return nullptr;
+			case clang::BuiltinType::Char32:
+				return nullptr;
+			case clang::BuiltinType::UShort:
+				return nullptr;
+			case clang::BuiltinType::UInt:
+				return new OOModel::PrimitiveTypeExpression(
+							OOModel::PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_INT);
+			case clang::BuiltinType::ULong:
+				return new OOModel::PrimitiveTypeExpression(
+							OOModel::PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_LONG);
+			case clang::BuiltinType::ULongLong:
+				return nullptr;
+			case clang::BuiltinType::UInt128:
+				return nullptr;
+			// signed types
+			case clang::BuiltinType::Char_S:
+				return nullptr;
+			case clang::BuiltinType::SChar:
+				return nullptr;
+			case clang::BuiltinType::WChar_S:
+				return nullptr;
+			case clang::BuiltinType::Short:
+				return nullptr;
+			case clang::BuiltinType::Int:
+				return new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::INT);
+			case clang::BuiltinType::Long:
+				return new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::LONG);
+			case clang::BuiltinType::LongLong:
+				return nullptr;
+			case clang::BuiltinType::Int128:
+				return nullptr;
+			// float types
+			case clang::BuiltinType::Half:
+				return nullptr;
+			case clang::BuiltinType::Float:
+				return new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::FLOAT);
+			case clang::BuiltinType::Double:
+				return new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::DOUBLE);
+			case clang::BuiltinType::LongDouble:
+				return nullptr;
+			// c++ specific
+			case clang::BuiltinType::NullPtr:
+				return nullptr;
+			default:
+				return nullptr;
+		}
+	}
 	else if(type.getTypePtr()->isRecordType())
 	{
 		if(clang::CXXRecordDecl* recordDecl = type.getTypePtr()->getAsCXXRecordDecl())

@@ -493,6 +493,14 @@ bool ClangAstVisitor::VisitCXXBoolLiteralExpr(clang::CXXBoolLiteralExpr* boolLit
 	return true;
 }
 
+bool ClangAstVisitor::VisitFloatingLiteral(clang::FloatingLiteral* floatLiteral)
+{
+	OOModel::FloatLiteral* ooFloatLit = new OOModel::FloatLiteral();
+	ooFloatLit->setValue(floatLiteral->getValueAsApproximateDouble());
+	ooExprStack_.push(ooFloatLit);
+	return true;
+}
+
 bool ClangAstVisitor::VisitDeclRefExpr(clang::DeclRefExpr* declRefExpr)
 {
 	OOModel::ReferenceExpression* refExpr = new OOModel::ReferenceExpression();
@@ -559,8 +567,6 @@ bool ClangAstVisitor::VisitMemberExpr(clang::MemberExpr* memberExpr)
 
 bool ClangAstVisitor::VisitBreakStmt(clang::BreakStmt* breakStmt)
 {
-	//-unused var
-	breakStmt->getBreakLoc();
 	OOModel::BreakStatement* ooBreak = new OOModel::BreakStatement();
 	OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top());
 	if(itemList) itemList->append(ooBreak);
@@ -570,10 +576,20 @@ bool ClangAstVisitor::VisitBreakStmt(clang::BreakStmt* breakStmt)
 	return true;
 }
 
+bool ClangAstVisitor::VisitContinueStmt(clang::ContinueStmt* continueStmt)
+{
+	OOModel::ContinueStatement* ooContinue = new OOModel::ContinueStatement();
+	OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top());
+	if(itemList) itemList->append(ooContinue);
+	else
+		log_->writeError(className_,QString("not able to put continue stmt"),
+							  QString("ContinueStmt"),continueStmt);
+	return true;
+}
+
 bool ClangAstVisitor::shouldUseDataRecursionFor(clang::Stmt* S)
 {
-	// -unused var
-	S->getStmtClass();
+	Q_UNUSED(S)
 	return false;
 }
 

@@ -1,5 +1,5 @@
 #include "test.h"
-//#include <iostream>
+#include <iostream>
 //TEst comment
 
 int NOCLASSFIELD;
@@ -48,7 +48,7 @@ public:
     }
 
     int takesRef(int& ref) {
-
+        return 0;
     }
 };
 }
@@ -90,6 +90,8 @@ class OneMore{
         while(oneMoreVariable < 1000)
         {
             oneMoreVariable = (oneMoreVariable+100);
+            if(oneMoreVariable>10)
+                continue;
         }
         if(oneMoreVariable <=1000)
         {
@@ -114,6 +116,8 @@ private:
 
 int Header::headerFunc()
 {
+    float someFloat = 13.4;
+    unsigned long uLong;
     int someVarInCPP[10];
     int array[] = {1,2,3};
     int k;

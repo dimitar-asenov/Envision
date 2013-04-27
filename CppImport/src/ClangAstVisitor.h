@@ -102,6 +102,7 @@ class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 		bool TraverseCXXMemberCallExpr(clang::CXXMemberCallExpr* callExpr);
 		bool VisitIntegerLiteral(clang::IntegerLiteral* intLit);
 		bool VisitCXXBoolLiteralExpr(clang::CXXBoolLiteralExpr* boolLitExpr);
+		bool VisitFloatingLiteral(clang::FloatingLiteral* floatLiteral);
 		bool VisitDeclRefExpr(clang::DeclRefExpr* declRefExpr);
 		bool VisitCXXUnresolvedConstructorExpr(clang::CXXUnresolvedConstructExpr* unresolvedConstructorExpr);
 		bool TraverseParenExpr(clang::ParenExpr* parenthesizedExpr);
@@ -109,6 +110,7 @@ class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 		bool VisitMemberExpr(clang::MemberExpr* memberExpr);
 
 		bool VisitBreakStmt(clang::BreakStmt* breakStmt);
+		bool VisitContinueStmt(clang::ContinueStmt* continueStmt);
 
 		bool shouldUseDataRecursionFor(clang::Stmt* S);
 
