@@ -325,9 +325,4 @@ QStringList GridBasedOffsetProvider::components()
 	return components;
 }
 
-bool GridBasedOffsetProvider::isIndivisible()
-{
-	return isIndivisible_;
-}
-
 } /* namespace OOInteraction */

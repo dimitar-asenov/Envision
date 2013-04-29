@@ -40,7 +40,6 @@ class OOINTERACTION_API GridBasedOffsetProvider : public StringOffsetProvider {
 
 		virtual int offset(Qt::Key key) override;
 		virtual void setOffset(int newOffset) override;
-		virtual bool isIndivisible() override;
 
 		/**
 		 * Adds the cell \a cell to the grid of this string provider.
@@ -60,7 +59,6 @@ class OOINTERACTION_API GridBasedOffsetProvider : public StringOffsetProvider {
 		static bool hasGridConstructorFor(Visualization::Item* item);
 
 		void setFilterNullAndEmptyComponents();
-		void setIsIndivisible(bool isIndivisible = true);
 
 	protected:
 		virtual QStringList components() override;
@@ -68,7 +66,6 @@ class OOINTERACTION_API GridBasedOffsetProvider : public StringOffsetProvider {
 	private:
 		QList<Cell*> cells_;
 		QSize size_;
-		bool isIndivisible_{};
 		bool filterNullAndEmptyComponents_{};
 
 		enum Direction {Left, Up, Right, Down};
@@ -91,6 +88,5 @@ inline void GridBasedOffsetProvider::addGridConstructor(void(*constructor)(GridB
 
 inline void GridBasedOffsetProvider::setFilterNullAndEmptyComponents() { filterNullAndEmptyComponents_ = true;}
 inline void GridBasedOffsetProvider::setSize(int width, int height) { size_.setWidth(width); size_.setHeight(height); }
-inline void GridBasedOffsetProvider::setIsIndivisible(bool isIndivisible) { isIndivisible_ = isIndivisible;}
 
 } /* namespace OOInteraction */
