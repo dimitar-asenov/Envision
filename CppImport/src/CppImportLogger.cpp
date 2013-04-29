@@ -54,11 +54,12 @@ void CppImportLogger::writeOut(QString &inWhichClass, QString &reason, QString &
 		default:
 			return;
 	}
+	std::pair<clang::FileID,unsigned> decomposedLoc = sourceManger_->getDecomposedLoc(decl->getLocation());
 	(*outStream) << "ERR/WARN: \t In class : " << inWhichClass << " \n\t reason : " << reason
 					 << " \n\t in clang node : " << clangType
 					 << " \n\t clang node name : " << QString::fromStdString(decl->getNameAsString())
 					 << " \n\t in file : " << sourceManger_->getBufferName(decl->getLocation())
-						 // TODO also get line number
+					 << " \n\t on line : " << sourceManger_->getLineNumber(decomposedLoc.first,decomposedLoc.second)
 					 << "\n";
 
 }
@@ -77,12 +78,13 @@ void CppImportLogger::writeOut(QString &inWhichClass, QString &reason, QString &
 		default:
 			return;
 	}
+	std::pair<clang::FileID,unsigned> decomposedLoc = sourceManger_->getDecomposedLoc(stmt->getLocStart());
 	(*outStream) << "ERR/WARN: \t In class : " << inWhichClass << " \n\t reason : " << reason
 					 << " \n\t in clang node : " << clangType
 						 // TODO maybe output something more useful
 					 << " \n\t in stmt class node : " << stmt->getStmtClassName()
 					 << " \n\t in file : " << sourceManger_->getBufferName(stmt->getLocStart())
-						 // TODO also get line number
+					 << " \n\t on line : " << sourceManger_->getLineNumber(decomposedLoc.first,decomposedLoc.second)
 					 << "\n";
 
 }
