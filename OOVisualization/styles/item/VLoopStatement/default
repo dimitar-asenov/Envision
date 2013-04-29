@@ -1,35 +1,34 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/Item/default">
-	<layout prototypes="layout/PanelBorderLayout/default">
-		<shape prototypes="shape/Box/default">
-			Box
-			<outline>
-				<width>1</width>
-				<color>
-					<alpha>255</alpha>
-					<red>160</red>
-					<green>160</green>
-					<blue>200</blue>
-				</color>
-			</outline>
-			<backgroundBrush>
-				<gradient>
-					<stopPoints>
-						<e1>
-							<first>1.0</first>
-							<second>
-								<alpha>255</alpha>
-								<red>224</red>
-								<green>224</green>
-								<blue>255</blue>
-							</second>
-						</e1>	
-					</stopPoints>
-				</gradient>
-			</backgroundBrush>
-			<cornerRadius>4</cornerRadius>
-		</shape>
-	</layout>
+	<shape prototypes="shape/Box/default">
+		Box
+		<outline>
+			<width>1</width>
+			<color>
+				<alpha>255</alpha>
+				<red>160</red>
+				<green>160</green>
+				<blue>200</blue>
+			</color>
+		</outline>
+		<backgroundBrush>
+			<gradient>
+				<stopPoints>
+					<e1>
+						<first>1.0</first>
+						<second>
+							<alpha>255</alpha>
+							<red>224</red>
+							<green>224</green>
+							<blue>255</blue>
+						</second>
+					</e1>
+				</stopPoints>
+			</gradient>
+		</backgroundBrush>
+		<cornerRadius>4</cornerRadius>
+	</shape>
+	<layout prototypes="layout/PanelBorderLayout/default" />
 	<header prototypes="layout/SequentialLayout/default">
 		<spaceBetweenElements>5</spaceBetweenElements>
 	</header>

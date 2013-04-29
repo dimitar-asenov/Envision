@@ -31,11 +31,11 @@
 #include "VStatementItem.h"
 
 #include "OOModel/src/statements/LoopStatement.h"
-#include "VisualizationBase/src/items/LayoutProvider.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
 
 namespace Visualization {
-	class PanelBorderLayout;
-	class SequentialLayout;
+	class NodeWrapper;
+	class Static;
 }
 
 namespace OOVisualization {
@@ -43,53 +43,34 @@ namespace OOVisualization {
 class VStatementItemList;
 
 class OOVISUALIZATION_API VLoopStatement
-	: public Super<VStatementItem<VLoopStatement, Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
+	: public Super<VStatementItem<VLoopStatement, Visualization::DeclarativeItem<VLoopStatement>,
 	  OOModel::LoopStatement>>
 {
 	ITEM_COMMON(VLoopStatement)
 
 	public:
 		VLoopStatement(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		virtual ~VLoopStatement();
 
-		Visualization::SequentialLayout* header() const;
-
-		Visualization::SequentialLayout* conditionBackground() const;
-		Visualization::SequentialLayout* initStepBackground() const;
-		Visualization::SequentialLayout* updateStepBackground() const;
-
-		Visualization::Item* condition() const;
-		Visualization::Item* initStep() const;
-		Visualization::Item* updateStep() const;
+		Visualization::NodeWrapper* condition() const;
+		Visualization::NodeWrapper* initStep() const;
+		Visualization::NodeWrapper* updateStep() const;
 		VStatementItemList* body() const;
-		Visualization::Item* icon() const;
+		Visualization::Static* icon() const;
 
-	protected:
-		virtual void determineChildren();
+		static void initializeForms();
 
 	private:
-		Visualization::SequentialLayout* header_;
-
-		Visualization::SequentialLayout* conditionBackground_;
-		Visualization::SequentialLayout* initStepBackground_;
-		Visualization::SequentialLayout* updateStepBackground_;
-
-		Visualization::Item* condition_;
-		Visualization::Item* initStep_;
-		Visualization::Item* updateStep_;
-		VStatementItemList* body_;
+		Visualization::NodeWrapper* condition_{};
+		Visualization::NodeWrapper* initStep_{};
+		Visualization::NodeWrapper* updateStep_{};
+		VStatementItemList* body_{};
+		Visualization::Static* icon_{};
 };
 
-inline Visualization::SequentialLayout* VLoopStatement::header() const { return header_; }
-
-inline Visualization::SequentialLayout* VLoopStatement::conditionBackground() const { return conditionBackground_; }
-inline Visualization::SequentialLayout* VLoopStatement::initStepBackground() const { return initStepBackground_; }
-inline Visualization::SequentialLayout* VLoopStatement::updateStepBackground() const { return updateStepBackground_; }
-
-inline Visualization::Item* VLoopStatement::condition() const { return condition_; }
-inline Visualization::Item* VLoopStatement::initStep() const { return initStep_; }
-inline Visualization::Item* VLoopStatement::updateStep() const { return updateStep_; }
+inline Visualization::NodeWrapper* VLoopStatement::condition() const { return condition_; }
+inline Visualization::NodeWrapper* VLoopStatement::initStep() const { return initStep_; }
+inline Visualization::NodeWrapper* VLoopStatement::updateStep() const { return updateStep_; }
 inline VStatementItemList* VLoopStatement::body() const { return body_; }
-inline Visualization::Item* VLoopStatement::icon() const {return header_->at<Visualization::Item>(0);}
+inline Visualization::Static* VLoopStatement::icon() const {return icon_;}
 
 }

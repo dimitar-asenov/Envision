@@ -28,9 +28,11 @@
 
 #include "../elements/VStatementItemList.h"
 
-#include "VisualizationBase/src/layouts/PanelBorderLayout.h"
-#include "VisualizationBase/src/layouts/SequentialLayout.h"
 #include "VisualizationBase/src/items/Static.h"
+#include "VisualizationBase/src/declarative/GridLayoutElement.h"
+#include "VisualizationBase/src/declarative/AnchorLayoutElement.h"
+#include "VisualizationBase/src/declarative/ShapeElement.h"
+#include "VisualizationBase/src/items/NodeWrapper.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -40,94 +42,42 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VLoopStatement, "item")
 
 VLoopStatement::VLoopStatement(Item* parent, NodeType* node, const StyleType* style) :
-	Super(parent, node, style),
-	header_(), conditionBackground_(), initStepBackground_(), updateStepBackground_(), condition_(), initStep_(),
-	updateStep_(),	body_()
+	Super(parent, node, style)
+{}
+
+void VLoopStatement::initializeForms()
 {
-	layout()->setTop(true);
-	header_ = new SequentialLayout(layout()->top(), &style->header());
-	layout()->top()->setFirst(header_);
-	header_->append(new Static(header_, &style->icon()));
-}
+	auto header = (new GridLayoutElement)
+					->setHorizontalSpacing(3)->setColumnStretchFactor(3, 1)
+					->setVerticalAlignment(LayoutStyle::Alignment::Center)
+					->put(0, 0, item<Static, I>(&I::icon_, [](I* v){return &v->style()->icon();}))
+					->put(1, 0, item<NodeWrapper, I>(&I::initStep_, [](I* v){return v->node()->initStep();},
+																					[](I* v){return &v->style()->initStep();}))
+					->put(2, 0, item<NodeWrapper, I>(&I::condition_, [](I* v){return v->node()->condition();},
+																					[](I* v){return &v->style()->condition();}))
+					->put(3, 0, item<NodeWrapper, I>(&I::updateStep_, [](I* v){return v->node()->updateStep();},
+																					[](I* v){return &v->style()->updateStep();}));
 
-VLoopStatement::~VLoopStatement()
-{
-	// These were automatically deleted by LayoutProvider's destructor
-	header_ = nullptr;
-	conditionBackground_ = nullptr;
-	initStepBackground_ = nullptr;
-	updateStepBackground_ = nullptr;
-	condition_ = nullptr;
-	initStep_ = nullptr;
-	updateStep_ = nullptr;
-	body_ = nullptr;
-}
+	auto body = (new GridLayoutElement)
+			->setColumnStretchFactor(0, 1)
+			->put(0, 0, item<VStatementItemList, I>(&I::body_, [](I* v){return v->node()->body();},
+							[](I* v){return &v->style()->body();}));
 
-void VLoopStatement::determineChildren()
-{
-	layout()->synchronizeContent(body_, node()->body(), &style()->body());
+	auto shapeElement = new ShapeElement();
 
-	// TODO Find a better way to synchronize the condition, initStep and updateStep. Perhaps use make a new layout for
-	// Single items. That would be more of a shape provider.
-
-	// Remove nodes which have changed
-	if (initStep_ && initStep_->node() != node()->initStep())
-	{
-		header_->removeAll(initStepBackground_);
-		initStep_ = nullptr;
-		initStepBackground_ = nullptr;
-	}
-
-	if (condition_ && condition_->node() != node()->condition())
-	{
-		header_->removeAll(conditionBackground_);
-		condition_ = nullptr;
-		conditionBackground_ = nullptr;
-	}
-
-	if (updateStep_ && updateStep_->node() != node()->updateStep())
-	{
-		header_->removeAll(updateStepBackground_);
-		updateStep_ = nullptr;
-		updateStepBackground_ = nullptr;
-	}
-
-	// Create nodes which are present in the model
-	if (!initStep_ && node()->initStep())
-	{
-		initStepBackground_ = new SequentialLayout(header_, &style()->initStep());
-		initStep_ = renderer()->render(initStepBackground_, node()->initStep());
-		initStepBackground_->append(initStep_);
-		header_->insert(initStepBackground_, 1);
-	}
-
-	if (!updateStep_ && node()->updateStep())
-	{
-		updateStepBackground_ = new SequentialLayout(header_, &style()->updateStep());
-		updateStep_ = renderer()->render(updateStepBackground_, node()->updateStep());
-		updateStepBackground_->append(updateStep_);
-		header_->append(updateStepBackground_);
-	}
-
-	if (!condition_ && node()->condition())
-	{
-		conditionBackground_ = new SequentialLayout(header_, &style()->condition());
-		condition_ = renderer()->render(conditionBackground_, node()->condition());
-		conditionBackground_->append(condition_);
-		header_->insert(conditionBackground_, (initStep_?2:1));
-	}
-
-	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
-	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
-	//			what's the reason they are being updated.
-	// The style needs to be updated every time since if our own style changes, so will that of the children.
-	layout()->setStyle(&style()->layout());
-	header_->setStyle(&style()->header());
-	header_->at<Static>(0)->setStyle(&style()->icon());
-	if (conditionBackground_) conditionBackground_->setStyle( &style()->condition() );
-	if (initStepBackground_) initStepBackground_->setStyle( &style()->initStep() );
-	if (updateStepBackground_) updateStepBackground_->setStyle( &style()->updateStep() );
-	body_->setStyle(&style()->body());
+	addForm((new AnchorLayoutElement())
+		// place body below header
+		->put(TheTopOf, body, 10, FromBottomOf, header)
+		// place upper left corner of the shape element
+		->put(TheTopOf, shapeElement, AtCenterOf, header)
+		->put(TheLeftOf, shapeElement, AtLeftOf, header)
+		// place the body 'inside' the shape element
+		->put(TheLeftOf, shapeElement, 10, FromLeftOf, body)
+		// align header and body on their right
+		->put(TheRightOf, header, AtRightOf, body)
+		// place the bottom right corner of the shape element
+		->put(TheRightOf, shapeElement, 10, FromRightOf, header)
+		->put(TheBottomOf, shapeElement, 10, FromBottomOf, body));
 }
 
 }
