@@ -7,7 +7,8 @@ win32:LIBS += -llogger \
 LIBS += -llpsolve55
 QT += xml \
     svg
-HEADERS += src/declarative/ShapeElement.h \
+HEADERS += src/items/NodeWrapper.h \
+    src/declarative/ShapeElement.h \
     src/declarative/Enumerations.h \
     src/nodes/TestBoxNode.h \
     src/items/TestBox.h \
@@ -107,7 +108,8 @@ HEADERS += src/declarative/ShapeElement.h \
     src/visualizationbase_api.h \
     test/BoxTest.h \
     src/visualizationbase.h
-SOURCES += src/declarative/ShapeElement.cpp \
+SOURCES += src/items/NodeWrapper.cpp \
+    src/declarative/ShapeElement.cpp \
     src/declarative/AnchorLayoutAnchor.cpp \
     src/declarative/AnchorLayoutConstraintSolver.cpp \
     test/DeclarativeTest.cpp \
