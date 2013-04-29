@@ -48,6 +48,7 @@ public:
     }
 
     int takesRef(int& ref) {
+        ref = ref < 10 ? 20 : 0;
         return 0;
     }
 };
@@ -63,7 +64,7 @@ class Another {
     bool aBoolVar;
     void aVoidFunc(){
         aTestingObj.myFunction(10,true);
-        bool aNotherBoolVar;};
+        bool aNotherBoolVar;}
 public:
     int aPublicvar;
     int aPublicFunction(){
@@ -75,6 +76,14 @@ private:
         int inAnotherVar;
         InAnotherClass* getClass(){
             return this;
+        }
+
+        InAnotherClass* getNewInst(){
+            return new InAnotherClass();
+        }
+
+        InAnotherClass* getNull(){
+            return 0;
         }
     };
 
@@ -120,6 +129,9 @@ int Header::headerFunc()
     unsigned long uLong;
     int someVarInCPP[10];
     int array[] = {1,2,3};
+    const char* string = "Testing";
+    char someChar = 'a';
+    int* newArray = new int[20];
     int k;
     for(int i=0; i<100;i++)
     {

@@ -30,7 +30,6 @@ namespace CppImport {
 
 OOModel::Expression *CppImportUtilities::convertClangType(clang::QualType type)
 {
-	type.dump();
 	if(type.getTypePtr()->isBuiltinType())
 	{
 		const clang::BuiltinType* builtinType = type.getTypePtr()->getAs<clang::BuiltinType>();
@@ -65,7 +64,7 @@ OOModel::Expression *CppImportUtilities::convertClangType(clang::QualType type)
 				return nullptr;
 			// signed types
 			case clang::BuiltinType::Char_S:
-				return nullptr;
+				return new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::CHAR);
 			case clang::BuiltinType::SChar:
 				return nullptr;
 			case clang::BuiltinType::WChar_S:

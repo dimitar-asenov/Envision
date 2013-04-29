@@ -110,7 +110,7 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl)
 		ooStack_.pop();
 
 		// visit base classes
-		// can only query base classes if there is a definition otherwise a clang assertion is failed
+		// can only query base classes if there is a definitionotherwise a clang assertion is failed
 		if(recordDecl->isThisDeclarationADefinition())
 		{
 			for(auto base_itr = recordDecl->bases_begin(); base_itr!=recordDecl->bases_end(); ++base_itr)
@@ -248,6 +248,32 @@ bool ClangAstVisitor::TraverseIfStmt(clang::IfStmt* ifStmt)
 	return true;
 }
 
+bool ClangAstVisitor::TraverseConditionalOperator(clang::ConditionalOperator* conditionalOperator)
+{
+	OOModel::ConditionalExpression* ooConditionalExpr = new OOModel::ConditionalExpression();
+	// store inBody var
+	bool inBody = inBody_;
+	inBody_ = false;
+	// traverse condition
+	TraverseStmt(conditionalOperator->getCond());
+	if(!ooExprStack_.empty())
+		ooConditionalExpr->setCondition(ooExprStack_.pop());
+	// traverse true part
+	TraverseStmt(conditionalOperator->getTrueExpr());
+	if(!ooExprStack_.empty())
+		ooConditionalExpr->setTrueExpression(ooExprStack_.pop());
+	// traverse false part
+	TraverseStmt(conditionalOperator->getFalseExpr());
+	if(!ooExprStack_.empty())
+		ooConditionalExpr->setFalseExpression(ooExprStack_.pop());
+	inBody_ = inBody;
+	if(inBody_)
+		log_->writeError(className_,QString("Cond operator in body"),QString("ConditionalOperator"),conditionalOperator);
+	else
+		ooExprStack_.push(ooConditionalExpr);
+	return true;
+}
+
 bool ClangAstVisitor::TraverseWhileStmt(clang::WhileStmt* whileStmt)
 {
 	OOModel::LoopStatement* ooLoop = new OOModel::LoopStatement();
@@ -366,12 +392,15 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 
 		if(varDecl->hasInit())
 		{
+			bool inBody = inBody_;
+			inBody_ = false;
 			TraverseStmt(varDecl->getInit());
 			if(!ooExprStack_.empty())
 				ooVarDecl->setInitialValue(ooExprStack_.pop());
 			else
 				log_->writeError(className_,QString("Var Init Expr no supported"),
 									  QString("Expr"),varDecl->getInit());
+			inBody_ = inBody;
 		}
 		if(inBody_)
 			itemList->append(ooVarDecl);
@@ -477,6 +506,21 @@ bool ClangAstVisitor::TraverseCXXMemberCallExpr(clang::CXXMemberCallExpr* callEx
 	return true;
 }
 
+bool ClangAstVisitor::TraverseCXXNewExpr(clang::CXXNewExpr* newExpr)
+{
+	OOModel::NewExpression* ooNewExpr = new OOModel::NewExpression();
+	ooNewExpr->setNewType(CppImportUtilities::convertClangType(newExpr->getAllocatedType()));
+	if(newExpr->isArray())
+	{
+		TraverseStmt(newExpr->getArraySize());
+		if(!ooExprStack_.empty())
+			ooNewExpr->setAmount(ooExprStack_.pop());
+	}
+
+	ooExprStack_.push(ooNewExpr);
+	return true;
+}
+
 bool ClangAstVisitor::VisitIntegerLiteral(clang::IntegerLiteral* intLit)
 {
 	OOModel::IntegerLiteral* ooIntLit = new OOModel::IntegerLiteral();
@@ -498,6 +542,22 @@ bool ClangAstVisitor::VisitFloatingLiteral(clang::FloatingLiteral* floatLiteral)
 	OOModel::FloatLiteral* ooFloatLit = new OOModel::FloatLiteral();
 	ooFloatLit->setValue(floatLiteral->getValueAsApproximateDouble());
 	ooExprStack_.push(ooFloatLit);
+	return true;
+}
+
+bool ClangAstVisitor::VisitCharacterLiteral(clang::CharacterLiteral* charLiteral)
+{
+	OOModel::CharacterLiteral* ooCharLit = new OOModel::CharacterLiteral();
+	ooCharLit->setValue(QChar(charLiteral->getValue()));
+	ooExprStack_.push(ooCharLit);
+	return true;
+}
+
+bool ClangAstVisitor::VisitStringLiteral(clang::StringLiteral* stringLiteral)
+{
+	OOModel::StringLiteral* ooStringLit = new OOModel::StringLiteral();
+	ooStringLit->setValue(QString::fromStdString(stringLiteral->getString().str()));
+	ooExprStack_.push(ooStringLit);
 	return true;
 }
 
@@ -562,6 +622,19 @@ bool ClangAstVisitor::VisitMemberExpr(clang::MemberExpr* memberExpr)
 		ooRef->ref()->setName(QString::fromStdString(memberExpr->getMemberDecl()->getNameAsString()));
 		ooExprStack_.push(ooRef);
 	}
+	return true;
+}
+
+bool ClangAstVisitor::TraverseInitListExpr(clang::InitListExpr* initListExpr)
+{
+	OOModel::ArrayInitializer* ooArrayInit = new OOModel::ArrayInitializer();
+	for(auto iter = initListExpr->begin(); iter!=initListExpr->end(); ++iter)
+	{
+		TraverseStmt(*iter);
+		if(!ooExprStack_.empty())
+			ooArrayInit->values()->append(ooExprStack_.pop());
+	}
+	ooExprStack_.push(ooArrayInit);
 	return true;
 }
 

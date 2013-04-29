@@ -44,6 +44,7 @@ class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 		bool TraverseCXXMethodDecl(clang::CXXMethodDecl* methodDecl);
 		bool TraverseFunctionDecl(clang::FunctionDecl* functionDecl);
 		bool TraverseIfStmt(clang::IfStmt* ifStmt);
+		bool TraverseConditionalOperator(clang::ConditionalOperator* conditionalOperator);
 		bool TraverseWhileStmt(clang::WhileStmt* whileStmt);
 		bool TraverseForStmt(clang::ForStmt* forStmt);
 		bool TraverseReturnStmt(clang::ReturnStmt* returnStmt);
@@ -100,14 +101,19 @@ class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 		bool VisitFieldDecl(clang::FieldDecl* fieldDecl);
 
 		bool TraverseCXXMemberCallExpr(clang::CXXMemberCallExpr* callExpr);
+		bool TraverseCXXNewExpr(clang::CXXNewExpr* newExpr);
 		bool VisitIntegerLiteral(clang::IntegerLiteral* intLit);
 		bool VisitCXXBoolLiteralExpr(clang::CXXBoolLiteralExpr* boolLitExpr);
 		bool VisitFloatingLiteral(clang::FloatingLiteral* floatLiteral);
+		bool VisitCharacterLiteral(clang::CharacterLiteral* charLiteral);
+		bool VisitStringLiteral(clang::StringLiteral* stringLiteral);
 		bool VisitDeclRefExpr(clang::DeclRefExpr* declRefExpr);
 		bool VisitCXXUnresolvedConstructorExpr(clang::CXXUnresolvedConstructExpr* unresolvedConstructorExpr);
 		bool TraverseParenExpr(clang::ParenExpr* parenthesizedExpr);
 		bool VisitCXXThisExpr(clang::CXXThisExpr* thisExpr);
 		bool VisitMemberExpr(clang::MemberExpr* memberExpr);
+
+		bool TraverseInitListExpr(clang::InitListExpr* initListExpr);
 
 		bool VisitBreakStmt(clang::BreakStmt* breakStmt);
 		bool VisitContinueStmt(clang::ContinueStmt* continueStmt);
