@@ -176,7 +176,7 @@ OOModel::UnaryOperation::OperatorTypes CppImportUtilities::convertUnaryOpcode(cl
 		case clang::UO_Plus: return OOModel::UnaryOperation::PLUS;
 		case clang::UO_Minus: return OOModel::UnaryOperation::MINUS;
 		case clang::UO_Not: return OOModel::UnaryOperation::NOT;
-			//    case clang::UO_LNot: return OOModel::UnaryOperation:
+		case clang::UO_LNot: return OOModel::UnaryOperation::NOT;
 			//    case clang::UO_Real: return OOModel::UnaryOperation:
 			//    case clang::UO_Imag: return OOModel::UnaryOperation:
 			//    case clang::UO_Extension: return OOModel::UnaryOperation:

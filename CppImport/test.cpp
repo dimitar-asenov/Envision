@@ -1,5 +1,5 @@
 #include "test.h"
-#include <iostream>
+//#include <iostream>
 //TEst comment
 
 int NOCLASSFIELD;
@@ -38,13 +38,19 @@ public:
             int f=0;
             k*=0;
         }
+        bool __plus;
+        int __c,__lit, __lc;
+        if ((__plus || __c == __lit)
+            && !(__lc && __c == __lc)
+            && !(__c == __lc))
+            return 0;
         return k;}
     int callExpr() {
         return this->myFunction(1,true);
     }
 
     int someCall() {
-        return myFunction(1,false);
+        return myFunction(1, ~false);
     }
 
     int takesRef(int& ref) {
@@ -96,6 +102,7 @@ class OneMore{
     int oneMoreFunction(){
         int oneMoreVariable, oneMoreVar2;
         oneMoreVariable = 100 + oneMoreVar2;
+        bool same = oneMoreVariable == oneMoreVar2;
         while(oneMoreVariable < 1000)
         {
             oneMoreVariable = (oneMoreVariable+100);
@@ -114,6 +121,8 @@ class OneMore{
         {
             oneMoreVariable = oneMoreVariable+300;
         }
+        else if(!oneMoreVariable)
+            return 0;
         return 100;
     }
 };
@@ -127,7 +136,9 @@ int Header::headerFunc()
 {
     float someFloat = 13.4;
     unsigned long uLong;
-    int someVarInCPP[10];
+    int someArray[10];
+    for(int a=0;a<10;a++)
+        someArray[a] = a;
     int array[] = {1,2,3};
     const char* string = "Testing";
     char someChar = 'a';

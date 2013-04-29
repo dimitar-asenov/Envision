@@ -95,6 +95,7 @@ class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 		bool TraverseUnaryPlus(clang::UnaryOperator* uOp);
 		bool TraverseUnaryMinus(clang::UnaryOperator* uOp);
 		bool TraverseUnaryNot(clang::UnaryOperator* uOp);
+		bool TraverseUnaryLNot(clang::UnaryOperator* uOp);
 
 
 		bool VisitStmt(clang::Stmt* S);
@@ -110,6 +111,7 @@ class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 		bool VisitDeclRefExpr(clang::DeclRefExpr* declRefExpr);
 		bool VisitCXXUnresolvedConstructorExpr(clang::CXXUnresolvedConstructExpr* unresolvedConstructorExpr);
 		bool TraverseParenExpr(clang::ParenExpr* parenthesizedExpr);
+		bool TraverseArraySubscriptExpr(clang::ArraySubscriptExpr* arraySubsrciptExpr);
 		bool VisitCXXThisExpr(clang::CXXThisExpr* thisExpr);
 		bool VisitMemberExpr(clang::MemberExpr* memberExpr);
 
@@ -214,6 +216,8 @@ inline bool ClangAstVisitor::TraverseUnaryPlus(clang::UnaryOperator* uOp)
 inline bool ClangAstVisitor::TraverseUnaryMinus(clang::UnaryOperator* uOp)
 {return TraverseUnaryOp(uOp);}
 inline bool ClangAstVisitor::TraverseUnaryNot(clang::UnaryOperator* uOp)
+{return TraverseUnaryOp(uOp);}
+inline bool ClangAstVisitor::TraverseUnaryLNot(clang::UnaryOperator* uOp)
 {return TraverseUnaryOp(uOp);}
 
 }

@@ -233,8 +233,8 @@ bool ClangAstVisitor::TraverseIfStmt(clang::IfStmt* ifStmt)
 		bool inBody = inBody_;
 		inBody_ = false;
 		TraverseStmt(ifStmt->getCond());
-		inBody_ = true;
 		ooIfStmt->setCondition(ooExprStack_.pop());
+		inBody_ = true;
 		// then branch
 		ooStack_.push(ooIfStmt->thenBranch());
 		TraverseStmt(ifStmt->getThen());
@@ -596,6 +596,31 @@ bool ClangAstVisitor::TraverseParenExpr(clang::ParenExpr* parenthesizedExpr)
 		ooExprStack_.push(ooParenExpr);
 	inBody_ = inBody;
 	return true;
+}
+
+bool ClangAstVisitor::TraverseArraySubscriptExpr(clang::ArraySubscriptExpr* arraySubsrciptExpr)
+{
+		OOModel::BinaryOperation* ooArrayAccess = new OOModel::BinaryOperation();
+		ooArrayAccess->setOp(OOModel::BinaryOperation::ARRAY_INDEX);
+		// save inbody var
+		bool inBody = inBody_;
+		inBody_ = false;
+		// visit the base the base is A in the expr A[10]
+		TraverseStmt(arraySubsrciptExpr->getBase());
+		if(!ooExprStack_.empty())
+			ooArrayAccess->setLeft(ooExprStack_.pop());
+		// visit the idx the idx is 10 in the expr A[10]
+		TraverseStmt(arraySubsrciptExpr->getIdx());
+		if(!ooExprStack_.empty())
+			ooArrayAccess->setRight(ooExprStack_.pop());
+		// restore inBody var
+		inBody_ = inBody;
+		// put the binop in the correct location
+		if(inBody_)
+			log_->writeError(className_,QString("Array subscribt in body"),
+								  QString("ArraySubscriptExpr"), arraySubsrciptExpr);
+		else ooExprStack_.push(ooArrayAccess);
+		return true;
 }
 
 bool ClangAstVisitor::VisitCXXThisExpr(clang::CXXThisExpr* thisExpr)
