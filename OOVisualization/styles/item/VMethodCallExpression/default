@@ -21,14 +21,13 @@
 		</name>
 	</name>
 	<arguments prototypes="item/VList/default">
-		<shape />	
+		<shape prototypes="shape/Braces/default">
+			Braces
+			<leftBrace>(</leftBrace>
+			<rightBrace>)</rightBrace>
+		</shape>
 		<drawShapeWhenEmpty>true</drawShapeWhenEmpty>	
 		<itemsStyle prototypes="layout/SequentialLayout/default">
-			<shape prototypes="shape/Braces/default">
-				Braces
-				<leftBrace>(</leftBrace>
-				<rightBrace>)</rightBrace>	
-			</shape>
 			<direction>0</direction>
 			<spaceBetweenElements>15</spaceBetweenElements>
 			<noInnerCursors>true</noInnerCursors>
