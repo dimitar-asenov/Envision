@@ -197,13 +197,13 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		OOModel::ExpressionStatement* replaceStatement = nullptr;
 		auto trimmedText = newText.trimmed();
 		if ( (enterPressed || spacePressed)
-				&& (trimmedText == "for" || trimmedText == "foreach" || trimmedText == "if"
+				&& (trimmedText == "for" || trimmedText == "foreach" || trimmedText == "if" || trimmedText == "class"
 						|| trimmedText == "continue" || trimmedText == "break" || trimmedText == "return"))
 			replaceStatement = parentExpressionStatement(dynamic_cast<OOModel::Expression*>(target->node()));
 
 		if (replaceStatement)
 		{
-			OOModel::Statement* st = nullptr;
+			OOModel::StatementItem* st = nullptr;
 			Model::Node* toFocus = nullptr;
 			if(trimmedText == "for")
 			{
@@ -245,6 +245,12 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 				ret->values()->append(new OOModel::EmptyExpression());
 
 				toFocus = ret->values()->at(0);
+				st = ret;
+			}
+			else if (trimmedText == "class")
+			{
+				auto ret =  new OOModel::Class();
+				toFocus = ret;
 				st = ret;
 			}
 
