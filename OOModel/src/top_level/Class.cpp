@@ -31,11 +31,12 @@ DEFINE_TYPED_LIST(OOModel::Class)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(Class, Model::ExtendableNode)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(Class, Model::ExtendableNode)
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(Class, StatementItem)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(Class, StatementItem)
 
 REGISTER_ATTRIBUTE(Class, name, Text, false, false, true)
 REGISTER_ATTRIBUTE(Class, baseClasses, TypedListOfExpression, false, false, true)
+REGISTER_ATTRIBUTE(Class, friends, TypedListOfExpression, false, false, true)
 REGISTER_ATTRIBUTE(Class, typeArguments, TypedListOfFormalTypeArgument, false, false, true)
 REGISTER_ATTRIBUTE(Class, classes, TypedListOfClass, false, false, true)
 REGISTER_ATTRIBUTE(Class, methods, TypedListOfMethod, false, false, true)
@@ -43,18 +44,36 @@ REGISTER_ATTRIBUTE(Class, fields, TypedListOfField, false, false, true)
 REGISTER_ATTRIBUTE(Class, enumerators, TypedListOfEnumerator, false, false, true)
 REGISTER_ATTRIBUTE(Class, visibility, Visibility, false, false, true)
 REGISTER_ATTRIBUTE(Class, annotations, StatementItemList, false, false, true)
+REGISTER_ATTRIBUTE(Class, cKind, Integer, false, false, true)
 
 Class::Class(const QString& name)
-: Model::ExtendableNode (nullptr, Class::getMetaData())
+: StatementItem (nullptr, Class::getMetaData())
 {
 	setName(name);
+	setConstructKind(ConstructKind::Class);
 }
 
 Class::Class(const QString& name, Visibility::VisibilityType vis)
-: Model::ExtendableNode (nullptr, Class::getMetaData())
+: StatementItem (nullptr, Class::getMetaData())
 {
 	setName(name);
 	setVisibility(vis);
+	setConstructKind(ConstructKind::Class);
+}
+
+Class::Class(const QString& name, ConstructKind kind)
+	: StatementItem (nullptr, Class::getMetaData())
+{
+	setName(name);
+	setConstructKind(kind);
+}
+
+Class::Class(const QString& name, Visibility::VisibilityType vis, ConstructKind kind)
+	: StatementItem (nullptr, Class::getMetaData())
+{
+	setName(name);
+	setVisibility(vis);
+	setConstructKind(kind);
 }
 
 bool Class::definesSymbol() const

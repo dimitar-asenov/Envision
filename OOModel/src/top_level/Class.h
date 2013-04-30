@@ -37,7 +37,7 @@
 #include "../elements/StatementItemList.h"
 #include "../expressions/Expression.h"
 
-#include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
+#include "../elements/StatementItem.h"
 #include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
 
@@ -45,23 +45,33 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Class)
 
 namespace OOModel {
 
-class OOMODEL_API Class : public Model::ExtendableNode
+class OOMODEL_API Class : public StatementItem
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Class)
 
 	ATTRIBUTE_OOP_NAME
 	ATTRIBUTE(Model::TypedList<Expression>, baseClasses, setBaseClasses)
+	ATTRIBUTE(Model::TypedList<Expression>, friends, setFriends)
 	ATTRIBUTE(Model::TypedList<FormalTypeArgument>, typeArguments, setTypeArguments)
 	ATTRIBUTE(Model::TypedList<Class>, classes, setClasses)
 	ATTRIBUTE(Model::TypedList<Method>, methods, setMethods)
 	ATTRIBUTE(Model::TypedList<Field>, fields, setFields)
 	ATTRIBUTE(Model::TypedList<Enumerator>, enumerators, setEnumerators)
+	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, cKind, setCKind, int)
 	ATTRIBUTE_OOP_VISIBILITY
 	ATTRIBUTE_OOP_ANNOTATIONS
 
 	public:
 		Class(const QString& name);
 		Class(const QString& name, Visibility::VisibilityType vis);
+
+		enum class ConstructKind : int {Class, Interface, Struct, Union, Enum};
+
+		Class(const QString& name, ConstructKind kind);
+		Class(const QString& name, Visibility::VisibilityType vis, ConstructKind kind);
+
+		ConstructKind constructKind() const;
+		void setConstructKind(const ConstructKind& kind);
 
 		virtual bool definesSymbol() const;
 		virtual const QString& symbolName() const;
@@ -70,5 +80,8 @@ class OOMODEL_API Class : public Model::ExtendableNode
 		virtual QList<Node*> findSymbols(const QRegExp& symbolExp, Node* source, FindSymbolMode mode,
 				bool exhaustAllScopes) override;
 };
+
+inline Class::ConstructKind Class::constructKind() const { return static_cast<ConstructKind> (cKind()); }
+inline void Class::setConstructKind(const ConstructKind& kind) { setCKind(static_cast<int> (kind)); }
 
 }
