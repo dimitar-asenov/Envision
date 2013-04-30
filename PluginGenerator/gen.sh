@@ -40,7 +40,7 @@ AUTHOR=$4
 DATE=`date +"$DATE_FORMAT"`
 
 PLUGIN_DIR=$WORKSPACE_DIR/$PLUGIN_NAME
-FILE_LIST="$PLUGIN_DIR/.project $PLUGIN_DIR/.cproject $PLUGIN_DIR/.gitignore $PLUGIN_DIR/*.* $PLUGIN_DIR/src/*.* $PLUGIN_DIR/test/*.*"
+FILE_LIST="$PLUGIN_DIR/eclipse.project $PLUGIN_DIR/eclipse.cproject $PLUGIN_DIR/.gitignore $PLUGIN_DIR/*.* $PLUGIN_DIR/src/*.* $PLUGIN_DIR/test/*.*"
 
 if [ -d $PLUGIN_DIR ]
 then
@@ -63,6 +63,8 @@ sed -i -e "s/AUTHOR/$AUTHOR/g" $FILE_LIST
 sed -i -e "s/DATE/$DATE/g" $FILE_LIST
 
 echo "Renaming files..."
+mv $PLUGIN_DIR/eclipse.project $PLUGIN_DIR/.project
+mv $PLUGIN_DIR/eclipse.cproject $PLUGIN_DIR/.cproject
 mv $PLUGIN_DIR/src/plugin_api.h $PLUGIN_DIR/src/${PLUGIN_NAME_LOWER}_api.h
 mv $PLUGIN_DIR/src/PluginException.h $PLUGIN_DIR/src/${PLUGIN_NAME}Exception.h
 mv $PLUGIN_DIR/src/plugin.h $PLUGIN_DIR/src/${PLUGIN_NAME_LOWER}.h
