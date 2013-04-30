@@ -34,7 +34,7 @@ namespace OOModel {
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(SwitchCase, Model::ExtendableNode)
 EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(SwitchCase, Model::ExtendableNode)
 
-REGISTER_ATTRIBUTE(SwitchCase, expr, Expression, false, false, true)
+REGISTER_ATTRIBUTE(SwitchCase, expr, Expression, false, true, true)
 REGISTER_ATTRIBUTE(SwitchCase, statement, StatementItemList, false, false, true)
 
 }
