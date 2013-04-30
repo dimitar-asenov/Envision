@@ -76,6 +76,18 @@ public:
     int aPublicFunction(){
         return 0;
     }
+    int aSwitchFunction(int k) {
+        switch(k) {
+        case 0:
+            return 10;
+        case 1==1:
+            return 20;
+        default:
+            k = 100;
+            break;
+        }
+        return k;
+    }
 
 private:
     class InAnotherClass{

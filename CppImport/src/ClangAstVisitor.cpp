@@ -325,6 +325,38 @@ bool ClangAstVisitor::TraverseForStmt(clang::ForStmt* forStmt)
 	return true;
 }
 
+bool ClangAstVisitor::TraverseSwitchStmt(clang::SwitchStmt* switchStmt)
+{
+	OOModel::SwitchStatement* ooSwitchStmt = new OOModel::SwitchStatement();
+	// save inbody var
+	bool inBody = inBody_;
+	inBody_ = false;
+	// traverse condition
+	TraverseStmt(switchStmt->getCond());
+	if(!ooExprStack_.empty())
+		ooSwitchStmt->setSwitchVar(ooExprStack_.pop());
+	// traverse the cases
+	clang::SwitchCase* switchCase = switchStmt->getSwitchCaseList();
+	TraverseStmt(switchCase);
+	if(!ooSwitchCaseStack_.empty())
+		ooSwitchStmt->cases()->append(ooSwitchCaseStack_.pop());
+	while(auto nextCase = switchCase->getNextSwitchCase())
+	{
+		TraverseStmt(nextCase);
+		if(!ooSwitchCaseStack_.empty())
+			// need to prepend because clang visits in reverse order
+			ooSwitchStmt->cases()->prepend(ooSwitchCaseStack_.pop());
+		switchCase = nextCase;
+	}
+	// restore inbody var
+	inBody_ = inBody;
+	if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
+		itemList->append(ooSwitchStmt);
+	else
+		log_->writeError(className_,QString("Uknown where to put switch Stmt"),QString("SwitchStmt"),switchStmt);
+	return true;
+}
+
 bool ClangAstVisitor::TraverseReturnStmt(clang::ReturnStmt* returnStmt)
 {
 	OOModel::ReturnStatement* ooReturn = new OOModel::ReturnStatement();
@@ -647,6 +679,38 @@ bool ClangAstVisitor::VisitMemberExpr(clang::MemberExpr* memberExpr)
 		ooRef->ref()->setName(QString::fromStdString(memberExpr->getMemberDecl()->getNameAsString()));
 		ooExprStack_.push(ooRef);
 	}
+	return true;
+}
+
+bool ClangAstVisitor::TraverseCaseStmt(clang::CaseStmt* caseStmt)
+{
+	OOModel::SwitchCase* ooSwitchCase = new OOModel::SwitchCase();
+	// traverse condition
+	TraverseStmt(caseStmt->getLHS());
+	if(!ooExprStack_.empty())
+		ooSwitchCase->setExpr(ooExprStack_.pop());
+	// no need to store inBody because stored by TraverseSwitchStmt()
+	inBody_ = true;
+	// traverse statements/body
+	ooStack_.push(ooSwitchCase->statement());
+	TraverseStmt(caseStmt->getSubStmt());
+	ooStack_.pop();
+	inBody_ = false;
+	ooSwitchCaseStack_.push(ooSwitchCase);
+	return true;
+}
+
+bool ClangAstVisitor::TraverseDefaultStmt(clang::DefaultStmt* defaultStmt)
+{
+	OOModel::SwitchCase* ooDefaultCase = new OOModel::SwitchCase();
+	// no need to store inBody because stored by TraverseSwitchStmt()
+	inBody_ = true;
+	// traverse statements/body
+	ooStack_.push(ooDefaultCase->statement());
+	TraverseStmt(defaultStmt->getSubStmt());
+	ooStack_.pop();
+	inBody_ = false;
+	ooSwitchCaseStack_.push(ooDefaultCase);
 	return true;
 }
 

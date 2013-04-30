@@ -47,6 +47,7 @@ class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 		bool TraverseConditionalOperator(clang::ConditionalOperator* conditionalOperator);
 		bool TraverseWhileStmt(clang::WhileStmt* whileStmt);
 		bool TraverseForStmt(clang::ForStmt* forStmt);
+		bool TraverseSwitchStmt(clang::SwitchStmt* switchStmt);
 		bool TraverseReturnStmt(clang::ReturnStmt* returnStmt);
 
 		bool TraverseStmt(clang::Stmt *S);
@@ -115,6 +116,9 @@ class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 		bool VisitCXXThisExpr(clang::CXXThisExpr* thisExpr);
 		bool VisitMemberExpr(clang::MemberExpr* memberExpr);
 
+		bool TraverseCaseStmt(clang::CaseStmt* caseStmt);
+		bool TraverseDefaultStmt(clang::DefaultStmt* defaultStmt);
+
 		bool TraverseInitListExpr(clang::InitListExpr* initListExpr);
 
 		bool VisitBreakStmt(clang::BreakStmt* breakStmt);
@@ -130,6 +134,7 @@ class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 
 		QStack<Model::Node*> ooStack_;
 		QStack<OOModel::Expression*> ooExprStack_;
+		QStack<OOModel::SwitchCase*> ooSwitchCaseStack_;
 
 		Model::Model* currentModel_{};
 		OOModel::Project* currentProject_{};
