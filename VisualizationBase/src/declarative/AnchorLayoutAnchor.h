@@ -29,7 +29,7 @@
 namespace Visualization {
 
 class Item;
-class Element;
+class FormElement;
 
 /**
  * An anchor is a constraint on how two elements are positioned relative to each other along one axis.
@@ -40,8 +40,8 @@ class Element;
 class AnchorLayoutAnchor {
 	public:
 		enum class Orientation : int {Auto, Horizontal, Vertical};
-		AnchorLayoutAnchor(float relativePlaceEdgePosition, Element* placeElement, int offset,
-				float relativeFixedEdgePosition, Element* fixedElement);
+		AnchorLayoutAnchor(float relativePlaceEdgePosition, FormElement* placeElement, int offset,
+				float relativeFixedEdgePosition, FormElement* fixedElement);
 		virtual ~AnchorLayoutAnchor();
 
 		/**
@@ -52,11 +52,11 @@ class AnchorLayoutAnchor {
 		/**
 		 * Returns the place element.
 		 */
-		Element* placeElement() const;
+		FormElement* placeElement() const;
 		/**
 		 * Returns the fixed element.
 		 */
-		Element* fixedElement() const;
+		FormElement* fixedElement() const;
 		/**
 		 * Returns whether this anchor depends on \a other, given the list of all anchors (\a allConstraints).
 		 */
@@ -76,17 +76,17 @@ class AnchorLayoutAnchor {
 
 	private:
 		float relativePlaceEdgePosition_{};
-		Element* placeElement_{};
+		FormElement* placeElement_{};
 		int offset_{};
 		float relativeFixedEdgePosition_{};
-		Element* fixedElement_{};
+		FormElement* fixedElement_{};
 };
 
-inline Element* AnchorLayoutAnchor::placeElement() const
+inline FormElement* AnchorLayoutAnchor::placeElement() const
 {
 	return placeElement_;
 }
-inline Element* AnchorLayoutAnchor::fixedElement() const
+inline FormElement* AnchorLayoutAnchor::fixedElement() const
 {
 	return fixedElement_;
 }

@@ -25,7 +25,7 @@
  **********************************************************************************************************************/
 
 #include "DeclarativeItemBase.h"
-#include "Element.h"
+#include "FormElement.h"
 #include "shapes/Shape.h"
 #include "shapes/ShapeStyle.h"
 
@@ -53,7 +53,7 @@ void DeclarativeItemBase::determineChildren()
 
 void DeclarativeItemBase::updateGeometry(int availableWidth, int availableHeight)
 {
-	Element* form = this->currentForm();
+	FormElement* form = this->currentForm();
 
 	if (hasShape())
 	{

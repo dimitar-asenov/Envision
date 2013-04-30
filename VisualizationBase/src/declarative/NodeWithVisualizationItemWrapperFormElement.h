@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "ItemWrapperElement.h"
+#include "ItemWrapperFormElement.h"
 
 namespace Visualization {
 
@@ -34,23 +34,23 @@ namespace Visualization {
  * This is an item wrapper element, with a specifiable style for the wrapped item, and a node to create the item with.
  */
 template <class ParentType, class VisualizationType>
-class NodeWithVisualizationItemWrapperElement : public ItemWrapperElement<ParentType, VisualizationType> {
-		FLUENT_ELEMENT_INTERFACE(NodeWithVisualizationItemWrapperElement);
+class NodeWithVisualizationItemWrapperFormElement : public ItemWrapperFormElement<ParentType, VisualizationType> {
+		FLUENT_ELEMENT_INTERFACE(NodeWithVisualizationItemWrapperFormElement);
 
 	public:
-		using ChildItem = typename ItemWrapperElement<ParentType, VisualizationType>::ChildItem;
+		using ChildItem = typename ItemWrapperFormElement<ParentType, VisualizationType>::ChildItem;
 		using GetStyleTypeFunction = std::function<const typename VisualizationType::StyleType* (ParentType* v)>;
 		using GetNodeTypeFunction = std::function<typename VisualizationType::NodeType* (ParentType* v)>;
 
-		NodeWithVisualizationItemWrapperElement(ChildItem item, GetNodeTypeFunction nodeGetter,
+		NodeWithVisualizationItemWrapperFormElement(ChildItem item, GetNodeTypeFunction nodeGetter,
 																GetStyleTypeFunction styleGetter);
-		virtual ~NodeWithVisualizationItemWrapperElement() {};
+		virtual ~NodeWithVisualizationItemWrapperFormElement() {};
 		virtual void synchronizeWithItem(Item* item) override;
 
 		/**
 		 * Sets if a wrapped item is created, even if there is no node to \a create. It is false by default.
 		 */
-		NodeWithVisualizationItemWrapperElement<ParentType,VisualizationType>* setCreateIfNoNode(bool create);
+		NodeWithVisualizationItemWrapperFormElement<ParentType,VisualizationType>* setCreateIfNoNode(bool create);
 
 	private:
 		GetNodeTypeFunction nodeGetter_;
@@ -59,13 +59,13 @@ class NodeWithVisualizationItemWrapperElement : public ItemWrapperElement<Parent
 };
 
 template <class ParentType, class VisualizationType>
-NodeWithVisualizationItemWrapperElement<ParentType, VisualizationType>::NodeWithVisualizationItemWrapperElement(
+NodeWithVisualizationItemWrapperFormElement<ParentType, VisualizationType>::NodeWithVisualizationItemWrapperFormElement(
 		ChildItem item, GetNodeTypeFunction nodeGetter, GetStyleTypeFunction styleGetter)
-: ItemWrapperElement<ParentType, VisualizationType>{item}, nodeGetter_{nodeGetter}, styleGetter_{styleGetter}
+: ItemWrapperFormElement<ParentType, VisualizationType>{item}, nodeGetter_{nodeGetter}, styleGetter_{styleGetter}
 {}
 
 template <class ParentType, class VisualizationType>
-void NodeWithVisualizationItemWrapperElement<ParentType, VisualizationType>::synchronizeWithItem(Item* item)
+void NodeWithVisualizationItemWrapperFormElement<ParentType, VisualizationType>::synchronizeWithItem(Item* item)
 {
 	auto& childItem = (static_cast<ParentType*>(item))->*this->item();
 	auto node = nodeGetter_(static_cast<ParentType*>(item));
@@ -89,8 +89,8 @@ void NodeWithVisualizationItemWrapperElement<ParentType, VisualizationType>::syn
 }
 
 template <class ParentType, class VisualizationType>
-inline NodeWithVisualizationItemWrapperElement<ParentType, VisualizationType>*
-NodeWithVisualizationItemWrapperElement<ParentType, VisualizationType>::setCreateIfNoNode(bool create)
+inline NodeWithVisualizationItemWrapperFormElement<ParentType, VisualizationType>*
+NodeWithVisualizationItemWrapperFormElement<ParentType, VisualizationType>::setCreateIfNoNode(bool create)
 {
 	createIfNoNode_ = create;
 	return this;

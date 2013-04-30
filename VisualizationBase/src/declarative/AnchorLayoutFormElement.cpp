@@ -24,27 +24,27 @@
  **
  **********************************************************************************************************************/
 
-#include "AnchorLayoutElement.h"
+#include "AnchorLayoutFormElement.h"
 
 #include "AnchorLayoutConstraintSolver.h"
 #include "../items/ItemRegion.h"
 
 namespace Visualization {
 
-AnchorLayoutElement::AnchorLayoutElement()
+AnchorLayoutFormElement::AnchorLayoutFormElement()
 : horizontalConstraints_{QList<AnchorLayoutAnchor*>()}, verticalConstraints_{QList<AnchorLayoutAnchor*>()},
   horizontalNeedsConstraintSolver_{false}, verticalNeedsConstraintSolver_{false},
   solver_{new AnchorLayoutConstraintSolver()}
 {}
 
-AnchorLayoutElement::~AnchorLayoutElement()
+AnchorLayoutFormElement::~AnchorLayoutFormElement()
 {
 	// elements were deleted by Element
 	SAFE_DELETE(solver_);
 }
 
-AnchorLayoutElement* AnchorLayoutElement::put(PlaceEdge placeEdge, Element* placeElement, AtEdge atEdge,
-		Element* fixedElement)
+AnchorLayoutFormElement* AnchorLayoutFormElement::put(PlaceEdge placeEdge, FormElement* placeElement, AtEdge atEdge,
+		FormElement* fixedElement)
 {
 	Edge edgeToBePlaced = static_cast<Edge>(placeEdge);
 	Edge fixedEdge = static_cast<Edge>(atEdge);
@@ -55,8 +55,8 @@ AnchorLayoutElement* AnchorLayoutElement::put(PlaceEdge placeEdge, Element* plac
 					fixedElement);
 }
 
-AnchorLayoutElement* AnchorLayoutElement::put(PlaceEdge placeEdge, Element* placeElement, int offset, FromEdge fromEdge,
-		Element* fixedElement)
+AnchorLayoutFormElement* AnchorLayoutFormElement::put(PlaceEdge placeEdge, FormElement* placeElement, int offset, FromEdge fromEdge,
+		FormElement* fixedElement)
 {
 	Edge edgeToBePlaced = static_cast<Edge>(placeEdge);
 	Edge fixedEdge = static_cast<Edge>(fromEdge);
@@ -70,8 +70,8 @@ AnchorLayoutElement* AnchorLayoutElement::put(PlaceEdge placeEdge, Element* plac
 					fixedElement);
 }
 
-AnchorLayoutElement* AnchorLayoutElement::put(PlaceEdge placeEdge, Element* placeElement, float relativeEdgePosition,
-		Element* fixedElement)
+AnchorLayoutFormElement* AnchorLayoutFormElement::put(PlaceEdge placeEdge, FormElement* placeElement, float relativeEdgePosition,
+		FormElement* fixedElement)
 {
 	Edge edgeToBePlaced = static_cast<Edge>(placeEdge);
 
@@ -81,10 +81,10 @@ AnchorLayoutElement* AnchorLayoutElement::put(PlaceEdge placeEdge, Element* plac
 	return put(orientation, relativePosition(edgeToBePlaced), placeElement, 0, relativeEdgePosition, fixedElement);
 }
 
-void AnchorLayoutElement::computeSize(Item* item, int /*availableWidth*/, int /*availableHeight*/)
+void AnchorLayoutFormElement::computeSize(Item* item, int /*availableWidth*/, int /*availableHeight*/)
 {
 	// compute size of each sub-element and set their position to (0, 0)
-	for (Element* element : children())
+	for (FormElement* element : children())
 	{
 		element->computeSize(item, 0, 0);
 		element->setPos(item, QPoint(0, 0));
@@ -102,7 +102,7 @@ void AnchorLayoutElement::computeSize(Item* item, int /*availableWidth*/, int /*
 	int adjustmentY = minY * -1 + topMargin();
 	int maxX = 0;
 	int maxY = 0;
-	for (Element* element : children())
+	for (FormElement* element : children())
 	{
 		element->setPos(item, QPoint(element->x(item) + adjustmentX, element->y(item) + adjustmentY));
 		if (element->xEnd(item) > maxX) maxX = element->xEnd(item);
@@ -111,14 +111,14 @@ void AnchorLayoutElement::computeSize(Item* item, int /*availableWidth*/, int /*
 	setSize(item, QSize(maxX + rightMargin(), maxY + bottomMargin()));
 }
 
-bool AnchorLayoutElement::sizeDependsOnParent(const Item* /*item*/) const
+bool AnchorLayoutFormElement::sizeDependsOnParent(const Item* /*item*/) const
 {
 	return false;
 }
 
-AnchorLayoutElement* AnchorLayoutElement::put(AnchorLayoutAnchor::Orientation orientation,
-		float relativePlaceEdgePosition, Element* placeElement, int offset, float relativeFixedEdgePosition,
-		Element* fixedElement)
+AnchorLayoutFormElement* AnchorLayoutFormElement::put(AnchorLayoutAnchor::Orientation orientation,
+		float relativePlaceEdgePosition, FormElement* placeElement, int offset, float relativeFixedEdgePosition,
+		FormElement* fixedElement)
 {
 	Q_ASSERT(orientation != AnchorLayoutAnchor::Orientation::Auto);
 
@@ -137,7 +137,7 @@ AnchorLayoutElement* AnchorLayoutElement::put(AnchorLayoutAnchor::Orientation or
 	return this;
 }
 
-AnchorLayoutAnchor::Orientation AnchorLayoutElement::orientation(Edge edge)
+AnchorLayoutAnchor::Orientation AnchorLayoutFormElement::orientation(Edge edge)
 {
 	switch (edge) {
 		case Edge::Left:
@@ -153,7 +153,7 @@ AnchorLayoutAnchor::Orientation AnchorLayoutElement::orientation(Edge edge)
 	}
 }
 
-AnchorLayoutAnchor::Orientation AnchorLayoutElement::inferOrientation(Edge firstEdge, Edge secondEdge)
+AnchorLayoutAnchor::Orientation AnchorLayoutFormElement::inferOrientation(Edge firstEdge, Edge secondEdge)
 {
 	AnchorLayoutAnchor::Orientation firstOrientation = orientation(firstEdge);
 	AnchorLayoutAnchor::Orientation secondOrientation = orientation(secondEdge);
@@ -171,7 +171,7 @@ AnchorLayoutAnchor::Orientation AnchorLayoutElement::inferOrientation(Edge first
 		return secondOrientation;
 }
 
-float AnchorLayoutElement::relativePosition(Edge edge)
+float AnchorLayoutFormElement::relativePosition(Edge edge)
 {
 	switch (edge) {
 		case Edge::Left:
@@ -185,16 +185,16 @@ float AnchorLayoutElement::relativePosition(Edge edge)
 	}
 }
 
-void AnchorLayoutElement::addConstraint(QList<AnchorLayoutAnchor*>& constraints,
-		AnchorLayoutAnchor::Orientation orientation, float relativePlaceEdgePosition, Element* placeElement,
-		int offset, float relativeFixedEdgePosition, Element* fixedElement)
+void AnchorLayoutFormElement::addConstraint(QList<AnchorLayoutAnchor*>& constraints,
+		AnchorLayoutAnchor::Orientation orientation, float relativePlaceEdgePosition, FormElement* placeElement,
+		int offset, float relativeFixedEdgePosition, FormElement* fixedElement)
 {
 	constraints.append(new AnchorLayoutAnchor(relativePlaceEdgePosition, placeElement, offset,
 																	relativeFixedEdgePosition, fixedElement));
 	sortConstraints(constraints, orientation);
 }
 
-int AnchorLayoutElement::placeElements(QList<AnchorLayoutAnchor*>& constraints,
+int AnchorLayoutFormElement::placeElements(QList<AnchorLayoutAnchor*>& constraints,
 		AnchorLayoutAnchor::Orientation orientation, Item* item)
 {
 	Q_ASSERT(orientation != AnchorLayoutAnchor::Orientation::Auto);
@@ -216,7 +216,7 @@ int AnchorLayoutElement::placeElements(QList<AnchorLayoutAnchor*>& constraints,
 	return minPos;
 }
 
-void AnchorLayoutElement::sortConstraints(QList<AnchorLayoutAnchor*>& constraints,
+void AnchorLayoutFormElement::sortConstraints(QList<AnchorLayoutAnchor*>& constraints,
 		AnchorLayoutAnchor::Orientation orientation)
 {
 	// check if this orientation does not already have circular dependencies (if so, don't sort)
@@ -227,7 +227,7 @@ void AnchorLayoutElement::sortConstraints(QList<AnchorLayoutAnchor*>& constraint
 		return;
 
 	QList<AnchorLayoutAnchor*> sortedConstraints;
-	QList<Element*> elementQueue;
+	QList<FormElement*> elementQueue;
 
 	// find all constraints which have a fixed node that depends on nothing
 	for (auto c1 : constraints)
@@ -284,7 +284,7 @@ void AnchorLayoutElement::sortConstraints(QList<AnchorLayoutAnchor*>& constraint
 	bool needsConstraintSolver = false;
 	for (int i=0; i<constraints.size(); ++i)
 	{
-		Element* lastPlaceElement = constraints.at(i)->placeElement();
+		FormElement* lastPlaceElement = constraints.at(i)->placeElement();
 		for (int j = 0; j < i; ++j)
 		{
 			if (constraints.at(j)->fixedElement() == lastPlaceElement)

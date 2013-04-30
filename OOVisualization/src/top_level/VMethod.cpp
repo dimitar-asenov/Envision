@@ -33,10 +33,10 @@
 #include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/items/Line.h"
 
-#include "VisualizationBase/src/declarative/AnchorLayoutElement.h"
-#include "VisualizationBase/src/declarative/GridLayoutElement.h"
-#include "VisualizationBase/src/declarative/SequentialLayoutElement.h"
-#include "VisualizationBase/src/declarative/ShapeElement.h"
+#include "VisualizationBase/src/declarative/AnchorLayoutFormElement.h"
+#include "VisualizationBase/src/declarative/GridLayoutFormElement.h"
+#include "VisualizationBase/src/declarative/SequentialLayoutFormElement.h"
+#include "VisualizationBase/src/declarative/ShapeFormElement.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -50,7 +50,7 @@ VMethod::VMethod(Item* parent, NodeType* node, const StyleType* style) : Super(p
 
 void VMethod::initializeForms()
 {
-	auto headerElement = (new GridLayoutElement())
+	auto headerElement = (new GridLayoutFormElement())
 		->setHorizontalSpacing(3)->setVerticalAlignment(LayoutStyle::Alignment::Center)->setColumnStretchFactor(4, 1)
 		->put(0, 0, item<Static, I>(&I::icon_, [](I* v){return &v->style()->icon();}))
 		->put(1, 0, item<VList, I>(&I::results_, [](I* v){return v->node()->results();},
@@ -81,7 +81,7 @@ void VMethod::initializeForms()
 		->put(4, 0, item<VList, I>(&I::arguments_, [](I* v){return v->node()->arguments();},
 											[](I* v){return &v->style()->arguments();}));
 
-	auto addonsElement = (new SequentialLayoutElement())
+	auto addonsElement = (new SequentialLayoutFormElement())
 								->setVertical()
 								->setListOfItems([](Item* i){return (static_cast<VMethod*>(i))->addOnItems().values();});
 
@@ -94,16 +94,16 @@ void VMethod::initializeForms()
 	auto bodyElement = item<VStatementItemList, I>(&I::body_, [](I* v){return v->node()->items();},
 											[](I* v){return &v->style()->body();});
 
-	auto contentElement = (new GridLayoutElement())
+	auto contentElement = (new GridLayoutFormElement())
 			->setVerticalSpacing(3)->setColumnStretchFactors(1)
 			->put(0, 0, addonsElement)
 			->put(0, 1, annotationsElement)
 			->put(0, 2, signatureLineElement)
 			->put(0, 3, bodyElement);
 
-	auto shapeElement = new ShapeElement();
+	auto shapeElement = new ShapeFormElement();
 
-	addForm((new AnchorLayoutElement())
+	addForm((new AnchorLayoutFormElement())
 			->put(TheLeftOf, shapeElement, AtLeftOf, headerElement)
 			->put(TheTopOf, shapeElement, AtCenterOf, headerElement)
 			->put(TheLeftOf, shapeElement, 10, FromLeftOf, contentElement)

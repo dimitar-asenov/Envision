@@ -26,23 +26,67 @@
 
 #pragma once
 
-#include "Element.h"
+#include "ItemWrapperFormElement.h"
+
+#include "ModelBase/src/nodes/Node.h"
+#include "../renderer/ModelRenderer.h"
 
 namespace Visualization {
 
 /**
- * The shape element is a placeholder element, stretching to encompass all the available space. It is used to put the
- * shape at a custom position.
+ * This is an item wrapper element, with a specifiable node to create the item with.
  */
-class ShapeElement : public Visualization::Element {
-	public:
-		ShapeElement();
-		virtual ~ShapeElement();
+template <class ParentType>
+class NodeItemWrapperFormElement : public ItemWrapperFormElement<ParentType> {
+		FLUENT_ELEMENT_INTERFACE(NodeItemWrapperFormElement);
 
-		virtual QList<Element*> shapeElements() override;
-		virtual void computeSize(Item* item, int availableWidth, int availableHeight) override;
-		virtual bool sizeDependsOnParent(const Item* item) const override;
-		virtual bool isEmpty(const Item* item) const override;
+	public:
+		using ChildItem = typename ItemWrapperFormElement<ParentType>::ChildItem;
+		using GetNodeFunction = std::function<Model::Node* (ParentType* v)>;
+
+		NodeItemWrapperFormElement(ChildItem item, GetNodeFunction nodeGetter);
+		virtual ~NodeItemWrapperFormElement() {};
+		virtual void synchronizeWithItem(Item* item) override;
+
+		/**
+		 * Sets if a wrapped item is created, even if there is no node to \a create. It is false by default.
+		 */
+		NodeItemWrapperFormElement<ParentType>* setCreateIfNoNode(bool create);
+
+	private:
+		GetNodeFunction nodeGetter_{};
+		bool createIfNoNode_{false};
 };
+
+template <class ParentType>
+NodeItemWrapperFormElement<ParentType>::NodeItemWrapperFormElement(ChildItem item, GetNodeFunction nodeGetter)
+: ItemWrapperFormElement<ParentType>{item}, nodeGetter_{nodeGetter}
+{}
+
+template <class ParentType>
+void NodeItemWrapperFormElement<ParentType>::synchronizeWithItem(Item* item)
+{
+	auto& childItem = (static_cast<ParentType*>(item))->*this->item();
+	auto node = nodeGetter_(static_cast<ParentType*>(item));
+
+	if(childItem && childItem->node() != node)
+	{
+		SAFE_DELETE_ITEM(childItem);
+		item->setUpdateNeeded(Item::StandardUpdate);
+	}
+
+	if(!childItem && (node || createIfNoNode_))
+	{
+		childItem = item->renderer()->render(item, node);
+		item->setUpdateNeeded(Item::StandardUpdate);
+	}
+}
+
+template <class ParentType>
+inline NodeItemWrapperFormElement<ParentType>* NodeItemWrapperFormElement<ParentType>::setCreateIfNoNode(bool create)
+{
+	createIfNoNode_ = create;
+	return this;
+}
 
 } /* namespace Visualization */

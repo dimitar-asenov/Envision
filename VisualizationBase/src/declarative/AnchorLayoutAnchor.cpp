@@ -26,12 +26,12 @@
 
 #include "AnchorLayoutAnchor.h"
 #include "../items/Item.h"
-#include "Element.h"
+#include "FormElement.h"
 
 namespace Visualization {
 
-AnchorLayoutAnchor::AnchorLayoutAnchor(float relativePlaceEdgePosition, Element* placeElement, int offset,
-		float relativeFixedEdgePosition, Element* fixedElement)
+AnchorLayoutAnchor::AnchorLayoutAnchor(float relativePlaceEdgePosition, FormElement* placeElement, int offset,
+		float relativeFixedEdgePosition, FormElement* fixedElement)
 : relativePlaceEdgePosition_{relativePlaceEdgePosition}, placeElement_{placeElement}, offset_{offset},
   relativeFixedEdgePosition_{relativeFixedEdgePosition}, fixedElement_{fixedElement}
 {}

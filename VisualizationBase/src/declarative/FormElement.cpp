@@ -24,13 +24,13 @@
  **
  **********************************************************************************************************************/
 
-#include "Element.h"
+#include "FormElement.h"
 #include "../items/Item.h"
 #include "../cursor/LayoutCursor.h"
 
 namespace Visualization {
 
-Element::~Element()
+FormElement::~FormElement()
 {
 	for (auto i : elementCache_.keys())
 		clearCache(i);
@@ -41,14 +41,14 @@ Element::~Element()
 	}
 }
 
-ElementCache& Element::getCache(const Item* item) const
+ElementCache& FormElement::getCache(const Item* item) const
 {
 	if (!elementCache_.contains(item))
 		elementCache_.insert(item, new ElementCache());
 	return *elementCache_.value(item);
 }
 
-void Element::clearCache(const Item* item)
+void FormElement::clearCache(const Item* item)
 {
 	if (elementCache_.contains(item))
 	{
@@ -58,21 +58,21 @@ void Element::clearCache(const Item* item)
 	}
 }
 
-QList<Element*> Element::shapeElements()
+QList<FormElement*> FormElement::shapeElements()
 {
-	auto elements = QList<Element*>();
+	auto elements = QList<FormElement*>();
 	for (auto c : children())
 		elements.append(c->shapeElements());
 	return elements;
 }
 
-void Element::setItemPositions(Item* item, int parentX, int parentY)
+void FormElement::setItemPositions(Item* item, int parentX, int parentY)
 {
-	for(Element* element : children())
+	for(FormElement* element : children())
 		element->setItemPositions(item, parentX + x(item), parentY + y(item));
 }
 
-QList<ItemRegion> Element::regions(Item* item, int parentX, int parentY)
+QList<ItemRegion> FormElement::regions(Item* item, int parentX, int parentY)
 {
 	QList<ItemRegion> allRegions;
 	for (auto element : children())
@@ -80,19 +80,19 @@ QList<ItemRegion> Element::regions(Item* item, int parentX, int parentY)
 	return allRegions;
 }
 
-void Element::synchronizeWithItem(Item* item)
+void FormElement::synchronizeWithItem(Item* item)
 {
-	for(Element* element : children())
+	for(FormElement* element : children())
 		if (element != nullptr) element->synchronizeWithItem(item);
 }
 
-void Element::destroyChildItems(Item* item)
+void FormElement::destroyChildItems(Item* item)
 {
 	clearCache(item);
-	for (Element* element : children()) element->destroyChildItems(item);
+	for (FormElement* element : children()) element->destroyChildItems(item);
 }
 
-bool Element::isEmpty(const Item* item) const
+bool FormElement::isEmpty(const Item* item) const
 {
 	for (auto e : children())
 		if (!e->isEmpty(item))
@@ -100,7 +100,7 @@ bool Element::isEmpty(const Item* item) const
 	return true;
 }
 
-bool Element::elementOrChildHasFocus(Item* item) const
+bool FormElement::elementOrChildHasFocus(Item* item) const
 {
 	auto cursor = item->scene()->mainCursor();
 	if (cursor && cursor->owner() == item)

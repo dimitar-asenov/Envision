@@ -27,7 +27,7 @@
 #pragma once
 
 #include "../visualizationbase_api.h"
-#include "LayoutElement.h"
+#include "LayoutFormElement.h"
 #include "../layouts/LayoutStyle.h"
 
 namespace Visualization {
@@ -42,75 +42,75 @@ namespace Visualization {
  *  - merging multiple cells into one
  *  - cursors, if the grid consists of exactly one row or column (not compatible with merging cells)
  */
-class GridLayoutElement : public LayoutElement {
-		FLUENT_ELEMENT_INTERFACE(GridLayoutElement);
+class GridLayoutFormElement : public LayoutFormElement {
+		FLUENT_ELEMENT_INTERFACE(GridLayoutFormElement);
 
 	public:
-		GridLayoutElement();
-		virtual ~GridLayoutElement();
+		GridLayoutFormElement();
+		virtual ~GridLayoutFormElement();
 
 		// Methods executable on element definition
 		/**
 		 * Puts the \a element at \a column and \a row in the grid.
 		 * Returns a pointer to this GridLayoutElement.
 		 */
-		GridLayoutElement* put(int column, int row, Element* element);
+		GridLayoutFormElement* put(int column, int row, FormElement* element);
 		/**
 		 * Sets the horizontal and the vertical \a spacing to the same value.
 		 * Returns a pointer to this GridLayoutElement.
 		 */
-		GridLayoutElement* setSpacing(int spacing);
+		GridLayoutFormElement* setSpacing(int spacing);
 		/**
 		 * Sets the horizontal and the vertical spacing to \a spaceBetweenColumns and \a spaceBetweenRows respectively.
 		 * Returns a pointer to this GridLayoutElement.
 		 */
-		GridLayoutElement* setSpacing(int spaceBetweenColumns, int spaceBetweenRows);
+		GridLayoutFormElement* setSpacing(int spaceBetweenColumns, int spaceBetweenRows);
 		/**
 		 * Sets the horizontal spacing to \a spaceBetweenColumns.
 		 * Returns a pointer to this GridLayoutElement.
 		 */
-		GridLayoutElement* setHorizontalSpacing(int spaceBetweenColumns);
+		GridLayoutFormElement* setHorizontalSpacing(int spaceBetweenColumns);
 		/**
 		 * Sets the vertical spacing to \a spaceBetweenRows.
 		 * Returns a pointer to this GridLayoutElement.
 		 */
-		GridLayoutElement* setVerticalSpacing(int spaceBetweenRows);
+		GridLayoutFormElement* setVerticalSpacing(int spaceBetweenRows);
 		/**
 		 * Sets the horizontal alignment to \a horizontalAlignment for all the cells in the grid.
 		 * Returns a pointer to this GridLayoutElement.
 		 */
-		GridLayoutElement* setHorizontalAlignment(LayoutStyle::Alignment horizontalAlignment);
+		GridLayoutFormElement* setHorizontalAlignment(LayoutStyle::Alignment horizontalAlignment);
 		/**
 		 * Sets the vertical alignment to \a verticalAlignment for all the cells in the grid.
 		 * Returns a pointer to this GridLayoutElement.
 		 */
-		GridLayoutElement* setVerticalAlignment(LayoutStyle::Alignment verticalAlignment);
+		GridLayoutFormElement* setVerticalAlignment(LayoutStyle::Alignment verticalAlignment);
 		/**
 		 * Sets the horizontal alignment to \a horizontalAlignment for all the cells in the specified \a column.
 		 * Returns a pointer to this GridLayoutElement.
 		 */
-		GridLayoutElement* setColumnHorizontalAlignment(int column, LayoutStyle::Alignment horizontalAlignment);
+		GridLayoutFormElement* setColumnHorizontalAlignment(int column, LayoutStyle::Alignment horizontalAlignment);
 		/**
 		 * Sets the vertical alignment to \a verticalAlignment for all the cells in the specified \a row.
 		 * Returns a pointer to this GridLayoutElement.
 		 */
-		GridLayoutElement* setRowVerticalAlignment(int row, LayoutStyle::Alignment verticalAlignment);
+		GridLayoutFormElement* setRowVerticalAlignment(int row, LayoutStyle::Alignment verticalAlignment);
 		/**
 		 * Sets the horizontal alignment to \a horizontalAlignment for the cell where the last element was added.
 		 * Returns a pointer to this GridLayoutElement.
 		 */
-		GridLayoutElement* setCellHorizontalAlignment(LayoutStyle::Alignment horizontalAlignment);
+		GridLayoutFormElement* setCellHorizontalAlignment(LayoutStyle::Alignment horizontalAlignment);
 		/**
 		 * Sets the vertical alignment to \a verticalAlignment for the cell where the last element was added.
 		 * Returns a pointer to this GridLayoutElement.
 		 */
-		GridLayoutElement* setCellVerticalAlignment(LayoutStyle::Alignment verticalAlignment);
+		GridLayoutFormElement* setCellVerticalAlignment(LayoutStyle::Alignment verticalAlignment);
 		/**
 		 * Sets the horizontal and vertical alignment to \a horizontalAlignment and \a verticalAlignment respectively for
 		 * the cell where the last element was added.
 		 * Returns a pointer to this GridLayoutElement.
 		 */
-		GridLayoutElement* setCellAlignment(LayoutStyle::Alignment horizontalAlignment,
+		GridLayoutFormElement* setCellAlignment(LayoutStyle::Alignment horizontalAlignment,
 														LayoutStyle::Alignment verticalAlignment);
 		/**
 		 * Set the cell spanning of the cell where the last element was added. This means \a columnSpan x \a rowSpan cells
@@ -118,35 +118,35 @@ class GridLayoutElement : public LayoutElement {
 		 * default cell has a \a columnSpan and \a rowSpan of one each.
 		 * Returns a pointer to this GridLayoutElement.
 		 */
-		GridLayoutElement* setCellSpanning(int columnSpan, int rowSpan);
+		GridLayoutFormElement* setCellSpanning(int columnSpan, int rowSpan);
 		/**
 		 * Sets the stretch factor of this \a column to \a stretchFactor.
 		 * The stretch factor determines, how much of the additionally available space this column gets if there is any.
 		 * By default this is 0, meaning the column does not stretch. If the stretch factor is bigger than zero, the
 		 * column gets a portion of additional space computed by (\a stretchFactor) / (sum of all column stretch factors).
 		 */
-		GridLayoutElement* setColumnStretchFactor(int column, float stretchFactor);
+		GridLayoutFormElement* setColumnStretchFactor(int column, float stretchFactor);
 		/**
 		 * Sets the stretch factor of all columns to \a stretchFactor.
 		 * The stretch factor determines, how much of the additionally available space each column gets if there is any.
 		 * By default this is 0, meaning the column does not stretch. If the stretch factor is bigger than zero, the
 		 * column gets a portion of additional space computed by (\a stretchFactor) / (sum of all column stretch factors).
 		 */
-		GridLayoutElement* setColumnStretchFactors(float stretchFactor);
+		GridLayoutFormElement* setColumnStretchFactors(float stretchFactor);
 		/**
 		 * Sets the stretch factor of this \a row to \a stretchFactor.
 		 * The stretch factor determines, how much of the additionally available space this row gets if there is any.
 		 * By default this is 0, meaning the row does not stretch. If the stretch factor is bigger than zero, the row
 		 * gets a portion of additional space computed by (\a stretchFactor) / (sum of all row stretch factors).
 		 */
-		GridLayoutElement* setRowStretchFactor(int row, float stretchFactor);
+		GridLayoutFormElement* setRowStretchFactor(int row, float stretchFactor);
 		/**
 		 * Sets the stretch factor of all rows to \a stretchFactor.
 		 * The stretch factor determines, how much of the additionally available space each row gets if there is any.
 		 * By default this is 0, meaning the row does not stretch. If the stretch factor is bigger than zero, the row
 		 * gets a portion of additional space computed by (\a stretchFactor) / (sum of all row stretch factors).
 		 */
-		GridLayoutElement* setRowStretchFactors(float stretchFactor);
+		GridLayoutFormElement* setRowStretchFactors(float stretchFactor);
 		/**
 		 * Sets the stretch factor of all columns and rows to \a stretchFactor.
 		 * The stretch factor determines, how much of the additionally available space each column/row gets if there is
@@ -154,28 +154,28 @@ class GridLayoutElement : public LayoutElement {
 		 * the column/row gets a portion of additional space computed by
 		 * (\a stretchFactor) / (sum of all column/row stretch factors).
 		 */
-		GridLayoutElement* setStretchFactors(float stretchFactor);
+		GridLayoutFormElement* setStretchFactors(float stretchFactor);
 		/**
 		 * Sets if the element has a cursor if it is empty to \a cursorWhenEmpty. Is false by default.
 		 * Also see SequentialLayoutStyle::hasCursorWhenEmpty().
 		 */
-		GridLayoutElement* setHasCursorWhenEmpty(bool cursorWhenEmpty);
+		GridLayoutFormElement* setHasCursorWhenEmpty(bool cursorWhenEmpty);
 		/**
 		 * Sets if the element does not have location equivalent cursors to \a notLocationEquivalent. Is false by
 		 * default.
 		 * Also see SequentialLayoutStyle::notLocationEquivalentCursors().
 		 */
-		GridLayoutElement* setNotLocationEquivalentCursors(bool notLocationEquivalent);
+		GridLayoutFormElement* setNotLocationEquivalentCursors(bool notLocationEquivalent);
 		/**
 		 * Sets if the element has no boundary cursors to \a noBoundaryCursors. Is false by default.
 		 * Also see SequentialLayoutStyle::noBoundaryCursorsInsideShape().
 		 */
-		GridLayoutElement* setNoBoudaryCursors(bool noBoundaryCursors);
+		GridLayoutFormElement* setNoBoudaryCursors(bool noBoundaryCursors);
 		/**
 		 * Sets if the element has no inner cursors to \a noInnerCursors. Is false by default.
 		 * Also see SequentialLayoutStyle::noInnerCursors().
 		 */
-		GridLayoutElement* setNoInnerCursors(bool noInnerCursors);
+		GridLayoutFormElement* setNoInnerCursors(bool noInnerCursors);
 
 		// Methods executable when items need to be rendered
 		virtual void computeSize(Item* item, int availableWidth, int availableHeight) override;
@@ -196,7 +196,7 @@ class GridLayoutElement : public LayoutElement {
 
 		QPair<int, int> lastCell_{};
 
-		QVector<QVector<Element*>> elementGrid_{};
+		QVector<QVector<FormElement*>> elementGrid_{};
 		QVector<QVector<QPair<int, int>>> spanGrid_{};
 
 		LayoutStyle::Alignment defaultHorizontalAlignment_{};
@@ -231,29 +231,29 @@ class GridLayoutElement : public LayoutElement {
 		void adjustCursorRegionToAvoidZeroSize(QRect& region, bool horizontal, bool first, bool last);
 };
 
-inline GridLayoutElement* GridLayoutElement::setSpacing(int spacing)
+inline GridLayoutFormElement* GridLayoutFormElement::setSpacing(int spacing)
 {
 	spaceBetweenRows_ = spacing;
 	spaceBetweenColumns_ = spacing;
 	return this;
 }
-inline GridLayoutElement* GridLayoutElement::setSpacing(int spaceBetweenColumns, int spaceBetweenRows)
+inline GridLayoutFormElement* GridLayoutFormElement::setSpacing(int spaceBetweenColumns, int spaceBetweenRows)
 {
 	spaceBetweenColumns_ = spaceBetweenColumns;
 	spaceBetweenRows_ = spaceBetweenRows;
 	return this;
 }
-inline GridLayoutElement* GridLayoutElement::setHorizontalSpacing(int spaceBetweenColumns)
+inline GridLayoutFormElement* GridLayoutFormElement::setHorizontalSpacing(int spaceBetweenColumns)
 {
 	spaceBetweenColumns_ = spaceBetweenColumns;
 	return this;
 }
-inline GridLayoutElement* GridLayoutElement::setVerticalSpacing(int spaceBetweenRows)
+inline GridLayoutFormElement* GridLayoutFormElement::setVerticalSpacing(int spaceBetweenRows)
 {
 	spaceBetweenRows_ = spaceBetweenRows;
 	return this;
 }
-inline GridLayoutElement* GridLayoutElement::setHorizontalAlignment(LayoutStyle::Alignment horizontalAlignment)
+inline GridLayoutFormElement* GridLayoutFormElement::setHorizontalAlignment(LayoutStyle::Alignment horizontalAlignment)
 {
 	defaultHorizontalAlignment_ = horizontalAlignment;
 	for (int x = 0; x < numColumns_; x++)
@@ -265,7 +265,7 @@ inline GridLayoutElement* GridLayoutElement::setHorizontalAlignment(LayoutStyle:
 
 	return this;
 }
-inline GridLayoutElement* GridLayoutElement::setVerticalAlignment(LayoutStyle::Alignment verticalAlignment)
+inline GridLayoutFormElement* GridLayoutFormElement::setVerticalAlignment(LayoutStyle::Alignment verticalAlignment)
 {
 	defaultVerticalAlignment_ = verticalAlignment;
 	for (int y = 0; y < numRows_; y++)
@@ -276,7 +276,7 @@ inline GridLayoutElement* GridLayoutElement::setVerticalAlignment(LayoutStyle::A
 	}
 	return this;
 }
-inline GridLayoutElement* GridLayoutElement::setColumnHorizontalAlignment(int column,
+inline GridLayoutFormElement* GridLayoutFormElement::setColumnHorizontalAlignment(int column,
 		LayoutStyle::Alignment horizontalAlignment)
 {
 	adjustSize(column, 0);
@@ -287,7 +287,7 @@ inline GridLayoutElement* GridLayoutElement::setColumnHorizontalAlignment(int co
 
 	return this;
 }
-inline GridLayoutElement* GridLayoutElement::setRowVerticalAlignment(int row, LayoutStyle::Alignment verticalAlignment)
+inline GridLayoutFormElement* GridLayoutFormElement::setRowVerticalAlignment(int row, LayoutStyle::Alignment verticalAlignment)
 {
 	adjustSize(0, row);
 
@@ -296,21 +296,21 @@ inline GridLayoutElement* GridLayoutElement::setRowVerticalAlignment(int row, La
 		cellVerticalAlignmentGrid_[x][row] = verticalAlignment;
 	return this;
 }
-inline GridLayoutElement* GridLayoutElement::setCellHorizontalAlignment(LayoutStyle::Alignment horizontalAlignment)
+inline GridLayoutFormElement* GridLayoutFormElement::setCellHorizontalAlignment(LayoutStyle::Alignment horizontalAlignment)
 {
 	int column = lastCell_.first;
 	int row = lastCell_.second;
 	cellHorizontalAlignmentGrid_[column][row] = horizontalAlignment;
 	return this;
 }
-inline GridLayoutElement* GridLayoutElement::setCellVerticalAlignment(LayoutStyle::Alignment verticalAlignment)
+inline GridLayoutFormElement* GridLayoutFormElement::setCellVerticalAlignment(LayoutStyle::Alignment verticalAlignment)
 {
 	int column = lastCell_.first;
 	int row = lastCell_.second;
 	cellVerticalAlignmentGrid_[column][row] = verticalAlignment;
 	return this;
 }
-inline GridLayoutElement* GridLayoutElement::setCellAlignment(LayoutStyle::Alignment horizontalAlignment,
+inline GridLayoutFormElement* GridLayoutFormElement::setCellAlignment(LayoutStyle::Alignment horizontalAlignment,
 																					LayoutStyle::Alignment verticalAlignment)
 {
 	int column = lastCell_.first;
@@ -319,7 +319,7 @@ inline GridLayoutElement* GridLayoutElement::setCellAlignment(LayoutStyle::Align
 	cellVerticalAlignmentGrid_[column][row] = verticalAlignment;
 	return this;
 }
-inline GridLayoutElement* GridLayoutElement::setCellSpanning(int columnSpan, int rowSpan)
+inline GridLayoutFormElement* GridLayoutFormElement::setCellSpanning(int columnSpan, int rowSpan)
 {
 	int column = lastCell_.first;
 	int row = lastCell_.second;
@@ -327,35 +327,35 @@ inline GridLayoutElement* GridLayoutElement::setCellSpanning(int columnSpan, int
 	spanGrid_[column][row] = QPair<int, int>(columnSpan, rowSpan);
 	return this;
 }
-inline GridLayoutElement* GridLayoutElement::setColumnStretchFactor(int column, float stretchFactor)
+inline GridLayoutFormElement* GridLayoutFormElement::setColumnStretchFactor(int column, float stretchFactor)
 {
 	adjustSize(column, 0);
 	columnStretchFactors_[column] = stretchFactor;
 	computeOverallStretchFactors();
 	return this;
 }
-inline GridLayoutElement* GridLayoutElement::setColumnStretchFactors(float stretchFactor)
+inline GridLayoutFormElement* GridLayoutFormElement::setColumnStretchFactors(float stretchFactor)
 {
 	defaultColumnStretchFactor_ = stretchFactor;
 	columnStretchFactors_ = QVector<float>(numColumns_, stretchFactor);
 	computeOverallStretchFactors();
 	return this;
 }
-inline GridLayoutElement* GridLayoutElement::setRowStretchFactor(int row, float stretchFactor)
+inline GridLayoutFormElement* GridLayoutFormElement::setRowStretchFactor(int row, float stretchFactor)
 {
 	adjustSize(0, row);
 	rowStretchFactors_[row] = stretchFactor;
 	computeOverallStretchFactors();
 	return this;
 }
-inline GridLayoutElement* GridLayoutElement::setRowStretchFactors(float stretchFactor)
+inline GridLayoutFormElement* GridLayoutFormElement::setRowStretchFactors(float stretchFactor)
 {
 	defaultRowStretchFactor_ = stretchFactor;
 	rowStretchFactors_ = QVector<float>(numRows_, stretchFactor);
 	computeOverallStretchFactors();
 	return this;
 }
-inline GridLayoutElement* GridLayoutElement::setStretchFactors(float stretchFactor)
+inline GridLayoutFormElement* GridLayoutFormElement::setStretchFactors(float stretchFactor)
 {
 	defaultColumnStretchFactor_ = stretchFactor;
 	defaultRowStretchFactor_ = stretchFactor;
@@ -364,23 +364,23 @@ inline GridLayoutElement* GridLayoutElement::setStretchFactors(float stretchFact
 	computeOverallStretchFactors();
 	return this;
 }
-inline GridLayoutElement* GridLayoutElement::setHasCursorWhenEmpty(bool cursorWhenEmpty)
+inline GridLayoutFormElement* GridLayoutFormElement::setHasCursorWhenEmpty(bool cursorWhenEmpty)
 {
 	hasCursorWhenEmpty_ = cursorWhenEmpty;
 	return this;
 }
-inline GridLayoutElement* GridLayoutElement::setNotLocationEquivalentCursors(
+inline GridLayoutFormElement* GridLayoutFormElement::setNotLocationEquivalentCursors(
 		bool notLocationEquivalentCursors)
 {
 	notLocationEquivalentCursors_ = notLocationEquivalentCursors;
 	return this;
 }
-inline GridLayoutElement* GridLayoutElement::setNoBoudaryCursors(bool noBoundaryCursors)
+inline GridLayoutFormElement* GridLayoutFormElement::setNoBoudaryCursors(bool noBoundaryCursors)
 {
 	noBoundaryCursors_ = noBoundaryCursors;
 	return this;
 }
-inline GridLayoutElement* GridLayoutElement::setNoInnerCursors(bool noInnerCursors)
+inline GridLayoutFormElement* GridLayoutFormElement::setNoInnerCursors(bool noInnerCursors)
 {
 	noInnerCursors_ = noInnerCursors;
 	return this;

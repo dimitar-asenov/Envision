@@ -30,9 +30,9 @@
 //#include "VisualizationBase/src/layouts/PanelBorderLayout.h"
 //#include "VisualizationBase/src/layouts/SequentialLayout.h"
 #include "VisualizationBase/src/items/Static.h"
-#include "VisualizationBase/src/declarative/GridLayoutElement.h"
-#include "VisualizationBase/src/declarative/AnchorLayoutElement.h"
-#include "VisualizationBase/src/declarative/ShapeElement.h"
+#include "VisualizationBase/src/declarative/GridLayoutFormElement.h"
+#include "VisualizationBase/src/declarative/AnchorLayoutFormElement.h"
+#include "VisualizationBase/src/declarative/ShapeFormElement.h"
 #include "VisualizationBase/src/items/NodeWrapper.h"
 
 using namespace Visualization;
@@ -61,7 +61,7 @@ void VIfStatement::updateGeometry(int availableWidth, int availableHeight)
 
 void VIfStatement::initializeForms()
 {
-	auto header = (new GridLayoutElement())
+	auto header = (new GridLayoutFormElement())
 			->setColumnStretchFactor(1, 1)->setVerticalAlignment(LayoutStyle::Alignment::Center)
 			->setHorizontalSpacing(3)
 			->put(0, 0, item<Static, I>(&I::icon_, [](I* v){return &v->style()->icon();}))
@@ -74,13 +74,13 @@ void VIfStatement::initializeForms()
 	auto elseBranch = item<VStatementItemList, I>(&I::elseBranch_, [](I* v){return v->node()->elseBranch();},
 																[](I* v){return &v->style()->elseBranch();});
 
-	auto shapeElement = new ShapeElement();
+	auto shapeElement = new ShapeFormElement();
 
 	// Form 0: then and else branch arranged horizontally
-	auto contentElement = (new GridLayoutElement())->setColumnStretchFactor(1, 1)->setRowStretchFactor(0, 1)
+	auto contentElement = (new GridLayoutFormElement())->setColumnStretchFactor(1, 1)->setRowStretchFactor(0, 1)
 			->put(0, 0, thenBranch)->put(1, 0, elseBranch);
 
-	addForm((new AnchorLayoutElement())
+	addForm((new AnchorLayoutFormElement())
 			->put(TheLeftOf, header, AtLeftOf, contentElement)
 			->put(TheLeftOf, shapeElement, 2, FromLeftOf, contentElement)
 			->put(TheRightOf, header, AtRightOf, contentElement)
@@ -90,10 +90,10 @@ void VIfStatement::initializeForms()
 			->put(TheBottomOf, shapeElement, 2, FromBottomOf, contentElement));
 
 	// Form 1: then and else branch arranged vertically
-	contentElement = (new GridLayoutElement())->setColumnStretchFactor(0, 1)->setRowStretchFactor(1, 1)
+	contentElement = (new GridLayoutFormElement())->setColumnStretchFactor(0, 1)->setRowStretchFactor(1, 1)
 			->put(0, 0, thenBranch)->put(0, 1, elseBranch);
 
-	addForm((new AnchorLayoutElement())
+	addForm((new AnchorLayoutFormElement())
 			->put(TheLeftOf, header, AtLeftOf, contentElement)
 			->put(TheLeftOf, shapeElement, 2, FromLeftOf, contentElement)
 			->put(TheRightOf, header, AtRightOf, contentElement)

@@ -28,7 +28,6 @@
 #define VisualizationBase_DECLARATIVETEST_H_
 
 #include "../src/declarative/DeclarativeItem.h"
-#include "../src/declarative/ItemWrapperElement.h"
 #include "../src/items/SymbolStyle.h"
 
 namespace Model {

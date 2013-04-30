@@ -24,20 +24,20 @@
  **
  **********************************************************************************************************************/
 
-#include "GridLayoutElement.h"
+#include "GridLayoutFormElement.h"
 
 #include "../items/ItemRegion.h"
 #include "../cursor/LayoutCursor.h"
 
 namespace Visualization {
 
-GridLayoutElement::GridLayoutElement()
+GridLayoutFormElement::GridLayoutFormElement()
 : numColumns_(1), numRows_(1), spaceBetweenColumns_{}, spaceBetweenRows_{}, lastCell_{QPair<int, int>(0, 0)},
   defaultHorizontalAlignment_{LayoutStyle::Alignment::Left}, defaultVerticalAlignment_{LayoutStyle::Alignment::Top},
   defaultColumnStretchFactor_{0}, defaultRowStretchFactor_{0}
 {
 	// initialize element grid
-	elementGrid_ = QVector<QVector<Element*>>(numColumns_, QVector<Element*>(numRows_));
+	elementGrid_ = QVector<QVector<FormElement*>>(numColumns_, QVector<FormElement*>(numRows_));
 
 	// initialize span grid
 	spanGrid_ = QVector<QVector<QPair<int, int>>>(numColumns_,QVector<QPair<int, int>>(numRows_, QPair<int, int>(1, 1)));
@@ -56,12 +56,12 @@ GridLayoutElement::GridLayoutElement()
 	computeOverallStretchFactors();
 }
 
-GridLayoutElement::~GridLayoutElement()
+GridLayoutFormElement::~GridLayoutFormElement()
 {
 	// elements were deleted by Element
 }
 
-GridLayoutElement* GridLayoutElement::put(int column, int row, Element* element)
+GridLayoutFormElement* GridLayoutFormElement::put(int column, int row, FormElement* element)
 {
 	adjustSize(column, row);
 	lastCell_ = QPair<int, int>(column, row);
@@ -74,7 +74,7 @@ GridLayoutElement* GridLayoutElement::put(int column, int row, Element* element)
 	return this;
 }
 
-void GridLayoutElement::computeSize(Item* item, int availableWidth, int availableHeight)
+void GridLayoutFormElement::computeSize(Item* item, int availableWidth, int availableHeight)
 {
 	// Compute default sizes of all the elements
 	// Get the widest and tallest items (without merged cells)
@@ -86,7 +86,7 @@ void GridLayoutElement::computeSize(Item* item, int availableWidth, int availabl
 		for(int y=0; y<numRows_; y++)
 			if (elementGrid_[x][y] != nullptr)
 			{
-				Element* element = elementGrid_[x][y];
+				FormElement* element = elementGrid_[x][y];
 				QPair<int, int> cellSpan = spanGrid_[x][y];
 				element->computeSize(item, 0, 0); // any additional space is distributed later
 				if (cellSpan.first == 1)
@@ -195,7 +195,7 @@ void GridLayoutElement::computeSize(Item* item, int availableWidth, int availabl
 		for(int y=0; y<numRows_; y++)
 			if (elementGrid_[x][y] != nullptr && elementGrid_[x][y]->sizeDependsOnParent(item))
 			{
-				Element* element = elementGrid_[x][y];
+				FormElement* element = elementGrid_[x][y];
 				QPair<int, int> cellSpan = spanGrid_[x][y];
 				if (cellSpan.first == 1 && cellSpan.second == 1)
 					element->computeSize(item, widestInColumn[x], tallestInRow[y]);
@@ -284,12 +284,12 @@ void GridLayoutElement::computeSize(Item* item, int availableWidth, int availabl
 	}
 }
 
-bool GridLayoutElement::sizeDependsOnParent(const Item*) const
+bool GridLayoutFormElement::sizeDependsOnParent(const Item*) const
 {
 	return overallColumnStretchFactor_ > 0 || overallRowStretchFactor_ > 0;
 }
 
-QList<ItemRegion> GridLayoutElement::regions(Item* item, int parentX, int parentY)
+QList<ItemRegion> GridLayoutFormElement::regions(Item* item, int parentX, int parentY)
 {
 	QList<ItemRegion> allRegions;
 
@@ -388,7 +388,7 @@ QList<ItemRegion> GridLayoutElement::regions(Item* item, int parentX, int parent
 	return allRegions;
 }
 
-void GridLayoutElement::computeOverallStretchFactors()
+void GridLayoutFormElement::computeOverallStretchFactors()
 {
 	overallColumnStretchFactor_ = 0;
 	for(auto stretchFactor : columnStretchFactors_) overallColumnStretchFactor_ += stretchFactor;
@@ -397,7 +397,7 @@ void GridLayoutElement::computeOverallStretchFactors()
 	for(auto stretchFactor : rowStretchFactors_) overallRowStretchFactor_ += stretchFactor;
 }
 
-void GridLayoutElement::adjustSize(int containColumn, int containRow)
+void GridLayoutFormElement::adjustSize(int containColumn, int containRow)
 {
 	if (containColumn >= numColumns_ || containRow >= numRows_)
 	{
@@ -406,7 +406,7 @@ void GridLayoutElement::adjustSize(int containColumn, int containRow)
 		int newNumRows = (containRow < numRows_) ? numRows_ : containRow + 1;
 
 		// adjust element grid
-		auto newElementGrid = QVector<QVector<Element*>>(newNumColumns, QVector<Element*>(newNumRows, nullptr));
+		auto newElementGrid = QVector<QVector<FormElement*>>(newNumColumns, QVector<FormElement*>(newNumRows, nullptr));
 		for (int x=0; x<numColumns_; x++)
 			for (int y=0; y<numRows_; y++)
 				newElementGrid[x][y] = elementGrid_[x][y];
@@ -482,14 +482,14 @@ void GridLayoutElement::adjustSize(int containColumn, int containRow)
 	}
 }
 
-inline void GridLayoutElement::adjustCursorRegionToAvoidZeroSize(QRect& region, bool horizontal, bool first, bool last)
+inline void GridLayoutFormElement::adjustCursorRegionToAvoidZeroSize(QRect& region, bool horizontal, bool first, bool last)
 {
 	// Make sure there is at least some space for the cursor Region.
 	if (horizontal && region.width() == 0) region.adjust((first?0:-1), 0, (last?0:1), 0);
 	if (!horizontal && region.height() == 0 ) region.adjust(0, (first?0:-1), 0, (last?0:1));
 }
 
-int GridLayoutElement::focusedElementIndex(Item* item) const
+int GridLayoutFormElement::focusedElementIndex(Item* item) const
 {
 	if (numColumns_ == 1)
 		for (int y=0; y<numRows_; ++y)

@@ -27,7 +27,7 @@
 #pragma once
 
 #include "../visualizationbase_api.h"
-#include "LayoutElement.h"
+#include "LayoutFormElement.h"
 #include "AnchorLayoutAnchor.h"
 #include "Enumerations.h"
 
@@ -36,12 +36,12 @@ namespace Visualization {
 
 class AnchorLayoutConstraintSolver;
 
-class AnchorLayoutElement : public LayoutElement {
-		FLUENT_ELEMENT_INTERFACE(AnchorLayoutElement);
+class AnchorLayoutFormElement : public LayoutFormElement {
+		FLUENT_ELEMENT_INTERFACE(AnchorLayoutFormElement);
 
 	public:
-		AnchorLayoutElement();
-		virtual ~AnchorLayoutElement();
+		AnchorLayoutFormElement();
+		virtual ~AnchorLayoutFormElement();
 
 		// Methods executable on element definition
 		/**
@@ -49,21 +49,21 @@ class AnchorLayoutElement : public LayoutElement {
 		 * \a fixedElement.
 		 * Returns a pointer to this AnchorLayoutElement.
 		 */
-		AnchorLayoutElement* put(PlaceEdge placeEdge, Element* placeElement, AtEdge atEdge, Element* fixedElement);
+		AnchorLayoutFormElement* put(PlaceEdge placeEdge, FormElement* placeElement, AtEdge atEdge, FormElement* fixedElement);
 		/**
 		 * Add an anchor to the layout, placing the \a placeEdge of the \a placeElement \a offset units from the
 		 * \a fromEdge of the \a fixedElement.
 		 * Returns a pointer to this AnchorLayoutElement.
 		 */
-		AnchorLayoutElement* put(PlaceEdge placeEdge, Element* placeElement, int offset, FromEdge fromEdge,
-											Element* fixedElement);
+		AnchorLayoutFormElement* put(PlaceEdge placeEdge, FormElement* placeElement, int offset, FromEdge fromEdge,
+											FormElement* fixedElement);
 		/**
 		 * Add an anchor to the layout, placing the \a placeEdge of the \a placeElement at the position
 		 * \a fixedElement.position + \a fixedElement.size * \a relativeEdge in the axis given by the \a placeEdge.
 		 * Returns a pointer to this AnchorLayoutElement.
 		 */
-		AnchorLayoutElement* put(PlaceEdge placeEdge, Element* placeElement, float relativeEdgePosition,
-											Element* fixedElement);
+		AnchorLayoutFormElement* put(PlaceEdge placeEdge, FormElement* placeElement, float relativeEdgePosition,
+											FormElement* fixedElement);
 
 		// Methods executable when items need to be rendered
 		virtual void computeSize(Item* item, int availableWidth, int availableHeight) override;
@@ -77,8 +77,8 @@ class AnchorLayoutElement : public LayoutElement {
 		 * of the \a fixedElement.
 		 * Returns a pointer to this AnchorLayoutElement.
 		 */
-		AnchorLayoutElement* put(AnchorLayoutAnchor::Orientation orientation, float relativePlaceEdgePosition,
-				Element* placeElement, int offset, float relativeFixedEdgePosition, Element* fixedElement);
+		AnchorLayoutFormElement* put(AnchorLayoutAnchor::Orientation orientation, float relativePlaceEdgePosition,
+				FormElement* placeElement, int offset, float relativeFixedEdgePosition, FormElement* fixedElement);
 		/**
 		 * Returns the orientation of the given \a edge. (E.g. horizontal for left, vertical for top, ...)
 		 * If the orientation is not given for this \a edge (i.e. it is center), returns Orientation::Auto.
@@ -100,8 +100,8 @@ class AnchorLayoutElement : public LayoutElement {
 		 * the \a offset, the \a relativeFixedEdgePosition, and the \a fixedElement to the list of \a constraints.
 		 */
 		void addConstraint(QList<AnchorLayoutAnchor*>& constraints, AnchorLayoutAnchor::Orientation orientation,
-				float relativePlaceEdgePosition, Element* placeElement, int offset, float relativeFixedEdgePosition,
-				Element* fixedElement);
+				float relativePlaceEdgePosition, FormElement* placeElement, int offset, float relativeFixedEdgePosition,
+				FormElement* fixedElement);
 		/**
 		 * Computes the positions in the \a orientation of all the elements for this \a item, using the list of
 		 * \a constraints.

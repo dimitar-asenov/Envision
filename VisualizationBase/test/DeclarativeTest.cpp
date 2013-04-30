@@ -30,10 +30,10 @@
 #include "../src/items/TestBox.h"
 #include "../src/items/VExtendable.h"
 #include "ModelBase/src/test_nodes/BinaryNode.h"
-#include "../src/declarative/GridLayoutElement.h"
-#include "../src/declarative/AnchorLayoutElement.h"
-#include "../src/declarative/SequentialLayoutElement.h"
-#include "../src/declarative/ShapeElement.h"
+#include "../src/declarative/GridLayoutFormElement.h"
+#include "../src/declarative/AnchorLayoutFormElement.h"
+#include "../src/declarative/SequentialLayoutFormElement.h"
+#include "../src/declarative/ShapeFormElement.h"
 
 namespace Visualization {
 
@@ -49,14 +49,14 @@ DeclarativeTest::DeclarativeTest(Item* parent, TestNodes::BinaryNode* node, Mode
 
 void DeclarativeTest::initializeForms()
 {
-	Element* testItemElement = item<Symbol, I>(&I::testItem_, [](I*){return itemStyles().get();});
-	Element* testNodeItemGeneralElement = item<I>(&I::testNodeItemGeneral_, [](I* v){return v->testNode_;});
-	Element* testNodeItemElement = item<VExtendable,I>(&I::testNodeItem_, [](I* v){return v->testNode_;},
+	FormElement* testItemElement = item<Symbol, I>(&I::testItem_, [](I*){return itemStyles().get();});
+	FormElement* testNodeItemGeneralElement = item<I>(&I::testNodeItemGeneral_, [](I* v){return v->testNode_;});
+	FormElement* testNodeItemElement = item<VExtendable,I>(&I::testNodeItem_, [](I* v){return v->testNode_;},
 																		[](I*){return VExtendable::itemStyles().get();});
-	Element* firstElement = item<I>(&I::firstItem_, [](I* v){return v->firstNode_;});
-	Element* secondElement = item<I>(&I::secondItem_, [](I* v){return v->secondNode_;});
-	Element* thirdElement = item<I>(&I::thirdItem_, [](I* v){return v->thirdNode_;});
-	Element* fourthElement = item<I>(&I::fourthItem_, [](I* v){return v->fourthNode_;});
+	FormElement* firstElement = item<I>(&I::firstItem_, [](I* v){return v->firstNode_;});
+	FormElement* secondElement = item<I>(&I::secondItem_, [](I* v){return v->secondNode_;});
+	FormElement* thirdElement = item<I>(&I::thirdItem_, [](I* v){return v->thirdNode_;});
+	FormElement* fourthElement = item<I>(&I::fourthItem_, [](I* v){return v->fourthNode_;});
 
 	// Test 0: VisualizationItemWrapperElement
 	addForm(testItemElement);
@@ -68,23 +68,23 @@ void DeclarativeTest::initializeForms()
 	addForm(testNodeItemElement);
 
 	// Test 3: GridLayoutElement
-	addForm((new GridLayoutElement())
+	addForm((new GridLayoutFormElement())
 				->setVerticalAlignment(LayoutStyle::Alignment::Center)
 				->setHorizontalAlignment(LayoutStyle::Alignment::Right)
 				->put(0, 0, firstElement)
 				->put(0, 1, testNodeItemElement)
-				->put(1, 1, (new GridLayoutElement())
+				->put(1, 1, (new GridLayoutFormElement())
 									->put(0, 0, secondElement)
 									->put(1, 1, thirdElement))
 				->put(2, 0, fourthElement));
 
 	// Test 4: GridLayoutElement with merged cells
-	addForm((new GridLayoutElement())
+	addForm((new GridLayoutFormElement())
 				->setVerticalAlignment(LayoutStyle::Alignment::Center)
 				->setHorizontalAlignment(LayoutStyle::Alignment::Center)
 				->setColumnStretchFactor(1, 1)
 				->setRowStretchFactors(1)
-				->put(0, 0, (new GridLayoutElement())
+				->put(0, 0, (new GridLayoutFormElement())
 									->setHorizontalSpacing(10)
 									->put(0, 0, firstElement)
 									->put(1, 0, secondElement)
@@ -96,13 +96,13 @@ void DeclarativeTest::initializeForms()
 				);
 
 	// Test 5: Size dependencies inside the grid & alignment
-	addForm((new GridLayoutElement())
+	addForm((new GridLayoutFormElement())
 				->setVerticalAlignment(LayoutStyle::Alignment::Center)
-				->put(0, 0, (new GridLayoutElement())
+				->put(0, 0, (new GridLayoutFormElement())
 									->setHorizontalSpacing(300)
 									->put(0, 0, firstElement)
 									->put(1, 0, secondElement)))
-				->put(0, 1, (new GridLayoutElement())
+				->put(0, 1, (new GridLayoutFormElement())
 									->setColumnStretchFactor(1, 1)
 									->put(0, 0, testNodeItemElement)
 									->put(2, 0, thirdElement)
@@ -111,7 +111,7 @@ void DeclarativeTest::initializeForms()
 				->setCellSpanning(1, 2);
 
 	// Test 6: Anchor layout
-	addForm((new AnchorLayoutElement())
+	addForm((new AnchorLayoutFormElement())
 				->put(TheBottomOf, firstElement, 20, FromTopOf, testNodeItemElement)
 				->put(TheLeftOf, firstElement, AtLeftOf, testNodeItemElement)
 				->put(TheVCenterOf, secondElement, AtCenterOf, firstElement)
@@ -123,7 +123,7 @@ void DeclarativeTest::initializeForms()
 				);
 
 	// Test 7: Anchor Layout with stretching Elements, in order specification
-	Element* verticalGrid1 = (new GridLayoutElement)
+	FormElement* verticalGrid1 = (new GridLayoutFormElement)
 										->setRowStretchFactors(1)
 										->put(0, 0, firstElement)
 										->setCellVerticalAlignment(LayoutStyle::Alignment::Top)
@@ -131,20 +131,20 @@ void DeclarativeTest::initializeForms()
 										->setCellVerticalAlignment(LayoutStyle::Alignment::Center)
 										->put(0, 2, thirdElement)
 										->setCellVerticalAlignment(LayoutStyle::Alignment::Bottom);
-	Element* verticalGrid2 = (new GridLayoutElement)
+	FormElement* verticalGrid2 = (new GridLayoutFormElement)
 										->setRowStretchFactors(1)
 										->put(0, 0, fourthElement)
 										->setCellVerticalAlignment(LayoutStyle::Alignment::Top)
 										->put(0, 1, testNodeItemElement)
 										->setCellVerticalAlignment(LayoutStyle::Alignment::Bottom);
-	addForm((new AnchorLayoutElement())
+	addForm((new AnchorLayoutFormElement())
 				->put(TheTopOf, verticalGrid1, AtTopOf, verticalGrid2)
 				->put(TheBottomOf, verticalGrid1, AtBottomOf, verticalGrid2)
 				->put(TheLeftOf, verticalGrid1, 20, FromRightOf, verticalGrid2));
 
 	// Test 8: Anchor Layout out of order specification with more elements, circular dependencies + shape element test
-	auto shapeElement = new ShapeElement();
-	addForm((new AnchorLayoutElement())
+	auto shapeElement = new ShapeFormElement();
+	addForm((new AnchorLayoutFormElement())
 				// arrange them on top of each other
 				->put(TheTopOf, firstElement, 20, FromBottomOf, secondElement)
 				->put(TheTopOf, secondElement, 20, FromBottomOf, thirdElement)
@@ -163,16 +163,16 @@ void DeclarativeTest::initializeForms()
 				->put(TheBottomOf, shapeElement, 10, FromBottomOf, secondElement));
 
 	// Test 9: Test sequential layout
-	Element* horizontalSequential = (new SequentialLayoutElement())
+	FormElement* horizontalSequential = (new SequentialLayoutFormElement())
 			->setSpaceBetweenElements(5)
 			->setListOfItems([](Item*){return QList<Item*>{new TestBox("a"), new TestBox("b"), new TestBox("cde")};});
-	Element* verticalSequential = (new SequentialLayoutElement())
+	FormElement* verticalSequential = (new SequentialLayoutFormElement())
 			->setSpaceBetweenElements(5)
 			->setListOfNodes([](Item*){return QList<Model::Node*>{new TestBoxNode("dfsdfs", true),
 																					new TestBoxNode("sfsdfsdf")};})
 			->setVertical();
 
-	addForm((new AnchorLayoutElement())
+	addForm((new AnchorLayoutFormElement())
 			->put(TheLeftOf, horizontalSequential, 20, FromRightOf, verticalSequential));
 }
 

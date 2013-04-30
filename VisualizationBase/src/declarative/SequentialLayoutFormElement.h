@@ -27,7 +27,7 @@
 #pragma once
 
 #include "../visualizationbase_api.h"
-#include "LayoutElement.h"
+#include "LayoutFormElement.h"
 #include "../layouts/LayoutStyle.h"
 
 namespace Model {
@@ -37,7 +37,7 @@ class List;
 
 namespace Visualization {
 
-class Element;
+class FormElement;
 
 /**
  * The sequential layout element can display a list of items either horizontally or vertically.
@@ -46,96 +46,96 @@ class Element;
  * Model::List, out of which the list of items then can be constructed by rendering each node with its default
  * visualization.
  */
-class VISUALIZATIONBASE_API SequentialLayoutElement : public LayoutElement
+class VISUALIZATIONBASE_API SequentialLayoutFormElement : public LayoutFormElement
 {
-		FLUENT_ELEMENT_INTERFACE(SequentialLayoutElement);
+		FLUENT_ELEMENT_INTERFACE(SequentialLayoutFormElement);
 
 	public:
 		using ListNodeGetterFunction = std::function<Model::List*(Item* item)>;
 		using ListOfNodesGetterFunction = std::function<QList<Model::Node*>(Item* item)>;
 		using ListOfItemsGetterFunction = std::function<QList<Item*>(Item* item)>;
 
-		SequentialLayoutElement();
-		virtual ~SequentialLayoutElement();
+		SequentialLayoutFormElement();
+		virtual ~SequentialLayoutFormElement();
 
 		// Functions executable on element definition
 		/**
 		 * Sets the getter (\a listNodeGetter) for getting a node of type List, from which the list of items to render in
 		 * the sequential layout can be computed. The items will be rendered with their default style.
 		 */
-		SequentialLayoutElement* setListNode(ListNodeGetterFunction listNodeGetter);
+		SequentialLayoutFormElement* setListNode(ListNodeGetterFunction listNodeGetter);
 		/**
 		 * Sets the getter (\a nodeListGetter) for getting a list of nodes, from which the list of items to render in the
 		 * sequential layout can be computed. The items will be rendered with their default style.
 		 */
-		SequentialLayoutElement* setListOfNodes(ListOfNodesGetterFunction nodeListGetter);
+		SequentialLayoutFormElement* setListOfNodes(ListOfNodesGetterFunction nodeListGetter);
 		/**
 		 * Sets the getter (\a itemListGetter) for getting a list of items to render in the sequential layout.
 		 */
-		SequentialLayoutElement* setListOfItems(ListOfItemsGetterFunction itemListGetter);
+		SequentialLayoutFormElement* setListOfItems(ListOfItemsGetterFunction itemListGetter);
 		/**
 		 * Sets what the \a space between two elements in the sequential layout should be.
 		 */
-		SequentialLayoutElement* setSpaceBetweenElements(int space);
+		SequentialLayoutFormElement* setSpaceBetweenElements(int space);
 		/**
 		 * Sets a getter (\a spaceBetweenElementsGetter) for getting the appropriate space between two elements
 		 * dynamically while rendering. If this getter is set, anything set with the setSpaceBetweenElements(int) will be
 		 * ignored.
 		 */
-		SequentialLayoutElement* setSpaceBetweenElements(std::function<int(Item* item)> spaceBetweenElementsGetter);
+		SequentialLayoutFormElement* setSpaceBetweenElements(std::function<int(Item* item)> spaceBetweenElementsGetter);
 		/**
 		 * Sets the \a orientation of this sequential layout. Also sets the alignment to the default (bottom for
 		 * horizontal, left for vertical).
 		 */
-		SequentialLayoutElement* setOrientation(Qt::Orientation orientation);
+		SequentialLayoutFormElement* setOrientation(Qt::Orientation orientation);
 		/**
 		 * Sets this sequential layout to be horizontal, also sets the alignment to the default (bottom)
 		 */
-		SequentialLayoutElement* setHorizontal();
+		SequentialLayoutFormElement* setHorizontal();
 		/**
 		 * Sets this sequential layout to be vertical, also sets the alignment to the default (left)
 		 */
-		SequentialLayoutElement* setVertical();
+		SequentialLayoutFormElement* setVertical();
 		/**
 		 * Sets the \a alignment. If it is not compatible with the layout's orientation, it will fall back to the default.
 		 */
-		SequentialLayoutElement* setAlignment(LayoutStyle::Alignment alignment);
+		SequentialLayoutFormElement* setAlignment(LayoutStyle::Alignment alignment);
 		/**
 		 * Defines if this layout should be displayed forwards (true) or backwards (false).
 		 * Example:
 		 * forwards (default): |0|1|2|3|
 		 * backwards:          |3|2|1|0|
 		 */
-		SequentialLayoutElement* setForward(bool forward);
+		SequentialLayoutFormElement* setForward(bool forward);
 		/**
 		 * Sets the minimum width to \a minWidth.
 		 */
-		SequentialLayoutElement* setMinWidth(int minWidth);
+		SequentialLayoutFormElement* setMinWidth(int minWidth);
 		/**
 		 * Sets the minimum height to \a minHeight.
 		 */
-		SequentialLayoutElement* setMinHeight(int minHeight);
+		SequentialLayoutFormElement* setMinHeight(int minHeight);
 		/**
 		 * Sets if the element has a cursor if it is empty to \a cursorWhenEmpty. Is false by default.
 		 * Also see SequentialLayoutStyle::hasCursorWhenEmpty().
 		 */
-		SequentialLayoutElement* setHasCursorWhenEmpty(bool cursorWhenEmpty);
+		SequentialLayoutFormElement* setHasCursorWhenEmpty(bool cursorWhenEmpty);
 		/**
 		 * Sets if the element does not have location equivalent cursors to \a notLocationEquivalent. Is false by
 		 * default.
 		 * Also see SequentialLayoutStyle::notLocationEquivalentCursors().
 		 */
-		SequentialLayoutElement* setNotLocationEquivalentCursors(bool notLocationEquivalent);
+		SequentialLayoutFormElement* setNotLocationEquivalentCursors(bool notLocationEquivalent);
 		/**
 		 * Sets if the element has no boundary cursors to \a noBoundaryCursors. Is false by default.
 		 * Also see SequentialLayoutStyle::noBoundaryCursorsInsideShape().
 		 */
-		SequentialLayoutElement* setNoBoudaryCursors(bool noBoundaryCursors);
+		SequentialLayoutFormElement* setNoBoudaryCursors(bool noBoundaryCursors);
 		/**
 		 * Sets if the element has no inner cursors to \a noInnerCursors. Is false by default.
 		 * Also see SequentialLayoutStyle::noInnerCursors().
 		 */
-		SequentialLayoutElement* setNoInnerCursors(bool noInnerCursors);
+		SequentialLayoutFormElement* setNoInnerCursors(bool noInnerCursors);
 
 		// Methods executable when items need to be rendered
 		virtual void computeSize(Item* item, int availableWidth, int availableHeight) override;
@@ -210,36 +210,36 @@ class VISUALIZATIONBASE_API SequentialLayoutElement : public LayoutElement
 		void removeFromItemList(Item* item, int index, bool deleteItem);
 };
 
-inline SequentialLayoutElement* SequentialLayoutElement::setListNode(ListNodeGetterFunction listNodeGetter)
+inline SequentialLayoutFormElement* SequentialLayoutFormElement::setListNode(ListNodeGetterFunction listNodeGetter)
 {
 	Q_ASSERT(!nodeListGetter_ && !itemListGetter_);
 	listNodeGetter_ = listNodeGetter;
 	return this;
 }
-inline SequentialLayoutElement* SequentialLayoutElement::setListOfNodes(ListOfNodesGetterFunction nodeListGetter)
+inline SequentialLayoutFormElement* SequentialLayoutFormElement::setListOfNodes(ListOfNodesGetterFunction nodeListGetter)
 {
 	Q_ASSERT(!listNodeGetter_ && !itemListGetter_);
 	nodeListGetter_ = nodeListGetter;
 	return this;
 }
-inline SequentialLayoutElement* SequentialLayoutElement::setListOfItems(ListOfItemsGetterFunction itemListGetter)
+inline SequentialLayoutFormElement* SequentialLayoutFormElement::setListOfItems(ListOfItemsGetterFunction itemListGetter)
 {
 	Q_ASSERT(!nodeListGetter_ && !listNodeGetter_);
 	itemListGetter_ = itemListGetter;
 	return this;
 }
-inline SequentialLayoutElement* SequentialLayoutElement::setSpaceBetweenElements(int space)
+inline SequentialLayoutFormElement* SequentialLayoutFormElement::setSpaceBetweenElements(int space)
 {
 	defaultSpaceBetweenElements_ = space;
 	return this;
 }
-inline SequentialLayoutElement* SequentialLayoutElement::setSpaceBetweenElements(
+inline SequentialLayoutFormElement* SequentialLayoutFormElement::setSpaceBetweenElements(
 		std::function<int(Item* item)> spaceBetweenElementsGetter)
 {
 	spaceBetweenElementsGetter_ = spaceBetweenElementsGetter;
 	return this;
 }
-inline SequentialLayoutElement* SequentialLayoutElement::setOrientation(Qt::Orientation orientation)
+inline SequentialLayoutFormElement* SequentialLayoutFormElement::setOrientation(Qt::Orientation orientation)
 {
 	orientation_ = orientation;
 	if (orientation_ == Qt::Horizontal)
@@ -248,61 +248,61 @@ inline SequentialLayoutElement* SequentialLayoutElement::setOrientation(Qt::Orie
 		alignment_ = LayoutStyle::Alignment::Left;
 	return this;
 }
-inline SequentialLayoutElement* SequentialLayoutElement::setHorizontal()
+inline SequentialLayoutFormElement* SequentialLayoutFormElement::setHorizontal()
 {
 	orientation_ = Qt::Horizontal;
 	alignment_ = LayoutStyle::Alignment::Bottom;
 	return this;
 }
-inline SequentialLayoutElement* SequentialLayoutElement::setVertical()
+inline SequentialLayoutFormElement* SequentialLayoutFormElement::setVertical()
 {
 	orientation_ = Qt::Vertical;
 	alignment_ = LayoutStyle::Alignment::Left;
 	return this;
 }
-inline SequentialLayoutElement* SequentialLayoutElement::setAlignment(LayoutStyle::Alignment alignment)
+inline SequentialLayoutFormElement* SequentialLayoutFormElement::setAlignment(LayoutStyle::Alignment alignment)
 {
 	alignment_ = alignment;
 	return this;
 }
-inline SequentialLayoutElement* SequentialLayoutElement::setForward(bool forward)
+inline SequentialLayoutFormElement* SequentialLayoutFormElement::setForward(bool forward)
 {
 	forward_ = forward;
 	return this;
 }
-inline SequentialLayoutElement* SequentialLayoutElement::setMinWidth(int minWidht)
+inline SequentialLayoutFormElement* SequentialLayoutFormElement::setMinWidth(int minWidht)
 {
 	minWidth_ = minWidht;
 	return this;
 }
-inline SequentialLayoutElement* SequentialLayoutElement::setMinHeight(int minHeight)
+inline SequentialLayoutFormElement* SequentialLayoutFormElement::setMinHeight(int minHeight)
 {
 	minHeight_ = minHeight;
 	return this;
 }
-inline SequentialLayoutElement* SequentialLayoutElement::setHasCursorWhenEmpty(bool cursorWhenEmpty)
+inline SequentialLayoutFormElement* SequentialLayoutFormElement::setHasCursorWhenEmpty(bool cursorWhenEmpty)
 {
 	hasCursorWhenEmpty_ = cursorWhenEmpty;
 	return this;
 }
-inline SequentialLayoutElement* SequentialLayoutElement::setNotLocationEquivalentCursors(
+inline SequentialLayoutFormElement* SequentialLayoutFormElement::setNotLocationEquivalentCursors(
 		bool notLocationEquivalentCursors)
 {
 	notLocationEquivalentCursors_ = notLocationEquivalentCursors;
 	return this;
 }
-inline SequentialLayoutElement* SequentialLayoutElement::setNoBoudaryCursors(bool noBoundaryCursors)
+inline SequentialLayoutFormElement* SequentialLayoutFormElement::setNoBoudaryCursors(bool noBoundaryCursors)
 {
 	noBoundaryCursors_ = noBoundaryCursors;
 	return this;
 }
-inline SequentialLayoutElement* SequentialLayoutElement::setNoInnerCursors(bool noInnerCursors)
+inline SequentialLayoutFormElement* SequentialLayoutFormElement::setNoInnerCursors(bool noInnerCursors)
 {
 	noInnerCursors_ = noInnerCursors;
 	return this;
 }
 
-template <class T> T* SequentialLayoutElement::itemAt(const Item* item, int itemIndex) const
+template <class T> T* SequentialLayoutFormElement::itemAt(const Item* item, int itemIndex) const
 {
 	auto& itemList = listForItem(item);
 	return static_cast<T*>(itemList.at(itemIndex));

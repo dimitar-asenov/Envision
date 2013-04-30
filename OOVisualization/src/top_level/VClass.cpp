@@ -34,10 +34,10 @@
 #include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/items/Static.h"
 
-#include "VisualizationBase/src/declarative/AnchorLayoutElement.h"
-#include "VisualizationBase/src/declarative/GridLayoutElement.h"
-#include "VisualizationBase/src/declarative/SequentialLayoutElement.h"
-#include "VisualizationBase/src/declarative/ShapeElement.h"
+#include "VisualizationBase/src/declarative/AnchorLayoutFormElement.h"
+#include "VisualizationBase/src/declarative/GridLayoutFormElement.h"
+#include "VisualizationBase/src/declarative/SequentialLayoutFormElement.h"
+#include "VisualizationBase/src/declarative/ShapeFormElement.h"
 #include "VisualizationBase/src/items/NodeWrapper.h"
 
 #include "ModelBase/src/nodes/Node.h"
@@ -72,7 +72,7 @@ void VClass::determineChildren()
 
 void VClass::initializeForms()
 {
-	auto headerElement = (new GridLayoutElement())
+	auto headerElement = (new GridLayoutFormElement())
 				->setHorizontalSpacing(3)->setColumnStretchFactor(3, 1)
 				->setVerticalAlignment(LayoutStyle::Alignment::Center)
 				->put(0, 0, item<Static, I>(&I::icon_, [](I* v){return &v->style()->icon();}))
@@ -90,7 +90,7 @@ void VClass::initializeForms()
 				->put(3, 0, item<VList, I>(&I::baseClasses_, [](I* v){return v->node()->baseClasses();},
 																			[](I* v){return &v->style()->baseClasses();}));
 
-	auto contentElement = (new GridLayoutElement())
+	auto contentElement = (new GridLayoutFormElement())
 				->setVerticalSpacing(3)->setColumnStretchFactor(0, 1)
 				->put(0, 0, item<VStatementItemList, I>(&I::annotations_, [](I* v)
 											{return v->node()->annotations()->size() > 0 ? v->node()->annotations() : nullptr;},
@@ -100,24 +100,24 @@ void VClass::initializeForms()
 								[](I* v){return &v->style()->enumerators();}))
 				->put(0, 2, item<PositionLayout, I>(&I::body_, [](I* v){return &v->style()->body();}));
 
-	auto fieldContainerElement = (new GridLayoutElement())
+	auto fieldContainerElement = (new GridLayoutFormElement())
 				->setVerticalSpacing(3)
-				->put(0, 0, (new SequentialLayoutElement())->setVertical()
+				->put(0, 0, (new SequentialLayoutFormElement())->setVertical()
 								->setListOfNodes([](Item* i){return (static_cast<VClass*>(i))->publicFields_;}))
-				->put(0, 1, (new SequentialLayoutElement())->setVertical()
+				->put(0, 1, (new SequentialLayoutFormElement())->setVertical()
 								->setListOfNodes([](Item* i){return (static_cast<VClass*>(i))->privateFields_;}))
-				->put(0, 2, (new SequentialLayoutElement())->setVertical()
+				->put(0, 2, (new SequentialLayoutFormElement())->setVertical()
 								->setListOfNodes([](Item* i){return (static_cast<VClass*>(i))->protectedFields_;}))
-				->put(0, 3, (new SequentialLayoutElement())->setVertical()
+				->put(0, 3, (new SequentialLayoutFormElement())->setVertical()
 								->setListOfNodes([](Item* i){return (static_cast<VClass*>(i))->defaultFields_;}));
 
-	auto shapeElement = new ShapeElement();
+	auto shapeElement = new ShapeFormElement();
 	auto backgroundElement = item<NodeWrapper, I>(&I::fieldBackground_, [](I*){return nullptr;},
 																	[](I* v){return &v->style()->fieldContainer();})
 										->setCreateIfNoNode(true);
 
 	// Form 0: with field nodes
-	addForm((new AnchorLayoutElement())
+	addForm((new AnchorLayoutFormElement())
 				// place the top left corner of the field container element
 				->put(TheLeftOf, fieldContainerElement, 10, FromLeftOf, headerElement)
 				->put(TheTopOf, fieldContainerElement, 5, FromBottomOf, headerElement)
@@ -138,7 +138,7 @@ void VClass::initializeForms()
 				->put(TheBottomOf, backgroundElement, 3, FromBottomOf, fieldContainerElement));
 
 	// Form 1: without field nodes
-	addForm((new AnchorLayoutElement())
+	addForm((new AnchorLayoutFormElement())
 				// place the top left corner of the content element
 				->put(TheLeftOf, headerElement, 10, FromLeftOf, contentElement)
 				->put(TheTopOf, contentElement, AtBottomOf, headerElement)

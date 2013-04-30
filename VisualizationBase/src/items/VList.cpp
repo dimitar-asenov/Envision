@@ -61,11 +61,11 @@ void VList::initializeForms()
 							{return static_cast<VList*>(i)->style()->itemsStyle().spaceBetweenElements();};
 
 	// Form 0: horizontal orientation
-	addForm((new SequentialLayoutElement())
+	addForm((new SequentialLayoutFormElement())
 			->setHorizontal()->setSpaceBetweenElements(spaceBetweenElementsGetter)
 			->setListOfNodes(listOfNodesGetter));
 	// Form 1: vertical orientation
-	addForm((new SequentialLayoutElement())
+	addForm((new SequentialLayoutFormElement())
 			->setVertical()->setSpaceBetweenElements(spaceBetweenElementsGetter)
 			->setListOfNodes(listOfNodesGetter));
 }

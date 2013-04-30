@@ -32,7 +32,7 @@ struct _lprec;
 
 namespace Visualization {
 
-class Element;
+class FormElement;
 class Item;
 
 /**
@@ -50,7 +50,7 @@ class AnchorLayoutConstraintSolver {
 		 * Taking a list of \a elements and a list of \a anchors, computes the positions along the axis given by
 		 * \a orientation for all the \a elements, relative to the \a item.
 		 */
-		void placeElements(const QVector<Element*>& elements, QList<AnchorLayoutAnchor*>& anchors,
+		void placeElements(const QVector<FormElement*>& elements, QList<AnchorLayoutAnchor*>& anchors,
 				AnchorLayoutAnchor::Orientation orientation, Item* item);
 	private:
 		void initializeConstraintSolver(int numVariables);

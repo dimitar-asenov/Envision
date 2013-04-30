@@ -26,67 +26,23 @@
 
 #pragma once
 
-#include "ItemWrapperElement.h"
-
-#include "ModelBase/src/nodes/Node.h"
-#include "../renderer/ModelRenderer.h"
+#include "FormElement.h"
 
 namespace Visualization {
 
 /**
- * This is an item wrapper element, with a specifiable node to create the item with.
+ * The shape form element is a placeholder form element, stretching to encompass all the available space. It is used to
+ * put the shape at a custom position.
  */
-template <class ParentType>
-class NodeItemWrapperElement : public ItemWrapperElement<ParentType> {
-		FLUENT_ELEMENT_INTERFACE(NodeItemWrapperElement);
-
+class ShapeFormElement : public Visualization::FormElement {
 	public:
-		using ChildItem = typename ItemWrapperElement<ParentType>::ChildItem;
-		using GetNodeFunction = std::function<Model::Node* (ParentType* v)>;
+		ShapeFormElement();
+		virtual ~ShapeFormElement();
 
-		NodeItemWrapperElement(ChildItem item, GetNodeFunction nodeGetter);
-		virtual ~NodeItemWrapperElement() {};
-		virtual void synchronizeWithItem(Item* item) override;
-
-		/**
-		 * Sets if a wrapped item is created, even if there is no node to \a create. It is false by default.
-		 */
-		NodeItemWrapperElement<ParentType>* setCreateIfNoNode(bool create);
-
-	private:
-		GetNodeFunction nodeGetter_{};
-		bool createIfNoNode_{false};
+		virtual QList<FormElement*> shapeElements() override;
+		virtual void computeSize(Item* item, int availableWidth, int availableHeight) override;
+		virtual bool sizeDependsOnParent(const Item* item) const override;
+		virtual bool isEmpty(const Item* item) const override;
 };
-
-template <class ParentType>
-NodeItemWrapperElement<ParentType>::NodeItemWrapperElement(ChildItem item, GetNodeFunction nodeGetter)
-: ItemWrapperElement<ParentType>{item}, nodeGetter_{nodeGetter}
-{}
-
-template <class ParentType>
-void NodeItemWrapperElement<ParentType>::synchronizeWithItem(Item* item)
-{
-	auto& childItem = (static_cast<ParentType*>(item))->*this->item();
-	auto node = nodeGetter_(static_cast<ParentType*>(item));
-
-	if(childItem && childItem->node() != node)
-	{
-		SAFE_DELETE_ITEM(childItem);
-		item->setUpdateNeeded(Item::StandardUpdate);
-	}
-
-	if(!childItem && (node || createIfNoNode_))
-	{
-		childItem = item->renderer()->render(item, node);
-		item->setUpdateNeeded(Item::StandardUpdate);
-	}
-}
-
-template <class ParentType>
-inline NodeItemWrapperElement<ParentType>* NodeItemWrapperElement<ParentType>::setCreateIfNoNode(bool create)
-{
-	createIfNoNode_ = create;
-	return this;
-}
 
 } /* namespace Visualization */

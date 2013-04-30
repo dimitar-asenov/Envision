@@ -24,34 +24,34 @@
  **
  **********************************************************************************************************************/
 
-#include "ShapeElement.h"
+#include "ShapeFormElement.h"
 
 namespace Visualization {
 
-ShapeElement::ShapeElement()
+ShapeFormElement::ShapeFormElement()
 {}
 
-ShapeElement::~ShapeElement()
+ShapeFormElement::~ShapeFormElement()
 {}
 
-QList<Element*> ShapeElement::shapeElements()
+QList<FormElement*> ShapeFormElement::shapeElements()
 {
-	auto list = QList<Element*>();
+	auto list = QList<FormElement*>();
 	list.append(this);
 	return list;
 }
 
-void ShapeElement::computeSize(Item* item, int availableWidth, int availableHeight)
+void ShapeFormElement::computeSize(Item* item, int availableWidth, int availableHeight)
 {
 	setSize(item, QSize(availableWidth, availableHeight));
 }
 
-bool ShapeElement::sizeDependsOnParent(const Item* /*item*/) const
+bool ShapeFormElement::sizeDependsOnParent(const Item* /*item*/) const
 {
 	return true;
 }
 
-bool ShapeElement::isEmpty(const Item* /*item*/) const
+bool ShapeFormElement::isEmpty(const Item* /*item*/) const
 {
 	return true;
 }

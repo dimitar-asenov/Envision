@@ -28,7 +28,7 @@
 
 #include "VisualizationBase/src/items/Static.h"
 #include "VisualizationBase/src/items/VList.h"
-#include "VisualizationBase/src/declarative/GridLayoutElement.h"
+#include "VisualizationBase/src/declarative/GridLayoutFormElement.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -44,7 +44,7 @@ VReturnStatement::VReturnStatement(Item* parent, NodeType* node, const StyleType
 
 void VReturnStatement::initializeForms()
 {
-	addForm((new GridLayoutElement())
+	addForm((new GridLayoutFormElement())
 				->setTopMargin(5)->setBottomMargin(5)->setHorizontalSpacing(5)
 				->setVerticalAlignment(LayoutStyle::Alignment::Center)
 				->put(0, 0, item<Static, I>(&I::symbol_, [](I* v){return &v->style()->symbol();}))

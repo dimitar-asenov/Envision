@@ -24,7 +24,7 @@
  **
  **********************************************************************************************************************/
 
-#include "SequentialLayoutElement.h"
+#include "SequentialLayoutFormElement.h"
 
 #include "ModelBase/src/nodes/List.h"
 #include "../renderer/ModelRenderer.h"
@@ -34,17 +34,17 @@
 
 namespace Visualization {
 
-SequentialLayoutElement::SequentialLayoutElement()
+SequentialLayoutFormElement::SequentialLayoutFormElement()
 {}
 
-SequentialLayoutElement::~SequentialLayoutElement()
+SequentialLayoutFormElement::~SequentialLayoutFormElement()
 {
 	for (auto list : itemListMap_)
 		for (auto item : *list)
 			SAFE_DELETE_ITEM(item);
 }
 
-void SequentialLayoutElement::computeSize(Item* item, int availableWidth, int availableHeight)
+void SequentialLayoutFormElement::computeSize(Item* item, int availableWidth, int availableHeight)
 {
 	auto& itemList = listForItem(item);
 
@@ -153,13 +153,13 @@ void SequentialLayoutElement::computeSize(Item* item, int availableWidth, int av
 
 }
 
-void SequentialLayoutElement::setItemPositions(Item* item, int parentX, int parentY)
+void SequentialLayoutFormElement::setItemPositions(Item* item, int parentX, int parentY)
 {
 	for (auto i : listForItem(item))
 		i->setPos(parentX + x(item) + i->x() + leftMargin(), parentY + y(item) + i->y() + topMargin());
 }
 
-void SequentialLayoutElement::synchronizeWithItem(Item* item)
+void SequentialLayoutFormElement::synchronizeWithItem(Item* item)
 {
 	auto& itemList = listForItem(item);
 	if (listNodeGetter_)
@@ -177,7 +177,7 @@ void SequentialLayoutElement::synchronizeWithItem(Item* item)
 	for (auto i : itemList) i->setParentItem(item);
 }
 
-bool SequentialLayoutElement::sizeDependsOnParent(const Item* item) const
+bool SequentialLayoutFormElement::sizeDependsOnParent(const Item* item) const
 {
 	for (auto i : listForItem(item))
 		if (i->sizeDependsOnParent())
@@ -185,9 +185,9 @@ bool SequentialLayoutElement::sizeDependsOnParent(const Item* item) const
 	return false;
 }
 
-void SequentialLayoutElement::destroyChildItems(Item* item)
+void SequentialLayoutFormElement::destroyChildItems(Item* item)
 {
-	LayoutElement::destroyChildItems(item);
+	LayoutFormElement::destroyChildItems(item);
 	if (itemListMap_.contains(item))
 	{
 		for (auto i : *itemListMap_.value(item))
@@ -196,21 +196,21 @@ void SequentialLayoutElement::destroyChildItems(Item* item)
 	}
 }
 
-QList<Item*>& SequentialLayoutElement::listForItem(const Item* item) const
+QList<Item*>& SequentialLayoutFormElement::listForItem(const Item* item) const
 {
 	if (!itemListMap_.contains(item))
 		itemListMap_.insert(item, new QList<Item*>());
 	return *itemListMap_.value(item);
 }
 
-int SequentialLayoutElement::spaceBetweenElements(Item* item)
+int SequentialLayoutFormElement::spaceBetweenElements(Item* item)
 {
 	if (spaceBetweenElementsGetter_)
 		return spaceBetweenElementsGetter_(item);
 	return defaultSpaceBetweenElements_;
 }
 
-void SequentialLayoutElement::synchronizeWithNodes(Item* item, const QList<Model::Node*>& nodes)
+void SequentialLayoutFormElement::synchronizeWithNodes(Item* item, const QList<Model::Node*>& nodes)
 {
 	auto& itemList = listForItem(item);
 
@@ -243,7 +243,7 @@ void SequentialLayoutElement::synchronizeWithNodes(Item* item, const QList<Model
 	while (itemList.size() > nodes.size()) removeFromItemList(item, itemList.size()-1, true);
 }
 
-void SequentialLayoutElement::synchronizeWithItems(Item* item, const QList<Item*>& items)
+void SequentialLayoutFormElement::synchronizeWithItems(Item* item, const QList<Item*>& items)
 {
 	auto& itemList = listForItem(item);
 
@@ -276,7 +276,7 @@ void SequentialLayoutElement::synchronizeWithItems(Item* item, const QList<Item*
 	while (itemList.size() > items.size()) removeFromItemList(item, itemList.size()-1, false);
 }
 
-void SequentialLayoutElement::removeFromItemList(Item* item, int index, bool deleteItem)
+void SequentialLayoutFormElement::removeFromItemList(Item* item, int index, bool deleteItem)
 {
 	auto& itemList = listForItem(item);
 	if (deleteItem) SAFE_DELETE_ITEM( itemList[index]);
@@ -285,7 +285,7 @@ void SequentialLayoutElement::removeFromItemList(Item* item, int index, bool del
 	item->setUpdateNeeded(Item::StandardUpdate);
 }
 
-void SequentialLayoutElement::swap(Item* item, int i, int j)
+void SequentialLayoutFormElement::swap(Item* item, int i, int j)
 {
 	auto& itemList = listForItem(item);
 
@@ -295,7 +295,7 @@ void SequentialLayoutElement::swap(Item* item, int i, int j)
 	item->setUpdateNeeded(Item::StandardUpdate);
 }
 
-QList<ItemRegion> SequentialLayoutElement::regions(Item* item, int parentX, int parentY)
+QList<ItemRegion> SequentialLayoutFormElement::regions(Item* item, int parentX, int parentY)
 {
 	QList<ItemRegion> regs;
 	auto& itemList = listForItem(item);
@@ -402,7 +402,7 @@ QList<ItemRegion> SequentialLayoutElement::regions(Item* item, int parentX, int 
 	return regs;
 }
 
-inline void SequentialLayoutElement::adjustCursorRegionToAvoidZeroSize(QRect& region, bool horizontal, bool first,
+inline void SequentialLayoutFormElement::adjustCursorRegionToAvoidZeroSize(QRect& region, bool horizontal, bool first,
 		bool last)
 {
 	// Make sure there is at least some space for the cursor Region.
@@ -418,7 +418,7 @@ inline void SequentialLayoutElement::adjustCursorRegionToAvoidZeroSize(QRect& re
 	}
 }
 
-bool SequentialLayoutElement::isEmpty(const Item* item) const
+bool SequentialLayoutFormElement::isEmpty(const Item* item) const
 {
 	for (auto i : listForItem(item))
 		if (!i->isEmpty())
@@ -426,9 +426,9 @@ bool SequentialLayoutElement::isEmpty(const Item* item) const
 	return true;
 }
 
-bool SequentialLayoutElement::elementOrChildHasFocus(Item* item) const
+bool SequentialLayoutFormElement::elementOrChildHasFocus(Item* item) const
 {
-	if (LayoutElement::elementOrChildHasFocus(item))
+	if (LayoutFormElement::elementOrChildHasFocus(item))
 		return true;
 	for (auto i : listForItem(item))
 		if (i->itemOrChildHasFocus())
@@ -436,7 +436,7 @@ bool SequentialLayoutElement::elementOrChildHasFocus(Item* item) const
 	return false;
 }
 
-int SequentialLayoutElement::focusedElementIndex(const Item* item) const
+int SequentialLayoutFormElement::focusedElementIndex(const Item* item) const
 {
 	auto& itemList = listForItem(item);
 
@@ -446,7 +446,7 @@ int SequentialLayoutElement::focusedElementIndex(const Item* item) const
 	return -1;
 }
 
-int SequentialLayoutElement::length(const Item* item) const
+int SequentialLayoutFormElement::length(const Item* item) const
 {
 	auto& itemList = listForItem(item);
 	return itemList.size();

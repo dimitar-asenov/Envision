@@ -26,7 +26,7 @@
 
 #include "AnchorLayoutConstraintSolver.h"
 
-#include "Element.h"
+#include "FormElement.h"
 
 #include <lpsolve/lp_lib.h>
 
@@ -44,7 +44,7 @@ AnchorLayoutConstraintSolver::~AnchorLayoutConstraintSolver()
 }
 
 
-void AnchorLayoutConstraintSolver::placeElements(const QVector<Element*>& elements, QList<AnchorLayoutAnchor*>& anchors,
+void AnchorLayoutConstraintSolver::placeElements(const QVector<FormElement*>& elements, QList<AnchorLayoutAnchor*>& anchors,
 		AnchorLayoutAnchor::Orientation orientation, Item* item)
 {
 	// elements already have a minimum size
@@ -107,7 +107,7 @@ void AnchorLayoutConstraintSolver::placeElements(const QVector<Element*>& elemen
 	// Apply the solution
 	for (int i=0; i<elements.size(); ++i)
 	{
-		Element* element = elements.at(i);
+		FormElement* element = elements.at(i);
 		int size = std::ceil(solution[endVariable(i)] - solution[startVariable(i)]);
 		int position = std::ceil(solution[startVariable(i)]);
 

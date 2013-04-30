@@ -27,17 +27,17 @@
 #pragma once
 
 #include "../visualizationbase_api.h"
-#include "Element.h"
+#include "FormElement.h"
 
 namespace Visualization {
 
 /**
  * Base class for a layout element.
  */
-class VISUALIZATIONBASE_API LayoutElement : public Element
+class VISUALIZATIONBASE_API LayoutFormElement : public FormElement
 {
 	public:
-		~LayoutElement() {};
+		~LayoutFormElement() {};
 };
 
 } /* namespace Visualization */

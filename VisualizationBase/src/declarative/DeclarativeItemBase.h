@@ -29,13 +29,13 @@
 #include "../visualizationbase_api.h"
 #include "../items/Item.h"
 #include "../items/ItemStyle.h"
-#include "VisualizationItemWrapperElement.h"
-#include "NodeItemWrapperElement.h"
-#include "NodeWithVisualizationItemWrapperElement.h"
+#include "VisualizationItemWrapperFormElement.h"
+#include "NodeItemWrapperFormElement.h"
+#include "NodeWithVisualizationItemWrapperFormElement.h"
 
 namespace Visualization {
 
-class Element;
+class FormElement;
 
 /**
  * The non-template base class for DeclarativeItem. Implements all not template related functionalities of the class
@@ -56,7 +56,7 @@ class VISUALIZATIONBASE_API DeclarativeItemBase: public Item
 		/**
 		 * Returns the list of forms available for this declarative item type.
 		 */
-		virtual QList<Element*>& forms() const = 0;
+		virtual QList<FormElement*>& forms() const = 0;
 		/**
 		 * Returns the index of the form to use for the current state of the declarative item.
 		 *
@@ -73,16 +73,16 @@ class VISUALIZATIONBASE_API DeclarativeItemBase: public Item
 		/**
 		 * Returns the form at the index from the cached result of determineForm.
 		 */
-		Element* currentForm() const;
+		FormElement* currentForm() const;
 		/**
 		 * Returns the a list of shape elements per form for this declarative item type. Those lists are determined from
 		 * the list of forms.
 		 */
-		virtual QList<QList<Element*>>& shapeElements() const = 0;
+		virtual QList<QList<FormElement*>>& shapeElements() const = 0;
 		/**
 		 * Returns the list of shape elements belonging to the current form (the same index as returned by determineForm).
 		 */
-		QList<Element*> currentShapeElements() const;
+		QList<FormElement*> currentShapeElements() const;
 
 		/**
 		 * A factory method to get an item wrapper element with a visualization only, it takes a pointer to member, where
@@ -91,7 +91,7 @@ class VISUALIZATIONBASE_API DeclarativeItemBase: public Item
 		 * always 'I') as the template arguments.
 		 */
 		template <class VisualizationType, class ParentType>
-			static VisualizationItemWrapperElement<ParentType, VisualizationType>*
+			static VisualizationItemWrapperFormElement<ParentType, VisualizationType>*
 			item(VisualizationType* ParentType::* item,
 					std::function<const typename VisualizationType::StyleType* (ParentType* v)> styleGetter);
 		/**
@@ -101,7 +101,7 @@ class VISUALIZATIONBASE_API DeclarativeItemBase: public Item
 		 * type (which is always 'I') as template argument.
 		 */
 		template <class ParentType>
-			static NodeItemWrapperElement<ParentType>*
+			static NodeItemWrapperFormElement<ParentType>*
 			item(Item* ParentType::* item, std::function<Model::Node* (ParentType* v)> nodeGetter);
 		/**
 		 * A factory method to get an item wrapper element with a node and a visualization, it takes a pointer to member,
@@ -110,7 +110,7 @@ class VISUALIZATIONBASE_API DeclarativeItemBase: public Item
 		 * it, one has to supply the visualization type and the parent type (which is always 'I') as template arguments.
 		 */
 		template <class VisualizationType, class ParentType>
-			static NodeWithVisualizationItemWrapperElement<ParentType, VisualizationType>*
+			static NodeWithVisualizationItemWrapperFormElement<ParentType, VisualizationType>*
 			item(VisualizationType* ParentType::* item,
 					std::function<typename VisualizationType::NodeType* (ParentType* v)> nodeGetter,
 					std::function<const typename VisualizationType::StyleType* (ParentType* v)> styleGetter);
@@ -120,31 +120,31 @@ class VISUALIZATIONBASE_API DeclarativeItemBase: public Item
 		int currentFormIndex_{};
 };
 
-inline Element* DeclarativeItemBase::currentForm() const {return forms().at(currentFormIndex_);}
-inline QList<Element*> DeclarativeItemBase::currentShapeElements() const {return shapeElements().at(currentFormIndex_);}
+inline FormElement* DeclarativeItemBase::currentForm() const {return forms().at(currentFormIndex_);}
+inline QList<FormElement*> DeclarativeItemBase::currentShapeElements() const {return shapeElements().at(currentFormIndex_);}
 
 template <class VisualizationType, class ParentType>
-	VisualizationItemWrapperElement<ParentType, VisualizationType>*
+	VisualizationItemWrapperFormElement<ParentType, VisualizationType>*
 	DeclarativeItemBase::item(VisualizationType* ParentType::* item,
 										std::function<const typename VisualizationType::StyleType* (ParentType* v)> styleGetter)
 {
-	return new VisualizationItemWrapperElement<ParentType, VisualizationType>(item, styleGetter);
+	return new VisualizationItemWrapperFormElement<ParentType, VisualizationType>(item, styleGetter);
 }
 
 template <class ParentType>
-	NodeItemWrapperElement<ParentType>*
+	NodeItemWrapperFormElement<ParentType>*
 	DeclarativeItemBase::item(Item* ParentType::* item, std::function<Model::Node* (ParentType* v)> nodeGetter)
 {
-	return new NodeItemWrapperElement<ParentType>(item, nodeGetter);
+	return new NodeItemWrapperFormElement<ParentType>(item, nodeGetter);
 }
 
 template <class VisualizationType, class ParentType>
-	NodeWithVisualizationItemWrapperElement<ParentType, VisualizationType>*
+	NodeWithVisualizationItemWrapperFormElement<ParentType, VisualizationType>*
 	DeclarativeItemBase::item(VisualizationType* ParentType::* item,
 			std::function<typename VisualizationType::NodeType* (ParentType* v)> nodeGetter,
 			std::function<const typename VisualizationType::StyleType* (ParentType* v)> styleGetter)
 {
-	return new NodeWithVisualizationItemWrapperElement<ParentType, VisualizationType>(item, nodeGetter, styleGetter);
+	return new NodeWithVisualizationItemWrapperFormElement<ParentType, VisualizationType>(item, nodeGetter, styleGetter);
 }
 
 } /* namespace Visualization */

@@ -29,9 +29,9 @@
 #include "../elements/VStatementItemList.h"
 
 #include "VisualizationBase/src/items/Static.h"
-#include "VisualizationBase/src/declarative/GridLayoutElement.h"
-#include "VisualizationBase/src/declarative/AnchorLayoutElement.h"
-#include "VisualizationBase/src/declarative/ShapeElement.h"
+#include "VisualizationBase/src/declarative/GridLayoutFormElement.h"
+#include "VisualizationBase/src/declarative/AnchorLayoutFormElement.h"
+#include "VisualizationBase/src/declarative/ShapeFormElement.h"
 #include "VisualizationBase/src/items/NodeWrapper.h"
 
 using namespace Visualization;
@@ -47,7 +47,7 @@ VLoopStatement::VLoopStatement(Item* parent, NodeType* node, const StyleType* st
 
 void VLoopStatement::initializeForms()
 {
-	auto header = (new GridLayoutElement)
+	auto header = (new GridLayoutFormElement())
 					->setHorizontalSpacing(3)->setColumnStretchFactor(3, 1)
 					->setVerticalAlignment(LayoutStyle::Alignment::Center)
 					->put(0, 0, item<Static, I>(&I::icon_, [](I* v){return &v->style()->icon();}))
@@ -58,14 +58,14 @@ void VLoopStatement::initializeForms()
 					->put(3, 0, item<NodeWrapper, I>(&I::updateStep_, [](I* v){return v->node()->updateStep();},
 																					[](I* v){return &v->style()->updateStep();}));
 
-	auto body = (new GridLayoutElement)
+	auto body = (new GridLayoutFormElement())
 			->setColumnStretchFactor(0, 1)
 			->put(0, 0, item<VStatementItemList, I>(&I::body_, [](I* v){return v->node()->body();},
 							[](I* v){return &v->style()->body();}));
 
-	auto shapeElement = new ShapeElement();
+	auto shapeElement = new ShapeFormElement();
 
-	addForm((new AnchorLayoutElement())
+	addForm((new AnchorLayoutFormElement())
 		// place body below header
 		->put(TheTopOf, body, 10, FromBottomOf, header)
 		// place upper left corner of the shape element

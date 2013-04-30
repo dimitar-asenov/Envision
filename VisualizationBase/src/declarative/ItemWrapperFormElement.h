@@ -27,7 +27,7 @@
 #pragma once
 
 #include "../visualizationbase_api.h"
-#include "Element.h"
+#include "FormElement.h"
 #include "../items/Item.h"
 
 namespace Visualization {
@@ -36,12 +36,12 @@ namespace Visualization {
  * Base class for an element wrapping an item.
  */
 template <class ParentType, class ChildItemType = Item>
-class ItemWrapperElement : public Element
+class ItemWrapperFormElement : public FormElement
 {
 	public: // Methods executable on element definition
 		using ChildItem = ChildItemType* ParentType::*;
-		ItemWrapperElement(ChildItem item);
-		virtual ~ItemWrapperElement() {};
+		ItemWrapperFormElement(ChildItem item);
+		virtual ~ItemWrapperFormElement() {};
 
 	public: // Methods executable when items need to be rendered
 		virtual void computeSize(Item* item, int availableWidth, int availableHeight) override;
@@ -62,12 +62,12 @@ class ItemWrapperElement : public Element
 };
 
 template <class ParentType, class ChildItemType>
-ItemWrapperElement<ParentType,ChildItemType>::ItemWrapperElement(ChildItem item)
+ItemWrapperFormElement<ParentType,ChildItemType>::ItemWrapperFormElement(ChildItem item)
 : item_(item)
 {}
 
 template <class ParentType, class ChildItemType>
-void ItemWrapperElement<ParentType,ChildItemType>::computeSize(Item* item, int availableWidth, int availableHeight)
+void ItemWrapperFormElement<ParentType,ChildItemType>::computeSize(Item* item, int availableWidth, int availableHeight)
 {
 	auto& childItem = (static_cast<ParentType*>(item))->*this->item();
 	if(childItem)
@@ -84,14 +84,14 @@ void ItemWrapperElement<ParentType,ChildItemType>::computeSize(Item* item, int a
 }
 
 template <class ParentType, class ChildItemType>
-void ItemWrapperElement<ParentType,ChildItemType>::setItemPositions(Item* item, int parentX, int parentY)
+void ItemWrapperFormElement<ParentType,ChildItemType>::setItemPositions(Item* item, int parentX, int parentY)
 {
 	auto& childItem = (static_cast<ParentType*>(item))->*this->item();
 	if(childItem) childItem->setPos(parentX + x(item) + leftMargin(), parentY + y(item) + topMargin());
 }
 
 template <class ParentType, class ChildItemType>
-bool ItemWrapperElement<ParentType,ChildItemType>::sizeDependsOnParent(const Item* item) const
+bool ItemWrapperFormElement<ParentType,ChildItemType>::sizeDependsOnParent(const Item* item) const
 {
 	auto& childItem = (static_cast<const ParentType*>(item))->*this->item();
 	if(childItem) return childItem->sizeDependsOnParent();
@@ -99,7 +99,7 @@ bool ItemWrapperElement<ParentType,ChildItemType>::sizeDependsOnParent(const Ite
 }
 
 template <class ParentType, class ChildItemType>
-QList<ItemRegion> ItemWrapperElement<ParentType,ChildItemType>::regions(Item* item, int , int)
+QList<ItemRegion> ItemWrapperFormElement<ParentType,ChildItemType>::regions(Item* item, int , int)
 {
 	auto& childItem = (static_cast<const ParentType*>(item))->*this->item();
 	if(childItem) return childItem->regions();
@@ -107,24 +107,24 @@ QList<ItemRegion> ItemWrapperElement<ParentType,ChildItemType>::regions(Item* it
 }
 
 template <class ParentType, class ChildItemType>
-void ItemWrapperElement<ParentType,ChildItemType>::destroyChildItems(Item* item)
+void ItemWrapperFormElement<ParentType,ChildItemType>::destroyChildItems(Item* item)
 {
-	Element::destroyChildItems(item);
+	FormElement::destroyChildItems(item);
 	auto& childItem = (static_cast<ParentType*>(item))->*this->item();
 	SAFE_DELETE_ITEM(childItem);
 }
 
 template <class ParentType, class ChildItemType>
-typename ItemWrapperElement<ParentType,ChildItemType>::ChildItem
-ItemWrapperElement<ParentType,ChildItemType>::item() const
+typename ItemWrapperFormElement<ParentType,ChildItemType>::ChildItem
+ItemWrapperFormElement<ParentType,ChildItemType>::item() const
 {
 	return item_;
 }
 
 template <class ParentType, class ChildItemType>
-bool ItemWrapperElement<ParentType,ChildItemType>::elementOrChildHasFocus(Item* item) const
+bool ItemWrapperFormElement<ParentType,ChildItemType>::elementOrChildHasFocus(Item* item) const
 {
-	if (Element::elementOrChildHasFocus(item))
+	if (FormElement::elementOrChildHasFocus(item))
 		return true;
 	auto& childItem = (static_cast<ParentType*>(item))->*this->item();
 	if (childItem) return childItem->itemOrChildHasFocus();
@@ -132,7 +132,7 @@ bool ItemWrapperElement<ParentType,ChildItemType>::elementOrChildHasFocus(Item* 
 }
 
 template <class ParentType, class ChildItemType>
-bool ItemWrapperElement<ParentType,ChildItemType>::isEmpty(const Item* item) const
+bool ItemWrapperFormElement<ParentType,ChildItemType>::isEmpty(const Item* item) const
 {
 	auto& childItem = (static_cast<const ParentType*>(item))->*this->item();
 	if (childItem) return childItem->isEmpty();

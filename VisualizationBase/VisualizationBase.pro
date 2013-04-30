@@ -7,8 +7,17 @@ win32:LIBS += -llogger \
 LIBS += -llpsolve55
 QT += xml \
     svg
-HEADERS += src/items/NodeWrapper.h \
-    src/declarative/ShapeElement.h \
+HEADERS += src/declarative/VisualizationItemWrapperFormElement.h \
+    src/declarative/NodeWithVisualizationItemWrapperFormElement.h \
+    src/declarative/NodeItemWrapperFormElement.h \
+    src/declarative/ItemWrapperFormElement.h \
+    src/declarative/SequentialLayoutFormElement.h \
+    src/declarative/GridLayoutFormElement.h \
+    src/declarative/AnchorLayoutFormElement.h \
+    src/declarative/LayoutFormElement.h \
+    src/declarative/ShapeFormElement.h \
+    src/declarative/FormElement.h \
+    src/items/NodeWrapper.h \
     src/declarative/Enumerations.h \
     src/nodes/TestBoxNode.h \
     src/items/TestBox.h \
@@ -16,18 +25,9 @@ HEADERS += src/items/NodeWrapper.h \
     src/items/Line.h \
     src/declarative/AnchorLayoutConstraintSolver.h \
     src/declarative/AnchorLayoutAnchor.h \
-    src/declarative/NodeWithVisualizationItemWrapperElement.h \
-    src/declarative/VisualizationItemWrapperElement.h \
-    src/declarative/NodeItemWrapperElement.h \
     test/DeclarativeTest.h \
-    src/declarative/GridLayoutElement.h \
-    src/declarative/AnchorLayoutElement.h \
     src/declarative/DeclarativeItem.h \
     src/declarative/DeclarativeItemBase.h \
-    src/declarative/Element.h \
-    src/declarative/ItemWrapperElement.h \
-    src/declarative/LayoutElement.h \
-    src/declarative/SequentialLayoutElement.h \
     src/items/Mipmap.h \
     src/items/VisualizationAddOn.h \
     src/shapes/SvgShapeStyle.h \
@@ -108,15 +108,15 @@ HEADERS += src/items/NodeWrapper.h \
     src/visualizationbase_api.h \
     test/BoxTest.h \
     src/visualizationbase.h
-SOURCES += src/items/NodeWrapper.cpp \
-    src/declarative/ShapeElement.cpp \
+SOURCES += src/declarative/SequentialLayoutFormElement.cpp \
+    src/declarative/GridLayoutFormElement.cpp \
+    src/declarative/AnchorLayoutFormElement.cpp \
+    src/declarative/ShapeFormElement.cpp \
+    src/declarative/FormElement.cpp \
+    src/items/NodeWrapper.cpp \
     src/declarative/AnchorLayoutAnchor.cpp \
     src/declarative/AnchorLayoutConstraintSolver.cpp \
     test/DeclarativeTest.cpp \
-    src/declarative/GridLayoutElement.cpp \
-    src/declarative/AnchorLayoutElement.cpp \
-    src/declarative/SequentialLayoutElement.cpp \
-    src/declarative/Element.cpp \
     src/declarative/DeclarativeItemBase.cpp \
     src/nodes/TestBoxNode.cpp \
     src/items/TestBox.cpp \

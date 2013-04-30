@@ -48,17 +48,17 @@ class DeclarativeItem : public DeclarativeItemBase
 		using I = VisualizationType;
 		DeclarativeItem(Item* parent, const StyleType* style = itemStyles().get());
 		virtual ~DeclarativeItem();
-		virtual QList<Element*>& forms() const override;
-		virtual QList<QList<Element*>>& shapeElements() const override;
+		virtual QList<FormElement*>& forms() const override;
+		virtual QList<QList<FormElement*>>& shapeElements() const override;
 	protected:
 		/**
 		 * Static vertion of the method forms, returning the list of forms for this declarative item type.
 		 */
-		static QList<Element*>& formsStatic();
+		static QList<FormElement*>& formsStatic();
 		/**
 		 * Static version of the method shapeElements, returning the list of shape element lists for each form.
 		 */
-		static QList<QList<Element*>>& shapeElementsStatic();
+		static QList<QList<FormElement*>>& shapeElementsStatic();
 		/**
 		 * Add an \a element to the list of forms. All the forms should be added via this method inside the static
 		 * method initializeForms.
@@ -85,32 +85,32 @@ DeclarativeItem<VisualizationType>::DeclarativeItem(Item* parent, const StyleTyp
 template <class VisualizationType>
 DeclarativeItem<VisualizationType>::~DeclarativeItem()
 {
-	for(Element* form : formsStatic())
+	for(FormElement* form : formsStatic())
 		form->destroyChildItems(this);
 }
 
 template <class VisualizationType>
-QList<Element*>& DeclarativeItem<VisualizationType>::formsStatic()
+QList<FormElement*>& DeclarativeItem<VisualizationType>::formsStatic()
 {
-	static QList<Element*> list;
+	static QList<FormElement*> list;
 	return list;
 }
 
 template <class VisualizationType>
-QList<Element*>& DeclarativeItem<VisualizationType>::forms() const
+QList<FormElement*>& DeclarativeItem<VisualizationType>::forms() const
 {
 	return formsStatic();
 }
 
 template <class VisualizationType>
-QList<QList<Element*>>& DeclarativeItem<VisualizationType>::shapeElementsStatic()
+QList<QList<FormElement*>>& DeclarativeItem<VisualizationType>::shapeElementsStatic()
 {
-	static QList<QList<Element*>> list;
+	static QList<QList<FormElement*>> list;
 	return list;
 }
 
 template <class VisualizationType>
-QList<QList<Element*>>& DeclarativeItem<VisualizationType>::shapeElements() const
+QList<QList<FormElement*>>& DeclarativeItem<VisualizationType>::shapeElements() const
 {
 	return shapeElementsStatic();
 }

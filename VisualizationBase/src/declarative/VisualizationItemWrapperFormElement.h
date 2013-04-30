@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "ItemWrapperElement.h"
+#include "ItemWrapperFormElement.h"
 
 namespace Visualization {
 
@@ -34,15 +34,15 @@ namespace Visualization {
  * This is an item wrapper element, with a specifiable style for the wrapped item.
  */
 template <class ParentType, class VisualizationType>
-class VisualizationItemWrapperElement : public ItemWrapperElement<ParentType, VisualizationType> {
-		FLUENT_ELEMENT_INTERFACE(VisualizationItemWrapperElement);
+class VisualizationItemWrapperFormElement : public ItemWrapperFormElement<ParentType, VisualizationType> {
+		FLUENT_ELEMENT_INTERFACE(VisualizationItemWrapperFormElement);
 
 	public:
-		using ChildItem = typename ItemWrapperElement<ParentType, VisualizationType>::ChildItem;
+		using ChildItem = typename ItemWrapperFormElement<ParentType, VisualizationType>::ChildItem;
 		using GetStyleFunction = std::function<const typename VisualizationType::StyleType* (ParentType* v)>;
 
-		VisualizationItemWrapperElement(ChildItem item, GetStyleFunction style);
-		virtual ~VisualizationItemWrapperElement() {};
+		VisualizationItemWrapperFormElement(ChildItem item, GetStyleFunction style);
+		virtual ~VisualizationItemWrapperFormElement() {};
 		virtual void synchronizeWithItem(Item* item) override;
 
 	private:
@@ -50,13 +50,13 @@ class VisualizationItemWrapperElement : public ItemWrapperElement<ParentType, Vi
 };
 
 template <class ParentType, class VisualizationType>
-VisualizationItemWrapperElement<ParentType, VisualizationType>::VisualizationItemWrapperElement(
+VisualizationItemWrapperFormElement<ParentType, VisualizationType>::VisualizationItemWrapperFormElement(
 		ChildItem item, GetStyleFunction style)
-: ItemWrapperElement<ParentType, VisualizationType>{item}, style_{style}
+: ItemWrapperFormElement<ParentType, VisualizationType>{item}, style_{style}
 {}
 
 template <class ParentType, class VisualizationType>
-void VisualizationItemWrapperElement<ParentType, VisualizationType>::synchronizeWithItem(Item* item)
+void VisualizationItemWrapperFormElement<ParentType, VisualizationType>::synchronizeWithItem(Item* item)
 {
 	auto& childItem = (static_cast<ParentType*>(item))->*this->item();
 	auto style = style_(static_cast<ParentType*>(item));
