@@ -27,7 +27,8 @@
 #pragma once
 
 #include "Core/src/EnvisionPlugin.h"
-#include "precompiled.h"
+#include "PLUGINNAME_LOWERCASE_api.h"
+#include "ModelBase/src/InitializationRegistry.h"
 
 namespace NAMESPACE {
 
@@ -49,5 +50,8 @@ class PLUGINNAME : public QObject, public Core::EnvisionPlugin
 		virtual void unload() override;
 		virtual void selfTest(QString testid) override;
 };
+
+PLUGINNAME_UPPERCASE_API Model::InitializationRegistry& nodeTypeInitializationRegistry();
+PLUGINNAME_UPPERCASE_API Model::InitializationRegistry& itemTypeInitializationRegistry();
 
 }

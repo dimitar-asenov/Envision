@@ -6,6 +6,7 @@
 		<project>Core</project>
 		<project>Logger</project>
 		<project>SelfTest</project>
+		<project>ModelBase</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

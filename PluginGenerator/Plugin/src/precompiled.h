@@ -29,6 +29,7 @@
 
 // TODO: Include here the precompiled headers of other plug-ins that use this plug-in uses. Only the "public" part of
 // hose headers will be included here
+#include "ModelBase/src/precompiled.h"
 #include "Logger/src/precompiled.h"
 #include "SelfTest/src/precompiled.h"
 #include "Core/src/precompiled.h"
