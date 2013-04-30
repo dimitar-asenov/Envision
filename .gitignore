@@ -2,3 +2,5 @@
 /doc/generated
 /Makefile
 /*.user
+/*/object_script.*.Debug
+/*/object_script.*.Release
