@@ -40,7 +40,7 @@ AUTHOR=$4
 DATE=`date +"$DATE_FORMAT"`
 
 PLUGIN_DIR=$WORKSPACE_DIR/$PLUGIN_NAME
-FILE_LIST="$PLUGIN_DIR/eclipse.project $PLUGIN_DIR/eclipse.cproject $PLUGIN_DIR/.gitignore $PLUGIN_DIR/*.* $PLUGIN_DIR/src/*.* $PLUGIN_DIR/test/*.*"
+FILE_LIST="$PLUGIN_DIR/eclipse.project $PLUGIN_DIR/eclipse.cproject $PLUGIN_DIR/*.* $PLUGIN_DIR/src/*.* $PLUGIN_DIR/test/*.*"
 
 if [ -d $PLUGIN_DIR ]
 then
