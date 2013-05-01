@@ -40,12 +40,11 @@ class OOMODEL_API PointerType : public Type {
 		virtual bool equals(const Type* other) const;
 		virtual PointerType* clone() const override;
 
-		//TODO: was const Type* baseType() const;
-		Type* baseType() const;
+		const Type* baseType() const;
 
 	private:
 		Type* baseType_;
 };
 
-inline Type *PointerType::baseType() const { return baseType_; }
+inline const Type* PointerType::baseType() const { return baseType_; }
 } /* namespace OOModel */
