@@ -749,9 +749,8 @@ bool ClangAstVisitor::VisitContinueStmt(clang::ContinueStmt* continueStmt)
 	return true;
 }
 
-bool ClangAstVisitor::shouldUseDataRecursionFor(clang::Stmt* S)
+bool ClangAstVisitor::shouldUseDataRecursionFor(clang::Stmt*)
 {
-	Q_UNUSED(S)
 	return false;
 }
 
