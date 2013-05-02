@@ -461,9 +461,11 @@ bool ClangAstVisitor::TraverseEnumDecl(clang::EnumDecl* enumDecl)
 		curModel->classes()->append(ooEnumClass);
 	else if(OOModel::Class* curClass = dynamic_cast<OOModel::Class*>(ooStack_.top()))
 		curClass->classes()->append(ooEnumClass);
+	else if(OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
+		itemList->append(ooEnumClass);
 	else
 	{
-		log_->writeWarning(className_,QString("Enums are only supported global, in namespaces or in classes"),
+		log_->writeWarning(className_,QString("Unknown where to put Enum"),
 								 QString("EnumDecl"),enumDecl);
 		// no need to further process this enum
 		return true;
