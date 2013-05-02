@@ -455,7 +455,8 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 
 bool ClangAstVisitor::TraverseEnumDecl(clang::EnumDecl* enumDecl)
 {
-	OOModel::Class* ooEnumClass = new OOModel::Class(QString::fromStdString(enumDecl->getNameAsString()));
+	OOModel::Class* ooEnumClass = new OOModel::Class
+			(QString::fromStdString(enumDecl->getNameAsString()), OOModel::Class::ConstructKind::Enum);
 	// insert in model
 	if(OOModel::Project* curProject = dynamic_cast<OOModel::Project*>(ooStack_.top()))
 		curProject->classes()->append(ooEnumClass);
