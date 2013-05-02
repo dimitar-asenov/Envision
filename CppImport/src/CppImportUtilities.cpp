@@ -164,6 +164,8 @@ OOModel::BinaryOperation::OperatorTypes CppImportUtilities::convertClangOpcode
 		case clang::BO_Rem: return OOModel::BinaryOperation::REMAINDER;
 		case clang::BO_Add: return OOModel::BinaryOperation::PLUS;
 		case clang::BO_Sub: return OOModel::BinaryOperation::MINUS;
+		case clang::BO_Shl: return OOModel::BinaryOperation::LEFT_SHIFT;
+		case clang::BO_Shr: return OOModel::BinaryOperation::RIGHT_SHIFT_SIGNED;
 		case clang::BO_LT: return OOModel::BinaryOperation::LESS;
 		case clang::BO_GT: return OOModel::BinaryOperation::GREATER;
 		case clang::BO_LE: return OOModel::BinaryOperation::LESS_EQUALS;
@@ -173,9 +175,12 @@ OOModel::BinaryOperation::OperatorTypes CppImportUtilities::convertClangOpcode
 		case clang::BO_And: return OOModel::BinaryOperation::AND;
 		case clang::BO_Xor: return OOModel::BinaryOperation::XOR;
 		case clang::BO_Or: return OOModel::BinaryOperation::OR;
-		case clang::BO_LAnd: return OOModel::BinaryOperation::AND;
+		case clang::BO_LAnd: return OOModel::BinaryOperation::CONDITIONAL_AND;
 		case clang::BO_LOr: return OOModel::BinaryOperation::CONDITIONAL_OR;
-		default: return OOModel::BinaryOperation::GREATER;
+		default:
+			log_->binaryOpNotSupported(kind);
+			// TODO this is wrong
+			return OOModel::BinaryOperation::CONDITIONAL_OR;
 	}
 }
 
@@ -195,7 +200,10 @@ OOModel::AssignmentExpression::AssignmentTypes CppImportUtilities::convertClangA
 		case clang::BO_AndAssign: return OOModel::AssignmentExpression::BIT_AND_ASSIGN;
 		case clang::BO_XorAssign: return OOModel::AssignmentExpression::BIT_XOR_ASSIGN;
 		case clang::BO_OrAssign: return OOModel::AssignmentExpression::BIT_OR_ASSIGN;
-		default: return OOModel::AssignmentExpression::ASSIGN;
+		default:
+			log_->binaryOpNotSupported(kind);
+			// TODO this is wrong
+			return OOModel::AssignmentExpression::BIT_OR_ASSIGN;
 	}
 }
 
@@ -216,7 +224,10 @@ OOModel::UnaryOperation::OperatorTypes CppImportUtilities::convertUnaryOpcode(cl
 			//    case clang::UO_Real: return OOModel::UnaryOperation:
 			//    case clang::UO_Imag: return OOModel::UnaryOperation:
 			//    case clang::UO_Extension: return OOModel::UnaryOperation:
-		default: return OOModel::UnaryOperation::POSTDECREMENT;
+		default:
+			log_->unaryOpNotSupported(kind);
+			// TODO this is wrong
+			return OOModel::UnaryOperation::NOT;
 	}
 }
 

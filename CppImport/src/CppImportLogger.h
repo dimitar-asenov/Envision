@@ -42,6 +42,9 @@ class CppImportLogger
 
 		void typeNotSupported(QString typeName);
 
+		void unaryOpNotSupported(clang::UnaryOperatorKind kind);
+		void binaryOpNotSupported(clang::BinaryOperatorKind kind);
+
 		void outputStatistics();
 	private:
 		// type of output for writeOut function
@@ -62,6 +65,8 @@ class CppImportLogger
 
 		QMap<QString,int> countMap_;
 		QMap<QString,int> typeCountMap_;
+		QMap<QString,int> binOpMap_;
+		QMap<QString,int> unaryOpMap_;
 };
 
 inline void CppImportLogger::writeError(QString inWhichClass, QString reason, QString clangType, clang::NamedDecl* decl)
