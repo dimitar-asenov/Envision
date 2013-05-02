@@ -118,18 +118,24 @@ void CppImportLogger::initStreams()
 
 void CppImportLogger::outputStatistics()
 {
-	(*warnStream_) << "\n==========Statistics==========\n"
-						<<"\nStatistics of Warnings and Errors:\n";
+	(*warnStream_) << endl;
+	(*warnStream_) << qSetFieldWidth(36) << center << qSetPadChar('=')
+						<< "Statistics of warnings and errors" << reset << endl;
+
 	if(!countMap_.empty())
 		for(auto iter = countMap_.constBegin(); iter != countMap_.constEnd(); ++iter)
-			(*warnStream_) << iter.key() << ":\t\t" << iter.value() << "\n";
+			(*warnStream_) << left << qSetFieldWidth(30) << iter.key() + ":"
+								<< right << qSetFieldWidth(6) << iter.value() << endl;
 
 	(*warnStream_) << "\nTypes not supported by envision:\n";
 	if(!typeCountMap_.empty())
-		for(auto it = typeCountMap_.constBegin(); it != countMap_.constEnd(); ++it)
-			(*warnStream_) << it.key() << ":\t\t" << it.value() << "\n";
+		for(auto it = typeCountMap_.constBegin(); it != typeCountMap_.constEnd(); ++it)
+			(*warnStream_) << left << qSetFieldWidth(30) << it.key() + ":"
+								<< right << qSetFieldWidth(6) << it.value() << endl;
 
-	(*warnStream_) << "\n========Statistics End========\n";
+	(*warnStream_) << endl;
+	(*warnStream_) << qSetFieldWidth(36) << center << qSetPadChar('=')
+						<< "Statistics End" << reset << endl;
 }
 
 }
