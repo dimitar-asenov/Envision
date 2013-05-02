@@ -59,34 +59,16 @@ OOModel::Module *TranslateManager::insertNamespace(clang::NamespaceDecl *nd, int
 	}
 }
 
-OOModel::Class* TranslateManager::insertClass(clang::CXXRecordDecl* rDecl)
+bool TranslateManager::insertClass(clang::CXXRecordDecl* rDecl, OOModel::Class* ooClass)
 {
-	OOModel::Class* ooClass = nullptr;
 	// if rdecl is not managed yet add it:
 	if(!classMap_.contains(rDecl))
 	{
-		ooClass = new OOModel::Class();
-		ooClass->setName(QString::fromStdString(rDecl->getNameAsString()));
 		classMap_.insert(rDecl,ooClass);
+		return true;
 	}
-	else
-		std::cout << "ERROR TRANSLATEMNGR: CLASS "<< rDecl->getNameAsString() << " ALREADY IN MAP" << std::endl;
-	return ooClass;
-}
-
-OOModel::Class *TranslateManager::insertStruct(clang::CXXRecordDecl* sDecl)
-{
-	OOModel::Class* ooClass = nullptr;
-	// if rdecl is not managed yet add it:
-	if(!structMap_.contains(sDecl))
-	{
-		ooClass = new OOModel::Class();
-		ooClass->setName(QString::fromStdString(sDecl->getNameAsString()));
-		classMap_.insert(sDecl,ooClass);
-	}
-	else
-		std::cout << "ERROR TRANSLATEMNGR: CLASS"<< sDecl->getNameAsString() << " ALREADY IN MAP" << std::endl;
-	return ooClass;
+	std::cout << "ERROR TRANSLATEMNGR: CLASS "<< rDecl->getNameAsString() << " ALREADY IN MAP" << std::endl;
+	return false;
 }
 
 OOModel::Method* TranslateManager::insertMethodDecl(clang::CXXMethodDecl* mDecl)

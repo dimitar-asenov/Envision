@@ -84,21 +84,28 @@ bool ClangAstVisitor::TraverseNamespaceDecl(clang::NamespaceDecl* namespaceDecl)
 
 bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl)
 {
-	if(recordDecl->isClass() || recordDecl->isStruct())
+	OOModel::Class* ooClass = nullptr;
+	QString recordDeclName = QString::fromStdString(recordDecl->getNameAsString());
+	if(recordDecl->isClass())
+		ooClass = new OOModel::Class(recordDeclName,OOModel::Class::ConstructKind::Class);
+	else if(recordDecl->isStruct())
+		ooClass = new OOModel::Class(recordDeclName,OOModel::Class::ConstructKind::Struct);
+	else if(recordDecl->isUnion())
+		ooClass = new OOModel::Class(recordDeclName,OOModel::Class::ConstructKind::Union);
+	if(ooClass)
 	{
-		// TODO might be better to handle structs and classes separately
-		OOModel::Class* ooClass;
-		ooClass = trMngr_->insertClass(recordDecl);
-		if(!ooClass)
+		if(!trMngr_->insertClass(recordDecl,ooClass))
 			return false;
 
 		// insert in model
-		if(OOModel::Project* curProject = dynamic_cast<OOModel::Project*>(ooStack_.top()))
+		if(auto curProject = dynamic_cast<OOModel::Project*>(ooStack_.top()))
 			curProject->modules()->append(ooClass);
-		else if(OOModel::Module* curModel = dynamic_cast<OOModel::Module*>(ooStack_.top()))
+		else if(auto curModel = dynamic_cast<OOModel::Module*>(ooStack_.top()))
 			curModel->modules()->append(ooClass);
-		else if(OOModel::Class* curClass = dynamic_cast<OOModel::Class*>(ooStack_.top()))
+		else if(auto curClass = dynamic_cast<OOModel::Class*>(ooStack_.top()))
 			curClass->classes()->append(ooClass);
+		else if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
+			itemList->append(ooClass);
 		else
 			log_->writeError(className_,QString("uknown where to put class"),
 								  QString("CXXRecordDecl"),recordDecl);
@@ -128,12 +135,6 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl)
 
 		// set visibility
 		ooClass->setVisibility(utils_->convertAccessSpecifier(recordDecl->getAccess()));
-	}
-	else if(recordDecl->isUnion())
-	{
-		log_->writeWarning(className_,QString("Unions not supported"),
-								 QString("CXXRecordDecl"),recordDecl);
-		return Base::TraverseCXXRecordDecl(recordDecl);
 	}
 	else
 	{

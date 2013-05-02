@@ -36,8 +36,7 @@ class TranslateManager
 	public:
 		TranslateManager(Model::Model* model, OOModel::Project* project, CppImportUtilities* utils);
 		OOModel::Module* insertNamespace(clang::NamespaceDecl* nd, int depth);
-		OOModel::Class* insertClass(clang::CXXRecordDecl* rDecl);
-		OOModel::Class* insertStruct(clang::CXXRecordDecl* sDecl);
+		bool insertClass(clang::CXXRecordDecl* rDecl, OOModel::Class* ooClass);
 		bool containsClass(clang::CXXRecordDecl* recordDecl);
 		OOModel::Method* insertMethodDecl(clang::CXXMethodDecl* mDecl);
 		OOModel::Method* insertFunctionDecl(clang::FunctionDecl* functionDecl);
@@ -54,7 +53,6 @@ class TranslateManager
 
 		QMap<clang::NamespaceDecl*, QPair<OOModel::Module*,int> > nameSpaceMap_;
 		QMap<clang::CXXRecordDecl*, OOModel::Class*> classMap_;
-		QMap<clang::CXXRecordDecl*, OOModel::Class*> structMap_;
 		QMap<clang::CXXMethodDecl*, OOModel::Method*> methodMap_;
 		QMap<clang::FunctionDecl*, OOModel::Method*> functionMap_;
 		QMap<clang::VarDecl*, OOModel::VariableDeclaration*> varMap_;
