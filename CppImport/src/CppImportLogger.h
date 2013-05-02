@@ -39,6 +39,10 @@ class CppImportLogger
 		void writeWarning(QString inWhichClass, QString reason, QString clangType, clang::NamedDecl* decl);
 		void writeError(QString inWhichClass, QString reason, QString clangType, clang::Stmt* stmt);
 		void writeWarning(QString inWhichClass, QString reason, QString clangType, clang::Stmt* stmt);
+
+		void typeNotSupported(QString typeName);
+
+		void outputStatistics();
 	private:
 		// type of output for writeOut function
 		enum OUTTYPE {ERROR,WARNING};
@@ -55,6 +59,9 @@ class CppImportLogger
 
 		// SourceManager to get file names from clang
 		clang::SourceManager* sourceManger_{};
+
+		QMap<QString,int> countMap_;
+		QMap<QString,int> typeCountMap_;
 };
 
 inline void CppImportLogger::writeError(QString inWhichClass, QString reason, QString clangType, clang::NamedDecl* decl)

@@ -54,6 +54,10 @@ void CppImportLogger::writeOut(QString &inWhichClass, QString &reason, QString &
 		default:
 			return;
 	}
+
+	int newCount = countMap_.value(clangType) + 1;
+	countMap_.insert(clangType, newCount);
+
 	std::pair<clang::FileID,unsigned> decomposedLoc = sourceManger_->getDecomposedLoc(decl->getLocation());
 	(*outStream) << "ERR/WARN: \t In class : " << inWhichClass << " \n\t reason : " << reason
 					 << " \n\t in clang node : " << clangType
@@ -78,6 +82,10 @@ void CppImportLogger::writeOut(QString &inWhichClass, QString &reason, QString &
 		default:
 			return;
 	}
+
+	int newCount = countMap_.value(clangType) + 1;
+	countMap_.insert(clangType, newCount);
+
 	std::pair<clang::FileID,unsigned> decomposedLoc = sourceManger_->getDecomposedLoc(stmt->getLocStart());
 	(*outStream) << "ERR/WARN: \t In class : " << inWhichClass << " \n\t reason : " << reason
 					 << " \n\t in clang node : " << clangType
@@ -87,6 +95,12 @@ void CppImportLogger::writeOut(QString &inWhichClass, QString &reason, QString &
 					 << " \n\t on line : " << sourceManger_->getLineNumber(decomposedLoc.first,decomposedLoc.second)
 					 << "\n";
 
+}
+
+void CppImportLogger::typeNotSupported(QString typeName)
+{
+	int newCount = typeCountMap_.value(typeName) + 1;
+	typeCountMap_.insert(typeName, newCount);
 }
 
 void CppImportLogger::initStreams()
@@ -100,6 +114,22 @@ void CppImportLogger::initStreams()
 		errStream_ = new QTextStream(stderr);
 		warnStream_ = new QTextStream(stdout);
 	}
+}
+
+void CppImportLogger::outputStatistics()
+{
+	(*warnStream_) << "\n==========Statistics==========\n"
+						<<"\nStatistics of Warnings and Errors:\n";
+	if(!countMap_.empty())
+		for(auto iter = countMap_.constBegin(); iter != countMap_.constEnd(); ++iter)
+			(*warnStream_) << iter.key() << ":\t\t" << iter.value() << "\n";
+
+	(*warnStream_) << "\nTypes not supported by envision:\n";
+	if(!typeCountMap_.empty())
+		for(auto it = typeCountMap_.constBegin(); it != countMap_.constEnd(); ++it)
+			(*warnStream_) << it.key() << ":\t\t" << it.value() << "\n";
+
+	(*warnStream_) << "\n========Statistics End========\n";
 }
 
 }

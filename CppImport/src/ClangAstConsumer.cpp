@@ -62,6 +62,7 @@ void ClangAstConsumer::HandleTranslationUnit(clang::ASTContext &Context)
 	cList.getComments();
 	Context.getTranslationUnitDecl();
 	astVisitor_->TraverseDecl(Context.getTranslationUnitDecl());
+	logger_->outputStatistics();
 }
 
 void ClangAstConsumer::Initialize(clang::ASTContext &Context)
