@@ -141,6 +141,7 @@ class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 		clang::ASTContext* astContext_{};
 		TranslateManager* trMngr_{};
 		CppImportLogger* log_{};
+		CppImportUtilities* utils_{};
 		bool inBody_{false};
 		QString className_{"ClangAstVisitor"};
 };

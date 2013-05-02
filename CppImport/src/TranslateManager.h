@@ -34,7 +34,7 @@ namespace CppImport {
 class TranslateManager
 {
 	public:
-		TranslateManager(Model::Model* model, OOModel::Project* project);
+		TranslateManager(Model::Model* model, OOModel::Project* project, CppImportUtilities* utils);
 		OOModel::Module* insertNamespace(clang::NamespaceDecl* nd, int depth);
 		OOModel::Class* insertClass(clang::CXXRecordDecl* rDecl);
 		OOModel::Class* insertStruct(clang::CXXRecordDecl* sDecl);
@@ -58,6 +58,8 @@ class TranslateManager
 		QMap<clang::CXXMethodDecl*, OOModel::Method*> methodMap_;
 		QMap<clang::FunctionDecl*, OOModel::Method*> functionMap_;
 		QMap<clang::VarDecl*, OOModel::VariableDeclaration*> varMap_;
+
+		CppImportUtilities* utils_{};
 };
 
 inline bool TranslateManager::containsClass(clang::CXXRecordDecl* recordDecl)

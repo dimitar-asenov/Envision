@@ -28,8 +28,8 @@
 
 namespace CppImport {
 
-TranslateManager::TranslateManager(Model::Model* model, OOModel::Project* project) :
-	model_(model), project_(project)
+TranslateManager::TranslateManager(Model::Model* model, OOModel::Project* project, CppImportUtilities* utils) :
+	model_(model), project_(project), utils_(utils)
 {
 }
 
@@ -207,7 +207,7 @@ OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl)
 	OOModel::Method* method = new OOModel::Method();
 	method->setName(QString::fromStdString(mDecl->getNameAsString()));
 	// process result type
-	OOModel::Expression* restype = CppImportUtilities::convertClangType(mDecl->getResultType());
+	OOModel::Expression* restype = utils_->convertClangType(mDecl->getResultType());
 	if(restype)
 	{
 		OOModel::FormalResult* methodResult = new OOModel::FormalResult();
@@ -220,7 +220,7 @@ OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl)
 	{
 		OOModel::FormalArgument* arg = new OOModel::FormalArgument();
 		arg->setName(QString::fromStdString((*it)->getNameAsString()));
-		OOModel::Expression* type = CppImportUtilities::convertClangType((*it)->getType());
+		OOModel::Expression* type = utils_->convertClangType((*it)->getType());
 		if(type) arg->setTypeExpression(type);
 		method->arguments()->append(arg);
 	}
@@ -244,7 +244,7 @@ OOModel::Method*TranslateManager::addNewFunction(clang::FunctionDecl* functionDe
 	OOModel::Method* ooFunction= new OOModel::Method();
 	ooFunction->setName(QString::fromStdString(functionDecl->getNameAsString()));
 	// process result type
-	OOModel::Expression* restype = CppImportUtilities::convertClangType(functionDecl->getResultType());
+	OOModel::Expression* restype = utils_->convertClangType(functionDecl->getResultType());
 	if(restype)
 	{
 		OOModel::FormalResult* methodResult = new OOModel::FormalResult();
@@ -257,7 +257,7 @@ OOModel::Method*TranslateManager::addNewFunction(clang::FunctionDecl* functionDe
 	{
 		OOModel::FormalArgument* arg = new OOModel::FormalArgument();
 		arg->setName(QString::fromStdString((*it)->getNameAsString()));
-		OOModel::Expression* type = CppImportUtilities::convertClangType((*it)->getType());
+		OOModel::Expression* type = utils_->convertClangType((*it)->getType());
 		if(type) arg->setTypeExpression(type);
 		ooFunction->arguments()->append(arg);
 	}

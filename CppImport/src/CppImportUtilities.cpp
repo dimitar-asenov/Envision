@@ -28,6 +28,10 @@
 
 namespace CppImport {
 
+CppImportUtilities::CppImportUtilities(CppImportLogger* logger) : log_(logger)
+{
+}
+
 OOModel::Expression *CppImportUtilities::convertClangType(clang::QualType type)
 {
 	if(type.getTypePtr()->isBuiltinType())
@@ -41,17 +45,29 @@ OOModel::Expression *CppImportUtilities::convertClangType(clang::QualType type)
 			case clang::BuiltinType::Bool:
 				return new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::BOOLEAN);
 			case clang::BuiltinType::Char_U:
-				return nullptr;
+				log_->typeNotSupported("char unsigned target");
+				return new OOModel::PrimitiveTypeExpression(
+							OOModel::PrimitiveTypeExpression::PrimitiveTypes::CHAR);
 			case clang::BuiltinType::UChar:
-				return nullptr;
+				log_->typeNotSupported("unsigned char");
+				return new OOModel::PrimitiveTypeExpression(
+							OOModel::PrimitiveTypeExpression::PrimitiveTypes::CHAR);
 			case clang::BuiltinType::WChar_U:
-				return nullptr;
+				log_->typeNotSupported("wchar_t unsigned target");
+				return new OOModel::PrimitiveTypeExpression(
+							OOModel::PrimitiveTypeExpression::PrimitiveTypes::CHAR);
 			case clang::BuiltinType::Char16:
-				return nullptr;
+				log_->typeNotSupported("char16_t");
+				return new OOModel::PrimitiveTypeExpression(
+							OOModel::PrimitiveTypeExpression::PrimitiveTypes::CHAR);
 			case clang::BuiltinType::Char32:
-				return nullptr;
+				log_->typeNotSupported("char32_t");
+				return new OOModel::PrimitiveTypeExpression(
+							OOModel::PrimitiveTypeExpression::PrimitiveTypes::CHAR);
 			case clang::BuiltinType::UShort:
-				return nullptr;
+				log_->typeNotSupported("unsigned short");
+				return new OOModel::PrimitiveTypeExpression(
+							OOModel::PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_INT);
 			case clang::BuiltinType::UInt:
 				return new OOModel::PrimitiveTypeExpression(
 							OOModel::PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_INT);
@@ -59,39 +75,59 @@ OOModel::Expression *CppImportUtilities::convertClangType(clang::QualType type)
 				return new OOModel::PrimitiveTypeExpression(
 							OOModel::PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_LONG);
 			case clang::BuiltinType::ULongLong:
-				return nullptr;
+				log_->typeNotSupported("unsigned long long");
+				return new OOModel::PrimitiveTypeExpression(
+							OOModel::PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_LONG);
 			case clang::BuiltinType::UInt128:
-				return nullptr;
+				log_->typeNotSupported("__uint128_t");
+				return new OOModel::PrimitiveTypeExpression(
+							OOModel::PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_LONG);
 			// signed types
 			case clang::BuiltinType::Char_S:
 				return new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::CHAR);
 			case clang::BuiltinType::SChar:
-				return nullptr;
+				log_->typeNotSupported("signed char");
+				return new OOModel::PrimitiveTypeExpression(
+							OOModel::PrimitiveTypeExpression::PrimitiveTypes::CHAR);
 			case clang::BuiltinType::WChar_S:
-				return nullptr;
+				log_->typeNotSupported("wchar_t");
+				return new OOModel::PrimitiveTypeExpression(
+							OOModel::PrimitiveTypeExpression::PrimitiveTypes::CHAR);
 			case clang::BuiltinType::Short:
-				return nullptr;
+				log_->typeNotSupported("short");
+				return new OOModel::PrimitiveTypeExpression(
+							OOModel::PrimitiveTypeExpression::PrimitiveTypes::INT);
 			case clang::BuiltinType::Int:
 				return new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::INT);
 			case clang::BuiltinType::Long:
 				return new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::LONG);
 			case clang::BuiltinType::LongLong:
-				return nullptr;
+				log_->typeNotSupported("long long");
+				return new OOModel::PrimitiveTypeExpression(
+							OOModel::PrimitiveTypeExpression::PrimitiveTypes::LONG);
 			case clang::BuiltinType::Int128:
-				return nullptr;
+				log_->typeNotSupported("__int128_t");
+				return new OOModel::PrimitiveTypeExpression(
+							OOModel::PrimitiveTypeExpression::PrimitiveTypes::LONG);
 			// float types
 			case clang::BuiltinType::Half:
-				return nullptr;
+				log_->typeNotSupported("half");
+				return new OOModel::PrimitiveTypeExpression(
+							OOModel::PrimitiveTypeExpression::PrimitiveTypes::FLOAT);
 			case clang::BuiltinType::Float:
 				return new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::FLOAT);
 			case clang::BuiltinType::Double:
 				return new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::DOUBLE);
 			case clang::BuiltinType::LongDouble:
-				return nullptr;
+				log_->typeNotSupported("long double");
+				return new OOModel::PrimitiveTypeExpression(
+							OOModel::PrimitiveTypeExpression::PrimitiveTypes::DOUBLE);
 			// c++ specific
 			case clang::BuiltinType::NullPtr:
+				log_->typeNotSupported("nullptr");
 				return nullptr;
 			default:
+				log_->typeNotSupported("other type ?");
 				return nullptr;
 		}
 	}

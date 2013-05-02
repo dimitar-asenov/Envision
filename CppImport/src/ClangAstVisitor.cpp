@@ -32,13 +32,15 @@ namespace CppImport {
 ClangAstVisitor::ClangAstVisitor(Model::Model* model, OOModel::Project* currentProject, CppImportLogger* logger) :
 	currentModel_(model) , currentProject_(currentProject) , log_(logger)
 {
-	trMngr_ = new TranslateManager(model,currentProject);
+	utils_ = new CppImportUtilities(log_);
+	trMngr_ = new TranslateManager(model,currentProject, utils_);
 	ooStack_.push(currentProject_);
 }
 
 ClangAstVisitor::~ClangAstVisitor()
 {
 	delete trMngr_;
+	delete utils_;
 }
 
 bool ClangAstVisitor::TraverseNamespaceDecl(clang::NamespaceDecl* namespaceDecl)
@@ -125,7 +127,7 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl)
 		}
 
 		// set visibility
-		ooClass->setVisibility(CppImportUtilities::convertAccessSpecifier(recordDecl->getAccess()));
+		ooClass->setVisibility(utils_->convertAccessSpecifier(recordDecl->getAccess()));
 	}
 	else if(recordDecl->isUnion())
 	{
@@ -167,7 +169,7 @@ bool ClangAstVisitor::TraverseCXXMethodDecl(clang::CXXMethodDecl* methodDecl)
 		ooStack_.pop();
 	}
 	// specify the visibility of the method
-	ooMethod->setVisibility(CppImportUtilities::convertAccessSpecifier(methodDecl->getAccess()));
+	ooMethod->setVisibility(utils_->convertAccessSpecifier(methodDecl->getAccess()));
 	return true;
 }
 
@@ -410,7 +412,7 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 					const clang::ConstantArrayType* constArr = llvm::dyn_cast<clang::ConstantArrayType>(arrType);
 					std::cout << "Const Array Size: " << constArr->getSize().getLimitedValue() << std::endl;
 					OOModel::ArrayTypeExpression* varType = new OOModel::ArrayTypeExpression();
-					if(OOModel::Expression* expr = CppImportUtilities::convertClangType(arrType->getElementType()))
+					if(OOModel::Expression* expr = utils_->convertClangType(arrType->getElementType()))
 						varType->setTypeExpression(expr);
 					ooVarDecl->setVarType(varType);
 				}
@@ -418,7 +420,7 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 		}
 		else
 		{
-			OOModel::Expression* type = CppImportUtilities::convertClangType(varDecl->getType());
+			OOModel::Expression* type = utils_->convertClangType(varDecl->getType());
 			if(type) ooVarDecl->setVarType(type);
 		}
 
@@ -496,9 +498,9 @@ bool ClangAstVisitor::VisitFieldDecl(clang::FieldDecl* fieldDecl)
 		return true;
 	}
 	clang::QualType ctype = fieldDecl->getType();
-	OOModel::Expression* type = CppImportUtilities::convertClangType(ctype);
+	OOModel::Expression* type = utils_->convertClangType(ctype);
 	if(type) field->setTypeExpression(type);
-	field->setVisibility(CppImportUtilities::convertAccessSpecifier(fieldDecl->getAccess()));
+	field->setVisibility(utils_->convertAccessSpecifier(fieldDecl->getAccess()));
 	return true;
 }
 
@@ -541,7 +543,7 @@ bool ClangAstVisitor::TraverseCXXMemberCallExpr(clang::CXXMemberCallExpr* callEx
 bool ClangAstVisitor::TraverseCXXNewExpr(clang::CXXNewExpr* newExpr)
 {
 	OOModel::NewExpression* ooNewExpr = new OOModel::NewExpression();
-	ooNewExpr->setNewType(CppImportUtilities::convertClangType(newExpr->getAllocatedType()));
+	ooNewExpr->setNewType(utils_->convertClangType(newExpr->getAllocatedType()));
 	if(newExpr->isArray())
 	{
 		TraverseStmt(newExpr->getArraySize());
@@ -757,7 +759,7 @@ bool ClangAstVisitor::shouldUseDataRecursionFor(clang::Stmt*)
 bool ClangAstVisitor::TraverseBinaryOp(clang::BinaryOperator* binaryOperator)
 {
 	OOModel::BinaryOperation::OperatorTypes ooOperatorType =
-			CppImportUtilities::convertClangOpcode(binaryOperator->getOpcode());
+			utils_->convertClangOpcode(binaryOperator->getOpcode());
 	OOModel::BinaryOperation* ooBinOp = new OOModel::BinaryOperation();
 	// save inBody_ value for recursive expressions
 	bool inBody = inBody_;
@@ -791,7 +793,7 @@ bool ClangAstVisitor::TraverseBinaryOp(clang::BinaryOperator* binaryOperator)
 bool ClangAstVisitor::TraverseAssignment(clang::BinaryOperator* binaryOperator)
 {
 	OOModel::AssignmentExpression::AssignmentTypes ooOperatorType =
-			CppImportUtilities::convertClangAssignOpcode(binaryOperator->getOpcode());
+			utils_->convertClangAssignOpcode(binaryOperator->getOpcode());
 	OOModel::AssignmentExpression* ooBinOp = new OOModel::AssignmentExpression();
 	// save inBody_ value for recursive expressions
 	bool inBody = inBody_;
@@ -825,7 +827,7 @@ bool ClangAstVisitor::TraverseAssignment(clang::BinaryOperator* binaryOperator)
 bool ClangAstVisitor::TraverseUnaryOp(clang::UnaryOperator* unaryOperator)
 {
 	OOModel::UnaryOperation::OperatorTypes ooOperatorType =
-			CppImportUtilities::convertUnaryOpcode(unaryOperator->getOpcode());
+			utils_->convertUnaryOpcode(unaryOperator->getOpcode());
 	OOModel::UnaryOperation* ooUnaryOp = new OOModel::UnaryOperation();
 	// save inBody_ value for recursive expressions
 	bool inBody = inBody_;

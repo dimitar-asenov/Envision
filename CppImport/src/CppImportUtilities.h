@@ -27,17 +27,20 @@
 #pragma once
 
 #include "cppimport_api.h"
+#include "CppImportLogger.h"
 
 namespace CppImport {
 
 class CppImportUtilities
 {
 	public:
-		CppImportUtilities() {}
-		static OOModel::Expression* convertClangType(clang::QualType type);
-		static OOModel::BinaryOperation::OperatorTypes convertClangOpcode(clang::BinaryOperatorKind kind);
-		static OOModel::AssignmentExpression::AssignmentTypes convertClangAssignOpcode(clang::BinaryOperatorKind kind);
-		static OOModel::UnaryOperation::OperatorTypes convertUnaryOpcode(clang::UnaryOperatorKind kind);
-		static OOModel::Visibility::VisibilityType convertAccessSpecifier(clang::AccessSpecifier as);
+		CppImportUtilities(CppImportLogger* logger);
+		OOModel::Expression* convertClangType(clang::QualType type);
+		OOModel::BinaryOperation::OperatorTypes convertClangOpcode(clang::BinaryOperatorKind kind);
+		OOModel::AssignmentExpression::AssignmentTypes convertClangAssignOpcode(clang::BinaryOperatorKind kind);
+		OOModel::UnaryOperation::OperatorTypes convertUnaryOpcode(clang::UnaryOperatorKind kind);
+		OOModel::Visibility::VisibilityType convertAccessSpecifier(clang::AccessSpecifier as);
+	private:
+		CppImportLogger* log_;
 };
 }
