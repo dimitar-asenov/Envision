@@ -396,57 +396,59 @@ bool ClangAstVisitor::VisitStmt(clang::Stmt* S)
 
 bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 {
-	//    std::cout << "Visiting VarDecl " << vd->getNameAsString() <<std::endl;
-
-	OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top());
-	if(itemList)
+	//OOModel::VariableDeclaration* ooVarDecl = trMngr_->insertVar(varDecl);
+	// TODO should be var
+	OOModel::Field* ooVarDecl = new OOModel::Field(QString::fromStdString(varDecl->getNameAsString()));
+	if(ooVarDecl)
 	{
-		OOModel::VariableDeclaration* ooVarDecl = trMngr_->insertVar(varDecl);
-		if(varDecl->getType().getTypePtr()->isArrayType())
-		{
-			//TODO this array section is very nasty
-			const clang::ArrayType* arrType =  varDecl->getType().getTypePtr()->getAsArrayTypeUnsafe();
-			if(arrType)
-			{
-				if(llvm::isa<clang::ConstantArrayType>(arrType))
-				{
-					const clang::ConstantArrayType* constArr = llvm::dyn_cast<clang::ConstantArrayType>(arrType);
-					std::cout << "Const Array Size: " << constArr->getSize().getLimitedValue() << std::endl;
-					OOModel::ArrayTypeExpression* varType = new OOModel::ArrayTypeExpression();
-					if(OOModel::Expression* expr = utils_->convertClangType(arrType->getElementType()))
-						varType->setTypeExpression(expr);
-					ooVarDecl->setVarType(varType);
-				}
-			}
-		}
-		else
-		{
-			OOModel::Expression* type = utils_->convertClangType(varDecl->getType());
-			if(type) ooVarDecl->setVarType(type);
-		}
-
-		if(varDecl->hasInit())
-		{
-			bool inBody = inBody_;
-			inBody_ = false;
-			TraverseStmt(varDecl->getInit());
-			if(!ooExprStack_.empty())
-				ooVarDecl->setInitialValue(ooExprStack_.pop());
-			else
-				log_->writeError(className_,QString("Var Init Expr no supported"),
-									  QString("Expr"),varDecl->getInit());
-			inBody_ = inBody;
-		}
-		if(inBody_)
+		if(auto project = dynamic_cast<OOModel::Project*>(ooStack_.top()))
+			project->fields()->append(ooVarDecl);
+		else if(auto module = dynamic_cast<OOModel::Module*>(ooStack_.top()))
+			module->fields()->append(ooVarDecl);
+		else if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
 			itemList->append(ooVarDecl);
 		else
-			ooExprStack_.push(ooVarDecl);
+		{
+			if(!llvm::isa<clang::ParmVarDecl>(varDecl))
+				log_->writeWarning(className_,QString("this variable is not supported"),
+										 QString("VarDecl"),varDecl);
+		}
+	}
+
+	if(varDecl->getType().getTypePtr()->isArrayType())
+	{
+		//TODO this array section is very nasty
+		const clang::ArrayType* arrType =  varDecl->getType().getTypePtr()->getAsArrayTypeUnsafe();
+		if(arrType)
+		{
+			if(llvm::isa<clang::ConstantArrayType>(arrType))
+			{
+				const clang::ConstantArrayType* constArr = llvm::dyn_cast<clang::ConstantArrayType>(arrType);
+				std::cout << "Const Array Size: " << constArr->getSize().getLimitedValue() << std::endl;
+				OOModel::ArrayTypeExpression* varType = new OOModel::ArrayTypeExpression();
+				if(OOModel::Expression* expr = utils_->convertClangType(arrType->getElementType()))
+					varType->setTypeExpression(expr);
+				ooVarDecl->setTypeExpression(varType);
+			}
+		}
 	}
 	else
 	{
-		if(!llvm::isa<clang::ParmVarDecl>(varDecl))
-			log_->writeWarning(className_,QString("this variable is not supported"),
-									 QString("VarDecl"),varDecl);
+		OOModel::Expression* type = utils_->convertClangType(varDecl->getType());
+		if(type) ooVarDecl->setTypeExpression(type);
+	}
+
+	if(varDecl->hasInit())
+	{
+		bool inBody = inBody_;
+		inBody_ = false;
+		TraverseStmt(varDecl->getInit());
+		if(!ooExprStack_.empty())
+			ooVarDecl->setInitialValue(ooExprStack_.pop());
+		else
+			log_->writeError(className_,QString("Var Init Expr not supported"),
+								  QString("Expr"),varDecl->getInit());
+		inBody_ = inBody;
 	}
 	return true;
 }
