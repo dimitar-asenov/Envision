@@ -6,3 +6,4 @@
 /qt
 /callgrind.out.*
 /test
+/projects

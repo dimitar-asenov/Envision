@@ -1,0 +1,5 @@
+The JavaImportTool application uses parts of the Apache Commons Framework and the Eclipse JDT. See the .classpath file
+for detailed dependency information.
+
+None of the dependencies are provided in order to avoid licensing issues. The dependencies are available for download
+on-line and you must agree to their License and Copyright Agreements before using them.

@@ -45,12 +45,12 @@ Interaction::CommandResult* CSceneHandlerItemTest::execute(Visualization::Item*,
 {
 	//Test code goes here
 
-	QString testDir = "test/";
+	QString testDir = "projects/";
 	Model::Model* model = new Model::Model();
 	FilePersistence::FileStore store;
 	store.setBaseFolder(testDir);
 
-	model->load(&store, "ConvertedProjectName");
+	model->load(&store, "large");
 	auto prj = dynamic_cast<OOModel::Project*> (model->root());
 
 	Visualization::VisualizationManager::instance().mainScene()->addTopLevelItem( new Visualization::RootItem(prj));
@@ -64,7 +64,7 @@ QList<Interaction::CommandSuggestion*> CSceneHandlerItemTest::suggest(Visualizat
 {
 	QList<Interaction::CommandSuggestion*> s;
 	if (QString("test").startsWith(textSoFar.trimmed(), Qt::CaseInsensitive) )
-			s.append(new Interaction::CommandSuggestion("test", "Initiates a test function"));
+			s.append(new Interaction::CommandSuggestion("test", "Loads and visualizes a large project"));
 	return s;
 }
 
