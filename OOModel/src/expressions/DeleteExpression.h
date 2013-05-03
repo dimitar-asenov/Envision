@@ -28,6 +28,8 @@
 
 #include "Expression.h"
 
+#include "ModelBase/src/nodes/Boolean.h"
+
 DECLARE_TYPED_LIST(OOMODEL_API, OOModel, DeleteExpression)
 
 namespace OOModel {
@@ -37,8 +39,11 @@ class OOMODEL_API DeleteExpression: public Expression
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(DeleteExpression)
 
 	ATTRIBUTE(Expression, deleteType, setDeleteType)
+	ATTRIBUTE_VALUE(Model::Boolean, arrayType, setArrayType, bool)
 
 	public:
+		DeleteExpression(bool isArrayType);
+
 		virtual Type* type() override;
 };
 
