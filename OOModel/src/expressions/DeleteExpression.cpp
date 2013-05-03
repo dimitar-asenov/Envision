@@ -37,16 +37,16 @@ EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(DeleteExpression, Expression)
 EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(DeleteExpression, Expression)
 
 REGISTER_ATTRIBUTE(DeleteExpression, deleteType, Expression, false, false, true)
-REGISTER_ATTRIBUTE(DeleteExpression, arrayType, Boolean, false, false, true)
+REGISTER_ATTRIBUTE(DeleteExpression, isArray, Boolean, false, false, true)
 
 DeleteExpression::DeleteExpression(bool isArrayType)
 {
-	setArrayType(isArrayType);
+	setIsArray(isArrayType);
 }
 
 Type* DeleteExpression::type()
 {
-	return new PrimitiveType(PrimitiveType::VOID, false);
+	return new PrimitiveType(PrimitiveType::VOID, true);
 }
 
 }
