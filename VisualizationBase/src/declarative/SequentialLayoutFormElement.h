@@ -49,6 +49,7 @@ class FormElement;
 class VISUALIZATIONBASE_API SequentialLayoutFormElement : public LayoutFormElement
 {
 		FLUENT_ELEMENT_INTERFACE(SequentialLayoutFormElement);
+		FLUENT_LAYOUT_INTERFACE(SequentialLayoutFormElement);
 
 	public:
 		using ListNodeGetterFunction = std::function<Model::List*(Item* item)>;
@@ -115,27 +116,6 @@ class VISUALIZATIONBASE_API SequentialLayoutFormElement : public LayoutFormEleme
 		 * Sets the minimum height to \a minHeight.
 		 */
 		SequentialLayoutFormElement* setMinHeight(int minHeight);
-		/**
-		 * Sets if the element has a cursor if it is empty to \a cursorWhenEmpty. Is false by default.
-		 * Also see SequentialLayoutStyle::hasCursorWhenEmpty().
-		 */
-		SequentialLayoutFormElement* setHasCursorWhenEmpty(bool cursorWhenEmpty);
-		/**
-		 * Sets if the element does not have location equivalent cursors to \a notLocationEquivalent. Is false by
-		 * default.
-		 * Also see SequentialLayoutStyle::notLocationEquivalentCursors().
-		 */
-		SequentialLayoutFormElement* setNotLocationEquivalentCursors(bool notLocationEquivalent);
-		/**
-		 * Sets if the element has no boundary cursors to \a noBoundaryCursors. Is false by default.
-		 * Also see SequentialLayoutStyle::noBoundaryCursorsInsideShape().
-		 */
-		SequentialLayoutFormElement* setNoBoudaryCursors(bool noBoundaryCursors);
-		/**
-		 * Sets if the element has no inner cursors to \a noInnerCursors. Is false by default.
-		 * Also see SequentialLayoutStyle::noInnerCursors().
-		 */
-		SequentialLayoutFormElement* setNoInnerCursors(bool noInnerCursors);
 
 		// Methods executable when items need to be rendered
 		virtual void computeSize(Item* item, int availableWidth, int availableHeight) override;
@@ -168,7 +148,7 @@ class VISUALIZATIONBASE_API SequentialLayoutFormElement : public LayoutFormEleme
 		ListOfNodesGetterFunction nodeListGetter_{};
 		ListOfItemsGetterFunction itemListGetter_{};
 
-		std::function<int(Item* item)> spaceBetweenElementsGetter_;
+		std::function<int(Item* item)> spaceBetweenElementsGetter_{};
 
 		int defaultSpaceBetweenElements_{0};
 		Qt::Orientation orientation_{Qt::Horizontal};
@@ -176,10 +156,6 @@ class VISUALIZATIONBASE_API SequentialLayoutFormElement : public LayoutFormEleme
 		bool forward_{true};
 		int minWidth_{};
 		int minHeight_{};
-		bool hasCursorWhenEmpty_{false};
-		bool notLocationEquivalentCursors_{false};
-		bool noBoundaryCursors_{false};
-		bool noInnerCursors_{false};
 
 		mutable QHash<const Item*, QList<Item*>*> itemListMap_{};
 
@@ -278,27 +254,6 @@ inline SequentialLayoutFormElement* SequentialLayoutFormElement::setMinWidth(int
 inline SequentialLayoutFormElement* SequentialLayoutFormElement::setMinHeight(int minHeight)
 {
 	minHeight_ = minHeight;
-	return this;
-}
-inline SequentialLayoutFormElement* SequentialLayoutFormElement::setHasCursorWhenEmpty(bool cursorWhenEmpty)
-{
-	hasCursorWhenEmpty_ = cursorWhenEmpty;
-	return this;
-}
-inline SequentialLayoutFormElement* SequentialLayoutFormElement::setNotLocationEquivalentCursors(
-		bool notLocationEquivalentCursors)
-{
-	notLocationEquivalentCursors_ = notLocationEquivalentCursors;
-	return this;
-}
-inline SequentialLayoutFormElement* SequentialLayoutFormElement::setNoBoudaryCursors(bool noBoundaryCursors)
-{
-	noBoundaryCursors_ = noBoundaryCursors;
-	return this;
-}
-inline SequentialLayoutFormElement* SequentialLayoutFormElement::setNoInnerCursors(bool noInnerCursors)
-{
-	noInnerCursors_ = noInnerCursors;
 	return this;
 }
 

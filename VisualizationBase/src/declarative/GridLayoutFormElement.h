@@ -44,6 +44,7 @@ namespace Visualization {
  */
 class GridLayoutFormElement : public LayoutFormElement {
 		FLUENT_ELEMENT_INTERFACE(GridLayoutFormElement);
+		FLUENT_LAYOUT_INTERFACE(GridLayoutFormElement);
 
 	public:
 		GridLayoutFormElement();
@@ -159,23 +160,6 @@ class GridLayoutFormElement : public LayoutFormElement {
 		 * Sets if the element has a cursor if it is empty to \a cursorWhenEmpty. Is false by default.
 		 * Also see SequentialLayoutStyle::hasCursorWhenEmpty().
 		 */
-		GridLayoutFormElement* setHasCursorWhenEmpty(bool cursorWhenEmpty);
-		/**
-		 * Sets if the element does not have location equivalent cursors to \a notLocationEquivalent. Is false by
-		 * default.
-		 * Also see SequentialLayoutStyle::notLocationEquivalentCursors().
-		 */
-		GridLayoutFormElement* setNotLocationEquivalentCursors(bool notLocationEquivalent);
-		/**
-		 * Sets if the element has no boundary cursors to \a noBoundaryCursors. Is false by default.
-		 * Also see SequentialLayoutStyle::noBoundaryCursorsInsideShape().
-		 */
-		GridLayoutFormElement* setNoBoudaryCursors(bool noBoundaryCursors);
-		/**
-		 * Sets if the element has no inner cursors to \a noInnerCursors. Is false by default.
-		 * Also see SequentialLayoutStyle::noInnerCursors().
-		 */
-		GridLayoutFormElement* setNoInnerCursors(bool noInnerCursors);
 
 		// Methods executable when items need to be rendered
 		virtual void computeSize(Item* item, int availableWidth, int availableHeight) override;
@@ -212,11 +196,6 @@ class GridLayoutFormElement : public LayoutFormElement {
 		QVector<float> rowStretchFactors_{};
 		float overallColumnStretchFactor_{};
 		float overallRowStretchFactor_{};
-
-		bool hasCursorWhenEmpty_{false};
-		bool notLocationEquivalentCursors_{false};
-		bool noBoundaryCursors_{false};
-		bool noInnerCursors_{false};
 
 		/**
 		 * Recomputes and caches the sum of the column stretch factors and the row stretch factors respectively.
@@ -362,27 +341,6 @@ inline GridLayoutFormElement* GridLayoutFormElement::setStretchFactors(float str
 	columnStretchFactors_ = QVector<float>(numColumns_, stretchFactor);
 	rowStretchFactors_ = QVector<float>(numRows_, stretchFactor);
 	computeOverallStretchFactors();
-	return this;
-}
-inline GridLayoutFormElement* GridLayoutFormElement::setHasCursorWhenEmpty(bool cursorWhenEmpty)
-{
-	hasCursorWhenEmpty_ = cursorWhenEmpty;
-	return this;
-}
-inline GridLayoutFormElement* GridLayoutFormElement::setNotLocationEquivalentCursors(
-		bool notLocationEquivalentCursors)
-{
-	notLocationEquivalentCursors_ = notLocationEquivalentCursors;
-	return this;
-}
-inline GridLayoutFormElement* GridLayoutFormElement::setNoBoudaryCursors(bool noBoundaryCursors)
-{
-	noBoundaryCursors_ = noBoundaryCursors;
-	return this;
-}
-inline GridLayoutFormElement* GridLayoutFormElement::setNoInnerCursors(bool noInnerCursors)
-{
-	noInnerCursors_ = noInnerCursors;
 	return this;
 }
 

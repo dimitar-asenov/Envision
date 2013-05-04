@@ -301,7 +301,7 @@ QList<ItemRegion> SequentialLayoutFormElement::regions(Item* item, int parentX, 
 	auto& itemList = listForItem(item);
 
 	// If this layout is not visible return no regions
-	if (itemList.isEmpty() && !hasCursorWhenEmpty_)
+	if (itemList.isEmpty() && !hasCursorWhenEmpty(item))
 		return regs;
 
 	QRect wholeArea = QRect(QPoint(x(item) + parentX, y(item) + parentY), size(item));
@@ -365,16 +365,16 @@ QList<ItemRegion> SequentialLayoutFormElement::regions(Item* item, int parentX, 
 		if (i==0) lc->setIsAtBoundary(true);
 
 		cursorRegion.cursor()->setRegion(cursorRegion.region());
-		if (notLocationEquivalentCursors_) lc->setNotLocationEquivalent(true);
+		if (notLocationEquivalentCursors(item)) lc->setNotLocationEquivalent(true);
 
 		// Skip cursor?
-		if (!((i == 0) && noBoundaryCursors_) && !((i > 0) && noInnerCursors_))
+		if (!((i == 0) && noBoundaryCursors(item)) && !((i > 0) && noInnerCursors(item)))
 			regs.append(cursorRegion);
 		regs.append(itemRegion);
 	}
 
 	// Add trailing cursor region if not omitted
-	if (!noBoundaryCursors_)
+	if (!noBoundaryCursors(item))
 	{
 		QRect trailing;
 		if (horizontal && forward_)
@@ -397,7 +397,7 @@ QList<ItemRegion> SequentialLayoutFormElement::regions(Item* item, int parentX, 
 		lc->setVisualizationSize(horizontal ? QSize(2, height(item)) : QSize(width(item), 2));
 		lc->setRegion(trailing);
 		lc->setIsAtBoundary(true);
-		if (notLocationEquivalentCursors_) lc->setNotLocationEquivalent(true);
+		if (notLocationEquivalentCursors(item)) lc->setNotLocationEquivalent(true);
 	}
 	return regs;
 }

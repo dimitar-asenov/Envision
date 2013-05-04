@@ -38,6 +38,114 @@ class VISUALIZATIONBASE_API LayoutFormElement : public FormElement
 {
 	public:
 		~LayoutFormElement() {};
+		/**
+		 * Sets a getter (\a cursorWhenEmptyGetter) for checking if the element should have cursors when empty
+		 * dynamically while rendering.
+		 */
+		LayoutFormElement* setHasCursorWhenEmpty(std::function<bool(Item* item)> cursorWhenEmptyGetter);
+		/**
+		 * Sets a getter (\a notLocationEquivalentGetter) for checking if the element's cursors are not location
+		 * equivalent dynamically while rendering.
+		 */
+		LayoutFormElement* setNotLocationEquivalentCursors(
+				std::function<bool(Item* item)> notLocationEquivalentGetter);
+		/**
+		 * Sets a getter (\a noBoundaryCursorsGetter) for checking if the element should not have any boundary cursors
+		 * dynamically while rendering.
+		 */
+		LayoutFormElement* setNoBoudaryCursors(std::function<bool(Item* item)> noBoundaryCursorsGetter);
+		/**
+		 * Sets a getter (\a noInnerCursorsGetter) for checking if the element should not have any inner cursors
+		 * dynamically while rendering.
+		 */
+		LayoutFormElement* setNoInnerCursors(std::function<bool(Item* item)> noInnerCursorsGetter);
+
+	protected:
+		bool hasCursorWhenEmpty(Item* item);
+		bool notLocationEquivalentCursors(Item* item);
+		bool noBoundaryCursors(Item* item);
+		bool noInnerCursors(Item* item);
+
+	private:
+		std::function<bool(Item* item)> hasCursorWhenEmptyGetter_{};
+		std::function<bool(Item* item)> notLocationEquivalentCursorsGetter_{};
+		std::function<bool(Item* item)> noBoundaryCursorsGetter_{};
+		std::function<bool(Item* item)> noInnerCursorsGetter_{};
 };
+inline LayoutFormElement* LayoutFormElement::setHasCursorWhenEmpty(
+		std::function<bool(Item* item)> hasCursorWhenEmptyGetter)
+{
+	hasCursorWhenEmptyGetter_ = hasCursorWhenEmptyGetter;
+	return this;
+}
+inline LayoutFormElement* LayoutFormElement::setNotLocationEquivalentCursors(
+		std::function<bool(Item* item)> notLocationEquivalentCursorsGetter)
+{
+	notLocationEquivalentCursorsGetter_ = notLocationEquivalentCursorsGetter;
+	return this;
+}
+inline LayoutFormElement* LayoutFormElement::setNoBoudaryCursors(std::function<bool(Item* item)> noBoudaryCursorsGetter)
+{
+	noBoundaryCursorsGetter_ = noBoudaryCursorsGetter;
+	return this;
+}
+inline LayoutFormElement* LayoutFormElement::setNoInnerCursors(std::function<bool(Item* item)> noInnerCursorsGetter)
+{
+	noInnerCursorsGetter_ = noInnerCursorsGetter;
+	return this;
+}
+inline bool LayoutFormElement::hasCursorWhenEmpty(Item* item)
+{
+	if (hasCursorWhenEmptyGetter_) return hasCursorWhenEmptyGetter_(item);
+	return true;
+}
+inline bool LayoutFormElement::notLocationEquivalentCursors(Item* item)
+{
+	if (notLocationEquivalentCursorsGetter_) return notLocationEquivalentCursorsGetter_(item);
+	return false;
+}
+inline bool LayoutFormElement::noBoundaryCursors(Item* item)
+{
+	if (noBoundaryCursorsGetter_) return noBoundaryCursorsGetter_(item);
+	return false;
+}
+inline bool LayoutFormElement::noInnerCursors(Item* item)
+{
+	if (noInnerCursorsGetter_) return noInnerCursorsGetter_(item);
+	return false;
+}
 
 } /* namespace Visualization */
+
+#define FLUENT_LAYOUT_INTERFACE(ClassName)																									\
+public:																																					\
+	/**
+	 * Sets a getter (\a cursorWhenEmptyGetter) for checking if the element should have cursors when empty
+	 * dynamically while rendering.
+	 */																																					\
+	ClassName* setHasCursorWhenEmpty(std::function<bool(Item* item)> cursorWhenEmptyGetter){																				\
+		 return static_cast<ClassName*>(LayoutFormElement::setHasCursorWhenEmpty(cursorWhenEmptyGetter));					\
+	 }																																						\
+	/**
+	 * Sets a getter (\a notLocationEquivalentGetter) for checking if the element's cursors are not location
+	 * equivalent dynamically while rendering.
+	 */																																					\
+	ClassName* setNotLocationEquivalentCursors(																								\
+			std::function<bool(Item* item)> notLocationEquivalentGetter){																\
+		 return static_cast<ClassName*>(																											\
+				 LayoutFormElement::setNotLocationEquivalentCursors(notLocationEquivalentGetter));								\
+	 }																																						\
+	/**
+	 * Sets a getter (\a noBoundaryCursorsGetter) for checking if the element should not have any boundary cursors
+	 * dynamically while rendering.
+	 */																																					\
+	ClassName* setNoBoudaryCursors(std::function<bool(Item* item)> noBoundaryCursorsGetter){									\
+		 return static_cast<ClassName*>(LayoutFormElement::setNoBoudaryCursors(noBoundaryCursorsGetter));					\
+	 }																																						\
+	/**
+	 * Sets a getter (\a noInnerCursorsGetter) for checking if the element should not have any inner cursors
+	 * dynamically while rendering.
+	 */																																					\
+	ClassName* setNoInnerCursors(std::function<bool(Item* item)> noInnerCursorsGetter){											\
+		 return static_cast<ClassName*>(LayoutFormElement::setNoInnerCursors(noInnerCursorsGetter));							\
+	 }

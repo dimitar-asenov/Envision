@@ -59,14 +59,30 @@ void VList::initializeForms()
 							};
 	auto spaceBetweenElementsGetter = [](Item* i)
 							{return static_cast<VList*>(i)->style()->itemsStyle().spaceBetweenElements();};
+	auto hasCursorWhenEmptyGetter = [](Item* i)
+							{return static_cast<VList*>(i)->style()->itemsStyle().hasCursorWhenEmpty();};
+	auto notLocationEquivalentGetter = [](Item* i)
+							{return static_cast<VList*>(i)->style()->itemsStyle().notLocationEquivalentCursors();};
+	auto noBoundaryCursorsGetter = [](Item* i)
+							{return static_cast<VList*>(i)->style()->itemsStyle().noBoundaryCursorsInsideShape();};
+	auto noInnerCursorsGetter = [](Item* i)
+							{return static_cast<VList*>(i)->style()->itemsStyle().noInnerCursors();};
 
 	// Form 0: horizontal orientation
 	addForm((new SequentialLayoutFormElement())
 			->setHorizontal()->setSpaceBetweenElements(spaceBetweenElementsGetter)
+			->setHasCursorWhenEmpty(hasCursorWhenEmptyGetter)
+			->setNotLocationEquivalentCursors(notLocationEquivalentGetter)
+			->setNoBoudaryCursors(noBoundaryCursorsGetter)
+			->setNoInnerCursors(noInnerCursorsGetter)
 			->setListOfNodes(listOfNodesGetter));
 	// Form 1: vertical orientation
 	addForm((new SequentialLayoutFormElement())
 			->setVertical()->setSpaceBetweenElements(spaceBetweenElementsGetter)
+			->setHasCursorWhenEmpty(hasCursorWhenEmptyGetter)
+			->setNotLocationEquivalentCursors(notLocationEquivalentGetter)
+			->setNoBoudaryCursors(noBoundaryCursorsGetter)
+			->setNoInnerCursors(noInnerCursorsGetter)
 			->setListOfNodes(listOfNodesGetter));
 }
 
