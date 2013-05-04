@@ -27,6 +27,7 @@
 #include "AnchorLayoutConstraintSolver.h"
 
 #include "FormElement.h"
+#include "VisualizationException.h"
 
 #include <lpsolve/lp_lib.h>
 
@@ -100,29 +101,37 @@ void AnchorLayoutConstraintSolver::placeElements(const QVector<FormElement*>& el
 	}
 	setMinimizeObjective(objectiveRow);
 
-	QVector<float> solution = solveConstraints();
-
-	cleanUpConstraintSolver();
-
-	// Apply the solution
-	for (int i=0; i<elements.size(); ++i)
+	try
 	{
-		FormElement* element = elements.at(i);
-		int size = std::ceil(solution[endVariable(i)] - solution[startVariable(i)]);
-		int position = std::ceil(solution[startVariable(i)]);
+		QVector<float> solution = solveConstraints();
 
-		if (orientation == AnchorLayoutAnchor::Orientation::Horizontal)
+		cleanUpConstraintSolver();
+
+		// Apply the solution
+		for (int i=0; i<elements.size(); ++i)
 		{
-			if (size > element->size(item).width())
-				element->computeSize(item, size, element->size(item).height());
-			element->setPos(item, QPoint(position, element->pos(item).y()));
+			FormElement* element = elements.at(i);
+			int size = std::ceil(solution[endVariable(i)] - solution[startVariable(i)]);
+			int position = std::ceil(solution[startVariable(i)]);
+
+			if (orientation == AnchorLayoutAnchor::Orientation::Horizontal)
+			{
+				if (size > element->size(item).width())
+					element->computeSize(item, size, element->size(item).height());
+				element->setPos(item, QPoint(position, element->pos(item).y()));
+			}
+			else // orientation == AnchorLayoutAnchor::Orientation::Vertical
+			{
+				if (size > element->size(item).height())
+					element->computeSize(item, element->size(item).width(), size);
+				element->setPos(item, QPoint(element->pos(item).x(), position));
+			}
 		}
-		else // orientation == AnchorLayoutAnchor::Orientation::Vertical
-		{
-			if (size > element->size(item).height())
-				element->computeSize(item, element->size(item).width(), size);
-			element->setPos(item, QPoint(element->pos(item).x(), position));
-		}
+	}
+	catch (VisualizationException e)
+	{
+		cleanUpConstraintSolver();
+		throw e;
 	}
 }
 
@@ -164,7 +173,8 @@ void AnchorLayoutConstraintSolver::setMinimizeObjective(QVector<float> objective
 QVector<float> AnchorLayoutConstraintSolver::solveConstraints()
 {
 	set_verbose(lp_, CRITICAL);
-	solve(lp_);
+	int success = solve(lp_);
+	if (success != OPTIMAL) throw VisualizationException("Failed to solve anchor constraints.");
 	get_variables(lp_, rowValues_);
 	QVector<float> result;
 	for (int i=0; i<numVariables_; ++i)
