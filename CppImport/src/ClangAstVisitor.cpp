@@ -311,12 +311,15 @@ bool ClangAstVisitor::TraverseForStmt(clang::ForStmt* forStmt)
 		inBody_ = false;
 		// init
 		TraverseStmt(forStmt->getInit());
+		if(!ooExprStack_.empty())
 		ooLoop->setInitStep(ooExprStack_.pop());
 		// condition
 		TraverseStmt(forStmt->getCond());
+		if(!ooExprStack_.empty())
 		ooLoop->setCondition(ooExprStack_.pop());
 		// update
 		TraverseStmt(forStmt->getInc());
+		if(!ooExprStack_.empty())
 		ooLoop->setUpdateStep(ooExprStack_.pop());
 		inBody_ = true;
 		// body
@@ -378,6 +381,77 @@ bool ClangAstVisitor::TraverseReturnStmt(clang::ReturnStmt* returnStmt)
 								  QString("Expr"),returnStmt->getRetValue());
 		inBody_ = inBody;
 	}
+	return true;
+}
+
+bool ClangAstVisitor::TraverseCXXTryStmt(clang::CXXTryStmt* tryStmt)
+{
+	tryStmt->dump();
+	OOModel::TryCatchFinallyStatement* ooTry = new OOModel::TryCatchFinallyStatement();
+	bool inBody = inBody_;
+	inBody_ = true;
+	// visit the body
+	ooStack_.push(ooTry->tryBody());
+	TraverseStmt(tryStmt->getTryBlock());
+	ooStack_.pop();
+	// visit catch blocks
+	unsigned end = tryStmt->getNumHandlers();
+	for(unsigned i = 0; i < end; i++)
+	{
+		TraverseStmt(tryStmt->getHandler(i));
+		ooTry->catchClauses()->append(ooStack_.pop());
+	}
+	inBody_ = inBody;
+	// add try stmt to model
+	if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
+		itemList->append(ooTry);
+	else
+		log_->writeError(className_,QString("Uknown where to put trystmt"),QString("CXXTryStmt"),tryStmt);
+	return true;
+}
+
+bool ClangAstVisitor::TraverseCXXCatchStmt(clang::CXXCatchStmt* catchStmt)
+{
+	OOModel::CatchClause* ooCatch = new OOModel::CatchClause();
+	// save inBody var
+	bool inBody = inBody_;
+	inBody_ = false;
+	// visit exception to catch
+	TraverseDecl(catchStmt->getExceptionDecl());
+	if(!ooExprStack_.empty())
+		ooCatch->setExceptionToCatch(ooExprStack_.pop());
+	// visit catch body
+	inBody_ = true;
+	ooStack_.push(ooCatch->body());
+	TraverseStmt(catchStmt->getHandlerBlock());
+	ooStack_.pop();
+	// finish up
+	inBody_ = inBody;
+	ooStack_.push(ooCatch);
+	return true;
+}
+
+bool ClangAstVisitor::TraverseCXXThrowExpr(clang::CXXThrowExpr* throwExpr)
+{
+	OOModel::ThrowExpression* ooThrow = new OOModel::ThrowExpression();
+	// save inBody var
+	bool inBody = inBody_;
+	inBody_ = false;
+	// visit throw expression
+	TraverseStmt(throwExpr->getSubExpr());
+	if(!ooExprStack_.empty())
+		ooThrow->setExpr(ooExprStack_.pop());
+	inBody_ = inBody;
+	// add to correct place
+	if(inBody_)
+	{
+		if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
+			itemList->append(ooThrow);
+		else
+			log_->writeError(className_,QString("uknown where to put throwExpr"),QString("CXXThrowExpr"),throwExpr);
+	}
+	else
+			ooExprStack_.push(ooThrow);
 	return true;
 }
 

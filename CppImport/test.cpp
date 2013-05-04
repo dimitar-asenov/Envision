@@ -1,5 +1,5 @@
 #include "test.h"
-#include <iostream>
+//#include <iostream>
 //TEst comment
 
 int NOCLASSFIELD;
@@ -142,6 +142,25 @@ class OneMore{
 class HeaderChild : public Header, public OneMore{
 private:
     int test;
+};
+
+
+class Exceptions
+{
+public:
+    int testException() {
+        int value = 0;
+        try
+        {
+            value=10;
+        }
+        catch (int e)
+        {
+            value = -1;
+        }
+        return value;
+
+    }
 };
 
 int Header::headerFunc()
