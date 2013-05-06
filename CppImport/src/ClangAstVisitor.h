@@ -55,6 +55,8 @@ class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 		bool TraverseCXXCatchStmt(clang::CXXCatchStmt* catchStmt);
 		bool TraverseCXXThrowExpr(clang::CXXThrowExpr* throwExpr);
 
+		bool TraverseLambdaExpr(clang::LambdaExpr* lambdaExpr);
+
 		bool TraverseStmt(clang::Stmt *S);
 		bool TraverseVarDecl(clang::VarDecl* varDecl);
 

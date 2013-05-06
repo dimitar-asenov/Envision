@@ -163,6 +163,15 @@ public:
     }
 };
 
+class Lambda
+{
+public:
+    bool testLambda(int arg) {
+        auto x = [](int arg){return arg>10;};
+        return x;
+    }
+};
+
 int Header::headerFunc()
 {
     float someFloat = 13.4;

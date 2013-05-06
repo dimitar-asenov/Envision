@@ -386,7 +386,6 @@ bool ClangAstVisitor::TraverseReturnStmt(clang::ReturnStmt* returnStmt)
 
 bool ClangAstVisitor::TraverseCXXTryStmt(clang::CXXTryStmt* tryStmt)
 {
-	tryStmt->dump();
 	OOModel::TryCatchFinallyStatement* ooTry = new OOModel::TryCatchFinallyStatement();
 	bool inBody = inBody_;
 	inBody_ = true;
@@ -452,6 +451,34 @@ bool ClangAstVisitor::TraverseCXXThrowExpr(clang::CXXThrowExpr* throwExpr)
 	}
 	else
 			ooExprStack_.push(ooThrow);
+	return true;
+}
+
+bool ClangAstVisitor::TraverseLambdaExpr(clang::LambdaExpr* lambdaExpr)
+{
+	lambdaExpr->getCallOperator()->dump();
+	OOModel::LambdaExpression* ooLambda = new OOModel::LambdaExpression();
+	// visit body
+	ooStack_.push(ooLambda->body());
+	TraverseStmt(lambdaExpr->getBody());
+	ooStack_.pop();
+	// visit arguments
+	clang::CXXMethodDecl* callOperator = lambdaExpr->getCallOperator();
+	for(auto it = callOperator->param_begin(); it != callOperator->param_end(); ++it)
+	{
+		OOModel::FormalArgument* arg = new OOModel::FormalArgument();
+		arg->setName(QString::fromStdString((*it)->getNameAsString()));
+		OOModel::Expression* type = utils_->convertClangType((*it)->getType());
+		if(type) arg->setTypeExpression(type);
+		ooLambda->arguments()->append(arg);
+	}
+	// insert in model
+	if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
+		itemList->append(ooLambda);
+	else
+		log_->writeError(className_,QString("unknown where to put lambdaexpr"),QString("LambdaExpr"),lambdaExpr);
+
+
 	return true;
 }
 
