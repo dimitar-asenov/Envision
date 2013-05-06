@@ -53,7 +53,8 @@ HEADERS += src/test_nodes/TestNodesInitializer.h \
     src/commands/SetModificationTarget.h \
     test/PersistentStoreMock.h \
     src/modelbase.h
-SOURCES += src/test_nodes/TestNodesInitializer.cpp \
+SOURCES += src/persistence/ClipboardStore.cpp \
+    src/test_nodes/TestNodesInitializer.cpp \
     src/InitializationRegistry.cpp \
     src/commands/NodeOwningCommand.cpp \
     src/model/ModelManager.cpp \

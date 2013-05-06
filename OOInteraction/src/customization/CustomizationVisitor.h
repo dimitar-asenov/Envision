@@ -53,6 +53,8 @@ class CommandExpression;
 
 class OOINTERACTION_API CustomizationVisitor : public Model::Visitor<CustomizationVisitor, Model::Node*> {
 	public:
+		virtual ~CustomizationVisitor();
+
 		static void init(Visualization::VisualizationGroup* customizationGroup);
 		static Model::Node* visitMethod(CustomizationVisitor* v, OOModel::Method* met);
 		static void resetCustomizations();

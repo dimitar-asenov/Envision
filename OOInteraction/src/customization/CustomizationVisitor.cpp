@@ -38,6 +38,9 @@
 
 namespace OOInteraction {
 
+// This is to force the vtable to be generated once only in OOInteraction
+CustomizationVisitor::~CustomizationVisitor(){}
+
 Visualization::VisualizationGroup* CustomizationVisitor::customizationGroup_{};
 QList<CommandExpression*> CustomizationVisitor::registeredCommands_;
 
