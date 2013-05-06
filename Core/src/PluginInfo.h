@@ -25,13 +25,14 @@
 ***********************************************************************************************************************/
 
 #pragma once
+#include "core_api.h"
 
 namespace Core {
 
 /**
  * Specifies a plug-in dependency.
  */
-struct PluginDependency
+struct CORE_API PluginDependency
 {
 	QString id;
 	QString majorVersion;
@@ -41,7 +42,7 @@ struct PluginDependency
 /**
  * Descibres a plug-in and specifies which plug-ins it depends on.
  */
-struct PluginInfo
+struct CORE_API PluginInfo
 {
 	QString id;
 	QString fullName;

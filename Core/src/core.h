@@ -24,19 +24,13 @@
  **
  **********************************************************************************************************************/
 
-#include "EnvisionApplication.h"
-#include "EnvisionManager.h"
+#pragma once
+#include "core_api.h"
 
 namespace Core {
 
-EnvisionApplication::EnvisionApplication(int& argc, char** argv) : QApplication(argc, argv){}
+int CORE_API coreMain(int argc, char *argv[]);
 
-bool EnvisionApplication::notify(QObject* receiver, QEvent* event)
-{
-	EnvisionManager::processPreEventActions(receiver, event);
-	auto res = QApplication::notify(receiver, event);
-	EnvisionManager::processPostEventActions(receiver, event);
-	return res;
 }
 
-} /* namespace Core */
+

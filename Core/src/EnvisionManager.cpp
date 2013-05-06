@@ -24,78 +24,74 @@
 **
 ***********************************************************************************************************************/
 
-#include "DefaultEnvisionManager.h"
+#include "EnvisionManager.h"
 #include "EnvisionException.h"
+#include "PluginManager.h"
 
 namespace Core {
 
-QList<DefaultEnvisionManager::EventPrePostAction>& DefaultEnvisionManager::preEventActions()
-{
-	static QList<EventPrePostAction> a;
-	return a;
-}
-
-QList<DefaultEnvisionManager::EventPrePostAction>& DefaultEnvisionManager::postEventActions()
-{
-	static QList<EventPrePostAction> a;
-	return a;
-}
-
-DefaultEnvisionManager::DefaultEnvisionManager() :
-	pm(nullptr), exitSet(false)
-{
-}
-
-DefaultEnvisionManager::~DefaultEnvisionManager()
+EnvisionManager::~EnvisionManager()
 {
 	exit();
 }
 
-QList<PluginInfo> DefaultEnvisionManager::getAllLoadedPluginsInfo()
+QList<EnvisionManager::EventPrePostAction>& EnvisionManager::preEventActions()
+{
+	static QList<EventPrePostAction> a;
+	return a;
+}
+
+QList<EnvisionManager::EventPrePostAction>& EnvisionManager::postEventActions()
+{
+	static QList<EventPrePostAction> a;
+	return a;
+}
+
+QList<PluginInfo> EnvisionManager::getAllLoadedPluginsInfo()
 {
 	if (exitSet) return QList<PluginInfo>();
 	if (pm) return pm->getAllLoadedPluginsInfo();
 	throw EnvisionException("The Envision Manager has no Plugin Manager set");
 }
 
-QMainWindow* DefaultEnvisionManager::getMainWindow()
+QMainWindow* EnvisionManager::getMainWindow()
 {
 	return mainWindow;
 }
 
 
 
-void DefaultEnvisionManager::setPluginManager(PluginManager* pm_)
+void EnvisionManager::setPluginManager(PluginManager* pm_)
 {
 	pm = pm_;
 }
 
-void DefaultEnvisionManager::setMainWindow(QMainWindow* mainWindow_)
+void EnvisionManager::setMainWindow(QMainWindow* mainWindow_)
 {
 	mainWindow = mainWindow_;
 }
 
-void DefaultEnvisionManager::exit()
+void EnvisionManager::exit()
 {
 	exitSet = true;
 }
 
-void DefaultEnvisionManager::addPreEventAction(EventPrePostAction action)
+void EnvisionManager::addPreEventAction(EventPrePostAction action)
 {
 	preEventActions().append(action);
 }
 
-void DefaultEnvisionManager::addPostEventAction(EventPrePostAction action)
+void EnvisionManager::addPostEventAction(EventPrePostAction action)
 {
 	postEventActions().append(action);
 }
 
-void DefaultEnvisionManager::processPreEventActions(QObject* receiver, QEvent* event)
+void EnvisionManager::processPreEventActions(QObject* receiver, QEvent* event)
 {
 	for (auto a : preEventActions()) a(receiver, event);
 }
 
-void DefaultEnvisionManager::processPostEventActions(QObject* receiver, QEvent* event)
+void EnvisionManager::processPostEventActions(QObject* receiver, QEvent* event)
 {
 	for (auto a : postEventActions()) a(receiver, event);
 }

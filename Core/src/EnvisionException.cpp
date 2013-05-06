@@ -23,20 +23,29 @@
  ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  **
  **********************************************************************************************************************/
-
-#include "EnvisionApplication.h"
-#include "EnvisionManager.h"
+#include "EnvisionException.h"
 
 namespace Core {
 
-EnvisionApplication::EnvisionApplication(int& argc, char** argv) : QApplication(argc, argv){}
+EnvisionException::EnvisionException(const QString& message) : msg_{message} {}
 
-bool EnvisionApplication::notify(QObject* receiver, QEvent* event)
+EnvisionException::~EnvisionException() {}
+
+const QString& EnvisionException::name() const
 {
-	EnvisionManager::processPreEventActions(receiver, event);
-	auto res = QApplication::notify(receiver, event);
-	EnvisionManager::processPostEventActions(receiver, event);
-	return res;
+	static QString ename("EnvisionException");
+	return ename;
 }
 
-} /* namespace Core */
+const QString& EnvisionException::message() const
+{
+	return msg_;
+}
+
+void EnvisionException::printError() const
+{
+	QTextStream err(stderr);
+	err << "Exception " << qPrintable( name() ) << ": " << qPrintable( message() ) << endl;
+}
+
+}

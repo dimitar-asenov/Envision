@@ -35,7 +35,7 @@ namespace Core {
  *
  * The Envision core will look for this interface (via the QT plug-in framework) in each plug-in.
  */
-class EnvisionPlugin
+class CORE_API EnvisionPlugin
 {
 	public:
 

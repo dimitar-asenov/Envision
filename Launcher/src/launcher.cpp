@@ -24,19 +24,35 @@
  **
  **********************************************************************************************************************/
 
-#include "EnvisionApplication.h"
-#include "EnvisionManager.h"
+#include "Core/src/core.h"
 
-namespace Core {
+// Enable core dumps of debug builds on Linux
+#ifdef Q_OS_LINUX
+#ifdef DEBUG
+#include <sys/resource.h>
+#endif
+#endif
 
-EnvisionApplication::EnvisionApplication(int& argc, char** argv) : QApplication(argc, argv){}
+using namespace Core;
 
-bool EnvisionApplication::notify(QObject* receiver, QEvent* event)
+/**
+ * This is the main executed when Envision is started. It shows the main window, loads all plug-ins and starts the event
+ * loop.
+ */
+int main(int argc, char *argv[])
 {
-	EnvisionManager::processPreEventActions(receiver, event);
-	auto res = QApplication::notify(receiver, event);
-	EnvisionManager::processPostEventActions(receiver, event);
-	return res;
-}
+	// Enable core dumps of debug builds on Linux
+#ifdef Q_OS_LINUX
+#ifdef DEBUG
+	struct rlimit core_limit;
+	core_limit.rlim_cur = RLIM_INFINITY;
+	core_limit.rlim_max = RLIM_INFINITY;
 
-} /* namespace Core */
+	if(setrlimit(RLIMIT_CORE, &core_limit) < 0)
+		qDebug() << "Error while enabling core dumps:" << strerror(errno);
+	else QFile::remove("./core");
+#endif
+#endif
+
+	return Core::coreMain(argc, argv);
+}

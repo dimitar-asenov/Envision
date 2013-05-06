@@ -25,19 +25,22 @@
 ***********************************************************************************************************************/
 
 #pragma once
-
+#include "core_api.h"
 #include "PluginInfo.h"
 
 namespace Core {
+
+class PluginManager;
 
 /**
  * The EnvisionManager interface provides various information about the Envision system.
  *
  * An instance of an object implementing this interface is passed to each plug-in that is loaded in the system.
  */
-class EnvisionManager
+class CORE_API EnvisionManager
 {
 	public:
+		~EnvisionManager();
 
 		/**
 		 * Returns a list of all the plug-ins currently loaded in the system.
@@ -46,14 +49,14 @@ class EnvisionManager
 		 * included in the list. If a list of all plug-ins is needed, make sure to call this method after Envision has
 		 * been fully initialized.
 		 */
-		virtual QList<PluginInfo> getAllLoadedPluginsInfo() = 0;
+		QList<PluginInfo> getAllLoadedPluginsInfo();
 
 		/**
 		 * Returns the main window of the application.
 		 *
 		 * This can be used by visualization plug-ins to draw custom components.
 		 */
-		virtual QMainWindow* getMainWindow() = 0;
+		QMainWindow* getMainWindow();
 
 		using EventPrePostAction = std::function<void (QObject* receiver, QEvent* event)>;
 
@@ -62,16 +65,32 @@ class EnvisionManager
 		 *
 		 * The provided action function will be called before any event for any object is dispatched.
 		 */
-		virtual void addPreEventAction(EventPrePostAction action) = 0;
+		void addPreEventAction(EventPrePostAction action);
 
 		/**
 		 * Adds \a action to the list of actions that will be executed after dispatching an event.
 		 *
 		 * The provided action function will be called after any event for any object is dispatched.
 		 */
-		virtual void addPostEventAction(EventPrePostAction action) = 0;
+		void addPostEventAction(EventPrePostAction action);
 
-		virtual ~EnvisionManager() {};
+		// The methods below are meant for use by Core only
+		void setPluginManager(PluginManager*);
+		void setMainWindow(QMainWindow*);
+
+		void exit();
+
+		static void processPreEventActions(QObject* receiver, QEvent* event);
+		static void processPostEventActions(QObject* receiver, QEvent* event);
+
+	private:
+		PluginManager* pm{};
+		QMainWindow* mainWindow{};
+
+		bool exitSet{};
+
+		static QList<EventPrePostAction>& preEventActions();
+		static QList<EventPrePostAction>& postEventActions();
 };
 
 }

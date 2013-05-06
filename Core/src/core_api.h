@@ -24,19 +24,13 @@
  **
  **********************************************************************************************************************/
 
-#include "EnvisionApplication.h"
-#include "EnvisionManager.h"
+#pragma once
 
-namespace Core {
+#include "precompiled.h"
 
-EnvisionApplication::EnvisionApplication(int& argc, char** argv) : QApplication(argc, argv){}
-
-bool EnvisionApplication::notify(QObject* receiver, QEvent* event)
-{
-	EnvisionManager::processPreEventActions(receiver, event);
-	auto res = QApplication::notify(receiver, event);
-	EnvisionManager::processPostEventActions(receiver, event);
-	return res;
-}
-
-} /* namespace Core */
+// This should be defined in the project file of the plug-in that exports symbols
+#if defined(CORE_LIBRARY)
+	#define CORE_API Q_DECL_EXPORT
+#else
+	#define CORE_API Q_DECL_IMPORT
+#endif

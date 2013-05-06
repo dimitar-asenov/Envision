@@ -24,40 +24,53 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-#include "EnvisionManager.h"
+#include "EnvisionWindow.h"
 #include "PluginManager.h"
+#include "EnvisionApplication.h"
+#include "EnvisionException.h"
+#include "EnvisionManager.h"
+#include "TestRunner.h"
 
 namespace Core {
-
-class DefaultEnvisionManager: public EnvisionManager
+/**
+ * This function is executed when Envision is started. It shows the main window, loads all plug-ins and starts the event
+ * loop.
+ */
+int coreMain(int argc, char *argv[])
 {
-	public:
-		DefaultEnvisionManager();
-		~DefaultEnvisionManager();
+	EnvisionApplication a(argc, argv);
 
-		virtual QList<PluginInfo> getAllLoadedPluginsInfo() override;
-		virtual QMainWindow* getMainWindow() override;
-		virtual void addPreEventAction(EventPrePostAction action) override;
-		virtual void addPostEventAction(EventPrePostAction action) override;
+	EnvisionWindow w;
+	w.show();
 
-		void setPluginManager(PluginManager*);
-		void setMainWindow(QMainWindow*);
+	TestRunner testr;
 
-		void exit();
+	int retCode = 0;
+	try
+	{
+		PluginManager pm;
+		EnvisionManager manager;
 
-		static void processPreEventActions(QObject* receiver, QEvent* event);
-		static void processPostEventActions(QObject* receiver, QEvent* event);
+		// Give the Envision manager all the information it needs to operate properly.
+		manager.setPluginManager(&pm);
+		manager.setMainWindow(&w);
 
-	private:
-		PluginManager* pm;
-		QMainWindow* mainWindow;
+		pm.loadAllPlugins(manager);
 
-		bool exitSet;
+		testr.enqueueSelfTests(pm);
 
-		static QList<EventPrePostAction>& preEventActions();
-		static QList<EventPrePostAction>& postEventActions();
-};
+		QTextStream out(stdout);
+		out << "==============================" << endl;
+
+		retCode = a.exec();
+	}
+	catch (EnvisionException &e)
+	{
+		e.printError();
+		retCode = 1;
+	}
+
+	return retCode;
+}
 
 }
