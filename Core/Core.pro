@@ -6,7 +6,9 @@ INSTALLS += target
 DEFINES += CORE_LIBRARY
 CONFIG += plugin
 QT += xml
-HEADERS += src/core_api.h \
+HEADERS += src/AdapterManager.h \
+    src/InitializationRegistry.h \
+    src/core_api.h \
     src/core.h \
     src/EnvisionApplication.h \
     src/EnvisionException.h \
@@ -19,7 +21,9 @@ HEADERS += src/core_api.h \
     src/TestRunner.h \
     src/PluginManager.h \
     src/EnvisionWindow.h
-SOURCES += src/EnvisionException.cpp \
+SOURCES += src/AdapterManager.cpp \
+    src/InitializationRegistry.cpp \
+    src/EnvisionException.cpp \
     src/EnvisionManager.cpp \
     src/core.cpp \
     src/EnvisionApplication.cpp \

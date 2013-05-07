@@ -42,7 +42,7 @@
 #include "InteractionBase/src/events/SetCursorEvent.h"
 #include "InteractionBase/src/autocomplete/AutoComplete.h"
 #include "InteractionBase/src/autocomplete/AutoCompleteEntry.h"
-#include "ModelBase/src/adapter/AdapterManager.h"
+#include "Core/src/AdapterManager.h"
 
 namespace OOInteraction {
 
@@ -344,12 +344,12 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 Visualization::Item* HExpression::stringInfo(Visualization::Item* target, Qt::Key key, QString& str, int& index)
 {
 	Visualization::Item* topMostItem = target;
-	auto* topMostSP = Model::AdapterManager::adapt<StringOffsetProvider>(topMostItem);
+	auto* topMostSP = Core::AdapterManager::adapt<StringOffsetProvider>(topMostItem);
 
 	auto p = topMostItem->parent();
 	while(p)
 	{
-		auto* adapted = Model::AdapterManager::adapt<StringOffsetProvider>(p);
+		auto* adapted = Core::AdapterManager::adapt<StringOffsetProvider>(p);
 		if (adapted)
 		{
 			SAFE_DELETE(topMostSP);

@@ -24,9 +24,9 @@
  **
  **********************************************************************************************************************/
 
-#include "adapter/AdapterManager.h"
+#include "AdapterManager.h"
 
-namespace Model {
+namespace Core {
 
 QHash<AdapterManager::AdapterKey, AdapterManager::AdapterCreationFunction>& AdapterManager::adapters()
 {
@@ -40,4 +40,4 @@ QHash<AdapterManager::TypeIdType, AdapterManager::AdapterCreationFunction>& Adap
 	return map;
 }
 
-} /* namespace Model */
+}

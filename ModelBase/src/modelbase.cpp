@@ -52,9 +52,9 @@ namespace Model {
 
 Log* ModelBase::logger = nullptr;
 
-InitializationRegistry& nodeTypeInitializationRegistry()
+Core::InitializationRegistry& nodeTypeInitializationRegistry()
 {
-	static InitializationRegistry r;
+	static Core::InitializationRegistry r;
 	return r;
 }
 

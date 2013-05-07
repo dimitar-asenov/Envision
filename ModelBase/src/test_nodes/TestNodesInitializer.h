@@ -27,10 +27,10 @@
 #pragma once
 
 #include "../modelbase_api.h"
-#include "../InitializationRegistry.h"
+#include "Core/src/InitializationRegistry.h"
 
 namespace TestNodes {
 
-MODELBASE_API Model::InitializationRegistry& nodeTypeInitializationRegistry();
+MODELBASE_API Core::InitializationRegistry& nodeTypeInitializationRegistry();
 
 } /* namespace TestNodes */

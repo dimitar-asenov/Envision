@@ -29,7 +29,6 @@
 #include "Core/src/EnvisionPlugin.h"
 #include "interactionbase_api.h"
 
-#include "ModelBase/src/InitializationRegistry.h"
 #include "Logger/src/Log.h"
 
 namespace Interaction {
@@ -59,6 +58,6 @@ class InteractionBase : public QObject, public Core::EnvisionPlugin
 };
 
 
-INTERACTIONBASE_API Model::InitializationRegistry& itemTypeInitializationRegistry();
+INTERACTIONBASE_API Core::InitializationRegistry& itemTypeInitializationRegistry();
 
 }

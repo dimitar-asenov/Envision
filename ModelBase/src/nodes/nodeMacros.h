@@ -59,7 +59,7 @@
 		static int typeIdStatic();																													\
 		static void registerNodeType();																											\
 		static void init();																															\
-		static ::Model::InitializationRegistry& initializationRegistry();																\
+		static ::Core::InitializationRegistry& initializationRegistry();																\
 																																							\
 	private:																																				\
 		static int typeId_;																															\
@@ -217,8 +217,8 @@ template class Model::TypedList<className>;																									\
  */
 #define NODE_DEFINE_TYPE_REGISTRATION_METHODS(className, superClassName)															\
 /* Forward declaration. This function must be defined in the enclosing namespace*/												\
-::Model::InitializationRegistry& nodeTypeInitializationRegistry();																	\
-::Model::InitializationRegistry& className::initializationRegistry()																	\
+::Core::InitializationRegistry& nodeTypeInitializationRegistry();																		\
+::Core::InitializationRegistry& className::initializationRegistry()																	\
 {																																							\
 	return nodeTypeInitializationRegistry();																									\
 }																																							\
@@ -287,8 +287,8 @@ void className::init()																																\
  */
 #define EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(className, superClassName)												\
 /* Forward declaration. This function must be defined in the enclosing namespace*/												\
-::Model::InitializationRegistry& nodeTypeInitializationRegistry();																	\
-::Model::InitializationRegistry& className::initializationRegistry()																	\
+::Core::InitializationRegistry& nodeTypeInitializationRegistry();																		\
+::Core::InitializationRegistry& className::initializationRegistry()																	\
 {																																							\
 	return nodeTypeInitializationRegistry();																									\
 }																																							\

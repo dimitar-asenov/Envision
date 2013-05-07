@@ -25,13 +25,13 @@
  **********************************************************************************************************************/
 
 #include "InitializationRegistry.h"
-#include "ModelException.h"
+#include "EnvisionException.h"
 
-namespace Model {
+namespace Core {
 
 void InitializationRegistry::add(InitializationFunction func)
 {
-	if (initialized_) throw ModelException("Adding an initializer function to an already initialized registry.");
+	if (initialized_) throw EnvisionException("Adding an initializer function to an already initialized registry.");
 	initializationFunctions_.append(func);
 }
 
@@ -42,4 +42,4 @@ void InitializationRegistry::initializeAll()
 	initializationFunctions_.clear();
 }
 
-} /* namespace Model */
+}

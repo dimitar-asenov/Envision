@@ -28,7 +28,6 @@
 
 #include "oointeraction_api.h"
 #include "Core/src/EnvisionPlugin.h"
-#include "ModelBase/src/InitializationRegistry.h"
 
 namespace OOInteraction {
 
@@ -54,6 +53,6 @@ class OOInteraction : public QObject, public Core::EnvisionPlugin
 		void initializeActions();
 };
 
-OOINTERACTION_API Model::InitializationRegistry& itemTypeInitializationRegistry();
+OOINTERACTION_API Core::InitializationRegistry& itemTypeInitializationRegistry();
 
 }

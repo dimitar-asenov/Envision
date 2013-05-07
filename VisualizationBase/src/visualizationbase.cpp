@@ -58,15 +58,15 @@ Q_EXPORT_PLUGIN2( visualizationbase, Visualization::VisualizationBase )
 namespace Visualization
 {
 
-Model::InitializationRegistry& nodeTypeInitializationRegistry()
+Core::InitializationRegistry& nodeTypeInitializationRegistry()
 {
-	static Model::InitializationRegistry r;
+	static Core::InitializationRegistry r;
 	return r;
 }
 
-Model::InitializationRegistry& itemTypeInitializationRegistry()
+Core::InitializationRegistry& itemTypeInitializationRegistry()
 {
-	static Model::InitializationRegistry r;
+	static Core::InitializationRegistry r;
 	return r;
 }
 

@@ -53,7 +53,7 @@ TypedList<T>::TypedList(::Model::Node *parent, ::Model::PersistentStore &store, 
 }
 
 template<class T>
-::Model::InitializationRegistry& TypedList<T>::initializationRegistry()
+::Core::InitializationRegistry& TypedList<T>::initializationRegistry()
 {
 	return T::initializationRegistry();
 }

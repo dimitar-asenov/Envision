@@ -26,11 +26,11 @@
 
 #pragma once
 
-#include "../modelbase_api.h"
+#include "core_api.h"
 
-namespace Model {
+namespace Core {
 
-class MODELBASE_API AdapterManager {
+class CORE_API AdapterManager {
 	public:
 		using AdapterCreationFunction = void* (*)(void* adaptee);
 
@@ -122,4 +122,4 @@ template <class AdapterBase, class Adapter, class Adaptee> void AdapterManager::
 	registerAdapter<AdapterBase, Adaptee>( createFrom<AdapterBase, Adapter, Adaptee> );
 }
 
-} /* namespace Model */
+}

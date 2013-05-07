@@ -4,7 +4,6 @@ DEFINES += MODELBASE_LIBRARY
 win32:LIBS += -llogger \
     -lselftest
 HEADERS += src/test_nodes/TestNodesInitializer.h \
-    src/InitializationRegistry.h \
     src/commands/NodeOwningCommand.h \
     src/model/ModelManager.h \
     src/concurrent/InterruptibleThread.h \
@@ -13,7 +12,6 @@ HEADERS += src/test_nodes/TestNodesInitializer.h \
     src/visitor/VisitorDefinition.h \
     src/visitor/Visitor.h \
     src/ModelException.h \
-    src/adapter/AdapterManager.h \
     src/commands/ExtendedNodeChild.h \
     src/commands/FieldSet.h \
     src/commands/ListInsert.h \
@@ -55,14 +53,12 @@ HEADERS += src/test_nodes/TestNodesInitializer.h \
     src/modelbase.h
 SOURCES += src/persistence/ClipboardStore.cpp \
     src/test_nodes/TestNodesInitializer.cpp \
-    src/InitializationRegistry.cpp \
     src/commands/NodeOwningCommand.cpp \
     src/model/ModelManager.cpp \
     src/concurrent/NodeReadWriteLock.cpp \
     src/model/Model.cpp \
     test/VisitorTests.cpp \
     src/persistence/PersistentStore.cpp \
-    src/adapter/AdapterManager.cpp \
     src/commands/AddModifiedNode.cpp \
     src/test_nodes/PositionExtension.cpp \
     src/nodes/Character.cpp \

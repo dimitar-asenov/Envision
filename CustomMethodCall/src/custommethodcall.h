@@ -28,7 +28,6 @@
 
 #include "Core/src/EnvisionPlugin.h"
 #include "custommethodcall_api.h"
-#include "ModelBase/src/InitializationRegistry.h"
 
 namespace CustomMethodCall {
 
@@ -51,6 +50,6 @@ class CustomMethodCall : public QObject, public Core::EnvisionPlugin
 		virtual void selfTest(QString testid) override;
 };
 
-CUSTOMMETHODCALL_API Model::InitializationRegistry& itemTypeInitializationRegistry();
+CUSTOMMETHODCALL_API Core::InitializationRegistry& itemTypeInitializationRegistry();
 
 }

@@ -28,7 +28,6 @@
 
 #include "oovisualization_api.h"
 #include "Core/src/EnvisionPlugin.h"
-#include "ModelBase/src/InitializationRegistry.h"
 
 namespace OOVisualization {
 
@@ -52,6 +51,6 @@ class OOVisualization : public QObject, public Core::EnvisionPlugin
 };
 
 
-OOVISUALIZATION_API Model::InitializationRegistry& itemTypeInitializationRegistry();
+OOVISUALIZATION_API Core::InitializationRegistry& itemTypeInitializationRegistry();
 
 }

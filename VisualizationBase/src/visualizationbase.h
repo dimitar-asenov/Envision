@@ -28,7 +28,6 @@
 
 #include "Core/src/EnvisionPlugin.h"
 #include "visualizationbase_api.h"
-#include "ModelBase/src/InitializationRegistry.h"
 
 namespace Visualization {
 
@@ -43,7 +42,7 @@ class VisualizationBase : public QObject, public Core::EnvisionPlugin
 		virtual void selfTest(QString testid) override;
 };
 
-VISUALIZATIONBASE_API Model::InitializationRegistry& nodeTypeInitializationRegistry();
-VISUALIZATIONBASE_API Model::InitializationRegistry& itemTypeInitializationRegistry();
+VISUALIZATIONBASE_API Core::InitializationRegistry& nodeTypeInitializationRegistry();
+VISUALIZATIONBASE_API Core::InitializationRegistry& itemTypeInitializationRegistry();
 
 }

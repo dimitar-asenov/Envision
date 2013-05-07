@@ -28,7 +28,6 @@
 
 #include "Core/src/EnvisionPlugin.h"
 #include "contractslibrary_api.h"
-#include "ModelBase/src/InitializationRegistry.h"
 
 namespace ContractsLibrary {
 
@@ -51,6 +50,6 @@ class ContractsLibrary : public QObject, public Core::EnvisionPlugin
 		virtual void selfTest(QString testid) override;
 };
 
-CONTRACTSLIBRARY_API Model::InitializationRegistry& itemTypeInitializationRegistry();
+CONTRACTSLIBRARY_API Core::InitializationRegistry& itemTypeInitializationRegistry();
 
 }

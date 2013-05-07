@@ -27,6 +27,7 @@
 #pragma once
 
 #include "EnvisionManager.h"
+#include "InitializationRegistry.h" // Convenience include header which is used in places including EnvisionPlugin.h
 
 namespace Core {
 

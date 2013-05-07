@@ -27,8 +27,7 @@
 #pragma once
 
 #include "Core/src/EnvisionPlugin.h"
-#include "precompiled.h"
-#include "InitializationRegistry.h"
+#include "modelbase_api.h"
 
 #include "Logger/src/Log.h"
 
@@ -50,6 +49,6 @@ class ModelBase : public QObject, public Core::EnvisionPlugin
 		static Logger::Log* logger;
 };
 
-MODELBASE_API InitializationRegistry& nodeTypeInitializationRegistry();
+MODELBASE_API Core::InitializationRegistry& nodeTypeInitializationRegistry();
 
 }

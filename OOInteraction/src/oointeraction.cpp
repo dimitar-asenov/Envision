@@ -74,15 +74,15 @@
 #include "VisualizationBase/src/items/VText.h"
 #include "VisualizationBase/src/VisualizationManager.h"
 
-#include "ModelBase/src/adapter/AdapterManager.h"
+#include "Core/src/AdapterManager.h"
 
 Q_EXPORT_PLUGIN2( oointeraction, OOInteraction::OOInteraction )
 
 namespace OOInteraction {
 
-Model::InitializationRegistry& itemTypeInitializationRegistry()
+Core::InitializationRegistry& itemTypeInitializationRegistry()
 {
-	static Model::InitializationRegistry r;
+	static Core::InitializationRegistry r;
 	return r;
 }
 
@@ -108,22 +108,22 @@ bool OOInteraction::initialize(Core::EnvisionManager&)
 
 	// Register default string offset providers
 	GridConstructors::initializeAll();
-	Model::AdapterManager::registerDefaultAdapter<StringOffsetProvider>(StringOffsetProvider::defaultProvider);
+	Core::AdapterManager::registerDefaultAdapter<StringOffsetProvider>(StringOffsetProvider::defaultProvider);
 
 	// Register custom string offset providers
-	Model::AdapterManager::registerAdapterViaConstructor
+	Core::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, InitializerStringOffsetProvider, OOVisualization::VArrayInitializer>();
-	Model::AdapterManager::registerAdapterViaConstructor
+	Core::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, EmptyExpressionStringOffsetProvider, OOVisualization::VEmptyExpression>();
-	Model::AdapterManager::registerAdapterViaConstructor
+	Core::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, TextRendererStringOffsetProvider, Visualization::Text>();
-	Model::AdapterManager::registerAdapterViaConstructor
+	Core::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, TextRendererStringOffsetProvider, Visualization::VText>();
-	Model::AdapterManager::registerAdapterViaConstructor
+	Core::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, TextRendererStringOffsetProvider, Visualization::Symbol>();
-	Model::AdapterManager::registerAdapterViaConstructor
+	Core::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, StaticStringOffsetProvider, Visualization::Static>();
-	Model::AdapterManager::registerAdapterViaConstructor
+	Core::AdapterManager::registerAdapterViaConstructor
 		<StringOffsetProvider, CompoundObjectStringOffsetProvider, OOVisualization::VLambdaExpression>();
 
 	Interaction::HSceneHandlerItem::instance()->addCommand(new CCreateProject());

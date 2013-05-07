@@ -36,9 +36,9 @@ Q_EXPORT_PLUGIN2( contractslibrary, ContractsLibrary::ContractsLibrary )
 
 namespace ContractsLibrary {
 
-Model::InitializationRegistry& itemTypeInitializationRegistry()
+Core::InitializationRegistry& itemTypeInitializationRegistry()
 {
-	static Model::InitializationRegistry r;
+	static Core::InitializationRegistry r;
 	return r;
 }
 

@@ -33,9 +33,9 @@ Q_EXPORT_PLUGIN2( oomodel, OOModel::OOModel )
 
 namespace OOModel {
 
-Model::InitializationRegistry& nodeTypeInitializationRegistry()
+Core::InitializationRegistry& nodeTypeInitializationRegistry()
 {
-	static Model::InitializationRegistry r;
+	static Core::InitializationRegistry r;
 	return r;
 }
 

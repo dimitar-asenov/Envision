@@ -41,9 +41,9 @@ using namespace Visualization;
 
 namespace OOVisualization {
 
-Model::InitializationRegistry& itemTypeInitializationRegistry()
+Core::InitializationRegistry& itemTypeInitializationRegistry()
 {
-	static Model::InitializationRegistry r;
+	static Core::InitializationRegistry r;
 	return r;
 }
 

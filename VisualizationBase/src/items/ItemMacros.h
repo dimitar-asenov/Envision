@@ -57,7 +57,7 @@ public:																																					\
 	static void addAddOn(Visualization::VisualizationAddOn* addOn);																	\
 	static bool removeAddOn(Visualization::VisualizationAddOn* addOn);																\
 																																							\
-	static ::Model::InitializationRegistry& initializationRegistry();																	\
+	static ::Core::InitializationRegistry& initializationRegistry();																	\
 	static void defaultInit();																														\
 private:																																					\
 	static Visualization::InteractionHandler* defaultClassHandler_;																	\
@@ -84,8 +84,8 @@ private:																																					\
  */
 #define ITEM_COMMON_DEFINITIONS( ItemClass, classType )																					\
 /* Forward declaration. This function must be defined in the enclosing namespace*/												\
-::Model::InitializationRegistry& itemTypeInitializationRegistry();																	\
-::Model::InitializationRegistry& ItemClass::initializationRegistry()																	\
+::Core::InitializationRegistry& itemTypeInitializationRegistry();																		\
+::Core::InitializationRegistry& ItemClass::initializationRegistry()																	\
 {																																							\
 	return itemTypeInitializationRegistry();																									\
 }																																							\

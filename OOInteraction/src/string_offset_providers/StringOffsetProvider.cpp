@@ -34,7 +34,8 @@
 #include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/items/Item.h"
 #include "VisualizationBase/src/items/TextRenderer.h"
-#include "ModelBase/src/adapter/AdapterManager.h"
+
+#include "Core/src/AdapterManager.h"
 
 namespace OOInteraction {
 
@@ -83,7 +84,7 @@ QString StringOffsetProvider::stringFromStringOffsetProvider(Visualization::Item
 	if (!item) return QString();
 
 	QString result;
-	StringOffsetProvider* sp = Model::AdapterManager::adapt<StringOffsetProvider>(item);
+	StringOffsetProvider* sp = Core::AdapterManager::adapt<StringOffsetProvider>(item);
 	if (sp)
 	{
 		result = sp->string();
@@ -101,7 +102,7 @@ bool StringOffsetProvider::isIndivisible()
 bool StringOffsetProvider::setOffsetInItem(int offset, Visualization::Item* item)
 {
 	if (!item) return false;
-	auto child = Model::AdapterManager::adapt<StringOffsetProvider>(item);
+	auto child = Core::AdapterManager::adapt<StringOffsetProvider>(item);
 	if (child)
 	{
 		if (offset > 0 && child->isIndivisible()) child->setOffset(child->string().length());
@@ -114,7 +115,7 @@ bool StringOffsetProvider::setOffsetInItem(int offset, Visualization::Item* item
 
 int StringOffsetProvider::itemOffset(Visualization::Item* item, int stringComponentLenght, Qt::Key key)
 {
-	StringOffsetProvider* child = Model::AdapterManager::adapt<StringOffsetProvider>(item);
+	StringOffsetProvider* child = Core::AdapterManager::adapt<StringOffsetProvider>(item);
 	Q_ASSERT(child);
 
 	int offset = child->offset(key);

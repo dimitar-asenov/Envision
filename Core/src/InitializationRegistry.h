@@ -26,11 +26,11 @@
 
 #pragma once
 
-#include "modelbase_api.h"
+#include "core_api.h"
 
-namespace Model {
+namespace Core {
 
-class MODELBASE_API InitializationRegistry
+class CORE_API InitializationRegistry
 {
 	public:
 		using InitializationFunction = std::function<void ()>;

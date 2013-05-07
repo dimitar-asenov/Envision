@@ -28,7 +28,6 @@
 
 #include "Core/src/EnvisionPlugin.h"
 #include "controlflowvisualization_api.h"
-#include "ModelBase/src/InitializationRegistry.h"
 
 namespace ControlFlowVisualization {
 
@@ -53,6 +52,6 @@ class ControlFlowVisualization : public QObject, public Core::EnvisionPlugin
 		static int visualizationPurpose();
 };
 
-CONTROLFLOWVISUALIZATION_API Model::InitializationRegistry& itemTypeInitializationRegistry();
+CONTROLFLOWVISUALIZATION_API Core::InitializationRegistry& itemTypeInitializationRegistry();
 
 }
