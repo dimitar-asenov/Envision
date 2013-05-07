@@ -37,7 +37,7 @@ class OOMODEL_API ArrayTypeExpression : public TypeExpression
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(ArrayTypeExpression)
 
 	ATTRIBUTE(Expression, typeExpression, setTypeExpression)
-	ATTRIBUTE(Expression, initialSize, setInitialSize)
+	ATTRIBUTE(Expression, fixedSize, setFixedSize)
 
 	public:
 		virtual Type* type();

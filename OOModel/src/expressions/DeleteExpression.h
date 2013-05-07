@@ -38,7 +38,7 @@ class OOMODEL_API DeleteExpression: public Expression
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(DeleteExpression)
 
-	ATTRIBUTE(Expression, deleteType, setDeleteType)
+	ATTRIBUTE(Expression, expr, setExpr)
 	ATTRIBUTE_VALUE(Model::Boolean, isArray, setIsArray, bool)
 
 	public:
