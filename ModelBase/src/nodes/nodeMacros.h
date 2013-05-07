@@ -84,15 +84,11 @@
  * 	EXTENDABLENODE_DECLARE_STANDARD_METHODS( MyNewNode )
  */
 #define EXTENDABLENODE_DECLARE_STANDARD_METHODS(className)																				\
+	NODE_DECLARE_STANDARD_METHODS(className)																									\
 	public:																																				\
-		className(::Model::Node* parent = nullptr);																							\
-		className(::Model::Node *parent, ::Model::PersistentStore &store, bool partialLoadHint);								\
 		className(::Model::Node* parent, ::Model::AttributeChain& metaData);															\
 		className(::Model::Node *parent, ::Model::PersistentStore &store, bool partialLoadHint,								\
 			::Model::AttributeChain& metaData); 																								\
-																																							\
-		static void init();																															\
-		static ::Model::InitializationRegistry& initializationRegistry();																\
 																																							\
 		static ::Model::AttributeChain& getMetaData();																						\
 		static ::Model::ExtendableIndex registerNewAttribute(const QString &attributeName,										\
@@ -106,19 +102,10 @@
 				T::template extendNode< className >(getMetaData().addExtension(T::extensionId()));								\
 		}																																					\
 																																							\
-		virtual const QString& typeName() const;																								\
-		virtual int typeId() const;																												\
-		virtual QList<int> hierarchyTypeIds() const;																							\
-		static const QString& typeNameStatic();																								\
-		static int typeIdStatic();																													\
-		static void registerNodeType();																											\
-																																							\
 	protected:																																			\
 		virtual ::Model::AttributeChain& topLevelMeta();																					\
 																																							\
 	private:																																				\
-		static int typeId_;																															\
-																																							\
 		static QList<QPair< ::Model::ExtendableIndex&, ::Model::Attribute> >& attributesToRegisterAtInitialization_();	\
 		static ::Model::ExtendableIndex addAttributeToInitialRegistrationList_														\
 				(::Model::ExtendableIndex& index, const QString &attributeName, const QString &attributeType, 				\
