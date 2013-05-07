@@ -37,6 +37,7 @@ EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(CastExpression, Expression)
 
 REGISTER_ATTRIBUTE(CastExpression, castType, Expression, false, false, true)
 REGISTER_ATTRIBUTE(CastExpression, expr, Expression, false, false, true)
+REGISTER_ATTRIBUTE(CastExpression, cKind, Integer, false, false, true)
 
 Type* CastExpression::type()
 {

@@ -7,6 +7,7 @@ SUBDIRS= Core \
 	FilePersistence \
 	HelloWorld \
 	InteractionBase \
+	Launcher \
 	Logger \
 	ModelBase \
 	OOInteraction \

@@ -36,6 +36,7 @@ EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(ArrayTypeExpression, TypeExpression)
 EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(ArrayTypeExpression, TypeExpression)
 
 REGISTER_ATTRIBUTE(ArrayTypeExpression, typeExpression, Expression, false, false, true)
+REGISTER_ATTRIBUTE(ArrayTypeExpression, initialSize, Expression, false, true, true)
 
 Type* ArrayTypeExpression::type()
 {
