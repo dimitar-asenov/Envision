@@ -36,6 +36,8 @@ class OOMODEL_API ArrayType : public Type {
 		ArrayType(const ArrayType& other);
 		virtual ~ArrayType();
 
+		// TODO: add constant size support
+
 		virtual bool equals(const Type* other) const override;
 		virtual ArrayType* clone() const override;
 
