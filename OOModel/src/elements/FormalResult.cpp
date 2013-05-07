@@ -31,14 +31,14 @@ DEFINE_TYPED_LIST(OOModel::FormalResult)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(FormalResult, Model::ExtendableNode)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(FormalResult, Model::ExtendableNode)
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(FormalResult)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(FormalResult)
 
 REGISTER_ATTRIBUTE(FormalResult, name, Text, false, false, true)
 REGISTER_ATTRIBUTE(FormalResult, typeExpression, Expression, false, false, true)
 
 FormalResult::FormalResult(const QString& name, Expression* type)
-: Model::ExtendableNode (nullptr, FormalResult::getMetaData())
+: Super(nullptr, FormalResult::getMetaData())
 {
 	if (!name.isEmpty()) setName(name);
 	if (type) setTypeExpression(type);

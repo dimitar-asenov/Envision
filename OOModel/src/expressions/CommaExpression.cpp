@@ -33,8 +33,8 @@ DEFINE_TYPED_LIST(OOModel::CommaExpression)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(CommaExpression, Expression)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommaExpression, Expression)
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(CommaExpression)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommaExpression)
 
 REGISTER_ATTRIBUTE(CommaExpression, left, Expression, false, false, true)
 REGISTER_ATTRIBUTE(CommaExpression, right, Expression, false, false, true)

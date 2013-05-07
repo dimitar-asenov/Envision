@@ -34,7 +34,7 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, DeleteExpression)
 
 namespace OOModel {
 
-class OOMODEL_API DeleteExpression: public Expression
+class OOMODEL_API DeleteExpression: public Reflect<Expression>
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(DeleteExpression)
 

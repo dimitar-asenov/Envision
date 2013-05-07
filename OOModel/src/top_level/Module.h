@@ -42,7 +42,7 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Module)
 
 namespace OOModel {
 
-class OOMODEL_API Module : public Model::ExtendableNode
+class OOMODEL_API Module : public Reflect<Model::ExtendableNode>
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Module)
 

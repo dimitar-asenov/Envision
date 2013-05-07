@@ -32,13 +32,13 @@ DEFINE_TYPED_LIST(OOModel::BooleanLiteral)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(BooleanLiteral, Expression)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(BooleanLiteral, Expression)
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(BooleanLiteral)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(BooleanLiteral)
 
 REGISTER_ATTRIBUTE(BooleanLiteral, value, Boolean, false, false, true)
 
 BooleanLiteral::BooleanLiteral(bool value)
-: Expression(nullptr, BooleanLiteral::getMetaData())
+: Super(nullptr, BooleanLiteral::getMetaData())
 {
 	setValue(value);
 }

@@ -31,14 +31,14 @@ DEFINE_TYPED_LIST(OOModel::Enumerator)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(Enumerator, Model::ExtendableNode)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(Enumerator, Model::ExtendableNode)
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(Enumerator)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(Enumerator)
 
 REGISTER_ATTRIBUTE(Enumerator, name, Text, false, false, true)
 REGISTER_ATTRIBUTE(Enumerator, value, Expression, false, true, true)
 
 Enumerator::Enumerator(const QString& name, Expression* value)
-: Model::ExtendableNode (nullptr, Enumerator::getMetaData())
+: Super(nullptr, Enumerator::getMetaData())
 {
 	setName(name);
 	if (value) setValue(value);

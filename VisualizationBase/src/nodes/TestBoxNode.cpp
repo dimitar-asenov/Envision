@@ -31,8 +31,8 @@ DEFINE_TYPED_LIST(Visualization::TestBoxNode)
 
 namespace Visualization {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(TestBoxNode, Model::ExtendableNode)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(TestBoxNode, Model::ExtendableNode)
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(TestBoxNode)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(TestBoxNode)
 
 REGISTER_ATTRIBUTE(TestBoxNode, red, Integer, false, false, true)
 REGISTER_ATTRIBUTE(TestBoxNode, green, Integer, false, false, true)
@@ -41,7 +41,7 @@ REGISTER_ATTRIBUTE(TestBoxNode, sizeDependsOnParent, Boolean, false, false, true
 REGISTER_ATTRIBUTE(TestBoxNode, label, Text, false, false, true)
 
 TestBoxNode::TestBoxNode(const QString& label, QColor color, bool sizeDependsOnParent)
-: ExtendableNode{nullptr, TestBoxNode::getMetaData()}
+: Super{nullptr, TestBoxNode::getMetaData()}
 {
 	setRed(color.red());
 	setGreen(color.green());
@@ -51,7 +51,7 @@ TestBoxNode::TestBoxNode(const QString& label, QColor color, bool sizeDependsOnP
 }
 
 TestBoxNode::TestBoxNode(const QString& label, bool sizeDependsOnParent)
-: ExtendableNode{nullptr, TestBoxNode::getMetaData()}
+: Super{nullptr, TestBoxNode::getMetaData()}
 {
 	QColor color = Qt::yellow;
 	setRed(color.red());

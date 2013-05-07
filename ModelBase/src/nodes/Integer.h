@@ -33,7 +33,7 @@ DECLARE_TYPED_LIST(MODELBASE_API, Model, Integer)
 
 namespace Model {
 
-class MODELBASE_API Integer: public Node
+class MODELBASE_API Integer: public Reflect<Node>
 {
 	NODE_DECLARE_STANDARD_METHODS(Integer)
 

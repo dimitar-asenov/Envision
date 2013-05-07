@@ -31,13 +31,13 @@ DEFINE_TYPED_LIST(OOModel::ReturnStatement)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(ReturnStatement, Statement)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(ReturnStatement, Statement)
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(ReturnStatement)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(ReturnStatement)
 
 REGISTER_ATTRIBUTE(ReturnStatement, values, TypedListOfExpression, false, false, true)
 
 ReturnStatement::ReturnStatement(Expression* firstReturnValue)
-: Statement (nullptr, ReturnStatement::getMetaData())
+: Super(nullptr, ReturnStatement::getMetaData())
 {
 	if(firstReturnValue) values()->append(firstReturnValue);
 }

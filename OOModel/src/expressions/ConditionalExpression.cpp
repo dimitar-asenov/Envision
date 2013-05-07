@@ -31,8 +31,8 @@ DEFINE_TYPED_LIST(OOModel::ConditionalExpression)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(ConditionalExpression, Expression)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(ConditionalExpression, Expression)
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(ConditionalExpression)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(ConditionalExpression)
 
 REGISTER_ATTRIBUTE(ConditionalExpression, condition, Expression, false, false, true)
 REGISTER_ATTRIBUTE(ConditionalExpression, trueExpression, Expression, false, false, true)

@@ -34,7 +34,7 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, FloatLiteral)
 
 namespace OOModel {
 
-class OOMODEL_API FloatLiteral: public Expression
+class OOMODEL_API FloatLiteral: public Reflect<Expression>
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(FloatLiteral)
 

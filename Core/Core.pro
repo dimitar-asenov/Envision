@@ -6,7 +6,8 @@ INSTALLS += target
 DEFINES += CORE_LIBRARY
 CONFIG += plugin
 QT += xml
-HEADERS += src/AdapterManager.h \
+HEADERS += src/reflect/Reflect.h \
+    src/AdapterManager.h \
     src/InitializationRegistry.h \
     src/core_api.h \
     src/core.h \

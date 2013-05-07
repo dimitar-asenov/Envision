@@ -31,8 +31,8 @@ DEFINE_TYPED_LIST(OOModel::Module)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(Module, Model::ExtendableNode)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(Module, Model::ExtendableNode)
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(Module)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(Module)
 
 REGISTER_ATTRIBUTE(Module, name, Text, false, false, true)
 REGISTER_ATTRIBUTE(Module, modules, TypedListOfModule, false, false, true)
@@ -40,8 +40,7 @@ REGISTER_ATTRIBUTE(Module, classes, TypedListOfClass, false, false, true)
 REGISTER_ATTRIBUTE(Module, methods, TypedListOfMethod, false, false, true)
 REGISTER_ATTRIBUTE(Module, fields, TypedListOfField, false, false, true)
 
-Module::Module(const QString& name)
-: Model::ExtendableNode (nullptr, Module::getMetaData())
+Module::Module(const QString& name) : Super(nullptr, Module::getMetaData())
 {
 	setName(name);
 }

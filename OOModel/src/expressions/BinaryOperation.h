@@ -34,7 +34,7 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, BinaryOperation)
 
 namespace OOModel {
 
-class OOMODEL_API BinaryOperation: public Expression
+class OOMODEL_API BinaryOperation: public Reflect<Expression>
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(BinaryOperation)
 

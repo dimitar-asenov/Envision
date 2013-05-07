@@ -34,7 +34,7 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, UnaryOperation)
 
 namespace OOModel {
 
-class OOMODEL_API UnaryOperation: public Expression
+class OOMODEL_API UnaryOperation: public Reflect<Expression>
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(UnaryOperation)
 

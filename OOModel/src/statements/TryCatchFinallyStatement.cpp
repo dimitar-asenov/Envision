@@ -31,8 +31,8 @@ DEFINE_TYPED_LIST(OOModel::TryCatchFinallyStatement)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(TryCatchFinallyStatement, Statement)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(TryCatchFinallyStatement, Statement)
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(TryCatchFinallyStatement)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(TryCatchFinallyStatement)
 
 REGISTER_ATTRIBUTE(TryCatchFinallyStatement, tryBody, StatementItemList, false, false, true)
 REGISTER_ATTRIBUTE(TryCatchFinallyStatement, catchClauses, TypedListOfCatchClause, false, false, true)

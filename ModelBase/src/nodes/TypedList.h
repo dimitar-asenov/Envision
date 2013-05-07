@@ -31,7 +31,7 @@
 namespace Model {
 
 template <class T>
-class TypedList: public List
+class TypedList: public Reflect<List>
 {
 	NODE_DECLARE_STANDARD_METHODS(TypedList)
 

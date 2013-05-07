@@ -31,8 +31,8 @@ DEFINE_TYPED_LIST(OOModel::Method)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(Method, Model::ExtendableNode)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(Method, Model::ExtendableNode)
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(Method)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(Method)
 
 REGISTER_ATTRIBUTE(Method, name, Text, false, false, true)
 REGISTER_ATTRIBUTE(Method, items, StatementItemList, false, false, true)
@@ -43,28 +43,26 @@ REGISTER_ATTRIBUTE(Method, visibility, Visibility, false, false, true)
 REGISTER_ATTRIBUTE(Method, storageSpecifier, StorageSpecifier, false, false, true)
 REGISTER_ATTRIBUTE(Method, annotations, StatementItemList, false, false, true)
 
-Method::Method(const QString& name)
-: Model::ExtendableNode (nullptr, Method::getMetaData())
+Method::Method(const QString& name) : Super(nullptr, Method::getMetaData())
 {
 	setName(name);
 }
 
-Method::Method(const QString& name, Visibility::VisibilityType vis)
-: Model::ExtendableNode (nullptr, Method::getMetaData())
+Method::Method(const QString& name, Visibility::VisibilityType vis) : Super(nullptr, Method::getMetaData())
 {
 	setName(name);
 	setVisibility(vis);
 }
 
 Method::Method(const QString& name, StorageSpecifier::StorageSpecifierTypes storage)
-: Model::ExtendableNode (nullptr, Method::getMetaData())
+: Super(nullptr, Method::getMetaData())
 {
 	setName(name);
 	setStorageSpecifier(storage);
 }
 
 Method::Method(const QString& name, Visibility::VisibilityType vis, StorageSpecifier::StorageSpecifierTypes storage)
-: Model::ExtendableNode (nullptr, Method::getMetaData())
+: Super(nullptr, Method::getMetaData())
 {
 	setName(name);
 	setVisibility(vis);

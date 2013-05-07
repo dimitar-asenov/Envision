@@ -31,15 +31,15 @@ DEFINE_TYPED_LIST(OOModel::FormalArgument)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(FormalArgument, Model::ExtendableNode)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(FormalArgument, Model::ExtendableNode)
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(FormalArgument)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(FormalArgument)
 
 REGISTER_ATTRIBUTE(FormalArgument, name, Text, false, false, true)
 REGISTER_ATTRIBUTE(FormalArgument, typeExpression, Expression, false, false, true)
 REGISTER_ATTRIBUTE(FormalArgument, directionInt, Integer, false, false, true)
 
 FormalArgument::FormalArgument(const QString& name, Expression* type, const Direction& direction)
-: Model::ExtendableNode (nullptr, FormalArgument::getMetaData())
+: Super(nullptr, FormalArgument::getMetaData())
 {
 	setName(name);
 	setDirection(direction);
@@ -47,7 +47,7 @@ FormalArgument::FormalArgument(const QString& name, Expression* type, const Dire
 }
 
 FormalArgument::FormalArgument(const QString& name, const Direction& direction)
-: Model::ExtendableNode (nullptr, FormalArgument::getMetaData())
+: Super(nullptr, FormalArgument::getMetaData())
 {
 	setName(name);
 	setDirection(direction);

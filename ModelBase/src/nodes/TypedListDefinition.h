@@ -41,14 +41,12 @@ template<class T> void TypedList<T>::setDefaultElementCreationFunction(CreateDef
 }
 
 template<class T>
-TypedList<T>::TypedList(::Model::Node* parent) :
-	List(parent)
-{
-}
+TypedList<T>::TypedList(::Model::Node* parent) : Super(parent)
+{}
 
 template<class T>
 TypedList<T>::TypedList(::Model::Node *parent, ::Model::PersistentStore &store, bool partialLoadHint) :
-	List(parent, store, partialLoadHint)
+Super(parent, store, partialLoadHint)
 {
 }
 

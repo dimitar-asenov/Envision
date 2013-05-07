@@ -32,7 +32,8 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, EmptyExpression)
 
 namespace OOModel {
 
-class OOMODEL_API EmptyExpression : public Expression {
+class OOMODEL_API EmptyExpression : public Reflect<Expression>
+{
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(EmptyExpression)
 
 	public:

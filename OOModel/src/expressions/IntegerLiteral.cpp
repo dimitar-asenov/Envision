@@ -32,13 +32,13 @@ DEFINE_TYPED_LIST(OOModel::IntegerLiteral)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(IntegerLiteral, Expression)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(IntegerLiteral, Expression)
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(IntegerLiteral)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(IntegerLiteral)
 
 REGISTER_ATTRIBUTE(IntegerLiteral, value, Integer, false, false, true)
 
 IntegerLiteral::IntegerLiteral(int value)
-: Expression(nullptr, IntegerLiteral::getMetaData())
+: Super(nullptr, IntegerLiteral::getMetaData())
 {
 	setValue(value);
 }

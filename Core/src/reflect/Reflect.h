@@ -26,30 +26,18 @@
 
 #pragma once
 
-#include "../oomodel_api.h"
+namespace Core {
 
-#include "../attributeMacros.h"
-#include "../expressions/Expression.h"
-
-#include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
-#include "ModelBase/src/nodes/Text.h"
-#include "ModelBase/src/nodes/nodeMacros.h"
-
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, FormalTypeArgument)
-
-namespace OOModel {
-
-class OOMODEL_API FormalTypeArgument : public Reflect<Model::ExtendableNode>
+template <class Base>
+class Reflect : public Base
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(FormalTypeArgument)
-	ATTRIBUTE_OOP_NAME
-	ATTRIBUTE(Expression, subTypeOfExpression, setSubTypeOfExpression)
-	ATTRIBUTE(Expression, superTypeOfExpression, setSuperTypeOfExpression)
-
+	protected:
+		using Super = Reflect<Base>;
 	public:
-		FormalTypeArgument(const QString& name, Expression* subtype = nullptr, Expression* supertype = nullptr);
-		virtual bool definesSymbol() const;
-		virtual const QString& symbolName() const;
+		using Base::Base;
 };
 
-} /* namespace OOModel */
+}
+
+// This alias is deliberitely outside of the namespace to make using this template less verbose
+template <class Base> using Reflect = Core::Reflect<Base>;

@@ -32,8 +32,8 @@ DEFINE_TYPED_LIST(OOModel::ErrorExpression)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(ErrorExpression, Expression)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(ErrorExpression, Expression)
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(ErrorExpression)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(ErrorExpression)
 
 REGISTER_ATTRIBUTE(ErrorExpression, prefix, Text, false, false, true)
 REGISTER_ATTRIBUTE(ErrorExpression, arg, Expression, false, false, true)

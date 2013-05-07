@@ -35,7 +35,7 @@ namespace OOModel {
 
 class Class;
 
-class OOMODEL_API ReferenceExpression: public Expression
+class OOMODEL_API ReferenceExpression: public Reflect<Expression>
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(ReferenceExpression)
 

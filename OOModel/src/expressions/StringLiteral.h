@@ -34,7 +34,7 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, StringLiteral)
 
 namespace OOModel {
 
-class OOMODEL_API StringLiteral: public Expression
+class OOMODEL_API StringLiteral: public Reflect<Expression>
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(StringLiteral)
 

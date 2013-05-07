@@ -32,7 +32,7 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, ConditionalExpression)
 
 namespace OOModel {
 
-class OOMODEL_API ConditionalExpression: public Expression
+class OOMODEL_API ConditionalExpression: public Reflect<Expression>
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(ConditionalExpression)
 

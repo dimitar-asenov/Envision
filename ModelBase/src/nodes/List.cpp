@@ -34,15 +34,13 @@
 
 namespace Model {
 
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(List, Node)
+NODE_DEFINE_TYPE_REGISTRATION_METHODS(List)
 
-List::List(Node *parent) :
-	Node(parent)
+List::List(Node *parent) : Super(parent)
 {
 }
 
-List::List(Node *parent, PersistentStore &store, bool partialHint) :
-	Node(parent)
+List::List(Node *parent, PersistentStore &store, bool partialHint) : Super(parent)
 {
 	fullyLoaded = !partialHint;
 

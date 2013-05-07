@@ -32,7 +32,7 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, ArrayInitializer)
 
 namespace OOModel {
 
-class OOMODEL_API ArrayInitializer: public Expression
+class OOMODEL_API ArrayInitializer: public Reflect<Expression>
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(ArrayInitializer)
 

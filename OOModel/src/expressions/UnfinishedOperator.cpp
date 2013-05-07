@@ -32,8 +32,8 @@ DEFINE_TYPED_LIST(OOModel::UnfinishedOperator)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(UnfinishedOperator, Expression)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(UnfinishedOperator, Expression)
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(UnfinishedOperator)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(UnfinishedOperator)
 
 REGISTER_ATTRIBUTE(UnfinishedOperator, delimiters, TypedListOfText, false, false, true)
 REGISTER_ATTRIBUTE(UnfinishedOperator, operands, TypedListOfExpression, false, false, true)

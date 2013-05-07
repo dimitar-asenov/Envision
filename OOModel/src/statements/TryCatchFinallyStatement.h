@@ -36,7 +36,7 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, TryCatchFinallyStatement)
 
 namespace OOModel {
 
-class OOMODEL_API TryCatchFinallyStatement: public Statement
+class OOMODEL_API TryCatchFinallyStatement: public Reflect<Statement>
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(TryCatchFinallyStatement)
 

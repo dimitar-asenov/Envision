@@ -39,7 +39,7 @@ namespace Model {
 
 class Text;
 
-class MODELBASE_API List: public Node
+class MODELBASE_API List: public Reflect<Node>
 {
 	NODE_DECLARE_STANDARD_METHODS(List)
 

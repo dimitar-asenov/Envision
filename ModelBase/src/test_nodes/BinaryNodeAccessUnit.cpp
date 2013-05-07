@@ -31,12 +31,13 @@ DEFINE_TYPED_LIST(TestNodes::BinaryNodeAccessUnit)
 
 namespace TestNodes {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(BinaryNodeAccessUnit, BinaryNode)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(BinaryNodeAccessUnit, BinaryNode)
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(BinaryNodeAccessUnit)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(BinaryNodeAccessUnit)
 
 Model::NodeReadWriteLock* BinaryNodeAccessUnit::accessLock() const
 {
-	return & (const_cast<BinaryNodeAccessUnit*> (this) )->accessLock_; // TODO const cast madness. What is the best way to use these?
+	// TODO const cast madness. What is the best way to use these?
+	return & (const_cast<BinaryNodeAccessUnit*> (this) )->accessLock_;
 }
 
 }

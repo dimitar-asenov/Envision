@@ -31,13 +31,13 @@ DEFINE_TYPED_LIST(OOModel::PrimitiveTypeExpression)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(PrimitiveTypeExpression, TypeExpression)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(PrimitiveTypeExpression, TypeExpression)
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(PrimitiveTypeExpression)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(PrimitiveTypeExpression)
 
 REGISTER_ATTRIBUTE(PrimitiveTypeExpression, val, Integer, false, false, true)
 
 PrimitiveTypeExpression::PrimitiveTypeExpression(const PrimitiveTypes& type)
-	: TypeExpression (nullptr, PrimitiveTypeExpression::getMetaData())
+: Super(nullptr, PrimitiveTypeExpression::getMetaData())
 {
 	setTypeValue(type);
 }

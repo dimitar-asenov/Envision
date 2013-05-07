@@ -32,7 +32,7 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, BreakStatement)
 
 namespace OOModel {
 
-class OOMODEL_API BreakStatement: public Statement
+class OOMODEL_API BreakStatement: public Reflect<Statement>
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(BreakStatement)
 };

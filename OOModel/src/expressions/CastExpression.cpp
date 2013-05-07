@@ -32,8 +32,8 @@ DEFINE_TYPED_LIST(OOModel::CastExpression)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(CastExpression, Expression)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(CastExpression, Expression)
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(CastExpression)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(CastExpression)
 
 REGISTER_ATTRIBUTE(CastExpression, castType, Expression, false, false, true)
 REGISTER_ATTRIBUTE(CastExpression, expr, Expression, false, false, true)

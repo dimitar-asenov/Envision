@@ -31,8 +31,8 @@ DEFINE_TYPED_LIST(OOModel::Field)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(Field, Model::ExtendableNode)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(Field, Model::ExtendableNode)
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(Field)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(Field)
 
 REGISTER_ATTRIBUTE(Field, name, Text, false, false, true)
 REGISTER_ATTRIBUTE(Field, typeExpression, Expression, false, false, true)
@@ -41,14 +41,14 @@ REGISTER_ATTRIBUTE(Field, visibility, Visibility, false, false, true)
 REGISTER_ATTRIBUTE(Field, storageSpecifier, StorageSpecifier, false, false, true)
 
 Field::Field(const QString& name, Expression* type)
-: Model::ExtendableNode (nullptr, Field::getMetaData())
+: Super(nullptr, Field::getMetaData())
 {
 	setName(name);
 	if (type) setTypeExpression(type);
 }
 
 Field::Field(const QString& name, Expression* type, Expression* initialValue)
-: Model::ExtendableNode (nullptr, Field::getMetaData())
+: Super(nullptr, Field::getMetaData())
 {
 	setName(name);
 	if (type) setTypeExpression(type);
@@ -56,7 +56,7 @@ Field::Field(const QString& name, Expression* type, Expression* initialValue)
 }
 
 Field::Field(const QString& name, Expression* type, Visibility::VisibilityType vis)
-: Model::ExtendableNode (nullptr, Field::getMetaData())
+: Super(nullptr, Field::getMetaData())
 {
 	setName(name);
 	if (type) setTypeExpression(type);
@@ -64,7 +64,7 @@ Field::Field(const QString& name, Expression* type, Visibility::VisibilityType v
 }
 
 Field::Field(const QString& name, Expression* type, StorageSpecifier::StorageSpecifierTypes storage)
-: Model::ExtendableNode (nullptr, Field::getMetaData())
+: Super(nullptr, Field::getMetaData())
 {
 	setName(name);
 	if (type) setTypeExpression(type);
@@ -73,7 +73,7 @@ Field::Field(const QString& name, Expression* type, StorageSpecifier::StorageSpe
 
 Field::Field(const QString& name, Expression* type, Visibility::VisibilityType vis,
 		StorageSpecifier::StorageSpecifierTypes storage, Expression* initialValue)
-: Model::ExtendableNode (nullptr, Field::getMetaData())
+: Super(nullptr, Field::getMetaData())
 {
 	setName(name);
 	if (type) setTypeExpression(type);

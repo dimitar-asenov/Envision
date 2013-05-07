@@ -32,13 +32,13 @@ DEFINE_TYPED_LIST(OOModel::FloatLiteral)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(FloatLiteral, Expression)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(FloatLiteral, Expression)
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(FloatLiteral)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(FloatLiteral)
 
 REGISTER_ATTRIBUTE(FloatLiteral, value, Float, false, false, true)
 
 FloatLiteral::FloatLiteral(double value)
-: Expression(nullptr, FloatLiteral::getMetaData())
+: Super(nullptr, FloatLiteral::getMetaData())
 {
 	setValue(value);
 }

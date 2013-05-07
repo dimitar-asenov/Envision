@@ -32,13 +32,13 @@ DEFINE_TYPED_LIST(OOModel::CharacterLiteral)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(CharacterLiteral, Expression)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(CharacterLiteral, Expression)
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(CharacterLiteral)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(CharacterLiteral)
 
 REGISTER_ATTRIBUTE(CharacterLiteral, value, Character, false, false, true)
 
 CharacterLiteral::CharacterLiteral(const QChar& value)
-: Expression(nullptr, CharacterLiteral::getMetaData())
+: Super(nullptr, CharacterLiteral::getMetaData())
 {
 	setValue(value);
 }

@@ -33,8 +33,8 @@ DEFINE_TYPED_LIST(OOModel::UnaryOperation)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(UnaryOperation, Expression)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(UnaryOperation, Expression)
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(UnaryOperation)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(UnaryOperation)
 
 REGISTER_ATTRIBUTE(UnaryOperation, operand, Expression, false, false, true)
 REGISTER_ATTRIBUTE(UnaryOperation, opr, Integer, false, false, true)

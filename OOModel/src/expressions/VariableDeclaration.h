@@ -36,7 +36,7 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, VariableDeclaration)
 
 namespace OOModel {
 
-class OOMODEL_API VariableDeclaration: public Expression
+class OOMODEL_API VariableDeclaration: public Reflect<Expression>
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(VariableDeclaration)
 

@@ -33,7 +33,7 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Statement)
 
 namespace OOModel {
 
-class OOMODEL_API Statement: public StatementItem
+class OOMODEL_API Statement: public Reflect<StatementItem>
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Statement)
 };

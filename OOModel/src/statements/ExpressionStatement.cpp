@@ -31,13 +31,13 @@ DEFINE_TYPED_LIST(OOModel::ExpressionStatement)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(ExpressionStatement, Statement)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(ExpressionStatement, Statement)
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(ExpressionStatement)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(ExpressionStatement)
 
 REGISTER_ATTRIBUTE(ExpressionStatement, expression, Expression, false, false, true)
 
 ExpressionStatement::ExpressionStatement(Expression* e)
-: Statement(nullptr, ExpressionStatement::getMetaData())
+: Super(nullptr, ExpressionStatement::getMetaData())
 {
 	setExpression(e);
 }

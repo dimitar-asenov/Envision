@@ -34,7 +34,7 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, AssignmentExpression)
 
 namespace OOModel {
 
-class OOMODEL_API AssignmentExpression: public Expression
+class OOMODEL_API AssignmentExpression: public Reflect<Expression>
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(AssignmentExpression)
 

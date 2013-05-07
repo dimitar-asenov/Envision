@@ -38,7 +38,7 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, SwitchCase)
 
 namespace OOModel {
 
-class OOMODEL_API SwitchCase : public Model::ExtendableNode
+class OOMODEL_API SwitchCase : public Reflect<Model::ExtendableNode>
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(SwitchCase)
 

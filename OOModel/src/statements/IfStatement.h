@@ -35,7 +35,7 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, IfStatement)
 
 namespace OOModel {
 
-class OOMODEL_API IfStatement: public Statement
+class OOMODEL_API IfStatement: public Reflect<Statement>
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(IfStatement)
 

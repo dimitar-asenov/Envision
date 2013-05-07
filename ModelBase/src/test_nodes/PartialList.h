@@ -34,7 +34,7 @@
 
 namespace TestNodes {
 
-class MODELBASE_API PartialList: public Model::ExtendableNode
+class MODELBASE_API PartialList: public Reflect<Model::ExtendableNode>
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(PartialList)
 	ATTRIBUTE(Model::List, list, setList)

@@ -31,8 +31,8 @@ DEFINE_TYPED_LIST(OOModel::Project)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(Project, Model::ExtendableNode)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(Project, Model::ExtendableNode)
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(Project)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(Project)
 
 REGISTER_ATTRIBUTE(Project, name, Text, false, false, true)
 REGISTER_ATTRIBUTE(Project, projects, TypedListOfProject, false, false, true)
@@ -41,8 +41,7 @@ REGISTER_ATTRIBUTE(Project, classes, TypedListOfClass, false, false, true)
 REGISTER_ATTRIBUTE(Project, methods, TypedListOfMethod, false, false, true)
 REGISTER_ATTRIBUTE(Project, fields, TypedListOfField, false, false, true)
 
-Project::Project(const QString& name)
-: Model::ExtendableNode (nullptr, Project::getMetaData())
+Project::Project(const QString& name) : Super(nullptr, Project::getMetaData())
 {
 	setName(name);
 }

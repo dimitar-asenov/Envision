@@ -31,8 +31,8 @@ DEFINE_TYPED_LIST(OOModel::Class)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(Class, StatementItem)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(Class, StatementItem)
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(Class)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(Class)
 
 REGISTER_ATTRIBUTE(Class, name, Text, false, false, true)
 REGISTER_ATTRIBUTE(Class, baseClasses, TypedListOfExpression, false, false, true)
@@ -47,14 +47,14 @@ REGISTER_ATTRIBUTE(Class, annotations, StatementItemList, false, false, true)
 REGISTER_ATTRIBUTE(Class, cKind, Integer, false, false, true)
 
 Class::Class(const QString& name)
-: StatementItem (nullptr, Class::getMetaData())
+: Super(nullptr, Class::getMetaData())
 {
 	setName(name);
 	setConstructKind(ConstructKind::Class);
 }
 
 Class::Class(const QString& name, Visibility::VisibilityType vis)
-: StatementItem (nullptr, Class::getMetaData())
+: Super(nullptr, Class::getMetaData())
 {
 	setName(name);
 	setVisibility(vis);
@@ -62,14 +62,14 @@ Class::Class(const QString& name, Visibility::VisibilityType vis)
 }
 
 Class::Class(const QString& name, ConstructKind kind)
-	: StatementItem (nullptr, Class::getMetaData())
+: Super(nullptr, Class::getMetaData())
 {
 	setName(name);
 	setConstructKind(kind);
 }
 
 Class::Class(const QString& name, Visibility::VisibilityType vis, ConstructKind kind)
-	: StatementItem (nullptr, Class::getMetaData())
+: Super(nullptr, Class::getMetaData())
 {
 	setName(name);
 	setVisibility(vis);

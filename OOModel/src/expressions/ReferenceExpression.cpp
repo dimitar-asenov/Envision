@@ -40,15 +40,15 @@ DEFINE_TYPED_LIST(OOModel::ReferenceExpression)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(ReferenceExpression, Expression)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(ReferenceExpression, Expression)
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(ReferenceExpression)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(ReferenceExpression)
 
 REGISTER_ATTRIBUTE(ReferenceExpression, prefix, Expression, false, true, true)
 REGISTER_ATTRIBUTE(ReferenceExpression, ref, OOReference, false, false, true)
 REGISTER_ATTRIBUTE(ReferenceExpression, typeArguments, TypedListOfExpression, false, false, true)
 
 ReferenceExpression::ReferenceExpression(const QString& name, Expression* prefix)
-: Expression(nullptr, ReferenceExpression::getMetaData())
+: Super(nullptr, ReferenceExpression::getMetaData())
 {
 	ref()->setName(name);
 	if (prefix != nullptr) setPrefix(prefix);

@@ -31,8 +31,8 @@ DEFINE_TYPED_LIST(OOModel::LoopStatement)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(LoopStatement, Statement)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(LoopStatement, Statement)
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(LoopStatement)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(LoopStatement)
 
 REGISTER_ATTRIBUTE(LoopStatement, condition, Expression, false, true, true)
 REGISTER_ATTRIBUTE(LoopStatement, initStep, Expression, false, true, true)

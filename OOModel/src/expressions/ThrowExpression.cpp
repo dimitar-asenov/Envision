@@ -32,8 +32,8 @@ DEFINE_TYPED_LIST(OOModel::ThrowExpression)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(ThrowExpression, Expression)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(ThrowExpression, Expression)
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(ThrowExpression)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(ThrowExpression)
 
 REGISTER_ATTRIBUTE(ThrowExpression, expr, Expression, false, false, true)
 

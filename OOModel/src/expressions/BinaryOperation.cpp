@@ -33,15 +33,15 @@ DEFINE_TYPED_LIST(OOModel::BinaryOperation)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(BinaryOperation, Expression)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(BinaryOperation, Expression)
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(BinaryOperation)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(BinaryOperation)
 
 REGISTER_ATTRIBUTE(BinaryOperation, left, Expression, false, false, true)
 REGISTER_ATTRIBUTE(BinaryOperation, right, Expression, false, false, true)
 REGISTER_ATTRIBUTE(BinaryOperation, opr, Integer, false, false, true)
 
 BinaryOperation::BinaryOperation(OperatorTypes op, Expression* left, Expression* right)
-: Expression (nullptr, BinaryOperation::getMetaData())
+: Super(nullptr, BinaryOperation::getMetaData())
 {
 	setOp(op);
 	if (left) setLeft(left);

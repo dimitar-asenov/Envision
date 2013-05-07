@@ -36,7 +36,7 @@ namespace OOModel {
 
 class Method;
 
-class OOMODEL_API MethodCallExpression: public Expression
+class OOMODEL_API MethodCallExpression: public Reflect<Expression>
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(MethodCallExpression)
 

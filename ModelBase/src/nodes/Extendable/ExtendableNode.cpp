@@ -69,19 +69,19 @@ AttributeChain& ExtendableNode::topLevelMeta()
 }
 
 ExtendableNode::ExtendableNode(Node *parent) :
-	Node(parent), meta(ExtendableNode::getMetaData())
+	Super(parent), meta(ExtendableNode::getMetaData())
 {
 	throw ModelException("Constructing an ExtendableNode class directly, without specifying meta data");
 }
 
 ExtendableNode::ExtendableNode(Node *parent, PersistentStore &, bool) :
-	Node(parent), meta(ExtendableNode::getMetaData())
+	Super(parent), meta(ExtendableNode::getMetaData())
 {
 	throw ModelException("Constructing an ExtendableNode class directly, without specifying meta data");
 }
 
 ExtendableNode::ExtendableNode(Node *parent, AttributeChain& metaData) :
-	Node(parent), meta(metaData), subnodes(meta.numLevels())
+	Super(parent), meta(metaData), subnodes(meta.numLevels())
 {
 	for (int level = 0; level < meta.numLevels(); ++level)
 	{
@@ -95,7 +95,7 @@ ExtendableNode::ExtendableNode(Node *parent, AttributeChain& metaData) :
 }
 
 ExtendableNode::ExtendableNode(Node *parent, PersistentStore &store, bool, AttributeChain& metaData) :
-	Node(parent), meta(metaData), subnodes(meta.numLevels())
+	Super(parent), meta(metaData), subnodes(meta.numLevels())
 {
 	for (int level = 0; level < meta.numLevels(); ++level)
 		subnodes[level] = QVector<Node*> (meta.level(level)->size(), nullptr);

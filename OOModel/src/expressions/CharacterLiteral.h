@@ -34,7 +34,7 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, CharacterLiteral)
 
 namespace OOModel {
 
-class OOMODEL_API CharacterLiteral: public Expression
+class OOMODEL_API CharacterLiteral: public Reflect<Expression>
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(CharacterLiteral)
 

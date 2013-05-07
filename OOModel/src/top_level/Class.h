@@ -45,7 +45,7 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Class)
 
 namespace OOModel {
 
-class OOMODEL_API Class : public StatementItem
+class OOMODEL_API Class : public Reflect<StatementItem>
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Class)
 
