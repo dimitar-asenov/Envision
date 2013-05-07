@@ -78,7 +78,8 @@ HEADERS += src/top_level/Enumerator.h \
     src/types/ReferenceType.h \
     src/types/PointerType.h \
     src/expressions/types/PointerTypeExpression.h \
-    src/expressions/types/ReferenceTypeExpression.h
+    src/expressions/types/ReferenceTypeExpression.h \
+    src/expressions/DeleteExpression.h
     
 SOURCES += src/top_level/Enumerator.cpp \
     src/types/LambdaType.cpp \
@@ -152,4 +153,5 @@ SOURCES += src/top_level/Enumerator.cpp \
     src/types/ReferenceType.cpp \
     src/types/PointerType.cpp \
     src/expressions/types/PointerTypeExpression.cpp \
-    src/expressions/types/ReferenceTypeExpression.cpp
+    src/expressions/types/ReferenceTypeExpression.cpp \
+    src/expressions/DeleteExpression.cpp

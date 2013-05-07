@@ -24,30 +24,27 @@
  **
  **********************************************************************************************************************/
 
-#include "CatchClause.h"
+#pragma once
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::CatchClause)
+#include "Expression.h"
+
+#include "ModelBase/src/nodes/Boolean.h"
+
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, DeleteExpression)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(CatchClause, Model::ExtendableNode)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(CatchClause, Model::ExtendableNode)
-
-REGISTER_ATTRIBUTE(CatchClause, exceptionToCatch, Expression, false, false, true)
-REGISTER_ATTRIBUTE(CatchClause, body, StatementItemList, false, false, true)
-
-QList<Model::Node*> CatchClause::findSymbols(const QRegExp& symbolExp,Model::Node* source, FindSymbolMode mode,
-		bool exhaustAllScopes)
+class OOMODEL_API DeleteExpression: public Expression
 {
-	QList<Model::Node*> symbols;
+	EXTENDABLENODE_DECLARE_STANDARD_METHODS(DeleteExpression)
 
-	symbols << exceptionToCatch()->findSymbols(symbolExp, source, SEARCH_DOWN, false);
+	ATTRIBUTE(Expression, deleteType, setDeleteType)
+	ATTRIBUTE_VALUE(Model::Boolean, isArray, setIsArray, bool)
 
-	if (exhaustAllScopes || symbols.empty())
-		symbols << Node::findSymbols(symbolExp, source, mode, exhaustAllScopes);
+	public:
+		DeleteExpression(bool isArrayType);
 
-	return symbols;
+		virtual Type* type() override;
+};
+
 }
-
-} /* namespace OOModel */
