@@ -456,7 +456,6 @@ bool ClangAstVisitor::TraverseCXXThrowExpr(clang::CXXThrowExpr* throwExpr)
 
 bool ClangAstVisitor::TraverseLambdaExpr(clang::LambdaExpr* lambdaExpr)
 {
-	lambdaExpr->getCallOperator()->dump();
 	OOModel::LambdaExpression* ooLambda = new OOModel::LambdaExpression();
 	// visit body
 	ooStack_.push(ooLambda->body());
@@ -697,7 +696,7 @@ bool ClangAstVisitor::VisitCharacterLiteral(clang::CharacterLiteral* charLiteral
 bool ClangAstVisitor::VisitStringLiteral(clang::StringLiteral* stringLiteral)
 {
 	OOModel::StringLiteral* ooStringLit = new OOModel::StringLiteral();
-	ooStringLit->setValue(QString::fromStdString(stringLiteral->getString().str()));
+	ooStringLit->setValue(QString::fromStdString(stringLiteral->getBytes().str()));
 	ooExprStack_.push(ooStringLit);
 	return true;
 }
