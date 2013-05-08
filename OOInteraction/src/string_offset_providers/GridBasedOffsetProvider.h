@@ -83,6 +83,7 @@ class OOINTERACTION_API GridBasedOffsetProvider : public StringOffsetProvider {
 template <class T>
 inline void GridBasedOffsetProvider::addGridConstructor(void(*constructor)(GridBasedOffsetProvider* provider, T* item))
 {
+	Q_ASSERT(!gridConstructors().contains(T::typeIdStatic()));
 	gridConstructors().insert(T::typeIdStatic(), reinterpret_cast<ItemTypeRegistrationFunction>(constructor) );
 }
 

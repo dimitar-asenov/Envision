@@ -174,7 +174,7 @@ templatePrefix QList<int> className::hierarchyTypeIds() const																			
  * 	...
  */
 #define DEFINE_TYPE_ID_DERIVED(className, globalPluginInitializationRegistryGetterFunction, nameExpression, templatePrefix)\
-DEFINE_TYPE_ID_COMMON(className, globalPluginInitializationRegistryGetterFunction, nameExpression, templatePrefix, 1)\
+DEFINE_TYPE_ID_COMMON(className, globalPluginInitializationRegistryGetterFunction, nameExpression, templatePrefix, -1)\
 																																							\
 templatePrefix QList<int> className::hierarchyTypeIds() const																			\
 {																																							\
