@@ -64,7 +64,6 @@ bool ModelBase::initialize(Core::EnvisionManager&)
 
 	logger = Logger::Log::getLogger("modelbase");
 
-	ExtendableNode::init();
 	nodeTypeInitializationRegistry().initializeAll();
 
 	return true;

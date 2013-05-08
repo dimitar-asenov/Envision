@@ -64,6 +64,8 @@ namespace Model {
  */
 class MODELBASE_API ExtendableNode: public Super<Node>
 {
+	DECLARE_TYPE_ID
+
 	public:
 
 		ExtendableNode(Node *parent, AttributeChain& metaData);
@@ -94,13 +96,6 @@ class MODELBASE_API ExtendableNode: public Super<Node>
 
 		static AttributeChain& getMetaData();
 
-		virtual const QString& typeName() const;
-		virtual int typeId() const;
-		virtual QList<int> hierarchyTypeIds() const;
-		static const QString& typeNameStatic();
-		static int typeIdStatic();
-		static void registerNodeType();
-		static void init();
 		static int registerExtensionId();
 
 		template <class T> T* extension();
@@ -120,12 +115,14 @@ class MODELBASE_API ExtendableNode: public Super<Node>
 		void removeAllNodes();
 		void verifyHasAllMandatoryAttributes();
 
-		static int typeId_;
 		static int nextExtensionId_;
 };
 
-inline Node* ExtendableNode::get(const ExtendableIndex &attributeIndex) const { return subnodes[attributeIndex.level()][attributeIndex.index()]; }
-inline int ExtendableNode::typeIdStatic() { return typeId_;}
+inline Node* ExtendableNode::get(const ExtendableIndex &attributeIndex) const
+{
+	return subnodes[attributeIndex.level()][attributeIndex.index()];
+}
+
 inline int ExtendableNode::registerExtensionId() { return nextExtensionId_++; }
 
 template <class T> T* ExtendableNode::extension()

@@ -29,6 +29,22 @@
 
 namespace Model {
 
+DEFINE_TYPE_ID_DERIVED(TypedList<T>, TypedList<T>::elementInitializationRegistry,
+		QString("TypedListOf") + T::typeNameStatic(), template<class T>)
+
+template<class T>
+Core::InitializationRegistry& TypedList<T>::elementInitializationRegistry()
+{
+	return T::initializationRegistry();
+}
+
+template<class T>
+void TypedList<T>::initType()
+{
+	TypedList<T>::typeIdVariable() = Node::registerNodeType(typeNameStatic(), ::Model::createNewNode<TypedList<T> >,
+			::Model::createNodeFromPersistence<TypedList<T> >);
+}
+
 template<class T> typename TypedList<T>::CreateDefaultElement& TypedList<T>::creationFunction()
 {
 	static CreateDefaultElement function;
@@ -48,63 +64,6 @@ template<class T>
 TypedList<T>::TypedList(::Model::Node *parent, ::Model::PersistentStore &store, bool partialLoadHint) :
 Super(parent, store, partialLoadHint)
 {
-}
-
-template<class T>
-::Core::InitializationRegistry& TypedList<T>::initializationRegistry()
-{
-	return T::initializationRegistry();
-}
-
-// This must be set to the result of Node::registerNodeType
-// This variable uses a clever trick to register an initialization function that will be called during the
-// plug-in's initialization routine
-template<class T> int TypedList<T>::typeId_ = (initializationRegistry().add(TypedList<T>::init) , -1);
-
-template<class T>
-const QString& TypedList<T>::typeName() const
-{
-	return typeNameStatic();
-}
-
-template<class T>
-int TypedList<T>::typeId() const
-{
-	return typeId_;
-}
-
-template<class T>
-QList<int> TypedList<T>::hierarchyTypeIds() const
-{
-	auto l = List::hierarchyTypeIds();
-	l.prepend(typeIdStatic());
-	return l;
-}
-
-template<class T>
-int TypedList<T>::typeIdStatic()
-{
-	return typeId_;
-}
-
-template<class T>
-const QString& TypedList<T>::typeNameStatic()
-{
-	static QString typeName_(QString("TypedListOf") + T::typeNameStatic());
-	return typeName_;
-}
-
-template<class T>
-void TypedList<T>::registerNodeType()
-{
-	typeId_ = Node::registerNodeType(typeNameStatic(), ::Model::createNewNode<TypedList<T> >,
-			::Model::createNodeFromPersistence<TypedList<T> >);
-}
-
-template<class T>
-void TypedList<T>::init()
-{
-	registerNodeType();
 }
 
 template<class T> T* TypedList<T>::first()

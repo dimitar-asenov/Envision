@@ -30,6 +30,7 @@
 #include "../persistence/PersistentStore.h"
 #include "Core/src/InitializationRegistry.h"
 #include "Core/src/reflect/Reflect.h"
+#include "Core/src/reflect/typeIdMacros.h"
 
 namespace Model {
 
@@ -68,6 +69,7 @@ class NodeReadWriteLock;
  */
 class MODELBASE_API Node
 {
+	DECLARE_TYPE_ID
 	public:
 
 		/**
@@ -309,31 +311,6 @@ class MODELBASE_API Node
 		Node* persistentUnitNode() const;
 
 		/**
-		 * Returns the name of the type of this Node. This is typically a string identical to the class name.
-		 *
-		 * This value is used when persisting the node.
-		 */
-		virtual const QString& typeName() const;
-
-		/**
-		 * Returns an integer id of the type of this Node. When a new node class is registered it receives a unique id.
-		 * This id can be used later to quickly recognize objects of a specific type.
-		 */
-		virtual int typeId() const;
-
-		static int typeIdStatic();
-
-		/**
-		 * Returns a list of all ids in the type hierarchy of this node (excluding abstract base classes).
-		 * \see typeId().
-		 *
-		 * The most derived id appears at the front of the list.
-		 *
-		 * The default implementation returns a list containing only the id of Node.
-		 */
-		virtual QList<int> hierarchyTypeIds() const;
-
-		/**
 		 * Registers the constructors of a class derived from Node.
 		 *
 		 * Each class derived from Node must be registered before it can be used.
@@ -438,11 +415,6 @@ class MODELBASE_API Node
 		static QMap<QString, NodeConstructor> nodeConstructorRegister;
 		static QMap<QString, NodePersistenceConstructor> nodePersistenceConstructorRegister;
 };
-
-inline int Node::typeIdStatic()
-{
-	return 0;
-}
 
 /**
  * This is a convenience function that can be used when registering classes derived from Node using registerNodeType().

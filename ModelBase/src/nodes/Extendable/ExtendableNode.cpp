@@ -28,39 +28,15 @@
 
 namespace Model {
 
-int ExtendableNode::typeId_ = -1; /* This must be set to the result of Node::registerNodeType */
+::Core::InitializationRegistry& nodeTypeInitializationRegistry();
+DEFINE_TYPE_ID_DERIVED(ExtendableNode, nodeTypeInitializationRegistry, "ExtendableNode",)
+
 int ExtendableNode::nextExtensionId_ = 0;
 
-const QString& ExtendableNode::typeName() const
+void ExtendableNode::initType()
 {
-	return typeNameStatic();
-}
-
-int ExtendableNode::typeId()	const
-{
-	return typeId_;
-}
-
-QList<int> ExtendableNode::hierarchyTypeIds() const
-{
-	return QList<int>() << typeId_;
-}
-
-const QString& ExtendableNode::typeNameStatic()
-{
-	static QString typeName_("ExtendableNode");
-	return typeName_;
-}
-
-void ExtendableNode::registerNodeType()
-{
-	typeId_ = Node::registerNodeType("ExtendableNode", ::Model::createNewNode< ExtendableNode >,
+	typeIdVariable() = Node::registerNodeType("ExtendableNode", ::Model::createNewNode< ExtendableNode >,
 			::Model::createNodeFromPersistence< ExtendableNode >);
-}
-
-void ExtendableNode::init()
-{
-	registerNodeType();
 }
 
 AttributeChain& ExtendableNode::topLevelMeta()

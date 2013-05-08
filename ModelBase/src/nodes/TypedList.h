@@ -47,6 +47,8 @@ class TypedList: public Super<List>
 		virtual Node* createDefaultElement() override;
 		static void setDefaultElementCreationFunction(CreateDefaultElement function);
 
+		static ::Core::InitializationRegistry& elementInitializationRegistry();
+
 	private:
 		static CreateDefaultElement& creationFunction();
 

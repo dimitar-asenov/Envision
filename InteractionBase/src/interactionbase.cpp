@@ -64,7 +64,7 @@
 #include "VisualizationBase/src/layouts/PositionLayout.h"
 #include "VisualizationBase/src/VisualizationManager.h"
 
-#include "ModelBase/src/test_nodes/BinaryNode.h"
+#include "ModelBase/src/test_nodes/TestNodesInitializer.h"
 
 #include "SelfTest/src/SelfTestSuite.h"
 
@@ -108,7 +108,7 @@ void InteractionBase::unload()
 
 void InteractionBase::selfTest(QString testid)
 {
-	TestNodes::BinaryNode::init();
+	TestNodes::nodeTypeInitializationRegistry().initializeAll();
 
 	if (testid.isEmpty()) SelfTest::TestManager<InteractionBase>::runAllTests().printResultStatistics();
 	else SelfTest::TestManager<InteractionBase>::runTest(testid).printResultStatistics();

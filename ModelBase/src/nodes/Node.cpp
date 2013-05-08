@@ -36,6 +36,9 @@ using namespace Logger;
 
 namespace Model {
 
+::Core::InitializationRegistry& nodeTypeInitializationRegistry();
+DEFINE_TYPE_ID_BASE(Node, nodeTypeInitializationRegistry, "Node",)
+
 /***********************************************************************************************************************
  * STATIC MEMBERS
  **********************************************************************************************************************/
@@ -170,17 +173,6 @@ void Node::endModification()
 /***********************************************************************************************************************
  * GETTERS AND SETTERS
  **********************************************************************************************************************/
-int Node::typeId() const
-{
-	return typeIdStatic();
-}
-
-const QString& Node::typeName() const
-{
-	static QString name = "Node";
-	return name;
-}
-
 Model* Node::model() const
 {
 	return ModelManager::instance().find(root());
@@ -242,13 +234,6 @@ const QString& Node::symbolName() const
 {
 	static QString nullString;
 	return nullString;
-}
-
-QList<int> Node::hierarchyTypeIds() const
-{
-	QList<int> l;
-	l << typeIdStatic();
-	return l;
 }
 
 bool Node::isNewPersistenceUnit() const

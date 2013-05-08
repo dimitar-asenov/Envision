@@ -26,6 +26,7 @@
 
 #pragma once
 
+#include "Core/src/reflect/typeIdMacros.h"
 #include "ModelBase/src/nodes/Extendable/Attribute.h"
 #include "ModelBase/src/nodes/Extendable/ExtendableIndex.h"
 
@@ -37,7 +38,7 @@
  * 			The name of the class being defined. This class must inherit from Node, directly or indirectly. For
  * 			classes directly inheriting ExtendableNode use the macro EXTENDABLENODE_DECLARE_STANDARD_CONSTRUCTORS.
  *
- * This macro declares a static method "registerNodeConstructors" which should be called during the initialization of
+ * This macro declares a static method initType() which should be called during the initialization of
  * the plug-in where this node is defined. This will assure that the new node type's constructors are properly
  * registered.
  *
@@ -48,21 +49,10 @@
  * 	NODE_DECLARE_STANDARD_METHODS( MyNewNode )
  */
 #define NODE_DECLARE_STANDARD_METHODS(className)																							\
+	DECLARE_TYPE_ID																																	\
 	public:																																				\
 		className(::Model::Node* parent = nullptr);																							\
 		className(::Model::Node *parent, ::Model::PersistentStore &store, bool partialLoadHint);								\
-																																							\
-		virtual const QString& typeName() const;																								\
-		virtual int typeId() const;																												\
-		virtual QList<int> hierarchyTypeIds() const;																							\
-		static const QString& typeNameStatic();																								\
-		static int typeIdStatic();																													\
-		static void registerNodeType();																											\
-		static void init();																															\
-		static ::Core::InitializationRegistry& initializationRegistry();																\
-																																							\
-	private:																																				\
-		static int typeId_;																															\
 
 /*********************************************************************************************************************/
 
@@ -73,7 +63,7 @@
  * @param className
  * 			The name of the class being defined. This class must inherit from ExtendableNode, directly or indirectly.
  *
- * This macro declares a static method "registerNodeConstructors" which should be called during the initialization of
+ * This macro declares a static method initType() which should be called during the initialization of
  * the plug-in where this node is defined. This will assure that the new node type's constructors are properly
  * registered.
  *
@@ -207,61 +197,15 @@ template class Model::TypedList<className>;																									\
  * Use this macro in the .cpp file that defines the new Node type.
  */
 #define NODE_DEFINE_TYPE_REGISTRATION_METHODS(className)																					\
-/* Forward declaration. This function must be defined in the enclosing namespace*/												\
 ::Core::InitializationRegistry& nodeTypeInitializationRegistry();																		\
-::Core::InitializationRegistry& className::initializationRegistry()																	\
-{																																							\
-	return nodeTypeInitializationRegistry();																									\
-}																																							\
+DEFINE_TYPE_ID_DERIVED(className, nodeTypeInitializationRegistry, #className,)													\
 																																							\
-/* Used to register a default initialization routine*/																					\
-class className##InitializerClass{																												\
-	public:																																				\
-		className##InitializerClass()																												\
-		{																																					\
-			className::initializationRegistry().add(className::init);																	\
-		}																																					\
-};																																							\
-static className##InitializerClass className##InitializerClassInstance_;															\
-																																							\
-/* This must be set to the result of Node::registerNodeType */																			\
-int className::typeId_ = -1; 																														\
-																																							\
-const QString& className::typeName() const																									\
+void className::initType()																															\
 {																																							\
-	return typeNameStatic();																														\
-}																																							\
-																																							\
-int className::typeId()	const																														\
-{																																							\
-	return typeId_;																																	\
-}																																							\
-QList<int> className::hierarchyTypeIds() const																								\
-{																																							\
-	auto l = Super::hierarchyTypeIds();																											\
-	l.prepend( typeIdStatic() );																													\
-	return l;																																			\
-}																																							\
-int className::typeIdStatic()																														\
-{																																							\
-	return typeId_;																																	\
-}																																							\
-const QString& className::typeNameStatic()																									\
-{																																							\
-	static QString typeName_(#className);																										\
-	return typeName_;																																	\
-}																																							\
-																																							\
-void className::registerNodeType()																												\
-{																																							\
-	typeId_ = Node::registerNodeType(#className, ::Model::createNewNode< className >,											\
+	typeIdVariable() = Node::registerNodeType(#className, ::Model::createNewNode< className >,								\
 			::Model::createNodeFromPersistence< className >);																				\
 }																																							\
-																																							\
-void className::init()																																\
-{																																							\
-	registerNodeType();																																\
-}
+
 /*********************************************************************************************************************/
 
 /**
@@ -274,58 +218,18 @@ void className::init()																																\
  * Use this macro in the .cpp file that defines the new Node type.
  */
 #define EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(className)																	\
-/* Forward declaration. This function must be defined in the enclosing namespace*/												\
 ::Core::InitializationRegistry& nodeTypeInitializationRegistry();																		\
-::Core::InitializationRegistry& className::initializationRegistry()																	\
-{																																							\
-	return nodeTypeInitializationRegistry();																									\
-}																																							\
+DEFINE_TYPE_ID_DERIVED(className, nodeTypeInitializationRegistry, #className,)													\
 																																							\
- /* Used to register a default initialization routine*/																					\
- class className##InitializerClass{																												\
- 	public:																																				\
- 		className##InitializerClass()																												\
- 		{																																					\
- 			className::initializationRegistry().add(className::init);																	\
- 		}																																					\
- };																																						\
- static className##InitializerClass className##InitializerClassInstance_;															\
- 																																							\
-/* This must be set to the result of Node::registerNodeType */																			\
-/* This variable uses a clever trick to register an initialization function that will be called during the */			\
-/* plug-in's initialization routine */																											\
-int className::typeId_ = -1; 																														\
-																																							\
-const QString& className::typeName() const																									\
-{																																							\
-	return typeNameStatic();																														\
-}																																							\
-																																							\
-int className::typeId()	const																														\
-{																																							\
-	return typeId_;																																	\
-}																																							\
-QList<int> className::hierarchyTypeIds() const																								\
-{																																							\
-	auto l = Super::hierarchyTypeIds();																											\
-	l.prepend( typeIdStatic() );																													\
-	return l;																																			\
-}																																							\
-int className::typeIdStatic()																														\
-{																																							\
-	return typeId_;																																	\
-}																																							\
-const QString& className::typeNameStatic()																									\
-{																																							\
-	static QString typeName_(#className);																										\
-	return typeName_;																																	\
-}																																							\
-																																							\
-void className::registerNodeType()																												\
+void className::initType()																															\
 {																																							\
 	className::getMetaData().setParent(&Super::getMetaData());																			\
-	typeId_ = Node::registerNodeType(#className, ::Model::createNewNode< className >,											\
+	typeIdVariable() = Node::registerNodeType(#className, ::Model::createNewNode< className >,								\
 			::Model::createNodeFromPersistence< className >);																				\
+																																							\
+	for (int i = 0; i<attributesToRegisterAtInitialization_().size(); ++i)															\
+		attributesToRegisterAtInitialization_().at(i).first =																				\
+				registerNewAttribute(attributesToRegisterAtInitialization_().at(i).second);										\
 }																																							\
 																																							\
 ::Model::AttributeChain& className::getMetaData()																							\
@@ -365,14 +269,7 @@ QList<QPair< ::Model::ExtendableIndex&, ::Model::Attribute> >& className::attrib
 			::Model::Attribute(attributeName, attributeType, isOptional, canBePartiallyLoaded, isPersistent)));			\
 	return ::Model::ExtendableIndex();																											\
 }																																							\
-																																							\
-void className::init()																																\
-{																																							\
-	registerNodeType();																																\
-	for (int i = 0; i<attributesToRegisterAtInitialization_().size(); ++i)															\
-		attributesToRegisterAtInitialization_().at(i).first =																				\
-				registerNewAttribute(attributesToRegisterAtInitialization_().at(i).second);										\
-}
+
 /*********************************************************************************************************************/
 
 /**
