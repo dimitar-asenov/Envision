@@ -41,8 +41,8 @@ namespace Visualization {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VField : public Visualization::ItemWithNode<VField, Visualization::LayoutProvider<>,
-	OOModel::Field >
+class OOVISUALIZATION_API VField : public Reflect<Visualization::ItemWithNode<VField, Visualization::LayoutProvider<>,
+	OOModel::Field >>
 {
 	ITEM_COMMON(VField)
 
@@ -54,8 +54,6 @@ class OOVISUALIZATION_API VField : public Visualization::ItemWithNode<VField, Vi
 		void determineChildren();
 
 	private:
-		typedef Visualization::ItemWithNode<VField, Visualization::LayoutProvider<>, OOModel::Field > BaseItemType;
-
 		Visualization::VText* name_{};
 		Visualization::Item* type_{};
 		Visualization::Static* assignmentSymbol_{};

@@ -36,7 +36,7 @@
 namespace Interaction {
 class Action;
 
-class INTERACTIONBASE_API ActionPrompt : public Visualization::Item
+class INTERACTIONBASE_API ActionPrompt : public Reflect<Visualization::Item>
 {
 	ITEM_COMMON(ActionPrompt)
 
@@ -64,7 +64,6 @@ class INTERACTIONBASE_API ActionPrompt : public Visualization::Item
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		typedef Item BaseItemType;
 
 		bool autoExecuteAction_;
 		Visualization::Item* originalActionReceiver_;

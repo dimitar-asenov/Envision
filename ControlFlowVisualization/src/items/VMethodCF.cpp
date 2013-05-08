@@ -41,7 +41,7 @@ namespace ControlFlowVisualization {
 ITEM_COMMON_DEFINITIONS(VMethodCF, "item")
 
 VMethodCF::VMethodCF(Item* parent, NodeType* node, const StyleType* style) :
-	BaseItemType(parent, node, style),
+	Super(parent, node, style),
 	header_( new SequentialLayout(nullptr, &style->header()) ),
 	icon_(new Static(nullptr, &style->icon())),
 	name_(new VText(nullptr, node->nameNode(), &style->nameDefault()) ),

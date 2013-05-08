@@ -31,7 +31,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API SVGIcon : public Icon
+class VISUALIZATIONBASE_API SVGIcon : public Reflect<Icon>
 {
 	ITEM_COMMON(SVGIcon)
 
@@ -41,9 +41,6 @@ class VISUALIZATIONBASE_API SVGIcon : public Icon
 
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-
-	private:
-		typedef Icon BaseItemType;
 };
 
 }

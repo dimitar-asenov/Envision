@@ -41,7 +41,7 @@ namespace Visualization {
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VReturnStatement
-	: public VStatementItem<VReturnStatement, Visualization::LayoutProvider<>, OOModel::ReturnStatement>
+	: public Reflect<VStatementItem<VReturnStatement, Visualization::LayoutProvider<>, OOModel::ReturnStatement>>
 {
 	ITEM_COMMON(VReturnStatement)
 
@@ -55,9 +55,6 @@ class OOVISUALIZATION_API VReturnStatement
 		void determineChildren();
 
 	private:
-		typedef VStatementItem<VReturnStatement, Visualization::LayoutProvider<>, OOModel::ReturnStatement>
-			BaseItemType;
-
 		Visualization::Static* symbol_;
 		Visualization::VList* values_;
 };

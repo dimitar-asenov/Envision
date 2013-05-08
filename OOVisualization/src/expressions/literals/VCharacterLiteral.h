@@ -36,8 +36,8 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VCharacterLiteral : public VExpression<VCharacterLiteral, Visualization::Item,
-OOModel::CharacterLiteral>
+class OOVISUALIZATION_API VCharacterLiteral : public Reflect<VExpression<VCharacterLiteral, Visualization::Item,
+OOModel::CharacterLiteral>>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VCharacterLiteral, Visualization::TextStyle)
 
@@ -50,9 +50,6 @@ OOModel::CharacterLiteral>
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		typedef VExpression<VCharacterLiteral, Visualization::Item, OOModel::CharacterLiteral>
-			BaseItemType;
-
 		Visualization::VCharacter* vis_;
 };
 

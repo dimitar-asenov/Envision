@@ -37,7 +37,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VArrayInitializer, "item")
 
 VArrayInitializer::VArrayInitializer(Item* parent, NodeType* node, const StyleType* style) :
-	BaseItemType(parent, node, style),
+	Super(parent, node, style),
 	values_(nullptr),
 	matrixForm_(false)
 {

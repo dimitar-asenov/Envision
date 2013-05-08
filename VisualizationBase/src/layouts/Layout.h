@@ -34,7 +34,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API Layout: public Item
+class VISUALIZATIONBASE_API Layout: public Reflect<Item>
 {
 	ITEM_COMMON(Layout)
 
@@ -54,9 +54,6 @@ class VISUALIZATIONBASE_API Layout: public Item
 				const typename T::StyleType* style);
 		template <class T> void synchronizeItem(Item*& layoutItem, T*& externalItem, typename T::NodeType* node,
 				const typename T::StyleType* style);
-
-	private:
-		typedef Item BaseItemType;
 };
 
 template <class T> void Layout::synchronizeItem(Item*& layoutItem, T*& externalItem, bool present, const typename T::StyleType* style)

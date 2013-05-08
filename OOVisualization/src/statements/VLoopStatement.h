@@ -43,8 +43,8 @@ namespace OOVisualization {
 class VStatementItemList;
 
 class OOVISUALIZATION_API VLoopStatement
-	: public VStatementItem<VLoopStatement, Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
-	  OOModel::LoopStatement>
+	: public Reflect<VStatementItem<VLoopStatement, Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
+	  OOModel::LoopStatement>>
 {
 	ITEM_COMMON(VLoopStatement)
 
@@ -68,9 +68,6 @@ class OOVISUALIZATION_API VLoopStatement
 		virtual void determineChildren();
 
 	private:
-		typedef VStatementItem<VLoopStatement,	Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
-			  OOModel::LoopStatement> BaseItemType;
-
 		Visualization::SequentialLayout* header_;
 
 		Visualization::SequentialLayout* conditionBackground_;

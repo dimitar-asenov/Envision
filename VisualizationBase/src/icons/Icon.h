@@ -33,7 +33,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API Icon: public Item
+class VISUALIZATIONBASE_API Icon: public Reflect<Item>
 {
 	ITEM_COMMON(Icon)
 
@@ -47,9 +47,6 @@ class VISUALIZATIONBASE_API Icon: public Item
 		int yOffset() const;
 
 		void setInnerSize(int width, int height);
-
-	private:
-		typedef Item BaseItemType;
 };
 
 }

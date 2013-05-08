@@ -40,7 +40,7 @@ namespace Interaction {
 
 class AutoCompleteEntry;
 
-class INTERACTIONBASE_API AutoCompleteVis : public Visualization::LayoutProvider<>
+class INTERACTIONBASE_API AutoCompleteVis : public Reflect<Visualization::LayoutProvider<>>
 {
 	ITEM_COMMON(AutoCompleteVis)
 
@@ -57,8 +57,6 @@ class INTERACTIONBASE_API AutoCompleteVis : public Visualization::LayoutProvider
 		virtual bool sceneEventFilter (QGraphicsItem* watched, QEvent* event) override;
 
 	private:
-		typedef LayoutProvider<> BaseItemType;
-
 		QList<AutoCompleteEntry*> entries_;
 		QList<AutoCompleteEntry*> newEntries_;
 		bool newEntriesSet_;

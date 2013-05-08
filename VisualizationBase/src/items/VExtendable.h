@@ -36,7 +36,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API VExtendable : public ItemWithNode<VExtendable, Item, Model::ExtendableNode>
+class VISUALIZATIONBASE_API VExtendable : public Reflect<ItemWithNode<VExtendable, Item, Model::ExtendableNode>>
 {
 	ITEM_COMMON(VExtendable)
 
@@ -52,8 +52,6 @@ class VISUALIZATIONBASE_API VExtendable : public ItemWithNode<VExtendable, Item,
 		void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		typedef ItemWithNode<VExtendable, Item, Model::ExtendableNode> BaseItemType;
-
 		SequentialLayout* header;
 		PanelBorderLayout* layout; //only used when expanded
 		SequentialLayout* attributes; //only used when expanded

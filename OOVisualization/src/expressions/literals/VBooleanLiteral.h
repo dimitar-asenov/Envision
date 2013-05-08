@@ -36,8 +36,8 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VBooleanLiteral : public VExpression<VBooleanLiteral, Visualization::Item,
-OOModel::BooleanLiteral>
+class OOVISUALIZATION_API VBooleanLiteral : public Reflect<VExpression<VBooleanLiteral, Visualization::Item,
+OOModel::BooleanLiteral>>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VBooleanLiteral, Visualization::TextStyle)
 
@@ -52,8 +52,6 @@ OOModel::BooleanLiteral>
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		typedef VExpression<VBooleanLiteral, Visualization::Item, OOModel::BooleanLiteral> BaseItemType;
-
 		Visualization::VBoolean* vis_;
 };
 

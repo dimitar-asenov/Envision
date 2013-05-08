@@ -38,7 +38,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VField, "item")
 
 VField::VField(Item* parent, NodeType* node, const StyleType* style) :
-	BaseItemType(parent, node, style),
+	Super(parent, node, style),
 	name_(new VText(layout(), node->nameNode(), &style->nameDefault()) )
 {
 	layout()->append(name_);

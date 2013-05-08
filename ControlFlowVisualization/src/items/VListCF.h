@@ -37,8 +37,8 @@
 
 namespace ControlFlowVisualization {
 
-class CONTROLFLOWVISUALIZATION_API VListCF : public Visualization::ItemWithNode<VListCF, ControlFlowItem, Model::List,
-	false>
+class CONTROLFLOWVISUALIZATION_API VListCF : public Reflect<Visualization::ItemWithNode<VListCF, ControlFlowItem,
+	Model::List, false>>
 {
 	ITEM_COMMON(VListCF)
 
@@ -53,8 +53,6 @@ class CONTROLFLOWVISUALIZATION_API VListCF : public Visualization::ItemWithNode<
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		typedef Visualization::ItemWithNode<VListCF, ControlFlowItem, Model::List, false> BaseItemType;
-
 		QVector< Visualization::Item* > items_;
 
 		QList< Visualization::Item* > extractSingleItems();

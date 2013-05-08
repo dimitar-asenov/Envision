@@ -39,7 +39,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VCatchClause, "item")
 
 VCatchClause::VCatchClause(Item* parent, NodeType* node, const StyleType* style) :
-	BaseItemType(parent, node, style)
+	Super(parent, node, style)
 {
 	layout()->setTop(true);
 	header_ = new SequentialLayout(layout()->top(), &style->header());

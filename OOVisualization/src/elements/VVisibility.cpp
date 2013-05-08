@@ -33,7 +33,7 @@ namespace OOVisualization {
 
 ITEM_COMMON_DEFINITIONS(VVisibility, "item")
 
-VVisibility::VVisibility(Item* parent, NodeType* vis, const StyleType* style) : BaseItemType(parent, vis, style)
+VVisibility::VVisibility(Item* parent, NodeType* vis, const StyleType* style) : Super(parent, vis, style)
 {
 }
 

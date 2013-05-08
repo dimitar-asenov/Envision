@@ -35,7 +35,7 @@
 
 namespace Interaction {
 
-class INTERACTIONBASE_API TextAndDescription : public Visualization::LayoutProvider<>
+class INTERACTIONBASE_API TextAndDescription : public Reflect<Visualization::LayoutProvider<>>
 {
 	ITEM_COMMON(TextAndDescription)
 
@@ -52,8 +52,6 @@ class INTERACTIONBASE_API TextAndDescription : public Visualization::LayoutProvi
 		virtual void determineChildren();
 
 	private:
-		typedef Item BaseItemType;
-
 		Visualization::Text* textVis_;
 		Visualization::Text* descriptionVis_;
 

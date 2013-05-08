@@ -35,7 +35,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VExpressionStatement, "item")
 
 VExpressionStatement::VExpressionStatement(Item* parent, NodeType* node, const StyleType* style) :
-	BaseItemType(parent, node, style),
+	Super(parent, node, style),
 	expr_( nullptr )
 {
 }

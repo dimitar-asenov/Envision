@@ -37,7 +37,7 @@ namespace ControlFlowVisualization {
 ITEM_COMMON_DEFINITIONS(VReturnStatementCF, "item")
 
 VReturnStatementCF::VReturnStatementCF(Item* parent, NodeType* node, const StyleType* style) :
-	BaseItemType(parent, node, style),
+	Super(parent, node, style),
 	vis_(nullptr)
 {
 }

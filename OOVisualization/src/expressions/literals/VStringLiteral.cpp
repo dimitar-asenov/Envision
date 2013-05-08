@@ -37,7 +37,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VStringLiteral, "item")
 
 VStringLiteral::VStringLiteral(Item* parent, NodeType* literal, const StyleType* style) :
-	BaseItemType(parent, literal, style),
+	Super(parent, literal, style),
 	pre_(nullptr),
 	post_(nullptr),
 	vis_(nullptr)

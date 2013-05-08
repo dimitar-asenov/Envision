@@ -41,8 +41,8 @@ namespace Visualization {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VReferenceExpression : public VExpression<VReferenceExpression,
-	Visualization::LayoutProvider<>, OOModel::ReferenceExpression>
+class OOVISUALIZATION_API VReferenceExpression : public Reflect<VExpression<VReferenceExpression,
+	Visualization::LayoutProvider<>, OOModel::ReferenceExpression>>
 {
 	ITEM_COMMON(VReferenceExpression)
 
@@ -59,9 +59,6 @@ class OOVISUALIZATION_API VReferenceExpression : public VExpression<VReferenceEx
 		void determineChildren();
 
 	private:
-		typedef VExpression<VReferenceExpression, Visualization::LayoutProvider<>,
-				OOModel::ReferenceExpression> BaseItemType;
-
 		Visualization::Text* name_;
 		Visualization::Static* separator_;
 		Visualization::Item* prefix_;

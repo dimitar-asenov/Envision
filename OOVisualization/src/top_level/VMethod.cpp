@@ -41,7 +41,7 @@ namespace OOVisualization {
 
 ITEM_COMMON_DEFINITIONS(VMethod, "item")
 
-VMethod::VMethod(Item* parent, NodeType* node, const StyleType* style) : BaseItemType(parent, node, style)
+VMethod::VMethod(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style)
 {
 	layout()->setTop(true);
 

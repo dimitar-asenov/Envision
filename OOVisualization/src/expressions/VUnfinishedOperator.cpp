@@ -36,7 +36,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VUnfinishedOperator, "item")
 
 VUnfinishedOperator::VUnfinishedOperator(Item* parent, NodeType* node, const StyleType* style) :
-	BaseItemType(parent, node, style)
+	Super(parent, node, style)
 {
 }
 

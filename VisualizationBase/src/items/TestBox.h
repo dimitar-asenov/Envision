@@ -31,7 +31,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API TestBox : public TextRenderer {
+class VISUALIZATIONBASE_API TestBox : public Reflect<TextRenderer> {
 
 	ITEM_COMMON_CUSTOM_STYLENAME(TestBox, TextStyle)
 
@@ -61,8 +61,6 @@ class VISUALIZATIONBASE_API TestBox : public TextRenderer {
 		virtual QString currentText() override;
 
 	private:
-		typedef TextRenderer BaseItemType;
-
 		NodeType* node_{};
 		int nodeRevision_{-1};
 

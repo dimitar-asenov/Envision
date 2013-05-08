@@ -43,7 +43,7 @@ namespace Visualization {
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VStringLiteral
-	: public VExpression<VStringLiteral, Visualization::LayoutProvider<>, OOModel::StringLiteral>
+	: public Reflect<VExpression<VStringLiteral, Visualization::LayoutProvider<>, OOModel::StringLiteral>>
 {
 	ITEM_COMMON(VStringLiteral)
 
@@ -55,8 +55,6 @@ class OOVISUALIZATION_API VStringLiteral
 		virtual void determineChildren();
 
 	private:
-		typedef VExpression<VStringLiteral, Visualization::LayoutProvider<>, OOModel::StringLiteral> BaseItemType;
-
 		Visualization::Static* pre_;
 		Visualization::Static* post_;
 		Visualization::VText* vis_;

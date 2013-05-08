@@ -35,7 +35,7 @@ namespace ControlFlowVisualization {
 ITEM_COMMON_DEFINITIONS(VBlockCF, "item")
 
 VBlockCF::VBlockCF(Item* parent, NodeType* node, const StyleType* style) :
-	BaseItemType(parent, node, style),
+	Super(parent, node, style),
 	statements(nullptr)
 {
 }

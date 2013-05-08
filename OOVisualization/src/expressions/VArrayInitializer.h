@@ -42,8 +42,8 @@ namespace Visualization {
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VArrayInitializer
-	: public VExpression<VArrayInitializer, Visualization::LayoutProvider<Visualization::GridLayout>,
-	  OOModel::ArrayInitializer>
+	: public Reflect<VExpression<VArrayInitializer, Visualization::LayoutProvider<Visualization::GridLayout>,
+	  OOModel::ArrayInitializer>>
 {
 	ITEM_COMMON(VArrayInitializer)
 
@@ -60,9 +60,6 @@ class OOVISUALIZATION_API VArrayInitializer
 		void determineChildren();
 
 	private:
-		typedef VExpression<VArrayInitializer, Visualization::LayoutProvider<Visualization::GridLayout>,
-				OOModel::ArrayInitializer> BaseItemType;
-
 		Visualization::VList* values_;
 		bool matrixForm_;
 

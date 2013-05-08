@@ -37,7 +37,7 @@
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VIntegerLiteral
-	: public VExpression<VIntegerLiteral, Visualization::Item, OOModel::IntegerLiteral>
+	: public Reflect<VExpression<VIntegerLiteral, Visualization::Item, OOModel::IntegerLiteral>>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VIntegerLiteral, Visualization::TextStyle)
 
@@ -52,8 +52,6 @@ class OOVISUALIZATION_API VIntegerLiteral
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		typedef VExpression<VIntegerLiteral, Visualization::Item, OOModel::IntegerLiteral> BaseItemType;
-
 		Visualization::VInteger* vis_;
 };
 

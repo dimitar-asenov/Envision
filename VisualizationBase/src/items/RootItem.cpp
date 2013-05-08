@@ -32,7 +32,7 @@ namespace Visualization {
 ITEM_COMMON_DEFINITIONS(RootItem, "item")
 
 RootItem::RootItem(Item* parent, NodeType* node, int purpose)
-	: BaseItemType(nullptr, node, itemStyles().get()), item_(nullptr)
+	: Super(nullptr, node, itemStyles().get()), item_(nullptr)
 {
 	Q_ASSERT(parent == nullptr);
 	setFlag(QGraphicsItem::ItemHasNoContents);
@@ -40,14 +40,14 @@ RootItem::RootItem(Item* parent, NodeType* node, int purpose)
 	setPurpose(purpose);
 }
 
-RootItem::RootItem(NodeType *node, int purpose) : BaseItemType(nullptr, node, itemStyles().get()), item_(nullptr)
+RootItem::RootItem(NodeType *node, int purpose) : Super(nullptr, node, itemStyles().get()), item_(nullptr)
 {
 	setFlag(QGraphicsItem::ItemHasNoContents);
 	setItemCategory(Scene::CodeItemCategory);
 	setPurpose(purpose);
 }
 
-RootItem::RootItem(Item* item, int purpose) : BaseItemType(nullptr, nullptr, itemStyles().get()), item_(item)
+RootItem::RootItem(Item* item, int purpose) : Super(nullptr, nullptr, itemStyles().get()), item_(item)
 {
 	setFlag(QGraphicsItem::ItemHasNoContents);
 	setPurpose(purpose);

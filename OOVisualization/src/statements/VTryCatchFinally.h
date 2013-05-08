@@ -45,8 +45,8 @@ namespace OOVisualization {
 class VStatementItemList;
 
 class OOVISUALIZATION_API VTryCatchFinally
-	: public VStatementItem<VTryCatchFinally,
-	  Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::TryCatchFinallyStatement>
+	: public Reflect<VStatementItem<VTryCatchFinally,
+	  Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::TryCatchFinallyStatement>>
 {
 	ITEM_COMMON(VTryCatchFinally)
 
@@ -68,10 +68,6 @@ class OOVISUALIZATION_API VTryCatchFinally
 		void determineChildren();
 
 	private:
-		typedef VStatementItem<VTryCatchFinally,
-			Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
-			OOModel::TryCatchFinallyStatement> BaseItemType;
-
 		Visualization::Static* tryIcon_{};
 		Visualization::SequentialLayout* contents_{};
 		VStatementItemList* tryBody_{};

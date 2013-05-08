@@ -33,7 +33,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API Line : public Item {
+class VISUALIZATIONBASE_API Line : public Reflect<Item> {
 	ITEM_COMMON(Line)
 
 	public:
@@ -44,9 +44,6 @@ class VISUALIZATIONBASE_API Line : public Item {
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 		virtual bool sizeDependsOnParent() const override;
-
-	private:
-		typedef Item BaseItemType;
 };
 
 } /* namespace Visualization */

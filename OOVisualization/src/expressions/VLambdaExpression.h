@@ -42,8 +42,8 @@ namespace OOVisualization {
 
 class VStatementItemList;
 
-class OOVISUALIZATION_API VLambdaExpression : public VExpression<VLambdaExpression,
-	Visualization::LayoutProvider<>, OOModel::LambdaExpression>
+class OOVISUALIZATION_API VLambdaExpression : public Reflect<VExpression<VLambdaExpression,
+	Visualization::LayoutProvider<>, OOModel::LambdaExpression>>
 {
 	ITEM_COMMON(VLambdaExpression)
 
@@ -59,9 +59,6 @@ class OOVISUALIZATION_API VLambdaExpression : public VExpression<VLambdaExpressi
 		void determineChildren();
 
 	private:
-		typedef VExpression<VLambdaExpression, Visualization::LayoutProvider<>, OOModel::LambdaExpression>
-			BaseItemType;
-
 		Visualization::VList* arguments_{};
 		Visualization::Static* icon_{};
 		VStatementItemList* body_{};

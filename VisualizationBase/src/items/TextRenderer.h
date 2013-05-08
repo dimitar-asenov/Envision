@@ -35,7 +35,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API TextRenderer : public Item
+class VISUALIZATIONBASE_API TextRenderer : public Reflect<Item>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(TextRenderer, TextStyle)
 
@@ -87,8 +87,6 @@ class VISUALIZATIONBASE_API TextRenderer : public Item
 		virtual QString currentText() = 0;
 
 	private:
-		typedef Item BaseItemType;
-
 		QStaticText staticText_;
 
 		qreal textXOffset_; //Base line

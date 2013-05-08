@@ -38,7 +38,7 @@ namespace OOVisualization {
 
 class VStatementItemList;
 
-class OOVISUALIZATION_API VBlock : public VStatementItem<VBlock, Visualization::Item, OOModel::Block>
+class OOVISUALIZATION_API VBlock : public Reflect<VStatementItem<VBlock, Visualization::Item, OOModel::Block>>
 {
 	ITEM_COMMON(VBlock)
 
@@ -51,8 +51,6 @@ class OOVISUALIZATION_API VBlock : public VStatementItem<VBlock, Visualization::
 		void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		typedef VStatementItem<VBlock, Visualization::Item, OOModel::Block> BaseItemType;
-
 		VStatementItemList* items_;
 };
 

@@ -38,15 +38,13 @@ namespace Visualization {
 
 #define BEGIN_STANDARD_EXPRESSION_VISUALIZATION_STYLE(apiSpecification, className, nodeType, styleTypeName)				\
 class apiSpecification className																													\
-	: public ::OOVisualization::VExpression<className, ::Visualization::LayoutProvider<>, nodeType> {						\
+	: public ::Reflect<::OOVisualization::VExpression<className, ::Visualization::LayoutProvider<>, nodeType>> {		\
 	ITEM_COMMON_CUSTOM_STYLENAME(className, styleTypeName)																				\
 																																							\
 	public:																																				\
 		className(::Visualization::Item* parent, NodeType* node, const StyleType* style = itemStyles().get());			\
 	protected:																																			\
 		virtual void determineChildren() override;																							\
-	private:																																				\
-		using BaseItemType = ::OOVisualization::VExpression<className, ::Visualization::LayoutProvider<>, nodeType>;	\
 
 //********************************************************************************************************************
 

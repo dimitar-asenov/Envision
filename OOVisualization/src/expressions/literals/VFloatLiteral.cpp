@@ -36,7 +36,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VFloatLiteral, "item")
 
 VFloatLiteral::VFloatLiteral(Item* parent, NodeType *node, const StyleType *style) :
-	BaseItemType(parent, node, style),
+	Super(parent, node, style),
 	vis_(nullptr)
 {
 }

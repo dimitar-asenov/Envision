@@ -39,8 +39,9 @@ namespace Visualization {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VErrorExpression : public VExpression<VErrorExpression,
-	Visualization::LayoutProvider<>, OOModel::ErrorExpression> {
+class OOVISUALIZATION_API VErrorExpression : public Reflect<VExpression<VErrorExpression,
+	Visualization::LayoutProvider<>, OOModel::ErrorExpression>>
+{
 
 	ITEM_COMMON(VErrorExpression)
 
@@ -52,8 +53,6 @@ class OOVISUALIZATION_API VErrorExpression : public VExpression<VErrorExpression
 		void determineChildren();
 
 	private:
-		typedef VExpression<VErrorExpression, Visualization::LayoutProvider<>, OOModel::ErrorExpression> BaseItemType;
-
 		Visualization::VText* prefix_;
 		Visualization::Item* arg_;
 		Visualization::VText* postfix_;

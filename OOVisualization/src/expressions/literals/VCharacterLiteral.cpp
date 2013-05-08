@@ -36,7 +36,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VCharacterLiteral, "item")
 
 VCharacterLiteral::VCharacterLiteral(Item* parent, NodeType* literal, const StyleType* style) :
-	BaseItemType(parent, literal, style),
+	Super(parent, literal, style),
 	vis_(nullptr)
 {
 }

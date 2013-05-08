@@ -39,8 +39,8 @@ namespace Visualization {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VUnfinishedOperator : public VExpression<VUnfinishedOperator,
-	Visualization::LayoutProvider<>, OOModel::UnfinishedOperator>
+class OOVISUALIZATION_API VUnfinishedOperator : public Reflect<VExpression<VUnfinishedOperator,
+	Visualization::LayoutProvider<>, OOModel::UnfinishedOperator>>
 {
 	ITEM_COMMON(VUnfinishedOperator)
 
@@ -52,9 +52,6 @@ class OOVISUALIZATION_API VUnfinishedOperator : public VExpression<VUnfinishedOp
 		void determineChildren();
 
 	private:
-		typedef VExpression<VUnfinishedOperator, Visualization::LayoutProvider<>,
-			OOModel::UnfinishedOperator> BaseItemType;
-
 		QVector<Visualization::VText*> delimiters_;
 		QVector<Visualization::Item*> operands_;
 };

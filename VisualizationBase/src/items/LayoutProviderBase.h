@@ -34,7 +34,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API LayoutProviderBase : public Item
+class VISUALIZATIONBASE_API LayoutProviderBase : public Reflect<Item>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(LayoutProviderBase, ItemStyle)
 
@@ -53,8 +53,6 @@ class VISUALIZATIONBASE_API LayoutProviderBase : public Item
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		typedef Item BaseItemType;
-
 		Layout* layout_;
 };
 

@@ -33,7 +33,7 @@
 
 namespace Visualization {
 
-class BoxTest : public Item
+class BoxTest : public Reflect<Item>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(BoxTest, ItemStyle)
 
@@ -44,8 +44,6 @@ class BoxTest : public Item
 		void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		typedef Item BaseItemType;
-
 		SequentialLayout items;
 };
 

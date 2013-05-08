@@ -33,7 +33,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API Symbol : public TextRenderer
+class VISUALIZATIONBASE_API Symbol : public Reflect<TextRenderer>
 {
 	ITEM_COMMON(Symbol)
 
@@ -44,9 +44,6 @@ class VISUALIZATIONBASE_API Symbol : public TextRenderer
 
 	protected:
 		virtual QString currentText();
-
-	private:
-		typedef TextRenderer BaseItemType;
 };
 
 }

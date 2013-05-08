@@ -34,7 +34,7 @@ namespace Visualization {
 ITEM_COMMON_DEFINITIONS(BoxTest, "item")
 
 BoxTest::BoxTest(Item* parent, int sub) :
-		Item(parent), items(this)
+Super(parent), items(this)
 {
 	setFlag(QGraphicsItem::ItemIsMovable);
 //	style.setMargins(4);

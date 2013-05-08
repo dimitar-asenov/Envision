@@ -92,7 +92,7 @@ private:																																					\
 																																							\
 void ItemClass::defaultInit()																														\
 {																																							\
-	BaseItemType::defaultInit();																													\
+	Super::defaultInit();																															\
 }																																							\
 																																							\
 /* Used to register a default initialization routine*/																					\
@@ -118,7 +118,7 @@ void ItemClass::setStyle(const Visualization::ItemStyle* style_)																
 Visualization::InteractionHandler* ItemClass::handler() const																			\
 {																																							\
 	if (defaultClassHandler()) return defaultClassHandler();																				\
-	return BaseItemType::handler();																												\
+	return Super::handler();																														\
 }																																							\
 																																							\
 const QString& ItemClass::typeName() const																									\
@@ -168,7 +168,7 @@ QList<Visualization::VisualizationAddOn*>& ItemClass::staticAddOns()												
 																																							\
 QList<Visualization::VisualizationAddOn*> ItemClass::addOns()																			\
 {																																							\
-	QList<Visualization::VisualizationAddOn*> list(BaseItemType::addOns());															\
+	QList<Visualization::VisualizationAddOn*> list(Super::addOns());																	\
 	list.append(staticAddOns());																													\
 	return list;																																		\
 }																																							\

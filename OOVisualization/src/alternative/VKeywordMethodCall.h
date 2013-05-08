@@ -42,8 +42,8 @@ namespace Visualization {
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VKeywordMethodCall
-	: public VExpression<VKeywordMethodCall,
-	  Visualization::LayoutProvider<>, OOModel::MethodCallExpression, false>
+	: public Reflect<VExpression<VKeywordMethodCall,
+	  Visualization::LayoutProvider<>, OOModel::MethodCallExpression, false>>
 {
 		ITEM_COMMON(VKeywordMethodCall)
 
@@ -58,9 +58,6 @@ class OOVISUALIZATION_API VKeywordMethodCall
 		void determineChildren();
 
 	private:
-		typedef VExpression<VKeywordMethodCall,
-				Visualization::LayoutProvider<>, OOModel::MethodCallExpression, false> BaseItemType;
-
 		Visualization::Static* keyword_;
 		Visualization::VList* arguments_;
 };

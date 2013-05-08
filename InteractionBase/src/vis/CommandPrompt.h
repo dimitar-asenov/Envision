@@ -37,7 +37,7 @@
 
 namespace Interaction {
 
-class INTERACTIONBASE_API CommandPrompt : public Visualization::Item
+class INTERACTIONBASE_API CommandPrompt : public Reflect<Visualization::Item>
 {
 	ITEM_COMMON(CommandPrompt)
 
@@ -68,8 +68,6 @@ class INTERACTIONBASE_API CommandPrompt : public Visualization::Item
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		typedef Item BaseItemType;
-
 		Visualization::Item* commandReceiver_;
 		Visualization::SequentialLayout* layout;
 		Visualization::SequentialLayout* suggestionContainer;

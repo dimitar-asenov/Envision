@@ -33,7 +33,7 @@ namespace Visualization {
 ITEM_COMMON_DEFINITIONS(VReference, "item")
 
 VReference::VReference(Item* parent, NodeType *node, const StyleType *style) :
-	BaseItemType(parent, node, style)
+	Super(parent, node, style)
 {
 }
 

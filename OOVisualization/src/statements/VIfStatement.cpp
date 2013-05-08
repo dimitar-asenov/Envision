@@ -38,7 +38,7 @@ namespace OOVisualization {
 
 ITEM_COMMON_DEFINITIONS(VIfStatement, "item")
 
-VIfStatement::VIfStatement(Item* parent, NodeType* node, const StyleType* style) : BaseItemType(parent, node, style),
+VIfStatement::VIfStatement(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style),
 	header_(), conditionBackground_(), condition_(), content_(), thenBranch_(), elseBranch_()
 {
 	layout()->setTop(true);
@@ -96,7 +96,7 @@ void VIfStatement::updateGeometry(int availableWidth, int availableHeight)
 		setUpdateNeeded(RepeatUpdate);
 	}
 
-	BaseItemType::updateGeometry(availableWidth, availableHeight);
+	Super::updateGeometry(availableWidth, availableHeight);
 }
 
 }

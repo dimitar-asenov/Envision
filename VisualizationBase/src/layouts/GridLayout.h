@@ -37,7 +37,7 @@ namespace Visualization {
 
 class ModelRenderer;
 
-class VISUALIZATIONBASE_API GridLayout: public Layout
+class VISUALIZATIONBASE_API GridLayout: public Reflect<Layout>
 {
 	ITEM_COMMON(GridLayout)
 
@@ -85,8 +85,6 @@ class VISUALIZATIONBASE_API GridLayout: public Layout
 		template <class T> void synchronize(T*& item, typename T::NodeType* node, const typename T::StyleType* style, int x, int y);
 
 	private:
-		typedef Layout BaseItemType;
-
 		QVector< QVector<Item*> > items_;
 		int sizeX_;
 		int sizeY_;

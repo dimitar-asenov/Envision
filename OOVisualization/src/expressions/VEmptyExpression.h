@@ -35,8 +35,8 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VEmptyExpression : public VExpression<VEmptyExpression, Visualization::Item,
-OOModel::EmptyExpression>
+class OOVISUALIZATION_API VEmptyExpression : public Reflect<VExpression<VEmptyExpression, Visualization::Item,
+OOModel::EmptyExpression>>
 {
 	ITEM_COMMON(VEmptyExpression)
 
@@ -49,8 +49,6 @@ OOModel::EmptyExpression>
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		typedef VExpression<VEmptyExpression, Visualization::Item, OOModel::EmptyExpression> BaseItemType;
-
 		Visualization::Static* vis_;
 };
 

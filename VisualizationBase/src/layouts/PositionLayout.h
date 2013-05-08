@@ -37,7 +37,7 @@ namespace  Visualization {
 
 class ModelRenderer;
 
-class VISUALIZATIONBASE_API PositionLayout : public Layout
+class VISUALIZATIONBASE_API PositionLayout : public Reflect<Layout>
 {
 	ITEM_COMMON(PositionLayout)
 
@@ -75,8 +75,6 @@ class VISUALIZATIONBASE_API PositionLayout : public Layout
 		int focusedElementIndex() const;
 
 	private:
-		typedef Layout BaseItemType;
-
 		QVector<Item*> items;
 		QVector<Position*> positions;
 		bool allNodesLackPositionInfo{};

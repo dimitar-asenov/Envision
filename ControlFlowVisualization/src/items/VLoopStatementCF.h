@@ -35,7 +35,7 @@
 namespace ControlFlowVisualization {
 
 class CONTROLFLOWVISUALIZATION_API VLoopStatementCF
-: public Visualization::ItemWithNode<VLoopStatementCF, ControlFlowItem, OOModel::LoopStatement, false>
+: public Reflect<Visualization::ItemWithNode<VLoopStatementCF, ControlFlowItem, OOModel::LoopStatement, false>>
 {
 	ITEM_COMMON(VLoopStatementCF)
 
@@ -51,9 +51,6 @@ class CONTROLFLOWVISUALIZATION_API VLoopStatementCF
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		typedef Visualization::ItemWithNode<VLoopStatementCF, ControlFlowItem, OOModel::LoopStatement, false>
-			BaseItemType;
-
 		Visualization::SequentialLayout* conditionBackground;
 		Visualization::SequentialLayout* initStepBackground;
 		Visualization::SequentialLayout* updateStepBackground;

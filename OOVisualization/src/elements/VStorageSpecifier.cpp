@@ -34,7 +34,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VStorageSpecifier, "item")
 
 VStorageSpecifier::VStorageSpecifier(Item* parent, NodeType* node, const StyleType* style) :
-	BaseItemType(parent, node, style)
+	Super(parent, node, style)
 {
 }
 

@@ -44,8 +44,8 @@ namespace Visualization {
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VModule
-: public Visualization::ItemWithNode<VModule, Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
-  OOModel::Module>
+: public Reflect<Visualization::ItemWithNode<VModule, Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
+  OOModel::Module>>
 {
 	ITEM_COMMON(VModule)
 
@@ -57,9 +57,6 @@ class OOVISUALIZATION_API VModule
 		void determineChildren();
 
 	private:
-		typedef Visualization::ItemWithNode<VModule, Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
-				OOModel::Module> BaseItemType;
-
 		Visualization::SequentialLayout* header{};
 		Visualization::VText* name{};
 		Visualization::PositionLayout* body_{};

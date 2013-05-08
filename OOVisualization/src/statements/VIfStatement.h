@@ -46,8 +46,8 @@ namespace OOVisualization {
 class VStatementItemList;
 
 class OOVISUALIZATION_API VIfStatement
-	: public VStatementItem<VIfStatement, Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
-	  OOModel::IfStatement>
+	: public Reflect<VStatementItem<VIfStatement, Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
+	  OOModel::IfStatement>>
 {
 	ITEM_COMMON(VIfStatement)
 
@@ -68,9 +68,6 @@ class OOVISUALIZATION_API VIfStatement
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 
 	private:
-		typedef VStatementItem<VIfStatement, Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
-				  OOModel::IfStatement> BaseItemType;
-
 		bool horizontal_{};
 		Visualization::SequentialLayout* header_;
 		Visualization::SequentialLayout* conditionBackground_;

@@ -34,7 +34,7 @@ namespace Visualization {
 
 class Cursor;
 
-class VISUALIZATIONBASE_API CursorShapeItem: public Item
+class VISUALIZATIONBASE_API CursorShapeItem: public Reflect<Item>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(CursorShapeItem, ItemStyle)
 
@@ -52,8 +52,6 @@ class VISUALIZATIONBASE_API CursorShapeItem: public Item
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		typedef Item BaseItemType;
-
 		Cursor* cursor_;
 		bool useCenter_;
 		QSize size_;

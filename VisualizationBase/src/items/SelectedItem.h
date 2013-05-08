@@ -33,7 +33,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API SelectedItem: public Item
+class VISUALIZATIONBASE_API SelectedItem: public Reflect<Item>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(SelectedItem, ItemStyle)
 
@@ -49,8 +49,6 @@ class VISUALIZATIONBASE_API SelectedItem: public Item
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		typedef Item BaseItemType;
-
 		Item* selectedItem_;
 };
 

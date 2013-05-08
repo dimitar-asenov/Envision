@@ -37,7 +37,7 @@ namespace ControlFlowVisualization {
 ITEM_COMMON_DEFINITIONS(VBreakStatementCF, "item")
 
 VBreakStatementCF::VBreakStatementCF(Item* parent, NodeType* node, const StyleType* style) :
-	BaseItemType(parent, node, style),
+	Super(parent, node, style),
 	vis_(nullptr)
 {
 }

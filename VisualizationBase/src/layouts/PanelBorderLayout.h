@@ -34,7 +34,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API PanelBorderLayout: public Layout
+class VISUALIZATIONBASE_API PanelBorderLayout: public Reflect<Layout>
 {
 	ITEM_COMMON(PanelBorderLayout)
 
@@ -64,8 +64,6 @@ class VISUALIZATIONBASE_API PanelBorderLayout: public Layout
 		virtual void updateGeometry(int availableWidth, int availableHeight);\
 
 	private:
-		typedef Layout BaseItemType;
-
 		PanelLayout* top_;
 		PanelLayout* left_;
 		PanelLayout* bottom_;

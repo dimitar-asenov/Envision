@@ -32,7 +32,7 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VStatementItemList : public Visualization::VList
+class OOVISUALIZATION_API VStatementItemList : public Reflect<Visualization::VList>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VStatementItemList, Visualization::VListStyle)
 
@@ -46,8 +46,6 @@ class OOVISUALIZATION_API VStatementItemList : public Visualization::VList
 		virtual void determineRange() override;
 
 	private:
-		typedef Visualization::VList BaseItemType;
-
 		static QList<RangeFilter>& rangeFilters();
 };
 

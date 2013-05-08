@@ -39,7 +39,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VForEachStatement, "item")
 
 VForEachStatement::VForEachStatement(Item* parent, NodeType* node, const StyleType* style) :
-	BaseItemType(parent, node, style),
+	Super(parent, node, style),
 	header_(), varContainer_(), collectionBackground_(), varName_(), collection_(),	varType_(), body_()
 {
 	layout()->setTop(true);

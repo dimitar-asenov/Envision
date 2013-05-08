@@ -41,8 +41,8 @@ namespace Visualization {
 namespace CustomMethodCall {
 
 class CUSTOMMETHODCALL_API EmptyMethodVis
-	: public Visualization::ItemWithNode<EmptyMethodVis, Visualization::LayoutProvider<>, OOModel::MethodCallExpression,
-	  false>
+	: public Reflect<Visualization::ItemWithNode<EmptyMethodVis, Visualization::LayoutProvider<>,
+	  	  OOModel::MethodCallExpression, false>>
 {
 	ITEM_COMMON(EmptyMethodVis)
 
@@ -54,9 +54,6 @@ class CUSTOMMETHODCALL_API EmptyMethodVis
 		void determineChildren();
 
 	private:
-		typedef Visualization::ItemWithNode<EmptyMethodVis, Visualization::LayoutProvider<>,
-				OOModel::MethodCallExpression, false> BaseItemType;
-
 		Visualization::Static* icon_;
 		Visualization::Static* separator_;
 		Visualization::Item* prefix_;

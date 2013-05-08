@@ -46,8 +46,8 @@ namespace OOVisualization {
 class VStatementItemList;
 
 class OOVISUALIZATION_API VClass
-: public Visualization::ItemWithNode<VClass, Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
-  OOModel::Class>
+: public Reflect<Visualization::ItemWithNode<VClass, Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
+  OOModel::Class>>
 {
 	ITEM_COMMON(VClass)
 
@@ -59,9 +59,6 @@ class OOVISUALIZATION_API VClass
 		void determineChildren();
 
 	private:
-		typedef Visualization::ItemWithNode<VClass, Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
-				OOModel::Class> BaseItemType;
-
 		Visualization::SequentialLayout* header_{};
 		Visualization::Static* icon_{};
 		Visualization::VText* name_{};

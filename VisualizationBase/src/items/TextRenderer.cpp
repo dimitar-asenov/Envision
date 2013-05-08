@@ -37,7 +37,7 @@ namespace Visualization {
 ITEM_COMMON_DEFINITIONS(TextRenderer, "item")
 
 TextRenderer::TextRenderer(Item* parent, const StyleType *style, const QString& text) :
-	Item(parent, style), staticText_(text), editable(true)
+Super(parent, style), staticText_(text), editable(true)
 {
 	staticText_.setPerformanceHint(QStaticText::AggressiveCaching);
 	staticText_.setTextFormat(Qt::PlainText);

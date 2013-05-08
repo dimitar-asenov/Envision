@@ -35,7 +35,7 @@
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VContinueStatement
-	: public VStatementItem<VContinueStatement, Visualization::Item, OOModel::ContinueStatement>
+	: public Reflect<VStatementItem<VContinueStatement, Visualization::Item, OOModel::ContinueStatement>>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VContinueStatement, Visualization::StaticStyle)
 
@@ -48,8 +48,6 @@ class OOVISUALIZATION_API VContinueStatement
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		typedef VStatementItem<VContinueStatement, Visualization::Item, OOModel::ContinueStatement> BaseItemType;
-
 		Visualization::Static* vis_;
 };
 

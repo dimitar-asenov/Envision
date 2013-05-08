@@ -34,7 +34,7 @@ namespace Visualization {
 
 class Scene;
 
-class VISUALIZATIONBASE_API SceneHandlerItem : public Item
+class VISUALIZATIONBASE_API SceneHandlerItem : public Reflect<Item>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(SceneHandlerItem, ItemStyle)
 
@@ -44,10 +44,6 @@ class VISUALIZATIONBASE_API SceneHandlerItem : public Item
 	protected:
 		virtual void determineChildren();
 		virtual void updateGeometry(int availableWidth, int availableHeight);
-
-	private:
-		typedef Item BaseItemType;
-
 };
 
 }

@@ -32,7 +32,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API Text : public TextRenderer
+class VISUALIZATIONBASE_API Text : public Reflect<TextRenderer>
 {
 	ITEM_COMMON(Text)
 
@@ -42,9 +42,6 @@ class VISUALIZATIONBASE_API Text : public TextRenderer
 
 	protected:
 		virtual QString currentText();
-
-	private:
-		typedef TextRenderer BaseItemType;
 };
 
 }

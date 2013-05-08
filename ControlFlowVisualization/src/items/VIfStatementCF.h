@@ -35,7 +35,7 @@
 namespace ControlFlowVisualization {
 
 class CONTROLFLOWVISUALIZATION_API VIfStatementCF
-: public Visualization::ItemWithNode<VIfStatementCF, ControlFlowItem, OOModel::IfStatement, false>
+: public Reflect<Visualization::ItemWithNode<VIfStatementCF, ControlFlowItem, OOModel::IfStatement, false>>
 {
 	ITEM_COMMON(VIfStatementCF)
 
@@ -51,8 +51,6 @@ class CONTROLFLOWVISUALIZATION_API VIfStatementCF
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		typedef Visualization::ItemWithNode<VIfStatementCF, ControlFlowItem, OOModel::IfStatement, false> BaseItemType;
-
 		Visualization::SequentialLayout* conditionBackground;
 
 		Visualization::Item* condition;

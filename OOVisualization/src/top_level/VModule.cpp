@@ -40,7 +40,7 @@ namespace OOVisualization {
 
 ITEM_COMMON_DEFINITIONS(VModule, "item")
 
-VModule::VModule(Item* parent, NodeType* node, const StyleType* style) : BaseItemType(parent, node, style)
+VModule::VModule(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style)
 {
 	layout()->setTop(true);
 	header = new SequentialLayout(layout()->top(), &style->header());

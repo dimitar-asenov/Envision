@@ -34,7 +34,7 @@
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VClassType
-	: public VExpression<VClassType, Visualization::Item, OOModel::ClassTypeExpression>
+	: public Reflect<VExpression<VClassType, Visualization::Item, OOModel::ClassTypeExpression>>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VClassType, VReferenceExpressionStyle)
 
@@ -49,8 +49,6 @@ class OOVISUALIZATION_API VClassType
 		void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		typedef VExpression<VClassType, Visualization::Item, OOModel::ClassTypeExpression> BaseItemType;
-
 		VReferenceExpression* vis_;
 };
 

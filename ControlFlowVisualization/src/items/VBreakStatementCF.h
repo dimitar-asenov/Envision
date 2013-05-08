@@ -34,7 +34,7 @@
 namespace ControlFlowVisualization {
 
 class CONTROLFLOWVISUALIZATION_API VBreakStatementCF
-: public Visualization::ItemWithNode<VBreakStatementCF, ControlFlowItem, OOModel::BreakStatement, false >
+: public Reflect<Visualization::ItemWithNode<VBreakStatementCF, ControlFlowItem, OOModel::BreakStatement, false >>
 {
 		ITEM_COMMON_CUSTOM_STYLENAME(VBreakStatementCF, ControlFlowItemStyle)
 
@@ -47,9 +47,6 @@ class CONTROLFLOWVISUALIZATION_API VBreakStatementCF
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		typedef Visualization::ItemWithNode<VBreakStatementCF, ControlFlowItem, OOModel::BreakStatement, false >
-			BaseItemType;
-
 		OOVisualization::VBreakStatement* vis_;
 };
 

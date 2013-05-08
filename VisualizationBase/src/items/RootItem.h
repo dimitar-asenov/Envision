@@ -32,7 +32,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API RootItem : public ItemWithNode<RootItem, Item, Model::Node, false> {
+class VISUALIZATIONBASE_API RootItem : public Reflect<ItemWithNode<RootItem, Item, Model::Node, false>> {
 
 	ITEM_COMMON_CUSTOM_STYLENAME(RootItem, ItemStyle)
 
@@ -51,8 +51,6 @@ class VISUALIZATIONBASE_API RootItem : public ItemWithNode<RootItem, Item, Model
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		typedef ItemWithNode<RootItem, Item, Model::Node, false> BaseItemType;
-
 		Item* item_;
 };
 

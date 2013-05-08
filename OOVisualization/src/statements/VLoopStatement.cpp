@@ -40,7 +40,7 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VLoopStatement, "item")
 
 VLoopStatement::VLoopStatement(Item* parent, NodeType* node, const StyleType* style) :
-	BaseItemType(parent, node, style),
+	Super(parent, node, style),
 	header_(), conditionBackground_(), initStepBackground_(), updateStepBackground_(), condition_(), initStep_(),
 	updateStep_(),	body_()
 {
