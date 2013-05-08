@@ -46,4 +46,10 @@ Type* CastExpression::type()
 	return t;
 }
 
+CastExpression::CastExpression(CastKind castKind)
+: Super(nullptr, CastExpression::getMetaData())
+{
+	setCastKind(castKind);
+}
+
 }
