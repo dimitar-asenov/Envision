@@ -102,7 +102,15 @@ template <class ParentType, class ChildItemType>
 QList<ItemRegion> ItemWrapperFormElement<ParentType,ChildItemType>::regions(Item* item, int , int)
 {
 	auto& childItem = (static_cast<const ParentType*>(item))->*this->item();
-	if(childItem) return childItem->regions();
+
+	if(childItem) {
+		QRect rect = childItem->boundingRect().toRect();
+		rect.translate(childItem->pos().toPoint());
+		QList<ItemRegion> regs;
+		regs.append(ItemRegion(rect));
+		regs.last().setItem(childItem);
+		return regs;
+	}
 	else return QList<ItemRegion>();
 }
 
