@@ -1,28 +1,29 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/Item/default">
+	<shape prototypes="shape/Box/default">
+		Box
+		<outline>
+			<width>1</width>
+			<color>
+				<alpha>255</alpha>
+				<red>224</red>
+				<green>224</green>
+				<blue>200</blue>
+			</color>
+		</outline>
+		<backgroundBrush>
+			<style>1</style>
+			<color>
+				<alpha>255</alpha>
+				<red>255</red>
+				<green>255</green>
+				<blue>224</blue>
+			</color>
+		</backgroundBrush>
+		<cornerRadius>4</cornerRadius>
+	</shape>
 	<layout prototypes="layout/PanelBorderLayout/default">
-		<shape prototypes="shape/Box/default">
-			Box
-			<outline>
-				<width>1</width>
-				<color>
-					<alpha>255</alpha>
-					<red>224</red>
-					<green>224</green>
-					<blue>200</blue>
-				</color>
-			</outline>
-			<backgroundBrush>
-				<style>1</style>
-				<color>
-					<alpha>255</alpha>
-					<red>255</red>
-					<green>255</green>
-					<blue>224</blue>
-				</color>
-			</backgroundBrush>
-			<cornerRadius>4</cornerRadius>
-		</shape>
+		<shape prototypes="shape/Box/default" />
 		<leftInnerMargin>1</leftInnerMargin>
 		<rightInnerMargin>0</rightInnerMargin>
 		<bottomInnerMargin>0</bottomInnerMargin>

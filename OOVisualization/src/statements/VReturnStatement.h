@@ -31,7 +31,8 @@
 #include "VStatementItem.h"
 
 #include "OOModel/src/statements/ReturnStatement.h"
-#include "VisualizationBase/src/items/LayoutProvider.h"
+#include "VisualizationBase/src/items/ItemWithNode.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
 
 namespace Visualization {
 	class Static;
@@ -41,22 +42,19 @@ namespace Visualization {
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VReturnStatement
-	: public Super<VStatementItem<VReturnStatement, Visualization::LayoutProvider<>, OOModel::ReturnStatement>>
+	: public Super<VStatementItem<VReturnStatement, Visualization::DeclarativeItem<VReturnStatement>, OOModel::ReturnStatement>>
 {
 	ITEM_COMMON(VReturnStatement)
 
 	public:
 		VReturnStatement(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		virtual ~VReturnStatement();
 
 		Visualization::Item* returnSymbol() const;
-
-	protected:
-		void determineChildren();
+		static void initializeForms();
 
 	private:
-		Visualization::Static* symbol_;
-		Visualization::VList* values_;
+		Visualization::Static* symbol_{};
+		Visualization::VList* values_{};
 };
 
 }

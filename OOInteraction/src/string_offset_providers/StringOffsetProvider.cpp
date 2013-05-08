@@ -34,8 +34,8 @@
 #include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/items/Item.h"
 #include "VisualizationBase/src/items/TextRenderer.h"
-
 #include "Core/src/AdapterManager.h"
+#include "VisualizationBase/src/items/LayoutProvider.h"
 
 namespace OOInteraction {
 
@@ -166,9 +166,9 @@ int StringOffsetProvider::listItemOffset(Visualization::VList* list,
 	QStringList components = StringOffsetProvider::components(list->node());
 
 	int result = prefix.size();
-	if (list->scene()->mainCursor() && list->scene()->mainCursor()->owner() == list->layout())
+	if (list->scene()->mainCursor() && list->scene()->mainCursor()->owner() == list)
 	{
-		int index = list->layout()->correspondingSceneCursor<Visualization::LayoutCursor>()->index();
+		int index = list->correspondingSceneCursor<Visualization::LayoutCursor>()->index();
 
 		if (index < 0) result = 0;
 		else

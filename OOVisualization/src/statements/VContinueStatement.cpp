@@ -46,14 +46,9 @@ VContinueStatement::~VContinueStatement()
 	SAFE_DELETE_ITEM(vis_);
 }
 
-void VContinueStatement::determineChildren()
+void VContinueStatement::initializeForms()
 {
-	vis_->setStyle( style());
-}
-
-void VContinueStatement::updateGeometry(int availableWidth, int availableHeight)
-{
-	Item::updateGeometry(vis_, availableWidth, availableHeight);
+	addForm(item<Static, I>(&I::vis_, [](I* v){return v->style();}));
 }
 
 }

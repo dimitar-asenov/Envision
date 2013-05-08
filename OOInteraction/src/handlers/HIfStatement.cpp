@@ -33,6 +33,9 @@
 
 #include "InteractionBase/src/events/SetCursorEvent.h"
 #include "VisualizationBase/src/cursor/LayoutCursor.h"
+#include "VisualizationBase/src/items/Static.h"
+#include "VisualizationBase/src/items/NodeWrapper.h"
+
 
 namespace OOInteraction {
 

@@ -32,6 +32,8 @@
 
 namespace Visualization {
 
+class FormElement;
+
 class VISUALIZATIONBASE_API LayoutCursor : public Cursor {
 	public:
 		LayoutCursor(Item* owner, CursorType type);
@@ -41,10 +43,12 @@ class VISUALIZATIONBASE_API LayoutCursor : public Cursor {
 		void set2DIndex(int x, int y);
 		void setIndex(int index);
 		void setVisualizationPosition(const QPoint& pos);
+		void setOwnerElement(FormElement* ownerElement);
 
 		int x();
 		int y();
 		int index();
+		FormElement* ownerElement();
 
 		void setIsAtBoundary(bool isAtBoundary);
 
@@ -56,14 +60,17 @@ class VISUALIZATIONBASE_API LayoutCursor : public Cursor {
 		int y_;
 		int index_;
 		bool isAtBoundary_;
+		FormElement* ownerElement_;
 };
 
 inline void LayoutCursor::set2DIndex(int x, int y) { x_ = x; y_ = y; }
 inline void LayoutCursor::setIndex(int index) { index_ = index; }
+inline void LayoutCursor::setOwnerElement(FormElement* ownerElement) {ownerElement_ = ownerElement;}
 
 inline int LayoutCursor::x() { return x_; }
 inline int LayoutCursor::y() { return y_; }
 inline int LayoutCursor::index() { return index_; }
+inline FormElement* LayoutCursor::ownerElement() { return ownerElement_; }
 
 inline void LayoutCursor::setIsAtBoundary(bool isAtBoundary) { isAtBoundary_ = isAtBoundary; }
 
