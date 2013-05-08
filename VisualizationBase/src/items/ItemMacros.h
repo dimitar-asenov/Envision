@@ -38,12 +38,9 @@
  * 			The name of the style type for this class
  */
 #define ITEM_COMMON_CUSTOM_STYLENAME( ItemClass, StyleTypeName)																		\
+DECLARE_TYPE_ID																																		\
 public:																																					\
 	typedef StyleTypeName StyleType;																												\
-	virtual const QString& typeName() const override;																						\
-	static const QString& staticTypeName();																									\
-	virtual int typeId() const override;																										\
-	static int staticTypeId();																														\
 																																							\
 	const StyleType* style() const { return static_cast<const StyleType*> (Item::style()); }									\
 	virtual void setStyle(const Visualization::ItemStyle* style);																		\
@@ -56,9 +53,6 @@ public:																																					\
 	virtual QList<Visualization::VisualizationAddOn*> addOns();																			\
 	static void addAddOn(Visualization::VisualizationAddOn* addOn);																	\
 	static bool removeAddOn(Visualization::VisualizationAddOn* addOn);																\
-																																							\
-	static ::Core::InitializationRegistry& initializationRegistry();																	\
-	static void defaultInit();																														\
 private:																																					\
 	static Visualization::InteractionHandler* defaultClassHandler_;																	\
 	static QList<Visualization::VisualizationAddOn*>& staticAddOns();
@@ -83,27 +77,15 @@ private:																																					\
  * 			look for this item's style directory. Typical values are "item", "shape", "layout" and "icon".
  */
 #define ITEM_COMMON_DEFINITIONS( ItemClass, classType )																					\
-/* Forward declaration. This function must be defined in the enclosing namespace*/												\
 ::Core::InitializationRegistry& itemTypeInitializationRegistry();																		\
-::Core::InitializationRegistry& ItemClass::initializationRegistry()																	\
-{																																							\
-	return itemTypeInitializationRegistry();																									\
-}																																							\
+DEFINE_TYPE_ID_DERIVED(ItemClass, itemTypeInitializationRegistry, #ItemClass,)													\
 																																							\
-void ItemClass::defaultInit()																														\
+void ItemClass::initType()																															\
 {																																							\
-	Super::defaultInit();																															\
+	if (ItemClass::typeIdVariable() < 0)																										\
+		ItemClass::typeIdVariable() = ::Visualization::Item::registerVisualization();												\
+	Super::initType();																																\
 }																																							\
-																																							\
-/* Used to register a default initialization routine*/																					\
-class ItemClass##InitializerClass{																												\
-	public:																																				\
-		ItemClass##InitializerClass()																												\
-		{																																					\
-			ItemClass::initializationRegistry().add(ItemClass::defaultInit);															\
-		}																																					\
-};																																							\
-static ItemClass##InitializerClass ItemClass##InitializerClassInstance_;															\
 																																							\
 Visualization::InteractionHandler* ItemClass::defaultClassHandler_ =	 nullptr;													\
 																																							\
@@ -119,28 +101,6 @@ Visualization::InteractionHandler* ItemClass::handler() const																			
 {																																							\
 	if (defaultClassHandler()) return defaultClassHandler();																				\
 	return Super::handler();																														\
-}																																							\
-																																							\
-const QString& ItemClass::typeName() const																									\
-{																																							\
-	return staticTypeName();																														\
-}																																							\
-																																							\
-const QString& ItemClass::staticTypeName()																									\
-{																																							\
-	static QString name(#ItemClass);																												\
-	return name;																																		\
-}																																							\
-																																							\
-int ItemClass::typeId() const																														\
-{																																							\
-	return staticTypeId();																															\
-}																																							\
-																																							\
-int ItemClass::staticTypeId()																														\
-{																																							\
-	static int id = ::Visualization::Item::registerVisualization();																	\
-	return id;																																			\
 }																																							\
 																																							\
 Visualization::StyleSet<ItemClass>& ItemClass::itemStyles()																				\

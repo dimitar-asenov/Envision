@@ -70,14 +70,18 @@ Core::InitializationRegistry& itemTypeInitializationRegistry()
 	return r;
 }
 
+Core::InitializationRegistry& shapeTypeInitializationRegistry()
+{
+	static Core::InitializationRegistry r;
+	return r;
+}
+
 bool VisualizationBase::initialize(Core::EnvisionManager& manager)
 {
 	VisualizationManager& vmi = VisualizationManager::instance();
 	vmi.init(&manager);
-	Shape::registerShape<Box>();
-	Shape::registerShape<Diamond>();
-	Shape::registerShape<Braces>();
-	Shape::registerShape<SvgShape>();
+
+	shapeTypeInitializationRegistry().initializeAll();
 
 	// Register extensions and nodes
 	Position::registerExtension();

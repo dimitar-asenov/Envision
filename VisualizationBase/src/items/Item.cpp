@@ -38,6 +38,9 @@
 
 namespace Visualization {
 
+::Core::InitializationRegistry& itemTypeInitializationRegistry();
+DEFINE_TYPE_ID_BASE(Item, itemTypeInitializationRegistry, "Item",)
+
 InteractionHandler* Item::defaultClassHandler_ = InteractionHandler::instance();
 
 int Item::registerVisualization()
@@ -96,12 +99,6 @@ Item::Item(Item* parent, const StyleType* style) :
 Item::~Item()
 {
 	SAFE_DELETE(shape_);
-}
-
-const QString& Item::typeName() const
-{
-	static const QString name("Item");
-	return name;
 }
 
 QRectF Item::boundingRect() const

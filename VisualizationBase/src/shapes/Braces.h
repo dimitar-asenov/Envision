@@ -33,7 +33,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API Braces: public Shape
+class VISUALIZATIONBASE_API Braces: public Super<Shape>
 {
 	SHAPE_COMMON( Braces )
 

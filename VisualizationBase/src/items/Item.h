@@ -45,6 +45,8 @@ class SequentialLayout;
 
 class VISUALIZATIONBASE_API Item : public QGraphicsItem
 {
+	DECLARE_TYPE_ID
+
 	public:
 		typedef ItemStyle StyleType;
 		const static int LAYER_DEFAULT_Z = 0;
@@ -55,8 +57,6 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 
 		Item(Item* parent, const StyleType* style = nullptr);
 		virtual ~Item();
-
-		virtual const QString& typeName() const;
 
 		Item* parent() const;
 		Scene* scene() const;
@@ -252,13 +252,6 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		static int registerVisualization();
 
 		/**
-		 * Returns the type id of this visualization class.
-		 *
-		 * Each class that inherits from Item has a unique type id that can be queried during runtime.
-		 */
-		virtual int typeId() const = 0;
-
-		/**
 		 * Returns all visualization add-ons of this and inherited classes.
 		 */
 		virtual QList<VisualizationAddOn*> addOns();
@@ -279,8 +272,6 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		bool isCategoryHiddenDuringPaint();
 
 		static QMultiHash<Model::Node*, Item*>& nodeItemsMap();
-
-		static void defaultInit();
 
 		static void setDefaultClassHandler(InteractionHandler* handler);
 		static InteractionHandler* defaultClassHandler();
@@ -473,7 +464,6 @@ inline const QMultiMap<VisualizationAddOn*, Item* >& Item::addOnItems()
 
 inline void Item::setItemCategory( Scene::ItemCategory cat) { itemCategory_ = cat; }
 inline bool Item::isCategoryHiddenDuringPaint() { return scene()->isHiddenCategory(itemCategory()); }
-inline void Item::defaultInit(){}
 
 inline void Item::setDefaultClassHandler(InteractionHandler* handler) {defaultClassHandler_ = handler;}
 inline InteractionHandler* Item::defaultClassHandler() {return defaultClassHandler_;}

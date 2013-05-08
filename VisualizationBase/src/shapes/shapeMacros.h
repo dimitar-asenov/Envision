@@ -38,9 +38,9 @@
  * 			The name of the style type for this class
  */
 #define SHAPE_COMMON_CUSTOM_STYLENAME( ShapeClass, StyleTypeName)																		\
+DECLARE_TYPE_ID																																		\
 public:																																					\
 	typedef StyleTypeName StyleType;																												\
-	static const QString& staticTypeName();																									\
 																																							\
 	const StyleType* style() const { return static_cast<const StyleType*> (Shape::style()); }									\
 	virtual void setStyle(const Visualization::ShapeStyle* style);																		\
@@ -68,18 +68,20 @@ private:
  * 			to look for this shape's style directory. Typical values are "item", "shape", "layout" and "icon".
  */
 #define SHAPE_COMMON_DEFINITIONS( ShapeClass, classType )																				\
+::Core::InitializationRegistry& shapeTypeInitializationRegistry();																	\
+DEFINE_TYPE_ID_DERIVED(ShapeClass, shapeTypeInitializationRegistry, #ShapeClass,)												\
+																																							\
+void ShapeClass::initType()																														\
+{																																							\
+	ShapeClass::typeIdVariable() = Shape::registerShape<ShapeClass>();																\
+}																																							\
+																																							\
 void ShapeClass::setStyle(const Visualization::ShapeStyle* style_)																	\
 {																																							\
 	if (style_ == style()) return;																												\
 	const StyleType* s = dynamic_cast<const StyleType*> (style_);																		\
 	if (!s) throw Visualization::VisualizationException("Invalid style type when calling " #ShapeClass "::setStyle");	\
 	Shape::setStyle(s);																																\
-}																																							\
-																																							\
-const QString& ShapeClass::staticTypeName()																									\
-{																																							\
-	static QString name(#ShapeClass);																											\
-	return name;																																		\
 }																																							\
 																																							\
 StyleSet<ShapeClass>& ShapeClass::itemStyles()																								\

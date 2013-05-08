@@ -32,7 +32,7 @@ namespace Visualization {
 SHAPE_COMMON_DEFINITIONS(Box, "shape")
 
 Box::Box(Item *parent, StyleType *style) :
-	Shape(parent, style)
+	Super(parent, style)
 {
 }
 

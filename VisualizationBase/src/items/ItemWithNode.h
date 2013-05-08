@@ -48,7 +48,7 @@ class ItemWithNode : public Super
 		virtual int revision() const;
 		virtual void setRevision(int newRevision);
 
-		static void defaultInit();
+		static void initType();
 	private:
 		ContainedNode* node_;
 		int revision_;
@@ -83,7 +83,7 @@ inline  void ItemWithNode<Derived,Super,ContainedNode,defaultInitialization>::se
 { revision_ = newRevision; }
 
 template <class Derived, class Super, class ContainedNode, bool defaultInitialization>
-void ItemWithNode<Derived,Super,ContainedNode,defaultInitialization>::defaultInit()
+void ItemWithNode<Derived,Super,ContainedNode,defaultInitialization>::initType()
 {
 	if (defaultInitialization && !Scene::defaultRenderer()->hasVisualization(NodeType::typeIdStatic()))
 	{
@@ -91,7 +91,7 @@ void ItemWithNode<Derived,Super,ContainedNode,defaultInitialization>::defaultIni
 		Scene::defaultRenderer()->registerVisualization(
 				NodeType::typeIdStatic(), createVisualization<Derived, NodeType>);
 	}
-	Super::defaultInit();
+	Super::initType();
 }
 
 }

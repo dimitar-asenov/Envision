@@ -28,6 +28,9 @@
 
 namespace Visualization {
 
+::Core::InitializationRegistry& shapeTypeInitializationRegistry();
+DEFINE_TYPE_ID_BASE(Shape, shapeTypeInitializationRegistry, "Shape",)
+
 QMap<QString, Shape::ShapeConstructor> Shape::shapeConstructors;
 QMap<QString, Shape::ShapeStyleConstructor> Shape::shapeStyleConstructors;
 
@@ -48,12 +51,6 @@ void Shape::setStyle(const Visualization::ShapeStyle* newStyle)
 		style_ = newStyle;
 		setParentNeedsUpdate();
 	}
-}
-
-const QString& Shape::staticTypeName()
-{
-	static QString name("Shape");
-	return name;
 }
 
 StyleSet<Shape>& Shape::itemStyles()

@@ -33,7 +33,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API Diamond: public Shape
+class VISUALIZATIONBASE_API Diamond: public Super<Shape>
 {
 	SHAPE_COMMON(Diamond)
 

@@ -83,7 +83,7 @@ class OOINTERACTION_API GridBasedOffsetProvider : public StringOffsetProvider {
 template <class T>
 inline void GridBasedOffsetProvider::addGridConstructor(void(*constructor)(GridBasedOffsetProvider* provider, T* item))
 {
-	gridConstructors().insert(T::staticTypeId(), reinterpret_cast<ItemTypeRegistrationFunction>(constructor) );
+	gridConstructors().insert(T::typeIdStatic(), reinterpret_cast<ItemTypeRegistrationFunction>(constructor) );
 }
 
 inline void GridBasedOffsetProvider::setFilterNullAndEmptyComponents() { filterNullAndEmptyComponents_ = true;}

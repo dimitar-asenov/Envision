@@ -73,8 +73,8 @@ inline Item* Static::item() { return item_; }
 
 template<class T> void Static::registerStaticItem()
 {
-	itemClasses_.insert(T::staticTypeName(), staticItemConstructor<T>);
-	itemStyles_.insert(T::staticTypeName(), staticItemStyleConstructor<T>);
+	itemClasses_.insert(T::typeNameStatic(), staticItemConstructor<T>);
+	itemStyles_.insert(T::typeNameStatic(), staticItemStyleConstructor<T>);
 }
 
 template<class T> Item* Static::staticItemConstructor(Item* parent, const ItemStyle* style)
