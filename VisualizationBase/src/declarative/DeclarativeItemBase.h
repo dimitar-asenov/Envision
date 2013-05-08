@@ -41,7 +41,7 @@ class FormElement;
  * The non-template base class for DeclarativeItem. Implements all not template related functionalities of the class
  * DeclarativeItem.
  */
-class VISUALIZATIONBASE_API DeclarativeItemBase: public Item
+class VISUALIZATIONBASE_API DeclarativeItemBase: public Super<Item>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(DeclarativeItemBase, ItemStyle)
 
@@ -116,7 +116,6 @@ class VISUALIZATIONBASE_API DeclarativeItemBase: public Item
 					std::function<const typename VisualizationType::StyleType* (ParentType* v)> styleGetter);
 
 	private:
-		typedef Item BaseItemType;
 		int currentFormIndex_{};
 };
 

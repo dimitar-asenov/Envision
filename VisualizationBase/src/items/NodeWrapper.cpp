@@ -31,8 +31,7 @@ namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(NodeWrapper, "item")
 
-NodeWrapper::NodeWrapper(Item* parent, NodeType* node, const StyleType* style)
-	: BaseItemType(parent, node)
+NodeWrapper::NodeWrapper(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node)
 {
 	setStyle(style);
 }

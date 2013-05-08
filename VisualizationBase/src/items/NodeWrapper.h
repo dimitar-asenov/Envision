@@ -42,7 +42,7 @@ namespace Visualization {
  * an ItemStyle.
  * This is useful, e.g. to give the node a background shape.
  */
-class VISUALIZATIONBASE_API NodeWrapper : public ItemWithNode<NodeWrapper, Item, Model::Node, false>
+class VISUALIZATIONBASE_API NodeWrapper : public Super<ItemWithNode<NodeWrapper, Item, Model::Node, false>>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(NodeWrapper, ItemStyle)
 
@@ -66,8 +66,6 @@ class VISUALIZATIONBASE_API NodeWrapper : public ItemWithNode<NodeWrapper, Item,
 
 
 	private:
-		typedef ItemWithNode<NodeWrapper, Item, Model::Node, false> BaseItemType;
-
 		Item* wrappedItem_{};
 		bool stretchable_{false};
 };

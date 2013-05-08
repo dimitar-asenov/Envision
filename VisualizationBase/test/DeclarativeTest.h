@@ -44,7 +44,7 @@ class Item;
 class Symbol;
 class VExtendable;
 
-class DeclarativeTest : public DeclarativeItem<DeclarativeTest> {
+class DeclarativeTest : public Super<DeclarativeItem<DeclarativeTest>> {
 
 	ITEM_COMMON_CUSTOM_STYLENAME(DeclarativeTest, SymbolStyle)
 
@@ -55,7 +55,6 @@ class DeclarativeTest : public DeclarativeItem<DeclarativeTest> {
 		virtual int determineForm() override;
 
 	private:
-		typedef DeclarativeItem<DeclarativeTest> BaseItemType;
 		Symbol* testItem_{};
 		VExtendable* testNodeItem_{};
 		Item* testNodeItemGeneral_{};

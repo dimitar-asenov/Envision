@@ -33,8 +33,7 @@ namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(DeclarativeItemBase, "item")
 
-DeclarativeItemBase::DeclarativeItemBase(Item* parent, const StyleType* style) :
-		Item(parent, style)
+DeclarativeItemBase::DeclarativeItemBase(Item* parent, const StyleType* style) : Super(parent, style)
 {}
 
 DeclarativeItemBase::~DeclarativeItemBase()

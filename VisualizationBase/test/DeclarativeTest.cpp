@@ -41,7 +41,7 @@ ITEM_COMMON_DEFINITIONS(DeclarativeTest, "item")
 
 DeclarativeTest::DeclarativeTest(Item* parent, TestNodes::BinaryNode* node, Model::Node* first, Model::Node* second,
 		Model::Node* third, Model::Node* fourth) :
-		DeclarativeItem<DeclarativeTest>(parent, itemStyles().get()), testNode_{node}, firstNode_{first},
+		Super(parent, itemStyles().get()), testNode_{node}, firstNode_{first},
 		secondNode_{second}, thirdNode_{third}, fourthNode_{fourth}
 {
 	setPurpose(0);

@@ -64,7 +64,7 @@ void VClass::determineChildren()
 	body_->synchronizeWithNodes( bodyItems, renderer());;
 
 	// call determineChildren of super class
-	BaseItemType::determineChildren();
+	Super::determineChildren();
 
 	// make field background behave as a special background element
 	if (fieldBackground_) fieldBackground_->setStretchable(true);
