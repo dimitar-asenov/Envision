@@ -34,7 +34,7 @@ namespace Visualization {
 
 class Cursor;
 
-class VISUALIZATIONBASE_API CursorShapeItem: public Reflect<Item>
+class VISUALIZATIONBASE_API CursorShapeItem: public Super<Item>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(CursorShapeItem, ItemStyle)
 

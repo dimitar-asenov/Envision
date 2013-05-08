@@ -36,7 +36,7 @@ namespace Model {
 class NameChange;
 template<class T> class FieldSet;
 
-class MODELBASE_API Text: public Reflect<Node>
+class MODELBASE_API Text: public Super<Node>
 {
 	friend class NameChange;
 

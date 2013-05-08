@@ -35,7 +35,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API VBoolean : public Reflect<ItemWithNode<VBoolean, TextRenderer, Model::Boolean>>
+class VISUALIZATIONBASE_API VBoolean : public Super<ItemWithNode<VBoolean, TextRenderer, Model::Boolean>>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VBoolean, TextStyle)
 

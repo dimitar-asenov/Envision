@@ -33,7 +33,7 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, StatementItemList)
 
 namespace OOModel {
 
-class OOMODEL_API StatementItemList : public Reflect<Model::TypedList<StatementItem>>
+class OOMODEL_API StatementItemList : public Super<Model::TypedList<StatementItem>>
 {
 	NODE_DECLARE_STANDARD_METHODS(StatementItemList)
 

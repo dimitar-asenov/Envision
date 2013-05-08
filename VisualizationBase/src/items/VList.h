@@ -36,7 +36,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API VList: public Reflect<ItemWithNode<VList, LayoutProvider<>, Model::List>>
+class VISUALIZATIONBASE_API VList: public Super<ItemWithNode<VList, LayoutProvider<>, Model::List>>
 {
 	ITEM_COMMON(VList)
 

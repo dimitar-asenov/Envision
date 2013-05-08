@@ -43,7 +43,7 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Project)
 
 namespace OOModel {
 
-class OOMODEL_API Project : public Reflect<Model::ExtendableNode>
+class OOMODEL_API Project : public Super<Model::ExtendableNode>
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Project)
 

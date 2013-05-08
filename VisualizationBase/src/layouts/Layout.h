@@ -34,7 +34,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API Layout: public Reflect<Item>
+class VISUALIZATIONBASE_API Layout: public Super<Item>
 {
 	ITEM_COMMON(Layout)
 

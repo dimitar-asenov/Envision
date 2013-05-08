@@ -42,7 +42,7 @@ namespace Visualization {
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VKeywordMethodCall
-	: public Reflect<VExpression<VKeywordMethodCall,
+	: public Super<VExpression<VKeywordMethodCall,
 	  Visualization::LayoutProvider<>, OOModel::MethodCallExpression, false>>
 {
 		ITEM_COMMON(VKeywordMethodCall)

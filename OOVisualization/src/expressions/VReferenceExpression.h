@@ -41,7 +41,7 @@ namespace Visualization {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VReferenceExpression : public Reflect<VExpression<VReferenceExpression,
+class OOVISUALIZATION_API VReferenceExpression : public Super<VExpression<VReferenceExpression,
 	Visualization::LayoutProvider<>, OOModel::ReferenceExpression>>
 {
 	ITEM_COMMON(VReferenceExpression)

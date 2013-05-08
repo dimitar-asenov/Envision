@@ -34,7 +34,7 @@
 namespace ControlFlowVisualization {
 
 class CONTROLFLOWVISUALIZATION_API VReturnStatementCF
-: public Reflect<Visualization::ItemWithNode<VReturnStatementCF, ControlFlowItem, OOModel::ReturnStatement, false>>
+: public Super<Visualization::ItemWithNode<VReturnStatementCF, ControlFlowItem, OOModel::ReturnStatement, false>>
 {
 		ITEM_COMMON_CUSTOM_STYLENAME(VReturnStatementCF, ControlFlowItemStyle)
 

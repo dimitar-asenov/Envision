@@ -36,7 +36,7 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, StatementItem)
 
 namespace OOModel {
 
-class OOMODEL_API StatementItem : public Reflect<Model::ExtendableNode>
+class OOMODEL_API StatementItem : public Super<Model::ExtendableNode>
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(StatementItem)
 };

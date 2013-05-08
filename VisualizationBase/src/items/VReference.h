@@ -35,7 +35,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API VReference : public Reflect<ItemWithNode<VReference, TextRenderer, Model::Reference>>
+class VISUALIZATIONBASE_API VReference : public Super<ItemWithNode<VReference, TextRenderer, Model::Reference>>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VReference, TextStyle)
 

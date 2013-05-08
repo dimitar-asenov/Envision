@@ -40,7 +40,7 @@ namespace Visualization {
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VBinaryOperation
-: public Reflect<VExpression<VBinaryOperation, Visualization::LayoutProvider<>, OOModel::BinaryOperation>>
+: public Super<VExpression<VBinaryOperation, Visualization::LayoutProvider<>, OOModel::BinaryOperation>>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VBinaryOperation, OperatorSequenceStyle)
 

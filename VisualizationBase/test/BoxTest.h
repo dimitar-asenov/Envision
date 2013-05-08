@@ -33,7 +33,7 @@
 
 namespace Visualization {
 
-class BoxTest : public Reflect<Item>
+class BoxTest : public Super<Item>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(BoxTest, ItemStyle)
 

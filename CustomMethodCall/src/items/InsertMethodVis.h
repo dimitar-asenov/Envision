@@ -42,7 +42,7 @@ namespace Visualization {
 namespace CustomMethodCall {
 
 class CUSTOMMETHODCALL_API InsertMethodVis
-: public Reflect<Visualization::ItemWithNode<InsertMethodVis, Visualization::LayoutProvider<>,
+: public Super<Visualization::ItemWithNode<InsertMethodVis, Visualization::LayoutProvider<>,
   	  OOModel::MethodCallExpression, false> >
 {
 	ITEM_COMMON(InsertMethodVis)

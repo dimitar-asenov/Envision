@@ -45,7 +45,7 @@ namespace Visualization {
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VProject
-: public Reflect<Visualization::ItemWithNode<VProject, Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
+: public Super<Visualization::ItemWithNode<VProject, Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
   	  OOModel::Project>>
 {
 	ITEM_COMMON(VProject)

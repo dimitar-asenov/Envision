@@ -45,7 +45,7 @@ namespace OOVisualization {
 class VStatementItemList;
 
 class OOVISUALIZATION_API VCatchClause
-	: public Reflect<Visualization::ItemWithNode<VCatchClause,
+	: public Super<Visualization::ItemWithNode<VCatchClause,
 	  Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::CatchClause>>
 {
 	ITEM_COMMON(VCatchClause)

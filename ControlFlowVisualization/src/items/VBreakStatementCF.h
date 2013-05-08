@@ -34,7 +34,7 @@
 namespace ControlFlowVisualization {
 
 class CONTROLFLOWVISUALIZATION_API VBreakStatementCF
-: public Reflect<Visualization::ItemWithNode<VBreakStatementCF, ControlFlowItem, OOModel::BreakStatement, false >>
+: public Super<Visualization::ItemWithNode<VBreakStatementCF, ControlFlowItem, OOModel::BreakStatement, false >>
 {
 		ITEM_COMMON_CUSTOM_STYLENAME(VBreakStatementCF, ControlFlowItemStyle)
 

@@ -35,7 +35,7 @@
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VContinueStatement
-	: public Reflect<VStatementItem<VContinueStatement, Visualization::Item, OOModel::ContinueStatement>>
+	: public Super<VStatementItem<VContinueStatement, Visualization::Item, OOModel::ContinueStatement>>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VContinueStatement, Visualization::StaticStyle)
 

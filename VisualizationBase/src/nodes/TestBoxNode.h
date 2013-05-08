@@ -38,7 +38,7 @@ DECLARE_TYPED_LIST(VISUALIZATIONBASE_API, Visualization, TestBoxNode)
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API TestBoxNode : public Reflect<Model::ExtendableNode> {
+class VISUALIZATIONBASE_API TestBoxNode : public Super<Model::ExtendableNode> {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(TestBoxNode)
 
 	ATTRIBUTE_VALUE(::Model::Integer, red, setRed, int)

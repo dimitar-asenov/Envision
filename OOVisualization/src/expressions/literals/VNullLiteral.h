@@ -35,7 +35,7 @@
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VNullLiteral
-	: public Reflect<VExpression<VNullLiteral, Visualization::Item, OOModel::NullLiteral>>
+	: public Super<VExpression<VNullLiteral, Visualization::Item, OOModel::NullLiteral>>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VNullLiteral, Visualization::StaticStyle)
 

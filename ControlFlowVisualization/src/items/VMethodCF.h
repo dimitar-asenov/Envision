@@ -44,7 +44,7 @@ namespace Visualization {
 
 namespace ControlFlowVisualization {
 
-class CONTROLFLOWVISUALIZATION_API VMethodCF : public Reflect<Visualization::ItemWithNode
+class CONTROLFLOWVISUALIZATION_API VMethodCF : public Super<Visualization::ItemWithNode
 	<VMethodCF, Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::Method, false>>
 {
 	ITEM_COMMON(VMethodCF)

@@ -38,7 +38,7 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, FormalResult)
 
 namespace OOModel {
 
-class OOMODEL_API FormalResult : public Reflect<Model::ExtendableNode>
+class OOMODEL_API FormalResult : public Super<Model::ExtendableNode>
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(FormalResult)
 	ATTRIBUTE_OOP_NAME

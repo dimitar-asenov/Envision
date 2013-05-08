@@ -33,7 +33,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API SelectedItem: public Reflect<Item>
+class VISUALIZATIONBASE_API SelectedItem: public Super<Item>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(SelectedItem, ItemStyle)
 

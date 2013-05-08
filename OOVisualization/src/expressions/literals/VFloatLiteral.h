@@ -37,7 +37,7 @@
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VFloatLiteral
-	: public Reflect<VExpression<VFloatLiteral, Visualization::Item, OOModel::FloatLiteral>>
+	: public Super<VExpression<VFloatLiteral, Visualization::Item, OOModel::FloatLiteral>>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VFloatLiteral, Visualization::TextStyle)
 

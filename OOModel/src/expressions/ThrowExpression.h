@@ -32,7 +32,7 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, ThrowExpression)
 
 namespace OOModel {
 
-class OOMODEL_API ThrowExpression: public Reflect<Expression>
+class OOMODEL_API ThrowExpression: public Super<Expression>
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(ThrowExpression)
 

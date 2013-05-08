@@ -35,7 +35,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API VText : public Reflect<ItemWithNode<VText, TextRenderer, Model::Text>>
+class VISUALIZATIONBASE_API VText : public Super<ItemWithNode<VText, TextRenderer, Model::Text>>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VText, TextStyle)
 

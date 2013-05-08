@@ -34,7 +34,7 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, OOReference)
 
 namespace OOModel {
 
-class OOMODEL_API OOReference : public Reflect<Model::Reference>
+class OOMODEL_API OOReference : public Super<Model::Reference>
 {
 
 	NODE_DECLARE_STANDARD_METHODS( OOReference )

@@ -41,7 +41,7 @@ namespace Visualization {
 namespace CustomMethodCall {
 
 class CUSTOMMETHODCALL_API SumMethodVis
-: public Reflect<Visualization::ItemWithNode<SumMethodVis, Visualization::LayoutProvider<>,
+: public Super<Visualization::ItemWithNode<SumMethodVis, Visualization::LayoutProvider<>,
   	  OOModel::MethodCallExpression, false>>
 {
 	ITEM_COMMON(SumMethodVis)

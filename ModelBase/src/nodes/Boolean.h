@@ -33,7 +33,7 @@ DECLARE_TYPED_LIST(MODELBASE_API, Model, Boolean)
 
 namespace Model {
 
-class MODELBASE_API Boolean: public Reflect<Node>
+class MODELBASE_API Boolean: public Super<Node>
 {
 	NODE_DECLARE_STANDARD_METHODS(Boolean)
 

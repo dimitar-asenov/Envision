@@ -38,7 +38,7 @@ namespace Visualization {
 
 #define BEGIN_STANDARD_EXPRESSION_VISUALIZATION_STYLE(apiSpecification, className, nodeType, styleTypeName)				\
 class apiSpecification className																													\
-	: public ::Reflect<::OOVisualization::VExpression<className, ::Visualization::LayoutProvider<>, nodeType>> {		\
+	: public ::Super<::OOVisualization::VExpression<className, ::Visualization::LayoutProvider<>, nodeType>> {		\
 	ITEM_COMMON_CUSTOM_STYLENAME(className, styleTypeName)																				\
 																																							\
 	public:																																				\

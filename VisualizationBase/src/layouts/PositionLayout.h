@@ -37,7 +37,7 @@ namespace  Visualization {
 
 class ModelRenderer;
 
-class VISUALIZATIONBASE_API PositionLayout : public Reflect<Layout>
+class VISUALIZATIONBASE_API PositionLayout : public Super<Layout>
 {
 	ITEM_COMMON(PositionLayout)
 

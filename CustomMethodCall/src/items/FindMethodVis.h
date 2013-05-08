@@ -43,7 +43,7 @@ namespace Visualization {
 namespace CustomMethodCall {
 
 class CUSTOMMETHODCALL_API FindMethodVis
-: public Reflect<Visualization::ItemWithNode<FindMethodVis, Visualization::LayoutProvider<>,
+: public Super<Visualization::ItemWithNode<FindMethodVis, Visualization::LayoutProvider<>,
   	  OOModel::MethodCallExpression, false>>
 {
 	ITEM_COMMON(FindMethodVis)

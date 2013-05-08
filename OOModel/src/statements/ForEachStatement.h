@@ -36,7 +36,7 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, ForEachStatement)
 
 namespace OOModel {
 
-class OOMODEL_API ForEachStatement: public Reflect<Statement>
+class OOMODEL_API ForEachStatement: public Super<Statement>
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(ForEachStatement)
 

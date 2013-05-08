@@ -36,7 +36,7 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VCharacterLiteral : public Reflect<VExpression<VCharacterLiteral, Visualization::Item,
+class OOVISUALIZATION_API VCharacterLiteral : public Super<VExpression<VCharacterLiteral, Visualization::Item,
 OOModel::CharacterLiteral>>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VCharacterLiteral, Visualization::TextStyle)

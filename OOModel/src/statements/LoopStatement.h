@@ -35,7 +35,7 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, LoopStatement)
 
 namespace OOModel {
 
-class OOMODEL_API LoopStatement: public Reflect<Statement>
+class OOMODEL_API LoopStatement: public Super<Statement>
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(LoopStatement)
 

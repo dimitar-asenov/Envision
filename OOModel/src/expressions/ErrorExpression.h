@@ -34,7 +34,7 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, ErrorExpression)
 
 namespace OOModel {
 
-class OOMODEL_API ErrorExpression : public Reflect<Expression> {
+class OOMODEL_API ErrorExpression : public Super<Expression> {
 
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(ErrorExpression)
 

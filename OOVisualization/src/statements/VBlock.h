@@ -38,7 +38,7 @@ namespace OOVisualization {
 
 class VStatementItemList;
 
-class OOVISUALIZATION_API VBlock : public Reflect<VStatementItem<VBlock, Visualization::Item, OOModel::Block>>
+class OOVISUALIZATION_API VBlock : public Super<VStatementItem<VBlock, Visualization::Item, OOModel::Block>>
 {
 	ITEM_COMMON(VBlock)
 

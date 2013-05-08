@@ -42,7 +42,7 @@ namespace OOVisualization {
 
 class VStatementItemList;
 
-class OOVISUALIZATION_API VLambdaExpression : public Reflect<VExpression<VLambdaExpression,
+class OOVISUALIZATION_API VLambdaExpression : public Super<VExpression<VLambdaExpression,
 	Visualization::LayoutProvider<>, OOModel::LambdaExpression>>
 {
 	ITEM_COMMON(VLambdaExpression)

@@ -35,7 +35,7 @@
 
 namespace Interaction {
 
-class INTERACTIONBASE_API TextAndDescription : public Reflect<Visualization::LayoutProvider<>>
+class INTERACTIONBASE_API TextAndDescription : public Super<Visualization::LayoutProvider<>>
 {
 	ITEM_COMMON(TextAndDescription)
 

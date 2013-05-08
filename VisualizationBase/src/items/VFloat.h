@@ -35,7 +35,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API VFloat : public Reflect<ItemWithNode<VFloat, TextRenderer, Model::Float>>
+class VISUALIZATIONBASE_API VFloat : public Super<ItemWithNode<VFloat, TextRenderer, Model::Float>>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VFloat, TextStyle)
 

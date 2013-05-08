@@ -33,7 +33,7 @@ DECLARE_TYPED_LIST(MODELBASE_API, Model, Reference)
 
 namespace Model {
 
-class MODELBASE_API Reference: public Reflect<Node>
+class MODELBASE_API Reference: public Super<Node>
 {
 	friend class PersistentStore;
 

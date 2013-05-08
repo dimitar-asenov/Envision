@@ -34,7 +34,7 @@ namespace Visualization {
 
 class Scene;
 
-class VISUALIZATIONBASE_API SceneHandlerItem : public Reflect<Item>
+class VISUALIZATIONBASE_API SceneHandlerItem : public Super<Item>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(SceneHandlerItem, ItemStyle)
 

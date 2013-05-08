@@ -62,7 +62,7 @@ namespace Model {
  *
  * The \file nodeMacros.h file contains many convenience macros which simplify the use of this extension mechanism.
  */
-class MODELBASE_API ExtendableNode: public Reflect<Node>
+class MODELBASE_API ExtendableNode: public Super<Node>
 {
 	public:
 

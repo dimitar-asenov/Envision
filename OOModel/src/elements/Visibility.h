@@ -37,7 +37,7 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Visibility)
 
 namespace OOModel {
 
-class OOMODEL_API Visibility :  public Reflect<Model::Node>
+class OOMODEL_API Visibility :  public Super<Model::Node>
 {
 	NODE_DECLARE_STANDARD_METHODS(Visibility)
 

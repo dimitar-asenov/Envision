@@ -35,7 +35,7 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VEmptyExpression : public Reflect<VExpression<VEmptyExpression, Visualization::Item,
+class OOVISUALIZATION_API VEmptyExpression : public Super<VExpression<VEmptyExpression, Visualization::Item,
 OOModel::EmptyExpression>>
 {
 	ITEM_COMMON(VEmptyExpression)

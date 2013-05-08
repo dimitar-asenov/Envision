@@ -35,7 +35,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API VCharacter : public Reflect<ItemWithNode<VCharacter, TextRenderer, Model::Character >>
+class VISUALIZATIONBASE_API VCharacter : public Super<ItemWithNode<VCharacter, TextRenderer, Model::Character >>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VCharacter, TextStyle)
 

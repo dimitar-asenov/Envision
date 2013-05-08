@@ -34,7 +34,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API LayoutProviderBase : public Reflect<Item>
+class VISUALIZATIONBASE_API LayoutProviderBase : public Super<Item>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(LayoutProviderBase, ItemStyle)
 

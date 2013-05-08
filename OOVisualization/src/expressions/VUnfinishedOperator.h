@@ -39,7 +39,7 @@ namespace Visualization {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VUnfinishedOperator : public Reflect<VExpression<VUnfinishedOperator,
+class OOVISUALIZATION_API VUnfinishedOperator : public Super<VExpression<VUnfinishedOperator,
 	Visualization::LayoutProvider<>, OOModel::UnfinishedOperator>>
 {
 	ITEM_COMMON(VUnfinishedOperator)

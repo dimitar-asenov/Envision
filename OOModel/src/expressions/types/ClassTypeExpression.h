@@ -34,7 +34,7 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, ClassTypeExpression)
 
 namespace OOModel {
 
-class OOMODEL_API ClassTypeExpression : public Reflect<TypeExpression>
+class OOMODEL_API ClassTypeExpression : public Super<TypeExpression>
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(ClassTypeExpression)
 

@@ -37,7 +37,7 @@
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VVisibility
-	: public Reflect<Visualization::ItemWithNode<VVisibility, Visualization::TextRenderer, OOModel::Visibility>>
+	: public Super<Visualization::ItemWithNode<VVisibility, Visualization::TextRenderer, OOModel::Visibility>>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VVisibility, Visualization::TextStyle)
 

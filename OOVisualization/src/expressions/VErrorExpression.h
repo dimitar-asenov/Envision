@@ -39,7 +39,7 @@ namespace Visualization {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VErrorExpression : public Reflect<VExpression<VErrorExpression,
+class OOVISUALIZATION_API VErrorExpression : public Super<VExpression<VErrorExpression,
 	Visualization::LayoutProvider<>, OOModel::ErrorExpression>>
 {
 

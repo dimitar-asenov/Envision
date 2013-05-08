@@ -46,7 +46,7 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Method)
 
 namespace OOModel {
 
-class OOMODEL_API Method : public Reflect<Model::ExtendableNode>
+class OOMODEL_API Method : public Super<Model::ExtendableNode>
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Method)
 

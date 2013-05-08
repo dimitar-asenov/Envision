@@ -31,7 +31,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API SVGIcon : public Reflect<Icon>
+class VISUALIZATIONBASE_API SVGIcon : public Super<Icon>
 {
 	ITEM_COMMON(SVGIcon)
 

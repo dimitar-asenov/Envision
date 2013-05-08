@@ -35,7 +35,7 @@
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VBreakStatement
-	: public Reflect<VStatementItem<VBreakStatement, Visualization::Item, OOModel::BreakStatement>>
+	: public Super<VStatementItem<VBreakStatement, Visualization::Item, OOModel::BreakStatement>>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VBreakStatement, Visualization::StaticStyle)
 

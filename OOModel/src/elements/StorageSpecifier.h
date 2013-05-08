@@ -37,7 +37,7 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, StorageSpecifier)
 
 namespace OOModel {
 
-class OOMODEL_API StorageSpecifier :  public Reflect<Model::Node>
+class OOMODEL_API StorageSpecifier :  public Super<Model::Node>
 {
 	NODE_DECLARE_STANDARD_METHODS(StorageSpecifier)
 

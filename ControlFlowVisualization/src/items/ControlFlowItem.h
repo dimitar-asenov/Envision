@@ -32,7 +32,7 @@
 
 namespace ControlFlowVisualization {
 
-class ControlFlowItem : public Reflect<Visualization::Item>
+class ControlFlowItem : public Super<Visualization::Item>
 {
 	ITEM_COMMON(ControlFlowItem)
 

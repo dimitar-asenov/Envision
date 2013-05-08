@@ -33,7 +33,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API Icon: public Reflect<Item>
+class VISUALIZATIONBASE_API Icon: public Super<Item>
 {
 	ITEM_COMMON(Icon)
 

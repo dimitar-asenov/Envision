@@ -36,7 +36,7 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VBooleanLiteral : public Reflect<VExpression<VBooleanLiteral, Visualization::Item,
+class OOVISUALIZATION_API VBooleanLiteral : public Super<VExpression<VBooleanLiteral, Visualization::Item,
 OOModel::BooleanLiteral>>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VBooleanLiteral, Visualization::TextStyle)

@@ -41,7 +41,7 @@ namespace Visualization {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VFormalTypeArgument : public Reflect<Visualization::ItemWithNode<VFormalTypeArgument,
+class OOVISUALIZATION_API VFormalTypeArgument : public Super<Visualization::ItemWithNode<VFormalTypeArgument,
 	  Visualization::LayoutProvider<>, OOModel::FormalTypeArgument>>
 {
 	ITEM_COMMON(VFormalTypeArgument)

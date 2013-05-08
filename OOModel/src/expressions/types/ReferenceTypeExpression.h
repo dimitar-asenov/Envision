@@ -32,7 +32,7 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, ReferenceTypeExpression)
 
 namespace OOModel {
 
-class OOMODEL_API ReferenceTypeExpression : public Reflect<TypeExpression>
+class OOMODEL_API ReferenceTypeExpression : public Super<TypeExpression>
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(ReferenceTypeExpression)
 

@@ -40,7 +40,7 @@ namespace Interaction {
 
 class AutoCompleteEntry;
 
-class INTERACTIONBASE_API AutoCompleteVis : public Reflect<Visualization::LayoutProvider<>>
+class INTERACTIONBASE_API AutoCompleteVis : public Super<Visualization::LayoutProvider<>>
 {
 	ITEM_COMMON(AutoCompleteVis)
 

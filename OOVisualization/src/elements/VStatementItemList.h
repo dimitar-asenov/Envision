@@ -32,7 +32,7 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VStatementItemList : public Reflect<Visualization::VList>
+class OOVISUALIZATION_API VStatementItemList : public Super<Visualization::VList>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VStatementItemList, Visualization::VListStyle)
 

@@ -41,7 +41,7 @@ namespace Visualization {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VField : public Reflect<Visualization::ItemWithNode<VField, Visualization::LayoutProvider<>,
+class OOVISUALIZATION_API VField : public Super<Visualization::ItemWithNode<VField, Visualization::LayoutProvider<>,
 	OOModel::Field >>
 {
 	ITEM_COMMON(VField)

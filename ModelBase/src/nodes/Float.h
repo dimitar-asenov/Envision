@@ -33,7 +33,7 @@ DECLARE_TYPED_LIST(MODELBASE_API, Model, Float)
 
 namespace Model {
 
-class MODELBASE_API Float: public Reflect<Node>
+class MODELBASE_API Float: public Super<Node>
 {
 	NODE_DECLARE_STANDARD_METHODS(Float)
 

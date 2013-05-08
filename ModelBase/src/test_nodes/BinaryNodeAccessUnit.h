@@ -35,7 +35,7 @@ DECLARE_TYPED_LIST(MODELBASE_API, TestNodes, BinaryNodeAccessUnit)
 
 namespace TestNodes {
 
-class MODELBASE_API BinaryNodeAccessUnit: public Reflect<BinaryNode>
+class MODELBASE_API BinaryNodeAccessUnit: public Super<BinaryNode>
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(BinaryNodeAccessUnit)
 

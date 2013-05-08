@@ -41,7 +41,7 @@ namespace Visualization {
 namespace CustomMethodCall {
 
 class CUSTOMMETHODCALL_API EmptyMethodVis
-	: public Reflect<Visualization::ItemWithNode<EmptyMethodVis, Visualization::LayoutProvider<>,
+	: public Super<Visualization::ItemWithNode<EmptyMethodVis, Visualization::LayoutProvider<>,
 	  	  OOModel::MethodCallExpression, false>>
 {
 	ITEM_COMMON(EmptyMethodVis)

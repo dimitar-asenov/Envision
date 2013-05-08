@@ -40,7 +40,7 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, FormalArgument)
 
 namespace OOModel {
 
-class OOMODEL_API FormalArgument : public Reflect<Model::ExtendableNode>
+class OOMODEL_API FormalArgument : public Super<Model::ExtendableNode>
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(FormalArgument)
 	ATTRIBUTE_OOP_NAME

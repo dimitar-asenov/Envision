@@ -31,7 +31,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API TestBox : public Reflect<TextRenderer> {
+class VISUALIZATIONBASE_API TestBox : public Super<TextRenderer> {
 
 	ITEM_COMMON_CUSTOM_STYLENAME(TestBox, TextStyle)
 

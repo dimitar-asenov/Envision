@@ -33,7 +33,7 @@ DECLARE_TYPED_LIST(MODELBASE_API, Model, Character)
 
 namespace Model {
 
-class MODELBASE_API Character: public Reflect<Node>
+class MODELBASE_API Character: public Super<Node>
 {
 	NODE_DECLARE_STANDARD_METHODS(Character)
 

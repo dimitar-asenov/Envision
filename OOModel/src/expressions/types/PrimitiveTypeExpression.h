@@ -34,7 +34,7 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, PrimitiveTypeExpression)
 
 namespace OOModel {
 
-class OOMODEL_API PrimitiveTypeExpression : public Reflect<TypeExpression>
+class OOMODEL_API PrimitiveTypeExpression : public Super<TypeExpression>
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(PrimitiveTypeExpression)
 	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, val, setVal, int)

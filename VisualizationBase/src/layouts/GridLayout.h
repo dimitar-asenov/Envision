@@ -37,7 +37,7 @@ namespace Visualization {
 
 class ModelRenderer;
 
-class VISUALIZATIONBASE_API GridLayout: public Reflect<Layout>
+class VISUALIZATIONBASE_API GridLayout: public Super<Layout>
 {
 	ITEM_COMMON(GridLayout)
 

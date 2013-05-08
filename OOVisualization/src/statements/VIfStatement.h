@@ -46,7 +46,7 @@ namespace OOVisualization {
 class VStatementItemList;
 
 class OOVISUALIZATION_API VIfStatement
-	: public Reflect<VStatementItem<VIfStatement, Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
+	: public Super<VStatementItem<VIfStatement, Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
 	  OOModel::IfStatement>>
 {
 	ITEM_COMMON(VIfStatement)

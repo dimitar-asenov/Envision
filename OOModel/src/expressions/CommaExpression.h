@@ -32,7 +32,7 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, CommaExpression)
 
 namespace OOModel {
 
-class OOMODEL_API CommaExpression: public Reflect<Expression>
+class OOMODEL_API CommaExpression: public Super<Expression>
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(CommaExpression)
 

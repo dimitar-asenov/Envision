@@ -47,7 +47,7 @@ namespace OOVisualization {
 class VStatementItemList;
 
 class OOVISUALIZATION_API VMethod
-: public Reflect<Visualization::ItemWithNode<VMethod, Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
+: public Super<Visualization::ItemWithNode<VMethod, Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
   OOModel::Method>>
 {
 	ITEM_COMMON(VMethod)

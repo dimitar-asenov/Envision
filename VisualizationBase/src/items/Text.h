@@ -32,7 +32,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API Text : public Reflect<TextRenderer>
+class VISUALIZATIONBASE_API Text : public Super<TextRenderer>
 {
 	ITEM_COMMON(Text)
 

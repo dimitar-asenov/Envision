@@ -37,7 +37,7 @@
 
 namespace ControlFlowVisualization {
 
-class CONTROLFLOWVISUALIZATION_API VListCF : public Reflect<Visualization::ItemWithNode<VListCF, ControlFlowItem,
+class CONTROLFLOWVISUALIZATION_API VListCF : public Super<Visualization::ItemWithNode<VListCF, ControlFlowItem,
 	Model::List, false>>
 {
 	ITEM_COMMON(VListCF)

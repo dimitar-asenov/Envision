@@ -42,7 +42,7 @@ namespace Visualization {
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VArrayInitializer
-	: public Reflect<VExpression<VArrayInitializer, Visualization::LayoutProvider<Visualization::GridLayout>,
+	: public Super<VExpression<VArrayInitializer, Visualization::LayoutProvider<Visualization::GridLayout>,
 	  OOModel::ArrayInitializer>>
 {
 	ITEM_COMMON(VArrayInitializer)

@@ -32,7 +32,7 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, PointerTypeExpression)
 
 namespace OOModel {
 
-class OOMODEL_API PointerTypeExpression : public Reflect<TypeExpression>
+class OOMODEL_API PointerTypeExpression : public Super<TypeExpression>
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(PointerTypeExpression)
 

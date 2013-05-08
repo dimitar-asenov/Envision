@@ -35,7 +35,7 @@
 namespace ControlFlowVisualization {
 
 class CONTROLFLOWVISUALIZATION_API VLoopStatementCF
-: public Reflect<Visualization::ItemWithNode<VLoopStatementCF, ControlFlowItem, OOModel::LoopStatement, false>>
+: public Super<Visualization::ItemWithNode<VLoopStatementCF, ControlFlowItem, OOModel::LoopStatement, false>>
 {
 	ITEM_COMMON(VLoopStatementCF)
 

@@ -41,7 +41,7 @@ namespace OOVisualization {
 
 class VReferenceExpression;
 
-class OOVISUALIZATION_API VMethodCallExpression : public Reflect<VExpression<VMethodCallExpression,
+class OOVISUALIZATION_API VMethodCallExpression : public Super<VExpression<VMethodCallExpression,
 	Visualization::LayoutProvider<>,	OOModel::MethodCallExpression>>
 {
 	ITEM_COMMON(VMethodCallExpression)

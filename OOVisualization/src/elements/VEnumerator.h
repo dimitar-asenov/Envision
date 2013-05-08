@@ -41,7 +41,7 @@ namespace Visualization {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VEnumerator : public Reflect<Visualization::ItemWithNode<VEnumerator,
+class OOVISUALIZATION_API VEnumerator : public Super<Visualization::ItemWithNode<VEnumerator,
 	Visualization::LayoutProvider<>, OOModel::Enumerator>>
 {
 	ITEM_COMMON(VEnumerator)

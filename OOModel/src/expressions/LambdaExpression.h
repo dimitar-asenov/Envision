@@ -35,7 +35,7 @@ namespace OOModel {
 
 class Method;
 
-class OOMODEL_API LambdaExpression: public Reflect<Expression>
+class OOMODEL_API LambdaExpression: public Super<Expression>
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(LambdaExpression)
 

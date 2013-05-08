@@ -45,7 +45,7 @@ namespace OOVisualization {
 class VStatementItemList;
 
 class OOVISUALIZATION_API VForEachStatement
-	: public Reflect<VStatementItem<VForEachStatement,
+	: public Super<VStatementItem<VForEachStatement,
 	  Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::ForEachStatement>>
 {
 	ITEM_COMMON(VForEachStatement)

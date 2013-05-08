@@ -36,7 +36,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API VExtendable : public Reflect<ItemWithNode<VExtendable, Item, Model::ExtendableNode>>
+class VISUALIZATIONBASE_API VExtendable : public Super<ItemWithNode<VExtendable, Item, Model::ExtendableNode>>
 {
 	ITEM_COMMON(VExtendable)
 

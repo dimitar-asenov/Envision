@@ -43,7 +43,7 @@ namespace OOVisualization {
 class VStatementItemList;
 
 class OOVISUALIZATION_API VLoopStatement
-	: public Reflect<VStatementItem<VLoopStatement, Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
+	: public Super<VStatementItem<VLoopStatement, Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
 	  OOModel::LoopStatement>>
 {
 	ITEM_COMMON(VLoopStatement)

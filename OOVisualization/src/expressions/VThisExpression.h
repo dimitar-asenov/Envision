@@ -34,7 +34,7 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VThisExpression : public Reflect<VExpression<VThisExpression, Visualization::Item,
+class OOVISUALIZATION_API VThisExpression : public Super<VExpression<VThisExpression, Visualization::Item,
 OOModel::ThisExpression>>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VThisExpression, Visualization::StaticStyle)

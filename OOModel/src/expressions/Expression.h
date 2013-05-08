@@ -39,7 +39,7 @@ namespace OOModel {
 class Class;
 class Type;
 
-class OOMODEL_API Expression : public Reflect<Model::ExtendableNode>
+class OOMODEL_API Expression : public Super<Model::ExtendableNode>
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Expression)
 

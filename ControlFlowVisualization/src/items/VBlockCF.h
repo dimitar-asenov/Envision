@@ -34,7 +34,7 @@
 
 namespace ControlFlowVisualization {
 
-class CONTROLFLOWVISUALIZATION_API VBlockCF : public Reflect<Visualization::ItemWithNode<VBlockCF, ControlFlowItem,
+class CONTROLFLOWVISUALIZATION_API VBlockCF : public Super<Visualization::ItemWithNode<VBlockCF, ControlFlowItem,
 	OOModel::Block, false>>
 {
 	ITEM_COMMON(VBlockCF)

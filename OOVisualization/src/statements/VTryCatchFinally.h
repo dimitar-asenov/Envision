@@ -45,7 +45,7 @@ namespace OOVisualization {
 class VStatementItemList;
 
 class OOVISUALIZATION_API VTryCatchFinally
-	: public Reflect<VStatementItem<VTryCatchFinally,
+	: public Super<VStatementItem<VTryCatchFinally,
 	  Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::TryCatchFinallyStatement>>
 {
 	ITEM_COMMON(VTryCatchFinally)

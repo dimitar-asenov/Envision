@@ -37,7 +37,7 @@
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VStorageSpecifier
-	: public Reflect<Visualization::ItemWithNode<VStorageSpecifier, Visualization::TextRenderer,
+	: public Super<Visualization::ItemWithNode<VStorageSpecifier, Visualization::TextRenderer,
 	  OOModel::StorageSpecifier>>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VStorageSpecifier, Visualization::TextStyle)

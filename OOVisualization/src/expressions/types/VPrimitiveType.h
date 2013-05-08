@@ -41,7 +41,7 @@ namespace Visualization {
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VPrimitiveType
-	: public Reflect<VExpression<VPrimitiveType, Visualization::Item, OOModel::PrimitiveTypeExpression>>
+	: public Super<VExpression<VPrimitiveType, Visualization::Item, OOModel::PrimitiveTypeExpression>>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VPrimitiveType, Visualization::StaticSequenceStyle)
 

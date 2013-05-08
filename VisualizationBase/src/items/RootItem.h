@@ -32,7 +32,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API RootItem : public Reflect<ItemWithNode<RootItem, Item, Model::Node, false>> {
+class VISUALIZATIONBASE_API RootItem : public Super<ItemWithNode<RootItem, Item, Model::Node, false>> {
 
 	ITEM_COMMON_CUSTOM_STYLENAME(RootItem, ItemStyle)
 

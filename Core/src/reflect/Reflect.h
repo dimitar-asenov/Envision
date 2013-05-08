@@ -40,4 +40,4 @@ class Reflect : public Base
 }
 
 // This alias is deliberitely outside of the namespace to make using this template less verbose
-template <class Base> using Reflect = Core::Reflect<Base>;
+template <class Base> using Super = Core::Reflect<Base>;

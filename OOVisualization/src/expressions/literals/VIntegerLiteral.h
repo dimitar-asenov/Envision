@@ -37,7 +37,7 @@
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VIntegerLiteral
-	: public Reflect<VExpression<VIntegerLiteral, Visualization::Item, OOModel::IntegerLiteral>>
+	: public Super<VExpression<VIntegerLiteral, Visualization::Item, OOModel::IntegerLiteral>>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VIntegerLiteral, Visualization::TextStyle)
 

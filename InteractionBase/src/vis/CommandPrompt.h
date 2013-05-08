@@ -37,7 +37,7 @@
 
 namespace Interaction {
 
-class INTERACTIONBASE_API CommandPrompt : public Reflect<Visualization::Item>
+class INTERACTIONBASE_API CommandPrompt : public Super<Visualization::Item>
 {
 	ITEM_COMMON(CommandPrompt)
 

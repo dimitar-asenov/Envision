@@ -35,7 +35,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API TextRenderer : public Reflect<Item>
+class VISUALIZATIONBASE_API TextRenderer : public Super<Item>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(TextRenderer, TextStyle)
 

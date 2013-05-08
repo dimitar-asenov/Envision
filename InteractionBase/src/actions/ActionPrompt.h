@@ -36,7 +36,7 @@
 namespace Interaction {
 class Action;
 
-class INTERACTIONBASE_API ActionPrompt : public Reflect<Visualization::Item>
+class INTERACTIONBASE_API ActionPrompt : public Super<Visualization::Item>
 {
 	ITEM_COMMON(ActionPrompt)
 

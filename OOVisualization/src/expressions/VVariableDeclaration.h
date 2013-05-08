@@ -40,7 +40,7 @@ namespace Visualization {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VVariableDeclaration : public Reflect<VExpression<VVariableDeclaration,
+class OOVISUALIZATION_API VVariableDeclaration : public Super<VExpression<VVariableDeclaration,
 	Visualization::LayoutProvider<>, OOModel::VariableDeclaration>>
 {
 	ITEM_COMMON(VVariableDeclaration)

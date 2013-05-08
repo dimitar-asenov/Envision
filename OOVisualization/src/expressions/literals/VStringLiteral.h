@@ -43,7 +43,7 @@ namespace Visualization {
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VStringLiteral
-	: public Reflect<VExpression<VStringLiteral, Visualization::LayoutProvider<>, OOModel::StringLiteral>>
+	: public Super<VExpression<VStringLiteral, Visualization::LayoutProvider<>, OOModel::StringLiteral>>
 {
 	ITEM_COMMON(VStringLiteral)
 

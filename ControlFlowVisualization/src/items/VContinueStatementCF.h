@@ -34,7 +34,7 @@
 namespace ControlFlowVisualization {
 
 class CONTROLFLOWVISUALIZATION_API VContinueStatementCF
-	: public Reflect<Visualization::ItemWithNode<VContinueStatementCF, ControlFlowItem, OOModel::ContinueStatement,
+	: public Super<Visualization::ItemWithNode<VContinueStatementCF, ControlFlowItem, OOModel::ContinueStatement,
 	  false >>
 {
 		ITEM_COMMON_CUSTOM_STYLENAME(VContinueStatementCF, ControlFlowItemStyle)
