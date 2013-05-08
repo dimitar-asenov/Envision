@@ -77,7 +77,7 @@ void HMethod::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 				m->node()->items()->append(es);
 				m->node()->model()->endModification();
 
-				m->content()->setUpdateNeeded(Visualization::Item::StandardUpdate);
+				m->setUpdateNeeded(Visualization::Item::StandardUpdate);
 				target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty));
 			}
 		}

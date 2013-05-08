@@ -32,6 +32,7 @@
 #include "items/VList.h"
 #include "items/RootItem.h"
 #include "nodes/TestBoxNode.h"
+#include "DeclarativeTest.h"
 
 #include "ModelBase/src/test_nodes/BinaryNode.h"
 #include "ModelBase/src/nodes/Text.h"
@@ -39,6 +40,49 @@
 #include "ModelBase/src/model/Model.h"
 
 namespace Visualization {
+
+//TEST(VisualizationBase, ExtendableTest)
+//{
+//	Model::Model* model = new Model::Model();
+//	Model::List* list = static_cast<Model::List*> (model->createRoot("List"));
+//
+//	model->beginModification(list, "set");
+//	TestNodes::BinaryNode* first = new TestNodes::BinaryNode();
+//	list->append(first);
+//	TestNodes::BinaryNode* second = new TestNodes::BinaryNode();
+//	list->append(second);
+//	Model::Text* third = new Model::Text();
+//	list->append(third);
+//
+//	first->name()->set("First node");
+//	TestNodes::BinaryNode* left = new TestNodes::BinaryNode();
+//	first->setLeft(left);
+//	TestNodes::BinaryNode* right = new TestNodes::BinaryNode();
+//	first->setRight(right);
+//	left->name()->set("left node");
+//	right->name()->set("right node");
+//
+//	second->name()->set("Empty node");
+//
+//	third->set("Some independent text");
+//
+//	list->append(new TestBoxNode("someText"));
+//	list->append(new TestBoxNode("stretch", true));
+//
+//	model->endModification();
+//
+//	auto top = new RootItem(list);
+//	auto scene = VisualizationManager::instance().mainScene();
+//	scene->addTopLevelItem( top );
+//	QApplication::processEvents();
+//
+//	VList* l = dynamic_cast<VList*> (top->item());
+//	l->itemAt<VExtendable>(1)->setExpanded(false);
+//	scene->scheduleUpdate();
+//	scene->listenToModel(model);
+//
+//	CHECK_CONDITION(scene);
+//}
 
 TEST(VisualizationBase, ExtendableTest)
 {
@@ -70,15 +114,13 @@ TEST(VisualizationBase, ExtendableTest)
 
 	model->endModification();
 
-	auto top = new RootItem(list);
+	auto it = new DeclarativeTest(nullptr, first, new TestBoxNode("first", true),
+																new TestBoxNode("second", Qt::darkGreen, true),
+																new TestBoxNode("third", Qt::darkRed,true),
+																new TestBoxNode("fourth", Qt::white, true));
 	auto scene = VisualizationManager::instance().mainScene();
-	scene->addTopLevelItem( top );
-	QApplication::processEvents();
-
-	VList* l = dynamic_cast<VList*> (top->item());
-	l->itemAt<VExtendable>(1)->setExpanded(false);
+	scene->addTopLevelItem(it);
 	scene->scheduleUpdate();
-	scene->listenToModel(model);
 
 	CHECK_CONDITION(scene);
 }
