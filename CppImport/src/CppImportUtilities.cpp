@@ -34,7 +34,12 @@ CppImportUtilities::CppImportUtilities(CppImportLogger* logger) : log_(logger)
 
 OOModel::Expression *CppImportUtilities::convertClangType(clang::QualType type)
 {
-	if(type.getTypePtr()->isBuiltinType())
+	if(type.getTypePtr()->getContainedAutoType())
+	{
+		log_->typeNotSupported(QString(type.getTypePtr()->getTypeClassName()));
+		return nullptr;
+	}
+	else if(type.getTypePtr()->isBuiltinType())
 	{
 		const clang::BuiltinType* builtinType = type.getTypePtr()->getAs<clang::BuiltinType>();
 		switch(builtinType->getKind())
