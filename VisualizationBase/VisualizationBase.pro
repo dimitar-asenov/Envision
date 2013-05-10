@@ -1,6 +1,7 @@
 TARGET = visualizationbase
 include(../Core/common_plugin.pri)
 DEFINES += VISUALIZATIONBASE_LIBRARY
+win32:DEFINES += WIN32 #needed for lpsolve
 win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase

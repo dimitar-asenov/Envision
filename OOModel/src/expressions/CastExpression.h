@@ -27,7 +27,7 @@
 #pragma once
 
 #include "Expression.h"
-#include "../ModelBase/src/nodes/Integer.h"
+#include "ModelBase/src/nodes/Integer.h"
 
 DECLARE_TYPED_LIST(OOMODEL_API, OOModel, CastExpression)
 

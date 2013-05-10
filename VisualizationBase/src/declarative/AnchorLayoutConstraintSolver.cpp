@@ -194,7 +194,12 @@ void AnchorLayoutConstraintSolver::initializeConstraintSolver(int numVariables)
 
 void AnchorLayoutConstraintSolver::cleanUpConstraintSolver()
 {
-	SAFE_DELETE(lp_);
+	if (lp_)
+	{
+		delete_lp(lp_);
+		lp_ = nullptr;
+	}
+
 	if (rowValues_)
 	{
 		delete[] rowValues_;
