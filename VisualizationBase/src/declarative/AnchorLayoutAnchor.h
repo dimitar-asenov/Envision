@@ -25,6 +25,7 @@
  **********************************************************************************************************************/
 
 #pragma once
+#include "../visualizationbase_api.h"
 
 namespace Visualization {
 
@@ -37,7 +38,7 @@ class FormElement;
  * Also, if there are no circular dependencies on the axis to compute, and the fixed element of this class is really
  * already fixed, the method execute can be used to calculate the position of the place element.
  */
-class AnchorLayoutAnchor {
+class VISUALIZATIONBASE_API AnchorLayoutAnchor {
 	public:
 		enum class Orientation : int {Auto, Horizontal, Vertical};
 		AnchorLayoutAnchor(float relativePlaceEdgePosition, FormElement* placeElement, int offset,

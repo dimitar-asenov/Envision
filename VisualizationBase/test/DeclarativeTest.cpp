@@ -30,10 +30,7 @@
 #include "../src/items/TestBox.h"
 #include "../src/items/VExtendable.h"
 #include "ModelBase/src/test_nodes/BinaryNode.h"
-#include "../src/declarative/GridLayoutFormElement.h"
-#include "../src/declarative/AnchorLayoutFormElement.h"
-#include "../src/declarative/SequentialLayoutFormElement.h"
-#include "../src/declarative/ShapeFormElement.h"
+#include "../src/declarative/DeclarativeItemDef.h"
 
 namespace Visualization {
 
@@ -49,14 +46,14 @@ DeclarativeTest::DeclarativeTest(Item* parent, TestNodes::BinaryNode* node, Mode
 
 void DeclarativeTest::initializeForms()
 {
-	FormElement* testItemElement = item<Symbol, I>(&I::testItem_, [](I*){return itemStyles().get();});
-	FormElement* testNodeItemGeneralElement = item<I>(&I::testNodeItemGeneral_, [](I* v){return v->testNode_;});
-	FormElement* testNodeItemElement = item<VExtendable,I>(&I::testNodeItem_, [](I* v){return v->testNode_;},
+	FormElement* testItemElement = item<Symbol>(&I::testItem_, [](I*){return itemStyles().get();});
+	FormElement* testNodeItemGeneralElement = item(&I::testNodeItemGeneral_, [](I* v){return v->testNode_;});
+	FormElement* testNodeItemElement = item<VExtendable>(&I::testNodeItem_, [](I* v){return v->testNode_;},
 																		[](I*){return VExtendable::itemStyles().get();});
-	FormElement* firstElement = item<I>(&I::firstItem_, [](I* v){return v->firstNode_;});
-	FormElement* secondElement = item<I>(&I::secondItem_, [](I* v){return v->secondNode_;});
-	FormElement* thirdElement = item<I>(&I::thirdItem_, [](I* v){return v->thirdNode_;});
-	FormElement* fourthElement = item<I>(&I::fourthItem_, [](I* v){return v->fourthNode_;});
+	FormElement* firstElement = item(&I::firstItem_, [](I* v){return v->firstNode_;});
+	FormElement* secondElement = item(&I::secondItem_, [](I* v){return v->secondNode_;});
+	FormElement* thirdElement = item(&I::thirdItem_, [](I* v){return v->thirdNode_;});
+	FormElement* fourthElement = item(&I::fourthItem_, [](I* v){return v->fourthNode_;});
 
 	// Test 0: VisualizationItemWrapperElement
 	addForm(testItemElement);

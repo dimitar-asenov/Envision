@@ -33,11 +33,7 @@
 #include "VisualizationBase/src/items/VText.h"
 #include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/items/Static.h"
-
-#include "VisualizationBase/src/declarative/AnchorLayoutFormElement.h"
-#include "VisualizationBase/src/declarative/GridLayoutFormElement.h"
-#include "VisualizationBase/src/declarative/SequentialLayoutFormElement.h"
-#include "VisualizationBase/src/declarative/ShapeFormElement.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 #include "VisualizationBase/src/items/NodeWrapper.h"
 
 #include "ModelBase/src/nodes/Node.h"
@@ -75,8 +71,8 @@ void VClass::initializeForms()
 	auto headerElement = (new GridLayoutFormElement())
 				->setHorizontalSpacing(3)->setColumnStretchFactor(3, 1)
 				->setVerticalAlignment(LayoutStyle::Alignment::Center)
-				->put(0, 0, item<Static, I>(&I::icon_, [](I* v){return &v->style()->icon();}))
-				->put(1, 0, item<VText, I>(&I::name_, [](I* v){return v->node()->nameNode();}, [](I* v)
+				->put(0, 0, item<Static>(&I::icon_, [](I* v){return &v->style()->icon();}))
+				->put(1, 0, item<VText>(&I::name_, [](I* v){return v->node()->nameNode();}, [](I* v)
 						{
 							// return the correct name style, depending on the classes visibility
 							if (v->node()->visibility() == Visibility::DEFAULT) return &v->style()->nameDefault();
@@ -85,20 +81,20 @@ void VClass::initializeForms()
 							else if (v->node()->visibility() == Visibility::PROTECTED) return &v->style()->nameProtected();
 							else throw OOVisualizationException("Unknown visibility in VClass::initializeForms");
 						}))
-				->put(2, 0, item<VList, I>(&I::typeArguments_, [](I* v){return v->node()->typeArguments();},
+				->put(2, 0, item<VList>(&I::typeArguments_, [](I* v){return v->node()->typeArguments();},
 																				[](I* v){return &v->style()->typeArguments();}))
-				->put(3, 0, item<VList, I>(&I::baseClasses_, [](I* v){return v->node()->baseClasses();},
+				->put(3, 0, item<VList>(&I::baseClasses_, [](I* v){return v->node()->baseClasses();},
 																			[](I* v){return &v->style()->baseClasses();}));
 
 	auto contentElement = (new GridLayoutFormElement())
 				->setVerticalSpacing(3)->setColumnStretchFactor(0, 1)
-				->put(0, 0, item<VStatementItemList, I>(&I::annotations_, [](I* v)
+				->put(0, 0, item<VStatementItemList>(&I::annotations_, [](I* v)
 											{return v->node()->annotations()->size() > 0 ? v->node()->annotations() : nullptr;},
 								[](I* v){return &v->style()->annotations();}))
-				->put(0, 1, item<VList, I>(&I::enumerators_, [](I* v)
+				->put(0, 1, item<VList>(&I::enumerators_, [](I* v)
 											{return v->node()->enumerators()->size() > 0 ? v->node()->enumerators() : nullptr;},
 								[](I* v){return &v->style()->enumerators();}))
-				->put(0, 2, item<PositionLayout, I>(&I::body_, [](I* v){return &v->style()->body();}));
+				->put(0, 2, item<PositionLayout>(&I::body_, [](I* v){return &v->style()->body();}));
 
 	auto fieldContainerElement = (new GridLayoutFormElement())
 				->setVerticalSpacing(3)
@@ -112,7 +108,7 @@ void VClass::initializeForms()
 								->setListOfNodes([](Item* i){return (static_cast<VClass*>(i))->defaultFields_;}));
 
 	auto shapeElement = new ShapeFormElement();
-	auto backgroundElement = item<NodeWrapper, I>(&I::fieldBackground_, [](I*){return nullptr;},
+	auto backgroundElement = item<NodeWrapper>(&I::fieldBackground_, [](I*){return nullptr;},
 																	[](I* v){return &v->style()->fieldContainer();})
 										->setCreateIfNoNode(true);
 

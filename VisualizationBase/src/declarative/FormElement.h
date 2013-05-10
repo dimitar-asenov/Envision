@@ -36,7 +36,7 @@ class ItemRegion;
 /**
  * Class to cache information about an element, that varies form item to item.
  */
-class ElementCache
+class VISUALIZATIONBASE_API ElementCache
 {
 	public:
 		ElementCache() {};

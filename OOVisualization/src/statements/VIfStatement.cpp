@@ -27,12 +27,8 @@
 #include "statements/VIfStatement.h"
 #include "../elements/VStatementItemList.h"
 
-//#include "VisualizationBase/src/layouts/PanelBorderLayout.h"
-//#include "VisualizationBase/src/layouts/SequentialLayout.h"
 #include "VisualizationBase/src/items/Static.h"
-#include "VisualizationBase/src/declarative/GridLayoutFormElement.h"
-#include "VisualizationBase/src/declarative/AnchorLayoutFormElement.h"
-#include "VisualizationBase/src/declarative/ShapeFormElement.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 #include "VisualizationBase/src/items/NodeWrapper.h"
 
 using namespace Visualization;
@@ -64,14 +60,14 @@ void VIfStatement::initializeForms()
 	auto header = (new GridLayoutFormElement())
 			->setColumnStretchFactor(1, 1)->setVerticalAlignment(LayoutStyle::Alignment::Center)
 			->setHorizontalSpacing(3)
-			->put(0, 0, item<Static, I>(&I::icon_, [](I* v){return &v->style()->icon();}))
-			->put(1, 0, item<NodeWrapper, I>(&I::condition_, [](I* v){return v->node()->condition();},
+			->put(0, 0, item<Static>(&I::icon_, [](I* v){return &v->style()->icon();}))
+			->put(1, 0, item<NodeWrapper>(&I::condition_, [](I* v){return v->node()->condition();},
 																[](I* v){return &v->style()->condition();}));
 
-	auto thenBranch = item<VStatementItemList, I>(&I::thenBranch_, [](I* v){return v->node()->thenBranch();},
+	auto thenBranch = item<VStatementItemList>(&I::thenBranch_, [](I* v){return v->node()->thenBranch();},
 																[](I* v){return &v->style()->thenBranch();});
 
-	auto elseBranch = item<VStatementItemList, I>(&I::elseBranch_, [](I* v){return v->node()->elseBranch();},
+	auto elseBranch = item<VStatementItemList>(&I::elseBranch_, [](I* v){return v->node()->elseBranch();},
 																[](I* v){return &v->style()->elseBranch();});
 
 	auto shapeElement = new ShapeFormElement();

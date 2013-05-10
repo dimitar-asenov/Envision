@@ -29,9 +29,7 @@
 #include "../elements/VStatementItemList.h"
 
 #include "VisualizationBase/src/items/Static.h"
-#include "VisualizationBase/src/declarative/GridLayoutFormElement.h"
-#include "VisualizationBase/src/declarative/AnchorLayoutFormElement.h"
-#include "VisualizationBase/src/declarative/ShapeFormElement.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 #include "VisualizationBase/src/items/NodeWrapper.h"
 
 using namespace Visualization;
@@ -50,17 +48,17 @@ void VLoopStatement::initializeForms()
 	auto header = (new GridLayoutFormElement())
 					->setHorizontalSpacing(3)->setColumnStretchFactor(3, 1)
 					->setVerticalAlignment(LayoutStyle::Alignment::Center)
-					->put(0, 0, item<Static, I>(&I::icon_, [](I* v){return &v->style()->icon();}))
-					->put(1, 0, item<NodeWrapper, I>(&I::initStep_, [](I* v){return v->node()->initStep();},
+					->put(0, 0, item<Static>(&I::icon_, [](I* v){return &v->style()->icon();}))
+					->put(1, 0, item<NodeWrapper>(&I::initStep_, [](I* v){return v->node()->initStep();},
 																					[](I* v){return &v->style()->initStep();}))
-					->put(2, 0, item<NodeWrapper, I>(&I::condition_, [](I* v){return v->node()->condition();},
+					->put(2, 0, item<NodeWrapper>(&I::condition_, [](I* v){return v->node()->condition();},
 																					[](I* v){return &v->style()->condition();}))
-					->put(3, 0, item<NodeWrapper, I>(&I::updateStep_, [](I* v){return v->node()->updateStep();},
+					->put(3, 0, item<NodeWrapper>(&I::updateStep_, [](I* v){return v->node()->updateStep();},
 																					[](I* v){return &v->style()->updateStep();}));
 
 	auto body = (new GridLayoutFormElement())
 			->setColumnStretchFactor(0, 1)
-			->put(0, 0, item<VStatementItemList, I>(&I::body_, [](I* v){return v->node()->body();},
+			->put(0, 0, item<VStatementItemList>(&I::body_, [](I* v){return v->node()->body();},
 							[](I* v){return &v->style()->body();}));
 
 	auto shapeElement = new ShapeFormElement();

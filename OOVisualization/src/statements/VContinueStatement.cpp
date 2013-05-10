@@ -27,6 +27,7 @@
 #include "statements/VContinueStatement.h"
 
 #include "OOModel/src/statements/ContinueStatement.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -41,7 +42,7 @@ VContinueStatement::VContinueStatement(Item* parent, NodeType* node, const Style
 
 void VContinueStatement::initializeForms()
 {
-	addForm(item<Static, I>(&I::vis_, [](I* v){return v->style();}));
+	addForm(item<Static>(&I::vis_, [](I* v){return v->style();}));
 }
 
 }

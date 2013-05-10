@@ -26,6 +26,7 @@
 
 #pragma once
 
+#include "../visualizationbase_api.h"
 #include "AnchorLayoutAnchor.h"
 
 struct _lprec;
@@ -42,7 +43,7 @@ class Item;
  *
  * The library used to solve the linear programming problem is lp_solve.
  */
-class AnchorLayoutConstraintSolver {
+class VISUALIZATIONBASE_API AnchorLayoutConstraintSolver {
 	public:
 		AnchorLayoutConstraintSolver();
 		virtual ~AnchorLayoutConstraintSolver();

@@ -7,7 +7,8 @@ win32:LIBS += -llogger \
 LIBS += -llpsolve55
 QT += xml \
     svg
-HEADERS += src/declarative/VisualizationItemWrapperFormElement.h \
+HEADERS += src/declarative/DeclarativeItemDef.h \
+    src/declarative/VisualizationItemWrapperFormElement.h \
     src/declarative/NodeWithVisualizationItemWrapperFormElement.h \
     src/declarative/NodeItemWrapperFormElement.h \
     src/declarative/ItemWrapperFormElement.h \

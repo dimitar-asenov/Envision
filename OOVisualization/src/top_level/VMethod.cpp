@@ -32,11 +32,7 @@
 #include "VisualizationBase/src/items/VText.h"
 #include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/items/Line.h"
-
-#include "VisualizationBase/src/declarative/AnchorLayoutFormElement.h"
-#include "VisualizationBase/src/declarative/GridLayoutFormElement.h"
-#include "VisualizationBase/src/declarative/SequentialLayoutFormElement.h"
-#include "VisualizationBase/src/declarative/ShapeFormElement.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -52,10 +48,10 @@ void VMethod::initializeForms()
 {
 	auto headerElement = (new GridLayoutFormElement())
 		->setHorizontalSpacing(3)->setVerticalAlignment(LayoutStyle::Alignment::Center)->setColumnStretchFactor(4, 1)
-		->put(0, 0, item<Static, I>(&I::icon_, [](I* v){return &v->style()->icon();}))
-		->put(1, 0, item<VList, I>(&I::results_, [](I* v){return v->node()->results();},
+		->put(0, 0, item<Static>(&I::icon_, [](I* v){return &v->style()->icon();}))
+		->put(1, 0, item<VList>(&I::results_, [](I* v){return v->node()->results();},
 											[](I* v){return &v->style()->results();}))
-		->put(2, 0, item<VText, I>(&I::name_, [](I* v){return v->node()->nameNode();}, [](I* v)
+		->put(2, 0, item<VText>(&I::name_, [](I* v){return v->node()->nameNode();}, [](I* v)
 				{
 					// return the correct name style according to visibility and static type of the method
 					if (v->node()->storageSpecifier() == StorageSpecifier::INSTANCE_VARIABLE)
@@ -76,22 +72,22 @@ void VMethod::initializeForms()
 					}
 					else throw OOVisualizationException("Unknown static type in VMethod::determineChildren");
 				}))
-		->put(3, 0, item<VList, I>(&I::typeArguments_, [](I* v){return v->node()->typeArguments();},
+		->put(3, 0, item<VList>(&I::typeArguments_, [](I* v){return v->node()->typeArguments();},
 											[](I* v){return &v->style()->arguments();}))
-		->put(4, 0, item<VList, I>(&I::arguments_, [](I* v){return v->node()->arguments();},
+		->put(4, 0, item<VList>(&I::arguments_, [](I* v){return v->node()->arguments();},
 											[](I* v){return &v->style()->arguments();}));
 
 	auto addonsElement = (new SequentialLayoutFormElement())
 								->setVertical()
 								->setListOfItems([](Item* i){return (static_cast<VMethod*>(i))->addOnItems().values();});
 
-	auto annotationsElement = item<VStatementItemList, I>(&I::annotations_, [](I* v)
+	auto annotationsElement = item<VStatementItemList>(&I::annotations_, [](I* v)
 											{return v->node()->annotations()->size() > 0 ? v->node()->annotations() : nullptr;},
 											[](I* v){return &v->style()->annotations();});
 
-	auto signatureLineElement = item<Line, I>(&I::signatureLine_, [](I* v){return &v->style()->signatureLine();});
+	auto signatureLineElement = item<Line>(&I::signatureLine_, [](I* v){return &v->style()->signatureLine();});
 
-	auto bodyElement = item<VStatementItemList, I>(&I::body_, [](I* v){return v->node()->items();},
+	auto bodyElement = item<VStatementItemList>(&I::body_, [](I* v){return v->node()->items();},
 											[](I* v){return &v->style()->body();});
 
 	auto contentElement = (new GridLayoutFormElement())

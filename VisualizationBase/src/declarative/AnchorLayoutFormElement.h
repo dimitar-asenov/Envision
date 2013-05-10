@@ -36,7 +36,7 @@ namespace Visualization {
 
 class AnchorLayoutConstraintSolver;
 
-class AnchorLayoutFormElement : public LayoutFormElement {
+class VISUALIZATIONBASE_API AnchorLayoutFormElement : public LayoutFormElement {
 		FLUENT_ELEMENT_INTERFACE(AnchorLayoutFormElement);
 
 	public:

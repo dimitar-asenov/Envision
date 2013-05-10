@@ -26,6 +26,7 @@
 
 #include "items/VList.h"
 #include "items/Text.h"
+#include "../src/declarative/DeclarativeItemDef.h"
 
 namespace Visualization {
 
