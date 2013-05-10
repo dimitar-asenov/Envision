@@ -27,6 +27,7 @@
 #include "statements/VContinueStatement.h"
 
 #include "OOModel/src/statements/ContinueStatement.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 
 using namespace Visualization;
 using namespace OOModel;
@@ -36,24 +37,12 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VContinueStatement, "item")
 
 VContinueStatement::VContinueStatement(Item* parent, NodeType* node, const StyleType* style) :
-	Super(parent, node, style),
-	vis_(new Static(this, style))
-{
-}
+	Super(parent, node, style)
+{}
 
-VContinueStatement::~VContinueStatement()
+void VContinueStatement::initializeForms()
 {
-	SAFE_DELETE_ITEM(vis_);
-}
-
-void VContinueStatement::determineChildren()
-{
-	vis_->setStyle( style());
-}
-
-void VContinueStatement::updateGeometry(int availableWidth, int availableHeight)
-{
-	Item::updateGeometry(vis_, availableWidth, availableHeight);
+	addForm(item<Static>(&I::vis_, [](I* v){return v->style();}));
 }
 
 }

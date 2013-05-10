@@ -30,6 +30,7 @@
 #include "VListCFStyle.h"
 
 #include "OOVisualization/src/top_level/VMethodStyle.h"
+#include "VisualizationBase/src/layouts/PanelBorderLayoutStyle.h"
 
 namespace ControlFlowVisualization {
 
@@ -37,13 +38,16 @@ class CONTROLFLOWVISUALIZATION_API VMethodCFStyle : public OOVisualization::VMet
 {
 	private:
 		VListCFStyle contentCF_;
+		Visualization::PanelBorderLayoutStyle layout_;
 
 	public:
 		void load(Visualization::StyleLoader& sl);
 
 		const VListCFStyle& contentCF() const;
+		const Visualization::PanelBorderLayoutStyle& layout() const;
 };
 
+inline const Visualization::PanelBorderLayoutStyle& VMethodCFStyle::layout() const { return layout_; }
 inline const VListCFStyle& VMethodCFStyle::contentCF() const { return contentCF_; }
 
 }

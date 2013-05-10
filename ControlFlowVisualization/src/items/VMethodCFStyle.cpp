@@ -31,6 +31,8 @@ namespace ControlFlowVisualization {
 void VMethodCFStyle::load(Visualization::StyleLoader& sl)
 {
 	VMethodStyle::load(sl);
+
+	sl.load("layout", layout_);
 	sl.load("contentCF", contentCF_);
 }
 

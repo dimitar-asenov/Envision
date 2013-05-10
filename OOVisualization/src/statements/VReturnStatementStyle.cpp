@@ -32,7 +32,6 @@ void VReturnStatementStyle::load(Visualization::StyleLoader& sl)
 {
 	ItemStyle::load(sl);
 
-	sl.load("layout", layout_);
 	sl.load("symbol", symbol_);
 	sl.load("values", values_);
 }

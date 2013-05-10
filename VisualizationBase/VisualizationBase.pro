@@ -4,12 +4,31 @@ DEFINES += VISUALIZATIONBASE_LIBRARY
 win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase
+LIBS += -llpsolve55
 QT += xml \
     svg
-HEADERS += src/nodes/TestBoxNode.h \
+HEADERS += src/declarative/DeclarativeItemDef.h \
+    src/declarative/VisualizationItemWrapperFormElement.h \
+    src/declarative/NodeWithVisualizationItemWrapperFormElement.h \
+    src/declarative/NodeItemWrapperFormElement.h \
+    src/declarative/ItemWrapperFormElement.h \
+    src/declarative/SequentialLayoutFormElement.h \
+    src/declarative/GridLayoutFormElement.h \
+    src/declarative/AnchorLayoutFormElement.h \
+    src/declarative/LayoutFormElement.h \
+    src/declarative/ShapeFormElement.h \
+    src/declarative/FormElement.h \
+    src/items/NodeWrapper.h \
+    src/declarative/Enumerations.h \
+    src/nodes/TestBoxNode.h \
     src/items/TestBox.h \
     src/items/LineStyle.h \
     src/items/Line.h \
+    src/declarative/AnchorLayoutConstraintSolver.h \
+    src/declarative/AnchorLayoutAnchor.h \
+    test/DeclarativeTest.h \
+    src/declarative/DeclarativeItem.h \
+    src/declarative/DeclarativeItemBase.h \
     src/items/Mipmap.h \
     src/items/VisualizationAddOn.h \
     src/shapes/SvgShapeStyle.h \
@@ -90,7 +109,17 @@ HEADERS += src/nodes/TestBoxNode.h \
     src/visualizationbase_api.h \
     test/BoxTest.h \
     src/visualizationbase.h
-SOURCES += src/nodes/TestBoxNode.cpp \
+SOURCES += src/declarative/SequentialLayoutFormElement.cpp \
+    src/declarative/GridLayoutFormElement.cpp \
+    src/declarative/AnchorLayoutFormElement.cpp \
+    src/declarative/ShapeFormElement.cpp \
+    src/declarative/FormElement.cpp \
+    src/items/NodeWrapper.cpp \
+    src/declarative/AnchorLayoutAnchor.cpp \
+    src/declarative/AnchorLayoutConstraintSolver.cpp \
+    test/DeclarativeTest.cpp \
+    src/declarative/DeclarativeItemBase.cpp \
+    src/nodes/TestBoxNode.cpp \
     src/items/TestBox.cpp \
     src/items/LineStyle.cpp \
     src/items/Line.cpp \

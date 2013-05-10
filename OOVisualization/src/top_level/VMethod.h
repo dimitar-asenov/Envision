@@ -32,13 +32,12 @@
 #include "OOModel/src/top_level/Method.h"
 
 #include "VisualizationBase/src/items/ItemWithNode.h"
-#include "VisualizationBase/src/items/LayoutProvider.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
 
 namespace Visualization {
 	class VText;
 	class VList;
 	class Static;
-	class PanelBorderLayout;
 	class Line;
 }
 
@@ -47,27 +46,22 @@ namespace OOVisualization {
 class VStatementItemList;
 
 class OOVISUALIZATION_API VMethod
-: public Super<Visualization::ItemWithNode<VMethod, Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
-  OOModel::Method>>
+: public Super<Visualization::ItemWithNode<VMethod, Visualization::DeclarativeItem<VMethod>, OOModel::Method>>
 {
 	ITEM_COMMON(VMethod)
 
 	public:
 		VMethod(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		virtual ~VMethod();
 
 		Visualization::VText* name() const;
 		VStatementItemList* body() const;
 		VStatementItemList* annotations() const;
-		Visualization::SequentialLayout* content() const;
 		Visualization::VList* typeArguments() const;
 		Visualization::VList* arguments() const;
 
-	protected:
-		void determineChildren();
+		static void initializeForms();
 
 	private:
-		Visualization::SequentialLayout* header_{};
 		Visualization::Static* icon_{};
 		Visualization::VText* name_{};
 		Visualization::VList* typeArguments_{};
@@ -76,14 +70,12 @@ class OOVISUALIZATION_API VMethod
 		VStatementItemList* body_{};
 		VStatementItemList* annotations_{};
 		Visualization::SequentialLayout* addons_{};
-		Visualization::SequentialLayout* content_{};
 		Visualization::VList* results_{};
 };
 
 inline Visualization::VText* VMethod::name() const { return name_; }
 inline VStatementItemList* VMethod::body() const { return body_; }
 inline VStatementItemList* VMethod::annotations() const { return annotations_; }
-inline Visualization::SequentialLayout* VMethod::content() const { return content_; }
 inline Visualization::VList* VMethod::typeArguments() const { return typeArguments_; }
 inline Visualization::VList* VMethod::arguments() const { return arguments_; }
 
