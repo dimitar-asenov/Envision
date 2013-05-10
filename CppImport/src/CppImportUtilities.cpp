@@ -151,7 +151,10 @@ OOModel::Expression *CppImportUtilities::convertClangType(clang::QualType type)
 		return ooRef;
 	}
 	else
+	{
+		log_->typeNotSupported(QString(type.getTypePtr()->getTypeClassName()));
 		return nullptr;
+	}
 }
 
 OOModel::BinaryOperation::OperatorTypes CppImportUtilities::convertClangOpcode
