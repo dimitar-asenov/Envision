@@ -137,7 +137,8 @@ public class NodeDescriptors {
 				{"Integer","opr"}});
 		initializerMap.put("CastExpression", new String[][]{
 				{"Expression","castType"},
-				{"Expression","expr"}});
+				{"Expression","expr"},
+				{"Integer","cKind"}});
 		initializerMap.put("MethodCallExpression", new String[][]{
 				{"ReferenceExpression","ref"},
 				{"TypedListOfExpression","arguments"}});

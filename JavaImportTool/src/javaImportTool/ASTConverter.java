@@ -668,6 +668,7 @@ public class ASTConverter {
 		{
 			CastExpression ce = (CastExpression) e;
 			node = new Node(null, "CastExpression", name);
+			node.child("cKind").setLongValue(0); // Make this a normal cast
 			node.setChild("castType", typeExpression(ce.getType(),"castType"));
 			node.setChild("expr", expression(ce.getExpression(),"expr"));
 		} else if (e instanceof CharacterLiteral)
