@@ -709,9 +709,8 @@ bool ClangAstVisitor::VisitDeclRefExpr(clang::DeclRefExpr* declRefExpr)
 	return true;
 }
 
-bool ClangAstVisitor::VisitCXXUnresolvedConstructorExpr(clang::CXXUnresolvedConstructExpr* unresolvedConstructorExpr)
+bool ClangAstVisitor::VisitCXXUnresolvedConstructorExpr(clang::CXXUnresolvedConstructExpr*)
 {
-	unresolvedConstructorExpr->getBitField();
 	ooExprStack_.push(new OOModel::Expression());
 	return true;
 }
