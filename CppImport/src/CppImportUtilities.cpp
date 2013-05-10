@@ -37,7 +37,8 @@ OOModel::Expression *CppImportUtilities::convertClangType(clang::QualType type)
 	if(type.getTypePtr()->getContainedAutoType())
 	{
 		log_->typeNotSupported(QString(type.getTypePtr()->getTypeClassName()));
-		return nullptr;
+		// TODO: return a correct type
+		return new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::VOID);
 	}
 	else if(type.getTypePtr()->isBuiltinType())
 	{

@@ -1,5 +1,5 @@
 #include "test.h"
-#include <iostream>
+//#include <iostream>
 //TEst comment
 
 int NOCLASSFIELD;
@@ -103,6 +103,10 @@ private:
         InAnotherClass* getNull(){
             return 0;
         }
+        void test() {
+            auto cl = new InAnotherClass();
+            cl->getClass();
+        }
     };
 
 };
@@ -199,7 +203,8 @@ int Header::headerFunc()
         if(k>10)
             break;
     }
-    return 0;
+    auto r = k;
+    return r;
 }
 
 int Header::headerFunc(int k)
