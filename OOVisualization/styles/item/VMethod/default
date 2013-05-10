@@ -13,11 +13,6 @@
 			</color>
 		</backgroundBrush>
 	</shape>
-	<layout prototypes="layout/PanelBorderLayout/default">
-		<shape prototypes="shape/Box/default" />
-		<isLeftProtrusionFixed>true</isLeftProtrusionFixed>
-		<leftProtrusion>10</leftProtrusion>
-	</layout>
 	<nameDefault prototypes="default.nameDefault" />
 	<namePublic prototypes="default.namePublic" />
 	<namePrivate prototypes="default.namePrivate" />

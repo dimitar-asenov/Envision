@@ -63,7 +63,6 @@
 #include "VisualizationBase/src/layouts/PanelBorderLayout.h"
 #include "VisualizationBase/src/layouts/PositionLayout.h"
 #include "VisualizationBase/src/VisualizationManager.h"
-#include "VisualizationBase/test/DeclarativeTest.h"
 
 #include "ModelBase/src/test_nodes/TestNodesInitializer.h"
 

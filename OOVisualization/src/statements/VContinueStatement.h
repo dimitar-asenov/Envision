@@ -42,11 +42,10 @@ class OOVISUALIZATION_API VContinueStatement
 
 	public:
 		VContinueStatement(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		virtual ~VContinueStatement();
 		static void initializeForms();
 
 	private:
-		Visualization::Static* vis_;
+		Visualization::Static* vis_{};
 };
 
 }

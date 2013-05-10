@@ -22,12 +22,6 @@
 		</backgroundBrush>
 		<cornerRadius>4</cornerRadius>
 	</shape>
-	<layout prototypes="layout/PanelBorderLayout/default">
-		<shape prototypes="shape/Box/default" />
-		<leftInnerMargin>1</leftInnerMargin>
-		<rightInnerMargin>0</rightInnerMargin>
-		<bottomInnerMargin>0</bottomInnerMargin>
-	</layout>
 	<header prototypes="layout/SequentialLayout/default">
 		<spaceBetweenElements>5</spaceBetweenElements>
 	</header>

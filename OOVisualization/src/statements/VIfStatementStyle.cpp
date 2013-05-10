@@ -32,7 +32,6 @@ void VIfStatementStyle::load(Visualization::StyleLoader& sl)
 {
 	ItemStyle::load(sl);
 
-	sl.load("layout", layout_);
 	sl.load("header", header_);
 	sl.load("icon", icon_);
 	sl.load("condition", condition_);

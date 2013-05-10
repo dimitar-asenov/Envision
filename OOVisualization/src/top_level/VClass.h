@@ -59,6 +59,8 @@ class OOVISUALIZATION_API VClass
 
 		static void initializeForms();
 		int determineForm() override;
+
+	protected:
 		void determineChildren() override;
 
 	private:

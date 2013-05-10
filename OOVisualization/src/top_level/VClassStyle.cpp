@@ -32,7 +32,6 @@ void VClassStyle::load(Visualization::StyleLoader& sl)
 {
 	ItemStyle::load(sl);
 
-	sl.load("layout", layout_);
 	sl.load("nameDefault", nameDefault_);
 	sl.load("namePublic", namePublic_);
 	sl.load("namePrivate", namePrivate_);

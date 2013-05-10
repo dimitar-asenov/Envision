@@ -36,15 +36,8 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VContinueStatement, "item")
 
 VContinueStatement::VContinueStatement(Item* parent, NodeType* node, const StyleType* style) :
-	Super(parent, node, style),
-	vis_(new Static(this, style))
-{
-}
-
-VContinueStatement::~VContinueStatement()
-{
-	SAFE_DELETE_ITEM(vis_);
-}
+	Super(parent, node, style)
+{}
 
 void VContinueStatement::initializeForms()
 {

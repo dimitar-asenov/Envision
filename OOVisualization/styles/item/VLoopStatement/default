@@ -28,7 +28,6 @@
 		</backgroundBrush>
 		<cornerRadius>4</cornerRadius>
 	</shape>
-	<layout prototypes="layout/PanelBorderLayout/default" />
 	<header prototypes="layout/SequentialLayout/default">
 		<spaceBetweenElements>5</spaceBetweenElements>
 	</header>

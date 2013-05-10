@@ -41,7 +41,6 @@ namespace OOVisualization {
 class OOVISUALIZATION_API VMethodStyle : public Visualization::ItemStyle
 {
 	private:
-		Visualization::PanelBorderLayoutStyle layout_;
 		Visualization::TextStyle nameDefault_;
 		Visualization::TextStyle namePublic_;
 		Visualization::TextStyle namePrivate_;
@@ -64,7 +63,6 @@ class OOVISUALIZATION_API VMethodStyle : public Visualization::ItemStyle
 	public:
 		void load(Visualization::StyleLoader& sl);
 
-		const Visualization::PanelBorderLayoutStyle& layout() const;
 		const Visualization::TextStyle& nameDefault() const;
 		const Visualization::TextStyle& namePublic() const;
 		const Visualization::TextStyle& namePrivate() const;
@@ -85,7 +83,6 @@ class OOVISUALIZATION_API VMethodStyle : public Visualization::ItemStyle
 		const Visualization::VListStyle& results() const;
 };
 
-inline const Visualization::PanelBorderLayoutStyle& VMethodStyle::layout() const { return layout_; }
 inline const Visualization::TextStyle& VMethodStyle::nameDefault() const { return nameDefault_; }
 inline const Visualization::TextStyle& VMethodStyle::namePublic() const { return namePublic_; }
 inline const Visualization::TextStyle& VMethodStyle::namePrivate() const { return namePrivate_; }
