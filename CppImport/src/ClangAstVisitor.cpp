@@ -703,8 +703,9 @@ bool ClangAstVisitor::VisitStringLiteral(clang::StringLiteral* stringLiteral)
 
 bool ClangAstVisitor::VisitDeclRefExpr(clang::DeclRefExpr* declRefExpr)
 {
+	// TODO: namespace resolution
 	OOModel::ReferenceExpression* refExpr = new OOModel::ReferenceExpression();
-	refExpr->setName(QString::fromStdString(declRefExpr->getNameInfo().getName().getAsString()));
+	refExpr->setName(QString::fromStdString(declRefExpr->getDecl()->getNameAsString()));
 	ooExprStack_.push(refExpr);
 	return true;
 }

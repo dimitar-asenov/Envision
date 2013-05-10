@@ -1,5 +1,5 @@
 #include "test.h"
-//#include <iostream>
+#include <iostream>
 //TEst comment
 
 int NOCLASSFIELD;
@@ -12,6 +12,7 @@ enum SomeNameEnum {FIRST};
 
 namespace TestSpace{
 namespace TestSpace {
+int k=0;
 
 int NameSpaceMethod(){
     return 100;
@@ -138,7 +139,7 @@ class OneMore{
             oneMoreVariable = oneMoreVariable+300;
         }
         else if(!oneMoreVariable)
-            return 0;
+            return TestSpace::TestSpace::k;
         return 100;
     }
 };
