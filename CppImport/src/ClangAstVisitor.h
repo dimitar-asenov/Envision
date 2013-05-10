@@ -57,11 +57,19 @@ class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 
 		bool TraverseLambdaExpr(clang::LambdaExpr* lambdaExpr);
 
+
 		bool TraverseStmt(clang::Stmt *S);
 		bool TraverseVarDecl(clang::VarDecl* varDecl);
 
 		bool TraverseEnumDecl(clang::EnumDecl* enumDecl);
 
+		// casts
+		bool TraverseCStyleCastExpr(clang::CStyleCastExpr* castExpr);
+		bool TraverseCXXConstCastExpr(clang::CXXConstCastExpr* castExpr);
+		bool TraverseCXXDynamicCastExpr(clang::CXXDynamicCastExpr* castExpr);
+		bool TraverseCXXReinterpretCastExpr(clang::CXXReinterpretCastExpr* castExpr);
+		bool TraverseCXXStaticCastExpr(clang::CXXStaticCastExpr* castExpr);
+		bool TraverseCXXFunctionalCastExpr(clang::CXXFunctionalCastExpr* castExpr);
 
 		// binary ops
 		bool TraverseBinMul(clang::BinaryOperator* binOp);
@@ -139,6 +147,8 @@ class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 
 		bool TraverseUnaryOp(clang::UnaryOperator* unaryOperator);
 
+		bool TraverseExplCastExpr(clang::ExplicitCastExpr* castExpr, OOModel::CastExpression::CastKind kind);
+
 		QStack<Model::Node*> ooStack_;
 		QStack<OOModel::Expression*> ooExprStack_;
 		QStack<OOModel::SwitchCase*> ooSwitchCaseStack_;
@@ -210,7 +220,6 @@ inline bool ClangAstVisitor::TraverseBinXorAssign(clang::CompoundAssignOperator*
 inline bool ClangAstVisitor::TraverseBinOrAssign(clang::CompoundAssignOperator* binOp)
 {return TraverseAssignment(binOp);}
 
-
 //unary ops
 inline bool ClangAstVisitor::TraverseUnaryPostInc(clang::UnaryOperator* uOp)
 {return TraverseUnaryOp(uOp);}
@@ -232,5 +241,19 @@ inline bool ClangAstVisitor::TraverseUnaryNot(clang::UnaryOperator* uOp)
 {return TraverseUnaryOp(uOp);}
 inline bool ClangAstVisitor::TraverseUnaryLNot(clang::UnaryOperator* uOp)
 {return TraverseUnaryOp(uOp);}
+
+// casts
+inline bool ClangAstVisitor::TraverseCStyleCastExpr(clang::CStyleCastExpr* castExpr)
+{return TraverseExplCastExpr(castExpr, OOModel::CastExpression::CastKind::Default); }
+inline bool ClangAstVisitor::TraverseCXXConstCastExpr(clang::CXXConstCastExpr* castExpr)
+{return TraverseExplCastExpr(castExpr, OOModel::CastExpression::CastKind::ConstCast); }
+inline bool ClangAstVisitor::TraverseCXXDynamicCastExpr(clang::CXXDynamicCastExpr* castExpr)
+{return TraverseExplCastExpr(castExpr, OOModel::CastExpression::CastKind::DynamicCast); }
+inline bool ClangAstVisitor::TraverseCXXReinterpretCastExpr(clang::CXXReinterpretCastExpr* castExpr)
+{return TraverseExplCastExpr(castExpr, OOModel::CastExpression::CastKind::ReinterpretCast); }
+inline bool ClangAstVisitor::TraverseCXXStaticCastExpr(clang::CXXStaticCastExpr* castExpr)
+{return TraverseExplCastExpr(castExpr, OOModel::CastExpression::CastKind::StaticCast); }
+inline bool ClangAstVisitor::TraverseCXXFunctionalCastExpr(clang::CXXFunctionalCastExpr* castExpr)
+{return TraverseExplCastExpr(castExpr, OOModel::CastExpression::CastKind::FunctionalCast); }
 
 }

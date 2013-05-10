@@ -1,5 +1,5 @@
 #include "test.h"
-//#include <iostream>
+#include <iostream>
 //TEst comment
 
 int NOCLASSFIELD;
@@ -160,6 +160,15 @@ public:
         }
         return value;
 
+    }
+};
+
+
+class Casts {
+    enum TestValues {ZERO, ONE, TWO};
+public:
+    int returnZero() {
+        return static_cast<int>(ZERO);
     }
 };
 

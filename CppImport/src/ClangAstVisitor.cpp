@@ -958,4 +958,27 @@ bool ClangAstVisitor::TraverseUnaryOp(clang::UnaryOperator* unaryOperator)
 	return true;
 }
 
+bool ClangAstVisitor::TraverseExplCastExpr(clang::ExplicitCastExpr* castExpr, OOModel::CastExpression::CastKind kind)
+{
+	OOModel::CastExpression* ooCast = new OOModel::CastExpression(kind);
+	// setType to cast to
+	ooCast->setType(utils_->convertClangType(castExpr->getType()));
+	// visit subexpr
+	bool inBody = inBody_;
+	inBody_ = false;
+	TraverseStmt(castExpr->getSubExprAsWritten());
+	if(!ooExprStack_.empty())
+		ooCast->setExpr(ooExprStack_.pop());
+
+	inBody_ = inBody;
+
+	if(!inBody_)
+	{
+		ooExprStack_.push(ooCast);
+		return true;
+	}
+	log_->writeError(className_,QString("uknown where to put castExpr"),QString("CastExpr"),castExpr);
+	return true;
+}
+
 } // namespace cppimport
