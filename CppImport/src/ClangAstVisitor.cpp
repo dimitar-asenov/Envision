@@ -472,11 +472,12 @@ bool ClangAstVisitor::TraverseLambdaExpr(clang::LambdaExpr* lambdaExpr)
 		ooLambda->arguments()->append(arg);
 	}
 	// insert in model
-	if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
+	if(!inBody_)
+			ooExprStack_.push(ooLambda);
+	else if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
 		itemList->append(ooLambda);
 	else
 		log_->writeError(className_,QString("unknown where to put lambdaexpr"),QString("LambdaExpr"),lambdaExpr);
-
 
 	return true;
 }
@@ -787,6 +788,15 @@ bool ClangAstVisitor::VisitMemberExpr(clang::MemberExpr* memberExpr)
 		ooRef->ref()->setName(QString::fromStdString(memberExpr->getMemberDecl()->getNameAsString()));
 		ooExprStack_.push(ooRef);
 	}
+	return true;
+}
+
+bool ClangAstVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constructExpr)
+{
+	// if is elidable we can directly visit the children
+	if(constructExpr->isElidable())
+		return TraverseStmt(*(constructExpr->child_begin()));
+	log_->writeError(className_,QString("Not handled yet"),QString("CXXConstructExpr"),constructExpr);
 	return true;
 }
 

@@ -131,6 +131,8 @@ class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 		bool VisitCXXThisExpr(clang::CXXThisExpr* thisExpr);
 		bool VisitMemberExpr(clang::MemberExpr* memberExpr);
 
+		bool TraverseCXXConstructExpr(clang::CXXConstructExpr* constructExpr);
+
 		bool TraverseCaseStmt(clang::CaseStmt* caseStmt);
 		bool TraverseDefaultStmt(clang::DefaultStmt* defaultStmt);
 
