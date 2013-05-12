@@ -874,8 +874,13 @@ bool ClangAstVisitor::shouldUseDataRecursionFor(clang::Stmt*)
 
 bool ClangAstVisitor::TraverseBinaryOp(clang::BinaryOperator* binaryOperator)
 {
+	clang::BinaryOperatorKind opcode = binaryOperator->getOpcode();
+	if(opcode == clang::BO_PtrMemD || opcode == clang::BO_PtrMemI || opcode == clang::BO_Comma)
+	{
+		log_->writeError(className_,QString("Binary OP NOT SUPPORTED"),QString("BinaryOperator"),binaryOperator);
+	}
 	OOModel::BinaryOperation::OperatorTypes ooOperatorType =
-			utils_->convertClangOpcode(binaryOperator->getOpcode());
+			utils_->convertClangOpcode(opcode);
 	OOModel::BinaryOperation* ooBinOp = new OOModel::BinaryOperation();
 	// save inBody_ value for recursive expressions
 	bool inBody = inBody_;
@@ -942,8 +947,14 @@ bool ClangAstVisitor::TraverseAssignment(clang::BinaryOperator* binaryOperator)
 
 bool ClangAstVisitor::TraverseUnaryOp(clang::UnaryOperator* unaryOperator)
 {
+	clang::UnaryOperatorKind opcode = unaryOperator->getOpcode();
+	if(opcode == clang::UO_Extension || opcode == clang::UO_Real || opcode == clang::UO_Imag)
+	{
+		log_->writeError(className_,QString("UNARY OP NOT SUPPORTED"),QString("UnaryOperator"),unaryOperator);
+		unaryOperator->dump();
+	}
 	OOModel::UnaryOperation::OperatorTypes ooOperatorType =
-			utils_->convertUnaryOpcode(unaryOperator->getOpcode());
+			utils_->convertUnaryOpcode(opcode);
 	OOModel::UnaryOperation* ooUnaryOp = new OOModel::UnaryOperation();
 	// save inBody_ value for recursive expressions
 	bool inBody = inBody_;

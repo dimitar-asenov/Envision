@@ -198,7 +198,9 @@ int Header::headerFunc()
     char someChar = 'a';
     int* newArray = new int[20];
     int k;
-    for(int i=0; i<100;i++)
+    int g=10;
+    k = (g++, g+1);
+    for(int i=0, someChar = 'c'; i<100;i++)
     {
         k = i;
         if(k>10)
