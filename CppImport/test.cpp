@@ -24,6 +24,10 @@ class Testing {
 public:
     int i;
     Testing(){}
+    ~Testing(){
+        i=0;
+    }
+
     enum AnEnum {FIRST,SECOND=(100+25),THIRD};
     int myFunction(int argument1, bool argument2){
         enum FuncEnum {LOL,LOL1};

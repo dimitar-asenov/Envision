@@ -146,9 +146,6 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl)
 
 bool ClangAstVisitor::TraverseCXXMethodDecl(clang::CXXMethodDecl* methodDecl)
 {
-	// Constructors not yet handled
-	if(llvm::isa<clang::CXXConstructorDecl>(methodDecl))
-		return true;
 	OOModel::Method* ooMethod = trMngr_->insertMethodDecl(methodDecl);
 	if(!ooMethod)
 	{
@@ -222,6 +219,18 @@ bool ClangAstVisitor::TraverseFunctionDecl(clang::FunctionDecl* functionDecl)
 							  QString("FunctionDecl"),functionDecl);
 	}
 	return true;
+}
+
+bool ClangAstVisitor::TraverseCXXConstructorDecl(clang::CXXConstructorDecl* constructorDecl)
+{
+	log_->writeError(className_,QString("CXXConstructor not supported"),QString("CXXConstructorDecl"),constructorDecl);
+	return TraverseCXXMethodDecl(constructorDecl);
+}
+
+bool ClangAstVisitor::TraverseCXXDestructorDecl(clang::CXXDestructorDecl* destructorDecl)
+{
+	log_->writeError(className_,QString("CXXDestructor not supported"),QString("CXXDestructorDecl"),destructorDecl);
+	return TraverseCXXMethodDecl(destructorDecl);
 }
 
 bool ClangAstVisitor::TraverseIfStmt(clang::IfStmt* ifStmt)
