@@ -27,7 +27,26 @@
 
 namespace Core {
 
-EnvisionException::EnvisionException(const QString& message) : msg_{message} {}
+bool& EnvisionException::assertOnThrow()
+{
+#if defined(DEBUG)
+	// This helps with debugging duing development
+	static bool aot = true;
+#else
+	static bool aot = false;
+#endif
+	return aot;
+}
+
+EnvisionException::EnvisionException()
+{
+	if (assertOnThrow()) Q_ASSERT_X(false, "Exception thrown", "");
+}
+
+EnvisionException::EnvisionException(const QString& message) : msg_{message}
+{
+	if (assertOnThrow()) Q_ASSERT_X(false, "Exception thrown", message.toAscii());
+}
 
 EnvisionException::~EnvisionException() {}
 

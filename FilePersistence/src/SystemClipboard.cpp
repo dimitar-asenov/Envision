@@ -280,6 +280,8 @@ bool SystemClipboard::readClipboard()
 	bool clipboardContainsEnvisionData = false;
 	if (!QApplication::clipboard()->text().isEmpty())
 	{
+		bool oldAssertOnThrow = FilePersistenceException::assertOnThrow();
+		FilePersistenceException::assertOnThrow() = false;
 		try
 		{
 			xml = new XMLModel();
@@ -294,6 +296,7 @@ bool SystemClipboard::readClipboard()
 			SAFE_DELETE(xml);
 			clipboardContainsEnvisionData = false;
 		}
+		FilePersistenceException::assertOnThrow() = oldAssertOnThrow;
 	}
 
 	return clipboardContainsEnvisionData && numNodes_ > 0;

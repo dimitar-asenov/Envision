@@ -37,13 +37,18 @@ namespace Core {
 class CORE_API EnvisionException
 {
 	public:
-		EnvisionException() = default;
+		EnvisionException();
 		EnvisionException(const QString& message);
 		virtual ~EnvisionException();
 
 		virtual const QString& name() const;
 		virtual const QString& message() const;
 		virtual void printError() const;
+
+		/**
+		 * Set this to control whether an assertion violation should occur when an exception is created
+		 */
+		static bool& assertOnThrow();
 
 	private:
 		QString msg_;
