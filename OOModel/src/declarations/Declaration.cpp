@@ -37,4 +37,17 @@ EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(Declaration)
 REGISTER_ATTRIBUTE(Declaration, name, Text, false, false, true)
 REGISTER_ATTRIBUTE(Declaration, visibility, Visibility, false, false, true)
 
+Declaration::Declaration(const QString& name)
+: Super(nullptr, Declaration::getMetaData())
+{
+	setName(name);
+}
+
+Declaration::Declaration(const QString& name, Visibility::VisibilityType vis)
+: Super(nullptr, Declaration::getMetaData())
+{
+	setName(name);
+	setVisibility(vis);
+}
+
 }

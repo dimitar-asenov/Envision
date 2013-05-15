@@ -73,6 +73,7 @@ bool VariableDeclarationExpression::definesSymbol() const
 	return true;
 }
 
+// TODO: should be virtual const QString& symbolName() const; !?
 const QString& VariableDeclarationExpression::symbolName()
 {
 	return decl()->name();
