@@ -33,6 +33,9 @@
 #include "top_level/Field.h"
 #include "top_level/Enumerator.h"
 
+#include "declarations/Declaration.h"
+#include "declarations/VariableDeclaration.h"
+
 #include "statements/Statement.h"
 #include "statements/Block.h"
 #include "statements/BreakStatement.h"
@@ -66,7 +69,7 @@
 #include "expressions/UnfinishedOperator.h"
 #include "expressions/CommaExpression.h"
 #include "expressions/AssignmentExpression.h"
-#include "expressions/VariableDeclaration.h"
+#include "expressions/VariableDeclarationExpression.h"
 #include "expressions/ConditionalExpression.h"
 #include "expressions/ThrowExpression.h"
 #include "expressions/LambdaExpression.h"

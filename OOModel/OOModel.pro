@@ -55,7 +55,6 @@ HEADERS += src/top_level/Enumerator.h \
     src/expressions/ThisExpression.h \
     src/expressions/UnaryOperation.h \
     src/expressions/UnfinishedOperator.h \
-    src/expressions/VariableDeclaration.h \
     src/oomodel_api.h \
     src/precompiled.h \
     src/statements/Block.h \
@@ -79,7 +78,11 @@ HEADERS += src/top_level/Enumerator.h \
     src/types/PointerType.h \
     src/expressions/types/PointerTypeExpression.h \
     src/expressions/types/ReferenceTypeExpression.h \
-    src/expressions/DeleteExpression.h
+    src/expressions/DeleteExpression.h \
+    src/declarations/Declaration.h \
+    src/declarations/VariableDeclaration.h \
+    src/expressions/VariableDeclarationExpression.h \
+    src/declarations/FieldDeclaration.h
     
 SOURCES += src/top_level/Enumerator.cpp \
     src/types/LambdaType.cpp \
@@ -103,7 +106,6 @@ SOURCES += src/top_level/Enumerator.cpp \
     src/expressions/types/TypeExpression.cpp \
     src/elements/OOReference.cpp \
     src/expressions/ConditionalExpression.cpp \
-    src/expressions/VariableDeclaration.cpp \
     src/expressions/AssignmentExpression.cpp \
     src/statements/ExpressionStatement.cpp \
     src/expressions/CommaExpression.cpp \
@@ -154,4 +156,8 @@ SOURCES += src/top_level/Enumerator.cpp \
     src/types/PointerType.cpp \
     src/expressions/types/PointerTypeExpression.cpp \
     src/expressions/types/ReferenceTypeExpression.cpp \
-    src/expressions/DeleteExpression.cpp
+    src/expressions/DeleteExpression.cpp \
+    src/declarations/VariableDeclaration.cpp \
+    src/declarations/Declaration.cpp \
+    src/expressions/VariableDeclarationExpression.cpp \
+    src/declarations/FieldDeclaration.cpp
