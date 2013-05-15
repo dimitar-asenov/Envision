@@ -39,6 +39,7 @@ class OOMODEL_API PointerTypeExpression : public Super<TypeExpression>
 	ATTRIBUTE(Expression, typeExpression, setTypeExpression)
 
 	public:
+		PointerTypeExpression(Expression* expr);
 		virtual Type* type();
 };
 

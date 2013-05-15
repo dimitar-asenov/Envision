@@ -3,7 +3,10 @@
 	<shape />
 	<layout prototypes="layout/SequentialLayout/default" />
 	<name prototypes="item/Text/default" />
-	<separator prototypes="item/Symbol/default" />
+	<nonPointerSeparator prototypes="item/Symbol/default" />
+	<pointerSeparator prototypes="item/Symbol/default">
+		<symbol>→</symbol>
+	</pointerSeparator>
 	<typeArguments prototypes="item/VList/default">
 		<shape />
 		<itemsStyle prototypes="layout/SequentialLayout/default">

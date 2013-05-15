@@ -37,6 +37,12 @@ EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(PointerTypeExpression)
 
 REGISTER_ATTRIBUTE(PointerTypeExpression, typeExpression, Expression, false, false, true)
 
+PointerTypeExpression::PointerTypeExpression(Expression* expr)
+: Super(nullptr, PointerTypeExpression::getMetaData())
+{
+	if (expr) setTypeExpression(expr);
+}
+
 Type* PointerTypeExpression::type()
 {
 	return new PointerType(typeExpression()->type(), false);

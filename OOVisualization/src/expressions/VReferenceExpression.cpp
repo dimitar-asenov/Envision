@@ -26,6 +26,8 @@
 
 #include "expressions/VReferenceExpression.h"
 
+#include "OOModel/src/types/PointerType.h"
+
 #include "VisualizationBase/src/items/Text.h"
 #include "VisualizationBase/src/items/Static.h"
 #include "VisualizationBase/src/items/VList.h"
@@ -59,7 +61,18 @@ VReferenceExpression::~VReferenceExpression()
 void VReferenceExpression::determineChildren()
 {
 	layout()->synchronizeFirst(prefix_, node()->prefix());
-	layout()->synchronizeMid(separator_, node()->prefix() != nullptr, &style()->separator(), 1);
+
+	auto* separatorStyle = &style()->nonPointerSeparator();
+	if (node()->prefix())
+	{
+		auto prefixType = node()->prefix()->type();
+		if (dynamic_cast<PointerType*> (prefixType) )
+			separatorStyle = &style()->pointerSeparator();
+		SAFE_DELETE(prefixType);
+	}
+
+
+	layout()->synchronizeMid(separator_, node()->prefix() != nullptr, separatorStyle, 1);
 	layout()->synchronizeLast(typeArguments_, node()->typeArguments()->size() > 0 ? node()->typeArguments() : nullptr,
 			&style()->typeArguments());
 
@@ -69,7 +82,7 @@ void VReferenceExpression::determineChildren()
 	// The style needs to be updated every time since if our own style changes, so will that of the children.
 	layout()->setStyle( &style()->layout());
 	name_->setStyle( &style()->name());
-	if (prefix_) separator_->setStyle( &style()->separator());
+	if (prefix_) separator_->setStyle( separatorStyle );
 	if (typeArguments_)
 	{
 		typeArguments_->setStyle(&style()->typeArguments());

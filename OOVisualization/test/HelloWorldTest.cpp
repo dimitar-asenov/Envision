@@ -431,6 +431,15 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 	arg3->setName("epsilon");
 	longMethod->arguments()->append(arg3);
 
+	auto var0 = new VariableDeclaration();
+	var0->setName("pSystem");
+	var0->setVarType(new PointerTypeExpression(new ClassTypeExpression(
+			new ReferenceExpression("System", new ReferenceExpression("Java")))));
+	longMethod->items()->append(var0);
+	longMethod->items()->append(new ExpressionStatement(
+			new ReferenceExpression("out", new ReferenceExpression("pSystem"))));
+
+
 	VariableDeclaration* var1 = new VariableDeclaration();
 	longMethod->items()->append(new ExpressionStatement(var1));
 	var1->setName("var1");
