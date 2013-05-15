@@ -40,13 +40,17 @@ class VisualizationItemWrapperFormElement : public ItemWrapperFormElement<Parent
 	public:
 		using ChildItem = typename ItemWrapperFormElement<ParentType, VisualizationType>::ChildItem;
 		using GetStyleFunction = std::function<const typename VisualizationType::StyleType* (ParentType* v)>;
+		using IsEnabledFunction = std::function<bool (ParentType* v)>;
 
 		VisualizationItemWrapperFormElement(ChildItem item, GetStyleFunction style);
 		virtual ~VisualizationItemWrapperFormElement() {};
 		virtual void synchronizeWithItem(Item* item) override;
 
+		VisualizationItemWrapperFormElement<ParentType, VisualizationType>* setEnabled(IsEnabledFunction enabled);
+
 	private:
 		GetStyleFunction style_{};
+		IsEnabledFunction enabled_{};
 };
 
 template <class ParentType, class VisualizationType>
@@ -56,12 +60,32 @@ VisualizationItemWrapperFormElement<ParentType, VisualizationType>::Visualizatio
 {}
 
 template <class ParentType, class VisualizationType>
+VisualizationItemWrapperFormElement<ParentType, VisualizationType>*
+VisualizationItemWrapperFormElement<ParentType, VisualizationType>::setEnabled(IsEnabledFunction enabled)
+{
+	enabled_ = enabled;
+	return this;
+}
+
+template <class ParentType, class VisualizationType>
 void VisualizationItemWrapperFormElement<ParentType, VisualizationType>::synchronizeWithItem(Item* item)
 {
 	auto& childItem = (static_cast<ParentType*>(item))->*this->item();
 	auto style = style_(static_cast<ParentType*>(item));
-	if(!childItem) childItem = new VisualizationType(item, style);
-	childItem->setStyle(style);
+	auto enabled = !enabled_ || enabled_(static_cast<ParentType*>(item));
+
+	if(childItem && !enabled)
+	{
+		SAFE_DELETE_ITEM(childItem);
+		item->setUpdateNeeded(Item::StandardUpdate);
+	}
+
+	if(!childItem && enabled)
+	{
+		childItem = new VisualizationType(item, style);
+		item->setUpdateNeeded(Item::StandardUpdate);
+	}
+	else if (enabled) childItem->setStyle(style);
 }
 
 } /* namespace Visualization */
