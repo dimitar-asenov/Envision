@@ -87,14 +87,20 @@ void VClass::initializeForms()
 																			[](I* v){return &v->style()->baseClasses();}));
 
 	auto contentElement = (new GridLayoutFormElement())
-				->setVerticalSpacing(3)->setColumnStretchFactor(0, 1)
-				->put(0, 0, item<VStatementItemList>(&I::annotations_, [](I* v)
+				->setSpacing(3)->setColumnStretchFactor(1, 1)
+				->put(1, 0, item<VStatementItemList>(&I::annotations_, [](I* v)
 											{return v->node()->annotations()->size() > 0 ? v->node()->annotations() : nullptr;},
 								[](I* v){return &v->style()->annotations();}))
-				->put(0, 1, item<VList>(&I::enumerators_, [](I* v)
+				->put(1, 1, item<VList>(&I::enumerators_, [](I* v)
 											{return v->node()->enumerators()->size() > 0 ? v->node()->enumerators() : nullptr;},
 								[](I* v){return &v->style()->enumerators();}))
-				->put(0, 2, item<PositionLayout>(&I::body_, [](I* v){return &v->style()->body();}));
+				->put(0, 2, item<Static>(&I::friendsSymbol_,
+						[](I* v){return &v->style()->friendsSymbol();})->setEnabled(
+								[](I* v){return v->node()->friends()->size() > 0;}))
+				->put(1, 2, item<VList>(&I::friends_,
+						[](I* v) {return v->node()->friends()->size() > 0 ? v->node()->friends() : nullptr;},
+						[](I* v){return &v->style()->friends();}))
+				->put(1, 3, item<PositionLayout>(&I::body_, [](I* v){return &v->style()->body();}));
 
 	auto fieldContainerElement = (new GridLayoutFormElement())
 				->setVerticalSpacing(3)

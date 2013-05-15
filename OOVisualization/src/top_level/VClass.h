@@ -70,6 +70,8 @@ class OOVISUALIZATION_API VClass
 		Visualization::VList* baseClasses_{};
 		VStatementItemList* annotations_{};
 		Visualization::VList* enumerators_{};
+		Visualization::Static* friendsSymbol_{};
+		Visualization::VList* friends_{};
 		Visualization::PositionLayout* body_{};
 		Visualization::NodeWrapper* fieldBackground_{};
 		QList<Model::Node*> publicFields_{};

@@ -171,7 +171,7 @@ Class* addGeneric(Model::Model* model, Project* parent)
 	return gen;
 }
 
-Class* addAnnotated(Model::Model* model, Project* parent)
+Class* addAnnotatedWithFriends(Model::Model* model, Project* parent)
 {
 	Class* ann = nullptr;
 
@@ -183,10 +183,15 @@ Class* addAnnotated(Model::Model* model, Project* parent)
 		parent->classes()->append(ann);
 	}
 
-	ann->setName("Annotated");
+	ann->setName("AnnotatedWithFriends");
 	ann->setVisibility(Visibility::PUBLIC);
 	ann->annotations()->append( new ExpressionStatement(new ReferenceExpression("SomeAnnotation")));
 
+	// Add some friends classes
+	ann->friends()->append(new ReferenceExpression("Generic"));
+	ann->friends()->append(new ReferenceExpression("System", new ReferenceExpression("Java")));
+
+	// Add methods
 	Method* foo = new Method("foo", Visibility::PUBLIC, StorageSpecifier::INSTANCE_VARIABLE);
 	ann->methods()->append(foo);
 	foo->annotations()->append(new ExpressionStatement(new ReferenceExpression("SomeAnnotation2")));
@@ -226,7 +231,7 @@ Class* addEnumeration(Model::Model* model, Project* parent)
 
 	// Set positions
 	en->extension<Position>()->setX(460);
-	en->extension<Position>()->setY(840);
+	en->extension<Position>()->setY(880);
 
 	model->endModification();
 	return en;
@@ -812,9 +817,9 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	Class* gen = nullptr;
 	gen = addGeneric(model, prj);
 
-	// Build a simple Class that has annotations
+	// Build a simple Class that has annotations and friends
 	Class* ann = nullptr;
-	ann = addAnnotated(model, prj);
+	ann = addAnnotatedWithFriends(model, prj);
 
 	// Build a simple enumeration
 	Class* en = nullptr;

@@ -116,6 +116,41 @@
 			<spaceBetweenElements>15</spaceBetweenElements>
 		</itemsStyle>
 	</enumerators>
+	<friendsSymbol prototypes="icon/SVGIcon/default">
+		<filename>styles/icon/friends.svg</filename>
+		<width>24</width>
+		<height>24</height>
+	</friendsSymbol>
+	<friends prototypes="item/VList/default">
+		<shape prototypes="shape/Box/default">
+			Box
+			<outline>
+				<width>1</width>
+				<color>
+					<alpha>255</alpha>
+					<red>100</red>
+					<green>200</green>
+					<blue>164</blue>
+				</color>
+			</outline>
+			<cornerRadius>1</cornerRadius>
+			<cornerType>0</cornerType>
+			<backgroundBrush>
+				<style>1</style>
+				<color>
+					<alpha>255</alpha>
+					<red>200</red>
+					<green>255</green>
+					<blue>224</blue>
+				</color>
+			</backgroundBrush>
+		</shape>
+		<itemsStyle prototypes="layout/SequentialLayout/default">
+			<alignment>1</alignment>
+			<direction>2</direction>
+			<spaceBetweenElements>2</spaceBetweenElements>
+		</itemsStyle>
+	</friends>
 	<fieldContainer prototypes="layout/SequentialLayout/default">
 		<shape prototypes="shape/Box/default">
 			Box
