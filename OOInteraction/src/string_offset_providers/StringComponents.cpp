@@ -207,6 +207,7 @@ void StringComponents::initConversions()
 	add<ThrowExpression>([](ThrowExpression* e ){ return c( "throw", " ", e->expr() ); });
 	add<NewExpression>([](NewExpression* e ){ return c( "new", " ", e->newType(),
 		Optional("[", e->amount()), Optional(e->amount(), AUTO), Optional("]", e->amount()) ); });
+	add<DeleteExpression>([](DeleteExpression* e ){ return c( e->isArray() ? "delete[]":"delete", " ", e->expr() ); });
 	add<VariableDeclaration>([](VariableDeclaration* e ){ return c( e->varType(), " ", e->name(),
 		Optional("=",e->initialValue()), Optional(e->initialValue())); });
 

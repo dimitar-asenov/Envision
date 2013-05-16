@@ -9,7 +9,8 @@ win32:LIBS += -llogger \
     -linteractionbase \
     -loovisualization \
     -lfilepersistence
-HEADERS += src/string_offset_providers/GridConstructors.h \
+HEADERS += src/expression_editor/operators/DeleteDescriptor.h \
+    src/string_offset_providers/GridConstructors.h \
     src/string_offset_providers/StringComponents.h \
     src/customization/CustomizationVisitor.h \
     src/expression_editor/operators/commands/CommandExpression.h \
@@ -66,7 +67,8 @@ HEADERS += src/string_offset_providers/GridConstructors.h \
     src/expression_editor/operators/PointerTypeDescriptor.h \
     src/expression_editor/operators/ReferenceTypeDescriptor.h \
     src/oointeraction.h
-SOURCES += src/string_offset_providers/GridConstructors.cpp \
+SOURCES += src/expression_editor/operators/DeleteDescriptor.cpp \
+    src/string_offset_providers/GridConstructors.cpp \
     src/string_offset_providers/StringComponents.cpp \
     src/customization/CustomizationVisitor.cpp \
     src/expression_editor/operators/commands/CreateMethodCall.cpp \

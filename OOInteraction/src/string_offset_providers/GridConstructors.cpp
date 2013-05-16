@@ -122,6 +122,12 @@ void GridConstructors::initializeAll()
 		grid->add(new Cell(2, vis->layout()->at<Visualization::Item>(1), 2));
 	});
 
+	GridBasedOffsetProvider::addGridConstructor<VDeleteExpression>(
+		[](GridBasedOffsetProvider* grid, VDeleteExpression* vis){
+			grid->add(new Cell(0, vis->layout()->at<Visualization::Item>(0), 0));
+			grid->add(new Cell(2, vis->layout()->at<Visualization::Item>(1), 2));
+		});
+
 	GridBasedOffsetProvider::addGridConstructor<VVariableDeclaration>(
 	[](GridBasedOffsetProvider* grid, VVariableDeclaration* vis){
 		grid->add(new Cell(0, vis->declarationType(), 0));

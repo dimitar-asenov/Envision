@@ -32,6 +32,7 @@
 #include "expression_editor/operators/CommaDescriptor.h"
 #include "expression_editor/operators/NewObjectDescriptor.h"
 #include "expression_editor/operators/NewArrayDescriptor.h"
+#include "expression_editor/operators/DeleteDescriptor.h"
 #include "expression_editor/operators/ThrowDescriptor.h"
 #include "expression_editor/operators/InitializerDescriptor.h"
 #include "expression_editor/operators/MemberOperatorDescriptor.h"
@@ -163,6 +164,10 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 			Interaction::OperatorDescriptor::RightAssociative));
 	instance()->addDescriptor(new NewArrayDescriptor( "new array", "new SPACE expr [ expr ]", 2, 2,
 			Interaction::OperatorDescriptor::RightAssociative));
+	instance()->addDescriptor(new DeleteDescriptor( "delete object", "delete SPACE expr", 1, 2,
+				Interaction::OperatorDescriptor::RightAssociative));
+	instance()->addDescriptor(new DeleteDescriptor( "delete array", "delete [] SPACE expr", 1, 2,
+				Interaction::OperatorDescriptor::RightAssociative));
 	instance()->addDescriptor(new MemberOperatorDescriptor( "member", "expr . id", 2, 1,
 			Interaction::OperatorDescriptor::LeftAssociative));
 	instance()->addDescriptor(new MemberOperatorDescriptor( "member", "expr . id < expr >", 3, 1,

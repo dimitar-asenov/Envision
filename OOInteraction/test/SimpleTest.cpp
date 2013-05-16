@@ -191,6 +191,9 @@ Method* addDivBySix(Model::Model* model, Class* parent)
 
 	divbysix->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("int d=(a+b)/42")));
 	divbysix->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("throw BadException")));
+	divbysix->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("delete aPointer")));
+	divbysix->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("delete[] anArrayPointer")));
+
 
 	VariableDeclaration* result = new VariableDeclaration();
 	divbysix->items()->append( new ExpressionStatement(result) );

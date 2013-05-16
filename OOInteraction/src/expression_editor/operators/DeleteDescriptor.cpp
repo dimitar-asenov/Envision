@@ -24,30 +24,25 @@
  **
  **********************************************************************************************************************/
 
-#include "DeleteExpression.h"
+#include "DeleteDescriptor.h"
 
-#include "types/PrimitiveTypeExpression.h"
+#include "OOModel/src/expressions/DeleteExpression.h"
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::DeleteExpression)
+namespace OOInteraction {
 
-namespace OOModel {
+DeleteDescriptor::DeleteDescriptor(const QString& name, const QString& signature, int num_operands,
+		int precedence, Associativity associativity)
+		: OOOperatorDescriptor(name, signature, num_operands, precedence, associativity)
+{}
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(DeleteExpression)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(DeleteExpression)
-
-REGISTER_ATTRIBUTE(DeleteExpression, expr, Expression, false, false, true)
-REGISTER_ATTRIBUTE(DeleteExpression, isArray, Boolean, false, false, true)
-
-DeleteExpression::DeleteExpression(bool isArrayType)
-: Super(nullptr, DeleteExpression::getMetaData())
+OOModel::Expression* DeleteDescriptor::create(const QList<OOModel::Expression*>& operands)
 {
-	setIsArray(isArrayType);
+	auto expr = new OOModel::DeleteExpression();
+
+	// TODO: This check should be more robust, not rely on signature or name
+	if (name().contains("array")) expr->setIsArray(true);
+	expr->setExpr( operands.first());
+	return expr;
 }
 
-Type* DeleteExpression::type()
-{
-	return new PrimitiveType(PrimitiveType::VOID, true);
-}
-
-}
+} /* namespace OOInteraction */

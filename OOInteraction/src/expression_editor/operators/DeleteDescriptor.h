@@ -24,30 +24,19 @@
  **
  **********************************************************************************************************************/
 
-#include "DeleteExpression.h"
+#pragma once
 
-#include "types/PrimitiveTypeExpression.h"
+#include "../../oointeraction_api.h"
+#include "../OOOperatorDescriptor.h"
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::DeleteExpression)
+namespace OOInteraction {
 
-namespace OOModel {
+class OOINTERACTION_API DeleteDescriptor : public OOOperatorDescriptor {
+	public:
+		DeleteDescriptor(const QString& name, const QString& signature, int num_operands, int precedence,
+			Associativity associativity);
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(DeleteExpression)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(DeleteExpression)
+		virtual OOModel::Expression* create(const QList<OOModel::Expression*>& operands);
+};
 
-REGISTER_ATTRIBUTE(DeleteExpression, expr, Expression, false, false, true)
-REGISTER_ATTRIBUTE(DeleteExpression, isArray, Boolean, false, false, true)
-
-DeleteExpression::DeleteExpression(bool isArrayType)
-: Super(nullptr, DeleteExpression::getMetaData())
-{
-	setIsArray(isArrayType);
-}
-
-Type* DeleteExpression::type()
-{
-	return new PrimitiveType(PrimitiveType::VOID, true);
-}
-
-}
+}  /* namespace OOInteraction */

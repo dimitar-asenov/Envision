@@ -633,6 +633,14 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 	longMethod->items()->append(new ExpressionStatement(throwExpr));
 	throwExpr->setExpr(new ReferenceExpression("AnException"));
 
+	auto deleteExpr = new DeleteExpression(false);
+	deleteExpr->setExpr(new ReferenceExpression("pSystem"));
+	longMethod->items()->append(new ExpressionStatement(deleteExpr));
+
+	auto deleteArrayExpr = new DeleteExpression(true);
+	deleteArrayExpr->setExpr(new ReferenceExpression("pSystem"));
+	longMethod->items()->append(new ExpressionStatement(deleteArrayExpr));
+
 	IfStatement* ifs = new IfStatement();
 	longMethod->items()->append(ifs);
 	BinaryOperation* ifCond = new BinaryOperation();
@@ -784,7 +792,7 @@ Method* addFactorial(Model::Model* model, Class* parent)
 	factorial->items()->append(factorialReturn);
 	factorialReturn->values()->append(new ReferenceExpression("result"));
 
-	factorial->extension<Position>()->setY(860);
+	factorial->extension<Position>()->setY(960);
 
 	model->endModification();
 	return factorial;
