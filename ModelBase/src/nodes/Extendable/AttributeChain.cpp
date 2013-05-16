@@ -29,17 +29,21 @@
 
 namespace Model {
 
-AttributeChain::AttributeChain() :
-	parent_(nullptr), numLevels_(1)
-{
-}
+//Only for extendableNode
+AttributeChain::AttributeChain(const QString& typeName)
+: typeName_{typeName}
+{}
 
-void AttributeChain::setParent(AttributeChain* newParent)
+AttributeChain::AttributeChain(const QString& typeName, AttributeChain* parentChain)
+: typeName_{typeName}
 {
-	if (newParent == this) return;
-	if (newParent == &ExtendableNode::getMetaData() ) return;
+	Q_ASSERT(parentChain);
+	Q_ASSERT(parentChain != this);
 
-	parent_ = newParent;
+	if (parentChain == &ExtendableNode::getMetaData() )
+		return; // a null parent indicates direct inheritance from ExtendableNode
+
+	parent_ = parentChain;
 
 	// Compute the number of levels
 	numLevels_ = 1;
@@ -54,6 +58,11 @@ void AttributeChain::setParent(AttributeChain* newParent)
 AttributeChain* AttributeChain::parent()
 {
 	return parent_;
+}
+
+const QString& AttributeChain::typeName() const
+{
+	return typeName_;
 }
 
 int AttributeChain::recursiveSize() const

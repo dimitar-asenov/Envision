@@ -223,7 +223,6 @@ DEFINE_TYPE_ID_DERIVED(className, nodeTypeInitializationRegistry, #className,)		
 																																							\
 void className::initType()																															\
 {																																							\
-	className::getMetaData().setParent(&Super::getMetaData());																			\
 	typeIdVariable() = Node::registerNodeType(#className, ::Model::createNewNode< className >,								\
 			::Model::createNodeFromPersistence< className >);																				\
 																																							\
@@ -234,7 +233,7 @@ void className::initType()																															\
 																																							\
 ::Model::AttributeChain& className::getMetaData()																							\
 {																																							\
-	static ::Model::AttributeChain descriptions;																								\
+	static ::Model::AttributeChain descriptions{#className, &Super::getMetaData()};												\
 	return descriptions;																																\
 }																																							\
 																																							\

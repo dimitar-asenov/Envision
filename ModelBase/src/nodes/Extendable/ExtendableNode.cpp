@@ -100,7 +100,7 @@ ExtendableNode::~ExtendableNode()
 
 AttributeChain& ExtendableNode::getMetaData()
 {
-	static AttributeChain descriptions;
+	static AttributeChain descriptions{"ExtendableNode"};
 	return descriptions;
 }
 
@@ -123,7 +123,9 @@ ExtendableIndex ExtendableNode::registerNewAttribute(AttributeChain& metaData, c
 
 void ExtendableNode::set(const ExtendableIndex &attributeIndex, Node* node)
 {
-	if ( !attributeIndex.isValid() ) throw ModelException("Trying to set an attribute with an invalid Index");
+	Q_ASSERT( attributeIndex.isValid() );
+	Q_ASSERT( attributeIndex.level() < subnodes.size());
+	Q_ASSERT( attributeIndex.index() < subnodes[attributeIndex.level()].size());
 	execute(new ExtendedNodeChild(this, node, attributeIndex, &subnodes));
 }
 

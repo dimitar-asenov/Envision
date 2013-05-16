@@ -35,17 +35,23 @@ namespace Model {
 class MODELBASE_API AttributeChain: public QVector<Attribute>
 {
 	private:
-		AttributeChain* parent_;
+		AttributeChain* parent_{};
 
-		int numLevels_; // The number of levels of attributes, including this one.
+		int numLevels_{1}; // The number of levels of attributes, including this one.
 
 		QMap< int, QVector<ExtendableIndex> > extensions_;
 
-	public:
-		AttributeChain();
+		QString typeName_;
 
-		void setParent(AttributeChain* newParent);
+		AttributeChain(const QString& typeName);
+
+	public:
+		friend class ExtendableNode;
+
+		AttributeChain(const QString& typeName, AttributeChain* parentChain);
+
 		AttributeChain* parent();
+		const QString& typeName() const;
 
 		int recursiveSize() const;
 		int numLevels() const;
