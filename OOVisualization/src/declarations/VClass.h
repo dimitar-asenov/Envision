@@ -24,51 +24,60 @@
 **
 ***********************************************************************************************************************/
 
-#include "expressions/VVariableDeclaration.h"
+#pragma once
 
-#include "VisualizationBase/src/items/Static.h"
-#include "VisualizationBase/src/items/VText.h"
+#include "../oovisualization_api.h"
+#include "VClassStyle.h"
 
-using namespace Visualization;
-using namespace OOModel;
+#include "OOModel/src/declarations/Class.h"
+
+#include "VisualizationBase/src/items/ItemWithNode.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
+
+namespace Visualization {
+	class VText;
+	class VList;
+	class Static;
+	class PositionLayout;
+	class NodeWrapper;
+}
+
+namespace Model {
+	class Node;
+}
 
 namespace OOVisualization {
+class VStatementItemList;
 
-ITEM_COMMON_DEFINITIONS(VVariableDeclaration, "item")
-
-VVariableDeclaration::VVariableDeclaration(Item* parent, NodeType* node, const StyleType* style) :
-	Super(parent, node, style),
-	name_(new VText(layout(), node->nameNode(), &style->name()) ),
-	type_(nullptr),
-	assignmentSymbol_(nullptr),
-	initialValue_(nullptr)
+class OOVISUALIZATION_API VClass
+: public Super<Visualization::ItemWithNode<VClass, Visualization::DeclarativeItem<VClass>, OOModel::Class>>
 {
-	layout()->append(name_);
-}
+	ITEM_COMMON(VClass)
 
-VVariableDeclaration::~VVariableDeclaration()
-{
-	// These were automatically deleted by LayoutProvider's destructor
-	name_ = nullptr;
-	type_ = nullptr;
-	assignmentSymbol_ = nullptr;
-	initialValue_ = nullptr;
-}
+	public:
+		VClass(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 
-void VVariableDeclaration::determineChildren()
-{
-	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
-	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
-	//			what's the reason they are being updated.
-	// The style needs to be updated every time since if our own style changes, so will that of the children.
-	layout()->setStyle( &style()->layout());
-	name_->setStyle( &style()->name());
+		static void initializeForms();
+		int determineForm() override;
 
-	layout()->synchronizeFirst(type_, node()->varType());
-	layout()->synchronizeMid(name_, node()->nameNode(), &style()->name(), 1);
-	name_->setEditable(false);
-	layout()->synchronizeMid(assignmentSymbol_, node()->initialValue() != nullptr, &style()->assignmentSymbol(), 2);
-	layout()->synchronizeLast(initialValue_, node()->initialValue());
-}
+	protected:
+		void determineChildren() override;
+
+	private:
+		Visualization::Static* icon_{};
+		Visualization::VText* name_{};
+		Visualization::VList* typeArguments_{};
+		Visualization::VList* baseClasses_{};
+		VStatementItemList* annotations_{};
+		Visualization::VList* enumerators_{};
+		Visualization::Static* friendsSymbol_{};
+		Visualization::VList* friends_{};
+		Visualization::PositionLayout* body_{};
+		Visualization::NodeWrapper* fieldBackground_{};
+		QList<Model::Node*> publicFields_{};
+		QList<Model::Node*> privateFields_{};
+		QList<Model::Node*> protectedFields_{};
+		QList<Model::Node*> defaultFields_{};
+};
 
 }

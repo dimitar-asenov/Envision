@@ -251,7 +251,7 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			{
 				auto ret =  new OOModel::Class();
 				toFocus = ret;
-				st = ret;
+				st = new OOModel::DeclarationStatement(ret);
 			}
 
 			Model::Node* containerNode = replaceStatement->parent();

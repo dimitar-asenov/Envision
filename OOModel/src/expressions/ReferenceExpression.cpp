@@ -27,10 +27,10 @@
 #include "expressions/ReferenceExpression.h"
 #include "expressions/VariableDeclarationExpression.h"
 #include "statements/ExpressionStatement.h"
-#include "top_level/Project.h"
-#include "top_level/Module.h"
-#include "top_level/Class.h"
-#include "top_level/Field.h"
+#include "declarations/Project.h"
+#include "declarations/Module.h"
+#include "declarations/Class.h"
+#include "declarations/Field.h"
 #include "../types/SymbolProviderType.h"
 #include "../types/ClassType.h"
 #include "../types/ErrorType.h"
@@ -65,7 +65,6 @@ Type* ReferenceExpression::type()
 		return new SymbolProviderType(module, false);
 	else if ( auto cl = dynamic_cast<Class*>( ref()->target() ) )
 		return new ClassType(cl, false);
-	// TODO: this was VariableDeclaration
 	else if ( auto vdecl = dynamic_cast<VariableDeclarationExpression*>( ref()->target() ) )
 	{
 		auto t = vdecl->type();
@@ -74,7 +73,6 @@ Type* ReferenceExpression::type()
 	}
 	else if ( auto expSt = dynamic_cast<ExpressionStatement*>( ref()->target() ))
 	{
-		// TODO: this was VariableDeclaration
 		if ( auto vdecl = dynamic_cast<VariableDeclarationExpression*>( expSt->expression() ) )
 		{
 			auto t = vdecl->type();

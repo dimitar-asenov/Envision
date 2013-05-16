@@ -24,42 +24,60 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-#include "../oomodel_api.h"
-
-#include "../attributeMacros.h"
-#include "Class.h"
-#include "Method.h"
 #include "Field.h"
 
-#include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
-#include "ModelBase/src/nodes/Text.h"
-#include "ModelBase/src/nodes/TypedList.h"
-#include "ModelBase/src/nodes/nodeMacros.h"
-
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Module)
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(OOModel::Field)
 
 namespace OOModel {
 
-class OOMODEL_API Module : public Super<Model::ExtendableNode>
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(Field)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(Field)
+
+
+REGISTER_ATTRIBUTE(Field, ttt, Expression, false, false, true)
+
+Field::Field(const QString& name, Expression* type)
+: Super(nullptr, Field::getMetaData())
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Module)
+	setName(name);
+	if (type) setTypeExpression(type);
+}
 
-	ATTRIBUTE_OOP_NAME
-	ATTRIBUTE(Model::TypedList<Module>, modules, setModules)
-	ATTRIBUTE(Model::TypedList<Class>, classes, setClasses)
-	ATTRIBUTE(Model::TypedList<Method>, methods, setMethods)
-	ATTRIBUTE(Model::TypedList<Field>, fields, setFields)
+Field::Field(const QString& name, Expression* type, Expression* initialValue)
+: Super(nullptr, Field::getMetaData())
+{
+	setName(name);
+	if (type) setTypeExpression(type);
+	if (initialValue) setInitialValue(initialValue);
+}
 
-	public:
-		Module(const QString& name);
+Field::Field(const QString& name, Expression* type, Visibility::VisibilityType vis)
+: Super(nullptr, Field::getMetaData())
+{
+	setName(name);
+	if (type) setTypeExpression(type);
+	setVisibility(vis);
+}
 
-		virtual bool definesSymbol() const;
-		virtual const QString& symbolName() const;
+Field::Field
+		(const QString& name, Expression* type, StorageSpecifier::StorageSpecifierTypes storage)
+: Super(nullptr, Field::getMetaData())
+{
+	setName(name);
+	if (type) setTypeExpression(type);
+	setStorageSpecifier(storage);
+}
 
-		virtual QList<Node*> findSymbols(const QRegExp& symbolExp, Node* source, FindSymbolMode mode,
-				bool exhaustAllScopes) override;
-};
+Field::Field(const QString& name, Expression* type, Visibility::VisibilityType vis,
+				 StorageSpecifier::StorageSpecifierTypes storage, Expression* initialValue)
+: Super(nullptr, Field::getMetaData())
+{
+	setName(name);
+	if (type) setTypeExpression(type);
+	setVisibility(vis);
+	setStorageSpecifier(storage);
+	if (initialValue) setInitialValue(initialValue);
+}
 
 }

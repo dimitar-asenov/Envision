@@ -7,7 +7,19 @@ win32:LIBS += -llogger \
     -loomodel \
     -lvisualizationbase \
     -linteractionbase
-HEADERS += src/expressions/allOOExpressionVisualizations.h \
+HEADERS += src/declarations/VFieldStyle.h \
+    src/declarations/VField.h \
+    src/expressions/VVariableDeclarationExpressionStyle.h \
+    src/expressions/VVariableDeclarationExpression.h \
+    src/declarations/VClass.h \
+    src/declarations/VClassStyle.h \
+    src/declarations/VMethod.h \
+    src/declarations/VMethodStyle.h \
+    src/declarations/VModule.h \
+    src/declarations/VModuleStyle.h \
+    src/declarations/VProject.h \
+    src/declarations/VProjectStyle.h \
+    src/expressions/allOOExpressionVisualizations.h \
     src/expressions/literals/VBooleanLiteral.h \
     src/expressions/literals/VCharacterLiteral.h \
     src/expressions/literals/VFloatLiteral.h \
@@ -38,8 +50,6 @@ HEADERS += src/expressions/allOOExpressionVisualizations.h \
     src/elements/VFormalTypeArgument.h \
     src/OOVisualizationException.h \
     src/allOOVisualizations.h \
-    src/elements/VField.h \
-    src/elements/VFieldStyle.h \
     src/elements/VFormalArgument.h \
     src/elements/VFormalArgumentStyle.h \
     src/elements/VFormalResult.h \
@@ -60,8 +70,6 @@ HEADERS += src/expressions/allOOExpressionVisualizations.h \
     src/expressions/VThisExpression.h \
     src/expressions/VUnfinishedOperator.h \
     src/expressions/VUnfinishedOperatorStyle.h \
-    src/expressions/VVariableDeclaration.h \
-    src/expressions/VVariableDeclarationStyle.h \
     src/oovisualization_api.h \
     src/precompiled.h \
     src/statements/VBlock.h \
@@ -77,16 +85,20 @@ HEADERS += src/expressions/allOOExpressionVisualizations.h \
     src/statements/VLoopStatementStyle.h \
     src/statements/VReturnStatement.h \
     src/statements/VReturnStatementStyle.h \
-    src/top_level/VClass.h \
-    src/top_level/VClassStyle.h \
-    src/top_level/VMethod.h \
-    src/top_level/VMethodStyle.h \
-    src/top_level/VModule.h \
-    src/top_level/VModuleStyle.h \
-    src/top_level/VProject.h \
-    src/top_level/VProjectStyle.h \
     src/oovisualization.h
-SOURCES += src/expressions/literals/VBooleanLiteral.cpp \
+SOURCES += src/declarations/VFieldStyle.cpp \
+    src/declarations/VField.cpp \
+    src/expressions/VVariableDeclarationExpressionStyle.cpp \
+    src/expressions/VVariableDeclarationExpression.cpp \
+    src/declarations/VClass.cpp \
+    src/declarations/VClassStyle.cpp \
+    src/declarations/VMethod.cpp \
+    src/declarations/VMethodStyle.cpp \
+    src/declarations/VModule.cpp \
+    src/declarations/VModuleStyle.cpp \
+    src/declarations/VProject.cpp \
+    src/declarations/VProjectStyle.cpp \
+    src/expressions/literals/VBooleanLiteral.cpp \
     src/expressions/literals/VCharacterLiteral.cpp \
     src/expressions/literals/VFloatLiteral.cpp \
     src/expressions/literals/VIntegerLiteral.cpp \
@@ -113,8 +125,6 @@ SOURCES += src/expressions/literals/VBooleanLiteral.cpp \
     src/elements/VStatementItemList.cpp \
     src/elements/VFormalTypeArgumentStyle.cpp \
     src/elements/VFormalTypeArgument.cpp \
-    src/expressions/VVariableDeclarationStyle.cpp \
-    src/expressions/VVariableDeclaration.cpp \
     src/expressions/VMethodCallExpressionStyle.cpp \
     src/statements/VExpressionStatement.cpp \
     src/expressions/VEmptyExpression.cpp \
@@ -131,21 +141,11 @@ SOURCES += src/expressions/literals/VBooleanLiteral.cpp \
     src/statements/VForEachStatementStyle.cpp \
     src/statements/VLoopStatement.cpp \
     src/statements/VLoopStatementStyle.cpp \
-    src/elements/VField.cpp \
-    src/elements/VFieldStyle.cpp \
     src/elements/VFormalArgument.cpp \
     src/elements/VFormalArgumentStyle.cpp \
     src/elements/VFormalResult.cpp \
     src/elements/VFormalResultStyle.cpp \
     src/elements/VVisibility.cpp \
-    src/top_level/VClass.cpp \
-    src/top_level/VClassStyle.cpp \
-    src/top_level/VMethod.cpp \
-    src/top_level/VMethodStyle.cpp \
-    src/top_level/VModule.cpp \
-    src/top_level/VModuleStyle.cpp \
-    src/top_level/VProject.cpp \
-    src/top_level/VProjectStyle.cpp \
     src/statements/VIfStatement.cpp \
     src/statements/VIfStatementStyle.cpp \
     src/statements/VReturnStatement.cpp \

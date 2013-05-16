@@ -40,7 +40,7 @@ namespace OOModel {
 class OOMODEL_API VariableDeclaration : public Super<Declaration>
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(VariableDeclaration)
-	ATTRIBUTE(Expression, type, setType)
+	ATTRIBUTE(Expression, typeExpression, setTypeExpression)
 	ATTRIBUTE(Expression, initialValue, setInitialValue)
 	ATTRIBUTE_OOP_STORAGESPECIFIER
 
@@ -51,9 +51,6 @@ class OOMODEL_API VariableDeclaration : public Super<Declaration>
 		VariableDeclaration(const QString& name, Expression* type, StorageSpecifier::StorageSpecifierTypes storage);
 		VariableDeclaration(const QString& name, Expression* type,  Visibility::VisibilityType vis,
 							  StorageSpecifier::StorageSpecifierTypes storage, Expression* initialValue = nullptr);
-
-		virtual bool definesSymbol() const;
-		virtual const QString& symbolName() const;
 };
 
 }

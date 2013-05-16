@@ -27,9 +27,9 @@
 #pragma once
 
 #include "../oovisualization_api.h"
-#include "VModuleStyle.h"
+#include "VProjectStyle.h"
 
-#include "OOModel/src/top_level/Module.h"
+#include "OOModel/src/declarations/Project.h"
 
 #include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/items/LayoutProvider.h"
@@ -38,20 +38,21 @@ namespace Visualization {
 	class VText;
 	class PanelBorderLayout;
 	class PositionLayout;
+	class SequentialLayout;
 	class VList;
 }
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VModule
-: public Super<Visualization::ItemWithNode<VModule, Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
-  OOModel::Module>>
+class OOVISUALIZATION_API VProject
+: public Super<Visualization::ItemWithNode<VProject, Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
+  	  OOModel::Project>>
 {
-	ITEM_COMMON(VModule)
+	ITEM_COMMON(VProject)
 
 	public:
-		VModule(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		virtual ~VModule();
+		VProject(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+		virtual ~VProject();
 
 	protected:
 		void determineChildren();

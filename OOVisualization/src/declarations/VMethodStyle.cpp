@@ -24,49 +24,32 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-#include "../oovisualization_api.h"
-#include "VVariableDeclarationStyle.h"
-#include "VExpression.h"
-
-#include "OOModel/src/expressions/VariableDeclaration.h"
-#include "VisualizationBase/src/items/LayoutProvider.h"
-
-namespace Visualization {
-	class Static;
-	class VText;
-}
+#include "VMethodStyle.h"
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VVariableDeclaration : public Super<VExpression<VVariableDeclaration,
-	Visualization::LayoutProvider<>, OOModel::VariableDeclaration>>
+void VMethodStyle::load(Visualization::StyleLoader& sl)
 {
-	ITEM_COMMON(VVariableDeclaration)
+	ItemStyle::load(sl);
 
-	public:
-		VVariableDeclaration(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		virtual ~VVariableDeclaration();
-
-		Visualization::VText* name() const;
-		Visualization::Item* declarationType() const;
-		Visualization::Static* assignmentSymbol() const;
-		Visualization::Item* initialValue() const;
-
-	protected:
-		void determineChildren();
-
-	private:
-		Visualization::VText* name_;
-		Visualization::Item* type_;
-		Visualization::Static* assignmentSymbol_;
-		Visualization::Item* initialValue_;
-};
-
-inline Visualization::VText* VVariableDeclaration::name() const {return name_;}
-inline Visualization::Item* VVariableDeclaration::declarationType() const {return type_;}
-inline Visualization::Static* VVariableDeclaration::assignmentSymbol() const {return assignmentSymbol_;}
-inline Visualization::Item* VVariableDeclaration::initialValue() const {return initialValue_;}
+	sl.load("nameDefault", nameDefault_);
+	sl.load("namePublic", namePublic_);
+	sl.load("namePrivate", namePrivate_);
+	sl.load("nameProtected", nameProtected_);
+	sl.load("nameStaticDefault", nameStaticDefault_);
+	sl.load("nameStaticPublic", nameStaticPublic_);
+	sl.load("nameStaticPrivate", nameStaticPrivate_);
+	sl.load("nameStaticProtected", nameStaticProtected_);
+	sl.load("icon", icon_);
+	sl.load("header", header_);
+	sl.load("signatureLine",signatureLine_);
+	sl.load("body", body_);
+	sl.load("annotations", annotations_);
+	sl.load("addons", addons_);
+	sl.load("content", content_);
+	sl.load("typeArguments", typeArguments_);
+	sl.load("arguments", arguments_);
+	sl.load("results", results_);
+}
 
 }

@@ -24,21 +24,17 @@
 **
 ***********************************************************************************************************************/
 
-#include "top_level/VProjectStyle.h"
+#include "VVariableDeclarationExpressionStyle.h"
 
 namespace OOVisualization {
 
-void VProjectStyle::load(Visualization::StyleLoader& sl)
+void VVariableDeclarationExpressionStyle::load(Visualization::StyleLoader& sl)
 {
 	ItemStyle::load(sl);
 
 	sl.load("layout", layout_);
-	sl.load("header", header_);
 	sl.load("name", name_);
-	sl.load("icon", icon_);
-	sl.load("body", body_);
-	sl.load("content", content_);
-	sl.load("fields", fields_);
+	sl.load("assignmentSymbol", assignmentSymbol_);
 }
 
 }

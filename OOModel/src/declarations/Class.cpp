@@ -24,72 +24,83 @@
 **
 ***********************************************************************************************************************/
 
-#include "top_level/Field.h"
+#include "Class.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::Field)
+DEFINE_TYPED_LIST(OOModel::Class)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(Field)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(Field)
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(Class)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(Class)
 
-REGISTER_ATTRIBUTE(Field, name, Text, false, false, true)
-REGISTER_ATTRIBUTE(Field, typeExpression, Expression, false, false, true)
-REGISTER_ATTRIBUTE(Field, initialValue, Expression, false, true, true)
-REGISTER_ATTRIBUTE(Field, visibility, Visibility, false, false, true)
-REGISTER_ATTRIBUTE(Field, storageSpecifier, StorageSpecifier, false, false, true)
+REGISTER_ATTRIBUTE(Class, baseClasses, TypedListOfExpression, false, false, true)
+REGISTER_ATTRIBUTE(Class, friends, TypedListOfExpression, false, false, true)
+REGISTER_ATTRIBUTE(Class, typeArguments, TypedListOfFormalTypeArgument, false, false, true)
+REGISTER_ATTRIBUTE(Class, classes, TypedListOfClass, false, false, true)
+REGISTER_ATTRIBUTE(Class, methods, TypedListOfMethod, false, false, true)
+REGISTER_ATTRIBUTE(Class, fields, TypedListOfField, false, false, true)
+REGISTER_ATTRIBUTE(Class, enumerators, TypedListOfEnumerator, false, false, true)
+REGISTER_ATTRIBUTE(Class, cKind, Integer, false, false, true)
 
-Field::Field(const QString& name, Expression* type)
-: Super(nullptr, Field::getMetaData())
+Class::Class(const QString& name)
+: Super(nullptr, Class::getMetaData())
 {
 	setName(name);
-	if (type) setTypeExpression(type);
+	setConstructKind(ConstructKind::Class);
 }
 
-Field::Field(const QString& name, Expression* type, Expression* initialValue)
-: Super(nullptr, Field::getMetaData())
+Class::Class(const QString& name, Visibility::VisibilityType vis)
+: Super(nullptr, Class::getMetaData())
 {
 	setName(name);
-	if (type) setTypeExpression(type);
-	if (initialValue) setInitialValue(initialValue);
-}
-
-Field::Field(const QString& name, Expression* type, Visibility::VisibilityType vis)
-: Super(nullptr, Field::getMetaData())
-{
-	setName(name);
-	if (type) setTypeExpression(type);
 	setVisibility(vis);
+	setConstructKind(ConstructKind::Class);
 }
 
-Field::Field(const QString& name, Expression* type, StorageSpecifier::StorageSpecifierTypes storage)
-: Super(nullptr, Field::getMetaData())
+Class::Class(const QString& name, ConstructKind kind)
+: Super(nullptr, Class::getMetaData())
 {
 	setName(name);
-	if (type) setTypeExpression(type);
-	setStorageSpecifier(storage);
+	setConstructKind(kind);
 }
 
-Field::Field(const QString& name, Expression* type, Visibility::VisibilityType vis,
-		StorageSpecifier::StorageSpecifierTypes storage, Expression* initialValue)
-: Super(nullptr, Field::getMetaData())
+Class::Class(const QString& name, Visibility::VisibilityType vis, ConstructKind kind)
+: Super(nullptr, Class::getMetaData())
 {
 	setName(name);
-	if (type) setTypeExpression(type);
 	setVisibility(vis);
-	setStorageSpecifier(storage);
-	if (initialValue) setInitialValue(initialValue);
+	setConstructKind(kind);
 }
 
-bool Field::definesSymbol() const
+bool Class::definesSymbol() const
 {
 	return true;
 }
 
-const QString& Field::symbolName() const
+const QString& Class::symbolName() const
 {
 	return name();
+}
+
+QList<Model::Node*> Class::findSymbols(const QRegExp& symbolExp,Model::Node* source, FindSymbolMode mode,
+		bool exhaustAllScopes)
+{
+	QList<Model::Node*> symbols;
+
+	symbols << classes()->findAllSymbolDefinitions(symbolExp);
+	symbols << methods()->findAllSymbolDefinitions(symbolExp);
+	symbols << fields()->findAllSymbolDefinitions(symbolExp);
+	symbols << enumerators()->findAllSymbolDefinitions(symbolExp);
+
+	if (exhaustAllScopes || symbols.isEmpty())
+		symbols << Node::findSymbols(symbolExp, source, mode, exhaustAllScopes);
+	return symbols;
+}
+
+bool Class::isGeneric()
+{
+	return typeArguments()->size() > 0;
 }
 
 }

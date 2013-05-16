@@ -26,12 +26,12 @@
 
 #pragma once
 
-#include "top_level/VProject.h"
-#include "top_level/VModule.h"
-#include "top_level/VClass.h"
-#include "top_level/VMethod.h"
+#include "declarations/VProject.h"
+#include "declarations/VModule.h"
+#include "declarations/VClass.h"
+#include "declarations/VMethod.h"
+#include "declarations/VField.h"
 
-#include "elements/VField.h"
 #include "elements/VEnumerator.h"
 #include "elements/VFormalArgument.h"
 #include "elements/VFormalResult.h"

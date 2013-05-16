@@ -26,7 +26,7 @@
 
 #include "ClassTypeExpression.h"
 #include "../../types/ClassType.h"
-#include "../../top_level/Class.h"
+#include "../../declarations/Class.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(OOModel::ClassTypeExpression)

@@ -30,20 +30,23 @@
 
 #include "VariableDeclaration.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, FieldDeclaration)
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Field)
 
 namespace OOModel {
 
-class OOMODEL_API FieldDeclaration : public Super<VariableDeclaration>
+class OOMODEL_API Field : public Super<VariableDeclaration>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(FieldDeclaration)
+	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Field)
+
+
+	ATTRIBUTE(Expression, ttt, setTTT)
 
 	public:
-		FieldDeclaration(const QString& name, Expression* type = nullptr);
-		FieldDeclaration(const QString& name, Expression* type, Expression* initialValue);
-		FieldDeclaration(const QString& name, Expression* type, Visibility::VisibilityType vis);
-		FieldDeclaration(const QString& name, Expression* type, StorageSpecifier::StorageSpecifierTypes storage);
-		FieldDeclaration(const QString& name, Expression* type,  Visibility::VisibilityType vis,
+		Field(const QString& name, Expression* type = nullptr);
+		Field(const QString& name, Expression* type, Expression* initialValue);
+		Field(const QString& name, Expression* type, Visibility::VisibilityType vis);
+		Field(const QString& name, Expression* type, StorageSpecifier::StorageSpecifierTypes storage);
+		Field(const QString& name, Expression* type,  Visibility::VisibilityType vis,
 				StorageSpecifier::StorageSpecifierTypes storage, Expression* initialValue = nullptr);
 };
 

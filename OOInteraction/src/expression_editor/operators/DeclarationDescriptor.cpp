@@ -26,7 +26,7 @@
 
 #include "expression_editor/operators/DeclarationDescriptor.h"
 
-#include "OOModel/src/expressions/VariableDeclaration.h"
+#include "OOModel/src/expressions/VariableDeclarationExpression.h"
 #include "OOModel/src/expressions/ReferenceExpression.h"
 
 namespace OOInteraction {
@@ -38,14 +38,14 @@ DeclarationDescriptor::DeclarationDescriptor(const QString& name, const QString&
 
 OOModel::Expression* DeclarationDescriptor::create(const QList<OOModel::Expression*>& operands)
 {
-	OOModel::VariableDeclaration* vd = new OOModel::VariableDeclaration();
+	auto vd = new OOModel::VariableDeclarationExpression();
 
-	vd->setVarType( operands.first() );
+	vd->decl()->setTypeExpression( operands.first() );
 	auto ref = dynamic_cast<OOModel::ReferenceExpression*>(operands[1]);
-	vd->setName( ref->name());
+	vd->decl()->setName( ref->name());
 	SAFE_DELETE(ref);
 
-	if (operands.size() > 2) vd->setInitialValue(operands[2]);
+	if (operands.size() > 2) vd->decl()->setInitialValue(operands[2]);
 	return vd;
 }
 

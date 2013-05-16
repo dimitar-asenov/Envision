@@ -26,37 +26,37 @@
 
 #pragma once
 
-#include "../oovisualization_api.h"
-#include "VFieldStyle.h"
+#include "../oomodel_api.h"
 
-#include "OOModel/src/top_level/Field.h"
+#include "Module.h"
+#include "Class.h"
+#include "Method.h"
+#include "Field.h"
 
-#include "VisualizationBase/src/items/ItemWithNode.h"
-#include "VisualizationBase/src/items/LayoutProvider.h"
+#include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
+#include "ModelBase/src/nodes/Text.h"
+#include "ModelBase/src/nodes/TypedList.h"
+#include "ModelBase/src/nodes/nodeMacros.h"
 
-namespace Visualization {
-	class VText;
-	class Static;
-}
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Project)
 
-namespace OOVisualization {
+namespace OOModel {
 
-class OOVISUALIZATION_API VField : public Super<Visualization::ItemWithNode<VField, Visualization::LayoutProvider<>,
-	OOModel::Field >>
+class OOMODEL_API Project : public Super<Declaration>
 {
-	ITEM_COMMON(VField)
+	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Project)
+
+	ATTRIBUTE(Model::TypedList<Project>, projects, setProjects)
+	ATTRIBUTE(Model::TypedList<Module>, modules, setModules)
+	ATTRIBUTE(Model::TypedList<Class>, classes, setClasses)
+	ATTRIBUTE(Model::TypedList<Method>, methods, setMethods)
+	ATTRIBUTE(Model::TypedList<Field>, fields, setFields)
 
 	public:
-		VField(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		virtual ~VField();
+		Project(const QString& name);
 
-	protected:
-		void determineChildren();
-
-	private:
-		Visualization::VText* name_{};
-		Visualization::Item* type_{};
-		Visualization::Static* assignmentSymbol_{};
-		Visualization::Item* initialValue_{};
+		virtual QList<Node*> findSymbols(const QRegExp& symbolExp, Node* source, FindSymbolMode mode,
+				bool exhaustAllScopes) override;
 };
+
 }

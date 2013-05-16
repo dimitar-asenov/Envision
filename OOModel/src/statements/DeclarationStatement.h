@@ -26,27 +26,24 @@
 
 #pragma once
 
-#include "VExpression.h"
-#include "StandardExpressionVisualizations.h"
+#include "Statement.h"
+#include "../declarations/Declaration.h"
 
-#include "VMethodCallExpression.h"
-#include "VReferenceExpression.h"
-#include "VThisExpression.h"
-#include "VBinaryOperation.h"
-#include "VArrayInitializer.h"
-#include "VVariableDeclarationExpression.h"
-#include "VLambdaExpression.h"
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, DeclarationStatement)
 
-#include "VEmptyExpression.h"
-#include "VErrorExpression.h"
-#include "VUnfinishedOperator.h"
+namespace OOModel {
 
-#include "literals/VStringLiteral.h"
-#include "literals/VIntegerLiteral.h"
-#include "literals/VFloatLiteral.h"
-#include "literals/VCharacterLiteral.h"
-#include "literals/VBooleanLiteral.h"
-#include "literals/VNullLiteral.h"
+class OOMODEL_API DeclarationStatement : public Super<Statement>
+{
+	EXTENDABLENODE_DECLARE_STANDARD_METHODS(DeclarationStatement)
 
-#include "types/VClassType.h"
-#include "types/VPrimitiveType.h"
+	ATTRIBUTE(Declaration, declaration, setDeclaration)
+
+	public:
+		DeclarationStatement(Declaration* d);
+
+		virtual bool definesSymbol() const;
+		virtual const QString& symbolName() const;
+};
+
+}/* namespace OOModel */

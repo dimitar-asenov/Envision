@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "top_level/Project.h"
+#include "Project.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(OOModel::Project)
@@ -34,7 +34,6 @@ namespace OOModel {
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(Project)
 EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(Project)
 
-REGISTER_ATTRIBUTE(Project, name, Text, false, false, true)
 REGISTER_ATTRIBUTE(Project, projects, TypedListOfProject, false, false, true)
 REGISTER_ATTRIBUTE(Project, modules, TypedListOfModule, false, false, true)
 REGISTER_ATTRIBUTE(Project, classes, TypedListOfClass, false, false, true)
@@ -44,16 +43,6 @@ REGISTER_ATTRIBUTE(Project, fields, TypedListOfField, false, false, true)
 Project::Project(const QString& name) : Super(nullptr, Project::getMetaData())
 {
 	setName(name);
-}
-
-bool Project::definesSymbol() const
-{
-	return true;
-}
-
-const QString& Project::symbolName() const
-{
-	return name();
 }
 
 QList<Model::Node*> Project::findSymbols(const QRegExp& symbolExp,Model::Node* source, FindSymbolMode mode,

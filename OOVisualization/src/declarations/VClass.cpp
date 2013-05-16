@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "top_level/VClass.h"
+#include "VClass.h"
 #include "OOVisualizationException.h"
 
 #include "../elements/VStatementItemList.h"

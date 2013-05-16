@@ -144,20 +144,18 @@ Class* addCollection(Model::Model* model, Project* parent)
 	insertCallSt->setExpression(insertCall);
 	ifs->thenBranch()->append(insertCallSt);
 
-	VariableDeclaration* indexVar = new VariableDeclaration();
+	VariableDeclarationExpression* indexVar = new VariableDeclarationExpression("index");
 	test->items()->append(new ExpressionStatement(indexVar));
-	indexVar->setName("index");
-	indexVar->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
+	indexVar->decl()->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
 	MethodCallExpression* findCall = new MethodCallExpression("find");
-	indexVar->setInitialValue(findCall);
+	indexVar->decl()->setInitialValue(findCall);
 	findCall->arguments()->append( new IntegerLiteral(42));
 
-	VariableDeclaration* resultVar = new VariableDeclaration();
+	VariableDeclarationExpression* resultVar = new VariableDeclarationExpression("result");
 	test->items()->append(new ExpressionStatement(resultVar));
-	resultVar->setName("result");
-	resultVar->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
+	resultVar->decl()->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
 	MethodCallExpression* sumCall = new MethodCallExpression("sum", new ThisExpression());
-	resultVar->setInitialValue(sumCall);
+	resultVar->decl()->setInitialValue(sumCall);
 	sumCall->arguments()->append( new IntegerLiteral(0));
 	sumCall->arguments()->append( new ReferenceExpression("index"));
 

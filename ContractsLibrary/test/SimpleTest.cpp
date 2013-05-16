@@ -43,7 +43,7 @@
 #include "VisualizationBase/src/node_extensions/Position.h"
 #include "VisualizationBase/src/items/RootItem.h"
 
-#include "OOVisualization/src/top_level/VMethod.h"
+#include "OOVisualization/src/declarations/VMethod.h"
 #include "OOVisualization/src/elements/VStatementItemList.h"
 #include "OOVisualization/src/alternative/VKeywordMethodCall.h"
 

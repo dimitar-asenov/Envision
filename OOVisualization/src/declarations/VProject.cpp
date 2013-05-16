@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "top_level/VProject.h"
+#include "VProject.h"
 
 #include "VisualizationBase/src/layouts/PanelBorderLayout.h"
 #include "VisualizationBase/src/layouts/PositionLayout.h"

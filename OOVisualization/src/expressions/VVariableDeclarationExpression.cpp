@@ -24,59 +24,52 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "VVariableDeclarationExpression.h"
 
-#include "../oovisualization_api.h"
-#include "VMethodStyle.h"
+#include "VisualizationBase/src/items/Static.h"
+#include "VisualizationBase/src/items/VText.h"
 
-#include "OOModel/src/top_level/Method.h"
-
-#include "VisualizationBase/src/items/ItemWithNode.h"
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
-
-namespace Visualization {
-	class VText;
-	class VList;
-	class Static;
-	class Line;
-}
+using namespace Visualization;
+using namespace OOModel;
 
 namespace OOVisualization {
 
-class VStatementItemList;
+ITEM_COMMON_DEFINITIONS(VVariableDeclarationExpression, "item")
 
-class OOVISUALIZATION_API VMethod
-: public Super<Visualization::ItemWithNode<VMethod, Visualization::DeclarativeItem<VMethod>, OOModel::Method>>
+VVariableDeclarationExpression::VVariableDeclarationExpression(Item* parent, NodeType* node, const StyleType* style) :
+	Super(parent, node, style),
+	name_(new VText(layout(), node->decl()->nameNode(), &style->name()) ),
+	type_(nullptr),
+	assignmentSymbol_(nullptr),
+	initialValue_(nullptr)
 {
-	ITEM_COMMON(VMethod)
+	layout()->append(name_);
+}
 
-	public:
-		VMethod(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+VVariableDeclarationExpression::~VVariableDeclarationExpression()
+{
+	// These were automatically deleted by LayoutProvider's destructor
+	name_ = nullptr;
+	type_ = nullptr;
+	assignmentSymbol_ = nullptr;
+	initialValue_ = nullptr;
+}
 
-		Visualization::VText* name() const;
-		VStatementItemList* body() const;
-		VStatementItemList* annotations() const;
-		Visualization::VList* typeArguments() const;
-		Visualization::VList* arguments() const;
+void VVariableDeclarationExpression::determineChildren()
+{
+	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
+	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
+	//			what's the reason they are being updated.
+	// The style needs to be updated every time since if our own style changes, so will that of the children.
+	layout()->setStyle( &style()->layout());
+	name_->setStyle( &style()->name());
 
-		static void initializeForms();
-
-	private:
-		Visualization::Static* icon_{};
-		Visualization::VText* name_{};
-		Visualization::VList* typeArguments_{};
-		Visualization::VList* arguments_{};
-		Visualization::Line* signatureLine_{};
-		VStatementItemList* body_{};
-		VStatementItemList* annotations_{};
-		Visualization::SequentialLayout* addons_{};
-		Visualization::VList* results_{};
-};
-
-inline Visualization::VText* VMethod::name() const { return name_; }
-inline VStatementItemList* VMethod::body() const { return body_; }
-inline VStatementItemList* VMethod::annotations() const { return annotations_; }
-inline Visualization::VList* VMethod::typeArguments() const { return typeArguments_; }
-inline Visualization::VList* VMethod::arguments() const { return arguments_; }
+	layout()->synchronizeFirst(type_, node()->decl()->typeExpression());
+	layout()->synchronizeMid(name_, node()->decl()->nameNode(), &style()->name(), 1);
+	name_->setEditable(false);
+	layout()->synchronizeMid(assignmentSymbol_, node()->decl()->initialValue() != nullptr,
+			&style()->assignmentSymbol(), 2);
+	layout()->synchronizeLast(initialValue_, node()->decl()->initialValue());
+}
 
 }

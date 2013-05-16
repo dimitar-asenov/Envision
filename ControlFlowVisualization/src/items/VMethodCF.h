@@ -30,7 +30,7 @@
 #include "VMethodCFStyle.h"
 #include "VListCF.h"
 
-#include "OOModel/src/top_level/Method.h"
+#include "OOModel/src/declarations/Method.h"
 
 #include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/items/LayoutProvider.h"

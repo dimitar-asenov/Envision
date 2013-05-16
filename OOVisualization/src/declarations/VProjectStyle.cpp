@@ -24,45 +24,21 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-#include "../oovisualization_api.h"
 #include "VProjectStyle.h"
-
-#include "OOModel/src/top_level/Project.h"
-
-#include "VisualizationBase/src/items/ItemWithNode.h"
-#include "VisualizationBase/src/items/LayoutProvider.h"
-
-namespace Visualization {
-	class VText;
-	class PanelBorderLayout;
-	class PositionLayout;
-	class SequentialLayout;
-	class VList;
-}
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VProject
-: public Super<Visualization::ItemWithNode<VProject, Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
-  	  OOModel::Project>>
+void VProjectStyle::load(Visualization::StyleLoader& sl)
 {
-	ITEM_COMMON(VProject)
+	ItemStyle::load(sl);
 
-	public:
-		VProject(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		virtual ~VProject();
-
-	protected:
-		void determineChildren();
-
-	private:
-		Visualization::SequentialLayout* header{};
-		Visualization::VText* name{};
-		Visualization::PositionLayout* body_{};
-		Visualization::SequentialLayout* content_{};
-		Visualization::VList* fields_{};
-};
+	sl.load("layout", layout_);
+	sl.load("header", header_);
+	sl.load("name", name_);
+	sl.load("icon", icon_);
+	sl.load("body", body_);
+	sl.load("content", content_);
+	sl.load("fields", fields_);
+}
 
 }

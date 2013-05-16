@@ -208,8 +208,8 @@ void StringComponents::initConversions()
 	add<NewExpression>([](NewExpression* e ){ return c( "new", " ", e->newType(),
 		Optional("[", e->amount()), Optional(e->amount(), AUTO), Optional("]", e->amount()) ); });
 	add<DeleteExpression>([](DeleteExpression* e ){ return c( e->isArray() ? "delete[]":"delete", " ", e->expr() ); });
-	add<VariableDeclaration>([](VariableDeclaration* e ){ return c( e->varType(), " ", e->name(),
-		Optional("=",e->initialValue()), Optional(e->initialValue())); });
+	add<VariableDeclarationExpression>([](VariableDeclarationExpression* e ){ return c( e->decl()->typeExpression(), " ",
+			e->decl()->name(), Optional("=",e->decl()->initialValue()), Optional(e->decl()->initialValue())); });
 
 	add<LambdaExpression>([](LambdaExpression* e ){ return c( CompoundObjectDescriptor::storeExpression(e)); });
 

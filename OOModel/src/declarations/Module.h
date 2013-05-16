@@ -28,60 +28,33 @@
 
 #include "../oomodel_api.h"
 
+#include "Class.h"
 #include "Method.h"
 #include "Field.h"
-#include "Enumerator.h"
-#include "../attributeMacros.h"
-#include "../elements/Visibility.h"
-#include "../elements/FormalTypeArgument.h"
-#include "../elements/StatementItemList.h"
-#include "../expressions/Expression.h"
 
-#include "../elements/StatementItem.h"
+#include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
 #include "ModelBase/src/nodes/Text.h"
+#include "ModelBase/src/nodes/TypedList.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Class)
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Module)
 
 namespace OOModel {
 
-class OOMODEL_API Class : public Super<StatementItem>
+class OOMODEL_API Module : public Super<Declaration>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Class)
+	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Module)
 
-	ATTRIBUTE_OOP_NAME
-	ATTRIBUTE(Model::TypedList<Expression>, baseClasses, setBaseClasses)
-	ATTRIBUTE(Model::TypedList<Expression>, friends, setFriends)
-	ATTRIBUTE(Model::TypedList<FormalTypeArgument>, typeArguments, setTypeArguments)
+	ATTRIBUTE(Model::TypedList<Module>, modules, setModules)
 	ATTRIBUTE(Model::TypedList<Class>, classes, setClasses)
 	ATTRIBUTE(Model::TypedList<Method>, methods, setMethods)
 	ATTRIBUTE(Model::TypedList<Field>, fields, setFields)
-	ATTRIBUTE(Model::TypedList<Enumerator>, enumerators, setEnumerators)
-	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, cKind, setCKind, int)
-	ATTRIBUTE_OOP_VISIBILITY
-	ATTRIBUTE_OOP_ANNOTATIONS
 
 	public:
-		Class(const QString& name);
-		Class(const QString& name, Visibility::VisibilityType vis);
-
-		enum class ConstructKind : int {Class, Interface, Struct, Union, Enum};
-
-		Class(const QString& name, ConstructKind kind);
-		Class(const QString& name, Visibility::VisibilityType vis, ConstructKind kind);
-
-		ConstructKind constructKind() const;
-		void setConstructKind(const ConstructKind& kind);
-
-		virtual bool definesSymbol() const;
-		virtual const QString& symbolName() const;
-		bool isGeneric();
+		Module(const QString& name);
 
 		virtual QList<Node*> findSymbols(const QRegExp& symbolExp, Node* source, FindSymbolMode mode,
 				bool exhaustAllScopes) override;
 };
-
-inline Class::ConstructKind Class::constructKind() const { return static_cast<ConstructKind> (cKind()); }
-inline void Class::setConstructKind(const ConstructKind& kind) { setCKind(static_cast<int> (kind)); }
 
 }

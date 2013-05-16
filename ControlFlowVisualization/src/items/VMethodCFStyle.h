@@ -29,7 +29,7 @@
 #include "../controlflowvisualization_api.h"
 #include "VListCFStyle.h"
 
-#include "OOVisualization/src/top_level/VMethodStyle.h"
+#include "OOVisualization/src/declarations/VMethodStyle.h"
 #include "VisualizationBase/src/layouts/PanelBorderLayoutStyle.h"
 
 namespace ControlFlowVisualization {

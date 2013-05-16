@@ -24,28 +24,49 @@
 **
 ***********************************************************************************************************************/
 
-#include "elements/VFieldStyle.h"
+#pragma once
 
-namespace OOVisualization {
+#include "../oomodel_api.h"
 
-VFieldStyle::VFieldStyle()
+#include "Declaration.h"
+
+#include "../elements/StorageSpecifier.h"
+#include "../elements/StatementItem.h"
+#include "../elements/FormalArgument.h"
+#include "../elements/FormalResult.h"
+#include "../elements/FormalTypeArgument.h"
+#include "../elements/StatementItemList.h"
+
+#include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
+#include "ModelBase/src/nodes/Text.h"
+#include "ModelBase/src/nodes/TypedList.h"
+#include "ModelBase/src/nodes/nodeMacros.h"
+
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Method)
+
+namespace OOModel {
+
+class OOMODEL_API Method : public Super<Declaration>
 {
-}
+	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Method)
 
-void VFieldStyle::load(Visualization::StyleLoader& sl)
-{
-	ItemStyle::load(sl);
+	ATTRIBUTE(StatementItemList, items, setItems)
+	ATTRIBUTE(Model::TypedList<FormalTypeArgument>, typeArguments, setTypeArguments)
+	ATTRIBUTE(Model::TypedList<FormalArgument>, arguments, setArguments)
+	ATTRIBUTE(Model::TypedList<FormalResult>, results, setResults)
+	ATTRIBUTE_OOP_STORAGESPECIFIER
 
-	sl.load("layout", layout_);
-	sl.load("nameDefault", nameDefault_);
-	sl.load("namePublic", namePublic_);
-	sl.load("namePrivate", namePrivate_);
-	sl.load("nameProtected", nameProtected_);
-	sl.load("nameStaticDefault", nameStaticDefault_);
-	sl.load("nameStaticPublic", nameStaticPublic_);
-	sl.load("nameStaticPrivate", nameStaticPrivate_);
-	sl.load("nameStaticProtected", nameStaticProtected_);
-	sl.load("assignmentSymbol", assignmentSymbol_);
-}
+	public:
+		Method(const QString& name);
+		Method(const QString& name, Visibility::VisibilityType vis);
+		Method(const QString& name, StorageSpecifier::StorageSpecifierTypes storage);
+		Method(const QString& name, Visibility::VisibilityType vis, StorageSpecifier::StorageSpecifierTypes storage);
+
+		QString fullyQualifiedName() const;
+		bool isGeneric();
+
+		virtual QList<Node*> findSymbols(const QRegExp& symbolExp, Node* source, FindSymbolMode mode,
+				bool exhaustAllScopes) override;
+};
 
 }

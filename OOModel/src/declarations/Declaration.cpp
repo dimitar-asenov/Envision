@@ -36,6 +36,7 @@ EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(Declaration)
 
 REGISTER_ATTRIBUTE(Declaration, name, Text, false, false, true)
 REGISTER_ATTRIBUTE(Declaration, visibility, Visibility, false, false, true)
+REGISTER_ATTRIBUTE(Declaration, annotations, StatementItemList, false, false, true)
 
 Declaration::Declaration(const QString& name)
 : Super(nullptr, Declaration::getMetaData())
@@ -48,6 +49,16 @@ Declaration::Declaration(const QString& name, Visibility::VisibilityType vis)
 {
 	setName(name);
 	setVisibility(vis);
+}
+
+bool Declaration::definesSymbol() const
+{
+	return true;
+}
+
+const QString& Declaration::symbolName() const
+{
+	return name();
 }
 
 }

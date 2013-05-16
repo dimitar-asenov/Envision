@@ -26,13 +26,11 @@
 
 #pragma once
 
-#include "top_level/Project.h"
-#include "top_level/Module.h"
-#include "top_level/Class.h"
-#include "top_level/Method.h"
-#include "top_level/Field.h"
-#include "top_level/Enumerator.h"
-
+#include "declarations/Project.h"
+#include "declarations/Module.h"
+#include "declarations/Class.h"
+#include "declarations/Method.h"
+#include "declarations/Field.h"
 #include "declarations/Declaration.h"
 #include "declarations/VariableDeclaration.h"
 
@@ -47,6 +45,7 @@
 #include "statements/SwitchCase.h"
 #include "statements/SwitchStatement.h"
 #include "statements/ExpressionStatement.h"
+#include "statements/DeclarationStatement.h"
 #include "statements/TryCatchFinallyStatement.h"
 
 #include "expressions/Expression.h"
@@ -74,7 +73,6 @@
 #include "expressions/ConditionalExpression.h"
 #include "expressions/ThrowExpression.h"
 #include "expressions/LambdaExpression.h"
-#include "expressions/DeleteExpression.h"
 
 #include "expressions/types/TypeExpression.h"
 #include "expressions/types/PrimitiveTypeExpression.h"
@@ -84,6 +82,7 @@
 #include "expressions/types/ReferenceTypeExpression.h"
 
 #include "elements/Visibility.h"
+#include "elements/Enumerator.h"
 #include "elements/StorageSpecifier.h"
 #include "elements/StatementItem.h"
 #include "elements/StatementItemList.h"

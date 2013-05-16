@@ -24,21 +24,36 @@
 **
 ***********************************************************************************************************************/
 
-#include "top_level/VModuleStyle.h"
+#pragma once
+
+#include "../oovisualization_api.h"
+
+#include "VisualizationBase/src/items/TextStyle.h"
+#include "VisualizationBase/src/items/StaticStyle.h"
+#include "VisualizationBase/src/layouts/SequentialLayout.h"
 
 namespace OOVisualization {
 
-void VModuleStyle::load(Visualization::StyleLoader& sl)
+class OOVISUALIZATION_API VVariableDeclarationExpressionStyle : public Visualization::ItemStyle
 {
-	ItemStyle::load(sl);
+	private:
+		Visualization::SequentialLayoutStyle layout_;
+		Visualization::TextStyle name_;
+		Visualization::StaticStyle assignmentSymbol_;
 
-	sl.load("layout", layout_);
-	sl.load("header", header_);
-	sl.load("name", name_);
-	sl.load("icon", icon_);
-	sl.load("body", body_);
-	sl.load("content", content_);
-	sl.load("fields", fields_);
-}
+	public:
+		void load(Visualization::StyleLoader& sl);
+
+		const Visualization::SequentialLayoutStyle& layout() const;
+		const Visualization::TextStyle& name() const;
+		const Visualization::StaticStyle& assignmentSymbol() const;
+};
+
+inline const Visualization::SequentialLayoutStyle& VVariableDeclarationExpressionStyle::layout()
+	const { return layout_; }
+inline const Visualization::TextStyle& VVariableDeclarationExpressionStyle::name()
+	const { return name_; }
+inline const Visualization::StaticStyle& VVariableDeclarationExpressionStyle::assignmentSymbol()
+	const { return assignmentSymbol_; }
 
 }

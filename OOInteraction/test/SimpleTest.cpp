@@ -99,77 +99,65 @@ Method* addDivBySix(Model::Model* model, Class* parent)
 	divbysix->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("true")));
 	divbysix->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("123456")));
 
-	VariableDeclaration* exprtest = new VariableDeclaration();
+	VariableDeclarationExpression* exprtest = new VariableDeclarationExpression("exprtest");
 	divbysix->items()->append(new ExpressionStatement(exprtest));
-	exprtest->setName("exprtest");
-	exprtest->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
-	exprtest->setInitialValue( OOExpressionBuilder::getOOExpression("+aa++&b,*e/d-#") );
+	exprtest->decl()->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
+	exprtest->decl()->setInitialValue( OOExpressionBuilder::getOOExpression("+aa++&b,*e/d-#") );
 
-	VariableDeclaration* exprtest2 = new VariableDeclaration();
+	VariableDeclarationExpression* exprtest2 = new VariableDeclarationExpression("exprtest2");
 	divbysix->items()->append(new ExpressionStatement(exprtest2));
-	exprtest2->setName("exprtest2");
-	exprtest2->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::VOID));
-	exprtest2->setInitialValue( OOExpressionBuilder::getOOExpression("a*b+c/e-d++%--e*-f==g") );
+	exprtest2->decl()->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::VOID));
+	exprtest2->decl()->setInitialValue( OOExpressionBuilder::getOOExpression("a*b+c/e-d++%--e*-f==g") );
 
-	VariableDeclaration* exprtest3 = new VariableDeclaration();
+	VariableDeclarationExpression* exprtest3 = new VariableDeclarationExpression("exprtest3");
 	divbysix->items()->append(new ExpressionStatement(exprtest3));
-	exprtest3->setName("exprtest3");
-	exprtest3->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::VOID));
-	exprtest3->setInitialValue( OOExpressionBuilder::getOOExpression("a<b||c>d&&e<=f|g&h^~i") );
+	exprtest3->decl()->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::VOID));
+	exprtest3->decl()->setInitialValue( OOExpressionBuilder::getOOExpression("a<b||c>d&&e<=f|g&h^~i") );
 
-	VariableDeclaration* exprtest4 = new VariableDeclaration();
+	VariableDeclarationExpression* exprtest4 = new VariableDeclarationExpression("exprtest4");
 	divbysix->items()->append(new ExpressionStatement(exprtest4));
-	exprtest4->setName("exprtest4");
-	exprtest4->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::VOID));
-	exprtest4->setInitialValue( OOExpressionBuilder::getOOExpression("new value[5]") );
+	exprtest4->decl()->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::VOID));
+	exprtest4->decl()->setInitialValue( OOExpressionBuilder::getOOExpression("new value[5]") );
 
-	VariableDeclaration* exprtest5 = new VariableDeclaration();
+	VariableDeclarationExpression* exprtest5 = new VariableDeclarationExpression("exprtest5");
 	divbysix->items()->append(new ExpressionStatement(exprtest5));
-	exprtest5->setName("exprtest5");
-	exprtest5->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::VOID));
-	exprtest5->setInitialValue( OOExpressionBuilder::getOOExpression("(castto)object") );
+	exprtest5->decl()->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::VOID));
+	exprtest5->decl()->setInitialValue( OOExpressionBuilder::getOOExpression("(castto)object") );
 
-	VariableDeclaration* exprtest6 = new VariableDeclaration();
+	VariableDeclarationExpression* exprtest6 = new VariableDeclarationExpression("exprtest6");
 	divbysix->items()->append(new ExpressionStatement(exprtest6));
-	exprtest6->setName("exprtest6");
-	exprtest6->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::VOID));
-	exprtest6->setInitialValue( OOExpressionBuilder::getOOExpression("{a,bb,ccc}") );
+	exprtest6->decl()->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::VOID));
+	exprtest6->decl()->setInitialValue( OOExpressionBuilder::getOOExpression("{a,bb,ccc}") );
 
-	VariableDeclaration* exprtest7 = new VariableDeclaration();
+	VariableDeclarationExpression* exprtest7 = new VariableDeclarationExpression("exprtest7");
 	divbysix->items()->append(new ExpressionStatement(exprtest7));
-	exprtest7->setName("exprtest7");
-	exprtest7->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::VOID));
-	exprtest7->setInitialValue( OOExpressionBuilder::getOOExpression("{{123,hello},{2,b}}") );
+	exprtest7->decl()->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::VOID));
+	exprtest7->decl()->setInitialValue( OOExpressionBuilder::getOOExpression("{{123,hello},{2,b}}") );
 
-	VariableDeclaration* exprtest8 = new VariableDeclaration();
+	VariableDeclarationExpression* exprtest8 = new VariableDeclarationExpression("exprtest8");
 	divbysix->items()->append(new ExpressionStatement(exprtest8));
-	exprtest8->setName("exprtest8");
-	exprtest8->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::VOID));
-	exprtest8->setInitialValue( OOExpressionBuilder::getOOExpression("a.b+c.d[i].f") );
+	exprtest8->decl()->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::VOID));
+	exprtest8->decl()->setInitialValue( OOExpressionBuilder::getOOExpression("a.b+c.d[i].f") );
 
-	VariableDeclaration* exprtest9 = new VariableDeclaration();
+	VariableDeclarationExpression* exprtest9 = new VariableDeclarationExpression("exprtest9");
 	divbysix->items()->append(new ExpressionStatement(exprtest9));
-	exprtest9->setName("exprtest9");
-	exprtest9->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::VOID));
-	exprtest9->setInitialValue( OOExpressionBuilder::getOOExpression("a()+a.b()+a.b[i].f().g()") );
+	exprtest9->decl()->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::VOID));
+	exprtest9->decl()->setInitialValue( OOExpressionBuilder::getOOExpression("a()+a.b()+a.b[i].f().g()") );
 
-	VariableDeclaration* exprtest10 = new VariableDeclaration();
+	VariableDeclarationExpression* exprtest10 = new VariableDeclarationExpression("exprtest10");
 	divbysix->items()->append(new ExpressionStatement(exprtest10));
-	exprtest10->setName("exprtest10");
-	exprtest10->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::VOID));
-	exprtest10->setInitialValue( OOExpressionBuilder::getOOExpression("this.b(a,b,c,123,false)") );
+	exprtest10->decl()->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::VOID));
+	exprtest10->decl()->setInitialValue( OOExpressionBuilder::getOOExpression("this.b(a,b,c,123,false)") );
 
-	VariableDeclaration* exprtest11 = new VariableDeclaration();
+	VariableDeclarationExpression* exprtest11 = new VariableDeclarationExpression("exprtest11");
 	divbysix->items()->append(new ExpressionStatement(exprtest11));
-	exprtest11->setName("exprtest11");
-	exprtest11->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::VOID));
-	exprtest11->setInitialValue( OOExpressionBuilder::getOOExpression("a+\"hello world\"") );
+	exprtest11->decl()->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::VOID));
+	exprtest11->decl()->setInitialValue( OOExpressionBuilder::getOOExpression("a+\"hello world\"") );
 
-	VariableDeclaration* exprtest12 = new VariableDeclaration();
+	VariableDeclarationExpression* exprtest12 = new VariableDeclarationExpression("exprtest12");
 	divbysix->items()->append(new ExpressionStatement(exprtest12));
-	exprtest12->setName("exprtest12");
-	exprtest12->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::VOID));
-	exprtest12->setInitialValue( OOExpressionBuilder::getOOExpression("int[]") );
+	exprtest12->decl()->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::VOID));
+	exprtest12->decl()->setInitialValue( OOExpressionBuilder::getOOExpression("int[]") );
 
 	auto exprtest13 = dynamic_cast<AssignmentExpression*>( OOExpressionBuilder::getOOExpression("a=b%=c>>>=d+C"));
 	divbysix->items()->append(new ExpressionStatement(exprtest13));
@@ -195,19 +183,17 @@ Method* addDivBySix(Model::Model* model, Class* parent)
 	divbysix->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("delete[] anArrayPointer")));
 
 
-	VariableDeclaration* result = new VariableDeclaration();
+	VariableDeclarationExpression* result = new VariableDeclarationExpression("result");
 	divbysix->items()->append( new ExpressionStatement(result) );
-	result->setName("result");
-	result->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
-	result->setInitialValue(new IntegerLiteral(-1));
+	result->decl()->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
+	result->decl()->setInitialValue(new IntegerLiteral(-1));
 
 	LoopStatement* sixloop = new LoopStatement();
 	divbysix->items()->append(sixloop);
-	VariableDeclaration* sixLoopInit = new VariableDeclaration();
+	VariableDeclarationExpression* sixLoopInit = new VariableDeclarationExpression("i");
 	sixloop->setInitStep(sixLoopInit);
-	sixLoopInit->setName("i");
-	sixLoopInit->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
-	sixLoopInit->setInitialValue(new IntegerLiteral(0));
+	sixLoopInit->decl()->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
+	sixLoopInit->decl()->setInitialValue(new IntegerLiteral(0));
 	BinaryOperation* sixLoopCond = new BinaryOperation();
 	sixloop->setCondition(sixLoopCond);
 	sixLoopCond->setLeft(new ReferenceExpression("i"));
@@ -222,12 +208,11 @@ Method* addDivBySix(Model::Model* model, Class* parent)
 	sixLoopUpdate->setOp(AssignmentExpression::PLUS_ASSIGN);
 	sixLoopUpdate->setRight(new IntegerLiteral(1));
 
-	VariableDeclaration* n = new VariableDeclaration();
+	VariableDeclarationExpression* n = new VariableDeclarationExpression("n");
 	sixloop->body()->append(new ExpressionStatement(n));
-	n->setName("n");
-	n->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
+	n->decl()->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
 	BinaryOperation* item = new BinaryOperation();
-	n->setInitialValue(item);
+	n->decl()->setInitialValue(item);
 	item->setLeft(new ReferenceExpression("numbers"));
 	item->setOp(BinaryOperation::ARRAY_INDEX);
 	item->setRight(new ReferenceExpression("i"));

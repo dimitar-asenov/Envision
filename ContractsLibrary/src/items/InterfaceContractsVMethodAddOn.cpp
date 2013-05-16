@@ -25,10 +25,10 @@
  **********************************************************************************************************************/
 
 #include "InterfaceContractsVMethodAddOn.h"
-#include "OOVisualization/src/top_level/VMethod.h"
+#include "OOVisualization/src/declarations/VMethod.h"
 #include "OOVisualization/src/elements/VStatementItemList.h"
-#include "OOModel/src/top_level/Class.h"
-#include "OOModel/src/top_level/Method.h"
+#include "OOModel/src/declarations/Class.h"
+#include "OOModel/src/declarations/Method.h"
 #include "OOModel/src/expressions/MethodCallExpression.h"
 #include "OOModel/src/statements/ExpressionStatement.h"
 

@@ -24,57 +24,59 @@
 **
 ***********************************************************************************************************************/
 
-#include "declarations/FieldDeclaration.h"
+#pragma once
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::FieldDeclaration)
+#include "../oovisualization_api.h"
+#include "VMethodStyle.h"
 
-namespace OOModel {
+#include "OOModel/src/declarations/Method.h"
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(FieldDeclaration)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(FieldDeclaration)
+#include "VisualizationBase/src/items/ItemWithNode.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
 
-FieldDeclaration::FieldDeclaration(const QString& name, Expression* type)
-: Super(nullptr, FieldDeclaration::getMetaData())
-{
-	setName(name);
-	if (type) setType(type);
+namespace Visualization {
+	class VText;
+	class VList;
+	class Static;
+	class Line;
 }
 
-FieldDeclaration::FieldDeclaration(const QString& name, Expression* type, Expression* initialValue)
-: Super(nullptr, FieldDeclaration::getMetaData())
-{
-	setName(name);
-	if (type) setType(type);
-	if (initialValue) setInitialValue(initialValue);
-}
+namespace OOVisualization {
 
-FieldDeclaration::FieldDeclaration(const QString& name, Expression* type, Visibility::VisibilityType vis)
-: Super(nullptr, FieldDeclaration::getMetaData())
-{
-	setName(name);
-	if (type) setType(type);
-	setVisibility(vis);
-}
+class VStatementItemList;
 
-FieldDeclaration::FieldDeclaration
-		(const QString& name, Expression* type, StorageSpecifier::StorageSpecifierTypes storage)
-: Super(nullptr, FieldDeclaration::getMetaData())
+class OOVISUALIZATION_API VMethod
+: public Super<Visualization::ItemWithNode<VMethod, Visualization::DeclarativeItem<VMethod>, OOModel::Method>>
 {
-	setName(name);
-	if (type) setType(type);
-	setStorageSpecifier(storage);
-}
+	ITEM_COMMON(VMethod)
 
-FieldDeclaration::FieldDeclaration(const QString& name, Expression* type, Visibility::VisibilityType vis,
-				 StorageSpecifier::StorageSpecifierTypes storage, Expression* initialValue)
-: Super(nullptr, FieldDeclaration::getMetaData())
-{
-	setName(name);
-	if (type) setType(type);
-	setVisibility(vis);
-	setStorageSpecifier(storage);
-	if (initialValue) setInitialValue(initialValue);
-}
+	public:
+		VMethod(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+
+		Visualization::VText* name() const;
+		VStatementItemList* body() const;
+		VStatementItemList* annotations() const;
+		Visualization::VList* typeArguments() const;
+		Visualization::VList* arguments() const;
+
+		static void initializeForms();
+
+	private:
+		Visualization::Static* icon_{};
+		Visualization::VText* name_{};
+		Visualization::VList* typeArguments_{};
+		Visualization::VList* arguments_{};
+		Visualization::Line* signatureLine_{};
+		VStatementItemList* body_{};
+		VStatementItemList* annotations_{};
+		Visualization::SequentialLayout* addons_{};
+		Visualization::VList* results_{};
+};
+
+inline Visualization::VText* VMethod::name() const { return name_; }
+inline VStatementItemList* VMethod::body() const { return body_; }
+inline VStatementItemList* VMethod::annotations() const { return annotations_; }
+inline Visualization::VList* VMethod::typeArguments() const { return typeArguments_; }
+inline Visualization::VList* VMethod::arguments() const { return arguments_; }
 
 }

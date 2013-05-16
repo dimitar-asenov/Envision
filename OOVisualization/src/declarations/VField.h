@@ -26,43 +26,37 @@
 
 #pragma once
 
-#include "../oomodel_api.h"
+#include "../oovisualization_api.h"
+#include "VFieldStyle.h"
 
-#include "../attributeMacros.h"
-#include "../elements/Visibility.h"
-#include "../elements/StorageSpecifier.h"
-#include "../expressions/Expression.h"
+#include "OOModel/src/declarations/Field.h"
 
-#include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
-#include "ModelBase/src/nodes/Text.h"
-#include "ModelBase/src/nodes/nodeMacros.h"
+#include "VisualizationBase/src/items/ItemWithNode.h"
+#include "VisualizationBase/src/items/LayoutProvider.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Field)
+namespace Visualization {
+	class VText;
+	class Static;
+}
 
-namespace OOModel {
+namespace OOVisualization {
 
-class OOMODEL_API Field : public Super<Model::ExtendableNode>
+class OOVISUALIZATION_API VField : public Super<Visualization::ItemWithNode<VField, Visualization::LayoutProvider<>,
+	OOModel::Field >>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Field)
-
-	ATTRIBUTE_OOP_NAME
-	ATTRIBUTE(Expression, typeExpression, setTypeExpression)
-	ATTRIBUTE(Expression, initialValue, setInitialValue)
-	ATTRIBUTE_OOP_VISIBILITY
-	ATTRIBUTE_OOP_STORAGESPECIFIER
+	ITEM_COMMON(VField)
 
 	public:
+		VField(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+		virtual ~VField();
 
-		Field(const QString& name, Expression* type = nullptr);
-		Field(const QString& name, Expression* type, Expression* initialValue);
-		Field(const QString& name, Expression* type, Visibility::VisibilityType vis);
-		Field(const QString& name, Expression* type, StorageSpecifier::StorageSpecifierTypes storage);
-		Field(const QString& name, Expression* type,  Visibility::VisibilityType vis,
-				StorageSpecifier::StorageSpecifierTypes storage, Expression* initialValue = nullptr);
+	protected:
+		void determineChildren();
 
-		virtual bool definesSymbol() const;
-		virtual const QString& symbolName() const;
+	private:
+		Visualization::VText* name_{};
+		Visualization::Item* type_{};
+		Visualization::Static* assignmentSymbol_{};
+		Visualization::Item* initialValue_{};
 };
-
-
 }

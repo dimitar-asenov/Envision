@@ -27,57 +27,46 @@
 #pragma once
 
 #include "../oovisualization_api.h"
-#include "VClassStyle.h"
+#include "VVariableDeclarationExpressionStyle.h"
+#include "VExpression.h"
 
-#include "OOModel/src/top_level/Class.h"
-
-#include "VisualizationBase/src/items/ItemWithNode.h"
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
+#include "OOModel/src/expressions/VariableDeclarationExpression.h"
+#include "VisualizationBase/src/items/LayoutProvider.h"
 
 namespace Visualization {
-	class VText;
-	class VList;
 	class Static;
-	class PositionLayout;
-	class NodeWrapper;
-}
-
-namespace Model {
-	class Node;
+	class VText;
 }
 
 namespace OOVisualization {
-class VStatementItemList;
 
-class OOVISUALIZATION_API VClass
-: public Super<Visualization::ItemWithNode<VClass, Visualization::DeclarativeItem<VClass>, OOModel::Class>>
+class OOVISUALIZATION_API VVariableDeclarationExpression : public Super<VExpression<VVariableDeclarationExpression,
+	Visualization::LayoutProvider<>, OOModel::VariableDeclarationExpression>>
 {
-	ITEM_COMMON(VClass)
+	ITEM_COMMON(VVariableDeclarationExpression)
 
 	public:
-		VClass(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+		VVariableDeclarationExpression(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+		virtual ~VVariableDeclarationExpression();
 
-		static void initializeForms();
-		int determineForm() override;
+		Visualization::VText* name() const;
+		Visualization::Item* declarationType() const;
+		Visualization::Static* assignmentSymbol() const;
+		Visualization::Item* initialValue() const;
 
 	protected:
-		void determineChildren() override;
+		void determineChildren();
 
 	private:
-		Visualization::Static* icon_{};
-		Visualization::VText* name_{};
-		Visualization::VList* typeArguments_{};
-		Visualization::VList* baseClasses_{};
-		VStatementItemList* annotations_{};
-		Visualization::VList* enumerators_{};
-		Visualization::Static* friendsSymbol_{};
-		Visualization::VList* friends_{};
-		Visualization::PositionLayout* body_{};
-		Visualization::NodeWrapper* fieldBackground_{};
-		QList<Model::Node*> publicFields_{};
-		QList<Model::Node*> privateFields_{};
-		QList<Model::Node*> protectedFields_{};
-		QList<Model::Node*> defaultFields_{};
+		Visualization::VText* name_;
+		Visualization::Item* type_;
+		Visualization::Static* assignmentSymbol_;
+		Visualization::Item* initialValue_;
 };
+
+inline Visualization::VText* VVariableDeclarationExpression::name() const {return name_;}
+inline Visualization::Item* VVariableDeclarationExpression::declarationType() const {return type_;}
+inline Visualization::Static* VVariableDeclarationExpression::assignmentSymbol() const {return assignmentSymbol_;}
+inline Visualization::Item* VVariableDeclarationExpression::initialValue() const {return initialValue_;}
 
 }

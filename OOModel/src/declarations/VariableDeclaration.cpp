@@ -34,7 +34,7 @@ namespace OOModel {
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(VariableDeclaration)
 EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(VariableDeclaration)
 
-REGISTER_ATTRIBUTE(VariableDeclaration, type, Expression, false, false, true)
+REGISTER_ATTRIBUTE(VariableDeclaration, typeExpression, Expression, false, false, true)
 REGISTER_ATTRIBUTE(VariableDeclaration, initialValue, Expression, false, true, true)
 REGISTER_ATTRIBUTE(VariableDeclaration, storageSpecifier, StorageSpecifier, false, false, true)
 
@@ -42,14 +42,14 @@ VariableDeclaration::VariableDeclaration(const QString& name, Expression* type)
 : Super(nullptr, VariableDeclaration::getMetaData())
 {
 	setName(name);
-	if (type) setType(type);
+	if (type) setTypeExpression(type);
 }
 
 VariableDeclaration::VariableDeclaration(const QString& name, Expression* type, Expression* initialValue)
 : Super(nullptr, VariableDeclaration::getMetaData())
 {
 	setName(name);
-	if (type) setType(type);
+	if (type) setTypeExpression(type);
 	if (initialValue) setInitialValue(initialValue);
 }
 
@@ -57,7 +57,7 @@ VariableDeclaration::VariableDeclaration(const QString& name, Expression* type, 
 : Super(nullptr, VariableDeclaration::getMetaData())
 {
 	setName(name);
-	if (type) setType(type);
+	if (type) setTypeExpression(type);
 	setVisibility(vis);
 }
 
@@ -66,7 +66,7 @@ VariableDeclaration::VariableDeclaration
 : Super(nullptr, VariableDeclaration::getMetaData())
 {
 	setName(name);
-	if (type) setType(type);
+	if (type) setTypeExpression(type);
 	setStorageSpecifier(storage);
 }
 
@@ -75,20 +75,10 @@ VariableDeclaration::VariableDeclaration(const QString& name, Expression* type, 
 : Super(nullptr, VariableDeclaration::getMetaData())
 {
 	setName(name);
-	if (type) setType(type);
+	if (type) setTypeExpression(type);
 	setVisibility(vis);
 	setStorageSpecifier(storage);
 	if (initialValue) setInitialValue(initialValue);
-}
-
-bool VariableDeclaration::definesSymbol() const
-{
-	return true;
-}
-
-const QString& VariableDeclaration::symbolName() const
-{
-	return name();
 }
 
 }

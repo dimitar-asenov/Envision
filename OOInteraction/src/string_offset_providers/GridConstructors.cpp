@@ -128,8 +128,8 @@ void GridConstructors::initializeAll()
 			grid->add(new Cell(2, vis->layout()->at<Visualization::Item>(1), 2));
 		});
 
-	GridBasedOffsetProvider::addGridConstructor<VVariableDeclaration>(
-	[](GridBasedOffsetProvider* grid, VVariableDeclaration* vis){
+	GridBasedOffsetProvider::addGridConstructor<VVariableDeclarationExpression>(
+	[](GridBasedOffsetProvider* grid, VVariableDeclarationExpression* vis){
 		grid->add(new Cell(0, vis->declarationType(), 0));
 		grid->add(new Cell(2, vis->name(), 2));
 		if (vis->initialValue())

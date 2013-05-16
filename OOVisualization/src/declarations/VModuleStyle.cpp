@@ -24,54 +24,21 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "VModuleStyle.h"
 
-#include "../oomodel_api.h"
+namespace OOVisualization {
 
-#include "../attributeMacros.h"
-#include "../elements/Visibility.h"
-#include "../elements/StorageSpecifier.h"
-#include "../elements/StatementItem.h"
-#include "../elements/FormalArgument.h"
-#include "../elements/FormalResult.h"
-#include "../elements/FormalTypeArgument.h"
-#include "../elements/StatementItemList.h"
-
-#include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
-#include "ModelBase/src/nodes/Text.h"
-#include "ModelBase/src/nodes/TypedList.h"
-#include "ModelBase/src/nodes/nodeMacros.h"
-
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Method)
-
-namespace OOModel {
-
-class OOMODEL_API Method : public Super<Model::ExtendableNode>
+void VModuleStyle::load(Visualization::StyleLoader& sl)
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Method)
+	ItemStyle::load(sl);
 
-	ATTRIBUTE_OOP_NAME
-	ATTRIBUTE(StatementItemList, items, setItems)
-	ATTRIBUTE(Model::TypedList<FormalTypeArgument>, typeArguments, setTypeArguments)
-	ATTRIBUTE(Model::TypedList<FormalArgument>, arguments, setArguments)
-	ATTRIBUTE(Model::TypedList<FormalResult>, results, setResults)
-	ATTRIBUTE_OOP_VISIBILITY
-	ATTRIBUTE_OOP_STORAGESPECIFIER
-	ATTRIBUTE_OOP_ANNOTATIONS
-
-	public:
-		Method(const QString& name);
-		Method(const QString& name, Visibility::VisibilityType vis);
-		Method(const QString& name, StorageSpecifier::StorageSpecifierTypes storage);
-		Method(const QString& name, Visibility::VisibilityType vis, StorageSpecifier::StorageSpecifierTypes storage);
-
-		virtual bool definesSymbol() const;
-		virtual const QString& symbolName() const;
-		QString fullyQualifiedName() const;
-		bool isGeneric();
-
-		virtual QList<Node*> findSymbols(const QRegExp& symbolExp, Node* source, FindSymbolMode mode,
-				bool exhaustAllScopes) override;
-};
+	sl.load("layout", layout_);
+	sl.load("header", header_);
+	sl.load("name", name_);
+	sl.load("icon", icon_);
+	sl.load("body", body_);
+	sl.load("content", content_);
+	sl.load("fields", fields_);
+}
 
 }

@@ -24,7 +24,7 @@
 **
 ***********************************************************************************************************************/
 
-#include "top_level/Method.h"
+#include "Method.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(OOModel::Method)
@@ -34,14 +34,11 @@ namespace OOModel {
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(Method)
 EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(Method)
 
-REGISTER_ATTRIBUTE(Method, name, Text, false, false, true)
 REGISTER_ATTRIBUTE(Method, items, StatementItemList, false, false, true)
 REGISTER_ATTRIBUTE(Method, typeArguments, TypedListOfFormalTypeArgument, false, false, true)
 REGISTER_ATTRIBUTE(Method, arguments, TypedListOfFormalArgument, false, false, true)
 REGISTER_ATTRIBUTE(Method, results, TypedListOfFormalResult, false, false, true)
-REGISTER_ATTRIBUTE(Method, visibility, Visibility, false, false, true)
 REGISTER_ATTRIBUTE(Method, storageSpecifier, StorageSpecifier, false, false, true)
-REGISTER_ATTRIBUTE(Method, annotations, StatementItemList, false, false, true)
 
 Method::Method(const QString& name) : Super(nullptr, Method::getMetaData())
 {
@@ -67,16 +64,6 @@ Method::Method(const QString& name, Visibility::VisibilityType vis, StorageSpeci
 	setName(name);
 	setVisibility(vis);
 	setStorageSpecifier(storage);
-}
-
-bool Method::definesSymbol() const
-{
-	return true;
-}
-
-const QString& Method::symbolName() const
-{
-	return name();
 }
 
 QString Method::fullyQualifiedName() const

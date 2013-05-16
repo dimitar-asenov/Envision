@@ -27,7 +27,7 @@
 #include "ValueAtReturnVisitor.h"
 #include "OOModel/src/expressions/MethodCallExpression.h"
 #include "OOModel/src/expressions/ReferenceExpression.h"
-#include "OOModel/src/top_level/Method.h"
+#include "OOModel/src/declarations/Method.h"
 #include "OOModel/src/elements/FormalArgument.h"
 #include "OOInteraction/src/expression_editor/OOExpressionBuilder.h"
 #include "OOInteraction/src/expression_editor/operators/CommandDescriptor.h"

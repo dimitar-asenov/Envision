@@ -24,17 +24,33 @@
 **
 ***********************************************************************************************************************/
 
-#include "expressions/VVariableDeclarationStyle.h"
+#include "VClassStyle.h"
 
 namespace OOVisualization {
 
-void VVariableDeclarationStyle::load(Visualization::StyleLoader& sl)
+void VClassStyle::load(Visualization::StyleLoader& sl)
 {
 	ItemStyle::load(sl);
 
-	sl.load("layout", layout_);
-	sl.load("name", name_);
-	sl.load("assignmentSymbol", assignmentSymbol_);
+	sl.load("nameDefault", nameDefault_);
+	sl.load("namePublic", namePublic_);
+	sl.load("namePrivate", namePrivate_);
+	sl.load("nameProtected", nameProtected_);
+	sl.load("icon", icon_);
+	sl.load("header", header_);
+	sl.load("typeArguments", typeArguments_);
+	sl.load("baseClasses", baseClasses_);
+	sl.load("annotations", annotations_);
+	sl.load("enumerators", enumerators_);
+	sl.load("friendsSymbol", friendsSymbol_);
+	sl.load("friends", friends_);
+	sl.load("body", body_);
+	sl.load("content", content_);
+	sl.load("fieldContainer", fieldContainer_);
+	sl.load("publicFieldArea", publicFieldArea_);
+	sl.load("privateFieldArea", privateFieldArea_);
+	sl.load("protectedFieldArea", protectedFieldArea_);
+	sl.load("defaultFieldArea", defaultFieldArea_);
 }
 
 }

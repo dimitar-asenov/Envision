@@ -26,7 +26,7 @@
 
 #include "OOReference.h"
 #include "../expressions/ReferenceExpression.h"
-#include "../top_level/Class.h"
+#include "../declarations/Class.h"
 
 #include "../types/SymbolProviderType.h"
 

@@ -24,29 +24,36 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
+#include "DeclarationStatement.h"
 
-#include "VExpression.h"
-#include "StandardExpressionVisualizations.h"
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(OOModel::DeclarationStatement)
 
-#include "VMethodCallExpression.h"
-#include "VReferenceExpression.h"
-#include "VThisExpression.h"
-#include "VBinaryOperation.h"
-#include "VArrayInitializer.h"
-#include "VVariableDeclarationExpression.h"
-#include "VLambdaExpression.h"
+namespace OOModel {
 
-#include "VEmptyExpression.h"
-#include "VErrorExpression.h"
-#include "VUnfinishedOperator.h"
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(DeclarationStatement)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(DeclarationStatement)
 
-#include "literals/VStringLiteral.h"
-#include "literals/VIntegerLiteral.h"
-#include "literals/VFloatLiteral.h"
-#include "literals/VCharacterLiteral.h"
-#include "literals/VBooleanLiteral.h"
-#include "literals/VNullLiteral.h"
+REGISTER_ATTRIBUTE(DeclarationStatement, declaration, Declaration, false, false, true)
 
-#include "types/VClassType.h"
-#include "types/VPrimitiveType.h"
+DeclarationStatement::DeclarationStatement(Declaration* d)
+: Super(nullptr, DeclarationStatement::getMetaData())
+{
+	setDeclaration(d);
+}
+
+bool DeclarationStatement::definesSymbol() const
+{
+	return true;
+}
+
+const QString& DeclarationStatement::symbolName() const
+{
+	static QString nullString;
+
+	//TODO What should the const usage be here?
+	auto d = (const_cast<DeclarationStatement*>(this))->declaration();
+	return d ? d->symbolName() : nullString;
+}
+
+} /* namespace OOModel */

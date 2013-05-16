@@ -24,32 +24,44 @@
 **
 ***********************************************************************************************************************/
 
-#include "top_level/VMethodStyle.h"
+#pragma once
+
+#include "../oovisualization_api.h"
+#include "VModuleStyle.h"
+
+#include "OOModel/src/declarations/Module.h"
+
+#include "VisualizationBase/src/items/ItemWithNode.h"
+#include "VisualizationBase/src/items/LayoutProvider.h"
+
+namespace Visualization {
+	class VText;
+	class PanelBorderLayout;
+	class PositionLayout;
+	class VList;
+}
 
 namespace OOVisualization {
 
-void VMethodStyle::load(Visualization::StyleLoader& sl)
+class OOVISUALIZATION_API VModule
+: public Super<Visualization::ItemWithNode<VModule, Visualization::LayoutProvider<Visualization::PanelBorderLayout>,
+  OOModel::Module>>
 {
-	ItemStyle::load(sl);
+	ITEM_COMMON(VModule)
 
-	sl.load("nameDefault", nameDefault_);
-	sl.load("namePublic", namePublic_);
-	sl.load("namePrivate", namePrivate_);
-	sl.load("nameProtected", nameProtected_);
-	sl.load("nameStaticDefault", nameStaticDefault_);
-	sl.load("nameStaticPublic", nameStaticPublic_);
-	sl.load("nameStaticPrivate", nameStaticPrivate_);
-	sl.load("nameStaticProtected", nameStaticProtected_);
-	sl.load("icon", icon_);
-	sl.load("header", header_);
-	sl.load("signatureLine",signatureLine_);
-	sl.load("body", body_);
-	sl.load("annotations", annotations_);
-	sl.load("addons", addons_);
-	sl.load("content", content_);
-	sl.load("typeArguments", typeArguments_);
-	sl.load("arguments", arguments_);
-	sl.load("results", results_);
-}
+	public:
+		VModule(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+		virtual ~VModule();
+
+	protected:
+		void determineChildren();
+
+	private:
+		Visualization::SequentialLayout* header{};
+		Visualization::VText* name{};
+		Visualization::PositionLayout* body_{};
+		Visualization::SequentialLayout* content_{};
+		Visualization::VList* fields_{};
+};
 
 }

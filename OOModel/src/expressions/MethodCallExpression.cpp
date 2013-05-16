@@ -25,8 +25,8 @@
 ***********************************************************************************************************************/
 
 #include "expressions/MethodCallExpression.h"
-#include "top_level/Class.h"
-#include "top_level/Method.h"
+#include "declarations/Class.h"
+#include "declarations/Method.h"
 #include "../types/PrimitiveType.h"
 #include "../types/ErrorType.h"
 

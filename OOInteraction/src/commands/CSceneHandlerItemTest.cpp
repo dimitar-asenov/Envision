@@ -29,7 +29,7 @@
 #include "VisualizationBase/src/items/RootItem.h"
 #include "VisualizationBase/src/VisualizationManager.h"
 
-#include "OOModel/src/top_level/Project.h"
+#include "OOModel/src/declarations/Project.h"
 #include "FilePersistence/src/FileStore.h"
 #include "ModelBase/src/model/Model.h"
 

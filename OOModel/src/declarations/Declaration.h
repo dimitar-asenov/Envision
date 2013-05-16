@@ -28,6 +28,8 @@
 
 #include "../oomodel_api.h"
 
+
+#include "../elements/StatementItemList.h"
 #include "../attributeMacros.h"
 #include "../elements/Visibility.h"
 
@@ -45,10 +47,14 @@ class OOMODEL_API Declaration : public Super<Model::ExtendableNode>
 
 	ATTRIBUTE_OOP_NAME
 	ATTRIBUTE_OOP_VISIBILITY
+	ATTRIBUTE_OOP_ANNOTATIONS
 
 	public:
 		Declaration(const QString& name);
-		Declaration(const QString &name, Visibility::VisibilityType vis);
+		Declaration(const QString& name, Visibility::VisibilityType vis);
+
+		virtual bool definesSymbol() const;
+		virtual const QString& symbolName() const;
 };
 
 }

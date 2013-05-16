@@ -24,86 +24,40 @@
 **
 ***********************************************************************************************************************/
 
-#include "top_level/Class.h"
+#include "Module.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::Class)
+DEFINE_TYPED_LIST(OOModel::Module)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(Class)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(Class)
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(Module)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(Module)
 
-REGISTER_ATTRIBUTE(Class, name, Text, false, false, true)
-REGISTER_ATTRIBUTE(Class, baseClasses, TypedListOfExpression, false, false, true)
-REGISTER_ATTRIBUTE(Class, friends, TypedListOfExpression, false, false, true)
-REGISTER_ATTRIBUTE(Class, typeArguments, TypedListOfFormalTypeArgument, false, false, true)
-REGISTER_ATTRIBUTE(Class, classes, TypedListOfClass, false, false, true)
-REGISTER_ATTRIBUTE(Class, methods, TypedListOfMethod, false, false, true)
-REGISTER_ATTRIBUTE(Class, fields, TypedListOfField, false, false, true)
-REGISTER_ATTRIBUTE(Class, enumerators, TypedListOfEnumerator, false, false, true)
-REGISTER_ATTRIBUTE(Class, visibility, Visibility, false, false, true)
-REGISTER_ATTRIBUTE(Class, annotations, StatementItemList, false, false, true)
-REGISTER_ATTRIBUTE(Class, cKind, Integer, false, false, true)
+REGISTER_ATTRIBUTE(Module, modules, TypedListOfModule, false, false, true)
+REGISTER_ATTRIBUTE(Module, classes, TypedListOfClass, false, false, true)
+REGISTER_ATTRIBUTE(Module, methods, TypedListOfMethod, false, false, true)
+REGISTER_ATTRIBUTE(Module, fields, TypedListOfField, false, false, true)
 
-Class::Class(const QString& name)
-: Super(nullptr, Class::getMetaData())
+Module::Module(const QString& name) : Super(nullptr, Module::getMetaData())
 {
 	setName(name);
-	setConstructKind(ConstructKind::Class);
 }
 
-Class::Class(const QString& name, Visibility::VisibilityType vis)
-: Super(nullptr, Class::getMetaData())
-{
-	setName(name);
-	setVisibility(vis);
-	setConstructKind(ConstructKind::Class);
-}
-
-Class::Class(const QString& name, ConstructKind kind)
-: Super(nullptr, Class::getMetaData())
-{
-	setName(name);
-	setConstructKind(kind);
-}
-
-Class::Class(const QString& name, Visibility::VisibilityType vis, ConstructKind kind)
-: Super(nullptr, Class::getMetaData())
-{
-	setName(name);
-	setVisibility(vis);
-	setConstructKind(kind);
-}
-
-bool Class::definesSymbol() const
-{
-	return true;
-}
-
-const QString& Class::symbolName() const
-{
-	return name();
-}
-
-QList<Model::Node*> Class::findSymbols(const QRegExp& symbolExp,Model::Node* source, FindSymbolMode mode,
+QList<Model::Node*> Module::findSymbols(const QRegExp& symbolExp,Model::Node* source, FindSymbolMode mode,
 		bool exhaustAllScopes)
 {
 	QList<Model::Node*> symbols;
 
+	symbols << modules()->findAllSymbolDefinitions(symbolExp);
 	symbols << classes()->findAllSymbolDefinitions(symbolExp);
 	symbols << methods()->findAllSymbolDefinitions(symbolExp);
 	symbols << fields()->findAllSymbolDefinitions(symbolExp);
-	symbols << enumerators()->findAllSymbolDefinitions(symbolExp);
 
 	if (exhaustAllScopes || symbols.isEmpty())
 		symbols << Node::findSymbols(symbolExp, source, mode, exhaustAllScopes);
-	return symbols;
-}
 
-bool Class::isGeneric()
-{
-	return typeArguments()->size() > 0;
+	return symbols;
 }
 
 }

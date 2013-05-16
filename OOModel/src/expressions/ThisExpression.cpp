@@ -25,7 +25,7 @@
 ***********************************************************************************************************************/
 
 #include "expressions/ThisExpression.h"
-#include "top_level/Class.h"
+#include "declarations/Class.h"
 #include "../types/ClassType.h"
 #include "../types/ErrorType.h"
 

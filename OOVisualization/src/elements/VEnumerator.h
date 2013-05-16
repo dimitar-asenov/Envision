@@ -29,7 +29,7 @@
 #include "../oovisualization_api.h"
 #include "VEnumeratorStyle.h"
 
-#include "OOModel/src/top_level/Enumerator.h"
+#include "OOModel/src/elements/Enumerator.h"
 
 #include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/items/LayoutProvider.h"

@@ -26,7 +26,7 @@
 
 #include "handlers/HMethod.h"
 
-#include "OOVisualization/src/top_level/VMethod.h"
+#include "OOVisualization/src/declarations/VMethod.h"
 #include "OOVisualization/src/elements/VStatementItemList.h"
 #include "OOModel/src/expressions/EmptyExpression.h"
 #include "OOModel/src/statements/ExpressionStatement.h"
