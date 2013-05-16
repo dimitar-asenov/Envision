@@ -24,32 +24,27 @@
 **
 ***********************************************************************************************************************/
 
-#include "expressions/CastExpression.h"
-#include "../types/Type.h"
+#pragma once
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::CastExpression)
+#include "../oomodel_api.h"
+
+#include "VariableDeclaration.h"
+
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, FieldDeclaration)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(CastExpression)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(CastExpression)
-
-REGISTER_ATTRIBUTE(CastExpression, castType, Expression, false, false, true)
-REGISTER_ATTRIBUTE(CastExpression, expr, Expression, false, false, true)
-REGISTER_ATTRIBUTE(CastExpression, cKind, Integer, false, false, true)
-
-Type* CastExpression::type()
+class OOMODEL_API FieldDeclaration : public Super<VariableDeclaration>
 {
-	auto t = castType()->type();
-	t->setValueType(true);
-	return t;
-}
+	EXTENDABLENODE_DECLARE_STANDARD_METHODS(FieldDeclaration)
 
-CastExpression::CastExpression(CastKind castKind)
-: Super(nullptr, CastExpression::getMetaData())
-{
-	setCastKind(castKind);
-}
+	public:
+		FieldDeclaration(const QString& name, Expression* type = nullptr);
+		FieldDeclaration(const QString& name, Expression* type, Expression* initialValue);
+		FieldDeclaration(const QString& name, Expression* type, Visibility::VisibilityType vis);
+		FieldDeclaration(const QString& name, Expression* type, StorageSpecifier::StorageSpecifierTypes storage);
+		FieldDeclaration(const QString& name, Expression* type,  Visibility::VisibilityType vis,
+				StorageSpecifier::StorageSpecifierTypes storage, Expression* initialValue = nullptr);
+};
 
 }

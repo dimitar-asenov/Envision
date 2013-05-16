@@ -24,37 +24,30 @@
 **
 ***********************************************************************************************************************/
 
-#include "expressions/VariableDeclaration.h"
-#include "../types/Type.h"
+#include "Declaration.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::VariableDeclaration)
+DEFINE_TYPED_LIST(OOModel::Declaration)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(VariableDeclaration)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(VariableDeclaration)
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(Declaration)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(Declaration)
 
-REGISTER_ATTRIBUTE(VariableDeclaration, name, Text, false, false, true)
-REGISTER_ATTRIBUTE(VariableDeclaration, varType, Expression, false, false, true)
-REGISTER_ATTRIBUTE(VariableDeclaration, initialValue, Expression, false, true, true)
+REGISTER_ATTRIBUTE(Declaration, name, Text, false, false, true)
+REGISTER_ATTRIBUTE(Declaration, visibility, Visibility, false, false, true)
 
-bool VariableDeclaration::definesSymbol() const
+Declaration::Declaration(const QString& name)
+: Super(nullptr, Declaration::getMetaData())
 {
-	return true;
+	setName(name);
 }
 
-const QString& VariableDeclaration::symbolName() const
+Declaration::Declaration(const QString& name, Visibility::VisibilityType vis)
+: Super(nullptr, Declaration::getMetaData())
 {
-	return name();
+	setName(name);
+	setVisibility(vis);
 }
-
-Type* VariableDeclaration::type()
-{
-	auto t = varType()->type();
-	t->setValueType(true);
-	return t;
-}
-
 
 }
