@@ -24,32 +24,38 @@
 **
 ***********************************************************************************************************************/
 
-#include "expressions/CastExpression.h"
-#include "../types/Type.h"
+#pragma once
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::CastExpression)
+#include "Expression.h"
+
+#include "../attributeMacros.h"
+
+#include "../declarations/VariableDeclaration.h"
+
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, VariableDeclarationExpression)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(CastExpression)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(CastExpression)
-
-REGISTER_ATTRIBUTE(CastExpression, castType, Expression, false, false, true)
-REGISTER_ATTRIBUTE(CastExpression, expr, Expression, false, false, true)
-REGISTER_ATTRIBUTE(CastExpression, cKind, Integer, false, false, true)
-
-Type* CastExpression::type()
+class OOMODEL_API VariableDeclarationExpression: public Super<Expression>
 {
-	auto t = castType()->type();
-	t->setValueType(true);
-	return t;
-}
+	EXTENDABLENODE_DECLARE_STANDARD_METHODS(VariableDeclarationExpression)
 
-CastExpression::CastExpression(CastKind castKind)
-: Super(nullptr, CastExpression::getMetaData())
-{
-	setCastKind(castKind);
-}
+	ATTRIBUTE(VariableDeclaration, decl, setDecl)
+
+	public:
+		VariableDeclarationExpression(VariableDeclaration* variableDeclaration);
+		VariableDeclarationExpression(const QString& name, Expression* type = nullptr);
+		VariableDeclarationExpression(const QString& name, Expression* type, Expression* initialValue);
+		VariableDeclarationExpression(const QString& name, Expression* type, Visibility::VisibilityType vis);
+		VariableDeclarationExpression
+		(const QString& name, Expression* type, StorageSpecifier::StorageSpecifierTypes storage);
+		VariableDeclarationExpression(const QString& name, Expression* type,  Visibility::VisibilityType vis,
+				StorageSpecifier::StorageSpecifierTypes storage, Expression* initialValue = nullptr);
+		virtual bool definesSymbol() const;
+		// TODO: should be virtual const QString& symbolName() const; !?
+		virtual const QString& symbolName();
+
+		virtual Type* type();
+};
 
 }

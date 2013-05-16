@@ -24,32 +24,57 @@
 **
 ***********************************************************************************************************************/
 
-#include "expressions/CastExpression.h"
-#include "../types/Type.h"
+#include "declarations/FieldDeclaration.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::CastExpression)
+DEFINE_TYPED_LIST(OOModel::FieldDeclaration)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(CastExpression)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(CastExpression)
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(FieldDeclaration)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(FieldDeclaration)
 
-REGISTER_ATTRIBUTE(CastExpression, castType, Expression, false, false, true)
-REGISTER_ATTRIBUTE(CastExpression, expr, Expression, false, false, true)
-REGISTER_ATTRIBUTE(CastExpression, cKind, Integer, false, false, true)
-
-Type* CastExpression::type()
+FieldDeclaration::FieldDeclaration(const QString& name, Expression* type)
+: Super(nullptr, FieldDeclaration::getMetaData())
 {
-	auto t = castType()->type();
-	t->setValueType(true);
-	return t;
+	setName(name);
+	if (type) setType(type);
 }
 
-CastExpression::CastExpression(CastKind castKind)
-: Super(nullptr, CastExpression::getMetaData())
+FieldDeclaration::FieldDeclaration(const QString& name, Expression* type, Expression* initialValue)
+: Super(nullptr, FieldDeclaration::getMetaData())
 {
-	setCastKind(castKind);
+	setName(name);
+	if (type) setType(type);
+	if (initialValue) setInitialValue(initialValue);
+}
+
+FieldDeclaration::FieldDeclaration(const QString& name, Expression* type, Visibility::VisibilityType vis)
+: Super(nullptr, FieldDeclaration::getMetaData())
+{
+	setName(name);
+	if (type) setType(type);
+	setVisibility(vis);
+}
+
+FieldDeclaration::FieldDeclaration
+		(const QString& name, Expression* type, StorageSpecifier::StorageSpecifierTypes storage)
+: Super(nullptr, FieldDeclaration::getMetaData())
+{
+	setName(name);
+	if (type) setType(type);
+	setStorageSpecifier(storage);
+}
+
+FieldDeclaration::FieldDeclaration(const QString& name, Expression* type, Visibility::VisibilityType vis,
+				 StorageSpecifier::StorageSpecifierTypes storage, Expression* initialValue)
+: Super(nullptr, FieldDeclaration::getMetaData())
+{
+	setName(name);
+	if (type) setType(type);
+	setVisibility(vis);
+	setStorageSpecifier(storage);
+	if (initialValue) setInitialValue(initialValue);
 }
 
 }

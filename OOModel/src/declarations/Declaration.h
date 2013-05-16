@@ -24,32 +24,31 @@
 **
 ***********************************************************************************************************************/
 
-#include "expressions/CastExpression.h"
-#include "../types/Type.h"
+#pragma once
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::CastExpression)
+#include "../oomodel_api.h"
+
+#include "../attributeMacros.h"
+#include "../elements/Visibility.h"
+
+#include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
+#include "ModelBase/src/nodes/Text.h"
+#include "ModelBase/src/nodes/nodeMacros.h"
+
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Declaration)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(CastExpression)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(CastExpression)
-
-REGISTER_ATTRIBUTE(CastExpression, castType, Expression, false, false, true)
-REGISTER_ATTRIBUTE(CastExpression, expr, Expression, false, false, true)
-REGISTER_ATTRIBUTE(CastExpression, cKind, Integer, false, false, true)
-
-Type* CastExpression::type()
+class OOMODEL_API Declaration : public Super<Model::ExtendableNode>
 {
-	auto t = castType()->type();
-	t->setValueType(true);
-	return t;
-}
+	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Declaration)
 
-CastExpression::CastExpression(CastKind castKind)
-: Super(nullptr, CastExpression::getMetaData())
-{
-	setCastKind(castKind);
-}
+	ATTRIBUTE_OOP_NAME
+	ATTRIBUTE_OOP_VISIBILITY
+
+	public:
+		Declaration(const QString& name);
+		Declaration(const QString &name, Visibility::VisibilityType vis);
+};
 
 }

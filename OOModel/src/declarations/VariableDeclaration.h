@@ -26,29 +26,34 @@
 
 #pragma once
 
-#include "Expression.h"
+#include "../oomodel_api.h"
 
-#include "../attributeMacros.h"
+#include "Declaration.h"
 
-#include "ModelBase/src/nodes/Text.h"
+#include "../elements/StorageSpecifier.h"
+#include "../expressions/Expression.h"
 
 DECLARE_TYPED_LIST(OOMODEL_API, OOModel, VariableDeclaration)
 
 namespace OOModel {
 
-class OOMODEL_API VariableDeclaration: public Super<Expression>
+class OOMODEL_API VariableDeclaration : public Super<Declaration>
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(VariableDeclaration)
-
-	ATTRIBUTE_OOP_NAME
-	ATTRIBUTE(Expression, varType, setVarType)
+	ATTRIBUTE(Expression, type, setType)
 	ATTRIBUTE(Expression, initialValue, setInitialValue)
+	ATTRIBUTE_OOP_STORAGESPECIFIER
 
 	public:
+		VariableDeclaration(const QString& name, Expression* type = nullptr);
+		VariableDeclaration(const QString& name, Expression* type, Expression* initialValue);
+		VariableDeclaration(const QString& name, Expression* type, Visibility::VisibilityType vis);
+		VariableDeclaration(const QString& name, Expression* type, StorageSpecifier::StorageSpecifierTypes storage);
+		VariableDeclaration(const QString& name, Expression* type,  Visibility::VisibilityType vis,
+							  StorageSpecifier::StorageSpecifierTypes storage, Expression* initialValue = nullptr);
+
 		virtual bool definesSymbol() const;
 		virtual const QString& symbolName() const;
-
-		virtual Type* type();
 };
 
 }
