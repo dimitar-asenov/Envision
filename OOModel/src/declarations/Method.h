@@ -55,6 +55,7 @@ class OOMODEL_API Method : public Super<Declaration>
 	ATTRIBUTE(Model::TypedList<FormalArgument>, arguments, setArguments)
 	ATTRIBUTE(Model::TypedList<FormalResult>, results, setResults)
 	ATTRIBUTE_OOP_STORAGESPECIFIER
+	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, mthKind, setMthKind, int)
 
 	public:
 		Method(const QString& name);
@@ -62,11 +63,25 @@ class OOMODEL_API Method : public Super<Declaration>
 		Method(const QString& name, StorageSpecifier::StorageSpecifierTypes storage);
 		Method(const QString& name, Visibility::VisibilityType vis, StorageSpecifier::StorageSpecifierTypes storage);
 
+		enum class MethodKind : int {Default, Constructor, Destructor, Conversion};
+
+		Method(const QString& name, MethodKind kind);
+		Method(const QString& name, Visibility::VisibilityType vis, MethodKind kind);
+		Method(const QString& name, StorageSpecifier::StorageSpecifierTypes storage, MethodKind kind);
+		Method(const QString& name, Visibility::VisibilityType vis,
+				 StorageSpecifier::StorageSpecifierTypes storage, MethodKind kind);
+
+		MethodKind methodKind() const;
+		void setMethodKind(const MethodKind& kind);
+
 		QString fullyQualifiedName() const;
 		bool isGeneric();
 
 		virtual QList<Node*> findSymbols(const QRegExp& symbolExp, Node* source, FindSymbolMode mode,
 				bool exhaustAllScopes) override;
 };
+
+inline Method::MethodKind Method::methodKind() const { return static_cast<MethodKind> (mthKind()); }
+inline void Method::setMethodKind(const MethodKind &kind) { setMthKind(static_cast<int> (kind)); }
 
 }

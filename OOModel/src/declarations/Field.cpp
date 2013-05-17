@@ -34,9 +34,6 @@ namespace OOModel {
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(Field)
 EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(Field)
 
-
-REGISTER_ATTRIBUTE(Field, ttt, Expression, false, false, true)
-
 Field::Field(const QString& name, Expression* type)
 : Super(nullptr, Field::getMetaData())
 {

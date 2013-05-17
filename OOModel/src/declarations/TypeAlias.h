@@ -28,23 +28,21 @@
 
 #include "../oomodel_api.h"
 
-#include "VariableDeclaration.h"
+#include "Declaration.h"
+#include "../expressions/Expression.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Field)
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, TypeAlias)
 
 namespace OOModel {
 
-class OOMODEL_API Field : public Super<VariableDeclaration>
+class OOMODEL_API TypeAlias : public Super<Declaration>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Field)
+	EXTENDABLENODE_DECLARE_STANDARD_METHODS(TypeAlias)
+	ATTRIBUTE(Expression, type, setType)
 
 	public:
-		Field(const QString& name, Expression* type = nullptr);
-		Field(const QString& name, Expression* type, Expression* initialValue);
-		Field(const QString& name, Expression* type, Visibility::VisibilityType vis);
-		Field(const QString& name, Expression* type, StorageSpecifier::StorageSpecifierTypes storage);
-		Field(const QString& name, Expression* type,  Visibility::VisibilityType vis,
-				StorageSpecifier::StorageSpecifierTypes storage, Expression* initialValue = nullptr);
+		TypeAlias(const QString& name, Expression* type = nullptr);
 };
 
 }
+

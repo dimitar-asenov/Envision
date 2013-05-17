@@ -82,7 +82,9 @@ HEADERS += src/statements/DeclarationStatement.h \
     src/expressions/DeleteExpression.h \
     src/declarations/Declaration.h \
     src/declarations/VariableDeclaration.h \
-    src/expressions/VariableDeclarationExpression.h
+    src/expressions/VariableDeclarationExpression.h \
+    src/declarations/TypeAlias.h \
+    src/expressions/types/AutoTypeExpression.h
 SOURCES += src/statements/DeclarationStatement.cpp \
     src/declarations/Field.cpp \
     src/declarations/Module.cpp \
@@ -159,4 +161,6 @@ SOURCES += src/statements/DeclarationStatement.cpp \
     src/expressions/DeleteExpression.cpp \
     src/declarations/VariableDeclaration.cpp \
     src/declarations/Declaration.cpp \
-    src/expressions/VariableDeclarationExpression.cpp
+    src/expressions/VariableDeclarationExpression.cpp \
+    src/declarations/TypeAlias.cpp \
+    src/expressions/types/AutoTypeExpression.cpp
