@@ -4,10 +4,12 @@ Envision is written in C++ and uses features from the C++11 standard. Make sure 
 GCC version 4.8 or newer should be sufficient.
 
 Envision currently uses the Qt 4.8 libraries but a migration to Qt 5 is planned.
+An additional dependency is lp_solve 5.5: http://lpsolve.sourceforge.net/
 
 \section eclipse Using Eclipse (recommended)
 
 	-# If you do not have the Qt development version installed, download and install it.
+	-# Download and install the lp_solve development library version 5.5.
 	-# Download and install the Qt Integration plug-in for your version of eclipse (32/64 bit).
 	-# Inside Eclipse, configure Qt so that it knows where to find the development files.
 	-# Download Envision's sources. The project is structured in separate directories where each one is an Eclipse/Qt
@@ -18,6 +20,7 @@ Envision currently uses the Qt 4.8 libraries but a migration to Qt 5 is planned.
 \section no_eclipse Using the command line or Qt Creator
 
 	-# If you do not have the Qt SDK installed, download and install it.
+	-# Download and install the lp_solve development library version 5.5.
 	-# Download Envision's sources. The main project is a Qt folders project which contains all the plug-ins. If you
 		want to use Qt Creator you should open the \c envision.pro file in the main directory.
 		Support for Qt Creator is minimal, but will be improved in the future.
