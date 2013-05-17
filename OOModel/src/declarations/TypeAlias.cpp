@@ -24,27 +24,23 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "TypeAlias.h"
 
-#include "../oomodel_api.h"
-
-#include "VariableDeclaration.h"
-
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Field)
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(OOModel::TypeAlias)
 
 namespace OOModel {
 
-class OOMODEL_API Field : public Super<VariableDeclaration>
-{
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Field)
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(TypeAlias)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(TypeAlias)
 
-	public:
-		Field(const QString& name, Expression* type = nullptr);
-		Field(const QString& name, Expression* type, Expression* initialValue);
-		Field(const QString& name, Expression* type, Visibility::VisibilityType vis);
-		Field(const QString& name, Expression* type, StorageSpecifier::StorageSpecifierTypes storage);
-		Field(const QString& name, Expression* type,  Visibility::VisibilityType vis,
-				StorageSpecifier::StorageSpecifierTypes storage, Expression* initialValue = nullptr);
-};
+REGISTER_ATTRIBUTE(TypeAlias, type, Expression, false, false, true)
+
+TypeAlias::TypeAlias(const QString &name, Expression *type)
+: Super(nullptr, TypeAlias::getMetaData())
+{
+	setName(name);
+	if(type) setType(type);
+}
 
 }

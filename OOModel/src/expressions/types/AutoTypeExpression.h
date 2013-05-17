@@ -26,25 +26,19 @@
 
 #pragma once
 
-#include "../oomodel_api.h"
+#include "TypeExpression.h"
 
-#include "VariableDeclaration.h"
-
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Field)
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, AutoTypeExpression)
 
 namespace OOModel {
 
-class OOMODEL_API Field : public Super<VariableDeclaration>
+class OOMODEL_API AutoTypeExpression : public Super<TypeExpression>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Field)
+	EXTENDABLENODE_DECLARE_STANDARD_METHODS(AutoTypeExpression)
 
 	public:
-		Field(const QString& name, Expression* type = nullptr);
-		Field(const QString& name, Expression* type, Expression* initialValue);
-		Field(const QString& name, Expression* type, Visibility::VisibilityType vis);
-		Field(const QString& name, Expression* type, StorageSpecifier::StorageSpecifierTypes storage);
-		Field(const QString& name, Expression* type,  Visibility::VisibilityType vis,
-				StorageSpecifier::StorageSpecifierTypes storage, Expression* initialValue = nullptr);
+		virtual Type* type();
 };
 
 }
+

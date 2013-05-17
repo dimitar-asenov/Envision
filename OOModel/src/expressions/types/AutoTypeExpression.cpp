@@ -24,27 +24,25 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "AutoTypeExpression.h"
 
-#include "../oomodel_api.h"
+#include "../../declarations/VariableDeclaration.h"
+#include "../../types/ErrorType.h"
 
-#include "VariableDeclaration.h"
-
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Field)
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(OOModel::AutoTypeExpression)
 
 namespace OOModel {
 
-class OOMODEL_API Field : public Super<VariableDeclaration>
-{
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Field)
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(AutoTypeExpression)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(AutoTypeExpression)
 
-	public:
-		Field(const QString& name, Expression* type = nullptr);
-		Field(const QString& name, Expression* type, Expression* initialValue);
-		Field(const QString& name, Expression* type, Visibility::VisibilityType vis);
-		Field(const QString& name, Expression* type, StorageSpecifier::StorageSpecifierTypes storage);
-		Field(const QString& name, Expression* type,  Visibility::VisibilityType vis,
-				StorageSpecifier::StorageSpecifierTypes storage, Expression* initialValue = nullptr);
-};
+Type* AutoTypeExpression::type()
+{
+	auto t = dynamic_cast<OOModel::VariableDeclaration*>(parent());
+	Q_ASSERT(t);
+	if(t->initialValue()) return t->initialValue()->type();
+	return new ErrorType("No initial value in auto type");
+}
 
 }

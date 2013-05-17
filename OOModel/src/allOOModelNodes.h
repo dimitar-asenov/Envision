@@ -80,6 +80,7 @@
 #include "expressions/types/ArrayTypeExpression.h"
 #include "expressions/types/PointerTypeExpression.h"
 #include "expressions/types/ReferenceTypeExpression.h"
+#include "expressions/types/AutoTypeExpression.h"
 
 #include "elements/Visibility.h"
 #include "elements/Enumerator.h"
