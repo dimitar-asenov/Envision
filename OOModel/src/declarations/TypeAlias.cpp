@@ -24,33 +24,23 @@
 **
 ***********************************************************************************************************************/
 
-#include "TypeAliasDeclaration.h"
+#include "TypeAlias.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::TypeAliasDeclaration)
+DEFINE_TYPED_LIST(OOModel::TypeAlias)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(TypeAliasDeclaration)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(TypeAliasDeclaration)
+EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(TypeAlias)
+EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(TypeAlias)
 
-REGISTER_ATTRIBUTE(TypeAliasDeclaration, type, Expression, false, false, true)
+REGISTER_ATTRIBUTE(TypeAlias, type, Expression, false, false, true)
 
-TypeAliasDeclaration::TypeAliasDeclaration(const QString &name, Expression *type)
-: Super(nullptr, TypeAliasDeclaration::getMetaData())
+TypeAlias::TypeAlias(const QString &name, Expression *type)
+: Super(nullptr, TypeAlias::getMetaData())
 {
 	setName(name);
 	if(type) setType(type);
-}
-
-bool TypeAliasDeclaration::definesSymbol() const
-{
-	return true;
-}
-
-const QString& TypeAliasDeclaration::symbolName() const
-{
-	return name();
 }
 
 }

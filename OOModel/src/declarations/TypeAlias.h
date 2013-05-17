@@ -31,20 +31,17 @@
 #include "Declaration.h"
 #include "../expressions/Expression.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, TypeAliasDeclaration)
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, TypeAlias)
 
 namespace OOModel {
 
-class OOMODEL_API TypeAliasDeclaration : public Super<Declaration>
+class OOMODEL_API TypeAlias : public Super<Declaration>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(TypeAliasDeclaration)
+	EXTENDABLENODE_DECLARE_STANDARD_METHODS(TypeAlias)
 	ATTRIBUTE(Expression, type, setType)
 
 	public:
-		TypeAliasDeclaration(const QString& name, Expression* type = nullptr);
-
-		virtual bool definesSymbol() const;
-		virtual const QString& symbolName() const;
+		TypeAlias(const QString& name, Expression* type = nullptr);
 };
 
 }

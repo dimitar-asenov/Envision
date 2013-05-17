@@ -83,7 +83,7 @@ HEADERS += src/statements/DeclarationStatement.h \
     src/declarations/Declaration.h \
     src/declarations/VariableDeclaration.h \
     src/expressions/VariableDeclarationExpression.h \
-    src/declarations/TypeAliasDeclaration.h
+    src/declarations/TypeAlias.h
 SOURCES += src/statements/DeclarationStatement.cpp \
     src/declarations/Field.cpp \
     src/declarations/Module.cpp \
@@ -161,4 +161,4 @@ SOURCES += src/statements/DeclarationStatement.cpp \
     src/declarations/VariableDeclaration.cpp \
     src/declarations/Declaration.cpp \
     src/expressions/VariableDeclarationExpression.cpp \
-    src/declarations/TypeAliasDeclaration.cpp
+    src/declarations/TypeAlias.cpp
