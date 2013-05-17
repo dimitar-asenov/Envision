@@ -10,6 +10,8 @@ var searchData=
   ['conditional_5fand',['CONDITIONAL_AND',['../classOOModel_1_1BinaryOperation.html#af590e3bc8d2168e470ed1c5190d2d3c2a40b5f70825f5c1716d6b94f9cbd1340d',1,'OOModel::BinaryOperation']]],
   ['conditional_5for',['CONDITIONAL_OR',['../classOOModel_1_1BinaryOperation.html#af590e3bc8d2168e470ed1c5190d2d3c2ad06b66d0b9841d5812c08ae0d6bfbff4',1,'OOModel::BinaryOperation']]],
   ['constcast',['ConstCast',['../classOOModel_1_1CastExpression.html#ada6ab54bf520f629426cd34b8aa905faadfd6062b26f65aefec59fb3739d34290',1,'OOModel::CastExpression']]],
+  ['constructor',['Constructor',['../classOOModel_1_1Method.html#ab08aaa06fc32f353094aa9d1793033eea678d0a4421b60dc59999ac02837496a6',1,'OOModel::Method']]],
+  ['conversion',['Conversion',['../classOOModel_1_1Method.html#ab08aaa06fc32f353094aa9d1793033eea3bb1503332637805beddb73a2dd1fe1b',1,'OOModel::Method']]],
   ['cursoraboveof',['CursorAboveOf',['../classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7ac107d1c187fb4def26eef44b28a13944',1,'Interaction::SetCursorEvent']]],
   ['cursorbelowof',['CursorBelowOf',['../classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7a45f5b7dd3073df0d681e06edc3c2487b',1,'Interaction::SetCursorEvent']]],
   ['cursordefault',['CursorDefault',['../classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7a5f26dcb6a2952d774aa6eeb4904194c1',1,'Interaction::SetCursorEvent']]],

@@ -22,5 +22,6 @@ var searchData=
   ['autocomplete',['AutoComplete',['../classInteraction_1_1AutoComplete.html',1,'Interaction']]],
   ['autocompleteentry',['AutoCompleteEntry',['../classInteraction_1_1AutoCompleteEntry.html',1,'Interaction']]],
   ['autocompletevis',['AutoCompleteVis',['../classInteraction_1_1AutoCompleteVis.html',1,'Interaction']]],
-  ['autocompletevisstyle',['AutoCompleteVisStyle',['../classInteraction_1_1AutoCompleteVisStyle.html',1,'Interaction']]]
+  ['autocompletevisstyle',['AutoCompleteVisStyle',['../classInteraction_1_1AutoCompleteVisStyle.html',1,'Interaction']]],
+  ['autotypeexpression',['AutoTypeExpression',['../classOOModel_1_1AutoTypeExpression.html',1,'OOModel']]]
 ];

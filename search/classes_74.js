@@ -8,8 +8,8 @@ var searchData=
   ['testresult',['TestResult',['../classSelfTest_1_1TestResult.html',1,'SelfTest']]],
   ['testresults',['TestResults',['../classSelfTest_1_1TestResults.html',1,'SelfTest']]],
   ['testrunner',['TestRunner',['../classCore_1_1TestRunner.html',1,'Core']]],
-  ['text',['Text',['../classVisualization_1_1Text.html',1,'Visualization']]],
   ['text',['Text',['../classModel_1_1Text.html',1,'Model']]],
+  ['text',['Text',['../classVisualization_1_1Text.html',1,'Visualization']]],
   ['textanddescription',['TextAndDescription',['../classInteraction_1_1TextAndDescription.html',1,'Interaction']]],
   ['textanddescriptionstyle',['TextAndDescriptionStyle',['../classInteraction_1_1TextAndDescriptionStyle.html',1,'Interaction']]],
   ['textcursor',['TextCursor',['../classVisualization_1_1TextCursor.html',1,'Visualization']]],
@@ -23,6 +23,7 @@ var searchData=
   ['token',['Token',['../classInteraction_1_1Token.html',1,'Interaction']]],
   ['trycatchfinallystatement',['TryCatchFinallyStatement',['../classOOModel_1_1TryCatchFinallyStatement.html',1,'OOModel']]],
   ['type',['Type',['../classOOModel_1_1Type.html',1,'OOModel']]],
+  ['typealias',['TypeAlias',['../classOOModel_1_1TypeAlias.html',1,'OOModel']]],
   ['typediterator',['TypedIterator',['../structModel_1_1TypedList_1_1TypedIterator.html',1,'Model::TypedList']]],
   ['typedlist',['TypedList',['../classModel_1_1TypedList.html',1,'Model']]],
   ['typeexpression',['TypeExpression',['../classOOModel_1_1TypeExpression.html',1,'OOModel']]]
