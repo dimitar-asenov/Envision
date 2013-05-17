@@ -56,7 +56,7 @@ void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		processed = true;
 		FilePersistence::SystemClipboard clipboard;
 		int selIndex = list->correspondingSceneCursor<Visualization::LayoutCursor>()->index();
-		if (selIndex > list->XXlength()) selIndex = list->XXlength();
+		if (selIndex > list->length()) selIndex = list->length();
 		if (selIndex < 0) selIndex = 0;
 		selIndex += list->rangeBegin();
 
@@ -98,7 +98,7 @@ void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 
 		// Delete the node corresponding to index. Make sure not to delete invisible nodes, that this list is currently
 		// not displaying. Check the boundaries on the layout, not on the nodes() array.
-		if (index >=0 && index < list->XXlength())
+		if (index >=0 && index < list->length())
 			removeNodeAndSetCursor(list, index + list->rangeBegin());
 	}
 
@@ -157,16 +157,16 @@ void HList::scheduleSetCursor(Visualization::VList* list, int setCursorNodeIndex
 		[=](){
 			int setCursorItemIndex = 0;
 			if (setCursorNodeIndex < list->rangeBegin()) setCursorItemIndex = 0;
-			else if (setCursorNodeIndex > list->rangeEnd()) setCursorItemIndex = list->XXlength();
+			else if (setCursorNodeIndex > list->rangeEnd()) setCursorItemIndex = list->length();
 			else setCursorItemIndex = setCursorNodeIndex - list->rangeBegin();
 
-			if (setCursorItemIndex == 0) return list->XXlength() ? list->itemAt<Visualization::Item>(0) : list;
+			if (setCursorItemIndex == 0) return list->length() ? list->itemAt<Visualization::Item>(0) : list;
 			else return list->itemAt<Visualization::Item>(setCursorItemIndex-1);
 		},
 		[=](){
 			int setCursorItemIndex = 0;
 			if (setCursorNodeIndex < list->rangeBegin()) setCursorItemIndex = 0;
-			else if (setCursorNodeIndex > list->rangeEnd()) setCursorItemIndex = list->XXlength();
+			else if (setCursorNodeIndex > list->rangeEnd()) setCursorItemIndex = list->length();
 			else setCursorItemIndex = setCursorNodeIndex - list->rangeBegin();
 
 			if (setCursorItemIndex == 0)
