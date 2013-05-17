@@ -34,13 +34,13 @@ namespace OOModel {
 EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(TypeAlias)
 EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(TypeAlias)
 
-REGISTER_ATTRIBUTE(TypeAlias, type, Expression, false, false, true)
+REGISTER_ATTRIBUTE(TypeAlias, typeExpression, Expression, false, false, true)
 
-TypeAlias::TypeAlias(const QString &name, Expression *type)
+TypeAlias::TypeAlias(const QString &name, Expression *typeExpression)
 : Super(nullptr, TypeAlias::getMetaData())
 {
 	setName(name);
-	if(type) setType(type);
+	if(typeExpression) setTypeExpression(typeExpression);
 }
 
 }

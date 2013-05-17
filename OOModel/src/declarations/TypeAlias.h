@@ -38,10 +38,10 @@ namespace OOModel {
 class OOMODEL_API TypeAlias : public Super<Declaration>
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(TypeAlias)
-	ATTRIBUTE(Expression, type, setType)
+	ATTRIBUTE(Expression, typeExpression, setTypeExpression)
 
 	public:
-		TypeAlias(const QString& name, Expression* type = nullptr);
+		TypeAlias(const QString& name, Expression* typeExpression = nullptr);
 };
 
 }
