@@ -105,7 +105,7 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl)
 		else if(auto curClass = dynamic_cast<OOModel::Class*>(ooStack_.top()))
 			curClass->classes()->append(ooClass);
 		else if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
-			itemList->append(ooClass);
+			itemList->append(new OOModel::DeclarationStatement(ooClass));
 		else
 			log_->writeError(className_,QString("uknown where to put class"),
 								  QString("CXXRecordDecl"),recordDecl);
@@ -575,7 +575,7 @@ bool ClangAstVisitor::TraverseEnumDecl(clang::EnumDecl* enumDecl)
 	else if(OOModel::Class* curClass = dynamic_cast<OOModel::Class*>(ooStack_.top()))
 		curClass->classes()->append(ooEnumClass);
 	else if(OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
-		itemList->append(ooEnumClass);
+		itemList->append(new OOModel::DeclarationStatement(ooEnumClass));
 	else
 	{
 		log_->writeWarning(className_,QString("Unknown where to put Enum"),
