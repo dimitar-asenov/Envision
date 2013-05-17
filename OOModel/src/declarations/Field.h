@@ -38,9 +38,6 @@ class OOMODEL_API Field : public Super<VariableDeclaration>
 {
 	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Field)
 
-
-	ATTRIBUTE(Expression, ttt, setTTT)
-
 	public:
 		Field(const QString& name, Expression* type = nullptr);
 		Field(const QString& name, Expression* type, Expression* initialValue);
