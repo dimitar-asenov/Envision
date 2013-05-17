@@ -29,16 +29,66 @@
 #include "../oointeraction_api.h"
 
 #include "OOModel/src/expressions/Expression.h"
+#include "OOModel/src/expressions/UnaryOperation.h"
+#include "OOModel/src/expressions/BinaryOperation.h"
+#include "OOModel/src/expressions/AssignmentExpression.h"
 #include "InteractionBase/src/expression_editor/OperatorDescriptor.h"
 
 namespace OOInteraction {
 
 class OOINTERACTION_API OOOperatorDescriptor : public Interaction::OperatorDescriptor {
 	public:
+		using CreateFunction = std::function<OOModel::Expression*(const QList<OOModel::Expression*>& operands)>;
+
 		OOOperatorDescriptor(const QString& name, const QString& signature, int num_operands, int precedence,
 				Associativity associativity);
 
-		virtual OOModel::Expression* create(const QList<OOModel::Expression*>& operands) = 0;
+		OOOperatorDescriptor(const QString& name, const QString& signature, int num_operands, int precedence,
+						Associativity associativity, CreateFunction createFunction);
+
+		virtual OOModel::Expression* create(const QList<OOModel::Expression*>& operands);
+
+		// Useful creationFunctions
+		template<OOModel::UnaryOperation::OperatorTypes op>
+		static OOModel::Expression* unary(const QList<OOModel::Expression*>& operands);
+
+		template<OOModel::BinaryOperation::OperatorTypes op>
+		static OOModel::Expression* binary(const QList<OOModel::Expression*>& operands);
+
+		template<OOModel::AssignmentExpression::AssignmentTypes op>
+		static OOModel::Expression* assignment(const QList<OOModel::Expression*>& operands);
+
+	private:
+		CreateFunction createFunction_{};
 };
+
+template<OOModel::UnaryOperation::OperatorTypes op>
+OOModel::Expression* OOOperatorDescriptor::unary(const QList<OOModel::Expression*>& operands)
+{
+	auto opr = new OOModel::UnaryOperation();
+	opr->setOp(op);
+	opr->setOperand(operands.first());
+	return opr;
+}
+
+template<OOModel::BinaryOperation::OperatorTypes op>
+OOModel::Expression* OOOperatorDescriptor::binary(const QList<OOModel::Expression*>& operands)
+{
+	auto opr = new OOModel::BinaryOperation();
+	opr->setOp(op);
+	opr->setLeft(operands.first());
+	opr->setRight(operands.last());
+	return opr;
+}
+
+template<OOModel::AssignmentExpression::AssignmentTypes op>
+OOModel::Expression* OOOperatorDescriptor::assignment(const QList<OOModel::Expression*>& operands)
+{
+	auto opr = new OOModel::AssignmentExpression();
+	opr->setOp(op);
+	opr->setLeft(operands.first());
+	opr->setRight(operands.last());
+	return opr;
+}
 
 } /* namespace OOInteraction */

@@ -24,23 +24,41 @@
  **
  **********************************************************************************************************************/
 
-#include "expression_editor/operators/NewArrayDescriptor.h"
+#include "CreateMethodCall.h"
+#include "../OOExpressionBuilder.h"
 
-#include "OOModel/src/expressions/NewExpression.h"
+#include "OOModel/src/expressions/MethodCallExpression.h"
 
 namespace OOInteraction {
 
-NewArrayDescriptor::NewArrayDescriptor(const QString& name, const QString& signature, int num_operands,
-		int precedence, Associativity associativity)
-		: OOOperatorDescriptor(name, signature, num_operands, precedence, associativity)
+CreateMethodCall::CreateMethodCall(const QString& name, const QString& methodToCreate,
+		int expectedTypeArguments)
+: name_(name), methodToCreate_(methodToCreate), expectedTypeArguments_(expectedTypeArguments)
 {}
 
-OOModel::Expression* NewArrayDescriptor::create(const QList<OOModel::Expression*>& operands)
+const QString& CreateMethodCall::name() const
 {
-	OOModel::NewExpression* opr = new OOModel::NewExpression();
-	opr->setNewType( operands.first());
-	opr->setAmount(operands.last());
-	return opr;
+	return name_;
+}
+
+OOModel::Expression* CreateMethodCall::create(const QList<OOModel::Expression*>& arguments)
+{
+	auto method = static_cast<OOModel::MethodCallExpression*>(
+			OOInteraction::OOExpressionBuilder::getOOExpression(methodToCreate_ + "()"));
+
+	int typeArguments = expectedTypeArguments_;
+	for(auto a: arguments)
+	{
+		if (typeArguments > 0)
+		{
+			method->ref()->typeArguments()->append(a);
+			--typeArguments;
+		}
+		else
+			method->arguments()->append(a);
+	}
+
+	return method;
 }
 
 } /* namespace OOInteraction */

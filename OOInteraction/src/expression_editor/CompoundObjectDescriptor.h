@@ -24,22 +24,31 @@
  **
  **********************************************************************************************************************/
 
-#include "expression_editor/operators/ReferenceTypeDescriptor.h"
+#pragma once
 
-#include "OOModel/src/expressions/types/ReferenceTypeExpression.h"
+#include "OOOperatorDescriptor.h"
 
 namespace OOInteraction {
 
-ReferenceTypeDescriptor::ReferenceTypeDescriptor(const QString& name, const QString& signature, int num_operands,
-		int precedence, Associativity associativity)
-		: OOOperatorDescriptor(name, signature, num_operands, precedence, associativity)
-{}
+class OOINTERACTION_API CompoundObjectDescriptor : public OOOperatorDescriptor {
+	public:
+		CompoundObjectDescriptor(const QString& name, const QString& signature, int num_operands, int precedence,
+			Associativity associativity);
 
-OOModel::Expression* ReferenceTypeDescriptor::create(const QList<OOModel::Expression*>& operands)
-{
-	OOModel::ReferenceTypeExpression* at = new OOModel::ReferenceTypeExpression();
-	at->setTypeExpression(operands.first());
-	return at;
-}
+		virtual OOModel::Expression* create(const QList<OOModel::Expression*>& operands);
+
+		static const QString storeExpression(OOModel::Expression* object);
+		static void cleanAllStoredExpressions();
+
+		static const QString& compoundSignature();
+
+		static bool processDeleteOrBackspaceKey(Qt::Key key, QString& expression, int& index);
+
+	private:
+		static QMap<int,OOModel::Expression*>& storedExpressions();
+		static int nextId();
+
+		static bool isInQuotes(int index, const QString& string, const QChar& quote = '\"');
+};
 
 } /* namespace OOInteraction */

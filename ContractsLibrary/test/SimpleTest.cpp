@@ -30,7 +30,6 @@
 #include "items/InterfaceContractsVMethodAddOn.h"
 #include "items/SignatureContractsVMethodAddOn.h"
 #include "items/ContractFilter.h"
-#include "OOInteraction/src/expression_editor/operators/commands/CreateMethodCall.h"
 #include "monitor/ValueAtReturnVisitor.h"
 
 #include "OOModel/src/allOOModelNodes.h"
@@ -48,7 +47,6 @@
 #include "OOVisualization/src/alternative/VKeywordMethodCall.h"
 
 #include "OOInteraction/src/expression_editor/OOExpressionBuilder.h"
-#include "OOInteraction/src/expression_editor/operators/CommandDescriptor.h"
 #include "OOInteraction/src/customization/CustomizationVisitor.h"
 
 using namespace OOModel;

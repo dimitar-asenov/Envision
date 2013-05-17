@@ -27,7 +27,7 @@
 #include "StringComponents.h"
 
 #include "ModelBase/src/nodes/Node.h"
-#include "../expression_editor/operators/CompoundObjectDescriptor.h"
+#include "../expression_editor/CompoundObjectDescriptor.h"
 
 #include "OOModel/src/allOOModelNodes.h"
 

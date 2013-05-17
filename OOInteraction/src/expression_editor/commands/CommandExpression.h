@@ -27,21 +27,17 @@
 #pragma once
 
 #include "../../oointeraction_api.h"
-#include "../OOOperatorDescriptor.h"
 
-#include "OOModel/src/expressions/AssignmentExpression.h"
-
+namespace OOModel {
+	class Expression;
+}
 namespace OOInteraction {
 
-class OOINTERACTION_API AssignmentDescriptor : public OOOperatorDescriptor {
+class OOINTERACTION_API CommandExpression {
 	public:
-		AssignmentDescriptor(OOModel::AssignmentExpression::AssignmentTypes assignmentType, const QString& name,
-				const QString& signature, int num_operands, int precedence, Associativity associativity);
-
-		virtual OOModel::Expression* create(const QList<OOModel::Expression*>& operands);
-
-	private:
-		OOModel::AssignmentExpression::AssignmentTypes assignmentType_;
+		virtual ~CommandExpression() {}
+		virtual const QString& name() const = 0;
+		virtual OOModel::Expression* create(const QList<OOModel::Expression*>& arguments) = 0;
 };
 
 } /* namespace OOInteraction */

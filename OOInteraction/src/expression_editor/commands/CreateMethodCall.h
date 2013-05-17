@@ -26,17 +26,22 @@
 
 #pragma once
 
-#include "../../oointeraction_api.h"
-#include "../OOOperatorDescriptor.h"
+#include "CommandExpression.h"
 
 namespace OOInteraction {
 
-class OOINTERACTION_API DeclarationDescriptor : public OOOperatorDescriptor {
+class OOINTERACTION_API CreateMethodCall : public CommandExpression {
 	public:
-	DeclarationDescriptor(const QString& name, const QString& signature, int num_operands, int precedence,
-			Associativity associativity);
+		CreateMethodCall(const QString& name, const QString& methodToCreate, int expectedTypeArguments = 0);
 
-		virtual OOModel::Expression* create(const QList<OOModel::Expression*>& operands);
+		virtual const QString& name() const;
+		virtual OOModel::Expression* create(const QList<OOModel::Expression*>& arguments);
+
+	private:
+		QString name_;
+		QString methodToCreate_;
+		int expectedTypeArguments_;
+
 };
 
 } /* namespace OOInteraction */

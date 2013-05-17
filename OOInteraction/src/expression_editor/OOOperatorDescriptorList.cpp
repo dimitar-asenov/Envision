@@ -26,26 +26,13 @@
 
 #include "expression_editor/OOOperatorDescriptorList.h"
 
-#include "expression_editor/operators/UnaryOperatorDescriptor.h"
-#include "expression_editor/operators/BinaryOperatorDescriptor.h"
-#include "expression_editor/operators/CastDescriptor.h"
-#include "expression_editor/operators/CommaDescriptor.h"
-#include "expression_editor/operators/NewObjectDescriptor.h"
-#include "expression_editor/operators/NewArrayDescriptor.h"
-#include "expression_editor/operators/DeleteDescriptor.h"
-#include "expression_editor/operators/ThrowDescriptor.h"
-#include "expression_editor/operators/InitializerDescriptor.h"
-#include "expression_editor/operators/MemberOperatorDescriptor.h"
-#include "expression_editor/operators/CallDescriptor.h"
-#include "expression_editor/operators/ArrayTypeDescriptor.h"
-#include "expression_editor/operators/PointerTypeDescriptor.h"
-#include "expression_editor/operators/ReferenceTypeDescriptor.h"
-#include "expression_editor/operators/AssignmentDescriptor.h"
-#include "expression_editor/operators/DeclarationDescriptor.h"
-#include "expression_editor/operators/ConditionalExpressionDescriptor.h"
-#include "expression_editor/operators/TypeArgumentsDescriptor.h"
-#include "expression_editor/operators/CommandDescriptor.h"
-#include "expression_editor/operators/CompoundObjectDescriptor.h"
+#include "expression_editor/CommandDescriptor.h"
+#include "expression_editor/CompoundObjectDescriptor.h"
+
+#include "OOModel/src/allOOModelNodes.h"
+
+using namespace OOModel;
+using namespace Interaction;
 
 namespace OOInteraction {
 
@@ -57,146 +44,278 @@ OOOperatorDescriptorList* OOOperatorDescriptorList::instance()
 
 void OOOperatorDescriptorList::initializeWithDefaultOperators()
 {
+	using OD = OOOperatorDescriptor;
 	// Unary operators
-	instance()->addDescriptor(new UnaryOperatorDescriptor(OOModel::UnaryOperation::PREINCREMENT,
-			"preincrement", "++ expr", 1, 2, Interaction::OperatorDescriptor::RightAssociative));
-	instance()->addDescriptor(new UnaryOperatorDescriptor(OOModel::UnaryOperation::PREDECREMENT,
-			"predecrement", "-- expr", 1, 2, Interaction::OperatorDescriptor::RightAssociative));
-	instance()->addDescriptor(new UnaryOperatorDescriptor(OOModel::UnaryOperation::POSTINCREMENT,
-			"postincrement", "expr ++", 1, 2, Interaction::OperatorDescriptor::LeftAssociative));
-	instance()->addDescriptor(new UnaryOperatorDescriptor(OOModel::UnaryOperation::POSTDECREMENT,
-			"postdecrement", "expr --", 1, 2, Interaction::OperatorDescriptor::LeftAssociative));
-	instance()->addDescriptor(new UnaryOperatorDescriptor(OOModel::UnaryOperation::PLUS,
-			"unary plus", "+ expr", 1, 2, Interaction::OperatorDescriptor::RightAssociative));
-	instance()->addDescriptor(new UnaryOperatorDescriptor(OOModel::UnaryOperation::MINUS,
-			"unary minus", "- expr", 1, 2, Interaction::OperatorDescriptor::RightAssociative));
-	instance()->addDescriptor(new UnaryOperatorDescriptor(OOModel::UnaryOperation::NOT,
-			"not", "! expr", 1, 2, Interaction::OperatorDescriptor::RightAssociative));
-	instance()->addDescriptor(new UnaryOperatorDescriptor(OOModel::UnaryOperation::COMPLEMENT,
-			"complement", "~ expr", 1, 2, Interaction::OperatorDescriptor::RightAssociative));
-	instance()->addDescriptor(new UnaryOperatorDescriptor(OOModel::UnaryOperation::PARENTHESIS,
-			"parenthesis", "( expr )", 1, 1, Interaction::OperatorDescriptor::NotAssociative));
-	instance()->addDescriptor(new UnaryOperatorDescriptor(OOModel::UnaryOperation::DEREFERENCE,
-			"dereference", "* expr", 1, 2, Interaction::OperatorDescriptor::RightAssociative));
-	instance()->addDescriptor(new UnaryOperatorDescriptor(OOModel::UnaryOperation::ADDRESSOF,
-			"addressof", "& expr", 1, 2, Interaction::OperatorDescriptor::RightAssociative));
+	add(new OD("preincrement", "++ expr", 1, 2, OD::RightAssociative,	OD::unary<UnaryOperation::PREINCREMENT>));
+	add(new OD("predecrement", "-- expr", 1, 2, OD::RightAssociative,	OD::unary<UnaryOperation::PREDECREMENT>));
+	add(new OD("postincrement", "expr ++", 1, 2, OD::LeftAssociative, OD::unary<UnaryOperation::POSTINCREMENT>));
+	add(new OD("postdecrement", "expr --", 1, 2, OD::LeftAssociative, OD::unary<UnaryOperation::POSTDECREMENT>));
+	add(new OD("unary plus", "+ expr", 1, 2, OD::RightAssociative,	OD::unary<UnaryOperation::PLUS>));
+	add(new OD("unary minus", "- expr", 1, 2, OD::RightAssociative, OD::unary<UnaryOperation::MINUS>));
+	add(new OD("not", "! expr", 1, 2, OD::RightAssociative, OD::unary<UnaryOperation::NOT>));
+	add(new OD("complement", "~ expr", 1, 2, OD::RightAssociative, OD::unary<UnaryOperation::COMPLEMENT>));
+	add(new OD("parenthesis", "( expr )", 1, 1, OD::NotAssociative, OD::unary<UnaryOperation::PARENTHESIS>));
+	add(new OD("dereference", "* expr", 1, 2, OD::RightAssociative, OD::unary<UnaryOperation::DEREFERENCE>));
+	add(new OD("addressof", "& expr", 1, 2, OD::RightAssociative, OD::unary<UnaryOperation::ADDRESSOF>));
 
 	// Binary operators
-	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::TIMES,
-			"times", "expr * expr", 2, 3, Interaction::OperatorDescriptor::LeftAssociative));
-	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::DIVIDE,
-			"divide", "expr / expr", 2, 3, Interaction::OperatorDescriptor::LeftAssociative));
-	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::REMAINDER,
-			"remainder", "expr % expr", 2, 3, Interaction::OperatorDescriptor::LeftAssociative));
-	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::PLUS,
-			"plus", "expr + expr", 2, 4, Interaction::OperatorDescriptor::LeftAssociative));
-	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::MINUS,
-			"minus", "expr - expr", 2, 4, Interaction::OperatorDescriptor::LeftAssociative));
-	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::LEFT_SHIFT,
-			"left shift", "expr << expr", 2, 5, Interaction::OperatorDescriptor::LeftAssociative));
-	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::RIGHT_SHIFT_SIGNED,
-			"right shift signed", "expr >> expr", 2, 5, Interaction::OperatorDescriptor::LeftAssociative));
-	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::RIGHT_SHIFT_UNSIGNED,
-			"righ shift unsigned", "expr >>> expr", 2, 5, Interaction::OperatorDescriptor::LeftAssociative));
-	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::LESS,
-			"less", "expr < expr", 2, 6, Interaction::OperatorDescriptor::LeftAssociative));
-	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::GREATER,
-			"greater", "expr > expr", 2, 6, Interaction::OperatorDescriptor::LeftAssociative));
-	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::LESS_EQUALS,
-			"less equals", "expr <= expr", 2, 6, Interaction::OperatorDescriptor::LeftAssociative));
-	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::GREATER_EQUALS,
-			"greater equals", "expr >= expr", 2, 6, Interaction::OperatorDescriptor::LeftAssociative));
-	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::EQUALS,
-			"equals", "expr == expr", 2, 7, Interaction::OperatorDescriptor::LeftAssociative));
-	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::NOT_EQUALS,
-			"not equals", "expr != expr", 2, 7, Interaction::OperatorDescriptor::LeftAssociative));
-	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::XOR,
-			"bitwise xor", "expr ^ expr", 2, 9, Interaction::OperatorDescriptor::LeftAssociative));
-	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::AND,
-			"bitwise and", "expr & expr", 2, 8, Interaction::OperatorDescriptor::LeftAssociative));
-	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::OR,
-			"bitwise or", "expr | expr", 2, 10, Interaction::OperatorDescriptor::LeftAssociative));
-	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::CONDITIONAL_AND,
-			"conditional and", "expr && expr", 2, 11, Interaction::OperatorDescriptor::LeftAssociative));
-	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::CONDITIONAL_OR,
-			"conditional or", "expr || expr", 2, 12, Interaction::OperatorDescriptor::LeftAssociative));
-	instance()->addDescriptor(new BinaryOperatorDescriptor(OOModel::BinaryOperation::ARRAY_INDEX,
-			"array index", "expr [ expr ]", 2, 1, Interaction::OperatorDescriptor::LeftAssociative));
+	add(new OD("times", "expr * expr", 2, 3, OD::LeftAssociative, OD::binary<BinaryOperation::TIMES>));
+	add(new OD("divide", "expr / expr", 2, 3, OD::LeftAssociative, OD::binary<BinaryOperation::DIVIDE>));
+	add(new OD("remainder", "expr % expr", 2, 3, OD::LeftAssociative, OD::binary<BinaryOperation::REMAINDER>));
+	add(new OD("plus", "expr + expr", 2, 4, OD::LeftAssociative, OD::binary<BinaryOperation::PLUS>));
+	add(new OD("minus", "expr - expr", 2, 4, OD::LeftAssociative, OD::binary<BinaryOperation::MINUS>));
+	add(new OD("left shift", "expr << expr", 2, 5, OD::LeftAssociative, OD::binary<BinaryOperation::LEFT_SHIFT>));
+	add(new OD("right shift signed", "expr >> expr", 2, 5, OD::LeftAssociative,
+			OD::binary<BinaryOperation::RIGHT_SHIFT_SIGNED>));
+	add(new OD("righ shift unsigned", "expr >>> expr", 2, 5, OD::LeftAssociative,
+			OD::binary<BinaryOperation::RIGHT_SHIFT_UNSIGNED>));
+	add(new OD("less", "expr < expr", 2, 6, OD::LeftAssociative, OD::binary<BinaryOperation::LESS>));
+	add(new OD("greater", "expr > expr", 2, 6, OD::LeftAssociative, OD::binary<BinaryOperation::GREATER>));
+	add(new OD("less equals", "expr <= expr", 2, 6, OD::LeftAssociative, OD::binary<BinaryOperation::LESS_EQUALS>));
+	add(new OD("greater equals", "expr >= expr", 2, 6, OD::LeftAssociative,
+			OD::binary<BinaryOperation::GREATER_EQUALS>));
+	add(new OD("equals", "expr == expr", 2, 7, OD::LeftAssociative, OD::binary<BinaryOperation::EQUALS>));
+	add(new OD("not equals", "expr != expr", 2, 7, OD::LeftAssociative, OD::binary<BinaryOperation::NOT_EQUALS>));
+	add(new OD("bitwise xor", "expr ^ expr", 2, 9, OD::LeftAssociative, OD::binary<BinaryOperation::XOR>));
+	add(new OD("bitwise and", "expr & expr", 2, 8, OD::LeftAssociative, OD::binary<BinaryOperation::AND>));
+	add(new OD("bitwise or", "expr | expr", 2, 10, OD::LeftAssociative, OD::binary<BinaryOperation::OR>));
+	add(new OD("conditional and", "expr && expr", 2, 11, OD::LeftAssociative,
+			OD::binary<BinaryOperation::CONDITIONAL_AND>));
+	add(new OD("conditional or", "expr || expr", 2, 12, OD::LeftAssociative,
+			OD::binary<BinaryOperation::CONDITIONAL_OR>));
+	add(new OD("array index", "expr [ expr ]", 2, 1, OD::LeftAssociative, OD::binary<BinaryOperation::ARRAY_INDEX>));
 
-	// Ternary operators
-	instance()->addDescriptor(new ConditionalExpressionDescriptor("conditional expression", "expr ? expr : expr", 3, 13,
-			Interaction::OperatorDescriptor::RightAssociative));
+	// Ternary operator
+	add(new OD("conditional expression", "expr ? expr : expr", 3, 13, OD::RightAssociative,
+			[](const QList<Expression*>& operands) -> Expression* {
+		auto opr = new ConditionalExpression();
+		opr->setCondition(operands.first());
+		opr->setTrueExpression(operands.at(1));
+		opr->setFalseExpression(operands.last());
+		return opr;
+	}));
 
 	// Assignment
-	instance()->addDescriptor(new AssignmentDescriptor(OOModel::AssignmentExpression::ASSIGN,
-				"assign", "expr = expr", 2, 14, Interaction::OperatorDescriptor::RightAssociative));
-	instance()->addDescriptor(new AssignmentDescriptor(OOModel::AssignmentExpression::PLUS_ASSIGN,
-				"assign", "expr += expr", 2, 14, Interaction::OperatorDescriptor::RightAssociative));
-	instance()->addDescriptor(new AssignmentDescriptor(OOModel::AssignmentExpression::MINUS_ASSIGN,
-				"assign", "expr -= expr", 2, 14, Interaction::OperatorDescriptor::RightAssociative));
-	instance()->addDescriptor(new AssignmentDescriptor(OOModel::AssignmentExpression::TIMES_ASSIGN,
-				"assign", "expr *= expr", 2, 14, Interaction::OperatorDescriptor::RightAssociative));
-	instance()->addDescriptor(new AssignmentDescriptor(OOModel::AssignmentExpression::DIVIDE_ASSIGN,
-				"assign", "expr /= expr", 2, 14, Interaction::OperatorDescriptor::RightAssociative));
-	instance()->addDescriptor(new AssignmentDescriptor(OOModel::AssignmentExpression::BIT_AND_ASSIGN,
-				"assign", "expr &= expr", 2, 14, Interaction::OperatorDescriptor::RightAssociative));
-	instance()->addDescriptor(new AssignmentDescriptor(OOModel::AssignmentExpression::BIT_OR_ASSIGN,
-				"assign", "expr |= expr", 2, 14, Interaction::OperatorDescriptor::RightAssociative));
-	instance()->addDescriptor(new AssignmentDescriptor(OOModel::AssignmentExpression::BIT_XOR_ASSIGN,
-				"assign", "expr ^= expr", 2, 14, Interaction::OperatorDescriptor::RightAssociative));
-	instance()->addDescriptor(new AssignmentDescriptor(OOModel::AssignmentExpression::REMAINDER_ASSIGN,
-				"assign", "expr %= expr", 2, 14, Interaction::OperatorDescriptor::RightAssociative));
-	instance()->addDescriptor(new AssignmentDescriptor(OOModel::AssignmentExpression::LEFT_SHIFT_ASSIGN,
-				"assign", "expr <<= expr", 2, 14, Interaction::OperatorDescriptor::RightAssociative));
-	instance()->addDescriptor(new AssignmentDescriptor(OOModel::AssignmentExpression::RIGHT_SHIFT_SIGNED_ASSIGN,
-				"assign", "expr >>= expr", 2, 14, Interaction::OperatorDescriptor::RightAssociative));
-	instance()->addDescriptor(new AssignmentDescriptor(OOModel::AssignmentExpression::RIGHT_SHIFT_UNSIGNED_ASSIGN,
-				"assign", "expr >>>= expr", 2, 14, Interaction::OperatorDescriptor::RightAssociative));
+	add(new OD("assign", "expr = expr", 2, 14, OD::RightAssociative,
+			OD::assignment<AssignmentExpression::ASSIGN>));
+	add(new OD("assign", "expr += expr", 2, 14, OD::RightAssociative,
+			OD::assignment<AssignmentExpression::PLUS_ASSIGN>));
+	add(new OD("assign", "expr -= expr", 2, 14, OD::RightAssociative,
+			OD::assignment<AssignmentExpression::MINUS_ASSIGN>));
+	add(new OD("assign", "expr *= expr", 2, 14, OD::RightAssociative,
+			OD::assignment<AssignmentExpression::TIMES_ASSIGN>));
+	add(new OD("assign", "expr /= expr", 2, 14, OD::RightAssociative,
+			OD::assignment<AssignmentExpression::DIVIDE_ASSIGN>));
+	add(new OD("assign", "expr &= expr", 2, 14, OD::RightAssociative,
+			OD::assignment<AssignmentExpression::BIT_AND_ASSIGN>));
+	add(new OD("assign", "expr |= expr", 2, 14, OD::RightAssociative,
+			OD::assignment<AssignmentExpression::BIT_OR_ASSIGN>));
+	add(new OD("assign", "expr ^= expr", 2, 14, OD::RightAssociative,
+			OD::assignment<AssignmentExpression::BIT_XOR_ASSIGN>));
+	add(new OD("assign", "expr %= expr", 2, 14, OD::RightAssociative,
+			OD::assignment<AssignmentExpression::REMAINDER_ASSIGN>));
+	add(new OD("assign", "expr <<= expr", 2, 14, OD::RightAssociative,
+			OD::assignment<AssignmentExpression::LEFT_SHIFT_ASSIGN>));
+	add(new OD("assign", "expr >>= expr", 2, 14, OD::RightAssociative,
+			OD::assignment<AssignmentExpression::RIGHT_SHIFT_SIGNED_ASSIGN>));
+	add(new OD("assign", "expr >>>= expr", 2, 14, OD::RightAssociative,
+			OD::assignment<AssignmentExpression::RIGHT_SHIFT_UNSIGNED_ASSIGN>));
 
 	// Others
-	instance()->addDescriptor(new CastDescriptor( "cast", "( expr ) expr", 2, 2,
-			Interaction::OperatorDescriptor::RightAssociative));
-	instance()->addDescriptor(new CommaDescriptor( "comma", "expr , expr", 2, 50,
-			Interaction::OperatorDescriptor::LeftAssociative));
-	instance()->addDescriptor(new InitializerDescriptor( "initializer", "{ expr }", 1, 0,
-			Interaction::OperatorDescriptor::NotAssociative));
-	instance()->addDescriptor(new NewObjectDescriptor( "new object", "new SPACE expr", 1, 2,
-			Interaction::OperatorDescriptor::RightAssociative));
-	instance()->addDescriptor(new NewArrayDescriptor( "new array", "new SPACE expr [ expr ]", 2, 2,
-			Interaction::OperatorDescriptor::RightAssociative));
-	instance()->addDescriptor(new DeleteDescriptor( "delete object", "delete SPACE expr", 1, 2,
-				Interaction::OperatorDescriptor::RightAssociative));
-	instance()->addDescriptor(new DeleteDescriptor( "delete array", "delete [] SPACE expr", 1, 2,
-				Interaction::OperatorDescriptor::RightAssociative));
-	instance()->addDescriptor(new MemberOperatorDescriptor( "member", "expr . id", 2, 1,
-			Interaction::OperatorDescriptor::LeftAssociative));
-	instance()->addDescriptor(new MemberOperatorDescriptor( "member", "expr . id < expr >", 3, 1,
-			Interaction::OperatorDescriptor::LeftAssociative));
-	instance()->addDescriptor(new CallDescriptor( "call", "expr ( expr )", 2, 1,
-			Interaction::OperatorDescriptor::LeftAssociative));
-	instance()->addDescriptor(new TypeArgumentsDescriptor( "type arguments", "id < expr >", 2, 0,
-			Interaction::OperatorDescriptor::LeftAssociative));
-	instance()->addDescriptor(new ArrayTypeDescriptor( "array type", "expr []", 1, 1,
-			Interaction::OperatorDescriptor::LeftAssociative));
-	instance()->addDescriptor(new PointerTypeDescriptor( "pointer type", "expr *", 1, 1,
-			Interaction::OperatorDescriptor::LeftAssociative));
-	instance()->addDescriptor(new ReferenceTypeDescriptor( "reference type", "expr &", 1, 1,
-			Interaction::OperatorDescriptor::LeftAssociative));
-	instance()->addDescriptor(new DeclarationDescriptor( "variable declaration", "expr SPACE id", 2, 40,
-			Interaction::OperatorDescriptor::RightAssociative));
-	instance()->addDescriptor(new DeclarationDescriptor( "variable declaration and initialization",
-			"expr SPACE id = expr", 3, 40, Interaction::OperatorDescriptor::RightAssociative));
-	instance()->addDescriptor(new ThrowDescriptor( "throw", "throw SPACE expr", 1, 30,
-					Interaction::OperatorDescriptor::RightAssociative));
+	add(new OD( "cast", "( expr ) expr", 2, 2, OD::RightAssociative,
+			[](const QList<Expression*>& operands) -> Expression* {
+		auto opr = new OOModel::CastExpression();
+		opr->setType(operands.first());
+		opr->setExpr(operands.last());
+		return opr;
+	}));
+
+	add(new OD( "comma", "expr , expr", 2, 50, OD::LeftAssociative,
+			[](const QList<Expression*>& operands) -> Expression* {
+		auto opr = new OOModel::CommaExpression();
+		opr->setLeft(operands.first());
+		opr->setRight(operands.last());
+		return opr;
+	}));
+
+	add(new OD( "initializer", "{ expr }", 1, 0, OD::NotAssociative,
+			[](const QList<Expression*>& operands) -> Expression* {
+		auto opr = new OOModel::ArrayInitializer();
+
+		for(auto e: operands)
+		{
+			if (auto comma = dynamic_cast<OOModel::CommaExpression*>(e))
+			{
+				for(auto ee : comma->allSubOperands(true))
+					opr->values()->append(ee);
+
+				SAFE_DELETE(comma);
+			}
+			else
+				opr->values()->append(e);
+		}
+
+		return opr;
+	}));
+
+	add(new OD( "new object", "new SPACE expr", 1, 2, OD::RightAssociative,
+			[](const QList<Expression*>& operands) -> Expression* {
+		auto opr = new OOModel::NewExpression();
+		opr->setNewType( operands.first());
+		return opr;
+	}));
+
+	add(new OD( "new array", "new SPACE expr [ expr ]", 2, 2, OD::RightAssociative,
+			[](const QList<Expression*>& operands) -> Expression* {
+		auto opr = new OOModel::NewExpression();
+		opr->setNewType( operands.first());
+		opr->setAmount(operands.last());
+		return opr;
+	}));
+
+	add(new OD( "delete object", "delete SPACE expr", 1, 2, OD::RightAssociative,
+			[](const QList<Expression*>& operands) -> Expression* {
+		auto expr = new OOModel::DeleteExpression();
+		expr->setExpr( operands.first());
+		return expr;
+	}));
+
+	add(new OD( "delete array", "delete [] SPACE expr", 1, 2, OD::RightAssociative,
+			[](const QList<Expression*>& operands) -> Expression* {
+		auto expr = new OOModel::DeleteExpression();
+		expr->setIsArray(true);
+		expr->setExpr( operands.first());
+		return expr;
+	}));
+
+	add(new OD( "member", "expr . id", 2, 1, OD::LeftAssociative,
+			[](const QList<Expression*>& operands) -> Expression* {
+		Q_ASSERT(operands.size() == 2);
+		auto ref = dynamic_cast<OOModel::ReferenceExpression*>( operands[1]);
+		Q_ASSERT(ref);
+
+		auto r = new OOModel::ReferenceExpression( ref->name(), operands.first() );
+		SAFE_DELETE(ref);
+		return r;
+	}));
+
+	add(new OD( "member", "expr . id < expr >", 3, 1, OD::LeftAssociative,
+			[](const QList<Expression*>& operands) -> Expression* {
+		Q_ASSERT(operands.size() == 3 );
+		auto ref = dynamic_cast<OOModel::ReferenceExpression*>( operands[1]);
+		Q_ASSERT(ref);
+
+		auto r = new OOModel::ReferenceExpression( ref->name(), operands.first() );
+		SAFE_DELETE(ref);
+
+		if (auto comma = dynamic_cast<OOModel::CommaExpression*>(operands.last()))
+		{
+			for(auto arg : comma->allSubOperands(true))
+				r->typeArguments()->append(arg);
+
+			SAFE_DELETE(comma);
+		}
+		else
+			if (!dynamic_cast<OOModel::EmptyExpression*>(operands.last()) )
+				r->typeArguments()->append(operands.last());
+
+		return r;
+	}));
+
+	add(new OD( "call", "expr ( expr )", 2, 1, OD::LeftAssociative,
+			[](const QList<Expression*>& operands) -> Expression* {
+		Q_ASSERT(operands.size() == 2);
+		auto ref = dynamic_cast<OOModel::ReferenceExpression*>( operands.first());
+		Q_ASSERT(ref);
+
+		auto opr = new OOModel::MethodCallExpression();
+		opr->setRef(ref);
+
+		if (auto comma = dynamic_cast<OOModel::CommaExpression*>(operands.last()))
+		{
+			for(auto arg : comma->allSubOperands(true))
+				opr->arguments()->append(arg);
+
+			SAFE_DELETE(comma);
+		}
+		else
+			if (!dynamic_cast<OOModel::EmptyExpression*>(operands.last()) )
+					opr->arguments()->append(operands.last());
+
+		return opr;
+	}));
+
+	add(new OD( "type arguments", "id < expr >", 2, 0, OD::LeftAssociative,
+			[](const QList<Expression*>& operands) -> Expression* {
+		Q_ASSERT(operands.size() == 2);
+		auto ref = dynamic_cast<OOModel::ReferenceExpression*>( operands.first());
+		Q_ASSERT(ref);
+
+		if (auto comma = dynamic_cast<OOModel::CommaExpression*>(operands.last()))
+		{
+			for(auto arg : comma->allSubOperands(true))
+				ref->typeArguments()->append(arg);
+
+			SAFE_DELETE(comma);
+		}
+		else
+			if (!dynamic_cast<OOModel::EmptyExpression*>(operands.last()) )
+					ref->typeArguments()->append(operands.last());
+
+		return ref;
+	}));
+
+	add(new OD( "array type", "expr []", 1, 1, OD::LeftAssociative,
+			[](const QList<Expression*>& operands) -> Expression* {
+		auto at = new OOModel::ArrayTypeExpression();
+		at->setTypeExpression(operands.first());
+		return at;
+	}));
+
+	add(new OD( "pointer type", "expr *", 1, 1, OD::LeftAssociative,
+			[](const QList<Expression*>& operands) -> Expression* {
+		auto at = new OOModel::PointerTypeExpression();
+		at->setTypeExpression(operands.first());
+		return at;
+	}));
+
+	add(new OD( "reference type", "expr &", 1, 1, OD::LeftAssociative,
+			[](const QList<Expression*>& operands) -> Expression* {
+		auto at = new OOModel::ReferenceTypeExpression();
+		at->setTypeExpression(operands.first());
+		return at;
+	}));
+
+	// Variable declaration
+	auto varDeclFunction = [](const QList<Expression*>& operands) -> Expression*
+	{
+		auto vd = new OOModel::VariableDeclarationExpression();
+
+		vd->decl()->setTypeExpression( operands.first() );
+		auto ref = dynamic_cast<OOModel::ReferenceExpression*>(operands[1]);
+		vd->decl()->setName( ref->name());
+		SAFE_DELETE(ref);
+
+		if (operands.size() > 2) vd->decl()->setInitialValue(operands[2]);
+		return vd;
+	};
+	add(new OD( "variable decl", "expr SPACE id", 2, 40, OD::RightAssociative, varDeclFunction));
+	add(new OD( "variable decl and initialization", "expr SPACE id = expr", 3, 40,
+			OD::RightAssociative, varDeclFunction));
+
+	add(new OD( "throw", "throw SPACE expr", 1, 30, OD::RightAssociative,
+			[](const QList<Expression*>& operands) -> Expression* {
+		auto expr = new OOModel::ThrowExpression();
+		expr->setExpr( operands.first());
+		return expr;
+	}));
 
 	// Command descriptors
-	instance()->addDescriptor(new CommandDescriptor( "command without params", "\\ id SPACE", 1, 0,
-			Interaction::OperatorDescriptor::NotAssociative));
-	instance()->addDescriptor(new CommandDescriptor( "command with params", "\\ id ( expr )", 2, 0,
-			Interaction::OperatorDescriptor::NotAssociative));
+	add(new CommandDescriptor( "command without params", "\\ id SPACE", 1, 0, OD::NotAssociative));
+	add(new CommandDescriptor( "command with params", "\\ id ( expr )", 2, 0, OD::NotAssociative));
 
-	instance()->addDescriptor(new CompoundObjectDescriptor( "compound object",
-			CompoundObjectDescriptor::compoundSignature(), 1, 0, Interaction::OperatorDescriptor::NotAssociative));
+	add(new CompoundObjectDescriptor( "compound object",
+			CompoundObjectDescriptor::compoundSignature(), 1, 0, OD::NotAssociative));
 }
 
 

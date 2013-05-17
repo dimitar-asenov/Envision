@@ -24,43 +24,33 @@
  **
  **********************************************************************************************************************/
 
-#include "expression_editor/operators/MemberOperatorDescriptor.h"
+#pragma once
 
-#include "OOModel/src/expressions/ReferenceExpression.h"
-#include "OOModel/src/expressions/EmptyExpression.h"
-#include "OOModel/src/expressions/CommaExpression.h"
+#include "OOOperatorDescriptor.h"
+#include "commands/CommandExpression.h"
+
+namespace OOModel {
+	class UnfinishedOperator;
+}
 
 namespace OOInteraction {
 
-MemberOperatorDescriptor::MemberOperatorDescriptor(const QString& name, const QString& signature, int num_operands,
-		int precedence, Associativity associativity)
-		: OOOperatorDescriptor(name, signature, num_operands, precedence, associativity)
-{}
+class OOINTERACTION_API CommandDescriptor : public OOOperatorDescriptor {
+	public:
+		CommandDescriptor(const QString& name, const QString& signature, int num_operands, int precedence,
+			Associativity associativity);
 
-OOModel::Expression* MemberOperatorDescriptor::create(const QList<OOModel::Expression*>& operands)
-{
-	Q_ASSERT(operands.size() == 2 || operands.size() == 3 );
-	auto ref = dynamic_cast<OOModel::ReferenceExpression*>( operands[1]);
-	Q_ASSERT(ref);
+		~CommandDescriptor();
 
-	OOModel::ReferenceExpression* r = new OOModel::ReferenceExpression( ref->name(), operands.first() );
-	SAFE_DELETE(ref);
+		virtual OOModel::Expression* create(const QList<OOModel::Expression*>& operands);
 
-	if (operands.size() == 3)
-	{
-		if (auto comma = dynamic_cast<OOModel::CommaExpression*>(operands.last()))
-		{
-			for(auto arg : comma->allSubOperands(true))
-				r->typeArguments()->append(arg);
+		static bool registerCommand(CommandExpression* command);
+		static void unregisterCommand(CommandExpression* command);
 
-			SAFE_DELETE(comma);
-		}
-		else
-			if (!dynamic_cast<OOModel::EmptyExpression*>(operands.last()) )
-				r->typeArguments()->append(operands.last());
-	}
+	private:
+		OOModel::UnfinishedOperator* createUnfinished(const QString& name, const QList<OOModel::Expression*>& arguments);
 
-	return r;
-}
+		static QMap<QString, CommandExpression*> commands;
+};
 
 } /* namespace OOInteraction */

@@ -34,5 +34,16 @@ OOOperatorDescriptor::OOOperatorDescriptor(const QString& name, const QString& s
 {
 }
 
+OOOperatorDescriptor::OOOperatorDescriptor(const QString& name, const QString& signature, int num_operands,
+		int precedence, Associativity associativity, CreateFunction createFunction)
+	:Interaction::OperatorDescriptor(name, signature, num_operands, precedence, associativity),
+	 createFunction_(createFunction)
+{}
+
+OOModel::Expression* OOOperatorDescriptor::create(const QList<OOModel::Expression*>& operands)
+{
+	Q_ASSERT(createFunction_);
+	return createFunction_(operands);
+}
 
 } /* namespace OOInteraction */

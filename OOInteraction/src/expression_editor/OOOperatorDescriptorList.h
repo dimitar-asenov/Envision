@@ -36,6 +36,13 @@ class OOINTERACTION_API OOOperatorDescriptorList : public Interaction::OperatorD
 	public:
 		static OOOperatorDescriptorList* instance();
 		static void initializeWithDefaultOperators();
+
+	private:
+		static void add(Interaction::OperatorDescriptor* descriptor);
 };
+
+inline void OOOperatorDescriptorList::add(Interaction::OperatorDescriptor* descriptor)
+{ instance()->addDescriptor(descriptor); }
+
 
 } /* namespace OOInteraction */

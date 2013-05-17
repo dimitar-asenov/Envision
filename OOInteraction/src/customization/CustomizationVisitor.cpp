@@ -25,8 +25,8 @@
  **********************************************************************************************************************/
 
 #include "CustomizationVisitor.h"
-#include "../expression_editor/operators/CommandDescriptor.h"
-#include "../expression_editor/operators/commands/CreateMethodCall.h"
+#include "../expression_editor/CommandDescriptor.h"
+#include "../expression_editor/commands/CreateMethodCall.h"
 
 #include "OOVisualization/src/alternative/VKeywordMethodCall.h"
 #include "OOModel/src/declarations/Method.h"

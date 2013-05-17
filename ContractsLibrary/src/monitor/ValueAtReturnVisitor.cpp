@@ -30,7 +30,7 @@
 #include "OOModel/src/declarations/Method.h"
 #include "OOModel/src/elements/FormalArgument.h"
 #include "OOInteraction/src/expression_editor/OOExpressionBuilder.h"
-#include "OOInteraction/src/expression_editor/operators/CommandDescriptor.h"
+#include "OOInteraction/src/expression_editor/CommandDescriptor.h"
 
 namespace ContractsLibrary {
 

@@ -9,45 +9,29 @@ win32:LIBS += -llogger \
     -linteractionbase \
     -loovisualization \
     -lfilepersistence
-HEADERS += src/expression_editor/operators/DeleteDescriptor.h \
+HEADERS += src/expression_editor/CommandDescriptor.h \
+    src/expression_editor/CompoundObjectDescriptor.h \
+    src/expression_editor/commands/CommandExpression.h \
+    src/expression_editor/commands/CreateMethodCall.h \
     src/string_offset_providers/GridConstructors.h \
     src/string_offset_providers/StringComponents.h \
     src/customization/CustomizationVisitor.h \
-    src/expression_editor/operators/commands/CommandExpression.h \
-    src/expression_editor/operators/commands/CreateMethodCall.h \
     src/commands/CCreateField.h \
     src/string_offset_providers/CompoundObjectStringOffsetProvider.h \
-    src/expression_editor/operators/CompoundObjectDescriptor.h \
     src/commands/CSceneHandlerItemTest.h \
     src/handlers/HForEachStatement.h \
     src/handlers/HKeywordStatement.h \
     src/handlers/HReturnStatement.h \
-    src/expression_editor/operators/ThrowDescriptor.h \
-    src/expression_editor/operators/NewObjectDescriptor.h \
     src/commands/CCreateProject.h \
     src/commands/CCreateMethod.h \
     src/commands/CCreateClass.h \
     src/string_offset_providers/Cell.h \
     src/string_offset_providers/ListCell.h \
     src/string_offset_providers/GridBasedOffsetProvider.h \
-    src/expression_editor/operators/CommandDescriptor.h \
-    src/expression_editor/operators/TypeArgumentsDescriptor.h \
-    src/expression_editor/operators/ConditionalExpressionDescriptor.h \
     src/OOInteractionException.h \
     src/expression_editor/OOExpressionBuilder.h \
     src/expression_editor/OOOperatorDescriptor.h \
     src/expression_editor/OOOperatorDescriptorList.h \
-    src/expression_editor/operators/ArrayTypeDescriptor.h \
-    src/expression_editor/operators/AssignmentDescriptor.h \
-    src/expression_editor/operators/BinaryOperatorDescriptor.h \
-    src/expression_editor/operators/CallDescriptor.h \
-    src/expression_editor/operators/CastDescriptor.h \
-    src/expression_editor/operators/CommaDescriptor.h \
-    src/expression_editor/operators/DeclarationDescriptor.h \
-    src/expression_editor/operators/InitializerDescriptor.h \
-    src/expression_editor/operators/MemberOperatorDescriptor.h \
-    src/expression_editor/operators/NewArrayDescriptor.h \
-    src/expression_editor/operators/UnaryOperatorDescriptor.h \
     src/handlers/HClass.h \
     src/handlers/HExpression.h \
     src/handlers/HFormalArgument.h \
@@ -64,62 +48,42 @@ HEADERS += src/expression_editor/operators/DeleteDescriptor.h \
     src/string_offset_providers/StaticStringOffsetProvider.h \
     src/string_offset_providers/StringOffsetProvider.h \
     src/string_offset_providers/TextRendererStringOffsetProvider.h \
-    src/expression_editor/operators/PointerTypeDescriptor.h \
-    src/expression_editor/operators/ReferenceTypeDescriptor.h \
     src/oointeraction.h
-SOURCES += src/expression_editor/operators/DeleteDescriptor.cpp \
+SOURCES += src/expression_editor/CommandDescriptor.cpp \
+    src/expression_editor/CompoundObjectDescriptor.cpp \
+    src/expression_editor/commands/CreateMethodCall.cpp \
     src/string_offset_providers/GridConstructors.cpp \
     src/string_offset_providers/StringComponents.cpp \
     src/customization/CustomizationVisitor.cpp \
-    src/expression_editor/operators/commands/CreateMethodCall.cpp \
     src/commands/CCreateField.cpp \
     src/string_offset_providers/CompoundObjectStringOffsetProvider.cpp \
-    src/expression_editor/operators/CompoundObjectDescriptor.cpp \
     src/commands/CSceneHandlerItemTest.cpp \
     src/handlers/HForEachStatement.cpp \
     src/handlers/HKeywordStatement.cpp \
     src/handlers/HReturnStatement.cpp \
-    src/expression_editor/operators/ThrowDescriptor.cpp \
-    src/expression_editor/operators/NewObjectDescriptor.cpp \
     src/commands/CCreateProject.cpp \
     src/commands/CCreateMethod.cpp \
     src/commands/CCreateClass.cpp \
     src/string_offset_providers/Cell.cpp \
     src/string_offset_providers/ListCell.cpp \
     src/string_offset_providers/GridBasedOffsetProvider.cpp \
-    src/expression_editor/operators/CommandDescriptor.cpp \
-    src/expression_editor/operators/TypeArgumentsDescriptor.cpp \
-    src/expression_editor/operators/ConditionalExpressionDescriptor.cpp \
     src/handlers/HLoop.cpp \
     src/handlers/HIfStatement.cpp \
-    src/expression_editor/operators/DeclarationDescriptor.cpp \
     src/string_offset_providers/TextRendererStringOffsetProvider.cpp \
     src/string_offset_providers/StringOffsetProvider.cpp \
     src/string_offset_providers/StaticStringOffsetProvider.cpp \
     src/string_offset_providers/InitializerStringOffsetProvider.cpp \
     src/string_offset_providers/EmptyExpressionStringOffsetProvider.cpp \
-    src/expression_editor/operators/AssignmentDescriptor.cpp \
     src/handlers/HStatement.cpp \
     src/handlers/HFormalArgument.cpp \
-    src/expression_editor/operators/ArrayTypeDescriptor.cpp \
     src/handlers/HMethod.cpp \
     src/handlers/HExpression.cpp \
     src/handlers/HClass.cpp \
     src/handlers/HProject.cpp \
     src/handlers/SetExpressionCursorEvent.cpp \
-    src/expression_editor/operators/CallDescriptor.cpp \
-    src/expression_editor/operators/MemberOperatorDescriptor.cpp \
-    src/expression_editor/operators/CommaDescriptor.cpp \
-    src/expression_editor/operators/CastDescriptor.cpp \
-    src/expression_editor/operators/InitializerDescriptor.cpp \
-    src/expression_editor/operators/NewArrayDescriptor.cpp \
-    src/expression_editor/operators/UnaryOperatorDescriptor.cpp \
     src/expression_editor/OOOperatorDescriptorList.cpp \
-    src/expression_editor/operators/BinaryOperatorDescriptor.cpp \
     src/expression_editor/OOOperatorDescriptor.cpp \
     src/expression_editor/OOExpressionBuilder.cpp \
     src/OOInteractionException.cpp \
     src/oointeraction.cpp \
-    test/SimpleTest.cpp \
-    src/expression_editor/operators/PointerTypeDescriptor.cpp \
-    src/expression_editor/operators/ReferenceTypeDescriptor.cpp
+    test/SimpleTest.cpp
