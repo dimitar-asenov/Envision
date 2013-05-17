@@ -1,12 +1,15 @@
 var searchData=
 [
   ['cannotinterpret',['CanNotInterpret',['../classInteraction_1_1CommandResult.html#a3a0031a9567c97241132101924a2d2a4af40c11d6dd47c8ea86e0b096f4c68f02',1,'Interaction::CommandResult']]],
+  ['center',['Center',['../classVisualization_1_1AnchorLayoutFormElement.html#a109beb02eabe2436d47b5e5b5d57cd08aaa2849598850f4396d270724d2ea969d',1,'Visualization::AnchorLayoutFormElement::Center()'],['../classVisualization_1_1LayoutStyle.html#a46ea3048e79f6de214b343abfe63cf31a4f1f6016fc9f3f2353c0cc7c67b292bd',1,'Visualization::LayoutStyle::Center()']]],
   ['char',['CHAR',['../classOOModel_1_1PrimitiveType.html#ac8006ae2bb33cdf51aa806c3c2d6bc05ad9a7edc1312d22f5276d8a33a2e97af3',1,'OOModel::PrimitiveType']]],
+  ['class',['Class',['../classOOModel_1_1Class.html#a6588078ab256b317e402527aa5c38f1ca9bd81329febf6efe22788e03ddeaf0af',1,'OOModel::Class']]],
   ['class_5fvariable',['CLASS_VARIABLE',['../classOOModel_1_1StorageSpecifier.html#aa4c64ecb64dd812016be98015bac877aa4f89c02c194fc9322b4bfb379da6bf7d',1,'OOModel::StorageSpecifier']]],
   ['codeitemcategory',['CodeItemCategory',['../classVisualization_1_1Scene.html#a493e1d97eee55349fc377f1f4f3abcdda4466d302ed2feaefdc4d9abd425c1946',1,'Visualization::Scene']]],
   ['complement',['COMPLEMENT',['../classOOModel_1_1UnaryOperation.html#a38be70a5b089b11a4d13707de8c38ec1a19f28e4ae1c14d4f48d353fc3216bc75',1,'OOModel::UnaryOperation']]],
   ['conditional_5fand',['CONDITIONAL_AND',['../classOOModel_1_1BinaryOperation.html#af590e3bc8d2168e470ed1c5190d2d3c2a40b5f70825f5c1716d6b94f9cbd1340d',1,'OOModel::BinaryOperation']]],
   ['conditional_5for',['CONDITIONAL_OR',['../classOOModel_1_1BinaryOperation.html#af590e3bc8d2168e470ed1c5190d2d3c2ad06b66d0b9841d5812c08ae0d6bfbff4',1,'OOModel::BinaryOperation']]],
+  ['constcast',['ConstCast',['../classOOModel_1_1CastExpression.html#ada6ab54bf520f629426cd34b8aa905faadfd6062b26f65aefec59fb3739d34290',1,'OOModel::CastExpression']]],
   ['cursoraboveof',['CursorAboveOf',['../classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7ac107d1c187fb4def26eef44b28a13944',1,'Interaction::SetCursorEvent']]],
   ['cursorbelowof',['CursorBelowOf',['../classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7a45f5b7dd3073df0d681e06edc3c2487b',1,'Interaction::SetCursorEvent']]],
   ['cursordefault',['CursorDefault',['../classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7a5f26dcb6a2952d774aa6eeb4904194c1',1,'Interaction::SetCursorEvent']]],
@@ -17,5 +20,6 @@ var searchData=
   ['cursoronleft',['CursorOnLeft',['../classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7a92d45c10b1184d64eafefd8332d3f738',1,'Interaction::SetCursorEvent']]],
   ['cursoronright',['CursorOnRight',['../classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7acf9a8ad7b6b311b1de7a7d2c7e219cf6',1,'Interaction::SetCursorEvent']]],
   ['cursorontop',['CursorOnTop',['../classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7a7b9979249881fa707653983acfb3f04c',1,'Interaction::SetCursorEvent']]],
-  ['cursorrightof',['CursorRightOf',['../classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7a6a3948300b8f334733f51c5d75ccb781',1,'Interaction::SetCursorEvent']]]
+  ['cursorrightof',['CursorRightOf',['../classInteraction_1_1SetCursorEvent.html#a4989d85b0a2bd550c1e0ba9419d301e7a6a3948300b8f334733f51c5d75ccb781',1,'Interaction::SetCursorEvent']]],
+  ['cut',['Cut',['../classVisualization_1_1BoxStyle.html#a34873df385d4000d55252672b7178af0aeb334dca00e390e0d3ebf52d205807d7',1,'Visualization::BoxStyle']]]
 ];

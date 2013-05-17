@@ -5,5 +5,6 @@ var searchData=
   ['inopdelim',['InOpDelim',['../classInteraction_1_1ExpressionContext.html#a529359d500858ebf0bf8984e1790926ba1a1b5217e54746117d6e0ad2bd75070e',1,'Interaction::ExpressionContext']]],
   ['instance_5fvariable',['INSTANCE_VARIABLE',['../classOOModel_1_1StorageSpecifier.html#aa4c64ecb64dd812016be98015bac877aa141df7aab9b78cb4d7b0f1863810d576',1,'OOModel::StorageSpecifier']]],
   ['int',['INT',['../classOOModel_1_1PrimitiveType.html#ac8006ae2bb33cdf51aa806c3c2d6bc05a7eba61d6783299e41710c81180106cb4',1,'OOModel::PrimitiveType']]],
+  ['interface',['Interface',['../classOOModel_1_1Class.html#a6588078ab256b317e402527aa5c38f1ca3c1aac82863ed9e5a9aca8ce687f711d',1,'OOModel::Class']]],
   ['invalue',['InValue',['../classInteraction_1_1ExpressionContext.html#a529359d500858ebf0bf8984e1790926ba2deeab404d0b07263d70dc586c948e3c',1,'Interaction::ExpressionContext']]]
 ];
