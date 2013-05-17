@@ -4,11 +4,11 @@ Envision maintainers : Dimitar Asenov
 
 \section contributors Source code contributors (in alphabetical order)
 
-Andrea Helfenstein
+Andrea Helfenstein - https://github.com/helandre
 		- Declarative API for defining visualizations and supporting documentation
 
 <br>
-Dimitar Asenov
+Dimitar Asenov - https://github.com/dimitar-asenov
 		- %Core Envision framework and MVC implementation
 		- Extensions for object-oriented programming
 		- Code contracts, custom method call, and control flow examples
@@ -16,7 +16,7 @@ Dimitar Asenov
 		- Documentation
 
 <br>
-Lukas Vogel
+Lukas Vogel - https://github.com/lukedirtwalker
 		- Enhancements to the object-oriented model
 
 \section funding Funding acknowledgements
