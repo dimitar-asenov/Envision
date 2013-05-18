@@ -506,23 +506,39 @@ bool ClangAstVisitor::VisitStmt(clang::Stmt* S)
 
 bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 {
-	//OOModel::VariableDeclaration* ooVarDecl = trMngr_->insertVar(varDecl);
-	// TODO should be var
-	OOModel::Field* ooVarDecl = new OOModel::Field(QString::fromStdString(varDecl->getNameAsString()));
-	if(ooVarDecl)
+	if(llvm::isa<clang::ParmVarDecl>(varDecl))
+		return true;
+	OOModel::VariableDeclaration* ooVarDecl = nullptr;
+	OOModel::VariableDeclarationExpression* ooVarDeclExpr = nullptr;
+	QString varName = QString::fromStdString(varDecl->getNameAsString());
+
+	if(!inBody_)
 	{
-		if(auto project = dynamic_cast<OOModel::Project*>(ooStack_.top()))
-			project->fields()->append(ooVarDecl);
-		else if(auto module = dynamic_cast<OOModel::Module*>(ooStack_.top()))
-			module->fields()->append(ooVarDecl);
-		else if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
-			itemList->append(ooVarDecl);
-		else
-		{
-			if(!llvm::isa<clang::ParmVarDecl>(varDecl))
-				log_->writeWarning(className_,QString("this variable is not supported"),
-										 QString("VarDecl"),varDecl);
-		}
+		ooVarDecl = new OOModel::VariableDeclaration(varName);
+		ooVarDeclExpr = new OOModel::VariableDeclarationExpression(ooVarDecl);
+		ooExprStack_.push(ooVarDeclExpr);
+	}
+	else if(auto project = dynamic_cast<OOModel::Project*>(ooStack_.top()))
+	{
+		ooVarDecl = new OOModel::Field(varName);
+		project->fields()->append(ooVarDecl);
+	}
+	else if(auto module = dynamic_cast<OOModel::Module*>(ooStack_.top()))
+	{
+		ooVarDecl = new OOModel::Field(varName);
+		module->fields()->append(ooVarDecl);
+	}
+	else if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
+	{
+		ooVarDecl = new OOModel::VariableDeclaration(varName);
+		// TODO: remove variabledeclaration expression?
+		itemList->append(new OOModel::ExpressionStatement(new OOModel::VariableDeclarationExpression(ooVarDecl)));
+	}
+	else
+	{
+		log_->writeWarning(className_,QString("this variable is not supported"),
+								 QString("VarDecl"),varDecl);
+		return true;
 	}
 
 	if(varDecl->getType().getTypePtr()->isArrayType())
@@ -548,13 +564,18 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 		if(type) ooVarDecl->setTypeExpression(type);
 	}
 
-	if(varDecl->hasInit())
+	// TODO: also visit type/value dependent inits
+	if(varDecl->hasInit() && !varDecl->getInit()->isValueDependent())
 	{
 		bool inBody = inBody_;
 		inBody_ = false;
 		TraverseStmt(varDecl->getInit());
 		if(!ooExprStack_.empty())
-			ooVarDecl->setInitialValue(ooExprStack_.pop());
+		{
+			// make sure we have not ourself as init (if init couldn't be converted)
+			if(ooVarDeclExpr != ooExprStack_.top())
+				ooVarDecl->setInitialValue(ooExprStack_.pop());
+		}
 		else
 			log_->writeError(className_,QString("Var Init Expr not supported"),
 								  QString("Expr"),varDecl->getInit());
@@ -734,7 +755,8 @@ bool ClangAstVisitor::TraverseParenExpr(clang::ParenExpr* parenthesizedExpr)
 	bool inBody = inBody_;
 	inBody_ = false;
 	TraverseStmt(parenthesizedExpr->getSubExpr());
-	ooParenExpr->setOperand(ooExprStack_.pop());
+	if(!ooExprStack_.empty())
+		ooParenExpr->setOperand(ooExprStack_.pop());
 
 	if(inBody)
 	{
