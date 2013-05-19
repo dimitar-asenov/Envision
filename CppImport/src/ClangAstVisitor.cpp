@@ -905,42 +905,58 @@ bool ClangAstVisitor::shouldUseDataRecursionFor(clang::Stmt*)
 
 bool ClangAstVisitor::TraverseBinaryOp(clang::BinaryOperator* binaryOperator)
 {
+	OOModel::Expression* ooLeft = nullptr;
+	OOModel::Expression* ooRight = nullptr;
+	OOModel::BinaryOperation* ooBinOp = nullptr;
+	OOModel::CommaExpression* ooComma  = nullptr;
 	clang::BinaryOperatorKind opcode = binaryOperator->getOpcode();
 	if(opcode == clang::BO_Comma)
 	{
-		log_->writeError(className_,QString("Binary OP NOT SUPPORTED"),QString("BinaryOperator"),binaryOperator);
-		log_->binaryOpNotSupported(opcode);
-		// TODO: handle comma expressions
-		return TraverseStmt(binaryOperator->getRHS());
+		ooComma = new OOModel::CommaExpression();
 	}
-	OOModel::BinaryOperation::OperatorTypes ooOperatorType =
-			utils_->convertClangOpcode(opcode);
-	OOModel::BinaryOperation* ooBinOp = new OOModel::BinaryOperation();
+	else
+	{
+		ooBinOp = new OOModel::BinaryOperation();
+		OOModel::BinaryOperation::OperatorTypes ooOperatorType =
+				utils_->convertClangOpcode(opcode);
+		ooBinOp->setOp(ooOperatorType);
+	}
 	// save inBody_ value for recursive expressions
 	bool inBody = inBody_;
 	inBody_ = false;
-	ooBinOp->setOp(ooOperatorType);
 	TraverseStmt(binaryOperator->getLHS());
 	if(!ooExprStack_.empty())
-		ooBinOp->setLeft(ooExprStack_.pop());
+		ooLeft = ooExprStack_.pop();
 	else
 		log_->writeError(className_,QString("BOP: LHSExpr not supported"),
 							  QString("Expr"),binaryOperator->getLHS());
 	TraverseStmt(binaryOperator->getRHS());
 	if(!ooExprStack_.empty())
-		ooBinOp->setRight(ooExprStack_.pop());
+		ooRight = ooExprStack_.pop();
 	else
 		log_->writeError(className_,QString("BOP: RHSExpr not supported"),
 							  QString("Expr"),binaryOperator->getRHS());
+	if(ooBinOp)
+	{
+		ooBinOp->setLeft(ooLeft);
+		ooBinOp->setRight(ooRight);
+	}
+	else
+	{
+		ooComma->setLeft(ooLeft);
+		ooComma->setRight(ooRight);
+	}
 
 	if(inBody)
 	{
 		OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top());
-		if(itemList) itemList->append(ooBinOp);
+		if(itemList && ooBinOp) itemList->append(ooBinOp);
+		else if(itemList && ooComma) itemList->append(ooComma);
 		else std::cout << "ERROR INSERT BINOP" << std::endl;
 	}
 	else
-		ooExprStack_.push(ooBinOp);
+		if(ooBinOp) ooExprStack_.push(ooBinOp);
+		else ooExprStack_.push(ooComma);
 	inBody_ = inBody;
 	return true;
 }
