@@ -144,33 +144,6 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl)
 	return true;
 }
 
-bool ClangAstVisitor::TraverseCXXMethodDecl(clang::CXXMethodDecl* methodDecl)
-{
-	OOModel::Method* ooMethod = trMngr_->insertMethodDecl(methodDecl);
-	if(!ooMethod)
-	{
-		// TODO is this correct?
-		// only consider a method where the parent has been visited
-		if(trMngr_->containsClass(methodDecl->getParent()))
-			log_->writeError(className_,QString("no ooModel::method found"),
-								  QString("CXXMethodDecl"),methodDecl);
-		return true;
-	}
-	// only visit the body if we are at the definition
-	if(methodDecl->isThisDeclarationADefinition())
-	{
-		ooStack_.push(ooMethod->items());
-		bool inBody = inBody_;
-		inBody_ = true;
-		TraverseStmt(methodDecl->getBody());
-		inBody_ = inBody;
-		ooStack_.pop();
-	}
-	// specify the visibility of the method
-	ooMethod->setVisibility(utils_->convertAccessSpecifier(methodDecl->getAccess()));
-	return true;
-}
-
 bool ClangAstVisitor::TraverseFunctionDecl(clang::FunctionDecl* functionDecl)
 {
 	if(llvm::isa<clang::CXXMethodDecl>(functionDecl))
@@ -219,18 +192,6 @@ bool ClangAstVisitor::TraverseFunctionDecl(clang::FunctionDecl* functionDecl)
 							  QString("FunctionDecl"),functionDecl);
 	}
 	return true;
-}
-
-bool ClangAstVisitor::TraverseCXXConstructorDecl(clang::CXXConstructorDecl* constructorDecl)
-{
-	log_->writeError(className_,QString("CXXConstructor not supported"),QString("CXXConstructorDecl"),constructorDecl);
-	return TraverseCXXMethodDecl(constructorDecl);
-}
-
-bool ClangAstVisitor::TraverseCXXDestructorDecl(clang::CXXDestructorDecl* destructorDecl)
-{
-	log_->writeError(className_,QString("CXXDestructor not supported"),QString("CXXDestructorDecl"),destructorDecl);
-	return TraverseCXXMethodDecl(destructorDecl);
 }
 
 bool ClangAstVisitor::TraverseIfStmt(clang::IfStmt* ifStmt)
@@ -1052,6 +1013,33 @@ bool ClangAstVisitor::TraverseExplCastExpr(clang::ExplicitCastExpr* castExpr, OO
 		return true;
 	}
 	log_->writeError(className_,QString("uknown where to put castExpr"),QString("CastExpr"),castExpr);
+	return true;
+}
+
+bool ClangAstVisitor::TraverseMethodDecl(clang::CXXMethodDecl* methodDecl, OOModel::Method::MethodKind kind)
+{
+	OOModel::Method* ooMethod = trMngr_->insertMethodDecl(methodDecl, kind);
+	if(!ooMethod)
+	{
+		// TODO is this correct?
+		// only consider a method where the parent has been visited
+		if(trMngr_->containsClass(methodDecl->getParent()))
+			log_->writeError(className_,QString("no ooModel::method found"),
+								  QString("CXXMethodDecl"),methodDecl);
+		return true;
+	}
+	// only visit the body if we are at the definition
+	if(methodDecl->isThisDeclarationADefinition())
+	{
+		ooStack_.push(ooMethod->items());
+		bool inBody = inBody_;
+		inBody_ = true;
+		TraverseStmt(methodDecl->getBody());
+		inBody_ = inBody;
+		ooStack_.pop();
+	}
+	// specify the visibility of the method
+	ooMethod->setVisibility(utils_->convertAccessSpecifier(methodDecl->getAccess()));
 	return true;
 }
 

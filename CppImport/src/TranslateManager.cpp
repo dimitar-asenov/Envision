@@ -71,7 +71,7 @@ bool TranslateManager::insertClass(clang::CXXRecordDecl* rDecl, OOModel::Class* 
 	return false;
 }
 
-OOModel::Method* TranslateManager::insertMethodDecl(clang::CXXMethodDecl* mDecl)
+OOModel::Method* TranslateManager::insertMethodDecl(clang::CXXMethodDecl* mDecl, OOModel::Method::MethodKind kind)
 {
 	OOModel::Method* method = nullptr;
 	// only consider methods where the parent has already been visited
@@ -106,7 +106,7 @@ OOModel::Method* TranslateManager::insertMethodDecl(clang::CXXMethodDecl* mDecl)
 				}
 			}
 			// check if method node exists or else create one
-			method = method ? method : addNewMethod(mDecl);
+			method = method ? method : addNewMethod(mDecl, kind);
 		}
 	}
 	return method;
@@ -183,11 +183,9 @@ OOModel::VariableDeclaration* TranslateManager::getVar(clang::VarDecl* vDecl)
 	return nullptr;
 }
 
-OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl)
+OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl, OOModel::Method::MethodKind kind)
 {
-	// add a new method
-	OOModel::Method* method = new OOModel::Method();
-	method->setName(QString::fromStdString(mDecl->getNameAsString()));
+	OOModel::Method* method = new OOModel::Method(QString::fromStdString(mDecl->getNameAsString()), kind);
 	// process result type
 	OOModel::Expression* restype = utils_->convertClangType(mDecl->getResultType());
 	if(restype)

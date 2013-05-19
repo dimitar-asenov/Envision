@@ -41,10 +41,7 @@ class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 
 		bool TraverseNamespaceDecl(clang::NamespaceDecl* namespaceDecl);
 		bool TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl);
-		bool TraverseCXXMethodDecl(clang::CXXMethodDecl* methodDecl);
 		bool TraverseFunctionDecl(clang::FunctionDecl* functionDecl);
-		bool TraverseCXXConstructorDecl(clang::CXXConstructorDecl* constructorDecl);
-		bool TraverseCXXDestructorDecl(clang::CXXDestructorDecl* destructorDecl);
 
 		bool TraverseIfStmt(clang::IfStmt* ifStmt);
 		bool TraverseConditionalOperator(clang::ConditionalOperator* conditionalOperator);
@@ -53,18 +50,21 @@ class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 		bool TraverseSwitchStmt(clang::SwitchStmt* switchStmt);
 		bool TraverseReturnStmt(clang::ReturnStmt* returnStmt);
 
-
 		bool TraverseCXXTryStmt(clang::CXXTryStmt* tryStmt);
 		bool TraverseCXXCatchStmt(clang::CXXCatchStmt* catchStmt);
 		bool TraverseCXXThrowExpr(clang::CXXThrowExpr* throwExpr);
 
 		bool TraverseLambdaExpr(clang::LambdaExpr* lambdaExpr);
 
-
 		bool TraverseStmt(clang::Stmt *S);
 		bool TraverseVarDecl(clang::VarDecl* varDecl);
 
 		bool TraverseEnumDecl(clang::EnumDecl* enumDecl);
+
+		// methods
+		bool TraverseCXXMethodDecl(clang::CXXMethodDecl* methodDecl);
+		bool TraverseCXXConstructorDecl(clang::CXXConstructorDecl* constructorDecl);
+		bool TraverseCXXDestructorDecl(clang::CXXDestructorDecl* destructorDecl);
 
 		// casts
 		bool TraverseCStyleCastExpr(clang::CStyleCastExpr* castExpr);
@@ -161,6 +161,8 @@ class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 		bool TraverseUnaryOp(clang::UnaryOperator* unaryOperator);
 
 		bool TraverseExplCastExpr(clang::ExplicitCastExpr* castExpr, OOModel::CastExpression::CastKind kind);
+
+		bool TraverseMethodDecl(clang::CXXMethodDecl* methodDecl, OOModel::Method::MethodKind kind);
 
 		QStack<Model::Node*> ooStack_;
 		QStack<OOModel::Expression*> ooExprStack_;
@@ -283,5 +285,13 @@ inline bool ClangAstVisitor::TraverseCXXStaticCastExpr(clang::CXXStaticCastExpr*
 {return TraverseExplCastExpr(castExpr, OOModel::CastExpression::CastKind::StaticCast); }
 inline bool ClangAstVisitor::TraverseCXXFunctionalCastExpr(clang::CXXFunctionalCastExpr* castExpr)
 {return TraverseExplCastExpr(castExpr, OOModel::CastExpression::CastKind::FunctionalCast); }
+
+// method
+inline bool ClangAstVisitor::TraverseCXXMethodDecl(clang::CXXMethodDecl *methodDecl)
+{return TraverseMethodDecl(methodDecl, OOModel::Method::MethodKind::Default); }
+inline bool ClangAstVisitor::TraverseCXXConstructorDecl(clang::CXXConstructorDecl *constructorDecl)
+{return TraverseMethodDecl(constructorDecl, OOModel::Method::MethodKind::Constructor); }
+inline bool ClangAstVisitor::TraverseCXXDestructorDecl(clang::CXXDestructorDecl *destructorDecl)
+{return TraverseMethodDecl(destructorDecl, OOModel::Method::MethodKind::Destructor); }
 
 }

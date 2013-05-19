@@ -38,14 +38,14 @@ class TranslateManager
 		OOModel::Module* insertNamespace(clang::NamespaceDecl* nd, int depth);
 		bool insertClass(clang::CXXRecordDecl* rDecl, OOModel::Class* ooClass);
 		bool containsClass(clang::CXXRecordDecl* recordDecl);
-		OOModel::Method* insertMethodDecl(clang::CXXMethodDecl* mDecl);
+		OOModel::Method* insertMethodDecl(clang::CXXMethodDecl* mDecl, OOModel::Method::MethodKind kind);
 		OOModel::Method* insertFunctionDecl(clang::FunctionDecl* functionDecl);
 		OOModel::Field* insertField(clang::FieldDecl* fDecl);
 		OOModel::VariableDeclaration* insertVar(clang::VarDecl* vDecl);
 		OOModel::VariableDeclaration* getVar(clang::VarDecl* vDecl);
 
 	private:
-		OOModel::Method* addNewMethod(clang::CXXMethodDecl* mDecl);
+		OOModel::Method* addNewMethod(clang::CXXMethodDecl* mDecl, OOModel::Method::MethodKind kind);
 		OOModel::Method* addNewFunction(clang::FunctionDecl* functionDecl);
 
 		Model::Model* model_{};
