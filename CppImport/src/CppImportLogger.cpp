@@ -131,12 +131,6 @@ void CppImportLogger::binaryOpNotSupported(clang::BinaryOperatorKind kind)
 	QString missing;
 	switch(kind)
 	{
-		case clang::BO_PtrMemD:
-			missing = "BO_PtrMemD";
-			break;
-		case clang::BO_PtrMemI:
-			missing = "BO_PtrMemI";
-			break;
 		case clang::BO_Comma:
 			missing = "BO_Comma";
 			break;

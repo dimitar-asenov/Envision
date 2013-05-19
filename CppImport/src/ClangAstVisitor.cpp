@@ -906,9 +906,12 @@ bool ClangAstVisitor::shouldUseDataRecursionFor(clang::Stmt*)
 bool ClangAstVisitor::TraverseBinaryOp(clang::BinaryOperator* binaryOperator)
 {
 	clang::BinaryOperatorKind opcode = binaryOperator->getOpcode();
-	if(opcode == clang::BO_PtrMemD || opcode == clang::BO_PtrMemI || opcode == clang::BO_Comma)
+	if(opcode == clang::BO_Comma)
 	{
 		log_->writeError(className_,QString("Binary OP NOT SUPPORTED"),QString("BinaryOperator"),binaryOperator);
+		log_->binaryOpNotSupported(opcode);
+		// TODO: handle comma expressions
+		return TraverseStmt(binaryOperator->getRHS());
 	}
 	OOModel::BinaryOperation::OperatorTypes ooOperatorType =
 			utils_->convertClangOpcode(opcode);
@@ -983,6 +986,9 @@ bool ClangAstVisitor::TraverseUnaryOp(clang::UnaryOperator* unaryOperator)
 	{
 		log_->writeError(className_,QString("UNARY OP NOT SUPPORTED"),QString("UnaryOperator"),unaryOperator);
 		unaryOperator->dump();
+		// just convert the subexpression
+		log_->unaryOpNotSupported(opcode);
+		return TraverseStmt(unaryOperator->getSubExpr());
 	}
 	OOModel::UnaryOperation::OperatorTypes ooOperatorType =
 			utils_->convertUnaryOpcode(opcode);

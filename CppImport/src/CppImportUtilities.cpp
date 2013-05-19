@@ -25,6 +25,7 @@
  **********************************************************************************************************************/
 
 #include "CppImportUtilities.h"
+#include "CppImportException.h"
 
 namespace CppImport {
 
@@ -168,6 +169,8 @@ OOModel::BinaryOperation::OperatorTypes CppImportUtilities::convertClangOpcode
 {
 	switch (kind)
 	{
+		case clang::BO_PtrMemD: return OOModel::BinaryOperation::POINTER_TO_MEMBER;
+		case clang::BO_PtrMemI: return OOModel::BinaryOperation::POINTER_POINTER_TO_MEMBER;
 		case clang::BO_Mul: return OOModel::BinaryOperation::TIMES;
 		case clang::BO_Div: return OOModel::BinaryOperation::DIVIDE;
 		case clang::BO_Rem: return OOModel::BinaryOperation::REMAINDER;
@@ -187,9 +190,7 @@ OOModel::BinaryOperation::OperatorTypes CppImportUtilities::convertClangOpcode
 		case clang::BO_LAnd: return OOModel::BinaryOperation::CONDITIONAL_AND;
 		case clang::BO_LOr: return OOModel::BinaryOperation::CONDITIONAL_OR;
 		default:
-			log_->binaryOpNotSupported(kind);
-			// TODO this is wrong
-			return OOModel::BinaryOperation::CONDITIONAL_OR;
+			throw(new CppImportException("Impossible binary operator"));
 	}
 }
 
