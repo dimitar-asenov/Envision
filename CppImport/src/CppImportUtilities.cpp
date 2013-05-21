@@ -33,7 +33,7 @@ CppImportUtilities::CppImportUtilities(CppImportLogger* logger) : log_(logger)
 {
 }
 
-OOModel::Expression *CppImportUtilities::convertClangType(clang::QualType type)
+OOModel::Expression* CppImportUtilities::convertClangType(clang::QualType type)
 {
 	if(type.getTypePtr()->getContainedAutoType())
 	{
@@ -156,6 +156,47 @@ OOModel::Expression *CppImportUtilities::convertClangType(clang::QualType type)
 		OOModel::ReferenceTypeExpression* ooRef = new OOModel::ReferenceTypeExpression();
 		ooRef->setTypeExpression(convertClangType(type.getTypePtr()->getPointeeType()));
 		return ooRef;
+	}
+	else if(type.getTypePtr()->isEnumeralType())
+	{
+		if(auto enumType = llvm::dyn_cast<clang::EnumType>(type.getTypePtr()))
+		{
+			OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression
+					(QString::fromStdString(enumType->getDecl()->getNameAsString()));
+			return ooRef;
+		}
+		log_->typeNotSupported(QString(type.getTypePtr()->getTypeClassName()));
+		return nullptr;
+	}
+	else if(type.getTypePtr()->isConstantArrayType())
+	{
+		if(auto constArrayType = llvm::dyn_cast<clang::ConstantArrayType>(type.getTypePtr()))
+		{
+			OOModel::ArrayTypeExpression* ooArrayType = new OOModel::ArrayTypeExpression();
+			ooArrayType->setTypeExpression(convertClangType(constArrayType->getElementType()));
+			ooArrayType->setFixedSize(new OOModel::IntegerLiteral(constArrayType->getSize().getLimitedValue()));
+			return ooArrayType;
+		}
+		log_->typeNotSupported(QString(type.getTypePtr()->getTypeClassName()));
+		return nullptr;
+	}
+	else if(type.getTypePtr()->isIncompleteArrayType())
+	{
+		if(auto incompleteArrayType = llvm::dyn_cast<clang::IncompleteArrayType>(type.getTypePtr()))
+		{
+			OOModel::ArrayTypeExpression* ooArrayType = new OOModel::ArrayTypeExpression();
+			ooArrayType->setTypeExpression(convertClangType(incompleteArrayType->getElementType()));
+			return ooArrayType;
+		}
+		log_->typeNotSupported(QString(type.getTypePtr()->getTypeClassName()));
+		return nullptr;
+	}
+	else if(auto parenType = llvm::dyn_cast<clang::ParenType>(type.getTypePtr()))
+	{
+		OOModel::UnaryOperation* ooUnaryOp = new OOModel::UnaryOperation();
+		ooUnaryOp->setOp(OOModel::UnaryOperation::PARENTHESIS);
+		ooUnaryOp->setOperand(convertClangType(parenType->getInnerType()));
+		return ooUnaryOp;
 	}
 	else
 	{

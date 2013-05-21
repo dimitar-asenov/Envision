@@ -502,28 +502,9 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 		return true;
 	}
 
-	if(varDecl->getType().getTypePtr()->isArrayType())
-	{
-		//TODO this array section is very nasty
-		const clang::ArrayType* arrType =  varDecl->getType().getTypePtr()->getAsArrayTypeUnsafe();
-		if(arrType)
-		{
-			if(llvm::isa<clang::ConstantArrayType>(arrType))
-			{
-				const clang::ConstantArrayType* constArr = llvm::dyn_cast<clang::ConstantArrayType>(arrType);
-				std::cout << "Const Array Size: " << constArr->getSize().getLimitedValue() << std::endl;
-				OOModel::ArrayTypeExpression* varType = new OOModel::ArrayTypeExpression();
-				if(OOModel::Expression* expr = utils_->convertClangType(arrType->getElementType()))
-					varType->setTypeExpression(expr);
-				ooVarDecl->setTypeExpression(varType);
-			}
-		}
-	}
-	else
-	{
-		OOModel::Expression* type = utils_->convertClangType(varDecl->getType());
-		if(type) ooVarDecl->setTypeExpression(type);
-	}
+	// set the type
+	OOModel::Expression* type = utils_->convertClangType(varDecl->getType());
+	if(type) ooVarDecl->setTypeExpression(type);
 
 	// TODO: also visit type/value dependent inits
 	if(varDecl->hasInit() && !varDecl->getInit()->isValueDependent())

@@ -179,6 +179,9 @@ public:
     int returnZero() {
         return static_cast<int>(ZERO);
     }
+    TestValues returnFirst() {
+        return ZERO;
+    }
 };
 
 class Lambda
