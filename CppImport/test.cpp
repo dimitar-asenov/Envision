@@ -64,6 +64,8 @@ public:
         return 0;
     }
 };
+
+typedef Testing TestingClass;
 }
 
 namespace TestSpace{
@@ -84,7 +86,8 @@ public:
     }
     
     int instantiateClass(){
-     Testing anObject;
+      typedef Testing TestingClass;
+     TestingClass anObject;
      return 0;
     }
     int aSwitchFunction(int k) {

@@ -138,6 +138,10 @@ OOModel::Expression* CppImportUtilities::convertClangType(clang::QualType type)
 				return nullptr;
 		}
 	}
+	else if(auto typedefType = llvm::dyn_cast<clang::TypedefType>(type.getTypePtr()))
+	{
+		return new OOModel::ReferenceExpression(QString::fromStdString(typedefType->getDecl()->getNameAsString()));
+	}
 	else if(type.getTypePtr()->isRecordType())
 	{
 		if(clang::CXXRecordDecl* recordDecl = type.getTypePtr()->getAsCXXRecordDecl())

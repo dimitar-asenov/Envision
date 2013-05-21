@@ -603,6 +603,21 @@ bool ClangAstVisitor::VisitContinueStmt(clang::ContinueStmt* continueStmt)
 	return true;
 }
 
+bool ClangAstVisitor::VisitTypedefNameDecl(clang::TypedefNameDecl* typedefDecl)
+{
+	// TODO: is weak imported could help to not have system typedefs
+	typedefDecl->dump();
+	OOModel::TypeAlias* ooTypeAlias = new OOModel::TypeAlias();
+	ooTypeAlias->setTypeExpression(utils_->convertClangType(typedefDecl->getUnderlyingType()));
+	ooTypeAlias->setName(QString::fromStdString(typedefDecl->getNameAsString()));
+	// TODO: for this the OOModel first needs to change
+	if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
+		itemList->append(ooTypeAlias);
+	else
+		log_->writeError(className_, QString("Uknown where to put typedef"), QString("TypeDefNameDecl"), typedefDecl);
+	return true;
+}
+
 bool ClangAstVisitor::shouldUseDataRecursionFor(clang::Stmt*)
 {
 	return false;

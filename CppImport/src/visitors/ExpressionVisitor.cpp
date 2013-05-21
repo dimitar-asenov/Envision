@@ -227,7 +227,7 @@ bool ExpressionVisitor::VisitMemberExpr(clang::MemberExpr* memberExpr)
 
 bool ExpressionVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constructExpr)
 {
-	constructExpr->dump();
+	//constructExpr->dump();
 	// if is elidable we can directly visit the children
 	if(constructExpr->isElidable())
 		return TraverseStmt(*(constructExpr->child_begin()));
