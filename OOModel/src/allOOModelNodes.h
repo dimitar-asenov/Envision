@@ -33,6 +33,7 @@
 #include "declarations/Field.h"
 #include "declarations/Declaration.h"
 #include "declarations/VariableDeclaration.h"
+#include "declarations/TypeAlias.h"
 
 #include "statements/Statement.h"
 #include "statements/Block.h"
