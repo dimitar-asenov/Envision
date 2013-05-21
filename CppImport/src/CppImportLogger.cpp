@@ -70,6 +70,8 @@ void CppImportLogger::writeOut(QString &inWhichClass, QString &reason, QString &
 
 void CppImportLogger::writeOut(QString &inWhichClass, QString &reason, QString &clangType, clang::Stmt* stmt, CppImportLogger::OUTTYPE outType)
 {
+	if(!stmt)
+		return;
 	QTextStream* outStream;
 	switch(outType)
 	{

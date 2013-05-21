@@ -34,6 +34,7 @@ ClangAstVisitor::ClangAstVisitor(Model::Model* model, OOModel::Project* currentP
 {
 	utils_ = new CppImportUtilities(log_);
 	trMngr_ = new TranslateManager(model,currentProject, utils_);
+	exprVisitor_ = new ExpressionVisitor(log_, utils_);
 	ooStack_.push(currentProject_);
 }
 
@@ -221,32 +222,6 @@ bool ClangAstVisitor::TraverseIfStmt(clang::IfStmt* ifStmt)
 	return true;
 }
 
-bool ClangAstVisitor::TraverseConditionalOperator(clang::ConditionalOperator* conditionalOperator)
-{
-	OOModel::ConditionalExpression* ooConditionalExpr = new OOModel::ConditionalExpression();
-	// store inBody var
-	bool inBody = inBody_;
-	inBody_ = false;
-	// traverse condition
-	TraverseStmt(conditionalOperator->getCond());
-	if(!ooExprStack_.empty())
-		ooConditionalExpr->setCondition(ooExprStack_.pop());
-	// traverse true part
-	TraverseStmt(conditionalOperator->getTrueExpr());
-	if(!ooExprStack_.empty())
-		ooConditionalExpr->setTrueExpression(ooExprStack_.pop());
-	// traverse false part
-	TraverseStmt(conditionalOperator->getFalseExpr());
-	if(!ooExprStack_.empty())
-		ooConditionalExpr->setFalseExpression(ooExprStack_.pop());
-	inBody_ = inBody;
-	if(inBody_)
-		log_->writeError(className_,QString("Cond operator in body"),QString("ConditionalOperator"),conditionalOperator);
-	else
-		ooExprStack_.push(ooConditionalExpr);
-	return true;
-}
-
 bool ClangAstVisitor::TraverseWhileStmt(clang::WhileStmt* whileStmt)
 {
 	OOModel::LoopStatement* ooLoop = new OOModel::LoopStatement();
@@ -400,30 +375,6 @@ bool ClangAstVisitor::TraverseCXXCatchStmt(clang::CXXCatchStmt* catchStmt)
 	return true;
 }
 
-bool ClangAstVisitor::TraverseCXXThrowExpr(clang::CXXThrowExpr* throwExpr)
-{
-	OOModel::ThrowExpression* ooThrow = new OOModel::ThrowExpression();
-	// save inBody var
-	bool inBody = inBody_;
-	inBody_ = false;
-	// visit throw expression
-	TraverseStmt(throwExpr->getSubExpr());
-	if(!ooExprStack_.empty())
-		ooThrow->setExpr(ooExprStack_.pop());
-	inBody_ = inBody;
-	// add to correct place
-	if(inBody_)
-	{
-		if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
-			itemList->append(ooThrow);
-		else
-			log_->writeError(className_,QString("uknown where to put throwExpr"),QString("CXXThrowExpr"),throwExpr);
-	}
-	else
-			ooExprStack_.push(ooThrow);
-	return true;
-}
-
 bool ClangAstVisitor::TraverseLambdaExpr(clang::LambdaExpr* lambdaExpr)
 {
 	OOModel::LambdaExpression* ooLambda = new OOModel::LambdaExpression();
@@ -454,6 +405,21 @@ bool ClangAstVisitor::TraverseLambdaExpr(clang::LambdaExpr* lambdaExpr)
 
 bool ClangAstVisitor::TraverseStmt(clang::Stmt* S)
 {
+	if(S && !llvm::isa<clang::LambdaExpr>(S) && llvm::isa<clang::Expr>(S))
+	{
+		bool ret = exprVisitor_->TraverseStmt(S);
+		if(auto expr = exprVisitor_->getLastExpression())
+		{
+			if(!inBody_)
+				ooExprStack_.push(expr);
+			else if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
+				itemList->append(new OOModel::ExpressionStatement(expr));
+		}
+		else
+			log_->writeError(className_, QString("exprvisitor couldn't convert"), QString("STMT"), S);
+		return ret;
+	}
+
 	return Base::TraverseStmt(S);
 }
 
@@ -583,196 +549,6 @@ bool ClangAstVisitor::VisitFieldDecl(clang::FieldDecl* fieldDecl)
 	return true;
 }
 
-bool ClangAstVisitor::TraverseCXXMemberCallExpr(clang::CXXMemberCallExpr* callExpr)
-{
-	OOModel::MethodCallExpression* ooMCall = new OOModel::MethodCallExpression
-			(QString::fromStdString(callExpr->getMethodDecl()->getNameAsString()));
-
-	// visit arguments
-	bool inBody = inBody_;
-	inBody_ = false;
-	clang::ExprIterator argIt = callExpr->arg_begin();
-	for(;argIt!=callExpr->arg_end();++argIt)
-	{
-		TraverseStmt(*argIt);
-		ooMCall->arguments()->append(ooExprStack_.pop());
-	}
-
-	// set target
-	// TODO multiple levels possible
-	if(auto callee = llvm::dyn_cast<clang::MemberExpr>(callExpr->getCallee()))
-	{
-		TraverseStmt(callee->getBase());
-		if(!ooExprStack_.empty())
-			ooMCall->ref()->setPrefix(ooExprStack_.pop());
-	}
-
-	// set the correct parent
-	inBody_ = inBody;
-	if(inBody_)
-	{
-		OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top());
-		if(itemList) itemList->append(ooMCall);
-	}
-	else
-		ooExprStack_.push(ooMCall);
-	return true;
-}
-
-bool ClangAstVisitor::TraverseCXXNewExpr(clang::CXXNewExpr* newExpr)
-{
-	OOModel::NewExpression* ooNewExpr = new OOModel::NewExpression();
-	ooNewExpr->setNewType(utils_->convertClangType(newExpr->getAllocatedType()));
-	if(newExpr->isArray())
-	{
-		TraverseStmt(newExpr->getArraySize());
-		if(!ooExprStack_.empty())
-			ooNewExpr->setAmount(ooExprStack_.pop());
-	}
-
-	ooExprStack_.push(ooNewExpr);
-	return true;
-}
-
-bool ClangAstVisitor::VisitIntegerLiteral(clang::IntegerLiteral* intLit)
-{
-	OOModel::IntegerLiteral* ooIntLit = new OOModel::IntegerLiteral();
-	ooIntLit->setValue(intLit->getValue().getLimitedValue());
-	ooExprStack_.push(ooIntLit);
-	return true;
-}
-
-bool ClangAstVisitor::VisitCXXBoolLiteralExpr(clang::CXXBoolLiteralExpr* boolLitExpr)
-{
-	OOModel::BooleanLiteral* ooBoolLit = new OOModel::BooleanLiteral();
-	ooBoolLit->setValue(boolLitExpr->getValue());
-	ooExprStack_.push(ooBoolLit);
-	return true;
-}
-
-bool ClangAstVisitor::VisitFloatingLiteral(clang::FloatingLiteral* floatLiteral)
-{
-	OOModel::FloatLiteral* ooFloatLit = new OOModel::FloatLiteral();
-	ooFloatLit->setValue(floatLiteral->getValueAsApproximateDouble());
-	ooExprStack_.push(ooFloatLit);
-	return true;
-}
-
-bool ClangAstVisitor::VisitCharacterLiteral(clang::CharacterLiteral* charLiteral)
-{
-	OOModel::CharacterLiteral* ooCharLit = new OOModel::CharacterLiteral();
-	ooCharLit->setValue(QChar(charLiteral->getValue()));
-	ooExprStack_.push(ooCharLit);
-	return true;
-}
-
-bool ClangAstVisitor::VisitStringLiteral(clang::StringLiteral* stringLiteral)
-{
-	OOModel::StringLiteral* ooStringLit = new OOModel::StringLiteral();
-	ooStringLit->setValue(QString::fromStdString(stringLiteral->getBytes().str()));
-	ooExprStack_.push(ooStringLit);
-	return true;
-}
-
-bool ClangAstVisitor::VisitDeclRefExpr(clang::DeclRefExpr* declRefExpr)
-{
-	// TODO: namespace resolution
-	OOModel::ReferenceExpression* refExpr = new OOModel::ReferenceExpression();
-	refExpr->setName(QString::fromStdString(declRefExpr->getDecl()->getNameAsString()));
-	ooExprStack_.push(refExpr);
-	return true;
-}
-
-bool ClangAstVisitor::VisitCXXUnresolvedConstructorExpr(clang::CXXUnresolvedConstructExpr*)
-{
-	ooExprStack_.push(new OOModel::Expression());
-	return true;
-}
-
-bool ClangAstVisitor::TraverseParenExpr(clang::ParenExpr* parenthesizedExpr)
-{
-	OOModel::UnaryOperation* ooParenExpr = new OOModel::UnaryOperation();
-	ooParenExpr->setOp(OOModel::UnaryOperation::PARENTHESIS);
-	// save inBody_ value for recursive expressions
-	bool inBody = inBody_;
-	inBody_ = false;
-	TraverseStmt(parenthesizedExpr->getSubExpr());
-	if(!ooExprStack_.empty())
-		ooParenExpr->setOperand(ooExprStack_.pop());
-
-	if(inBody)
-	{
-		OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top());
-		if(itemList) itemList->append(ooParenExpr);
-		else std::cout << "ERROR INSERT Parenthesized Expression" << std::endl;
-	}
-	else
-		ooExprStack_.push(ooParenExpr);
-	inBody_ = inBody;
-	return true;
-}
-
-bool ClangAstVisitor::TraverseArraySubscriptExpr(clang::ArraySubscriptExpr* arraySubsrciptExpr)
-{
-		OOModel::BinaryOperation* ooArrayAccess = new OOModel::BinaryOperation();
-		ooArrayAccess->setOp(OOModel::BinaryOperation::ARRAY_INDEX);
-		// save inbody var
-		bool inBody = inBody_;
-		inBody_ = false;
-		// visit the base the base is A in the expr A[10]
-		TraverseStmt(arraySubsrciptExpr->getBase());
-		if(!ooExprStack_.empty())
-			ooArrayAccess->setLeft(ooExprStack_.pop());
-		// visit the idx the idx is 10 in the expr A[10]
-		TraverseStmt(arraySubsrciptExpr->getIdx());
-		if(!ooExprStack_.empty())
-			ooArrayAccess->setRight(ooExprStack_.pop());
-		// restore inBody var
-		inBody_ = inBody;
-		// put the binop in the correct location
-		if(inBody_)
-			log_->writeError(className_,QString("Array subscribt in body"),
-								  QString("ArraySubscriptExpr"), arraySubsrciptExpr);
-		else ooExprStack_.push(ooArrayAccess);
-		return true;
-}
-
-bool ClangAstVisitor::VisitCXXThisExpr(clang::CXXThisExpr* thisExpr)
-{
-	if(!thisExpr->isImplicit())
-	{
-		if(inBody_)
-		{
-			// TODO ..
-		}
-		else
-		{
-			ooExprStack_.push(new OOModel::ThisExpression());
-		}
-	}
-	return true;
-}
-
-bool ClangAstVisitor::VisitMemberExpr(clang::MemberExpr* memberExpr)
-{
-	if(memberExpr->isImplicitAccess())
-	{
-		OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression();
-		ooRef->ref()->setName(QString::fromStdString(memberExpr->getMemberDecl()->getNameAsString()));
-		ooExprStack_.push(ooRef);
-	}
-	return true;
-}
-
-bool ClangAstVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constructExpr)
-{
-	// if is elidable we can directly visit the children
-	if(constructExpr->isElidable())
-		return TraverseStmt(*(constructExpr->child_begin()));
-	log_->writeError(className_,QString("Not handled yet"),QString("CXXConstructExpr"),constructExpr);
-	return true;
-}
-
 bool ClangAstVisitor::TraverseCaseStmt(clang::CaseStmt* caseStmt)
 {
 	OOModel::SwitchCase* ooSwitchCase = new OOModel::SwitchCase();
@@ -805,19 +581,6 @@ bool ClangAstVisitor::TraverseDefaultStmt(clang::DefaultStmt* defaultStmt)
 	return true;
 }
 
-bool ClangAstVisitor::TraverseInitListExpr(clang::InitListExpr* initListExpr)
-{
-	OOModel::ArrayInitializer* ooArrayInit = new OOModel::ArrayInitializer();
-	for(auto iter = initListExpr->begin(); iter!=initListExpr->end(); ++iter)
-	{
-		TraverseStmt(*iter);
-		if(!ooExprStack_.empty())
-			ooArrayInit->values()->append(ooExprStack_.pop());
-	}
-	ooExprStack_.push(ooArrayInit);
-	return true;
-}
-
 bool ClangAstVisitor::VisitBreakStmt(clang::BreakStmt* breakStmt)
 {
 	OOModel::BreakStatement* ooBreak = new OOModel::BreakStatement();
@@ -843,158 +606,6 @@ bool ClangAstVisitor::VisitContinueStmt(clang::ContinueStmt* continueStmt)
 bool ClangAstVisitor::shouldUseDataRecursionFor(clang::Stmt*)
 {
 	return false;
-}
-
-bool ClangAstVisitor::TraverseBinaryOp(clang::BinaryOperator* binaryOperator)
-{
-	OOModel::Expression* ooLeft = nullptr;
-	OOModel::Expression* ooRight = nullptr;
-	OOModel::BinaryOperation* ooBinOp = nullptr;
-	OOModel::CommaExpression* ooComma  = nullptr;
-	clang::BinaryOperatorKind opcode = binaryOperator->getOpcode();
-	if(opcode == clang::BO_Comma)
-	{
-		ooComma = new OOModel::CommaExpression();
-	}
-	else
-	{
-		ooBinOp = new OOModel::BinaryOperation();
-		OOModel::BinaryOperation::OperatorTypes ooOperatorType =
-				utils_->convertClangOpcode(opcode);
-		ooBinOp->setOp(ooOperatorType);
-	}
-	// save inBody_ value for recursive expressions
-	bool inBody = inBody_;
-	inBody_ = false;
-	TraverseStmt(binaryOperator->getLHS());
-	if(!ooExprStack_.empty())
-		ooLeft = ooExprStack_.pop();
-	else
-		log_->writeError(className_,QString("BOP: LHSExpr not supported"),
-							  QString("Expr"),binaryOperator->getLHS());
-	TraverseStmt(binaryOperator->getRHS());
-	if(!ooExprStack_.empty())
-		ooRight = ooExprStack_.pop();
-	else
-		log_->writeError(className_,QString("BOP: RHSExpr not supported"),
-							  QString("Expr"),binaryOperator->getRHS());
-	if(ooBinOp)
-	{
-		ooBinOp->setLeft(ooLeft);
-		ooBinOp->setRight(ooRight);
-	}
-	else
-	{
-		ooComma->setLeft(ooLeft);
-		ooComma->setRight(ooRight);
-	}
-
-	if(inBody)
-	{
-		OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top());
-		if(itemList && ooBinOp) itemList->append(ooBinOp);
-		else if(itemList && ooComma) itemList->append(ooComma);
-		else std::cout << "ERROR INSERT BINOP" << std::endl;
-	}
-	else
-		if(ooBinOp) ooExprStack_.push(ooBinOp);
-		else ooExprStack_.push(ooComma);
-	inBody_ = inBody;
-	return true;
-}
-
-bool ClangAstVisitor::TraverseAssignment(clang::BinaryOperator* binaryOperator)
-{
-	OOModel::AssignmentExpression::AssignmentTypes ooOperatorType =
-			utils_->convertClangAssignOpcode(binaryOperator->getOpcode());
-	OOModel::AssignmentExpression* ooBinOp = new OOModel::AssignmentExpression();
-	// save inBody_ value for recursive expressions
-	bool inBody = inBody_;
-	inBody_ = false;
-	ooBinOp->setOp(ooOperatorType);
-	TraverseStmt(binaryOperator->getLHS());
-	if(!ooExprStack_.empty())
-		ooBinOp->setLeft(ooExprStack_.pop());
-	else
-		log_->writeError(className_,QString("BOP: LHSExpr not supported"),
-							  QString("Expr"),binaryOperator->getLHS());
-	TraverseStmt(binaryOperator->getRHS());
-	if(!ooExprStack_.empty())
-		ooBinOp->setRight(ooExprStack_.pop());
-	else
-		log_->writeError(className_,QString("BOP: RHSExpr not supported"),
-							  QString("Expr"),binaryOperator->getRHS());
-
-	if(inBody)
-	{
-		OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top());
-		if(itemList) itemList->append(ooBinOp);
-		else std::cout << "ERROR INSERT BINOP" << std::endl;
-	}
-	else
-		ooExprStack_.push(ooBinOp);
-	inBody_ = inBody;
-	return true;
-}
-
-bool ClangAstVisitor::TraverseUnaryOp(clang::UnaryOperator* unaryOperator)
-{
-	clang::UnaryOperatorKind opcode = unaryOperator->getOpcode();
-	if(opcode == clang::UO_Extension || opcode == clang::UO_Real || opcode == clang::UO_Imag)
-	{
-		log_->writeError(className_,QString("UNARY OP NOT SUPPORTED"),QString("UnaryOperator"),unaryOperator);
-		unaryOperator->dump();
-		// just convert the subexpression
-		log_->unaryOpNotSupported(opcode);
-		return TraverseStmt(unaryOperator->getSubExpr());
-	}
-	OOModel::UnaryOperation::OperatorTypes ooOperatorType =
-			utils_->convertUnaryOpcode(opcode);
-	OOModel::UnaryOperation* ooUnaryOp = new OOModel::UnaryOperation();
-	// save inBody_ value for recursive expressions
-	bool inBody = inBody_;
-	inBody_ = false;
-	ooUnaryOp->setOp(ooOperatorType);
-	TraverseStmt(unaryOperator->getSubExpr());
-	if(!ooExprStack_.empty())
-		ooUnaryOp->setOperand(ooExprStack_.pop());
-	else
-		log_->writeError(className_,QString("UOP: SubExpr not supported"),
-							  QString("Expr"),unaryOperator->getSubExpr());
-
-	if(inBody)
-	{
-		OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top());
-		if(itemList) itemList->append(ooUnaryOp);
-		else std::cout << "ERROR INSERT Unary" << std::endl;
-	}
-	else
-		ooExprStack_.push(ooUnaryOp);
-	inBody_ = inBody;
-	return true;
-}
-
-bool ClangAstVisitor::TraverseExplCastExpr(clang::ExplicitCastExpr* castExpr, OOModel::CastExpression::CastKind kind)
-{
-	OOModel::CastExpression* ooCast = new OOModel::CastExpression(kind);
-	// setType to cast to
-	ooCast->setType(utils_->convertClangType(castExpr->getType()));
-	// visit subexpr
-	bool inBody = inBody_;
-	inBody_ = false;
-	TraverseStmt(castExpr->getSubExprAsWritten());
-	if(!ooExprStack_.empty())
-		ooCast->setExpr(ooExprStack_.pop());
-
-	inBody_ = inBody;
-
-	if(!inBody_)
-	{
-		ooExprStack_.push(ooCast);
-		return true;
-	}
-	log_->writeError(className_,QString("uknown where to put castExpr"),QString("CastExpr"),castExpr);
-	return true;
 }
 
 bool ClangAstVisitor::TraverseMethodDecl(clang::CXXMethodDecl* methodDecl, OOModel::Method::MethodKind kind)

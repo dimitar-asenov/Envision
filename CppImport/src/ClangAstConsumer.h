@@ -28,7 +28,7 @@
 
 
 #include "cppimport_api.h"
-#include "ClangAstVisitor.h"
+#include "visitors/ClangAstVisitor.h"
 #include "ClangPPCallbacks.h"
 #include "CppImportLogger.h"
 
