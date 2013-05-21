@@ -33,6 +33,9 @@
 
 namespace CppImport {
 
+//forward declare expressionvisitor
+class ExpressionVisitor;
+
 class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 {
 	typedef clang::RecursiveASTVisitor<ClangAstVisitor> Base;

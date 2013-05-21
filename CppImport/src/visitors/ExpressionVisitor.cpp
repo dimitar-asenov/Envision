@@ -28,8 +28,8 @@
 
 namespace CppImport {
 
-ExpressionVisitor::ExpressionVisitor(CppImportLogger* log, CppImportUtilities* utils)
-: log_(log) , utils_(utils)
+ExpressionVisitor::ExpressionVisitor(ClangAstVisitor* visitor, CppImportLogger* log, CppImportUtilities* utils)
+: baseVisitor_(visitor), log_(log) , utils_(utils)
 {}
 
 
@@ -227,9 +227,18 @@ bool ExpressionVisitor::VisitMemberExpr(clang::MemberExpr* memberExpr)
 
 bool ExpressionVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constructExpr)
 {
+	constructExpr->dump();
 	// if is elidable we can directly visit the children
 	if(constructExpr->isElidable())
 		return TraverseStmt(*(constructExpr->child_begin()));
+	// check for lambda
+	if(constructExpr->getConstructor()->getParent()->isLambda())
+	{
+		// TODO: handle lambda
+	}
+	else
+		return true;
+
 	log_->writeError(className_,QString("Not handled yet"),QString("CXXConstructExpr"),constructExpr);
 	return true;
 }
@@ -239,6 +248,11 @@ OOModel::Expression* ExpressionVisitor::getLastExpression()
 	if(!ooExprStack_.empty())
 		return ooExprStack_.pop();
 	return nullptr;
+}
+
+bool ExpressionVisitor::TraverseLambdaExpr(clang::LambdaExpr* lambdaExpr)
+{
+	return baseVisitor_->TraverseLambdaExpr(lambdaExpr);
 }
 
 bool ExpressionVisitor::TraverseInitListExpr(clang::InitListExpr* initListExpr)

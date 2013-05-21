@@ -34,7 +34,7 @@ ClangAstVisitor::ClangAstVisitor(Model::Model* model, OOModel::Project* currentP
 {
 	utils_ = new CppImportUtilities(log_);
 	trMngr_ = new TranslateManager(model,currentProject, utils_);
-	exprVisitor_ = new ExpressionVisitor(log_, utils_);
+	exprVisitor_ = new ExpressionVisitor(this, log_, utils_);
 	ooStack_.push(currentProject_);
 }
 

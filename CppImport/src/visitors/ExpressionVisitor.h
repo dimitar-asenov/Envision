@@ -29,15 +29,20 @@
 #include "../cppimport_api.h"
 #include "../CppImportLogger.h"
 #include "../CppImportUtilities.h"
+#include "ClangAstVisitor.h"
 
 namespace CppImport {
+
+class ClangAstVisitor;
 
 class ExpressionVisitor : public clang::RecursiveASTVisitor <ExpressionVisitor>
 {
 	public:
-		ExpressionVisitor(CppImportLogger* log, CppImportUtilities* utils);
+		ExpressionVisitor(ClangAstVisitor* visitor, CppImportLogger* log, CppImportUtilities* utils);
 
 		OOModel::Expression* getLastExpression();
+
+		bool TraverseLambdaExpr(clang::LambdaExpr* lambdaExpr);
 
 		bool TraverseConditionalOperator(clang::ConditionalOperator* conditionalOperator);
 
@@ -126,6 +131,7 @@ class ExpressionVisitor : public clang::RecursiveASTVisitor <ExpressionVisitor>
 
 	private:
 		QStack<OOModel::Expression*> ooExprStack_;
+		ClangAstVisitor* baseVisitor_{};
 		CppImportLogger* log_{};
 		CppImportUtilities* utils_{};
 		QString className_{"ExpressionVisitor"};

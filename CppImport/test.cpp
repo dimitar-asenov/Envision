@@ -1,5 +1,5 @@
 #include "test.h"
-#include <iostream>
+// #include <iostream>
 //TEst comment
 
 int NOCLASSFIELD;
@@ -57,6 +57,7 @@ public:
     int someCall() {
         return myFunction(1, ~false);
     }
+    
 
     int takesRef(int& ref) {
         ref = ref < 10 ? 20 : 0;
@@ -80,6 +81,11 @@ public:
     int aPublicvar;
     int aPublicFunction(){
         return 0;
+    }
+    
+    int instantiateClass(){
+     Testing anObject;
+     return 0;
     }
     int aSwitchFunction(int k) {
         switch(k) {
@@ -193,8 +199,22 @@ public:
     }
 };
 
+class ClassArg {
+public:
+  ClassArg(int k) {
+   myVal = k; 
+  }
+  
+  int getVal() {
+    return myVal;
+  }
+private:
+  int myVal;
+};
+
 int Header::headerFunc()
 {
+  ClassArg object(10);
     float someFloat = 13.4;
     unsigned long uLong;
     int someArray[10];
