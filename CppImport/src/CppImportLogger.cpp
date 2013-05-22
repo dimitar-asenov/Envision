@@ -36,11 +36,12 @@ CppImportLogger::CppImportLogger(clang::SourceManager* sourceManager) :
 
 CppImportLogger::~CppImportLogger()
 {
-	delete errStream_;
-	delete warnStream_;
+	SAFE_DELETE(errStream_);
+	SAFE_DELETE(warnStream_);
 }
 
-void CppImportLogger::writeOut(QString &inWhichClass, QString &reason, QString &clangType, clang::NamedDecl* decl, CppImportLogger::OUTTYPE outType)
+void CppImportLogger::writeOut(QString &inWhichClass, QString &reason, clang::NamedDecl* decl,
+										 CppImportLogger::OUTTYPE outType)
 {
 	QTextStream* outStream;
 	switch(outType)
@@ -55,6 +56,8 @@ void CppImportLogger::writeOut(QString &inWhichClass, QString &reason, QString &
 			return;
 	}
 
+	QString clangType = QString(decl->getDeclKindName());
+
 	int newCount = countMap_.value(clangType) + 1;
 	countMap_.insert(clangType, newCount);
 
@@ -68,7 +71,8 @@ void CppImportLogger::writeOut(QString &inWhichClass, QString &reason, QString &
 
 }
 
-void CppImportLogger::writeOut(QString &inWhichClass, QString &reason, QString &clangType, clang::Stmt* stmt, CppImportLogger::OUTTYPE outType)
+void CppImportLogger::writeOut(QString &inWhichClass, QString &reason, clang::Stmt* stmt,
+										 CppImportLogger::OUTTYPE outType)
 {
 	if(!stmt)
 		return;
@@ -84,15 +88,14 @@ void CppImportLogger::writeOut(QString &inWhichClass, QString &reason, QString &
 		default:
 			return;
 	}
+	QString clangType = QString(stmt->getStmtClassName());
 
 	int newCount = countMap_.value(clangType) + 1;
 	countMap_.insert(clangType, newCount);
 
 	std::pair<clang::FileID,unsigned> decomposedLoc = sourceManger_->getDecomposedLoc(stmt->getLocStart());
 	(*outStream) << "ERR/WARN: \t In class : " << inWhichClass << " \n\t reason : " << reason
-					 << " \n\t in clang node : " << clangType
-						 // TODO maybe output something more useful
-					 << " \n\t in stmt class node : " << stmt->getStmtClassName()
+					 << " \n\t in stmt class node : " << clangType
 					 << " \n\t in file : " << sourceManger_->getBufferName(stmt->getLocStart())
 					 << " \n\t on line : " << sourceManger_->getLineNumber(decomposedLoc.first,decomposedLoc.second)
 					 << "\n";

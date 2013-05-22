@@ -30,8 +30,8 @@ namespace CppImport {
 
 CppImportManager::~CppImportManager()
 {
-	delete compilationDB_;
-	delete myTool_;
+	SAFE_DELETE(compilationDB_);
+	SAFE_DELETE(myTool_);
 }
 
 bool CppImportManager::setSrcPath(QString& path)
@@ -61,13 +61,13 @@ void CppImportManager::createModel()
 
 bool CppImportManager::setCompilationDbPath(QString& path)
 {
-	std::string Error = "DATABASE NOT OK";
+	std::string Error;
 	compilationDB_ = nullptr;
 	compilationDB_ = clang::tooling::CompilationDatabase::loadFromDirectory(path.toAscii().data(),Error);
 
 	if(!compilationDB_)
 	{
-		std::cout << "ERROR NO COMPDB" << std::endl;
+		std::cout << "Error could not load compilation database :  " << Error << std::endl;
 		return false;
 	}
 	return true;
