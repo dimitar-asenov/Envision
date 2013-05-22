@@ -59,7 +59,8 @@ HEADERS += src/precompiled.h \
     src/TranslateManager.h \
     src/ClangPPCallbacks.h \
     src/CppImportLogger.h \
-    src/visitors/ExpressionVisitor.h
+    src/visitors/ExpressionVisitor.h \
+    src/AnnotationHandler.h
 SOURCES += src/CppImportException.cpp \
 	src/cppimport.cpp \
 	test/SimpleTest.cpp \
@@ -71,4 +72,5 @@ SOURCES += src/CppImportException.cpp \
     src/TranslateManager.cpp \
     src/ClangPPCallbacks.cpp \
     src/CppImportLogger.cpp \
-    src/visitors/ExpressionVisitor.cpp
+    src/visitors/ExpressionVisitor.cpp \
+    src/AnnotationHandler.cpp

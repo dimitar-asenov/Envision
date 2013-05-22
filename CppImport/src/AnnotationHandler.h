@@ -27,25 +27,22 @@
 #pragma once
 
 #include "cppimport_api.h"
-#include "visitors/ClangAstVisitor.h"
-#include "ClangPPCallbacks.h"
-#include "CppImportLogger.h"
 
 namespace CppImport {
 
-class ClangAstConsumer : public clang::ASTConsumer
+class AnnotationHandler : public clang::CommentHandler
 {
 	public:
-		ClangAstConsumer(clang::CompilerInstance* ci, Model::Model* model, OOModel::Project* currentProject = nullptr);
-		~ClangAstConsumer();
-		virtual void HandleTranslationUnit(clang::ASTContext &Context) override;
-		virtual void Initialize(clang::ASTContext &Context) override;
+		void setInFile(llvm::StringRef file);
+		virtual bool HandleComment(clang::Preprocessor& pp, clang::SourceRange rng) override;
 
 	private:
-		ClangAstVisitor* astVisitor_{};
-		clang::CompilerInstance* ci_{};
-		CppImportLogger* logger_{};
-
+		llvm::StringRef inFile_;
 };
+
+inline void AnnotationHandler::setInFile(llvm::StringRef file)
+{
+	inFile_ = file;
+}
 
 }

@@ -36,9 +36,15 @@ ClangConsumerFactory::ClangConsumerFactory()
 	project_->setName("NewProject");
 }
 
+ClangConsumerFactory::~ClangConsumerFactory()
+{
+	SAFE_DELETE(annotationHandler_);
+}
+
 clang::ASTConsumer *ClangConsumerFactory::CreateASTConsumer(clang::CompilerInstance &CI, llvm::StringRef InFile)
 {
-	std::cout << "PROCESSING FILE " << InFile.str() << std::endl;
+	annotationHandler_->setInFile(InFile);
+	CI.getPreprocessor().addCommentHandler(annotationHandler_);
 	return new ClangAstConsumer(&CI,model_,project_);
 }
 

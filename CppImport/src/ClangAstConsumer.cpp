@@ -28,8 +28,8 @@
 
 namespace CppImport {
 
-ClangAstConsumer::ClangAstConsumer(clang::CompilerInstance *ci, Model::Model *model, OOModel::Project *currentProject) :
-	clang::ASTConsumer(), ci_(ci)
+ClangAstConsumer::ClangAstConsumer(clang::CompilerInstance *ci, Model::Model *model, OOModel::Project *currentProject)
+: clang::ASTConsumer(), ci_(ci)
 {
 	Q_ASSERT(ci);
 	logger_ = new CppImportLogger(&ci_->getSourceManager());
@@ -38,28 +38,18 @@ ClangAstConsumer::ClangAstConsumer(clang::CompilerInstance *ci, Model::Model *mo
 
 ClangAstConsumer::~ClangAstConsumer()
 {
-	delete astVisitor_;
-	delete logger_;
+	SAFE_DELETE(astVisitor_);
+	SAFE_DELETE(logger_);
 }
-
-//bool ClangAstConsumer::HandleTopLevelDecl(clang::DeclGroupRef D)
-//{
-//    clang::DeclGroupRef::iterator iterator = D.begin();
-
-//        for (; iterator != D.end(); ++iterator)
-//        {
-////            clang::RawCommentList cList = (*iterator)->getASTContext().getRawCommentList();
-////           // clang::RawCommentList cList = astContext->getRawCommentList();
-////            cList.getComments();
-////            astVisitor_->TraverseDecl(*iterator);
-//        }
-//    return true; // keep going
-//}
 
 void ClangAstConsumer::HandleTranslationUnit(clang::ASTContext &Context)
 {
-	clang::RawCommentList cList = Context.getRawCommentList();
-	cList.getComments();
+//	clang::RawCommentList cList = Context.getRawCommentList();
+//	auto commentsRef = cList.getComments();
+//	for(auto it = commentsRef.begin(); it!= commentsRef.end(); ++it)
+//	{
+//		std::cout << "COMMENT: " << (*it)->getRawText(ci_->getSourceManager()).str() << std::endl;
+//	}
 	Context.getTranslationUnitDecl();
 	astVisitor_->TraverseDecl(Context.getTranslationUnitDecl());
 	logger_->outputStatistics();

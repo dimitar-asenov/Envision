@@ -24,28 +24,26 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
-
-#include "cppimport_api.h"
-#include "visitors/ClangAstVisitor.h"
-#include "ClangPPCallbacks.h"
-#include "CppImportLogger.h"
+#include "AnnotationHandler.h"
 
 namespace CppImport {
 
-class ClangAstConsumer : public clang::ASTConsumer
+
+bool AnnotationHandler::HandleComment(clang::Preprocessor& pp, clang::SourceRange rng)
 {
-	public:
-		ClangAstConsumer(clang::CompilerInstance* ci, Model::Model* model, OOModel::Project* currentProject = nullptr);
-		~ClangAstConsumer();
-		virtual void HandleTranslationUnit(clang::ASTContext &Context) override;
-		virtual void Initialize(clang::ASTContext &Context) override;
+	clang::SourceManager& sm = pp.getSourceManager();
+	// TODO extend this test to also include other files?
+	if( sm.getFilename(rng.getBegin()) == inFile_)
+	{
+	  std::pair<clang::FileID, unsigned int> startLoc = sm.getDecomposedLoc(rng.getBegin());
+	  std::pair<clang::FileID, unsigned int> endLoc = sm.getDecomposedLoc(rng.getEnd());
 
-	private:
-		ClangAstVisitor* astVisitor_{};
-		clang::CompilerInstance* ci_{};
-		CppImportLogger* logger_{};
+	  llvm::StringRef fileData = sm.getBufferData(startLoc.first);
 
-};
+	  std::cout << fileData.substr(startLoc.second, endLoc.second - startLoc.second).str();
+	  std::cout << std::endl;
+	}
+	return false;
+}
 
 }

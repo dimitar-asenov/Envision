@@ -28,6 +28,7 @@
 
 #include "cppimport_api.h"
 #include "ClangAstConsumer.h"
+#include "AnnotationHandler.h"
 
 namespace CppImport {
 
@@ -35,12 +36,14 @@ class ClangConsumerFactory : public clang::ASTFrontendAction
 {
 	public:
 		ClangConsumerFactory();
+		~ClangConsumerFactory();
 		//    static Model::Model* getModel() { return model_;}
 		static Model::Model* model_;
 		virtual clang::ASTConsumer* CreateASTConsumer(clang::CompilerInstance &CI, llvm::StringRef InFile) override;
 
 	private:
 		OOModel::Project* project_{};
+		AnnotationHandler* annotationHandler_{ new AnnotationHandler() };
 };
 
 }
