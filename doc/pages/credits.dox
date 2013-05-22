@@ -1,13 +1,11 @@
 /*! \page credits Credits
 
+Envision is a research protoype developed at the <a href="http://www.pm.inf.ethz.ch/">Chair of Programming Methodology</a>, Department of Computer Science, ETH Zurich. External contributions are welcome.
+
 Envision maintainers : Dimitar Asenov
 
-\section contributors Source code contributors (in alphabetical order)
+\section contributors Source code contributors (in alphabetical order of last name)
 
-Andrea Helfenstein - https://github.com/helandre
-		- Declarative API for defining visualizations and supporting documentation
-
-<br>
 Dimitar Asenov - https://github.com/dimitar-asenov
 		- %Core Envision framework and MVC implementation
 		- Extensions for object-oriented programming
@@ -16,13 +14,12 @@ Dimitar Asenov - https://github.com/dimitar-asenov
 		- Documentation
 
 <br>
+Andrea Helfenstein - https://github.com/helandre
+		- Declarative API for defining visualizations and supporting documentation
+
+<br>
 Lukas Vogel - https://github.com/lukedirtwalker
 		- Enhancements to the object-oriented model
-
-\section funding Funding acknowledgements
-	- ETH Zurich, Department of Computer Science, Chair of Programming Methodology
-		- <a href="http://www.pm.inf.ethz.ch/">http://www.pm.inf.ethz.ch/</a>
-	
 
 \section special Special Thanks
 	- Peter Müller - for advising the PhD studies of Dimitar and guiding the work on Envision.
