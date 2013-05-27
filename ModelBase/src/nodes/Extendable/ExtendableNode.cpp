@@ -251,8 +251,9 @@ void ExtendableNode::verifyHasAllMandatoryAttributes()
 
 		for (int i = 0; i < currentLevel->size(); ++i)
 			if ( subnodes[level][i] == nullptr && (*currentLevel)[i].optional() == false )
-				throw ModelException("An ExtendableNode has an uninitialized mandatory attribute "
-						+ (*currentLevel)[i].name());
+				throw ModelException("An ExtendableNode of type '" + meta.typeName()
+						+ "' has an uninitialized mandatory attribute '"
+						+ (*currentLevel)[i].name() +"'");
 	}
 }
 
