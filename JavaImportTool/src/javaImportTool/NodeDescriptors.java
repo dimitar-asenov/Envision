@@ -25,20 +25,24 @@ public class NodeDescriptors {
 	
 	static {
 		
-		// Top level nodes
+		// Declarations
 		initializerMap.put("Project", new String[][]{
 				{"Text","name"},
 				{"TypedListOfProject","projects"},
 				{"TypedListOfModule","modules"},
 				{"TypedListOfClass","classes"},
 				{"TypedListOfMethod","methods"},
-				{"TypedListOfField","fields"}});
+				{"StatementItemList","annotations"},
+				{"TypedListOfField","fields"},
+				{"Visibility","visibility"}});
 		initializerMap.put("Module", new String[][]{
 				{"Text","name"},
 				{"TypedListOfModule","modules"},
 				{"TypedListOfClass","classes"},
 				{"TypedListOfMethod","methods"},
-				{"TypedListOfField","fields"}});
+				{"StatementItemList","annotations"},
+				{"TypedListOfField","fields"},
+				{"Visibility","visibility"}});
 		initializerMap.put("Class", new String[][]{
 				{"Text","name"},
 				{"TypedListOfExpression","baseClasses"},
@@ -59,11 +63,19 @@ public class NodeDescriptors {
 				{"TypedListOfFormalResult","results"},
 				{"Visibility","visibility"},
 				{"StorageSpecifier","storageSpecifier"},
-				{"StatementItemList","annotations"}});
+				{"StatementItemList","annotations"},
+				{"Integer","mthKind"}});
 		initializerMap.put("Field", new String[][]{
 				{"Text","name"},
 				{"Expression","typeExpression"},
 				{"Visibility","visibility"},
+				{"StatementItemList","annotations"},
+				{"StorageSpecifier","storageSpecifier"}});
+		initializerMap.put("VariableDeclaration", new String[][]{
+				{"Text","name"},
+				{"Expression","typeExpression"},
+				{"Visibility","visibility"},
+				{"StatementItemList","annotations"},
 				{"StorageSpecifier","storageSpecifier"}});
 		
 		// Elements
@@ -117,9 +129,8 @@ public class NodeDescriptors {
 				{"Expression","right"}});
 		initializerMap.put("ThrowExpression", new String[][]{
 				{"Expression","expr"}});
-		initializerMap.put("VariableDeclaration", new String[][]{
-				{"Text","name"},
-				{"Expression","varType"}});
+		initializerMap.put("VariableDeclarationExpression", new String[][]{
+				{"VariableDeclaration","decl"}});
 		initializerMap.put("BinaryOperation", new String[][]{
 				{"Expression","left"},
 				{"Expression","right"},

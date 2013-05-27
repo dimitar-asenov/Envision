@@ -68,6 +68,8 @@ public class ASTConverter {
 	{
 		Node cl = containers.peek().addSymbolNodeInList("classes", "Class", node.getName().getIdentifier());
 		containers.push(cl);
+		
+		// TODO: Handle different types of classes
 		cl.child("cKind").setLongValue(0); // Make this a class
 		
 		//TODO: Handle JavaDoc
@@ -113,6 +115,9 @@ public class ASTConverter {
 	{
 		Node me = containers.peek().addSymbolNodeInList("methods", "Method", node.getName().getIdentifier());
 		containers.push(me);
+		
+		// TODO: Handle different types of methods
+		me.child("mthKind").setLongValue(0); // Make this a method
 		
 		setModifiers(node);
 		processTypeParameters(node.typeParameters());
@@ -349,11 +354,14 @@ public class ASTConverter {
 	    		
 	    		visitStatementBody(cc.getBody(),catchNode,"body");
 	    		
-	    		Node varDecl = catchNode.setChild("exceptionToCatch",
-	    				new Node(null,"VariableDeclaration", "exceptionToCatch"));
+	    		Node varDeclExpression = catchNode.setChild("exceptionToCatch",
+	    				new Node(null,"VariableDeclarationExpression", "exceptionToCatch"));
+	    		Node varDecl = varDeclExpression.child("decl");
 	    		//TODO: handle modifiers
-	    		varDecl.setChild("varType", addExtraDimensions(typeExpression(cc.getException().getType(), "varType"),
-	    				cc.getException().getExtraDimensions()) );
+	    		varDecl.child("visibility").setLongValue(0);
+				varDecl.child("storageSpecifier").setLongValue(0);
+	    		varDecl.setChild("typeExpression", addExtraDimensions(typeExpression(cc.getException().getType(),
+	    				"typeExpression"), cc.getException().getExtraDimensions()) );
 	    		varDecl.setSymbol(cc.getException().getName().getIdentifier());
 	    		//TODO: handle varArgs (...)
 	    		if (cc.getException().getInitializer() != null)
@@ -868,17 +876,20 @@ public class ASTConverter {
     	for(VariableDeclarationFragment vdf : fragments)
 		{
     		// It's ok to reuse the same name for all generated variables, since this will be fixed later.    		
-			Node varDecl = new Node(null, "VariableDeclaration", name);
+			Node varDeclExpression = new Node(null, "VariableDeclarationExpression", name);
+			Node varDecl = varDeclExpression.child("decl");
 			
 			varDecl.setSymbol(vdf.getName().getIdentifier());
 			//TODO: handle modifiers
-			Node variableType = typeExpression(type, "varType");
-			varDecl.setChild("varType", addExtraDimensions(variableType, vdf.getExtraDimensions()));
+			varDecl.child("visibility").setLongValue(0);
+			varDecl.child("storageSpecifier").setLongValue(0);
+			Node variableType = typeExpression(type, "typeExpression");
+			varDecl.setChild("typeExpression", addExtraDimensions(variableType, vdf.getExtraDimensions()));
 			
 			if (vdf.getInitializer() != null)
 				varDecl.add(expression(vdf.getInitializer(), "initialValue"));
 			
-			variableDeclarations.add(varDecl);
+			variableDeclarations.add(varDeclExpression);
 		}
     	
     	return variableDeclarations;

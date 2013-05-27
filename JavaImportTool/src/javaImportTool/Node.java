@@ -139,6 +139,7 @@ public class Node {
 			{
 				Node newNode = child.add(new Node(child, tag, child.children_.size()));
 				newNode.setSymbol(symbolName);
+				newNode.child("visibility").setLongValue(0);
 				return newNode;
 			}
 		}
