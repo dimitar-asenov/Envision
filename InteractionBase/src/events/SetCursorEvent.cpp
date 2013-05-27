@@ -111,7 +111,7 @@ void SetCursorEvent::execute()
 
 	if (showPrompt_)
 	{
-		auto it = static_cast<Visualization::Item*>(item->scene()->focusItem());
+		auto it = item->scene()->focusItem();
 		if (it)
 		{
 			if(auto hand = dynamic_cast<Interaction::GenericHandler*>(it->handler()))

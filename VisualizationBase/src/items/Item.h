@@ -276,6 +276,22 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		static void setDefaultClassHandler(InteractionHandler* handler);
 		static InteractionHandler* defaultClassHandler();
 
+		/**
+		 * Returns \a item if it is an instance of Item* or the closest of its ancestors that is an Item*.
+		 */
+		static Item* envisionItem(QGraphicsItem* item);
+
+		/**
+		 * Returns a list of all direct children items which are an instance of Item.
+		 *
+		 * The default implementation assumes that all children are instances of Item and simply calls
+		 * QGraphicsView::childItems(). Reimplement this in items that can contain non-Item children to return the correct
+		 * list.
+		 *
+		 * This method hides QGraphicsItem::childItems();
+		 */
+		virtual QList<Item*> childItems() const;
+
 	protected:
 
 		void setWidth(int width);
@@ -349,7 +365,6 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 
 		Scene::ItemCategory itemCategory_;
 
-		void updateChildren();
 		void updateAddOnItems();
 
 		/**
@@ -460,6 +475,12 @@ template <class T> T* Item::correspondingSceneCursor()
 inline const QMultiMap<VisualizationAddOn*, Item* >& Item::addOnItems()
 {
 	return addOnItems_;
+}
+
+inline Item* Item::envisionItem(QGraphicsItem* item)
+{
+	while(item && !dynamic_cast<Item*>(item)) item = item->parentItem();
+	return static_cast<Item*>(item);
 }
 
 inline void Item::setItemCategory( Scene::ItemCategory cat) { itemCategory_ = cat; }

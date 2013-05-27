@@ -98,6 +98,23 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 
 		void addRefreshActionFunction(RefreshActionFunction func);
 
+		/**
+		 * Returns the focused item if it is an instance of Item* or the closest of its ancestors that is an Item*.
+		 *
+		 * This method hides QGraphicsScene::focusItem() const.
+		 */
+		Item* focusItem() const;
+
+		/**
+		 * Returns a list of selected items.
+		 *
+		 * Only items that derive from Item are returned. If an item is selected but does not derive from Item then its
+		 * first Item ancestor will be returned in the list, if it is not already in the list.
+		 *
+		 * This method hised QGraphicsScene::selectedItems() const
+		 */
+		QList<Item*> selectedItems() const;
+
 	public slots:
 		void nodesUpdated(QList<Node*> nodes);
 

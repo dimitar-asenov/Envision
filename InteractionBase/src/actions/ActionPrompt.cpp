@@ -171,7 +171,7 @@ void ActionPrompt::computeCurrentActionReceiver()
 		while(i < children.size())
 		{
 			// While exploring the children in a BFS manner, look out for reaching the desired child node
-			auto child = static_cast<Visualization::Item*>(children.at(i));
+			auto child = children.at(i);
 			if (child->node())
 			{
 				auto actionList = Action::actions(child->node());
