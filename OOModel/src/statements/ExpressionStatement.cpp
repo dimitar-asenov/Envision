@@ -31,8 +31,8 @@ DEFINE_TYPED_LIST(OOModel::ExpressionStatement)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(ExpressionStatement)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(ExpressionStatement)
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(ExpressionStatement)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(ExpressionStatement)
 
 REGISTER_ATTRIBUTE(ExpressionStatement, expression, Expression, false, false, true)
 

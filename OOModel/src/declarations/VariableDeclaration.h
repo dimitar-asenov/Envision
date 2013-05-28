@@ -39,7 +39,7 @@ namespace OOModel {
 
 class OOMODEL_API VariableDeclaration : public Super<Declaration>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(VariableDeclaration)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(VariableDeclaration)
 	ATTRIBUTE(Expression, typeExpression, setTypeExpression)
 	ATTRIBUTE(Expression, initialValue, setInitialValue)
 	ATTRIBUTE_OOP_STORAGESPECIFIER

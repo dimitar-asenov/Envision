@@ -38,7 +38,7 @@ namespace OOModel {
 
 class OOMODEL_API ForEachStatement: public Super<Statement>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(ForEachStatement)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(ForEachStatement)
 
 	ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::Text, varName, setVarName, QString, const QString&)
 	ATTRIBUTE(Expression, varType, setVarType)

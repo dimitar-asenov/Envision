@@ -36,7 +36,7 @@ namespace OOModel {
 
 class OOMODEL_API FloatLiteral: public Super<Expression>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(FloatLiteral)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(FloatLiteral)
 
 	ATTRIBUTE_VALUE(::Model::Float, value, setValue, double)
 

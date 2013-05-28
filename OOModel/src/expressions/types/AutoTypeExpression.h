@@ -34,7 +34,7 @@ namespace OOModel {
 
 class OOMODEL_API AutoTypeExpression : public Super<TypeExpression>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(AutoTypeExpression)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(AutoTypeExpression)
 
 	public:
 		virtual Type* type();

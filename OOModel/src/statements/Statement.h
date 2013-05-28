@@ -35,7 +35,7 @@ namespace OOModel {
 
 class OOMODEL_API Statement: public Super<StatementItem>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Statement)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(Statement)
 };
 
 }

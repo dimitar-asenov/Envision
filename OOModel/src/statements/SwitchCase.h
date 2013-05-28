@@ -31,16 +31,16 @@
 #include "../elements/StatementItemList.h"
 #include "../expressions/Expression.h"
 
-#include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
+#include "ModelBase/src/nodes/composite/CompositeNode.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
 
 DECLARE_TYPED_LIST(OOMODEL_API, OOModel, SwitchCase)
 
 namespace OOModel {
 
-class OOMODEL_API SwitchCase : public Super<Model::ExtendableNode>
+class OOMODEL_API SwitchCase : public Super<Model::CompositeNode>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(SwitchCase)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(SwitchCase)
 
 	ATTRIBUTE(Expression, expr, setExpr)
 	ATTRIBUTE(StatementItemList, statement, setStatement)

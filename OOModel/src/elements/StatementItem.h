@@ -28,7 +28,7 @@
 
 #include "../oomodel_api.h"
 
-#include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
+#include "ModelBase/src/nodes/composite/CompositeNode.h"
 #include "ModelBase/src/nodes/TypedList.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
 
@@ -36,9 +36,9 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, StatementItem)
 
 namespace OOModel {
 
-class OOMODEL_API StatementItem : public Super<Model::ExtendableNode>
+class OOMODEL_API StatementItem : public Super<Model::CompositeNode>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(StatementItem)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(StatementItem)
 };
 
 }

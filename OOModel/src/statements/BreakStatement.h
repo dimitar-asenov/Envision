@@ -34,7 +34,7 @@ namespace OOModel {
 
 class OOMODEL_API BreakStatement: public Super<Statement>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(BreakStatement)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(BreakStatement)
 };
 
 }

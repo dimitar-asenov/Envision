@@ -31,8 +31,8 @@ DEFINE_TYPED_LIST(OOModel::Declaration)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(Declaration)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(Declaration)
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(Declaration)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(Declaration)
 
 REGISTER_ATTRIBUTE(Declaration, name, Text, false, false, true)
 REGISTER_ATTRIBUTE(Declaration, visibility, Visibility, false, false, true)

@@ -31,8 +31,8 @@ DEFINE_TYPED_LIST(OOModel::ForEachStatement)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(ForEachStatement)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(ForEachStatement)
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(ForEachStatement)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(ForEachStatement)
 
 REGISTER_ATTRIBUTE(ForEachStatement, varName, Text, false, false, true)
 REGISTER_ATTRIBUTE(ForEachStatement, varType, Expression, false, true, true)

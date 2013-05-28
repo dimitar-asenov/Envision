@@ -28,7 +28,7 @@
 
 #include "../visualizationbase_api.h"
 
-#include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
+#include "ModelBase/src/nodes/composite/CompositeNode.h"
 #include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/Integer.h"
 #include "ModelBase/src/nodes/Boolean.h"
@@ -38,8 +38,8 @@ DECLARE_TYPED_LIST(VISUALIZATIONBASE_API, Visualization, TestBoxNode)
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API TestBoxNode : public Super<Model::ExtendableNode> {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(TestBoxNode)
+class VISUALIZATIONBASE_API TestBoxNode : public Super<Model::CompositeNode> {
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(TestBoxNode)
 
 	ATTRIBUTE_VALUE(::Model::Integer, red, setRed, int)
 	ATTRIBUTE_VALUE(::Model::Integer, green, setGreen, int)

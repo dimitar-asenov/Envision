@@ -38,7 +38,7 @@
 #include "items/VBoolean.h"
 #include "items/VFloat.h"
 #include "items/VReference.h"
-#include "items/VExtendable.h"
+#include "items/VComposite.h"
 #include "items/VList.h"
 
 #include "items/Static.h"

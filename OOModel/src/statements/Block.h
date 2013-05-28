@@ -35,7 +35,7 @@ namespace OOModel {
 
 class OOMODEL_API Block: public Super<Statement>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Block)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(Block)
 
 	ATTRIBUTE(StatementItemList, items, setItems)
 };

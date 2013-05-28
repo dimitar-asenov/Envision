@@ -31,8 +31,8 @@ DEFINE_TYPED_LIST(TestNodes::BinaryNodeAccessUnit)
 
 namespace TestNodes {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(BinaryNodeAccessUnit)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(BinaryNodeAccessUnit)
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(BinaryNodeAccessUnit)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(BinaryNodeAccessUnit)
 
 Model::NodeReadWriteLock* BinaryNodeAccessUnit::accessLock() const
 {

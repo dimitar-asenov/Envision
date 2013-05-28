@@ -36,7 +36,7 @@ namespace OOModel {
 
 class OOMODEL_API BinaryOperation: public Super<Expression>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(BinaryOperation)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(BinaryOperation)
 
 	ATTRIBUTE(Expression, left, setLeft)
 	ATTRIBUTE(Expression, right, setRight)

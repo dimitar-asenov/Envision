@@ -36,7 +36,7 @@ namespace TestNodes {
 
 class MODELBASE_API BinaryNodePersistenceUnit: public Super<BinaryNode>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(BinaryNodePersistenceUnit)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(BinaryNodePersistenceUnit)
 
 	public:
 		virtual bool isNewPersistenceUnit() const;

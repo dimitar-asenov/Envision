@@ -32,8 +32,8 @@ DEFINE_TYPED_LIST(OOModel::ArrayTypeExpression)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(ArrayTypeExpression)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(ArrayTypeExpression)
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(ArrayTypeExpression)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(ArrayTypeExpression)
 
 REGISTER_ATTRIBUTE(ArrayTypeExpression, typeExpression, Expression, false, false, true)
 REGISTER_ATTRIBUTE(ArrayTypeExpression, fixedSize, Expression, false, true, true)

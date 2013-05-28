@@ -24,53 +24,37 @@
 **
 ***********************************************************************************************************************/
 
-#include "nodes/Extendable/Attribute.h"
+#include "CompositeNodeChangeChild.h"
+#include "nodes/Node.h"
+
+#include "ModelException.h"
 
 namespace Model {
 
-Attribute::Attribute()
+CompositeNodeChangeChild::CompositeNodeChangeChild(Node* target, Node* newValue_,
+		const CompositeIndex &attributeIndex_, QVector< QVector<Node*> >* subnodes_) :
+		NodeOwningCommand(target, "set node", (*subnodes_)[attributeIndex_.level()][attributeIndex_.index()], newValue_),
+		newVal(newValue_), oldVal((*subnodes_)[attributeIndex_.level()][attributeIndex_.index()]),
+	attributeIndex(attributeIndex_), subnodes(subnodes_)
 {
-
+	if (newValue_ && newValue_->parent())
+		throw ModelException("Set as a child of CompositeNode a node that already has a parent.");
 }
 
-Attribute::Attribute(QString name, QString type, bool optional, bool partialHint, bool persistent) :
-	name_(name), type_(type), optional_(optional), partialHint_(partialHint), persistent_(persistent)
+void CompositeNodeChangeChild::redo()
 {
+	(*subnodes)[attributeIndex.level()][attributeIndex.index()] = newVal;
+	if (newVal) newVal->setParent(target());
+	if (oldVal) oldVal->setParent(nullptr);
+	NodeOwningCommand::redo();
 }
 
-Attribute::Attribute(QString name) :
-	name_(name)
+void CompositeNodeChangeChild::undo()
 {
-}
-
-const QString& Attribute::name() const
-{
-	return name_;
-}
-
-const QString& Attribute::type() const
-{
-	return type_;
-}
-
-bool Attribute::optional() const
-{
-	return optional_;
-}
-
-bool Attribute::partialHint() const
-{
-	return partialHint_;
-}
-
-bool Attribute::persistent() const
-{
-	return persistent_;
-}
-
-bool Attribute::operator==(const Attribute &other) const
-{
-	return name_ == other.name_;
+	(*subnodes)[attributeIndex.level()][attributeIndex.index()] = oldVal;
+	if (newVal) newVal->setParent(nullptr);
+	if (oldVal) oldVal->setParent(target());
+	NodeOwningCommand::undo();
 }
 
 }

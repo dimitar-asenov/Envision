@@ -31,7 +31,7 @@
 #include "../attributeMacros.h"
 #include "../expressions/Expression.h"
 
-#include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
+#include "ModelBase/src/nodes/composite/CompositeNode.h"
 #include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
 
@@ -39,9 +39,9 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Enumerator)
 
 namespace OOModel {
 
-class OOMODEL_API Enumerator : public Super<Model::ExtendableNode>
+class OOMODEL_API Enumerator : public Super<Model::CompositeNode>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Enumerator)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(Enumerator)
 
 	ATTRIBUTE_OOP_NAME
 	ATTRIBUTE(Expression, value, setValue)

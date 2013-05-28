@@ -33,8 +33,8 @@ DEFINE_TYPED_LIST(OOModel::ClassTypeExpression)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(ClassTypeExpression)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(ClassTypeExpression)
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(ClassTypeExpression)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(ClassTypeExpression)
 
 REGISTER_ATTRIBUTE(ClassTypeExpression, typeExpression, ReferenceExpression, false, false, true)
 

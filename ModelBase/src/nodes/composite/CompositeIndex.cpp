@@ -24,31 +24,31 @@
 **
 ***********************************************************************************************************************/
 
-#include "nodes/Extendable/ExtendableIndex.h"
+#include "nodes/composite/CompositeIndex.h"
 
 namespace Model {
 
-ExtendableIndex::ExtendableIndex() :
+CompositeIndex::CompositeIndex() :
 	level_(-1), index_(-1)
 {
 }
 
-ExtendableIndex::ExtendableIndex(int level, int index) :
+CompositeIndex::CompositeIndex(int level, int index) :
 	level_(level), index_(index)
 {
 }
 
-int ExtendableIndex::level() const
+int CompositeIndex::level() const
 {
 	return level_;
 }
 
-int ExtendableIndex::index() const
+int CompositeIndex::index() const
 {
 	return index_;
 }
 
-bool ExtendableIndex::isValid() const
+bool CompositeIndex::isValid() const
 {
 	return level_ >= 0 && index_ >=0;
 }

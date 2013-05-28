@@ -36,7 +36,7 @@ namespace OOModel {
 
 class OOMODEL_API ErrorExpression : public Super<Expression> {
 
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(ErrorExpression)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(ErrorExpression)
 
 	ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::Text, prefix, setPrefix, QString, const QString&)
 	ATTRIBUTE(Expression, arg, setArg)

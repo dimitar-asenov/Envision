@@ -28,7 +28,7 @@
 #include "VisualizationManager.h"
 #include "Scene.h"
 #include "SelfTest/src/SelfTestSuite.h"
-#include "items/VExtendable.h"
+#include "items/VComposite.h"
 #include "items/VList.h"
 #include "items/RootItem.h"
 #include "nodes/TestBoxNode.h"
@@ -41,7 +41,7 @@
 
 namespace Visualization {
 
-//TEST(VisualizationBase, ExtendableTest)
+//TEST(VisualizationBase, CompositeTest)
 //{
 //	Model::Model* model = new Model::Model();
 //	Model::List* list = static_cast<Model::List*> (model->createRoot("List"));
@@ -77,14 +77,14 @@ namespace Visualization {
 //	QApplication::processEvents();
 //
 //	VList* l = dynamic_cast<VList*> (top->item());
-//	l->itemAt<VExtendable>(1)->setExpanded(false);
+//	l->itemAt<VComposite>(1)->setExpanded(false);
 //	scene->scheduleUpdate();
 //	scene->listenToModel(model);
 //
 //	CHECK_CONDITION(scene);
 //}
 
-TEST(VisualizationBase, ExtendableTest)
+TEST(VisualizationBase, CompositeTest)
 {
 	Model::Model* model = new Model::Model();
 	Model::List* list = static_cast<Model::List*> (model->createRoot("List"));

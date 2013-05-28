@@ -62,9 +62,9 @@ void PositionLayout::insert(Item* item)
 	// Check whether this item has a node and a position associated with it
 	if ( !item->hasNode() ) throw VisualizationException("Adding an Item that has no node to a PositionLayout");
 
-	Model::ExtendableNode* extNode = dynamic_cast<Model::ExtendableNode*> (item->node());
+	Model::CompositeNode* extNode = dynamic_cast<Model::CompositeNode*> (item->node());
 	if (!extNode)
-		throw VisualizationException("Adding an Item that does not implement ExtendableNode to a PositionLayout");
+		throw VisualizationException("Adding an Item that does not implement CompositeNode to a PositionLayout");
 
 	Position* pos = extNode->extension<Position>();
 
@@ -138,7 +138,7 @@ void PositionLayout::synchronizeWithNodes(const QList<Model::Node*>& nodes, Mode
 	for (int i = 0; i < nodes.size(); ++i)
 	{
 		// Check if node has position info
-		Model::ExtendableNode* extNode = dynamic_cast<Model::ExtendableNode*> (nodes[i]);
+		Model::CompositeNode* extNode = dynamic_cast<Model::CompositeNode*> (nodes[i]);
 		if (extNode)
 		{
 			Position* pos = extNode->extension<Position>();

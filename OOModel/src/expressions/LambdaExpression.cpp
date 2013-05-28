@@ -32,8 +32,8 @@ DEFINE_TYPED_LIST(OOModel::LambdaExpression)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(LambdaExpression)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(LambdaExpression)
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(LambdaExpression)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(LambdaExpression)
 
 REGISTER_ATTRIBUTE(LambdaExpression, body, StatementItemList, false, false, true)
 REGISTER_ATTRIBUTE(LambdaExpression, arguments, TypedListOfFormalArgument, false, false, true)

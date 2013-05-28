@@ -35,7 +35,7 @@ namespace OOModel {
 
 class OOMODEL_API CastExpression: public Super<Expression>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(CastExpression)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(CastExpression)
 
 	ATTRIBUTE(Expression, castType, setType)
 	ATTRIBUTE(Expression, expr, setExpr)

@@ -33,7 +33,7 @@
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/VisualizationManager.h"
 #include "VisualizationBase/src/items/VList.h"
-#include "VisualizationBase/src/items/VExtendable.h"
+#include "VisualizationBase/src/items/VComposite.h"
 #include "VisualizationBase/src/items/RootItem.h"
 
 #include "ModelBase/src/test_nodes/BinaryNode.h"
@@ -47,7 +47,7 @@ using namespace Visualization;
 
 TEST(InteractionBase, TextSelect)
 {
-	Visualization::VExtendable::setDefaultClassHandler(HBinaryNode::instance());
+	Visualization::VComposite::setDefaultClassHandler(HBinaryNode::instance());
 
 	Model::Model* model = new Model::Model();
 	Model::List* list = static_cast<Model::List*> (model->createRoot("List"));
@@ -79,7 +79,7 @@ TEST(InteractionBase, TextSelect)
 	QApplication::processEvents();
 
 	VList* l = dynamic_cast<VList*> (top->item());
-	l->itemAt<VExtendable>(0)->setExpanded();
+	l->itemAt<VComposite>(0)->setExpanded();
 	scene->scheduleUpdate();
 	scene->listenToModel(model);
 

@@ -37,7 +37,7 @@ namespace OOModel {
 
 class OOMODEL_API LoopStatement: public Super<Statement>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(LoopStatement)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(LoopStatement)
 
 	ATTRIBUTE(Expression, condition, setCondition)
 	ATTRIBUTE(Expression, initStep, setInitStep)

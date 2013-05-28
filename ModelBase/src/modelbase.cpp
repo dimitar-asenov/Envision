@@ -35,7 +35,7 @@
 #include "nodes/Boolean.h"
 #include "nodes/Character.h"
 #include "nodes/Reference.h"
-#include "nodes/Extendable/ExtendableNode.h"
+#include "nodes/composite/CompositeNode.h"
 #include "nodes/List.h"
 #include "nodes/TypedList.h"
 

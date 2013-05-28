@@ -39,7 +39,7 @@
 #include "VisualizationBase/src/items/VList.h"
 #include "FilePersistence/src/SystemClipboard.h"
 #include "ModelBase/src/nodes/List.h"
-#include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
+#include "ModelBase/src/nodes/composite/CompositeNode.h"
 
 namespace Interaction {
 

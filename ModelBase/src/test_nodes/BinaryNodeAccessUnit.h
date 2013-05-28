@@ -37,7 +37,7 @@ namespace TestNodes {
 
 class MODELBASE_API BinaryNodeAccessUnit: public Super<BinaryNode>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(BinaryNodeAccessUnit)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(BinaryNodeAccessUnit)
 
 	private:
 		Model::NodeReadWriteLock accessLock_;

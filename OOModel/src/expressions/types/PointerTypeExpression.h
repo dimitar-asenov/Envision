@@ -34,7 +34,7 @@ namespace OOModel {
 
 class OOMODEL_API PointerTypeExpression : public Super<TypeExpression>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(PointerTypeExpression)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(PointerTypeExpression)
 
 	ATTRIBUTE(Expression, typeExpression, setTypeExpression)
 

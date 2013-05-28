@@ -32,8 +32,8 @@ DEFINE_TYPED_LIST(OOModel::PointerTypeExpression)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(PointerTypeExpression)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(PointerTypeExpression)
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(PointerTypeExpression)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(PointerTypeExpression)
 
 REGISTER_ATTRIBUTE(PointerTypeExpression, typeExpression, Expression, false, false, true)
 

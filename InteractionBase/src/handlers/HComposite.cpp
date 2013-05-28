@@ -24,37 +24,32 @@
 **
 ***********************************************************************************************************************/
 
-#include "commands/ExtendedNodeChild.h"
-#include "nodes/Node.h"
+#include "handlers/HComposite.h"
 
-#include "ModelException.h"
+#include "VisualizationBase/src/items/VComposite.h"
+#include "VisualizationBase/src/Scene.h"
 
-namespace Model {
+namespace Interaction {
 
-ExtendedNodeChild::ExtendedNodeChild(Node* target, Node* newValue_,
-		const ExtendableIndex &attributeIndex_, QVector< QVector<Node*> >* subnodes_) :
-		NodeOwningCommand(target, "set node", (*subnodes_)[attributeIndex_.level()][attributeIndex_.index()], newValue_),
-		newVal(newValue_), oldVal((*subnodes_)[attributeIndex_.level()][attributeIndex_.index()]),
-	attributeIndex(attributeIndex_), subnodes(subnodes_)
+HComposite::HComposite()
 {
-	if (newValue_ && newValue_->parent())
-		throw ModelException("Set as a child of ExtenableNode a node that already has a parent.");
+
 }
 
-void ExtendedNodeChild::redo()
+HComposite* HComposite::instance()
 {
-	(*subnodes)[attributeIndex.level()][attributeIndex.index()] = newVal;
-	if (newVal) newVal->setParent(target());
-	if (oldVal) oldVal->setParent(nullptr);
-	NodeOwningCommand::redo();
+	static HComposite h;
+	return &h;
 }
 
-void ExtendedNodeChild::undo()
+void HComposite::mouseDoubleClickEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
-	(*subnodes)[attributeIndex.level()][attributeIndex.index()] = oldVal;
-	if (newVal) newVal->setParent(nullptr);
-	if (oldVal) oldVal->setParent(target());
-	NodeOwningCommand::undo();
+	if (event->modifiers() == 0 && event->button() == Qt::LeftButton)
+	{
+		Visualization::VComposite *composite = dynamic_cast<Visualization::VComposite*> (target);
+		composite->setExpanded(! composite->expanded());
+	}
+	else GenericHandler::mouseDoubleClickEvent(target, event);
 }
 
 }

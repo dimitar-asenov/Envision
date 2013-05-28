@@ -34,7 +34,7 @@ namespace OOModel {
 
 class OOMODEL_API EmptyExpression : public Super<Expression>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(EmptyExpression)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(EmptyExpression)
 
 	public:
 		virtual Type* type();

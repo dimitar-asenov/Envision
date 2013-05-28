@@ -35,8 +35,8 @@ DEFINE_TYPED_LIST(OOModel::MethodCallExpression)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(MethodCallExpression)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(MethodCallExpression)
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(MethodCallExpression)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(MethodCallExpression)
 
 REGISTER_ATTRIBUTE(MethodCallExpression, ref, ReferenceExpression, false, false, true)
 REGISTER_ATTRIBUTE(MethodCallExpression, arguments, TypedListOfExpression, false, false, true)

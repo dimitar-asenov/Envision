@@ -34,7 +34,7 @@ namespace OOModel {
 
 class OOMODEL_API NewExpression: public Super<Expression>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(NewExpression)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(NewExpression)
 
 	ATTRIBUTE(Expression, newType, setNewType)
 	ATTRIBUTE(Expression, amount, setAmount)

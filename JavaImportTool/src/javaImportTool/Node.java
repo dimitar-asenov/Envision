@@ -11,7 +11,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
  * The Node class represents an Envision model node that will be saved to the generated XML output.
  * 
  * This single class is used to model all corresponding nodes in Envision. Therefore it can represent both leaf nodes
- * and composite nodes such as lists or extendable nodes.
+ * and composite nodes such as lists or CompositeNode.
  */
 public class Node {
 	

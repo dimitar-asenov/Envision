@@ -30,7 +30,7 @@
 #include "../expressions/Expression.h"
 #include "../attributeMacros.h"
 
-#include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
+#include "ModelBase/src/nodes/composite/CompositeNode.h"
 #include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
 
@@ -38,9 +38,9 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, FormalResult)
 
 namespace OOModel {
 
-class OOMODEL_API FormalResult : public Super<Model::ExtendableNode>
+class OOMODEL_API FormalResult : public Super<Model::CompositeNode>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(FormalResult)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(FormalResult)
 	ATTRIBUTE_OOP_NAME
 	ATTRIBUTE(Expression, typeExpression, setTypeExpression)
 

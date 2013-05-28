@@ -42,7 +42,7 @@ namespace Visualization {
 
 class Item;
 class Symbol;
-class VExtendable;
+class VComposite;
 
 class DeclarativeTest : public Super<DeclarativeItem<DeclarativeTest>> {
 
@@ -56,7 +56,7 @@ class DeclarativeTest : public Super<DeclarativeItem<DeclarativeTest>> {
 
 	private:
 		Symbol* testItem_{};
-		VExtendable* testNodeItem_{};
+		VComposite* testNodeItem_{};
 		Item* testNodeItemGeneral_{};
 		TestNodes::BinaryNode* testNode_{};
 		Model::Node* firstNode_{};

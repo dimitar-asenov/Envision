@@ -24,39 +24,22 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
-
-#include "../visualizationbase_api.h"
-
-#include "../layouts/PanelBorderLayoutStyle.h"
-#include "../layouts/SequentialLayout.h"
+#include "items/VCompositeStyle.h"
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API VExtendableStyle : public ItemStyle
+VCompositeStyle::VCompositeStyle() : expanded_(true)
 {
-	private:
-		PanelBorderLayoutStyle borderStyle_;
-		SequentialLayoutStyle headerStyle_;
-		SequentialLayoutStyle smallHeaderStyle_;
-		SequentialLayoutStyle attributesStyle_;
-		bool expanded_;
+}
 
-	public:
-		VExtendableStyle();
-		void load(StyleLoader& sl);
-
-		const PanelBorderLayoutStyle& borderStyle() const;
-		const SequentialLayoutStyle&  headerStyle() const;
-		const SequentialLayoutStyle&  smallHeaderStyle() const;
-		const SequentialLayoutStyle&  attributesStyle() const;
-		bool expanded() const;
-};
-
-inline const PanelBorderLayoutStyle& VExtendableStyle::borderStyle() const {return borderStyle_; }
-inline const SequentialLayoutStyle& VExtendableStyle::headerStyle() const {return headerStyle_; }
-inline const SequentialLayoutStyle& VExtendableStyle::smallHeaderStyle() const {return smallHeaderStyle_; }
-inline const SequentialLayoutStyle& VExtendableStyle::attributesStyle() const {return attributesStyle_; }
-inline bool VExtendableStyle::expanded() const { return expanded_; }
+void VCompositeStyle::load(StyleLoader& sl)
+{
+	ItemStyle::load(sl);
+	sl.load("expanded", expanded_);
+	sl.load("borderStyle", borderStyle_);
+	sl.load("headerStyle", headerStyle_);
+	sl.load("smallHeaderStyle", smallHeaderStyle_);
+	sl.load("attributesStyle", attributesStyle_);
+}
 
 }

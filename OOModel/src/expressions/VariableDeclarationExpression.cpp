@@ -32,8 +32,8 @@ DEFINE_TYPED_LIST(OOModel::VariableDeclarationExpression)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(VariableDeclarationExpression)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(VariableDeclarationExpression)
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(VariableDeclarationExpression)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(VariableDeclarationExpression)
 
 REGISTER_ATTRIBUTE(VariableDeclarationExpression, decl, VariableDeclaration, false, false, true)
 

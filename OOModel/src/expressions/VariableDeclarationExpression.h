@@ -38,7 +38,7 @@ namespace OOModel {
 
 class OOMODEL_API VariableDeclarationExpression: public Super<Expression>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(VariableDeclarationExpression)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(VariableDeclarationExpression)
 
 	ATTRIBUTE(VariableDeclaration, decl, setDecl)
 

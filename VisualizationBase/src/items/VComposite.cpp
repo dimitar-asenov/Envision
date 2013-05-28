@@ -24,15 +24,15 @@
 **
 ***********************************************************************************************************************/
 
-#include "items/VExtendable.h"
+#include "items/VComposite.h"
 #include "items/Text.h"
 #include "../renderer/ModelRenderer.h"
 
 namespace Visualization {
 
-ITEM_COMMON_DEFINITIONS(VExtendable, "item")
+ITEM_COMMON_DEFINITIONS(VComposite, "item")
 
-VExtendable::VExtendable(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style),
+VComposite::VComposite(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style),
 	header( new SequentialLayout(this, &style->smallHeaderStyle())),
 	layout(),
 	attributes(),
@@ -42,7 +42,7 @@ VExtendable::VExtendable(Item* parent, NodeType* node, const StyleType* style) :
 	if (!expanded_) removeShape();
 }
 
-VExtendable::~VExtendable()
+VComposite::~VComposite()
 {
 	if ( expanded_ )
 	{
@@ -55,7 +55,7 @@ VExtendable::~VExtendable()
 	else SAFE_DELETE_ITEM(header);
 }
 
-void VExtendable::determineChildren()
+void VComposite::determineChildren()
 {
 	// Set the name if any
 	if ( node()->hasAttribute("name") )
@@ -155,13 +155,13 @@ void VExtendable::determineChildren()
 
 }
 
-void VExtendable::updateGeometry(int availableWidth, int availableHeight)
+void VComposite::updateGeometry(int availableWidth, int availableHeight)
 {
 	if ( expanded_ ) Item::updateGeometry(layout, availableWidth, availableHeight);
 	else Item::updateGeometry(header, availableWidth, availableHeight);
 }
 
-void VExtendable::setExpanded(bool expanded)
+void VComposite::setExpanded(bool expanded)
 {
 	if ( expanded != expanded_ )
 	{
@@ -170,7 +170,7 @@ void VExtendable::setExpanded(bool expanded)
 	}
 }
 
-inline bool VExtendable::expandedSwtiched() const
+inline bool VComposite::expandedSwtiched() const
 {
 	return (layout && attributes) != expanded_;
 }

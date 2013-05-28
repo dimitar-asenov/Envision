@@ -36,7 +36,7 @@ namespace OOModel {
 
 class OOMODEL_API IntegerLiteral: public Super<Expression>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(IntegerLiteral)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(IntegerLiteral)
 
 	ATTRIBUTE_VALUE(::Model::Integer, value, setValue, int)
 

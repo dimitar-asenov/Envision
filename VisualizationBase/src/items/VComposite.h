@@ -24,22 +24,43 @@
 **
 ***********************************************************************************************************************/
 
-#include "items/VExtendableStyle.h"
+#pragma once
+
+#include "../visualizationbase_api.h"
+
+#include "ItemWithNode.h"
+#include "VCompositeStyle.h"
+#include "../layouts/SequentialLayout.h"
+#include "../layouts/PanelBorderLayout.h"
+#include "ModelBase/src/nodes/composite/CompositeNode.h"
 
 namespace Visualization {
 
-VExtendableStyle::VExtendableStyle() : expanded_(true)
+class VISUALIZATIONBASE_API VComposite : public Super<ItemWithNode<VComposite, Item, Model::CompositeNode>>
 {
-}
+	ITEM_COMMON(VComposite)
 
-void VExtendableStyle::load(StyleLoader& sl)
-{
-	ItemStyle::load(sl);
-	sl.load("expanded", expanded_);
-	sl.load("borderStyle", borderStyle_);
-	sl.load("headerStyle", headerStyle_);
-	sl.load("smallHeaderStyle", smallHeaderStyle_);
-	sl.load("attributesStyle", attributesStyle_);
-}
+	public:
+		VComposite(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+		virtual ~VComposite();
+
+		void setExpanded(bool expanded = true);
+		bool expanded() const;
+
+	protected:
+		void determineChildren();
+		void updateGeometry(int availableWidth, int availableHeight);
+
+	private:
+		SequentialLayout* header;
+		PanelBorderLayout* layout; //only used when expanded
+		SequentialLayout* attributes; //only used when expanded
+
+		bool expanded_;
+		bool expandedSwtiched() const;
+
+};
+
+inline bool VComposite::expanded() const { return expanded_; }
 
 }

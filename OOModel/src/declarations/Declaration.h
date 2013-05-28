@@ -33,7 +33,7 @@
 #include "../attributeMacros.h"
 #include "../elements/Visibility.h"
 
-#include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
+#include "ModelBase/src/nodes/composite/CompositeNode.h"
 #include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
 
@@ -41,9 +41,9 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Declaration)
 
 namespace OOModel {
 
-class OOMODEL_API Declaration : public Super<Model::ExtendableNode>
+class OOMODEL_API Declaration : public Super<Model::CompositeNode>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Declaration)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(Declaration)
 
 	ATTRIBUTE_OOP_NAME
 	ATTRIBUTE_OOP_VISIBILITY

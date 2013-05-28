@@ -33,8 +33,8 @@ DEFINE_TYPED_LIST(OOModel::DeleteExpression)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(DeleteExpression)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(DeleteExpression)
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(DeleteExpression)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(DeleteExpression)
 
 REGISTER_ATTRIBUTE(DeleteExpression, expr, Expression, false, false, true)
 REGISTER_ATTRIBUTE(DeleteExpression, isArray, Boolean, false, false, true)

@@ -28,7 +28,7 @@
 
 #include "../src/items/Symbol.h"
 #include "../src/items/TestBox.h"
-#include "../src/items/VExtendable.h"
+#include "../src/items/VComposite.h"
 #include "ModelBase/src/test_nodes/BinaryNode.h"
 #include "../src/declarative/DeclarativeItemDef.h"
 
@@ -48,8 +48,8 @@ void DeclarativeTest::initializeForms()
 {
 	FormElement* testItemElement = item<Symbol>(&I::testItem_, [](I*){return itemStyles().get();});
 	FormElement* testNodeItemGeneralElement = item(&I::testNodeItemGeneral_, [](I* v){return v->testNode_;});
-	FormElement* testNodeItemElement = item<VExtendable>(&I::testNodeItem_, [](I* v){return v->testNode_;},
-																		[](I*){return VExtendable::itemStyles().get();});
+	FormElement* testNodeItemElement = item<VComposite>(&I::testNodeItem_, [](I* v){return v->testNode_;},
+																		[](I*){return VComposite::itemStyles().get();});
 	FormElement* firstElement = item(&I::firstItem_, [](I* v){return v->firstNode_;});
 	FormElement* secondElement = item(&I::secondItem_, [](I* v){return v->secondNode_;});
 	FormElement* thirdElement = item(&I::thirdItem_, [](I* v){return v->thirdNode_;});

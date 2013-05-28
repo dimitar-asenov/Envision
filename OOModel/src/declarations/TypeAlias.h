@@ -37,7 +37,7 @@ namespace OOModel {
 
 class OOMODEL_API TypeAlias : public Super<Declaration>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(TypeAlias)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(TypeAlias)
 	ATTRIBUTE(Expression, typeExpression, setTypeExpression)
 
 	public:

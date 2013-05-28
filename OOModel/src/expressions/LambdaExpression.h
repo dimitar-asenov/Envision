@@ -37,7 +37,7 @@ class Method;
 
 class OOMODEL_API LambdaExpression: public Super<Expression>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(LambdaExpression)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(LambdaExpression)
 
 	ATTRIBUTE(Model::TypedList<FormalArgument>, arguments, setArguments)
 	ATTRIBUTE(StatementItemList, body, setBody)

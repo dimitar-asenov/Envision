@@ -133,27 +133,27 @@ care of all drawing and service functions and the derived class must only popula
 SVGIcon - This item displays the content of an SVG file as an icon. The file to use and the icon size are specified
 in the item's style.
 
-VBoolean, VCharacter, VInteger, VFloat, VText, VReference, VList, VExtendable - As a convention item names of the
+VBoolean, VCharacter, VInteger, VFloat, VText, VReference, VList, VComposite - As a convention item names of the
 form \e Vnode are used when they visualize the correspondingly named node. Thus these items are used to show the
 similarly named nodes defined in ModelBase. Most of these items are thin wrappers around TextRenderer. VList uses
-a SequentialLayout and shows the contents of a List object. VExtendable is based on a PanelBorderLayout layout
-and serves as a generic visualization for any class deriving from ExtendableNode. It lists all the attributes
+a SequentialLayout and shows the contents of a List object. VComposite is based on a PanelBorderLayout layout
+and serves as a generic visualization for any class deriving from CompositeNode. It lists all the attributes
 of such an item as a pair of attribute name and attribute visualization per row.
 
 The figure below is a screen shot from Envision showing how some of the predefined items are visualized.
 
 \image html "default_vis.png" "The default visualization of generic items"
 
-The figure shows a list with a gray background which consists of three items. The first two items are VExtendable
+The figure shows a list with a gray background which consists of three items. The first two items are VComposite
 objects representing a simple BinaryNode node. The last item is a VText object rendering of a Text node. A binary
-node has a name, and optionally a left and right child nodes. VExtendable shows all attributes of the node it
+node has a name, and optionally a left and right child nodes. VComposite shows all attributes of the node it
 represents as a vertical list of pairs. In gray we see on the left the name of the attribute. On the right we see
-the visualization of the attribute value. Since VExtendable can be used to visualize any node that inherits from
-ExtendableNode there needs to be away to know exactly what node type is being visualized. The name of the node
-type appears in gray in the top bar of the visualization. In case there is an attribute called \e name VExtendable
+the visualization of the attribute value. Since VComposite can be used to visualize any node that inherits from
+CompositeNode there needs to be away to know exactly what node type is being visualized. The name of the node
+type appears in gray in the top bar of the visualization. In case there is an attribute called \e name VComposite
 puts this in the title before the type name, instead of the normal list of attributes. Thus in the image above the
 first two elements of the list are called 'First node' and 'Empty node'. Furthermore we see that both child
-elements of 'First node' are present and are called 'left node' and 'right node'. All instances of VExtendable
+elements of 'First node' are present and are called 'left node' and 'right node'. All instances of VComposite
 represent BinaryNode objects as indicated by their type in gray text.
 
 <h4>Layouts</h4>
@@ -210,7 +210,7 @@ matrices are also naturally represented by a grid arrangement.
 
 PositionLayout - This layout arranges items which contain a position. Visualizations which can be used in this layout
 must represents nodes that have the Position extension. This extension class is defined in VisualizationBase and can be
-registered for any node type that inherits from ExtendableNode. It provides \e x and \e y coordinates that define the
+registered for any node type that inherits from CompositeNode. It provides \e x and \e y coordinates that define the
 position of the node. The figure below shows an example visualization of three items.
 
 \image html "position_layout.png" "A position layout. The location of each item is determined from its x and y coordinates stored in the application model."

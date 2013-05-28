@@ -24,12 +24,12 @@
 **
 ***********************************************************************************************************************/
 
-#include "nodes/Extendable/AttributeChain.h"
-#include "nodes/Extendable/ExtendableNode.h"
+#include "nodes/composite/AttributeChain.h"
+#include "nodes/composite/CompositeNode.h"
 
 namespace Model {
 
-//Only for extendableNode
+//Only for CompositeNode
 AttributeChain::AttributeChain(const QString& typeName)
 : typeName_{typeName}
 {}
@@ -40,8 +40,8 @@ AttributeChain::AttributeChain(const QString& typeName, AttributeChain* parentCh
 	Q_ASSERT(parentChain);
 	Q_ASSERT(parentChain != this);
 
-	if (parentChain == &ExtendableNode::getMetaData() )
-		return; // a null parent indicates direct inheritance from ExtendableNode
+	if (parentChain == &CompositeNode::getMetaData() )
+		return; // a null parent indicates direct inheritance from CompositeNode
 
 	parent_ = parentChain;
 
@@ -98,23 +98,23 @@ AttributeChain* AttributeChain::level(int level)
 	return ac;
 }
 
-ExtendableIndex AttributeChain::indexForAttribute(const QString &name) const
+CompositeIndex AttributeChain::indexForAttribute(const QString &name) const
 {
 	const AttributeChain* ac = this;
 	int level = numLevels_ - 1;
 	while ( ac )
 	{
 		int index = ac->indexOf(name);
-		if ( index >= 0 ) return ExtendableIndex(level, index);
+		if ( index >= 0 ) return CompositeIndex(level, index);
 
 		--level;
 		ac = ac->parent_;
 	}
 
-	return ExtendableIndex();
+	return CompositeIndex();
 }
 
-const Attribute& AttributeChain::attribute(const ExtendableIndex &index)
+const Attribute& AttributeChain::attribute(const CompositeIndex &index)
 {
 	return level(index.level())->at(index.index());
 }
@@ -146,14 +146,14 @@ bool AttributeChain::hasExtensionInHierarchy(int extensionId) const
 	return false;
 }
 
-QVector<ExtendableIndex>& AttributeChain::addExtension(int extensionId)
+QVector<CompositeIndex>& AttributeChain::addExtension(int extensionId)
 {
 	if (hasExtensionInHierarchy(extensionId)) throw ModelException("Adding an extension which has already exists in the type hierarchy");
-	extensions_.insert(extensionId, QVector<ExtendableIndex>());
+	extensions_.insert(extensionId, QVector<CompositeIndex>());
 	return extensions_[extensionId];
 }
 
-const QVector<ExtendableIndex>& AttributeChain::extension(int extensionId) const
+const QVector<CompositeIndex>& AttributeChain::extension(int extensionId) const
 {
 	// We need the cast here since otherwise ac->extentions_ is const below, which leads QMap<>::[] to give back a
 	// temporary copy not a const reference

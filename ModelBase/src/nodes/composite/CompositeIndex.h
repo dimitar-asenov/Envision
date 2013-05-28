@@ -26,41 +26,24 @@
 
 #pragma once
 
-#include "../visualizationbase_api.h"
+#include "../../modelbase_api.h"
 
-#include "ItemWithNode.h"
-#include "VExtendableStyle.h"
-#include "../layouts/SequentialLayout.h"
-#include "../layouts/PanelBorderLayout.h"
-#include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
+namespace Model {
 
-namespace Visualization {
-
-class VISUALIZATIONBASE_API VExtendable : public Super<ItemWithNode<VExtendable, Item, Model::ExtendableNode>>
+class MODELBASE_API CompositeIndex
 {
-	ITEM_COMMON(VExtendable)
+	private:
+		int level_;
+		int index_;
 
 	public:
-		VExtendable(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		virtual ~VExtendable();
+		CompositeIndex();
+		CompositeIndex(int level, int index);
 
-		void setExpanded(bool expanded = true);
-		bool expanded() const;
+		int level() const;
+		int index() const;
 
-	protected:
-		void determineChildren();
-		void updateGeometry(int availableWidth, int availableHeight);
-
-	private:
-		SequentialLayout* header;
-		PanelBorderLayout* layout; //only used when expanded
-		SequentialLayout* attributes; //only used when expanded
-
-		bool expanded_;
-		bool expandedSwtiched() const;
-
+		bool isValid() const;
 };
-
-inline bool VExtendable::expanded() const { return expanded_; }
 
 }

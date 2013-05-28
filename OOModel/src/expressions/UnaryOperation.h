@@ -36,7 +36,7 @@ namespace OOModel {
 
 class OOMODEL_API UnaryOperation: public Super<Expression>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(UnaryOperation)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(UnaryOperation)
 
 	ATTRIBUTE(Expression, operand, setOperand)
 	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, opr, setOpr, int)

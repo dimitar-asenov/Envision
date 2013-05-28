@@ -24,23 +24,53 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "nodes/composite/Attribute.h"
 
-#include "../interactionbase_api.h"
+namespace Model {
 
-#include "GenericHandler.h"
-
-namespace Interaction {
-
-class INTERACTIONBASE_API HExtendable : public GenericHandler
+Attribute::Attribute()
 {
-	protected:
-		HExtendable();
 
-	public:
-		static HExtendable* instance();
+}
 
-		virtual void mouseDoubleClickEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event);
-};
+Attribute::Attribute(QString name, QString type, bool optional, bool partialHint, bool persistent) :
+	name_(name), type_(type), optional_(optional), partialHint_(partialHint), persistent_(persistent)
+{
+}
+
+Attribute::Attribute(QString name) :
+	name_(name)
+{
+}
+
+const QString& Attribute::name() const
+{
+	return name_;
+}
+
+const QString& Attribute::type() const
+{
+	return type_;
+}
+
+bool Attribute::optional() const
+{
+	return optional_;
+}
+
+bool Attribute::partialHint() const
+{
+	return partialHint_;
+}
+
+bool Attribute::persistent() const
+{
+	return persistent_;
+}
+
+bool Attribute::operator==(const Attribute &other) const
+{
+	return name_ == other.name_;
+}
 
 }

@@ -37,7 +37,7 @@ class Class;
 
 class OOMODEL_API TypeExpression : public Super<Expression>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(TypeExpression)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(TypeExpression)
 };
 
 }

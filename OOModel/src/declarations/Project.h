@@ -33,7 +33,7 @@
 #include "Method.h"
 #include "Field.h"
 
-#include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
+#include "ModelBase/src/nodes/composite/CompositeNode.h"
 #include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/TypedList.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
@@ -44,7 +44,7 @@ namespace OOModel {
 
 class OOMODEL_API Project : public Super<Declaration>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Project)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(Project)
 
 	ATTRIBUTE(Model::TypedList<Project>, projects, setProjects)
 	ATTRIBUTE(Model::TypedList<Module>, modules, setModules)

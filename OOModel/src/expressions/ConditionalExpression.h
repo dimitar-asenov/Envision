@@ -34,7 +34,7 @@ namespace OOModel {
 
 class OOMODEL_API ConditionalExpression: public Super<Expression>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(ConditionalExpression)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(ConditionalExpression)
 
 	ATTRIBUTE(Expression, condition, setCondition)
 	ATTRIBUTE(Expression, trueExpression, setTrueExpression)

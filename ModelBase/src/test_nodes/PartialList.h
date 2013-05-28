@@ -28,15 +28,15 @@
 
 #include "../modelbase_api.h"
 
-#include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
+#include "ModelBase/src/nodes/composite/CompositeNode.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
 #include "ModelBase/src/nodes/List.h"
 
 namespace TestNodes {
 
-class MODELBASE_API PartialList: public Super<Model::ExtendableNode>
+class MODELBASE_API PartialList: public Super<Model::CompositeNode>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(PartialList)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(PartialList)
 	ATTRIBUTE(Model::List, list, setList)
 };
 

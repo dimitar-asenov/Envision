@@ -28,7 +28,7 @@
 
 #include "../modelbase_api.h"
 
-#include "../nodes/Extendable/ExtendableNode.h"
+#include "../nodes/composite/CompositeNode.h"
 #include "../nodes/nodeMacros.h"
 #include "../nodes/Text.h"
 
@@ -36,9 +36,9 @@ DECLARE_TYPED_LIST(MODELBASE_API, TestNodes, BinaryNode)
 
 namespace TestNodes {
 
-class MODELBASE_API BinaryNode: public Super<Model::ExtendableNode>
+class MODELBASE_API BinaryNode: public Super<Model::CompositeNode>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(BinaryNode)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(BinaryNode)
 
 	ATTRIBUTE(Model::Text, name, setName)
 	ATTRIBUTE(BinaryNode, left, setLeft)

@@ -36,7 +36,7 @@ namespace OOModel {
 
 class OOMODEL_API ClassTypeExpression : public Super<TypeExpression>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(ClassTypeExpression)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(ClassTypeExpression)
 
 	ATTRIBUTE(ReferenceExpression, typeExpression, setTypeExpression)
 

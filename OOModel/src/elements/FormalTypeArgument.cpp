@@ -31,8 +31,8 @@ DEFINE_TYPED_LIST(OOModel::FormalTypeArgument)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(FormalTypeArgument)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(FormalTypeArgument)
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(FormalTypeArgument)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(FormalTypeArgument)
 
 REGISTER_ATTRIBUTE(FormalTypeArgument, name, Text, false, false, true)
 REGISTER_ATTRIBUTE(FormalTypeArgument, subTypeOfExpression, Expression, false, true, true)

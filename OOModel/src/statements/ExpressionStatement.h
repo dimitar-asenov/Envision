@@ -35,7 +35,7 @@ namespace OOModel {
 
 class OOMODEL_API ExpressionStatement : public Super<Statement>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(ExpressionStatement)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(ExpressionStatement)
 
 	ATTRIBUTE(Expression, expression, setExpression)
 

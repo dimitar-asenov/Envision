@@ -33,9 +33,9 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, CatchClause)
 
 namespace OOModel {
 
-class OOMODEL_API CatchClause : public Super<Model::ExtendableNode>
+class OOMODEL_API CatchClause : public Super<Model::CompositeNode>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(CatchClause)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(CatchClause)
 
 	ATTRIBUTE(Expression, exceptionToCatch, setExceptionToCatch)
 	ATTRIBUTE(StatementItemList, body, setBody)

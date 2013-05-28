@@ -24,39 +24,40 @@
 **
 ***********************************************************************************************************************/
 
-#include "nodes/Extendable/ExtendableNode.h"
+#include "nodes/composite/CompositeNode.h"
+#include "../../commands/CompositeNodeChangeChild.h"
 
 namespace Model {
 
 ::Core::InitializationRegistry& nodeTypeInitializationRegistry();
-DEFINE_TYPE_ID_DERIVED(ExtendableNode, nodeTypeInitializationRegistry, "ExtendableNode",)
+DEFINE_TYPE_ID_DERIVED(CompositeNode, nodeTypeInitializationRegistry, "CompositeNode",)
 
-int ExtendableNode::nextExtensionId_ = 0;
+int CompositeNode::nextExtensionId_ = 0;
 
-void ExtendableNode::initType()
+void CompositeNode::initType()
 {
-	typeIdVariable() = Node::registerNodeType("ExtendableNode", ::Model::createNewNode< ExtendableNode >,
-			::Model::createNodeFromPersistence< ExtendableNode >);
+	typeIdVariable() = Node::registerNodeType("CompositeNode", ::Model::createNewNode< CompositeNode >,
+			::Model::createNodeFromPersistence< CompositeNode >);
 }
 
-AttributeChain& ExtendableNode::topLevelMeta()
+AttributeChain& CompositeNode::topLevelMeta()
 {
 	return meta;
 }
 
-ExtendableNode::ExtendableNode(Node *parent) :
-	Super(parent), meta(ExtendableNode::getMetaData())
+CompositeNode::CompositeNode(Node *parent) :
+	Super(parent), meta(CompositeNode::getMetaData())
 {
-	throw ModelException("Constructing an ExtendableNode class directly, without specifying meta data");
+	throw ModelException("Constructing an CompositeNode class directly, without specifying meta data");
 }
 
-ExtendableNode::ExtendableNode(Node *parent, PersistentStore &, bool) :
-	Super(parent), meta(ExtendableNode::getMetaData())
+CompositeNode::CompositeNode(Node *parent, PersistentStore &, bool) :
+	Super(parent), meta(CompositeNode::getMetaData())
 {
-	throw ModelException("Constructing an ExtendableNode class directly, without specifying meta data");
+	throw ModelException("Constructing an CompositeNode class directly, without specifying meta data");
 }
 
-ExtendableNode::ExtendableNode(Node *parent, AttributeChain& metaData) :
+CompositeNode::CompositeNode(Node *parent, AttributeChain& metaData) :
 	Super(parent), meta(metaData), subnodes(meta.numLevels())
 {
 	for (int level = 0; level < meta.numLevels(); ++level)
@@ -70,7 +71,7 @@ ExtendableNode::ExtendableNode(Node *parent, AttributeChain& metaData) :
 	}
 }
 
-ExtendableNode::ExtendableNode(Node *parent, PersistentStore &store, bool, AttributeChain& metaData) :
+CompositeNode::CompositeNode(Node *parent, PersistentStore &store, bool, AttributeChain& metaData) :
 	Super(parent), meta(metaData), subnodes(meta.numLevels())
 {
 	for (int level = 0; level < meta.numLevels(); ++level)
@@ -80,7 +81,7 @@ ExtendableNode::ExtendableNode(Node *parent, PersistentStore &store, bool, Attri
 
 	for (QList<LoadedNode>::iterator ln = children.begin(); ln != children.end(); ln++)
 	{
-		ExtendableIndex index = meta.indexForAttribute(ln->name);
+		CompositeIndex index = meta.indexForAttribute(ln->name);
 		if ( !index.isValid() ) throw ModelException("Node has attribute "
 				+ ln->name + " in persistent store, but this attribute is not registered");
 
@@ -91,65 +92,65 @@ ExtendableNode::ExtendableNode(Node *parent, PersistentStore &store, bool, Attri
 	verifyHasAllMandatoryAttributes();
 }
 
-ExtendableNode::~ExtendableNode()
+CompositeNode::~CompositeNode()
 {
 	for (int level = 0; level < subnodes.size(); ++level)
 		for (int i = 0; i < subnodes[level].size(); ++i)
 			if ( subnodes[level][i] ) SAFE_DELETE( subnodes[level][i] );
 }
 
-AttributeChain& ExtendableNode::getMetaData()
+AttributeChain& CompositeNode::getMetaData()
 {
-	static AttributeChain descriptions{"ExtendableNode"};
+	static AttributeChain descriptions{"CompositeNode"};
 	return descriptions;
 }
 
-ExtendableIndex ExtendableNode::registerNewAttribute(AttributeChain& metaData, const QString &attributeName,
+CompositeIndex CompositeNode::registerNewAttribute(AttributeChain& metaData, const QString &attributeName,
 		const QString &attributeType, bool canBePartiallyLoaded, bool isOptional, bool isPersistent)
 {
 	return registerNewAttribute(metaData, Attribute(attributeName, attributeType,
 												isOptional, canBePartiallyLoaded, isPersistent));
 }
 
-ExtendableIndex ExtendableNode::registerNewAttribute(AttributeChain& metaData, const Attribute& attribute)
+CompositeIndex CompositeNode::registerNewAttribute(AttributeChain& metaData, const Attribute& attribute)
 {
 	if ( metaData.hasAttribute(attribute.name()) )
 		throw ModelException("Trying to register new attribute " + attribute.name() + " but this name already exists");
 
 	metaData.append(attribute);
 
-	return ExtendableIndex(metaData.numLevels() - 1, metaData.size() - 1);
+	return CompositeIndex(metaData.numLevels() - 1, metaData.size() - 1);
 }
 
-void ExtendableNode::set(const ExtendableIndex &attributeIndex, Node* node)
+void CompositeNode::set(const CompositeIndex &attributeIndex, Node* node)
 {
 	Q_ASSERT( attributeIndex.isValid() );
 	Q_ASSERT( attributeIndex.level() < subnodes.size());
 	Q_ASSERT( attributeIndex.index() < subnodes[attributeIndex.level()].size());
-	execute(new ExtendedNodeChild(this, node, attributeIndex, &subnodes));
+	execute(new CompositeNodeChangeChild(this, node, attributeIndex, &subnodes));
 }
 
-Node* ExtendableNode::get(const QString &attributeName) const
+Node* CompositeNode::get(const QString &attributeName) const
 {
-	ExtendableIndex index = meta.indexForAttribute(attributeName);
+	CompositeIndex index = meta.indexForAttribute(attributeName);
 	if ( index.isValid() ) return subnodes[index.level()][index.index()];
 	return nullptr;
 }
 
-ExtendableIndex ExtendableNode::indexOf(Node* node) const
+CompositeIndex CompositeNode::indexOf(Node* node) const
 {
 	if (node)
 	{
 		for (int level = 0; level < subnodes.size(); ++level)
 			for (int i = 0; i < subnodes[level].size(); ++i)
 				if (subnodes[level][i] == node)
-					return ExtendableIndex(level, i);
+					return CompositeIndex(level, i);
 	}
 
-	return ExtendableIndex();
+	return CompositeIndex();
 }
 
-QList<Node*> ExtendableNode::children()
+QList<Node*> CompositeNode::children()
 {
 	QList<Node*> result;
 	for( auto p : getAllAttributes(false) )
@@ -158,24 +159,24 @@ QList<Node*> ExtendableNode::children()
 	return result;
 }
 
-bool ExtendableNode::replaceChild(Node* child, Node* replacement)
+bool CompositeNode::replaceChild(Node* child, Node* replacement)
 {
 	if (!child || !replacement) return false;
 
-	ExtendableIndex index = indexOf(child);
+	CompositeIndex index = indexOf(child);
 	if (!index.isValid()) return false;
 
 	if ( !index.isValid() ) throw ModelException("Trying to set an attribute with an invalid Index");
-	execute(new ExtendedNodeChild(this, replacement, index, &subnodes));
+	execute(new CompositeNodeChangeChild(this, replacement, index, &subnodes));
 	return true;
 }
 
-bool ExtendableNode::hasAttribute(const QString& attributeName)
+bool CompositeNode::hasAttribute(const QString& attributeName)
 {
 	return meta.hasAttribute(attributeName);
 }
 
-QList< QPair<QString, Node*> > ExtendableNode::getAllAttributes(bool includeNullValues)
+QList< QPair<QString, Node*> > CompositeNode::getAllAttributes(bool includeNullValues)
 {
 	QList< QPair<QString, Node*> > result;
 
@@ -191,17 +192,17 @@ QList< QPair<QString, Node*> > ExtendableNode::getAllAttributes(bool includeNull
 	return result;
 }
 
-void ExtendableNode::removeOptional(const ExtendableIndex &attributeIndex)
+void CompositeNode::removeOptional(const CompositeIndex &attributeIndex)
 {
 	if ( meta.attribute(attributeIndex).optional() )
 	{
-		execute(new ExtendedNodeChild(this, nullptr, attributeIndex, &subnodes));
+		execute(new CompositeNodeChangeChild(this, nullptr, attributeIndex, &subnodes));
 	}
 	else
 		throw ModelException("Trying to remove a non-optional attribute");
 }
 
-void ExtendableNode::save(PersistentStore &store) const
+void CompositeNode::save(PersistentStore &store) const
 {
 	for (int level = 0; level < meta.numLevels(); ++level)
 	{
@@ -212,10 +213,10 @@ void ExtendableNode::save(PersistentStore &store) const
 	}
 }
 
-void ExtendableNode::load(PersistentStore &store)
+void CompositeNode::load(PersistentStore &store)
 {
 	if (store.currentNodeType() != typeName())
-		throw ModelException("Trying to load an Extendable node from an incompatible node type "
+		throw ModelException("Trying to load a CompositeNode from an incompatible node type "
 				+ store.currentNodeType());
 
 	removeAllNodes();
@@ -224,26 +225,26 @@ void ExtendableNode::load(PersistentStore &store)
 
 	for (QList<LoadedNode>::iterator ln = children.begin(); ln != children.end(); ln++)
 	{
-		ExtendableIndex index = meta.indexForAttribute(ln->name);
+		CompositeIndex index = meta.indexForAttribute(ln->name);
 		if ( !index.isValid() )
 			throw ModelException("Node has attribute "
 					+ ln->name + " in persistent store, but this attribute is not registered");
 
-		execute(new ExtendedNodeChild(this, ln->node, ExtendableIndex(index.level(),index.index()), &subnodes));
+		execute(new CompositeNodeChangeChild(this, ln->node, CompositeIndex(index.level(),index.index()), &subnodes));
 	}
 
 	verifyHasAllMandatoryAttributes();
 }
 
-void ExtendableNode::removeAllNodes()
+void CompositeNode::removeAllNodes()
 {
 	for (int level = 0; level < subnodes.size(); ++level)
 		for (int i = 0; i < subnodes[level].size(); ++i)
 			if ( subnodes[level][i] )
-				execute(new ExtendedNodeChild(this, nullptr, ExtendableIndex(level,i), &subnodes));
+				execute(new CompositeNodeChangeChild(this, nullptr, CompositeIndex(level,i), &subnodes));
 }
 
-void ExtendableNode::verifyHasAllMandatoryAttributes()
+void CompositeNode::verifyHasAllMandatoryAttributes()
 {
 	for (int level = 0; level < meta.numLevels(); ++level)
 	{
@@ -251,7 +252,7 @@ void ExtendableNode::verifyHasAllMandatoryAttributes()
 
 		for (int i = 0; i < currentLevel->size(); ++i)
 			if ( subnodes[level][i] == nullptr && (*currentLevel)[i].optional() == false )
-				throw ModelException("An ExtendableNode of type '" + meta.typeName()
+				throw ModelException("An CompositeNode of type '" + meta.typeName()
 						+ "' has an uninitialized mandatory attribute '"
 						+ (*currentLevel)[i].name() +"'");
 	}

@@ -24,32 +24,29 @@
 **
 ***********************************************************************************************************************/
 
-#include "handlers/HExtendable.h"
+#pragma once
 
-#include "VisualizationBase/src/items/VExtendable.h"
-#include "VisualizationBase/src/Scene.h"
+#include "NodeOwningCommand.h"
+#include "../nodes/composite/CompositeIndex.h"
 
-namespace Interaction {
+namespace Model {
 
-HExtendable::HExtendable()
+class Node;
+
+class MODELBASE_API CompositeNodeChangeChild: public NodeOwningCommand
 {
+	private:
+		Node* newVal;
+		Node* oldVal;
+		CompositeIndex attributeIndex;
+		QVector< QVector<Node*> >* subnodes;
 
-}
+	public:
+		CompositeNodeChangeChild(Node* target, Node* newValue, const CompositeIndex &attributeIndex,
+				QVector< QVector<Node*> >* subnodes);
 
-HExtendable* HExtendable::instance()
-{
-	static HExtendable h;
-	return &h;
-}
-
-void HExtendable::mouseDoubleClickEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
-{
-	if (event->modifiers() == 0 && event->button() == Qt::LeftButton)
-	{
-		Visualization::VExtendable *ext = dynamic_cast<Visualization::VExtendable*> (target);
-		ext->setExpanded(! ext->expanded());
-	}
-	else GenericHandler::mouseDoubleClickEvent(target, event);
-}
+		virtual void redo();
+		virtual void undo();
+};
 
 }

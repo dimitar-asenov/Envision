@@ -38,7 +38,7 @@ class Method;
 
 class OOMODEL_API MethodCallExpression: public Super<Expression>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(MethodCallExpression)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(MethodCallExpression)
 
 	ATTRIBUTE(ReferenceExpression, ref, setRef)
 	ATTRIBUTE(Model::TypedList<Expression>, arguments, setArguments)

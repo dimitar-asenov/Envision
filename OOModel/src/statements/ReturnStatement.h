@@ -35,7 +35,7 @@ namespace OOModel {
 
 class OOMODEL_API ReturnStatement: public Super<Statement>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(ReturnStatement)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(ReturnStatement)
 
 	ATTRIBUTE(Model::TypedList<Expression>, values, setValues)
 

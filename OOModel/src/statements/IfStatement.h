@@ -37,7 +37,7 @@ namespace OOModel {
 
 class OOMODEL_API IfStatement: public Super<Statement>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(IfStatement)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(IfStatement)
 
 	ATTRIBUTE(Expression, condition, setCondition)
 	ATTRIBUTE(StatementItemList, thenBranch, setThenBranch)

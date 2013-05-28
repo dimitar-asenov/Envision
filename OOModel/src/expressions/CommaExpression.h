@@ -34,7 +34,7 @@ namespace OOModel {
 
 class OOMODEL_API CommaExpression: public Super<Expression>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(CommaExpression)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(CommaExpression)
 
 	ATTRIBUTE(Expression, left, setLeft)
 	ATTRIBUTE(Expression, right, setRight)

@@ -31,8 +31,8 @@ DEFINE_TYPED_LIST(OOModel::PrimitiveTypeExpression)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(PrimitiveTypeExpression)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(PrimitiveTypeExpression)
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(PrimitiveTypeExpression)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(PrimitiveTypeExpression)
 
 REGISTER_ATTRIBUTE(PrimitiveTypeExpression, val, Integer, false, false, true)
 

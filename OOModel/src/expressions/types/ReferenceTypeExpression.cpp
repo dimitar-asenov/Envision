@@ -32,8 +32,8 @@ DEFINE_TYPED_LIST(OOModel::ReferenceTypeExpression)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(ReferenceTypeExpression)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(ReferenceTypeExpression)
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(ReferenceTypeExpression)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(ReferenceTypeExpression)
 
 REGISTER_ATTRIBUTE(ReferenceTypeExpression, typeExpression, Expression, false, false, true)
 

@@ -31,8 +31,8 @@ DEFINE_TYPED_LIST(OOModel::AssignmentExpression)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(AssignmentExpression)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(AssignmentExpression)
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(AssignmentExpression)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(AssignmentExpression)
 
 REGISTER_ATTRIBUTE(AssignmentExpression, left, Expression, false, false, true)
 REGISTER_ATTRIBUTE(AssignmentExpression, right, Expression, false, false, true)

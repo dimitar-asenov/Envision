@@ -37,7 +37,7 @@
 #include "../elements/FormalTypeArgument.h"
 #include "../elements/StatementItemList.h"
 
-#include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
+#include "ModelBase/src/nodes/composite/CompositeNode.h"
 #include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/TypedList.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
@@ -48,7 +48,7 @@ namespace OOModel {
 
 class OOMODEL_API Method : public Super<Declaration>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Method)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(Method)
 
 	ATTRIBUTE(StatementItemList, items, setItems)
 	ATTRIBUTE(Model::TypedList<FormalTypeArgument>, typeArguments, setTypeArguments)

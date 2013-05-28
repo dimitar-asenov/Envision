@@ -36,7 +36,7 @@ namespace OOModel {
 
 class OOMODEL_API Field : public Super<VariableDeclaration>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Field)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(Field)
 
 	public:
 		Field(const QString& name, Expression* type = nullptr);

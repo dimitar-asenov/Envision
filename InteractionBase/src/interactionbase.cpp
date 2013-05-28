@@ -29,7 +29,7 @@
 #include "handlers/GenericHandler.h"
 #include "handlers/HText.h"
 #include "handlers/HList.h"
-#include "handlers/HExtendable.h"
+#include "handlers/HComposite.h"
 #include "handlers/HCommandPrompt.h"
 #include "handlers/HActionPrompt.h"
 #include "handlers/HSceneHandlerItem.h"
@@ -44,7 +44,7 @@
 
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/items/SceneHandlerItem.h"
-#include "VisualizationBase/src/items/VExtendable.h"
+#include "VisualizationBase/src/items/VComposite.h"
 #include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/items/Text.h"
 #include "VisualizationBase/src/items/Symbol.h"
@@ -88,7 +88,7 @@ bool InteractionBase::initialize(Core::EnvisionManager&)
 	Visualization::Item::setDefaultClassHandler(GenericHandler::instance());
 	Visualization::TextRenderer::setDefaultClassHandler(HText::instance());
 	Visualization::SceneHandlerItem::setDefaultClassHandler(HSceneHandlerItem::instance());
-	Visualization::VExtendable::setDefaultClassHandler(HExtendable::instance());
+	Visualization::VComposite::setDefaultClassHandler(HComposite::instance());
 	Visualization::VList::setDefaultClassHandler(HList::instance());
 	Visualization::RootItem::setDefaultClassHandler(HRootItem::instance());
 	Visualization::PositionLayout::setDefaultClassHandler(HPositionLayout::instance());

@@ -26,24 +26,21 @@
 
 #pragma once
 
-#include "../../modelbase_api.h"
+#include "../interactionbase_api.h"
 
-namespace Model {
+#include "GenericHandler.h"
 
-class MODELBASE_API ExtendableIndex
+namespace Interaction {
+
+class INTERACTIONBASE_API HComposite : public GenericHandler
 {
-	private:
-		int level_;
-		int index_;
+	protected:
+		HComposite();
 
 	public:
-		ExtendableIndex();
-		ExtendableIndex(int level, int index);
+		static HComposite* instance();
 
-		int level() const;
-		int index() const;
-
-		bool isValid() const;
+		virtual void mouseDoubleClickEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event);
 };
 
 }

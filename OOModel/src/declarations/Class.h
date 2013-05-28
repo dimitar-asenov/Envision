@@ -43,7 +43,7 @@ namespace OOModel {
 
 class OOMODEL_API Class : public Super<Declaration>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Class)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(Class)
 
 	ATTRIBUTE(Model::TypedList<Expression>, baseClasses, setBaseClasses)
 	ATTRIBUTE(Model::TypedList<Expression>, friends, setFriends)

@@ -31,7 +31,7 @@
 #include "../attributeMacros.h"
 #include "../expressions/Expression.h"
 
-#include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
+#include "ModelBase/src/nodes/composite/CompositeNode.h"
 #include "ModelBase/src/nodes/Text.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
 #include "ModelBase/src/nodes/Integer.h"
@@ -40,9 +40,9 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, FormalArgument)
 
 namespace OOModel {
 
-class OOMODEL_API FormalArgument : public Super<Model::ExtendableNode>
+class OOMODEL_API FormalArgument : public Super<Model::CompositeNode>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(FormalArgument)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(FormalArgument)
 	ATTRIBUTE_OOP_NAME
 	ATTRIBUTE(Expression, typeExpression, setTypeExpression)
 	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, directionInt, setDirectionInt, int)

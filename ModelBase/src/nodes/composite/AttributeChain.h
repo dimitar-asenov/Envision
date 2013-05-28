@@ -28,7 +28,7 @@
 
 #include "../../modelbase_api.h"
 #include "Attribute.h"
-#include "ExtendableIndex.h"
+#include "CompositeIndex.h"
 
 namespace Model {
 
@@ -39,14 +39,14 @@ class MODELBASE_API AttributeChain: public QVector<Attribute>
 
 		int numLevels_{1}; // The number of levels of attributes, including this one.
 
-		QMap< int, QVector<ExtendableIndex> > extensions_;
+		QMap< int, QVector<CompositeIndex> > extensions_;
 
 		QString typeName_;
 
 		AttributeChain(const QString& typeName);
 
 	public:
-		friend class ExtendableNode;
+		friend class CompositeNode;
 
 		AttributeChain(const QString& typeName, AttributeChain* parentChain);
 
@@ -57,12 +57,12 @@ class MODELBASE_API AttributeChain: public QVector<Attribute>
 		int numLevels() const;
 
 		AttributeChain* level(int level);
-		ExtendableIndex indexForAttribute(const QString &name) const;
-		const Attribute& attribute(const ExtendableIndex &index);
+		CompositeIndex indexForAttribute(const QString &name) const;
+		const Attribute& attribute(const CompositeIndex &index);
 		bool hasAttribute(const QString &name) const;
 		bool hasExtensionInHierarchy(int extensionId) const;
-		QVector<ExtendableIndex>& addExtension(int extensionId);
-		const QVector<ExtendableIndex>& extension(int extensionId) const;
+		QVector<CompositeIndex>& addExtension(int extensionId);
+		const QVector<CompositeIndex>& extension(int extensionId) const;
 };
 
 }

@@ -33,8 +33,8 @@ DEFINE_TYPED_LIST(OOModel::BinaryOperation)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(BinaryOperation)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(BinaryOperation)
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(BinaryOperation)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(BinaryOperation)
 
 REGISTER_ATTRIBUTE(BinaryOperation, left, Expression, false, false, true)
 REGISTER_ATTRIBUTE(BinaryOperation, right, Expression, false, false, true)

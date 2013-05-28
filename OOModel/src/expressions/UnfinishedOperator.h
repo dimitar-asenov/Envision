@@ -36,7 +36,7 @@ namespace OOModel {
 
 class OOMODEL_API UnfinishedOperator : public Super<Expression>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(UnfinishedOperator)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(UnfinishedOperator)
 
 	ATTRIBUTE(Model::TypedList<Model::Text>, delimiters, setDelimiters)
 	ATTRIBUTE(Model::TypedList<Expression>, operands, setOperands)

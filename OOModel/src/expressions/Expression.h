@@ -28,7 +28,7 @@
 
 #include "../oomodel_api.h"
 
-#include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
+#include "ModelBase/src/nodes/composite/CompositeNode.h"
 #include "ModelBase/src/nodes/TypedList.h"
 #include "ModelBase/src/nodes/nodeMacros.h"
 
@@ -39,9 +39,9 @@ namespace OOModel {
 class Class;
 class Type;
 
-class OOMODEL_API Expression : public Super<Model::ExtendableNode>
+class OOMODEL_API Expression : public Super<Model::CompositeNode>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(Expression)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(Expression)
 
 	public:
 		virtual Type* type();

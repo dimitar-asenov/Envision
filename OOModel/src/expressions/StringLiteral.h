@@ -36,7 +36,7 @@ namespace OOModel {
 
 class OOMODEL_API StringLiteral: public Super<Expression>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(StringLiteral)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(StringLiteral)
 
 	ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::Text, value, setValue, QString, const QString&)
 

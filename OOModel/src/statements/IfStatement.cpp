@@ -31,8 +31,8 @@ DEFINE_TYPED_LIST(OOModel::IfStatement)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(IfStatement)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(IfStatement)
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(IfStatement)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(IfStatement)
 
 REGISTER_ATTRIBUTE(IfStatement, condition, Expression, false, false, true)
 REGISTER_ATTRIBUTE(IfStatement, thenBranch, StatementItemList, false, false, true)
