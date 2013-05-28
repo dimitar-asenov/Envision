@@ -84,9 +84,9 @@ void SystemClipboard::saveDoubleValue(double value)
 	xml->saveDoubleValue(value);
 }
 
-void SystemClipboard::saveReferenceValue(const QString &name, const Node*)
+void SystemClipboard::saveReferenceValue(const QString &name, const Node* target)
 {
-	QString nameString = name.isNull() ? NULL_STRING : name;
+	QString nameString = name.isNull() ? (target && target->definesSymbol() ? target->symbolName() : NULL_STRING) : name;
 	xml->saveStringValue(nameString);
 }
 
