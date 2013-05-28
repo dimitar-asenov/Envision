@@ -109,8 +109,9 @@ void SystemClipboard::saveNode(const Node *node, const QString &name, bool)
 		PersistedNode* persisted = node->model()->store()->loadCompleteNodeSubtree(node->model()->name(), node);
 
 		if (!persisted) throw FilePersistenceException("Could not load node subtree from old persistent store.");
-		PersistedValue< QList<PersistedNode*> >* composite = dynamic_cast<PersistedValue< QList<PersistedNode*> >* > (persisted);
-		if (!composite) throw FilePersistenceException("Partial loading of Value-type nodes (string, int, double) is not supported.");
+		auto composite = dynamic_cast<PersistedValue< QList<PersistedNode*> >* > (persisted);
+		if (!composite)
+			throw FilePersistenceException("Partial loading of Value-type nodes (string, int, double) is not supported.");
 
 		for(int i = 0; i<composite->value().size(); ++i)
 		{
@@ -141,7 +142,7 @@ void SystemClipboard::saveNodeFromOldStore(PersistedNode* node)
 			if (dbl) xml->saveDoubleValue(dbl->value());
 			else
 			{
-				PersistedValue< QList<PersistedNode*> >* composite =  dynamic_cast< PersistedValue< QList<PersistedNode*> >* > (node);
+				auto composite = dynamic_cast< PersistedValue< QList<PersistedNode*> >* > (node);
 				if (composite)
 				{
 					for (int i = 0; i< composite->value().size(); ++i) saveNodeFromOldStore(composite->value()[i]);
@@ -206,12 +207,15 @@ QString SystemClipboard::currentNodeType() const
 
 QList<LoadedNode> SystemClipboard::loadPartialNode(Node*)
 {
-	throw FilePersistenceException("The loadPartialNode(...) method is not supported in the SystemClipboard store. This might indicate that an object only partially loaded itself, ignoring the provided partial hint.");
+	throw FilePersistenceException("The loadPartialNode(...) method is not supported in the SystemClipboard store."
+			" This might indicate that an object only partially loaded itself, ignoring the provided partial hint.");
 }
 
 PersistedNode* SystemClipboard::loadCompleteNodeSubtree(const QString&, const Node*)
 {
-	throw FilePersistenceException("The loadCompleteNodeSubtree(...) method is not supported in the SystemClipboard store. This might indicate that an object only partially loaded itself, ignoring the provided partial hint.");
+	throw FilePersistenceException("The loadCompleteNodeSubtree(...) method is not supported in the SystemClipboard"
+			" store. This might indicate that an object only partially loaded itself,"
+			" ignoring the provided partial hint.");
 }
 
 int SystemClipboard::loadIntValue()
