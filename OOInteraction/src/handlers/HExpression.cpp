@@ -30,6 +30,7 @@
 #include "../expression_editor/CompoundObjectDescriptor.h"
 #include "string_offset_providers/StringComponents.h"
 #include "string_offset_providers/StringOffsetProvider.h"
+#include "string_offset_providers/CompoundObjectStringOffsetProvider.h"
 #include "expression_editor/OOExpressionBuilder.h"
 #include "handlers/SetExpressionCursorEvent.h"
 
@@ -352,6 +353,9 @@ Visualization::Item* HExpression::stringInfo(Visualization::Item* target, Qt::Ke
 		auto* adapted = Core::AdapterManager::adapt<StringOffsetProvider>(p);
 		if (adapted)
 		{
+			// If we reach a compound object do not search past it.
+			if (dynamic_cast<CompoundObjectStringOffsetProvider*>(adapted)) break;
+
 			SAFE_DELETE(topMostSP);
 			topMostSP = adapted;
 			topMostItem = p;
