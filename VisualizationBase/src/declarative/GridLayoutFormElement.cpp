@@ -296,7 +296,8 @@ QList<ItemRegion> GridLayoutFormElement::regions(Item* item, int parentX, int pa
 	// regions for the child elements
 	for(int x=0; x<numColumns_; x++)
 		for(int y=0; y<numRows_; y++)
-			allRegions.append(elementGrid_[x][y]->regions(item, this->x(item) + parentX, this->y(item) + parentY));
+			if(elementGrid_[x][y])
+				allRegions.append(elementGrid_[x][y]->regions(item, this->x(item) + parentX, this->y(item) + parentY));
 
 	// if grid consists of exactly one row or one column, add more cursor regions
 	if (numColumns_ == 1 || numRows_ == 1)
