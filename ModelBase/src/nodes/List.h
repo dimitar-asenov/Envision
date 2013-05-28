@@ -112,18 +112,25 @@ class MODELBASE_API List: public Super<Node>
 		QVector<Node*> nodes_;
 
 		void loadSubNodes(QList<LoadedNode>& nodeList);
+
+		void ensureFullyLoaded() const;
 };
 
-inline List::iterator List::begin() {return nodes_.begin();}
-inline List::const_iterator List::begin() const {return nodes_.begin();}
-inline List::const_iterator List::cbegin() const {return nodes_.constBegin();}
-inline List::iterator List::end() {return nodes_.end();}
-inline List::const_iterator List::end() const {return nodes_.end();}
-inline List::const_iterator List::cend() const {return nodes_.constEnd();}
+inline List::iterator List::begin() {ensureFullyLoaded(); return nodes_.begin();}
+inline List::const_iterator List::begin() const {ensureFullyLoaded(); return nodes_.begin();}
+inline List::const_iterator List::cbegin() const {ensureFullyLoaded(); return nodes_.constBegin();}
+inline List::iterator List::end() {ensureFullyLoaded(); return nodes_.end();}
+inline List::const_iterator List::end() const {ensureFullyLoaded(); return nodes_.end();}
+inline List::const_iterator List::cend() const {ensureFullyLoaded(); return nodes_.constEnd();}
+
+inline void List::ensureFullyLoaded() const
+{
+	if (!fullyLoaded) const_cast<List*>(this)->loadFully(* (model()->store()));
+}
 
 template <class T> T* List::first()
 {
-	if (!fullyLoaded) loadFully(* (model()->store()));
+	ensureFullyLoaded();
 
 	if ( nodes_.isEmpty() ) throw ModelException("Trying to access the first element of an empty list.");
 	return static_cast<T*> (nodes_.first());
@@ -131,7 +138,7 @@ template <class T> T* List::first()
 
 template <class T> T* List::last()
 {
-	if (!fullyLoaded) loadFully(* (model()->store()));
+	ensureFullyLoaded();
 
 	if ( nodes_.isEmpty() ) throw ModelException("Trying to access the last element of an empty list.");
 	return static_cast<T*> (nodes_.last());
@@ -139,7 +146,7 @@ template <class T> T* List::last()
 
 template <class T> T* List::at(int i)
 {
-	if (!fullyLoaded) loadFully(* (model()->store()));
+	ensureFullyLoaded();
 
 	return static_cast<T*> (nodes_[i]);
 }
