@@ -62,6 +62,7 @@ void VReferenceExpression::determineChildren()
 {
 	layout()->synchronizeFirst(prefix_, node()->prefix());
 
+	// TODO: In C++ we should have this->... In Java it should be this. ...
 	auto* separatorStyle = &style()->nonPointerSeparator();
 	if (node()->prefix())
 	{
