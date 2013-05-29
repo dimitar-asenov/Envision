@@ -50,11 +50,13 @@ class INTERACTIONBASE_API GenericHandlerModelListener : public QObject
 
 	public:
 		void listenToModelOf(Visualization::Item* item);
+		void stopListeningToModelOf(Visualization::Item* item);
 
 	public slots:
 		void nodesUpdated(QList<Node*> nodes);
 
 	private:
+		Model::Model* modelOf(Visualization::Item* item);
 		QList<Model::Model*> models_{};
 };
 
@@ -137,6 +139,8 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 		// The item in the pair below should be a top-level item.
 		// The cursor's position should be in terms of the top-level item coordinates.
 		static QList<QPair<Visualization::Item*, QPoint> > cursorPositionsForUndo_;
+		static QPair<Visualization::Item*, QPoint> lastCursorPosition_;
+		static int cursorUndoIndex_;
 		static void recordCursorPosition(Visualization::Item* target);
 		static GenericHandlerModelListener& modelListener();
 };

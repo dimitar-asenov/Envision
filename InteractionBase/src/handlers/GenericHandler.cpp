@@ -50,7 +50,7 @@ void GenericHandlerModelListener::nodesUpdated(QList<Node*>)
 	GenericHandler::fixCursorPositionForUndoAfterModelChange();
 }
 
-void GenericHandlerModelListener::listenToModelOf(Visualization::Item* item)
+Model::Model* GenericHandlerModelListener::modelOf(Visualization::Item* item)
 {
 	auto node = item->node();
 	while (!node && item->parent())
@@ -59,8 +59,13 @@ void GenericHandlerModelListener::listenToModelOf(Visualization::Item* item)
 		node = item->node();
 	}
 
-	if (!node) return;
-	auto model = node->model();
+	if (!node) return nullptr;
+	else return node->model();
+}
+
+void GenericHandlerModelListener::listenToModelOf(Visualization::Item* item)
+{
+	auto model = modelOf(item);
 	if (!model) return;
 
 	if (!models_.contains(model))
@@ -68,6 +73,18 @@ void GenericHandlerModelListener::listenToModelOf(Visualization::Item* item)
 		models_.append(model);
 		connect(model, SIGNAL(nodesModified(QList<Node*>)), this,
 				SLOT(nodesUpdated(QList<Node*>)), Qt::QueuedConnection);
+	}
+}
+
+void GenericHandlerModelListener::stopListeningToModelOf(Visualization::Item* item)
+{
+	auto model = modelOf(item);
+	if (!model) return;
+
+	if (models_.contains(model))
+	{
+		models_.removeAll(model);
+		disconnect(model, SIGNAL(nodesModified(QList<Node*>)), this, SLOT(nodesUpdated(QList<Node*>)));
 	}
 }
 
@@ -79,6 +96,9 @@ QPoint GenericHandler::cursorOriginMidPoint_;
 GenericHandler::CursorMoveOrientation GenericHandler::cursorMoveOrientation_ = NoOrientation;
 
 QList<QPair<Visualization::Item*, QPoint> > GenericHandler::cursorPositionsForUndo_{};
+int GenericHandler::cursorUndoIndex_{-1};
+QPair<Visualization::Item*, QPoint> GenericHandler::lastCursorPosition_;
+
 GenericHandlerModelListener& GenericHandler::modelListener()
 {
 	static GenericHandlerModelListener m;
@@ -212,6 +232,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 		if (target->hasNode())
 		{
 			auto scene = target->scene();
+			modelListener().stopListeningToModelOf(target);
 
 			Model::Model* m = target->node()->model();
 			m->beginModification(nullptr, "undo");
@@ -220,16 +241,21 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 			target->setUpdateNeeded(Visualization::Item::StandardUpdate);
 
 			// Reposition the cursor to the location it had before the model was changed
-			cursorPositionsForUndo_.removeLast(); // At the beginning of this even we also recorded the cursor position.
-			if (!cursorPositionsForUndo_.isEmpty()
-					&& scene->topLevelItems().contains(cursorPositionsForUndo_.last().first))
+			if (cursorUndoIndex_ + 1 == cursorPositionsForUndo_.size())
 			{
-				scene->addPostEventAction( new SetCursorEvent(cursorPositionsForUndo_.last().first,
-						cursorPositionsForUndo_.last().second));
+				cursorPositionsForUndo_.append(lastCursorPosition_);
+				++cursorUndoIndex_;
+			}
 
-				cursorPositionsForUndo_.last().first->moveCursor(
-						Visualization::Item::MoveOnPosition, cursorPositionsForUndo_.last().second);
-				cursorPositionsForUndo_.removeLast();
+			if (cursorUndoIndex_ >= 0)
+			{
+				auto undoData = cursorPositionsForUndo_.at(--cursorUndoIndex_);
+				if (scene->topLevelItems().contains(undoData.first))
+				{
+					scene->addPostEventAction( new SetCursorEvent(undoData.first, undoData.second));
+
+					undoData.first->moveCursor(Visualization::Item::MoveOnPosition, undoData.second);
+				}
 			}
 		}
 		else InteractionHandler::keyPressEvent(target, event);
@@ -238,11 +264,32 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 	{
 		if (target->hasNode())
 		{
+			auto scene = target->scene();
+			modelListener().stopListeningToModelOf(target);
+
 			Model::Model* m = target->node()->model();
 			m->beginModification(nullptr, "redo");
 			m->redo();
 			m->endModification();
 			target->setUpdateNeeded(Visualization::Item::StandardUpdate);
+
+			// Reposition the cursor to the location it had after the model was changed
+			if (cursorUndoIndex_+1 < cursorPositionsForUndo_.size())
+			{
+				auto undoData = cursorPositionsForUndo_.at(++cursorUndoIndex_);
+				if (scene->topLevelItems().contains(undoData.first))
+				{
+					scene->addPostEventAction( new SetCursorEvent(undoData.first, undoData.second));
+
+					undoData.first->moveCursor(Visualization::Item::MoveOnPosition, undoData.second);
+				}
+
+				if (cursorUndoIndex_ + 1 == cursorPositionsForUndo_.size())
+				{
+					cursorPositionsForUndo_.removeLast();
+					--cursorUndoIndex_;
+				}
+			}
 		}
 		else InteractionHandler::keyPressEvent(target, event);
 	}
@@ -614,19 +661,20 @@ void GenericHandler::recordCursorPosition(Visualization::Item* target)
 		auto top_level = c->owner();
 		Q_ASSERT(top_level);
 		while (top_level->parent()) top_level = top_level->parent();
-		if (cursorPositionsForUndo_.isEmpty())
-			cursorPositionsForUndo_.append(qMakePair(static_cast<Visualization::Item*>(nullptr),QPoint()));
-		cursorPositionsForUndo_.last().first = top_level;
-		cursorPositionsForUndo_.last().second = top_level->mapFromItem(c->owner(), c->region().center()).toPoint();
+
+		lastCursorPosition_.first = top_level;
+		lastCursorPosition_.second = top_level->mapFromItem(c->owner(), c->region().center()).toPoint();
 	}
 }
 
 void GenericHandler::fixCursorPositionForUndoAfterModelChange()
 {
-	if (cursorPositionsForUndo_.isEmpty())
-		cursorPositionsForUndo_.append(qMakePair(static_cast<Visualization::Item*>(nullptr),QPoint()));
-	else
-		cursorPositionsForUndo_.append(cursorPositionsForUndo_.last());
+	// If making changes after an Undo, discard the remaining hierarchy
+	while (cursorUndoIndex_ + 1 < cursorPositionsForUndo_.size())
+		cursorPositionsForUndo_.removeLast();
+
+	cursorPositionsForUndo_.append(lastCursorPosition_);
+	++cursorUndoIndex_;
 }
 
 }
