@@ -38,6 +38,13 @@ COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(NewExpression)
 REGISTER_ATTRIBUTE(NewExpression, newType, Expression, false, false, true)
 REGISTER_ATTRIBUTE(NewExpression, amount, Expression, false, true, true)
 
+NewExpression::NewExpression(Expression* type, Expression* amount)
+: Super{nullptr, NewExpression::getMetaData()}
+{
+	setNewType(type);
+	if (amount) setAmount(amount);
+}
+
 Type* NewExpression::type()
 {
 	auto t = newType()->type();

@@ -40,6 +40,9 @@ class OOMODEL_API NewExpression: public Super<Expression>
 	ATTRIBUTE(Expression, amount, setAmount)
 
 	public:
+
+		NewExpression(Expression* type, Expression* amount = nullptr);
+
 		virtual Type* type();
 };
 

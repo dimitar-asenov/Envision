@@ -39,6 +39,9 @@ class OOMODEL_API ReferenceTypeExpression : public Super<TypeExpression>
 	ATTRIBUTE(Expression, typeExpression, setTypeExpression)
 
 	public:
+
+		ReferenceTypeExpression(Expression* ref);
+
 		virtual Type* type();
 };
 

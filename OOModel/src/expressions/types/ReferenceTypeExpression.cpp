@@ -37,6 +37,12 @@ COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(ReferenceTypeExpression)
 
 REGISTER_ATTRIBUTE(ReferenceTypeExpression, typeExpression, Expression, false, false, true)
 
+ReferenceTypeExpression::ReferenceTypeExpression(Expression* ref)
+: Super(nullptr, ReferenceTypeExpression::getMetaData())
+{
+	if (ref) setTypeExpression(ref);
+}
+
 Type* ReferenceTypeExpression::type()
 {
 	return new ReferenceType(typeExpression()->type(), false);
