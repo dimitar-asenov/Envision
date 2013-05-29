@@ -37,6 +37,10 @@ SetCursorEvent::SetCursorEvent(Visualization::Item* itemToGetCursor, CursorPlace
 : CustomSceneEvent(EventType), itemToGetCursor_(itemToGetCursor), placement_(placement), showPrompt_(showPrompt)
 {}
 
+SetCursorEvent::SetCursorEvent(Visualization::Item* itemToGetCursor, QPoint point, bool showPrompt)
+: CustomSceneEvent(EventType), itemToGetCursor_(itemToGetCursor), point_(point), showPrompt_(showPrompt)
+{}
+
 SetCursorEvent::SetCursorEvent(GetItemFunction getItemToFocus, CursorPlacement placement, bool showPrompt)
 : CustomSceneEvent(EventType), getItemToFocus_(getItemToFocus), placement_(placement), showPrompt_(showPrompt)
 {}
@@ -80,33 +84,41 @@ void SetCursorEvent::execute()
 	}
 
 	if (!item) return;
-	auto parent = item->parent();
 
-	if (getCursorPlacement_) placement_ = getCursorPlacement_();
-	switch(placement_)
+	if (point_.x() >= 0 && point_.y() >= 0)
 	{
-		case CursorOnTop: item->moveCursor(Visualization::Item::CursorMoveDirection::MoveOnPosition,
-				QPoint(item->width() / 2, 0)); break;
-		case CursorOnBottom: item->moveCursor(Visualization::Item::CursorMoveDirection::MoveOnPosition,
-				QPoint(item->width() / 2, item->yEnd())); break;
-		case CursorOnLeft: item->moveCursor(Visualization::Item::CursorMoveDirection::MoveOnPosition,
-				QPoint(0, item->height() / 2)); break;
-		case CursorOnRight: item->moveCursor(Visualization::Item::CursorMoveDirection::MoveOnPosition,
-				QPoint(item->xEnd(), item->height() / 2)); break;
-		case CursorOnCenter: item->moveCursor(Visualization::Item::CursorMoveDirection::MoveOnPosition,
-				QPoint(item->width() / 2,item->height() / 2)); break;
+		item->moveCursor(Visualization::Item::CursorMoveDirection::MoveOnPosition, point_);
+	}
+	else
+	{
+		auto parent = item->parent();
 
-		case CursorAboveOf: parent->moveCursor(Visualization::Item::CursorMoveDirection::MoveOnPosition,
-				item->pos().toPoint() + QPoint(item->width() / 2, 0)); break;
-		case CursorBelowOf: parent->moveCursor(Visualization::Item::CursorMoveDirection::MoveOnPosition,
-				item->pos().toPoint() + QPoint(item->width() / 2, item->height()-1)); break;
-		case CursorLeftOf: parent->moveCursor(Visualization::Item::CursorMoveDirection::MoveOnPosition,
-				item->pos().toPoint() + QPoint(0, item->height() / 2)); break;
-		case CursorRightOf: parent->moveCursor(Visualization::Item::CursorMoveDirection::MoveOnPosition,
-				item->pos().toPoint() + QPoint(item->width() - 1, item->height() / 2)); break;
-		case CursorDefault: item->moveCursor(); break;
+		if (getCursorPlacement_) placement_ = getCursorPlacement_();
+		switch(placement_)
+		{
+			case CursorOnTop: item->moveCursor(Visualization::Item::CursorMoveDirection::MoveOnPosition,
+					QPoint(item->width() / 2, 0)); break;
+			case CursorOnBottom: item->moveCursor(Visualization::Item::CursorMoveDirection::MoveOnPosition,
+					QPoint(item->width() / 2, item->yEnd())); break;
+			case CursorOnLeft: item->moveCursor(Visualization::Item::CursorMoveDirection::MoveOnPosition,
+					QPoint(0, item->height() / 2)); break;
+			case CursorOnRight: item->moveCursor(Visualization::Item::CursorMoveDirection::MoveOnPosition,
+					QPoint(item->xEnd(), item->height() / 2)); break;
+			case CursorOnCenter: item->moveCursor(Visualization::Item::CursorMoveDirection::MoveOnPosition,
+					QPoint(item->width() / 2,item->height() / 2)); break;
 
-		default: item->moveCursor(); break;
+			case CursorAboveOf: parent->moveCursor(Visualization::Item::CursorMoveDirection::MoveOnPosition,
+					item->pos().toPoint() + QPoint(item->width() / 2, 0)); break;
+			case CursorBelowOf: parent->moveCursor(Visualization::Item::CursorMoveDirection::MoveOnPosition,
+					item->pos().toPoint() + QPoint(item->width() / 2, item->height()-1)); break;
+			case CursorLeftOf: parent->moveCursor(Visualization::Item::CursorMoveDirection::MoveOnPosition,
+					item->pos().toPoint() + QPoint(0, item->height() / 2)); break;
+			case CursorRightOf: parent->moveCursor(Visualization::Item::CursorMoveDirection::MoveOnPosition,
+					item->pos().toPoint() + QPoint(item->width() - 1, item->height() / 2)); break;
+			case CursorDefault: item->moveCursor(); break;
+
+			default: item->moveCursor(); break;
+		}
 	}
 
 	if (showPrompt_)
