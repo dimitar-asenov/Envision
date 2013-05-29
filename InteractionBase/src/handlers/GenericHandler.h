@@ -31,9 +31,32 @@
 #include "VisualizationBase/src/items/Item.h"
 #include "VisualizationBase/src/InteractionHandler.h"
 
-namespace Model { class Node; }
+namespace Model {
+	class Node;
+	class Model;
+}
 
 namespace Interaction {
+
+class INTERACTIONBASE_API GenericHandlerModelListener : public QObject
+{
+	Q_OBJECT
+
+	private:
+		// This is needed in order to make the Signals and Slots mechanism work. Otherwise we are not able to connect to
+		// the signal provided from Model. This is because the signatures of the two methods, must match exactly
+		// (stringwise).
+		using Node = Model::Node;
+
+	public:
+		void listenToModelOf(Visualization::Item* item);
+
+	public slots:
+		void nodesUpdated(QList<Node*> nodes);
+
+	private:
+		QList<Model::Model*> models_{};
+};
 
 class Command;
 class CommandExecutionEngine;
@@ -89,6 +112,8 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 		void showActionPrompt(Visualization::Item *actionRecevier, bool autoExecuteAction);
 		virtual void action(Visualization::Item *target, const QString& action);
 
+		static void fixCursorPositionForUndoAfterModelChange();
+
 	protected:
 		GenericHandler();
 
@@ -108,6 +133,12 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 		static CursorMoveOrientation cursorMoveOrientation_;
 
 		static void resetCursorOrigin();
+
+		// The item in the pair below should be a top-level item.
+		// The cursor's position should be in terms of the top-level item coordinates.
+		static QList<QPair<Visualization::Item*, QPoint> > cursorPositionsForUndo_;
+		static void recordCursorPosition(Visualization::Item* target);
+		static GenericHandlerModelListener& modelListener();
 };
 
 inline const QList<Command*>& GenericHandler::commands() { return supportedCommands; }

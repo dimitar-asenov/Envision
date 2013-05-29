@@ -38,10 +38,38 @@
 #include "VisualizationBase/src/cursor/Cursor.h"
 #include "VisualizationBase/src/items/VList.h"
 #include "FilePersistence/src/SystemClipboard.h"
+
+#include "ModelBase/src/model/Model.h"
 #include "ModelBase/src/nodes/List.h"
 #include "ModelBase/src/nodes/composite/CompositeNode.h"
 
 namespace Interaction {
+
+void GenericHandlerModelListener::nodesUpdated(QList<Node*>)
+{
+	GenericHandler::fixCursorPositionForUndoAfterModelChange();
+}
+
+void GenericHandlerModelListener::listenToModelOf(Visualization::Item* item)
+{
+	auto node = item->node();
+	while (!node && item->parent())
+	{
+		item = item->parent();
+		node = item->node();
+	}
+
+	if (!node) return;
+	auto model = node->model();
+	if (!model) return;
+
+	if (!models_.contains(model))
+	{
+		models_.append(model);
+		connect(model, SIGNAL(nodesModified(QList<Node*>)), this,
+				SLOT(nodesUpdated(QList<Node*>)), Qt::QueuedConnection);
+	}
+}
 
 CommandExecutionEngine* GenericHandler::executionEngine_ = CommandExecutionEngine::instance();
 CommandPrompt* GenericHandler::commandPrompt_{};
@@ -49,6 +77,13 @@ ActionPrompt* GenericHandler::actionPrompt_{};
 
 QPoint GenericHandler::cursorOriginMidPoint_;
 GenericHandler::CursorMoveOrientation GenericHandler::cursorMoveOrientation_ = NoOrientation;
+
+QList<QPair<Visualization::Item*, QPoint> > GenericHandler::cursorPositionsForUndo_{};
+GenericHandlerModelListener& GenericHandler::modelListener()
+{
+	static GenericHandlerModelListener m;
+	return m;
+}
 
 GenericHandler::GenericHandler()
 {
@@ -104,8 +139,11 @@ void GenericHandler::command(Visualization::Item *target, const QString& command
 	executionEngine_->execute(target, command);
 }
 
-void GenericHandler::beforeEvent(Visualization::Item *, QEvent* event)
+void GenericHandler::beforeEvent(Visualization::Item * target, QEvent* event)
 {
+	recordCursorPosition(target);
+	modelListener().listenToModelOf(target);
+
 	if (	event->type() == QEvent::GraphicsSceneMouseMove
 			|| event->type() == QEvent::GraphicsSceneMousePress
 			|| event->type() == QEvent::GraphicsSceneMouseDoubleClick)
@@ -173,11 +211,26 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 	{
 		if (target->hasNode())
 		{
+			auto scene = target->scene();
+
 			Model::Model* m = target->node()->model();
 			m->beginModification(nullptr, "undo");
 			m->undo();
 			m->endModification();
 			target->setUpdateNeeded(Visualization::Item::StandardUpdate);
+
+			// Reposition the cursor to the location it had before the model was changed
+			cursorPositionsForUndo_.removeLast(); // At the beginning of this even we also recorded the cursor position.
+			if (!cursorPositionsForUndo_.isEmpty()
+					&& scene->topLevelItems().contains(cursorPositionsForUndo_.last().first))
+			{
+				scene->addPostEventAction( new SetCursorEvent(cursorPositionsForUndo_.last().first,
+						cursorPositionsForUndo_.last().second));
+
+				cursorPositionsForUndo_.last().first->moveCursor(
+						Visualization::Item::MoveOnPosition, cursorPositionsForUndo_.last().second);
+				cursorPositionsForUndo_.removeLast();
+			}
 		}
 		else InteractionHandler::keyPressEvent(target, event);
 	}
@@ -551,6 +604,29 @@ void GenericHandler::action(Visualization::Item *target, const QString& action)
 			break;
 		}
 	}
+}
+
+void GenericHandler::recordCursorPosition(Visualization::Item* target)
+{
+	auto c = target->scene()->mainCursor();
+	if (c)
+	{
+		auto top_level = c->owner();
+		Q_ASSERT(top_level);
+		while (top_level->parent()) top_level = top_level->parent();
+		if (cursorPositionsForUndo_.isEmpty())
+			cursorPositionsForUndo_.append(qMakePair(static_cast<Visualization::Item*>(nullptr),QPoint()));
+		cursorPositionsForUndo_.last().first = top_level;
+		cursorPositionsForUndo_.last().second = top_level->mapFromItem(c->owner(), c->region().center()).toPoint();
+	}
+}
+
+void GenericHandler::fixCursorPositionForUndoAfterModelChange()
+{
+	if (cursorPositionsForUndo_.isEmpty())
+		cursorPositionsForUndo_.append(qMakePair(static_cast<Visualization::Item*>(nullptr),QPoint()));
+	else
+		cursorPositionsForUndo_.append(cursorPositionsForUndo_.last());
 }
 
 }
