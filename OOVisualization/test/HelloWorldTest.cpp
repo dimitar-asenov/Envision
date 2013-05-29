@@ -623,6 +623,11 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 	deleteArrayExpr->setExpr(new ReferenceExpression("pSystem"));
 	longMethod->items()->append(new ExpressionStatement(deleteArrayExpr));
 
+	auto var20 = new VariableDeclarationExpression("var20", new AutoTypeExpression());
+	longMethod->items()->append(new ExpressionStatement(var20));
+	var20->decl()->setInitialValue( new NewExpression( new ClassTypeExpression(
+			new ReferenceExpression("HelloWorld"))));
+
 	IfStatement* ifs = new IfStatement();
 	longMethod->items()->append(ifs);
 	BinaryOperation* ifCond = new BinaryOperation();

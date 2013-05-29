@@ -188,6 +188,8 @@ Method* addDivBySix(Model::Model* model, Class* parent)
 	divbysix->items()->append(new ExpressionStatement(
 		OOExpressionBuilder::getOOExpression("const volatile int vcx=1")));
 
+	divbysix->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("auto aa=SomeClass")));
+
 
 	VariableDeclarationExpression* result = new VariableDeclarationExpression("result");
 	divbysix->items()->append( new ExpressionStatement(result) );

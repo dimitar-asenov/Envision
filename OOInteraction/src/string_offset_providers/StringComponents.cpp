@@ -125,6 +125,7 @@ void StringComponents::initConversions()
 					TypeQualifierExpression::Qualifier::CONST, "const",
 					TypeQualifierExpression::Qualifier::VOLATILE, "volatile"),
 			" ", e->typeExpression() ); });
+	add<AutoTypeExpression>([](AutoTypeExpression* ){ return c( "auto" ); });
 
 	// Operators
 	add<AssignmentExpression>([](AssignmentExpression* e){ return c(

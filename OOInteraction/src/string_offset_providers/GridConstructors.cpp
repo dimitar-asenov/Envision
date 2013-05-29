@@ -63,6 +63,11 @@ void GridConstructors::initializeAll()
 		grid->add(new Cell(0, vis->item(), 0));
 	});
 
+	GridBasedOffsetProvider::addGridConstructor<VAutoType>(
+	[](GridBasedOffsetProvider* grid, VAutoType* vis){
+		grid->add(new Cell(0, vis->item(), 0));
+	});
+
 	GridBasedOffsetProvider::addGridConstructor<VBooleanLiteral>(
 	[](GridBasedOffsetProvider* grid, VBooleanLiteral* vis){
 		grid->add(new Cell(0, vis->item(), 0));

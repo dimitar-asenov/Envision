@@ -24,30 +24,36 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
+#include "VAutoType.h"
 
-#include "VExpression.h"
-#include "StandardExpressionVisualizations.h"
+#include "VisualizationBase/src/items/Text.h"
 
-#include "VMethodCallExpression.h"
-#include "VReferenceExpression.h"
-#include "VThisExpression.h"
-#include "VBinaryOperation.h"
-#include "VArrayInitializer.h"
-#include "VVariableDeclarationExpression.h"
-#include "VLambdaExpression.h"
+using namespace Visualization;
+using namespace OOModel;
 
-#include "VEmptyExpression.h"
-#include "VErrorExpression.h"
-#include "VUnfinishedOperator.h"
+namespace OOVisualization {
 
-#include "literals/VStringLiteral.h"
-#include "literals/VIntegerLiteral.h"
-#include "literals/VFloatLiteral.h"
-#include "literals/VCharacterLiteral.h"
-#include "literals/VBooleanLiteral.h"
-#include "literals/VNullLiteral.h"
+ITEM_COMMON_DEFINITIONS(VAutoType, "item")
 
-#include "types/VClassType.h"
-#include "types/VPrimitiveType.h"
-#include "types/VAutoType.h"
+		VAutoType::VAutoType(Item* parent, NodeType* node, const StyleType* style) :
+	Super(parent, node, style),
+	vis_(new Static(this, style))
+{
+}
+
+VAutoType::~VAutoType()
+{
+	SAFE_DELETE_ITEM(vis_);
+}
+
+void VAutoType::determineChildren()
+{
+	vis_->setStyle(style());
+}
+
+void VAutoType::updateGeometry(int availableWidth, int availableHeight)
+{
+	Item::updateGeometry(vis_, availableWidth, availableHeight);
+}
+
+}

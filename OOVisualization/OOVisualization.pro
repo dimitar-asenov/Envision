@@ -7,7 +7,8 @@ win32:LIBS += -llogger \
     -loomodel \
     -lvisualizationbase \
     -linteractionbase
-HEADERS += src/declarations/VFieldStyle.h \
+HEADERS += src/expressions/types/VAutoType.h \
+    src/declarations/VFieldStyle.h \
     src/declarations/VField.h \
     src/expressions/VVariableDeclarationExpressionStyle.h \
     src/expressions/VVariableDeclarationExpression.h \
@@ -86,7 +87,8 @@ HEADERS += src/declarations/VFieldStyle.h \
     src/statements/VReturnStatement.h \
     src/statements/VReturnStatementStyle.h \
     src/oovisualization.h
-SOURCES += src/declarations/VFieldStyle.cpp \
+SOURCES += src/expressions/types/VAutoType.cpp \
+    src/declarations/VFieldStyle.cpp \
     src/declarations/VField.cpp \
     src/expressions/VVariableDeclarationExpressionStyle.cpp \
     src/expressions/VVariableDeclarationExpression.cpp \
