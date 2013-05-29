@@ -120,6 +120,11 @@ void StringComponents::initConversions()
 			PrimitiveTypeExpression::PrimitiveTypes::CHAR, "char",
 			PrimitiveTypeExpression::PrimitiveTypes::VOID, "void")
 	); });
+	add<TypeQualifierExpression>([](TypeQualifierExpression* e ){ return c(
+			choose(e->qualifier(),
+					TypeQualifierExpression::Qualifier::CONST, "const",
+					TypeQualifierExpression::Qualifier::VOLATILE, "volatile"),
+			" ", e->typeExpression() ); });
 
 	// Operators
 	add<AssignmentExpression>([](AssignmentExpression* e){ return c(

@@ -4,7 +4,8 @@ DEFINES += OOMODEL_LIBRARY
 win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase
-HEADERS += src/statements/DeclarationStatement.h \
+HEADERS += src/expressions/types/TypeQualifierExpression.h \
+    src/statements/DeclarationStatement.h \
     src/declarations/Field.h \
     src/declarations/Module.h \
     src/declarations/Project.h \
@@ -85,7 +86,8 @@ HEADERS += src/statements/DeclarationStatement.h \
     src/expressions/VariableDeclarationExpression.h \
     src/declarations/TypeAlias.h \
     src/expressions/types/AutoTypeExpression.h
-SOURCES += src/statements/DeclarationStatement.cpp \
+SOURCES += src/expressions/types/TypeQualifierExpression.cpp \
+    src/statements/DeclarationStatement.cpp \
     src/declarations/Field.cpp \
     src/declarations/Module.cpp \
     src/declarations/Project.cpp \

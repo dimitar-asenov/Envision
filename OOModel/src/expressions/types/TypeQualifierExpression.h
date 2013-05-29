@@ -26,56 +26,35 @@
 
 #pragma once
 
-#include "../oomodel_api.h"
+#include "TypeExpression.h"
+#include "../../types/Type.h"
+
+#include "ModelBase/src/nodes/Integer.h"
+
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, TypeQualifierExpression)
 
 namespace OOModel {
 
-class OOMODEL_API Type {
+class OOMODEL_API TypeQualifierExpression : public Super<TypeExpression>
+{
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(TypeQualifierExpression)
+
+	ATTRIBUTE(Expression, typeExpression, setTypeExpression)
+	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, qualifierVal, setQualifierVal, int)
+
 	public:
+		using Qualifier = Type::Qualifier;
 
-		enum Qualifier {
-			CONST = 0x1,
-			VOLATILE = 0x2
-		};
-		Q_DECLARE_FLAGS(Qualifiers, Qualifier)
+		TypeQualifierExpression(Qualifier q, Expression* e = nullptr);
 
-		Type(bool isValueType);
-		virtual ~Type();
+		Qualifier qualifier() const;
+		void setQualifier(Qualifier q);
 
-		/**
-		 * \brief Returns true if this is an error type.
-		 *
-		 * The default implementation returns false.
-		 */
-		virtual bool isError() const;
-
-		/**
-		 * \brief Returns true if the this type belongs to an expression representing a value.
-		 *
-		 * Expressions can represent values e.g. '5', 'a+b' or types e.g. 'int[]'. If this type object represents a value
-		 * expression this method returns true, otherwise it returns false.
-		 */
-		bool isValueType() const;
-		void setValueType(bool isValueType);
-
-		virtual bool equals(const Type* other) const = 0;
-		virtual Type* clone() const = 0;
-
-		Qualifiers qualifiers() const;
-		void setQualifiers(Qualifiers q, bool enable = true);
-
-	private:
-		bool isValueType_;
-		Qualifiers qualifiers_{0};
+		virtual Type* type();
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Type::Qualifiers)
-
-inline bool Type::isValueType() const { return isValueType_; }
-inline void Type::setValueType(bool isValueType) { isValueType_ = isValueType; }
-
-inline Type::Qualifiers Type::qualifiers() const { return qualifiers_;}
-inline void Type::setQualifiers(Qualifiers q, bool enable) {if (enable) qualifiers_ |= q; else qualifiers_ &= (~q);}
-
+inline TypeQualifierExpression::Qualifier TypeQualifierExpression::qualifier()
+	const { return static_cast<Qualifier> (qualifierVal()); }
+inline void TypeQualifierExpression::setQualifier(Qualifier q){ setQualifierVal(q);}
 
 } /* namespace OOModel */

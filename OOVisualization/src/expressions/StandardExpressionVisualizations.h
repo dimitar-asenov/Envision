@@ -56,6 +56,10 @@ BEGIN_STANDARD_EXPRESSION_VISUALIZATION_STYLE(apiSpecification, className, nodeT
 BEGIN_STANDARD_EXPRESSION_VISUALIZATION_STYLE(apiSpecification, className, nodeType, ::OOVisualization::OperatorSequenceStyle)
 //********************************************************************************************************************
 
+#define BEGIN_STANDARD_FLAG_EXPRESSION_VISUALIZATION(apiSpecification, className, nodeType, flag)							\
+BEGIN_STANDARD_ENUMERATION_EXPRESSION_VISUALIZATION(apiSpecification, className, nodeType, flag)
+//********************************************************************************************************************
+
 #define EXPRESSION_PART(type, name)																												\
 	public:																																				\
 		type* name() const { return name##_; }																									\
@@ -78,6 +82,7 @@ namespace OOVisualization {
 #undef BEGIN_STANDARD_EXPRESSION_VISUALIZATION_STYLE
 #undef BEGIN_STANDARD_EXPRESSION_VISUALIZATION
 #undef BEGIN_STANDARD_ENUMERATION_EXPRESSION_VISUALIZATION
+#undef BEGIN_STANDARD_FLAG_EXPRESSION_VISUALIZATION
 #undef END_STANDARD_EXPRESSION_VISUALIZATION
 #undef EXPRESSION_PART
 #undef PREFIX

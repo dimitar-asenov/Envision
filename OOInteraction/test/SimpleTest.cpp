@@ -183,6 +183,12 @@ Method* addDivBySix(Model::Model* model, Class* parent)
 	divbysix->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("delete[] anArrayPointer")));
 
 
+	divbysix->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("const int xc=42")));
+	divbysix->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("volatile int xv")));
+	divbysix->items()->append(new ExpressionStatement(
+		OOExpressionBuilder::getOOExpression("const volatile int vcx=1")));
+
+
 	VariableDeclarationExpression* result = new VariableDeclarationExpression("result");
 	divbysix->items()->append( new ExpressionStatement(result) );
 	result->decl()->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));

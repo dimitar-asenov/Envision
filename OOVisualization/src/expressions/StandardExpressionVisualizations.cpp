@@ -55,6 +55,18 @@ BEGIN_STANDARD_EXPRESSION_VISUALIZATION_ALL(apiSpecification, className, nodeTyp
 
 //********************************************************************************************************************
 
+#define BEGIN_STANDARD_FLAG_EXPRESSION_VISUALIZATION(apiSpecification, className, nodeType, flag)							\
+BEGIN_STANDARD_EXPRESSION_VISUALIZATION_ALL(apiSpecification, className, nodeType)												\
+																																							\
+	int f = node()->flag();																															\
+	Q_ASSERT(f);																																		\
+	int i = 0;																																			\
+	while ( !(f&1) ) {++i; f >>= 1;}																												\
+	Q_ASSERT(f==1);																																	\
+	const ::OOVisualization::OperatorStyle* opStyle = &style()->op( i );																\
+	layout()->setStyle( &opStyle->layout());
+//********************************************************************************************************************
+
 #define OPERAND(name)																																\
 layout()->synchronizeMid(name##_, node()->name(), index);																				\
 if (name##_) ++index;																																\
@@ -86,6 +98,7 @@ namespace OOVisualization {
 #undef BEGIN_STANDARD_EXPRESSION_VISUALIZATION_ALL
 #undef BEGIN_STANDARD_EXPRESSION_VISUALIZATION
 #undef BEGIN_STANDARD_ENUMERATION_EXPRESSION_VISUALIZATION
+#undef BEGIN_STANDARD_FLAG_EXPRESSION_VISUALIZATION
 #undef END_STANDARD_EXPRESSION_VISUALIZATION
 #undef PREINPOSTFIX
 #undef PREFIX

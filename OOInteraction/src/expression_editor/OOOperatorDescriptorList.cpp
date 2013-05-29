@@ -286,6 +286,22 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 		return at;
 	}));
 
+	add(new OD( "const qualifier", "const SPACE expr", 1, 1, OD::RightAssociative,
+			[](const QList<Expression*>& operands) -> Expression* {
+		auto at = new OOModel::TypeQualifierExpression();
+		at->setQualifier(OOModel::Type::CONST);
+		at->setTypeExpression(operands.first());
+		return at;
+	}));
+
+	add(new OD( "volatile qualifier", "volatile SPACE expr", 1, 1, OD::RightAssociative,
+			[](const QList<Expression*>& operands) -> Expression* {
+		auto at = new OOModel::TypeQualifierExpression();
+		at->setQualifier(OOModel::Type::VOLATILE);
+		at->setTypeExpression(operands.first());
+		return at;
+	}));
+
 	// Variable declaration
 	auto varDeclFunction = [](const QList<Expression*>& operands) -> Expression*
 	{

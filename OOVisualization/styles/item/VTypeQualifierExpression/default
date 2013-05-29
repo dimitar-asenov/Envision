@@ -1,0 +1,11 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/Item/default">
+	<operators>
+		<e0 prototypes="default.operand">
+			<preSymbol prototypes="item/Symbol/keyword"><symbol>const</symbol></preSymbol>
+		</e0>
+		<e1 prototypes="default.operand">
+			<preSymbol prototypes="item/Symbol/keyword"><symbol>volatile</symbol></preSymbol>
+		</e1>
+	</operators>
+</style>

@@ -35,7 +35,7 @@ PrimitiveType::PrimitiveType(PrimitiveTypes type, bool isValueType) : Type(isVal
 bool PrimitiveType::equals(const Type* other) const
 {
 	if (auto pt = dynamic_cast<const PrimitiveType*>(other))
-		return type_ == pt->type_;
+		return type_ == pt->type_ && qualifiers() == other->qualifiers();
 
 	return false;
 }

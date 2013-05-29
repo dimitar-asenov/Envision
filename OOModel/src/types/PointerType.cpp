@@ -44,7 +44,7 @@ PointerType::~PointerType()
 bool PointerType::equals(const Type* other) const
 {
 	if (auto at = dynamic_cast<const PointerType*> (other))
-		return baseType_ != nullptr && baseType_->equals(at->baseType_);
+		return baseType_ != nullptr && baseType_->equals(at->baseType_) && qualifiers() == other->qualifiers();
 
 	return false;
 }

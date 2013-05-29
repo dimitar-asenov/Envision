@@ -44,7 +44,7 @@ ReferenceType::~ReferenceType()
 bool ReferenceType::equals(const Type* other) const
 {
 	if (auto at = dynamic_cast<const ReferenceType*> (other))
-		return baseType_ != nullptr && baseType_->equals(at->baseType_);
+		return baseType_ != nullptr && baseType_->equals(at->baseType_) && qualifiers() == other->qualifiers();
 
 	return false;
 }

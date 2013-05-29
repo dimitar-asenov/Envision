@@ -525,7 +525,8 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 
 	VariableDeclarationExpression* var14 = new VariableDeclarationExpression("var14");
 	longMethod->items()->append(new ExpressionStatement(var14));
-	var14->decl()->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
+	var14->decl()->setTypeExpression(new TypeQualifierExpression ( Type::CONST,
+			new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT)));
 	UnaryOperation* uOp2 = new UnaryOperation();
 	var14->decl()->setInitialValue(uOp2);
 	uOp2->setOp(UnaryOperation::POSTINCREMENT);
@@ -533,7 +534,8 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 
 	VariableDeclarationExpression* var15 = new VariableDeclarationExpression("var15");
 	longMethod->items()->append(new ExpressionStatement(var15));
-	var15->decl()->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
+	var15->decl()->setTypeExpression(new TypeQualifierExpression ( Type::VOLATILE,
+			new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT)));
 	BinaryOperation* binOp0 = new BinaryOperation();
 	var15->decl()->setInitialValue(binOp0);
 	binOp0->setOp(BinaryOperation::DIVIDE);
@@ -549,7 +551,9 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 
 	VariableDeclarationExpression* var16 = new VariableDeclarationExpression("var16");
 	longMethod->items()->append(new ExpressionStatement(var16));
-	var16->decl()->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::BOOLEAN));
+	var16->decl()->setTypeExpression(new TypeQualifierExpression ( Type::CONST,
+			new TypeQualifierExpression ( Type::VOLATILE,
+			new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::BOOLEAN))));
 	BinaryOperation* binOp2 = new BinaryOperation();
 	var16->decl()->setInitialValue(binOp2);
 	binOp2->setOp(BinaryOperation::LESS_EQUALS);
