@@ -32,8 +32,8 @@
 namespace OOInteraction {
 
 CompoundObjectDescriptor::CompoundObjectDescriptor(const QString& name, const QString& signature,
-		int num_operands, int precedence, Associativity associativity)
-		: OOOperatorDescriptor(name, signature, num_operands, precedence, associativity)
+		int precedence, Associativity associativity)
+		: OOOperatorDescriptor(name, signature, precedence, associativity)
 {}
 
 OOModel::Expression* CompoundObjectDescriptor::create(const QList<OOModel::Expression*>& operands)

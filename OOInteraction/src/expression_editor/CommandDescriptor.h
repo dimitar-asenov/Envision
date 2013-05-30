@@ -37,9 +37,7 @@ namespace OOInteraction {
 
 class OOINTERACTION_API CommandDescriptor : public OOOperatorDescriptor {
 	public:
-		CommandDescriptor(const QString& name, const QString& signature, int num_operands, int precedence,
-			Associativity associativity);
-
+		CommandDescriptor(const QString& name, const QString& signature, int precedence,	Associativity associativity);
 		~CommandDescriptor();
 
 		virtual OOModel::Expression* create(const QList<OOModel::Expression*>& operands);

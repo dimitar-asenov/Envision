@@ -28,15 +28,15 @@
 
 namespace OOInteraction {
 
-OOOperatorDescriptor::OOOperatorDescriptor(const QString& name, const QString& signature, int num_operands,
+OOOperatorDescriptor::OOOperatorDescriptor(const QString& name, const QString& signature,
 		int precedence, Associativity associativity)
-	: Interaction::OperatorDescriptor(name, signature, num_operands, precedence, associativity)
+	: Interaction::OperatorDescriptor(name, signature, precedence, associativity)
 {
 }
 
-OOOperatorDescriptor::OOOperatorDescriptor(const QString& name, const QString& signature, int num_operands,
+OOOperatorDescriptor::OOOperatorDescriptor(const QString& name, const QString& signature,
 		int precedence, Associativity associativity, CreateFunction createFunction)
-	:Interaction::OperatorDescriptor(name, signature, num_operands, precedence, associativity),
+	:Interaction::OperatorDescriptor(name, signature, precedence, associativity),
 	 createFunction_(createFunction)
 {}
 

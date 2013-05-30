@@ -35,7 +35,7 @@ class INTERACTIONBASE_API OperatorDescriptor {
 		enum Associativity {LeftAssociative, RightAssociative, NotAssociative};
 
 		OperatorDescriptor();
-		OperatorDescriptor(const QString& name, const QString& signature, int num_operands, int precedence, Associativity associativity);
+		OperatorDescriptor(const QString& name, const QString& signature, int precedence, Associativity associativity);
 		virtual ~OperatorDescriptor();
 
 		// A transient operator descriptor is one that is created dynamically and is associated with a particular
@@ -59,10 +59,10 @@ class INTERACTIONBASE_API OperatorDescriptor {
 	private:
 		QString name_;
 		QStringList signature_;
-		int num_operands_;
-		int precedence_;
-		Associativity associativity_;
-		bool transient_;
+		int num_operands_{};
+		int precedence_{};
+		Associativity associativity_{};
+		bool transient_{};
 
 		// Based on the signature we precompute the prefix, infixes and postfix to speed up later processing
 		QString prefix_;

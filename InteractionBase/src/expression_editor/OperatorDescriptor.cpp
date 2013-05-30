@@ -34,25 +34,38 @@ OperatorDescriptor::OperatorDescriptor() {
 OperatorDescriptor::~OperatorDescriptor() {
 }
 
-OperatorDescriptor::OperatorDescriptor(const QString& name, const QString& signature, int num_operands, int precedence, Associativity associativity)
-	: name_(name), num_operands_(num_operands), precedence_(precedence), associativity_(associativity), transient_(false)
+OperatorDescriptor::OperatorDescriptor(const QString& name, const QString& signature, int precedence,
+		Associativity associativity)
+	: name_(name), precedence_(precedence), associativity_(associativity)
 {
 	signature_ = signature.split(" ", QString::SkipEmptyParts);
 	signature_.replaceInStrings("SPACE", " ");
+	num_operands_ = signature_.count("expr") + signature_.count("id");
 
 	// Compute prefix
 	for(int i = 0; i < signature_.size() && signature_.at(i) != "expr" && signature_.at(i) != "id"; ++i)
 		prefix_.append( signature_.at(i) );
 
 	// Compute posfix
-	for(int i = signature_.size()-1; i>=0 && signature_.at(i) != "expr" && signature_.at(i) != "id" ; --i)
-		postfix_.prepend( signature_.at(i) );
+	int postfix_index = signature_.size()-1;
+	for(; postfix_index>=0 && signature_.at(postfix_index) != "expr" && signature_.at(postfix_index) != "id";
+			--postfix_index)
+		postfix_.prepend( signature_.at(postfix_index) );
 
-	// Compute infixes
-	infixes_ = delimiters();
-	infixes_.removeAll("");
-	if ( !prefix_.isEmpty() ) infixes_.removeFirst();
-	if ( !postfix_.isEmpty() ) infixes_.removeLast();
+	// If the postfix encompasses the entire expression, then this expression is likely just a single keyword e.g. this
+	// or nullptr. In that case it only has a prefix and no infixes or postfixes
+	if (postfix_index < 0)
+	{
+		postfix_.clear();
+	}
+	else
+	{
+		// Compute infixes
+		infixes_ = delimiters();
+		infixes_.removeAll("");
+		if ( !prefix_.isEmpty() ) infixes_.removeFirst();
+		if ( !postfix_.isEmpty() ) infixes_.removeLast();
+	}
 }
 
 QStringList OperatorDescriptor::delimiters()

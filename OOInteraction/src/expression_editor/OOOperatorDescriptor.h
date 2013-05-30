@@ -40,10 +40,10 @@ class OOINTERACTION_API OOOperatorDescriptor : public Interaction::OperatorDescr
 	public:
 		using CreateFunction = std::function<OOModel::Expression*(const QList<OOModel::Expression*>& operands)>;
 
-		OOOperatorDescriptor(const QString& name, const QString& signature, int num_operands, int precedence,
+		OOOperatorDescriptor(const QString& name, const QString& signature, int precedence,
 				Associativity associativity);
 
-		OOOperatorDescriptor(const QString& name, const QString& signature, int num_operands, int precedence,
+		OOOperatorDescriptor(const QString& name, const QString& signature, int precedence,
 						Associativity associativity, CreateFunction createFunction);
 
 		virtual OOModel::Expression* create(const QList<OOModel::Expression*>& operands);

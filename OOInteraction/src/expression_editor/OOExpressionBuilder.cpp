@@ -68,35 +68,8 @@ void OOExpressionBuilder::visit(Interaction::Value* val)
 	bool isInt = false;
 	int value = val->text().toInt(&isInt);
 
-	// TODO: this should be done in a more extensible way
 	if (isInt)
 		expression = new OOModel::IntegerLiteral(value);
-	else if (val->text() == "true" || val->text() == "false")
-		expression = new OOModel::BooleanLiteral( val->text() == "true" );
-	else if (val->text() == "null")
-		expression = new OOModel::NullLiteral();
-	else if (val->text() == "this")
-		expression = new OOModel::ThisExpression();
-	else if (val->text() == "auto")
-		expression = new OOModel::AutoTypeExpression();
-	else if (val->text() == "int")
-		expression = new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::INT);
-	else if (val->text() == "long")
-		expression = new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::LONG);
-	else if (val->text() == "uint")
-		expression = new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_INT);
-	else if (val->text() == "ulong")
-		expression = new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_LONG);
-	else if (val->text() == "float")
-		expression = new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::FLOAT);
-	else if (val->text() == "double")
-		expression = new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::DOUBLE);
-	else if (val->text() == "bool")
-		expression = new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::BOOLEAN);
-	else if (val->text() == "char")
-		expression = new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::CHAR);
-	else if (val->text() == "void")
-		expression = new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::VOID);
 	else if (val->text().startsWith('"'))
 		expression = new OOModel::StringLiteral(val->text().mid(1, val->text().size()-2));
 	else
