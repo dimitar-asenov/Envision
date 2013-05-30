@@ -35,9 +35,9 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, IfStatement)
 
 namespace OOModel {
 
-class OOMODEL_API IfStatement: public Statement
+class OOMODEL_API IfStatement: public Super<Statement>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(IfStatement)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(IfStatement)
 
 	ATTRIBUTE(Expression, condition, setCondition)
 	ATTRIBUTE(StatementItemList, thenBranch, setThenBranch)

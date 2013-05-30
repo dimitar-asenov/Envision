@@ -30,7 +30,7 @@
 #include "VMethodCFStyle.h"
 #include "VListCF.h"
 
-#include "OOModel/src/top_level/Method.h"
+#include "OOModel/src/declarations/Method.h"
 
 #include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/items/LayoutProvider.h"
@@ -44,8 +44,8 @@ namespace Visualization {
 
 namespace ControlFlowVisualization {
 
-class CONTROLFLOWVISUALIZATION_API VMethodCF : public Visualization::ItemWithNode
-	< Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::Method>
+class CONTROLFLOWVISUALIZATION_API VMethodCF : public Super<Visualization::ItemWithNode
+	<VMethodCF, Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::Method, false>>
 {
 	ITEM_COMMON(VMethodCF)
 
@@ -57,9 +57,6 @@ class CONTROLFLOWVISUALIZATION_API VMethodCF : public Visualization::ItemWithNod
 		void determineChildren();
 
 	private:
-		typedef Visualization::ItemWithNode
-				< Visualization::LayoutProvider<Visualization::PanelBorderLayout>, OOModel::Method> BaseItemType;
-
 		Visualization::SequentialLayout* header_;
 		Visualization::Static* icon_;
 		Visualization::VText* name_;

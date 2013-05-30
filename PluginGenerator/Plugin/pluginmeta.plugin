@@ -3,5 +3,6 @@
 	<dependencies>
 		<dependency pluginid="logger" version="0" />
 		<dependency pluginid="selftest" version="0" />
+		<dependency pluginid="modelbase" version="0" />
 	</dependencies>
 </plugin>

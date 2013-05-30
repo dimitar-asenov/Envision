@@ -27,9 +27,10 @@
 #include "HExpression.h"
 #include "../OOInteractionException.h"
 
-#include "../expression_editor/operators/CompoundObjectDescriptor.h"
-#include "string_components/StringComponents.h"
+#include "../expression_editor/CompoundObjectDescriptor.h"
+#include "string_offset_providers/StringComponents.h"
 #include "string_offset_providers/StringOffsetProvider.h"
+#include "string_offset_providers/CompoundObjectStringOffsetProvider.h"
 #include "expression_editor/OOExpressionBuilder.h"
 #include "handlers/SetExpressionCursorEvent.h"
 
@@ -42,7 +43,7 @@
 #include "InteractionBase/src/events/SetCursorEvent.h"
 #include "InteractionBase/src/autocomplete/AutoComplete.h"
 #include "InteractionBase/src/autocomplete/AutoCompleteEntry.h"
-#include "ModelBase/src/adapter/AdapterManager.h"
+#include "Core/src/AdapterManager.h"
 
 namespace OOInteraction {
 
@@ -197,13 +198,13 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		OOModel::ExpressionStatement* replaceStatement = nullptr;
 		auto trimmedText = newText.trimmed();
 		if ( (enterPressed || spacePressed)
-				&& (trimmedText == "for" || trimmedText == "foreach" || trimmedText == "if"
+				&& (trimmedText == "for" || trimmedText == "foreach" || trimmedText == "if" || trimmedText == "class"
 						|| trimmedText == "continue" || trimmedText == "break" || trimmedText == "return"))
 			replaceStatement = parentExpressionStatement(dynamic_cast<OOModel::Expression*>(target->node()));
 
 		if (replaceStatement)
 		{
-			OOModel::Statement* st = nullptr;
+			OOModel::StatementItem* st = nullptr;
 			Model::Node* toFocus = nullptr;
 			if(trimmedText == "for")
 			{
@@ -246,6 +247,12 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 
 				toFocus = ret->values()->at(0);
 				st = ret;
+			}
+			else if (trimmedText == "class")
+			{
+				auto ret =  new OOModel::Class();
+				toFocus = ret;
+				st = new OOModel::DeclarationStatement(ret);
 			}
 
 			Model::Node* containerNode = replaceStatement->parent();
@@ -338,14 +345,17 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 Visualization::Item* HExpression::stringInfo(Visualization::Item* target, Qt::Key key, QString& str, int& index)
 {
 	Visualization::Item* topMostItem = target;
-	auto* topMostSP = Model::AdapterManager::adapt<StringOffsetProvider>(topMostItem);
+	auto* topMostSP = Core::AdapterManager::adapt<StringOffsetProvider>(topMostItem);
 
 	auto p = topMostItem->parent();
 	while(p)
 	{
-		auto* adapted = Model::AdapterManager::adapt<StringOffsetProvider>(p);
+		auto* adapted = Core::AdapterManager::adapt<StringOffsetProvider>(p);
 		if (adapted)
 		{
+			// If we reach a compound object do not search past it.
+			if (dynamic_cast<CompoundObjectStringOffsetProvider*>(adapted)) break;
+
 			SAFE_DELETE(topMostSP);
 			topMostSP = adapted;
 			topMostItem = p;

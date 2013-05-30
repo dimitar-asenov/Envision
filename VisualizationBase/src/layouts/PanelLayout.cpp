@@ -31,7 +31,7 @@ namespace Visualization {
 ITEM_COMMON_DEFINITIONS( PanelLayout, "layout" )
 
 PanelLayout::PanelLayout(Item* parent, const StyleType* style) :
-	Layout(parent, style), first_(), middle_(), last_()
+Super(parent, style), first_(), middle_(), last_()
 {
 }
 

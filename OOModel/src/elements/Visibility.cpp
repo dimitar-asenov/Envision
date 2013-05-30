@@ -33,21 +33,21 @@ DEFINE_TYPED_LIST(OOModel::Visibility)
 
 namespace OOModel {
 
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(Visibility, Model::Node)
+NODE_DEFINE_TYPE_REGISTRATION_METHODS(Visibility)
 
-Visibility::Visibility(Model::Node *parent) :
-	Node(parent), vis(DEFAULT)
+Visibility::Visibility(Model::Node *parent)
+: Super(parent), vis(DEFAULT)
 {
 }
 
-Visibility::Visibility(Model::Node *parent, Model::PersistentStore &store, bool) :
-	Node(parent)
+Visibility::Visibility(Model::Node *parent, Model::PersistentStore &store, bool)
+: Super(parent)
 {
 	vis = fromInt( store.loadIntValue() );
 }
 
 Visibility::Visibility(const VisibilityType val)
-	: Node(nullptr), vis(val)
+: Super(nullptr), vis(val)
 {
 }
 

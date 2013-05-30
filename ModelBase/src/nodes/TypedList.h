@@ -31,7 +31,7 @@
 namespace Model {
 
 template <class T>
-class TypedList: public List
+class TypedList: public Super<List>
 {
 	NODE_DECLARE_STANDARD_METHODS(TypedList)
 
@@ -47,8 +47,59 @@ class TypedList: public List
 		virtual Node* createDefaultElement() override;
 		static void setDefaultElementCreationFunction(CreateDefaultElement function);
 
+		static ::Core::InitializationRegistry& elementInitializationRegistry();
+
 	private:
 		static CreateDefaultElement& creationFunction();
+
+	// Iterator
+	public:
+		struct TypedIterator : public std::iterator<std::bidirectional_iterator_tag, T*> {
+			TypedIterator() = default;
+			TypedIterator(const TypedIterator& other) = default;
+			TypedIterator(List::iterator it): it_{it}{}
+			TypedIterator& operator=(const TypedIterator&) = default;
+
+			TypedIterator& operator++() {++it_;return *this;}
+			TypedIterator operator++(int) {TypedIterator old(*this); ++it_; return old;}
+			TypedIterator& operator--() {--it_;return *this;}
+			TypedIterator operator--(int) {TypedIterator old(*this); --it_; return old;}
+			bool operator==(const TypedIterator& other) const {return it_==other.it_;}
+			bool operator!=(const TypedIterator& other) const {return it_!=other.it_;}
+			T* & operator*() const { return reinterpret_cast<T*&>(*it_); }
+			T*   operator->() const { return reinterpret_cast<T*&>(*it_); }
+
+			List::iterator it_{};
+		};
+
+		struct ConstTypedIterator : public std::iterator<std::bidirectional_iterator_tag, const T*> {
+			ConstTypedIterator() = default;
+			ConstTypedIterator(const ConstTypedIterator& other) = default;
+			ConstTypedIterator(List::const_iterator it): it_{it}{}
+			ConstTypedIterator& operator=(const ConstTypedIterator&) = default;
+			ConstTypedIterator(TypedIterator& it) : it_{it.it_}{}
+
+			ConstTypedIterator& operator++() {++it_;return *this;}
+			ConstTypedIterator operator++(int) {ConstTypedIterator old(*this); ++it_; return old;}
+			ConstTypedIterator& operator--() {--it_;return *this;}
+			ConstTypedIterator operator--(int) {ConstTypedIterator old(*this); --it_; return old;}
+			bool operator==(const ConstTypedIterator& other) const {return it_==other.it_;}
+			bool operator!=(const ConstTypedIterator& other) const {return it_!=other.it_;}
+			T* const& operator*() const {return reinterpret_cast<T* const &>(*it_);}
+			T* operator->() const { return reinterpret_cast<T* const &>(*it_); }
+
+			List::const_iterator it_{};
+		};
+
+		using iterator = TypedIterator;
+		using const_iterator = ConstTypedIterator;
+
+		iterator begin(){return TypedIterator(List::begin());}
+		const_iterator begin() const {return ConstTypedIterator(List::cbegin());}
+		const_iterator cbegin() const {return ConstTypedIterator(List::cbegin());}
+		iterator end() {return TypedIterator(List::end());}
+		const_iterator end() const {return ConstTypedIterator(List::cend());}
+		const_iterator cend() const {return ConstTypedIterator(List::cend());}
 };
 
 }

@@ -34,9 +34,9 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, IntegerLiteral)
 
 namespace OOModel {
 
-class OOMODEL_API IntegerLiteral: public Expression
+class OOMODEL_API IntegerLiteral: public Super<Expression>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(IntegerLiteral)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(IntegerLiteral)
 
 	ATTRIBUTE_VALUE(::Model::Integer, value, setValue, int)
 

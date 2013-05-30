@@ -1,8 +1,5 @@
 <!DOCTYPE EnvisionVisualizationStyle>
-<style prototypes="item/Symbol/default">
-	<font>
-		<weight>99</weight>
-	</font>
+<style prototypes="item/Symbol/keyword">
 	<pen>
 		<color>
 			<alpha>255</alpha>

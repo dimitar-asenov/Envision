@@ -28,8 +28,8 @@
 
 #include "OOVisualization/src/elements/VStatementItemList.h"
 
-#include "OOModel/src/top_level/Method.h"
-#include "OOModel/src/top_level/Class.h"
+#include "OOModel/src/declarations/Method.h"
+#include "OOModel/src/declarations/Class.h"
 #include "OOModel/src/elements/StatementItemList.h"
 #include "OOModel/src/statements/ExpressionStatement.h"
 

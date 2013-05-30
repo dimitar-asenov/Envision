@@ -33,7 +33,7 @@ ITEM_COMMON_DEFINITIONS(TextAndDescription, "item")
 using namespace Visualization;
 
 TextAndDescription::TextAndDescription(Item* parent, const StyleType* style)
-	: Visualization::LayoutProvider<>(parent, style), textVis_(), descriptionVis_()
+	: Super(parent, style), textVis_(), descriptionVis_()
 {
 }
 

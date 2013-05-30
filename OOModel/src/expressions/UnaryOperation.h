@@ -34,16 +34,16 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, UnaryOperation)
 
 namespace OOModel {
 
-class OOMODEL_API UnaryOperation: public Expression
+class OOMODEL_API UnaryOperation: public Super<Expression>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(UnaryOperation)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(UnaryOperation)
 
 	ATTRIBUTE(Expression, operand, setOperand)
 	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, opr, setOpr, int)
 
 	public:
 		enum OperatorTypes {PREINCREMENT, PREDECREMENT, POSTINCREMENT, POSTDECREMENT, PLUS, MINUS, NOT, COMPLEMENT,
-			PARENTHESIS};
+				PARENTHESIS, DEREFERENCE, ADDRESSOF};
 
 		OperatorTypes op() const;
 		void setOp(const OperatorTypes& oper);

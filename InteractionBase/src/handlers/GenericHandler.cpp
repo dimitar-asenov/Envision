@@ -38,10 +38,55 @@
 #include "VisualizationBase/src/cursor/Cursor.h"
 #include "VisualizationBase/src/items/VList.h"
 #include "FilePersistence/src/SystemClipboard.h"
+
+#include "ModelBase/src/model/Model.h"
 #include "ModelBase/src/nodes/List.h"
-#include "ModelBase/src/nodes/Extendable/ExtendableNode.h"
+#include "ModelBase/src/nodes/composite/CompositeNode.h"
 
 namespace Interaction {
+
+void GenericHandlerModelListener::nodesUpdated(QList<Node*>)
+{
+	GenericHandler::fixCursorPositionForUndoAfterModelChange();
+}
+
+Model::Model* GenericHandlerModelListener::modelOf(Visualization::Item* item)
+{
+	auto node = item->node();
+	while (!node && item->parent())
+	{
+		item = item->parent();
+		node = item->node();
+	}
+
+	if (!node) return nullptr;
+	else return node->model();
+}
+
+void GenericHandlerModelListener::listenToModelOf(Visualization::Item* item)
+{
+	auto model = modelOf(item);
+	if (!model) return;
+
+	if (!models_.contains(model))
+	{
+		models_.append(model);
+		connect(model, SIGNAL(nodesModified(QList<Node*>)), this,
+				SLOT(nodesUpdated(QList<Node*>)), Qt::QueuedConnection);
+	}
+}
+
+void GenericHandlerModelListener::stopListeningToModelOf(Visualization::Item* item)
+{
+	auto model = modelOf(item);
+	if (!model) return;
+
+	if (models_.contains(model))
+	{
+		models_.removeAll(model);
+		disconnect(model, SIGNAL(nodesModified(QList<Node*>)), this, SLOT(nodesUpdated(QList<Node*>)));
+	}
+}
 
 CommandExecutionEngine* GenericHandler::executionEngine_ = CommandExecutionEngine::instance();
 CommandPrompt* GenericHandler::commandPrompt_{};
@@ -49,6 +94,16 @@ ActionPrompt* GenericHandler::actionPrompt_{};
 
 QPoint GenericHandler::cursorOriginMidPoint_;
 GenericHandler::CursorMoveOrientation GenericHandler::cursorMoveOrientation_ = NoOrientation;
+
+QList<QPair<Visualization::Item*, QPoint> > GenericHandler::cursorPositionsForUndo_{};
+int GenericHandler::cursorUndoIndex_{-1};
+QPair<Visualization::Item*, QPoint> GenericHandler::lastCursorPosition_;
+
+GenericHandlerModelListener& GenericHandler::modelListener()
+{
+	static GenericHandlerModelListener m;
+	return m;
+}
 
 GenericHandler::GenericHandler()
 {
@@ -104,8 +159,11 @@ void GenericHandler::command(Visualization::Item *target, const QString& command
 	executionEngine_->execute(target, command);
 }
 
-void GenericHandler::beforeEvent(Visualization::Item *, QEvent* event)
+void GenericHandler::beforeEvent(Visualization::Item * target, QEvent* event)
 {
+	recordCursorPosition(target);
+	modelListener().listenToModelOf(target);
+
 	if (	event->type() == QEvent::GraphicsSceneMouseMove
 			|| event->type() == QEvent::GraphicsSceneMousePress
 			|| event->type() == QEvent::GraphicsSceneMouseDoubleClick)
@@ -119,12 +177,12 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 	if (event->matches(QKeySequence::Copy))
 	{
 		QList<const Model::Node*> nodesToCopy;
-		QList<QGraphicsItem*> selected = target->scene()->selectedItems();
+		auto selected = target->scene()->selectedItems();
 
 		// Get all items from the current selection that are model items.
 		for (int i = 0; i<selected.size(); ++i)
 		{
-			Visualization::Item* item = static_cast<Visualization::Item*> (selected.at(i));
+			auto item = selected.at(i);
 			if (item->hasNode()) nodesToCopy.append(item->node());
 		}
 
@@ -132,7 +190,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 		// which is a model item.
 		if (nodesToCopy.size() == 0 && selected.size() == 1)
 		{
-			Visualization::Item* item = static_cast<Visualization::Item*> (selected.at(0));
+			auto item = selected.at(0);
 			while (item)
 			{
 				if (item->hasNode())
@@ -173,11 +231,32 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 	{
 		if (target->hasNode())
 		{
+			auto scene = target->scene();
+			modelListener().stopListeningToModelOf(target);
+
 			Model::Model* m = target->node()->model();
 			m->beginModification(nullptr, "undo");
 			m->undo();
 			m->endModification();
 			target->setUpdateNeeded(Visualization::Item::StandardUpdate);
+
+			// Reposition the cursor to the location it had before the model was changed
+			if (cursorUndoIndex_ + 1 == cursorPositionsForUndo_.size())
+			{
+				cursorPositionsForUndo_.append(lastCursorPosition_);
+				++cursorUndoIndex_;
+			}
+
+			if (cursorUndoIndex_ >= 0)
+			{
+				auto undoData = cursorPositionsForUndo_.at(--cursorUndoIndex_);
+				if (scene->topLevelItems().contains(undoData.first))
+				{
+					scene->addPostEventAction( new SetCursorEvent(undoData.first, undoData.second));
+
+					undoData.first->moveCursor(Visualization::Item::MoveOnPosition, undoData.second);
+				}
+			}
 		}
 		else InteractionHandler::keyPressEvent(target, event);
 	}
@@ -185,11 +264,32 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 	{
 		if (target->hasNode())
 		{
+			auto scene = target->scene();
+			modelListener().stopListeningToModelOf(target);
+
 			Model::Model* m = target->node()->model();
 			m->beginModification(nullptr, "redo");
 			m->redo();
 			m->endModification();
 			target->setUpdateNeeded(Visualization::Item::StandardUpdate);
+
+			// Reposition the cursor to the location it had after the model was changed
+			if (cursorUndoIndex_+1 < cursorPositionsForUndo_.size())
+			{
+				auto undoData = cursorPositionsForUndo_.at(++cursorUndoIndex_);
+				if (scene->topLevelItems().contains(undoData.first))
+				{
+					scene->addPostEventAction( new SetCursorEvent(undoData.first, undoData.second));
+
+					undoData.first->moveCursor(Visualization::Item::MoveOnPosition, undoData.second);
+				}
+
+				if (cursorUndoIndex_ + 1 == cursorPositionsForUndo_.size())
+				{
+					cursorPositionsForUndo_.removeLast();
+					--cursorUndoIndex_;
+				}
+			}
 		}
 		else InteractionHandler::keyPressEvent(target, event);
 	}
@@ -425,7 +525,7 @@ void GenericHandler::focusInEvent(Visualization::Item *target, QFocusEvent *even
 
 void GenericHandler::filterSelectedItems(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
-	QList<QGraphicsItem*> selection = target->scene()->selectedItems();
+	auto selection = target->scene()->selectedItems();
 
 	// Filter out items for which the selection is completely internal.
 	for (int i = selection.size()-1; i>=0; --i)
@@ -452,7 +552,7 @@ void GenericHandler::filterSelectedItems(Visualization::Item *target, QGraphicsS
 	bool modelItemSelected = false;
 	selection = target->scene()->selectedItems();
 	for (int i = 0; i<selection.size(); ++i)
-		if ( (static_cast<Visualization::Item*> (selection.at(i)))->hasNode())
+		if ( selection.at(i)->hasNode() )
 		{
 			modelItemSelected = true;
 			break;
@@ -461,7 +561,7 @@ void GenericHandler::filterSelectedItems(Visualization::Item *target, QGraphicsS
 	// If there is at least one model item, discard all items which are not model items.
 	if (modelItemSelected)
 		for (int i = selection.size() - 1; i>=0; --i)
-			if ((static_cast<Visualization::Item*> (selection.at(i)))->hasNode() == false)
+			if ( !selection.at(i)->hasNode() )
 			{
 				selection.at(i)->setSelected(false);
 				selection.removeAt(i);
@@ -551,6 +651,30 @@ void GenericHandler::action(Visualization::Item *target, const QString& action)
 			break;
 		}
 	}
+}
+
+void GenericHandler::recordCursorPosition(Visualization::Item* target)
+{
+	auto c = target->scene()->mainCursor();
+	if (c)
+	{
+		auto top_level = c->owner();
+		Q_ASSERT(top_level);
+		while (top_level->parent()) top_level = top_level->parent();
+
+		lastCursorPosition_.first = top_level;
+		lastCursorPosition_.second = top_level->mapFromItem(c->owner(), c->region().center()).toPoint();
+	}
+}
+
+void GenericHandler::fixCursorPositionForUndoAfterModelChange()
+{
+	// If making changes after an Undo, discard the remaining hierarchy
+	while (cursorUndoIndex_ + 1 < cursorPositionsForUndo_.size())
+		cursorPositionsForUndo_.removeLast();
+
+	cursorPositionsForUndo_.append(lastCursorPosition_);
+	++cursorUndoIndex_;
 }
 
 }

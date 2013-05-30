@@ -34,9 +34,9 @@ DECLARE_TYPED_LIST(MODELBASE_API, TestNodes, BinaryNodePersistenceUnit)
 
 namespace TestNodes {
 
-class MODELBASE_API BinaryNodePersistenceUnit: public BinaryNode
+class MODELBASE_API BinaryNodePersistenceUnit: public Super<BinaryNode>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(BinaryNodePersistenceUnit)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(BinaryNodePersistenceUnit)
 
 	public:
 		virtual bool isNewPersistenceUnit() const;

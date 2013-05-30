@@ -32,11 +32,13 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API RootItem : public ItemWithNode<Item> {
+class VISUALIZATIONBASE_API RootItem : public Super<ItemWithNode<RootItem, Item, Model::Node, false>> {
 
 	ITEM_COMMON_CUSTOM_STYLENAME(RootItem, ItemStyle)
 
 	public:
+		// Included because it is required for initialization. Parent must always be nullptr.
+		RootItem(Item* parent, NodeType* node, int purpose = 0);
 		RootItem(NodeType* node, int purpose = 0);
 		RootItem(Item* item, int purpose = 0);
 		~RootItem();
@@ -49,8 +51,6 @@ class VISUALIZATIONBASE_API RootItem : public ItemWithNode<Item> {
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		typedef ItemWithNode<Item> BaseItemType;
-
 		Item* item_;
 };
 

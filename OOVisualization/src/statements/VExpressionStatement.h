@@ -27,16 +27,15 @@
 #pragma once
 
 #include "../oovisualization_api.h"
+#include "VStatementItem.h"
 
 #include "OOModel/src/statements/ExpressionStatement.h"
-
 #include "VisualizationBase/src/items/Item.h"
-#include "VisualizationBase/src/items/ItemWithNode.h"
 
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VExpressionStatement
-	: public Visualization::ItemWithNode< Visualization::Item, OOModel::ExpressionStatement>
+	: public Super<VStatementItem<VExpressionStatement, Visualization::Item, OOModel::ExpressionStatement>>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VExpressionStatement, Visualization::ItemStyle)
 
@@ -49,8 +48,6 @@ class OOVISUALIZATION_API VExpressionStatement
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		typedef Visualization::ItemWithNode< Visualization::Item, OOModel::ExpressionStatement> BaseItemType;
-
 		Visualization::Item* expr_;
 };
 

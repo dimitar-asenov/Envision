@@ -30,7 +30,6 @@
 #include "items/InterfaceContractsVMethodAddOn.h"
 #include "items/SignatureContractsVMethodAddOn.h"
 #include "items/ContractFilter.h"
-#include "OOInteraction/src/expression_editor/operators/commands/CreateMethodCall.h"
 #include "monitor/ValueAtReturnVisitor.h"
 
 #include "OOModel/src/allOOModelNodes.h"
@@ -43,12 +42,11 @@
 #include "VisualizationBase/src/node_extensions/Position.h"
 #include "VisualizationBase/src/items/RootItem.h"
 
-#include "OOVisualization/src/top_level/VMethod.h"
+#include "OOVisualization/src/declarations/VMethod.h"
 #include "OOVisualization/src/elements/VStatementItemList.h"
 #include "OOVisualization/src/alternative/VKeywordMethodCall.h"
 
 #include "OOInteraction/src/expression_editor/OOExpressionBuilder.h"
-#include "OOInteraction/src/expression_editor/operators/CommandDescriptor.h"
 #include "OOInteraction/src/customization/CustomizationVisitor.h"
 
 using namespace OOModel;
@@ -58,9 +56,9 @@ using namespace OOVisualization;
 
 namespace ContractsLibrary {
 
-Library* createContractsLibrary()
+Project* createContractsLibrary()
 {
-	Library* lib = new Library("CodeContracts");
+	Project* lib = new Project("CodeContracts");
 	lib->extension<Position>()->setX(1260);
 
 	Class* contract = new Class("Contract");
@@ -369,7 +367,7 @@ TEST(ContractsLibrary, ContractsLibraryTest)
 	prj = dynamic_cast<Project*> (model->createRoot("Project"));
 	model->beginModification(prj, "create a few classes that use contracts");
 	prj->setName("HelloWorld");
-	prj->libraries()->append(createContractsLibrary());
+	prj->projects()->append(createContractsLibrary());
 	prj->classes()->append( createBaseClass());
 	prj->classes()->append( createDerivedClass() );
 	prj->classes()->append( createPaper() );

@@ -34,8 +34,9 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, UnfinishedOperator)
 
 namespace OOModel {
 
-class OOMODEL_API UnfinishedOperator : public Expression {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(UnfinishedOperator)
+class OOMODEL_API UnfinishedOperator : public Super<Expression>
+{
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(UnfinishedOperator)
 
 	ATTRIBUTE(Model::TypedList<Model::Text>, delimiters, setDelimiters)
 	ATTRIBUTE(Model::TypedList<Expression>, operands, setOperands)

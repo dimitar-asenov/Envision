@@ -26,23 +26,14 @@
 
 #include "items/VList.h"
 #include "items/Text.h"
+#include "../src/declarative/DeclarativeItemDef.h"
 
 namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(VList, "item")
 
-VList::VList(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode< LayoutProvider<>, Model::List>(parent, node, style)
-{
-}
-
-void VList::determineChildren()
-{
-	// TODO: find a better way and place to determine the style of children
-	layout()->setStyle(&style()->itemsStyle());
-	determineRange();
-	layout()->synchronizeWithNodes(node()->nodes().toList().mid(rangeBegin_, rangeEnd_ - rangeBegin_), renderer());
-}
+VList::VList(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style)
+{}
 
 void VList::determineRange()
 {
@@ -58,6 +49,49 @@ void VList::setRange(int begin, int end)
 
 	rangeBegin_ = begin;
 	rangeEnd_ = end;
+}
+
+void VList::initializeForms()
+{
+	auto listOfNodesGetter = [](Item* i)
+							{
+								auto v = static_cast<VList*>(i);
+								return v->node()->nodes().toList().mid(v->rangeBegin_, v->rangeEnd_ - v->rangeBegin_);
+							};
+	auto spaceBetweenElementsGetter = [](Item* i)
+							{return static_cast<VList*>(i)->style()->itemsStyle().spaceBetweenElements();};
+	auto hasCursorWhenEmptyGetter = [](Item* i)
+							{return static_cast<VList*>(i)->style()->itemsStyle().hasCursorWhenEmpty();};
+	auto notLocationEquivalentGetter = [](Item* i)
+							{return static_cast<VList*>(i)->style()->itemsStyle().notLocationEquivalentCursors();};
+	auto noBoundaryCursorsGetter = [](Item* i)
+							{return static_cast<VList*>(i)->style()->itemsStyle().noBoundaryCursorsInsideShape();};
+	auto noInnerCursorsGetter = [](Item* i)
+							{return static_cast<VList*>(i)->style()->itemsStyle().noInnerCursors();};
+
+	// Form 0: horizontal orientation
+	addForm((new SequentialLayoutFormElement())
+			->setHorizontal()->setSpaceBetweenElements(spaceBetweenElementsGetter)
+			->setHasCursorWhenEmpty(hasCursorWhenEmptyGetter)
+			->setNotLocationEquivalentCursors(notLocationEquivalentGetter)
+			->setNoBoudaryCursors(noBoundaryCursorsGetter)
+			->setNoInnerCursors(noInnerCursorsGetter)
+			->setListOfNodes(listOfNodesGetter));
+	// Form 1: vertical orientation
+	addForm((new SequentialLayoutFormElement())
+			->setVertical()->setSpaceBetweenElements(spaceBetweenElementsGetter)
+			->setHasCursorWhenEmpty(hasCursorWhenEmptyGetter)
+			->setNotLocationEquivalentCursors(notLocationEquivalentGetter)
+			->setNoBoudaryCursors(noBoundaryCursorsGetter)
+			->setNoInnerCursors(noInnerCursorsGetter)
+			->setListOfNodes(listOfNodesGetter));
+}
+
+int VList::determineForm()
+{
+	determineRange();
+	if (style()->itemsStyle().isHorizontal()) return 0;
+	else return 1;
 }
 
 }

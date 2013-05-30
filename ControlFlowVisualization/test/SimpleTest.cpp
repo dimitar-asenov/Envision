@@ -73,24 +73,21 @@ Method* addComplicated(Model::Model* model, Class* parent)
 
 	met->setName("complicated");
 
-	VariableDeclaration* a = new VariableDeclaration();
+	VariableDeclarationExpression* a = new VariableDeclarationExpression("a");
 	met->items()->append(new ExpressionStatement(a));
-	a->setName("a");
-	a->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
+	a->decl()->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
 
-	VariableDeclaration* b = new VariableDeclaration();
+	VariableDeclarationExpression* b = new VariableDeclarationExpression("b");
 	met->items()->append(new ExpressionStatement(b));
-	b->setName("b");
-	b->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_INT));
-	b->setInitialValue(new IntegerLiteral(1000));
+	b->decl()->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_INT));
+	b->decl()->setInitialValue(new IntegerLiteral(1000));
 
 	LoopStatement* loop = new LoopStatement();
 	met->items()->append(loop);
-	VariableDeclaration* initStep = new VariableDeclaration();
+	VariableDeclarationExpression* initStep = new VariableDeclarationExpression("i");
 	loop->setInitStep(initStep);
-	initStep->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
-	initStep->setName("i");
-	initStep->setInitialValue(new IntegerLiteral(0));
+	initStep->decl()->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
+	initStep->decl()->setInitialValue(new IntegerLiteral(0));
 	BinaryOperation* loopCondition = new BinaryOperation();
 	loop->setCondition(loopCondition);
 	loopCondition->setLeft(new ReferenceExpression("i"));
@@ -192,19 +189,17 @@ Method* addDivBySix(Model::Model* model, Class* parent)
 	argType->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
 	arg->setTypeExpression(argType);
 
-	VariableDeclaration* result = new VariableDeclaration();
+	VariableDeclarationExpression* result = new VariableDeclarationExpression("result");
 	divbysix->items()->append(new ExpressionStatement(result));
-	result->setName("result");
-	result->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
-	result->setInitialValue(new IntegerLiteral(-1));
+	result->decl()->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
+	result->decl()->setInitialValue(new IntegerLiteral(-1));
 
 	LoopStatement* sixloop = new LoopStatement();
 	divbysix->items()->append(sixloop);
-	VariableDeclaration* sixLoopInit = new VariableDeclaration();
+	VariableDeclarationExpression* sixLoopInit = new VariableDeclarationExpression("i");
 	sixloop->setInitStep(sixLoopInit);
-	sixLoopInit->setName("i");
-	sixLoopInit->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
-	sixLoopInit->setInitialValue(new IntegerLiteral(0));
+	sixLoopInit->decl()->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
+	sixLoopInit->decl()->setInitialValue(new IntegerLiteral(0));
 	BinaryOperation* sixLoopCond = new BinaryOperation();
 	sixloop->setCondition(sixLoopCond);
 	sixLoopCond->setLeft(new ReferenceExpression("i"));
@@ -219,12 +214,11 @@ Method* addDivBySix(Model::Model* model, Class* parent)
 	sixLoopUpdate->setOp(AssignmentExpression::PLUS_ASSIGN);
 	sixLoopUpdate->setRight(new IntegerLiteral(1));
 
-	VariableDeclaration* n = new VariableDeclaration();
+	VariableDeclarationExpression* n = new VariableDeclarationExpression("n");
 	sixloop->body()->append(new ExpressionStatement(n));
-	n->setName("n");
-	n->setVarType(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
+	n->decl()->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
 	BinaryOperation* item = new BinaryOperation();
-	n->setInitialValue(item);
+	n->decl()->setInitialValue(item);
 	item->setLeft(new ReferenceExpression("numbers"));
 	item->setOp(BinaryOperation::ARRAY_INDEX);
 	item->setRight(new ReferenceExpression("i"));

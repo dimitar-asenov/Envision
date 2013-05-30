@@ -24,13 +24,18 @@
  **
  **********************************************************************************************************************/
 
-#include "string_offset_providers/StringOffsetProvider.h"
-#include "string_components/StringComponents.h"
+#include "StringOffsetProvider.h"
+#include "StringComponents.h"
+#include "GridBasedOffsetProvider.h"
+#include "TextRendererStringOffsetProvider.h"
 
+#include "OOModel/src/expressions/Expression.h"
 #include "VisualizationBase/src/cursor/LayoutCursor.h"
 #include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/items/Item.h"
-#include "ModelBase/src/adapter/AdapterManager.h"
+#include "VisualizationBase/src/items/TextRenderer.h"
+#include "Core/src/AdapterManager.h"
+#include "VisualizationBase/src/items/LayoutProvider.h"
 
 namespace OOInteraction {
 
@@ -57,16 +62,7 @@ QStringList StringOffsetProvider::components()
 QStringList StringOffsetProvider::components(Model::Node* node)
 {
 	if (!node) return QStringList();
-
-	QStringList result;
-	StringComponents* sc = Model::AdapterManager::adapt<StringComponents>(node);
-	if (sc)
-	{
-		result = sc->components();
-		SAFE_DELETE(sc);
-	}
-
-	return result;
+	else return StringComponents(node).components();
 }
 
 QString StringOffsetProvider::stringFromComponenets(Model::Node* node)
@@ -88,7 +84,7 @@ QString StringOffsetProvider::stringFromStringOffsetProvider(Visualization::Item
 	if (!item) return QString();
 
 	QString result;
-	StringOffsetProvider* sp = Model::AdapterManager::adapt<StringOffsetProvider>(item);
+	StringOffsetProvider* sp = Core::AdapterManager::adapt<StringOffsetProvider>(item);
 	if (sp)
 	{
 		result = sp->string();
@@ -106,7 +102,7 @@ bool StringOffsetProvider::isIndivisible()
 bool StringOffsetProvider::setOffsetInItem(int offset, Visualization::Item* item)
 {
 	if (!item) return false;
-	auto child = Model::AdapterManager::adapt<StringOffsetProvider>(item);
+	auto child = Core::AdapterManager::adapt<StringOffsetProvider>(item);
 	if (child)
 	{
 		if (offset > 0 && child->isIndivisible()) child->setOffset(child->string().length());
@@ -119,14 +115,13 @@ bool StringOffsetProvider::setOffsetInItem(int offset, Visualization::Item* item
 
 int StringOffsetProvider::itemOffset(Visualization::Item* item, int stringComponentLenght, Qt::Key key)
 {
-	StringOffsetProvider* child = Model::AdapterManager::adapt<StringOffsetProvider>(item);
-	int offset = 0;
-	if (child)
-	{
-		offset = child->offset(key);
-		if (offset > 0 && child->isIndivisible()) offset = stringComponentLenght;
-		SAFE_DELETE(child);
-	}
+	StringOffsetProvider* child = Core::AdapterManager::adapt<StringOffsetProvider>(item);
+	Q_ASSERT(child);
+
+	int offset = child->offset(key);
+	if (offset > 0 && child->isIndivisible()) offset = stringComponentLenght;
+	SAFE_DELETE(child);
+
 	return offset;
 }
 
@@ -171,9 +166,9 @@ int StringOffsetProvider::listItemOffset(Visualization::VList* list,
 	QStringList components = StringOffsetProvider::components(list->node());
 
 	int result = prefix.size();
-	if (list->scene()->mainCursor() && list->scene()->mainCursor()->owner() == list->layout())
+	if (list->scene()->mainCursor() && list->scene()->mainCursor()->owner() == list)
 	{
-		int index = list->layout()->correspondingSceneCursor<Visualization::LayoutCursor>()->index();
+		int index = list->correspondingSceneCursor<Visualization::LayoutCursor>()->index();
 
 		if (index < 0) result = 0;
 		else
@@ -208,6 +203,19 @@ int StringOffsetProvider::listItemOffset(Visualization::VList* list,
 	}
 
 	return result;
+}
+
+StringOffsetProvider* StringOffsetProvider::defaultProvider(Visualization::Item* item)
+{
+	if ( GridBasedOffsetProvider::hasGridConstructorFor(item)) return new GridBasedOffsetProvider(item);
+	if ( auto tr = dynamic_cast<Visualization::TextRenderer*>(item)) return new TextRendererStringOffsetProvider(tr);
+
+	// TODO: The next condition is a bit flaky. Find a way to improve that. Perhaps with information regarding the parent
+	// class, which is always a form of VExpression<...>
+	if ( !dynamic_cast<OOModel::Expression*>(item->node()) ) return nullptr;
+	if ( dynamic_cast<Visualization::LayoutProvider<>*>(item) )	return new GridBasedOffsetProvider(item);
+
+	return nullptr;
 }
 
 } /* namespace OOInteraction */

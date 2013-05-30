@@ -34,9 +34,9 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, BinaryOperation)
 
 namespace OOModel {
 
-class OOMODEL_API BinaryOperation: public Expression
+class OOMODEL_API BinaryOperation: public Super<Expression>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(BinaryOperation)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(BinaryOperation)
 
 	ATTRIBUTE(Expression, left, setLeft)
 	ATTRIBUTE(Expression, right, setRight)
@@ -45,7 +45,7 @@ class OOMODEL_API BinaryOperation: public Expression
 	public:
 		enum OperatorTypes { TIMES, DIVIDE, REMAINDER, PLUS, MINUS, LEFT_SHIFT, RIGHT_SHIFT_SIGNED, RIGHT_SHIFT_UNSIGNED,
 			LESS, GREATER, LESS_EQUALS, GREATER_EQUALS, EQUALS, NOT_EQUALS, XOR, AND, OR, CONDITIONAL_AND, CONDITIONAL_OR,
-			ARRAY_INDEX };
+			ARRAY_INDEX, POINTER_TO_MEMBER, POINTER_POINTER_TO_MEMBER };
 
 		OperatorTypes op() const;
 		void setOp(const OperatorTypes& oper);

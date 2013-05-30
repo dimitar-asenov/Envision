@@ -31,12 +31,12 @@ namespace Visualization {
 ITEM_COMMON_DEFINITIONS(SVGIcon, "icon")
 
 SVGIcon::SVGIcon(Item* parent, const QString& iconStyleName) :
-	Icon(parent, itemStyles().get(iconStyleName))
+Super(parent, itemStyles().get(iconStyleName))
 {
 }
 
 SVGIcon::SVGIcon(Item* parent, const SVGIconStyle *style) :
-	Icon(parent, style)
+Super(parent, style)
 {
 }
 

@@ -25,7 +25,7 @@
  **********************************************************************************************************************/
 
 #include "ClassType.h"
-#include "../top_level/Class.h"
+#include "../declarations/Class.h"
 
 namespace OOModel {
 

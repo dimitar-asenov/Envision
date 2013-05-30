@@ -28,21 +28,53 @@
 #include "Cell.h"
 #include "../OOInteractionException.h"
 
+
 #include "VisualizationBase/src/items/LayoutProvider.h"
 #include "VisualizationBase/src/layouts/SequentialLayout.h"
 #include "VisualizationBase/src/cursor/LayoutCursor.h"
 
 namespace OOInteraction {
 
+QMap<int, void (*)(GridBasedOffsetProvider* provider, Visualization::Item* item)>&
+		GridBasedOffsetProvider::gridConstructors()
+{
+	static QMap<int, void (*)(GridBasedOffsetProvider* provider, Visualization::Item* item)> map;
+	return map;
+}
+
 GridBasedOffsetProvider::GridBasedOffsetProvider(Visualization::Item* vis)
 	: StringOffsetProvider(vis)
 {
+	auto gridConstructor = gridConstructors().find(vis->typeId());
+	if (gridConstructor != gridConstructors().end())
+	{
+		(*gridConstructor)(this, vis);
+		return;
+	}
+
+	// See if this item uses a sequential layout and use a standard way to handle it
+	if (auto layoutProvider = dynamic_cast<Visualization::LayoutProvider<>*>(vis))
+	{
+		setFilterNullAndEmptyComponents();
+		for(int i = 0; i < layoutProvider->layout()->length(); ++i)
+			add(new Cell(i, layoutProvider->layout()->at<Visualization::Item>(i), i));
+
+		return;
+	}
+
+	throw OOInteractionException("Creating an unknown GridBasedOffsetProvider for a visualization of type " +
+			vis->typeName());
 }
 
 GridBasedOffsetProvider::~GridBasedOffsetProvider()
 {
 	for (auto c : cells_) SAFE_DELETE(c);
 	cells_.clear();
+}
+
+bool GridBasedOffsetProvider::hasGridConstructorFor(Visualization::Item* item)
+{
+	return (gridConstructors().find(item->typeId()) != gridConstructors().end());
 }
 
 void GridBasedOffsetProvider::add(Cell* cell)
@@ -160,7 +192,7 @@ int GridBasedOffsetProvider::offset(Qt::Key key)
 	// None of the cells has the cursor. Try a sequential layout.
 	if (!target)
 	{
-		auto layout_provider = dynamic_cast<Visualization::LayoutProvider<Visualization::SequentialLayout>*>(item());
+		auto layout_provider = dynamic_cast<Visualization::LayoutProvider<>*>(item());
 		if (layout_provider && layout_provider->scene()->mainCursor()->owner() == layout_provider->layout())
 		{
 			int index = layout_provider->layout()->correspondingSceneCursor<Visualization::LayoutCursor>()->index();
@@ -269,6 +301,28 @@ void GridBasedOffsetProvider::setOffset(int newOffset)
 	// TODO choose a cell in possibly a smarter way
 	if (indexCell) indexCell->setOffset(offset);
 	else nextCell->setOffset(0);
+}
+
+QStringList GridBasedOffsetProvider::components()
+{
+	QStringList components = StringOffsetProvider::components();
+
+	if (filterNullAndEmptyComponents_)
+	{
+		auto layoutProvider = dynamic_cast<Visualization::LayoutProvider<>*>(item());
+		Q_ASSERT(layoutProvider);
+
+		if (components.size() != layoutProvider->layout()->length())
+		{
+			for (int i = components.size() - 1; i>=0; --i)
+				if (components[i].isNull())
+					components.removeAt(i);
+		}
+		if (components.size() != layoutProvider->layout()->length())
+			components.removeAll(QString(""));
+	}
+
+	return components;
 }
 
 } /* namespace OOInteraction */

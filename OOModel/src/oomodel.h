@@ -26,7 +26,6 @@
 
 #pragma once
 
-#include "ModelBase/src/InitializationRegistry.h"
 #include "Core/src/EnvisionPlugin.h"
 #include "oomodel_api.h"
 
@@ -51,6 +50,6 @@ class OOModel : public QObject, public Core::EnvisionPlugin
 		virtual void selfTest(QString testid) override;
 };
 
-OOMODEL_API Model::InitializationRegistry& nodeTypeInitializationRegistry();
+OOMODEL_API Core::InitializationRegistry& nodeTypeInitializationRegistry();
 
 }

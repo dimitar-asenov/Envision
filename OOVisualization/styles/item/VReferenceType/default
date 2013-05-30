@@ -1,0 +1,4 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/VUnaryOperation/default.operand">
+	<postSymbol prototypes="item/Symbol/default"><symbol>&amp;</symbol></postSymbol>
+</style>

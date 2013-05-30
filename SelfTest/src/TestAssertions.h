@@ -157,20 +157,27 @@
 
 /**********************************************************************************************************************/
 #define CHECK_FOR_EXCEPTION( exception, statement )																						\
+{																																							\
+	bool oldAssertOnThrow = exception::assertOnThrow();																					\
+	exception::assertOnThrow() = false;																											\
 	try																																					\
 	{																																						\
 		statement;																																		\
+		exception::assertOnThrow() = oldAssertOnThrow;																						\
 		allChecksPassedFlag = false;																												\
 		QString message = getName() + "\t" + __FILE__ + ":" + QString::number(__LINE__) + "\t";								\
 		message += "Exception " #exception " was expected but did not occur";														\
 		testResults.addFailedCheck(message);																									\
 	} catch (exception &e)																															\
 	{																																						\
+		exception::assertOnThrow() = oldAssertOnThrow;																						\
 		testResults.addPassedCheck();																												\
 	} catch (...)																																		\
 	{																																						\
+		exception::assertOnThrow() = oldAssertOnThrow;																						\
 		allChecksPassedFlag = false;																												\
 		testResults.addFailedCheck(getName() + "\t" + __FILE__ + ":" + QString::number(__LINE__) + " Uncaught exception");	\
 		throw;																																			\
-	}
+	}																																						\
+}
 /**********************************************************************************************************************/

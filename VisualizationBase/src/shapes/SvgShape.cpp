@@ -32,7 +32,7 @@ namespace Visualization {
 SHAPE_COMMON_DEFINITIONS(SvgShape, "shape")
 
 SvgShape::SvgShape(Item *parent, StyleType *style) :
-	Shape(parent, style)
+	Super(parent, style)
 {
 }
 
@@ -56,13 +56,13 @@ void SvgShape::update()
 
 int SvgShape::contentLeft()
 {
-	int outterWidth = sizeSpecified() == OutterSize ? width() : Shape::outterSize(width(), height()).width();
+	int outterWidth = sizeSpecified() == OutterSize ? width() : Super::outterSize(width(), height()).width();
 	return xOffset() + std::ceil(outterWidth*style()->leftContentMarginFraction());
 }
 
 int SvgShape::contentTop()
 {
-	int outterHeight = sizeSpecified() == OutterSize ? height() : Shape::outterSize(width(), height()).height();
+	int outterHeight = sizeSpecified() == OutterSize ? height() : Super::outterSize(width(), height()).height();
 	return yOffset() + std::ceil(outterHeight*style()->topContentMarginFraction());
 }
 

@@ -1,0 +1,10 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/Item/default">
+	<layout prototypes="layout/SequentialLayout/default">
+		<spaceBetweenElements>5</spaceBetweenElements>
+	</layout>
+	<name prototypes="item/Text/default" />
+	<assignmentSymbol prototypes="item/Symbol/default">
+		<symbol>←</symbol>
+	</assignmentSymbol>
+</style>

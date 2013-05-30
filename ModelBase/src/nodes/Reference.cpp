@@ -34,16 +34,14 @@ DEFINE_TYPED_LIST(Model::Reference)
 
 namespace Model {
 
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(Reference, Node)
+NODE_DEFINE_TYPE_REGISTRATION_METHODS(Reference)
 
-Reference::Reference(Node *parent) :
-	Node(parent), target_()
+Reference::Reference(Node *parent) : Super(parent), target_()
 {
 	manageUnresolvedReferencesListInModel();
 }
 
-Reference::Reference(Node *parent, PersistentStore &store, bool) :
-	Node(parent), target_()
+Reference::Reference(Node *parent, PersistentStore &store, bool) : Super(parent), target_()
 {
 	name_ = store.loadReferenceValue(this);
 	manageUnresolvedReferencesListInModel();

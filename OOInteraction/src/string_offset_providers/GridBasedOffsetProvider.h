@@ -38,8 +38,8 @@ class OOINTERACTION_API GridBasedOffsetProvider : public StringOffsetProvider {
 		GridBasedOffsetProvider(Visualization::Item* vis);
 		~GridBasedOffsetProvider();
 
-		virtual int offset(Qt::Key key);
-		virtual void setOffset(int newOffset);
+		virtual int offset(Qt::Key key) override;
+		virtual void setOffset(int newOffset) override;
 
 		/**
 		 * Adds the cell \a cell to the grid of this string provider.
@@ -55,9 +55,18 @@ class OOINTERACTION_API GridBasedOffsetProvider : public StringOffsetProvider {
 		 */
 		void setSize(int width, int height);
 
+		template <class T> static void addGridConstructor(void(*constructor)(GridBasedOffsetProvider* provider, T* item));
+		static bool hasGridConstructorFor(Visualization::Item* item);
+
+		void setFilterNullAndEmptyComponents();
+
+	protected:
+		virtual QStringList components() override;
+
 	private:
 		QList<Cell*> cells_;
 		QSize size_;
+		bool filterNullAndEmptyComponents_{};
 
 		enum Direction {Left, Up, Right, Down};
 		Cell* findCell(const QRect& start, Direction dir) const;
@@ -66,8 +75,19 @@ class OOINTERACTION_API GridBasedOffsetProvider : public StringOffsetProvider {
 		bool isOnLeft(Cell* cell) const;
 		bool isOnBottom(Cell* cell) const;
 		bool isOnRight(Cell* cell) const;
+
+		using ItemTypeRegistrationFunction = void (*)(GridBasedOffsetProvider* provider, Visualization::Item* item);
+		static QMap<int, ItemTypeRegistrationFunction>& gridConstructors();
 };
 
+template <class T>
+inline void GridBasedOffsetProvider::addGridConstructor(void(*constructor)(GridBasedOffsetProvider* provider, T* item))
+{
+	Q_ASSERT(!gridConstructors().contains(T::typeIdStatic()));
+	gridConstructors().insert(T::typeIdStatic(), reinterpret_cast<ItemTypeRegistrationFunction>(constructor) );
+}
+
+inline void GridBasedOffsetProvider::setFilterNullAndEmptyComponents() { filterNullAndEmptyComponents_ = true;}
 inline void GridBasedOffsetProvider::setSize(int width, int height) { size_.setWidth(width); size_.setHeight(height); }
 
 } /* namespace OOInteraction */

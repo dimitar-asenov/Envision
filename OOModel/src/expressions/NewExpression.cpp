@@ -32,11 +32,18 @@ DEFINE_TYPED_LIST(OOModel::NewExpression)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(NewExpression, Expression)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(NewExpression, Expression)
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(NewExpression)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(NewExpression)
 
 REGISTER_ATTRIBUTE(NewExpression, newType, Expression, false, false, true)
 REGISTER_ATTRIBUTE(NewExpression, amount, Expression, false, true, true)
+
+NewExpression::NewExpression(Expression* type, Expression* amount)
+: Super{nullptr, NewExpression::getMetaData()}
+{
+	setNewType(type);
+	if (amount) setAmount(amount);
+}
 
 Type* NewExpression::type()
 {

@@ -25,7 +25,7 @@
  **********************************************************************************************************************/
 
 #include "EnvisionApplication.h"
-#include "DefaultEnvisionManager.h"
+#include "EnvisionManager.h"
 
 namespace Core {
 
@@ -33,9 +33,9 @@ EnvisionApplication::EnvisionApplication(int& argc, char** argv) : QApplication(
 
 bool EnvisionApplication::notify(QObject* receiver, QEvent* event)
 {
-	DefaultEnvisionManager::processPreEventActions(receiver, event);
+	EnvisionManager::processPreEventActions(receiver, event);
 	auto res = QApplication::notify(receiver, event);
-	DefaultEnvisionManager::processPostEventActions(receiver, event);
+	EnvisionManager::processPostEventActions(receiver, event);
 	return res;
 }
 

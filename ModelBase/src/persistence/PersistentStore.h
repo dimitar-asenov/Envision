@@ -78,7 +78,7 @@ class MODELBASE_API PersistentStore
 		 */
 		virtual QString loadReferenceValue(Reference* r) = 0;
 
-		virtual ~PersistentStore() {};
+		virtual ~PersistentStore();
 };
 
 }

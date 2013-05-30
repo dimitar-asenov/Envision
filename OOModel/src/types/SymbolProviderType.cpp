@@ -36,7 +36,8 @@ SymbolProviderType::SymbolProviderType(Model::Node* symbolProviderNode, bool isV
 bool SymbolProviderType::equals(const Type* other) const
 {
 	if (auto ct = dynamic_cast<const SymbolProviderType*>(other))
-		return symbolProvider() != nullptr && symbolProvider() == ct->symbolProvider();
+		return symbolProvider() != nullptr && symbolProvider() == ct->symbolProvider()
+				&& qualifiers() == other->qualifiers();
 
 	return false;
 }

@@ -1,7 +1,6 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/Item/default">
 	<statics>
-		<length>9</length>
 		<e0 prototypes="default.type">
 			<symbol>int</symbol>
 		</e0>

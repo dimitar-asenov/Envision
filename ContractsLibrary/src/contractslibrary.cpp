@@ -32,14 +32,19 @@
 
 #include "OOInteraction/src/handlers/HExpression.h"
 
-#include "ModelBase/src/adapter/AdapterManager.h"
-
 Q_EXPORT_PLUGIN2( contractslibrary, ContractsLibrary::ContractsLibrary )
 
 namespace ContractsLibrary {
 
+Core::InitializationRegistry& itemTypeInitializationRegistry()
+{
+	static Core::InitializationRegistry r;
+	return r;
+}
+
 bool ContractsLibrary::initialize(Core::EnvisionManager&)
 {
+	itemTypeInitializationRegistry().initializeAll();
 	ValueAtReturnVisitor::init();
 
 	// Create a change monitor

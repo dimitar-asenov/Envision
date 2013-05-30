@@ -32,11 +32,12 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, ArrayTypeExpression)
 
 namespace OOModel {
 
-class OOMODEL_API ArrayTypeExpression : public TypeExpression
+class OOMODEL_API ArrayTypeExpression : public Super<TypeExpression>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(ArrayTypeExpression)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(ArrayTypeExpression)
 
 	ATTRIBUTE(Expression, typeExpression, setTypeExpression)
+	ATTRIBUTE(Expression, fixedSize, setFixedSize)
 
 	public:
 		virtual Type* type();

@@ -72,5 +72,38 @@
 		<width>60</width>
 		<height>60</height>
 	</icon>
-	<content prototypes="layout/PositionLayout/default" />
+	<content prototypes="layout/SequentialLayout/default">
+		<direction>2</direction>
+		<alignment>1</alignment>
+		<spaceBetweenElements>5</spaceBetweenElements>
+	</content>
+	<body prototypes="layout/PositionLayout/default" />
+	<fields prototypes="item/VList/default">
+		<shape prototypes="shape/Box/default">
+			Box
+			<outline>
+				<width>1</width>
+				<color>
+					<alpha>255</alpha>
+					<red>160</red>
+					<green>160</green>
+					<blue>160</blue>
+				</color>
+			</outline>
+			<cornerRadius>1</cornerRadius>
+			<cornerType>0</cornerType>
+			<backgroundBrush>
+				<style>1</style>
+				<color>
+					<alpha>255</alpha>
+					<red>255</red>
+					<green>255</green>
+					<blue>255</blue>
+				</color>
+			</backgroundBrush>
+		</shape>
+		<itemsStyle prototypes="layout/SequentialLayout/default">
+			<spaceBetweenElements>20</spaceBetweenElements>
+		</itemsStyle>
+	</fields>
 </style>

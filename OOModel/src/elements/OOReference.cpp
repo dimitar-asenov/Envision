@@ -26,7 +26,7 @@
 
 #include "OOReference.h"
 #include "../expressions/ReferenceExpression.h"
-#include "../top_level/Class.h"
+#include "../declarations/Class.h"
 
 #include "../types/SymbolProviderType.h"
 
@@ -35,8 +35,8 @@ DEFINE_TYPED_LIST(OOModel::OOReference)
 
 namespace OOModel {
 
-NODE_DEFINE_EMPTY_CONSTRUCTORS(OOReference, Model::Reference)
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(OOReference, Model::Reference)
+NODE_DEFINE_EMPTY_CONSTRUCTORS(OOReference)
+NODE_DEFINE_TYPE_REGISTRATION_METHODS(OOReference)
 
 bool OOReference::resolve()
 {

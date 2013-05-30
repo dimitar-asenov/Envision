@@ -36,9 +36,9 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, SwitchStatement)
 
 namespace OOModel {
 
-class OOMODEL_API SwitchStatement: public Statement
+class OOMODEL_API SwitchStatement: public Super<Statement>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(SwitchStatement)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(SwitchStatement)
 
 	ATTRIBUTE(Expression, switchVar, setSwitchVar)
 	ATTRIBUTE(Model::TypedList<SwitchCase>, cases, setCases)

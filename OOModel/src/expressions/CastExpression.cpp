@@ -32,17 +32,24 @@ DEFINE_TYPED_LIST(OOModel::CastExpression)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(CastExpression, Expression)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(CastExpression, Expression)
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CastExpression)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CastExpression)
 
 REGISTER_ATTRIBUTE(CastExpression, castType, Expression, false, false, true)
 REGISTER_ATTRIBUTE(CastExpression, expr, Expression, false, false, true)
+REGISTER_ATTRIBUTE(CastExpression, cKind, Integer, false, false, true)
 
 Type* CastExpression::type()
 {
 	auto t = castType()->type();
 	t->setValueType(true);
 	return t;
+}
+
+CastExpression::CastExpression(CastKind castKind)
+: Super(nullptr, CastExpression::getMetaData())
+{
+	setCastKind(castKind);
 }
 
 }

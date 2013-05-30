@@ -24,19 +24,24 @@
 **
 ***********************************************************************************************************************/
 
-#include "items/Item.h"
-#include "items/ItemStyle.h"
-#include "layouts/SequentialLayout.h"
-#include "shapes/Shape.h"
-#include "shapes/ShapeStyle.h"
-#include "VisualizationException.h"
-#include "Scene.h"
+#include "Item.h"
+#include "ItemStyle.h"
+#include "../layouts/SequentialLayout.h"
+#include "../shapes/Shape.h"
+#include "../shapes/ShapeStyle.h"
+#include "../VisualizationException.h"
+#include "../Scene.h"
 #include "../renderer/ModelRenderer.h"
 #include "VisualizationAddOn.h"
 
-#include "cursor/Cursor.h"
+#include "../cursor/Cursor.h"
 
 namespace Visualization {
+
+::Core::InitializationRegistry& itemTypeInitializationRegistry();
+DEFINE_TYPE_ID_BASE(Item, itemTypeInitializationRegistry, "Item",)
+
+InteractionHandler* Item::defaultClassHandler_ = InteractionHandler::instance();
 
 int Item::registerVisualization()
 {
@@ -192,7 +197,7 @@ void Item::updateSubtree()
 	{
 		updateAddOnItems();
 		determineChildren();
-		updateChildren();
+		for (auto child : childItems()) child->updateSubtree();
 		changeGeometry();
 		if (needsUpdate_ == RepeatUpdate) needsUpdate_ = StandardUpdate;
 		else
@@ -208,16 +213,6 @@ void Item::changeGeometry(int availableWidth, int availableHeight)
 {
 	updateGeometry(availableWidth, availableHeight);
 	update();
-}
-
-void Item::updateChildren()
-{
-	QList<QGraphicsItem *> children = childItems();
-	for (QList<QGraphicsItem *>::iterator child = children.begin(); child != children.end(); ++child)
-	{
-		Item* item = static_cast<Item*> (*child);
-		item->updateSubtree();
-	}
 }
 
 void Item::updateAddOnItems()
@@ -297,7 +292,7 @@ void Item::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
 
 InteractionHandler* Item::handler() const
 {
-	return InteractionHandler::instance();
+	return defaultClassHandler();
 }
 
 void Item::execute(const QString& command)
@@ -338,11 +333,8 @@ bool Item::itemOrChildHasFocus() const
 
 Item* Item::focusedChild() const
 {
-	for(auto item : childItems())
-	{
-		Item* child = static_cast<Item*> (item);
+	for(auto child : childItems())
 		if (child->itemOrChildHasFocus()) return child;
-	}
 
 	return nullptr;
 }
@@ -414,9 +406,8 @@ Item* Item::childClosestTo(const QPoint& point, PositionConstraints childConstra
 	Item* closest = nullptr;
 	int closest_distance = 0;
 
-	for(auto item : childItems())
+	for(auto child : childItems())
 	{
-		Item* child = static_cast<Item*> (item);
 		QPoint childCoordinates = mapToItem(child, point).toPoint();
 
 		if ( (child->satisfiedPositionConstraints(childCoordinates) & childConstraint) == childConstraint)
@@ -457,10 +448,9 @@ QList<ItemRegion> Item::regions()
 
 	if (!style()->wholeItemCursor())
 	{
-		for(auto item : childItems())
+		for(auto child : childItems())
 		{
 			hasChildren = true;
-			Item* child = static_cast<Item*> (item);
 			QRect rect = child->boundingRect().toRect();
 			rect.translate(child->pos().toPoint());
 			regs.append(ItemRegion(rect));
@@ -734,6 +724,14 @@ void Item::setSize(const QSizeF& size)
 		prepareGeometryChange();
 		boundingRect_.setSize(size);
 	}
+}
+
+QList<Item*> Item::childItems() const
+{
+	// TODO: This is rather ugly and dangerous. Is there a better way to achieve this without a performance penalty?
+	auto && children = QGraphicsItem::childItems();
+	auto && ch = reinterpret_cast<QList<Item*>*>(&children);
+	return *ch;
 }
 
 /***********************************************************************************************************************

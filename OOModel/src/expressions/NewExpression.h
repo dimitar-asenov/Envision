@@ -32,14 +32,17 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, NewExpression)
 
 namespace OOModel {
 
-class OOMODEL_API NewExpression: public Expression
+class OOMODEL_API NewExpression: public Super<Expression>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(NewExpression)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(NewExpression)
 
 	ATTRIBUTE(Expression, newType, setNewType)
 	ATTRIBUTE(Expression, amount, setAmount)
 
 	public:
+
+		NewExpression(Expression* type, Expression* amount = nullptr);
+
 		virtual Type* type();
 };
 

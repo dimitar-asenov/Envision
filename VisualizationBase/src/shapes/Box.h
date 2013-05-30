@@ -33,7 +33,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API Box: public Shape
+class VISUALIZATIONBASE_API Box: public Super<Shape>
 {
 	SHAPE_COMMON(Box)
 

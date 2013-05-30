@@ -1,7 +1,9 @@
 /Envision
+/Envision.exe
 /styles
 /plugins
 /core
 /qt
 /callgrind.out.*
 /test
+/projects

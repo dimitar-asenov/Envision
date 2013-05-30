@@ -33,15 +33,13 @@ DEFINE_TYPED_LIST(Model::Integer)
 
 namespace Model {
 
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(Integer, Node)
+NODE_DEFINE_TYPE_REGISTRATION_METHODS(Integer)
 
-Integer::Integer(Node *parent) :
-	Node(parent), integer(0)
+Integer::Integer(Node *parent) : Super(parent), integer(0)
 {
 }
 
-Integer::Integer(Node *parent, PersistentStore &store, bool) :
-	Node(parent)
+Integer::Integer(Node *parent, PersistentStore &store, bool) : Super(parent)
 {
 	integer = store.loadIntValue();
 }

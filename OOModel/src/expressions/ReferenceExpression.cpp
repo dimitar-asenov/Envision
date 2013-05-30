@@ -25,13 +25,12 @@
 ***********************************************************************************************************************/
 
 #include "expressions/ReferenceExpression.h"
-#include "expressions/VariableDeclaration.h"
+#include "expressions/VariableDeclarationExpression.h"
 #include "statements/ExpressionStatement.h"
-#include "top_level/Project.h"
-#include "top_level/Library.h"
-#include "top_level/Module.h"
-#include "top_level/Class.h"
-#include "top_level/Field.h"
+#include "declarations/Project.h"
+#include "declarations/Module.h"
+#include "declarations/Class.h"
+#include "declarations/Field.h"
 #include "../types/SymbolProviderType.h"
 #include "../types/ClassType.h"
 #include "../types/ErrorType.h"
@@ -41,15 +40,15 @@ DEFINE_TYPED_LIST(OOModel::ReferenceExpression)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(ReferenceExpression, Expression)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(ReferenceExpression, Expression)
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(ReferenceExpression)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(ReferenceExpression)
 
 REGISTER_ATTRIBUTE(ReferenceExpression, prefix, Expression, false, true, true)
 REGISTER_ATTRIBUTE(ReferenceExpression, ref, OOReference, false, false, true)
 REGISTER_ATTRIBUTE(ReferenceExpression, typeArguments, TypedListOfExpression, false, false, true)
 
 ReferenceExpression::ReferenceExpression(const QString& name, Expression* prefix)
-: Expression(nullptr, ReferenceExpression::getMetaData())
+: Super(nullptr, ReferenceExpression::getMetaData())
 {
 	ref()->setName(name);
 	if (prefix != nullptr) setPrefix(prefix);
@@ -62,13 +61,11 @@ Type* ReferenceExpression::type()
 
 	if ( auto project = dynamic_cast<Project*>( ref()->target() ) )
 		return new SymbolProviderType(project, false);
-	else if ( auto library = dynamic_cast<Library*>( ref()->target() ) )
-		return new SymbolProviderType(library, false);
 	else if ( auto module = dynamic_cast<Module*>( ref()->target() ) )
 		return new SymbolProviderType(module, false);
 	else if ( auto cl = dynamic_cast<Class*>( ref()->target() ) )
 		return new ClassType(cl, false);
-	else if ( auto vdecl = dynamic_cast<VariableDeclaration*>( ref()->target() ) )
+	else if ( auto vdecl = dynamic_cast<VariableDeclarationExpression*>( ref()->target() ) )
 	{
 		auto t = vdecl->type();
 		t->setValueType(true);
@@ -76,7 +73,7 @@ Type* ReferenceExpression::type()
 	}
 	else if ( auto expSt = dynamic_cast<ExpressionStatement*>( ref()->target() ))
 	{
-		if ( auto vdecl = dynamic_cast<VariableDeclaration*>( expSt->expression() ) )
+		if ( auto vdecl = dynamic_cast<VariableDeclarationExpression*>( expSt->expression() ) )
 		{
 			auto t = vdecl->type();
 			t->setValueType(true);

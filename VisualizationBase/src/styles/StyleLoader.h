@@ -111,15 +111,18 @@ template <class T> void StyleLoader::loadComposite(QVector<T>& value)
 
 template <typename T> void StyleLoader::loadComposite(QList<T>& value)
 {
-	int length;
-	load("length", length);
-
 	value.clear();
-	for(int i = 0; i< length; ++i)
+	for(int i = 0; ; ++i)
 	{
-		T element;
-		load("e"+QString::number(i), element);
-		value.append(element);
+		auto elementName = "e"+QString::number(i);
+
+		if (hasProperty(elementName))
+		{
+			T element;
+			load(elementName, element);
+			value.append(element);
+		}
+		else break;
 	}
 }
 

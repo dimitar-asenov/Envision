@@ -28,9 +28,9 @@
 
 namespace TestNodes {
 
-Model::InitializationRegistry& nodeTypeInitializationRegistry()
+Core::InitializationRegistry& nodeTypeInitializationRegistry()
 {
-	static Model::InitializationRegistry r;
+	static Core::InitializationRegistry r;
 	return r;
 }
 

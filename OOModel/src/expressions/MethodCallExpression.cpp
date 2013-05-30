@@ -25,8 +25,8 @@
 ***********************************************************************************************************************/
 
 #include "expressions/MethodCallExpression.h"
-#include "top_level/Class.h"
-#include "top_level/Method.h"
+#include "declarations/Class.h"
+#include "declarations/Method.h"
 #include "../types/PrimitiveType.h"
 #include "../types/ErrorType.h"
 
@@ -35,14 +35,14 @@ DEFINE_TYPED_LIST(OOModel::MethodCallExpression)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(MethodCallExpression, Expression)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(MethodCallExpression, Expression)
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(MethodCallExpression)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(MethodCallExpression)
 
 REGISTER_ATTRIBUTE(MethodCallExpression, ref, ReferenceExpression, false, false, true)
 REGISTER_ATTRIBUTE(MethodCallExpression, arguments, TypedListOfExpression, false, false, true)
 
 MethodCallExpression::MethodCallExpression(const QString& name, Expression* prefix)
-: Expression(nullptr, MethodCallExpression::getMetaData())
+: Super(nullptr, MethodCallExpression::getMetaData())
 {
 	ref()->setName(name);
 	if (prefix != nullptr) ref()->setPrefix(prefix);

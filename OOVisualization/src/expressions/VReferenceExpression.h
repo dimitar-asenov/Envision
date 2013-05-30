@@ -28,10 +28,9 @@
 
 #include "../oovisualization_api.h"
 #include "VReferenceExpressionStyle.h"
+#include "VExpression.h"
 
 #include "OOModel/src/expressions/ReferenceExpression.h"
-
-#include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/items/LayoutProvider.h"
 
 namespace Visualization {
@@ -42,8 +41,8 @@ namespace Visualization {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VReferenceExpression : public Visualization::ItemWithNode< Visualization::LayoutProvider<>,
-OOModel::ReferenceExpression>
+class OOVISUALIZATION_API VReferenceExpression : public Super<VExpression<VReferenceExpression,
+	Visualization::LayoutProvider<>, OOModel::ReferenceExpression>>
 {
 	ITEM_COMMON(VReferenceExpression)
 
@@ -60,8 +59,6 @@ OOModel::ReferenceExpression>
 		void determineChildren();
 
 	private:
-		typedef Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::ReferenceExpression> BaseItemType;
-
 		Visualization::Text* name_;
 		Visualization::Static* separator_;
 		Visualization::Item* prefix_;

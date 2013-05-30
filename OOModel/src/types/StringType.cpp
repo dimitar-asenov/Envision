@@ -33,7 +33,7 @@ StringType::StringType() : Type(true)
 
 bool StringType::equals(const Type* other) const
 {
-	return dynamic_cast<const StringType*>(other);
+	return dynamic_cast<const StringType*>(other) && qualifiers() == other->qualifiers();
 }
 
 StringType* StringType::clone() const

@@ -32,7 +32,7 @@ namespace Visualization {
 SHAPE_COMMON_DEFINITIONS(Braces, "shape")
 
 Braces::Braces(Item *parent, StyleType *style) :
-	Shape(parent, style), contentTop_(0), contentLeft_(0), textSize_(2)
+	Super(parent, style), contentTop_(0), contentLeft_(0), textSize_(2)
 {
 }
 

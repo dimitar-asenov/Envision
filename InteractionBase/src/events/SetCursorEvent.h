@@ -53,6 +53,7 @@ class INTERACTIONBASE_API SetCursorEvent : public Visualization::CustomSceneEven
 
 		SetCursorEvent(Visualization::Item* itemToGetCursor, CursorPlacement placement = CursorDefault,
 				bool showPrompt = false);
+		SetCursorEvent(Visualization::Item* itemToGetCursor, QPoint point, bool showPrompt = false);
 		SetCursorEvent(GetItemFunction getItemToFocus, CursorPlacement placement = CursorDefault,
 				bool showPrompt = false);
 		SetCursorEvent(GetItemFunction getItemToFocus, GetCursorPlacement getCursorPlacement,
@@ -71,6 +72,7 @@ class INTERACTIONBASE_API SetCursorEvent : public Visualization::CustomSceneEven
 		Visualization::Scene* scene_{};
 		Model::Node* node_{};
 		CursorPlacement placement_{};
+		QPoint point_{-1,-1};
 		bool showPrompt_{false};
 };
 

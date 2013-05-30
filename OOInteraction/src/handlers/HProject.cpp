@@ -28,8 +28,8 @@
 
 #include "commands/CCreateClass.h"
 
-#include "OOVisualization/src/top_level/VProject.h"
-#include "OOModel/src/top_level/Project.h"
+#include "OOVisualization/src/declarations/VProject.h"
+#include "OOModel/src/declarations/Project.h"
 #include "FilePersistence/src/SystemClipboard.h"
 
 namespace OOInteraction {

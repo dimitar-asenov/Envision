@@ -31,10 +31,10 @@ DEFINE_TYPED_LIST(OOModel::SwitchCase)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(SwitchCase, Model::ExtendableNode)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(SwitchCase, Model::ExtendableNode)
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(SwitchCase)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(SwitchCase)
 
-REGISTER_ATTRIBUTE(SwitchCase, expr, Expression, false, false, true)
+REGISTER_ATTRIBUTE(SwitchCase, expr, Expression, false, true, true)
 REGISTER_ATTRIBUTE(SwitchCase, statement, StatementItemList, false, false, true)
 
 }

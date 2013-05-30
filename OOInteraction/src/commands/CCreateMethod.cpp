@@ -26,8 +26,8 @@
 
 #include "commands/CCreateMethod.h"
 
-#include "OOModel/src/top_level/Class.h"
-#include "OOModel/src/top_level/Method.h"
+#include "OOModel/src/declarations/Class.h"
+#include "OOModel/src/declarations/Method.h"
 
 #include "InteractionBase/src/events/SetCursorEvent.h"
 

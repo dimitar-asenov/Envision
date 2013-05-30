@@ -25,9 +25,6 @@
 ***********************************************************************************************************************/
 
 #include "filepersistence.h"
-#include "ModelBase/src/test_nodes/BinaryNode.h"
-#include "ModelBase/src/test_nodes/BinaryNodePersistenceUnit.h"
-#include "ModelBase/src/test_nodes/PartialList.h"
 #include "ModelBase/src/test_nodes/TestNodesInitializer.h"
 
 #include "SelfTest/src/SelfTestSuite.h"

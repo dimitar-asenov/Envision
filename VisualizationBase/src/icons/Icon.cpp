@@ -32,7 +32,7 @@ namespace Visualization {
 ITEM_COMMON_DEFINITIONS(Icon, "icon")
 
 Icon::Icon(Item* parent, const IconStyle* style) :
-	Item(parent, style)
+Super(parent, style)
 {
 }
 

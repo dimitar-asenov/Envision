@@ -33,21 +33,18 @@ DEFINE_TYPED_LIST(Model::Text)
 
 namespace Model {
 
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(Text, Node)
+NODE_DEFINE_TYPE_REGISTRATION_METHODS(Text)
 
-Text::Text(Node *parent) :
-	Node(parent)
-{
-}
+Text::Text(Node *parent) : Super(parent)
+{}
 
-Text::Text(Node *parent, PersistentStore &store, bool) :
-	Node(parent)
+Text::Text(Node *parent, PersistentStore &store, bool) :	Super(parent)
 {
 	text = store.loadStringValue();
 }
 
 Text::Text(const QString& text) :
-	Node(nullptr)
+	Super(nullptr)
 {
 	set(text);
 }

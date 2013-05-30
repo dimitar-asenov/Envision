@@ -35,7 +35,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API VReference : public ItemWithNode<TextRenderer, Model::Reference>
+class VISUALIZATIONBASE_API VReference : public Super<ItemWithNode<VReference, TextRenderer, Model::Reference>>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VReference, TextStyle)
 
@@ -45,9 +45,6 @@ class VISUALIZATIONBASE_API VReference : public ItemWithNode<TextRenderer, Model
 
 	protected:
 		virtual QString currentText();
-
-	private:
-		typedef ItemWithNode<TextRenderer, Model::Reference> BaseItemType;
 };
 
 }

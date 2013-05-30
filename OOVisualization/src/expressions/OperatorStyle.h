@@ -67,8 +67,10 @@ class OOVISUALIZATION_API OperatorSequenceStyle : public Visualization::ItemStyl
 		void load(Visualization::StyleLoader& sl);
 
 		const OperatorStyle& op(int i) const;
+		const OperatorStyle& op(bool b) const;
 };
 
 inline const OperatorStyle& OperatorSequenceStyle::op(int i) const { return seq_.at(i); }
+inline const OperatorStyle& OperatorSequenceStyle::op(bool b) const { return b ? seq_.at(1) : seq_.first(); }
 
 }

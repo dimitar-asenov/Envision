@@ -38,7 +38,7 @@
 #include "items/VBoolean.h"
 #include "items/VFloat.h"
 #include "items/VReference.h"
-#include "items/VExtendable.h"
+#include "items/VComposite.h"
 #include "items/VList.h"
 
 #include "items/Static.h"
@@ -50,7 +50,7 @@
 #include "node_extensions/Position.h"
 #include "nodes/TestBoxNode.h"
 
-#include "ModelBase/src/test_nodes/BinaryNode.h"
+#include "ModelBase/src/test_nodes/TestNodesInitializer.h"
 #include "SelfTest/src/SelfTestSuite.h"
 
 Q_EXPORT_PLUGIN2( visualizationbase, Visualization::VisualizationBase )
@@ -58,9 +58,21 @@ Q_EXPORT_PLUGIN2( visualizationbase, Visualization::VisualizationBase )
 namespace Visualization
 {
 
-Model::InitializationRegistry& nodeTypeInitializationRegistry()
+Core::InitializationRegistry& nodeTypeInitializationRegistry()
 {
-	static Model::InitializationRegistry r;
+	static Core::InitializationRegistry r;
+	return r;
+}
+
+Core::InitializationRegistry& itemTypeInitializationRegistry()
+{
+	static Core::InitializationRegistry r;
+	return r;
+}
+
+Core::InitializationRegistry& shapeTypeInitializationRegistry()
+{
+	static Core::InitializationRegistry r;
 	return r;
 }
 
@@ -68,32 +80,15 @@ bool VisualizationBase::initialize(Core::EnvisionManager& manager)
 {
 	VisualizationManager& vmi = VisualizationManager::instance();
 	vmi.init(&manager);
-	Shape::registerShape<Box>();
-	Shape::registerShape<Diamond>();
-	Shape::registerShape<Braces>();
-	Shape::registerShape<SvgShape>();
+
+	shapeTypeInitializationRegistry().initializeAll();
 
 	// Register extensions and nodes
 	Position::registerExtension();
 	nodeTypeInitializationRegistry().initializeAll();
 
 	// Register visualizations
-	Scene::defaultRenderer()->registerVisualization(
-			Model::Text::typeIdStatic(), createVisualization<VText, Model::Text>);
-	Scene::defaultRenderer()->registerVisualization(
-			Model::Integer::typeIdStatic(), createVisualization<VInteger, Model::Integer>);
-	Scene::defaultRenderer()->registerVisualization(
-			Model::Float::typeIdStatic(), createVisualization<VFloat, Model::Float>);
-	Scene::defaultRenderer()->registerVisualization(
-			Model::Character::typeIdStatic(), createVisualization<VCharacter, Model::Character>);
-	Scene::defaultRenderer()->registerVisualization(
-			Model::Boolean::typeIdStatic(), createVisualization<VBoolean, Model::Boolean>);
-	Scene::defaultRenderer()->registerVisualization(
-			Model::Reference::typeIdStatic(), createVisualization<VReference, Model::Reference>);
-	Scene::defaultRenderer()->registerVisualization(
-			Model::ExtendableNode::typeIdStatic(), createVisualization<VExtendable, Model::ExtendableNode>);
-	Scene::defaultRenderer()->registerVisualization(
-			Model::List::typeIdStatic(), createVisualization<VList, Model::List>);
+	itemTypeInitializationRegistry().initializeAll();
 	Scene::defaultRenderer()->registerVisualization(
 			TestBoxNode::typeIdStatic(), createVisualization<TestBox, TestBoxNode>);
 
@@ -122,7 +117,7 @@ void VisualizationBase::unload()
 
 void VisualizationBase::selfTest(QString)
 {
-	TestNodes::BinaryNode::init();
+	TestNodes::nodeTypeInitializationRegistry().initializeAll();
 	SelfTest::TestManager<VisualizationBase>::runAllTests().printResultStatistics();
 }
 

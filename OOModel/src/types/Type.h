@@ -32,6 +32,13 @@ namespace OOModel {
 
 class OOMODEL_API Type {
 	public:
+
+		enum Qualifier {
+			CONST = 0x1,
+			VOLATILE = 0x2
+		};
+		Q_DECLARE_FLAGS(Qualifiers, Qualifier)
+
 		Type(bool isValueType);
 		virtual ~Type();
 
@@ -54,12 +61,21 @@ class OOMODEL_API Type {
 		virtual bool equals(const Type* other) const = 0;
 		virtual Type* clone() const = 0;
 
+		Qualifiers qualifiers() const;
+		void setQualifiers(Qualifiers q, bool enable = true);
+
 	private:
 		bool isValueType_;
+		Qualifiers qualifiers_{0};
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Type::Qualifiers)
 
 inline bool Type::isValueType() const { return isValueType_; }
 inline void Type::setValueType(bool isValueType) { isValueType_ = isValueType; }
+
+inline Type::Qualifiers Type::qualifiers() const { return qualifiers_;}
+inline void Type::setQualifiers(Qualifiers q, bool enable) {if (enable) qualifiers_ |= q; else qualifiers_ &= (~q);}
 
 
 } /* namespace OOModel */

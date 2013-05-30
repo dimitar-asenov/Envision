@@ -32,8 +32,9 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, EmptyExpression)
 
 namespace OOModel {
 
-class OOMODEL_API EmptyExpression : public Expression {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(EmptyExpression)
+class OOMODEL_API EmptyExpression : public Super<Expression>
+{
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(EmptyExpression)
 
 	public:
 		virtual Type* type();

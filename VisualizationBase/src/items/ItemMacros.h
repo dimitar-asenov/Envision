@@ -38,25 +38,23 @@
  * 			The name of the style type for this class
  */
 #define ITEM_COMMON_CUSTOM_STYLENAME( ItemClass, StyleTypeName)																		\
+DECLARE_TYPE_ID																																		\
 public:																																					\
 	typedef StyleTypeName StyleType;																												\
-	static const QString& className();																											\
-	virtual int typeId() const override;																										\
-	static int staticTypeId();																														\
 																																							\
 	const StyleType* style() const { return static_cast<const StyleType*> (Item::style()); }									\
 	virtual void setStyle(const Visualization::ItemStyle* style);																		\
 	static Visualization::StyleSet<ItemClass>& itemStyles();																				\
 																																							\
-	virtual Visualization::InteractionHandler* handler() const { return handler_; };												\
-	static void setInteractionHandler(Visualization::InteractionHandler* handler) {handler_ = handler;}					\
+	virtual Visualization::InteractionHandler* handler() const;																			\
+	static void setDefaultClassHandler(Visualization::InteractionHandler* handler) {defaultClassHandler_ = handler;}	\
+	static Visualization::InteractionHandler* defaultClassHandler() {return defaultClassHandler_;}							\
 																																							\
 	virtual QList<Visualization::VisualizationAddOn*> addOns();																			\
 	static void addAddOn(Visualization::VisualizationAddOn* addOn);																	\
 	static bool removeAddOn(Visualization::VisualizationAddOn* addOn);																\
-																																							\
 private:																																					\
-	static Visualization::InteractionHandler* handler_;																					\
+	static Visualization::InteractionHandler* defaultClassHandler_;																	\
 	static QList<Visualization::VisualizationAddOn*>& staticAddOns();
 /**********************************************************************************************************************/
 
@@ -79,7 +77,17 @@ private:																																					\
  * 			look for this item's style directory. Typical values are "item", "shape", "layout" and "icon".
  */
 #define ITEM_COMMON_DEFINITIONS( ItemClass, classType )																					\
-Visualization::InteractionHandler* ItemClass::handler_ = Visualization::InteractionHandler::instance();					\
+::Core::InitializationRegistry& itemTypeInitializationRegistry();																		\
+DEFINE_TYPE_ID_DERIVED(ItemClass, itemTypeInitializationRegistry, #ItemClass,)													\
+																																							\
+void ItemClass::initType()																															\
+{																																							\
+	if (ItemClass::typeIdVariable() < 0)																										\
+		ItemClass::typeIdVariable() = ::Visualization::Item::registerVisualization();												\
+	Super::initType();																																\
+}																																							\
+																																							\
+Visualization::InteractionHandler* ItemClass::defaultClassHandler_ =	 nullptr;													\
 																																							\
 void ItemClass::setStyle(const Visualization::ItemStyle* style_)																		\
 {																																							\
@@ -89,21 +97,10 @@ void ItemClass::setStyle(const Visualization::ItemStyle* style_)																
 	Item::setStyle(s);																																\
 }																																							\
 																																							\
-const QString& ItemClass::className()																											\
+Visualization::InteractionHandler* ItemClass::handler() const																			\
 {																																							\
-	static QString name(#ItemClass);																												\
-	return name;																																		\
-}																																							\
-																																							\
-int ItemClass::typeId() const																														\
-{																																							\
-	return staticTypeId();																															\
-}																																							\
-																																							\
-int ItemClass::staticTypeId()																														\
-{																																							\
-	static int id = ::Visualization::Item::registerVisualization();																	\
-	return id;																																			\
+	if (defaultClassHandler()) return defaultClassHandler();																				\
+	return Super::handler();																														\
 }																																							\
 																																							\
 Visualization::StyleSet<ItemClass>& ItemClass::itemStyles()																				\
@@ -131,7 +128,7 @@ QList<Visualization::VisualizationAddOn*>& ItemClass::staticAddOns()												
 																																							\
 QList<Visualization::VisualizationAddOn*> ItemClass::addOns()																			\
 {																																							\
-	QList<Visualization::VisualizationAddOn*> list(BaseItemType::addOns());															\
+	QList<Visualization::VisualizationAddOn*> list(Super::addOns());																	\
 	list.append(staticAddOns());																													\
 	return list;																																		\
 }																																							\

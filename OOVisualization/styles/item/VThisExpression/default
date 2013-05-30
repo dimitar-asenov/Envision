@@ -1,15 +1,4 @@
 <!DOCTYPE EnvisionVisualizationStyle>
-<style prototypes="item/Symbol/default">
-	<font>
-		<weight>99</weight>
-	</font>
-	<pen>t
-		<color>
-			<alpha>255</alpha>
-			<red>0</red>
-			<green>0</green>
-			<blue>255</blue>
-		</color>
-	</pen>
+<style prototypes="item/Symbol/keyword">
 	<symbol>this</symbol>
 </style>

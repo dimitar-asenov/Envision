@@ -31,18 +31,18 @@ namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(TestBox, "item")
 
-TestBox::TestBox(Item* parent, NodeType* node): TextRenderer{parent, itemStyles().get(), node->label()}, node_{node}
+TestBox::TestBox(Item* parent, NodeType* node): Super{parent, itemStyles().get(), node->label()}, node_{node}
 {}
 
-TestBox::TestBox(NodeType* node) : TextRenderer{nullptr, itemStyles().get(), node->label()}, node_{node}
+TestBox::TestBox(NodeType* node) : Super{nullptr, itemStyles().get(), node->label()}, node_{node}
 {}
 
 TestBox::TestBox(const QString& label, QColor color, bool sizeDependsOnParent)
-: TextRenderer{nullptr, itemStyles().get(), label}, color_(color), sizeDependsOnParent_(sizeDependsOnParent)
+: Super{nullptr, itemStyles().get(), label}, color_(color), sizeDependsOnParent_(sizeDependsOnParent)
 {}
 
 TestBox::TestBox(const QString& label, bool sizeDependsOnParent)
-: TextRenderer{nullptr, itemStyles().get(), label}, sizeDependsOnParent_(sizeDependsOnParent)
+: Super{nullptr, itemStyles().get(), label}, sizeDependsOnParent_(sizeDependsOnParent)
 {}
 
 bool TestBox::hasNode() const

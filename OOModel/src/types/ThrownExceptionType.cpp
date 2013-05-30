@@ -43,7 +43,8 @@ ThrownExceptionType::~ThrownExceptionType()
 bool ThrownExceptionType::equals(const Type* other) const
 {
 	if (auto at = dynamic_cast<const ThrownExceptionType*> (other))
-		return exceptionType_ != nullptr && exceptionType_->equals(at->exceptionType_);
+		return exceptionType_ != nullptr && exceptionType_->equals(at->exceptionType_)
+				 && qualifiers() == other->qualifiers();
 
 	return false;
 }

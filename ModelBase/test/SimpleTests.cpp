@@ -35,7 +35,7 @@
 
 namespace Model {
 
-TEST(ModelBase, ExtendableMetaData)
+TEST(ModelBase, CompositeMetaData)
 {
 	AttributeChain& metaExt = TestNodes::BinaryNode::getMetaData();
 	AttributeChain& metaUnit = TestNodes::BinaryNodeAccessUnit::getMetaData();

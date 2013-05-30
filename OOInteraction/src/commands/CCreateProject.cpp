@@ -26,7 +26,7 @@
 
 #include "CCreateProject.h"
 
-#include "OOModel/src/top_level/Project.h"
+#include "OOModel/src/declarations/Project.h"
 #include "VisualizationBase/src/items/RootItem.h"
 #include "InteractionBase/src/events/SetCursorEvent.h"
 

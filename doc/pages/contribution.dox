@@ -27,22 +27,21 @@ See \ref compilation "the compilation instructions".
 
 
 \section style Code style
-Qt is an excellent framework and is used throughout the Envision project. Not surprisingly Envision adopts many of the
-code style conventions of Qt. Have a look at:
-	- <a href="http://qt-project.org/wiki/Qt_Coding_Style">The Qt Coding Style</a>
-	- <a href="http://qt-project.org/wiki/Coding-Conventions">The Qt Coding Conventions</a>
-	- In addition, you might want to have a look at 
-		<a href="http://qt-project.org/wiki/API-Design-Principles">Qt's API Design Principles</a>
-		or even read the
-		<a href="http://www4.in.tum.de/~blanchet/api-design.pdf">more elaborate PDF version</a>.
+\subsection names Naming
+All names in envision plug-in should use CamelCase:
+	- The names of type definitions (classes, structs, typedefs, using, enums, etc.) should start with a capital case letter.
+	- Function, method, variable, and field names should start with a small case letter.
+	- Private members should end with a trailing underscore (e.g. \c data_, instead of \c data)
+	- Names should be descriptive, especially names of function arguments. Avoid abbreviations and shortend words. The exception
+		is the name of local variables, which can be short provided there is no ambiguity.
 
-Here a few important points, and things where Envision differs from Qt:
-	- <b>Language features</b>
-		- Strive for <a href="http://en.wikipedia.org/wiki/Const-correctness">const-correctness</a>.
-		- Use exceptions and RTTI where appropriate.
-		- Make use of the <a href="http://www.stroustrup.com/C++11FAQ.html">new C++11 features</a>.
-		- All class members should have a default initializer using the new C++11 syntax with curly braces in the class
-			declaration:
+\subsection features Language features
+	- Strive for <a href="http://en.wikipedia.org/wiki/Const-correctness">const-correctness</a>.
+	- Use exceptions and RTTI where appropriate.
+	- Avoid C casts and use C++ casts instead: (\c static_cast, \c dynamic_cast, \c const_cast, \c reinterpret_cast) 
+	- Make use of <a href="http://www.stroustrup.com/C++11FAQ.html">C++11 features</a>.
+	- All class members should have a default initializer using the new C++11 syntax with curly braces in the class
+		declaration:
 \code
 // Wrong:
 class PointAndItem
@@ -68,10 +67,10 @@ class PointAndItem
 		Item* item_{};
 }
 \endcode
-		- When reimplementing a virtual method, put the \c virtual and the \c override keywords in your method declaration.
-		- Only define private fields, never public or protected.
-		- All non-virtual methods that are simple and short should be declared inline. The method definition of inlined methods should appear
-			after the class body:
+	- When reimplementing a virtual method, put the \c virtual and the \c override keywords in your method declaration.
+	- Only define private fields, never public or protected.
+	- All non-virtual methods that are simple and short should be declared inline. The method definition of inlined methods should appear
+		after the class body:
 \code
 // Wrong:
 class Cell
@@ -93,14 +92,15 @@ class Cell
 
 inline int Cell::value() const { return value_;}
 \endcode
-		- Wherever possible prefer to use classes provided by Qt over STL or other libraries.
-		- If you are defining new templates make sure those work across platforms and shared object boundaries.
-	- \b Formatting
-		- Always use TABs for indentation and never spaces. Configure your editor to display a tab as 3 spaces.
-		- Lines should be shorter than 120 characters. A TAB counts as 3 characters.
-		- If the body of an \c if, \c while, or \c for is a single statement, do not use curly braces around it. If the
-			condition and statement fit nicely on the same line write them on one line, otherwise put the statement on a
-			newline:
+	- Wherever possible prefer to use classes provided by Qt over STL or other libraries.
+	- If you are defining new templates make sure those work across platforms and shared object boundaries.
+
+\subsection formatting Formatting and white space
+	- Always use TABs for indentation and never spaces. Configure your editor to display a tab as 3 spaces.
+	- Lines should be at most 120 characters. A TAB counts as 3 characters.
+	- If the body of an \c if, \c while, or \c for is a single statement, do not use curly braces around it. If the
+		condition and statement fit nicely on the same line write them on one line, otherwise put the statement on a
+		newline:
 \code
 // Wrong:
 if (foo)
@@ -116,7 +116,7 @@ if (foo) bar();
 if (aMoreComplicatedOrMultilineCondition)
 	anExtremelyLongAndComplicatedStatement();
 \endcode
-		- Curly braces should appear in a line on their own, except when using lambdas:
+	- Curly braces should appear in a line on their own, except when using lambdas:
 \code
 // Wrong:
 if (foo) {
@@ -127,30 +127,36 @@ if (foo)
 {
 }
 \endcode
-		- Leave a single space after a \c // comment delimiter.
-		- For pointers or references, do not leave any space between the type and '*' or '&', but write a single space
-			between the '*' or '&' and the variable name:
+	- Leave a single space after a \c // comment delimiter.
+	- For pointers or references, do not leave any space between the type and '*' or '&', but write a single space
+		between the '*' or '&' and the variable name:
 \code
 QString& string;
 Item* item;
 const QString& message;
 \endcode
-		- Field names should follow the Qt naming conventions and additionally should end with an underscore:
+	- Field names should follow the Qt naming conventions and additionally should end with an underscore:
 \code
 private:
 	int length_;
 	Item* myFirstItem_;
 \endcode
-		- Private and protected methods do not end with an underscore.
-		- When declaring a class, list the members in the following order starting from the top: \c public, \c protected,
-			\c private.
-		- In the \c .cpp file defining a class, define all members in the following order starting from the top: \c static,
-			\c constructors, \c destructors, <tt>the rest</tt>
+	- Private and protected methods do not end with an underscore.
+	- When declaring a class, list the members in the following order starting from the top: \c public, \c protected,
+		\c private.
+	- In the \c .cpp file defining a class, define all members in the following order starting from the top: \c static,
+		\c constructors, \c destructors, <tt>the rest</tt>
 
 Of course you can always have a look at the existing code in case you are not sure about something. If you feel like
 some additional clarifications should be added here, let Dimitar know.
 
-
+\subsection further Further info
+Qt is an excellent framework and is used throughout the Envision project. Many Qt conventions have been adopted by
+Envision. You may want to have a look at:
+	- <a href="http://qt-project.org/wiki/Qt_Coding_Style">The Qt Coding Style</a>.
+	- <a href="http://qt-project.org/wiki/Coding-Conventions">The Qt Coding Conventions</a>
+	- <a href="http://qt-project.org/wiki/API-Design-Principles">Qt's API Design Principles</a>
+	- <a href="http://www4.in.tum.de/~blanchet/api-design.pdf">Qt's API Design Principles (a more elaborate PDF version)</a>.
 
 \section committing Commit policy
 	- A single commit should focus on a single bug fix, or a single aspect of an enhancement. Unrelated changes should be
@@ -158,7 +164,7 @@ some additional clarifications should be added here, let Dimitar know.
 	- Do not squash multiple commits into one. A bug fix or enhancement should have its own branch that contains all
 		necessary commits.
 	- Always include a commit message which should at a minimum contain at least a title
-	- Commit titles should be limited to 72 characters and use the present tense to indicate what the commit does:
+	- Commit titles should be limited to 72 characters and use the present tense to indicate what the commit will do:
 \verbatim
 Right: Fix a bug where typing 42 would crash Envision
 Wrong: Fixes a bug where typing 42 would crash Envision

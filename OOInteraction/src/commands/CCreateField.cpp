@@ -26,8 +26,8 @@
 
 #include "CCreateField.h"
 
-#include "OOModel/src/top_level/Class.h"
-#include "OOModel/src/top_level/Field.h"
+#include "OOModel/src/declarations/Class.h"
+#include "OOModel/src/declarations/Field.h"
 #include "OOModel/src/expressions/EmptyExpression.h"
 
 #include "InteractionBase/src/events/SetCursorEvent.h"

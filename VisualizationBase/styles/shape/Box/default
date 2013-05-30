@@ -8,7 +8,6 @@
 			<start><x>0</x><y>0</y></start>
 			<finish><x>0</x><y>20</y></finish>
 			<stopPoints>
-				<length>2</length>
 				<e0>
 					<first>0.0</first>
 					<second>

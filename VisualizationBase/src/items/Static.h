@@ -33,7 +33,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API Static : public Item
+class VISUALIZATIONBASE_API Static : public Super<Item>
 {
 	ITEM_COMMON(Static)
 
@@ -55,8 +55,6 @@ class VISUALIZATIONBASE_API Static : public Item
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		typedef Item BaseItemType;
-
 		Item* item_;
 
 		typedef Item* (*staticItemConstructorType)(Item* parent, const ItemStyle* style);
@@ -75,8 +73,8 @@ inline Item* Static::item() { return item_; }
 
 template<class T> void Static::registerStaticItem()
 {
-	itemClasses_.insert(T::className(), staticItemConstructor<T>);
-	itemStyles_.insert(T::className(), staticItemStyleConstructor<T>);
+	itemClasses_.insert(T::typeNameStatic(), staticItemConstructor<T>);
+	itemStyles_.insert(T::typeNameStatic(), staticItemStyleConstructor<T>);
 }
 
 template<class T> Item* Static::staticItemConstructor(Item* parent, const ItemStyle* style)

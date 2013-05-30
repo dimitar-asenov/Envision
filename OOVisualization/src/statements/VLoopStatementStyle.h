@@ -38,7 +38,6 @@ namespace OOVisualization {
 class OOVISUALIZATION_API VLoopStatementStyle : public Visualization::ItemStyle
 {
 	private:
-		Visualization::PanelBorderLayoutStyle layout_;
 		Visualization::SequentialLayoutStyle header_;
 		Visualization::StaticStyle icon_;
 		Visualization::SequentialLayoutStyle initStep_;
@@ -49,7 +48,6 @@ class OOVISUALIZATION_API VLoopStatementStyle : public Visualization::ItemStyle
 	public:
 		void load(Visualization::StyleLoader& sl);
 
-		const Visualization::PanelBorderLayoutStyle& layout() const;
 		const Visualization::SequentialLayoutStyle& header() const;
 		const Visualization::StaticStyle& icon() const;
 
@@ -59,7 +57,6 @@ class OOVISUALIZATION_API VLoopStatementStyle : public Visualization::ItemStyle
 		const Visualization::VListStyle& body() const;
 };
 
-inline const Visualization::PanelBorderLayoutStyle& VLoopStatementStyle::layout() const { return layout_; }
 inline const Visualization::SequentialLayoutStyle& VLoopStatementStyle::header() const { return header_; }
 inline const Visualization::StaticStyle& VLoopStatementStyle::icon() const { return icon_; }
 

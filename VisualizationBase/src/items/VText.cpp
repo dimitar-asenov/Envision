@@ -32,8 +32,7 @@ namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(VText, "item")
 
-VText::VText(Item* parent, NodeType* node, const StyleType* style) :
-	ItemWithNode<TextRenderer, Model::Text>(parent, node, style)
+VText::VText(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style)
 {
 	TextRenderer::setText(node->get());
 }
@@ -55,9 +54,9 @@ bool VText::moveCursor(CursorMoveDirection dir, QPoint reference)
 {
 	if (dir == MoveDefault)
 	{
-		return ItemWithNode<TextRenderer, Model::Text>::moveCursor(MoveLeftOf, QPoint(xEnd()+1,0));
+		return Super::moveCursor(MoveLeftOf, QPoint(xEnd()+1,0));
 	}
-	else return ItemWithNode<TextRenderer, Model::Text>::moveCursor(dir, reference);
+	else return Super::moveCursor(dir, reference);
 }
 
 }

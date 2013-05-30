@@ -27,20 +27,34 @@
 #pragma once
 
 #include "Expression.h"
+#include "ModelBase/src/nodes/Integer.h"
 
 DECLARE_TYPED_LIST(OOMODEL_API, OOModel, CastExpression)
 
 namespace OOModel {
 
-class OOMODEL_API CastExpression: public Expression
+class OOMODEL_API CastExpression: public Super<Expression>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(CastExpression)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(CastExpression)
 
 	ATTRIBUTE(Expression, castType, setType)
 	ATTRIBUTE(Expression, expr, setExpr)
+	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, cKind, setCKind, int)
 
 	public:
 		virtual Type* type();
+
+		enum class CastKind : int
+		{Default, ConstCast, DynamicCast, ReinterpretCast, StaticCast, FunctionalCast};
+
+		CastExpression(CastKind castKind);
+
+		CastKind castKind() const;
+		void setCastKind(const CastKind& castKind);
+
 };
+
+inline CastExpression::CastKind CastExpression::castKind() const {return static_cast<CastKind> (cKind()); }
+inline void CastExpression::setCastKind(const CastKind& castKind) { setCKind(static_cast<int> (castKind)); }
 
 }

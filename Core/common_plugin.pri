@@ -10,3 +10,5 @@ pluginmeta.files = $${TARGET}.plugin
 styles.path = $${BUILD_DIR}/styles
 styles.files = styles/*
 INSTALLS += target pluginmeta styles
+
+LIBS += -L$${BUILD_DIR} -lcore
