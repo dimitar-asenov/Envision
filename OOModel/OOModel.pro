@@ -4,7 +4,15 @@ DEFINES += OOMODEL_LIBRARY
 win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase
-HEADERS += src/types/LambdaType.h \
+HEADERS += src/expressions/types/TypeQualifierExpression.h \
+    src/statements/DeclarationStatement.h \
+    src/declarations/Field.h \
+    src/declarations/Module.h \
+    src/declarations/Project.h \
+    src/elements/Enumerator.h \
+    src/declarations/Class.h \
+    src/declarations/Method.h \
+    src/types/LambdaType.h \
     src/expressions/LambdaExpression.h \
     src/elements/CatchClause.h \
     src/statements/TryCatchFinallyStatement.h \
@@ -54,7 +62,6 @@ HEADERS += src/types/LambdaType.h \
     src/expressions/ThisExpression.h \
     src/expressions/UnaryOperation.h \
     src/expressions/UnfinishedOperator.h \
-    src/expressions/VariableDeclaration.h \
     src/oomodel_api.h \
     src/precompiled.h \
     src/statements/Block.h \
@@ -68,14 +75,26 @@ HEADERS += src/types/LambdaType.h \
     src/statements/Statement.h \
     src/statements/SwitchCase.h \
     src/statements/SwitchStatement.h \
-    src/top_level/Class.h \
-    src/top_level/Field.h \
-    src/top_level/Library.h \
-    src/top_level/Method.h \
-    src/top_level/Module.h \
-    src/top_level/Project.h \
-    src/oomodel.h
-SOURCES += src/types/LambdaType.cpp \
+    src/oomodel.h \
+    src/types/ReferenceType.h \
+    src/types/PointerType.h \
+    src/expressions/types/PointerTypeExpression.h \
+    src/expressions/types/ReferenceTypeExpression.h \
+    src/expressions/DeleteExpression.h \
+    src/declarations/Declaration.h \
+    src/declarations/VariableDeclaration.h \
+    src/expressions/VariableDeclarationExpression.h \
+    src/declarations/TypeAlias.h \
+    src/expressions/types/AutoTypeExpression.h
+SOURCES += src/expressions/types/TypeQualifierExpression.cpp \
+    src/statements/DeclarationStatement.cpp \
+    src/declarations/Field.cpp \
+    src/declarations/Module.cpp \
+    src/declarations/Project.cpp \
+    src/elements/Enumerator.cpp \
+    src/declarations/Class.cpp \
+    src/declarations/Method.cpp \
+    src/types/LambdaType.cpp \
     src/expressions/LambdaExpression.cpp \
     src/elements/CatchClause.cpp \
     src/statements/TryCatchFinallyStatement.cpp \
@@ -96,7 +115,6 @@ SOURCES += src/types/LambdaType.cpp \
     src/expressions/types/TypeExpression.cpp \
     src/elements/OOReference.cpp \
     src/expressions/ConditionalExpression.cpp \
-    src/expressions/VariableDeclaration.cpp \
     src/expressions/AssignmentExpression.cpp \
     src/statements/ExpressionStatement.cpp \
     src/expressions/CommaExpression.cpp \
@@ -110,12 +128,6 @@ SOURCES += src/types/LambdaType.cpp \
     src/elements/FormalArgument.cpp \
     src/elements/FormalResult.cpp \
     src/elements/StatementItem.cpp \
-    src/top_level/Class.cpp \
-    src/top_level/Field.cpp \
-    src/top_level/Library.cpp \
-    src/top_level/Method.cpp \
-    src/top_level/Module.cpp \
-    src/top_level/Project.cpp \
     src/statements/ForEachStatement.cpp \
     src/expressions/UnaryOperation.cpp \
     src/expressions/ReferenceExpression.cpp \
@@ -143,4 +155,14 @@ SOURCES += src/types/LambdaType.cpp \
     src/expressions/Expression.cpp \
     src/OOModelException.cpp \
     src/oomodel.cpp \
-    test/SimpleTest.cpp
+    test/SimpleTest.cpp \
+    src/types/ReferenceType.cpp \
+    src/types/PointerType.cpp \
+    src/expressions/types/PointerTypeExpression.cpp \
+    src/expressions/types/ReferenceTypeExpression.cpp \
+    src/expressions/DeleteExpression.cpp \
+    src/declarations/VariableDeclaration.cpp \
+    src/declarations/Declaration.cpp \
+    src/expressions/VariableDeclarationExpression.cpp \
+    src/declarations/TypeAlias.cpp \
+    src/expressions/types/AutoTypeExpression.cpp

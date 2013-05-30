@@ -33,9 +33,9 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, ReturnStatement)
 
 namespace OOModel {
 
-class OOMODEL_API ReturnStatement: public Statement
+class OOMODEL_API ReturnStatement: public Super<Statement>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(ReturnStatement)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(ReturnStatement)
 
 	ATTRIBUTE(Model::TypedList<Expression>, values, setValues)
 

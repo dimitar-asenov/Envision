@@ -28,10 +28,9 @@
 
 #include "../oovisualization_api.h"
 #include "VErrorExpressionStyle.h"
+#include "VExpression.h"
 
 #include "OOModel/src/expressions/ErrorExpression.h"
-
-#include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/items/LayoutProvider.h"
 
 namespace Visualization {
@@ -40,8 +39,9 @@ namespace Visualization {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VErrorExpression : public Visualization::ItemWithNode<Visualization::LayoutProvider<>,
-OOModel::ErrorExpression> {
+class OOVISUALIZATION_API VErrorExpression : public Super<VExpression<VErrorExpression,
+	Visualization::LayoutProvider<>, OOModel::ErrorExpression>>
+{
 
 	ITEM_COMMON(VErrorExpression)
 
@@ -53,8 +53,6 @@ OOModel::ErrorExpression> {
 		void determineChildren();
 
 	private:
-		typedef Visualization::ItemWithNode<Visualization::LayoutProvider<>, OOModel::ErrorExpression> BaseItemType;
-
 		Visualization::VText* prefix_;
 		Visualization::Item* arg_;
 		Visualization::VText* postfix_;

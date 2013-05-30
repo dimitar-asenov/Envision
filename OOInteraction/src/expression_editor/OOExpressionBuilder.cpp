@@ -77,6 +77,8 @@ void OOExpressionBuilder::visit(Interaction::Value* val)
 		expression = new OOModel::NullLiteral();
 	else if (val->text() == "this")
 		expression = new OOModel::ThisExpression();
+	else if (val->text() == "auto")
+		expression = new OOModel::AutoTypeExpression();
 	else if (val->text() == "int")
 		expression = new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::INT);
 	else if (val->text() == "long")

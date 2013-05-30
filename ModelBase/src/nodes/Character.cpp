@@ -33,15 +33,12 @@ DEFINE_TYPED_LIST(Model::Character)
 
 namespace Model {
 
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(Character, Node)
+NODE_DEFINE_TYPE_REGISTRATION_METHODS(Character)
 
-Character::Character(Node *parent) :
-	Node(parent), value('\0')
-{
-}
+Character::Character(Node *parent) : Super(parent), value('\0')
+{}
 
-Character::Character(Node *parent, PersistentStore &store, bool) :
-	Node(parent)
+Character::Character(Node *parent, PersistentStore &store, bool) : Super(parent)
 {
 	QString t = store.loadStringValue();
 	if (t.size() != 1) throw ModelException("Creating character node failed. Invalid persistent store data: " + t);

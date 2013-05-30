@@ -28,16 +28,15 @@
 
 #include "../oovisualization_api.h"
 #include "VEmptyExpressionStyle.h"
+#include "VExpression.h"
 
-#include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/items/Static.h"
-
 #include "OOModel/src/expressions/EmptyExpression.h"
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VEmptyExpression : public Visualization::ItemWithNode< Visualization::Item,
-OOModel::EmptyExpression>
+class OOVISUALIZATION_API VEmptyExpression : public Super<VExpression<VEmptyExpression, Visualization::Item,
+OOModel::EmptyExpression>>
 {
 	ITEM_COMMON(VEmptyExpression)
 
@@ -50,8 +49,6 @@ OOModel::EmptyExpression>
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		typedef Visualization::ItemWithNode< Visualization::Item, OOModel::EmptyExpression> BaseItemType;
-
 		Visualization::Static* vis_;
 };
 

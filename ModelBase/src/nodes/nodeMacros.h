@@ -26,8 +26,9 @@
 
 #pragma once
 
-#include "ModelBase/src/nodes/Extendable/Attribute.h"
-#include "ModelBase/src/nodes/Extendable/ExtendableIndex.h"
+#include "Core/src/reflect/typeIdMacros.h"
+#include "ModelBase/src/nodes/composite/Attribute.h"
+#include "ModelBase/src/nodes/composite/CompositeIndex.h"
 
 /**
  * Declares standard constructors and standard static methods for registering the constructors of a class inheriting
@@ -35,9 +36,9 @@
  *
  * @param className
  * 			The name of the class being defined. This class must inherit from Node, directly or indirectly. For
- * 			classes directly inheriting ExtendableNode use the macro EXTENDABLENODE_DECLARE_STANDARD_CONSTRUCTORS.
+ * 			classes directly inheriting CompositeNode use the macro COMPOSITENODE_DECLARE_STANDARD_CONSTRUCTORS.
  *
- * This macro declares a static method "registerNodeConstructors" which should be called during the initialization of
+ * This macro declares a static method initType() which should be called during the initialization of
  * the plug-in where this node is defined. This will assure that the new node type's constructors are properly
  * registered.
  *
@@ -48,57 +49,42 @@
  * 	NODE_DECLARE_STANDARD_METHODS( MyNewNode )
  */
 #define NODE_DECLARE_STANDARD_METHODS(className)																							\
+	DECLARE_TYPE_ID																																	\
 	public:																																				\
 		className(::Model::Node* parent = nullptr);																							\
 		className(::Model::Node *parent, ::Model::PersistentStore &store, bool partialLoadHint);								\
-																																							\
-		virtual const QString& typeName() const;																								\
-		virtual int typeId() const;																												\
-		virtual QList<int> hierarchyTypeIds() const;																							\
-		static const QString& typeNameStatic();																								\
-		static int typeIdStatic();																													\
-		static void registerNodeType();																											\
-		static void init();																															\
-		static ::Model::InitializationRegistry& initializationRegistry();													\
-																																							\
-	private:																																				\
-		static int typeId_;																															\
 
 /*********************************************************************************************************************/
 
 /**
  * Declares standard constructors and standard static methods for registering the constructors of a class inheriting
- * ExtendableNode.
+ * CompositeNode.
  *
  * @param className
- * 			The name of the class being defined. This class must inherit from ExtendableNode, directly or indirectly.
+ * 			The name of the class being defined. This class must inherit from CompositeNode, directly or indirectly.
  *
- * This macro declares a static method "registerNodeConstructors" which should be called during the initialization of
+ * This macro declares a static method initType() which should be called during the initialization of
  * the plug-in where this node is defined. This will assure that the new node type's constructors are properly
  * registered.
  *
  * This macro should appear as the first line after the class declaration e.g. :
  *
- * class MyNewNode : public ExtendableNode
+ * class MyNewNode : public CompositeNode
  * {
- * 	EXTENDABLENODE_DECLARE_STANDARD_METHODS( MyNewNode )
+ * 	COMPOSITENODE_DECLARE_STANDARD_METHODS( MyNewNode )
  */
-#define EXTENDABLENODE_DECLARE_STANDARD_METHODS(className)																				\
+#define COMPOSITENODE_DECLARE_STANDARD_METHODS(className)																				\
+	NODE_DECLARE_STANDARD_METHODS(className)																									\
 	public:																																				\
-		className(::Model::Node* parent = nullptr);																							\
-		className(::Model::Node *parent, ::Model::PersistentStore &store, bool partialLoadHint);								\
 		className(::Model::Node* parent, ::Model::AttributeChain& metaData);															\
 		className(::Model::Node *parent, ::Model::PersistentStore &store, bool partialLoadHint,								\
 			::Model::AttributeChain& metaData); 																								\
 																																							\
-		static void init();																															\
-		static ::Model::InitializationRegistry& initializationRegistry();													\
-																																							\
 		static ::Model::AttributeChain& getMetaData();																						\
-		static ::Model::ExtendableIndex registerNewAttribute(const QString &attributeName,										\
+		static ::Model::CompositeIndex registerNewAttribute(const QString &attributeName,										\
 				const QString &attributeType, bool canBePartiallyLoaded, bool isOptional, bool isPersistent);				\
 																																							\
-		static ::Model::ExtendableIndex registerNewAttribute(const ::Model::Attribute& attribute);							\
+		static ::Model::CompositeIndex registerNewAttribute(const ::Model::Attribute& attribute);							\
 																																							\
 		template <class T> static void registerNewExtension()																				\
 		{																																					\
@@ -106,22 +92,13 @@
 				T::template extendNode< className >(getMetaData().addExtension(T::extensionId()));								\
 		}																																					\
 																																							\
-		virtual const QString& typeName() const;																								\
-		virtual int typeId() const;																												\
-		virtual QList<int> hierarchyTypeIds() const;																							\
-		static const QString& typeNameStatic();																								\
-		static int typeIdStatic();																													\
-		static void registerNodeType();																											\
-																																							\
 	protected:																																			\
 		virtual ::Model::AttributeChain& topLevelMeta();																					\
 																																							\
 	private:																																				\
-		static int typeId_;																															\
-																																							\
-		static QList<QPair< ::Model::ExtendableIndex&, ::Model::Attribute> >& attributesToRegisterAtInitialization_();	\
-		static ::Model::ExtendableIndex addAttributeToInitialRegistrationList_														\
-				(::Model::ExtendableIndex& index, const QString &attributeName, const QString &attributeType, 				\
+		static QList<QPair< ::Model::CompositeIndex&, ::Model::Attribute> >& attributesToRegisterAtInitialization_();	\
+		static ::Model::CompositeIndex addAttributeToInitialRegistrationList_														\
+				(::Model::CompositeIndex& index, const QString &attributeName, const QString &attributeType, 				\
 					bool canBePartiallyLoaded, bool isOptional, bool isPersistent);													\
 
 /*********************************************************************************************************************/
@@ -175,45 +152,39 @@ template class Model::TypedList<className>;																									\
  * Defines standard empty constructors for a new Node type which just call their parent constructors.
  *
  * @param className
- * 			The name of the class being defined. This class must inherit from superClassName.
- *
- * @param superClassName
- * 			The name of the direct parent class. This class must be or inherit from from Node, directly or indirectly.
+ * 			The name of the class being defined. This class must be or inherit from from Node, directly or indirectly.
  *
  * Use this macro in the .cpp file that defines the new Node type.
  */
-#define NODE_DEFINE_EMPTY_CONSTRUCTORS(className, superClassName)																		\
-	className::className(::Model::Node* parent) : superClassName (parent) {}														\
+#define NODE_DEFINE_EMPTY_CONSTRUCTORS(className)																							\
+	className::className(::Model::Node* parent) : Super(parent) {}																		\
 																																							\
 	className::className(::Model::Node *parent, ::Model::PersistentStore &store, bool partialLoadHint)						\
-		: superClassName (parent, store, partialLoadHint) {}
+		: Super (parent, store, partialLoadHint) {}
 /*********************************************************************************************************************/
 
 /**
  * Defines standard empty constructors for a new Node type which just call their parent constructors.
  *
  * @param className
- * 			The name of the class being defined. This class must inherit from superClassName.
- *
- * @param superClassName
- * 			The name of the direct parent class. This class must be or inherit from from ExtendableNode, directly or
+ * 			The name of the class being defined. This class must be or inherit from from CompositeNode, directly or
  * 			indirectly.
  *
  * Use this macro in the .cpp file that defines the new Node type.
  */
-#define EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(className, superClassName)														\
+#define COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(className)																				\
 	className::className(::Model::Node* parent)																								\
-		: superClassName (parent, className::getMetaData()) {}																			\
+		: Super (parent, className::getMetaData()) {}																						\
 		  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	\
 	className::className(::Model::Node *parent, ::Model::PersistentStore &store, bool partialLoadHint)						\
-		: superClassName (parent, store, partialLoadHint, className::getMetaData()) {}											\
+		: Super (parent, store, partialLoadHint, className::getMetaData()) {}														\
 		  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	   \
 	className::className(::Model::Node* parent, ::Model::AttributeChain& metaData)												\
-		: superClassName (parent, metaData) {}																									\
+		: Super (parent, metaData) {}																												\
 																																							\
 	className::className(::Model::Node *parent, ::Model::PersistentStore &store, bool partialLoadHint,						\
 			::Model::AttributeChain& metaData)																									\
-		: superClassName (parent, store, partialLoadHint, metaData) {}
+		: Super (parent, store, partialLoadHint, metaData) {}
 /*********************************************************************************************************************/
 
 /**
@@ -221,61 +192,20 @@ template class Model::TypedList<className>;																									\
  * that returns the name of this class.
  *
  * @param className
- * 			The name of the class being defined. This class must inherit directly from superClassName.
- * @param superClassName
- * 			The super class that the defined node type derives from. This class must inherit from from Node, directly or
- * 			indirectly.
+ * 			The name of the class being defined. This class must inherit from from Node, directly or indirectly.
  *
  * Use this macro in the .cpp file that defines the new Node type.
  */
-#define NODE_DEFINE_TYPE_REGISTRATION_METHODS(className, superClassName)															\
-/* Forward declaration. This function must be defined in the enclosing namespace*/												\
-::Model::InitializationRegistry& nodeTypeInitializationRegistry();																			\
-::Model::InitializationRegistry& className::initializationRegistry()														\
-{																																							\
-	return nodeTypeInitializationRegistry();																										\
-}																																							\
+#define NODE_DEFINE_TYPE_REGISTRATION_METHODS(className)																					\
+::Core::InitializationRegistry& nodeTypeInitializationRegistry();																		\
+DEFINE_TYPE_ID_DERIVED(className, nodeTypeInitializationRegistry, #className,)													\
 																																							\
-/* This must be set to the result of Node::registerNodeType */																			\
-/* This variable uses a clever trick to register an initialization function that will be called during the */			\
-/* plug-in's initialization routine */																											\
-int className::typeId_ = (initializationRegistry().add(className::init) , -1); 										\
-																																							\
-const QString& className::typeName() const																									\
+void className::initType()																															\
 {																																							\
-	return typeNameStatic();																														\
-}																																							\
-																																							\
-int className::typeId()	const																														\
-{																																							\
-	return typeId_;																																	\
-}																																							\
-QList<int> className::hierarchyTypeIds() const																								\
-{																																							\
-	auto l = superClassName::hierarchyTypeIds();																								\
-	l.prepend( typeIdStatic() );																													\
-	return l;																																			\
-}																																							\
-int className::typeIdStatic()																														\
-{																																							\
-	return typeId_;																																	\
-}																																							\
-const QString& className::typeNameStatic()																									\
-{																																							\
-	static QString typeName_(#className);																										\
-	return typeName_;																																	\
-}																																							\
-																																							\
-void className::registerNodeType()																												\
-{																																							\
-	typeId_ = Node::registerNodeType(#className, ::Model::createNewNode< className >,											\
+	typeIdVariable() = Node::registerNodeType(#className, ::Model::createNewNode< className >,								\
 			::Model::createNodeFromPersistence< className >);																				\
 }																																							\
-																																							\
-void className::init()																																\
-{																																							\
-	registerNodeType();																																\
-}
+
 /*********************************************************************************************************************/
 
 /**
@@ -283,61 +213,27 @@ void className::init()																																\
  * that returns the name of this class.
  *
  * @param className
- * 			The name of the class being defined. This class must inherit directly from superClassName.
- * @param superClassName
- * 			The super class that the defined node type derives from. This class must inherit from ExtendableNode,
- * 			directly or indirectly.
+ * 			The name of the class being defined. This class must inherit from CompositeNode, directly or indirectly.
  *
  * Use this macro in the .cpp file that defines the new Node type.
  */
-#define EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(className, superClassName)												\
-/* Forward declaration. This function must be defined in the enclosing namespace*/												\
-::Model::InitializationRegistry& nodeTypeInitializationRegistry();																			\
-::Model::InitializationRegistry& className::initializationRegistry()														\
-{																																							\
-	return nodeTypeInitializationRegistry();																										\
-}																																							\
+#define COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(className)																	\
+::Core::InitializationRegistry& nodeTypeInitializationRegistry();																		\
+DEFINE_TYPE_ID_DERIVED(className, nodeTypeInitializationRegistry, #className,)													\
 																																							\
-/* This must be set to the result of Node::registerNodeType */																			\
-/* This variable uses a clever trick to register an initialization function that will be called during the */			\
-/* plug-in's initialization routine */																											\
-int className::typeId_ = (initializationRegistry().add(className::init) , -1); 										\
-																																							\
-const QString& className::typeName() const																									\
+void className::initType()																															\
 {																																							\
-	return typeNameStatic();																														\
-}																																							\
-																																							\
-int className::typeId()	const																														\
-{																																							\
-	return typeId_;																																	\
-}																																							\
-QList<int> className::hierarchyTypeIds() const																								\
-{																																							\
-	auto l = superClassName::hierarchyTypeIds();																								\
-	l.prepend( typeIdStatic() );																													\
-	return l;																																			\
-}																																							\
-int className::typeIdStatic()																														\
-{																																							\
-	return typeId_;																																	\
-}																																							\
-const QString& className::typeNameStatic()																									\
-{																																							\
-	static QString typeName_(#className);																										\
-	return typeName_;																																	\
-}																																							\
-																																							\
-void className::registerNodeType()																												\
-{																																							\
-	className::getMetaData().setParent(&superClassName::getMetaData());																\
-	typeId_ = Node::registerNodeType(#className, ::Model::createNewNode< className >,											\
+	typeIdVariable() = Node::registerNodeType(#className, ::Model::createNewNode< className >,								\
 			::Model::createNodeFromPersistence< className >);																				\
+																																							\
+	for (int i = 0; i<attributesToRegisterAtInitialization_().size(); ++i)															\
+		attributesToRegisterAtInitialization_().at(i).first =																				\
+				registerNewAttribute(attributesToRegisterAtInitialization_().at(i).second);										\
 }																																							\
 																																							\
 ::Model::AttributeChain& className::getMetaData()																							\
 {																																							\
-	static ::Model::AttributeChain descriptions;																								\
+	static ::Model::AttributeChain descriptions{#className, &Super::getMetaData()};												\
 	return descriptions;																																\
 }																																							\
 																																							\
@@ -346,44 +242,37 @@ void className::registerNodeType()																												\
 	return getMetaData();																															\
 }																																							\
 																																							\
-QList<QPair< ::Model::ExtendableIndex&, ::Model::Attribute> >& className::attributesToRegisterAtInitialization_()		\
+QList<QPair< ::Model::CompositeIndex&, ::Model::Attribute> >& className::attributesToRegisterAtInitialization_()		\
 {																																							\
-	static QList<QPair< ::Model::ExtendableIndex&, ::Model::Attribute> > a;															\
+	static QList<QPair< ::Model::CompositeIndex&, ::Model::Attribute> > a;															\
 	return a;																																			\
 }																																							\
 																																							\
-::Model::ExtendableIndex className::registerNewAttribute(const QString &attributeName,											\
+::Model::CompositeIndex className::registerNewAttribute(const QString &attributeName,											\
 	const QString &attributeType, bool canBePartiallyLoaded, bool isOptional, bool isPersistent)								\
 {																																							\
-	return ExtendableNode::registerNewAttribute(getMetaData(), attributeName, attributeType, 									\
+	return CompositeNode::registerNewAttribute(getMetaData(), attributeName, attributeType, 									\
 					canBePartiallyLoaded, isOptional, isPersistent );																		\
 }																																							\
 																																							\
-::Model::ExtendableIndex className::registerNewAttribute(const ::Model::Attribute& attribute)								\
+::Model::CompositeIndex className::registerNewAttribute(const ::Model::Attribute& attribute)								\
 {																																							\
-	return ExtendableNode::registerNewAttribute(getMetaData(), attribute);															\
+	return CompositeNode::registerNewAttribute(getMetaData(), attribute);															\
 }																																							\
 																																							\
-::Model::ExtendableIndex className::addAttributeToInitialRegistrationList_ (::Model::ExtendableIndex& index,			\
+::Model::CompositeIndex className::addAttributeToInitialRegistrationList_ (::Model::CompositeIndex& index,			\
 	const QString &attributeName, const QString &attributeType, bool canBePartiallyLoaded, bool isOptional,				\
 			 bool isPersistent)																														\
 {																																							\
-	attributesToRegisterAtInitialization_().append(QPair< ::Model::ExtendableIndex&, ::Model::Attribute>(index,			\
+	attributesToRegisterAtInitialization_().append(QPair< ::Model::CompositeIndex&, ::Model::Attribute>(index,			\
 			::Model::Attribute(attributeName, attributeType, isOptional, canBePartiallyLoaded, isPersistent)));			\
-	return ::Model::ExtendableIndex();																											\
+	return ::Model::CompositeIndex();																											\
 }																																							\
-																																							\
-void className::init()																																\
-{																																							\
-	registerNodeType();																																\
-	for (int i = 0; i<attributesToRegisterAtInitialization_().size(); ++i)															\
-		attributesToRegisterAtInitialization_().at(i).first =																				\
-				registerNewAttribute(attributesToRegisterAtInitialization_().at(i).second);										\
-}
+
 /*********************************************************************************************************************/
 
 /**
- * Declares an attribute for a class inheriting from ExtendableNode.
+ * Declares an attribute for a class inheriting from CompositeNode.
  *
  * @param type
  * 				The node type of the attribute
@@ -395,7 +284,7 @@ void className::init()																																\
  */
 #define ATTRIBUTE(type, name, setMethodName)																									\
 private:																																					\
-		static ::Model::ExtendableIndex name##Index;																							\
+		static ::Model::CompositeIndex name##Index;																							\
 public:																																					\
 		type* name() { return static_cast< type* > (get(name##Index)); }																\
 		void setMethodName(type* node) { set(name##Index, node); }																		\
@@ -404,7 +293,7 @@ private:																																					\
 /*********************************************************************************************************************/
 
 /**
- * Declares a private attribute for a class inheriting from ExtendableNode.
+ * Declares a private attribute for a class inheriting from CompositeNode.
  *
  * @param type
  * 				The node type of the attribute
@@ -416,7 +305,7 @@ private:																																					\
  */
 #define PRIVATE_ATTRIBUTE(type, name, setMethodName)																						\
 private:																																					\
-		static ::Model::ExtendableIndex name##Index;																							\
+		static ::Model::CompositeIndex name##Index;																							\
 		type* name() { return static_cast< type* > (get(name##Index)); }																\
 		void setMethodName(type* node) { set(name##Index, node); }																		\
 private:																																					\
@@ -455,7 +344,7 @@ private:																																					\
 
 
 /**
- * Declares an attribute for a class inheriting from ExtendableNode. The attribute must have a get() and a set()
+ * Declares an attribute for a class inheriting from CompositeNode. The attribute must have a get() and a set()
  * method.
  *
  * Defines three methods for this attribute:
@@ -475,7 +364,7 @@ private:																																					\
  */
 #define ATTRIBUTE_VALUE(type, name, setMethodName, valueType)																			\
 private:																																					\
-		static ::Model::ExtendableIndex name##Index;																							\
+		static ::Model::CompositeIndex name##Index;																							\
 public:																																					\
 		type* name##Node() { return static_cast<type*> (get(name##Index)); }															\
 		valueType name() const { return (static_cast<type*> (get(name##Index)))->get(); }										\
@@ -485,7 +374,7 @@ private:																																					\
 /*********************************************************************************************************************/
 
 /**
- * Declares a private attribute for a class inheriting from ExtendableNode. The attribute must have a get() and a
+ * Declares a private attribute for a class inheriting from CompositeNode. The attribute must have a get() and a
  * set() method.
  *
  * Defines three methods for this attribute:
@@ -505,7 +394,7 @@ private:																																					\
  */
 #define PRIVATE_ATTRIBUTE_VALUE(type, name, setMethodName, valueType)																\
 private:																																					\
-		static ::Model::ExtendableIndex name##Index;																							\
+		static ::Model::CompositeIndex name##Index;																							\
 		type* name##Node() { return static_cast<type*> (get(name##Index)); }															\
 		valueType name() const { return (static_cast<type*> (get(name##Index)))->get(); }										\
 		void setMethodName(const valueType& val) { SET_ATTR_VAL(type, name) }														\
@@ -514,7 +403,7 @@ private:																																					\
 /*********************************************************************************************************************/
 
 /**
- * Declares an attribute for a class inheriting from ExtendableNode. The attribute must have a get() and a set()
+ * Declares an attribute for a class inheriting from CompositeNode. The attribute must have a get() and a set()
  * method.
  *
  * Defines three methods for this attribute:
@@ -536,7 +425,7 @@ private:																																					\
  */
 #define ATTRIBUTE_VALUE_CUSTOM_RETURN(type, name, setMethodName, valueType, returnValueType)									\
 private:																																					\
-		static ::Model::ExtendableIndex name##Index;																							\
+		static ::Model::CompositeIndex name##Index;																							\
 public:																																					\
 		type* name##Node() { return static_cast<type*> (get(name##Index)); }															\
 		returnValueType name() const { return (static_cast<type*> (get(name##Index)))->get(); }								\
@@ -562,34 +451,34 @@ private:																																					\
   * 				Whether this attribute should be persisted when saving the object to a persistent store.
   */
  #define REGISTER_ATTRIBUTE(className, attributeName, attributeType, partial, optional, persistent)						\
-::Model::ExtendableIndex className::attributeName##Index = addAttributeToInitialRegistrationList_(							\
+::Model::CompositeIndex className::attributeName##Index = addAttributeToInitialRegistrationList_(							\
 		attributeName##Index, #attributeName, #attributeType, partial, optional, persistent);
 
 /**
  * Declares standard attributes and methods needed for each extension class.
  *
  *	This macro should appear on the first line of the declaration of a class that is an extension for objects of type
- *	ExtendableNode or derived classes.
+ *	CompositeNode or derived classes.
  *
  * @param className
  * 				The name of the extension lass that is being declared
  */
 #define DECLARE_EXTENSION(className)																											\
 private:																																					\
-	::Model::ExtendableNode* self_;																												\
-	const QVector< ::Model::ExtendableIndex >& attr_;																						\
+	::Model::CompositeNode* self_;																												\
+	const QVector< ::Model::CompositeIndex >& attr_;																						\
 																																							\
 	static int extensionId_;																														\
 	static QList< ::Model::Attribute >& attributesToRegister_();																		\
 	static int addAttributeToRegister_( ::Model::Attribute attribute);																\
 																																							\
 public:																																					\
-	className( ::Model::ExtendableNode* self, const QVector< ::Model::ExtendableIndex>& extensionAttributes);			\
+	className( ::Model::CompositeNode* self, const QVector< ::Model::CompositeIndex>& extensionAttributes);			\
 																																							\
 	static void registerExtension();																												\
 	static int extensionId() { return extensionId_; }																						\
 																																							\
-	template <class T> static void extendNode(QVector<Model::ExtendableIndex>& extensionAttributes)							\
+	template <class T> static void extendNode(QVector<Model::CompositeIndex>& extensionAttributes)							\
 	{																																						\
 		for (int i = 0; i<attributesToRegister_().size(); ++i)																			\
 			extensionAttributes.append( T::registerNewAttribute(attributesToRegister_()[i]) );									\
@@ -620,18 +509,18 @@ int className::addAttributeToRegister_( ::Model::Attribute attribute )										
 	return attributesToRegister_().size()-1;																									\
 }																																							\
 																																							\
-className::className(::Model::ExtendableNode* self, const QVector< ::Model::ExtendableIndex>& extensionAttributes) :	\
+className::className(::Model::CompositeNode* self, const QVector< ::Model::CompositeIndex>& extensionAttributes) :	\
 	self_(self), attr_(extensionAttributes) {}																								\
 																																							\
 void className::registerExtension()																												\
 {																																							\
-	extensionId_ = ::Model::ExtendableNode::registerExtensionId();																		\
+	extensionId_ = ::Model::CompositeNode::registerExtensionId();																		\
 }																																							\
 
 /*********************************************************************************************************************/
 
 /**
- * Declares an attribute for a class providing an extension to ExtendableNode.
+ * Declares an attribute for a class providing an extension to CompositeNode.
  *
  * @param type
  * 				The node type of the attribute
@@ -652,7 +541,7 @@ private:																																					\
 /*********************************************************************************************************************/
 
 /**
- * Declares a private attribute for a class providing an extension to ExtendableNode.
+ * Declares a private attribute for a class providing an extension to CompositeNode.
  *
  * @param type
  * 				The node type of the attribute
@@ -673,7 +562,7 @@ private:																																					\
 /*********************************************************************************************************************/
 
 /**
- * Declares an attribute for a class providing an extension to ExtendableNode. The attribute must have a get() and
+ * Declares an attribute for a class providing an extension to CompositeNode. The attribute must have a get() and
  * a set() method.
  *
  * Defines three methods for this attribute:
@@ -703,7 +592,7 @@ private:																																					\
 /*********************************************************************************************************************/
 
 /**
- * Declares a private attribute for a class providing an extension to ExtendableNode. The attribute must have a get()
+ * Declares a private attribute for a class providing an extension to CompositeNode. The attribute must have a get()
  * and a set() method.
  *
  * Defines three methods for this attribute:
@@ -732,7 +621,7 @@ private:																																					\
 
 /*********************************************************************************************************************/
 /**
- * Declares an attribute for a class providing an extension to ExtendableNode. The attribute must have a get() and
+ * Declares an attribute for a class providing an extension to CompositeNode. The attribute must have a get() and
  * a set() method.
  *
  * Defines three methods for this attribute:

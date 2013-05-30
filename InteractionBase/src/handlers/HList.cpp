@@ -51,12 +51,12 @@ void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	Visualization::VList* list = static_cast<Visualization::VList*> (target);
 	bool processed = false;
 
-	if (event->matches(QKeySequence::Paste) && list->scene()->mainCursor()->owner() == list->layout())
+	if (event->matches(QKeySequence::Paste) && list->scene()->mainCursor()->owner() == list)
 	{
 		processed = true;
 		FilePersistence::SystemClipboard clipboard;
-		int selIndex = list->layout()->correspondingSceneCursor<Visualization::LayoutCursor>()->index();
-		if (selIndex > list->XXlength()) selIndex = list->XXlength();
+		int selIndex = list->correspondingSceneCursor<Visualization::LayoutCursor>()->index();
+		if (selIndex > list->length()) selIndex = list->length();
 		if (selIndex < 0) selIndex = 0;
 		selIndex += list->rangeBegin();
 
@@ -89,16 +89,16 @@ void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 
 	if (!list->suppressDefaultRemovalHandler() && event->modifiers() == Qt::NoModifier
 			&& (event->key() == Qt::Key_Delete || event->key() == Qt::Key_Backspace)
-			&& list->scene()->mainCursor() && list->scene()->mainCursor()->owner() == list->layout())
+			&& list->scene()->mainCursor() && list->scene()->mainCursor()->owner() == list)
 	{
 		processed = true;
 
-		int index = list->layout()->correspondingSceneCursor<Visualization::LayoutCursor>()->index();
+		int index = list->correspondingSceneCursor<Visualization::LayoutCursor>()->index();
 		if (event->key() == Qt::Key_Backspace) --index;
 
 		// Delete the node corresponding to index. Make sure not to delete invisible nodes, that this list is currently
 		// not displaying. Check the boundaries on the layout, not on the nodes() array.
-		if (index >=0 && index < list->layout()->length())
+		if (index >=0 && index < list->length())
 			removeNodeAndSetCursor(list, index + list->rangeBegin());
 	}
 
@@ -107,8 +107,8 @@ void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		bool createDown = event->modifiers() == Qt::NoModifier;
 		bool createRight = event->modifiers() == Qt::ShiftModifier;
 
-		if ((createDown && !list->layout()->style()->isHorizontal())
-				|| ( createRight && list->layout()->style()->isHorizontal()) )
+		if ((createDown && !list->style()->itemsStyle().isHorizontal())
+				|| ( createRight && list->style()->itemsStyle().isHorizontal()) )
 		{
 			auto newElem = list->node()->createDefaultElement();
 			if (newElem)
@@ -116,8 +116,8 @@ void HList::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 				processed = true;
 
 				int index = -1;
-				if (list->scene()->mainCursor() && list->scene()->mainCursor()->owner() == list->layout())
-					index = list->layout()->correspondingSceneCursor<Visualization::LayoutCursor>()->index();
+				if (list->scene()->mainCursor() && list->scene()->mainCursor()->owner() == list)
+					index = list->correspondingSceneCursor<Visualization::LayoutCursor>()->index();
 				else
 				{
 					index = list->focusedItemIndex();
@@ -157,22 +157,24 @@ void HList::scheduleSetCursor(Visualization::VList* list, int setCursorNodeIndex
 		[=](){
 			int setCursorItemIndex = 0;
 			if (setCursorNodeIndex < list->rangeBegin()) setCursorItemIndex = 0;
-			else if (setCursorNodeIndex > list->rangeEnd()) setCursorItemIndex = list->XXlength();
+			else if (setCursorNodeIndex > list->rangeEnd()) setCursorItemIndex = list->length();
 			else setCursorItemIndex = setCursorNodeIndex - list->rangeBegin();
 
-			if (setCursorItemIndex == 0) return list->XXlength() ? list->itemAt<Visualization::Item>(0) : list;
+			if (setCursorItemIndex == 0) return list->length() ? list->itemAt<Visualization::Item>(0) : list;
 			else return list->itemAt<Visualization::Item>(setCursorItemIndex-1);
 		},
 		[=](){
 			int setCursorItemIndex = 0;
 			if (setCursorNodeIndex < list->rangeBegin()) setCursorItemIndex = 0;
-			else if (setCursorNodeIndex > list->rangeEnd()) setCursorItemIndex = list->XXlength();
+			else if (setCursorNodeIndex > list->rangeEnd()) setCursorItemIndex = list->length();
 			else setCursorItemIndex = setCursorNodeIndex - list->rangeBegin();
 
 			if (setCursorItemIndex == 0)
-				return (list->layout()->isHorizontal() ? SetCursorEvent::CursorLeftOf : SetCursorEvent::CursorAboveOf);
+				return (list->style()->itemsStyle().isHorizontal()
+						? SetCursorEvent::CursorLeftOf : SetCursorEvent::CursorAboveOf);
 			else
-				return (list->layout()->isHorizontal() ? SetCursorEvent::CursorRightOf : SetCursorEvent::CursorBelowOf);
+				return (list->style()->itemsStyle().isHorizontal()
+						? SetCursorEvent::CursorRightOf : SetCursorEvent::CursorBelowOf);
 		}
 	));
 }

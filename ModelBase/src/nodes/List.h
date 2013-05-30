@@ -39,7 +39,7 @@ namespace Model {
 
 class Text;
 
-class MODELBASE_API List: public Node
+class MODELBASE_API List: public Super<Node>
 {
 	NODE_DECLARE_STANDARD_METHODS(List)
 
@@ -59,6 +59,7 @@ class MODELBASE_API List: public Node
 
 		int indexOf(const Node* item) const;
 		int indexOfSubitem(const Node* item) const;
+		bool contains(const Node* node) const;
 
 		void append(Node* node);
 		void prepend(Node* node);
@@ -75,6 +76,16 @@ class MODELBASE_API List: public Node
 		 */
 		void remove(Node* instance);
 		void clear();
+
+		using iterator = QVector<Node*>::Iterator;
+		using const_iterator = QVector<Node*>::ConstIterator;
+
+		iterator begin();
+		const_iterator begin() const;
+		const_iterator cbegin() const;
+		iterator end();
+		const_iterator end() const;
+		const_iterator cend() const;
 
 		const QVector<Node*>& nodes();
 
@@ -101,11 +112,25 @@ class MODELBASE_API List: public Node
 		QVector<Node*> nodes_;
 
 		void loadSubNodes(QList<LoadedNode>& nodeList);
+
+		void ensureFullyLoaded() const;
 };
+
+inline List::iterator List::begin() {ensureFullyLoaded(); return nodes_.begin();}
+inline List::const_iterator List::begin() const {ensureFullyLoaded(); return nodes_.begin();}
+inline List::const_iterator List::cbegin() const {ensureFullyLoaded(); return nodes_.constBegin();}
+inline List::iterator List::end() {ensureFullyLoaded(); return nodes_.end();}
+inline List::const_iterator List::end() const {ensureFullyLoaded(); return nodes_.end();}
+inline List::const_iterator List::cend() const {ensureFullyLoaded(); return nodes_.constEnd();}
+
+inline void List::ensureFullyLoaded() const
+{
+	if (!fullyLoaded) const_cast<List*>(this)->loadFully(* (model()->store()));
+}
 
 template <class T> T* List::first()
 {
-	if (!fullyLoaded) loadFully(* (model()->store()));
+	ensureFullyLoaded();
 
 	if ( nodes_.isEmpty() ) throw ModelException("Trying to access the first element of an empty list.");
 	return static_cast<T*> (nodes_.first());
@@ -113,7 +138,7 @@ template <class T> T* List::first()
 
 template <class T> T* List::last()
 {
-	if (!fullyLoaded) loadFully(* (model()->store()));
+	ensureFullyLoaded();
 
 	if ( nodes_.isEmpty() ) throw ModelException("Trying to access the last element of an empty list.");
 	return static_cast<T*> (nodes_.last());
@@ -121,7 +146,7 @@ template <class T> T* List::last()
 
 template <class T> T* List::at(int i)
 {
-	if (!fullyLoaded) loadFully(* (model()->store()));
+	ensureFullyLoaded();
 
 	return static_cast<T*> (nodes_[i]);
 }
@@ -129,5 +154,6 @@ template <class T> T* List::at(int i)
 inline const QVector<Node*>& List::nodes() { return nodes_; }
 inline void List::append(Node* node) { insert(nodes_.size(), node); }
 inline void List::prepend(Node* node) { insert(0, node); }
+inline bool List::contains(const Node* node) const {return nodes_.contains(const_cast<Node*>(node));}
 
 }

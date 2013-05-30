@@ -3,7 +3,8 @@ include(../Core/common_plugin.pri)
 
 DEFINES += PLUGINNAME_UPPERCASE_LIBRARY
 win32:LIBS += -llogger \
-    -lselftest
+    -lselftest \
+    -lmodelbase
 
 HEADERS += src/precompiled.h \
     src/PLUGINNAMEException.h \

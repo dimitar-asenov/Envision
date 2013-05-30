@@ -38,9 +38,10 @@ namespace Visualization {
 
 class VISUALIZATIONBASE_API Shape
 {
+	DECLARE_TYPE_ID
+
 	public:
 		typedef ShapeStyle StyleType;
-		static const QString& className();
 
 		const StyleType* style() const;
 		virtual void setStyle(const Visualization::ShapeStyle* style);
@@ -63,7 +64,7 @@ class VISUALIZATIONBASE_API Shape
 
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) = 0;
 
-		template <class ShapeClass> static void registerShape();
+		template <class ShapeClass> static int registerShape();
 		static Shape* createNewShape(const QString& shapeName, Item* parent);
 		static ShapeStyle* createNewShapeStyle(const QString& shapeName);
 
@@ -113,13 +114,17 @@ inline QSize Shape::outterSize(int innerWidth, int innerHeight) const { return o
 template <class Base, class Actual> inline Base* Shape::makeDefaultStyle() { return new Actual(); }
 template <class Base, class Actual> inline Base* Shape::makeDefaultShape(Item* parent) {return new Actual(parent); }
 
-template <class ShapeClass> inline void Shape::registerShape()
+template <class ShapeClass> inline int Shape::registerShape()
 {
-	if (shapeConstructors.contains(ShapeClass::className()))
-		throw VisualizationException("Trying to register an already registered shape type " + ShapeClass::className());
+	if (shapeConstructors.contains(ShapeClass::typeNameStatic()))
+		throw VisualizationException("Trying to register an already registered shape type "
+				+ ShapeClass::typeNameStatic());
 
-	shapeConstructors.insert(ShapeClass::className(),makeDefaultShape<Shape,ShapeClass>);
-	shapeStyleConstructors.insert(ShapeClass::className(),makeDefaultStyle<ShapeStyle,typename ShapeClass::StyleType>);
+	shapeConstructors.insert(ShapeClass::typeNameStatic(),
+			makeDefaultShape<Shape,ShapeClass>);
+	shapeStyleConstructors.insert(ShapeClass::typeNameStatic(),
+			makeDefaultStyle<ShapeStyle,typename ShapeClass::StyleType>);
+	return shapeConstructors.size();
 }
 
 }

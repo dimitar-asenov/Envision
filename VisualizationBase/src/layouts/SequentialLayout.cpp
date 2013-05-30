@@ -37,7 +37,7 @@ namespace Visualization {
 ITEM_COMMON_DEFINITIONS( SequentialLayout, "layout" )
 
 SequentialLayout::SequentialLayout(Item* parent, const StyleType* style) :
-	Layout(parent, style), spaceBetweenElements_(-1)
+Super(parent, style), spaceBetweenElements_(-1)
 {
 }
 

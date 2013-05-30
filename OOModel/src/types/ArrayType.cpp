@@ -43,7 +43,7 @@ ArrayType::~ArrayType()
 bool ArrayType::equals(const Type* other) const
 {
 	if (auto at = dynamic_cast<const ArrayType*> (other))
-		return elementType_ != nullptr && elementType_->equals(at->elementType_);
+		return elementType_ != nullptr && elementType_->equals(at->elementType_) && qualifiers() == other->qualifiers();
 
 	return false;
 }

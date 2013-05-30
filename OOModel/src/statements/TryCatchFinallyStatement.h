@@ -36,9 +36,9 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, TryCatchFinallyStatement)
 
 namespace OOModel {
 
-class OOMODEL_API TryCatchFinallyStatement: public Statement
+class OOMODEL_API TryCatchFinallyStatement: public Super<Statement>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(TryCatchFinallyStatement)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(TryCatchFinallyStatement)
 
 	ATTRIBUTE(StatementItemList, tryBody, setTryBody)
 	ATTRIBUTE(Model::TypedList<CatchClause>, catchClauses, setCatchClauses)

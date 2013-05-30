@@ -31,7 +31,7 @@ namespace Visualization {
 ITEM_COMMON_DEFINITIONS( PanelBorderLayout, "layout" )
 
 PanelBorderLayout::PanelBorderLayout(Item* parent, const StyleType* style) :
-	Layout(parent, style), top_(new PanelLayout(this, &style->topStyle())),
+Super(parent, style), top_(new PanelLayout(this, &style->topStyle())),
 	left_(), bottom_(), right_(), content_()
 {
 }

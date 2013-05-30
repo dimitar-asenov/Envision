@@ -28,10 +28,9 @@
 
 #include "../oovisualization_api.h"
 #include "VUnfinishedOperatorStyle.h"
+#include "VExpression.h"
 
 #include "OOModel/src/expressions/UnfinishedOperator.h"
-
-#include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/items/LayoutProvider.h"
 
 namespace Visualization {
@@ -40,8 +39,8 @@ namespace Visualization {
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VUnfinishedOperator : public Visualization::ItemWithNode<Visualization::LayoutProvider<>,
-OOModel::UnfinishedOperator>
+class OOVISUALIZATION_API VUnfinishedOperator : public Super<VExpression<VUnfinishedOperator,
+	Visualization::LayoutProvider<>, OOModel::UnfinishedOperator>>
 {
 	ITEM_COMMON(VUnfinishedOperator)
 
@@ -53,8 +52,6 @@ OOModel::UnfinishedOperator>
 		void determineChildren();
 
 	private:
-		typedef Visualization::ItemWithNode<Visualization::LayoutProvider<>, OOModel::UnfinishedOperator> BaseItemType;
-
 		QVector<Visualization::VText*> delimiters_;
 		QVector<Visualization::Item*> operands_;
 };

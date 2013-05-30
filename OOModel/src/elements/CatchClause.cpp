@@ -31,11 +31,11 @@ DEFINE_TYPED_LIST(OOModel::CatchClause)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(CatchClause, Model::ExtendableNode)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(CatchClause, Model::ExtendableNode)
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CatchClause)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CatchClause)
 
 REGISTER_ATTRIBUTE(CatchClause, exceptionToCatch, Expression, false, false, true)
-REGISTER_ATTRIBUTE(CatchClause, body, setBody, false, false, true)
+REGISTER_ATTRIBUTE(CatchClause, body, StatementItemList, false, false, true)
 
 QList<Model::Node*> CatchClause::findSymbols(const QRegExp& symbolExp,Model::Node* source, FindSymbolMode mode,
 		bool exhaustAllScopes)

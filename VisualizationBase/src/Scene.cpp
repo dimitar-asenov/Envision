@@ -113,7 +113,7 @@ void Scene::updateItems()
 	// Update Selections
 	// TODO do not recreate all items all the time.
 	for (int i = 0; i<selections_.size(); i++) SAFE_DELETE_ITEM(selections_[i]);
-	QList<QGraphicsItem *> selected = selectedItems();
+	auto selected = selectedItems();
 
 	// Only display a selection when there are multiple selected items or no cursor
 	bool draw_selections = selected.size() !=1 || mainCursor_ == nullptr || mainCursor_->visualization() == nullptr;
@@ -132,8 +132,7 @@ void Scene::updateItems()
 	{
 		for (int i = 0; i<selected.size(); ++i)
 		{
-			Item* s = static_cast<Item*> (selected[i]);
-			selections_.append(new SelectedItem(s));
+			selections_.append(new SelectedItem(selected[i]));
 			addItem(selections_.last());
 			selections_.last()->updateSubtree();
 		}
@@ -275,7 +274,7 @@ void Scene::keyPressEvent (QKeyEvent *event)
 		for (auto top : topLevelItems_)
 		{
 			auto parent = top;
-			while (parent->parentItem()) parent = static_cast<Item*>(parent->parentItem());
+			while (parent->parent()) parent = parent->parent();
 
 			auto rootItem = dynamic_cast<Visualization::RootItem*>(parent);
 			if (rootItem) rootItem->setUpdateNeeded(Visualization::Item::FullUpdate);
@@ -289,6 +288,23 @@ void Scene::setMainCursor(Cursor* cursor)
 	SAFE_DELETE(mainCursor_);
 	mainCursor_ = cursor;
 	mainCursorsJustSet_ = true;
+}
+
+Item* Scene::focusItem() const
+{
+	return Item::envisionItem(QGraphicsScene::focusItem());
+}
+
+QList<Item*> Scene::selectedItems() const
+{
+	QList<Item*> list;
+	for (auto item :  QGraphicsScene::selectedItems())
+	{
+		auto envisionItem = Item::envisionItem(item);
+		if (envisionItem && !list.contains(envisionItem))
+			list.append(envisionItem);
+	}
+	return list;
 }
 
 void Scene::computeSceneRect()

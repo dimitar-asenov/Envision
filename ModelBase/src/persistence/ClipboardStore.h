@@ -35,6 +35,8 @@ namespace Model {
 class MODELBASE_API ClipboardStore: public PersistentStore
 {
 	public:
+		virtual ~ClipboardStore();
+
 		virtual void putNode(const Node* node) = 0;
 		virtual void putNodes(const QList<const Node*>& nodes) = 0;
 

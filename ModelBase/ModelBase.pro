@@ -3,8 +3,12 @@ include(../Core/common_plugin.pri)
 DEFINES += MODELBASE_LIBRARY
 win32:LIBS += -llogger \
     -lselftest
-HEADERS += src/test_nodes/TestNodesInitializer.h \
-    src/InitializationRegistry.h \
+HEADERS += src/commands/CompositeNodeChangeChild.h \
+    src/nodes/composite/CompositeNode.h \
+    src/nodes/composite/CompositeIndex.h \
+    src/nodes/composite/Attribute.h \
+    src/nodes/composite/AttributeChain.h \
+    src/test_nodes/TestNodesInitializer.h \
     src/commands/NodeOwningCommand.h \
     src/model/ModelManager.h \
     src/concurrent/InterruptibleThread.h \
@@ -13,8 +17,6 @@ HEADERS += src/test_nodes/TestNodesInitializer.h \
     src/visitor/VisitorDefinition.h \
     src/visitor/Visitor.h \
     src/ModelException.h \
-    src/adapter/AdapterManager.h \
-    src/commands/ExtendedNodeChild.h \
     src/commands/FieldSet.h \
     src/commands/ListInsert.h \
     src/commands/ListPut.h \
@@ -25,10 +27,6 @@ HEADERS += src/test_nodes/TestNodesInitializer.h \
     src/modelbase_api.h \
     src/nodes/Boolean.h \
     src/nodes/Character.h \
-    src/nodes/Extendable/Attribute.h \
-    src/nodes/Extendable/AttributeChain.h \
-    src/nodes/Extendable/ExtendableIndex.h \
-    src/nodes/Extendable/ExtendableNode.h \
     src/nodes/Float.h \
     src/nodes/Integer.h \
     src/nodes/List.h \
@@ -53,22 +51,25 @@ HEADERS += src/test_nodes/TestNodesInitializer.h \
     src/commands/SetModificationTarget.h \
     test/PersistentStoreMock.h \
     src/modelbase.h
-SOURCES += src/test_nodes/TestNodesInitializer.cpp \
-    src/InitializationRegistry.cpp \
+SOURCES += src/commands/CompositeNodeChangeChild.cpp \
+    src/nodes/composite/CompositeNode.cpp \
+    src/nodes/composite/CompositeIndex.cpp \
+    src/nodes/composite/Attribute.cpp \
+    src/nodes/composite/AttributeChain.cpp \
+    src/persistence/ClipboardStore.cpp \
+    src/test_nodes/TestNodesInitializer.cpp \
     src/commands/NodeOwningCommand.cpp \
     src/model/ModelManager.cpp \
     src/concurrent/NodeReadWriteLock.cpp \
     src/model/Model.cpp \
     test/VisitorTests.cpp \
     src/persistence/PersistentStore.cpp \
-    src/adapter/AdapterManager.cpp \
     src/commands/AddModifiedNode.cpp \
     src/test_nodes/PositionExtension.cpp \
     src/nodes/Character.cpp \
     src/nodes/Boolean.cpp \
     src/nodes/Float.cpp \
     src/commands/ListPut.cpp \
-    src/commands/ExtendedNodeChild.cpp \
     src/persistence/PersistedNode.cpp \
     src/test_nodes/BinaryNodePersistenceUnit.cpp \
     src/test_nodes/PartialList.cpp \
@@ -81,11 +82,7 @@ SOURCES += src/test_nodes/TestNodesInitializer.cpp \
     src/nodes/List.cpp \
     test/NotificationsTest.cpp \
     test/NotificationListener.cpp \
-    src/nodes/Extendable/Attribute.cpp \
-    src/nodes/Extendable/AttributeChain.cpp \
-    src/nodes/Extendable/ExtendableIndex.cpp \
     src/nodes/Node.cpp \
-    src/nodes/Extendable/ExtendableNode.cpp \
     src/commands/UndoCommand.cpp \
     test/ConcurrencyTests.cpp \
     src/commands/SetModificationTarget.cpp \

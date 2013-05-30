@@ -25,7 +25,7 @@
 ***********************************************************************************************************************/
 
 #include "expressions/ThisExpression.h"
-#include "top_level/Class.h"
+#include "declarations/Class.h"
 #include "../types/ClassType.h"
 #include "../types/ErrorType.h"
 
@@ -34,8 +34,8 @@ DEFINE_TYPED_LIST(OOModel::ThisExpression)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(ThisExpression, Expression)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(ThisExpression, Expression)
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(ThisExpression)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(ThisExpression)
 
 Type* ThisExpression::type()
 {

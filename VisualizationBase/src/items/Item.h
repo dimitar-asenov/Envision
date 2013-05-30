@@ -45,6 +45,8 @@ class SequentialLayout;
 
 class VISUALIZATIONBASE_API Item : public QGraphicsItem
 {
+	DECLARE_TYPE_ID
+
 	public:
 		typedef ItemStyle StyleType;
 		const static int LAYER_DEFAULT_Z = 0;
@@ -250,13 +252,6 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		static int registerVisualization();
 
 		/**
-		 * Returns the type id of this visualization class.
-		 *
-		 * Each class that inherits from Item has a unique type id that can be queried during runtime.
-		 */
-		virtual int typeId() const = 0;
-
-		/**
 		 * Returns all visualization add-ons of this and inherited classes.
 		 */
 		virtual QList<VisualizationAddOn*> addOns();
@@ -277,6 +272,25 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		bool isCategoryHiddenDuringPaint();
 
 		static QMultiHash<Model::Node*, Item*>& nodeItemsMap();
+
+		static void setDefaultClassHandler(InteractionHandler* handler);
+		static InteractionHandler* defaultClassHandler();
+
+		/**
+		 * Returns \a item if it is an instance of Item* or the closest of its ancestors that is an Item*.
+		 */
+		static Item* envisionItem(QGraphicsItem* item);
+
+		/**
+		 * Returns a list of all direct children items which are an instance of Item.
+		 *
+		 * The default implementation assumes that all children are instances of Item and simply calls
+		 * QGraphicsView::childItems(). Reimplement this in items that can contain non-Item children to return the correct
+		 * list.
+		 *
+		 * This method hides QGraphicsItem::childItems();
+		 */
+		virtual QList<Item*> childItems() const;
 
 	protected:
 
@@ -351,7 +365,6 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 
 		Scene::ItemCategory itemCategory_;
 
-		void updateChildren();
 		void updateAddOnItems();
 
 		/**
@@ -360,6 +373,8 @@ class VISUALIZATIONBASE_API Item : public QGraphicsItem
 		 * Use addAddOn() and removeAddOn() to change the contents of the list.
 		 */
 		static QList<VisualizationAddOn*>& staticAddOns();
+
+		static InteractionHandler* defaultClassHandler_;
 
 		QMultiMap<VisualizationAddOn*, Item* > addOnItems_;
 
@@ -462,7 +477,16 @@ inline const QMultiMap<VisualizationAddOn*, Item* >& Item::addOnItems()
 	return addOnItems_;
 }
 
+inline Item* Item::envisionItem(QGraphicsItem* item)
+{
+	while(item && !dynamic_cast<Item*>(item)) item = item->parentItem();
+	return static_cast<Item*>(item);
+}
+
 inline void Item::setItemCategory( Scene::ItemCategory cat) { itemCategory_ = cat; }
 inline bool Item::isCategoryHiddenDuringPaint() { return scene()->isHiddenCategory(itemCategory()); }
+
+inline void Item::setDefaultClassHandler(InteractionHandler* handler) {defaultClassHandler_ = handler;}
+inline InteractionHandler* Item::defaultClassHandler() {return defaultClassHandler_;}
 
 }

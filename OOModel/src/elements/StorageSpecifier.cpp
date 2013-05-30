@@ -33,21 +33,21 @@ DEFINE_TYPED_LIST(OOModel::StorageSpecifier)
 
 namespace OOModel {
 
-NODE_DEFINE_TYPE_REGISTRATION_METHODS(StorageSpecifier, Model::Node)
+NODE_DEFINE_TYPE_REGISTRATION_METHODS(StorageSpecifier)
 
-StorageSpecifier::StorageSpecifier(Model::Node *parent) :
-	Node(parent), specifier(INSTANCE_VARIABLE)
+StorageSpecifier::StorageSpecifier(Model::Node *parent)
+: Super(parent), specifier(INSTANCE_VARIABLE)
 {
 }
 
-StorageSpecifier::StorageSpecifier(Model::Node *parent, Model::PersistentStore &store, bool) :
-	Node(parent)
+StorageSpecifier::StorageSpecifier(Model::Node *parent, Model::PersistentStore &store, bool)
+: Super(parent)
 {
 	specifier = fromInt( store.loadIntValue() );
 }
 
 StorageSpecifier::StorageSpecifier(const StorageSpecifierTypes val)
-	:Node(nullptr), specifier(val)
+: Super(nullptr), specifier(val)
 {
 
 }

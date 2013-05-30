@@ -31,8 +31,23 @@ Q_EXPORT_PLUGIN2( PLUGINNAME_LOWERCASE, NAMESPACE::PLUGINNAME )
 
 namespace NAMESPACE {
 
+Core::InitializationRegistry& nodeTypeInitializationRegistry()
+{
+	static Core::InitializationRegistry r;
+	return r;
+}
+
+Core::InitializationRegistry& itemTypeInitializationRegistry()
+{
+	static Core::InitializationRegistry r;
+	return r;
+}
+
 bool PLUGINNAME::initialize(Core::EnvisionManager&)
 {
+	nodeTypeInitializationRegistry().initializeAll();
+	itemTypeInitializationRegistry().initializeAll();
+
 	return true;
 }
 

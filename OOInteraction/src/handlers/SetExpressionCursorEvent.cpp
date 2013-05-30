@@ -29,7 +29,7 @@
 #include "string_offset_providers/StringOffsetProvider.h"
 
 #include "VisualizationBase/src/items/Item.h"
-#include "ModelBase/src/adapter/AdapterManager.h"
+#include "Core/src/AdapterManager.h"
 
 namespace OOInteraction {
 
@@ -62,7 +62,7 @@ void SetExpressionCursorEvent::execute()
 		auto nodeVis = parentContainerChain_.at(container)->findVisualizationOf(node_);
 		if (nodeVis)
 		{
-			auto* sp = Model::AdapterManager::adapt<StringOffsetProvider>( nodeVis );
+			auto* sp = Core::AdapterManager::adapt<StringOffsetProvider>( nodeVis );
 			if (sp)
 			{
 				sp->setOffset(offset_);

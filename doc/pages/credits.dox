@@ -1,0 +1,40 @@
+/*! \page credits Credits
+
+Envision is a research protoype developed at the <a href="http://www.pm.inf.ethz.ch/">Chair of Programming Methodology</a>, Department of Computer Science, ETH Zurich. External contributions are welcome.
+
+Envision maintainers : Dimitar Asenov
+
+\section contributors Source code contributors (in alphabetical order of last name)
+
+Dimitar Asenov - https://github.com/dimitar-asenov
+		- %Core Envision framework and MVC implementation
+		- Extensions for object-oriented programming
+		- Code contracts, custom method call, and control flow examples
+		- Java importer
+		- Documentation
+
+<br>
+Andrea Helfenstein - https://github.com/helandre
+		- Declarative API for defining visualizations and supporting documentation
+
+<br>
+Lukas Vogel - https://github.com/lukedirtwalker
+		- Enhancements to the object-oriented model
+
+\section special Special Thanks
+	- Peter Müller - for advising the PhD studies of Dimitar and guiding the work on Envision.
+
+	- Lucia Asenov - for her help with testing Envision and suggesting improvements. 
+
+	- Openclipart (<a href="http://openclipart.org">http://openclipart.org</a>) - for providing royalty free vector
+	graphics. List of graphics used within Envision:
+		- http://openclipart.org/detail/17922/books-by-aj
+		- http://openclipart.org/detail/23918/package-by-anonymous-23918
+		- http://openclipart.org/detail/27122/brooklyn-bridge-by-ericortner-27122
+		- http://openclipart.org/detail/74179/community-by-russel
+		- http://openclipart.org/detail/21735/tree-by-gurica
+		- http://openclipart.org/detail/168299/exit-icon-by-ivak
+		- http://openclipart.org/detail/22083/crane-by-nicubunu
+		- http://openclipart.org/detail/34693/architetto----tasto-2-by-anonymous
+
+*/ 

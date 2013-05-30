@@ -54,7 +54,7 @@ const int PROMPT_TO_RECEIVER_DISTANCE = 3;
 ITEM_COMMON_DEFINITIONS(CommandPrompt, "item")
 
 CommandPrompt::CommandPrompt(Item* commandReceiver, const StyleType* style) :
-	Item(nullptr, style),
+	Super(nullptr, style),
 	commandReceiver_(commandReceiver),
 	layout(new SequentialLayout(this, &style->layout())),
 	suggestionContainer(new SequentialLayout(layout, &style->suggestionContainer())),

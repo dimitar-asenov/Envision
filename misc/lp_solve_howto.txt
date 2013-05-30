@@ -1,0 +1,9 @@
+To install LP Solve in Windows:
+- Download the latest update of version 5.5 from here: http://sourceforge.net/projects/lpsolve/files/lpsolve/
+  Make sure to get the correct version for your g++ settings (32/64 bit)
+  
+- In a suitable location e.g. (C:\mingw64\opt\include). Lets call this directory LIB. Create a subdirectory of LIB
+  called 'lpsolve' and extract all files from the archive directly there.
+  
+- Configure your mingw installation to use the new directory: Add the LIB directory (not 'lpsolve' directly) to the
+  CPLUS_INCLUDE_PATH environment variable and add the 'lpsolve' directory to the LIBRARY_PATH variable.

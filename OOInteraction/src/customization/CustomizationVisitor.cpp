@@ -25,11 +25,11 @@
  **********************************************************************************************************************/
 
 #include "CustomizationVisitor.h"
-#include "../expression_editor/operators/CommandDescriptor.h"
-#include "../expression_editor/operators/commands/CreateMethodCall.h"
+#include "../expression_editor/CommandDescriptor.h"
+#include "../expression_editor/commands/CreateMethodCall.h"
 
 #include "OOVisualization/src/alternative/VKeywordMethodCall.h"
-#include "OOModel/src/top_level/Method.h"
+#include "OOModel/src/declarations/Method.h"
 #include "OOModel/src/expressions/MethodCallExpression.h"
 #include "OOModel/src/expressions/StringLiteral.h"
 #include "OOModel/src/expressions/IntegerLiteral.h"
@@ -37,6 +37,9 @@
 #include "VisualizationBase/src/renderer/VisualizationGroup.h"
 
 namespace OOInteraction {
+
+// This is to force the vtable to be generated once only in OOInteraction
+CustomizationVisitor::~CustomizationVisitor(){}
 
 Visualization::VisualizationGroup* CustomizationVisitor::customizationGroup_{};
 QList<CommandExpression*> CustomizationVisitor::registeredCommands_;
@@ -49,9 +52,8 @@ void CustomizationVisitor::init(Visualization::VisualizationGroup* customization
 
 Model::Node* CustomizationVisitor::visitMethod(CustomizationVisitor*, OOModel::Method* met)
 {
-	for(int i = 0; i<met->annotations()->size(); ++i)
+	for(auto annotation : *met->annotations())
 	{
-		auto annotation = met->annotations()->at(i);
 		if ( auto sti = dynamic_cast<OOModel::ExpressionStatement*>(annotation) )
 			if (auto call = dynamic_cast<OOModel::MethodCallExpression*>(sti->expression()) )
 			{

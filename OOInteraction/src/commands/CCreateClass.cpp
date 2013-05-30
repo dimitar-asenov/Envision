@@ -26,8 +26,8 @@
 
 #include "commands/CCreateClass.h"
 
-#include "OOModel/src/top_level/Project.h"
-#include "OOModel/src/top_level/Class.h"
+#include "OOModel/src/declarations/Project.h"
+#include "OOModel/src/declarations/Class.h"
 
 #include "InteractionBase/src/events/SetCursorEvent.h"
 #include "VisualizationBase/src/items/RootItem.h"

@@ -26,20 +26,20 @@
 
 #include "ClassTypeExpression.h"
 #include "../../types/ClassType.h"
-#include "../../top_level/Class.h"
+#include "../../declarations/Class.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(OOModel::ClassTypeExpression)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(ClassTypeExpression, TypeExpression)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(ClassTypeExpression, TypeExpression)
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(ClassTypeExpression)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(ClassTypeExpression)
 
 REGISTER_ATTRIBUTE(ClassTypeExpression, typeExpression, ReferenceExpression, false, false, true)
 
 ClassTypeExpression::ClassTypeExpression(ReferenceExpression* ref)
-: TypeExpression (nullptr, ClassTypeExpression::getMetaData())
+: Super(nullptr, ClassTypeExpression::getMetaData())
 {
 	if (ref) setTypeExpression(ref);
 }

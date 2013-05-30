@@ -32,6 +32,8 @@
 
 #include "InteractionBase/src/events/SetCursorEvent.h"
 #include "VisualizationBase/src/cursor/LayoutCursor.h"
+#include "VisualizationBase/src/items/Static.h"
+#include "VisualizationBase/src/items/NodeWrapper.h"
 
 namespace OOInteraction {
 
@@ -68,7 +70,7 @@ void HLoop::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			vloop->node()->setCondition(empty);
 			vloop->node()->model()->endModification();
 
-			vloop->header()->setUpdateNeeded(Visualization::Item::StandardUpdate);
+			vloop->setUpdateNeeded(Visualization::Item::StandardUpdate);
 			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty));
 		}
 	}
@@ -84,7 +86,7 @@ void HLoop::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			vloop->node()->setUpdateStep(empty);
 			vloop->node()->model()->endModification();
 
-			vloop->header()->setUpdateNeeded(Visualization::Item::StandardUpdate);
+			vloop->setUpdateNeeded(Visualization::Item::StandardUpdate);
 			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty));
 		}
 	}
@@ -100,7 +102,7 @@ void HLoop::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			vloop->node()->setInitStep(empty);
 			vloop->node()->model()->endModification();
 
-			vloop->header()->setUpdateNeeded(Visualization::Item::StandardUpdate);
+			vloop->setUpdateNeeded(Visualization::Item::StandardUpdate);
 			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty));
 		}
 

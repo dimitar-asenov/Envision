@@ -28,17 +28,17 @@
 
 #include "../oovisualization_api.h"
 #include "VBlockStyle.h"
+#include "VStatementItem.h"
 
 #include "OOModel/src/statements/Block.h"
 
 #include "VisualizationBase/src/items/Item.h"
-#include "VisualizationBase/src/items/ItemWithNode.h"
 
 namespace OOVisualization {
 
 class VStatementItemList;
 
-class OOVISUALIZATION_API VBlock : public Visualization::ItemWithNode< Visualization::Item, OOModel::Block>
+class OOVISUALIZATION_API VBlock : public Super<VStatementItem<VBlock, Visualization::Item, OOModel::Block>>
 {
 	ITEM_COMMON(VBlock)
 
@@ -51,8 +51,6 @@ class OOVISUALIZATION_API VBlock : public Visualization::ItemWithNode< Visualiza
 		void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		typedef Visualization::ItemWithNode< Visualization::Item, OOModel::Block> BaseItemType;
-
 		VStatementItemList* items_;
 };
 

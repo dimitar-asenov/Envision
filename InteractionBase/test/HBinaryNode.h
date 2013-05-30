@@ -26,11 +26,11 @@
 
 #pragma once
 
-#include "../src/handlers/HExtendable.h"
+#include "../src/handlers/HComposite.h"
 
 namespace Interaction {
 
-class HBinaryNode : public HExtendable
+class HBinaryNode : public HComposite
 {
 	public:
 		static HBinaryNode* instance();

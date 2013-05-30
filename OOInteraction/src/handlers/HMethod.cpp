@@ -26,7 +26,7 @@
 
 #include "handlers/HMethod.h"
 
-#include "OOVisualization/src/top_level/VMethod.h"
+#include "OOVisualization/src/declarations/VMethod.h"
 #include "OOVisualization/src/elements/VStatementItemList.h"
 #include "OOModel/src/expressions/EmptyExpression.h"
 #include "OOModel/src/statements/ExpressionStatement.h"
@@ -77,7 +77,7 @@ void HMethod::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 				m->node()->items()->append(es);
 				m->node()->model()->endModification();
 
-				m->content()->setUpdateNeeded(Visualization::Item::StandardUpdate);
+				m->setUpdateNeeded(Visualization::Item::StandardUpdate);
 				target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty));
 			}
 		}

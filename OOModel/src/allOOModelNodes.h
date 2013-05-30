@@ -26,12 +26,13 @@
 
 #pragma once
 
-#include "top_level/Project.h"
-#include "top_level/Library.h"
-#include "top_level/Module.h"
-#include "top_level/Class.h"
-#include "top_level/Method.h"
-#include "top_level/Field.h"
+#include "declarations/Project.h"
+#include "declarations/Module.h"
+#include "declarations/Class.h"
+#include "declarations/Method.h"
+#include "declarations/Field.h"
+#include "declarations/Declaration.h"
+#include "declarations/VariableDeclaration.h"
 
 #include "statements/Statement.h"
 #include "statements/Block.h"
@@ -44,6 +45,7 @@
 #include "statements/SwitchCase.h"
 #include "statements/SwitchStatement.h"
 #include "statements/ExpressionStatement.h"
+#include "statements/DeclarationStatement.h"
 #include "statements/TryCatchFinallyStatement.h"
 
 #include "expressions/Expression.h"
@@ -55,6 +57,7 @@
 #include "expressions/NullLiteral.h"
 #include "expressions/ThisExpression.h"
 #include "expressions/NewExpression.h"
+#include "expressions/DeleteExpression.h"
 #include "expressions/MethodCallExpression.h"
 #include "expressions/UnaryOperation.h"
 #include "expressions/BinaryOperation.h"
@@ -66,7 +69,7 @@
 #include "expressions/UnfinishedOperator.h"
 #include "expressions/CommaExpression.h"
 #include "expressions/AssignmentExpression.h"
-#include "expressions/VariableDeclaration.h"
+#include "expressions/VariableDeclarationExpression.h"
 #include "expressions/ConditionalExpression.h"
 #include "expressions/ThrowExpression.h"
 #include "expressions/LambdaExpression.h"
@@ -75,8 +78,13 @@
 #include "expressions/types/PrimitiveTypeExpression.h"
 #include "expressions/types/ClassTypeExpression.h"
 #include "expressions/types/ArrayTypeExpression.h"
+#include "expressions/types/PointerTypeExpression.h"
+#include "expressions/types/ReferenceTypeExpression.h"
+#include "expressions/types/AutoTypeExpression.h"
+#include "expressions/types/TypeQualifierExpression.h"
 
 #include "elements/Visibility.h"
+#include "elements/Enumerator.h"
 #include "elements/StorageSpecifier.h"
 #include "elements/StatementItem.h"
 #include "elements/StatementItemList.h"

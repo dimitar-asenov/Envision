@@ -5,14 +5,13 @@
 	<layout prototypes="layout/SequentialLayout/default" />
 	
 	<arguments prototypes="item/VList/default">
-		<shape />	
-		<drawShapeWhenEmpty>true</drawShapeWhenEmpty>	
+		<drawShapeWhenEmpty>true</drawShapeWhenEmpty>
+		<shape prototypes="shape/Braces/default">
+			Braces
+			<leftBrace>(</leftBrace>
+			<rightBrace>)</rightBrace>
+		</shape>
 		<itemsStyle prototypes="layout/SequentialLayout/default">
-			<shape prototypes="shape/Braces/default">
-				Braces
-				<leftBrace>(</leftBrace>
-				<rightBrace>)</rightBrace>	
-			</shape>
 			<direction>0</direction>
 			<spaceBetweenElements>15</spaceBetweenElements>
 			<noInnerCursors>true</noInnerCursors>

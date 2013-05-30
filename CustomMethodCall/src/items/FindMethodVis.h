@@ -43,7 +43,8 @@ namespace Visualization {
 namespace CustomMethodCall {
 
 class CUSTOMMETHODCALL_API FindMethodVis
-: public Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::MethodCallExpression>
+: public Super<Visualization::ItemWithNode<FindMethodVis, Visualization::LayoutProvider<>,
+  	  OOModel::MethodCallExpression, false>>
 {
 	ITEM_COMMON(FindMethodVis)
 
@@ -55,8 +56,6 @@ class CUSTOMMETHODCALL_API FindMethodVis
 		void determineChildren();
 
 	private:
-		typedef Visualization::ItemWithNode< Visualization::LayoutProvider<>, OOModel::MethodCallExpression> BaseItemType;
-
 		Visualization::Text* name_;
 		Visualization::Static* separator_;
 		Visualization::Item* prefix_;

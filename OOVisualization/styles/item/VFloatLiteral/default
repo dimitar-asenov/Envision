@@ -5,17 +5,11 @@
 		<style>1</style>
 		<color>
 			<alpha>255</alpha>
-			<red>0</red>
+			<red>64</red>
 			<green>0</green>
-			<blue>255</blue>
+			<blue>128</blue>
 		</color>
 	</pen>
-	<font>
-		<weight>75</weight>
-	</font>
-	<selectionFont>
-		<weight>75</weight>
-	</selectionFont>
 	<caretPen>
 		<width>2.0</width>
 		<style>1</style>

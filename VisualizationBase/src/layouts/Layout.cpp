@@ -35,7 +35,7 @@ namespace Visualization {
 ITEM_COMMON_DEFINITIONS( Layout, "layout" )
 
 Layout::Layout(Item* parent, const StyleType* style) :
-	Item(parent, style)
+Super(parent, style)
 {
 	setFlag(QGraphicsItem::ItemIsSelectable, false);
 	setAcceptedMouseButtons(Qt::LeftButton);

@@ -38,7 +38,6 @@ namespace OOVisualization {
 class OOVISUALIZATION_API VIfStatementStyle : public Visualization::ItemStyle
 {
 	private:
-		Visualization::PanelBorderLayoutStyle layout_;
 		Visualization::SequentialLayoutStyle header_;
 		Visualization::StaticStyle icon_;
 		Visualization::SequentialLayoutStyle condition_;
@@ -53,7 +52,6 @@ class OOVISUALIZATION_API VIfStatementStyle : public Visualization::ItemStyle
 	public:
 		void load(Visualization::StyleLoader& sl);
 
-		const Visualization::PanelBorderLayoutStyle& layout() const;
 		const Visualization::SequentialLayoutStyle& header() const;
 		const Visualization::StaticStyle& icon() const;
 		const Visualization::SequentialLayoutStyle& condition() const;
@@ -66,7 +64,6 @@ class OOVISUALIZATION_API VIfStatementStyle : public Visualization::ItemStyle
 		const Visualization::VListStyle& elseBranch() const;
 };
 
-inline const Visualization::PanelBorderLayoutStyle& VIfStatementStyle::layout() const { return layout_; }
 inline const Visualization::SequentialLayoutStyle& VIfStatementStyle::header() const { return header_; }
 inline const Visualization::StaticStyle& VIfStatementStyle::icon() const { return icon_; }
 inline const Visualization::SequentialLayoutStyle& VIfStatementStyle::condition() const { return condition_; }

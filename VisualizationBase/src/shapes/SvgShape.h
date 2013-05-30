@@ -33,7 +33,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API SvgShape : public Shape
+class VISUALIZATIONBASE_API SvgShape : public Super<Shape>
 {
 	SHAPE_COMMON(SvgShape)
 

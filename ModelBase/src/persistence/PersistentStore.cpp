@@ -29,6 +29,8 @@
 
 namespace Model {
 
+PersistentStore::~PersistentStore() {}
+
 void PersistentStore::setReferenceTargetr(Reference* r, Node* target)
 {
 	r->target_ = target;

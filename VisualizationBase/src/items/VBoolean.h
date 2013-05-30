@@ -35,7 +35,7 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API VBoolean : public ItemWithNode<TextRenderer, Model::Boolean>
+class VISUALIZATIONBASE_API VBoolean : public Super<ItemWithNode<VBoolean, TextRenderer, Model::Boolean>>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VBoolean, TextStyle)
 
@@ -45,9 +45,6 @@ class VISUALIZATIONBASE_API VBoolean : public ItemWithNode<TextRenderer, Model::
 
 	protected:
 		virtual QString currentText();
-
-	private:
-		typedef ItemWithNode<TextRenderer, Model::Boolean> BaseItemType;
 };
 
 }

@@ -29,21 +29,21 @@
 #include "../visualizationbase_api.h"
 
 #include "ItemWithNode.h"
-#include "LayoutProvider.h"
+#include "../declarative/DeclarativeItem.h"
+#include "../declarative/SequentialLayoutFormElement.h"
 #include "VListStyle.h"
-#include "../layouts/SequentialLayout.h"
 #include "ModelBase/src/nodes/List.h"
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API VList: public ItemWithNode< LayoutProvider<>, Model::List>
+class VISUALIZATIONBASE_API VList: public Super<ItemWithNode<VList, DeclarativeItem<VList>, Model::List>>
 {
 	ITEM_COMMON(VList)
 
 	public:
 		VList(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 
-		int XXlength() const;
+		int length() const;
 		template <class T> T* itemAt(int itemIndex);
 		template <class T> T* itemAtNodeIndex(int nodeIndex);
 		int focusedItemIndex() const;
@@ -55,9 +55,10 @@ class VISUALIZATIONBASE_API VList: public ItemWithNode< LayoutProvider<>, Model:
 		bool suppressDefaultRemovalHandler() const;
 		void setSuppressDefaultRemovalHandler(bool suppress);
 
-	protected:
-		virtual void determineChildren() override;
+		static void initializeForms();
+		virtual int determineForm();
 
+	protected:
 		/**
 		 * Called during determineChildren() in order to determine which nodes should be shown.
 		 *
@@ -75,17 +76,21 @@ class VISUALIZATIONBASE_API VList: public ItemWithNode< LayoutProvider<>, Model:
 		void setRange(int begin, int end);
 
 	private:
-		typedef ItemWithNode< LayoutProvider<>, Model::List> BaseItemType;
-
 		bool suppressDefaultRemovalHandler_{};
 		int rangeBegin_{};
 		int rangeEnd_{};
 };
 
-inline int VList::XXlength() const { return layout()->length(); }
-inline int VList::focusedItemIndex() const { return layout()->focusedElementIndex(); }
+inline int VList::length() const { return static_cast<SequentialLayoutFormElement*>(currentForm())->length(this); }
+inline int VList::focusedItemIndex() const
+{
+	return static_cast<SequentialLayoutFormElement*>(currentForm())->focusedElementIndex(this);
+}
 inline int VList::focusedNodeIndex() const { return focusedItemIndex() + rangeBegin_; }
-template <class T> inline T* VList::itemAt(int itemIndex) { return layout()->at<T>(itemIndex); }
+template <class T> inline T* VList::itemAt(int itemIndex)
+{
+		return static_cast<SequentialLayoutFormElement*>(currentForm())->itemAt<T>(this, itemIndex);
+}
 template <class T> inline T* VList::itemAtNodeIndex(int nodeIndex)
 {
 		Q_ASSERT(rangeBegin_ <= nodeIndex);

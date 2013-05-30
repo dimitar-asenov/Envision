@@ -25,18 +25,19 @@
 ***********************************************************************************************************************/
 
 #include "expressions/Expression.h"
+#include "../types/ErrorType.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(OOModel::Expression)
 
 namespace OOModel {
 
-EXTENDABLENODE_DEFINE_EMPTY_CONSTRUCTORS(Expression, Model::ExtendableNode)
-EXTENDABLENODE_DEFINE_TYPE_REGISTRATION_METHODS(Expression, Model::ExtendableNode)
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(Expression)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(Expression)
 
 Type* Expression::type()
 {
-	return nullptr;
+	return new ErrorType("Uninitialized expression type");
 }
 
 }

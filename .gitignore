@@ -2,3 +2,13 @@
 /doc/generated
 /Makefile
 /*.user
+/*/object_script.*.Debug
+/*/object_script.*.Release
+
+/*/debug
+/*/release
+/*/*.so
+/*/*.dll
+/*/Makefile
+/*/Makefile.Release
+/*/Makefile.Debug

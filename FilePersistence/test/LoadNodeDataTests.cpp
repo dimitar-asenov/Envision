@@ -42,8 +42,6 @@ TEST(FilePersistence, LoadDataMultipleUnits)
 	store.setBaseFolder(testDir);
 
 	typedef PersistedValue< QString >* String;
-	typedef PersistedValue< int >* Integer;
-	typedef PersistedValue< double >* Double;
 	typedef PersistedValue< QList<PersistedNode*> >* Composite;
 
 	// Root Node

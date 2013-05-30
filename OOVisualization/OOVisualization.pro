@@ -7,27 +7,50 @@ win32:LIBS += -llogger \
     -loomodel \
     -lvisualizationbase \
     -linteractionbase
-HEADERS += src/alternative/VKeywordMethodCallStyle.h \
+HEADERS += src/expressions/types/VAutoType.h \
+    src/declarations/VFieldStyle.h \
+    src/declarations/VField.h \
+    src/expressions/VVariableDeclarationExpressionStyle.h \
+    src/expressions/VVariableDeclarationExpression.h \
+    src/declarations/VClass.h \
+    src/declarations/VClassStyle.h \
+    src/declarations/VMethod.h \
+    src/declarations/VMethodStyle.h \
+    src/declarations/VModule.h \
+    src/declarations/VModuleStyle.h \
+    src/declarations/VProject.h \
+    src/declarations/VProjectStyle.h \
+    src/expressions/allOOExpressionVisualizations.h \
+    src/expressions/literals/VBooleanLiteral.h \
+    src/expressions/literals/VCharacterLiteral.h \
+    src/expressions/literals/VFloatLiteral.h \
+    src/expressions/literals/VIntegerLiteral.h \
+    src/expressions/literals/VNullLiteral.h \
+    src/expressions/literals/VStringLiteral.h \
+    src/expressions/literals/VStringLiteralStyle.h \
+    src/expressions/types/VClassType.h \
+    src/expressions/types/VPrimitiveType.h \
+    src/expressions/StandardExpressionDefinitions.h \
+    src/expressions/StandardExpressionVisualizations.h \
+    src/elements/VCatchClauseStyle.h \
+    src/expressions/VExpression.h \
+    src/elements/VCatchClause.h \
+    src/statements/VStatementItem.h \
+    src/elements/VEnumerator.h \
+    src/elements/VEnumeratorStyle.h \
+    src/alternative/VKeywordMethodCallStyle.h \
     src/alternative/VKeywordMethodCall.h \
     src/expressions/VLambdaExpressionStyle.h \
     src/expressions/VLambdaExpression.h \
     src/statements/VTryCatchFinallyStyle.h \
-    src/statements/VCatchClauseStyle.h \
-    src/statements/VCatchClause.h \
     src/statements/VTryCatchFinally.h \
-    src/expressions/VThrowExpressionStyle.h \
-    src/expressions/VThrowExpression.h \
     test/MethodAddOn.h \
     src/expressions/VEmptyExpressionStyle.h \
     src/elements/VStatementItemList.h \
     src/elements/VFormalTypeArgumentStyle.h \
     src/elements/VFormalTypeArgument.h \
-    src/types/VClassType.h \
-    src/expressions/VConditionalExpression.h \
     src/OOVisualizationException.h \
     src/allOOVisualizations.h \
-    src/elements/VField.h \
-    src/elements/VFieldStyle.h \
     src/elements/VFormalArgument.h \
     src/elements/VFormalArgumentStyle.h \
     src/elements/VFormalResult.h \
@@ -37,33 +60,17 @@ HEADERS += src/alternative/VKeywordMethodCallStyle.h \
     src/expressions/OperatorStyle.h \
     src/expressions/VArrayInitializer.h \
     src/expressions/VArrayInitializerStyle.h \
-    src/expressions/VAssignmentExpression.h \
     src/expressions/VBinaryOperation.h \
-    src/expressions/VCastExpression.h \
-    src/expressions/VCastExpressionStyle.h \
-    src/expressions/VCommaExpression.h \
     src/expressions/VEmptyExpression.h \
     src/expressions/VErrorExpression.h \
     src/expressions/VErrorExpressionStyle.h \
     src/expressions/VMethodCallExpression.h \
     src/expressions/VMethodCallExpressionStyle.h \
-    src/expressions/VNewExpression.h \
-    src/expressions/VNewExpressionStyle.h \
     src/expressions/VReferenceExpression.h \
     src/expressions/VReferenceExpressionStyle.h \
     src/expressions/VThisExpression.h \
-    src/expressions/VUnaryOperation.h \
     src/expressions/VUnfinishedOperator.h \
     src/expressions/VUnfinishedOperatorStyle.h \
-    src/expressions/VVariableDeclaration.h \
-    src/expressions/VVariableDeclarationStyle.h \
-    src/literals/VBooleanLiteral.h \
-    src/literals/VCharacterLiteral.h \
-    src/literals/VFloatLiteral.h \
-    src/literals/VIntegerLiteral.h \
-    src/literals/VNullLiteral.h \
-    src/literals/VStringLiteral.h \
-    src/literals/VStringLiteralStyle.h \
     src/oovisualization_api.h \
     src/precompiled.h \
     src/statements/VBlock.h \
@@ -79,43 +86,49 @@ HEADERS += src/alternative/VKeywordMethodCallStyle.h \
     src/statements/VLoopStatementStyle.h \
     src/statements/VReturnStatement.h \
     src/statements/VReturnStatementStyle.h \
-    src/top_level/VClass.h \
-    src/top_level/VClassStyle.h \
-    src/top_level/VLibrary.h \
-    src/top_level/VLibraryStyle.h \
-    src/top_level/VMethod.h \
-    src/top_level/VMethodStyle.h \
-    src/top_level/VModule.h \
-    src/top_level/VModuleStyle.h \
-    src/top_level/VProject.h \
-    src/top_level/VProjectStyle.h \
-    src/types/VArrayType.h \
-    src/types/VArrayTypeStyle.h \
-    src/types/VPrimitiveType.h \
     src/oovisualization.h
-SOURCES += src/alternative/VKeywordMethodCallStyle.cpp \
+SOURCES += src/expressions/types/VAutoType.cpp \
+    src/declarations/VFieldStyle.cpp \
+    src/declarations/VField.cpp \
+    src/expressions/VVariableDeclarationExpressionStyle.cpp \
+    src/expressions/VVariableDeclarationExpression.cpp \
+    src/declarations/VClass.cpp \
+    src/declarations/VClassStyle.cpp \
+    src/declarations/VMethod.cpp \
+    src/declarations/VMethodStyle.cpp \
+    src/declarations/VModule.cpp \
+    src/declarations/VModuleStyle.cpp \
+    src/declarations/VProject.cpp \
+    src/declarations/VProjectStyle.cpp \
+    src/expressions/literals/VBooleanLiteral.cpp \
+    src/expressions/literals/VCharacterLiteral.cpp \
+    src/expressions/literals/VFloatLiteral.cpp \
+    src/expressions/literals/VIntegerLiteral.cpp \
+    src/expressions/literals/VNullLiteral.cpp \
+    src/expressions/literals/VStringLiteral.cpp \
+    src/expressions/literals/VStringLiteralStyle.cpp \
+    src/expressions/types/VClassType.cpp \
+    src/expressions/types/VPrimitiveType.cpp \
+    src/expressions/StandardExpressionVisualizations.cpp \
+    src/elements/VCatchClauseStyle.cpp \
+    src/expressions/VExpression.cpp \
+    src/elements/VCatchClause.cpp \
+    src/statements/VStatementItem.cpp \
+    src/elements/VEnumerator.cpp \
+    src/elements/VEnumeratorStyle.cpp \
+    src/alternative/VKeywordMethodCallStyle.cpp \
     src/alternative/VKeywordMethodCall.cpp \
     src/expressions/VLambdaExpressionStyle.cpp \
     src/expressions/VLambdaExpression.cpp \
     src/statements/VTryCatchFinallyStyle.cpp \
-    src/statements/VCatchClauseStyle.cpp \
-    src/statements/VCatchClause.cpp \
     src/statements/VTryCatchFinally.cpp \
-    src/expressions/VThrowExpressionStyle.cpp \
-    src/expressions/VThrowExpression.cpp \
     test/MethodAddOn.cpp \
     src/expressions/VEmptyExpressionStyle.cpp \
     src/elements/VStatementItemList.cpp \
     src/elements/VFormalTypeArgumentStyle.cpp \
     src/elements/VFormalTypeArgument.cpp \
-    src/types/VClassType.cpp \
-    src/expressions/VConditionalExpression.cpp \
-    src/expressions/VVariableDeclarationStyle.cpp \
-    src/expressions/VVariableDeclaration.cpp \
-    src/expressions/VAssignmentExpression.cpp \
     src/expressions/VMethodCallExpressionStyle.cpp \
     src/statements/VExpressionStatement.cpp \
-    src/expressions/VCommaExpression.cpp \
     src/expressions/VEmptyExpression.cpp \
     src/expressions/VUnfinishedOperatorStyle.cpp \
     src/expressions/VUnfinishedOperator.cpp \
@@ -124,32 +137,17 @@ SOURCES += src/alternative/VKeywordMethodCallStyle.cpp \
     src/elements/VStorageSpecifier.cpp \
     src/expressions/VArrayInitializer.cpp \
     src/expressions/VArrayInitializerStyle.cpp \
-    src/literals/VStringLiteralStyle.cpp \
-    src/types/VArrayTypeStyle.cpp \
-    src/types/VArrayType.cpp \
     src/statements/VContinueStatement.cpp \
     src/statements/VBreakStatement.cpp \
     src/statements/VForEachStatement.cpp \
     src/statements/VForEachStatementStyle.cpp \
     src/statements/VLoopStatement.cpp \
     src/statements/VLoopStatementStyle.cpp \
-    src/elements/VField.cpp \
-    src/elements/VFieldStyle.cpp \
     src/elements/VFormalArgument.cpp \
     src/elements/VFormalArgumentStyle.cpp \
     src/elements/VFormalResult.cpp \
     src/elements/VFormalResultStyle.cpp \
     src/elements/VVisibility.cpp \
-    src/top_level/VClass.cpp \
-    src/top_level/VClassStyle.cpp \
-    src/top_level/VLibrary.cpp \
-    src/top_level/VLibraryStyle.cpp \
-    src/top_level/VMethod.cpp \
-    src/top_level/VMethodStyle.cpp \
-    src/top_level/VModule.cpp \
-    src/top_level/VModuleStyle.cpp \
-    src/top_level/VProject.cpp \
-    src/top_level/VProjectStyle.cpp \
     src/statements/VIfStatement.cpp \
     src/statements/VIfStatementStyle.cpp \
     src/statements/VReturnStatement.cpp \
@@ -157,21 +155,9 @@ SOURCES += src/alternative/VKeywordMethodCallStyle.cpp \
     src/statements/VBlock.cpp \
     src/statements/VBlockStyle.cpp \
     src/expressions/VBinaryOperation.cpp \
-    src/expressions/VUnaryOperation.cpp \
     src/expressions/OperatorStyle.cpp \
-    src/expressions/VNewExpression.cpp \
-    src/expressions/VNewExpressionStyle.cpp \
-    src/expressions/VCastExpression.cpp \
-    src/expressions/VCastExpressionStyle.cpp \
     src/expressions/VThisExpression.cpp \
     src/expressions/VMethodCallExpression.cpp \
-    src/literals/VNullLiteral.cpp \
-    src/literals/VBooleanLiteral.cpp \
-    src/literals/VCharacterLiteral.cpp \
-    src/literals/VFloatLiteral.cpp \
-    src/literals/VIntegerLiteral.cpp \
-    src/types/VPrimitiveType.cpp \
-    src/literals/VStringLiteral.cpp \
     src/expressions/VReferenceExpression.cpp \
     src/expressions/VReferenceExpressionStyle.cpp \
     test/HelloWorldTest.cpp \

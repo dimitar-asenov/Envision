@@ -29,7 +29,7 @@
 #include "handlers/GenericHandler.h"
 #include "handlers/HText.h"
 #include "handlers/HList.h"
-#include "handlers/HExtendable.h"
+#include "handlers/HComposite.h"
 #include "handlers/HCommandPrompt.h"
 #include "handlers/HActionPrompt.h"
 #include "handlers/HSceneHandlerItem.h"
@@ -44,7 +44,7 @@
 
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/items/SceneHandlerItem.h"
-#include "VisualizationBase/src/items/VExtendable.h"
+#include "VisualizationBase/src/items/VComposite.h"
 #include "VisualizationBase/src/items/VList.h"
 #include "VisualizationBase/src/items/Text.h"
 #include "VisualizationBase/src/items/Symbol.h"
@@ -64,7 +64,7 @@
 #include "VisualizationBase/src/layouts/PositionLayout.h"
 #include "VisualizationBase/src/VisualizationManager.h"
 
-#include "ModelBase/src/test_nodes/BinaryNode.h"
+#include "ModelBase/src/test_nodes/TestNodesInitializer.h"
 
 #include "SelfTest/src/SelfTestSuite.h"
 
@@ -76,31 +76,24 @@ namespace Interaction {
 
 Log* InteractionBase::logger = nullptr;
 
+Core::InitializationRegistry& itemTypeInitializationRegistry()
+{
+	static Core::InitializationRegistry r;
+	return r;
+}
+
 bool InteractionBase::initialize(Core::EnvisionManager&)
 {
 	logger = Logger::Log::getLogger("interactionbase");
-	Visualization::SceneHandlerItem::setInteractionHandler(HSceneHandlerItem::instance());
-	Visualization::VExtendable::setInteractionHandler(HExtendable::instance());
-	Visualization::VList::setInteractionHandler(HList::instance());
-	Visualization::Text::setInteractionHandler(HText::instance());
-	Visualization::Symbol::setInteractionHandler(HText::instance());
-	Visualization::Line::setInteractionHandler(GenericHandler::instance());
-	Visualization::TestBox::setInteractionHandler(HText::instance());
-	Visualization::VText::setInteractionHandler(HText::instance());
-	Visualization::VInteger::setInteractionHandler(HText::instance());
-	Visualization::VFloat::setInteractionHandler(HText::instance());
-	Visualization::VCharacter::setInteractionHandler(HText::instance());
-	Visualization::VBoolean::setInteractionHandler(HText::instance());
-	Visualization::VReference::setInteractionHandler(HText::instance());
-	Visualization::RootItem::setInteractionHandler(HRootItem::instance());
-	Visualization::SVGIcon::setInteractionHandler(GenericHandler::instance());
-	Visualization::SequentialLayout::setInteractionHandler(GenericHandler::instance());
-	Visualization::PanelLayout::setInteractionHandler(GenericHandler::instance());
-	Visualization::PanelBorderLayout::setInteractionHandler(GenericHandler::instance());
-	Visualization::PositionLayout::setInteractionHandler(HPositionLayout::instance());
-	CommandPrompt::setInteractionHandler(HCommandPrompt::instance());
-	ActionPrompt::setInteractionHandler(HActionPrompt::instance());
-	TextAndDescription::setInteractionHandler(GenericHandler::instance());
+	Visualization::Item::setDefaultClassHandler(GenericHandler::instance());
+	Visualization::TextRenderer::setDefaultClassHandler(HText::instance());
+	Visualization::SceneHandlerItem::setDefaultClassHandler(HSceneHandlerItem::instance());
+	Visualization::VComposite::setDefaultClassHandler(HComposite::instance());
+	Visualization::VList::setDefaultClassHandler(HList::instance());
+	Visualization::RootItem::setDefaultClassHandler(HRootItem::instance());
+	Visualization::PositionLayout::setDefaultClassHandler(HPositionLayout::instance());
+	CommandPrompt::setDefaultClassHandler(HCommandPrompt::instance());
+	ActionPrompt::setDefaultClassHandler(HActionPrompt::instance());
 
 	// We use to show the prompt. It can only be shown once the Scene is activated.
 	auto mainScene = Visualization::VisualizationManager::instance().mainScene();
@@ -115,7 +108,7 @@ void InteractionBase::unload()
 
 void InteractionBase::selfTest(QString testid)
 {
-	TestNodes::BinaryNode::init();
+	TestNodes::nodeTypeInitializationRegistry().initializeAll();
 
 	if (testid.isEmpty()) SelfTest::TestManager<InteractionBase>::runAllTests().printResultStatistics();
 	else SelfTest::TestManager<InteractionBase>::runTest(testid).printResultStatistics();

@@ -33,9 +33,9 @@ Q_EXPORT_PLUGIN2( oomodel, OOModel::OOModel )
 
 namespace OOModel {
 
-Model::InitializationRegistry& nodeTypeInitializationRegistry()
+Core::InitializationRegistry& nodeTypeInitializationRegistry()
 {
-	static Model::InitializationRegistry r;
+	static Core::InitializationRegistry r;
 	return r;
 }
 
@@ -60,6 +60,7 @@ bool OOModel::initialize(Core::EnvisionManager&)
 		auto field = new Field();
 		field->setTypeExpression(new EmptyExpression());
 		return field;} );
+	Model::TypedList<Enumerator>::setDefaultElementCreationFunction([]() -> Enumerator* { return new Enumerator();} );
 	Model::TypedList<Expression>::setDefaultElementCreationFunction([]() -> Expression* {
 		return new EmptyExpression();} );
 

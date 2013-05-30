@@ -27,7 +27,7 @@
 #pragma once
 
 #include "Core/src/EnvisionPlugin.h"
-#include "precompiled.h"
+#include "controlflowvisualization_api.h"
 
 namespace ControlFlowVisualization {
 
@@ -51,5 +51,7 @@ class ControlFlowVisualization : public QObject, public Core::EnvisionPlugin
 
 		static int visualizationPurpose();
 };
+
+CONTROLFLOWVISUALIZATION_API Core::InitializationRegistry& itemTypeInitializationRegistry();
 
 }

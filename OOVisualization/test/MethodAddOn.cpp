@@ -25,7 +25,7 @@
  **********************************************************************************************************************/
 
 #include "MethodAddOn.h"
-#include "../src/top_level/VMethod.h"
+#include "../src/declarations/VMethod.h"
 #include "VisualizationBase/src/items/Text.h"
 
 namespace OOVisualization {

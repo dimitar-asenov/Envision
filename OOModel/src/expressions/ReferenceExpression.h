@@ -35,9 +35,9 @@ namespace OOModel {
 
 class Class;
 
-class OOMODEL_API ReferenceExpression: public Expression
+class OOMODEL_API ReferenceExpression: public Super<Expression>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(ReferenceExpression)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(ReferenceExpression)
 
 	ATTRIBUTE(Expression, prefix, setPrefix)
 	ATTRIBUTE(OOReference, ref, setRef)

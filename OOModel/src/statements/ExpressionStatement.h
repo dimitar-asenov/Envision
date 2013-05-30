@@ -33,8 +33,9 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, ExpressionStatement)
 
 namespace OOModel {
 
-class OOMODEL_API ExpressionStatement : public Statement {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(ExpressionStatement)
+class OOMODEL_API ExpressionStatement : public Super<Statement>
+{
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(ExpressionStatement)
 
 	ATTRIBUTE(Expression, expression, setExpression)
 

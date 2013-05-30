@@ -40,7 +40,8 @@ class OOVISUALIZATION_API VReferenceExpressionStyle : public Visualization::Item
 	private:
 		Visualization::SequentialLayoutStyle layout_;
 		Visualization::TextStyle name_;
-		Visualization::StaticStyle separator_;
+		Visualization::StaticStyle nonPointerSeparator_;
+		Visualization::StaticStyle pointerSeparator_;
 		Visualization::VListStyle typeArguments_;
 
 	public:
@@ -48,13 +49,17 @@ class OOVISUALIZATION_API VReferenceExpressionStyle : public Visualization::Item
 
 		const Visualization::SequentialLayoutStyle& layout() const;
 		const Visualization::TextStyle& name() const;
-		const Visualization::StaticStyle& separator() const;
+		const Visualization::StaticStyle& nonPointerSeparator() const;
+		const Visualization::StaticStyle& pointerSeparator() const;
 		const Visualization::VListStyle& typeArguments() const;
 };
 
 inline const Visualization::SequentialLayoutStyle& VReferenceExpressionStyle::layout() const { return layout_; }
 inline const Visualization::TextStyle& VReferenceExpressionStyle::name() const { return name_; }
-inline const Visualization::StaticStyle& VReferenceExpressionStyle::separator() const { return separator_; }
+inline const Visualization::StaticStyle& VReferenceExpressionStyle::nonPointerSeparator()
+	const { return nonPointerSeparator_; }
+inline const Visualization::StaticStyle& VReferenceExpressionStyle::pointerSeparator()
+	const { return pointerSeparator_; }
 inline const Visualization::VListStyle& VReferenceExpressionStyle::typeArguments() const { return typeArguments_; }
 
 }

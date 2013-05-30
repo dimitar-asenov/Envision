@@ -34,9 +34,9 @@ DECLARE_TYPED_LIST(OOMODEL_API, OOModel, AssignmentExpression)
 
 namespace OOModel {
 
-class OOMODEL_API AssignmentExpression: public Expression
+class OOMODEL_API AssignmentExpression: public Super<Expression>
 {
-	EXTENDABLENODE_DECLARE_STANDARD_METHODS(AssignmentExpression)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(AssignmentExpression)
 
 	ATTRIBUTE(Expression, left, setLeft)
 	ATTRIBUTE(Expression, right, setRight)

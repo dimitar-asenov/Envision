@@ -1,0 +1,12 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/Item/default">
+	<layout prototypes="layout/SequentialLayout/default">
+		<spaceBetweenElements>3</spaceBetweenElements>
+		<noInnerCursors>true</noInnerCursors>
+		<noBoundaryCursorsInsideShape>true</noBoundaryCursorsInsideShape>
+	</layout>
+	<preSymbol prototypes="item/Static/default" />
+	<inSymbol prototypes="item/Static/default" />
+	<in2Symbol prototypes="item/Static/default" />
+	<postSymbol prototypes="item/Static/default" />
+</style>

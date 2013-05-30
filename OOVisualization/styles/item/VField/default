@@ -28,4 +28,7 @@
 			<underline>true</underline>
 		</font>
 	</nameStaticProtected>
+	<assignmentSymbol prototypes="item/Symbol/default">
+		<symbol>←</symbol>
+	</assignmentSymbol>
 </style>

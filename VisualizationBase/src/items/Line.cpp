@@ -31,7 +31,7 @@ namespace Visualization {
 ITEM_COMMON_DEFINITIONS(Line, "item")
 
 Line::Line(Item* parent, const LineStyle* style)
-	: Item(parent, style)
+	: Super(parent, style)
 {}
 
 void Line::determineChildren(){}

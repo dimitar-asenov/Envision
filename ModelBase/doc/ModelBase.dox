@@ -62,20 +62,20 @@ The predefined types include:
 	in ModelBase and partially in extending plug-ins.
 	\li List is a node that contains an ordered list of nodes. This list is untyped.
 	\li TypedList is a thin wrapper around List that provides a statically typed equivalent to it.
-	\li ExtendableNode is a node that can be extended to contain children of arbitrary type. Plug-in developers can use
+	\li CompositeNode is a node that can be extended to contain children of arbitrary type. Plug-in developers can use
 	the functionality of this node to quickly design new node types.
 
 <h3>Node extensibility</h3>
  
 In order to create new types of nodes, a plug-in developer can inherit an existing predefined node or Node directly.
-The ExtendableNode class is specifically designed for implementing new custom nodes. It provides two main features to
+The CompositeNode class is specifically designed for implementing new custom nodes. It provides two main features to
 support extensibility:
 
-\li A class inheriting from ExtendableNode can declaratively specify what attributes (child nodes) it will have. The
+\li A class inheriting from CompositeNode can declaratively specify what attributes (child nodes) it will have. The
 number and type of attributes can be arbitrary. A longer inheritance chain is also possible, where each derived class
 specifies additional child nodes. Attributes defined in base classes are of course also available in derived classes.
 
-\li Nodes deriving from ExtendableNode also support an extension mechanism. An extension can be dynamically registered
+\li Nodes deriving from CompositeNode also support an extension mechanism. An extension can be dynamically registered
 for a node type at run-time as long as no instances of this class have been created yet. The attributes specified in the
 extension will be added to the attributes that are already defined in the node type being extended. This change will
 apply to all nodes that derive from the extended class. This feature can be used by plug-ins to attach new information
@@ -83,9 +83,9 @@ to a model tree.
 
 The image below illustrates these mechanisms with an example.
 
-\image html "extendable.png" "A binary node hierarchy with extensions"
+\image html "composite.png" "A binary node hierarchy with extensions"
 
-A node type BinaryNode is defined that inherits from ExtendableNode and specifies two attributes: left and right.
+A node type BinaryNode is defined that inherits from CompositeNode and specifies two attributes: left and right.
 IntegerBinaryNode derives from BinaryNode and introduces an additional attribute - value. In addition, the Position
 extension has been registered for BinaryNode. This inserts the attributes x and y into BinaryNode and all its
 subclasses - in this case only IntegerBinaryNode. Finally one more extension has been registered for IntegerBinaryNode
@@ -93,10 +93,10 @@ which provides that node type with the new attribute editable. On the right we s
 available for the two different classes.
 
 There is no limit to how many extensions a node can have. Extensions are implemented as single classes and can be
-applied to any node that inherits directly or indirectly from ExtendableNode. A simple method is provided for asking if
+applied to any node that inherits directly or indirectly from CompositeNode. A simple method is provided for asking if
 an extension has been registered for a node type and accessing its corresponding attributes.
 
-Persistence operations are automatically handled for any class deriving from ExtendableNode for all attributes and
+Persistence operations are automatically handled for any class deriving from CompositeNode for all attributes and
 attributes of extensions.
 
 <h3>Concurrent access</h3>

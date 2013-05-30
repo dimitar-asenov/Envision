@@ -28,10 +28,9 @@
 
 #include "../oovisualization_api.h"
 #include "OperatorStyle.h"
+#include "VExpression.h"
 
 #include "OOModel/src/expressions/BinaryOperation.h"
-
-#include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/items/LayoutProvider.h"
 
 namespace Visualization {
@@ -41,7 +40,7 @@ namespace Visualization {
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VBinaryOperation
-: public Visualization::ItemWithNode<Visualization::LayoutProvider<>, OOModel::BinaryOperation>
+: public Super<VExpression<VBinaryOperation, Visualization::LayoutProvider<>, OOModel::BinaryOperation>>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VBinaryOperation, OperatorSequenceStyle)
 
@@ -53,8 +52,6 @@ class OOVISUALIZATION_API VBinaryOperation
 		void determineChildren();
 
 	private:
-		typedef Visualization::ItemWithNode<Visualization::LayoutProvider<>, OOModel::BinaryOperation> BaseItemType;
-
 		Visualization::Static* pre_;
 		Visualization::Static* in_;
 		Visualization::Static* post_;

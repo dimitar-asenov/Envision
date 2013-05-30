@@ -27,7 +27,7 @@
 #pragma once
 
 #include "Core/src/EnvisionPlugin.h"
-#include "precompiled.h"
+#include "interactionbase_api.h"
 
 #include "Logger/src/Log.h"
 
@@ -56,5 +56,8 @@ class InteractionBase : public QObject, public Core::EnvisionPlugin
 	private:
 		static Logger::Log* logger;
 };
+
+
+INTERACTIONBASE_API Core::InitializationRegistry& itemTypeInitializationRegistry();
 
 }

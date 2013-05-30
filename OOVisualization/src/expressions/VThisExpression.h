@@ -27,16 +27,15 @@
 #pragma once
 
 #include "../oovisualization_api.h"
+#include "VExpression.h"
 
-#include "VisualizationBase/src/items/ItemWithNode.h"
 #include "VisualizationBase/src/items/Static.h"
-
 #include "OOModel/src/expressions/ThisExpression.h"
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VThisExpression : public Visualization::ItemWithNode< Visualization::Item,
-OOModel::ThisExpression>
+class OOVISUALIZATION_API VThisExpression : public Super<VExpression<VThisExpression, Visualization::Item,
+OOModel::ThisExpression>>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(VThisExpression, Visualization::StaticStyle)
 
@@ -44,14 +43,16 @@ OOModel::ThisExpression>
 		VThisExpression(Item* parent, NodeType *expr, const StyleType *style = itemStyles().get());
 		virtual ~VThisExpression();
 
+		Visualization::Static* item() const;
+
 	protected:
 		virtual void determineChildren();
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		typedef Visualization::ItemWithNode< Visualization::Item, OOModel::ThisExpression> BaseItemType;
-
 		Visualization::Static* vis_;
 };
+
+inline Visualization::Static* VThisExpression::item() const { return vis_;}
 
 }

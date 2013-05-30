@@ -25,6 +25,7 @@
 ***********************************************************************************************************************/
 
 #pragma once
+#include "core_api.h"
 
 namespace Core {
 
@@ -33,41 +34,24 @@ namespace Core {
  *
  * It provides simple facilities to store and print an error message.
  */
-class EnvisionException
+class CORE_API EnvisionException
 {
-	private:
-		QString msg;
-
 	public:
-		EnvisionException()
-		{
-		}
+		EnvisionException();
+		EnvisionException(const QString& message);
+		virtual ~EnvisionException();
 
-		EnvisionException(const QString& message) :
-			msg(message)
-		{
-		}
+		virtual const QString& name() const;
+		virtual const QString& message() const;
+		virtual void printError() const;
 
-		virtual ~EnvisionException()
-		{
-		}
+		/**
+		 * Set this to control whether an assertion violation should occur when an exception is created
+		 */
+		static bool& assertOnThrow();
 
-		virtual const QString& name() const
-		{
-			static QString ename("EnvisionException");
-			return ename;
-		}
-
-		virtual const QString& message() const
-		{
-			return msg;
-		}
-
-		virtual void printError() const
-		{
-			QTextStream err(stderr);
-			err << "Exception " << qPrintable( name() ) << ": " << qPrintable( message() ) << endl;
-		}
+	private:
+		QString msg_;
 };
 
 }

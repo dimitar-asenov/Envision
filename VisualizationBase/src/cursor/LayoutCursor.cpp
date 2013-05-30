@@ -31,7 +31,8 @@
 namespace Visualization {
 
 LayoutCursor::LayoutCursor(Item* owner, CursorType type)
-	: Cursor(owner, type, new CursorShapeItem(this)), x_(0), y_(0), index_(0), isAtBoundary_(false)
+	: Cursor(owner, type, new CursorShapeItem(this)), x_(0), y_(0), index_(0), isAtBoundary_(false),
+	  ownerElement_(nullptr)
 {
 }
 
@@ -53,7 +54,8 @@ bool LayoutCursor::isSame(Cursor* c)
 {
 	auto lc = dynamic_cast<LayoutCursor*>(c);
 	if (lc)
-		return lc->owner() == owner() && lc->x() == x() && lc->y() == y() && lc->index() == index();
+		return lc->owner() == owner() && lc->x() == x() && lc->y() == y() && lc->index() == index()
+				&& lc->ownerElement() == ownerElement();
 
 	return false;
 }

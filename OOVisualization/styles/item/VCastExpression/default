@@ -1,5 +1,5 @@
 <!DOCTYPE EnvisionVisualizationStyle>
-<style prototypes="item/Item/default">
+<style prototypes="item/VUnaryOperation/default.operand">
 	<layout prototypes="layout/SequentialLayout/default">
 		<shape prototypes="shape/Box/default">
 			Box

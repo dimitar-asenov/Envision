@@ -33,20 +33,17 @@
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API Line : public Item {
+class VISUALIZATIONBASE_API Line : public Super<Item> {
 	ITEM_COMMON(Line)
 
 	public:
 		Line(Item* parent, const LineStyle* style = itemStyles().get());
+		virtual bool sizeDependsOnParent() const override;
 
 	protected:
 		virtual void determineChildren() override;
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
-		virtual bool sizeDependsOnParent() const override;
-
-	private:
-		typedef Item BaseItemType;
 };
 
 } /* namespace Visualization */
