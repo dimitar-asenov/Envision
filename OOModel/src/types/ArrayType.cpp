@@ -32,7 +32,7 @@ ArrayType::ArrayType(Type* elementType, bool isValueType) : Type(isValueType), e
 {}
 
 ArrayType::ArrayType(const ArrayType& other)
-: Type(other.isValueType()), elementType_(other.elementType()->clone())
+: Type(other), elementType_(other.elementType()->clone())
 {}
 
 ArrayType::~ArrayType()

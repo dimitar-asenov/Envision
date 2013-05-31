@@ -33,7 +33,7 @@ ReferenceType::ReferenceType(Type* baseType, bool isValueType)
 {}
 
 ReferenceType::ReferenceType(const ReferenceType& other)
-	: Type(other.isValueType()), baseType_(other.baseType()->clone())
+	: Type(other), baseType_(other.baseType()->clone())
 {}
 
 ReferenceType::~ReferenceType()

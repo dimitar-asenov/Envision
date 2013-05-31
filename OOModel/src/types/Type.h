@@ -40,6 +40,7 @@ class OOMODEL_API Type {
 		Q_DECLARE_FLAGS(Qualifiers, Qualifier)
 
 		Type(bool isValueType);
+		Type(const Type& other);
 		virtual ~Type();
 
 		/**

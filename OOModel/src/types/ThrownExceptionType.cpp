@@ -32,7 +32,7 @@ ThrownExceptionType::ThrownExceptionType(Type* exceptionType) : Type(true), exce
 {}
 
 ThrownExceptionType::ThrownExceptionType(const ThrownExceptionType& other)
-: Type(other.isValueType()), exceptionType_(other.exceptionType()->clone())
+: Type(other), exceptionType_(other.exceptionType()->clone())
 {}
 
 ThrownExceptionType::~ThrownExceptionType()
