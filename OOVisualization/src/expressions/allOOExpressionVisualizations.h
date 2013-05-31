@@ -51,3 +51,4 @@
 #include "types/VClassType.h"
 #include "types/VPrimitiveType.h"
 #include "types/VAutoType.h"
+#include "types/VFunctionType.h"

@@ -82,6 +82,7 @@
 #include "expressions/types/ReferenceTypeExpression.h"
 #include "expressions/types/AutoTypeExpression.h"
 #include "expressions/types/TypeQualifierExpression.h"
+#include "expressions/types/FunctionTypeExpression.h"
 
 #include "elements/Visibility.h"
 #include "elements/Enumerator.h"

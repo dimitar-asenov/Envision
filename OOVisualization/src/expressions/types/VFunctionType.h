@@ -26,34 +26,50 @@
 
 #pragma once
 
-#include "../oovisualization_api.h"
+#include "../../oovisualization_api.h"
+#include "VFunctionTypeStyle.h"
+#include "../VExpression.h"
 
-#include "VisualizationBase/src/layouts/SequentialLayout.h"
-#include "VisualizationBase/src/items/VListStyle.h"
-#include "VisualizationBase/src/items/StaticStyle.h"
+#include "OOModel/src/expressions/types/FunctionTypeExpression.h"
+#include "VisualizationBase/src/items/LayoutProvider.h"
+
+namespace Visualization {
+	class VList;
+	class Static;
+}
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VLambdaExpressionStyle : public Visualization::ItemStyle
+
+class OOVISUALIZATION_API VFunctionType : public Super<VExpression<VFunctionType,
+	Visualization::LayoutProvider<>, OOModel::FunctionTypeExpression>>
 {
-	private:
-		Visualization::SequentialLayoutStyle layout_;
-		Visualization::VListStyle arguments_;
-		Visualization::StaticStyle icon_;
-		Visualization::VListStyle body_;
+	ITEM_COMMON(VFunctionType)
 
 	public:
-		void load(Visualization::StyleLoader& sl);
+		VFunctionType(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
+		virtual ~VFunctionType();
 
-		const Visualization::SequentialLayoutStyle& layout() const;
-		const Visualization::VListStyle& arguments() const;
-		const Visualization::StaticStyle& icon() const;
-		const Visualization::VListStyle& body() const;
+		Visualization::Static* icon() const;
+		Visualization::VList* arguments() const;
+		Visualization::Static* resultSymbol() const;
+		Visualization::VList* results() const;
+
+	protected:
+		void determineChildren();
+
+	private:
+
+		Visualization::Static* icon_{};
+		Visualization::VList* arguments_{};
+		Visualization::Static* resultSymbol_{};
+		Visualization::VList* results_{};
 };
 
-inline const Visualization::SequentialLayoutStyle& VLambdaExpressionStyle::layout() const { return layout_; }
-inline const Visualization::VListStyle& VLambdaExpressionStyle::arguments() const { return arguments_; }
-inline const Visualization::StaticStyle& VLambdaExpressionStyle::icon() const { return icon_; }
-inline const Visualization::VListStyle& VLambdaExpressionStyle::body() const { return body_; }
+
+inline Visualization::Static* VFunctionType::icon() const { return icon_; }
+inline Visualization::VList* VFunctionType::arguments() const { return arguments_; }
+inline Visualization::Static* VFunctionType::resultSymbol() const { return resultSymbol_; }
+inline Visualization::VList* VFunctionType::results() const { return results_; }
 
 } /* namespace OOVisualization */

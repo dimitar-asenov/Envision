@@ -24,36 +24,19 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
-
-#include "../oovisualization_api.h"
-
-#include "VisualizationBase/src/layouts/SequentialLayout.h"
-#include "VisualizationBase/src/items/VListStyle.h"
-#include "VisualizationBase/src/items/StaticStyle.h"
+#include "VFunctionTypeStyle.h"
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VLambdaExpressionStyle : public Visualization::ItemStyle
+void VFunctionTypeStyle::load(Visualization::StyleLoader& sl)
 {
-	private:
-		Visualization::SequentialLayoutStyle layout_;
-		Visualization::VListStyle arguments_;
-		Visualization::StaticStyle icon_;
-		Visualization::VListStyle body_;
+	ItemStyle::load(sl);
 
-	public:
-		void load(Visualization::StyleLoader& sl);
-
-		const Visualization::SequentialLayoutStyle& layout() const;
-		const Visualization::VListStyle& arguments() const;
-		const Visualization::StaticStyle& icon() const;
-		const Visualization::VListStyle& body() const;
-};
-
-inline const Visualization::SequentialLayoutStyle& VLambdaExpressionStyle::layout() const { return layout_; }
-inline const Visualization::VListStyle& VLambdaExpressionStyle::arguments() const { return arguments_; }
-inline const Visualization::StaticStyle& VLambdaExpressionStyle::icon() const { return icon_; }
-inline const Visualization::VListStyle& VLambdaExpressionStyle::body() const { return body_; }
+	sl.load("layout", layout_);
+	sl.load("icon", icon_);
+	sl.load("arguments", arguments_);
+	sl.load("resultSymbol", resultSymbol_);
+	sl.load("results", results_);
+}
 
 } /* namespace OOVisualization */

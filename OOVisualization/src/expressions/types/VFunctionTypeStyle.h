@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "../oovisualization_api.h"
+#include "../../oovisualization_api.h"
 
 #include "VisualizationBase/src/layouts/SequentialLayout.h"
 #include "VisualizationBase/src/items/VListStyle.h"
@@ -34,26 +34,29 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VLambdaExpressionStyle : public Visualization::ItemStyle
+class OOVISUALIZATION_API VFunctionTypeStyle : public Visualization::ItemStyle
 {
 	private:
 		Visualization::SequentialLayoutStyle layout_;
-		Visualization::VListStyle arguments_;
 		Visualization::StaticStyle icon_;
-		Visualization::VListStyle body_;
+		Visualization::VListStyle arguments_;
+		Visualization::StaticStyle resultSymbol_;
+		Visualization::VListStyle results_;
 
 	public:
 		void load(Visualization::StyleLoader& sl);
 
 		const Visualization::SequentialLayoutStyle& layout() const;
-		const Visualization::VListStyle& arguments() const;
 		const Visualization::StaticStyle& icon() const;
-		const Visualization::VListStyle& body() const;
+		const Visualization::VListStyle& arguments() const;
+		const Visualization::StaticStyle& resultSymbol() const;
+		const Visualization::VListStyle& results() const;
 };
 
-inline const Visualization::SequentialLayoutStyle& VLambdaExpressionStyle::layout() const { return layout_; }
-inline const Visualization::VListStyle& VLambdaExpressionStyle::arguments() const { return arguments_; }
-inline const Visualization::StaticStyle& VLambdaExpressionStyle::icon() const { return icon_; }
-inline const Visualization::VListStyle& VLambdaExpressionStyle::body() const { return body_; }
+inline const Visualization::SequentialLayoutStyle& VFunctionTypeStyle::layout() const { return layout_; }
+inline const Visualization::StaticStyle& VFunctionTypeStyle::icon() const { return icon_; }
+inline const Visualization::VListStyle& VFunctionTypeStyle::arguments() const { return arguments_; }
+inline const Visualization::StaticStyle& VFunctionTypeStyle::resultSymbol() const {return resultSymbol_;}
+inline const Visualization::VListStyle& VFunctionTypeStyle::results() const {return results_;}
 
 } /* namespace OOVisualization */

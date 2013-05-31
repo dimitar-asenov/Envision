@@ -45,6 +45,12 @@ FunctionType::FunctionType(const FunctionType& other)
 	for(auto r : other.results_) results_.append(r->clone());
 }
 
+FunctionType::~FunctionType()
+{
+	for (auto a : arguments_) delete a;
+	for (auto r : results_) delete r;
+}
+
 bool FunctionType::equals(const Type* other) const
 {
 	auto ft = dynamic_cast<const FunctionType*> (other);

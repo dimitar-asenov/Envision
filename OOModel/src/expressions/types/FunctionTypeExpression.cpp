@@ -24,36 +24,55 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
+#include "FunctionTypeExpression.h"
+#include "../../types/FunctionType.h"
 
-#include "../oovisualization_api.h"
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(OOModel::FunctionTypeExpression)
 
-#include "VisualizationBase/src/layouts/SequentialLayout.h"
-#include "VisualizationBase/src/items/VListStyle.h"
-#include "VisualizationBase/src/items/StaticStyle.h"
+namespace OOModel {
 
-namespace OOVisualization {
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(FunctionTypeExpression)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(FunctionTypeExpression)
 
-class OOVISUALIZATION_API VLambdaExpressionStyle : public Visualization::ItemStyle
+REGISTER_ATTRIBUTE(FunctionTypeExpression, arguments, TypedListOfFormalArgument, false, false, true)
+REGISTER_ATTRIBUTE(FunctionTypeExpression, results, TypedListOfFormalResult, false, false, true)
+
+FunctionTypeExpression::FunctionTypeExpression(const QList<FormalArgument*>& args)
+: FunctionTypeExpression{args, {}}
+{}
+
+FunctionTypeExpression::FunctionTypeExpression(const QList<FormalResult*>& res)
+: FunctionTypeExpression{{}, res}
+{}
+
+FunctionTypeExpression::FunctionTypeExpression(const QList<FormalArgument*>& args,
+		const QList<FormalResult*>& res)
+: Super(nullptr, FunctionTypeExpression::getMetaData())
 {
-	private:
-		Visualization::SequentialLayoutStyle layout_;
-		Visualization::VListStyle arguments_;
-		Visualization::StaticStyle icon_;
-		Visualization::VListStyle body_;
+	for (auto a : args)
+	{
+		Q_ASSERT(a);
+		arguments()->append(a);
+	}
+	for (auto r : res)
+	{
+		Q_ASSERT(r);
+		results()->append(r);
+	}
+}
 
-	public:
-		void load(Visualization::StyleLoader& sl);
+Type* FunctionTypeExpression::type()
+{
+	QList<const Type*> args;
+	for (auto ait = arguments()->begin(); ait != arguments()->end(); ++ait)
+		args.append((*ait)->typeExpression()->type());
 
-		const Visualization::SequentialLayoutStyle& layout() const;
-		const Visualization::VListStyle& arguments() const;
-		const Visualization::StaticStyle& icon() const;
-		const Visualization::VListStyle& body() const;
-};
+	QList<const Type*> res;
+	for (auto rit = results()->begin(); rit != results()->end(); ++rit)
+		res.append( (*rit)->typeExpression()->type());
 
-inline const Visualization::SequentialLayoutStyle& VLambdaExpressionStyle::layout() const { return layout_; }
-inline const Visualization::VListStyle& VLambdaExpressionStyle::arguments() const { return arguments_; }
-inline const Visualization::StaticStyle& VLambdaExpressionStyle::icon() const { return icon_; }
-inline const Visualization::VListStyle& VLambdaExpressionStyle::body() const { return body_; }
+	return new FunctionType(false, args, res);
+}
 
-} /* namespace OOVisualization */
+}

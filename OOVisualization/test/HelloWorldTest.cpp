@@ -628,6 +628,30 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 	var20->decl()->setInitialValue( new NewExpression( new ClassTypeExpression(
 			new ReferenceExpression("HelloWorld"))));
 
+	auto var21 = new VariableDeclarationExpression("var21", new FunctionTypeExpression());
+	longMethod->items()->append(new ExpressionStatement(var21));
+
+	auto var22 = new VariableDeclarationExpression("var22", new FunctionTypeExpression(
+		QList<FormalArgument*>
+			{new FormalArgument("val", new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT))
+			,new FormalArgument("name", new ClassTypeExpression(new ReferenceExpression("String")))}));
+	longMethod->items()->append(new ExpressionStatement(var22));
+
+	auto var23 = new VariableDeclarationExpression("var23", new FunctionTypeExpression( {},
+			QList<FormalResult*>
+				{new FormalResult("", new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT))}));
+		longMethod->items()->append(new ExpressionStatement(var23));
+
+	auto var24 = new VariableDeclarationExpression("var24", new FunctionTypeExpression(
+			QList<FormalArgument*>
+				{new FormalArgument("val", new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT))
+				,new FormalArgument("name", new ClassTypeExpression(new ReferenceExpression("String")))},
+			QList<FormalResult*>
+				{new FormalResult("x", new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT))
+				,new FormalResult("y", new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT))}));
+		longMethod->items()->append(new ExpressionStatement(var24));
+
+
 	IfStatement* ifs = new IfStatement();
 	longMethod->items()->append(ifs);
 	BinaryOperation* ifCond = new BinaryOperation();
@@ -776,7 +800,7 @@ Method* addFactorial(Model::Model* model, Class* parent)
 	factorial->items()->append(factorialReturn);
 	factorialReturn->values()->append(new ReferenceExpression("result"));
 
-	factorial->extension<Position>()->setY(960);
+	factorial->extension<Position>()->setY(1060);
 
 	model->endModification();
 	return factorial;

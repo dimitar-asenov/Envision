@@ -24,36 +24,54 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
+#include "VFunctionType.h"
 
-#include "../oovisualization_api.h"
+#include "VisualizationBase/src/items/VList.h"
+#include "VisualizationBase/src/items/Static.h"
 
-#include "VisualizationBase/src/layouts/SequentialLayout.h"
-#include "VisualizationBase/src/items/VListStyle.h"
-#include "VisualizationBase/src/items/StaticStyle.h"
+using namespace Visualization;
+using namespace OOModel;
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VLambdaExpressionStyle : public Visualization::ItemStyle
+ITEM_COMMON_DEFINITIONS(VFunctionType, "item")
+
+VFunctionType::VFunctionType(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style)
 {
-	private:
-		Visualization::SequentialLayoutStyle layout_;
-		Visualization::VListStyle arguments_;
-		Visualization::StaticStyle icon_;
-		Visualization::VListStyle body_;
+	icon_ = new Static(layout(), &style->icon());
+	layout()->append(icon_);
+}
 
-	public:
-		void load(Visualization::StyleLoader& sl);
+VFunctionType::~VFunctionType()
+{
+	// These were automatically deleted by LayoutProvider's destructor
+	icon_ = nullptr;
+	arguments_ = nullptr;
+	resultSymbol_ = nullptr;
+	results_ = nullptr;
 
-		const Visualization::SequentialLayoutStyle& layout() const;
-		const Visualization::VListStyle& arguments() const;
-		const Visualization::StaticStyle& icon() const;
-		const Visualization::VListStyle& body() const;
-};
+}
 
-inline const Visualization::SequentialLayoutStyle& VLambdaExpressionStyle::layout() const { return layout_; }
-inline const Visualization::VListStyle& VLambdaExpressionStyle::arguments() const { return arguments_; }
-inline const Visualization::StaticStyle& VLambdaExpressionStyle::icon() const { return icon_; }
-inline const Visualization::VListStyle& VLambdaExpressionStyle::body() const { return body_; }
+void VFunctionType::determineChildren()
+{
+	layout()->synchronizeFirst(icon_, true, &style()->icon());
+	layout()->synchronizeMid(arguments_, node()->arguments(), &style()->arguments(), 1);
+	layout()->synchronizeLast(results_, node()->results()->size() ? node()->results() : nullptr, &style()->results());
+	layout()->synchronizeMid(resultSymbol_, results_, &style()->resultSymbol(), 2);
+
+
+	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
+	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know
+	//			what's the reason they are being updated.
+	// The style needs to be updated every time since if our own style changes, so will that of the children.
+	layout()->setStyle( &style()->layout());
+	icon_->setStyle( &style()->icon());
+	arguments_->setStyle( &style()->arguments() );
+	if (results_)
+	{
+		resultSymbol_->setStyle( &style()->resultSymbol());
+		results_->setStyle( &style()->results() );
+	}
+}
 
 } /* namespace OOVisualization */
