@@ -47,8 +47,8 @@ FunctionType::FunctionType(const FunctionType& other)
 
 FunctionType::~FunctionType()
 {
-	for (auto a : arguments_) delete a;
-	for (auto r : results_) delete r;
+	for (auto a : arguments_) SAFE_DELETE( a);
+	for (auto r : results_) SAFE_DELETE(r);
 }
 
 bool FunctionType::equals(const Type* other) const
