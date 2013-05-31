@@ -27,6 +27,7 @@
 #pragma once
 
 #include "../elements/FormalArgument.h"
+#include "../elements/FormalResult.h"
 #include "../elements/StatementItemList.h"
 
 DECLARE_TYPED_LIST(OOMODEL_API, OOModel, LambdaExpression)
@@ -40,6 +41,7 @@ class OOMODEL_API LambdaExpression: public Super<Expression>
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(LambdaExpression)
 
 	ATTRIBUTE(Model::TypedList<FormalArgument>, arguments, setArguments)
+	ATTRIBUTE(Model::TypedList<FormalResult>, results, setResults)
 	ATTRIBUTE(StatementItemList, body, setBody)
 
 	public:

@@ -4,7 +4,8 @@ DEFINES += OOMODEL_LIBRARY
 win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase
-HEADERS += src/expressions/types/TypeQualifierExpression.h \
+HEADERS += src/types/FunctionType.h \
+    src/expressions/types/TypeQualifierExpression.h \
     src/statements/DeclarationStatement.h \
     src/declarations/Field.h \
     src/declarations/Module.h \
@@ -12,7 +13,6 @@ HEADERS += src/expressions/types/TypeQualifierExpression.h \
     src/elements/Enumerator.h \
     src/declarations/Class.h \
     src/declarations/Method.h \
-    src/types/LambdaType.h \
     src/expressions/LambdaExpression.h \
     src/elements/CatchClause.h \
     src/statements/TryCatchFinallyStatement.h \
@@ -86,7 +86,8 @@ HEADERS += src/expressions/types/TypeQualifierExpression.h \
     src/expressions/VariableDeclarationExpression.h \
     src/declarations/TypeAlias.h \
     src/expressions/types/AutoTypeExpression.h
-SOURCES += src/expressions/types/TypeQualifierExpression.cpp \
+SOURCES += src/types/FunctionType.cpp \
+    src/expressions/types/TypeQualifierExpression.cpp \
     src/statements/DeclarationStatement.cpp \
     src/declarations/Field.cpp \
     src/declarations/Module.cpp \
@@ -94,7 +95,6 @@ SOURCES += src/expressions/types/TypeQualifierExpression.cpp \
     src/elements/Enumerator.cpp \
     src/declarations/Class.cpp \
     src/declarations/Method.cpp \
-    src/types/LambdaType.cpp \
     src/expressions/LambdaExpression.cpp \
     src/elements/CatchClause.cpp \
     src/statements/TryCatchFinallyStatement.cpp \

@@ -25,7 +25,7 @@
  **********************************************************************************************************************/
 
 #include "LambdaExpression.h"
-#include "../types/LambdaType.h"
+#include "../types/FunctionType.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(OOModel::LambdaExpression)
@@ -37,10 +37,19 @@ COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(LambdaExpression)
 
 REGISTER_ATTRIBUTE(LambdaExpression, body, StatementItemList, false, false, true)
 REGISTER_ATTRIBUTE(LambdaExpression, arguments, TypedListOfFormalArgument, false, false, true)
+REGISTER_ATTRIBUTE(LambdaExpression, results, TypedListOfFormalResult, false, false, true)
 
 Type* LambdaExpression::type()
 {
-	return new LambdaType(this);
+	QList<const Type*> args;
+	for (auto ait = arguments()->begin(); ait != arguments()->end(); ++ait)
+		args.append((*ait)->typeExpression()->type());
+
+	QList<const Type*> res;
+	for (auto rit = results()->begin(); rit != results()->end(); ++rit)
+		res.append( (*rit)->typeExpression()->type());
+
+	return new FunctionType(true, args, res);
 }
 
 } /* namespace OOModel */

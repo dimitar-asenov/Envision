@@ -24,21 +24,37 @@
  **
  **********************************************************************************************************************/
 
-#include "LambdaType.h"
+#pragma once
+
+#include "Type.h"
 
 namespace OOModel {
+class LambdaExpression;
 
-LambdaType::LambdaType(LambdaExpression* lambda) : Type(false), lambda_(lambda)
-{}
+class OOMODEL_API FunctionType : public Type {
+	public:
+		FunctionType(bool isValueType, QList<const Type*> arguments, Type* result = nullptr);
+		FunctionType(bool isValueType, QList<const Type*> arguments, QList<const Type*> results);
 
-bool LambdaType::equals(const Type*) const
-{
-	return false;
-}
+		FunctionType(const FunctionType& other);
 
-LambdaType* LambdaType::clone() const
-{
-	return new LambdaType(*this);
-}
+		~FunctionType();
+
+		virtual bool equals(const Type* other) const override;
+		virtual FunctionType* clone() const override;
+
+		const QList<const Type*>& arguments() const;
+		const QList<const Type*>& results() const;
+		const Type* result() const;
+
+	private:
+		QList<const Type*> arguments_;
+		QList<const Type*> results_;
+};
+
+inline const QList<const Type*>& FunctionType::arguments() const { return arguments_; }
+inline const QList<const Type*>& FunctionType::results() const { return results_; }
+inline const Type* FunctionType::result() const
+	{Q_ASSERT(results_.size() <= 1); return results_.isEmpty() ? nullptr : results_.first();}
 
 } /* namespace OOModel */

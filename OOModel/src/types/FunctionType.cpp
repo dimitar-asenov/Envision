@@ -24,29 +24,47 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
-
-#include "Type.h"
+#include "FunctionType.h"
 
 namespace OOModel {
-class LambdaExpression;
 
-class OOMODEL_API LambdaType : public Type {
-	public:
-		LambdaType(LambdaExpression* lambda);
+FunctionType::FunctionType(bool isValueType, QList<const Type*> arguments, QList<const Type*> results)
+: Type(isValueType), arguments_{arguments}, results_{results}
+{}
 
-		LambdaExpression* lambda() const;
+FunctionType::FunctionType(bool isValueType, QList<const Type*> arguments, Type* result)
+: Type(isValueType), arguments_{arguments}
+{
+	if (result) results_.append(result);
+}
 
-		/**
-		 * Always returns false, two lambdas are never equal.
-		 */
-		virtual bool equals(const Type* other) const override;
+FunctionType::FunctionType(const FunctionType& other)
+: Type(other)
+{
+	for(auto a : other.arguments_) arguments_.append(a->clone());
+	for(auto r : other.results_) results_.append(r->clone());
+}
 
-		virtual LambdaType* clone() const override;
+bool FunctionType::equals(const Type* other) const
+{
+	auto ft = dynamic_cast<const FunctionType*> (other);
+	if (!ft) return false;
 
-	private:
-		LambdaExpression* lambda_;
-};
+	if (arguments_.size() != ft->arguments_.size()) return false;
+	if (results_.size() != ft->results_.size()) return false;
 
-inline LambdaExpression* LambdaType::lambda() const { return lambda_; }
+	for(int i = 0; i<arguments_.size(); ++i)
+		if (! arguments_.at(i)->equals(ft->arguments_.at(i))) return false;
+
+	for(int i = 0; i<results_.size(); ++i)
+		if (! results_.at(i)->equals(ft->results_.at(i))) return false;
+
+	return true;
+}
+
+FunctionType* FunctionType::clone() const
+{
+	return new FunctionType(*this);
+}
+
 } /* namespace OOModel */
