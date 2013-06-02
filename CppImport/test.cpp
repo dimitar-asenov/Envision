@@ -1,5 +1,5 @@
 #include "test.h"
-#include <iostream>
+//#include <iostream>
 //TEst comment
 
 int NOCLASSFIELD;
@@ -238,6 +238,26 @@ private:
 template <class T, class U>
 T GetMin (T a, U b) {
   return (a<b?a:b);
+}
+
+
+class FriendTest {
+    friend int method(int a) {
+        if(a>10)
+            return 0;
+        else
+            return 10;
+    }
+
+    friend int method2(FriendTest* x);
+
+private:
+    int c;
+};
+
+int method2(FriendTest* x) {
+    x->c = 100;
+    return 100;
 }
 
 

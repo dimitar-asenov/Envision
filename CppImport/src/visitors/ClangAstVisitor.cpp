@@ -136,6 +136,13 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl)
 		// set visibility
 		ooClass->setVisibility(utils_->convertAccessSpecifier(recordDecl->getAccess()));
 
+		// visit friends
+		for(auto friendIt = recordDecl->friend_begin(); friendIt != recordDecl->friend_end(); ++friendIt)
+		{
+			//TODO
+
+		}
+
 		// visit type arguments if any
 		if(auto describedTemplate = recordDecl->getDescribedClassTemplate())
 		{
