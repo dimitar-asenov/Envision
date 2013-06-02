@@ -110,6 +110,8 @@ class ExpressionVisitor : public clang::RecursiveASTVisitor <ExpressionVisitor>
 
 
 		bool TraverseCXXMemberCallExpr(clang::CXXMemberCallExpr* callExpr);
+		bool TraverseCallExpr(clang::CallExpr* callExpr);
+
 		bool TraverseCXXNewExpr(clang::CXXNewExpr* newExpr);
 		bool VisitIntegerLiteral(clang::IntegerLiteral* intLit);
 		bool VisitCXXBoolLiteralExpr(clang::CXXBoolLiteralExpr* boolLitExpr);

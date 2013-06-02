@@ -76,27 +76,78 @@ bool ExpressionVisitor::VisitDependentScopeDeclRefExpr(clang::DependentScopeDecl
 
 bool ExpressionVisitor::TraverseCXXMemberCallExpr(clang::CXXMemberCallExpr* callExpr)
 {
-	OOModel::MethodCallExpression* ooMCall = new OOModel::MethodCallExpression
-			(QString::fromStdString(callExpr->getMethodDecl()->getNameAsString()));
+//	OOModel::MethodCallExpression* ooMCall = new OOModel::MethodCallExpression
+//			(QString::fromStdString(callExpr->getMethodDecl()->getNameAsString()));
 
-	// visit arguments
-	clang::ExprIterator argIt = callExpr->arg_begin();
-	for(;argIt!=callExpr->arg_end();++argIt)
+//	// visit arguments
+//	clang::ExprIterator argIt = callExpr->arg_begin();
+//	for(;argIt!=callExpr->arg_end();++argIt)
+//	{
+//		TraverseStmt(*argIt);
+//		ooMCall->arguments()->append(ooExprStack_.pop());
+//	}
+
+//	// set target
+//	// TODO multiple levels possible
+//	if(auto callee = llvm::dyn_cast<clang::MemberExpr>(callExpr->getCallee()))
+//	{
+//		TraverseStmt(callee->getBase());
+//		if(!ooExprStack_.empty())
+//			ooMCall->ref()->setPrefix(ooExprStack_.pop());
+//	}
+
+//	// type arguments
+
+//	ooExprStack_.push(ooMCall);
+//	return true;
+	return TraverseCallExpr(callExpr);
+}
+
+bool ExpressionVisitor::TraverseCallExpr(clang::CallExpr* callExpr)
+{
+	if(auto callee = callExpr->getDirectCallee())
 	{
-		TraverseStmt(*argIt);
-		ooMCall->arguments()->append(ooExprStack_.pop());
-	}
+		OOModel::MethodCallExpression* ooMCall = new OOModel::MethodCallExpression
+				(QString::fromStdString(callee->getNameAsString()));
 
-	// set target
-	// TODO multiple levels possible
-	if(auto callee = llvm::dyn_cast<clang::MemberExpr>(callExpr->getCallee()))
+		// visit arguments
+		clang::ExprIterator argIt = callExpr->arg_begin();
+		for(;argIt!=callExpr->arg_end();++argIt)
+		{
+			TraverseStmt(*argIt);
+			if(!ooExprStack_.empty())
+				ooMCall->arguments()->append(ooExprStack_.pop());
+			else
+				log_->writeError(className_,QString("not supported"),*argIt);
+		}
+
+		// set target
+		// TODO multiple levels possible
+		if(auto callee = llvm::dyn_cast<clang::MemberExpr>(callExpr->getCallee()))
+		{
+			TraverseStmt(callee->getBase());
+			if(!ooExprStack_.empty())
+				ooMCall->ref()->setPrefix(ooExprStack_.pop());
+		}
+
+		// type arguments
+		// TODO this might need some inspection
+		if(auto specArgs = callee->getTemplateSpecializationArgs())
+		{
+			for(unsigned i=0; i < specArgs->size(); i++)
+			{
+				// TODO what if its not a type
+				if(specArgs->get(i).getKind() == clang::TemplateArgument::ArgKind::Type)
+					if(auto type = utils_->convertClangType(specArgs->get(i).getAsType()))
+						ooMCall->ref()->typeArguments()->append(type);
+			}
+		}
+		ooExprStack_.push(ooMCall);
+	}
+	else
 	{
-		TraverseStmt(callee->getBase());
-		if(!ooExprStack_.empty())
-			ooMCall->ref()->setPrefix(ooExprStack_.pop());
+		//TODO
 	}
-
-	ooExprStack_.push(ooMCall);
 	return true;
 }
 

@@ -200,6 +200,12 @@ OOModel::Expression* CppImportUtilities::convertClangType(clang::QualType type)
 		ooUnaryOp->setOperand(convertClangType(parenType->getInnerType()));
 		return ooUnaryOp;
 	}
+	else if(auto templateParmType = llvm::dyn_cast<clang::TemplateTypeParmType>(type.getTypePtr()))
+	{
+		return new OOModel::ClassTypeExpression(
+					new OOModel::ReferenceExpression(
+						QString::fromStdString(templateParmType->getDecl()->getNameAsString())));
+	}
 	else
 	{
 		log_->typeNotSupported(QString(type.getTypePtr()->getTypeClassName()));

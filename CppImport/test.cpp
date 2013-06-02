@@ -215,6 +215,33 @@ private:
   int myVal;
 };
 
+template <class T> class TemplatePair {
+public:
+    TemplatePair(T first, T second) {
+        values[0] = first;
+        values[1] = second;
+     }
+
+    T first() {
+        return values[0];
+    }
+
+    T second() {
+        return values[1];
+    }
+
+private:
+    T values[2];
+};
+
+
+template <class T, class U>
+T GetMin (T a, U b) {
+  return (a<b?a:b);
+}
+
+
+
 int Header::headerFunc()
 {
   ClassArg object(10);
@@ -237,6 +264,12 @@ int Header::headerFunc()
             break;
     }
     auto r = k;
+
+    int i,j;
+    long l;
+    i = GetMin<int,long> (j,l);
+
+
     return r;
 }
 

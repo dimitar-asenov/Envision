@@ -135,6 +135,18 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl)
 
 		// set visibility
 		ooClass->setVisibility(utils_->convertAccessSpecifier(recordDecl->getAccess()));
+
+		// visit type arguments if any
+		if(auto describedTemplate = recordDecl->getDescribedClassTemplate())
+		{
+			auto templateParamList = describedTemplate->getTemplateParameters();
+			for( auto templateParam = templateParamList->begin();
+				  templateParam != templateParamList->end(); ++templateParam)
+			{
+				QString name = QString::fromStdString((*templateParam)->getNameAsString());
+				ooClass->typeArguments()->append(new OOModel::FormalTypeArgument(name));
+			}
+		}
 	}
 	else
 	{
@@ -183,6 +195,18 @@ bool ClangAstVisitor::TraverseFunctionDecl(clang::FunctionDecl* functionDecl)
 				TraverseStmt(body);
 			inBody_ = inBody;
 			ooStack_.pop();
+		}
+
+		// visit type arguments if any
+		if(auto functionTemplate = functionDecl->getDescribedFunctionTemplate())
+		{
+			auto templateParamList = functionTemplate->getTemplateParameters();
+			for( auto templateParam = templateParamList->begin();
+				  templateParam != templateParamList->end(); ++templateParam)
+			{
+				QString name = QString::fromStdString((*templateParam)->getNameAsString());
+				ooFunction->typeArguments()->append(new OOModel::FormalTypeArgument(name));
+			}
 		}
 	}
 	else
@@ -412,7 +436,10 @@ bool ClangAstVisitor::TraverseStmt(clang::Stmt* S)
 				itemList->append(new OOModel::ExpressionStatement(expr));
 		}
 		else
+		{
+			ooExprStack_.push(new OOModel::ErrorExpression());
 			log_->writeError(className_, QString("exprvisitor couldn't convert"), S);
+		}
 		return ret;
 	}
 
@@ -636,6 +663,18 @@ bool ClangAstVisitor::TraverseMethodDecl(clang::CXXMethodDecl* methodDecl, OOMod
 	}
 	// specify the visibility of the method
 	ooMethod->setVisibility(utils_->convertAccessSpecifier(methodDecl->getAccess()));
+
+	// visit type arguments if any
+	if(auto functionTemplate = methodDecl->getDescribedFunctionTemplate())
+	{
+		auto templateParamList = functionTemplate->getTemplateParameters();
+		for( auto templateParam = templateParamList->begin();
+			  templateParam != templateParamList->end(); ++templateParam)
+		{
+			QString name = QString::fromStdString((*templateParam)->getNameAsString());
+			ooMethod->typeArguments()->append(new OOModel::FormalTypeArgument(name));
+		}
+	}
 	return true;
 }
 
