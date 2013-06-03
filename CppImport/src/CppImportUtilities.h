@@ -35,12 +35,13 @@ class CppImportUtilities
 {
 	public:
 		CppImportUtilities(CppImportLogger* logger);
-		OOModel::Expression* convertClangType(clang::QualType type);
+		OOModel::Expression* convertClangType(clang::QualType qualType);
 		OOModel::BinaryOperation::OperatorTypes convertClangOpcode(clang::BinaryOperatorKind kind);
 		OOModel::AssignmentExpression::AssignmentTypes convertClangAssignOpcode(clang::BinaryOperatorKind kind);
 		OOModel::UnaryOperation::OperatorTypes convertUnaryOpcode(clang::UnaryOperatorKind kind);
 		OOModel::Visibility::VisibilityType convertAccessSpecifier(clang::AccessSpecifier as);
 	private:
+		OOModel::Expression* convertBuiltInClangType(const clang::Type* type);
 		CppImportLogger* log_;
 };
 }

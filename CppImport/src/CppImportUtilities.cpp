@@ -33,182 +33,108 @@ CppImportUtilities::CppImportUtilities(CppImportLogger* logger) : log_(logger)
 {
 }
 
-OOModel::Expression* CppImportUtilities::convertClangType(clang::QualType type)
+OOModel::Expression* CppImportUtilities::convertClangType(clang::QualType qualType)
 {
-	if(type.getTypePtr()->getContainedAutoType())
+	const clang::Type* type = qualType.getTypePtr();
+	Q_ASSERT(type);
+	if(type->getContainedAutoType())
 	{
 		return new OOModel::AutoTypeExpression();
 	}
-	else if(type.getTypePtr()->isBuiltinType())
+	else if(type->isBuiltinType())
 	{
-		const clang::BuiltinType* builtinType = type.getTypePtr()->getAs<clang::BuiltinType>();
-		switch(builtinType->getKind())
-		{
-			case clang::BuiltinType::Void:
-				return new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::VOID);
-			// unsigned types
-			case clang::BuiltinType::Bool:
-				return new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::BOOLEAN);
-			case clang::BuiltinType::Char_U:
-				log_->typeNotSupported("char unsigned target");
-				return new OOModel::PrimitiveTypeExpression(
-							OOModel::PrimitiveTypeExpression::PrimitiveTypes::CHAR);
-			case clang::BuiltinType::UChar:
-				log_->typeNotSupported("unsigned char");
-				return new OOModel::PrimitiveTypeExpression(
-							OOModel::PrimitiveTypeExpression::PrimitiveTypes::CHAR);
-			case clang::BuiltinType::WChar_U:
-				log_->typeNotSupported("wchar_t unsigned target");
-				return new OOModel::PrimitiveTypeExpression(
-							OOModel::PrimitiveTypeExpression::PrimitiveTypes::CHAR);
-			case clang::BuiltinType::Char16:
-				log_->typeNotSupported("char16_t");
-				return new OOModel::PrimitiveTypeExpression(
-							OOModel::PrimitiveTypeExpression::PrimitiveTypes::CHAR);
-			case clang::BuiltinType::Char32:
-				log_->typeNotSupported("char32_t");
-				return new OOModel::PrimitiveTypeExpression(
-							OOModel::PrimitiveTypeExpression::PrimitiveTypes::CHAR);
-			case clang::BuiltinType::UShort:
-				log_->typeNotSupported("unsigned short");
-				return new OOModel::PrimitiveTypeExpression(
-							OOModel::PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_INT);
-			case clang::BuiltinType::UInt:
-				return new OOModel::PrimitiveTypeExpression(
-							OOModel::PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_INT);
-			case clang::BuiltinType::ULong:
-				return new OOModel::PrimitiveTypeExpression(
-							OOModel::PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_LONG);
-			case clang::BuiltinType::ULongLong:
-				log_->typeNotSupported("unsigned long long");
-				return new OOModel::PrimitiveTypeExpression(
-							OOModel::PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_LONG);
-			case clang::BuiltinType::UInt128:
-				log_->typeNotSupported("__uint128_t");
-				return new OOModel::PrimitiveTypeExpression(
-							OOModel::PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_LONG);
-			// signed types
-			case clang::BuiltinType::Char_S:
-				return new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::CHAR);
-			case clang::BuiltinType::SChar:
-				log_->typeNotSupported("signed char");
-				return new OOModel::PrimitiveTypeExpression(
-							OOModel::PrimitiveTypeExpression::PrimitiveTypes::CHAR);
-			case clang::BuiltinType::WChar_S:
-				log_->typeNotSupported("wchar_t");
-				return new OOModel::PrimitiveTypeExpression(
-							OOModel::PrimitiveTypeExpression::PrimitiveTypes::CHAR);
-			case clang::BuiltinType::Short:
-				log_->typeNotSupported("short");
-				return new OOModel::PrimitiveTypeExpression(
-							OOModel::PrimitiveTypeExpression::PrimitiveTypes::INT);
-			case clang::BuiltinType::Int:
-				return new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::INT);
-			case clang::BuiltinType::Long:
-				return new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::LONG);
-			case clang::BuiltinType::LongLong:
-				log_->typeNotSupported("long long");
-				return new OOModel::PrimitiveTypeExpression(
-							OOModel::PrimitiveTypeExpression::PrimitiveTypes::LONG);
-			case clang::BuiltinType::Int128:
-				log_->typeNotSupported("__int128_t");
-				return new OOModel::PrimitiveTypeExpression(
-							OOModel::PrimitiveTypeExpression::PrimitiveTypes::LONG);
-			// float types
-			case clang::BuiltinType::Half:
-				log_->typeNotSupported("half");
-				return new OOModel::PrimitiveTypeExpression(
-							OOModel::PrimitiveTypeExpression::PrimitiveTypes::FLOAT);
-			case clang::BuiltinType::Float:
-				return new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::FLOAT);
-			case clang::BuiltinType::Double:
-				return new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::DOUBLE);
-			case clang::BuiltinType::LongDouble:
-				log_->typeNotSupported("long double");
-				return new OOModel::PrimitiveTypeExpression(
-							OOModel::PrimitiveTypeExpression::PrimitiveTypes::DOUBLE);
-			// c++ specific
-			case clang::BuiltinType::NullPtr:
-				log_->typeNotSupported("nullptr");
-				return nullptr;
-			default:
-				log_->typeNotSupported("other type ?");
-				return nullptr;
-		}
+		return convertBuiltInClangType(type);
 	}
-	else if(auto typedefType = llvm::dyn_cast<clang::TypedefType>(type.getTypePtr()))
+	else if(auto typedefType = llvm::dyn_cast<clang::TypedefType>(type))
 	{
 		return new OOModel::ReferenceExpression(QString::fromStdString(typedefType->getDecl()->getNameAsString()));
 	}
-	else if(type.getTypePtr()->isRecordType())
+	else if(type->isRecordType())
 	{
-		if(clang::CXXRecordDecl* recordDecl = type.getTypePtr()->getAsCXXRecordDecl())
+		if(clang::CXXRecordDecl* recordDecl = type->getAsCXXRecordDecl())
 			return new OOModel::ClassTypeExpression(new OOModel::ReferenceExpression(
 																	 QString::fromStdString(recordDecl->getNameAsString())));
 		return nullptr;
 	}
-	else if(type.getTypePtr()->isPointerType())
+	else if(type->isPointerType())
 	{
 		OOModel::PointerTypeExpression* ooPtr = new OOModel::PointerTypeExpression();
-		ooPtr->setTypeExpression(convertClangType(type.getTypePtr()->getPointeeType()));
+		ooPtr->setTypeExpression(convertClangType(type->getPointeeType()));
 		return ooPtr;
 	}
-	else if(type.getTypePtr()->isReferenceType())
+	else if(type->isReferenceType())
 	{
 		OOModel::ReferenceTypeExpression* ooRef = new OOModel::ReferenceTypeExpression();
-		ooRef->setTypeExpression(convertClangType(type.getTypePtr()->getPointeeType()));
+		ooRef->setTypeExpression(convertClangType(type->getPointeeType()));
 		return ooRef;
 	}
-	else if(type.getTypePtr()->isEnumeralType())
+	else if(type->isEnumeralType())
 	{
-		if(auto enumType = llvm::dyn_cast<clang::EnumType>(type.getTypePtr()))
+		if(auto enumType = llvm::dyn_cast<clang::EnumType>(type))
 		{
 			OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression
 					(QString::fromStdString(enumType->getDecl()->getNameAsString()));
 			return ooRef;
 		}
-		log_->typeNotSupported(QString(type.getTypePtr()->getTypeClassName()));
+		log_->typeNotSupported(QString(type->getTypeClassName()));
 		return nullptr;
 	}
-	else if(type.getTypePtr()->isConstantArrayType())
+	else if(type->isConstantArrayType())
 	{
-		if(auto constArrayType = llvm::dyn_cast<clang::ConstantArrayType>(type.getTypePtr()))
+		if(auto constArrayType = llvm::dyn_cast<clang::ConstantArrayType>(type))
 		{
 			OOModel::ArrayTypeExpression* ooArrayType = new OOModel::ArrayTypeExpression();
 			ooArrayType->setTypeExpression(convertClangType(constArrayType->getElementType()));
 			ooArrayType->setFixedSize(new OOModel::IntegerLiteral(constArrayType->getSize().getLimitedValue()));
 			return ooArrayType;
 		}
-		log_->typeNotSupported(QString(type.getTypePtr()->getTypeClassName()));
+		log_->typeNotSupported(QString(type->getTypeClassName()));
 		return nullptr;
 	}
-	else if(type.getTypePtr()->isIncompleteArrayType())
+	else if(type->isIncompleteArrayType())
 	{
-		if(auto incompleteArrayType = llvm::dyn_cast<clang::IncompleteArrayType>(type.getTypePtr()))
+		if(auto incompleteArrayType = llvm::dyn_cast<clang::IncompleteArrayType>(type))
 		{
 			OOModel::ArrayTypeExpression* ooArrayType = new OOModel::ArrayTypeExpression();
 			ooArrayType->setTypeExpression(convertClangType(incompleteArrayType->getElementType()));
 			return ooArrayType;
 		}
-		log_->typeNotSupported(QString(type.getTypePtr()->getTypeClassName()));
+		log_->typeNotSupported(QString(type->getTypeClassName()));
 		return nullptr;
 	}
-	else if(auto parenType = llvm::dyn_cast<clang::ParenType>(type.getTypePtr()))
+	else if(auto parenType = llvm::dyn_cast<clang::ParenType>(type))
 	{
 		OOModel::UnaryOperation* ooUnaryOp = new OOModel::UnaryOperation();
 		ooUnaryOp->setOp(OOModel::UnaryOperation::PARENTHESIS);
 		ooUnaryOp->setOperand(convertClangType(parenType->getInnerType()));
 		return ooUnaryOp;
 	}
-	else if(auto templateParmType = llvm::dyn_cast<clang::TemplateTypeParmType>(type.getTypePtr()))
+	else if(auto templateParmType = llvm::dyn_cast<clang::TemplateTypeParmType>(type))
 	{
 		return new OOModel::ClassTypeExpression(
 					new OOModel::ReferenceExpression(
 						QString::fromStdString(templateParmType->getDecl()->getNameAsString())));
 	}
+	else if(auto functionProtoType = llvm::dyn_cast<clang::FunctionProtoType>(type))
+	{
+		// TODO: include templates. (and more?)
+		OOModel::FunctionTypeExpression* ooFunctionType = new OOModel::FunctionTypeExpression();
+		ooFunctionType->results()->append(new OOModel::FormalResult
+													 ("", convertClangType(functionProtoType->getResultType())));
+		for(auto argIt = functionProtoType->arg_type_begin(); argIt != functionProtoType->arg_type_end(); ++argIt)
+		{
+			ooFunctionType->arguments()->append(new OOModel::FormalArgument("", convertClangType(*argIt)));
+		}
+		return ooFunctionType;
+	}
+	else if(auto elaboratedType = llvm::dyn_cast<clang::ElaboratedType>(type))
+	{
+		// TODO: handle this correctly
+		return convertClangType(elaboratedType->getNamedType());
+	}
 	else
 	{
-		log_->typeNotSupported(QString(type.getTypePtr()->getTypeClassName()));
+		log_->typeNotSupported(QString(type->getTypeClassName()));
 		return nullptr;
 	}
 }
@@ -299,6 +225,104 @@ OOModel::Visibility::VisibilityType CppImportUtilities::convertAccessSpecifier(c
 		case clang::AS_private: return OOModel::Visibility::PRIVATE;
 		case clang::AS_none: return OOModel::Visibility::DEFAULT;
 		default: return OOModel::Visibility::DEFAULT;
+	}
+}
+
+OOModel::Expression*CppImportUtilities::convertBuiltInClangType(const clang::Type* type)
+{
+	const clang::BuiltinType* builtinType = type->getAs<clang::BuiltinType>();
+	switch(builtinType->getKind())
+	{
+		case clang::BuiltinType::Void:
+			return new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::VOID);
+		// unsigned types
+		case clang::BuiltinType::Bool:
+			return new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::BOOLEAN);
+		case clang::BuiltinType::Char_U:
+			log_->typeNotSupported("char unsigned target");
+			return new OOModel::PrimitiveTypeExpression(
+						OOModel::PrimitiveTypeExpression::PrimitiveTypes::CHAR);
+		case clang::BuiltinType::UChar:
+			log_->typeNotSupported("unsigned char");
+			return new OOModel::PrimitiveTypeExpression(
+						OOModel::PrimitiveTypeExpression::PrimitiveTypes::CHAR);
+		case clang::BuiltinType::WChar_U:
+			log_->typeNotSupported("wchar_t unsigned target");
+			return new OOModel::PrimitiveTypeExpression(
+						OOModel::PrimitiveTypeExpression::PrimitiveTypes::CHAR);
+		case clang::BuiltinType::Char16:
+			log_->typeNotSupported("char16_t");
+			return new OOModel::PrimitiveTypeExpression(
+						OOModel::PrimitiveTypeExpression::PrimitiveTypes::CHAR);
+		case clang::BuiltinType::Char32:
+			log_->typeNotSupported("char32_t");
+			return new OOModel::PrimitiveTypeExpression(
+						OOModel::PrimitiveTypeExpression::PrimitiveTypes::CHAR);
+		case clang::BuiltinType::UShort:
+			log_->typeNotSupported("unsigned short");
+			return new OOModel::PrimitiveTypeExpression(
+						OOModel::PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_INT);
+		case clang::BuiltinType::UInt:
+			return new OOModel::PrimitiveTypeExpression(
+						OOModel::PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_INT);
+		case clang::BuiltinType::ULong:
+			return new OOModel::PrimitiveTypeExpression(
+						OOModel::PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_LONG);
+		case clang::BuiltinType::ULongLong:
+			log_->typeNotSupported("unsigned long long");
+			return new OOModel::PrimitiveTypeExpression(
+						OOModel::PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_LONG);
+		case clang::BuiltinType::UInt128:
+			log_->typeNotSupported("__uint128_t");
+			return new OOModel::PrimitiveTypeExpression(
+						OOModel::PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_LONG);
+		// signed types
+		case clang::BuiltinType::Char_S:
+			return new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::CHAR);
+		case clang::BuiltinType::SChar:
+			log_->typeNotSupported("signed char");
+			return new OOModel::PrimitiveTypeExpression(
+						OOModel::PrimitiveTypeExpression::PrimitiveTypes::CHAR);
+		case clang::BuiltinType::WChar_S:
+			log_->typeNotSupported("wchar_t");
+			return new OOModel::PrimitiveTypeExpression(
+						OOModel::PrimitiveTypeExpression::PrimitiveTypes::CHAR);
+		case clang::BuiltinType::Short:
+			log_->typeNotSupported("short");
+			return new OOModel::PrimitiveTypeExpression(
+						OOModel::PrimitiveTypeExpression::PrimitiveTypes::INT);
+		case clang::BuiltinType::Int:
+			return new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::INT);
+		case clang::BuiltinType::Long:
+			return new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::LONG);
+		case clang::BuiltinType::LongLong:
+			log_->typeNotSupported("long long");
+			return new OOModel::PrimitiveTypeExpression(
+						OOModel::PrimitiveTypeExpression::PrimitiveTypes::LONG);
+		case clang::BuiltinType::Int128:
+			log_->typeNotSupported("__int128_t");
+			return new OOModel::PrimitiveTypeExpression(
+						OOModel::PrimitiveTypeExpression::PrimitiveTypes::LONG);
+		// float types
+		case clang::BuiltinType::Half:
+			log_->typeNotSupported("half");
+			return new OOModel::PrimitiveTypeExpression(
+						OOModel::PrimitiveTypeExpression::PrimitiveTypes::FLOAT);
+		case clang::BuiltinType::Float:
+			return new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::FLOAT);
+		case clang::BuiltinType::Double:
+			return new OOModel::PrimitiveTypeExpression(OOModel::PrimitiveTypeExpression::PrimitiveTypes::DOUBLE);
+		case clang::BuiltinType::LongDouble:
+			log_->typeNotSupported("long double");
+			return new OOModel::PrimitiveTypeExpression(
+						OOModel::PrimitiveTypeExpression::PrimitiveTypes::DOUBLE);
+		// c++ specific
+		case clang::BuiltinType::NullPtr:
+			log_->typeNotSupported("nullptr");
+			return nullptr;
+		default:
+			log_->typeNotSupported("other type ?");
+			return nullptr;
 	}
 }
 
