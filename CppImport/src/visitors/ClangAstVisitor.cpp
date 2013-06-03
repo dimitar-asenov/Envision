@@ -118,29 +118,27 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl)
 		// visit child decls
 		if(recordDecl->isThisDeclarationADefinition())
 		{
-			// visit fields
-			for(auto fieldIt = recordDecl->field_begin(); fieldIt != recordDecl->field_end(); ++fieldIt)
-				TraverseDecl(*fieldIt);
-			// visit methods
-			for(auto methodIt = recordDecl->method_begin(); methodIt != recordDecl->method_end(); ++ methodIt)
-				TraverseDecl(*methodIt);
-			ooStack_.pop();
-
-			// visit friends
-			for(auto friendIt = recordDecl->friend_begin(); friendIt != recordDecl->friend_end(); ++friendIt)
+			ooStack_.push(ooClass);
+			for(auto declIt = recordDecl->decls_begin(); declIt!=recordDecl->decls_end(); ++declIt)
 			{
-				// Class type
-				if(auto type = (*friendIt)->getFriendType())
-					insertFriendClass(type, ooClass);
-				// Functions
-				if (auto friendDecl = (*friendIt)->getFriendDecl())
+				if(auto fDecl = llvm::dyn_cast<clang::FriendDecl>(*declIt))
 				{
-					if(!llvm::isa<clang::FunctionDecl>(friendDecl))
-						log_->writeError(className_,"Friend which ish not a function", friendDecl);
-					else
-						insertFriendFunction(llvm::dyn_cast<clang::FunctionDecl>(friendDecl), ooClass);
+					// Class type
+					if(auto type = fDecl->getFriendType())
+						insertFriendClass(type, ooClass);
+					// Functions
+					if (auto friendDecl = fDecl->getFriendDecl())
+					{
+						if(!llvm::isa<clang::FunctionDecl>(friendDecl))
+							log_->writeError(className_,"Friend which ish not a function", friendDecl);
+						else
+							insertFriendFunction(llvm::dyn_cast<clang::FunctionDecl>(friendDecl), ooClass);
+					}
 				}
+				else
+					TraverseDecl(*declIt);
 			}
+			ooStack_.pop();
 
 			// visit base classes
 			for(auto base_itr = recordDecl->bases_begin(); base_itr!=recordDecl->bases_end(); ++base_itr)
