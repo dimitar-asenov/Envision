@@ -1,5 +1,5 @@
 #include "test.h"
-//#include <iostream>
+#include <iostream>
 //TEst comment
 
 int NOCLASSFIELD;
@@ -248,6 +248,7 @@ class FriendTest {
         else
             return 10;
     }
+    friend class ClassArg;
 
     friend int method2(FriendTest* x);
 

@@ -109,19 +109,36 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl)
 			itemList->append(new OOModel::DeclarationStatement(ooClass));
 		else
 			log_->writeError(className_, QString("uknown where to put class"), recordDecl);
-		// visit child decls
-		ooStack_.push(ooClass);
-		clang::DeclContext::decl_iterator it = recordDecl->decls_begin();
-		for(;it!=recordDecl->decls_end();++it)
-		{
-			TraverseDecl(*it);
-		}
-		ooStack_.pop();
 
-		// visit base classes
-		// can only query base classes if there is a definitionotherwise a clang assertion is failed
+		// visit child decls
 		if(recordDecl->isThisDeclarationADefinition())
 		{
+			ooStack_.push(ooClass);
+			// visit fields
+			for(auto fieldIt = recordDecl->field_begin(); fieldIt != recordDecl->field_end(); ++fieldIt)
+				TraverseDecl(*fieldIt);
+			// visit methods
+			for(auto methodIt = recordDecl->method_begin(); methodIt != recordDecl->method_end(); ++ methodIt)
+				TraverseDecl(*methodIt);
+			ooStack_.pop();
+
+			// visit friends
+			for(auto friendIt = recordDecl->friend_begin(); friendIt != recordDecl->friend_end(); ++friendIt)
+			{
+				// Class type
+				if(auto type = (*friendIt)->getFriendType())
+					insertFriendClass(type, ooClass);
+				// Functions
+				if (auto friendDecl = (*friendIt)->getFriendDecl())
+				{
+					if(!llvm::isa<clang::FunctionDecl>(friendDecl))
+						log_->writeError(className_,"Friend which ish not a function", friendDecl);
+					else
+						insertFriendFunction(llvm::dyn_cast<clang::FunctionDecl>(friendDecl), ooClass);
+				}
+			}
+
+			// visit base classes
 			for(auto base_itr = recordDecl->bases_begin(); base_itr!=recordDecl->bases_end(); ++base_itr)
 			{
 				if(auto baseClass = base_itr->getType().getTypePtr()->getAsCXXRecordDecl())
@@ -135,13 +152,6 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl)
 
 		// set visibility
 		ooClass->setVisibility(utils_->convertAccessSpecifier(recordDecl->getAccess()));
-
-		// visit friends
-		for(auto friendIt = recordDecl->friend_begin(); friendIt != recordDecl->friend_end(); ++friendIt)
-		{
-			//TODO
-
-		}
 
 		// visit type arguments if any
 		if(auto describedTemplate = recordDecl->getDescribedClassTemplate())
@@ -184,10 +194,8 @@ bool ClangAstVisitor::TraverseFunctionDecl(clang::FunctionDecl* functionDecl)
 			curModel->methods()->append(ooFunction);
 		else if(OOModel::Class* curClass = dynamic_cast<OOModel::Class*>(ooStack_.top()))
 		{
-			// function Probably is a friend of class
-			std::cout<< "FRIEND FUNCTION ??? CLASS ON TOP OF STACK " << curClass->name().toStdString() <<
-							" Function name: " << functionDecl->getNameAsString() << std::endl;
-
+			log_->writeError(className_,"friend function with definition is not supported", functionDecl);
+			curClass->methods()->append(ooFunction);
 		}
 		else
 			log_->writeError(className_, QString("uknown where to put function"), functionDecl);
@@ -683,6 +691,30 @@ bool ClangAstVisitor::TraverseMethodDecl(clang::CXXMethodDecl* methodDecl, OOMod
 		}
 	}
 	return true;
+}
+
+void ClangAstVisitor::insertFriendClass(clang::TypeSourceInfo* typeInfo, OOModel::Class* ooClass)
+{
+	if(clang::CXXRecordDecl* recordDecl = typeInfo->getType().getTypePtr()->getAsCXXRecordDecl())
+		ooClass->friends()->append(new OOModel::ReferenceExpression
+											(QString::fromStdString(recordDecl->getNameAsString())));
+}
+
+void ClangAstVisitor::insertFriendFunction(clang::FunctionDecl* friendFunction, OOModel::Class* ooClass)
+{
+	if(friendFunction->isThisDeclarationADefinition())
+	{
+		// TODO this is at the moment the only solution to handle this
+		ooStack_.push(ooClass);
+		TraverseDecl(friendFunction);
+		ooStack_.pop();
+	}
+	// this should happen anyway that it is clearly visible that there is a friend
+	// TODO: this is not really a method call but rather a reference
+	OOModel::MethodCallExpression* ooMCall = new OOModel::MethodCallExpression(
+				QString::fromStdString(friendFunction->getNameAsString()));
+	// TODO: handle return type & arguments & type arguments
+	ooClass->friends()->append(ooMCall);
 }
 
 } // namespace cppimport

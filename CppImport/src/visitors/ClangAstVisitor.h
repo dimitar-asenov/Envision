@@ -91,6 +91,9 @@ class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 
 		bool TraverseMethodDecl(clang::CXXMethodDecl* methodDecl, OOModel::Method::MethodKind kind);
 
+		void insertFriendClass(clang::TypeSourceInfo* typeInfo, OOModel::Class* ooClass);
+		void insertFriendFunction(clang::FunctionDecl* friendFunction, OOModel::Class* ooClass);
+
 		QStack<Model::Node*> ooStack_;
 		QStack<OOModel::Expression*> ooExprStack_;
 		QStack<OOModel::SwitchCase*> ooSwitchCaseStack_;
