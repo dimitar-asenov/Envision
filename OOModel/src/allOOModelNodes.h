@@ -95,3 +95,4 @@
 #include "elements/FormalTypeArgument.h"
 #include "elements/OOReference.h"
 #include "elements/CatchClause.h"
+#include "elements/MemberInitializer.h"

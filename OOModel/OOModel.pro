@@ -86,7 +86,8 @@ HEADERS += src/expressions/types/FunctionTypeExpression.h \
     src/declarations/VariableDeclaration.h \
     src/expressions/VariableDeclarationExpression.h \
     src/declarations/TypeAlias.h \
-    src/expressions/types/AutoTypeExpression.h
+    src/expressions/types/AutoTypeExpression.h \
+    src/elements/MemberInitializer.h
 SOURCES += src/expressions/types/FunctionTypeExpression.cpp \
     src/types/FunctionType.cpp \
     src/expressions/types/TypeQualifierExpression.cpp \
@@ -167,4 +168,5 @@ SOURCES += src/expressions/types/FunctionTypeExpression.cpp \
     src/declarations/Declaration.cpp \
     src/expressions/VariableDeclarationExpression.cpp \
     src/declarations/TypeAlias.cpp \
-    src/expressions/types/AutoTypeExpression.cpp
+    src/expressions/types/AutoTypeExpression.cpp \
+    src/elements/MemberInitializer.cpp
