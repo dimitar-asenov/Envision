@@ -33,7 +33,7 @@ ClangAstConsumer::ClangAstConsumer(clang::CompilerInstance *ci, Model::Model *mo
 {
 	Q_ASSERT(ci);
 	logger_ = new CppImportLogger(&ci_->getSourceManager());
-	this->astVisitor_ = new ClangAstVisitor(model, currentProject, logger_);
+	this->astVisitor_ = new ClangAstVisitor(model, currentProject, logger_, &ci_->getSourceManager());
 }
 
 ClangAstConsumer::~ClangAstConsumer()

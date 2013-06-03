@@ -29,8 +29,8 @@
 
 namespace CppImport {
 
-ClangAstVisitor::ClangAstVisitor(Model::Model* model, OOModel::Project* currentProject, CppImportLogger* logger) :
-	currentModel_(model) , currentProject_(currentProject) , log_(logger)
+ClangAstVisitor::ClangAstVisitor(Model::Model* model, OOModel::Project* currentProject, CppImportLogger* logger, clang::SourceManager* srcManager) :
+	currentModel_(model) , currentProject_(currentProject) , log_(logger), sourceManager_(srcManager)
 {
 	utils_ = new CppImportUtilities(log_);
 	trMngr_ = new TranslateManager(model,currentProject, utils_);
@@ -47,6 +47,9 @@ ClangAstVisitor::~ClangAstVisitor()
 
 bool ClangAstVisitor::TraverseNamespaceDecl(clang::NamespaceDecl* namespaceDecl)
 {
+	if(!shouldModel(namespaceDecl->getLocation()))
+		return true;
+
 	OOModel::Module* ooModule = nullptr;
 	// insert it in model
 	if(OOModel::Project* curProject = dynamic_cast<OOModel::Project*>(ooStack_.top()))
@@ -85,6 +88,8 @@ bool ClangAstVisitor::TraverseNamespaceDecl(clang::NamespaceDecl* namespaceDecl)
 
 bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl)
 {
+	if(!shouldModel(recordDecl->getLocation()))
+		return true;
 	OOModel::Class* ooClass = nullptr;
 	QString recordDeclName = QString::fromStdString(recordDecl->getNameAsString());
 	if(recordDecl->isClass())
@@ -113,7 +118,6 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl)
 		// visit child decls
 		if(recordDecl->isThisDeclarationADefinition())
 		{
-			ooStack_.push(ooClass);
 			// visit fields
 			for(auto fieldIt = recordDecl->field_begin(); fieldIt != recordDecl->field_end(); ++fieldIt)
 				TraverseDecl(*fieldIt);
@@ -175,6 +179,9 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl)
 
 bool ClangAstVisitor::TraverseFunctionDecl(clang::FunctionDecl* functionDecl)
 {
+	if(!shouldModel(functionDecl->getLocation()))
+		return true;
+
 	if(llvm::isa<clang::CXXMethodDecl>(functionDecl))
 		// already handled
 		return true;
@@ -471,6 +478,9 @@ bool ClangAstVisitor::VisitStmt(clang::Stmt* S)
 
 bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 {
+	if(!shouldModel(varDecl->getLocation()))
+		return true;
+
 	if(llvm::isa<clang::ParmVarDecl>(varDecl))
 		return true;
 	OOModel::VariableDeclaration* ooVarDecl = nullptr;
@@ -530,6 +540,9 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 
 bool ClangAstVisitor::TraverseEnumDecl(clang::EnumDecl* enumDecl)
 {
+	if(!shouldModel(enumDecl->getLocation()))
+		return true;
+
 	OOModel::Class* ooEnumClass = new OOModel::Class
 			(QString::fromStdString(enumDecl->getNameAsString()), OOModel::Class::ConstructKind::Enum);
 	// insert in model
@@ -637,6 +650,8 @@ bool ClangAstVisitor::VisitContinueStmt(clang::ContinueStmt* continueStmt)
 
 bool ClangAstVisitor::VisitTypedefNameDecl(clang::TypedefNameDecl* typedefDecl)
 {
+	if(!shouldModel(typedefDecl->getLocation()))
+		return true;
 	// TODO: is weak imported could help to not have system typedefs
 	// typedefDecl->dump();
 	OOModel::TypeAlias* ooTypeAlias = new OOModel::TypeAlias();
@@ -715,6 +730,13 @@ void ClangAstVisitor::insertFriendFunction(clang::FunctionDecl* friendFunction, 
 				QString::fromStdString(friendFunction->getNameAsString()));
 	// TODO: handle return type & arguments & type arguments
 	ooClass->friends()->append(ooMCall);
+}
+
+bool ClangAstVisitor::shouldModel(clang::SourceLocation location)
+{
+	if(sourceManager_->isInSystemHeader(location))
+		return modelSysHeader_;
+	return true;
 }
 
 } // namespace cppimport

@@ -40,7 +40,7 @@ class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 {
 	typedef clang::RecursiveASTVisitor<ClangAstVisitor> Base;
 	public:
-		ClangAstVisitor(Model::Model* model, OOModel::Project* currentProject, CppImportLogger* logger);
+		ClangAstVisitor(Model::Model* model, OOModel::Project* currentProject, CppImportLogger* logger, clang::SourceManager* srcManager);
 		~ClangAstVisitor();
 
 		bool TraverseNamespaceDecl(clang::NamespaceDecl* namespaceDecl);
@@ -94,6 +94,8 @@ class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 		void insertFriendClass(clang::TypeSourceInfo* typeInfo, OOModel::Class* ooClass);
 		void insertFriendFunction(clang::FunctionDecl* friendFunction, OOModel::Class* ooClass);
 
+		bool shouldModel(clang::SourceLocation location);
+
 		QStack<Model::Node*> ooStack_;
 		QStack<OOModel::Expression*> ooExprStack_;
 		QStack<OOModel::SwitchCase*> ooSwitchCaseStack_;
@@ -105,6 +107,8 @@ class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 		CppImportLogger* log_{};
 		CppImportUtilities* utils_{};
 		ExpressionVisitor* exprVisitor_{};
+		clang::SourceManager* sourceManager_{};
+		bool modelSysHeader_{false};
 		bool inBody_{true};
 		QString className_{"ClangAstVisitor"};
 };
