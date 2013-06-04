@@ -74,6 +74,7 @@
 #include "expressions/ConditionalExpression.h"
 #include "expressions/ThrowExpression.h"
 #include "expressions/LambdaExpression.h"
+#include "expressions/TypeTraitExpr.h"
 
 #include "expressions/types/TypeExpression.h"
 #include "expressions/types/PrimitiveTypeExpression.h"
