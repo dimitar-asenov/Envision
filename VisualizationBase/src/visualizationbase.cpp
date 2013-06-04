@@ -99,7 +99,7 @@ bool VisualizationBase::initialize(Core::EnvisionManager& manager)
 
 	// Enlarge and Center Main Window
 
-	vmi.getMainWindow()->resize(1180,700);
+	vmi.getMainWindow()->resize(1280,720); // 720p
 	QRect descktop( QApplication::desktop()->screenGeometry() );
 	int leftPos = descktop.width()/2-VisualizationManager::instance().getMainWindow()->width()/2;
 	int topPos = descktop.height()/2-VisualizationManager::instance().getMainWindow()->height()/2;
