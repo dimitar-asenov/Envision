@@ -32,6 +32,7 @@ DEFINE_TYPED_LIST(OOModel::MemberInitializer)
 namespace OOModel {
 
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(MemberInitializer)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(MemberInitializer)
 
 REGISTER_ATTRIBUTE(MemberInitializer, memberName, Text, false, false, true)
 REGISTER_ATTRIBUTE(MemberInitializer, initializedValue, Expression, false, false, true)
