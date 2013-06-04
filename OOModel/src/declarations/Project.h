@@ -51,7 +51,6 @@ class OOMODEL_API Project : public Super<Declaration>
 	ATTRIBUTE(Model::TypedList<Class>, classes, setClasses)
 	ATTRIBUTE(Model::TypedList<Method>, methods, setMethods)
 	ATTRIBUTE(Model::TypedList<Field>, fields, setFields)
-	ATTRIBUTE(Model::TypedList<Declaration>, typeAliases, setTypeAliases)
 
 	public:
 		Project(const QString& name);

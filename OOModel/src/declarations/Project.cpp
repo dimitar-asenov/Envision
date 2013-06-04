@@ -39,7 +39,6 @@ REGISTER_ATTRIBUTE(Project, modules, TypedListOfModule, false, false, true)
 REGISTER_ATTRIBUTE(Project, classes, TypedListOfClass, false, false, true)
 REGISTER_ATTRIBUTE(Project, methods, TypedListOfMethod, false, false, true)
 REGISTER_ATTRIBUTE(Project, fields, TypedListOfField, false, false, true)
-REGISTER_ATTRIBUTE(Project, typeAliases, TypedListOfDeclaration, false, false, true)
 
 Project::Project(const QString& name) : Super(nullptr, Project::getMetaData())
 {
@@ -56,7 +55,7 @@ QList<Model::Node*> Project::findSymbols(const QRegExp& symbolExp,Model::Node* s
 	symbols << classes()->findAllSymbolDefinitions(symbolExp);
 	symbols << methods()->findAllSymbolDefinitions(symbolExp);
 	symbols << fields()->findAllSymbolDefinitions(symbolExp);
-	symbols << typeAliases()->findAllSymbolDefinitions(symbolExp);
+	symbols << subDeclarations()->findAllSymbolDefinitions(symbolExp);
 
 	if (exhaustAllScopes || symbols.isEmpty())
 		symbols << Node::findSymbols(symbolExp, source, mode, exhaustAllScopes);

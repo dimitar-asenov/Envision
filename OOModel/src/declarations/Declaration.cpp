@@ -37,6 +37,7 @@ COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(Declaration)
 REGISTER_ATTRIBUTE(Declaration, name, Text, false, false, true)
 REGISTER_ATTRIBUTE(Declaration, visibility, Visibility, false, false, true)
 REGISTER_ATTRIBUTE(Declaration, annotations, StatementItemList, false, false, true)
+REGISTER_ATTRIBUTE(Declaration, subDeclarations, TypedListOfDeclaration, false, false, true)
 
 Declaration::Declaration(const QString& name)
 : Super(nullptr, Declaration::getMetaData())

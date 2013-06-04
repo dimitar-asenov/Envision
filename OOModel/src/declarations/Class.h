@@ -52,7 +52,6 @@ class OOMODEL_API Class : public Super<Declaration>
 	ATTRIBUTE(Model::TypedList<Method>, methods, setMethods)
 	ATTRIBUTE(Model::TypedList<Field>, fields, setFields)
 	ATTRIBUTE(Model::TypedList<Enumerator>, enumerators, setEnumerators)
-	ATTRIBUTE(Model::TypedList<Declaration>, typeAliases, setTypeAliases)
 	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, cKind, setCKind, int)
 
 

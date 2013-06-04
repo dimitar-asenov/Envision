@@ -128,6 +128,7 @@ QList<Model::Node*> Method::findSymbols(const QRegExp& symbolExp, Model::Node* s
 
 		symbols << arguments()->findAllSymbolDefinitions(symbolExp);
 		symbols << results()->findAllSymbolDefinitions(symbolExp);
+		symbols << subDeclarations()->findAllSymbolDefinitions(symbolExp);
 		// Note that a StatementList also implements findSymbols and locally declared variables will be found there.
 
 		if (exhaustAllScopes || symbols.isEmpty())

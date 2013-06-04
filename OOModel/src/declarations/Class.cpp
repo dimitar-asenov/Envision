@@ -41,7 +41,6 @@ REGISTER_ATTRIBUTE(Class, classes, TypedListOfClass, false, false, true)
 REGISTER_ATTRIBUTE(Class, methods, TypedListOfMethod, false, false, true)
 REGISTER_ATTRIBUTE(Class, fields, TypedListOfField, false, false, true)
 REGISTER_ATTRIBUTE(Class, enumerators, TypedListOfEnumerator, false, false, true)
-REGISTER_ATTRIBUTE(Class, typeAliases, TypedListOfDeclaration, false, false, true)
 REGISTER_ATTRIBUTE(Class, cKind, Integer, false, false, true)
 
 Class::Class(const QString& name)
@@ -93,7 +92,7 @@ QList<Model::Node*> Class::findSymbols(const QRegExp& symbolExp,Model::Node* sou
 	symbols << methods()->findAllSymbolDefinitions(symbolExp);
 	symbols << fields()->findAllSymbolDefinitions(symbolExp);
 	symbols << enumerators()->findAllSymbolDefinitions(symbolExp);
-	symbols << typeAliases()->findAllSymbolDefinitions(symbolExp);
+	symbols << subDeclarations()->findAllSymbolDefinitions(symbolExp);
 
 	if (exhaustAllScopes || symbols.isEmpty())
 		symbols << Node::findSymbols(symbolExp, source, mode, exhaustAllScopes);

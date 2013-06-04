@@ -48,6 +48,7 @@ class OOMODEL_API Declaration : public Super<Model::CompositeNode>
 	ATTRIBUTE_OOP_NAME
 	ATTRIBUTE_OOP_VISIBILITY
 	ATTRIBUTE_OOP_ANNOTATIONS
+	ATTRIBUTE(Model::TypedList<Declaration>, subDeclarations, setSubDeclarations)
 
 	public:
 		Declaration(const QString& name);
