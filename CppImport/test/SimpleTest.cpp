@@ -286,8 +286,9 @@ TEST(CppImport, SimpleTest)
 	//    else if (cl) top_level = cl;
 	//    else top_level = divbysix;
 	CppImportManager manager;
-	QString srcPath("/home/luke/BachelorThesis/Envision/CppImport");
-	manager.setSrcPath(srcPath);
+	QString srcPath("/home/luke/BachelorThesis/TestEnvision/Envision/Core/src");
+	QString dbpath("/home/luke/BachelorThesis/TestEnvision/Envision/Core");
+	manager.setSrcPath(srcPath, dbpath);
 	manager.createModel();
 
 	Model::Model* model = ClangConsumerFactory::model_;

@@ -34,9 +34,9 @@ CppImportManager::~CppImportManager()
 	SAFE_DELETE(myTool_);
 }
 
-bool CppImportManager::setSrcPath(QString& path)
+bool CppImportManager::setSrcPath(QString& srcpath, QString& dbpath)
 {
-	QDir dir(path);
+	QDir dir(srcpath);
 	// set a filter to only get files which are c++ sources
 	QStringList cppFilter;
 	cppFilter << "*.cpp" << "*.cc" << "*.cxx";
@@ -48,7 +48,7 @@ bool CppImportManager::setSrcPath(QString& path)
 	{
 		sources_.push_back(dir.absoluteFilePath(file).toStdString());
 	}
-	return setCompilationDbPath(path);
+	return setCompilationDbPath(dbpath);
 }
 
 void CppImportManager::createModel()

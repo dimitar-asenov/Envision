@@ -657,7 +657,7 @@ bool ClangAstVisitor::VisitTypedefNameDecl(clang::TypedefNameDecl* typedefDecl)
 	ooTypeAlias->setName(QString::fromStdString(typedefDecl->getNameAsString()));
 	// TODO: for this the OOModel first needs to change
 	if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
-		itemList->append(ooTypeAlias);
+		itemList->append(new OOModel::DeclarationStatement(ooTypeAlias));
 	else
 		log_->writeError(className_, QString("Uknown where to put typedef"), typedefDecl);
 	return true;
@@ -732,7 +732,7 @@ void ClangAstVisitor::insertFriendFunction(clang::FunctionDecl* friendFunction, 
 
 bool ClangAstVisitor::shouldModel(clang::SourceLocation location)
 {
-	if(sourceManager_->isInSystemHeader(location))
+	if(sourceManager_->isInSystemHeader(location) || QString(sourceManager_->getBufferName(location)).contains("qt"))
 		return modelSysHeader_;
 	return true;
 }
