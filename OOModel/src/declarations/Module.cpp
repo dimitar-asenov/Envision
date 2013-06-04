@@ -38,6 +38,7 @@ REGISTER_ATTRIBUTE(Module, modules, TypedListOfModule, false, false, true)
 REGISTER_ATTRIBUTE(Module, classes, TypedListOfClass, false, false, true)
 REGISTER_ATTRIBUTE(Module, methods, TypedListOfMethod, false, false, true)
 REGISTER_ATTRIBUTE(Module, fields, TypedListOfField, false, false, true)
+REGISTER_ATTRIBUTE(Module, typeAliases, TypedListOfDeclaration, false, false, true)
 
 Module::Module(const QString& name) : Super(nullptr, Module::getMetaData())
 {
@@ -53,6 +54,7 @@ QList<Model::Node*> Module::findSymbols(const QRegExp& symbolExp,Model::Node* so
 	symbols << classes()->findAllSymbolDefinitions(symbolExp);
 	symbols << methods()->findAllSymbolDefinitions(symbolExp);
 	symbols << fields()->findAllSymbolDefinitions(symbolExp);
+	symbols << typeAliases()->findAllSymbolDefinitions(symbolExp);
 
 	if (exhaustAllScopes || symbols.isEmpty())
 		symbols << Node::findSymbols(symbolExp, source, mode, exhaustAllScopes);
