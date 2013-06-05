@@ -88,7 +88,7 @@ HEADERS += src/expressions/types/FunctionTypeExpression.h \
     src/declarations/TypeAlias.h \
     src/expressions/types/AutoTypeExpression.h \
     src/elements/MemberInitializer.h \
-    src/expressions/TypeTraitExpr.h
+    src/expressions/TypeTraitExpression.h
 SOURCES += src/expressions/types/FunctionTypeExpression.cpp \
     src/types/FunctionType.cpp \
     src/expressions/types/TypeQualifierExpression.cpp \
@@ -171,4 +171,4 @@ SOURCES += src/expressions/types/FunctionTypeExpression.cpp \
     src/declarations/TypeAlias.cpp \
     src/expressions/types/AutoTypeExpression.cpp \
     src/elements/MemberInitializer.cpp \
-    src/expressions/TypeTraitExpr.cpp
+    src/expressions/TypeTraitExpression.cpp

@@ -24,27 +24,36 @@
 **
 ***********************************************************************************************************************/
 
-#include "expressions/TypeTraitExpr.h"
+#pragma once
 
-#include "../types/PrimitiveType.h"
+#include "Expression.h"
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::TypeTraitExpr)
+#include "ModelBase/src/nodes/Integer.h"
+
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, TypeTraitExpression)
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(TypeTraitExpr)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(TypeTraitExpr)
-
-REGISTER_ATTRIBUTE(TypeTraitExpr, operand, Expression, false, false, true)
-REGISTER_ATTRIBUTE(TypeTraitExpr, ttKind, Integer, false, false, true)
-
-Type* TypeTraitExpr::type()
+class OOMODEL_API TypeTraitExpression : public Super<Expression>
 {
-	if(ttKind() == static_cast<int>(TypeTraitKind::SizeOf) ||
-			ttKind() == static_cast<int>(TypeTraitKind::AlignOf))
-		return new PrimitiveType(PrimitiveType::PrimitiveTypes::INT, true);
-	return operand()->type();
-}
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(TypeTraitExpression)
+
+	ATTRIBUTE(Expression, operand, setOperand)
+	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, ttKind, setTTKind, int)
+
+	public:
+		enum class TypeTraitKind : int {SizeOf, AlignOf, TypeId};
+
+		TypeTraitKind typeTraitKind() const;
+		void setTypeTraitKind(const TypeTraitKind& kind);
+
+		virtual Type* type();
+};
+
+inline TypeTraitExpression::TypeTraitKind TypeTraitExpression::typeTraitKind() const
+{ return static_cast<TypeTraitKind>(ttKind()); }
+
+inline void TypeTraitExpression::setTypeTraitKind(const TypeTraitKind &kind)
+{ setTTKind(static_cast<int>(kind)); }
 
 }
