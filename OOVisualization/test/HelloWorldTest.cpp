@@ -632,23 +632,25 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 	longMethod->items()->append(new ExpressionStatement(var21));
 
 	auto var22 = new VariableDeclarationExpression("var22", new FunctionTypeExpression(
-		QList<FormalArgument*>
-			{new FormalArgument("val", new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT))
-			,new FormalArgument("name", new ClassTypeExpression(new ReferenceExpression("String")))}));
+			{new VariableDeclarationExpression("val",
+					new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT))
+			,new VariableDeclarationExpression("name", new ClassTypeExpression(new ReferenceExpression("String")))}));
 	longMethod->items()->append(new ExpressionStatement(var22));
 
 	auto var23 = new VariableDeclarationExpression("var23", new FunctionTypeExpression( {},
-			QList<FormalResult*>
-				{new FormalResult("", new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT))}));
+				{new VariableDeclarationExpression("",
+						new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT))}));
 		longMethod->items()->append(new ExpressionStatement(var23));
 
 	auto var24 = new VariableDeclarationExpression("var24", new FunctionTypeExpression(
-			QList<FormalArgument*>
-				{new FormalArgument("val", new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT))
-				,new FormalArgument("name", new ClassTypeExpression(new ReferenceExpression("String")))},
-			QList<FormalResult*>
-				{new FormalResult("x", new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT))
-				,new FormalResult("y", new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT))}));
+				{new VariableDeclarationExpression("val",
+						new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT))
+				,new VariableDeclarationExpression("name",
+						new ClassTypeExpression(new ReferenceExpression("String")))},
+				{new VariableDeclarationExpression("x",
+						new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT))
+				,new VariableDeclarationExpression("y",
+						new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT))}));
 		longMethod->items()->append(new ExpressionStatement(var24));
 
 

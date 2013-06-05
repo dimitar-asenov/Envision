@@ -27,8 +27,6 @@
 #pragma once
 
 #include "TypeExpression.h"
-#include "../../elements/FormalArgument.h"
-#include "../../elements/FormalResult.h"
 
 DECLARE_TYPED_LIST(OOMODEL_API, OOModel, FunctionTypeExpression)
 
@@ -38,13 +36,11 @@ class OOMODEL_API FunctionTypeExpression : public Super<TypeExpression>
 {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(FunctionTypeExpression)
 
-	ATTRIBUTE(Model::TypedList<FormalArgument>, arguments, setArguments)
-	ATTRIBUTE(Model::TypedList<FormalResult>, results, setResults)
+	ATTRIBUTE(Model::TypedList<Expression>, arguments, setArguments)
+	ATTRIBUTE(Model::TypedList<Expression>, results, setResults)
 
 	public:
-		FunctionTypeExpression(const QList<FormalArgument*>& arguments);
-		FunctionTypeExpression(const QList<FormalResult*>& results);
-		FunctionTypeExpression(const QList<FormalArgument*>& arguments, const QList<FormalResult*>& results);
+		FunctionTypeExpression(const QList<Expression*>& arguments, const QList<Expression*>& results = {});
 
 		virtual Type* type();
 };

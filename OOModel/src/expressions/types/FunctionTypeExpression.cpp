@@ -26,6 +26,7 @@
 
 #include "FunctionTypeExpression.h"
 #include "../../types/FunctionType.h"
+#include "../../types/ErrorType.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(OOModel::FunctionTypeExpression)
@@ -35,19 +36,11 @@ namespace OOModel {
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(FunctionTypeExpression)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(FunctionTypeExpression)
 
-REGISTER_ATTRIBUTE(FunctionTypeExpression, arguments, TypedListOfFormalArgument, false, false, true)
-REGISTER_ATTRIBUTE(FunctionTypeExpression, results, TypedListOfFormalResult, false, false, true)
+REGISTER_ATTRIBUTE(FunctionTypeExpression, arguments, TypedListOfExpression, false, false, true)
+REGISTER_ATTRIBUTE(FunctionTypeExpression, results, TypedListOfExpression, false, false, true)
 
-FunctionTypeExpression::FunctionTypeExpression(const QList<FormalArgument*>& args)
-: FunctionTypeExpression{args, {}}
-{}
-
-FunctionTypeExpression::FunctionTypeExpression(const QList<FormalResult*>& res)
-: FunctionTypeExpression{{}, res}
-{}
-
-FunctionTypeExpression::FunctionTypeExpression(const QList<FormalArgument*>& args,
-		const QList<FormalResult*>& res)
+FunctionTypeExpression::FunctionTypeExpression(const QList<Expression*>& args,
+		const QList<Expression*>& res)
 : Super(nullptr, FunctionTypeExpression::getMetaData())
 {
 	for (auto a : args)
@@ -64,13 +57,31 @@ FunctionTypeExpression::FunctionTypeExpression(const QList<FormalArgument*>& arg
 
 Type* FunctionTypeExpression::type()
 {
+	// TODO: be a little more specific about what are allowed arguments and results.
+	// E.g. return an error type if an argumnet is not a variable declaration and it is not
+	// a type name.
 	QList<const Type*> args;
-	for (auto ait = arguments()->begin(); ait != arguments()->end(); ++ait)
-		args.append((*ait)->typeExpression()->type());
+	for (auto a : *arguments())
+	{
+		args.append(a->type());
+		if (args.last()->isError())
+		{
+			for (auto t : args) SAFE_DELETE(t);
+			return new ErrorType("Invalid argument type for FunctionTypeExpression");
+		}
+	}
 
 	QList<const Type*> res;
-	for (auto rit = results()->begin(); rit != results()->end(); ++rit)
-		res.append( (*rit)->typeExpression()->type());
+	for (auto r : *results())
+	{
+		res.append(r->type());
+		if (res.last()->isError())
+		{
+			for (auto t : args) SAFE_DELETE(t);
+			for (auto t : res) SAFE_DELETE(t);
+			return new ErrorType("Invalid result type for FunctionTypeExpression");
+		}
+	}
 
 	return new FunctionType(false, args, res);
 }
