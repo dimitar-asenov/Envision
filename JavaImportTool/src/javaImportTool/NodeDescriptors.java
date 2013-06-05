@@ -34,7 +34,8 @@ public class NodeDescriptors {
 				{"TypedListOfMethod","methods"},
 				{"StatementItemList","annotations"},
 				{"TypedListOfField","fields"},
-				{"Visibility","visibility"}});
+				{"Visibility","visibility"},
+				{"TypedListOfDeclaration","subDeclarations"}});
 		initializerMap.put("Module", new String[][]{
 				{"Text","name"},
 				{"TypedListOfModule","modules"},
@@ -42,7 +43,8 @@ public class NodeDescriptors {
 				{"TypedListOfMethod","methods"},
 				{"StatementItemList","annotations"},
 				{"TypedListOfField","fields"},
-				{"Visibility","visibility"}});
+				{"Visibility","visibility"},
+				{"TypedListOfDeclaration","subDeclarations"}});
 		initializerMap.put("Class", new String[][]{
 				{"Text","name"},
 				{"TypedListOfExpression","baseClasses"},
@@ -54,7 +56,8 @@ public class NodeDescriptors {
 				{"TypedListOfExpression","friends"},
 				{"Visibility","visibility"},
 				{"StatementItemList","annotations"},
-				{"Integer","cKind"}});
+				{"Integer","cKind"},
+				{"TypedListOfDeclaration","subDeclarations"}});
 		initializerMap.put("Method", new String[][]{
 				{"Text","name"},
 				{"StatementItemList","items"},
@@ -64,19 +67,28 @@ public class NodeDescriptors {
 				{"Visibility","visibility"},
 				{"StorageSpecifier","storageSpecifier"},
 				{"StatementItemList","annotations"},
-				{"Integer","mthKind"}});
+				{"Integer","mthKind"},
+				{"TypedListOfDeclaration","subDeclarations"}});
 		initializerMap.put("Field", new String[][]{
 				{"Text","name"},
 				{"Expression","typeExpression"},
 				{"Visibility","visibility"},
 				{"StatementItemList","annotations"},
-				{"StorageSpecifier","storageSpecifier"}});
+				{"StorageSpecifier","storageSpecifier"},
+				{"TypedListOfDeclaration","subDeclarations"}});
 		initializerMap.put("VariableDeclaration", new String[][]{
 				{"Text","name"},
 				{"Expression","typeExpression"},
 				{"Visibility","visibility"},
 				{"StatementItemList","annotations"},
-				{"StorageSpecifier","storageSpecifier"}});
+				{"StorageSpecifier","storageSpecifier"},
+				{"TypedListOfDeclaration","subDeclarations"}});
+		initializerMap.put("NameImport", new String[][]{
+				{"Text","name"},
+				{"Visibility","visibility"},
+				{"StatementItemList","annotations"},
+				{"TypedListOfDeclaration","subDeclarations"},
+				{"ReferenceExpression","importedName"}});
 		
 		// Elements
 		initializerMap.put("FormalTypeArgument", new String[][]{

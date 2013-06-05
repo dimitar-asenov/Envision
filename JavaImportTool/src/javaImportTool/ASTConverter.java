@@ -11,6 +11,7 @@ public class ASTConverter {
 	private Node root;
 	private String source;
 	private Stack<Node> containers = new Stack<Node>();
+	private List<ImportDeclaration> imports;
 	
 	ASTConverter(Node root, String source)
 	{
@@ -38,7 +39,7 @@ public class ASTConverter {
 		if (pd != null) moduleName = pd.getName().getFullyQualifiedName();
 		containers.push(root.getModuleContext( moduleName ) );
 
-		//TODO: Handle imports
+		imports = node.imports();
 
 	    List<AbstractTypeDeclaration> types = node.types();
 	    for (AbstractTypeDeclaration type : types) {
@@ -78,6 +79,16 @@ public class ASTConverter {
 		setModifiers(node);
 		
 		//TODO: Handle Annotations
+		
+		// Imports
+		for(ImportDeclaration id : imports)
+		{
+			//TODO: Handle static and on demand imports
+			Node importNode = new Node(null, "NameImport", cl.child("subDeclarations").numChildren());
+			importNode.setChild("importedName", expression(id.getName(), "importedName"));
+			importNode.child("visibility").setLongValue(0);
+			cl.child("subDeclarations").add(importNode);
+		}
 		
 		// Type parameters
 		processTypeParameters(node.typeParameters());
