@@ -4,7 +4,8 @@ DEFINES += OOMODEL_LIBRARY
 win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase
-HEADERS += src/expressions/types/FunctionTypeExpression.h \
+HEADERS += src/declarations/NameImport.h \
+    src/expressions/types/FunctionTypeExpression.h \
     src/types/FunctionType.h \
     src/expressions/types/TypeQualifierExpression.h \
     src/statements/DeclarationStatement.h \
@@ -89,7 +90,8 @@ HEADERS += src/expressions/types/FunctionTypeExpression.h \
     src/expressions/types/AutoTypeExpression.h \
     src/elements/MemberInitializer.h \
     src/expressions/TypeTraitExpression.h
-SOURCES += src/expressions/types/FunctionTypeExpression.cpp \
+SOURCES += src/declarations/NameImport.cpp \
+    src/expressions/types/FunctionTypeExpression.cpp \
     src/types/FunctionType.cpp \
     src/expressions/types/TypeQualifierExpression.cpp \
     src/statements/DeclarationStatement.cpp \

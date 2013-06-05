@@ -25,6 +25,7 @@
 ***********************************************************************************************************************/
 
 #include "TypeAlias.h"
+#include "../types/SymbolProviderType.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(OOModel::TypeAlias)
@@ -41,6 +42,24 @@ TypeAlias::TypeAlias(const QString &name, Expression *typeExpression)
 {
 	setName(name);
 	if(typeExpression) setTypeExpression(typeExpression);
+}
+
+QList<Model::Node*> TypeAlias::findSymbols(const QRegExp& symbolExp,Model::Node* source, FindSymbolMode mode,
+		bool exhaustAllScopes)
+{
+	QList<Model::Node*> symbols;
+
+	auto type = typeExpression()->type();
+	auto symbolProviderType = dynamic_cast<SymbolProviderType*>(type);
+	if (symbolProviderType)
+		symbols = symbolProviderType->symbolProvider()
+			->findSymbols(symbolExp, symbolProviderType->symbolProvider(), SEARCH_DOWN, exhaustAllScopes);
+
+	SAFE_DELETE(type);
+
+	if (exhaustAllScopes || symbols.isEmpty())
+		symbols << Super::findSymbols(symbolExp, source, mode, exhaustAllScopes);
+	return symbols;
 }
 
 }

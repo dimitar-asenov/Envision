@@ -34,6 +34,7 @@
 #include "declarations/Declaration.h"
 #include "declarations/VariableDeclaration.h"
 #include "declarations/TypeAlias.h"
+#include "declarations/NameImport.h"
 
 #include "statements/Statement.h"
 #include "statements/Block.h"

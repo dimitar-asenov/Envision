@@ -31,6 +31,9 @@
 #include "declarations/Module.h"
 #include "declarations/Class.h"
 #include "declarations/Field.h"
+#include "declarations/TypeAlias.h"
+#include "declarations/NameImport.h"
+#include "declarations/Field.h"
 #include "../types/SymbolProviderType.h"
 #include "../types/ClassType.h"
 #include "../types/ErrorType.h"
@@ -65,9 +68,19 @@ Type* ReferenceExpression::type()
 		return new SymbolProviderType(module, false);
 	else if ( auto cl = dynamic_cast<Class*>( ref()->target() ) )
 		return new ClassType(cl, false);
+	else if ( auto alias = dynamic_cast<TypeAlias*>( ref()->target() ) )
+		return new SymbolProviderType(alias, false);
+	else if ( auto nameImport = dynamic_cast<NameImport*>( ref()->target() ) )
+		return nameImport->importedName()->type();
 	else if ( auto vdecl = dynamic_cast<VariableDeclarationExpression*>( ref()->target() ) )
 	{
 		auto t = vdecl->type();
+		t->setValueType(true);
+		return t;
+	}
+	else if ( auto vdecl = dynamic_cast<VariableDeclaration*>( ref()->target() ) )
+	{
+		auto t = vdecl->typeExpression()->type();
 		t->setValueType(true);
 		return t;
 	}
