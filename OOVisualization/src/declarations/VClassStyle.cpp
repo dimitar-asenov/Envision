@@ -44,6 +44,7 @@ void VClassStyle::load(Visualization::StyleLoader& sl)
 	sl.load("enumerators", enumerators_);
 	sl.load("friendsSymbol", friendsSymbol_);
 	sl.load("friends", friends_);
+	sl.load("declarations", declarations_);
 	sl.load("body", body_);
 	sl.load("content", content_);
 	sl.load("fieldContainer", fieldContainer_);

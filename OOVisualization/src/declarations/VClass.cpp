@@ -100,7 +100,10 @@ void VClass::initializeForms()
 				->put(1, 2, item<VList>(&I::friends_,
 						[](I* v) {return v->node()->friends()->size() > 0 ? v->node()->friends() : nullptr;},
 						[](I* v){return &v->style()->friends();}))
-				->put(1, 3, item<PositionLayout>(&I::body_, [](I* v){return &v->style()->body();}));
+				->put(1, 3, item<VList>(&I::declarations_,
+						[](I* v) {return v->node()->subDeclarations()->size() > 0 ? v->node()->subDeclarations() : nullptr;},
+						[](I* v){return &v->style()->declarations();}))
+				->put(1, 4, item<PositionLayout>(&I::body_, [](I* v){return &v->style()->body();}));
 
 	auto fieldContainerElement = (new GridLayoutFormElement())
 				->setVerticalSpacing(3)

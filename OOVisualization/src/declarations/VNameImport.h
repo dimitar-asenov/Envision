@@ -24,50 +24,36 @@
  **
  **********************************************************************************************************************/
 
-#include "NameImport.h"
+#pragma once
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::NameImport)
+#include "../oovisualization_api.h"
+#include "VNameImportStyle.h"
 
-namespace OOModel {
+#include "OOModel/src/declarations/NameImport.h"
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(NameImport)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(NameImport)
+#include "VisualizationBase/src/items/ItemWithNode.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
 
-REGISTER_ATTRIBUTE(NameImport, importedName, ReferenceExpression, false, false, true)
+namespace Visualization {
+	class Static;
+}
 
-NameImport::NameImport(ReferenceExpression *importedName)
-: Super(nullptr, NameImport::getMetaData())
+namespace OOVisualization {
+
+class OOVISUALIZATION_API VNameImport
+: public Super<Visualization::ItemWithNode<VNameImport, Visualization::DeclarativeItem<VNameImport>,
+  	  	  	  	  	  OOModel::NameImport>>
 {
-	if(importedName) setImportedName(importedName);
-}
+	ITEM_COMMON(VNameImport)
 
-bool NameImport::definesSymbol() const
-{
-	return true;
-}
+	public:
+		VNameImport(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 
-const QString& NameImport::symbolName() const
-{
-	auto imported = const_cast<NameImport*>(this)->importedName();
-	Q_ASSERT(imported->ref()->target() != this);
-	return imported->name();
-}
+		static void initializeForms();
 
-QList<Model::Node*> NameImport::findSymbols(const QRegExp& symbolExp, Model::Node* source, FindSymbolMode mode,
-		bool exhaustAllScopes)
-{
-	QList<Model::Node*> symbols;
-	if (mode == SEARCH_DOWN)
-		symbols = importedName()->findSymbols(symbolExp, importedName(), SEARCH_DOWN, exhaustAllScopes);
+	private:
+		Visualization::Static* icon_{};
+		Visualization::Item* imported_{};
+};
 
-	if ( mode == SEARCH_UP && parent() && (exhaustAllScopes || symbols.isEmpty()))
-		symbols << parent()->findSymbols(symbolExp, source, mode, exhaustAllScopes);
-
-	// Filter out results that are the same as this node
-	symbols.removeAll(this);
-
-	return symbols;
-}
-
-}
+} /* namespace OOVisualization */

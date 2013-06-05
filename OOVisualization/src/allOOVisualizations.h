@@ -31,6 +31,7 @@
 #include "declarations/VClass.h"
 #include "declarations/VMethod.h"
 #include "declarations/VField.h"
+#include "declarations/VNameImport.h"
 
 #include "elements/VEnumerator.h"
 #include "elements/VFormalArgument.h"

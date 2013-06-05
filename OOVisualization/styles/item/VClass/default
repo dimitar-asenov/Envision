@@ -151,6 +151,14 @@
 			<spaceBetweenElements>2</spaceBetweenElements>
 		</itemsStyle>
 	</friends>
+	<declarations prototypes="item/VList/default">
+		<shape/>
+		<itemsStyle prototypes="layout/SequentialLayout/default">
+			<alignment>1</alignment>
+			<direction>2</direction>
+			<spaceBetweenElements>2</spaceBetweenElements>
+		</itemsStyle>
+	</declarations>
 	<fieldContainer prototypes="layout/SequentialLayout/default">
 		<shape prototypes="shape/Box/default">
 			Box

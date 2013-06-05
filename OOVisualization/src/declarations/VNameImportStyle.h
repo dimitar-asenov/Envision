@@ -24,50 +24,25 @@
  **
  **********************************************************************************************************************/
 
-#include "NameImport.h"
+#pragma once
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::NameImport)
+#include "../oovisualization_api.h"
 
-namespace OOModel {
+#include "VisualizationBase/src/items/StaticStyle.h"
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(NameImport)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(NameImport)
+namespace OOVisualization {
 
-REGISTER_ATTRIBUTE(NameImport, importedName, ReferenceExpression, false, false, true)
-
-NameImport::NameImport(ReferenceExpression *importedName)
-: Super(nullptr, NameImport::getMetaData())
+class OOVISUALIZATION_API VNameImportStyle : public Visualization::ItemStyle
 {
-	if(importedName) setImportedName(importedName);
-}
+	private:
+		Visualization::StaticStyle icon_;
 
-bool NameImport::definesSymbol() const
-{
-	return true;
-}
+	public:
+		void load(Visualization::StyleLoader& sl);
 
-const QString& NameImport::symbolName() const
-{
-	auto imported = const_cast<NameImport*>(this)->importedName();
-	Q_ASSERT(imported->ref()->target() != this);
-	return imported->name();
-}
+		const Visualization::StaticStyle& icon() const;
+};
 
-QList<Model::Node*> NameImport::findSymbols(const QRegExp& symbolExp, Model::Node* source, FindSymbolMode mode,
-		bool exhaustAllScopes)
-{
-	QList<Model::Node*> symbols;
-	if (mode == SEARCH_DOWN)
-		symbols = importedName()->findSymbols(symbolExp, importedName(), SEARCH_DOWN, exhaustAllScopes);
+inline const Visualization::StaticStyle& VNameImportStyle::icon() const { return icon_; }
 
-	if ( mode == SEARCH_UP && parent() && (exhaustAllScopes || symbols.isEmpty()))
-		symbols << parent()->findSymbols(symbolExp, source, mode, exhaustAllScopes);
-
-	// Filter out results that are the same as this node
-	symbols.removeAll(this);
-
-	return symbols;
-}
-
-}
+} /* namespace OOVisualization */

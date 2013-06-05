@@ -24,50 +24,27 @@
  **
  **********************************************************************************************************************/
 
-#include "NameImport.h"
+#include "VNameImport.h"
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::NameImport)
+#include "VisualizationBase/src/items/Static.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
 
-namespace OOModel {
+using namespace Visualization;
+using namespace OOModel;
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(NameImport)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(NameImport)
+namespace OOVisualization {
 
-REGISTER_ATTRIBUTE(NameImport, importedName, ReferenceExpression, false, false, true)
+ITEM_COMMON_DEFINITIONS(VNameImport, "item")
 
-NameImport::NameImport(ReferenceExpression *importedName)
-: Super(nullptr, NameImport::getMetaData())
+VNameImport::VNameImport(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style)
+{}
+
+void VNameImport::initializeForms()
 {
-	if(importedName) setImportedName(importedName);
+	addForm((new GridLayoutFormElement())->setHorizontalSpacing(3)
+		->put(0, 0, item<Static>(&I::icon_, [](I* v){return &v->style()->icon();}))
+		->put(1, 0, item(&I::imported_, [](I* v){return v->node()->importedName();} ))
+	);
 }
 
-bool NameImport::definesSymbol() const
-{
-	return true;
-}
-
-const QString& NameImport::symbolName() const
-{
-	auto imported = const_cast<NameImport*>(this)->importedName();
-	Q_ASSERT(imported->ref()->target() != this);
-	return imported->name();
-}
-
-QList<Model::Node*> NameImport::findSymbols(const QRegExp& symbolExp, Model::Node* source, FindSymbolMode mode,
-		bool exhaustAllScopes)
-{
-	QList<Model::Node*> symbols;
-	if (mode == SEARCH_DOWN)
-		symbols = importedName()->findSymbols(symbolExp, importedName(), SEARCH_DOWN, exhaustAllScopes);
-
-	if ( mode == SEARCH_UP && parent() && (exhaustAllScopes || symbols.isEmpty()))
-		symbols << parent()->findSymbols(symbolExp, source, mode, exhaustAllScopes);
-
-	// Filter out results that are the same as this node
-	symbols.removeAll(this);
-
-	return symbols;
-}
-
-}
+} /* namespace OOVisualization */

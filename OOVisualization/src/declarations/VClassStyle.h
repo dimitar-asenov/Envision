@@ -52,6 +52,7 @@ class OOVISUALIZATION_API VClassStyle : public Visualization::ItemStyle
 		Visualization::VListStyle enumerators_;
 		Visualization::StaticStyle friendsSymbol_;
 		Visualization::VListStyle friends_;
+		Visualization::VListStyle declarations_;
 		Visualization::PositionLayoutStyle body_;
 		Visualization::SequentialLayoutStyle content_;
 		Visualization::SequentialLayoutStyle fieldContainer_;
@@ -75,6 +76,7 @@ class OOVISUALIZATION_API VClassStyle : public Visualization::ItemStyle
 		const Visualization::VListStyle& enumerators() const;
 		const Visualization::StaticStyle& friendsSymbol() const;
 		const Visualization::VListStyle& friends() const;
+		const Visualization::VListStyle& declarations() const;
 		const Visualization::PositionLayoutStyle& body() const;
 		const Visualization::SequentialLayoutStyle& content() const;
 		const Visualization::SequentialLayoutStyle& fieldContainer() const;
@@ -96,6 +98,7 @@ inline const Visualization::VListStyle& VClassStyle::annotations() const { retur
 inline const Visualization::VListStyle& VClassStyle::enumerators() const { return enumerators_; }
 inline const Visualization::StaticStyle& VClassStyle::friendsSymbol() const{ return friendsSymbol_; }
 inline const Visualization::VListStyle& VClassStyle::friends() const { return friends_; }
+inline const Visualization::VListStyle& VClassStyle::declarations() const { return declarations_; }
 inline const Visualization::PositionLayoutStyle& VClassStyle::body() const { return body_; }
 inline const Visualization::SequentialLayoutStyle& VClassStyle::content() const { return content_; }
 inline const Visualization::SequentialLayoutStyle& VClassStyle::fieldContainer() const { return fieldContainer_; }

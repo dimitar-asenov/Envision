@@ -66,11 +66,19 @@ Class* addHelloWorld(Model::Model* model, Project* parent)
 
 	hello->setName("HelloWorld");
 	hello->setVisibility(Visibility::PUBLIC);
+
+	hello->subDeclarations()->append(new NameImport(
+		new ReferenceExpression("out", new ReferenceExpression("System", new ReferenceExpression("Java")))));
+	// TODO: BUG: If the two lines below are uncommented this will trigger an infinite loop.
+	// hello->subDeclarations()->append(new NameImport(new ReferenceExpression("Java")));
+	// hello->subDeclarations()->append(new NameImport(new ReferenceExpression("Java")));
+
 	Method* main = new Method();
 	hello->methods()->append(main);
 	main->setName("main");
 	main->setVisibility(Visibility::PUBLIC);
 	main->setStorageSpecifier(StorageSpecifier::CLASS_VARIABLE);
+
 
 	FormalArgument* mainArgs = new FormalArgument();
 	main->arguments()->append(mainArgs);
