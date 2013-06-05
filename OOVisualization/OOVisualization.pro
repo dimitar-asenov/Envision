@@ -59,8 +59,6 @@ HEADERS += src/declarations/VNameImportStyle.h \
     src/elements/VFormalArgumentStyle.h \
     src/elements/VFormalResult.h \
     src/elements/VFormalResultStyle.h \
-    src/elements/VStorageSpecifier.h \
-    src/elements/VVisibility.h \
     src/expressions/OperatorStyle.h \
     src/expressions/VArrayInitializer.h \
     src/expressions/VArrayInitializerStyle.h \
@@ -142,7 +140,6 @@ SOURCES += src/declarations/VNameImportStyle.cpp \
     src/expressions/VUnfinishedOperator.cpp \
     src/expressions/VErrorExpressionStyle.cpp \
     src/expressions/VErrorExpression.cpp \
-    src/elements/VStorageSpecifier.cpp \
     src/expressions/VArrayInitializer.cpp \
     src/expressions/VArrayInitializerStyle.cpp \
     src/statements/VContinueStatement.cpp \
@@ -155,7 +152,6 @@ SOURCES += src/declarations/VNameImportStyle.cpp \
     src/elements/VFormalArgumentStyle.cpp \
     src/elements/VFormalResult.cpp \
     src/elements/VFormalResultStyle.cpp \
-    src/elements/VVisibility.cpp \
     src/statements/VIfStatement.cpp \
     src/statements/VIfStatementStyle.cpp \
     src/statements/VReturnStatement.cpp \

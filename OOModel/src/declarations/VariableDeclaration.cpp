@@ -36,7 +36,6 @@ COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(VariableDeclaration)
 
 REGISTER_ATTRIBUTE(VariableDeclaration, typeExpression, Expression, false, false, true)
 REGISTER_ATTRIBUTE(VariableDeclaration, initialValue, Expression, false, true, true)
-REGISTER_ATTRIBUTE(VariableDeclaration, storageSpecifier, StorageSpecifier, false, false, true)
 
 VariableDeclaration::VariableDeclaration(const QString& name, Expression* type)
 : Super(nullptr, VariableDeclaration::getMetaData())
@@ -53,31 +52,13 @@ VariableDeclaration::VariableDeclaration(const QString& name, Expression* type, 
 	if (initialValue) setInitialValue(initialValue);
 }
 
-VariableDeclaration::VariableDeclaration(const QString& name, Expression* type, Visibility::VisibilityType vis)
+VariableDeclaration::VariableDeclaration(const QString& name, Expression* type, Modifier::Modifiers mod,
+		Expression* initialValue)
 : Super(nullptr, VariableDeclaration::getMetaData())
 {
 	setName(name);
 	if (type) setTypeExpression(type);
-	setVisibility(vis);
-}
-
-VariableDeclaration::VariableDeclaration
-		(const QString& name, Expression* type, StorageSpecifier::StorageSpecifierTypes storage)
-: Super(nullptr, VariableDeclaration::getMetaData())
-{
-	setName(name);
-	if (type) setTypeExpression(type);
-	setStorageSpecifier(storage);
-}
-
-VariableDeclaration::VariableDeclaration(const QString& name, Expression* type, Visibility::VisibilityType vis,
-		StorageSpecifier::StorageSpecifierTypes storage, Expression* initialValue)
-: Super(nullptr, VariableDeclaration::getMetaData())
-{
-	setName(name);
-	if (type) setTypeExpression(type);
-	setVisibility(vis);
-	setStorageSpecifier(storage);
+	modifiers()->set(mod);
 	if (initialValue) setInitialValue(initialValue);
 }
 

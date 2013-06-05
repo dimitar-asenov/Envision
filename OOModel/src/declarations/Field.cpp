@@ -41,6 +41,14 @@ Field::Field(const QString& name, Expression* type)
 	if (type) setTypeExpression(type);
 }
 
+
+Field::Field(const QString& name, Modifier::Modifiers mod)
+: Super(nullptr, Field::getMetaData())
+{
+	setName(name);
+	modifiers()->set(mod);
+}
+
 Field::Field(const QString& name, Expression* type, Expression* initialValue)
 : Super(nullptr, Field::getMetaData())
 {
@@ -49,31 +57,12 @@ Field::Field(const QString& name, Expression* type, Expression* initialValue)
 	if (initialValue) setInitialValue(initialValue);
 }
 
-Field::Field(const QString& name, Expression* type, Visibility::VisibilityType vis)
+Field::Field(const QString& name, Expression* type, Modifier::Modifiers mod, Expression* initialValue)
 : Super(nullptr, Field::getMetaData())
 {
 	setName(name);
 	if (type) setTypeExpression(type);
-	setVisibility(vis);
-}
-
-Field::Field
-		(const QString& name, Expression* type, StorageSpecifier::StorageSpecifierTypes storage)
-: Super(nullptr, Field::getMetaData())
-{
-	setName(name);
-	if (type) setTypeExpression(type);
-	setStorageSpecifier(storage);
-}
-
-Field::Field(const QString& name, Expression* type, Visibility::VisibilityType vis,
-				 StorageSpecifier::StorageSpecifierTypes storage, Expression* initialValue)
-: Super(nullptr, Field::getMetaData())
-{
-	setName(name);
-	if (type) setTypeExpression(type);
-	setVisibility(vis);
-	setStorageSpecifier(storage);
+	modifiers()->set(mod);
 	if (initialValue) setInitialValue(initialValue);
 }
 

@@ -40,11 +40,9 @@ class OOMODEL_API Field : public Super<VariableDeclaration>
 
 	public:
 		Field(const QString& name, Expression* type = nullptr);
+		Field(const QString& name, Modifier::Modifiers mod);
 		Field(const QString& name, Expression* type, Expression* initialValue);
-		Field(const QString& name, Expression* type, Visibility::VisibilityType vis);
-		Field(const QString& name, Expression* type, StorageSpecifier::StorageSpecifierTypes storage);
-		Field(const QString& name, Expression* type,  Visibility::VisibilityType vis,
-				StorageSpecifier::StorageSpecifierTypes storage, Expression* initialValue = nullptr);
+		Field(const QString& name, Expression* type, Modifier::Modifiers mod, Expression* initialValue = nullptr);
 };
 
 }

@@ -24,51 +24,63 @@
  **
  **********************************************************************************************************************/
 
-#include "CCreateField.h"
+#include "Modifier.h"
 
-#include "OOModel/src/declarations/Class.h"
-#include "OOModel/src/declarations/Field.h"
-#include "OOModel/src/expressions/EmptyExpression.h"
+#include "ModelBase/src/commands/FieldSet.h"
+#include "OOModelException.h"
 
-#include "InteractionBase/src/events/SetCursorEvent.h"
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(OOModel::Modifier)
 
-using namespace OOModel;
+namespace OOModel {
 
-namespace OOInteraction {
+NODE_DEFINE_TYPE_REGISTRATION_METHODS(Modifier)
 
-CCreateField::CCreateField() : CreateNamedObjectWithAttributes("field",
-		{{"public", "private","protected"}, {"static"}})
+Modifier::Modifier(Model::Node *parent)
+: Super(parent)
 {
 }
 
-Interaction::CommandResult* CCreateField::create(Visualization::Item* /*source*/, Visualization::Item* target,
-	const QString& name, const QStringList& attributes)
+Modifier::Modifier(Model::Node *parent, Model::PersistentStore &store, bool)
+: Super(parent)
 {
-	auto cl = dynamic_cast<OOModel::Class*> (target->node());
-	Q_ASSERT(cl);
-
-	auto f = new OOModel::Field();
-	f->setTypeExpression(new OOModel::EmptyExpression());
-	if (!name.isEmpty()) f->setName(name);
-
-	// Set visibility
-	if (attributes.first() == "private" ) f->modifiers()->set(Modifier::Private);
-	else if (attributes.first() == "protected" ) f->modifiers()->set(Modifier::Protected);
-	else if (attributes.first() == "public" ) f->modifiers()->set(Modifier::Public);
-
-	// Set scope
-	if (attributes.last() == "static") f->modifiers()->set(Modifier::Static);
-
-	cl->fields()->beginModification("create field");
-	cl->fields()->append(f);
-	cl->fields()->endModification();
-
-	target->setUpdateNeeded(Visualization::Item::StandardUpdate);
-	target->scene()->addPostEventAction(new Interaction::SetCursorEvent(target,
-			(name.isEmpty() ? static_cast<Model::Node*>(f->nameNode()) : f->typeExpression()),
-			Interaction::SetCursorEvent::CursorDefault, false));
-
-	return new Interaction::CommandResult();
+	modifiers_ = fromInt( store.loadIntValue() );
 }
 
-} /* namespace OOInteraction */
+Modifier::Modifier(Modifiers m)
+: Super(nullptr), modifiers_(m)
+{}
+
+
+void Modifier::set(Modifiers modifiers, bool enable)
+{
+	execute(new Model::FieldSet<Modifiers>(this, modifiers_,
+			enable ? modifiers_ | modifiers : modifiers_ & (~modifiers)));
+}
+
+void Modifier::clear()
+{
+	execute(new Model::FieldSet<Modifiers>(this, modifiers_, None));
+}
+
+void Modifier::save(Model::PersistentStore &store) const
+{
+	store.saveIntValue(modifiers_);
+}
+
+void Modifier::load(Model::PersistentStore &store)
+{
+	if (store.currentNodeType() != typeName())
+		throw OOModelException("Trying to load a Modifier node from an incompatible node type "
+				+ store.currentNodeType());
+
+	set(fromInt(store.loadIntValue()));
+}
+
+Modifier::Modifiers Modifier::fromInt(int val)
+{
+	//TODO: Do some error checking
+	return static_cast<Modifiers>(val);
+}
+
+} /* namespace OOModel */

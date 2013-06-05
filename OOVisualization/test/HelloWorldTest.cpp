@@ -65,7 +65,7 @@ Class* addHelloWorld(Model::Model* model, Project* parent)
 	}
 
 	hello->setName("HelloWorld");
-	hello->setVisibility(Visibility::PUBLIC);
+	hello->modifiers()->set(Modifier::Public);
 
 	hello->subDeclarations()->append(new NameImport(
 		new ReferenceExpression("out", new ReferenceExpression("System", new ReferenceExpression("Java")))));
@@ -73,12 +73,8 @@ Class* addHelloWorld(Model::Model* model, Project* parent)
 	// hello->subDeclarations()->append(new NameImport(new ReferenceExpression("Java")));
 	// hello->subDeclarations()->append(new NameImport(new ReferenceExpression("Java")));
 
-	Method* main = new Method();
+	Method* main = new Method("main", Modifier::Public | Modifier::Static);
 	hello->methods()->append(main);
-	main->setName("main");
-	main->setVisibility(Visibility::PUBLIC);
-	main->setStorageSpecifier(StorageSpecifier::CLASS_VARIABLE);
-
 
 	FormalArgument* mainArgs = new FormalArgument();
 	main->arguments()->append(mainArgs);
@@ -113,7 +109,7 @@ Class* addGeneric(Model::Model* model, Project* parent)
 	}
 
 	gen->setName("Generic");
-	gen->setVisibility(Visibility::PUBLIC);
+	gen->modifiers()->set(Modifier::Public);
 	gen->typeArguments()->append(new FormalTypeArgument("P"));
 	gen->typeArguments()->append(new FormalTypeArgument("Q", new ReferenceExpression("P")));
 	gen->typeArguments()->append(new FormalTypeArgument("R", nullptr, new ReferenceExpression("P")));
@@ -123,27 +119,18 @@ Class* addGeneric(Model::Model* model, Project* parent)
 			new IntegerLiteral(42)));
 	gen->fields()->append(new Field("data", new ClassTypeExpression(new ReferenceExpression("P"))));
 
-	Method* foo = new Method();
+	Method* foo = new Method("foo", Modifier::Public);
 	gen->methods()->append(foo);
-	foo->setName("foo");
-	foo->setVisibility(Visibility::PUBLIC);
-	foo->setStorageSpecifier(StorageSpecifier::INSTANCE_VARIABLE);
 	foo->typeArguments()->append(new FormalTypeArgument("T"));
 
-	Method* bar = new Method();
+	Method* bar = new Method("bar", Modifier::Public | Modifier::Static);
 	gen->methods()->append(bar);
-	bar->setName("bar");
-	bar->setVisibility(Visibility::PUBLIC);
-	bar->setStorageSpecifier(StorageSpecifier::CLASS_VARIABLE);
 	bar->typeArguments()->append(new FormalTypeArgument("S"));
 	bar->typeArguments()->append(new FormalTypeArgument("U", new ReferenceExpression("S")));
 	bar->typeArguments()->append(new FormalTypeArgument("V", nullptr, new ReferenceExpression("S")));
 
-	Method* foobar = new Method();
+	Method* foobar = new Method("foobar", Modifier::Public);
 	gen->methods()->append(foobar);
-	foobar->setName("foobar");
-	foobar->setVisibility(Visibility::PUBLIC);
-	foobar->setStorageSpecifier(StorageSpecifier::INSTANCE_VARIABLE);
 
 	VariableDeclarationExpression* var = new VariableDeclarationExpression("var");
 	foobar->items()->append(new ExpressionStatement(var));
@@ -191,7 +178,7 @@ Class* addAnnotatedWithFriends(Model::Model* model, Project* parent)
 	}
 
 	ann->setName("AnnotatedWithFriends");
-	ann->setVisibility(Visibility::PUBLIC);
+	ann->modifiers()->set(Modifier::Public);
 	ann->annotations()->append( new ExpressionStatement(new ReferenceExpression("SomeAnnotation")));
 
 	// Add some friends classes
@@ -199,7 +186,7 @@ Class* addAnnotatedWithFriends(Model::Model* model, Project* parent)
 	ann->friends()->append(new ReferenceExpression("System", new ReferenceExpression("Java")));
 
 	// Add methods
-	Method* foo = new Method("foo", Visibility::PUBLIC, StorageSpecifier::INSTANCE_VARIABLE);
+	Method* foo = new Method("foo", Modifier::Public);
 	ann->methods()->append(foo);
 	foo->annotations()->append(new ExpressionStatement(new ReferenceExpression("SomeAnnotation2")));
 	foo->annotations()->append(new ExpressionStatement(new ReferenceExpression("SomeAnnotation3")));
@@ -230,7 +217,7 @@ Class* addEnumeration(Model::Model* model, Project* parent)
 	}
 
 	en->setName("Colors");
-	en->setVisibility(Visibility::PUBLIC);
+	en->modifiers()->set(Modifier::Public);
 	en->enumerators()->append( new Enumerator("RED"));
 	en->enumerators()->append( new Enumerator("GREEN"));
 	en->enumerators()->append( new Enumerator("BLUE", new IntegerLiteral(5)));
@@ -249,7 +236,7 @@ Module* addLambda()
 	mod->fields()->append(new Field("common",
 			new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT)));
 
-	auto iUnary = new Class("IUnary", Visibility::PUBLIC);
+	auto iUnary = new Class("IUnary", Modifier::Public);
 	mod->classes()->append(iUnary);
 	auto unMet = new Method("op");
 	iUnary->methods()->append(unMet);
@@ -258,7 +245,7 @@ Module* addLambda()
 	unMet->arguments()->append(new FormalArgument("x",
 				new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT)));
 
-	auto iBinary = new Class("IBinary", Visibility::PUBLIC);
+	auto iBinary = new Class("IBinary", Modifier::Public);
 	mod->classes()->append(iBinary);
 	auto binMet = new Method("op");
 	iBinary->methods()->append(binMet);
@@ -269,14 +256,14 @@ Module* addLambda()
 	binMet->arguments()->append(new FormalArgument("y",
 				new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT)));
 
-	auto iNoRet = new Class("INoReturn", Visibility::PUBLIC);
+	auto iNoRet = new Class("INoReturn", Modifier::Public);
 	mod->classes()->append(iNoRet);
 	auto noRetMet = new Method("op");
 	iNoRet->methods()->append(noRetMet);
 	noRetMet->arguments()->append(new FormalArgument("x",
 				new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT)));
 
-	auto test = new Class("LambdaTest", Visibility::PUBLIC);
+	auto test = new Class("LambdaTest", Modifier::Public);
 	mod->classes()->append(test);
 
 	auto acceptUnary =  new Method("unary");
@@ -334,7 +321,7 @@ Module* addLambda()
 
 Class* addInner()
 {
-	Class* outer = new Class("Outer", Visibility::PUBLIC);
+	Class* outer = new Class("Outer", Modifier::Public);
 
 	outer->classes()->append( new Class("Inner1"));
 	outer->classes()->append( new Class("Inner2"));
@@ -359,10 +346,8 @@ Project* addJavaLibrary(Model::Model* model, Project* parent)
 
 	java->setName("Java");
 
-	Class* string = new Class();
+	Class* string = new Class("String", Modifier::Public);
 	java->classes()->append(string);
-	string->setName("String");
-	string->setVisibility(Visibility::PUBLIC);
 	ClassTypeExpression* type = new ClassTypeExpression();
 	string->baseClasses()->append(type);
 	type->typeExpression()->ref()->setName("Object");
@@ -371,15 +356,11 @@ Project* addJavaLibrary(Model::Model* model, Project* parent)
 	java->modules()->append(io);
 	io->setName("io");
 
-	Class* printstream = new Class();
+	Class* printstream = new Class("PrintStream", Modifier::Public);
 	io->classes()->append(printstream);
-	printstream->setName("PrintStream");
-	printstream->setVisibility(Visibility::PUBLIC);
 
-	Method* println = new Method();
+	Method* println = new Method("println", Modifier::Public);
 	printstream->methods()->append(println);
-	println->setName("println");
-	println->setVisibility(Visibility::PUBLIC);
 
 	FormalArgument* arg = new FormalArgument();
 	println->arguments()->append(arg);
@@ -388,15 +369,10 @@ Project* addJavaLibrary(Model::Model* model, Project* parent)
 	arg->setTypeExpression(argType);
 	argType->typeExpression()->ref()->setName("String");
 
-	Class* system = new Class();
+	Class* system = new Class("System", Modifier::Public);
 	java->classes()->append(system);
-	system->setName("System");
-	system->setVisibility(Visibility::PUBLIC);
-	Field* out = new Field();
+	Field* out = new Field("out", Modifier::Public | Modifier::Static);
 	system->fields()->append(out);
-	out->setName("out");
-	out->setVisibility(Visibility::PUBLIC);
-	out->setStorageSpecifier(StorageSpecifier::CLASS_VARIABLE);
 	ClassTypeExpression* outtype = new ClassTypeExpression();
 	out->setTypeExpression(outtype);
 	outtype->typeExpression()->ref()->setName("PrintStream");

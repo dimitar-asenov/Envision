@@ -53,19 +53,8 @@ VariableDeclarationExpression::VariableDeclarationExpression
 {}
 
 VariableDeclarationExpression::VariableDeclarationExpression
-		(const QString& name, Expression* type, Visibility::VisibilityType vis)
-: VariableDeclarationExpression(new VariableDeclaration(name, type, vis))
-{}
-
-VariableDeclarationExpression::VariableDeclarationExpression
-		(const QString& name, Expression* type, StorageSpecifier::StorageSpecifierTypes storage)
-: VariableDeclarationExpression(new VariableDeclaration(name, type, storage))
-{}
-
-VariableDeclarationExpression::VariableDeclarationExpression
-		(const QString& name, Expression* type, Visibility::VisibilityType vis,
-		StorageSpecifier::StorageSpecifierTypes storage, Expression* initialValue)
-: VariableDeclarationExpression(new VariableDeclaration(name, type, vis, storage, initialValue))
+		(const QString& name, Expression* type, Modifier::Modifiers mod, Expression* initialValue)
+: VariableDeclarationExpression(new VariableDeclaration(name, type, mod, initialValue))
 {}
 
 bool VariableDeclarationExpression::definesSymbol() const

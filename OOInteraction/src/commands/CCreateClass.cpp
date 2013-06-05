@@ -32,6 +32,8 @@
 #include "InteractionBase/src/events/SetCursorEvent.h"
 #include "VisualizationBase/src/items/RootItem.h"
 
+using namespace OOModel;
+
 namespace OOInteraction {
 
 CCreateClass::CCreateClass() : CreateNamedObjectWithAttributes("class",
@@ -52,10 +54,9 @@ Interaction::CommandResult* CCreateClass::create(Visualization::Item* /*source*/
 		if (!name.isEmpty()) cl->setName(name);
 
 		// Set visibility
-		if (attributes.first() == "private" ) cl->setVisibility(OOModel::Visibility::PRIVATE);
-		else if (attributes.first()  == "protected" ) cl->setVisibility(OOModel::Visibility::PROTECTED);
-		else if (attributes.first()  == "public" ) cl->setVisibility(OOModel::Visibility::PUBLIC);
-		else cl->setVisibility(OOModel::Visibility::DEFAULT);
+		if (attributes.first() == "private" ) cl->modifiers()->set(Modifier::Private);
+		else if (attributes.first()  == "protected" ) cl->modifiers()->set(Modifier::Protected);
+		else if (attributes.first()  == "public" ) cl->modifiers()->set(Modifier::Public);
 
 		pr->beginModification("create class");
 		pr->classes()->append(cl);
@@ -72,10 +73,9 @@ Interaction::CommandResult* CCreateClass::create(Visualization::Item* /*source*/
 		if (!name.isEmpty()) cl->setName(name);
 
 		// Set visibility
-		if (attributes.first() == "private" ) cl->setVisibility(OOModel::Visibility::PRIVATE);
-		else if (attributes.first()  == "protected" ) cl->setVisibility(OOModel::Visibility::PROTECTED);
-		else if (attributes.first()  == "public" ) cl->setVisibility(OOModel::Visibility::PUBLIC);
-		else cl->setVisibility(OOModel::Visibility::DEFAULT);
+		if (attributes.first() == "private" ) cl->modifiers()->set(Modifier::Private);
+		else if (attributes.first()  == "protected" ) cl->modifiers()->set(Modifier::Protected);
+		else if (attributes.first()  == "public" ) cl->modifiers()->set(Modifier::Public);
 
 		cl->endModification();
 

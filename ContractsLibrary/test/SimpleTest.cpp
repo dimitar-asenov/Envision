@@ -65,7 +65,7 @@ Project* createContractsLibrary()
 	lib->classes()->append(contract);
 	contract->extension<Position>()->setY(0);
 
-	Method* req = new Method("Requires", Visibility::PUBLIC, StorageSpecifier::CLASS_VARIABLE);
+	Method* req = new Method("Requires", Modifier::Public | Modifier::Static);
 	contract->methods()->append(req);
 	req->arguments()->append( new FormalArgument("precondition", new PrimitiveTypeExpression(PrimitiveType::BOOLEAN)) );
 	req->annotations()->append(new ExpressionStatement(
@@ -74,7 +74,7 @@ Project* createContractsLibrary()
 		OOExpressionBuilder::getOOExpression("EnvisionShortcut(\"requires\")")));
 	req->extension<Position>()->setY(0);
 
-	Method* ens = new Method("Ensures", Visibility::PUBLIC, StorageSpecifier::CLASS_VARIABLE);
+	Method* ens = new Method("Ensures", Modifier::Public | Modifier::Static);
 	contract->methods()->append(ens);
 	ens->arguments()->append( new FormalArgument("postcondition", new PrimitiveTypeExpression(PrimitiveType::BOOLEAN)) );
 	ens->annotations()->append(new ExpressionStatement(
@@ -83,7 +83,7 @@ Project* createContractsLibrary()
 		OOExpressionBuilder::getOOExpression("EnvisionShortcut(\"ensures\")")));
 	ens->extension<Position>()->setY(120);
 
-	Method* res = new Method("Result", Visibility::PUBLIC, StorageSpecifier::CLASS_VARIABLE);
+	Method* res = new Method("Result", Modifier::Public | Modifier::Static);
 	contract->methods()->append(res);
 	res->typeArguments()->append( new FormalTypeArgument("T") );
 	res->annotations()->append(new ExpressionStatement(
@@ -92,7 +92,7 @@ Project* createContractsLibrary()
 		OOExpressionBuilder::getOOExpression("EnvisionShortcut(\"result\",1)")));
 	res->extension<Position>()->setY(240);
 
-	Method* old = new Method("OldValue", Visibility::PUBLIC, StorageSpecifier::CLASS_VARIABLE);
+	Method* old = new Method("OldValue", Modifier::Public | Modifier::Static);
 	contract->methods()->append(old);
 	old->typeArguments()->append(new FormalTypeArgument("T"));
 	old->arguments()->append( new FormalArgument("variable", new ReferenceExpression("T")) );
@@ -102,17 +102,17 @@ Project* createContractsLibrary()
 		OOExpressionBuilder::getOOExpression("EnvisionShortcut(\"old\")")));
 	old->extension<Position>()->setY(360);
 
-	Method* contractClass = new Method("ContractClass", Visibility::PUBLIC, StorageSpecifier::CLASS_VARIABLE);
+	Method* contractClass = new Method("ContractClass", Modifier::Public | Modifier::Static);
 	contract->methods()->append(contractClass);
 	contractClass->arguments()->append( new FormalArgument("class", new ReferenceExpression("Class")) );
 	contractClass->extension<Position>()->setY(480);
 
-	Method* contractClassFor = new Method("ContractClassFor", Visibility::PUBLIC, StorageSpecifier::CLASS_VARIABLE);
+	Method* contractClassFor = new Method("ContractClassFor", Modifier::Public | Modifier::Static);
 	contract->methods()->append(contractClassFor);
 	contractClassFor->arguments()->append( new FormalArgument("class", new ReferenceExpression("Class")) );
 	contractClassFor->extension<Position>()->setY(600);
 
-	Method* out = new Method("ValueAtReturn", Visibility::PUBLIC, StorageSpecifier::CLASS_VARIABLE);
+	Method* out = new Method("ValueAtReturn", Modifier::Public | Modifier::Static);
 	contract->methods()->append(out);
 	out->typeArguments()->append( new FormalTypeArgument("T") );
 	out->arguments()->append( new FormalArgument("argument", new ReferenceExpression("T")) );
@@ -222,12 +222,12 @@ Project* createContractsLibrary()
 
 Class* createBaseClass()
 {
-	Class* car = new Class("Car", Visibility::PUBLIC);
+	Class* car = new Class("Car", Modifier::Public);
 
-	auto *fuel = new Field( "fuel", new PrimitiveTypeExpression(PrimitiveType::INT), Visibility::PUBLIC);
+	auto *fuel = new Field( "fuel", new PrimitiveTypeExpression(PrimitiveType::INT), Modifier::Public);
 	car->fields()->append(fuel);
 
-	auto *travel = new Method("travel", Visibility::PUBLIC);
+	auto *travel = new Method("travel", Modifier::Public);
 	car->methods()->append(travel);
 	travel->arguments()->append( new FormalArgument("numPassengers", new PrimitiveTypeExpression(PrimitiveType::INT)) );
 	travel->results()->append( new FormalResult(QString(), new PrimitiveTypeExpression(PrimitiveType::INT)) );
@@ -249,10 +249,10 @@ Class* createBaseClass()
 
 Class* createDerivedClass()
 {
-	Class* car = new Class("SelfDrivingCar", Visibility::PUBLIC);
+	Class* car = new Class("SelfDrivingCar", Modifier::Public);
 	car->baseClasses()->append(new ReferenceExpression("Car"));
 
-	auto *travel = new Method("travel", Visibility::PUBLIC);
+	auto *travel = new Method("travel", Modifier::Public);
 	car->methods()->append(travel);
 	travel->arguments()->append( new FormalArgument("numPassengers", new PrimitiveTypeExpression(PrimitiveType::INT)) );
 	travel->results()->append( new FormalResult(QString(), new PrimitiveTypeExpression(PrimitiveType::INT)) );
@@ -267,11 +267,11 @@ Class* createDerivedClass()
 
 Class* createInterface()
 {
-	Class* interface = new Class("ICalc", Visibility::PUBLIC);
+	Class* interface = new Class("ICalc", Modifier::Public);
 	interface->annotations()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
 			"CodeContracts.Contract.ContractClass(ICalcContracts)")));
 
-	auto *op = new Method("op", Visibility::PUBLIC);
+	auto *op = new Method("op", Modifier::Public);
 	interface->methods()->append(op);
 	op->arguments()->append( new FormalArgument("x", new PrimitiveTypeExpression(PrimitiveType::INT)) );
 	op->arguments()->append( new FormalArgument("y", new PrimitiveTypeExpression(PrimitiveType::INT)) );
@@ -284,12 +284,12 @@ Class* createInterface()
 
 Class* createInterfaceContracts()
 {
-	Class* calcContracts = new Class("ICalcContracts", Visibility::PUBLIC);
+	Class* calcContracts = new Class("ICalcContracts", Modifier::Public);
 	calcContracts->annotations()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
 				"CodeContracts.Contract.ContractClassFor(ICalc)")));
 	calcContracts->baseClasses()->append(OOExpressionBuilder::getOOExpression("ICalc"));
 
-	auto *op = new Method("op", Visibility::PUBLIC);
+	auto *op = new Method("op", Modifier::Public);
 	calcContracts->methods()->append(op);
 	op->arguments()->append( new FormalArgument("x", new PrimitiveTypeExpression(PrimitiveType::INT)) );
 	op->arguments()->append( new FormalArgument("y", new PrimitiveTypeExpression(PrimitiveType::INT)) );
@@ -306,10 +306,10 @@ Class* createInterfaceContracts()
 
 Class* createPaper()
 {
-	Class* paperClass = new Class("Paper", Visibility::PUBLIC);
+	Class* paperClass = new Class("Paper", Modifier::Public);
 	paperClass->extension<Position>()->setX(860);
 
-	auto *minMax = new Method("min_max", Visibility::PUBLIC);
+	auto *minMax = new Method("min_max", Modifier::Public);
 	paperClass->methods()->append(minMax);
 	minMax->arguments()->append( new FormalArgument("a", new PrimitiveTypeExpression(PrimitiveType::INT)) );
 	minMax->arguments()->append( new FormalArgument("b", new PrimitiveTypeExpression(PrimitiveType::INT)) );
@@ -331,7 +331,7 @@ Class* createPaper()
 	i->elseBranch()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("min=a")));
 	minMax->extension<Position>()->setY(0);
 
-	auto *fact = new Method("factorial", Visibility::PUBLIC);
+	auto *fact = new Method("factorial", Modifier::Public);
 	paperClass->methods()->append(fact);
 	fact->arguments()->append( new FormalArgument("x", new PrimitiveTypeExpression(PrimitiveType::INT)) );
 	fact->results()->append( new FormalResult(QString(), new PrimitiveTypeExpression(PrimitiveType::INT)) );
@@ -343,7 +343,7 @@ Class* createPaper()
 				"x<=1?1:x*factorial(x-1)")));
 	fact->extension<Position>()->setY(180);
 
-	auto *app = new Method("append", Visibility::PUBLIC);
+	auto *app = new Method("append", Modifier::Public);
 	paperClass->methods()->append(app);
 	app->arguments()->append( new FormalArgument("x", new PrimitiveTypeExpression(PrimitiveType::INT)) );
 	app->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(

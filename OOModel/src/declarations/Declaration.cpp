@@ -35,7 +35,7 @@ COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(Declaration)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(Declaration)
 
 REGISTER_ATTRIBUTE(Declaration, name, Text, false, false, true)
-REGISTER_ATTRIBUTE(Declaration, visibility, Visibility, false, false, true)
+REGISTER_ATTRIBUTE(Declaration, modifiers, Modifier, false, false, true)
 REGISTER_ATTRIBUTE(Declaration, annotations, StatementItemList, false, false, true)
 REGISTER_ATTRIBUTE(Declaration, subDeclarations, TypedListOfDeclaration, false, false, true)
 
@@ -45,11 +45,11 @@ Declaration::Declaration(const QString& name)
 	setName(name);
 }
 
-Declaration::Declaration(const QString& name, Visibility::VisibilityType vis)
+Declaration::Declaration(const QString& name, Modifier::Modifiers modifiers)
 : Super(nullptr, Declaration::getMetaData())
 {
 	setName(name);
-	setVisibility(vis);
+	if (modifiers) this->modifiers()->set(modifiers);
 }
 
 bool Declaration::definesSymbol() const

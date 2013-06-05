@@ -4,7 +4,8 @@ DEFINES += OOMODEL_LIBRARY
 win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase
-HEADERS += src/declarations/NameImport.h \
+HEADERS += src/elements/Modifier.h \
+    src/declarations/NameImport.h \
     src/expressions/types/FunctionTypeExpression.h \
     src/types/FunctionType.h \
     src/expressions/types/TypeQualifierExpression.h \
@@ -42,8 +43,6 @@ HEADERS += src/declarations/NameImport.h \
     src/elements/FormalResult.h \
     src/elements/StatementItem.h \
     src/elements/StatementItemList.h \
-    src/elements/StorageSpecifier.h \
-    src/elements/Visibility.h \
     src/expressions/ArrayInitializer.h \
     src/expressions/AssignmentExpression.h \
     src/expressions/BinaryOperation.h \
@@ -90,7 +89,8 @@ HEADERS += src/declarations/NameImport.h \
     src/expressions/types/AutoTypeExpression.h \
     src/elements/MemberInitializer.h \
     src/expressions/TypeTraitExpression.h
-SOURCES += src/declarations/NameImport.cpp \
+SOURCES += src/elements/Modifier.cpp \
+    src/declarations/NameImport.cpp \
     src/expressions/types/FunctionTypeExpression.cpp \
     src/types/FunctionType.cpp \
     src/expressions/types/TypeQualifierExpression.cpp \
@@ -127,10 +127,8 @@ SOURCES += src/declarations/NameImport.cpp \
     src/expressions/UnfinishedOperator.cpp \
     src/expressions/ErrorExpression.cpp \
     src/expressions/EmptyExpression.cpp \
-    src/elements/StorageSpecifier.cpp \
     src/elements/StatementItemList.cpp \
     src/expressions/ArrayInitializer.cpp \
-    src/elements/Visibility.cpp \
     src/elements/FormalArgument.cpp \
     src/elements/FormalResult.cpp \
     src/elements/StatementItem.cpp \

@@ -46,11 +46,8 @@ class OOMODEL_API VariableDeclarationExpression: public Super<Expression>
 		VariableDeclarationExpression(VariableDeclaration* variableDeclaration);
 		VariableDeclarationExpression(const QString& name, Expression* type = nullptr);
 		VariableDeclarationExpression(const QString& name, Expression* type, Expression* initialValue);
-		VariableDeclarationExpression(const QString& name, Expression* type, Visibility::VisibilityType vis);
-		VariableDeclarationExpression
-		(const QString& name, Expression* type, StorageSpecifier::StorageSpecifierTypes storage);
-		VariableDeclarationExpression(const QString& name, Expression* type,  Visibility::VisibilityType vis,
-				StorageSpecifier::StorageSpecifierTypes storage, Expression* initialValue = nullptr);
+		VariableDeclarationExpression(const QString& name, Expression* type, Modifier::Modifiers mod,
+				Expression* initialValue = nullptr);
 
 		virtual bool definesSymbol() const override;
 		virtual const QString& symbolName() const override;

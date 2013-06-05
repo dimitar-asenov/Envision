@@ -56,13 +56,13 @@ class OOMODEL_API Class : public Super<Declaration>
 
 
 	public:
-		Class(const QString& name);
-		Class(const QString& name, Visibility::VisibilityType vis);
 
 		enum class ConstructKind : int {Class, Interface, Struct, Union, Enum};
 
+		Class(const QString& name);
+
 		Class(const QString& name, ConstructKind kind);
-		Class(const QString& name, Visibility::VisibilityType vis, ConstructKind kind);
+		Class(const QString& name, Modifier::Modifiers mod, ConstructKind kind = ConstructKind::Class);
 
 		ConstructKind constructKind() const;
 		void setConstructKind(const ConstructKind& kind);

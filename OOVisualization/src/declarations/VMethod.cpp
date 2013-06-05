@@ -53,24 +53,22 @@ void VMethod::initializeForms()
 											[](I* v){return &v->style()->results();}))
 		->put(2, 0, item<VText>(&I::name_, [](I* v){return v->node()->nameNode();}, [](I* v)
 				{
-					// return the correct name style according to visibility and static type of the method
-					if (v->node()->storageSpecifier() == StorageSpecifier::INSTANCE_VARIABLE)
+					// return the correct name style according to method's modifiers
+					auto modifiers = v->node()->modifiers();
+					if (modifiers->isSet(Modifier::Static))
 					{
-						if (v->node()->visibility() == Visibility::DEFAULT) return &v->style()->nameDefault();
-						else if (v->node()->visibility() == Visibility::PRIVATE) return &v->style()->namePrivate();
-						else if (v->node()->visibility() == Visibility::PROTECTED) return &v->style()->nameProtected();
-						else if (v->node()->visibility() == Visibility::PUBLIC) return &v->style()->namePublic();
-						else throw OOVisualizationException("Unknown visibility type in VMethod::initializeForms");
+						if (modifiers->isSet(Modifier::Private)) return &v->style()->nameStaticPrivate();
+						else if (modifiers->isSet(Modifier::Protected)) return &v->style()->nameStaticProtected();
+						else if (modifiers->isSet(Modifier::Public)) return &v->style()->nameStaticPublic();
+						else return &v->style()->nameStaticDefault();
 					}
-					else if (v->node()->storageSpecifier() == StorageSpecifier::CLASS_VARIABLE)
+					else
 					{
-						if (v->node()->visibility() == Visibility::DEFAULT) return &v->style()->nameStaticDefault();
-						else if (v->node()->visibility() == Visibility::PRIVATE)return &v->style()->nameStaticPrivate();
-						else if (v->node()->visibility() == Visibility::PROTECTED) return &v->style()->nameStaticProtected();
-						else if (v->node()->visibility() == Visibility::PUBLIC) return &v->style()->nameStaticPublic();
-						else throw OOVisualizationException("Unknown visibility type in VMethod::determineChildren");
+						if (modifiers->isSet(Modifier::Private)) return &v->style()->namePrivate();
+						else if (modifiers->isSet(Modifier::Protected)) return &v->style()->nameProtected();
+						else if (modifiers->isSet(Modifier::Public)) return &v->style()->namePublic();
+						else return &v->style()->nameDefault();
 					}
-					else throw OOVisualizationException("Unknown static type in VMethod::determineChildren");
 				}))
 		->put(3, 0, item<VList>(&I::typeArguments_, [](I* v){return v->node()->typeArguments();},
 											[](I* v){return &v->style()->arguments();}))

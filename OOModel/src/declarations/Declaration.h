@@ -31,7 +31,7 @@
 
 #include "../elements/StatementItemList.h"
 #include "../attributeMacros.h"
-#include "../elements/Visibility.h"
+#include "../elements/Modifier.h"
 
 #include "ModelBase/src/nodes/composite/CompositeNode.h"
 #include "ModelBase/src/nodes/Text.h"
@@ -46,13 +46,13 @@ class OOMODEL_API Declaration : public Super<Model::CompositeNode>
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(Declaration)
 
 	ATTRIBUTE_OOP_NAME
-	ATTRIBUTE_OOP_VISIBILITY
+	ATTRIBUTE(Modifier, modifiers, setModifiers)
 	ATTRIBUTE_OOP_ANNOTATIONS
 	ATTRIBUTE(Model::TypedList<Declaration>, subDeclarations, setSubDeclarations)
 
 	public:
 		Declaration(const QString& name);
-		Declaration(const QString& name, Visibility::VisibilityType vis);
+		Declaration(const QString& name, Modifier::Modifiers modifiers);
 
 		virtual bool definesSymbol() const;
 		virtual const QString& symbolName() const;

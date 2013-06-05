@@ -75,11 +75,11 @@ void VClass::initializeForms()
 				->put(1, 0, item<VText>(&I::name_, [](I* v){return v->node()->nameNode();}, [](I* v)
 						{
 							// return the correct name style, depending on the classes visibility
-							if (v->node()->visibility() == Visibility::DEFAULT) return &v->style()->nameDefault();
-							else if (v->node()->visibility() == Visibility::PUBLIC) return &v->style()->namePublic();
-							else if (v->node()->visibility() == Visibility::PRIVATE) return &v->style()->namePrivate();
-							else if (v->node()->visibility() == Visibility::PROTECTED) return &v->style()->nameProtected();
-							else throw OOVisualizationException("Unknown visibility in VClass::initializeForms");
+							auto modifiers = v->node()->modifiers();
+							if (modifiers->isSet(Modifier::Public)) return &v->style()->namePublic();
+							else if (modifiers->isSet(Modifier::Private)) return &v->style()->namePrivate();
+							else if (modifiers->isSet(Modifier::Protected)) return &v->style()->nameProtected();
+							else return &v->style()->nameDefault();
 						}))
 				->put(2, 0, item<VList>(&I::typeArguments_, [](I* v){return v->node()->typeArguments();},
 																				[](I* v){return &v->style()->typeArguments();}))
@@ -166,15 +166,13 @@ int VClass::determineForm()
 
 	for (int i = 0; i< node()->fields()->size(); ++i)
 	{
-		if (node()->fields()->at(i)->visibility() == Visibility::PUBLIC)
+		if (node()->fields()->at(i)->modifiers()->isSet(Modifier::Public))
 			publicFields_.append(node()->fields()->at(i));
-		else if (node()->fields()->at(i)->visibility() == Visibility::PRIVATE)
+		else if (node()->fields()->at(i)->modifiers()->isSet(Modifier::Private))
 			privateFields_.append(node()->fields()->at(i));
-		else if (node()->fields()->at(i)->visibility() == Visibility::PROTECTED)
+		else if (node()->fields()->at(i)->modifiers()->isSet(Modifier::Protected))
 			protectedFields_.append(node()->fields()->at(i));
-		else if (node()->fields()->at(i)->visibility() == Visibility::DEFAULT)
-			defaultFields_.append(node()->fields()->at(i));
-		else throw OOVisualizationException("Unknown visibility value when updating VClass instance.");
+		else defaultFields_.append(node()->fields()->at(i));
 	}
 
 	if (node()->fields()->size() > 0) return 0;

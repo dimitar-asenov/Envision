@@ -57,7 +57,7 @@ Class* addCollection(Model::Model* model, Project* parent)
 	}
 
 	col->setName("Collection");
-	col->setVisibility(Visibility::PUBLIC);
+	col->modifiers()->set(Modifier::Public);
 
 	Method* find = new Method();
 	col->methods()->append(find);

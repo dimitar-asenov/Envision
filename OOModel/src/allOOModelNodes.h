@@ -87,9 +87,7 @@
 #include "expressions/types/TypeQualifierExpression.h"
 #include "expressions/types/FunctionTypeExpression.h"
 
-#include "elements/Visibility.h"
 #include "elements/Enumerator.h"
-#include "elements/StorageSpecifier.h"
 #include "elements/StatementItem.h"
 #include "elements/StatementItemList.h"
 #include "elements/FormalArgument.h"
@@ -98,3 +96,4 @@
 #include "elements/OOReference.h"
 #include "elements/CatchClause.h"
 #include "elements/MemberInitializer.h"
+#include "elements/Modifier.h"

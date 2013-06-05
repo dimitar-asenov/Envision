@@ -30,7 +30,6 @@
 
 #include "Declaration.h"
 
-#include "../elements/StorageSpecifier.h"
 #include "../elements/StatementItem.h"
 #include "../elements/FormalArgument.h"
 #include "../elements/FormalResult.h"
@@ -56,22 +55,16 @@ class OOMODEL_API Method : public Super<Declaration>
 	ATTRIBUTE(Model::TypedList<FormalArgument>, arguments, setArguments)
 	ATTRIBUTE(Model::TypedList<FormalResult>, results, setResults)
 	ATTRIBUTE(Model::TypedList<MemberInitializer>, memberInitializers, setMemberInitializers)
-	ATTRIBUTE_OOP_STORAGESPECIFIER
 	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, mthKind, setMthKind, int)
 
 	public:
 		Method(const QString& name);
-		Method(const QString& name, Visibility::VisibilityType vis);
-		Method(const QString& name, StorageSpecifier::StorageSpecifierTypes storage);
-		Method(const QString& name, Visibility::VisibilityType vis, StorageSpecifier::StorageSpecifierTypes storage);
+		Method(const QString& name, Modifier::Modifiers mod);
 
 		enum class MethodKind : int {Default, Constructor, Destructor, Conversion};
 
 		Method(const QString& name, MethodKind kind);
-		Method(const QString& name, Visibility::VisibilityType vis, MethodKind kind);
-		Method(const QString& name, StorageSpecifier::StorageSpecifierTypes storage, MethodKind kind);
-		Method(const QString& name, Visibility::VisibilityType vis,
-				 StorageSpecifier::StorageSpecifierTypes storage, MethodKind kind);
+		Method(const QString& name, Modifier::Modifiers mod, MethodKind kind);
 
 		MethodKind methodKind() const;
 		void setMethodKind(const MethodKind& kind);

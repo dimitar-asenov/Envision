@@ -31,6 +31,8 @@
 
 #include "InteractionBase/src/events/SetCursorEvent.h"
 
+using namespace OOModel;
+
 namespace OOInteraction {
 
 CCreateMethod::CCreateMethod() : CreateNamedObjectWithAttributes("method",
@@ -48,14 +50,12 @@ Interaction::CommandResult* CCreateMethod::create(Visualization::Item* /*source*
 	if (!name.isEmpty()) m->setName(name);
 
 	// Set visibility
-	if (attributes.first() == "private" ) m->setVisibility(OOModel::Visibility::PRIVATE);
-	else if (attributes.first() == "protected" ) m->setVisibility(OOModel::Visibility::PROTECTED);
-	else if (attributes.first() == "public" ) m->setVisibility(OOModel::Visibility::PUBLIC);
-	else m->setVisibility(OOModel::Visibility::DEFAULT);
+	if (attributes.first() == "private" ) m->modifiers()->set(Modifier::Private);
+	else if (attributes.first() == "protected" ) m->modifiers()->set(Modifier::Protected);
+	else if (attributes.first() == "public" ) m->modifiers()->set(Modifier::Public);
 
 	// Set scope
-	if (attributes.last() == "static") m->setStorageSpecifier(OOModel::StorageSpecifier::CLASS_VARIABLE);
-	else m->setStorageSpecifier(OOModel::StorageSpecifier::INSTANCE_VARIABLE);
+	if (attributes.last() == "static") m->modifiers()->set(Modifier::Static);
 
 	cl->methods()->beginModification("create method");
 	cl->methods()->append(m);

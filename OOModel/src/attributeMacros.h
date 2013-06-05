@@ -39,31 +39,6 @@
 /*********************************************************************************************************************/
 
 /**
- * Declares a 'visibility' attribute of type OOModel::Visibility.
- *
- * The attribute node can be accessed via visibilityNode()
- * The visibility type is accessible via visibility()
- * A new value can be set via setVisibility()
- */
-#define ATTRIBUTE_OOP_VISIBILITY																													\
-	ATTRIBUTE_VALUE(::OOModel::Visibility, visibility, setVisibility, ::OOModel::Visibility::VisibilityType)
-
-/*********************************************************************************************************************/
-
-/**
- * Declares a 'storageSpecifier' attribute of type OOModel::StorageSpecifier.
- *
- * The attribute node can be accessed via storageSpecifierNode()
- * The visibility type is accessible via storageSpecifier()
- * A new value can be set via setStorageSpecifier()
- */
-#define ATTRIBUTE_OOP_STORAGESPECIFIER																										\
-	ATTRIBUTE_VALUE(::OOModel::StorageSpecifier, storageSpecifier, setStorageSpecifier,										\
-	::OOModel::StorageSpecifier::StorageSpecifierTypes)
-
-/*********************************************************************************************************************/
-
-/**
  * Declares an 'annotations' attribute of type OOModel::StatementItemList.
  *
  * The annotations list can be accessed via annotations()

@@ -24,51 +24,54 @@
  **
  **********************************************************************************************************************/
 
-#include "CCreateField.h"
+#pragma once
 
-#include "OOModel/src/declarations/Class.h"
-#include "OOModel/src/declarations/Field.h"
-#include "OOModel/src/expressions/EmptyExpression.h"
+#include "../oomodel_api.h"
 
-#include "InteractionBase/src/events/SetCursorEvent.h"
+#include "ModelBase/src/nodes/Node.h"
+#include "ModelBase/src/nodes/nodeMacros.h"
+#include "ModelBase/src/persistence/PersistentStore.h"
+#include "ModelBase/src/nodes/TypedList.h"
 
-using namespace OOModel;
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Modifier)
 
-namespace OOInteraction {
+namespace OOModel {
 
-CCreateField::CCreateField() : CreateNamedObjectWithAttributes("field",
-		{{"public", "private","protected"}, {"static"}})
+class OOMODEL_API Modifier :  public Super<Model::Node>
 {
-}
+	NODE_DECLARE_STANDARD_METHODS(Modifier)
 
-Interaction::CommandResult* CCreateField::create(Visualization::Item* /*source*/, Visualization::Item* target,
-	const QString& name, const QStringList& attributes)
-{
-	auto cl = dynamic_cast<OOModel::Class*> (target->node());
-	Q_ASSERT(cl);
+	public:
+		enum ModifierFlag {
+			None  = 0x00000000,
 
-	auto f = new OOModel::Field();
-	f->setTypeExpression(new OOModel::EmptyExpression());
-	if (!name.isEmpty()) f->setName(name);
+			Public = 0x00000001,
+			Private = 0x00000002,
+			Protected = 0x00000004,
 
-	// Set visibility
-	if (attributes.first() == "private" ) f->modifiers()->set(Modifier::Private);
-	else if (attributes.first() == "protected" ) f->modifiers()->set(Modifier::Protected);
-	else if (attributes.first() == "public" ) f->modifiers()->set(Modifier::Public);
+			Static = 0x00000008
+		};
+		Q_DECLARE_FLAGS(Modifiers, ModifierFlag)
 
-	// Set scope
-	if (attributes.last() == "static") f->modifiers()->set(Modifier::Static);
+		Modifier(Modifiers modifiers);
 
-	cl->fields()->beginModification("create field");
-	cl->fields()->append(f);
-	cl->fields()->endModification();
+		Modifiers get() const;
+		bool isSet(ModifierFlag flag) const;
+		void set(Modifiers modifiers, bool enable = true);
+		void clear();
 
-	target->setUpdateNeeded(Visualization::Item::StandardUpdate);
-	target->scene()->addPostEventAction(new Interaction::SetCursorEvent(target,
-			(name.isEmpty() ? static_cast<Model::Node*>(f->nameNode()) : f->typeExpression()),
-			Interaction::SetCursorEvent::CursorDefault, false));
+		virtual void save(Model::PersistentStore &store) const;
+		virtual void load(Model::PersistentStore &store);
 
-	return new Interaction::CommandResult();
-}
+	private:
+		Modifiers modifiers_{0};
 
-} /* namespace OOInteraction */
+		Modifiers fromInt(int val);
+};
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Modifier::Modifiers)
+
+inline Modifier::Modifiers Modifier::get() const { return modifiers_; }
+inline bool Modifier::isSet(ModifierFlag flag) const { return modifiers_.testFlag(flag);}
+
+} /* namespace OOModel */

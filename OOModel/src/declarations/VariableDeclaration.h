@@ -30,7 +30,6 @@
 
 #include "Declaration.h"
 
-#include "../elements/StorageSpecifier.h"
 #include "../expressions/Expression.h"
 
 DECLARE_TYPED_LIST(OOMODEL_API, OOModel, VariableDeclaration)
@@ -42,15 +41,12 @@ class OOMODEL_API VariableDeclaration : public Super<Declaration>
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(VariableDeclaration)
 	ATTRIBUTE(Expression, typeExpression, setTypeExpression)
 	ATTRIBUTE(Expression, initialValue, setInitialValue)
-	ATTRIBUTE_OOP_STORAGESPECIFIER
 
 	public:
 		VariableDeclaration(const QString& name, Expression* type = nullptr);
 		VariableDeclaration(const QString& name, Expression* type, Expression* initialValue);
-		VariableDeclaration(const QString& name, Expression* type, Visibility::VisibilityType vis);
-		VariableDeclaration(const QString& name, Expression* type, StorageSpecifier::StorageSpecifierTypes storage);
-		VariableDeclaration(const QString& name, Expression* type,  Visibility::VisibilityType vis,
-							  StorageSpecifier::StorageSpecifierTypes storage, Expression* initialValue = nullptr);
+		VariableDeclaration(const QString& name, Expression* type,  Modifier::Modifiers mod,
+				Expression* initialValue = nullptr);
 };
 
 }

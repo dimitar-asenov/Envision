@@ -50,14 +50,6 @@ Class::Class(const QString& name)
 	setConstructKind(ConstructKind::Class);
 }
 
-Class::Class(const QString& name, Visibility::VisibilityType vis)
-: Super(nullptr, Class::getMetaData())
-{
-	setName(name);
-	setVisibility(vis);
-	setConstructKind(ConstructKind::Class);
-}
-
 Class::Class(const QString& name, ConstructKind kind)
 : Super(nullptr, Class::getMetaData())
 {
@@ -65,11 +57,11 @@ Class::Class(const QString& name, ConstructKind kind)
 	setConstructKind(kind);
 }
 
-Class::Class(const QString& name, Visibility::VisibilityType vis, ConstructKind kind)
+Class::Class(const QString& name, Modifier::Modifiers mod, ConstructKind kind)
 : Super(nullptr, Class::getMetaData())
 {
 	setName(name);
-	setVisibility(vis);
+	modifiers()->set(mod);
 	setConstructKind(kind);
 }
 

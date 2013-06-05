@@ -39,7 +39,6 @@ REGISTER_ATTRIBUTE(Method, typeArguments, TypedListOfFormalTypeArgument, false, 
 REGISTER_ATTRIBUTE(Method, arguments, TypedListOfFormalArgument, false, false, true)
 REGISTER_ATTRIBUTE(Method, results, TypedListOfFormalResult, false, false, true)
 REGISTER_ATTRIBUTE(Method, memberInitializers, TypedListOfMemberInitializer, false, true, true)
-REGISTER_ATTRIBUTE(Method, storageSpecifier, StorageSpecifier, false, false, true)
 REGISTER_ATTRIBUTE(Method, mthKind, Integer, false, false, true)
 
 Method::Method(const QString& name) : Super(nullptr, Method::getMetaData())
@@ -47,25 +46,10 @@ Method::Method(const QString& name) : Super(nullptr, Method::getMetaData())
 	setName(name);
 }
 
-Method::Method(const QString& name, Visibility::VisibilityType vis) : Super(nullptr, Method::getMetaData())
+Method::Method(const QString& name, Modifier::Modifiers mod) : Super(nullptr, Method::getMetaData())
 {
 	setName(name);
-	setVisibility(vis);
-}
-
-Method::Method(const QString& name, StorageSpecifier::StorageSpecifierTypes storage)
-: Super(nullptr, Method::getMetaData())
-{
-	setName(name);
-	setStorageSpecifier(storage);
-}
-
-Method::Method(const QString& name, Visibility::VisibilityType vis, StorageSpecifier::StorageSpecifierTypes storage)
-: Super(nullptr, Method::getMetaData())
-{
-	setName(name);
-	setVisibility(vis);
-	setStorageSpecifier(storage);
+	modifiers()->set(mod);
 }
 
 Method::Method(const QString& name, MethodKind kind) : Super(nullptr, Method::getMetaData())
@@ -74,29 +58,11 @@ Method::Method(const QString& name, MethodKind kind) : Super(nullptr, Method::ge
 	setMethodKind(kind);
 }
 
-Method::Method(const QString& name, Visibility::VisibilityType vis, MethodKind kind)
+Method::Method(const QString& name, Modifier::Modifiers mod, MethodKind kind)
 : Super(nullptr, Method::getMetaData())
 {
 	setName(name);
-	setVisibility(vis);
-	setMethodKind(kind);
-}
-
-Method::Method(const QString& name, StorageSpecifier::StorageSpecifierTypes storage, MethodKind kind)
-: Super(nullptr, Method::getMetaData())
-{
-	setName(name);
-	setStorageSpecifier(storage);
-	setMethodKind(kind);
-}
-
-Method::Method(const QString& name, Visibility::VisibilityType vis,
-					StorageSpecifier::StorageSpecifierTypes storage, MethodKind kind)
-: Super(nullptr, Method::getMetaData())
-{
-	setName(name);
-	setVisibility(vis);
-	setStorageSpecifier(storage);
+	modifiers()->set(mod);
 	setMethodKind(kind);
 }
 

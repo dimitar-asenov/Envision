@@ -73,23 +73,21 @@ VMethodCF::~VMethodCF()
 void VMethodCF::determineChildren()
 {
 	const TextStyle* nameStyle = nullptr;
-	if (node()->storageSpecifier() == StorageSpecifier::INSTANCE_VARIABLE)
+	auto modifiers = node()->modifiers();
+	if (modifiers->isSet(Modifier::Static))
 	{
-		if (node()->visibility() == Visibility::DEFAULT) nameStyle = &style()->nameDefault();
-		else if (node()->visibility() == Visibility::PRIVATE) nameStyle = &style()->namePrivate();
-		else if (node()->visibility() == Visibility::PROTECTED) nameStyle = &style()->nameProtected();
-		else if (node()->visibility() == Visibility::PUBLIC) nameStyle = &style()->namePublic();
-		else throw ControlFlowVisualizationException("Unknown visibility type in VMethodCF::determineChildren");
+		if (modifiers->isSet(Modifier::Private)) nameStyle = &style()->nameStaticPrivate();
+		else if (modifiers->isSet(Modifier::Protected)) nameStyle = &style()->nameStaticProtected();
+		else if (modifiers->isSet(Modifier::Public)) nameStyle = &style()->nameStaticPublic();
+		else nameStyle = &style()->nameStaticDefault();
 	}
-	else if (node()->storageSpecifier() == StorageSpecifier::CLASS_VARIABLE)
+	else
 	{
-		if (node()->visibility() == Visibility::DEFAULT) nameStyle = &style()->nameStaticDefault();
-		else if (node()->visibility() == Visibility::PRIVATE)nameStyle = &style()->nameStaticPrivate();
-		else if (node()->visibility() == Visibility::PROTECTED) nameStyle = &style()->nameStaticProtected();
-		else if (node()->visibility() == Visibility::PUBLIC) nameStyle = &style()->nameStaticPublic();
-		else throw ControlFlowVisualizationException("Unknown visibility type in VMethodCF::determineChildren");
+		if (modifiers->isSet(Modifier::Private)) nameStyle = &style()->namePrivate();
+		else if (modifiers->isSet(Modifier::Protected)) nameStyle = &style()->nameProtected();
+		else if (modifiers->isSet(Modifier::Public)) nameStyle = &style()->namePublic();
+		else nameStyle = &style()->nameDefault();
 	}
-	else throw ControlFlowVisualizationException("Unknown static type in VMethodCF::determineChildren");
 
 	header_->synchronizeMid(name_, node()->nameNode(), nameStyle, 1);
 	header_->synchronizeLast(arguments_, node()->arguments(), &style()->arguments());

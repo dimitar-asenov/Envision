@@ -46,24 +46,18 @@ TEST(OOModel, JavaLibraryAndHelloWorldTest)
 	prj->projects()->append(java);
 	java->setName("Java");
 
-	Class* string = new Class();
+	Class* string = new Class("String", Modifier::Public);
 	java->classes()->append(string);
-	string->setName("String");
-	string->setVisibility(Visibility::PUBLIC);
 
 	Module* io = new Module();
 	java->modules()->append(io);
 	io->setName("io");
 
-	Class* printstream = new Class();
+	Class* printstream = new Class("PrintStream", Modifier::Public);
 	io->classes()->append(printstream);
-	printstream->setName("PrintStream");
-	printstream->setVisibility(Visibility::PUBLIC);
 
-	Method* println = new Method();
+	Method* println = new Method("println", Modifier::Public);
 	printstream->methods()->append(println);
-	println->setName("println");
-	println->setVisibility(Visibility::PUBLIC);
 
 	FormalArgument* arg = new FormalArgument();
 	println->arguments()->append(arg);
@@ -72,15 +66,10 @@ TEST(OOModel, JavaLibraryAndHelloWorldTest)
 	arg->setTypeExpression(argType);
 	argType->typeExpression()->ref()->setName("String");
 
-	Class* system = new Class();
+	Class* system = new Class("System", Modifier::Public);
 	java->classes()->append(system);
-	system->setName("System");
-	system->setVisibility(Visibility::PUBLIC);
-	Field* out = new Field();
+	Field* out = new Field("out", nullptr, Modifier::Public | Modifier::Static);
 	system->fields()->append(out);
-	out->setName("out");
-	out->setVisibility(Visibility::PUBLIC);
-	out->setStorageSpecifier(StorageSpecifier::CLASS_VARIABLE);
 	ClassTypeExpression* outtype = new ClassTypeExpression();
 	out->setTypeExpression(outtype);
 	outtype->typeExpression()->ref()->setName("PrintStream");
@@ -89,16 +78,11 @@ TEST(OOModel, JavaLibraryAndHelloWorldTest)
 	prefix->ref()->setName("io");
 
 	// Build a simple HelloWorld Application
-	Class* hello = new Class();
+	Class* hello = new Class("HelloWorld", Modifier::Public);
 	prj->classes()->append(hello);
-	hello->setName("HelloWorld");
-	hello->setVisibility(Visibility::PUBLIC);
-	Method* main = new Method();
+	Method* main = new Method("main", Modifier::Public | Modifier::Static);
 	hello->methods()->append(main);
 
-	main->setName("main");
-	main->setVisibility(Visibility::PUBLIC);
-	main->setStorageSpecifier(StorageSpecifier::CLASS_VARIABLE);
 	//TODO make an array argument
 
 	ExpressionStatement* callPrintlnSt = new ExpressionStatement();
