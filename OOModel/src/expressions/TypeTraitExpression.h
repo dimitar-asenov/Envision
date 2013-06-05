@@ -26,36 +26,34 @@
 
 #pragma once
 
-#include "../oomodel_api.h"
+#include "Expression.h"
 
+#include "ModelBase/src/nodes/Integer.h"
 
-#include "../elements/StatementItemList.h"
-#include "../attributeMacros.h"
-#include "../elements/Visibility.h"
-
-#include "ModelBase/src/nodes/composite/CompositeNode.h"
-#include "ModelBase/src/nodes/Text.h"
-#include "ModelBase/src/nodes/nodeMacros.h"
-
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Declaration)
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, TypeTraitExpression)
 
 namespace OOModel {
 
-class OOMODEL_API Declaration : public Super<Model::CompositeNode>
+class OOMODEL_API TypeTraitExpression : public Super<Expression>
 {
-	COMPOSITENODE_DECLARE_STANDARD_METHODS(Declaration)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(TypeTraitExpression)
 
-	ATTRIBUTE_OOP_NAME
-	ATTRIBUTE_OOP_VISIBILITY
-	ATTRIBUTE_OOP_ANNOTATIONS
-	ATTRIBUTE(Model::TypedList<Declaration>, subDeclarations, setSubDeclarations)
+	ATTRIBUTE(Expression, operand, setOperand)
+	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, ttKind, setTTKind, int)
 
 	public:
-		Declaration(const QString& name);
-		Declaration(const QString& name, Visibility::VisibilityType vis);
+		enum class TypeTraitKind : int {SizeOf, AlignOf, TypeId};
 
-		virtual bool definesSymbol() const;
-		virtual const QString& symbolName() const;
+		TypeTraitKind typeTraitKind() const;
+		void setTypeTraitKind(const TypeTraitKind& kind);
+
+		virtual Type* type();
 };
+
+inline TypeTraitExpression::TypeTraitKind TypeTraitExpression::typeTraitKind() const
+{ return static_cast<TypeTraitKind>(ttKind()); }
+
+inline void TypeTraitExpression::setTypeTraitKind(const TypeTraitKind &kind)
+{ setTTKind(static_cast<int>(kind)); }
 
 }

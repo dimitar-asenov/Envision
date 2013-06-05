@@ -92,6 +92,7 @@ QList<Model::Node*> Class::findSymbols(const QRegExp& symbolExp,Model::Node* sou
 	symbols << methods()->findAllSymbolDefinitions(symbolExp);
 	symbols << fields()->findAllSymbolDefinitions(symbolExp);
 	symbols << enumerators()->findAllSymbolDefinitions(symbolExp);
+	symbols << subDeclarations()->findAllSymbolDefinitions(symbolExp);
 
 	if (exhaustAllScopes || symbols.isEmpty())
 		symbols << Node::findSymbols(symbolExp, source, mode, exhaustAllScopes);

@@ -33,6 +33,7 @@
 #include "declarations/Field.h"
 #include "declarations/Declaration.h"
 #include "declarations/VariableDeclaration.h"
+#include "declarations/TypeAlias.h"
 
 #include "statements/Statement.h"
 #include "statements/Block.h"
@@ -73,6 +74,7 @@
 #include "expressions/ConditionalExpression.h"
 #include "expressions/ThrowExpression.h"
 #include "expressions/LambdaExpression.h"
+#include "expressions/TypeTraitExpression.h"
 
 #include "expressions/types/TypeExpression.h"
 #include "expressions/types/PrimitiveTypeExpression.h"
@@ -94,3 +96,4 @@
 #include "elements/FormalTypeArgument.h"
 #include "elements/OOReference.h"
 #include "elements/CatchClause.h"
+#include "elements/MemberInitializer.h"

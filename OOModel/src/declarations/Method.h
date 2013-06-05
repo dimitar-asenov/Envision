@@ -36,6 +36,7 @@
 #include "../elements/FormalResult.h"
 #include "../elements/FormalTypeArgument.h"
 #include "../elements/StatementItemList.h"
+#include "../elements/MemberInitializer.h"
 
 #include "ModelBase/src/nodes/composite/CompositeNode.h"
 #include "ModelBase/src/nodes/Text.h"
@@ -54,6 +55,7 @@ class OOMODEL_API Method : public Super<Declaration>
 	ATTRIBUTE(Model::TypedList<FormalTypeArgument>, typeArguments, setTypeArguments)
 	ATTRIBUTE(Model::TypedList<FormalArgument>, arguments, setArguments)
 	ATTRIBUTE(Model::TypedList<FormalResult>, results, setResults)
+	ATTRIBUTE(Model::TypedList<MemberInitializer>, memberInitializers, setMemberInitializers)
 	ATTRIBUTE_OOP_STORAGESPECIFIER
 	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, mthKind, setMthKind, int)
 
