@@ -141,6 +141,53 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 	add(new OD( "void", "void", 0, OD::NotAssociative, [](const QList<Expression*>&) -> Expression* {
 		return new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::VOID); }));
 
+	// Function Type
+	add(new OD( "void function type", "[] ( expr )", 1, OD::NotAssociative,
+			[](const QList<Expression*>& operands) -> Expression* {
+		Q_ASSERT(operands.size() == 1);
+		auto fte = new FunctionTypeExpression();
+
+		if (auto comma = dynamic_cast<CommaExpression*>(operands.first()))
+		{
+			for(auto ee : comma->allSubOperands(true))
+				fte->arguments()->append(ee);
+
+			SAFE_DELETE(comma);
+		}
+		else
+			fte->arguments()->append(operands.first());
+
+		return fte;
+	}));
+	add(new OD( "void function type", "[] ( expr ) -> ( expr )", 1, OD::NotAssociative,
+			[](const QList<Expression*>& operands) -> Expression* {
+		Q_ASSERT(operands.size() == 2);
+		auto fte = new FunctionTypeExpression();
+
+		if (auto comma = dynamic_cast<CommaExpression*>(operands.first()))
+		{
+			for(auto ee : comma->allSubOperands(true))
+				fte->arguments()->append(ee);
+
+			SAFE_DELETE(comma);
+		}
+		else
+			fte->arguments()->append(operands.first());
+
+		if (auto comma = dynamic_cast<CommaExpression*>(operands.last()))
+		{
+			for(auto ee : comma->allSubOperands(true))
+				fte->results()->append(ee);
+
+			SAFE_DELETE(comma);
+		}
+		else
+			fte->results()->append(operands.last());
+
+		return fte;
+	}));
+
+
 	// Keywords
 	add(new OD( "this", "this", 0, OD::NotAssociative, [](const QList<Expression*>&) -> Expression* {
 		return new ThisExpression(); }));

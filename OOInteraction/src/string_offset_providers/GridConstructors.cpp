@@ -163,6 +163,17 @@ void GridConstructors::initializeAll()
 			for(int i = 0; i<vis->layout()->length(); ++i)
 				grid->add(new Cell(i, vis->layout()->at<Visualization::Item>(i), i));
 	});
+
+	GridBasedOffsetProvider::addGridConstructor<VFunctionType>(
+	[](GridBasedOffsetProvider* grid, VFunctionType* vis){
+		grid->add(new Cell(0, vis->icon(), 0));
+		grid->add(new ListCell(1, vis->arguments(), 1, "(", ",", ")"));
+		if (vis->results())
+		{
+			grid->add(new Cell(2, vis->resultSymbol(), 2));
+			grid->add(new ListCell(3, vis->results(), 3, "(", ",", ")"));
+		}
+	});
 }
 
 } /* namespace OOInteraction */

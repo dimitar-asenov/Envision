@@ -191,6 +191,18 @@ Method* addDivBySix(Model::Model* model, Class* parent)
 	divbysix->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("auto aa=SomeClass")));
 
 
+	divbysix->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("[]() f")));
+	divbysix->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("[](int) g")));
+	divbysix->items()->append(new ExpressionStatement(
+			OOExpressionBuilder::getOOExpression("[](int arg,long arg2) h")));
+	divbysix->items()->append(new ExpressionStatement(
+			OOExpressionBuilder::getOOExpression("[](int arg,long arg2)->(int) h")));
+	divbysix->items()->append(new ExpressionStatement(
+					OOExpressionBuilder::getOOExpression("[](int arg,long arg2)->(int x) h")));
+	divbysix->items()->append(new ExpressionStatement(
+					OOExpressionBuilder::getOOExpression("[](int arg,long arg2)->(int x,int y) h")));
+
+
 	VariableDeclarationExpression* result = new VariableDeclarationExpression("result");
 	divbysix->items()->append( new ExpressionStatement(result) );
 	result->decl()->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
