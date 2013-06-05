@@ -24,38 +24,27 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "expressions/TypeTraitExpression.h"
 
-#include "../oomodel_api.h"
+#include "../types/PrimitiveType.h"
+#include "../types/ErrorType.h"
 
-
-#include "../elements/StatementItemList.h"
-#include "../attributeMacros.h"
-#include "../elements/Visibility.h"
-
-#include "ModelBase/src/nodes/composite/CompositeNode.h"
-#include "ModelBase/src/nodes/Text.h"
-#include "ModelBase/src/nodes/nodeMacros.h"
-
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Declaration)
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(OOModel::TypeTraitExpression)
 
 namespace OOModel {
 
-class OOMODEL_API Declaration : public Super<Model::CompositeNode>
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(TypeTraitExpression)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(TypeTraitExpression)
+
+REGISTER_ATTRIBUTE(TypeTraitExpression, operand, Expression, false, false, true)
+REGISTER_ATTRIBUTE(TypeTraitExpression, ttKind, Integer, false, false, true)
+
+Type* TypeTraitExpression::type()
 {
-	COMPOSITENODE_DECLARE_STANDARD_METHODS(Declaration)
-
-	ATTRIBUTE_OOP_NAME
-	ATTRIBUTE_OOP_VISIBILITY
-	ATTRIBUTE_OOP_ANNOTATIONS
-	ATTRIBUTE(Model::TypedList<Declaration>, subDeclarations, setSubDeclarations)
-
-	public:
-		Declaration(const QString& name);
-		Declaration(const QString& name, Visibility::VisibilityType vis);
-
-		virtual bool definesSymbol() const;
-		virtual const QString& symbolName() const;
-};
+	if(typeTraitKind() == TypeTraitKind::SizeOf || typeTraitKind() == TypeTraitKind::AlignOf)
+		return new PrimitiveType(PrimitiveType::PrimitiveTypes::INT, true);
+	return new ErrorType("Typeinfo request but not supported in TypeTraitExpression");
+}
 
 }

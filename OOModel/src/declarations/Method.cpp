@@ -38,6 +38,7 @@ REGISTER_ATTRIBUTE(Method, items, StatementItemList, false, false, true)
 REGISTER_ATTRIBUTE(Method, typeArguments, TypedListOfFormalTypeArgument, false, false, true)
 REGISTER_ATTRIBUTE(Method, arguments, TypedListOfFormalArgument, false, false, true)
 REGISTER_ATTRIBUTE(Method, results, TypedListOfFormalResult, false, false, true)
+REGISTER_ATTRIBUTE(Method, memberInitializers, TypedListOfMemberInitializer, false, true, true)
 REGISTER_ATTRIBUTE(Method, storageSpecifier, StorageSpecifier, false, false, true)
 REGISTER_ATTRIBUTE(Method, mthKind, Integer, false, false, true)
 
@@ -127,6 +128,7 @@ QList<Model::Node*> Method::findSymbols(const QRegExp& symbolExp, Model::Node* s
 
 		symbols << arguments()->findAllSymbolDefinitions(symbolExp);
 		symbols << results()->findAllSymbolDefinitions(symbolExp);
+		symbols << subDeclarations()->findAllSymbolDefinitions(symbolExp);
 		// Note that a StatementList also implements findSymbols and locally declared variables will be found there.
 
 		if (exhaustAllScopes || symbols.isEmpty())

@@ -28,34 +28,25 @@
 
 #include "../oomodel_api.h"
 
+#include "../expressions/Expression.h"
 
-#include "../elements/StatementItemList.h"
-#include "../attributeMacros.h"
-#include "../elements/Visibility.h"
-
-#include "ModelBase/src/nodes/composite/CompositeNode.h"
 #include "ModelBase/src/nodes/Text.h"
-#include "ModelBase/src/nodes/nodeMacros.h"
 
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, Declaration)
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, MemberInitializer)
 
 namespace OOModel {
 
-class OOMODEL_API Declaration : public Super<Model::CompositeNode>
+class OOMODEL_API MemberInitializer : public Super<Model::CompositeNode>
 {
-	COMPOSITENODE_DECLARE_STANDARD_METHODS(Declaration)
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(MemberInitializer)
 
-	ATTRIBUTE_OOP_NAME
-	ATTRIBUTE_OOP_VISIBILITY
-	ATTRIBUTE_OOP_ANNOTATIONS
-	ATTRIBUTE(Model::TypedList<Declaration>, subDeclarations, setSubDeclarations)
+	ATTRIBUTE(Expression, initializedValue, setInitializedValue)
+	ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::Text, memberName, setMemberName, QString, const QString&)
 
 	public:
-		Declaration(const QString& name);
-		Declaration(const QString& name, Visibility::VisibilityType vis);
+		MemberInitializer(const QString& memberName, Expression* initValue = nullptr);
 
-		virtual bool definesSymbol() const;
-		virtual const QString& symbolName() const;
 };
 
 }
+
