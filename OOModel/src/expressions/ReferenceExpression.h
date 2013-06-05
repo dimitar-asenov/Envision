@@ -50,11 +50,11 @@ class OOMODEL_API ReferenceExpression: public Super<Expression>
 		virtual Type* type();
 
 		void setName(const QString& name);
-		QString name();
+		const QString& name();
 };
 
 inline Model::Node* ReferenceExpression::target() { return ref()->target(); }
 inline void ReferenceExpression::setName(const QString& name) {ref()->setName(name);}
-inline QString ReferenceExpression::name() {return ref()->name();}
+inline const QString& ReferenceExpression::name() {return ref()->name();}
 
 }

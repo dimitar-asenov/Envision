@@ -41,7 +41,7 @@ class MODELBASE_API Reference: public Super<Node>
 
 	public:
 
-		QString name() const;
+		const QString& name() const;
 		void setName(const QString &name, bool tryResolvingImmediately = true);
 
 		Node* target() const;
@@ -68,7 +68,7 @@ class MODELBASE_API Reference: public Super<Node>
 		void manageUnresolvedReferencesListInModel();
 };
 
-inline QString Reference::name() const { return target_ ? target_->symbolName() : name_; }
+inline const QString& Reference::name() const { return target_ ? target_->symbolName() : name_; }
 inline Node* Reference::target() const { return target_; }
 inline bool Reference::isResolved() const { return target_; }
 
