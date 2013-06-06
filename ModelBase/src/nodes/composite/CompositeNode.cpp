@@ -127,6 +127,7 @@ void CompositeNode::set(const CompositeIndex &attributeIndex, Node* node)
 	Q_ASSERT( attributeIndex.isValid() );
 	Q_ASSERT( attributeIndex.level() < subnodes.size());
 	Q_ASSERT( attributeIndex.index() < subnodes[attributeIndex.level()].size());
+	Q_ASSERT( node || meta.attribute(attributeIndex).optional());
 	execute(new CompositeNodeChangeChild(this, node, attributeIndex, &subnodes));
 }
 
