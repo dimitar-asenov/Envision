@@ -43,6 +43,10 @@ class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 		ClangAstVisitor(Model::Model* model, OOModel::Project* currentProject, CppImportLogger* logger, clang::SourceManager* srcManager);
 		~ClangAstVisitor();
 
+		Model::Node* ooStackTop();
+		void pushOOStack(Model::Node* node);
+		Model::Node* popOOStack();
+
 		bool TraverseNamespaceDecl(clang::NamespaceDecl* namespaceDecl);
 		bool TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl);
 		bool TraverseFunctionDecl(clang::FunctionDecl* functionDecl);
@@ -55,8 +59,6 @@ class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 
 		bool TraverseCXXTryStmt(clang::CXXTryStmt* tryStmt);
 		bool TraverseCXXCatchStmt(clang::CXXCatchStmt* catchStmt);
-
-		bool TraverseLambdaExpr(clang::LambdaExpr* lambdaExpr);
 
 		bool TraverseStmt(clang::Stmt *S);
 		bool TraverseVarDecl(clang::VarDecl* varDecl);

@@ -278,19 +278,49 @@ bool ExpressionVisitor::VisitMemberExpr(clang::MemberExpr* memberExpr)
 
 bool ExpressionVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constructExpr)
 {
-	//constructExpr->dump();
 	// if is elidable we can directly visit the children
 	if(constructExpr->isElidable())
 		return TraverseStmt(*(constructExpr->child_begin()));
 	// check for lambda
-	if(constructExpr->getConstructor()->getParent()->isLambda())
+	if(!constructExpr->getConstructor()->getParent()->isLambda())
 	{
-		// TODO: handle lambda
-	}
-	else
+		OOModel::MethodCallExpression* ooMethodCall = new OOModel::MethodCallExpression(
+					QString::fromStdString(constructExpr->getConstructor()->getNameAsString()));
+		for(auto argIt = constructExpr->arg_begin(); argIt != constructExpr->arg_end(); ++argIt)
+		{
+			TraverseStmt(*argIt);
+			if(!ooExprStack_.empty())
+				ooMethodCall->arguments()->append(ooExprStack_.pop());
+			else
+				log_->writeError(className_,"Could not convert", *argIt);
+		}
+		ooExprStack_.push(ooMethodCall);
 		return true;
+	}
 
 	log_->writeError(className_, QString("Not handled yet"), constructExpr);
+	return true;
+}
+
+bool ExpressionVisitor::TraverseLambdaExpr(clang::LambdaExpr* lambdaExpr)
+{
+	OOModel::LambdaExpression* ooLambda = new OOModel::LambdaExpression();
+	// visit body
+	baseVisitor_->pushOOStack(ooLambda->body());
+	baseVisitor_->TraverseStmt(lambdaExpr->getBody());
+	baseVisitor_->popOOStack();
+	// visit arguments
+	clang::CXXMethodDecl* callOperator = lambdaExpr->getCallOperator();
+	for(auto it = callOperator->param_begin(); it != callOperator->param_end(); ++it)
+	{
+		OOModel::FormalArgument* arg = new OOModel::FormalArgument();
+		arg->setName(QString::fromStdString((*it)->getNameAsString()));
+		OOModel::Expression* type = utils_->convertClangType((*it)->getType());
+		if(type) arg->setTypeExpression(type);
+		ooLambda->arguments()->append(arg);
+	}
+
+	ooExprStack_.push(ooLambda);
 	return true;
 }
 
@@ -299,11 +329,6 @@ OOModel::Expression* ExpressionVisitor::getLastExpression()
 	if(!ooExprStack_.empty())
 		return ooExprStack_.pop();
 	return nullptr;
-}
-
-bool ExpressionVisitor::TraverseLambdaExpr(clang::LambdaExpr* lambdaExpr)
-{
-	return baseVisitor_->TraverseLambdaExpr(lambdaExpr);
 }
 
 bool ExpressionVisitor::TraverseInitListExpr(clang::InitListExpr* initListExpr)

@@ -45,6 +45,22 @@ ClangAstVisitor::~ClangAstVisitor()
 	SAFE_DELETE(exprVisitor_);
 }
 
+Model::Node*ClangAstVisitor::ooStackTop()
+{
+	return ooStack_.top();
+}
+
+void ClangAstVisitor::pushOOStack(Model::Node* node)
+{
+	Q_ASSERT(node);
+	ooStack_.push(node);
+}
+
+Model::Node*ClangAstVisitor::popOOStack()
+{
+	return ooStack_.pop();
+}
+
 bool ClangAstVisitor::TraverseNamespaceDecl(clang::NamespaceDecl* namespaceDecl)
 {
 	if(!shouldModel(namespaceDecl->getLocation()))
@@ -415,37 +431,9 @@ bool ClangAstVisitor::TraverseCXXCatchStmt(clang::CXXCatchStmt* catchStmt)
 	return true;
 }
 
-bool ClangAstVisitor::TraverseLambdaExpr(clang::LambdaExpr* lambdaExpr)
-{
-	OOModel::LambdaExpression* ooLambda = new OOModel::LambdaExpression();
-	// visit body
-	ooStack_.push(ooLambda->body());
-	TraverseStmt(lambdaExpr->getBody());
-	ooStack_.pop();
-	// visit arguments
-	clang::CXXMethodDecl* callOperator = lambdaExpr->getCallOperator();
-	for(auto it = callOperator->param_begin(); it != callOperator->param_end(); ++it)
-	{
-		OOModel::FormalArgument* arg = new OOModel::FormalArgument();
-		arg->setName(QString::fromStdString((*it)->getNameAsString()));
-		OOModel::Expression* type = utils_->convertClangType((*it)->getType());
-		if(type) arg->setTypeExpression(type);
-		ooLambda->arguments()->append(arg);
-	}
-	// insert in model
-	if(!inBody_)
-			ooExprStack_.push(ooLambda);
-	else if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
-		itemList->append(ooLambda);
-	else
-		log_->writeError(className_, QString("unknown where to put lambdaexpr"), lambdaExpr);
-
-	return true;
-}
-
 bool ClangAstVisitor::TraverseStmt(clang::Stmt* S)
 {
-	if(S && !llvm::isa<clang::LambdaExpr>(S) && llvm::isa<clang::Expr>(S))
+	if(S && llvm::isa<clang::Expr>(S))
 	{
 		bool ret = exprVisitor_->TraverseStmt(S);
 		if(auto expr = exprVisitor_->getLastExpression())
@@ -522,7 +510,7 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 	{
 		bool inBody = inBody_;
 		inBody_ = false;
-		TraverseStmt(varDecl->getInit());
+		TraverseStmt(varDecl->getInit()->IgnoreImplicit());
 		if(!ooExprStack_.empty())
 		{
 			// make sure we have not ourself as init (if init couldn't be converted)
