@@ -49,7 +49,7 @@ QString VModifier::currentText()
 	if (node()->isSet(Modifier::Protected)) text += " protected";
 	if (node()->isSet(Modifier::Private)) text += " private";
 
-	if (text.at(0) == ' ') text.remove(0,1);
+	if (!text.isEmpty() && text.at(0) == ' ') text.remove(0,1);
 	return text;
 }
 
