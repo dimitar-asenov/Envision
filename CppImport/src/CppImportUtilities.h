@@ -42,6 +42,7 @@ class CppImportUtilities
 		OOModel::Modifier::ModifierFlag convertAccessSpecifier(clang::AccessSpecifier as);
 	private:
 		OOModel::Expression* convertBuiltInClangType(const clang::Type* type);
+		OOModel::Expression* createErrorExpression(QString reason);
 		CppImportLogger* log_;
 };
 }

@@ -55,7 +55,7 @@ OOModel::Expression* CppImportUtilities::convertClangType(clang::QualType qualTy
 			// TODO: why does this not work with ClassTypeExpression
 			return /*new OOModel::ClassTypeExpression(*/new OOModel::ReferenceExpression(
 																	 QString::fromStdString(recordDecl->getNameAsString())/*)*/);
-		return nullptr;
+		return createErrorExpression("is RecordDecl but not CXX");
 	}
 	else if(type->isPointerType())
 	{
@@ -78,7 +78,7 @@ OOModel::Expression* CppImportUtilities::convertClangType(clang::QualType qualTy
 			return ooRef;
 		}
 		log_->typeNotSupported(QString(type->getTypeClassName()));
-		return nullptr;
+		return createErrorExpression("isEnumeralType but cannot not be casted");
 	}
 	else if(type->isConstantArrayType())
 	{
@@ -90,7 +90,7 @@ OOModel::Expression* CppImportUtilities::convertClangType(clang::QualType qualTy
 			return ooArrayType;
 		}
 		log_->typeNotSupported(QString(type->getTypeClassName()));
-		return nullptr;
+		return createErrorExpression("isConstantArray but cannot not be casted");
 	}
 	else if(type->isIncompleteArrayType())
 	{
@@ -101,15 +101,15 @@ OOModel::Expression* CppImportUtilities::convertClangType(clang::QualType qualTy
 			return ooArrayType;
 		}
 		log_->typeNotSupported(QString(type->getTypeClassName()));
-		return nullptr;
+		return createErrorExpression("isIncompleteArray but cannot not be casted");
 	}
-	else if(auto parenType = llvm::dyn_cast<clang::ParenType>(type))
-	{
-		OOModel::UnaryOperation* ooUnaryOp = new OOModel::UnaryOperation();
-		ooUnaryOp->setOp(OOModel::UnaryOperation::PARENTHESIS);
-		ooUnaryOp->setOperand(convertClangType(parenType->getInnerType()));
-		return ooUnaryOp;
-	}
+//	else if(auto parenType = llvm::dyn_cast<clang::ParenType>(type))
+//	{
+//		OOModel::UnaryOperation* ooUnaryOp = new OOModel::UnaryOperation();
+//		ooUnaryOp->setOp(OOModel::UnaryOperation::PARENTHESIS);
+//		ooUnaryOp->setOperand(convertClangType(parenType->getInnerType()));
+//		return ooUnaryOp;
+//	}
 	else if(auto typeDefType = llvm::dyn_cast<clang::TypedefType>(type))
 	{
 		return new OOModel::ReferenceExpression(QString::fromStdString(typeDefType->getDecl()->getNameAsString()));
@@ -125,11 +125,10 @@ OOModel::Expression* CppImportUtilities::convertClangType(clang::QualType qualTy
 	{
 		// TODO: include templates. (and more?)
 		OOModel::FunctionTypeExpression* ooFunctionType = new OOModel::FunctionTypeExpression();
-		ooFunctionType->results()->append(new OOModel::FormalResult
-													 ("", convertClangType(functionProtoType->getResultType())));
+		ooFunctionType->results()->append(convertClangType(functionProtoType->getResultType()));
 		for(auto argIt = functionProtoType->arg_type_begin(); argIt != functionProtoType->arg_type_end(); ++argIt)
 		{
-			ooFunctionType->arguments()->append(new OOModel::FormalArgument("", convertClangType(*argIt)));
+			ooFunctionType->arguments()->append(convertClangType(*argIt));
 		}
 		return ooFunctionType;
 	}
@@ -141,7 +140,7 @@ OOModel::Expression* CppImportUtilities::convertClangType(clang::QualType qualTy
 	else
 	{
 		log_->typeNotSupported(QString(type->getTypeClassName()));
-		return nullptr;
+		return createErrorExpression("Unsupported Type");
 	}
 }
 
@@ -325,11 +324,19 @@ OOModel::Expression*CppImportUtilities::convertBuiltInClangType(const clang::Typ
 		// c++ specific
 		case clang::BuiltinType::NullPtr:
 			log_->typeNotSupported("nullptr");
-			return nullptr;
+			return createErrorExpression("Unsupported type");
 		default:
 			log_->typeNotSupported("other type ?");
-			return nullptr;
+			return createErrorExpression("Unsupported type");
 	}
+}
+
+OOModel::Expression* CppImportUtilities::createErrorExpression(QString reason)
+{
+	OOModel::ErrorExpression* ooError = new OOModel::ErrorExpression();
+	ooError->setPrefix("#");
+	ooError->setArg(new OOModel::StringLiteral(reason));
+	return ooError;
 }
 
 } /* namespace CppImport */
