@@ -11,183 +11,206 @@ import java.util.Map;
  */
 public class NodeDescriptors {
 	
-	public static void initialize(Node node)
+	public static void initialize(Node node, String initializeAsType)
 	{
-		String[][] children = initializerMap.get(node.tag());
-		if (children != null)
-			for (String[] childAttributes : children)
-			{
-				node.add(new Node(node, childAttributes[0], childAttributes[1]));
-			}
+		NodeInitializer initializer = initializerMap.get(initializeAsType);
+		if (initializer != null) initializer.initialize(node);
+		else
+		{
+			assert initializeAsType.startsWith("TypedListOf");
+		}
 	}
 
-	private static Map<String, String[][]> initializerMap = new HashMap<String, String[][]> ();
+	private static Map<String, NodeInitializer> initializerMap = new HashMap<String, NodeInitializer> ();
+	
+	private static void add(NodeInitializer ni)
+	{
+		initializerMap.put(ni.nodeType(), ni);
+	}
 	
 	static {
 		
 		// Declarations
-		initializerMap.put("Project", new String[][]{
+		add( new NodeInitializer("Declaration", new String[][] {
 				{"Text","name"},
+				{"Modifier","modifiers"},
+				{"StatementItemList","annotations"},
+				{"TypedListOfDeclaration","subDeclarations"}
+		}));
+		add( new NodeInitializer("-class-level-container", "Declaration", new String[][] {
+				{"TypedListOfClass","classes"},
+				{"TypedListOfMethod","methods"},
+				{"TypedListOfField","fields"},
+		}));
+		add( new NodeInitializer("Project", "-class-level-container", new String[][]{
 				{"TypedListOfProject","projects"},
-				{"TypedListOfModule","modules"},
-				{"TypedListOfClass","classes"},
-				{"TypedListOfMethod","methods"},
-				{"StatementItemList","annotations"},
-				{"TypedListOfField","fields"},
-				{"Visibility","visibility"},
-				{"TypedListOfDeclaration","subDeclarations"}});
-		initializerMap.put("Module", new String[][]{
-				{"Text","name"},
-				{"TypedListOfModule","modules"},
-				{"TypedListOfClass","classes"},
-				{"TypedListOfMethod","methods"},
-				{"StatementItemList","annotations"},
-				{"TypedListOfField","fields"},
-				{"Visibility","visibility"},
-				{"TypedListOfDeclaration","subDeclarations"}});
-		initializerMap.put("Class", new String[][]{
-				{"Text","name"},
+				{"TypedListOfModule","modules"}
+		}));
+		
+		add( new NodeInitializer("Module", "-class-level-container", new String[][]{
+				{"TypedListOfModule","modules"}
+		}));
+		add( new NodeInitializer("Class", "-class-level-container", new String[][]{
 				{"TypedListOfExpression","baseClasses"},
 				{"TypedListOfEnumerator","enumerators"},
 				{"TypedListOfFormalTypeArgument","typeArguments"},
-				{"TypedListOfField","fields"},
-				{"TypedListOfClass","classes"},
-				{"TypedListOfMethod","methods"},
 				{"TypedListOfExpression","friends"},
-				{"Visibility","visibility"},
-				{"StatementItemList","annotations"},
-				{"Integer","cKind"},
-				{"TypedListOfDeclaration","subDeclarations"}});
-		initializerMap.put("Method", new String[][]{
-				{"Text","name"},
+				{"Integer","cKind"}
+		}));
+		add( new NodeInitializer("Method", "Declaration", new String[][]{
 				{"StatementItemList","items"},
 				{"TypedListOfFormalTypeArgument","typeArguments"},
 				{"TypedListOfFormalArgument","arguments"},
 				{"TypedListOfFormalResult","results"},
-				{"Visibility","visibility"},
-				{"StorageSpecifier","storageSpecifier"},
-				{"StatementItemList","annotations"},
-				{"Integer","mthKind"},
-				{"TypedListOfDeclaration","subDeclarations"}});
-		initializerMap.put("Field", new String[][]{
-				{"Text","name"},
-				{"Expression","typeExpression"},
-				{"Visibility","visibility"},
-				{"StatementItemList","annotations"},
-				{"StorageSpecifier","storageSpecifier"},
-				{"TypedListOfDeclaration","subDeclarations"}});
-		initializerMap.put("VariableDeclaration", new String[][]{
-				{"Text","name"},
-				{"Expression","typeExpression"},
-				{"Visibility","visibility"},
-				{"StatementItemList","annotations"},
-				{"StorageSpecifier","storageSpecifier"},
-				{"TypedListOfDeclaration","subDeclarations"}});
-		initializerMap.put("NameImport", new String[][]{
-				{"Text","name"},
-				{"Visibility","visibility"},
-				{"StatementItemList","annotations"},
-				{"TypedListOfDeclaration","subDeclarations"},
-				{"ReferenceExpression","importedName"}});
+				{"Integer","mthKind"}
+		}));
+		add( new NodeInitializer("VariableDeclaration", "Declaration", new String[][]{
+				{"Expression","typeExpression"}
+		}));
+		add( new NodeInitializer("Field", "VariableDeclaration", null));
+		add( new NodeInitializer("NameImport", "Declaration", new String[][]{
+				{"ReferenceExpression","importedName"}
+		}));
 		
 		// Elements
-		initializerMap.put("FormalTypeArgument", new String[][]{
-				{"Text","name"}});
-		initializerMap.put("FormalArgument", new String[][]{
+		add( new NodeInitializer("FormalTypeArgument", new String[][]{
+				{"Text","name"}
+		}));
+		add( new NodeInitializer("FormalArgument", new String[][]{
 				{"Text","name"},
 				{"Expression","typeExpression"},
-				{"Integer","directionInt"}});
-		initializerMap.put("FormalResult", new String[][]{
+				{"Integer","directionInt"}
+		}));
+		add( new NodeInitializer("FormalResult", new String[][]{
 				{"Text","name"},
-				{"Expression","typeExpression"}});
+				{"Expression","typeExpression"}
+		}));
+		add( new NodeInitializer("Modifier", "Integer", null));
 		
 		// Statements
-		initializerMap.put("Block", new String[][]{
-				{"StatementItemList","items"}});
-		initializerMap.put("ExpressionStatement", new String[][]{
-				{"Expression","expression"}});
-		initializerMap.put("LoopStatement", new String[][]{
-				{"StatementItemList","body"}});
-		initializerMap.put("ForEachStatement", new String[][]{
+		add( new NodeInitializer("Block", new String[][]{
+				{"StatementItemList","items"}
+		}));
+		add( new NodeInitializer("ExpressionStatement", new String[][]{
+				{"Expression","expression"}
+		}));
+		add( new NodeInitializer("LoopStatement", new String[][]{
+				{"StatementItemList","body"}
+		}));
+		add( new NodeInitializer("ForEachStatement", new String[][]{
 				{"Text","varName"},
 				{"Expression","collection"},
-				{"StatementItemList","body"}});
-		initializerMap.put("IfStatement", new String[][]{
+				{"StatementItemList","body"}
+		}));
+		add( new NodeInitializer("IfStatement", new String[][]{
 				{"Expression","condition"},
 				{"StatementItemList","thenBranch"},
-				{"StatementItemList","elseBranch"}});
-		initializerMap.put("ReturnStatement", new String[][]{
-				{"TypedListOfExpression","values"}});
-		initializerMap.put("SwitchCase", new String[][]{
+				{"StatementItemList","elseBranch"}
+		}));
+		add( new NodeInitializer("ReturnStatement", new String[][]{
+				{"TypedListOfExpression","values"}
+		}));
+		add( new NodeInitializer("SwitchCase", new String[][]{
 				{"Expression","expr"},
-				{"StatementItemList","statement"}});
-		initializerMap.put("SwitchStatement", new String[][]{
+				{"StatementItemList","statement"}
+		}));
+		add( new NodeInitializer("SwitchStatement", new String[][]{
 				{"Expression","switchVar"},
-				{"TypedListOfSwitchCase","cases"}});
-		initializerMap.put("TryCatchFinallyStatement", new String[][]{
+				{"TypedListOfSwitchCase","cases"}
+		}));
+		add( new NodeInitializer("TryCatchFinallyStatement", new String[][]{
 				{"StatementItemList","tryBody"},
 				{"TypedListOfCatchClause","catchClauses"},
-				{"StatementItemList","finallyBody"}});
-		initializerMap.put("CatchClause", new String[][]{
+				{"StatementItemList","finallyBody"}
+		}));
+		add( new NodeInitializer("CatchClause", new String[][]{
 				{"Expression","exceptionToCatch"},
-				{"StatementItemList","body"}});
+				{"StatementItemList","body"}
+		}));
 		
 		// Expressions
-		initializerMap.put("ReferenceExpression", new String[][]{
+		add( new NodeInitializer("ReferenceExpression", new String[][]{
 				{"OOReference","ref"},
-				{"TypedListOfExpression","typeArguments"}});
-		initializerMap.put("CommaExpression", new String[][]{
+				{"TypedListOfExpression","typeArguments"}
+		}));
+		add( new NodeInitializer("CommaExpression", new String[][]{
 				{"Expression","left"},
-				{"Expression","right"}});
-		initializerMap.put("ThrowExpression", new String[][]{
-				{"Expression","expr"}});
-		initializerMap.put("VariableDeclarationExpression", new String[][]{
-				{"VariableDeclaration","decl"}});
-		initializerMap.put("BinaryOperation", new String[][]{
+				{"Expression","right"}
+		}));
+		add( new NodeInitializer("ThrowExpression", new String[][]{
+				{"Expression","expr"}
+		}));
+		add( new NodeInitializer("VariableDeclarationExpression", new String[][]{
+				{"VariableDeclaration","decl"}
+		}));
+		add( new NodeInitializer("BinaryOperation", new String[][]{
 				{"Expression","left"},
 				{"Expression","right"},
-				{"Integer","opr"}});
-		initializerMap.put("UnaryOperation", new String[][]{
+				{"Integer","opr"}
+		}));
+		add( new NodeInitializer("UnaryOperation", new String[][]{
 				{"Expression","operand"},
-				{"Integer","opr"}});
-		initializerMap.put("NewExpression", new String[][]{
-				{"Expression","newType"}});
-		initializerMap.put("ArrayInitializer", new String[][]{
-				{"TypedListOfExpression","values"}});
-		initializerMap.put("AssignmentExpression", new String[][]{
+				{"Integer","opr"}
+		}));
+		add( new NodeInitializer("NewExpression", new String[][]{
+				{"Expression","newType"}
+		}));
+		add( new NodeInitializer("ArrayInitializer", new String[][]{
+				{"TypedListOfExpression","values"}
+		}));
+		add( new NodeInitializer("AssignmentExpression", new String[][]{
 				{"Expression","left"},
 				{"Expression","right"},
-				{"Integer","opr"}});
-		initializerMap.put("CastExpression", new String[][]{
+				{"Integer","opr"}
+		}));
+		add( new NodeInitializer("CastExpression", new String[][]{
 				{"Expression","castType"},
 				{"Expression","expr"},
-				{"Integer","cKind"}});
-		initializerMap.put("MethodCallExpression", new String[][]{
+				{"Integer","cKind"}
+		}));
+		add( new NodeInitializer("MethodCallExpression", new String[][]{
 				{"ReferenceExpression","ref"},
-				{"TypedListOfExpression","arguments"}});
-		initializerMap.put("ConditionalExpression", new String[][]{
+				{"TypedListOfExpression","arguments"}
+		}));
+		add( new NodeInitializer("ConditionalExpression", new String[][]{
 				{"Expression","condition"},
 				{"Expression","trueExpression"},
-				{"Expression","falseExpression"}});
+				{"Expression","falseExpression"}
+		}));
 
 		// Literals
-		initializerMap.put("BooleanLiteral", new String[][]{
-				{"Boolean","value"}});
-		initializerMap.put("CharacterLiteral", new String[][]{
-				{"Character","value"}});
-		initializerMap.put("IntegerLiteral", new String[][]{
-				{"Integer","value"}});
-		initializerMap.put("FloatLiteral", new String[][]{
-				{"Float","value"}});
-		initializerMap.put("StringLiteral", new String[][]{
-				{"Text","value"}});
+		add( new NodeInitializer("BooleanLiteral", new String[][]{
+				{"Boolean","value"}
+		}));
+		add( new NodeInitializer("CharacterLiteral", new String[][]{
+				{"Character","value"}
+		}));
+		add( new NodeInitializer("IntegerLiteral", new String[][]{
+				{"Integer","value"}
+		}));
+		add( new NodeInitializer("FloatLiteral", new String[][]{
+				{"Float","value"}
+		}));
+		add( new NodeInitializer("StringLiteral", new String[][]{
+				{"Text","value"}
+		}));
 		
 		// Type expressions
-		initializerMap.put("PrimitiveTypeExpression", new String[][]{
-				{"Integer","val"}});
-		initializerMap.put("ClassTypeExpression", new String[][]{
-				{"ReferenceExpression","typeExpression"}});
-		initializerMap.put("ArrayTypeExpression", new String[][]{
-				{"Expression","typeExpression"}});
+		add( new NodeInitializer("PrimitiveTypeExpression", new String[][]{
+				{"Integer","val"}
+		}));
+		add( new NodeInitializer("ClassTypeExpression", new String[][]{
+				{"ReferenceExpression","typeExpression"}
+		}));
+		add( new NodeInitializer("ArrayTypeExpression", new String[][]{
+				{"Expression","typeExpression"}
+		}));
+		
+		// Primitive types
+		add( new NodeInitializer("Boolean", 0));
+		add( new NodeInitializer("Character", "x"));
+		add( new NodeInitializer("Integer", 0));
+		add( new NodeInitializer("Float", 0.0));
+		add( new NodeInitializer("Text", ""));
 	}
 }

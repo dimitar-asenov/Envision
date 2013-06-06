@@ -32,7 +32,6 @@ public class Main {
 		try
 		{
 			Node root = new Node(null, "Project", "0");
-			root.child("visibility").setLongValue(0);
 			root.setSymbol(projectName);
 
 			File dir = new File(inputDirectory);

@@ -56,7 +56,7 @@ public class Node {
 		parent_ = parent;
 		tag_ = tag;
 		id_ = nextId_++;
-		NodeDescriptors.initialize(this);
+		NodeDescriptors.initialize(this, tag_);
 	}
 	
 	public Node(Node parent, String tag, String name)
@@ -139,7 +139,6 @@ public class Node {
 			{
 				Node newNode = child.add(new Node(child, tag, child.children_.size()));
 				newNode.setSymbol(symbolName);
-				newNode.child("visibility").setLongValue(0);
 				return newNode;
 			}
 		}

@@ -86,7 +86,6 @@ public class ASTConverter {
 			//TODO: Handle static and on demand imports
 			Node importNode = new Node(null, "NameImport", cl.child("subDeclarations").numChildren());
 			importNode.setChild("importedName", expression(id.getName(), "importedName"));
-			importNode.child("visibility").setLongValue(0);
 			cl.child("subDeclarations").add(importNode);
 		}
 		
@@ -369,8 +368,6 @@ public class ASTConverter {
 	    				new Node(null,"VariableDeclarationExpression", "exceptionToCatch"));
 	    		Node varDecl = varDeclExpression.child("decl");
 	    		//TODO: handle modifiers
-	    		varDecl.child("visibility").setLongValue(0);
-				varDecl.child("storageSpecifier").setLongValue(0);
 	    		varDecl.setChild("typeExpression", addExtraDimensions(typeExpression(cc.getException().getType(),
 	    				"typeExpression"), cc.getException().getExtraDimensions()) );
 	    		varDecl.setSymbol(cc.getException().getName().getIdentifier());
@@ -452,8 +449,6 @@ public class ASTConverter {
 			Node type = typeExpression(arg.getType(), "typeExpression");
 			a.setChild("typeExpression", addExtraDimensions(type,arg.getExtraDimensions()));
 			
-			a.child("directionInt").setLongValue(0);
-			
 			// TODO: Implement support for modifies and annotations
 			// TODO: Implement support for variable method arity
 			// TODO: Implement support for initializers
@@ -462,37 +457,26 @@ public class ASTConverter {
 
 	void setModifiers(BodyDeclaration body) throws ConversionException
 	{
-		Node n = containers.peek();
-		
-		// Set defaults
-		if (n.tag().equals("Class"))
-			n.child("visibility").setLongValue(0);
-		else if (n.tag().equals("Method") || n.tag().equals("Field"))
-		{
-			n.child("visibility").setLongValue(0);
-			n.child("storageSpecifier").setLongValue(0);
-		}
-		
+		Node n = containers.peek();	
 
 		int modifiers = body.getModifiers();
-		if ((modifiers & Modifier.PUBLIC) != 0)
-			n.child("visibility").setLongValue(1);
-		else if ((modifiers & Modifier.PRIVATE) != 0)
-			n.child("visibility").setLongValue(2);
-		else if ((modifiers & Modifier.PROTECTED) != 0)
-			n.child("visibility").setLongValue(3);
-		else if ((modifiers & Modifier.STATIC) != 0)
-			n.child("storageSpecifier").setLongValue(1);
-		else {
-			// TODO: Handle other modifiers
-			// abstract
-			// final
-			// native
-			// synchronized
-			// transient
-			// volatile
-			// strictfp
-		}
+		int modifiersToSet = 0;
+		
+		if ((modifiers & Modifier.PUBLIC) != 0) modifiersToSet |= 0x00000001;
+		if ((modifiers & Modifier.PRIVATE) != 0) modifiersToSet |= 0x00000002;
+		if ((modifiers & Modifier.PROTECTED) != 0)  modifiersToSet |= 0x00000004;
+		if ((modifiers & Modifier.STATIC) != 0)  modifiersToSet |= 0x00000008;
+
+		// TODO: Handle other modifiers
+		// abstract
+		// final
+		// native
+		// synchronized
+		// transient
+		// volatile
+		// strictfp
+		
+		n.child("modifiers").setLongValue(modifiersToSet);
 	}
 	
 	Node typeExpression(Type type, String name) throws ConversionException
@@ -687,7 +671,6 @@ public class ASTConverter {
 		{
 			CastExpression ce = (CastExpression) e;
 			node = new Node(null, "CastExpression", name);
-			node.child("cKind").setLongValue(0); // Make this a normal cast
 			node.setChild("castType", typeExpression(ce.getType(),"castType"));
 			node.setChild("expr", expression(ce.getExpression(),"expr"));
 		} else if (e instanceof CharacterLiteral)
@@ -892,8 +875,6 @@ public class ASTConverter {
 			
 			varDecl.setSymbol(vdf.getName().getIdentifier());
 			//TODO: handle modifiers
-			varDecl.child("visibility").setLongValue(0);
-			varDecl.child("storageSpecifier").setLongValue(0);
 			Node variableType = typeExpression(type, "typeExpression");
 			varDecl.setChild("typeExpression", addExtraDimensions(variableType, vdf.getExtraDimensions()));
 			
