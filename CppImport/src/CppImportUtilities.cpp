@@ -52,8 +52,9 @@ OOModel::Expression* CppImportUtilities::convertClangType(clang::QualType qualTy
 	else if(type->isRecordType())
 	{
 		if(clang::CXXRecordDecl* recordDecl = type->getAsCXXRecordDecl())
-			return new OOModel::ClassTypeExpression(new OOModel::ReferenceExpression(
-																	 QString::fromStdString(recordDecl->getNameAsString())));
+			// TODO: why does this not work with ClassTypeExpression
+			return /*new OOModel::ClassTypeExpression(*/new OOModel::ReferenceExpression(
+																	 QString::fromStdString(recordDecl->getNameAsString())/*)*/);
 		return nullptr;
 	}
 	else if(type->isPointerType())
@@ -109,11 +110,16 @@ OOModel::Expression* CppImportUtilities::convertClangType(clang::QualType qualTy
 		ooUnaryOp->setOperand(convertClangType(parenType->getInnerType()));
 		return ooUnaryOp;
 	}
+	else if(auto typeDefType = llvm::dyn_cast<clang::TypedefType>(type))
+	{
+		return new OOModel::ReferenceExpression(QString::fromStdString(typeDefType->getDecl()->getNameAsString()));
+	}
 	else if(auto templateParmType = llvm::dyn_cast<clang::TemplateTypeParmType>(type))
 	{
-		return new OOModel::ClassTypeExpression(
+		// TODO: ClassTypeExpression
+		return /*new OOModel::ClassTypeExpression(*/
 					new OOModel::ReferenceExpression(
-						QString::fromStdString(templateParmType->getDecl()->getNameAsString())));
+						QString::fromStdString(templateParmType->getDecl()->getNameAsString())/*)*/);
 	}
 	else if(auto functionProtoType = llvm::dyn_cast<clang::FunctionProtoType>(type))
 	{
@@ -216,15 +222,15 @@ OOModel::UnaryOperation::OperatorTypes CppImportUtilities::convertUnaryOpcode(cl
 	}
 }
 
-OOModel::Visibility::VisibilityType CppImportUtilities::convertAccessSpecifier(clang::AccessSpecifier as)
+OOModel::Modifier::ModifierFlag CppImportUtilities::convertAccessSpecifier(clang::AccessSpecifier as)
 {
 	switch (as)
 	{
-		case clang::AS_public: return OOModel::Visibility::PUBLIC;
-		case clang::AS_protected: return OOModel::Visibility::PROTECTED;
-		case clang::AS_private: return OOModel::Visibility::PRIVATE;
-		case clang::AS_none: return OOModel::Visibility::DEFAULT;
-		default: return OOModel::Visibility::DEFAULT;
+		case clang::AS_public: return OOModel::Modifier::Public;
+		case clang::AS_protected: return OOModel::Modifier::Protected;
+		case clang::AS_private: return OOModel::Modifier::Private;
+		case clang::AS_none: return OOModel::Modifier::None;
+		default: return OOModel::Modifier::None;
 	}
 }
 

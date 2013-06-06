@@ -39,7 +39,7 @@ class CppImportUtilities
 		OOModel::BinaryOperation::OperatorTypes convertClangOpcode(clang::BinaryOperatorKind kind);
 		OOModel::AssignmentExpression::AssignmentTypes convertClangAssignOpcode(clang::BinaryOperatorKind kind);
 		OOModel::UnaryOperation::OperatorTypes convertUnaryOpcode(clang::UnaryOperatorKind kind);
-		OOModel::Visibility::VisibilityType convertAccessSpecifier(clang::AccessSpecifier as);
+		OOModel::Modifier::ModifierFlag convertAccessSpecifier(clang::AccessSpecifier as);
 	private:
 		OOModel::Expression* convertBuiltInClangType(const clang::Type* type);
 		CppImportLogger* log_;

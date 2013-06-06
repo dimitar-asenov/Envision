@@ -153,7 +153,7 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl)
 		}
 
 		// set visibility
-		ooClass->setVisibility(utils_->convertAccessSpecifier(recordDecl->getAccess()));
+		ooClass->modifiers()->set(utils_->convertAccessSpecifier(recordDecl->getAccess()));
 
 		// visit type arguments if any
 		if(auto describedTemplate = recordDecl->getDescribedClassTemplate())
@@ -590,7 +590,7 @@ bool ClangAstVisitor::VisitFieldDecl(clang::FieldDecl* fieldDecl)
 	clang::QualType ctype = fieldDecl->getType();
 	OOModel::Expression* type = utils_->convertClangType(ctype);
 	if(type) field->setTypeExpression(type);
-	field->setVisibility(utils_->convertAccessSpecifier(fieldDecl->getAccess()));
+	field->modifiers()->set(utils_->convertAccessSpecifier(fieldDecl->getAccess()));
 	return true;
 }
 
@@ -650,14 +650,17 @@ bool ClangAstVisitor::VisitTypedefNameDecl(clang::TypedefNameDecl* typedefDecl)
 {
 	if(!shouldModel(typedefDecl->getLocation()))
 		return true;
-	// TODO: is weak imported could help to not have system typedefs
-	// typedefDecl->dump();
 	OOModel::TypeAlias* ooTypeAlias = new OOModel::TypeAlias();
 	ooTypeAlias->setTypeExpression(utils_->convertClangType(typedefDecl->getUnderlyingType()));
 	ooTypeAlias->setName(QString::fromStdString(typedefDecl->getNameAsString()));
-	// TODO: for this the OOModel first needs to change
 	if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
 		itemList->append(new OOModel::DeclarationStatement(ooTypeAlias));
+	else if(auto ooProject = dynamic_cast<OOModel::Project*>(ooStack_.top()))
+		ooProject->subDeclarations()->append(ooTypeAlias);
+	else if(auto ooModule = dynamic_cast<OOModel::Module*>(ooStack_.top()))
+		ooModule->subDeclarations()->append(ooTypeAlias);
+	else if(auto ooClass = dynamic_cast<OOModel::Class*>(ooStack_.top()))
+		ooClass->subDeclarations()->append(ooTypeAlias);
 	else
 		log_->writeError(className_, QString("Uknown where to put typedef"), typedefDecl);
 	return true;
@@ -690,7 +693,7 @@ bool ClangAstVisitor::TraverseMethodDecl(clang::CXXMethodDecl* methodDecl, OOMod
 		ooStack_.pop();
 	}
 	// specify the visibility of the method
-	ooMethod->setVisibility(utils_->convertAccessSpecifier(methodDecl->getAccess()));
+	ooMethod->modifiers()->set(utils_->convertAccessSpecifier(methodDecl->getAccess()));
 
 	// visit type arguments if any
 	if(auto functionTemplate = methodDecl->getDescribedFunctionTemplate())
@@ -732,7 +735,10 @@ void ClangAstVisitor::insertFriendFunction(clang::FunctionDecl* friendFunction, 
 
 bool ClangAstVisitor::shouldModel(clang::SourceLocation location)
 {
-	if(sourceManager_->isInSystemHeader(location) || QString(sourceManager_->getBufferName(location)).contains("qt"))
+	bool invalid = false;
+	if(sourceManager_->isInSystemHeader(location) ||
+			QString(sourceManager_->getBufferName(location, &invalid)).contains("qt") ||
+			invalid)
 		return modelSysHeader_;
 	return true;
 }
