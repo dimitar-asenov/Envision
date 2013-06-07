@@ -242,6 +242,17 @@ bool ExpressionVisitor::TraverseCXXNewExpr(clang::CXXNewExpr* newExpr)
 	return true;
 }
 
+bool ExpressionVisitor::TraverseCXXDeleteExpr(clang::CXXDeleteExpr* deleteExpr)
+{
+	OOModel::DeleteExpression* ooDeleteExpr = new OOModel::DeleteExpression();
+	ooDeleteExpr->setIsArray(deleteExpr->isArrayForm());
+	TraverseStmt(deleteExpr->getArgument());
+	if(!ooExprStack_.empty())
+		ooDeleteExpr->setExpr(ooExprStack_.pop());
+	ooExprStack_.push(ooDeleteExpr);
+	return true;
+}
+
 bool ExpressionVisitor::VisitIntegerLiteral(clang::IntegerLiteral* intLit)
 {
 	OOModel::IntegerLiteral* ooIntLit = new OOModel::IntegerLiteral();
