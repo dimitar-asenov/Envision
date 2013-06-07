@@ -113,6 +113,23 @@ void CppImportLogger::unaryOpNotSupported(clang::UnaryOperatorKind kind)
 	unaryOpMap_.insert(missing,newCount);
 }
 
+void CppImportLogger::storageClassNotSupported(clang::StorageClass sc)
+{
+	QString missing;
+	switch(sc)
+	{
+		case clang::SC_Extern: missing = "SC_Extern"; break;
+		case clang::SC_PrivateExtern: missing = "SC_PrivateExtern"; break;
+		case clang::SC_OpenCLWorkGroupLocal: missing = "SC_OpenCLWorkGroupLocal"; break;
+		case clang::SC_Auto: missing = "SC_Auto"; break;
+		case clang::SC_Register: missing = "SC_Register"; break;
+		default: missing = "uknown sc"; break;
+	}
+
+	int newCount = unaryOpMap_.value(missing) + 1;
+	unaryOpMap_.insert(missing,newCount);
+}
+
 void CppImportLogger::overloadedOpNotSupported(clang::OverloadedOperatorKind kind, bool binary)
 {
 	QString missing;
@@ -163,6 +180,7 @@ void CppImportLogger::outputStatistics()
 	printStatistic("Types not supported by envision", typeCountMap_);
 	printStatistic("Unary operations not supported", unaryOpMap_);
 	printStatistic("Overloaded operations not supported", overloadMap_);
+	printStatistic("Storage class specifiers not supported", storageMap_);
 
 	// end section
 	(*warnStream_) << endl;

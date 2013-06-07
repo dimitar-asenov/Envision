@@ -168,7 +168,7 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl)
 			}
 		}
 
-		// set visibility
+		// set modifiers
 		ooClass->modifiers()->set(utils_->convertAccessSpecifier(recordDecl->getAccess()));
 
 		// visit type arguments if any
@@ -244,6 +244,8 @@ bool ClangAstVisitor::TraverseFunctionDecl(clang::FunctionDecl* functionDecl)
 				ooFunction->typeArguments()->append(new OOModel::FormalTypeArgument(name));
 			}
 		}
+		// modifiers
+		ooFunction->modifiers()->set(utils_->convertStorageSpecifier(functionDecl->getStorageClassAsWritten()));
 	}
 	else
 	{
@@ -502,8 +504,7 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 	}
 
 	// set the type
-	OOModel::Expression* type = utils_->convertClangType(varDecl->getType());
-	if(type) ooVarDecl->setTypeExpression(type);
+	ooVarDecl->setTypeExpression(utils_->convertClangType(varDecl->getType()));
 
 	// TODO: also visit type/value dependent inits
 	if(varDecl->hasInit() && !varDecl->getInit()->isValueDependent())
@@ -521,6 +522,9 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 			log_->writeError(className_, QString("Var Init Expr not supported"), varDecl->getInit());
 		inBody_ = inBody;
 	}
+	// modifiers
+	ooVarDecl->modifiers()->set(utils_->convertStorageSpecifier(varDecl->getStorageClassAsWritten()));
+
 	return true;
 }
 
@@ -567,6 +571,7 @@ bool ClangAstVisitor::TraverseEnumDecl(clang::EnumDecl* enumDecl)
 
 bool ClangAstVisitor::VisitFieldDecl(clang::FieldDecl* fieldDecl)
 {
+	// TODO: field implementation is missing a lot of things
 	OOModel::Field* field = trMngr_->insertField(fieldDecl);
 	if(!field)
 	{
@@ -575,9 +580,9 @@ bool ClangAstVisitor::VisitFieldDecl(clang::FieldDecl* fieldDecl)
 		// return false;
 		return true;
 	}
-	clang::QualType ctype = fieldDecl->getType();
-	OOModel::Expression* type = utils_->convertClangType(ctype);
-	if(type) field->setTypeExpression(type);
+
+	field->setTypeExpression(utils_->convertClangType(fieldDecl->getType()));
+	// modifiers
 	field->modifiers()->set(utils_->convertAccessSpecifier(fieldDecl->getAccess()));
 	return true;
 }
@@ -680,9 +685,6 @@ bool ClangAstVisitor::TraverseMethodDecl(clang::CXXMethodDecl* methodDecl, OOMod
 		inBody_ = inBody;
 		ooStack_.pop();
 	}
-	// specify the visibility of the method
-	ooMethod->modifiers()->set(utils_->convertAccessSpecifier(methodDecl->getAccess()));
-
 	// visit type arguments if any
 	if(auto functionTemplate = methodDecl->getDescribedFunctionTemplate())
 	{
@@ -694,6 +696,9 @@ bool ClangAstVisitor::TraverseMethodDecl(clang::CXXMethodDecl* methodDecl, OOMod
 			ooMethod->typeArguments()->append(new OOModel::FormalTypeArgument(name));
 		}
 	}
+	// modifiers
+	ooMethod->modifiers()->set(utils_->convertAccessSpecifier(methodDecl->getAccess()));
+	ooMethod->modifiers()->set(utils_->convertStorageSpecifier(methodDecl->getStorageClassAsWritten()));
 	return true;
 }
 

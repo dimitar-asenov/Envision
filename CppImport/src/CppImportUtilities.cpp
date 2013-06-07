@@ -29,6 +29,7 @@
 
 namespace CppImport {
 
+
 CppImportUtilities::CppImportUtilities(CppImportLogger* logger) : log_(logger)
 {
 }
@@ -37,89 +38,64 @@ OOModel::Expression* CppImportUtilities::convertClangType(clang::QualType qualTy
 {
 	const clang::Type* type = qualType.getTypePtr();
 	Q_ASSERT(type);
-	if(type->getContainedAutoType())
+	if(llvm::isa<clang::AutoType>(type))
 	{
 		return new OOModel::AutoTypeExpression();
-	}
-	else if(type->isBuiltinType())
-	{
-		return convertBuiltInClangType(type);
 	}
 	else if(auto typedefType = llvm::dyn_cast<clang::TypedefType>(type))
 	{
 		return new OOModel::ReferenceExpression(QString::fromStdString(typedefType->getDecl()->getNameAsString()));
 	}
-	else if(type->isRecordType())
+	else if(auto recordType = llvm::dyn_cast<clang::RecordType>(type))
 	{
-		if(clang::CXXRecordDecl* recordDecl = type->getAsCXXRecordDecl())
-			// TODO: why does this not work with ClassTypeExpression
-			return /*new OOModel::ClassTypeExpression(*/new OOModel::ReferenceExpression(
-																	 QString::fromStdString(recordDecl->getNameAsString())/*)*/);
-		return createErrorExpression("is RecordDecl but not CXX");
+			return new OOModel::ClassTypeExpression(new OOModel::ReferenceExpression(
+																	 QString::fromStdString(recordType->getDecl()->getNameAsString())));
 	}
-	else if(type->isPointerType())
+	else if(auto pointerType = llvm::dyn_cast<clang::PointerType>(type))
 	{
 		OOModel::PointerTypeExpression* ooPtr = new OOModel::PointerTypeExpression();
-		ooPtr->setTypeExpression(convertClangType(type->getPointeeType()));
+		ooPtr->setTypeExpression(convertClangType(pointerType->getPointeeType()));
 		return ooPtr;
 	}
-	else if(type->isReferenceType())
+	else if(auto refType = llvm::dyn_cast<clang::ReferenceType>(type))
 	{
 		OOModel::ReferenceTypeExpression* ooRef = new OOModel::ReferenceTypeExpression();
-		ooRef->setTypeExpression(convertClangType(type->getPointeeType()));
+		ooRef->setTypeExpression(convertClangType(refType->getPointeeType()));
 		return ooRef;
 	}
-	else if(type->isEnumeralType())
+	else if(auto enumType = llvm::dyn_cast<clang::EnumType>(type))
 	{
-		if(auto enumType = llvm::dyn_cast<clang::EnumType>(type))
-		{
-			OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression
-					(QString::fromStdString(enumType->getDecl()->getNameAsString()));
-			return ooRef;
-		}
-		log_->typeNotSupported(QString(type->getTypeClassName()));
-		return createErrorExpression("isEnumeralType but cannot not be casted");
+		OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression
+				(QString::fromStdString(enumType->getDecl()->getNameAsString()));
+		return ooRef;
 	}
-	else if(type->isConstantArrayType())
+	else if(auto constArrayType = llvm::dyn_cast<clang::ConstantArrayType>(type))
 	{
-		if(auto constArrayType = llvm::dyn_cast<clang::ConstantArrayType>(type))
-		{
-			OOModel::ArrayTypeExpression* ooArrayType = new OOModel::ArrayTypeExpression();
-			ooArrayType->setTypeExpression(convertClangType(constArrayType->getElementType()));
-			ooArrayType->setFixedSize(new OOModel::IntegerLiteral(constArrayType->getSize().getLimitedValue()));
-			return ooArrayType;
-		}
-		log_->typeNotSupported(QString(type->getTypeClassName()));
-		return createErrorExpression("isConstantArray but cannot not be casted");
+		OOModel::ArrayTypeExpression* ooArrayType = new OOModel::ArrayTypeExpression();
+		ooArrayType->setTypeExpression(convertClangType(constArrayType->getElementType()));
+		ooArrayType->setFixedSize(new OOModel::IntegerLiteral(constArrayType->getSize().getLimitedValue()));
+		return ooArrayType;
 	}
-	else if(type->isIncompleteArrayType())
+	else if(auto incompleteArrayType = llvm::dyn_cast<clang::IncompleteArrayType>(type))
 	{
-		if(auto incompleteArrayType = llvm::dyn_cast<clang::IncompleteArrayType>(type))
-		{
-			OOModel::ArrayTypeExpression* ooArrayType = new OOModel::ArrayTypeExpression();
-			ooArrayType->setTypeExpression(convertClangType(incompleteArrayType->getElementType()));
-			return ooArrayType;
-		}
-		log_->typeNotSupported(QString(type->getTypeClassName()));
-		return createErrorExpression("isIncompleteArray but cannot not be casted");
+		OOModel::ArrayTypeExpression* ooArrayType = new OOModel::ArrayTypeExpression();
+		ooArrayType->setTypeExpression(convertClangType(incompleteArrayType->getElementType()));
+		return ooArrayType;
 	}
-//	else if(auto parenType = llvm::dyn_cast<clang::ParenType>(type))
-//	{
-//		OOModel::UnaryOperation* ooUnaryOp = new OOModel::UnaryOperation();
-//		ooUnaryOp->setOp(OOModel::UnaryOperation::PARENTHESIS);
-//		ooUnaryOp->setOperand(convertClangType(parenType->getInnerType()));
-//		return ooUnaryOp;
-//	}
+	else if(auto parenType = llvm::dyn_cast<clang::ParenType>(type))
+	{
+		// TODO: this might not always be a nice solution
+		// to just return the inner type of a parenthesized type
+		return convertClangType(parenType->getInnerType());
+	}
 	else if(auto typeDefType = llvm::dyn_cast<clang::TypedefType>(type))
 	{
 		return new OOModel::ReferenceExpression(QString::fromStdString(typeDefType->getDecl()->getNameAsString()));
 	}
 	else if(auto templateParmType = llvm::dyn_cast<clang::TemplateTypeParmType>(type))
 	{
-		// TODO: ClassTypeExpression
-		return /*new OOModel::ClassTypeExpression(*/
-					new OOModel::ReferenceExpression(
-						QString::fromStdString(templateParmType->getDecl()->getNameAsString())/*)*/);
+		return new OOModel::ReferenceExpression(
+						QString::fromStdString(templateParmType->getDecl()->getNameAsString()));
 	}
 	else if(auto functionProtoType = llvm::dyn_cast<clang::FunctionProtoType>(type))
 	{
@@ -136,6 +112,19 @@ OOModel::Expression* CppImportUtilities::convertClangType(clang::QualType qualTy
 	{
 		// TODO: handle this correctly
 		return convertClangType(elaboratedType->getNamedType());
+	}
+	else if(auto templateSpecialization = llvm::dyn_cast<clang::TemplateSpecializationType>(type))
+	{
+		OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression();
+		ooRef->setName(QString::fromStdString(
+								templateSpecialization->getTemplateName().getAsTemplateDecl()->getNameAsString()));
+		for(auto argIt = templateSpecialization->begin(); argIt != templateSpecialization->end(); ++argIt)
+			ooRef->typeArguments()->append(convertClangType(argIt->getAsType()));
+		return ooRef;
+	}
+	else if(type->isBuiltinType())
+	{
+		return convertBuiltInClangType(type);
 	}
 	else
 	{
@@ -220,6 +209,18 @@ OOModel::Modifier::ModifierFlag CppImportUtilities::convertAccessSpecifier(clang
 		case clang::AS_private: return OOModel::Modifier::Private;
 		case clang::AS_none: return OOModel::Modifier::None;
 		default: return OOModel::Modifier::None;
+	}
+}
+
+OOModel::Modifier::ModifierFlag CppImportUtilities::convertStorageSpecifier(clang::StorageClass storage)
+{
+	switch(storage)
+	{
+		case clang::SC_None: return OOModel::Modifier::None;
+		case clang::SC_Static: return OOModel::Modifier::Static;
+		default:
+			log_->storageClassNotSupported(storage);
+			return OOModel::Modifier::None;
 	}
 }
 

@@ -43,6 +43,7 @@ class CppImportLogger
 		void typeNotSupported(QString typeName);
 
 		void unaryOpNotSupported(clang::UnaryOperatorKind kind);
+		void storageClassNotSupported(clang::StorageClass sc);
 
 		void overloadedOpNotSupported(clang::OverloadedOperatorKind kind, bool binary);
 
@@ -69,6 +70,7 @@ class CppImportLogger
 		QMap<QString,int> typeCountMap_;
 		QMap<QString,int> unaryOpMap_;
 		QMap<QString,int> overloadMap_;
+		QMap<QString,int> storageMap_;
 };
 
 inline void CppImportLogger::writeError(QString inWhichClass, QString reason, clang::NamedDecl* decl)

@@ -40,6 +40,7 @@ class CppImportUtilities
 		OOModel::AssignmentExpression::AssignmentTypes convertClangAssignOpcode(clang::BinaryOperatorKind kind);
 		OOModel::UnaryOperation::OperatorTypes convertUnaryOpcode(clang::UnaryOperatorKind kind);
 		OOModel::Modifier::ModifierFlag convertAccessSpecifier(clang::AccessSpecifier as);
+		OOModel::Modifier::ModifierFlag convertStorageSpecifier(clang::StorageClass storage);
 
 		OOModel::BinaryOperation::OperatorTypes translateBinaryOverloadOp(clang::OverloadedOperatorKind kind);
 		OOModel::AssignmentExpression::AssignmentTypes translateAssignOverloadOp(clang::OverloadedOperatorKind kind);
