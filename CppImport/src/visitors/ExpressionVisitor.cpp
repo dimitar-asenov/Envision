@@ -151,6 +151,82 @@ bool ExpressionVisitor::TraverseCallExpr(clang::CallExpr* callExpr)
 	return true;
 }
 
+bool ExpressionVisitor::TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* callExpr)
+{
+	auto callee = llvm::dyn_cast<clang::MemberExpr>(callExpr->getCallee()->IgnoreImplicit());
+	unsigned numArguments = callExpr->getNumArgs();
+	if(1 == numArguments && !callee)
+	{
+		OOModel::UnaryOperation* ooUnaryOp = new OOModel::UnaryOperation();
+		ooUnaryOp->setOp(utils_->translateUnaryOverloadOp(callExpr->getOperator()));
+		TraverseStmt(callExpr->getArg(0));
+		if(!ooExprStack_.empty())
+			ooUnaryOp->setOperand(ooExprStack_.pop());
+	}
+	else if(1 == numArguments && callee)
+	{
+		if(utils_->isAssignOverload(callExpr->getOperator()))
+		{
+			OOModel::AssignmentExpression* ooAssign = new OOModel::AssignmentExpression();
+			ooAssign->setOp(utils_->translateAssignOverloadOp(callExpr->getOperator()));
+			TraverseStmt(callee);
+			if(!ooExprStack_.empty())
+				ooAssign->setLeft(ooExprStack_.pop());
+			TraverseStmt(callExpr->getArg(0));
+			if(!ooExprStack_.empty())
+				ooAssign->setRight(ooExprStack_.pop());
+			ooExprStack_.push(ooAssign);
+		}
+		else
+		{
+			OOModel::BinaryOperation* ooBinaryOp = new OOModel::BinaryOperation();
+			ooBinaryOp->setOp(utils_->translateBinaryOverloadOp(callExpr->getOperator()));
+			TraverseStmt(callee);
+			if(!ooExprStack_.empty())
+				ooBinaryOp->setLeft(ooExprStack_.pop());
+			TraverseStmt(callExpr->getArg(0));
+			if(!ooExprStack_.empty())
+				ooBinaryOp->setRight(ooExprStack_.pop());
+			ooExprStack_.push(ooBinaryOp);
+		}
+	}
+	else if(2 == numArguments)
+	{
+		if(utils_->isAssignOverload(callExpr->getOperator()))
+		{
+			OOModel::AssignmentExpression* ooAssign = new OOModel::AssignmentExpression();
+			ooAssign->setOp(utils_->translateAssignOverloadOp(callExpr->getOperator()));
+			TraverseStmt(callExpr->getArg(0)->IgnoreImplicit());
+			if(!ooExprStack_.empty())
+				ooAssign->setLeft(ooExprStack_.pop());
+			TraverseStmt(callExpr->getArg(1)->IgnoreImplicit());
+			if(!ooExprStack_.empty())
+				ooAssign->setRight(ooExprStack_.pop());
+			ooExprStack_.push(ooAssign);
+		}
+		else
+		{
+			OOModel::BinaryOperation* ooBinaryOp = new OOModel::BinaryOperation();
+			ooBinaryOp->setOp(utils_->translateBinaryOverloadOp(callExpr->getOperator()));
+			TraverseStmt(callExpr->getArg(0)->IgnoreImplicit());
+			if(!ooExprStack_.empty())
+				ooBinaryOp->setLeft(ooExprStack_.pop());
+			TraverseStmt(callExpr->getArg(1)->IgnoreImplicit());
+			if(!ooExprStack_.empty())
+				ooBinaryOp->setRight(ooExprStack_.pop());
+			ooExprStack_.push(ooBinaryOp);
+		}
+	}
+	else
+	{
+		log_->writeError(className_,
+							  QString("More than 2 arguments in operator call. Seen %1 arguments").arg(numArguments),
+							  callExpr);
+		ooExprStack_.push(utils_->createErrorExpression("Wrong number of Args in OperatorCallExpr"));
+	}
+	return true;
+}
+
 bool ExpressionVisitor::TraverseCXXNewExpr(clang::CXXNewExpr* newExpr)
 {
 	OOModel::NewExpression* ooNewExpr = new OOModel::NewExpression();

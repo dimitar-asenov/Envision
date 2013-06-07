@@ -233,6 +233,95 @@ OOModel::Modifier::ModifierFlag CppImportUtilities::convertAccessSpecifier(clang
 	}
 }
 
+OOModel::BinaryOperation::OperatorTypes CppImportUtilities::translateBinaryOverloadOp(clang::OverloadedOperatorKind kind)
+{
+	switch(kind)
+	{
+		case clang::OO_Plus: return OOModel::BinaryOperation::PLUS;
+		case clang::OO_Minus: return OOModel::BinaryOperation::MINUS;
+		case clang::OO_Star: return OOModel::BinaryOperation::TIMES;
+		case clang::OO_Slash: return OOModel::BinaryOperation::DIVIDE;
+		case clang::OO_Percent: return OOModel::BinaryOperation::REMAINDER;
+		case clang::OO_Caret: return OOModel::BinaryOperation::XOR;
+		case clang::OO_Amp: return OOModel::BinaryOperation::AND;
+		case clang::OO_Pipe: return OOModel::BinaryOperation::OR;
+		case clang::OO_Less: return OOModel::BinaryOperation::LESS;
+		case clang::OO_Greater: return OOModel::BinaryOperation::GREATER;
+		case clang::OO_LessLess: return OOModel::BinaryOperation::LEFT_SHIFT;
+		case clang::OO_GreaterGreater: return OOModel::BinaryOperation::RIGHT_SHIFT_SIGNED;
+		case clang::OO_EqualEqual: return OOModel::BinaryOperation::EQUALS;
+		case clang::OO_ExclaimEqual: return OOModel::BinaryOperation::NOT_EQUALS;
+		case clang::OO_LessEqual: return OOModel::BinaryOperation::LESS_EQUALS;
+		case clang::OO_GreaterEqual: return OOModel::BinaryOperation::GREATER_EQUALS;
+		case clang::OO_AmpAmp: return OOModel::BinaryOperation::CONDITIONAL_AND;
+		case clang::OO_PipePipe: return OOModel::BinaryOperation::CONDITIONAL_OR;
+//		case clang::OO_PlusPlus: return OOModel::BinaryOperation::;
+//		case clang::OO_MinusMinus: return OOModel::BinaryOperation::;
+//		case clang::OO_Comma: return OOModel::BinaryOperation::;
+		case clang::OO_ArrowStar: return OOModel::BinaryOperation::POINTER_POINTER_TO_MEMBER;
+//		case clang::OO_Call: return OOModel::BinaryOperation::;
+//		case clang::OO_Subscript: return OOModel::BinaryOperation::;
+//		case clang::OO_Conditional: return OOModel::BinaryOperation::;
+		default:
+			log_->overloadedOpNotSupported(kind, true);
+			// TODO: throw exception instead
+			return OOModel::BinaryOperation::PLUS;
+	}
+}
+
+OOModel::AssignmentExpression::AssignmentTypes CppImportUtilities::translateAssignOverloadOp(clang::OverloadedOperatorKind kind)
+{
+	switch(kind)
+	{
+		case clang::OO_Equal: return OOModel::AssignmentExpression::ASSIGN;
+		case clang::OO_PlusEqual: return OOModel::AssignmentExpression::PLUS_ASSIGN;
+		case clang::OO_MinusEqual: return OOModel::AssignmentExpression::MINUS_ASSIGN;
+		case clang::OO_StarEqual: return OOModel::AssignmentExpression::TIMES_ASSIGN;
+		case clang::OO_SlashEqual: return OOModel::AssignmentExpression::DIVIDE_ASSIGN;
+		case clang::OO_PercentEqual: return OOModel::AssignmentExpression::REMAINDER_ASSIGN;
+		case clang::OO_CaretEqual: return OOModel::AssignmentExpression::BIT_XOR_ASSIGN;
+		case clang::OO_AmpEqual: return OOModel::AssignmentExpression::BIT_AND_ASSIGN;
+		case clang::OO_PipeEqual: return OOModel::AssignmentExpression::BIT_OR_ASSIGN;
+		case clang::OO_LessLessEqual: return OOModel::AssignmentExpression::LEFT_SHIFT_ASSIGN;
+		case clang::OO_GreaterGreaterEqual: return OOModel::AssignmentExpression::RIGHT_SHIFT_SIGNED_ASSIGN;
+		default:
+			log_->overloadedOpNotSupported(kind, true);
+			// TODO: throw exception instead
+			return OOModel::AssignmentExpression::ASSIGN;
+	}
+}
+
+OOModel::UnaryOperation::OperatorTypes CppImportUtilities::translateUnaryOverloadOp(clang::OverloadedOperatorKind kind)
+{
+	switch(kind)
+	{
+//		case clang::OO_New: return OOModel::UnaryOperation::;
+//		case clang::OO_Delete: return OOModel::UnaryOperation::;
+//		case clang::OO_Array_New: return OOModel::UnaryOperation::;
+//		case clang::OO_Array_Delete: return OOModel::UnaryOperation::;
+		case clang::OO_Plus: return OOModel::UnaryOperation::PLUS;
+		case clang::OO_Minus: return OOModel::UnaryOperation::MINUS;
+		case clang::OO_Star: return OOModel::UnaryOperation::DEREFERENCE;
+		case clang::OO_Amp: return OOModel::UnaryOperation::ADDRESSOF;
+		case clang::OO_Tilde: return OOModel::UnaryOperation::COMPLEMENT;
+		case clang::OO_Exclaim: return OOModel::UnaryOperation::NOT;
+		case clang::OO_PlusPlus: return OOModel::UnaryOperation::POSTINCREMENT;
+		case clang::OO_MinusMinus: return OOModel::UnaryOperation::POSTDECREMENT;
+//		case clang::OO_Arrow: return OOModel::UnaryOperation::;
+//		case clang::OO_Call: return OOModel::UnaryOperation::;
+		default:
+			log_->overloadedOpNotSupported(kind, false);
+			// TODO: throw exception instead
+			return OOModel::UnaryOperation::PLUS;
+	}
+}
+
+bool CppImportUtilities::isAssignOverload(clang::OverloadedOperatorKind kind)
+{
+	return ((kind >= clang::OO_PlusEqual && kind <= clang::OO_GreaterGreaterEqual)
+			  && kind != clang::OO_LessLess && kind != clang::OO_GreaterGreater);
+}
+
 OOModel::Expression*CppImportUtilities::convertBuiltInClangType(const clang::Type* type)
 {
 	const clang::BuiltinType* builtinType = type->getAs<clang::BuiltinType>();

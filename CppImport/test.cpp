@@ -120,7 +120,7 @@ private:
         void test() {
             auto cl = new InAnotherClass();
             cl->getClass();
-// 	    std::cout << "test" << std::endl;
+	    std::cout << "test" << std::endl;
         }
     };
 

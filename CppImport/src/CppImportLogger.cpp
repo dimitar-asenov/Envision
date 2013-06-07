@@ -148,6 +148,32 @@ void CppImportLogger::binaryOpNotSupported(clang::BinaryOperatorKind kind)
 	binOpMap_.insert(missing,newCount);
 }
 
+void CppImportLogger::overloadedOpNotSupported(clang::OverloadedOperatorKind kind, bool binary)
+{
+	QString missing;
+	switch(kind)
+	{
+		case clang::OO_New: missing = "New"; break;
+		case clang::OO_Delete: missing = "Delete"; break;
+		case clang::OO_Array_New: missing = "Array_New"; break;
+		case clang::OO_Array_Delete: missing = "Array_Delete"; break;
+		case clang::OO_PlusPlus: missing = "PlusPlus"; break;
+		case clang::OO_MinusMinus: missing = "MinusMinus"; break;
+		case clang::OO_Comma: missing = "Comma"; break;
+		case clang::OO_Arrow: missing = "Arrow"; break;
+		case clang::OO_Call: missing = "Call"; break;
+		case clang::OO_Subscript: missing = "Subscript"; break;
+		case clang::OO_Conditional: missing = "Conditional"; break;
+		default:
+			missing = "Uknown_OVERLOAD";
+			break;
+	}
+	binary ? missing.append("_BIN") : missing.append("_UN");
+
+	int newCount = overloadMap_.value(missing) + 1;
+	overloadMap_.insert(missing, newCount);
+}
+
 void CppImportLogger::initStreams()
 {
 	if(writeToFile_)
@@ -168,6 +194,7 @@ void CppImportLogger::outputStatistics()
 	(*warnStream_) << qSetFieldWidth(36) << center << qSetPadChar('=')
 						<< "Statistics of warnings and errors" << reset << endl;
 
+	// TODO: have one functions which takes QMap and Qstring to print this
 	// general errors
 	if(!countMap_.empty())
 		for(auto iter = countMap_.constBegin(); iter != countMap_.constEnd(); ++iter)
@@ -190,6 +217,12 @@ void CppImportLogger::outputStatistics()
 	(*warnStream_) << "\nUnary operations not supported:\n";
 	if(!unaryOpMap_.empty())
 		for(auto it = unaryOpMap_.constBegin(); it!= unaryOpMap_.constEnd(); ++it)
+			(*warnStream_) << left << qSetFieldWidth(30) << it.key() + ":"
+								<< right << qSetFieldWidth(6) << it.value() << endl;
+
+	(*warnStream_) << "\nOverloaded operations not supported:\n";
+	if(!overloadMap_.empty())
+		for(auto it = overloadMap_.constBegin(); it!= overloadMap_.constEnd(); ++it)
 			(*warnStream_) << left << qSetFieldWidth(30) << it.key() + ":"
 								<< right << qSetFieldWidth(6) << it.value() << endl;
 
