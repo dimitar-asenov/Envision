@@ -43,7 +43,6 @@ class CppImportLogger
 		void typeNotSupported(QString typeName);
 
 		void unaryOpNotSupported(clang::UnaryOperatorKind kind);
-		void binaryOpNotSupported(clang::BinaryOperatorKind kind);
 
 		void overloadedOpNotSupported(clang::OverloadedOperatorKind kind, bool binary);
 
@@ -54,6 +53,7 @@ class CppImportLogger
 		void writeOut(QString& inWhichClass, QString& reason, clang::NamedDecl* decl, OUTTYPE outType);
 		void writeOut(QString &inWhichClass, QString &reason, clang::Stmt *stmt, OUTTYPE outType);
 		void initStreams();
+		void printStatistic(const char* message, QMap<QString,int>& map);
 
 		// outstreams
 		QTextStream* errStream_{};
@@ -67,7 +67,6 @@ class CppImportLogger
 
 		QMap<QString,int> countMap_;
 		QMap<QString,int> typeCountMap_;
-		QMap<QString,int> binOpMap_;
 		QMap<QString,int> unaryOpMap_;
 		QMap<QString,int> overloadMap_;
 };

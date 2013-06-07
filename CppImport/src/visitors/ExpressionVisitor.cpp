@@ -453,16 +453,14 @@ bool ExpressionVisitor::TraverseBinaryOp(clang::BinaryOperator* binaryOperator)
 	{
 		ooBinOp->setLeft(ooLeft);
 		ooBinOp->setRight(ooRight);
+		ooExprStack_.push(ooBinOp);
 	}
 	else
 	{
 		ooComma->setLeft(ooLeft);
 		ooComma->setRight(ooRight);
+		ooExprStack_.push(ooComma);
 	}
-
-	if(ooBinOp) ooExprStack_.push(ooBinOp);
-	else ooExprStack_.push(ooComma);
-
 	return true;
 }
 

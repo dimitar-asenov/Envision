@@ -46,14 +46,9 @@ void CppImportLogger::writeOut(QString &inWhichClass, QString &reason, clang::Na
 	QTextStream* outStream;
 	switch(outType)
 	{
-		case ERROR:
-			outStream = errStream_;
-			break;
-		case WARNING:
-			outStream = warnStream_;
-			break;
-		default:
-			return;
+		case ERROR: outStream = errStream_; break;
+		case WARNING: outStream = warnStream_; break;
+		default: return;
 	}
 
 	QString clangType = QString(decl->getDeclKindName());
@@ -79,14 +74,9 @@ void CppImportLogger::writeOut(QString &inWhichClass, QString &reason, clang::St
 	QTextStream* outStream;
 	switch(outType)
 	{
-		case ERROR:
-			outStream = errStream_;
-			break;
-		case WARNING:
-			outStream = warnStream_;
-			break;
-		default:
-			return;
+		case ERROR: outStream = errStream_; break;
+		case WARNING: outStream = warnStream_; break;
+		default: return;
 	}
 	QString clangType = QString(stmt->getStmtClassName());
 
@@ -113,39 +103,14 @@ void CppImportLogger::unaryOpNotSupported(clang::UnaryOperatorKind kind)
 	QString missing;
 	switch(kind)
 	{
-		case clang::UO_Real:
-			missing = "UO_Real";
-			break;
-		case clang::UO_Imag:
-			missing = "UO_Imag";
-			break;
-		case clang::UO_Extension:
-			missing = "UO_Extension";
-			break;
-		default:
-			missing = "Uknown unary op";
-			break;
+		case clang::UO_Real: missing = "UO_Real"; break;
+		case clang::UO_Imag: missing = "UO_Imag"; break;
+		case clang::UO_Extension: missing = "UO_Extension"; break;
+		default: missing = "Uknown unary op"; break;
 	}
 
 	int newCount = unaryOpMap_.value(missing) + 1;
 	unaryOpMap_.insert(missing,newCount);
-}
-
-void CppImportLogger::binaryOpNotSupported(clang::BinaryOperatorKind kind)
-{
-	QString missing;
-	switch(kind)
-	{
-		case clang::BO_Comma:
-			missing = "BO_Comma";
-			break;
-		default:
-			missing = "uknown binop";
-			break;
-	}
-
-	int newCount = binOpMap_.value(missing) + 1;
-	binOpMap_.insert(missing,newCount);
 }
 
 void CppImportLogger::overloadedOpNotSupported(clang::OverloadedOperatorKind kind, bool binary)
@@ -194,42 +159,26 @@ void CppImportLogger::outputStatistics()
 	(*warnStream_) << qSetFieldWidth(36) << center << qSetPadChar('=')
 						<< "Statistics of warnings and errors" << reset << endl;
 
-	// TODO: have one functions which takes QMap and Qstring to print this
-	// general errors
-	if(!countMap_.empty())
-		for(auto iter = countMap_.constBegin(); iter != countMap_.constEnd(); ++iter)
-			(*warnStream_) << left << qSetFieldWidth(30) << iter.key() + ":"
-								<< right << qSetFieldWidth(6) << iter.value() << endl;
-
-	// types section
-	(*warnStream_) << "\nTypes not supported by envision:\n";
-	if(!typeCountMap_.empty())
-		for(auto it = typeCountMap_.constBegin(); it != typeCountMap_.constEnd(); ++it)
-			(*warnStream_) << left << qSetFieldWidth(30) << it.key() + ":"
-								<< right << qSetFieldWidth(6) << it.value() << endl;
-	// operators section
-	(*warnStream_) << "\nBinary operations not supported:\n";
-	if(!binOpMap_.empty())
-		for(auto it = binOpMap_.constBegin(); it!= binOpMap_.constEnd(); ++it)
-			(*warnStream_) << left << qSetFieldWidth(30) << it.key() + ":"
-								<< right << qSetFieldWidth(6) << it.value() << endl;
-
-	(*warnStream_) << "\nUnary operations not supported:\n";
-	if(!unaryOpMap_.empty())
-		for(auto it = unaryOpMap_.constBegin(); it!= unaryOpMap_.constEnd(); ++it)
-			(*warnStream_) << left << qSetFieldWidth(30) << it.key() + ":"
-								<< right << qSetFieldWidth(6) << it.value() << endl;
-
-	(*warnStream_) << "\nOverloaded operations not supported:\n";
-	if(!overloadMap_.empty())
-		for(auto it = overloadMap_.constBegin(); it!= overloadMap_.constEnd(); ++it)
-			(*warnStream_) << left << qSetFieldWidth(30) << it.key() + ":"
-								<< right << qSetFieldWidth(6) << it.value() << endl;
+	printStatistic("General errors", countMap_);
+	printStatistic("Types not supported by envision", typeCountMap_);
+	printStatistic("Unary operations not supported", unaryOpMap_);
+	printStatistic("Overloaded operations not supported", overloadMap_);
 
 	// end section
 	(*warnStream_) << endl;
 	(*warnStream_) << qSetFieldWidth(36) << center << qSetPadChar('=')
 						<< "Statistics End" << reset << endl;
+}
+
+void CppImportLogger::printStatistic(const char* message, QMap<QString, int>& map)
+{
+	if(!map.empty())
+	{
+		(*warnStream_) << endl << message << endl;
+		for(auto iter = map.constBegin(); iter != map.constEnd(); ++iter)
+			(*warnStream_) << left << qSetFieldWidth(30) << iter.key() + ":"
+								<< right << qSetFieldWidth(6) << iter.value() << endl;
+	}
 }
 
 }
