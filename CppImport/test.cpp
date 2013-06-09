@@ -274,6 +274,8 @@ int Header::headerFunc()
         someArray[a] = a;
     int array[] = {1,2,3};
     const char* string = "Testing";
+    volatile int volInt = 10;
+    const volatile int constVolInt = 100;
     char someChar = 'a';
     int* newArray = new int[20];
     int k;
