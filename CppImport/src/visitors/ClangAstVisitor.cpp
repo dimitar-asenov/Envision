@@ -387,6 +387,41 @@ bool ClangAstVisitor::TraverseReturnStmt(clang::ReturnStmt* returnStmt)
 	return true;
 }
 
+bool ClangAstVisitor::TraverseDeclStmt(clang::DeclStmt* declStmt)
+{
+	if(inBody_)
+	{
+		for(auto declIt = declStmt->decl_begin(); declIt != declStmt->decl_end(); ++declIt)
+			TraverseDecl(*declIt);
+		return true;
+	}
+	if(!declStmt->isSingleDecl())
+	{
+		log_->writeWarning(className_, QString("Decl Stmt with multiple decl needs inspection"), declStmt);
+		OOModel::CommaExpression* ooComma = new OOModel::CommaExpression();
+		// TODO: fix this section
+		bool inBody = inBody_;
+		inBody_ = false;
+		auto declIt = declStmt->decl_begin();
+		TraverseDecl(*declIt);
+		if(!ooExprStack_.empty())
+			ooComma->setLeft(ooExprStack_.pop());
+		if(++declIt != declStmt->decl_end())
+		{
+			TraverseDecl(*declIt);
+			if(!ooExprStack_.empty())
+				ooComma->setRight(ooExprStack_.pop());
+		}
+
+		if(!(inBody_ = inBody))
+			ooExprStack_.push(ooComma);
+		else
+			log_->writeError(className_,QString("uknown where to put "), declStmt);
+		return true;
+	}
+	return TraverseDecl(declStmt->getSingleDecl());
+}
+
 bool ClangAstVisitor::TraverseCXXTryStmt(clang::CXXTryStmt* tryStmt)
 {
 	OOModel::TryCatchFinallyStatement* ooTry = new OOModel::TryCatchFinallyStatement();
