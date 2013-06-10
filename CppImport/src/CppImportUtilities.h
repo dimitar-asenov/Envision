@@ -42,6 +42,8 @@ class CppImportUtilities
 		OOModel::Modifier::ModifierFlag convertAccessSpecifier(clang::AccessSpecifier as);
 		OOModel::Modifier::ModifierFlag convertStorageSpecifier(clang::StorageClass storage);
 
+		OOModel::Expression* convertTemplateArgument(const clang::TemplateArgument& templateArg);
+
 		OOModel::BinaryOperation::OperatorTypes translateBinaryOverloadOp(clang::OverloadedOperatorKind kind);
 		OOModel::AssignmentExpression::AssignmentTypes translateAssignOverloadOp(clang::OverloadedOperatorKind kind);
 		OOModel::UnaryOperation::OperatorTypes translateUnaryOverloadOp(clang::OverloadedOperatorKind kind);

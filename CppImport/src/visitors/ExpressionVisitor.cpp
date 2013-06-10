@@ -133,19 +133,44 @@ bool ExpressionVisitor::TraverseCallExpr(clang::CallExpr* callExpr)
 		// type arguments
 		// TODO this might need some inspection
 		if(auto specArgs = callee->getTemplateSpecializationArgs())
-		{
 			for(unsigned i=0; i < specArgs->size(); i++)
-			{
-				// TODO what if its not a type
-				if(specArgs->get(i).getKind() == clang::TemplateArgument::ArgKind::Type)
-					if(auto type = utils_->convertClangType(specArgs->get(i).getAsType()))
-						ooMCall->ref()->typeArguments()->append(type);
-			}
-		}
+				ooMCall->ref()->typeArguments()->append(utils_->convertTemplateArgument(specArgs->get(i)));
 		ooExprStack_.push(ooMCall);
 	}
 	else
 	{
+//		callExpr->dump();
+		if(auto calleeExpr =  llvm::dyn_cast<clang::UnresolvedLookupExpr>(callExpr->getCallee()))
+		{
+			OOModel::MethodCallExpression* ooMehtodCall = new OOModel::MethodCallExpression
+					(QString::fromStdString(calleeExpr->getName().getAsString()));
+			// visit arguments
+			for(auto argIt = callExpr->arg_begin(); argIt!=callExpr->arg_end(); ++argIt)
+			{
+				TraverseStmt(*argIt);
+				if(!ooExprStack_.empty())
+					ooMehtodCall->arguments()->append(ooExprStack_.pop());
+				else
+					log_->writeError(className_,QString("not supported"),*argIt);
+			}
+			//template args
+			if(calleeExpr->hasExplicitTemplateArgs())
+			{
+				unsigned templateArgs = calleeExpr->getNumTemplateArgs();
+				auto astTemplateArgsList = calleeExpr->getExplicitTemplateArgs();
+				for(unsigned i = 0; i < templateArgs; i++)
+					ooMehtodCall->ref()->typeArguments()->append
+							(utils_->convertTemplateArgument(astTemplateArgsList[i].getArgument()));
+			}
+
+			ooExprStack_.push(ooMehtodCall);
+		}
+		else
+		{
+			log_->writeError(className_, "Unsupported call", callExpr);
+			TraverseStmt(callExpr->getCallee());
+			callExpr->dump();
+		}
 		//TODO
 	}
 	return true;
@@ -308,9 +333,10 @@ bool ExpressionVisitor::VisitDeclRefExpr(clang::DeclRefExpr* declRefExpr)
 	return true;
 }
 
-bool ExpressionVisitor::VisitCXXUnresolvedConstructorExpr(clang::CXXUnresolvedConstructExpr*)
+bool ExpressionVisitor::VisitCXXUnresolvedConstructorExpr(clang::CXXUnresolvedConstructExpr* unresolvedContruct)
 {
 	ooExprStack_.push(new OOModel::Expression());
+	log_->writeError(className_, QString("UnresolvedConstruct exr"), unresolvedContruct);
 	return true;
 }
 
@@ -379,7 +405,7 @@ bool ExpressionVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constr
 			if(!ooExprStack_.empty())
 				ooMethodCall->arguments()->append(ooExprStack_.pop());
 			else
-				log_->writeError(className_,"Could not convert", *argIt);
+				log_->writeError(className_, "Could not convert", *argIt);
 		}
 		ooExprStack_.push(ooMethodCall);
 		return true;

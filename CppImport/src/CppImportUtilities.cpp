@@ -236,6 +236,43 @@ OOModel::Modifier::ModifierFlag CppImportUtilities::convertStorageSpecifier(clan
 	}
 }
 
+OOModel::Expression*CppImportUtilities::convertTemplateArgument(const clang::TemplateArgument& templateArg)
+{
+	// TODO: clang return weird kind numbers seem to be unitialized,
+	// hopefully 3.3 will do better
+	switch(templateArg.getKind())
+	{
+		case clang::TemplateArgument::ArgKind::Null:
+			std::cout << "NULL #####################################"<<std::endl;
+			return createErrorExpression("Unsupported TemplateArgumentLoc");
+		case clang::TemplateArgument::ArgKind::Type:
+			return convertClangType(templateArg.getAsType());
+		case clang::TemplateArgument::ArgKind::Declaration:
+			return new OOModel::ReferenceExpression(QString::fromStdString(templateArg.getAsDecl()->getNameAsString()));
+		case clang::TemplateArgument::ArgKind::NullPtr:
+			std::cout << "NULLPTR #####################################"<<std::endl;
+			return createErrorExpression("Unsupported TemplateArgumentLoc");
+		case clang::TemplateArgument::ArgKind::Integral:
+			std::cout << "INTEGRAL #####################################"<<std::endl;
+			return createErrorExpression("Unsupported TemplateArgumentLoc");
+		case clang::TemplateArgument::ArgKind::Template:
+			return new OOModel::ReferenceExpression(
+						QString::fromStdString(templateArg.getAsTemplate().getAsTemplateDecl()->getNameAsString()));
+		case clang::TemplateArgument::ArgKind::TemplateExpansion:
+			std::cout << "EXPANSION #####################################"<<std::endl;
+			return createErrorExpression("Unsupported TemplateArgumentLoc");
+		case clang::TemplateArgument::ArgKind::Expression:
+			std::cout << "EXPPRESSION #####################################"<<std::endl;
+			return createErrorExpression("Unsupported TemplateArgumentLoc");
+		case clang::TemplateArgument::ArgKind::Pack:
+			std::cout << "PACK #####################################"<<std::endl;
+			return createErrorExpression("Unsupported TemplateArgumentLoc");
+		default:
+			std::cout << "####### " << static_cast<int>(templateArg.getKind()) << std::endl;
+			return createErrorExpression("Unsupported TemplateArgumentLoc");
+	}
+}
+
 OOModel::BinaryOperation::OperatorTypes CppImportUtilities::translateBinaryOverloadOp(clang::OverloadedOperatorKind kind)
 {
 	switch(kind)

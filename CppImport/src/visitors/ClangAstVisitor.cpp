@@ -497,7 +497,9 @@ bool ClangAstVisitor::TraverseStmt(clang::Stmt* S)
 {
 	if(S && llvm::isa<clang::Expr>(S))
 	{
-		bool ret = exprVisitor_->TraverseStmt(S);
+		// always ignore implicit stuff
+		auto casted = llvm::dyn_cast<clang::Expr>(S);
+		bool ret = exprVisitor_->TraverseStmt(casted->IgnoreImplicit());
 		if(auto expr = exprVisitor_->getLastExpression())
 		{
 			if(!inBody_)
