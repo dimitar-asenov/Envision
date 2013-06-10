@@ -1,5 +1,6 @@
 #include "test.h"
 #include <iostream>
+#include <vector>
 //TEst comment
 
 int NOCLASSFIELD;
@@ -7,6 +8,19 @@ int NOCLASSFIELD;
 void globalMethod(){
     int aVarInGlobalMethod = 100;
 }
+
+class TestRangeLoop {
+    vector<int> vec;
+    void testFun(){
+        vec.push_back( 10 );
+        vec.push_back( 20 );
+
+        for (int i : vec )
+        {
+            cout << i;
+        }
+    }
+};
 
 enum SomeNameEnum {FIRST};
 

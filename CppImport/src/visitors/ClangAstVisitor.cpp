@@ -335,6 +335,31 @@ bool ClangAstVisitor::TraverseForStmt(clang::ForStmt* forStmt)
 	return true;
 }
 
+bool ClangAstVisitor::TraverseCXXForRangeStmt(clang::CXXForRangeStmt* forRangeStmt)
+{
+	OOModel::ForEachStatement* ooLoop = new OOModel::ForEachStatement();
+	OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top());
+	if(itemList)
+	{
+		const clang::VarDecl* loopVar = forRangeStmt->getLoopVariable();
+		itemList->append(ooLoop);
+		ooLoop->setVarName(QString::fromStdString(loopVar->getNameAsString()));
+		ooLoop->setVarType(utils_->convertClangType(loopVar->getType()));
+		bool inBody = inBody_;
+		inBody_ = false;
+		TraverseStmt(forRangeStmt->getRangeInit());
+		if(!ooExprStack_.empty())
+			ooLoop->setCollection(ooExprStack_.pop());
+		inBody_ = true;
+		//body
+		ooStack_.push(ooLoop->body());
+		TraverseStmt(forRangeStmt->getBody());
+		ooStack_.pop();
+		inBody_ = inBody;
+	}
+	return true;
+}
+
 bool ClangAstVisitor::TraverseSwitchStmt(clang::SwitchStmt* switchStmt)
 {
 	OOModel::SwitchStatement* ooSwitchStmt = new OOModel::SwitchStatement();
