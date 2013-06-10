@@ -774,6 +774,9 @@ bool ClangAstVisitor::TraverseMethodDecl(clang::CXXMethodDecl* methodDecl, OOMod
 	// modifiers
 	ooMethod->modifiers()->set(utils_->convertAccessSpecifier(methodDecl->getAccess()));
 	ooMethod->modifiers()->set(utils_->convertStorageSpecifier(methodDecl->getStorageClassAsWritten()));
+	// member initializers
+	if(auto constructor = llvm::dyn_cast<clang::CXXConstructorDecl>(methodDecl))
+		insertMemberInitializers(ooMethod, constructor);
 	return true;
 }
 
@@ -799,6 +802,39 @@ void ClangAstVisitor::insertFriendFunction(clang::FunctionDecl* friendFunction, 
 				QString::fromStdString(friendFunction->getNameAsString()));
 	// TODO: handle return type & arguments & type arguments
 	ooClass->friends()->append(ooMCall);
+}
+
+void ClangAstVisitor::insertMemberInitializers(OOModel::Method* ooMethod, clang::CXXConstructorDecl* constructor)
+{
+	// TODO: add support for all member initializers
+	if(constructor->getNumCtorInitializers())
+	{
+		ooMethod->setMemberInitializers(new Model::TypedList<OOModel::MemberInitializer>());
+		bool inBody = inBody_;
+		inBody_ = false;
+		for(auto initIt = constructor->init_begin(); initIt != constructor->init_end(); ++initIt)
+		{
+			OOModel::MemberInitializer* ooMemberInit = new OOModel::MemberInitializer();
+			if((*initIt)->isMemberInitializer())
+				ooMemberInit->setMemberName(QString::fromStdString((*initIt)->getMember()->getNameAsString()));
+			else if((*initIt)->isBaseInitializer())
+			{
+				if(auto baseRecord = (*initIt)->getBaseClass()->getAsCXXRecordDecl())
+					ooMemberInit->setMemberName(QString::fromStdString(baseRecord->getNameAsString()));
+				else
+					// unsupported
+					Q_ASSERT(0);
+			}
+			else
+				// unsupported
+				Q_ASSERT(0);
+			TraverseStmt((*initIt)->getInit());
+			if(!ooExprStack_.empty())
+				ooMemberInit->setInitializedValue(ooExprStack_.pop());
+			ooMethod->memberInitializers()->append(ooMemberInit);
+		}
+		inBody_ = inBody;
+	}
 }
 
 bool ClangAstVisitor::shouldModel(clang::SourceLocation location)
