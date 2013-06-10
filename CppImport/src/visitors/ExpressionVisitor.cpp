@@ -118,7 +118,7 @@ bool ExpressionVisitor::TraverseCallExpr(clang::CallExpr* callExpr)
 			if(!ooExprStack_.empty())
 				ooMCall->arguments()->append(ooExprStack_.pop());
 			else
-				log_->writeError(className_,QString("not supported"),*argIt);
+				log_->writeError(className_, "not supported", *argIt);
 		}
 
 		// set target
@@ -151,7 +151,7 @@ bool ExpressionVisitor::TraverseCallExpr(clang::CallExpr* callExpr)
 				if(!ooExprStack_.empty())
 					ooMehtodCall->arguments()->append(ooExprStack_.pop());
 				else
-					log_->writeError(className_,QString("not supported"),*argIt);
+					log_->writeError(className_, "not supported", *argIt);
 			}
 			//template args
 			if(calleeExpr->hasExplicitTemplateArgs())
@@ -336,7 +336,7 @@ bool ExpressionVisitor::VisitDeclRefExpr(clang::DeclRefExpr* declRefExpr)
 bool ExpressionVisitor::VisitCXXUnresolvedConstructorExpr(clang::CXXUnresolvedConstructExpr* unresolvedContruct)
 {
 	ooExprStack_.push(new OOModel::Expression());
-	log_->writeError(className_, QString("UnresolvedConstruct exr"), unresolvedContruct);
+	log_->writeError(className_, "UnresolvedConstruct expr", unresolvedContruct);
 	return true;
 }
 
@@ -411,7 +411,7 @@ bool ExpressionVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constr
 		return true;
 	}
 
-	log_->writeError(className_, QString("Not handled yet"), constructExpr);
+	log_->writeError(className_, "Not handled yet", constructExpr);
 	return true;
 }
 
@@ -480,12 +480,12 @@ bool ExpressionVisitor::TraverseBinaryOp(clang::BinaryOperator* binaryOperator)
 	if(!ooExprStack_.empty())
 		ooLeft = ooExprStack_.pop();
 	else
-		log_->writeError(className_, QString("BOP: LHSExpr not supported"), binaryOperator->getLHS());
+		log_->writeError(className_, "BOP: LHSExpr not supported", binaryOperator->getLHS());
 	TraverseStmt(binaryOperator->getRHS());
 	if(!ooExprStack_.empty())
 		ooRight = ooExprStack_.pop();
 	else
-		log_->writeError(className_, QString("BOP: RHSExpr not supported"), binaryOperator->getRHS());
+		log_->writeError(className_, "BOP: RHSExpr not supported", binaryOperator->getRHS());
 	if(ooBinOp)
 	{
 		ooBinOp->setLeft(ooLeft);
@@ -512,12 +512,12 @@ bool ExpressionVisitor::TraverseAssignment(clang::BinaryOperator* binaryOperator
 	if(!ooExprStack_.empty())
 		ooBinOp->setLeft(ooExprStack_.pop());
 	else
-		log_->writeError(className_, QString("BOP: LHSExpr not supported"), binaryOperator->getLHS());
+		log_->writeError(className_, "BOP: LHSExpr not supported", binaryOperator->getLHS());
 	TraverseStmt(binaryOperator->getRHS());
 	if(!ooExprStack_.empty())
 		ooBinOp->setRight(ooExprStack_.pop());
 	else
-		log_->writeError(className_, QString("BOP: RHSExpr not supported"), binaryOperator->getRHS());
+		log_->writeError(className_, "BOP: RHSExpr not supported", binaryOperator->getRHS());
 
 	ooExprStack_.push(ooBinOp);
 	return true;
@@ -528,7 +528,7 @@ bool ExpressionVisitor::TraverseUnaryOp(clang::UnaryOperator* unaryOperator)
 	clang::UnaryOperatorKind opcode = unaryOperator->getOpcode();
 	if(opcode == clang::UO_Extension || opcode == clang::UO_Real || opcode == clang::UO_Imag)
 	{
-		log_->writeError(className_, QString("UNARY OP NOT SUPPORTED"), unaryOperator);
+		log_->writeError(className_, "UNARY OP NOT SUPPORTED", unaryOperator);
 		unaryOperator->dump();
 		// just convert the subexpression
 		log_->unaryOpNotSupported(opcode);
@@ -542,7 +542,7 @@ bool ExpressionVisitor::TraverseUnaryOp(clang::UnaryOperator* unaryOperator)
 	if(!ooExprStack_.empty())
 		ooUnaryOp->setOperand(ooExprStack_.pop());
 	else
-		log_->writeError(className_, QString("UOP: SubExpr not supported"), unaryOperator->getSubExpr());
+		log_->writeError(className_, "UOP: SubExpr not supported", unaryOperator->getSubExpr());
 
 	ooExprStack_.push(ooUnaryOp);
 	return true;

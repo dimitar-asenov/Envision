@@ -87,7 +87,7 @@ bool ClangAstVisitor::TraverseNamespaceDecl(clang::NamespaceDecl* namespaceDecl)
 	}
 	else
 	{
-		log_->writeError(className_, QString("uknown where to put namespace"), namespaceDecl);
+		log_->writeError(className_, "uknown where to put namespace", namespaceDecl);
 		// this is a severe error which should not happen therefore stop visiting
 		return false;
 	}
@@ -129,7 +129,7 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl)
 		else if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
 			itemList->append(new OOModel::DeclarationStatement(ooClass));
 		else
-			log_->writeError(className_, QString("uknown where to put class"), recordDecl);
+			log_->writeError(className_, "uknown where to put class", recordDecl);
 
 		// visit child decls
 		if(recordDecl->isThisDeclarationADefinition())
@@ -219,7 +219,7 @@ bool ClangAstVisitor::TraverseFunctionDecl(clang::FunctionDecl* functionDecl)
 			curClass->methods()->append(ooFunction);
 		}
 		else
-			log_->writeError(className_, QString("uknown where to put function"), functionDecl);
+			log_->writeError(className_, "uknown where to put function", functionDecl);
 
 		// only visit the body if we are at the definition
 		if(functionDecl->isThisDeclarationADefinition())
@@ -249,7 +249,7 @@ bool ClangAstVisitor::TraverseFunctionDecl(clang::FunctionDecl* functionDecl)
 	}
 	else
 	{
-		log_->writeError(className_, QString("could no insert function"), functionDecl);
+		log_->writeError(className_, "could no insert function", functionDecl);
 	}
 	return true;
 }
@@ -388,7 +388,7 @@ bool ClangAstVisitor::TraverseSwitchStmt(clang::SwitchStmt* switchStmt)
 	if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
 		itemList->append(ooSwitchStmt);
 	else
-		log_->writeError(className_, QString("Uknown where to put switch Stmt"), switchStmt);
+		log_->writeError(className_, "Uknown where to put switch Stmt", switchStmt);
 	return true;
 }
 
@@ -406,7 +406,7 @@ bool ClangAstVisitor::TraverseReturnStmt(clang::ReturnStmt* returnStmt)
 		if(!ooExprStack_.empty())
 			ooReturn->values()->append(ooExprStack_.pop());
 		else
-			log_->writeError(className_, QString("Return expr not supported"), returnStmt->getRetValue());
+			log_->writeError(className_, "Return expr not supported", returnStmt->getRetValue());
 		inBody_ = inBody;
 	}
 	return true;
@@ -422,7 +422,7 @@ bool ClangAstVisitor::TraverseDeclStmt(clang::DeclStmt* declStmt)
 	}
 	if(!declStmt->isSingleDecl())
 	{
-		log_->writeWarning(className_, QString("Decl Stmt with multiple decl needs inspection"), declStmt);
+		log_->writeWarning(className_, "Decl Stmt with multiple decl needs inspection", declStmt);
 		OOModel::CommaExpression* ooComma = new OOModel::CommaExpression();
 		// TODO: fix this section
 		bool inBody = inBody_;
@@ -441,7 +441,7 @@ bool ClangAstVisitor::TraverseDeclStmt(clang::DeclStmt* declStmt)
 		if(!(inBody_ = inBody))
 			ooExprStack_.push(ooComma);
 		else
-			log_->writeError(className_,QString("uknown where to put "), declStmt);
+			log_->writeError(className_,"uknown where to put ", declStmt);
 		return true;
 	}
 	return TraverseDecl(declStmt->getSingleDecl());
@@ -468,7 +468,7 @@ bool ClangAstVisitor::TraverseCXXTryStmt(clang::CXXTryStmt* tryStmt)
 	if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
 		itemList->append(ooTry);
 	else
-		log_->writeError(className_, QString("Uknown where to put trystmt"), tryStmt);
+		log_->writeError(className_, "Uknown where to put trystmt", tryStmt);
 	return true;
 }
 
@@ -510,7 +510,7 @@ bool ClangAstVisitor::TraverseStmt(clang::Stmt* S)
 		else
 		{
 			ooExprStack_.push(new OOModel::ErrorExpression());
-			log_->writeError(className_, QString("exprvisitor couldn't convert"), S);
+			log_->writeError(className_, "exprvisitor couldn't convert", S);
 		}
 		return ret;
 	}
@@ -561,7 +561,7 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 	}
 	else
 	{
-		log_->writeWarning(className_, QString("this variable is not supported"), varDecl);
+		log_->writeWarning(className_, "this variable is not supported", varDecl);
 		return true;
 	}
 
@@ -581,7 +581,7 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 				ooVarDecl->setInitialValue(ooExprStack_.pop());
 		}
 		else
-			log_->writeError(className_, QString("Var Init Expr not supported"), varDecl->getInit());
+			log_->writeError(className_, "Var Init Expr not supported", varDecl->getInit());
 		inBody_ = inBody;
 	}
 	// modifiers
@@ -608,7 +608,7 @@ bool ClangAstVisitor::TraverseEnumDecl(clang::EnumDecl* enumDecl)
 		itemList->append(new OOModel::DeclarationStatement(ooEnumClass));
 	else
 	{
-		log_->writeWarning(className_, QString("Unknown where to put Enum"), enumDecl);
+		log_->writeWarning(className_, "Unknown where to put Enum", enumDecl);
 		// no need to further process this enum
 		return true;
 	}
@@ -637,7 +637,7 @@ bool ClangAstVisitor::VisitFieldDecl(clang::FieldDecl* fieldDecl)
 	OOModel::Field* field = trMngr_->insertField(fieldDecl);
 	if(!field)
 	{
-		log_->writeError(className_, QString("no parent found for this field"), fieldDecl);
+		log_->writeError(className_, "no parent found for this field", fieldDecl);
 		// TODO
 		// return false;
 		return true;
@@ -687,7 +687,7 @@ bool ClangAstVisitor::VisitBreakStmt(clang::BreakStmt* breakStmt)
 	OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top());
 	if(itemList) itemList->append(ooBreak);
 	else
-		log_->writeError(className_, QString("not able to put break stmt"), breakStmt);
+		log_->writeError(className_, "not able to put break stmt", breakStmt);
 	return true;
 }
 
@@ -697,7 +697,7 @@ bool ClangAstVisitor::VisitContinueStmt(clang::ContinueStmt* continueStmt)
 	OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top());
 	if(itemList) itemList->append(ooContinue);
 	else
-		log_->writeError(className_, QString("not able to put continue stmt"), continueStmt);
+		log_->writeError(className_, "not able to put continue stmt", continueStmt);
 	return true;
 }
 
@@ -717,7 +717,7 @@ bool ClangAstVisitor::VisitTypedefNameDecl(clang::TypedefNameDecl* typedefDecl)
 	else if(auto ooClass = dynamic_cast<OOModel::Class*>(ooStack_.top()))
 		ooClass->subDeclarations()->append(ooTypeAlias);
 	else
-		log_->writeError(className_, QString("Uknown where to put typedef"), typedefDecl);
+		log_->writeError(className_, "Uknown where to put typedef", typedefDecl);
 	return true;
 }
 
@@ -734,7 +734,7 @@ bool ClangAstVisitor::TraverseMethodDecl(clang::CXXMethodDecl* methodDecl, OOMod
 		// TODO is this correct?
 		// only consider a method where the parent has been visited
 		if(trMngr_->containsClass(methodDecl->getParent()))
-			log_->writeError(className_, QString("no ooModel::method found"), methodDecl);
+			log_->writeError(className_, "no ooModel::method found", methodDecl);
 		return true;
 	}
 	// only visit the body if we are at the definition
