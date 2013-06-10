@@ -633,6 +633,8 @@ bool ClangAstVisitor::TraverseEnumDecl(clang::EnumDecl* enumDecl)
 
 bool ClangAstVisitor::VisitFieldDecl(clang::FieldDecl* fieldDecl)
 {
+	if(!shouldModel(fieldDecl->getLocation()))
+		return true;
 	// TODO: field implementation is missing a lot of things
 	OOModel::Field* field = trMngr_->insertField(fieldDecl);
 	if(!field)
@@ -641,6 +643,17 @@ bool ClangAstVisitor::VisitFieldDecl(clang::FieldDecl* fieldDecl)
 		// TODO
 		// return false;
 		return true;
+	}
+	if(fieldDecl->hasInClassInitializer())
+	{
+		bool inBody = inBody_;
+		inBody_ = false;
+		TraverseStmt(fieldDecl->getInClassInitializer());
+		if(!ooExprStack_.empty())
+			field->setInitialValue(ooExprStack_.pop());
+		else
+			log_->writeError(className_, "Could not translate init", fieldDecl->getInClassInitializer());
+		inBody_ = inBody;
 	}
 
 	field->setTypeExpression(utils_->convertClangType(fieldDecl->getType()));
