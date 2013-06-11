@@ -2,16 +2,12 @@
 2. Go to the project tab:
   -IN BUILD TAB
   2.1 remove shadow build
-  2.2 remove make step
-  2.3 add custom build step (choose the maker.sh script you may want to specify cores for the make step)
+  2.2 Use make command in (PROJECT ROOT)/
+      you may want to add "debug" and the number of cores (e.g. "-j4") as arguments
   -IN RUN TAB
-  2.4 add run configuration
+  2.3 add run configuration
     as command take the (PROJECT ROOT)/DebugBuild/Envision
     arguments: -graphicssystem raster  (you can add --test in other build configs)
     working directory: (PROJECT ROOT)/DebugBuild/
 
 Should be ready to run now
-
-What about clean ?? TODO
-  
-  

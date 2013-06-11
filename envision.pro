@@ -16,3 +16,4 @@ SUBDIRS= Core \
 	SelfTest \
 	VisualizationBase
 CONFIG+=debug_and_release
+CONFIG+=ordered
