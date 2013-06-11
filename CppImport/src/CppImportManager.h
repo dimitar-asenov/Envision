@@ -38,7 +38,7 @@ class CppImportManager
 		CppImportManager(){}
 		~CppImportManager();
 		bool setSrcPath(QString& srcpath, QString& dbpath);
-		void createModel();
+		Model::Model* createModel();
 
 	protected:
 		bool setCompilationDbPath(QString& path);

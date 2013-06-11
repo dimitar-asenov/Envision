@@ -36,16 +36,16 @@ namespace CppImport {
 class ClangAstConsumer : public clang::ASTConsumer
 {
 	public:
-		ClangAstConsumer(clang::CompilerInstance* ci, Model::Model* model, OOModel::Project* currentProject = nullptr);
+		ClangAstConsumer(CppImportLogger* log, ClangAstVisitor* visitor);
 		~ClangAstConsumer();
 		virtual void HandleTranslationUnit(clang::ASTContext &Context) override;
 		virtual void Initialize(clang::ASTContext &Context) override;
+		void setCompilerInstance(clang::CompilerInstance* compilerInstance);
 
 	private:
+		CppImportLogger* logger_{};
 		ClangAstVisitor* astVisitor_{};
 		clang::CompilerInstance* ci_{};
-		CppImportLogger* logger_{};
-
 };
 
 }

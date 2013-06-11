@@ -26,6 +26,8 @@
 
 #include "CppImportManager.h"
 
+#include "ClangFrontendActionFactory.h"
+
 namespace CppImport {
 
 CppImportManager::~CppImportManager()
@@ -51,12 +53,14 @@ bool CppImportManager::setSrcPath(QString& srcpath, QString& dbpath)
 	return setCompilationDbPath(dbpath);
 }
 
-void CppImportManager::createModel()
+Model::Model*CppImportManager::createModel()
 {
 	myTool_ = new clang::tooling::ClangTool(*compilationDB_,sources_);
-	// run overtakes pointer so no need to free it later
-	myTool_->run(clang::tooling::newFrontendActionFactory<ClangConsumerFactory>());
-	ClangConsumerFactory::model_->endModification();
+	Model::Model* model = new Model::Model();
+	ClangFrontendActionFactory* faf = new ClangFrontendActionFactory(model);
+	myTool_->run(faf);
+	model->endModification();
+	return model;
 }
 
 bool CppImportManager::setCompilationDbPath(QString& path)

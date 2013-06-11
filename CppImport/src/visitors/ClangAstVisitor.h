@@ -40,8 +40,9 @@ class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 {
 	typedef clang::RecursiveASTVisitor<ClangAstVisitor> Base;
 	public:
-		ClangAstVisitor(Model::Model* model, OOModel::Project* currentProject, CppImportLogger* logger, clang::SourceManager* srcManager);
+		ClangAstVisitor(Model::Model* model, OOModel::Project* currentProject, CppImportLogger* logger);
 		~ClangAstVisitor();
+		void setSourceManager(clang::SourceManager* sourceManager);
 
 		Model::Node* ooStackTop();
 		void pushOOStack(Model::Node* node);

@@ -24,52 +24,34 @@
  **
  **********************************************************************************************************************/
 
+#pragma once
+
+#include "cppimport_api.h"
+
+#include "ClangConsumerFactory.h"
 #include "ClangAstConsumer.h"
+#include "visitors/ClangAstVisitor.h"
+#include "CppImportLogger.h"
 
 namespace CppImport {
 
-ClangAstConsumer::ClangAstConsumer(CppImportLogger* log, ClangAstVisitor* visitor)
-: clang::ASTConsumer(), logger_(log), astVisitor_(visitor)
+class ClangFrontendActionFactory : public clang::tooling::FrontendActionFactory
 {
-//	logger_ = new CppImportLogger();
-//	astVisitor_ = new ClangAstVisitor(model, currentProject, logger_);
-}
+	public:
+		ClangFrontendActionFactory(Model::Model* model);
+		~ClangFrontendActionFactory();
+		virtual clang::FrontendAction* create() override;
 
-ClangAstConsumer::~ClangAstConsumer()
-{
-//	SAFE_DELETE(astVisitor_);
-//	SAFE_DELETE(logger_);
-}
 
-void ClangAstConsumer::HandleTranslationUnit(clang::ASTContext &Context)
-{
-//	clang::RawCommentList cList = Context.getRawCommentList();
-//	auto commentsRef = cList.getComments();
-//	for(auto it = commentsRef.begin(); it!= commentsRef.end(); ++it)
-//	{
-//		std::cout << "COMMENT: " << (*it)->getRawText(ci_->getSourceManager()).str() << std::endl;
-//	}
-	Context.getTranslationUnitDecl();
-	astVisitor_->TraverseDecl(Context.getTranslationUnitDecl());
-	logger_->outputStatistics();
-}
+	private:
+		OOModel::Project* project_{};
+		Model::Model* model_{};
 
-void ClangAstConsumer::Initialize(clang::ASTContext &Context)
-{
-	Context.getRawCommentList();
-	if(ci_)
-	{
-		ci_->getPreprocessor().addPPCallbacks(new ClangPPCallbacks());
-	}
-}
+		ClangConsumerFactory* consumerFactory_{};
+		ClangAstConsumer* consumer_{};
 
-void ClangAstConsumer::setCompilerInstance(clang::CompilerInstance* compilerInstance)
-{
-	Q_ASSERT(compilerInstance);
-	clang::SourceManager* mngr = &compilerInstance->getSourceManager();
-	Q_ASSERT(mngr);
-	logger_->setSourceManager(mngr);
-	astVisitor_->setSourceManager(mngr);
-}
+		ClangAstVisitor* visitor_{};
+		CppImportLogger* logger_{};
+};
 
 }

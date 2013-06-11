@@ -48,21 +48,20 @@ class TranslateManager
 		OOModel::Method* addNewMethod(clang::CXXMethodDecl* mDecl, OOModel::Method::MethodKind kind);
 		OOModel::Method* addNewFunction(clang::FunctionDecl* functionDecl);
 
+		QString hashFunction(clang::FunctionDecl* functionDecl);
+		QString hashRecord(clang::RecordDecl* recordDecl);
+		QString hashVar(clang::VarDecl* varDecl);
+
 		Model::Model* model_{};
 		OOModel::Project* project_{};
 
-		QMap<clang::NamespaceDecl*, QPair<OOModel::Module*,int> > nameSpaceMap_;
-		QMap<clang::CXXRecordDecl*, OOModel::Class*> classMap_;
-		QMap<clang::CXXMethodDecl*, OOModel::Method*> methodMap_;
-		QMap<clang::FunctionDecl*, OOModel::Method*> functionMap_;
-		QMap<clang::VarDecl*, OOModel::VariableDeclaration*> varMap_;
+		QMap<QString, OOModel::Module*> nameSpaceMap_;
+		QMap<QString, OOModel::Class*> classMap_;
+		QMap<QString, OOModel::Method*> methodMap_;
+		QMap<QString, OOModel::Method*> functionMap_;
+		QMap<QString, OOModel::VariableDeclaration*> varMap_;
 
 		CppImportUtilities* utils_{};
 };
-
-inline bool TranslateManager::containsClass(clang::CXXRecordDecl* recordDecl)
-{
-	return classMap_.contains(recordDecl);
-}
 
 }

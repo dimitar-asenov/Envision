@@ -28,13 +28,9 @@
 
 namespace CppImport {
 
-ClangConsumerFactory::ClangConsumerFactory()
-{
-	model_ = new Model::Model();
-	project_ = dynamic_cast<OOModel::Project*> (model_->createRoot("Project"));
-	model_->beginModification(project_, "Adding a project");
-	project_->setName("NewProject");
-}
+ClangConsumerFactory::ClangConsumerFactory(ClangAstConsumer* consumer)
+: consumer_(consumer)
+{}
 
 ClangConsumerFactory::~ClangConsumerFactory()
 {
@@ -45,9 +41,9 @@ clang::ASTConsumer *ClangConsumerFactory::CreateASTConsumer(clang::CompilerInsta
 {
 	annotationHandler_->setInFile(InFile);
 	CI.getPreprocessor().addCommentHandler(annotationHandler_);
-	return new ClangAstConsumer(&CI,model_,project_);
+	// set new ci
+	consumer_ ->setCompilerInstance(&CI);
+	return consumer_;
 }
-
-Model::Model* ClangConsumerFactory::model_;
 
 }

@@ -33,8 +33,9 @@ namespace CppImport {
 class CppImportLogger
 {
 	public:
-		CppImportLogger(clang::SourceManager* sourceManager);
+		CppImportLogger();
 		~CppImportLogger();
+		void setSourceManager(clang::SourceManager* sourceManager);
 		void writeError(QString inWhichClass, QString reason, clang::NamedDecl* decl);
 		void writeWarning(QString inWhichClass, QString reason, clang::NamedDecl* decl);
 		void writeError(QString inWhichClass, QString reason, clang::Stmt* stmt);

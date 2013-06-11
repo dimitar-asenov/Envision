@@ -28,8 +28,7 @@
 
 namespace CppImport {
 
-CppImportLogger::CppImportLogger(clang::SourceManager* sourceManager) :
-	sourceManger_(sourceManager)
+CppImportLogger::CppImportLogger()
 {
 	initStreams();
 }
@@ -38,6 +37,12 @@ CppImportLogger::~CppImportLogger()
 {
 	SAFE_DELETE(errStream_);
 	SAFE_DELETE(warnStream_);
+}
+
+void CppImportLogger::setSourceManager(clang::SourceManager* sourceManager)
+{
+	Q_ASSERT(sourceManager);
+	sourceManger_ = sourceManager;
 }
 
 void CppImportLogger::writeOut(QString &inWhichClass, QString &reason, clang::NamedDecl* decl,
