@@ -322,7 +322,7 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 							{
 								auto o = mc->owner();
 								while (o && o->handler() != this) o = o->parent();
-								if (o) showAutoComplete(o);
+								if (o) showAutoComplete(o, false, false);
 							}
 						}));
 			}
@@ -412,7 +412,7 @@ void HExpression::setNewExpression(Visualization::Item* target, Visualization::I
 	CompoundObjectDescriptor::cleanAllStoredExpressions();
 }
 
-void HExpression::showAutoComplete(Visualization::Item* target)
+void HExpression::showAutoComplete(Visualization::Item* target, bool showIfEmpty, bool showIfPreciselyMatched)
 {
 	// Make a string pattern to look for. Given an input like:
 	// someclass.met|hod
@@ -420,21 +420,22 @@ void HExpression::showAutoComplete(Visualization::Item* target)
 	// *m*e*t*
 	// Everything after the cursor is discarded. The identifier characters before the cursor are used and each character
 	// is surrounded with *
-	QString str;
+	QString userWord;
 	int index;
-	stringInfo(target, Qt::Key_A, str, index); //Any non special key
+	stringInfo(target, Qt::Key_A, userWord, index); //Any non special key
 
-	str = str.left(index);
-	index = str.size() - 1;
+	userWord = userWord.left(index);
+	index = userWord.size() - 1;
 	while (index >= 0)
 	{
-		if (str.at(index).isLetterOrNumber() || str.at(index) == '_') --index;
+		if (userWord.at(index).isLetterOrNumber() || userWord.at(index) == '_') --index;
 		else break;
 	}
 	++index;
 
-	str = str.right(str.size() - index);
-	for(int i = str.size(); i>=0; --i) str.insert(i, "*");
+	userWord = userWord.right(userWord.size() - index);
+	QString searchPattern = userWord;
+	for(int i = searchPattern.size(); i>=0; --i) searchPattern.insert(i, "*");
 
 	QList<Interaction::AutoCompleteEntry*> entries;
 
@@ -468,14 +469,27 @@ void HExpression::showAutoComplete(Visualization::Item* target)
 
 	auto searchNode = scopePrefix ? scopePrefix->symbolProvider() : target->node();
 
-	for(auto n : searchNode->findSymbols(QRegExp(str, Qt::CaseInsensitive, QRegExp::Wildcard),
+	for(auto n : searchNode->findSymbols(QRegExp(searchPattern, Qt::CaseInsensitive, QRegExp::Wildcard),
 		target->node(), (afterDot ? Model::Node::SEARCH_DOWN : Model::Node::SEARCH_UP), afterDot == false))
 			entries.append(new Interaction::AutoCompleteEntry(n->symbolName(), QString(), nullptr,
 				[=](Interaction::AutoCompleteEntry* entry) { doAutoComplete(target, entry->text()); }));
 
 	SAFE_DELETE(scopePrefix);
 
-	Interaction::AutoComplete::show(entries);
+	bool show = true;
+	if (!showIfEmpty && entries.isEmpty()) show = false;
+	if (show && !showIfPreciselyMatched)
+	{
+		for (auto e : entries)
+			if (e->text() == userWord)
+			{
+				show = false;
+				break;
+			}
+	}
+
+	if (show) Interaction::AutoComplete::show(entries);
+	else Interaction::AutoComplete::hide();
 }
 
 void HExpression::toggleAutoComplete(Visualization::Item* target)
