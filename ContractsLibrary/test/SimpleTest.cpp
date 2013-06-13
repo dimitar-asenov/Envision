@@ -56,13 +56,13 @@ using namespace OOVisualization;
 
 namespace ContractsLibrary {
 
-Project* createContractsLibrary()
+Module* createContractsLibrary()
 {
-	Project* lib = new Project("CodeContracts");
-	lib->extension<Position>()->setX(1260);
+	Module* module = new Module("CodeContracts");
+	module->extension<Position>()->setX(1260);
 
 	Class* contract = new Class("Contract");
-	lib->classes()->append(contract);
+	module->classes()->append(contract);
 	contract->extension<Position>()->setY(0);
 
 	Method* req = new Method("Requires", Modifier::Public | Modifier::Static);
@@ -202,10 +202,10 @@ Project* createContractsLibrary()
 //	Scene::defaultRenderer()->registerGroup(MethodCallExpression::typeIdStatic(), g);
 //
 //	// Register custom input
-//	CommandDescriptor::registerCommand(new CreateMethodCall("requires", "CodeContracts.Contract.Requires"));
-//	CommandDescriptor::registerCommand(new CreateMethodCall("ensures", "CodeContracts.Contract.Ensures"));
-//	CommandDescriptor::registerCommand(new CreateMethodCall("old", "CodeContracts.Contract.OldValue"));
-//	CommandDescriptor::registerCommand(new CreateMethodCall("result", "CodeContracts.Contract.Result",1));
+//	CommandDescriptor::registerCommand(new CreateMethodCall("requires", "Contract.Requires"));
+//	CommandDescriptor::registerCommand(new CreateMethodCall("ensures", "Contract.Ensures"));
+//	CommandDescriptor::registerCommand(new CreateMethodCall("old", "Contract.OldValue"));
+//	CommandDescriptor::registerCommand(new CreateMethodCall("result", "Contract.Result",1));
 
 	// Register method add-ons
 	VMethod::addAddOn( new InterfaceContractsVMethodAddOn(contractClass) );
@@ -217,7 +217,7 @@ Project* createContractsLibrary()
 	OOVisualization::VStatementItemList::addRangeFilter( ContractFilter::showOnlyContractsFilter );
 	OOVisualization::VStatementItemList::addRangeFilter( ContractFilter::hideContractsFilter );
 
-	return lib;
+	return module;
 }
 
 Class* createBaseClass()
@@ -233,16 +233,16 @@ Class* createBaseClass()
 	travel->results()->append( new FormalResult(QString(), new PrimitiveTypeExpression(PrimitiveType::INT)) );
 
 	travel->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
-			"CodeContracts.Contract.Requires(fuel>0)")));
+			"Contract.Requires(fuel>0)")));
 
 	travel->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
-			"CodeContracts.Contract.Requires(numPassengers>0)")));
+			"Contract.Requires(numPassengers>0)")));
 
 	travel->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
-			"CodeContracts.Contract.Ensures(fuel<CodeContracts.Contract.OldValue(fuel))")));
+			"Contract.Ensures(fuel<Contract.OldValue(fuel))")));
 
 	travel->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
-			"CodeContracts.Contract.Ensures(CodeContracts.Contract.Result<int>()>0)")));
+			"Contract.Ensures(Contract.Result<int>()>0)")));
 
 	return car;
 }
@@ -258,7 +258,7 @@ Class* createDerivedClass()
 	travel->results()->append( new FormalResult(QString(), new PrimitiveTypeExpression(PrimitiveType::INT)) );
 
 	travel->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
-			"CodeContracts.Contract.Requires(numPassengers>=0)")));
+			"Contract.Requires(numPassengers>=0)")));
 
 	car->extension<Position>()->setY(200);
 
@@ -269,7 +269,7 @@ Class* createInterface()
 {
 	Class* interface = new Class("ICalc", Modifier::Public);
 	interface->annotations()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
-			"CodeContracts.Contract.ContractClass(ICalcContracts)")));
+			"Contract.ContractClass(ICalcContracts)")));
 
 	auto *op = new Method("op", Modifier::Public);
 	interface->methods()->append(op);
@@ -286,7 +286,7 @@ Class* createInterfaceContracts()
 {
 	Class* calcContracts = new Class("ICalcContracts", Modifier::Public);
 	calcContracts->annotations()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
-				"CodeContracts.Contract.ContractClassFor(ICalc)")));
+				"Contract.ContractClassFor(ICalc)")));
 	calcContracts->baseClasses()->append(OOExpressionBuilder::getOOExpression("ICalc"));
 
 	auto *op = new Method("op", Modifier::Public);
@@ -295,7 +295,7 @@ Class* createInterfaceContracts()
 	op->arguments()->append( new FormalArgument("y", new PrimitiveTypeExpression(PrimitiveType::INT)) );
 	op->results()->append( new FormalResult(QString(), new PrimitiveTypeExpression(PrimitiveType::INT)) );
 	op->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
-				"CodeContracts.Contract.Requires(x!=y)")));
+				"Contract.Requires(x!=y)")));
 	op->items()->append(new ReturnStatement( OOExpressionBuilder::getOOExpression("0")));
 
 	calcContracts->extension<Position>()->setX(420);
@@ -319,8 +319,8 @@ Class* createPaper()
 			new FormalArgument("max", new PrimitiveTypeExpression(PrimitiveType::INT), FormalArgument::OUT) );
 
 	minMax->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
-			"CodeContracts.Contract.Ensures(CodeContracts.Contract.ValueAtReturn(min)<="
-			"CodeContracts.Contract.ValueAtReturn(max))")));
+			"Contract.Ensures(Contract.ValueAtReturn(min)<="
+			"Contract.ValueAtReturn(max))")));
 
 	auto i = new IfStatement();
 	minMax->items()->append(i);
@@ -336,9 +336,9 @@ Class* createPaper()
 	fact->arguments()->append( new FormalArgument("x", new PrimitiveTypeExpression(PrimitiveType::INT)) );
 	fact->results()->append( new FormalResult(QString(), new PrimitiveTypeExpression(PrimitiveType::INT)) );
 	fact->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
-				"CodeContracts.Contract.Requires(x>=0)")));
+				"Contract.Requires(x>=0)")));
 	fact->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
-			"CodeContracts.Contract.Ensures(CodeContracts.Contract.Result<int>()>0)")));
+			"Contract.Ensures(Contract.Result<int>()>0)")));
 	fact->items()->append(new ReturnStatement( OOExpressionBuilder::getOOExpression(
 				"x<=1?1:x*factorial(x-1)")));
 	fact->extension<Position>()->setY(180);
@@ -347,14 +347,33 @@ Class* createPaper()
 	paperClass->methods()->append(app);
 	app->arguments()->append( new FormalArgument("x", new PrimitiveTypeExpression(PrimitiveType::INT)) );
 	app->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
-				"CodeContracts.Contract.Ensures(elements[size-1]==x)")));
+				"Contract.Ensures(elements[size-1]==x)")));
 	app->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
-			"CodeContracts.Contract.Ensures(size==CodeContracts.Contract.OldValue(size)+1)")));
+			"Contract.Ensures(size==Contract.OldValue(size)+1)")));
 	app->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
 				"elements[size++]=x")));
 	app->extension<Position>()->setY(320);
 
 	return paperClass;
+}
+
+Module* createClientModule()
+{
+	Module* module = new Module("Client");
+	module->extension<Position>()->setX(0);
+	module->extension<Position>()->setY(0);
+
+	module->classes()->append( createBaseClass());
+	module->classes()->append( createDerivedClass() );
+	module->classes()->append( createPaper() );
+	module->classes()->append( createInterface() );
+	module->classes()->append( createInterfaceContracts() );
+
+	auto ref = dynamic_cast<ReferenceExpression*>(OOExpressionBuilder::getOOExpression("CodeContracts.Contract"));
+	Q_ASSERT(ref);
+	module->subDeclarations()->append(new NameImport(ref));
+
+	return module;
 }
 
 TEST(ContractsLibrary, ContractsLibraryTest)
@@ -366,13 +385,9 @@ TEST(ContractsLibrary, ContractsLibraryTest)
 	// Create project
 	prj = dynamic_cast<Project*> (model->createRoot("Project"));
 	model->beginModification(prj, "create a few classes that use contracts");
-	prj->setName("HelloWorld");
-	prj->projects()->append(createContractsLibrary());
-	prj->classes()->append( createBaseClass());
-	prj->classes()->append( createDerivedClass() );
-	prj->classes()->append( createPaper() );
-	prj->classes()->append( createInterface() );
-	prj->classes()->append( createInterfaceContracts() );
+	prj->setName("CustomizationDemo");
+	prj->modules()->append( createContractsLibrary());
+	prj->modules()->append( createClientModule());
 	model->endModification();
 
 	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(prj));

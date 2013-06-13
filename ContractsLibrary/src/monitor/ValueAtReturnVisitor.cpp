@@ -120,7 +120,7 @@ Model::Node* ValueAtReturnVisitor::visitReference(ValueAtReturnVisitor* v, OOMod
 		{
 			++v->numWrapped_;
 			auto retval = OOInteraction::OOExpressionBuilder::getOOExpression(
-					"CodeContracts.Contract.ValueAtReturn(" + ref->name() + ")");
+					"Contract.ValueAtReturn(" + ref->name() + ")");
 			return retval;
 		}
 	}
