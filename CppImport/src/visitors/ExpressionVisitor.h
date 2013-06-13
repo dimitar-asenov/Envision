@@ -126,7 +126,7 @@ class ExpressionVisitor : public clang::RecursiveASTVisitor <ExpressionVisitor>
 		bool TraverseParenExpr(clang::ParenExpr* parenthesizedExpr);
 		bool TraverseArraySubscriptExpr(clang::ArraySubscriptExpr* arraySubsrciptExpr);
 		bool VisitCXXThisExpr(clang::CXXThisExpr* thisExpr);
-		bool VisitMemberExpr(clang::MemberExpr* memberExpr);
+		bool TraverseMemberExpr(clang::MemberExpr* memberExpr);
 
 		bool TraverseCXXConstructExpr(clang::CXXConstructExpr* constructExpr);
 

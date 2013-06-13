@@ -46,8 +46,11 @@ class CppImportUtilities
 
 		OOModel::BinaryOperation::OperatorTypes translateBinaryOverloadOp(clang::OverloadedOperatorKind kind);
 		OOModel::AssignmentExpression::AssignmentTypes translateAssignOverloadOp(clang::OverloadedOperatorKind kind);
-		OOModel::UnaryOperation::OperatorTypes translateUnaryOverloadOp(clang::OverloadedOperatorKind kind);
-		bool isAssignOverload(clang::OverloadedOperatorKind kind);
+		OOModel::UnaryOperation::OperatorTypes translateUnaryOverloadOp
+		(clang::OverloadedOperatorKind kind, unsigned numArgs);
+
+		enum class OverloadKind : int {Unsupported, Unary, Binary, Assign, MethodCall, ArrayIndex, ReferenceExpr, Comma};
+		OverloadKind getOverloadKind(clang::OverloadedOperatorKind kind, unsigned numArgs);
 
 		OOModel::Expression* createErrorExpression(QString reason);
 	private:

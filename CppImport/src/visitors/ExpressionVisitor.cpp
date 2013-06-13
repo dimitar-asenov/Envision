@@ -125,9 +125,12 @@ bool ExpressionVisitor::TraverseCallExpr(clang::CallExpr* callExpr)
 		// TODO multiple levels possible
 		if(auto callee = llvm::dyn_cast<clang::MemberExpr>(callExpr->getCallee()))
 		{
-			TraverseStmt(callee->getBase());
-			if(!ooExprStack_.empty())
-				ooMCall->ref()->setPrefix(ooExprStack_.pop());
+			if(!callee->isImplicitAccess() && callee->getBase())
+			{
+				TraverseStmt(callee->getBase());
+				if(!ooExprStack_.empty())
+					ooMCall->ref()->setPrefix(ooExprStack_.pop());
+			}
 		}
 
 		// type arguments
@@ -139,7 +142,6 @@ bool ExpressionVisitor::TraverseCallExpr(clang::CallExpr* callExpr)
 	}
 	else
 	{
-//		callExpr->dump();
 		if(auto calleeExpr =  llvm::dyn_cast<clang::UnresolvedLookupExpr>(callExpr->getCallee()))
 		{
 			OOModel::MethodCallExpression* ooMehtodCall = new OOModel::MethodCallExpression
@@ -178,77 +180,105 @@ bool ExpressionVisitor::TraverseCallExpr(clang::CallExpr* callExpr)
 
 bool ExpressionVisitor::TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* callExpr)
 {
-	auto callee = llvm::dyn_cast<clang::MemberExpr>(callExpr->getCallee()->IgnoreImplicit());
+	//first traverse the callee then put each argument on the stack
+	if(auto callee = llvm::dyn_cast<clang::MemberExpr>(callExpr->getCallee()->IgnoreImplicit()))
+		TraverseStmt(callee);
+	for(auto argIt = callExpr->arg_begin(); argIt != callExpr->arg_end(); ++argIt)
+		TraverseStmt(*argIt);
+
 	unsigned numArguments = callExpr->getNumArgs();
-	if(1 == numArguments && !callee)
+	clang::OverloadedOperatorKind operatorKind = callExpr->getOperator();
+	switch(utils_->getOverloadKind(operatorKind, numArguments))
 	{
-		OOModel::UnaryOperation* ooUnaryOp = new OOModel::UnaryOperation();
-		ooUnaryOp->setOp(utils_->translateUnaryOverloadOp(callExpr->getOperator()));
-		TraverseStmt(callExpr->getArg(0));
-		if(!ooExprStack_.empty())
-			ooUnaryOp->setOperand(ooExprStack_.pop());
-	}
-	else if(1 == numArguments && callee)
-	{
-		if(utils_->isAssignOverload(callExpr->getOperator()))
+		case CppImportUtilities::OverloadKind::Unsupported:
+			ooExprStack_.push(utils_->createErrorExpression("Unsupported Overload Expression"));
+			break;
+		case CppImportUtilities::OverloadKind::Unary:
+		{
+			if(2 == numArguments)
+				// remove dummy expression
+				ooExprStack_.pop();
+			OOModel::UnaryOperation* ooUnary = new OOModel::UnaryOperation();
+			ooUnary->setOp(utils_->translateUnaryOverloadOp(operatorKind, numArguments));
+			if(!ooExprStack_.empty())
+				ooUnary->setOperand(ooExprStack_.pop());
+			// remove callee
+			if(!ooExprStack_.empty())
+				ooExprStack_.pop();
+			ooExprStack_.push(ooUnary);
+			break;
+		}
+		case CppImportUtilities::OverloadKind::Binary:
+		{
+			OOModel::BinaryOperation* ooBinary = new OOModel::BinaryOperation();
+			ooBinary->setOp(utils_->translateBinaryOverloadOp(operatorKind));
+			if(!ooExprStack_.empty())
+				ooBinary->setRight(ooExprStack_.pop());
+			if(!ooExprStack_.empty())
+				ooBinary->setLeft(ooExprStack_.pop());
+			ooExprStack_.push(ooBinary);
+			break;
+		}
+		case CppImportUtilities::OverloadKind::Assign:
 		{
 			OOModel::AssignmentExpression* ooAssign = new OOModel::AssignmentExpression();
-			ooAssign->setOp(utils_->translateAssignOverloadOp(callExpr->getOperator()));
-			TraverseStmt(callee);
-			if(!ooExprStack_.empty())
-				ooAssign->setLeft(ooExprStack_.pop());
-			TraverseStmt(callExpr->getArg(0));
+			ooAssign->setOp(utils_->translateAssignOverloadOp(operatorKind));
 			if(!ooExprStack_.empty())
 				ooAssign->setRight(ooExprStack_.pop());
-			ooExprStack_.push(ooAssign);
-		}
-		else
-		{
-			OOModel::BinaryOperation* ooBinaryOp = new OOModel::BinaryOperation();
-			ooBinaryOp->setOp(utils_->translateBinaryOverloadOp(callExpr->getOperator()));
-			TraverseStmt(callee);
-			if(!ooExprStack_.empty())
-				ooBinaryOp->setLeft(ooExprStack_.pop());
-			TraverseStmt(callExpr->getArg(0));
-			if(!ooExprStack_.empty())
-				ooBinaryOp->setRight(ooExprStack_.pop());
-			ooExprStack_.push(ooBinaryOp);
-		}
-	}
-	else if(2 == numArguments)
-	{
-		if(utils_->isAssignOverload(callExpr->getOperator()))
-		{
-			OOModel::AssignmentExpression* ooAssign = new OOModel::AssignmentExpression();
-			ooAssign->setOp(utils_->translateAssignOverloadOp(callExpr->getOperator()));
-			TraverseStmt(callExpr->getArg(0)->IgnoreImplicit());
 			if(!ooExprStack_.empty())
 				ooAssign->setLeft(ooExprStack_.pop());
-			TraverseStmt(callExpr->getArg(1)->IgnoreImplicit());
-			if(!ooExprStack_.empty())
-				ooAssign->setRight(ooExprStack_.pop());
 			ooExprStack_.push(ooAssign);
+			break;
 		}
-		else
+		case CppImportUtilities::OverloadKind::MethodCall:
 		{
-			OOModel::BinaryOperation* ooBinaryOp = new OOModel::BinaryOperation();
-			ooBinaryOp->setOp(utils_->translateBinaryOverloadOp(callExpr->getOperator()));
-			TraverseStmt(callExpr->getArg(0)->IgnoreImplicit());
+			// TODO handle argument
+			OOModel::MethodCallExpression* ooCall = new OOModel::MethodCallExpression();
 			if(!ooExprStack_.empty())
-				ooBinaryOp->setLeft(ooExprStack_.pop());
-			TraverseStmt(callExpr->getArg(1)->IgnoreImplicit());
-			if(!ooExprStack_.empty())
-				ooBinaryOp->setRight(ooExprStack_.pop());
-			ooExprStack_.push(ooBinaryOp);
+			{
+				if(auto ooRef = dynamic_cast<OOModel::ReferenceExpression*>(ooExprStack_.pop()))
+				{
+					if(!ooExprStack_.empty())
+						// remove function (operator())
+						ooExprStack_.pop();
+
+					ooCall->ref()->setName(ooRef->ref()->name());
+					SAFE_DELETE(ooRef);
+					ooExprStack_.push(ooCall);
+					break;
+				}
+			}
+			break;
 		}
+		case CppImportUtilities::OverloadKind::ArrayIndex:
+			ooExprStack_.push(utils_->createErrorExpression("Unsupported ARRAYIND OVERLOAD"));
+			break;
+		case CppImportUtilities::OverloadKind::ReferenceExpr:
+		{
+			if(!ooExprStack_.empty())
+			{
+				if(auto ooRef = dynamic_cast<OOModel::ReferenceExpression*>(ooExprStack_.pop()))
+				{
+					if(!ooExprStack_.empty())
+						// remove function (operator->)
+						ooExprStack_.pop();
+					if(!ooExprStack_.empty())
+						ooRef->setPrefix(ooExprStack_.pop());
+					ooExprStack_.push(ooRef);
+					break;
+				}
+			}
+			ooExprStack_.push(utils_->createErrorExpression("Could not resolve Reference/Arrow"));
+			break;
+		}
+		case CppImportUtilities::OverloadKind::Comma:
+			ooExprStack_.push(utils_->createErrorExpression("Unsupported COMMA OVERLOAD"));
+			break;
+		default:
+			ooExprStack_.push(utils_->createErrorExpression("Unsupported Overload Expression"));
+			break;
 	}
-	else
-	{
-		log_->writeError(className_,
-							  QString("More than 2 arguments in operator call. Seen %1 arguments").arg(numArguments),
-							  callExpr);
-		ooExprStack_.push(utils_->createErrorExpression("Wrong number of Args in OperatorCallExpr"));
-	}
+
 	return true;
 }
 
@@ -378,14 +408,24 @@ bool ExpressionVisitor::VisitCXXThisExpr(clang::CXXThisExpr* thisExpr)
 	return true;
 }
 
-bool ExpressionVisitor::VisitMemberExpr(clang::MemberExpr* memberExpr)
+bool ExpressionVisitor::TraverseMemberExpr(clang::MemberExpr* memberExpr)
 {
 	if(memberExpr->isImplicitAccess())
 	{
 		OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression();
 		ooRef->ref()->setName(QString::fromStdString(memberExpr->getMemberDecl()->getNameAsString()));
 		ooExprStack_.push(ooRef);
+		return true;
 	}
+	OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression();
+	ooRef->ref()->setName(QString::fromStdString(memberExpr->getMemberDecl()->getNameAsString()));
+	if(memberExpr->getBase())
+	{
+		TraverseStmt(memberExpr->getBase());
+		if(!ooExprStack_.empty())
+			ooRef->setPrefix(ooExprStack_.pop());
+	}
+	ooExprStack_.push(ooRef);
 	return true;
 }
 
