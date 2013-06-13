@@ -57,8 +57,10 @@ Model::Model*CppImportManager::createModel()
 {
 	myTool_ = new clang::tooling::ClangTool(*compilationDB_,sources_);
 	Model::Model* model = new Model::Model();
-	ClangFrontendActionFactory* faf = new ClangFrontendActionFactory(model);
-	myTool_->run(faf);
+	ClangFrontendActionFactory* frontendActionFactory = new ClangFrontendActionFactory(model);
+	myTool_->run(frontendActionFactory);
+	frontendActionFactory->outputStatistics();
+	SAFE_DELETE(frontendActionFactory);
 	model->endModification();
 	return model;
 }

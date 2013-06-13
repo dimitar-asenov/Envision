@@ -11,21 +11,24 @@ ClangFrontendActionFactory::ClangFrontendActionFactory(Model::Model* model)
 	model_->beginModification(project_, "Adding a project");
 	project_->setName("NewProject");
 
-
 	logger_ = new CppImportLogger();
 	visitor_ = new ClangAstVisitor(model_, project_, logger_);
-	consumer_ = new ClangAstConsumer(logger_, visitor_);
-	consumerFactory_ = new ClangConsumerFactory(consumer_);
 }
 
 ClangFrontendActionFactory::~ClangFrontendActionFactory()
 {
-	SAFE_DELETE(consumer_);
+	SAFE_DELETE(logger_);
+	SAFE_DELETE(visitor_);
 }
 
 clang::FrontendAction* ClangFrontendActionFactory::create()
 {
-	return new ClangConsumerFactory(new ClangAstConsumer(logger_, visitor_));;
+	return new ClangConsumerFactory(new ClangAstConsumer(logger_, visitor_));
+}
+
+void ClangFrontendActionFactory::outputStatistics()
+{
+	logger_->outputStatistics();
 }
 
 }

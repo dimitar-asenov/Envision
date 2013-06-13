@@ -41,14 +41,11 @@ class ClangFrontendActionFactory : public clang::tooling::FrontendActionFactory
 		ClangFrontendActionFactory(Model::Model* model);
 		~ClangFrontendActionFactory();
 		virtual clang::FrontendAction* create() override;
-
+		void outputStatistics();
 
 	private:
 		OOModel::Project* project_{};
 		Model::Model* model_{};
-
-		ClangConsumerFactory* consumerFactory_{};
-		ClangAstConsumer* consumer_{};
 
 		ClangAstVisitor* visitor_{};
 		CppImportLogger* logger_{};

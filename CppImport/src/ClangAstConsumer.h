@@ -46,6 +46,7 @@ class ClangAstConsumer : public clang::ASTConsumer
 		CppImportLogger* logger_{};
 		ClangAstVisitor* astVisitor_{};
 		clang::CompilerInstance* ci_{};
+		ClangPPCallbacks* ppCallBacks_{};
 };
 
 }

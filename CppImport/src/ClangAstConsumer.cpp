@@ -31,27 +31,18 @@ namespace CppImport {
 ClangAstConsumer::ClangAstConsumer(CppImportLogger* log, ClangAstVisitor* visitor)
 : clang::ASTConsumer(), logger_(log), astVisitor_(visitor)
 {
-//	logger_ = new CppImportLogger();
-//	astVisitor_ = new ClangAstVisitor(model, currentProject, logger_);
+	ppCallBacks_ = new ClangPPCallbacks();
 }
 
 ClangAstConsumer::~ClangAstConsumer()
 {
-//	SAFE_DELETE(astVisitor_);
-//	SAFE_DELETE(logger_);
+	SAFE_DELETE(ppCallBacks_);
 }
 
 void ClangAstConsumer::HandleTranslationUnit(clang::ASTContext &Context)
 {
-//	clang::RawCommentList cList = Context.getRawCommentList();
-//	auto commentsRef = cList.getComments();
-//	for(auto it = commentsRef.begin(); it!= commentsRef.end(); ++it)
-//	{
-//		std::cout << "COMMENT: " << (*it)->getRawText(ci_->getSourceManager()).str() << std::endl;
-//	}
 	Context.getTranslationUnitDecl();
 	astVisitor_->TraverseDecl(Context.getTranslationUnitDecl());
-	logger_->outputStatistics();
 }
 
 void ClangAstConsumer::Initialize(clang::ASTContext &Context)
@@ -59,7 +50,7 @@ void ClangAstConsumer::Initialize(clang::ASTContext &Context)
 	Context.getRawCommentList();
 	if(ci_)
 	{
-		ci_->getPreprocessor().addPPCallbacks(new ClangPPCallbacks());
+		ci_->getPreprocessor().addPPCallbacks(ppCallBacks_);
 	}
 }
 
