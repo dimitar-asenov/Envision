@@ -56,10 +56,16 @@ using namespace OOVisualization;
 
 namespace ContractsLibrary {
 
+static const bool DISABLE_ALL_CUSTOMIZATIONS = false;
+static const bool DISABLE_KEYWORD_VISUALIZATION_ANNOTATIONS = false;
+static const bool DISABLE_KEYWORD_INPUT_ANNOTATIONS = false;
+static const bool DISABLE_METHOD_ADDONS = false;
+static const bool DISABLE_VALUE_AT_RETURN_VISITOR = false;
+static const bool DISABLE_FILTERS = false;
+
 Module* createContractsLibrary()
 {
 	Module* module = new Module("CodeContracts");
-	module->extension<Position>()->setX(1260);
 
 	Class* contract = new Class("Contract");
 	module->classes()->append(contract);
@@ -68,39 +74,29 @@ Module* createContractsLibrary()
 	Method* req = new Method("Requires", Modifier::Public | Modifier::Static);
 	contract->methods()->append(req);
 	req->arguments()->append( new FormalArgument("precondition", new PrimitiveTypeExpression(PrimitiveType::BOOLEAN)) );
-	req->annotations()->append(new ExpressionStatement(
-		OOExpressionBuilder::getOOExpression("EnvisionKeywordVisualization(\"contracts/requires\")")));
-	req->annotations()->append(new ExpressionStatement(
-		OOExpressionBuilder::getOOExpression("EnvisionShortcut(\"requires\")")));
 	req->extension<Position>()->setY(0);
 
 	Method* ens = new Method("Ensures", Modifier::Public | Modifier::Static);
 	contract->methods()->append(ens);
 	ens->arguments()->append( new FormalArgument("postcondition", new PrimitiveTypeExpression(PrimitiveType::BOOLEAN)) );
-	ens->annotations()->append(new ExpressionStatement(
-			OOExpressionBuilder::getOOExpression("EnvisionKeywordVisualization(\"contracts/ensures\")")));
-	ens->annotations()->append(new ExpressionStatement(
-		OOExpressionBuilder::getOOExpression("EnvisionShortcut(\"ensures\")")));
 	ens->extension<Position>()->setY(120);
 
 	Method* res = new Method("Result", Modifier::Public | Modifier::Static);
 	contract->methods()->append(res);
 	res->typeArguments()->append( new FormalTypeArgument("T") );
-	res->annotations()->append(new ExpressionStatement(
-		OOExpressionBuilder::getOOExpression("EnvisionKeywordVisualization(\"contracts/result\")")));
-	res->annotations()->append(new ExpressionStatement(
-		OOExpressionBuilder::getOOExpression("EnvisionShortcut(\"result\",1)")));
 	res->extension<Position>()->setY(240);
 
 	Method* old = new Method("OldValue", Modifier::Public | Modifier::Static);
 	contract->methods()->append(old);
 	old->typeArguments()->append(new FormalTypeArgument("T"));
 	old->arguments()->append( new FormalArgument("variable", new ReferenceExpression("T")) );
-	old->annotations()->append(new ExpressionStatement(
-		OOExpressionBuilder::getOOExpression("EnvisionKeywordVisualization(\"contracts/old\")")));
-	old->annotations()->append(new ExpressionStatement(
-		OOExpressionBuilder::getOOExpression("EnvisionShortcut(\"old\")")));
 	old->extension<Position>()->setY(360);
+
+	Method* out = new Method("ValueAtReturn", Modifier::Public | Modifier::Static);
+	contract->methods()->append(out);
+	out->typeArguments()->append( new FormalTypeArgument("T") );
+	out->arguments()->append( new FormalArgument("argument", new ReferenceExpression("T")) );
+	out->extension<Position>()->setY(720);
 
 	Method* contractClass = new Method("ContractClass", Modifier::Public | Modifier::Static);
 	contract->methods()->append(contractClass);
@@ -111,16 +107,6 @@ Module* createContractsLibrary()
 	contract->methods()->append(contractClassFor);
 	contractClassFor->arguments()->append( new FormalArgument("class", new ReferenceExpression("Class")) );
 	contractClassFor->extension<Position>()->setY(600);
-
-	Method* out = new Method("ValueAtReturn", Modifier::Public | Modifier::Static);
-	contract->methods()->append(out);
-	out->typeArguments()->append( new FormalTypeArgument("T") );
-	out->arguments()->append( new FormalArgument("argument", new ReferenceExpression("T")) );
-	out->annotations()->append(new ExpressionStatement(
-				OOExpressionBuilder::getOOExpression("EnvisionKeywordVisualization(\"contracts/out\")")));
-	out->extension<Position>()->setY(720);
-
-	ValueAtReturnVisitor::setMethods(ens, out);
 
 	// DO NOT DELETE THE COMMENTED CODE BELOW
 	// It can be used as a good example of how to do visualization groups with a condition.
@@ -207,15 +193,54 @@ Module* createContractsLibrary()
 //	CommandDescriptor::registerCommand(new CreateMethodCall("old", "Contract.OldValue"));
 //	CommandDescriptor::registerCommand(new CreateMethodCall("result", "Contract.Result",1));
 
-	// Register method add-ons
-	VMethod::addAddOn( new InterfaceContractsVMethodAddOn(contractClass) );
-	VMethod::addAddOn( new SignatureContractsVMethodAddOn(contractClass) );
+	// Customizations
+	if (!DISABLE_ALL_CUSTOMIZATIONS)
+	{
+		// Let items know what is the contractClass
+		ContractFilter::setContractsClass(contract);
 
-	// Let items know what is the contractClass
-	ContractFilter::setContractsClass(contract);
-	// Install filters
-	OOVisualization::VStatementItemList::addRangeFilter( ContractFilter::showOnlyContractsFilter );
-	OOVisualization::VStatementItemList::addRangeFilter( ContractFilter::hideContractsFilter );
+		if (!DISABLE_KEYWORD_VISUALIZATION_ANNOTATIONS)
+		{
+			req->annotations()->append(new ExpressionStatement(
+				OOExpressionBuilder::getOOExpression("EnvisionKeywordVisualization(\"contracts/requires\")")));
+			ens->annotations()->append(new ExpressionStatement(
+				OOExpressionBuilder::getOOExpression("EnvisionKeywordVisualization(\"contracts/ensures\")")));
+			res->annotations()->append(new ExpressionStatement(
+				OOExpressionBuilder::getOOExpression("EnvisionKeywordVisualization(\"contracts/result\")")));
+			old->annotations()->append(new ExpressionStatement(
+				OOExpressionBuilder::getOOExpression("EnvisionKeywordVisualization(\"contracts/old\")")));
+			out->annotations()->append(new ExpressionStatement(
+				OOExpressionBuilder::getOOExpression("EnvisionKeywordVisualization(\"contracts/out\")")));
+		}
+
+		if (!DISABLE_KEYWORD_INPUT_ANNOTATIONS)
+		{
+			req->annotations()->append(new ExpressionStatement(
+				OOExpressionBuilder::getOOExpression("EnvisionShortcut(\"requires\")")));
+			ens->annotations()->append(new ExpressionStatement(
+				OOExpressionBuilder::getOOExpression("EnvisionShortcut(\"ensures\")")));
+			res->annotations()->append(new ExpressionStatement(
+				OOExpressionBuilder::getOOExpression("EnvisionShortcut(\"result\",1)")));
+			old->annotations()->append(new ExpressionStatement(
+				OOExpressionBuilder::getOOExpression("EnvisionShortcut(\"old\")")));
+		}
+
+
+		if(!DISABLE_VALUE_AT_RETURN_VISITOR) ValueAtReturnVisitor::setMethods(ens, out);
+		if(!DISABLE_METHOD_ADDONS)
+		{
+			// Register method add-ons
+			VMethod::addAddOn( new InterfaceContractsVMethodAddOn(contractClass) );
+			VMethod::addAddOn( new SignatureContractsVMethodAddOn(contractClass) );
+		}
+
+		if(!DISABLE_FILTERS)
+		{
+			// Install filters
+			OOVisualization::VStatementItemList::addRangeFilter( ContractFilter::showOnlyContractsFilter );
+			OOVisualization::VStatementItemList::addRangeFilter( ContractFilter::hideContractsFilter );
+		}
+	}
 
 	return module;
 }
@@ -260,7 +285,18 @@ Class* createDerivedClass()
 	travel->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
 			"Contract.Requires(numPassengers>=0)")));
 
-	car->extension<Position>()->setY(200);
+	return car;
+}
+
+Class* createDerivedDerivedClass()
+{
+	Class* car = new Class("SelfDrivingBus", Modifier::Public);
+	car->baseClasses()->append(new ReferenceExpression("SelfDrivingCar"));
+
+	auto *travel = new Method("travel", Modifier::Public);
+	car->methods()->append(travel);
+	travel->arguments()->append( new FormalArgument("numPassengers", new PrimitiveTypeExpression(PrimitiveType::INT)) );
+	travel->results()->append( new FormalResult(QString(), new PrimitiveTypeExpression(PrimitiveType::INT)) );
 
 	return car;
 }
@@ -276,8 +312,6 @@ Class* createInterface()
 	op->arguments()->append( new FormalArgument("x", new PrimitiveTypeExpression(PrimitiveType::INT)) );
 	op->arguments()->append( new FormalArgument("y", new PrimitiveTypeExpression(PrimitiveType::INT)) );
 	op->results()->append( new FormalResult(QString(), new PrimitiveTypeExpression(PrimitiveType::INT)) );
-
-	interface->extension<Position>()->setX(420);
 
 	return interface;
 }
@@ -298,19 +332,12 @@ Class* createInterfaceContracts()
 				"Contract.Requires(x!=y)")));
 	op->items()->append(new ReturnStatement( OOExpressionBuilder::getOOExpression("0")));
 
-	calcContracts->extension<Position>()->setX(420);
-	calcContracts->extension<Position>()->setY(180);
-
 	return calcContracts;
 }
 
-Class* createPaper()
+Method* createMinMax()
 {
-	Class* paperClass = new Class("Paper", Modifier::Public);
-	paperClass->extension<Position>()->setX(860);
-
 	auto *minMax = new Method("min_max", Modifier::Public);
-	paperClass->methods()->append(minMax);
 	minMax->arguments()->append( new FormalArgument("a", new PrimitiveTypeExpression(PrimitiveType::INT)) );
 	minMax->arguments()->append( new FormalArgument("b", new PrimitiveTypeExpression(PrimitiveType::INT)) );
 	minMax->arguments()->append(
@@ -329,10 +356,13 @@ Class* createPaper()
 	i->thenBranch()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("min=b")));
 	i->elseBranch()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("max=b")));
 	i->elseBranch()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression("min=a")));
-	minMax->extension<Position>()->setY(0);
 
-	auto *fact = new Method("factorial", Modifier::Public);
-	paperClass->methods()->append(fact);
+	return minMax;
+}
+
+Method* createFactorial()
+{
+	auto *fact = new Method("factorial", Modifier::Public | Modifier::Static);
 	fact->arguments()->append( new FormalArgument("x", new PrimitiveTypeExpression(PrimitiveType::INT)) );
 	fact->results()->append( new FormalResult(QString(), new PrimitiveTypeExpression(PrimitiveType::INT)) );
 	fact->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
@@ -341,17 +371,39 @@ Class* createPaper()
 			"Contract.Ensures(Contract.Result<int>()>0)")));
 	fact->items()->append(new ReturnStatement( OOExpressionBuilder::getOOExpression(
 				"x<=1?1:x*factorial(x-1)")));
+
+	return fact;
+}
+
+Method* createAppend()
+{
+	auto *app = new Method("append", Modifier::Public);
+		app->arguments()->append( new FormalArgument("x", new PrimitiveTypeExpression(PrimitiveType::INT)) );
+		app->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
+					"Contract.Ensures(elements[size-1]==x)")));
+		app->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
+				"Contract.Ensures(size==Contract.OldValue(size)+1)")));
+		app->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
+					"elements[size++]=x")));
+
+	return app;
+}
+
+
+Class* createPaperClass()
+{
+	Class* paperClass = new Class("Paper", Modifier::Public);
+
+	auto *minMax = createMinMax();
+	paperClass->methods()->append(minMax);
+	minMax->extension<Position>()->setY(0);
+
+	auto *fact = createFactorial();
+	paperClass->methods()->append(fact);
 	fact->extension<Position>()->setY(180);
 
-	auto *app = new Method("append", Modifier::Public);
+	auto *app = createAppend();
 	paperClass->methods()->append(app);
-	app->arguments()->append( new FormalArgument("x", new PrimitiveTypeExpression(PrimitiveType::INT)) );
-	app->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
-				"Contract.Ensures(elements[size-1]==x)")));
-	app->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
-			"Contract.Ensures(size==Contract.OldValue(size)+1)")));
-	app->items()->append(new ExpressionStatement( OOExpressionBuilder::getOOExpression(
-				"elements[size++]=x")));
 	app->extension<Position>()->setY(320);
 
 	return paperClass;
@@ -360,14 +412,18 @@ Class* createPaper()
 Module* createClientModule()
 {
 	Module* module = new Module("Client");
-	module->extension<Position>()->setX(0);
-	module->extension<Position>()->setY(0);
 
 	module->classes()->append( createBaseClass());
 	module->classes()->append( createDerivedClass() );
-	module->classes()->append( createPaper() );
+	module->classes()->append( createDerivedDerivedClass() );
 	module->classes()->append( createInterface() );
 	module->classes()->append( createInterfaceContracts() );
+
+	// Choose either the class or a method
+	module->classes()->append( createPaperClass() );
+	//module->methods()->append( createMinMax() );
+	//module->methods()->append( createFactorial() );
+	//module->methods()->append( createAppend() );
 
 	auto ref = dynamic_cast<ReferenceExpression*>(OOExpressionBuilder::getOOExpression("CodeContracts.Contract"));
 	Q_ASSERT(ref);
@@ -386,8 +442,8 @@ TEST(ContractsLibrary, ContractsLibraryTest)
 	prj = dynamic_cast<Project*> (model->createRoot("Project"));
 	model->beginModification(prj, "create a few classes that use contracts");
 	prj->setName("CustomizationDemo");
-	prj->modules()->append( createContractsLibrary());
 	prj->modules()->append( createClientModule());
+	prj->modules()->append( createContractsLibrary());
 	model->endModification();
 
 	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(prj));
