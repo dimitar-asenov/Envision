@@ -1,0 +1,27 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/Item/default">
+	<shape />
+	<layout prototypes="layout/SequentialLayout/default">
+		<spaceBetweenElements>15</spaceBetweenElements>
+		<noInnerCursors>true</noInnerCursors>
+		<noBoundaryCursorsInsideShape>true</noBoundaryCursorsInsideShape>
+	</layout>
+	<keyword prototypes="icon/SVGIcon/default">
+		<filename></filename>
+		<width>18</width>
+		<height>18</height>
+	</keyword>
+	<arguments prototypes="item/VList/default">
+		<drawShapeWhenEmpty>true</drawShapeWhenEmpty>
+		<shape />
+		<itemsStyle prototypes="layout/SequentialLayout/default">
+			<drawShapeWhenEmpty>true</drawShapeWhenEmpty>
+			<direction>0</direction>
+			<spaceBetweenElements>15</spaceBetweenElements>
+			<noInnerCursors>false</noInnerCursors>
+			<allowEquivalentCursorsThroughBoundary>false</allowEquivalentCursorsThroughBoundary>
+			<minHeight>8</minHeight>
+			<minHeight>4</minHeight>
+		</itemsStyle>
+	</arguments>
+</style>
