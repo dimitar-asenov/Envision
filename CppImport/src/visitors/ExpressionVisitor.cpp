@@ -285,7 +285,9 @@ bool ExpressionVisitor::TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* 
 bool ExpressionVisitor::TraverseCXXNewExpr(clang::CXXNewExpr* newExpr)
 {
 	OOModel::NewExpression* ooNewExpr = new OOModel::NewExpression();
-	ooNewExpr->setNewType(utils_->convertClangType(newExpr->getAllocatedType()));
+	TraverseStmt(newExpr->getInitializer());
+	if(!ooExprStack_.empty())
+		ooNewExpr->setNewType(ooExprStack_.pop());
 	if(newExpr->isArray())
 	{
 		TraverseStmt(newExpr->getArraySize());
