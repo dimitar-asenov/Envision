@@ -202,9 +202,9 @@ bool ExpressionVisitor::TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* 
 			ooUnary->setOp(utils_->translateUnaryOverloadOp(operatorKind, numArguments));
 			if(!ooExprStack_.empty())
 				ooUnary->setOperand(ooExprStack_.pop());
-			// remove callee
-			if(!ooExprStack_.empty())
-				ooExprStack_.pop();
+			// TODO: is this needed? remove callee
+//			if(!ooExprStack_.empty())
+//				ooExprStack_.pop();
 			ooExprStack_.push(ooUnary);
 			break;
 		}
@@ -232,42 +232,34 @@ bool ExpressionVisitor::TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* 
 		}
 		case CppImportUtilities::OverloadKind::MethodCall:
 		{
-			// TODO handle argument
+			std::cout << "METHOD CALL" << std::endl;
 			OOModel::MethodCallExpression* ooCall = new OOModel::MethodCallExpression();
+			for(unsigned i = 0; i < numArguments - 1; i++)
+			{
+				if(!ooExprStack_.empty())
+					ooCall->arguments()->prepend(ooExprStack_.pop());
+			}
 			if(!ooExprStack_.empty())
 			{
 				if(auto ooRef = dynamic_cast<OOModel::ReferenceExpression*>(ooExprStack_.pop()))
 				{
-					if(!ooExprStack_.empty())
-						// remove function (operator())
-						ooExprStack_.pop();
-
 					ooCall->ref()->setName(ooRef->ref()->name());
 					SAFE_DELETE(ooRef);
 					ooExprStack_.push(ooCall);
 					break;
 				}
 			}
+			// this should not happen
+			SAFE_DELETE(ooCall);
+			log_->writeError(className_, "No method name found (overload)", callExpr);
+			ooExprStack_.push(utils_->createErrorExpression("METHOD CALL NO NAME FOUND"));
 			break;
 		}
-		case CppImportUtilities::OverloadKind::ArrayIndex:
-			ooExprStack_.push(utils_->createErrorExpression("Unsupported ARRAYIND OVERLOAD"));
-			break;
 		case CppImportUtilities::OverloadKind::ReferenceExpr:
 		{
 			if(!ooExprStack_.empty())
-			{
-				if(auto ooRef = dynamic_cast<OOModel::ReferenceExpression*>(ooExprStack_.pop()))
-				{
-					if(!ooExprStack_.empty())
-						// remove function (operator->)
-						ooExprStack_.pop();
-					if(!ooExprStack_.empty())
-						ooRef->setPrefix(ooExprStack_.pop());
-					ooExprStack_.push(ooRef);
+				if(dynamic_cast<OOModel::ReferenceExpression*>(ooExprStack_.top()))
 					break;
-				}
-			}
 			ooExprStack_.push(utils_->createErrorExpression("Could not resolve Reference/Arrow"));
 			break;
 		}
@@ -455,6 +447,11 @@ bool ExpressionVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constr
 
 	log_->writeError(className_, "Not handled yet", constructExpr);
 	return true;
+}
+
+bool ExpressionVisitor::TraverseCXXTemporaryObjectExpr(clang::CXXTemporaryObjectExpr* tempObjectExpr)
+{
+	return TraverseCXXConstructExpr(tempObjectExpr);
 }
 
 bool ExpressionVisitor::TraverseLambdaExpr(clang::LambdaExpr* lambdaExpr)

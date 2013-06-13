@@ -296,6 +296,7 @@ OOModel::BinaryOperation::OperatorTypes CppImportUtilities::translateBinaryOverl
 		case clang::OO_AmpAmp: return OOModel::BinaryOperation::CONDITIONAL_AND;
 		case clang::OO_PipePipe: return OOModel::BinaryOperation::CONDITIONAL_OR;
 		case clang::OO_ArrowStar: return OOModel::BinaryOperation::POINTER_POINTER_TO_MEMBER;
+		case clang::OO_Subscript: return OOModel::BinaryOperation::ARRAY_INDEX;
 		default: throw( new CppImportException("Invalid binary overload operator"));
 	}
 }
@@ -389,7 +390,7 @@ CppImportUtilities::OverloadKind CppImportUtilities::getOverloadKind
 		case clang::OO_ArrowStar: return OverloadKind::Binary;
 		case clang::OO_Arrow: return OverloadKind::ReferenceExpr;
 		case clang::OO_Call: return OverloadKind::MethodCall;
-		case clang::OO_Subscript: return OverloadKind::ArrayIndex;
+		case clang::OO_Subscript: return OverloadKind::Binary;
 		default: return OverloadKind::Unsupported;
 	}
 }
