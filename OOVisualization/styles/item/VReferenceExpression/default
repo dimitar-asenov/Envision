@@ -8,13 +8,12 @@
 		<symbol>→</symbol>
 	</pointerSeparator>
 	<typeArguments prototypes="item/VList/default">
-		<shape />
+		<shape prototypes="shape/Braces/default">
+			Braces
+			<leftBrace>⟨</leftBrace>
+			<rightBrace>⟩</rightBrace>	
+		</shape>
 		<itemsStyle prototypes="layout/SequentialLayout/default">
-			<shape prototypes="shape/Braces/default">
-				Braces
-				<leftBrace>⟨</leftBrace>
-				<rightBrace>⟩</rightBrace>	
-			</shape>
 			<direction>0</direction>
 			<spaceBetweenElements>10</spaceBetweenElements>
 			<noInnerCursors>true</noInnerCursors>
