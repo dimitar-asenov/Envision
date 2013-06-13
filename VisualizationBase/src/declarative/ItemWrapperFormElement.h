@@ -47,7 +47,7 @@ class ItemWrapperFormElement : public FormElement
 		virtual void computeSize(Item* item, int availableWidth, int availableHeight) override;
 		virtual void setItemPositions(Item* item, int parentX, int parentY) override;
 		virtual bool sizeDependsOnParent(const Item* item) const override;
-		virtual QList<ItemRegion> regions(Item* item, int parentX, int parentY) override;
+		virtual QList<ItemRegion> regions(DeclarativeItemBase* item, int parentX, int parentY) override;
 		bool elementOrChildHasFocus(Item* item) const override;
 		bool isEmpty(const Item* item) const override;
 
@@ -99,7 +99,7 @@ bool ItemWrapperFormElement<ParentType,ChildItemType>::sizeDependsOnParent(const
 }
 
 template <class ParentType, class ChildItemType>
-QList<ItemRegion> ItemWrapperFormElement<ParentType,ChildItemType>::regions(Item* item, int , int)
+QList<ItemRegion> ItemWrapperFormElement<ParentType,ChildItemType>::regions(DeclarativeItemBase* item, int , int)
 {
 	auto& childItem = (static_cast<const ParentType*>(item))->*this->item();
 

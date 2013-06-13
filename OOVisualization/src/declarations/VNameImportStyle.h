@@ -28,11 +28,12 @@
 
 #include "../oovisualization_api.h"
 
+#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
 #include "VisualizationBase/src/items/StaticStyle.h"
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VNameImportStyle : public Visualization::ItemStyle
+class OOVISUALIZATION_API VNameImportStyle : public Visualization::DeclarativeItemBaseStyle
 {
 	private:
 		Visualization::StaticStyle icon_;

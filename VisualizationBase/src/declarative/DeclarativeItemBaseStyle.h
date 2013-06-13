@@ -24,51 +24,24 @@
  **
  **********************************************************************************************************************/
 
-#ifndef VisualizationBase_DECLARATIVETEST_H_
-#define VisualizationBase_DECLARATIVETEST_H_
+#pragma once
 
-#include "../src/declarative/DeclarativeItem.h"
-#include "DeclarativeTestStyle.h"
-
-namespace Model {
-class Node;
-}
-
-namespace TestNodes {
-class BinaryNode;
-}
+#include "../visualizationbase_api.h"
+#include "../items/ItemStyle.h"
 
 namespace Visualization {
 
-class Item;
-class Symbol;
-class VComposite;
-
-class DeclarativeTest : public Super<DeclarativeItem<DeclarativeTest>> {
-
-	ITEM_COMMON(DeclarativeTest)
+class VISUALIZATIONBASE_API DeclarativeItemBaseStyle : public ItemStyle
+{
+	private:
+		bool extraCursorsOutsideShape_{};
 
 	public:
-		DeclarativeTest(Item* parent, TestNodes::BinaryNode* node, Model::Node* first, Model::Node* second,
-				Model::Node* third, Model::Node* fourth);
-		static void initializeForms();
-		virtual int determineForm() override;
+		virtual void load(StyleLoader& sl);
 
-	private:
-		Symbol* testItem_{};
-		VComposite* testNodeItem_{};
-		Item* testNodeItemGeneral_{};
-		TestNodes::BinaryNode* testNode_{};
-		Model::Node* firstNode_{};
-		Model::Node* secondNode_{};
-		Model::Node* thirdNode_{};
-		Model::Node* fourthNode_{};
-		Item* firstItem_{};
-		Item* secondItem_{};
-		Item* thirdItem_{};
-		Item* fourthItem_{};
+		bool extraCursorsOutsideShape() const;
 };
 
-} /* namespace Visualization */
+inline bool DeclarativeItemBaseStyle::extraCursorsOutsideShape() const {return extraCursorsOutsideShape_;}
 
-#endif /* VisualizationBase_DECLARATIVETEST_H_ */
+} /* namespace Visualization */

@@ -27,6 +27,7 @@
 #include "FormElement.h"
 #include "../items/Item.h"
 #include "../cursor/LayoutCursor.h"
+#include "DeclarativeItemBase.h"
 
 namespace Visualization {
 
@@ -72,7 +73,7 @@ void FormElement::setItemPositions(Item* item, int parentX, int parentY)
 		element->setItemPositions(item, parentX + x(item), parentY + y(item));
 }
 
-QList<ItemRegion> FormElement::regions(Item* item, int parentX, int parentY)
+QList<ItemRegion> FormElement::regions(DeclarativeItemBase* item, int parentX, int parentY)
 {
 	QList<ItemRegion> allRegions;
 	for (auto element : children())

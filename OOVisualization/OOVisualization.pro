@@ -7,7 +7,8 @@ win32:LIBS += -llogger \
     -loomodel \
     -lvisualizationbase \
     -linteractionbase
-HEADERS += src/elements/VModifier.h \
+HEADERS += src/statements/VContinueStatementStyle.h \
+    src/elements/VModifier.h \
     src/declarations/VNameImportStyle.h \
     src/declarations/VNameImport.h \
     src/expressions/types/VFunctionType.h \
@@ -90,7 +91,8 @@ HEADERS += src/elements/VModifier.h \
     src/statements/VReturnStatement.h \
     src/statements/VReturnStatementStyle.h \
     src/oovisualization.h
-SOURCES += src/elements/VModifier.cpp \
+SOURCES += src/statements/VContinueStatementStyle.cpp \
+    src/elements/VModifier.cpp \
     src/declarations/VNameImportStyle.cpp \
     src/declarations/VNameImport.cpp \
     src/expressions/types/VFunctionType.cpp \

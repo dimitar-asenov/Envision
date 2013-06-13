@@ -122,7 +122,7 @@ class VISUALIZATIONBASE_API SequentialLayoutFormElement : public LayoutFormEleme
 		virtual void setItemPositions(Item* item, int parentX, int parentY) override;
 		virtual void synchronizeWithItem(Item* item) override;
 		virtual bool sizeDependsOnParent(const Item* item) const override;
-		virtual QList<ItemRegion> regions(Item* item, int parentX, int parentY) override;
+		virtual QList<ItemRegion> regions(DeclarativeItemBase* item, int parentX, int parentY) override;
 
 		bool isEmpty(const Item* item) const override;
 		bool elementOrChildHasFocus(Item* item) const override;

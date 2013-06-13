@@ -24,51 +24,14 @@
  **
  **********************************************************************************************************************/
 
-#ifndef VisualizationBase_DECLARATIVETEST_H_
-#define VisualizationBase_DECLARATIVETEST_H_
-
-#include "../src/declarative/DeclarativeItem.h"
 #include "DeclarativeTestStyle.h"
-
-namespace Model {
-class Node;
-}
-
-namespace TestNodes {
-class BinaryNode;
-}
 
 namespace Visualization {
 
-class Item;
-class Symbol;
-class VComposite;
-
-class DeclarativeTest : public Super<DeclarativeItem<DeclarativeTest>> {
-
-	ITEM_COMMON(DeclarativeTest)
-
-	public:
-		DeclarativeTest(Item* parent, TestNodes::BinaryNode* node, Model::Node* first, Model::Node* second,
-				Model::Node* third, Model::Node* fourth);
-		static void initializeForms();
-		virtual int determineForm() override;
-
-	private:
-		Symbol* testItem_{};
-		VComposite* testNodeItem_{};
-		Item* testNodeItemGeneral_{};
-		TestNodes::BinaryNode* testNode_{};
-		Model::Node* firstNode_{};
-		Model::Node* secondNode_{};
-		Model::Node* thirdNode_{};
-		Model::Node* fourthNode_{};
-		Item* firstItem_{};
-		Item* secondItem_{};
-		Item* thirdItem_{};
-		Item* fourthItem_{};
-};
+void DeclarativeTestStyle::load(StyleLoader& sl)
+{
+	DeclarativeItemBaseStyle::load(sl);
+	sl.load("symbol", symbol_);
+}
 
 } /* namespace Visualization */
-
-#endif /* VisualizationBase_DECLARATIVETEST_H_ */

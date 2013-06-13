@@ -26,11 +26,13 @@
 
 #include "SequentialLayoutFormElement.h"
 
-#include "ModelBase/src/nodes/List.h"
+#include "DeclarativeItemBase.h"
 #include "../renderer/ModelRenderer.h"
 #include "../items/Item.h"
 #include "../items/ItemRegion.h"
 #include "../cursor/LayoutCursor.h"
+
+#include "ModelBase/src/nodes/List.h"
 
 namespace Visualization {
 
@@ -295,7 +297,7 @@ void SequentialLayoutFormElement::swap(Item* item, int i, int j)
 	item->setUpdateNeeded(Item::StandardUpdate);
 }
 
-QList<ItemRegion> SequentialLayoutFormElement::regions(Item* item, int parentX, int parentY)
+QList<ItemRegion> SequentialLayoutFormElement::regions(DeclarativeItemBase* item, int parentX, int parentY)
 {
 	QList<ItemRegion> regs;
 	auto& itemList = listForItem(item);

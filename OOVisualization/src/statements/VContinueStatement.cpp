@@ -42,7 +42,7 @@ VContinueStatement::VContinueStatement(Item* parent, NodeType* node, const Style
 
 void VContinueStatement::initializeForms()
 {
-	addForm(item<Static>(&I::vis_, [](I* v){return v->style();}));
+	addForm(item<Static>(&I::vis_, [](I* v){return &v->style()->icon();}));
 }
 
 }

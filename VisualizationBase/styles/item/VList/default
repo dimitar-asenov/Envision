@@ -1,5 +1,5 @@
 <!DOCTYPE EnvisionVisualizationStyle>
-<style prototypes="item/Item/default">
+<style prototypes="item/DeclarativeItemBase/default">
 	<shape prototypes="shape/Box/default">
 		Box
 		<backgroundBrush>

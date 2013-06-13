@@ -28,6 +28,7 @@
 
 #include "../oovisualization_api.h"
 #include "VStatementItem.h"
+#include "VContinueStatementStyle.h"
 
 #include "VisualizationBase/src/items/Static.h"
 #include "VisualizationBase/src/declarative/DeclarativeItem.h"
@@ -38,7 +39,7 @@ namespace OOVisualization {
 class OOVISUALIZATION_API VContinueStatement
 	: public Super<VStatementItem<VContinueStatement, Visualization::DeclarativeItem<VContinueStatement>, OOModel::ContinueStatement>>
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(VContinueStatement, Visualization::StaticStyle)
+	ITEM_COMMON(VContinueStatement)
 
 	public:
 		VContinueStatement(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());

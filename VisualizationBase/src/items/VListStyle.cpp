@@ -34,7 +34,7 @@ VListStyle::VListStyle()
 
 void VListStyle::load(StyleLoader& sl)
 {
-	ItemStyle::load(sl);
+	DeclarativeItemBaseStyle::load(sl);
 	sl.load("itemsStyle", itemsStyle_);
 }
 

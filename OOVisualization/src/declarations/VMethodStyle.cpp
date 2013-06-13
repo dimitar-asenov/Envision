@@ -30,7 +30,7 @@ namespace OOVisualization {
 
 void VMethodStyle::load(Visualization::StyleLoader& sl)
 {
-	ItemStyle::load(sl);
+	DeclarativeItemBaseStyle::load(sl);
 
 	sl.load("nameDefault", nameDefault_);
 	sl.load("namePublic", namePublic_);

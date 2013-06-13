@@ -1,5 +1,5 @@
 <!DOCTYPE EnvisionVisualizationStyle>
-<style prototypes="../Symbol/default">
+<style prototypes="../DeclarativeItemBase/default">
 	<shape prototypes="shape/Box/default">
 		Box
 		<backgroundBrush>
@@ -20,5 +20,7 @@
 		<cornerType>0</cornerType>
 		<cornerRadius>5</cornerRadius>
 	</shape>
-	<symbol>Hello</symbol>
+	<symbol prototypes="../Symbol/default">
+		<symbol>Hello</symbol>
+	</symbol>
 </style>

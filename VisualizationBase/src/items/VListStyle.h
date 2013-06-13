@@ -28,11 +28,12 @@
 
 #include "../visualizationbase_api.h"
 
+#include "../declarative/DeclarativeItemBaseStyle.h"
 #include "../layouts/SequentialLayoutStyle.h"
 
 namespace Visualization {
 
-class VISUALIZATIONBASE_API VListStyle : public ItemStyle
+class VISUALIZATIONBASE_API VListStyle : public DeclarativeItemBaseStyle
 {
 	private:
 		SequentialLayoutStyle itemsStyle_;

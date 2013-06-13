@@ -27,8 +27,8 @@
 #pragma once
 
 #include "../visualizationbase_api.h"
+#include "DeclarativeItemBaseStyle.h"
 #include "../items/Item.h"
-#include "../items/ItemStyle.h"
 
 namespace Visualization {
 
@@ -40,7 +40,7 @@ class FormElement;
  */
 class VISUALIZATIONBASE_API DeclarativeItemBase: public Super<Item>
 {
-	ITEM_COMMON_CUSTOM_STYLENAME(DeclarativeItemBase, ItemStyle)
+	ITEM_COMMON(DeclarativeItemBase)
 
 	public:
 		DeclarativeItemBase(Item* parent, const StyleType* style = itemStyles().get());

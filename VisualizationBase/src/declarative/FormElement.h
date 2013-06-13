@@ -32,6 +32,7 @@ namespace Visualization {
 
 class Item;
 class ItemRegion;
+class DeclarativeItemBase;
 
 /**
  * Class to cache information about an element, that varies form item to item.
@@ -155,7 +156,7 @@ class VISUALIZATIONBASE_API FormElement
 		 * elements for this \a item. \a parentX and \a parentY are the offsets that this element needs to have from the
 		 * parent \a item (similar to the setItemPositions method).
 		 */
-		virtual QList<ItemRegion> regions(Item* item, int parentX=0, int parentY=0);
+		virtual QList<ItemRegion> regions(DeclarativeItemBase* item, int parentX=0, int parentY=0);
 		/**
 		 * Caches the \a position of this form element for the specified \a item.
 		 */

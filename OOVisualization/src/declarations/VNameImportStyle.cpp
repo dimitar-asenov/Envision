@@ -30,7 +30,7 @@ namespace OOVisualization {
 
 void VNameImportStyle::load(Visualization::StyleLoader& sl)
 {
-	ItemStyle::load(sl);
+	DeclarativeItemBaseStyle::load(sl);
 	sl.load("icon", icon_);
 }
 

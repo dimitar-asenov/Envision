@@ -24,51 +24,23 @@
  **
  **********************************************************************************************************************/
 
-#ifndef VisualizationBase_DECLARATIVETEST_H_
-#define VisualizationBase_DECLARATIVETEST_H_
+#pragma once
 
-#include "../src/declarative/DeclarativeItem.h"
-#include "DeclarativeTestStyle.h"
-
-namespace Model {
-class Node;
-}
-
-namespace TestNodes {
-class BinaryNode;
-}
+#include "declarative/DeclarativeItemBaseStyle.h"
+#include "items/SymbolStyle.h"
 
 namespace Visualization {
 
-class Item;
-class Symbol;
-class VComposite;
-
-class DeclarativeTest : public Super<DeclarativeItem<DeclarativeTest>> {
-
-	ITEM_COMMON(DeclarativeTest)
+class DeclarativeTestStyle : public DeclarativeItemBaseStyle
+{
+		SymbolStyle symbol_;
 
 	public:
-		DeclarativeTest(Item* parent, TestNodes::BinaryNode* node, Model::Node* first, Model::Node* second,
-				Model::Node* third, Model::Node* fourth);
-		static void initializeForms();
-		virtual int determineForm() override;
+		void load(Visualization::StyleLoader& sl);
 
-	private:
-		Symbol* testItem_{};
-		VComposite* testNodeItem_{};
-		Item* testNodeItemGeneral_{};
-		TestNodes::BinaryNode* testNode_{};
-		Model::Node* firstNode_{};
-		Model::Node* secondNode_{};
-		Model::Node* thirdNode_{};
-		Model::Node* fourthNode_{};
-		Item* firstItem_{};
-		Item* secondItem_{};
-		Item* thirdItem_{};
-		Item* fourthItem_{};
+		const SymbolStyle& symbol() const;
 };
 
-} /* namespace Visualization */
+inline const SymbolStyle& DeclarativeTestStyle::symbol() const { return symbol_; }
 
-#endif /* VisualizationBase_DECLARATIVETEST_H_ */
+} /* namespace Visualization */

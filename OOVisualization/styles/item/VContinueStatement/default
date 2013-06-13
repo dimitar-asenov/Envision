@@ -1,4 +1,6 @@
 <!DOCTYPE EnvisionVisualizationStyle>
-<style prototypes="item/Symbol/keyword">
-	<symbol>continue</symbol>
+<style prototypes="item/DeclarativeItemBase/default">
+	<icon prototypes="item/Symbol/keyword">
+		<symbol>continue</symbol>
+	</icon>
 </style>

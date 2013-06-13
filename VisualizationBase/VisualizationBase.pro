@@ -8,7 +8,9 @@ win32:LIBS += -llogger \
 LIBS += -llpsolve55
 QT += xml \
     svg
-HEADERS += src/items/VCompositeStyle.h \
+HEADERS += test/DeclarativeTestStyle.h \
+    src/declarative/DeclarativeItemBaseStyle.h \
+    src/items/VCompositeStyle.h \
     src/items/VComposite.h \
     src/declarative/DeclarativeItemDef.h \
     src/declarative/VisualizationItemWrapperFormElement.h \
@@ -110,7 +112,9 @@ HEADERS += src/items/VCompositeStyle.h \
     src/visualizationbase_api.h \
     test/BoxTest.h \
     src/visualizationbase.h
-SOURCES += src/items/VCompositeStyle.cpp \
+SOURCES += test/DeclarativeTestStyle.cpp \
+    src/declarative/DeclarativeItemBaseStyle.cpp \
+    src/items/VCompositeStyle.cpp \
     src/items/VComposite.cpp \
     src/declarative/SequentialLayoutFormElement.cpp \
     src/declarative/GridLayoutFormElement.cpp \

@@ -164,7 +164,7 @@ class VISUALIZATIONBASE_API GridLayoutFormElement : public LayoutFormElement {
 		// Methods executable when items need to be rendered
 		virtual void computeSize(Item* item, int availableWidth, int availableHeight) override;
 		virtual bool sizeDependsOnParent(const Item* item) const override;
-		virtual QList<ItemRegion> regions(Item* item, int parentX, int parentY) override;
+		virtual QList<ItemRegion> regions(DeclarativeItemBase* item, int parentX, int parentY) override;
 
 		/**
 		 * Returns the index of the focused element for the specified \a item. If no element is focused, returns -1. This

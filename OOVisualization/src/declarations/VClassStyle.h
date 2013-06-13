@@ -37,7 +37,7 @@
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VClassStyle : public Visualization::ItemStyle
+class OOVISUALIZATION_API VClassStyle : public Visualization::DeclarativeItemBaseStyle
 {
 	private:
 		Visualization::TextStyle nameDefault_;

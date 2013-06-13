@@ -1,5 +1,5 @@
 <!DOCTYPE EnvisionVisualizationStyle>
-<style prototypes="item/Item/default">
+<style prototypes="item/DeclarativeItemBase/default">
 	<allowEquivalentCursorsThroughBoundary>false</allowEquivalentCursorsThroughBoundary>
 	<symbol prototypes="icon/SVGIcon/default">
 		<filename>styles/icon/icon-exit.svg</filename>

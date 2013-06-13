@@ -26,6 +26,7 @@
 
 #include "GridLayoutFormElement.h"
 
+#include "DeclarativeItemBase.h"
 #include "../items/ItemRegion.h"
 #include "../cursor/LayoutCursor.h"
 
@@ -289,7 +290,7 @@ bool GridLayoutFormElement::sizeDependsOnParent(const Item*) const
 	return overallColumnStretchFactor_ > 0 || overallRowStretchFactor_ > 0;
 }
 
-QList<ItemRegion> GridLayoutFormElement::regions(Item* item, int parentX, int parentY)
+QList<ItemRegion> GridLayoutFormElement::regions(DeclarativeItemBase* item, int parentX, int parentY)
 {
 	QList<ItemRegion> allRegions;
 

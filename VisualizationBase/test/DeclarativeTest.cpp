@@ -46,7 +46,7 @@ DeclarativeTest::DeclarativeTest(Item* parent, TestNodes::BinaryNode* node, Mode
 
 void DeclarativeTest::initializeForms()
 {
-	FormElement* testItemElement = item<Symbol>(&I::testItem_, [](I*){return itemStyles().get();});
+	FormElement* testItemElement = item<Symbol>(&I::testItem_, [](I*){return &itemStyles().get()->symbol();});
 	FormElement* testNodeItemGeneralElement = item(&I::testNodeItemGeneral_, [](I* v){return v->testNode_;});
 	FormElement* testNodeItemElement = item<VComposite>(&I::testNodeItem_, [](I* v){return v->testNode_;},
 																		[](I*){return VComposite::itemStyles().get();});
