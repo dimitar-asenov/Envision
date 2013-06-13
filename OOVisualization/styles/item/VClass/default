@@ -31,9 +31,18 @@
 					<alpha>255</alpha>
 					<red>240</red>
 					<green>240</green>
-					<blue>240</blue>
+					<blue>255</blue>
 				</color>
 			</backgroundBrush>
+			<outline>
+				<width>1</width>
+				<color>
+					<alpha>255</alpha>
+					<red>128</red>
+					<green>128</green>
+					<blue>255</blue>
+				</color>
+			</outline>
 		</shape>
 		<itemsStyle prototypes="layout/SequentialLayout/default">
 			<direction>0</direction>

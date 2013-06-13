@@ -71,7 +71,7 @@ void VMethod::initializeForms()
 					}
 				}))
 		->put(3, 0, item<VList>(&I::typeArguments_, [](I* v){return v->node()->typeArguments();},
-											[](I* v){return &v->style()->arguments();}))
+											[](I* v){return &v->style()->typeArguments();}))
 		->put(4, 0, item<VList>(&I::arguments_, [](I* v){return v->node()->arguments();},
 											[](I* v){return &v->style()->arguments();}));
 
