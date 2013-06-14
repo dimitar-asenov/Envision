@@ -423,6 +423,24 @@ bool ExpressionVisitor::TraverseMemberExpr(clang::MemberExpr* memberExpr)
 	return true;
 }
 
+bool ExpressionVisitor::TraverseCXXTypeidExpr(clang::CXXTypeidExpr* typeIdExpr)
+{
+	OOModel::TypeTraitExpression* ooTypeTrait = new OOModel::TypeTraitExpression();
+	ooTypeTrait->setTypeTraitKind(OOModel::TypeTraitExpression::TypeTraitKind::TypeId);
+	if(typeIdExpr->isTypeOperand())
+		ooTypeTrait->setOperand(utils_->convertClangType(typeIdExpr->getTypeOperand()));
+	else
+	{
+		TraverseStmt(typeIdExpr->getExprOperand());
+		if(!ooExprStack_.empty())
+			ooTypeTrait->setOperand(ooExprStack_.pop());
+		else
+			log_->writeError(className_, "unsupported typeid operand", typeIdExpr);
+	}
+	ooExprStack_.push(ooTypeTrait);
+	return true;
+}
+
 bool ExpressionVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constructExpr)
 {
 	// if is elidable we can directly visit the children
