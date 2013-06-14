@@ -16,7 +16,6 @@
 		</keyword>
 	</old>
 	<result prototypes="default_text">
-		<shape />
 		<layout >
 			<spaceBetweenElements>1</spaceBetweenElements>
 		</layout>
@@ -45,4 +44,10 @@
 			<symbol>↲</symbol>
 		</keyword>
 	</out>
+	
+	<requiresIcon prototypes="default_icon">
+		<keyword>
+			<filename>styles/icon/greenTick.svg</filename>
+		</keyword>
+	</requiresIcon>
 </style>

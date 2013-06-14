@@ -421,9 +421,9 @@ Module* createClientModule()
 
 	// Choose either the class or a method
 	module->classes()->append( createPaperClass() );
-	//module->methods()->append( createMinMax() );
-	//module->methods()->append( createFactorial() );
-	//module->methods()->append( createAppend() );
+//	module->methods()->append( createMinMax() );
+//	module->methods()->append( createFactorial() );
+//	module->methods()->append( createAppend() );
 
 	auto ref = dynamic_cast<ReferenceExpression*>(OOExpressionBuilder::getOOExpression("CodeContracts.Contract"));
 	Q_ASSERT(ref);
@@ -442,11 +442,16 @@ TEST(ContractsLibrary, ContractsLibraryTest)
 	prj = dynamic_cast<Project*> (model->createRoot("Project"));
 	model->beginModification(prj, "create a few classes that use contracts");
 	prj->setName("CustomizationDemo");
-	prj->modules()->append( createClientModule());
+	auto client = createClientModule();
+	prj->modules()->append( client );
 	prj->modules()->append( createContractsLibrary());
 	model->endModification();
 
 	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(prj));
+//	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(client));
+//	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(client->classes()->at(0)));
+//	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(client->methods()->at(0)));
+
 	VisualizationManager::instance().mainScene()->listenToModel(model);
 
 	CustomizationVisitor customizations;
