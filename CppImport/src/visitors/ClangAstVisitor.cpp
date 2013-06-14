@@ -586,8 +586,7 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 	// set the type
 	ooVarDecl->setTypeExpression(utils_->convertClangType(varDecl->getType()));
 
-	// TODO: also visit type/value dependent inits
-	if(varDecl->hasInit() && !varDecl->getInit()->isValueDependent())
+	if(varDecl->hasInit())
 	{
 		bool inBody = inBody_;
 		inBody_ = false;
