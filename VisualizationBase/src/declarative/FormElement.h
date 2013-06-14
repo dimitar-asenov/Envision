@@ -237,7 +237,7 @@ class VISUALIZATIONBASE_API FormElement
 		/**
 		 * Returns the form element's parent element.
 		 */
-		FormElement* parent();
+		FormElement* parent() const;
 
 	private:
 		int marginTop_{};
@@ -263,6 +263,9 @@ inline void ElementCache::setSize(const QSize& size) {size_ = size;}
 inline void ElementCache::setPos(const QPoint& position) {pos_ = position;}
 inline QSize ElementCache::size() const {return size_;}
 inline QPoint ElementCache::pos() const {return pos_;}
+
+
+inline FormElement* FormElement::parent() const {return parent_;}
 
 inline FormElement* FormElement::setMargins(int left, int top, int right, int bottom)
 {

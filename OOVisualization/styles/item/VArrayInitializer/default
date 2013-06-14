@@ -24,6 +24,7 @@
 			<cornerType>2</cornerType>
 			<cornerRadius>3</cornerRadius>
 		</shape>
+		<extraCursorsOutsideShape>true</extraCursorsOutsideShape>
 		<itemsStyle prototypes="layout/SequentialLayout/default">
 			<direction>0</direction>
 			<spaceBetweenElements>5</spaceBetweenElements>

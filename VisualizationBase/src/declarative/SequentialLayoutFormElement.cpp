@@ -306,17 +306,40 @@ QList<ItemRegion> SequentialLayoutFormElement::regions(DeclarativeItemBase* item
 	if (itemList.isEmpty() && !hasCursorWhenEmpty(item))
 		return regs;
 
-	QRect wholeArea = QRect(QPoint(x(item) + parentX, y(item) + parentY), size(item));
-	QRect elementsArea = QRect(QPoint(wholeArea.left() + leftMargin(), wholeArea.top() + topMargin()),
-										QPoint(wholeArea.right() - rightMargin(), wholeArea.bottom() - bottomMargin()));
-
-	// This is the rectangle half-way between the bounding box of the layout and elementsArea.
-	QRect midArea = QRect(QPoint(wholeArea.left() + leftMargin()/2, wholeArea.top() + topMargin()/2),
-										QPoint(wholeArea.right() - rightMargin()/2, wholeArea.bottom() - bottomMargin()/2));
+	bool extraCursors = false;
+	if (parent() == nullptr)
+	{
+		// This is a top-level list. Take into consideration the style of the parent item and its shape.
+		extraCursors = item->hasShape() && item->style()->extraCursorsOutsideShape();
+	}
 
 	bool horizontal = (orientation_ == Qt::Horizontal);
 
-	int offset = (spaceBetweenElements(item) > 0) ? spaceBetweenElements(item)/2 : 1;
+	auto elementBoundary = QRect(QPoint(x(item) + parentX, y(item) + parentY), size(item));
+	if (extraCursors && itemList.isEmpty())
+	{
+		if (horizontal)
+		{
+			elementBoundary.setTop(0);
+			elementBoundary.setHeight( item->height() );
+		}
+		else
+		{
+			elementBoundary.setLeft(0);
+			elementBoundary.setWidth( item->width() );
+		}
+	}
+
+	auto wholeArea = extraCursors ? QRect(QPoint(0,0), item->size().toSize()) : elementBoundary;
+
+	auto elementsArea = elementBoundary.adjusted(+leftMargin(), topMargin(), -rightMargin(), -bottomMargin());
+
+	// This is the rectangle half-way between the bounding box of the layout and elementsArea.
+	QRect midArea = QRect( (wholeArea.left() + elementsArea.left()) / 2, (wholeArea.top() + elementsArea.top()) / 2,
+			(wholeArea.width() + elementsArea.width()) / 2, (wholeArea.height() + elementsArea.height()) / 2 );
+
+	//int offset = (spaceBetweenElements(item) > 0) ? spaceBetweenElements(item)/2 : 1;
+	int offset = 1;
 
 	int last = forward_ ?
 			( horizontal ? midArea.left() : midArea.top()) :
@@ -328,33 +351,33 @@ QList<ItemRegion> SequentialLayoutFormElement::regions(DeclarativeItemBase* item
 		ItemRegion itemRegion;
 		if (horizontal && forward_)
 		{
-			cursorRegion.setRegion(QRect(last, elementsArea.top(), itemList[i]->x() - last, elementsArea.height()));
-			itemRegion.setRegion(QRect(itemList[i]->x(), elementsArea.top(), itemList[i]->width(), elementsArea.height()));
+			cursorRegion.setRegion(QRect(last, elementBoundary.top(), itemList[i]->x() - last, elementBoundary.height()));
+			itemRegion.setRegion(QRect(itemList[i]->x(), elementBoundary.top(), itemList[i]->width(), elementBoundary.height()));
 			last = itemList[i]->xEnd() + offset;
 		}
 		else if (horizontal && !forward_)
 		{
-			cursorRegion.setRegion(QRect(itemList[i]->xEnd()+1, elementsArea.top(), last, elementsArea.height()));
-			itemRegion.setRegion(QRect(itemList[i]->x(), elementsArea.top(), itemList[i]->width(), elementsArea.height()));
+			cursorRegion.setRegion(QRect(itemList[i]->xEnd()+1, elementBoundary.top(), last, elementBoundary.height()));
+			itemRegion.setRegion(QRect(itemList[i]->x(), elementBoundary.top(), itemList[i]->width(), elementBoundary.height()));
 			last = itemList[i]->x() - offset;
 		}
 		else if (!horizontal && forward_)
 		{
-			cursorRegion.setRegion(QRect(elementsArea.left(), last,  elementsArea.width(), itemList[i]->y() - last));
-			itemRegion.setRegion(QRect(elementsArea.left(), itemList[i]->y(), elementsArea.width(),
+			cursorRegion.setRegion(QRect(elementBoundary.left(), last,  elementBoundary.width(), itemList[i]->y() - last));
+			itemRegion.setRegion(QRect(elementBoundary.left(), itemList[i]->y(), elementBoundary.width(),
 												itemList[i]->height()));
 			last = itemList[i]->yEnd() + offset;
 		}
 		else
 		{
-			cursorRegion.setRegion(QRect(elementsArea.left(), itemList[i]->yEnd()+1, elementsArea.width(), last));
-			itemRegion.setRegion(QRect(elementsArea.left(), itemList[i]->y(), elementsArea.width(),
+			cursorRegion.setRegion(QRect(elementBoundary.left(), itemList[i]->yEnd()+1, elementBoundary.width(), last));
+			itemRegion.setRegion(QRect(elementBoundary.left(), itemList[i]->y(), elementBoundary.width(),
 												itemList[i]->height()));
 			last = itemList[i]->y() - offset;
 		}
 
 		itemRegion.setItem(itemList[i]);
-		adjustCursorRegionToAvoidZeroSize(cursorRegion.region(), horizontal, i==0, false);
+		adjustCursorRegionToAvoidZeroSize(cursorRegion.region(), horizontal, !extraCursors && i==0, false);
 
 		// Note below, that a horizontal layout, means a vertical cursor
 		auto lc = new LayoutCursor(item, horizontal ? Cursor::VerticalCursor : Cursor::HorizontalCursor);
@@ -362,9 +385,9 @@ QList<ItemRegion> SequentialLayoutFormElement::regions(DeclarativeItemBase* item
 		cursorRegion.setCursor(lc);
 		lc->setIndex(i);
 		lc->setVisualizationPosition(cursorRegion.region().topLeft());
-		lc->setVisualizationSize(horizontal ? QSize(2, height(item)) : QSize(width(item), 2));
+		lc->setVisualizationSize(horizontal ? QSize(2, elementBoundary.height()) : QSize(elementBoundary.width(), 2));
 		lc->setOwnerElement(this);
-		if (i==0) lc->setIsAtBoundary(true);
+		if (i==0 && !extraCursors) lc->setIsAtBoundary(true);
 
 		cursorRegion.cursor()->setRegion(cursorRegion.region());
 		if (notLocationEquivalentCursors(item)) lc->setNotLocationEquivalent(true);
@@ -380,14 +403,14 @@ QList<ItemRegion> SequentialLayoutFormElement::regions(DeclarativeItemBase* item
 	{
 		QRect trailing;
 		if (horizontal && forward_)
-			trailing.setRect(last, elementsArea.top(), midArea.right() + 1 - last, elementsArea.height());
+			trailing.setRect(last, elementBoundary.top(), midArea.right() + 1 - last, elementBoundary.height());
 		else if (horizontal && !forward_)
-			trailing.setRect(midArea.left(), elementsArea.top(), last - midArea.left(), elementsArea.height());
+			trailing.setRect(midArea.left(), elementBoundary.top(), last - midArea.left(), elementBoundary.height());
 		else if (!horizontal && forward_)
-			trailing.setRect(elementsArea.left(), last,  elementsArea.width(), midArea.bottom() + 1 - last);
-		else trailing.setRect(elementsArea.left(), midArea.top(),  elementsArea.width(), last - midArea.top());
+			trailing.setRect(elementBoundary.left(), last,  elementBoundary.width(), midArea.bottom() + 1 - last);
+		else trailing.setRect(elementBoundary.left(), midArea.top(),  elementBoundary.width(), last - midArea.top());
 
-		adjustCursorRegionToAvoidZeroSize(trailing, horizontal, false, true);
+		adjustCursorRegionToAvoidZeroSize(trailing, horizontal, false, !extraCursors);
 
 		regs.append(ItemRegion(trailing));
 		// Note below, that a horizontal layout, means a vertical cursor
@@ -395,12 +418,80 @@ QList<ItemRegion> SequentialLayoutFormElement::regions(DeclarativeItemBase* item
 		lc->setOwnerElement(this);
 		regs.last().setCursor(lc);
 		lc->setIndex(itemList.size());
-		lc->setVisualizationPosition(regs.last().region().topLeft());
-		lc->setVisualizationSize(horizontal ? QSize(2, height(item)) : QSize(width(item), 2));
+
+		auto vSize = horizontal ? QSize(2, elementBoundary.height()) : QSize(elementBoundary.width(), 2);
+		lc->setVisualizationSize(vSize);
+		auto vPos = regs.last().region().topLeft();
+		if (itemList.isEmpty())
+		{
+			// Center the cursors. The final + 1 is just for rounding, it looks more centered with it.
+			if (horizontal) vPos.rx() += (regs.last().region().width() - vSize.width()) / 2 + 1;
+			else vPos.ry() += (regs.last().region().height() - vSize.height()) / 2 + 1;
+		}
+		lc->setVisualizationPosition(vPos);
+
 		lc->setRegion(trailing);
+		if (!extraCursors) lc->setIsAtBoundary(true);
+		if (notLocationEquivalentCursors(item)) lc->setNotLocationEquivalent(true);
+	}
+
+	// Finally add the two extra cursors if requested
+	if (extraCursors)
+	{
+		QRect extra;
+
+		// Front
+		if (horizontal && forward_)
+			extra.setRect(0, 0, midArea.left(), item->height());
+		else if (horizontal && !forward_)
+			extra.setRect(midArea.right() + 1, 0, item->width() - midArea.right() - 1, item->height());
+		else if (!horizontal && forward_)
+			extra.setRect(0, 0,  item->width(), midArea.top());
+		else
+			extra.setRect(0, midArea.bottom() + 1, item->width(), item->height() - midArea.bottom() - 1);
+
+		adjustCursorRegionToAvoidZeroSize(extra, horizontal, true, false);
+
+		regs.append(ItemRegion(extra));
+		// Note below, that a horizontal layout, means a vertical cursor
+		auto lc = new LayoutCursor(item, horizontal ? Cursor::VerticalCursor : Cursor::HorizontalCursor);
+		lc->setOwnerElement(this);
+		regs.last().setCursor(lc);
+		lc->setIndex(-1);
+		lc->setVisualizationPosition(regs.last().region().topLeft());
+		lc->setVisualizationSize(horizontal ? QSize(2, item->height()) : QSize(item->width(), 2));
+		lc->setRegion(extra);
+		lc->setIsAtBoundary(true);
+		if (notLocationEquivalentCursors(item)) lc->setNotLocationEquivalent(true);
+
+		// Back
+		if (horizontal && forward_)
+			extra.setRect(midArea.right() + 1, 0, item->width() - midArea.right() - 1, item->height());
+		else if (horizontal && !forward_)
+			extra.setRect(0, 0, midArea.left(), item->height());
+		else if (!horizontal && forward_)
+			extra.setRect(0, midArea.bottom() + 1, item->width(), item->height() - midArea.bottom() - 1);
+		else
+			extra.setRect(0, 0,  item->width(), midArea.top());
+
+		adjustCursorRegionToAvoidZeroSize(extra, horizontal, false, true);
+
+		regs.append(ItemRegion(extra));
+		// Note below, that a horizontal layout, means a vertical cursor
+		lc = new LayoutCursor(item, horizontal ? Cursor::VerticalCursor : Cursor::HorizontalCursor);
+		lc->setOwnerElement(this);
+		regs.last().setCursor(lc);
+		lc->setIndex(itemList.size()+1);
+
+		auto vSize = horizontal ? QSize(2, item->height()) : QSize(item->width(), 2);
+		lc->setVisualizationSize(vSize);
+		lc->setVisualizationPosition(regs.last().region().bottomRight() -QPoint(vSize.width(), vSize.height()));
+
+		lc->setRegion(extra);
 		lc->setIsAtBoundary(true);
 		if (notLocationEquivalentCursors(item)) lc->setNotLocationEquivalent(true);
 	}
+
 	return regs;
 }
 

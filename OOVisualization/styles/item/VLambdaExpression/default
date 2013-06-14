@@ -11,6 +11,7 @@
 			<leftBrace>(</leftBrace>
 			<rightBrace>)</rightBrace>
 		</shape>
+		<extraCursorsOutsideShape>true</extraCursorsOutsideShape>
 		<itemsStyle prototypes="layout/SequentialLayout/default">
 			<direction>0</direction>
 			<spaceBetweenElements>15</spaceBetweenElements>
