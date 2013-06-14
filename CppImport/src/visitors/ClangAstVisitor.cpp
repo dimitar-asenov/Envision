@@ -112,6 +112,11 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl)
 {
 	if(!shouldModel(recordDecl->getLocation()))
 		return true;
+	if(!recordDecl->isThisDeclarationADefinition())
+	{
+		log_->writeWarning(className_,"This is a forward declaration and is not modeled", recordDecl);
+		return true;
+	}
 	OOModel::Class* ooClass = nullptr;
 	QString recordDeclName = QString::fromStdString(recordDecl->getNameAsString());
 	if(recordDecl->isClass())
@@ -123,7 +128,8 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl)
 	if(ooClass)
 	{
 		if(!trMngr_->insertClass(recordDecl,ooClass))
-			return false;
+			// this class is already visited
+			return true;
 
 		// insert in model
 		if(auto curProject = dynamic_cast<OOModel::Project*>(ooStack_.top()))
@@ -208,12 +214,28 @@ bool ClangAstVisitor::TraverseFunctionDecl(clang::FunctionDecl* functionDecl)
 	OOModel::Method* ooFunction = trMngr_->insertFunctionDecl(functionDecl);
 	if(ooFunction)
 	{
-		if(ooFunction->parent())
+		// only visit the body if we are at the definition
+		if(functionDecl->isThisDeclarationADefinition())
 		{
-			// TODO find out why this happens
-			std::cout << "FUNCTION HAS OOPARENT " << functionDecl->getNameAsString() << std::endl;
-			return true;
+			if(ooFunction->items()->size())
+			{
+				log_->writeWarning(className_, "This function is double defined", functionDecl);
+				return true;
+			}
+			ooStack_.push(ooFunction->items());
+			bool inBody = inBody_;
+			inBody_ = true;
+			if(auto body = functionDecl->getBody())
+				TraverseStmt(body);
+			inBody_ = inBody;
+			ooStack_.pop();
 		}
+
+
+		if(ooFunction->parent())
+			// this function has already been inserted to the model
+			return true;
+
 		// insert in model
 		if(OOModel::Project* curProject = dynamic_cast<OOModel::Project*>(ooStack_.top()))
 			curProject->methods()->append(ooFunction);
@@ -227,17 +249,7 @@ bool ClangAstVisitor::TraverseFunctionDecl(clang::FunctionDecl* functionDecl)
 		else
 			log_->writeError(className_, "uknown where to put function", functionDecl);
 
-		// only visit the body if we are at the definition
-		if(functionDecl->isThisDeclarationADefinition())
-		{
-			ooStack_.push(ooFunction->items());
-			bool inBody = inBody_;
-			inBody_ = true;
-			if(auto body = functionDecl->getBody())
-				TraverseStmt(body);
-			inBody_ = inBody;
-			ooStack_.pop();
-		}
+
 
 		// visit type arguments if any
 		if(auto functionTemplate = functionDecl->getDescribedFunctionTemplate())
@@ -759,6 +771,8 @@ bool ClangAstVisitor::TraverseMethodDecl(clang::CXXMethodDecl* methodDecl, OOMod
 	// only visit the body if we are at the definition
 	if(methodDecl->isThisDeclarationADefinition())
 	{
+		if(ooMethod->items()->size())
+			log_->writeWarning(className_, "This function is double defined", methodDecl);
 		ooStack_.push(ooMethod->items());
 		bool inBody = inBody_;
 		inBody_ = true;

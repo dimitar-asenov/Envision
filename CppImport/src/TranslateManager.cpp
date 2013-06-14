@@ -25,6 +25,7 @@
  **********************************************************************************************************************/
 
 #include "TranslateManager.h"
+#include "CppImportException.h"
 
 namespace CppImport {
 
@@ -48,15 +49,13 @@ OOModel::Module *TranslateManager::insertNamespace(clang::NamespaceDecl *nd, int
 
 bool TranslateManager::insertClass(clang::CXXRecordDecl* rDecl, OOModel::Class* ooClass)
 {
-	QString hash = QString::fromStdString(rDecl->getNameAsString());
-	hash.append("_").append(rDecl->isThisDeclarationADefinition());
+	QString hash = hashRecord(rDecl);
 	// if rdecl is not managed yet add it:
 	if(!classMap_.contains(hash))
 	{
 		classMap_.insert(hash,ooClass);
 		return true;
 	}
-	std::cout << "ERROR TRANSLATEMNGR: CLASS "<< rDecl->getNameAsString() << " ALREADY IN MAP" << std::endl;
 	return false;
 }
 
@@ -66,23 +65,49 @@ OOModel::Method* TranslateManager::insertMethodDecl(clang::CXXMethodDecl* mDecl,
 	// only consider methods where the parent has already been visited
 	if(classMap_.contains(hashRecord(mDecl->getParent())))
 	{
-		QString hash = hashFunction(mDecl);
+		QString hash = hashMethod(mDecl);
 		if(!methodMap_.contains(hash))
 			method = addNewMethod(mDecl, kind);
 		else
+		{
 			method = methodMap_.value(hash);
+			if(method->items()->size())
+				return method;
+			// the method which is in the map is just a declaration
+			// therefore it might miss some arguments name which we collect here
+			for(int i = 0; i< method->arguments()->size(); i++)
+			{
+				OOModel::FormalArgument* ooArg = method->arguments()->at(i);
+				// note that this never should/can be out of range otherwise the hash would be different
+				ooArg->setName(QString::fromStdString(mDecl->getParamDecl(i)->getNameAsString()));
+			}
+			return method;
+		}
 	}
 	return method;
 }
 
-OOModel::Method*TranslateManager::insertFunctionDecl(clang::FunctionDecl* functionDecl)
+OOModel::Method* TranslateManager::insertFunctionDecl(clang::FunctionDecl* functionDecl)
 {
 	OOModel::Method* ooFunction = nullptr;
 	QString hash = hashFunction(functionDecl);
 	if(!functionMap_.contains(hash))
 		ooFunction = addNewFunction(functionDecl);
 	else
+	{
 		ooFunction = functionMap_.value(hash);
+		if(ooFunction->items()->size())
+			return ooFunction;
+		// the method which is in the map is just a declaration
+		// therefore it might miss some arguments name which we collect here
+		for(int i = 0; i< ooFunction->arguments()->size(); i++)
+		{
+			OOModel::FormalArgument* ooArg = ooFunction->arguments()->at(i);
+			// note that this never should/can be out of range otherwise the hash would be different
+			ooArg->setName(QString::fromStdString(functionDecl->getParamDecl(i)->getNameAsString()));
+		}
+		return ooFunction;
+	}
 	return ooFunction;
 }
 
@@ -99,31 +124,9 @@ OOModel::Field* TranslateManager::insertField(clang::FieldDecl* fDecl)
 	return nullptr;
 }
 
-OOModel::VariableDeclaration* TranslateManager::insertVar(clang::VarDecl* vDecl)
-{
-	QString hash = hashVar(vDecl);
-	OOModel::VariableDeclaration* ooVarDecl = nullptr;
-	if(!varMap_.contains(hash))
-	{
-		ooVarDecl = new OOModel::VariableDeclaration();
-		ooVarDecl->setName(QString::fromStdString(vDecl->getNameAsString()));
-		varMap_.insert(hash,ooVarDecl);
-	}
-	else
-		std::cout << "ERROR TRANSLATEMNGR: ---------->VAR : " << vDecl->getNameAsString() << " IS ALREADY IN THE MAP" << std::endl;
-	return ooVarDecl;
-}
-
-OOModel::VariableDeclaration* TranslateManager::getVar(clang::VarDecl* vDecl)
-{
-	QString hash = hashVar(vDecl);
-	if(varMap_.contains(hash))
-		return varMap_.value(hash);
-	return nullptr;
-}
-
 OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl, OOModel::Method::MethodKind kind)
 {
+	QString hash = hashMethod(mDecl);
 	OOModel::Method* method = new OOModel::Method(QString::fromStdString(mDecl->getNameAsString()), kind);
 	// process result type
 	OOModel::Expression* restype = utils_->convertClangType(mDecl->getResultType());
@@ -152,7 +155,7 @@ OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl, OOM
 	else
 		std::cout << "ERROR TRANSLATEMNGR: METHOD DECL NO PARENT FOUND" << std::endl;
 
-	methodMap_.insert(hashFunction(mDecl),method);
+	methodMap_.insert(hash, method);
 
 	return method;
 }
@@ -200,17 +203,26 @@ QString TranslateManager::hashFunction(clang::FunctionDecl* functionDecl)
 	return hash;
 }
 
-QString TranslateManager::hashRecord(clang::RecordDecl* recordDecl)
+QString TranslateManager::hashMethod(clang::CXXMethodDecl* methodDecl)
 {
-	QString hash = QString::fromStdString(recordDecl->getNameAsString());
-	hash.append("_").append(recordDecl->isThisDeclarationADefinition());
+	QString hash = QString::fromStdString(methodDecl->getNameAsString());
+	hash.prepend(QString::fromStdString(methodDecl->getResultType().getCanonicalType().getAsString()).append("_"));
+	hash.append("_").append(QString::fromStdString(methodDecl->getParent()->getNameAsString()));
+	hash.append("_").append(methodDecl->getNumParams());
+
+
+	for(unsigned i = 0; i < methodDecl->param_size(); i++)
+	{
+		hash.append("_").append(QString::fromStdString(methodDecl->getParamDecl(i)->getType().getCanonicalType().getAsString()));
+	}
 	return hash;
 }
 
-QString TranslateManager::hashVar(clang::VarDecl* varDecl)
+QString TranslateManager::hashRecord(clang::RecordDecl* recordDecl)
 {
-	QString hash = QString::fromStdString(varDecl->getNameAsString());
-	hash.prepend(QString::fromStdString(varDecl->getType().getAsString()).append("_"));
+	QString hash = QString::fromStdString(recordDecl->getNameAsString());
+	if(auto parentNamedDecl = llvm::dyn_cast<clang::NamedDecl>(recordDecl->getParent()))
+		hash.prepend(QString::fromStdString(parentNamedDecl->getNameAsString()));
 	return hash;
 }
 

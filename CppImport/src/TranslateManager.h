@@ -41,16 +41,14 @@ class TranslateManager
 		OOModel::Method* insertMethodDecl(clang::CXXMethodDecl* mDecl, OOModel::Method::MethodKind kind);
 		OOModel::Method* insertFunctionDecl(clang::FunctionDecl* functionDecl);
 		OOModel::Field* insertField(clang::FieldDecl* fDecl);
-		OOModel::VariableDeclaration* insertVar(clang::VarDecl* vDecl);
-		OOModel::VariableDeclaration* getVar(clang::VarDecl* vDecl);
 
 	private:
 		OOModel::Method* addNewMethod(clang::CXXMethodDecl* mDecl, OOModel::Method::MethodKind kind);
 		OOModel::Method* addNewFunction(clang::FunctionDecl* functionDecl);
 
 		QString hashFunction(clang::FunctionDecl* functionDecl);
+		QString hashMethod(clang::CXXMethodDecl* methodDecl);
 		QString hashRecord(clang::RecordDecl* recordDecl);
-		QString hashVar(clang::VarDecl* varDecl);
 
 		Model::Model* model_{};
 		OOModel::Project* project_{};
@@ -59,7 +57,6 @@ class TranslateManager
 		QMap<QString, OOModel::Class*> classMap_;
 		QMap<QString, OOModel::Method*> methodMap_;
 		QMap<QString, OOModel::Method*> functionMap_;
-		QMap<QString, OOModel::VariableDeclaration*> varMap_;
 
 		CppImportUtilities* utils_{};
 };
