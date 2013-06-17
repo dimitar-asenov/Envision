@@ -44,4 +44,4 @@ Type* ThrowExpression::type()
 	return new ThrownExceptionType(t);
 }
 
-} /* namespace Interaction */
+} /* namespace OOModel */
