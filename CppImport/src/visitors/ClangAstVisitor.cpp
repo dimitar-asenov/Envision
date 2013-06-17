@@ -263,7 +263,7 @@ bool ClangAstVisitor::TraverseFunctionDecl(clang::FunctionDecl* functionDecl)
 			}
 		}
 		// modifiers
-		ooFunction->modifiers()->set(utils_->convertStorageSpecifier(functionDecl->getStorageClassAsWritten()));
+		ooFunction->modifiers()->set(utils_->convertStorageSpecifier(functionDecl->getStorageClass()));
 	}
 	else
 	{
@@ -602,7 +602,7 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 		inBody_ = inBody;
 	}
 	// modifiers
-	ooVarDecl->modifiers()->set(utils_->convertStorageSpecifier(varDecl->getStorageClassAsWritten()));
+	ooVarDecl->modifiers()->set(utils_->convertStorageSpecifier(varDecl->getStorageClass()));
 
 	return true;
 }
@@ -792,7 +792,7 @@ bool ClangAstVisitor::TraverseMethodDecl(clang::CXXMethodDecl* methodDecl, OOMod
 	}
 	// modifiers
 	ooMethod->modifiers()->set(utils_->convertAccessSpecifier(methodDecl->getAccess()));
-	ooMethod->modifiers()->set(utils_->convertStorageSpecifier(methodDecl->getStorageClassAsWritten()));
+	ooMethod->modifiers()->set(utils_->convertStorageSpecifier(methodDecl->getStorageClass()));
 	// member initializers
 	if(auto constructor = llvm::dyn_cast<clang::CXXConstructorDecl>(methodDecl))
 		insertMemberInitializers(ooMethod, constructor);
