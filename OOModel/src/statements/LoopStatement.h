@@ -31,6 +31,8 @@
 #include "../expressions/Expression.h"
 #include "../elements/StatementItemList.h"
 
+#include "ModelBase/src/nodes/Integer.h"
+
 DECLARE_TYPED_LIST(OOMODEL_API, OOModel, LoopStatement)
 
 namespace OOModel {
@@ -43,10 +45,21 @@ class OOMODEL_API LoopStatement: public Super<Statement>
 	ATTRIBUTE(Expression, initStep, setInitStep)
 	ATTRIBUTE(Expression, updateStep, setUpdateStep)
 	ATTRIBUTE(StatementItemList, body, setBody)
+	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, lpKind, setLpKind, int)
 
 	public:
+		enum class LoopKind : int {PreStopCondition, PostStopCondition, PreContinueCondition, PostContinueCondition};
+		LoopStatement(LoopKind& kind);
+
+		LoopKind loopKind() const;
+		void setLoopKind(const LoopKind& kind);
+
 		virtual QList<Model::Node*> findSymbols(const QRegExp& symbolExp, Node* source, FindSymbolMode mode,
 				bool exhaustAllScopes) override;
 };
+
+
+inline LoopStatement::LoopKind LoopStatement::loopKind() const { return static_cast<LoopKind> (lpKind()); }
+inline void LoopStatement::setLoopKind(const LoopKind &kind) { setLpKind(static_cast<int> (kind)); }
 
 }
