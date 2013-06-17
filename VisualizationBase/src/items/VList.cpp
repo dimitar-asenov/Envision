@@ -74,7 +74,7 @@ void VList::initializeForms()
 			->setHorizontal()->setSpaceBetweenElements(spaceBetweenElementsGetter)
 			->setHasCursorWhenEmpty(hasCursorWhenEmptyGetter)
 			->setNotLocationEquivalentCursors(notLocationEquivalentGetter)
-			->setNoBoudaryCursors(noBoundaryCursorsGetter)
+			->setNoBoundaryCursors(noBoundaryCursorsGetter)
 			->setNoInnerCursors(noInnerCursorsGetter)
 			->setListOfNodes(listOfNodesGetter));
 	// Form 1: vertical orientation
@@ -82,7 +82,7 @@ void VList::initializeForms()
 			->setVertical()->setSpaceBetweenElements(spaceBetweenElementsGetter)
 			->setHasCursorWhenEmpty(hasCursorWhenEmptyGetter)
 			->setNotLocationEquivalentCursors(notLocationEquivalentGetter)
-			->setNoBoudaryCursors(noBoundaryCursorsGetter)
+			->setNoBoundaryCursors(noBoundaryCursorsGetter)
 			->setNoInnerCursors(noInnerCursorsGetter)
 			->setListOfNodes(listOfNodesGetter));
 }

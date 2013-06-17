@@ -53,7 +53,7 @@ class VISUALIZATIONBASE_API LayoutFormElement : public FormElement
 		 * Sets a getter (\a noBoundaryCursorsGetter) for checking if the element should not have any boundary cursors
 		 * dynamically while rendering.
 		 */
-		LayoutFormElement* setNoBoudaryCursors(std::function<bool(Item* item)> noBoundaryCursorsGetter);
+		LayoutFormElement* setNoBoundaryCursors(std::function<bool(Item* item)> noBoundaryCursorsGetter);
 		/**
 		 * Sets a getter (\a noInnerCursorsGetter) for checking if the element should not have any inner cursors
 		 * dynamically while rendering.
@@ -84,9 +84,10 @@ inline LayoutFormElement* LayoutFormElement::setNotLocationEquivalentCursors(
 	notLocationEquivalentCursorsGetter_ = notLocationEquivalentCursorsGetter;
 	return this;
 }
-inline LayoutFormElement* LayoutFormElement::setNoBoudaryCursors(std::function<bool(Item* item)> noBoudaryCursorsGetter)
+inline LayoutFormElement*
+	LayoutFormElement::setNoBoundaryCursors(std::function<bool(Item* item)> noBoundaryCursorsGetter)
 {
-	noBoundaryCursorsGetter_ = noBoudaryCursorsGetter;
+	noBoundaryCursorsGetter_ = noBoundaryCursorsGetter;
 	return this;
 }
 inline LayoutFormElement* LayoutFormElement::setNoInnerCursors(std::function<bool(Item* item)> noInnerCursorsGetter)
@@ -139,8 +140,8 @@ public:																																					\
 	 * Sets a getter (\a noBoundaryCursorsGetter) for checking if the element should not have any boundary cursors
 	 * dynamically while rendering.
 	 */																																					\
-	ClassName* setNoBoudaryCursors(std::function<bool(Item* item)> noBoundaryCursorsGetter){									\
-		 return static_cast<ClassName*>(LayoutFormElement::setNoBoudaryCursors(noBoundaryCursorsGetter));					\
+	ClassName* setNoBoundaryCursors(std::function<bool(Item* item)> noBoundaryCursorsGetter){									\
+		 return static_cast<ClassName*>(LayoutFormElement::setNoBoundaryCursors(noBoundaryCursorsGetter));					\
 	 }																																						\
 	/**
 	 * Sets a getter (\a noInnerCursorsGetter) for checking if the element should not have any inner cursors
