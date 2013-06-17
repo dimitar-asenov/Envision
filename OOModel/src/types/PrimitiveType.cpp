@@ -46,10 +46,10 @@ PrimitiveType::PrimitiveTypes PrimitiveType::resultFromBinaryOperation(Primitive
 	if (left == DOUBLE || right == DOUBLE) return DOUBLE;
 	if (left == FLOAT || right == FLOAT) return FLOAT;
 	if ( (left == LONG || right == LONG)
-			&& !left == UNSIGNED_LONG && !left == UNSIGNED_INT && !right == UNSIGNED_LONG && !right == UNSIGNED_INT)
+			&& left != UNSIGNED_LONG && left != UNSIGNED_INT && right != UNSIGNED_LONG && right != UNSIGNED_INT)
 		return LONG;
 	if ( (left == UNSIGNED_LONG || right == UNSIGNED_LONG)
-			&& !left == LONG && !left == INT && !right == LONG && !right == INT)
+			&& left != LONG && left != INT && right != LONG && right != INT)
 		return UNSIGNED_LONG;
 
 	return VOID;
