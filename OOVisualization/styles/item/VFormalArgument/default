@@ -1,6 +1,9 @@
 <!DOCTYPE EnvisionVisualizationStyle>
-<style prototypes="item/Item/default">
+<style prototypes="item/DeclarativeItemBase/default">
 	<shape />
+	<noBoundaryCursorsInsideShape>true</noBoundaryCursorsInsideShape>
+	<noInnerCursors>true</noInnerCursors>
+
 	<layout prototypes="layout/SequentialLayout/default">
 		<direction>2</direction>
 		<noInnerCursors>true</noInnerCursors>
@@ -13,4 +16,20 @@
 		<noInnerCursors>true</noInnerCursors>
 		<noBoundaryCursorsInsideShape>true</noBoundaryCursorsInsideShape>
 	</lambdaLayout>
+	
+	<outIcon prototypes="item/Symbol/default">
+		<font>
+			<size>10</size>
+			<weight>0</weight>
+		</font>
+		<pen>
+			<color>
+				<alpha>255</alpha>
+				<red>255</red>
+				<green>0</green>
+				<blue>0</blue>
+			</color>
+		</pen>
+		<symbol>↲</symbol>
+	</outIcon>
 </style>

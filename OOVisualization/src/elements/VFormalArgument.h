@@ -32,35 +32,39 @@
 #include "OOModel/src/elements/FormalArgument.h"
 
 #include "VisualizationBase/src/items/ItemWithNode.h"
-#include "VisualizationBase/src/items/LayoutProvider.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
 
 namespace Visualization {
 	class VText;
+	class Static;
 }
 
 namespace OOVisualization {
 
 class OOVISUALIZATION_API VFormalArgument
-	: public Super<Visualization::ItemWithNode<VFormalArgument, Visualization::LayoutProvider<>,
+	: public Super<Visualization::ItemWithNode<VFormalArgument, Visualization::DeclarativeItem<VFormalArgument>,
 	  OOModel::FormalArgument>>
 {
 	ITEM_COMMON(VFormalArgument)
 
 	public:
 		VFormalArgument(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-		virtual ~VFormalArgument();
 
-		Visualization::VText* name();
-		Visualization::Item* typeExpr();
 
-	protected:
-		void determineChildren();
+		static void initializeForms();
+		virtual int determineForm() override;
+
+		Visualization::VText* name() const;
+		Visualization::Item* typeExpr()const;
+		Visualization::Static* icon() const;
 
 	private:
-		Visualization::VText* name_;
-		Visualization::Item* type_;
+		Visualization::VText* name_{};
+		Visualization::Item* type_{};
+		Visualization::Static* icon_{};
 };
 
-inline Visualization::VText* VFormalArgument::name() { return name_; }
-inline Visualization::Item* VFormalArgument::typeExpr() { return type_; }
+inline Visualization::VText* VFormalArgument::name() const { return name_; }
+inline Visualization::Item* VFormalArgument::typeExpr() const { return type_; }
+inline Visualization::Static* VFormalArgument::icon() const { return icon_; }
 }

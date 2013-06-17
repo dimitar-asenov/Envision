@@ -28,17 +28,20 @@
 
 #include "../oovisualization_api.h"
 
+#include "VisualizationBase/src/declarative/DeclarativeItemBaseStyle.h"
 #include "VisualizationBase/src/items/TextStyle.h"
+#include "VisualizationBase/src/items/StaticStyle.h"
 #include "VisualizationBase/src/layouts/SequentialLayout.h"
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VFormalArgumentStyle : public Visualization::ItemStyle
+class OOVISUALIZATION_API VFormalArgumentStyle : public Visualization::DeclarativeItemBaseStyle
 {
 	private:
 		Visualization::SequentialLayoutStyle layout_;
 		Visualization::SequentialLayoutStyle lambdaLayout_;
 		Visualization::TextStyle name_;
+		Visualization::StaticStyle outIcon_;
 
 	public:
 		void load(Visualization::StyleLoader& sl);
@@ -46,10 +49,12 @@ class OOVISUALIZATION_API VFormalArgumentStyle : public Visualization::ItemStyle
 		const Visualization::SequentialLayoutStyle& layout() const;
 		const Visualization::SequentialLayoutStyle& lambdaLayout() const;
 		const Visualization::TextStyle& name() const;
+		const Visualization::StaticStyle& outIcon() const;
 };
 
 inline const Visualization::SequentialLayoutStyle& VFormalArgumentStyle::layout() const { return layout_; }
 inline const Visualization::SequentialLayoutStyle& VFormalArgumentStyle::lambdaLayout() const { return lambdaLayout_; }
 inline const Visualization::TextStyle& VFormalArgumentStyle::name() const { return name_; }
+inline const Visualization::StaticStyle& VFormalArgumentStyle::outIcon() const { return outIcon_; }
 
 }
