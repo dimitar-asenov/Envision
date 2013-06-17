@@ -58,6 +58,7 @@
 #include <string>
 
 #include <QtCore/QDir>
+#include <QtCore/QDirIterator>
 #include <QtCore/QStack>
 
 

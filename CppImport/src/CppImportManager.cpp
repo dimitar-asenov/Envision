@@ -38,18 +38,12 @@ CppImportManager::~CppImportManager()
 
 bool CppImportManager::setSrcPath(QString& srcpath, QString& dbpath)
 {
-	QDir dir(srcpath);
 	// set a filter to only get files which are c++ sources
 	QStringList cppFilter;
 	cppFilter << "*.cpp" << "*.cc" << "*.cxx";
-	dir.setNameFilters(cppFilter);
-	dir.setFilter(QDir::Files);
-	QStringList files = dir.entryList();
-	// add all files found to sources vector
-	foreach (QString file, files)
-	{
-		sources_.push_back(dir.absoluteFilePath(file).toStdString());
-	}
+	QDirIterator dirIterator(srcpath, cppFilter, QDir::Files, QDirIterator::Subdirectories);
+	while(dirIterator.hasNext())
+		sources_.push_back(dirIterator.next().toStdString());
 	return setCompilationDbPath(dbpath);
 }
 
