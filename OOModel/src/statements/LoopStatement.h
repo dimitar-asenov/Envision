@@ -48,7 +48,7 @@ class OOMODEL_API LoopStatement: public Super<Statement>
 	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, lpKind, setLpKind, int)
 
 	public:
-		enum class LoopKind : int {PreStopCondition, PostStopCondition, PreContinueCondition, PostContinueCondition};
+		enum class LoopKind : int {PreCheck, PostCheck};
 		LoopStatement(LoopKind& kind);
 
 		LoopKind loopKind() const;
