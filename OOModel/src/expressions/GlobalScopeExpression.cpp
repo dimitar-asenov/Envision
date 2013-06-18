@@ -24,42 +24,43 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "expressions/GlobalScopeExpression.h"
+#include "declarations/Declaration.h"
+#include "declarations/Class.h"
+#include "../types/ClassType.h"
+#include "../types/SymbolProviderType.h"
+#include "../types/ErrorType.h"
 
-#include "Statement.h"
-
-#include "../expressions/Expression.h"
-#include "../elements/StatementItemList.h"
-
-#include "ModelBase/src/nodes/Integer.h"
-
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, LoopStatement)
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(OOModel::GlobalScopeExpression)
 
 namespace OOModel {
 
-class OOMODEL_API LoopStatement: public Super<Statement>
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(GlobalScopeExpression)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(GlobalScopeExpression)
+
+Type* GlobalScopeExpression::type()
 {
-	COMPOSITENODE_DECLARE_STANDARD_METHODS(LoopStatement)
+	auto p = parent();
 
-	ATTRIBUTE(Expression, condition, setCondition)
-	ATTRIBUTE(Expression, initStep, setInitStep)
-	ATTRIBUTE(Expression, updateStep, setUpdateStep)
-	ATTRIBUTE(StatementItemList, body, setBody)
-	PRIVATE_ATTRIBUTE_VALUE(Model::Integer, lpKind, setLpKind, int)
+	if(p)
 
-	public:
-		enum class LoopKind : int {PreCheck, PostCheck};
-		LoopStatement(LoopKind& kind);
+	while(p)
+	{
+		if(auto gp = p->parent())
+		{
+			p = gp;
+			continue;
+		}
+		if(auto cl = dynamic_cast<Class*> (p))
+			return new ClassType(cl, true);
+		else if(auto decl = dynamic_cast<Declaration*> (p))
+			return new SymbolProviderType(decl, true);
+		else
+			break;
+	}
 
-		LoopKind loopKind() const;
-		void setLoopKind(const LoopKind& kind);
-
-		virtual QList<Model::Node*> findSymbols(const QRegExp& symbolExp, Node* source, FindSymbolMode mode,
-				bool exhaustAllScopes) override;
-};
-
-
-inline LoopStatement::LoopKind LoopStatement::loopKind() const { return static_cast<LoopKind> (lpKind()); }
-inline void LoopStatement::setLoopKind(const LoopKind &kind) { setLpKind(static_cast<int> (kind)); }
-
+	return new ErrorType("Global Scope is no declaration");
 }
+
+} /* namespace OOModel */

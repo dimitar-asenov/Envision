@@ -49,7 +49,14 @@ class OOMODEL_API Modifier :  public Super<Model::Node>
 			Private = 0x00000002,
 			Protected = 0x00000004,
 
-			Static = 0x00000008
+			Static = 0x00000008,
+
+			Final = 0x00000010,
+			Abstract = 0x00000020,
+			Virtual = 0x00000040,
+			Override = 0x00000080,
+
+			Inline = 0x00000100
 		};
 		Q_DECLARE_FLAGS(Modifiers, ModifierFlag)
 
