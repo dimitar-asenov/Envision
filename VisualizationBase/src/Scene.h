@@ -115,12 +115,20 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		 */
 		QList<Item*> selectedItems() const;
 
+		bool isCurrentMousePressAClick() const;
+
 	public slots:
 		void nodesUpdated(QList<Node*> nodes);
 
 	protected:
-		virtual bool event(QEvent *event) override;
-		virtual void keyPressEvent (QKeyEvent *event) override;
+		virtual bool event(QEvent* event) override;
+		virtual void keyPressEvent(QKeyEvent* event) override;
+
+		// Reimplemented in order to detect mouse clicks
+		virtual void mouseMoveEvent(QGraphicsSceneMouseEvent* mouseEvent) override;
+		virtual void mousePressEvent(QGraphicsSceneMouseEvent* mouseEvent) override;
+		virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent* mouseEvent) override;
+		virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* mouseEvent) override;
 
 	private:
 		bool needsUpdate_;
@@ -138,6 +146,10 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 
 		ItemCategories hiddenItemCategories_;
 
+		bool isCurrentMousePressAClick_{};
+		QElapsedTimer lastMousePressTimer_{};
+		const int MAX_MILLISECONDS_FOR_A_CLICK = 500;
+
 		QList<RefreshActionFunction> refreshActionFunctions_;
 
 		void updateItems();
@@ -154,6 +166,8 @@ inline SceneHandlerItem* Scene::sceneHandlerItem() {return sceneHandlerItem_; }
 inline Cursor* Scene::mainCursor() { return mainCursor_; }
 inline const QList<Item*>& Scene::topLevelItems() const {return topLevelItems_; }
 inline void Scene::addRefreshActionFunction(RefreshActionFunction func) {refreshActionFunctions_.append(func); }
+
+inline bool Scene::isCurrentMousePressAClick() const { return isCurrentMousePressAClick_; }
 
 
 }

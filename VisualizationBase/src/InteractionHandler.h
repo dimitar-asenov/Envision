@@ -71,13 +71,16 @@ class VISUALIZATIONBASE_API InteractionHandler
 		virtual void focusOutEvent(Item *target, QFocusEvent *event);
 
 		// Command events
-		virtual void command(Item *target, const QString& command);
+		virtual void command(Item *target, const QString& command); // Introduced by Envision
 
 		// Destructor
 		virtual ~InteractionHandler();
 
 		// Instance
 		static InteractionHandler* instance();
+
+		static bool isClick(Item* target);
+		static bool isDrag(Item* target);
 };
 
 }

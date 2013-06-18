@@ -204,14 +204,13 @@ bool Scene::event(QEvent *event)
 			)
 			scheduleUpdate();
 
-		// Always move the scene handler item to the location of the last mouse click.
-		// This assures that even if the user presses somewhere in the empty space of the scene, the scene handler item will
-		// be selected.
-
 		Logger::Timer* tInputEvent{};
 		if (event->type() == QEvent::GraphicsSceneMousePress || event->type() == QEvent::KeyPress)
 			tInputEvent = Logger::Timer::start("Input event");
 
+		// Always move the scene handler item to the location of the last mouse click.
+		// This assures that even if the user presses somewhere in the empty space of the scene, the scene handler item will
+		// be selected.
 		if (event->type() == QEvent::GraphicsSceneMousePress)
 		{
 			auto e = static_cast<QGraphicsSceneMouseEvent*>(event);
@@ -361,6 +360,35 @@ void Scene::computeSceneRect()
 	//sceneRect = viewRect.united(sceneRect);
 	setSceneRect(sceneRect);
 	for(auto v: views()) v->setSceneRect(viewRect);
+}
+
+// Reimplemented in order to detect mouse clicks
+void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent* mouseEvent)
+{
+	isCurrentMousePressAClick_ = isCurrentMousePressAClick_
+				&& lastMousePressTimer_.elapsed() <= MAX_MILLISECONDS_FOR_A_CLICK;
+	QGraphicsScene::mouseMoveEvent(mouseEvent);
+}
+
+void Scene::mousePressEvent(QGraphicsSceneMouseEvent* mouseEvent)
+{
+	lastMousePressTimer_.start();
+	isCurrentMousePressAClick_ = true;
+	QGraphicsScene::mousePressEvent(mouseEvent);
+}
+
+void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent* mouseEvent)
+{
+	isCurrentMousePressAClick_ = isCurrentMousePressAClick_
+			&& lastMousePressTimer_.elapsed() <= MAX_MILLISECONDS_FOR_A_CLICK;
+	QGraphicsScene::mouseReleaseEvent(mouseEvent);
+}
+
+
+void Scene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* mouseEvent)
+{
+	isCurrentMousePressAClick_ = false;
+	QGraphicsScene::mouseDoubleClickEvent(mouseEvent);
 }
 
 }
