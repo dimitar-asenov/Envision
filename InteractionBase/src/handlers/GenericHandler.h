@@ -85,21 +85,22 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 		void removeCommandPrompt();
 		void showCommandPrompt(Visualization::Item* commandRecevier);
 
-		virtual void beforeEvent(Visualization::Item *target, QEvent* event);
+		virtual void beforeEvent(Visualization::Item *target, QEvent* event) override;
 
 		// Keyboard events
-		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event);
+		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event) override;
 
 		// Mouse events
-		virtual void mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event);
-		virtual void mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event);
-		virtual void mouseDoubleClickEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event);
+		virtual void mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
+		virtual void mouseReleaseEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
+		virtual void mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
+		virtual void mouseDoubleClickEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
 
 		// Focus events
-		virtual void focusInEvent(Visualization::Item *target, QFocusEvent *event);
+		virtual void focusInEvent(Visualization::Item *target, QFocusEvent *event) override;
 
 		// Command events
-		virtual void command(Visualization::Item *target, const QString& command);
+		virtual void command(Visualization::Item *target, const QString& command) override;
 
 		/**
 		 * Removes the node visualized by \a target from the list which contains it.

@@ -468,24 +468,18 @@ bool GenericHandler::moveCursor(Visualization::Item *target, int key)
 
 void GenericHandler::mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
-	if (event->button() == Qt::LeftButton && event->modifiers() == Qt::ControlModifier)
-	{
-		// Ignore the event and do not send it to the Interaction handler. This prevents the default event handlers from
-		// processing the event.
-		event->ignore();
-		return;
-	}
-
 	if (event->modifiers() == Qt::NoModifier)
 		target->moveCursor(Visualization::Item::MoveOnPosition, event->pos().toPoint());
+	else if (event->button() == Qt::RightButton)
+		{} // Accept the event
+	else
+		event->ignore();
+}
 
-	if (event->button() == Qt::RightButton)
-	{
-		showCommandPrompt(target);
-		return;
-	}
 
-	InteractionHandler::mousePressEvent(target, event);
+void GenericHandler::mouseReleaseEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
+{
+	if (isClick(target) && event->button() == Qt::RightButton) showCommandPrompt(target);
 }
 
 void GenericHandler::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
@@ -498,12 +492,11 @@ void GenericHandler::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneM
 		filterSelectedItems(target, event);
 		target->scene()->scheduleUpdate();
 	}
-	else InteractionHandler::mouseMoveEvent(target, event);
 }
 
-void GenericHandler::mouseDoubleClickEvent(Visualization::Item *, QGraphicsSceneMouseEvent *event)
+void GenericHandler::mouseDoubleClickEvent(Visualization::Item *, QGraphicsSceneMouseEvent *)
 {
-	event->ignore();
+	// Do no use the default handlers.
 }
 
 void GenericHandler::focusInEvent(Visualization::Item *target, QFocusEvent *event)
