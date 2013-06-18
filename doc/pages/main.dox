@@ -12,28 +12,26 @@
 
 \section status Development status
 
-	Envision is in its early development stage and can not be used for programming yet. Nevertheless the current version
-	illustrates some of the key visualization and interaction concepts for the IDE.
+	Envision is still a proof of concept prototype and can not be used for programming yet. Nevertheless the current
+	version illustrates some of the key visualization and interaction concepts for the IDE.
 
-	Envision currently runs on Linux and Windows. Development is done in Linux. There are two branches on GitHub:
+	Envision currently runs on Linux and Windows. Development is done in Linux. There are two code branches on GitHub:
 		- \c master - contains an older, more stable version of the IDE
 		- \c development - contains the latest changes and features. This branch is typically updated on a daily basis
 		and might contain severe bugs. When the \c development branch is "in a good state" it is merged into \c master.
 
 	\subsection implemented Implemented features
-
 		- A core component that finds and loads plug-ins at run time
 		- A small test framework for testing plug-ins
 		- An extensible application model which currently supports a subset of Java (partial generics, no interfaces, no
-		reflection, no libraries)
+		reflection, no libraries), and C++ (some templates, partial C++11 support, few 'exotic features')
 		- Flexible visualizations for elements of the model
-		- %Interaction directly with the visualizations using a structured editor approach
-
-		The implemented features should be considered a proof of concept only and are not stable at this point.
+		- Cod editing using a structured editor
+		- Ability to customize how AST nodes are rendered based on context
+		- Partial support for importing Java code
 
 	\subsection missing Missing features required for basic usability
-
-		- Import and export to and from any programming language
+		- Full support for importing/exporting to/from a programming language
 		- Support for external libraries
 
 \section dev-doc Developer documentation and guidelines for contributors
