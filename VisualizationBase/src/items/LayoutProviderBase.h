@@ -47,7 +47,8 @@ class VISUALIZATIONBASE_API LayoutProviderBase : public Super<Item>
 
 		Layout* layout() const;
 
-		virtual Item* childClosestTo(const QPoint& point, PositionConstraints childConstraint = NoConstraints);
+		virtual Item* childClosestTo(const QPoint& point, PositionConstraints childConstraint = NoConstraints)
+			const override;
 
 	protected:
 		virtual void updateGeometry(int availableWidth, int availableHeight);
