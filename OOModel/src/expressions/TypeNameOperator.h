@@ -24,24 +24,23 @@
  **
  **********************************************************************************************************************/
 
-#include "ThrowExpression.h"
-#include "../types/ThrownExceptionType.h"
+#pragma once
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::ThrowExpression)
+#include "Expression.h"
+
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, TypeNameOperator)
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(ThrowExpression)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(ThrowExpression)
-
-REGISTER_ATTRIBUTE(ThrowExpression, expr, Expression, false, false, true)
-
-Type* ThrowExpression::type()
+class OOMODEL_API TypeNameOperator : public Super<Expression>
 {
-	auto t = expr()->type();
-	t->setValueType(true);
-	return new ThrownExceptionType(t);
-}
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(TypeNameOperator)
+
+	ATTRIBUTE(Expression, typeExpression, setTypeExpression)
+
+	public:
+		virtual Type* type() override;
+};
+
 
 } /* namespace OOModel */

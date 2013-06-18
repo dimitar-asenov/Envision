@@ -88,7 +88,9 @@ HEADERS += src/elements/Modifier.h \
     src/declarations/TypeAlias.h \
     src/expressions/types/AutoTypeExpression.h \
     src/elements/MemberInitializer.h \
-    src/expressions/TypeTraitExpression.h
+    src/expressions/TypeTraitExpression.h \
+    src/expressions/TypeNameOperator.h \
+    src/expressions/GlobalScopeExpression.h
 SOURCES += src/elements/Modifier.cpp \
     src/declarations/NameImport.cpp \
     src/expressions/types/FunctionTypeExpression.cpp \
@@ -171,4 +173,6 @@ SOURCES += src/elements/Modifier.cpp \
     src/declarations/TypeAlias.cpp \
     src/expressions/types/AutoTypeExpression.cpp \
     src/elements/MemberInitializer.cpp \
-    src/expressions/TypeTraitExpression.cpp
+    src/expressions/TypeTraitExpression.cpp \
+    src/expressions/TypeNameOperator.cpp \
+    src/expressions/GlobalScopeExpression.cpp

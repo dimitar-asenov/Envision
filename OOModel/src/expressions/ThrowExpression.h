@@ -42,4 +42,4 @@ class OOMODEL_API ThrowExpression: public Super<Expression>
 		virtual Type* type() override;
 };
 
-} /* namespace Interaction */
+} /* namespace OOModel */
