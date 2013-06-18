@@ -73,7 +73,7 @@ Model::Node* ValueAtReturnVisitor::visitChildren(Model::Node* n)
 
 Model::Node* ValueAtReturnVisitor::visitMethodCall(ValueAtReturnVisitor* v, OOModel::MethodCallExpression* call)
 {
-	if (ensuresMethod_ && call->ref()->target() == ensuresMethod_)
+	if (ensuresMethod_ && call->methodDefinition() == ensuresMethod_)
 	{
 		v->inEnsuresCall_ = true;
 		v->visitChildren(call);
@@ -82,7 +82,7 @@ Model::Node* ValueAtReturnVisitor::visitMethodCall(ValueAtReturnVisitor* v, OOMo
 	}
 
 	if (v->inEnsuresCall_ &&
-			valueAtReturnMethod_ && call->ref()->target() == valueAtReturnMethod_ && call->arguments()->size() == 1)
+			valueAtReturnMethod_ && call->methodDefinition() == valueAtReturnMethod_ && call->arguments()->size() == 1)
 	{
 		v->inValueAtReturnCall_ = true;
 		v->outReference_ = false;
