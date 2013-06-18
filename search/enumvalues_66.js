@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['final',['Final',['../classOOModel_1_1Modifier.html#a2c9964e99b5760a74776041df40a494fa133b79d5bf3aec528085a1051df3e9b5',1,'OOModel::Modifier']]],
   ['float',['FLOAT',['../classOOModel_1_1PrimitiveType.html#ac8006ae2bb33cdf51aa806c3c2d6bc05a10a2e54e8b85f728be2dcd4eb23ea790',1,'OOModel::PrimitiveType']]],
   ['frombottomof',['FromBottomOf',['../namespaceDeclarativeEnumerations.html#ae436664a02a430f8cbc33e95308984dbabc2736edb51a511e59afd8832f43d621',1,'DeclarativeEnumerations']]],
   ['fromcenterof',['FromCenterOf',['../namespaceDeclarativeEnumerations.html#ae436664a02a430f8cbc33e95308984dbad59e586076f991adde868423c50e0054',1,'DeclarativeEnumerations']]],

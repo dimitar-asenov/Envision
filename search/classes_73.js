@@ -23,7 +23,6 @@ var searchData=
   ['staticsequencestyle',['StaticSequenceStyle',['../classVisualization_1_1StaticSequenceStyle.html',1,'Visualization']]],
   ['staticstringoffsetprovider',['StaticStringOffsetProvider',['../classOOInteraction_1_1StaticStringOffsetProvider.html',1,'OOInteraction']]],
   ['staticstyle',['StaticStyle',['../classVisualization_1_1StaticStyle.html',1,'Visualization']]],
-  ['storagespecifier',['StorageSpecifier',['../classOOModel_1_1StorageSpecifier.html',1,'OOModel']]],
   ['stringcomponents',['StringComponents',['../classOOInteraction_1_1StringComponents.html',1,'OOInteraction']]],
   ['stringliteral',['StringLiteral',['../classOOModel_1_1StringLiteral.html',1,'OOModel']]],
   ['stringoffsetprovider',['StringOffsetProvider',['../classOOInteraction_1_1StringOffsetProvider.html',1,'OOInteraction']]],

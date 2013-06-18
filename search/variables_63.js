@@ -59,5 +59,7 @@ var searchData=
   ['cursor_5f',['cursor_',['../classVisualization_1_1CursorShapeItem.html#a1c4735cd48ab0fee1ec44ecbc40b04f0',1,'Visualization::CursorShapeItem::cursor_()'],['../classVisualization_1_1ItemRegion.html#a6641c51085727c5e9e75582963d9cb7a',1,'Visualization::ItemRegion::cursor_()']]],
   ['cursormoveorientation_5f',['cursorMoveOrientation_',['../classInteraction_1_1GenericHandler.html#a4f2c4fc5bcbd25872fc86372d10e4449',1,'Interaction::GenericHandler']]],
   ['cursororiginmidpoint_5f',['cursorOriginMidPoint_',['../classInteraction_1_1GenericHandler.html#a2311d7d78a49b581e3c61d740132b043',1,'Interaction::GenericHandler']]],
+  ['cursorpositionsforundo_5f',['cursorPositionsForUndo_',['../classInteraction_1_1GenericHandler.html#a2c160f1d2377a8af2b77c92af6836cd8',1,'Interaction::GenericHandler']]],
+  ['cursorundoindex_5f',['cursorUndoIndex_',['../classInteraction_1_1GenericHandler.html#a2eea6ebee759dbe078aaa05a12275ac6',1,'Interaction::GenericHandler']]],
   ['customizationgroup_5f',['customizationGroup_',['../classOOInteraction_1_1CustomizationVisitor.html#a973b08c56fdfd262317fa46f7905b800',1,'OOInteraction::CustomizationVisitor']]]
 ];

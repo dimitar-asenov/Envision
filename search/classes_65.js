@@ -24,9 +24,6 @@ var searchData=
   ['expressiontreebuildinstruction',['ExpressionTreeBuildInstruction',['../classInteraction_1_1ExpressionTreeBuildInstruction.html',1,'Interaction']]],
   ['expressiontreeutils',['ExpressionTreeUtils',['../classInteraction_1_1ExpressionTreeUtils.html',1,'Interaction']]],
   ['expressionvisitor',['ExpressionVisitor',['../classInteraction_1_1ExpressionVisitor.html',1,'Interaction']]],
-  ['extendableindex',['ExtendableIndex',['../classModel_1_1ExtendableIndex.html',1,'Model']]],
-  ['extendablenode',['ExtendableNode',['../classModel_1_1ExtendableNode.html',1,'Model']]],
-  ['extendednodechild',['ExtendedNodeChild',['../classModel_1_1ExtendedNodeChild.html',1,'Model']]],
   ['extendedvisitor',['ExtendedVisitor',['../classModel_1_1ExtendedVisitor.html',1,'Model']]],
   ['extendedvisitor_3c_20visitorb_2c_20visitora_20_3e',['ExtendedVisitor&lt; VisitorB, VisitorA &gt;',['../classModel_1_1ExtendedVisitor.html',1,'Model']]]
 ];

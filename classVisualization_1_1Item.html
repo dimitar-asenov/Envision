@@ -159,6 +159,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a98d175274738f71ee2474ddecd2b2b26"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classVisualization_1_1Item.html">Item</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#a98d175274738f71ee2474ddecd2b2b26">childClosestTo</a> (const QPoint &amp;point, PositionConstraints childConstraint=<a class="el" href="classVisualization_1_1Item.html#abf6fb87b5d8abed3670d34089aa70fc4a16fe5f25f8f1791782b9576324e33946">NoConstraints</a>) const </td></tr>
 <tr class="memdesc:a98d175274738f71ee2474ddecd2b2b26"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the child item (if any) that has the least distance to the point <em>point</em>.  <a href="#a98d175274738f71ee2474ddecd2b2b26">More...</a><br/></td></tr>
 <tr class="separator:a98d175274738f71ee2474ddecd2b2b26"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac861da03f6f69c761947f50c49b043de"><td class="memItemLeft" align="right" valign="top">virtual QList&lt; <a class="el" href="classVisualization_1_1Item.html">Item</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#ac861da03f6f69c761947f50c49b043de">childItems</a> () const </td></tr>
+<tr class="memdesc:ac861da03f6f69c761947f50c49b043de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a list of all direct children items which are an instance of <a class="el" href="classVisualization_1_1Item.html">Item</a>.  <a href="#ac861da03f6f69c761947f50c49b043de">More...</a><br/></td></tr>
+<tr class="separator:ac861da03f6f69c761947f50c49b043de"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4a2fd152a15ce835b94fb472826a8161"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#a4a2fd152a15ce835b94fb472826a8161">childNodePurpose</a> (const <a class="el" href="classModel_1_1Node.html">Model::Node</a> *<a class="el" href="classVisualization_1_1Item.html#aad3f7ad185d3a8d1d76eef1942faafdf">node</a>) const </td></tr>
 <tr class="separator:a4a2fd152a15ce835b94fb472826a8161"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac16cddc5439298e8f13fbdb027e48131"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#ac16cddc5439298e8f13fbdb027e48131">clearChildNodePurpose</a> (const <a class="el" href="classModel_1_1Node.html">Model::Node</a> *<a class="el" href="classVisualization_1_1Item.html#aad3f7ad185d3a8d1d76eef1942faafdf">node</a>)</td></tr>
@@ -269,6 +272,9 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a8d7a4f3d5f9aa9a81f4f251e5599e0c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2d755df348f47a837a76318cef636ed6"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classVisualization_1_1InteractionHandler.html">InteractionHandler</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#a2d755df348f47a837a76318cef636ed6">defaultClassHandler</a> ()</td></tr>
 <tr class="separator:a2d755df348f47a837a76318cef636ed6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a97894f8505e4757c8a43f52a6321dfd4"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classVisualization_1_1Item.html">Item</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#a97894f8505e4757c8a43f52a6321dfd4">envisionItem</a> (QGraphicsItem *item)</td></tr>
+<tr class="memdesc:a97894f8505e4757c8a43f52a6321dfd4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns <em>item</em> if it is an instance of Item* or the closest of its ancestors that is an Item*.  <a href="#a97894f8505e4757c8a43f52a6321dfd4">More...</a><br/></td></tr>
+<tr class="separator:a97894f8505e4757c8a43f52a6321dfd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acf8235be59848b7af02de8b53b3a098a"><td class="memItemLeft" align="right" valign="top">static QMultiHash&lt; <a class="el" href="classModel_1_1Node.html">Model::Node</a> <br class="typebreak"/>
 *, <a class="el" href="classVisualization_1_1Item.html">Item</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#acf8235be59848b7af02de8b53b3a098a">nodeItemsMap</a> ()</td></tr>
 <tr class="separator:acf8235be59848b7af02de8b53b3a098a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -400,8 +406,6 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a412debb8d2d7d20c3086acb12ab0a30e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f61f6ded4849bb6e08857bf3cae2577"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#a2f61f6ded4849bb6e08857bf3cae2577">updateAddOnItems</a> ()</td></tr>
 <tr class="separator:a2f61f6ded4849bb6e08857bf3cae2577"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a929f09cd739fd904decfa9f317a8c68a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVisualization_1_1Item.html#a929f09cd739fd904decfa9f317a8c68a">updateChildren</a> ()</td></tr>
-<tr class="separator:a929f09cd739fd904decfa9f317a8c68a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
@@ -778,6 +782,33 @@ Friends</h2></td></tr>
 <p>The point <em>point</em> must be in the current item's local coordinates.</p>
 <p>The <em>childConstraint</em> argument can be used to limit which children are considered. Only children that match all specified constraints may be returned by this method. The <em>childConstraint</em> argument specifies the constraints from a child item's point of view, e.g. a constraint <em>LeftOf</em> will be satisfied if a child is left of the specified point.</p>
 <dl class="section see"><dt>See Also</dt><dd><a class="el" href="classVisualization_1_1Item.html#aed53b47250d3a102fc592d18ea2dba07" title="Returns all position constraints with respect to the point point satisfied by this item...">satisfiedPositionConstraints</a> </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ac861da03f6f69c761947f50c49b043de"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QList&lt; <a class="el" href="classVisualization_1_1Item.html">Item</a> * &gt; Visualization::Item::childItems </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns a list of all direct children items which are an instance of <a class="el" href="classVisualization_1_1Item.html">Item</a>. </p>
+<p>The default implementation assumes that all children are instances of <a class="el" href="classVisualization_1_1Item.html">Item</a> and simply calls QGraphicsView::childItems(). Reimplement this in items that can contain non-Item children to return the correct list.</p>
+<p>This method hides QGraphicsItem::childItems(); </p>
 
 </div>
 </div>
@@ -1451,6 +1482,32 @@ template&lt;class T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a97894f8505e4757c8a43f52a6321dfd4"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classVisualization_1_1Item.html">Item</a> * Visualization::Item::envisionItem </td>
+          <td>(</td>
+          <td class="paramtype">QGraphicsItem *&#160;</td>
+          <td class="paramname"><em>item</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns <em>item</em> if it is an instance of Item* or the closest of its ancestors that is an Item*. </p>
 
 </div>
 </div>
@@ -2936,29 +2993,6 @@ template&lt;class T &gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void Visualization::Item::updateAddOnItems </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a929f09cd739fd904decfa9f317a8c68a"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Visualization::Item::updateChildren </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>

@@ -108,7 +108,7 @@ Inheritance diagram for Interaction::GenericHandler:</div>
 <area href="classVisualization_1_1InteractionHandler.html" alt="Visualization::InteractionHandler" shape="rect" coords="0,0,199,24"/>
 <area href="classInteraction_1_1HActionPrompt.html" alt="Interaction::HActionPrompt" shape="rect" coords="209,112,408,136"/>
 <area href="classInteraction_1_1HCommandPrompt.html" alt="Interaction::HCommandPrompt" shape="rect" coords="209,168,408,192"/>
-<area href="classInteraction_1_1HExtendable.html" alt="Interaction::HExtendable" shape="rect" coords="209,224,408,248"/>
+<area href="classInteraction_1_1HComposite.html" alt="Interaction::HComposite" shape="rect" coords="209,224,408,248"/>
 <area href="classInteraction_1_1HList.html" alt="Interaction::HList" shape="rect" coords="209,280,408,304"/>
 <area href="classInteraction_1_1HPositionLayout.html" alt="Interaction::HPositionLayout" shape="rect" coords="209,336,408,360"/>
 <area href="classInteraction_1_1HRootItem.html" alt="Interaction::HRootItem" shape="rect" coords="209,392,408,416"/>
@@ -203,6 +203,8 @@ Public Member Functions</h2></td></tr>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a7224b3530cb02f11e3e4ae1768483db9"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classInteraction_1_1CommandExecutionEngine.html">CommandExecutionEngine</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1GenericHandler.html#a7224b3530cb02f11e3e4ae1768483db9">executionEngine</a> ()</td></tr>
 <tr class="separator:a7224b3530cb02f11e3e4ae1768483db9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ba13733d0fb90cd8e322abc3e02f32d"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1GenericHandler.html#a4ba13733d0fb90cd8e322abc3e02f32d">fixCursorPositionForUndoAfterModelChange</a> ()</td></tr>
+<tr class="separator:a4ba13733d0fb90cd8e322abc3e02f32d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8c28b8428d337496e73d363ed3c7d302"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classInteraction_1_1GenericHandler.html">GenericHandler</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1GenericHandler.html#a8c28b8428d337496e73d363ed3c7d302">instance</a> ()</td></tr>
 <tr class="separator:a8c28b8428d337496e73d363ed3c7d302"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a227723e9c7abafda87a9c757e2145740"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1GenericHandler.html#a227723e9c7abafda87a9c757e2145740">setCommandExecutionEngine</a> (<a class="el" href="classInteraction_1_1CommandExecutionEngine.html">CommandExecutionEngine</a> *engine)</td></tr>
@@ -227,6 +229,11 @@ Protected Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
+<tr class="memitem:a13746dd7772ccf0b5fe33591de5e5603"><td class="memItemLeft" align="right" valign="top">static <br class="typebreak"/>
+<a class="el" href="classInteraction_1_1GenericHandlerModelListener.html">GenericHandlerModelListener</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1GenericHandler.html#a13746dd7772ccf0b5fe33591de5e5603">modelListener</a> ()</td></tr>
+<tr class="separator:a13746dd7772ccf0b5fe33591de5e5603"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a562c164c1bb7b79f213d160b139a6c13"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1GenericHandler.html#a562c164c1bb7b79f213d160b139a6c13">recordCursorPosition</a> (<a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *target)</td></tr>
+<tr class="separator:a562c164c1bb7b79f213d160b139a6c13"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2665e2578c1c41a080325f412a0e2991"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1GenericHandler.html#a2665e2578c1c41a080325f412a0e2991">resetCursorOrigin</a> ()</td></tr>
 <tr class="separator:a2665e2578c1c41a080325f412a0e2991"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -245,8 +252,18 @@ Static Private Attributes</h2></td></tr>
 <tr class="separator:a4f2c4fc5bcbd25872fc86372d10e4449"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2311d7d78a49b581e3c61d740132b043"><td class="memItemLeft" align="right" valign="top">static QPoint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1GenericHandler.html#a2311d7d78a49b581e3c61d740132b043">cursorOriginMidPoint_</a></td></tr>
 <tr class="separator:a2311d7d78a49b581e3c61d740132b043"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c160f1d2377a8af2b77c92af6836cd8"><td class="memItemLeft" align="right" valign="top">static QList&lt; QPair<br class="typebreak"/>
+&lt; <a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> <br class="typebreak"/>
+*, QPoint &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1GenericHandler.html#a2c160f1d2377a8af2b77c92af6836cd8">cursorPositionsForUndo_</a> {}</td></tr>
+<tr class="separator:a2c160f1d2377a8af2b77c92af6836cd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2eea6ebee759dbe078aaa05a12275ac6"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1GenericHandler.html#a2eea6ebee759dbe078aaa05a12275ac6">cursorUndoIndex_</a> {-1}</td></tr>
+<tr class="separator:a2eea6ebee759dbe078aaa05a12275ac6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6348e5adf0601adf6b0734cd5e954543"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classInteraction_1_1CommandExecutionEngine.html">CommandExecutionEngine</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1GenericHandler.html#a6348e5adf0601adf6b0734cd5e954543">executionEngine_</a> = <a class="el" href="classInteraction_1_1CommandExecutionEngine.html#af9b2618cb6152bc42f58c9321bf12c94">CommandExecutionEngine::instance</a>()</td></tr>
 <tr class="separator:a6348e5adf0601adf6b0734cd5e954543"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a181ffd275f9aaa6196986a322e73a001"><td class="memItemLeft" align="right" valign="top">static QPair<br class="typebreak"/>
+&lt; <a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> <br class="typebreak"/>
+*, QPoint &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInteraction_1_1GenericHandler.html#a181ffd275f9aaa6196986a322e73a001">lastCursorPosition_</a></td></tr>
+<tr class="separator:a181ffd275f9aaa6196986a322e73a001"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Enumeration Documentation</h2>
 <a class="anchor" id="a618aa472ba56cb22999693d28b71e6d4"></a>
@@ -561,6 +578,29 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a4ba13733d0fb90cd8e322abc3e02f32d"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Interaction::GenericHandler::fixCursorPositionForUndoAfterModelChange </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a9e1a53bed9f52e90dd01e2ab0c0f67cd"></a>
 <div class="memitem">
 <div class="memproto">
@@ -658,6 +698,29 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a13746dd7772ccf0b5fe33591de5e5603"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classInteraction_1_1GenericHandlerModelListener.html">GenericHandlerModelListener</a> &amp; Interaction::GenericHandler::modelListener </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a96506cc53c5a286d5488e53a8d5fb6da"></a>
 <div class="memitem">
 <div class="memproto">
@@ -692,7 +755,7 @@ Static Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classVisualization_1_1InteractionHandler.html#a63ab0f2f24af969449b575b3ad5b5aa7">Visualization::InteractionHandler</a>.</p>
 
-<p>Reimplemented in <a class="el" href="classInteraction_1_1HExtendable.html#a8a5d1ecd7629c738c9fa66eb5fd58657">Interaction::HExtendable</a>, and <a class="el" href="classInteraction_1_1HText.html#a35168f96c51f042c2868fa34c7a8800f">Interaction::HText</a>.</p>
+<p>Reimplemented in <a class="el" href="classInteraction_1_1HComposite.html#ab043a4c69f692e6165d4f63380b4c5b6">Interaction::HComposite</a>, and <a class="el" href="classInteraction_1_1HText.html#a35168f96c51f042c2868fa34c7a8800f">Interaction::HText</a>.</p>
 
 </div>
 </div>
@@ -800,6 +863,30 @@ Static Private Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a562c164c1bb7b79f213d160b139a6c13"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Interaction::GenericHandler::recordCursorPosition </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *&#160;</td>
+          <td class="paramname"><em>target</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1025,6 +1112,46 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a2c160f1d2377a8af2b77c92af6836cd8"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QList&lt; QPair&lt; <a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *, QPoint &gt; &gt; Interaction::GenericHandler::cursorPositionsForUndo_ {}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a2eea6ebee759dbe078aaa05a12275ac6"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Interaction::GenericHandler::cursorUndoIndex_ {-1}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a6348e5adf0601adf6b0734cd5e954543"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1034,6 +1161,26 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classInteraction_1_1CommandExecutionEngine.html">CommandExecutionEngine</a> * Interaction::GenericHandler::executionEngine_ = <a class="el" href="classInteraction_1_1CommandExecutionEngine.html#af9b2618cb6152bc42f58c9321bf12c94">CommandExecutionEngine::instance</a>()</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a181ffd275f9aaa6196986a322e73a001"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">QPair&lt; <a class="el" href="classVisualization_1_1Item.html">Visualization::Item</a> *, QPoint &gt; Interaction::GenericHandler::lastCursorPosition_</td>
         </tr>
       </table>
   </td>

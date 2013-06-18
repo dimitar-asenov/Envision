@@ -86,27 +86,31 @@ About</h1>
 <p>To read about the motivation for building Envision and find out what are some of the key ideas for the IDE, please see <a class="el" href="motivation.html">the motivation page</a>.</p>
 <h1><a class="anchor" id="status"></a>
 Development status</h1>
-<p>Envision is in its early development stage and can not be used for programming yet. Nevertheless the current version illustrates some of the key visualization and interaction concepts for the IDE.</p>
-<p>Envision currently runs on Linux and Windows. Development is done in Linux. There are two branches on GitHub:</p>
+<p>Envision is still a proof of concept prototype and can not be used for programming yet. Nevertheless the current version illustrates some of the key visualization and interaction concepts for the IDE.</p>
+<p>Envision currently runs on Linux and Windows. Development is done in Linux. There are two code branches on GitHub:</p>
 <ul>
 <li><code>master</code> - contains an older, more stable version of the IDE</li>
 <li><code>development</code> - contains the latest changes and features. This branch is typically updated on a daily basis and might contain severe bugs. When the <code>development</code> branch is "in a good state" it is merged into <code>master</code>.</li>
 </ul>
 <h2><a class="anchor" id="implemented"></a>
 Implemented features</h2>
-<pre class="fragment">  - A core component that finds and loads plug-ins at run time
-  - A small test framework for testing plug-ins
-  - An extensible application model which currently supports a subset of Java (partial generics, no interfaces, no
-  reflection, no libraries)
-  - Flexible visualizations for elements of the model
-  - %Interaction directly with the visualizations using a structured editor approach
-
-  The implemented features should be considered a proof of concept only and are not stable at this point.
-</pre><h2><a class="anchor" id="missing"></a>
+<ul>
+<li>A core component that finds and loads plug-ins at run time</li>
+<li>A small test framework for testing plug-ins</li>
+<li>An extensible application model which currently supports a subset of Java (partial generics, no interfaces, no reflection, no libraries), and C++ (some templates, partial C++11 support, few 'exotic features')</li>
+<li>Flexible visualizations for elements of the model</li>
+<li>Cod editing using a structured editor</li>
+<li>Ability to customize how AST nodes are rendered based on context</li>
+<li>Partial support for importing Java code</li>
+</ul>
+<p>The implemented features should be considered a proof of concept only and are not stable at this point.</p>
+<h2><a class="anchor" id="missing"></a>
 Missing features required for basic usability</h2>
-<pre class="fragment">  - Import and export to and from any programming language
-  - Support for external libraries
-</pre><h1><a class="anchor" id="dev-doc"></a>
+<ul>
+<li>Full support for importing/exporting to/from a programming language</li>
+<li>Support for external libraries</li>
+</ul>
+<h1><a class="anchor" id="dev-doc"></a>
 Developer documentation and guidelines for contributors</h1>
 <p>NOTE: This developer documentation is currently being created and is not fully complete.</p>
 <p>For an introduction to the project's design and organization for contributors, please check out <a class="el" href="architecture.html">the architecture of Envision</a>.</p>

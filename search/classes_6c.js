@@ -1,7 +1,6 @@
 var searchData=
 [
   ['lambdaexpression',['LambdaExpression',['../classOOModel_1_1LambdaExpression.html',1,'OOModel']]],
-  ['lambdatype',['LambdaType',['../classOOModel_1_1LambdaType.html',1,'OOModel']]],
   ['layout',['Layout',['../classVisualization_1_1Layout.html',1,'Visualization']]],
   ['layoutcursor',['LayoutCursor',['../classVisualization_1_1LayoutCursor.html',1,'Visualization']]],
   ['layoutformelement',['LayoutFormElement',['../classVisualization_1_1LayoutFormElement.html',1,'Visualization']]],

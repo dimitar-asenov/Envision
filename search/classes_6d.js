@@ -1,6 +1,7 @@
 var searchData=
 [
   ['mainview',['MainView',['../classVisualization_1_1MainView.html',1,'Visualization']]],
+  ['memberinitializer',['MemberInitializer',['../classOOModel_1_1MemberInitializer.html',1,'OOModel']]],
   ['method',['Method',['../classOOModel_1_1Method.html',1,'OOModel']]],
   ['methodaddon',['MethodAddOn',['../classOOVisualization_1_1MethodAddOn.html',1,'OOVisualization']]],
   ['methodcallexpression',['MethodCallExpression',['../classOOModel_1_1MethodCallExpression.html',1,'OOModel']]],
@@ -11,5 +12,6 @@ var searchData=
   ['modelexception',['ModelException',['../classModel_1_1ModelException.html',1,'Model']]],
   ['modelmanager',['ModelManager',['../classModel_1_1ModelManager.html',1,'Model']]],
   ['modelrenderer',['ModelRenderer',['../classVisualization_1_1ModelRenderer.html',1,'Visualization']]],
+  ['modifier',['Modifier',['../classOOModel_1_1Modifier.html',1,'OOModel']]],
   ['module',['Module',['../classOOModel_1_1Module.html',1,'OOModel']]]
 ];

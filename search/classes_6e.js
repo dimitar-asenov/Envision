@@ -1,6 +1,7 @@
 var searchData=
 [
   ['namechange',['NameChange',['../classModel_1_1NameChange.html',1,'Model']]],
+  ['nameimport',['NameImport',['../classOOModel_1_1NameImport.html',1,'OOModel']]],
   ['newexpression',['NewExpression',['../classOOModel_1_1NewExpression.html',1,'OOModel']]],
   ['node',['Node',['../classModel_1_1Node.html',1,'Model']]],
   ['nodeidmap',['NodeIdMap',['../classFilePersistence_1_1NodeIdMap.html',1,'FilePersistence']]],

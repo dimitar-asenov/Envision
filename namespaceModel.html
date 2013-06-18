@@ -106,11 +106,11 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1ClipboardStore.html">ClipboardStore</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1ExtendableIndex.html">ExtendableIndex</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1CompositeIndex.html">CompositeIndex</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1ExtendableNode.html">ExtendableNode</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1CompositeNode.html">CompositeNode</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1ExtendedNodeChild.html">ExtendedNodeChild</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1CompositeNodeChangeChild.html">CompositeNodeChangeChild</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModel_1_1ExtendedVisitor.html">ExtendedVisitor</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -217,8 +217,8 @@ Functions</h2></td></tr>
 <tr class="separator:a70edd5ee4c91369b3acbafbfc53ab584"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa59ca03da3e1fd2fe0db037c8d42fbe0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceModel.html#aa59ca03da3e1fd2fe0db037c8d42fbe0">TEST</a> (<a class="el" href="classModel_1_1ModelBase.html">ModelBase</a>, ListCreation)</td></tr>
 <tr class="separator:aa59ca03da3e1fd2fe0db037c8d42fbe0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac84dd5ea65935b1098c150476f9b9613"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceModel.html#ac84dd5ea65935b1098c150476f9b9613">TEST</a> (<a class="el" href="classModel_1_1ModelBase.html">ModelBase</a>, ExtendableMetaData)</td></tr>
-<tr class="separator:ac84dd5ea65935b1098c150476f9b9613"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a17455cc2c9b2237b6f3cb6378ccf059a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceModel.html#a17455cc2c9b2237b6f3cb6378ccf059a">TEST</a> (<a class="el" href="classModel_1_1ModelBase.html">ModelBase</a>, CompositeMetaData)</td></tr>
+<tr class="separator:a17455cc2c9b2237b6f3cb6378ccf059a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a05ffd682d7cc62f9133133ff8d2f8f37"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceModel.html#a05ffd682d7cc62f9133133ff8d2f8f37">TEST</a> (<a class="el" href="classModel_1_1ModelBase.html">ModelBase</a>, ListInsertion)</td></tr>
 <tr class="separator:a05ffd682d7cc62f9133133ff8d2f8f37"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8f44301d06d23aa6fd0acc610d26780f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceModel.html#a8f44301d06d23aa6fd0acc610d26780f">TEST</a> (<a class="el" href="classModel_1_1ModelBase.html">ModelBase</a>, SimpleModelCreation)</td></tr>
@@ -274,24 +274,24 @@ Functions</h2></td></tr>
 <li><a class="el" href="classModel_1_1Reference.html">Reference</a> is a node that contains a string reference to another node. Resolving references is partially defined in <a class="el" href="classModel_1_1ModelBase.html">ModelBase</a> and partially in extending plug-ins. </li>
 <li><a class="el" href="classModel_1_1List.html">List</a> is a node that contains an ordered list of nodes. This list is untyped. </li>
 <li><a class="el" href="classModel_1_1TypedList.html">TypedList</a> is a thin wrapper around <a class="el" href="classModel_1_1List.html">List</a> that provides a statically typed equivalent to it. </li>
-<li><a class="el" href="classModel_1_1ExtendableNode.html">ExtendableNode</a> is a node that can be extended to contain children of arbitrary type. Plug-in developers can use the functionality of this node to quickly design new node types.</li>
+<li><a class="el" href="classModel_1_1CompositeNode.html">CompositeNode</a> is a node that can be extended to contain children of arbitrary type. Plug-in developers can use the functionality of this node to quickly design new node types.</li>
 </ul>
 <h3><a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision.">Node</a> extensibility</h3>
-<p>In order to create new types of nodes, a plug-in developer can inherit an existing predefined node or <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision.">Node</a> directly. The <a class="el" href="classModel_1_1ExtendableNode.html">ExtendableNode</a> class is specifically designed for implementing new custom nodes. It provides two main features to support extensibility:</p>
+<p>In order to create new types of nodes, a plug-in developer can inherit an existing predefined node or <a class="el" href="classModel_1_1Node.html" title="The Node class is the foundation element in the model tree in Envision.">Node</a> directly. The <a class="el" href="classModel_1_1CompositeNode.html">CompositeNode</a> class is specifically designed for implementing new custom nodes. It provides two main features to support extensibility:</p>
 <ul>
-<li>A class inheriting from <a class="el" href="classModel_1_1ExtendableNode.html">ExtendableNode</a> can declaratively specify what attributes (child nodes) it will have. The number and type of attributes can be arbitrary. A longer inheritance chain is also possible, where each derived class specifies additional child nodes. Attributes defined in base classes are of course also available in derived classes.</li>
+<li>A class inheriting from <a class="el" href="classModel_1_1CompositeNode.html">CompositeNode</a> can declaratively specify what attributes (child nodes) it will have. The number and type of attributes can be arbitrary. A longer inheritance chain is also possible, where each derived class specifies additional child nodes. Attributes defined in base classes are of course also available in derived classes.</li>
 </ul>
 <ul>
-<li>Nodes deriving from <a class="el" href="classModel_1_1ExtendableNode.html">ExtendableNode</a> also support an extension mechanism. An extension can be dynamically registered for a node type at run-time as long as no instances of this class have been created yet. The attributes specified in the extension will be added to the attributes that are already defined in the node type being extended. This change will apply to all nodes that derive from the extended class. This feature can be used by plug-ins to attach new information to a model tree.</li>
+<li>Nodes deriving from <a class="el" href="classModel_1_1CompositeNode.html">CompositeNode</a> also support an extension mechanism. An extension can be dynamically registered for a node type at run-time as long as no instances of this class have been created yet. The attributes specified in the extension will be added to the attributes that are already defined in the node type being extended. This change will apply to all nodes that derive from the extended class. This feature can be used by plug-ins to attach new information to a model tree.</li>
 </ul>
 <p>The image below illustrates these mechanisms with an example.</p>
 <div class="image">
-<img src="extendable.png" alt="extendable.png"/>
+<img src="composite.png" alt="composite.png"/>
 <div class="caption">
 A binary node hierarchy with extensions</div></div>
-<p> A node type BinaryNode is defined that inherits from <a class="el" href="classModel_1_1ExtendableNode.html">ExtendableNode</a> and specifies two attributes: left and right. IntegerBinaryNode derives from BinaryNode and introduces an additional attribute - value. In addition, the Position extension has been registered for BinaryNode. This inserts the attributes x and y into BinaryNode and all its subclasses - in this case only IntegerBinaryNode. Finally one more extension has been registered for IntegerBinaryNode which provides that node type with the new attribute editable. On the right we see a summary of what attributes are available for the two different classes.</p>
-<p>There is no limit to how many extensions a node can have. Extensions are implemented as single classes and can be applied to any node that inherits directly or indirectly from <a class="el" href="classModel_1_1ExtendableNode.html">ExtendableNode</a>. A simple method is provided for asking if an extension has been registered for a node type and accessing its corresponding attributes.</p>
-<p>Persistence operations are automatically handled for any class deriving from <a class="el" href="classModel_1_1ExtendableNode.html">ExtendableNode</a> for all attributes and attributes of extensions.</p>
+<p> A node type BinaryNode is defined that inherits from <a class="el" href="classModel_1_1CompositeNode.html">CompositeNode</a> and specifies two attributes: left and right. IntegerBinaryNode derives from BinaryNode and introduces an additional attribute - value. In addition, the Position extension has been registered for BinaryNode. This inserts the attributes x and y into BinaryNode and all its subclasses - in this case only IntegerBinaryNode. Finally one more extension has been registered for IntegerBinaryNode which provides that node type with the new attribute editable. On the right we see a summary of what attributes are available for the two different classes.</p>
+<p>There is no limit to how many extensions a node can have. Extensions are implemented as single classes and can be applied to any node that inherits directly or indirectly from <a class="el" href="classModel_1_1CompositeNode.html">CompositeNode</a>. A simple method is provided for asking if an extension has been registered for a node type and accessing its corresponding attributes.</p>
+<p>Persistence operations are automatically handled for any class deriving from <a class="el" href="classModel_1_1CompositeNode.html">CompositeNode</a> for all attributes and attributes of extensions.</p>
 <h3>Concurrent access</h3>
 <p>In today’s software engineering practices developers use many different tools and techniques to be more productive and to create high quality applications. Many of these tools work with the source code or the application binary. This includes compilation, testing, verification, profiling, and others. Modern IDEs are capable of performing some of these tasks in parallel in order to speed up development. For example the source can be automatically compiled behind the scenes while the user is typing. This allows the environment to show compilation mistakes or warnings immediately after the programmer writes the lines that generate them. This is an excellent feature that helps quickly eliminate trivial problems in the source code, without explicitly compiling the program first. Another feature popular among programmers is auto-complete - the ability of an IDE to suggest a complete symbol name based on just a few characters typed by the developer. Enabling this is a background process that keeps an up-to-date table of defined symbols by constantly parsing the source code and reading in new definitions. In some cases the IDE even performs more complicated background verification and analysis while the user is typing.</p>
 <p>Receiving information about the program such as compilation and verification errors, testing statistics, profiling reports, etc. in real time can be a huge boost to productivity. Therefore having a mechanism that enables concurrent access to the source code or the application model in the case of Envision is crucial. The <a class="el" href="classModel_1_1ModelBase.html">ModelBase</a> plug-in implements a such a mechanism that controls the access to the tree structure of a model. For maximum flexibility a number of different ways to access the tree exist. This allows tools with different needs to use an appropriate access mode and optimally utilize resources.</p>
@@ -608,7 +608,7 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ac84dd5ea65935b1098c150476f9b9613"></a>
+<a class="anchor" id="a17455cc2c9b2237b6f3cb6378ccf059a"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -621,7 +621,7 @@ template&lt;class T &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">ExtendableMetaData&#160;</td>
+          <td class="paramtype">CompositeMetaData&#160;</td>
           <td class="paramname">&#160;</td>
         </tr>
         <tr>

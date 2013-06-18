@@ -26,5 +26,8 @@ var searchData=
   ['typealias',['TypeAlias',['../classOOModel_1_1TypeAlias.html',1,'OOModel']]],
   ['typediterator',['TypedIterator',['../structModel_1_1TypedList_1_1TypedIterator.html',1,'Model::TypedList']]],
   ['typedlist',['TypedList',['../classModel_1_1TypedList.html',1,'Model']]],
-  ['typeexpression',['TypeExpression',['../classOOModel_1_1TypeExpression.html',1,'OOModel']]]
+  ['typeexpression',['TypeExpression',['../classOOModel_1_1TypeExpression.html',1,'OOModel']]],
+  ['typenameoperator',['TypeNameOperator',['../classOOModel_1_1TypeNameOperator.html',1,'OOModel']]],
+  ['typequalifierexpression',['TypeQualifierExpression',['../classOOModel_1_1TypeQualifierExpression.html',1,'OOModel']]],
+  ['typetraitexpression',['TypeTraitExpression',['../classOOModel_1_1TypeTraitExpression.html',1,'OOModel']]]
 ];

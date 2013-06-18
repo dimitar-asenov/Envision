@@ -31,7 +31,7 @@ var searchData=
   ['executionengine_5f',['executionEngine_',['../classInteraction_1_1GenericHandler.html#a6348e5adf0601adf6b0734cd5e954543',1,'Interaction::GenericHandler']]],
   ['exit_5f',['exit_',['../classControlFlowVisualization_1_1ControlFlowItem.html#adc797fbba4b2c2999562a0315f34e118',1,'ControlFlowVisualization::ControlFlowItem']]],
   ['exitset',['exitSet',['../classCore_1_1EnvisionManager.html#a24d9497f37625441185f24ddc7997cd0',1,'Core::EnvisionManager']]],
-  ['expanded_5f',['expanded_',['../classVisualization_1_1VExtendable.html#a8c439751737f3bce1cac76ca2019d4a6',1,'Visualization::VExtendable::expanded_()'],['../classVisualization_1_1VExtendableStyle.html#ae5b0ccbc56994beb2dd82d6f95e3e4cd',1,'Visualization::VExtendableStyle::expanded_()']]],
+  ['expanded_5f',['expanded_',['../classVisualization_1_1VComposite.html#a802223b38361b018f7ad81c5d8e33495',1,'Visualization::VComposite::expanded_()'],['../classVisualization_1_1VCompositeStyle.html#a2a1c4cd4c19d61edac5c80a3ddb2b230',1,'Visualization::VCompositeStyle::expanded_()']]],
   ['expectedtypearguments_5f',['expectedTypeArguments_',['../classOOInteraction_1_1CreateMethodCall.html#afcde4119e86b44719b3c2f8aa6f40f17',1,'OOInteraction::CreateMethodCall']]],
   ['expr_5f',['expr_',['../classOOVisualization_1_1VDeleteExpression.html#a931cf466eaeaa79d513b0881ab9239c2',1,'OOVisualization::VDeleteExpression::expr_()'],['../classOOVisualization_1_1VCastExpression.html#a565ef94469333369d1c01909ba614060',1,'OOVisualization::VCastExpression::expr_()'],['../classOOVisualization_1_1VThrowExpression.html#a6b18373daf16762a227a7042b31f990b',1,'OOVisualization::VThrowExpression::expr_()'],['../classOOVisualization_1_1VExpressionStatement.html#a3f50c13d47065aa4266f6a74bd2b3045',1,'OOVisualization::VExpressionStatement::expr_()']]],
   ['expression',['expression',['../classOOInteraction_1_1OOExpressionBuilder.html#a42387e9c904c9d91938e6dba572988cd',1,'OOInteraction::OOExpressionBuilder']]],
@@ -39,6 +39,6 @@ var searchData=
   ['expressionmonitors_5f',['expressionMonitors_',['../classOOInteraction_1_1HExpression.html#a142fe868dbd62ad3e50fbb7fedbf0672',1,'OOInteraction::HExpression']]],
   ['expressiontocatch_5f',['expressionToCatch_',['../classOOVisualization_1_1VCatchClause.html#a6097d412b161c3d6fb893394988f58be',1,'OOVisualization::VCatchClause']]],
   ['extensionid_5f',['extensionId_',['../classTestNodes_1_1PositionExtension.html#a906c616e8ffc34387e395b08b34827cf',1,'TestNodes::PositionExtension']]],
-  ['extensions_5f',['extensions_',['../classModel_1_1AttributeChain.html#ac4040d3de98de5e0cd108c03d3ebf87e',1,'Model::AttributeChain']]],
-  ['extracursorsoutsideshape_5f',['extraCursorsOutsideShape_',['../classVisualization_1_1SequentialLayoutStyle.html#a491c304ce041d8bbd760548918cb4972',1,'Visualization::SequentialLayoutStyle']]]
+  ['extensions_5f',['extensions_',['../classModel_1_1AttributeChain.html#abc84b06d38f5014fe3b940709a9fc5ce',1,'Model::AttributeChain']]],
+  ['extracursorsoutsideshape_5f',['extraCursorsOutsideShape_',['../classVisualization_1_1DeclarativeItemBaseStyle.html#a239ed80e36767f35dfdb8d8039e17d5c',1,'Visualization::DeclarativeItemBaseStyle::extraCursorsOutsideShape_()'],['../classVisualization_1_1SequentialLayoutStyle.html#a491c304ce041d8bbd760548918cb4972',1,'Visualization::SequentialLayoutStyle::extraCursorsOutsideShape_()']]]
 ];
