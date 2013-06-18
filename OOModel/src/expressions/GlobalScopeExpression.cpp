@@ -41,26 +41,14 @@ COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(GlobalScopeExpression)
 
 Type* GlobalScopeExpression::type()
 {
-	auto p = parent();
+	auto root = this->root();
 
-	if(p)
-
-	while(p)
-	{
-		if(auto gp = p->parent())
-		{
-			p = gp;
-			continue;
-		}
-		if(auto cl = dynamic_cast<Class*> (p))
-			return new ClassType(cl, true);
-		else if(auto decl = dynamic_cast<Declaration*> (p))
-			return new SymbolProviderType(decl, true);
-		else
-			break;
-	}
-
-	return new ErrorType("Global Scope is no declaration");
+	if (auto cl = dynamic_cast<Class*> (root))
+		return new ClassType(cl, true);
+	else if (auto decl = dynamic_cast<Declaration*> (root))
+		return new SymbolProviderType(decl, true);
+	else
+		return new ErrorType("Global scope expression used in a tree without a root declaration");
 }
 
 } /* namespace OOModel */
