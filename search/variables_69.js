@@ -31,6 +31,7 @@ var searchData=
   ['interruptiblereaders',['interruptibleReaders',['../classModel_1_1NodeReadWriteLock.html#a9a3491f24f43b0456e91962b94e0e00a',1,'Model::NodeReadWriteLock']]],
   ['invalueatreturncall_5f',['inValueAtReturnCall_',['../classContractsLibrary_1_1ValueAtReturnVisitor.html#a4642885269b96916f6bfa340ca88cf2f',1,'ContractsLibrary::ValueAtReturnVisitor']]],
   ['isatboundary_5f',['isAtBoundary_',['../classVisualization_1_1LayoutCursor.html#a1a5a43a37fa1b59b59396ec0939b3854',1,'Visualization::LayoutCursor']]],
+  ['iscurrentmousepressaclick_5f',['isCurrentMousePressAClick_',['../classVisualization_1_1Scene.html#a17028bb8ab301731ae8f8e12ccb6e823',1,'Visualization::Scene']]],
   ['isnewpersistenceunit_5f',['isNewPersistenceUnit_',['../classModel_1_1PersistedNode.html#ad648215a47c0873ee9c0966e03a6320b',1,'Model::PersistedNode']]],
   ['isvaluetype_5f',['isValueType_',['../classOOModel_1_1Type.html#a02fb9ecfb92b7212fc34df6ebd992de7',1,'OOModel::Type']]],
   ['it_5f',['it_',['../structModel_1_1TypedList_1_1TypedIterator.html#a774f166302590ad33fe579120a140ad4',1,'Model::TypedList::TypedIterator::it_()'],['../structModel_1_1TypedList_1_1ConstTypedIterator.html#a060ba5b6e1e0358763315c40996ec54d',1,'Model::TypedList::ConstTypedIterator::it_()']]],

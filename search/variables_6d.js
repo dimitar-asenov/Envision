@@ -14,6 +14,7 @@ var searchData=
   ['margintop_5f',['marginTop_',['../classVisualization_1_1FormElement.html#a856f05e34322fe6408e5c188711a4729',1,'Visualization::FormElement']]],
   ['matrixform_5f',['matrixForm_',['../classOOVisualization_1_1VArrayInitializer.html#a67a8764273198cd864346b24101c7f7e',1,'OOVisualization::VArrayInitializer']]],
   ['max_5fdouble_5fprecision',['MAX_DOUBLE_PRECISION',['../namespaceFilePersistence.html#ae30af4b3e5ad1cc83d4c6fa725f3ae27',1,'FilePersistence']]],
+  ['max_5fmilliseconds_5ffor_5fa_5fclick',['MAX_MILLISECONDS_FOR_A_CLICK',['../classVisualization_1_1Scene.html#a4d17344617d24f6a3a55fa13807fc017',1,'Visualization::Scene']]],
   ['message',['message',['../structLogger_1_1Log_1_1LogEntry.html#a9b6433b1fec65d2d8e55e10b455c9fff',1,'Logger::Log::LogEntry::message()'],['../classSelfTest_1_1TestResult.html#a9ba7472ed6db552fb3b59f22aae644f9',1,'SelfTest::TestResult::message()']]],
   ['message_5f',['message_',['../classInteraction_1_1CommandError.html#aa231c008f9af2d95d41c8702ab679903',1,'Interaction::CommandError::message_()'],['../classOOModel_1_1ErrorType.html#a73333a9037a6bc5567a8fe538a9c6086',1,'OOModel::ErrorType::message_()']]],
   ['meta',['meta',['../classModel_1_1CompositeNode.html#a082d881f1a65c318ee4ab99086ecffea',1,'Model::CompositeNode']]],
