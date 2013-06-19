@@ -10,6 +10,20 @@
 
 	To read about the motivation for building Envision and find out what are some of the key ideas for the IDE, please see \ref motivation "the motivation page".
 
+	\subsection videos Videos
+
+	\htmlonly 
+	<iframe width="640" height="360" src="http://www.youtube.com/embed/9X9stH2T-7w" frameborder="0" allowfullscreen></iframe><br/>
+	\endhtmlonly
+	A short introduction that highlights some of the main concepts in Envision.
+
+	<br/>
+
+	\htmlonly 
+	<iframe width="640" height="360" src="http://www.youtube.com/embed/GD0W5HEteu8" frameborder="0" allowfullscreen></iframe><br/>
+	\endhtmlonly
+	A demonstration of how the visualizations and interactions in Envision can be customized for embedded domain-specific languages.
+
 \section status Development status
 
 	Envision is still a proof of concept prototype and can not be used for programming yet. Nevertheless the current
