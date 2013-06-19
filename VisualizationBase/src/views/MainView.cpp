@@ -100,14 +100,27 @@ void MainView::resizeEvent(QResizeEvent *event)
 
 void MainView::wheelEvent(QWheelEvent *event)
 {
-	if ( event->delta() > 0 ) scaleLevel--;
-	else scaleLevel++;
+	if (event->modifiers() == Qt::ControlModifier)
+	{
+		if ( event->delta() > 0 ) scaleLevel--;
+		else scaleLevel++;
 
-	if ( scaleLevel <= 0 ) scaleLevel = 1;
-	qreal factor = scaleFactor();
-	setTransform(QTransform::fromScale(factor, factor));
+		if ( scaleLevel <= 0 ) scaleLevel = 1;
+		qreal factor = scaleFactor();
+		setTransform(QTransform::fromScale(factor, factor));
 
-	if ( miniMap ) miniMap->visibleRectChanged();
+		if ( miniMap ) miniMap->visibleRectChanged();
+	}
+	else if (event->modifiers() == Qt::NoModifier || event->modifiers() == Qt::ShiftModifier)
+	{
+		auto bar = event->orientation() == Qt::Vertical && event->modifiers() == Qt::NoModifier
+				? verticalScrollBar() : horizontalScrollBar();
+
+		auto newPos = bar->value() - event->delta();
+		if (newPos < bar->minimum()) newPos = bar->minimum();
+		if (newPos > bar->maximum()) newPos = bar->maximum();
+		bar->setValue(newPos);
+	}
 }
 
 qreal MainView::scaleFactor() const
