@@ -82,7 +82,7 @@ Core::InitializationRegistry& itemTypeInitializationRegistry()
 	return r;
 }
 
-bool InteractionBase::initialize(Core::EnvisionManager&)
+bool InteractionBase::initialize(Core::EnvisionManager& envisionManager)
 {
 	logger = Logger::Log::getLogger("interactionbase");
 	Visualization::Item::setDefaultClassHandler(GenericHandler::instance());
@@ -96,8 +96,11 @@ bool InteractionBase::initialize(Core::EnvisionManager&)
 	ActionPrompt::setDefaultClassHandler(HActionPrompt::instance());
 
 	// We use to show the prompt. It can only be shown once the Scene is activated.
-	auto mainScene = Visualization::VisualizationManager::instance().mainScene();
-	mainScene->installEventFilter(new DetectMainSceneActivated());
+	if (!envisionManager.areSelfTestsPending())
+	{
+		auto mainScene = Visualization::VisualizationManager::instance().mainScene();
+		mainScene->installEventFilter(new DetectMainSceneActivated());
+	}
 
 	return true;
 }
