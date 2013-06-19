@@ -62,6 +62,7 @@ public class NodeDescriptors {
 				{"TypedListOfFormalTypeArgument","typeArguments"},
 				{"TypedListOfFormalArgument","arguments"},
 				{"TypedListOfFormalResult","results"},
+				{"TypedListOfMemberInitializer","memberInitializers"},
 				{"Integer","mthKind"}
 		}));
 		add( new NodeInitializer("VariableDeclaration", "Declaration", new String[][]{
@@ -95,7 +96,8 @@ public class NodeDescriptors {
 				{"Expression","expression"}
 		}));
 		add( new NodeInitializer("LoopStatement", new String[][]{
-				{"StatementItemList","body"}
+				{"StatementItemList","body"},
+				{"Integer","lpKind"}
 		}));
 		add( new NodeInitializer("ForEachStatement", new String[][]{
 				{"Text","varName"},
