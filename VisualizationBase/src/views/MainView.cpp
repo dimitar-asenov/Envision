@@ -100,6 +100,7 @@ void MainView::resizeEvent(QResizeEvent *event)
 
 void MainView::wheelEvent(QWheelEvent *event)
 {
+	// Zoom
 	if (event->modifiers() == Qt::ControlModifier)
 	{
 		if ( event->delta() > 0 ) scaleLevel--;
@@ -111,15 +112,13 @@ void MainView::wheelEvent(QWheelEvent *event)
 
 		if ( miniMap ) miniMap->visibleRectChanged();
 	}
+	// Scroll
 	else if (event->modifiers() == Qt::NoModifier || event->modifiers() == Qt::ShiftModifier)
 	{
 		auto bar = event->orientation() == Qt::Vertical && event->modifiers() == Qt::NoModifier
 				? verticalScrollBar() : horizontalScrollBar();
 
-		auto newPos = bar->value() - event->delta();
-		if (newPos < bar->minimum()) newPos = bar->minimum();
-		if (newPos > bar->maximum()) newPos = bar->maximum();
-		bar->setValue(newPos);
+		bar->setValue( bar->value() - event->delta() );
 	}
 }
 
@@ -288,6 +287,35 @@ void MainView::paintEvent(QPaintEvent* event)
 	auto t = Logger::Timer::start("Main view paint");
 	View::paintEvent(event);
 	t->tick();
+}
+
+void MainView::mouseMoveEvent(QMouseEvent *event)
+{
+	if (!isPanning_) return View::mouseMoveEvent(event);
+
+	event->accept();
+	horizontalScrollBar()->setValue(horizontalScrollBar()->value() - (event->x() - panStartPos_.x()));
+	verticalScrollBar()->setValue(verticalScrollBar()->value() - (event->y() - panStartPos_.y()));
+	panStartPos_ = event->pos();
+}
+
+void MainView::mousePressEvent(QMouseEvent *event)
+{
+	if (event->modifiers() != Qt::ControlModifier) return View::mousePressEvent(event);
+
+	event->accept();
+	isPanning_ = true;
+	panStartPos_ = event->pos();
+   setCursor(Qt::ClosedHandCursor);
+}
+
+void MainView::mouseReleaseEvent(QMouseEvent *event)
+{
+	if (!isPanning_) return View::mouseReleaseEvent(event);
+
+	event->accept();
+	setCursor(Qt::ArrowCursor);
+	isPanning_ = false;
 }
 
 }

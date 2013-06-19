@@ -56,6 +56,11 @@ class VISUALIZATIONBASE_API MainView: public View
 		virtual void keyPressEvent(QKeyEvent* event) override;
 		virtual void paintEvent(QPaintEvent* event) override;
 
+		// Used for panning
+		virtual void mouseMoveEvent(QMouseEvent *event) override;
+		virtual void mousePressEvent(QMouseEvent *event) override;
+		virtual void mouseReleaseEvent(QMouseEvent *event) override;
+
 
 	private:
 		MiniMap* miniMap;
@@ -65,6 +70,9 @@ class VISUALIZATIONBASE_API MainView: public View
 
 		bool showTimers_{false};
 		QList<QLabel*> infoLabels_; ///< Information text displayed in the top left corner
+
+		bool isPanning_{};
+		QPoint panStartPos_{};
 
 		void updateInfoLabels();
 };
