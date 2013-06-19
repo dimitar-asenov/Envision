@@ -44,7 +44,7 @@ HPositionLayout* HPositionLayout::instance()
 
 void HPositionLayout::mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
-	if (event->button() == Qt::LeftButton && event->modifiers() == Qt::ControlModifier)
+	if (event->button() == Qt::LeftButton && event->modifiers() == Qt::ShiftModifier)
 	{
 		Visualization::PositionLayout* layout = static_cast<Visualization::PositionLayout*> (target);
 
@@ -82,39 +82,31 @@ void HPositionLayout::mousePressEvent(Visualization::Item *target, QGraphicsScen
 
 void HPositionLayout::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
 {
-	if (event->modifiers() == Qt::ControlModifier && !event->buttonDownPos( Qt::LeftButton).isNull() )
+	if (currentItem)
 	{
-		if (currentItem)
+		Visualization::PositionLayout* layout = static_cast<Visualization::PositionLayout*> (target);
+
+		int newX = layout->toGrid( originalX + event->pos().x() - event->buttonDownPos(Qt::LeftButton).x() );
+		int newY = layout->toGrid( originalY + event->pos().y() - event->buttonDownPos(Qt::LeftButton).y() );;
+
+		int currentItemPositionX = currentItemPosition->xNode() ? currentItemPosition->x() : 0;
+		int currentItemPositionY = currentItemPosition->yNode() ? currentItemPosition->y() : 0;
+		if (newX != currentItemPositionX || newY != currentItemPositionY)
 		{
-			Visualization::PositionLayout* layout = static_cast<Visualization::PositionLayout*> (target);
-
-			int newX = layout->toGrid( originalX + event->pos().x() - event->buttonDownPos(Qt::LeftButton).x() );
-			int newY = layout->toGrid( originalY + event->pos().y() - event->buttonDownPos(Qt::LeftButton).y() );;
-
-			int currentItemPositionX = currentItemPosition->xNode() ? currentItemPosition->x() : 0;
-			int currentItemPositionY = currentItemPosition->yNode() ? currentItemPosition->y() : 0;
-			if (newX != currentItemPositionX || newY != currentItemPositionY)
-			{
-				currentItem->node()->model()->beginModification(currentItem->node(),"Change position");
-				currentItemPosition->setX( newX );
-				currentItemPosition->setY( newY );
-				currentItem->node()->model()->endModification();
-				currentItem->setUpdateNeeded(Visualization::Item::StandardUpdate);
-				target->scene()->scheduleUpdate();
-			}
+			currentItem->node()->model()->beginModification(currentItem->node(),"Change position");
+			currentItemPosition->setX( newX );
+			currentItemPosition->setY( newY );
+			currentItem->node()->model()->endModification();
+			currentItem->setUpdateNeeded(Visualization::Item::StandardUpdate);
+			target->scene()->scheduleUpdate();
 		}
 	}
-	else GenericHandler::mouseMoveEvent(target, event);
 }
 
-void HPositionLayout::mouseReleaseEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
+void HPositionLayout::mouseReleaseEvent(Visualization::Item *, QGraphicsSceneMouseEvent *)
 {
-	if (event->modifiers() == Qt::ControlModifier && !event->button() == Qt::LeftButton)
-	{
-		currentItem = nullptr;
-		currentItemPosition = nullptr;
-	}
-	else GenericHandler::mouseReleaseEvent(target, event);
+	currentItem = nullptr;
+	currentItemPosition = nullptr;
 }
 
 }
