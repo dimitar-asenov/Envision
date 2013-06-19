@@ -148,11 +148,11 @@ EnvisionPlugin* PluginManager::getLoadedPluginInterface(QString pluginId)
 
 QString PluginManager::getLibraryFileName(const QString pluginId)
 {
-#ifdef Q_WS_X11
+#ifdef Q_OS_LINUX
 	return "lib" + pluginId + ".so";
 #endif
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 	return pluginId + ".dll";
 #endif
 }

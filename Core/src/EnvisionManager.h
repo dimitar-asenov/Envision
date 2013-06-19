@@ -31,6 +31,7 @@
 namespace Core {
 
 class PluginManager;
+class TestRunner;
 
 /**
  * The EnvisionManager interface provides various information about the Envision system.
@@ -74,9 +75,10 @@ class CORE_API EnvisionManager
 		 */
 		void addPostEventAction(EventPrePostAction action);
 
-		// The methods below are meant for use by Core only
-		void setPluginManager(PluginManager*);
-		void setMainWindow(QMainWindow*);
+		/**
+		 * Returns true if there are any self tests that will be run after all plug-ins have been initialized.
+		 */
+		bool areSelfTestsPending() const;
 
 		void exit();
 
@@ -84,13 +86,20 @@ class CORE_API EnvisionManager
 		static void processPostEventActions(QObject* receiver, QEvent* event);
 
 	private:
-		PluginManager* pm{};
-		QMainWindow* mainWindow{};
+		PluginManager* pm_{};
+		QMainWindow* mainWindow_{};
+		TestRunner* testRunner_{};
 
-		bool exitSet{};
+		bool exitSet_{};
 
 		static QList<EventPrePostAction>& preEventActions();
 		static QList<EventPrePostAction>& postEventActions();
+
+		// The methods below are meant for use by Core only
+		friend int coreMain(int argc, char *argv[]);
+		void setPluginManager(PluginManager*);
+		void setMainWindow(QMainWindow*);
+		void setTestRunner(TestRunner*);
 };
 
 }

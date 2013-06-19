@@ -54,6 +54,7 @@ int coreMain(int argc, char *argv[])
 		// Give the Envision manager all the information it needs to operate properly.
 		manager.setPluginManager(&pm);
 		manager.setMainWindow(&w);
+		manager.setTestRunner(&testr);
 
 		pm.loadAllPlugins(manager);
 

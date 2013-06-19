@@ -30,19 +30,25 @@
 
 namespace Core {
 
+class TestEvent;
+
 class TestRunner: public QObject
 {
 	Q_OBJECT
 
-	private:
-		PluginManager *pm;
+	public:
+		TestRunner();
+
+		void enqueueSelfTests(PluginManager& pm);
+		const QList<const TestEvent*>& requestedTests() const;
 
 	protected:
 		void customEvent ( QEvent * event );
 
-	public:
-		TestRunner();
-		void enqueueSelfTests(PluginManager& pm);
+	private:
+		PluginManager* pm_{};
+		QList<const TestEvent*> requestedTests_;
 };
 
+inline const QList<const TestEvent*>& TestRunner::requestedTests() const {return requestedTests_;}
 }

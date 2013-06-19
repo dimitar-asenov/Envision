@@ -30,14 +30,19 @@ namespace Core {
 
 class TestEvent: public QEvent
 {
-	private:
-		QString testTarget;
-		QString testId;
-
 	public:
+		static const QEvent::Type EventType;
+
 		TestEvent(QString testTarget, QString testId);
-		QString getTarget();
-		QString getId();
+		const QString& target() const;
+		const QString& id() const;
+
+	private:
+		QString testTarget_;
+		QString testId_;
 };
+
+inline const QString& TestEvent::target() const { return testTarget_;}
+inline const QString& TestEvent::id() const { return testId_;}
 
 }

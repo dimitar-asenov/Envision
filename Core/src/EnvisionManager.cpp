@@ -27,6 +27,7 @@
 #include "EnvisionManager.h"
 #include "EnvisionException.h"
 #include "PluginManager.h"
+#include "TestRunner.h"
 
 namespace Core {
 
@@ -49,31 +50,37 @@ QList<EnvisionManager::EventPrePostAction>& EnvisionManager::postEventActions()
 
 QList<PluginInfo> EnvisionManager::getAllLoadedPluginsInfo()
 {
-	if (exitSet) return QList<PluginInfo>();
-	if (pm) return pm->getAllLoadedPluginsInfo();
+	if (exitSet_) return QList<PluginInfo>();
+	if (pm_) return pm_->getAllLoadedPluginsInfo();
 	throw EnvisionException("The Envision Manager has no Plugin Manager set");
 }
 
 QMainWindow* EnvisionManager::getMainWindow()
 {
-	return mainWindow;
+	return mainWindow_;
 }
 
 
 
-void EnvisionManager::setPluginManager(PluginManager* pm_)
+void EnvisionManager::setPluginManager(PluginManager* pm)
 {
-	pm = pm_;
+	pm_ = pm;
 }
 
-void EnvisionManager::setMainWindow(QMainWindow* mainWindow_)
+void EnvisionManager::setMainWindow(QMainWindow* mainWindow)
 {
-	mainWindow = mainWindow_;
+	mainWindow_ = mainWindow;
+}
+
+
+void EnvisionManager::setTestRunner(TestRunner* tr)
+{
+	testRunner_ = tr;
 }
 
 void EnvisionManager::exit()
 {
-	exitSet = true;
+	exitSet_ = true;
 }
 
 void EnvisionManager::addPreEventAction(EventPrePostAction action)
@@ -94,6 +101,11 @@ void EnvisionManager::processPreEventActions(QObject* receiver, QEvent* event)
 void EnvisionManager::processPostEventActions(QObject* receiver, QEvent* event)
 {
 	for (auto a : postEventActions()) a(receiver, event);
+}
+
+bool EnvisionManager::areSelfTestsPending() const
+{
+	return !testRunner_->requestedTests().isEmpty();
 }
 
 }

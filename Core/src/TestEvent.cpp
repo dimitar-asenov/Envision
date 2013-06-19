@@ -28,18 +28,12 @@
 
 namespace Core {
 
-TestEvent::TestEvent(QString testTarget_, QString testId_) : QEvent(QEvent::User), testTarget(testTarget_), testId(testId_)
-{
-}
+const QEvent::Type TestEvent::EventType = static_cast<QEvent::Type> (QEvent::registerEventType());
 
-QString TestEvent::getTarget()
-{
-	return testTarget;
-}
+TestEvent::TestEvent(QString testTarget, QString testId) :
+		QEvent(EventType), testTarget_(testTarget), testId_(testId)
+{}
 
-QString TestEvent::getId()
-{
-	return testId;
-}
+
 
 }

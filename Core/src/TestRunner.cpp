@@ -30,15 +30,8 @@
 
 namespace Core {
 
-TestRunner::TestRunner() :
-	pm(nullptr)
+TestRunner::TestRunner()
 {
-}
-
-void TestRunner::enqueueSelfTests(PluginManager& pm)
-{
-	this->pm = &pm;
-
 	QStringList arguments = qApp->arguments();
 
 	bool tests = false;
@@ -62,13 +55,21 @@ void TestRunner::enqueueSelfTests(PluginManager& pm)
 			QString id = QString::null;
 			if ( parts.length() > 1 ) id = parts[1];
 
-			if (pm.isPluginLoaded(target) )
-			{
-				qApp->postEvent(this, new TestEvent(target, id));
-			}
-			else throw EnvisionException("A test was requested for a plugin which is not loaded: " + target);
+			requestedTests_.append(new TestEvent(target, id));
 		}
 	}
+}
+void TestRunner::enqueueSelfTests(PluginManager& pm)
+{
+	pm_ = &pm;
+
+	for(auto t : requestedTests_)
+	{
+
+		if (pm.isPluginLoaded(t->target()) ) qApp->postEvent(this, const_cast<TestEvent*>(t));
+		else throw EnvisionException("A test was requested for a plugin which is not loaded: " + t->target());
+	}
+	requestedTests_.clear();
 }
 
 void TestRunner::customEvent( QEvent * event )
@@ -77,11 +78,11 @@ void TestRunner::customEvent( QEvent * event )
 	if (ev)
 	{
 		QTextStream out(stdout);
-		if ( ev->getId().isEmpty())
-			out << "Running all tests for plug-in " + ev->getTarget() << endl;
+		if ( ev->id().isEmpty())
+			out << "Running all tests for plug-in " + ev->target() << endl;
 		else
-			out << "Running test '" << ev->getId() << "' for plug-in " << ev->getTarget() << endl;
-		pm->getLoadedPluginInterface(ev->getTarget())->selfTest(ev->getId());
+			out << "Running test '" << ev->id() << "' for plug-in " << ev->target() << endl;
+		pm_->getLoadedPluginInterface(ev->target())->selfTest(ev->id());
 	}
 }
 
