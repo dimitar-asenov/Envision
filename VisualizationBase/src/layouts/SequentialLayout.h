@@ -76,18 +76,34 @@ class VISUALIZATIONBASE_API SequentialLayout: public Super<Layout>
 
 		void synchronizeWithNodes(const QList<Model::Node*>& nodes, ModelRenderer* renderer);
 
+		// Synchronize methods with a node
 		void synchronizeFirst(Item*& item, Model::Node* node);
 		void synchronizeLast(Item*& item, Model::Node* node);
 		void synchronizeMid(Item*& item, Model::Node* node, int position);
-		template <class T> void synchronizeFirst(T*& item, bool present, const typename T::StyleType* style);
-		template <class T> void synchronizeLast(T*& item, bool present, const typename T::StyleType* style);
-		template <class T> void synchronizeMid(T*& item, bool present, const typename T::StyleType* style, int position);
-		template <class T> void synchronizeFirst(T*& item, typename T::NodeType* node,
-				const typename T::StyleType* style);
-		template <class T> void synchronizeLast(T*& item, typename T::NodeType* node,
-				const typename T::StyleType* style);
-		template <class T> void synchronizeMid(T*& item, typename T::NodeType* node,
-				const typename T::StyleType* style, int position);
+
+		// Synchronize methods with a specific Visualization
+		template <class FieldType, class VisualizationType = FieldType>
+		void synchronizeFirst(FieldType*& item, bool present, const typename VisualizationType::StyleType* style);
+
+		template <class FieldType, class VisualizationType = FieldType>
+		void synchronizeLast(FieldType*& item, bool present, const typename VisualizationType::StyleType* style);
+
+		template <class FieldType, class VisualizationType = FieldType>
+		void synchronizeMid(FieldType*& item, bool present,
+				const typename VisualizationType::StyleType* style, int position);
+
+		// Synchronize methods with a specific Visualization for a specific Node
+		template <class FieldType, class VisualizationType = FieldType>
+		void synchronizeFirst(FieldType*& item, typename VisualizationType::NodeType* node,
+				const typename VisualizationType::StyleType* style);
+
+		template <class FieldType, class VisualizationType = FieldType>
+		void synchronizeLast(FieldType*& item, typename VisualizationType::NodeType* node,
+				const typename VisualizationType::StyleType* style);
+
+		template <class FieldType, class VisualizationType = FieldType>
+			void synchronizeMid(FieldType*& item, typename VisualizationType::NodeType* node,
+				const typename VisualizationType::StyleType* style, int position);
 
 	private:
 		QVector<Item*> items;
@@ -102,17 +118,23 @@ inline bool SequentialLayout::isForward() const { return style()->isForward(); }
 template <class T> inline T* SequentialLayout::at(int index) { return static_cast<T*> (items[index]); }
 template <class T> inline T* SequentialLayout::at(int index) const { return static_cast<T*> (items[index]); }
 
-template <class T> void SequentialLayout::synchronizeFirst(T*& item, bool present, const typename T::StyleType* style)
+template <class FieldType, class VisualizationType>
+void SequentialLayout::synchronizeFirst(FieldType*& item, bool present,
+		const typename VisualizationType::StyleType* style)
 {
-	synchronizeMid(item, present, style, 0);
+	synchronizeMid<FieldType, VisualizationType>(item, present, style, 0);
 }
 
-template <class T> void SequentialLayout::synchronizeLast(T*& item, bool present, const typename T::StyleType* style)
+template <class FieldType, class VisualizationType>
+void SequentialLayout::synchronizeLast(FieldType*& item, bool present,
+		const typename VisualizationType::StyleType* style)
 {
-	synchronizeMid(item, present, style, length());
+	synchronizeMid<FieldType, VisualizationType>(item, present, style, length());
 }
 
-template <class T> void SequentialLayout::synchronizeMid(T*& item, bool present, const typename T::StyleType* style, int position)
+template <class FieldType, class VisualizationType>
+void SequentialLayout::synchronizeMid(FieldType*& item, bool present,
+		const typename VisualizationType::StyleType* style, int position)
 {
 	if (item && !present)
 	{
@@ -122,24 +144,30 @@ template <class T> void SequentialLayout::synchronizeMid(T*& item, bool present,
 
 	if (!item && present)
 	{
-		if (style) item = new T(nullptr, style);
-		else item = new T(nullptr);
+		if (style) item = new VisualizationType(nullptr, style);
+		else item = new VisualizationType(nullptr);
 
 		insert(item, ((position > length()) ? length() : position) );
 	}
 }
 
-template <class T> void SequentialLayout::synchronizeFirst(T*& item, typename T::NodeType* node, const typename T::StyleType* style)
+template <class FieldType, class VisualizationType>
+void SequentialLayout::synchronizeFirst(FieldType*& item, typename VisualizationType::NodeType* node,
+		const typename VisualizationType::StyleType* style)
 {
-	synchronizeMid(item, node, style, 0);
+	synchronizeMid<FieldType, VisualizationType>(item, node, style, 0);
 }
 
-template <class T> void SequentialLayout::synchronizeLast(T*& item, typename T::NodeType* node, const typename T::StyleType* style)
+template <class FieldType, class VisualizationType>
+void SequentialLayout::synchronizeLast(FieldType*& item, typename VisualizationType::NodeType* node,
+		const typename VisualizationType::StyleType* style)
 {
-	synchronizeMid(item, node, style, length());
+	synchronizeMid<FieldType, VisualizationType>(item, node, style, length());
 }
 
-template <class T> void SequentialLayout::synchronizeMid(T*& item, typename T::NodeType* node, const typename T::StyleType* style, int position)
+template  <class FieldType, class VisualizationType>
+void SequentialLayout::synchronizeMid(FieldType*& item, typename VisualizationType::NodeType* node,
+		const typename VisualizationType::StyleType* style, int position)
 {
 	if (item && item->node() != node)
 	{
@@ -149,8 +177,8 @@ template <class T> void SequentialLayout::synchronizeMid(T*& item, typename T::N
 
 	if (!item && node)
 	{
-		if (style) item = new T(nullptr, node, style);
-		else item = new T(nullptr, node);
+		if (style) item = new VisualizationType(nullptr, node, style);
+		else item = new VisualizationType(nullptr, node);
 
 		insert(item, ((position > length()) ? length() : position) );
 	}
