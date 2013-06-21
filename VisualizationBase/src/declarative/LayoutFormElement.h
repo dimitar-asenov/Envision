@@ -37,6 +37,9 @@ namespace Visualization {
 class VISUALIZATIONBASE_API LayoutFormElement : public FormElement
 {
 	public:
+		LayoutFormElement() = default;
+		LayoutFormElement(const LayoutFormElement& other) = default;
+		LayoutFormElement& operator=(const LayoutFormElement&) = delete;
 		~LayoutFormElement() {};
 		/**
 		 * Sets a getter (\a cursorWhenEmptyGetter) for checking if the element should have cursors when empty
@@ -67,6 +70,8 @@ class VISUALIZATIONBASE_API LayoutFormElement : public FormElement
 		bool noInnerCursors(Item* item);
 
 	private:
+
+		// Do not forget to update the copy constructor if adding new members.
 		std::function<bool(Item* item)> hasCursorWhenEmptyGetter_{};
 		std::function<bool(Item* item)> notLocationEquivalentCursorsGetter_{};
 		std::function<bool(Item* item)> noBoundaryCursorsGetter_{};

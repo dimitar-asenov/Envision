@@ -28,11 +28,14 @@
 
 namespace Visualization {
 
-ShapeFormElement::ShapeFormElement()
-{}
-
 ShapeFormElement::~ShapeFormElement()
 {}
+
+
+ShapeFormElement* ShapeFormElement::clone() const
+{
+	return new ShapeFormElement(*this);
+}
 
 QList<FormElement*> ShapeFormElement::shapeElements()
 {

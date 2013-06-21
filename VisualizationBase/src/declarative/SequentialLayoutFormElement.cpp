@@ -36,14 +36,25 @@
 
 namespace Visualization {
 
-SequentialLayoutFormElement::SequentialLayoutFormElement()
-{}
+SequentialLayoutFormElement::SequentialLayoutFormElement(const SequentialLayoutFormElement& other)
+:	LayoutFormElement{other}, listNodeGetter_{other.listNodeGetter_}, nodeListGetter_{other.nodeListGetter_},
+ 	itemListGetter_{other.itemListGetter_}, spaceBetweenElementsGetter_{other.spaceBetweenElementsGetter_},
+ 	defaultSpaceBetweenElements_{other.defaultSpaceBetweenElements_}, orientation_{other.orientation_},
+ 	alignment_{other.alignment_}, forward_{other.forward_}, minWidth_{other.minWidth_}, minHeight_{other.minHeight_}
+{
+}
 
 SequentialLayoutFormElement::~SequentialLayoutFormElement()
 {
 	for (auto list : itemListMap_)
 		for (auto item : *list)
 			SAFE_DELETE_ITEM(item);
+}
+
+
+SequentialLayoutFormElement* SequentialLayoutFormElement::clone() const
+{
+	return new SequentialLayoutFormElement(*this);
 }
 
 void SequentialLayoutFormElement::computeSize(Item* item, int availableWidth, int availableHeight)

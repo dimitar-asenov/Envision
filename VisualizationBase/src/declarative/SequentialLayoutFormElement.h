@@ -56,8 +56,12 @@ class VISUALIZATIONBASE_API SequentialLayoutFormElement : public LayoutFormEleme
 		using ListOfNodesGetterFunction = std::function<QList<Model::Node*>(Item* item)>;
 		using ListOfItemsGetterFunction = std::function<QList<Item*>(Item* item)>;
 
-		SequentialLayoutFormElement();
+		SequentialLayoutFormElement() = default;
+		SequentialLayoutFormElement(const SequentialLayoutFormElement& other);
+		SequentialLayoutFormElement& operator=(const SequentialLayoutFormElement&) = delete;
 		virtual ~SequentialLayoutFormElement();
+
+		virtual SequentialLayoutFormElement* clone() const override;
 
 		// Functions executable on element definition
 		/**
@@ -144,6 +148,8 @@ class VISUALIZATIONBASE_API SequentialLayoutFormElement : public LayoutFormEleme
 		virtual void destroyChildItems(Item* item) override;
 
 	private:
+
+		// Do not forget to update the copy constructor if adding new members.
 		ListNodeGetterFunction listNodeGetter_{};
 		ListOfNodesGetterFunction nodeListGetter_{};
 		ListOfItemsGetterFunction itemListGetter_{};

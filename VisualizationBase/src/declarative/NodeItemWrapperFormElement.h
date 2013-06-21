@@ -45,7 +45,13 @@ class NodeItemWrapperFormElement : public ItemWrapperFormElement<ParentType> {
 		using GetNodeFunction = std::function<Model::Node* (ParentType* v)>;
 
 		NodeItemWrapperFormElement(ChildItem item, GetNodeFunction nodeGetter);
+		NodeItemWrapperFormElement() = delete;
+		NodeItemWrapperFormElement(const NodeItemWrapperFormElement<ParentType>& other) = default;
+		NodeItemWrapperFormElement<ParentType>& operator=(const NodeItemWrapperFormElement<ParentType>&) = delete;
 		virtual ~NodeItemWrapperFormElement() {};
+
+		virtual NodeItemWrapperFormElement<ParentType>* clone() const override;
+
 		virtual void synchronizeWithItem(Item* item) override;
 
 		/**
@@ -54,6 +60,8 @@ class NodeItemWrapperFormElement : public ItemWrapperFormElement<ParentType> {
 		NodeItemWrapperFormElement<ParentType>* setCreateIfNoNode(bool create);
 
 	private:
+
+		// Do not forget to update the copy constructor if adding new members.
 		GetNodeFunction nodeGetter_{};
 		bool createIfNoNode_{false};
 };
@@ -62,6 +70,12 @@ template <class ParentType>
 NodeItemWrapperFormElement<ParentType>::NodeItemWrapperFormElement(ChildItem item, GetNodeFunction nodeGetter)
 : ItemWrapperFormElement<ParentType>{item}, nodeGetter_{nodeGetter}
 {}
+
+template <class ParentType>
+NodeItemWrapperFormElement<ParentType>* NodeItemWrapperFormElement<ParentType>::clone() const
+{
+		return new NodeItemWrapperFormElement<ParentType>(*this);
+}
 
 template <class ParentType>
 void NodeItemWrapperFormElement<ParentType>::synchronizeWithItem(Item* item)

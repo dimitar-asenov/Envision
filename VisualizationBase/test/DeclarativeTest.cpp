@@ -156,7 +156,7 @@ void DeclarativeTest::initializeForms()
 				// place shape element
 				->put(TheLeftOf, shapeElement, 10, FromLeftOf, secondElement)
 				->put(TheRightOf, shapeElement, 10, FromRightOf, secondElement)
-				->put(TheTopOf, shapeElement, 10, FromTopOf, secondElement)
+				->put(TheTopOf, shapeElement, 30, FromTopOf, secondElement)
 				->put(TheBottomOf, shapeElement, 10, FromBottomOf, secondElement));
 
 	// Test 9: Test sequential layout
@@ -175,7 +175,7 @@ void DeclarativeTest::initializeForms()
 
 int DeclarativeTest::determineForm()
 {
-	return 9;
+	return 8;
 }
 
 } /* namespace Visualization */

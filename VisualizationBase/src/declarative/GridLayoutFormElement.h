@@ -48,11 +48,19 @@ class VISUALIZATIONBASE_API GridLayoutFormElement : public LayoutFormElement {
 
 	public:
 		GridLayoutFormElement();
+		GridLayoutFormElement(const GridLayoutFormElement& other);
+		GridLayoutFormElement& operator=(const GridLayoutFormElement&) = delete;
 		virtual ~GridLayoutFormElement();
+
+		virtual GridLayoutFormElement* clone() const override;
 
 		// Methods executable on element definition
 		/**
 		 * Puts the \a element at \a column and \a row in the grid.
+		 *
+		 * If the element is already used elsewhere (is a form root, or has a parent) it is cloned and that clone is put
+		 * in the grid instead.
+		 *
 		 * Returns a pointer to this GridLayoutElement.
 		 */
 		GridLayoutFormElement* put(int column, int row, FormElement* element);
@@ -173,18 +181,20 @@ class VISUALIZATIONBASE_API GridLayoutFormElement : public LayoutFormElement {
 		int focusedElementIndex(Item* item) const;
 
 	private:
-		int numColumns_{};
-		int numRows_{};
+
+		// Do not forget to update the copy constructor if adding new members.
+		int numColumns_{1};
+		int numRows_{1};
 		int spaceBetweenColumns_{};
 		int spaceBetweenRows_{};
 
-		QPair<int, int> lastCell_{};
+		QPair<int, int> lastCell_{QPair<int, int>(0, 0)};
 
 		QVector<QVector<FormElement*>> elementGrid_{};
 		QVector<QVector<QPair<int, int>>> spanGrid_{};
 
-		LayoutStyle::Alignment defaultHorizontalAlignment_{};
-		LayoutStyle::Alignment defaultVerticalAlignment_{};
+		LayoutStyle::Alignment defaultHorizontalAlignment_{LayoutStyle::Alignment::Left};
+		LayoutStyle::Alignment defaultVerticalAlignment_{LayoutStyle::Alignment::Top};
 		QVector<LayoutStyle::Alignment> defaultRowVerticalAlignments_{};
 		QVector<LayoutStyle::Alignment> defaultColumnHorizontalAlignments_{};
 		QVector<QVector<LayoutStyle::Alignment>> cellHorizontalAlignmentGrid_{};

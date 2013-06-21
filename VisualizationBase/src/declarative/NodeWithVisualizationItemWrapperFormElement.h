@@ -44,7 +44,14 @@ class NodeWithVisualizationItemWrapperFormElement : public ItemWrapperFormElemen
 
 		NodeWithVisualizationItemWrapperFormElement(ChildItem item, GetNodeTypeFunction nodeGetter,
 																GetStyleTypeFunction styleGetter);
+		NodeWithVisualizationItemWrapperFormElement() = delete;
+		NodeWithVisualizationItemWrapperFormElement(
+				const NodeWithVisualizationItemWrapperFormElement<ParentType,VisualizationType>& other) = default;
+		NodeWithVisualizationItemWrapperFormElement<ParentType,VisualizationType>&
+			operator=(const NodeWithVisualizationItemWrapperFormElement<ParentType,VisualizationType>&) = delete;
 		virtual ~NodeWithVisualizationItemWrapperFormElement() {};
+
+		virtual NodeWithVisualizationItemWrapperFormElement<ParentType, VisualizationType>* clone() const override;
 		virtual void synchronizeWithItem(Item* item) override;
 
 		/**
@@ -53,6 +60,8 @@ class NodeWithVisualizationItemWrapperFormElement : public ItemWrapperFormElemen
 		NodeWithVisualizationItemWrapperFormElement<ParentType,VisualizationType>* setCreateIfNoNode(bool create);
 
 	private:
+
+		// Do not forget to update the copy constructor if adding new members.
 		GetNodeTypeFunction nodeGetter_;
 		GetStyleTypeFunction styleGetter_;
 		bool createIfNoNode_{false};
@@ -63,6 +72,14 @@ NodeWithVisualizationItemWrapperFormElement<ParentType, VisualizationType>::Node
 		ChildItem item, GetNodeTypeFunction nodeGetter, GetStyleTypeFunction styleGetter)
 : ItemWrapperFormElement<ParentType, VisualizationType>{item}, nodeGetter_{nodeGetter}, styleGetter_{styleGetter}
 {}
+
+
+template <class ParentType, class VisualizationType>
+NodeWithVisualizationItemWrapperFormElement<ParentType, VisualizationType>*
+NodeWithVisualizationItemWrapperFormElement<ParentType, VisualizationType>::clone() const
+{
+	return new NodeWithVisualizationItemWrapperFormElement<ParentType, VisualizationType>(*this);
+}
 
 template <class ParentType, class VisualizationType>
 void NodeWithVisualizationItemWrapperFormElement<ParentType, VisualizationType>::synchronizeWithItem(Item* item)

@@ -67,8 +67,13 @@ class DeclarativeItem : public DeclarativeItemBase
 		static QList<QList<FormElement*>>& shapeElementsStatic();
 
 		/**
-		 * Add an \a element to the list of forms. All the forms should be added via this method inside the static
-		 * method initializeForms.
+		 * Add \a element to the list of forms.
+		 *
+		 * All the forms should be added via this method inside the static method initializeForms.
+		 *
+		 * If \a element is already a form root element or has a parent, then it is cloned and its clone is added to the
+		 * list.
+		 *
 		 * Returns a pointer to the added element.
 		 */
 		template <class ElementType> static ElementType* addForm(ElementType* element);

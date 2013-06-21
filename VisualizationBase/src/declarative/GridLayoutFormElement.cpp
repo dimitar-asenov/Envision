@@ -33,9 +33,6 @@
 namespace Visualization {
 
 GridLayoutFormElement::GridLayoutFormElement()
-: numColumns_(1), numRows_(1), spaceBetweenColumns_{}, spaceBetweenRows_{}, lastCell_{QPair<int, int>(0, 0)},
-  defaultHorizontalAlignment_{LayoutStyle::Alignment::Left}, defaultVerticalAlignment_{LayoutStyle::Alignment::Top},
-  defaultColumnStretchFactor_{0}, defaultRowStretchFactor_{0}
 {
 	// initialize element grid
 	elementGrid_ = QVector<QVector<FormElement*>>(numColumns_, QVector<FormElement*>(numRows_));
@@ -57,21 +54,66 @@ GridLayoutFormElement::GridLayoutFormElement()
 	computeOverallStretchFactors();
 }
 
+
+GridLayoutFormElement::GridLayoutFormElement(const GridLayoutFormElement& other) : LayoutFormElement{other},
+	// Copy everything and then clone all child FormElements
+	numColumns_{other.numColumns_},
+	numRows_{other.numRows_},
+	spaceBetweenColumns_{other.spaceBetweenColumns_},
+	spaceBetweenRows_{other.spaceBetweenRows_},
+
+	lastCell_{other.lastCell_},
+
+	elementGrid_{other.elementGrid_},
+	spanGrid_{other.spanGrid_},
+
+	defaultHorizontalAlignment_{other.defaultHorizontalAlignment_},
+	defaultVerticalAlignment_{other.defaultVerticalAlignment_},
+	defaultRowVerticalAlignments_{other.defaultRowVerticalAlignments_},
+	defaultColumnHorizontalAlignments_{other.defaultColumnHorizontalAlignments_},
+	cellHorizontalAlignmentGrid_{other.cellHorizontalAlignmentGrid_},
+	cellVerticalAlignmentGrid_{other.cellVerticalAlignmentGrid_},
+
+	defaultColumnStretchFactor_{other.defaultColumnStretchFactor_},
+	defaultRowStretchFactor_{other.defaultRowStretchFactor_},
+	columnStretchFactors_{other.columnStretchFactors_},
+	rowStretchFactors_{other.rowStretchFactors_},
+	overallColumnStretchFactor_{other.overallColumnStretchFactor_},
+	overallRowStretchFactor_{other.overallRowStretchFactor_}
+{
+	// Adjust child Elements
+	for(int x = 0; x<elementGrid_.size(); ++x)
+		for(int y = 0; y<elementGrid_[x].size(); ++y)
+			if (elementGrid_[x][y])
+				{
+					auto child = elementGrid_[x][y]->clone();
+					elementGrid_[x][y] = child;
+					addChild(child);
+				}
+}
+
 GridLayoutFormElement::~GridLayoutFormElement()
 {
 	// elements were deleted by Element
 }
 
+GridLayoutFormElement* GridLayoutFormElement::clone() const
+{
+	return new GridLayoutFormElement(*this);
+}
+
 GridLayoutFormElement* GridLayoutFormElement::put(int column, int row, FormElement* element)
 {
+	auto toAdd = element->cloneIfAlreadyUsed();
+
 	adjustSize(column, row);
 	lastCell_ = QPair<int, int>(column, row);
 
 	removeChild(elementGrid_[column][row]);
-	addChild(element);
+	addChild(toAdd);
 
 	SAFE_DELETE(elementGrid_[column][row]);
-	elementGrid_[column][row] = element;
+	elementGrid_[column][row] = toAdd;
 	return this;
 }
 

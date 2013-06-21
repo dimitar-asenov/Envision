@@ -42,6 +42,11 @@ FormElement::~FormElement()
 	}
 }
 
+
+FormElement::FormElement(const FormElement& other) : marginTop_{other.marginTop_}, marginBottom_{other.marginBottom_},
+	marginLeft_{other.marginLeft_}, marginRight_{other.marginRight_}
+{}
+
 ElementCache& FormElement::getCache(const Item* item) const
 {
 	if (!elementCache_.contains(item))
@@ -118,6 +123,35 @@ bool FormElement::elementOrChildHasFocus(Item* item) const
 	}
 
 	return false;
+}
+
+void FormElement::addChild(FormElement* child)
+{
+	Q_ASSERT(child);
+	Q_ASSERT(!child->parent());
+	Q_ASSERT(!child->isFormRoot());
+	Q_ASSERT(!children_.contains(child));
+	children_.append(child);
+	child->parent_ = this;
+}
+
+void FormElement::removeChild(FormElement* child)
+{
+	if (child)
+		for (int i=0; i<children_.size(); ++i)
+			if (child == children_[i]) children_.remove(i);
+}
+
+FormElement* FormElement::setFormRoot()
+{
+	Q_ASSERT(!parent_);
+	isFormRoot_ = true;
+	return this;
+}
+
+FormElement* FormElement::cloneIfAlreadyUsed()
+{
+	return ( isFormRoot() || parent() ) ? clone() : this;
 }
 
 }

@@ -86,8 +86,10 @@ template <class VisualizationType>
 template <class ElementType>
 ElementType* DeclarativeItem<VisualizationType>::addForm(ElementType* element)
 {
-	formsStatic().append(element);
-	return element;
+	auto toAdd = static_cast<ElementType*> (element->cloneIfAlreadyUsed());
+	formsStatic().append(toAdd);
+	toAdd->setFormRoot();
+	return toAdd;
 }
 
 template <class VisualizationType>

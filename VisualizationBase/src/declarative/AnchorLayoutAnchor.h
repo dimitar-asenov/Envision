@@ -41,9 +41,15 @@ class FormElement;
 class VISUALIZATIONBASE_API AnchorLayoutAnchor {
 	public:
 		enum class Orientation : int {Auto, Horizontal, Vertical};
+
 		AnchorLayoutAnchor(float relativePlaceEdgePosition, FormElement* placeElement, int offset,
 				float relativeFixedEdgePosition, FormElement* fixedElement);
+		AnchorLayoutAnchor(const AnchorLayoutAnchor& other) = default; // This is rather complicated and the layout takes
+																							// care of doing it properly.
+		AnchorLayoutAnchor& operator=(const AnchorLayoutAnchor&) = delete;
 		virtual ~AnchorLayoutAnchor();
+
+		virtual AnchorLayoutAnchor* clone() const;
 
 		/**
 		 * Returns the position on the \a orientation axis of the element to be placed, assuming its size for \a item was
@@ -76,6 +82,14 @@ class VISUALIZATIONBASE_API AnchorLayoutAnchor {
 		int offset() const;
 
 	private:
+
+		// This is used for the adjustment when an AnchorLayout is cloned.
+		friend class AnchorLayoutFormElement;
+		void setPlaceElement(FormElement* el);
+		void setFixedElement(FormElement* el);
+
+
+		// Do not forget to update the copy constructor if adding new members.
 		float relativePlaceEdgePosition_{};
 		FormElement* placeElement_{};
 		int offset_{};
@@ -103,5 +117,8 @@ inline int AnchorLayoutAnchor::offset() const
 {
 	return offset_;
 }
+
+inline void AnchorLayoutAnchor::setPlaceElement(FormElement* el) {placeElement_ = el;}
+inline void AnchorLayoutAnchor::setFixedElement(FormElement* el) {fixedElement_ = el;}
 
 } /* namespace Visualization */

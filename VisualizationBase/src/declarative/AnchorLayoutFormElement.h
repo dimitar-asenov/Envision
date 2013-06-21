@@ -41,7 +41,11 @@ class VISUALIZATIONBASE_API AnchorLayoutFormElement : public LayoutFormElement {
 
 	public:
 		AnchorLayoutFormElement();
+		AnchorLayoutFormElement(const AnchorLayoutFormElement& other);
+		AnchorLayoutFormElement& operator=(const AnchorLayoutFormElement&) = delete;
 		virtual ~AnchorLayoutFormElement();
+
+		virtual AnchorLayoutFormElement* clone() const override;
 
 		// Methods executable on element definition
 		/**
@@ -75,6 +79,10 @@ class VISUALIZATIONBASE_API AnchorLayoutFormElement : public LayoutFormElement {
 		 * General method, that all the other put methods get translated to. It puts an anchor in the \a orientation,
 		 * and places the \a relativePlaceEdgePosition of \a placeElement \a offset from the \a relativeFixedEdgePositon
 		 * of the \a fixedElement.
+		 *
+		 * If any of \a placeElement or \a fixedElement are already used elsewhere (have a parent or are a form root)
+		 * then they are first cloned, and the corresponding clone is used for the anchor instead.
+		 *
 		 * Returns a pointer to this AnchorLayoutElement.
 		 */
 		AnchorLayoutFormElement* put(AnchorLayoutAnchor::Orientation orientation, float relativePlaceEdgePosition,
@@ -115,12 +123,33 @@ class VISUALIZATIONBASE_API AnchorLayoutFormElement : public LayoutFormElement {
 		void sortConstraints(QList<AnchorLayoutAnchor*>& constraints,
 				AnchorLayoutAnchor::Orientation orientation);
 
+		/**
+		 * Finds the proper match for \a element when putting it into the anchor layout.
+		 *
+		 * When putting an element into an Anchor layout sveral situations can occur:
+		 * - The element is not yet used anywhere (it has no parent and is not a root form). In this case this method
+		 * 	simply returns the element itself.
+		 * - The \a element is already used by this Anchor layout. In this case the \a element itself is returned.
+		 * - The \a element is already used by another layout or is a form root. In this case the \a element is cloned
+		 *   the first time this method is called and the clone is always returned when the method is called for the same
+		 *   \a element argument.
+		 */
+		FormElement* findChildMatch(FormElement* element);
+
+		// Do not forget to update the copy constructor if adding new members.
 		QList<AnchorLayoutAnchor*> horizontalConstraints_{};
 		QList<AnchorLayoutAnchor*> verticalConstraints_{};
 		bool horizontalNeedsConstraintSolver_{};
 		bool verticalNeedsConstraintSolver_{};
 
 		AnchorLayoutConstraintSolver* solver_{};
+		QMap<FormElement*, FormElement*> externalMatches_{};
+
+		/**
+		 * Clones one set of constraints.
+		 */
+		void cloneConstraints(QList<AnchorLayoutAnchor*>& thisConstraints,
+				const QList<AnchorLayoutAnchor*>& otherConstraints, QMap<FormElement*, FormElement*>& matching);
 };
 
 } /* namespace Visualization */

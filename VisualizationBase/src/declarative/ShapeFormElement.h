@@ -37,13 +37,20 @@ namespace Visualization {
  */
 class VISUALIZATIONBASE_API ShapeFormElement : public Visualization::FormElement {
 	public:
-		ShapeFormElement();
+
+		ShapeFormElement() = default;
+		ShapeFormElement(const ShapeFormElement& other) = default;
+		ShapeFormElement& operator=(const ShapeFormElement&) = delete;
 		virtual ~ShapeFormElement();
+
+		virtual ShapeFormElement* clone() const override;
 
 		virtual QList<FormElement*> shapeElements() override;
 		virtual void computeSize(Item* item, int availableWidth, int availableHeight) override;
 		virtual bool sizeDependsOnParent(const Item* item) const override;
 		virtual bool isEmpty(const Item* item) const override;
+
+		// Do not forget to update the copy constructor if adding new members.
 };
 
 } /* namespace Visualization */

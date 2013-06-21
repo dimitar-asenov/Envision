@@ -32,15 +32,70 @@
 namespace Visualization {
 
 AnchorLayoutFormElement::AnchorLayoutFormElement()
-: horizontalConstraints_{QList<AnchorLayoutAnchor*>()}, verticalConstraints_{QList<AnchorLayoutAnchor*>()},
-  horizontalNeedsConstraintSolver_{false}, verticalNeedsConstraintSolver_{false},
-  solver_{new AnchorLayoutConstraintSolver()}
+: solver_{new AnchorLayoutConstraintSolver()} // TODO: Does each AnchorLayoutElement really need its own solver?
 {}
+
+AnchorLayoutFormElement::AnchorLayoutFormElement(const AnchorLayoutFormElement& other) : LayoutFormElement{other},
+	horizontalNeedsConstraintSolver_{other.horizontalNeedsConstraintSolver_},
+	verticalNeedsConstraintSolver_{other.verticalNeedsConstraintSolver_},
+	solver_{new AnchorLayoutConstraintSolver()}, // TODO: Does each AnchorLayoutElement really need its own solver?
+	externalMatches_{} // Will be adjusted later
+{
+	QMap<FormElement*, FormElement*> matching;
+	cloneConstraints(horizontalConstraints_, other.horizontalConstraints_, matching);
+	cloneConstraints(verticalConstraints_, other.verticalConstraints_, matching);
+
+	for(auto it = other.externalMatches_.constBegin(); it != other.externalMatches_.constEnd(); ++it)
+	{
+		auto newMatch = matching.value(it.value());
+		Q_ASSERT(newMatch);
+		externalMatches_.insert(it.key(), newMatch);
+	}
+}
+
+void AnchorLayoutFormElement::cloneConstraints(QList<AnchorLayoutAnchor*>& thisConstraints,
+		const QList<AnchorLayoutAnchor*>& otherConstraints, QMap<FormElement*, FormElement*>& matching)
+{
+	for(auto c : otherConstraints)
+	{
+		auto cloned = c->clone();
+		thisConstraints.append(cloned);
+
+		auto matchingPlace = matching.value(cloned->placeElement());
+		if (!matchingPlace)
+		{
+			matchingPlace = cloned->placeElement()->clone();
+			matching.insert(cloned->placeElement(), matchingPlace);
+
+			Q_ASSERT(!children().contains(matchingPlace));
+			addChild(matchingPlace);
+		}
+		Q_ASSERT(matchingPlace->parent() == this);
+		cloned->setPlaceElement(matchingPlace);
+
+		auto matchingFixed = matching.value(cloned->fixedElement());
+		if (!matchingFixed)
+		{
+			matchingFixed = cloned->fixedElement()->clone();
+			matching.insert(cloned->fixedElement(), matchingFixed);
+
+			Q_ASSERT(!children().contains(matchingFixed));
+			addChild(matchingFixed);
+		};
+		Q_ASSERT(matchingFixed->parent() == this);
+		cloned->setFixedElement(matchingFixed);
+	}
+}
 
 AnchorLayoutFormElement::~AnchorLayoutFormElement()
 {
 	// elements were deleted by Element
 	SAFE_DELETE(solver_);
+}
+
+AnchorLayoutFormElement* AnchorLayoutFormElement::clone() const
+{
+	return new AnchorLayoutFormElement(*this);
 }
 
 AnchorLayoutFormElement* AnchorLayoutFormElement::put(PlaceEdge placeEdge, FormElement* placeElement, AtEdge atEdge,
@@ -122,18 +177,15 @@ AnchorLayoutFormElement* AnchorLayoutFormElement::put(AnchorLayoutAnchor::Orient
 {
 	Q_ASSERT(orientation != AnchorLayoutAnchor::Orientation::Auto);
 
-	if (!children().contains(placeElement))
-		addChild(placeElement);
-
-	if (!children().contains(fixedElement))
-		addChild(fixedElement);
+	auto placeElementToAdd = findChildMatch(placeElement);
+	auto fixedElementToAdd = findChildMatch(fixedElement);
 
 	if (orientation == AnchorLayoutAnchor::Orientation::Horizontal)
-		addConstraint(horizontalConstraints_, orientation, relativePlaceEdgePosition, placeElement, offset,
-																			relativeFixedEdgePosition, fixedElement);
+		addConstraint(horizontalConstraints_, orientation, relativePlaceEdgePosition, placeElementToAdd, offset,
+																			relativeFixedEdgePosition, fixedElementToAdd);
 	else // orientation == AnchorLayoutConstraint::Orientation::Vertical
-		addConstraint(verticalConstraints_, orientation, relativePlaceEdgePosition, placeElement, offset,
-																			relativeFixedEdgePosition, fixedElement);
+		addConstraint(verticalConstraints_, orientation, relativePlaceEdgePosition, placeElementToAdd, offset,
+																			relativeFixedEdgePosition, fixedElementToAdd);
 	return this;
 }
 
@@ -300,6 +352,32 @@ void AnchorLayoutFormElement::sortConstraints(QList<AnchorLayoutAnchor*>& constr
 		else // orientation == AnchorLayoutAnchor::Orientation::Vertical
 			verticalNeedsConstraintSolver_ = true;
 	}
+}
+
+/**
+ * Finds the proper match for \a element when putting it into the anchor layout.
+ *
+ * When putting an element into an Anchor layout sveral situations can occur:
+ * - The element is not yet used anywhere (it has no parent and is not a root form). In this case this method
+ * 	simply returns the element itself.
+ * - The \a element is already used by this Anchor layout. In this case the \a element itself is returned.
+ * - The \a element is already used by another layout or is a form root. In this case the \a element is cloned
+ *   the first time this method is called and the clone is always returned when the method is called for the same
+ *   \a element argument.
+ */
+FormElement* AnchorLayoutFormElement::findChildMatch(FormElement* element)
+{
+	auto found = externalMatches_.value(element);
+	if (found) return found;
+
+	Q_ASSERT(!children().contains(element));
+	Q_ASSERT(element->parent() != this);
+
+	auto toAdd = element->parent() || element->isFormRoot() ? element->clone() : element;
+
+	addChild(toAdd);
+	externalMatches_.insert(element, toAdd);
+	return toAdd;
 }
 
 }

@@ -43,12 +43,22 @@ class VisualizationItemWrapperFormElement : public ItemWrapperFormElement<Parent
 		using IsEnabledFunction = std::function<bool (ParentType* v)>;
 
 		VisualizationItemWrapperFormElement(ChildItem item, GetStyleFunction style);
+		VisualizationItemWrapperFormElement() = delete;
+		VisualizationItemWrapperFormElement(
+				const VisualizationItemWrapperFormElement<ParentType,VisualizationType>& other) = default;
+		VisualizationItemWrapperFormElement<ParentType,VisualizationType>&
+				operator=(const VisualizationItemWrapperFormElement<ParentType,VisualizationType>&) = delete;
 		virtual ~VisualizationItemWrapperFormElement() {};
+
+		virtual VisualizationItemWrapperFormElement<ParentType, VisualizationType>* clone() const override;
+
 		virtual void synchronizeWithItem(Item* item) override;
 
 		VisualizationItemWrapperFormElement<ParentType, VisualizationType>* setEnabled(IsEnabledFunction enabled);
 
 	private:
+
+		// Do not forget to update the copy constructor if adding new members.
 		GetStyleFunction style_{};
 		IsEnabledFunction enabled_{};
 };
@@ -58,6 +68,13 @@ VisualizationItemWrapperFormElement<ParentType, VisualizationType>::Visualizatio
 		ChildItem item, GetStyleFunction style)
 : ItemWrapperFormElement<ParentType, VisualizationType>{item}, style_{style}
 {}
+
+template <class ParentType, class VisualizationType>
+VisualizationItemWrapperFormElement<ParentType, VisualizationType>*
+VisualizationItemWrapperFormElement<ParentType, VisualizationType>::clone() const
+{
+	return new VisualizationItemWrapperFormElement<ParentType, VisualizationType>(*this);
+}
 
 template <class ParentType, class VisualizationType>
 VisualizationItemWrapperFormElement<ParentType, VisualizationType>*

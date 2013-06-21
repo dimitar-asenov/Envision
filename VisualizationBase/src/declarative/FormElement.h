@@ -72,7 +72,18 @@ class VISUALIZATIONBASE_API ElementCache
 class VISUALIZATIONBASE_API FormElement
 {
 	public:
+		FormElement() = default;
+		FormElement(const FormElement& other);
+		FormElement& operator=(const FormElement&) = delete;
 		virtual ~FormElement();
+
+		/**
+		 * Copy this element and all its children into a new element tree.
+		 */
+		virtual FormElement* clone() const = 0;
+
+		FormElement* cloneIfAlreadyUsed();
+
 		/**
 		 * Returns the list of shape elements inside this form element.
 		 * Recursively collects the shape elements from the element's children.
@@ -111,6 +122,11 @@ class VISUALIZATIONBASE_API FormElement
 		 * Returns a pointer to this FormElement.
 		 */
 		FormElement* setRightMargin(int right);
+
+		/**
+		 * Sets this element to be a formRoot
+		 */
+		FormElement* setFormRoot();
 
 		// Methods executable when items need to be rendered
 		/**
@@ -201,6 +217,9 @@ class VISUALIZATIONBASE_API FormElement
 		 */
 		virtual void destroyChildItems(Item* item);
 
+		FormElement* parent() const;
+		bool isFormRoot() const;
+
 	protected:
 		/**
 		 * Caches the \a size of this form element for the specified \a item.
@@ -234,12 +253,11 @@ class VISUALIZATIONBASE_API FormElement
 		 * Returns the list of children.
 		 */
 		const QVector<FormElement*>& children() const;
-		/**
-		 * Returns the form element's parent element.
-		 */
-		FormElement* parent() const;
 
 	private:
+
+		// Do not forget to update the copy constructor if adding new members.
+		bool isFormRoot_{};
 		int marginTop_{};
 		int marginBottom_{};
 		int marginLeft_{};
@@ -304,14 +322,8 @@ inline int FormElement::topMargin() {return marginTop_;}
 inline int FormElement::bottomMargin() {return marginBottom_;}
 inline int FormElement::leftMargin() {return marginLeft_;}
 inline int FormElement::rightMargin() {return marginRight_;}
+inline bool FormElement::isFormRoot() const {return isFormRoot_;}
 
-inline void FormElement::addChild(FormElement* child){children_.append(child); child->parent_ = this;}
-inline void FormElement::removeChild(FormElement* child)
-{
-	if (child)
-		for (int i=0; i<children_.size(); ++i)
-			if (child == children_[i]) children_.remove(i);
-}
 inline const QVector<FormElement*>& FormElement::children() const {return children_;}
 
 } /* namespace Visualization */

@@ -40,7 +40,12 @@ class ItemWrapperFormElement : public FormElement
 {
 	public: // Methods executable on element definition
 		using ChildItem = ChildItemType* ParentType::*;
+
 		ItemWrapperFormElement(ChildItem item);
+		ItemWrapperFormElement() = delete;
+		ItemWrapperFormElement(const ItemWrapperFormElement<ParentType,ChildItemType>& other) = default;
+		ItemWrapperFormElement<ParentType,ChildItemType>&
+			operator=(const ItemWrapperFormElement<ParentType,ChildItemType>&) = delete;
 		virtual ~ItemWrapperFormElement() {};
 
 	public: // Methods executable when items need to be rendered
@@ -58,6 +63,8 @@ class ItemWrapperFormElement : public FormElement
 		ChildItem item() const;
 
 	private:
+
+		// Do not forget to update the copy constructor if adding new members.
 		ChildItem item_{};
 };
 
