@@ -33,6 +33,7 @@
 namespace Visualization {
 
 class FormElement;
+class GridLayoutFormElement;
 
 /**
  * The non-template base class for DeclarativeItem. Implements all not template related functionalities of the class
@@ -80,6 +81,15 @@ class VISUALIZATIONBASE_API DeclarativeItemBase: public Super<Item>
 		 * Returns the list of shape elements belonging to the current form (the same index as returned by determineForm).
 		 */
 		QList<FormElement*> currentShapeElements() const;
+
+	protected:
+		/**
+		 * Creates a grid layout.
+		 *
+		 * This is a convenience method.
+		 */
+		static GridLayoutFormElement* grid(QList<QList<FormElement*>> elements);
+
 
 	private:
 		int currentFormIndex_{};

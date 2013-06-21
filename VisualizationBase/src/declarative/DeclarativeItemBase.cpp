@@ -28,6 +28,7 @@
 #include "FormElement.h"
 #include "shapes/Shape.h"
 #include "shapes/ShapeStyle.h"
+#include "GridLayoutFormElement.h"
 
 namespace Visualization {
 
@@ -115,6 +116,23 @@ bool DeclarativeItemBase::isEmpty() const
 QList<ItemRegion> DeclarativeItemBase::regions()
 {
 	return currentForm()->regions(this);
+}
+
+GridLayoutFormElement* DeclarativeItemBase::grid(QList<QList<FormElement*>> elements)
+{
+	auto grid = new GridLayoutFormElement();
+
+	for(int y = 0; y < elements.size(); ++y)
+	{
+		auto& row = elements.at(y);
+		for(int x = 0; x < row.size(); ++x)
+		{
+			auto el = row.at(x);
+			if (el) grid->put(x, y, el);
+		}
+	}
+
+	return grid;
 }
 
 }
