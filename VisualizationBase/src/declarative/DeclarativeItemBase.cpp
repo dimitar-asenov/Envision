@@ -118,7 +118,7 @@ QList<ItemRegion> DeclarativeItemBase::regions()
 	return currentForm()->regions(this);
 }
 
-GridLayoutFormElement* DeclarativeItemBase::grid(QList<QList<FormElement*>> elements)
+GridLayoutFormElement* DeclarativeItemBase::grid(QList<QList<Merge>> elements)
 {
 	auto grid = new GridLayoutFormElement();
 
@@ -127,8 +127,13 @@ GridLayoutFormElement* DeclarativeItemBase::grid(QList<QList<FormElement*>> elem
 		auto& row = elements.at(y);
 		for(int x = 0; x < row.size(); ++x)
 		{
-			auto el = row.at(x);
-			if (el) grid->put(x, y, el);
+			auto m = row.at(x);
+			if (m.element) grid->put(x, y, m.element);
+
+			Q_ASSERT(m.xSpan > 0);
+			Q_ASSERT(m.ySpan > 0);
+
+			if (m.xSpan > 1 || m.ySpan > 1) grid->setCellSpanning(m.xSpan, m.ySpan);
 		}
 	}
 

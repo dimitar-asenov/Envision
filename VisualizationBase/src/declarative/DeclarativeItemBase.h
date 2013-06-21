@@ -83,12 +83,23 @@ class VISUALIZATIONBASE_API DeclarativeItemBase: public Super<Item>
 		QList<FormElement*> currentShapeElements() const;
 
 	protected:
+
+		struct Merge
+		{
+			Merge(FormElement* e) : element{e}{}
+			Merge(FormElement* e, int x, int y) : element{e}, xSpan{x}, ySpan{y} {}
+
+			FormElement* element{};
+			int xSpan{1};
+			int ySpan{1};
+		};
+
 		/**
 		 * Creates a grid layout.
 		 *
 		 * This is a convenience method.
 		 */
-		static GridLayoutFormElement* grid(QList<QList<FormElement*>> elements);
+		static GridLayoutFormElement* grid(QList<QList<Merge>> elements);
 
 
 	private:
