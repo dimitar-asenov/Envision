@@ -304,11 +304,9 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 	add(new OD( "call", "expr ( expr )", 1, OD::LeftAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		Q_ASSERT(operands.size() == 2);
-		auto ref = dynamic_cast<ReferenceExpression*>( operands.first());
-		Q_ASSERT(ref);
 
 		auto opr = new MethodCallExpression();
-		opr->setRef(ref);
+		opr->setCallee(operands.first());
 
 		if (auto comma = dynamic_cast<CommaExpression*>(operands.last()))
 		{

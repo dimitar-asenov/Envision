@@ -25,9 +25,12 @@
 ***********************************************************************************************************************/
 
 #include "expressions/MethodCallExpression.h"
+#include "ReferenceExpression.h"
 #include "declarations/Class.h"
 #include "declarations/Method.h"
 #include "../types/PrimitiveType.h"
+#include "../types/SymbolProviderType.h"
+#include "../types/FunctionType.h"
 #include "../types/ErrorType.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
@@ -38,26 +41,56 @@ namespace OOModel {
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(MethodCallExpression)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(MethodCallExpression)
 
-REGISTER_ATTRIBUTE(MethodCallExpression, ref, ReferenceExpression, false, false, true)
+REGISTER_ATTRIBUTE(MethodCallExpression, callee, Expression, false, false, true)
 REGISTER_ATTRIBUTE(MethodCallExpression, arguments, TypedListOfExpression, false, false, true)
 
-MethodCallExpression::MethodCallExpression(const QString& name, Expression* prefix)
+MethodCallExpression::MethodCallExpression(const QString& name, Expression* referencePrefix)
 : Super(nullptr, MethodCallExpression::getMetaData())
 {
-	ref()->setName(name);
-	if (prefix != nullptr) ref()->setPrefix(prefix);
+	setCallee(new ReferenceExpression(name, referencePrefix));
 }
 
 Method* MethodCallExpression::methodDefinition()
 {
-	return dynamic_cast<Method*> (ref()->target());
+	Method* ret = nullptr;
+
+	// TODO: handle other cases as well (e.g. FunctionType)
+	auto calleeType = callee()->type();
+	if (auto spt = dynamic_cast<SymbolProviderType*>(calleeType))
+	{
+		if (auto m = dynamic_cast<Method*>(spt->symbolProvider()))
+			ret = m;
+		else if (/*auto c =*/ dynamic_cast<Class*>(spt->symbolProvider()))
+			{/* TODO: Find the method that implements the () overload and return that*/}
+	}
+
+
+	SAFE_DELETE(calleeType);
+
+	return ret;
 }
 
 Type* MethodCallExpression::type()
 {
 	auto mdef = methodDefinition();
 	if (!mdef)
-		return new ErrorType("Unresolved reference to a method");
+	{
+		// This type does not point to a method. See if it points to a FunctionalType object
+		auto calleeType = callee()->type();
+		Type* ret = nullptr;
+		if (auto ft = dynamic_cast<FunctionType*>(calleeType))
+		{
+			// TODO: handle multiple return values
+			if (ft->results().isEmpty()) ret = new PrimitiveType(PrimitiveType::VOID, true);
+			else ret = ft->results().first()->clone();
+		}
+
+		SAFE_DELETE(calleeType);
+
+		if (ret) return ret;
+		else return new ErrorType("Unresolved reference to a method");
+	}
+
 
 	if (mdef->results()->size() == 0)
 		return new PrimitiveType(PrimitiveType::VOID, true);

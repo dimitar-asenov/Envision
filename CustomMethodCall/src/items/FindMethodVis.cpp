@@ -26,6 +26,7 @@
 
 #include "items/FindMethodVis.h"
 
+#include "OOModel/src/expressions/ReferenceExpression.h"
 #include "VisualizationBase/src/items/Text.h"
 #include "VisualizationBase/src/items/Static.h"
 #include "VisualizationBase/src/items/VList.h"
@@ -59,8 +60,11 @@ FindMethodVis::~FindMethodVis()
 
 void FindMethodVis::determineChildren()
 {
-	layout()->synchronizeFirst(prefix_, node()->ref()->prefix());
-	layout()->synchronizeMid(separator_, node()->ref()->prefix() != nullptr, &style()->separator(), 1);
+	auto ref = dynamic_cast<OOModel::ReferenceExpression*>(node()->callee());
+	auto prefixNode = ref ? ref->prefix() : nullptr;
+
+	layout()->synchronizeFirst(prefix_, prefixNode);
+	layout()->synchronizeMid(separator_, prefixNode != nullptr, &style()->separator(), 1);
 	layout()->synchronizeLast(arguments_, node()->arguments(), &style()->arguments());
 
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
@@ -72,7 +76,7 @@ void FindMethodVis::determineChildren()
 	arguments_->setStyle( &style()->arguments() );
 	if (prefix_) separator_->setStyle( &style()->separator());
 
-	name_->setText(node()->ref()->name());
+	if (ref) name_->setText(ref->name());
 }
 
 }

@@ -68,6 +68,8 @@ Type* ReferenceExpression::type()
 		return new SymbolProviderType(module, false);
 	else if ( auto cl = dynamic_cast<Class*>( ref()->target() ) )
 		return new ClassType(cl, false);
+	else if ( auto method = dynamic_cast<Method*>( ref()->target() ) )
+		return new SymbolProviderType(method, false);
 	else if ( auto alias = dynamic_cast<TypeAlias*>( ref()->target() ) )
 		return new SymbolProviderType(alias, false);
 	else if ( auto nameImport = dynamic_cast<NameImport*>( ref()->target() ) )

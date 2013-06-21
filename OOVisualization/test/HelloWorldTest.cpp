@@ -143,15 +143,15 @@ Class* addGeneric(Model::Model* model, Project* parent)
 
 	ExpressionStatement* callFooSt = new ExpressionStatement();
 	MethodCallExpression* callFoo = new MethodCallExpression("foo");
-	callFoo->ref()->typeArguments()->append(new ReferenceExpression("A"));
+	dynamic_cast<ReferenceExpression*>(callFoo->callee())->typeArguments()->append(new ReferenceExpression("A"));
 	callFooSt->setExpression(callFoo);
 	foobar->items()->append(callFooSt);
 
 	ExpressionStatement* callBarSt = new ExpressionStatement();
 	MethodCallExpression* callBar = new MethodCallExpression("bar");
-	callBar->ref()->typeArguments()->append(new ReferenceExpression("A"));
-	callBar->ref()->typeArguments()->append(new ReferenceExpression("B"));
-	callBar->ref()->typeArguments()->append(new ReferenceExpression("C"));
+	dynamic_cast<ReferenceExpression*>(callBar->callee())->typeArguments()->append(new ReferenceExpression("A"));
+	dynamic_cast<ReferenceExpression*>(callBar->callee())->typeArguments()->append(new ReferenceExpression("B"));
+	dynamic_cast<ReferenceExpression*>(callBar->callee())->typeArguments()->append(new ReferenceExpression("C"));
 	callBarSt->setExpression(callBar);
 	foobar->items()->append(callBarSt);
 
@@ -463,8 +463,7 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 	VariableDeclarationExpression* var8 = new VariableDeclarationExpression("var8");
 	longMethod->items()->append(new ExpressionStatement(var8));
 	var8->decl()->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
-	MethodCallExpression* var8Value = new MethodCallExpression();
-	var8Value->ref()->setName("getId");
+	MethodCallExpression* var8Value = new MethodCallExpression("getId");
 	var8->decl()->setInitialValue(var8Value);
 
 	VariableDeclarationExpression* var9 = new VariableDeclarationExpression("var9");

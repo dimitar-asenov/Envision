@@ -171,7 +171,7 @@ public class NodeDescriptors {
 				{"Integer","cKind"}
 		}));
 		add( new NodeInitializer("MethodCallExpression", new String[][]{
-				{"ReferenceExpression","ref"},
+				{"Expression","callee"},
 				{"TypedListOfExpression","arguments"}
 		}));
 		add( new NodeInitializer("ConditionalExpression", new String[][]{

@@ -26,6 +26,7 @@
 
 #include "items/EmptyMethodVis.h"
 
+#include "OOModel/src/expressions/ReferenceExpression.h"
 #include "VisualizationBase/src/items/Static.h"
 
 using namespace Visualization;
@@ -54,8 +55,11 @@ EmptyMethodVis::~EmptyMethodVis()
 
 void EmptyMethodVis::determineChildren()
 {
-	layout()->synchronizeFirst(prefix_, node()->ref()->prefix());
-	layout()->synchronizeMid(separator_, node()->ref()->prefix() != nullptr, &style()->separator(), 1);
+	auto ref = dynamic_cast<OOModel::ReferenceExpression*>(node()->callee());
+	auto prefixNode = ref ? ref->prefix() : nullptr;
+
+	layout()->synchronizeFirst(prefix_, prefixNode);
+	layout()->synchronizeMid(separator_, prefixNode != nullptr, &style()->separator(), 1);
 
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
 	// TODO: consider the performance of this. Possibly introduce a style updated boolean for all items so that they know

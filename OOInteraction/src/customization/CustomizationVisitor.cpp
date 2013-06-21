@@ -31,6 +31,7 @@
 #include "OOVisualization/src/alternative/VKeywordMethodCall.h"
 #include "OOModel/src/declarations/Method.h"
 #include "OOModel/src/expressions/MethodCallExpression.h"
+#include "OOModel/src/expressions/ReferenceExpression.h"
 #include "OOModel/src/expressions/StringLiteral.h"
 #include "OOModel/src/expressions/IntegerLiteral.h"
 #include "OOModel/src/statements/ExpressionStatement.h"
@@ -57,43 +58,46 @@ Model::Node* CustomizationVisitor::visitMethod(CustomizationVisitor*, OOModel::M
 		if ( auto sti = dynamic_cast<OOModel::ExpressionStatement*>(annotation) )
 			if (auto call = dynamic_cast<OOModel::MethodCallExpression*>(sti->expression()) )
 			{
-				if (call->ref()->prefix() == nullptr && call->ref()->name() == "EnvisionKeywordVisualization"
-						&& call->arguments()->size() == 1)
+				if (auto ref = dynamic_cast<OOModel::ReferenceExpression*>(call->callee() ))
 				{
-					if (auto styleName = dynamic_cast<OOModel::StringLiteral*>(call->arguments()->first()))
+					if (ref->prefix() == nullptr && ref->name() == "EnvisionKeywordVisualization"
+							&& call->arguments()->size() == 1)
 					{
-
-						// Register Visualizations in the group
-						QString styleNameString = styleName->value();
-						customizationGroup_->addVisualization(
-								[=](Visualization::Item* parent, Model::Node* node) -> Visualization::Item*
-								{
-									return new OOVisualization::VKeywordMethodCall(
-											parent, static_cast<OOModel::MethodCallExpression*> (node),
-											OOVisualization::VKeywordMethodCall::itemStyles().get(styleNameString));
-								},
-								[=](Visualization::Item*, Model::Node* node) -> bool
-								{
-									auto call = static_cast<OOModel::MethodCallExpression*>(node);
-									return call->methodDefinition() == met;
-								});
-					}
-				}
-				else if  (call->ref()->prefix() == nullptr && call->ref()->name() == "EnvisionShortcut"
-						&& call->arguments()->size() >= 1 && call->arguments()->size() <=2)
-				{
-					if (auto keyword = dynamic_cast<OOModel::StringLiteral*>(call->arguments()->first()))
-					{
-						CommandExpression* command{};
-						if (call->arguments()->size() == 1)
-							command = new CreateMethodCall(keyword->value(), met->fullyQualifiedName());
-						else if (auto numArgs = dynamic_cast<OOModel::IntegerLiteral*>(call->arguments()->last()))
-							command = new CreateMethodCall(keyword->value(), met->fullyQualifiedName(), numArgs->value());
-
-						if (command)
+						if (auto styleName = dynamic_cast<OOModel::StringLiteral*>(call->arguments()->first()))
 						{
-							registeredCommands_.append(command);
-							CommandDescriptor::registerCommand(command);
+
+							// Register Visualizations in the group
+							QString styleNameString = styleName->value();
+							customizationGroup_->addVisualization(
+									[=](Visualization::Item* parent, Model::Node* node) -> Visualization::Item*
+									{
+										return new OOVisualization::VKeywordMethodCall(
+												parent, static_cast<OOModel::MethodCallExpression*> (node),
+												OOVisualization::VKeywordMethodCall::itemStyles().get(styleNameString));
+									},
+									[=](Visualization::Item*, Model::Node* node) -> bool
+									{
+										auto call = static_cast<OOModel::MethodCallExpression*>(node);
+										return call->methodDefinition() == met;
+									});
+						}
+					}
+					else if  (ref->prefix() == nullptr && ref->name() == "EnvisionShortcut"
+							&& call->arguments()->size() >= 1 && call->arguments()->size() <=2)
+					{
+						if (auto keyword = dynamic_cast<OOModel::StringLiteral*>(call->arguments()->first()))
+						{
+							CommandExpression* command{};
+							if (call->arguments()->size() == 1)
+								command = new CreateMethodCall(keyword->value(), met->fullyQualifiedName());
+							else if (auto numArgs = dynamic_cast<OOModel::IntegerLiteral*>(call->arguments()->last()))
+								command = new CreateMethodCall(keyword->value(), met->fullyQualifiedName(), numArgs->value());
+
+							if (command)
+							{
+								registeredCommands_.append(command);
+								CommandDescriptor::registerCommand(command);
+							}
 						}
 					}
 				}

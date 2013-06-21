@@ -56,8 +56,8 @@ class OOVISUALIZATION_API VMethodCallExpression : public Super<VExpression<VMeth
 		void determineChildren();
 
 	private:
-		VReferenceExpression* name_;
-		Visualization::VList* arguments_;
+		Item* callee_{};
+		Visualization::VList* arguments_{};
 };
 
 inline Visualization::VList* VMethodCallExpression::arguments() const { return arguments_; }

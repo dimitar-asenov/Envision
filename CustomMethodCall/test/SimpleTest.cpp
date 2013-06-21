@@ -125,21 +125,18 @@ Class* addCollection(Model::Model* model, Project* parent)
 	BinaryOperation* orIf = new BinaryOperation();
 	ifs->setCondition(orIf);
 	orIf->setOp(BinaryOperation::CONDITIONAL_OR);
-	MethodCallExpression* emptyCall = new MethodCallExpression();
+	MethodCallExpression* emptyCall = new MethodCallExpression("empty");
 	orIf->setLeft(emptyCall);
-	emptyCall->ref()->setName("empty");
 
 	UnaryOperation* negation = new UnaryOperation();
 	orIf->setRight(negation);
 	negation->setOp(UnaryOperation::NOT);
-	MethodCallExpression* existsCall = new MethodCallExpression();
+	MethodCallExpression* existsCall = new MethodCallExpression(QChar(0x2203));
 	negation->setOperand(existsCall);
-	existsCall->ref()->setName(QChar(0x2203));
 	existsCall->arguments()->append( new IntegerLiteral(42));
 
 	ExpressionStatement* insertCallSt = new ExpressionStatement();
-	MethodCallExpression* insertCall = new MethodCallExpression();
-	insertCall->ref()->setName("insert");
+	MethodCallExpression* insertCall = new MethodCallExpression("insert");
 	insertCall->arguments()->append( new IntegerLiteral(42));
 	insertCallSt->setExpression(insertCall);
 	ifs->thenBranch()->append(insertCallSt);

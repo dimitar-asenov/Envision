@@ -750,14 +750,16 @@ public class ASTConverter {
 		{
 			MethodInvocation ie = (MethodInvocation) e;
 			node = new Node(null, "MethodCallExpression", name);
+			Node refNode = new Node(null, "ReferenceExpression", "callee");
+			node.setChild("callee", refNode);
 			
 			if (ie.getExpression() != null)
-				node.child("ref").add(expression(ie.getExpression(), "prefix"));
-			node.child("ref").child("ref").setStringValue("____NULL____:" + ie.getName().getIdentifier());
+				refNode.add(expression(ie.getExpression(), "prefix"));
+			refNode.child("ref").setStringValue("____NULL____:" + ie.getName().getIdentifier());
 			
 			for (Type ta : (List<Type>) ie.typeArguments())
-				node.child("ref").child("typeArguments").add(
-						typeExpression(ta, Integer.toString(node.child("ref").child("typeArguments").numChildren())));
+				refNode.child("typeArguments").add(
+						typeExpression(ta, Integer.toString(refNode.child("typeArguments").numChildren())));
 			
 			for (Expression arg : (List<Expression>) ie.arguments())
 				node.child("arguments").add(expression(arg, Integer.toString(node.child("arguments").numChildren())));

@@ -227,7 +227,7 @@ void StringComponents::initConversions()
 	add<ArrayInitializer>([](ArrayInitializer* e){ return c( list(e->values(),"{",",","}", false, false) ); });
 
 	add<MethodCallExpression>([](MethodCallExpression* e){ return c(
-		e->ref(), list(e->arguments(),"(",",",")", false, true) ); });
+		e->callee(), list(e->arguments(),"(",",",")", false, true) ); });
 
 	add<ReferenceExpression>([](ReferenceExpression* e){ return c(
 		Optional(e->prefix(), AUTO), Optional(".", e->prefix()), e->name(),

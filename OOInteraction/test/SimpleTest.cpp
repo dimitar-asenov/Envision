@@ -202,6 +202,8 @@ Method* addDivBySix(Model::Model* model, Class* parent)
 	divbysix->items()->append(new ExpressionStatement(
 					OOExpressionBuilder::getOOExpression("[](int arg,long arg2)->(int x,int y) h")));
 
+	divbysix->items()->append(new ExpressionStatement(
+					OOExpressionBuilder::getOOExpression("a.b[42]()+x()()")));
 
 	VariableDeclarationExpression* result = new VariableDeclarationExpression("result");
 	divbysix->items()->append( new ExpressionStatement(result) );

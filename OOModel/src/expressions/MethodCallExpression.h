@@ -26,8 +26,7 @@
 
 #pragma once
 
-#include "ReferenceExpression.h"
-
+#include "Expression.h"
 #include "ModelBase/src/nodes/TypedList.h"
 
 DECLARE_TYPED_LIST(OOMODEL_API, OOModel, MethodCallExpression)
@@ -40,11 +39,17 @@ class OOMODEL_API MethodCallExpression: public Super<Expression>
 {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(MethodCallExpression)
 
-	ATTRIBUTE(ReferenceExpression, ref, setRef)
+	ATTRIBUTE(Expression, callee, setCallee)
 	ATTRIBUTE(Model::TypedList<Expression>, arguments, setArguments)
 
 	public:
-		MethodCallExpression(const QString& name, Expression* prefix = nullptr);
+		MethodCallExpression(const QString& name, Expression* referencePrefix = nullptr);
+
+		/**
+		 * Returns the definition of the method that is being called by this method call if one exists.
+		 *
+		 * If the callee is an expression of type FunctionType the return value is nullptr.
+		 */
 		Method* methodDefinition();
 
 		virtual Type* type();

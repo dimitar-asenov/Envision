@@ -30,6 +30,7 @@
 #include "OOModel/src/declarations/Class.h"
 #include "OOModel/src/declarations/Method.h"
 #include "OOModel/src/expressions/MethodCallExpression.h"
+#include "OOModel/src/expressions/ReferenceExpression.h"
 #include "OOModel/src/statements/ExpressionStatement.h"
 
 #include "VisualizationBase/src/renderer/ModelRenderer.h"

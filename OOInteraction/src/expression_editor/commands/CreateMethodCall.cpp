@@ -28,6 +28,7 @@
 #include "../OOExpressionBuilder.h"
 
 #include "OOModel/src/expressions/MethodCallExpression.h"
+#include "OOModel/src/expressions/ReferenceExpression.h"
 
 namespace OOInteraction {
 
@@ -46,12 +47,15 @@ OOModel::Expression* CreateMethodCall::create(const QList<OOModel::Expression*>&
 	auto method = static_cast<OOModel::MethodCallExpression*>(
 			OOInteraction::OOExpressionBuilder::getOOExpression(methodToCreate_ + "()"));
 
+	auto ref = dynamic_cast<OOModel::ReferenceExpression*>(method->callee());
+	Q_ASSERT(ref);
+
 	int typeArguments = expectedTypeArguments_;
 	for(auto a: arguments)
 	{
 		if (typeArguments > 0)
 		{
-			method->ref()->typeArguments()->append(a);
+			ref->typeArguments()->append(a);
 			--typeArguments;
 		}
 		else

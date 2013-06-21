@@ -5,9 +5,7 @@
 	<name prototypes="item/Text/default" />
 	<separator prototypes="item/Symbol/default" />
 	<arguments prototypes="item/VList/default">
-		<shape />
-		<itemsStyle prototypes="layout/SequentialLayout/default">
-			<shape prototypes="shape/Box/default">
+		<shape prototypes="shape/Box/default">
 				Box
 				<backgroundBrush>
 					<gradient>
@@ -27,6 +25,7 @@
 				<cornerType>2</cornerType>
 				<cornerRadius>2</cornerRadius>
 			</shape>
+		<itemsStyle prototypes="layout/SequentialLayout/default">
 			<direction>0</direction>
 			<spaceBetweenElements>3</spaceBetweenElements><drawShapeWhenEmpty>true</drawShapeWhenEmpty>
 		</itemsStyle>

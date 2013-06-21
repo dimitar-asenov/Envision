@@ -97,7 +97,10 @@ TEST(OOModel, JavaLibraryAndHelloWorldTest)
 	model.endModification();
 
 	CHECK_STR_EQUAL("Java", java->name());
-	CHECK_CONDITION(callPrintln->ref()->ref()->isResolved());
+
+	auto ref = dynamic_cast<ReferenceExpression*>(callPrintln->callee());
+	CHECK_CONDITION(ref);
+	CHECK_CONDITION(ref->ref()->isResolved());
 	CHECK_CONDITION(callPrintln->methodDefinition() != nullptr);
 	CHECK_CONDITION(callPrintln->methodDefinition() == println);
 }

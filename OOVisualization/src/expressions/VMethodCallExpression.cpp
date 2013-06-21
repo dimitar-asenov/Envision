@@ -37,22 +37,27 @@ namespace OOVisualization {
 ITEM_COMMON_DEFINITIONS(VMethodCallExpression, "item")
 
 VMethodCallExpression::VMethodCallExpression(Item* parent, NodeType* node, const StyleType* style) :
-	Super(parent, node, style),
-	name_(),
-	arguments_()
-{
-}
+	Super(parent, node, style)
+{}
 
 VMethodCallExpression::~VMethodCallExpression()
 {
 	// These were automatically deleted by LayoutProvider's destructor
-	name_ = nullptr;
+	callee_ = nullptr;
 	arguments_ = nullptr;
 }
 
 void VMethodCallExpression::determineChildren()
 {
-	layout()->synchronizeFirst(name_, node()->ref(), &style()->name());
+	if (auto ref = dynamic_cast<ReferenceExpression*>(node()->callee()))
+	{
+		// TODO: Find a way around that ugly hack. It might eve
+		layout()->synchronizeFirst<Item,VReferenceExpression>(callee_, ref, &style()->name());
+
+		if(callee_) static_cast<VReferenceExpression*>(callee_)->setStyle( &style()->name());
+	}
+	else
+		layout()->synchronizeFirst(callee_, node()->callee());
 	layout()->synchronizeLast(arguments_, node()->arguments(), &style()->arguments());
 
 	// TODO: find a better way and place to determine the style of children. Is doing this causing too many updates?
@@ -60,7 +65,6 @@ void VMethodCallExpression::determineChildren()
 	//			what's the reason they are being updated.
 	// The style needs to be updated every time since if our own style changes, so will that of the children.
 	layout()->setStyle( &style()->layout());
-	name_->setStyle( &style()->name());
 	arguments_->setStyle( &style()->arguments() );
 	arguments_->setSuppressDefaultRemovalHandler(true);
 }
