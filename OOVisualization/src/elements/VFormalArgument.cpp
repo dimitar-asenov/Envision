@@ -44,33 +44,28 @@ VFormalArgument::VFormalArgument(Item* parent, NodeType* node, const StyleType* 
 
 void VFormalArgument::initializeForms()
 {
-	addForm((new GridLayoutFormElement())
-			->setHorizontalAlignment(LayoutStyle::Alignment::Center)
-			->put(0, 0, (new GridLayoutFormElement())
-				->put(0, 0, item<VText>(&I::name_, [](I* v){return v->node()->nameNode();},
-						[](I* v){return &v->style()->name();}))
-				->put(1, 0, item<Static>(&I::icon_, [](I* v){return &v->style()->outIcon();})
-						->setEnabled([](I* v) -> bool {return v->node()->direction()==FormalArgument::OUT;})
-						->setRightMargin(4)
-				)
-			)
-			->put(0, 1, item(&I::type_, [](I* v){return v->node()->typeExpression();}))
-			->setNoInnerCursors([](Item*){return true;})
-			->setNoBoundaryCursors([](Item*){return true;})
+	auto nameEl = item<VText>(&I::name_, [](I* v){return v->node()->nameNode();},
+			[](I* v){return &v->style()->name();});
+
+	auto outIconEl = item<Static>(&I::icon_, [](I* v){return &v->style()->outIcon();})
+								->setEnabled([](I* v) -> bool {return v->node()->direction()==FormalArgument::OUT;})
+								->setRightMargin(4);
+
+	auto typeEl = item(&I::type_, [](I* v){return v->node()->typeExpression();});
+
+	addForm(grid({
+			{grid({{nameEl, outIconEl}})},
+			{typeEl}
+		})
+		->setHorizontalAlignment(LayoutStyle::Alignment::Center)
+		->setNoInnerCursors([](Item*){return true;})
+		->setNoBoundaryCursors([](Item*){return true;})
 	);
 
-	addForm((new GridLayoutFormElement())
-				->setHorizontalAlignment(LayoutStyle::Alignment::Center)
-				->put(0, 0, item(&I::type_, [](I* v){return v->node()->typeExpression();}))
-				->put(1, 0, item<VText>(&I::name_, [](I* v){return v->node()->nameNode();},
-						[](I* v){return &v->style()->name();}))
-				->put(2, 0, item<Static>(&I::icon_, [](I* v){return &v->style()->outIcon();})
-						->setEnabled([](I* v) -> bool {return v->node()->direction()==FormalArgument::OUT;})
-						->setRightMargin(4)
-				)
-				->setNoInnerCursors([](Item*){return true;})
-				->setNoBoundaryCursors([](Item*){return true;})
-		);
+	addForm(grid({	{typeEl, nameEl, outIconEl} })
+		->setNoInnerCursors([](Item*){return true;})
+		->setNoBoundaryCursors([](Item*){return true;})
+	);
 }
 
 int VFormalArgument::determineForm()
