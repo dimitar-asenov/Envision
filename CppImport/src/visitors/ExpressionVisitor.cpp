@@ -160,7 +160,6 @@ bool ExpressionVisitor::TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* 
 		}
 		case CppImportUtilities::OverloadKind::MethodCall:
 		{
-			std::cout << "METHOD CALL" << std::endl;
 			OOModel::MethodCallExpression* ooCall = new OOModel::MethodCallExpression();
 			for(unsigned i = 0; i < numArguments - 1; i++)
 			{
@@ -401,7 +400,9 @@ bool ExpressionVisitor::VisitOverloadExpr(clang::OverloadExpr* overloadExpr)
 
 bool ExpressionVisitor::TraverseUnresolvedMemberExpr(clang::UnresolvedMemberExpr* unresolvedMember)
 {
-	unresolvedMember->dump();
+	// we only consider statements which are written in source
+	if(unresolvedMember->isImplicitAccess())
+		return true;
 	OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression
 			(QString::fromStdString(unresolvedMember->getName().getAsString()));
 	TraverseStmt(unresolvedMember->getBase());
