@@ -238,8 +238,6 @@ OOModel::Modifier::ModifierFlag CppImportUtilities::convertStorageSpecifier(clan
 
 OOModel::Expression*CppImportUtilities::convertTemplateArgument(const clang::TemplateArgument& templateArg)
 {
-	// TODO: clang return weird kind numbers seem to be unitialized,
-	// hopefully 3.3 will do better
 	switch(templateArg.getKind())
 	{
 		case clang::TemplateArgument::ArgKind::Null:
