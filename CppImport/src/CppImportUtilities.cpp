@@ -244,29 +244,29 @@ OOModel::Expression*CppImportUtilities::convertTemplateArgument(const clang::Tem
 	{
 		case clang::TemplateArgument::ArgKind::Null:
 			std::cout << "NULL #####################################"<<std::endl;
-			return createErrorExpression("Unsupported TemplateArgumentLoc");
+			return createErrorExpression("Unsupported TemplateArgument NULL");
 		case clang::TemplateArgument::ArgKind::Type:
 			return convertClangType(templateArg.getAsType());
 		case clang::TemplateArgument::ArgKind::Declaration:
 			return new OOModel::ReferenceExpression(QString::fromStdString(templateArg.getAsDecl()->getNameAsString()));
 		case clang::TemplateArgument::ArgKind::NullPtr:
 			std::cout << "NULLPTR #####################################"<<std::endl;
-			return createErrorExpression("Unsupported TemplateArgumentLoc");
+			return createErrorExpression("Unsupported TemplateArgument NULLPTR");
 		case clang::TemplateArgument::ArgKind::Integral:
 			std::cout << "INTEGRAL #####################################"<<std::endl;
-			return createErrorExpression("Unsupported TemplateArgumentLoc");
+			return createErrorExpression("Unsupported TemplateArgument INTEGRAL");
 		case clang::TemplateArgument::ArgKind::Template:
 			return new OOModel::ReferenceExpression(
 						QString::fromStdString(templateArg.getAsTemplate().getAsTemplateDecl()->getNameAsString()));
 		case clang::TemplateArgument::ArgKind::TemplateExpansion:
 			std::cout << "EXPANSION #####################################"<<std::endl;
-			return createErrorExpression("Unsupported TemplateArgumentLoc");
+			return createErrorExpression("Unsupported TemplateArgument EXPANSION");
 		case clang::TemplateArgument::ArgKind::Expression:
 			std::cout << "EXPPRESSION #####################################"<<std::endl;
-			return createErrorExpression("Unsupported TemplateArgumentLoc");
+			return createErrorExpression("Unsupported TemplateArgument EXPRESSION");
 		case clang::TemplateArgument::ArgKind::Pack:
 			std::cout << "PACK #####################################"<<std::endl;
-			return createErrorExpression("Unsupported TemplateArgumentLoc");
+			return createErrorExpression("Unsupported TemplateArgument PACK");
 		default:
 			std::cout << "####### " << static_cast<int>(templateArg.getKind()) << std::endl;
 			return createErrorExpression("Unsupported TemplateArgumentLoc");

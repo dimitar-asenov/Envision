@@ -771,7 +771,11 @@ bool ClangAstVisitor::TraverseMethodDecl(clang::CXXMethodDecl* methodDecl, OOMod
 	if(methodDecl->isThisDeclarationADefinition())
 	{
 		if(ooMethod->items()->size())
+		{
 			log_->writeWarning(className_, "This function is double defined", methodDecl);
+			// only consider the first definition
+			return true;
+		}
 		ooStack_.push(ooMethod->items());
 		bool inBody = inBody_;
 		inBody_ = true;
@@ -841,12 +845,18 @@ void ClangAstVisitor::insertMemberInitializers(OOModel::Method* ooMethod, clang:
 				if(auto baseRecord = (*initIt)->getBaseClass()->getAsCXXRecordDecl())
 					ooMemberInit->setMemberName(QString::fromStdString(baseRecord->getNameAsString()));
 				else
+				{
 					// unsupported
-					Q_ASSERT(0);
+					log_->writeError(className_, "Unsupported member init", constructor);
+					ooMemberInit->setMemberName("#unsupported");
+				}
 			}
 			else
+			{
 				// unsupported
-				Q_ASSERT(0);
+				log_->writeError(className_, "Unsupported member init", constructor);
+				ooMemberInit->setMemberName("#unsupported");
+			}
 			TraverseStmt((*initIt)->getInit());
 			if(!ooExprStack_.empty())
 				ooMemberInit->setInitializedValue(ooExprStack_.pop());
