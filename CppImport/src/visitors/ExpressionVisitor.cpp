@@ -81,56 +81,16 @@ bool ExpressionVisitor::TraverseCXXMemberCallExpr(clang::CXXMemberCallExpr* call
 
 bool ExpressionVisitor::TraverseCallExpr(clang::CallExpr* callExpr)
 {
-	OOModel::MethodCallExpression* ooMethodCall = nullptr;
-	auto directCallee = callExpr->getDirectCallee();
-	auto callee = llvm::dyn_cast<clang::OverloadExpr>(callExpr->getCallee());
-	if(directCallee)
-		ooMethodCall = new OOModel::MethodCallExpression(QString::fromStdString(directCallee->getNameAsString()));
-	else if(callee)
-		ooMethodCall = new OOModel::MethodCallExpression(QString::fromStdString(callee->getName().getAsString()));
+	OOModel::MethodCallExpression* ooMethodCall = new OOModel::MethodCallExpression();
+	TraverseStmt(callExpr->getCallee());
+	if(!ooExprStack_.empty())
+		ooMethodCall->setCallee(ooExprStack_.pop());
 	else
 	{
-		// TODO: if OOMethodCall would take any expression this could be simplified
-		TraverseStmt(callExpr->getCallee()->IgnoreParens());
-		if(!ooExprStack_.empty())
-		{
-			if(auto unary = dynamic_cast<OOModel::UnaryOperation*>(ooExprStack_.pop()))
-			{
-				OOModel::ReferenceExpression* ooRef = nullptr;
-				if(unary->op() == OOModel::UnaryOperation::DEREFERENCE &&
-						(ooRef = dynamic_cast<OOModel::ReferenceExpression*>(unary->operand())))
-				{
-					ooMethodCall = new OOModel::MethodCallExpression();
-					ooMethodCall->ref()->setName(ooRef->name());
-					SAFE_DELETE(unary);
-				}
-			}
-		}
-		if(!ooMethodCall)
-		{
-			log_->writeError(className_, "Could not translate method call", callExpr);
-			return true;
-		}
+		log_->writeError(className_, "could not convert method callee", callExpr->getCallee());
+		ooMethodCall->setCallee(utils_->createErrorExpression("Could not convert calleee"));
 	}
-	// visit prefix
-	if(callee)
-	{
-		TraverseStmt(callee);
-		if(!ooExprStack_.empty())
-			ooMethodCall->ref()->setPrefix(ooExprStack_.pop());
-	}
-	else if(directCallee)
-	{
-		if(auto callee = llvm::dyn_cast<clang::MemberExpr>(callExpr->getCallee()))
-		{
-			if(!callee->isImplicitAccess() && callee->getBase())
-			{
-				TraverseStmt(callee->getBase());
-				if(!ooExprStack_.empty())
-					ooMethodCall->ref()->setPrefix(ooExprStack_.pop());
-			}
-		}
-	}
+
 	// visit arguments
 	for(auto argIt = callExpr->arg_begin(); argIt!=callExpr->arg_end(); ++argIt)
 	{
@@ -140,25 +100,92 @@ bool ExpressionVisitor::TraverseCallExpr(clang::CallExpr* callExpr)
 		else
 			log_->writeError(className_, "not supported", *argIt);
 	}
-	// template args
-	if(directCallee)
-	{
-		// TODO this might need some inspection
-		if(auto specArgs = directCallee->getTemplateSpecializationArgs())
-			for(unsigned i=0; i < specArgs->size(); i++)
-				ooMethodCall->ref()->typeArguments()->append(utils_->convertTemplateArgument(specArgs->get(i)));
-	}
-	else if(callee && callee->hasExplicitTemplateArgs())
-	{
-		unsigned templateArgs = callee->getNumTemplateArgs();
-		auto astTemplateArgsList = callee->getExplicitTemplateArgs();
-		for(unsigned i = 0; i < templateArgs; i++)
-			ooMethodCall->ref()->typeArguments()->append
-					(utils_->convertTemplateArgument(astTemplateArgsList[i].getArgument()));
-	}
+
 	ooExprStack_.push(ooMethodCall);
+
 	return true;
 }
+
+//bool ExpressionVisitor::TraverseCallExpr(clang::CallExpr* callExpr)
+//{
+//	OOModel::MethodCallExpression* ooMethodCall = nullptr;
+//	auto directCallee = callExpr->getDirectCallee();
+//	auto callee = llvm::dyn_cast<clang::OverloadExpr>(callExpr->getCallee());
+//	if(directCallee)
+//		ooMethodCall = new OOModel::MethodCallExpression(QString::fromStdString(directCallee->getNameAsString()));
+//	else if(callee)
+//		ooMethodCall = new OOModel::MethodCallExpression(QString::fromStdString(callee->getName().getAsString()));
+//	else
+//	{
+//		// TODO: if OOMethodCall would take any expression this could be simplified
+//		TraverseStmt(callExpr->getCallee()->IgnoreParens());
+//		if(!ooExprStack_.empty())
+//		{
+//			if(auto unary = dynamic_cast<OOModel::UnaryOperation*>(ooExprStack_.pop()))
+//			{
+//				OOModel::ReferenceExpression* ooRef = nullptr;
+//				if(unary->op() == OOModel::UnaryOperation::DEREFERENCE &&
+//						(ooRef = dynamic_cast<OOModel::ReferenceExpression*>(unary->operand())))
+//				{
+//					ooMethodCall = new OOModel::MethodCallExpression();
+//					ooMethodCall->ref()->setName(ooRef->name());
+//					SAFE_DELETE(unary);
+//				}
+//			}
+//		}
+//		if(!ooMethodCall)
+//		{
+//			log_->writeError(className_, "Could not translate method call", callExpr);
+//			return true;
+//		}
+//	}
+//	// visit prefix
+//	if(callee)
+//	{
+//		TraverseStmt(callee);
+//		if(!ooExprStack_.empty())
+//			ooMethodCall->ref()->setPrefix(ooExprStack_.pop());
+//	}
+//	else if(directCallee)
+//	{
+//		if(auto callee = llvm::dyn_cast<clang::MemberExpr>(callExpr->getCallee()))
+//		{
+//			if(!callee->isImplicitAccess() && callee->getBase())
+//			{
+//				TraverseStmt(callee->getBase());
+//				if(!ooExprStack_.empty())
+//					ooMethodCall->ref()->setPrefix(ooExprStack_.pop());
+//			}
+//		}
+//	}
+//	// visit arguments
+//	for(auto argIt = callExpr->arg_begin(); argIt!=callExpr->arg_end(); ++argIt)
+//	{
+//		TraverseStmt(*argIt);
+//		if(!ooExprStack_.empty())
+//			ooMethodCall->arguments()->append(ooExprStack_.pop());
+//		else
+//			log_->writeError(className_, "not supported", *argIt);
+//	}
+//	// template args
+//	if(directCallee)
+//	{
+//		// TODO this might need some inspection
+//		if(auto specArgs = directCallee->getTemplateSpecializationArgs())
+//			for(unsigned i=0; i < specArgs->size(); i++)
+//				ooMethodCall->ref()->typeArguments()->append(utils_->convertTemplateArgument(specArgs->get(i)));
+//	}
+//	else if(callee && callee->hasExplicitTemplateArgs())
+//	{
+//		unsigned templateArgs = callee->getNumTemplateArgs();
+//		auto astTemplateArgsList = callee->getExplicitTemplateArgs();
+//		for(unsigned i = 0; i < templateArgs; i++)
+//			ooMethodCall->ref()->typeArguments()->append
+//					(utils_->convertTemplateArgument(astTemplateArgsList[i].getArgument()));
+//	}
+//	ooExprStack_.push(ooMethodCall);
+//	return true;
+//}
 
 bool ExpressionVisitor::TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* callExpr)
 {
@@ -225,7 +252,7 @@ bool ExpressionVisitor::TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* 
 			{
 				if(auto ooRef = dynamic_cast<OOModel::ReferenceExpression*>(ooExprStack_.pop()))
 				{
-					ooCall->ref()->setName(ooRef->ref()->name());
+					ooCall->setCallee(new OOModel::ReferenceExpression(ooRef->ref()->name()));
 					SAFE_DELETE(ooRef);
 					ooExprStack_.push(ooCall);
 					break;
@@ -333,9 +360,16 @@ bool ExpressionVisitor::VisitStringLiteral(clang::StringLiteral* stringLiteral)
 bool ExpressionVisitor::VisitDeclRefExpr(clang::DeclRefExpr* declRefExpr)
 {
 	// TODO: namespace resolution
-	OOModel::ReferenceExpression* refExpr = new OOModel::ReferenceExpression();
-	refExpr->setName(QString::fromStdString(declRefExpr->getDecl()->getNameAsString()));
-	ooExprStack_.push(refExpr);
+	OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression();
+	ooRef->setName(QString::fromStdString(declRefExpr->getDecl()->getNameAsString()));
+	if(declRefExpr->hasExplicitTemplateArgs())
+	{
+		unsigned templateArgs = declRefExpr->getNumTemplateArgs();
+		auto astTemplateArgsList = declRefExpr->getExplicitTemplateArgs();
+		for(unsigned i = 0; i < templateArgs; i++)
+			ooRef->typeArguments()->append(utils_->convertTemplateArgument(astTemplateArgsList[i].getArgument()));
+	}
+	ooExprStack_.push(ooRef);
 	return true;
 }
 
@@ -390,6 +424,13 @@ bool ExpressionVisitor::TraverseMemberExpr(clang::MemberExpr* memberExpr)
 	{
 		OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression();
 		ooRef->ref()->setName(QString::fromStdString(memberExpr->getMemberDecl()->getNameAsString()));
+		if(memberExpr->hasExplicitTemplateArgs())
+		{
+			unsigned templateArgs = memberExpr->getNumTemplateArgs();
+			auto astTemplateArgsList = memberExpr->getExplicitTemplateArgs();
+			for(unsigned i = 0; i < templateArgs; i++)
+				ooRef->typeArguments()->append(utils_->convertTemplateArgument(astTemplateArgsList[i].getArgument()));
+		}
 		ooExprStack_.push(ooRef);
 		return true;
 	}
@@ -420,6 +461,46 @@ bool ExpressionVisitor::TraverseCXXTypeidExpr(clang::CXXTypeidExpr* typeIdExpr)
 			log_->writeError(className_, "unsupported typeid operand", typeIdExpr);
 	}
 	ooExprStack_.push(ooTypeTrait);
+	return true;
+}
+
+bool ExpressionVisitor::VisitOverloadExpr(clang::OverloadExpr* overloadExpr)
+{
+	OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression
+			(QString::fromStdString(overloadExpr->getName().getAsString()));
+	// template args
+	if(overloadExpr->hasExplicitTemplateArgs())
+	{
+		unsigned templateArgs = overloadExpr->getNumTemplateArgs();
+		auto astTemplateArgsList = overloadExpr->getExplicitTemplateArgs();
+		for(unsigned i = 0; i < templateArgs; i++)
+		{
+		//	astTemplateArgsList[i].getTypeSourceInfo()->getType();
+			//ooRef->typeArguments()->append(utils_->convertClangType(astTemplateArgsList[i].getTypeSourceInfo()->getType()));
+			ooRef->typeArguments()->append(utils_->convertTemplateArgument(astTemplateArgsList[i].getArgument()));
+		}
+	}
+	ooExprStack_.push(ooRef);
+	return true;
+}
+
+bool ExpressionVisitor::TraverseUnresolvedMemberExpr(clang::UnresolvedMemberExpr* unresolvedMember)
+{
+	unresolvedMember->dump();
+	OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression
+			(QString::fromStdString(unresolvedMember->getName().getAsString()));
+	TraverseStmt(unresolvedMember->getBase());
+	if(!ooExprStack_.empty())
+		ooRef->setPrefix(ooExprStack_.pop());
+	// template args
+	if(unresolvedMember->hasExplicitTemplateArgs())
+	{
+		unsigned templateArgs = unresolvedMember->getNumTemplateArgs();
+		auto astTemplateArgsList = unresolvedMember->getExplicitTemplateArgs();
+		for(unsigned i = 0; i < templateArgs; i++)
+			ooRef->typeArguments()->append(utils_->convertTemplateArgument(astTemplateArgsList[i].getArgument()));
+	}
+	ooExprStack_.push(ooRef);
 	return true;
 }
 
