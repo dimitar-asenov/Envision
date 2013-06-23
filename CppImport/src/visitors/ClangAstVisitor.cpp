@@ -251,15 +251,16 @@ bool ClangAstVisitor::TraverseFunctionDecl(clang::FunctionDecl* functionDecl)
 
 
 
-		// visit type arguments if any
-		if(auto functionTemplate = functionDecl->getDescribedFunctionTemplate())
+		// visit type arguments if any & if not yet visited
+		if(!ooFunction->typeArguments()->size())
 		{
-			auto templateParamList = functionTemplate->getTemplateParameters();
-			for( auto templateParam = templateParamList->begin();
-				  templateParam != templateParamList->end(); ++templateParam)
+			if(auto functionTemplate = functionDecl->getDescribedFunctionTemplate())
 			{
-				QString name = QString::fromStdString((*templateParam)->getNameAsString());
-				ooFunction->typeArguments()->append(new OOModel::FormalTypeArgument(name));
+				auto templateParamList = functionTemplate->getTemplateParameters();
+				for( auto templateParam = templateParamList->begin();
+					  templateParam != templateParamList->end(); ++templateParam)
+					ooFunction->typeArguments()->append(new OOModel::FormalTypeArgument
+																	(QString::fromStdString((*templateParam)->getNameAsString())));
 			}
 		}
 		// modifiers
@@ -783,15 +784,16 @@ bool ClangAstVisitor::TraverseMethodDecl(clang::CXXMethodDecl* methodDecl, OOMod
 		inBody_ = inBody;
 		ooStack_.pop();
 	}
-	// visit type arguments if any
-	if(auto functionTemplate = methodDecl->getDescribedFunctionTemplate())
+	// visit type arguments if any & if not yet visited
+	if(!ooMethod->typeArguments()->size())
 	{
-		auto templateParamList = functionTemplate->getTemplateParameters();
-		for( auto templateParam = templateParamList->begin();
-			  templateParam != templateParamList->end(); ++templateParam)
+		if(auto functionTemplate = methodDecl->getDescribedFunctionTemplate())
 		{
-			QString name = QString::fromStdString((*templateParam)->getNameAsString());
-			ooMethod->typeArguments()->append(new OOModel::FormalTypeArgument(name));
+			auto templateParamList = functionTemplate->getTemplateParameters();
+			for( auto templateParam = templateParamList->begin();
+				  templateParam != templateParamList->end(); ++templateParam)
+				ooMethod->typeArguments()->append(new OOModel::FormalTypeArgument
+															 (QString::fromStdString((*templateParam)->getNameAsString())));
 		}
 	}
 	// modifiers
