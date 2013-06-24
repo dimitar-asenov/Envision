@@ -238,7 +238,10 @@ void PositionLayout::updateGeometry(int, int)
 		int lastRight = 0;
 		int colWidth = 0;
 
+
 		auto model = items[0]->node()->model();
+		QList<Model::Model*> models{ {model} };
+
 		model->beginModification(items[0]->node(), "Automatically set position");
 		// It is important to batch the modifications, since model::endModification() send a notification signal.
 
@@ -265,12 +268,25 @@ void PositionLayout::updateGeometry(int, int)
 				colWidth = items[i]->width();
 			}
 
+			auto newModel = items[i]->node()->model();
+
+			if (newModel != model)
+			{
+				if (!models.contains(newModel))
+				{
+					models << newModel;
+					newModel->beginModification(items[i]->node(), "Automatically set position");
+				}
+
+				model = newModel;
+			}
+
 			model->changeModificationTarget(items[i]->node());
 			positions[i]->setX(x);
 			positions[i]->setY(y);
 		}
 
-		model->endModification();
+		for (auto m : models) m->endModification();
 		allNodesLackPositionInfo = false;
 	}
 
