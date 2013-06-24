@@ -122,7 +122,7 @@ class ExpressionVisitor : public clang::RecursiveASTVisitor <ExpressionVisitor>
 		bool VisitCharacterLiteral(clang::CharacterLiteral* charLiteral);
 		bool VisitStringLiteral(clang::StringLiteral* stringLiteral);
 		bool VisitDeclRefExpr(clang::DeclRefExpr* declRefExpr);
-		bool VisitCXXUnresolvedConstructorExpr(clang::CXXUnresolvedConstructExpr* unresolvedConstructorExpr);
+		bool TraverseCXXUnresolvedConstructExpr(clang::CXXUnresolvedConstructExpr* unresolvedConstruct);
 		bool TraverseParenExpr(clang::ParenExpr* parenthesizedExpr);
 		bool TraverseArraySubscriptExpr(clang::ArraySubscriptExpr* arraySubsrciptExpr);
 		bool VisitCXXThisExpr(clang::CXXThisExpr* thisExpr);

@@ -294,10 +294,23 @@ bool ExpressionVisitor::VisitDeclRefExpr(clang::DeclRefExpr* declRefExpr)
 	return true;
 }
 
-bool ExpressionVisitor::VisitCXXUnresolvedConstructorExpr(clang::CXXUnresolvedConstructExpr* unresolvedContruct)
+bool ExpressionVisitor::TraverseCXXUnresolvedConstructExpr(clang::CXXUnresolvedConstructExpr* unresolvedConstruct)
 {
-	ooExprStack_.push(new OOModel::Expression());
-	log_->writeError(className_, "UnresolvedConstruct expr", unresolvedContruct);
+	OOModel::MethodCallExpression* ooMethodCall = new OOModel::MethodCallExpression();
+	ooMethodCall->setCallee(utils_->convertClangType(unresolvedConstruct->getTypeAsWritten()));
+	// visit arguments
+	for(auto argIt = unresolvedConstruct->arg_begin(); argIt!=unresolvedConstruct->arg_end(); ++argIt)
+	{
+		if(llvm::isa<clang::CXXDefaultArgExpr>(*argIt))
+			// this is a default arg and is not written in the source code
+			continue;
+		TraverseStmt(*argIt);
+		if(!ooExprStack_.empty())
+			ooMethodCall->arguments()->append(ooExprStack_.pop());
+		else
+			log_->writeError(className_, "not supported", *argIt);
+	}
+	ooExprStack_.push(ooMethodCall);
 	return true;
 }
 
