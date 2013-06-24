@@ -491,9 +491,12 @@ bool ClangAstVisitor::TraverseCXXCatchStmt(clang::CXXCatchStmt* catchStmt)
 	bool inBody = inBody_;
 	inBody_ = false;
 	// visit exception to catch
-	TraverseDecl(catchStmt->getExceptionDecl());
-	if(!ooExprStack_.empty())
-		ooCatch->setExceptionToCatch(ooExprStack_.pop());
+	if(catchStmt->getExceptionDecl())
+	{
+		TraverseDecl(catchStmt->getExceptionDecl());
+		if(!ooExprStack_.empty())
+			ooCatch->setExceptionToCatch(ooExprStack_.pop());
+	}
 	// visit catch body
 	inBody_ = true;
 	ooStack_.push(ooCatch->body());

@@ -57,10 +57,12 @@ bool ExpressionVisitor::TraverseCXXThrowExpr(clang::CXXThrowExpr* throwExpr)
 {
 	OOModel::ThrowExpression* ooThrow = new OOModel::ThrowExpression();
 	// visit throw expression
-	TraverseStmt(throwExpr->getSubExpr());
-	if(!ooExprStack_.empty())
-		ooThrow->setExpr(ooExprStack_.pop());
-
+	if(throwExpr->getSubExpr())
+	{
+		TraverseStmt(throwExpr->getSubExpr());
+		if(!ooExprStack_.empty())
+			ooThrow->setExpr(ooExprStack_.pop());
+	}
 	ooExprStack_.push(ooThrow);
 	return true;
 }
