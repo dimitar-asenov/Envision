@@ -50,13 +50,15 @@ NameChange::~NameChange()
 void NameChange::redo()
 {
 	command->redo();
-	UndoCommand::target()->model()->emitNameModified(UndoCommand::target(), oldName);
+	if (auto model = UndoCommand::target()->model())
+		model->emitNameModified(UndoCommand::target(), oldName);
 }
 
 void NameChange::undo()
 {
 	command->undo();
-	UndoCommand::target()->model()->emitNameModified(UndoCommand::target(), newName);
+	if (auto model = UndoCommand::target()->model())
+			model->emitNameModified(UndoCommand::target(), newName);
 }
 
 }
