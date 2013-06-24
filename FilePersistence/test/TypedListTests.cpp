@@ -61,11 +61,11 @@ TEST(FilePersistence, LoadingTypedList)
 TEST(FilePersistence, SavingTypedList)
 {
 	QString testDir = QDir::tempPath() + "/Envision/FilePersistence/tests";
-	Model::Model model;
 	FileStore store;
 	store.setBaseFolder(testDir);
 
-	Model::TypedList<Model::Text>* list = dynamic_cast<Model::TypedList<Model::Text>*> (model.createRoot("TypedListOfText"));
+	auto list = new Model::TypedList<Model::Text>;
+	Model::Model model(list);
 
 	model.beginModification(list, "create");
 	Model::Text* one = new Model::Text();

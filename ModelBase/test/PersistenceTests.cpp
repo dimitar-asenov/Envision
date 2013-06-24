@@ -36,12 +36,9 @@ namespace Model {
 
 TEST(ModelBase, PersistenceSave)
 {
-	Model model;
+	auto root = new TestNodes::BinaryNode();
+	Model model("root", root);
 	PersistentStoreMock store;
-
-	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.createRoot("BinaryNode"));
-
-	model.setName("root");
 	model.save(&store);
 
 	CHECK_STR_EQUAL("BinaryNode,root,full,Text,name,full,,Integer,_ext_PositionExtension_x,full,0,Integer,_ext_PositionExtension_y,full,0,", store.getSaved());

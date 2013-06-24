@@ -87,8 +87,8 @@ class VisitorC : public Visitor<VisitorC>{
 
 TEST(ModelBase, VisitorSample)
 {
-	Model model;
-	List* root = dynamic_cast<List*> (model.createRoot("List"));
+	auto root = new List();
+	Model model(root);
 
 	model.setName("root");
 

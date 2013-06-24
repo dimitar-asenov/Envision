@@ -38,11 +38,11 @@ namespace FilePersistence {
 TEST(FilePersistence, SaveRootOnly)
 {
 	QString testDir = QDir::tempPath() + "/Envision/FilePersistence/tests";
-	Model::Model model;
 	FileStore store;
 	store.setBaseFolder(testDir);
 
-	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.createRoot("BinaryNode"));
+	auto root = new TestNodes::BinaryNode;
+	Model::Model model(root);
 
 	model.beginModification(root->name(), "set title");
 	root->name()->set("Title");
@@ -57,11 +57,11 @@ TEST(FilePersistence, SaveRootOnly)
 TEST(FilePersistence, SaveModeNodesSingleUnitOnly)
 {
 	QString testDir = QDir::tempPath() + QDir::toNativeSeparators("/Envision/FilePersistence/tests");
-	Model::Model model;
 	FileStore store;
 	store.setBaseFolder(testDir);
 
-	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.createRoot("BinaryNode"));
+	auto root = new TestNodes::BinaryNode;
+	Model::Model model(root);
 
 	model.beginModification(root, "set title");
 	root->name()->set("Root");
@@ -82,11 +82,11 @@ TEST(FilePersistence, SaveModeNodesSingleUnitOnly)
 TEST(FilePersistence, SaveMultipleUnits)
 {
 	QString testDir = QDir::tempPath() + QDir::toNativeSeparators("/Envision/FilePersistence/tests");
-	Model::Model model;
 	FileStore store;
 	store.setBaseFolder(testDir);
 
-	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.createRoot("BinaryNode"));
+	auto root = new TestNodes::BinaryNode;
+	Model::Model model(root);
 
 	model.beginModification(root, "set title");
 	root->name()->set("Root");

@@ -34,8 +34,8 @@ namespace Model {
 
 TEST(ModelBase, UndoRedoTextSet)
 {
-	Model model;
-	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.createRoot("BinaryNode"));
+	auto root = new TestNodes::BinaryNode();
+	Model model(root);
 
 	CHECK_CONDITION(root->name()->get().isNull());
 	CHECK_INT_EQUAL(0, root->name()->revision());
@@ -80,8 +80,8 @@ TEST(ModelBase, UndoRedoTextSet)
 
 TEST(ModelBase, UndoRedoOptionalNodes)
 {
-	Model model;
-	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.createRoot("BinaryNode"));
+	auto root = new TestNodes::BinaryNode();
+	Model model(root);
 
 	CHECK_INT_EQUAL(0, root->name()->revision());
 	CHECK_INT_EQUAL(0, root->revision());
@@ -161,8 +161,8 @@ TEST(ModelBase, UndoRedoOptionalNodes)
 
 TEST(ModelBase, UndoRedoGroupTextSet)
 {
-	Model model;
-	Text* root = dynamic_cast<Text*> (model.createRoot("Text"));
+	auto root = new Text();
+	Model model(root);
 
 	CHECK_INT_EQUAL(0, root->revision());
 

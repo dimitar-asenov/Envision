@@ -41,37 +41,10 @@ using namespace Visualization;
 
 namespace ControlFlowVisualization {
 
-Class* addClass(Model::Model* model, Project* parent)
+Method* addComplicated(Class* parent)
 {
-	Class* cl = nullptr;
-
-	if (!parent) cl = dynamic_cast<Class*> (model->createRoot("Class"));
-	model->beginModification(parent ? static_cast<Model::Node*> (parent) :cl, "Adding a hello world class.");
-	if (!cl)
-	{
-		cl = new Class();
-		parent->classes()->append(cl);
-	}
-
-	cl->setName("SomeClass");
-
-	model->endModification();
-	return cl;
-}
-
-Method* addComplicated(Model::Model* model, Class* parent)
-{
-	Method* met = nullptr;
-
-	if (!parent) met = dynamic_cast<Method*> (model->createRoot("Method"));
-	model->beginModification(parent? static_cast<Model::Node*> (parent) : met, "Adding a Complicated method.");
-	if (!met)
-	{
-		met = new Method();
-		parent->methods()->append(met);
-	}
-
-	met->setName("complicated");
+	auto met = new Method("complicated");
+	if (parent) parent->methods()->append(met);
 
 	VariableDeclarationExpression* a = new VariableDeclarationExpression("a");
 	met->items()->append(new ExpressionStatement(a));
@@ -162,23 +135,14 @@ Method* addComplicated(Model::Model* model, Class* parent)
 	met->items()->append(metReturn);
 	met->extension<Position>()->setX(500);
 
-	model->endModification();
 	return met;
 }
 
-Method* addDivBySix(Model::Model* model, Class* parent)
+Method* addDivBySix(Class* parent)
 {
-	Method* divbysix = nullptr;
+	auto divbysix = new Method("findDivBySix");
+	if (parent) parent->methods()->append(divbysix);
 
-	if (!parent) divbysix = dynamic_cast<Method*> (model->createRoot("Method"));
-	model->beginModification(parent? static_cast<Model::Node*> (parent) : divbysix, "Adding a divBySix method.");
-	if (!divbysix)
-	{
-		divbysix = new Method();
-		parent->methods()->append(divbysix);
-	}
-
-	divbysix->setName("findDivBySix");
 	FormalResult* divbysixResult = new FormalResult();
 	divbysixResult->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
 	divbysix->results()->append(divbysixResult);
@@ -259,32 +223,22 @@ Method* addDivBySix(Model::Model* model, Class* parent)
 	divbysixFinalReturn->values()->append(new ReferenceExpression("result"));
 	divbysix->items()->append(divbysixFinalReturn);
 
-	model->endModification();
 	return divbysix;
 }
 
 TEST(ControlFlowVisualization, SimpleTest)
 {
-	Model::Model* model = new Model::Model();
+	auto cl = new Class("SomeClass");
 
-	Class* cl = nullptr;
-	cl = addClass(model, nullptr);
+	addComplicated(cl);
+	addDivBySix(cl);
 
-	Method* complicated = nullptr;
-	complicated = addComplicated(model, cl);
+	auto model = new Model::Model(cl);
 
-	Method* divbysix = nullptr;
-	divbysix = addDivBySix(model, cl);
-
-	Model::Node* top_level = nullptr;
-	if (cl) top_level = cl;
-	else if(complicated) top_level = complicated;
-	else top_level = divbysix;
-
-	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(top_level));
+	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(cl));
 	VisualizationManager::instance().mainScene()->listenToModel(model);
 
-	CHECK_CONDITION(top_level != nullptr);
+	CHECK_CONDITION(cl != nullptr);
 }
 
 }

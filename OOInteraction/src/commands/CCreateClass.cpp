@@ -46,18 +46,17 @@ Interaction::CommandResult* CCreateClass::create(Visualization::Item* /*source*/
 {
 	auto pr = dynamic_cast<OOModel::Project*> (target->node());
 
-	OOModel::Class* cl = nullptr;
+	OOModel::Class* cl = new OOModel::Class();
+	if (!name.isEmpty()) cl->setName(name);
+
+	// Set visibility
+	if (attributes.first() == "private" ) cl->modifiers()->set(Modifier::Private);
+	else if (attributes.first()  == "protected" ) cl->modifiers()->set(Modifier::Protected);
+	else if (attributes.first()  == "public" ) cl->modifiers()->set(Modifier::Public);
+
 	bool newModel = false;
 	if (pr)
 	{
-		cl = new OOModel::Class();
-		if (!name.isEmpty()) cl->setName(name);
-
-		// Set visibility
-		if (attributes.first() == "private" ) cl->modifiers()->set(Modifier::Private);
-		else if (attributes.first()  == "protected" ) cl->modifiers()->set(Modifier::Protected);
-		else if (attributes.first()  == "public" ) cl->modifiers()->set(Modifier::Public);
-
 		pr->beginModification("create class");
 		pr->classes()->append(cl);
 		pr->endModification();
@@ -66,18 +65,7 @@ Interaction::CommandResult* CCreateClass::create(Visualization::Item* /*source*/
 	{
 		newModel = true;
 		auto model = new Model::Model();
-		cl = dynamic_cast<OOModel::Class*> (model->createRoot("Class"));
-
-		cl->beginModification("set project name");
-
-		if (!name.isEmpty()) cl->setName(name);
-
-		// Set visibility
-		if (attributes.first() == "private" ) cl->modifiers()->set(Modifier::Private);
-		else if (attributes.first()  == "protected" ) cl->modifiers()->set(Modifier::Protected);
-		else if (attributes.first()  == "public" ) cl->modifiers()->set(Modifier::Public);
-
-		cl->endModification();
+		model->setRoot(cl);
 
 		target->scene()->addTopLevelItem( new Visualization::RootItem(cl) );
 		target->scene()->listenToModel(model);

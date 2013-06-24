@@ -35,8 +35,8 @@ namespace Model {
 
 TEST(ModelBase, PositionExtension)
 {
-	Model model;
-	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.createRoot("BinaryNode"));
+	auto root = new TestNodes::BinaryNode();
+	Model model(root);
 
 	CHECK_CONDITION(root->hasAttribute("_ext_PositionExtension_x"));
 	CHECK_CONDITION(root->hasAttribute("_ext_PositionExtension_y"));

@@ -31,7 +31,7 @@ namespace Model {
 NotificationListener::NotificationListener(Model& model) : root(nullptr)
 {
 	QObject::connect(&model, SIGNAL(nodesModified(QList<Node*>)), this, SLOT(setModifiedNodes(QList<Node*>)));
-	QObject::connect(&model, SIGNAL(rootCreated(Node*)), this, SLOT(rootCreated(Node*)));
+	QObject::connect(&model, SIGNAL(rootNodeSet(Node*)), this, SLOT(rootNodeSet(Node*)));
 
 }
 
@@ -40,7 +40,7 @@ void NotificationListener::setModifiedNodes( QList<Node*> nodes)
 	modifiedNodes = nodes;
 }
 
-void NotificationListener::rootCreated(Node* root_)
+void NotificationListener::rootNodeSet(Node* root_)
 {
 	root = root_;
 }

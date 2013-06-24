@@ -77,7 +77,8 @@ TEST(ModelBase, SimpleModelCreation)
 	Model model;
 	CHECK_CONDITION( model.root() == nullptr );
 
-	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.createRoot("BinaryNode"));
+	auto root = new TestNodes::BinaryNode();
+	model.setRoot(root);
 	CHECK_CONDITION( model.root() == root );
 
 	CHECK_CONDITION( root->model() == &model );
@@ -87,8 +88,8 @@ TEST(ModelBase, SimpleModelCreation)
 
 TEST(ModelBase, RemoveOptional)
 {
-	Model model;
-	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.createRoot("BinaryNode"));
+	auto root = new TestNodes::BinaryNode();
+	Model model(root);
 
 	model.beginModification(root, "Making left node");
 	TestNodes::BinaryNode* left = new TestNodes::BinaryNode();
@@ -111,8 +112,8 @@ TEST(ModelBase, RemoveOptional)
 
 TEST(ModelBase, ChildNodeRetrieval)
 {
-	Model model;
-	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.createRoot("BinaryNode"));
+	auto root = new TestNodes::BinaryNode();
+	Model model(root);
 
 	model.beginModification(root, "Making nodes");
 	TestNodes::BinaryNode* left = new TestNodes::BinaryNode();
@@ -134,23 +135,27 @@ TEST(ModelBase, ChildNodeRetrieval)
 
 TEST(ModelBase, ProperRegistration)
 {
-	Model model;
-	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.createRoot("BinaryNode"));
+	auto root = new TestNodes::BinaryNode();
+	Model model(root);
 	CHECK_CONDITION(root->typeId() >= 0);
 
 	Model model2;
-	Text* t = dynamic_cast<Text*> (model2.createRoot("Text"));
+	auto t = new Text();
+	model2.setRoot(t);
+
 	CHECK_CONDITION(t->typeId() >= 0);
 	CHECK_CONDITION(t->typeId() != root->typeId());
 
 	Model model3;
-	Integer* i = dynamic_cast<Integer*> (model3.createRoot("Integer"));
+	auto i = new Integer();
+	model3.setRoot(i);
 	CHECK_CONDITION(i->typeId() >= 0);
 	CHECK_CONDITION(i->typeId() != root->typeId());
 	CHECK_CONDITION(i->typeId() != t->typeId());
 
 	Model model4;
-	Reference* r = dynamic_cast<Reference*> (model4.createRoot("Reference"));
+	auto r = new Reference();
+	model4.setRoot(r);
 	CHECK_CONDITION(r->typeId() >= 0);
 	CHECK_CONDITION(r->typeId() != root->typeId());
 	CHECK_CONDITION(r->typeId() != t->typeId());

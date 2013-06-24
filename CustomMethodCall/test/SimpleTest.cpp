@@ -44,20 +44,11 @@ using namespace Visualization;
 
 namespace CustomMethodCall {
 
-Class* addCollection(Model::Model* model, Project* parent)
+Class* addCollection(Project* parent)
 {
-	Class* col = nullptr;
+	auto col = new Class("Collection", Modifier::Public);
+	if (parent) parent->classes()->append(col);
 
-	if (!parent) col = dynamic_cast<Class*> (model->createRoot("Class"));
-	model->beginModification(parent ? static_cast<Model::Node*> (parent) :col, "Adding a collection class.");
-	if (!col)
-	{
-		col = new Class();
-		parent->classes()->append(col);
-	}
-
-	col->setName("Collection");
-	col->modifiers()->set(Modifier::Public);
 
 	Method* find = new Method();
 	col->methods()->append(find);
@@ -164,8 +155,6 @@ Class* addCollection(Model::Model* model, Project* parent)
 	testFormalResult->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
 	test->results()->append(testFormalResult);
 
-	model->endModification();
-
 	// Register a group that holds the guard condition: are we visualizing a method belonging to the Collection class?
 	auto g = new VisualizationGroup();
 	g->setConditionFunction([=](Visualization::Item*, Model::Node* node) -> bool
@@ -217,20 +206,13 @@ Class* addCollection(Model::Model* model, Project* parent)
 
 TEST(CustomMethodCall, CustomVisTest)
 {
-	////////////////////////////////////////////////// Create Model
-	Model::Model* model = new Model::Model();
+	auto collection = addCollection(nullptr);
+	auto model = new Model::Model(collection);
 
-	Class* collection = nullptr;
-	collection = addCollection(model, nullptr);
-
-	////////////////////////////////////////////////// Set Scene
-	Model::Node* top_level = nullptr;
-	if(collection) top_level = collection;
-
-	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(top_level));
+	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(collection));
 	VisualizationManager::instance().mainScene()->listenToModel(model);
 
-	CHECK_CONDITION(top_level != nullptr);
+	CHECK_CONDITION(collection != nullptr);
 }
 
 }

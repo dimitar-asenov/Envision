@@ -137,10 +137,8 @@ TEST(FilePersistence, PasteBinaryFromClipboard)
 
 TEST(FilePersistence, PasteListFromClipboard)
 {
-	Model::Model model;
-	model.setName("test");
-
-	Model::List* root = dynamic_cast<Model::List*> (model.createRoot("List"));
+	auto root = new Model::List;
+	Model::Model model("test", root);
 
 	model.beginModification(root, "elems");
 	Model::Text* first = new Model::Text();
@@ -170,10 +168,8 @@ TEST(FilePersistence, PasteListFromClipboard)
 
 TEST(FilePersistence, PasteInListFromClipboard)
 {
-	Model::Model model;
-	model.setName("test");
-
-	Model::List* root = dynamic_cast<Model::List*> (model.createRoot("List"));
+	auto root = new Model::List;
+	Model::Model model("test",root);
 
 	model.beginModification(root, "elems");
 	Model::Text* first = new Model::Text();

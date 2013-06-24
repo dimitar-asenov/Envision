@@ -162,12 +162,13 @@ QList<Node*> Node::findSymbols(const QRegExp& symbolExp, Node* source, FindSymbo
 
 void Node::beginModification(const QString &text)
 {
-	model()->beginModification(this, text);
+	if (auto m = model())
+		m->beginModification(this, text);
 }
 
 void Node::endModification()
 {
-	model()->endModification();
+	if (auto m = model()) m->endModification();
 }
 
 /***********************************************************************************************************************

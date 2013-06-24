@@ -41,46 +41,19 @@ using namespace Visualization;
 
 namespace OOInteraction {
 
-Project* addProject(Model::Model* model)
+Class* addClass(Project* parent)
 {
-	Project* pr = dynamic_cast<Project*> (model->createRoot("Project"));
-	model->beginModification(pr, "Adding a project");
-		pr->setName("NewProject");
-	model->endModification();
-	return pr;
-}
+	auto cl = new Class("SomeClass");
+	if (parent) parent->classes()->append(cl);
 
-Class* addClass(Model::Model* model, Project* parent)
-{
-	Class* cl = nullptr;
-
-	if (!parent) cl = dynamic_cast<Class*> (model->createRoot("Class"));
-	model->beginModification(parent ? static_cast<Model::Node*> (parent) :cl, "Adding a hello world class.");
-	if (!cl)
-	{
-		cl = new Class();
-		parent->classes()->append(cl);
-	}
-
-	cl->setName("SomeClass");
-
-	model->endModification();
 	return cl;
 }
 
-Method* addDivBySix(Model::Model* model, Class* parent)
+Method* addDivBySix(Class* parent)
 {
-	Method* divbysix = nullptr;
+	auto divbysix = new Method("findDivBySix");
+	if (parent) parent->methods()->append(divbysix);
 
-	if (!parent) divbysix = dynamic_cast<Method*> (model->createRoot("Method"));
-	model->beginModification(parent? static_cast<Model::Node*> (parent) : divbysix, "Adding a divBySix method.");
-	if (!divbysix)
-	{
-		divbysix = new Method();
-		parent->methods()->append(divbysix);
-	}
-
-	divbysix->setName("findDivBySix");
 	FormalResult* divbysixResult = new FormalResult();
 	divbysixResult->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
 	divbysix->results()->append(divbysixResult);
@@ -275,33 +248,23 @@ Method* addDivBySix(Model::Model* model, Class* parent)
 	divbysixReturn->values()->append(new ReferenceExpression("result"));
 	divbysix->items()->append(divbysixReturn);
 
-	model->endModification();
 	return divbysix;
 }
 
 TEST(OOInteraction, SimpleTest)
 {
-	Model::Model* model = new Model::Model();
+	auto pr = new Project("NewProject");
+	auto cl = addClass(pr);
+	addDivBySix(cl);
 
-	Project* pr = nullptr;
-	pr = addProject(model);
-
-	Class* cl = nullptr;
-	cl = addClass(model, pr);
-
-	Method* divbysix = nullptr;
-	divbysix = addDivBySix(model, cl);
-
-	Model::Node* top_level = nullptr;
-	if (pr) top_level = pr;
-	else if (cl) top_level = cl;
-	else top_level = divbysix;
+	auto top_level = pr;
+	auto model = new Model::Model(top_level);
 
 
 	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(top_level));
 	VisualizationManager::instance().mainScene()->listenToModel(model);
 
-		CHECK_CONDITION(top_level != nullptr);
+	CHECK_CONDITION(top_level != nullptr);
 }
 
 }

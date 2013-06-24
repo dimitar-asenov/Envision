@@ -40,7 +40,8 @@ TEST(ModelBase, ModificationNotificationTests)
 	CHECK_CONDITION(nl.root == nullptr);
 	CHECK_INT_EQUAL(0, nl.modifiedNodes.size());
 
-	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.createRoot("BinaryNode"));
+	auto root = new TestNodes::BinaryNode();
+	model.setRoot(root);
 
 	CHECK_CONDITION(root == nl.root);
 

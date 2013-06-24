@@ -435,17 +435,14 @@ Module* createClientModule()
 TEST(ContractsLibrary, ContractsLibraryTest)
 {
 	////////////////////////////////////////////////// Create Model
-	Model::Model* model = new Model::Model();
-	Project* prj = nullptr;
 
 	// Create project
-	prj = dynamic_cast<Project*> (model->createRoot("Project"));
-	model->beginModification(prj, "create a few classes that use contracts");
-	prj->setName("CustomizationDemo");
+	auto prj = new Project("CustomizationDemo");
 	auto client = createClientModule();
 	prj->modules()->append( client );
 	prj->modules()->append( createContractsLibrary());
-	model->endModification();
+
+	auto model = new Model::Model(prj);
 
 	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(prj));
 //	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(client));

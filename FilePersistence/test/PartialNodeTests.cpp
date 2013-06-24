@@ -77,11 +77,11 @@ TEST(FilePersistence, LoadingList)
 TEST(FilePersistence, SaveList)
 {
 	QString testDir = QDir::tempPath() + "/Envision/FilePersistence/tests";
-	Model::Model model;
 	FileStore store;
 	store.setBaseFolder(testDir);
 
-	TestNodes::PartialList* root = dynamic_cast<TestNodes::PartialList*> (model.createRoot("PartialList"));
+	auto root = new TestNodes::PartialList;
+	Model::Model model(root);
 
 	model.beginModification(root, "create ");
 	Model::Text* one = new Model::Text();

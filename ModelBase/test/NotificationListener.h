@@ -43,7 +43,7 @@ class NotificationListener : public QObject
 
 	public slots:
 		void setModifiedNodes( QList<Node*> nodes);
-		void rootCreated(Node* root);
+		void rootNodeSet(Node* root);
 };
 
 }

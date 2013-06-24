@@ -86,8 +86,8 @@ namespace Visualization {
 
 TEST(VisualizationBase, CompositeTest)
 {
-	Model::Model* model = new Model::Model();
-	Model::List* list = static_cast<Model::List*> (model->createRoot("List"));
+	auto list = new Model::List();
+	auto model = new Model::Model(list);
 
 	model->beginModification(list, "set");
 	TestNodes::BinaryNode* first = new TestNodes::BinaryNode();

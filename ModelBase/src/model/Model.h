@@ -62,11 +62,18 @@ class MODELBASE_API Model: public QObject
 	public:
 
 		/**
-		 * Constructs a new Model.
+		 * Constructs a new Model with the given \a root.
 		 *
 		 * The undo history limit is set to 100 operations.
 		 */
-		Model();
+		Model(Node* root = nullptr);
+
+		/**
+		 * Constructs a new Model with the given \a name and \a root.
+		 *
+		 * The undo history limit is set to 100 operations.
+		 */
+		Model(const QString& name, Node* root = nullptr);
 
 		/**
 		 * Deletes the root node corresponding to the Model.
@@ -182,8 +189,6 @@ class MODELBASE_API Model: public QObject
 
 		/**
 		 * Returns the root node for this model.
-		 *
-		 * If the root node has not been created yet, this method will return NULL.
 		 */
 		Node* root();
 
@@ -198,18 +203,12 @@ class MODELBASE_API Model: public QObject
 		void setName(const QString& name);
 
 		/**
-		 * Creates a new root node with the specified type.
+		 * Sets the root node of this model to \a node.
 		 *
-		 * If a root node already exists this method will not do anything. If a new root is created the rootCreated signal
-		 * will be emitted.
-		 *
-		 * This method must be called outside of a modification block. This action can not be undone.
-		 *
-		 * @param typeName
-		 * 				A string that specifies what type should the root node have.
-		 *
+		 * The model should not have a root node set. This method must be called outside of a modification block.
+		 * This action can not be undone.
 		 */
-		Node* createRoot(const QString &typeName);
+		void setRoot(Node* node);
 
 		/**
 		 * Pushes the specified command on the undo stack and executes it.
@@ -342,12 +341,12 @@ class MODELBASE_API Model: public QObject
 
 	signals:
 		/**
-		 * Emitted when a new rootNode was created or loaded
+		 * Emitted when a new root node was set.
 		 *
 		 * @param root
 		 * 				A pointer to the new root node
 		 */
-		void rootCreated(Node* root);
+		void rootNodeSet(Node* root);
 
 		/**
 		 * Emitted at the end of a modification block.
@@ -399,7 +398,7 @@ class MODELBASE_API Model: public QObject
 		QString name_;
 
 		/** The root node for this model */
-		Node* root_;
+		Node* root_{};
 
 		/** The command stack that holds the undo history */
 		QUndoStack commands;
@@ -429,7 +428,7 @@ class MODELBASE_API Model: public QObject
 		 * The node that is the top-most ancestor of all other nodes that are currently being modification. Only nodes in
 		 * the same access unit and below this node (including the node itself) may be modified.
 		 */
-		Node* currentModificationTarget;
+		Node* currentModificationTarget{};
 
 		/**
 		 * The lock of the access unit that is responsible for the current modification target node. Each node has exactly
@@ -437,7 +436,7 @@ class MODELBASE_API Model: public QObject
 		 * currently acquired lock is stored here so that each write operation can be checked to assure that no write
 		 * occurs outside of the access unit.
 		 */
-		NodeReadWriteLock* currentModificationLock;
+		NodeReadWriteLock* currentModificationLock{};
 
 		/**
 		 * A list of all top-level nodes which were modified as part of the last modification operation. This is only used
@@ -454,7 +453,7 @@ class MODELBASE_API Model: public QObject
 		 *
 		 * The two can not be mixed in the same operation and this flag is used to control this.
 		 */
-		bool pushedNewCommandsOnTheStack;
+		bool pushedNewCommandsOnTheStack{};
 
 		/**
 		 * Indicates if undo() or redo() were called during the last modification operation.
@@ -465,13 +464,13 @@ class MODELBASE_API Model: public QObject
 		 *
 		 * The two can not be mixed in the same operation and this flag is used to control this.
 		 */
-		bool performedUndoRedo;
+		bool performedUndoRedo{};
 
 		/**
 		 * This flag indicates if a modification is currently in progress. Commands can be pushed on the undo stack and
 		 * executed only if this is true.
 		 */
-		bool modificationInProgress;
+		bool modificationInProgress{};
 
 		/**
 		 * The persistent store where the model is currently stored.
@@ -479,7 +478,7 @@ class MODELBASE_API Model: public QObject
 		 * This is used in calls to Node::loadFully when a partially loaded node needs to load its entire contents.
 		 * It can also be used by other stores when the model needs to be saved to a different location.
 		 */
-		PersistentStore* store_;
+		PersistentStore* store_{};
 
 		/**
 		 * A list of all unresolved references which are currently loaded nodes.

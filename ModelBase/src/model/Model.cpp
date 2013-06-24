@@ -33,12 +33,17 @@
 
 namespace Model {
 
-Model::Model() :
-	root_(nullptr), currentModificationTarget(nullptr), currentModificationLock(nullptr),
-	pushedNewCommandsOnTheStack(false), performedUndoRedo(false), modificationInProgress(false), store_(nullptr)
+Model::Model(Node* root)
 {
 	commands.setUndoLimit(100);
 	manager().add(this);
+
+	if (root) setRoot(root);
+}
+
+Model::Model(const QString& name, Node* root) : Model{root}
+{
+	setName(name);
 }
 
 Model::~Model()
@@ -204,20 +209,34 @@ void Model::load(PersistentStore* store, const QString& name)
 		store_ = store;
 		commands.clear();
 		root_ = store_->loadModel(this, name_);
-		emit rootCreated(root_);
+		emit rootNodeSet(root_);
 	}
 }
 
-Node* Model::createRoot(const QString &typeName)
+void Model::setRoot(Node* node)
 {
-	if ( root_ == nullptr )
+	Q_ASSERT(!root_);
+	Q_ASSERT(node);
+
+	commands.clear();
+	root_ = node;
+
+	QList<Node*> nodeStack{ {node} };
+	while (!nodeStack.isEmpty())
 	{
-		commands.clear();
-		root_ = Node::createNewNode(typeName, nullptr);
-		emit rootCreated(root_);
+		auto node = nodeStack.takeLast(); //Depth first
+		if (auto ref = dynamic_cast<Reference*>(node))
+			if (!ref->isResolved()) addUnresolvedReference(ref);
+
+		for (auto children : node->children())
+			nodeStack.append(children);
 	}
 
-	return root_;
+	beginModification(root_, "Resolve children");
+	tryResolvingReferences();
+	endModification();
+
+	emit rootNodeSet(root_);
 }
 
 void Model::addUnresolvedReference(Reference* ref)

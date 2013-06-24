@@ -35,8 +35,8 @@ namespace OOModel {
 
 TEST(OOModel, SimpleClassTest)
 {
-	Model::Model model;
-	Class* root = dynamic_cast<Class*> (model.createRoot("Class"));
+	auto root = new Class;
+	Model::Model model(root);
 
 	CHECK_CONDITION(root != nullptr);
 	CHECK_CONDITION(root->name().isEmpty());
@@ -48,8 +48,8 @@ TEST(OOModel, SimpleClassTest)
 
 TEST(OOModel, SimpleProjectTest)
 {
-	Model::Model model;
-	Project* root = dynamic_cast<Project*> (model.createRoot("Project"));
+	auto root = new Project;
+	Model::Model model(root);
 
 	CHECK_CONDITION(root != nullptr);
 	CHECK_CONDITION(root->name().isEmpty());

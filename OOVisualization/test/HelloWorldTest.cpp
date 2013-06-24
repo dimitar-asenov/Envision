@@ -52,20 +52,10 @@ namespace OOVisualization {
 
 // The methods below add a certain construct to an existing model or model entity.
 
-Class* addHelloWorld(Model::Model* model, Project* parent)
+Class* addHelloWorld(Project* parent)
 {
-	Class* hello = nullptr;
-
-	if (!parent) hello = dynamic_cast<Class*> (model->createRoot("Class"));
-	model->beginModification(parent ? static_cast<Model::Node*> (parent) :hello, "Adding a hello world class.");
-	if (!hello)
-	{
-		hello = new Class();
-		parent->classes()->append(hello);
-	}
-
-	hello->setName("HelloWorld");
-	hello->modifiers()->set(Modifier::Public);
+	auto hello = new Class("HelloWorld", Modifier::Public);
+	if (parent) parent->classes()->append(hello);
 
 	hello->subDeclarations()->append(new NameImport(
 		new ReferenceExpression("out", new ReferenceExpression("System", new ReferenceExpression("Java")))));
@@ -92,24 +82,14 @@ Class* addHelloWorld(Model::Model* model, Project* parent)
 	callPrintlnSt->setExpression(callPrintln);
 	main->items()->append(callPrintlnSt);
 
-	model->endModification();
 	return hello;
 }
 
-Class* addGeneric(Model::Model* model, Project* parent)
+Class* addGeneric(Project* parent)
 {
-	Class* gen = nullptr;
+	auto gen = new Class("Generic", Modifier::Public);
+	if (parent) parent->classes()->append(gen);
 
-	if (!parent) gen = dynamic_cast<Class*> (model->createRoot("Class"));
-	model->beginModification(parent ? static_cast<Model::Node*> (parent) :gen, "Adding a generic class.");
-	if (!gen)
-	{
-		gen = new Class();
-		parent->classes()->append(gen);
-	}
-
-	gen->setName("Generic");
-	gen->modifiers()->set(Modifier::Public);
 	gen->typeArguments()->append(new FormalTypeArgument("P"));
 	gen->typeArguments()->append(new FormalTypeArgument("Q", new ReferenceExpression("P")));
 	gen->typeArguments()->append(new FormalTypeArgument("R", nullptr, new ReferenceExpression("P")));
@@ -161,24 +141,14 @@ Class* addGeneric(Model::Model* model, Project* parent)
 	bar->extension<Position>()->setY(80);
 	foobar->extension<Position>()->setY(140);
 
-	model->endModification();
 	return gen;
 }
 
-Class* addAnnotatedWithFriends(Model::Model* model, Project* parent)
+Class* addAnnotatedWithFriends(Project* parent)
 {
-	Class* ann = nullptr;
+	auto ann = new Class("AnnotatedWithFriends", Modifier::Public);
+	if (parent) parent->classes()->append(ann);
 
-	if (!parent) ann = dynamic_cast<Class*> (model->createRoot("Class"));
-	model->beginModification(parent ? static_cast<Model::Node*> (parent) :ann, "Adding an annotated class.");
-	if (!ann)
-	{
-		ann = new Class();
-		parent->classes()->append(ann);
-	}
-
-	ann->setName("AnnotatedWithFriends");
-	ann->modifiers()->set(Modifier::Public);
 	ann->annotations()->append( new ExpressionStatement(new ReferenceExpression("SomeAnnotation")));
 
 	// Add some friends classes
@@ -200,24 +170,14 @@ Class* addAnnotatedWithFriends(Model::Model* model, Project* parent)
 	ann->extension<Position>()->setX(460);
 	ann->extension<Position>()->setY(620);
 
-	model->endModification();
 	return ann;
 }
 
-Class* addEnumeration(Model::Model* model, Project* parent)
+Class* addEnumeration(Project* parent)
 {
-	Class* en = nullptr;
+	auto en = new Class("Colors", Modifier::Public);
+	if (parent) parent->classes()->append(en);
 
-	if (!parent) en = dynamic_cast<Class*> (model->createRoot("Class"));
-	model->beginModification(parent ? static_cast<Model::Node*> (parent) :en, "Adding an enumeration class.");
-	if (!en)
-	{
-		en = new Class();
-		parent->classes()->append(en);
-	}
-
-	en->setName("Colors");
-	en->modifiers()->set(Modifier::Public);
 	en->enumerators()->append( new Enumerator("RED"));
 	en->enumerators()->append( new Enumerator("GREEN"));
 	en->enumerators()->append( new Enumerator("BLUE", new IntegerLiteral(5)));
@@ -226,7 +186,6 @@ Class* addEnumeration(Model::Model* model, Project* parent)
 	en->extension<Position>()->setX(460);
 	en->extension<Position>()->setY(880);
 
-	model->endModification();
 	return en;
 }
 
@@ -332,19 +291,10 @@ Class* addInner()
 	return outer;
 }
 
-Project* addJavaLibrary(Model::Model* model, Project* parent)
+Project* addJavaLibrary(Project* parent)
 {
-	Project* java = nullptr;
-
-	if (!parent) java = dynamic_cast<Project*> (model->createRoot("Project"));
-	model->beginModification(parent? static_cast<Model::Node*> (parent) :java, "Adding a java library.");
-	if (!java)
-	{
-		java = new Project();
-		parent->projects()->append( java );
-	}
-
-	java->setName("Java");
+	auto java = new Project("Java");
+	if (parent) parent->projects()->append(java);
 
 	Class* string = new Class("String", Modifier::Public);
 	java->classes()->append(string);
@@ -385,23 +335,14 @@ Project* addJavaLibrary(Model::Model* model, Project* parent)
 	string->extension<Position>()->setY(100);
 	io->extension<Position>()->setX(240);
 
-	model->endModification();
 	return java;
 }
 
-Method* addLongMethod(Model::Model* model, Class* parent)
+Method* addLongMethod(Class* parent)
 {
-	Method* longMethod = nullptr;
+	auto longMethod = new Method("aLongTestMethod");
+	if (parent) parent->methods()->append(longMethod);
 
-	if (!parent) longMethod = dynamic_cast<Method*> (model->createRoot("Method"));
-	model->beginModification(parent? static_cast<Model::Node*> (parent) : longMethod, "Adding a long method.");
-	if (!longMethod)
-	{
-		longMethod = new Method();
-		parent->methods()->append(longMethod);
-	}
-
-	longMethod->setName("aLongTestMethod");
 	FormalResult* result  = new FormalResult();
 	result->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
 	longMethod->results()->append(result);
@@ -710,23 +651,14 @@ Method* addLongMethod(Model::Model* model, Class* parent)
 	else
 		longMethod->extension<Position>()->setX(400);
 
-	model->endModification();
 	return longMethod;
 }
 
-Method* addFactorial(Model::Model* model, Class* parent)
+Method* addFactorial(Class* parent)
 {
-	Method* factorial = nullptr;
+	auto factorial = new Method("factorial");
+	if (parent) parent->methods()->append(factorial);
 
-	if (!parent) factorial = dynamic_cast<Method*> (model->createRoot("Method"));
-	model->beginModification(parent? static_cast<Model::Node*> (parent) : factorial, "Adding a factorial method.");
-	if (!factorial)
-	{
-		factorial = new Method();
-		parent->methods()->append(factorial);
-	}
-
-	factorial->setName("factorial");
 	FormalResult* factorialResult = new FormalResult();
 	factorial->results()->append(factorialResult);
 	factorialResult->setTypeExpression(new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT));
@@ -787,57 +719,47 @@ Method* addFactorial(Model::Model* model, Class* parent)
 
 	factorial->extension<Position>()->setY(1060);
 
-	model->endModification();
 	return factorial;
 }
 
 TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 {
-	////////////////////////////////////////////////// Create Model
-	Model::Model* model = new Model::Model();
-	Project* prj = nullptr;
-
 	// Create project
-	prj = dynamic_cast<Project*> (model->createRoot("Project"));
-	model->beginModification(prj, "build simple java library and a hello world app");
-	prj->setName("HelloWorld");
+	auto prj = new Project("HelloWorld");
 	prj->fields()->append(new Field("global",
 			new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT)));
 	prj->fields()->append(new Field("global2",
 			new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_LONG)));
-	model->endModification();
 
 	Project* java = nullptr;
-	java = addJavaLibrary(model, prj);
+	java = addJavaLibrary(prj);
 
 	// Build a simple HelloWorld Application
 	Class* hello = nullptr;
-	hello = addHelloWorld(model, prj);
+	hello = addHelloWorld(prj);
 
 	// Build a simple Generic Class
 	Class* gen = nullptr;
-	gen = addGeneric(model, prj);
+	gen = addGeneric(prj);
 
 	// Build a simple Class that has annotations and friends
 	Class* ann = nullptr;
-	ann = addAnnotatedWithFriends(model, prj);
+	ann = addAnnotatedWithFriends(prj);
 
 	// Build a simple enumeration
 	Class* en = nullptr;
-	en = addEnumeration(model, prj);
+	en = addEnumeration(prj);
 
 //	// Add a second method
 	Method* longMethod = nullptr;
-	longMethod = addLongMethod(model, hello);
+	longMethod = addLongMethod(hello);
 
 //	// Add a third method
 	Method* factorial = nullptr;
-	factorial = addFactorial(model, hello);
+	factorial = addFactorial(hello);
 
-	prj->beginModification("add lambda module");
 	prj->modules()->append(addLambda());
 	prj->classes()->append(addInner());
-	prj->endModification();
 
 // Add a method Add-on
 	VMethod::addAddOn(new MethodAddOn("foo"));
@@ -852,6 +774,8 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	else if(java) top_level = java;
 	else if (longMethod) top_level = longMethod;
 	else top_level = factorial;
+
+	auto model = new Model::Model(top_level);
 
 	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(top_level));
 	VisualizationManager::instance().mainScene()->listenToModel(model);

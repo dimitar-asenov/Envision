@@ -35,11 +35,10 @@ namespace OOModel {
 
 TEST(OOModel, JavaLibraryAndHelloWorldTest)
 {
-	Model::Model model;
-	Project* prj = dynamic_cast<Project*> (model.createRoot("Project"));
+	auto prj = new Project("HelloWorld");
+	Model::Model model(prj);
 
 	model.beginModification(prj, "build simple java library and a hello world app");
-	prj->setName("HelloWorld");
 
 	// Build a simple Java Library
 	Project* java = new Project();

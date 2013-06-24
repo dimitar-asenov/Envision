@@ -36,9 +36,8 @@ namespace Model {
 
 TEST(ModelBase, SingleWriteUnitCheck)
 {
-	Model model;
-
-	TestNodes::BinaryNode* root = dynamic_cast<TestNodes::BinaryNode*> (model.createRoot("BinaryNode"));
+	auto root = new TestNodes::BinaryNode();
+	Model model(root);
 
 	model.beginModification(root, "make tree");
 	TestNodes::BinaryNode* left = new TestNodes::BinaryNode();

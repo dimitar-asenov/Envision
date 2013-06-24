@@ -41,13 +41,12 @@ Interaction::CommandResult* CCreateProject::create(Visualization::Item* /*source
 {
 	auto parent = dynamic_cast<OOModel::Project*> (target->node());
 
-	OOModel::Project* project = nullptr;
+	auto project = new OOModel::Project();
+	if (!name.isEmpty()) project->setName(name);
+
 	bool newModel = false;
 	if (parent)
 	{
-		project = new OOModel::Project();
-		if (!name.isEmpty()) project->setName(name);
-
 		parent->beginModification("create project");
 		parent->projects()->append(project);
 		parent->endModification();
@@ -56,14 +55,7 @@ Interaction::CommandResult* CCreateProject::create(Visualization::Item* /*source
 	{
 		newModel = true;
 		auto model = new Model::Model();
-		project = dynamic_cast<OOModel::Project*> (model->createRoot("Project"));
-
-		if (!name.isEmpty())
-		{
-			project->beginModification("set project name");
-			project->setName(name);
-			project->endModification();
-		}
+		model->setRoot(project);
 
 		target->scene()->addTopLevelItem( new Visualization::RootItem(project) );
 		target->scene()->listenToModel(model);

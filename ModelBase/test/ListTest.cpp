@@ -36,8 +36,8 @@ namespace Model {
 
 TEST(ModelBase, ListCreation)
 {
-	Model model;
-	List* root = dynamic_cast<List*> (model.createRoot("List"));
+	auto root = new List();
+	Model model(root);
 
 	CHECK_INT_EQUAL(0, root->size());
 
@@ -64,8 +64,8 @@ TEST(ModelBase, ListCreation)
 
 TEST(ModelBase, ListInsertion)
 {
-	Model model;
-	List* root = dynamic_cast<List*> (model.createRoot("List"));
+	auto root = new List();
+	Model model(root);
 
 	model.beginModification(root, "add elements to list");
 	Text* a = new Text();
@@ -97,8 +97,8 @@ TEST(ModelBase, ListInsertion)
 
 TEST(ModelBase, ListRemoval)
 {
-	Model model;
-	List* root = dynamic_cast<List*> (model.createRoot("List"));
+	auto root = new List();
+	Model model(root);
 
 	model.beginModification(root, "add elements to list");
 	Text* a = new Text();
@@ -136,8 +136,8 @@ TEST(ModelBase, ListRemoval)
 
 TEST(ModelBase, ListUndo)
 {
-	Model model;
-	List* root = dynamic_cast<List*> (model.createRoot("List"));
+	auto root = new List();
+	Model model(root);
 
 	model.beginModification(root, "add elements to list");
 	Text* a = new Text();
