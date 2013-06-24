@@ -124,6 +124,18 @@ OOModel::Expression* CppImportUtilities::convertClangType(clang::QualType qualTy
 			ooRef->typeArguments()->append(convertClangType(argIt->getAsType()));
 		translatedType = ooRef;
 	}
+	else if(auto dependentType = llvm::dyn_cast<clang::DependentNameType>(type))
+	{
+		OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression
+				(QString(dependentType->getIdentifier()->getNameStart()));
+		if(dependentType->getKeyword() == clang::ETK_Typename)
+		{
+			OOModel::TypeNameOperator* ooTypeName = new OOModel::TypeNameOperator();
+			ooTypeName->setTypeExpression(ooRef);
+			return ooTypeName;
+		}
+		return ooRef;
+	}
 	else if(type->isBuiltinType())
 	{
 		translatedType = convertBuiltInClangType(type);
