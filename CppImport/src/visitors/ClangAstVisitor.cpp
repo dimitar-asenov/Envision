@@ -170,14 +170,7 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl)
 
 			// visit base classes
 			for(auto base_itr = recordDecl->bases_begin(); base_itr!=recordDecl->bases_end(); ++base_itr)
-			{
-				if(auto baseClass = base_itr->getType().getTypePtr()->getAsCXXRecordDecl())
-				{
-					OOModel::ClassTypeExpression* parent = new OOModel::ClassTypeExpression();
-					parent->typeExpression()->ref()->setName(QString::fromStdString(baseClass->getNameAsString()));
-					ooClass->baseClasses()->append(parent);
-				}
-			}
+				ooClass->baseClasses()->append(utils_->convertClangType(base_itr->getType()));
 		}
 
 		// set modifiers
@@ -528,7 +521,7 @@ bool ClangAstVisitor::TraverseStmt(clang::Stmt* S)
 		}
 		else
 		{
-			ooExprStack_.push(new OOModel::ErrorExpression());
+			ooExprStack_.push(utils_->createErrorExpression("Could not convert expr"));
 			log_->writeError(className_, "exprvisitor couldn't convert", S);
 		}
 		return ret;
