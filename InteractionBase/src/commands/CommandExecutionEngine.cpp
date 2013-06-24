@@ -125,15 +125,16 @@ void CommandExecutionEngine::execute(Visualization::Item *originator, const QStr
 	// If no item can process this command dispatch it to the SceneItem
 	if (!processed && originator != originator->scene()->sceneHandlerItem())
 	{
-		GenericHandler* handler = dynamic_cast<GenericHandler*> (source->scene()->sceneHandlerItem()->handler());
+		auto sceneHandlerItem = source->scene()->sceneHandlerItem();
+		auto handler = dynamic_cast<GenericHandler*> (sceneHandlerItem->handler());
 
 		if ( handler )
 		{
 			for (int i = 0; i < handler->commands().size(); ++i)
 			{
-				if ( handler->commands().at(i)->canInterpret(source, nullptr, tokens) )
+				if ( handler->commands().at(i)->canInterpret(source, sceneHandlerItem, tokens) )
 				{
-					lastCommandResult = handler->commands().at(i)->execute(source, nullptr, tokens);
+					lastCommandResult = handler->commands().at(i)->execute(source, sceneHandlerItem, tokens);
 
 					if ( lastCommandResult->code() != CommandResult::CanNotInterpret )
 					{
