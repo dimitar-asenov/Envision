@@ -90,4 +90,7 @@ template<class T> Node* TypedList<T>::createDefaultElement()
 	if (creationFunction()) return creationFunction()();
 	else return nullptr;
 }
+
+template<class T> int TypedList<T>::lowerTypeBoundForElements() const { return T::typeIdStatic();}
+
 }

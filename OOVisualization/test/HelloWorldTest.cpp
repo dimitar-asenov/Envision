@@ -362,7 +362,7 @@ Method* addLongMethod(Class* parent)
 	auto var0 = new VariableDeclarationExpression("pSystem");
 	var0->decl()->setTypeExpression(new PointerTypeExpression(new ClassTypeExpression(
 			new ReferenceExpression("System", new ReferenceExpression("Java")))));
-	longMethod->items()->append(var0);
+	longMethod->items()->append(new ExpressionStatement(var0));
 	longMethod->items()->append(new ExpressionStatement(
 			new ReferenceExpression("out", new ReferenceExpression("pSystem"))));
 
@@ -586,11 +586,11 @@ Method* addLongMethod(Class* parent)
 	ifCond->setOp(BinaryOperation::NOT_EQUALS);
 	ifCond->setRight(new IntegerLiteral(10));
 	UnaryOperation* thenBranch = new UnaryOperation();
-	ifs->thenBranch()->append(thenBranch);
+	ifs->thenBranch()->append(new ExpressionStatement(thenBranch));
 	thenBranch->setOp(UnaryOperation::POSTINCREMENT);
 	thenBranch->setOperand(new ReferenceExpression("var14"));
 	UnaryOperation* elseBranch = new UnaryOperation();
-	ifs->elseBranch()->append(elseBranch);
+	ifs->elseBranch()->append(new ExpressionStatement(elseBranch));
 	elseBranch->setOp(UnaryOperation::POSTDECREMENT);
 	elseBranch->setOperand(new ReferenceExpression("var14"));
 

@@ -73,7 +73,7 @@ Method* addComplicated(Class* parent)
 	updateStep->setRight(new IntegerLiteral(1));
 
 	AssignmentExpression* loopBodyAssignment = new AssignmentExpression();
-	loop->body()->append(loopBodyAssignment);
+	loop->body()->append(new ExpressionStatement(loopBodyAssignment));
 	loopBodyAssignment->setLeft(new ReferenceExpression("b"));
 	loopBodyAssignment->setOp(AssignmentExpression::TIMES_ASSIGN);
 	loopBodyAssignment->setRight(new IntegerLiteral(2));
@@ -124,7 +124,7 @@ Method* addComplicated(Class* parent)
 	forEach->setVarType( new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::UNSIGNED_INT) );
 	forEach->setCollection(new ReferenceExpression("SomeCollection"));
 	AssignmentExpression* assignEach = new AssignmentExpression();
-	forEach->body()->append(assignEach);
+	forEach->body()->append(new ExpressionStatement(assignEach));
 	assignEach->setLeft(new ReferenceExpression("a"));
 	assignEach->setOp(AssignmentExpression::DIVIDE_ASSIGN);
 	assignEach->setRight(new ReferenceExpression("elem"));
@@ -213,7 +213,7 @@ Method* addDivBySix(Class* parent)
 	div3->setRight(new IntegerLiteral(3));
 
 	AssignmentExpression* resultFound = new AssignmentExpression();
-	ifdiv3->thenBranch()->append(resultFound);
+	ifdiv3->thenBranch()->append(new ExpressionStatement(resultFound));
 	resultFound->setLeft(new ReferenceExpression("result"));
 	resultFound->setOp(AssignmentExpression::ASSIGN);
 	resultFound->setRight(new ReferenceExpression("i"));

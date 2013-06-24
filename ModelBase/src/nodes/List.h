@@ -108,6 +108,8 @@ class MODELBASE_API List: public Super<Node>
 		 */
 		virtual Node* createDefaultElement();
 
+		virtual int lowerTypeBoundForElements() const;
+
 	private:
 		QVector<Node*> nodes_;
 

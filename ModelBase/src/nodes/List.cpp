@@ -62,6 +62,8 @@ void List::loadSubNodes(QList<LoadedNode>& nodeList)
 {
 	for (QList<LoadedNode>::iterator ln = nodeList.begin(); ln != nodeList.end(); ln++)
 	{
+		Q_ASSERT(ln->node->hierarchyTypeIds().contains(lowerTypeBoundForElements()));
+
 		bool ok = true;
 		int index = ln->name.toInt(&ok);
 
@@ -97,6 +99,7 @@ void List::load(PersistentStore &store)
 	QList<LoadedNode> children = store.loadAllSubNodes(this);
 	for (QList<LoadedNode>::iterator ln = children.begin(); ln != children.end(); ln++)
 	{
+		Q_ASSERT(ln->node->hierarchyTypeIds().contains(lowerTypeBoundForElements()));
 		bool ok = true;
 		int index = ln->name.toInt(&ok);
 		if ( !ok ) throw ModelException("Could not read the index of a list item. Index value is: " + ln->name);
@@ -146,8 +149,25 @@ int List::indexOfSubitem(const Node* item) const
 
 void List::insert(int position, Node* node)
 {
+	Q_ASSERT(node);
+
+	bool typeToInsertRespectsLowerBound = false;
+	int lowerBound = lowerTypeBoundForElements();
+	for (auto typeId : node->hierarchyTypeIds())
+		if (typeId == lowerBound)
+		{
+			typeToInsertRespectsLowerBound = true;
+			break;
+		}
+	Q_ASSERT(typeToInsertRespectsLowerBound);
+
 	if (!fullyLoaded) loadFully(* (model()->store()));
 	execute(new ListInsert(this, nodes_, node, position));
+}
+
+int List::lowerTypeBoundForElements() const
+{
+	return Node::typeIdStatic();
 }
 
 void List::remove(int index)

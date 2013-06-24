@@ -238,7 +238,7 @@ Method* addDivBySix(Class* parent)
 	div3->setRight(new IntegerLiteral(3));
 
 	AssignmentExpression* resultFound = new AssignmentExpression();
-	ifdiv3->thenBranch()->append(resultFound);
+	ifdiv3->thenBranch()->append(new ExpressionStatement(resultFound));
 	resultFound->setLeft(new ReferenceExpression("result"));
 	resultFound->setOp(AssignmentExpression::ASSIGN);
 	resultFound->setRight(new ReferenceExpression("i"));

@@ -49,6 +49,8 @@ class TypedList: public Super<List>
 
 		static ::Core::InitializationRegistry& elementInitializationRegistry();
 
+		virtual int lowerTypeBoundForElements() const override;
+
 	private:
 		static CreateDefaultElement& creationFunction();
 
