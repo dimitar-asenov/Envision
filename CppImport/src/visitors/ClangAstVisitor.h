@@ -73,8 +73,7 @@ class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 		bool TraverseCXXConstructorDecl(clang::CXXConstructorDecl* constructorDecl);
 		bool TraverseCXXDestructorDecl(clang::CXXDestructorDecl* destructorDecl);
 
-		bool VisitStmt(clang::Stmt* S);
-		bool VisitFieldDecl(clang::FieldDecl* fieldDecl);
+		bool TraverseFieldDecl(clang::FieldDecl* fieldDecl);
 
 		bool TraverseCaseStmt(clang::CaseStmt* caseStmt);
 		bool TraverseDefaultStmt(clang::DefaultStmt* defaultStmt);

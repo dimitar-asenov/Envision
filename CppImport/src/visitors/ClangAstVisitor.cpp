@@ -537,14 +537,6 @@ bool ClangAstVisitor::TraverseStmt(clang::Stmt* S)
 	return Base::TraverseStmt(S);
 }
 
-bool ClangAstVisitor::VisitStmt(clang::Stmt* S)
-{
-	//    std::cout << "VISITING STMT" << std::endl;
-	//    llvm::errs() << "VISITING STMT" << "\n";
-	//			  S->dump();
-	return Base::VisitStmt(S);
-}
-
 bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 {
 	if(!shouldModel(varDecl->getLocation()))
@@ -649,7 +641,7 @@ bool ClangAstVisitor::TraverseEnumDecl(clang::EnumDecl* enumDecl)
 	return true;
 }
 
-bool ClangAstVisitor::VisitFieldDecl(clang::FieldDecl* fieldDecl)
+bool ClangAstVisitor::TraverseFieldDecl(clang::FieldDecl* fieldDecl)
 {
 	if(!shouldModel(fieldDecl->getLocation()))
 		return true;
@@ -870,10 +862,11 @@ void ClangAstVisitor::insertMemberInitializers(OOModel::Method* ooMethod, clang:
 
 bool ClangAstVisitor::shouldModel(clang::SourceLocation location)
 {
-	bool invalid = false;
-	if(sourceManager_->isInSystemHeader(location) ||
-			QString(sourceManager_->getBufferName(location, &invalid)).contains("qt") ||
-			invalid)
+//	bool invalid = false;
+	QString fileName;
+	if(auto file = sourceManager_->getPresumedLoc(location).getFilename())
+		fileName = QString(file);
+	if(sourceManager_->isInSystemHeader(location) || fileName.isEmpty() || fileName.contains("qt"))
 		return modelSysHeader_;
 	return true;
 }
