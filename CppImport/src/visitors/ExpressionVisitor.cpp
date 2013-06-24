@@ -94,6 +94,9 @@ bool ExpressionVisitor::TraverseCallExpr(clang::CallExpr* callExpr)
 	// visit arguments
 	for(auto argIt = callExpr->arg_begin(); argIt!=callExpr->arg_end(); ++argIt)
 	{
+		if(llvm::isa<clang::CXXDefaultArgExpr>(*argIt))
+			// this is a default arg and is not written in the source code
+			continue;
 		TraverseStmt(*argIt);
 		if(!ooExprStack_.empty())
 			ooMethodCall->arguments()->append(ooExprStack_.pop());
@@ -432,6 +435,9 @@ bool ExpressionVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constr
 					QString::fromStdString(constructExpr->getConstructor()->getNameAsString()));
 		for(auto argIt = constructExpr->arg_begin(); argIt != constructExpr->arg_end(); ++argIt)
 		{
+			if(llvm::isa<clang::CXXDefaultArgExpr>(*argIt))
+				// this is a default arg and is not written in the source code
+				continue;
 			TraverseStmt(*argIt);
 			if(!ooExprStack_.empty())
 				ooMethodCall->arguments()->append(ooExprStack_.pop());
