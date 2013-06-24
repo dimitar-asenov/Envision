@@ -416,14 +416,14 @@ bool ExpressionVisitor::VisitOverloadExpr(clang::OverloadExpr* overloadExpr)
 
 bool ExpressionVisitor::TraverseUnresolvedMemberExpr(clang::UnresolvedMemberExpr* unresolvedMember)
 {
-	// we only consider statements which are written in source
-	if(unresolvedMember->isImplicitAccess())
-		return true;
 	OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression
-			(QString::fromStdString(unresolvedMember->getName().getAsString()));
-	TraverseStmt(unresolvedMember->getBase());
-	if(!ooExprStack_.empty())
-		ooRef->setPrefix(ooExprStack_.pop());
+			(QString::fromStdString(unresolvedMember->getMemberName().getAsString()));
+	if(!unresolvedMember->isImplicitAccess())
+	{
+		TraverseStmt(unresolvedMember->getBase());
+		if(!ooExprStack_.empty())
+			ooRef->setPrefix(ooExprStack_.pop());
+	}
 	// template args
 	if(unresolvedMember->hasExplicitTemplateArgs())
 	{
