@@ -236,17 +236,13 @@ bool ExpressionVisitor::TraverseCXXDeleteExpr(clang::CXXDeleteExpr* deleteExpr)
 
 bool ExpressionVisitor::VisitIntegerLiteral(clang::IntegerLiteral* intLit)
 {
-	OOModel::IntegerLiteral* ooIntLit = new OOModel::IntegerLiteral();
-	ooIntLit->setValue(intLit->getValue().getLimitedValue());
-	ooExprStack_.push(ooIntLit);
+	ooExprStack_.push(new OOModel::IntegerLiteral(intLit->getValue().getLimitedValue()));
 	return true;
 }
 
 bool ExpressionVisitor::VisitCXXBoolLiteralExpr(clang::CXXBoolLiteralExpr* boolLitExpr)
 {
-	OOModel::BooleanLiteral* ooBoolLit = new OOModel::BooleanLiteral();
-	ooBoolLit->setValue(boolLitExpr->getValue());
-	ooExprStack_.push(ooBoolLit);
+	ooExprStack_.push(new OOModel::BooleanLiteral(boolLitExpr->getValue()));
 	return true;
 }
 
@@ -258,25 +254,19 @@ bool ExpressionVisitor::VisitCXXNullPtrLiteralExpr(clang::CXXNullPtrLiteralExpr*
 
 bool ExpressionVisitor::VisitFloatingLiteral(clang::FloatingLiteral* floatLiteral)
 {
-	OOModel::FloatLiteral* ooFloatLit = new OOModel::FloatLiteral();
-	ooFloatLit->setValue(floatLiteral->getValueAsApproximateDouble());
-	ooExprStack_.push(ooFloatLit);
+	ooExprStack_.push(new OOModel::FloatLiteral(floatLiteral->getValueAsApproximateDouble()));
 	return true;
 }
 
 bool ExpressionVisitor::VisitCharacterLiteral(clang::CharacterLiteral* charLiteral)
 {
-	OOModel::CharacterLiteral* ooCharLit = new OOModel::CharacterLiteral();
-	ooCharLit->setValue(QChar(charLiteral->getValue()));
-	ooExprStack_.push(ooCharLit);
+	ooExprStack_.push(new OOModel::CharacterLiteral(QChar(charLiteral->getValue())));
 	return true;
 }
 
 bool ExpressionVisitor::VisitStringLiteral(clang::StringLiteral* stringLiteral)
 {
-	OOModel::StringLiteral* ooStringLit = new OOModel::StringLiteral();
-	ooStringLit->setValue(QString::fromStdString(stringLiteral->getBytes().str()));
-	ooExprStack_.push(ooStringLit);
+	ooExprStack_.push(new OOModel::StringLiteral(QString::fromStdString(stringLiteral->getBytes().str())));
 	return true;
 }
 
@@ -348,9 +338,7 @@ bool ExpressionVisitor::TraverseArraySubscriptExpr(clang::ArraySubscriptExpr* ar
 bool ExpressionVisitor::VisitCXXThisExpr(clang::CXXThisExpr* thisExpr)
 {
 	if(!thisExpr->isImplicit())
-	{
 			ooExprStack_.push(new OOModel::ThisExpression());
-	}
 	return true;
 }
 
