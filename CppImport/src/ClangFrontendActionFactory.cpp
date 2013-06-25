@@ -4,15 +4,10 @@
 
 namespace CppImport {
 
-ClangFrontendActionFactory::ClangFrontendActionFactory(Model::Model* model)
-: model_(model)
+ClangFrontendActionFactory::ClangFrontendActionFactory(OOModel::Project* project)
 {
-	project_ = dynamic_cast<OOModel::Project*> (model_->createRoot("Project"));
-	model_->beginModification(project_, "Adding a project");
-	project_->setName("NewProject");
-
 	logger_ = new CppImportLogger();
-	visitor_ = new ClangAstVisitor(model_, project_, logger_);
+	visitor_ = new ClangAstVisitor(project, logger_);
 }
 
 ClangFrontendActionFactory::~ClangFrontendActionFactory()

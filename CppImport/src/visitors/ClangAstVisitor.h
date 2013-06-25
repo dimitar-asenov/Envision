@@ -40,7 +40,7 @@ class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 {
 	typedef clang::RecursiveASTVisitor<ClangAstVisitor> Base;
 	public:
-		ClangAstVisitor(Model::Model* model, OOModel::Project* currentProject, CppImportLogger* logger);
+		ClangAstVisitor(OOModel::Project* project, CppImportLogger* logger);
 		~ClangAstVisitor();
 		void setSourceManager(clang::SourceManager* sourceManager);
 
@@ -106,8 +106,6 @@ class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 		QStack<OOModel::Expression*> ooExprStack_;
 		QStack<OOModel::SwitchCase*> ooSwitchCaseStack_;
 
-		Model::Model* currentModel_{};
-		OOModel::Project* currentProject_{};
 		clang::ASTContext* astContext_{};
 		TranslateManager* trMngr_{};
 		CppImportLogger* log_{};

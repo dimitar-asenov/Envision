@@ -29,10 +29,9 @@
 
 namespace CppImport {
 
-TranslateManager::TranslateManager(Model::Model* model, OOModel::Project* project, CppImportUtilities* utils) :
-	model_(model), project_(project), utils_(utils)
-{
-}
+TranslateManager::TranslateManager(CppImportUtilities* utils)
+: utils_(utils)
+{}
 
 OOModel::Module *TranslateManager::insertNamespace(clang::NamespaceDecl *nd, int depth)
 {

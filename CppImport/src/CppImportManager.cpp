@@ -50,13 +50,12 @@ bool CppImportManager::setSrcPath(QString& srcpath, QString& dbpath)
 Model::Model*CppImportManager::createModel()
 {
 	myTool_ = new clang::tooling::ClangTool(*compilationDB_,sources_);
-	Model::Model* model = new Model::Model();
-	ClangFrontendActionFactory* frontendActionFactory = new ClangFrontendActionFactory(model);
+	OOModel::Project* project = new OOModel::Project("CppImport");
+	ClangFrontendActionFactory* frontendActionFactory = new ClangFrontendActionFactory(project);
 	myTool_->run(frontendActionFactory);
 	frontendActionFactory->outputStatistics();
 	SAFE_DELETE(frontendActionFactory);
-	model->endModification();
-	return model;
+	return new Model::Model("CppImport", project);
 }
 
 bool CppImportManager::setCompilationDbPath(QString& path)

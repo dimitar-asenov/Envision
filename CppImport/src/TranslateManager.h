@@ -34,7 +34,7 @@ namespace CppImport {
 class TranslateManager
 {
 	public:
-		TranslateManager(Model::Model* model, OOModel::Project* project, CppImportUtilities* utils);
+		TranslateManager(CppImportUtilities* utils);
 		OOModel::Module* insertNamespace(clang::NamespaceDecl* nd, int depth);
 		bool insertClass(clang::CXXRecordDecl* rDecl, OOModel::Class* ooClass);
 		bool containsClass(clang::CXXRecordDecl* recordDecl);
@@ -49,9 +49,6 @@ class TranslateManager
 		QString hashFunction(clang::FunctionDecl* functionDecl);
 		QString hashMethod(clang::CXXMethodDecl* methodDecl);
 		QString hashRecord(clang::RecordDecl* recordDecl);
-
-		Model::Model* model_{};
-		OOModel::Project* project_{};
 
 		QMap<QString, OOModel::Module*> nameSpaceMap_;
 		QMap<QString, OOModel::Class*> classMap_;

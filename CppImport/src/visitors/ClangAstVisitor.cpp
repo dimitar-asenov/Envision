@@ -29,13 +29,13 @@
 
 namespace CppImport {
 
-ClangAstVisitor::ClangAstVisitor(Model::Model* model, OOModel::Project* currentProject, CppImportLogger* logger)
-: currentModel_(model) , currentProject_(currentProject) , log_(logger)
+ClangAstVisitor::ClangAstVisitor(OOModel::Project* project, CppImportLogger* logger)
+:  log_(logger)
 {
 	utils_ = new CppImportUtilities(log_);
-	trMngr_ = new TranslateManager(model,currentProject, utils_);
+	trMngr_ = new TranslateManager(utils_);
 	exprVisitor_ = new ExpressionVisitor(this, log_, utils_);
-	ooStack_.push(currentProject_);
+	ooStack_.push(project);
 }
 
 ClangAstVisitor::~ClangAstVisitor()
@@ -133,9 +133,9 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl)
 
 		// insert in model
 		if(auto curProject = dynamic_cast<OOModel::Project*>(ooStack_.top()))
-			curProject->modules()->append(ooClass);
+			curProject->classes()->append(ooClass);
 		else if(auto curModel = dynamic_cast<OOModel::Module*>(ooStack_.top()))
-			curModel->modules()->append(ooClass);
+			curModel->classes()->append(ooClass);
 		else if(auto curClass = dynamic_cast<OOModel::Class*>(ooStack_.top()))
 			curClass->classes()->append(ooClass);
 		else if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))

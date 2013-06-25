@@ -38,15 +38,12 @@ namespace CppImport {
 class ClangFrontendActionFactory : public clang::tooling::FrontendActionFactory
 {
 	public:
-		ClangFrontendActionFactory(Model::Model* model);
+		ClangFrontendActionFactory(OOModel::Project* project);
 		~ClangFrontendActionFactory();
 		virtual clang::FrontendAction* create() override;
 		void outputStatistics();
 
 	private:
-		OOModel::Project* project_{};
-		Model::Model* model_{};
-
 		ClangAstVisitor* visitor_{};
 		CppImportLogger* logger_{};
 };
