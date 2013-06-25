@@ -224,7 +224,6 @@ bool ClangAstVisitor::TraverseFunctionDecl(clang::FunctionDecl* functionDecl)
 			ooStack_.pop();
 		}
 
-
 		if(ooFunction->parent())
 			// this function has already been inserted to the model
 			return true;
@@ -268,16 +267,18 @@ bool ClangAstVisitor::TraverseFunctionDecl(clang::FunctionDecl* functionDecl)
 
 bool ClangAstVisitor::TraverseIfStmt(clang::IfStmt* ifStmt)
 {
-	OOModel::IfStatement* ooIfStmt = new OOModel::IfStatement();
-	OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top());
-	if(itemList)
+	if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
 	{
+		OOModel::IfStatement* ooIfStmt = new OOModel::IfStatement();
 		// append the if stmt to current stmt list
 		itemList->append(ooIfStmt);
 		// condition
 		bool inBody = inBody_;
 		inBody_ = false;
-		TraverseStmt(ifStmt->getCond());
+		if(auto varDecl = ifStmt->getConditionVariable())
+			TraverseDecl(varDecl);
+		else
+			TraverseStmt(ifStmt->getCond());
 		ooIfStmt->setCondition(ooExprStack_.pop());
 		inBody_ = true;
 		// then branch
@@ -290,21 +291,25 @@ bool ClangAstVisitor::TraverseIfStmt(clang::IfStmt* ifStmt)
 		inBody_ = inBody;
 		ooStack_.pop();
 	}
+	else
+		log_->writeError(className_, "Uknown where to put if stmt", ifStmt);
 	return true;
 }
 
 bool ClangAstVisitor::TraverseWhileStmt(clang::WhileStmt* whileStmt)
 {
-	OOModel::LoopStatement* ooLoop = new OOModel::LoopStatement();
-	OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top());
-	if(itemList)
+	if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
 	{
+		OOModel::LoopStatement* ooLoop = new OOModel::LoopStatement();
 		// append the loop to current stmt list
 		itemList->append(ooLoop);
 		// condition
 		bool inBody = inBody_;
 		inBody_ = false;
-		TraverseStmt(whileStmt->getCond());
+		if(auto varDecl = whileStmt->getConditionVariable())
+			TraverseDecl(varDecl);
+		else
+			TraverseStmt(whileStmt->getCond());
 		inBody_ = true;
 		ooLoop->setCondition(ooExprStack_.pop());
 		// body
@@ -313,15 +318,16 @@ bool ClangAstVisitor::TraverseWhileStmt(clang::WhileStmt* whileStmt)
 		inBody_ = inBody;
 		ooStack_.pop();
 	}
+	else
+		log_->writeError(className_, "Uknown where to put while stmt", whileStmt);
 	return true;
 }
 
 bool ClangAstVisitor::TraverseForStmt(clang::ForStmt* forStmt)
 {
-	OOModel::LoopStatement* ooLoop = new OOModel::LoopStatement();
-	OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top());
-	if(itemList)
+	if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
 	{
+		OOModel::LoopStatement* ooLoop = new OOModel::LoopStatement();
 		itemList->append(ooLoop);
 		bool inBody = inBody_;
 		inBody_ = false;
@@ -344,15 +350,16 @@ bool ClangAstVisitor::TraverseForStmt(clang::ForStmt* forStmt)
 		inBody_ = inBody;
 		ooStack_.pop();
 	}
+	else
+		log_->writeError(className_, "Uknown where to put for stmt", forStmt);
 	return true;
 }
 
 bool ClangAstVisitor::TraverseCXXForRangeStmt(clang::CXXForRangeStmt* forRangeStmt)
 {
-	OOModel::ForEachStatement* ooLoop = new OOModel::ForEachStatement();
-	OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top());
-	if(itemList)
+	if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
 	{
+		OOModel::ForEachStatement* ooLoop = new OOModel::ForEachStatement();
 		const clang::VarDecl* loopVar = forRangeStmt->getLoopVariable();
 		itemList->append(ooLoop);
 		ooLoop->setVarName(QString::fromStdString(loopVar->getNameAsString()));
@@ -369,47 +376,53 @@ bool ClangAstVisitor::TraverseCXXForRangeStmt(clang::CXXForRangeStmt* forRangeSt
 		ooStack_.pop();
 		inBody_ = inBody;
 	}
+	else
+		log_->writeError(className_, "Uknown where to put forRange stmt", forRangeStmt);
 	return true;
 }
 
 bool ClangAstVisitor::TraverseSwitchStmt(clang::SwitchStmt* switchStmt)
 {
-	OOModel::SwitchStatement* ooSwitchStmt = new OOModel::SwitchStatement();
-	// save inbody var
-	bool inBody = inBody_;
-	inBody_ = false;
-	// traverse condition
-	TraverseStmt(switchStmt->getCond());
-	if(!ooExprStack_.empty())
-		ooSwitchStmt->setSwitchVar(ooExprStack_.pop());
-	// traverse the cases
-	clang::SwitchCase* switchCase = switchStmt->getSwitchCaseList();
-	TraverseStmt(switchCase);
-	if(!ooSwitchCaseStack_.empty())
-		ooSwitchStmt->cases()->append(ooSwitchCaseStack_.pop());
-	while(auto nextCase = switchCase->getNextSwitchCase())
-	{
-		TraverseStmt(nextCase);
-		if(!ooSwitchCaseStack_.empty())
-			// need to prepend because clang visits in reverse order
-			ooSwitchStmt->cases()->prepend(ooSwitchCaseStack_.pop());
-		switchCase = nextCase;
-	}
-	// restore inbody var
-	inBody_ = inBody;
 	if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
+	{
+		OOModel::SwitchStatement* ooSwitchStmt = new OOModel::SwitchStatement();
 		itemList->append(ooSwitchStmt);
+		// save inbody var
+		bool inBody = inBody_;
+		inBody_ = false;
+		// traverse condition
+		if(auto varDecl = switchStmt->getConditionVariable())
+			TraverseDecl(varDecl);
+		else
+			TraverseStmt(switchStmt->getCond());
+		if(!ooExprStack_.empty())
+			ooSwitchStmt->setSwitchVar(ooExprStack_.pop());
+		// traverse the cases
+		clang::SwitchCase* switchCase = switchStmt->getSwitchCaseList();
+		TraverseStmt(switchCase);
+		if(!ooSwitchCaseStack_.empty())
+			ooSwitchStmt->cases()->append(ooSwitchCaseStack_.pop());
+		while(auto nextCase = switchCase->getNextSwitchCase())
+		{
+			TraverseStmt(nextCase);
+			if(!ooSwitchCaseStack_.empty())
+				// need to prepend because clang visits in reverse order
+				ooSwitchStmt->cases()->prepend(ooSwitchCaseStack_.pop());
+			switchCase = nextCase;
+		}
+		// restore inbody var
+		inBody_ = inBody;
+	}
 	else
-		log_->writeError(className_, "Uknown where to put switch Stmt", switchStmt);
+		log_->writeError(className_, "Uknown where to put switch stmt", switchStmt);
 	return true;
 }
 
 bool ClangAstVisitor::TraverseReturnStmt(clang::ReturnStmt* returnStmt)
 {
-	OOModel::ReturnStatement* ooReturn = new OOModel::ReturnStatement();
-	OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top());
-	if(itemList)
+	if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
 	{
+		OOModel::ReturnStatement* ooReturn = new OOModel::ReturnStatement();
 		itemList->append(ooReturn);
 		// return expression
 		bool inBody = inBody_;
@@ -421,6 +434,8 @@ bool ClangAstVisitor::TraverseReturnStmt(clang::ReturnStmt* returnStmt)
 			log_->writeError(className_, "Return expr not supported", returnStmt->getRetValue());
 		inBody_ = inBody;
 	}
+	else
+		log_->writeError(className_, "Uknown where to put return stmt", returnStmt);
 	return true;
 }
 
@@ -461,26 +476,27 @@ bool ClangAstVisitor::TraverseDeclStmt(clang::DeclStmt* declStmt)
 
 bool ClangAstVisitor::TraverseCXXTryStmt(clang::CXXTryStmt* tryStmt)
 {
-	OOModel::TryCatchFinallyStatement* ooTry = new OOModel::TryCatchFinallyStatement();
-	bool inBody = inBody_;
-	inBody_ = true;
-	// visit the body
-	ooStack_.push(ooTry->tryBody());
-	TraverseStmt(tryStmt->getTryBlock());
-	ooStack_.pop();
-	// visit catch blocks
-	unsigned end = tryStmt->getNumHandlers();
-	for(unsigned i = 0; i < end; i++)
-	{
-		TraverseStmt(tryStmt->getHandler(i));
-		ooTry->catchClauses()->append(ooStack_.pop());
-	}
-	inBody_ = inBody;
-	// add try stmt to model
 	if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
+	{
+		OOModel::TryCatchFinallyStatement* ooTry = new OOModel::TryCatchFinallyStatement();
 		itemList->append(ooTry);
+		bool inBody = inBody_;
+		inBody_ = true;
+		// visit the body
+		ooStack_.push(ooTry->tryBody());
+		TraverseStmt(tryStmt->getTryBlock());
+		ooStack_.pop();
+		// visit catch blocks
+		unsigned end = tryStmt->getNumHandlers();
+		for(unsigned i = 0; i < end; i++)
+		{
+			TraverseStmt(tryStmt->getHandler(i));
+			ooTry->catchClauses()->append(ooStack_.pop());
+		}
+		inBody_ = inBody;
+	}
 	else
-		log_->writeError(className_, "Uknown where to put trystmt", tryStmt);
+		log_->writeError(className_, "Uknown where to put try stmt", tryStmt);
 	return true;
 }
 
@@ -702,21 +718,19 @@ bool ClangAstVisitor::TraverseDefaultStmt(clang::DefaultStmt* defaultStmt)
 
 bool ClangAstVisitor::VisitBreakStmt(clang::BreakStmt* breakStmt)
 {
-	OOModel::BreakStatement* ooBreak = new OOModel::BreakStatement();
-	OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top());
-	if(itemList) itemList->append(ooBreak);
+	if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
+		itemList->append(new OOModel::BreakStatement());
 	else
-		log_->writeError(className_, "not able to put break stmt", breakStmt);
+		log_->writeError(className_, "Uknown where to put break stmt", breakStmt);
 	return true;
 }
 
 bool ClangAstVisitor::VisitContinueStmt(clang::ContinueStmt* continueStmt)
 {
-	OOModel::ContinueStatement* ooContinue = new OOModel::ContinueStatement();
-	OOModel::StatementItemList* itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top());
-	if(itemList) itemList->append(ooContinue);
+	if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
+		itemList->append(new OOModel::ContinueStatement());
 	else
-		log_->writeError(className_, "not able to put continue stmt", continueStmt);
+		log_->writeError(className_, "Uknown where to put continue stmt", continueStmt);
 	return true;
 }
 
@@ -729,12 +743,8 @@ bool ClangAstVisitor::VisitTypedefNameDecl(clang::TypedefNameDecl* typedefDecl)
 	ooTypeAlias->setName(QString::fromStdString(typedefDecl->getNameAsString()));
 	if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
 		itemList->append(new OOModel::DeclarationStatement(ooTypeAlias));
-	else if(auto ooProject = dynamic_cast<OOModel::Project*>(ooStack_.top()))
-		ooProject->subDeclarations()->append(ooTypeAlias);
-	else if(auto ooModule = dynamic_cast<OOModel::Module*>(ooStack_.top()))
-		ooModule->subDeclarations()->append(ooTypeAlias);
-	else if(auto ooClass = dynamic_cast<OOModel::Class*>(ooStack_.top()))
-		ooClass->subDeclarations()->append(ooTypeAlias);
+	else if(auto declaration = dynamic_cast<OOModel::Declaration*>(ooStack_.top()))
+		declaration->subDeclarations()->append(ooTypeAlias);
 	else
 		log_->writeError(className_, "Uknown where to put typedef", typedefDecl);
 	return true;
