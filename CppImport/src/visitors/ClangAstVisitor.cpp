@@ -323,6 +323,31 @@ bool ClangAstVisitor::TraverseWhileStmt(clang::WhileStmt* whileStmt)
 	return true;
 }
 
+bool ClangAstVisitor::TraverseDoStmt(clang::DoStmt* doStmt)
+{
+	if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
+	{
+		OOModel::LoopStatement* ooLoop = new OOModel::LoopStatement();
+		ooLoop->setLoopKind(OOModel::LoopStatement::LoopKind::PostCheck);
+		// append the loop to current stmt list
+		itemList->append(ooLoop);
+		// condition
+		bool inBody = inBody_;
+		inBody_ = false;
+		TraverseStmt(doStmt->getCond());
+		ooLoop->setCondition(ooExprStack_.pop());
+		// body
+		inBody_ = true;
+		ooStack_.push(ooLoop->body());
+		TraverseStmt(doStmt->getBody());
+		inBody_ = inBody;
+		ooStack_.pop();
+	}
+	else
+		log_->writeError(className_, "Uknown where to put do while stmt", doStmt);
+	return true;
+}
+
 bool ClangAstVisitor::TraverseForStmt(clang::ForStmt* forStmt)
 {
 	if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
