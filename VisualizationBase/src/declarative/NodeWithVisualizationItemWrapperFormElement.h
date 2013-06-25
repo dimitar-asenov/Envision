@@ -46,7 +46,7 @@ class NodeWithVisualizationItemWrapperFormElement : public ItemWrapperFormElemen
 																GetStyleTypeFunction styleGetter);
 		NodeWithVisualizationItemWrapperFormElement() = delete;
 		NodeWithVisualizationItemWrapperFormElement(
-				const NodeWithVisualizationItemWrapperFormElement<ParentType,VisualizationType>& other) = default;
+				const NodeWithVisualizationItemWrapperFormElement<ParentType,VisualizationType>&) = default;
 		NodeWithVisualizationItemWrapperFormElement<ParentType,VisualizationType>&
 			operator=(const NodeWithVisualizationItemWrapperFormElement<ParentType,VisualizationType>&) = delete;
 		virtual ~NodeWithVisualizationItemWrapperFormElement() {};

@@ -39,7 +39,7 @@ class VISUALIZATIONBASE_API ShapeFormElement : public Visualization::FormElement
 	public:
 
 		ShapeFormElement() = default;
-		ShapeFormElement(const ShapeFormElement& other) = default;
+		ShapeFormElement(const ShapeFormElement&) = default;
 		ShapeFormElement& operator=(const ShapeFormElement&) = delete;
 		virtual ~ShapeFormElement();
 

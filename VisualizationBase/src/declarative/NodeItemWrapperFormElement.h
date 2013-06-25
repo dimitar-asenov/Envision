@@ -46,7 +46,7 @@ class NodeItemWrapperFormElement : public ItemWrapperFormElement<ParentType> {
 
 		NodeItemWrapperFormElement(ChildItem item, GetNodeFunction nodeGetter);
 		NodeItemWrapperFormElement() = delete;
-		NodeItemWrapperFormElement(const NodeItemWrapperFormElement<ParentType>& other) = default;
+		NodeItemWrapperFormElement(const NodeItemWrapperFormElement<ParentType>&) = default;
 		NodeItemWrapperFormElement<ParentType>& operator=(const NodeItemWrapperFormElement<ParentType>&) = delete;
 		virtual ~NodeItemWrapperFormElement() {};
 

@@ -38,7 +38,7 @@ class VISUALIZATIONBASE_API LayoutFormElement : public FormElement
 {
 	public:
 		LayoutFormElement() = default;
-		LayoutFormElement(const LayoutFormElement& other) = default;
+		LayoutFormElement(const LayoutFormElement&) = default;
 		LayoutFormElement& operator=(const LayoutFormElement&) = delete;
 		~LayoutFormElement() {};
 		/**

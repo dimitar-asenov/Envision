@@ -45,7 +45,7 @@ class VisualizationItemWrapperFormElement : public ItemWrapperFormElement<Parent
 		VisualizationItemWrapperFormElement(ChildItem item, GetStyleFunction style);
 		VisualizationItemWrapperFormElement() = delete;
 		VisualizationItemWrapperFormElement(
-				const VisualizationItemWrapperFormElement<ParentType,VisualizationType>& other) = default;
+				const VisualizationItemWrapperFormElement<ParentType,VisualizationType>&) = default;
 		VisualizationItemWrapperFormElement<ParentType,VisualizationType>&
 				operator=(const VisualizationItemWrapperFormElement<ParentType,VisualizationType>&) = delete;
 		virtual ~VisualizationItemWrapperFormElement() {};

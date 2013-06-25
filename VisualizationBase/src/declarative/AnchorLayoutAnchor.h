@@ -44,7 +44,7 @@ class VISUALIZATIONBASE_API AnchorLayoutAnchor {
 
 		AnchorLayoutAnchor(float relativePlaceEdgePosition, FormElement* placeElement, int offset,
 				float relativeFixedEdgePosition, FormElement* fixedElement);
-		AnchorLayoutAnchor(const AnchorLayoutAnchor& other) = default; // This is rather complicated and the layout takes
+		AnchorLayoutAnchor(const AnchorLayoutAnchor&) = default; // This is rather complicated and the layout takes
 																							// care of doing it properly.
 		AnchorLayoutAnchor& operator=(const AnchorLayoutAnchor&) = delete;
 		virtual ~AnchorLayoutAnchor();

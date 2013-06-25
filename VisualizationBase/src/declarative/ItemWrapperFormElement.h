@@ -43,7 +43,7 @@ class ItemWrapperFormElement : public FormElement
 
 		ItemWrapperFormElement(ChildItem item);
 		ItemWrapperFormElement() = delete;
-		ItemWrapperFormElement(const ItemWrapperFormElement<ParentType,ChildItemType>& other) = default;
+		ItemWrapperFormElement(const ItemWrapperFormElement<ParentType,ChildItemType>&) = default;
 		ItemWrapperFormElement<ParentType,ChildItemType>&
 			operator=(const ItemWrapperFormElement<ParentType,ChildItemType>&) = delete;
 		virtual ~ItemWrapperFormElement() {};
