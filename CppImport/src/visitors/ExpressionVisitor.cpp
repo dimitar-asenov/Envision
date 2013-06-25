@@ -426,6 +426,28 @@ bool ExpressionVisitor::TraverseUnresolvedMemberExpr(clang::UnresolvedMemberExpr
 	return true;
 }
 
+bool ExpressionVisitor::TraverseCXXDependentScopeMemberExpr(clang::CXXDependentScopeMemberExpr* dependentScopeMember)
+{
+	OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression
+			(QString::fromStdString(dependentScopeMember->getMember().getAsString()));
+	if(!dependentScopeMember->isImplicitAccess())
+	{
+		TraverseStmt(dependentScopeMember->getBase());
+		if(!ooExprStack_.empty())
+			ooRef->setPrefix(ooExprStack_.pop());
+	}
+	// template args
+	if(dependentScopeMember->hasExplicitTemplateArgs())
+	{
+		unsigned templateArgs = dependentScopeMember->getNumTemplateArgs();
+		auto astTemplateArgsList = dependentScopeMember->getExplicitTemplateArgs().getTemplateArgs();
+		for(unsigned i = 0; i < templateArgs; i++)
+			ooRef->typeArguments()->append(utils_->convertTemplateArgument(astTemplateArgsList[i].getArgument()));
+	}
+	ooExprStack_.push(ooRef);
+	return true;
+}
+
 bool ExpressionVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constructExpr)
 {
 	// if is elidable we can directly visit the children

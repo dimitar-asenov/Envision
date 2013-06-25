@@ -132,6 +132,7 @@ class ExpressionVisitor : public clang::RecursiveASTVisitor <ExpressionVisitor>
 
 		bool VisitOverloadExpr(clang::OverloadExpr* overloadExpr);
 		bool TraverseUnresolvedMemberExpr(clang::UnresolvedMemberExpr* unresolvedMember);
+		bool TraverseCXXDependentScopeMemberExpr(clang::CXXDependentScopeMemberExpr* dependentScopeMember);
 
 		bool TraverseCXXConstructExpr(clang::CXXConstructExpr* constructExpr);
 		bool TraverseCXXTemporaryObjectExpr(clang::CXXTemporaryObjectExpr* tempObjectExpr);
