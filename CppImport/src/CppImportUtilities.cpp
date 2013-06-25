@@ -121,7 +121,7 @@ OOModel::Expression* CppImportUtilities::convertClangType(clang::QualType qualTy
 		ooRef->setName(QString::fromStdString(
 								templateSpecialization->getTemplateName().getAsTemplateDecl()->getNameAsString()));
 		for(auto argIt = templateSpecialization->begin(); argIt != templateSpecialization->end(); ++argIt)
-			ooRef->typeArguments()->append(convertClangType(argIt->getAsType()));
+			ooRef->typeArguments()->append(convertTemplateArgument(*argIt));
 		translatedType = ooRef;
 	}
 	else if(auto dependentType = llvm::dyn_cast<clang::DependentNameType>(type))
