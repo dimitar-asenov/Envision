@@ -72,6 +72,7 @@ class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 		bool TraverseCXXMethodDecl(clang::CXXMethodDecl* methodDecl);
 		bool TraverseCXXConstructorDecl(clang::CXXConstructorDecl* constructorDecl);
 		bool TraverseCXXDestructorDecl(clang::CXXDestructorDecl* destructorDecl);
+		bool TraverseCXXConversionDecl(clang::CXXConversionDecl* conversionDecl);
 
 		bool TraverseFieldDecl(clang::FieldDecl* fieldDecl);
 
@@ -124,5 +125,8 @@ inline bool ClangAstVisitor::TraverseCXXConstructorDecl(clang::CXXConstructorDec
 {return TraverseMethodDecl(constructorDecl, OOModel::Method::MethodKind::Constructor); }
 inline bool ClangAstVisitor::TraverseCXXDestructorDecl(clang::CXXDestructorDecl *destructorDecl)
 {return TraverseMethodDecl(destructorDecl, OOModel::Method::MethodKind::Destructor); }
+inline bool ClangAstVisitor::TraverseCXXConversionDecl(clang::CXXConversionDecl *conversionDecl)
+// TODO handle explicit keyword
+{return TraverseMethodDecl(conversionDecl, OOModel::Method::MethodKind::Conversion); }
 
 }
