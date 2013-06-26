@@ -39,10 +39,23 @@ COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(AutoTypeExpression)
 
 Type* AutoTypeExpression::type()
 {
-	auto t = dynamic_cast<OOModel::VariableDeclaration*>(parent());
-	Q_ASSERT(t);
-	if(t->initialValue()) return t->initialValue()->type();
-	return new ErrorType("No initial value in auto type");
+	auto p = parent();
+	VariableDeclaration* varDecl = nullptr;
+	if(!(varDecl = dynamic_cast<VariableDeclaration*>(p)))
+		varDecl = dynamic_cast<VariableDeclaration*>(p->parent());
+	Q_ASSERT(varDecl);
+	if(!varDecl->initialValue())
+		return new ErrorType("No initial value in auto type");
+	auto initType = varDecl->initialValue()->type();
+	if(varDecl == p)
+		return initType;
+	if(dynamic_cast<ReferenceTypeExpression*>(p))
+		return new ReferenceType(initType, initType->isValueType());
+	if(dynamic_cast<PointerTypeExpression*>(p))
+		return new PointerType(initType, initType->isValueType());
+	// this can/should not happen
+	Q_ASSERT(0);
+	return nullptr;
 }
 
 }
