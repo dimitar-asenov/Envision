@@ -61,4 +61,19 @@ void HRootItem::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	else GenericHandler::keyPressEvent(target, event);
 }
 
+
+void HRootItem::mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
+{
+	if (event->button() == Qt::LeftButton && event->modifiers() == Qt::ShiftModifier)
+	{
+		offset = (target->pos() - event->scenePos()).toPoint();
+	}
+	else event->ignore();//GenericHandler::mousePressEvent(target, event);
+}
+
+void HRootItem::mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event)
+{
+	target->setPos(event->scenePos() + offset);
+}
+
 } /* namespace Interaction */

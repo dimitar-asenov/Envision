@@ -37,10 +37,17 @@ class INTERACTIONBASE_API HRootItem : public GenericHandler
 	public:
 		virtual void keyPressEvent(Visualization::Item *target, QKeyEvent *event);
 
+		// Mouse events for moving items around the scene
+		virtual void mousePressEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
+		virtual void mouseMoveEvent(Visualization::Item *target, QGraphicsSceneMouseEvent *event) override;
+
 		static HRootItem* instance();
 
 	protected:
 		HRootItem();
+
+	private:
+		QPoint offset{};
 };
 
 } /* namespace Interaction */
