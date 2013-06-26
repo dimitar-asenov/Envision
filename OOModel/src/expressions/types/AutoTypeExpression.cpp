@@ -28,6 +28,10 @@
 
 #include "../../declarations/VariableDeclaration.h"
 #include "../../types/ErrorType.h"
+#include "../../types/PointerType.h"
+#include "../../types/ReferenceType.h"
+#include "PointerTypeExpression.h"
+#include "ReferenceTypeExpression.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(OOModel::AutoTypeExpression)
@@ -39,10 +43,21 @@ COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(AutoTypeExpression)
 
 Type* AutoTypeExpression::type()
 {
-	auto t = dynamic_cast<OOModel::VariableDeclaration*>(parent());
-	Q_ASSERT(t);
-	if(t->initialValue()) return t->initialValue()->type();
-	return new ErrorType("No initial value in auto type");
+	auto p = parent();
+	VariableDeclaration* varDecl = nullptr;
+	if(!(varDecl = dynamic_cast<VariableDeclaration*>(p)))
+		varDecl = dynamic_cast<VariableDeclaration*>(p->parent());
+	Q_ASSERT(varDecl);
+	if(!varDecl->initialValue())
+		return new ErrorType("No initial value in auto type");
+	auto initType = varDecl->initialValue()->type();
+	if(varDecl == p)
+		return initType;
+	if(dynamic_cast<ReferenceTypeExpression*>(p))
+		return new ReferenceType(initType, initType->isValueType());
+	if(dynamic_cast<PointerTypeExpression*>(p))
+		return new PointerType(initType, initType->isValueType());
+	return new ErrorType("Could not find type of auto expression");
 }
 
 }
