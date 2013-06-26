@@ -29,6 +29,7 @@
 #include "../oomodel_api.h"
 
 #include "../expressions/Expression.h"
+#include "../expressions/ReferenceExpression.h"
 
 #include "ModelBase/src/nodes/Text.h"
 
@@ -41,10 +42,10 @@ class OOMODEL_API MemberInitializer : public Super<Model::CompositeNode>
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(MemberInitializer)
 
 	ATTRIBUTE(Expression, initializedValue, setInitializedValue)
-	ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::Text, memberName, setMemberName, QString, const QString&)
+	ATTRIBUTE(ReferenceExpression, memberReference, setMemberReference)
 
 	public:
-		MemberInitializer(const QString& memberName, Expression* initValue = nullptr);
+		MemberInitializer(ReferenceExpression* memberRef = nullptr, Expression* initValue = nullptr);
 
 };
 
