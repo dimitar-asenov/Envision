@@ -34,7 +34,7 @@ namespace OOModel {
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CatchClause)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CatchClause)
 
-REGISTER_ATTRIBUTE(CatchClause, exceptionToCatch, Expression, false, false, true)
+REGISTER_ATTRIBUTE(CatchClause, exceptionToCatch, Expression, false, true, true)
 REGISTER_ATTRIBUTE(CatchClause, body, StatementItemList, false, false, true)
 
 QList<Model::Node*> CatchClause::findSymbols(const QRegExp& symbolExp,Model::Node* source, FindSymbolMode mode,
@@ -42,7 +42,8 @@ QList<Model::Node*> CatchClause::findSymbols(const QRegExp& symbolExp,Model::Nod
 {
 	QList<Model::Node*> symbols;
 
-	symbols << exceptionToCatch()->findSymbols(symbolExp, source, SEARCH_DOWN, false);
+	if (exceptionToCatch())
+		symbols << exceptionToCatch()->findSymbols(symbolExp, source, SEARCH_DOWN, false);
 
 	if (exhaustAllScopes || symbols.empty())
 		symbols << Node::findSymbols(symbolExp, source, mode, exhaustAllScopes);

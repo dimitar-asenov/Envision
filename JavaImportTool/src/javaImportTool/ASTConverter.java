@@ -364,7 +364,7 @@ public class ASTConverter {
 	    		
 	    		visitStatementBody(cc.getBody(),catchNode,"body");
 	    		
-	    		Node varDeclExpression = catchNode.setChild("exceptionToCatch",
+	    		Node varDeclExpression = catchNode.add(
 	    				new Node(null,"VariableDeclarationExpression", "exceptionToCatch"));
 	    		Node varDecl = varDeclExpression.child("decl");
 	    		//TODO: handle modifiers

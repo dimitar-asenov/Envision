@@ -126,7 +126,6 @@ public class NodeDescriptors {
 				{"StatementItemList","finallyBody"}
 		}));
 		add( new NodeInitializer("CatchClause", new String[][]{
-				{"Expression","exceptionToCatch"},
 				{"StatementItemList","body"}
 		}));
 		
