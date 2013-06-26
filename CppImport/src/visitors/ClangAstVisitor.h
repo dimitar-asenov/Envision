@@ -29,11 +29,9 @@
 #include "../cppimport_api.h"
 #include "../TranslateManager.h"
 #include "../CppImportLogger.h"
-#include "ExpressionVisitor.h"
 
 namespace CppImport {
 
-//forward declare expressionvisitor
 class ExpressionVisitor;
 
 class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>

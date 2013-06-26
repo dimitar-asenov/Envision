@@ -25,6 +25,7 @@
  **********************************************************************************************************************/
 
 #include "ClangAstVisitor.h"
+#include "ExpressionVisitor.h"
 #include "CppImportUtilities.h"
 
 namespace CppImport {

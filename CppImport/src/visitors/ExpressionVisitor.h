@@ -28,7 +28,6 @@
 
 #include "../cppimport_api.h"
 #include "../CppImportLogger.h"
-#include "ClangAstVisitor.h"
 
 namespace CppImport {
 
