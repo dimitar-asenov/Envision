@@ -28,6 +28,10 @@
 
 #include "../../declarations/VariableDeclaration.h"
 #include "../../types/ErrorType.h"
+#include "../../types/PointerType.h"
+#include "../../types/ReferenceType.h"
+#include "PointerTypeExpression.h"
+#include "ReferenceTypeExpression.h"
 
 #include "ModelBase/src/nodes/TypedListDefinition.h"
 DEFINE_TYPED_LIST(OOModel::AutoTypeExpression)
@@ -53,9 +57,7 @@ Type* AutoTypeExpression::type()
 		return new ReferenceType(initType, initType->isValueType());
 	if(dynamic_cast<PointerTypeExpression*>(p))
 		return new PointerType(initType, initType->isValueType());
-	// this can/should not happen
-	Q_ASSERT(0);
-	return nullptr;
+	return new ErrorType("Could not find type of auto expression");
 }
 
 }
