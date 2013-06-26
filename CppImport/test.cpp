@@ -10,14 +10,14 @@ void globalMethod(){
 }
 
 class TestRangeLoop {
-    vector<int> vec;
+    std::vector<int> vec;
     void testFun(){
         vec.push_back( 10 );
         vec.push_back( 20 );
 
         for (int i : vec )
         {
-            cout << i;
+            std::cout << i;
         }
     }
 };
@@ -142,6 +142,19 @@ private:
 }
 }
 }
+
+namespace UsingTest {
+ using namespace std;
+ using std::vector;
+ namespace TestInner = TestSpace::TestSpace::innerNameSpace;
+ class UsingTestClass{
+  int test(){
+    TestInner::Another a;
+    return 10;
+  }
+ };
+}
+
 
 class OneMore{
     int oneMoreFunction(){

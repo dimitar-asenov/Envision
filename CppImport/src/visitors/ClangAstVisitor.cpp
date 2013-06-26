@@ -775,6 +775,71 @@ bool ClangAstVisitor::VisitTypedefNameDecl(clang::TypedefNameDecl* typedefDecl)
 	return true;
 }
 
+bool ClangAstVisitor::VisitNamespaceAliasDecl(clang::NamespaceAliasDecl* namespaceAlias)
+{
+	if(!shouldModel(namespaceAlias->getLocation()))
+		return true;
+	OOModel::TypeAlias* ooTypeAlias = new OOModel::TypeAlias();
+	ooTypeAlias->setName(QString::fromStdString(namespaceAlias->getNameAsString()));
+	OOModel::ReferenceExpression* nameRef = new OOModel::ReferenceExpression
+			(QString::fromStdString(namespaceAlias->getAliasedNamespace()->getNameAsString()));
+	if(auto prefix = namespaceAlias->getQualifier())
+		nameRef->setPrefix(utils_->translateNestedNameSpecifier(prefix));
+	ooTypeAlias->setTypeExpression(nameRef);
+	if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
+		itemList->append(new OOModel::DeclarationStatement(ooTypeAlias));
+	else if(auto declaration = dynamic_cast<OOModel::Declaration*>(ooStack_.top()))
+		declaration->subDeclarations()->append(ooTypeAlias);
+	else
+	{
+		SAFE_DELETE(ooTypeAlias);
+		log_->writeError(className_, "Uknown where to put namespace alias", namespaceAlias);
+	}
+	return true;
+}
+
+bool ClangAstVisitor::VisitUsingDecl(clang::UsingDecl* usingDecl)
+{
+	if(!shouldModel(usingDecl->getLocation()))
+		return true;
+	OOModel::ReferenceExpression* nameRef = new OOModel::ReferenceExpression
+			(QString::fromStdString(usingDecl->getNameAsString()));
+	if(auto prefix = usingDecl->getQualifier())
+		nameRef->setPrefix(utils_->translateNestedNameSpecifier(prefix));
+	OOModel::NameImport* ooNameImport = new OOModel::NameImport(nameRef);
+	if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
+		itemList->append(new OOModel::DeclarationStatement(ooNameImport));
+	else if(auto declaration = dynamic_cast<OOModel::Declaration*>(ooStack_.top()))
+		declaration->subDeclarations()->append(ooNameImport);
+	else
+	{
+		SAFE_DELETE(ooNameImport);
+		log_->writeError(className_, "Uknown where to put using decl", usingDecl);
+	}
+	return true;
+}
+
+bool ClangAstVisitor::VisitUsingDirectiveDecl(clang::UsingDirectiveDecl* usingDirectiveDecl)
+{
+	if(!shouldModel(usingDirectiveDecl->getLocation()))
+		return true;
+	OOModel::ReferenceExpression* nameRef = new OOModel::ReferenceExpression
+			(QString::fromStdString(usingDirectiveDecl->getNominatedNamespaceAsWritten()->getNameAsString()));
+	if(auto prefix = usingDirectiveDecl->getQualifier())
+		nameRef->setPrefix(utils_->translateNestedNameSpecifier(prefix));
+	OOModel::NameImport* ooNameImport = new OOModel::NameImport(nameRef);
+	if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
+		itemList->append(new OOModel::DeclarationStatement(ooNameImport));
+	else if(auto declaration = dynamic_cast<OOModel::Declaration*>(ooStack_.top()))
+		declaration->subDeclarations()->append(ooNameImport);
+	else
+	{
+		SAFE_DELETE(ooNameImport);
+		log_->writeError(className_, "Uknown where to put using directive decl", usingDirectiveDecl);
+	}
+	return true;
+}
+
 bool ClangAstVisitor::shouldUseDataRecursionFor(clang::Stmt*)
 {
 	return false;

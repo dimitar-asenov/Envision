@@ -84,6 +84,9 @@ class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 		bool VisitContinueStmt(clang::ContinueStmt* continueStmt);
 
 		bool VisitTypedefNameDecl(clang::TypedefNameDecl* typedefDecl);
+		bool VisitNamespaceAliasDecl(clang::NamespaceAliasDecl* namespaceAlias);
+		bool VisitUsingDecl(clang::UsingDecl* usingDecl);
+		bool VisitUsingDirectiveDecl(clang::UsingDirectiveDecl* usingDirectiveDecl);
 
 		bool shouldUseDataRecursionFor(clang::Stmt* S);
 
