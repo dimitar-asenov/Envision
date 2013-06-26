@@ -25,13 +25,19 @@
  **********************************************************************************************************************/
 
 #include "ExpressionVisitor.h"
+#include "../CppImportUtilities.h"
 
 namespace CppImport {
 
-ExpressionVisitor::ExpressionVisitor(ClangAstVisitor* visitor, CppImportLogger* log, CppImportUtilities* utils)
-: baseVisitor_(visitor), log_(log) , utils_(utils)
+ExpressionVisitor::ExpressionVisitor(ClangAstVisitor* visitor, CppImportLogger* log)
+: baseVisitor_{visitor}, log_{log}
 {}
 
+void ExpressionVisitor::setUtilities(CppImportUtilities* utils)
+{
+	Q_ASSERT(utils);
+	utils_ = utils;
+}
 
 bool ExpressionVisitor::TraverseConditionalOperator(clang::ConditionalOperator* conditionalOperator)
 {

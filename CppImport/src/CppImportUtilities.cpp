@@ -26,13 +26,14 @@
 
 #include "CppImportUtilities.h"
 #include "CppImportException.h"
+#include "visitors/ExpressionVisitor.h"
 
 namespace CppImport {
 
 
-CppImportUtilities::CppImportUtilities(CppImportLogger* logger) : log_(logger)
-{
-}
+CppImportUtilities::CppImportUtilities(CppImportLogger* logger, ExpressionVisitor* visitor)
+: log_{logger}, exprVisitor_{visitor}
+{}
 
 OOModel::Expression* CppImportUtilities::convertClangType(clang::QualType qualType)
 {

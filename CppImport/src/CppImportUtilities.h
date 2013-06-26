@@ -31,10 +31,12 @@
 
 namespace CppImport {
 
+class ExpressionVisitor;
+
 class CppImportUtilities
 {
 	public:
-		CppImportUtilities(CppImportLogger* logger);
+		CppImportUtilities(CppImportLogger* logger, ExpressionVisitor* visitor);
 		OOModel::Expression* convertClangType(clang::QualType qualType);
 		OOModel::BinaryOperation::OperatorTypes convertClangOpcode(clang::BinaryOperatorKind kind);
 		OOModel::AssignmentExpression::AssignmentTypes convertClangAssignOpcode(clang::BinaryOperatorKind kind);
@@ -58,5 +60,6 @@ class CppImportUtilities
 	private:
 		OOModel::Expression* convertBuiltInClangType(const clang::Type* type);
 		CppImportLogger* log_;
+		ExpressionVisitor* exprVisitor_{};
 };
 }

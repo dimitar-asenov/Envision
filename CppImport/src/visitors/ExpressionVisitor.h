@@ -28,17 +28,18 @@
 
 #include "../cppimport_api.h"
 #include "../CppImportLogger.h"
-#include "../CppImportUtilities.h"
 #include "ClangAstVisitor.h"
 
 namespace CppImport {
 
 class ClangAstVisitor;
+class CppImportUtilities;
 
 class ExpressionVisitor : public clang::RecursiveASTVisitor <ExpressionVisitor>
 {
 	public:
-		ExpressionVisitor(ClangAstVisitor* visitor, CppImportLogger* log, CppImportUtilities* utils);
+		ExpressionVisitor(ClangAstVisitor* visitor, CppImportLogger* log);
+		void setUtilities(CppImportUtilities* utils);
 
 		OOModel::Expression* getLastExpression();
 

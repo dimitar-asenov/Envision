@@ -32,9 +32,10 @@ namespace CppImport {
 ClangAstVisitor::ClangAstVisitor(OOModel::Project* project, CppImportLogger* logger)
 :  log_(logger)
 {
-	utils_ = new CppImportUtilities(log_);
+	exprVisitor_ = new ExpressionVisitor(this, log_);
+	utils_ = new CppImportUtilities(log_, exprVisitor_);
+	exprVisitor_->setUtilities(utils_);
 	trMngr_ = new TranslateManager(utils_);
-	exprVisitor_ = new ExpressionVisitor(this, log_, utils_);
 	ooStack_.push(project);
 }
 
