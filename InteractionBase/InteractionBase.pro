@@ -6,7 +6,8 @@ win32:LIBS += -llogger \
     -lmodelbase \
     -lfilepersistence \
     -lvisualizationbase
-HEADERS += src/handlers/HComposite.h \
+HEADERS += src/commands/CFind.h \
+    src/handlers/HComposite.h \
     src/handlers/HActionPrompt.h \
     src/actions/ActionPromptStyle.h \
     src/actions/ActionPrompt.h \
@@ -66,7 +67,8 @@ HEADERS += src/handlers/HComposite.h \
     src/vis/TextAndDescription.h \
     src/vis/TextAndDescriptionStyle.h \
     src/interactionbase.h
-SOURCES += src/handlers/HComposite.cpp \
+SOURCES += src/commands/CFind.cpp \
+    src/handlers/HComposite.cpp \
     src/handlers/HActionPrompt.cpp \
     src/actions/ActionPromptStyle.cpp \
     src/actions/ActionPrompt.cpp \

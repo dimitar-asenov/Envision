@@ -117,10 +117,15 @@ void CommandPrompt::showPrompt()
 
 void CommandPrompt::hidePrompt()
 {
-	commandSelectedFirst = command->correspondingSceneCursor<Visualization::TextCursor>()->selectionFirstIndex();
-	commandSelectedLast = command->correspondingSceneCursor<Visualization::TextCursor>()->selectionLastIndex();
+	if (scene()->mainCursor())
+	{
+		commandSelectedFirst = command->correspondingSceneCursor<Visualization::TextCursor>()->selectionFirstIndex();
+		commandSelectedLast = command->correspondingSceneCursor<Visualization::TextCursor>()->selectionLastIndex();
+	}
 	hide();
-	commandReceiver()->moveCursor(Visualization::Item::MoveOnPosition, receiverCursorPosition);
+
+	if (scene()->mainCursor()) // If the main cursor was deleted, then do not select anything.
+		commandReceiver()->moveCursor(Visualization::Item::MoveOnPosition, receiverCursorPosition);
 }
 
 void CommandPrompt::determineChildren()
