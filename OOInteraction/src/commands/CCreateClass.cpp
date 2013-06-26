@@ -67,7 +67,9 @@ Interaction::CommandResult* CCreateClass::create(Visualization::Item* /*source*/
 		auto model = new Model::Model();
 		model->setRoot(cl);
 
-		target->scene()->addTopLevelItem( new Visualization::RootItem(cl) );
+		auto vis = new Visualization::RootItem(cl);
+		vis->setPos(target->pos());
+		target->scene()->addTopLevelItem( vis );
 		target->scene()->listenToModel(model);
 	}
 
