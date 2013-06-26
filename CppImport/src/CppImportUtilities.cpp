@@ -248,6 +248,40 @@ OOModel::Modifier::ModifierFlag CppImportUtilities::convertStorageSpecifier(clan
 	}
 }
 
+OOModel::Expression*CppImportUtilities::translateNestedNameSpecifier(clang::NestedNameSpecifier* nestedName)
+{
+	OOModel::ReferenceExpression* currentRef = nullptr;
+	switch(nestedName->getKind())
+	{
+		case clang::NestedNameSpecifier::Identifier:
+			currentRef = new OOModel::ReferenceExpression(nestedName->getAsIdentifier()->getNameStart());
+			break;
+		case clang::NestedNameSpecifier::Namespace:
+			currentRef = new OOModel::ReferenceExpression
+					(QString::fromStdString(nestedName->getAsNamespace()->getNameAsString()));
+			break;
+		case clang::NestedNameSpecifier::NamespaceAlias:
+			currentRef = new OOModel::ReferenceExpression
+					(QString::fromStdString(nestedName->getAsNamespaceAlias()->getNameAsString()));
+			break;
+		case clang::NestedNameSpecifier::TypeSpec:
+			// TODO
+//			if(auto typeRef = dynamic_cast<OOModel::ReferenceExpression*>(convertClangType(nestedName->getAsType()->)))
+			Q_ASSERT(0);
+			break;
+		case clang::NestedNameSpecifier::TypeSpecWithTemplate:
+			// TODO
+			Q_ASSERT(0);
+			break;
+		case clang::NestedNameSpecifier::Global:
+			Q_ASSERT(!nestedName->getPrefix());
+			return new OOModel::GlobalScopeExpression();
+	}
+	if(auto prefix = nestedName->getPrefix())
+		currentRef->setPrefix(translateNestedNameSpecifier(prefix));
+	return currentRef;
+}
+
 OOModel::Expression*CppImportUtilities::convertTemplateArgument(const clang::TemplateArgument& templateArg)
 {
 	switch(templateArg.getKind())
