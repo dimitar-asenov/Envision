@@ -35,9 +35,8 @@ public class ASTConverter {
 	public void visit(CompilationUnit node) throws ConversionException
 	{
 		PackageDeclaration pd = node.getPackage();
-		String moduleName = "Default";
-		if (pd != null) moduleName = pd.getName().getFullyQualifiedName();
-		containers.push(root.getModuleContext( moduleName ) );
+		if (pd == null) containers.push(root);
+		else containers.push(root.getModuleContext( pd.getName().getFullyQualifiedName() ) );
 
 		imports = node.imports();
 
