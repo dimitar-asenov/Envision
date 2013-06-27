@@ -43,6 +43,7 @@ class VISUALIZATIONBASE_API SelectedItem: public Super<Item>
 
 		virtual UpdateType needsUpdate() override;
 		Item* selectedItem();
+		void setSelectedItem(Item* item);
 
 	protected:
 		virtual void determineChildren();

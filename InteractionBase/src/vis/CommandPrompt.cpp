@@ -53,7 +53,7 @@ const int PROMPT_TO_RECEIVER_DISTANCE = 3;
 
 ITEM_COMMON_DEFINITIONS(CommandPrompt, "item")
 
-CommandPrompt::CommandPrompt(Item* commandReceiver, const StyleType* style) :
+CommandPrompt::CommandPrompt(Item* commandReceiver, QString initialCommandText, const StyleType* style) :
 	Super(nullptr, style),
 	commandReceiver_(commandReceiver),
 	layout(new SequentialLayout(this, &style->layout())),
@@ -75,11 +75,16 @@ CommandPrompt::CommandPrompt(Item* commandReceiver, const StyleType* style) :
 
 	commandReceiver->scene()->addTopLevelItem(this);
 
-	command->setText("Type a command");
+	if (initialCommandText.isNull()) command->setText("Type a command");
+	else command->setText(initialCommandText);
 	saveReceiverCursorPosition();
 	setPromptPosition();
 	command->moveCursor();
-	command->correspondingSceneCursor<Visualization::TextCursor>()->selectAll();
+
+	if (initialCommandText.isNull())
+		command->correspondingSceneCursor<Visualization::TextCursor>()->selectAll();
+	else
+		command->correspondingSceneCursor<Visualization::TextCursor>()->setCaretPosition(initialCommandText.size());
 }
 
 CommandPrompt::~CommandPrompt()
@@ -105,11 +110,12 @@ void CommandPrompt::takeSuggestion(CommandSuggestion* suggestion)
 	command->correspondingSceneCursor<Visualization::TextCursor>()->setCaretPosition(suggestion->suggestion().size());
 }
 
-void CommandPrompt::showPrompt()
+void CommandPrompt::showPrompt(QString initialCommandText)
 {
 	saveReceiverCursorPosition();
 	setPromptPosition();
 	show();
+	if (! initialCommandText.isNull()) command->setText(initialCommandText);
 	command->moveCursor();
 	command->correspondingSceneCursor<Visualization::TextCursor>()
 			->setSelectedCharacters(commandSelectedFirst, commandSelectedLast);

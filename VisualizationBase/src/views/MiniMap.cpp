@@ -25,6 +25,7 @@
 ***********************************************************************************************************************/
 
 #include "views/MiniMap.h"
+#include "../items/Item.h"
 
 #include "Logger/src/Timer.h"
 
@@ -72,11 +73,22 @@ void MiniMap::paintEvent(QPaintEvent *event)
 	auto t = Logger::Timer::start("Minimap paint");
 	View::paintEvent(event);
 
+	// Paint orientation rectangle and circle
 	QPainter painter(viewport());
 	painter.setPen(Qt::red);
 	painter.drawRect(drawnRect);
 	if (drawnRect.width() <= 2 || drawnRect.height() <= 2)
 		painter.drawEllipse(drawnRect.center(), 5,5);
+
+	// Indicate clearly selected items
+	for (auto sel : scene()->selectedItems())
+	{
+		auto rect = mapFromScene(sel->sceneBoundingRect()).boundingRect();
+		if (rect.width() < 1) rect.setWidth(1);
+		if (rect.height() < 1) rect.setHeight(1);
+		painter.setBrush(Qt::red);
+		painter.drawRect(rect);
+	}
 
 	t->tick();
 }

@@ -45,6 +45,11 @@ SelectedItem::~SelectedItem()
 	selectedItem_ = nullptr;
 }
 
+void SelectedItem::setSelectedItem(Item* item)
+{
+	selectedItem_ = item;
+}
+
 Item::UpdateType SelectedItem::needsUpdate()
 {
 	return FullUpdate;

@@ -111,8 +111,6 @@ void Scene::updateItems()
 		topLevelItems_.at(i)->updateSubtree();
 
 	// Update Selections
-	// TODO do not recreate all items all the time.
-	for (int i = 0; i<selections_.size(); i++) SAFE_DELETE_ITEM(selections_[i]);
 	auto selected = selectedItems();
 
 	// Only display a selection when there are multiple selected items or no cursor
@@ -128,14 +126,36 @@ void Scene::updateItems()
 		draw_selections = !selectable || selectable != selected.first();
 	}
 
+	int numSelectionItems = 0;
+	auto selectionsIt = selections_.begin();
+	auto selectionsInitialSize = selections_.size();
 	if (draw_selections && !(selected.size() == 1 && selected.first() == sceneHandlerItem_))
 	{
-		for (int i = 0; i<selected.size(); ++i)
+		for (auto selectedItem : selected)
 		{
-			selections_.append(new SelectedItem(selected[i]));
-			addItem(selections_.last());
-			selections_.last()->updateSubtree();
+			if (numSelectionItems < selectionsInitialSize)
+			{
+				auto selectionMarker = *selectionsIt;
+				selectionMarker->setSelectedItem(selectedItem);
+				selectionMarker->updateSubtree();
+				++selectionsIt;
+			}
+			else
+			{
+				auto selectionMarker = new SelectedItem(selectedItem);
+				selectionMarker->updateSubtree();
+				selections_.append(selectionMarker);
+				addItem(selectionMarker);
+			}
+
+			++numSelectionItems;
 		}
+	}
+
+	while (numSelectionItems < selectionsInitialSize)
+	{
+		SAFE_DELETE_ITEM(selections_.takeLast());
+		--selectionsInitialSize;
 	}
 
 	// Update the main cursor

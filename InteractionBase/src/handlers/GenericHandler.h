@@ -83,7 +83,7 @@ class INTERACTIONBASE_API GenericHandler : public Visualization::InteractionHand
 
 		CommandPrompt* commandPrompt();
 		void removeCommandPrompt();
-		void showCommandPrompt(Visualization::Item* commandRecevier);
+		void showCommandPrompt(Visualization::Item* commandRecevier, QString initialCommandText = QString());
 
 		virtual void beforeEvent(Visualization::Item *target, QEvent* event) override;
 

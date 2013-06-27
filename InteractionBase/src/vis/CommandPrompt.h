@@ -42,7 +42,8 @@ class INTERACTIONBASE_API CommandPrompt : public Super<Visualization::Item>
 	ITEM_COMMON(CommandPrompt)
 
 	public:
-		CommandPrompt(Visualization::Item* commandReceiver, const StyleType* style = itemStyles().get());
+		CommandPrompt(Visualization::Item* commandReceiver, QString initialCommandText = QString(),
+				const StyleType* style = itemStyles().get());
 		virtual ~CommandPrompt();
 
 		void setResult(CommandResult* result);
@@ -60,7 +61,7 @@ class INTERACTIONBASE_API CommandPrompt : public Super<Visualization::Item>
 		QString text() const;
 		void takeSuggestion(CommandSuggestion* suggestion);
 
-		void showPrompt();
+		void showPrompt(QString initialCommandText = QString());
 		void hidePrompt();
 
 	protected:

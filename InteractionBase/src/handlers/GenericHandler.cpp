@@ -141,16 +141,16 @@ void GenericHandler::removeCommandPrompt()
 	SAFE_DELETE_ITEM(commandPrompt_);
 }
 
-void GenericHandler::showCommandPrompt(Visualization::Item* commandReceiver)
+void GenericHandler::showCommandPrompt(Visualization::Item* commandReceiver, QString initialCommandText)
 {
 	if (commandPrompt_ && commandPrompt_->commandReceiver() == commandReceiver)
 	{
-		commandPrompt_->showPrompt();
+		commandPrompt_->showPrompt(initialCommandText);
 	}
 	else
 	{
 		removeCommandPrompt();
-		commandPrompt_ = new CommandPrompt(commandReceiver);
+		commandPrompt_ = new CommandPrompt(commandReceiver, initialCommandText);
 	}
 }
 
@@ -351,12 +351,14 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 	{
 		AutoComplete::hide();
 	}
-	else if (event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Escape
+	else if ( ((event->modifiers() == Qt::NoModifier && event->key() == Qt::Key_Escape) // Regular command prompt
+			     || (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_F)) // Find command
 			&& !(actionPrompt_ && actionPrompt_->isVisible())
 			&& !(commandPrompt_ && (commandPrompt_ == target || commandPrompt_->isAncestorOf(target))) )
 	{
 		// Only show the command prompt if this event was not received within it.
-		showCommandPrompt(target);
+		if (event->modifiers() == Qt::NoModifier) showCommandPrompt(target);
+		else showCommandPrompt(target, "find ");
 	}
 	else if (event->modifiers() == Qt::ShiftModifier && event->key() == Qt::Key_Escape && target->node()
 			&& !(commandPrompt_ && commandPrompt_->isVisible()))
