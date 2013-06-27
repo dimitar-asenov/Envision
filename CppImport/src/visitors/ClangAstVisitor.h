@@ -101,8 +101,6 @@ class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 		void insertFriendClass(clang::TypeSourceInfo* typeInfo, OOModel::Class* ooClass);
 		void insertFriendFunction(clang::FunctionDecl* friendFunction, OOModel::Class* ooClass);
 
-		void insertMemberInitializers(OOModel::Method* ooMethod, clang::CXXConstructorDecl* constructor);
-
 		bool shouldModel(clang::SourceLocation location);
 
 		QStack<Model::Node*> ooStack_;

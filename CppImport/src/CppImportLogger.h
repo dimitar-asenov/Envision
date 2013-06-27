@@ -41,6 +41,8 @@ class CppImportLogger
 		void writeError(QString inWhichClass, QString reason, clang::Stmt* stmt);
 		void writeWarning(QString inWhichClass, QString reason, clang::Stmt* stmt);
 
+		void writeError(QString inWhichClass, QString reason, clang::SourceLocation loc);
+
 		void typeNotSupported(QString typeName);
 
 		void unaryOpNotSupported(clang::UnaryOperatorKind kind);

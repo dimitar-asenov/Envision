@@ -97,6 +97,15 @@ void CppImportLogger::writeOut(QString &inWhichClass, QString &reason, clang::St
 
 }
 
+void CppImportLogger::writeError(QString inWhichClass, QString reason, clang::SourceLocation loc)
+{
+	std::pair<clang::FileID,unsigned> decomposedLoc = sourceManger_->getDecomposedLoc(loc);
+	(*errStream_) << "ERR/WARN: \t In class : " << inWhichClass << " \n\t reason : " << reason
+					  << " \n\t in file : " << sourceManger_->getBufferName(loc)
+					  << " \n\t on line : " << sourceManger_->getLineNumber(decomposedLoc.first,decomposedLoc.second)
+					  << "\n";
+}
+
 void CppImportLogger::typeNotSupported(QString typeName)
 {
 	int newCount = typeCountMap_.value(typeName) + 1;

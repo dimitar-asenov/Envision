@@ -56,9 +56,13 @@ class CppImportUtilities
 		enum class OverloadKind : int {Unsupported, Unary, Binary, Assign, MethodCall, ReferenceExpr, Comma};
 		OverloadKind getOverloadKind(clang::OverloadedOperatorKind kind, unsigned numArgs);
 
+		OOModel::MemberInitializer* translateMemberInit(clang::CXXCtorInitializer* initializer);
+
 		OOModel::Expression* createErrorExpression(QString reason);
 	private:
 		OOModel::Expression* convertBuiltInClangType(const clang::Type* type);
+		OOModel::Expression* convertTypePtr(const clang::Type* type);
+		QString className_{"CppImportUtilities"};
 		CppImportLogger* log_;
 		ExpressionVisitor* exprVisitor_{};
 };

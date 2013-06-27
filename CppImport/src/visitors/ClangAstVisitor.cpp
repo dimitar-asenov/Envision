@@ -891,7 +891,17 @@ bool ClangAstVisitor::TraverseMethodDecl(clang::CXXMethodDecl* methodDecl, OOMod
 	ooMethod->modifiers()->set(utils_->convertStorageSpecifier(methodDecl->getStorageClass()));
 	// member initializers
 	if(auto constructor = llvm::dyn_cast<clang::CXXConstructorDecl>(methodDecl))
-		insertMemberInitializers(ooMethod, constructor);
+	{
+		if(!constructor->getNumCtorInitializers())
+			return true;
+		for(auto initIt = constructor->init_begin(); initIt != constructor->init_end(); ++initIt)
+		{
+			if(!(*initIt)->isWritten())
+				continue;
+			if(auto ooMemberInit = utils_->translateMemberInit((*initIt)))
+				ooMethod->memberInitializers()->append(ooMemberInit);
+		}
+	}
 	return true;
 }
 
@@ -917,45 +927,6 @@ void ClangAstVisitor::insertFriendFunction(clang::FunctionDecl* friendFunction, 
 				QString::fromStdString(friendFunction->getNameAsString()));
 	// TODO: handle return type & arguments & type arguments
 	ooClass->friends()->append(ooMCall);
-}
-
-void ClangAstVisitor::insertMemberInitializers(OOModel::Method* ooMethod, clang::CXXConstructorDecl* constructor)
-{
-	// TODO: add support for all member initializers
-	if(constructor->getNumCtorInitializers())
-	{
-		ooMethod->setMemberInitializers(new Model::TypedList<OOModel::MemberInitializer>());
-		bool inBody = inBody_;
-		inBody_ = false;
-		for(auto initIt = constructor->init_begin(); initIt != constructor->init_end(); ++initIt)
-		{
-			OOModel::MemberInitializer* ooMemberInit = new OOModel::MemberInitializer();
-			if((*initIt)->isMemberInitializer())
-				ooMemberInit->setMemberName(QString::fromStdString((*initIt)->getMember()->getNameAsString()));
-			else if((*initIt)->isBaseInitializer())
-			{
-				if(auto baseRecord = (*initIt)->getBaseClass()->getAsCXXRecordDecl())
-					ooMemberInit->setMemberName(QString::fromStdString(baseRecord->getNameAsString()));
-				else
-				{
-					// unsupported
-					log_->writeError(className_, "Unsupported member init", constructor);
-					ooMemberInit->setMemberName("#unsupported");
-				}
-			}
-			else
-			{
-				// unsupported
-				log_->writeError(className_, "Unsupported member init", constructor);
-				ooMemberInit->setMemberName("#unsupported");
-			}
-			TraverseStmt((*initIt)->getInit());
-			if(!ooExprStack_.empty())
-				ooMemberInit->setInitializedValue(ooExprStack_.pop());
-			ooMethod->memberInitializers()->append(ooMemberInit);
-		}
-		inBody_ = inBody;
-	}
 }
 
 bool ClangAstVisitor::shouldModel(clang::SourceLocation location)
