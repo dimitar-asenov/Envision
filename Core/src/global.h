@@ -34,3 +34,8 @@ template <class T> inline void SAFE_DELETE( T* & object)
 		object = nullptr;
 	}
 }
+
+template <class T> inline void SAFE_DELETE( T* && object)
+{
+	if (object) delete object;
+}

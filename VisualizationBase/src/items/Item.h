@@ -463,6 +463,15 @@ template <class T> inline void SAFE_DELETE_ITEM( T* & item)
 	}
 }
 
+template <class T> inline void SAFE_DELETE_ITEM( T* && item)
+{
+	if (item)
+	{
+		item->removeFromScene();
+		SAFE_DELETE(item);
+	}
+}
+
 template <class T> T* Item::correspondingSceneCursor()
 {
 	//Currently ony the main cursor is supported.
