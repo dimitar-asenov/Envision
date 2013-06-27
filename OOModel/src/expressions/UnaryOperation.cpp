@@ -39,6 +39,14 @@ COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(UnaryOperation)
 REGISTER_ATTRIBUTE(UnaryOperation, operand, Expression, false, false, true)
 REGISTER_ATTRIBUTE(UnaryOperation, opr, Integer, false, false, true)
 
+
+UnaryOperation::UnaryOperation(const OperatorTypes& op, Expression* operand)
+: Super(nullptr, UnaryOperation::getMetaData())
+{
+	setOp(op);
+	if(operand) setOperand(operand);
+}
+
 Type* UnaryOperation::type()
 {
 	if (opr() == DEREFERENCE)

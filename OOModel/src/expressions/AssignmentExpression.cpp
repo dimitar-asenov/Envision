@@ -38,6 +38,14 @@ REGISTER_ATTRIBUTE(AssignmentExpression, left, Expression, false, false, true)
 REGISTER_ATTRIBUTE(AssignmentExpression, right, Expression, false, false, true)
 REGISTER_ATTRIBUTE(AssignmentExpression, opr, Integer, false, false, true)
 
+AssignmentExpression::AssignmentExpression(const AssignmentTypes &op, Expression *left, Expression *right)
+: Super(nullptr, AssignmentExpression::getMetaData())
+{
+	setOp(op);
+	if(left) setLeft(left);
+	if(right) setRight(right);
+}
+
 Type* AssignmentExpression::type()
 {
 	return left()->type();

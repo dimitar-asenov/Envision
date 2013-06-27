@@ -45,6 +45,8 @@ class OOMODEL_API UnaryOperation: public Super<Expression>
 		enum OperatorTypes {PREINCREMENT, PREDECREMENT, POSTINCREMENT, POSTDECREMENT, PLUS, MINUS, NOT, COMPLEMENT,
 				PARENTHESIS, DEREFERENCE, ADDRESSOF};
 
+		UnaryOperation(const OperatorTypes& op, Expression* operand = nullptr);
+
 		OperatorTypes op() const;
 		void setOp(const OperatorTypes& oper);
 
