@@ -64,20 +64,22 @@ bool ExpressionVisitor::TraverseCXXThrowExpr(clang::CXXThrowExpr* throwExpr)
 {
 	OOModel::ThrowExpression* ooThrow = new OOModel::ThrowExpression();
 	// visit throw expression
-	if(throwExpr->getSubExpr())
+	if(auto subExpr = throwExpr->getSubExpr())
 	{
-		TraverseStmt(throwExpr->getSubExpr());
+		TraverseStmt(subExpr);
 		if(!ooExprStack_.empty())
 			ooThrow->setExpr(ooExprStack_.pop());
 	}
+	else
+		ooThrow->setExpr(new OOModel::EmptyExpression());
 	ooExprStack_.push(ooThrow);
 	return true;
 }
 
-bool ExpressionVisitor::VisitDependentScopeDeclRefExpr(clang::DependentScopeDeclRefExpr* depenentScope)
+bool ExpressionVisitor::VisitDependentScopeDeclRefExpr(clang::DependentScopeDeclRefExpr* dependentScope)
 {
 	// TODO: this should be extended to support also the dependent type
-	QString ref = QString::fromStdString(depenentScope->getDeclName().getAsString());
+	QString ref = QString::fromStdString(dependentScope->getDeclName().getAsString());
 	OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression(ref);
 	ooExprStack_.push(ooRef);
 	return true;
@@ -232,8 +234,7 @@ bool ExpressionVisitor::TraverseCXXNewExpr(clang::CXXNewExpr* newExpr)
 
 bool ExpressionVisitor::TraverseCXXDeleteExpr(clang::CXXDeleteExpr* deleteExpr)
 {
-	OOModel::DeleteExpression* ooDeleteExpr = new OOModel::DeleteExpression();
-	ooDeleteExpr->setIsArray(deleteExpr->isArrayForm());
+	OOModel::DeleteExpression* ooDeleteExpr = new OOModel::DeleteExpression(deleteExpr->isArrayForm());
 	TraverseStmt(deleteExpr->getArgument());
 	if(!ooExprStack_.empty())
 		ooDeleteExpr->setExpr(ooExprStack_.pop());
@@ -351,27 +352,19 @@ bool ExpressionVisitor::VisitCXXThisExpr(clang::CXXThisExpr* thisExpr)
 
 bool ExpressionVisitor::TraverseMemberExpr(clang::MemberExpr* memberExpr)
 {
-	if(memberExpr->isImplicitAccess())
+	OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression
+			(QString::fromStdString(memberExpr->getMemberDecl()->getNameAsString()));
+	if(memberExpr->hasExplicitTemplateArgs())
 	{
-		OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression();
-		ooRef->ref()->setName(QString::fromStdString(memberExpr->getMemberDecl()->getNameAsString()));
-		if(memberExpr->hasExplicitTemplateArgs())
-		{
-			unsigned templateArgs = memberExpr->getNumTemplateArgs();
-			auto astTemplateArgsList = memberExpr->getExplicitTemplateArgs().getTemplateArgs();
-			for(unsigned i = 0; i < templateArgs; i++)
-				ooRef->typeArguments()->append(utils_->convertTemplateArgument(astTemplateArgsList[i].getArgument()));
-		}
-		ooExprStack_.push(ooRef);
-		return true;
+		unsigned templateArgs = memberExpr->getNumTemplateArgs();
+		auto astTemplateArgsList = memberExpr->getExplicitTemplateArgs().getTemplateArgs();
+		for(unsigned i = 0; i < templateArgs; i++)
+			ooRef->typeArguments()->append(utils_->convertTemplateArgument(astTemplateArgsList[i].getArgument()));
 	}
-	OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression();
-	ooRef->ref()->setName(QString::fromStdString(memberExpr->getMemberDecl()->getNameAsString()));
-	if(memberExpr->getBase())
+	if(!memberExpr->isImplicitAccess() && memberExpr->getBase())
 	{
 		TraverseStmt(memberExpr->getBase());
-		if(!ooExprStack_.empty())
-			ooRef->setPrefix(ooExprStack_.pop());
+		if(!ooExprStack_.empty()) ooRef->setPrefix(ooExprStack_.pop());
 	}
 	ooExprStack_.push(ooRef);
 	return true;
@@ -415,12 +408,6 @@ bool ExpressionVisitor::TraverseUnresolvedMemberExpr(clang::UnresolvedMemberExpr
 {
 	OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression
 			(QString::fromStdString(unresolvedMember->getMemberName().getAsString()));
-	if(!unresolvedMember->isImplicitAccess())
-	{
-		TraverseStmt(unresolvedMember->getBase());
-		if(!ooExprStack_.empty())
-			ooRef->setPrefix(ooExprStack_.pop());
-	}
 	// template args
 	if(unresolvedMember->hasExplicitTemplateArgs())
 	{
@@ -428,6 +415,11 @@ bool ExpressionVisitor::TraverseUnresolvedMemberExpr(clang::UnresolvedMemberExpr
 		auto astTemplateArgsList = unresolvedMember->getExplicitTemplateArgs().getTemplateArgs();
 		for(unsigned i = 0; i < templateArgs; i++)
 			ooRef->typeArguments()->append(utils_->convertTemplateArgument(astTemplateArgsList[i].getArgument()));
+	}
+	if(!unresolvedMember->isImplicitAccess() && unresolvedMember->getBase())
+	{
+		TraverseStmt(unresolvedMember->getBase());
+		if(!ooExprStack_.empty()) ooRef->setPrefix(ooExprStack_.pop());
 	}
 	ooExprStack_.push(ooRef);
 	return true;
@@ -437,12 +429,6 @@ bool ExpressionVisitor::TraverseCXXDependentScopeMemberExpr(clang::CXXDependentS
 {
 	OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression
 			(QString::fromStdString(dependentScopeMember->getMember().getAsString()));
-	if(!dependentScopeMember->isImplicitAccess())
-	{
-		TraverseStmt(dependentScopeMember->getBase());
-		if(!ooExprStack_.empty())
-			ooRef->setPrefix(ooExprStack_.pop());
-	}
 	// template args
 	if(dependentScopeMember->hasExplicitTemplateArgs())
 	{
@@ -451,6 +437,12 @@ bool ExpressionVisitor::TraverseCXXDependentScopeMemberExpr(clang::CXXDependentS
 		for(unsigned i = 0; i < templateArgs; i++)
 			ooRef->typeArguments()->append(utils_->convertTemplateArgument(astTemplateArgsList[i].getArgument()));
 	}
+	if(!dependentScopeMember->isImplicitAccess() && dependentScopeMember->getBase())
+	{
+		TraverseStmt(dependentScopeMember->getBase());
+		if(!ooExprStack_.empty()) ooRef->setPrefix(ooExprStack_.pop());
+	}
+
 	ooExprStack_.push(ooRef);
 	return true;
 }
@@ -513,9 +505,8 @@ bool ExpressionVisitor::TraverseLambdaExpr(clang::LambdaExpr* lambdaExpr)
 
 OOModel::Expression* ExpressionVisitor::getLastExpression()
 {
-	if(!ooExprStack_.empty())
-		return ooExprStack_.pop();
-	return nullptr;
+	if(!ooExprStack_.empty()) return ooExprStack_.pop();
+	return utils_->createErrorExpression("Could not convert last expression");
 }
 
 bool ExpressionVisitor::TraverseInitListExpr(clang::InitListExpr* initListExpr)
@@ -524,8 +515,7 @@ bool ExpressionVisitor::TraverseInitListExpr(clang::InitListExpr* initListExpr)
 	for(auto iter = initListExpr->begin(); iter!=initListExpr->end(); ++iter)
 	{
 		TraverseStmt(*iter);
-		if(!ooExprStack_.empty())
-			ooArrayInit->values()->append(ooExprStack_.pop());
+		if(!ooExprStack_.empty()) ooArrayInit->values()->append(ooExprStack_.pop());
 	}
 	ooExprStack_.push(ooArrayInit);
 	return true;
@@ -535,63 +525,38 @@ bool ExpressionVisitor::TraverseBinaryOp(clang::BinaryOperator* binaryOperator)
 {
 	OOModel::Expression* ooLeft = nullptr;
 	OOModel::Expression* ooRight = nullptr;
-	OOModel::BinaryOperation* ooBinOp = nullptr;
-	OOModel::CommaExpression* ooComma  = nullptr;
-	clang::BinaryOperatorKind opcode = binaryOperator->getOpcode();
-	if(opcode == clang::BO_Comma)
-	{
-		ooComma = new OOModel::CommaExpression();
-	}
-	else
-	{
-		ooBinOp = new OOModel::BinaryOperation();
-		OOModel::BinaryOperation::OperatorTypes ooOperatorType =
-				utils_->convertClangOpcode(opcode);
-		ooBinOp->setOp(ooOperatorType);
-	}
-
+	// left
 	TraverseStmt(binaryOperator->getLHS());
-	if(!ooExprStack_.empty())
-		ooLeft = ooExprStack_.pop();
+	if(!ooExprStack_.empty()) ooLeft = ooExprStack_.pop();
 	else
 		log_->writeError(className_, "BOP: LHSExpr not supported", binaryOperator->getLHS());
+	// right
 	TraverseStmt(binaryOperator->getRHS());
-	if(!ooExprStack_.empty())
-		ooRight = ooExprStack_.pop();
+	if(!ooExprStack_.empty()) ooRight = ooExprStack_.pop();
 	else
 		log_->writeError(className_, "BOP: RHSExpr not supported", binaryOperator->getRHS());
-	if(ooBinOp)
-	{
-		ooBinOp->setLeft(ooLeft);
-		ooBinOp->setRight(ooRight);
-		ooExprStack_.push(ooBinOp);
-	}
+
+	clang::BinaryOperatorKind opcode = binaryOperator->getOpcode();
+	if(opcode == clang::BO_Comma)
+		ooExprStack_.push(new OOModel::CommaExpression(ooLeft, ooRight));
 	else
-	{
-		ooComma->setLeft(ooLeft);
-		ooComma->setRight(ooRight);
-		ooExprStack_.push(ooComma);
-	}
+		ooExprStack_.push(new OOModel::BinaryOperation
+								(utils_->convertClangOpcode(opcode), ooLeft, ooRight));
 	return true;
 }
 
 bool ExpressionVisitor::TraverseAssignment(clang::BinaryOperator* binaryOperator)
 {
-	OOModel::AssignmentExpression::AssignmentTypes ooOperatorType =
-			utils_->convertClangAssignOpcode(binaryOperator->getOpcode());
-	OOModel::AssignmentExpression* ooBinOp = new OOModel::AssignmentExpression();
-
-	ooBinOp->setOp(ooOperatorType);
+	OOModel::AssignmentExpression* ooBinOp = new OOModel::AssignmentExpression
+			(utils_->convertClangAssignOpcode(binaryOperator->getOpcode()));
+	// left
 	TraverseStmt(binaryOperator->getLHS());
-	if(!ooExprStack_.empty())
-		ooBinOp->setLeft(ooExprStack_.pop());
-	else
-		log_->writeError(className_, "BOP: LHSExpr not supported", binaryOperator->getLHS());
+	if(!ooExprStack_.empty()) ooBinOp->setLeft(ooExprStack_.pop());
+	else log_->writeError(className_, "BOP: LHSExpr not supported", binaryOperator->getLHS());
+	// right
 	TraverseStmt(binaryOperator->getRHS());
-	if(!ooExprStack_.empty())
-		ooBinOp->setRight(ooExprStack_.pop());
-	else
-		log_->writeError(className_, "BOP: RHSExpr not supported", binaryOperator->getRHS());
+	if(!ooExprStack_.empty()) ooBinOp->setRight(ooExprStack_.pop());
+	else log_->writeError(className_, "BOP: RHSExpr not supported", binaryOperator->getRHS());
 
 	ooExprStack_.push(ooBinOp);
 	return true;
@@ -608,15 +573,11 @@ bool ExpressionVisitor::TraverseUnaryOp(clang::UnaryOperator* unaryOperator)
 		log_->unaryOpNotSupported(opcode);
 		return TraverseStmt(unaryOperator->getSubExpr());
 	}
-	OOModel::UnaryOperation::OperatorTypes ooOperatorType =
-			utils_->convertUnaryOpcode(opcode);
-	OOModel::UnaryOperation* ooUnaryOp = new OOModel::UnaryOperation();
-	ooUnaryOp->setOp(ooOperatorType);
+	OOModel::UnaryOperation* ooUnaryOp = new OOModel::UnaryOperation(utils_->convertUnaryOpcode(opcode));
+	// subexpr
 	TraverseStmt(unaryOperator->getSubExpr());
-	if(!ooExprStack_.empty())
-		ooUnaryOp->setOperand(ooExprStack_.pop());
-	else
-		log_->writeError(className_, "UOP: SubExpr not supported", unaryOperator->getSubExpr());
+	if(!ooExprStack_.empty()) ooUnaryOp->setOperand(ooExprStack_.pop());
+	else log_->writeError(className_, "UOP: SubExpr not supported", unaryOperator->getSubExpr());
 
 	ooExprStack_.push(ooUnaryOp);
 	return true;
@@ -629,8 +590,7 @@ bool ExpressionVisitor::TraverseExplCastExpr(clang::ExplicitCastExpr* castExpr, 
 	ooCast->setType(utils_->convertClangType(castExpr->getType()));
 	// visit subexpr
 	TraverseStmt(castExpr->getSubExprAsWritten());
-	if(!ooExprStack_.empty())
-		ooCast->setExpr(ooExprStack_.pop());
+	if(!ooExprStack_.empty()) ooCast->setExpr(ooExprStack_.pop());
 
 	ooExprStack_.push(ooCast);
 	return true;

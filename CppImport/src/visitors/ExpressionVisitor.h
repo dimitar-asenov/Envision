@@ -48,7 +48,7 @@ class ExpressionVisitor : public clang::RecursiveASTVisitor <ExpressionVisitor>
 
 		bool TraverseCXXThrowExpr(clang::CXXThrowExpr* throwExpr);
 
-		bool VisitDependentScopeDeclRefExpr(clang::DependentScopeDeclRefExpr* depenentScope);
+		bool VisitDependentScopeDeclRefExpr(clang::DependentScopeDeclRefExpr* dependentScope);
 
 		// casts
 		bool TraverseCStyleCastExpr(clang::CStyleCastExpr* castExpr);
