@@ -36,15 +36,18 @@ COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(MemberInitializer)
 
 
 REGISTER_ATTRIBUTE(MemberInitializer, initializedValue, Expression, false, false, true)
-REGISTER_ATTRIBUTE(MemberInitializer, memberReference, ReferenceExpression, false, false, true)
+REGISTER_ATTRIBUTE(MemberInitializer, memberReference, ReferenceExpression, false, true, true)
 
 MemberInitializer::MemberInitializer(ReferenceExpression* memberRef, Expression* initValue)
 : Super(nullptr, MemberInitializer::getMetaData())
 {
-	if(memberRef)
-		setMemberReference(memberRef);
-	if(initValue)
-		setInitializedValue(initValue);
+	setMemberReference(memberRef);
+	setInitializedValue(initValue);
+}
+
+MemberInitializer::MemberInitializer(Expression* initValue)
+{
+	setInitializedValue(initValue);
 }
 
 }
