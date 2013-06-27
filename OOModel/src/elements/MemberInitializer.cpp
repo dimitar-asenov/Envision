@@ -46,6 +46,7 @@ MemberInitializer::MemberInitializer(ReferenceExpression* memberRef, Expression*
 }
 
 MemberInitializer::MemberInitializer(Expression* initValue)
+: Super(nullptr, MemberInitializer::getMetaData())
 {
 	setInitializedValue(initValue);
 }
