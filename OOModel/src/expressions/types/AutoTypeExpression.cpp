@@ -43,19 +43,28 @@ COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(AutoTypeExpression)
 
 Type* AutoTypeExpression::type()
 {
+	/**
+	 *	TODO: like this we return the wrong type for auto &&
+	 * note however that const and volatile are supported as TypeQualifierExpression
+	 *	adds the qualifier when calling the type() method
+	 **/
 	auto p = parent();
+	Model::Node* current = this;
 	VariableDeclaration* varDecl = nullptr;
-	if(!(varDecl = dynamic_cast<VariableDeclaration*>(p)))
-		varDecl = dynamic_cast<VariableDeclaration*>(p->parent());
-	Q_ASSERT(varDecl);
+	while(!(varDecl = dynamic_cast<VariableDeclaration*>(p)))
+	{
+		current = p;
+		p = p->parent();
+		Q_ASSERT(p);
+	}
 	if(!varDecl->initialValue())
 		return new ErrorType("No initial value in auto type");
 	auto initType = varDecl->initialValue()->type();
 	if(varDecl == p)
 		return initType;
-	if(dynamic_cast<ReferenceTypeExpression*>(p))
+	if(dynamic_cast<ReferenceTypeExpression*>(current))
 		return new ReferenceType(initType, initType->isValueType());
-	if(dynamic_cast<PointerTypeExpression*>(p))
+	if(dynamic_cast<PointerTypeExpression*>(current))
 		return new PointerType(initType, initType->isValueType());
 	return new ErrorType("Could not find type of auto expression");
 }

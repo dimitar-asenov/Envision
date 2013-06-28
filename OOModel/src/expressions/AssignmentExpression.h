@@ -47,13 +47,16 @@ class OOMODEL_API AssignmentExpression: public Super<Expression>
 			BIT_OR_ASSIGN, BIT_XOR_ASSIGN, REMAINDER_ASSIGN, LEFT_SHIFT_ASSIGN, RIGHT_SHIFT_SIGNED_ASSIGN,
 			RIGHT_SHIFT_UNSIGNED_ASSIGN};
 
+		AssignmentExpression(const AssignmentTypes& op, Expression* left = nullptr, Expression* right = nullptr);
+
 		AssignmentTypes op() const;
 		void setOp(const AssignmentTypes& oper);
 
 		virtual Type* type();
 };
 
-inline AssignmentExpression::AssignmentTypes AssignmentExpression::op() const { return static_cast<AssignmentTypes> (opr()); }
+inline AssignmentExpression::AssignmentTypes AssignmentExpression::op() const
+{ return static_cast<AssignmentTypes> (opr()); }
 inline void AssignmentExpression::setOp(const AssignmentTypes& oper) { setOpr(oper); }
 
 }
