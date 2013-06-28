@@ -39,32 +39,36 @@ class INTERACTIONBASE_API AutoCompleteEntry
 	public:
 		typedef std::function<void (AutoCompleteEntry* entry)> ExecuteFunction;
 
-		AutoCompleteEntry(const QString& text = QString(), const QString& description = QString(),
-				Visualization::Item* visualization = nullptr, ExecuteFunction execFunction = nullptr);
+		AutoCompleteEntry(const QString& text = QString(), const QString& description = QString());
+		AutoCompleteEntry(const QString& text, const QString& description,
+				Visualization::Item* visualization, ExecuteFunction execFunction = nullptr);
+		AutoCompleteEntry(const QString& text, const QString& description,
+				QSharedPointer<Visualization::Item> visualization,	ExecuteFunction execFunction = nullptr);
 		virtual ~AutoCompleteEntry();
 
 		virtual void execute();
 
 		const QString& text();
 		const QString& description();
-		Visualization::Item* visualization();
+		QSharedPointer<Visualization::Item> visualization();
 
 		void setText(const QString& suggestion);
 		void setDescription(const QString& description);
+		void setVisualization(QSharedPointer<Visualization::Item> item);
 		void setVisualization(Visualization::Item* item);
 		void setExecutionFunction(ExecuteFunction execFunction);
 
 	private:
 		QString text_;
 		QString description_;
-		Visualization::Item* vis_;
+		QSharedPointer<Visualization::Item> vis_;
 		ExecuteFunction execFunction_;
 
 };
 
 inline const QString& AutoCompleteEntry::text() { return text_; }
 inline const QString& AutoCompleteEntry::description() { return description_; }
-inline Visualization::Item* AutoCompleteEntry::visualization() { return vis_; }
+inline QSharedPointer<Visualization::Item> AutoCompleteEntry::visualization() { return vis_; }
 inline void AutoCompleteEntry::setText(const QString& text) { text_ = text; }
 inline void AutoCompleteEntry::setDescription(const QString& description) { description_ = description; }
 

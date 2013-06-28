@@ -36,14 +36,19 @@ AutoCompleteVis* AutoComplete::vis_ = nullptr;
 bool AutoComplete::hideRequested_ = false;
 
 
-void AutoComplete::show(const QList<AutoCompleteEntry*>& entries)
+void AutoComplete::show(const QList<AutoCompleteEntry*>& entries, bool explicitSelection )
 {
 	hideRequested_ = false;
-	if (vis_ && vis_->scene() == Visualization::VisualizationManager::instance().mainScene()) vis_->setEntries(entries);
+	if (vis_ && vis_->scene() == Visualization::VisualizationManager::instance().mainScene())
+	{
+		vis_->setExplicitSelection(explicitSelection);
+		vis_->setEntries(entries);
+	}
 	else
 	{
 		if (vis_) hide();
 		vis_ = new AutoCompleteVis(entries);
+		vis_->setExplicitSelection(explicitSelection);
 		Visualization::VisualizationManager::instance().mainScene()->addTopLevelItem(vis_);
 	}
 }

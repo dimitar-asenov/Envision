@@ -41,28 +41,7 @@ namespace Interaction {
 const char* QUOTE_SYMBOLS = "\"'`";
 const char* ESCAPE_SYMBOLS = "\\";
 
-CommandExecutionEngine::CommandExecutionEngine() :
-	lastCommandResult(nullptr), resultIsExternallyAcquired(false)
-{
-}
-
-CommandExecutionEngine::~CommandExecutionEngine()
-{
-	deleteLastCommandResult();
-}
-
-CommandResult* CommandExecutionEngine::acquireResult()
-{
-	resultIsExternallyAcquired = true;
-	return lastCommandResult;
-}
-
-void CommandExecutionEngine::deleteLastCommandResult()
-{
-	if (resultIsExternallyAcquired ) lastCommandResult = nullptr;
-	else SAFE_DELETE(lastCommandResult);
-	resultIsExternallyAcquired = false;
-}
+CommandExecutionEngine::~CommandExecutionEngine() {}
 
 CommandExecutionEngine* CommandExecutionEngine::instance()
 {
@@ -72,14 +51,15 @@ CommandExecutionEngine* CommandExecutionEngine::instance()
 
 void CommandExecutionEngine::execute(Visualization::Item *originator, const QString& command)
 {
-	deleteLastCommandResult();
+	lastCommandResult_.clear();
 
 	QString trimmed = command.trimmed();
 
 	if ( !doQuotesMatch(command, QUOTE_SYMBOLS, ESCAPE_SYMBOLS) )
 	{
-		lastCommandResult = new CommandResult(new CommandError("A quoted string expands past the end of the command."));
-		lastCommandResult->errors().first()->addResolutionTip("Try inserting a matching quote.");
+		lastCommandResult_ = QSharedPointer<CommandResult>(
+				new CommandResult(new CommandError("A quoted string expands past the end of the command.")));
+		lastCommandResult_->errors().first()->addResolutionTip("Try inserting a matching quote.");
 		return;
 	}
 
@@ -107,14 +87,15 @@ void CommandExecutionEngine::execute(Visualization::Item *originator, const QStr
 			{
 				if ( handler->commands().at(i)->canInterpret(source, target, tokens) )
 				{
-					lastCommandResult = handler->commands().at(i)->execute(source, target, tokens);
+					lastCommandResult_ = QSharedPointer<CommandResult>(
+							handler->commands().at(i)->execute(source, target, tokens));
 
-					if (lastCommandResult->code() != CommandResult::CanNotInterpret)
+					if (lastCommandResult_->code() != CommandResult::CanNotInterpret)
 					{
 						processed = true;
 						break;
 					}
-					else deleteLastCommandResult();
+					else lastCommandResult_.clear();
 				}
 			}
 		}
@@ -134,14 +115,15 @@ void CommandExecutionEngine::execute(Visualization::Item *originator, const QStr
 			{
 				if ( handler->commands().at(i)->canInterpret(source, sceneHandlerItem, tokens) )
 				{
-					lastCommandResult = handler->commands().at(i)->execute(source, sceneHandlerItem, tokens);
+					lastCommandResult_ = QSharedPointer<CommandResult>(
+							handler->commands().at(i)->execute(source, sceneHandlerItem, tokens));
 
-					if ( lastCommandResult->code() != CommandResult::CanNotInterpret )
+					if ( lastCommandResult_->code() != CommandResult::CanNotInterpret )
 					{
 						processed = true;
 						break;
 					}
-					else deleteLastCommandResult();
+					else lastCommandResult_.clear();
 				}
 			}
 		}
@@ -150,7 +132,8 @@ void CommandExecutionEngine::execute(Visualization::Item *originator, const QStr
 	// If the command is still not processed this is an error
 	if (!processed)
 	{
-		lastCommandResult = new CommandResult(new CommandError("Unknown command '" + command + "' "));
+		lastCommandResult_ = QSharedPointer<CommandResult>(
+				new CommandResult(new CommandError("Unknown command '" + command + "' ")));
 		InteractionBase::log()->add(Logger::Log::LOGWARNING, "Unknown command: " + command);
 	}
 }

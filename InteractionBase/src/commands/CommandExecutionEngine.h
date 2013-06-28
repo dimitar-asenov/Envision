@@ -44,11 +44,10 @@ class INTERACTIONBASE_API CommandExecutionEngine
 		virtual void execute(Visualization::Item *target, const QString& command);
 		virtual QList<CommandSuggestion*> autoComplete(Visualization::Item *target, const QString& textSoFar);
 
-		CommandResult* acquireResult();
-		void deleteLastCommandResult();
+		QSharedPointer<CommandResult> result();
 
 	protected:
-		CommandExecutionEngine();
+		CommandExecutionEngine() = default;
 
 		virtual QString extractNavigationString(QString& command);
 		virtual Visualization::Item* navigate(Visualization::Item *originator, const QString& navigationString);
@@ -59,8 +58,9 @@ class INTERACTIONBASE_API CommandExecutionEngine
 		virtual bool isEscaped(const QString& string, int indexToCheck, const QString& escapeSymbols);
 
 	private:
-		CommandResult* lastCommandResult;
-		bool resultIsExternallyAcquired;
+		QSharedPointer<CommandResult> lastCommandResult_;
 };
+
+inline QSharedPointer<CommandResult> CommandExecutionEngine::result() { return lastCommandResult_; }
 
 }

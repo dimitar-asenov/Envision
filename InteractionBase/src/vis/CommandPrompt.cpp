@@ -28,6 +28,8 @@
 #include "vis/TextAndDescription.h"
 #include "handlers/GenericHandler.h"
 #include "commands/CommandExecutionEngine.h"
+#include "autocomplete/AutoComplete.h"
+#include "autocomplete/AutoCompleteEntry.h"
 
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/cursor/TextCursor.h"
@@ -56,35 +58,32 @@ ITEM_COMMON_DEFINITIONS(CommandPrompt, "item")
 CommandPrompt::CommandPrompt(Item* commandReceiver, QString initialCommandText, const StyleType* style) :
 	Super(nullptr, style),
 	commandReceiver_(commandReceiver),
-	layout(new SequentialLayout(this, &style->layout())),
-	suggestionContainer(new SequentialLayout(layout, &style->suggestionContainer())),
-	errorContainer(new SequentialLayout(layout, &style->errorContainer())),
-	command( new Text(layout, &style->commandText())),
-	result_(nullptr)
+	layout_(new SequentialLayout(this, &style->layout())),
+	errorContainer_(new SequentialLayout(layout_, &style->errorContainer())),
+	command_( new Text(layout_, &style->commandText()))
 {
 	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(ItemIgnoresTransformations);
 	setZValue(LAYER_COMMAND);
 	setItemCategory(Scene::MenuItemCategory);
 
-	command->setEditable(true);
+	command_->setEditable(true);
 
-	layout->append(command);
-	layout->append(errorContainer);
-	layout->append(suggestionContainer);
+	layout_->append(command_);
+	layout_->append(errorContainer_);
 
 	commandReceiver->scene()->addTopLevelItem(this);
 
-	if (initialCommandText.isNull()) command->setText("Type a command");
-	else command->setText(initialCommandText);
+	if (initialCommandText.isNull()) command_->setText("Type a command");
+	else command_->setText(initialCommandText);
 	saveReceiverCursorPosition();
 	setPromptPosition();
-	command->moveCursor();
+	command_->moveCursor();
 
 	if (initialCommandText.isNull())
-		command->correspondingSceneCursor<Visualization::TextCursor>()->selectAll();
+		command_->correspondingSceneCursor<Visualization::TextCursor>()->selectAll();
 	else
-		command->correspondingSceneCursor<Visualization::TextCursor>()->setCaretPosition(initialCommandText.size());
+		command_->correspondingSceneCursor<Visualization::TextCursor>()->setCaretPosition(initialCommandText.size());
 }
 
 CommandPrompt::~CommandPrompt()
@@ -95,19 +94,18 @@ CommandPrompt::~CommandPrompt()
 	removeResult();
 	removeSuggestions();
 
-	SAFE_DELETE_ITEM(layout);
+	SAFE_DELETE_ITEM(layout_);
 
 	// These are deleted by layout's destructor
-	command = nullptr;
-	suggestionContainer = nullptr;
-	errorContainer = nullptr;
+	command_ = nullptr;
+	errorContainer_ = nullptr;
 }
 
 void CommandPrompt::takeSuggestion(CommandSuggestion* suggestion)
 {
-	command->setText(suggestion->suggestion());
-	command->moveCursor();
-	command->correspondingSceneCursor<Visualization::TextCursor>()->setCaretPosition(suggestion->suggestion().size());
+	command_->setText(suggestion->text());
+	command_->moveCursor();
+	command_->correspondingSceneCursor<Visualization::TextCursor>()->setCaretPosition(suggestion->text().size());
 }
 
 void CommandPrompt::showPrompt(QString initialCommandText)
@@ -115,23 +113,23 @@ void CommandPrompt::showPrompt(QString initialCommandText)
 	saveReceiverCursorPosition();
 	setPromptPosition();
 	show();
-	if (! initialCommandText.isNull()) command->setText(initialCommandText);
-	command->moveCursor();
-	command->correspondingSceneCursor<Visualization::TextCursor>()
-			->setSelectedCharacters(commandSelectedFirst, commandSelectedLast);
+	if (! initialCommandText.isNull()) command_->setText(initialCommandText);
+	command_->moveCursor();
+	command_->correspondingSceneCursor<Visualization::TextCursor>()
+			->setSelectedCharacters(commandSelectedFirst_, commandSelectedLast_);
 }
 
 void CommandPrompt::hidePrompt()
 {
 	if (scene()->mainCursor())
 	{
-		commandSelectedFirst = command->correspondingSceneCursor<Visualization::TextCursor>()->selectionFirstIndex();
-		commandSelectedLast = command->correspondingSceneCursor<Visualization::TextCursor>()->selectionLastIndex();
+		commandSelectedFirst_ = command_->correspondingSceneCursor<Visualization::TextCursor>()->selectionFirstIndex();
+		commandSelectedLast_ = command_->correspondingSceneCursor<Visualization::TextCursor>()->selectionLastIndex();
 	}
 	hide();
 
 	if (scene()->mainCursor()) // If the main cursor was deleted, then do not select anything.
-		commandReceiver()->moveCursor(Visualization::Item::MoveOnPosition, receiverCursorPosition);
+		commandReceiver()->moveCursor(Visualization::Item::MoveOnPosition, receiverCursorPosition_);
 }
 
 void CommandPrompt::determineChildren()
@@ -141,16 +139,16 @@ void CommandPrompt::determineChildren()
 	if (h)
 	{
 		removeSuggestions();
-		addSuggestions( h->executionEngine()->autoComplete(commandReceiver_, command->text()));
+		addSuggestions( h->executionEngine()->autoComplete(commandReceiver_, command_->text()));
 	}
 }
 
 void CommandPrompt::updateGeometry(int availableWidth, int availableHeight)
 {
-	Item::updateGeometry(layout, availableWidth, availableHeight);
+	Item::updateGeometry(layout_, availableWidth, availableHeight);
 }
 
-void CommandPrompt::setResult(CommandResult* result)
+void CommandPrompt::setResult(QSharedPointer<CommandResult> result)
 {
 	removeResult();
 	result_ = result;
@@ -161,93 +159,54 @@ void CommandPrompt::setResult(CommandResult* result)
 		// Create visualization if one is missing.
 		if (result->errors()[i]->visualization() == nullptr)
 		{
-			TextAndDescription* vis = new TextAndDescription(errorContainer, &style()->defaultError());
+			TextAndDescription* vis = new TextAndDescription(errorContainer_, &style()->defaultError());
 			vis->setContents(result->errors()[i]->message(), result->errors()[i]->resolutionTips().join(" OR "));
 			result->errors()[i]->setVisualization(vis);
 		}
 
 		// Add the visualization to the container layout
-		errorContainer->append(result->errors()[i]->visualization());
+		errorContainer_->append(result->errors()[i]->visualization());
 	}
 
 	// Add the suggestions to the list
-	for (int i = 0; i<result->suggestions().size(); ++i)
-	{
-		// Create visualization if one is missing.
-		if (result->suggestions()[i]->visualization() == nullptr)
-		{
-			TextAndDescription* vis = new TextAndDescription(suggestionContainer, &style()->defaultSuggestion());
-			vis->setContents(result->suggestions()[i]->suggestion(), result->suggestions()[i]->description());
-			result->suggestions()[i]->setVisualization(vis);
-		}
-
-		// Add the visualization to the container layout
-		suggestionContainer->append(result->suggestions()[i]->visualization());
-	}
-	setUpdateNeeded(Visualization::Item::StandardUpdate);
+	addSuggestions(result->suggestions());
+	showAutocompleteBasedOnSuggestions();
 }
 
 void CommandPrompt::removeResult()
 {
 	if (result_)
 	{
-		// Remove all suggestion visual items contributed by the result.
-		for (int i = 0; i<result_->suggestions().size(); ++i)
-			suggestionContainer->removeAll(result_->suggestions().at(i)->visualization(), false);
+		// Remove all suggestion contributed by the result.
+		for (auto s : result_->suggestions()) suggestions_.removeAll(s);
 
 		// Remove all error visual items contributed by the result.
-		for (int i = 0; i<result_->errors().size(); ++i)
-			errorContainer->removeAll(result_->errors().at(i)->visualization(), false);
+		errorContainer_->clear(false);
 	}
-	SAFE_DELETE(result_);
+	result_.clear();
+
+	showAutocompleteBasedOnSuggestions();
 	setUpdateNeeded(Visualization::Item::StandardUpdate);
 }
 
 void CommandPrompt::addSuggestion(CommandSuggestion* suggestion)
 {
 	suggestions_.append(suggestion);
-
-	// Create visualization if one is missing.
-	if (suggestion->visualization() == nullptr)
-	{
-		TextAndDescription* vis = new TextAndDescription(suggestionContainer, &style()->defaultSuggestion());
-		vis->setContents(suggestion->suggestion(), suggestion->description());
-		suggestion->setVisualization(vis);
-	}
-
-	// Add the visualization to the container layout
-	suggestionContainer->append(suggestion->visualization());
-
+	showAutocompleteBasedOnSuggestions();
 	setUpdateNeeded(Visualization::Item::StandardUpdate);
 }
 
 void CommandPrompt::addSuggestions(const QList<CommandSuggestion*>& suggestions)
 {
-	for (int i = 0; i < suggestions.size(); ++i)
-	{
-		suggestions_.append(suggestions[i]);
-
-		// Create visualization if one is missing.
-		if (suggestions_.last()->visualization() == nullptr)
-		{
-			TextAndDescription* vis = new TextAndDescription(suggestionContainer, &style()->defaultSuggestion());
-			vis->setContents(suggestions_.last()->suggestion(), suggestions_.last()->description());
-			suggestions_.last()->setVisualization(vis);
-		}
-
-		// Add the visualization to the container layout
-		suggestionContainer->append(suggestions_.last()->visualization());
-	}
+	suggestions_.append( suggestions );
+	showAutocompleteBasedOnSuggestions();
 	setUpdateNeeded(Visualization::Item::StandardUpdate);
 }
 
 void CommandPrompt::removeSuggestions()
 {
-	for (int i = 0; i<suggestions_.size(); ++i)
-	{
-		suggestionContainer->removeAll(suggestions_.at(i)->visualization(), false);
-		SAFE_DELETE(suggestions_[i]);
-	}
+	for (int i = 0; i<suggestions_.size(); ++i) SAFE_DELETE(suggestions_[i]);
+	AutoComplete::hide();
 	suggestions_.clear();
 	setUpdateNeeded(Visualization::Item::StandardUpdate);
 }
@@ -255,9 +214,9 @@ void CommandPrompt::removeSuggestions()
 void CommandPrompt::saveReceiverCursorPosition()
 {
 	// Save the current cursor
-	receiverCursorPosition = QPoint(0,0);
+	receiverCursorPosition_ = QPoint(0,0);
 	if (commandReceiver_->scene()->mainCursor()->owner() == commandReceiver_)
-		receiverCursorPosition = commandReceiver_->scene()->mainCursor()->position();
+		receiverCursorPosition_ = commandReceiver_->scene()->mainCursor()->position();
 }
 
 void CommandPrompt::setPromptPosition()
@@ -271,10 +230,28 @@ void CommandPrompt::setPromptPosition()
 	else
 	{
 		// If the item is rather large show the prompt at the cursor
-		promptPos += receiverCursorPosition;
+		promptPos += receiverCursorPosition_;
 	}
 
 	setPos(promptPos);
+}
+
+void CommandPrompt::showAutocompleteBasedOnSuggestions()
+{
+	auto executeFunction = [](AutoCompleteEntry* e){
+		if (auto prompt = GenericHandler::instance()->commandPrompt())
+			prompt->takeSuggestion(static_cast<CommandSuggestion*>(e));
+	};
+
+
+	QList<AutoCompleteEntry*> entries;
+		for (auto s : suggestions_) entries.append(new AutoCompleteEntry(s->text(), s->description(),
+				s->visualization(), executeFunction));
+
+	if (entries.isEmpty() || !isVisible())
+		AutoComplete::hide();
+	else
+		AutoComplete::show(entries, true);
 }
 
 }

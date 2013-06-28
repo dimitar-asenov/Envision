@@ -36,7 +36,7 @@ class AutoCompleteEntry;
 class INTERACTIONBASE_API AutoComplete {
 	public:
 
-		static void show(const QList<AutoCompleteEntry*>& entries);
+		static void show(const QList<AutoCompleteEntry*>& entries, bool explicitSelection = false);
 
 		/**
 		 * Hides the auto completion menu immediately.

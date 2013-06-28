@@ -46,14 +46,14 @@ class INTERACTIONBASE_API CommandPrompt : public Super<Visualization::Item>
 				const StyleType* style = itemStyles().get());
 		virtual ~CommandPrompt();
 
-		void setResult(CommandResult* result);
+		void setResult(QSharedPointer<CommandResult> result);
 		void addSuggestion(CommandSuggestion* suggestion);
 		void addSuggestions(const QList<CommandSuggestion*>& suggestions);
 
 		void removeResult();
 		void removeSuggestions();
 
-		CommandResult* result();
+		QSharedPointer<CommandResult> result();
 		QList<CommandSuggestion*>& suggestions();
 
 		Visualization::Item* commandReceiver();
@@ -69,28 +69,28 @@ class INTERACTIONBASE_API CommandPrompt : public Super<Visualization::Item>
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		Visualization::Item* commandReceiver_;
-		Visualization::SequentialLayout* layout;
-		Visualization::SequentialLayout* suggestionContainer;
-		Visualization::SequentialLayout* errorContainer;
-		Visualization::Text* command;
+		Visualization::Item* commandReceiver_{};
+		Visualization::SequentialLayout* layout_{};
+		Visualization::SequentialLayout* errorContainer_{};
+		Visualization::Text* command_{};
 
-		int commandSelectedFirst;
-		int commandSelectedLast;
+		int commandSelectedFirst_{};
+		int commandSelectedLast_{};
 
-		CommandResult* result_;
-		QList<CommandSuggestion*> suggestions_;	//Suggestions from the result do not appear here.
+		QSharedPointer<CommandResult> result_;
+		QList<CommandSuggestion*> suggestions_;
 
-		QPoint receiverCursorPosition;
+		QPoint receiverCursorPosition_;
 
 		void saveReceiverCursorPosition();
 		void setPromptPosition();
+		void showAutocompleteBasedOnSuggestions();
 };
 
 inline Visualization::Item* CommandPrompt::commandReceiver() { return commandReceiver_; }
-inline QString CommandPrompt::text() const {return command->text();}
+inline QString CommandPrompt::text() const {return command_->text();}
 
-inline CommandResult* CommandPrompt::result() { return result_; }
+inline QSharedPointer<CommandResult> CommandPrompt::result() { return result_; }
 inline QList<CommandSuggestion*>& CommandPrompt::suggestions() { return suggestions_; }
 
 }

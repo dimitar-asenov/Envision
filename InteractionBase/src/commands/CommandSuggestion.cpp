@@ -24,20 +24,12 @@
 **
 ***********************************************************************************************************************/
 
-#include "commands/CommandSuggestion.h"
-
-#include "VisualizationBase/src/items/Item.h"
+#include "CommandSuggestion.h"
+#include "../handlers/GenericHandler.h"
+#include "../vis/CommandPrompt.h"
 
 namespace Interaction {
 
-CommandSuggestion::CommandSuggestion(const QString& suggestion, const QString& description, Visualization::Item* visualization) :
-	suggestedCommand(suggestion), commandDescription(description), suggestionVisualization(visualization)
-{
-}
-
-CommandSuggestion::~CommandSuggestion()
-{
-	SAFE_DELETE_ITEM(suggestionVisualization);
-}
+void CommandSuggestion::execute() {}
 
 }

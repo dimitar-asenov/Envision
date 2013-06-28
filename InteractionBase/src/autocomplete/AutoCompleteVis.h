@@ -51,6 +51,15 @@ class INTERACTIONBASE_API AutoCompleteVis : public Super<Visualization::LayoutPr
 		virtual UpdateType needsUpdate() override;
 		void setEntries(const QList<AutoCompleteEntry*>& entries);
 
+		/**
+		 * Set whether explicit selection is required or not. If explicit selection is required, then for an autocomplete
+		 * entry to be executed the user will specifically have to choose it using the keyboard.
+		 *
+		 * If \a explicitSelection is set to false (the default) then, the first autocomplete entry is automatically
+		 * selected.
+		 */
+		void setExplicitSelection(bool explicitSelection);
+
 	protected:
 		virtual void determineChildren() override;
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
@@ -59,13 +68,19 @@ class INTERACTIONBASE_API AutoCompleteVis : public Super<Visualization::LayoutPr
 	private:
 		QList<AutoCompleteEntry*> entries_;
 		QList<AutoCompleteEntry*> newEntries_;
-		bool newEntriesSet_;
+		bool newEntriesSet_{true};
 
-		Visualization::Static* noProposals_;
-		QGraphicsEffect* selectionEffect_;
-		int selectionIndex_;
+		Visualization::Static* noProposals_{};
+		QGraphicsEffect* selectionEffect_{};
+		int selectionIndex_{-1};
+
+		bool explicitSelection_{};
 
 		void updateEntries();
+		void updateSelection();
+		void selectUp();
+		void selectDown();
+		void resetSelection();
 };
 
 } /* namespace Interaction */

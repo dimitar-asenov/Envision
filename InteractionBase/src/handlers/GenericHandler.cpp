@@ -347,7 +347,7 @@ void GenericHandler::keyPressEvent(Visualization::Item *target, QKeyEvent *event
 			if(!moved) InteractionHandler::keyPressEvent(target, event);
 		}
 	}
-	else if (event->key() == Qt::Key_Escape && AutoComplete::isVisible())
+	else if (event->key() == Qt::Key_Escape && AutoComplete::isVisible() && !commandPrompt_)
 	{
 		AutoComplete::hide();
 	}

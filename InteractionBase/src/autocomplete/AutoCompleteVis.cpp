@@ -28,6 +28,7 @@
 #include "AutoComplete.h"
 #include "AutoCompleteEntry.h"
 #include "../vis/TextAndDescription.h"
+#include "../vis/CommandPrompt.h"
 
 #include "VisualizationBase/src/Scene.h"
 #include "VisualizationBase/src/cursor/Cursor.h"
@@ -39,13 +40,7 @@ namespace Interaction {
 ITEM_COMMON_DEFINITIONS(AutoCompleteVis, "item")
 
 AutoCompleteVis::AutoCompleteVis(const QList<AutoCompleteEntry*>& entries, const StyleType* style) :
-Super(nullptr, style),
-	entries_(),
-	newEntries_(entries),
-	newEntriesSet_(true),
-	noProposals_(),
-	selectionEffect_(),
-	selectionIndex_()
+Super(nullptr, style), newEntries_(entries)
 {
 	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(QGraphicsItem::ItemClipsChildrenToShape);
@@ -58,12 +53,19 @@ AutoCompleteVis::~AutoCompleteVis()
 	layout()->clear(false);
 	SAFE_DELETE_ITEM(noProposals_);
 	for(auto e : entries_) SAFE_DELETE(e);
+	for(auto e : newEntries_) SAFE_DELETE(e);
 	entries_.clear();
+	newEntries_.clear();
 
-	selectionEffect_ = nullptr; // This is deleted when it's corresponding item is deleted
+	selectionEffect_ = nullptr; // This is deleted when its corresponding item is deleted
 
 	// Deleted by layout's destructor
 	noProposals_ = nullptr;
+}
+
+void AutoCompleteVis::setExplicitSelection(bool explicitSelection)
+{
+	explicitSelection_ = explicitSelection;
 }
 
 void AutoCompleteVis::setEntries(const QList<AutoCompleteEntry*>& entries)
@@ -79,26 +81,14 @@ void AutoCompleteVis::updateEntries()
 	SAFE_DELETE_ITEM(noProposals_);
 	for(auto e : entries_) SAFE_DELETE(e);
 	entries_ = newEntries_;
-
+	newEntries_.clear();
 
 	for (auto e : entries_)
 			if (!e->visualization())
 				e->setVisualization( new TextAndDescription(e->text(), e->description()));
 
-	if (entries_.isEmpty())
-	{
-		layout()->synchronizeFirst(noProposals_, true, &style()->noProposals());
-		selectionIndex_ = -1;
-	}
-	else
-	{
-		selectionIndex_ = 0;
-		selectionEffect_ = new QGraphicsColorizeEffect();	// Note we must renew this every time since it will be
-																			// automatically deleted by the item that owns it.
-		entries_.at(selectionIndex_)->visualization()->setGraphicsEffect(selectionEffect_);
-
-		for (auto e : entries_) layout()->append(e->visualization());
-	}
+	if (entries_.isEmpty()) layout()->synchronizeFirst(noProposals_, true, &style()->noProposals());
+	else for (auto e : entries_) layout()->append(e->visualization().data());
 
 	// Install event handler
 	if (scene() && scene()->mainCursor() && !this->isAncestorOf(scene()->mainCursor()->owner()))
@@ -107,7 +97,11 @@ void AutoCompleteVis::updateEntries()
 
 void AutoCompleteVis::determineChildren()
 {
-	if (newEntriesSet_) updateEntries();
+	if (newEntriesSet_)
+	{
+		updateEntries();
+		resetSelection();
+	}
 
 	layout()->setStyle(&style()->layout());
 	if (noProposals_) noProposals_->setStyle(&style()->noProposals());
@@ -118,8 +112,17 @@ void AutoCompleteVis::updateGeometry(int /*availableWidth*/, int /*availableHeig
 	// Set position
 	if (scene() && scene()->mainCursor() && !this->isAncestorOf(scene()->mainCursor()->owner()))
 	{
-		auto owner = scene()->mainCursor()->owner();
-		setPos(owner->scenePos().toPoint() + QPoint(0, owner->height() + style()->distanceToCursor()));
+		auto itemToUseForPosition = scene()->mainCursor()->owner();
+
+		// Check if this is a command prompt
+		auto root = itemToUseForPosition;
+		while (root->parent()) root = root->parent();
+		if (dynamic_cast<CommandPrompt*>(root))
+			itemToUseForPosition = root;
+
+		// The cursor does not belong to a command prompt
+		setPos(itemToUseForPosition->scenePos().toPoint() +
+			QPoint(0, itemToUseForPosition->height() + style()->distanceToCursor()));
 	}
 
 	// Set size
@@ -172,31 +175,28 @@ bool AutoCompleteVis::sceneEventFilter(QGraphicsItem* watched, QEvent* event)
 		{
 			case Qt::Key_Down:
 				{
-					if (selectionIndex_ < entries_.size() - 1)
-					{
-						++selectionIndex_;
-						entries_.at(selectionIndex_)->visualization()->setGraphicsEffect(selectionEffect_);
-					}
+					selectDown();
 					return true;
 				}
 				break;
 			case Qt::Key_Up:
 				{
-					if (selectionIndex_ > 0)
-					{
-						--selectionIndex_;
-						entries_.at(selectionIndex_)->visualization()->setGraphicsEffect(selectionEffect_);
-					}
+					selectUp();
 					return true;
 				}
 				break;
 			case Qt::Key_Return:
 			case Qt::Key_Enter:
 				{
-					if (selectionIndex_ < 0 && entries_.size() == 1) selectionIndex_ = 0;
-					entries_.at(selectionIndex_)->execute();
+					auto executed = false;
+
+					if (selectionIndex_>=0 && selectionIndex_ < entries_.size())
+					{
+						executed = true;
+						entries_.at(selectionIndex_)->execute();
+					}
 					scene()->addPostEventAction(new Visualization::CustomSceneEvent( AutoComplete::hide ));
-					return true;
+					return executed || !explicitSelection_;
 				}
 				break;
 		}
@@ -205,5 +205,72 @@ bool AutoCompleteVis::sceneEventFilter(QGraphicsItem* watched, QEvent* event)
 	return false;
 }
 
+void AutoCompleteVis::resetSelection()
+{
+	selectionEffect_ = nullptr;
+	selectionIndex_ = -1;
+	if (!explicitSelection_ && entries_.size() > 0)
+	{
+		selectionIndex_ = 0;
+	}
+	updateSelection();
+}
+
+void AutoCompleteVis::selectUp()
+{
+	auto newIndex = selectionIndex_ - 1;
+	if (newIndex <= -1)
+	{
+		if (explicitSelection_) newIndex = -1;
+		else if (entries_.size() > 0) newIndex = 0;
+	}
+
+	if (newIndex != selectionIndex_)
+	{
+		selectionIndex_ = newIndex;
+		updateSelection();
+	}
+}
+
+void AutoCompleteVis::selectDown()
+{
+	auto newIndex = selectionIndex_ + 1;
+	if (newIndex < entries_.size())
+	{
+		selectionIndex_ = newIndex;
+		updateSelection();
+	}
+}
+
+void AutoCompleteVis::updateSelection()
+{
+	if (selectionIndex_ >= 0 && selectionIndex_ < entries_.size())
+	{
+		// There is a selected item.
+		if (!selectionEffect_)
+			selectionEffect_ = new QGraphicsColorizeEffect();	// Note we must renew this every time since it will be
+																				// automatically deleted by the item that owns it.
+
+		entries_.at(selectionIndex_)->visualization()->setGraphicsEffect(selectionEffect_);
+	}
+	else
+	{
+		// There is no selected item.
+		if (selectionEffect_)
+		{
+			Visualization::Item* itemWithEffect = nullptr;
+			for (auto i : entries_)
+				if (auto eff = i->visualization()->graphicsEffect())
+				{
+					itemWithEffect = i->visualization().data();
+					Q_ASSERT(eff == selectionEffect_);
+					itemWithEffect->setGraphicsEffect(nullptr);
+					selectionEffect_ = nullptr;
+					break;
+				}
+			Q_ASSERT(itemWithEffect);
+		}
+	}
+}
 
 } /* namespace Interaction */

@@ -30,22 +30,34 @@
 
 namespace Interaction {
 
+AutoCompleteEntry::AutoCompleteEntry(const QString& text, const QString& description)
+: text_(text), description_(description)
+{}
+
 AutoCompleteEntry::AutoCompleteEntry(const QString& text, const QString& description,
-		Visualization::Item* visualization, ExecuteFunction execFunction) :
-	text_(text), description_(description), vis_(visualization), execFunction_(execFunction)
+		Visualization::Item* visualization, ExecuteFunction execFunction)
+	: AutoCompleteEntry(text, description,
+			QSharedPointer<Visualization::Item>(visualization),
+			execFunction)
 {
 }
 
-AutoCompleteEntry::~AutoCompleteEntry()
+AutoCompleteEntry::AutoCompleteEntry(const QString& text, const QString& description,
+		QSharedPointer<Visualization::Item> visualization, ExecuteFunction execFunction)
+: text_(text), description_(description), vis_(visualization), execFunction_(execFunction)
 {
-	SAFE_DELETE_ITEM(vis_);
 }
 
+AutoCompleteEntry::~AutoCompleteEntry() {}
+
+void AutoCompleteEntry::setVisualization(QSharedPointer<Visualization::Item> item)
+{
+	vis_ = item;
+}
 
 void AutoCompleteEntry::setVisualization(Visualization::Item* item)
 {
-	SAFE_DELETE_ITEM(vis_);
-	vis_ = item;
+	vis_ = QSharedPointer<Visualization::Item>(item);
 }
 
 void AutoCompleteEntry::setExecutionFunction(ExecuteFunction execFunction)
