@@ -39,6 +39,13 @@ COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CommaExpression)
 REGISTER_ATTRIBUTE(CommaExpression, left, Expression, false, false, true)
 REGISTER_ATTRIBUTE(CommaExpression, right, Expression, false, false, true)
 
+CommaExpression::CommaExpression(Expression* left, Expression* right)
+: Super(nullptr, CommaExpression::getMetaData())
+{
+	if(left) setLeft(left);
+	if(right) setRight(right);
+}
+
 QList<Expression*> CommaExpression::allSubOperands(bool detachOperands)
 {
 	QList<Expression*> operands;

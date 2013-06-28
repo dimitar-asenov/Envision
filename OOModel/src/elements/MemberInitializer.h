@@ -29,22 +29,32 @@
 #include "../oomodel_api.h"
 
 #include "../expressions/Expression.h"
+#include "../expressions/ReferenceExpression.h"
 
 #include "ModelBase/src/nodes/Text.h"
 
 DECLARE_TYPED_LIST(OOMODEL_API, OOModel, MemberInitializer)
 
 namespace OOModel {
-
+/**
+ *	This class represent various forms of member initializers.
+ * It may be a call to a super constructor then \a memberReference will denote
+ * the callee of the super constructor and \a initializedValue will denote the arguments.
+ * In case of delegating constructors the \a memberRef will be empty,
+ * as the \a \initializedValue will contain a method call.
+ * For simple member field initializers the \a memberReference will contain a reference to the field
+ * and \a initializedValue the valued it should be initialized to
+ */
 class OOMODEL_API MemberInitializer : public Super<Model::CompositeNode>
 {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(MemberInitializer)
 
 	ATTRIBUTE(Expression, initializedValue, setInitializedValue)
-	ATTRIBUTE_VALUE_CUSTOM_RETURN(::Model::Text, memberName, setMemberName, QString, const QString&)
+	ATTRIBUTE(ReferenceExpression, memberReference, setMemberReference)
 
 	public:
-		MemberInitializer(const QString& memberName, Expression* initValue = nullptr);
+		MemberInitializer(ReferenceExpression* memberRef, Expression* initValue);
+		MemberInitializer(Expression* initValue);
 
 };
 

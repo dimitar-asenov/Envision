@@ -40,6 +40,8 @@ class OOMODEL_API CommaExpression: public Super<Expression>
 	ATTRIBUTE(Expression, right, setRight)
 
 	public:
+		CommaExpression(Expression* left, Expression* right);
+
 		/**
 		 * \brief Returns in a single list all expressions of this and nested CommaExpression operators.
 		 *
