@@ -57,11 +57,16 @@ bool ExpressionVisitor::TraverseMemberExpr(clang::MemberExpr* memberExpr)
 		for(unsigned i = 0; i < templateArgs; i++)
 			ooRef->typeArguments()->append(utils_->convertTemplateArgument(astTemplateArgsList[i].getArgument()));
 	}
+	OOModel::Expression* ooBase = nullptr;
 	if(!memberExpr->isImplicitAccess() && memberExpr->getBase())
 	{
 		TraverseStmt(memberExpr->getBase());
-		if(!ooExprStack_.empty()) ooRef->setPrefix(ooExprStack_.pop());
+		if(!ooExprStack_.empty()) ooBase = ooExprStack_.pop();
 	}
+	if(auto qualifier = memberExpr->getQualifier())
+		ooRef->setPrefix(utils_->translateNestedNameSpecifier(qualifier, ooBase));
+	else if(ooBase)
+		ooRef->setPrefix(ooBase);
 	ooExprStack_.push(ooRef);
 	return true;
 }
@@ -78,11 +83,16 @@ bool ExpressionVisitor::TraverseUnresolvedMemberExpr(clang::UnresolvedMemberExpr
 		for(unsigned i = 0; i < templateArgs; i++)
 			ooRef->typeArguments()->append(utils_->convertTemplateArgument(astTemplateArgsList[i].getArgument()));
 	}
+	OOModel::Expression* ooBase = nullptr;
 	if(!unresolvedMember->isImplicitAccess() && unresolvedMember->getBase())
 	{
 		TraverseStmt(unresolvedMember->getBase());
-		if(!ooExprStack_.empty()) ooRef->setPrefix(ooExprStack_.pop());
+		if(!ooExprStack_.empty()) ooBase = ooExprStack_.pop();
 	}
+	if(auto qualifier = unresolvedMember->getQualifier())
+		ooRef->setPrefix(utils_->translateNestedNameSpecifier(qualifier, ooBase));
+	else if(ooBase)
+		ooRef->setPrefix(ooBase);
 	ooExprStack_.push(ooRef);
 	return true;
 }
@@ -99,21 +109,24 @@ bool ExpressionVisitor::TraverseCXXDependentScopeMemberExpr(clang::CXXDependentS
 		for(unsigned i = 0; i < templateArgs; i++)
 			ooRef->typeArguments()->append(utils_->convertTemplateArgument(astTemplateArgsList[i].getArgument()));
 	}
+	OOModel::Expression* ooBase = nullptr;
 	if(!dependentScopeMember->isImplicitAccess() && dependentScopeMember->getBase())
 	{
 		TraverseStmt(dependentScopeMember->getBase());
-		if(!ooExprStack_.empty()) ooRef->setPrefix(ooExprStack_.pop());
+		if(!ooExprStack_.empty()) ooBase = ooExprStack_.pop();
 	}
-
+	if(auto qualifier = dependentScopeMember->getQualifier())
+		ooRef->setPrefix(utils_->translateNestedNameSpecifier(qualifier, ooBase));
+	else if(ooBase)
+		ooRef->setPrefix(ooBase);
 	ooExprStack_.push(ooRef);
 	return true;
 }
 
 bool ExpressionVisitor::VisitDeclRefExpr(clang::DeclRefExpr* declRefExpr)
 {
-	// TODO: namespace resolution
-	OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression();
-	ooRef->setName(QString::fromStdString(declRefExpr->getDecl()->getNameAsString()));
+	OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression
+			(QString::fromStdString(declRefExpr->getDecl()->getNameAsString()));
 	if(declRefExpr->hasExplicitTemplateArgs())
 	{
 		unsigned templateArgs = declRefExpr->getNumTemplateArgs();
@@ -121,15 +134,25 @@ bool ExpressionVisitor::VisitDeclRefExpr(clang::DeclRefExpr* declRefExpr)
 		for(unsigned i = 0; i < templateArgs; i++)
 			ooRef->typeArguments()->append(utils_->convertTemplateArgument(astTemplateArgsList[i].getArgument()));
 	}
+	if(auto qualifier = declRefExpr->getQualifier())
+		ooRef->setPrefix(utils_->translateNestedNameSpecifier(qualifier));
 	ooExprStack_.push(ooRef);
 	return true;
 }
 
 bool ExpressionVisitor::VisitDependentScopeDeclRefExpr(clang::DependentScopeDeclRefExpr* dependentScope)
 {
-	// TODO: this should be extended to support also the dependent type
-	QString ref = QString::fromStdString(dependentScope->getDeclName().getAsString());
-	OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression(ref);
+	OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression
+			(QString::fromStdString(dependentScope->getDeclName().getAsString()));
+	if(dependentScope->hasExplicitTemplateArgs())
+	{
+		unsigned templateArgs = dependentScope->getNumTemplateArgs();
+		auto astTemplateArgsList = dependentScope->getExplicitTemplateArgs().getTemplateArgs();
+		for(unsigned i = 0; i < templateArgs; i++)
+			ooRef->typeArguments()->append(utils_->convertTemplateArgument(astTemplateArgsList[i].getArgument()));
+	}
+	if(auto qualifier = dependentScope->getQualifier())
+		ooRef->setPrefix(utils_->translateNestedNameSpecifier(qualifier));
 	ooExprStack_.push(ooRef);
 	return true;
 }

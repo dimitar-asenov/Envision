@@ -140,9 +140,11 @@ OOModel::Modifier::ModifierFlag CppImportUtilities::convertStorageSpecifier(clan
 	}
 }
 
-OOModel::Expression*CppImportUtilities::translateNestedNameSpecifier(clang::NestedNameSpecifier* nestedName)
+OOModel::Expression*CppImportUtilities::translateNestedNameSpecifier
+(clang::NestedNameSpecifier* nestedName, OOModel::Expression* base)
 {
 	OOModel::ReferenceExpression* currentRef = nullptr;
+	OOModel::Expression* returnExpr = nullptr;
 	switch(nestedName->getKind())
 	{
 		case clang::NestedNameSpecifier::Identifier:
@@ -161,23 +163,27 @@ OOModel::Expression*CppImportUtilities::translateNestedNameSpecifier(clang::Nest
 			if(auto typeRef = dynamic_cast<OOModel::ReferenceExpression*>(convertTypePtr(nestedName->getAsType())))
 				currentRef = typeRef;
 			else
-				Q_ASSERT(0);
-			return createErrorExpression("TypeSpecNameSpecifier");
+				returnExpr = createErrorExpression("TypeSpecNameSpecifier");
 			break;
 		case clang::NestedNameSpecifier::TypeSpecWithTemplate:
 			// TODO
 			if(auto typeRef = dynamic_cast<OOModel::ReferenceExpression*>(convertTypePtr(nestedName->getAsType())))
 				currentRef = typeRef;
 			else
-				Q_ASSERT(0);
+				returnExpr = createErrorExpression("Could not translate TypeSpecWithTemplate");
 			break;
 		case clang::NestedNameSpecifier::Global:
 			Q_ASSERT(!nestedName->getPrefix());
-			return new OOModel::GlobalScopeExpression();
+			returnExpr = new OOModel::GlobalScopeExpression();
 	}
 	if(auto prefix = nestedName->getPrefix())
-		currentRef->setPrefix(translateNestedNameSpecifier(prefix));
-	return currentRef;
+		currentRef->setPrefix(translateNestedNameSpecifier(prefix, base));
+	else if(currentRef && base)
+		currentRef->setPrefix(base);
+	else if(returnExpr && base)
+		throw CppImportException("Invalid c++ expression");
+	if(currentRef) return currentRef;
+	return returnExpr;
 }
 
 OOModel::Expression* CppImportUtilities::convertTemplateArgument(const clang::TemplateArgument& templateArg)
@@ -478,8 +484,11 @@ OOModel::Expression*CppImportUtilities::convertTypePtr(const clang::Type* type)
 	}
 	else if(auto recordType = llvm::dyn_cast<clang::RecordType>(type))
 	{
-			translatedType = /*new OOModel::ClassTypeExpression(*/
-						new OOModel::ReferenceExpression(QString::fromStdString(recordType->getDecl()->getNameAsString())/*)*/);
+		OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression
+				(QString::fromStdString(recordType->getDecl()->getNameAsString()));
+		if(auto qualifier = recordType->getDecl()->getQualifier())
+			ooRef->setPrefix(translateNestedNameSpecifier(qualifier));
+		translatedType = ooRef;
 	}
 	else if(auto pointerType = llvm::dyn_cast<clang::PointerType>(type))
 	{
@@ -497,6 +506,8 @@ OOModel::Expression*CppImportUtilities::convertTypePtr(const clang::Type* type)
 	{
 		OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression
 				(QString::fromStdString(enumType->getDecl()->getNameAsString()));
+		if(auto qualifier = enumType->getDecl()->getQualifier())
+			ooRef->setPrefix(translateNestedNameSpecifier(qualifier));
 		translatedType = ooRef;
 	}
 	else if(auto constArrayType = llvm::dyn_cast<clang::ConstantArrayType>(type))
@@ -540,8 +551,11 @@ OOModel::Expression*CppImportUtilities::convertTypePtr(const clang::Type* type)
 	}
 	else if(auto elaboratedType = llvm::dyn_cast<clang::ElaboratedType>(type))
 	{
-		// TODO: handle this correctly
+		// TODO: this might also have a keyword in front (like e.g. class, typename)
 		translatedType = convertClangType(elaboratedType->getNamedType());
+		if(auto qualifier = elaboratedType->getQualifier())
+			if(auto ooRef = dynamic_cast<OOModel::ReferenceExpression*>(translatedType))
+				ooRef->setPrefix(translateNestedNameSpecifier(qualifier));
 	}
 	else if(auto templateSpecialization = llvm::dyn_cast<clang::TemplateSpecializationType>(type))
 	{
@@ -556,6 +570,8 @@ OOModel::Expression*CppImportUtilities::convertTypePtr(const clang::Type* type)
 	{
 		OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression
 				(QString(dependentType->getIdentifier()->getNameStart()));
+		if(auto qualifier = dependentType->getQualifier())
+			ooRef->setPrefix(translateNestedNameSpecifier(qualifier));
 		if(dependentType->getKeyword() == clang::ETK_Typename)
 		{
 			OOModel::TypeNameOperator* ooTypeName = new OOModel::TypeNameOperator();

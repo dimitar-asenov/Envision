@@ -44,7 +44,8 @@ class CppImportUtilities
 		OOModel::Modifier::ModifierFlag convertAccessSpecifier(clang::AccessSpecifier as);
 		OOModel::Modifier::ModifierFlag convertStorageSpecifier(clang::StorageClass storage);
 
-		OOModel::Expression* translateNestedNameSpecifier(clang::NestedNameSpecifier* nestedName);
+		OOModel::Expression* translateNestedNameSpecifier
+		(clang::NestedNameSpecifier* nestedName, OOModel::Expression* base = nullptr);
 
 		OOModel::Expression* convertTemplateArgument(const clang::TemplateArgument& templateArg);
 
