@@ -39,6 +39,7 @@ class Item;
 class ModelRenderer;
 class SceneHandlerItem;
 class SelectedItem;
+class NameOverlay;
 class Cursor;
 
 class VISUALIZATIONBASE_API Scene : public QGraphicsScene
@@ -137,6 +138,8 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		SceneHandlerItem* sceneHandlerItem_;
 		QList<Item*> topLevelItems_;
 		QList<SelectedItem*> selections_;
+		QList<NameOverlay*> nameOverlays_;
+
 		Cursor* mainCursor_;
 		bool mainCursorsJustSet_;
 		QList<QEvent*> postEventActions_;
