@@ -140,8 +140,8 @@ void CppImportLogger::storageClassNotSupported(clang::StorageClass sc)
 		default: missing = "uknown sc"; break;
 	}
 
-	int newCount = unaryOpMap_.value(missing) + 1;
-	unaryOpMap_.insert(missing,newCount);
+	int newCount = storageMap_.value(missing) + 1;
+	storageMap_.insert(missing,newCount);
 }
 
 void CppImportLogger::overloadedOpNotSupported(clang::OverloadedOperatorKind kind, bool binary)
