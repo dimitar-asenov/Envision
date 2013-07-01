@@ -158,12 +158,18 @@ OOModel::Expression*CppImportUtilities::translateNestedNameSpecifier(clang::Nest
 			break;
 		case clang::NestedNameSpecifier::TypeSpec:
 			// TODO
-//			if(auto typeRef = dynamic_cast<OOModel::ReferenceExpression*>(convertClangType(nestedName->getAsType()->)))
-			Q_ASSERT(0);
+			if(auto typeRef = dynamic_cast<OOModel::ReferenceExpression*>(convertTypePtr(nestedName->getAsType())))
+				currentRef = typeRef;
+			else
+				Q_ASSERT(0);
+			return createErrorExpression("TypeSpecNameSpecifier");
 			break;
 		case clang::NestedNameSpecifier::TypeSpecWithTemplate:
 			// TODO
-			Q_ASSERT(0);
+			if(auto typeRef = dynamic_cast<OOModel::ReferenceExpression*>(convertTypePtr(nestedName->getAsType())))
+				currentRef = typeRef;
+			else
+				Q_ASSERT(0);
 			break;
 		case clang::NestedNameSpecifier::Global:
 			Q_ASSERT(!nestedName->getPrefix());
@@ -174,7 +180,7 @@ OOModel::Expression*CppImportUtilities::translateNestedNameSpecifier(clang::Nest
 	return currentRef;
 }
 
-OOModel::Expression*CppImportUtilities::convertTemplateArgument(const clang::TemplateArgument& templateArg)
+OOModel::Expression* CppImportUtilities::convertTemplateArgument(const clang::TemplateArgument& templateArg)
 {
 	switch(templateArg.getKind())
 	{
@@ -198,8 +204,8 @@ OOModel::Expression*CppImportUtilities::convertTemplateArgument(const clang::Tem
 			std::cout << "EXPANSION #####################################"<<std::endl;
 			return createErrorExpression("Unsupported TemplateArgument EXPANSION");
 		case clang::TemplateArgument::ArgKind::Expression:
-			std::cout << "EXPPRESSION #####################################"<<std::endl;
-			return createErrorExpression("Unsupported TemplateArgument EXPRESSION");
+			exprVisitor_->TraverseStmt(templateArg.getAsExpr());
+			return exprVisitor_->getLastExpression();
 		case clang::TemplateArgument::ArgKind::Pack:
 			std::cout << "PACK #####################################"<<std::endl;
 			return createErrorExpression("Unsupported TemplateArgument PACK");
@@ -557,6 +563,10 @@ OOModel::Expression*CppImportUtilities::convertTypePtr(const clang::Type* type)
 			return ooTypeName;
 		}
 		return ooRef;
+	}
+	else if(auto injectedClass = llvm::dyn_cast<clang::InjectedClassNameType>(type))
+	{
+		translatedType = convertTypePtr(injectedClass->getInjectedTST());
 	}
 	else if(type->isBuiltinType())
 	{
