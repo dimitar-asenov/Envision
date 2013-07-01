@@ -603,6 +603,11 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 		ooVarDecl = new OOModel::Field(varName);
 		module->fields()->append(ooVarDecl);
 	}
+	else if(auto ooClass = dynamic_cast<OOModel::Class*>(ooStack_.top()))
+	{
+		ooVarDecl = new OOModel::Field(varName);
+		ooClass->fields()->append(ooVarDecl);
+	}
 	else if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
 	{
 		ooVarDecl = new OOModel::VariableDeclaration(varName);
