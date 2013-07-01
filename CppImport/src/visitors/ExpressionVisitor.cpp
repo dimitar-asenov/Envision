@@ -40,39 +40,88 @@ void ExpressionVisitor::setUtilities(CppImportUtilities* utils)
 	utils_ = utils;
 }
 
-bool ExpressionVisitor::TraverseConditionalOperator(clang::ConditionalOperator* conditionalOperator)
+OOModel::Expression* ExpressionVisitor::getLastExpression()
 {
-	OOModel::ConditionalExpression* ooConditionalExpr = new OOModel::ConditionalExpression();
-	// traverse condition
-	TraverseStmt(conditionalOperator->getCond());
-	if(!ooExprStack_.empty())
-		ooConditionalExpr->setCondition(ooExprStack_.pop());
-	// traverse true part
-	TraverseStmt(conditionalOperator->getTrueExpr());
-	if(!ooExprStack_.empty())
-		ooConditionalExpr->setTrueExpression(ooExprStack_.pop());
-	// traverse false part
-	TraverseStmt(conditionalOperator->getFalseExpr());
-	if(!ooExprStack_.empty())
-		ooConditionalExpr->setFalseExpression(ooExprStack_.pop());
+	if(!ooExprStack_.empty()) return ooExprStack_.pop();
+	return utils_->createErrorExpression("Could not convert last expression");
+}
 
-	ooExprStack_.push(ooConditionalExpr);
+bool ExpressionVisitor::TraverseMemberExpr(clang::MemberExpr* memberExpr)
+{
+	OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression
+			(QString::fromStdString(memberExpr->getMemberDecl()->getNameAsString()));
+	if(memberExpr->hasExplicitTemplateArgs())
+	{
+		unsigned templateArgs = memberExpr->getNumTemplateArgs();
+		auto astTemplateArgsList = memberExpr->getExplicitTemplateArgs().getTemplateArgs();
+		for(unsigned i = 0; i < templateArgs; i++)
+			ooRef->typeArguments()->append(utils_->convertTemplateArgument(astTemplateArgsList[i].getArgument()));
+	}
+	if(!memberExpr->isImplicitAccess() && memberExpr->getBase())
+	{
+		TraverseStmt(memberExpr->getBase());
+		if(!ooExprStack_.empty()) ooRef->setPrefix(ooExprStack_.pop());
+	}
+	ooExprStack_.push(ooRef);
 	return true;
 }
 
-bool ExpressionVisitor::TraverseCXXThrowExpr(clang::CXXThrowExpr* throwExpr)
+bool ExpressionVisitor::TraverseUnresolvedMemberExpr(clang::UnresolvedMemberExpr* unresolvedMember)
 {
-	OOModel::ThrowExpression* ooThrow = new OOModel::ThrowExpression();
-	// visit throw expression
-	if(auto subExpr = throwExpr->getSubExpr())
+	OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression
+			(QString::fromStdString(unresolvedMember->getMemberName().getAsString()));
+	// template args
+	if(unresolvedMember->hasExplicitTemplateArgs())
 	{
-		TraverseStmt(subExpr);
-		if(!ooExprStack_.empty())
-			ooThrow->setExpr(ooExprStack_.pop());
+		unsigned templateArgs = unresolvedMember->getNumTemplateArgs();
+		auto astTemplateArgsList = unresolvedMember->getExplicitTemplateArgs().getTemplateArgs();
+		for(unsigned i = 0; i < templateArgs; i++)
+			ooRef->typeArguments()->append(utils_->convertTemplateArgument(astTemplateArgsList[i].getArgument()));
 	}
-	else
-		ooThrow->setExpr(new OOModel::EmptyExpression());
-	ooExprStack_.push(ooThrow);
+	if(!unresolvedMember->isImplicitAccess() && unresolvedMember->getBase())
+	{
+		TraverseStmt(unresolvedMember->getBase());
+		if(!ooExprStack_.empty()) ooRef->setPrefix(ooExprStack_.pop());
+	}
+	ooExprStack_.push(ooRef);
+	return true;
+}
+
+bool ExpressionVisitor::TraverseCXXDependentScopeMemberExpr(clang::CXXDependentScopeMemberExpr* dependentScopeMember)
+{
+	OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression
+			(QString::fromStdString(dependentScopeMember->getMember().getAsString()));
+	// template args
+	if(dependentScopeMember->hasExplicitTemplateArgs())
+	{
+		unsigned templateArgs = dependentScopeMember->getNumTemplateArgs();
+		auto astTemplateArgsList = dependentScopeMember->getExplicitTemplateArgs().getTemplateArgs();
+		for(unsigned i = 0; i < templateArgs; i++)
+			ooRef->typeArguments()->append(utils_->convertTemplateArgument(astTemplateArgsList[i].getArgument()));
+	}
+	if(!dependentScopeMember->isImplicitAccess() && dependentScopeMember->getBase())
+	{
+		TraverseStmt(dependentScopeMember->getBase());
+		if(!ooExprStack_.empty()) ooRef->setPrefix(ooExprStack_.pop());
+	}
+
+	ooExprStack_.push(ooRef);
+	return true;
+}
+
+bool ExpressionVisitor::VisitDeclRefExpr(clang::DeclRefExpr* declRefExpr)
+{
+	// TODO: namespace resolution
+	OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression();
+	ooRef->setName(QString::fromStdString(declRefExpr->getDecl()->getNameAsString()));
+	if(declRefExpr->hasExplicitTemplateArgs())
+	{
+		unsigned templateArgs = declRefExpr->getNumTemplateArgs();
+		auto astTemplateArgsList = declRefExpr->getExplicitTemplateArgs().getTemplateArgs();
+		for(unsigned i = 0; i < templateArgs; i++)
+			ooRef->typeArguments()->append(utils_->convertTemplateArgument(astTemplateArgsList[i].getArgument()));
+	}
+	ooExprStack_.push(ooRef);
 	return true;
 }
 
@@ -278,19 +327,32 @@ bool ExpressionVisitor::VisitStringLiteral(clang::StringLiteral* stringLiteral)
 	return true;
 }
 
-bool ExpressionVisitor::VisitDeclRefExpr(clang::DeclRefExpr* declRefExpr)
+bool ExpressionVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constructExpr)
 {
-	// TODO: namespace resolution
-	OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression();
-	ooRef->setName(QString::fromStdString(declRefExpr->getDecl()->getNameAsString()));
-	if(declRefExpr->hasExplicitTemplateArgs())
+	// if is elidable we can directly visit the children
+	if(constructExpr->isElidable())
+		return TraverseStmt(*(constructExpr->child_begin()));
+	// check for lambda
+	if(!constructExpr->getConstructor()->getParent()->isLambda())
 	{
-		unsigned templateArgs = declRefExpr->getNumTemplateArgs();
-		auto astTemplateArgsList = declRefExpr->getExplicitTemplateArgs().getTemplateArgs();
-		for(unsigned i = 0; i < templateArgs; i++)
-			ooRef->typeArguments()->append(utils_->convertTemplateArgument(astTemplateArgsList[i].getArgument()));
+		OOModel::MethodCallExpression* ooMethodCall = new OOModel::MethodCallExpression(
+					QString::fromStdString(constructExpr->getConstructor()->getNameAsString()));
+		for(auto argIt = constructExpr->arg_begin(); argIt != constructExpr->arg_end(); ++argIt)
+		{
+			if(llvm::isa<clang::CXXDefaultArgExpr>(*argIt))
+				// this is a default arg and is not written in the source code
+				continue;
+			TraverseStmt(*argIt);
+			if(!ooExprStack_.empty())
+				ooMethodCall->arguments()->append(ooExprStack_.pop());
+			else
+				log_->writeError(className_, "Could not convert", *argIt);
+		}
+		ooExprStack_.push(ooMethodCall);
+		return true;
 	}
-	ooExprStack_.push(ooRef);
+
+	log_->writeError(className_, "Not handled yet", constructExpr);
 	return true;
 }
 
@@ -350,26 +412,6 @@ bool ExpressionVisitor::VisitCXXThisExpr(clang::CXXThisExpr* thisExpr)
 	return true;
 }
 
-bool ExpressionVisitor::TraverseMemberExpr(clang::MemberExpr* memberExpr)
-{
-	OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression
-			(QString::fromStdString(memberExpr->getMemberDecl()->getNameAsString()));
-	if(memberExpr->hasExplicitTemplateArgs())
-	{
-		unsigned templateArgs = memberExpr->getNumTemplateArgs();
-		auto astTemplateArgsList = memberExpr->getExplicitTemplateArgs().getTemplateArgs();
-		for(unsigned i = 0; i < templateArgs; i++)
-			ooRef->typeArguments()->append(utils_->convertTemplateArgument(astTemplateArgsList[i].getArgument()));
-	}
-	if(!memberExpr->isImplicitAccess() && memberExpr->getBase())
-	{
-		TraverseStmt(memberExpr->getBase());
-		if(!ooExprStack_.empty()) ooRef->setPrefix(ooExprStack_.pop());
-	}
-	ooExprStack_.push(ooRef);
-	return true;
-}
-
 bool ExpressionVisitor::TraverseCXXTypeidExpr(clang::CXXTypeidExpr* typeIdExpr)
 {
 	OOModel::TypeTraitExpression* ooTypeTrait = new OOModel::TypeTraitExpression();
@@ -404,83 +446,6 @@ bool ExpressionVisitor::VisitOverloadExpr(clang::OverloadExpr* overloadExpr)
 	return true;
 }
 
-bool ExpressionVisitor::TraverseUnresolvedMemberExpr(clang::UnresolvedMemberExpr* unresolvedMember)
-{
-	OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression
-			(QString::fromStdString(unresolvedMember->getMemberName().getAsString()));
-	// template args
-	if(unresolvedMember->hasExplicitTemplateArgs())
-	{
-		unsigned templateArgs = unresolvedMember->getNumTemplateArgs();
-		auto astTemplateArgsList = unresolvedMember->getExplicitTemplateArgs().getTemplateArgs();
-		for(unsigned i = 0; i < templateArgs; i++)
-			ooRef->typeArguments()->append(utils_->convertTemplateArgument(astTemplateArgsList[i].getArgument()));
-	}
-	if(!unresolvedMember->isImplicitAccess() && unresolvedMember->getBase())
-	{
-		TraverseStmt(unresolvedMember->getBase());
-		if(!ooExprStack_.empty()) ooRef->setPrefix(ooExprStack_.pop());
-	}
-	ooExprStack_.push(ooRef);
-	return true;
-}
-
-bool ExpressionVisitor::TraverseCXXDependentScopeMemberExpr(clang::CXXDependentScopeMemberExpr* dependentScopeMember)
-{
-	OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression
-			(QString::fromStdString(dependentScopeMember->getMember().getAsString()));
-	// template args
-	if(dependentScopeMember->hasExplicitTemplateArgs())
-	{
-		unsigned templateArgs = dependentScopeMember->getNumTemplateArgs();
-		auto astTemplateArgsList = dependentScopeMember->getExplicitTemplateArgs().getTemplateArgs();
-		for(unsigned i = 0; i < templateArgs; i++)
-			ooRef->typeArguments()->append(utils_->convertTemplateArgument(astTemplateArgsList[i].getArgument()));
-	}
-	if(!dependentScopeMember->isImplicitAccess() && dependentScopeMember->getBase())
-	{
-		TraverseStmt(dependentScopeMember->getBase());
-		if(!ooExprStack_.empty()) ooRef->setPrefix(ooExprStack_.pop());
-	}
-
-	ooExprStack_.push(ooRef);
-	return true;
-}
-
-bool ExpressionVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constructExpr)
-{
-	// if is elidable we can directly visit the children
-	if(constructExpr->isElidable())
-		return TraverseStmt(*(constructExpr->child_begin()));
-	// check for lambda
-	if(!constructExpr->getConstructor()->getParent()->isLambda())
-	{
-		OOModel::MethodCallExpression* ooMethodCall = new OOModel::MethodCallExpression(
-					QString::fromStdString(constructExpr->getConstructor()->getNameAsString()));
-		for(auto argIt = constructExpr->arg_begin(); argIt != constructExpr->arg_end(); ++argIt)
-		{
-			if(llvm::isa<clang::CXXDefaultArgExpr>(*argIt))
-				// this is a default arg and is not written in the source code
-				continue;
-			TraverseStmt(*argIt);
-			if(!ooExprStack_.empty())
-				ooMethodCall->arguments()->append(ooExprStack_.pop());
-			else
-				log_->writeError(className_, "Could not convert", *argIt);
-		}
-		ooExprStack_.push(ooMethodCall);
-		return true;
-	}
-
-	log_->writeError(className_, "Not handled yet", constructExpr);
-	return true;
-}
-
-bool ExpressionVisitor::TraverseCXXTemporaryObjectExpr(clang::CXXTemporaryObjectExpr* tempObjectExpr)
-{
-	return TraverseCXXConstructExpr(tempObjectExpr);
-}
-
 bool ExpressionVisitor::TraverseLambdaExpr(clang::LambdaExpr* lambdaExpr)
 {
 	OOModel::LambdaExpression* ooLambda = new OOModel::LambdaExpression();
@@ -503,10 +468,45 @@ bool ExpressionVisitor::TraverseLambdaExpr(clang::LambdaExpr* lambdaExpr)
 	return true;
 }
 
-OOModel::Expression* ExpressionVisitor::getLastExpression()
+bool ExpressionVisitor::TraverseConditionalOperator(clang::ConditionalOperator* conditionalOperator)
 {
-	if(!ooExprStack_.empty()) return ooExprStack_.pop();
-	return utils_->createErrorExpression("Could not convert last expression");
+	OOModel::ConditionalExpression* ooConditionalExpr = new OOModel::ConditionalExpression();
+	// traverse condition
+	TraverseStmt(conditionalOperator->getCond());
+	if(!ooExprStack_.empty())
+		ooConditionalExpr->setCondition(ooExprStack_.pop());
+	// traverse true part
+	TraverseStmt(conditionalOperator->getTrueExpr());
+	if(!ooExprStack_.empty())
+		ooConditionalExpr->setTrueExpression(ooExprStack_.pop());
+	// traverse false part
+	TraverseStmt(conditionalOperator->getFalseExpr());
+	if(!ooExprStack_.empty())
+		ooConditionalExpr->setFalseExpression(ooExprStack_.pop());
+
+	ooExprStack_.push(ooConditionalExpr);
+	return true;
+}
+
+bool ExpressionVisitor::TraverseCXXThrowExpr(clang::CXXThrowExpr* throwExpr)
+{
+	OOModel::ThrowExpression* ooThrow = new OOModel::ThrowExpression();
+	// visit throw expression
+	if(auto subExpr = throwExpr->getSubExpr())
+	{
+		TraverseStmt(subExpr);
+		if(!ooExprStack_.empty())
+			ooThrow->setExpr(ooExprStack_.pop());
+	}
+	else
+		ooThrow->setExpr(new OOModel::EmptyExpression());
+	ooExprStack_.push(ooThrow);
+	return true;
+}
+
+bool ExpressionVisitor::TraverseCXXTemporaryObjectExpr(clang::CXXTemporaryObjectExpr* tempObjectExpr)
+{
+	return TraverseCXXConstructExpr(tempObjectExpr);
 }
 
 bool ExpressionVisitor::TraverseInitListExpr(clang::InitListExpr* initListExpr)

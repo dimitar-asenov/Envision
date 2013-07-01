@@ -42,13 +42,49 @@ class ExpressionVisitor : public clang::RecursiveASTVisitor <ExpressionVisitor>
 
 		OOModel::Expression* getLastExpression();
 
+		// memberExpr
+		bool TraverseMemberExpr(clang::MemberExpr* memberExpr);
+		bool TraverseUnresolvedMemberExpr(clang::UnresolvedMemberExpr* unresolvedMember);
+		bool TraverseCXXDependentScopeMemberExpr(clang::CXXDependentScopeMemberExpr* dependentScopeMember);
+		// declRefExpr
+		bool VisitDeclRefExpr(clang::DeclRefExpr* declRefExpr);
+		bool VisitDependentScopeDeclRefExpr(clang::DependentScopeDeclRefExpr* dependentScope);
+		// callExpr
+		bool TraverseCXXMemberCallExpr(clang::CXXMemberCallExpr* callExpr);
+		bool TraverseCallExpr(clang::CallExpr* callExpr);
+		bool TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* callExpr);
+		// memory
+		bool TraverseCXXNewExpr(clang::CXXNewExpr* newExpr);
+		bool TraverseCXXDeleteExpr(clang::CXXDeleteExpr* deleteExpr);
+		// Literals
+		bool VisitIntegerLiteral(clang::IntegerLiteral* intLit);
+		bool VisitCXXBoolLiteralExpr(clang::CXXBoolLiteralExpr* boolLitExpr);
+		bool VisitCXXNullPtrLiteralExpr(clang::CXXNullPtrLiteralExpr* nullPtrLitExpr);
+		bool VisitFloatingLiteral(clang::FloatingLiteral* floatLiteral);
+		bool VisitCharacterLiteral(clang::CharacterLiteral* charLiteral);
+		bool VisitStringLiteral(clang::StringLiteral* stringLiteral);
+		// construct expr
+		bool TraverseCXXConstructExpr(clang::CXXConstructExpr* constructExpr);
+		bool TraverseCXXUnresolvedConstructExpr(clang::CXXUnresolvedConstructExpr* unresolvedConstruct);
+
+		bool TraverseParenExpr(clang::ParenExpr* parenthesizedExpr);
+		bool TraverseArraySubscriptExpr(clang::ArraySubscriptExpr* arraySubsrciptExpr);
+
+		bool VisitCXXThisExpr(clang::CXXThisExpr* thisExpr);
+
+		bool TraverseCXXTypeidExpr(clang::CXXTypeidExpr* typeIdExpr);
+
+		bool VisitOverloadExpr(clang::OverloadExpr* overloadExpr);
+
 		bool TraverseLambdaExpr(clang::LambdaExpr* lambdaExpr);
 
 		bool TraverseConditionalOperator(clang::ConditionalOperator* conditionalOperator);
 
 		bool TraverseCXXThrowExpr(clang::CXXThrowExpr* throwExpr);
 
-		bool VisitDependentScopeDeclRefExpr(clang::DependentScopeDeclRefExpr* dependentScope);
+		bool TraverseCXXTemporaryObjectExpr(clang::CXXTemporaryObjectExpr* tempObjectExpr);
+
+		bool TraverseInitListExpr(clang::InitListExpr* initListExpr);
 
 		// casts
 		bool TraverseCStyleCastExpr(clang::CStyleCastExpr* castExpr);
@@ -57,7 +93,6 @@ class ExpressionVisitor : public clang::RecursiveASTVisitor <ExpressionVisitor>
 		bool TraverseCXXReinterpretCastExpr(clang::CXXReinterpretCastExpr* castExpr);
 		bool TraverseCXXStaticCastExpr(clang::CXXStaticCastExpr* castExpr);
 		bool TraverseCXXFunctionalCastExpr(clang::CXXFunctionalCastExpr* castExpr);
-
 		// binary ops
 		bool TraverseBinMul(clang::BinaryOperator* binOp);
 		bool TraverseBinDiv(clang::BinaryOperator* binOp);
@@ -75,7 +110,6 @@ class ExpressionVisitor : public clang::RecursiveASTVisitor <ExpressionVisitor>
 		bool TraverseBinOr(clang::BinaryOperator* binOp);
 		bool TraverseBinLAnd(clang::BinaryOperator* binOp);
 		bool TraverseBinLOr(clang::BinaryOperator* binOp);
-
 		bool TraverseBinComma(clang::BinaryOperator* binOp);
 		bool TraverseBinPtrMemD(clang::BinaryOperator* binOp);
 		bool TraverseBinPtrMemI(clang::BinaryOperator* binOp);
@@ -91,7 +125,6 @@ class ExpressionVisitor : public clang::RecursiveASTVisitor <ExpressionVisitor>
 		bool TraverseBinAndAssign(clang::CompoundAssignOperator* binOp);
 		bool TraverseBinXorAssign(clang::CompoundAssignOperator* binOp);
 		bool TraverseBinOrAssign(clang::CompoundAssignOperator* binOp);
-
 		// unary ops
 		bool TraverseUnaryPostInc(clang::UnaryOperator* uOp);
 		bool TraverseUnaryPostDec(clang::UnaryOperator* uOp);
@@ -103,42 +136,9 @@ class ExpressionVisitor : public clang::RecursiveASTVisitor <ExpressionVisitor>
 		bool TraverseUnaryMinus(clang::UnaryOperator* uOp);
 		bool TraverseUnaryNot(clang::UnaryOperator* uOp);
 		bool TraverseUnaryLNot(clang::UnaryOperator* uOp);
-
 		bool TraverseUnaryReal(clang::UnaryOperator* uOp);
 		bool TraverseUnaryImag(clang::UnaryOperator* uOp);
 		bool TraverseUnaryExtension(clang::UnaryOperator* uOp);
-
-
-		bool TraverseCXXMemberCallExpr(clang::CXXMemberCallExpr* callExpr);
-		bool TraverseCallExpr(clang::CallExpr* callExpr);
-		bool TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* callExpr);
-
-		bool TraverseCXXNewExpr(clang::CXXNewExpr* newExpr);
-		bool TraverseCXXDeleteExpr(clang::CXXDeleteExpr* deleteExpr);
-		bool VisitIntegerLiteral(clang::IntegerLiteral* intLit);
-		bool VisitCXXBoolLiteralExpr(clang::CXXBoolLiteralExpr* boolLitExpr);
-		bool VisitCXXNullPtrLiteralExpr(clang::CXXNullPtrLiteralExpr* nullPtrLitExpr);
-		bool VisitFloatingLiteral(clang::FloatingLiteral* floatLiteral);
-		bool VisitCharacterLiteral(clang::CharacterLiteral* charLiteral);
-		bool VisitStringLiteral(clang::StringLiteral* stringLiteral);
-		bool VisitDeclRefExpr(clang::DeclRefExpr* declRefExpr);
-		bool TraverseCXXUnresolvedConstructExpr(clang::CXXUnresolvedConstructExpr* unresolvedConstruct);
-		bool TraverseParenExpr(clang::ParenExpr* parenthesizedExpr);
-		bool TraverseArraySubscriptExpr(clang::ArraySubscriptExpr* arraySubsrciptExpr);
-		bool VisitCXXThisExpr(clang::CXXThisExpr* thisExpr);
-		bool TraverseMemberExpr(clang::MemberExpr* memberExpr);
-
-		bool TraverseCXXTypeidExpr(clang::CXXTypeidExpr* typeIdExpr);
-
-		bool VisitOverloadExpr(clang::OverloadExpr* overloadExpr);
-		bool TraverseUnresolvedMemberExpr(clang::UnresolvedMemberExpr* unresolvedMember);
-		bool TraverseCXXDependentScopeMemberExpr(clang::CXXDependentScopeMemberExpr* dependentScopeMember);
-
-		bool TraverseCXXConstructExpr(clang::CXXConstructExpr* constructExpr);
-		bool TraverseCXXTemporaryObjectExpr(clang::CXXTemporaryObjectExpr* tempObjectExpr);
-
-		bool TraverseInitListExpr(clang::InitListExpr* initListExpr);
-
 
 	private:
 		QStack<OOModel::Expression*> ooExprStack_;
@@ -149,9 +149,7 @@ class ExpressionVisitor : public clang::RecursiveASTVisitor <ExpressionVisitor>
 
 		bool TraverseBinaryOp(clang::BinaryOperator* binaryOperator);
 		bool TraverseAssignment(clang::BinaryOperator* binaryOperator);
-
 		bool TraverseUnaryOp(clang::UnaryOperator* unaryOperator);
-
 		bool TraverseExplCastExpr(clang::ExplicitCastExpr* castExpr, OOModel::CastExpression::CastKind kind);
 };
 
@@ -189,7 +187,6 @@ inline bool ExpressionVisitor::TraverseBinLAnd(clang::BinaryOperator *binOp)
 {return TraverseBinaryOp(binOp);}
 inline bool ExpressionVisitor::TraverseBinLOr(clang::BinaryOperator *binOp)
 {return TraverseBinaryOp(binOp);}
-
 inline bool ExpressionVisitor::TraverseBinComma(clang::BinaryOperator* binOp)
 {return TraverseBinaryOp(binOp);}
 inline bool ExpressionVisitor::TraverseBinPtrMemD(clang::BinaryOperator* binOp)
@@ -242,7 +239,6 @@ inline bool ExpressionVisitor::TraverseUnaryNot(clang::UnaryOperator* uOp)
 {return TraverseUnaryOp(uOp);}
 inline bool ExpressionVisitor::TraverseUnaryLNot(clang::UnaryOperator* uOp)
 {return TraverseUnaryOp(uOp);}
-
 inline bool ExpressionVisitor::TraverseUnaryReal(clang::UnaryOperator* uOp)
 {return TraverseUnaryOp(uOp);}
 inline bool ExpressionVisitor::TraverseUnaryImag(clang::UnaryOperator* uOp)
