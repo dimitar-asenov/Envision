@@ -374,8 +374,16 @@ bool ExpressionVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constr
 		ooExprStack_.push(ooMethodCall);
 		return true;
 	}
-
-	log_->writeError(className_, "Not handled yet", constructExpr);
+	// clang models lambda construct expressions weird the name of the lambda is in the first argument
+	if(constructExpr->getNumArgs() != 1)
+		log_->writeError(className_, "ContructExpr need inspectation", constructExpr);
+	for(auto argIt = constructExpr->arg_begin(); argIt != constructExpr->arg_end(); ++argIt)
+	{
+		if(llvm::isa<clang::CXXDefaultArgExpr>(*argIt))
+			// this is a default arg and is not written in the source code
+			continue;
+		TraverseStmt(*argIt);
+	}
 	return true;
 }
 
