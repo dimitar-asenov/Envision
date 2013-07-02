@@ -191,33 +191,29 @@ OOModel::Expression* CppImportUtilities::convertTemplateArgument(const clang::Te
 	switch(templateArg.getKind())
 	{
 		case clang::TemplateArgument::ArgKind::Null:
-			std::cout << "NULL #####################################"<<std::endl;
-			return createErrorExpression("Unsupported TemplateArgument NULL");
+			return new OOModel::EmptyExpression();
 		case clang::TemplateArgument::ArgKind::Type:
 			return convertClangType(templateArg.getAsType());
 		case clang::TemplateArgument::ArgKind::Declaration:
 			return new OOModel::ReferenceExpression(QString::fromStdString(templateArg.getAsDecl()->getNameAsString()));
 		case clang::TemplateArgument::ArgKind::NullPtr:
-			std::cout << "NULLPTR #####################################"<<std::endl;
-			return createErrorExpression("Unsupported TemplateArgument NULLPTR");
+			return new OOModel::NullLiteral();
 		case clang::TemplateArgument::ArgKind::Integral:
-			std::cout << "INTEGRAL #####################################"<<std::endl;
-			return createErrorExpression("Unsupported TemplateArgument INTEGRAL");
+			return new OOModel::IntegerLiteral(templateArg.getAsIntegral().getLimitedValue());
 		case clang::TemplateArgument::ArgKind::Template:
 			return new OOModel::ReferenceExpression(
 						QString::fromStdString(templateArg.getAsTemplate().getAsTemplateDecl()->getNameAsString()));
 		case clang::TemplateArgument::ArgKind::TemplateExpansion:
-			std::cout << "EXPANSION #####################################"<<std::endl;
+			// TODO: add support
 			return createErrorExpression("Unsupported TemplateArgument EXPANSION");
 		case clang::TemplateArgument::ArgKind::Expression:
 			exprVisitor_->TraverseStmt(templateArg.getAsExpr());
 			return exprVisitor_->getLastExpression();
 		case clang::TemplateArgument::ArgKind::Pack:
-			std::cout << "PACK #####################################"<<std::endl;
+			// TODO: add support
 			return createErrorExpression("Unsupported TemplateArgument PACK");
 		default:
-			std::cout << "####### " << static_cast<int>(templateArg.getKind()) << std::endl;
-			return createErrorExpression("Unsupported TemplateArgumentLoc");
+			throw CppImportException("Invalid Template Argument kind");
 	}
 }
 
