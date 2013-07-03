@@ -1,0 +1,6 @@
+[
+  { "directory": "/home/luke/BachelorThesis/Envision/CppImport/test",
+    "command": "/usr/bin/clang++ -std=c++0x -Irelative -I/usr/lib/clang/3.3/include/ -c -o test.o test.cpp",
+    "file": "test.cpp" 
+  }
+] 

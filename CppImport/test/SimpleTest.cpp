@@ -47,17 +47,15 @@ namespace CppImport {
 TEST(CppImport, SimpleTest)
 {
 	CppImportManager manager;
-	QString srcPath("/home/luke/BachelorThesis/TestEnvision/Envision/Core/src");
-	QString dbpath("/home/luke/BachelorThesis/TestEnvision/Envision/Core");
-//	QString srcPath("/home/luke/BachelorThesis/Envision/CppImport");
-//	QString dbpath("/home/luke/BachelorThesis/Envision/CppImport");
-	manager.setSrcPath(srcPath, dbpath);
-//	manager.createModel();
+
+//	QString srcPath("/home/luke/BachelorThesis/TestEnvision/Envision/Core/src");
+//	QString dbpath("/home/luke/BachelorThesis/TestEnvision/Envision/Core");
+//	manager.setSrcPath(srcPath, dbpath);
+
+	manager.setupTest();
 
 	Model::Model* model = manager.createModel();
 	Model::Node* top_level = model->root();
-
-	QDir::setCurrent(qApp->applicationDirPath());
 
 	VisualizationManager::instance().mainScene()->addTopLevelItem( new RootItem(top_level));
 	VisualizationManager::instance().mainScene()->listenToModel(model);

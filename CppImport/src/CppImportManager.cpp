@@ -27,6 +27,7 @@
 #include "CppImportManager.h"
 
 #include "ClangFrontendActionFactory.h"
+#include "CppImportException.h"
 
 namespace CppImport {
 
@@ -36,15 +37,17 @@ CppImportManager::~CppImportManager()
 	SAFE_DELETE(myTool_);
 }
 
-bool CppImportManager::setSrcPath(QString& srcpath, QString& dbpath)
+bool CppImportManager::setImportPath(const QString& sourcePath, const QString& compilationDbPath)
 {
 	// set a filter to only get files which are c++ sources
 	QStringList cppFilter;
 	cppFilter << "*.cpp" << "*.cc" << "*.cxx";
-	QDirIterator dirIterator(srcpath, cppFilter, QDir::Files, QDirIterator::Subdirectories);
+	QDirIterator dirIterator(sourcePath, cppFilter, QDir::Files, QDirIterator::Subdirectories);
 	while(dirIterator.hasNext())
 		sources_.push_back(dirIterator.next().toStdString());
-	return setCompilationDbPath(dbpath);
+	if(compilationDbPath.isEmpty())
+		return setCompilationDbPath(sourcePath);
+	return setCompilationDbPath(compilationDbPath);
 }
 
 Model::Model*CppImportManager::createModel()
@@ -55,20 +58,50 @@ Model::Model*CppImportManager::createModel()
 	myTool_->run(frontendActionFactory);
 	frontendActionFactory->outputStatistics();
 	SAFE_DELETE(frontendActionFactory);
+	// reset the path (because clang tool changes it)
+	QDir::setCurrent(qApp->applicationDirPath());
+	// remove the test file if there is one
+	QDir rootDir(QDir::currentPath());
+	rootDir.cdUp();
+	rootDir.cd(QString("CppImport").append(QDir::separator()).append("test"));
+	QFile::remove(rootDir.canonicalPath() + QDir::separator() + "test.cpp");
 	return new Model::Model("CppImport", project);
 }
 
-bool CppImportManager::setCompilationDbPath(QString& path)
+bool CppImportManager::setupTest()
+{
+	// setup the root dir
+	QDir rootDir(QDir::currentPath());
+	rootDir.cdUp();
+	rootDir.cd(QString("CppImport").append(QDir::separator()).append("test"));
+	QString rootPath = rootDir.canonicalPath();
+	// open testSelector file to read in dir
+	QFile selector(rootPath + QDir::separator() + "testSelector");
+	if(!selector.open(QFile::ReadOnly))
+		throw CppImportException("Could not open testSelector file");
+	QTextStream inStream(&selector);
+	QString testDir;
+	while(!inStream.atEnd())
+	{
+		testDir = inStream.readLine();
+		if(!testDir.startsWith("#"))
+			break;
+	}
+	if(testDir.isEmpty())
+		throw CppImportException("No test case uncommented in the testSelector file");
+	// copy the test file to the root dir
+	QFile testFile(rootPath + QDir::separator() + testDir + QDir::separator() + "test.cpp");
+	if(!testFile.copy(rootPath + QDir::separator() + "test.cpp"))
+		throw CppImportException("Could not copy test.cpp file from " + testDir);
+
+	return setImportPath(rootPath);
+}
+
+bool CppImportManager::setCompilationDbPath(const QString& path)
 {
 	std::string Error;
-	compilationDB_ = nullptr;
-	compilationDB_ = clang::tooling::CompilationDatabase::loadFromDirectory(path.toAscii().data(),Error);
-
-	if(!compilationDB_)
-	{
-		std::cout << "Error could not load compilation database :  " << Error << std::endl;
-		return false;
-	}
+	if(!(compilationDB_ = clang::tooling::CompilationDatabase::loadFromDirectory(path.toAscii().data(),Error)))
+		throw CppImportException("No compilation database found : " + QString::fromStdString(Error));
 	return true;
 }
 

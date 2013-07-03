@@ -32,16 +32,42 @@
 
 namespace CppImport {
 
-class CppImportManager
+/**
+ * This is the core manager of the CppImport plugin.
+ * To import C++ code you have to specify a path to import with the \a setImportPath method.
+ *	After having set the source path you can translate the code with the \a createModel method.
+ *
+ * To experiment/test you may want to use the \a setupTest method.
+ */
+class CPPIMPORT_API CppImportManager
 {
 	public:
-		CppImportManager(){}
 		~CppImportManager();
-		bool setSrcPath(QString& srcpath, QString& dbpath);
+
+		/**
+		 * Use this function to set \a sourcePath which you want to import.
+		 * If the path of the compile_commands.json file differs from the \a sourcePath
+		 * please set the \a compilationDbPath
+		 *	returns true if succeeded
+		 */
+		bool setImportPath(const QString& sourcePath, const QString& compilationDbPath = QString());
+
+		/**
+		 * Creates a clang tool and translates the sourcecode to Envision's AST and returns the root
+		 * Be sure to have set the sourcePath before calling this method
+		 */
 		Model::Model* createModel();
 
+		/**
+		 * Imports code from a test.cpp file in a subdirectory of ENVISION_ROOT/CppImport/test
+		 * Specify the directory in the testSelector file.
+		 * Note that the general compile_commands.json file is use so you do not need to provide a compilation database.
+		 *	returns true if succeeded
+		 */
+		bool setupTest();
+
 	protected:
-		bool setCompilationDbPath(QString& path);
+		bool setCompilationDbPath(const QString& path);
 		clang::CompilerInstance compilerInstance_{};
 		clang::tooling::ClangTool* myTool_{};
 		clang::tooling::CompilationDatabase* compilationDB_{};

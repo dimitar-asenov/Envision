@@ -1,0 +1,10 @@
+# SET A DIRECTORY CONTAINING A test.cpp file
+# The test will pick the first line without leading '#'
+#General
+SwitchCase
+TemplateClassSpec
+#TemplateMethodSpec
+#
+#
+#
+#
