@@ -153,12 +153,7 @@ void CppImportLogger::overloadedOpNotSupported(clang::OverloadedOperatorKind kin
 		case clang::OO_Delete: missing = "Delete"; break;
 		case clang::OO_Array_New: missing = "Array_New"; break;
 		case clang::OO_Array_Delete: missing = "Array_Delete"; break;
-		case clang::OO_PlusPlus: missing = "PlusPlus"; break;
-		case clang::OO_MinusMinus: missing = "MinusMinus"; break;
 		case clang::OO_Comma: missing = "Comma"; break;
-		case clang::OO_Arrow: missing = "Arrow"; break;
-		case clang::OO_Call: missing = "Call"; break;
-		case clang::OO_Subscript: missing = "Subscript"; break;
 		case clang::OO_Conditional: missing = "Conditional"; break;
 		default:
 			missing = "Uknown_OVERLOAD";

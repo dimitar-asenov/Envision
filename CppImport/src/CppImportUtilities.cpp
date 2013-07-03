@@ -74,7 +74,7 @@ OOModel::BinaryOperation::OperatorTypes CppImportUtilities::convertClangOpcode
 		case clang::BO_Or: return OOModel::BinaryOperation::OR;
 		case clang::BO_LAnd: return OOModel::BinaryOperation::CONDITIONAL_AND;
 		case clang::BO_LOr: return OOModel::BinaryOperation::CONDITIONAL_OR;
-		default: throw(new CppImportException("Impossible binary operator"));
+		default: throw CppImportException("Impossible binary operator");
 	}
 }
 
@@ -94,7 +94,7 @@ OOModel::AssignmentExpression::AssignmentTypes CppImportUtilities::convertClangA
 		case clang::BO_AndAssign: return OOModel::AssignmentExpression::BIT_AND_ASSIGN;
 		case clang::BO_XorAssign: return OOModel::AssignmentExpression::BIT_XOR_ASSIGN;
 		case clang::BO_OrAssign: return OOModel::AssignmentExpression::BIT_OR_ASSIGN;
-		default: throw(new CppImportException("Impossible assign operator"));
+		default: throw CppImportException("Impossible assign operator");
 	}
 }
 
@@ -112,7 +112,7 @@ OOModel::UnaryOperation::OperatorTypes CppImportUtilities::convertUnaryOpcode(cl
 		case clang::UO_Minus: return OOModel::UnaryOperation::MINUS;
 		case clang::UO_Not: return OOModel::UnaryOperation::COMPLEMENT;
 		case clang::UO_LNot: return OOModel::UnaryOperation::NOT;
-		default: throw(new CppImportException("Unary operation not supported"));
+		default: throw CppImportException("Unary operation not supported");
 	}
 }
 
