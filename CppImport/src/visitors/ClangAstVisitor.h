@@ -27,12 +27,13 @@
 #pragma once
 
 #include "../cppimport_api.h"
-#include "../TranslateManager.h"
+#include "../manager/TranslateManager.h"
 #include "../CppImportLogger.h"
 
 namespace CppImport {
 
 class ExpressionVisitor;
+class TemplateArgumentVisitor;
 
 class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 {
@@ -47,7 +48,10 @@ class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 		Model::Node* popOOStack();
 
 		bool TraverseNamespaceDecl(clang::NamespaceDecl* namespaceDecl);
+		bool TraverseClassTemplateDecl(clang::ClassTemplateDecl* classTemplate);
+		bool TraverseClassTemplateSpecializationDecl(clang::ClassTemplateSpecializationDecl* specializationDecl);
 		bool TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl);
+
 		bool TraverseFunctionDecl(clang::FunctionDecl* functionDecl);
 
 		bool TraverseIfStmt(clang::IfStmt* ifStmt);
@@ -97,6 +101,7 @@ class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 		bool TraverseExplCastExpr(clang::ExplicitCastExpr* castExpr, OOModel::CastExpression::CastKind kind);
 
 		bool TraverseMethodDecl(clang::CXXMethodDecl* methodDecl, OOModel::Method::MethodKind kind);
+		void TraverseClass(clang::CXXRecordDecl* recordDecl, OOModel::Class* ooClass);
 
 		void insertFriendClass(clang::TypeSourceInfo* typeInfo, OOModel::Class* ooClass);
 		void insertFriendFunction(clang::FunctionDecl* friendFunction, OOModel::Class* ooClass);
@@ -112,6 +117,7 @@ class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 		CppImportLogger* log_{};
 		CppImportUtilities* utils_{};
 		ExpressionVisitor* exprVisitor_{};
+		TemplateArgumentVisitor* templArgVisitor_{};
 		clang::SourceManager* sourceManager_{};
 		bool modelSysHeader_{false};
 		bool inBody_{true};

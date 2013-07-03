@@ -25,13 +25,22 @@
  **********************************************************************************************************************/
 
 #include "TranslateManager.h"
-#include "CppImportException.h"
 
 namespace CppImport {
 
 TranslateManager::TranslateManager(CppImportUtilities* utils)
-: utils_(utils)
+	: utils_(utils)
 {}
+
+TranslateManager::~TranslateManager()
+{
+	SAFE_DELETE(nh_);
+}
+
+void TranslateManager::setSourceManager(clang::SourceManager* mngr)
+{
+	nh_->setSourceManager(mngr);
+}
 
 OOModel::Module *TranslateManager::insertNamespace(clang::NamespaceDecl *nd, int depth)
 {
@@ -48,7 +57,7 @@ OOModel::Module *TranslateManager::insertNamespace(clang::NamespaceDecl *nd, int
 
 bool TranslateManager::insertClass(clang::CXXRecordDecl* rDecl, OOModel::Class* ooClass)
 {
-	QString hash = hashRecord(rDecl);
+	const QString hash = nh_->hashRecord(rDecl);
 	// if rdecl is not managed yet add it:
 	if(!classMap_.contains(hash))
 	{
@@ -58,13 +67,36 @@ bool TranslateManager::insertClass(clang::CXXRecordDecl* rDecl, OOModel::Class* 
 	return false;
 }
 
+bool TranslateManager::insertClassTemplate(clang::ClassTemplateDecl* classTemplate, OOModel::Class* ooClass)
+{
+	const QString hash = nh_->hashClassTemplate(classTemplate);
+	if(!classMap_.contains(hash))
+	{
+		classMap_.insert(hash, ooClass);
+		return true;
+	}
+	return false;
+}
+
+bool TranslateManager::insertClassTemplateSpec
+(clang::ClassTemplateSpecializationDecl* classTemplate, OOModel::Class* ooClass)
+{
+	const QString hash = nh_->hashClassTemplateSpec(classTemplate);
+	if(!classMap_.contains(hash))
+	{
+		classMap_.insert(hash, ooClass);
+		return true;
+	}
+	return false;
+}
+
 OOModel::Method* TranslateManager::insertMethodDecl(clang::CXXMethodDecl* mDecl, OOModel::Method::MethodKind kind)
 {
 	OOModel::Method* method = nullptr;
 	// only consider methods where the parent has already been visited
-	if(classMap_.contains(hashRecord(mDecl->getParent())))
+	if(classMap_.contains(nh_->hashRecord(mDecl->getParent())))
 	{
-		QString hash = hashMethod(mDecl);
+		const QString hash = nh_->hashMethod(mDecl);
 		if(!methodMap_.contains(hash))
 			method = addNewMethod(mDecl, kind);
 		else
@@ -89,7 +121,7 @@ OOModel::Method* TranslateManager::insertMethodDecl(clang::CXXMethodDecl* mDecl,
 OOModel::Method* TranslateManager::insertFunctionDecl(clang::FunctionDecl* functionDecl)
 {
 	OOModel::Method* ooFunction = nullptr;
-	QString hash = hashFunction(functionDecl);
+	const QString hash = nh_->hashFunction(functionDecl);
 	if(!functionMap_.contains(hash))
 		ooFunction = addNewFunction(functionDecl);
 	else
@@ -112,7 +144,7 @@ OOModel::Method* TranslateManager::insertFunctionDecl(clang::FunctionDecl* funct
 
 OOModel::Field* TranslateManager::insertField(clang::FieldDecl* fDecl)
 {
-	QString hash = hashRecord(fDecl->getParent());
+	const QString hash = nh_->hashRecord(fDecl->getParent());
 	if(classMap_.contains(hash))
 	{
 		OOModel::Field* field = new OOModel::Field();
@@ -125,7 +157,7 @@ OOModel::Field* TranslateManager::insertField(clang::FieldDecl* fDecl)
 
 OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl, OOModel::Method::MethodKind kind)
 {
-	QString hash = hashMethod(mDecl);
+	const QString hash = nh_->hashMethod(mDecl);
 	OOModel::Method* method = new OOModel::Method(QString::fromStdString(mDecl->getNameAsString()), kind);
 	// process result type
 	OOModel::Expression* restype = utils_->convertClangType(mDecl->getResultType());
@@ -146,9 +178,9 @@ OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl, OOM
 		method->arguments()->append(arg);
 	}
 	// find the correct class to add the method
-	if(classMap_.contains(hashRecord(mDecl->getParent())))
+	if(classMap_.contains(nh_->hashRecord(mDecl->getParent())))
 	{
-		OOModel::Class* parent = classMap_.value(hashRecord(mDecl->getParent()));
+		OOModel::Class* parent = classMap_.value(nh_->hashRecord(mDecl->getParent()));
 		parent->methods()->append(method);
 	}
 	else
@@ -159,7 +191,7 @@ OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl, OOM
 	return method;
 }
 
-OOModel::Method*TranslateManager::addNewFunction(clang::FunctionDecl* functionDecl)
+OOModel::Method* TranslateManager::addNewFunction(clang::FunctionDecl* functionDecl)
 {
 	// add a new method
 	OOModel::Method* ooFunction= new OOModel::Method();
@@ -183,51 +215,14 @@ OOModel::Method*TranslateManager::addNewFunction(clang::FunctionDecl* functionDe
 		ooFunction->arguments()->append(arg);
 	}
 
-	functionMap_.insert(hashFunction(functionDecl),ooFunction);
+	functionMap_.insert(nh_->hashFunction(functionDecl),ooFunction);
 
 	return ooFunction;
 }
 
-QString TranslateManager::hashFunction(clang::FunctionDecl* functionDecl)
-{
-	QString hash = QString::fromStdString(functionDecl->getNameAsString());
-	hash.prepend(QString::fromStdString(functionDecl->getResultType().getAsString()).append("_"));
-	hash.append("_").append(functionDecl->getNumParams());
-
-
-	for(unsigned i = 0; i < functionDecl->param_size(); i++)
-	{
-		hash.append("_").append(QString::fromStdString(functionDecl->getParamDecl(i)->getType().getAsString()));
-	}
-	return hash;
-}
-
-QString TranslateManager::hashMethod(clang::CXXMethodDecl* methodDecl)
-{
-	QString hash = QString::fromStdString(methodDecl->getNameAsString());
-	hash.prepend(QString::fromStdString(methodDecl->getResultType().getCanonicalType().getAsString()).append("_"));
-	hash.append("_").append(QString::fromStdString(methodDecl->getParent()->getNameAsString()));
-	hash.append("_").append(methodDecl->getNumParams());
-
-
-	for(unsigned i = 0; i < methodDecl->param_size(); i++)
-	{
-		hash.append("_").append(QString::fromStdString(methodDecl->getParamDecl(i)->getType().getCanonicalType().getAsString()));
-	}
-	return hash;
-}
-
-QString TranslateManager::hashRecord(clang::RecordDecl* recordDecl)
-{
-	QString hash = QString::fromStdString(recordDecl->getNameAsString());
-	if(auto parentNamedDecl = llvm::dyn_cast<clang::NamedDecl>(recordDecl->getParent()))
-		hash.prepend(QString::fromStdString(parentNamedDecl->getNameAsString()));
-	return hash;
-}
-
 bool TranslateManager::containsClass(clang::CXXRecordDecl* recordDecl)
 {
-	return classMap_.contains(hashRecord(recordDecl));
+	return classMap_.contains(nh_->hashRecord(recordDecl));
 }
 
 }

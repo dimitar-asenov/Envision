@@ -27,35 +27,28 @@
 #pragma once
 
 #include "cppimport_api.h"
-#include "CppImportUtilities.h"
 
 namespace CppImport {
 
-class TranslateManager
+class NodeHasher
 {
 	public:
-		TranslateManager(CppImportUtilities* utils);
-		OOModel::Module* insertNamespace(clang::NamespaceDecl* nd, int depth);
-		bool insertClass(clang::CXXRecordDecl* rDecl, OOModel::Class* ooClass);
-		bool containsClass(clang::CXXRecordDecl* recordDecl);
-		OOModel::Method* insertMethodDecl(clang::CXXMethodDecl* mDecl, OOModel::Method::MethodKind kind);
-		OOModel::Method* insertFunctionDecl(clang::FunctionDecl* functionDecl);
-		OOModel::Field* insertField(clang::FieldDecl* fDecl);
+		NodeHasher();
+		void setSourceManager(clang::SourceManager* mngr);
+
+		const QString hashFunction(const clang::FunctionDecl* functionDecl);
+		const QString hashMethod(const clang::CXXMethodDecl* methodDecl);
+		const QString hashRecord(const clang::RecordDecl* recordDecl);
+		const QString hashClassTemplate(const clang::ClassTemplateDecl* classTemplate);
+		const QString hashClassTemplateSpec(const clang::ClassTemplateSpecializationDecl* classTemplateSpec);
+
+		const QString hashType(const clang::QualType& type);
+		const QString hashTemplateTypeParm(const clang::TemplateTypeParmDecl* parm);
+		const QString hashTemplateTypeParm(const clang::NonTypeTemplateParmDecl* parm);
+		const QString hashTemplateArg(const clang::TemplateArgument& arg);
 
 	private:
-		OOModel::Method* addNewMethod(clang::CXXMethodDecl* mDecl, OOModel::Method::MethodKind kind);
-		OOModel::Method* addNewFunction(clang::FunctionDecl* functionDecl);
-
-		QString hashFunction(clang::FunctionDecl* functionDecl);
-		QString hashMethod(clang::CXXMethodDecl* methodDecl);
-		QString hashRecord(clang::RecordDecl* recordDecl);
-
-		QMap<QString, OOModel::Module*> nameSpaceMap_;
-		QMap<QString, OOModel::Class*> classMap_;
-		QMap<QString, OOModel::Method*> methodMap_;
-		QMap<QString, OOModel::Method*> functionMap_;
-
-		CppImportUtilities* utils_{};
+		clang::SourceManager* srcMngr_{};
 };
 
 }
