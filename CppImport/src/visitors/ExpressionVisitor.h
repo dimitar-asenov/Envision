@@ -147,6 +147,10 @@ class ExpressionVisitor : public clang::RecursiveASTVisitor <ExpressionVisitor>
 		CppImportUtilities* utils_{};
 		QString className_{"ExpressionVisitor"};
 
+		OOModel::ReferenceExpression* createRef(const QString& name, clang::NestedNameSpecifier* qualifier = nullptr,
+															 clang::TemplateArgumentLoc* templateArgs = nullptr,
+															 unsigned numTArgs = 0, clang::Expr* base = nullptr);
+
 		bool TraverseBinaryOp(clang::BinaryOperator* binaryOperator);
 		bool TraverseAssignment(clang::BinaryOperator* binaryOperator);
 		bool TraverseUnaryOp(clang::UnaryOperator* unaryOperator);

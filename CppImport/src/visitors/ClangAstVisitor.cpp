@@ -115,21 +115,11 @@ bool ClangAstVisitor::TraverseNamespaceDecl(clang::NamespaceDecl* namespaceDecl)
 
 bool ClangAstVisitor::TraverseClassTemplateDecl(clang::ClassTemplateDecl* classTemplate)
 {
-	if(!shouldModel(classTemplate->getLocation()))
-		return true;
-	if(!classTemplate->isThisDeclarationADefinition())
+	if(!shouldModel(classTemplate->getLocation()) || !classTemplate->isThisDeclarationADefinition())
 		return true;
 
 	clang::CXXRecordDecl* recordDecl = classTemplate->getTemplatedDecl();
-	OOModel::Class* ooClass = nullptr;
-	QString recordDeclName = QString::fromStdString(recordDecl->getNameAsString());
-	if(recordDecl->isClass())
-		ooClass = new OOModel::Class(recordDeclName,OOModel::Class::ConstructKind::Class);
-	else if(recordDecl->isStruct())
-		ooClass = new OOModel::Class(recordDeclName,OOModel::Class::ConstructKind::Struct);
-	else if(recordDecl->isUnion())
-		ooClass = new OOModel::Class(recordDeclName,OOModel::Class::ConstructKind::Union);
-	if(ooClass)
+	if(auto ooClass = createClass(recordDecl))
 	{
 		if(!trMngr_->insertClassTemplate(classTemplate, ooClass))
 			// this class is already visited
@@ -144,29 +134,17 @@ bool ClangAstVisitor::TraverseClassTemplateDecl(clang::ClassTemplateDecl* classT
 			ooClass->typeArguments()->append(templArgVisitor_->getLastTranslated());
 		}
 	}
-	else
-		log_->writeError(className_, "Unsupported RecordDecl", recordDecl);
 	return true;
 }
 
 bool ClangAstVisitor::TraverseClassTemplateSpecializationDecl
 (clang::ClassTemplateSpecializationDecl* specializationDecl)
 {
-	if(!shouldModel(specializationDecl->getLocation()))
-		return true;
-	if(!specializationDecl->isThisDeclarationADefinition())
+	if(!shouldModel(specializationDecl->getLocation()) || !specializationDecl->isThisDeclarationADefinition())
 		return true;
 
 	clang::CXXRecordDecl* recordDecl = specializationDecl->getSpecializedTemplate()->getTemplatedDecl();
-	OOModel::Class* ooClass = nullptr;
-	QString recordDeclName = QString::fromStdString(recordDecl->getNameAsString());
-	if(recordDecl->isClass())
-		ooClass = new OOModel::Class(recordDeclName,OOModel::Class::ConstructKind::Class);
-	else if(recordDecl->isStruct())
-		ooClass = new OOModel::Class(recordDeclName,OOModel::Class::ConstructKind::Struct);
-	else if(recordDecl->isUnion())
-		ooClass = new OOModel::Class(recordDeclName,OOModel::Class::ConstructKind::Union);
-	if(ooClass)
+	if(auto ooClass = createClass(recordDecl))
 	{
 		if(!trMngr_->insertClassTemplateSpec(specializationDecl, ooClass))
 			// this class is already visited
@@ -177,29 +155,15 @@ bool ClangAstVisitor::TraverseClassTemplateSpecializationDecl
 			ooClass->typeArguments()->append(new OOModel::FormalTypeArgument
 					("#spec", utils_->convertTemplateArgument(specializationDecl->getTemplateArgs().get(i))));
 	}
-	else
-		log_->writeError(className_, "Unsupported RecordDecl", recordDecl);
 	return true;
 }
 
 bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl)
 {
-	if(!shouldModel(recordDecl->getLocation()))
+	if(!shouldModel(recordDecl->getLocation()) || !recordDecl->isThisDeclarationADefinition())
 		return true;
-	if(!recordDecl->isThisDeclarationADefinition())
-	{
-		log_->writeWarning(className_,"This is a forward declaration and is not modeled", recordDecl);
-		return true;
-	}
-	OOModel::Class* ooClass = nullptr;
-	QString recordDeclName = QString::fromStdString(recordDecl->getNameAsString());
-	if(recordDecl->isClass())
-		ooClass = new OOModel::Class(recordDeclName,OOModel::Class::ConstructKind::Class);
-	else if(recordDecl->isStruct())
-		ooClass = new OOModel::Class(recordDeclName,OOModel::Class::ConstructKind::Struct);
-	else if(recordDecl->isUnion())
-		ooClass = new OOModel::Class(recordDeclName,OOModel::Class::ConstructKind::Union);
-	if(ooClass)
+
+	if(auto ooClass = createClass(recordDecl))
 	{
 		if(!trMngr_->insertClass(recordDecl,ooClass))
 			// this class is already visited
@@ -224,31 +188,11 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl)
 
 bool ClangAstVisitor::TraverseFunctionDecl(clang::FunctionDecl* functionDecl)
 {
-	if(!shouldModel(functionDecl->getLocation()))
+	if(!shouldModel(functionDecl->getLocation()) || llvm::isa<clang::CXXMethodDecl>(functionDecl))
 		return true;
-	if(llvm::isa<clang::CXXMethodDecl>(functionDecl))
-		// already handled
-		return true;
-	OOModel::Method* ooFunction = trMngr_->insertFunctionDecl(functionDecl);
-	if(ooFunction)
-	{
-		// only visit the body if we are at the definition
-		if(functionDecl->isThisDeclarationADefinition())
-		{
-			if(ooFunction->items()->size())
-			{
-				log_->writeWarning(className_, "This function is double defined", functionDecl);
-				return true;
-			}
-			ooStack_.push(ooFunction->items());
-			bool inBody = inBody_;
-			inBody_ = true;
-			if(auto body = functionDecl->getBody())
-				TraverseStmt(body);
-			inBody_ = inBody;
-			ooStack_.pop();
-		}
 
+	if(auto ooFunction = trMngr_->insertFunctionDecl(functionDecl))
+	{
 		if(ooFunction->parent())
 			// this function has already been inserted to the model
 			return true;
@@ -265,36 +209,11 @@ bool ClangAstVisitor::TraverseFunctionDecl(clang::FunctionDecl* functionDecl)
 		}
 		else
 			log_->writeError(className_, "uknown where to put function", functionDecl);
-
-		// visit type arguments if any & if not yet visited
-		if(!ooFunction->typeArguments()->size())
-		{
-			if(auto functionTemplate = functionDecl->getDescribedFunctionTemplate())
-			{
-				auto templateParamList = functionTemplate->getTemplateParameters();
-				for( auto templateParam = templateParamList->begin();
-					  templateParam != templateParamList->end(); ++templateParam)
-				{
-					templArgVisitor_->TraverseDecl(*templateParam);
-					ooFunction->typeArguments()->append(templArgVisitor_->getLastTranslated());
-				}
-			}
-			if(auto specArgs = functionDecl->getTemplateSpecializationArgsAsWritten())
-			{
-			unsigned templateArgs = specArgs->NumTemplateArgs;
-			auto astTemplateArgsList = specArgs->getTemplateArgs();
-			for(unsigned i = 0; i < templateArgs; i++)
-				ooFunction->typeArguments()->append(new OOModel::FormalTypeArgument
-							("#spec", utils_->convertTemplateArgument(astTemplateArgsList[i].getArgument())));
-			}
-		}
-		// modifiers
-		ooFunction->modifiers()->set(utils_->convertStorageSpecifier(functionDecl->getStorageClass()));
+		// handle body, typeargs and storage specifier
+		TraverseFunction(functionDecl, ooFunction);
 	}
 	else
-	{
-		log_->writeError(className_, "could no insert function", functionDecl);
-	}
+		log_->writeError(className_, "could not insert function", functionDecl);
 	return true;
 }
 
@@ -894,37 +813,10 @@ bool ClangAstVisitor::TraverseMethodDecl(clang::CXXMethodDecl* methodDecl, OOMod
 			log_->writeError(className_, "no ooModel::method found", methodDecl);
 		return true;
 	}
-	// only visit the body if we are at the definition
-	if(methodDecl->isThisDeclarationADefinition())
-	{
-		if(ooMethod->items()->size())
-		{
-			log_->writeWarning(className_, "This function is double defined", methodDecl);
-			// only consider the first definition
-			return true;
-		}
-		ooStack_.push(ooMethod->items());
-		bool inBody = inBody_;
-		inBody_ = true;
-		TraverseStmt(methodDecl->getBody());
-		inBody_ = inBody;
-		ooStack_.pop();
-	}
-	// visit type arguments if any & if not yet visited
-	if(!ooMethod->typeArguments()->size())
-	{
-		if(auto functionTemplate = methodDecl->getDescribedFunctionTemplate())
-		{
-			auto templateParamList = functionTemplate->getTemplateParameters();
-			for( auto templateParam = templateParamList->begin();
-				  templateParam != templateParamList->end(); ++templateParam)
-				ooMethod->typeArguments()->append(new OOModel::FormalTypeArgument
-															 (QString::fromStdString((*templateParam)->getNameAsString())));
-		}
-	}
+	// handle body, typeargs and storage specifier
+	TraverseFunction(methodDecl, ooMethod);
 	// modifiers
 	ooMethod->modifiers()->set(utils_->convertAccessSpecifier(methodDecl->getAccess()));
-	ooMethod->modifiers()->set(utils_->convertStorageSpecifier(methodDecl->getStorageClass()));
 	// member initializers
 	if(auto constructor = llvm::dyn_cast<clang::CXXConstructorDecl>(methodDecl))
 	{
@@ -989,6 +881,63 @@ void ClangAstVisitor::TraverseClass(clang::CXXRecordDecl* recordDecl, OOModel::C
 	ooClass->modifiers()->set(utils_->convertAccessSpecifier(recordDecl->getAccess()));
 }
 
+void ClangAstVisitor::TraverseFunction(clang::FunctionDecl* functionDecl, OOModel::Method* ooFunction)
+{
+	// only visit the body if we are at the definition
+	if(functionDecl->isThisDeclarationADefinition())
+	{
+		if(ooFunction->items()->size())
+		{
+			log_->writeWarning(className_, "This function is double defined", functionDecl);
+			return;
+		}
+		ooStack_.push(ooFunction->items());
+		bool inBody = inBody_;
+		inBody_ = true;
+		if(auto body = functionDecl->getBody())
+			TraverseStmt(body);
+		inBody_ = inBody;
+		ooStack_.pop();
+	}
+	// visit type arguments if any & if not yet visited
+	if(!ooFunction->typeArguments()->size())
+	{
+		if(auto functionTemplate = functionDecl->getDescribedFunctionTemplate())
+		{
+			auto templateParamList = functionTemplate->getTemplateParameters();
+			for( auto templateParam = templateParamList->begin();
+				  templateParam != templateParamList->end(); ++templateParam)
+			{
+				templArgVisitor_->TraverseDecl(*templateParam);
+				ooFunction->typeArguments()->append(templArgVisitor_->getLastTranslated());
+			}
+		}
+		if(auto specArgs = functionDecl->getTemplateSpecializationArgsAsWritten())
+		{
+		unsigned templateArgs = specArgs->NumTemplateArgs;
+		auto astTemplateArgsList = specArgs->getTemplateArgs();
+		for(unsigned i = 0; i < templateArgs; i++)
+			ooFunction->typeArguments()->append(new OOModel::FormalTypeArgument
+						("#spec", utils_->convertTemplateArgument(astTemplateArgsList[i].getArgument())));
+		}
+	}
+	// modifiers
+	ooFunction->modifiers()->set(utils_->convertStorageSpecifier(functionDecl->getStorageClass()));
+}
+
+OOModel::Class*ClangAstVisitor::createClass(clang::CXXRecordDecl* recordDecl)
+{
+	QString recordDeclName = QString::fromStdString(recordDecl->getNameAsString());
+	if(recordDecl->isClass())
+		return new OOModel::Class(recordDeclName,OOModel::Class::ConstructKind::Class);
+	else if(recordDecl->isStruct())
+		return new OOModel::Class(recordDeclName,OOModel::Class::ConstructKind::Struct);
+	else if(recordDecl->isUnion())
+		return new OOModel::Class(recordDeclName,OOModel::Class::ConstructKind::Union);
+	log_->writeError(className_, "Unsupported RecordDecl", recordDecl);
+	return nullptr;
+}
+
 void ClangAstVisitor::insertFriendClass(clang::TypeSourceInfo* typeInfo, OOModel::Class* ooClass)
 {
 	if(clang::CXXRecordDecl* recordDecl = typeInfo->getType().getTypePtr()->getAsCXXRecordDecl())
@@ -1015,7 +964,6 @@ void ClangAstVisitor::insertFriendFunction(clang::FunctionDecl* friendFunction, 
 
 bool ClangAstVisitor::shouldModel(clang::SourceLocation location)
 {
-//	bool invalid = false;
 	QString fileName;
 	if(auto file = sourceManager_->getPresumedLoc(location).getFilename())
 		fileName = QString(file);
