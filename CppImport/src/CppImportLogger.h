@@ -30,7 +30,7 @@
 
 namespace CppImport {
 
-class CppImportLogger
+class CPPIMPORT_API CppImportLogger
 {
 	public:
 		CppImportLogger();

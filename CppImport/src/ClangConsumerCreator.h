@@ -35,7 +35,7 @@ namespace CppImport {
  * This class is used for clang tools. The CreateASTConsumer method is automatically called
  * by the create method of the FrontendAction factory
  */
-class ClangConsumerCreator : public clang::ASTFrontendAction
+class CPPIMPORT_API ClangConsumerCreator : public clang::ASTFrontendAction
 {
 	public:
 		/**

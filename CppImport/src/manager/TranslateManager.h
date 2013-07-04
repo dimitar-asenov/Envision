@@ -36,7 +36,7 @@ namespace CppImport {
  * This class is to manage the whole translation process.
  * It keeps track of nodes already translated and completes them if needed.
  */
-class TranslateManager
+class CPPIMPORT_API TranslateManager
 {
 	public:
 		TranslateManager(CppImportUtilities* utils);

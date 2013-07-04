@@ -40,7 +40,7 @@ class TemplateArgumentVisitor;
  *
  * One can specify to model system headers with the \a modelSysHeader_ variable.
  */
-class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
+class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 {
 	typedef clang::RecursiveASTVisitor<ClangAstVisitor> Base;
 	public:

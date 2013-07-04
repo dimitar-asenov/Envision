@@ -33,7 +33,7 @@
 
 namespace CppImport {
 
-class ClangFrontendActionFactory : public clang::tooling::FrontendActionFactory
+class CPPIMPORT_API ClangFrontendActionFactory : public clang::tooling::FrontendActionFactory
 {
 	public:
 		/**

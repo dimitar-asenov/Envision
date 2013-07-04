@@ -32,7 +32,7 @@
 
 namespace CppImport {
 
-class ClangAstConsumer : public clang::ASTConsumer
+class CPPIMPORT_API ClangAstConsumer : public clang::ASTConsumer
 {
 	public:
 		ClangAstConsumer(CppImportLogger* log, ClangAstVisitor* visitor);

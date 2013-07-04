@@ -35,7 +35,7 @@ namespace CppImport {
  * The methods should return the same value for full defined clang nodes and declarations.
  * The user of this class has to make sure that the source manager is set and valid.
  */
-class NodeHasher
+class CPPIMPORT_API NodeHasher
 {
 	public:
 		void setSourceManager(const clang::SourceManager* sourceManager);

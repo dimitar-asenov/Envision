@@ -35,7 +35,7 @@ namespace CppImport {
 /**
  * A visitor for template arguments.
  */
-class TemplateArgumentVisitor : public clang::RecursiveASTVisitor <TemplateArgumentVisitor>
+class CPPIMPORT_API TemplateArgumentVisitor : public clang::RecursiveASTVisitor <TemplateArgumentVisitor>
 {
 	public:
 		TemplateArgumentVisitor(ExpressionVisitor* vis, CppImportUtilities* util, CppImportLogger* log);

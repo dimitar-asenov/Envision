@@ -36,7 +36,7 @@ class ExpressionVisitor;
 /**
  * This is a helper class for translation of types operators type arguments and similar stuff.
  */
-class CppImportUtilities
+class CPPIMPORT_API CppImportUtilities
 {
 	public:
 		CppImportUtilities(CppImportLogger* logger, ExpressionVisitor* visitor);

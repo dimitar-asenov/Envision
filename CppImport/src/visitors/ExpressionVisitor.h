@@ -39,7 +39,7 @@ class CppImportUtilities;
  * The way to interact it with it is to call TraverseStmt(someExpr)
  * and then get the translated expression with the  \a getLastExpression method
  */
-class ExpressionVisitor : public clang::RecursiveASTVisitor <ExpressionVisitor>
+class CPPIMPORT_API ExpressionVisitor : public clang::RecursiveASTVisitor <ExpressionVisitor>
 {
 	public:
 		ExpressionVisitor(ClangAstVisitor* visitor, CppImportLogger* log);
