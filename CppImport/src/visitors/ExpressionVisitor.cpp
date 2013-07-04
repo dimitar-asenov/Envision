@@ -403,8 +403,8 @@ bool ExpressionVisitor::VisitCXXThisExpr(clang::CXXThisExpr* thisExpr)
 
 bool ExpressionVisitor::TraverseCXXTypeidExpr(clang::CXXTypeidExpr* typeIdExpr)
 {
-	OOModel::TypeTraitExpression* ooTypeTrait = new OOModel::TypeTraitExpression();
-	ooTypeTrait->setTypeTraitKind(OOModel::TypeTraitExpression::TypeTraitKind::TypeId);
+	OOModel::TypeTraitExpression* ooTypeTrait = new OOModel::TypeTraitExpression
+			(OOModel::TypeTraitExpression::TypeTraitKind::TypeId);
 	if(typeIdExpr->isTypeOperand())
 		ooTypeTrait->setOperand(utils_->translateQualifiedType(typeIdExpr->getTypeOperand()));
 	else
@@ -507,6 +507,36 @@ bool ExpressionVisitor::TraverseInitListExpr(clang::InitListExpr* initListExpr)
 		if(!ooExprStack_.empty()) ooArrayInit->values()->append(ooExprStack_.pop());
 	}
 	ooExprStack_.push(ooArrayInit);
+	return true;
+}
+
+bool ExpressionVisitor::TraverseUnaryExprOrTypeTraitExpr(clang::UnaryExprOrTypeTraitExpr* typeTrait)
+{
+	OOModel::Expression* argument = nullptr;
+	if(typeTrait->isArgumentType())
+		argument = utils_->translateQualifiedType(typeTrait->getArgumentType());
+	else
+	{
+		TraverseStmt(typeTrait->getArgumentExpr());
+		if(!ooExprStack_.empty()) argument = ooExprStack_.pop();
+		else
+		{
+			log_->writeError(className_, "unsupported type trait arg", typeTrait->getArgumentExpr());
+			argument = utils_->createErrorExpression("Unsupported argument");
+		}
+	}
+	auto kind = typeTrait->getKind();
+	if(clang::UETT_SizeOf == kind)
+		ooExprStack_.push(new OOModel::TypeTraitExpression
+								(OOModel::TypeTraitExpression::TypeTraitKind::SizeOf, argument));
+	else if(clang::UETT_AlignOf == kind)
+		ooExprStack_.push(new OOModel::TypeTraitExpression
+								(OOModel::TypeTraitExpression::TypeTraitKind::AlignOf, argument));
+	else
+	{
+		log_->writeError(className_, "unsupported type trait expr", typeTrait);
+		SAFE_DELETE(argument);
+	}
 	return true;
 }
 

@@ -98,6 +98,8 @@ class CPPIMPORT_API ExpressionVisitor : public clang::RecursiveASTVisitor <Expre
 
 		bool TraverseInitListExpr(clang::InitListExpr* initListExpr);
 
+		bool TraverseUnaryExprOrTypeTraitExpr(clang::UnaryExprOrTypeTraitExpr* typeTrait);
+
 		// casts
 		bool TraverseCStyleCastExpr(clang::CStyleCastExpr* castExpr);
 		bool TraverseCXXConstCastExpr(clang::CXXConstCastExpr* castExpr);
