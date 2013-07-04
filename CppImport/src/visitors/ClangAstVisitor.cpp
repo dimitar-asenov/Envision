@@ -925,6 +925,10 @@ void ClangAstVisitor::TraverseFunction(clang::FunctionDecl* functionDecl, OOMode
 	}
 	// modifiers
 	ooFunction->modifiers()->set(utils_->translateStorageSpecifier(functionDecl->getStorageClass()));
+	if(functionDecl->isInlineSpecified())
+		ooFunction->modifiers()->set(OOModel::Modifier::Inline);
+	if(functionDecl->isVirtualAsWritten())
+		ooFunction->modifiers()->set(OOModel::Modifier::Virtual);
 }
 
 OOModel::Class*ClangAstVisitor::createClass(clang::CXXRecordDecl* recordDecl)
