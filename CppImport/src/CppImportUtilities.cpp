@@ -35,7 +35,7 @@ CppImportUtilities::CppImportUtilities(CppImportLogger* logger, ExpressionVisito
 : log_{logger}, exprVisitor_{visitor}
 {}
 
-OOModel::Expression* CppImportUtilities::convertClangType(clang::QualType qualType)
+OOModel::Expression* CppImportUtilities::translateQualifiedType(const clang::QualType qualType)
 {
 	OOModel::Expression* translatedType = convertTypePtr(qualType.getTypePtr());
 	if(qualType.isConstQualified() && qualType.isVolatileQualified())
@@ -49,10 +49,10 @@ OOModel::Expression* CppImportUtilities::convertClangType(clang::QualType qualTy
 	return translatedType;
 }
 
-OOModel::BinaryOperation::OperatorTypes CppImportUtilities::convertClangOpcode
-	(clang::BinaryOperatorKind kind)
+OOModel::BinaryOperation::OperatorTypes CppImportUtilities::translateBinaryOp
+(const clang::BinaryOperatorKind& binaryOpKind)
 {
-	switch (kind)
+	switch (binaryOpKind)
 	{
 		case clang::BO_PtrMemD: return OOModel::BinaryOperation::POINTER_TO_MEMBER;
 		case clang::BO_PtrMemI: return OOModel::BinaryOperation::POINTER_POINTER_TO_MEMBER;
@@ -78,10 +78,10 @@ OOModel::BinaryOperation::OperatorTypes CppImportUtilities::convertClangOpcode
 	}
 }
 
-OOModel::AssignmentExpression::AssignmentTypes CppImportUtilities::convertClangAssignOpcode
-	(clang::BinaryOperatorKind kind)
+OOModel::AssignmentExpression::AssignmentTypes CppImportUtilities::translateAssignOp
+(const clang::BinaryOperatorKind& assignOpKind)
 {
-	switch (kind)
+	switch (assignOpKind)
 	{
 		case clang::BO_Assign: return OOModel::AssignmentExpression::ASSIGN;
 		case clang::BO_MulAssign: return OOModel::AssignmentExpression::TIMES_ASSIGN;
@@ -98,9 +98,10 @@ OOModel::AssignmentExpression::AssignmentTypes CppImportUtilities::convertClangA
 	}
 }
 
-OOModel::UnaryOperation::OperatorTypes CppImportUtilities::convertUnaryOpcode(clang::UnaryOperatorKind kind)
+OOModel::UnaryOperation::OperatorTypes CppImportUtilities::translateUnaryOp
+(const clang::UnaryOperatorKind& unaryOpKind)
 {
-	switch (kind)
+	switch (unaryOpKind)
 	{
 		case clang::UO_PostInc: return OOModel::UnaryOperation::POSTINCREMENT;
 		case clang::UO_PostDec: return OOModel::UnaryOperation::POSTDECREMENT;
@@ -116,9 +117,10 @@ OOModel::UnaryOperation::OperatorTypes CppImportUtilities::convertUnaryOpcode(cl
 	}
 }
 
-OOModel::Modifier::ModifierFlag CppImportUtilities::convertAccessSpecifier(clang::AccessSpecifier as)
+OOModel::Modifier::ModifierFlag CppImportUtilities::translateAccessSpecifier
+(const clang::AccessSpecifier& acessSpecifier)
 {
-	switch (as)
+	switch (acessSpecifier)
 	{
 		case clang::AS_public: return OOModel::Modifier::Public;
 		case clang::AS_protected: return OOModel::Modifier::Protected;
@@ -128,20 +130,21 @@ OOModel::Modifier::ModifierFlag CppImportUtilities::convertAccessSpecifier(clang
 	}
 }
 
-OOModel::Modifier::ModifierFlag CppImportUtilities::convertStorageSpecifier(clang::StorageClass storage)
+OOModel::Modifier::ModifierFlag CppImportUtilities::translateStorageSpecifier
+(const clang::StorageClass& storageClass)
 {
-	switch(storage)
+	switch(storageClass)
 	{
 		case clang::SC_None: return OOModel::Modifier::None;
 		case clang::SC_Static: return OOModel::Modifier::Static;
 		default:
-			log_->storageClassNotSupported(storage);
+			log_->storageClassNotSupported(storageClass);
 			return OOModel::Modifier::None;
 	}
 }
 
-OOModel::Expression*CppImportUtilities::translateNestedNameSpecifier
-(clang::NestedNameSpecifier* nestedName, OOModel::Expression* base)
+OOModel::Expression* CppImportUtilities::translateNestedNameSpecifier
+(const clang::NestedNameSpecifier* nestedName, OOModel::Expression* base)
 {
 	OOModel::ReferenceExpression* currentRef = nullptr;
 	OOModel::Expression* returnExpr = nullptr;
@@ -186,14 +189,14 @@ OOModel::Expression*CppImportUtilities::translateNestedNameSpecifier
 	return returnExpr;
 }
 
-OOModel::Expression* CppImportUtilities::convertTemplateArgument(const clang::TemplateArgument& templateArg)
+OOModel::Expression* CppImportUtilities::translateTemplateArgument(const clang::TemplateArgument& templateArg)
 {
 	switch(templateArg.getKind())
 	{
 		case clang::TemplateArgument::ArgKind::Null:
 			return new OOModel::EmptyExpression();
 		case clang::TemplateArgument::ArgKind::Type:
-			return convertClangType(templateArg.getAsType());
+			return translateQualifiedType(templateArg.getAsType());
 		case clang::TemplateArgument::ArgKind::Declaration:
 			return new OOModel::ReferenceExpression(QString::fromStdString(templateArg.getAsDecl()->getNameAsString()));
 		case clang::TemplateArgument::ArgKind::NullPtr:
@@ -217,9 +220,10 @@ OOModel::Expression* CppImportUtilities::convertTemplateArgument(const clang::Te
 	}
 }
 
-OOModel::BinaryOperation::OperatorTypes CppImportUtilities::translateBinaryOverloadOp(clang::OverloadedOperatorKind kind)
+OOModel::BinaryOperation::OperatorTypes CppImportUtilities::translateBinaryOverloadOp
+(const clang::OverloadedOperatorKind& overloadOpKind)
 {
-	switch(kind)
+	switch(overloadOpKind)
 	{
 		case clang::OO_Plus: return OOModel::BinaryOperation::PLUS;
 		case clang::OO_Minus: return OOModel::BinaryOperation::MINUS;
@@ -246,9 +250,9 @@ OOModel::BinaryOperation::OperatorTypes CppImportUtilities::translateBinaryOverl
 }
 
 OOModel::AssignmentExpression::AssignmentTypes CppImportUtilities::translateAssignOverloadOp
-(clang::OverloadedOperatorKind kind)
+(const clang::OverloadedOperatorKind& overloadOpKind)
 {
-	switch(kind)
+	switch(overloadOpKind)
 	{
 		case clang::OO_Equal: return OOModel::AssignmentExpression::ASSIGN;
 		case clang::OO_PlusEqual: return OOModel::AssignmentExpression::PLUS_ASSIGN;
@@ -266,9 +270,9 @@ OOModel::AssignmentExpression::AssignmentTypes CppImportUtilities::translateAssi
 }
 
 OOModel::UnaryOperation::OperatorTypes CppImportUtilities::translateUnaryOverloadOp
-(clang::OverloadedOperatorKind kind, unsigned numArgs)
+(const clang::OverloadedOperatorKind& overloadOpKind, const unsigned numArgs)
 {
-	switch(kind)
+	switch(overloadOpKind)
 	{
 		case clang::OO_Plus: return OOModel::UnaryOperation::PLUS;
 		case clang::OO_Minus: return OOModel::UnaryOperation::MINUS;
@@ -285,9 +289,9 @@ OOModel::UnaryOperation::OperatorTypes CppImportUtilities::translateUnaryOverloa
 }
 
 CppImportUtilities::OverloadKind CppImportUtilities::getOverloadKind
-(clang::OverloadedOperatorKind kind, unsigned numArgs)
+(const clang::OverloadedOperatorKind& overloadOpKind, unsigned numArgs)
 {
-	switch(kind)
+	switch(overloadOpKind)
 	{
 		//		case clang::OO_New: return OverloadKind::;
 		//		case clang::OO_Delete: return OverloadKind::;
@@ -339,7 +343,7 @@ CppImportUtilities::OverloadKind CppImportUtilities::getOverloadKind
 	}
 }
 
-OOModel::MemberInitializer* CppImportUtilities::translateMemberInit(clang::CXXCtorInitializer* initializer)
+OOModel::MemberInitializer* CppImportUtilities::translateMemberInit(const clang::CXXCtorInitializer* initializer)
 {
 	OOModel::MemberInitializer* ooMemberInit = nullptr;
 	OOModel::Expression* initExpression = nullptr;
@@ -489,13 +493,13 @@ OOModel::Expression*CppImportUtilities::convertTypePtr(const clang::Type* type)
 	else if(auto pointerType = llvm::dyn_cast<clang::PointerType>(type))
 	{
 		OOModel::PointerTypeExpression* ooPtr = new OOModel::PointerTypeExpression();
-		ooPtr->setTypeExpression(convertClangType(pointerType->getPointeeType()));
+		ooPtr->setTypeExpression(translateQualifiedType(pointerType->getPointeeType()));
 		translatedType = ooPtr;
 	}
 	else if(auto refType = llvm::dyn_cast<clang::ReferenceType>(type))
 	{
 		OOModel::ReferenceTypeExpression* ooRef = new OOModel::ReferenceTypeExpression();
-		ooRef->setTypeExpression(convertClangType(refType->getPointeeType()));
+		ooRef->setTypeExpression(translateQualifiedType(refType->getPointeeType()));
 		translatedType = ooRef;
 	}
 	else if(auto enumType = llvm::dyn_cast<clang::EnumType>(type))
@@ -509,25 +513,26 @@ OOModel::Expression*CppImportUtilities::convertTypePtr(const clang::Type* type)
 	else if(auto constArrayType = llvm::dyn_cast<clang::ConstantArrayType>(type))
 	{
 		OOModel::ArrayTypeExpression* ooArrayType = new OOModel::ArrayTypeExpression();
-		ooArrayType->setTypeExpression(convertClangType(constArrayType->getElementType()));
+		ooArrayType->setTypeExpression(translateQualifiedType(constArrayType->getElementType()));
 		ooArrayType->setFixedSize(new OOModel::IntegerLiteral(constArrayType->getSize().getLimitedValue()));
 		translatedType = ooArrayType;
 	}
 	else if(auto incompleteArrayType = llvm::dyn_cast<clang::IncompleteArrayType>(type))
 	{
 		OOModel::ArrayTypeExpression* ooArrayType = new OOModel::ArrayTypeExpression();
-		ooArrayType->setTypeExpression(convertClangType(incompleteArrayType->getElementType()));
+		ooArrayType->setTypeExpression(translateQualifiedType(incompleteArrayType->getElementType()));
 		translatedType = ooArrayType;
 	}
 	else if(auto parenType = llvm::dyn_cast<clang::ParenType>(type))
 	{
 		// TODO: this might not always be a nice solution
 		// to just return the inner type of a parenthesized type
-		translatedType = convertClangType(parenType->getInnerType());
+		translatedType = translateQualifiedType(parenType->getInnerType());
 	}
 	else if(auto typeDefType = llvm::dyn_cast<clang::TypedefType>(type))
 	{
-		translatedType = new OOModel::ReferenceExpression(QString::fromStdString(typeDefType->getDecl()->getNameAsString()));
+		translatedType = new OOModel::ReferenceExpression
+				(QString::fromStdString(typeDefType->getDecl()->getNameAsString()));
 	}
 	else if(auto templateParmType = llvm::dyn_cast<clang::TemplateTypeParmType>(type))
 	{
@@ -538,17 +543,17 @@ OOModel::Expression*CppImportUtilities::convertTypePtr(const clang::Type* type)
 	{
 		// TODO: include templates. (and more?)
 		OOModel::FunctionTypeExpression* ooFunctionType = new OOModel::FunctionTypeExpression();
-		ooFunctionType->results()->append(convertClangType(functionProtoType->getResultType()));
+		ooFunctionType->results()->append(translateQualifiedType(functionProtoType->getResultType()));
 		for(auto argIt = functionProtoType->arg_type_begin(); argIt != functionProtoType->arg_type_end(); ++argIt)
 		{
-			ooFunctionType->arguments()->append(convertClangType(*argIt));
+			ooFunctionType->arguments()->append(translateQualifiedType(*argIt));
 		}
 		translatedType = ooFunctionType;
 	}
 	else if(auto elaboratedType = llvm::dyn_cast<clang::ElaboratedType>(type))
 	{
 		// TODO: this might also have a keyword in front (like e.g. class, typename)
-		translatedType = convertClangType(elaboratedType->getNamedType());
+		translatedType = translateQualifiedType(elaboratedType->getNamedType());
 		if(auto qualifier = elaboratedType->getQualifier())
 			if(auto ooRef = dynamic_cast<OOModel::ReferenceExpression*>(translatedType))
 				ooRef->setPrefix(translateNestedNameSpecifier(qualifier));
@@ -559,7 +564,7 @@ OOModel::Expression*CppImportUtilities::convertTypePtr(const clang::Type* type)
 		ooRef->setName(QString::fromStdString(
 								templateSpecialization->getTemplateName().getAsTemplateDecl()->getNameAsString()));
 		for(auto argIt = templateSpecialization->begin(); argIt != templateSpecialization->end(); ++argIt)
-			ooRef->typeArguments()->append(convertTemplateArgument(*argIt));
+			ooRef->typeArguments()->append(translateTemplateArgument(*argIt));
 		translatedType = ooRef;
 	}
 	else if(auto dependentType = llvm::dyn_cast<clang::DependentNameType>(type))
@@ -592,7 +597,7 @@ OOModel::Expression*CppImportUtilities::convertTypePtr(const clang::Type* type)
 	return translatedType;
 }
 
-OOModel::Expression* CppImportUtilities::createErrorExpression(QString reason)
+OOModel::Expression* CppImportUtilities::createErrorExpression(const QString& reason)
 {
 	OOModel::ErrorExpression* ooError = new OOModel::ErrorExpression();
 	ooError->setPrefix("#");

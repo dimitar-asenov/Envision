@@ -29,12 +29,9 @@
 
 namespace CppImport {
 
-NodeHasher::NodeHasher()
-{}
-
-void NodeHasher::setSourceManager(clang::SourceManager* mngr)
+void NodeHasher::setSourceManager(const clang::SourceManager* sourceManager)
 {
-	srcMngr_ = mngr;
+	srcMngr_ = sourceManager;
 }
 
 const QString NodeHasher::hashFunction(const clang::FunctionDecl* functionDecl)
@@ -125,50 +122,50 @@ const QString NodeHasher::hashType(const clang::QualType& type)
 	return QString::fromStdString(type.getCanonicalType().getAsString());
 }
 
-const QString NodeHasher::hashTemplateTypeParm(const clang::TemplateTypeParmDecl* parm)
+const QString NodeHasher::hashTemplateTypeParm(const clang::TemplateTypeParmDecl* templTypeParam)
 {
-	QString hash = QString::fromStdString(parm->getNameAsString());
-	if(parm->hasDefaultArgument())
-		hash.append("=").append(hashType(parm->getDefaultArgument()));
+	QString hash = QString::fromStdString(templTypeParam->getNameAsString());
+	if(templTypeParam->hasDefaultArgument())
+		hash.append("=").append(hashType(templTypeParam->getDefaultArgument()));
 	return hash;
 }
 
-const QString NodeHasher::hashTemplateTypeParm(const clang::NonTypeTemplateParmDecl* parm)
+const QString NodeHasher::hashTemplateTypeParm(const clang::NonTypeTemplateParmDecl* nonTypeTemplParam)
 {
-	QString hash = QString::fromStdString(parm->getNameAsString());
-	hash.append("_").append(QString::fromStdString(parm->getType().getCanonicalType().getAsString()));
-	if(parm->hasDefaultArgument())
-		hash.append("=").append(QString(srcMngr_->getCharacterData(parm->getDefaultArgumentLoc())));
+	QString hash = QString::fromStdString(nonTypeTemplParam->getNameAsString());
+	hash.append("_").append(QString::fromStdString(nonTypeTemplParam->getType().getCanonicalType().getAsString()));
+	if(nonTypeTemplParam->hasDefaultArgument())
+		hash.append("=").append(QString(srcMngr_->getCharacterData(nonTypeTemplParam->getDefaultArgumentLoc())));
 	return hash;
 }
 
-const QString NodeHasher::hashTemplateArg(const clang::TemplateArgument& arg)
+const QString NodeHasher::hashTemplateArg(const clang::TemplateArgument& templateArg)
 {
 	QString hash;
-	switch(arg.getKind())
+	switch(templateArg.getKind())
 	{
 		case clang::TemplateArgument::ArgKind::Null:
 			hash = "null"; break;
 		case clang::TemplateArgument::ArgKind::Type:
-			hash = hashType(arg.getAsType());
+			hash = hashType(templateArg.getAsType());
 			break;
 		case clang::TemplateArgument::ArgKind::Declaration:
-			hash = QString::fromStdString(arg.getAsDecl()->getNameAsString());
-			hash.prepend("_").prepend(hashType(arg.getAsDecl()->getType()));
+			hash = QString::fromStdString(templateArg.getAsDecl()->getNameAsString());
+			hash.prepend("_").prepend(hashType(templateArg.getAsDecl()->getType()));
 			break;
 		case clang::TemplateArgument::ArgKind::NullPtr:
 			hash = "nullptr"; break;
 		case clang::TemplateArgument::ArgKind::Integral:
-			hash.setNum(arg.getAsIntegral().getLimitedValue());
+			hash.setNum(templateArg.getAsIntegral().getLimitedValue());
 			break;
 		case clang::TemplateArgument::ArgKind::Template:
-			hash = QString::fromStdString(arg.getAsTemplate().getAsTemplateDecl()->getNameAsString());
+			hash = QString::fromStdString(templateArg.getAsTemplate().getAsTemplateDecl()->getNameAsString());
 			break;
 		case clang::TemplateArgument::ArgKind::TemplateExpansion:
 			// TODO: add support
 			hash = "EXPANSION"; break;
 		case clang::TemplateArgument::ArgKind::Expression:
-			hash = QString(srcMngr_->getCharacterData(arg.getAsExpr()->getLocStart()));
+			hash = QString(srcMngr_->getCharacterData(templateArg.getAsExpr()->getLocStart()));
 			break;
 		case clang::TemplateArgument::ArgKind::Pack:
 			// TODO: add support

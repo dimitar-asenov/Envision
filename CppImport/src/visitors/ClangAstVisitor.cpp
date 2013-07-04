@@ -49,7 +49,7 @@ ClangAstVisitor::~ClangAstVisitor()
 	SAFE_DELETE(exprVisitor_);
 }
 
-void ClangAstVisitor::setSourceManager(clang::SourceManager* sourceManager)
+void ClangAstVisitor::setSourceManager(const clang::SourceManager* sourceManager)
 {
 	Q_ASSERT(sourceManager);
 	sourceManager_ = sourceManager;
@@ -153,7 +153,7 @@ bool ClangAstVisitor::TraverseClassTemplateSpecializationDecl
 		// visit type arguments if any
 		for(unsigned i = 0; i < specializationDecl->getTemplateArgs().size(); i++)
 			ooClass->typeArguments()->append(new OOModel::FormalTypeArgument
-					("#spec", utils_->convertTemplateArgument(specializationDecl->getTemplateArgs().get(i))));
+					("#spec", utils_->translateTemplateArgument(specializationDecl->getTemplateArgs().get(i))));
 	}
 	return true;
 }
@@ -340,7 +340,7 @@ bool ClangAstVisitor::TraverseCXXForRangeStmt(clang::CXXForRangeStmt* forRangeSt
 		const clang::VarDecl* loopVar = forRangeStmt->getLoopVariable();
 		itemList->append(ooLoop);
 		ooLoop->setVarName(QString::fromStdString(loopVar->getNameAsString()));
-		ooLoop->setVarType(utils_->convertClangType(loopVar->getType()));
+		ooLoop->setVarType(utils_->translateQualifiedType(loopVar->getType()));
 		bool inBody = inBody_;
 		inBody_ = false;
 		TraverseStmt(forRangeStmt->getRangeInit());
@@ -571,7 +571,7 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 	}
 
 	// set the type
-	ooVarDecl->setTypeExpression(utils_->convertClangType(varDecl->getType()));
+	ooVarDecl->setTypeExpression(utils_->translateQualifiedType(varDecl->getType()));
 
 	if(varDecl->hasInit())
 	{
@@ -589,7 +589,7 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 		inBody_ = inBody;
 	}
 	// modifiers
-	ooVarDecl->modifiers()->set(utils_->convertStorageSpecifier(varDecl->getStorageClass()));
+	ooVarDecl->modifiers()->set(utils_->translateStorageSpecifier(varDecl->getStorageClass()));
 
 	return true;
 }
@@ -660,9 +660,9 @@ bool ClangAstVisitor::TraverseFieldDecl(clang::FieldDecl* fieldDecl)
 		inBody_ = inBody;
 	}
 
-	field->setTypeExpression(utils_->convertClangType(fieldDecl->getType()));
+	field->setTypeExpression(utils_->translateQualifiedType(fieldDecl->getType()));
 	// modifiers
-	field->modifiers()->set(utils_->convertAccessSpecifier(fieldDecl->getAccess()));
+	field->modifiers()->set(utils_->translateAccessSpecifier(fieldDecl->getAccess()));
 	return true;
 }
 
@@ -721,7 +721,7 @@ bool ClangAstVisitor::VisitTypedefNameDecl(clang::TypedefNameDecl* typedefDecl)
 	if(!shouldModel(typedefDecl->getLocation()))
 		return true;
 	OOModel::TypeAlias* ooTypeAlias = new OOModel::TypeAlias();
-	ooTypeAlias->setTypeExpression(utils_->convertClangType(typedefDecl->getUnderlyingType()));
+	ooTypeAlias->setTypeExpression(utils_->translateQualifiedType(typedefDecl->getUnderlyingType()));
 	ooTypeAlias->setName(QString::fromStdString(typedefDecl->getNameAsString()));
 	if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
 		itemList->append(new OOModel::DeclarationStatement(ooTypeAlias));
@@ -816,7 +816,7 @@ bool ClangAstVisitor::TraverseMethodDecl(clang::CXXMethodDecl* methodDecl, OOMod
 	// handle body, typeargs and storage specifier
 	TraverseFunction(methodDecl, ooMethod);
 	// modifiers
-	ooMethod->modifiers()->set(utils_->convertAccessSpecifier(methodDecl->getAccess()));
+	ooMethod->modifiers()->set(utils_->translateAccessSpecifier(methodDecl->getAccess()));
 	// member initializers
 	if(auto constructor = llvm::dyn_cast<clang::CXXConstructorDecl>(methodDecl))
 	{
@@ -835,6 +835,7 @@ bool ClangAstVisitor::TraverseMethodDecl(clang::CXXMethodDecl* methodDecl, OOMod
 
 void ClangAstVisitor::TraverseClass(clang::CXXRecordDecl* recordDecl, OOModel::Class* ooClass)
 {
+	Q_ASSERT(ooClass);
 	// insert in model
 	if(auto curProject = dynamic_cast<OOModel::Project*>(ooStack_.top()))
 		curProject->classes()->append(ooClass);
@@ -874,15 +875,16 @@ void ClangAstVisitor::TraverseClass(clang::CXXRecordDecl* recordDecl, OOModel::C
 
 		// visit base classes
 		for(auto base_itr = recordDecl->bases_begin(); base_itr!=recordDecl->bases_end(); ++base_itr)
-			ooClass->baseClasses()->append(utils_->convertClangType(base_itr->getType()));
+			ooClass->baseClasses()->append(utils_->translateQualifiedType(base_itr->getType()));
 	}
 
 	// set modifiers
-	ooClass->modifiers()->set(utils_->convertAccessSpecifier(recordDecl->getAccess()));
+	ooClass->modifiers()->set(utils_->translateAccessSpecifier(recordDecl->getAccess()));
 }
 
 void ClangAstVisitor::TraverseFunction(clang::FunctionDecl* functionDecl, OOModel::Method* ooFunction)
 {
+	Q_ASSERT(ooFunction);
 	// only visit the body if we are at the definition
 	if(functionDecl->isThisDeclarationADefinition())
 	{
@@ -918,11 +920,11 @@ void ClangAstVisitor::TraverseFunction(clang::FunctionDecl* functionDecl, OOMode
 		auto astTemplateArgsList = specArgs->getTemplateArgs();
 		for(unsigned i = 0; i < templateArgs; i++)
 			ooFunction->typeArguments()->append(new OOModel::FormalTypeArgument
-						("#spec", utils_->convertTemplateArgument(astTemplateArgsList[i].getArgument())));
+						("#spec", utils_->translateTemplateArgument(astTemplateArgsList[i].getArgument())));
 		}
 	}
 	// modifiers
-	ooFunction->modifiers()->set(utils_->convertStorageSpecifier(functionDecl->getStorageClass()));
+	ooFunction->modifiers()->set(utils_->translateStorageSpecifier(functionDecl->getStorageClass()));
 }
 
 OOModel::Class*ClangAstVisitor::createClass(clang::CXXRecordDecl* recordDecl)
@@ -962,7 +964,7 @@ void ClangAstVisitor::insertFriendFunction(clang::FunctionDecl* friendFunction, 
 	ooClass->friends()->append(ooMCall);
 }
 
-bool ClangAstVisitor::shouldModel(clang::SourceLocation location)
+bool ClangAstVisitor::shouldModel(const clang::SourceLocation& location)
 {
 	QString fileName;
 	if(auto file = sourceManager_->getPresumedLoc(location).getFilename())

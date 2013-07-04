@@ -37,7 +37,7 @@ void ClangAstConsumer::HandleTranslationUnit(clang::ASTContext& astContext)
 	astVisitor_->TraverseDecl(astContext.getTranslationUnitDecl());
 }
 
-void ClangAstConsumer::setCompilerInstance(clang::CompilerInstance* compilerInstance)
+void ClangAstConsumer::setCompilerInstance(const clang::CompilerInstance* compilerInstance)
 {
 	Q_ASSERT(compilerInstance);
 	clang::SourceManager* mngr = &compilerInstance->getSourceManager();

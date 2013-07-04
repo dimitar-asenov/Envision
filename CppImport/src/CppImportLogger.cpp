@@ -39,13 +39,13 @@ CppImportLogger::~CppImportLogger()
 	SAFE_DELETE(warnStream_);
 }
 
-void CppImportLogger::setSourceManager(clang::SourceManager* sourceManager)
+void CppImportLogger::setSourceManager(const clang::SourceManager* sourceManager)
 {
 	Q_ASSERT(sourceManager);
 	sourceManger_ = sourceManager;
 }
 
-void CppImportLogger::writeOut(QString &inWhichClass, QString &reason, clang::NamedDecl* decl,
+void CppImportLogger::writeOut(const QString& inWhichClass, const QString& reason, const clang::NamedDecl* decl,
 										 CppImportLogger::OUTTYPE outType)
 {
 	QTextStream* outStream;
@@ -71,7 +71,7 @@ void CppImportLogger::writeOut(QString &inWhichClass, QString &reason, clang::Na
 
 }
 
-void CppImportLogger::writeOut(QString &inWhichClass, QString &reason, clang::Stmt* stmt,
+void CppImportLogger::writeOut(const QString& inWhichClass, const QString& reason, const clang::Stmt* stmt,
 										 CppImportLogger::OUTTYPE outType)
 {
 	if(!stmt)
@@ -97,7 +97,7 @@ void CppImportLogger::writeOut(QString &inWhichClass, QString &reason, clang::St
 
 }
 
-void CppImportLogger::writeError(QString inWhichClass, QString reason, clang::SourceLocation loc)
+void CppImportLogger::writeError(const QString& inWhichClass, const QString& reason, const clang::SourceLocation& loc)
 {
 	std::pair<clang::FileID,unsigned> decomposedLoc = sourceManger_->getDecomposedLoc(loc);
 	(*errStream_) << "ERR/WARN: \t In class : " << inWhichClass << " \n\t reason : " << reason
@@ -106,13 +106,13 @@ void CppImportLogger::writeError(QString inWhichClass, QString reason, clang::So
 					  << "\n";
 }
 
-void CppImportLogger::typeNotSupported(QString typeName)
+void CppImportLogger::typeNotSupported(const QString& typeName)
 {
 	int newCount = typeCountMap_.value(typeName) + 1;
 	typeCountMap_.insert(typeName, newCount);
 }
 
-void CppImportLogger::unaryOpNotSupported(clang::UnaryOperatorKind kind)
+void CppImportLogger::unaryOpNotSupported(const clang::UnaryOperatorKind& kind)
 {
 	QString missing;
 	switch(kind)
@@ -127,7 +127,7 @@ void CppImportLogger::unaryOpNotSupported(clang::UnaryOperatorKind kind)
 	unaryOpMap_.insert(missing,newCount);
 }
 
-void CppImportLogger::storageClassNotSupported(clang::StorageClass sc)
+void CppImportLogger::storageClassNotSupported(const clang::StorageClass& sc)
 {
 	QString missing;
 	switch(sc)
@@ -144,7 +144,7 @@ void CppImportLogger::storageClassNotSupported(clang::StorageClass sc)
 	storageMap_.insert(missing,newCount);
 }
 
-void CppImportLogger::overloadedOpNotSupported(clang::OverloadedOperatorKind kind, bool binary)
+void CppImportLogger::overloadedOpNotSupported(const clang::OverloadedOperatorKind& kind, const bool binary)
 {
 	QString missing;
 	switch(kind)
@@ -197,7 +197,7 @@ void CppImportLogger::outputStatistics()
 						<< "Statistics End" << reset << endl;
 }
 
-void CppImportLogger::printStatistic(const char* message, QMap<QString, int>& map)
+void CppImportLogger::printStatistic(const char* message, const QMap<QString, int>& map)
 {
 	if(!map.empty())
 	{

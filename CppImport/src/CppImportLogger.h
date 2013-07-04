@@ -35,29 +35,29 @@ class CppImportLogger
 	public:
 		CppImportLogger();
 		~CppImportLogger();
-		void setSourceManager(clang::SourceManager* sourceManager);
-		void writeError(QString inWhichClass, QString reason, clang::NamedDecl* decl);
-		void writeWarning(QString inWhichClass, QString reason, clang::NamedDecl* decl);
-		void writeError(QString inWhichClass, QString reason, clang::Stmt* stmt);
-		void writeWarning(QString inWhichClass, QString reason, clang::Stmt* stmt);
+		void setSourceManager(const clang::SourceManager* sourceManager);
+		void writeError(const QString& inWhichClass, const QString& reason, const clang::NamedDecl* decl);
+		void writeWarning(const QString& inWhichClass, const QString& reason, const clang::NamedDecl* decl);
+		void writeError(const QString& inWhichClass, const QString& reason, const clang::Stmt* stmt);
+		void writeWarning(const QString& inWhichClass, const QString& reason, const clang::Stmt* stmt);
 
-		void writeError(QString inWhichClass, QString reason, clang::SourceLocation loc);
+		void writeError(const QString& inWhichClass, const QString& reason, const clang::SourceLocation& loc);
 
-		void typeNotSupported(QString typeName);
+		void typeNotSupported(const QString& typeName);
 
-		void unaryOpNotSupported(clang::UnaryOperatorKind kind);
-		void storageClassNotSupported(clang::StorageClass sc);
+		void unaryOpNotSupported(const clang::UnaryOperatorKind& kind);
+		void storageClassNotSupported(const clang::StorageClass& sc);
 
-		void overloadedOpNotSupported(clang::OverloadedOperatorKind kind, bool binary);
+		void overloadedOpNotSupported(const clang::OverloadedOperatorKind& kind, const bool binary);
 
 		void outputStatistics();
 	private:
 		// type of output for writeOut function
 		enum OUTTYPE {ERROR,WARNING};
-		void writeOut(QString& inWhichClass, QString& reason, clang::NamedDecl* decl, OUTTYPE outType);
-		void writeOut(QString &inWhichClass, QString &reason, clang::Stmt *stmt, OUTTYPE outType);
+		void writeOut(const QString& inWhichClass, const QString& reason, const clang::NamedDecl* decl, OUTTYPE outType);
+		void writeOut(const QString& inWhichClass, const QString& reason, const clang::Stmt *stmt, OUTTYPE outType);
 		void initStreams();
-		void printStatistic(const char* message, QMap<QString,int>& map);
+		void printStatistic(const char* message, const QMap<QString,int>& map);
 
 		// outstreams
 		QTextStream* errStream_{};
@@ -67,7 +67,7 @@ class CppImportLogger
 		bool writeToFile_{false};
 
 		// SourceManager to get file names from clang
-		clang::SourceManager* sourceManger_{};
+		const clang::SourceManager* sourceManger_{};
 
 		QMap<QString,int> countMap_;
 		QMap<QString,int> typeCountMap_;
@@ -76,16 +76,18 @@ class CppImportLogger
 		QMap<QString,int> storageMap_;
 };
 
-inline void CppImportLogger::writeError(QString inWhichClass, QString reason, clang::NamedDecl* decl)
+inline void CppImportLogger::writeError
+(const QString& inWhichClass, const QString& reason, const clang::NamedDecl* decl)
 { writeOut(inWhichClass, reason, decl, ERROR); }
 
-inline void CppImportLogger::writeWarning(QString inWhichClass, QString reason, clang::NamedDecl* decl)
+inline void CppImportLogger::writeWarning
+(const QString& inWhichClass, const QString& reason, const clang::NamedDecl* decl)
 { writeOut(inWhichClass, reason, decl, WARNING); }
 
-inline void CppImportLogger::writeError(QString inWhichClass, QString reason, clang::Stmt* stmt)
+inline void CppImportLogger::writeError(const QString& inWhichClass, const QString& reason, const clang::Stmt* stmt)
 { writeOut(inWhichClass, reason, stmt, ERROR); }
 
-inline void CppImportLogger::writeWarning(QString inWhichClass, QString reason, clang::Stmt* stmt)
+inline void CppImportLogger::writeWarning(const QString& inWhichClass, const QString& reason, const clang::Stmt* stmt)
 { writeOut(inWhichClass, reason, stmt, WARNING); }
 
 }

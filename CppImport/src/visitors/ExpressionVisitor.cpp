@@ -348,7 +348,7 @@ bool ExpressionVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constr
 bool ExpressionVisitor::TraverseCXXUnresolvedConstructExpr(clang::CXXUnresolvedConstructExpr* unresolvedConstruct)
 {
 	OOModel::MethodCallExpression* ooMethodCall = new OOModel::MethodCallExpression();
-	ooMethodCall->setCallee(utils_->convertClangType(unresolvedConstruct->getTypeAsWritten()));
+	ooMethodCall->setCallee(utils_->translateQualifiedType(unresolvedConstruct->getTypeAsWritten()));
 	// visit arguments
 	for(auto argIt = unresolvedConstruct->arg_begin(); argIt!=unresolvedConstruct->arg_end(); ++argIt)
 	{
@@ -406,7 +406,7 @@ bool ExpressionVisitor::TraverseCXXTypeidExpr(clang::CXXTypeidExpr* typeIdExpr)
 	OOModel::TypeTraitExpression* ooTypeTrait = new OOModel::TypeTraitExpression();
 	ooTypeTrait->setTypeTraitKind(OOModel::TypeTraitExpression::TypeTraitKind::TypeId);
 	if(typeIdExpr->isTypeOperand())
-		ooTypeTrait->setOperand(utils_->convertClangType(typeIdExpr->getTypeOperand()));
+		ooTypeTrait->setOperand(utils_->translateQualifiedType(typeIdExpr->getTypeOperand()));
 	else
 	{
 		TraverseStmt(typeIdExpr->getExprOperand());
@@ -429,7 +429,7 @@ bool ExpressionVisitor::VisitOverloadExpr(clang::OverloadExpr* overloadExpr)
 		unsigned templateArgs = overloadExpr->getNumTemplateArgs();
 		auto astTemplateArgsList = overloadExpr->getExplicitTemplateArgs().getTemplateArgs();
 		for(unsigned i = 0; i < templateArgs; i++)
-			ooRef->typeArguments()->append(utils_->convertTemplateArgument(astTemplateArgsList[i].getArgument()));
+			ooRef->typeArguments()->append(utils_->translateTemplateArgument(astTemplateArgsList[i].getArgument()));
 	}
 	ooExprStack_.push(ooRef);
 	return true;
@@ -448,7 +448,7 @@ bool ExpressionVisitor::TraverseLambdaExpr(clang::LambdaExpr* lambdaExpr)
 	{
 		OOModel::FormalArgument* arg = new OOModel::FormalArgument();
 		arg->setName(QString::fromStdString((*it)->getNameAsString()));
-		OOModel::Expression* type = utils_->convertClangType((*it)->getType());
+		OOModel::Expression* type = utils_->translateQualifiedType((*it)->getType());
 		if(type) arg->setTypeExpression(type);
 		ooLambda->arguments()->append(arg);
 	}
@@ -518,7 +518,7 @@ OOModel::ReferenceExpression* ExpressionVisitor::createRef
 	OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression(name);
 	if(templateArgs)
 		for(unsigned i = 0; i < numTArgs; i++)
-			ooRef->typeArguments()->append(utils_->convertTemplateArgument(templateArgs[i].getArgument()));
+			ooRef->typeArguments()->append(utils_->translateTemplateArgument(templateArgs[i].getArgument()));
 	OOModel::Expression* ooBase = nullptr;
 	if(base)
 	{
@@ -552,14 +552,14 @@ bool ExpressionVisitor::TraverseBinaryOp(clang::BinaryOperator* binaryOperator)
 		ooExprStack_.push(new OOModel::CommaExpression(ooLeft, ooRight));
 	else
 		ooExprStack_.push(new OOModel::BinaryOperation
-								(utils_->convertClangOpcode(opcode), ooLeft, ooRight));
+								(utils_->translateBinaryOp(opcode), ooLeft, ooRight));
 	return true;
 }
 
 bool ExpressionVisitor::TraverseAssignment(clang::BinaryOperator* binaryOperator)
 {
 	OOModel::AssignmentExpression* ooBinOp = new OOModel::AssignmentExpression
-			(utils_->convertClangAssignOpcode(binaryOperator->getOpcode()));
+			(utils_->translateAssignOp(binaryOperator->getOpcode()));
 	// left
 	TraverseStmt(binaryOperator->getLHS());
 	if(!ooExprStack_.empty()) ooBinOp->setLeft(ooExprStack_.pop());
@@ -584,7 +584,7 @@ bool ExpressionVisitor::TraverseUnaryOp(clang::UnaryOperator* unaryOperator)
 		log_->unaryOpNotSupported(opcode);
 		return TraverseStmt(unaryOperator->getSubExpr());
 	}
-	OOModel::UnaryOperation* ooUnaryOp = new OOModel::UnaryOperation(utils_->convertUnaryOpcode(opcode));
+	OOModel::UnaryOperation* ooUnaryOp = new OOModel::UnaryOperation(utils_->translateUnaryOp(opcode));
 	// subexpr
 	TraverseStmt(unaryOperator->getSubExpr());
 	if(!ooExprStack_.empty()) ooUnaryOp->setOperand(ooExprStack_.pop());
@@ -598,7 +598,7 @@ bool ExpressionVisitor::TraverseExplCastExpr(clang::ExplicitCastExpr* castExpr, 
 {
 	OOModel::CastExpression* ooCast = new OOModel::CastExpression(kind);
 	// setType to cast to
-	ooCast->setType(utils_->convertClangType(castExpr->getType()));
+	ooCast->setType(utils_->translateQualifiedType(castExpr->getType()));
 	// visit subexpr
 	TraverseStmt(castExpr->getSubExprAsWritten());
 	if(!ooExprStack_.empty()) ooCast->setExpr(ooExprStack_.pop());

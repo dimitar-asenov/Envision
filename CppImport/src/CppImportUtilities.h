@@ -33,37 +33,55 @@ namespace CppImport {
 
 class ExpressionVisitor;
 
+/**
+ * This is a helper class for translation of types operators type arguments and similar stuff.
+ */
 class CppImportUtilities
 {
 	public:
 		CppImportUtilities(CppImportLogger* logger, ExpressionVisitor* visitor);
-		OOModel::Expression* convertClangType(clang::QualType qualType);
-		OOModel::BinaryOperation::OperatorTypes convertClangOpcode(clang::BinaryOperatorKind kind);
-		OOModel::AssignmentExpression::AssignmentTypes convertClangAssignOpcode(clang::BinaryOperatorKind kind);
-		OOModel::UnaryOperation::OperatorTypes convertUnaryOpcode(clang::UnaryOperatorKind kind);
-		OOModel::Modifier::ModifierFlag convertAccessSpecifier(clang::AccessSpecifier as);
-		OOModel::Modifier::ModifierFlag convertStorageSpecifier(clang::StorageClass storage);
 
+		OOModel::Expression* translateQualifiedType(const clang::QualType qualType);
+		OOModel::BinaryOperation::OperatorTypes translateBinaryOp(const clang::BinaryOperatorKind& binaryOpKind);
+		OOModel::AssignmentExpression::AssignmentTypes translateAssignOp(const clang::BinaryOperatorKind& assignOpKind);
+		OOModel::UnaryOperation::OperatorTypes translateUnaryOp(const clang::UnaryOperatorKind& unaryOpKind);
+		OOModel::Modifier::ModifierFlag translateAccessSpecifier(const clang::AccessSpecifier& acessSpecifier);
+		OOModel::Modifier::ModifierFlag translateStorageSpecifier(const clang::StorageClass& storageClass);
+
+		/**
+		 * Translates nested name specifiers. If there is a\a base specified
+		 * it will be put as a prefix of the first namespecifier
+		 * e.g. \c { obj.A::ref } here obj would be the \a base and A the \a nestedName
+		 */
 		OOModel::Expression* translateNestedNameSpecifier
-		(clang::NestedNameSpecifier* nestedName, OOModel::Expression* base = nullptr);
+		(const clang::NestedNameSpecifier* nestedName, OOModel::Expression* base = nullptr);
 
-		OOModel::Expression* convertTemplateArgument(const clang::TemplateArgument& templateArg);
+		OOModel::Expression* translateTemplateArgument(const clang::TemplateArgument& templateArg);
 
-		OOModel::BinaryOperation::OperatorTypes translateBinaryOverloadOp(clang::OverloadedOperatorKind kind);
-		OOModel::AssignmentExpression::AssignmentTypes translateAssignOverloadOp(clang::OverloadedOperatorKind kind);
+		OOModel::BinaryOperation::OperatorTypes translateBinaryOverloadOp
+		(const clang::OverloadedOperatorKind& overloadOpKind);
+		OOModel::AssignmentExpression::AssignmentTypes translateAssignOverloadOp
+		(const clang::OverloadedOperatorKind& overloadOpKind);
 		OOModel::UnaryOperation::OperatorTypes translateUnaryOverloadOp
-		(clang::OverloadedOperatorKind kind, unsigned numArgs);
+		(const clang::OverloadedOperatorKind& overloadOpKind, const unsigned numArgs);
 
 		enum class OverloadKind : int {Unsupported, Unary, Binary, Assign, MethodCall, ReferenceExpr, Comma};
-		OverloadKind getOverloadKind(clang::OverloadedOperatorKind kind, unsigned numArgs);
+		/**
+		 * Determines the kind of an overload operation. e.g. an arrow will return ReferenceExpr
+		 */
+		OverloadKind getOverloadKind(const clang::OverloadedOperatorKind& overloadOpKind, unsigned numArgs);
 
-		OOModel::MemberInitializer* translateMemberInit(clang::CXXCtorInitializer* initializer);
+		OOModel::MemberInitializer* translateMemberInit(const clang::CXXCtorInitializer* initializer);
 
-		OOModel::Expression* createErrorExpression(QString reason);
+		/**
+		 * Creates an error expression which is clearly visible inside envision
+		 * In envision it is represented as a red # and the \a reason string
+		 */
+		OOModel::Expression* createErrorExpression(const QString& reason);
 	private:
 		OOModel::Expression* convertBuiltInClangType(const clang::Type* type);
 		OOModel::Expression* convertTypePtr(const clang::Type* type);
-		QString className_{"CppImportUtilities"};
+		const QString className_{"CppImportUtilities"};
 		CppImportLogger* log_;
 		ExpressionVisitor* exprVisitor_{};
 };

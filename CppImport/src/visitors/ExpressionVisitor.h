@@ -34,12 +34,24 @@ namespace CppImport {
 class ClangAstVisitor;
 class CppImportUtilities;
 
+/**
+ * The expression visitor translates clang expression to envision expression.
+ * The way to interact it with it is to call TraverseStmt(someExpr)
+ * and then get the translated expression with the  \a getLastExpression method
+ */
 class ExpressionVisitor : public clang::RecursiveASTVisitor <ExpressionVisitor>
 {
 	public:
 		ExpressionVisitor(ClangAstVisitor* visitor, CppImportLogger* log);
+		/**
+		 * This function should be called directly after instantiating this visitor.
+		 * The two classes have a dependency on each other.
+		 */
 		void setUtilities(CppImportUtilities* utils);
 
+		/**
+		 * Return the last translated expression or an error expression if it could not translate it.
+		 */
 		OOModel::Expression* getLastExpression();
 
 		// memberExpr
@@ -113,7 +125,7 @@ class ExpressionVisitor : public clang::RecursiveASTVisitor <ExpressionVisitor>
 		bool TraverseBinComma(clang::BinaryOperator* binOp);
 		bool TraverseBinPtrMemD(clang::BinaryOperator* binOp);
 		bool TraverseBinPtrMemI(clang::BinaryOperator* binOp);
-		//     binary assigns
+		// binary assigns
 		bool TraverseBinAssign(clang::BinaryOperator* binOp);
 		bool TraverseBinMulAssign(clang::CompoundAssignOperator* binOp);
 		bool TraverseBinDivAssign(clang::CompoundAssignOperator* binOp);
@@ -145,15 +157,31 @@ class ExpressionVisitor : public clang::RecursiveASTVisitor <ExpressionVisitor>
 		ClangAstVisitor* baseVisitor_{};
 		CppImportLogger* log_{};
 		CppImportUtilities* utils_{};
-		QString className_{"ExpressionVisitor"};
+		const QString className_{"ExpressionVisitor"};
 
+		/**
+		 * Abstracts common code between all kinds of MemberExpr and DeclRefExpr.
+		 * Creates a reference expression with the \a name specified and sets prefixes and type arguments if specified.
+		 */
 		OOModel::ReferenceExpression* createRef(const QString& name, clang::NestedNameSpecifier* qualifier = nullptr,
 															 clang::TemplateArgumentLoc* templateArgs = nullptr,
 															 unsigned numTArgs = 0, clang::Expr* base = nullptr);
 
+		/**
+		 * Helper Function for all binary operations as clang has for each operator an own Traverse method.
+		 */
 		bool TraverseBinaryOp(clang::BinaryOperator* binaryOperator);
+		/**
+		 * Helper Function for all assign operations as clang has for each operator an own Traverse method.
+		 */
 		bool TraverseAssignment(clang::BinaryOperator* binaryOperator);
+		/**
+		 * Helper Function for all unary operations as clang has for each operator an own Traverse method.
+		 */
 		bool TraverseUnaryOp(clang::UnaryOperator* unaryOperator);
+		/**
+		 * Helper Function for all kind of casts.
+		 */
 		bool TraverseExplCastExpr(clang::ExplicitCastExpr* castExpr, OOModel::CastExpression::CastKind kind);
 };
 

@@ -30,11 +30,15 @@
 
 namespace CppImport {
 
+/**
+ * This is a helper class which aims to create unique identifiers for clang nodes.
+ * The methods should return the same value for full defined clang nodes and declarations.
+ * The user of this class has to make sure that the source manager is set and valid.
+ */
 class NodeHasher
 {
 	public:
-		NodeHasher();
-		void setSourceManager(clang::SourceManager* mngr);
+		void setSourceManager(const clang::SourceManager* sourceManager);
 
 		const QString hashFunction(const clang::FunctionDecl* functionDecl);
 		const QString hashMethod(const clang::CXXMethodDecl* methodDecl);
@@ -43,12 +47,12 @@ class NodeHasher
 		const QString hashClassTemplateSpec(const clang::ClassTemplateSpecializationDecl* classTemplateSpec);
 
 		const QString hashType(const clang::QualType& type);
-		const QString hashTemplateTypeParm(const clang::TemplateTypeParmDecl* parm);
-		const QString hashTemplateTypeParm(const clang::NonTypeTemplateParmDecl* parm);
-		const QString hashTemplateArg(const clang::TemplateArgument& arg);
+		const QString hashTemplateTypeParm(const clang::TemplateTypeParmDecl* templTypeParam);
+		const QString hashTemplateTypeParm(const clang::NonTypeTemplateParmDecl* nonTypeTemplParam);
+		const QString hashTemplateArg(const clang::TemplateArgument& templateArg);
 
 	private:
-		clang::SourceManager* srcMngr_{};
+		const clang::SourceManager* srcMngr_{};
 };
 
 }

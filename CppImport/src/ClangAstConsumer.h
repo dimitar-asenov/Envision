@@ -45,7 +45,7 @@ class ClangAstConsumer : public clang::ASTConsumer
 		/**
 		 * Sets the compilerInstance of the logger_ and the astVisitor_ to \a compilerInstance
 		 */
-		void setCompilerInstance(clang::CompilerInstance* compilerInstance);
+		void setCompilerInstance(const clang::CompilerInstance* compilerInstance);
 
 	private:
 		CppImportLogger* logger_{};

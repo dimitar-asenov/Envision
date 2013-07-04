@@ -32,18 +32,45 @@
 
 namespace CppImport {
 
+/**
+ * This class is to manage the whole translation process.
+ * It keeps track of nodes already translated and completes them if needed.
+ */
 class TranslateManager
 {
 	public:
 		TranslateManager(CppImportUtilities* utils);
 		~TranslateManager();
-		void setSourceManager(clang::SourceManager* mngr);
+		void setSourceManager(const clang::SourceManager* mngr);
 		OOModel::Module* insertNamespace(clang::NamespaceDecl* nd, int depth);
+
+		/**
+		 * Inserts the class \a ooClass to the managed class if it is not yet managed.
+		 * Returns true if the class is not yet managed (insert success) else false
+		 */
 		bool insertClass(clang::CXXRecordDecl* rDecl, OOModel::Class* ooClass);
+		/**
+		 * Inserts the class \a ooClass to the managed class if it is not yet managed.
+		 * Returns true if the class is not yet managed (insert success) else false
+		 */
 		bool insertClassTemplate(clang::ClassTemplateDecl* classTemplate, OOModel::Class* ooClass);
+		/**
+		 * Inserts the class \a ooClass to the managed class if it is not yet managed.
+		 * Returns true if the class is not yet managed (insert success) else false
+		 */
 		bool insertClassTemplateSpec(clang::ClassTemplateSpecializationDecl* classTemplate, OOModel::Class* ooClass);
 		bool containsClass(clang::CXXRecordDecl* recordDecl);
+		/**
+		 * Inserts the method \a mDecl to the manager if not yet managed.
+		 * If the method is already managed the arguments may be completed.
+		 * Returns either the new method created or the existing one.
+		 */
 		OOModel::Method* insertMethodDecl(clang::CXXMethodDecl* mDecl, OOModel::Method::MethodKind kind);
+		/**
+		 * Inserts the method \a mDecl to the manager if not yet managed.
+		 * If the method is already managed the arguments may be completed.
+		 * Returns either the new method created or the existing one.
+		 */
 		OOModel::Method* insertFunctionDecl(clang::FunctionDecl* functionDecl);
 		OOModel::Field* insertField(clang::FieldDecl* fDecl);
 

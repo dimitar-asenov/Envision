@@ -34,14 +34,19 @@ namespace CppImport {
 
 class ExpressionVisitor;
 class TemplateArgumentVisitor;
-
+/**
+ * This is the core visitor of the CppImport plugin it translates declarations and statements
+ * from clang's AST to Envision's AST.
+ *
+ * One can specify to model system headers with the \a modelSysHeader_ variable.
+ */
 class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 {
 	typedef clang::RecursiveASTVisitor<ClangAstVisitor> Base;
 	public:
 		ClangAstVisitor(OOModel::Project* project, CppImportLogger* logger);
 		~ClangAstVisitor();
-		void setSourceManager(clang::SourceManager* sourceManager);
+		void setSourceManager(const clang::SourceManager* sourceManager);
 
 		Model::Node* ooStackTop();
 		void pushOOStack(Model::Node* node);
@@ -90,26 +95,47 @@ class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 		bool VisitUsingDecl(clang::UsingDecl* usingDecl);
 		bool VisitUsingDirectiveDecl(clang::UsingDirectiveDecl* usingDirectiveDecl);
 
+		/**
+		 * A helper function called by RecursiveASTVisitor parent class.
+		 * In our case this function should return false because we use a custom traversal strategy.
+		 */
 		bool shouldUseDataRecursionFor(clang::Stmt* S);
 
 	private:
-		bool TraverseBinaryOp(clang::BinaryOperator* binaryOperator);
-		bool TraverseAssignment(clang::BinaryOperator* binaryOperator);
-
-		bool TraverseUnaryOp(clang::UnaryOperator* unaryOperator);
-
-		bool TraverseExplCastExpr(clang::ExplicitCastExpr* castExpr, OOModel::CastExpression::CastKind kind);
-
+		/**
+		 * Abstract function to handle normal member functions, constructors, destructors and conversion functions.
+		 * This method will translate the complete method if \a methodDecl is a definition
+		 */
 		bool TraverseMethodDecl(clang::CXXMethodDecl* methodDecl, OOModel::Method::MethodKind kind);
+
+		/**
+		 * Insert the class in the model and will visit the body and insert base classes.
+		 * It does not visit type arguments they should be handled on the caller site.
+		 */
 		void TraverseClass(clang::CXXRecordDecl* recordDecl, OOModel::Class* ooClass);
+
+		/**
+		 * Abstract function to handle common parts between FunctionDecl and its subclasses.
+		 * This includes traversing the body.
+		 */
 		void TraverseFunction(clang::FunctionDecl* functionDecl, OOModel::Method* ooFunction);
 
+		/**
+		 * Creates a class with the name as specified in \a recordDecl.
+		 * It also sets the correct Kind (class, struct or union)
+		 * if the kind is none of this the method returns a nullptr
+		 */
 		OOModel::Class* createClass(clang::CXXRecordDecl* recordDecl);
+
 
 		void insertFriendClass(clang::TypeSourceInfo* typeInfo, OOModel::Class* ooClass);
 		void insertFriendFunction(clang::FunctionDecl* friendFunction, OOModel::Class* ooClass);
 
-		bool shouldModel(clang::SourceLocation location);
+		/**
+		 * Returns if it is intended to model the code at the \a location.
+		 * The decision is based on wheter the \a location is valid and on the value of \a modelSysHeader_
+		 */
+		bool shouldModel(const clang::SourceLocation& location);
 
 		QStack<Model::Node*> ooStack_;
 		QStack<OOModel::Expression*> ooExprStack_;
@@ -121,10 +147,10 @@ class ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAstVisitor>
 		CppImportUtilities* utils_{};
 		ExpressionVisitor* exprVisitor_{};
 		TemplateArgumentVisitor* templArgVisitor_{};
-		clang::SourceManager* sourceManager_{};
+		const clang::SourceManager* sourceManager_{};
 		bool modelSysHeader_{false};
 		bool inBody_{true};
-		QString className_{"ClangAstVisitor"};
+		const QString className_{"ClangAstVisitor"};
 };
 
 // method
@@ -135,7 +161,7 @@ inline bool ClangAstVisitor::TraverseCXXConstructorDecl(clang::CXXConstructorDec
 inline bool ClangAstVisitor::TraverseCXXDestructorDecl(clang::CXXDestructorDecl *destructorDecl)
 {return TraverseMethodDecl(destructorDecl, OOModel::Method::MethodKind::Destructor); }
 inline bool ClangAstVisitor::TraverseCXXConversionDecl(clang::CXXConversionDecl *conversionDecl)
-// TODO handle explicit keyword
+// TODO: handle explicit keyword
 {return TraverseMethodDecl(conversionDecl, OOModel::Method::MethodKind::Conversion); }
 
 }

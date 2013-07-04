@@ -32,7 +32,9 @@
 #include "ExpressionVisitor.h"
 
 namespace CppImport {
-
+/**
+ * A visitor for template arguments.
+ */
 class TemplateArgumentVisitor : public clang::RecursiveASTVisitor <TemplateArgumentVisitor>
 {
 	public:
@@ -45,7 +47,7 @@ class TemplateArgumentVisitor : public clang::RecursiveASTVisitor <TemplateArgum
 		CppImportUtilities* utils_{};
 		CppImportLogger* log_{};
 		QStack<OOModel::FormalTypeArgument*> typeArgStack_;
-		QString className_{"TemplateArgumentVisitor"};
+		const QString className_{"TemplateArgumentVisitor"};
 };
 
 }

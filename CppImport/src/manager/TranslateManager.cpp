@@ -37,7 +37,7 @@ TranslateManager::~TranslateManager()
 	SAFE_DELETE(nh_);
 }
 
-void TranslateManager::setSourceManager(clang::SourceManager* mngr)
+void TranslateManager::setSourceManager(const clang::SourceManager* mngr)
 {
 	nh_->setSourceManager(mngr);
 }
@@ -160,7 +160,7 @@ OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl, OOM
 	const QString hash = nh_->hashMethod(mDecl);
 	OOModel::Method* method = new OOModel::Method(QString::fromStdString(mDecl->getNameAsString()), kind);
 	// process result type
-	OOModel::Expression* restype = utils_->convertClangType(mDecl->getResultType());
+	OOModel::Expression* restype = utils_->translateQualifiedType(mDecl->getResultType());
 	if(restype)
 	{
 		OOModel::FormalResult* methodResult = new OOModel::FormalResult();
@@ -173,7 +173,7 @@ OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl, OOM
 	{
 		OOModel::FormalArgument* arg = new OOModel::FormalArgument();
 		arg->setName(QString::fromStdString((*it)->getNameAsString()));
-		OOModel::Expression* type = utils_->convertClangType((*it)->getType());
+		OOModel::Expression* type = utils_->translateQualifiedType((*it)->getType());
 		if(type) arg->setTypeExpression(type);
 		method->arguments()->append(arg);
 	}
@@ -197,7 +197,7 @@ OOModel::Method* TranslateManager::addNewFunction(clang::FunctionDecl* functionD
 	OOModel::Method* ooFunction= new OOModel::Method();
 	ooFunction->setName(QString::fromStdString(functionDecl->getNameAsString()));
 	// process result type
-	OOModel::Expression* restype = utils_->convertClangType(functionDecl->getResultType());
+	OOModel::Expression* restype = utils_->translateQualifiedType(functionDecl->getResultType());
 	if(restype)
 	{
 		OOModel::FormalResult* methodResult = new OOModel::FormalResult();
@@ -210,7 +210,7 @@ OOModel::Method* TranslateManager::addNewFunction(clang::FunctionDecl* functionD
 	{
 		OOModel::FormalArgument* arg = new OOModel::FormalArgument();
 		arg->setName(QString::fromStdString((*it)->getNameAsString()));
-		OOModel::Expression* type = utils_->convertClangType((*it)->getType());
+		OOModel::Expression* type = utils_->translateQualifiedType((*it)->getType());
 		if(type) arg->setTypeExpression(type);
 		ooFunction->arguments()->append(arg);
 	}
