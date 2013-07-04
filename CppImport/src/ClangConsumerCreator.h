@@ -24,19 +24,35 @@
  **
  **********************************************************************************************************************/
 
-#include "ClangPPCallbacks.h"
+#pragma once
+
+#include "cppimport_api.h"
+#include "ClangAstConsumer.h"
 
 namespace CppImport {
 
-void ClangPPCallbacks::FileChanged(clang::SourceLocation, clang::PPCallbacks::FileChangeReason,
-											  clang::SrcMgr::CharacteristicKind, clang::FileID)
+/**
+ * This class is used for clang tools. The CreateASTConsumer method is automatically called
+ * by the create method of the FrontendAction factory
+ */
+class ClangConsumerCreator : public clang::ASTFrontendAction
 {
+	public:
+		/**
+		 * \a consumer is the consumer which is returned by the CreateASTConsumer method
+		 */
+		ClangConsumerCreator(ClangAstConsumer* consumer);
+
+		/**
+		 * This method returns the consumer set by the constructor.
+		 *	It updates the compileinstance of the logger and astvisitor of the consumer_
+		 */
+		virtual clang::ASTConsumer* CreateASTConsumer
+			(clang::CompilerInstance& compilerInstance, llvm::StringRef) override;
+
+	private:
+		ClangAstConsumer* consumer_{};
+};
+
 }
 
-void ClangPPCallbacks::InclusionDirective(clang::SourceLocation, const clang::Token&, llvm::StringRef,
-														bool, clang::CharSourceRange, const clang::FileEntry*,
-														llvm::StringRef, llvm::StringRef, const clang::Module*)
-{
-}
-
-}

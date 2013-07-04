@@ -53,30 +53,26 @@ HEADERS += src/precompiled.h \
     src/cppimport.h \
     src/ClangAstConsumer.h \
     src/visitors/ClangAstVisitor.h \
-    src/ClangConsumerFactory.h \
     src/CppImportManager.h \
     src/CppImportUtilities.h \
-    src/ClangPPCallbacks.h \
     src/CppImportLogger.h \
     src/visitors/ExpressionVisitor.h \
-    src/AnnotationHandler.h \
     src/ClangFrontendActionFactory.h \
     src/visitors/TemplateArgumentVisitor.h \
     src/manager/NodeHasher.h \
-    src/manager/TranslateManager.h
+    src/manager/TranslateManager.h \
+    src/ClangConsumerCreator.h
 SOURCES += src/CppImportException.cpp \
 	src/cppimport.cpp \
 	test/SimpleTest.cpp \
     src/ClangAstConsumer.cpp \
     src/visitors/ClangAstVisitor.cpp \
-    src/ClangConsumerFactory.cpp \
     src/CppImportManager.cpp \
     src/CppImportUtilities.cpp \
-    src/ClangPPCallbacks.cpp \
     src/CppImportLogger.cpp \
     src/visitors/ExpressionVisitor.cpp \
-    src/AnnotationHandler.cpp \
     src/ClangFrontendActionFactory.cpp \
     src/visitors/TemplateArgumentVisitor.cpp \
     src/manager/NodeHasher.cpp \
-    src/manager/TranslateManager.cpp
+    src/manager/TranslateManager.cpp \
+    src/ClangConsumerCreator.cpp

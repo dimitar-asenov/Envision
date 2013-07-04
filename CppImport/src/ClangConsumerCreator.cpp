@@ -24,26 +24,19 @@
  **
  **********************************************************************************************************************/
 
-#include "AnnotationHandler.h"
+#include "ClangConsumerCreator.h"
 
 namespace CppImport {
 
+ClangConsumerCreator::ClangConsumerCreator(ClangAstConsumer* consumer)
+: consumer_(consumer)
+{}
 
-bool AnnotationHandler::HandleComment(clang::Preprocessor& pp, clang::SourceRange rng)
+clang::ASTConsumer* ClangConsumerCreator::CreateASTConsumer(clang::CompilerInstance& compilerInstance, llvm::StringRef)
 {
-	clang::SourceManager& sm = pp.getSourceManager();
-	// TODO extend this test to also include other files?
-	if( sm.getFilename(rng.getBegin()) == inFile_)
-	{
-	  std::pair<clang::FileID, unsigned int> startLoc = sm.getDecomposedLoc(rng.getBegin());
-	  std::pair<clang::FileID, unsigned int> endLoc = sm.getDecomposedLoc(rng.getEnd());
-
-	  llvm::StringRef fileData = sm.getBufferData(startLoc.first);
-
-	  std::cout << fileData.substr(startLoc.second, endLoc.second - startLoc.second).str();
-	  std::cout << std::endl;
-	}
-	return false;
+	// set new compiler instance
+	consumer_ ->setCompilerInstance(&compilerInstance);
+	return consumer_;
 }
 
 }

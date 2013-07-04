@@ -28,7 +28,6 @@
 
 #include "cppimport_api.h"
 #include "visitors/ClangAstVisitor.h"
-#include "ClangPPCallbacks.h"
 #include "CppImportLogger.h"
 
 namespace CppImport {
@@ -37,16 +36,21 @@ class ClangAstConsumer : public clang::ASTConsumer
 {
 	public:
 		ClangAstConsumer(CppImportLogger* log, ClangAstVisitor* visitor);
-		~ClangAstConsumer();
-		virtual void HandleTranslationUnit(clang::ASTContext &Context) override;
-		virtual void Initialize(clang::ASTContext &Context) override;
+
+		/**
+		 * Starts the astVisitor_ on this translation unit
+		 */
+		virtual void HandleTranslationUnit(clang::ASTContext& astContext) override;
+
+		/**
+		 * Sets the compilerInstance of the logger_ and the astVisitor_ to \a compilerInstance
+		 */
 		void setCompilerInstance(clang::CompilerInstance* compilerInstance);
 
 	private:
 		CppImportLogger* logger_{};
 		ClangAstVisitor* astVisitor_{};
 		clang::CompilerInstance* ci_{};
-		ClangPPCallbacks* ppCallBacks_{};
 };
 
 }

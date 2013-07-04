@@ -1,6 +1,6 @@
 #include "ClangFrontendActionFactory.h"
 
-#include "ClangConsumerFactory.h"
+#include "ClangConsumerCreator.h"
 
 namespace CppImport {
 
@@ -18,7 +18,7 @@ ClangFrontendActionFactory::~ClangFrontendActionFactory()
 
 clang::FrontendAction* ClangFrontendActionFactory::create()
 {
-	return new ClangConsumerFactory(new ClangAstConsumer(logger_, visitor_));
+	return new ClangConsumerCreator(new ClangAstConsumer(logger_, visitor_));
 }
 
 void ClangFrontendActionFactory::outputStatistics()

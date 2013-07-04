@@ -27,8 +27,6 @@
 #pragma once
 
 #include "cppimport_api.h"
-#include "ClangAstConsumer.h"
-#include "ClangConsumerFactory.h"
 
 namespace CppImport {
 

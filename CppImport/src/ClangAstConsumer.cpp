@@ -30,28 +30,11 @@ namespace CppImport {
 
 ClangAstConsumer::ClangAstConsumer(CppImportLogger* log, ClangAstVisitor* visitor)
 : clang::ASTConsumer(), logger_(log), astVisitor_(visitor)
-{
-	ppCallBacks_ = new ClangPPCallbacks();
-}
+{}
 
-ClangAstConsumer::~ClangAstConsumer()
+void ClangAstConsumer::HandleTranslationUnit(clang::ASTContext& astContext)
 {
-	SAFE_DELETE(ppCallBacks_);
-}
-
-void ClangAstConsumer::HandleTranslationUnit(clang::ASTContext &Context)
-{
-	Context.getTranslationUnitDecl();
-	astVisitor_->TraverseDecl(Context.getTranslationUnitDecl());
-}
-
-void ClangAstConsumer::Initialize(clang::ASTContext &Context)
-{
-	Context.getRawCommentList();
-	if(ci_)
-	{
-		ci_->getPreprocessor().addPPCallbacks(ppCallBacks_);
-	}
+	astVisitor_->TraverseDecl(astContext.getTranslationUnitDecl());
 }
 
 void ClangAstConsumer::setCompilerInstance(clang::CompilerInstance* compilerInstance)
