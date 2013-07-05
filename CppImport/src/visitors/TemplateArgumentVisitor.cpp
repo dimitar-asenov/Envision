@@ -9,11 +9,20 @@ TemplateArgumentVisitor::TemplateArgumentVisitor
 
 OOModel::FormalTypeArgument*TemplateArgumentVisitor::getLastTranslated()
 {
-	if(!typeArgStack_.empty())
-		return typeArgStack_.pop();
-	// TODO:
-//	log_->writeError(className_, "Could not convert");
-	return new OOModel::FormalTypeArgument("#ERROR");
+	Q_ASSERT(!typeArgStack_.empty());
+	return typeArgStack_.pop();
+}
+
+bool TemplateArgumentVisitor::TraverseDecl(clang::Decl* decl)
+{
+	if(!llvm::isa<clang::TemplateTypeParmDecl>(decl) && !llvm::isa<clang::NonTypeTemplateParmDecl>(decl))
+	{
+		log_->writeError(className_, "Can not handle this decl with this visitor", decl->getLocStart());
+		typeArgStack_.push(new OOModel::FormalTypeArgument("#ERROR"));
+		return true;
+ 	}
+	// dispatch to the correct function
+	return RecursiveASTVisitor<TemplateArgumentVisitor>::TraverseDecl(decl);
 }
 
 bool TemplateArgumentVisitor::TraverseTemplateTypeParmDecl(clang::TemplateTypeParmDecl* templateParm)
