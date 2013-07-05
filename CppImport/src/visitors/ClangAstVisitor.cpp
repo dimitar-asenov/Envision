@@ -389,20 +389,33 @@ bool ClangAstVisitor::TraverseDeclStmt(clang::DeclStmt* declStmt)
 	}
 	if(!declStmt->isSingleDecl())
 	{
-		log_->writeWarning(className_, "Decl Stmt with multiple decl needs inspection", declStmt);
 		OOModel::CommaExpression* ooComma = new OOModel::CommaExpression();
-		// TODO: fix this section
 		bool inBody = inBody_;
 		inBody_ = false;
-		auto declIt = declStmt->decl_begin();
-		TraverseDecl(*declIt);
-		if(!ooExprStack_.empty())
-			ooComma->setLeft(ooExprStack_.pop());
-		if(++declIt != declStmt->decl_end())
+		QList<OOModel::Expression*> exprList;
+		for(auto declIt = declStmt->decl_begin(); declIt != declStmt->decl_end(); declIt++)
 		{
 			TraverseDecl(*declIt);
 			if(!ooExprStack_.empty())
-				ooComma->setRight(ooExprStack_.pop());
+				exprList.append(ooExprStack_.pop());
+			else
+				log_->writeError(className_, "unsupported decl", (*declIt)->getLocStart());
+		}
+		int size = exprList.size();
+		auto currentCommaExpr = ooComma;
+		for(int i = 0; i < size; i++)
+		{
+			if((i+2) < size)
+			{
+				currentCommaExpr->setLeft(exprList.at(i));
+				auto next = new OOModel::CommaExpression();
+				currentCommaExpr->setRight(next);
+				currentCommaExpr = next;
+			}
+			else if((i+1) < size)
+				currentCommaExpr->setLeft(exprList.at(i));
+			else
+				currentCommaExpr->setRight(exprList.at(i));
 		}
 
 		if(!(inBody_ = inBody))
@@ -524,7 +537,7 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 	else if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
 	{
 		ooVarDecl = new OOModel::VariableDeclaration(varName);
-		// TODO: remove variabledeclaration expression?
+		// TODO: remove variabledeclaration expression as soon we have a DeclarationStatement
 		itemList->append(new OOModel::ExpressionStatement(new OOModel::VariableDeclarationExpression(ooVarDecl)));
 	}
 	else
@@ -602,13 +615,10 @@ bool ClangAstVisitor::TraverseFieldDecl(clang::FieldDecl* fieldDecl)
 {
 	if(!shouldModel(fieldDecl->getLocation()))
 		return true;
-	// TODO: field implementation is missing a lot of things
 	OOModel::Field* field = trMngr_->insertField(fieldDecl);
 	if(!field)
 	{
 		log_->writeError(className_, "no parent found for this field", fieldDecl);
-		// TODO
-		// return false;
 		return true;
 	}
 	if(fieldDecl->hasInClassInitializer())
