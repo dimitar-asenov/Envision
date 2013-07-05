@@ -4,6 +4,7 @@ void sFunction(int arg)
 {
  switch(arg)
  {
+   std::cout << "pre amble";
    case 0:
      return;
    case 1:
@@ -19,7 +20,8 @@ void sFunction(int arg)
    default:
      std::cout << "default";
      std::cout << std::endl;
-     return;
+     break;
+   return;
  }
 }
 

@@ -64,7 +64,6 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		bool TraverseDoStmt(clang::DoStmt* doStmt);
 		bool TraverseForStmt(clang::ForStmt* forStmt);
 		bool TraverseCXXForRangeStmt(clang::CXXForRangeStmt* forRangeStmt);
-		bool TraverseSwitchStmt(clang::SwitchStmt* switchStmt);
 		bool TraverseReturnStmt(clang::ReturnStmt* returnStmt);
 		bool TraverseDeclStmt(clang::DeclStmt* declStmt);
 
@@ -84,6 +83,7 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 
 		bool TraverseFieldDecl(clang::FieldDecl* fieldDecl);
 
+		bool TraverseSwitchStmt(clang::SwitchStmt* switchStmt);
 		bool TraverseCaseStmt(clang::CaseStmt* caseStmt);
 		bool TraverseDefaultStmt(clang::DefaultStmt* defaultStmt);
 
