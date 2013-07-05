@@ -1,6 +1,8 @@
 # SET A DIRECTORY CONTAINING A test.cpp file
 # The test will pick the first line without leading '#'
 #General
+path:/home/luke/BachelorThesis/TestEnvision/Envision/VisualizationBase
+DeclStmt
 SwitchCase
 TemplateClassSpec
 #TemplateMethodSpec

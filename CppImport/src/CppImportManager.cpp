@@ -81,18 +81,30 @@ bool CppImportManager::setupTest()
 		throw CppImportException("Could not open testSelector file");
 	QTextStream inStream(&selector);
 	QString testDir;
+	bool isPath = false;
 	while(!inStream.atEnd())
 	{
 		testDir = inStream.readLine();
+		if(testDir.startsWith("path:"))
+		{
+			testDir.replace(0,5,"");
+			isPath = true;
+			break;
+		}
 		if(!testDir.startsWith("#"))
 			break;
 	}
 	if(testDir.isEmpty())
 		throw CppImportException("No test case uncommented in the testSelector file");
-	// copy the test file to the root dir
-	QFile testFile(rootPath + QDir::separator() + testDir + QDir::separator() + "test.cpp");
-	if(!testFile.copy(rootPath + QDir::separator() + "test.cpp"))
-		throw CppImportException("Could not copy test.cpp file from " + testDir);
+	if(isPath)
+		rootPath = testDir;
+	else
+	{
+		// copy the test file to the root dir
+		QFile testFile(rootPath + QDir::separator() + testDir + QDir::separator() + "test.cpp");
+		if(!testFile.copy(rootPath + QDir::separator() + "test.cpp"))
+			throw CppImportException("Could not copy test.cpp file from " + testDir);
+	}
 
 	return setImportPath(rootPath);
 }

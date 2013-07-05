@@ -47,9 +47,9 @@ TEST(CppImport, SimpleTest)
 {
 	CppImportManager manager;
 
-//	QString srcPath("/home/luke/BachelorThesis/TestEnvision/Envision/Core/src");
+//	QString srcPath("/home/luke/BachelorThesis/TestEnvision/Envision/Core/");
 //	QString dbpath("/home/luke/BachelorThesis/TestEnvision/Envision/Core");
-//	manager.setSrcPath(srcPath, dbpath);
+//	manager.setImportPath(srcPath, dbpath);
 
 	manager.setupTest();
 
