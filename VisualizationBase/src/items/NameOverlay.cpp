@@ -30,6 +30,47 @@
 
 namespace Visualization {
 
+class BottomItemNode
+{
+	public:
+		BottomItemNode* parent{};
+		Item* item{};
+		QList<BottomItemNode*> children{};
+		bool hasPaintedTextInHierarchy{};
+
+		BottomItemNode(BottomItemNode* parent = nullptr, Item* item = nullptr) : parent{parent}, item{item}{}
+		~BottomItemNode()
+		{
+			for (auto node : children) SAFE_DELETE(node);
+			children.clear();
+		}
+
+		void insert(Item* item)
+		{
+			for (auto node : children)
+				if (node->item->isAncestorOf(item))
+				{
+					node->insert(item);
+					return;
+				}
+
+			children.append(new BottomItemNode(this, item));
+		}
+
+		void resetFlags()
+		{
+			hasPaintedTextInHierarchy = false;
+			for (auto node : children) node->resetFlags();
+		}
+
+		void markPainted()
+		{
+			hasPaintedTextInHierarchy = true;
+			auto p = parent;
+			while (p) { p->hasPaintedTextInHierarchy = true; p = p->parent;}
+		}
+};
+
 ITEM_COMMON_DEFINITIONS(NameOverlay, "item")
 
 NameOverlay::NameOverlay(Scene* scene, const StyleType* style) :
@@ -44,6 +85,7 @@ Super(nullptr, style)
 
 NameOverlay::~NameOverlay()
 {
+	SAFE_DELETE(bottomItems_);
 }
 
 Item::UpdateType NameOverlay::needsUpdate()
@@ -58,9 +100,11 @@ void NameOverlay::determineChildren()
 		if (auto mv = dynamic_cast<MainView*>(v))
 		{
 			const double OVERLAY_SCALE_TRESHOLD = 0.5;
-			if (mv->scaleFactor() < OVERLAY_SCALE_TRESHOLD && bottomItems_.isEmpty())
+			if (mv->scaleFactor() < OVERLAY_SCALE_TRESHOLD && !bottomItems_)
 			{
 				// Add the overlays
+				bottomItems_ = new BottomItemNode{};
+
 				QList<Item*> stack = scene()->topLevelItems();
 				while(!stack.isEmpty())
 				{
@@ -74,12 +118,22 @@ void NameOverlay::determineChildren()
 
 					auto definesSymbol = item->node() && item->node()->definesSymbol();
 
-					if (definesSymbol) bottomItems_.append(item);
+					if (definesSymbol) bottomItems_->insert(item);
 					stack.append(item->childItems());
 				}
+
+				// Prepare a more efficient way to explore the nodes when rendering
+				dfsOrder_.clear();
+				QList<BottomItemNode*> dfsStack = {bottomItems_};
+				while(!dfsStack.isEmpty())
+				{
+					auto last = dfsStack.takeLast();
+					dfsOrder_.prepend(last);
+					dfsStack.append(last->children);
+				}
 			}
-			else if (mv->scaleFactor() >= OVERLAY_SCALE_TRESHOLD && !bottomItems_.isEmpty())
-				bottomItems_.clear();
+			else if (mv->scaleFactor() >= OVERLAY_SCALE_TRESHOLD && bottomItems_)
+				SAFE_DELETE(bottomItems_);
 
 			break;
 		}
@@ -102,6 +156,7 @@ const QString& NameOverlay::overlayText(Item* item) const
 void NameOverlay::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
 	Super::paint(painter, option, widget);
+	if (!bottomItems_) return;
 
 	// Only paint if zoomed out
 	qreal scaleFactor = painter->worldTransform().m11();
@@ -115,8 +170,14 @@ void NameOverlay::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 		// Get the main view, if we're currently rendering on it.
 		auto mainView = dynamic_cast<MainView*>(scene()->currentPaintView());
 
-		for (auto item : bottomItems_)
+		bottomItems_->resetFlags();
+		for (auto node : dfsOrder_)
 		{
+			if (node->hasPaintedTextInHierarchy) continue;
+
+			auto item = node->item;
+			if (!item) continue;
+
 			auto rect = item->mapToScene(item->boundingRect()).boundingRect().toRect();
 
 			// Only render texts that are inside the view
@@ -135,6 +196,7 @@ void NameOverlay::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 			auto text = overlayText(item);
 			if (inView && !tooSmall && fitsInRect(text, font, rect))
 			{
+				node->markPainted();
 				painter->setPen(style()->pen());
 				painter->setFont(font);
 				painter->drawText(rect, Qt::AlignCenter | Qt::TextWrapAnywhere, text);

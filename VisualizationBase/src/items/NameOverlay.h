@@ -33,6 +33,8 @@
 
 namespace Visualization {
 
+class BottomItemNode;
+
 class VISUALIZATIONBASE_API NameOverlay: public Super<Item>
 {
 	ITEM_COMMON_CUSTOM_STYLENAME(NameOverlay, TextStyle)
@@ -50,7 +52,8 @@ class VISUALIZATIONBASE_API NameOverlay: public Super<Item>
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		QList<Item*> bottomItems_;
+		BottomItemNode* bottomItems_{};
+		QList<BottomItemNode*> dfsOrder_{};
 
 		const QString& overlayText(Item* item) const;
 		bool fitsInRect(const QString& text, const QFontMetrics& qfm, const QRect& r) const;
