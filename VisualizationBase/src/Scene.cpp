@@ -34,7 +34,6 @@
 #include "renderer/ModelRenderer.h"
 #include "cursor/Cursor.h"
 #include "CustomSceneEvent.h"
-#include "views/MainView.h"
 
 #include "ModelBase/src/nodes/Node.h"
 #include "ModelBase/src/model/Model.h"
@@ -53,11 +52,13 @@ class UpdateSceneEvent : public QEvent
 const QEvent::Type UpdateSceneEvent::EventType = static_cast<QEvent::Type> (QEvent::registerEventType());
 
 Scene::Scene()
-	: QGraphicsScene(VisualizationManager::instance().getMainWindow()), needsUpdate_(false),
-	  renderer_(defaultRenderer()), sceneHandlerItem_(new SceneHandlerItem(this)), mainCursor_(nullptr),
-	  mainCursorsJustSet_(false), inEventHandler_(false), inAnUpdate_(false), hiddenItemCategories_(NoItemCategory)
+	: QGraphicsScene(VisualizationManager::instance().getMainWindow()),
+	  	  renderer_(defaultRenderer()), sceneHandlerItem_(new SceneHandlerItem(this)),
+	  	  nameOverlay_{new NameOverlay(this)}, hiddenItemCategories_(NoItemCategory)
 {
 	setItemIndexMethod(NoIndex);
+
+	initialized_ = true;
 }
 
 Scene::~Scene()
@@ -69,8 +70,7 @@ Scene::~Scene()
 	topLevelItems_.clear();
 	for (SelectedItem* si : selections_) SAFE_DELETE_ITEM(si);
 	selections_.clear();
-	for (NameOverlay* no : nameOverlays_) SAFE_DELETE_ITEM(no);
-	nameOverlays_.clear();
+	SAFE_DELETE_ITEM(nameOverlay_);
 
 	if (renderer_ != defaultRenderer()) SAFE_DELETE(renderer_);
 	else renderer_ = nullptr;
@@ -169,51 +169,9 @@ void Scene::updateItems()
 		mainCursor_->visualization()->updateSubtree();
 	}
 
-	// Add or remove overlays based on the scale of the main view
-	for (auto v : views())
-	{
-		if (auto mv = dynamic_cast<MainView*>(v))
-		{
-			const double OVERLAY_SCALE_TRESHOLD = 0.5;
-			if (mv->scaleFactor() < OVERLAY_SCALE_TRESHOLD && nameOverlays_.isEmpty())
-			{
-				// Add the overlays
-				QList<Item*> stack = topLevelItems();
-				while(!stack.isEmpty())
-				{
-					auto item = stack.takeLast();
-
-					const double OVERLAY_MIN_WIDTH = 200;
-					const double OVERLAY_MIN_HEIGHT = 200;
-						if (item->boundingRect().width() < OVERLAY_MIN_WIDTH
-								|| item->boundingRect().height() < OVERLAY_MIN_HEIGHT)
-							continue;
-
-					auto definesSymbol = item->node() && item->node()->definesSymbol();
-
-					if (definesSymbol)
-					{
-						auto overlay = new NameOverlay(item);
-						overlay->updateSubtree();
-						nameOverlays_.append(overlay);
-						addItem(overlay);
-					}
-
-					stack.append(item->childItems());
-				}
-			}
-			else if (mv->scaleFactor() >= OVERLAY_SCALE_TRESHOLD && !nameOverlays_.isEmpty())
-			{
-				// Remove the overlays
-				for (auto o : nameOverlays_) SAFE_DELETE_ITEM(o);
-				nameOverlays_.clear();
-			}
-
-			break;
-		}
-	}
-
 	computeSceneRect();
+
+	nameOverlay_->updateSubtree();
 
 	updateTimer->tick();
 	needsUpdate_ = false;
@@ -259,7 +217,7 @@ bool Scene::event(QEvent *event)
 {
 	bool result = false;
 
-	if (inAnUpdate_)
+	if (inAnUpdate_ || !initialized_)
 		result = QGraphicsScene::event(event);
 	else
 	{
@@ -457,6 +415,12 @@ void Scene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* mouseEvent)
 {
 	isCurrentMousePressAClick_ = false;
 	QGraphicsScene::mouseDoubleClickEvent(mouseEvent);
+}
+
+void Scene::setCurrentPaintView(View* view)
+{
+	Q_ASSERT((view != nullptr) != (currentPaintView_ != nullptr));
+	currentPaintView_ = view;
 }
 
 }

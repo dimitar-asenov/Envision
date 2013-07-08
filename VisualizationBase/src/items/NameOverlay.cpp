@@ -26,28 +26,24 @@
 
 #include "NameOverlay.h"
 #include "shapes/Shape.h"
+#include "views/MainView.h"
 
 namespace Visualization {
 
 ITEM_COMMON_DEFINITIONS(NameOverlay, "item")
 
-NameOverlay::NameOverlay(Item* bottomItem, const StyleType* style) :
-Super(nullptr, style), bottomItem_(bottomItem)
+NameOverlay::NameOverlay(Scene* scene, const StyleType* style) :
+Super(nullptr, style)
 {
 	setFlags(0);
 	setAcceptedMouseButtons(0);
 	setZValue(LAYER_NAME_OVERLAY_Z);
 	setItemCategory(Scene::SelectionItemCategory);
+	scene->addItem(this);
 }
 
 NameOverlay::~NameOverlay()
 {
-	bottomItem_ = nullptr;
-}
-
-void NameOverlay::setBottomItem(Item* item)
-{
-	bottomItem_ = item;
 }
 
 Item::UpdateType NameOverlay::needsUpdate()
@@ -56,57 +52,101 @@ Item::UpdateType NameOverlay::needsUpdate()
 }
 
 void NameOverlay::determineChildren()
-{}
-
-void NameOverlay::updateGeometry(int, int)
 {
-	if (hasShape())
+	for (auto v : scene()->views())
 	{
-		getShape()->setInnerSize(bottomItem_->width(), bottomItem_->height());
-		QPointF pos = QPointF( getShape()->contentLeft(), getShape()->contentTop() );
+		if (auto mv = dynamic_cast<MainView*>(v))
+		{
+			const double OVERLAY_SCALE_TRESHOLD = 0.5;
+			if (mv->scaleFactor() < OVERLAY_SCALE_TRESHOLD && bottomItems_.isEmpty())
+			{
+				// Add the overlays
+				QList<Item*> stack = scene()->topLevelItems();
+				while(!stack.isEmpty())
+				{
+					auto item = stack.takeLast();
 
-		setPos(bottomItem_->mapToScene(0,0) - pos);
-	}
-	else
-	{
-		setSize(bottomItem_->boundingRect().size().toSize());
-		setPos(bottomItem_->mapToScene(0,0));
+					const double OVERLAY_MIN_WIDTH = 200;
+					const double OVERLAY_MIN_HEIGHT = 200;
+						if (item->boundingRect().width() < OVERLAY_MIN_WIDTH
+								|| item->boundingRect().height() < OVERLAY_MIN_HEIGHT)
+							continue;
+
+					auto definesSymbol = item->node() && item->node()->definesSymbol();
+
+					if (definesSymbol) bottomItems_.append(item);
+					stack.append(item->childItems());
+				}
+			}
+			else if (mv->scaleFactor() >= OVERLAY_SCALE_TRESHOLD && !bottomItems_.isEmpty())
+				bottomItems_.clear();
+
+			break;
+		}
 	}
 }
 
-const QString& NameOverlay::overlayText() const
+void NameOverlay::updateGeometry(int, int)
 {
-	Q_ASSERT(bottomItem_->node());
-	Q_ASSERT(bottomItem_->node()->definesSymbol());
-	return bottomItem_->node()->symbolName();
+	setSize(scene()->sceneRect().size());
+	setPos(scene()->sceneRect().topLeft());
+}
+
+const QString& NameOverlay::overlayText(Item* item) const
+{
+	Q_ASSERT(item->node());
+	Q_ASSERT(item->node()->definesSymbol());
+	return item->node()->symbolName();
 }
 
 void NameOverlay::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
 	Super::paint(painter, option, widget);
 
+	// Only paint if zoomed out
 	qreal scaleFactor = painter->worldTransform().m11();
-	if (scaleFactor <= 1.0)
+	if (!isCategoryHiddenDuringPaint() && scaleFactor <= 1.0)
 	{
-
+		// Adjust the font size for a constant on screen text size
 		auto font = style()->font();
 		font.setPixelSize(font.pixelSize()/scaleFactor);
-		auto text = overlayText();
-		if (fitsInBoundingRect(text, font))
+		QFontMetrics qfm(font);
+
+		// Get the main view, if we're currently rendering on it.
+		auto mainView = dynamic_cast<MainView*>(scene()->currentPaintView());
+
+		for (auto item : bottomItems_)
 		{
-			painter->setPen(style()->pen());
-			painter->setFont(font);
-			painter->drawText(boundingRect(), Qt::AlignCenter | Qt::TextWrapAnywhere, text);
+			auto rect = item->mapToScene(item->boundingRect()).boundingRect().toRect();
+
+			// Only render texts that are inside the view
+			auto inView = true;
+			if(mainView)
+			{
+				auto viewRect = mainView->mapFromScene(rect).boundingRect();
+				if (viewRect.right() < 0 || viewRect.bottom() < 0) inView = false;
+				else if (viewRect.top() > mainView->height() || viewRect.left() > mainView->width() ) inView = false;
+			}
+
+			// Do not render texts that are too small
+			auto scaledSize = rect.size() * scaleFactor;
+			auto tooSmall = scaledSize.width() < 20 || scaledSize.height() < 20;
+
+			auto text = overlayText(item);
+			if (inView && !tooSmall && fitsInRect(text, font, rect))
+			{
+				painter->setPen(style()->pen());
+				painter->setFont(font);
+				painter->drawText(rect, Qt::AlignCenter | Qt::TextWrapAnywhere, text);
+			}
 		}
 	}
 }
 
-bool NameOverlay::fitsInBoundingRect(const QString& text, const QFont& font) const
+bool NameOverlay::fitsInRect(const QString& text, const QFontMetrics& qfm, const QRect& rect) const
 {
-	QFontMetrics qfm(font);
-	auto bound = boundingRect();
-	auto needed = qfm.boundingRect(bound.toRect(), Qt::AlignCenter | Qt::TextWrapAnywhere, text);
-	return needed.width() < bound.width() && needed.height() < bound.height();
+	auto needed = qfm.boundingRect(rect, Qt::AlignCenter | Qt::TextWrapAnywhere, text);
+	return needed.width() < rect.width() && needed.height() < rect.height();
 }
 
 }

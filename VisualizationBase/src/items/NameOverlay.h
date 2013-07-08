@@ -38,12 +38,10 @@ class VISUALIZATIONBASE_API NameOverlay: public Super<Item>
 	ITEM_COMMON_CUSTOM_STYLENAME(NameOverlay, TextStyle)
 
 	public:
-		NameOverlay(Item* bottomItem, const StyleType* style = itemStyles().get());
+		NameOverlay(Scene* scene, const StyleType* style = itemStyles().get());
 		virtual ~NameOverlay();
 
 		virtual UpdateType needsUpdate() override;
-		Item* bottomItem();
-		void setBottomItem(Item* item);
 
 		virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
@@ -52,12 +50,10 @@ class VISUALIZATIONBASE_API NameOverlay: public Super<Item>
 		virtual void updateGeometry(int availableWidth, int availableHeight);
 
 	private:
-		Item* bottomItem_;
+		QList<Item*> bottomItems_;
 
-		const QString& overlayText() const;
-		bool fitsInBoundingRect(const QString& text, const QFont& font) const;
+		const QString& overlayText(Item* item) const;
+		bool fitsInRect(const QString& text, const QFontMetrics& qfm, const QRect& r) const;
 };
-
-inline Item* NameOverlay::bottomItem() { return bottomItem_; }
 
 }

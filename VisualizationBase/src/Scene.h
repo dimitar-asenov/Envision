@@ -41,6 +41,7 @@ class SceneHandlerItem;
 class SelectedItem;
 class NameOverlay;
 class Cursor;
+class View;
 
 class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 {
@@ -118,6 +119,8 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 
 		bool isCurrentMousePressAClick() const;
 
+		View* currentPaintView() const;
+
 	public slots:
 		void nodesUpdated(QList<Node*> nodes);
 
@@ -132,20 +135,21 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent* mouseEvent) override;
 
 	private:
-		bool needsUpdate_;
+		bool needsUpdate_{};
+		bool initialized_{};
 
-		ModelRenderer* renderer_;
-		SceneHandlerItem* sceneHandlerItem_;
+		ModelRenderer* renderer_{};
+		SceneHandlerItem* sceneHandlerItem_{};
 		QList<Item*> topLevelItems_;
 		QList<SelectedItem*> selections_;
-		QList<NameOverlay*> nameOverlays_;
+		NameOverlay* nameOverlay_{};
 
-		Cursor* mainCursor_;
-		bool mainCursorsJustSet_;
+		Cursor* mainCursor_{};
+		bool mainCursorsJustSet_{};
 		QList<QEvent*> postEventActions_;
 
-		bool inEventHandler_;
-		bool inAnUpdate_;
+		bool inEventHandler_{};
+		bool inAnUpdate_{};
 
 		ItemCategories hiddenItemCategories_;
 
@@ -154,6 +158,10 @@ class VISUALIZATIONBASE_API Scene : public QGraphicsScene
 		const int MAX_MILLISECONDS_FOR_A_CLICK = 500;
 
 		QList<RefreshActionFunction> refreshActionFunctions_;
+
+		View* currentPaintView_{};
+		friend class View;
+		void setCurrentPaintView(View* view);
 
 		void updateItems();
 		void computeSceneRect();
@@ -171,6 +179,7 @@ inline const QList<Item*>& Scene::topLevelItems() const {return topLevelItems_; 
 inline void Scene::addRefreshActionFunction(RefreshActionFunction func) {refreshActionFunctions_.append(func); }
 
 inline bool Scene::isCurrentMousePressAClick() const { return isCurrentMousePressAClick_; }
+inline View* Scene::currentPaintView() const { return currentPaintView_; }
 
 
 }

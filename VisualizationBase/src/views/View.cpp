@@ -60,7 +60,9 @@ Scene* View::scene()
 void View::paintEvent(QPaintEvent* event)
 {
 	scene()->setHiddenItemCategories(hiddenItemCategories_);
+	scene()->setCurrentPaintView(this);
 	QGraphicsView::paintEvent(event);
+	scene()->setCurrentPaintView(nullptr);
 }
 
 }
