@@ -39,10 +39,10 @@ namespace CppImport {
 class CPPIMPORT_API TranslateManager
 {
 	public:
-		TranslateManager(CppImportUtilities* utils);
+		TranslateManager(CppImportUtilities* utils, OOModel::Project* root);
 		~TranslateManager();
 		void setSourceManager(const clang::SourceManager* mngr);
-		OOModel::Module* insertNamespace(clang::NamespaceDecl* nd, int depth);
+		OOModel::Module* insertNamespace(clang::NamespaceDecl* namespaceDecl);
 
 		/**
 		 * Inserts the class \a ooClass to the managed class if it is not yet managed.
@@ -100,6 +100,7 @@ class CPPIMPORT_API TranslateManager
 		QMap<QString, OOModel::Field*> staticFieldMap_;
 
 		CppImportUtilities* utils_{};
+		OOModel::Project* rootProject_{};
 		NodeHasher* nh_{new NodeHasher()};
 };
 

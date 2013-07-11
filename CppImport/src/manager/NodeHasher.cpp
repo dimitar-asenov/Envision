@@ -61,6 +61,20 @@ const QString NodeHasher::hashMethod(const clang::CXXMethodDecl* methodDecl)
 	return hash;
 }
 
+const QString NodeHasher::hashNameSpace(const clang::NamespaceDecl* namespaceDecl)
+{
+	QString hash = QString::fromStdString(namespaceDecl->getNameAsString());
+	if(auto ctxt = namespaceDecl->getDeclContext())
+	{
+		if(ctxt->isTranslationUnit())
+			return hash;
+		else if(auto pn = llvm::dyn_cast<clang::NamespaceDecl>(ctxt))
+			return hash.prepend(hashNameSpace(pn));
+		throw CppImportException("Invalid decl context in namespace");
+	}
+	return hash;
+}
+
 const QString NodeHasher::hashRecord(const clang::RecordDecl* recordDecl)
 {
 	if(auto classTemplateSpec = llvm::dyn_cast<clang::ClassTemplateSpecializationDecl>(recordDecl))

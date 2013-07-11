@@ -37,7 +37,7 @@ ClangAstVisitor::ClangAstVisitor(OOModel::Project* project, CppImportLogger* log
 	exprVisitor_ = new ExpressionVisitor(this, log_);
 	utils_ = new CppImportUtilities(log_, exprVisitor_);
 	exprVisitor_->setUtilities(utils_);
-	trMngr_ = new TranslateManager(utils_);
+	trMngr_ = new TranslateManager(utils_, project);
 	templArgVisitor_ = new TemplateArgumentVisitor(exprVisitor_, utils_, log_);
 	ooStack_.push(project);
 }
@@ -76,26 +76,8 @@ bool ClangAstVisitor::TraverseNamespaceDecl(clang::NamespaceDecl* namespaceDecl)
 {
 	if(!shouldModel(namespaceDecl->getLocation()))
 		return true;
-	OOModel::Module* ooModule = nullptr;
-	// insert it in model
-	if(OOModel::Project* curProject = dynamic_cast<OOModel::Project*>(ooStack_.top()))
-	{
-		ooModule = trMngr_->insertNamespace(namespaceDecl, ooStack_.size()-1);
-		// if the module is not yet in the list add it
-		if(!curProject->modules()->contains(ooModule))
-			curProject->modules()->append(ooModule);
-	}
-	else if(OOModel::Module* curModel = dynamic_cast<OOModel::Module*>(ooStack_.top()))
-	{
-		ooModule = trMngr_->insertNamespace(namespaceDecl, ooStack_.size());
-		// check if the namespace is already the one which is active
-		if(curModel == ooModule)
-			return true;
-		// if the module is not yet in the list add it
-		if(!curModel->modules()->contains(ooModule))
-			curModel->modules()->append(ooModule);
-	}
-	else
+	OOModel::Module* ooModule = trMngr_->insertNamespace(namespaceDecl);
+	if(!ooModule)
 	{
 		log_->writeError(className_, "uknown where to put namespace", namespaceDecl);
 		// this is a severe error which should not happen therefore stop visiting

@@ -28,8 +28,8 @@
 
 namespace CppImport {
 
-TranslateManager::TranslateManager(CppImportUtilities* utils)
-	: utils_(utils)
+TranslateManager::TranslateManager(CppImportUtilities* utils, OOModel::Project* root)
+	: utils_(utils), rootProject_(root)
 {}
 
 TranslateManager::~TranslateManager()
@@ -42,16 +42,24 @@ void TranslateManager::setSourceManager(const clang::SourceManager* mngr)
 	nh_->setSourceManager(mngr);
 }
 
-OOModel::Module *TranslateManager::insertNamespace(clang::NamespaceDecl *nd, int depth)
+OOModel::Module *TranslateManager::insertNamespace(clang::NamespaceDecl* namespaceDecl)
 {
-	QString hash = QString::fromStdString(nd->getNameAsString());
-	hash.append("_").append(depth);
+	const QString hash = nh_->hashNameSpace(namespaceDecl);
 	if(nameSpaceMap_.contains(hash))
 		return nameSpaceMap_.value(hash);
-
-	OOModel::Module* ooModule = new OOModel::Module();
-	ooModule->setName(QString::fromStdString(nd->getNameAsString()));
+	OOModel::Module* ooModule = new OOModel::Module(QString::fromStdString(namespaceDecl->getNameAsString()));
 	nameSpaceMap_.insert(hash, ooModule);
+	if(namespaceDecl->getDeclContext()->isTranslationUnit())
+		rootProject_->modules()->append(ooModule);
+	else if(auto p = llvm::dyn_cast<clang::NamespaceDecl>(namespaceDecl->getDeclContext()))
+	{
+		const QString pHash = nh_->hashNameSpace(p);
+		if(!nameSpaceMap_.contains(pHash))
+			return nullptr;
+		nameSpaceMap_.value(pHash)->modules()->append(ooModule);
+	}
+	else
+		return nullptr;
 	return ooModule;
 }
 

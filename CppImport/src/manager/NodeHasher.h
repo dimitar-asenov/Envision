@@ -42,6 +42,7 @@ class CPPIMPORT_API NodeHasher
 
 		const QString hashFunction(const clang::FunctionDecl* functionDecl);
 		const QString hashMethod(const clang::CXXMethodDecl* methodDecl);
+		const QString hashNameSpace(const clang::NamespaceDecl* namespaceDecl);
 		const QString hashRecord(const clang::RecordDecl* recordDecl);
 		const QString hashClassTemplate(const clang::ClassTemplateDecl* classTemplate);
 		const QString hashClassTemplateSpec(const clang::ClassTemplateSpecializationDecl* classTemplateSpec);
