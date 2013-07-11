@@ -45,6 +45,16 @@ class CPPIMPORT_API NodeHasher
 		const QString hashRecord(const clang::RecordDecl* recordDecl);
 		const QString hashClassTemplate(const clang::ClassTemplateDecl* classTemplate);
 		const QString hashClassTemplateSpec(const clang::ClassTemplateSpecializationDecl* classTemplateSpec);
+		/**
+		 * Hashes a static field.
+		 * Note that clang treats static fields as VarDecl's.
+		 */
+		const QString hashStaticField(const clang::VarDecl* varDecl);
+		/**
+		 * This function is a dispatcher for a \a context which represents a class to return the correct hash.
+		 * It is used to hash the context (=parent) of static fields.
+		 */
+		const QString hashParentOfStaticField(const clang::DeclContext* context);
 
 		const QString hashType(const clang::QualType& type);
 		const QString hashTemplateTypeParm(const clang::TemplateTypeParmDecl* templTypeParam);

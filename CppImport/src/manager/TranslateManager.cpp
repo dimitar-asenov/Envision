@@ -142,15 +142,35 @@ OOModel::Method* TranslateManager::insertFunctionDecl(clang::FunctionDecl* funct
 	return ooFunction;
 }
 
-OOModel::Field* TranslateManager::insertField(clang::FieldDecl* fDecl)
+OOModel::Field* TranslateManager::insertField(clang::FieldDecl* fieldDecl)
 {
-	const QString hash = nh_->hashRecord(fDecl->getParent());
+	const QString hash = nh_->hashRecord(fieldDecl->getParent());
 	if(classMap_.contains(hash))
 	{
-		OOModel::Field* field = new OOModel::Field();
-		field->setName(QString::fromStdString(fDecl->getNameAsString()));
-		classMap_.value(hash)->fields()->append(field);
-		return field;
+		OOModel::Field* ooField = new OOModel::Field();
+		ooField->setName(QString::fromStdString(fieldDecl->getNameAsString()));
+		classMap_.value(hash)->fields()->append(ooField);
+		return ooField;
+	}
+	return nullptr;
+}
+
+OOModel::Field* TranslateManager::insertStaticField(clang::VarDecl* varDecl, bool& wasDeclared)
+{
+	const QString hash = nh_->hashStaticField(varDecl);
+	if(staticFieldMap_.contains(hash))
+	{
+		wasDeclared = true;
+		return staticFieldMap_.value(hash);
+	}
+	wasDeclared = false;
+	const QString parentHash = nh_->hashParentOfStaticField(varDecl->getDeclContext());
+	if(classMap_.contains(parentHash))
+	{
+		OOModel::Field* ooField = new OOModel::Field(QString::fromStdString(varDecl->getNameAsString()));
+		classMap_.value(parentHash)->fields()->append(ooField);
+		staticFieldMap_.insert(hash, ooField);
+		return ooField;
 	}
 	return nullptr;
 }
@@ -158,7 +178,12 @@ OOModel::Field* TranslateManager::insertField(clang::FieldDecl* fDecl)
 OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl, OOModel::Method::MethodKind kind)
 {
 	const QString hash = nh_->hashMethod(mDecl);
-	OOModel::Method* method = new OOModel::Method(QString::fromStdString(mDecl->getNameAsString()), kind);
+	// remove type argument from name because clang has that in the name of constructors of template classes.
+	// template<class T> class List{ List();}; results in List<T> as name.
+	QString name = QString::fromStdString(mDecl->getNameAsString());
+	if(name.endsWith(">"))
+		name = name.left(name.indexOf("<"));
+	OOModel::Method* method = new OOModel::Method(name, kind);
 	// process result type
 	OOModel::Expression* restype = utils_->translateQualifiedType(mDecl->getResultType());
 	if(restype)

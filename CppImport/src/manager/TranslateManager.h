@@ -72,7 +72,22 @@ class CPPIMPORT_API TranslateManager
 		 * Returns either the new method created or the existing one.
 		 */
 		OOModel::Method* insertFunctionDecl(clang::FunctionDecl* functionDecl);
-		OOModel::Field* insertField(clang::FieldDecl* fDecl);
+		/**
+		 * Inserts the field \a fieldDecl to the manager and into the correct class.
+		 * If the parent is not yet visited this method returns a nullptr.
+		 *
+		 */
+		OOModel::Field* insertField(clang::FieldDecl* fieldDecl);
+
+		/**
+		 * Inserts the static field \a varDecl to the manager and into the correct class.
+		 * The parameter \a wasDeclared will be set to true if the declaration of this field was visited
+		 * (only need to visit initializer now).
+		 * The caller has to make sure that this is a static field.
+		 * If the parent is not yet visited this method returns a nullptr.
+		 * Note that clang treats a static field as a VarDecl
+		 */
+		OOModel::Field* insertStaticField(clang::VarDecl* varDecl, bool& wasDeclared);
 
 	private:
 		OOModel::Method* addNewMethod(clang::CXXMethodDecl* mDecl, OOModel::Method::MethodKind kind);
@@ -82,6 +97,7 @@ class CPPIMPORT_API TranslateManager
 		QMap<QString, OOModel::Class*> classMap_;
 		QMap<QString, OOModel::Method*> methodMap_;
 		QMap<QString, OOModel::Method*> functionMap_;
+		QMap<QString, OOModel::Field*> staticFieldMap_;
 
 		CppImportUtilities* utils_{};
 		NodeHasher* nh_{new NodeHasher()};

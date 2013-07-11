@@ -117,6 +117,25 @@ const QString NodeHasher::hashClassTemplateSpec(const clang::ClassTemplateSpecia
 	return hash;
 }
 
+const QString NodeHasher::hashStaticField(const clang::VarDecl* varDecl)
+{
+	QString hash = QString::fromStdString(varDecl->getNameAsString()).prepend("_");
+	hash.prepend(hashParentOfStaticField(varDecl->getDeclContext()));
+	hash.append("_").append(hashType(varDecl->getType()));
+	return hash;
+}
+
+const QString NodeHasher::hashParentOfStaticField(const clang::DeclContext* context)
+{
+	if(auto cts = llvm::dyn_cast<clang::ClassTemplateSpecializationDecl>(context))
+		return hashClassTemplateSpec(cts);
+	else if(auto ct = llvm::dyn_cast<clang::ClassTemplateDecl>(context))
+		return hashClassTemplate(ct);
+	else if(auto c = llvm::dyn_cast<clang::CXXRecordDecl>(context))
+		return hashRecord(c);
+	throw CppImportException("Invalid parent to hash a static var");
+}
+
 const QString NodeHasher::hashType(const clang::QualType& type)
 {
 	return QString::fromStdString(type.getCanonicalType().getAsString());

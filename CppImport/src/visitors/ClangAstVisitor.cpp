@@ -76,7 +76,6 @@ bool ClangAstVisitor::TraverseNamespaceDecl(clang::NamespaceDecl* namespaceDecl)
 {
 	if(!shouldModel(namespaceDecl->getLocation()))
 		return true;
-
 	OOModel::Module* ooModule = nullptr;
 	// insert it in model
 	if(OOModel::Project* curProject = dynamic_cast<OOModel::Project*>(ooStack_.top()))
@@ -513,41 +512,51 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 	OOModel::VariableDeclarationExpression* ooVarDeclExpr = nullptr;
 	QString varName = QString::fromStdString(varDecl->getNameAsString());
 
-	if(!inBody_)
+	bool wasDeclared = false;
+	if(varDecl->isStaticDataMember())
 	{
-		ooVarDecl = new OOModel::VariableDeclaration(varName);
-		ooVarDeclExpr = new OOModel::VariableDeclarationExpression(ooVarDecl);
-		ooExprStack_.push(ooVarDeclExpr);
-	}
-	else if(auto project = dynamic_cast<OOModel::Project*>(ooStack_.top()))
-	{
-		ooVarDecl = new OOModel::Field(varName);
-		project->fields()->append(ooVarDecl);
-	}
-	else if(auto module = dynamic_cast<OOModel::Module*>(ooStack_.top()))
-	{
-		ooVarDecl = new OOModel::Field(varName);
-		module->fields()->append(ooVarDecl);
-	}
-	else if(auto ooClass = dynamic_cast<OOModel::Class*>(ooStack_.top()))
-	{
-		ooVarDecl = new OOModel::Field(varName);
-		ooClass->fields()->append(ooVarDecl);
-	}
-	else if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
-	{
-		ooVarDecl = new OOModel::VariableDeclaration(varName);
-		// TODO: remove variabledeclaration expression as soon we have a DeclarationStatement
-		itemList->append(new OOModel::ExpressionStatement(new OOModel::VariableDeclarationExpression(ooVarDecl)));
+		if(!(ooVarDecl = trMngr_->insertStaticField(varDecl, wasDeclared)))
+		{
+			log_->writeError(className_, "Static field with no parent", varDecl);
+			varDecl->dump();
+			return true;
+		}
 	}
 	else
 	{
-		log_->writeWarning(className_, "this variable is not supported", varDecl);
-		return true;
+		if(!inBody_)
+		{
+			ooVarDecl = new OOModel::VariableDeclaration(varName);
+			ooVarDeclExpr = new OOModel::VariableDeclarationExpression(ooVarDecl);
+			ooExprStack_.push(ooVarDeclExpr);
+		}
+		else if(auto project = dynamic_cast<OOModel::Project*>(ooStack_.top()))
+		{
+			ooVarDecl = new OOModel::Field(varName);
+			project->fields()->append(ooVarDecl);
+		}
+		else if(auto module = dynamic_cast<OOModel::Module*>(ooStack_.top()))
+		{
+			ooVarDecl = new OOModel::Field(varName);
+			module->fields()->append(ooVarDecl);
+		}
+		else if(auto ooClass = dynamic_cast<OOModel::Class*>(ooStack_.top()))
+		{
+			ooVarDecl = new OOModel::Field(varName);
+			ooClass->fields()->append(ooVarDecl);
+		}
+		else if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
+		{
+			ooVarDecl = new OOModel::VariableDeclaration(varName);
+			// TODO: remove variabledeclaration expression as soon we have a DeclarationStatement
+			itemList->append(new OOModel::ExpressionStatement(new OOModel::VariableDeclarationExpression(ooVarDecl)));
+		}
+		else
+		{
+			log_->writeWarning(className_, "this variable is not supported", varDecl);
+			return true;
+		}
 	}
-
-	// set the type
-	ooVarDecl->setTypeExpression(utils_->translateQualifiedType(varDecl->getType()));
 
 	if(varDecl->hasInit())
 	{
@@ -564,9 +573,14 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 			log_->writeError(className_, "Var Init Expr not supported", varDecl->getInit());
 		inBody_ = inBody;
 	}
+	if(wasDeclared)
+		// we know the rest of the information already
+		return true;
+
+	// set the type
+	ooVarDecl->setTypeExpression(utils_->translateQualifiedType(varDecl->getType()));
 	// modifiers
 	ooVarDecl->modifiers()->set(utils_->translateStorageSpecifier(varDecl->getStorageClass()));
-
 	return true;
 }
 
@@ -643,7 +657,6 @@ bool ClangAstVisitor::TraverseSwitchStmt(clang::SwitchStmt* switchStmt)
 {
 	if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
 	{
-//		switchStmt->dump();
 		OOModel::SwitchStatement* ooSwitchStmt = new OOModel::SwitchStatement();
 		itemList->append(ooSwitchStmt);
 		// save inbody var
@@ -682,7 +695,7 @@ bool ClangAstVisitor::TraverseSwitchStmt(clang::SwitchStmt* switchStmt)
 			if(bodyIt == body->body_end())
 			{
 				auto switchCase = new OOModel::SwitchCase();
-				// TODO: this uses qt foreach might get replaced in newer versions
+				// do not use range based c++11 loop for append.
 				foreach(OOModel::StatementItem* s , preambleStmts)
 					switchCase->statement()->append(s);
 				ooSwitchStmt->cases()->append(switchCase);
@@ -973,10 +986,10 @@ void ClangAstVisitor::TraverseFunction(clang::FunctionDecl* functionDecl, OOMode
 	if(functionDecl->isThisDeclarationADefinition())
 	{
 		if(ooFunction->items()->size())
-		{
-			log_->writeWarning(className_, "This function is double defined", functionDecl);
+			/* TODO: this is a double defined function this comes from functions defined in the header.
+			* We might need to give this some attention as soon as we support macros
+			* (could be that we include the header with different defines) but for now we just ignore it. */
 			return;
-		}
 		ooStack_.push(ooFunction->items());
 		bool inBody = inBody_;
 		inBody_ = true;
