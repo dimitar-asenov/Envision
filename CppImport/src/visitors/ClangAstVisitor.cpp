@@ -838,19 +838,22 @@ bool ClangAstVisitor::VisitUsingDecl(clang::UsingDecl* usingDecl)
 {
 	if(!shouldModel(usingDecl->getLocation()))
 		return true;
-	OOModel::ReferenceExpression* nameRef = new OOModel::ReferenceExpression
-			(QString::fromStdString(usingDecl->getNameAsString()));
-	if(auto prefix = usingDecl->getQualifier())
-		nameRef->setPrefix(utils_->translateNestedNameSpecifier(prefix));
-	OOModel::NameImport* ooNameImport = new OOModel::NameImport(nameRef);
-	if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
-		itemList->append(new OOModel::DeclarationStatement(ooNameImport));
-	else if(auto declaration = dynamic_cast<OOModel::Declaration*>(ooStack_.top()))
-		declaration->subDeclarations()->append(ooNameImport);
-	else
+	if(auto ooNameImport = trMngr_->insertUsingDecl(usingDecl))
 	{
-		SAFE_DELETE(ooNameImport);
-		log_->writeError(className_, "Uknown where to put using decl", usingDecl);
+		OOModel::ReferenceExpression* nameRef = new OOModel::ReferenceExpression
+				(QString::fromStdString(usingDecl->getNameAsString()));
+		if(auto prefix = usingDecl->getQualifier())
+			nameRef->setPrefix(utils_->translateNestedNameSpecifier(prefix));
+		ooNameImport->setImportedName(nameRef);
+		if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
+			itemList->append(new OOModel::DeclarationStatement(ooNameImport));
+		else if(auto declaration = dynamic_cast<OOModel::Declaration*>(ooStack_.top()))
+			declaration->subDeclarations()->append(ooNameImport);
+		else
+		{
+			SAFE_DELETE(ooNameImport);
+			log_->writeError(className_, "Uknown where to put using decl", usingDecl);
+		}
 	}
 	return true;
 }
@@ -859,19 +862,22 @@ bool ClangAstVisitor::VisitUsingDirectiveDecl(clang::UsingDirectiveDecl* usingDi
 {
 	if(!shouldModel(usingDirectiveDecl->getLocation()))
 		return true;
-	OOModel::ReferenceExpression* nameRef = new OOModel::ReferenceExpression
-			(QString::fromStdString(usingDirectiveDecl->getNominatedNamespaceAsWritten()->getNameAsString()));
-	if(auto prefix = usingDirectiveDecl->getQualifier())
-		nameRef->setPrefix(utils_->translateNestedNameSpecifier(prefix));
-	OOModel::NameImport* ooNameImport = new OOModel::NameImport(nameRef);
-	if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
-		itemList->append(new OOModel::DeclarationStatement(ooNameImport));
-	else if(auto declaration = dynamic_cast<OOModel::Declaration*>(ooStack_.top()))
-		declaration->subDeclarations()->append(ooNameImport);
-	else
+	if(auto ooNameImport = trMngr_->insertUsingDirective(usingDirectiveDecl))
 	{
-		SAFE_DELETE(ooNameImport);
-		log_->writeError(className_, "Uknown where to put using directive decl", usingDirectiveDecl);
+		OOModel::ReferenceExpression* nameRef = new OOModel::ReferenceExpression
+				(QString::fromStdString(usingDirectiveDecl->getNominatedNamespaceAsWritten()->getNameAsString()));
+		if(auto prefix = usingDirectiveDecl->getQualifier())
+			nameRef->setPrefix(utils_->translateNestedNameSpecifier(prefix));
+		ooNameImport->setImportedName(nameRef);
+		if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
+			itemList->append(new OOModel::DeclarationStatement(ooNameImport));
+		else if(auto declaration = dynamic_cast<OOModel::Declaration*>(ooStack_.top()))
+			declaration->subDeclarations()->append(ooNameImport);
+		else
+		{
+			SAFE_DELETE(ooNameImport);
+			log_->writeError(className_, "Uknown where to put using directive decl", usingDirectiveDecl);
+		}
 	}
 	return true;
 }

@@ -89,6 +89,9 @@ class CPPIMPORT_API TranslateManager
 		 */
 		OOModel::Field* insertStaticField(clang::VarDecl* varDecl, bool& wasDeclared);
 
+		OOModel::NameImport* insertUsingDecl(clang::UsingDecl* usingDecl);
+		OOModel::NameImport* insertUsingDirective(clang::UsingDirectiveDecl* usingDirective);
+
 	private:
 		OOModel::Method* addNewMethod(clang::CXXMethodDecl* mDecl, OOModel::Method::MethodKind kind);
 		OOModel::Method* addNewFunction(clang::FunctionDecl* functionDecl);
@@ -98,6 +101,9 @@ class CPPIMPORT_API TranslateManager
 		QMap<QString, OOModel::Method*> methodMap_;
 		QMap<QString, OOModel::Method*> functionMap_;
 		QMap<QString, OOModel::Field*> staticFieldMap_;
+
+		QMap<QString, OOModel::NameImport*> usingDeclMap_;
+		QMap<QString, OOModel::NameImport*> usingDirectiveMap_;
 
 		CppImportUtilities* utils_{};
 		OOModel::Project* rootProject_{};

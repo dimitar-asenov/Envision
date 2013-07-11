@@ -150,6 +150,37 @@ const QString NodeHasher::hashParentOfStaticField(const clang::DeclContext* cont
 	throw CppImportException("Invalid parent to hash a static var");
 }
 
+const QString NodeHasher::hashUsingParent(const clang::DeclContext* context)
+{
+	if(context->isTranslationUnit())
+		return QString();
+	if(auto ns = llvm::dyn_cast<clang::NamespaceDecl>(context))
+		return hashNameSpace(ns);
+	else if(auto cts = llvm::dyn_cast<clang::ClassTemplateSpecializationDecl>(context))
+		return hashClassTemplateSpec(cts);
+	else if(auto ct = llvm::dyn_cast<clang::ClassTemplateDecl>(context))
+		return hashClassTemplate(ct);
+	else if(auto c = llvm::dyn_cast<clang::CXXRecordDecl>(context))
+		return hashRecord(c);
+	throw CppImportException("Invalid parent for using directive or using decl");
+}
+
+const QString NodeHasher::hashUsingDirective(const clang::UsingDirectiveDecl* usingDirective)
+{
+	// TODO nested name qualifier?
+	QString hash = QString::fromStdString(usingDirective->getNominatedNamespaceAsWritten()->getNameAsString());
+	hash.prepend("_").prepend(hashUsingParent(usingDirective->getDeclContext()));
+	return hash;
+}
+
+const QString NodeHasher::hashUsingDecl(const clang::UsingDecl* usingDecl)
+{
+	// TODO nested name qualifier?
+	QString hash = QString::fromStdString(usingDecl->getNameAsString());
+	hash.prepend("_").prepend(hashUsingParent(usingDecl->getDeclContext()));
+	return hash;
+}
+
 const QString NodeHasher::hashType(const clang::QualType& type)
 {
 	return QString::fromStdString(type.getCanonicalType().getAsString());

@@ -57,6 +57,10 @@ class CPPIMPORT_API NodeHasher
 		 */
 		const QString hashParentOfStaticField(const clang::DeclContext* context);
 
+		const QString hashUsingParent(const clang::DeclContext* context);
+		const QString hashUsingDirective(const clang::UsingDirectiveDecl* usingDirective);
+		const QString hashUsingDecl(const clang::UsingDecl* usingDecl);
+
 		const QString hashType(const clang::QualType& type);
 		const QString hashTemplateTypeParm(const clang::TemplateTypeParmDecl* templTypeParam);
 		const QString hashTemplateTypeParm(const clang::NonTypeTemplateParmDecl* nonTypeTemplParam);

@@ -183,6 +183,30 @@ OOModel::Field* TranslateManager::insertStaticField(clang::VarDecl* varDecl, boo
 	return nullptr;
 }
 
+OOModel::NameImport* TranslateManager::insertUsingDecl(clang::UsingDecl* usingDecl)
+{
+	OOModel::NameImport* ooName = nullptr;
+	const QString hash = nh_->hashUsingDecl(usingDecl);
+	if(!usingDeclMap_.contains(hash))
+	{
+		ooName = new OOModel::NameImport();
+		usingDeclMap_.insert(hash, ooName);
+	}
+	return ooName;
+}
+
+OOModel::NameImport* TranslateManager::insertUsingDirective(clang::UsingDirectiveDecl* usingDirective)
+{
+	OOModel::NameImport* ooName = nullptr;
+	const QString hash = nh_->hashUsingDirective(usingDirective);
+	if(!usingDirectiveMap_.contains(hash))
+	{
+		ooName = new OOModel::NameImport();
+		usingDirectiveMap_.insert(hash, ooName);
+	}
+	return ooName;
+}
+
 OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl, OOModel::Method::MethodKind kind)
 {
 	const QString hash = nh_->hashMethod(mDecl);
