@@ -83,9 +83,9 @@ Class* addHelloWorld(Project* parent)
 	main->items()->append(callPrintlnSt);
 
 	// Add constructors and destructors
-	auto con = new Method("HelloWorld", Method::MethodKind::Constructor);
+	auto con = new Method("HelloWorld", Modifier::Public, Method::MethodKind::Constructor);
 	con->extension<Position>()->set(400,0);
-	auto des = new Method("HelloWorld", Method::MethodKind::Destructor);
+	auto des = new Method("~HelloWorld", Modifier::Public, Method::MethodKind::Destructor);
 	des->extension<Position>()->set(400,80);
 
 	hello->methods()->append(con);
