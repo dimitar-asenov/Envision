@@ -162,22 +162,57 @@ const QString NodeHasher::hashUsingParent(const clang::DeclContext* context)
 		return hashClassTemplate(ct);
 	else if(auto c = llvm::dyn_cast<clang::CXXRecordDecl>(context))
 		return hashRecord(c);
+	else if(auto m = llvm::dyn_cast<clang::CXXMethodDecl>(context))
+		return hashMethod(m);
+	else if(auto f = llvm::dyn_cast<clang::FunctionDecl>(context))
+		return hashFunction(f);
 	throw CppImportException("Invalid parent for using directive or using decl");
 }
 
 const QString NodeHasher::hashUsingDirective(const clang::UsingDirectiveDecl* usingDirective)
 {
-	// TODO nested name qualifier?
 	QString hash = QString::fromStdString(usingDirective->getNominatedNamespaceAsWritten()->getNameAsString());
+	if(auto p = usingDirective->getQualifier())
+		hash.prepend("_").prepend(hashNestedNameSpecifier(p));
 	hash.prepend("_").prepend(hashUsingParent(usingDirective->getDeclContext()));
 	return hash;
 }
 
 const QString NodeHasher::hashUsingDecl(const clang::UsingDecl* usingDecl)
 {
-	// TODO nested name qualifier?
 	QString hash = QString::fromStdString(usingDecl->getNameAsString());
+	if(auto p = usingDecl->getQualifier())
+		hash.prepend("_").prepend(hashNestedNameSpecifier(p));
 	hash.prepend("_").prepend(hashUsingParent(usingDecl->getDeclContext()));
+	return hash;
+}
+
+const QString NodeHasher::hashNestedNameSpecifier(const clang::NestedNameSpecifier* nestedName)
+{
+	QString hash;
+	switch(nestedName->getKind())
+	{
+		case clang::NestedNameSpecifier::Identifier:
+			hash = QString(nestedName->getAsIdentifier()->getNameStart());
+			break;
+		case clang::NestedNameSpecifier::Namespace:
+			hash = QString::fromStdString(nestedName->getAsNamespace()->getNameAsString());
+			break;
+		case clang::NestedNameSpecifier::NamespaceAlias:
+			hash = QString::fromStdString(nestedName->getAsNamespaceAlias()->getNameAsString());
+			break;
+		case clang::NestedNameSpecifier::TypeSpec:
+			hash = hashType(nestedName->getAsType()->getCanonicalTypeInternal());
+			break;
+		case clang::NestedNameSpecifier::TypeSpecWithTemplate:
+			hash = hashType(nestedName->getAsType()->getCanonicalTypeInternal());
+			break;
+		case clang::NestedNameSpecifier::Global:
+			hash = "_";
+			break;
+	}
+	if(auto p = nestedName->getPrefix())
+		hash.prepend("_").prepend(hashNestedNameSpecifier(p));
 	return hash;
 }
 
