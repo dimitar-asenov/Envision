@@ -65,6 +65,7 @@ VProject::~VProject()
 	body_ = nullptr;
 	content_ = nullptr;
 	fields_ = nullptr;
+	declarations_ = nullptr;
 }
 
 void VProject::determineChildren()
@@ -87,7 +88,12 @@ void VProject::determineChildren()
 	bodyItems << node()->classes()->nodes().toList();
 	bodyItems << node()->methods()->nodes().toList();
 	body_->synchronizeWithNodes(bodyItems, renderer());
-	content_->synchronizeFirst(fields_, node()->fields()->size() > 0 ? node()->fields() : nullptr, &style()->fields());
+
+	auto fieldsIndex = node()->subDeclarations()->size() > 0 ? 1 : 0;
+	content_->synchronizeFirst(declarations_, fieldsIndex > 0 ? node()->subDeclarations() :nullptr,
+			&style()->declarations());
+	content_->synchronizeMid(fields_, node()->fields()->size() > 0 ? node()->fields() : nullptr, &style()->fields(),
+			fieldsIndex);
 }
 
 }

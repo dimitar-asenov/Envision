@@ -750,6 +750,10 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 {
 	// Create project
 	auto prj = new Project("HelloWorld");
+	prj->subDeclarations()->append(new NameImport(
+			new ReferenceExpression("Code", new ReferenceExpression("SomeLibrary"))));
+	prj->subDeclarations()->append(new NameImport(
+			new ReferenceExpression("AnotherLibrary")));
 	prj->fields()->append(new Field("global",
 			new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT)));
 	prj->fields()->append(new Field("global2",

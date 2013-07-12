@@ -38,7 +38,6 @@ namespace Visualization {
 	class VText;
 	class PanelBorderLayout;
 	class PositionLayout;
-	class SequentialLayout;
 	class VList;
 }
 
@@ -62,6 +61,7 @@ class OOVISUALIZATION_API VProject
 		Visualization::VText* name{};
 		Visualization::PositionLayout* body_{};
 		Visualization::SequentialLayout* content_{};
+		Visualization::VList* declarations_{};
 		Visualization::VList* fields_{};
 };
 

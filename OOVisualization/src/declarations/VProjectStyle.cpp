@@ -39,6 +39,7 @@ void VProjectStyle::load(Visualization::StyleLoader& sl)
 	sl.load("body", body_);
 	sl.load("content", content_);
 	sl.load("fields", fields_);
+	sl.load("declarations", declarations_);
 }
 
 }

@@ -47,6 +47,7 @@ class OOVISUALIZATION_API VProjectStyle : public Visualization::ItemStyle
 		Visualization::PositionLayoutStyle body_;
 		Visualization::SequentialLayoutStyle content_;
 		Visualization::VListStyle fields_;
+		Visualization::VListStyle declarations_;
 
 	public:
 		void load(Visualization::StyleLoader& sl);
@@ -58,6 +59,7 @@ class OOVISUALIZATION_API VProjectStyle : public Visualization::ItemStyle
 		const Visualization::PositionLayoutStyle& body() const;
 		const Visualization::SequentialLayoutStyle& content() const;
 		const Visualization::VListStyle& fields() const;
+		const Visualization::VListStyle& declarations() const;
 };
 
 inline const Visualization::PanelBorderLayoutStyle& VProjectStyle::layout() const {return layout_; }
@@ -67,5 +69,6 @@ inline const Visualization::StaticStyle& VProjectStyle::icon() const {return ico
 inline const Visualization::PositionLayoutStyle& VProjectStyle::body() const { return body_; }
 inline const Visualization::SequentialLayoutStyle& VProjectStyle::content() const { return content_; }
 inline const Visualization::VListStyle& VProjectStyle::fields() const { return fields_; }
+inline const Visualization::VListStyle& VProjectStyle::declarations() const { return declarations_; }
 
 }
