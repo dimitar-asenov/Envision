@@ -35,13 +35,6 @@ namespace Visualization {
 
 class VISUALIZATIONBASE_API SVGIconStyle : public IconStyle
 {
-	private:
-		QString filename_;
-		mutable QSvgRenderer renderer_;
-		mutable Mipmap mipmap_;
-		int width_;
-		int height_;
-
 	public:
 		virtual void load(StyleLoader& sl);
 
@@ -50,6 +43,18 @@ class VISUALIZATIONBASE_API SVGIconStyle : public IconStyle
 		int height() const;
 
 		void paint(QPainter* painter, int x, int y) const;
+
+	private:
+		QString filename_;
+		mutable QSvgRenderer renderer_;
+		mutable Mipmap mipmap_;
+		int width_;
+		int height_;
+
+		/**
+		 * Returns true if the pixmap was created or false if it was too small and not added.
+		 */
+		bool drawScaledPixmapInMipmap(qreal scaleFactor) const;
 };
 
 inline const QString& SVGIconStyle::filename() const { return filename_; }
