@@ -82,6 +82,15 @@ Class* addHelloWorld(Project* parent)
 	callPrintlnSt->setExpression(callPrintln);
 	main->items()->append(callPrintlnSt);
 
+	// Add constructors and destructors
+	auto con = new Method("HelloWorld", Method::MethodKind::Constructor);
+	con->extension<Position>()->set(400,0);
+	auto des = new Method("HelloWorld", Method::MethodKind::Destructor);
+	des->extension<Position>()->set(400,80);
+
+	hello->methods()->append(con);
+	hello->methods()->append(des);
+
 	return hello;
 }
 
@@ -136,8 +145,7 @@ Class* addGeneric(Project* parent)
 	foobar->items()->append(callBarSt);
 
 	// Set positions
-	gen->extension<Position>()->setX(460);
-	gen->extension<Position>()->setY(300);
+	gen->extension<Position>()->set(860,300);
 	bar->extension<Position>()->setY(80);
 	foobar->extension<Position>()->setY(140);
 
@@ -167,8 +175,7 @@ Class* addAnnotatedWithFriends(Project* parent)
 	var->decl()->setInitialValue(new IntegerLiteral(42));
 
 	// Set positions
-	ann->extension<Position>()->setX(460);
-	ann->extension<Position>()->setY(620);
+	ann->extension<Position>()->set(860,620);
 
 	return ann;
 }
@@ -183,8 +190,7 @@ Class* addEnumeration(Project* parent)
 	en->enumerators()->append( new Enumerator("BLUE", new IntegerLiteral(5)));
 
 	// Set positions
-	en->extension<Position>()->setX(460);
-	en->extension<Position>()->setY(880);
+	en->extension<Position>()->set(860,880);
 
 	return en;
 }
@@ -274,7 +280,7 @@ Module* addLambda()
 	le->body()->append(new ExpressionStatement(someOpCall));
 
 	// Positions
-	mod->extension<Position>()->set(900,300);
+	mod->extension<Position>()->set(1300,300);
 	return mod;
 }
 
@@ -286,7 +292,7 @@ Class* addInner()
 	outer->classes()->append( new Class("Inner2"));
 
 	// Set positions
-	outer->extension<Position>()->set(900,760);
+	outer->extension<Position>()->set(1300,860);
 
 	return outer;
 }
@@ -331,7 +337,7 @@ Project* addJavaLibrary(Project* parent)
 	prefix->ref()->setName("io");
 
 	// Set positions
-	java->extension<Position>()->setX(460);
+	java->extension<Position>()->setX(860);
 	string->extension<Position>()->setY(100);
 	io->extension<Position>()->setX(240);
 
@@ -741,7 +747,7 @@ Method* addFactorial(Class* parent)
 	factorial->items()->append(factorialReturn);
 	factorialReturn->values()->append(new ReferenceExpression("result"));
 
-	factorial->extension<Position>()->setY(1060);
+	factorial->extension<Position>()->set(400, 160);
 
 	return factorial;
 }

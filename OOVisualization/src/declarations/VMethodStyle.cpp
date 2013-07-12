@@ -40,7 +40,10 @@ void VMethodStyle::load(Visualization::StyleLoader& sl)
 	sl.load("nameStaticPublic", nameStaticPublic_);
 	sl.load("nameStaticPrivate", nameStaticPrivate_);
 	sl.load("nameStaticProtected", nameStaticProtected_);
-	sl.load("icon", icon_);
+	sl.load("defaultIcon", defaultIcon_);
+	sl.load("constructorIcon", constructorIcon_);
+	sl.load("destructorIcon", destructorIcon_);
+	sl.load("conversionIcon", conversionIcon_);
 	sl.load("header", header_);
 	sl.load("signatureLine",signatureLine_);
 	sl.load("body", body_);

@@ -49,7 +49,10 @@ class OOVISUALIZATION_API VMethodStyle : public Visualization::DeclarativeItemBa
 		Visualization::TextStyle nameStaticPublic_;
 		Visualization::TextStyle nameStaticPrivate_;
 		Visualization::TextStyle nameStaticProtected_;
-		Visualization::StaticStyle icon_;
+		Visualization::StaticStyle defaultIcon_;
+		Visualization::StaticStyle constructorIcon_;
+		Visualization::StaticStyle destructorIcon_;
+		Visualization::StaticStyle conversionIcon_;
 		Visualization::SequentialLayoutStyle header_;
 		Visualization::LineStyle signatureLine_;
 		Visualization::VListStyle body_;
@@ -71,7 +74,10 @@ class OOVISUALIZATION_API VMethodStyle : public Visualization::DeclarativeItemBa
 		const Visualization::TextStyle& nameStaticPublic() const;
 		const Visualization::TextStyle& nameStaticPrivate() const;
 		const Visualization::TextStyle& nameStaticProtected() const;
-		const Visualization::StaticStyle& icon() const;
+		const Visualization::StaticStyle& defaultIcon() const;
+		const Visualization::StaticStyle& constructorIcon() const;
+		const Visualization::StaticStyle& destructorIcon() const;
+		const Visualization::StaticStyle& conversionIcon() const;
 		const Visualization::SequentialLayoutStyle& header() const;
 		const Visualization::LineStyle& signatureLine() const;
 		const Visualization::VListStyle& body() const;
@@ -91,7 +97,10 @@ inline const Visualization::TextStyle& VMethodStyle::nameStaticDefault() const {
 inline const Visualization::TextStyle& VMethodStyle::nameStaticPublic() const { return nameStaticPublic_; }
 inline const Visualization::TextStyle& VMethodStyle::nameStaticPrivate() const { return nameStaticPrivate_; }
 inline const Visualization::TextStyle& VMethodStyle::nameStaticProtected() const { return nameStaticProtected_; }
-inline const Visualization::StaticStyle& VMethodStyle::icon() const { return icon_; }
+inline const Visualization::StaticStyle& VMethodStyle::defaultIcon() const { return defaultIcon_; }
+inline const Visualization::StaticStyle& VMethodStyle::constructorIcon() const { return constructorIcon_; }
+inline const Visualization::StaticStyle& VMethodStyle::destructorIcon() const { return destructorIcon_; }
+inline const Visualization::StaticStyle& VMethodStyle::conversionIcon() const { return conversionIcon_; }
 inline const Visualization::SequentialLayoutStyle& VMethodStyle::header() const { return header_; }
 inline const Visualization::LineStyle& VMethodStyle::signatureLine() const { return signatureLine_; }
 inline const Visualization::VListStyle& VMethodStyle::body() const { return body_; }

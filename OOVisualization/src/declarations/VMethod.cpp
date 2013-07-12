@@ -48,7 +48,16 @@ void VMethod::initializeForms()
 {
 	auto headerElement = (new GridLayoutFormElement())
 		->setHorizontalSpacing(3)->setVerticalAlignment(LayoutStyle::Alignment::Center)->setColumnStretchFactor(4, 1)
-		->put(0, 0, item<Static>(&I::icon_, [](I* v){return &v->style()->icon();}))
+		->put(0, 0, item<Static>(&I::icon_, [](I* v)
+				{
+					switch (v->node()->methodKind())
+					{
+						case Method::MethodKind::Default: return &v->style()->defaultIcon();
+						case Method::MethodKind::Constructor: return &v->style()->constructorIcon();
+						case Method::MethodKind::Destructor: return &v->style()->destructorIcon();
+						default: return &v->style()->defaultIcon();
+					}
+				}))
 		->put(1, 0, item<VList>(&I::results_, [](I* v){return v->node()->results();},
 											[](I* v){return &v->style()->results();}))
 		->put(2, 0, item<VText>(&I::name_, [](I* v){return v->node()->nameNode();}, [](I* v)
