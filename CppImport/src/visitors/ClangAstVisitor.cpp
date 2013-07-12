@@ -185,6 +185,7 @@ bool ClangAstVisitor::TraverseFunctionDecl(clang::FunctionDecl* functionDecl)
 			curModel->methods()->append(ooFunction);
 		else if(OOModel::Class* curClass = dynamic_cast<OOModel::Class*>(ooStack_.top()))
 		{
+			// TODO: this should not happen: remove this case?
 			log_->writeError(className_, functionDecl, CppImportLogger::Reason::NOT_SUPPORTED);
 			curClass->methods()->append(ooFunction);
 		}
