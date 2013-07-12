@@ -17,7 +17,8 @@ bool TemplateArgumentVisitor::TraverseDecl(clang::Decl* decl)
 {
 	if(!llvm::isa<clang::TemplateTypeParmDecl>(decl) && !llvm::isa<clang::NonTypeTemplateParmDecl>(decl))
 	{
-		log_->writeError(className_, "Can not handle this decl with this visitor", decl->getLocStart());
+		log_->writeError(className_, decl->getLocStart(), CppImportLogger::Reason::OTHER,
+							  "Can not handle this decl with this visitor");
 		typeArgStack_.push(new OOModel::FormalTypeArgument("#ERROR"));
 		return true;
  	}

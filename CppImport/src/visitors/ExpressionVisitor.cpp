@@ -128,7 +128,7 @@ bool ExpressionVisitor::TraverseCallExpr(clang::CallExpr* callExpr)
 		ooMethodCall->setCallee(ooExprStack_.pop());
 	else
 	{
-		log_->writeError(className_, "could not convert method callee", callExpr->getCallee());
+		log_->writeError(className_, callExpr->getCallee(), CppImportLogger::Reason::NOT_SUPPORTED);
 		ooMethodCall->setCallee(utils_->createErrorExpression("Could not convert calleee"));
 	}
 
@@ -142,7 +142,7 @@ bool ExpressionVisitor::TraverseCallExpr(clang::CallExpr* callExpr)
 		if(!ooExprStack_.empty())
 			ooMethodCall->arguments()->append(ooExprStack_.pop());
 		else
-			log_->writeError(className_, "not supported", *argIt);
+			log_->writeError(className_, *argIt, CppImportLogger::Reason::NOT_SUPPORTED);
 	}
 
 	ooExprStack_.push(ooMethodCall);
@@ -222,7 +222,7 @@ bool ExpressionVisitor::TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* 
 			}
 			// this should not happen
 			SAFE_DELETE(ooCall);
-			log_->writeError(className_, "No method name found (overload)", callExpr);
+			log_->writeError(className_, callExpr, CppImportLogger::Reason::OTHER, "No method name found (overload)");
 			ooExprStack_.push(utils_->createErrorExpression("METHOD CALL NO NAME FOUND"));
 			break;
 		}
@@ -327,14 +327,14 @@ bool ExpressionVisitor::TraverseCXXConstructExpr(clang::CXXConstructExpr* constr
 			if(!ooExprStack_.empty())
 				ooMethodCall->arguments()->append(ooExprStack_.pop());
 			else
-				log_->writeError(className_, "Could not convert", *argIt);
+				log_->writeError(className_, *argIt, CppImportLogger::Reason::NOT_SUPPORTED);
 		}
 		ooExprStack_.push(ooMethodCall);
 		return true;
 	}
 	// clang models lambda construct expressions weird the name of the lambda is in the first argument
 	if(constructExpr->getNumArgs() != 1)
-		log_->writeError(className_, "ContructExpr need inspectation", constructExpr);
+		log_->writeError(className_, constructExpr, CppImportLogger::Reason::OTHER, "ContructExpr need inspectation");
 	for(auto argIt = constructExpr->arg_begin(); argIt != constructExpr->arg_end(); ++argIt)
 	{
 		if(llvm::isa<clang::CXXDefaultArgExpr>(*argIt))
@@ -359,7 +359,7 @@ bool ExpressionVisitor::TraverseCXXUnresolvedConstructExpr(clang::CXXUnresolvedC
 		if(!ooExprStack_.empty())
 			ooMethodCall->arguments()->append(ooExprStack_.pop());
 		else
-			log_->writeError(className_, "not supported", *argIt);
+			log_->writeError(className_, *argIt, CppImportLogger::Reason::NOT_SUPPORTED);
 	}
 	ooExprStack_.push(ooMethodCall);
 	return true;
@@ -413,7 +413,7 @@ bool ExpressionVisitor::TraverseCXXTypeidExpr(clang::CXXTypeidExpr* typeIdExpr)
 		if(!ooExprStack_.empty())
 			ooTypeTrait->setOperand(ooExprStack_.pop());
 		else
-			log_->writeError(className_, "unsupported typeid operand", typeIdExpr);
+			log_->writeError(className_, typeIdExpr, CppImportLogger::Reason::NOT_SUPPORTED);
 	}
 	ooExprStack_.push(ooTypeTrait);
 	return true;
@@ -521,7 +521,7 @@ bool ExpressionVisitor::TraverseUnaryExprOrTypeTraitExpr(clang::UnaryExprOrTypeT
 		if(!ooExprStack_.empty()) argument = ooExprStack_.pop();
 		else
 		{
-			log_->writeError(className_, "unsupported type trait arg", typeTrait->getArgumentExpr());
+			log_->writeError(className_, typeTrait->getArgumentExpr(), CppImportLogger::Reason::NOT_SUPPORTED);
 			argument = utils_->createErrorExpression("Unsupported argument");
 		}
 	}
@@ -534,7 +534,7 @@ bool ExpressionVisitor::TraverseUnaryExprOrTypeTraitExpr(clang::UnaryExprOrTypeT
 								(OOModel::TypeTraitExpression::TypeTraitKind::AlignOf, argument));
 	else
 	{
-		log_->writeError(className_, "unsupported type trait expr", typeTrait);
+		log_->writeError(className_, typeTrait, CppImportLogger::Reason::NOT_SUPPORTED);
 		SAFE_DELETE(argument);
 	}
 	return true;
@@ -570,12 +570,12 @@ bool ExpressionVisitor::TraverseBinaryOp(clang::BinaryOperator* binaryOperator)
 	TraverseStmt(binaryOperator->getLHS());
 	if(!ooExprStack_.empty()) ooLeft = ooExprStack_.pop();
 	else
-		log_->writeError(className_, "BOP: LHSExpr not supported", binaryOperator->getLHS());
+		log_->writeError(className_, binaryOperator->getLHS(), CppImportLogger::Reason::NOT_SUPPORTED);
 	// right
 	TraverseStmt(binaryOperator->getRHS());
 	if(!ooExprStack_.empty()) ooRight = ooExprStack_.pop();
 	else
-		log_->writeError(className_, "BOP: RHSExpr not supported", binaryOperator->getRHS());
+		log_->writeError(className_, binaryOperator->getRHS(), CppImportLogger::Reason::NOT_SUPPORTED);
 
 	clang::BinaryOperatorKind opcode = binaryOperator->getOpcode();
 	if(opcode == clang::BO_Comma)
@@ -593,11 +593,11 @@ bool ExpressionVisitor::TraverseAssignment(clang::BinaryOperator* binaryOperator
 	// left
 	TraverseStmt(binaryOperator->getLHS());
 	if(!ooExprStack_.empty()) ooBinOp->setLeft(ooExprStack_.pop());
-	else log_->writeError(className_, "BOP: LHSExpr not supported", binaryOperator->getLHS());
+	else log_->writeError(className_, binaryOperator->getLHS(), CppImportLogger::Reason::NOT_SUPPORTED);
 	// right
 	TraverseStmt(binaryOperator->getRHS());
 	if(!ooExprStack_.empty()) ooBinOp->setRight(ooExprStack_.pop());
-	else log_->writeError(className_, "BOP: RHSExpr not supported", binaryOperator->getRHS());
+	else log_->writeError(className_, binaryOperator->getRHS(), CppImportLogger::Reason::NOT_SUPPORTED);
 
 	ooExprStack_.push(ooBinOp);
 	return true;
@@ -608,7 +608,7 @@ bool ExpressionVisitor::TraverseUnaryOp(clang::UnaryOperator* unaryOperator)
 	clang::UnaryOperatorKind opcode = unaryOperator->getOpcode();
 	if(opcode == clang::UO_Extension || opcode == clang::UO_Real || opcode == clang::UO_Imag)
 	{
-		log_->writeError(className_, "UNARY OP NOT SUPPORTED", unaryOperator);
+		log_->writeError(className_, unaryOperator, CppImportLogger::Reason::NOT_SUPPORTED);
 		unaryOperator->dump();
 		// just convert the subexpression
 		log_->unaryOpNotSupported(opcode);
@@ -618,7 +618,7 @@ bool ExpressionVisitor::TraverseUnaryOp(clang::UnaryOperator* unaryOperator)
 	// subexpr
 	TraverseStmt(unaryOperator->getSubExpr());
 	if(!ooExprStack_.empty()) ooUnaryOp->setOperand(ooExprStack_.pop());
-	else log_->writeError(className_, "UOP: SubExpr not supported", unaryOperator->getSubExpr());
+	else log_->writeError(className_, unaryOperator->getSubExpr(), CppImportLogger::Reason::NOT_SUPPORTED);
 
 	ooExprStack_.push(ooUnaryOp);
 	return true;

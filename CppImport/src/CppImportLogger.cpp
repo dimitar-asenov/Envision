@@ -45,8 +45,8 @@ void CppImportLogger::setSourceManager(const clang::SourceManager* sourceManager
 	sourceManger_ = sourceManager;
 }
 
-void CppImportLogger::writeOut(const QString& inWhichClass, const QString& reason, const clang::NamedDecl* decl,
-										 CppImportLogger::OUTTYPE outType)
+void CppImportLogger::writeOut(const QString& inWhichClass, const clang::NamedDecl* decl, OUTTYPE outType,
+										 const Reason& r, const QString& reason)
 {
 	QTextStream* outStream;
 	switch(outType)
@@ -57,12 +57,18 @@ void CppImportLogger::writeOut(const QString& inWhichClass, const QString& reaso
 	}
 
 	QString clangType = QString(decl->getDeclKindName());
-
+	clangType.append(reasons_[static_cast<int>(r)]);
 	int newCount = countMap_.value(clangType) + 1;
 	countMap_.insert(clangType, newCount);
 
+	QString outMessage;
+	if(r == Reason::OTHER)
+		outMessage = reason;
+	else
+		outMessage = getReasonString(r);
+
 	std::pair<clang::FileID,unsigned> decomposedLoc = sourceManger_->getDecomposedLoc(decl->getLocation());
-	(*outStream) << "ERR/WARN: \t In class : " << inWhichClass << " \n\t reason : " << reason
+	(*outStream) << "ERR/WARN: \t In class : " << inWhichClass << " \n\t reason : " << outMessage
 					 << " \n\t in clang node : " << clangType
 					 << " \n\t clang node name : " << QString::fromStdString(decl->getNameAsString())
 					 << " \n\t in file : " << sourceManger_->getBufferName(decl->getLocation())
@@ -71,8 +77,8 @@ void CppImportLogger::writeOut(const QString& inWhichClass, const QString& reaso
 
 }
 
-void CppImportLogger::writeOut(const QString& inWhichClass, const QString& reason, const clang::Stmt* stmt,
-										 CppImportLogger::OUTTYPE outType)
+void CppImportLogger::writeOut(const QString& inWhichClass, const clang::Stmt* stmt, OUTTYPE outType,
+										 const Reason& r, const QString& reason)
 {
 	if(!stmt)
 		return;
@@ -84,12 +90,18 @@ void CppImportLogger::writeOut(const QString& inWhichClass, const QString& reaso
 		default: return;
 	}
 	QString clangType = QString(stmt->getStmtClassName());
-
+	clangType.append(reasons_[static_cast<int>(r)]);
 	int newCount = countMap_.value(clangType) + 1;
 	countMap_.insert(clangType, newCount);
 
+	QString outMessage;
+	if(r == Reason::OTHER)
+		outMessage = reason;
+	else
+		outMessage = getReasonString(r);
+
 	std::pair<clang::FileID,unsigned> decomposedLoc = sourceManger_->getDecomposedLoc(stmt->getLocStart());
-	(*outStream) << "ERR/WARN: \t In class : " << inWhichClass << " \n\t reason : " << reason
+	(*outStream) << "ERR/WARN: \t In class : " << inWhichClass << " \n\t reason : " << outMessage
 					 << " \n\t in stmt class node : " << clangType
 					 << " \n\t in file : " << sourceManger_->getBufferName(stmt->getLocStart())
 					 << " \n\t on line : " << sourceManger_->getLineNumber(decomposedLoc.first,decomposedLoc.second)
@@ -97,10 +109,16 @@ void CppImportLogger::writeOut(const QString& inWhichClass, const QString& reaso
 
 }
 
-void CppImportLogger::writeError(const QString& inWhichClass, const QString& reason, const clang::SourceLocation& loc)
+void CppImportLogger::writeError(const QString& inWhichClass, const clang::SourceLocation& loc, const Reason& r, const QString& reason)
 {
+	QString outMessage;
+	if(r == Reason::OTHER)
+		outMessage = reason;
+	else
+		outMessage = getReasonString(r);
+
 	std::pair<clang::FileID,unsigned> decomposedLoc = sourceManger_->getDecomposedLoc(loc);
-	(*errStream_) << "ERR/WARN: \t In class : " << inWhichClass << " \n\t reason : " << reason
+	(*errStream_) << "ERR/WARN: \t In class : " << inWhichClass << " \n\t reason : " << outMessage
 					  << " \n\t in file : " << sourceManger_->getBufferName(loc)
 					  << " \n\t on line : " << sourceManger_->getLineNumber(decomposedLoc.first,decomposedLoc.second)
 					  << "\n";
@@ -110,6 +128,19 @@ void CppImportLogger::typeNotSupported(const QString& typeName)
 {
 	int newCount = typeCountMap_.value(typeName) + 1;
 	typeCountMap_.insert(typeName, newCount);
+}
+
+void CppImportLogger::typeNotSupported(const clang::Type* type)
+{
+	QString typeName = QString(type->getTypeClassName());
+	int newCount = typeCountMap_.value(typeName) + 1;
+	typeCountMap_.insert(typeName, newCount);
+
+//	(*errStream_) << "ERR/WARN: \t reason :  TYPE NOT SUPPORTED"
+//					  << " \n\t in file : " << sourceManger_->getBufferName(type->get)
+//					  << " \n\t on line : " << sourceManger_->getLineNumber(decomposedLoc.first,decomposedLoc.second)
+//					  << "\n";
+
 }
 
 void CppImportLogger::unaryOpNotSupported(const clang::UnaryOperatorKind& kind)
@@ -205,6 +236,21 @@ void CppImportLogger::printStatistic(const char* message, const QMap<QString, in
 		for(auto iter = map.constBegin(); iter != map.constEnd(); ++iter)
 			(*warnStream_) << left << qSetFieldWidth(30) << iter.key() + ":"
 								<< right << qSetFieldWidth(6) << iter.value() << endl;
+	}
+}
+
+const QString CppImportLogger::getReasonString(const CppImportLogger::Reason& r)
+{
+	switch(r)
+	{
+		case Reason::NOT_SUPPORTED:
+			return "Not supported";
+		case Reason::NO_PARENT:
+			return "No parent found";
+		case Reason::INSERT_PROBLEM:
+			return "Uknown where to put";
+		default:
+			return QString();
 	}
 }
 

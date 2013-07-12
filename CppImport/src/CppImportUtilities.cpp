@@ -162,20 +162,21 @@ OOModel::Expression* CppImportUtilities::translateNestedNameSpecifier
 					(QString::fromStdString(nestedName->getAsNamespaceAlias()->getNameAsString()));
 			break;
 		case clang::NestedNameSpecifier::TypeSpec:
-			// TODO
+			// TODO handle the case where this cast is not a reference
 			if(auto typeRef = dynamic_cast<OOModel::ReferenceExpression*>(convertTypePtr(nestedName->getAsType())))
 				currentRef = typeRef;
 			else
 				returnExpr = createErrorExpression("TypeSpecNameSpecifier");
 			break;
 		case clang::NestedNameSpecifier::TypeSpecWithTemplate:
-			// TODO
+			// TODO handle the case where this cast is not a reference
 			if(auto typeRef = dynamic_cast<OOModel::ReferenceExpression*>(convertTypePtr(nestedName->getAsType())))
 				currentRef = typeRef;
 			else
 				returnExpr = createErrorExpression("Could not translate TypeSpecWithTemplate");
 			break;
 		case clang::NestedNameSpecifier::Global:
+			// if we have the Global specifier there can not be a prefix() other wise it is invalid C++
 			Q_ASSERT(!nestedName->getPrefix());
 			returnExpr = new OOModel::GlobalScopeExpression();
 	}
@@ -356,7 +357,7 @@ OOModel::MemberInitializer* CppImportUtilities::translateMemberInit(const clang:
 		if(auto memberRef = dynamic_cast<OOModel::ReferenceExpression*>(convertTypePtr(initializer->getBaseClass())))
 			ooMemberInit = new OOModel::MemberInitializer(memberRef, initExpression);
 		else
-			log_->writeError(className_, "Could not convert CtorInit - BaseInitializer", initializer->getLParenLoc());
+			log_->writeError(className_, initializer->getLParenLoc(), CppImportLogger::Reason::NOT_SUPPORTED);
 	}
 	else if(initializer->isMemberInitializer())
 		ooMemberInit = new OOModel::MemberInitializer(
@@ -367,11 +368,11 @@ OOModel::MemberInitializer* CppImportUtilities::translateMemberInit(const clang:
 		ooMemberInit = new OOModel::MemberInitializer(initExpression);
 
 	if(!ooMemberInit)
-		log_->writeError(className_, "Unsupported CtorInit", initializer->getLParenLoc());
+		log_->writeError(className_, initializer->getLParenLoc(), CppImportLogger::Reason::NOT_SUPPORTED);
 	return ooMemberInit;
 }
 
-OOModel::Expression*CppImportUtilities::convertBuiltInClangType(const clang::Type* type)
+OOModel::Expression*CppImportUtilities::convertBuiltInClangType(const clang::BuiltinType* type)
 {
 	const clang::BuiltinType* builtinType = type->getAs<clang::BuiltinType>();
 	switch(builtinType->getKind())
@@ -585,9 +586,9 @@ OOModel::Expression*CppImportUtilities::convertTypePtr(const clang::Type* type)
 	{
 		translatedType = convertTypePtr(injectedClass->getInjectedTST());
 	}
-	else if(type->isBuiltinType())
+	else if(auto builtIn = llvm::dyn_cast<clang::BuiltinType>(type))
 	{
-		translatedType = convertBuiltInClangType(type);
+		translatedType = convertBuiltInClangType(builtIn);
 	}
 	else
 	{

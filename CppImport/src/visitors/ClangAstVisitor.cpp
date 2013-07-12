@@ -79,7 +79,7 @@ bool ClangAstVisitor::TraverseNamespaceDecl(clang::NamespaceDecl* namespaceDecl)
 	OOModel::Module* ooModule = trMngr_->insertNamespace(namespaceDecl);
 	if(!ooModule)
 	{
-		log_->writeError(className_, "uknown where to put namespace", namespaceDecl);
+		log_->writeError(className_, namespaceDecl, CppImportLogger::Reason::INSERT_PROBLEM);
 		// this is a severe error which should not happen therefore stop visiting
 		return false;
 	}
@@ -163,7 +163,7 @@ bool ClangAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl)
 		}
 	}
 	else
-		log_->writeError(className_, "Unsupported RecordDecl", recordDecl);
+		log_->writeError(className_, recordDecl, CppImportLogger::Reason::NOT_SUPPORTED);
 	return true;
 }
 
@@ -185,16 +185,16 @@ bool ClangAstVisitor::TraverseFunctionDecl(clang::FunctionDecl* functionDecl)
 			curModel->methods()->append(ooFunction);
 		else if(OOModel::Class* curClass = dynamic_cast<OOModel::Class*>(ooStack_.top()))
 		{
-			log_->writeError(className_,"friend function with definition is not supported", functionDecl);
+			log_->writeError(className_, functionDecl, CppImportLogger::Reason::NOT_SUPPORTED);
 			curClass->methods()->append(ooFunction);
 		}
 		else
-			log_->writeError(className_, "uknown where to put function", functionDecl);
+			log_->writeError(className_, functionDecl, CppImportLogger::Reason::INSERT_PROBLEM);
 		// handle body, typeargs and storage specifier
 		TraverseFunction(functionDecl, ooFunction);
 	}
 	else
-		log_->writeError(className_, "could not insert function", functionDecl);
+		log_->writeError(className_, functionDecl, CppImportLogger::Reason::INSERT_PROBLEM);
 	return true;
 }
 
@@ -225,7 +225,7 @@ bool ClangAstVisitor::TraverseIfStmt(clang::IfStmt* ifStmt)
 		ooStack_.pop();
 	}
 	else
-		log_->writeError(className_, "Uknown where to put if stmt", ifStmt);
+		log_->writeError(className_, ifStmt, CppImportLogger::Reason::INSERT_PROBLEM);
 	return true;
 }
 
@@ -252,7 +252,7 @@ bool ClangAstVisitor::TraverseWhileStmt(clang::WhileStmt* whileStmt)
 		ooStack_.pop();
 	}
 	else
-		log_->writeError(className_, "Uknown where to put while stmt", whileStmt);
+		log_->writeError(className_, whileStmt, CppImportLogger::Reason::INSERT_PROBLEM);
 	return true;
 }
 
@@ -277,7 +277,7 @@ bool ClangAstVisitor::TraverseDoStmt(clang::DoStmt* doStmt)
 		ooStack_.pop();
 	}
 	else
-		log_->writeError(className_, "Uknown where to put do while stmt", doStmt);
+		log_->writeError(className_, doStmt, CppImportLogger::Reason::INSERT_PROBLEM);
 	return true;
 }
 
@@ -309,7 +309,7 @@ bool ClangAstVisitor::TraverseForStmt(clang::ForStmt* forStmt)
 		ooStack_.pop();
 	}
 	else
-		log_->writeError(className_, "Uknown where to put for stmt", forStmt);
+		log_->writeError(className_, forStmt, CppImportLogger::Reason::INSERT_PROBLEM);
 	return true;
 }
 
@@ -335,7 +335,7 @@ bool ClangAstVisitor::TraverseCXXForRangeStmt(clang::CXXForRangeStmt* forRangeSt
 		inBody_ = inBody;
 	}
 	else
-		log_->writeError(className_, "Uknown where to put forRange stmt", forRangeStmt);
+		log_->writeError(className_, forRangeStmt, CppImportLogger::Reason::INSERT_PROBLEM);
 	return true;
 }
 
@@ -352,11 +352,11 @@ bool ClangAstVisitor::TraverseReturnStmt(clang::ReturnStmt* returnStmt)
 		if(!ooExprStack_.empty())
 			ooReturn->values()->append(ooExprStack_.pop());
 		else
-			log_->writeError(className_, "Return expr not supported", returnStmt->getRetValue());
+			log_->writeError(className_, returnStmt->getRetValue(), CppImportLogger::Reason::NOT_SUPPORTED);
 		inBody_ = inBody;
 	}
 	else
-		log_->writeError(className_, "Uknown where to put return stmt", returnStmt);
+		log_->writeError(className_, returnStmt, CppImportLogger::Reason::INSERT_PROBLEM);
 	return true;
 }
 
@@ -380,7 +380,7 @@ bool ClangAstVisitor::TraverseDeclStmt(clang::DeclStmt* declStmt)
 			if(!ooExprStack_.empty())
 				exprList.append(ooExprStack_.pop());
 			else
-				log_->writeError(className_, "unsupported decl", (*declIt)->getLocStart());
+				log_->writeError(className_, (*declIt)->getLocStart(), CppImportLogger::Reason::NOT_SUPPORTED);
 		}
 		int size = exprList.size();
 		auto currentCommaExpr = ooComma;
@@ -402,7 +402,7 @@ bool ClangAstVisitor::TraverseDeclStmt(clang::DeclStmt* declStmt)
 		if(!(inBody_ = inBody))
 			ooExprStack_.push(ooComma);
 		else
-			log_->writeError(className_,"uknown where to put ", declStmt);
+			log_->writeError(className_, declStmt, CppImportLogger::Reason::INSERT_PROBLEM);
 		return true;
 	}
 	return TraverseDecl(declStmt->getSingleDecl());
@@ -430,7 +430,7 @@ bool ClangAstVisitor::TraverseCXXTryStmt(clang::CXXTryStmt* tryStmt)
 		inBody_ = inBody;
 	}
 	else
-		log_->writeError(className_, "Uknown where to put try stmt", tryStmt);
+		log_->writeError(className_, tryStmt, CppImportLogger::Reason::INSERT_PROBLEM);
 	return true;
 }
 
@@ -475,7 +475,7 @@ bool ClangAstVisitor::TraverseStmt(clang::Stmt* S)
 		else
 		{
 			ooExprStack_.push(utils_->createErrorExpression("Could not convert expr"));
-			log_->writeError(className_, "exprvisitor couldn't convert", S);
+			log_->writeError(className_, S, CppImportLogger::Reason::NOT_SUPPORTED);
 		}
 		return ret;
 	}
@@ -499,7 +499,7 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 	{
 		if(!(ooVarDecl = trMngr_->insertStaticField(varDecl, wasDeclared)))
 		{
-			log_->writeError(className_, "Static field with no parent", varDecl);
+			log_->writeError(className_, varDecl, CppImportLogger::Reason::NO_PARENT);
 			varDecl->dump();
 			return true;
 		}
@@ -535,7 +535,7 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 		}
 		else
 		{
-			log_->writeWarning(className_, "this variable is not supported", varDecl);
+			log_->writeWarning(className_, varDecl, CppImportLogger::Reason::INSERT_PROBLEM);
 			return true;
 		}
 	}
@@ -552,7 +552,7 @@ bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)
 				ooVarDecl->setInitialValue(ooExprStack_.pop());
 		}
 		else
-			log_->writeError(className_, "Var Init Expr not supported", varDecl->getInit());
+			log_->writeError(className_, varDecl->getInit(), CppImportLogger::Reason::NOT_SUPPORTED);
 		inBody_ = inBody;
 	}
 	if(wasDeclared)
@@ -584,7 +584,7 @@ bool ClangAstVisitor::TraverseEnumDecl(clang::EnumDecl* enumDecl)
 		itemList->append(new OOModel::DeclarationStatement(ooEnumClass));
 	else
 	{
-		log_->writeWarning(className_, "Unknown where to put Enum", enumDecl);
+		log_->writeWarning(className_, enumDecl, CppImportLogger::Reason::INSERT_PROBLEM);
 		// no need to further process this enum
 		return true;
 	}
@@ -614,7 +614,7 @@ bool ClangAstVisitor::TraverseFieldDecl(clang::FieldDecl* fieldDecl)
 	OOModel::Field* field = trMngr_->insertField(fieldDecl);
 	if(!field)
 	{
-		log_->writeError(className_, "no parent found for this field", fieldDecl);
+		log_->writeError(className_, fieldDecl, CppImportLogger::Reason::NO_PARENT);
 		return true;
 	}
 	if(fieldDecl->hasInClassInitializer())
@@ -625,7 +625,7 @@ bool ClangAstVisitor::TraverseFieldDecl(clang::FieldDecl* fieldDecl)
 		if(!ooExprStack_.empty())
 			field->setInitialValue(ooExprStack_.pop());
 		else
-			log_->writeError(className_, "Could not translate init", fieldDecl->getInClassInitializer());
+			log_->writeError(className_, fieldDecl->getInClassInitializer(), CppImportLogger::Reason::NOT_SUPPORTED);
 		inBody_ = inBody;
 	}
 
@@ -740,12 +740,12 @@ bool ClangAstVisitor::TraverseSwitchStmt(clang::SwitchStmt* switchStmt)
 			SAFE_DELETE(itemList);
 		}
 		else
-			log_->writeError(className_, "unsupported switchstmt", switchStmt);
+			log_->writeError(className_, switchStmt, CppImportLogger::Reason::NOT_SUPPORTED);
 		// restore inbody var
 		inBody_ = inBody;
 	}
 	else
-		log_->writeError(className_, "Uknown where to put switch stmt", switchStmt);
+		log_->writeError(className_, switchStmt, CppImportLogger::Reason::INSERT_PROBLEM);
 	return true;
 }
 
@@ -782,7 +782,7 @@ bool ClangAstVisitor::VisitBreakStmt(clang::BreakStmt* breakStmt)
 	if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
 		itemList->append(new OOModel::BreakStatement());
 	else
-		log_->writeError(className_, "Uknown where to put break stmt", breakStmt);
+		log_->writeError(className_, breakStmt, CppImportLogger::Reason::INSERT_PROBLEM);
 	return true;
 }
 
@@ -791,7 +791,7 @@ bool ClangAstVisitor::VisitContinueStmt(clang::ContinueStmt* continueStmt)
 	if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
 		itemList->append(new OOModel::ContinueStatement());
 	else
-		log_->writeError(className_, "Uknown where to put continue stmt", continueStmt);
+		log_->writeError(className_, continueStmt, CppImportLogger::Reason::INSERT_PROBLEM);
 	return true;
 }
 
@@ -807,7 +807,7 @@ bool ClangAstVisitor::VisitTypedefNameDecl(clang::TypedefNameDecl* typedefDecl)
 	else if(auto declaration = dynamic_cast<OOModel::Declaration*>(ooStack_.top()))
 		declaration->subDeclarations()->append(ooTypeAlias);
 	else
-		log_->writeError(className_, "Uknown where to put typedef", typedefDecl);
+		log_->writeError(className_, typedefDecl, CppImportLogger::Reason::INSERT_PROBLEM);
 	return true;
 }
 
@@ -829,7 +829,7 @@ bool ClangAstVisitor::VisitNamespaceAliasDecl(clang::NamespaceAliasDecl* namespa
 	else
 	{
 		SAFE_DELETE(ooTypeAlias);
-		log_->writeError(className_, "Uknown where to put namespace alias", namespaceAlias);
+		log_->writeError(className_, namespaceAlias, CppImportLogger::Reason::INSERT_PROBLEM);
 	}
 	return true;
 }
@@ -852,7 +852,7 @@ bool ClangAstVisitor::VisitUsingDecl(clang::UsingDecl* usingDecl)
 		else
 		{
 			SAFE_DELETE(ooNameImport);
-			log_->writeError(className_, "Uknown where to put using decl", usingDecl);
+			log_->writeError(className_, usingDecl, CppImportLogger::Reason::INSERT_PROBLEM);
 		}
 	}
 	return true;
@@ -876,7 +876,7 @@ bool ClangAstVisitor::VisitUsingDirectiveDecl(clang::UsingDirectiveDecl* usingDi
 		else
 		{
 			SAFE_DELETE(ooNameImport);
-			log_->writeError(className_, "Uknown where to put using directive decl", usingDirectiveDecl);
+			log_->writeError(className_, usingDirectiveDecl, CppImportLogger::Reason::INSERT_PROBLEM);
 		}
 	}
 	return true;
@@ -895,7 +895,7 @@ bool ClangAstVisitor::TraverseMethodDecl(clang::CXXMethodDecl* methodDecl, OOMod
 		// TODO is this correct?
 		// only consider a method where the parent has been visited
 		if(trMngr_->containsClass(methodDecl->getParent()))
-			log_->writeError(className_, "no ooModel::method found", methodDecl);
+			log_->writeError(className_, methodDecl, CppImportLogger::Reason::NO_PARENT);
 		return true;
 	}
 	// handle body, typeargs and storage specifier
@@ -931,7 +931,7 @@ void ClangAstVisitor::TraverseClass(clang::CXXRecordDecl* recordDecl, OOModel::C
 	else if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
 		itemList->append(new OOModel::DeclarationStatement(ooClass));
 	else
-		log_->writeError(className_, "uknown where to put class", recordDecl);
+		log_->writeError(className_, recordDecl, CppImportLogger::Reason::INSERT_PROBLEM);
 
 	// visit child decls
 	if(recordDecl->isThisDeclarationADefinition())
@@ -948,7 +948,7 @@ void ClangAstVisitor::TraverseClass(clang::CXXRecordDecl* recordDecl, OOModel::C
 				if (auto friendDecl = fDecl->getFriendDecl())
 				{
 					if(!llvm::isa<clang::FunctionDecl>(friendDecl))
-						log_->writeError(className_,"Friend which ish not a function", friendDecl);
+						log_->writeError(className_, friendDecl, CppImportLogger::Reason::NOT_SUPPORTED);
 					else
 						insertFriendFunction(llvm::dyn_cast<clang::FunctionDecl>(friendDecl), ooClass);
 				}
@@ -1025,7 +1025,7 @@ OOModel::Class*ClangAstVisitor::createClass(clang::CXXRecordDecl* recordDecl)
 		return new OOModel::Class(recordDeclName,OOModel::Class::ConstructKind::Struct);
 	else if(recordDecl->isUnion())
 		return new OOModel::Class(recordDeclName,OOModel::Class::ConstructKind::Union);
-	log_->writeError(className_, "Unsupported RecordDecl", recordDecl);
+	log_->writeError(className_, recordDecl, CppImportLogger::Reason::NOT_SUPPORTED);
 	return nullptr;
 }
 

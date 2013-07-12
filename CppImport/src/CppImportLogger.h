@@ -36,14 +36,23 @@ class CPPIMPORT_API CppImportLogger
 		CppImportLogger();
 		~CppImportLogger();
 		void setSourceManager(const clang::SourceManager* sourceManager);
-		void writeError(const QString& inWhichClass, const QString& reason, const clang::NamedDecl* decl);
-		void writeWarning(const QString& inWhichClass, const QString& reason, const clang::NamedDecl* decl);
-		void writeError(const QString& inWhichClass, const QString& reason, const clang::Stmt* stmt);
-		void writeWarning(const QString& inWhichClass, const QString& reason, const clang::Stmt* stmt);
 
-		void writeError(const QString& inWhichClass, const QString& reason, const clang::SourceLocation& loc);
+		enum class Reason : int {OTHER, NOT_SUPPORTED, NO_PARENT, INSERT_PROBLEM};
+
+		void writeError(const QString& inWhichClass, const clang::NamedDecl* decl,
+							 const Reason& r, const QString& reason = QString());
+		void writeWarning(const QString& inWhichClass, const clang::NamedDecl* decl,
+								const Reason& r, const QString& reason = QString());
+		void writeError(const QString& inWhichClass, const clang::Stmt* stmt,
+							 const Reason& r, const QString& reason = QString());
+		void writeWarning(const QString& inWhichClass, const clang::Stmt* stmt,
+								const Reason& r, const QString& reason = QString());
+
+		void writeError(const QString& inWhichClass, const clang::SourceLocation& loc,
+							 const Reason& r, const QString& reason = QString());
 
 		void typeNotSupported(const QString& typeName);
+		void typeNotSupported(const clang::Type* type);
 
 		void unaryOpNotSupported(const clang::UnaryOperatorKind& kind);
 		void storageClassNotSupported(const clang::StorageClass& sc);
@@ -54,10 +63,16 @@ class CPPIMPORT_API CppImportLogger
 	private:
 		// type of output for writeOut function
 		enum OUTTYPE {ERROR,WARNING};
-		void writeOut(const QString& inWhichClass, const QString& reason, const clang::NamedDecl* decl, OUTTYPE outType);
-		void writeOut(const QString& inWhichClass, const QString& reason, const clang::Stmt *stmt, OUTTYPE outType);
+		void writeOut(const QString& inWhichClass, const clang::NamedDecl* decl,
+						  OUTTYPE outType, const Reason& r, const QString& reason = QString());
+		void writeOut(const QString& inWhichClass, const clang::Stmt *stmt,
+						  OUTTYPE outType, const Reason& r, const QString& reason = QString());
 		void initStreams();
 		void printStatistic(const char* message, const QMap<QString,int>& map);
+
+		const QString getReasonString(const Reason& r);
+		// reason strings to append on maps (keep in sync with reason enum
+		const QString reasons_[4] = {"_O","_NS","_NP","_IP"};
 
 		// outstreams
 		QTextStream* errStream_{};
@@ -77,18 +92,20 @@ class CPPIMPORT_API CppImportLogger
 };
 
 inline void CppImportLogger::writeError
-(const QString& inWhichClass, const QString& reason, const clang::NamedDecl* decl)
-{ writeOut(inWhichClass, reason, decl, ERROR); }
+(const QString& inWhichClass, const clang::NamedDecl* decl, const Reason& r, const QString& reason)
+{ writeOut(inWhichClass, decl, ERROR, r, reason); }
 
 inline void CppImportLogger::writeWarning
-(const QString& inWhichClass, const QString& reason, const clang::NamedDecl* decl)
-{ writeOut(inWhichClass, reason, decl, WARNING); }
+(const QString& inWhichClass, const clang::NamedDecl* decl, const Reason& r, const QString& reason)
+{ writeOut(inWhichClass, decl, WARNING, r, reason); }
 
-inline void CppImportLogger::writeError(const QString& inWhichClass, const QString& reason, const clang::Stmt* stmt)
-{ writeOut(inWhichClass, reason, stmt, ERROR); }
+inline void CppImportLogger::writeError
+(const QString& inWhichClass, const clang::Stmt* stmt, const Reason& r, const QString& reason)
+{ writeOut(inWhichClass, stmt, ERROR, r, reason); }
 
-inline void CppImportLogger::writeWarning(const QString& inWhichClass, const QString& reason, const clang::Stmt* stmt)
-{ writeOut(inWhichClass, reason, stmt, WARNING); }
+inline void CppImportLogger::writeWarning
+(const QString& inWhichClass, const clang::Stmt* stmt, const Reason& r, const QString& reason)
+{ writeOut(inWhichClass, stmt, WARNING, r, reason); }
 
 }
 
