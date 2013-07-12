@@ -52,6 +52,20 @@ namespace OOVisualization {
 
 // The methods below add a certain construct to an existing model or model entity.
 
+void addConstructorAndDestructor(Class* cl)
+{
+
+	auto con = new Method(cl->name(), Modifier::Public, Method::MethodKind::Constructor);
+	cl->methods()->append(con);
+	con->extension<Position>()->set(400,0);
+	con->memberInitializers()->append(new MemberInitializer(new ReferenceExpression("Super"), new IntegerLiteral(42)));
+	con->memberInitializers()->append(new MemberInitializer(new ReferenceExpression("name"), new StringLiteral("hi")));
+
+	auto des = new Method("~" + cl->name(), Modifier::Public, Method::MethodKind::Destructor);
+	cl->methods()->append(des);
+	des->extension<Position>()->set(400,160);
+}
+
 Class* addHelloWorld(Project* parent)
 {
 	auto hello = new Class("HelloWorld", Modifier::Public);
@@ -83,13 +97,7 @@ Class* addHelloWorld(Project* parent)
 	main->items()->append(callPrintlnSt);
 
 	// Add constructors and destructors
-	auto con = new Method("HelloWorld", Modifier::Public, Method::MethodKind::Constructor);
-	con->extension<Position>()->set(400,0);
-	auto des = new Method("~HelloWorld", Modifier::Public, Method::MethodKind::Destructor);
-	des->extension<Position>()->set(400,80);
-
-	hello->methods()->append(con);
-	hello->methods()->append(des);
+	addConstructorAndDestructor(hello);
 
 	return hello;
 }

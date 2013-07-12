@@ -91,6 +91,10 @@ void VMethod::initializeForms()
 	auto annotationsElement = item<VStatementItemList>(&I::annotations_, [](I* v)
 											{return v->node()->annotations()->size() > 0 ? v->node()->annotations() : nullptr;},
 											[](I* v){return &v->style()->annotations();});
+	auto memberInitializersElement = item<VList>(&I::memberInitializers_, [](I* v)
+											{return v->node()->memberInitializers()->size() > 0 ?
+													v->node()->memberInitializers() : nullptr;},
+											[](I* v){return &v->style()->memberInitializers();});
 
 	auto signatureLineElement = item<Line>(&I::signatureLine_, [](I* v){return &v->style()->signatureLine();});
 
@@ -102,7 +106,8 @@ void VMethod::initializeForms()
 			->put(0, 0, addonsElement)
 			->put(0, 1, annotationsElement)
 			->put(0, 2, signatureLineElement)
-			->put(0, 3, bodyElement);
+			->put(0, 3, memberInitializersElement)
+			->put(0, 4, bodyElement);
 
 	auto shapeElement = new ShapeFormElement();
 

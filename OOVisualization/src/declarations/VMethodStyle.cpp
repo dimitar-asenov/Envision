@@ -53,6 +53,7 @@ void VMethodStyle::load(Visualization::StyleLoader& sl)
 	sl.load("typeArguments", typeArguments_);
 	sl.load("arguments", arguments_);
 	sl.load("results", results_);
+	sl.load("memberInitializers", memberInitializers_);
 }
 
 }

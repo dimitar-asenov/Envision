@@ -71,6 +71,7 @@ class OOVISUALIZATION_API VMethod
 		VStatementItemList* annotations_{};
 		Visualization::SequentialLayout* addons_{};
 		Visualization::VList* results_{};
+		Visualization::VList* memberInitializers_{};
 };
 
 inline Visualization::VText* VMethod::name() const { return name_; }

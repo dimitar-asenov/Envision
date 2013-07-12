@@ -62,6 +62,7 @@ class OOVISUALIZATION_API VMethodStyle : public Visualization::DeclarativeItemBa
 		Visualization::VListStyle typeArguments_;
 		Visualization::VListStyle arguments_;
 		Visualization::VListStyle results_;
+		Visualization::VListStyle memberInitializers_;
 
 	public:
 		void load(Visualization::StyleLoader& sl);
@@ -87,6 +88,7 @@ class OOVISUALIZATION_API VMethodStyle : public Visualization::DeclarativeItemBa
 		const Visualization::VListStyle& typeArguments() const;
 		const Visualization::VListStyle& arguments() const;
 		const Visualization::VListStyle& results() const;
+		const Visualization::VListStyle& memberInitializers() const;
 };
 
 inline const Visualization::TextStyle& VMethodStyle::nameDefault() const { return nameDefault_; }
@@ -110,5 +112,6 @@ inline const Visualization::SequentialLayoutStyle& VMethodStyle::content() const
 inline const Visualization::VListStyle& VMethodStyle::arguments() const { return arguments_; }
 inline const Visualization::VListStyle& VMethodStyle::typeArguments() const { return typeArguments_; }
 inline const Visualization::VListStyle& VMethodStyle::results() const { return results_; }
+inline const Visualization::VListStyle& VMethodStyle::memberInitializers() const { return memberInitializers_; }
 
 }

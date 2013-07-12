@@ -7,7 +7,8 @@ win32:LIBS += -llogger \
     -loomodel \
     -lvisualizationbase \
     -linteractionbase
-HEADERS += src/elements/VSwitchCaseStyle.h \
+HEADERS += src/elements/VMemberInitializer.h \
+    src/elements/VSwitchCaseStyle.h \
     src/statements/VSwitchStatement.h \
     src/elements/VSwitchCase.h \
     src/statements/VSwitchStatementStyle.h \
@@ -95,7 +96,8 @@ HEADERS += src/elements/VSwitchCaseStyle.h \
     src/statements/VReturnStatement.h \
     src/statements/VReturnStatementStyle.h \
     src/oovisualization.h
-SOURCES += src/elements/VSwitchCaseStyle.cpp \
+SOURCES += src/elements/VMemberInitializer.cpp \
+    src/elements/VSwitchCaseStyle.cpp \
     src/statements/VSwitchStatement.cpp \
     src/elements/VSwitchCase.cpp \
     src/statements/VSwitchStatementStyle.cpp \
