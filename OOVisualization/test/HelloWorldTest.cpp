@@ -755,9 +755,22 @@ Method* addFactorial(Class* parent)
 	factorial->items()->append(factorialReturn);
 	factorialReturn->values()->append(new ReferenceExpression("result"));
 
-	factorial->extension<Position>()->set(400, 160);
+	factorial->extension<Position>()->set(400, 260);
 
 	return factorial;
+}
+
+Method* addExtraMethod(Class* parent)
+{
+	auto extra = new Method("additional");
+	if (parent) parent->methods()->append(extra);
+
+	extra->items()->append(new DeclarationStatement(new TypeAlias("newTypeName",
+			new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT))));
+
+	extra->extension<Position>()->set(400, 600);
+
+	return extra;
 }
 
 TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
@@ -799,6 +812,9 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 //	// Add a third method
 	Method* factorial = nullptr;
 	factorial = addFactorial(hello);
+
+	// Add an extra method
+	addExtraMethod(hello);
 
 	prj->modules()->append(addLambda());
 	prj->classes()->append(addInner());
