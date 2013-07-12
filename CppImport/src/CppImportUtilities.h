@@ -79,7 +79,10 @@ class CPPIMPORT_API CppImportUtilities
 		 */
 		OOModel::Expression* createErrorExpression(const QString& reason);
 	private:
-		OOModel::Expression* convertBuiltInClangType(const clang::Type* type);
+		/**
+		 * Translates \a type to the nearest primitive OOModel type.
+		 */
+		OOModel::Expression* convertBuiltInClangType(const clang::BuiltinType* type);
 		OOModel::Expression* convertTypePtr(const clang::Type* type);
 		const QString className_{"CppImportUtilities"};
 		CppImportLogger* log_;

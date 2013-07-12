@@ -89,7 +89,17 @@ class CPPIMPORT_API TranslateManager
 		 */
 		OOModel::Field* insertStaticField(clang::VarDecl* varDecl, bool& wasDeclared);
 
+		/**
+		 * This function is to make sure that an using declaration is used only once.
+		 * The function returns a new allocated NameImport object if this usingdecl is not yet there in this context.
+		 * Else it returns a nullptr.
+		 */
 		OOModel::NameImport* insertUsingDecl(clang::UsingDecl* usingDecl);
+		/**
+		 * This function is to make sure that an using directive is used only once.
+		 * The function returns a new allocated NameImport object if this usingdecl is not yet there in this context.
+		 * Else it returns a nullptr.
+		 */
 		OOModel::NameImport* insertUsingDirective(clang::UsingDirectiveDecl* usingDirective);
 
 	private:
