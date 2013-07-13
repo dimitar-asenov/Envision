@@ -124,13 +124,12 @@ bool ClangAstVisitor::TraverseClassTemplateSpecializationDecl
 	if(!shouldModel(specializationDecl->getLocation()) || !specializationDecl->isThisDeclarationADefinition())
 		return true;
 
-	clang::CXXRecordDecl* recordDecl = specializationDecl->getSpecializedTemplate()->getTemplatedDecl();
-	if(auto ooClass = createClass(recordDecl))
+	if(auto ooClass = createClass(specializationDecl))
 	{
 		if(!trMngr_->insertClassTemplateSpec(specializationDecl, ooClass))
 			// this class is already visited
 			return true;
-		TraverseClass(recordDecl, ooClass);
+		TraverseClass(specializationDecl, ooClass);
 		// visit type arguments if any
 		for(unsigned i = 0; i < specializationDecl->getTemplateArgs().size(); i++)
 			ooClass->typeArguments()->append(new OOModel::FormalTypeArgument

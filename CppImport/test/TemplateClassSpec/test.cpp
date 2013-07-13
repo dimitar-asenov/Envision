@@ -10,7 +10,7 @@ template<class T = float, int i = 5> class A
 template<> class A<> { public: A(); };
 template<> class A<double, 10> { public: A(); };
 
-template<> class A<double> {public: A(); };
+template<> class A<double> {public: A(); int value; };
 
 template<class T, int i> A<T, i>::A() : value(i) {
    std::cout << "Primary template, "
