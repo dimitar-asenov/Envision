@@ -39,6 +39,9 @@ CppImportManager::~CppImportManager()
 
 bool CppImportManager::setImportPath(const QString& sourcePath, const QString& compilationDbPath)
 {
+	// set projectname if not yet set
+	if(projectName_.isEmpty())
+		projectName_ = sourcePath.split(QDir::separator()).last();
 	// set a filter to only get files which are c++ sources
 	QStringList cppFilter;
 	cppFilter << "*.cpp" << "*.cc" << "*.cxx";
@@ -53,7 +56,7 @@ bool CppImportManager::setImportPath(const QString& sourcePath, const QString& c
 Model::Model*CppImportManager::createModel()
 {
 	myTool_ = new clang::tooling::ClangTool(*compilationDB_,sources_);
-	OOModel::Project* project = new OOModel::Project("CppImport");
+	OOModel::Project* project = new OOModel::Project(projectName_);
 	ClangFrontendActionFactory* frontendActionFactory = new ClangFrontendActionFactory(project);
 	myTool_->run(frontendActionFactory);
 	frontendActionFactory->outputStatistics();
@@ -100,6 +103,8 @@ bool CppImportManager::setupTest()
 		rootPath = testDir;
 	else
 	{
+		// set to project name to the testfolder
+		projectName_ = testDir.split(QDir::separator()).last();
 		// copy the test file to the root dir
 		QFile testFile(rootPath + QDir::separator() + testDir + QDir::separator() + "test.cpp");
 		if(!testFile.copy(rootPath + QDir::separator() + "test.cpp"))

@@ -71,6 +71,10 @@ class CPPIMPORT_API CppImportManager
 		clang::tooling::CompilationDatabase* compilationDB_{};
 		std::vector<std::string> sources_{};
 
+		// the project name which is shown in Envision
+		// we set this to the innermost directory of the sourcepath
+		QString projectName_;
+
 };
 
 }
