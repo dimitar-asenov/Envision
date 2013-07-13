@@ -212,17 +212,13 @@ bool ExpressionVisitor::TraverseCXXOperatorCallExpr(clang::CXXOperatorCallExpr* 
 			}
 			if(!ooExprStack_.empty())
 			{
-				if(auto ooRef = dynamic_cast<OOModel::ReferenceExpression*>(ooExprStack_.pop()))
-				{
-					ooCall->setCallee(new OOModel::ReferenceExpression(ooRef->ref()->name()));
-					SAFE_DELETE(ooRef);
-					ooExprStack_.push(ooCall);
-					break;
-				}
+				ooCall->setCallee(ooExprStack_.pop());
+				ooExprStack_.push(ooCall);
+				break;
 			}
 			// this should not happen
 			SAFE_DELETE(ooCall);
-			log_->writeError(className_, callExpr, CppImportLogger::Reason::OTHER, "No method name found (overload)");
+			log_->writeError(className_, callExpr, CppImportLogger::Reason::OTHER, "No method callee found (overload)");
 			ooExprStack_.push(utils_->createErrorExpression("METHOD CALL NO NAME FOUND"));
 			break;
 		}
