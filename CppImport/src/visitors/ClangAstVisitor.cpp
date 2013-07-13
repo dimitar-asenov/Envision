@@ -173,25 +173,26 @@ bool ClangAstVisitor::TraverseFunctionDecl(clang::FunctionDecl* functionDecl)
 
 	if(auto ooFunction = trMngr_->insertFunctionDecl(functionDecl))
 	{
-		if(ooFunction->parent())
-			// this function has already been inserted to the model
-			return true;
-
-		// insert in model
-		if(OOModel::Project* curProject = dynamic_cast<OOModel::Project*>(ooStack_.top()))
-			curProject->methods()->append(ooFunction);
-		else if(OOModel::Module* curModel = dynamic_cast<OOModel::Module*>(ooStack_.top()))
-			curModel->methods()->append(ooFunction);
-		else if(OOModel::Class* curClass = dynamic_cast<OOModel::Class*>(ooStack_.top()))
+		if(!ooFunction->parent())
 		{
-			// TODO: this should not happen: remove this case?
-			log_->writeError(className_, functionDecl, CppImportLogger::Reason::NOT_SUPPORTED);
-			curClass->methods()->append(ooFunction);
+			// insert in model
+			if(OOModel::Project* curProject = dynamic_cast<OOModel::Project*>(ooStack_.top()))
+				curProject->methods()->append(ooFunction);
+			else if(OOModel::Module* curModel = dynamic_cast<OOModel::Module*>(ooStack_.top()))
+				curModel->methods()->append(ooFunction);
+			else if(OOModel::Class* curClass = dynamic_cast<OOModel::Class*>(ooStack_.top()))
+			{
+				// TODO: this should not happen: remove this case?
+				log_->writeError(className_, functionDecl, CppImportLogger::Reason::NOT_SUPPORTED);
+				curClass->methods()->append(ooFunction);
+			}
+			else
+				log_->writeError(className_, functionDecl, CppImportLogger::Reason::INSERT_PROBLEM);
 		}
-		else
-			log_->writeError(className_, functionDecl, CppImportLogger::Reason::INSERT_PROBLEM);
-		// handle body, typeargs and storage specifier
-		TraverseFunction(functionDecl, ooFunction);
+		if(!ooFunction->items()->size())
+			// only visit the body if we have not yet visited it
+			// handle body, typeargs and storage specifier
+			TraverseFunction(functionDecl, ooFunction);
 	}
 	else
 		log_->writeError(className_, functionDecl, CppImportLogger::Reason::INSERT_PROBLEM);
@@ -898,23 +899,34 @@ bool ClangAstVisitor::TraverseMethodDecl(clang::CXXMethodDecl* methodDecl, OOMod
 			log_->writeError(className_, methodDecl, CppImportLogger::Reason::NO_PARENT);
 		return true;
 	}
-	// handle body, typeargs and storage specifier
-	TraverseFunction(methodDecl, ooMethod);
-	// modifiers
-	ooMethod->modifiers()->set(utils_->translateAccessSpecifier(methodDecl->getAccess()));
-	// member initializers
-	if(auto constructor = llvm::dyn_cast<clang::CXXConstructorDecl>(methodDecl))
+	if(!ooMethod->items()->size())
 	{
-		if(!constructor->getNumCtorInitializers())
-			return true;
-		for(auto initIt = constructor->init_begin(); initIt != constructor->init_end(); ++initIt)
+		// we only translate the following if the method is not yet defined (therefore the body is empty)
+		// note that the following code might get executed twice once for the declaration and once for the definition.
+
+		// translate modifiers
+		ooMethod->modifiers()->set(utils_->translateAccessSpecifier(methodDecl->getAccess()));
+
+		// handle body, typeargs and storage specifier
+		TraverseFunction(methodDecl, ooMethod);
+
+		// member initializers
+		if(auto constructor = llvm::dyn_cast<clang::CXXConstructorDecl>(methodDecl))
 		{
-			if(!(*initIt)->isWritten())
-				continue;
-			if(auto ooMemberInit = utils_->translateMemberInit((*initIt)))
-				ooMethod->memberInitializers()->append(ooMemberInit);
+			if(constructor->getNumCtorInitializers() && !ooMethod->memberInitializers()->size())
+			{
+				// if the method already has member initializer we do not have to consider them anymore
+				for(auto initIt = constructor->init_begin(); initIt != constructor->init_end(); ++initIt)
+				{
+					if(!(*initIt)->isWritten())
+						continue;
+					if(auto ooMemberInit = utils_->translateMemberInit((*initIt)))
+						ooMethod->memberInitializers()->append(ooMemberInit);
+				}
+			}
 		}
 	}
+
 	return true;
 }
 
