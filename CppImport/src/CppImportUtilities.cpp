@@ -604,6 +604,10 @@ OOModel::Expression*CppImportUtilities::convertTypePtr(const clang::Type* type, 
 	{
 		translatedType = convertTypePtr(injectedClass->getInjectedTST(), location);
 	}
+	else if(auto substTemplateParm = llvm::dyn_cast<clang::SubstTemplateTypeParmType>(type))
+	{
+		translatedType = translateQualifiedType(substTemplateParm->getReplacementType(), location);
+	}
 	else if(auto builtIn = llvm::dyn_cast<clang::BuiltinType>(type))
 	{
 		translatedType = convertBuiltInClangType(builtIn);
