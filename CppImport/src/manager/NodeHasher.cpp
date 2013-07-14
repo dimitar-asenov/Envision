@@ -187,6 +187,23 @@ const QString NodeHasher::hashUsingDecl(const clang::UsingDecl* usingDecl)
 	return hash;
 }
 
+const QString NodeHasher::hashNameSpaceAlias(const clang::NamespaceAliasDecl* namespaceAlias)
+{
+	QString hash = QString::fromStdString(namespaceAlias->getNameAsString());
+	hash.prepend("_").prepend(hashUsingParent(namespaceAlias->getDeclContext()));
+	hash.append("_").append(hashNestedNameSpecifier(namespaceAlias->getQualifier()));
+	hash.append("_").append(hashNameSpace(namespaceAlias->getNamespace()));
+	return hash;
+}
+
+const QString NodeHasher::hashTypeAlias(const clang::TypedefNameDecl* typeAlias)
+{
+	QString hash = QString::fromStdString(typeAlias->getNameAsString());
+	hash.prepend("_").prepend(hashUsingParent(typeAlias->getDeclContext()));
+	hash.append("_").append(hashType(typeAlias->getUnderlyingType()));
+	return hash;
+}
+
 const QString NodeHasher::hashNestedNameSpecifier(const clang::NestedNameSpecifier* nestedName)
 {
 	QString hash;

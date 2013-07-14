@@ -207,6 +207,30 @@ OOModel::NameImport* TranslateManager::insertUsingDirective(clang::UsingDirectiv
 	return ooName;
 }
 
+OOModel::TypeAlias*TranslateManager::insertNamespaceAlias(clang::NamespaceAliasDecl* namespaceAlias)
+{
+	OOModel::TypeAlias* ooAlias = nullptr;
+	const QString hash = nh_->hashNameSpaceAlias(namespaceAlias);
+	if(!namespacAliasMap_.contains(hash))
+	{
+		ooAlias = new OOModel::TypeAlias();
+		namespacAliasMap_.insert(hash, ooAlias);
+	}
+	return ooAlias;
+}
+
+OOModel::TypeAlias*TranslateManager::insertTypeAlias(clang::TypedefNameDecl* typeAlias)
+{
+	OOModel::TypeAlias* ooAlias = nullptr;
+	const QString hash = nh_->hashTypeAlias(typeAlias);
+	if(!typeAliasMap_.contains(hash))
+	{
+		ooAlias = new OOModel::TypeAlias();
+		typeAliasMap_.insert(hash, ooAlias);
+	}
+	return ooAlias;
+}
+
 OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl, OOModel::Method::MethodKind kind)
 {
 	const QString hash = nh_->hashMethod(mDecl);

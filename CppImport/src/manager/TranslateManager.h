@@ -101,6 +101,18 @@ class CPPIMPORT_API TranslateManager
 		 * Else it returns a nullptr.
 		 */
 		OOModel::NameImport* insertUsingDirective(clang::UsingDirectiveDecl* usingDirective);
+		/**
+		 * This function is to make sure that an using directive is used only once.
+		 * The function returns a new allocated NameImport object if this usingdecl is not yet there in this context.
+		 * Else it returns a nullptr.
+		 */
+		OOModel::TypeAlias* insertNamespaceAlias(clang::NamespaceAliasDecl* namespaceAlias);
+		/**
+		 * This function is to make sure that an using directive is used only once.
+		 * The function returns a new allocated NameImport object if this usingdecl is not yet there in this context.
+		 * Else it returns a nullptr.
+		 */
+		OOModel::TypeAlias* insertTypeAlias(clang::TypedefNameDecl* typeAlias);
 
 	private:
 		OOModel::Method* addNewMethod(clang::CXXMethodDecl* mDecl, OOModel::Method::MethodKind kind);
@@ -114,6 +126,9 @@ class CPPIMPORT_API TranslateManager
 
 		QMap<QString, OOModel::NameImport*> usingDeclMap_;
 		QMap<QString, OOModel::NameImport*> usingDirectiveMap_;
+
+		QMap<QString, OOModel::TypeAlias*> namespacAliasMap_;
+		QMap<QString, OOModel::TypeAlias*> typeAliasMap_;
 
 		CppImportUtilities* utils_{};
 		OOModel::Project* rootProject_{};

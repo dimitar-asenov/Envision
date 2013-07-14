@@ -801,16 +801,18 @@ bool ClangAstVisitor::VisitTypedefNameDecl(clang::TypedefNameDecl* typedefDecl)
 {
 	if(!shouldModel(typedefDecl->getLocation()))
 		return true;
-	OOModel::TypeAlias* ooTypeAlias = new OOModel::TypeAlias();
-	ooTypeAlias->setTypeExpression(utils_->translateQualifiedType(typedefDecl->getUnderlyingType(),
-																					  typedefDecl->getLocStart()));
-	ooTypeAlias->setName(QString::fromStdString(typedefDecl->getNameAsString()));
-	if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
-		itemList->append(new OOModel::DeclarationStatement(ooTypeAlias));
-	else if(auto declaration = dynamic_cast<OOModel::Declaration*>(ooStack_.top()))
-		declaration->subDeclarations()->append(ooTypeAlias);
-	else
-		log_->writeError(className_, typedefDecl, CppImportLogger::Reason::INSERT_PROBLEM);
+	if(auto ooTypeAlias = trMngr_->insertTypeAlias(typedefDecl))
+	{
+		ooTypeAlias->setTypeExpression(utils_->translateQualifiedType(typedefDecl->getUnderlyingType(),
+																						  typedefDecl->getLocStart()));
+		ooTypeAlias->setName(QString::fromStdString(typedefDecl->getNameAsString()));
+		if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
+			itemList->append(new OOModel::DeclarationStatement(ooTypeAlias));
+		else if(auto declaration = dynamic_cast<OOModel::Declaration*>(ooStack_.top()))
+			declaration->subDeclarations()->append(ooTypeAlias);
+		else
+			log_->writeError(className_, typedefDecl, CppImportLogger::Reason::INSERT_PROBLEM);
+	}
 	return true;
 }
 
@@ -818,21 +820,23 @@ bool ClangAstVisitor::VisitNamespaceAliasDecl(clang::NamespaceAliasDecl* namespa
 {
 	if(!shouldModel(namespaceAlias->getLocation()))
 		return true;
-	OOModel::TypeAlias* ooTypeAlias = new OOModel::TypeAlias();
-	ooTypeAlias->setName(QString::fromStdString(namespaceAlias->getNameAsString()));
-	OOModel::ReferenceExpression* nameRef = new OOModel::ReferenceExpression
-			(QString::fromStdString(namespaceAlias->getAliasedNamespace()->getNameAsString()));
-	if(auto prefix = namespaceAlias->getQualifier())
-		nameRef->setPrefix(utils_->translateNestedNameSpecifier(prefix, namespaceAlias->getLocation()));
-	ooTypeAlias->setTypeExpression(nameRef);
-	if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
-		itemList->append(new OOModel::DeclarationStatement(ooTypeAlias));
-	else if(auto declaration = dynamic_cast<OOModel::Declaration*>(ooStack_.top()))
-		declaration->subDeclarations()->append(ooTypeAlias);
-	else
+	if(auto ooTypeAlias = trMngr_->insertNamespaceAlias(namespaceAlias))
 	{
-		SAFE_DELETE(ooTypeAlias);
-		log_->writeError(className_, namespaceAlias, CppImportLogger::Reason::INSERT_PROBLEM);
+		ooTypeAlias->setName(QString::fromStdString(namespaceAlias->getNameAsString()));
+		OOModel::ReferenceExpression* nameRef = new OOModel::ReferenceExpression
+				(QString::fromStdString(namespaceAlias->getAliasedNamespace()->getNameAsString()));
+		if(auto prefix = namespaceAlias->getQualifier())
+			nameRef->setPrefix(utils_->translateNestedNameSpecifier(prefix, namespaceAlias->getLocation()));
+		ooTypeAlias->setTypeExpression(nameRef);
+		if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
+			itemList->append(new OOModel::DeclarationStatement(ooTypeAlias));
+		else if(auto declaration = dynamic_cast<OOModel::Declaration*>(ooStack_.top()))
+			declaration->subDeclarations()->append(ooTypeAlias);
+		else
+		{
+			SAFE_DELETE(ooTypeAlias);
+			log_->writeError(className_, namespaceAlias, CppImportLogger::Reason::INSERT_PROBLEM);
+		}
 	}
 	return true;
 }

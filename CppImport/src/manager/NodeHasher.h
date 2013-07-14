@@ -60,6 +60,8 @@ class CPPIMPORT_API NodeHasher
 		const QString hashUsingParent(const clang::DeclContext* context);
 		const QString hashUsingDirective(const clang::UsingDirectiveDecl* usingDirective);
 		const QString hashUsingDecl(const clang::UsingDecl* usingDecl);
+		const QString hashNameSpaceAlias(const clang::NamespaceAliasDecl* namespaceAlias);
+		const QString hashTypeAlias(const clang::TypedefNameDecl* typeAlias);
 		const QString hashNestedNameSpecifier(const clang::NestedNameSpecifier* nestedName);
 
 		const QString hashType(const clang::QualType& type);
