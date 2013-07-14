@@ -124,22 +124,24 @@ void CppImportLogger::writeError(const QString& inWhichClass, const clang::Sourc
 					  << "\n";
 }
 
-void CppImportLogger::typeNotSupported(const QString& typeName)
+void CppImportLogger::primitiveTypeNotSupported(const QString& typeName)
 {
 	int newCount = typeCountMap_.value(typeName) + 1;
 	typeCountMap_.insert(typeName, newCount);
 }
 
-void CppImportLogger::typeNotSupported(const clang::Type* type)
+void CppImportLogger::typeNotSupported(const clang::Type* type, const clang::SourceLocation& location)
 {
 	QString typeName = QString(type->getTypeClassName());
 	int newCount = typeCountMap_.value(typeName) + 1;
 	typeCountMap_.insert(typeName, newCount);
 
-//	(*errStream_) << "ERR/WARN: \t reason :  TYPE NOT SUPPORTED"
-//					  << " \n\t in file : " << sourceManger_->getBufferName(type->get)
-//					  << " \n\t on line : " << sourceManger_->getLineNumber(decomposedLoc.first,decomposedLoc.second)
-//					  << "\n";
+	std::pair<clang::FileID,unsigned> decomposedLoc = sourceManger_->getDecomposedLoc(location);
+	(*errStream_) << "ERR/WARN: \t reason :  TYPE NOT SUPPORTED : " << typeName.append("Type")
+															// append Type to get the clang node name ^
+					  << " \n\t in file : " << sourceManger_->getBufferName(location)
+					  << " \n\t on line : " << sourceManger_->getLineNumber(decomposedLoc.first,decomposedLoc.second)
+					  << "\n";
 
 }
 

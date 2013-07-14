@@ -21,7 +21,7 @@ bool TemplateArgumentVisitor::TraverseDecl(clang::Decl* decl)
 							  "Can not handle this decl with this visitor");
 		typeArgStack_.push(new OOModel::FormalTypeArgument("#ERROR"));
 		return true;
- 	}
+	}
 	// dispatch to the correct function
 	return RecursiveASTVisitor<TemplateArgumentVisitor>::TraverseDecl(decl);
 }
@@ -31,7 +31,8 @@ bool TemplateArgumentVisitor::TraverseTemplateTypeParmDecl(clang::TemplateTypePa
 	OOModel::FormalTypeArgument* ooArg = new OOModel::FormalTypeArgument
 			(QString::fromStdString(templateParm->getNameAsString()));
 	if(templateParm->hasDefaultArgument())
-		ooArg->setSubTypeOfExpression(utils_->translateQualifiedType(templateParm->getDefaultArgument()));
+		ooArg->setSubTypeOfExpression(utils_->translateQualifiedType(templateParm->getDefaultArgument(),
+																						 templateParm->getLocStart()));
 	typeArgStack_.push(ooArg);
 	return true;
 }
@@ -40,7 +41,8 @@ bool TemplateArgumentVisitor::TraverseNonTypeTemplateParmDecl(clang::NonTypeTemp
 {
 	OOModel::FormalTypeArgument* ooArg = new OOModel::FormalTypeArgument
 			(QString::fromStdString(nonTypeTemplateParm->getNameAsString()));
-	ooArg->setSubTypeOfExpression(utils_->translateQualifiedType(nonTypeTemplateParm->getType()));
+	ooArg->setSubTypeOfExpression(utils_->translateQualifiedType(nonTypeTemplateParm->getType(),
+																					 nonTypeTemplateParm->getLocStart()));
 	if(nonTypeTemplateParm->hasDefaultArgument())
 	{
 		exprVisitor_->TraverseStmt(nonTypeTemplateParm->getDefaultArgument());

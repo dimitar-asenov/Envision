@@ -41,7 +41,8 @@ class CPPIMPORT_API CppImportUtilities
 	public:
 		CppImportUtilities(CppImportLogger* logger, ExpressionVisitor* visitor);
 
-		OOModel::Expression* translateQualifiedType(const clang::QualType qualType);
+		OOModel::Expression* translateQualifiedType(const clang::QualType qualType,
+																  const clang::SourceLocation& location);
 		OOModel::BinaryOperation::OperatorTypes translateBinaryOp(const clang::BinaryOperatorKind& binaryOpKind);
 		OOModel::AssignmentExpression::AssignmentTypes translateAssignOp(const clang::BinaryOperatorKind& assignOpKind);
 		OOModel::UnaryOperation::OperatorTypes translateUnaryOp(const clang::UnaryOperatorKind& unaryOpKind);
@@ -53,10 +54,12 @@ class CPPIMPORT_API CppImportUtilities
 		 * it will be put as a prefix of the first namespecifier
 		 * e.g. \c { obj.A::ref } here obj would be the \a base and A the \a nestedName
 		 */
-		OOModel::Expression* translateNestedNameSpecifier
-		(const clang::NestedNameSpecifier* nestedName, OOModel::Expression* base = nullptr);
+		OOModel::Expression* translateNestedNameSpecifier(const clang::NestedNameSpecifier* nestedName,
+																		  const clang::SourceLocation& location,
+																		  OOModel::Expression* base = nullptr);
 
-		OOModel::Expression* translateTemplateArgument(const clang::TemplateArgument& templateArg);
+		OOModel::Expression* translateTemplateArgument(const clang::TemplateArgument& templateArg,
+																	  const clang::SourceLocation& location);
 
 		OOModel::BinaryOperation::OperatorTypes translateBinaryOverloadOp
 		(const clang::OverloadedOperatorKind& overloadOpKind);
@@ -83,7 +86,7 @@ class CPPIMPORT_API CppImportUtilities
 		 * Translates \a type to the nearest primitive OOModel type.
 		 */
 		OOModel::Expression* convertBuiltInClangType(const clang::BuiltinType* type);
-		OOModel::Expression* convertTypePtr(const clang::Type* type);
+		OOModel::Expression* convertTypePtr(const clang::Type* type, const clang::SourceLocation& location);
 		const QString className_{"CppImportUtilities"};
 		CppImportLogger* log_;
 		ExpressionVisitor* exprVisitor_{};

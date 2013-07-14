@@ -217,7 +217,7 @@ OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl, OOM
 		name = name.left(name.indexOf("<"));
 	OOModel::Method* method = new OOModel::Method(name, kind);
 	// process result type
-	OOModel::Expression* restype = utils_->translateQualifiedType(mDecl->getResultType());
+	OOModel::Expression* restype = utils_->translateQualifiedType(mDecl->getResultType(), mDecl->getLocStart());
 	if(restype)
 	{
 		OOModel::FormalResult* methodResult = new OOModel::FormalResult();
@@ -230,7 +230,7 @@ OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl, OOM
 	{
 		OOModel::FormalArgument* arg = new OOModel::FormalArgument();
 		arg->setName(QString::fromStdString((*it)->getNameAsString()));
-		OOModel::Expression* type = utils_->translateQualifiedType((*it)->getType());
+		OOModel::Expression* type = utils_->translateQualifiedType((*it)->getType(), (*it)->getLocStart());
 		if(type) arg->setTypeExpression(type);
 		method->arguments()->append(arg);
 	}
@@ -254,7 +254,8 @@ OOModel::Method* TranslateManager::addNewFunction(clang::FunctionDecl* functionD
 	OOModel::Method* ooFunction= new OOModel::Method();
 	ooFunction->setName(QString::fromStdString(functionDecl->getNameAsString()));
 	// process result type
-	OOModel::Expression* restype = utils_->translateQualifiedType(functionDecl->getResultType());
+	OOModel::Expression* restype = utils_->translateQualifiedType(functionDecl->getResultType(),
+																					  functionDecl->getLocStart());
 	if(restype)
 	{
 		OOModel::FormalResult* methodResult = new OOModel::FormalResult();
@@ -267,7 +268,7 @@ OOModel::Method* TranslateManager::addNewFunction(clang::FunctionDecl* functionD
 	{
 		OOModel::FormalArgument* arg = new OOModel::FormalArgument();
 		arg->setName(QString::fromStdString((*it)->getNameAsString()));
-		OOModel::Expression* type = utils_->translateQualifiedType((*it)->getType());
+		OOModel::Expression* type = utils_->translateQualifiedType((*it)->getType(), (*it)->getLocStart());
 		if(type) arg->setTypeExpression(type);
 		ooFunction->arguments()->append(arg);
 	}
