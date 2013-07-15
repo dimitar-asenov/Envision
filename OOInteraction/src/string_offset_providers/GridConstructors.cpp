@@ -127,6 +127,12 @@ void GridConstructors::initializeAll()
 		grid->add(new Cell(2, vis->layout()->at<Visualization::Item>(1), 2));
 	});
 
+	GridBasedOffsetProvider::addGridConstructor<VTypeNameOperator>(
+	[](GridBasedOffsetProvider* grid, VTypeNameOperator* vis){
+		grid->add(new Cell(0, vis->layout()->at<Visualization::Item>(0), 0));
+		grid->add(new Cell(2, vis->layout()->at<Visualization::Item>(1), 2));
+	});
+
 	GridBasedOffsetProvider::addGridConstructor<VTypeQualifierExpression>(
 		[](GridBasedOffsetProvider* grid, VTypeQualifierExpression* vis){
 			grid->add(new Cell(0, vis->layout()->at<Visualization::Item>(0), 0));

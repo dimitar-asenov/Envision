@@ -217,6 +217,7 @@ void StringComponents::initConversions()
 	add<ThisExpression>([](ThisExpression* ){ return c( "this" ); });
 	add<GlobalScopeExpression>([](GlobalScopeExpression* ){ return c( "::" ); });
 	add<ThrowExpression>([](ThrowExpression* e ){ return c( "throw", " ", e->expr() ); });
+	add<TypeNameOperator>([](TypeNameOperator* e ){ return c( "typename", " ", e->typeExpression() ); });
 	add<NewExpression>([](NewExpression* e ){ return c( "new", " ", e->newType(),
 		Optional("[", e->amount()), Optional(e->amount(), AUTO), Optional("]", e->amount()) ); });
 	add<DeleteExpression>([](DeleteExpression* e ){ return c( e->isArray() ? "delete[]":"delete", " ", e->expr() ); });

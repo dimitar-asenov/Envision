@@ -381,6 +381,21 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 		return at;
 	}));
 
+	add(new OD( "throw", "throw SPACE expr", 30, OD::RightAssociative,
+			[](const QList<Expression*>& operands) -> Expression* {
+		auto expr = new ThrowExpression();
+		expr->setExpr( operands.first());
+		return expr;
+	}));
+
+	add(new OD( "typename", "typename SPACE expr", 1, OD::RightAssociative,
+			[](const QList<Expression*>& operands) -> Expression* {
+		auto expr = new TypeNameOperator();
+		expr->setTypeExpression( operands.first());
+		return expr;
+	}));
+
+
 	// Variable declaration
 	auto varDeclFunction = [](const QList<Expression*>& operands) -> Expression*
 	{
@@ -398,12 +413,6 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 	add(new OD( "variable decl and initialization", "expr SPACE id = expr", 40,
 			OD::RightAssociative, varDeclFunction));
 
-	add(new OD( "throw", "throw SPACE expr", 30, OD::RightAssociative,
-			[](const QList<Expression*>& operands) -> Expression* {
-		auto expr = new ThrowExpression();
-		expr->setExpr( operands.first());
-		return expr;
-	}));
 
 	// Command descriptors
 	add(new CommandDescriptor( "command without params", "\\ id SPACE", 0, OD::NotAssociative));
