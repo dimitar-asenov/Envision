@@ -215,6 +215,7 @@ void StringComponents::initConversions()
 	add<ConditionalExpression>([](ConditionalExpression* e){ return c(
 		QString(), e->condition(), "?", e->trueExpression(), ":", e->falseExpression() , QString() ); });
 	add<ThisExpression>([](ThisExpression* ){ return c( "this" ); });
+	add<GlobalScopeExpression>([](GlobalScopeExpression* ){ return c( "::" ); });
 	add<ThrowExpression>([](ThrowExpression* e ){ return c( "throw", " ", e->expr() ); });
 	add<NewExpression>([](NewExpression* e ){ return c( "new", " ", e->newType(),
 		Optional("[", e->amount()), Optional(e->amount(), AUTO), Optional("]", e->amount()) ); });

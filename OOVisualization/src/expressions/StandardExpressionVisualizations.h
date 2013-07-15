@@ -75,6 +75,12 @@ BEGIN_STANDARD_ENUMERATION_EXPRESSION_VISUALIZATION(apiSpecification, className,
 #define POSTFIX(condition) EXPRESSION_PART(::Visualization::Static, postfix)
 #define OPERAND(name) EXPRESSION_PART(::Visualization::Item, name)
 
+#define STANDARD_KEYWORD_EXPRESSION(apiSpecification, className, nodeType)															\
+BEGIN_STANDARD_EXPRESSION_VISUALIZATION(apiSpecification, className, nodeType)													\
+PREFIX(true)																																			\
+END_STANDARD_EXPRESSION_VISUALIZATION
+//********************************************************************************************************************
+
 namespace OOVisualization {
 #include "StandardExpressionDefinitions.h"
 }
@@ -90,4 +96,5 @@ namespace OOVisualization {
 #undef INFIX2
 #undef POSTFIX
 #undef OPERAND
+#undef STANDARD_KEYWORD_EXPRESSION
 

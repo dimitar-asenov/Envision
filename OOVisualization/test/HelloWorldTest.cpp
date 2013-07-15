@@ -767,6 +767,9 @@ Method* addExtraMethod(Class* parent)
 
 	extra->items()->append(new DeclarationStatement(new TypeAlias("newTypeName",
 			new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT))));
+	extra->items()->append(new ExpressionStatement(
+					new ReferenceExpression("someGlobalVariable", new GlobalScopeExpression())));
+
 
 	extra->extension<Position>()->set(400, 600);
 

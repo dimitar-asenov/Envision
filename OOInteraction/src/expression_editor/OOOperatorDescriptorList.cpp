@@ -191,6 +191,8 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 	// Keywords
 	add(new OD( "this", "this", 0, OD::NotAssociative, [](const QList<Expression*>&) -> Expression* {
 		return new ThisExpression(); }));
+	add(new OD( "::", "::", 0, OD::NotAssociative, [](const QList<Expression*>&) -> Expression* {
+			return new GlobalScopeExpression(); }));
 	add(new OD( "auto", "auto", 0, OD::NotAssociative, [](const QList<Expression*>&) -> Expression* {
 		return new AutoTypeExpression(); }));
 	add(new OD( "null", "null", 0, OD::NotAssociative, [](const QList<Expression*>&) -> Expression* {

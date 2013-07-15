@@ -91,6 +91,12 @@ if (name##_)																																			\
 #define INFIX2(condition) PREINPOSTFIX(infix2, condition, in2Symbol)
 #define POSTFIX(condition) PREINPOSTFIX(postfix, condition, postSymbol)
 
+#define STANDARD_KEYWORD_EXPRESSION(apiSpecification, className, nodeType)															\
+BEGIN_STANDARD_EXPRESSION_VISUALIZATION(apiSpecification, className, nodeType)													\
+PREFIX(true)																																			\
+END_STANDARD_EXPRESSION_VISUALIZATION
+//********************************************************************************************************************
+
 namespace OOVisualization {
 #include "StandardExpressionDefinitions.h"
 }
@@ -106,3 +112,4 @@ namespace OOVisualization {
 #undef INFIX2
 #undef POSTFIX
 #undef OPERAND
+#undef STANDARD_KEYWORD_EXPRESSION

@@ -177,6 +177,8 @@ Method* addDivBySix(Class* parent)
 
 	divbysix->items()->append(new ExpressionStatement(
 					OOExpressionBuilder::getOOExpression("a.b[42]()+x()()")));
+	divbysix->items()->append(new ExpressionStatement(
+						OOExpressionBuilder::getOOExpression("::.globalVar=::.globalFunct(42)")));
 
 	VariableDeclarationExpression* result = new VariableDeclarationExpression("result");
 	divbysix->items()->append( new ExpressionStatement(result) );
