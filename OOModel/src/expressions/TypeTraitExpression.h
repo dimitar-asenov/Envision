@@ -44,6 +44,8 @@ class OOMODEL_API TypeTraitExpression : public Super<Expression>
 	public:
 		enum class TypeTraitKind : int {SizeOf, AlignOf, TypeId};
 
+		TypeTraitExpression(TypeTraitKind kind, Expression* expr = nullptr);
+
 		TypeTraitKind typeTraitKind() const;
 		void setTypeTraitKind(const TypeTraitKind& kind);
 

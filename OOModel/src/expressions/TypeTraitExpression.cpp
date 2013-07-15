@@ -40,6 +40,13 @@ COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(TypeTraitExpression)
 REGISTER_ATTRIBUTE(TypeTraitExpression, operand, Expression, false, false, true)
 REGISTER_ATTRIBUTE(TypeTraitExpression, ttKind, Integer, false, false, true)
 
+TypeTraitExpression::TypeTraitExpression(TypeTraitKind kind, Expression* expr)
+: Super(nullptr, TypeTraitExpression::getMetaData())
+{
+	setTypeTraitKind(kind);
+	if (expr) setOperand(expr);
+}
+
 Type* TypeTraitExpression::type()
 {
 	if(typeTraitKind() == TypeTraitKind::SizeOf || typeTraitKind() == TypeTraitKind::AlignOf)
