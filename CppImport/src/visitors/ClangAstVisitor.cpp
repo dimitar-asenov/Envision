@@ -654,88 +654,70 @@ bool ClangAstVisitor::TraverseSwitchStmt(clang::SwitchStmt* switchStmt)
 			ooSwitchStmt->setSwitchVar(ooExprStack_.pop());
 		// body
 		inBody_ = true;
-		// TODO: this section needs some polishing
+		// TODO: handle fall through
 		if(auto body = llvm::dyn_cast<clang::CompoundStmt>(switchStmt->getBody()))
 		{
 			auto itemList = new OOModel::StatementItemList();
 			ooStack_.push(itemList);
 			auto bodyIt = body->body_begin();
-			// visit preamble
+			// skip preamble
 			while(bodyIt != body->body_end() && !llvm::isa<clang::CaseStmt>(*bodyIt) &&
 					!llvm::isa<clang::DefaultStmt>(*bodyIt))
+				bodyIt++;
+			if(bodyIt != body->body_begin())
+				log_->writeError(className_, switchStmt, CppImportLogger::Reason::OTHER,
+									  "switch body has statements before first case");
+			OOModel::SwitchCase* currentCase = nullptr;
+			for(; bodyIt != body->body_end(); bodyIt++)
 			{
 				TraverseStmt(*bodyIt);
-				bodyIt++;
-			}
-			// this are statements which get executed in every case
-			QList<OOModel::StatementItem*> preambleStmts;
-			for(int i = 0; i < itemList->size(); i++)
-				preambleStmts.append(itemList->at(i));
-			// empty the list
-			for(int i = 0; i < preambleStmts.size(); i++)
-				itemList->remove(preambleStmts.at(i));
-			// there might be no case/default stmt
-			if(bodyIt == body->body_end())
-			{
-				auto switchCase = new OOModel::SwitchCase();
-				// do not use range based c++11 loop for append.
-				foreach(OOModel::StatementItem* s , preambleStmts)
-					switchCase->statement()->append(s);
-				ooSwitchStmt->cases()->append(switchCase);
-			}
-			else
-			{
-				OOModel::SwitchCase* currentCase = nullptr;
-				for(; bodyIt != body->body_end(); bodyIt++)
+				if(llvm::isa<clang::CaseStmt>(*bodyIt) || llvm::isa<clang::DefaultStmt>(*bodyIt))
 				{
-					TraverseStmt(*bodyIt);
-					if(llvm::isa<clang::CaseStmt>(*bodyIt) || llvm::isa<clang::DefaultStmt>(*bodyIt))
+					if(currentCase)
 					{
-						if(currentCase)
+						// TODO: handle fall through needs copy constructor
+
+						// get the last statements
+						QList<OOModel::StatementItem*> ns;
+						for(int i = 0; i < itemList->size(); i++)
+							ns.append(itemList->at(i));
+						for(int i = 0; i < ns.size(); i++)
 						{
-							// prepend the preable
-							// TODO: this would need copy constructor
-							//						for(int i = preambleStmts.size() - 1; i >= 0; i--)
-							//							currentCase->statement()->append(preambleStmts.at(i));
-
-							// TODO: handle fall through also needs copy constructor
-
-							// get the last statements
-							QList<OOModel::StatementItem*> ns;
-							for(int i = 0; i < itemList->size(); i++)
-								ns.append(itemList->at(i));
-							for(int i = 0; i < ns.size(); i++)
-							{
-								auto s = ns.at(i);
-								itemList->remove(s);
-								currentCase->statement()->append(s);
-							}
+							auto s = ns.at(i);
+							itemList->remove(s);
+							currentCase->statement()->append(s);
 						}
-						currentCase = ooSwitchCaseStack_.pop();
-						ooSwitchStmt->cases()->append(currentCase);
 					}
+					currentCase = ooSwitchCaseStack_.pop();
+					ooSwitchStmt->cases()->append(currentCase);
 				}
-				if(currentCase)
+			}
+
+			if(currentCase)
+			{
+				// TODO: handle fall through needs copy constructor
+
+				// get the last statements
+				QList<OOModel::StatementItem*> ns;
+				for(int i = 0; i < itemList->size(); i++)
+					ns.append(itemList->at(i));
+				for(int i = 0; i < ns.size(); i++)
 				{
-					// prepend the preable
-					// TODO: this would need copy constructor
-//						for(int i = preambleStmts.size() - 1; i >= 0; i--)
-//							currentCase->statement()->append(preambleStmts.at(i));
-
-					// TODO: handle fall through also needs copy constructor
-
-					// get the last statements
-					QList<OOModel::StatementItem*> ns;
-					for(int i = 0; i < itemList->size(); i++)
-						ns.append(itemList->at(i));
-					for(int i = 0; i < ns.size(); i++)
+					auto s = ns.at(i);
+					itemList->remove(s);
+					currentCase->statement()->append(s);
+					// check if we are at the end and if there are still some cases after the last case
+					if(dynamic_cast<OOModel::ReturnStatement*>(s) || dynamic_cast<OOModel::BreakStatement*>(s))
 					{
-						auto s = ns.at(i);
-						itemList->remove(s);
-						currentCase->statement()->append(s);
+						// check if there are more statements
+						if(itemList->size())
+							log_->writeError(className_,switchStmt, CppImportLogger::Reason::OTHER,
+												  "switch has statement after last case");
+						break;
 					}
 				}
 			}
+
 			// remove the helper itemList
 			ooStack_.pop();
 			SAFE_DELETE(itemList);
