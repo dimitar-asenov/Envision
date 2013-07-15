@@ -55,11 +55,33 @@
 			<direction>0</direction>
 		</itemsStyle>
 	</baseClasses>
-	<icon prototypes="icon/SVGIcon/default">
+	
+	<classIcon prototypes="icon/SVGIcon/default">
 		<filename>styles/icon/class.svg</filename>
 		<width>32</width>
 		<height>32</height>
-	</icon>
+	</classIcon>
+	<interfaceIcon prototypes="icon/SVGIcon/default">
+		<filename>styles/icon/interface.svg</filename>
+		<width>32</width>
+		<height>32</height>
+	</interfaceIcon>
+	<structIcon prototypes="icon/SVGIcon/default">
+		<filename>styles/icon/struct.svg</filename>
+		<width>32</width>
+		<height>32</height>
+	</structIcon>
+	<unionIcon prototypes="icon/SVGIcon/default">
+		<filename>styles/icon/union.svg</filename>
+		<width>32</width>
+		<height>32</height>
+	</unionIcon>
+	<enumIcon prototypes="icon/SVGIcon/default">
+		<filename>styles/icon/enum.svg</filename>
+		<width>32</width>
+		<height>32</height>
+	</enumIcon>
+	
 	<visibility prototypes="item/Text/default" />
 	<content prototypes="layout/SequentialLayout/default">
 		<direction>2</direction>

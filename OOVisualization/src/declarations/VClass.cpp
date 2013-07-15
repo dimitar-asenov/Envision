@@ -71,7 +71,17 @@ void VClass::initializeForms()
 	auto headerElement = (new GridLayoutFormElement())
 				->setHorizontalSpacing(3)->setColumnStretchFactor(3, 1)
 				->setVerticalAlignment(LayoutStyle::Alignment::Center)
-				->put(0, 0, item<Static>(&I::icon_, [](I* v){return &v->style()->icon();}))
+				->put(0, 0, item<Static>(&I::icon_, [](I* v) -> const Visualization::StaticStyle* {
+						switch (v->node()->constructKind())
+						{
+							case OOModel::Class::ConstructKind::Class : return &v->style()->classIcon();
+							case OOModel::Class::ConstructKind::Interface : return &v->style()->interfaceIcon();
+							case OOModel::Class::ConstructKind::Struct : return &v->style()->structIcon();
+							case OOModel::Class::ConstructKind::Union : return &v->style()->unionIcon();
+							case OOModel::Class::ConstructKind::Enum : return &v->style()->enumIcon();
+							default : return &v->style()->classIcon();
+						}
+					}))
 				->put(1, 0, item<VText>(&I::name_, [](I* v){return v->node()->nameNode();}, [](I* v)
 						{
 							// return the correct name style, depending on the classes visibility

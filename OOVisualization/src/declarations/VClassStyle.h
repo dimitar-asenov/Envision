@@ -44,7 +44,13 @@ class OOVISUALIZATION_API VClassStyle : public Visualization::DeclarativeItemBas
 		Visualization::TextStyle namePublic_;
 		Visualization::TextStyle namePrivate_;
 		Visualization::TextStyle nameProtected_;
-		Visualization::StaticStyle icon_;
+
+		Visualization::StaticStyle classIcon_;
+		Visualization::StaticStyle interfaceIcon_;
+		Visualization::StaticStyle structIcon_;
+		Visualization::StaticStyle unionIcon_;
+		Visualization::StaticStyle enumIcon_;
+
 		Visualization::SequentialLayoutStyle header_;
 		Visualization::VListStyle typeArguments_;
 		Visualization::VListStyle baseClasses_;
@@ -68,7 +74,13 @@ class OOVISUALIZATION_API VClassStyle : public Visualization::DeclarativeItemBas
 		const Visualization::TextStyle& namePublic() const;
 		const Visualization::TextStyle& namePrivate() const;
 		const Visualization::TextStyle& nameProtected() const;
-		const Visualization::StaticStyle& icon() const;
+
+		const Visualization::StaticStyle& classIcon() const;
+		const Visualization::StaticStyle& interfaceIcon() const;
+		const Visualization::StaticStyle& structIcon() const;
+		const Visualization::StaticStyle& unionIcon() const;
+		const Visualization::StaticStyle& enumIcon() const;
+
 		const Visualization::SequentialLayoutStyle& header() const;
 		const Visualization::VListStyle& typeArguments() const;
 		const Visualization::VListStyle& baseClasses() const;
@@ -90,7 +102,13 @@ inline const Visualization::TextStyle& VClassStyle::nameDefault() const { return
 inline const Visualization::TextStyle& VClassStyle::namePublic() const { return namePublic_; }
 inline const Visualization::TextStyle& VClassStyle::namePrivate() const { return namePrivate_; }
 inline const Visualization::TextStyle& VClassStyle::nameProtected() const { return nameProtected_; }
-inline const Visualization::StaticStyle& VClassStyle::icon() const { return icon_; }
+
+inline const Visualization::StaticStyle& VClassStyle::classIcon() const { return classIcon_; }
+inline const Visualization::StaticStyle& VClassStyle::interfaceIcon() const { return interfaceIcon_; }
+inline const Visualization::StaticStyle& VClassStyle::structIcon() const { return structIcon_; }
+inline const Visualization::StaticStyle& VClassStyle::unionIcon() const { return unionIcon_; }
+inline const Visualization::StaticStyle& VClassStyle::enumIcon() const { return enumIcon_; }
+
 inline const Visualization::SequentialLayoutStyle& VClassStyle::header() const { return header_; }
 inline const Visualization::VListStyle& VClassStyle::typeArguments() const { return typeArguments_; }
 inline const Visualization::VListStyle& VClassStyle::baseClasses() const { return baseClasses_; }

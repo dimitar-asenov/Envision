@@ -190,7 +190,7 @@ Class* addAnnotatedWithFriends(Project* parent)
 
 Class* addEnumeration(Project* parent)
 {
-	auto en = new Class("Colors", Modifier::Public);
+	auto en = new Class("Colors", Modifier::Public, Class::ConstructKind::Enum);
 	if (parent) parent->classes()->append(en);
 
 	en->enumerators()->append( new Enumerator("RED"));
@@ -296,8 +296,8 @@ Class* addInner()
 {
 	Class* outer = new Class("Outer", Modifier::Public);
 
-	outer->classes()->append( new Class("Inner1"));
-	outer->classes()->append( new Class("Inner2"));
+	outer->classes()->append( new Class("InnerStruct", Class::ConstructKind::Struct));
+	outer->classes()->append( new Class("InnerInterface", Class::ConstructKind::Interface));
 
 	// Set positions
 	outer->extension<Position>()->set(1300,860);

@@ -36,7 +36,13 @@ void VClassStyle::load(Visualization::StyleLoader& sl)
 	sl.load("namePublic", namePublic_);
 	sl.load("namePrivate", namePrivate_);
 	sl.load("nameProtected", nameProtected_);
-	sl.load("icon", icon_);
+
+	sl.load("classIcon", classIcon_);
+	sl.load("interfaceIcon", interfaceIcon_);
+	sl.load("structIcon", structIcon_);
+	sl.load("unionIcon", unionIcon_);
+	sl.load("enumIcon", enumIcon_);
+
 	sl.load("header", header_);
 	sl.load("typeArguments", typeArguments_);
 	sl.load("baseClasses", baseClasses_);
