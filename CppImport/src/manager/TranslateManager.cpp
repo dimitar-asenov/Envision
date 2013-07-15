@@ -240,13 +240,16 @@ OOModel::Method* TranslateManager::addNewMethod(clang::CXXMethodDecl* mDecl, OOM
 	if(name.endsWith(">"))
 		name = name.left(name.indexOf("<"));
 	OOModel::Method* method = new OOModel::Method(name, kind);
-	// process result type
-	OOModel::Expression* restype = utils_->translateQualifiedType(mDecl->getResultType(), mDecl->getLocStart());
-	if(restype)
+	if(!llvm::isa<clang::CXXConstructorDecl>(mDecl) && !llvm::isa<clang::CXXDestructorDecl>(mDecl))
 	{
-		OOModel::FormalResult* methodResult = new OOModel::FormalResult();
-		methodResult->setTypeExpression(restype);
-		method->results()->append(methodResult);
+		// process result type
+		OOModel::Expression* restype = utils_->translateQualifiedType(mDecl->getResultType(), mDecl->getLocStart());
+		if(restype)
+		{
+			OOModel::FormalResult* methodResult = new OOModel::FormalResult();
+			methodResult->setTypeExpression(restype);
+			method->results()->append(methodResult);
+		}
 	}
 	// process arguments
 	clang::FunctionDecl::param_const_iterator it = mDecl->param_begin();
