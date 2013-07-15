@@ -1,7 +1,5 @@
 <!DOCTYPE EnvisionVisualizationStyle>
-<style prototypes="item/Item/default">
-	<layout prototypes="layout/SequentialLayout/default" />
-	<preSymbol prototypes="item/Static/default" />
+<style prototypes="item/OperatorStyle/default">
 	<inSymbol prototypes="item/Symbol/default">
 		<font>
 			<weight>99</weight>
@@ -14,5 +12,4 @@
 		</font>
 		<symbol> : </symbol>
 	</in2Symbol>
-	<postSymbol prototypes="item/Static/default" />
 </style>

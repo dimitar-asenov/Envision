@@ -27,6 +27,7 @@
 #include "StandardExpressionVisualizations.h"
 
 #include "VisualizationBase/src/items/Static.h"
+#include "VisualizationBase/src/items/NodeWrapper.h"
 
 #define BEGIN_STANDARD_EXPRESSION_VISUALIZATION_ALL(apiSpecification, className, nodeType)									\
 ITEM_COMMON_DEFINITIONS(className, "item")																									\
@@ -50,7 +51,7 @@ BEGIN_STANDARD_EXPRESSION_VISUALIZATION_ALL(apiSpecification, className, nodeTyp
 #define BEGIN_STANDARD_ENUMERATION_EXPRESSION_VISUALIZATION(apiSpecification, className, nodeType, enumeration)		\
 BEGIN_STANDARD_EXPRESSION_VISUALIZATION_ALL(apiSpecification, className, nodeType)												\
 																																							\
-	const ::OOVisualization::OperatorStyle* opStyle = &style()->op( node()->enumeration() );									\
+	const ::OOVisualization::OperatorStyle* opStyle = &style()->op( (int) node()->enumeration() );							\
 	layout()->setStyle( &opStyle->layout());																									\
 
 //********************************************************************************************************************
@@ -73,7 +74,14 @@ if (name##_) ++index;																																\
 
 //********************************************************************************************************************
 
+#define WRAPPED_OPERAND(name, wrapId)																											\
+layout()->synchronizeMid<::Visualization::Item, ::Visualization::NodeWrapper>(name##_, node()->name(), &opStyle->operand##wrapId##Wrapper(),index);	\
+if (name##_) {																																			\
+	++index;																																				\
+	name##_->setStyle( &opStyle->operand##wrapId##Wrapper() );				 															\
+}																																							\
 
+//********************************************************************************************************************
 
 #define PREINPOSTFIX(name, condition, styleAttribute)																						\
 layout()->synchronizeMid(name##_, condition, &opStyle->styleAttribute(), index);													\
@@ -112,4 +120,5 @@ namespace OOVisualization {
 #undef INFIX2
 #undef POSTFIX
 #undef OPERAND
+#undef WRAPPED_OPERAND
 #undef STANDARD_KEYWORD_EXPRESSION

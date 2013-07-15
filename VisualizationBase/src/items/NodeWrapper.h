@@ -60,6 +60,8 @@ class VISUALIZATIONBASE_API NodeWrapper : public Super<ItemWithNode<NodeWrapper,
 		// TODO: should not need to redefine this
 		virtual bool hasNode() const override;
 
+		Item* wrappedItem() const;
+
 	protected:
 		virtual void determineChildren() override;
 		virtual void updateGeometry(int availableWidth, int availableHeight) override;
@@ -71,5 +73,6 @@ class VISUALIZATIONBASE_API NodeWrapper : public Super<ItemWithNode<NodeWrapper,
 };
 
 inline void NodeWrapper::setStretchable(bool stretchable) {stretchable_ = stretchable;}
+inline Item* NodeWrapper::wrappedItem() const { return wrappedItem_; }
 
 } /* namespace Visualization */

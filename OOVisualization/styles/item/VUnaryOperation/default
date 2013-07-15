@@ -1,31 +1,31 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/Item/default">
 	<operators>
-		<e0 prototypes="default.operand">
+		<e0 prototypes="item/OperatorStyle/default">
 			<preSymbol prototypes="item/Symbol/default"><symbol>⁺⁺</symbol></preSymbol>
 		</e0>
-		<e1 prototypes="default.operand">
+		<e1 prototypes="item/OperatorStyle/default">
 			<preSymbol prototypes="item/Symbol/default"><symbol>⁻⁻</symbol></preSymbol>
 		</e1>
-		<e2 prototypes="default.operand">
+		<e2 prototypes="item/OperatorStyle/default">
 			<postSymbol prototypes="item/Symbol/default"><symbol>⁺⁺</symbol></postSymbol>
 		</e2>
-		<e3 prototypes="default.operand">
+		<e3 prototypes="item/OperatorStyle/default">
 			<postSymbol prototypes="item/Symbol/default"><symbol>⁻⁻</symbol></postSymbol>
 		</e3>
-		<e4 prototypes="default.operand">
+		<e4 prototypes="item/OperatorStyle/default">
 			<preSymbol prototypes="item/Symbol/default"><symbol>+</symbol></preSymbol>
 		</e4>
-		<e5 prototypes="default.operand">
+		<e5 prototypes="item/OperatorStyle/default">
 			<preSymbol prototypes="item/Symbol/default"><symbol>-</symbol></preSymbol>
 		</e5>
-		<e6 prototypes="default.operand">
+		<e6 prototypes="item/OperatorStyle/default">
 			<preSymbol prototypes="item/Symbol/default"><symbol>¬</symbol></preSymbol>
 		</e6>
-		<e7 prototypes="default.operand">
+		<e7 prototypes="item/OperatorStyle/default">
 			<preSymbol prototypes="item/Symbol/default"><symbol>~</symbol></preSymbol>
 		</e7>
-		<e8 prototypes="default.operand">
+		<e8 prototypes="item/OperatorStyle/default">
 			<layout>
 				<extraCursorsOutsideShape>true</extraCursorsOutsideShape>
 				<shape prototypes="shape/Braces/default">
@@ -35,10 +35,10 @@
 				</shape>
 			</layout>
 		</e8>
-		<e9 prototypes="default.operand">
+		<e9 prototypes="item/OperatorStyle/default">
 			<preSymbol prototypes="item/Symbol/default"><symbol>*</symbol></preSymbol>
 		</e9>
-		<e10 prototypes="default.operand">
+		<e10 prototypes="item/OperatorStyle/default">
 			<preSymbol prototypes="item/Symbol/default"><symbol>&amp;</symbol></preSymbol>
 		</e10>
 	</operators>

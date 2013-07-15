@@ -74,6 +74,7 @@ BEGIN_STANDARD_ENUMERATION_EXPRESSION_VISUALIZATION(apiSpecification, className,
 #define INFIX2(condition) EXPRESSION_PART(::Visualization::Static, infix2)
 #define POSTFIX(condition) EXPRESSION_PART(::Visualization::Static, postfix)
 #define OPERAND(name) EXPRESSION_PART(::Visualization::Item, name)
+#define WRAPPED_OPERAND(name, wrapId) OPERAND(name)
 
 #define STANDARD_KEYWORD_EXPRESSION(apiSpecification, className, nodeType)															\
 BEGIN_STANDARD_EXPRESSION_VISUALIZATION(apiSpecification, className, nodeType)													\
@@ -96,5 +97,6 @@ namespace OOVisualization {
 #undef INFIX2
 #undef POSTFIX
 #undef OPERAND
+#undef WRAPPED_OPERAND
 #undef STANDARD_KEYWORD_EXPRESSION
 

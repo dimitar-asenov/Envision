@@ -179,7 +179,13 @@ Method* addDivBySix(Class* parent)
 	divbysix->items()->append(new ExpressionStatement(
 			OOExpressionBuilder::getOOExpression("::.globalVar=::.globalFunct(42)")));
 	divbysix->items()->append(new ExpressionStatement(
-			OOExpressionBuilder::getOOExpression("typename ::.Vis::StyleType var=\"value\"")));
+			OOExpressionBuilder::getOOExpression("typename ::.Vis.StyleType var=\"value\"")));
+	divbysix->items()->append(new ExpressionStatement(
+			OOExpressionBuilder::getOOExpression("int size=sizeof(int)")));
+	divbysix->items()->append(new ExpressionStatement(
+			OOExpressionBuilder::getOOExpression("int align=alignof(float)")));
+	divbysix->items()->append(new ExpressionStatement(
+			OOExpressionBuilder::getOOExpression("auto tid=typeid(double)")));
 
 	VariableDeclarationExpression* result = new VariableDeclarationExpression("result");
 	divbysix->items()->append( new ExpressionStatement(result) );

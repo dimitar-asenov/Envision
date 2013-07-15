@@ -1,5 +1,5 @@
 <!DOCTYPE EnvisionVisualizationStyle>
-<style prototypes="item/VUnaryOperation/default.operand">
+<style prototypes="item/OperatorStyle/default">
 	<preSymbol prototypes="icon/SVGIcon/default">
 		<filename>styles/icon/globe.svg</filename>
 		<width>18</width>

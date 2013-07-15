@@ -201,6 +201,16 @@ void StringComponents::initConversions()
 			UnaryOperation::DEREFERENCE, Optional(),
 			UnaryOperation::ADDRESSOF, Optional())
 	); });
+	add<TypeTraitExpression>([](TypeTraitExpression* e){ return c(
+			choose( static_cast<int>(e->typeTraitKind()),
+				static_cast<int>(TypeTraitExpression::TypeTraitKind::SizeOf), "sizeof",
+				static_cast<int>(TypeTraitExpression::TypeTraitKind::AlignOf), "alignof",
+				static_cast<int>(TypeTraitExpression::TypeTraitKind::TypeId), "typeid"),
+			"(",
+			e->operand(),
+			")"
+	); });
+
 
 	// Literals
 	add<BooleanLiteral>([](BooleanLiteral* e){ return c( e->value() ? "true" : "false" ); });

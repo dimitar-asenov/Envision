@@ -29,6 +29,7 @@
 #include "../oovisualization_api.h"
 
 #include "VisualizationBase/src/items/StaticStyle.h"
+#include "VisualizationBase/src/items/NodeWrapper.h"
 #include "VisualizationBase/src/layouts/SequentialLayout.h"
 
 namespace OOVisualization {
@@ -42,6 +43,10 @@ class OOVISUALIZATION_API OperatorStyle : public Visualization::ItemStyle
 		Visualization::StaticStyle in2Symbol_;
 		Visualization::StaticStyle postSymbol_;
 
+		Visualization::NodeWrapper::StyleType operand0Wrapper_;
+		Visualization::NodeWrapper::StyleType operand1Wrapper_;
+		Visualization::NodeWrapper::StyleType operand2Wrapper_;
+
 	public:
 		void load(Visualization::StyleLoader& sl);
 
@@ -50,6 +55,10 @@ class OOVISUALIZATION_API OperatorStyle : public Visualization::ItemStyle
 		const Visualization::StaticStyle& inSymbol() const;
 		const Visualization::StaticStyle& in2Symbol() const;
 		const Visualization::StaticStyle& postSymbol() const;
+
+		const Visualization::NodeWrapper::StyleType& operand0Wrapper() const;
+		const Visualization::NodeWrapper::StyleType& operand1Wrapper() const;
+		const Visualization::NodeWrapper::StyleType& operand2Wrapper() const;
 };
 
 inline const Visualization::SequentialLayoutStyle& OperatorStyle::layout() const { return layout_; }
@@ -57,6 +66,10 @@ inline const Visualization::StaticStyle& OperatorStyle::preSymbol() const { retu
 inline const Visualization::StaticStyle& OperatorStyle::inSymbol() const { return inSymbol_; }
 inline const Visualization::StaticStyle& OperatorStyle::in2Symbol() const { return in2Symbol_; }
 inline const Visualization::StaticStyle& OperatorStyle::postSymbol() const { return postSymbol_; }
+
+inline const Visualization::NodeWrapper::StyleType& OperatorStyle::operand0Wrapper() const { return operand0Wrapper_; }
+inline const Visualization::NodeWrapper::StyleType& OperatorStyle::operand1Wrapper() const { return operand1Wrapper_; }
+inline const Visualization::NodeWrapper::StyleType& OperatorStyle::operand2Wrapper() const { return operand2Wrapper_; }
 
 class OOVISUALIZATION_API OperatorSequenceStyle : public Visualization::ItemStyle
 {

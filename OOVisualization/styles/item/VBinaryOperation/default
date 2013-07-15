@@ -1,71 +1,71 @@
 <!DOCTYPE EnvisionVisualizationStyle>
 <style prototypes="item/Item/default">
 	<operators>
-		<e0 prototypes="default.operand">
+		<e0 prototypes="item/OperatorStyle/default">
 			<inSymbol prototypes="item/Symbol/default"><symbol>*</symbol></inSymbol>
 		</e0>
-		<e1 prototypes="default.operand">
+		<e1 prototypes="item/OperatorStyle/default">
 			<inSymbol prototypes="item/Symbol/default"><symbol>/</symbol></inSymbol>
 		</e1>
-		<e2 prototypes="default.operand">
+		<e2 prototypes="item/OperatorStyle/default">
 			<inSymbol prototypes="item/Symbol/default"><symbol>%</symbol></inSymbol>
 		</e2>
-		<e3 prototypes="default.operand">
+		<e3 prototypes="item/OperatorStyle/default">
 			<inSymbol prototypes="item/Symbol/default"><symbol>+</symbol></inSymbol>
 		</e3>
-		<e4 prototypes="default.operand">
+		<e4 prototypes="item/OperatorStyle/default">
 			<inSymbol prototypes="item/Symbol/default"><symbol>-</symbol></inSymbol>
 		</e4>
-		<e5 prototypes="default.operand">
+		<e5 prototypes="item/OperatorStyle/default">
 			<inSymbol prototypes="item/Symbol/default"><symbol>&lt;&lt;</symbol></inSymbol>
 		</e5>
-		<e6 prototypes="default.operand">
+		<e6 prototypes="item/OperatorStyle/default">
 			<inSymbol prototypes="item/Symbol/default"><symbol>&gt;&gt;</symbol></inSymbol>
 		</e6>
-		<e7 prototypes="default.operand">
+		<e7 prototypes="item/OperatorStyle/default">
 			<inSymbol prototypes="item/Symbol/default"><symbol>&gt;&gt;&gt;</symbol></inSymbol>
 		</e7>
-		<e8 prototypes="default.operand">
+		<e8 prototypes="item/OperatorStyle/default">
 			<inSymbol prototypes="item/Symbol/default"><symbol>&lt;</symbol></inSymbol>
 		</e8>
-		<e9 prototypes="default.operand">
+		<e9 prototypes="item/OperatorStyle/default">
 			<inSymbol prototypes="item/Symbol/default"><symbol>&gt;</symbol></inSymbol>
 		</e9>
-		<e10 prototypes="default.operand">
+		<e10 prototypes="item/OperatorStyle/default">
 			<inSymbol prototypes="item/Symbol/default"><symbol>≤</symbol></inSymbol>
 		</e10>
-		<e11 prototypes="default.operand">
+		<e11 prototypes="item/OperatorStyle/default">
 			<inSymbol prototypes="item/Symbol/default"><symbol>≥</symbol></inSymbol>
 		</e11>
-		<e12 prototypes="default.operand">
+		<e12 prototypes="item/OperatorStyle/default">
 			<inSymbol prototypes="item/Symbol/default"><symbol>=</symbol></inSymbol>
 		</e12>
-		<e13 prototypes="default.operand">
+		<e13 prototypes="item/OperatorStyle/default">
 			<inSymbol prototypes="item/Symbol/default"><symbol>≠</symbol></inSymbol>
 		</e13>
-		<e14 prototypes="default.operand">
+		<e14 prototypes="item/OperatorStyle/default">
 			<inSymbol prototypes="item/Symbol/default"><symbol>⊻</symbol></inSymbol>
 		</e14>
-		<e15 prototypes="default.operand">
+		<e15 prototypes="item/OperatorStyle/default">
 			<inSymbol prototypes="item/Symbol/default"><symbol>&amp;</symbol></inSymbol>
 		</e15>
-		<e16 prototypes="default.operand">
+		<e16 prototypes="item/OperatorStyle/default">
 			<inSymbol prototypes="item/Symbol/default"><symbol>|</symbol></inSymbol>
 		</e16>
-		<e17 prototypes="default.operand">
+		<e17 prototypes="item/OperatorStyle/default">
 			<inSymbol prototypes="item/Symbol/default"><symbol>∧</symbol></inSymbol>
 		</e17>
-		<e18 prototypes="default.operand">
+		<e18 prototypes="item/OperatorStyle/default">
 			<inSymbol prototypes="item/Symbol/default"><symbol>∨</symbol></inSymbol>
 		</e18>
-		<e19 prototypes="default.operand">
+		<e19 prototypes="item/OperatorStyle/default">
 			<inSymbol prototypes="item/Symbol/default"><symbol>[</symbol></inSymbol>
 			<postSymbol prototypes="item/Symbol/default"><symbol>]</symbol></postSymbol>
 		</e19>
-		<e20 prototypes="default.operand">
+		<e20 prototypes="item/OperatorStyle/default">
 			<inSymbol prototypes="item/Symbol/default"><symbol>.*</symbol></inSymbol>
 		</e20>
-		<e21 prototypes="default.operand">
+		<e21 prototypes="item/OperatorStyle/default">
 			<inSymbol prototypes="item/Symbol/default"><symbol>→*</symbol></inSymbol>
 		</e21>
 	</operators>

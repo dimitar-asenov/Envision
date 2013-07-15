@@ -396,6 +396,20 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 	}));
 
 
+	// Type traits operators
+	add(new OD( "sizeof", "sizeof ( expr )", 1, OD::NotAssociative,
+			[](const QList<Expression*>& operands) -> Expression* {
+		return new TypeTraitExpression(TypeTraitExpression::TypeTraitKind::SizeOf, operands.first());
+	}));
+	add(new OD( "alignof", "alignof ( expr )", 1, OD::NotAssociative,
+			[](const QList<Expression*>& operands) -> Expression* {
+		return new TypeTraitExpression(TypeTraitExpression::TypeTraitKind::AlignOf, operands.first());
+	}));
+	add(new OD( "typeid", "typeid ( expr )", 1, OD::NotAssociative,
+			[](const QList<Expression*>& operands) -> Expression* {
+		return new TypeTraitExpression(TypeTraitExpression::TypeTraitKind::TypeId, operands.first());
+	}));
+
 	// Variable declaration
 	auto varDeclFunction = [](const QList<Expression*>& operands) -> Expression*
 	{

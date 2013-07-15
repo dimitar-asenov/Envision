@@ -769,6 +769,12 @@ Method* addExtraMethod(Class* parent)
 			new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT))));
 	extra->items()->append(new ExpressionStatement(
 					new ReferenceExpression("someGlobalVariable", new GlobalScopeExpression())));
+	extra->items()->append(new ExpressionStatement( new TypeTraitExpression(TypeTraitExpression::TypeTraitKind::SizeOf,
+			new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::INT))));
+	extra->items()->append(new ExpressionStatement( new TypeTraitExpression(TypeTraitExpression::TypeTraitKind::AlignOf,
+			new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::FLOAT))));
+	extra->items()->append(new ExpressionStatement( new TypeTraitExpression(TypeTraitExpression::TypeTraitKind::TypeId,
+			new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::DOUBLE))));
 
 
 	extra->extension<Position>()->set(400, 600);

@@ -1,8 +1,0 @@
-<!DOCTYPE EnvisionVisualizationStyle>
-<style prototypes="item/Item/default">
-	<layout prototypes="layout/SequentialLayout/default"/>
-	<preSymbol prototypes="item/Static/default" />
-	<inSymbol prototypes="item/Static/default" />
-	<in2Symbol prototypes="item/Static/default" />
-	<postSymbol prototypes="item/Static/default" />
-</style>

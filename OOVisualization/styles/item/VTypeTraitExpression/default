@@ -1,0 +1,35 @@
+<!DOCTYPE EnvisionVisualizationStyle>
+<style prototypes="item/Item/default">
+	<operators>
+		<e0 prototypes="item/OperatorStyle/default">
+			<preSymbol prototypes="item/Symbol/keyword"><symbol>sizeof</symbol></preSymbol>
+			<operand0Wrapper>
+				<shape prototypes="shape/Braces/default">
+					Braces
+					<leftBrace>(</leftBrace>
+					<rightBrace>)</rightBrace>
+				</shape>
+			</operand0Wrapper>
+		</e0>
+		<e1 prototypes="item/OperatorStyle/default">
+			<preSymbol prototypes="item/Symbol/keyword"><symbol>alignof</symbol></preSymbol>
+			<operand0Wrapper>
+				<shape prototypes="shape/Braces/default">
+					Braces
+					<leftBrace>(</leftBrace>
+					<rightBrace>)</rightBrace>
+				</shape>
+			</operand0Wrapper>
+		</e1>
+		<e2 prototypes="item/OperatorStyle/default">
+			<preSymbol prototypes="item/Symbol/keyword"><symbol>typeid</symbol></preSymbol>
+			<operand0Wrapper>
+				<shape prototypes="shape/Braces/default">
+					Braces
+					<leftBrace>(</leftBrace>
+					<rightBrace>)</rightBrace>
+				</shape>
+			</operand0Wrapper>
+		</e2>
+	</operators>
+</style>

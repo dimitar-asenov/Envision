@@ -170,6 +170,14 @@ void GridConstructors::initializeAll()
 				grid->add(new Cell(i, vis->layout()->at<Visualization::Item>(i), i));
 	});
 
+	GridBasedOffsetProvider::addGridConstructor<VTypeTraitExpression>(
+		[](GridBasedOffsetProvider* grid, VTypeTraitExpression* vis){
+			grid->setFilterNullAndEmptyComponents();
+
+			grid->add(new Cell(0, vis->layout()->at<Visualization::Item>(0), 0));
+			grid->add(new Cell(2, vis->layout()->at<Visualization::NodeWrapper>(1)->wrappedItem(), 2));
+		});
+
 	GridBasedOffsetProvider::addGridConstructor<VFunctionType>(
 	[](GridBasedOffsetProvider* grid, VFunctionType* vis){
 		grid->add(new Cell(0, vis->icon(), 0));

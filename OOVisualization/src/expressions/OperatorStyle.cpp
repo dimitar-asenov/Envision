@@ -37,6 +37,10 @@ void OperatorStyle::load(Visualization::StyleLoader& sl)
 	sl.load("inSymbol", inSymbol_);
 	sl.load("in2Symbol", in2Symbol_);
 	sl.load("postSymbol", postSymbol_);
+
+	sl.load("operand0Wrapper", operand0Wrapper_);
+	sl.load("operand1Wrapper", operand1Wrapper_);
+	sl.load("operand2Wrapper", operand2Wrapper_);
 }
 
 void OperatorSequenceStyle::load(Visualization::StyleLoader& sl)
