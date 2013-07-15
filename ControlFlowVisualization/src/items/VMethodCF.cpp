@@ -43,7 +43,7 @@ ITEM_COMMON_DEFINITIONS(VMethodCF, "item")
 VMethodCF::VMethodCF(Item* parent, NodeType* node, const StyleType* style) :
 	Super(parent, node, style),
 	header_( new SequentialLayout(nullptr, &style->header()) ),
-	icon_(new Static(nullptr, &style->icon())),
+	icon_(new Static(nullptr, &style->defaultIcon())),
 	name_(new VText(nullptr, node->nameNode(), &style->nameDefault()) ),
 	arguments_(new VList(nullptr, node->arguments(), &style->arguments()) ),
 	contentCF_(nullptr),
@@ -102,7 +102,7 @@ void VMethodCF::determineChildren()
 	//			what's the reason they are being updated.
 	// The style needs to be updated every time since if our own style changes, so will that of the children.
 	layout()->setStyle( &style()->layout() );
-	icon_->setStyle( &style()->icon());
+	icon_->setStyle( &style()->defaultIcon());
 	header_->setStyle( &style()->header() );
 	name_->setStyle(nameStyle);
 	contentCF_->setStyle( &style()->contentCF() );
