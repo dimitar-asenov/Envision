@@ -45,6 +45,10 @@
 #include "InteractionBase/src/autocomplete/AutoCompleteEntry.h"
 #include "Core/src/AdapterManager.h"
 
+using namespace OOModel;
+using namespace Visualization;
+using namespace Interaction;
+
 namespace OOInteraction {
 
 HExpression::HExpression()
@@ -58,7 +62,7 @@ HExpression* HExpression::instance()
 	return &h;
 }
 
-void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
+void HExpression::keyPressEvent(Item *target, QKeyEvent *event)
 {
 	auto key = event->key();
 	auto modifiers = event->modifiers();
@@ -91,12 +95,12 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	{
 		// We need to trigger an update of all the visualizations leading up to the target, even though the target
 		// visualization will probably be deleted and replaced with a new one.
-		target->setUpdateNeeded(Visualization::Item::StandardUpdate);
+		target->setUpdateNeeded(Item::StandardUpdate);
 
 		// Find the top most parent that is adaptable to StringProvider
 		QString str;
 		int index;
-		Visualization::Item* topMostItem = stringInfo(target, (Qt::Key) key, str, index);
+		Item* topMostItem = stringInfo(target, (Qt::Key) key, str, index);
 
 		if (index < 0) return;
 
@@ -113,30 +117,30 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		if ((key == Qt::Key_Backspace && index == 0) || (key == Qt::Key_Delete && index == str.length()))
 		{
 			if (topMostItem->node()->parent()
-					&& topMostItem->node()->parent()->typeId() == OOModel::ExpressionStatement::typeIdStatic())
+					&& topMostItem->node()->parent()->typeId() == ExpressionStatement::typeIdStatic())
 			{
-				if ( auto list = dynamic_cast<OOModel::StatementItemList*>(topMostItem->node()->parent()->parent()) )
+				if ( auto list = dynamic_cast<StatementItemList*>(topMostItem->node()->parent()->parent()) )
 				{
 					int thisNodeListIndex = list->indexOf(topMostItem->node()->parent());
 					int nodeToDeletelistIndex = thisNodeListIndex + (key == Qt::Key_Backspace ? -1 : +1);
-					bool empty = dynamic_cast<OOModel::EmptyExpression*>(topMostItem->node());
+					bool empty = dynamic_cast<EmptyExpression*>(topMostItem->node());
 
 					// Get a parent which represents a list (of statements or statement items)
 					auto parent = topMostItem->parent();
-					Visualization::VList* vlist = nullptr;
-					while (!(vlist = dynamic_cast<Visualization::VList*>(parent)) && parent->parent())
+					VList* vlist = nullptr;
+					while (!(vlist = dynamic_cast<VList*>(parent)) && parent->parent())
 						parent = parent->parent();
 
 					if (nodeToDeletelistIndex >= 0 && nodeToDeletelistIndex < list->size())
 					{
 						// Delete the current or the previous or the next empty item
-						auto st = dynamic_cast<OOModel::ExpressionStatement*>(list->at(nodeToDeletelistIndex));
-						if (st && dynamic_cast<OOModel::EmptyExpression*>(st->expression()))
+						auto st = dynamic_cast<ExpressionStatement*>(list->at(nodeToDeletelistIndex));
+						if (st && dynamic_cast<EmptyExpression*>(st->expression()))
 						{
-							Interaction::HList::instance()->removeNodeAndSetCursor(vlist,
+							HList::instance()->removeNodeAndSetCursor(vlist,
 									empty ? thisNodeListIndex : nodeToDeletelistIndex, key == Qt::Key_Delete,
 										key == Qt::Key_Delete
-										? Interaction::SetCursorEvent::CursorOnRight : Interaction::SetCursorEvent::CursorOnLeft);
+										? SetCursorEvent::CursorOnRight : SetCursorEvent::CursorOnLeft);
 							return;
 						}
 					}
@@ -144,9 +148,9 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 					// If we could not delete the previous/next statements, then delete the current one if it is empty.
 					// In either case position the cursor appropriately
 					if (empty)
-						Interaction::HList::instance()->removeNodeAndSetCursor(vlist, thisNodeListIndex);
+						HList::instance()->removeNodeAndSetCursor(vlist, thisNodeListIndex);
 					else
-						Interaction::HList::instance()->scheduleSetCursor(vlist, thisNodeListIndex +
+						HList::instance()->scheduleSetCursor(vlist, thisNodeListIndex +
 								(key == Qt::Key_Delete ? 1 : 0));
 					return;
 				}
@@ -195,64 +199,74 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 		}
 
 		// Process keywords for statements
-		OOModel::ExpressionStatement* replaceStatement = nullptr;
+		ExpressionStatement* replaceStatement = nullptr;
 		auto trimmedText = newText.trimmed();
 		if ( (enterPressed || spacePressed)
 				&& (trimmedText == "for" || trimmedText == "foreach" || trimmedText == "if" || trimmedText == "class"
-						|| trimmedText == "continue" || trimmedText == "break" || trimmedText == "return"))
+						|| trimmedText == "continue" || trimmedText == "break" || trimmedText == "return" ||
+						trimmedText == "do"))
 			replaceStatement = parentExpressionStatement(dynamic_cast<OOModel::Expression*>(target->node()));
 
 		if (replaceStatement)
 		{
-			OOModel::StatementItem* st = nullptr;
+			StatementItem* st = nullptr;
 			Model::Node* toFocus = nullptr;
 			if(trimmedText == "for")
 			{
-				auto loop =  new OOModel::LoopStatement();
-				loop->setInitStep(new OOModel::EmptyExpression());
+				auto loop =  new LoopStatement();
+				loop->setInitStep(new EmptyExpression());
 
 				toFocus = loop->initStep();
 				st = loop;
 			}
 			else if (trimmedText == "foreach")
 			{
-				auto loop =  new OOModel::ForEachStatement();
-				loop->setCollection(new OOModel::EmptyExpression());
+				auto loop =  new ForEachStatement();
+				loop->setCollection(new EmptyExpression());
 
 				toFocus = loop->varNameNode();
 				st = loop;
 			}
 			else if (trimmedText == "if")
 			{
-				auto ifs =  new OOModel::IfStatement();
-				ifs->setCondition(new OOModel::EmptyExpression());
+				auto ifs =  new IfStatement();
+				ifs->setCondition(new EmptyExpression());
 
 				toFocus = ifs->condition();
 				st = ifs;
 			}
 			else if (trimmedText == "continue")
 			{
-				st = new OOModel::ContinueStatement();
+				st = new ContinueStatement();
 				toFocus = st;
 			}
 			else if (trimmedText == "break")
 			{
-				st = new OOModel::BreakStatement();
+				st = new BreakStatement();
 				toFocus = st;
 			}
 			else if (trimmedText == "return")
 			{
-				auto ret =  new OOModel::ReturnStatement();
-				ret->values()->append(new OOModel::EmptyExpression());
+				auto ret =  new ReturnStatement();
+				ret->values()->append(new EmptyExpression());
 
 				toFocus = ret->values()->at(0);
 				st = ret;
 			}
 			else if (trimmedText == "class")
 			{
-				auto ret =  new OOModel::Class();
+				auto ret =  new Class();
 				toFocus = ret;
-				st = new OOModel::DeclarationStatement(ret);
+				st = new DeclarationStatement(ret);
+			}
+			else if(trimmedText == "do")
+			{
+				auto loop =  new LoopStatement(LoopStatement::LoopKind::PostCheck);
+				auto empty = new EmptyExpression();
+				loop->body()->append(new ExpressionStatement(empty));
+
+				toFocus = empty;
+				st = loop;
 			}
 
 			Model::Node* containerNode = replaceStatement->parent();
@@ -262,9 +276,9 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 
 			// Get a parent which represents a list (of statements or statement items)
 			auto parent = topMostItem->parent();
-			while (! dynamic_cast<Visualization::VList*>(parent) && parent->parent()) parent = parent->parent();
+			while (! dynamic_cast<VList*>(parent) && parent->parent()) parent = parent->parent();
 
-			target->scene()->addPostEventAction(new Interaction::SetCursorEvent(parent, toFocus));
+			target->scene()->addPostEventAction(new SetCursorEvent(parent, toFocus));
 			return;
 		}
 
@@ -274,10 +288,10 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			auto expSt = parentExpressionStatement(dynamic_cast<OOModel::Expression*>(target->node()));
 			if (expSt)
 			{
-				auto stList = dynamic_cast<OOModel::StatementItemList*>(expSt->parent());
+				auto stList = dynamic_cast<StatementItemList*>(expSt->parent());
 				if (stList)
 				{
-					auto es = new OOModel::ExpressionStatement(new OOModel::EmptyExpression());
+					auto es = new ExpressionStatement(new EmptyExpression());
 					stList->model()->beginModification(stList, "add empty statement");
 					stList->insert(stList->indexOf(expSt) + (index==0 && !str.isEmpty()?0:1), es);
 					stList->model()->endModification();
@@ -287,8 +301,8 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 					{
 						// For the current item
 						target->scene()->addPostEventAction(
-							new Interaction::SetCursorEvent(topMostItem->parent(), target->node(),
-								Interaction::SetCursorEvent::CursorOnLeft));
+							new SetCursorEvent(topMostItem->parent(), target->node(),
+								SetCursorEvent::CursorOnLeft));
 					}
 					else
 					{
@@ -296,7 +310,7 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 						auto p = target;
 						while (p->parent()) p = p->parent(); // Using topMostItem->parent() does not work.
 						target->scene()->addPostEventAction(
-							new Interaction::SetCursorEvent(p, es->expression(), Interaction::SetCursorEvent::CursorOnLeft));
+							new SetCursorEvent(p, es->expression(), SetCursorEvent::CursorOnLeft));
 					}
 					return;
 				}
@@ -314,7 +328,7 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 				)
 			{
 				auto s = target->scene();
-				s->addPostEventAction(new Visualization::CustomSceneEvent(
+				s->addPostEventAction(new CustomSceneEvent(
 						[s, this]() {
 							auto mc = s->mainCursor();
 							if (mc) // This will be null if 'target' was deleted, e.g. because the new expression
@@ -328,7 +342,7 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			}
 			else
 			{
-				target->scene()->addPostEventAction(new Visualization::CustomSceneEvent(Interaction::AutoComplete::hide));
+				target->scene()->addPostEventAction(new CustomSceneEvent(AutoComplete::hide));
 			}
 
 			return;
@@ -342,9 +356,9 @@ void HExpression::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	GenericHandler::keyPressEvent(target, event);
 }
 
-Visualization::Item* HExpression::stringInfo(Visualization::Item* target, Qt::Key key, QString& str, int& index)
+Item* HExpression::stringInfo(Item* target, Qt::Key key, QString& str, int& index)
 {
-	Visualization::Item* topMostItem = target;
+	Item* topMostItem = target;
 	auto* topMostSP = Core::AdapterManager::adapt<StringOffsetProvider>(topMostItem);
 
 	auto p = topMostItem->parent();
@@ -370,16 +384,16 @@ Visualization::Item* HExpression::stringInfo(Visualization::Item* target, Qt::Ke
 	return topMostItem;
 }
 
-OOModel::ExpressionStatement* HExpression::parentExpressionStatement(OOModel::Expression* e)
+ExpressionStatement* HExpression::parentExpressionStatement(OOModel::Expression* e)
 {
 	// Is this expression part of an expression statement
 	auto ep = e->parent();
-	while (ep && !dynamic_cast<OOModel::Statement*>(ep)) ep = ep->parent();
+	while (ep && !dynamic_cast<Statement*>(ep)) ep = ep->parent();
 
-	return dynamic_cast<OOModel::ExpressionStatement*>(ep);
+	return dynamic_cast<ExpressionStatement*>(ep);
 }
 
-void HExpression::setNewExpression(Visualization::Item* target, Visualization::Item* topMostItem, const QString& text,
+void HExpression::setNewExpression(Item* target, Item* topMostItem, const QString& text,
 				int index)
 {
 	OOModel::Expression* newExpression = OOExpressionBuilder::getOOExpression( text );
@@ -412,7 +426,7 @@ void HExpression::setNewExpression(Visualization::Item* target, Visualization::I
 	CompoundObjectDescriptor::cleanAllStoredExpressions();
 }
 
-void HExpression::showAutoComplete(Visualization::Item* target, bool showIfEmpty, bool showIfPreciselyMatched)
+void HExpression::showAutoComplete(Item* target, bool showIfEmpty, bool showIfPreciselyMatched)
 {
 	// Make a string pattern to look for. Given an input like:
 	// someclass.met|hod
@@ -437,12 +451,12 @@ void HExpression::showAutoComplete(Visualization::Item* target, bool showIfEmpty
 	QString searchPattern = userWord;
 	for(int i = searchPattern.size(); i>=0; --i) searchPattern.insert(i, "*");
 
-	QList<Interaction::AutoCompleteEntry*> entries;
+	QList<AutoCompleteEntry*> entries;
 
-	OOModel::SymbolProviderType* scopePrefix = nullptr;
+	SymbolProviderType* scopePrefix = nullptr;
 	bool afterDot = false;
 
-	if (auto ref = dynamic_cast<OOModel::ReferenceExpression*>(target->node()))
+	if (auto ref = dynamic_cast<ReferenceExpression*>(target->node()))
 	{
 		// If the auto complete is invoked somewhere in a reference expression after a '.' only look for members that
 		// match.
@@ -450,7 +464,7 @@ void HExpression::showAutoComplete(Visualization::Item* target, bool showIfEmpty
 		{
 			afterDot = true;
 			auto t = ref->prefix()->type();
-			scopePrefix = dynamic_cast<OOModel::SymbolProviderType*>(t);
+			scopePrefix = dynamic_cast<SymbolProviderType*>(t);
 			if (!scopePrefix) SAFE_DELETE(t);
 		}
 	}
@@ -462,7 +476,7 @@ void HExpression::showAutoComplete(Visualization::Item* target, bool showIfEmpty
 		{
 			afterDot = true;
 			auto t = unf->operands()->first()->type();
-			scopePrefix = dynamic_cast<OOModel::SymbolProviderType*>(t);
+			scopePrefix = dynamic_cast<SymbolProviderType*>(t);
 			if (!scopePrefix) SAFE_DELETE(t);
 		}
 	}
@@ -471,8 +485,8 @@ void HExpression::showAutoComplete(Visualization::Item* target, bool showIfEmpty
 
 	for(auto n : searchNode->findSymbols(QRegExp(searchPattern, Qt::CaseInsensitive, QRegExp::Wildcard),
 		target->node(), (afterDot ? Model::Node::SEARCH_DOWN : Model::Node::SEARCH_UP), afterDot == false))
-			entries.append(new Interaction::AutoCompleteEntry(n->symbolName(), QString(), nullptr,
-				[=](Interaction::AutoCompleteEntry* entry) { doAutoComplete(target, entry->text()); }));
+			entries.append(new AutoCompleteEntry(n->symbolName(), QString(), nullptr,
+				[=](AutoCompleteEntry* entry) { doAutoComplete(target, entry->text()); }));
 
 	SAFE_DELETE(scopePrefix);
 
@@ -488,26 +502,26 @@ void HExpression::showAutoComplete(Visualization::Item* target, bool showIfEmpty
 			}
 	}
 
-	if (show) Interaction::AutoComplete::show(entries);
-	else Interaction::AutoComplete::hide();
+	if (show) AutoComplete::show(entries);
+	else AutoComplete::hide();
 }
 
-void HExpression::toggleAutoComplete(Visualization::Item* target)
+void HExpression::toggleAutoComplete(Item* target)
 {
-	if (Interaction::AutoComplete::isVisible())
-		Interaction::AutoComplete::hide();
+	if (AutoComplete::isVisible())
+		AutoComplete::hide();
 	else showAutoComplete(target);
 }
 
-void HExpression::doAutoComplete(Visualization::Item* target, const QString& autoCompleteStr)
+void HExpression::doAutoComplete(Item* target, const QString& autoCompleteStr)
 {
 	// We need to trigger an update of all the visualizations leading up to the target, even though the target
 	// visualization will probably be deleted and replaced with a new one.
-	target->setUpdateNeeded(Visualization::Item::StandardUpdate);
+	target->setUpdateNeeded(Item::StandardUpdate);
 
 	QString str;
 	int index;
-	Visualization::Item* topMostItem = stringInfo(target, Qt::Key_A, str, index); //Any non special key
+	Item* topMostItem = stringInfo(target, Qt::Key_A, str, index); //Any non special key
 
 	int startIndex = index - 1;
 	while (startIndex >= 0)

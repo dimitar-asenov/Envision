@@ -59,6 +59,8 @@ class OOVISUALIZATION_API VLoopStatement
 
 		static void initializeForms();
 
+		virtual int determineForm() override;
+
 	private:
 		Visualization::NodeWrapper* condition_{};
 		Visualization::NodeWrapper* initStep_{};

@@ -77,17 +77,20 @@ void HLoop::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 	else if (vloop->condition() && vloop->condition()->itemOrChildHasFocus() && (switchHorizontal || createRight))
 	{
 		event->accept();
-		if (vloop->node()->updateStep())
-			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, vloop->node()->updateStep()));
-		else
+		if (vloop->node()->loopKind() == OOModel::LoopStatement::LoopKind::PreCheck)
 		{
-			auto empty = new OOModel::EmptyExpression();
-			vloop->node()->model()->beginModification(vloop->node(), "create updateStep");
-			vloop->node()->setUpdateStep(empty);
-			vloop->node()->model()->endModification();
+			if (vloop->node()->updateStep())
+				target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, vloop->node()->updateStep()));
+			else
+			{
+				auto empty = new OOModel::EmptyExpression();
+				vloop->node()->model()->beginModification(vloop->node(), "create updateStep");
+				vloop->node()->setUpdateStep(empty);
+				vloop->node()->model()->endModification();
 
-			vloop->setUpdateNeeded(Visualization::Item::StandardUpdate);
-			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty));
+				vloop->setUpdateNeeded(Visualization::Item::StandardUpdate);
+				target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty));
+			}
 		}
 	}
 	else if (vloop->updateStep() && vloop->updateStep()->itemOrChildHasFocus() && (switchHorizontal || createRight))
@@ -123,6 +126,22 @@ void HLoop::keyPressEvent(Visualization::Item *target, QKeyEvent *event)
 			vloop->node()->model()->endModification();
 
 			vloop->body()->setUpdateNeeded(Visualization::Item::StandardUpdate);
+			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty));
+		}
+
+	}else if (vloop->body() && vloop->body()->itemOrChildHasFocus() && (createDown || createRight))
+	{
+		event->accept();
+		if (vloop->node()->condition())
+			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, vloop->node()->condition()));
+		else
+		{
+			auto empty = new OOModel::EmptyExpression();
+			vloop->node()->model()->beginModification(vloop->node(), "create condition");
+			vloop->node()->setCondition(empty);
+			vloop->node()->model()->endModification();
+
+			vloop->setUpdateNeeded(Visualization::Item::StandardUpdate);
 			target->scene()->addPostEventAction( new Interaction::SetCursorEvent(target, empty));
 		}
 

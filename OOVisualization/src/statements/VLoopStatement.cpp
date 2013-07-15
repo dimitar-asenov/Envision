@@ -64,18 +64,35 @@ void VLoopStatement::initializeForms()
 	auto shapeElement = new ShapeFormElement();
 
 	addForm((new AnchorLayoutFormElement())
-		// place body below header
 		->put(TheTopOf, body, 10, FromBottomOf, header)
-		// place upper left corner of the shape element
 		->put(TheTopOf, shapeElement, AtCenterOf, header)
 		->put(TheLeftOf, shapeElement, AtLeftOf, header)
-		// place the body 'inside' the shape element
 		->put(TheLeftOf, shapeElement, 10, FromLeftOf, body)
-		// align header and body on their right
 		->put(TheRightOf, header, AtRightOf, body)
-		// place the bottom right corner of the shape element
 		->put(TheRightOf, shapeElement, 10, FromRightOf, header)
 		->put(TheBottomOf, shapeElement, 10, FromBottomOf, body));
+
+	// Now add the second form for a DO loop
+	auto icon = grid({{item<Static>(&I::icon_, [](I* v){return &v->style()->icon();})}})->setColumnStretchFactor(0, 1);
+	auto footer = grid({{item<NodeWrapper>(&I::condition_, [](I* v){return v->node()->condition();},
+			[](I* v){return &v->style()->condition();})}})->setColumnStretchFactor(0, 1);
+
+	addForm((new AnchorLayoutFormElement())
+		->put(TheTopOf, body, 10, FromBottomOf, icon)
+		->put(TheTopOf, shapeElement, AtCenterOf, icon)
+		->put(TheLeftOf, shapeElement, AtLeftOf, icon)
+		->put(TheLeftOf, shapeElement, 5, FromLeftOf, footer)
+		->put(TheLeftOf, shapeElement, 10, FromLeftOf, body)
+		->put(TheRightOf, icon, AtRightOf, body)
+		->put(TheRightOf, footer, AtRightOf, body)
+		->put(TheRightOf, shapeElement, 10, FromRightOf, icon)
+		->put(TheTopOf, footer, 10, FromBottomOf, body)
+		->put(TheBottomOf, shapeElement, AtCenterOf, footer));
+}
+
+int VLoopStatement::determineForm()
+{
+	return static_cast<int>(node()->loopKind());
 }
 
 }

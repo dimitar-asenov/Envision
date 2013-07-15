@@ -776,6 +776,21 @@ Method* addExtraMethod(Class* parent)
 	extra->items()->append(new ExpressionStatement( new TypeTraitExpression(TypeTraitExpression::TypeTraitKind::TypeId,
 			new PrimitiveTypeExpression(PrimitiveTypeExpression::PrimitiveTypes::DOUBLE))));
 
+	auto loop = new LoopStatement(LoopStatement::LoopKind::PostCheck);
+	extra->items()->append(loop);
+	BinaryOperation* loopCondition = new BinaryOperation();
+	loop->setCondition(loopCondition);
+	loopCondition->setLeft(new ReferenceExpression("i"));
+	loopCondition->setOp(BinaryOperation::LESS);
+	loopCondition->setRight(new ReferenceExpression("x"));
+	AssignmentExpression* loopBodyAssignment = new AssignmentExpression();
+	loop->body()->append(new ExpressionStatement(loopBodyAssignment));
+	loopBodyAssignment->setLeft(new ReferenceExpression("var14"));
+	loopBodyAssignment->setOp(AssignmentExpression::TIMES_ASSIGN);
+	loopBodyAssignment->setRight(new IntegerLiteral(2));
+	loop->body()->append(new ContinueStatement());
+	loop->body()->append(new BreakStatement());
+
 
 	extra->extension<Position>()->set(400, 600);
 
