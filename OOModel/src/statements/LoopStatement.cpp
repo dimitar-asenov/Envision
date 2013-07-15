@@ -40,7 +40,7 @@ REGISTER_ATTRIBUTE(LoopStatement, updateStep, Expression, false, true, true)
 REGISTER_ATTRIBUTE(LoopStatement, body, StatementItemList, false, false, true)
 REGISTER_ATTRIBUTE(LoopStatement, lpKind, Integer, false, false, true)
 
-LoopStatement::LoopStatement(LoopKind& kind)
+LoopStatement::LoopStatement(LoopKind kind)
 : Super(nullptr, LoopStatement::getMetaData())
 {
 	setLoopKind(kind);
