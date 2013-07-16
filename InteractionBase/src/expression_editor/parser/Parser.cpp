@@ -79,6 +79,7 @@ ParseResult Parser::parse(QVector<Token>::const_iterator token, ParseResult resu
 		hasLeft = true;
 	}
 
+	// Finish parsing if the end is reached
 	if (token == end_tokens_)
 	{
 		result.missingTrailingTokens = expected.size();
@@ -87,34 +88,50 @@ ParseResult Parser::parse(QVector<Token>::const_iterator token, ParseResult resu
 	}
 
 	bool error = false;
-
-	bool processedByLiterals = false;
-	if (token->type() == Token::Identifier || token->type() == Token::Literal)
-		processIdentifiersAndLiterals(processedByLiterals, error, expected, token, hasLeft, instructions);
-
-	// If the current token is the same as any of the next expected delimiters try to complete the parsing asuming
-	// missing expressions in between and finishing the intermediate operators.
-	bool processedByExpectedDelimiters = false;
-	ParseResult pr_expected_delim;
-	if (!processedByLiterals && !error && token->type() == Token::OperatorDelimiter)
+	switch(token->type())
 	{
-		pr_expected_delim = processExpectedOperatorDelimiters(processedByExpectedDelimiters, expected, token, result,
-				instructions);
+		case Token::Identifier:
+		case Token::Literal:
+		{
+			processIdentifiersAndLiterals(error, expected, token, hasLeft, instructions);
+			break;
+		}
+		case Token::OperatorDelimiter:
+		{
+			// Try two things: interpret this delimiter as part of an existing operator or as introducing a new one
+			// Return whichever produces a better result.
+
+			// If the current token is the same as any of the next expected delimiters try to complete the parsing assuming
+			// missing expressions in between and finishing the intermediate operators.
+			bool processedByExpectedDelimiters = false;
+			auto pr_expected_delim = processExpectedOperatorDelimiters(processedByExpectedDelimiters, expected, token,
+						result, instructions);
+
+			// Try to complete the parsing assuming that a new operator is being introduced by the current token.
+			bool processedByNewDelimiters = false;
+			processNewOperatorDelimiters(processedByNewDelimiters, error, expected, token, hasLeft, result, instructions);
+
+			// Return the better result if any.
+			if (processedByExpectedDelimiters && !processedByNewDelimiters) return pr_expected_delim;
+			if (!processedByExpectedDelimiters && processedByNewDelimiters) return result;
+			if (processedByExpectedDelimiters && processedByNewDelimiters)
+				return result < pr_expected_delim ? result : pr_expected_delim;
+
+			error = true;
+			break;
+		}
+		case Token::PartialLiteral:
+		{
+			error = true;
+			break;
+		}
+		default:
+			Q_ASSERT(false); // Unknown token type
 	}
 
-	// Try to complete the parsing assuming that a new operator is being introduced by the current token.
-	bool processedByNewDelimiters = false;
-	if ( !processedByLiterals && !error && token->type() == Token::OperatorDelimiter)
-	{
-		processNewOperatorDelimiters(processedByNewDelimiters, error, expected, token, hasLeft, result, instructions);
-	}
-
-	if (processedByExpectedDelimiters && !processedByNewDelimiters) return pr_expected_delim;
-	if (!processedByExpectedDelimiters && processedByNewDelimiters) return result;
-	if (processedByExpectedDelimiters && processedByNewDelimiters)
-		return result < pr_expected_delim ? result : pr_expected_delim;
-
-	if (!processedByLiterals || error)
+	// We do not get here if this is an OperatorDelimiter which has been processed. In that case the function returns
+	// early.
+	if (error)
 	{
 		++result.errors;
 		instructions.append( new AddErrorOperator(token->text()) );
@@ -125,7 +142,7 @@ ParseResult Parser::parse(QVector<Token>::const_iterator token, ParseResult resu
 	return parse(token, result, expected, hasLeft, instructions);
 }
 
-void Parser::processIdentifiersAndLiterals(bool& processed, bool& error, QStringList& expected,
+void Parser::processIdentifiersAndLiterals(bool& error, QStringList& expected,
 		QVector<Token>::const_iterator& token, bool& hasLeft, QVector<ExpressionTreeBuildInstruction*>& instructions)
 {
 	QString e = expected.isEmpty() ? "" : expected.first();
@@ -134,9 +151,9 @@ void Parser::processIdentifiersAndLiterals(bool& processed, bool& error, QString
 		instructions.append( new AddValue(token->text()) );
 		hasLeft = true;
 		expected.removeFirst();
-		processed = true;
+		error = false;
 	}
-	else if (e == "id") error = true;
+	else error = true;
 }
 
 ParseResult Parser::processExpectedOperatorDelimiters(bool& processed, QStringList& expected,
