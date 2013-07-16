@@ -31,7 +31,7 @@
 
 namespace Interaction {
 
-QStringList Token::specialSignatureWords_ = {"expr", "id", "SPACE", "EXPR", "ID"};
+QStringList Token::specialSignatureWords_ = {"SPACE", "EXPR", "ID"};
 
 Token::Token()
 {
@@ -110,7 +110,7 @@ bool Token::tokenExistsInOperators(QString token, const OperatorDescriptorList* 
 {
 	for (int i = 0; i < ops->size(); ++i)
 		if (ops->at(i)->signature().contains(token) )
-			return !specialSignatureWords_.contains(token);
+			return OperatorDescriptor::isDelimiter(token) && !specialSignatureWords_.contains(token);
 
 	return false;
 }

@@ -105,9 +105,8 @@ void OOExpressionBuilder::visit(Interaction::UnfinishedOperator* unfinished)
 		for(int i = 0; i <unfinished->numComplete(); ++i)
 		{
 			QString current = unfinished->descriptor()->signature().at(i);
-			bool current_is_expr = current == "id" || current == "expr";
 
-			if (current_is_expr)
+			if (!Interaction::OperatorDescriptor::isDelimiter(current))
 			{
 				unf->delimiters()->append(new Model::Text(lastDelimiter));
 				lastDelimiter.clear();

@@ -54,7 +54,7 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 	add(new OD("unary minus", "- expr", 2, OD::RightAssociative, OD::unary<UnaryOperation::MINUS>));
 	add(new OD("not", "! expr", 2, OD::RightAssociative, OD::unary<UnaryOperation::NOT>));
 	add(new OD("complement", "~ expr", 2, OD::RightAssociative, OD::unary<UnaryOperation::COMPLEMENT>));
-	add(new OD("parenthesis", "( expr )", 1, OD::NotAssociative, OD::unary<UnaryOperation::PARENTHESIS>));
+	add(new OD("parenthesis", "( typeOrExpr )", 1, OD::NotAssociative, OD::unary<UnaryOperation::PARENTHESIS>));
 	add(new OD("dereference", "* expr", 2, OD::RightAssociative, OD::unary<UnaryOperation::DEREFERENCE>));
 	add(new OD("addressof", "& expr", 2, OD::RightAssociative, OD::unary<UnaryOperation::ADDRESSOF>));
 
@@ -159,7 +159,7 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 
 		return fte;
 	}));
-	add(new OD( "void function type", "[] ( expr ) -> ( expr )", 1, OD::NotAssociative,
+	add(new OD( "non-void function type", "[] ( expr ) -> ( type )", 1, OD::NotAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		Q_ASSERT(operands.size() == 2);
 		auto fte = new FunctionTypeExpression();
@@ -203,7 +203,7 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 		return new BooleanLiteral(false); }));
 
 	// Others
-	add(new OD( "cast", "( expr ) expr", 2, OD::RightAssociative,
+	add(new OD( "cast", "( type ) expr", 2, OD::RightAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto opr = new CastExpression();
 		opr->setType(operands.first());
@@ -211,7 +211,7 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 		return opr;
 	}));
 
-	add(new OD( "comma", "expr , expr", 50, OD::LeftAssociative,
+	add(new OD( "comma", "typeOrExpr , typeOrExpr", 50, OD::LeftAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto opr = new CommaExpression();
 		opr->setLeft(operands.first());
@@ -344,28 +344,28 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 		return ref;
 	}));
 
-	add(new OD( "array type", "expr []", 1, OD::LeftAssociative,
+	add(new OD( "array type", "type []", 1, OD::LeftAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto at = new ArrayTypeExpression();
 		at->setTypeExpression(operands.first());
 		return at;
 	}));
 
-	add(new OD( "pointer type", "expr *", 1, OD::LeftAssociative,
+	add(new OD( "pointer type", "type *", 1, OD::LeftAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto at = new PointerTypeExpression();
 		at->setTypeExpression(operands.first());
 		return at;
 	}));
 
-	add(new OD( "reference type", "expr &", 1, OD::LeftAssociative,
+	add(new OD( "reference type", "type &", 1, OD::LeftAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto at = new ReferenceTypeExpression();
 		at->setTypeExpression(operands.first());
 		return at;
 	}));
 
-	add(new OD( "const qualifier", "const SPACE expr", 1, OD::RightAssociative,
+	add(new OD( "const qualifier", "const SPACE type", 1, OD::RightAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto at = new TypeQualifierExpression();
 		at->setQualifier(Type::CONST);
@@ -373,7 +373,7 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 		return at;
 	}));
 
-	add(new OD( "volatile qualifier", "volatile SPACE expr", 1, OD::RightAssociative,
+	add(new OD( "volatile qualifier", "volatile SPACE type", 1, OD::RightAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto at = new TypeQualifierExpression();
 		at->setQualifier(Type::VOLATILE);
@@ -388,7 +388,7 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 		return expr;
 	}));
 
-	add(new OD( "typename", "typename SPACE expr", 1, OD::RightAssociative,
+	add(new OD( "typename", "typename SPACE type", 1, OD::RightAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		auto expr = new TypeNameOperator();
 		expr->setTypeExpression( operands.first());
@@ -397,15 +397,15 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 
 
 	// Type traits operators
-	add(new OD( "sizeof", "sizeof ( expr )", 1, OD::NotAssociative,
+	add(new OD( "sizeof", "sizeof ( type )", 1, OD::NotAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		return new TypeTraitExpression(TypeTraitExpression::TypeTraitKind::SizeOf, operands.first());
 	}));
-	add(new OD( "alignof", "alignof ( expr )", 1, OD::NotAssociative,
+	add(new OD( "alignof", "alignof ( type )", 1, OD::NotAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		return new TypeTraitExpression(TypeTraitExpression::TypeTraitKind::AlignOf, operands.first());
 	}));
-	add(new OD( "typeid", "typeid ( expr )", 1, OD::NotAssociative,
+	add(new OD( "typeid", "typeid ( type )", 1, OD::NotAssociative,
 			[](const QList<Expression*>& operands) -> Expression* {
 		return new TypeTraitExpression(TypeTraitExpression::TypeTraitKind::TypeId, operands.first());
 	}));
@@ -423,14 +423,14 @@ void OOOperatorDescriptorList::initializeWithDefaultOperators()
 		if (operands.size() > 2) vd->decl()->setInitialValue(operands[2]);
 		return vd;
 	};
-	add(new OD( "variable decl", "expr SPACE id", 40, OD::RightAssociative, varDeclFunction));
-	add(new OD( "variable decl and initialization", "expr SPACE id = expr", 40,
+	add(new OD( "variable decl", "type SPACE id", 40, OD::RightAssociative, varDeclFunction));
+	add(new OD( "variable decl and initialization", "type SPACE id = expr", 40,
 			OD::RightAssociative, varDeclFunction));
 
 
 	// Command descriptors
 	add(new CommandDescriptor( "command without params", "\\ id SPACE", 0, OD::NotAssociative));
-	add(new CommandDescriptor( "command with params", "\\ id ( expr )", 0, OD::NotAssociative));
+	add(new CommandDescriptor( "command with params", "\\ id ( typeOrExpr )", 0, OD::NotAssociative));
 
 	add(new CompoundObjectDescriptor( "compound object",
 			CompoundObjectDescriptor::compoundSignature(), 0, OD::NotAssociative));

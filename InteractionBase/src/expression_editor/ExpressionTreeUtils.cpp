@@ -323,7 +323,7 @@ void ExpressionTreeUtils::fixWrongIds(Expression*& top)
 						if (badId) break;
 					}
 
-					if (s == "id" || s == "expr") ++operandIndex;
+					if (!OperatorDescriptor::isDelimiter(s)) ++operandIndex;
 				}
 
 				if (badId) op = UnfinishedOperator::replaceFinishedWithUnfinished(top, op);

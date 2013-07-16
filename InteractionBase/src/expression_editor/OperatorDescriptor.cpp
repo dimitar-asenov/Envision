@@ -42,16 +42,16 @@ OperatorDescriptor::OperatorDescriptor(const QString& name, const QString& signa
 	signature_.replaceInStrings("SPACE", " ");
 	computeExpectedTokens();
 
-	num_operands_ = signature_.count("expr") + signature_.count("id");
+	for(auto s : signature_)
+		if (!isDelimiter(s)) ++num_operands_;
 
 	// Compute prefix
-	for(int i = 0; i < signature_.size() && signature_.at(i) != "expr" && signature_.at(i) != "id"; ++i)
+	for(int i = 0; i < signature_.size() && isDelimiter(signature_.at(i)); ++i)
 		prefix_.append( signature_.at(i) );
 
 	// Compute posfix
 	int postfix_index = signature_.size()-1;
-	for(; postfix_index>=0 && signature_.at(postfix_index) != "expr" && signature_.at(postfix_index) != "id";
-			--postfix_index)
+	for(; postfix_index>=0 && isDelimiter(signature_.at(postfix_index)); --postfix_index)
 		postfix_.prepend( signature_.at(postfix_index) );
 
 	// If the postfix encompasses the entire expression, then this expression is likely just a single keyword e.g. this
@@ -77,7 +77,7 @@ QStringList OperatorDescriptor::delimiters()
 
 	for (int i = 0; i< signature_.size(); ++i)
 	{
-		if (signature_.at(i) == "expr" || signature_.at(i) == "id") l.append("");
+		if ( !isDelimiter(signature_.at(i))) l.append("");
 		else l.last().append( signature_.at(i) );
 	}
 
@@ -89,8 +89,10 @@ void OperatorDescriptor::computeExpectedTokens()
 	for (auto s : signature_)
 	{
 		if ( s == "id" ) expectedTokens_ <<  ExpectedToken(ExpectedToken::ID);
-		else if ( s != "expr" ) expectedTokens_ << ExpectedToken(ExpectedToken::DELIM, s);
-		else expectedTokens_ << ExpectedToken();
+		else if ( s == "type" ) expectedTokens_ <<  ExpectedToken(ExpectedToken::TYPE);
+		else if ( s == "expr" ) expectedTokens_ <<  ExpectedToken(ExpectedToken::VALUE);
+		else if ( s == "typeOrExpr" ) expectedTokens_ <<  ExpectedToken(ExpectedToken::ANY);
+		else expectedTokens_ << ExpectedToken(ExpectedToken::DELIM, s);
 	}
 	expectedTokens_ << ExpectedToken(ExpectedToken::END);
 }

@@ -57,7 +57,7 @@ QString UnfinishedOperator::next()
 
 void UnfinishedOperator::addNext(Expression* e)
 {
-	if ( next() != "expr" && next() != "id")
+	if ( OperatorDescriptor::isDelimiter(next()) )
 	{
 		++num_complete_;
 		return;
@@ -66,7 +66,7 @@ void UnfinishedOperator::addNext(Expression* e)
 	int child_index = 0;
 	for (int i = 0; i<num_complete_; ++i)
 	{
-		if (descriptor()->signature().at(i) == "expr" || descriptor()->signature().at(i) == "id")
+		if ( !OperatorDescriptor::isDelimiter(descriptor()->signature().at(i)))
 			child_index++;
 	}
 
@@ -80,7 +80,7 @@ QString UnfinishedOperator::renderText()
 	QString text;
 	int operand_index = 0;
 	for (int i=0; i < num_complete_; ++i)
-		if (descriptor()->signature().at(i) != "expr" && descriptor()->signature().at(i) != "id")
+		if ( OperatorDescriptor::isDelimiter(descriptor()->signature().at(i)) )
 			text += descriptor()->signature().at(i);
 		else
 			text += at(operand_index++)->renderText();
@@ -111,7 +111,7 @@ UnfinishedOperator* UnfinishedOperator::replaceFinishedWithUnfinished(Expression
 	int operandIndex = 0;
 	for(auto s : op->descriptor()->signature())
 	{
-		if (s == "expr" || s == "id")
+		if ( !OperatorDescriptor::isDelimiter(s) )
 		{
 			auto e = op->replaceOperand(op->operands().at(operandIndex), new Empty());
 			unf->addNext(e);

@@ -146,7 +146,10 @@ void Parser::processIdentifiersAndLiterals(bool& error, QList<ExpectedToken>& ex
 		QVector<Token>::const_iterator& token, bool& hasLeft, QVector<ExpressionTreeBuildInstruction*>& instructions)
 {
 	if ( !expected.isEmpty() &&
-			(	expected.first().type == ExpectedToken::ANY // TODO: Also treat TYPE and VALUE
+			(	expected.first().type == ExpectedToken::VALUE
+			|| expected.first().type == ExpectedToken::ANY
+			|| expected.first().type == ExpectedToken::TYPE // TYPE should not be limited to Identifiers, because there
+			// might be a postfix operator that converts a literal to a type (e.g. 123 <typeof)
 			|| (expected.first().type == ExpectedToken::ID && token->type() == Token::Identifier)))
 	{
 		instructions.append( new AddValue(token->text()) );
@@ -189,14 +192,15 @@ ParseResult Parser::processExpectedOperatorDelimiters(bool& processed, QList<Exp
 			{
 				auto exp = new_expected.takeFirst();
 
-				if (exp.type == ExpectedToken::ANY || exp.type == ExpectedToken::ID )
+				if (exp.type == ExpectedToken::VALUE || exp.type == ExpectedToken::ID
+						|| exp.type == ExpectedToken::TYPE  || exp.type == ExpectedToken::ANY )
 				{
 					if (fillMissingWithEmptyExpressions) new_instructions.append( new AddEmptyValue() );
 					++pr.emptyExpressions;
 				}
 				else if (exp.type == ExpectedToken::END)
 				{
-					// If the expectation is not an expression or an identifier then it must be an end
+					// If the expectation is not one of the above then it must be either an end or a delimiter
 					new_instructions.append(fillMissingWithEmptyExpressions ?
 							(ExpressionTreeBuildInstruction*)new FinishOperator() : new LeaveUnfinished());
 					pr.numOperators++;
@@ -241,7 +245,10 @@ void Parser::processNewOperatorDelimiters(bool& processed, bool& error, QList<Ex
 	}
 	else
 	{
-		bool prefix = !expected.isEmpty() && expected.first().type == ExpectedToken::ANY;
+		bool prefix = !expected.isEmpty() &&
+				( 	expected.first().type == ExpectedToken::VALUE
+					|| expected.first().type == ExpectedToken::TYPE
+					|| expected.first().type == ExpectedToken::ANY);
 
 		QList<OperatorDescriptor*> matching_ops;
 		if (prefix) {

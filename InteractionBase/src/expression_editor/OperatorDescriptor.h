@@ -59,6 +59,8 @@ class INTERACTIONBASE_API OperatorDescriptor {
 
 		const QList<ExpectedToken>& expectedTokens() const;
 
+		static bool isDelimiter(const QString& str);
+
 	private:
 		QString name_;
 		QStringList signature_;
@@ -89,5 +91,10 @@ inline const QStringList& OperatorDescriptor::infixes() { return infixes_; }
 inline const QString& OperatorDescriptor::infix(int at) { return infixes_.at(at); }
 inline const QString& OperatorDescriptor::postfix() { return postfix_; }
 inline const QList<ExpectedToken>& OperatorDescriptor::expectedTokens() const {return expectedTokens_;}
+
+inline bool OperatorDescriptor::isDelimiter(const QString& str)
+{
+	return str != "expr" && str != "id" && str != "type" && str != "typeOrExpr";
+}
 
 }
