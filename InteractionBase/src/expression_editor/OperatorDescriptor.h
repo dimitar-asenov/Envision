@@ -27,6 +27,7 @@
 #pragma once
 
 #include "../interactionbase_api.h"
+#include "parser/Parser.h"
 
 namespace Interaction {
 
@@ -56,6 +57,8 @@ class INTERACTIONBASE_API OperatorDescriptor {
 
 		QStringList delimiters();
 
+		const QList<ExpectedToken>& expectedTokens() const;
+
 	private:
 		QString name_;
 		QStringList signature_;
@@ -63,11 +66,14 @@ class INTERACTIONBASE_API OperatorDescriptor {
 		int precedence_{};
 		Associativity associativity_{};
 		bool transient_{};
+		QList<ExpectedToken> expectedTokens_;
 
 		// Based on the signature we precompute the prefix, infixes and postfix to speed up later processing
 		QString prefix_;
 		QStringList infixes_;
 		QString postfix_;
+
+		void computeExpectedTokens();
 };
 
 inline void OperatorDescriptor::setTransient(bool transient) { transient_ = transient; }
@@ -82,5 +88,6 @@ inline const QString& OperatorDescriptor::prefix() { return prefix_; }
 inline const QStringList& OperatorDescriptor::infixes() { return infixes_; }
 inline const QString& OperatorDescriptor::infix(int at) { return infixes_.at(at); }
 inline const QString& OperatorDescriptor::postfix() { return postfix_; }
+inline const QList<ExpectedToken>& OperatorDescriptor::expectedTokens() const {return expectedTokens_;}
 
 }

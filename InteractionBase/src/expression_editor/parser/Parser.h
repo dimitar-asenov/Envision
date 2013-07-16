@@ -36,22 +36,34 @@ namespace Interaction {
 class OperatorDescriptorList;
 class ExpressionTreeBuildInstruction;
 
+struct INTERACTIONBASE_API ExpectedToken
+{
+	enum ExpectedType {ANY, TYPE, VALUE, ID, DELIM, END};
+	// TYPE and VALUE are subtypes of ANY and are not yet used
+
+	ExpectedToken(ExpectedType type, const QString& text) : type{type}, text{text} {}
+	ExpectedToken(ExpectedType type = ANY) : type{type} {}
+
+	ExpectedType type{ANY};
+	QString text{};
+};
+
 class INTERACTIONBASE_API Parser {
 	public:
 		Parser(const OperatorDescriptorList* ops);
 		QVector<ExpressionTreeBuildInstruction*> parse(QVector<Token> tokens);
 
 	private:
-		ParseResult parse(QVector<Token>::const_iterator token, ParseResult result, QStringList& expected, bool hasLeft,
-				QVector<ExpressionTreeBuildInstruction*>& instructions);
+		ParseResult parse(QVector<Token>::const_iterator token, ParseResult result, QList<ExpectedToken>& expected,
+				bool hasLeft, QVector<ExpressionTreeBuildInstruction*>& instructions);
 
-		ParseResult processExpectedOperatorDelimiters(bool& processed, QStringList& expected,
+		ParseResult processExpectedOperatorDelimiters(bool& processed, QList<ExpectedToken>& expected,
 				QVector<Token>::const_iterator& token, ParseResult& result,
 				QVector<ExpressionTreeBuildInstruction*>& instructions);
-		void processIdentifiersAndLiterals(bool& error, QStringList& expected,
+		void processIdentifiersAndLiterals(bool& error, QList<ExpectedToken>& expected,
 				QVector<Token>::const_iterator& token, bool& hasLeft,
 				QVector<ExpressionTreeBuildInstruction*>& instructions);
-		void processNewOperatorDelimiters(bool& processed, bool& error, QStringList& expected,
+		void processNewOperatorDelimiters(bool& processed, bool& error, QList<ExpectedToken>& expected,
 				QVector<Token>::const_iterator& token, bool& hasLeft, ParseResult& result,
 				QVector<ExpressionTreeBuildInstruction*>& instructions);
 

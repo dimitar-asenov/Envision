@@ -40,6 +40,8 @@ OperatorDescriptor::OperatorDescriptor(const QString& name, const QString& signa
 {
 	signature_ = signature.split(" ", QString::SkipEmptyParts);
 	signature_.replaceInStrings("SPACE", " ");
+	computeExpectedTokens();
+
 	num_operands_ = signature_.count("expr") + signature_.count("id");
 
 	// Compute prefix
@@ -82,5 +84,15 @@ QStringList OperatorDescriptor::delimiters()
 	return l;
 }
 
+void OperatorDescriptor::computeExpectedTokens()
+{
+	for (auto s : signature_)
+	{
+		if ( s == "id" ) expectedTokens_ <<  ExpectedToken(ExpectedToken::ID);
+		else if ( s != "expr" ) expectedTokens_ << ExpectedToken(ExpectedToken::DELIM, s);
+		else expectedTokens_ << ExpectedToken();
+	}
+	expectedTokens_ << ExpectedToken(ExpectedToken::END);
+}
 
 }
