@@ -44,7 +44,7 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 {
 	typedef clang::RecursiveASTVisitor<ClangAstVisitor> Base;
 	public:
-		ClangAstVisitor(OOModel::Project* project, CppImportLogger* logger);
+		ClangAstVisitor(OOModel::Project* project, CppImportLogger* logger, TranslateManager* manager);
 		~ClangAstVisitor();
 		void setSourceManager(const clang::SourceManager* sourceManager);
 
@@ -142,8 +142,9 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		QStack<OOModel::SwitchCase*> ooSwitchCaseStack_;
 
 		clang::ASTContext* astContext_{};
-		TranslateManager* trMngr_{};
+
 		CppImportLogger* log_{};
+		TranslateManager* trMngr_{};
 		CppImportUtilities* utils_{};
 		ExpressionVisitor* exprVisitor_{};
 		TemplateArgumentVisitor* templArgVisitor_{};

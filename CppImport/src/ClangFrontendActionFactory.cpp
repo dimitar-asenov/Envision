@@ -2,12 +2,14 @@
 
 #include "ClangConsumerCreator.h"
 
+#include "manager/TranslateManager.h"
+
 namespace CppImport {
 
-ClangFrontendActionFactory::ClangFrontendActionFactory(OOModel::Project* project)
+ClangFrontendActionFactory::ClangFrontendActionFactory(OOModel::Project* project, TranslateManager* manager)
 {
 	logger_ = new CppImportLogger();
-	visitor_ = new ClangAstVisitor(project, logger_);
+	visitor_ = new ClangAstVisitor(project, logger_, manager);
 }
 
 ClangFrontendActionFactory::~ClangFrontendActionFactory()

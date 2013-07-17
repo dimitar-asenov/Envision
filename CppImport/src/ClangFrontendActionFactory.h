@@ -41,7 +41,7 @@ class CPPIMPORT_API ClangFrontendActionFactory : public clang::tooling::Frontend
 		 * the same instance over multiple translation units.
 		 * The \a project is the root node where everything will be added to.
 		 */
-		ClangFrontendActionFactory(OOModel::Project* project);
+		ClangFrontendActionFactory(OOModel::Project* project, TranslateManager* manager);
 
 		virtual ~ClangFrontendActionFactory() override;
 

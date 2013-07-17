@@ -28,8 +28,8 @@
 
 namespace CppImport {
 
-TranslateManager::TranslateManager(CppImportUtilities* utils, OOModel::Project* root)
-	: utils_(utils), rootProject_(root)
+TranslateManager::TranslateManager(OOModel::Project* root)
+	: rootProject_(root)
 {}
 
 TranslateManager::~TranslateManager()
@@ -40,6 +40,12 @@ TranslateManager::~TranslateManager()
 void TranslateManager::setSourceManager(const clang::SourceManager* mngr)
 {
 	nh_->setSourceManager(mngr);
+}
+
+void TranslateManager::setUtils(CppImportUtilities* utils)
+{
+	Q_ASSERT(utils);
+	utils_ = utils;
 }
 
 OOModel::Module *TranslateManager::insertNamespace(clang::NamespaceDecl* namespaceDecl)

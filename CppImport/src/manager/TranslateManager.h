@@ -39,9 +39,11 @@ namespace CppImport {
 class CPPIMPORT_API TranslateManager
 {
 	public:
-		TranslateManager(CppImportUtilities* utils, OOModel::Project* root);
+		TranslateManager(OOModel::Project* root);
 		~TranslateManager();
 		void setSourceManager(const clang::SourceManager* mngr);
+
+		void setUtils(CppImportUtilities* utils);
 		OOModel::Module* insertNamespace(clang::NamespaceDecl* namespaceDecl);
 
 		/**

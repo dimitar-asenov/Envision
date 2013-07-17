@@ -29,6 +29,8 @@
 #include "ClangFrontendActionFactory.h"
 #include "CppImportException.h"
 
+#include "QtCore/QStringList"
+
 namespace CppImport {
 
 CppImportManager::~CppImportManager()
@@ -53,16 +55,56 @@ bool CppImportManager::setImportPath(const QString& sourcePath, const QString& c
 	return setCompilationDbPath(compilationDbPath);
 }
 
+void CppImportManager::readFiles(const QString path)
+{
+	qDebug() << path;
+	QStringList cppFilter;
+	cppFilter << "*.cpp" << "*.cc" << "*.cxx";
+	QDirIterator dirIterator(path, cppFilter, QDir::Files, QDirIterator::Subdirectories);
+
+	QString p = path;
+	p.truncate(path.lastIndexOf("/"));
+	p = p.split("/").last();
+	qDebug() << p;
+
+	QStringList sources;
+
+	while(dirIterator.hasNext())
+		sources.append(dirIterator.next());
+	spSources_.insert(p, sources);
+
+	std::string Error;
+	clang::tooling::CompilationDatabase* db = nullptr;
+	if(!(db = clang::tooling::CompilationDatabase::loadFromDirectory(path.toAscii().data(),Error)))
+		throw CppImportException("No compilation database found : " + QString::fromStdString(Error));
+	dbMap_.insert(p, db);
+}
+
 Model::Model*CppImportManager::createModel()
 {
-	myTool_ = new clang::tooling::ClangTool(*compilationDB_,sources_);
+
 	OOModel::Project* project = new OOModel::Project(projectName_);
-	ClangFrontendActionFactory* frontendActionFactory = new ClangFrontendActionFactory(project);
-	myTool_->run(frontendActionFactory);
-	frontendActionFactory->outputStatistics();
-	SAFE_DELETE(frontendActionFactory);
-	// reset the path (because clang tool changes it)
-	QDir::setCurrent(qApp->applicationDirPath());
+	TranslateManager* manager = new TranslateManager(project);
+
+	foreach(QString s, subProjects_)
+	{
+		s.truncate(s.lastIndexOf("/"));
+		qDebug() << "Processing subproject ####### :" << s;
+		std::vector<std::string> srcs;
+		QStringList current = spSources_.value(s);
+		foreach(QString src, current)
+		{
+			srcs.push_back(src.toStdString());
+		}
+		myTool_ = new clang::tooling::ClangTool(*dbMap_.value(s), srcs);
+		ClangFrontendActionFactory* frontendActionFactory = new ClangFrontendActionFactory(project, manager);
+		myTool_->run(frontendActionFactory);
+		frontendActionFactory->outputStatistics();
+		SAFE_DELETE(frontendActionFactory);
+		// reset the path (because clang tool changes it)
+		QDir::setCurrent(qApp->applicationDirPath());
+	}
+	SAFE_DELETE(manager);
 	// remove the test file if there is one
 	QDir rootDir(QDir::currentPath());
 	rootDir.cdUp();
@@ -92,6 +134,25 @@ bool CppImportManager::setupTest()
 		{
 			testDir.replace(0,5,"");
 			isPath = true;
+			QString subp = inStream.readLine();
+			if(subp.startsWith("pros:"))
+			{
+				projectName_ = testDir.split("/").last();
+
+				subp.replace(0,5,"");
+				subProjects_ = subp.split(";");
+				foreach(QString s, subProjects_)
+				{
+					QString path = testDir;
+					path.append("/").append(s);
+					readFiles(path);
+				}
+				return true;
+			}
+			else
+			{
+				Q_ASSERT(0);
+			}
 			break;
 		}
 		if(!testDir.startsWith("#"))

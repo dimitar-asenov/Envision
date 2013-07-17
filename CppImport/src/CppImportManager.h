@@ -50,6 +50,8 @@ class CPPIMPORT_API CppImportManager
 		 */
 		bool setImportPath(const QString& sourcePath, const QString& compilationDbPath = QString());
 
+		void readFiles(const QString path);
+
 		/**
 		 * Creates a clang tool and translates the sourcecode to Envision's AST and returns the root
 		 * Be sure to have set the sourcePath before calling this method
@@ -74,6 +76,9 @@ class CPPIMPORT_API CppImportManager
 		// the project name which is shown in Envision
 		// we set this to the innermost directory of the sourcepath
 		QString projectName_;
+		QStringList subProjects_;
+		QMap<QString, QStringList> spSources_;
+		QMap<QString, clang::tooling::CompilationDatabase*> dbMap_;
 
 };
 
