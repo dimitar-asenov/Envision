@@ -112,13 +112,12 @@ public class NodeDescriptors {
 		add( new NodeInitializer("ReturnStatement", new String[][]{
 				{"TypedListOfExpression","values"}
 		}));
-		add( new NodeInitializer("SwitchCase", new String[][]{
-				{"Expression","expr"},
-				{"StatementItemList","statement"}
+		add( new NodeInitializer("CaseStatement", new String[][]{
+				{"StatementItemList","body"}
 		}));
 		add( new NodeInitializer("SwitchStatement", new String[][]{
-				{"Expression","switchVar"},
-				{"TypedListOfSwitchCase","cases"}
+				{"Expression","switchExpression"},
+				{"StatementItemList","body"}
 		}));
 		add( new NodeInitializer("TryCatchFinallyStatement", new String[][]{
 				{"StatementItemList","tryBody"},

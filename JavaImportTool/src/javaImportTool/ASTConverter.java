@@ -294,32 +294,33 @@ public class ASTConverter {
 	    	node = new Node(null, "SwitchStatement", name);
 	    	SwitchStatement ss = (SwitchStatement) s;
 	    	
-	    	node.setChild("switchVar", expression(ss.getExpression(),"switchVar"));
+	    	node.setChild("switchExpression", expression(ss.getExpression(),"switchExpression"));
 	    	
-	    	Node lastCase = null;
+	    	Node lastStatementContainer = node;
 	    	for (Statement item : (List<Statement>) ss.statements())
 	    	{	    		
 	    		if (item instanceof SwitchCase)
 	    		{
 	    			SwitchCase switchCase = (SwitchCase) item;
-	    			lastCase = new Node(node, "SwitchCase", node.numChildren());
-	    			if (switchCase.getExpression() == null)
-	    				// TODO: is this the best way to define a default case
-	    				lastCase.setChild("expr", new Node(null, "EmptyExpression", "expr"));
-	    			else lastCase.setChild("expr", expression(switchCase.getExpression(),"expr"));
+	    			lastStatementContainer = new Node(node, "CaseStatement", node.child("body").numChildren());
+	    			node.child("body").add(lastStatementContainer);
+	    			
+	    			if (switchCase.getExpression() != null)
+	    				lastStatementContainer.add(expression(switchCase.getExpression(),"caseExpression"));
 	    		}
 	    		else if (item instanceof Block) // Treat blocks into individual statements
 	    		{
 	    			Block block = (Block) item;
 	    			for(Statement blockStatement : (List<Statement>) block.statements())
 	    			{
-	    				for(Node innerStatement :
-	    					statement(blockStatement,Integer.toString(lastCase.child("statement").numChildren())))
+	    				for(Node innerStatement : statement(blockStatement,
+	    						Integer.toString(lastStatementContainer.child("body").numChildren())))
 	    				{
 	    					if (innerStatement != null)
 	    					{
-	    						innerStatement.setName(Integer.toString(lastCase.child("statement").numChildren()));
-	    						lastCase.child("statement").add(innerStatement);
+	    						innerStatement.setName(
+	    								Integer.toString(lastStatementContainer.child("body").numChildren()));
+	    						lastStatementContainer.child("body").add(innerStatement);
 	    					}
 	    				}	
 	    			}
@@ -327,12 +328,13 @@ public class ASTConverter {
 	    		else
 	    		{
 	    			for(Node innerStatement :
-	    				statement(item,Integer.toString(lastCase.child("statement").numChildren())))
+	    				statement(item,Integer.toString(lastStatementContainer.child("body").numChildren())))
     				{
     					if (innerStatement != null)
     					{
-    						innerStatement.setName(Integer.toString(lastCase.child("statement").numChildren()));
-    						lastCase.child("statement").add(innerStatement);
+    						innerStatement.setName(
+    								Integer.toString(lastStatementContainer.child("body").numChildren()));
+    						lastStatementContainer.child("body").add(innerStatement);
     					}
     				}
 	    		}

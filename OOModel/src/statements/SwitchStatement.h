@@ -28,7 +28,6 @@
 
 #include "Statement.h"
 
-#include "../elements/FormalArgument.h"
 #include "../expressions/Expression.h"
 #include "../elements/StatementItemList.h"
 
