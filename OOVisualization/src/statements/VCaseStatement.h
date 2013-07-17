@@ -24,41 +24,49 @@
  **
  **********************************************************************************************************************/
 
-#include "VSwitchCase.h"
-#include "../elements/VStatementItemList.h"
+#pragma once
 
-#include "VisualizationBase/src/items/Static.h"
-#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
-#include "VisualizationBase/src/items/NodeWrapper.h"
+#include "../oovisualization_api.h"
+#include "VStatementItem.h"
+#include "VCaseStatementStyle.h"
 
-using namespace Visualization;
-using namespace OOModel;
+#include "OOModel/src/statements/CaseStatement.h"
+
+#include "VisualizationBase/src/items/ItemWithNode.h"
+#include "VisualizationBase/src/declarative/DeclarativeItem.h"
+
+namespace Visualization {
+	class Static;
+	class NodeWrapper;
+}
 
 namespace OOVisualization {
 
-ITEM_COMMON_DEFINITIONS(VSwitchCase, "item")
+class VStatementItemList;
 
-VSwitchCase::VSwitchCase(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style)
-{}
-
-void VSwitchCase::initializeForms()
+class OOVISUALIZATION_API VCaseStatement
+	: public Super<VStatementItem<VCaseStatement, Visualization::DeclarativeItem<VCaseStatement>,
+	  OOModel::CaseStatement>>
 {
-	addForm(grid(
-			{
-				{	item<Static>(&I::icon_, [](I* v){return v->node()->expr() ?
-						&v->style()->icon() : &v->style()->defaultCaseIcon();}),
-					item<NodeWrapper>(&I::caseExpression_,	[](I* v){return v->node()->expr();},
-																		[](I* v){return &v->style()->caseExpression();})
-				},
-				{	nullptr,
-					item<VStatementItemList>(&I::statements_, [](I* v){return v->node()->statement();},
-																			[](I* v){return &v->style()->statements();})
-				}
-			}
+	ITEM_COMMON(VCaseStatement)
 
-		)
-	);
+	public:
+		VCaseStatement(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
 
-}
+		Visualization::Static* icon() const;
+		Visualization::NodeWrapper* caseExpression() const;
+		VStatementItemList* statements() const;
+
+		static void initializeForms();
+
+	private:
+		Visualization::Static* icon_{};
+		Visualization::NodeWrapper* caseExpression_{};
+		VStatementItemList* statements_{};
+};
+
+inline Visualization::Static* VCaseStatement::icon() const {return icon_;}
+inline Visualization::NodeWrapper* VCaseStatement::caseExpression() const { return caseExpression_; }
+inline VStatementItemList* VCaseStatement::statements() const { return statements_; }
 
 } /* namespace OOVisualization */

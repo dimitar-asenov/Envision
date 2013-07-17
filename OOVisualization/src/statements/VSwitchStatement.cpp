@@ -48,11 +48,11 @@ void VSwitchStatement::initializeForms()
 			->setColumnStretchFactor(1, 1)->setVerticalAlignment(LayoutStyle::Alignment::Center)
 			->setHorizontalSpacing(3)
 			->put(0, 0, item<Static>(&I::icon_, [](I* v){return &v->style()->icon();}))
-			->put(1, 0, item<NodeWrapper>(&I::condition_,	[](I* v){return v->node()->switchVar();},
+			->put(1, 0, item<NodeWrapper>(&I::condition_,	[](I* v){return v->node()->switchExpression();},
 																			[](I* v){return &v->style()->condition();}));
 
-	auto cases = item<VList>(&I::cases_,	[](I* v){return v->node()->cases();},
-														[](I* v){return &v->style()->cases();});
+	auto cases = item<VStatementItemList>(&I::body_,	[](I* v){return v->node()->body();},
+														[](I* v){return &v->style()->body();});
 
 	// We need something stretchable
 	auto casesContainer = grid({{cases}})->setColumnStretchFactor(1, 1);

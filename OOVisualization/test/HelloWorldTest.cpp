@@ -609,26 +609,26 @@ Method* addLongMethod(Class* parent)
 	elseBranch->setOperand(new ReferenceExpression("var14"));
 
 	auto swi = new SwitchStatement();
-	swi->setSwitchVar(new ReferenceExpression("someVar"));
+	swi->setSwitchExpression(new ReferenceExpression("someVar"));
 	longMethod->items()->append(swi);
 	//Case 0
-	auto swi0 = new SwitchCase();
-	swi->cases()->append(swi0);
-	swi0->setExpr(new IntegerLiteral(0));
+	auto swi0 = new CaseStatement();
+	swi->body()->append(swi0);
+	swi0->setCaseExpression(new IntegerLiteral(0));
 	//Case 1
-	auto swi1 = new SwitchCase();
-	swi->cases()->append(swi1);
-	swi1->setExpr(new IntegerLiteral(1));
+	auto swi1 = new CaseStatement();
+	swi->body()->append(swi1);
+	swi1->setCaseExpression(new IntegerLiteral(1));
 	auto swi1Op = new UnaryOperation();
-	swi1->statement()->append(new ExpressionStatement(swi1Op));
+	swi1->body()->append(new ExpressionStatement(swi1Op));
 	swi1Op->setOp(UnaryOperation::PREINCREMENT);
 	swi1Op->setOperand(new ReferenceExpression("result"));
-	swi1->statement()->append(new BreakStatement());
+	swi1->body()->append(new BreakStatement());
 	// Default
-	auto swiDefault = new SwitchCase();
-	swi->cases()->append(swiDefault);
+	auto swiDefault = new CaseStatement();
+	swi->body()->append(swiDefault);
 	auto swiDefaultOp = new UnaryOperation();
-	swiDefault->statement()->append(new ExpressionStatement(swiDefaultOp));
+	swiDefault->body()->append(new ExpressionStatement(swiDefaultOp));
 	swiDefaultOp->setOp(UnaryOperation::PREDECREMENT);
 	swiDefaultOp->setOperand(new ReferenceExpression("result"));
 

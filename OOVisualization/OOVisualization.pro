@@ -7,13 +7,13 @@ win32:LIBS += -llogger \
     -loomodel \
     -lvisualizationbase \
     -linteractionbase
-HEADERS += src/declarations/VTypeAlias.h \
+HEADERS += src/statements/VCaseStatement.h \
+    src/statements/VCaseStatementStyle.h \
+    src/declarations/VTypeAlias.h \
     src/declarations/VTypeAliasStyle.h \
     src/statements/VDeclarationStatement.h \
     src/elements/VMemberInitializer.h \
-    src/elements/VSwitchCaseStyle.h \
     src/statements/VSwitchStatement.h \
-    src/elements/VSwitchCase.h \
     src/statements/VSwitchStatementStyle.h \
     src/statements/VContinueStatementStyle.h \
     src/elements/VModifier.h \
@@ -99,13 +99,13 @@ HEADERS += src/declarations/VTypeAlias.h \
     src/statements/VReturnStatement.h \
     src/statements/VReturnStatementStyle.h \
     src/oovisualization.h
-SOURCES += src/declarations/VTypeAlias.cpp \
+SOURCES += src/statements/VCaseStatement.cpp \
+    src/statements/VCaseStatementStyle.cpp \
+    src/declarations/VTypeAlias.cpp \
     src/declarations/VTypeAliasStyle.cpp \
     src/statements/VDeclarationStatement.cpp \
     src/elements/VMemberInitializer.cpp \
-    src/elements/VSwitchCaseStyle.cpp \
     src/statements/VSwitchStatement.cpp \
-    src/elements/VSwitchCase.cpp \
     src/statements/VSwitchStatementStyle.cpp \
     src/statements/VContinueStatementStyle.cpp \
     src/elements/VModifier.cpp \

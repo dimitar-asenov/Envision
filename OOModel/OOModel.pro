@@ -4,7 +4,8 @@ DEFINES += OOMODEL_LIBRARY
 win32:LIBS += -llogger \
     -lselftest \
     -lmodelbase
-HEADERS += src/elements/Modifier.h \
+HEADERS += src/statements/CaseStatement.h \
+    src/elements/Modifier.h \
     src/declarations/NameImport.h \
     src/expressions/types/FunctionTypeExpression.h \
     src/types/FunctionType.h \
@@ -74,7 +75,6 @@ HEADERS += src/elements/Modifier.h \
     src/statements/LoopStatement.h \
     src/statements/ReturnStatement.h \
     src/statements/Statement.h \
-    src/statements/SwitchCase.h \
     src/statements/SwitchStatement.h \
     src/oomodel.h \
     src/types/ReferenceType.h \
@@ -91,7 +91,8 @@ HEADERS += src/elements/Modifier.h \
     src/expressions/TypeTraitExpression.h \
     src/expressions/TypeNameOperator.h \
     src/expressions/GlobalScopeExpression.h
-SOURCES += src/elements/Modifier.cpp \
+SOURCES += src/statements/CaseStatement.cpp \
+    src/elements/Modifier.cpp \
     src/declarations/NameImport.cpp \
     src/expressions/types/FunctionTypeExpression.cpp \
     src/types/FunctionType.cpp \
@@ -140,7 +141,6 @@ SOURCES += src/elements/Modifier.cpp \
     src/expressions/MethodCallExpression.cpp \
     test/JavaTest.cpp \
     src/statements/ReturnStatement.cpp \
-    src/statements/SwitchCase.cpp \
     src/statements/SwitchStatement.cpp \
     src/statements/ContinueStatement.cpp \
     src/statements/BreakStatement.cpp \

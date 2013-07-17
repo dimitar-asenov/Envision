@@ -34,7 +34,7 @@ namespace OOModel {
 COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(SwitchStatement)
 COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(SwitchStatement)
 
-REGISTER_ATTRIBUTE(SwitchStatement, switchVar, Expression, false, false, true)
-REGISTER_ATTRIBUTE(SwitchStatement, cases, TypedListOfSwitchCase, false, false, true)
+REGISTER_ATTRIBUTE(SwitchStatement, switchExpression, Expression, false, false, true)
+REGISTER_ATTRIBUTE(SwitchStatement, body, StatementItemList, false, false, true)
 
 }

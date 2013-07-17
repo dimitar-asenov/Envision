@@ -24,48 +24,18 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
-
-#include "../oovisualization_api.h"
-#include "VSwitchCaseStyle.h"
-
-#include "OOModel/src/statements/SwitchCase.h"
-
-#include "VisualizationBase/src/items/ItemWithNode.h"
-#include "VisualizationBase/src/declarative/DeclarativeItem.h"
-
-namespace Visualization {
-	class Static;
-	class NodeWrapper;
-}
+#include "VCaseStatementStyle.h"
 
 namespace OOVisualization {
 
-class VStatementItemList;
-
-class OOVISUALIZATION_API VSwitchCase
-	: public Super<Visualization::ItemWithNode<VSwitchCase, Visualization::DeclarativeItem<VSwitchCase>,
-	  OOModel::SwitchCase>>
+void VCaseStatementStyle::load(Visualization::StyleLoader& sl)
 {
-	ITEM_COMMON(VSwitchCase)
+	DeclarativeItemBaseStyle::load(sl);
 
-	public:
-		VSwitchCase(Item* parent, NodeType* node, const StyleType* style = itemStyles().get());
-
-		Visualization::Static* icon() const;
-		Visualization::NodeWrapper* caseExpression() const;
-		VStatementItemList* statements() const;
-
-		static void initializeForms();
-
-	private:
-		Visualization::Static* icon_{};
-		Visualization::NodeWrapper* caseExpression_{};
-		VStatementItemList* statements_{};
-};
-
-inline Visualization::Static* VSwitchCase::icon() const {return icon_;}
-inline Visualization::NodeWrapper* VSwitchCase::caseExpression() const { return caseExpression_; }
-inline VStatementItemList* VSwitchCase::statements() const { return statements_; }
+	sl.load("icon", icon_);
+	sl.load("defaultCaseIcon", defaultCaseIcon_);
+	sl.load("caseExpression", caseExpression_);
+	sl.load("statements", statements_);
+}
 
 } /* namespace OOVisualization */

@@ -24,36 +24,41 @@
  **
  **********************************************************************************************************************/
 
-#pragma once
+#include "VCaseStatement.h"
+#include "../elements/VStatementItemList.h"
 
-#include "../oovisualization_api.h"
+#include "VisualizationBase/src/items/Static.h"
+#include "VisualizationBase/src/declarative/DeclarativeItemDef.h"
+#include "VisualizationBase/src/items/NodeWrapper.h"
 
-#include "VisualizationBase/src/items/VListStyle.h"
-#include "VisualizationBase/src/items/StaticStyle.h"
+using namespace Visualization;
+using namespace OOModel;
 
 namespace OOVisualization {
 
-class OOVISUALIZATION_API VSwitchCaseStyle : public Visualization::DeclarativeItemBaseStyle
+ITEM_COMMON_DEFINITIONS(VCaseStatement, "item")
+
+VCaseStatement::VCaseStatement(Item* parent, NodeType* node, const StyleType* style) : Super(parent, node, style)
+{}
+
+void VCaseStatement::initializeForms()
 {
-	private:
-		Visualization::StaticStyle icon_;
-		Visualization::StaticStyle defaultCaseIcon_;
-		Visualization::ItemStyle caseExpression_;
+	addForm(grid(
+			{
+				{	item<Static>(&I::icon_, [](I* v){return v->node()->caseExpression() ?
+						&v->style()->icon() : &v->style()->defaultCaseIcon();}),
+					item<NodeWrapper>(&I::caseExpression_,	[](I* v){return v->node()->caseExpression();},
+																		[](I* v){return &v->style()->caseExpression();})
+				},
+				{	nullptr,
+					item<VStatementItemList>(&I::statements_, [](I* v){return v->node()->body();},
+																			[](I* v){return &v->style()->statements();})
+				}
+			}
 
-		Visualization::VListStyle statements_;
-	public:
-		void load(Visualization::StyleLoader& sl);
+		)
+	);
 
-		const Visualization::StaticStyle& icon() const;
-		const Visualization::StaticStyle& defaultCaseIcon() const;
-		const Visualization::ItemStyle& caseExpression() const;
-
-		const Visualization::VListStyle& statements() const;
-};
-
-inline const Visualization::StaticStyle& VSwitchCaseStyle::icon() const { return icon_; }
-inline const Visualization::StaticStyle& VSwitchCaseStyle::defaultCaseIcon() const { return defaultCaseIcon_; }
-inline const Visualization::ItemStyle& VSwitchCaseStyle::caseExpression() const { return caseExpression_; }
-inline const Visualization::VListStyle& VSwitchCaseStyle::statements() const { return statements_; }
+}
 
 } /* namespace OOVisualization */

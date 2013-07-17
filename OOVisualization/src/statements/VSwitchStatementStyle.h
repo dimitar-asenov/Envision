@@ -39,18 +39,18 @@ class OOVISUALIZATION_API VSwitchStatementStyle : public Visualization::Declarat
 		Visualization::StaticStyle icon_;
 		Visualization::ItemStyle condition_;
 
-		Visualization::VListStyle cases_;
+		Visualization::VListStyle body_;
 	public:
 		void load(Visualization::StyleLoader& sl);
 
 		const Visualization::StaticStyle& icon() const;
 		const Visualization::ItemStyle& condition() const;
 
-		const Visualization::VListStyle& cases() const;
+		const Visualization::VListStyle& body() const;
 };
 
 inline const Visualization::StaticStyle& VSwitchStatementStyle::icon() const { return icon_; }
 inline const Visualization::ItemStyle& VSwitchStatementStyle::condition() const { return condition_; }
-inline const Visualization::VListStyle& VSwitchStatementStyle::cases() const { return cases_; }
+inline const Visualization::VListStyle& VSwitchStatementStyle::body() const { return body_; }
 
 } /* namespace OOVisualization */

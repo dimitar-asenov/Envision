@@ -43,7 +43,5 @@
 			<cornerType>2</cornerType>
 		</shape>
 	</condition>
-	<cases prototypes="item/VList/default">
-		<shape/>
-	</cases>
+	<body prototypes="item/VStatementItemList/default" />
 </style>

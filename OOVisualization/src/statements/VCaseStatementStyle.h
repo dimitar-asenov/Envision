@@ -24,18 +24,36 @@
  **
  **********************************************************************************************************************/
 
-#include "VSwitchCaseStyle.h"
+#pragma once
+
+#include "../oovisualization_api.h"
+
+#include "VisualizationBase/src/items/VListStyle.h"
+#include "VisualizationBase/src/items/StaticStyle.h"
 
 namespace OOVisualization {
 
-void VSwitchCaseStyle::load(Visualization::StyleLoader& sl)
+class OOVISUALIZATION_API VCaseStatementStyle : public Visualization::DeclarativeItemBaseStyle
 {
-	DeclarativeItemBaseStyle::load(sl);
+	private:
+		Visualization::StaticStyle icon_;
+		Visualization::StaticStyle defaultCaseIcon_;
+		Visualization::ItemStyle caseExpression_;
 
-	sl.load("icon", icon_);
-	sl.load("defaultCaseIcon", defaultCaseIcon_);
-	sl.load("caseExpression", caseExpression_);
-	sl.load("statements", statements_);
-}
+		Visualization::VListStyle statements_;
+	public:
+		void load(Visualization::StyleLoader& sl);
+
+		const Visualization::StaticStyle& icon() const;
+		const Visualization::StaticStyle& defaultCaseIcon() const;
+		const Visualization::ItemStyle& caseExpression() const;
+
+		const Visualization::VListStyle& statements() const;
+};
+
+inline const Visualization::StaticStyle& VCaseStatementStyle::icon() const { return icon_; }
+inline const Visualization::StaticStyle& VCaseStatementStyle::defaultCaseIcon() const { return defaultCaseIcon_; }
+inline const Visualization::ItemStyle& VCaseStatementStyle::caseExpression() const { return caseExpression_; }
+inline const Visualization::VListStyle& VCaseStatementStyle::statements() const { return statements_; }
 
 } /* namespace OOVisualization */

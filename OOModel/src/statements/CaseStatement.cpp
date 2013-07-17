@@ -24,26 +24,17 @@
 **
 ***********************************************************************************************************************/
 
-#pragma once
+#include "CaseStatement.h"
 
-#include "../oomodel_api.h"
-#include "Statement.h"
-#include "../elements/StatementItemList.h"
-#include "../expressions/Expression.h"
-
-#include "ModelBase/src/nodes/composite/CompositeNode.h"
-#include "ModelBase/src/nodes/nodeMacros.h"
-
-DECLARE_TYPED_LIST(OOMODEL_API, OOModel, SwitchCase)
+#include "ModelBase/src/nodes/TypedListDefinition.h"
+DEFINE_TYPED_LIST(OOModel::CaseStatement)
 
 namespace OOModel {
 
-class OOMODEL_API SwitchCase : public Super<Model::CompositeNode>
-{
-	COMPOSITENODE_DECLARE_STANDARD_METHODS(SwitchCase)
+COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(CaseStatement)
+COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(CaseStatement)
 
-	ATTRIBUTE(Expression, expr, setExpr)
-	ATTRIBUTE(StatementItemList, statement, setStatement)
-};
+REGISTER_ATTRIBUTE(CaseStatement, caseExpression, Expression, false, true, true)
+REGISTER_ATTRIBUTE(CaseStatement, body, StatementItemList, false, false, true)
 
 }

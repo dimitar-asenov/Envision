@@ -52,5 +52,7 @@
 #include "statements/VContinueStatement.h"
 #include "statements/VExpressionStatement.h"
 #include "statements/VTryCatchFinally.h"
+#include "statements/VSwitchStatement.h"
+#include "statements/VCaseStatement.h"
 
 #include "alternative/VKeywordMethodCall.h"

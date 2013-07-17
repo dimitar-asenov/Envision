@@ -29,6 +29,7 @@
 #include "../oovisualization_api.h"
 #include "VSwitchStatementStyle.h"
 #include "VStatementItem.h"
+#include "../elements/VStatementItemList.h"
 
 #include "OOModel/src/statements/SwitchStatement.h"
 
@@ -54,18 +55,18 @@ class OOVISUALIZATION_API VSwitchStatement
 
 		Visualization::Static* icon() const;
 		Visualization::NodeWrapper* condition() const;
-		Visualization::VList* cases() const;
+		VStatementItemList* body() const;
 
 		static void initializeForms();
 
 	private:
 		Visualization::Static* icon_{};
 		Visualization::NodeWrapper* condition_{};
-		Visualization::VList* cases_{};
+		VStatementItemList* body_{};
 };
 
 inline Visualization::Static* VSwitchStatement::icon() const {return icon_;}
 inline Visualization::NodeWrapper* VSwitchStatement::condition() const { return condition_; }
-inline Visualization::VList* VSwitchStatement::cases() const { return cases_; }
+inline VStatementItemList* VSwitchStatement::body() const { return body_; }
 
 } /* namespace OOVisualization */

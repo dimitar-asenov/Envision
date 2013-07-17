@@ -44,7 +44,7 @@
 #include "statements/IfStatement.h"
 #include "statements/LoopStatement.h"
 #include "statements/ReturnStatement.h"
-#include "statements/SwitchCase.h"
+#include "statements/CaseStatement.h"
 #include "statements/SwitchStatement.h"
 #include "statements/ExpressionStatement.h"
 #include "statements/DeclarationStatement.h"

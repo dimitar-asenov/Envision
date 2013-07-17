@@ -34,7 +34,7 @@ void VSwitchStatementStyle::load(Visualization::StyleLoader& sl)
 
 	sl.load("icon", icon_);
 	sl.load("condition", condition_);
-	sl.load("cases", cases_);
+	sl.load("body", body_);
 }
 
 } /* namespace OOVisualization */

@@ -30,7 +30,7 @@
 
 #include "../elements/FormalArgument.h"
 #include "../expressions/Expression.h"
-#include "SwitchCase.h"
+#include "../elements/StatementItemList.h"
 
 DECLARE_TYPED_LIST(OOMODEL_API, OOModel, SwitchStatement)
 
@@ -40,8 +40,8 @@ class OOMODEL_API SwitchStatement: public Super<Statement>
 {
 	COMPOSITENODE_DECLARE_STANDARD_METHODS(SwitchStatement)
 
-	ATTRIBUTE(Expression, switchVar, setSwitchVar)
-	ATTRIBUTE(Model::TypedList<SwitchCase>, cases, setCases)
+	ATTRIBUTE(Expression, switchExpression, setSwitchExpression)
+	ATTRIBUTE(StatementItemList, body, setBody)
 };
 
 }

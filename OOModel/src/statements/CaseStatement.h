@@ -24,17 +24,22 @@
 **
 ***********************************************************************************************************************/
 
-#include "statements/SwitchCase.h"
+#pragma once
 
-#include "ModelBase/src/nodes/TypedListDefinition.h"
-DEFINE_TYPED_LIST(OOModel::SwitchCase)
+#include "Statement.h"
+#include "../elements/StatementItemList.h"
+#include "../expressions/Expression.h"
+
+DECLARE_TYPED_LIST(OOMODEL_API, OOModel, CaseStatement)
 
 namespace OOModel {
 
-COMPOSITENODE_DEFINE_EMPTY_CONSTRUCTORS(SwitchCase)
-COMPOSITENODE_DEFINE_TYPE_REGISTRATION_METHODS(SwitchCase)
+class OOMODEL_API CaseStatement : public Super<Statement>
+{
+	COMPOSITENODE_DECLARE_STANDARD_METHODS(CaseStatement)
 
-REGISTER_ATTRIBUTE(SwitchCase, expr, Expression, false, true, true)
-REGISTER_ATTRIBUTE(SwitchCase, statement, StatementItemList, false, false, true)
+	ATTRIBUTE(Expression, caseExpression, setCaseExpression)
+	ATTRIBUTE(StatementItemList, body, setBody)
+};
 
 }
