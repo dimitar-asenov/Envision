@@ -461,6 +461,12 @@ bool ClangAstVisitor::TraverseCXXCatchStmt(clang::CXXCatchStmt* catchStmt)
 
 bool ClangAstVisitor::TraverseStmt(clang::Stmt* S)
 {
+	if(S && S == currentStmt_)
+	{
+		log_->writeError(className_, S, CppImportLogger::Reason::NOT_SUPPORTED);
+		return true;
+	}
+	currentStmt_ = S;
 	if(S && llvm::isa<clang::Expr>(S))
 	{
 		// always ignore implicit stuff
@@ -482,6 +488,16 @@ bool ClangAstVisitor::TraverseStmt(clang::Stmt* S)
 	}
 
 	return Base::TraverseStmt(S);
+}
+
+bool ClangAstVisitor::VisitStmt(clang::Stmt* S)
+{
+	if(S && S == currentStmt_)
+	{
+		log_->writeError(className_, S, CppImportLogger::Reason::NOT_SUPPORTED);
+		return true;
+	}
+	return Base::VisitStmt(S);
 }
 
 bool ClangAstVisitor::TraverseVarDecl(clang::VarDecl* varDecl)

@@ -71,6 +71,7 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		bool TraverseCXXCatchStmt(clang::CXXCatchStmt* catchStmt);
 
 		bool TraverseStmt(clang::Stmt *S);
+		bool VisitStmt(clang::Stmt *S);
 		bool TraverseVarDecl(clang::VarDecl* varDecl);
 
 		bool TraverseEnumDecl(clang::EnumDecl* enumDecl);
@@ -152,6 +153,8 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		bool modelSysHeader_{false};
 		bool inBody_{true};
 		const QString className_{"ClangAstVisitor"};
+
+		clang::Stmt* currentStmt_{};
 };
 
 // method
