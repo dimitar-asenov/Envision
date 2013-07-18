@@ -151,7 +151,6 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 
 		QStack<Model::Node*> ooStack_;
 		QStack<OOModel::Expression*> ooExprStack_;
-		QStack<OOModel::SwitchCase*> ooSwitchCaseStack_;
 
 		clang::ASTContext* astContext_{};
 

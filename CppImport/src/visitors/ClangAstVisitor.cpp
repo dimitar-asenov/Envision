@@ -44,7 +44,6 @@ ClangAstVisitor::ClangAstVisitor(OOModel::Project* project, CppImportLogger* log
 
 ClangAstVisitor::~ClangAstVisitor()
 {
-//	SAFE_DELETE(trMngr_);
 	SAFE_DELETE(utils_);
 	SAFE_DELETE(exprVisitor_);
 }
@@ -698,76 +697,31 @@ bool ClangAstVisitor::TraverseSwitchStmt(clang::SwitchStmt* switchStmt)
 		else
 			TraverseStmt(switchStmt->getCond());
 		if(!ooExprStack_.empty())
-			ooSwitchStmt->setSwitchVar(ooExprStack_.pop());
+			ooSwitchStmt->setSwitchExpression(ooExprStack_.pop());
 		// body
 		inBody_ = true;
-		// TODO: handle fall through
 		if(auto body = llvm::dyn_cast<clang::CompoundStmt>(switchStmt->getBody()))
 		{
-			auto itemList = new OOModel::StatementItemList();
-			ooStack_.push(itemList);
+			ooStack_.push(ooSwitchStmt->body());
+			// Visit everything before the first case/default statement
 			auto bodyIt = body->body_begin();
-			// skip preamble
 			while(bodyIt != body->body_end() && !llvm::isa<clang::CaseStmt>(*bodyIt) &&
 					!llvm::isa<clang::DefaultStmt>(*bodyIt))
-				bodyIt++;
-			if(bodyIt != body->body_begin())
-				log_->writeError(className_, switchStmt, CppImportLogger::Reason::OTHER,
-									  "switch body has statements before first case");
-			OOModel::SwitchCase* currentCase = nullptr;
-			for(; bodyIt != body->body_end(); bodyIt++)
-			{
-				TraverseStmt(*bodyIt);
-				if(llvm::isa<clang::CaseStmt>(*bodyIt) || llvm::isa<clang::DefaultStmt>(*bodyIt))
-				{
-					if(currentCase)
-					{
-						// TODO: handle fall through needs copy constructor
+				TraverseStmt(*bodyIt++);
 
-						// get the last statements
-						QList<OOModel::StatementItem*> ns;
-						for(int i = 0; i < itemList->size(); i++)
-							ns.append(itemList->at(i));
-						for(int i = 0; i < ns.size(); i++)
-						{
-							auto s = ns.at(i);
-							itemList->remove(s);
-							currentCase->statement()->append(s);
-						}
-					}
-					currentCase = ooSwitchCaseStack_.pop();
-					ooSwitchStmt->cases()->append(currentCase);
-				}
-			}
+			// push a dummy itemlist such that at every case/default statement we can first pop the stack
+			auto itemList = new OOModel::StatementItemList();
+			ooStack_.push(itemList);
+			// visit the rest
+			while(bodyIt != body->body_end())
+				TraverseStmt(*bodyIt++);
 
-			if(currentCase)
-			{
-				// TODO: handle fall through needs copy constructor
-
-				// get the last statements
-				QList<OOModel::StatementItem*> ns;
-				for(int i = 0; i < itemList->size(); i++)
-					ns.append(itemList->at(i));
-				for(int i = 0; i < ns.size(); i++)
-				{
-					auto s = ns.at(i);
-					itemList->remove(s);
-					currentCase->statement()->append(s);
-					// check if we are at the end and if there are still some cases after the last case
-					if(dynamic_cast<OOModel::ReturnStatement*>(s) || dynamic_cast<OOModel::BreakStatement*>(s))
-					{
-						// check if there are more statements
-						if(itemList->size())
-							log_->writeError(className_,switchStmt, CppImportLogger::Reason::OTHER,
-												  "switch has statement after last case");
-						break;
-					}
-				}
-			}
-
-			// remove the helper itemList
+			// pops the body from the last case statement
 			ooStack_.pop();
+			// delete the dummy list
 			SAFE_DELETE(itemList);
+			// pop the body of the switch statement
+			ooStack_.pop();
 		}
 		else
 			log_->writeError(className_, switchStmt, CppImportLogger::Reason::NOT_SUPPORTED);
@@ -781,29 +735,45 @@ bool ClangAstVisitor::TraverseSwitchStmt(clang::SwitchStmt* switchStmt)
 
 bool ClangAstVisitor::TraverseCaseStmt(clang::CaseStmt* caseStmt)
 {
-	OOModel::SwitchCase* ooSwitchCase = new OOModel::SwitchCase();
+	// pop the body of the previous case
+	ooStack_.pop();
+	OOModel::CaseStatement* ooSwitchCase = new OOModel::CaseStatement();
+	// insert in model
+	if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
+		itemList->append(ooSwitchCase);
+	else
+	{
+		log_->writeError(className_, caseStmt, CppImportLogger::Reason::INSERT_PROBLEM);
+		return true;
+	}
 	// traverse condition
 	inBody_ = false;
 	TraverseStmt(caseStmt->getLHS());
 	if(!ooExprStack_.empty())
-		ooSwitchCase->setExpr(ooExprStack_.pop());
+		ooSwitchCase->setCaseExpression(ooExprStack_.pop());
 	inBody_ = true;
 	// traverse statements/body
-	ooStack_.push(ooSwitchCase->statement());
+	ooStack_.push(ooSwitchCase->body());
 	TraverseStmt(caseStmt->getSubStmt());
-	ooStack_.pop();
-	ooSwitchCaseStack_.push(ooSwitchCase);
 	return true;
 }
 
 bool ClangAstVisitor::TraverseDefaultStmt(clang::DefaultStmt* defaultStmt)
 {
-	OOModel::SwitchCase* ooDefaultCase = new OOModel::SwitchCase();
-	// traverse statements/body
-	ooStack_.push(ooDefaultCase->statement());
-	TraverseStmt(defaultStmt->getSubStmt());
+	// pop the body of the previous case
 	ooStack_.pop();
-	ooSwitchCaseStack_.push(ooDefaultCase);
+	OOModel::CaseStatement* ooDefaultCase = new OOModel::CaseStatement();
+	// insert in model
+	if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
+		itemList->append(ooDefaultCase);
+	else
+	{
+		log_->writeError(className_, defaultStmt, CppImportLogger::Reason::INSERT_PROBLEM);
+		return true;
+	}
+	// traverse statements/body
+	ooStack_.push(ooDefaultCase->body());
+	TraverseStmt(defaultStmt->getSubStmt());
 	return true;
 }
 
