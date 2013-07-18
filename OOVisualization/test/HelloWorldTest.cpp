@@ -203,6 +203,17 @@ Class* addEnumeration(Project* parent)
 	return en;
 }
 
+Class* addAnnotation(Project* parent)
+{
+	auto ann = new Class("Annotation", Modifier::Public, Class::ConstructKind::Annotation);
+	if (parent) parent->classes()->append(ann);
+
+	// Set positions
+	ann->extension<Position>()->set(860,1020);
+
+	return ann;
+}
+
 Module* addLambda()
 {
 	auto mod = new Module("Lambda");
@@ -828,6 +839,9 @@ TEST(OOVisualization, JavaLibraryAndHelloWorldTest)
 	// Build a simple enumeration
 	Class* en = nullptr;
 	en = addEnumeration(prj);
+
+	// Add an annotation class
+	addAnnotation(prj);
 
 //	// Add a second method
 	Method* longMethod = nullptr;

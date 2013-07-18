@@ -68,10 +68,7 @@ public class ASTConverter {
 		
     	if (type.getNodeType() == ASTNode.TYPE_DECLARATION ) visit((TypeDeclaration)type);
     	else if (type.getNodeType() == ASTNode.ENUM_DECLARATION) visit((EnumDeclaration)type);
-    	else if (type.getNodeType() == ASTNode.ANNOTATION_TYPE_DECLARATION)
-    	{
-    		//TODO: Handle this
-    	}
+    	else if (type.getNodeType() == ASTNode.ANNOTATION_TYPE_DECLARATION) visit((AnnotationTypeDeclaration)type);
     	else throw new UnknownFeatureException("CompilationUnit content" + Integer.toString(type.getNodeType()));
     	
     	containers.pop();
@@ -97,6 +94,15 @@ public class ASTConverter {
 		visitClassBody(node.bodyDeclarations());
 	}
 	
+	public void visit(AnnotationTypeDeclaration node) throws ConversionException
+	{
+		Node cl = containers.peek();
+		cl.child("cKind").setLongValue(5); // Make this an annotation
+		
+		// Body declarations
+		visitClassBody(node.bodyDeclarations());
+	}
+	
 	public void visit(EnumDeclaration node) throws ConversionException
 	{
 		Node cl = containers.peek();
@@ -116,6 +122,7 @@ public class ASTConverter {
 		// Methods and Fields
 		int fields = 0;
 		int methods = 0;
+		int annotations = 0;
 		
 		for(BodyDeclaration b : declarations)
 		{
@@ -129,7 +136,8 @@ public class ASTConverter {
 				containers.peek().addSymbolNodeInList("enumerators", "Enumerator",
 						((EnumConstantDeclaration)b).getName().getIdentifier());
 			}
-			else if (b instanceof AnnotationTypeMemberDeclaration); // TODO: Handle this
+			else if (b instanceof AnnotationTypeMemberDeclaration)
+				visit((AnnotationTypeMemberDeclaration)b, annotations++);
 			else throw new UnknownFeatureException("Unknown body declaration: " + b.getClass().getSimpleName());
 		}
 	}
@@ -179,6 +187,20 @@ public class ASTConverter {
 			
 			containers.pop();
 		}
+	}
+	
+	public void visit(AnnotationTypeMemberDeclaration node, int name) throws ConversionException
+	{
+		Node field = containers.peek().addSymbolNodeInList("fields", "Field", node.getName().getIdentifier());
+		containers.push(field);
+			
+		setModifiers(node);
+		field.setChild("typeExpression", typeExpression(node.getType(), "typeExpression"));
+
+		if (node.getDefault() != null)
+			field.add(expression(node.getDefault(), "initialValue"));
+			
+		containers.pop();
 	}
 	
 	public void visitBody(List<Statement> statements, String name) throws ConversionException

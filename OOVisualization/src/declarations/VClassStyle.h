@@ -50,6 +50,7 @@ class OOVISUALIZATION_API VClassStyle : public Visualization::DeclarativeItemBas
 		Visualization::StaticStyle structIcon_;
 		Visualization::StaticStyle unionIcon_;
 		Visualization::StaticStyle enumIcon_;
+		Visualization::StaticStyle annotationIcon_;
 
 		Visualization::SequentialLayoutStyle header_;
 		Visualization::VListStyle typeArguments_;
@@ -80,6 +81,7 @@ class OOVISUALIZATION_API VClassStyle : public Visualization::DeclarativeItemBas
 		const Visualization::StaticStyle& structIcon() const;
 		const Visualization::StaticStyle& unionIcon() const;
 		const Visualization::StaticStyle& enumIcon() const;
+		const Visualization::StaticStyle& annotationIcon() const;
 
 		const Visualization::SequentialLayoutStyle& header() const;
 		const Visualization::VListStyle& typeArguments() const;
@@ -108,6 +110,7 @@ inline const Visualization::StaticStyle& VClassStyle::interfaceIcon() const { re
 inline const Visualization::StaticStyle& VClassStyle::structIcon() const { return structIcon_; }
 inline const Visualization::StaticStyle& VClassStyle::unionIcon() const { return unionIcon_; }
 inline const Visualization::StaticStyle& VClassStyle::enumIcon() const { return enumIcon_; }
+inline const Visualization::StaticStyle& VClassStyle::annotationIcon() const { return annotationIcon_; }
 
 inline const Visualization::SequentialLayoutStyle& VClassStyle::header() const { return header_; }
 inline const Visualization::VListStyle& VClassStyle::typeArguments() const { return typeArguments_; }

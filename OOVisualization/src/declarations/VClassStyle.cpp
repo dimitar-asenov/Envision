@@ -42,6 +42,7 @@ void VClassStyle::load(Visualization::StyleLoader& sl)
 	sl.load("structIcon", structIcon_);
 	sl.load("unionIcon", unionIcon_);
 	sl.load("enumIcon", enumIcon_);
+	sl.load("annotationIcon", annotationIcon_);
 
 	sl.load("header", header_);
 	sl.load("typeArguments", typeArguments_);

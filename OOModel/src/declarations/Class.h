@@ -57,7 +57,7 @@ class OOMODEL_API Class : public Super<Declaration>
 
 	public:
 
-		enum class ConstructKind : int {Class, Interface, Struct, Union, Enum};
+		enum class ConstructKind : int {Class, Interface, Struct, Union, Enum, Annotation};
 
 		Class(const QString& name);
 

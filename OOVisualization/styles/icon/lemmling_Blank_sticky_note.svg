@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://web.resource.org/cc/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" version="1.0" width="460.34183" height="444.82458" id="svg2">
+  <defs id="defs4">
+    <linearGradient id="linearGradient3164">
+      <stop id="stop3166" style="stop-color:#c8c800;stop-opacity:1" offset="0"/>
+      <stop id="stop3168" style="stop-color:#ffff49;stop-opacity:1" offset="1"/>
+    </linearGradient>
+    <linearGradient x1="171.36571" y1="343.67136" x2="181.27632" y2="378.14941" id="linearGradient3206" xlink:href="#linearGradient3164" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0.9913899,-0.1309431,0.1309431,0.9913899,-65.848112,49.984526)"/>
+  </defs>
+  <g transform="translate(-117.8043,-304.40923)" id="layer1">
+    <path d="M 133.07032,372.03894 C 184.04371,352.21122 267.61012,341.92456 267.61012,341.92456 L 505.70478,310.47695 L 531.29975,504.26041 C 531.29975,504.26041 544.97428,617.40757 578.14614,671.44519 C 500.53358,703.63161 363.11126,723.63885 363.11126,723.63885 L 169.32781,749.23382 L 125.54506,417.74791 C 125.54506,417.74791 118.56588,391.3026 133.07032,372.03894 z" id="path3162" style="fill:#000000;fill-opacity:0.39215686;fill-rule:nonzero;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1"/>
+    <path d="M 125.64175,364.97122 C 184.11514,348.1435 262.68155,337.85684 262.68155,337.85684 L 500.77621,306.40923 L 526.37118,500.1927 C 526.37118,500.1927 535.13841,576.18587 568.31026,630.22349 C 505.11787,706.36137 358.18269,719.57113 358.18269,719.57113 L 164.39924,745.1661 L 120.61649,413.68019 C 120.61649,413.68019 116.82044,381.80671 125.64175,364.97122 z" id="rect2385" style="fill:url(#linearGradient3206);fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1"/>
+  </g>
+  <metadata>
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+        <cc:license rdf:resource="http://creativecommons.org/licenses/publicdomain/"/>
+        <dc:publisher>
+          <cc:Agent rdf:about="http://openclipart.org/">
+            <dc:title>Open Clip Art Library</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:title>Blank sticky note</dc:title>
+        <dc:date>2008-07-07T06:00:01</dc:date>
+        <dc:description>A blank sticky note to write your own text on</dc:description>
+        <dc:source>http://openclipart.org/detail/17620/blank-sticky-note-by-lemmling</dc:source>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>lemmling</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>clip art</rdf:li>
+            <rdf:li>clipart</rdf:li>
+            <rdf:li>how i did it</rdf:li>
+            <rdf:li>image</rdf:li>
+            <rdf:li>media</rdf:li>
+            <rdf:li>memo</rdf:li>
+            <rdf:li>memo</rdf:li>
+            <rdf:li>note</rdf:li>
+            <rdf:li>note</rdf:li>
+            <rdf:li>office</rdf:li>
+            <rdf:li>office</rdf:li>
+            <rdf:li>png</rdf:li>
+            <rdf:li>public domain</rdf:li>
+            <rdf:li>sticky note</rdf:li>
+            <rdf:li>sticky note</rdf:li>
+            <rdf:li>svg</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+      </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/publicdomain/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction"/>
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution"/>
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks"/>
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+</svg>

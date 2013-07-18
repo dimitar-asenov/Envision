@@ -81,6 +81,11 @@
 		<width>32</width>
 		<height>32</height>
 	</enumIcon>
+	<annotationIcon prototypes="icon/SVGIcon/default">
+		<filename>styles/icon/annotation.svg</filename>
+		<width>32</width>
+		<height>32</height>
+	</annotationIcon>
 	
 	<visibility prototypes="item/Text/default" />
 	<content prototypes="layout/SequentialLayout/default">
