@@ -39,9 +39,9 @@ class CPPIMPORT_API CppImportLogger
 
 		enum class Reason : int {OTHER, NOT_SUPPORTED, NO_PARENT, INSERT_PROBLEM};
 
-		void writeError(const QString& inWhichClass, const clang::NamedDecl* decl,
+		void writeError(const QString& inWhichClass, const clang::Decl* decl,
 							 const Reason& r, const QString& reason = QString());
-		void writeWarning(const QString& inWhichClass, const clang::NamedDecl* decl,
+		void writeWarning(const QString& inWhichClass, const clang::Decl* decl,
 								const Reason& r, const QString& reason = QString());
 		void writeError(const QString& inWhichClass, const clang::Stmt* stmt,
 							 const Reason& r, const QString& reason = QString());
@@ -63,7 +63,7 @@ class CPPIMPORT_API CppImportLogger
 	private:
 		// type of output for writeOut function
 		enum OUTTYPE {ERROR,WARNING};
-		void writeOut(const QString& inWhichClass, const clang::NamedDecl* decl,
+		void writeOut(const QString& inWhichClass, const clang::Decl* decl,
 						  OUTTYPE outType, const Reason& r, const QString& reason = QString());
 		void writeOut(const QString& inWhichClass, const clang::Stmt *stmt,
 						  OUTTYPE outType, const Reason& r, const QString& reason = QString());
@@ -92,11 +92,11 @@ class CPPIMPORT_API CppImportLogger
 };
 
 inline void CppImportLogger::writeError
-(const QString& inWhichClass, const clang::NamedDecl* decl, const Reason& r, const QString& reason)
+(const QString& inWhichClass, const clang::Decl* decl, const Reason& r, const QString& reason)
 { writeOut(inWhichClass, decl, ERROR, r, reason); }
 
 inline void CppImportLogger::writeWarning
-(const QString& inWhichClass, const clang::NamedDecl* decl, const Reason& r, const QString& reason)
+(const QString& inWhichClass, const clang::Decl* decl, const Reason& r, const QString& reason)
 { writeOut(inWhichClass, decl, WARNING, r, reason); }
 
 inline void CppImportLogger::writeError

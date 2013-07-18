@@ -45,7 +45,7 @@ void CppImportLogger::setSourceManager(const clang::SourceManager* sourceManager
 	sourceManger_ = sourceManager;
 }
 
-void CppImportLogger::writeOut(const QString& inWhichClass, const clang::NamedDecl* decl, OUTTYPE outType,
+void CppImportLogger::writeOut(const QString& inWhichClass, const clang::Decl* decl, OUTTYPE outType,
 										 const Reason& r, const QString& reason)
 {
 	QTextStream* outStream;
@@ -67,10 +67,14 @@ void CppImportLogger::writeOut(const QString& inWhichClass, const clang::NamedDe
 	else
 		outMessage = getReasonString(r);
 
+	QString nodeName;
+	if(auto namedDecl = llvm::dyn_cast<clang::NamedDecl>(decl))
+		nodeName = QString::fromStdString(namedDecl->getNameAsString());
+
 	std::pair<clang::FileID,unsigned> decomposedLoc = sourceManger_->getDecomposedLoc(decl->getLocation());
 	(*outStream) << "ERR/WARN: \t In class : " << inWhichClass << " \n\t reason : " << outMessage
 					 << " \n\t in clang node : " << clangType
-					 << " \n\t clang node name : " << QString::fromStdString(decl->getNameAsString())
+					 << " \n\t clang node name : " << (nodeName.isEmpty() ? "not a named decl" : nodeName)
 					 << " \n\t in file : " << sourceManger_->getBufferName(decl->getLocation())
 					 << " \n\t on line : " << sourceManger_->getLineNumber(decomposedLoc.first,decomposedLoc.second)
 					 << "\n";
