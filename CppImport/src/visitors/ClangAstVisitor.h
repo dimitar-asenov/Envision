@@ -52,12 +52,18 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		void pushOOStack(Model::Node* node);
 		Model::Node* popOOStack();
 
+		// method only for debugging
+		bool TraverseDecl(clang::Decl* decl);
+		// method only for debugging
+		bool VisitDecl(clang::Decl* decl);
+
 		bool TraverseNamespaceDecl(clang::NamespaceDecl* namespaceDecl);
 		bool TraverseClassTemplateDecl(clang::ClassTemplateDecl* classTemplate);
 		bool TraverseClassTemplateSpecializationDecl(clang::ClassTemplateSpecializationDecl* specializationDecl);
 		bool TraverseCXXRecordDecl(clang::CXXRecordDecl* recordDecl);
 
 		bool TraverseFunctionDecl(clang::FunctionDecl* functionDecl);
+		bool TraverseFunctionTemplateDecl(clang::FunctionTemplateDecl* functionDecl);
 
 		bool TraverseIfStmt(clang::IfStmt* ifStmt);
 		bool TraverseWhileStmt(clang::WhileStmt* whileStmt);
@@ -70,8 +76,13 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		bool TraverseCXXTryStmt(clang::CXXTryStmt* tryStmt);
 		bool TraverseCXXCatchStmt(clang::CXXCatchStmt* catchStmt);
 
-		bool TraverseStmt(clang::Stmt *S);
-		bool VisitStmt(clang::Stmt *S);
+		/**
+		 * Traverses the stmt \a S and if it is an expression dispatches to the expression visitor
+		 */
+		bool TraverseStmt(clang::Stmt* S);
+		// method only for debugging
+		bool VisitStmt(clang::Stmt* S);
+
 		bool TraverseVarDecl(clang::VarDecl* varDecl);
 
 		bool TraverseEnumDecl(clang::EnumDecl* enumDecl);
@@ -88,13 +99,13 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		bool TraverseCaseStmt(clang::CaseStmt* caseStmt);
 		bool TraverseDefaultStmt(clang::DefaultStmt* defaultStmt);
 
-		bool VisitBreakStmt(clang::BreakStmt* breakStmt);
-		bool VisitContinueStmt(clang::ContinueStmt* continueStmt);
+		bool TraverseBreakStmt(clang::BreakStmt* breakStmt);
+		bool TraverseContinueStmt(clang::ContinueStmt* continueStmt);
 
-		bool VisitTypedefNameDecl(clang::TypedefNameDecl* typedefDecl);
-		bool VisitNamespaceAliasDecl(clang::NamespaceAliasDecl* namespaceAlias);
-		bool VisitUsingDecl(clang::UsingDecl* usingDecl);
-		bool VisitUsingDirectiveDecl(clang::UsingDirectiveDecl* usingDirectiveDecl);
+		bool WalkUpFromTypedefNameDecl(clang::TypedefNameDecl* typedefDecl);
+		bool TraverseNamespaceAliasDecl(clang::NamespaceAliasDecl* namespaceAlias);
+		bool TraverseUsingDecl(clang::UsingDecl* usingDecl);
+		bool TraverseUsingDirectiveDecl(clang::UsingDirectiveDecl* usingDirectiveDecl);
 
 		/**
 		 * A helper function called by RecursiveASTVisitor parent class.
@@ -155,6 +166,7 @@ class CPPIMPORT_API ClangAstVisitor : public clang::RecursiveASTVisitor <ClangAs
 		const QString className_{"ClangAstVisitor"};
 
 		clang::Stmt* currentStmt_{};
+		clang::Decl* currenDecl_{};
 };
 
 // method

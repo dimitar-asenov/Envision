@@ -72,6 +72,30 @@ Model::Node*ClangAstVisitor::popOOStack()
 	return ooStack_.pop();
 }
 
+bool ClangAstVisitor::TraverseDecl(clang::Decl* decl)
+{
+	if(decl && decl == currenDecl_)
+	{
+		log_->writeError(className_, decl, CppImportLogger::Reason::NOT_SUPPORTED);
+		return true;
+	}
+	currenDecl_ = decl;
+	return Base::TraverseDecl(decl);
+}
+
+bool ClangAstVisitor::VisitDecl(clang::Decl* decl)
+{
+	if(!shouldModel(decl->getLocation()))
+		return true;
+
+	if(decl && decl == currenDecl_ && !llvm::isa<clang::AccessSpecDecl>(decl))
+	{
+		log_->writeError(className_, decl, CppImportLogger::Reason::NOT_SUPPORTED);
+		return true;
+	}
+	return Base::VisitDecl(decl);
+}
+
 bool ClangAstVisitor::TraverseNamespaceDecl(clang::NamespaceDecl* namespaceDecl)
 {
 	if(!shouldModel(namespaceDecl->getLocation()))
@@ -198,6 +222,13 @@ bool ClangAstVisitor::TraverseFunctionDecl(clang::FunctionDecl* functionDecl)
 	else
 		log_->writeError(className_, functionDecl, CppImportLogger::Reason::INSERT_PROBLEM);
 	return true;
+}
+
+bool ClangAstVisitor::TraverseFunctionTemplateDecl(clang::FunctionTemplateDecl* functionDecl)
+{
+	// this node does not provide any special information
+	// therefore it is sufficient to just visit the templated function
+	return TraverseFunctionDecl(functionDecl->getTemplatedDecl());
 }
 
 bool ClangAstVisitor::TraverseIfStmt(clang::IfStmt* ifStmt)
@@ -381,7 +412,7 @@ bool ClangAstVisitor::TraverseDeclStmt(clang::DeclStmt* declStmt)
 			if(!ooExprStack_.empty())
 				exprList.append(ooExprStack_.pop());
 			else
-				log_->writeError(className_, (*declIt)->getLocStart(), CppImportLogger::Reason::NOT_SUPPORTED);
+				log_->writeError(className_, *declIt, CppImportLogger::Reason::NOT_SUPPORTED);
 		}
 		int size = exprList.size();
 		auto currentCommaExpr = ooComma;
@@ -492,7 +523,7 @@ bool ClangAstVisitor::TraverseStmt(clang::Stmt* S)
 
 bool ClangAstVisitor::VisitStmt(clang::Stmt* S)
 {
-	if(S && S == currentStmt_)
+	if(S && S == currentStmt_ && !llvm::isa<clang::CompoundStmt>(S))
 	{
 		log_->writeError(className_, S, CppImportLogger::Reason::NOT_SUPPORTED);
 		return true;
@@ -776,7 +807,7 @@ bool ClangAstVisitor::TraverseDefaultStmt(clang::DefaultStmt* defaultStmt)
 	return true;
 }
 
-bool ClangAstVisitor::VisitBreakStmt(clang::BreakStmt* breakStmt)
+bool ClangAstVisitor::TraverseBreakStmt(clang::BreakStmt* breakStmt)
 {
 	if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
 		itemList->append(new OOModel::BreakStatement());
@@ -785,7 +816,7 @@ bool ClangAstVisitor::VisitBreakStmt(clang::BreakStmt* breakStmt)
 	return true;
 }
 
-bool ClangAstVisitor::VisitContinueStmt(clang::ContinueStmt* continueStmt)
+bool ClangAstVisitor::TraverseContinueStmt(clang::ContinueStmt* continueStmt)
 {
 	if(auto itemList = dynamic_cast<OOModel::StatementItemList*>(ooStack_.top()))
 		itemList->append(new OOModel::ContinueStatement());
@@ -794,8 +825,9 @@ bool ClangAstVisitor::VisitContinueStmt(clang::ContinueStmt* continueStmt)
 	return true;
 }
 
-bool ClangAstVisitor::VisitTypedefNameDecl(clang::TypedefNameDecl* typedefDecl)
+bool ClangAstVisitor::WalkUpFromTypedefNameDecl(clang::TypedefNameDecl* typedefDecl)
 {
+	// This method is a walkup such that it covers both subtypes (typedef and typealias)
 	if(!shouldModel(typedefDecl->getLocation()))
 		return true;
 	if(auto ooTypeAlias = trMngr_->insertTypeAlias(typedefDecl))
@@ -813,7 +845,7 @@ bool ClangAstVisitor::VisitTypedefNameDecl(clang::TypedefNameDecl* typedefDecl)
 	return true;
 }
 
-bool ClangAstVisitor::VisitNamespaceAliasDecl(clang::NamespaceAliasDecl* namespaceAlias)
+bool ClangAstVisitor::TraverseNamespaceAliasDecl(clang::NamespaceAliasDecl* namespaceAlias)
 {
 	if(!shouldModel(namespaceAlias->getLocation()))
 		return true;
@@ -838,7 +870,7 @@ bool ClangAstVisitor::VisitNamespaceAliasDecl(clang::NamespaceAliasDecl* namespa
 	return true;
 }
 
-bool ClangAstVisitor::VisitUsingDecl(clang::UsingDecl* usingDecl)
+bool ClangAstVisitor::TraverseUsingDecl(clang::UsingDecl* usingDecl)
 {
 	if(!shouldModel(usingDecl->getLocation()))
 		return true;
@@ -862,7 +894,7 @@ bool ClangAstVisitor::VisitUsingDecl(clang::UsingDecl* usingDecl)
 	return true;
 }
 
-bool ClangAstVisitor::VisitUsingDirectiveDecl(clang::UsingDirectiveDecl* usingDirectiveDecl)
+bool ClangAstVisitor::TraverseUsingDirectiveDecl(clang::UsingDirectiveDecl* usingDirectiveDecl)
 {
 	if(!shouldModel(usingDirectiveDecl->getLocation()))
 		return true;

@@ -46,6 +46,28 @@ OOModel::Expression* ExpressionVisitor::getLastExpression()
 	return utils_->createErrorExpression("Could not convert last expression");
 }
 
+bool ExpressionVisitor::TraverseExpr(clang::Expr* e)
+{
+	if(e && e == currentExpr_)
+	{
+		log_->writeError(className_, e, CppImportLogger::Reason::NOT_SUPPORTED);
+		return true;
+	}
+	currentExpr_ = e;
+	return Base::TraverseStmt(e);
+}
+
+bool ExpressionVisitor::VisitExpr(clang::Expr* e)
+{
+	if(e && e == currentExpr_)
+	{
+		log_->writeError(className_, e, CppImportLogger::Reason::NOT_SUPPORTED);
+		return true;
+	}
+	currentExpr_ = e;
+	return Base::VisitStmt(e);
+}
+
 bool ExpressionVisitor::TraverseMemberExpr(clang::MemberExpr* memberExpr)
 {
 	QString name = QString::fromStdString(memberExpr->getMemberDecl()->getNameAsString());
@@ -93,7 +115,7 @@ bool ExpressionVisitor::TraverseCXXDependentScopeMemberExpr(clang::CXXDependentS
 	return true;
 }
 
-bool ExpressionVisitor::VisitDeclRefExpr(clang::DeclRefExpr* declRefExpr)
+bool ExpressionVisitor::TraverseDeclRefExpr(clang::DeclRefExpr* declRefExpr)
 {
 	QString name = QString::fromStdString(declRefExpr->getDecl()->getNameAsString());
 	if(declRefExpr->hasExplicitTemplateArgs())
@@ -105,7 +127,7 @@ bool ExpressionVisitor::VisitDeclRefExpr(clang::DeclRefExpr* declRefExpr)
 	return true;
 }
 
-bool ExpressionVisitor::VisitDependentScopeDeclRefExpr(clang::DependentScopeDeclRefExpr* dependentScope)
+bool ExpressionVisitor::TraverseDependentScopeDeclRefExpr(clang::DependentScopeDeclRefExpr* dependentScope)
 {
 	QString name = QString::fromStdString(dependentScope->getDeclName().getAsString());
 	if(dependentScope->hasExplicitTemplateArgs())
@@ -270,37 +292,37 @@ bool ExpressionVisitor::TraverseCXXDeleteExpr(clang::CXXDeleteExpr* deleteExpr)
 	return true;
 }
 
-bool ExpressionVisitor::VisitIntegerLiteral(clang::IntegerLiteral* intLit)
+bool ExpressionVisitor::TraverseIntegerLiteral(clang::IntegerLiteral* intLit)
 {
 	ooExprStack_.push(new OOModel::IntegerLiteral(intLit->getValue().getLimitedValue()));
 	return true;
 }
 
-bool ExpressionVisitor::VisitCXXBoolLiteralExpr(clang::CXXBoolLiteralExpr* boolLitExpr)
+bool ExpressionVisitor::TraverseCXXBoolLiteralExpr(clang::CXXBoolLiteralExpr* boolLitExpr)
 {
 	ooExprStack_.push(new OOModel::BooleanLiteral(boolLitExpr->getValue()));
 	return true;
 }
 
-bool ExpressionVisitor::VisitCXXNullPtrLiteralExpr(clang::CXXNullPtrLiteralExpr*)
+bool ExpressionVisitor::TraverseCXXNullPtrLiteralExpr(clang::CXXNullPtrLiteralExpr*)
 {
 	ooExprStack_.push(new OOModel::NullLiteral());
 	return true;
 }
 
-bool ExpressionVisitor::VisitFloatingLiteral(clang::FloatingLiteral* floatLiteral)
+bool ExpressionVisitor::TraverseFloatingLiteral(clang::FloatingLiteral* floatLiteral)
 {
 	ooExprStack_.push(new OOModel::FloatLiteral(floatLiteral->getValueAsApproximateDouble()));
 	return true;
 }
 
-bool ExpressionVisitor::VisitCharacterLiteral(clang::CharacterLiteral* charLiteral)
+bool ExpressionVisitor::TraverseCharacterLiteral(clang::CharacterLiteral* charLiteral)
 {
 	ooExprStack_.push(new OOModel::CharacterLiteral(QChar(charLiteral->getValue())));
 	return true;
 }
 
-bool ExpressionVisitor::VisitStringLiteral(clang::StringLiteral* stringLiteral)
+bool ExpressionVisitor::TraverseStringLiteral(clang::StringLiteral* stringLiteral)
 {
 	ooExprStack_.push(new OOModel::StringLiteral(QString::fromStdString(stringLiteral->getBytes().str())));
 	return true;
@@ -393,7 +415,7 @@ bool ExpressionVisitor::TraverseArraySubscriptExpr(clang::ArraySubscriptExpr* ar
 		return true;
 }
 
-bool ExpressionVisitor::VisitCXXThisExpr(clang::CXXThisExpr* thisExpr)
+bool ExpressionVisitor::TraverseCXXThisExpr(clang::CXXThisExpr* thisExpr)
 {
 	if(!thisExpr->isImplicit())
 			ooExprStack_.push(new OOModel::ThisExpression());
@@ -418,7 +440,7 @@ bool ExpressionVisitor::TraverseCXXTypeidExpr(clang::CXXTypeidExpr* typeIdExpr)
 	return true;
 }
 
-bool ExpressionVisitor::VisitOverloadExpr(clang::OverloadExpr* overloadExpr)
+bool ExpressionVisitor::WalkUpFromOverloadExpr(clang::OverloadExpr* overloadExpr)
 {
 	OOModel::ReferenceExpression* ooRef = new OOModel::ReferenceExpression
 			(QString::fromStdString(overloadExpr->getName().getAsString()));

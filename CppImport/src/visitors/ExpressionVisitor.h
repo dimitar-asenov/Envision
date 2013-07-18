@@ -54,13 +54,16 @@ class CPPIMPORT_API ExpressionVisitor : public clang::RecursiveASTVisitor <Expre
 		 */
 		OOModel::Expression* getLastExpression();
 
+		bool TraverseExpr(clang::Expr* e);
+		bool VisitExpr(clang::Expr* e);
+
 		// memberExpr
 		bool TraverseMemberExpr(clang::MemberExpr* memberExpr);
 		bool TraverseUnresolvedMemberExpr(clang::UnresolvedMemberExpr* unresolvedMember);
 		bool TraverseCXXDependentScopeMemberExpr(clang::CXXDependentScopeMemberExpr* dependentScopeMember);
 		// declRefExpr
-		bool VisitDeclRefExpr(clang::DeclRefExpr* declRefExpr);
-		bool VisitDependentScopeDeclRefExpr(clang::DependentScopeDeclRefExpr* dependentScope);
+		bool TraverseDeclRefExpr(clang::DeclRefExpr* declRefExpr);
+		bool TraverseDependentScopeDeclRefExpr(clang::DependentScopeDeclRefExpr* dependentScope);
 		// callExpr
 		bool TraverseCXXMemberCallExpr(clang::CXXMemberCallExpr* callExpr);
 		bool TraverseCallExpr(clang::CallExpr* callExpr);
@@ -69,12 +72,12 @@ class CPPIMPORT_API ExpressionVisitor : public clang::RecursiveASTVisitor <Expre
 		bool TraverseCXXNewExpr(clang::CXXNewExpr* newExpr);
 		bool TraverseCXXDeleteExpr(clang::CXXDeleteExpr* deleteExpr);
 		// Literals
-		bool VisitIntegerLiteral(clang::IntegerLiteral* intLit);
-		bool VisitCXXBoolLiteralExpr(clang::CXXBoolLiteralExpr* boolLitExpr);
-		bool VisitCXXNullPtrLiteralExpr(clang::CXXNullPtrLiteralExpr* nullPtrLitExpr);
-		bool VisitFloatingLiteral(clang::FloatingLiteral* floatLiteral);
-		bool VisitCharacterLiteral(clang::CharacterLiteral* charLiteral);
-		bool VisitStringLiteral(clang::StringLiteral* stringLiteral);
+		bool TraverseIntegerLiteral(clang::IntegerLiteral* intLit);
+		bool TraverseCXXBoolLiteralExpr(clang::CXXBoolLiteralExpr* boolLitExpr);
+		bool TraverseCXXNullPtrLiteralExpr(clang::CXXNullPtrLiteralExpr* nullPtrLitExpr);
+		bool TraverseFloatingLiteral(clang::FloatingLiteral* floatLiteral);
+		bool TraverseCharacterLiteral(clang::CharacterLiteral* charLiteral);
+		bool TraverseStringLiteral(clang::StringLiteral* stringLiteral);
 		// construct expr
 		bool TraverseCXXConstructExpr(clang::CXXConstructExpr* constructExpr);
 		bool TraverseCXXUnresolvedConstructExpr(clang::CXXUnresolvedConstructExpr* unresolvedConstruct);
@@ -82,11 +85,11 @@ class CPPIMPORT_API ExpressionVisitor : public clang::RecursiveASTVisitor <Expre
 		bool TraverseParenExpr(clang::ParenExpr* parenthesizedExpr);
 		bool TraverseArraySubscriptExpr(clang::ArraySubscriptExpr* arraySubsrciptExpr);
 
-		bool VisitCXXThisExpr(clang::CXXThisExpr* thisExpr);
+		bool TraverseCXXThisExpr(clang::CXXThisExpr* thisExpr);
 
 		bool TraverseCXXTypeidExpr(clang::CXXTypeidExpr* typeIdExpr);
 
-		bool VisitOverloadExpr(clang::OverloadExpr* overloadExpr);
+		bool WalkUpFromOverloadExpr(clang::OverloadExpr* overloadExpr);
 
 		bool TraverseLambdaExpr(clang::LambdaExpr* lambdaExpr);
 
@@ -186,6 +189,11 @@ class CPPIMPORT_API ExpressionVisitor : public clang::RecursiveASTVisitor <Expre
 		 * Helper Function for all kind of casts.
 		 */
 		bool TraverseExplCastExpr(clang::ExplicitCastExpr* castExpr, OOModel::CastExpression::CastKind kind);
+
+		// saved for debugging
+		clang::Expr* currentExpr_{};
+
+		using Base = clang::RecursiveASTVisitor<ExpressionVisitor>;
 };
 
 
