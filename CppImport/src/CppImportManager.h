@@ -41,16 +41,12 @@ class CPPIMPORT_API CppImportManager
 {
 	public:
 		~CppImportManager();
-
 		/**
 		 * Use this function to set \a sourcePath which you want to import.
-		 * If the path of the compile_commands.json file differs from the \a sourcePath
-		 * please set the \a compilationDbPath
-		 *	returns true if succeeded
+		 * If the project has subproject please specify this with setting \a subProject to true
+		 * All subprojects that contain a compile_commands file will be translated
 		 */
-		bool setImportPath(const QString& sourcePath, const QString& compilationDbPath = QString());
-
-		void readFiles(const QString path);
+		void setImportPath(const QString& sourcePath, const bool subProjects = false);
 
 		/**
 		 * Creates a clang tool and translates the sourcecode to Envision's AST and returns the root
@@ -61,24 +57,47 @@ class CPPIMPORT_API CppImportManager
 		/**
 		 * Imports code from a test.cpp file in a subdirectory of ENVISION_ROOT/CppImport/test
 		 * Specify the directory in the testSelector file.
-		 * Note that the general compile_commands.json file is use so you do not need to provide a compilation database.
-		 *	returns true if succeeded
+		 * For simple tests inside the test directory you do not have to provide a compile_commands file
 		 */
-		bool setupTest();
+		void setupTest();
 
-	protected:
-		bool setCompilationDbPath(const QString& path);
-		clang::CompilerInstance compilerInstance_{};
-		clang::tooling::ClangTool* myTool_{};
-		clang::tooling::CompilationDatabase* compilationDB_{};
-		std::vector<std::string> sources_{};
+	private:
+		/**
+		 * Prepares everything for the project in \a sourcePath to get imported
+		 */
+		void initPath(const QString& sourcePath);
+
+		/**
+		 * Sets the project name based on the \a sourcePath
+		 */
+		void setProjectName(const QString& sourcePath);
+
+		/**
+		 * Collects all source files in \a sourcPath and sub directories and stores them in the sourcesMap_.
+		 */
+		void readInFiles(const QString& sourcePath);
+
+		/**
+		 * Adds the compilation database to compilationDbMap_.
+		 */
+		void setCompilationDbPath(const QString& sourcePath);
+
+		/**
+		 * Creates a compile_commands file inside \a testPath
+		 * Use this method only for simple test.cpp files
+		 */
+		void createCompilationDbForTest(const QString& testPath);
+
+		// File endings filter
+		QStringList cppFilter_ = {"*.cpp", "*.cc", "*.cxx"};
 
 		// the project name which is shown in Envision
 		// we set this to the innermost directory of the sourcepath
 		QString projectName_;
-		QStringList subProjects_;
-		QMap<QString, QStringList> spSources_;
-		QMap<QString, clang::tooling::CompilationDatabase*> dbMap_;
+		// projects we have to import. For single project this list will only contain one entry
+		QStringList projects_;
+		QMap<QString, std::vector<std::string>* > sourcesMap_;
+		QMap<QString, clang::tooling::CompilationDatabase*> compilationDbMap_;
 
 };
 

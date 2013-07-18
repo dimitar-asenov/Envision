@@ -47,10 +47,6 @@ TEST(CppImport, SimpleTest)
 {
 	CppImportManager manager;
 
-//	QString srcPath("/home/luke/BachelorThesis/TestEnvision/Envision/Core/");
-//	QString dbpath("/home/luke/BachelorThesis/TestEnvision/Envision/Core");
-//	manager.setImportPath(srcPath, dbpath);
-
 	manager.setupTest();
 
 	Model::Model* model = manager.createModel();
