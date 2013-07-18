@@ -39,55 +39,49 @@ public class ASTConverter {
 		else containers.push(root.getModuleContext( pd.getName().getFullyQualifiedName() ) );
 
 		imports = node.imports();
-
-	    List<AbstractTypeDeclaration> types = node.types();
-	    for (AbstractTypeDeclaration type : types) {
-	    	if (type.getNodeType() == ASTNode.TYPE_DECLARATION )
-	    	{
-	    		visit((TypeDeclaration)type);
-	    	}
-	    	else if (type.getNodeType() == ASTNode.ENUM_DECLARATION)
-	    	{
-	    		//TODO: Handle this
-	    	}
-	    	else if (type.getNodeType() == ASTNode.ANNOTATION_TYPE_DECLARATION)
-	    	{
-	    		//TODO: Handle this
-	    	}
-	    	else
-	    	{
-	    		throw new UnknownFeatureException("CompilationUnit content" + Integer.toString(type.getNodeType()));
-	    	}
-
-	    }
+	    for (AbstractTypeDeclaration type : (List<AbstractTypeDeclaration>) node.types())
+	    	visit(type, true);
 	    
 	    containers.pop();
+	}
+	
+	public void visit(AbstractTypeDeclaration type, boolean topLevel) throws ConversionException
+	{
+		Node cl = containers.peek().addSymbolNodeInList("classes", "Class", type.getName().getIdentifier());
+		containers.push(cl);
+		
+		setModifiers(type);
+		//TODO: Handle JavaDoc
+		//TODO: Handle Annotations
+		
+		if (topLevel)
+		{
+			// Only process imports if this is a declaration directly in the compilation unit
+			for(ImportDeclaration id : imports)
+			{
+				//TODO: Handle static and on demand imports
+				Node importNode = new Node(null, "NameImport", cl.child("subDeclarations").numChildren());
+				importNode.setChild("importedName", expression(id.getName(), "importedName"));
+				cl.child("subDeclarations").add(importNode);
+			}
+		}
+		
+    	if (type.getNodeType() == ASTNode.TYPE_DECLARATION ) visit((TypeDeclaration)type);
+    	else if (type.getNodeType() == ASTNode.ENUM_DECLARATION) visit((EnumDeclaration)type);
+    	else if (type.getNodeType() == ASTNode.ANNOTATION_TYPE_DECLARATION)
+    	{
+    		//TODO: Handle this
+    	}
+    	else throw new UnknownFeatureException("CompilationUnit content" + Integer.toString(type.getNodeType()));
+    	
+    	containers.pop();
 	}
 
 	public void visit(TypeDeclaration node) throws ConversionException
 	{
-		Node cl = containers.peek().addSymbolNodeInList("classes", "Class", node.getName().getIdentifier());
-		containers.push(cl);
-		
-		// TODO: Handle different types of classes
-		cl.child("cKind").setLongValue(0); // Make this a class
-		
-		//TODO: Handle JavaDoc
-		//TODO: Handle difference between Class and Interface
-		
-		setModifiers(node);
-		
-		//TODO: Handle Annotations
-		
-		// Imports
-		for(ImportDeclaration id : imports)
-		{
-			//TODO: Handle static and on demand imports
-			Node importNode = new Node(null, "NameImport", cl.child("subDeclarations").numChildren());
-			importNode.setChild("importedName", expression(id.getName(), "importedName"));
-			cl.child("subDeclarations").add(importNode);
-		}
-		
+		Node cl = containers.peek();
+		cl.child("cKind").setLongValue(node.isInterface() ? 1 : 0); // Make this a class or an interface
+	
 		// Type parameters
 		processTypeParameters(node.typeParameters());
 
@@ -99,25 +93,45 @@ public class ASTConverter {
 		for (Type t : (List<Type>)node.superInterfaceTypes())
 			cl.child("baseClasses").add(typeExpression(t, Integer.toString(i++)));
 		
+		// Body declarations
+		visitClassBody(node.bodyDeclarations());
+	}
+	
+	public void visit(EnumDeclaration node) throws ConversionException
+	{
+		Node cl = containers.peek();
+		cl.child("cKind").setLongValue(4); // Make this an Enum
+
+		// Super classes/interfaces
+		int i = 0;			
+		for (Type t : (List<Type>)node.superInterfaceTypes())
+			cl.child("baseClasses").add(typeExpression(t, Integer.toString(i++)));
+		
+		// Body declarations
+		visitClassBody(node.bodyDeclarations());
+	}
+	
+	public void visitClassBody(List<BodyDeclaration> declarations) throws ConversionException
+	{
 		// Methods and Fields
 		int fields = 0;
 		int methods = 0;
 		
-		for(BodyDeclaration b : (List<BodyDeclaration>) node.bodyDeclarations())
+		for(BodyDeclaration b : declarations)
 		{
 			if (b instanceof MethodDeclaration) visit((MethodDeclaration)b, methods++);
 			else if (b instanceof FieldDeclaration) visit((FieldDeclaration)b, fields++);
-			
-			else if (b instanceof TypeDeclaration); // TODO: Handle this
-			else if (b instanceof EnumDeclaration); // TODO: Handle this
+			else if (b instanceof AbstractTypeDeclaration) visit((AbstractTypeDeclaration)b, false);
 			else if (b instanceof Initializer); // TODO: Handle this
-			else if (b instanceof EnumConstantDeclaration); // TODO: Handle this
-			else if (b instanceof AnnotationTypeDeclaration); // TODO: Handle this
+			else if (b instanceof EnumConstantDeclaration)
+			{
+				// TODO: Handle special enumeration types
+				containers.peek().addSymbolNodeInList("enumerators", "Enumerator",
+						((EnumConstantDeclaration)b).getName().getIdentifier());
+			}
 			else if (b instanceof AnnotationTypeMemberDeclaration); // TODO: Handle this
 			else throw new UnknownFeatureException("Unknown body declaration: " + b.getClass().getSimpleName());
 		}
-		
-		containers.pop();
 	}
 	
 	public void visit(MethodDeclaration node, int name) throws ConversionException
@@ -784,18 +798,19 @@ public class ASTConverter {
 			node = new Node(null, "NullLiteral", name);
 		} else if (e instanceof NumberLiteral)
 		{
-			NumberLiteral nl = (NumberLiteral) e;
+			String num = ((NumberLiteral) e).getToken();
 			
 			//TODO: Verify that the correct node type is always created
-			if (!nl.getToken().contains("x")
-					&& (nl.getToken().contains(".") || nl.getToken().contains("e") || nl.getToken().contains("E")))
+			if (!num.contains("x")
+					&& ((num.contains(".") || num.contains("e") || num.contains("E"))
+						|| num.endsWith("f") || num.endsWith("d") ))
 			{
+				if (num.endsWith("f") || num.endsWith("d") ) num = num.substring(0,num.length()-1);
 				node = new Node(null, "FloatLiteral", name);
-				node.child("value").setDoubleValue(Double.parseDouble(nl.getToken()));
+				node.child("value").setDoubleValue(Double.parseDouble(num));
 			}
 			else
 			{
-				String num = nl.getToken();
 				long decoded = 0;
 				if (num.equals("0x8000000000000000L")) decoded = 0x8000000000000000L;
 				else

@@ -87,6 +87,9 @@ public class NodeDescriptors {
 				{"Expression","typeExpression"}
 		}));
 		add( new NodeInitializer("Modifier", "Integer", null));
+		add( new NodeInitializer("Enumerator", new String[][]{
+				{"Text","name"}
+		}));
 		
 		// Statements
 		add( new NodeInitializer("Block", new String[][]{
