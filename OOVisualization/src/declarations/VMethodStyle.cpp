@@ -28,32 +28,6 @@
 
 namespace OOVisualization {
 
-void VMethodStyle::load(Visualization::StyleLoader& sl)
-{
-	DeclarativeItemBaseStyle::load(sl);
-
-	sl.load("nameDefault", nameDefault_);
-	sl.load("namePublic", namePublic_);
-	sl.load("namePrivate", namePrivate_);
-	sl.load("nameProtected", nameProtected_);
-	sl.load("nameStaticDefault", nameStaticDefault_);
-	sl.load("nameStaticPublic", nameStaticPublic_);
-	sl.load("nameStaticPrivate", nameStaticPrivate_);
-	sl.load("nameStaticProtected", nameStaticProtected_);
-	sl.load("defaultIcon", defaultIcon_);
-	sl.load("constructorIcon", constructorIcon_);
-	sl.load("destructorIcon", destructorIcon_);
-	sl.load("conversionIcon", conversionIcon_);
-	sl.load("header", header_);
-	sl.load("signatureLine",signatureLine_);
-	sl.load("body", body_);
-	sl.load("annotations", annotations_);
-	sl.load("addons", addons_);
-	sl.load("content", content_);
-	sl.load("typeArguments", typeArguments_);
-	sl.load("arguments", arguments_);
-	sl.load("results", results_);
-	sl.load("memberInitializers", memberInitializers_);
-}
+VMethodStyle::~VMethodStyle(){} // Put the VTable here
 
 }

@@ -99,7 +99,8 @@ HEADERS += src/statements/VCaseStatement.h \
     src/statements/VReturnStatement.h \
     src/statements/VReturnStatementStyle.h \
     src/oovisualization.h
-SOURCES += src/statements/VCaseStatement.cpp \
+SOURCES += src/declarations/VMethodStyle.cpp \
+    src/statements/VCaseStatement.cpp \
     src/statements/VCaseStatementStyle.cpp \
     src/declarations/VTypeAlias.cpp \
     src/declarations/VTypeAliasStyle.cpp \
@@ -121,7 +122,6 @@ SOURCES += src/statements/VCaseStatement.cpp \
     src/declarations/VClass.cpp \
     src/declarations/VClassStyle.cpp \
     src/declarations/VMethod.cpp \
-    src/declarations/VMethodStyle.cpp \
     src/declarations/VModule.cpp \
     src/declarations/VModuleStyle.cpp \
     src/declarations/VProject.cpp \

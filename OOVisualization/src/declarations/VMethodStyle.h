@@ -28,7 +28,6 @@
 
 #include "../oovisualization_api.h"
 
-
 #include "VisualizationBase/src/items/TextStyle.h"
 #include "VisualizationBase/src/items/VListStyle.h"
 #include "VisualizationBase/src/items/StaticStyle.h"
@@ -40,78 +39,31 @@ namespace OOVisualization {
 
 class OOVISUALIZATION_API VMethodStyle : public Visualization::DeclarativeItemBaseStyle
 {
-	private:
-		Visualization::TextStyle nameDefault_;
-		Visualization::TextStyle namePublic_;
-		Visualization::TextStyle namePrivate_;
-		Visualization::TextStyle nameProtected_;
-		Visualization::TextStyle nameStaticDefault_;
-		Visualization::TextStyle nameStaticPublic_;
-		Visualization::TextStyle nameStaticPrivate_;
-		Visualization::TextStyle nameStaticProtected_;
-		Visualization::StaticStyle defaultIcon_;
-		Visualization::StaticStyle constructorIcon_;
-		Visualization::StaticStyle destructorIcon_;
-		Visualization::StaticStyle conversionIcon_;
-		Visualization::SequentialLayoutStyle header_;
-		Visualization::LineStyle signatureLine_;
-		Visualization::VListStyle body_;
-		Visualization::VListStyle annotations_;
-		Visualization::SequentialLayoutStyle addons_;
-		Visualization::SequentialLayoutStyle content_;
-		Visualization::VListStyle typeArguments_;
-		Visualization::VListStyle arguments_;
-		Visualization::VListStyle results_;
-		Visualization::VListStyle memberInitializers_;
-
 	public:
-		void load(Visualization::StyleLoader& sl);
+		virtual ~VMethodStyle() override;
 
-		const Visualization::TextStyle& nameDefault() const;
-		const Visualization::TextStyle& namePublic() const;
-		const Visualization::TextStyle& namePrivate() const;
-		const Visualization::TextStyle& nameProtected() const;
-		const Visualization::TextStyle& nameStaticDefault() const;
-		const Visualization::TextStyle& nameStaticPublic() const;
-		const Visualization::TextStyle& nameStaticPrivate() const;
-		const Visualization::TextStyle& nameStaticProtected() const;
-		const Visualization::StaticStyle& defaultIcon() const;
-		const Visualization::StaticStyle& constructorIcon() const;
-		const Visualization::StaticStyle& destructorIcon() const;
-		const Visualization::StaticStyle& conversionIcon() const;
-		const Visualization::SequentialLayoutStyle& header() const;
-		const Visualization::LineStyle& signatureLine() const;
-		const Visualization::VListStyle& body() const;
-		const Visualization::VListStyle& annotations() const;
-		const Visualization::SequentialLayoutStyle& addons() const;
-		const Visualization::SequentialLayoutStyle& content() const;
-		const Visualization::VListStyle& typeArguments() const;
-		const Visualization::VListStyle& arguments() const;
-		const Visualization::VListStyle& results() const;
-		const Visualization::VListStyle& memberInitializers() const;
+		Property<Visualization::TextStyle> nameDefault{this, "nameDefault"};
+		Property<Visualization::TextStyle> namePublic{this, "namePublic"};
+		Property<Visualization::TextStyle> namePrivate{this, "namePrivate"};
+		Property<Visualization::TextStyle> nameProtected{this, "nameProtected"};
+		Property<Visualization::TextStyle> nameStaticDefault{this, "nameStaticDefault"};
+		Property<Visualization::TextStyle> nameStaticPublic{this, "nameStaticPublic"};
+		Property<Visualization::TextStyle> nameStaticPrivate{this, "nameStaticPrivate"};
+		Property<Visualization::TextStyle> nameStaticProtected{this, "nameStaticProtected"};
+		Property<Visualization::StaticStyle> defaultIcon{this, "defaultIcon"};
+		Property<Visualization::StaticStyle> constructorIcon{this, "constructorIcon"};
+		Property<Visualization::StaticStyle> destructorIcon{this, "destructorIcon"};
+		Property<Visualization::StaticStyle> conversionIcon{this, "conversionIcon"};
+		Property<Visualization::SequentialLayoutStyle> header{this, "header"};
+		Property<Visualization::LineStyle> signatureLine{this, "signatureLine"};
+		Property<Visualization::VListStyle> body{this, "body"};
+		Property<Visualization::VListStyle> annotations{this, "annotations"};
+		Property<Visualization::SequentialLayoutStyle> addons{this, "addons"};
+		Property<Visualization::SequentialLayoutStyle> content{this, "content"};
+		Property<Visualization::VListStyle> typeArguments{this, "typeArguments"};
+		Property<Visualization::VListStyle> arguments{this, "arguments"};
+		Property<Visualization::VListStyle> results{this, "results"};
+		Property<Visualization::VListStyle> memberInitializers{this, "memberInitializers"};
 };
-
-inline const Visualization::TextStyle& VMethodStyle::nameDefault() const { return nameDefault_; }
-inline const Visualization::TextStyle& VMethodStyle::namePublic() const { return namePublic_; }
-inline const Visualization::TextStyle& VMethodStyle::namePrivate() const { return namePrivate_; }
-inline const Visualization::TextStyle& VMethodStyle::nameProtected() const { return nameProtected_; }
-inline const Visualization::TextStyle& VMethodStyle::nameStaticDefault() const { return nameStaticDefault_; }
-inline const Visualization::TextStyle& VMethodStyle::nameStaticPublic() const { return nameStaticPublic_; }
-inline const Visualization::TextStyle& VMethodStyle::nameStaticPrivate() const { return nameStaticPrivate_; }
-inline const Visualization::TextStyle& VMethodStyle::nameStaticProtected() const { return nameStaticProtected_; }
-inline const Visualization::StaticStyle& VMethodStyle::defaultIcon() const { return defaultIcon_; }
-inline const Visualization::StaticStyle& VMethodStyle::constructorIcon() const { return constructorIcon_; }
-inline const Visualization::StaticStyle& VMethodStyle::destructorIcon() const { return destructorIcon_; }
-inline const Visualization::StaticStyle& VMethodStyle::conversionIcon() const { return conversionIcon_; }
-inline const Visualization::SequentialLayoutStyle& VMethodStyle::header() const { return header_; }
-inline const Visualization::LineStyle& VMethodStyle::signatureLine() const { return signatureLine_; }
-inline const Visualization::VListStyle& VMethodStyle::body() const { return body_; }
-inline const Visualization::VListStyle& VMethodStyle::annotations() const { return annotations_; }
-inline const Visualization::SequentialLayoutStyle& VMethodStyle::addons() const { return addons_; }
-inline const Visualization::SequentialLayoutStyle& VMethodStyle::content() const { return content_; }
-inline const Visualization::VListStyle& VMethodStyle::arguments() const { return arguments_; }
-inline const Visualization::VListStyle& VMethodStyle::typeArguments() const { return typeArguments_; }
-inline const Visualization::VListStyle& VMethodStyle::results() const { return results_; }
-inline const Visualization::VListStyle& VMethodStyle::memberInitializers() const { return memberInitializers_; }
 
 }
