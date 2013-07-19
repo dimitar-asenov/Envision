@@ -44,6 +44,7 @@ void ShapeStyle::setOutline(const QPen& outline)
 
 void ShapeStyle::load(StyleLoader& sl)
 {
+	Style::load(sl);
 	sl.load("outline", outline_);
 }
 

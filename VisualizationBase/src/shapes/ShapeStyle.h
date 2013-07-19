@@ -28,6 +28,7 @@
 
 #include "../visualizationbase_api.h"
 #include "../styles/Style.h"
+#include "../styles/StyleProperty.h"
 
 namespace Visualization {
 

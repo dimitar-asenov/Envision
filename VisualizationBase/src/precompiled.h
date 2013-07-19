@@ -69,6 +69,7 @@
 #include <QtCore/QMultiMap>
 
 #include <cmath>
+#include <type_traits>
 
 #if defined(VISUALIZATIONBASE_LIBRARY)
 // Put here includes which only appear in compilation units and do not appear in headers. Precompiled headers of

@@ -31,10 +31,23 @@
 
 namespace Visualization {
 
+template <class T, class = void> class StyleProperty;
+
 class VISUALIZATIONBASE_API Style
 {
 	public:
 		virtual ~Style();
+		virtual void load(StyleLoader& sl);
+
+		using PropertyLoader = std::function<void (StyleLoader& sl)>;
+		void addPropertyLoader( PropertyLoader loader );
+
+	protected:
+		template <class A, class B = void> using Property = StyleProperty<A, B>;
+
+	private:
+		QList<PropertyLoader> loaders_;
 };
+inline void Style::addPropertyLoader(PropertyLoader loader) { loaders_.append(loader);}
 
 }

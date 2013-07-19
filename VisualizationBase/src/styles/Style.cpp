@@ -31,4 +31,9 @@ namespace Visualization {
 Style::~Style()
 {}
 
+void Style::load(StyleLoader& sl)
+{
+	for (auto l : loaders_) l(sl);
+}
+
 }

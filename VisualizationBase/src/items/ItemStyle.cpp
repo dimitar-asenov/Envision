@@ -49,6 +49,8 @@ Shape* ItemStyle::createShape(Item* parent) const
 
 void ItemStyle::load(StyleLoader& sl)
 {
+	Style::load(sl);
+
 	QString shape;
 	sl.load("wholeItemCursor", wholeItemCursor_);
 	sl.load("drawsOnlyShape", drawsOnlyShape_);
